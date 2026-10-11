@@ -35,6 +35,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
       - run: npm ci --ignore-scripts
         working-directory: renderer
       - run: node node_modules/playwright-core/cli.js install chromium --with-deps
@@ -42,3 +44,15 @@ jobs:
       - run: npm test
         working-directory: renderer
       - run: node web/verification/ui-smoke.cjs
+      - run: cargo build --locked -p open-seo-spider
+      - name: Rust and browser integration
+        shell: bash
+        run: |
+          node renderer/server.mjs > "$RUNNER_TEMP/renderer.log" 2>&1 &
+          renderer_pid=$!
+          target/debug/open-seo-spider serve --listen 127.0.0.1:8787 --data-dir "$RUNNER_TEMP/spider-data" > "$RUNNER_TEMP/spider.log" 2>&1 &
+          spider_pid=$!
+          trap 'kill "$spider_pid" "$renderer_pid" 2>/dev/null || true' EXIT
+          node --input-type=module -e 'const urls=["http://127.0.0.1:8787/healthz","http://127.0.0.1:8790/health"];for(const url of urls){let ready=false;for(let i=0;i<80;i++){try{if((await fetch(url)).ok){ready=true;break}}catch{}await new Promise(r=>setTimeout(r,250))}if(!ready)throw new Error(`Service unavailable: ${url}`)}'
+          cargo test --locked -p open-seo-spider-core --test crawl_fixtures live_browser_worker_executes_javascript_for_core_crawl -- --ignored
+          node web/verification/ui-renderer-live.cjs
