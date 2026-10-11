@@ -1,0 +1,2290 @@
+{
+  "schema_version": 1,
+  "project": "Open SEO Spider",
+  "catalog_date": "2026-10-11",
+  "reference_product": "Screaming Frog SEO Spider",
+  "reference_advertised_version": "24.3",
+  "method": "Independent capability requirements from public official documentation; no proprietary binary inspection or implementation code was used.",
+  "status_policy": "All entries begin planned. A status change requires implementation evidence; feature parity additionally requires acceptance and comparison evidence.",
+  "coverage_note": "144 grouped capability requirements cover documented product areas. They are not a reproduction or verified inventory of every individual issue filter. Full parity is NOT PROVEN.",
+  "project_constraints": {
+    "implementation": "Independent Rust implementation preferred by user",
+    "operation": "Local operation; container/WSL/native launch packaging can be selected separately",
+    "url_limit": "No commercial URL cap; user-configurable resource limits and physical hardware limits remain",
+    "third_party_services": "Separate authorization, accounts, quotas and fees may be required; no credential or license bypass",
+    "compatibility": "Open SEO Spider snapshot/config formats first. Compatibility with proprietary crawl files is not claimed.",
+    "appearance": "Original UI, branding and assets"
+  },
+  "phases": {
+    "P1": "HTTP crawler foundation and essential extraction",
+    "P2": "Persistence, graph analysis, relationships, sitemaps and analyst interface",
+    "P3": "Browser rendering, extraction and advanced validation",
+    "P4": "Authorized providers, optional AI, automation and MCP"
+  },
+  "groups": [
+    {
+      "id": "modes",
+      "title": "Crawl modes and control",
+      "phase": "P1"
+    },
+    {
+      "id": "crawl",
+      "title": "Discovery, scope and URL policy",
+      "phase": "P1"
+    },
+    {
+      "id": "robots",
+      "title": "Robots and indexability",
+      "phase": "P1"
+    },
+    {
+      "id": "http",
+      "title": "Transport, status and redirects",
+      "phase": "P1"
+    },
+    {
+      "id": "metadata",
+      "title": "Page metadata and content",
+      "phase": "P1"
+    },
+    {
+      "id": "links",
+      "title": "Link graph and architecture",
+      "phase": "P2"
+    },
+    {
+      "id": "relationships",
+      "title": "Canonical, multilingual and alternative pages",
+      "phase": "P2"
+    },
+    {
+      "id": "images",
+      "title": "Images and resource evidence",
+      "phase": "P2"
+    },
+    {
+      "id": "rendering",
+      "title": "Browser rendering and custom scripts",
+      "phase": "P3"
+    },
+    {
+      "id": "quality",
+      "title": "Structured data, usability and validation",
+      "phase": "P3"
+    },
+    {
+      "id": "sitemap",
+      "title": "Sitemaps",
+      "phase": "P2"
+    },
+    {
+      "id": "integrations",
+      "title": "Authorized API integrations",
+      "phase": "P4"
+    },
+    {
+      "id": "ai",
+      "title": "Optional AI and semantic analysis",
+      "phase": "P4"
+    },
+    {
+      "id": "storage",
+      "title": "Persistence, projects and portability",
+      "phase": "P2"
+    },
+    {
+      "id": "automation",
+      "title": "Automation, exports and agent access",
+      "phase": "P4"
+    },
+    {
+      "id": "ui",
+      "title": "Analyst interface",
+      "phase": "P2"
+    }
+  ],
+  "sources": [
+    {
+      "id": "overview",
+      "title": "SEO Spider overview",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "guide",
+      "title": "User guide index",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/user-guide/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "config",
+      "title": "Configuration",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "general",
+      "title": "General operation",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/user-guide/general/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "tabs",
+      "title": "Data tabs",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/user-guide/tabs/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "release24",
+      "title": "Version 24 release (19 May 2026)",
+      "url": "https://www.screamingfrog.co.uk/blog/seo-spider-24/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "list",
+      "title": "List mode",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-use-list-mode/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "render",
+      "title": "JavaScript crawling",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/crawl-javascript-seo/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "compare",
+      "title": "Crawl comparison",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-compare-crawls/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "visuals",
+      "title": "Architecture visualization",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/site-architecture-crawl-visualisations/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "extract",
+      "title": "Custom extraction",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/web-scraping/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "structured",
+      "title": "Structured data",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/structured-data-testing-validation/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "accessibility",
+      "title": "Accessibility",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-perform-a-web-accessibility-audit/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "duplicates",
+      "title": "Duplicate content",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-check-for-duplicate-content/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "semantic",
+      "title": "Semantic similarity",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-identify-semantically-similar-pages-outliers/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "ai",
+      "title": "AI prompts",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-crawl-with-ai-prompts/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "images",
+      "title": "Image auditing",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-find-missing-image-alt-text/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "canonical",
+      "title": "Canonical auditing",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-canonicals/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "hreflang",
+      "title": "Hreflang auditing",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-hreflang/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "pagination",
+      "title": "Pagination auditing",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-pagination/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "sitemaps",
+      "title": "Sitemap auditing",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-xml-sitemaps/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "sitemapgen",
+      "title": "Sitemap generation",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/xml-sitemap-generator/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "spelling",
+      "title": "Spelling and grammar",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/spelling-grammar-checker/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "cwv",
+      "title": "Core Web Vitals",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-core-web-vitals/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "mobile",
+      "title": "Mobile usability",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-mobile-usability/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "ngrams",
+      "title": "N-grams",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-use-n-grams/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "cookies",
+      "title": "Cookies",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-perform-a-cookie-audit/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "pdf",
+      "title": "PDF auditing",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-pdfs/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "auth",
+      "title": "Authentication",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/crawling-password-protected-websites/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "robots",
+      "title": "Robots testing",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/robots-txt-tester/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "notifications",
+      "title": "Notifications",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-set-up-crawl-email-notifications-export-attachments/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "teams",
+      "title": "Team workflows",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/seo-spider-working-in-teams/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "links",
+      "title": "Link auditing",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/internal-linking-audit-with-the-seo-spider/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "inspection",
+      "title": "URL Inspection API",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-automate-the-url-inspection-api/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "readability",
+      "title": "Readability",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-test-readability/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "head",
+      "title": "HTML head validation",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-debug-invalid-html-elements-in-the-head/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "redirectmap",
+      "title": "Semantic redirect mapping",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-use-vector-embeddings-for-redirect-mapping/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "orphans",
+      "title": "Orphan auditing",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/find-orphan-pages/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "redirects",
+      "title": "Redirect auditing",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/audit-redirects/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "amp",
+      "title": "AMP auditing",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-validate-amp/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "interactions",
+      "title": "User interaction scripts",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/simulating-user-interactions-with-custom-javascript/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "jsdebug",
+      "title": "JavaScript debugging",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-debug-custom-javascript-snippets/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "search",
+      "title": "Custom search",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-use-custom-search/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    },
+    {
+      "id": "looker",
+      "title": "Automated report exports",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-automate-crawl-reports-in-data-studio/",
+      "type": "official_primary_documentation",
+      "checked_on": "2026-10-11"
+    }
+  ],
+  "features": [
+    {
+      "id": "modes.spider",
+      "name": "Website spider",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Crawl a synthetic linked graph; fetch each normalized URL once and preserve every link occurrence.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "modes"
+    },
+    {
+      "id": "modes.list",
+      "name": "List import",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "list"
+      ],
+      "acceptance_test": "Import TXT, CSV, XLSX and XML; keep original row order and duplicate inputs in exports while deduplicating network work.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "modes"
+    },
+    {
+      "id": "modes.serp",
+      "name": "Offline SERP editing",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Import URL/title/description rows, calculate length and approximate width, and export without making network requests.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "modes"
+    },
+    {
+      "id": "modes.apis",
+      "name": "API-only enrichment",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Enrich supplied URLs using a mock API; record zero website requests.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "modes"
+    },
+    {
+      "id": "modes.compare",
+      "name": "Snapshot comparison",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "compare"
+      ],
+      "acceptance_test": "Compare two saved fixture snapshots and classify new, missing and changed URLs.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "modes"
+    },
+    {
+      "id": "modes.control",
+      "name": "Pause, stop, resume",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "general"
+      ],
+      "acceptance_test": "Pause with requests in flight, persist frontier, restart, and complete with no missing or duplicated results.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "modes"
+    },
+    {
+      "id": "modes.recrawl",
+      "name": "Selective re-crawl",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "general"
+      ],
+      "acceptance_test": "Re-fetch a chosen failed URL after the fixture changes without clearing unrelated saved results.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "modes"
+    },
+    {
+      "id": "crawl.unlimited",
+      "name": "No commercial URL ceiling",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "overview"
+      ],
+      "acceptance_test": "Complete a deterministic 501-URL fixture; configurable operator limits remain independent of licenses.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "crawl"
+    },
+    {
+      "id": "crawl.scope",
+      "name": "Host, subdomain and folder scope",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Verify exact host, all-subdomains and start-folder policies against an HTTP fixture with cross-scope links.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "crawl"
+    },
+    {
+      "id": "crawl.resources",
+      "name": "Per-type discovery and storage",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Independently store and fetch HTML, CSS, JavaScript, images, media, PDF and legacy SWF references.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "crawl"
+    },
+    {
+      "id": "crawl.relationships",
+      "name": "Relationship discovery",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Enable discovery separately for canonicals, hreflang, next/prev, AMP, iframe, mobile alternate and meta refresh.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "crawl"
+    },
+    {
+      "id": "crawl.normalization",
+      "name": "URL identity and encoding",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "tabs"
+      ],
+      "acceptance_test": "Cover relative URLs, base href, Unicode host/path, percent encoding, fragments and duplicate query strings without merging distinct resources.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "crawl"
+    },
+    {
+      "id": "crawl.rewrite",
+      "name": "URL rewriting rules",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Apply saved query removal, regex replacement and rewrite rules; keep original and requested addresses for evidence.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "crawl"
+    },
+    {
+      "id": "crawl.include_exclude",
+      "name": "Include/exclude expressions",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Exercise allow and deny regexes against links and resources with an explained exclusion reason.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "crawl"
+    },
+    {
+      "id": "crawl.cdns",
+      "name": "CDN classification",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Classify configured CDN hosts as internal while preventing unrestricted external traversal.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "crawl"
+    },
+    {
+      "id": "crawl.nofollow",
+      "name": "Link directive policy",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Exercise nofollow, ugc, sponsored and page nofollow; store links regardless of whether discovery is enabled.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "crawl"
+    },
+    {
+      "id": "crawl.limits",
+      "name": "Operator crawl controls",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Test total, depth, URLs-per-depth, folder, query, subdomain, redirect, URL length, link-count and response-size bounds.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "crawl"
+    },
+    {
+      "id": "crawl.speed",
+      "name": "Concurrency and request speed",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Use a timestamped fixture to prove request-rate bounds and bounded concurrency under latency.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "crawl"
+    },
+    {
+      "id": "crawl.timeouts_retries",
+      "name": "Timeout and retry policy",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Distinguish timeout, DNS/network and HTTP errors; retry selected 5xx responses with bounded attempts.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "crawl"
+    },
+    {
+      "id": "crawl.headers_proxy",
+      "name": "Agents, headers and proxies",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Verify custom user agent/header and proxy behavior using captured fixture requests; redact secrets from export.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "crawl"
+    },
+    {
+      "id": "crawl.tls",
+      "name": "Trusted certificates and HSTS",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Crawl a fixture with a user-trusted certificate and observe HSTS upgrade provenance without disabling validation globally.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "crawl"
+    },
+    {
+      "id": "robots.fetch",
+      "name": "robots.txt retrieval and caching",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "robots"
+      ],
+      "acceptance_test": "Cache per origin and test distinct policy on scheme/host/port; record blocked URLs without fabricated status codes.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "robots"
+    },
+    {
+      "id": "robots.matching",
+      "name": "Agent matching and directives",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "robots"
+      ],
+      "acceptance_test": "Run fixtures for multiple user-agent groups, allow/disallow wildcards, end anchors and sitemap declarations.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "robots"
+    },
+    {
+      "id": "robots.test",
+      "name": "Custom policy simulation",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "robots"
+      ],
+      "acceptance_test": "Evaluate supplied rules against a URL list without editing the remote site's robots.txt.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "robots"
+    },
+    {
+      "id": "robots.override",
+      "name": "Explicit robots override",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "robots"
+      ],
+      "acceptance_test": "Keep respect as the default; require a saved explicit override and show its state in crawl metadata.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "robots"
+    },
+    {
+      "id": "robots.meta",
+      "name": "Meta and HTTP robots",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "tabs"
+      ],
+      "acceptance_test": "Extract multiple meta robots and X-Robots-Tag fields; distinguish general and agent-specific directives.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "robots"
+    },
+    {
+      "id": "robots.indexability",
+      "name": "Indexability explanations",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "tabs"
+      ],
+      "acceptance_test": "Report concrete reasons for redirect, robots blocking, noindex, non-HTML and canonicalization with supporting evidence.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "robots"
+    },
+    {
+      "id": "robots.traversal",
+      "name": "Directive-dependent discovery",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Verify saved noindex/canonical/pagination policies influence expansion without suppressing observed evidence.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "robots"
+    },
+    {
+      "id": "http.response",
+      "name": "Response evidence",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "tabs"
+      ],
+      "acceptance_test": "Record status, final content type, measured bytes, transferred bytes, timings and complete header evidence.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "http"
+    },
+    {
+      "id": "http.failures",
+      "name": "Status and network failure groups",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "tabs"
+      ],
+      "acceptance_test": "Seed 2xx, 3xx, 4xx, 5xx, timeout and malformed links; expose distinct machine-readable results.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "http"
+    },
+    {
+      "id": "http.redirects",
+      "name": "Redirect chains and loops",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "redirects"
+      ],
+      "acceptance_test": "Persist every hop including terminal URL; find chains, circular loops, off-scope destinations and non-200 endings.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "http"
+    },
+    {
+      "id": "http.refresh",
+      "name": "Refresh and script redirects",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "redirects"
+      ],
+      "acceptance_test": "Detect HTTP refresh, meta refresh and rendered JavaScript navigation; label each mechanism separately.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "http"
+    },
+    {
+      "id": "http.migration",
+      "name": "Migration destination validation",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "redirects"
+      ],
+      "acceptance_test": "Check a CSV of old/new URL expectations and identify mismatched final destinations.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "http"
+    },
+    {
+      "id": "http.broken_sources",
+      "name": "Broken-link source export",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "links"
+      ],
+      "acceptance_test": "Export every source occurrence for a broken destination with anchor, rel and location.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "http"
+    },
+    {
+      "id": "metadata.titles",
+      "name": "Title extraction and audits",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "tabs"
+      ],
+      "acceptance_test": "Test absent, empty, multiple, duplicate and configurable character/width thresholds with a known HTML fixture.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "metadata"
+    },
+    {
+      "id": "metadata.descriptions",
+      "name": "Description extraction and audits",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "tabs"
+      ],
+      "acceptance_test": "Test absent, duplicate, multiple and length/width limits without assuming a fixed search-engine display width.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "metadata"
+    },
+    {
+      "id": "metadata.headings",
+      "name": "H1/H2 and meta keyword evidence",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "tabs"
+      ],
+      "acceptance_test": "Record heading order and duplicate/missing/multiple conditions plus meta keyword values as observational fields.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "metadata"
+    },
+    {
+      "id": "metadata.serp_preview",
+      "name": "SERP preview",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "general"
+      ],
+      "acceptance_test": "Show editable title/description preview; identify it as an approximation and export edited values.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "metadata"
+    },
+    {
+      "id": "metadata.area",
+      "name": "Configurable content area",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "duplicates"
+      ],
+      "acceptance_test": "Exclude shared navigation/footer and include a chosen selector; prove selected text feeds analysis.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "metadata"
+    },
+    {
+      "id": "metadata.wordcount",
+      "name": "Text count and ratio",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "readability"
+      ],
+      "acceptance_test": "Use fixture paragraphs and hidden/script content to prove documented tokenization and text/code calculations.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "metadata"
+    },
+    {
+      "id": "metadata.readability",
+      "name": "Readability scoring",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "readability"
+      ],
+      "acceptance_test": "Return score and formula/language version; classify unsupported language explicitly.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "metadata"
+    },
+    {
+      "id": "metadata.exact",
+      "name": "Exact duplicate detection",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "duplicates"
+      ],
+      "acceptance_test": "Group identical content but separate a one-character change; record the digest method.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "metadata"
+    },
+    {
+      "id": "metadata.near",
+      "name": "Near duplicate detection",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "duplicates"
+      ],
+      "acceptance_test": "Score a controlled changed paragraph above/below a configured threshold; preserve matched URL and comparison evidence.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "metadata"
+    },
+    {
+      "id": "metadata.spelling",
+      "name": "Spelling and grammar",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "spelling"
+      ],
+      "acceptance_test": "Test multilingual dictionaries, ignored words/rules and exact issue locations against saved text.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "metadata"
+    },
+    {
+      "id": "metadata.ngrams",
+      "name": "N-gram frequency",
+      "status": "planned",
+      "phase": "P1",
+      "source_ids": [
+        "ngrams"
+      ],
+      "acceptance_test": "Count overlapping one-, two- and three-word sequences with documented stopword and case policies.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "metadata"
+    },
+    {
+      "id": "links.occurrences",
+      "name": "Inlinks and outlinks",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "links"
+      ],
+      "acceptance_test": "For repeated A-to-B anchors, expose total occurrences and unique sources separately with anchor text and rel.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "links"
+    },
+    {
+      "id": "links.positions",
+      "name": "Link position and path",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "links"
+      ],
+      "acceptance_test": "Classify nav/header/footer/content links and custom positions; retain selector/path per occurrence.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "links"
+    },
+    {
+      "id": "links.depth",
+      "name": "Shortest crawl depth",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "links"
+      ],
+      "acceptance_test": "On a graph with multiple routes, compute minimum click depth deterministically after complete discovery.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "links"
+    },
+    {
+      "id": "links.score",
+      "name": "Internal authority scoring",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "links"
+      ],
+      "acceptance_test": "Run a documented independent PageRank-style method on a known graph; save algorithm and parameter version.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "links"
+    },
+    {
+      "id": "links.orphans",
+      "name": "Orphan URL discovery",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "orphans"
+      ],
+      "acceptance_test": "Merge sitemap/analytics/search data; distinguish absent internal links from incomplete crawl coverage.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "links"
+    },
+    {
+      "id": "links.uncrawlable",
+      "name": "Nonstandard link evidence",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "release24"
+      ],
+      "acceptance_test": "Record onclick, javascript URLs and href on non-anchor elements without assuming a valid navigable target.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "links"
+    },
+    {
+      "id": "links.fragments",
+      "name": "Bookmark validation",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "general"
+      ],
+      "acceptance_test": "Verify decoded fragment destinations against IDs/names; distinguish a missing fragment from a failed page.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "links"
+    },
+    {
+      "id": "links.crawl_graph",
+      "name": "Crawl tree and graph views",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "visuals"
+      ],
+      "acceptance_test": "Render shortest-path hierarchy, focus/expand and status/indexability coloring from fixture data.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "links"
+    },
+    {
+      "id": "links.directory_graph",
+      "name": "Directory architecture views",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "visuals"
+      ],
+      "acceptance_test": "Build directory hierarchy including synthetic grouping paths and label paths that are not fetched URLs.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "links"
+    },
+    {
+      "id": "links.graphs_3d",
+      "name": "3D graph views",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "visuals"
+      ],
+      "acceptance_test": "Display a bounded large graph and expose truncation/focus rather than silently omitting nodes.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "links"
+    },
+    {
+      "id": "links.segments",
+      "name": "Configurable segmentation",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Apply ordered field/regex segments and filter counts, issues, charts and exports by segment.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "links"
+    },
+    {
+      "id": "relationships.canonical",
+      "name": "Canonical extraction",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "canonical"
+      ],
+      "acceptance_test": "Extract HTML and HTTP Link canonical entries including relative, multiple and self-referencing values.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "relationships"
+    },
+    {
+      "id": "relationships.canonical_checks",
+      "name": "Canonical validation",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "canonical"
+      ],
+      "acceptance_test": "Flag malformed, conflicting, redirecting, blocked and non-indexable targets and canonical chains.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "relationships"
+    },
+    {
+      "id": "relationships.pagination",
+      "name": "Pagination relationship validation",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "pagination"
+      ],
+      "acceptance_test": "Extract HTML/HTTP next and prev; test broken links, absent returns and inconsistent chains.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "relationships"
+    },
+    {
+      "id": "relationships.hreflang",
+      "name": "Hreflang extraction",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "hreflang"
+      ],
+      "acceptance_test": "Read HTML, HTTP Link and XML sitemap alternates with language/region and x-default.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "relationships"
+    },
+    {
+      "id": "relationships.hreflang_checks",
+      "name": "Hreflang reciprocity and validity",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "hreflang"
+      ],
+      "acceptance_test": "Test unsupported codes, missing returns/self-reference, duplicates and non-indexable targets.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "relationships"
+    },
+    {
+      "id": "relationships.amp",
+      "name": "AMP extraction and validation",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "amp"
+      ],
+      "acceptance_test": "Detect amphtml/canonical reciprocity and report versioned AMP validation findings.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "relationships"
+    },
+    {
+      "id": "relationships.mobile",
+      "name": "Mobile alternate relationships",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "mobile"
+      ],
+      "acceptance_test": "Resolve alternate media relationships and surface missing or non-indexable target evidence.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "relationships"
+    },
+    {
+      "id": "images.sources",
+      "name": "Image candidates and occurrences",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "images"
+      ],
+      "acceptance_test": "Record src/srcset candidates and every source page independently; preserve per-occurrence alt.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "images"
+    },
+    {
+      "id": "images.alt",
+      "name": "Missing alt distinctions",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "images"
+      ],
+      "acceptance_test": "Separate missing attribute from empty/whitespace alt using three deliberately different image elements.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "images"
+    },
+    {
+      "id": "images.size",
+      "name": "Image dimensions and size audits",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "images"
+      ],
+      "acceptance_test": "Record intrinsic/rendered dimensions, transfer size and configurable thresholds without mislabeling unavailable data.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "images"
+    },
+    {
+      "id": "images.cookies",
+      "name": "Cookie audit",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "cookies"
+      ],
+      "acceptance_test": "Collect response and script cookies with domain/path/security attributes and distinguish session contexts.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "images"
+    },
+    {
+      "id": "images.pdf",
+      "name": "PDF metadata and text",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "pdf"
+      ],
+      "acceptance_test": "Extract title, author, dates, pages and text from an owned fixture PDF; show unsupported encrypted files explicitly.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "images"
+    },
+    {
+      "id": "images.pdf_links",
+      "name": "PDF links and anchor evidence",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "pdf"
+      ],
+      "acceptance_test": "Resolve link annotations, record source document/page and extract text where reliable.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "images"
+    },
+    {
+      "id": "rendering.text",
+      "name": "Raw HTML mode",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "render"
+      ],
+      "acceptance_test": "Fetch and parse a script-dependent fixture while proving no JavaScript execution.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "rendering"
+    },
+    {
+      "id": "rendering.chromium",
+      "name": "Chromium rendering mode",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "render"
+      ],
+      "acceptance_test": "Discover links created after script execution; save browser/version/config used for the crawl.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "rendering"
+    },
+    {
+      "id": "rendering.wait",
+      "name": "Render completion policy",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "render"
+      ],
+      "acceptance_test": "Control viewport, wait/timeout and resource loading; distinguish timed-out render from a successful raw fetch.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "rendering"
+    },
+    {
+      "id": "rendering.source_diff",
+      "name": "Raw/rendered parity analysis",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "render"
+      ],
+      "acceptance_test": "Surface elements and links added/removed by rendering while retaining both representations.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "rendering"
+    },
+    {
+      "id": "rendering.screenshot",
+      "name": "Rendered screenshots",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "render"
+      ],
+      "acceptance_test": "Capture a deterministic owned page at selected viewport and link the image to URL/snapshot.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "rendering"
+    },
+    {
+      "id": "rendering.console",
+      "name": "Console and blocked-resource evidence",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "render"
+      ],
+      "acceptance_test": "Save browser JS errors and failed/robots-blocked resource loads with URLs and error types.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "rendering"
+    },
+    {
+      "id": "rendering.flatten",
+      "name": "Shadow DOM and iframe flattening",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "render"
+      ],
+      "acceptance_test": "Extract owned fixtures with shadow roots and same-origin iframe content; preserve source context.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "rendering"
+    },
+    {
+      "id": "rendering.archive",
+      "name": "Website archiving",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Save configured page/resource artifacts and verify a manifest can locate each stored file.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "rendering"
+    },
+    {
+      "id": "rendering.custom_extract",
+      "name": "CSS/XPath/regex extraction",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "extract"
+      ],
+      "acceptance_test": "Return text, attributes, HTML, inner HTML and function values from a known fixture with multi-value results.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "rendering"
+    },
+    {
+      "id": "rendering.visual_extract",
+      "name": "Visual selector authoring",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "extract"
+      ],
+      "acceptance_test": "Choose an element, preview raw/rendered extraction, save selector and verify it on a second fixture.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "rendering"
+    },
+    {
+      "id": "rendering.custom_search",
+      "name": "Literal and regex search",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "search"
+      ],
+      "acceptance_test": "Search source, rendered content and selected text with occurrence counts and match evidence.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "rendering"
+    },
+    {
+      "id": "rendering.javascript",
+      "name": "Custom JavaScript extraction",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "jsdebug"
+      ],
+      "acceptance_test": "Run a user-authored script against a fixture with timeout/error handling and typed returned columns.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "rendering"
+    },
+    {
+      "id": "rendering.interact",
+      "name": "Scripted interactions",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "interactions"
+      ],
+      "acceptance_test": "Execute authored hover/click/scroll actions in declared order and discover resulting links.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "rendering"
+    },
+    {
+      "id": "rendering.snippet_library",
+      "name": "User snippet library",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "jsdebug"
+      ],
+      "acceptance_test": "Import/export user-owned snippets without storing provider secrets in shared library files.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "rendering"
+    },
+    {
+      "id": "quality.structured_formats",
+      "name": "JSON-LD, Microdata and RDFa",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "structured"
+      ],
+      "acceptance_test": "Extract nested graphs from each format; keep parse errors and raw node references.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "quality"
+    },
+    {
+      "id": "quality.schema",
+      "name": "Schema vocabulary validation",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "structured"
+      ],
+      "acceptance_test": "Check types/properties against an identified schema version; test unknown and deprecated terms.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "quality"
+    },
+    {
+      "id": "quality.richresults",
+      "name": "Rich result requirements",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "structured"
+      ],
+      "acceptance_test": "Validate required/recommended fields using versioned public rules; distinguish errors from warnings.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "quality"
+    },
+    {
+      "id": "quality.accessibility",
+      "name": "axe accessibility findings",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "accessibility"
+      ],
+      "acceptance_test": "Run version-pinned axe on a deliberately failing rendered fixture; retain rule, impact, node and WCAG tags.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "quality"
+    },
+    {
+      "id": "quality.accessibility_limit",
+      "name": "Manual accessibility boundaries",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "accessibility"
+      ],
+      "acceptance_test": "Display automated-only coverage and incomplete/needs-review findings in report exports.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "quality"
+    },
+    {
+      "id": "quality.mobile",
+      "name": "Mobile usability checks",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "mobile"
+      ],
+      "acceptance_test": "Test viewport, sizing, tap targets and incompatible content under defined mobile rendering.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "quality"
+    },
+    {
+      "id": "quality.html_head",
+      "name": "Invalid head elements",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "head"
+      ],
+      "acceptance_test": "Seed invalid head children that affect subsequent metadata; point to observed raw markup.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "quality"
+    },
+    {
+      "id": "quality.html_validation",
+      "name": "HTML conformance checks",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Run a versioned validator against owned malformed HTML and retain line/column/rule where available.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "quality"
+    },
+    {
+      "id": "quality.security",
+      "name": "Transport and header audits",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "tabs"
+      ],
+      "acceptance_test": "Test mixed content, insecure forms, MIME mismatch and configurable security-header presence with concrete evidence.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "quality"
+    },
+    {
+      "id": "quality.carbon",
+      "name": "Green hosting and carbon estimate",
+      "status": "planned",
+      "phase": "P3",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Expose dataset/method/version and unknown states; label output as an estimate.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "quality"
+    },
+    {
+      "id": "sitemap.discovery",
+      "name": "Robots and explicit sitemaps",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "sitemaps"
+      ],
+      "acceptance_test": "Load a sitemap index, gzipped child sitemap and explicit input; handle loops/malformed XML safely.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "sitemap"
+    },
+    {
+      "id": "sitemap.coverage",
+      "name": "Sitemap coverage and orphan checks",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "sitemaps"
+      ],
+      "acceptance_test": "Compare fetched pages and sitemap locations; distinguish not listed, sitemap-only and incomplete crawl.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "sitemap"
+    },
+    {
+      "id": "sitemap.validity",
+      "name": "Sitemap URL validation",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "sitemaps"
+      ],
+      "acceptance_test": "Find redirect/non-200/non-indexable URLs and invalid lastmod values in fixture XML.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "sitemap"
+    },
+    {
+      "id": "sitemap.generate",
+      "name": "XML sitemap generation",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "sitemapgen"
+      ],
+      "acceptance_test": "Export valid XML with optional lastmod, image entries and hreflang; parse output with an independent parser.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "sitemap"
+    },
+    {
+      "id": "sitemap.split",
+      "name": "Split and segmented sitemaps",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "sitemapgen"
+      ],
+      "acceptance_test": "Split at configured URL/byte bounds, create index and prove segment URL membership.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "sitemap"
+    },
+    {
+      "id": "integrations.ga4",
+      "name": "Google Analytics 4",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Using an authorized property, join page metrics with declared URL matching and preserve absent data as absent.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "integrations"
+    },
+    {
+      "id": "integrations.gsc",
+      "name": "Search Console analytics",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Fetch selected dates/dimensions and join clicks/impressions/CTR/position; report API errors and row coverage.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "integrations"
+    },
+    {
+      "id": "integrations.inspection",
+      "name": "Search Console URL inspection",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "inspection"
+      ],
+      "acceptance_test": "Honor daily/property quotas; retain inspection timestamp and distinguish inspected from queued URLs.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "integrations"
+    },
+    {
+      "id": "integrations.psi",
+      "name": "PageSpeed Insights and Lighthouse",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "cwv"
+      ],
+      "acceptance_test": "Preserve mobile/desktop, field/lab distinction, metric units and provider error details.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "integrations"
+    },
+    {
+      "id": "integrations.cwv",
+      "name": "Core Web Vitals aggregation",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "cwv"
+      ],
+      "acceptance_test": "Compute pass/fail from available field metrics; never substitute lab results for unavailable field data.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "integrations"
+    },
+    {
+      "id": "integrations.majestic",
+      "name": "Majestic metrics",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Use separately authorized credentials; mock fresh/historic datasets, quota exhaustion and URL/domain scopes.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "integrations"
+    },
+    {
+      "id": "integrations.ahrefs",
+      "name": "Ahrefs metrics",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Use independent authorized app/API access; mock expiry, quota and metric joins without reusing vendor tokens.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "integrations"
+    },
+    {
+      "id": "integrations.moz",
+      "name": "Moz metrics",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Mock authorized URL/domain metric queries with unavailable/quota states.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "integrations"
+    },
+    {
+      "id": "integrations.oauth",
+      "name": "Account connection management",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Add, disconnect and revoke an authorized provider account; verify tokens stay out of logs and version control.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "integrations"
+    },
+    {
+      "id": "integrations.provider_urls",
+      "name": "API-discovered crawl candidates",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "orphans"
+      ],
+      "acceptance_test": "Optionally enqueue provider-only URLs with provenance and scope checking; preserve orphan evidence.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "integrations"
+    },
+    {
+      "id": "ai.providers",
+      "name": "Cloud and local model adapters",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "ai"
+      ],
+      "acceptance_test": "Use mock OpenAI-compatible/Gemini/Anthropic and a local Ollama endpoint; record model/provider errors separately.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "ai"
+    },
+    {
+      "id": "ai.prompts",
+      "name": "Custom prompts and test preview",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "ai"
+      ],
+      "acceptance_test": "Run an authored prompt on selected page text/HTML/extraction; preview exact input and persist typed output.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "ai"
+    },
+    {
+      "id": "ai.prompt_library",
+      "name": "Prompt import/export",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "ai"
+      ],
+      "acceptance_test": "Round-trip user-authored prompts with model/settings and no secrets.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "ai"
+    },
+    {
+      "id": "ai.embeddings",
+      "name": "Embedding generation",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "semantic"
+      ],
+      "acceptance_test": "Embed selected text, cache with model/input hash and reject incompatible dimensionality.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "ai"
+    },
+    {
+      "id": "ai.similarity",
+      "name": "Semantic similarity",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "semantic"
+      ],
+      "acceptance_test": "Rank a known vector fixture using a documented cosine method and configured thresholds.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "ai"
+    },
+    {
+      "id": "ai.outliers",
+      "name": "Semantic relevance and outliers",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "semantic"
+      ],
+      "acceptance_test": "Report low-centroid-similarity fixture vectors with exact scores and declared corpus coverage.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "ai"
+    },
+    {
+      "id": "ai.semantic_search",
+      "name": "Semantic search and clusters",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "semantic"
+      ],
+      "acceptance_test": "Query saved vectors and visualize clusters while retaining model/dimensionality provenance.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "ai"
+    },
+    {
+      "id": "ai.redirect_mapping",
+      "name": "Semantic redirect suggestions",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "redirectmap"
+      ],
+      "acceptance_test": "Rank candidate target pages from a deterministic vector fixture and export suggestions with score; never apply redirects automatically.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "ai"
+    },
+    {
+      "id": "ai.usage",
+      "name": "Provider cost and rate controls",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "ai"
+      ],
+      "acceptance_test": "Enforce explicit rate/spend bounds for an API fixture, record retries and distinguish local from paid providers.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "ai"
+    },
+    {
+      "id": "storage.database",
+      "name": "Durable local database",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "general"
+      ],
+      "acceptance_test": "Crash after committed requests; recover completed results and pending queue with consistent graph state.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "storage"
+    },
+    {
+      "id": "storage.memory",
+      "name": "Optional memory storage",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Run the same fixture in memory and disk modes; compare results while documenting mode differences.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "storage"
+    },
+    {
+      "id": "storage.snapshots",
+      "name": "Save/open/import/export snapshots",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "general"
+      ],
+      "acceptance_test": "Round-trip an Open SEO Spider snapshot including config, graph, issues and optional artifacts; verify schema version.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "storage"
+    },
+    {
+      "id": "storage.projects",
+      "name": "Projects and crawl history",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "teams"
+      ],
+      "acceptance_test": "Group snapshots by project, label them, reopen them and record their creation/config identity.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "storage"
+    },
+    {
+      "id": "storage.retention",
+      "name": "Retention and locking",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Use test timestamps to expire unlocked fixture snapshots while preserving locked snapshots and active jobs.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "storage"
+    },
+    {
+      "id": "storage.config",
+      "name": "Reusable crawl configuration",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "teams"
+      ],
+      "acceptance_test": "Export/import typed config and validate missing credentials/paths without silently changing settings.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "storage"
+    },
+    {
+      "id": "storage.portable",
+      "name": "Shared crawl portability",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "teams"
+      ],
+      "acceptance_test": "Copy an Open SEO Spider archive to a second local directory and open all declared portable artifacts.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "storage"
+    },
+    {
+      "id": "storage.compare_changes",
+      "name": "Field and content changes",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "compare"
+      ],
+      "acceptance_test": "Detect title, description, headings, graph, directives, structured data and content changes even if issue counts are unchanged.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "storage"
+    },
+    {
+      "id": "storage.compare_mapping",
+      "name": "Cross-host comparison mapping",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "compare"
+      ],
+      "acceptance_test": "Map staging/production or migrated URL prefixes before joining snapshots and expose collisions.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "storage"
+    },
+    {
+      "id": "storage.compare_export",
+      "name": "Comparison export",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "compare"
+      ],
+      "acceptance_test": "Export both snapshots and deltas with new/missing/changed evidence and stable URL keys.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "storage"
+    },
+    {
+      "id": "automation.tables",
+      "name": "Table and bulk exports",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "general"
+      ],
+      "acceptance_test": "Export filtered observations and all-occurrence evidence as CSV/XLSX; escape formulas and preserve Unicode/newlines.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "automation"
+    },
+    {
+      "id": "automation.reports",
+      "name": "Issue and specialist reports",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "general"
+      ],
+      "acceptance_test": "Export versioned overview plus redirect/canonical/hreflang/sitemap/security/content report fixtures.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "automation"
+    },
+    {
+      "id": "automation.assets",
+      "name": "Artifact exports",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "general"
+      ],
+      "acceptance_test": "Export source, rendered HTML, screenshots, headers, cookies and PDF artifacts with a manifest.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "automation"
+    },
+    {
+      "id": "automation.looker",
+      "name": "Google Sheets/Looker output",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "looker"
+      ],
+      "acceptance_test": "Use an authorized export destination; retain append/replace setting and stable column schema across two runs.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "automation"
+    },
+    {
+      "id": "automation.cli",
+      "name": "Headless command line",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "general"
+      ],
+      "acceptance_test": "Run a crawl/config/import/analysis/export sequence from CLI and verify deterministic exit codes.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "automation"
+    },
+    {
+      "id": "automation.scheduler",
+      "name": "Recurring scheduling",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "general"
+      ],
+      "acceptance_test": "Use a fake clock to execute saved crawl tasks, record history/errors and define overlap policy.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "automation"
+    },
+    {
+      "id": "automation.auto_compare",
+      "name": "Automatic last-two comparison",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "release24"
+      ],
+      "acceptance_test": "After two completed project snapshots, create a comparison automatically using saved comparison settings.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "automation"
+    },
+    {
+      "id": "automation.notifications",
+      "name": "Completion and change notifications",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "notifications"
+      ],
+      "acceptance_test": "Send only to an explicitly configured local test SMTP sink; verify summary, change table and attachment error handling.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "automation"
+    },
+    {
+      "id": "automation.mcp",
+      "name": "MCP agent interface",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "release24"
+      ],
+      "acceptance_test": "Perform MCP initialize/list-tools/crawl/read/export using a local client; keep script execution an explicit capability.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "automation"
+    },
+    {
+      "id": "automation.mcp_transport",
+      "name": "STDIO and streamable HTTP",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Exercise both transports on loopback and prove JSON protocol framing and job identifiers remain stable.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "automation"
+    },
+    {
+      "id": "automation.stats",
+      "name": "Local usage statistics",
+      "status": "planned",
+      "phase": "P4",
+      "source_ids": [
+        "release24"
+      ],
+      "acceptance_test": "Aggregate locally saved crawl counts/duration without sending telemetry by default.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "automation"
+    },
+    {
+      "id": "ui.realtime",
+      "name": "Live crawl progress and tables",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "general"
+      ],
+      "acceptance_test": "During a delayed fixture crawl, update progress/results and permit safe pause/config inspection.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "ui"
+    },
+    {
+      "id": "ui.filter",
+      "name": "Sort, search and saved columns",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "general"
+      ],
+      "acceptance_test": "Combine numeric/text filters and sort; keep column preferences when reopening a project.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "ui"
+    },
+    {
+      "id": "ui.overview",
+      "name": "Overview and issue taxonomy",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "tabs"
+      ],
+      "acceptance_test": "Show severity/type/count and drill-down to every affected URL; distinguish observation from advice.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "ui"
+    },
+    {
+      "id": "ui.details",
+      "name": "URL evidence inspector",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "tabs"
+      ],
+      "acceptance_test": "Select a URL and inspect links, resources, raw/rendered source, headers, cookies and structured nodes.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "ui"
+    },
+    {
+      "id": "ui.charts",
+      "name": "Site structure and timing charts",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "tabs"
+      ],
+      "acceptance_test": "Aggregate folder/depth/status/timing over a fixture dataset with consistent filtered totals.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "ui"
+    },
+    {
+      "id": "ui.localization",
+      "name": "Language and UI preferences",
+      "status": "planned",
+      "phase": "P2",
+      "source_ids": [
+        "config"
+      ],
+      "acceptance_test": "Switch supported interface locale/theme/font settings while preserving stored crawl text exactly.",
+      "implementation_evidence": [],
+      "parity_evidence": [],
+      "group": "ui"
+    }
+  ]
+}
