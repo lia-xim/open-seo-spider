@@ -108,5 +108,8 @@ try {
   if (process.env.SPIDER_EVIDENCE) { await mkdir(path.dirname(process.env.SPIDER_EVIDENCE), { recursive: true }); await writeFile(process.env.SPIDER_EVIDENCE, JSON.stringify(evidence, null, 2) + '\n'); }
 } finally {
   await stop(); await new Promise(resolve => fixture.close(resolve));
-  await rm(data, { recursive: true, force: true });
+  const cleanupPath = path.resolve(data);
+  assert.equal(path.dirname(cleanupPath), path.resolve(os.tmpdir()), 'cleanup must remain directly inside the temporary directory');
+  assert.ok(path.basename(cleanupPath).startsWith('open-seo-spider-api-'), 'cleanup must target the owned API fixture directory');
+  await rm(cleanupPath, { recursive: true, force: true });
 }

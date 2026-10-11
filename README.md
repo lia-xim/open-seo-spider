@@ -24,6 +24,9 @@ On Windows, double-click **Open SEO Spider.cmd**. The launcher uses the compiled
 release binary and starts the optional browser worker when its dependencies are
 installed. Alternatively, run `scripts/start.ps1`; `scripts/stop.ps1` stops the
 recorded application and browser worker processes.
+If the optional browser worker cannot start, the launcher warns and still starts
+the HTTP application; JavaScript rendering remains unavailable until the worker
+is running.
 
 Open `http://127.0.0.1:8787`. Crawl state stays in the ignored `data/` directory.
 Completed snapshots, cancelled crawls and interrupted SQLite frontiers survive
