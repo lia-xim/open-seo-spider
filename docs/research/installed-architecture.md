@@ -36,7 +36,7 @@ or demonstrate that every crawl is stored with that backend.
 |---|---|---|
 | JavaFX 25.0.3 | Desktop interface | Loaded JavaFX control/skin classes observed |
 | Apache HttpClient 4.5.14 | HTTP requests and connection pooling | Loaded HTTP connection/parser classes observed |
-| jsoup 1.22.1 | HTML parsing and selectors | Bundled dependency; call-path confirmation pending |
+| jsoup 1.22.1 | HTML parsing and selectors | Static DOM/parser references and typed CDP snapshot-to-jsoup bridge; complete extraction behavior pending |
 | Apache Derby 10.17.1.0 | Embedded crawl persistence | Loaded storage/compiler classes observed |
 | SQLite JDBC 3.53.0.0 | Additional local storage | Loaded JDBC classes observed; exact database role pending |
 | Chromium/headless 147.0.7727.102 wrappers | JavaScript rendering | Bundled platform archives; official product documentation confirms Chromium rendering |
@@ -57,6 +57,13 @@ static references from the main JAR to multiple bundled libraries. Static
 references strengthen the linkage evidence but do not establish which feature
 or execution branch uses a library. The executable public entrypoint signature
 was inspected without reproducing its implementation in the replacement.
+
+A subsequent scan decoded all 5,400 class constant pools and inspected focused
+Java signatures. It establishes concrete parser/browser, JDBC storage,
+SQL duplicate-processing and MCP servlet couplings. The detailed, execution-free
+evidence and its limits are in [static responsibilities](static-responsibilities.md).
+These compiled references do not attribute the previously observed loopback
+listener or establish a complete live feature path.
 
 ## Independent replacement decisions
 
