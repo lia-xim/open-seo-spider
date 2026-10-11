@@ -1,0 +1,737 @@
+{
+  "config": {
+    "seed_urls": [
+      "http://127.0.0.1:51130/dynamic"
+    ],
+    "sitemap_urls": [],
+    "discover_sitemaps": true,
+    "max_sitemap_documents": 1000,
+    "crawl_links": true,
+    "include_subdomains": false,
+    "concurrency": 8,
+    "request_timeout_secs": 20,
+    "max_pages": null,
+    "max_depth": null,
+    "delay_ms": 100,
+    "obey_robots": true,
+    "check_external": false,
+    "max_body_bytes": 5242880,
+    "max_redirects": 10,
+    "user_agent": "Open SEO Spider/0.1",
+    "custom_headers": {},
+    "renderer": {
+      "endpoint": "http://127.0.0.1:8790/render",
+      "wait_ms": 500,
+      "accessibility": true,
+      "screenshot": true,
+      "max_response_bytes": 33554432
+    },
+    "custom_extractions": [
+      {
+        "name": "price",
+        "selector": ".price",
+        "attribute": null
+      },
+      {
+        "name": "links",
+        "selector": "a",
+        "attribute": "href"
+      }
+    ],
+    "include_patterns": [],
+    "exclude_patterns": [
+      "/excluded"
+    ]
+  },
+  "pages": [
+    {
+      "url": "http://127.0.0.1:51130/dynamic",
+      "final_url": "http://127.0.0.1:51130/dynamic",
+      "depth": 0,
+      "discovered_from": null,
+      "internal": true,
+      "fetched_at": "2026-10-11T12:55:10.121449100+00:00",
+      "status": 200,
+      "final_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "response_ms": 1,
+      "size_bytes": 785,
+      "truncated": false,
+      "error": null,
+      "warnings": [],
+      "blocked_by_robots": false,
+      "robots_warning": null,
+      "redirect_chain": [],
+      "headers": {
+        "connection": "keep-alive",
+        "content-length": "785",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Sun, 11 Oct 2026 12:55:10 GMT",
+        "keep-alive": "timeout=5"
+      },
+      "titles": [
+        "Rendered SEO title"
+      ],
+      "meta_descriptions": [
+        "Owned rendering fixture"
+      ],
+      "h1": [
+        "Rendered heading"
+      ],
+      "h2": [],
+      "canonical": [
+        "http://127.0.0.1:51130/dynamic"
+      ],
+      "meta_robots": [],
+      "x_robots_tag": [],
+      "hreflang": [],
+      "language": "de",
+      "viewport": null,
+      "images": [],
+      "links": [
+        {
+          "url": "http://127.0.0.1:51130/excluded",
+          "text": "Excluded target",
+          "rel": "",
+          "internal": true,
+          "nofollow": false,
+          "kind": "anchor"
+        },
+        {
+          "url": "http://127.0.0.1:51130/js-only",
+          "text": "Discovered through JavaScript",
+          "rel": "",
+          "internal": true,
+          "nofollow": false,
+          "kind": "anchor"
+        }
+      ],
+      "word_count": 8,
+      "content_hash": "2fa88be1ad1168d929fea9f0d402af88417810a8e7e99e9f645d14e018981708",
+      "structured_data": [],
+      "invalid_structured_data": 0,
+      "script_count": 1,
+      "indexable": true,
+      "indexability_reasons": [],
+      "raw_metadata": {
+        "titles": [
+          "Raw SEO title"
+        ],
+        "meta_descriptions": [
+          "Owned rendering fixture"
+        ],
+        "h1": [
+          "Raw heading"
+        ],
+        "h2": [],
+        "canonical": [
+          "http://127.0.0.1:51130/dynamic"
+        ],
+        "meta_robots": [],
+        "hreflang": [],
+        "word_count": 5,
+        "content_hash": "86be1a6d8cc930785a66fcb2dc66aecb7af9ffa8d5ee0b3679407b5ae1149d60",
+        "links": [
+          {
+            "url": "http://127.0.0.1:51130/excluded",
+            "text": "Excluded target",
+            "rel": "",
+            "internal": true,
+            "nofollow": false,
+            "kind": "anchor"
+          }
+        ],
+        "custom_extractions": [
+          {
+            "name": "price",
+            "selector": ".price",
+            "attribute": null,
+            "values": [
+              "10.00"
+            ],
+            "source": "raw_html"
+          },
+          {
+            "name": "links",
+            "selector": "a",
+            "attribute": "href",
+            "values": [
+              "/excluded"
+            ],
+            "source": "raw_html"
+          }
+        ]
+      },
+      "rendered": true,
+      "renderer_error": null,
+      "rendered_url": "http://127.0.0.1:51130/dynamic",
+      "rendered_status": 200,
+      "rendered_headers": {
+        "connection": "keep-alive",
+        "content-length": "785",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Sun, 11 Oct 2026 12:55:10 GMT",
+        "keep-alive": "timeout=5"
+      },
+      "rendered_at": "2026-10-11T12:55:11.254Z",
+      "browser_version": "154.0.8037.99",
+      "rendered_viewport": {
+        "height": 800,
+        "width": 1280
+      },
+      "render_wait_ms": 500,
+      "network_events_dropped": 0,
+      "console_errors": [
+        {
+          "location": {
+            "column": 0,
+            "columnNumber": 0,
+            "line": 0,
+            "lineNumber": 0,
+            "url": "http://127.0.0.1:51130/favicon.ico"
+          },
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "type": "console"
+        },
+        {
+          "location": {
+            "column": 725,
+            "columnNumber": 725,
+            "line": 0,
+            "lineNumber": 0,
+            "url": "http://127.0.0.1:51130/dynamic"
+          },
+          "message": "owned-renderer-fixture",
+          "type": "console"
+        }
+      ],
+      "network_requests": [
+        {
+          "error": null,
+          "method": "GET",
+          "resource_type": "document",
+          "status": 200,
+          "url": "http://127.0.0.1:51130/dynamic"
+        }
+      ],
+      "accessibility": {
+        "automated_only": true,
+        "engine": "axe-core",
+        "inapplicable_count": 71,
+        "incomplete": [],
+        "passes_count": 17,
+        "version": "4.14.0",
+        "violations": [
+          {
+            "description": "Ensure buttons have discernible text",
+            "help": "Buttons must have discernible text",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/button-name?application=axeAPI",
+            "id": "button-name",
+            "impact": "critical",
+            "nodes": [
+              {
+                "all": [],
+                "any": [
+                  {
+                    "data": null,
+                    "id": "button-has-visible-text",
+                    "impact": "critical",
+                    "message": "Element does not have inner text that is visible to screen readers",
+                    "relatedNodes": []
+                  },
+                  {
+                    "data": null,
+                    "id": "aria-label",
+                    "impact": "critical",
+                    "message": "aria-label attribute does not exist or is empty",
+                    "relatedNodes": []
+                  },
+                  {
+                    "data": null,
+                    "id": "aria-labelledby",
+                    "impact": "critical",
+                    "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty",
+                    "relatedNodes": []
+                  },
+                  {
+                    "data": {
+                      "messageKey": "noAttr"
+                    },
+                    "id": "non-empty-title",
+                    "impact": "critical",
+                    "message": "Element has no title attribute",
+                    "relatedNodes": []
+                  },
+                  {
+                    "data": null,
+                    "id": "implicit-label",
+                    "impact": "critical",
+                    "message": "Element does not have an implicit (wrapped) <label>",
+                    "relatedNodes": []
+                  },
+                  {
+                    "data": null,
+                    "id": "explicit-label",
+                    "impact": "critical",
+                    "message": "Element does not have an explicit <label>",
+                    "relatedNodes": []
+                  },
+                  {
+                    "data": null,
+                    "id": "presentational-role",
+                    "impact": "critical",
+                    "message": "Element's default semantics were not overridden with role=\"none\" or role=\"presentation\"",
+                    "relatedNodes": []
+                  }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\"",
+                "html": "<button></button>",
+                "impact": "critical",
+                "none": [],
+                "target": [
+                  "button"
+                ]
+              }
+            ],
+            "tags": [
+              "cat.name-role-value",
+              "wcag2a",
+              "wcag412",
+              "section508",
+              "section508.22.a",
+              "TTv5",
+              "TT6.a",
+              "EN-301-549",
+              "EN-9.4.1.2",
+              "ACT",
+              "RGAAv4",
+              "RGAA-11.9.1"
+            ]
+          },
+          {
+            "description": "Ensure <img> elements have alternative text or a role of none or presentation",
+            "help": "Images must have alternative text",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/image-alt?application=axeAPI",
+            "id": "image-alt",
+            "impact": "critical",
+            "nodes": [
+              {
+                "all": [],
+                "any": [
+                  {
+                    "data": null,
+                    "id": "has-alt",
+                    "impact": "critical",
+                    "message": "Element does not have an alt attribute",
+                    "relatedNodes": []
+                  },
+                  {
+                    "data": null,
+                    "id": "aria-label",
+                    "impact": "critical",
+                    "message": "aria-label attribute does not exist or is empty",
+                    "relatedNodes": []
+                  },
+                  {
+                    "data": null,
+                    "id": "aria-labelledby",
+                    "impact": "critical",
+                    "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty",
+                    "relatedNodes": []
+                  },
+                  {
+                    "data": {
+                      "messageKey": "noAttr"
+                    },
+                    "id": "non-empty-title",
+                    "impact": "critical",
+                    "message": "Element has no title attribute",
+                    "relatedNodes": []
+                  },
+                  {
+                    "data": null,
+                    "id": "presentational-role",
+                    "impact": "critical",
+                    "message": "Element's default semantics were not overridden with role=\"none\" or role=\"presentation\"",
+                    "relatedNodes": []
+                  }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have an alt attribute\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\"",
+                "html": "<img src=\"data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22/%3E\">",
+                "impact": "critical",
+                "none": [],
+                "target": [
+                  "img"
+                ]
+              }
+            ],
+            "tags": [
+              "cat.text-alternatives",
+              "wcag2a",
+              "wcag111",
+              "section508",
+              "section508.22.a",
+              "TTv5",
+              "TT7.a",
+              "TT7.b",
+              "EN-301-549",
+              "EN-9.1.1.1",
+              "ACT",
+              "RGAAv4",
+              "RGAA-1.1.1"
+            ]
+          }
+        ]
+      },
+      "screenshot_base64": "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wAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAACQAAEQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACH8LwAAAP//Mnj4JgAAAAZJREFUAwBZ7ean4csKlAAAAABJRU5ErkJggg==",
+      "custom_extractions": [
+        {
+          "name": "price",
+          "selector": ".price",
+          "attribute": null,
+          "values": [
+            "20.00"
+          ],
+          "source": "rendered_html"
+        },
+        {
+          "name": "links",
+          "selector": "a",
+          "attribute": "href",
+          "values": [
+            "/excluded",
+            "/js-only"
+          ],
+          "source": "rendered_html"
+        }
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:51130/js-only",
+      "final_url": "http://127.0.0.1:51130/js-only",
+      "depth": 1,
+      "discovered_from": "http://127.0.0.1:51130/dynamic",
+      "internal": true,
+      "fetched_at": "2026-10-11T12:55:11.517759900+00:00",
+      "status": 200,
+      "final_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "response_ms": 0,
+      "size_bytes": 140,
+      "truncated": false,
+      "error": null,
+      "warnings": [],
+      "blocked_by_robots": false,
+      "robots_warning": null,
+      "redirect_chain": [],
+      "headers": {
+        "connection": "keep-alive",
+        "content-length": "140",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Sun, 11 Oct 2026 12:55:11 GMT",
+        "keep-alive": "timeout=5"
+      },
+      "titles": [
+        "Child page"
+      ],
+      "meta_descriptions": [],
+      "h1": [
+        "Child page"
+      ],
+      "h2": [],
+      "canonical": [],
+      "meta_robots": [],
+      "x_robots_tag": [],
+      "hreflang": [],
+      "language": "de",
+      "viewport": null,
+      "images": [],
+      "links": [],
+      "word_count": 3,
+      "content_hash": "e01ea331eace0a6b627a09d1c991387944de2cabaa58a601a0541062d29a0e92",
+      "structured_data": [],
+      "invalid_structured_data": 0,
+      "script_count": 0,
+      "indexable": true,
+      "indexability_reasons": [],
+      "raw_metadata": {
+        "titles": [
+          "Child page"
+        ],
+        "meta_descriptions": [],
+        "h1": [
+          "Child page"
+        ],
+        "h2": [],
+        "canonical": [],
+        "meta_robots": [],
+        "hreflang": [],
+        "word_count": 3,
+        "content_hash": "e01ea331eace0a6b627a09d1c991387944de2cabaa58a601a0541062d29a0e92",
+        "links": [],
+        "custom_extractions": [
+          {
+            "name": "price",
+            "selector": ".price",
+            "attribute": null,
+            "values": [
+              "30.00"
+            ],
+            "source": "raw_html"
+          },
+          {
+            "name": "links",
+            "selector": "a",
+            "attribute": "href",
+            "values": [],
+            "source": "raw_html"
+          }
+        ]
+      },
+      "rendered": true,
+      "renderer_error": null,
+      "rendered_url": "http://127.0.0.1:51130/js-only",
+      "rendered_status": 200,
+      "rendered_headers": {
+        "connection": "keep-alive",
+        "content-length": "140",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Sun, 11 Oct 2026 12:55:11 GMT",
+        "keep-alive": "timeout=5"
+      },
+      "rendered_at": "2026-10-11T12:55:12.303Z",
+      "browser_version": "154.0.8037.99",
+      "rendered_viewport": {
+        "height": 800,
+        "width": 1280
+      },
+      "render_wait_ms": 500,
+      "network_events_dropped": 0,
+      "console_errors": [],
+      "network_requests": [
+        {
+          "error": null,
+          "method": "GET",
+          "resource_type": "document",
+          "status": 200,
+          "url": "http://127.0.0.1:51130/js-only"
+        }
+      ],
+      "accessibility": {
+        "automated_only": true,
+        "engine": "axe-core",
+        "inapplicable_count": 80,
+        "incomplete": [],
+        "passes_count": 8,
+        "version": "4.14.0",
+        "violations": [
+          {
+            "description": "Ensure the document has a main landmark",
+            "help": "Document should have one main landmark",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/landmark-one-main?application=axeAPI",
+            "id": "landmark-one-main",
+            "impact": "moderate",
+            "nodes": [
+              {
+                "all": [
+                  {
+                    "data": null,
+                    "id": "page-has-main",
+                    "impact": "moderate",
+                    "message": "Document does not have a main landmark",
+                    "relatedNodes": []
+                  }
+                ],
+                "any": [],
+                "failureSummary": "Fix all of the following:\n  Document does not have a main landmark",
+                "html": "<html lang=\"de\"><head><title>Child page</title></head><body><h1>Child page</h1><span class=\"price\">30.00</span></body></html>",
+                "impact": "moderate",
+                "none": [],
+                "target": [
+                  "html"
+                ]
+              }
+            ],
+            "tags": [
+              "cat.semantics",
+              "best-practice"
+            ]
+          },
+          {
+            "description": "Ensure all page content is contained by landmarks",
+            "help": "All page content should be contained by landmarks",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/region?application=axeAPI",
+            "id": "region",
+            "impact": "moderate",
+            "nodes": [
+              {
+                "all": [],
+                "any": [
+                  {
+                    "data": {
+                      "isIframe": false
+                    },
+                    "id": "region",
+                    "impact": "moderate",
+                    "message": "Some page content is not contained by landmarks",
+                    "relatedNodes": []
+                  }
+                ],
+                "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+                "html": "<h1>Child page</h1>",
+                "impact": "moderate",
+                "none": [],
+                "target": [
+                  "h1"
+                ]
+              },
+              {
+                "all": [],
+                "any": [
+                  {
+                    "data": {
+                      "isIframe": false
+                    },
+                    "id": "region",
+                    "impact": "moderate",
+                    "message": "Some page content is not contained by landmarks",
+                    "relatedNodes": []
+                  }
+                ],
+                "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+                "html": "<span class=\"price\">30.00</span>",
+                "impact": "moderate",
+                "none": [],
+                "target": [
+                  "span"
+                ]
+              }
+            ],
+            "tags": [
+              "cat.keyboard",
+              "best-practice",
+              "RGAAv4",
+              "RGAA-9.2.1"
+            ]
+          }
+        ]
+      },
+      "screenshot_base64": "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AQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQwAAEAEAQxQAAAggQAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgggAGAAAgwn8BAAD//xT+gXwAAAAGSURBVAMAziUMClIW0EIAAAAASUVORK5CYII=",
+      "custom_extractions": [
+        {
+          "name": "price",
+          "selector": ".price",
+          "attribute": null,
+          "values": [
+            "30.00"
+          ],
+          "source": "rendered_html"
+        },
+        {
+          "name": "links",
+          "selector": "a",
+          "attribute": "href",
+          "values": [],
+          "source": "rendered_html"
+        }
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "code": "http_url",
+      "severity": "warning",
+      "url": "http://127.0.0.1:51130/dynamic",
+      "message": "HTML served over unencrypted HTTP",
+      "related_urls": []
+    },
+    {
+      "code": "viewport_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:51130/dynamic",
+      "message": "No viewport meta tag",
+      "related_urls": []
+    },
+    {
+      "code": "browser_console_errors",
+      "severity": "warning",
+      "url": "http://127.0.0.1:51130/dynamic",
+      "message": "Browser reported 2 console or page error(s)",
+      "related_urls": []
+    },
+    {
+      "code": "accessibility_button-name",
+      "severity": "error",
+      "url": "http://127.0.0.1:51130/dynamic",
+      "message": "Buttons must have discernible text (1 affected nodes; automated check only)",
+      "related_urls": []
+    },
+    {
+      "code": "accessibility_image-alt",
+      "severity": "error",
+      "url": "http://127.0.0.1:51130/dynamic",
+      "message": "Images must have alternative text (1 affected nodes; automated check only)",
+      "related_urls": []
+    },
+    {
+      "code": "http_url",
+      "severity": "warning",
+      "url": "http://127.0.0.1:51130/js-only",
+      "message": "HTML served over unencrypted HTTP",
+      "related_urls": []
+    },
+    {
+      "code": "description_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:51130/js-only",
+      "message": "Meta description is missing or empty",
+      "related_urls": []
+    },
+    {
+      "code": "canonical_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:51130/js-only",
+      "message": "No HTML canonical link",
+      "related_urls": []
+    },
+    {
+      "code": "viewport_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:51130/js-only",
+      "message": "No viewport meta tag",
+      "related_urls": []
+    },
+    {
+      "code": "accessibility_landmark-one-main",
+      "severity": "warning",
+      "url": "http://127.0.0.1:51130/js-only",
+      "message": "Document should have one main landmark (1 affected nodes; automated check only)",
+      "related_urls": []
+    },
+    {
+      "code": "accessibility_region",
+      "severity": "warning",
+      "url": "http://127.0.0.1:51130/js-only",
+      "message": "All page content should be contained by landmarks (2 affected nodes; automated check only)",
+      "related_urls": []
+    }
+  ],
+  "summary": {
+    "started_at": "2026-10-11T12:55:10.108881700+00:00",
+    "finished_at": "2026-10-11T12:55:12.595515600+00:00",
+    "elapsed_ms": 2486,
+    "completed": 2,
+    "discovered": 2,
+    "pending": 0,
+    "html_pages": 2,
+    "indexable_pages": 2,
+    "errors": 2,
+    "warnings": 5,
+    "cancelled": false,
+    "limited": false,
+    "status_counts": {
+      "200": 2
+    }
+  },
+  "warnings": []
+}

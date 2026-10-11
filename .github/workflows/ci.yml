@@ -1,0 +1,44 @@
+name: Rust checks
+on:
+  push:
+  pull_request:
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: cargo fmt --all --check
+      - run: cargo test --workspace --locked
+      - run: cargo clippy --workspace --all-targets --locked -- -D warnings
+      - run: cargo build --locked -p open-seo-spider
+      - run: node scripts/api-e2e.mjs
+      - run: npm ci --ignore-scripts
+        working-directory: scripts
+      - run: node scripts/mcp-e2e.mjs
+  renderer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci --ignore-scripts
+        working-directory: renderer
+      - run: node node_modules/playwright-core/cli.js install chromium --with-deps
+        working-directory: renderer
+      - run: npm test
+        working-directory: renderer
+      - run: node web/verification/ui-smoke.cjs

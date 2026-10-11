@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "project": "Open SEO Spider",
   "catalog_date": "2026-10-11",
   "reference_product": "Screaming Frog SEO Spider",
   "reference_advertised_version": "24.3",
   "method": "Independent capability requirements from public official documentation; no proprietary binary inspection or implementation code was used.",
-  "status_policy": "All entries begin planned. A status change requires implementation evidence; feature parity additionally requires acceptance and comparison evidence.",
+  "status_policy": "implemented means this entry's independent acceptance is supported by current tests/runtime and code evidence; partial means a verified slice exists with explicit remaining acceptance. Neither status means reference-product parity. planned means no sufficient implementation slice is tracked. All reference parity is NOT_PROVEN.",
   "coverage_note": "144 grouped capability requirements cover documented product areas. They are not a reproduction or verified inventory of every individual issue filter. Full parity is NOT PROVEN.",
   "project_constraints": {
     "implementation": "Independent Rust implementation preferred by user",
@@ -417,28 +417,51 @@
     {
       "id": "modes.spider",
       "name": "Website spider",
-      "status": "planned",
+      "status": "implemented",
       "phase": "P1",
       "source_ids": [
         "config"
       ],
       "acceptance_test": "Crawl a synthetic linked graph; fetch each normalized URL once and preserve every link occurrence.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "analysis",
+            "api"
+          ],
+          "proves": "The 601-URL core fixture fetches the fragment-duplicate destination once, and the 604-URL API fixture completes. Raw links retain occurrences; analysis separately tests repeated anchors and unique degrees."
+        }
+      ],
       "parity_evidence": [],
-      "group": "modes"
+      "group": "modes",
+      "remaining_acceptance": [],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "modes.list",
       "name": "List import",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "list"
       ],
       "acceptance_test": "Import TXT, CSV, XLSX and XML; keep original row order and duplicate inputs in exports while deduplicating network work.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "ui-fixture"
+          ],
+          "proves": "Seed URL arrays with crawl_links=false fetch only listed URLs. UI list-mode payload and bounded body/noindex behavior are tested."
+        }
+      ],
       "parity_evidence": [],
-      "group": "modes"
+      "group": "modes",
+      "remaining_acceptance": [
+        "Implement TXT/CSV/XLSX/XML input parsing with original row order and duplicate-input export provenance."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "modes.serp",
@@ -451,7 +474,11 @@
       "acceptance_test": "Import URL/title/description rows, calculate length and approximate width, and export without making network requests.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "modes"
+      "group": "modes",
+      "remaining_acceptance": [
+        "Import URL/title/description rows, calculate length and approximate width, and export without making network requests."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "modes.apis",
@@ -464,33 +491,62 @@
       "acceptance_test": "Enrich supplied URLs using a mock API; record zero website requests.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "modes"
+      "group": "modes",
+      "remaining_acceptance": [
+        "Enrich supplied URLs using a mock API; record zero website requests."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "modes.compare",
       "name": "Snapshot comparison",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "compare"
       ],
       "acceptance_test": "Compare two saved fixture snapshots and classify new, missing and changed URLs.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "api"
+          ],
+          "proves": "Snapshot comparison classifies added/removed/changed URL keys in code. Core recovery checks added URLs; API JSON reimport comparison proves an unchanged snapshot has zero changes."
+        }
+      ],
       "parity_evidence": [],
-      "group": "modes"
+      "group": "modes",
+      "remaining_acceptance": [
+        "Add complete saved-fixture assertions for new, removed and changed classifications together."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "modes.control",
       "name": "Pause, stop, resume",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "general"
       ],
       "acceptance_test": "Pause with requests in flight, persist frontier, restart, and complete with no missing or duplicated results.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "api",
+            "ui-live"
+          ],
+          "proves": "Cancellation preserves a resumable report/frontier. API cancel/resume and process termination/restart finish 725 observations without re-fetching the completed seed."
+        }
+      ],
       "parity_evidence": [],
-      "group": "modes"
+      "group": "modes",
+      "remaining_acceptance": [
+        "Prove explicit pause semantics/UI and complete in-flight result/occurrence equality before and after pause."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "modes.recrawl",
@@ -503,72 +559,135 @@
       "acceptance_test": "Re-fetch a chosen failed URL after the fixture changes without clearing unrelated saved results.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "modes"
+      "group": "modes",
+      "remaining_acceptance": [
+        "Re-fetch a chosen failed URL after the fixture changes without clearing unrelated saved results."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "crawl.unlimited",
       "name": "No commercial URL ceiling",
-      "status": "planned",
+      "status": "implemented",
       "phase": "P1",
       "source_ids": [
         "overview"
       ],
       "acceptance_test": "Complete a deterministic 501-URL fixture; configurable operator limits remain independent of licenses.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "api",
+            "ui-fixture"
+          ],
+          "proves": "Default max_pages=None has no commercial ceiling. A 601-URL core fixture and 604-URL HTTP/API fixture complete; UI aliases do not introduce a cap. Explicit operator limits remain available."
+        }
+      ],
       "parity_evidence": [],
-      "group": "crawl"
+      "group": "crawl",
+      "remaining_acceptance": [],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "crawl.scope",
       "name": "Host, subdomain and folder scope",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "config"
       ],
       "acceptance_test": "Verify exact host, all-subdomains and start-folder policies against an HTTP fixture with cross-scope links.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "core-fixtures"
+          ],
+          "proves": "Exact host/port and optional subdomain boundaries are implemented. Tests reject suffix lookalikes and accept multiple explicitly seeded origins."
+        }
+      ],
       "parity_evidence": [],
-      "group": "crawl"
+      "group": "crawl",
+      "remaining_acceptance": [
+        "Implement start-folder scoping and prove all policies together on cross-scope HTTP links, including scheme decisions."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "crawl.resources",
       "name": "Per-type discovery and storage",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "config"
       ],
       "acceptance_test": "Independently store and fetch HTML, CSS, JavaScript, images, media, PDF and legacy SWF references.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "core-unit"
+          ],
+          "proves": "HTML extraction records anchors, stylesheet, script, image, iframe and selected media references; enabled link discovery fetches observed destinations and records response evidence."
+        }
+      ],
       "parity_evidence": [],
-      "group": "crawl"
+      "group": "crawl",
+      "remaining_acceptance": [
+        "Add independent fetch/store switches per resource type and dedicated CSS/JS/media/PDF/SWF acceptance fixtures."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "crawl.relationships",
       "name": "Relationship discovery",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "config"
       ],
       "acceptance_test": "Enable discovery separately for canonicals, hreflang, next/prev, AMP, iframe, mobile alternate and meta refresh.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "analysis"
+          ],
+          "proves": "HTML canonical/hreflang values are resolved and audited against observed targets; iframe references are recorded."
+        }
+      ],
       "parity_evidence": [],
-      "group": "crawl"
+      "group": "crawl",
+      "remaining_acceptance": [
+        "Add independent relationship discovery controls and next/prev, AMP, mobile alternate and refresh extraction/discovery."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "crawl.normalization",
       "name": "URL identity and encoding",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "tabs"
       ],
       "acceptance_test": "Cover relative URLs, base href, Unicode host/path, percent encoding, fragments and duplicate query strings without merging distinct resources.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "core-fixtures"
+          ],
+          "proves": "Relative links/base href, lowercase host/default port, fragment removal and query-order preservation are tested. Duplicate fragments do not duplicate network work."
+        }
+      ],
       "parity_evidence": [],
-      "group": "crawl"
+      "group": "crawl",
+      "remaining_acceptance": [
+        "Add explicit Unicode host/path, percent-encoding and repeated-query fixture cases without speculative identity merging."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "crawl.rewrite",
@@ -581,20 +700,37 @@
       "acceptance_test": "Apply saved query removal, regex replacement and rewrite rules; keep original and requested addresses for evidence.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "crawl"
+      "group": "crawl",
+      "remaining_acceptance": [
+        "Apply saved query removal, regex replacement and rewrite rules; keep original and requested addresses for evidence."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "crawl.include_exclude",
       "name": "Include/exclude expressions",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "config"
       ],
       "acceptance_test": "Exercise allow and deny regexes against links and resources with an explained exclusion reason.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "ui-fixture",
+            "ui-renderer"
+          ],
+          "proves": "Validated Rust URL regexes apply before link/sitemap enqueue; tests preserve explicit seed exemptions and reject invalid definitions before HTTP. UI regex configuration payload is checked."
+        }
+      ],
       "parity_evidence": [],
-      "group": "crawl"
+      "group": "crawl",
+      "remaining_acceptance": [
+        "Record explained per-URL exclusion evidence and test resource-type filters, rather than only omitting filtered discovery."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "crawl.cdns",
@@ -607,72 +743,136 @@
       "acceptance_test": "Classify configured CDN hosts as internal while preventing unrestricted external traversal.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "crawl"
+      "group": "crawl",
+      "remaining_acceptance": [
+        "Classify configured CDN hosts as internal while preventing unrestricted external traversal."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "crawl.nofollow",
       "name": "Link directive policy",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "config"
       ],
       "acceptance_test": "Exercise nofollow, ugc, sponsored and page nofollow; store links regardless of whether discovery is enabled.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "analysis"
+          ],
+          "proves": "Anchor rel/nofollow values remain observable. Independent graph scoring excludes nofollow/ugc/sponsored/page nofollow; discovery currently follows stored references."
+        }
+      ],
       "parity_evidence": [],
-      "group": "crawl"
+      "group": "crawl",
+      "remaining_acceptance": [
+        "Add configurable traversal policy and dedicated fixtures for all four directives while preserving link occurrences."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "crawl.limits",
       "name": "Operator crawl controls",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "config"
       ],
       "acceptance_test": "Test total, depth, URLs-per-depth, folder, query, subdomain, redirect, URL length, link-count and response-size bounds.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "renderer"
+          ],
+          "proves": "Optional total/depth, concurrency, HTTP body, redirect and sitemap-document limits exist; body truncation and cancellation are tested. Renderer contexts/queue/deadline/HTML are bounded."
+        }
+      ],
       "parity_evidence": [],
-      "group": "crawl"
+      "group": "crawl",
+      "remaining_acceptance": [
+        "Implement or explicitly specify URLs-per-depth, folder/query/subdomain counts, URL length and link-count controls; exercise every configured bound."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "crawl.speed",
       "name": "Concurrency and request speed",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "config"
       ],
       "acceptance_test": "Use a timestamped fixture to prove request-rate bounds and bounded concurrency under latency.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "renderer"
+          ],
+          "proves": "Core scheduling caps concurrent tasks and spaces per-origin starts; renderer pool tests prove max four concurrent jobs with bounded queuing."
+        }
+      ],
       "parity_evidence": [],
-      "group": "crawl"
+      "group": "crawl",
+      "remaining_acceptance": [
+        "Add timestamped HTTP fixtures asserting the core per-origin request-rate and concurrency bounds under latency."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "crawl.timeouts_retries",
       "name": "Timeout and retry policy",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "config"
       ],
       "acceptance_test": "Distinguish timeout, DNS/network and HTTP errors; retry selected 5xx responses with bounded attempts.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "renderer"
+          ],
+          "proves": "HTTP failures are retained with error messages; slow rendering returns 504 and releases capacity. Native timeout configuration and resumable cancellation exist."
+        }
+      ],
       "parity_evidence": [],
-      "group": "crawl"
+      "group": "crawl",
+      "remaining_acceptance": [
+        "Introduce bounded retry rules/backoff and dedicated DNS, network, native timeout and selected-5xx distinctions."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "crawl.headers_proxy",
       "name": "Agents, headers and proxies",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "config"
       ],
       "acceptance_test": "Verify custom user agent/header and proxy behavior using captured fixture requests; redact secrets from export.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "renderer"
+          ],
+          "proves": "Custom UA/header handling and malformed header rejection are tested. Both native HTTP and Chromium two-origin tests keep test credentials away from robots/external requests and cross-origin redirects."
+        }
+      ],
       "parity_evidence": [],
-      "group": "crawl"
+      "group": "crawl",
+      "remaining_acceptance": [
+        "Add explicit proxy configuration/proof and secret-redacted config/report exports."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "crawl.tls",
@@ -685,33 +885,62 @@
       "acceptance_test": "Crawl a fixture with a user-trusted certificate and observe HSTS upgrade provenance without disabling validation globally.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "crawl"
+      "group": "crawl",
+      "remaining_acceptance": [
+        "Crawl a fixture with a user-trusted certificate and observe HSTS upgrade provenance without disabling validation globally."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "robots.fetch",
       "name": "robots.txt retrieval and caching",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "robots"
       ],
       "acceptance_test": "Cache per origin and test distinct policy on scheme/host/port; record blocked URLs without fabricated status codes.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "core-unit",
+            "api"
+          ],
+          "proves": "Per-origin robots cache retrieves once in the 601-page fixture. Blocked pages have no fabricated HTTP status; robots 503/outage denies crawling with explicit evidence."
+        }
+      ],
       "parity_evidence": [],
-      "group": "robots"
+      "group": "robots",
+      "remaining_acceptance": [
+        "Add scheme/host/port cache separation fixtures with contrasting policy and declared cache lifetime."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "robots.matching",
       "name": "Agent matching and directives",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "robots"
       ],
       "acceptance_test": "Run fixtures for multiple user-agent groups, allow/disallow wildcards, end anchors and sitemap declarations.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "core-fixtures"
+          ],
+          "proves": "Google robotstxt parser tests multiple user-agent groups, wildcard Disallow and Allow precedence. Sitemap declarations drive the core sitemap fixture."
+        }
+      ],
       "parity_evidence": [],
-      "group": "robots"
+      "group": "robots",
+      "remaining_acceptance": [
+        "Add end-anchor directive fixtures and the full declared agent-selection acceptance matrix."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "robots.test",
@@ -724,46 +953,87 @@
       "acceptance_test": "Evaluate supplied rules against a URL list without editing the remote site's robots.txt.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "robots"
+      "group": "robots",
+      "remaining_acceptance": [
+        "Evaluate supplied rules against a URL list without editing the remote site's robots.txt."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "robots.override",
       "name": "Explicit robots override",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "robots"
       ],
       "acceptance_test": "Keep respect as the default; require a saved explicit override and show its state in crawl metadata.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "ui-fixture"
+          ],
+          "proves": "obey_robots defaults true and is stored in CrawlConfig; settings expose an explicit option. Respect behavior is proved by blocked target fixtures."
+        }
+      ],
       "parity_evidence": [],
-      "group": "robots"
+      "group": "robots",
+      "remaining_acceptance": [
+        "Add a saved explicit-override fixture proving the changed request behavior and visible crawl metadata state."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "robots.meta",
       "name": "Meta and HTTP robots",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "tabs"
       ],
       "acceptance_test": "Extract multiple meta robots and X-Robots-Tag fields; distinguish general and agent-specific directives.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "core-unit"
+          ],
+          "proves": "Multiple extracted meta directives and X-Robots-Tag values remain evidence. Noindex affects indexability in the list-mode fixture."
+        }
+      ],
       "parity_evidence": [],
-      "group": "robots"
+      "group": "robots",
+      "remaining_acceptance": [
+        "Preserve the directive agent identity separately and test general versus agent-specific directives rather than conflating them."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "robots.indexability",
       "name": "Indexability explanations",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "tabs"
       ],
       "acceptance_test": "Report concrete reasons for redirect, robots blocking, noindex, non-HTML and canonicalization with supporting evidence.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "analysis",
+            "ui-live"
+          ],
+          "proves": "Records explain non-200 requested status, robots blocking, errors, non-HTML, noindex, canonicalization, truncated body and rendering failure. Inspector exposes stored observations."
+        }
+      ],
       "parity_evidence": [],
-      "group": "robots"
+      "group": "robots",
+      "remaining_acceptance": [
+        "Add a dedicated fixture asserting every explanation and correct agent-specific directive interpretation."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "robots.traversal",
@@ -776,59 +1046,113 @@
       "acceptance_test": "Verify saved noindex/canonical/pagination policies influence expansion without suppressing observed evidence.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "robots"
+      "group": "robots",
+      "remaining_acceptance": [
+        "Verify saved noindex/canonical/pagination policies influence expansion without suppressing observed evidence."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "http.response",
       "name": "Response evidence",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "tabs"
       ],
       "acceptance_test": "Record status, final content type, measured bytes, transferred bytes, timings and complete header evidence.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "api",
+            "renderer"
+          ],
+          "proves": "Initial/final status, content type, response milliseconds, bounded decoded bytes and header maps are retained. Rendered status/headers remain separate from native evidence."
+        }
+      ],
       "parity_evidence": [],
-      "group": "http"
+      "group": "http",
+      "remaining_acceptance": [
+        "Retain measured transfer bytes/timing phases and complete duplicate header provenance, not only a single-value map."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "http.failures",
       "name": "Status and network failure groups",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "tabs"
       ],
       "acceptance_test": "Seed 2xx, 3xx, 4xx, 5xx, timeout and malformed links; expose distinct machine-readable results.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "api",
+            "renderer"
+          ],
+          "proves": "2xx, redirects, 404, robots outage, redirect-loop and renderer timeout are tested and produce separate observations/issues."
+        }
+      ],
       "parity_evidence": [],
-      "group": "http"
+      "group": "http",
+      "remaining_acceptance": [
+        "Add the full native 5xx/DNS/timeout/malformed-link classification matrix with stable machine-readable error classes."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "http.redirects",
       "name": "Redirect chains and loops",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "redirects"
       ],
       "acceptance_test": "Persist every hop including terminal URL; find chains, circular loops, off-scope destinations and non-200 endings.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "api",
+            "renderer"
+          ],
+          "proves": "Redirect hop records, initial/final status and loop detection are tested. Worker same-origin and foreign-origin redirect behavior is verified without header leakage."
+        }
+      ],
       "parity_evidence": [],
-      "group": "http"
+      "group": "http",
+      "remaining_acceptance": [
+        "Add multi-hop/non-200-ending/off-scope fixtures and explicit chain report acceptance."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "http.refresh",
       "name": "Refresh and script redirects",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "redirects"
       ],
       "acceptance_test": "Detect HTTP refresh, meta refresh and rendered JavaScript navigation; label each mechanism separately.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-browser"
+          ],
+          "proves": "Chromium final_url can observe a page after JavaScript navigation; rendered_url remains separate from native final_url."
+        }
+      ],
       "parity_evidence": [],
-      "group": "http"
+      "group": "http",
+      "remaining_acceptance": [
+        "Detect and label HTTP Refresh, meta refresh and JavaScript navigation mechanisms in a dedicated fixture."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "http.migration",
@@ -841,59 +1165,114 @@
       "acceptance_test": "Check a CSV of old/new URL expectations and identify mismatched final destinations.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "http"
+      "group": "http",
+      "remaining_acceptance": [
+        "Check a CSV of old/new URL expectations and identify mismatched final destinations."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "http.broken_sources",
       "name": "Broken-link source export",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "links"
       ],
       "acceptance_test": "Export every source occurrence for a broken destination with anchor, rel and location.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "api",
+            "ui-live"
+          ],
+          "proves": "Broken-outlink findings identify source pages; all-occurrence links CSV contains source, target, anchor, kind and rel. API/browser exports are tested."
+        }
+      ],
       "parity_evidence": [],
-      "group": "http"
+      "group": "http",
+      "remaining_acceptance": [
+        "Add an explicit broken-destination source export including per-occurrence document location/path."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "metadata.titles",
       "name": "Title extraction and audits",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "tabs"
       ],
       "acceptance_test": "Test absent, empty, multiple, duplicate and configurable character/width thresholds with a known HTML fixture.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "core-unit",
+            "api",
+            "ui-fixture"
+          ],
+          "proves": "Title extraction, missing/multiple/duplicate and fixed character checks exist; duplicate fixture and UI title filter/inspector are tested."
+        }
+      ],
       "parity_evidence": [],
-      "group": "metadata"
+      "group": "metadata",
+      "remaining_acceptance": [
+        "Exercise empty/multiple cases and configurable character plus measured/approximate width thresholds."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "metadata.descriptions",
       "name": "Description extraction and audits",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "tabs"
       ],
       "acceptance_test": "Test absent, duplicate, multiple and length/width limits without assuming a fixed search-engine display width.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "core-fixtures"
+          ],
+          "proves": "Description extraction and missing/multiple/duplicate/fixed-length issue code are implemented; extraction and duplicate audit source are exercised."
+        }
+      ],
       "parity_evidence": [],
-      "group": "metadata"
+      "group": "metadata",
+      "remaining_acceptance": [
+        "Add configurable length/width thresholds and complete absent/multiple/duplicate threshold fixtures."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "metadata.headings",
       "name": "H1/H2 and meta keyword evidence",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "tabs"
       ],
       "acceptance_test": "Record heading order and duplicate/missing/multiple conditions plus meta keyword values as observational fields.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "core-browser"
+          ],
+          "proves": "H1/H2 lists and H1 missing/multiple findings exist. Raw and JavaScript-changed H1 are separately retained in the live browser fixture."
+        }
+      ],
       "parity_evidence": [],
-      "group": "metadata"
+      "group": "metadata",
+      "remaining_acceptance": [
+        "Add heading duplicate/order acceptance and meta keyword observational fields."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "metadata.serp_preview",
@@ -906,7 +1285,11 @@
       "acceptance_test": "Show editable title/description preview; identify it as an approximation and export edited values.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "metadata"
+      "group": "metadata",
+      "remaining_acceptance": [
+        "Show editable title/description preview; identify it as an approximation and export edited values."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "metadata.area",
@@ -919,20 +1302,35 @@
       "acceptance_test": "Exclude shared navigation/footer and include a chosen selector; prove selected text feeds analysis.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "metadata"
+      "group": "metadata",
+      "remaining_acceptance": [
+        "Exclude shared navigation/footer and include a chosen selector; prove selected text feeds analysis."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "metadata.wordcount",
       "name": "Text count and ratio",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "readability"
       ],
       "acceptance_test": "Use fixture paragraphs and hidden/script content to prove documented tokenization and text/code calculations.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-unit"
+          ],
+          "proves": "Normalized body whitespace tokens exclude script/style/noscript/template ancestors; the extraction fixture proves a five-word result despite script text."
+        }
+      ],
       "parity_evidence": [],
-      "group": "metadata"
+      "group": "metadata",
+      "remaining_acceptance": [
+        "Specify CSS-hidden-content handling and add text/code ratio plus paragraph/hidden-content fixtures."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "metadata.readability",
@@ -945,20 +1343,36 @@
       "acceptance_test": "Return score and formula/language version; classify unsupported language explicitly.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "metadata"
+      "group": "metadata",
+      "remaining_acceptance": [
+        "Return score and formula/language version; classify unsupported language explicitly."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "metadata.exact",
       "name": "Exact duplicate detection",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "duplicates"
       ],
       "acceptance_test": "Group identical content but separate a one-character change; record the digest method.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "core-fixtures"
+          ],
+          "proves": "SHA-256 hashes normalized body text; audit code groups equal captured hashes and records related URLs."
+        }
+      ],
       "parity_evidence": [],
-      "group": "metadata"
+      "group": "metadata",
+      "remaining_acceptance": [
+        "Add explicit identical versus one-character-change grouping assertions and digest provenance in the report schema."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "metadata.near",
@@ -971,7 +1385,11 @@
       "acceptance_test": "Score a controlled changed paragraph above/below a configured threshold; preserve matched URL and comparison evidence.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "metadata"
+      "group": "metadata",
+      "remaining_acceptance": [
+        "Score a controlled changed paragraph above/below a configured threshold; preserve matched URL and comparison evidence."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "metadata.spelling",
@@ -984,7 +1402,11 @@
       "acceptance_test": "Test multilingual dictionaries, ignored words/rules and exact issue locations against saved text.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "metadata"
+      "group": "metadata",
+      "remaining_acceptance": [
+        "Test multilingual dictionaries, ignored words/rules and exact issue locations against saved text."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "metadata.ngrams",
@@ -997,20 +1419,35 @@
       "acceptance_test": "Count overlapping one-, two- and three-word sequences with documented stopword and case policies.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "metadata"
+      "group": "metadata",
+      "remaining_acceptance": [
+        "Count overlapping one-, two- and three-word sequences with documented stopword and case policies."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "links.occurrences",
       "name": "Inlinks and outlinks",
-      "status": "planned",
+      "status": "implemented",
       "phase": "P2",
       "source_ids": [
         "links"
       ],
       "acceptance_test": "For repeated A-to-B anchors, expose total occurrences and unique sources separately with anchor text and rel.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "analysis",
+            "core-unit",
+            "api"
+          ],
+          "proves": "Repeated A-to-B anchors retain occurrence counts separately from unique source/target degrees. Original LinkRecord values preserve anchor text/rel and all-occurrence links export is API-tested."
+        }
+      ],
       "parity_evidence": [],
-      "group": "links"
+      "group": "links",
+      "remaining_acceptance": [],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "links.positions",
@@ -1023,46 +1460,85 @@
       "acceptance_test": "Classify nav/header/footer/content links and custom positions; retain selector/path per occurrence.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "links"
+      "group": "links",
+      "remaining_acceptance": [
+        "Classify nav/header/footer/content links and custom positions; retain selector/path per occurrence."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "links.depth",
       "name": "Shortest crawl depth",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "links"
       ],
       "acceptance_test": "On a graph with multiple routes, compute minimum click depth deterministically after complete discovery.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "analysis"
+          ],
+          "proves": "Graph analysis deterministically computes shortest observed anchor distances by BFS, separately from stored crawl depth; fixture checks depth and input-order invariance."
+        }
+      ],
       "parity_evidence": [],
-      "group": "links"
+      "group": "links",
+      "remaining_acceptance": [
+        "Add a dedicated multi-route/long-first discovery graph asserting all minimum click depths."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "links.score",
       "name": "Internal authority scoring",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "links"
       ],
       "acceptance_test": "Run a documented independent PageRank-style method on a known graph; save algorithm and parameter version.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "analysis",
+            "api"
+          ],
+          "proves": "Independent PageRank uses damping .85, L1 tolerance 1e-12, max200 iterations, uniform dangling redistribution and max-rank normalization100. Tests prove conserved rank, dangling/nofollow behavior and deterministic order."
+        }
+      ],
       "parity_evidence": [],
-      "group": "links"
+      "group": "links",
+      "remaining_acceptance": [
+        "Add an explicit algorithm/parameter version identifier to persisted graph evidence."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "links.orphans",
       "name": "Orphan URL discovery",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "orphans"
       ],
       "acceptance_test": "Merge sitemap/analytics/search data; distinguish absent internal links from incomplete crawl coverage.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "analysis",
+            "core-fixtures"
+          ],
+          "proves": "Zero observed inlinks identifies usable non-seed HTML candidates only; pending/limited/cancelled/truncated coverage is explicit. Sitemap-only pages are discoverable."
+        }
+      ],
       "parity_evidence": [],
-      "group": "links"
+      "group": "links",
+      "remaining_acceptance": [
+        "Join sitemap/GA4/GSC URL provenance and prove whole supplied-source reconciliation while preserving incomplete-crawl boundaries."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "links.uncrawlable",
@@ -1075,7 +1551,11 @@
       "acceptance_test": "Record onclick, javascript URLs and href on non-anchor elements without assuming a valid navigable target.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "links"
+      "group": "links",
+      "remaining_acceptance": [
+        "Record onclick, javascript URLs and href on non-anchor elements without assuming a valid navigable target."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "links.fragments",
@@ -1088,20 +1568,37 @@
       "acceptance_test": "Verify decoded fragment destinations against IDs/names; distinguish a missing fragment from a failed page.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "links"
+      "group": "links",
+      "remaining_acceptance": [
+        "Verify decoded fragment destinations against IDs/names; distinguish a missing fragment from a failed page."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "links.crawl_graph",
       "name": "Crawl tree and graph views",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "visuals"
       ],
       "acceptance_test": "Render shortest-path hierarchy, focus/expand and status/indexability coloring from fixture data.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "analysis",
+            "ui-fixture",
+            "ui-live"
+          ],
+          "proves": "Observed anchor nodes/edges/degrees are API-proved; browser displays a bounded graph and real local-crawl graph with explicit scope."
+        }
+      ],
       "parity_evidence": [],
-      "group": "links"
+      "group": "links",
+      "remaining_acceptance": [
+        "Add shortest-path tree hierarchy, focus/expand controls and full status/indexability color acceptance."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "links.directory_graph",
@@ -1114,7 +1611,11 @@
       "acceptance_test": "Build directory hierarchy including synthetic grouping paths and label paths that are not fetched URLs.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "links"
+      "group": "links",
+      "remaining_acceptance": [
+        "Build directory hierarchy including synthetic grouping paths and label paths that are not fetched URLs."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "links.graphs_3d",
@@ -1127,7 +1628,11 @@
       "acceptance_test": "Display a bounded large graph and expose truncation/focus rather than silently omitting nodes.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "links"
+      "group": "links",
+      "remaining_acceptance": [
+        "Display a bounded large graph and expose truncation/focus rather than silently omitting nodes."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "links.segments",
@@ -1140,33 +1645,61 @@
       "acceptance_test": "Apply ordered field/regex segments and filter counts, issues, charts and exports by segment.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "links"
+      "group": "links",
+      "remaining_acceptance": [
+        "Apply ordered field/regex segments and filter counts, issues, charts and exports by segment."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "relationships.canonical",
       "name": "Canonical extraction",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "canonical"
       ],
       "acceptance_test": "Extract HTML and HTTP Link canonical entries including relative, multiple and self-referencing values.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "analysis"
+          ],
+          "proves": "Relative HTML canonical links resolve against base URL; multiple/conflicting/self/target-cycle facts are analyzed."
+        }
+      ],
       "parity_evidence": [],
-      "group": "relationships"
+      "group": "relationships",
+      "remaining_acceptance": [
+        "Extract HTTP Link canonical values and test HTML/HTTP relative/multiple/self precedence."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "relationships.canonical_checks",
       "name": "Canonical validation",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "canonical"
       ],
       "acceptance_test": "Flag malformed, conflicting, redirecting, blocked and non-indexable targets and canonical chains.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "analysis",
+            "core-fixtures"
+          ],
+          "proves": "Observed redirect/non200/blocked/noindex/canonicalized/unobserved/conflicting targets and canonical cycles have distinct findings. Unknown targets never become fabricated HTTP failures."
+        }
+      ],
       "parity_evidence": [],
-      "group": "relationships"
+      "group": "relationships",
+      "remaining_acceptance": [
+        "Preserve malformed declaration evidence and test full chain/cycle/target-state acceptance through actual captured HTML."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "relationships.pagination",
@@ -1179,33 +1712,61 @@
       "acceptance_test": "Extract HTML/HTTP next and prev; test broken links, absent returns and inconsistent chains.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "relationships"
+      "group": "relationships",
+      "remaining_acceptance": [
+        "Extract HTML/HTTP next and prev; test broken links, absent returns and inconsistent chains."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "relationships.hreflang",
       "name": "Hreflang extraction",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "hreflang"
       ],
       "acceptance_test": "Read HTML, HTTP Link and XML sitemap alternates with language/region and x-default.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "analysis"
+          ],
+          "proves": "HTML alternate hreflang language strings and resolved URLs are retained; language labels normalize for conflict checks."
+        }
+      ],
       "parity_evidence": [],
-      "group": "relationships"
+      "group": "relationships",
+      "remaining_acceptance": [
+        "Add HTTP Link and XML sitemap alternates plus explicit language/region/x-default extraction fixtures."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "relationships.hreflang_checks",
       "name": "Hreflang reciprocity and validity",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "hreflang"
       ],
       "acceptance_test": "Test unsupported codes, missing returns/self-reference, duplicates and non-indexable targets.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "analysis",
+            "core-unit"
+          ],
+          "proves": "Self-reference, language-target conflicts, fetched complete target reciprocity and noindex/canonicalized targets are tested. Core tests avoid false return absence on 500/truncated targets."
+        }
+      ],
       "parity_evidence": [],
-      "group": "relationships"
+      "group": "relationships",
+      "remaining_acceptance": [
+        "Validate supported language/region codes and preserve duplicate-identical declaration findings."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "relationships.amp",
@@ -1218,7 +1779,11 @@
       "acceptance_test": "Detect amphtml/canonical reciprocity and report versioned AMP validation findings.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "relationships"
+      "group": "relationships",
+      "remaining_acceptance": [
+        "Detect amphtml/canonical reciprocity and report versioned AMP validation findings."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "relationships.mobile",
@@ -1231,46 +1796,86 @@
       "acceptance_test": "Resolve alternate media relationships and surface missing or non-indexable target evidence.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "relationships"
+      "group": "relationships",
+      "remaining_acceptance": [
+        "Resolve alternate media relationships and surface missing or non-indexable target evidence."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "images.sources",
       "name": "Image candidates and occurrences",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "images"
       ],
       "acceptance_test": "Record src/srcset candidates and every source page independently; preserve per-occurrence alt.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "ui-fixture"
+          ],
+          "proves": "Each img src occurrence retains its source PageRecord, alt and declared width/height/loading; browser inspector exposes image evidence."
+        }
+      ],
       "parity_evidence": [],
-      "group": "images"
+      "group": "images",
+      "remaining_acceptance": [
+        "Add srcset/picture candidates and explicit multi-page occurrence acceptance."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "images.alt",
       "name": "Missing alt distinctions",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "images"
       ],
       "acceptance_test": "Separate missing attribute from empty/whitespace alt using three deliberately different image elements.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "core-fixtures",
+            "ui-fixture"
+          ],
+          "proves": "Option<String> distinguishes absent alt from present strings; missing-alt fixture findings and UI image-alt filter are tested."
+        }
+      ],
       "parity_evidence": [],
-      "group": "images"
+      "group": "images",
+      "remaining_acceptance": [
+        "Add the three-element absent/empty/whitespace fixture and report these distinctions explicitly."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "images.size",
       "name": "Image dimensions and size audits",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "images"
       ],
       "acceptance_test": "Record intrinsic/rendered dimensions, transfer size and configurable thresholds without mislabeling unavailable data.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-unit"
+          ],
+          "proves": "Declared HTML image dimensions are captured as observational strings; independently fetched resources have native byte evidence."
+        }
+      ],
       "parity_evidence": [],
-      "group": "images"
+      "group": "images",
+      "remaining_acceptance": [
+        "Measure intrinsic and rendered dimensions/transfer bytes with configurable thresholds and explicit unavailable states."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "images.cookies",
@@ -1283,7 +1888,11 @@
       "acceptance_test": "Collect response and script cookies with domain/path/security attributes and distinguish session contexts.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "images"
+      "group": "images",
+      "remaining_acceptance": [
+        "Collect response and script cookies with domain/path/security attributes and distinguish session contexts."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "images.pdf",
@@ -1296,7 +1905,11 @@
       "acceptance_test": "Extract title, author, dates, pages and text from an owned fixture PDF; show unsupported encrypted files explicitly.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "images"
+      "group": "images",
+      "remaining_acceptance": [
+        "Extract title, author, dates, pages and text from an owned fixture PDF; show unsupported encrypted files explicitly."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "images.pdf_links",
@@ -1309,85 +1922,165 @@
       "acceptance_test": "Resolve link annotations, record source document/page and extract text where reliable.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "images"
+      "group": "images",
+      "remaining_acceptance": [
+        "Resolve link annotations, record source document/page and extract text where reliable."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "rendering.text",
       "name": "Raw HTML mode",
-      "status": "planned",
+      "status": "implemented",
       "phase": "P3",
       "source_ids": [
         "render"
       ],
       "acceptance_test": "Fetch and parse a script-dependent fixture while proving no JavaScript execution.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "core-browser"
+          ],
+          "proves": "Native HTTP plus HTML parsing retains Raw title/Raw heading before optional browser execution. The extraction fixture ignores script words and the live core/browser fixture separately retains the unexecuted raw metadata."
+        }
+      ],
       "parity_evidence": [],
-      "group": "rendering"
+      "group": "rendering",
+      "remaining_acceptance": [],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "rendering.chromium",
       "name": "Chromium rendering mode",
-      "status": "planned",
+      "status": "implemented",
       "phase": "P3",
       "source_ids": [
         "render"
       ],
       "acceptance_test": "Discover links created after script execution; save browser/version/config used for the crawl.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "renderer",
+            "core-browser",
+            "ui-fixture",
+            "ui-renderer"
+          ],
+          "proves": "Real Rust→worker→installed Chrome execution changes title/H1 and extracts a JavaScript-only link. Optional renderer settings and worker startup are independently tested. PageRecord browser_version/rendered_viewport/render_wait_ms/network_events_dropped preserve worker provenance; Rust fixture and explicit live worker test verify it. Saved CrawlConfig retains optional renderer settings. The fresh real core-to-Chrome gate also asserts browser_version, rendered_viewport, render_wait_ms=100 and network_events_dropped=0."
+        }
+      ],
       "parity_evidence": [],
-      "group": "rendering"
+      "group": "rendering",
+      "remaining_acceptance": [],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "rendering.wait",
       "name": "Render completion policy",
-      "status": "planned",
+      "status": "partial",
       "phase": "P3",
       "source_ids": [
         "render"
       ],
       "acceptance_test": "Control viewport, wait/timeout and resource loading; distinguish timed-out render from a successful raw fetch.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "renderer",
+            "core-fixtures",
+            "core-browser",
+            "ui-renderer"
+          ],
+          "proves": "Worker controls viewport/wait/deadline; core distinguishes raw success from renderer failure and disallowed native pages never trigger rendering."
+        }
+      ],
       "parity_evidence": [],
-      "group": "rendering"
+      "group": "rendering",
+      "remaining_acceptance": [
+        "Expose viewport/resource-loading policy through crawler config and prove selected resource/robots controls plus full timeout distinctions."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "rendering.source_diff",
       "name": "Raw/rendered parity analysis",
-      "status": "planned",
+      "status": "partial",
       "phase": "P3",
       "source_ids": [
         "render"
       ],
       "acceptance_test": "Surface elements and links added/removed by rendering while retaining both representations.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "core-browser",
+            "ui-fixture",
+            "ui-renderer"
+          ],
+          "proves": "RawMetadata preserves original titles/headings/links/extraction values while current fields reflect rendered DOM. Native status/headers remain separate."
+        }
+      ],
       "parity_evidence": [],
-      "group": "rendering"
+      "group": "rendering",
+      "remaining_acceptance": [
+        "Retain both full HTML representations and compute explicit added/removed element/link differences."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "rendering.screenshot",
       "name": "Rendered screenshots",
-      "status": "planned",
+      "status": "partial",
       "phase": "P3",
       "source_ids": [
         "render"
       ],
       "acceptance_test": "Capture a deterministic owned page at selected viewport and link the image to URL/snapshot.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "renderer",
+            "core-browser",
+            "ui-renderer"
+          ],
+          "proves": "Worker returns a valid viewport PNG; real core crawl stores screenshot_base64 on the URL record and JSON snapshot can serialize it. Actual UI lazily previews the PNG and project export retains render evidence."
+        }
+      ],
       "parity_evidence": [],
-      "group": "rendering"
+      "group": "rendering",
+      "remaining_acceptance": [
+        "Expose selected capture viewport through crawler/UI, add deterministic image/viewport assertions and artifact-file links."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "rendering.console",
       "name": "Console and blocked-resource evidence",
-      "status": "planned",
+      "status": "partial",
       "phase": "P3",
       "source_ids": [
         "render"
       ],
       "acceptance_test": "Save browser JS errors and failed/robots-blocked resource loads with URLs and error types.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "renderer",
+            "core-browser",
+            "ui-renderer"
+          ],
+          "proves": "Console/page errors and network request URL/type/status/failure objects are captured and stored; fixture asserts deliberate console error and HTTP observation."
+        }
+      ],
       "parity_evidence": [],
-      "group": "rendering"
+      "group": "rendering",
+      "remaining_acceptance": [
+        "Enforce browser subresource robots policy and prove blocked-resource reason evidence; native main-page robots gating alone does not establish this."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "rendering.flatten",
@@ -1400,7 +2093,11 @@
       "acceptance_test": "Extract owned fixtures with shadow roots and same-origin iframe content; preserve source context.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "rendering"
+      "group": "rendering",
+      "remaining_acceptance": [
+        "Extract owned fixtures with shadow roots and same-origin iframe content; preserve source context."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "rendering.archive",
@@ -1413,20 +2110,39 @@
       "acceptance_test": "Save configured page/resource artifacts and verify a manifest can locate each stored file.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "rendering"
+      "group": "rendering",
+      "remaining_acceptance": [
+        "Save configured page/resource artifacts and verify a manifest can locate each stored file."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "rendering.custom_extract",
       "name": "CSS/XPath/regex extraction",
-      "status": "planned",
+      "status": "partial",
       "phase": "P3",
       "source_ids": [
         "extract"
       ],
       "acceptance_test": "Return text, attributes, HTML, inner HTML and function values from a known fixture with multi-value results.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "core-fixtures",
+            "core-browser",
+            "ui-fixture",
+            "ui-renderer"
+          ],
+          "proves": "Named CSS text/attribute extraction is validated before HTTP, applies to raw/rendered DOM, keeps all matches and empty results, and exports exact values. UI config and inspector are fixture-tested. The actual final app/browser→Rust→Chrome fixture additionally proves raw price10 versus rendered price20, saved extraction evidence and rendered-DOM table values."
+        }
+      ],
       "parity_evidence": [],
-      "group": "rendering"
+      "group": "rendering",
+      "remaining_acceptance": [
+        "Implement XPath, regex content extraction, outer/inner HTML and function-value modes with acceptance for each."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "rendering.visual_extract",
@@ -1439,7 +2155,11 @@
       "acceptance_test": "Choose an element, preview raw/rendered extraction, save selector and verify it on a second fixture.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "rendering"
+      "group": "rendering",
+      "remaining_acceptance": [
+        "Choose an element, preview raw/rendered extraction, save selector and verify it on a second fixture."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "rendering.custom_search",
@@ -1452,7 +2172,11 @@
       "acceptance_test": "Search source, rendered content and selected text with occurrence counts and match evidence.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "rendering"
+      "group": "rendering",
+      "remaining_acceptance": [
+        "Search source, rendered content and selected text with occurrence counts and match evidence."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "rendering.javascript",
@@ -1465,7 +2189,11 @@
       "acceptance_test": "Run a user-authored script against a fixture with timeout/error handling and typed returned columns.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "rendering"
+      "group": "rendering",
+      "remaining_acceptance": [
+        "Run a user-authored script against a fixture with timeout/error handling and typed returned columns."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "rendering.interact",
@@ -1478,7 +2206,11 @@
       "acceptance_test": "Execute authored hover/click/scroll actions in declared order and discover resulting links.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "rendering"
+      "group": "rendering",
+      "remaining_acceptance": [
+        "Execute authored hover/click/scroll actions in declared order and discover resulting links."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "rendering.snippet_library",
@@ -1491,20 +2223,36 @@
       "acceptance_test": "Import/export user-owned snippets without storing provider secrets in shared library files.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "rendering"
+      "group": "rendering",
+      "remaining_acceptance": [
+        "Import/export user-owned snippets without storing provider secrets in shared library files."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "quality.structured_formats",
       "name": "JSON-LD, Microdata and RDFa",
-      "status": "planned",
+      "status": "partial",
       "phase": "P3",
       "source_ids": [
         "structured"
       ],
       "acceptance_test": "Extract nested graphs from each format; keep parse errors and raw node references.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "analysis"
+          ],
+          "proves": "JSON-LD parsed blocks/error count and recursively observed @type facts are tested; context type-coercion definitions are excluded from content type facts."
+        }
+      ],
       "parity_evidence": [],
-      "group": "quality"
+      "group": "quality",
+      "remaining_acceptance": [
+        "Implement Microdata/RDFa with raw-node provenance and nested-graph fixtures for each supported format."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "quality.schema",
@@ -1517,7 +2265,11 @@
       "acceptance_test": "Check types/properties against an identified schema version; test unknown and deprecated terms.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "quality"
+      "group": "quality",
+      "remaining_acceptance": [
+        "Check types/properties against an identified schema version; test unknown and deprecated terms."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "quality.richresults",
@@ -1530,46 +2282,86 @@
       "acceptance_test": "Validate required/recommended fields using versioned public rules; distinguish errors from warnings.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "quality"
+      "group": "quality",
+      "remaining_acceptance": [
+        "Validate required/recommended fields using versioned public rules; distinguish errors from warnings."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "quality.accessibility",
       "name": "axe accessibility findings",
-      "status": "planned",
+      "status": "implemented",
       "phase": "P3",
       "source_ids": [
         "accessibility"
       ],
       "acceptance_test": "Run version-pinned axe on a deliberately failing rendered fixture; retain rule, impact, node and WCAG tags.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "renderer",
+            "core-browser",
+            "ui-renderer"
+          ],
+          "proves": "Pinned axe-core4.14.0 runs on owned failing rendered HTML. Tests assert button-name/image-alt plus engine version, impact, node HTML/target and WCAG tags; the live Rust/browser test retains the accessibility JSON."
+        }
+      ],
       "parity_evidence": [],
-      "group": "quality"
+      "group": "quality",
+      "remaining_acceptance": [],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "quality.accessibility_limit",
       "name": "Manual accessibility boundaries",
-      "status": "planned",
+      "status": "partial",
       "phase": "P3",
       "source_ids": [
         "accessibility"
       ],
       "acceptance_test": "Display automated-only coverage and incomplete/needs-review findings in report exports.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "renderer",
+            "core-browser",
+            "ui-renderer"
+          ],
+          "proves": "Worker accessibility JSON marks automated_only:true and keeps incomplete results; errors use null findings plus error instead of an empty pass report."
+        }
+      ],
       "parity_evidence": [],
-      "group": "quality"
+      "group": "quality",
+      "remaining_acceptance": [
+        "Display/export incomplete needs-review details and automated coverage throughout UI/specialist reports, with end-to-end assertions."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "quality.mobile",
       "name": "Mobile usability checks",
-      "status": "planned",
+      "status": "partial",
       "phase": "P3",
       "source_ids": [
         "mobile"
       ],
       "acceptance_test": "Test viewport, sizing, tap targets and incompatible content under defined mobile rendering.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "ui-fixture"
+          ],
+          "proves": "Viewport meta evidence/missing-viewport findings exist; dashboard itself passes narrow viewport layout checks."
+        }
+      ],
       "parity_evidence": [],
-      "group": "quality"
+      "group": "quality",
+      "remaining_acceptance": [
+        "Add rendered target-site tap sizing/content usability rules and dedicated mobile-site fixtures; dashboard responsiveness is not website mobile usability proof."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "quality.html_head",
@@ -1582,7 +2374,11 @@
       "acceptance_test": "Seed invalid head children that affect subsequent metadata; point to observed raw markup.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "quality"
+      "group": "quality",
+      "remaining_acceptance": [
+        "Seed invalid head children that affect subsequent metadata; point to observed raw markup."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "quality.html_validation",
@@ -1595,20 +2391,36 @@
       "acceptance_test": "Run a versioned validator against owned malformed HTML and retain line/column/rule where available.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "quality"
+      "group": "quality",
+      "remaining_acceptance": [
+        "Run a versioned validator against owned malformed HTML and retain line/column/rule where available."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "quality.security",
       "name": "Transport and header audits",
-      "status": "planned",
+      "status": "partial",
       "phase": "P3",
       "source_ids": [
         "tabs"
       ],
       "acceptance_test": "Test mixed content, insecure forms, MIME mismatch and configurable security-header presence with concrete evidence.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "analysis",
+            "core-fixtures"
+          ],
+          "proves": "Observed HTTPS header presence/selected values and HTTP resource references are independently tested. HTTP anchor navigation remains a separate finding."
+        }
+      ],
       "parity_evidence": [],
-      "group": "quality"
+      "group": "quality",
+      "remaining_acceptance": [
+        "Add insecure-form/MIME-mismatch checks, configurable header rules and complete transport fixture coverage."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "quality.carbon",
@@ -1621,59 +2433,111 @@
       "acceptance_test": "Expose dataset/method/version and unknown states; label output as an estimate.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "quality"
+      "group": "quality",
+      "remaining_acceptance": [
+        "Expose dataset/method/version and unknown states; label output as an estimate."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "sitemap.discovery",
       "name": "Robots and explicit sitemaps",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "sitemaps"
       ],
       "acceptance_test": "Load a sitemap index, gzipped child sitemap and explicit input; handle loops/malformed XML safely.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "core-unit"
+          ],
+          "proves": "Robots/explicit sitemap inputs, nested sitemap indexes, multiple explicit origins, XML escaping, malformed-root rejection and bounded/seen discovery exist and are fixture-tested."
+        }
+      ],
       "parity_evidence": [],
-      "group": "sitemap"
+      "group": "sitemap",
+      "remaining_acceptance": [
+        "Add owned gzipped child-sitemap decoding and explicit index-loop/malformed-XML end-to-end fixtures."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "sitemap.coverage",
       "name": "Sitemap coverage and orphan checks",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "sitemaps"
       ],
       "acceptance_test": "Compare fetched pages and sitemap locations; distinguish not listed, sitemap-only and incomplete crawl.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "analysis"
+          ],
+          "proves": "Sitemap-only locations are fetched with discovery source; observed graph orphan candidates explicitly retain incomplete/limited coverage boundaries."
+        }
+      ],
       "parity_evidence": [],
-      "group": "sitemap"
+      "group": "sitemap",
+      "remaining_acceptance": [
+        "Persist complete sitemap membership and compare not-listed/sitemap-only observations rather than deriving only zero-inlink candidates."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "sitemap.validity",
       "name": "Sitemap URL validation",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "sitemaps"
       ],
       "acceptance_test": "Find redirect/non-200/non-indexable URLs and invalid lastmod values in fixture XML.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures"
+          ],
+          "proves": "Discovered sitemap locations receive ordinary status/indexability observations and errors."
+        }
+      ],
       "parity_evidence": [],
-      "group": "sitemap"
+      "group": "sitemap",
+      "remaining_acceptance": [
+        "Retain sitemap XML fields, validate lastmod and produce specific redirect/non200/nonindexable sitemap-url findings."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "sitemap.generate",
       "name": "XML sitemap generation",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "sitemapgen"
       ],
       "acceptance_test": "Export valid XML with optional lastmod, image entries and hreflang; parse output with an independent parser.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "api",
+            "ui-live"
+          ],
+          "proves": "Basic indexable-page loc XML export escapes URL text, passes core content assertions and downloads through API/live browser."
+        }
+      ],
       "parity_evidence": [],
-      "group": "sitemap"
+      "group": "sitemap",
+      "remaining_acceptance": [
+        "Support optional lastmod/image/hreflang entries and independent-parser output validation."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "sitemap.split",
@@ -1686,7 +2550,11 @@
       "acceptance_test": "Split at configured URL/byte bounds, create index and prove segment URL membership.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "sitemap"
+      "group": "sitemap",
+      "remaining_acceptance": [
+        "Split at configured URL/byte bounds, create index and prove segment URL membership."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "integrations.ga4",
@@ -1699,7 +2567,11 @@
       "acceptance_test": "Using an authorized property, join page metrics with declared URL matching and preserve absent data as absent.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "integrations"
+      "group": "integrations",
+      "remaining_acceptance": [
+        "Using an authorized property, join page metrics with declared URL matching and preserve absent data as absent."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "integrations.gsc",
@@ -1712,7 +2584,11 @@
       "acceptance_test": "Fetch selected dates/dimensions and join clicks/impressions/CTR/position; report API errors and row coverage.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "integrations"
+      "group": "integrations",
+      "remaining_acceptance": [
+        "Fetch selected dates/dimensions and join clicks/impressions/CTR/position; report API errors and row coverage."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "integrations.inspection",
@@ -1725,7 +2601,11 @@
       "acceptance_test": "Honor daily/property quotas; retain inspection timestamp and distinguish inspected from queued URLs.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "integrations"
+      "group": "integrations",
+      "remaining_acceptance": [
+        "Honor daily/property quotas; retain inspection timestamp and distinguish inspected from queued URLs."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "integrations.psi",
@@ -1738,7 +2618,11 @@
       "acceptance_test": "Preserve mobile/desktop, field/lab distinction, metric units and provider error details.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "integrations"
+      "group": "integrations",
+      "remaining_acceptance": [
+        "Preserve mobile/desktop, field/lab distinction, metric units and provider error details."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "integrations.cwv",
@@ -1751,7 +2635,11 @@
       "acceptance_test": "Compute pass/fail from available field metrics; never substitute lab results for unavailable field data.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "integrations"
+      "group": "integrations",
+      "remaining_acceptance": [
+        "Compute pass/fail from available field metrics; never substitute lab results for unavailable field data."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "integrations.majestic",
@@ -1764,7 +2652,11 @@
       "acceptance_test": "Use separately authorized credentials; mock fresh/historic datasets, quota exhaustion and URL/domain scopes.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "integrations"
+      "group": "integrations",
+      "remaining_acceptance": [
+        "Use separately authorized credentials; mock fresh/historic datasets, quota exhaustion and URL/domain scopes."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "integrations.ahrefs",
@@ -1777,7 +2669,11 @@
       "acceptance_test": "Use independent authorized app/API access; mock expiry, quota and metric joins without reusing vendor tokens.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "integrations"
+      "group": "integrations",
+      "remaining_acceptance": [
+        "Use independent authorized app/API access; mock expiry, quota and metric joins without reusing vendor tokens."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "integrations.moz",
@@ -1790,7 +2686,11 @@
       "acceptance_test": "Mock authorized URL/domain metric queries with unavailable/quota states.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "integrations"
+      "group": "integrations",
+      "remaining_acceptance": [
+        "Mock authorized URL/domain metric queries with unavailable/quota states."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "integrations.oauth",
@@ -1803,7 +2703,11 @@
       "acceptance_test": "Add, disconnect and revoke an authorized provider account; verify tokens stay out of logs and version control.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "integrations"
+      "group": "integrations",
+      "remaining_acceptance": [
+        "Add, disconnect and revoke an authorized provider account; verify tokens stay out of logs and version control."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "integrations.provider_urls",
@@ -1816,7 +2720,11 @@
       "acceptance_test": "Optionally enqueue provider-only URLs with provenance and scope checking; preserve orphan evidence.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "integrations"
+      "group": "integrations",
+      "remaining_acceptance": [
+        "Optionally enqueue provider-only URLs with provenance and scope checking; preserve orphan evidence."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "ai.providers",
@@ -1829,7 +2737,11 @@
       "acceptance_test": "Use mock OpenAI-compatible/Gemini/Anthropic and a local Ollama endpoint; record model/provider errors separately.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "ai"
+      "group": "ai",
+      "remaining_acceptance": [
+        "Use mock OpenAI-compatible/Gemini/Anthropic and a local Ollama endpoint; record model/provider errors separately."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "ai.prompts",
@@ -1842,7 +2754,11 @@
       "acceptance_test": "Run an authored prompt on selected page text/HTML/extraction; preview exact input and persist typed output.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "ai"
+      "group": "ai",
+      "remaining_acceptance": [
+        "Run an authored prompt on selected page text/HTML/extraction; preview exact input and persist typed output."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "ai.prompt_library",
@@ -1855,7 +2771,11 @@
       "acceptance_test": "Round-trip user-authored prompts with model/settings and no secrets.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "ai"
+      "group": "ai",
+      "remaining_acceptance": [
+        "Round-trip user-authored prompts with model/settings and no secrets."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "ai.embeddings",
@@ -1868,7 +2788,11 @@
       "acceptance_test": "Embed selected text, cache with model/input hash and reject incompatible dimensionality.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "ai"
+      "group": "ai",
+      "remaining_acceptance": [
+        "Embed selected text, cache with model/input hash and reject incompatible dimensionality."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "ai.similarity",
@@ -1881,7 +2805,11 @@
       "acceptance_test": "Rank a known vector fixture using a documented cosine method and configured thresholds.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "ai"
+      "group": "ai",
+      "remaining_acceptance": [
+        "Rank a known vector fixture using a documented cosine method and configured thresholds."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "ai.outliers",
@@ -1894,7 +2822,11 @@
       "acceptance_test": "Report low-centroid-similarity fixture vectors with exact scores and declared corpus coverage.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "ai"
+      "group": "ai",
+      "remaining_acceptance": [
+        "Report low-centroid-similarity fixture vectors with exact scores and declared corpus coverage."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "ai.semantic_search",
@@ -1907,7 +2839,11 @@
       "acceptance_test": "Query saved vectors and visualize clusters while retaining model/dimensionality provenance.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "ai"
+      "group": "ai",
+      "remaining_acceptance": [
+        "Query saved vectors and visualize clusters while retaining model/dimensionality provenance."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "ai.redirect_mapping",
@@ -1920,7 +2856,11 @@
       "acceptance_test": "Rank candidate target pages from a deterministic vector fixture and export suggestions with score; never apply redirects automatically.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "ai"
+      "group": "ai",
+      "remaining_acceptance": [
+        "Rank candidate target pages from a deterministic vector fixture and export suggestions with score; never apply redirects automatically."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "ai.usage",
@@ -1933,59 +2873,110 @@
       "acceptance_test": "Enforce explicit rate/spend bounds for an API fixture, record retries and distinguish local from paid providers.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "ai"
+      "group": "ai",
+      "remaining_acceptance": [
+        "Enforce explicit rate/spend bounds for an API fixture, record retries and distinguish local from paid providers."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "storage.database",
       "name": "Durable local database",
-      "status": "planned",
+      "status": "implemented",
       "phase": "P2",
       "source_ids": [
         "general"
       ],
       "acceptance_test": "Crash after committed requests; recover completed results and pending queue with consistent graph state.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "api"
+          ],
+          "proves": "SQLite stores result plus discovered frontier transactionally. Cancel/resume and actual process termination/restart retain completed pages and finish the pending graph without re-fetching the completed seed."
+        }
+      ],
       "parity_evidence": [],
-      "group": "storage"
+      "group": "storage",
+      "remaining_acceptance": [],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "storage.memory",
       "name": "Optional memory storage",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "config"
       ],
       "acceptance_test": "Run the same fixture in memory and disk modes; compare results while documenting mode differences.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures"
+          ],
+          "proves": "Crawler can run with no SQLite store; default in-memory fixtures and durable-store recovery fixtures pass."
+        }
+      ],
       "parity_evidence": [],
-      "group": "storage"
+      "group": "storage",
+      "remaining_acceptance": [
+        "Run the identical fixture in both modes and assert equal captured observations/graph with documented mode differences."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "storage.snapshots",
       "name": "Save/open/import/export snapshots",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "general"
       ],
       "acceptance_test": "Round-trip an Open SEO Spider snapshot including config, graph, issues and optional artifacts; verify schema version.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "api",
+            "ui-fixture",
+            "ui-live",
+            "ui-renderer"
+          ],
+          "proves": "Complete CrawlReport JSON exports/imports config/pages/links/issues and optional inline browser fields. API round-trip compare has zero changes; live browser report download works. Actual browser render evidence survives project export and a legacy pre-extraction JSON report remains importable."
+        }
+      ],
       "parity_evidence": [],
-      "group": "storage"
+      "group": "storage",
+      "remaining_acceptance": [
+        "Add an explicit versioned snapshot schema and complete optional-artifact round-trip assertions."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "storage.projects",
       "name": "Projects and crawl history",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "teams"
       ],
       "acceptance_test": "Group snapshots by project, label them, reopen them and record their creation/config identity.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "api",
+            "ui-fixture"
+          ],
+          "proves": "Local crawl history reopens persisted snapshots and active/interrupted job identity survives restart."
+        }
+      ],
       "parity_evidence": [],
-      "group": "storage"
+      "group": "storage",
+      "remaining_acceptance": [
+        "Add named project grouping, labels and explicit creation/config identity acceptance."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "storage.retention",
@@ -1998,46 +2989,86 @@
       "acceptance_test": "Use test timestamps to expire unlocked fixture snapshots while preserving locked snapshots and active jobs.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "storage"
+      "group": "storage",
+      "remaining_acceptance": [
+        "Use test timestamps to expire unlocked fixture snapshots while preserving locked snapshots and active jobs."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "storage.config",
       "name": "Reusable crawl configuration",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "teams"
       ],
       "acceptance_test": "Export/import typed config and validate missing credentials/paths without silently changing settings.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "api",
+            "core-fixtures",
+            "ui-fixture"
+          ],
+          "proves": "Typed CrawlConfig is serialized with snapshots; defaults/aliases, bad headers/selectors/regexes and persisted UI settings are tested."
+        }
+      ],
       "parity_evidence": [],
-      "group": "storage"
+      "group": "storage",
+      "remaining_acceptance": [
+        "Add dedicated config import/export with credential/path validation and unchanged setting assertions."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "storage.portable",
       "name": "Shared crawl portability",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "teams"
       ],
       "acceptance_test": "Copy an Open SEO Spider archive to a second local directory and open all declared portable artifacts.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "api"
+          ],
+          "proves": "Self-contained report JSON imports under a new local crawl ID, keeping source observations; inline optional screenshot data has no external image path requirement."
+        }
+      ],
       "parity_evidence": [],
-      "group": "storage"
+      "group": "storage",
+      "remaining_acceptance": [
+        "Copy/open an archive in a second directory and validate all declared portable artifacts plus manifest/schema version."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "storage.compare_changes",
       "name": "Field and content changes",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "compare"
       ],
       "acceptance_test": "Detect title, description, headings, graph, directives, structured data and content changes even if issue counts are unchanged.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "api",
+            "core-fixtures"
+          ],
+          "proves": "Comparison joins stable URL keys and checks status/finalURL/title/description/headings/canonical/robots/hash/count/render fields; imported-identical report and added URLs are tested."
+        }
+      ],
       "parity_evidence": [],
-      "group": "storage"
+      "group": "storage",
+      "remaining_acceptance": [
+        "Add graph and structured-data comparisons and prove all changed-field cases when issue counts remain equal."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "storage.compare_mapping",
@@ -2050,59 +3081,112 @@
       "acceptance_test": "Map staging/production or migrated URL prefixes before joining snapshots and expose collisions.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "storage"
+      "group": "storage",
+      "remaining_acceptance": [
+        "Map staging/production or migrated URL prefixes before joining snapshots and expose collisions."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "storage.compare_export",
       "name": "Comparison export",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "compare"
       ],
       "acceptance_test": "Export both snapshots and deltas with new/missing/changed evidence and stable URL keys.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "api"
+          ],
+          "proves": "Snapshot exports and JSON comparison endpoint expose before/after IDs and added/removed/changed URL field deltas."
+        }
+      ],
       "parity_evidence": [],
-      "group": "storage"
+      "group": "storage",
+      "remaining_acceptance": [
+        "Add combined downloadable comparison export with fixture assertions for all delta classes and both snapshots."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "automation.tables",
       "name": "Table and bulk exports",
-      "status": "planned",
+      "status": "partial",
       "phase": "P4",
       "source_ids": [
         "general"
       ],
       "acceptance_test": "Export filtered observations and all-occurrence evidence as CSV/XLSX; escape formulas and preserve Unicode/newlines.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "api",
+            "core-fixtures",
+            "ui-live"
+          ],
+          "proves": "CSV pages/issues/all-occurrence links/extraction exports and basic XML/JSON exports exist; exact quoted extraction values and browser downloads are tested."
+        }
+      ],
       "parity_evidence": [],
-      "group": "automation"
+      "group": "automation",
+      "remaining_acceptance": [
+        "Add XLSX, filtered-export parity, formula-injection escaping and explicit Unicode/newline acceptance."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "automation.reports",
       "name": "Issue and specialist reports",
-      "status": "planned",
+      "status": "partial",
       "phase": "P4",
       "source_ids": [
         "general"
       ],
       "acceptance_test": "Export versioned overview plus redirect/canonical/hreflang/sitemap/security/content report fixtures.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "api",
+            "analysis",
+            "ui-live"
+          ],
+          "proves": "Issues CSV and advanced graph/relationship/security analysis plus basic sitemap exports are accessible and include independently observed issue codes."
+        }
+      ],
       "parity_evidence": [],
-      "group": "automation"
+      "group": "automation",
+      "remaining_acceptance": [
+        "Add versioned overview and dedicated redirect/canonical/hreflang/sitemap/security/content specialist report acceptance."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "automation.assets",
       "name": "Artifact exports",
-      "status": "planned",
+      "status": "partial",
       "phase": "P4",
       "source_ids": [
         "general"
       ],
       "acceptance_test": "Export source, rendered HTML, screenshots, headers, cookies and PDF artifacts with a manifest.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-browser",
+            "api"
+          ],
+          "proves": "CrawlReport JSON carries headers, raw metadata and optional screenshot/accessibility/network observations."
+        }
+      ],
       "parity_evidence": [],
-      "group": "automation"
+      "group": "automation",
+      "remaining_acceptance": [
+        "Export raw/rendered HTML and resource/cookie/PDF files with an artifact manifest."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "automation.looker",
@@ -2115,20 +3199,36 @@
       "acceptance_test": "Use an authorized export destination; retain append/replace setting and stable column schema across two runs.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "automation"
+      "group": "automation",
+      "remaining_acceptance": [
+        "Use an authorized export destination; retain append/replace setting and stable column schema across two runs."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "automation.cli",
       "name": "Headless command line",
-      "status": "planned",
+      "status": "partial",
       "phase": "P4",
       "source_ids": [
         "general"
       ],
       "acceptance_test": "Run a crawl/config/import/analysis/export sequence from CLI and verify deterministic exit codes.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "api"
+          ],
+          "proves": "Original CLI exposes serve/crawl/mcp and crawl JSON/CSV/XML output paths; underlying crawler/export behavior is tested through core/API."
+        }
+      ],
       "parity_evidence": [],
-      "group": "automation"
+      "group": "automation",
+      "remaining_acceptance": [
+        "Execute the complete CLI config/import/analysis/export sequence and assert deterministic success/error exit codes."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "automation.scheduler",
@@ -2141,7 +3241,11 @@
       "acceptance_test": "Use a fake clock to execute saved crawl tasks, record history/errors and define overlap policy.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "automation"
+      "group": "automation",
+      "remaining_acceptance": [
+        "Use a fake clock to execute saved crawl tasks, record history/errors and define overlap policy."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "automation.auto_compare",
@@ -2154,7 +3258,11 @@
       "acceptance_test": "After two completed project snapshots, create a comparison automatically using saved comparison settings.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "automation"
+      "group": "automation",
+      "remaining_acceptance": [
+        "After two completed project snapshots, create a comparison automatically using saved comparison settings."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "automation.notifications",
@@ -2167,111 +3275,208 @@
       "acceptance_test": "Send only to an explicitly configured local test SMTP sink; verify summary, change table and attachment error handling.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "automation"
+      "group": "automation",
+      "remaining_acceptance": [
+        "Send only to an explicitly configured local test SMTP sink; verify summary, change table and attachment error handling."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "automation.mcp",
       "name": "MCP agent interface",
-      "status": "planned",
+      "status": "implemented",
       "phase": "P4",
       "source_ids": [
         "release24"
       ],
       "acceptance_test": "Perform MCP initialize/list-tools/crawl/read/export using a local client; keep script execution an explicit capability.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "mcp"
+          ],
+          "proves": "Official local MCP SDK clients initialize/list 11 tools, start a crawl, read status/pages/issues/analysis/project JSON, compare/list history and receive tool errors. Project JSON provides local snapshot export; arbitrary script execution is not exposed as an implicit tool."
+        }
+      ],
       "parity_evidence": [],
-      "group": "automation"
+      "group": "automation",
+      "remaining_acceptance": [],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "automation.mcp_transport",
       "name": "STDIO and streamable HTTP",
-      "status": "planned",
+      "status": "implemented",
       "phase": "P4",
       "source_ids": [
         "config"
       ],
       "acceptance_test": "Exercise both transports on loopback and prove JSON protocol framing and job identifiers remain stable.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "mcp"
+          ],
+          "proves": "Both stdio and Streamable HTTP on loopback complete the official SDK initialize/tool workflow. Typed JSON framing and the returned job IDs remain usable for status/pages/project/analysis throughout each transport."
+        }
+      ],
       "parity_evidence": [],
-      "group": "automation"
+      "group": "automation",
+      "remaining_acceptance": [],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "automation.stats",
       "name": "Local usage statistics",
-      "status": "planned",
+      "status": "partial",
       "phase": "P4",
       "source_ids": [
         "release24"
       ],
       "acceptance_test": "Aggregate locally saved crawl counts/duration without sending telemetry by default.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "api",
+            "ui-live"
+          ],
+          "proves": "Saved CrawlSummary and local job status expose crawl counts/duration and current history in the local application."
+        }
+      ],
       "parity_evidence": [],
-      "group": "automation"
+      "group": "automation",
+      "remaining_acceptance": [
+        "Add explicit aggregate usage statistics over multiple snapshots and demonstrate default no-telemetry behavior."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "ui.realtime",
       "name": "Live crawl progress and tables",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "general"
       ],
       "acceptance_test": "During a delayed fixture crawl, update progress/results and permit safe pause/config inspection.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "api",
+            "ui-fixture",
+            "ui-live"
+          ],
+          "proves": "Polling job progress/results, cancellation/resume and actual form→Rust→fixture→inspector/export flow are tested; safe bounded pagination exists."
+        }
+      ],
       "parity_evidence": [],
-      "group": "ui"
+      "group": "ui",
+      "remaining_acceptance": [
+        "Exercise delayed live updates and explicit pause/config-inspection acceptance in browser."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "ui.filter",
       "name": "Sort, search and saved columns",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "general"
       ],
       "acceptance_test": "Combine numeric/text filters and sort; keep column preferences when reopening a project.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "ui-fixture",
+            "ui-live"
+          ],
+          "proves": "Text search, numeric sorting, title/image/issue filters, bounded pagination and persisted settings are fixture-tested; live404 filter/inspector is proved."
+        }
+      ],
       "parity_evidence": [],
-      "group": "ui"
+      "group": "ui",
+      "remaining_acceptance": [
+        "Save/reopen column preferences and test combined numeric/text filtering rather than separate controls alone."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "ui.overview",
       "name": "Overview and issue taxonomy",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "tabs"
       ],
       "acceptance_test": "Show severity/type/count and drill-down to every affected URL; distinguish observation from advice.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "ui-fixture",
+            "ui-live"
+          ],
+          "proves": "Overview and independently computed issue counters/filtering drill into URL observations; live404 and robots findings are tested."
+        }
+      ],
       "parity_evidence": [],
-      "group": "ui"
+      "group": "ui",
+      "remaining_acceptance": [
+        "Assert severity/type/count consistency and drill-down for every observed issue family with clear observation/advice distinction."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "ui.details",
       "name": "URL evidence inspector",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "tabs"
       ],
       "acceptance_test": "Select a URL and inspect links, resources, raw/rendered source, headers, cookies and structured nodes.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "ui-fixture",
+            "ui-live",
+            "ui-renderer"
+          ],
+          "proves": "Inspector shows URL status, headers, anchor/image evidence, link metrics, JSON-LD and CSS extraction source; rendered/raw metadata is present in supported fields."
+        }
+      ],
       "parity_evidence": [],
-      "group": "ui"
+      "group": "ui",
+      "remaining_acceptance": [
+        "Add full raw/rendered HTML, cookie details and complete resource/structured-node inspection acceptance."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "ui.charts",
       "name": "Site structure and timing charts",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "tabs"
       ],
       "acceptance_test": "Aggregate folder/depth/status/timing over a fixture dataset with consistent filtered totals.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "analysis",
+            "ui-fixture",
+            "ui-live"
+          ],
+          "proves": "Graph/depth distribution and page status/timing observations are available with bounded visual graph fixture/live proof."
+        }
+      ],
       "parity_evidence": [],
-      "group": "ui"
+      "group": "ui",
+      "remaining_acceptance": [
+        "Add folder/depth/status/timing aggregation charts with consistent combined filtered totals."
+      ],
+      "parity_status": "NOT_PROVEN"
     },
     {
       "id": "ui.localization",
@@ -2284,7 +3489,392 @@
       "acceptance_test": "Switch supported interface locale/theme/font settings while preserving stored crawl text exactly.",
       "implementation_evidence": [],
       "parity_evidence": [],
-      "group": "ui"
+      "group": "ui",
+      "remaining_acceptance": [
+        "Switch supported interface locale/theme/font settings while preserving stored crawl text exactly."
+      ],
+      "parity_status": "NOT_PROVEN"
     }
-  ]
+  ],
+  "implementation_review_date": "2026-10-11",
+  "parity_status": "NOT_PROVEN",
+  "verification_runs": [
+    {
+      "id": "api",
+      "artifact": "docs/verification/api-e2e.json",
+      "command": "node scripts/api-e2e.mjs",
+      "result": "PASS",
+      "tested_at": "2026-10-11T12:55:30.737Z",
+      "scope": [
+        "604 URL HTTP/API crawl",
+        "robots excluded target",
+        "redirect initial/final status",
+        "graph and issue API",
+        "named CSS extraction and all six export endpoints",
+        "JSON import and snapshot comparison",
+        "cancel and resume",
+        "failed resume manifest write retains cancelled state and snapshot",
+        "process termination and SQLite frontier recovery",
+        "host/origin protection"
+      ],
+      "limits": "Owned local HTTP fixtures; no reference-product comparison."
+    },
+    {
+      "id": "core-fixtures",
+      "artifact": "crates/core/tests/crawl_fixtures.rs",
+      "command": "cargo test -p open-seo-spider-core",
+      "result": "PASS",
+      "scope": "17 integration tests passed; live browser gate ignored in this default run. 8 core unit tests passed.",
+      "reported_by": "Root and core implementation agents in this session",
+      "limits": "Test source is linked; this registry records the session result, not a saved terminal log."
+    },
+    {
+      "id": "core-unit",
+      "artifact": "crates/core/src",
+      "command": "cargo test -p open-seo-spider-core",
+      "result": "PASS",
+      "scope": "8 core unit tests passed with the integration suite.",
+      "reported_by": "Core implementation agent in this session",
+      "limits": "Individual assertions cover only their owned fixtures; broad rule compliance is not inferred."
+    },
+    {
+      "id": "analysis",
+      "artifact": "docs/analysis-acceptance.md",
+      "command": "cargo test -p open-seo-spider analysis::tests -- --nocapture",
+      "result": "PASS",
+      "scope": "8 deterministic analysis tests; graph, relationships, headers, JSON-LD facts and incomplete scope.",
+      "limits": "Captured snapshot only; no whole-site/reference completeness or provider validation."
+    },
+    {
+      "id": "renderer",
+      "artifact": "renderer/tests/worker.test.mjs",
+      "command": "npm test (renderer/)",
+      "result": "PASS",
+      "scope": "12 tests, 0 fail/skip, real installed Windows Chrome. JS DOM, PNG, axe tags/nodes/impact/version, origin-scoped credentials, isolation, queue, timeout, shutdown.",
+      "limits": "Local worker fixtures; cross-platform/large-crawl performance not proven."
+    },
+    {
+      "id": "core-browser",
+      "artifact": "crates/core/tests/crawl_fixtures.rs",
+      "command": "cargo test -p open-seo-spider-core live_browser_worker_executes_javascript_for_core_crawl -- --ignored",
+      "result": "PASS",
+      "scope": "One explicit real Rust→loopback worker→Chrome test. Executed title/H1, JS-only link, retained raw metadata, axe JSON, PNG and network evidence. Fresh rerun passes browser version, rendered viewport, render wait100ms and dropped-event count0 provenance assertions.",
+      "reported_by": "Core implementation agent in this session",
+      "limits": "Owned fixture integration; no vendor comparison or sustained-scale browser proof."
+    },
+    {
+      "id": "ui-fixture",
+      "artifact": "web/verification/ui-fixture-results.json",
+      "result": "PASS",
+      "tested_at": "2026-10-11T12:44:38.742Z",
+      "scope": [
+        "empty state",
+        "snapshot and advanced analysis",
+        "bounded pagination",
+        "search and URL inspector links",
+        "title filter and numeric sorting",
+        "untrusted metadata escaped",
+        "image alt filter",
+        "advanced issue filter",
+        "link metrics and JSON-LD",
+        "CSS extraction results and source in table and inspector",
+        "renderer provenance and explicit dropped network observations",
+        "bounded real anchor graph",
+        "CSV sitemap project downloads",
+        "invalid extraction JSON blocks settings save",
+        "invalid CSS rejected before starting",
+        "persisted settings",
+        "list mode POST contract",
+        "opt-in renderer POST contract, no runtime claim",
+        "named CSS and Rust regex configuration POST contract",
+        "sitemap mode POST contract",
+        "report import",
+        "viewport 1920: no document overflow, footer reachable",
+        "viewport 1440: no document overflow, footer reachable",
+        "viewport 390: no document overflow, footer reachable",
+        "viewport 320: no document overflow, footer reachable",
+        "expanded renderer and extraction settings bottom reachable on mobile"
+      ],
+      "limits": "Isolated browser fixture only; not live Rust backend proof"
+    },
+    {
+      "id": "ui-live",
+      "artifact": "web/verification/ui-live-results.json",
+      "result": "PASS",
+      "tested_at": "2026-10-11T12:22:34.456Z",
+      "scope": [
+        "real form to Rust crawler to local HTTP fixture",
+        "real 404 filter and URL inspector",
+        "real robots exclusions",
+        "real observed graph",
+        "real browser CSV sitemap and persisted report downloads",
+        "live viewport 1440 no overflow footer reachable",
+        "live viewport 390 no overflow footer reachable"
+      ],
+      "limits": "Actual live Rust server form -> local controlled fixture -> crawl data -> inspector -> exports"
+    },
+    {
+      "id": "ui-renderer",
+      "artifact": "web/verification/ui-renderer-live-results.json",
+      "result": "PASS",
+      "tested_at": "2026-10-11T12:55:15.232Z",
+      "scope": [
+        "real renderer discovers JS-only links and respects URL exclusion",
+        "raw and rendered named CSS extraction evidence",
+        "actual axe violations screenshot PNG network console and browser provenance observations",
+        "live UI rendered metadata raw comparison and lazy screenshot preview",
+        "live extraction table displays actual DOM values",
+        "render evidence and browser provenance survive project export",
+        "legacy pre-extraction JSON report import remains compatible",
+        "final live mobile no overflow and footer reachable"
+      ],
+      "limits": "Actual final app browser -> Rust -> local Chromium renderer -> owned JS fixture -> persisted exports and legacy import"
+    },
+    {
+      "id": "mcp",
+      "artifact": "docs/verification/mcp-e2e.json",
+      "command": "node scripts/mcp-e2e.mjs",
+      "result": "PASS",
+      "tested_at": "2026-10-11T12:55:31.406Z",
+      "scope": [
+        "stdio: SDK initialize, 11 tools, start/status/pages/issues/project/analysis/compare/list and tool error",
+        "streamable_http: SDK initialize, 11 tools, start/status/pages/issues/project/analysis/compare/list and tool error"
+      ],
+      "limits": "Official SDK against local owned fixtures; not an external-client deployment or reference-product parity test."
+    }
+  ],
+  "reference_workflows": [
+    {
+      "id": "reference.http_graph",
+      "status": "missing",
+      "parity_status": "NOT_PROVEN",
+      "feature_ids": [
+        "modes.spider",
+        "crawl.normalization",
+        "links.occurrences",
+        "links.depth",
+        "http.response"
+      ],
+      "acceptance": "On an owned multiroute graph compare normalized URL identities, response fields, anchor occurrences and shortest depth at recorded reference version/settings.",
+      "evidence": []
+    },
+    {
+      "id": "reference.robots_redirects",
+      "status": "missing",
+      "parity_status": "NOT_PROVEN",
+      "feature_ids": [
+        "robots.fetch",
+        "robots.matching",
+        "robots.meta",
+        "robots.indexability",
+        "http.redirects"
+      ],
+      "acceptance": "Compare agent-specific robots/noindex, controlled redirect chains/loops, initial/final status and blocked/unknown states using authorized ordinary reference operation.",
+      "evidence": []
+    },
+    {
+      "id": "reference.javascript",
+      "status": "missing",
+      "parity_status": "NOT_PROVEN",
+      "feature_ids": [
+        "rendering.chromium",
+        "rendering.wait",
+        "rendering.source_diff",
+        "rendering.screenshot",
+        "rendering.console"
+      ],
+      "acceptance": "Compare one script-dependent owned fixture with declared browser/wait/viewport/resources settings; retain both DOM captures and classify observed differences.",
+      "evidence": []
+    },
+    {
+      "id": "reference.relationships",
+      "status": "missing",
+      "parity_status": "NOT_PROVEN",
+      "feature_ids": [
+        "relationships.canonical",
+        "relationships.canonical_checks",
+        "relationships.hreflang",
+        "relationships.hreflang_checks"
+      ],
+      "acceptance": "Compare controlled HTML/HTTP/XML declarations, target states, reciprocity and conflicts; preserve legitimate unobserved-target uncertainty.",
+      "evidence": []
+    },
+    {
+      "id": "reference.quality",
+      "status": "missing",
+      "parity_status": "NOT_PROVEN",
+      "feature_ids": [
+        "metadata.exact",
+        "quality.structured_formats",
+        "quality.schema",
+        "quality.richresults",
+        "quality.accessibility",
+        "quality.security"
+      ],
+      "acceptance": "Use owned text/schema/accessibility/security fixtures with pinned rules/engines, compare raw findings and document unsupported checks individually.",
+      "evidence": []
+    },
+    {
+      "id": "reference.persistence_exports",
+      "status": "missing",
+      "parity_status": "NOT_PROVEN",
+      "feature_ids": [
+        "modes.control",
+        "storage.database",
+        "storage.snapshots",
+        "storage.compare_changes",
+        "automation.tables",
+        "automation.reports"
+      ],
+      "acceptance": "Compare controlled interruption/resume and exported observations using each product's own documented formats; validate stable fields and all-occurrence evidence without claiming proprietary-file compatibility.",
+      "evidence": []
+    },
+    {
+      "id": "reference.providers_automation",
+      "status": "missing",
+      "parity_status": "NOT_PROVEN",
+      "feature_ids": [
+        "integrations.gsc",
+        "integrations.ga4",
+        "ai.providers",
+        "automation.scheduler",
+        "automation.mcp",
+        "automation.mcp_transport"
+      ],
+      "acceptance": "Use separately authorized provider accounts or mock providers and local MCP clients; version settings, quotas/errors and automation lifecycle before comparison.",
+      "evidence": []
+    }
+  ],
+  "status_summary": {
+    "overall": {
+      "implemented": 9,
+      "partial": 69,
+      "planned": 66,
+      "total": 144
+    },
+    "phases": {
+      "P1": {
+        "implemented": 2,
+        "partial": 28,
+        "planned": 15,
+        "total": 45
+      },
+      "P2": {
+        "implemented": 2,
+        "partial": 27,
+        "planned": 16,
+        "total": 45
+      },
+      "P3": {
+        "implemented": 3,
+        "partial": 9,
+        "planned": 12,
+        "total": 24
+      },
+      "P4": {
+        "implemented": 2,
+        "partial": 5,
+        "planned": 23,
+        "total": 30
+      }
+    },
+    "groups": {
+      "modes": {
+        "implemented": 1,
+        "partial": 3,
+        "planned": 3,
+        "total": 7
+      },
+      "crawl": {
+        "implemented": 1,
+        "partial": 10,
+        "planned": 3,
+        "total": 14
+      },
+      "robots": {
+        "implemented": 0,
+        "partial": 5,
+        "planned": 2,
+        "total": 7
+      },
+      "http": {
+        "implemented": 0,
+        "partial": 5,
+        "planned": 1,
+        "total": 6
+      },
+      "metadata": {
+        "implemented": 0,
+        "partial": 5,
+        "planned": 6,
+        "total": 11
+      },
+      "links": {
+        "implemented": 1,
+        "partial": 4,
+        "planned": 6,
+        "total": 11
+      },
+      "relationships": {
+        "implemented": 0,
+        "partial": 4,
+        "planned": 3,
+        "total": 7
+      },
+      "images": {
+        "implemented": 0,
+        "partial": 3,
+        "planned": 3,
+        "total": 6
+      },
+      "rendering": {
+        "implemented": 2,
+        "partial": 5,
+        "planned": 7,
+        "total": 14
+      },
+      "quality": {
+        "implemented": 1,
+        "partial": 4,
+        "planned": 5,
+        "total": 10
+      },
+      "sitemap": {
+        "implemented": 0,
+        "partial": 4,
+        "planned": 1,
+        "total": 5
+      },
+      "integrations": {
+        "implemented": 0,
+        "partial": 0,
+        "planned": 10,
+        "total": 10
+      },
+      "ai": {
+        "implemented": 0,
+        "partial": 0,
+        "planned": 9,
+        "total": 9
+      },
+      "storage": {
+        "implemented": 1,
+        "partial": 7,
+        "planned": 2,
+        "total": 10
+      },
+      "automation": {
+        "implemented": 2,
+        "partial": 5,
+        "planned": 4,
+        "total": 11
+      },
+      "ui": {
+        "implemented": 0,
+        "partial": 5,
+        "planned": 1,
+        "total": 6
+      }
+    }
+  }
 }

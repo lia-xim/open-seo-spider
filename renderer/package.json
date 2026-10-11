@@ -1,0 +1,17 @@
+{
+  "name": "open-seo-spider-renderer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Optional independent local Chromium rendering and axe accessibility worker",
+  "license": "MIT",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "axe-core": "4.14.0",
+    "playwright-core": "1.64.0"
+  }
+}

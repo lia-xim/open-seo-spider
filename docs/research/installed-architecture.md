@@ -26,7 +26,7 @@ OpenJDK 25.0.3+9-LTS. A loopback listener was present in the Java process; its p
 has not been established from that observation alone.
 
 Read-only loaded-class diagnostics contain JavaFX UI classes, Apache HTTP client
-classes, and Apache Derby storage classes. Loaded classes establish that those
+classes, Apache Derby storage classes and SQLite JDBC classes. Loaded classes establish that those
 components were loaded into this process. They do not establish every call path
 or demonstrate that every crawl is stored with that backend.
 
@@ -38,7 +38,7 @@ or demonstrate that every crawl is stored with that backend.
 | Apache HttpClient 4.5.14 | HTTP requests and connection pooling | Loaded HTTP connection/parser classes observed |
 | jsoup 1.22.1 | HTML parsing and selectors | Bundled dependency; call-path confirmation pending |
 | Apache Derby 10.17.1.0 | Embedded crawl persistence | Loaded storage/compiler classes observed |
-| SQLite JDBC 3.53.0.0 | Additional local storage | Bundled dependency; active role pending |
+| SQLite JDBC 3.53.0.0 | Additional local storage | Loaded JDBC classes observed; exact database role pending |
 | Chromium/headless 147.0.7727.102 wrappers | JavaScript rendering | Bundled platform archives; official product documentation confirms Chromium rendering |
 | LanguageTool 6.5 and dictionaries | Spelling/grammar analysis | Bundled dependencies; live grammar workflow pending |
 | Lucene 10.1.0 | Indexing/text analysis | Bundled dependency; active role pending |
@@ -51,6 +51,12 @@ Package groupings include `seo/spider/ui`, `seo/spider/config`,
 `uk/co/screamingfrog/seospider/data`, and `uk/co/screamingfrog/seospider/db`.
 Many class names are obfuscated; names and dependency inventory cannot recover
 the complete algorithms or data lifecycle.
+
+The read-only `jdeps --multi-release 25 -summary` dependency graph also confirms
+static references from the main JAR to multiple bundled libraries. Static
+references strengthen the linkage evidence but do not establish which feature
+or execution branch uses a library. The executable public entrypoint signature
+was inspected without reproducing its implementation in the replacement.
 
 ## Independent replacement decisions
 

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Open SEO Spider · Lokaler SEO-Crawler</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Zum Inhalt</a>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Open SEO Spider Startseite">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 5 7 11v10l9 6 9-6V11Z"/><path d="m7 11 9 5 9-5M16 16v11"/><circle cx="16" cy="5" r="2.5"/><circle cx="7" cy="11" r="2.5"/><circle cx="25" cy="11" r="2.5"/><circle cx="16" cy="27" r="2.5"/></svg>
+      <span>Open SEO Spider<small>YOUR WEB, UNDERSTOOD.</small></span>
+    </a>
+    <div class="topbar-right"><span id="connection-state" class="connection"><i></i>Verbinde lokal …</span><span class="version">RUST · LOCAL</span><button id="settings-open" class="icon-button" aria-label="Crawl-Einstellungen öffnen" title="Einstellungen">⚙</button></div>
+  </header>
+  <div class="app-layout">
+    <aside class="sidebar" aria-label="Analysen">
+      <div class="workspace-label">CRAWL WORKSPACE</div>
+      <nav id="section-nav">
+        <button data-section="overview" class="nav-item active" aria-current="page"><span class="nav-symbol">◫</span>Übersicht<span class="nav-count" data-count="overview">—</span></button>
+        <div class="nav-group-label">URL INVENTAR</div>
+        <button data-section="internal" class="nav-item"><span class="nav-symbol">↗</span>Interne URLs<span class="nav-count" data-count="internal">0</span></button>
+        <button data-section="external" class="nav-item"><span class="nav-symbol">↗</span>Externe Links<span class="nav-count" data-count="external">0</span></button>
+        <button data-section="status" class="nav-item"><span class="nav-symbol">≋</span>HTTP &amp; Indexierung</button>
+        <div class="nav-group-label">ONPAGE ANALYSE</div>
+        <button data-section="titles" class="nav-item"><span class="nav-symbol">T</span>Seitentitel</button>
+        <button data-section="meta" class="nav-item"><span class="nav-symbol">¶</span>Meta Descriptions</button>
+        <button data-section="headings" class="nav-item"><span class="nav-symbol">H</span>Überschriften</button>
+        <button data-section="canonical" class="nav-item"><span class="nav-symbol">↪</span>Canonicals</button>
+        <button data-section="robots" class="nav-item"><span class="nav-symbol">⊘</span>Robots &amp; Directives</button>
+        <button data-section="hreflang" class="nav-item"><span class="nav-symbol">◎</span>Hreflang</button>
+        <button data-section="images" class="nav-item"><span class="nav-symbol">▧</span>Bilder<span class="nav-count" data-count="images">0</span></button>
+        <button data-section="structured" class="nav-item"><span class="nav-symbol">{ }</span>Strukturierte Daten</button>
+        <button data-section="extractions" class="nav-item"><span class="nav-symbol">⌁</span>CSS-Extraktionen</button>
+        <div class="nav-group-label">PRIORISIERUNG</div>
+        <button data-section="issues" class="nav-item"><span class="nav-symbol">!</span>Probleme<span class="nav-count" data-count="issues">0</span></button>
+        <button data-section="graph" class="nav-item"><span class="nav-symbol">⌘</span>Linkgraph</button>
+        <button data-section="linkmetrics" class="nav-item"><span class="nav-symbol">≡</span>Linkmetriken</button>
+      </nav>
+      <div class="sidebar-footer"><span class="local-dot"></span><div>Deine Daten bleiben lokal<small>Unabhängige Implementierung</small></div></div>
+    </aside>
+    <main id="main" tabindex="-1">
+      <section class="crawl-panel" aria-labelledby="crawl-heading">
+        <div class="page-heading"><div><p class="eyebrow">LOKALER TECHNISCHER SEO-AUDIT</p><h1 id="crawl-heading">Seiten entdecken. Probleme verstehen.</h1></div><div class="history-control"><label for="crawl-history">Gespeicherte Crawls</label><select id="crawl-history"><option value="">Neuer Crawl</option></select></div></div>
+        <form id="crawl-form" class="crawl-form">
+          <div class="mode-control"><label for="crawl-mode">Modus</label><select id="crawl-mode"><option value="spider">Website crawlen</option><option value="list">URL-Liste</option><option value="sitemap">Sitemap crawlen</option></select></div>
+          <div class="seed-control"><label for="seed-url">Start-URL</label><div class="url-input"><span aria-hidden="true">↗</span><input id="seed-url" name="seed_url" type="url" placeholder="https://example.com" autocomplete="url" spellcheck="false" required></div></div>
+          <button id="start-button" class="button primary" type="submit"><span aria-hidden="true">▶</span>Crawl starten</button>
+          <button id="cancel-button" class="button" type="button" hidden>■ Stoppen</button>
+          <button id="resume-button" class="button" type="button" hidden>↻ Fortsetzen</button>
+        </form>
+        <div id="list-control" class="list-control" hidden><label for="url-list">Eine vollständige HTTP(S)-URL pro Zeile</label><textarea id="url-list" rows="4" placeholder="https://example.com/&#10;https://example.com/about" spellcheck="false"></textarea><p>Im Listenmodus werden ausschließlich die eingegebenen URLs abgerufen.</p></div>
+        <div class="crawl-bottom"><div id="crawl-state" class="crawl-state"><span class="status-dot idle"></span>Bereit für deinen ersten Crawl</div><div class="crawl-options"><span id="settings-summary">8 parallele Requests · Robots.txt beachten</span><button id="settings-inline" type="button" class="text-button">Anpassen ↗</button></div></div>
+        <div class="progress-track" aria-hidden="true"><div id="progress-bar"></div></div>
+        <p id="message" class="message" role="status" hidden></p>
+        <details id="crawl-notices" class="crawl-notices" hidden><summary>Hinweise zu diesem Crawl</summary><ul></ul></details>
+      </section>
+      <section class="metrics" aria-label="Crawl-Kennzahlen">
+        <div class="metric"><div><span>ERFASSTE URLS</span><span class="metric-icon">↗</span></div><strong id="metric-fetched">0</strong><small id="metric-progress">Noch keine URLs</small></div>
+        <div class="metric"><div><span>IN DER WARTESCHLANGE</span><span class="metric-icon">≋</span></div><strong id="metric-queued">0</strong><small id="metric-discovered">0 URLs entdeckt</small></div>
+        <div class="metric"><div><span>HTML-SEITEN</span><span class="metric-icon">⌘</span></div><strong id="metric-html">0</strong><small id="metric-indexable">0 indexierbar</small></div>
+        <div class="metric"><div><span>PROBLEME</span><span class="metric-icon warn">!</span></div><strong id="metric-issues">0</strong><small id="metric-failed">0 fehlgeschlagene Abrufe</small></div>
+      </section>
+      <section class="results-panel" aria-labelledby="section-heading">
+        <div class="results-heading"><div><p id="section-eyebrow" class="eyebrow">CRAWL INTELLIGENCE</p><h2 id="section-heading">Übersicht</h2><p id="section-description" class="section-description">Ein Blick auf den technischen Zustand deiner Website.</p></div><div class="export-controls"><button id="import-project" class="button small" type="button" title="Einen exportierten Open SEO Spider-Bericht laden">↑ JSON laden</button><input id="import-file" type="file" accept=".json,application/json" hidden><button id="export-csv" class="button small" type="button" disabled title="Alle aktuell gefilterten Ergebnisse dieses Bereichs exportieren">↓ CSV</button><button id="export-sitemap" class="button small" type="button" disabled>↓ Sitemap</button><button id="export-project" class="button small" type="button" disabled title="Nach Abschluss oder Stopp als vollständigen Crawl-Bericht exportieren">↓ JSON</button></div></div>
+        <div id="overview-view"></div>
+        <div id="table-view" hidden>
+          <div class="table-tools"><div class="search-field"><span aria-hidden="true">⌕</span><input id="table-search" type="search" aria-label="Ergebnisse durchsuchen" placeholder="URL oder Inhalt durchsuchen …"></div><select id="table-filter" aria-label="Ergebnisse filtern"><option value="all">Alle Ergebnisse</option></select><div id="result-count" class="result-count">0 Ergebnisse</div></div>
+          <div class="table-scroll" tabindex="0" aria-label="Ergebnistabelle, horizontal scrollbar"><table id="results-table"><thead></thead><tbody></tbody></table></div>
+          <div class="table-pagination"><span id="page-label">Keine Ergebnisse</span><div><label for="page-size">Zeilen</label><select id="page-size"><option>25</option><option selected>50</option><option>100</option><option>250</option></select><button id="page-prev" class="button small" aria-label="Vorherige Seite" disabled>←</button><button id="page-next" class="button small" aria-label="Nächste Seite" disabled>→</button></div></div>
+        </div>
+        <div id="graph-view" hidden></div>
+      </section>
+      <section id="inspector" class="inspector" aria-label="Details der ausgewählten URL" hidden><div class="inspector-header"><div><p class="eyebrow">URL INSPECTOR</p><h2 id="inspector-url"></h2></div><button id="inspector-close" class="icon-button" aria-label="URL-Details schließen">×</button></div><div id="inspector-tabs" class="inspector-tabs" role="tablist" aria-label="URL-Details"><button role="tab" data-tab="details" aria-selected="true">Seitendetails</button><button role="tab" data-tab="inlinks" aria-selected="false">Eingehende Links</button><button role="tab" data-tab="outlinks" aria-selected="false">Ausgehende Links</button><button role="tab" data-tab="issues" aria-selected="false">Probleme</button></div><div id="inspector-content" role="tabpanel"></div></section>
+      <footer class="main-footer"><span>Open SEO Spider · lokal, transparent, unabhängig</span><span>HTTP-Crawling &amp; HTML-Analyse · keine künstliche URL-Lizenzgrenze</span></footer>
+    </main>
+  </div>
+  <dialog id="settings-dialog" aria-labelledby="settings-heading"><form id="settings-form"><div class="dialog-heading"><div><p class="eyebrow">CRAWL CONFIGURATION</p><h2 id="settings-heading">Crawl-Einstellungen</h2></div><button id="settings-close" class="icon-button" type="button" aria-label="Einstellungen schließen">×</button></div><p>Die Einstellungen gelten für den nächsten Crawl. Ein Wert von 0 deaktiviert die freiwillige Grenze.</p><div class="settings-grid"><label>Parallele Requests<input name="concurrency" type="number" min="1" max="64" value="8" required></label><label>Timeout in Sekunden<input name="timeout_seconds" type="number" min="1" max="300" value="20" required></label><label>URL-Grenze<input name="max_pages" type="number" min="0" value="0" required><small>0 = unbegrenzt</small></label><label>Maximale Tiefe<input name="max_depth" type="number" min="0" value="0" required><small>0 = unbegrenzt</small></label><label>Request-Abstand in ms<input name="delay_ms" type="number" min="0" max="60000" value="100" required><small>Pro Host; 0 = kein Mindestabstand</small></label><label>Max. Antwortgröße in MiB<input name="max_body_mb" type="number" min="1" max="100" value="5" required><small>Größere Antworten werden markiert</small></label><label class="setting-wide">User-Agent<input name="user_agent" value="Open SEO Spider/0.1" maxlength="256" required></label></div><label class="checkbox-field"><input name="obey_robots" type="checkbox" checked><span>Robots.txt beachten<small>Ausgeschlossene URLs werden nicht abgerufen.</small></span></label><label class="checkbox-field"><input name="follow_subdomains" type="checkbox"><span>Subdomains einschließen<small>Nur aktivieren, wenn diese zum gewünschten Crawl gehören.</small></span></label><label class="checkbox-field"><input name="check_external" type="checkbox"><span>Externe Linkziele prüfen<small>Auch Ziele außerhalb der Website werden abgerufen. Interne Auswertungen bleiben getrennt.</small></span></label><label class="checkbox-field"><input name="javascript_rendering" type="checkbox"><span>JavaScript-Rendering aktivieren<small>Benötigt den separat laufenden lokalen Browser-Worker. Verbindungsfehler werden als Warnung ausgewiesen.</small></span></label><div id="renderer-settings" class="settings-grid renderer-settings" hidden><label class="setting-wide">Lokaler Worker-Endpunkt<input name="renderer_endpoint" type="url" value="http://127.0.0.1:8790/render" placeholder="http://127.0.0.1:8790/render"></label><label>Wartezeit nach Laden (ms)<input name="renderer_wait_ms" type="number" min="0" max="30000" value="500"></label><div></div><label class="checkbox-field setting-wide"><input name="renderer_accessibility" type="checkbox"><span>Barrierefreiheit mit axe prüfen<small>Benötigt axe im Browser-Worker.</small></span></label><label class="checkbox-field setting-wide"><input name="renderer_screenshot" type="checkbox"><span>Screenshot erfassen<small>Kann größere gespeicherte Crawl-Berichte erzeugen.</small></span></label></div><details id="advanced-config" class="advanced-config"><summary>URL-Filter &amp; eigene CSS-Extraktionen</summary><div class="settings-grid"><label class="setting-wide">URL-Include-Muster<textarea name="include_patterns_text" rows="3" placeholder="Ein regulärer Ausdruck pro Zeile"></textarea><small>Leer = alle URLs im konfigurierten Crawl-Bereich. Rust prüft die Regex-Syntax.</small></label><label class="setting-wide">URL-Exclude-Muster<textarea name="exclude_patterns_text" rows="3" placeholder="/logout&#10;/checkout"></textarea><small>Ein regulärer Ausdruck pro Zeile; passende URLs werden ausgeschlossen.</small></label><label class="setting-wide">Eigene CSS-Extraktionen als JSON<textarea name="custom_extractions_json" rows="6" spellcheck="false">[]</textarea><small>Beispiel: [{"name":"price","selector":".price","attribute":null}] · null erfasst Text; "href" oder "src" erfasst ein Attribut. CSS-Selektoren werden auf dem analysierten HTML oder gerenderten DOM angewendet.</small></label></div></details><div class="capability-note"><strong>Aktueller Funktionsumfang</strong><p>Standardmäßig analysiert der Crawler HTTP-Antworten und HTML. Optionales JavaScript-Rendering verwendet den lokalen Browser-Worker. URL-Filter und eigene CSS-Extraktionen sind verfügbar. Externe Analytics-APIs, XPath und JavaScript-Extraktionen sind hier noch nicht eingerichtet.</p></div><p id="settings-error" class="message error" role="alert" hidden></p><div class="dialog-footer"><button class="button primary" type="submit">Einstellungen übernehmen</button></div></form></dialog>
+</body>
+</html>
