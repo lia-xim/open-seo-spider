@@ -1,0 +1,143 @@
+{
+  "tested_at": "2026-10-12T10:50:24.929Z",
+  "result": "PASS",
+  "platform": "native Windows",
+  "release_binary_sha256": "35e64b787bd9216797506d9b92a09b89a3a1e828d4ae20212724ea52ea05081d",
+  "debug_binary_sha256": "266bcaf4e87c56d83347a288e7c2b7e7c8331a4796f2aaba9452471e5b774783",
+  "rust": {
+    "default_passed": 189,
+    "breakdown": {
+      "app": 36,
+      "core": 121,
+      "crawl": 23,
+      "dom": 5,
+      "resources": 4
+    },
+    "default_ignored": 1,
+    "explicit_real_browser_passed": 1,
+    "format": "PASS",
+    "clippy": "PASS",
+    "debug_build": "PASS",
+    "release_build": "PASS"
+  },
+  "worker": {
+    "passed": 17,
+    "scope": "Actual Chrome worker, bounded cold startup and unchanged full render deadline, execution isolation and document/resource observations."
+  },
+  "ui": {
+    "fixture_passed": 47,
+    "list_input_state_passed": 12,
+    "actual_list_import_passed": 14,
+    "actual_dom_passed": 19,
+    "actual_resource_passed": 13,
+    "actual_renderer_passed": 14,
+    "javascript_runtime_errors": [],
+    "offline_website_requests": 0
+  },
+  "imports": {
+    "formats": [
+      "txt",
+      "csv",
+      "xml",
+      "xlsx"
+    ],
+    "api_cli_checks": 11,
+    "ordered_occurrences": true,
+    "network_deduplication": true,
+    "formula_evaluation": false,
+    "transported_provenance": "declared client input, not attested original document",
+    "error_exit_codes": [
+      1,
+      2
+    ],
+    "success_exit_code": 0
+  },
+  "api": {
+    "crawl_urls": 604,
+    "recovery_urls": 725,
+    "exports": 14,
+    "readonly_snapshot_restart": "PASS"
+  },
+  "mcp": {
+    "transports": 2,
+    "tools": 11,
+    "sdk": "2.3.1"
+  },
+  "installed_runtime": {
+    "saved_jobs": 7,
+    "release_sha256": "35e64b787bd9216797506d9b92a09b89a3a1e828d4ae20212724ea52ea05081d",
+    "byte_identical_after_restart": true,
+    "preserved_json_files": 11,
+    "installed_offline_import_rows": 3,
+    "offline_website_requests": 0,
+    "tested_at": "2026-10-12T10:42:01.7743136Z",
+    "result": "PASS",
+    "debug_sha256": "266bcaf4e87c56d83347a288e7c2b7e7c8331a4796f2aaba9452471e5b774783",
+    "exports": 14
+  },
+  "reference": {
+    "heading_memberships": {
+      "MATCH": 48,
+      "DIFFERENT": 0
+    },
+    "text_widths": {
+      "MATCH": 58,
+      "DIFFERENT": 0,
+      "UNAVAILABLE": 0
+    },
+    "fields": {
+      "MATCH": 887,
+      "DIFFERENT": 29,
+      "UNAVAILABLE": 3
+    },
+    "full_parity": "NOT_PROVEN"
+  },
+  "artifacts": [
+    {
+      "artifact": "docs/verification/api-e2e.json",
+      "sha256": "7a78a2567129cfbae947f08f54aec290256003093aa61acf4139a11086d9e117"
+    },
+    {
+      "artifact": "docs/verification/mcp-e2e.json",
+      "sha256": "cc3c6cdfa9d8b6263681cb966e3e7b30f7087cdd7537484c2c0a37de8202b729"
+    },
+    {
+      "artifact": "docs/verification/list-import-e2e.json",
+      "sha256": "d54299ab3356bb7059811e575f971618db15cd1b113c03146824c8ff22b99dd4"
+    },
+    {
+      "artifact": "web/verification/ui-fixture-results.json",
+      "sha256": "0e7b8b6af8a8abafdb46ba2516f61a5ac033712247aa1fbd924c5d7eb430cf78"
+    },
+    {
+      "artifact": "web/verification/ui-list-import-live-results.json",
+      "sha256": "347683f77d6d2be2039bf404ebd69bf5fc0c35174cd5e4cf165e983eebce2bae"
+    },
+    {
+      "artifact": "web/verification/ui-dom-live-results.json",
+      "sha256": "d1ca5cc92d9c42d3e89ee96438ca7b34051f5bcbd973bf49286888efc67a54f3"
+    },
+    {
+      "artifact": "web/verification/ui-resource-live-results.json",
+      "sha256": "79a2a06697e195a7184fccd7ab0f0d7e1114b10dc28b178b252dbd8f70a669b1"
+    },
+    {
+      "artifact": "web/verification/ui-renderer-live-results.json",
+      "sha256": "0a9c096a2d0aee4abe14fc8c029ae7b277a0b82f6eb9cb6ab7d66640232033b9"
+    },
+    {
+      "artifact": "docs/parity/native-heading-comparison.json",
+      "sha256": "a242edaad04e292d4dcf220885009bef61e10c23ea561238c11477153ece8502"
+    },
+    {
+      "artifact": "docs/parity/native-text-width-comparison.json",
+      "sha256": "f24d1058970a07a41b3dfdb2c009e1b20608b84844d8994f16b9a526c9e6dada"
+    },
+    {
+      "artifact": "docs/parity/reference-comparison.json",
+      "sha256": "06eb9676b8b5d58d1b621a9a429cdd2b64cde2d987d4304caf9d5b3915c434b4"
+    }
+  ],
+  "scope": "Independent bounded list formats, exact ordered source occurrences, original-input CSV joined to actual observations, CLI config/import/crawl/analysis/export and linear indexed fragment lookup. Native installed release preserves seven existing jobs and eleven original JSON files.",
+  "remaining": "Full vendor feature/filter/workflow parity, providers, advanced crawl policy, graceful pause and selected recrawl remain incomplete. Current Windows native gates are proven; cross-platform CI for this batch is pending. The previous DOM batch CI is separately recorded against its exact commit; local Windows Docker installation remains NOT_PROVEN."
+}

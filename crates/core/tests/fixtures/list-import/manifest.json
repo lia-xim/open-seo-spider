@@ -1,0 +1,114 @@
+{
+  "files": [
+    {
+      "path": "case-colliding-entry.xlsx",
+      "purpose": "Case-folded package path collision rejected",
+      "bytes": 3238,
+      "sha256": "9064038e497814e6ae0d0c1dda9ca5b06942303e362d02cee813a641f0e3176e"
+    },
+    {
+      "path": "duplicate-cell.xlsx",
+      "purpose": "Duplicate cell coordinates rejected",
+      "bytes": 2955,
+      "sha256": "33f585670a3ff7378b336f1b01c5e109fa5d4c892bd131ed8fd9322498c72d5e"
+    },
+    {
+      "path": "duplicate-header.xlsx",
+      "purpose": "Two exact selected headers are ambiguous",
+      "bytes": 2946,
+      "sha256": "5374677c613babcf0660b6c3cfdd0de1189861a4b561f7e4bba37e306869680c"
+    },
+    {
+      "path": "external-worksheet.xlsx",
+      "purpose": "External worksheet relationship rejected without fetching",
+      "bytes": 2979,
+      "sha256": "83616d2457f4df6fc0be5c232b18fa9a2c2414f941a9c7dce4fca84974b40e0d"
+    },
+    {
+      "path": "huge-observed-row.xlsx",
+      "purpose": "Observed sparse row span must obey max_rows",
+      "bytes": 2950,
+      "sha256": "9aab7d7a3883a9b5715b9b59f02065adc72337762b3b574fb81f8b818985cfa9"
+    },
+    {
+      "path": "huge-shared-count.xlsx",
+      "purpose": "Allocation-driving uniqueCount must fail before Calamine construction",
+      "bytes": 2968,
+      "sha256": "0956c2f579a55d381b97c60bc49994f6c2d00b691ea1c5b406c175c291821730"
+    },
+    {
+      "path": "inflation-budget.xlsx",
+      "purpose": "Actual inflation bound and understated size-metadata test",
+      "bytes": 3033,
+      "sha256": "94f46efadcbc755034385914ab9b5f48b27c732f64883a40eaab17d41cb32697"
+    },
+    {
+      "path": "ordered-formulas.xlsx",
+      "purpose": "Ordered duplicates, shared/rich/inline strings, sparse rows, typed/formula caches, hidden sheets, hyperlink labels, huge declared dimension",
+      "bytes": 2950,
+      "sha256": "e57c641ffb5cbabedc2b4b164093e3862a1a8767f0911134801daaeae75e7af5"
+    },
+    {
+      "path": "regenerate.py",
+      "purpose": null,
+      "bytes": 5790,
+      "sha256": "a6453bc9281a250a6f1329e31607995279970899b4c077cf587a7866a03850d0"
+    },
+    {
+      "path": "sample-index.xml",
+      "purpose": null,
+      "bytes": 246,
+      "sha256": "d9cefc051f1340c361c197daa1afdc6d4505b36f11129eb0af3b712f3973aaf7"
+    },
+    {
+      "path": "sample-occurrences.csv",
+      "purpose": null,
+      "bytes": 1582,
+      "sha256": "261eed6b646d4b62c13e400d2e68aae1473f6836b306d2d57c3fdc19d08ef2d0"
+    },
+    {
+      "path": "sample.csv",
+      "purpose": null,
+      "bytes": 82,
+      "sha256": "68f766000052ff469188e91caa9af6b2d856df5f7b452bc5d5384ebc832f44d0"
+    },
+    {
+      "path": "sample.txt",
+      "purpose": null,
+      "bytes": 76,
+      "sha256": "ccdd7e497a7144c7ee327dab019c2602c3d71508e1ae00d55760f56a8be7c333"
+    },
+    {
+      "path": "serialized-contracts.json",
+      "purpose": null,
+      "bytes": 29116,
+      "sha256": "28b1c835d8bc6292aeedc36a38dd31987b7f260af0242568a03942dcb6a0ff93"
+    },
+    {
+      "path": "wrong-cell-row.xlsx",
+      "purpose": "Cell reference must belong to explicit parent row",
+      "bytes": 2951,
+      "sha256": "9604cb57a01e935e916b3da6ee3322602118ee6e5ea6f969f26ae7e399c18e57"
+    }
+  ],
+  "provenance": "Independently authored minimal OOXML/CSV/TXT/XML fixtures. No vendor assets or user documents. example.test and never-fetch.test are test labels; no network during parsing.",
+  "generator": "regenerate.py uses Python zipfile, deterministic entry order and 2026-01-01 timestamps; compression byte identity can depend on Python/zlib version.",
+  "evidence_scope": "Integrated native core list importer: 19 focused tests PASS, none failed/ignored, 102 unrelated core tests filtered. Isolated Clippy PASS. API/browser/whole-workspace/vendor parity require separate gates.",
+  "schema": 1,
+  "verification": {
+    "lock_sha256": "f5fb0c46eb83482cdda4ea496eb0002903cd8a06d62e071a4c79748a7cef3550",
+    "vendor_parser_parity": "NOT_PROVEN",
+    "native_command": "cargo test --locked -p open-seo-spider-core --lib list_import::tests",
+    "recorded_at": "2026-10-12T10:28:12.4140481Z",
+    "isolated_clippy": "PASS --all-targets -- -D warnings before tracked integration",
+    "command_session": 63577,
+    "module_sha256": "b8aa4259de85a610f8bf08a1e27917e5ac7f2e1795e2af7c407db464c28aa53b",
+    "filtered_out": 102,
+    "api": "NOT_PROVEN",
+    "failed": 0,
+    "ignored": 0,
+    "passed": 19,
+    "status": "PASS",
+    "browser": "NOT_PROVEN"
+  }
+}

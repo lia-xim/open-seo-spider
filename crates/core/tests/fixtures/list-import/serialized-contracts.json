@@ -1,0 +1,917 @@
+{
+  "inspection": {
+    "engine": "open-seo-spider/offline-list-v1/calamine-0.36.1",
+    "input_bytes": 2950,
+    "input_sha256": "e57c641ffb5cbabedc2b4b164093e3862a1a8767f0911134801daaeae75e7af5",
+    "limitations": [
+      "Inspection lists sheet metadata only; it does not infer URL columns, evaluate formulas or start a crawl.",
+      "ZIP64, encrypted/macro-enabled workbooks and non-UTF-8 XML parts are explicitly unsupported."
+    ],
+    "sheets": [
+      {
+        "index": 1,
+        "name": "URLs",
+        "sheet_type": "WorkSheet",
+        "visibility": "Visible"
+      },
+      {
+        "index": 2,
+        "name": "Other",
+        "sheet_type": "WorkSheet",
+        "visibility": "Visible"
+      },
+      {
+        "index": 3,
+        "name": "Hidden",
+        "sheet_type": "WorkSheet",
+        "visibility": "Hidden"
+      }
+    ],
+    "warnings": [
+      "External hyperlinks/book relationships are not executed or treated as URL cell values."
+    ],
+    "website_requests": 0
+  },
+  "options": {
+    "csv": {
+      "format": {
+        "column": {
+          "kind": "header",
+          "name": "URL",
+          "row": 1
+        },
+        "delimiter": "comma",
+        "kind": "csv",
+        "start_row": 2
+      },
+      "limits": {
+        "max_csv_fields": 200000,
+        "max_field_bytes": 8192,
+        "max_input_bytes": 8388608,
+        "max_output_bytes": 8388608,
+        "max_rows": 50000,
+        "max_shared_strings": 100000,
+        "max_sheet_cells": 200000,
+        "max_sheets": 128,
+        "max_xml_depth": 64,
+        "max_xml_events": 500000,
+        "max_zip_entries": 1024,
+        "max_zip_entry_bytes": 8388608,
+        "max_zip_total_bytes": 33554432
+      }
+    },
+    "txt": {
+      "format": {
+        "kind": "txt"
+      },
+      "limits": {
+        "max_csv_fields": 200000,
+        "max_field_bytes": 8192,
+        "max_input_bytes": 8388608,
+        "max_output_bytes": 8388608,
+        "max_rows": 50000,
+        "max_shared_strings": 100000,
+        "max_sheet_cells": 200000,
+        "max_sheets": 128,
+        "max_xml_depth": 64,
+        "max_xml_events": 500000,
+        "max_zip_entries": 1024,
+        "max_zip_entry_bytes": 8388608,
+        "max_zip_total_bytes": 33554432
+      }
+    },
+    "xlsx": {
+      "format": {
+        "column": {
+          "kind": "header",
+          "name": "URL",
+          "row": 1
+        },
+        "formula_policy": "reject",
+        "kind": "xlsx",
+        "sheet": {
+          "kind": "name",
+          "value": "URLs"
+        },
+        "start_row": 2
+      },
+      "limits": {
+        "max_csv_fields": 200000,
+        "max_field_bytes": 8192,
+        "max_input_bytes": 8388608,
+        "max_output_bytes": 8388608,
+        "max_rows": 50000,
+        "max_shared_strings": 100000,
+        "max_sheet_cells": 200000,
+        "max_sheets": 128,
+        "max_xml_depth": 64,
+        "max_xml_events": 500000,
+        "max_zip_entries": 1024,
+        "max_zip_entry_bytes": 8388608,
+        "max_zip_total_bytes": 33554432
+      }
+    },
+    "xlsx_cached": {
+      "format": {
+        "column": {
+          "kind": "index",
+          "value": 2
+        },
+        "formula_policy": "cached_string_only",
+        "kind": "xlsx",
+        "sheet": {
+          "kind": "index",
+          "value": 1
+        },
+        "start_row": 2
+      },
+      "limits": {
+        "max_csv_fields": 200000,
+        "max_field_bytes": 8192,
+        "max_input_bytes": 8388608,
+        "max_output_bytes": 8388608,
+        "max_rows": 50000,
+        "max_shared_strings": 100000,
+        "max_sheet_cells": 200000,
+        "max_sheets": 128,
+        "max_xml_depth": 64,
+        "max_xml_events": 500000,
+        "max_zip_entries": 1024,
+        "max_zip_entry_bytes": 8388608,
+        "max_zip_total_bytes": 33554432
+      }
+    },
+    "xml": {
+      "format": {
+        "kind": "xml"
+      },
+      "limits": {
+        "max_csv_fields": 200000,
+        "max_field_bytes": 8192,
+        "max_input_bytes": 8388608,
+        "max_output_bytes": 8388608,
+        "max_rows": 50000,
+        "max_shared_strings": 100000,
+        "max_sheet_cells": 200000,
+        "max_sheets": 128,
+        "max_xml_depth": 64,
+        "max_xml_events": 500000,
+        "max_zip_entries": 1024,
+        "max_zip_entry_bytes": 8388608,
+        "max_zip_total_bytes": 33554432
+      }
+    }
+  },
+  "results": {
+    "csv": {
+      "engine": "open-seo-spider/offline-list-v1/calamine-0.36.1",
+      "input_bytes": 82,
+      "input_sha256": "68f766000052ff469188e91caa9af6b2d856df5f7b452bc5d5384ebc832f44d0",
+      "limitations": [
+        "Import does not start a crawl, follow links, evaluate formulas or fetch sitemap indexes.",
+        "Only absolute HTTP/HTTPS values are URL candidates; original values and duplicate rows are retained.",
+        "Independent import contract; complete original parser/filter parity is NOT_PROVEN."
+      ],
+      "options": {
+        "format": {
+          "column": {
+            "kind": "header",
+            "name": "URL",
+            "row": 1
+          },
+          "delimiter": "comma",
+          "kind": "csv",
+          "start_row": 2
+        },
+        "limits": {
+          "max_csv_fields": 200000,
+          "max_field_bytes": 8192,
+          "max_input_bytes": 8388608,
+          "max_output_bytes": 8388608,
+          "max_rows": 50000,
+          "max_shared_strings": 100000,
+          "max_sheet_cells": 200000,
+          "max_sheets": 128,
+          "max_xml_depth": 64,
+          "max_xml_events": 500000,
+          "max_zip_entries": 1024,
+          "max_zip_entry_bytes": 8388608,
+          "max_zip_total_bytes": 33554432
+        }
+      },
+      "rows": [
+        {
+          "candidate_kind": "page_url",
+          "cell": null,
+          "cell_type": "csv_string",
+          "error": null,
+          "formula_metadata": null,
+          "fragment": null,
+          "normalized_url": "https://example.test/a",
+          "raw_value": "https://example.test/a",
+          "sheet": null,
+          "source_index": 1,
+          "source_line": 2,
+          "source_row": 2
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": null,
+          "cell_type": "csv_string",
+          "error": null,
+          "formula_metadata": null,
+          "fragment": null,
+          "normalized_url": "https://example.test/a",
+          "raw_value": "https://example.test/a",
+          "sheet": null,
+          "source_index": 2,
+          "source_line": 3,
+          "source_row": 3
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": null,
+          "cell_type": "csv_string",
+          "error": "invalid absolute URL",
+          "formula_metadata": null,
+          "fragment": null,
+          "normalized_url": null,
+          "raw_value": "invalid URL",
+          "sheet": null,
+          "source_index": 3,
+          "source_line": 4,
+          "source_row": 4
+        }
+      ],
+      "selected_column": 1,
+      "selected_sheet": null,
+      "warnings": [],
+      "website_requests": 0
+    },
+    "txt": {
+      "engine": "open-seo-spider/offline-list-v1/calamine-0.36.1",
+      "input_bytes": 76,
+      "input_sha256": "ccdd7e497a7144c7ee327dab019c2602c3d71508e1ae00d55760f56a8be7c333",
+      "limitations": [
+        "Import does not start a crawl, follow links, evaluate formulas or fetch sitemap indexes.",
+        "Only absolute HTTP/HTTPS values are URL candidates; original values and duplicate rows are retained.",
+        "Independent import contract; complete original parser/filter parity is NOT_PROVEN."
+      ],
+      "options": {
+        "format": {
+          "kind": "txt"
+        },
+        "limits": {
+          "max_csv_fields": 200000,
+          "max_field_bytes": 8192,
+          "max_input_bytes": 8388608,
+          "max_output_bytes": 8388608,
+          "max_rows": 50000,
+          "max_shared_strings": 100000,
+          "max_sheet_cells": 200000,
+          "max_sheets": 128,
+          "max_xml_depth": 64,
+          "max_xml_events": 500000,
+          "max_zip_entries": 1024,
+          "max_zip_entry_bytes": 8388608,
+          "max_zip_total_bytes": 33554432
+        }
+      },
+      "rows": [
+        {
+          "candidate_kind": "page_url",
+          "cell": null,
+          "cell_type": "text",
+          "error": null,
+          "formula_metadata": null,
+          "fragment": "fragment",
+          "normalized_url": "https://example.test/a",
+          "raw_value": "https://example.test/a#fragment",
+          "sheet": null,
+          "source_index": 1,
+          "source_line": 1,
+          "source_row": 1
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": null,
+          "cell_type": "text",
+          "error": null,
+          "formula_metadata": null,
+          "fragment": "fragment",
+          "normalized_url": "https://example.test/a",
+          "raw_value": "https://example.test/a#fragment",
+          "sheet": null,
+          "source_index": 2,
+          "source_line": 2,
+          "source_row": 2
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": null,
+          "cell_type": "text",
+          "error": "invalid absolute URL",
+          "formula_metadata": null,
+          "fragment": null,
+          "normalized_url": null,
+          "raw_value": "invalid URL",
+          "sheet": null,
+          "source_index": 3,
+          "source_line": 3,
+          "source_row": 3
+        }
+      ],
+      "selected_column": null,
+      "selected_sheet": null,
+      "warnings": [],
+      "website_requests": 0
+    },
+    "xlsx": {
+      "engine": "open-seo-spider/offline-list-v1/calamine-0.36.1",
+      "input_bytes": 2950,
+      "input_sha256": "e57c641ffb5cbabedc2b4b164093e3862a1a8767f0911134801daaeae75e7af5",
+      "limitations": [
+        "Import does not start a crawl, follow links, evaluate formulas or fetch sitemap indexes.",
+        "Only absolute HTTP/HTTPS values are URL candidates; original values and duplicate rows are retained.",
+        "Independent import contract; complete original parser/filter parity is NOT_PROVEN.",
+        "XLSX cell raw_value means decoded stored literal/cache; numeric/date display formatting and hyperlink targets are not URL values.",
+        "Formula caches may be stale; even explicitly accepted string caches are never evaluated or refreshed.",
+        "ZIP64, encrypted/macro-enabled workbooks and non-UTF-8 XML parts are explicitly unsupported."
+      ],
+      "options": {
+        "format": {
+          "column": {
+            "kind": "header",
+            "name": "URL",
+            "row": 1
+          },
+          "formula_policy": "reject",
+          "kind": "xlsx",
+          "sheet": {
+            "kind": "name",
+            "value": "URLs"
+          },
+          "start_row": 2
+        },
+        "limits": {
+          "max_csv_fields": 200000,
+          "max_field_bytes": 8192,
+          "max_input_bytes": 8388608,
+          "max_output_bytes": 8388608,
+          "max_rows": 50000,
+          "max_shared_strings": 100000,
+          "max_sheet_cells": 200000,
+          "max_sheets": 128,
+          "max_xml_depth": 64,
+          "max_xml_events": 500000,
+          "max_zip_entries": 1024,
+          "max_zip_entry_bytes": 8388608,
+          "max_zip_total_bytes": 33554432
+        }
+      },
+      "rows": [
+        {
+          "candidate_kind": "page_url",
+          "cell": "B2",
+          "cell_type": "shared_string",
+          "error": null,
+          "formula_metadata": null,
+          "fragment": "part",
+          "normalized_url": "https://example.test/same?b=2&a=1",
+          "raw_value": "https://example.test/same?b=2&a=1#part",
+          "sheet": "URLs",
+          "source_index": 1,
+          "source_line": null,
+          "source_row": 2
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B3",
+          "cell_type": "string",
+          "error": null,
+          "formula_metadata": null,
+          "fragment": "part",
+          "normalized_url": "https://example.test/same?b=2&a=1",
+          "raw_value": "https://example.test/same?b=2&a=1#part",
+          "sheet": "URLs",
+          "source_index": 2,
+          "source_line": null,
+          "source_row": 3
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B4",
+          "cell_type": "missing",
+          "error": "selected XLSX cell is missing",
+          "formula_metadata": null,
+          "fragment": null,
+          "normalized_url": null,
+          "raw_value": "",
+          "sheet": "URLs",
+          "source_index": 3,
+          "source_line": null,
+          "source_row": 4
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B5",
+          "cell_type": "boolean",
+          "error": "selected XLSX cell/cache is not a string URL value",
+          "formula_metadata": null,
+          "fragment": null,
+          "normalized_url": null,
+          "raw_value": "1",
+          "sheet": "URLs",
+          "source_index": 4,
+          "source_line": null,
+          "source_row": 5
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B6",
+          "cell_type": "string",
+          "error": "formula cells require explicit cached_string_only policy; formulas are never evaluated",
+          "formula_metadata": {
+            "formula": "HYPERLINK(\"https://never-fetch.test\", \"label\")",
+            "kind": "normal"
+          },
+          "fragment": null,
+          "normalized_url": null,
+          "raw_value": "https://example.test/cached",
+          "sheet": "URLs",
+          "source_index": 5,
+          "source_line": null,
+          "source_row": 6
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B7",
+          "cell_type": "string",
+          "error": "formula cells require explicit cached_string_only policy; formulas are never evaluated",
+          "formula_metadata": {
+            "formula": "A7",
+            "kind": "shared",
+            "range": "Dimensions { start: (6, 1), end: (7, 1) }",
+            "shared_index": 0
+          },
+          "fragment": null,
+          "normalized_url": null,
+          "raw_value": "https://example.test/shared",
+          "sheet": "URLs",
+          "source_index": 6,
+          "source_line": null,
+          "source_row": 7
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B8",
+          "cell_type": "string",
+          "error": "formula cells require explicit cached_string_only policy; formulas are never evaluated",
+          "formula_metadata": {
+            "kind": "shared_derived",
+            "shared_index": 0
+          },
+          "fragment": null,
+          "normalized_url": null,
+          "raw_value": "https://example.test/derived",
+          "sheet": "URLs",
+          "source_index": 7,
+          "source_line": null,
+          "source_row": 8
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B9",
+          "cell_type": "error",
+          "error": "selected XLSX cell/cache is not a string URL value",
+          "formula_metadata": null,
+          "fragment": null,
+          "normalized_url": null,
+          "raw_value": "#N/A",
+          "sheet": "URLs",
+          "source_index": 8,
+          "source_line": null,
+          "source_row": 9
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B10",
+          "cell_type": "date_time_iso",
+          "error": "selected XLSX cell/cache is not a string URL value",
+          "formula_metadata": null,
+          "fragment": null,
+          "normalized_url": null,
+          "raw_value": "2026-10-12T00:00:00Z",
+          "sheet": "URLs",
+          "source_index": 9,
+          "source_line": null,
+          "source_row": 10
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B11",
+          "cell_type": "string",
+          "error": "invalid absolute URL",
+          "formula_metadata": null,
+          "fragment": null,
+          "normalized_url": null,
+          "raw_value": "open-me",
+          "sheet": "URLs",
+          "source_index": 10,
+          "source_line": null,
+          "source_row": 11
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B12",
+          "cell_type": "empty",
+          "error": "formula cells require explicit cached_string_only policy; formulas are never evaluated",
+          "formula_metadata": {
+            "formula": "A12",
+            "kind": "normal"
+          },
+          "fragment": null,
+          "normalized_url": null,
+          "raw_value": "",
+          "sheet": "URLs",
+          "source_index": 11,
+          "source_line": null,
+          "source_row": 12
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B13",
+          "cell_type": "string",
+          "error": null,
+          "formula_metadata": null,
+          "fragment": "kept",
+          "normalized_url": "https://example.test/fragment",
+          "raw_value": "https://example.test/fragment#kept",
+          "sheet": "URLs",
+          "source_index": 12,
+          "source_line": null,
+          "source_row": 13
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B14",
+          "cell_type": "missing",
+          "error": "selected XLSX cell is missing",
+          "formula_metadata": null,
+          "fragment": null,
+          "normalized_url": null,
+          "raw_value": "",
+          "sheet": "URLs",
+          "source_index": 13,
+          "source_line": null,
+          "source_row": 14
+        }
+      ],
+      "selected_column": 2,
+      "selected_sheet": {
+        "index": 1,
+        "name": "URLs",
+        "sheet_type": "WorkSheet",
+        "visibility": "Visible"
+      },
+      "warnings": [
+        "External hyperlinks/book relationships are not executed or treated as URL cell values."
+      ],
+      "website_requests": 0
+    },
+    "xlsx_cached": {
+      "engine": "open-seo-spider/offline-list-v1/calamine-0.36.1",
+      "input_bytes": 2950,
+      "input_sha256": "e57c641ffb5cbabedc2b4b164093e3862a1a8767f0911134801daaeae75e7af5",
+      "limitations": [
+        "Import does not start a crawl, follow links, evaluate formulas or fetch sitemap indexes.",
+        "Only absolute HTTP/HTTPS values are URL candidates; original values and duplicate rows are retained.",
+        "Independent import contract; complete original parser/filter parity is NOT_PROVEN.",
+        "XLSX cell raw_value means decoded stored literal/cache; numeric/date display formatting and hyperlink targets are not URL values.",
+        "Formula caches may be stale; even explicitly accepted string caches are never evaluated or refreshed.",
+        "ZIP64, encrypted/macro-enabled workbooks and non-UTF-8 XML parts are explicitly unsupported."
+      ],
+      "options": {
+        "format": {
+          "column": {
+            "kind": "index",
+            "value": 2
+          },
+          "formula_policy": "cached_string_only",
+          "kind": "xlsx",
+          "sheet": {
+            "kind": "index",
+            "value": 1
+          },
+          "start_row": 2
+        },
+        "limits": {
+          "max_csv_fields": 200000,
+          "max_field_bytes": 8192,
+          "max_input_bytes": 8388608,
+          "max_output_bytes": 8388608,
+          "max_rows": 50000,
+          "max_shared_strings": 100000,
+          "max_sheet_cells": 200000,
+          "max_sheets": 128,
+          "max_xml_depth": 64,
+          "max_xml_events": 500000,
+          "max_zip_entries": 1024,
+          "max_zip_entry_bytes": 8388608,
+          "max_zip_total_bytes": 33554432
+        }
+      },
+      "rows": [
+        {
+          "candidate_kind": "page_url",
+          "cell": "B2",
+          "cell_type": "shared_string",
+          "error": null,
+          "formula_metadata": null,
+          "fragment": "part",
+          "normalized_url": "https://example.test/same?b=2&a=1",
+          "raw_value": "https://example.test/same?b=2&a=1#part",
+          "sheet": "URLs",
+          "source_index": 1,
+          "source_line": null,
+          "source_row": 2
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B3",
+          "cell_type": "string",
+          "error": null,
+          "formula_metadata": null,
+          "fragment": "part",
+          "normalized_url": "https://example.test/same?b=2&a=1",
+          "raw_value": "https://example.test/same?b=2&a=1#part",
+          "sheet": "URLs",
+          "source_index": 2,
+          "source_line": null,
+          "source_row": 3
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B4",
+          "cell_type": "missing",
+          "error": "selected XLSX cell is missing",
+          "formula_metadata": null,
+          "fragment": null,
+          "normalized_url": null,
+          "raw_value": "",
+          "sheet": "URLs",
+          "source_index": 3,
+          "source_line": null,
+          "source_row": 4
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B5",
+          "cell_type": "boolean",
+          "error": "selected XLSX cell/cache is not a string URL value",
+          "formula_metadata": null,
+          "fragment": null,
+          "normalized_url": null,
+          "raw_value": "1",
+          "sheet": "URLs",
+          "source_index": 4,
+          "source_line": null,
+          "source_row": 5
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B6",
+          "cell_type": "string",
+          "error": null,
+          "formula_metadata": {
+            "formula": "HYPERLINK(\"https://never-fetch.test\", \"label\")",
+            "kind": "normal"
+          },
+          "fragment": null,
+          "normalized_url": "https://example.test/cached",
+          "raw_value": "https://example.test/cached",
+          "sheet": "URLs",
+          "source_index": 5,
+          "source_line": null,
+          "source_row": 6
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B7",
+          "cell_type": "string",
+          "error": null,
+          "formula_metadata": {
+            "formula": "A7",
+            "kind": "shared",
+            "range": "Dimensions { start: (6, 1), end: (7, 1) }",
+            "shared_index": 0
+          },
+          "fragment": null,
+          "normalized_url": "https://example.test/shared",
+          "raw_value": "https://example.test/shared",
+          "sheet": "URLs",
+          "source_index": 6,
+          "source_line": null,
+          "source_row": 7
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B8",
+          "cell_type": "string",
+          "error": null,
+          "formula_metadata": {
+            "kind": "shared_derived",
+            "shared_index": 0
+          },
+          "fragment": null,
+          "normalized_url": "https://example.test/derived",
+          "raw_value": "https://example.test/derived",
+          "sheet": "URLs",
+          "source_index": 7,
+          "source_line": null,
+          "source_row": 8
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B9",
+          "cell_type": "error",
+          "error": "selected XLSX cell/cache is not a string URL value",
+          "formula_metadata": null,
+          "fragment": null,
+          "normalized_url": null,
+          "raw_value": "#N/A",
+          "sheet": "URLs",
+          "source_index": 8,
+          "source_line": null,
+          "source_row": 9
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B10",
+          "cell_type": "date_time_iso",
+          "error": "selected XLSX cell/cache is not a string URL value",
+          "formula_metadata": null,
+          "fragment": null,
+          "normalized_url": null,
+          "raw_value": "2026-10-12T00:00:00Z",
+          "sheet": "URLs",
+          "source_index": 9,
+          "source_line": null,
+          "source_row": 10
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B11",
+          "cell_type": "string",
+          "error": "invalid absolute URL",
+          "formula_metadata": null,
+          "fragment": null,
+          "normalized_url": null,
+          "raw_value": "open-me",
+          "sheet": "URLs",
+          "source_index": 10,
+          "source_line": null,
+          "source_row": 11
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B12",
+          "cell_type": "empty",
+          "error": "selected XLSX cell/cache is not a string URL value",
+          "formula_metadata": {
+            "formula": "A12",
+            "kind": "normal"
+          },
+          "fragment": null,
+          "normalized_url": null,
+          "raw_value": "",
+          "sheet": "URLs",
+          "source_index": 11,
+          "source_line": null,
+          "source_row": 12
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B13",
+          "cell_type": "string",
+          "error": null,
+          "formula_metadata": null,
+          "fragment": "kept",
+          "normalized_url": "https://example.test/fragment",
+          "raw_value": "https://example.test/fragment#kept",
+          "sheet": "URLs",
+          "source_index": 12,
+          "source_line": null,
+          "source_row": 13
+        },
+        {
+          "candidate_kind": "page_url",
+          "cell": "B14",
+          "cell_type": "missing",
+          "error": "selected XLSX cell is missing",
+          "formula_metadata": null,
+          "fragment": null,
+          "normalized_url": null,
+          "raw_value": "",
+          "sheet": "URLs",
+          "source_index": 13,
+          "source_line": null,
+          "source_row": 14
+        }
+      ],
+      "selected_column": 2,
+      "selected_sheet": {
+        "index": 1,
+        "name": "URLs",
+        "sheet_type": "WorkSheet",
+        "visibility": "Visible"
+      },
+      "warnings": [
+        "External hyperlinks/book relationships are not executed or treated as URL cell values."
+      ],
+      "website_requests": 0
+    },
+    "xml_index": {
+      "engine": "open-seo-spider/offline-list-v1/calamine-0.36.1",
+      "input_bytes": 246,
+      "input_sha256": "d9cefc051f1340c361c197daa1afdc6d4505b36f11129eb0af3b712f3973aaf7",
+      "limitations": [
+        "Import does not start a crawl, follow links, evaluate formulas or fetch sitemap indexes.",
+        "Only absolute HTTP/HTTPS values are URL candidates; original values and duplicate rows are retained.",
+        "Independent import contract; complete original parser/filter parity is NOT_PROVEN.",
+        "XML import recognizes immediate sitemap loc values; it is not full sitemap-schema validation or alternate/image/video discovery."
+      ],
+      "options": {
+        "format": {
+          "kind": "xml"
+        },
+        "limits": {
+          "max_csv_fields": 200000,
+          "max_field_bytes": 8192,
+          "max_input_bytes": 8388608,
+          "max_output_bytes": 8388608,
+          "max_rows": 50000,
+          "max_shared_strings": 100000,
+          "max_sheet_cells": 200000,
+          "max_sheets": 128,
+          "max_xml_depth": 64,
+          "max_xml_events": 500000,
+          "max_zip_entries": 1024,
+          "max_zip_entry_bytes": 8388608,
+          "max_zip_total_bytes": 33554432
+        }
+      },
+      "rows": [
+        {
+          "candidate_kind": "sitemap_document",
+          "cell": null,
+          "cell_type": "xml_location",
+          "error": null,
+          "formula_metadata": null,
+          "fragment": null,
+          "normalized_url": "https://example.test/sitemap.xml",
+          "raw_value": "https://example.test/sitemap.xml",
+          "sheet": null,
+          "source_index": 1,
+          "source_line": null,
+          "source_row": 1
+        },
+        {
+          "candidate_kind": "sitemap_document",
+          "cell": null,
+          "cell_type": "xml_location",
+          "error": null,
+          "formula_metadata": null,
+          "fragment": null,
+          "normalized_url": "https://example.test/sitemap.xml",
+          "raw_value": "https://example.test/sitemap.xml",
+          "sheet": null,
+          "source_index": 2,
+          "source_line": null,
+          "source_row": 2
+        },
+        {
+          "candidate_kind": "sitemap_document",
+          "cell": null,
+          "cell_type": "xml_location",
+          "error": "invalid absolute URL",
+          "formula_metadata": null,
+          "fragment": null,
+          "normalized_url": null,
+          "raw_value": "invalid URL",
+          "sheet": null,
+          "source_index": 3,
+          "source_line": null,
+          "source_row": 3
+        }
+      ],
+      "selected_column": null,
+      "selected_sheet": null,
+      "warnings": [
+        "Sitemap index locations are sitemap-document candidates, not page seeds; no recursion or URL fetching occurred."
+      ],
+      "website_requests": 0
+    }
+  },
+  "scope": "Actual isolated pure Rust import/inspection serialization; no application/browser integration or complete original parser parity proof"
+}

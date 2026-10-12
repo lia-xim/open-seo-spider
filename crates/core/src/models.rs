@@ -5,6 +5,8 @@ use std::collections::BTreeMap;
 #[serde(default)]
 pub struct CrawlConfig {
     pub seed_urls: Vec<String>,
+    /// Declared original input occurrences; network deduplication is separate.
+    pub input_imports: Vec<crate::ListImportResult>,
     pub sitemap_urls: Vec<String>,
     pub discover_sitemaps: bool,
     pub max_sitemap_documents: usize,
@@ -42,6 +44,7 @@ impl Default for CrawlConfig {
     fn default() -> Self {
         Self {
             seed_urls: Vec::new(),
+            input_imports: Vec::new(),
             sitemap_urls: Vec::new(),
             discover_sitemaps: true,
             max_sitemap_documents: 1000,
@@ -68,6 +71,61 @@ impl Default for CrawlConfig {
             include_patterns: Vec::new(),
             exclude_patterns: Vec::new(),
         }
+    }
+}
+
+impl CrawlConfig {
+    /// Prepare declared input provenance and discovery URLs without any network work.
+    pub fn prepare_input_lists(&mut self) -> anyhow::Result<()> {
+        use crate::{ListCandidateKind, ListImportFormat, ListImportLimits, ListImportOptions};
+        if self.input_imports.is_empty() && !self.seed_urls.is_empty() {
+            self.input_imports.push(crate::import_url_list(
+                self.seed_urls.join("\n").as_bytes(),
+                &ListImportOptions {
+                    format: ListImportFormat::Txt,
+                    limits: ListImportLimits::default(),
+                },
+            )?);
+        }
+        anyhow::ensure!(
+            self.input_imports.len() <= 32,
+            "At most 32 input lists may be attached to a crawl"
+        );
+        let mut total_bytes = 0usize;
+        let mut seeds: std::collections::HashSet<String> = self
+            .seed_urls
+            .iter()
+            .map(|seed| {
+                crate::normalize_url(seed, None)
+                    .map(|url| url.to_string())
+                    .unwrap_or_else(|| seed.clone())
+            })
+            .collect();
+        let mut sitemaps: std::collections::HashSet<String> =
+            self.sitemap_urls.iter().cloned().collect();
+        for input in &self.input_imports {
+            crate::validate_import_result(input)?;
+            total_bytes = total_bytes.saturating_add(serde_json::to_vec(input)?.len());
+            anyhow::ensure!(
+                total_bytes <= 32 * 1024 * 1024,
+                "Combined input provenance exceeds 32 MiB"
+            );
+            for row in &input.rows {
+                let Some(url) = row.normalized_url.as_ref().filter(|_| row.error.is_none()) else {
+                    continue;
+                };
+                match row.candidate_kind {
+                    ListCandidateKind::PageUrl if seeds.insert(url.clone()) => {
+                        self.seed_urls.push(url.clone())
+                    }
+                    ListCandidateKind::SitemapDocument if sitemaps.insert(url.clone()) => {
+                        self.sitemap_urls.push(url.clone())
+                    }
+                    _ => {}
+                }
+            }
+        }
+        Ok(())
     }
 }
 

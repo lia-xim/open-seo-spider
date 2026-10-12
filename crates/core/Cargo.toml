@@ -7,6 +7,7 @@ description = "Independent, local-first SEO crawler and audit engine"
 
 [dependencies]
 anyhow = "1"
+calamine = { version = "=0.36.1", default-features = false }
 chrono = { version = "0.4", features = ["serde"] }
 csv = "1.4"
 encoding_rs = "0.8"
@@ -29,6 +30,7 @@ sxd-xpath = "0.4.2"
 ttf-parser = "0.25.1"
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time", "net", "io-util"] }
 url = { version = "2", features = ["serde"] }
+zip = { version = "=8.6.0", default-features = false, features = ["deflate"] }
 
 [dev-dependencies]
 tempfile = "3"

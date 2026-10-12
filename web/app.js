@@ -5,7 +5,7 @@
   const state = {
     crawl: null, crawls: [], pages: [], issues: [], section: 'overview',
     search: '', filter: 'all', sort: 'url', direction: 1, page: 0, pageSize: 50,
-    selected: null, selectedResponse: null, responses: null, responsesError: '', fragments: null, fragmentsError: '', inspectorTab: 'details', polling: false, starting: false,
+    selected: null, selectedResponse: null, selectedInput: null, responses: null, responsesError: '', fragments: null, fragmentsError: '', inspectorTab: 'details', polling: false, starting: false,
     generation: 0, issueMap: new Map(), pageMap: new Map(), cache: {}, analysis: null, analysisError: '', settings: {
       concurrency: 8, timeout_seconds: 20, max_pages: 0, max_depth: 0,
       user_agent: 'Open SEO Spider/0.1', indexability_agent: 'googlebot', obey_robots: true, follow_subdomains: false,
@@ -22,6 +22,7 @@
     external: ['URL INVENTAR', 'Externe Links', 'Entdeckte Linkziele außerhalb des Crawl-Bereichs. Ungeprüfte Ziele haben keinen HTTP-Status.'],
     status: ['TECHNISCHE ANALYSE', 'HTTP & Indexierung', 'Antwortcodes, Weiterleitungen, Abrufdauer und Indexierbarkeit.'],
     responses: ['HTTP BEOBACHTUNGEN', 'Antworten', 'Jede erfasste native HTTP-Antwort einschließlich Zwischenredirects. Nicht gespeicherte Header und Body bleiben unbekannt; Dokumentdaten stehen separat.'],
+    inputs: ['EINGABEHERKUNFT', 'Eingabezeilen', 'Gespeicherte, deklarierte Importherkunft mit ursprünglicher Reihenfolge, Duplikaten und ungültigen Zeilen. Der vollständige CSV-Export ergänzt tatsächliche Abrufbefunde.'],
     titles: ['ONPAGE ANALYSE', 'Seitentitel', 'Title-Tags, Zeichenlänge und mehrfach verwendete Titel. Längen sind Hinweise.'],
     meta: ['ONPAGE ANALYSE', 'Meta Descriptions', 'Descriptions, Zeichenlänge und Duplikate im abgerufenen HTML.'],
     headings: ['ONPAGE ANALYSE', 'Überschriften', 'H1- und H2-Struktur deiner Seiten, einschließlich mehrfacher Überschriften.'],
@@ -52,6 +53,7 @@
     cancelled: 'Crawl gestoppt', canceled: 'Crawl gestoppt', failed: 'Crawl fehlgeschlagen',
     paused: 'Crawl pausiert', interrupted: 'Crawl unterbrochen', cancelling: 'Crawl wird gestoppt'
   };
+  const listUI = { controller: null, page: 0, acceptedText: null, snapshot: null };
   const number = (value) => Number(value || 0).toLocaleString('de-DE');
   const array = (value) => Array.isArray(value) ? value : value == null || value === '' ? [] : [value];
   const first = (value) => array(value).join(' | ');
@@ -244,6 +246,7 @@
     state.issues = [];
     state.selected = null;
     state.selectedResponse = null;
+    state.selectedInput = null;
     state.responses = null;
     state.responsesError = '';
     state.fragments = null;
@@ -270,8 +273,8 @@
     event.preventDefault();
     if (state.starting || active()) return;
     const mode = $('crawl-mode').value;
-    const urls = mode === 'list' ? [...new Set($('url-list').value.split(/\r?\n/).map((url) => url.trim()).filter(Boolean))] : [$('seed-url').value.trim()];
-    if (!urls.length) { message('Bitte gib mindestens eine URL ein.', true); return; }
+    let urls = mode === 'list' ? [] : [$('seed-url').value.trim()], sitemapUrls = [], inputImports = [];
+    if (mode !== 'list' && !urls[0]) { message('Bitte gib mindestens eine URL ein.', true); return; }
     for (const url of urls) {
       try { const parsed = new URL(url); if (!['http:', 'https:'].includes(parsed.protocol)) throw new Error('scheme'); }
       catch (_) { message(`Keine gültige HTTP(S)-URL: ${url}`, true); return; }
@@ -283,7 +286,20 @@
     $('start-button').disabled = true;
     message('');
     try {
-      const payload = { ...state.settings, ...advanced, mode, seed_url: mode === 'sitemap' ? '' : urls[0], urls: mode === 'sitemap' ? [] : urls, seed_urls: mode === 'sitemap' ? [] : urls, sitemap_urls: mode === 'sitemap' ? urls : [], crawl_links: mode !== 'list', include_subdomains: state.settings.follow_subdomains, request_timeout_secs: state.settings.timeout_seconds, max_body_bytes: state.settings.max_body_mb * 1024 * 1024 };
+      if (mode === 'list') {
+        if (!listUI.controller) throw new Error('Der Listenimport wurde nicht geladen. Seite neu laden.');
+        let imported = listUI.controller.state.accepted;
+        if (!imported || listUI.acceptedText !== $('url-list').value) {
+          listUI.controller.setEditedText($('url-list').value);
+          imported = await listUI.controller.preview();
+          if (!imported) throw new Error(listUI.controller.state.error || 'Die Liste wurde während der Prüfung geändert. Bitte erneut starten.');
+        }
+        const summary = window.ListImportTools.summarizeRows(imported.rows);
+        if (!summary.accepted) { if (!$('list-import-dialog').open) $('list-import-dialog').showModal(); throw new Error('Keine gültigen HTTP(S)-Kandidaten. Die Vorschau enthält die ungültigen Quellzeilen.'); }
+        urls = summary.page_urls; sitemapUrls = summary.sitemap_urls; inputImports = [imported];
+      }
+      if ($('crawl-mode').value !== mode) throw new Error('Der Crawl-Modus wurde während der Prüfung geändert. Bitte erneut starten.');
+      const payload = { ...state.settings, ...advanced, mode, seed_url: mode === 'sitemap' ? '' : urls[0] || '', urls: mode === 'sitemap' ? [] : urls, seed_urls: mode === 'sitemap' ? [] : urls, sitemap_urls: mode === 'sitemap' ? urls : sitemapUrls, input_imports: inputImports, crawl_links: mode !== 'list', include_subdomains: state.settings.follow_subdomains, request_timeout_secs: state.settings.timeout_seconds, max_body_bytes: state.settings.max_body_mb * 1024 * 1024 };
       payload.renderer = state.settings.javascript_rendering ? { endpoint: state.settings.renderer_endpoint, wait_ms: state.settings.renderer_wait_ms, accessibility: state.settings.renderer_accessibility, screenshot: state.settings.renderer_screenshot, collect_cookies: state.settings.renderer_collect_cookies, custom_javascript: parseCustomJavascript(state.settings.custom_javascript_json) } : null;
       const result = await request('/api/crawls', { method: 'POST', body: JSON.stringify(payload) });
       const crawl = result.crawl || result;
@@ -483,6 +499,7 @@
 
   function getRows() {
     switch (state.section) {
+      case 'inputs': return array(state.crawl?.config?.input_imports).flatMap((result, index) => array(result.rows).map((row, rowIndex) => ({ ...row, list_index: index + 1, occurrence_index: rowIndex, input_sha256: result.input_sha256, _import: result, url: row.normalized_url || '' })));
       case 'external': return externalRows();
       case 'images': return imageRows();
       case 'imagefiles': return imageFileRows();
@@ -517,6 +534,7 @@
 
   function columns() {
     switch (state.section) {
+      case 'inputs': return [numberColumn('list_index', 'Liste'), textColumn('input_sha256', 'Quellhash'), numberColumn('source_index', 'Quellindex'), numberColumn('source_row', 'Quellzeile'), numberColumn('source_line', 'Physische Zeile'), textColumn('sheet', 'Worksheet'), textColumn('cell', 'Zelle'), textColumn('raw_value', 'Originalwert', row => row.raw_value == null ? 'Nicht erfasst' : row.raw_value === '' ? '[leer]' : row.raw_value), textColumn('normalized_url', 'Normalisierte URL'), textColumn('fragment', 'Fragment'), textColumn('candidate_kind', 'Kandidat', row => row.candidate_kind === 'page_url' ? 'Seiten-URL' : row.candidate_kind === 'sitemap_document' ? 'Sitemap-Dokument' : 'Nicht erfasst'), textColumn('error', 'Importfehler')];
       case 'external': return [urlColumn, { key: 'status', label: 'HTTP geprüft', value: (row) => row.status, render: (row) => statusBadge(row.status) }, textColumn('text', 'Linktext'), numberColumn('source_count', 'Verlinkende Seiten'), textColumn('nofollow', 'Nofollow', (row) => row.nofollow ? 'Ja' : 'Nein')];
       case 'status': return [urlColumn, { key: 'initial_status', label: 'HTTP initial', value: (row) => row.status, render: (row) => statusBadge(row.status) }, statusColumn, textColumn('final_url', 'Finale URL'), numberColumn('redirects', 'Redirects', (row) => row.redirect_chain.length), { key: 'response_ms', label: 'Antwortzeit', value: (row) => row.response_ms, render: (row) => duration(row.response_ms) }, indexColumn, textColumn('error', 'Abruffehler')];
       case 'responses': return [urlColumn, textColumn('requested_url', 'Anfrage-URL'), numberColumn('response_index', 'Antwortposition'), { key: 'status', label: 'HTTP beobachtet', value: row => row.status, render: row => statusBadge(row.status) }, textColumn('location', 'Location'), textColumn('capture_kind', 'Befund', row => row.capture_kind === 'redirect_hop' ? 'Zwischenredirect' : 'Terminale Antwort'), textColumn('headers_known', 'Header erfasst', row => row.headers == null ? 'Unbekannt' : 'Ja'), textColumn('content_type', 'Content-Type'), numberColumn('body_bytes', 'Erfasste Bodybytes'), textColumn('body_complete', 'Body vollständig', row => row.body_complete == null ? 'Unbekannt' : row.body_complete ? 'Ja' : 'Nein'), textColumn('document_metadata_available', 'HTML-Metadaten verfügbar', row => row.document_metadata_available ? 'Ja' : 'Nein')];
@@ -549,6 +567,7 @@
   function filterOptions() {
     const base = [['all', 'Alle Ergebnisse']];
     switch (state.section) {
+      case 'inputs': return [...base, ['invalid', 'Ungültige Zeilen'], ['page_url', 'Seiten-URLs'], ['sitemap_document', 'Sitemap-Dokumente']];
       case 'fragments': return [...base, ['matched', 'ID / Name / Dokumentanfang gefunden'], ['missing', 'Ziel fehlt'], ['unknown', 'Unbekannt / nicht prüfbar'], ['unsupported', 'Nicht unterstützt']];
       case 'headingorder': return [...base, ['unavailable', 'Nicht erfasst'], ['partial', 'Unvollständiger Prüfbefund'], ['raw', 'HTML-Antwort'], ['rendered', 'Gerenderter DOM'], ...[1, 2, 3, 4, 5, 6].map(level => [`h${level}`, `H${level}`])];
       case 'keywords': return [...base, ['unavailable', 'Nicht erfasst'], ['partial', 'Unvollständiger Prüfbefund'], ['raw', 'HTML-Antwort'], ['rendered', 'Gerenderter DOM'], ['content_missing', 'content-Attribut fehlt'], ['empty', 'Vorhandener content leer']];
@@ -579,6 +598,7 @@
   function matchesFilter(row) {
     const filter = state.filter;
     if (filter === 'all') return true;
+    if (state.section === 'inputs') return filter === 'invalid' ? row.error != null : row.candidate_kind === filter;
     if (state.section === 'fragments') return filter === 'matched' ? ['matched_id', 'matched_name', 'top'].includes(row.status) : row.status === filter;
     if (state.section === 'linkdom') return filter === 'unavailable' ? row._unavailable : filter === 'fragment' ? row.fragment != null : filter.startsWith('position:') ? row.position === filter.slice(9) : row.kind === filter;
     if (domSections.includes(state.section)) {
@@ -644,11 +664,12 @@
     state.page = Math.max(0, Math.min(state.page, pages - 1));
     const offset = state.page * state.pageSize;
     const visible = rows.slice(offset, offset + state.pageSize);
-    const isSelected = row => state.section === 'responses' ? state.selectedResponse && state.selectedResponse.requested_url === row.requested_url && state.selectedResponse.response_index === row.response_index : state.selected && (row._page?.url || row.url) === state.selected.url;
+    const isSelected = row => state.section === 'inputs' ? state.selectedInput && row.list_index === state.selectedInput.list_index && row.occurrence_index === state.selectedInput.occurrence_index : state.section === 'responses' ? state.selectedResponse && state.selectedResponse.requested_url === row.requested_url && state.selectedResponse.response_index === row.response_index : state.selected && (row._page?.url || row.url) === state.selected.url;
     const emptyNote = state.section === 'responses' ? state.responsesError || (state.responses == null ? 'Diese Beobachtungen werden nach Abschluss oder Stopp des Crawls geladen. Nicht erfasste Antworten bleiben unbekannt.' : 'Es wurden keine nativen HTTP-Antworten erfasst, beispielsweise bei DNS-Fehlern oder Robots-Sperren.') : state.section === 'fragments' ? state.fragmentsError || (!state.fragments ? 'Fragmentbeobachtungen werden nach Abschluss oder Stopp geladen.' : !state.fragments.enabled ? 'Fragmentprüfung ist für diesen Crawl deaktiviert. Aktiviere sie in den Einstellungen für einen neuen Crawl.' : 'Keine Fragmentreferenzen im erfassten Inventar. Crawl- und Capture-Grenzen gelten weiterhin.') : null;
     const table = $('results-table');
+    const inputEmptyNote = state.section === 'inputs' ? array(state.crawl?.config?.input_imports).length ? 'Die gespeicherten Importergebnisse enthalten keine Eingabezeilen.' : 'Eingabeherkunft nicht erfasst. Bei älteren Projekten bleibt sie unbekannt; dies ist kein Nachweis einer leeren Eingabe.' : null;
     table.querySelector('thead').innerHTML = `<tr>${currentColumns.map((column) => `<th scope="col" aria-sort="${state.sort === column.key ? state.direction > 0 ? 'ascending' : 'descending' : 'none'}"><button type="button" data-sort="${escape(column.key)}">${escape(column.label)}<span aria-hidden="true">${state.sort === column.key ? state.direction > 0 ? '↑' : '↓' : '↕'}</span></button></th>`).join('')}</tr>`;
-    table.querySelector('tbody').innerHTML = visible.length ? visible.map((row, index) => `<tr class="click-row${isSelected(row) ? ' selected' : ''}" data-row="${index}" tabindex="0" aria-label="Details zu ${escape(row.url)} öffnen">${currentColumns.map((column) => `<td>${column.render(row)}</td>`).join('')}</tr>`).join('') : `<tr><td class="empty-cell" colspan="${currentColumns.length}"><strong>${state.search || state.filter !== 'all' ? 'Keine passenden Ergebnisse' : state.crawl ? 'Noch keine Daten in diesem Bereich' : 'Starte einen Crawl, um Ergebnisse zu sehen'}</strong>${escape(state.search || state.filter !== 'all' ? 'Ändere den Filter oder den Suchbegriff.' : emptyNote || (['linkmetrics', 'structured'].includes(state.section) ? state.analysisError || 'Diese Auswertung wird nach Abschluss oder Stopp des Crawls berechnet.' : state.section === 'images' ? 'Bildreferenzen erscheinen nach der Auswertung von HTML-Seiten.' : state.section === 'external' ? 'Externe Links erscheinen, sobald sie im HTML entdeckt werden.' : 'Nur tatsächlich erfasste Daten werden angezeigt.'))}</td></tr>`;
+    table.querySelector('tbody').innerHTML = visible.length ? visible.map((row, index) => `<tr class="click-row${isSelected(row) ? ' selected' : ''}" data-row="${index}" tabindex="0" aria-label="Details zu ${escape(row.url)} öffnen">${currentColumns.map((column) => `<td>${column.render(row)}</td>`).join('')}</tr>`).join('') : `<tr><td class="empty-cell" colspan="${currentColumns.length}"><strong>${state.search || state.filter !== 'all' ? 'Keine passenden Ergebnisse' : state.crawl ? 'Noch keine Daten in diesem Bereich' : 'Starte einen Crawl, um Ergebnisse zu sehen'}</strong>${escape(state.search || state.filter !== 'all' ? 'Ändere den Filter oder den Suchbegriff.' : inputEmptyNote || emptyNote || (['linkmetrics', 'structured'].includes(state.section) ? state.analysisError || 'Diese Auswertung wird nach Abschluss oder Stopp des Crawls berechnet.' : state.section === 'images' ? 'Bildreferenzen erscheinen nach der Auswertung von HTML-Seiten.' : state.section === 'external' ? 'Externe Links erscheinen, sobald sie im HTML entdeckt werden.' : 'Nur tatsächlich erfasste Daten werden angezeigt.'))}</td></tr>`;
     table.querySelectorAll('[data-sort]').forEach((button) => button.addEventListener('click', () => {
       state.direction = state.sort === button.dataset.sort ? -state.direction : 1;
       state.sort = button.dataset.sort;
@@ -658,6 +679,7 @@
     table.querySelectorAll('[data-row]').forEach((rowElement) => {
       const open = () => {
         const row = visible[Number(rowElement.dataset.row)];
+        if (state.section === 'inputs') { state.selected = null; state.selectedResponse = null; state.selectedInput = row; renderInspector(); renderTable(); $('inspector').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); return; }
         if (state.section === 'responses') { selectResponse(row); return; }
         if (state.section === 'fragments' && !row._page) { message('Kein gespeicherter Dokumentdatensatz zur Quell-URL verfügbar.', true); return; }
         const page = row._page || state.pageMap.get(row.url) || row;
@@ -679,10 +701,10 @@
     state.page = 0;
     state.filter = 'all';
     state.search = '';
-    state.sort = 'url';
+    state.sort = section === 'inputs' ? 'list_index' : 'url';
     state.direction = 1;
     $('table-search').value = '';
-    $('table-filter').innerHTML = filterOptions().map(([value, label]) => `<option value="${value}">${escape(label)}</option>`).join('');
+    $('table-filter').innerHTML = filterOptions().map(([value, label]) => `<option value="${escape(value)}">${escape(label)}</option>`).join('');
     document.querySelectorAll('[data-section]').forEach((button) => {
       button.classList.toggle('active', button.dataset.section === section);
       if (button.dataset.section === section) button.setAttribute('aria-current', 'page'); else button.removeAttribute('aria-current');
@@ -698,16 +720,17 @@
     $('overview-view').hidden = state.section !== 'overview';
     $('graph-view').hidden = state.section !== 'graph';
     $('table-view').hidden = ['overview', 'graph'].includes(state.section);
-    $('export-csv').disabled = (!state.pages.length && !state.issues.length) || state.section === 'responses' && state.responses == null || state.section === 'fragments' && (!state.fragments || !state.fragments.enabled);
-    $('export-resources').hidden = !['pdf', 'imagefiles', 'responses', 'fragments', 'linkdom', ...domSections].includes(state.section);
+    $('export-csv').disabled = (state.section === 'inputs' ? !getRows().length : !state.pages.length && !state.issues.length) || state.section === 'responses' && state.responses == null || state.section === 'fragments' && (!state.fragments || !state.fragments.enabled);
+    $('export-resources').hidden = !['inputs', 'pdf', 'imagefiles', 'responses', 'fragments', 'linkdom', ...domSections].includes(state.section);
     $('export-resources').disabled = !state.crawl || Boolean(active());
-    $('export-resources').textContent = domSections.includes(state.section) ? '↓ Alle DOM-Beobachtungen CSV' : state.section === 'pdf' ? '↓ PDF-Details CSV' : state.section === 'responses' ? '↓ Alle Antworten CSV' : state.section === 'fragments' ? '↓ Alle Fragmentziele CSV' : state.section === 'linkdom' ? '↓ Alle Linkvorkommen CSV' : '↓ Bilddateien CSV';
+    $('export-resources').textContent = state.section === 'inputs' ? '↓ Alle Eingabezeilen CSV' : domSections.includes(state.section) ? '↓ Alle DOM-Beobachtungen CSV' : state.section === 'pdf' ? '↓ PDF-Details CSV' : state.section === 'responses' ? '↓ Alle Antworten CSV' : state.section === 'fragments' ? '↓ Alle Fragmentziele CSV' : state.section === 'linkdom' ? '↓ Alle Linkvorkommen CSV' : '↓ Bilddateien CSV';
     if (state.section === 'overview') renderOverview();
     else if (state.section === 'graph') renderGraph();
     else renderTable();
   }
 
   function selectResponse(response) {
+    state.selectedInput = null;
     state.selected = null;
     state.selectedResponse = response;
     renderInspector();
@@ -738,6 +761,7 @@
   }
 
   function selectPage(page) {
+    state.selectedInput = null;
     state.selectedResponse = null;
     state.selected = normalPage(page);
     state.inspectorTab = 'details';
@@ -746,7 +770,17 @@
     $('inspector').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
+  function renderInputInspector(row) {
+    $('inspector').hidden = false;
+    $('inspector-tabs').hidden = true;
+    $('inspector').querySelector('.eyebrow').textContent = 'DEKLARIERTE EINGABEHERKUNFT';
+    $('inspector-url').textContent = row.normalized_url ?? row.raw_value ?? 'Eingabezeile';
+    const fields = [['Liste', row.list_index], ['Parserprofil', row._import.engine], ['Quellhash', row.input_sha256], ['Quellbytes', row._import.input_bytes], ['Quellindex', row.source_index], ['Quellzeile', row.source_row], ['Physische Zeile', row.source_line], ['Worksheet', row.sheet], ['Zelle', row.cell], ['Originalwert', row.raw_value === '' ? '[leer]' : row.raw_value], ['Normalisierte URL', row.normalized_url], ['Fragment', row.fragment], ['Kandidatenart', row.candidate_kind], ['Zelltyp', row.cell_type], ['Formelmetadaten', row.formula_metadata == null ? null : JSON.stringify(row.formula_metadata)], ['Importfehler', row.error ?? 'Keiner deklariert']];
+    $('inspector-content').innerHTML = `<p class="detail-empty">Deklarierte Herkunft aus dem gespeicherten Importergebnis, keine signierte Bestätigung. Index 0 ist erhalten und bedeutet eine nicht erfasste Quellposition. Abrufbefunde sind ausschließlich im vollständigen Eingabezeilen-CSV ergänzt.</p><dl class="details-grid">${fields.map(([label, value]) => `<dt>${escape(label)}</dt><dd>${escape(value ?? 'Nicht erfasst')}</dd>`).join('')}</dl><details><summary>Importoptionen &amp; Grenzen</summary><pre class="list-import-details">${escape(JSON.stringify({ options: row._import.options, website_requests: row._import.website_requests, warnings: row._import.warnings, limitations: row._import.limitations }, null, 2))}</pre></details>`;
+  }
+
   function renderInspector() {
+    if (state.selectedInput) { renderInputInspector(state.selectedInput); return; }
     if (state.selectedResponse) { renderResponseInspector(state.selectedResponse); return; }
     const page = state.selected;
     if (!page) { $('inspector').hidden = true; return; }
@@ -1146,7 +1180,85 @@
     $('renderer-settings').querySelectorAll('input, textarea').forEach((input) => { input.disabled = !enabled; });
   }
 
+  function listOptions() {
+    return window.ListImportTools.buildListOptions({ kind: $('list-format').value, delimiter: $('list-delimiter').value,
+      column_kind: $('list-column-kind').value, column_index: $('list-column-index').value,
+      header_name: $('list-header-name').value, header_row: $('list-header-row').value, start_row: $('list-start-row').value,
+      sheet_kind: 'index', sheet_index: $('list-sheet').value, formula_policy: $('list-formula-policy').value });
+  }
+
+  function syncListControls() {
+    const kind = $('list-format').value, columns = ['csv', 'xlsx'].includes(kind), header = columns && $('list-column-kind').value === 'header';
+    for (const [id, show] of [['list-delimiter-control', kind === 'csv'], ['list-sheet-control', kind === 'xlsx'], ['list-column-kind-control', columns], ['list-column-index-control', columns && !header], ['list-header-name-control', header], ['list-header-row-control', header], ['list-start-row-control', columns], ['list-formula-control', kind === 'xlsx']]) $(id).hidden = !show;
+    $('list-inspect').hidden = kind !== 'xlsx';
+  }
+
+  function updateListOptions() {
+    if (!listUI.controller) return;
+    listUI.page = 0; syncListControls(); listUI.controller.setOptions(null);
+    try { listUI.controller.setOptions(listOptions()); }
+    catch (error) { $('list-import-error').textContent = error.message; $('list-import-error').hidden = false; }
+  }
+
+  function renderListPreview(snapshot = listUI.snapshot) {
+    if (!snapshot) return;
+    listUI.snapshot = snapshot;
+    const busy = ['reading', 'inspecting', 'parsing'].includes(snapshot.phase);
+    $('list-inspect').disabled = busy || !snapshot.source;
+    $('list-preview').disabled = busy || !snapshot.source || !snapshot.options;
+    $('list-accept').disabled = snapshot.phase !== 'preview' || !snapshot.result || !window.ListImportTools.summarizeRows(snapshot.result.rows).accepted;
+    $('list-import-error').hidden = !snapshot.error;
+    $('list-import-error').textContent = snapshot.error;
+    $('list-source-info').textContent = snapshot.source ? `${snapshot.source.name} · ${number(snapshot.source.bytes)} Byte` : '';
+    $('list-import-status').textContent = ({ empty: 'Noch keine Datei ausgewählt.', reading: 'Lokale Datei wird gelesen …', selected: 'Quelle ausgewählt; noch keine aktuelle Vorschau übernommen.', inspecting: 'Workbook wird lokal geprüft …', parsing: 'Quelle wird lokal gelesen und validiert …', preview: 'Vorschau bereit. Noch kein Crawl gestartet.', accepted: 'Geprüfte Kandidaten übernommen. Crawl separat starten.', error: 'Import nicht erfolgreich; kein Ergebnis übernommen.' })[snapshot.phase] || 'Befund nicht erfasst.';
+    if (snapshot.inspection) {
+      const selected = $('list-sheet').value;
+      $('list-sheet').innerHTML = '<option value="">Worksheet ausdrücklich auswählen</option>' + snapshot.inspection.sheets.map(sheet => `<option value="${escape(sheet.index)}"${sheet.sheet_type === 'WorkSheet' ? '' : ' disabled'}>${escape(sheet.name)} · ${escape(sheet.visibility)} · ${escape(sheet.sheet_type)}</option>`).join('');
+      $('list-sheet').value = selected;
+    }
+    const result = snapshot.result, rows = array(result?.rows);
+    $('list-preview-panel').hidden = !result;
+    $('list-origin-state').textContent = snapshot.accepted ? `Übernommener ${snapshot.accepted.options?.format?.kind?.toUpperCase() || 'Import'} · ${number(rows.length)} Quellzeilen erhalten` : 'Manueller Text · wird vor dem Crawl lokal geprüft';
+    if (!result) return;
+    const summary = window.ListImportTools.summarizeRows(rows);
+    $('list-preview-summary').textContent = `${number(summary.rows)} Quellzeilen · ${number(summary.accepted)} akzeptierte Kandidaten · ${number(summary.invalid)} ungültig · ${number(summary.duplicates)} Wiederholungen · ${number(summary.page_urls.length)} eindeutige Seiten / ${number(summary.sitemap_urls.length)} Sitemap-Dokumente`;
+    $('list-preview-details').textContent = JSON.stringify({ engine: result.engine, input_sha256: result.input_sha256, input_bytes: result.input_bytes, options: result.options, selected_sheet: result.selected_sheet, selected_column: result.selected_column, website_requests: result.website_requests, warnings: result.warnings, limitations: result.limitations }, null, 2);
+    const pages = Math.max(1, Math.ceil(rows.length / 50)); listUI.page = Math.max(0, Math.min(listUI.page, pages - 1));
+    const seen = new Set(), duplicate = rows.map(row => { if (row.error != null || !row.normalized_url) return false; const repeated = seen.has(row.normalized_url); seen.add(row.normalized_url); return repeated; });
+    const offset = listUI.page * 50, known = value => Number.isSafeInteger(value) && value >= 0 ? number(value) : 'Nicht erfasst';
+    $('list-preview-table').querySelector('tbody').innerHTML = rows.slice(offset, offset + 50).map((row, index) => `<tr>${[known(row.source_index), known(row.source_row), known(row.source_line), [row.sheet, row.cell].filter(value => value != null).join(' / ') || 'Nicht erfasst', row.raw_value == null ? 'Nicht erfasst' : row.raw_value === '' ? '[leer]' : row.raw_value, row.candidate_kind === 'page_url' ? 'Seiten-URL' : row.candidate_kind === 'sitemap_document' ? 'Sitemap-Dokument' : 'Nicht erfasst', row.normalized_url ?? 'Nicht gültig / erfasst', row.fragment ?? 'Nicht erfasst', [row.cell_type || 'Nicht erfasst', row.formula_metadata == null ? '' : JSON.stringify(row.formula_metadata)].filter(Boolean).join(' · '), duplicate[offset + index] ? 'Wiederholung' : '—', row.error ?? '—'].map((value, cell) => `<td${cell === 10 && row.error != null ? ' class="import-error"' : ''}>${escape(value)}</td>`).join('')}</tr>`).join('') || '<tr><td colspan="11">Keine Quellzeilen erfasst.</td></tr>';
+    $('list-page-label').textContent = rows.length ? `${number(offset + 1)}–${number(Math.min(offset + 50, rows.length))} von ${number(rows.length)}` : 'Keine Ergebnisse';
+    $('list-page-prev').disabled = listUI.page === 0; $('list-page-next').disabled = listUI.page + 1 >= pages;
+  }
+
+  function bindListImporter() {
+    if (!window.ListImportTools) { $('list-import-open').disabled = true; return; }
+    listUI.controller = new window.ListImportTools.ImportPreviewState({ transport: (path, body) => request(path, { method: 'POST', body: JSON.stringify(body) }), emit: renderListPreview });
+    $('list-import-open').addEventListener('click', () => { syncListControls(); renderListPreview(listUI.controller.state); $('list-import-dialog').showModal(); });
+    $('list-import-close').addEventListener('click', () => { listUI.controller.cancelPending(); $('list-import-dialog').close(); });
+    $('list-import-dialog').addEventListener('cancel', () => listUI.controller.cancelPending());
+    $('list-file').addEventListener('change', async event => {
+      const file = event.target.files[0]; if (!file) return;
+      const extension = file.name.split('.').pop().toLowerCase();
+      if (['xls', 'xlsm', 'xlsb', 'ods'].includes(extension)) { listUI.controller.setEditedText(''); $('list-import-error').textContent = 'Dieses Workbook-Format wird nicht unterstützt. Bitte als XLSX speichern.'; $('list-import-error').hidden = false; return; }
+      if (['txt', 'csv', 'xml', 'xlsx'].includes(extension)) $('list-format').value = extension;
+      $('list-sheet').innerHTML = '<option value="">Zuerst Workbook prüfen</option>'; listUI.page = 0; listUI.acceptedText = null;
+      const source = await listUI.controller.setFile(file); if (source) updateListOptions();
+    });
+    for (const id of ['list-format', 'list-delimiter', 'list-sheet', 'list-column-kind', 'list-column-index', 'list-header-name', 'list-header-row', 'list-start-row', 'list-formula-policy']) $(id).addEventListener('change', updateListOptions);
+    $('list-inspect').addEventListener('click', async () => { try { await listUI.controller.inspect(); } catch (error) { message(error.message, true); } });
+    $('list-import-form').addEventListener('submit', async event => { event.preventDefault(); updateListOptions(); if (!listUI.controller.state.options) return; await listUI.controller.preview(); });
+    $('list-accept').addEventListener('click', () => {
+      try { const handoff = listUI.controller.accept(); const imported = handoff.input_imports[0]; $('url-list').value = imported.rows.filter(row => row.error == null && row.normalized_url).map(row => row.normalized_url).join('\n'); listUI.acceptedText = $('url-list').value; $('list-import-dialog').close(); }
+      catch (error) { $('list-import-error').textContent = error.message; $('list-import-error').hidden = false; }
+    });
+    $('url-list').addEventListener('input', () => { listUI.acceptedText = null; $('list-format').value = 'txt'; $('list-file').value = ''; listUI.page = 0; listUI.controller.setEditedText($('url-list').value); syncListControls(); });
+    $('list-page-prev').addEventListener('click', () => { listUI.page--; renderListPreview(); }); $('list-page-next').addEventListener('click', () => { listUI.page++; renderListPreview(); });
+    renderListPreview(listUI.controller.state);
+  }
+
   function bindEvents() {
+    bindListImporter();
     $('crawl-form').addEventListener('submit', startCrawl);
     $('cancel-button').addEventListener('click', cancelCrawl);
     $('resume-button').addEventListener('click', resumeCrawl);
@@ -1171,7 +1283,7 @@
     $('page-size').addEventListener('change', (event) => { state.pageSize = Number(event.target.value); state.page = 0; renderTable(); });
     $('page-prev').addEventListener('click', () => { state.page -= 1; renderTable(); });
     $('page-next').addEventListener('click', () => { state.page += 1; renderTable(); });
-    $('inspector-close').addEventListener('click', () => { state.selected = null; state.selectedResponse = null; $('inspector').hidden = true; if (!['overview', 'graph'].includes(state.section)) renderTable(); });
+    $('inspector-close').addEventListener('click', () => { state.selected = null; state.selectedResponse = null; state.selectedInput = null; $('inspector').hidden = true; if (!['overview', 'graph'].includes(state.section)) renderTable(); });
     const tabs = [...document.querySelectorAll('[data-tab]')];
     tabs.forEach((button, index) => {
       button.addEventListener('click', () => { state.inspectorTab = button.dataset.tab; renderInspector(); });
@@ -1190,7 +1302,7 @@
     $('settings-form').addEventListener('submit', saveSettings);
     $('settings-form').elements.javascript_rendering.addEventListener('change', (event) => toggleRendererSettings(event.target.checked));
     $('export-csv').addEventListener('click', exportCSV);
-    $('export-resources').addEventListener('click', () => serverDownload(domSections.includes(state.section) ? 'dom.csv' : ({ pdf: 'pdf.csv', responses: 'responses.csv', fragments: 'fragments.csv', linkdom: 'links.csv', imagefiles: 'images.csv' })[state.section], `open-seo-spider-${state.crawl.id}-${state.section}.csv`));
+    $('export-resources').addEventListener('click', () => serverDownload(domSections.includes(state.section) ? 'dom.csv' : ({ inputs: 'inputs.csv', pdf: 'pdf.csv', responses: 'responses.csv', fragments: 'fragments.csv', linkdom: 'links.csv', imagefiles: 'images.csv' })[state.section], `open-seo-spider-${state.crawl.id}-${state.section}.csv`));
     $('import-project').addEventListener('click', () => $('import-file').click());
     $('import-file').addEventListener('change', (event) => importProject(event.target.files[0]));
     $('export-sitemap').addEventListener('click', () => serverDownload('sitemap.xml', `open-seo-spider-${state.crawl.id}-sitemap.xml`));

@@ -1,0 +1,14 @@
+Source Index,Source Row,Source Line,Sheet,Cell,Raw Value,Cell Type,Candidate Kind,Normalized URL,Fragment,Error,Formula Metadata
+1,2,,URLs,B2,https://example.test/same?b=2&a=1#part,shared_string,PageUrl,https://example.test/same?b=2&a=1,part,,
+2,3,,URLs,B3,https://example.test/same?b=2&a=1#part,string,PageUrl,https://example.test/same?b=2&a=1,part,,
+3,4,,URLs,B4,,missing,PageUrl,,,selected XLSX cell is missing,
+4,5,,URLs,B5,1,boolean,PageUrl,,,selected XLSX cell/cache is not a string URL value,
+5,6,,URLs,B6,https://example.test/cached,string,PageUrl,https://example.test/cached,,,"{""kind"":""normal"",""formula"":""HYPERLINK(\""https://never-fetch.test\"", \""label\"")""}"
+6,7,,URLs,B7,https://example.test/shared,string,PageUrl,https://example.test/shared,,,"{""kind"":""shared"",""shared_index"":0,""range"":""Dimensions { start: (6, 1), end: (7, 1) }"",""formula"":""A7""}"
+7,8,,URLs,B8,https://example.test/derived,string,PageUrl,https://example.test/derived,,,"{""kind"":""shared_derived"",""shared_index"":0}"
+8,9,,URLs,B9,#N/A,error,PageUrl,,,selected XLSX cell/cache is not a string URL value,
+9,10,,URLs,B10,2026-10-12T00:00:00Z,date_time_iso,PageUrl,,,selected XLSX cell/cache is not a string URL value,
+10,11,,URLs,B11,open-me,string,PageUrl,,,invalid absolute URL,
+11,12,,URLs,B12,,empty,PageUrl,,,selected XLSX cell/cache is not a string URL value,"{""kind"":""normal"",""formula"":""A12""}"
+12,13,,URLs,B13,https://example.test/fragment#kept,string,PageUrl,https://example.test/fragment,kept,,
+13,14,,URLs,B14,,missing,PageUrl,,,selected XLSX cell is missing,

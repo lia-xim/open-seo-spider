@@ -6,13 +6,15 @@ use axum::{
     response::{IntoResponse, Response},
     routing::{get, post},
 };
+use base64::{Engine as _, engine::general_purpose::STANDARD};
 use open_seo_spider_core::{
-    AuditIssue, CrawlConfig, CrawlEvent, CrawlReport, CrawlStore, Crawler, PageRecord,
-    RobotsSimulationInput, SerpInputRow, compare_crawls, export_browser_cookies_csv,
-    export_custom_extractions_csv, export_custom_javascript_csv, export_dom_observations_csv,
-    export_fragments_csv, export_image_resources_csv, export_issues_csv, export_links_csv,
-    export_pages_csv, export_pdf_csv, export_response_observations_csv,
-    export_robots_simulation_csv, export_serp_csv, export_sitemap_xml, import_serp_csv,
+    AuditIssue, CrawlConfig, CrawlEvent, CrawlReport, CrawlStore, Crawler, ListImportLimits,
+    ListImportOptions, PageRecord, RobotsSimulationInput, SerpInputRow, compare_crawls,
+    export_browser_cookies_csv, export_custom_extractions_csv, export_custom_javascript_csv,
+    export_dom_observations_csv, export_fragments_csv, export_image_resources_csv,
+    export_input_occurrences_csv, export_issues_csv, export_links_csv, export_pages_csv,
+    export_pdf_csv, export_response_observations_csv, export_robots_simulation_csv,
+    export_serp_csv, export_sitemap_xml, import_serp_csv, import_url_list, inspect_xlsx_list,
     preview_serp, response_observations, simulate_robots, validate_fragments,
 };
 use serde::{Deserialize, Serialize};
@@ -136,6 +138,17 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
         )
         .route("/api/capabilities", get(capabilities))
         .route(
+            "/list-import.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+                    include_str!("../../../web/list-import.js"),
+                )
+            }),
+        )
+        .route("/api/lists/inspect", post(list_inspect))
+        .route("/api/lists/import", post(list_import))
+        .route(
             "/serp",
             get(|| async {
                 (
@@ -188,6 +201,7 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
         .route("/api/crawls/{id}/fragments", get(fragment_inventory))
         .route("/api/crawls/{id}/fragments.csv", get(export_fragments))
         .route("/api/crawls/{id}/dom.csv", get(export_dom))
+        .route("/api/crawls/{id}/inputs.csv", get(export_inputs))
         .route("/api/crawls/{id}/cancel", post(cancel_crawl))
         .route("/api/crawls/{id}/resume", post(resume_crawl))
         .route("/api/crawls/{id}/export.csv", get(export_csv))
@@ -286,11 +300,12 @@ async fn capabilities() -> Json<Value> {
         },
         "offline_serp":{"path":"/serp","website_requests":0,"csv_import":true,"row_limit":10000},
         "offline_robots":{"path":"/robots","website_requests":0,"engine":"crawler_policy","remote_rules_fetch":false},
+        "offline_list_import":{"formats":["txt","csv","xml","xlsx"],"website_requests":0,"max_input_bytes":8388608,"max_rows_per_file":50000,"row_order":true,"duplicates":true,"xlsx_formulas":"reject_or_explicit_cached_string_only","provenance":"declared_client_input"},
         "optional_worker":{"javascript_rendering":true,"custom_javascript":true,
             "redacted_cookie_observations":true,"screenshots":true,"accessibility_axe":true,
             "endpoint":"http://127.0.0.1:8790/render","enabled_by_default":false},
         "mcp":{"stdio":true,"streamable_http":"/mcp"},
-        "exports":["pages_csv","issues_csv","links_csv","extractions_csv","javascript_csv","cookies_csv","pdf_csv","image_resources_csv","responses_csv","fragments_csv","dom_csv","sitemap_xml","project_json"],
+        "exports":["pages_csv","issues_csv","links_csv","extractions_csv","javascript_csv","cookies_csv","pdf_csv","image_resources_csv","responses_csv","fragments_csv","dom_csv","inputs_csv","sitemap_xml","project_json"],
         "unimplemented":["api_integrations","spelling_grammar","pdf_ocr_and_rendering","shared_authenticated_browser_sessions","embedding_semantic_search","scheduling","full_structured_data_validation"],
         "parity":"in progress; see docs/parity/granular-acceptance.json"
     }))
@@ -345,7 +360,8 @@ fn config_from_input(mut value: Value) -> anyhow::Result<CrawlConfig> {
             object.insert(key.into(), Value::Null);
         }
     }
-    let config: CrawlConfig = serde_json::from_value(value)?;
+    let mut config: CrawlConfig = serde_json::from_value(value)?;
+    config.prepare_input_lists()?;
     Crawler::new(config.clone())?;
     Ok(config)
 }
@@ -633,6 +649,62 @@ async fn export_csv(State(state): State<AppState>, Path(id): Path<Uuid>) -> ApiR
             .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?,
         "text/csv; charset=utf-8",
         "pages.csv",
+    ))
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct ListInspectRequest {
+    content_base64: String,
+    #[serde(default)]
+    limits: ListImportLimits,
+}
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct ListImportRequest {
+    content_base64: String,
+    options: ListImportOptions,
+}
+fn decode_list_input(encoded: &str, limits: &ListImportLimits) -> anyhow::Result<Vec<u8>> {
+    limits.validate()?;
+    anyhow::ensure!(
+        encoded.len() <= limits.max_input_bytes.div_ceil(3) * 4,
+        "Encoded input exceeds max_input_bytes"
+    );
+    let bytes = STANDARD.decode(encoded)?;
+    anyhow::ensure!(
+        bytes.len() <= limits.max_input_bytes,
+        "Input exceeds max_input_bytes"
+    );
+    Ok(bytes)
+}
+async fn list_inspect(Json(input): Json<ListInspectRequest>) -> ApiResult<Json<Value>> {
+    let result = tokio::task::spawn_blocking(move || {
+        let bytes = decode_list_input(&input.content_base64, &input.limits)?;
+        inspect_xlsx_list(&bytes, &input.limits)
+    })
+    .await
+    .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?
+    .map_err(|e| api_error(StatusCode::BAD_REQUEST, e))?;
+    Ok(Json(json!(result)))
+}
+async fn list_import(Json(input): Json<ListImportRequest>) -> ApiResult<Json<Value>> {
+    let result = tokio::task::spawn_blocking(move || {
+        let bytes = decode_list_input(&input.content_base64, &input.options.limits)?;
+        import_url_list(&bytes, &input.options)
+    })
+    .await
+    .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?
+    .map_err(|e| api_error(StatusCode::BAD_REQUEST, e))?;
+    Ok(Json(json!(result)))
+}
+async fn export_inputs(State(state): State<AppState>, Path(id): Path<Uuid>) -> ApiResult<Response> {
+    let report = require_report(&state, id).await?;
+    Ok(download(
+        export_input_occurrences_csv(&report)
+            .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?,
+        "text/csv; charset=utf-8",
+        "inputs.csv",
     ))
 }
 
@@ -984,6 +1056,57 @@ async fn compare(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn uploaded_list_config_retains_occurrences_and_rejects_forged_targets() {
+        let parsed = import_url_list(
+            b"https://example.test/a#one\nnot a URL\nhttps://example.test/a#one\n",
+            &ListImportOptions {
+                format: open_seo_spider_core::ListImportFormat::Txt,
+                limits: ListImportLimits::default(),
+            },
+        )
+        .unwrap();
+        let config = config_from_input(json!({"mode":"list","input_imports":[parsed]})).unwrap();
+        assert_eq!(config.seed_urls, vec!["https://example.test/a"]);
+        assert_eq!(config.input_imports[0].rows.len(), 3);
+        assert_eq!(config.input_imports[0].rows[0].source_index, 1);
+        assert!(config.input_imports[0].rows[1].error.is_some());
+        let mut forged = config.input_imports[0].clone();
+        forged.rows[0].normalized_url = Some("https://other.test/stolen".into());
+        assert!(config_from_input(json!({"input_imports":[forged]})).is_err());
+    }
+    #[test]
+    fn xml_index_entries_prepare_sitemap_discovery_without_page_seeds() {
+        let parsed=import_url_list(br#"<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>https://example.test/nested.xml</loc></sitemap></sitemapindex>"#, &ListImportOptions {format:open_seo_spider_core::ListImportFormat::Xml,limits:ListImportLimits::default()}).unwrap();
+        let config = config_from_input(json!({"input_imports":[parsed],"mode":"list"})).unwrap();
+        assert!(config.seed_urls.is_empty());
+        assert_eq!(config.sitemap_urls, vec!["https://example.test/nested.xml"]);
+    }
+    #[test]
+    fn encoded_upload_limits_are_checked_before_decode() {
+        let limits = ListImportLimits {
+            max_input_bytes: 2,
+            ..Default::default()
+        };
+        assert_eq!(decode_list_input("YWI=", &limits).unwrap(), b"ab");
+        assert!(decode_list_input("YWJj", &limits).is_err());
+        assert!(decode_list_input("YWI=YWI=", &limits).is_err());
+        assert!(decode_list_input("not base64!", &limits).is_err());
+        assert!(
+            decode_list_input(
+                "",
+                &ListImportLimits {
+                    max_input_bytes: 0,
+                    ..Default::default()
+                }
+            )
+            .is_err()
+        );
+    }
+    #[test]
+    fn direct_seed_raw_controls_cannot_create_ambiguous_import_targets() {
+        assert!(config_from_input(json!({"seed_urls":["https://example.test/a\nb"]})).is_err());
+    }
     #[test]
     fn ui_config_aliases_do_not_introduce_a_url_limit() {
         let config=config_from_input(json!({"seed_url":"https://example.com","mode":"list","max_pages":0,"max_depth":0,"follow_subdomains":true})).unwrap();

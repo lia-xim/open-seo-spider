@@ -40,7 +40,22 @@ cargo run -p open-seo-spider -- crawl https://example.com --output crawl.json --
 cargo run -p open-seo-spider -- crawl --sitemap https://example.com/sitemap.xml
 ```
 
-List mode uses `--list` and one or more explicit URL arguments. `max_pages` is
+List mode accepts explicit URL arguments and local TXT/CSV/XML/XLSX files, with
+original rows, duplicates and invalid values retained separately from network work.
+Use the upload preview in the UI, or the byte-only `import-list` command. XLSX
+requires explicit sheet/column options; formulas default to rejection.
+
+```sh
+open-seo-spider import-list urls.txt --output input.json --csv input.csv
+open-seo-spider import-list urls.xlsx --inspect
+open-seo-spider crawl --list-file urls.txt --config crawl-config.json --output crawl.json --input-csv inputs.csv
+```
+
+`--config` loads native JSON settings; unset flags keep their configured values.
+`--list-file` selects list mode, and `--list-options` supplies a native JSON import
+selection for CSV/XLSX. Importing makes no website request; crawl start is explicit.
+See [list import contracts and resource limits](docs/list-imports.md).
+`max_pages` is
 optional; the default has no product-imposed page limit. Crawls obey robots.txt
 by default and pace requests by origin. Optional include/exclude regular
 expressions filter discovered URLs. Named CSS, XPath1.0 and Rust-regex

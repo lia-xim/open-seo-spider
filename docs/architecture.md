@@ -104,6 +104,20 @@ must be enabled in the crawl configuration.
 
 ## Evidence boundaries
 
+List parsing is a byte-only core operation for UTF-8 TXT/CSV, sitemap XML and
+bounded XLSX packages. Streaming Excel cells, actual inflated ZIP/XML budgets
+and explicit cached-formula policy avoid dense worksheet allocations and formula
+execution. Import results are declared client provenance and are validated before
+seeds are derived. CrawlConfig retains original occurrence rows while normal
+frontier deduplication controls requests. Sitemap-index inputs enter sitemap
+discovery separately from page seeds. `inputs.csv` joins original occurrences to
+captured request identities without inventing status for invalid or unfetched
+rows. The CLI and HTTP transports share the same parser and validator.
+
+Fragment validation lazily indexes IDs and legacy names for each queried captured
+document. Repeated lookups preserve first-DOM-occurrence selection and raw-before-
+decoded behavior without rescanning the entire target tree per link.
+
 Deterministic HTTP/API tests prove more than 500 URL observations, cancellation,
 resume after process termination, exports, import and comparison. Unit/integration
 tests and browser fixture results are retained beside their reproducible scripts.

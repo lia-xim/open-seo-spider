@@ -1,10 +1,10 @@
 # Local reference comparison
 
-Run: 2026-10-12T10:07:21.429Z. Full product parity: **NOT PROVEN**.
+Run: 2026-10-12T10:48:27.390Z. Full product parity: **NOT PROVEN**.
 
 35 reference rows / 34 independent rows; 887 matching fields, 29 differing fields, 3 unavailable fields.
 
-Fixture SHA-256: `928545b1b70ae07da917fddd0fd1fd137878e7819326741dbbd6c23cb4607072`. Native binary SHA-256: `77e16925d14bf253cfa187258a1331b7a4b2d79e8ab24a10a68d4dc54c445df4`.
+Fixture SHA-256: `928545b1b70ae07da917fddd0fd1fd137878e7819326741dbbd6c23cb4607072`. Native binary SHA-256: `266bcaf4e87c56d83347a288e7c2b7e7c8331a4796f2aaba9452471e5b774783`.
 
 The original normal CLI reported a missing licence and successfully exported eleven CSV tabs for this controlled fixture. The original CLI rewrites its ordinary profile on shutdown; no licence/config/auth flag or setting change was supplied.
 

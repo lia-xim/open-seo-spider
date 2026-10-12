@@ -4,7 +4,45 @@
 use crate::{
     CrawlReport, FragmentObservation, FragmentStatus, FragmentTarget, PageRecord, normalize_url,
 };
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, HashMap};
+
+/// Borrowed, per-captured-document lookup. Imported observation arrays may be
+/// reordered, so lowest recorded DOM position wins; ties keep the first record.
+/// IDs always precede legacy anchor names, independently of their DOM positions.
+#[derive(Default)]
+struct FragmentTargetIndex<'a> {
+    ids: HashMap<&'a str, &'a FragmentTarget>,
+    names: HashMap<&'a str, &'a FragmentTarget>,
+}
+
+impl<'a> FragmentTargetIndex<'a> {
+    fn new(targets: &'a [FragmentTarget]) -> Self {
+        let mut index = Self::default();
+        for target in targets {
+            let entries = match target.kind.as_str() {
+                "id" => &mut index.ids,
+                "legacy_anchor_name" => &mut index.names,
+                _ => continue,
+            };
+            entries
+                .entry(target.value.as_str())
+                .and_modify(|previous| {
+                    if target.dom_location.index < previous.dom_location.index {
+                        *previous = target;
+                    }
+                })
+                .or_insert(target);
+        }
+        index
+    }
+
+    fn find(&self, fragment: &str) -> Option<&'a FragmentTarget> {
+        self.ids
+            .get(fragment)
+            .or_else(|| self.names.get(fragment))
+            .copied()
+    }
+}
 
 /// Returns no rows while config.validate_fragments is disabled. Every captured
 /// anchor occurrence with a fragment otherwise receives a deterministic result.
@@ -12,16 +50,21 @@ pub fn validate_fragments(report: &CrawlReport) -> Vec<FragmentObservation> {
     if !report.config.validate_fragments {
         return Vec::new();
     }
-    let mut requested: BTreeMap<String, Vec<&PageRecord>> = BTreeMap::new();
-    let mut documents: BTreeMap<String, Vec<&PageRecord>> = BTreeMap::new();
-    for page in &report.pages {
+    let mut requested: BTreeMap<String, Vec<usize>> = BTreeMap::new();
+    let mut documents: BTreeMap<String, Vec<usize>> = BTreeMap::new();
+    for (index, page) in report.pages.iter().enumerate() {
         if let Some(url) = normalize_url(&page.url, None) {
-            requested.entry(url.to_string()).or_default().push(page);
+            requested.entry(url.to_string()).or_default().push(index);
         }
         if let Some(url) = normalize_url(page.document_url(), None) {
-            documents.entry(url.to_string()).or_default().push(page);
+            documents.entry(url.to_string()).or_default().push(index);
         }
     }
+    // Build lazily once for each successful, complete DOM that is actually
+    // queried. Avoid O(links * target IDs) scans and unused-document allocations.
+    let mut target_indexes: Vec<Option<FragmentTargetIndex<'_>>> = std::iter::repeat_with(|| None)
+        .take(report.pages.len())
+        .collect();
     let mut observations = Vec::new();
     for source in &report.pages {
         for link in source.links.iter().filter(|link| link.kind == "anchor") {
@@ -50,7 +93,11 @@ pub fn validate_fragments(report: &CrawlReport) -> Vec<FragmentObservation> {
                 Some(targets) if targets.len() != 1 => {
                     observation.reason = "target_capture_ambiguous".into()
                 }
-                Some(targets) => evaluate(&mut observation, targets[0]),
+                Some(targets) => evaluate(
+                    &mut observation,
+                    &report.pages[targets[0]],
+                    &mut target_indexes[targets[0]],
+                ),
             }
             observations.push(observation);
         }
@@ -76,7 +123,11 @@ pub fn validate_fragments(report: &CrawlReport) -> Vec<FragmentObservation> {
     observations
 }
 
-fn evaluate(observation: &mut FragmentObservation, target: &PageRecord) {
+fn evaluate<'a>(
+    observation: &mut FragmentObservation,
+    target: &'a PageRecord,
+    target_index: &mut Option<FragmentTargetIndex<'a>>,
+) {
     observation.target_document_url = Some(target.document_url().into());
     let target_address = normalize_url(target.document_url(), None);
     let declared_address = normalize_url(&observation.target_url, None);
@@ -126,12 +177,14 @@ fn evaluate(observation: &mut FragmentObservation, target: &PageRecord) {
         observation.reason = "empty_fragment_document_top".into();
         return;
     }
-    if let Some(found) = find_target(&facts.fragment_targets, &observation.fragment) {
+    let targets =
+        target_index.get_or_insert_with(|| FragmentTargetIndex::new(&facts.fragment_targets));
+    if let Some(found) = targets.find(&observation.fragment) {
         matched(observation, found, "exact_fragment");
         return;
     }
     let decoded = observation.decoded_fragment.as_deref().unwrap_or("");
-    if let Some(found) = find_target(&facts.fragment_targets, decoded) {
+    if let Some(found) = targets.find(decoded) {
         matched(observation, found, "percent_decoded_utf8_fragment");
         return;
     }
@@ -147,19 +200,6 @@ fn evaluate(observation: &mut FragmentObservation, target: &PageRecord) {
     }
     observation.status = FragmentStatus::Missing;
     observation.reason = "no_matching_id_or_legacy_anchor_name_in_complete_captured_html".into();
-}
-
-fn find_target<'a>(targets: &'a [FragmentTarget], fragment: &str) -> Option<&'a FragmentTarget> {
-    targets
-        .iter()
-        .filter(|target| target.kind == "id" && target.value == fragment)
-        .min_by_key(|target| target.dom_location.index)
-        .or_else(|| {
-            targets
-                .iter()
-                .filter(|target| target.kind == "legacy_anchor_name" && target.value == fragment)
-                .min_by_key(|target| target.dom_location.index)
-        })
 }
 
 fn matched(observation: &mut FragmentObservation, target: &FragmentTarget, encoding: &str) {
@@ -281,6 +321,121 @@ mod tests {
                 .as_deref()
                 .unwrap()
                 .ends_with("/span[1]")
+        );
+    }
+    #[test]
+    fn indexed_duplicates_keep_dom_order_and_id_precedence_even_for_reordered_imports() {
+        let source = page(
+            "a",
+            "<a href='/b#x'>ID</a><a href='/b#old'>Name</a><a href='/b#%41'>Raw</a>",
+        );
+        let mut target = page(
+            "b",
+            "<a name='x'></a><a name='old'></a><span id='x'></span><div id='x'></div><a name='old'></a><div id='A'></div><div id='%41'></div>",
+        );
+        let expected_id = target
+            .dom_metadata
+            .as_ref()
+            .unwrap()
+            .fragment_targets
+            .iter()
+            .find(|target| target.kind == "id" && target.value == "x")
+            .unwrap()
+            .clone();
+        let expected_name = target
+            .dom_metadata
+            .as_ref()
+            .unwrap()
+            .fragment_targets
+            .iter()
+            .find(|target| target.kind == "legacy_anchor_name" && target.value == "old")
+            .unwrap()
+            .clone();
+        // Imported report arrays need not have remained sorted by DOM index.
+        target
+            .dom_metadata
+            .as_mut()
+            .unwrap()
+            .fragment_targets
+            .reverse();
+        let rows = validate_fragments(&report(vec![source, target]));
+        let find = |fragment: &str| rows.iter().find(|row| row.fragment == fragment).unwrap();
+        let actual_id = find("x").matched_target.as_ref().unwrap();
+        assert_eq!(actual_id.kind, "id");
+        assert_eq!(actual_id.dom_location.index, expected_id.dom_location.index);
+        assert_eq!(actual_id.dom_location.path, expected_id.dom_location.path);
+        let actual_name = find("old").matched_target.as_ref().unwrap();
+        assert_eq!(actual_name.kind, "legacy_anchor_name");
+        assert_eq!(
+            actual_name.dom_location.index,
+            expected_name.dom_location.index
+        );
+        assert_eq!(find("%41").reason, "exact_fragment");
+        assert_eq!(find("%41").matched_target.as_ref().unwrap().value, "%41");
+    }
+
+    #[test]
+    fn large_captured_target_and_many_links_have_deterministic_indexed_results() {
+        const COUNT: usize = 10_000;
+        let mut source = page("a", "");
+        let mut target = page("b", "");
+        let mut observations = Vec::with_capacity(COUNT * 2);
+        for index in 0..COUNT {
+            for (kind, prefix) in [("id", "id"), ("legacy_anchor_name", "name")] {
+                let value = format!("{prefix}-{index:05}");
+                observations.push(FragmentTarget {
+                    kind: kind.into(),
+                    value: value.clone(),
+                    dom_location: crate::DomLocation {
+                        index: observations.len() + 1,
+                        ..Default::default()
+                    },
+                });
+                source.links.push(LinkRecord {
+                    url: target.url.clone(),
+                    resolved_href: Some(format!("{}#{value}", target.url)),
+                    fragment: Some(value),
+                    kind: "anchor".into(),
+                    internal: true,
+                    dom_location: Some(crate::DomLocation {
+                        index: source.links.len() + 1,
+                        ..Default::default()
+                    }),
+                    ..Default::default()
+                });
+            }
+        }
+        target.dom_metadata.as_mut().unwrap().fragment_targets = observations;
+        let mut input = report(vec![source, target]);
+        let rows = validate_fragments(&input);
+        assert_eq!(rows.len(), COUNT * 2);
+        for (index, row) in rows.iter().enumerate() {
+            assert_eq!(
+                row.status,
+                if index % 2 == 0 {
+                    FragmentStatus::MatchedId
+                } else {
+                    FragmentStatus::MatchedName
+                }
+            );
+            assert_eq!(row.reason, "exact_fragment");
+            assert_eq!(
+                row.matched_target.as_ref().unwrap().dom_location.index,
+                index + 1
+            );
+            assert!(row.target_complete);
+        }
+        // Report/observation array order is not the matching or output-order policy.
+        input.pages.reverse();
+        input.pages[0]
+            .dom_metadata
+            .as_mut()
+            .unwrap()
+            .fragment_targets
+            .reverse();
+        assert_eq!(
+            serde_json::to_value(&rows).unwrap(),
+            serde_json::to_value(validate_fragments(&input)).unwrap()
         );
     }
     #[test]

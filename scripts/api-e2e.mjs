@@ -91,7 +91,7 @@ try {
   assert(issues.issues.some(issue => issue.code === 'broken_outlinks'));
   const analysis = await call(`/api/crawls/${job.id}/analysis`);
   assert(analysis.graph.nodes.length > 500);
-  for (const endpoint of ['export.csv', 'issues.csv', 'links.csv', 'extractions.csv', 'javascript.csv', 'cookies.csv', 'pdf.csv', 'images.csv', 'responses.csv', 'fragments.csv', 'dom.csv', 'sitemap.xml', 'project.json']) {
+  for (const endpoint of ['export.csv', 'issues.csv', 'links.csv', 'extractions.csv', 'javascript.csv', 'cookies.csv', 'pdf.csv', 'images.csv', 'responses.csv', 'fragments.csv', 'dom.csv', 'inputs.csv', 'sitemap.xml', 'project.json']) {
     const response = await fetch(`${api}/api/crawls/${job.id}/${endpoint}`);
     assert.equal(response.status, 200);
     const contents = await response.text();
@@ -140,7 +140,7 @@ try {
   assert.equal(resumed.stats.fetched, 725);
   assert.equal(requests.get('/slow'), 1, 'completed seed must survive process restart');
   assert.equal((await status(job.id)).stats.fetched, 604);
-  const evidence = { tested_at: new Date().toISOString(), platform: process.platform, assertions: ['604 URL HTTP/API crawl', 'robots excluded target', 'redirect initial/final status and separate intermediate-response inventory with unknown unretained body/headers', 'graph and issue API', 'named extraction and all thirteen crawl export endpoints, disabled-fragment headers and effective DOM provenance', 'offline SERP CSV import, Unicode/unknown widths, duplicate input order and formula-safe export without website requests', 'offline robots shared matcher, ordered duplicate and invalid rows, CSV, invalid bounds and zero website requests', 'JSON import and snapshot comparison', 'completed and imported snapshot bytes, formatting and unknown future extension preserved on startup', 'cancel and resume', 'failed resume manifest write retains cancelled state and snapshot', 'process termination and SQLite frontier recovery', 'host/origin protection'], result: 'PASS' };
+  const evidence = { tested_at: new Date().toISOString(), platform: process.platform, assertions: ['604 URL HTTP/API crawl', 'robots excluded target', 'redirect initial/final status and separate intermediate-response inventory with unknown unretained body/headers', 'graph and issue API', 'named extraction and all fourteen crawl export endpoints, disabled-fragment headers and effective DOM provenance', 'offline SERP CSV import, Unicode/unknown widths, duplicate input order and formula-safe export without website requests', 'offline robots shared matcher, ordered duplicate and invalid rows, CSV, invalid bounds and zero website requests', 'JSON import and snapshot comparison', 'completed and imported snapshot bytes, formatting and unknown future extension preserved on startup', 'cancel and resume', 'failed resume manifest write retains cancelled state and snapshot', 'process termination and SQLite frontier recovery', 'host/origin protection'], result: 'PASS' };
   console.log(JSON.stringify(evidence, null, 2));
   if (process.env.SPIDER_EVIDENCE) { await mkdir(path.dirname(process.env.SPIDER_EVIDENCE), { recursive: true }); await writeFile(process.env.SPIDER_EVIDENCE, JSON.stringify(evidence, null, 2) + '\n'); }
 } finally {

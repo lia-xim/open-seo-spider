@@ -33,6 +33,7 @@ jobs:
       - run: cargo clippy --workspace --all-targets --locked -- -D warnings
       - run: cargo build --locked -p open-seo-spider
       - run: node scripts/api-e2e.mjs
+      - run: node scripts/list-import-e2e.mjs
       - run: npm ci --ignore-scripts
         working-directory: scripts
       - run: node scripts/mcp-e2e.mjs
@@ -71,6 +72,7 @@ jobs:
       - run: node web/verification/ui-smoke.cjs
       - run: node --test web/verification/serp-state-race.test.cjs
       - run: node --test web/verification/robots-input-state.test.cjs
+      - run: node --test web/verification/list-import-state.test.mjs
       - run: cargo build --locked -p open-seo-spider
       - name: Rust and browser integration
         shell: bash
@@ -87,3 +89,4 @@ jobs:
           node web/verification/ui-resource-live.cjs
           node web/verification/ui-dom-live.cjs
           node web/verification/ui-robots-live.cjs
+          node web/verification/ui-list-import-live.cjs

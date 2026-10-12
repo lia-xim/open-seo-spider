@@ -1,6 +1,101 @@
 use crate::{CrawlReport, PageChange};
 use std::collections::{BTreeMap, BTreeSet};
 
+/// Original list occurrences joined to captured request identities, without fetching.
+pub fn export_input_occurrences_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let mut writer = csv::Writer::from_writer(Vec::new());
+    writer.write_record([
+        "Source List",
+        "Input SHA256",
+        "Provenance",
+        "Source Index",
+        "Source Row",
+        "Source Line",
+        "Sheet",
+        "Cell",
+        "Raw Value",
+        "Cell Type",
+        "Formula Metadata",
+        "Candidate Kind",
+        "Normalized URL",
+        "Fragment",
+        "Input Error",
+        "Observation",
+        "Status",
+        "Final Status",
+        "Final URL",
+        "Title",
+        "Crawl Error",
+    ])?;
+    let mut captured = std::collections::HashMap::new();
+    for page in &report.pages {
+        captured.entry(page.url.as_str()).or_insert(page);
+    }
+    for (list_index, input) in report.config.input_imports.iter().enumerate() {
+        crate::validate_import_result(input)?;
+        for row in &input.rows {
+            let page = row
+                .normalized_url
+                .as_deref()
+                .and_then(|url| captured.get(url).copied());
+            let observation = if row.error.is_some() {
+                "invalid_input"
+            } else if row.candidate_kind == crate::ListCandidateKind::SitemapDocument {
+                "sitemap_document"
+            } else if page.is_some_and(|p| p.blocked_by_robots) {
+                "blocked_by_robots"
+            } else if page.is_some_and(|p| p.error.is_some()) {
+                "request_error"
+            } else if page.is_some() {
+                "captured"
+            } else {
+                "unfetched"
+            };
+            let page = page.filter(|_| {
+                row.error.is_none() && row.candidate_kind == crate::ListCandidateKind::PageUrl
+            });
+            writer.write_record([
+                (list_index + 1).to_string(),
+                input.input_sha256.clone(),
+                "declared_client_input".into(),
+                row.source_index.to_string(),
+                row.source_row.to_string(),
+                row.source_line.map(|n| n.to_string()).unwrap_or_default(),
+                csv_text(row.sheet.as_deref().unwrap_or_default()),
+                csv_text(row.cell.as_deref().unwrap_or_default()),
+                csv_text(&row.raw_value),
+                csv_text(&row.cell_type),
+                csv_text(
+                    &row.formula_metadata
+                        .as_ref()
+                        .map(serde_json::to_string)
+                        .transpose()?
+                        .unwrap_or_default(),
+                ),
+                match row.candidate_kind {
+                    crate::ListCandidateKind::PageUrl => "page_url",
+                    crate::ListCandidateKind::SitemapDocument => "sitemap_document",
+                }
+                .into(),
+                csv_text(row.normalized_url.as_deref().unwrap_or_default()),
+                csv_text(row.fragment.as_deref().unwrap_or_default()),
+                csv_text(row.error.as_deref().unwrap_or_default()),
+                observation.into(),
+                page.and_then(|p| p.status)
+                    .map(|s| s.to_string())
+                    .unwrap_or_default(),
+                page.and_then(|p| p.final_status)
+                    .map(|s| s.to_string())
+                    .unwrap_or_default(),
+                csv_text(page.map(|p| p.final_url.as_str()).unwrap_or_default()),
+                csv_text(page.map(|p| p.title()).unwrap_or_default()),
+                csv_text(page.and_then(|p| p.error.as_deref()).unwrap_or_default()),
+            ])?;
+        }
+    }
+    Ok(String::from_utf8(writer.into_inner()?)?)
+}
+
 pub fn export_pages_csv(report: &CrawlReport) -> anyhow::Result<String> {
     let mut writer = csv::Writer::from_writer(Vec::new());
     writer.write_record([
@@ -1383,5 +1478,31 @@ mod tests {
         ] {
             assert_eq!(csv_text(text), text);
         }
+    }
+    #[test]
+    fn input_export_keeps_duplicate_invalid_and_unfetched_rows_without_fake_status() {
+        let input = crate::import_url_list(b"https://example.test/a#first\n=FORMULA()\nhttps://example.test/a#second\nhttps://example.test/unfetched", &crate::ListImportOptions {format:crate::ListImportFormat::Txt,limits:crate::ListImportLimits::default()}).unwrap();
+        let mut report = report(vec![PageRecord {
+            url: "https://example.test/a".into(),
+            final_url: "https://example.test/final".into(),
+            status: Some(301),
+            final_status: Some(200),
+            ..Default::default()
+        }]);
+        report.config.input_imports.push(input);
+        let text = export_input_occurrences_csv(&report).unwrap();
+        let mut reader = csv::Reader::from_reader(text.as_bytes());
+        let rows = reader.records().collect::<Result<Vec<_>, _>>().unwrap();
+        assert_eq!(rows.len(), 4);
+        assert_eq!(&rows[0][3], "1");
+        assert_eq!(&rows[0][13], "first");
+        assert_eq!(&rows[2][13], "second");
+        assert_eq!(&rows[0][16], "301");
+        assert_eq!(&rows[2][17], "200");
+        assert_eq!(&rows[1][8], "'=FORMULA()");
+        assert_eq!(&rows[1][15], "invalid_input");
+        assert_eq!(&rows[1][16], "");
+        assert_eq!(&rows[3][15], "unfetched");
+        assert_eq!(&rows[3][17], "");
     }
 }

@@ -8,6 +8,7 @@ mod extract;
 mod extraction_engine;
 mod fragments;
 mod image_metadata;
+mod list_import;
 mod metadata;
 mod models;
 mod onpage;
@@ -29,12 +30,19 @@ pub use dom_facts::audit_dom_metadata;
 pub use export::{
     compare_crawls, export_browser_cookies_csv, export_custom_extractions_csv,
     export_custom_javascript_csv, export_dom_observations_csv, export_fragments_csv,
-    export_image_resources_csv, export_issues_csv, export_links_csv, export_pages_csv,
-    export_pdf_csv, export_sitemap_xml,
+    export_image_resources_csv, export_input_occurrences_csv, export_issues_csv, export_links_csv,
+    export_pages_csv, export_pdf_csv, export_sitemap_xml,
 };
 pub use extract::{extract_custom, extract_html};
 pub use extraction_engine::extract_configured;
 pub use fragments::validate_fragments;
+pub use list_import::{
+    LIST_IMPORT_ENGINE, ListCandidateKind, ListColumnSelector, ListCsvDelimiter,
+    ListFormulaMetadata, ListFormulaPolicy, ListImportFormat, ListImportInspection,
+    ListImportLimits, ListImportOptions, ListImportResult, ListImportRow, ListImportSheet,
+    ListSheetSelector, export_url_list_csv, import_url_list, inspect_xlsx_list,
+    validate_import_result,
+};
 pub use metadata::{applicable_robot_directives, parse_link_header, parse_x_robots_tag};
 pub use models::*;
 pub use response_observations::{

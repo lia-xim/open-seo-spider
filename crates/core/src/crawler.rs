@@ -41,6 +41,7 @@ pub struct Crawler {
 
 impl Crawler {
     pub fn new(mut config: CrawlConfig) -> anyhow::Result<Self> {
+        config.prepare_input_lists()?;
         if config.seed_urls.is_empty() && config.sitemap_urls.is_empty() {
             bail!("At least one seed URL or sitemap URL is required");
         }
@@ -75,6 +76,9 @@ impl Crawler {
         }
         let mut seeds = Vec::new();
         for seed in &config.seed_urls {
+            if seed.chars().any(char::is_control) {
+                bail!("Seed URLs must not contain raw control characters");
+            }
             seeds.push(
                 normalize_url(seed, None)
                     .with_context(|| format!("Invalid HTTP(S) seed URL: {seed}"))?,

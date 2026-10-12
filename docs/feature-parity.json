@@ -441,7 +441,7 @@
     {
       "id": "modes.list",
       "name": "List import",
-      "status": "partial",
+      "status": "implemented",
       "phase": "P1",
       "source_ids": [
         "list"
@@ -454,13 +454,20 @@
             "ui-fixture"
           ],
           "proves": "Seed URL arrays with crawl_links=false fetch only listed URLs. UI list-mode payload and bounded body/noindex behavior are tested."
+        },
+        {
+          "verification_run_ids": [
+            "list-import-batch",
+            "list-import-api-cli",
+            "ui-list-import",
+            "list-import-state"
+          ],
+          "proves": "Pure native bounded TXT/CSV/XML/XLSX parsing retains row order, blanks/errors, duplicate values and explicit cell/formula facts. Actual API/CLI/browser crawl fetches unique page identities once; inputs.csv repeats original occurrences joined to captured observations. XML index candidates remain sitemap documents. Import/inspection performs zero website requests."
         }
       ],
       "parity_evidence": [],
       "group": "modes",
-      "remaining_acceptance": [
-        "Implement TXT/CSV/XLSX/XML input parsing with original row order and duplicate-input export provenance."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -1667,6 +1674,13 @@
             "dom-robots-batch"
           ],
           "proves": "Opt-in captured-document validation checks raw fragment then UTF-8 decoded fallback against ID and legacy anchor name; raw/decoded/top/missing/unknown/unsupported outcomes are distinct. No validation request is made; failed, incomplete, legacy and status-unknown rendered targets remain unknown."
+        },
+        {
+          "verification_run_ids": [
+            "list-import-batch",
+            "core-unit"
+          ],
+          "proves": "Lazy per-complete-document borrowed ID/name indexes replace repeated whole-DOM scans; min DOM index wins imported ties and raw/decoded/ID/name/unknown semantics remain tested. 20,000 targets and 20,000 links are exercised; this is not whole-crawl capacity proof."
         }
       ],
       "parity_evidence": [],
@@ -3202,6 +3216,12 @@
             "ui-fixture"
           ],
           "proves": "Typed CrawlConfig is serialized with snapshots; defaults/aliases, bad headers/selectors/regexes and persisted UI settings are tested."
+        },
+        {
+          "verification_run_ids": [
+            "list-import-api-cli"
+          ],
+          "proves": "CLI --config preserves saved concurrency, fragment and named extraction settings when flags are unset. Dedicated configuration UI and credential/path validation remain incomplete."
         }
       ],
       "parity_evidence": [],
@@ -3398,7 +3418,7 @@
     {
       "id": "automation.cli",
       "name": "Headless command line",
-      "status": "partial",
+      "status": "implemented",
       "phase": "P4",
       "source_ids": [
         "general"
@@ -3411,13 +3431,18 @@
             "api"
           ],
           "proves": "Original CLI exposes serve/crawl/mcp and crawl JSON/CSV/XML output paths; underlying crawler/export behavior is tested through core/API."
+        },
+        {
+          "verification_run_ids": [
+            "list-import-batch",
+            "list-import-api-cli"
+          ],
+          "proves": "Actual CLI reads typed configuration, imports lists, crawls, analyzes and exports JSON/input CSV. Unset flags preserve saved settings. Explicit success/error exits are 0/1/2; invalid selection/config/scheme/options produce no requests or output."
         }
       ],
       "parity_evidence": [],
       "group": "automation",
-      "remaining_acceptance": [
-        "Execute the complete CLI config/import/analysis/export sequence and assert deterministic success/error exit codes."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -3694,13 +3719,13 @@
       "artifact": "docs/verification/api-e2e.json",
       "command": "node scripts/api-e2e.mjs",
       "result": "PASS",
-      "tested_at": "2026-10-12T09:59:29.902Z",
+      "tested_at": "2026-10-12T10:36:30.918Z",
       "scope": [
         "604 URL HTTP/API crawl",
         "robots excluded target",
         "redirect initial/final status and separate intermediate-response inventory with unknown unretained body/headers",
         "graph and issue API",
-        "named extraction and all thirteen crawl export endpoints, disabled-fragment headers and effective DOM provenance",
+        "named extraction and all fourteen crawl export endpoints, disabled-fragment headers and effective DOM provenance",
         "offline SERP CSV import, Unicode/unknown widths, duplicate input order and formula-safe export without website requests",
         "offline robots shared matcher, ordered duplicate and invalid rows, CSV, invalid bounds and zero website requests",
         "JSON import and snapshot comparison",
@@ -3727,8 +3752,8 @@
       "artifact": "crates/core/src",
       "command": "cargo test -p open-seo-spider-core",
       "result": "PASS",
-      "scope": "99 core unit tests passed, including DOM facts, srcset grammar, captured fragments, exact MIME, status-unknown rendered evidence and offline robots simulation, plus the previously supported extraction/resource/font contracts.",
-      "reported_by": "Core implementation agent; aggregate recorded in dom-robots-batch.",
+      "scope": "121 core unit tests pass, including bounded TXT/CSV/XML/XLSX parser and transported provenance validation, indexed captured fragments including 20,000 targets and 20,000 links, plus all prior extraction/resource/robots contracts.",
+      "reported_by": "Root and implementation agents; aggregate recorded in list-import-batch.",
       "limits": "Individual assertions cover only their owned fixtures; broad rule compliance is not inferred.",
       "tested_at": "2026-10-12"
     },
@@ -3746,7 +3771,7 @@
       "artifact": "renderer/tests/worker.test.mjs",
       "command": "npm test (renderer/)",
       "result": "PASS",
-      "scope": "16 real Chrome worker tests passed, including async named scripts, isolated errors, infinite-execution termination and reuse, bounded JSON, isolated redacted cookies/response headers, network, axe and PNG observations.",
+      "scope": "17 actual Chrome worker tests pass, including bounded cold startup, whole render deadlines, custom script isolation and all previous DOM/network/axe/PNG evidence.",
       "limits": "Local worker fixtures; cross-platform/large-crawl performance not proven.",
       "tested_at": "2026-10-12"
     },
@@ -3764,9 +3789,10 @@
       "id": "ui-fixture",
       "artifact": "web/verification/ui-fixture-results.json",
       "result": "PASS",
-      "tested_at": "2026-10-12T09:34:29.248Z",
+      "tested_at": "2026-10-12T10:35:28.210Z",
       "scope": [
         "empty state",
+        "historical source index and row zero remain explicit zero while absent positions remain unknown",
         "snapshot and advanced analysis",
         "bounded pagination",
         "search and URL inspector links",
@@ -3795,7 +3821,13 @@
         "position rule invalid CSS and duplicate trimmed names rejected before start",
         "inconsistent thresholds rejected and individual checks can be disabled",
         "persisted settings",
+        "legacy input provenance remains unknown rather than proven empty",
+        "file preview preserves ordered invalid duplicate rows with bounded safe rendering and no crawl",
+        "320px importer keeps horizontal rows contained and acceptance reachable",
+        "acceptance starts no crawl and edited all-invalid text clears file provenance and blocks crawling",
         "list mode POST contract and default fragment opt-in remains false",
+        "manual list retains original duplicate occurrences through native import contract",
+        "declared input rows have separate keyboard inspector and server occurrence export",
         "opt-in renderer POST contract, no runtime claim",
         "named CSS Rust regex and custom audit thresholds POST contract",
         "sitemap mode POST contract",
@@ -3829,7 +3861,7 @@
       "id": "ui-renderer",
       "artifact": "web/verification/ui-renderer-live-results.json",
       "result": "PASS",
-      "tested_at": "2026-10-12T09:47:46.713Z",
+      "tested_at": "2026-10-12T10:41:03.777Z",
       "scope": [
         "real renderer discovers JS-only links and respects URL exclusion",
         "raw and rendered named CSS extraction evidence",
@@ -3853,7 +3885,7 @@
       "artifact": "docs/verification/mcp-e2e.json",
       "command": "node scripts/mcp-e2e.mjs",
       "result": "PASS",
-      "tested_at": "2026-10-12T10:08:05.620Z",
+      "tested_at": "2026-10-12T10:36:05.820Z",
       "scope": [
         "stdio: SDK initialize, 11 tools, start/status/pages/issues/project/analysis/compare/list and tool error",
         "streamable_http: SDK initialize, 11 tools, start/status/pages/issues/project/analysis/compare/list and tool error"
@@ -3917,7 +3949,7 @@
       "artifact": "web/verification/ui-resource-live-results.json",
       "command": "node web/verification/ui-resource-live.cjs",
       "result": "PASS",
-      "tested_at": "2026-10-12T09:48:10.964Z",
+      "tested_at": "2026-10-12T10:39:48.545Z",
       "scope": [
         "native PDF parses original metadata verified page count and text without invented HTML title",
         "PDF URI annotation discovers local target and native scoped headers remain separate",
@@ -3965,7 +3997,7 @@
       "id": "native-text-width",
       "artifact": "docs/parity/native-text-width-comparison.json",
       "result": "PASS_BOUNDED_NATIVE_PROFILE",
-      "tested_at": "2026-10-12T10:07:20.543Z",
+      "tested_at": "2026-10-12T10:48:26.680Z",
       "scope": {
         "measurement_profile": "roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic",
         "counts": {
@@ -3987,7 +4019,7 @@
       "artifact": "docs/parity/reference-comparison.json",
       "command": "node scripts/reference-parity.mjs --reuse-reference",
       "result": "COMPARISON_EXECUTED",
-      "tested_at": "2026-10-12T10:07:21.429Z",
+      "tested_at": "2026-10-12T10:48:27.390Z",
       "scope": {
         "counts": {
           "MATCH": 887,
@@ -4021,7 +4053,7 @@
       "artifact": "web/verification/ui-dom-live-results.json",
       "result": "PASS",
       "scope": "19 actual Chrome UI/API checks including raw/rendered DOM, unknown rendered status, legacy snapshots, fragment settings, MIME filtering, CSV and narrow width.",
-      "tested_at": "2026-10-12T10:00:26.784Z",
+      "tested_at": "2026-10-12T10:39:32.282Z",
       "limits": "Own bounded fixtures; complete vendor feature, filter and workflow parity remain NOT_PROVEN."
     },
     {
@@ -4045,8 +4077,43 @@
       "artifact": "docs/parity/native-heading-comparison.json",
       "result": "PASS_BOUNDED_NATIVE_HEADING_MEMBERSHIP",
       "scope": "48 matching H1/H2 membership comparisons on 24 authored HTML cases; retained original CSV/HTML hashes checked.",
-      "tested_at": "2026-10-12T10:07:20.298Z",
+      "tested_at": "2026-10-12T10:48:26.471Z",
       "limits": "Own bounded fixtures; complete vendor feature, filter and workflow parity remain NOT_PROVEN."
+    },
+    {
+      "id": "list-import-batch",
+      "artifact": "docs/verification/list-import-batch.json",
+      "scope": "189 default Rust plus one explicit Chrome gate; worker17; fixtureUI47; list-state12; actual list14/DOM19/resources13/renderer14; 14 exports; installed seven jobs/eleven byte-identical JSON files.",
+      "result": "PASS",
+      "tested_at": "2026-10-12T10:50:24.929Z",
+      "limits": "Independent owned fixtures; complete vendor feature/filter/workflow parity remains NOT_PROVEN."
+    },
+    {
+      "id": "list-import-api-cli",
+      "artifact": "docs/verification/list-import-e2e.json",
+      "command": "node scripts/list-import-e2e.mjs",
+      "scope": "Eleven actual byte/API/HTTP/CLI gates. All four formats retain original occurrences with zero import requests, explicit crawl deduplicates fetches, inputs CSV joins observations, readonly restart preserves bytes, CLI config and analyzed exports survive, success/error exit codes are 0/1/2.",
+      "result": "PASS",
+      "tested_at": "2026-10-12T10:50:24.929Z",
+      "limits": "Independent owned fixtures; complete vendor feature/filter/workflow parity remains NOT_PROVEN."
+    },
+    {
+      "id": "ui-list-import",
+      "artifact": "web/verification/ui-list-import-live-results.json",
+      "command": "node web/verification/ui-list-import-live.cjs",
+      "scope": "14 actual browser→Rust gates: all four formats, explicit workbook sheet/header/formula selection, exact manual textarea rows, preview/accept/race invalidation, source row inspector, CSV, legacy unknowns and 320px bottom reachability.",
+      "result": "PASS",
+      "tested_at": "2026-10-12T10:50:24.929Z",
+      "limits": "Independent owned fixtures; complete vendor feature/filter/workflow parity remains NOT_PROVEN."
+    },
+    {
+      "id": "list-import-state",
+      "artifact": "web/verification/list-import-state.test.mjs",
+      "command": "node --test web/verification/list-import-state.test.mjs",
+      "scope": "12 deferred parsing/file/inspect/preview sequencing regressions against actual helper script.",
+      "result": "PASS",
+      "tested_at": "2026-10-12T10:50:24.929Z",
+      "limits": "Independent owned fixtures; complete vendor feature/filter/workflow parity remains NOT_PROVEN."
     }
   ],
   "reference_workflows": [
@@ -4168,15 +4235,15 @@
   ],
   "status_summary": {
     "overall": {
-      "implemented": 20,
-      "partial": 71,
+      "implemented": 22,
+      "partial": 69,
       "planned": 53,
       "total": 144
     },
     "phases": {
       "P1": {
-        "implemented": 7,
-        "partial": 26,
+        "implemented": 8,
+        "partial": 25,
         "planned": 12,
         "total": 45
       },
@@ -4193,16 +4260,16 @@
         "total": 24
       },
       "P4": {
-        "implemented": 2,
-        "partial": 5,
+        "implemented": 3,
+        "partial": 4,
         "planned": 23,
         "total": 30
       }
     },
     "groups": {
       "modes": {
-        "implemented": 2,
-        "partial": 3,
+        "implemented": 3,
+        "partial": 2,
         "planned": 2,
         "total": 7
       },
@@ -4285,8 +4352,8 @@
         "total": 10
       },
       "automation": {
-        "implemented": 2,
-        "partial": 5,
+        "implemented": 3,
+        "partial": 4,
         "planned": 4,
         "total": 11
       },

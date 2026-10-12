@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "tested_at": "2026-10-12T10:07:21.429Z",
+  "tested_at": "2026-10-12T10:48:27.390Z",
   "status": "COMPARISON_EXECUTED",
   "full_parity": "NOT_PROVEN",
   "fixture_sha256": "928545b1b70ae07da917fddd0fd1fd137878e7819326741dbbd6c23cb4607072",
@@ -14,10 +14,62 @@
   },
   "independent": {
     "binary": "open-seo-spider.exe",
-    "binary_sha256": "77e16925d14bf253cfa187258a1331b7a4b2d79e8ab24a10a68d4dc54c445df4",
+    "binary_sha256": "266bcaf4e87c56d83347a288e7c2b7e7c8331a4796f2aaba9452471e5b774783",
     "config": {
       "seed_urls": [
-        "http://127.0.0.1:50078/"
+        "http://127.0.0.1:52352/"
+      ],
+      "input_imports": [
+        {
+          "engine": "open-seo-spider/offline-list-v1/calamine-0.36.1",
+          "input_sha256": "bb2b0087853e8f2b3debf1a88227e412d29c0cc97c7c568dccfaf15d05ccebb0",
+          "input_bytes": 23,
+          "options": {
+            "format": {
+              "kind": "txt"
+            },
+            "limits": {
+              "max_input_bytes": 8388608,
+              "max_rows": 50000,
+              "max_field_bytes": 8192,
+              "max_zip_entries": 1024,
+              "max_zip_entry_bytes": 8388608,
+              "max_zip_total_bytes": 33554432,
+              "max_xml_events": 500000,
+              "max_xml_depth": 64,
+              "max_shared_strings": 100000,
+              "max_sheet_cells": 200000,
+              "max_csv_fields": 200000,
+              "max_output_bytes": 8388608,
+              "max_sheets": 128
+            }
+          },
+          "selected_sheet": null,
+          "selected_column": null,
+          "rows": [
+            {
+              "source_index": 1,
+              "source_row": 1,
+              "source_line": 1,
+              "sheet": null,
+              "cell": null,
+              "raw_value": "http://127.0.0.1:52352/",
+              "cell_type": "text",
+              "formula_metadata": null,
+              "candidate_kind": "page_url",
+              "normalized_url": "http://127.0.0.1:52352/",
+              "fragment": null,
+              "error": null
+            }
+          ],
+          "website_requests": 0,
+          "warnings": [],
+          "limitations": [
+            "Import does not start a crawl, follow links, evaluate formulas or fetch sitemap indexes.",
+            "Only absolute HTTP/HTTPS values are URL candidates; original values and duplicate rows are retained.",
+            "Independent import contract; complete original parser/filter parity is NOT_PROVEN."
+          ]
+        }
       ],
       "sitemap_urls": [],
       "discover_sitemaps": false,
@@ -6733,11 +6785,11 @@
         "method": "GET"
       },
       {
-        "path": "/short-title",
+        "path": "/multiple-title",
         "method": "GET"
       },
       {
-        "path": "/multiple-title",
+        "path": "/short-title",
         "method": "GET"
       },
       {
@@ -6773,11 +6825,11 @@
         "method": "GET"
       },
       {
-        "path": "/canonical-404",
+        "path": "/canonical-conflict",
         "method": "GET"
       },
       {
-        "path": "/canonical-conflict",
+        "path": "/canonical-404",
         "method": "GET"
       },
       {
@@ -6793,11 +6845,11 @@
         "method": "GET"
       },
       {
-        "path": "/images",
+        "path": "/jsonld-invalid",
         "method": "GET"
       },
       {
-        "path": "/jsonld-invalid",
+        "path": "/images",
         "method": "GET"
       },
       {
@@ -6821,11 +6873,11 @@
         "method": "GET"
       },
       {
-        "path": "/server-error",
+        "path": "/redirect-two",
         "method": "GET"
       },
       {
-        "path": "/redirect-two",
+        "path": "/server-error",
         "method": "GET"
       },
       {
