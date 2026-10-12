@@ -59,6 +59,8 @@ pub struct RecrawlTarget {
     pub parent_page_sha256: String,
     pub depth: usize,
     pub discovered_from: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub policy_admission: Option<crate::PolicyAdmission>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
@@ -211,11 +213,30 @@ pub fn prepare_selected_recrawl(
             "Recorded requested URL uses an unsupported/noncanonical identity"
         );
         ensure!(
-            crawler.selected_target_allowed(&normalized),
+            config.crawl_policy.is_some() || crawler.selected_target_allowed(&normalized),
             "Selected external URL is not eligible under inherited scope/external-check settings"
         );
         let coalesced_into = first_occurrence.get(raw).copied();
         if coalesced_into.is_none() {
+            let policy_admission = match &config.crawl_policy {
+                Some(policy) => {
+                    let compiled = crate::CompiledCrawlPolicy::new(policy)?;
+                    let mut saved = page
+                        .policy
+                        .as_ref()
+                        .context("Policy parent page lacks saved admission")?
+                        .admission
+                        .clone();
+                    saved.validate(
+                        compiled.policy_sha256(),
+                        raw,
+                        crate::PolicyTaskRole::PageDocument,
+                    )?;
+                    saved.inherited = true;
+                    Some(saved)
+                }
+                None => None,
+            };
             first_occurrence.insert(raw.clone(), index + 1);
             targets.push(RecrawlTarget {
                 requested_url: raw.clone(),
@@ -223,6 +244,7 @@ pub fn prepare_selected_recrawl(
                 parent_page_sha256: payload_sha256(page)?,
                 depth: page.depth,
                 discovered_from: page.discovered_from.clone(),
+                policy_admission,
             });
         }
         selection.push(RecrawlSelectionOccurrence {
@@ -381,6 +403,7 @@ mod tests {
             summary: CrawlSummary::default(),
             warnings: Vec::new(),
             operation: None,
+            policy_ledger: None,
         })
         .unwrap()
     }

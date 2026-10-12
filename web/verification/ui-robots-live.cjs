@@ -4,7 +4,7 @@ const http=require('node:http');
 const fs=require('node:fs');
 const path=require('node:path');
 const {chromium}=require('../../renderer/node_modules/playwright-core');
-const app=process.env.SPIDER_URL||'http://127.0.0.1:8787';
+const app=process.env.SPIDER_APP_URL||process.env.SPIDER_URL||'http://127.0.0.1:8787';
 const executable=process.env.SPIDER_BROWSER_EXECUTABLE||(()=>{for(const candidate of ['C:/Program Files/Google/Chrome/Application/chrome.exe','C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'])if(fs.existsSync(candidate))return candidate;return undefined;})();
 const checks=[];const checked=message=>{checks.push(message);console.log(`PASS ${message}`);};
 let websiteRequests=0,apiRequests=0;

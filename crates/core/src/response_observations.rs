@@ -111,6 +111,7 @@ mod tests {
     fn report(page: PageRecord) -> CrawlReport {
         CrawlReport {
             operation: None,
+            policy_ledger: None,
             config: Default::default(),
             pages: vec![page],
             issues: vec![],

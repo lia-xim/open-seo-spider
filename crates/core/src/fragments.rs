@@ -271,6 +271,7 @@ mod tests {
     fn report(pages: Vec<PageRecord>) -> CrawlReport {
         CrawlReport {
             operation: None,
+            policy_ledger: None,
             config: CrawlConfig {
                 validate_fragments: true,
                 ..Default::default()

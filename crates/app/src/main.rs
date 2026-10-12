@@ -1,5 +1,6 @@
 mod analysis;
 mod mcp;
+mod policy_export;
 mod server;
 
 use clap::{Parser, Subcommand};
@@ -27,6 +28,27 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Read native admission evidence locally or export every row in one read snapshot.
+    PolicyLedger {
+        store: PathBuf,
+        #[arg(long)]
+        after_sequence: Option<u64>,
+        #[arg(long, default_value_t = 200)]
+        limit: usize,
+        /// New JSON destination for the complete snapshot; pagination options do not apply.
+        #[arg(long)]
+        json: Option<PathBuf>,
+        /// New CSV destination for the complete snapshot; pagination options do not apply.
+        #[arg(long)]
+        csv: Option<PathBuf>,
+    },
+    /// Analyze supplied text locally; no website is fetched.
+    AnalyzeContent {
+        input: PathBuf,
+        /// New output file; an existing file is refused.
+        #[arg(long)]
+        output: Option<PathBuf>,
+    },
     /// Parse an owned URL list locally; this command makes no website requests.
     ImportList {
         file: PathBuf,
@@ -82,6 +104,9 @@ enum Command {
         list: bool,
         #[arg(long)]
         config: Option<PathBuf>,
+        /// Durable SQLite frontier, required when the optional native policy is enabled.
+        #[arg(long)]
+        store: Option<PathBuf>,
         #[arg(long)]
         list_file: Vec<PathBuf>,
         #[arg(long)]
@@ -116,6 +141,78 @@ async fn main() -> anyhow::Result<()> {
     }) {
         Command::Serve { listen, data_dir } => server::serve(&listen, data_dir).await?,
         Command::Mcp { server } => mcp::stdio(&server).await?,
+        Command::PolicyLedger {
+            store,
+            after_sequence,
+            limit,
+            json,
+            csv,
+        } => {
+            anyhow::ensure!((1..=1000).contains(&limit), "limit must be 1..1000");
+            anyhow::ensure!(
+                after_sequence.is_none() || (json.is_none() && csv.is_none()),
+                "Complete policy exports cannot be combined with after_sequence"
+            );
+            let source = tokio::fs::canonicalize(&store).await?;
+            let mut destinations = std::collections::HashSet::new();
+            for path in json.iter().chain(csv.iter()) {
+                let resolved = canonical_destination(path).await?;
+                anyhow::ensure!(
+                    resolved != source,
+                    "Policy export cannot overwrite its SQLite source"
+                );
+                anyhow::ensure!(
+                    destinations.insert(destination_identity(&resolved)),
+                    "Policy JSON and CSV destinations must differ"
+                );
+                anyhow::ensure!(
+                    !tokio::fs::try_exists(path).await?,
+                    "Policy export destinations must be new files"
+                );
+            }
+            let exporting = json.is_some() || csv.is_some();
+            tokio::task::spawn_blocking(move || -> anyhow::Result<()> {
+                let database = open_seo_spider_core::CrawlStore::open_read_only(store)?;
+                for (path, format) in json
+                    .iter()
+                    .map(|path| (path, policy_export::Format::Json))
+                    .chain(csv.iter().map(|path| (path, policy_export::Format::Csv)))
+                {
+                    let file = std::fs::OpenOptions::new()
+                        .write(true)
+                        .create_new(true)
+                        .open(path)?;
+                    let mut writer = std::io::BufWriter::new(file);
+                    policy_export::write_snapshot(&database, format, &mut writer, |_| Ok(()))?;
+                }
+                if !exporting {
+                    println!(
+                        "{}",
+                        serde_json::to_string_pretty(
+                            &database.policy_occurrences(after_sequence, limit)?
+                        )?
+                    );
+                }
+                Ok(())
+            })
+            .await??;
+        }
+        Command::AnalyzeContent { input, output } => {
+            let request: open_seo_spider_core::ContentAnalysisInput =
+                serde_json::from_slice(&read_bounded(&input, 8 * 1024 * 1024).await?)?;
+            let result = open_seo_spider_core::analyze_content(&request)?;
+            let json = serde_json::to_vec_pretty(&result)?;
+            if let Some(output) = output {
+                let mut file = tokio::fs::OpenOptions::new()
+                    .write(true)
+                    .create_new(true)
+                    .open(output)
+                    .await?;
+                tokio::io::AsyncWriteExt::write_all(&mut file, &json).await?;
+            } else {
+                println!("{}", String::from_utf8(json)?);
+            }
+        }
         Command::PreviewPolicy { input, output } => {
             let request: open_seo_spider_core::CrawlPolicyPreviewInput =
                 serde_json::from_slice(&read_bounded(&input, 8 * 1024 * 1024).await?)?;
@@ -243,6 +340,7 @@ async fn main() -> anyhow::Result<()> {
             sitemap,
             list,
             config,
+            store,
             list_file,
             list_options,
             concurrency,
@@ -290,9 +388,11 @@ async fn main() -> anyhow::Result<()> {
                     .push(import_url_list(&bytes, &options)?);
             }
             config.prepare_input_lists()?;
-            let mut report = Crawler::new(config)?
-                .run(None, Arc::new(AtomicBool::new(false)))
-                .await?;
+            let mut crawler = Crawler::new(config)?;
+            if let Some(store) = store {
+                crawler = crawler.with_store(store)?;
+            }
+            let mut report = crawler.run(None, Arc::new(AtomicBool::new(false))).await?;
             analysis::extend_report(&mut report);
             tokio::fs::write(&output, serde_json::to_vec_pretty(&report)?).await?;
             if let Some(path) = csv {

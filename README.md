@@ -145,8 +145,28 @@ contracts. `spider_recrawl` exposes the same derived-job operation over MCP.
 
 `open-seo-spider preview-policy policy.json --output decisions.json` and
 `POST /api/policy/preview` evaluate explicit scope/query/rewrite rules without
-network requests. [Policy preview](docs/crawl-policy.md) is a separate pure engine;
-its rules are not yet applied by the live crawler.
+network requests. [Policy preview](docs/crawl-policy.md) is a separate pure engine.
+An explicit `crawl_policy` also enables the [native SQLite-backed integration](docs/native-crawl-policy.md).
+It retains observed URLs separately from fetch aliases and records decisions for
+admitted, coalesced and denied occurrences. The [advanced policy UI](docs/crawl-policy-ui.md)
+offers offline preview, bounded evidence pages and full streamed snapshot exports.
+This native slice rejects browser rendering and legacy top-level URL filters when
+combined with the new policy, before making website requests.
+
+```sh
+open-seo-spider crawl --config native-policy.json --store crawl.sqlite --output crawl.json
+open-seo-spider policy-ledger crawl.sqlite --limit 200
+open-seo-spider policy-ledger crawl.sqlite --json decisions.json --csv decisions.csv
+```
+
+`POST /api/content/analyze`, `open-seo-spider analyze-content input.json` and the
+MCP tool `spider_analyze_content` analyze explicitly supplied text locally. The
+[content engine](docs/content-analysis.md) provides Unicode token and n-gram
+evidence, exact shingle-set similarity and an explicit English/German readability
+heuristic. Missing or incomplete text remains unknown. This bounded supplied-text
+engine does not yet retain full crawl text or establish whole-site content parity.
+The [original content observations](docs/reference-content-analysis.md) record the
+measured differences and unavailable comparisons.
 
 The running application exposes stateless Streamable HTTP MCP at
 `http://127.0.0.1:8787/mcp`. For stdio, configure a client to execute:

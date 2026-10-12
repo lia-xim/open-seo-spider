@@ -26,13 +26,25 @@ try{
     client=new Client({name:'open-seo-spider-acceptance',version:'0.1.0'});
     const transport=kind==='stdio'?new StdioClientTransport({command:binary,args:['mcp','--server',api],cwd:root,stderr:'pipe'}):new StreamableHTTPClientTransport(new URL(api+'/mcp'));
     await client.connect(transport);
-    const inventory=await client.listTools();assert.equal(inventory.tools.length,13);
+    const inventory=await client.listTools();assert.equal(inventory.tools.length,16);
     assert.ok(inventory.tools.some(tool=>tool.name==='spider_pause'&&tool.annotations.readOnlyHint===false));
     assert.ok(inventory.tools.some(tool=>tool.name==='spider_recrawl'&&tool.annotations.readOnlyHint===false&&tool.annotations.openWorldHint===true));
     const caps=await call('spider_capabilities');assert.equal(caps.crawl.url_limit,null);
+    assert.ok(inventory.tools.some(tool=>tool.name==='spider_analyze_content'&&tool.annotations.readOnlyHint===true&&tool.annotations.openWorldHint===false));
+    const suppliedText='one two three four five six seven eight nine ten eleven twelve.';
+    const analysis=await call('spider_analyze_content',{input:{corpus_id:'mcp-owned-text',corpus_scope:'three supplied texts',corpus_complete:false,documents:[
+      {id:'a',source:'manual_text',text:suppliedText,language:'en',complete:true},
+      {id:'b',source:'manual_text',text:suppliedText,language:'en',complete:true},
+      {id:'missing',source:'manual_text',text:null,language:null,complete:false},
+    ]}});
+    assert.equal(analysis.website_requests,0);assert.equal(analysis.pairs[0].near_duplicate,true);assert.equal(analysis.pairs[1].near_duplicate,null);assert.equal(analysis.corpus.missing_text_documents,1);
+    const policy={scope:{roots:[{origin:'http://127.0.0.1:19089',folders:['/']}]}};
+    const preview=await call('spider_preview_policy',{input:{config:policy,inputs:[{occurrence_id:'own-mcp-seed',source_kind:'seed',raw_value:'http://127.0.0.1:19089/a',base_url:null,source_url:null,source_location:null}]}});
+    assert.equal(preview.website_requests,0);assert.equal(preview.decisions[0].fetch_candidate_url,'http://127.0.0.1:19089/a');
     revision=0;
     const started=await call('spider_start_crawl',{config:{seed_urls:['http://127.0.0.1:19089/a','http://127.0.0.1:19089/b'],crawl_links:false,discover_sitemaps:false,delay_ms:0}});
     const finished=await until(async()=>{const status=await call('spider_status',{id:started.id});return status.status==='completed'&&status;});assert.equal(finished.stats.fetched,2);
+    const disabledLedger=await call('spider_policy',{id:started.id,limit:1});assert.equal(disabledLedger.enabled,false);assert.equal(disabledLedger.ledger_available,false);assert.deepEqual(disabledLedger.observations,[]);
     const pages=await call('spider_pages',{id:started.id,offset:1,limit:1});assert.equal(pages.pages.length,1);assert.equal(pages.total,2);
     assert((await call('spider_issues',{id:started.id})).issues.length>0);
     assert.equal((await call('spider_project',{id:started.id})).pages.length,2);
@@ -46,7 +58,11 @@ try{
     await until(async()=>{const status=await call('spider_status',{id:recrawl.id});if(status.status==='failed')throw Error(status.error);return status.status==='completed';});
     const child=await call('spider_project',{id:recrawl.id});assert.equal(child.pages.length,2);assert.deepEqual(child.pages.find(page=>page.url.endsWith('/b')),parent.pages.find(page=>page.url.endsWith('/b')));assert.match(child.pages.find(page=>page.url.endsWith('/a')).titles[0],/revision 1/);assert.deepEqual(await call('spider_project',{id:started.id}),parent);
     const changes=await call('spider_compare',{before:started.id,after:recrawl.id});assert.equal(changes.changes.length,1);assert.equal(changes.changes[0].url,'http://127.0.0.1:19089/a');
-    checks.push(`${kind}: SDK initialize, 13 tools, crawl/read/analysis/compare, completed-pause conflict, derived selected recrawl with fresh selected row and exact retained parent/unselected rows`);
+    const policyJob=await call('spider_start_crawl',{config:{seed_urls:['http://127.0.0.1:19089/a','http://127.0.0.1:19089/b'],crawl_links:false,discover_sitemaps:false,delay_ms:0,crawl_policy:policy}});
+    await until(async()=>{const status=await call('spider_status',{id:policyJob.id});if(status.status==='failed')throw Error(status.error);return status.status==='completed';});
+    const firstPolicyPage=await call('spider_policy',{id:policyJob.id,limit:1});assert.equal(firstPolicyPage.enabled,true);assert.equal(firstPolicyPage.ledger_available,true);assert.equal(firstPolicyPage.observations.length,1);assert.equal(firstPolicyPage.has_more,true);
+    const secondPolicyPage=await call('spider_policy',{id:policyJob.id,after_sequence:firstPolicyPage.next_after_sequence,limit:1});assert.equal(secondPolicyPage.observations.length,1);assert.equal(secondPolicyPage.has_more,false);assert.notEqual(secondPolicyPage.observations[0].sequence,firstPolicyPage.observations[0].sequence);
+    checks.push(`${kind}: SDK initialize, 16 tools, supplied-text analysis with unknown missing row, zero-HTTP policy preview, native policy cursor without repeated rows, disabled-policy evidence, crawl/read/analysis/compare, completed-pause conflict, derived selected recrawl with fresh selected row and exact retained parent/unselected rows`);
     await client.close();client=null;
   }
   const evidence={tested_at:new Date().toISOString(),sdk:'@modelcontextprotocol/client 2.3.1',platform:process.platform,result:'PASS',checks};

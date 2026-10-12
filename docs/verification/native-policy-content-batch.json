@@ -1,0 +1,146 @@
+{
+  "tested_at": "2026-10-12T14:21:46.720Z",
+  "result": "PASS",
+  "platform": "native Windows",
+  "rust": {
+    "workspace_passed": 269,
+    "app": 36,
+    "core": 233,
+    "default_ignored": 3,
+    "explicit_chrome_selected_recrawl_passed": 1,
+    "format": "PASS",
+    "clippy": "PASS",
+    "debug_build": "PASS",
+    "final_debug_sha256": "92f8d68294451852a7dcdb47dcd1be6b5f595e7184decf79b1f0bb9b224e1b78",
+    "final_change_focused_checks": {
+      "policy_unit": 4,
+      "policy_http": 13
+    },
+    "scope": "Workspace gate plus final imported-history completeness correction verified by focused policy gates and whole-workspace Clippy."
+  },
+  "native_policy": {
+    "fixture_checks": 13,
+    "actual_ledger_observations": 506,
+    "cursor_rows": 200,
+    "full_snapshot_exports": [
+      "json",
+      "csv"
+    ],
+    "all_snapshot_rows_exported": true,
+    "ledger_complete": false,
+    "incomplete_sources": 1,
+    "unknown_final_body": "policy-denied redirect is not inferred captured",
+    "renderer_supported": false,
+    "profile": "Independent declared native URL admission and durable occurrence ledger; no vendor policy equivalence claim."
+  },
+  "content_analysis": {
+    "pure_tests": 20,
+    "api_cli_check_groups": 4,
+    "website_requests": 0,
+    "scope": "Explicitly supplied text only; native HTML/DOM content capture integration remains pending."
+  },
+  "mcp": {
+    "tools": 16,
+    "transports": 2,
+    "sdk": "@modelcontextprotocol/client 2.3.1"
+  },
+  "ui": {
+    "final_policy_checks": 8,
+    "final_debug_sha256": "92f8d68294451852a7dcdb47dcd1be6b5f595e7184decf79b1f0bb9b224e1b78",
+    "javascript_runtime_errors": [],
+    "earlier_baseline": {
+      "actual_checks": 95,
+      "debug_sha256": "b9879198cdde5afa66b155c64dd15a51908975741a83e6439da0659132f350ea",
+      "scope": "Policy, selected recrawl, control, list imports, DOM, resources, renderer and robots; own earlier B7 binary."
+    },
+    "policy_fixture_checks": 15
+  },
+  "prior_batch": {
+    "selected_recrawl_exact_ci": {
+      "observed_at": "2026-10-12T14:16:01.5083587Z",
+      "result": "PASS",
+      "commit": "0df95ca1434316bc0e11503164d9c6140d88f78c",
+      "url": "https://github.com/lia-xim/open-seo-spider/actions/runs/38255480208",
+      "jobs": [
+        {
+          "name": "test (ubuntu-latest)",
+          "result": "success",
+          "url": "https://github.com/lia-xim/open-seo-spider/actions/runs/38255480208/job/114832322121"
+        },
+        {
+          "name": "container",
+          "result": "success",
+          "url": "https://github.com/lia-xim/open-seo-spider/actions/runs/38255480208/job/114832322238"
+        },
+        {
+          "name": "test (windows-latest)",
+          "result": "success",
+          "url": "https://github.com/lia-xim/open-seo-spider/actions/runs/38255480208/job/114832322420"
+        },
+        {
+          "name": "renderer",
+          "result": "success",
+          "url": "https://github.com/lia-xim/open-seo-spider/actions/runs/38255480208/job/114832322510"
+        }
+      ],
+      "scope": "Exact-source Windows/Linux Rust/API/CLI/selected recrawl/official MCP SDK; sandboxed Chromium worker and UI; Linux Docker unprivileged process and persistent SQLite volume.",
+      "local_windows_docker_installation": "NOT_PROVEN",
+      "full_vendor_parity": "NOT_PROVEN"
+    },
+    "installed_runtime": {
+      "user_data_fixture_requests": 0,
+      "result": "PASS",
+      "saved_jobs": 7,
+      "mcp_tools": 13,
+      "original_batch3_files_identical": true,
+      "preserved_json_files": 11,
+      "release_sha256": "557c7e392f7bf70f6c80f25e30322221e4844e9ca361eb66af31b28f0046562d",
+      "tested_at": "2026-10-12T13:34:28.7598580Z",
+      "debug_sha256": "e509defab9999fc34ceef515a2cc72a9b251f1bcbdfca8261eaa722e6fa8284a",
+      "byte_identical_after_restart": true,
+      "selected_recrawl": true
+    }
+  },
+  "artifacts": [
+    {
+      "artifact": "docs/verification/crawl-policy-e2e.json",
+      "sha256": "28ebdd6633aed082b839dad98f9575ea3799b124bdd788753d695a09e7cb7153"
+    },
+    {
+      "artifact": "docs/verification/content-analysis-e2e.json",
+      "sha256": "9d3b54aa64f3b38e4f23a456f9769aa96e0b64b5d88e5c332cb4e56e08df901b"
+    },
+    {
+      "artifact": "docs/verification/mcp-e2e.json",
+      "sha256": "0085ab31dbfe7fa898ee6b1b300d0116c2f09468644ce5c7bdd67104955ce196"
+    },
+    {
+      "artifact": "web/verification/ui-policy-live-results.json",
+      "sha256": "7fdf4a6894b1571ac6c7f7ddb082a7c51c25f015605e132446608c8263efb157"
+    },
+    {
+      "artifact": "docs/verification/api-e2e.json",
+      "sha256": "655d4b9dccc153dd8d99df7fb0d2ec82970c00a5b0ca97f9322ef02a9d526b43"
+    },
+    {
+      "artifact": "docs/verification/crawl-control-e2e.json",
+      "sha256": "f0b05f88c1166b1bfd062273f5c42ff2412f150b891a028840a997b5ceb272db"
+    },
+    {
+      "artifact": "docs/verification/selected-recrawl-e2e.json",
+      "sha256": "469cde379ea637cab6ce0d9aa92eb1ab0cf07137eb31a5da1dcd43cb769d9066"
+    },
+    {
+      "artifact": "docs/verification/list-import-e2e.json",
+      "sha256": "97536538a1ce1888ad96e99b5a308cf915059b49dddb52a3ef41c2e3ec6af4e3"
+    }
+  ],
+  "source_boundaries": {
+    "proprietary_source_in_repository": false,
+    "full_vendor_parity": "NOT_PROVEN",
+    "local_windows_docker_installation": "NOT_PROVEN",
+    "exact_batch_ci": "PENDING",
+    "immutable_release_build": "PENDING",
+    "installed_user_runtime": "Previous verified selected-recrawl release; replacement follows immutable release build."
+  }
+}

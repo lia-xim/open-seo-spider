@@ -8,10 +8,11 @@ use axum::{
 };
 use base64::{Engine as _, engine::general_purpose::STANDARD};
 use open_seo_spider_core::{
-    AuditIssue, CrawlCheckpoint, CrawlConfig, CrawlControl, CrawlEvent, CrawlOutcome,
-    CrawlPolicyPreviewInput, CrawlReport, CrawlStore, Crawler, ListImportLimits, ListImportOptions,
-    PageRecord, RecrawlResumeOverride, RecrawlSourceKind, RobotsSimulationInput, RunPlan,
-    SelectedRecrawlOperation, SelectedRecrawlParent, SerpInputRow, compare_crawls,
+    AuditIssue, ContentAnalysisInput, ContentAnalysisResult, CrawlCheckpoint, CrawlConfig,
+    CrawlControl, CrawlEvent, CrawlOutcome, CrawlPolicyPreviewInput, CrawlReport, CrawlStore,
+    Crawler, ListImportLimits, ListImportOptions, PageRecord, RecrawlResumeOverride,
+    RecrawlSourceKind, RobotsSimulationInput, RunPlan, SelectedRecrawlOperation,
+    SelectedRecrawlParent, SerpInputRow, analyze_content, compare_crawls,
     export_browser_cookies_csv, export_custom_extractions_csv, export_custom_javascript_csv,
     export_dom_observations_csv, export_fragments_csv, export_image_resources_csv,
     export_input_occurrences_csv, export_issues_csv, export_links_csv, export_pages_csv,
@@ -25,6 +26,7 @@ use serde_json::{Value, json};
 use std::{collections::HashMap, path::PathBuf, sync::Arc};
 use tokio::sync::RwLock;
 use uuid::Uuid;
+mod policy;
 
 #[derive(Clone)]
 struct AppState {
@@ -52,6 +54,7 @@ struct Job {
     frontier_available: bool,
     operation: Option<SelectedRecrawlOperation>,
     recrawl_override: RecrawlResumeOverride,
+    policy_ledger: Option<open_seo_spider_core::PolicyLedgerSummary>,
 }
 #[derive(Serialize, Deserialize)]
 struct JobManifest {
@@ -86,7 +89,7 @@ impl Job {
             })
             .count();
         let active = matches!(self.status.as_str(), "running" | "pausing" | "cancelling");
-        json!({"id":self.id,"status":self.status,"seed_url":self.config.seed_urls.first(),"config":self.config,"started_at":self.started_at,"finished_at":self.finished_at,"generation":self.generation,"checkpoint":self.checkpoint,"operation":self.operation,"resume_available":self.frontier_available && !active,"recrawl_available":self.report.is_some() && !active,"parent_snapshot_available":self.operation.is_some() && self.frontier_available,"stats":{"discovered":self.pages.len()+self.queued+self.in_flight,"queued":self.queued,"discovery_pending":self.discovery_pending,"fetched":self.pages.len(),"failed":failed,"issues":self.issues.len(),"in_flight":self.in_flight},"warnings":self.warnings,"error":self.error,"summary":self.report.as_ref().map(|report| &report.summary)})
+        json!({"id":self.id,"status":self.status,"seed_url":self.config.seed_urls.first(),"config":self.config,"started_at":self.started_at,"finished_at":self.finished_at,"generation":self.generation,"checkpoint":self.checkpoint,"operation":self.operation,"policy_ledger":self.policy_ledger,"resume_available":self.frontier_available && !active,"recrawl_available":self.report.is_some() && !active,"parent_snapshot_available":self.operation.is_some() && self.frontier_available,"stats":{"discovered":self.pages.len()+self.queued+self.in_flight,"queued":self.queued,"discovery_pending":self.discovery_pending,"fetched":self.pages.len(),"failed":failed,"issues":self.issues.len(),"in_flight":self.in_flight},"warnings":self.warnings,"error":self.error,"summary":self.report.as_ref().map(|report| &report.summary)})
     }
 }
 #[derive(Serialize)]
@@ -167,6 +170,7 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
         .route("/api/lists/inspect", post(list_inspect))
         .route("/api/lists/import", post(list_import))
         .route("/api/policy/preview", post(policy_preview))
+        .route("/api/content/analyze", post(content_analysis))
         .route("/api/crawls/{id}/recrawl", post(recrawl))
         .route("/api/crawls/{id}/parent.json", get(export_recrawl_parent))
         .route(
@@ -217,6 +221,9 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
         .route("/api/crawls/{id}/pages", get(pages))
         .route("/api/crawls/{id}/issues", get(issues))
         .route("/api/crawls/{id}/analysis", get(advanced_analysis))
+        .route("/api/crawls/{id}/policy", get(policy::inventory))
+        .route("/api/crawls/{id}/policy.json", get(policy::export_json))
+        .route("/api/crawls/{id}/policy.csv", get(policy::export_csv))
         .route("/api/crawls/{id}/responses", get(response_inventory))
         .route("/api/crawls/{id}/responses.csv", get(export_responses))
         .route("/api/crawls/{id}/fragments", get(fragment_inventory))
@@ -321,7 +328,9 @@ async fn capabilities() -> Json<Value> {
             "responsive_image_candidates":true,"nonstandard_navigation_observations":true,
             "fragment_validation":{"opt_in":true,"requires_captured_target":true,"unknown_is_not_missing":true}
         },
-        "offline_policy_preview":{"endpoint":"/api/policy/preview","website_requests":0,"applied_to_crawls":false},
+        "offline_policy_preview":{"endpoint":"/api/policy/preview","website_requests":0,"applied_to_crawls":true},
+        "native_crawl_policy":{"opt_in":true,"engine":open_seo_spider_core::LIVE_CRAWL_POLICY_ENGINE,"durable_sqlite_ledger":true,"paged_observations":true,"streamed_snapshot_exports":true,"renderer_supported":false,"scope_does_not_grant_credentials":true,"occurrence_limit":null},
+        "offline_content_analysis":{"endpoint":"/api/content/analyze","website_requests":0,"similarity":"exact_token_shingle_jaccard","readability":"explicit_en_de_heuristic","full_reference_parity":false},
         "offline_serp":{"path":"/serp","website_requests":0,"csv_import":true,"row_limit":10000},
         "offline_robots":{"path":"/robots","website_requests":0,"engine":"crawler_policy","remote_rules_fetch":false},
         "offline_list_import":{"formats":["txt","csv","xml","xlsx"],"website_requests":0,"max_input_bytes":8388608,"max_rows_per_file":50000,"row_order":true,"duplicates":true,"xlsx_formulas":"reject_or_explicit_cached_string_only","provenance":"declared_client_input"},
@@ -333,6 +342,15 @@ async fn capabilities() -> Json<Value> {
         "unimplemented":["api_integrations","spelling_grammar","pdf_ocr_and_rendering","shared_authenticated_browser_sessions","embedding_semantic_search","scheduling","full_structured_data_validation"],
         "parity":"in progress; see docs/parity/granular-acceptance.json"
     }))
+}
+async fn content_analysis(
+    Json(input): Json<ContentAnalysisInput>,
+) -> ApiResult<Json<ContentAnalysisResult>> {
+    tokio::task::spawn_blocking(move || analyze_content(&input))
+        .await
+        .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?
+        .map(Json)
+        .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))
 }
 async fn policy_preview(Json(input): Json<CrawlPolicyPreviewInput>) -> ApiResult<Json<Value>> {
     let preview = tokio::task::spawn_blocking(move || preview_crawl_policy(&input))
@@ -425,6 +443,7 @@ async fn create_crawl(
         frontier_available: false,
         operation: None,
         recrawl_override: RecrawlResumeOverride::default(),
+        policy_ledger: None,
     }));
     save_manifest(&state, &job)
         .await
@@ -538,7 +557,7 @@ async fn recrawl(
         pages, issues:Vec::new(), queued, discovery_pending:0, in_flight:0,
         warnings:vec!["Selected recrawl retains unrelated source observations; current coverage combines inherited and newly captured results.".into()],
         error:None, report:None, control:CrawlControl::new(), generation:1, checkpoint:None,
-        frontier_available:true, operation, recrawl_override:RecrawlResumeOverride::default(),
+        frontier_available:true, operation, recrawl_override:RecrawlResumeOverride::default(), policy_ledger:None,
     }));
     if let Err(error) = save_manifest(&state, &job).await {
         remove_reserved_job_files(&state, id).await;
@@ -873,6 +892,7 @@ async fn launch(state: AppState, job: Arc<RwLock<Job>>) {
                         guard.in_flight = in_flight;
                     }
                     CrawlEvent::Warning { message } => guard.warnings.push(message),
+                    CrawlEvent::PolicyProgress { ledger } => guard.policy_ledger = Some(*ledger),
                     CrawlEvent::Operation { operation } => {
                         target_indices = operation
                             .targets
@@ -940,6 +960,7 @@ async fn launch(state: AppState, job: Arc<RwLock<Job>>) {
                 guard.issues = report.issues.clone();
                 guard.warnings = report.warnings.clone();
                 guard.operation = report.operation.clone();
+                guard.policy_ledger = report.policy_ledger.clone();
                 guard.report = Some(report.clone());
                 let path = state.data_dir.join(format!("{id}.json"));
                 if let Err(error) = write_json(path, &report).await {
@@ -1298,6 +1319,7 @@ async fn persist_import(state: &AppState, id: Uuid, mut report: CrawlReport) -> 
 }
 async fn register_report(state: &AppState, id: Uuid, report: CrawlReport) {
     let operation = report.operation.clone();
+    let policy_ledger = report.policy_ledger.clone();
     let job = Job {
         id,
         config: report.config.clone(),
@@ -1325,6 +1347,7 @@ async fn register_report(state: &AppState, id: Uuid, report: CrawlReport) {
         frontier_available: false,
         operation,
         recrawl_override: RecrawlResumeOverride::default(),
+        policy_ledger,
     };
     state
         .jobs
@@ -1568,6 +1591,7 @@ async fn load_reports(state: &AppState) -> anyhow::Result<()> {
             frontier_available: true,
             operation: inspection.operation,
             recrawl_override: RecrawlResumeOverride::default(),
+            policy_ledger: inspection.policy_ledger,
         };
         state
             .jobs
@@ -1621,6 +1645,7 @@ async fn load_reports(state: &AppState) -> anyhow::Result<()> {
             frontier_available: false,
             operation: None,
             recrawl_override: RecrawlResumeOverride::default(),
+            policy_ledger: None,
         };
         state
             .jobs

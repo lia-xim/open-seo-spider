@@ -79,7 +79,7 @@ function csvRows(input){
   const origin=`http://127.0.0.1:${fixture.address().port}`;
   try{
     await page.goto(app);await page.locator('#connection-state.connected').waitFor();
-    await page.click('#settings-open');await page.uncheck('[name=javascript_rendering]');await page.fill('[name=delay_ms]','0');await page.locator('#advanced-config summary').click();await page.fill('[name=pdf_analysis_json]','{}');await page.click('#settings-form button[type=submit]');
+    await page.click('#settings-open');await page.uncheck('[name=javascript_rendering]');await page.fill('[name=delay_ms]','0');await page.locator('#advanced-config > summary').click();await page.fill('[name=pdf_analysis_json]','{}');await page.click('#settings-form button[type=submit]');
     await page.fill('#seed-url',`${origin}/`);await page.click('#start-button');
     const id=await waitForComplete(page);
     const response=await fetch(`${app}/api/crawls/${id}/pages?limit=1000`);assert.equal(response.status,200);const data=await response.json();

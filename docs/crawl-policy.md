@@ -1,8 +1,8 @@
-# Offline crawl policy preview
+# Crawl policy preview and native execution
 
-`crates/core/src/crawl_policy.rs` is an independently authored pure policy engine. It compiles rules and evaluates ordered URL occurrences without HTTP, filesystem access or crawl mutation. **It is initially a preview engine: existing crawler requests and scheduler behavior do not use it.** A preview result is neither robots permission nor evidence of a server response or complete Screaming Frog equivalence.
+`crates/core/src/crawl_policy.rs` is an independently authored pure policy engine. It compiles rules and evaluates ordered URL occurrences without HTTP, filesystem access or crawl mutation. The optional native integration persists each decision in SQLite before scheduling work. A preview result is neither robots permission nor evidence of a server response or complete Screaming Frog equivalence.
 
-The proposed app transport passes a `CrawlPolicyPreviewInput` directly to `preview_crawl_policy`. Its shape is:
+The app transport passes a `CrawlPolicyPreviewInput` directly to `preview_crawl_policy`. Its shape is:
 
 ```json
 {
@@ -58,6 +58,6 @@ All configurable limits are positive and capped: 10,000 preview inputs; 8 MiB se
 
 Own fixtures under `crates/core/tests/fixtures/crawl-policy/` define 47 independent candidate contracts and nine future integration scenarios. Eleven focused unit tests replay those contracts and exercise explicit capture behavior, aliases, order, malformed shapes, exact origin/suffix/IP boundaries, source-kind exemption, changed identity cycles and configured resource limits. The locked native gate passed all 11 tests on 2026-10-12; its command, scope and source hash are recorded in the fixture manifest. Authored expectations alone are not proof of execution or vendor parity.
 
-Crawler scheduling, actual-target robots checks, header isolation, native/rendered discovery, redirect stops, SQLite atomic decision storage, resume, CSV/project exports and a browser zero-request workflow remain separate integration gates. They are not enabled by displaying this preview. Saved effective fetch identities must not be rewritten a second time on restart or selective recrawl.
+The [native integration](native-crawl-policy.md) now uses this engine for scheduling, actual-target robots checks, header isolation, redirect stops, atomic decision/frontier storage and saved-identity recovery. It retains observed graph targets and fragments separately from fetch aliases. The [UI contract](crawl-policy-ui.md) separates offline preview from explicit crawl start, unavailable inherited rows and bounded native evidence. Browser rendering combined with the new policy remains unsupported. Saved effective fetch identities are not rewritten a second time on restart or selective recrawl.
 
 Public vendor capability reference: [Screaming Frog configuration](https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/). Its public wording is ambiguous for some list-rewrite and include-match cases; no exact vendor behavior follows from this independent profile. URL and robots standards: [RFC 3986](https://www.rfc-editor.org/rfc/rfc3986.html), [RFC 9309](https://www.rfc-editor.org/rfc/rfc9309.html). No vendor code or assets are used.

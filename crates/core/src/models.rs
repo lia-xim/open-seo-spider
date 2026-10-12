@@ -38,6 +38,10 @@ pub struct CrawlConfig {
     /// Full normalized URL regex filters for discovery; explicit seeds are exempt.
     pub include_patterns: Vec<String>,
     pub exclude_patterns: Vec<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub crawl_policy: Option<crate::CrawlPolicyConfig>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub live_policy_limits: Option<crate::LiveCrawlPolicyLimits>,
 }
 
 impl Default for CrawlConfig {
@@ -70,6 +74,8 @@ impl Default for CrawlConfig {
             link_position_rules: Vec::new(),
             include_patterns: Vec::new(),
             exclude_patterns: Vec::new(),
+            crawl_policy: None,
+            live_policy_limits: None,
         }
     }
 }
@@ -817,6 +823,8 @@ pub struct PageRecord {
     pub pdf: Option<PdfRecord>,
     pub image_metadata: Option<ImageResourceMetadata>,
     pub dom_metadata: Option<DomMetadata>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub policy: Option<crate::PagePolicyObservation>,
 }
 
 impl PageRecord {
@@ -900,11 +908,16 @@ pub struct CrawlReport {
     /// observations and exclude selected historical rows until fresh commit.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub operation: Option<crate::SelectedRecrawlOperation>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub policy_ledger: Option<crate::PolicyLedgerSummary>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "type", rename_all = "snake_case")]
 pub enum CrawlEvent {
+    PolicyProgress {
+        ledger: Box<crate::PolicyLedgerSummary>,
+    },
     Operation {
         operation: Box<crate::SelectedRecrawlOperation>,
     },

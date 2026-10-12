@@ -133,7 +133,20 @@ rows. The CLI and HTTP transports share the same parser and validator.
 The independent pure [crawl policy preview](crawl-policy.md) evaluates explicit
 scope, query handling and regex replacements with ordered source occurrences,
 identity traces, alias coalescing and zero HTTP requests. It is exposed through
-the API and CLI; applying this policy to live crawl discovery is still pending.
+the API, CLI and MCP. Optional native execution keeps immutable admissions and
+every observed decision in a generation-guarded SQLite ledger. Original graph
+targets remain distinct from transformed fetch aliases. Bounded cursor pages and
+full streamed exports use read-only connections; a full export holds one SQLite
+read snapshot while a later generation may append. Missing inherited rows and
+failed final bodies keep coverage explicitly incomplete. Policy with browser
+rendering remains a separate integration gate.
+
+The independent supplied-text content engine computes overlapping n-grams, exact
+token-shingle Jaccard pairs and explicit English/German readability heuristics.
+Typed configuration and input hashes bind each result; absent/incomplete text
+never becomes a fabricated complete body. API, CLI and MCP share this pure engine.
+The initial request is bounded to128 documents and8MiB; this is an analysis
+resource contract, not a crawl URL allowance or whole-site scaling proof.
 
 Fragment validation lazily indexes IDs and legacy names for each queried captured
 document. Repeated lookups preserve first-DOM-occurrence selection and raw-before-

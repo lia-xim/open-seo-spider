@@ -88,6 +88,14 @@ impl Bridge {
         let mut route = match name {
             "spider_capabilities" => "api/capabilities".to_owned(),
             "spider_list_crawls" => "api/crawls".to_owned(),
+            "spider_analyze_content" => {
+                body = Some(args.get("input").cloned().context("input required")?);
+                "api/content/analyze".to_owned()
+            }
+            "spider_preview_policy" => {
+                body = Some(args.get("input").cloned().context("input required")?);
+                "api/policy/preview".to_owned()
+            }
             "spider_start_crawl" => {
                 body = Some(args.get("config").cloned().context("config required")?);
                 "api/crawls".to_owned()
@@ -103,6 +111,7 @@ impl Bridge {
                     "spider_pages" => "/pages",
                     "spider_issues" => "/issues",
                     "spider_analysis" => "/analysis",
+                    "spider_policy" => "/policy",
                     "spider_cancel" => {
                         body = Some(json!({}));
                         "/cancel"
@@ -136,6 +145,17 @@ impl Bridge {
                 args["offset"].as_u64().unwrap_or(0),
                 args["limit"].as_u64().unwrap_or(200).clamp(1, 10000)
             ));
+        }
+        if name == "spider_policy" {
+            let limit = args["limit"].as_u64().unwrap_or(200);
+            anyhow::ensure!((1..=1000).contains(&limit), "limit must be 1..1000");
+            route.push_str(&format!("?limit={limit}"));
+            if let Some(value) = args.get("after_sequence") {
+                let sequence = value
+                    .as_u64()
+                    .context("after_sequence must be a nonnegative integer")?;
+                route.push_str(&format!("&after_sequence={sequence}"));
+            }
         }
         let url = self.base.join(&route)?;
         let mut response = if let Some(body) = body {
@@ -177,6 +197,9 @@ fn inventory() -> Vec<Value> {
         ("spider_pages","Read a bounded page slice; increment offset for more",json!({"id":uuid,"offset":{"type":"integer","minimum":0},"limit":{"type":"integer","minimum":1,"maximum":10000}}),vec!["id"],true),
         ("spider_issues","Read observed audit issues",json!({"id":uuid}),vec!["id"],true),
         ("spider_analysis","Read graph and relationship/security/JSON-LD observations",json!({"id":uuid}),vec!["id"],true),
+        ("spider_policy","Read bounded native admission evidence; advance the returned sequence cursor",json!({"id":uuid,"after_sequence":{"type":"integer","minimum":0},"limit":{"type":"integer","minimum":1,"maximum":1000}}),vec!["id"],true),
+        ("spider_analyze_content","Analyze supplied text locally with an explicit similarity/readability profile; no website is fetched",json!({"input":{"type":"object"}}),vec!["input"],true),
+        ("spider_preview_policy","Preview supplied scope, query and rewrite decisions locally; no crawl is started",json!({"input":{"type":"object"}}),vec!["input"],true),
         ("spider_cancel","Cancel and retain the saved frontier",json!({"id":uuid}),vec!["id"],false),
         ("spider_pause","Stop admitting new documents, drain active work and persist a resumable checkpoint",json!({"id":uuid}),vec!["id"],false),
         ("spider_resume","Resume a local crawl from SQLite with optional explicit operational overrides",json!({"id":uuid,"options":{"type":"object","properties":{"max_pages":{"type":"integer","minimum":0},"max_attempts":{"type":"integer","minimum":0},"concurrency":{"type":"integer","minimum":1},"delay_ms":{"type":"integer","minimum":0},"request_timeout_secs":{"type":"integer","minimum":1}},"additionalProperties":false}}),vec!["id"],false),
@@ -232,7 +255,7 @@ mod tests {
                 .await
                 .is_none()
         );
-        assert_eq!(inventory().len(), 13);
+        assert_eq!(inventory().len(), 16);
     }
     #[test]
     fn only_loopback_bridge() {

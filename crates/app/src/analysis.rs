@@ -1276,6 +1276,7 @@ mod tests {
     fn report(pages: Vec<PageRecord>) -> CrawlReport {
         CrawlReport {
             operation: None,
+            policy_ledger: None,
             config: CrawlConfig {
                 seed_urls: vec!["https://fixture.test/a".into()],
                 ..Default::default()

@@ -1,6 +1,7 @@
 //! Independent HTTP crawling, SEO extraction, durable storage and exports.
 //! No commercial URL cap is imposed. Resource limits are user configuration.
 mod audit;
+mod content_analysis;
 mod control;
 mod crawl_policy;
 mod crawler;
@@ -15,6 +16,7 @@ mod metadata;
 mod models;
 mod onpage;
 mod pdf;
+mod policy_ledger;
 mod recrawl;
 mod renderer;
 mod response_observations;
@@ -28,6 +30,7 @@ mod text_metrics;
 mod urls;
 
 pub use audit::{audit_pages, audit_pages_with_thresholds};
+pub use content_analysis::*;
 pub use control::{
     ControlledCrawlResult, CrawlCheckpoint, CrawlControl, CrawlOutcome, CrawlRequest,
     CrawlRunState, CrawlStoreInspection,
@@ -53,6 +56,12 @@ pub use list_import::{
 };
 pub use metadata::{applicable_robot_directives, parse_link_header, parse_x_robots_tag};
 pub use models::*;
+pub use policy_ledger::{
+    InheritedPolicyHistory, LIVE_CRAWL_POLICY_ENGINE, LiveCrawlPolicyLimits, PagePolicyObservation,
+    PolicyAdmission, PolicyInputBasis, PolicyLedgerSummary, PolicyObservationBasis,
+    PolicyOccurrence, PolicyOccurrencePage, PolicyTaskRole, StoredPolicyOccurrence,
+    export_policy_occurrences_csv,
+};
 pub use recrawl::{
     PreparedSelectedRecrawl, RecrawlParentReference, RecrawlResumeOverride,
     RecrawlSelectionOccurrence, RecrawlSourceKind, RecrawlTarget, RecrawlTargetObservation,

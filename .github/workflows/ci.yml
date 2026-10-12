@@ -36,6 +36,8 @@ jobs:
       - run: node scripts/list-import-e2e.mjs
       - run: node scripts/crawl-control-e2e.mjs
       - run: node scripts/selected-recrawl-e2e.mjs
+      - run: node scripts/crawl-policy-e2e.mjs
+      - run: node scripts/content-analysis-e2e.mjs
       - run: npm ci --ignore-scripts
         working-directory: scripts
       - run: node scripts/mcp-e2e.mjs
@@ -74,6 +76,7 @@ jobs:
       - run: node web/verification/ui-smoke.cjs
       - run: node web/verification/ui-crawl-control-smoke.cjs
       - run: node web/verification/ui-selected-recrawl-smoke.cjs
+      - run: node web/verification/ui-policy-smoke.cjs
       - run: node --test web/verification/serp-state-race.test.cjs
       - run: node --test web/verification/robots-input-state.test.cjs
       - run: node --test web/verification/list-import-state.test.mjs
@@ -98,3 +101,4 @@ jobs:
           node web/verification/ui-list-import-live.cjs
           node web/verification/ui-crawl-control-live.cjs
           node web/verification/ui-selected-recrawl-live.cjs
+          node web/verification/ui-policy-live.cjs

@@ -37,7 +37,7 @@ const fixture=http.createServer((req,res)=>{
     await page.check('[name=renderer_collect_cookies]');
     const scripts=[{name:'titleAndLinks',script:'await Promise.resolve(); return {title:document.title,links:document.links.length};'},{name:'scriptFailure',script:'throw new Error("Owned script error");'},{name:'laterResult',script:'return 42;'}];
     await page.fill('[name=custom_javascript_json]',JSON.stringify(scripts));
-    await page.locator('#advanced-config summary').click();
+    await page.locator('#advanced-config > summary').click();
     await page.fill('[name=custom_extractions_json]',JSON.stringify([{name:'price',selector:'.price',attribute:null},{name:'links',selector:'a',attribute:'href'},{name:'xpathPrice',method:'xpath',selector:'//span[@class="price"]//text()'},{name:'xpathCount',method:'xpath',selector:'count(//a)',output:'function_value'},{name:'regexPrice',method:'regex',selector:'class="price">(?:<strong>)?([0-9.]+)',regex_group:1},{name:'priceOuter',selector:'.price',output:'outer_html'},{name:'priceInner',method:'xpath',selector:'//span[@class="price"]',output:'inner_html'}]));
     await page.fill('[name=exclude_patterns_text]','/excluded');
     await page.click('#settings-form button[type=submit]');await page.fill('#seed-url',seed);await page.click('#start-button');

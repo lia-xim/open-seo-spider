@@ -48,6 +48,8 @@ pub struct CrawlCheckpoint {
     pub pending: usize,
     pub discovery_pending: usize,
     pub discovery_complete: bool,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub policy_ledger: Option<crate::PolicyLedgerSummary>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -64,6 +66,8 @@ pub struct CrawlStoreInspection {
     pub checkpoint_valid: bool,
     #[serde(default)]
     pub operation: Option<crate::SelectedRecrawlOperation>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub policy_ledger: Option<crate::PolicyLedgerSummary>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

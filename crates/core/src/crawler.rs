@@ -42,6 +42,8 @@ pub struct Crawler {
     asserted_plan: Option<RunPlan>,
     selected_base: Option<PreparedSelectedRecrawl>,
     recrawl_override: RecrawlResumeOverride,
+    policy: Option<Arc<crate::CompiledCrawlPolicy>>,
+    policy_limits: crate::LiveCrawlPolicyLimits,
     #[cfg(test)]
     pdf_parse_hook: Option<PdfParseHook>,
 }
@@ -49,6 +51,30 @@ pub struct Crawler {
 impl Crawler {
     pub fn new(mut config: CrawlConfig) -> anyhow::Result<Self> {
         config.prepare_input_lists()?;
+        let policy_limits = config.live_policy_limits.clone().unwrap_or_default();
+        policy_limits.validate()?;
+        if config.crawl_policy.is_none() && config.live_policy_limits.is_some() {
+            bail!("Live policy limits require a configured crawl policy");
+        }
+        if config.crawl_policy.is_some() && config.renderer.is_some() {
+            bail!(
+                "Native crawl policy cannot be combined with browser rendering: browser request enforcement is not implemented"
+            );
+        }
+        if config.crawl_policy.is_some()
+            && (!config.include_patterns.is_empty() || !config.exclude_patterns.is_empty())
+        {
+            bail!("Use policy include/exclude rules rather than ambiguous legacy URL filters");
+        }
+        let policy = config
+            .crawl_policy
+            .as_ref()
+            .map(crate::CompiledCrawlPolicy::new)
+            .transpose()?
+            .map(Arc::new);
+        if let Some(policy) = &policy {
+            config.crawl_policy = Some(policy.config().clone());
+        }
         if config.seed_urls.is_empty() && config.sitemap_urls.is_empty() {
             bail!("At least one seed URL or sitemap URL is required");
         }
@@ -137,6 +163,8 @@ impl Crawler {
             asserted_plan: None,
             selected_base: None,
             recrawl_override: RecrawlResumeOverride::default(),
+            policy,
+            policy_limits,
             #[cfg(test)]
             pdf_parse_hook: None,
         })
@@ -210,6 +238,11 @@ impl Crawler {
                 "A finished crawl controller cannot be reused; create one for the new invocation"
             );
         }
+        if self.policy.is_some() && self.store.is_none() {
+            bail!(
+                "Native crawl policy requires explicit SQLite storage for durable admission and ledger evidence"
+            );
+        }
         if let (Some(store), Some(prepared)) = (&self.store, &self.selected_base) {
             match store.run_plan()? {
                 RunPlan::FullCrawl => store.initialize_selected_recrawl(prepared)?,
@@ -255,6 +288,13 @@ impl Crawler {
             .as_ref()
             .map(|store| store.begin_run(&started_at))
             .transpose()?;
+        if let (Some(policy), Some(store), Some(generation)) =
+            (&self.policy, &self.store, generation)
+            && selected.is_none()
+        {
+            let mut rows = self.initial_policy_rows(policy);
+            store.initialize_policy(policy, &mut rows, &self.policy_limits, generation)?;
+        }
         let max_attempts = if let Some(plan) = selected {
             match (&self.store, generation) {
                 (Some(store), Some(generation)) => store
@@ -294,6 +334,7 @@ impl Crawler {
                             url: target.requested_url.clone(),
                             depth: target.depth,
                             discovered_from: target.discovered_from.clone(),
+                            admission: target.policy_admission.clone(),
                         })
                         .collect()
                 })
@@ -362,11 +403,17 @@ impl Crawler {
         }
         // Always ensure seeds exist, including after an interruption immediately
         // after the configuration was first saved.
-        for seed in self.config.seed_urls.iter().filter(|_| selected.is_none()) {
+        for seed in self
+            .config
+            .seed_urls
+            .iter()
+            .filter(|_| selected.is_none() && self.policy.is_none())
+        {
             let entry = QueueEntry {
                 url: seed.clone(),
                 depth: 0,
                 discovered_from: None,
+                admission: None,
             };
             if seen.insert(entry.url.clone()) {
                 if let Some(store) = &self.store {
@@ -400,6 +447,7 @@ impl Crawler {
             robots: self.robots.clone(),
             rate: self.rate.clone(),
             pdf_slots: self.pdf_slots.clone(),
+            policy: self.policy.clone(),
             #[cfg(test)]
             pdf_parse_hook: self.pdf_parse_hook.clone(),
         });
@@ -452,12 +500,13 @@ impl Crawler {
             if tasks.is_empty() {
                 break;
             }
-            let page = tokio::select! {
+            let mut page = tokio::select! {
                 page = tasks.next() => page.expect("nonempty tasks"),
                 _ = control.changed() => continue,
             };
             let mut discoveries = Vec::new();
-            if selected.is_none()
+            if self.policy.is_none()
+                && selected.is_none()
                 && self.config.crawl_links
                 && page.internal
                 && !page.blocked_by_robots
@@ -473,11 +522,31 @@ impl Crawler {
                             url: link.url.clone(),
                             depth: page.depth + 1,
                             discovered_from: Some(page.url.clone()),
+                            admission: None,
                         });
                     }
                 }
             }
-            if let Some(store) = &self.store {
+            if let (Some(policy), Some(store)) = (&self.policy, &self.store) {
+                let mut rows = self.page_policy_rows(&mut page, policy, selected.is_some())?;
+                discoveries = store.complete_with_policy(
+                    &page,
+                    &mut rows,
+                    generation.expect("stored generation"),
+                    &self.policy_limits,
+                )?;
+                for entry in &discoveries {
+                    seen.insert(entry.url.clone());
+                }
+                if let Some(ledger) = store.policy_ledger_summary()? {
+                    emit(
+                        &events,
+                        CrawlEvent::PolicyProgress {
+                            ledger: Box::new(ledger),
+                        },
+                    );
+                }
+            } else if let Some(store) = &self.store {
                 store.complete(
                     &page,
                     &discoveries,
@@ -586,6 +655,12 @@ impl Crawler {
             summary: summary.clone(),
             warnings,
             operation: operation.clone(),
+            policy_ledger: self
+                .store
+                .as_ref()
+                .map(|store| store.policy_ledger_summary())
+                .transpose()?
+                .flatten(),
         };
         let checkpoint = self
             .store
@@ -611,7 +686,215 @@ impl Crawler {
         })
     }
 
-    fn discovery_seeds(&self) -> Vec<DiscoveryEntry> {
+    fn initial_policy_rows(
+        &self,
+        policy: &crate::CompiledCrawlPolicy,
+    ) -> Vec<crate::PolicyOccurrence> {
+        use crate::{
+            CandidateSourceKind as Kind, PolicyInputBasis as Basis, PolicyTaskRole as Role,
+        };
+        let mut rows = Vec::new();
+        let mut covered = HashSet::new();
+        for (index, input) in self.config.input_imports.iter().enumerate() {
+            let revision = format!(
+                "initial:{}:{index}:{}",
+                policy.policy_sha256(),
+                input.input_sha256
+            );
+            for row in &input.rows {
+                let (kind, role) = match row.candidate_kind {
+                    crate::ListCandidateKind::PageUrl => (Kind::ListPage, Role::PageDocument),
+                    crate::ListCandidateKind::SitemapDocument => {
+                        (Kind::SitemapDocument, Role::SitemapDocument)
+                    }
+                };
+                if let Some(url) = &row.normalized_url {
+                    covered.insert((role.key(), url.clone()));
+                }
+                let mut occurrence = crate::policy_ledger::decide(
+                    policy,
+                    &revision,
+                    row.source_index,
+                    kind,
+                    row.raw_value.clone(),
+                    None,
+                    None,
+                    Basis::DeclaredInput,
+                    role,
+                );
+                if row.error.is_some() || row.normalized_url.is_none() {
+                    occurrence.admission_reason = "input_row_rejected".into();
+                    occurrence.input_error = row
+                        .error
+                        .clone()
+                        .or_else(|| Some("Importer supplied no accepted normalized URL".into()));
+                }
+                rows.push(occurrence);
+            }
+        }
+        for (role, kind, urls) in [
+            (Role::PageDocument, Kind::Seed, &self.config.seed_urls),
+            (
+                Role::SitemapDocument,
+                Kind::SitemapDocument,
+                &self.config.sitemap_urls,
+            ),
+        ] {
+            let revision = format!("initial:{}:explicit:{}", policy.policy_sha256(), role.key());
+            for (index, url) in urls.iter().enumerate() {
+                if !covered.contains(&(role.key(), url.clone())) {
+                    rows.push(crate::policy_ledger::decide(
+                        policy,
+                        &revision,
+                        index,
+                        kind,
+                        url.clone(),
+                        None,
+                        None,
+                        Basis::DeclaredInput,
+                        role,
+                    ));
+                }
+            }
+        }
+        rows
+    }
+
+    fn page_policy_rows(
+        &self,
+        page: &mut PageRecord,
+        policy: &crate::CompiledCrawlPolicy,
+        selected: bool,
+    ) -> anyhow::Result<Vec<crate::PolicyOccurrence>> {
+        use crate::{
+            CandidateSourceKind as Kind, PolicyInputBasis as Basis, PolicyTaskRole as Role,
+        };
+        let revision = crate::policy_ledger::source_revision(page)?;
+        let complete = page.final_status == Some(200)
+            && page.error.is_none()
+            && !page.truncated
+            && !page.blocked_by_robots
+            && page.pdf.as_ref().is_none_or(|pdf| pdf.annotations_complete);
+        let observation = page
+            .policy
+            .as_mut()
+            .context("Native policy task produced no admission evidence")?;
+        observation.source_revision = revision.clone();
+        observation.candidates_complete = complete;
+        let expand = observation.effective_can_expand && complete;
+        let mut rows = observation.redirect_decisions.clone();
+        let mut candidates = Vec::new();
+        for link in &page.links {
+            if link.kind == "pdf_annotation" && page.pdf.is_some() {
+                continue;
+            }
+            let kind = if link.kind == "anchor" {
+                Kind::Anchor
+            } else if link.kind == "pdf_annotation" {
+                Kind::PdfAnnotation
+            } else {
+                Kind::Resource
+            };
+            let (raw, basis) = link
+                .raw_href
+                .as_ref()
+                .map(|value| (value.clone(), Basis::ObservedAttribute))
+                .unwrap_or_else(|| (link.url.clone(), Basis::ResolvedLegacyFallback));
+            candidates.push((kind, raw, basis));
+        }
+        if let Some(pdf) = &page.pdf {
+            candidates.extend(pdf.annotation_links.iter().map(|link| {
+                (
+                    Kind::PdfAnnotation,
+                    link.raw_uri.clone(),
+                    Basis::PdfAnnotationUri,
+                )
+            }));
+        }
+        let candidate_count = candidates.len();
+        for (index, (kind, raw, basis)) in candidates.into_iter().enumerate() {
+            let mut row = crate::policy_ledger::decide(
+                policy,
+                &revision,
+                index,
+                kind,
+                raw,
+                page.document_base_url
+                    .clone()
+                    .or_else(|| Some(page.document_url().into())),
+                Some(page.url.clone()),
+                basis,
+                Role::PageDocument,
+            );
+            if row.admission_reason == "pending_admission" {
+                row.admission_reason = if selected {
+                    "selected_no_expansion"
+                } else if !self.config.crawl_links {
+                    "crawl_links_disabled"
+                } else if self
+                    .config
+                    .max_depth
+                    .is_some_and(|limit| page.depth >= limit)
+                {
+                    "depth_limit"
+                } else if !complete {
+                    "source_incomplete"
+                } else if !expand {
+                    "source_check_only"
+                } else {
+                    "pending_admission"
+                }
+                .into();
+            }
+            rows.push(row);
+        }
+        // Relationships keep their actual graph identity and remain observation-only.
+        for (index, relationship) in page.link_relationships.iter().enumerate() {
+            let mut row = crate::policy_ledger::decide(
+                policy,
+                &revision,
+                candidate_count + index,
+                Kind::Relationship,
+                relationship.url.clone(),
+                None,
+                Some(page.url.clone()),
+                Basis::ResolvedLegacyFallback,
+                Role::ObservationOnly,
+            );
+            if row.admission_reason == "pending_admission" {
+                row.admission_reason = "observation_only".into();
+            }
+            rows.push(row);
+        }
+        page.policy
+            .as_mut()
+            .expect("observed policy")
+            .candidate_count = rows.len();
+        Ok(rows)
+    }
+
+    fn discovery_seeds(&self) -> anyhow::Result<Vec<DiscoveryEntry>> {
+        if self.policy.is_some() {
+            let mut origins = HashSet::new();
+            let mut entries = Vec::new();
+            if self.config.crawl_links
+                && self.config.discover_sitemaps
+                && self.config.obey_robots
+                && let Some(store) = &self.store
+            {
+                for task in store.pending()? {
+                    if let Some(url) = normalize_url(&task.url, None)
+                        && origins.insert(origin(&url))
+                    {
+                        entries.push(DiscoveryEntry {
+                            kind: DiscoveryKind::Robots,
+                            url: format!("{}/", origin(&url)),
+                        });
+                    }
+                }
+            }
+            return Ok(entries);
+        }
         let mut entries = Vec::new();
         if self.config.crawl_links && self.config.discover_sitemaps && self.config.obey_robots {
             let mut origins = HashSet::new();
@@ -628,7 +911,7 @@ impl Crawler {
             kind: DiscoveryKind::Sitemap,
             url: url.clone(),
         }));
-        entries
+        Ok(entries)
     }
 
     async fn run_discovery(
@@ -639,7 +922,7 @@ impl Crawler {
         initial: (usize, usize),
         generation: Option<u64>,
     ) -> anyhow::Result<DiscoveryProgress> {
-        let seeds = self.discovery_seeds();
+        let seeds = self.discovery_seeds()?;
         let mut progress = DiscoveryProgress::default();
         let (mut queue, mut discovered, mut completed_sitemaps) = if let Some(store) = &self.store {
             store.initialize_discovery(&seeds)?;
@@ -671,6 +954,7 @@ impl Crawler {
             robots: self.robots.clone(),
             rate: self.rate.clone(),
             pdf_slots: self.pdf_slots.clone(),
+            policy: self.policy.clone(),
             #[cfg(test)]
             pdf_parse_hook: self.pdf_parse_hook.clone(),
         };
@@ -706,16 +990,49 @@ impl Crawler {
             // Pause deliberately does not drop this future. Cancel retains the
             // existing abort behavior and leaves this unit pending in storage.
             let mut output = tokio::select! {
-                output = self.discover_unit(&entry, &context) => output,
+                output = self.discover_unit(&entry, &context) => output?,
                 _ = control.cancelled() => break,
             };
-            output.pages.retain(|page| {
-                self.filters.allows(&page.url) && page_seen.insert(page.url.clone())
-            });
-            output
-                .children
-                .retain(|child| discovered.insert(child.clone()));
-            if let Some(store) = &self.store {
+            if self.policy.is_some()
+                && let Some(store) = &self.store
+            {
+                let revision = output
+                    .policy_revision
+                    .as_deref()
+                    .context("Policy discovery produced no source revision")?;
+                (output.pages, output.children) = store.complete_discovery_with_policy(
+                    &entry,
+                    &mut output.policy_rows,
+                    (revision, output.policy_complete),
+                    &output.warnings,
+                    generation.expect("stored generation"),
+                    &self.policy_limits,
+                )?;
+                for page in &output.pages {
+                    page_seen.insert(page.url.clone());
+                }
+                for child in &output.children {
+                    discovered.insert(child.clone());
+                }
+                if let Some(ledger) = store.policy_ledger_summary()? {
+                    emit(
+                        events,
+                        CrawlEvent::PolicyProgress {
+                            ledger: Box::new(ledger),
+                        },
+                    );
+                }
+            } else {
+                output.pages.retain(|page| {
+                    self.filters.allows(&page.url) && page_seen.insert(page.url.clone())
+                });
+                output
+                    .children
+                    .retain(|child| discovered.insert(child.clone()));
+            }
+            if self.policy.is_none()
+                && let Some(store) = &self.store
+            {
                 store.complete_discovery(
                     &entry,
                     &output.pages,
@@ -758,22 +1075,49 @@ impl Crawler {
         &self,
         entry: &DiscoveryEntry,
         context: &FetchContext,
-    ) -> DiscoveryOutput {
-        let mut output = DiscoveryOutput::default();
+    ) -> anyhow::Result<DiscoveryOutput> {
+        let mut output = DiscoveryOutput {
+            policy_revision: Some(format!("protocol:{}:{}", entry.kind.as_str(), entry.url)),
+            ..Default::default()
+        };
         let Some(parsed) = normalize_url(&entry.url, None) else {
             output
                 .warnings
                 .push(format!("Invalid sitemap URL {}", entry.url));
-            return output;
+            return Ok(output);
         };
-        if !same_scope(&parsed, &self.seeds, self.config.include_subdomains) {
+        if self.policy.is_none()
+            && !same_scope(&parsed, &self.seeds, self.config.include_subdomains)
+        {
             output.warnings.push(format!(
                 "Sitemap outside configured scope skipped: {}",
                 entry.url
             ));
-            return output;
+            return Ok(output);
         }
         if entry.kind == DiscoveryKind::Robots {
+            if let Some(policy) = &self.policy {
+                let robots = self.robots.get(&parsed).await;
+                output.policy_complete = robots.warning.is_none();
+                let revision = output
+                    .policy_revision
+                    .as_deref()
+                    .expect("protocol revision");
+                for (index, url) in robots.sitemaps.iter().enumerate() {
+                    output.policy_rows.push(crate::policy_ledger::decide(
+                        policy,
+                        revision,
+                        index,
+                        crate::CandidateSourceKind::SitemapDocument,
+                        url.clone(),
+                        None,
+                        Some(entry.url.clone()),
+                        crate::PolicyInputBasis::DeclaredInput,
+                        crate::PolicyTaskRole::SitemapDocument,
+                    ));
+                }
+                return Ok(output);
+            }
             output
                 .children
                 .extend(
@@ -787,15 +1131,28 @@ impl Crawler {
                             url: url.clone(),
                         }),
                 );
-            return output;
+            return Ok(output);
         }
         let (page, body) = context
             .document(QueueEntry {
                 url: parsed.to_string(),
                 depth: 0,
                 discovered_from: None,
+                admission: if self.policy.is_some() {
+                    self.store
+                        .as_ref()
+                        .context("Native policy discovery requires durable storage")?
+                        .task_policy(crate::PolicyTaskRole::SitemapDocument, &entry.url)?
+                } else {
+                    None
+                },
             })
             .await;
+        if let Some(observation) = &page.policy {
+            output
+                .policy_rows
+                .extend(observation.redirect_decisions.clone());
+        }
         if page.error.is_some()
             || page.final_status != Some(200)
             || page.truncated
@@ -807,11 +1164,52 @@ impl Crawler {
                 page.error
                     .unwrap_or_else(|| format!("status {:?}", page.final_status)),
             ));
-            return output;
+            return Ok(output);
         }
-        match parse_sitemap(&body.unwrap_or_default()) {
+        let body = body.unwrap_or_default();
+        output.policy_revision = Some(crate::policy_ledger::digest(format!(
+            "sitemap:{}:{body}",
+            entry.url
+        )));
+        match parse_sitemap(&body) {
             Ok(sitemap) => {
-                for loc in sitemap.locations {
+                output.policy_complete = true;
+                for (index, loc) in sitemap.locations.into_iter().enumerate() {
+                    if let Some(policy) = &self.policy {
+                        let role = if sitemap.is_index {
+                            crate::PolicyTaskRole::SitemapDocument
+                        } else {
+                            crate::PolicyTaskRole::PageDocument
+                        };
+                        let kind = if sitemap.is_index {
+                            crate::CandidateSourceKind::SitemapDocument
+                        } else {
+                            crate::CandidateSourceKind::SitemapLocation
+                        };
+                        let mut row = crate::policy_ledger::decide(
+                            policy,
+                            output.policy_revision.as_deref().expect("XML revision"),
+                            index,
+                            kind,
+                            loc,
+                            None,
+                            Some(entry.url.clone()),
+                            crate::PolicyInputBasis::ParserObservedXml,
+                            role,
+                        );
+                        let xml_allowed = page.policy.as_ref().is_some_and(|observation| {
+                            observation.admission.can_discover_xml
+                                && observation
+                                    .redirect_decisions
+                                    .iter()
+                                    .all(|row| row.decision.folder_internal)
+                        });
+                        if !xml_allowed && row.admission_reason == "pending_admission" {
+                            row.admission_reason = "source_check_only".into();
+                        }
+                        output.policy_rows.push(row);
+                        continue;
+                    }
                     let Some(parsed) = normalize_url(&loc, None) else {
                         continue;
                     };
@@ -828,6 +1226,7 @@ impl Crawler {
                             url: parsed.to_string(),
                             depth: 0,
                             discovered_from: Some(entry.url.clone()),
+                            admission: None,
                         });
                     }
                 }
@@ -836,7 +1235,7 @@ impl Crawler {
                 .warnings
                 .push(format!("Invalid sitemap XML at {}: {error}", entry.url)),
         }
-        output
+        Ok(output)
     }
 }
 
@@ -845,6 +1244,9 @@ struct DiscoveryOutput {
     pages: Vec<QueueEntry>,
     children: Vec<DiscoveryEntry>,
     warnings: Vec<String>,
+    policy_rows: Vec<crate::PolicyOccurrence>,
+    policy_revision: Option<String>,
+    policy_complete: bool,
 }
 
 #[derive(Default)]
@@ -886,6 +1288,7 @@ struct FetchContext {
     robots: Arc<RobotsCache>,
     rate: Arc<RateLimiter>,
     pdf_slots: Arc<Semaphore>,
+    policy: Option<Arc<crate::CompiledCrawlPolicy>>,
     #[cfg(test)]
     pdf_parse_hook: Option<PdfParseHook>,
 }
@@ -901,6 +1304,27 @@ impl FetchContext {
             indexability_agent: self.config.indexability_agent.clone(),
             ..Default::default()
         };
+        if let Some(policy) = &self.policy {
+            let Some(admission) = entry.admission else {
+                page.error = Some("Native policy admission missing; request was not made".into());
+                return (page, None);
+            };
+            if let Err(error) =
+                admission.validate(policy.policy_sha256(), &page.url, admission.task_role)
+            {
+                page.error = Some(error.to_string());
+                return (page, None);
+            }
+            let can_expand = admission.can_expand;
+            page.policy = Some(crate::PagePolicyObservation {
+                admission,
+                effective_can_expand: can_expand,
+                redirect_decisions: Vec::new(),
+                source_revision: String::new(),
+                candidates_complete: false,
+                candidate_count: 0,
+            });
+        }
         let Some(mut current) = normalize_url(&entry.url, None) else {
             page.error = Some("Invalid HTTP(S) URL".into());
             set_indexability(&mut page);
@@ -987,9 +1411,47 @@ impl FetchContext {
                     .headers()
                     .get(reqwest::header::LOCATION)
                     .and_then(|value| value.to_str().ok());
+                // Observe literal Location before parser/loop/limit stops. A
+                // sitemap protocol response has no retained PageRecord later.
+                let redirect_decision =
+                    if let (Some(policy), Some(location)) = (&self.policy, location) {
+                        let observation = page.policy.as_mut().expect("validated policy admission");
+                        let revision = format!("redirect:{}", observation.admission.occurrence_id);
+                        let mut decision = crate::policy_ledger::decide(
+                            policy,
+                            &revision,
+                            page.redirect_chain.len() + 1,
+                            crate::CandidateSourceKind::Redirect,
+                            location.into(),
+                            Some(current.to_string()),
+                            Some(page.url.clone()),
+                            crate::PolicyInputBasis::ObservedRedirectLocation,
+                            crate::PolicyTaskRole::ObservationOnly,
+                        );
+                        observation.effective_can_expand &= decision.decision.traverse;
+                        decision.admission_reason =
+                            if decision.decision.decision == crate::CrawlPolicyDecisionKind::Deny {
+                                "redirect_denied"
+                            } else {
+                                "redirect_followed"
+                            }
+                            .into();
+                        let index = observation.redirect_decisions.len();
+                        observation.redirect_decisions.push(decision);
+                        Some(index)
+                    } else {
+                        None
+                    };
                 let Some(target) =
                     location.and_then(|location| normalize_url(location, Some(&current)))
                 else {
+                    if let Some(index) = redirect_decision {
+                        page.policy
+                            .as_mut()
+                            .expect("observed policy")
+                            .redirect_decisions[index]
+                            .admission_reason = "redirect_invalid".into();
+                    }
                     page.error = Some("Redirect has no valid HTTP(S) Location".into());
                     break;
                 };
@@ -1001,11 +1463,25 @@ impl FetchContext {
                 page.final_url = target.to_string();
                 page.final_status = None;
                 if !visited.insert(target.to_string()) {
+                    if let Some(index) = redirect_decision {
+                        page.policy
+                            .as_mut()
+                            .expect("observed policy")
+                            .redirect_decisions[index]
+                            .admission_reason = "redirect_stopped_loop".into();
+                    }
                     page.error = Some("Redirect loop detected".into());
                     page.final_status = None;
                     break;
                 }
                 if page.redirect_chain.len() > self.config.max_redirects {
+                    if let Some(index) = redirect_decision {
+                        page.policy
+                            .as_mut()
+                            .expect("observed policy")
+                            .redirect_decisions[index]
+                            .admission_reason = "redirect_stopped_limit".into();
+                    }
                     page.error = Some(format!(
                         "Redirect limit ({}) exceeded",
                         self.config.max_redirects
@@ -1013,7 +1489,23 @@ impl FetchContext {
                     page.final_status = None;
                     break;
                 }
-                if !same_scope(&target, &self.seeds, self.config.include_subdomains)
+                if redirect_decision.is_some_and(|index| {
+                    page.policy
+                        .as_ref()
+                        .expect("observed policy")
+                        .redirect_decisions[index]
+                        .decision
+                        .decision
+                        == crate::CrawlPolicyDecisionKind::Deny
+                }) {
+                    page.warnings.push(
+                        "Redirect target denied by native crawl policy; no target request was made"
+                            .into(),
+                    );
+                    break;
+                }
+                if self.policy.is_none()
+                    && !same_scope(&target, &self.seeds, self.config.include_subdomains)
                     && !self.config.check_external
                 {
                     page.warnings.push(
@@ -1090,6 +1582,7 @@ impl FetchContext {
                         text: format!("PDF URI annotation (page {})", link.page),
                         internal: same_scope(&url, &self.seeds, self.config.include_subdomains),
                         kind: "pdf_annotation".into(),
+                        raw_href: Some(link.raw_uri.clone()),
                         ..Default::default()
                     });
                 }
@@ -1192,6 +1685,100 @@ mod tests {
     use lopdf::dictionary;
     use std::sync::{Condvar, Mutex};
     use tokio::io::{AsyncReadExt, AsyncWriteExt};
+
+    #[test]
+    fn pdf_policy_candidates_keep_raw_uri_and_rejected_actions_without_false_completeness() {
+        let crawler = Crawler::new(CrawlConfig {
+            seed_urls: vec!["https://example.org/document.pdf".into()],
+            crawl_policy: Some(crate::CrawlPolicyConfig {
+                scope: crate::CrawlScopeConfig {
+                    roots: vec![crate::CrawlScopeRoot {
+                        origin: "https://example.org".into(),
+                        subdomains: false,
+                        folders: vec!["/".into()],
+                        exact_paths: vec![],
+                    }],
+                    ..Default::default()
+                },
+                ..Default::default()
+            }),
+            ..Default::default()
+        })
+        .unwrap();
+        let policy = crawler.policy.as_ref().unwrap();
+        let initial = crate::policy_ledger::decide(
+            policy,
+            "initial-pdf",
+            0,
+            crate::CandidateSourceKind::Seed,
+            "https://example.org/document.pdf".into(),
+            None,
+            None,
+            crate::PolicyInputBasis::DeclaredInput,
+            crate::PolicyTaskRole::PageDocument,
+        );
+        let admission = crate::policy_ledger::admission(&initial).unwrap();
+        let mut page = PageRecord {
+            url: admission.fetch_url.clone(),
+            final_url: admission.fetch_url.clone(),
+            final_status: Some(200),
+            content_type: "application/pdf".into(),
+            links: vec![crate::LinkRecord {
+                url: "https://example.org/next#part".into(),
+                kind: "pdf_annotation".into(),
+                ..Default::default()
+            }],
+            pdf: Some(crate::PdfRecord {
+                annotations_complete: true,
+                status: crate::ResourceAnalysisStatus::Complete,
+                annotation_links: vec![
+                    crate::PdfAnnotationLink {
+                        page: 1,
+                        raw_uri: "next#part".into(),
+                        url: Some("https://example.org/next".into()),
+                    },
+                    crate::PdfAnnotationLink {
+                        page: 1,
+                        raw_uri: "#local".into(),
+                        url: Some("https://example.org/document.pdf".into()),
+                    },
+                    crate::PdfAnnotationLink {
+                        page: 2,
+                        raw_uri: "ftp://example.org/unfetchable".into(),
+                        url: None,
+                    },
+                ],
+                ..Default::default()
+            }),
+            policy: Some(crate::PagePolicyObservation {
+                admission,
+                effective_can_expand: true,
+                redirect_decisions: vec![],
+                source_revision: String::new(),
+                candidates_complete: false,
+                candidate_count: 0,
+            }),
+            ..Default::default()
+        };
+        let rows = crawler.page_policy_rows(&mut page, policy, false).unwrap();
+        assert_eq!(rows.len(), 3);
+        assert!(rows.iter().all(|row| row.input_basis
+            == crate::PolicyInputBasis::PdfAnnotationUri
+            && row.raw_value_observed));
+        assert_eq!(rows[0].decision.raw_value, "next#part");
+        assert_eq!(
+            rows[0].decision.resolved_discovered_url.as_deref(),
+            Some("https://example.org/next#part")
+        );
+        assert_eq!(rows[0].admission_reason, "pending_admission");
+        assert_eq!(rows[2].admission_reason, "policy_denied");
+        assert!(page.policy.as_ref().unwrap().candidates_complete);
+        page.pdf.as_mut().unwrap().annotations_complete = false;
+        let rows = crawler.page_policy_rows(&mut page, policy, false).unwrap();
+        assert!(!page.policy.as_ref().unwrap().candidates_complete);
+        assert_eq!(rows[0].admission_reason, "source_incomplete");
+        assert_eq!(rows[2].admission_reason, "policy_denied");
+    }
 
     struct ParserRelease(Arc<(Mutex<bool>, Condvar)>);
 

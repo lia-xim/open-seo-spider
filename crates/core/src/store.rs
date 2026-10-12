@@ -14,6 +14,7 @@ pub(crate) struct QueueEntry {
     pub url: String,
     pub depth: usize,
     pub discovered_from: Option<String>,
+    pub admission: Option<crate::PolicyAdmission>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -23,7 +24,7 @@ pub(crate) enum DiscoveryKind {
 }
 
 impl DiscoveryKind {
-    fn as_str(self) -> &'static str {
+    pub(crate) fn as_str(self) -> &'static str {
         match self {
             Self::Robots => "robots",
             Self::Sitemap => "sitemap",
@@ -60,6 +61,7 @@ impl CrawlStore {
             CREATE TABLE IF NOT EXISTS recrawl_base(id INTEGER PRIMARY KEY CHECK(id=1),snapshot BLOB NOT NULL);
             CREATE TABLE IF NOT EXISTS recrawl_pages(url TEXT PRIMARY KEY,ordinal INTEGER NOT NULL,payload_sha256 TEXT NOT NULL,inherited INTEGER NOT NULL);
             CREATE TABLE IF NOT EXISTS recrawl_targets(url TEXT PRIMARY KEY,admitted_attempts INTEGER NOT NULL DEFAULT 0,last_admitted_generation INTEGER,committed_generation INTEGER,committed_payload_sha256 TEXT);")?;
+        connection.execute_batch(crate::policy_ledger::SCHEMA)?;
         Ok(Self {
             connection: Mutex::new(connection),
         })
@@ -109,6 +111,22 @@ impl CrawlStore {
             _ => false,
         };
         let plan = load_run_plan(&transaction)?;
+        let policy_ledger = if let Some(policy) = config
+            .as_ref()
+            .and_then(|config| config.crawl_policy.as_ref())
+        {
+            crate::policy_ledger::verify(&transaction, &crate::CompiledCrawlPolicy::new(policy)?)?;
+            crate::policy_ledger::summary(&transaction)?
+        } else {
+            None
+        };
+        if checkpoint_valid
+            && checkpoint
+                .as_ref()
+                .is_some_and(|checkpoint| checkpoint.policy_ledger != policy_ledger)
+        {
+            bail!("Terminal policy ledger differs from checkpoint binding");
+        }
         let operation = if matches!(plan, RunPlan::SelectedRecrawl(_)) {
             verify_recrawl_rows(&transaction, &plan)?;
             recrawl_operation(&transaction)?
@@ -136,6 +154,7 @@ impl CrawlStore {
             discovery_complete,
             checkpoint_valid,
             operation,
+            policy_ledger,
         })
     }
 
@@ -248,6 +267,19 @@ impl CrawlStore {
                 "INSERT INTO recrawl_targets(url) VALUES(?1)",
                 [&target.requested_url],
             )?;
+            if let Some(admission) = &target.policy_admission {
+                crate::policy_ledger::save_admission(&transaction, admission)?;
+            }
+        }
+        if let Some(policy) = &prepared.config.crawl_policy {
+            let policy = crate::CompiledCrawlPolicy::new(policy)?;
+            crate::policy_ledger::initialize(
+                &transaction,
+                policy.policy_sha256(),
+                prepared.base_report.policy_ledger.as_ref(),
+                true,
+            )?;
+            put_metadata(&transaction, "policy_initialized", "true")?;
         }
         put_metadata(&transaction, "discovery_initialized", "true")?;
         put_metadata(&transaction, "discovery_complete", "true")?;
@@ -391,6 +423,12 @@ impl CrawlStore {
             .optional()?;
         if let Some(saved) = saved {
             let mut old: CrawlConfig = serde_json::from_str(&saved)?;
+            if let Some(policy) = &old.crawl_policy {
+                crate::policy_ledger::verify(
+                    &connection,
+                    &crate::CompiledCrawlPolicy::new(policy)?,
+                )?;
+            }
             // Explicit resume may add deterministic manual-seed provenance to
             // legacy configs. Read-only recovery never runs this migration.
             old.prepare_input_lists()?;
@@ -443,6 +481,132 @@ impl CrawlStore {
         Ok(count as usize)
     }
 
+    pub fn policy_ledger_summary(&self) -> anyhow::Result<Option<crate::PolicyLedgerSummary>> {
+        let connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        crate::policy_ledger::summary(&connection)
+    }
+
+    pub fn policy_occurrences(
+        &self,
+        after_sequence: Option<u64>,
+        limit: usize,
+    ) -> anyhow::Result<crate::PolicyOccurrencePage> {
+        let mut connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        let config: Option<CrawlConfig> = metadata(&transaction, "config")?;
+        let bytes = config
+            .and_then(|config| config.live_policy_limits)
+            .unwrap_or_default()
+            .max_page_bytes;
+        let page = crate::policy_ledger::page(&transaction, after_sequence, limit, bytes)?;
+        transaction.commit()?;
+        Ok(page)
+    }
+
+    /// One snapshot across every page. For exports concurrent with a writer,
+    /// use a separate open_read_only store; visitor must not reenter this store.
+    pub fn visit_policy_occurrences(
+        &self,
+        limit: usize,
+        mut visitor: impl FnMut(&crate::PolicyOccurrencePage) -> anyhow::Result<()>,
+    ) -> anyhow::Result<Option<crate::PolicyLedgerSummary>> {
+        let mut connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        let config: Option<CrawlConfig> = metadata(&transaction, "config")?;
+        if let Some(policy) = config
+            .as_ref()
+            .and_then(|config| config.crawl_policy.as_ref())
+        {
+            crate::policy_ledger::verify(&transaction, &crate::CompiledCrawlPolicy::new(policy)?)?;
+        }
+        let bytes = config
+            .and_then(|config| config.live_policy_limits)
+            .unwrap_or_default()
+            .max_page_bytes;
+        let mut cursor = None;
+        let mut snapshot = None;
+        loop {
+            let page = crate::policy_ledger::page(&transaction, cursor, limit, bytes)?;
+            if snapshot.is_none() {
+                snapshot = page.ledger.clone();
+            }
+            visitor(&page)?;
+            if !page.has_more {
+                break;
+            }
+            cursor = page.next_sequence;
+        }
+        transaction.commit()?;
+        Ok(snapshot)
+    }
+
+    pub(crate) fn task_policy(
+        &self,
+        role: crate::PolicyTaskRole,
+        url: &str,
+    ) -> anyhow::Result<Option<crate::PolicyAdmission>> {
+        let connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        crate::policy_ledger::saved_admission(&connection, role, url)
+    }
+
+    pub(crate) fn initialize_policy(
+        &self,
+        policy: &crate::CompiledCrawlPolicy,
+        rows: &mut [crate::PolicyOccurrence],
+        limits: &crate::LiveCrawlPolicyLimits,
+        generation: u64,
+    ) -> anyhow::Result<()> {
+        let mut connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        require_generation(&transaction, generation)?;
+        if metadata_text(&transaction, "policy_initialized")?.as_deref() == Some("true") {
+            crate::policy_ledger::verify(&transaction, policy)?;
+            return Ok(());
+        }
+        crate::policy_ledger::initialize(&transaction, policy.policy_sha256(), None, false)?;
+        crate::policy_ledger::commit(&transaction, rows, generation, limits, None)?;
+        for row in rows {
+            if let Some(url) = &row.scheduled_fetch_url {
+                match row.task_role {
+                    crate::PolicyTaskRole::PageDocument => {
+                        transaction.execute(
+                            "INSERT INTO frontier(url,depth,discovered_from) VALUES(?1,0,NULL)",
+                            [url],
+                        )?;
+                    }
+                    crate::PolicyTaskRole::SitemapDocument => {
+                        enqueue_discovery(
+                            &transaction,
+                            &DiscoveryEntry {
+                                kind: DiscoveryKind::Sitemap,
+                                url: url.clone(),
+                            },
+                        )?;
+                    }
+                    crate::PolicyTaskRole::ObservationOnly => {}
+                }
+            }
+        }
+        put_metadata(&transaction, "policy_initialized", "true")?;
+        transaction.commit()?;
+        Ok(())
+    }
+
     pub(crate) fn enqueue(&self, entry: &QueueEntry) -> anyhow::Result<()> {
         self.connection
             .lock()
@@ -483,7 +647,7 @@ impl CrawlStore {
             enqueue_discovery(&transaction, entry)?;
         }
         put_metadata(&transaction, "discovery_initialized", "true")?;
-        if entries.is_empty() {
+        if discovery_pending_count(&transaction)? == 0 {
             put_metadata(&transaction, "discovery_complete", "true")?;
         }
         transaction.commit()?;
@@ -590,12 +754,108 @@ impl CrawlStore {
 
     /// Stores the result and every newly discovered URL in one transaction. This
     /// prevents an interrupted crawl from losing links found in a completed page.
+    pub(crate) fn complete_discovery_with_policy(
+        &self,
+        entry: &DiscoveryEntry,
+        rows: &mut [crate::PolicyOccurrence],
+        source: (&str, bool),
+        warnings: &[String],
+        generation: u64,
+        limits: &crate::LiveCrawlPolicyLimits,
+    ) -> anyhow::Result<(Vec<QueueEntry>, Vec<DiscoveryEntry>)> {
+        let mut connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        require_generation(&transaction, generation)?;
+        crate::policy_ledger::commit(&transaction, rows, generation, limits, Some(source))?;
+        let mut pages = Vec::new();
+        let mut children = Vec::new();
+        for row in rows {
+            if let Some(url) = &row.scheduled_fetch_url {
+                match row.task_role {
+                    crate::PolicyTaskRole::PageDocument => {
+                        transaction.execute(
+                            "INSERT INTO frontier(url,depth,discovered_from) VALUES(?1,0,?2)",
+                            params![url, entry.url],
+                        )?;
+                        pages.push(QueueEntry {
+                            url: url.clone(),
+                            depth: 0,
+                            discovered_from: Some(entry.url.clone()),
+                            admission: crate::policy_ledger::saved_admission(
+                                &transaction,
+                                row.task_role,
+                                url,
+                            )?,
+                        });
+                    }
+                    crate::PolicyTaskRole::SitemapDocument => {
+                        let child = DiscoveryEntry {
+                            kind: DiscoveryKind::Sitemap,
+                            url: url.clone(),
+                        };
+                        enqueue_discovery(&transaction, &child)?;
+                        children.push(child);
+                    }
+                    crate::PolicyTaskRole::ObservationOnly => {}
+                }
+            }
+        }
+        transaction.execute(
+            "UPDATE discovery_frontier SET done=1 WHERE kind=?1 AND url=?2",
+            params![entry.kind.as_str(), entry.url],
+        )?;
+        let mut saved: Vec<String> =
+            metadata(&transaction, "discovery_warnings")?.unwrap_or_default();
+        for warning in warnings {
+            if !saved.contains(warning) {
+                saved.push(warning.clone());
+            }
+        }
+        put_metadata(
+            &transaction,
+            "discovery_warnings",
+            &serde_json::to_string(&saved)?,
+        )?;
+        if discovery_pending_count(&transaction)? == 0 {
+            put_metadata(&transaction, "discovery_complete", "true")?;
+        }
+        transaction.commit()?;
+        Ok((pages, children))
+    }
+
     pub(crate) fn complete(
         &self,
         page: &PageRecord,
         discovered: &[QueueEntry],
         generation: u64,
     ) -> anyhow::Result<()> {
+        self.complete_impl(page, discovered, generation, None)
+            .map(|_| ())
+    }
+
+    pub(crate) fn complete_with_policy(
+        &self,
+        page: &PageRecord,
+        rows: &mut [crate::PolicyOccurrence],
+        generation: u64,
+        limits: &crate::LiveCrawlPolicyLimits,
+    ) -> anyhow::Result<Vec<QueueEntry>> {
+        self.complete_impl(page, &[], generation, Some((rows, limits)))
+    }
+
+    fn complete_impl(
+        &self,
+        page: &PageRecord,
+        discovered: &[QueueEntry],
+        generation: u64,
+        policy: Option<(
+            &mut [crate::PolicyOccurrence],
+            &crate::LiveCrawlPolicyLimits,
+        )>,
+    ) -> anyhow::Result<Vec<QueueEntry>> {
         let page_text = serde_json::to_string(page)?;
         let mut connection = self
             .connection
@@ -603,8 +863,51 @@ impl CrawlStore {
             .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
         let transaction = connection.transaction()?;
         require_generation(&transaction, generation)?;
+        let mut scheduled = Vec::new();
+        if let Some((rows, limits)) = policy {
+            let observation = page
+                .policy
+                .as_ref()
+                .context("Policy response lacks saved task admission")?;
+            let saved = crate::policy_ledger::saved_admission(
+                &transaction,
+                crate::PolicyTaskRole::PageDocument,
+                &page.url,
+            )?
+            .context("Policy frontier admission missing")?;
+            if saved != observation.admission {
+                bail!("Policy response changed immutable initial permission");
+            }
+            crate::policy_ledger::commit(
+                &transaction,
+                rows,
+                generation,
+                limits,
+                Some((
+                    &observation.source_revision,
+                    observation.candidates_complete,
+                )),
+            )?;
+            for row in rows {
+                if let Some(url) = &row.scheduled_fetch_url {
+                    if row.task_role != crate::PolicyTaskRole::PageDocument {
+                        bail!("Page source scheduled invalid task role");
+                    }
+                    scheduled.push(QueueEntry {
+                        url: url.clone(),
+                        depth: page.depth + 1,
+                        discovered_from: Some(page.url.clone()),
+                        admission: crate::policy_ledger::saved_admission(
+                            &transaction,
+                            row.task_role,
+                            url,
+                        )?,
+                    });
+                }
+            }
+        }
         if metadata_text(&transaction, "operation_kind")?.as_deref() == Some("selected_recrawl") {
-            if !discovered.is_empty() {
+            if !discovered.is_empty() || !scheduled.is_empty() {
                 bail!("Selected recrawl cannot expand its frontier");
             }
             let target: (i64,Option<String>) = transaction.query_row("SELECT frontier.depth,frontier.discovered_from FROM frontier JOIN recrawl_targets ON frontier.url=recrawl_targets.url WHERE frontier.url=?1", [&page.url], |row| Ok((row.get(0)?,row.get(1)?)))?;
@@ -635,14 +938,14 @@ impl CrawlStore {
             params![page.url, page_text],
         )?;
         transaction.execute("UPDATE frontier SET done=1 WHERE url=?1", [&page.url])?;
-        for entry in discovered {
+        for entry in discovered.iter().chain(scheduled.iter()) {
             transaction.execute(
                 "INSERT OR IGNORE INTO frontier(url,depth,discovered_from) VALUES(?1,?2,?3)",
                 params![entry.url, entry.depth as i64, entry.discovered_from],
             )?;
         }
         transaction.commit()?;
-        Ok(())
+        Ok(scheduled)
     }
 
     pub(crate) fn pending(&self) -> anyhow::Result<Vec<QueueEntry>> {
@@ -664,10 +967,23 @@ impl CrawlStore {
                     url: row.get(0)?,
                     depth: row.get::<_, i64>(1)? as usize,
                     discovered_from: row.get(2)?,
+                    admission: None,
                 })
             })?
             .collect::<Result<Vec<_>, _>>()
             .context("Read saved frontier")
+            .and_then(|mut entries| {
+                if metadata_text(&connection, "policy_ledger")?.is_some() {
+                    for entry in &mut entries {
+                        entry.admission = crate::policy_ledger::saved_admission(
+                            &connection,
+                            crate::PolicyTaskRole::PageDocument,
+                            &entry.url,
+                        )?;
+                    }
+                }
+                Ok(entries)
+            })
     }
 
     pub fn pages(&self) -> anyhow::Result<Vec<PageRecord>> {
@@ -747,7 +1063,11 @@ impl CrawlStore {
             discovery_pending: discovery_pending_count(&transaction)?,
             discovery_complete: metadata_text(&transaction, "discovery_complete")?.as_deref()
                 == Some("true"),
+            policy_ledger: crate::policy_ledger::summary(&transaction)?,
         };
+        if report.policy_ledger != checkpoint.policy_ledger {
+            bail!("Report policy ledger differs from committed evidence");
+        }
         run.finished_at = Some(checkpoint.created_at.clone());
         run.outcome = Some(outcome);
         put_metadata(&transaction, "report", &report_text)?;
@@ -830,6 +1150,11 @@ fn verify_recrawl_rows(connection: &Connection, plan: &RunPlan) -> anyhow::Resul
     let run: Option<CrawlRunState> = metadata(connection, "run_state")?;
     let run_generation = run.map_or(0, |run| run.generation);
     let selected = plan.targets_set();
+    let target_by_url: std::collections::HashMap<_, _> = plan
+        .targets
+        .iter()
+        .map(|target| (target.requested_url.as_str(), target))
+        .collect();
     let current: usize = count(connection, "SELECT count(*) FROM recrawl_pages")?;
     if current != base.pages.len()
         || count(connection, "SELECT count(*) FROM recrawl_targets")? != plan.targets.len()
@@ -870,6 +1195,20 @@ fn verify_recrawl_rows(connection: &Connection, plan: &RunPlan) -> anyhow::Resul
                 || !matches!(frontier.2, 0 | 1)
             {
                 bail!("Selected frontier changed immutable parent discovery provenance");
+            }
+            let target = target_by_url
+                .get(page.url.as_str())
+                .context("Selected target missing")?;
+            if let Some(admission) = &target.policy_admission
+                && crate::policy_ledger::saved_admission(
+                    connection,
+                    crate::PolicyTaskRole::PageDocument,
+                    &page.url,
+                )?
+                .as_ref()
+                    != Some(admission)
+            {
+                bail!("Inherited policy admission changed immutable selected target permission");
             }
             let (attempts,last_admitted,committed,payload): (i64,Option<i64>,Option<i64>,Option<String>) = connection.query_row(
                 "SELECT admitted_attempts,last_admitted_generation,committed_generation,committed_payload_sha256 FROM recrawl_targets WHERE url=?1",
@@ -1061,9 +1400,136 @@ mod tests {
     use super::*;
     use crate::CrawlSummary;
 
+    #[test]
+    fn policy_stream_uses_one_wal_snapshot_while_another_generation_appends() {
+        let temp = tempfile::tempdir().unwrap();
+        let path = temp.path().join("stream.sqlite");
+        let writer = CrawlStore::open(&path).unwrap();
+        let policy_config = crate::CrawlPolicyConfig {
+            scope: crate::CrawlScopeConfig {
+                roots: vec![crate::CrawlScopeRoot {
+                    origin: "https://example.org".into(),
+                    subdomains: false,
+                    folders: vec!["/".into()],
+                    exact_paths: vec![],
+                }],
+                ..Default::default()
+            },
+            ..Default::default()
+        };
+        let policy = crate::CompiledCrawlPolicy::new(&policy_config).unwrap();
+        let config = CrawlConfig {
+            crawl_policy: Some(policy_config),
+            ..Default::default()
+        };
+        writer.prepare(&config).unwrap();
+        let generation = writer.begin_run("first").unwrap();
+        let make_row = |revision: &str, ordinal| {
+            let mut row = crate::policy_ledger::decide(
+                &policy,
+                revision,
+                ordinal,
+                crate::CandidateSourceKind::Anchor,
+                format!("https://example.org/item/{revision}/{ordinal}"),
+                None,
+                None,
+                crate::PolicyInputBasis::ObservedAttribute,
+                crate::PolicyTaskRole::ObservationOnly,
+            );
+            row.admission_reason = "observation_only".into();
+            row
+        };
+        let mut rows = (0..3)
+            .map(|index| make_row("first", index))
+            .collect::<Vec<_>>();
+        writer
+            .initialize_policy(
+                &policy,
+                &mut rows,
+                &crate::LiveCrawlPolicyLimits::default(),
+                generation,
+            )
+            .unwrap();
+        let original = writer.policy_ledger_summary().unwrap();
+        let reader = CrawlStore::open_read_only(&path).unwrap();
+        let mut seen = Vec::new();
+        let mut calls = 0;
+        let returned = reader
+            .visit_policy_occurrences(1, |page| {
+                assert_eq!(page.ledger, original);
+                calls += 1;
+                if calls == 1 {
+                    let generation = writer.begin_run("second").unwrap();
+                    let mut connection = writer.connection.lock().unwrap();
+                    let transaction = connection.transaction().unwrap();
+                    crate::policy_ledger::commit(
+                        &transaction,
+                        &mut [make_row("second", 0)],
+                        generation,
+                        &crate::LiveCrawlPolicyLimits::default(),
+                        None,
+                    )?;
+                    transaction.commit()?;
+                }
+                seen.extend(page.rows.iter().map(|row| (row.sequence, row.generation)));
+                Ok(())
+            })
+            .unwrap();
+        assert_eq!(returned, original);
+        assert_eq!(calls, 3);
+        assert_eq!(seen, vec![(1, 1), (2, 1), (3, 1)]);
+        assert_eq!(
+            writer.policy_ledger_summary().unwrap().unwrap().occurrences,
+            4
+        );
+        assert_eq!(
+            reader.policy_occurrences(Some(3), 1).unwrap().rows[0].generation,
+            2
+        );
+    }
+
+    #[test]
+    fn legacy_policy_stream_calls_empty_header_once_and_aborts_on_consumer_error() {
+        let temp = tempfile::tempdir().unwrap();
+        let path = temp.path().join("legacy-stream.sqlite");
+        let connection = Connection::open(&path).unwrap();
+        connection
+            .execute_batch("CREATE TABLE metadata(key TEXT PRIMARY KEY,value TEXT);")
+            .unwrap();
+        drop(connection);
+        let before = std::fs::read(&path).unwrap();
+        let store = CrawlStore::open_read_only(&path).unwrap();
+        let mut calls = 0;
+        assert_eq!(
+            store
+                .visit_policy_occurrences(1, |page| {
+                    calls += 1;
+                    assert!(page.ledger.is_none());
+                    assert!(page.rows.is_empty());
+                    assert!(!page.has_more);
+                    Ok(())
+                })
+                .unwrap(),
+            None
+        );
+        assert_eq!(calls, 1);
+        assert!(
+            store
+                .visit_policy_occurrences(1, |_| anyhow::bail!("disconnected fixture consumer"))
+                .is_err()
+        );
+        assert!(
+            store
+                .visit_policy_occurrences(0, |_| panic!("invalid limit must not emit"))
+                .is_err()
+        );
+        assert_eq!(std::fs::read(&path).unwrap(), before);
+    }
+
     fn report(config: CrawlConfig, pending: usize) -> CrawlReport {
         CrawlReport {
             operation: None,
+            policy_ledger: None,
             config,
             pages: Vec::new(),
             issues: Vec::new(),
@@ -1392,6 +1858,7 @@ mod tests {
                 url: "https://example.org/pending".into(),
                 depth: 0,
                 discovered_from: None,
+                admission: None,
             })
             .unwrap();
         store.initialize_discovery(&[]).unwrap();
@@ -1465,7 +1932,8 @@ mod tests {
                     &[QueueEntry {
                         url: "https://example.org/blocked".into(),
                         depth: 0,
-                        discovered_from: None
+                        discovered_from: None,
+                        admission: None,
                     }],
                     &[DiscoveryEntry {
                         kind: DiscoveryKind::Sitemap,

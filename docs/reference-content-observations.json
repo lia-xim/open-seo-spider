@@ -1,0 +1,852 @@
+{
+  "schema_version": 1,
+  "project": "Open SEO Spider",
+  "observed_at": "2026-10-12T13:29:02.537Z",
+  "status": "BOUNDED_ORIGINAL_REFERENCE_OBSERVED",
+  "full_vendor_parity": "NOT_PROVEN",
+  "independent_comparison": "NOT_RUN",
+  "reference": {
+    "product": "Screaming Frog SEO Spider",
+    "version": "24.3",
+    "execution": "ordinary_installed_windows_cli",
+    "licence_status": "Missing",
+    "exit_code": 0,
+    "timed_out": false,
+    "settings_modified_by_runner": false,
+    "GUI_session_controlled": false,
+    "flags_used": [
+      "--headless",
+      "--crawl",
+      "--output-folder",
+      "--export-format",
+      "--export-tabs"
+    ],
+    "requested_filters": [
+      "Content:All",
+      "Content:Exact Duplicates",
+      "Content:Near Duplicates",
+      "Content:Low Content Pages",
+      "Content:Readability Difficult",
+      "Content:Readability Very Difficult",
+      "Content:Lorem Ipsum Placeholder",
+      "Content:Soft 404 Pages"
+    ],
+    "selected_non_secret_runtime_parameters": {
+      "near_duplicate_checking": false,
+      "near_duplicate_threshold_percent": 90,
+      "only_indexable_for_duplicates": true,
+      "calculate_readability": true
+    }
+  },
+  "profile": {
+    "before_sha256": "1284aa1fbf678cef66d303e7e37bdab255ba042f9d5a9f9bea4d0b0bf1c9c368",
+    "after_sha256": "0730266305e0639ab1f0dd38eb77f8fe91797b96b99438f6c092fb671d84dccd",
+    "changed_keys": [
+      "analytics.last_sent"
+    ],
+    "settings_modified_by_runner": false,
+    "rollback_performed": false,
+    "private_byte_snapshots": true
+  },
+  "provenance": {
+    "original_fixture_json_sha256": "aa5d30d3c494e669c25ff3a04565427465e5dd174864fd5358dd39ee4136757c",
+    "private_raw_result_sha256": "a774fbffead82846d7072bd8f212235e52a2e8a29290b78a21d177756362e6e5",
+    "private_stdout_sha256": "04130226203c062ecbf46161ec9f793f0d7c0ecd6d1539b446bb19440b10673e",
+    "private_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "public_case_design": "independently_authored_owned_localhost_html",
+    "original_csvs": [
+      {
+        "original_file_name": "inhalt_alle.csv",
+        "argument": "Content:All",
+        "sha256": "ccc8502c7785ebcc2a3aa2ec8fc3931ace971cbc0fd1f4dfb7a19137ce2b7035",
+        "data_rows": 22
+      },
+      {
+        "original_file_name": "inhalt_exakte_duplikate.csv",
+        "argument": "Content:Exact Duplicates",
+        "sha256": "94563c0b519871eff90873bfa089b94e8ce2fff10b8320d19ec3013ee322ffbb",
+        "data_rows": 2
+      },
+      {
+        "original_file_name": "inhalt_lesbarkeit_schwierig.csv",
+        "argument": "Content:Readability Difficult",
+        "sha256": "f79def4a14b0d889a51f32fc830a98824e364e53d1ad605dbfdc78c4fcc4c5c6",
+        "data_rows": 0
+      },
+      {
+        "original_file_name": "inhalt_lorem_ipsumplatzhalter.csv",
+        "argument": "Content:Lorem Ipsum Placeholder",
+        "sha256": "976525e7f4488f02d413a8057c9e90739268ee9cc12a252f56b1b065aca2aa53",
+        "data_rows": 1
+      },
+      {
+        "original_file_name": "inhalt_nahduplikate.csv",
+        "argument": "Content:Near Duplicates",
+        "sha256": "ea7733cadcf2c12a63c9c847375fbbfe8903dd52ff44d545732d8843d4526683",
+        "data_rows": 0
+      },
+      {
+        "original_file_name": "inhalt_sehr_schwierig_lesbar.csv",
+        "argument": "Content:Readability Very Difficult",
+        "sha256": "e86cb959db637dc925594b74df4ab4b1ba24823ca2ecc959bf29cd70be00812b",
+        "data_rows": 2
+      },
+      {
+        "original_file_name": "inhalt_seiten_mit_geringem_inhalt.csv",
+        "argument": "Content:Low Content Pages",
+        "sha256": "c05080cfe2a22f6091edd225a063914970e167e28e9d950c50c00ccc55034ad6",
+        "data_rows": 6
+      },
+      {
+        "original_file_name": "inhalt_soft404seiten.csv",
+        "argument": "Content:Soft 404 Pages",
+        "sha256": "7ef3570eb1bea8ef5af6b122d6d608ebccba46438137d3b63ae58ac192d85ae0",
+        "data_rows": 1
+      }
+    ],
+    "private_artifact_location": "task work/content-analysis/reference-2026-10-12T13-28-52-481Z",
+    "normalize": "fixture URLs reduced to exact path; German decimal commas parsed; blank values remain null; no source case values are rewritten."
+  },
+  "authored_cases": [
+    {
+      "path": "/identical-a",
+      "supplied_text": "The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat.",
+      "html": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Controlled content text experiment</title></head><body><p>The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat.</p></body></html>",
+      "headers": {},
+      "purpose": "identical-a"
+    },
+    {
+      "path": "/identical-b",
+      "supplied_text": "The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat.",
+      "html": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Controlled content text experiment</title></head><body><p>The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat.</p></body></html>",
+      "headers": {},
+      "purpose": "identical-b"
+    },
+    {
+      "path": "/changed-one",
+      "supplied_text": "The dog sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat.",
+      "html": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Controlled content text experiment</title></head><body><p>The dog sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat.</p></body></html>",
+      "headers": {},
+      "purpose": "changed-one"
+    },
+    {
+      "path": "/same-text-markup",
+      "supplied_text": "The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat.",
+      "html": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Controlled content text experiment</title></head><body><p>The <em>cat</em> sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat.</p></body></html>",
+      "headers": {},
+      "purpose": "same-text-markup"
+    },
+    {
+      "path": "/noindex-identical",
+      "supplied_text": "The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat.",
+      "html": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Controlled content text experiment</title></head><body><p>The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat.</p></body></html>",
+      "headers": {
+        "X-Robots-Tag": "noindex"
+      },
+      "purpose": "noindex-identical"
+    },
+    {
+      "path": "/easy-en",
+      "supplied_text": "The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits.",
+      "html": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Controlled content text experiment</title></head><body><p>The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits. The dog runs. The cat sits.</p></body></html>",
+      "headers": {},
+      "purpose": "easy-en"
+    },
+    {
+      "path": "/hard-en",
+      "supplied_text": "Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization;",
+      "html": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Controlled content text experiment</title></head><body><p>Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization; Organizational institutionalization characterizes multidisciplinary interdependencies, experimental methodologies and representational conceptualization;</p></body></html>",
+      "headers": {},
+      "purpose": "hard-en"
+    },
+    {
+      "path": "/long-sentence",
+      "supplied_text": "The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and.",
+      "html": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Controlled content text experiment</title></head><body><p>The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and The cat sits on the mat and the dog runs in the park and.</p></body></html>",
+      "headers": {},
+      "purpose": "long-sentence"
+    },
+    {
+      "path": "/tiny",
+      "supplied_text": "The cat sits on the mat.",
+      "html": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Controlled content text experiment</title></head><body><p>The cat sits on the mat.</p></body></html>",
+      "headers": {},
+      "purpose": "tiny"
+    },
+    {
+      "path": "/empty",
+      "supplied_text": "",
+      "html": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Controlled content text experiment</title></head><body><p></p></body></html>",
+      "headers": {},
+      "purpose": "empty"
+    },
+    {
+      "path": "/de-easy",
+      "supplied_text": "Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus.",
+      "html": "<!doctype html><html lang=\"de\"><head><meta charset=\"utf-8\"><title>Controlled content text experiment</title></head><body><p>Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus. Der Hund ist im Haus.</p></body></html>",
+      "headers": {},
+      "purpose": "de-easy"
+    },
+    {
+      "path": "/fr-easy",
+      "supplied_text": "Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison.",
+      "html": "<!doctype html><html lang=\"fr\"><head><meta charset=\"utf-8\"><title>Controlled content text experiment</title></head><body><p>Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison. Le chat dort dans la maison.</p></body></html>",
+      "headers": {},
+      "purpose": "fr-easy"
+    },
+    {
+      "path": "/unicode-composed",
+      "supplied_text": "The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat.",
+      "html": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Controlled content text experiment</title></head><body><p>The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat.</p></body></html>",
+      "headers": {},
+      "purpose": "unicode-composed"
+    },
+    {
+      "path": "/unicode-decomposed",
+      "supplied_text": "The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat.",
+      "html": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Controlled content text experiment</title></head><body><p>The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat. The café has a cat.</p></body></html>",
+      "headers": {},
+      "purpose": "unicode-decomposed"
+    },
+    {
+      "path": "/hidden",
+      "supplied_text": "The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat.",
+      "html": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Controlled content text experiment</title></head><body><p>The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat.</p><div hidden>Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. Hidden text words. </div><div style=\"display:none\">Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. Invisible display words. </div></body></html>",
+      "headers": {},
+      "purpose": "hidden"
+    },
+    {
+      "path": "/script",
+      "supplied_text": "The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat.",
+      "html": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Controlled content text experiment</title></head><body><p>The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat.</p><script type=\"text/plain\">Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. Script text words. </script><style>/* Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words. Style text words.  */</style></body></html>",
+      "headers": {},
+      "purpose": "script"
+    },
+    {
+      "path": "/boilerplate-a",
+      "supplied_text": "The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat.",
+      "html": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Controlled content text experiment</title></head><body><nav>Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. </nav><p>The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat. The cat sits on the mat.</p><footer>Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. </footer></body></html>",
+      "headers": {},
+      "purpose": "boilerplate-a"
+    },
+    {
+      "path": "/boilerplate-b",
+      "supplied_text": "Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers.",
+      "html": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Controlled content text experiment</title></head><body><nav>Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. Common navigation words. </nav><main><p>Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. Unique main paragraphs discuss birds and flowers. </p></main><footer>Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. Common footer words. </footer></body></html>",
+      "headers": {},
+      "purpose": "boilerplate-b"
+    },
+    {
+      "path": "/punctuation-whitespace",
+      "supplied_text": "cat\tdog\ncat  dog cat...dog!",
+      "html": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Controlled content text experiment</title></head><body><p>cat\tdog\ncat  dog cat...dog!</p></body></html>",
+      "headers": {},
+      "purpose": "punctuation-whitespace"
+    },
+    {
+      "path": "/lorem",
+      "supplied_text": "Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.",
+      "html": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Controlled content text experiment</title></head><body><p>Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.</p></body></html>",
+      "headers": {},
+      "purpose": "lorem"
+    },
+    {
+      "path": "/soft-error",
+      "supplied_text": "Page Not Found. This requested page does not exist.",
+      "html": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Controlled content text experiment</title></head><body><p>Page Not Found. This requested page does not exist.</p></body></html>",
+      "headers": {},
+      "purpose": "soft-error"
+    },
+    {
+      "path": "/",
+      "supplied_text": "Controlled fixture index",
+      "html": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Controlled content text experiment</title></head><body><p>Controlled fixture index</p><a href=\"/identical-a\">/identical-a</a>\n<a href=\"/identical-b\">/identical-b</a>\n<a href=\"/changed-one\">/changed-one</a>\n<a href=\"/same-text-markup\">/same-text-markup</a>\n<a href=\"/noindex-identical\">/noindex-identical</a>\n<a href=\"/easy-en\">/easy-en</a>\n<a href=\"/hard-en\">/hard-en</a>\n<a href=\"/long-sentence\">/long-sentence</a>\n<a href=\"/tiny\">/tiny</a>\n<a href=\"/empty\">/empty</a>\n<a href=\"/de-easy\">/de-easy</a>\n<a href=\"/fr-easy\">/fr-easy</a>\n<a href=\"/unicode-composed\">/unicode-composed</a>\n<a href=\"/unicode-decomposed\">/unicode-decomposed</a>\n<a href=\"/hidden\">/hidden</a>\n<a href=\"/script\">/script</a>\n<a href=\"/boilerplate-a\">/boilerplate-a</a>\n<a href=\"/boilerplate-b\">/boilerplate-b</a>\n<a href=\"/punctuation-whitespace\">/punctuation-whitespace</a>\n<a href=\"/lorem\">/lorem</a>\n<a href=\"/soft-error\">/soft-error</a></body></html>",
+      "headers": {},
+      "purpose": ""
+    }
+  ],
+  "observations": [
+    {
+      "path": "/",
+      "reference": {
+        "words": 24,
+        "sentences": 5,
+        "average_words_per_sentence": 4.8,
+        "score": 0,
+        "classification": "Sehr schwer",
+        "language": "en",
+        "indexability": "Indexierbar",
+        "html_digest": "8ea457568126c0ec3c8ac39a7ce8d825",
+        "near_similarity": null
+      },
+      "supplied_html_sha256": "9e7c38ba5bfcebbba1e984e0fcdf26310b15efe3a2d14b284d54f921d437354d",
+      "direct_supplied_html_md5": "8ea457568126c0ec3c8ac39a7ce8d825",
+      "md5_exact_match": true,
+      "md5_unpadded_hex_match": true
+    },
+    {
+      "path": "/lorem",
+      "reference": {
+        "words": 175,
+        "sentences": 45,
+        "average_words_per_sentence": 3.889,
+        "score": 50.608,
+        "classification": "Relativ schwer",
+        "language": "en",
+        "indexability": "Indexierbar",
+        "html_digest": "c686c6b252e50a6d8ad8e41f46eaaba9",
+        "near_similarity": null
+      },
+      "supplied_html_sha256": "787a9b8ffd6daf668ccb1967919bf6464dbdfc3489639d4407f42b1da76085e4",
+      "direct_supplied_html_md5": "c686c6b252e50a6d8ad8e41f46eaaba9",
+      "md5_exact_match": true,
+      "md5_unpadded_hex_match": true
+    },
+    {
+      "path": "/fr-easy",
+      "reference": {
+        "words": 210,
+        "sentences": 48,
+        "average_words_per_sentence": 4.375,
+        "score": 100,
+        "classification": "Sehr einfach",
+        "language": "fr",
+        "indexability": "Indexierbar",
+        "html_digest": "ad4fa506f4f1dd9434736adbc6a2ce39",
+        "near_similarity": null
+      },
+      "supplied_html_sha256": "992901acedc8534a84cf5176c7a92e5e543b3159e9001163698eed63027c88fc",
+      "direct_supplied_html_md5": "ad4fa506f4f1dd9434736adbc6a2ce39",
+      "md5_exact_match": true,
+      "md5_unpadded_hex_match": true
+    },
+    {
+      "path": "/noindex-identical",
+      "reference": {
+        "words": 210,
+        "sentences": 45,
+        "average_words_per_sentence": 4.667,
+        "score": 100,
+        "classification": "Sehr einfach",
+        "language": "en",
+        "indexability": "Nicht indexierbar",
+        "html_digest": "ae567f1bc04def269807841c59519c76",
+        "near_similarity": null
+      },
+      "supplied_html_sha256": "17e57dca168e9a9999fe26bf7558cd4285158d493b133c5f1f0315aebe35015c",
+      "direct_supplied_html_md5": "ae567f1bc04def269807841c59519c76",
+      "md5_exact_match": true,
+      "md5_unpadded_hex_match": true
+    },
+    {
+      "path": "/same-text-markup",
+      "reference": {
+        "words": 210,
+        "sentences": 45,
+        "average_words_per_sentence": 4.667,
+        "score": 100,
+        "classification": "Sehr einfach",
+        "language": "en",
+        "indexability": "Indexierbar",
+        "html_digest": "b0a38d864b775564212dadff781c84a5",
+        "near_similarity": null
+      },
+      "supplied_html_sha256": "47fe3505899d6a199ed8dd6333e87b741d354138ff2934b37fdd3c10c0dd9cab",
+      "direct_supplied_html_md5": "b0a38d864b775564212dadff781c84a5",
+      "md5_exact_match": true,
+      "md5_unpadded_hex_match": true
+    },
+    {
+      "path": "/long-sentence",
+      "reference": {
+        "words": 350,
+        "sentences": 19,
+        "average_words_per_sentence": 18.421,
+        "score": 100,
+        "classification": "Sehr einfach",
+        "language": "en",
+        "indexability": "Indexierbar",
+        "html_digest": "a818015372b4b6e433b4b78cf3ad8e9a",
+        "near_similarity": null
+      },
+      "supplied_html_sha256": "3cd33cfd97814df9efb7473ee1be7322367fe68634c41df9fa83601927cc77cf",
+      "direct_supplied_html_md5": "a818015372b4b6e433b4b78cf3ad8e9a",
+      "md5_exact_match": true,
+      "md5_unpadded_hex_match": true
+    },
+    {
+      "path": "/hard-en",
+      "reference": {
+        "words": 300,
+        "sentences": 61,
+        "average_words_per_sentence": 4.918,
+        "score": 0,
+        "classification": "Sehr schwer",
+        "language": "en",
+        "indexability": "Indexierbar",
+        "html_digest": "a914af3136702d39134431838dc59861",
+        "near_similarity": null
+      },
+      "supplied_html_sha256": "ca47c44270c9eb75f89f1cbc298f46dc38c8f2a6eb210d04088bfa7440058c88",
+      "direct_supplied_html_md5": "a914af3136702d39134431838dc59861",
+      "md5_exact_match": true,
+      "md5_unpadded_hex_match": true
+    },
+    {
+      "path": "/soft-error",
+      "reference": {
+        "words": 9,
+        "sentences": 2,
+        "average_words_per_sentence": 4.5,
+        "score": 98.868,
+        "classification": "Sehr einfach",
+        "language": "en",
+        "indexability": "Indexierbar",
+        "html_digest": "79f31f65facbd5713f680c126374a443",
+        "near_similarity": null
+      },
+      "supplied_html_sha256": "ecbd32ea64cd76f9c4029fd48dfb60e9a5fff61802ae2e5c1d32d7afba7eb3e7",
+      "direct_supplied_html_md5": "79f31f65facbd5713f680c126374a443",
+      "md5_exact_match": true,
+      "md5_unpadded_hex_match": true
+    },
+    {
+      "path": "/script",
+      "reference": {
+        "words": 210,
+        "sentences": 45,
+        "average_words_per_sentence": 4.667,
+        "score": 100,
+        "classification": "Sehr einfach",
+        "language": "en",
+        "indexability": "Indexierbar",
+        "html_digest": "5e0051f0a6b585f780d390b378535146",
+        "near_similarity": null
+      },
+      "supplied_html_sha256": "aabf6915318fbefceb9f18435358f95c58eeb1c889a42e668e0697ce96a4e591",
+      "direct_supplied_html_md5": "5e0051f0a6b585f780d390b378535146",
+      "md5_exact_match": true,
+      "md5_unpadded_hex_match": true
+    },
+    {
+      "path": "/punctuation-whitespace",
+      "reference": {
+        "words": 5,
+        "sentences": 2,
+        "average_words_per_sentence": 2.5,
+        "score": 100,
+        "classification": "Sehr einfach",
+        "language": "en",
+        "indexability": "Indexierbar",
+        "html_digest": "aa72c4b9093c35f4e34333a0186fce77",
+        "near_similarity": null
+      },
+      "supplied_html_sha256": "cea8f3fc7173bf875b637b30f197a3c006a5d199bc0d0e1e115c318b572bebdc",
+      "direct_supplied_html_md5": "aa72c4b9093c35f4e34333a0186fce77",
+      "md5_exact_match": true,
+      "md5_unpadded_hex_match": true
+    },
+    {
+      "path": "/unicode-composed",
+      "reference": {
+        "words": 200,
+        "sentences": 40,
+        "average_words_per_sentence": 5,
+        "score": 100,
+        "classification": "Sehr einfach",
+        "language": "en",
+        "indexability": "Indexierbar",
+        "html_digest": "3b27e7a9f8b90ee7eadeb71622b7c3ec",
+        "near_similarity": null
+      },
+      "supplied_html_sha256": "09bea02c82974f10f72886e48492df1c64f135451973a41852489e50c7ad0228",
+      "direct_supplied_html_md5": "3b27e7a9f8b90ee7eadeb71622b7c3ec",
+      "md5_exact_match": true,
+      "md5_unpadded_hex_match": true
+    },
+    {
+      "path": "/identical-b",
+      "reference": {
+        "words": 210,
+        "sentences": 45,
+        "average_words_per_sentence": 4.667,
+        "score": 100,
+        "classification": "Sehr einfach",
+        "language": "en",
+        "indexability": "Indexierbar",
+        "html_digest": "ae567f1bc04def269807841c59519c76",
+        "near_similarity": null
+      },
+      "supplied_html_sha256": "17e57dca168e9a9999fe26bf7558cd4285158d493b133c5f1f0315aebe35015c",
+      "direct_supplied_html_md5": "ae567f1bc04def269807841c59519c76",
+      "md5_exact_match": true,
+      "md5_unpadded_hex_match": true
+    },
+    {
+      "path": "/identical-a",
+      "reference": {
+        "words": 210,
+        "sentences": 45,
+        "average_words_per_sentence": 4.667,
+        "score": 100,
+        "classification": "Sehr einfach",
+        "language": "en",
+        "indexability": "Indexierbar",
+        "html_digest": "ae567f1bc04def269807841c59519c76",
+        "near_similarity": null
+      },
+      "supplied_html_sha256": "17e57dca168e9a9999fe26bf7558cd4285158d493b133c5f1f0315aebe35015c",
+      "direct_supplied_html_md5": "ae567f1bc04def269807841c59519c76",
+      "md5_exact_match": true,
+      "md5_unpadded_hex_match": true
+    },
+    {
+      "path": "/changed-one",
+      "reference": {
+        "words": 210,
+        "sentences": 45,
+        "average_words_per_sentence": 4.667,
+        "score": 100,
+        "classification": "Sehr einfach",
+        "language": "en",
+        "indexability": "Indexierbar",
+        "html_digest": "36d35df25da23a28f4697ca55c166654",
+        "near_similarity": null
+      },
+      "supplied_html_sha256": "4be0bcaf0a0a75b60517c62c27f091caf8dafe96df17f5c8b7591d1c574b4da5",
+      "direct_supplied_html_md5": "36d35df25da23a28f4697ca55c166654",
+      "md5_exact_match": true,
+      "md5_unpadded_hex_match": true
+    },
+    {
+      "path": "/de-easy",
+      "reference": {
+        "words": 200,
+        "sentences": 51,
+        "average_words_per_sentence": 3.922,
+        "score": 100,
+        "classification": "Sehr einfach",
+        "language": "de",
+        "indexability": "Indexierbar",
+        "html_digest": "4c80c61adf850204d58b1acd9d74d3d2",
+        "near_similarity": null
+      },
+      "supplied_html_sha256": "1194a10b8966683e19f14a8c45e15f683613d24aac8bf78621ca70bd77f20de4",
+      "direct_supplied_html_md5": "4c80c61adf850204d58b1acd9d74d3d2",
+      "md5_exact_match": true,
+      "md5_unpadded_hex_match": true
+    },
+    {
+      "path": "/easy-en",
+      "reference": {
+        "words": 210,
+        "sentences": 78,
+        "average_words_per_sentence": 2.692,
+        "score": 100,
+        "classification": "Sehr einfach",
+        "language": "en",
+        "indexability": "Indexierbar",
+        "html_digest": "dd2dc8a780d1f2854fe01abe0760f766",
+        "near_similarity": null
+      },
+      "supplied_html_sha256": "fd3a8d49bd6f85c9296dccccb06e7c77b6494693a6fe5e9280713a854b437594",
+      "direct_supplied_html_md5": "dd2dc8a780d1f2854fe01abe0760f766",
+      "md5_exact_match": true,
+      "md5_unpadded_hex_match": true
+    },
+    {
+      "path": "/unicode-decomposed",
+      "reference": {
+        "words": 200,
+        "sentences": 48,
+        "average_words_per_sentence": 4.167,
+        "score": 100,
+        "classification": "Sehr einfach",
+        "language": "en",
+        "indexability": "Indexierbar",
+        "html_digest": "da19047197cb3c0a7f838ab6989f5ec4",
+        "near_similarity": null
+      },
+      "supplied_html_sha256": "ef04d1536e4cf1b077b9186dded5d3884cd4a0d4e5c43abdf7bfcf66f6d527f1",
+      "direct_supplied_html_md5": "da19047197cb3c0a7f838ab6989f5ec4",
+      "md5_exact_match": true,
+      "md5_unpadded_hex_match": true
+    },
+    {
+      "path": "/hidden",
+      "reference": {
+        "words": 390,
+        "sentences": 105,
+        "average_words_per_sentence": 3.714,
+        "score": 100,
+        "classification": "Sehr einfach",
+        "language": "en",
+        "indexability": "Indexierbar",
+        "html_digest": "f32c269b788a8939d1ef60c357b56e7d",
+        "near_similarity": null
+      },
+      "supplied_html_sha256": "46a9ea4d3be19d9f1760b55e3e40730e0d99ef2cc84bdd67bb4f30d5ab319dd5",
+      "direct_supplied_html_md5": "f32c269b788a8939d1ef60c357b56e7d",
+      "md5_exact_match": true,
+      "md5_unpadded_hex_match": true
+    },
+    {
+      "path": "/empty",
+      "reference": {
+        "words": 0,
+        "sentences": null,
+        "average_words_per_sentence": null,
+        "score": null,
+        "classification": null,
+        "language": "en",
+        "indexability": "Indexierbar",
+        "html_digest": "22072c397efff75e8fcd747e8e64ec7e",
+        "near_similarity": null
+      },
+      "supplied_html_sha256": "b03abb62469771d5e27f6c42bc177b85ca5609119c407169cf942f861964d457",
+      "direct_supplied_html_md5": "22072c397efff75e8fcd747e8e64ec7e",
+      "md5_exact_match": true,
+      "md5_unpadded_hex_match": true
+    },
+    {
+      "path": "/tiny",
+      "reference": {
+        "words": 6,
+        "sentences": 1,
+        "average_words_per_sentence": 6,
+        "score": 100,
+        "classification": "Sehr einfach",
+        "language": "en",
+        "indexability": "Indexierbar",
+        "html_digest": "9b7c2172d144f0980a9982ecd55bfc58",
+        "near_similarity": null
+      },
+      "supplied_html_sha256": "579e1efcd1ae6a42a53ab8be7e6982771fa48ee9d89e1da76b9b5b09c8e0e0fb",
+      "direct_supplied_html_md5": "9b7c2172d144f0980a9982ecd55bfc58",
+      "md5_exact_match": true,
+      "md5_unpadded_hex_match": true
+    },
+    {
+      "path": "/boilerplate-b",
+      "reference": {
+        "words": 210,
+        "sentences": 40,
+        "average_words_per_sentence": 5.25,
+        "score": 56.478,
+        "classification": "Relativ schwer",
+        "language": "en",
+        "indexability": "Indexierbar",
+        "html_digest": "f22e713a5710385294b6d3c74f20488c",
+        "near_similarity": null
+      },
+      "supplied_html_sha256": "8d9ca805479e21701f655a49cb4a38414de85e5e01d646c79fd8d10d05fbdc02",
+      "direct_supplied_html_md5": "f22e713a5710385294b6d3c74f20488c",
+      "md5_exact_match": true,
+      "md5_unpadded_hex_match": true
+    },
+    {
+      "path": "/boilerplate-a",
+      "reference": {
+        "words": 210,
+        "sentences": 45,
+        "average_words_per_sentence": 4.667,
+        "score": 100,
+        "classification": "Sehr einfach",
+        "language": "en",
+        "indexability": "Indexierbar",
+        "html_digest": "60572f32b59cc8613a94d2d268de9fe6",
+        "near_similarity": null
+      },
+      "supplied_html_sha256": "ea4d738b3d47b1d62603ef5d1f0f13b8457f473f1236d6553a3d91a7500352e8",
+      "direct_supplied_html_md5": "60572f32b59cc8613a94d2d268de9fe6",
+      "md5_exact_match": true,
+      "md5_unpadded_hex_match": true
+    }
+  ],
+  "memberships": {
+    "Content:All": [
+      "/",
+      "/lorem",
+      "/fr-easy",
+      "/noindex-identical",
+      "/same-text-markup",
+      "/long-sentence",
+      "/hard-en",
+      "/soft-error",
+      "/script",
+      "/punctuation-whitespace",
+      "/unicode-composed",
+      "/identical-b",
+      "/identical-a",
+      "/changed-one",
+      "/de-easy",
+      "/easy-en",
+      "/unicode-decomposed",
+      "/hidden",
+      "/empty",
+      "/tiny",
+      "/boilerplate-b",
+      "/boilerplate-a"
+    ],
+    "Content:Exact Duplicates": [
+      "/identical-b",
+      "/identical-a"
+    ],
+    "Content:Readability Difficult": [],
+    "Content:Lorem Ipsum Placeholder": [
+      "/lorem"
+    ],
+    "Content:Near Duplicates": [],
+    "Content:Readability Very Difficult": [
+      "/",
+      "/hard-en"
+    ],
+    "Content:Low Content Pages": [
+      "/",
+      "/lorem",
+      "/soft-error",
+      "/punctuation-whitespace",
+      "/empty",
+      "/tiny"
+    ],
+    "Content:Soft 404 Pages": [
+      "/soft-error"
+    ]
+  },
+  "trigger_control_evidence": [
+    {
+      "argument": "Content:Exact Duplicates",
+      "availability": "REFERENCE_POSITIVE_AND_CONTROL_OBSERVED",
+      "positive_paths": [
+        "/identical-a",
+        "/identical-b"
+      ],
+      "negative_control_paths": [
+        "/changed-one",
+        "/same-text-markup",
+        "/noindex-identical"
+      ],
+      "native_filter_comparison": "NOT_RUN",
+      "full_filter_parity": "NOT_PROVEN"
+    },
+    {
+      "argument": "Content:Low Content Pages",
+      "availability": "REFERENCE_POSITIVE_AND_CONTROL_OBSERVED",
+      "positive_paths": [
+        "/tiny",
+        "/empty",
+        "/lorem"
+      ],
+      "negative_control_paths": [
+        "/identical-a",
+        "/unicode-composed"
+      ],
+      "native_filter_comparison": "NOT_RUN",
+      "full_filter_parity": "NOT_PROVEN"
+    },
+    {
+      "argument": "Content:Readability Very Difficult",
+      "availability": "REFERENCE_POSITIVE_AND_CONTROL_OBSERVED",
+      "positive_paths": [
+        "/hard-en"
+      ],
+      "negative_control_paths": [
+        "/easy-en",
+        "/tiny"
+      ],
+      "native_filter_comparison": "NOT_RUN",
+      "full_filter_parity": "NOT_PROVEN"
+    },
+    {
+      "argument": "Content:Lorem Ipsum Placeholder",
+      "availability": "REFERENCE_POSITIVE_AND_CONTROL_OBSERVED",
+      "positive_paths": [
+        "/lorem"
+      ],
+      "negative_control_paths": [
+        "/easy-en"
+      ],
+      "native_filter_comparison": "NOT_RUN",
+      "full_filter_parity": "NOT_PROVEN"
+    },
+    {
+      "argument": "Content:Soft 404 Pages",
+      "availability": "REFERENCE_POSITIVE_AND_CONTROL_OBSERVED",
+      "positive_paths": [
+        "/soft-error"
+      ],
+      "negative_control_paths": [
+        "/easy-en"
+      ],
+      "native_filter_comparison": "NOT_RUN",
+      "full_filter_parity": "NOT_PROVEN"
+    },
+    {
+      "argument": "Content:Readability Difficult",
+      "availability": "PARTIAL_NO_POSITIVE_MEASURED_RANGE_CASE",
+      "positive_paths": [],
+      "negative_control_paths": [],
+      "native_filter_comparison": "NOT_RUN",
+      "full_filter_parity": "NOT_PROVEN"
+    },
+    {
+      "argument": "Content:Near Duplicates",
+      "availability": "UNAVAILABLE_CHECKING_DISABLED_UNDER_CURRENT_PROFILE",
+      "positive_paths": [],
+      "negative_control_paths": [],
+      "native_filter_comparison": "NOT_RUN",
+      "full_filter_parity": "NOT_PROVEN"
+    }
+  ],
+  "fixture_requests": {
+    "count": 23,
+    "paths": [
+      "/robots.txt",
+      "/",
+      "/lorem",
+      "/fr-easy",
+      "/noindex-identical",
+      "/same-text-markup",
+      "/long-sentence",
+      "/hard-en",
+      "/soft-error",
+      "/script",
+      "/punctuation-whitespace",
+      "/unicode-composed",
+      "/identical-b",
+      "/identical-a",
+      "/changed-one",
+      "/de-easy",
+      "/easy-en",
+      "/unicode-decomposed",
+      "/hidden",
+      "/empty",
+      "/tiny",
+      "/boilerplate-b",
+      "/boilerplate-a"
+    ],
+    "known_foreign_fixture_urls": 0,
+    "note": "Only requests received by the own fixture are measured; application-wide background telemetry/network is not asserted absent."
+  },
+  "facts": {
+    "direct_own_html_md5_matches": 22,
+    "all_rows": 22,
+    "near_duplicate_algorithm_observed": false,
+    "reference_native_similarity_profile_equivalence": "NOT_PROVEN"
+  },
+  "limitations": [
+    "Exact results belong only to this unchanged installed ordinary profile and authored localhost fixture.",
+    "An empty near-duplicate export is not a negative membership proof when extraction, licence or post-analysis prerequisites are unavailable.",
+    "Private profile bytes and raw logs stay in task work; no credentials, assets or original code are distributed.",
+    "Public documentation describes MinHash and licensed enabling/configuration steps; this run does not enable them or prove a runtime entitlement error.",
+    "English/German supplied-text Flesch and exact Jaccard are explicitly independent profiles; original score/language/segmentation/rounding equivalence is not claimed.",
+    "No original binaries, implementation source, fonts, translations bundle, profile values or credentials are included."
+  ],
+  "source_urls": [
+    "https://www.screamingfrog.co.uk/seo-spider/user-guide/general/#command-line-interface",
+    "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-check-for-duplicate-content/",
+    "https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-test-readability/",
+    "https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/",
+    "https://www.screamingfrog.co.uk/seo-spider/user-guide/tabs/"
+  ]
+}

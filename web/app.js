@@ -3,7 +3,7 @@
 (() => {
   const $ = (id) => document.getElementById(id);
   const state = {
-    recrawlURLs: new Set(),
+    recrawlURLs: new Set(), policy: null, policyError: '', policyToken: null, policyCursor: 0, policyBack: [], policySelected: null, policySort: 0, policyDirection: 1,
     crawl: null, crawls: [], pages: [], issues: [], section: 'overview',
     search: '', filter: 'all', sort: 'url', direction: 1, page: 0, pageSize: 50,
     selected: null, selectedResponse: null, selectedInput: null, responses: null, responsesError: '', fragments: null, fragmentsError: '', inspectorTab: 'details', polling: false, starting: false,
@@ -14,7 +14,7 @@
       javascript_rendering: false, renderer_endpoint: 'http://127.0.0.1:8790/render',
       renderer_wait_ms: 500, renderer_accessibility: false, renderer_screenshot: false,
       renderer_collect_cookies: false, custom_javascript_json: '[]',
-      include_patterns_text: '', exclude_patterns_text: '', custom_extractions_json: '[]', audit_thresholds_json: '{}', pdf_analysis_json: '{}', validate_fragments: false, link_position_rules_json: '[]'
+      include_patterns_text: '', exclude_patterns_text: '', custom_extractions_json: '[]', audit_thresholds_json: '{}', pdf_analysis_json: '{}', validate_fragments: false, link_position_rules_json: '[]', crawl_policy_enabled: false, crawl_policy_json: '{"scope":{"roots":[{"origin":"https://example.test","folders":["/"],"subdomains":false,"exact_paths":[]}]}}', live_policy_limits_json: '{}'
     }
   };
   const sections = {
@@ -23,6 +23,8 @@
     external: ['URL INVENTAR', 'Externe Links', 'Entdeckte Linkziele außerhalb des Crawl-Bereichs. Ungeprüfte Ziele haben keinen HTTP-Status.'],
     status: ['TECHNISCHE ANALYSE', 'HTTP & Indexierung', 'Antwortcodes, Weiterleitungen, Abrufdauer und Indexierbarkeit.'],
     responses: ['HTTP BEOBACHTUNGEN', 'Antworten', 'Jede erfasste native HTTP-Antwort einschließlich Zwischenredirects. Nicht gespeicherte Header und Body bleiben unbekannt; Dokumentdaten stehen separat.'],
+    policy: ['NATIVE URL-POLICY', 'Policy-Entscheidungen', 'Gespeicherte Vorkommen und tatsächliche Zulassungsbefunde, begrenzt nach Ledger-Seite. Verweigerte Kandidaten sind keine abgerufenen Dokumente.'],
+    policyaliases: ['NATIVE URL-POLICY', 'URL-Transformationen', 'Tatsächlich gespeicherte Transformationen von beobachteten Zielen zu Abrufkandidaten. Kein HTTP-Redirect und kein Erfolgsnachweis für das Originalziel.'],
     inputs: ['EINGABEHERKUNFT', 'Eingabezeilen', 'Gespeicherte, deklarierte Importherkunft mit ursprünglicher Reihenfolge, Duplikaten und ungültigen Zeilen. Der vollständige CSV-Export ergänzt tatsächliche Abrufbefunde.'],
     titles: ['ONPAGE ANALYSE', 'Seitentitel', 'Title-Tags, Zeichenlänge und mehrfach verwendete Titel. Längen sind Hinweise.'],
     meta: ['ONPAGE ANALYSE', 'Meta Descriptions', 'Descriptions, Zeichenlänge und Duplikate im abgerufenen HTML.'],
@@ -57,6 +59,10 @@
   const listUI = { controller: null, page: 0, acceptedText: null, snapshot: null };
   let limitResumeContext = null;
   let selectedRecrawlContext = null;
+  const policyPreview = { revision: 0, token: null, result: null };
+  const policySection = () => ['policy', 'policyaliases'].includes(state.section);
+  const nativePolicyEngine = 'open-seo-spider/native-crawl-policy-v1';
+  const policyDecisionLabel = value => ({ fetch_and_traverse: 'Abruf & Traversierung', check_only: 'Nur prüfen', deny: 'Policy verweigert' }[value] || value || 'Nicht erfasst');
   const number = (value) => Number(value || 0).toLocaleString('de-DE');
   const array = (value) => Array.isArray(value) ? value : value == null || value === '' ? [] : [value];
   const first = (value) => array(value).join(' | ');
@@ -101,6 +107,8 @@
   }
   function invalidatePoll() {
     state.generation += 1;
+    state.policyToken?.controller.abort();
+    state.policyToken = null;
     clearTimeout(state.pollTimer);
     state.pollTimer = null;
     state.pollToken = null;
@@ -263,6 +271,7 @@
       if (analysis) state.issues.push(...array(analysis.issues));
       state.issues = state.issues.filter(issue => !pendingSelected.has(issue.url));
       reindexIssues(); connection(true); render();
+      if (policySection() && !state.policyToken) loadPolicyPage(state.policyCursor);
       if (state.selectedResponse || state.selectedInput) renderInspector();
       else if (state.selected) { state.selected = state.pages.find(page => page.url === state.selected.url) || state.selected; renderInspector(); }
       if (previousStatus !== state.crawl.status && terminal) {
@@ -282,6 +291,8 @@
 
   async function selectCrawl(id) {
     invalidatePoll();
+    invalidatePolicyPreview();
+    resetPolicyLedger();
     state.control = null; state.startOperation = null; state.starting = false;
     limitResumeContext = null;
     if ($('resume-limit-dialog').open) $('resume-limit-dialog').close();
@@ -348,6 +359,7 @@
       if ($('crawl-mode').value !== mode) throw new Error('Der Crawl-Modus wurde während der Prüfung geändert. Bitte erneut starten.');
       if (!current()) return;
       const payload = { ...state.settings, ...advanced, mode, seed_url: mode === 'sitemap' ? '' : urls[0] || '', urls: mode === 'sitemap' ? [] : urls, seed_urls: mode === 'sitemap' ? [] : urls, sitemap_urls: mode === 'sitemap' ? urls : sitemapUrls, input_imports: inputImports, crawl_links: mode !== 'list', include_subdomains: state.settings.follow_subdomains, request_timeout_secs: state.settings.timeout_seconds, max_body_bytes: state.settings.max_body_mb * 1024 * 1024 };
+      for (const key of ['crawl_policy_enabled', 'crawl_policy_json', 'live_policy_limits_json']) delete payload[key];
       payload.renderer = state.settings.javascript_rendering ? { endpoint: state.settings.renderer_endpoint, wait_ms: state.settings.renderer_wait_ms, accessibility: state.settings.renderer_accessibility, screenshot: state.settings.renderer_screenshot, collect_cookies: state.settings.renderer_collect_cookies, custom_javascript: parseCustomJavascript(state.settings.custom_javascript_json) } : null;
       const result = await request('/api/crawls', { method: 'POST', body: JSON.stringify(payload) });
       const crawl = result.crawl || result;
@@ -479,7 +491,7 @@
     $('url-list').disabled = Boolean(busy || active());
     $('list-import-open').disabled = !window.ListImportTools || Boolean(busy || active());
     const hasData = Boolean(state.crawl && state.pages.length);
-    $('export-csv').disabled = (!hasData && !state.issues.length) || state.section === 'responses' && state.responses == null || state.section === 'fragments' && (!state.fragments || !state.fragments.enabled);
+    $('export-csv').disabled = policySection() ? !policyVisibleRows().length || Boolean(state.policyToken || state.policyError) : (!hasData && !state.issues.length) || state.section === 'responses' && state.responses == null || state.section === 'fragments' && (!state.fragments || !state.fragments.enabled);
     $('export-sitemap').disabled = !hasData || Boolean(busy || active());
     $('export-project').disabled = !state.crawl || Boolean(busy || active());
     $('export-resources').disabled = !state.crawl || Boolean(busy || active());
@@ -490,7 +502,7 @@
     $('inspector-recrawl-selection').hidden = !state.selected || !state.pageMap.has(state.selected.url) || Boolean(state.selectedResponse || state.selectedInput);
     $('inspector-recrawl-checkbox').checked = Boolean(state.selected && state.recrawlURLs.has(state.selected.url));
     $('inspector-recrawl-checkbox').disabled = Boolean(busy || active() || state.crawl?.recrawl_available === false);
-    $('settings-summary').textContent = `${state.settings.concurrency} parallele Requests · ${state.settings.obey_robots ? 'Robots.txt beachten' : 'Robots.txt ignorieren'}${state.settings.max_pages ? ` · Grenze ${number(state.settings.max_pages)}` : ''}${state.settings.javascript_rendering ? ' · JavaScript-Rendering' : ''}`;
+    $('settings-summary').textContent = `${state.settings.concurrency} parallele Requests · ${state.settings.obey_robots ? 'Robots.txt beachten' : 'Robots.txt ignorieren'}${state.settings.max_pages ? ` · Grenze ${number(state.settings.max_pages)}` : ''}${state.settings.javascript_rendering ? ' · JavaScript-Rendering' : ''}${state.settings.crawl_policy_enabled ? ' · Native URL-Policy' : ''}`;
   }
 
   function renderMetrics() {
@@ -868,6 +880,7 @@
       if (button.dataset.section === section) button.setAttribute('aria-current', 'page'); else button.removeAttribute('aria-current');
     });
     renderSection();
+    if (policySection() && state.crawl && !state.policy && !state.policyToken) loadPolicyPage();
   }
 
   function renderSection() {
@@ -877,13 +890,16 @@
     $('section-description').textContent = description;
     $('overview-view').hidden = state.section !== 'overview';
     $('graph-view').hidden = state.section !== 'graph';
-    $('table-view').hidden = ['overview', 'graph'].includes(state.section);
-    $('export-csv').disabled = (state.section === 'inputs' ? !getRows().length : !state.pages.length && !state.issues.length) || state.section === 'responses' && state.responses == null || state.section === 'fragments' && (!state.fragments || !state.fragments.enabled);
+    $('policy-view').hidden = !policySection();
+    $('table-view').hidden = ['overview', 'graph'].includes(state.section) || policySection();
+    $('export-csv').disabled = policySection() ? !policyVisibleRows().length || Boolean(state.policyToken || state.policyError) : (state.section === 'inputs' ? !getRows().length : !state.pages.length && !state.issues.length) || state.section === 'responses' && state.responses == null || state.section === 'fragments' && (!state.fragments || !state.fragments.enabled);
+    $('export-csv').title = policySection() ? 'Nur gefilterte Vorkommen der aktuell geladenen Ledger-Seite exportieren' : 'Alle aktuell gefilterten Ergebnisse dieses Bereichs exportieren';
     $('export-resources').hidden = !['inputs', 'pdf', 'imagefiles', 'responses', 'fragments', 'linkdom', ...domSections].includes(state.section);
     $('export-resources').disabled = !state.crawl || Boolean(actionBusy() || active());
     $('export-resources').textContent = state.section === 'inputs' ? '↓ Alle Eingabezeilen CSV' : domSections.includes(state.section) ? '↓ Alle DOM-Beobachtungen CSV' : state.section === 'pdf' ? '↓ PDF-Details CSV' : state.section === 'responses' ? '↓ Alle Antworten CSV' : state.section === 'fragments' ? '↓ Alle Fragmentziele CSV' : state.section === 'linkdom' ? '↓ Alle Linkvorkommen CSV' : '↓ Bilddateien CSV';
     if (state.section === 'overview') renderOverview();
     else if (state.section === 'graph') renderGraph();
+    else if (policySection()) renderPolicyLedger();
     else renderTable();
   }
 
@@ -993,6 +1009,12 @@
         ['Browser-Cookies', page.browser_cookies.length ? JSON.stringify(page.browser_cookies, null, 2) : 'Keine erfasst; Aufnahme ist optional und pro Seitenaufruf isoliert'],
         ['HTTP-Header', Object.entries(page.headers || {}).map(([key, value]) => `${key}: ${value}`).join('\n') || '—']
       ];
+      fields.push(['Native Policy-Aufzeichnung', page.policy ? page.policy.admission?.engine === nativePolicyEngine ? 'Gespeicherte native Task-Zulassung' : 'Unbekanntes gespeichertes Policy-Profil' : 'Nicht erfasst; keine nachträgliche Zulassung abgeleitet']);
+      if (page.policy) {
+        const policy = page.policy, admission = policy.admission || {};
+        const permission = value => typeof value === 'boolean' ? value ? 'Ja' : 'Nein' : 'Nicht erfasst';
+        fields.push(['Policy-Engine / SHA256', `${admission.engine || 'Nicht erfasst'}\n${admission.policy_sha256 || 'Nicht erfasst'}`],['Policy-Anfrage-URL / Rolle', `${admission.fetch_url || 'Nicht erfasst'}\n${admission.task_role || 'Nicht erfasst'}`],['Policy-Vorkommen / Quelle', `${admission.occurrence_id || 'Nicht erfasst'}\n${admission.source_kind || 'Nicht erfasst'}`],['Policy-Aufzeichnung geerbt', permission(admission.inherited)],['Policy-Seitentraversierung initial / effektiv', `${permission(admission.can_expand)} / ${permission(policy.effective_can_expand)}`],['Policy-XML-Discovery erlaubt', permission(admission.can_discover_xml)],['Policy-Quellkandidaten', `${policy.candidate_count ?? 'Nicht erfasst'} · Erfassung vollständig: ${permission(policy.candidates_complete)}\nQuellrevision ${policy.source_revision || 'Nicht erfasst'}`],['Policy-Redirect-Entscheidungen', JSON.stringify(policy.redirect_decisions || [],null,2)]);
+      }
       if (isPDF(page)) {
         const pdf = page.pdf;
         fields.push(['PDF-Analyse', resourceStatus(pdf?.status)]);
@@ -1141,6 +1163,7 @@
   }
 
   function exportCSV() {
+    if (policySection()) { exportPolicyPage(); return; }
     const original = state.section;
     if (['overview', 'graph'].includes(original)) state.section = 'internal';
     const cols = columns();
@@ -1189,9 +1212,11 @@
   }
 
   function openSettings() {
+    invalidatePolicyPreview();
     const form = $('settings-form');
     for (const [key, value] of Object.entries(state.settings)) {
       const element = form.elements.namedItem(key);
+      if (!element) continue;
       if (element.type === 'checkbox') element.checked = Boolean(value); else element.value = value;
     }
     toggleRendererSettings(state.settings.javascript_rendering);
@@ -1202,7 +1227,7 @@
   function saveSettings(event) {
     event.preventDefault();
     const form = $('settings-form');
-    const advancedText = { include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value, link_position_rules_json: form.elements.link_position_rules_json.value, validate_fragments: form.elements.validate_fragments.checked };
+    const advancedText = { include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value, link_position_rules_json: form.elements.link_position_rules_json.value, validate_fragments: form.elements.validate_fragments.checked, crawl_policy_enabled: form.elements.crawl_policy_enabled.checked, crawl_policy_json: form.elements.crawl_policy_json.value, live_policy_limits_json: form.elements.live_policy_limits_json.value, javascript_rendering: form.elements.javascript_rendering.checked };
     try { parseAdvanced(advancedText); validateRendererSettings({ javascript_rendering: form.elements.javascript_rendering.checked, renderer_endpoint: form.elements.renderer_endpoint.value.trim(), renderer_wait_ms: Number(form.elements.renderer_wait_ms.value), timeout_seconds: Number(form.elements.timeout_seconds.value) }); }
     catch (error) {
       $('settings-error').textContent = error.message;
@@ -1215,6 +1240,7 @@
     Object.assign(state.settings, advancedText);
     try { localStorage.setItem('open-seo-spider-settings', JSON.stringify(state.settings)); } catch (_) { /* Crawl settings still apply when storage is unavailable. */ }
     $('settings-dialog').close();
+    invalidatePolicyPreview();
     renderControls();
   }
 
@@ -1226,6 +1252,7 @@
         const nonnegative = (value) => Number.isInteger(Number(value)) && Number(value) >= 0 ? Number(value) : 0;
         state.settings = { concurrency: positive(saved.concurrency, 8, 64), timeout_seconds: positive(saved.timeout_seconds, 20, 300), max_pages: nonnegative(saved.max_pages), max_depth: nonnegative(saved.max_depth), user_agent: String(saved.user_agent || 'Open SEO Spider/0.1').slice(0, 256), obey_robots: saved.obey_robots !== false, follow_subdomains: saved.follow_subdomains === true, delay_ms: nonnegative(saved.delay_ms ?? 100), max_body_mb: positive(saved.max_body_mb, 5, 100), check_external: saved.check_external === true, javascript_rendering: saved.javascript_rendering === true, renderer_endpoint: String(saved.renderer_endpoint || 'http://127.0.0.1:8790/render'), renderer_wait_ms: nonnegative(saved.renderer_wait_ms ?? 500), renderer_accessibility: saved.renderer_accessibility === true, renderer_screenshot: saved.renderer_screenshot === true };
         Object.assign(state.settings, { indexability_agent: String(saved.indexability_agent || 'googlebot'), renderer_collect_cookies: saved.renderer_collect_cookies === true, custom_javascript_json: String(saved.custom_javascript_json || '[]'), audit_thresholds_json: String(saved.audit_thresholds_json || '{}'), pdf_analysis_json: String(saved.pdf_analysis_json || '{}'), include_patterns_text: String(saved.include_patterns_text || ''), exclude_patterns_text: String(saved.exclude_patterns_text || ''), custom_extractions_json: String(saved.custom_extractions_json || '[]'), validate_fragments: saved.validate_fragments === true, link_position_rules_json: String(saved.link_position_rules_json || '[]') });
+        Object.assign(state.settings, { crawl_policy_enabled: saved.crawl_policy_enabled === true, crawl_policy_json: String(saved.crawl_policy_json || '{"scope":{"roots":[{"origin":"https://example.test","folders":["/"]}]}}'), live_policy_limits_json: String(saved.live_policy_limits_json || '{}') });
       }
     } catch (_) { /* Invalid saved settings fall back to safe defaults. */ }
   }
@@ -1269,7 +1296,196 @@
       return { name, selector, attribute: definition.attribute == null ? null : definition.attribute.trim(), method, output, max_results, regex_group, regex_flags, namespaces };
     });
     const lines = (value) => [...new Set(String(value || '').split(/\r?\n/).map((line) => line.trim()).filter(Boolean))];
-    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), pdf_analysis: parsePdfAnalysis(settings.pdf_analysis_json), link_position_rules: parsePositionRules(settings.link_position_rules_json), validate_fragments: settings.validate_fragments === true, include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text) };
+    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), pdf_analysis: parsePdfAnalysis(settings.pdf_analysis_json), link_position_rules: parsePositionRules(settings.link_position_rules_json), validate_fragments: settings.validate_fragments === true, include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text), ...parseNativePolicy(settings) };
+  }
+
+  function policyObject(value, allowed, label) {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error(`${label}: Ein JSON-Objekt ist erforderlich.`);
+    for (const key of Object.keys(value)) if (!allowed.includes(key)) throw new Error(`${label}: Unbekanntes Feld ${key}.`);
+    return value;
+  }
+
+  function parsePolicyConfig(text) {
+    let config;
+    try { config = JSON.parse(text || '{}'); } catch (_) { throw new Error('URL-Policy: Gültiges JSON ist erforderlich.'); }
+    policyObject(config, ['engine','scope','query','rewrites','include_patterns','exclude_patterns','filter_identity','initial_inputs','limits'], 'URL-Policy');
+    if (config.engine != null && config.engine !== 'open-seo-spider/crawl-policy-v1') throw new Error('URL-Policy: Unbekanntes Engine-Profil.');
+    const strings = (value, label, max) => { if (!Array.isArray(value) || value.length > max || value.some(item => typeof item !== 'string')) throw new Error(`${label}: Ein String-Array mit höchstens ${max} Einträgen ist erforderlich.`); };
+    const choice = (value, choices, label) => { if (value != null && !choices.includes(value)) throw new Error(`${label}: ${choices.join(', ')} erforderlich.`); };
+    policyObject(config.scope, ['roots','outside_folder','external'], 'Policy-Scope');
+    if (!Array.isArray(config.scope.roots) || !config.scope.roots.length || config.scope.roots.length > 32) throw new Error('Policy-Scope: 1 bis 32 explizite Origins sind erforderlich.');
+    choice(config.scope.outside_folder, ['deny','check_once'], 'Außerhalb Ordner'); choice(config.scope.external, ['deny','check_once'], 'Externe Origins');
+    for (const root of config.scope.roots) {
+      policyObject(root, ['origin','subdomains','folders','exact_paths'], 'Policy-Root');
+      let url; try { url = new URL(root.origin); } catch (_) { throw new Error('Policy-Root: Eine vollständige HTTP(S)-Origin ist erforderlich.'); }
+      if (typeof root.origin !== 'string' || !['http:','https:'].includes(url.protocol) || url.username || url.password || url.pathname !== '/' || url.search || url.hash) throw new Error('Policy-Root: Origin ohne Inhaltspfad, Zugangsdaten, Query oder Fragment eingeben.');
+      if (root.subdomains != null && typeof root.subdomains !== 'boolean') throw new Error('Policy-Root: subdomains muss true oder false sein.');
+      strings(root.folders, 'Policy-Ordner', 128); if (root.exact_paths != null) strings(root.exact_paths, 'Exakte Pfade', 128);
+      if (!root.folders.length && !root.exact_paths?.length) throw new Error('Policy-Root: Mindestens ein Ordner oder exakter Pfad ist erforderlich.');
+      for (const path of [...root.folders, ...(root.exact_paths || [])]) if (!path.startsWith('/') || path.includes('?') || path.includes('#') || /[\u0000-\u0020\u007f]/.test(path)) throw new Error('Policy-Pfad: Absoluter kodierter Pfad ohne Query, Fragment oder Leerraum erforderlich.');
+      if (root.folders.some(path => !path.endsWith('/'))) throw new Error('Policy-Ordner beginnen und enden mit /. exact_paths erlaubt einzelne Pfade.');
+    }
+    if (config.query != null) { policyObject(config.query, ['remove_keys','key_match','order'], 'Policy-Query'); if (config.query.remove_keys != null) strings(config.query.remove_keys, 'Query-Schlüssel', 128); choice(config.query.key_match, ['encoded_bytes','percent_decoded_utf8'], 'Query-Key-Matching'); choice(config.query.order, ['preserve','stable_encoded_key'], 'Query-Reihenfolge'); }
+    for (const key of ['include_patterns','exclude_patterns']) if (config[key] != null) strings(config[key], key, 128);
+    choice(config.filter_identity, ['fetch','discovered','both'], 'Filter-Identität');
+    if (config.initial_inputs != null) { policyObject(config.initial_inputs, ['rewrite','filters'], 'Initiale Eingaben'); choice(config.initial_inputs.rewrite, ['preserve','apply'], 'Initiale Transformation'); choice(config.initial_inputs.filters, ['exempt','apply'], 'Initiale Filter'); }
+    if (config.rewrites != null) {
+      if (!Array.isArray(config.rewrites) || config.rewrites.length > 64) throw new Error('Policy-Rewrites: Höchstens 64 geordnete Regeln.');
+      const ids = new Set();
+      for (const rule of config.rewrites) {
+        policyObject(rule, ['id','pattern','replacement'], 'Policy-Rewrite');
+        if (typeof rule.id !== 'string' || !rule.id || ids.has(rule.id) || typeof rule.pattern !== 'string') throw new Error('Policy-Rewrite: Eindeutige id und Regex-String pattern erforderlich.');
+        ids.add(rule.id); const replacement = rule.replacement;
+        policyObject(replacement, ['kind', replacement?.kind === 'literal' ? 'text' : 'template'], 'Policy-Replacement');
+        if (!['literal','captures'].includes(replacement.kind) || typeof replacement[replacement.kind === 'literal' ? 'text' : 'template'] !== 'string') throw new Error('Policy-Replacement: literal mit text oder captures mit template erforderlich.');
+      }
+    }
+    if (config.limits != null) {
+      const ceilings = { max_inputs:10000,max_input_bytes:8388608,max_url_bytes:16384,max_roots:32,max_scope_paths:128,max_query_keys:128,max_query_tokens:1024,max_rewrite_rules:64,max_filters:128,max_pattern_bytes:8192,max_total_pattern_bytes:65536,max_replacement_bytes:4096,max_capture_groups:32,max_trace_steps:256,max_output_bytes:16777216,regex_size_limit:1048576,dfa_size_limit:1048576 };
+      policyObject(config.limits, Object.keys(ceilings), 'Policy-Preview-Grenzen');
+      for (const [key, value] of Object.entries(config.limits)) if (!Number.isSafeInteger(value) || value < 1 || value > ceilings[key]) throw new Error(`Policy-Grenze ${key}: positive Ganzzahl bis ${ceilings[key]} erforderlich.`);
+    }
+    return config;
+  }
+
+  function parseNativePolicy(settings) {
+    if (!settings.crawl_policy_enabled) return {};
+    if (settings.javascript_rendering) throw new Error('Native URL-Policy und JavaScript-Rendering können nicht gemeinsam verwendet werden. Regeln für Browser-Requests sind hier noch nicht implementiert.');
+    if (String(settings.include_patterns_text || '').trim() || String(settings.exclude_patterns_text || '').trim()) throw new Error('Mit nativer URL-Policy müssen die bisherigen URL-Include/Exclude-Felder leer sein. Regeln in der Policy konfigurieren; bestehende Werte werden nicht automatisch gelöscht.');
+    const crawl_policy = parsePolicyConfig(settings.crawl_policy_json);
+    let limits; try { limits = JSON.parse(settings.live_policy_limits_json || '{}'); } catch (_) { throw new Error('Native Ledger-Grenzen benötigen gültiges JSON.'); }
+    policyObject(limits, ['max_row_bytes','max_batch_bytes','max_batch_occurrences','max_ledger_bytes','max_page_bytes'], 'Native Ledger-Grenzen');
+    const effective = { max_row_bytes:262144,max_batch_bytes:33554432,max_batch_occurrences:100000,max_ledger_bytes:null,max_page_bytes:1048576,...limits };
+    for (const [key, value] of Object.entries(effective)) if (!(key === 'max_ledger_bytes' && value === null) && (!Number.isSafeInteger(value) || value < 1)) throw new Error(`Ledger-Grenze ${key}: positive ganze Zahl${key === 'max_ledger_bytes' ? ' oder null' : ''} erforderlich.`);
+    if (effective.max_row_bytes < 1024 || effective.max_row_bytes > 4194304 || effective.max_batch_bytes < effective.max_row_bytes || effective.max_batch_bytes > 268435456 || effective.max_batch_occurrences > 1000000 || effective.max_page_bytes < effective.max_row_bytes || effective.max_page_bytes > 16777216) throw new Error('Native Ledger-Grenzen: Zeile 1024–4194304 Bytes, Batch bis 256 MiB, maximal 1000000 Vorkommen, API-Seite bis 16 MiB; Batch/API-Seite müssen eine Zeile aufnehmen können.');
+    return { crawl_policy, ...(Object.keys(limits).length ? { live_policy_limits: limits } : {}) };
+  }
+
+  function invalidatePolicyPreview() {
+    policyPreview.revision += 1; policyPreview.token?.controller.abort(); policyPreview.token = null; policyPreview.result = null;
+    if (!$('policy-preview-results')) return;
+    $('policy-preview-results').hidden = true; $('policy-preview-error').hidden = true; $('policy-preview-button').disabled = false;
+    $('policy-preview-status').textContent = 'Noch keine gültige Offline-Probe für diese Eingabe.';
+  }
+
+  async function previewPolicy() {
+    invalidatePolicyPreview();
+    let body;
+    try {
+      const config = parsePolicyConfig($('settings-form').elements.crawl_policy_json.value), raw = $('policy-preview-raw').value;
+      if (!raw.length) throw new Error('Mindestens einen Offline-Kandidaten eingeben.');
+      const base = $('policy-preview-base').value.trim();
+      if (base) { const url = new URL(base); if (!['http:','https:'].includes(url.protocol) || url.username || url.password) throw new Error('Basis-URL muss eine HTTP(S)-URL ohne Zugangsdaten sein.'); }
+      const inputs = raw.split(/\r?\n/).map((raw_value, index) => ({ occurrence_id:`ui-probe-${index + 1}`,source_kind:$('policy-preview-kind').value,raw_value,base_url:base || null }));
+      if (inputs.length > (config.limits?.max_inputs ?? 10000)) throw new Error('Zu viele Kandidaten für den konfigurierten Preview-Batch.');
+      body = { config, inputs };
+    } catch (error) { $('policy-preview-error').textContent = error.message; $('policy-preview-error').hidden = false; return; }
+    const token = { revision:policyPreview.revision,generation:state.generation,controller:new AbortController() };
+    policyPreview.token = token; $('policy-preview-button').disabled = true; $('policy-preview-status').textContent = 'Offline-Probe wird lokal ausgewertet …';
+    const current = () => policyPreview.token === token && policyPreview.revision === token.revision && state.generation === token.generation && $('settings-dialog').open;
+    try {
+      const result = await request('/api/policy/preview', { method:'POST',body:JSON.stringify(body),signal:token.controller.signal });
+      if (!current()) return;
+      if (result.engine !== 'open-seo-spider/crawl-policy-v1' || !Array.isArray(result.decisions) || result.website_requests !== 0) throw new Error('Unbekanntes oder unvollständiges Offline-Preview-Profil.');
+      policyPreview.result = result;
+      $('policy-preview-summary').textContent = `${number(result.decisions.length)} Offline-Vorkommen · Website-Requests: 0 · Profil ${result.engine} · Policy-SHA256 ${result.policy_sha256 || 'nicht erfasst'}`;
+      $('policy-preview-details').textContent = JSON.stringify({ config:result.config,replacement_profile:result.replacement_profile,limitations:result.limitations,decisions:result.decisions }, null, 2);
+      $('policy-preview-table').querySelector('tbody').innerHTML = result.decisions.map(row => `<tr>${[row.occurrence_id,row.raw_value,row.normalized_discovered_url ?? row.resolved_discovered_url,row.fetch_candidate_url,row.fragment,policyDecisionLabel(row.decision),[row.reason_code,row.error,...array(row.warnings)].filter(Boolean).join(' · '),row.coalesced_into].map(value => `<td>${escape(value ?? 'Nicht erfasst')}</td>`).join('')}</tr>`).join('');
+      $('policy-preview-results').hidden = false; $('policy-preview-status').textContent = 'Offline-Probe abgeschlossen. Kein Crawl gestartet; native Zulassung und Robots bleiben getrennte Prüfungen.';
+    } catch (error) { if (current()) { $('policy-preview-error').textContent = error.message; $('policy-preview-error').hidden = false; $('policy-preview-status').textContent = 'Offline-Probe fehlgeschlagen; kein gültiges Ergebnis.'; } }
+    finally { if (policyPreview.token === token) { policyPreview.token = null; $('policy-preview-button').disabled = false; } }
+  }
+
+  function resetPolicyLedger() {
+    state.policyToken?.controller.abort(); state.policyToken = null; state.policy = null; state.policyError = ''; state.policyCursor = 0; state.policyBack = []; state.policySelected = null; state.policySort = 0; state.policyDirection = 1;
+    if ($('policy-search')) { $('policy-search').value = ''; $('policy-filter').value = 'all'; $('policy-inspector').hidden = true; }
+  }
+
+  async function loadPolicyPage(cursor = state.policyCursor, navigation = null) {
+    if (!state.crawl || state.policyToken || !policySection()) return;
+    const token = { id:state.crawl.id,generation:state.generation,cursor,controller:new AbortController() };
+    state.policyToken = token; state.policyError = ''; renderPolicyLedger(); renderControls();
+    const current = () => state.policyToken === token && token.id === state.crawl?.id && token.generation === state.generation;
+    try {
+      const result = await request(`/api/crawls/${encodeURIComponent(token.id)}/policy?after_sequence=${encodeURIComponent(cursor)}&limit=200`, { signal:token.controller.signal });
+      if (!current()) return;
+      if (typeof result.enabled !== 'boolean' || !Array.isArray(result.observations) || typeof result.has_more !== 'boolean' || result.observations.length > 200) throw new Error('Ungültige oder unbeschränkte Policy-Ledger-Seite.');
+      if (result.enabled && result.engine !== nativePolicyEngine) throw new Error('Unbekanntes natives Policy-Ledger-Profil. Keine Zulassungen werden daraus abgeleitet.');
+      if (result.has_more && (!Number.isSafeInteger(result.next_after_sequence) || result.next_after_sequence <= cursor)) throw new Error('Ungültiger oder nicht fortschreitender Ledger-Cursor.');
+      if (result.observations.some(row => !Number.isSafeInteger(row.sequence) || row.sequence <= cursor || !row.occurrence || !row.occurrence.decision)) throw new Error('Policy-Vorkommen ohne gespeicherte Sequenz/Entscheidung.');
+      if (navigation === 'next') state.policyBack.push(state.policyCursor);
+      else if (navigation === 'back') state.policyBack.pop();
+      state.policyCursor = cursor; state.policy = result;
+      const selected = state.policySelected && result.observations.find(row => row.sequence === state.policySelected.sequence && row.occurrence.decision.occurrence_id === state.policySelected.occurrence.decision.occurrence_id);
+      state.policySelected = selected || null;
+      if (!selected) $('policy-inspector').hidden = true;
+    } catch (error) { if (current()) state.policyError = `Policy-Ledger nicht verfügbar: ${error.message}`; }
+    finally { if (state.policyToken === token) { state.policyToken = null; if (current() || token.id === state.crawl?.id && token.generation === state.generation) { renderPolicyLedger(); renderControls(); } } }
+  }
+
+  function policyVisibleRows() {
+    if (!state.policy?.enabled || state.policy.ledger_available === false || state.policy.engine !== nativePolicyEngine) return [];
+    const search = $('policy-search').value.toLocaleLowerCase(), filter = $('policy-filter').value;
+    return state.policy.observations.filter(row => {
+      const decision = row.occurrence.decision;
+      if (state.section === 'policyaliases' && !(typeof decision.normalized_discovered_url === 'string' && typeof decision.fetch_candidate_url === 'string' && decision.normalized_discovered_url !== decision.fetch_candidate_url)) return false;
+      if (filter !== 'all' && (['current','inherited'].includes(filter) ? row.basis !== filter : decision.decision !== filter)) return false;
+      return !search || JSON.stringify(row).toLocaleLowerCase().includes(search);
+    }).sort((left,right) => { const value = policyColumns[state.policySort][1], a = value(left), b = value(right); if (a == null && b == null) return 0; if (a == null) return 1; if (b == null) return -1; return (typeof a === 'number' && typeof b === 'number' ? a - b : String(a).localeCompare(String(b),'de',{numeric:true})) * state.policyDirection; });
+  }
+
+  const policyColumns = [
+    ['Sequenz', row => row.sequence],['Generation',row => row.generation],['Ledger-Basis',row => row.basis === 'current' ? 'Aktuelle Beobachtung' : row.basis === 'inherited' ? 'Geerbte Historie' : 'Nicht erfasst'],
+    ['Vorkommen-ID',row => row.occurrence.decision.occurrence_id],['Quelle / Rolle',row => `${row.occurrence.decision.source_kind} / ${row.occurrence.task_role}`],['Originalwert',row => row.occurrence.decision.raw_value],
+    ['Beobachtete URL',row => row.occurrence.decision.normalized_discovered_url],['Abrufkandidat',row => row.occurrence.decision.fetch_candidate_url],['Fragment',row => row.occurrence.decision.fragment],
+    ['Policy-Entscheidung',row => policyDecisionLabel(row.occurrence.decision.decision)],['Task-Zulassung',row => row.occurrence.admission_reason],['Eingeplante Anfrage-URL',row => row.occurrence.scheduled_fetch_url],
+    ['Zusammengeführte Task-ID',row => row.occurrence.coalesced_task_occurrence_id],['Grund / Fehler',row => [row.occurrence.input_error,row.occurrence.decision.reason_code,row.occurrence.decision.error].filter(Boolean).join(' · ')],
+    ['Abrufkandidat: Origin intern',row => row.occurrence.decision.host_internal],['Abrufkandidat: Pfad intern',row => row.occurrence.decision.folder_internal],['Eingabebasis',row => row.occurrence.input_basis],
+    ['Originalwert beobachtet',row => row.occurrence.raw_value_observed],['Quellordinal',row => row.occurrence.source_ordinal],['Quellrevision',row => row.occurrence.source_revision],['Policy-SHA256',row => row.occurrence.decision.policy_sha256]
+  ];
+
+  function renderPolicyLedger() {
+    if (!policySection()) return;
+    const result = state.policy, checkpoint = result?.checkpoint;
+    $('policy-error').hidden = !state.policyError; $('policy-error').textContent = state.policyError;
+    $('policy-summary').textContent = !state.crawl ? 'Einen gespeicherten Crawl auswählen.' : state.policyToken ? 'Ledger-Seite wird geladen …' : !result ? 'Noch keine Policy-Ledger-Beobachtungen geladen.' : !result.enabled ? 'Keine Policy-Aufzeichnung für diesen Lauf. Historische Befunde bleiben ohne nachträgliche Policy-Zulassung.' : result.ledger_available === false ? `Policy konfiguriert; gespeicherte SQLite-Vorkommen nicht verfügbar. Grund: ${result.reason || 'nicht erfasst'}. Eine importierte Zusammenfassung ist nur deklarierte Metadaten und kein verfügbares leeres oder vollständiges Ledger.` : `Profil ${result.engine} · Policy-SHA256 ${result.policy_sha256 || 'nicht erfasst'} · Revision ${checkpoint?.revision ?? 'nicht erfasst'} · ${checkpoint?.occurrences == null ? 'Anzahl nicht erfasst' : `${number(checkpoint.occurrences)} gespeicherte Vorkommen`} · ${checkpoint?.committed_bytes == null ? 'Speicher nicht erfasst' : `${number(checkpoint.committed_bytes)} Bytes`} · Ledger ${checkpoint?.complete === true ? 'vollständig' : checkpoint?.complete === false ? 'unvollständig' : 'Vollständigkeit unbekannt'}`;
+    const history = checkpoint?.inherited_history;
+    $('policy-scope').textContent = [result?.scope == null ? 'Ledger-Abdeckung nicht erfasst.' : typeof result.scope === 'string' ? result.scope : JSON.stringify(result.scope), ...(history ? [`Geerbte Historie: ${history.available_occurrences ?? 'unbekannt'} von ${history.expected_occurrences ?? 'unbekannt'} Vorkommen verfügbar; ${history.complete === true ? 'vollständig' : history.complete === false ? 'unvollständig' : 'Vollständigkeit unbekannt'}. Parent-Ledger-SHA256 ${history.parent_ledger_sha256 || 'nicht erfasst'}`] : []), ...(checkpoint ? [`Unvollständige Quellen: ${checkpoint.incomplete_sources ?? 'nicht erfasst'}. Rolling-SHA256 ${checkpoint.rolling_sha256 || 'nicht erfasst'}. Vollständigkeit betrifft das gespeicherte Ledger, nicht alle URLs der Website.`] : [])].join(' ');
+    const rows = policyVisibleRows(), table = $('policy-table');
+    table.querySelector('thead').innerHTML = `<tr>${policyColumns.map(([label], index) => `<th scope="col" aria-sort="${state.policySort === index ? state.policyDirection === 1 ? 'ascending' : 'descending' : 'none'}"><button type="button" data-policy-sort="${index}">${escape(label)} ${state.policySort === index ? state.policyDirection === 1 ? '↑' : '↓' : '↕'}</button></th>`).join('')}</tr>`;
+    const empty = state.policyError ? 'Ledger konnte nicht geladen werden; dies ist kein leeres vollständiges Ergebnis.' : !state.crawl ? 'Kein Crawl gewählt.' : result?.ledger_available === false && result.enabled ? 'Gespeicherte SQLite-Vorkommen sind nicht verfügbar. Vollständige Exporte sind gesperrt; eine importierte Zusammenfassung rekonstruiert keine Ledger-Zeilen.' : !result?.enabled ? 'Keine Policy-Vorkommen erfasst.' : !rows.length ? 'Keine passenden Vorkommen auf der geladenen Ledger-Seite. Weitere Ledger-Seiten können andere Entscheidungen enthalten.' : '';
+    table.querySelector('tbody').innerHTML = rows.length && !state.policyError ? rows.map((row,index) => `<tr data-policy-row="${index}" tabindex="0" aria-label="Details zum Policy-Vorkommen ${escape(row.occurrence.decision.occurrence_id)}">${policyColumns.map(([,value]) => `<td>${escape(value(row) ?? 'Nicht erfasst')}</td>`).join('')}</tr>`).join('') : `<tr><td class="empty-cell" colspan="${policyColumns.length}">${escape(empty)}</td></tr>`;
+    table.querySelectorAll('[data-policy-sort]').forEach(button => button.addEventListener('click',() => { const sort = Number(button.dataset.policySort); state.policyDirection = state.policySort === sort ? -state.policyDirection : 1; state.policySort = sort; renderPolicyLedger(); }));
+    table.querySelectorAll('[data-policy-row]').forEach(element => { const open = () => { state.policySelected = rows[Number(element.dataset.policyRow)]; renderPolicyInspector(); $('policy-inspector').scrollIntoView({block:'nearest'}); }; element.addEventListener('click',open); element.addEventListener('keydown',event => { if (['Enter',' '].includes(event.key)) { event.preventDefault(); open(); } }); });
+    renderPolicyInspector();
+    const busy = Boolean(state.policyToken), usable = Boolean(result?.enabled && result.ledger_available !== false && !state.policyError && result.engine === nativePolicyEngine);
+    $('policy-prev').disabled = busy || !state.policyBack.length; $('policy-next').disabled = busy || !usable || !result.has_more; $('policy-refresh').disabled = busy || !state.crawl;
+    $('policy-export-csv').disabled = !usable || busy; $('policy-export-json').disabled = !usable || busy;
+    $('policy-page-label').textContent = `${number(rows.length)} gefilterte/sortierte von ${number(result?.observations?.length || 0)} geladenen Vorkommen · nach Sequenz ${state.policyCursor} · maximal 200 pro API-Seite`;
+  }
+
+  function renderPolicyInspector() {
+    const row = state.policySelected; $('policy-inspector').hidden = !row; if (!row) return;
+    $('policy-inspector-basis').textContent = row.basis === 'inherited' ? 'Geerbte Ledger-Historie; kein neuer Abruf in diesem Lauf.' : row.basis === 'current' ? 'Aktuell gespeichertes Policy-Vorkommen. Eine Entscheidung allein belegt keinen gestarteten oder erfolgreichen Abruf.' : 'Ledger-Basis nicht erfasst.';
+    $('policy-inspector-data').textContent = JSON.stringify(row,null,2);
+    const url = row.occurrence.scheduled_fetch_url; $('policy-open-document').hidden = !url || !state.pageMap.has(url);
+  }
+
+  function exportPolicyPage() {
+    if (state.policyToken || state.policyError) return;
+    const rows = policyVisibleRows(); if (!rows.length) return;
+    const cell = input => { let value = String(input ?? ''); if (typeof input !== 'number' && typeof input !== 'boolean' && /^[\s\uFEFF]*[=+@-]/u.test(value)) value = `'${value}`; return `"${value.replace(/"/g,'""')}"`; };
+    const data = [policyColumns.map(([label]) => cell(label)).join(','),...rows.map(row => policyColumns.map(([,value]) => cell(value(row))).join(','))].join('\r\n');
+    downloadBlob(new Blob(['\uFEFF',data],{type:'text/csv;charset=utf-8'}),`open-seo-spider-${state.crawl.id}-policy-page-after-${state.policyCursor}.csv`);
+    message(`${number(rows.length)} gefilterte Vorkommen der geladenen Ledger-Seite exportiert. Vollständige Exporte stehen separat bereit.`);
+  }
+
+  function downloadPolicySnapshot(extension) {
+    if (!state.crawl || state.policyToken || state.policyError || !state.policy?.enabled || state.policy.ledger_available === false || state.policy.engine !== nativePolicyEngine) return;
+    const link = document.createElement('a');
+    link.href = `/api/crawls/${encodeURIComponent(state.crawl.id)}/policy.${extension}`;
+    link.download = `open-seo-spider-${state.crawl.id}-policy.${extension}`;
+    document.body.append(link); link.click(); link.remove();
   }
 
   function parsePositionRules(text) {
@@ -1429,6 +1645,20 @@
   }
 
   function bindEvents() {
+    $('policy-settings').addEventListener('input', invalidatePolicyPreview);
+    $('policy-settings').addEventListener('change', invalidatePolicyPreview);
+    $('policy-preview-button').addEventListener('click', previewPolicy);
+    $('settings-dialog').addEventListener('close', invalidatePolicyPreview);
+    $('settings-dialog').addEventListener('cancel', invalidatePolicyPreview);
+    $('policy-search').addEventListener('input', () => { renderPolicyLedger(); renderControls(); });
+    $('policy-filter').addEventListener('change', () => { renderPolicyLedger(); renderControls(); });
+    $('policy-refresh').addEventListener('click', () => loadPolicyPage());
+    $('policy-next').addEventListener('click', () => { if (state.policy?.has_more) loadPolicyPage(state.policy.next_after_sequence, 'next'); });
+    $('policy-prev').addEventListener('click', () => { if (state.policyBack.length) loadPolicyPage(state.policyBack[state.policyBack.length - 1], 'back'); });
+    $('policy-inspector-close').addEventListener('click', () => { state.policySelected = null; $('policy-inspector').hidden = true; });
+    $('policy-open-document').addEventListener('click', () => { const url = state.policySelected?.occurrence.scheduled_fetch_url; if (url && state.pageMap.has(url)) selectPage(state.pageMap.get(url)); });
+    $('policy-export-csv').addEventListener('click', () => downloadPolicySnapshot('csv'));
+    $('policy-export-json').addEventListener('click', () => downloadPolicySnapshot('json'));
     $('recrawl-selected').addEventListener('click', openSelectedRecrawl);
     $('recrawl-clear').addEventListener('click', () => { if (actionBusy()) return; state.recrawlURLs.clear(); renderControls(); if (!['overview', 'graph'].includes(state.section)) renderTable(); });
     $('inspector-recrawl-checkbox').addEventListener('change', event => { if (state.selected) setRecrawlSelected(state.selected.url, event.target.checked); });
@@ -1502,6 +1732,7 @@
   }
 
   async function initialize() {
+    $('advanced-config').append($('policy-settings-template').content.cloneNode(true));
     restoreSettings();
     bindEvents();
     selectSection('overview');
