@@ -35,6 +35,7 @@ jobs:
       - run: node scripts/api-e2e.mjs
       - run: node scripts/list-import-e2e.mjs
       - run: node scripts/crawl-control-e2e.mjs
+      - run: node scripts/selected-recrawl-e2e.mjs
       - run: npm ci --ignore-scripts
         working-directory: scripts
       - run: node scripts/mcp-e2e.mjs
@@ -72,6 +73,7 @@ jobs:
         working-directory: renderer
       - run: node web/verification/ui-smoke.cjs
       - run: node web/verification/ui-crawl-control-smoke.cjs
+      - run: node web/verification/ui-selected-recrawl-smoke.cjs
       - run: node --test web/verification/serp-state-race.test.cjs
       - run: node --test web/verification/robots-input-state.test.cjs
       - run: node --test web/verification/list-import-state.test.mjs
@@ -87,6 +89,7 @@ jobs:
           node --input-type=module -e 'const urls=["http://127.0.0.1:8787/healthz","http://127.0.0.1:8790/health"];for(const url of urls){let ready=false;for(let i=0;i<80;i++){try{if((await fetch(url)).ok){ready=true;break}}catch{}await new Promise(r=>setTimeout(r,250))}if(!ready)throw new Error(`Service unavailable: ${url}`)}'
           cargo test --locked -p open-seo-spider-core --test crawl_fixtures live_browser_worker_executes_javascript_for_core_crawl -- --ignored
           cargo test --locked -p open-seo-spider-core --test control_fixtures live_browser_worker_pause_drains_render_and_retains_rendered_discoveries -- --ignored
+          cargo test --locked -p open-seo-spider-core --test recrawl_fixtures live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion -- --ignored
           node web/verification/ui-renderer-live.cjs
           node web/verification/ui-serp-live.cjs
           node web/verification/ui-resource-live.cjs
@@ -94,3 +97,4 @@ jobs:
           node web/verification/ui-robots-live.cjs
           node web/verification/ui-list-import-live.cjs
           node web/verification/ui-crawl-control-live.cjs
+          node web/verification/ui-selected-recrawl-live.cjs

@@ -112,8 +112,17 @@ impl Bridge {
                         "/pause"
                     }
                     "spider_resume" => {
-                        body = Some(json!({}));
+                        body = Some(args.get("options").cloned().unwrap_or_else(|| json!({})));
                         "/resume"
+                    }
+                    "spider_recrawl" => {
+                        let mut request =
+                            json!({"urls":args.get("urls").context("urls required")?});
+                        if let Some(value) = args.get("max_attempts") {
+                            request["max_attempts"] = value.clone();
+                        }
+                        body = Some(request);
+                        "/recrawl"
                     }
                     "spider_project" => "/project.json",
                     _ => bail!("Unknown tool"),
@@ -170,10 +179,11 @@ fn inventory() -> Vec<Value> {
         ("spider_analysis","Read graph and relationship/security/JSON-LD observations",json!({"id":uuid}),vec!["id"],true),
         ("spider_cancel","Cancel and retain the saved frontier",json!({"id":uuid}),vec!["id"],false),
         ("spider_pause","Stop admitting new documents, drain active work and persist a resumable checkpoint",json!({"id":uuid}),vec!["id"],false),
-        ("spider_resume","Resume a local crawl from SQLite",json!({"id":uuid}),vec!["id"],false),
+        ("spider_resume","Resume a local crawl from SQLite with optional explicit operational overrides",json!({"id":uuid,"options":{"type":"object","properties":{"max_pages":{"type":"integer","minimum":0},"max_attempts":{"type":"integer","minimum":0},"concurrency":{"type":"integer","minimum":1},"delay_ms":{"type":"integer","minimum":0},"request_timeout_secs":{"type":"integer","minimum":1}},"additionalProperties":false}}),vec!["id"],false),
+        ("spider_recrawl","Create a derived crawl that refreshes only selected exact requested URLs and retains the source snapshot",json!({"id":uuid,"urls":{"type":"array","items":{"type":"string"},"minItems":1},"max_attempts":{"type":"integer","minimum":0,"description":"Optional selected-attempt budget; zero means unlimited"}}),vec!["id","urls"],false),
         ("spider_project","Read the original project snapshot; paginate large crawls via spider_pages",json!({"id":uuid}),vec!["id"],true),
         ("spider_compare","Compare two crawl snapshots",json!({"before":uuid,"after":uuid}),vec!["before","after"],true),
-    ].into_iter().map(|(name,description,properties,required,read)|json!({"name":name,"description":description,"inputSchema":{"type":"object","properties":properties,"required":required,"additionalProperties":false},"annotations":{"readOnlyHint":read,"destructiveHint":false,"openWorldHint":name=="spider_start_crawl"||name=="spider_resume"}})).collect()
+    ].into_iter().map(|(name,description,properties,required,read)|json!({"name":name,"description":description,"inputSchema":{"type":"object","properties":properties,"required":required,"additionalProperties":false},"annotations":{"readOnlyHint":read,"destructiveHint":false,"openWorldHint":name=="spider_start_crawl"||name=="spider_resume"||name=="spider_recrawl"}})).collect()
 }
 pub async fn stdio(base: &str) -> anyhow::Result<()> {
     let bridge = Bridge::new(base)?;
@@ -222,7 +232,7 @@ mod tests {
                 .await
                 .is_none()
         );
-        assert_eq!(inventory().len(), 12);
+        assert_eq!(inventory().len(), 13);
     }
     #[test]
     fn only_loopback_bridge() {

@@ -11,7 +11,8 @@ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const binary=process.env.SPIDER_BINARY||path.join(root,'target','debug',`open-seo-spider${process.platform==='win32'?'.exe':''}`);
 const data=await mkdtemp(path.join(os.tmpdir(),'open-seo-spider-mcp-'));
 const api='http://127.0.0.1:18788';
-const fixture=http.createServer((request,response)=>{if(request.url==='/robots.txt'){response.end('User-agent: *\nAllow: /');return;}response.setHeader('content-type','text/html');response.end(`<html lang="de"><title>MCP ${request.url}</title><body><h1>Fixture</h1></body></html>`);});
+let revision=0;
+const fixture=http.createServer((request,response)=>{if(request.url==='/robots.txt'){response.end('User-agent: *\nAllow: /');return;}response.setHeader('content-type','text/html');response.end(`<html lang="de"><title>MCP ${request.url} revision ${revision}</title><body><h1>Fixture</h1></body></html>`);});
 await new Promise(resolve=>fixture.listen(19089,'127.0.0.1',resolve));
 const server=spawn(binary,['serve','--listen','127.0.0.1:18788','--data-dir',data],{cwd:root,windowsHide:true,stdio:'ignore'});
 let client;
@@ -25,9 +26,11 @@ try{
     client=new Client({name:'open-seo-spider-acceptance',version:'0.1.0'});
     const transport=kind==='stdio'?new StdioClientTransport({command:binary,args:['mcp','--server',api],cwd:root,stderr:'pipe'}):new StreamableHTTPClientTransport(new URL(api+'/mcp'));
     await client.connect(transport);
-    const inventory=await client.listTools();assert.equal(inventory.tools.length,12);
+    const inventory=await client.listTools();assert.equal(inventory.tools.length,13);
     assert.ok(inventory.tools.some(tool=>tool.name==='spider_pause'&&tool.annotations.readOnlyHint===false));
+    assert.ok(inventory.tools.some(tool=>tool.name==='spider_recrawl'&&tool.annotations.readOnlyHint===false&&tool.annotations.openWorldHint===true));
     const caps=await call('spider_capabilities');assert.equal(caps.crawl.url_limit,null);
+    revision=0;
     const started=await call('spider_start_crawl',{config:{seed_urls:['http://127.0.0.1:19089/a','http://127.0.0.1:19089/b'],crawl_links:false,discover_sitemaps:false,delay_ms:0}});
     const finished=await until(async()=>{const status=await call('spider_status',{id:started.id});return status.status==='completed'&&status;});assert.equal(finished.stats.fetched,2);
     const pages=await call('spider_pages',{id:started.id,offset:1,limit:1});assert.equal(pages.pages.length,1);assert.equal(pages.total,2);
@@ -38,7 +41,12 @@ try{
     assert((await call('spider_list_crawls')).crawls.length>0);
     const missing=await client.callTool({name:'spider_status',arguments:{id:'00000000-0000-0000-0000-000000000000'}});assert.equal(missing.isError,true);
     const latePause=await client.callTool({name:'spider_pause',arguments:{id:started.id}});assert.equal(latePause.isError,true);
-    checks.push(`${kind}: SDK initialize, 12 tools, start/status/pages/issues/project/analysis/compare/list and completed-pause conflict/tool error`);
+    const parent=await call('spider_project',{id:started.id});revision=1;
+    const recrawl=await call('spider_recrawl',{id:started.id,urls:['http://127.0.0.1:19089/a'],max_attempts:0});assert.notEqual(recrawl.id,started.id);assert.equal(recrawl.parent_id,started.id);
+    await until(async()=>{const status=await call('spider_status',{id:recrawl.id});if(status.status==='failed')throw Error(status.error);return status.status==='completed';});
+    const child=await call('spider_project',{id:recrawl.id});assert.equal(child.pages.length,2);assert.deepEqual(child.pages.find(page=>page.url.endsWith('/b')),parent.pages.find(page=>page.url.endsWith('/b')));assert.match(child.pages.find(page=>page.url.endsWith('/a')).titles[0],/revision 1/);assert.deepEqual(await call('spider_project',{id:started.id}),parent);
+    const changes=await call('spider_compare',{before:started.id,after:recrawl.id});assert.equal(changes.changes.length,1);assert.equal(changes.changes[0].url,'http://127.0.0.1:19089/a');
+    checks.push(`${kind}: SDK initialize, 13 tools, crawl/read/analysis/compare, completed-pause conflict, derived selected recrawl with fresh selected row and exact retained parent/unselected rows`);
     await client.close();client=null;
   }
   const evidence={tested_at:new Date().toISOString(),sdk:'@modelcontextprotocol/client 2.3.1',platform:process.platform,result:'PASS',checks};

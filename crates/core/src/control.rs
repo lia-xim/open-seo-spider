@@ -62,6 +62,8 @@ pub struct CrawlStoreInspection {
     /// Controlled-writer consistency: generation, hashes and row counts agree.
     /// This is not a full integrity scan of arbitrary SQLite row contents.
     pub checkpoint_valid: bool,
+    #[serde(default)]
+    pub operation: Option<crate::SelectedRecrawlOperation>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

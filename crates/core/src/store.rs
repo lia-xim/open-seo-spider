@@ -1,6 +1,7 @@
 use crate::{
     CrawlCheckpoint, CrawlConfig, CrawlOutcome, CrawlReport, CrawlRunState, CrawlStoreInspection,
-    PageRecord,
+    PageRecord, PreparedSelectedRecrawl, RecrawlTargetObservation, RecrawlTargetState, RunPlan,
+    SelectedRecrawlOperation,
 };
 use anyhow::{Context, bail};
 use rusqlite::{Connection, OpenFlags, OptionalExtension, params};
@@ -55,7 +56,10 @@ impl CrawlStore {
             CREATE TABLE IF NOT EXISTS pages(url TEXT PRIMARY KEY, data TEXT NOT NULL);
             CREATE INDEX IF NOT EXISTS frontier_pending ON frontier(done,depth);
             CREATE TABLE IF NOT EXISTS discovery_frontier(kind TEXT NOT NULL,url TEXT NOT NULL,done INTEGER NOT NULL DEFAULT 0,PRIMARY KEY(kind,url));
-            CREATE INDEX IF NOT EXISTS discovery_frontier_pending ON discovery_frontier(done);")?;
+            CREATE INDEX IF NOT EXISTS discovery_frontier_pending ON discovery_frontier(done);
+            CREATE TABLE IF NOT EXISTS recrawl_base(id INTEGER PRIMARY KEY CHECK(id=1),snapshot BLOB NOT NULL);
+            CREATE TABLE IF NOT EXISTS recrawl_pages(url TEXT PRIMARY KEY,ordinal INTEGER NOT NULL,payload_sha256 TEXT NOT NULL,inherited INTEGER NOT NULL);
+            CREATE TABLE IF NOT EXISTS recrawl_targets(url TEXT PRIMARY KEY,admitted_attempts INTEGER NOT NULL DEFAULT 0,last_admitted_generation INTEGER,committed_generation INTEGER,committed_payload_sha256 TEXT);")?;
         Ok(Self {
             connection: Mutex::new(connection),
         })
@@ -104,6 +108,23 @@ impl CrawlStore {
             }
             _ => false,
         };
+        let plan = load_run_plan(&transaction)?;
+        let operation = if matches!(plan, RunPlan::SelectedRecrawl(_)) {
+            verify_recrawl_rows(&transaction, &plan)?;
+            recrawl_operation(&transaction)?
+        } else {
+            None
+        };
+        if checkpoint_valid && let Some(operation) = &operation {
+            let saved: CrawlReport = serde_json::from_str(
+                report
+                    .as_deref()
+                    .context("Terminal selected checkpoint has no report")?,
+            )?;
+            if saved.operation.as_ref() != Some(operation) {
+                bail!("Terminal selected operation differs from its checkpoint report");
+            }
+        }
         transaction.commit()?;
         Ok(CrawlStoreInspection {
             config,
@@ -114,7 +135,212 @@ impl CrawlStore {
             discovery_pending,
             discovery_complete,
             checkpoint_valid,
+            operation,
         })
+    }
+
+    /// Read-only immutable plan inspection. Unknown engines, altered parent
+    /// bytes, plan/config mismatches and invalid retained rows are rejected.
+    pub fn run_plan(&self) -> anyhow::Result<RunPlan> {
+        let mut connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        let plan = load_run_plan(&transaction)?;
+        if matches!(plan, RunPlan::SelectedRecrawl(_)) {
+            verify_recrawl_rows(&transaction, &plan)?;
+        }
+        transaction.commit()?;
+        Ok(plan)
+    }
+
+    pub fn parent_snapshot_bytes(&self) -> anyhow::Result<Option<Vec<u8>>> {
+        let connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        parent_snapshot(&connection)
+    }
+
+    pub fn recrawl_operation(&self) -> anyhow::Result<Option<SelectedRecrawlOperation>> {
+        let mut connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        let plan = load_run_plan(&transaction)?;
+        if matches!(plan, RunPlan::SelectedRecrawl(_)) {
+            verify_recrawl_rows(&transaction, &plan)?;
+        }
+        let operation = recrawl_operation(&transaction)?;
+        transaction.commit()?;
+        Ok(operation)
+    }
+
+    /// Atomically initializes an EMPTY derived database. The exact immutable
+    /// parent JSON and compact unselected payloads are retained; selected old
+    /// rows are never inserted into this child's current observation set.
+    pub fn initialize_selected_recrawl(
+        &self,
+        prepared: &PreparedSelectedRecrawl,
+    ) -> anyhow::Result<()> {
+        prepared.validate()?;
+        let mut connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        for table in [
+            "metadata",
+            "pages",
+            "frontier",
+            "discovery_frontier",
+            "recrawl_base",
+            "recrawl_pages",
+            "recrawl_targets",
+        ] {
+            let exists: i64 =
+                transaction.query_row(&format!("SELECT count(*) FROM {table}"), [], |row| {
+                    row.get(0)
+                })?;
+            if exists != 0 {
+                bail!("Selected recrawl requires a new empty database");
+            }
+        }
+        let selected = prepared.plan.targets_set();
+        put_metadata(
+            &transaction,
+            "config",
+            &serde_json::to_string(&prepared.config)?,
+        )?;
+        put_metadata(
+            &transaction,
+            "run_plan",
+            &serde_json::to_string(&RunPlan::SelectedRecrawl(prepared.plan.clone()))?,
+        )?;
+        put_metadata(&transaction, "operation_kind", "selected_recrawl")?;
+        transaction.execute(
+            "INSERT INTO recrawl_base(id,snapshot) VALUES(1,?1)",
+            [&prepared.base_snapshot_bytes],
+        )?;
+        for (ordinal, page) in prepared.base_report.pages.iter().enumerate() {
+            let text = serde_json::to_string(page)?;
+            let inherited = !selected.contains(page.url.as_str());
+            transaction.execute("INSERT INTO recrawl_pages(url,ordinal,payload_sha256,inherited) VALUES(?1,?2,?3,?4)", params![page.url, i64::try_from(ordinal)?, sha256(&text), inherited])?;
+            if inherited {
+                transaction.execute(
+                    "INSERT INTO pages(url,data) VALUES(?1,?2)",
+                    params![page.url, text],
+                )?;
+            }
+        }
+        for target in &prepared.plan.targets {
+            transaction.execute(
+                "INSERT INTO frontier(url,depth,discovered_from) VALUES(?1,?2,?3)",
+                params![
+                    target.requested_url,
+                    i64::try_from(target.depth)?,
+                    target.discovered_from
+                ],
+            )?;
+            transaction.execute(
+                "INSERT INTO recrawl_targets(url) VALUES(?1)",
+                [&target.requested_url],
+            )?;
+        }
+        put_metadata(&transaction, "discovery_initialized", "true")?;
+        put_metadata(&transaction, "discovery_complete", "true")?;
+        put_metadata(
+            &transaction,
+            "recrawl_invocation",
+            &serde_json::to_string(&RecrawlInvocation {
+                generation: 0,
+                max_attempts: prepared.plan.default_max_attempts,
+                admitted: 0,
+                committed: 0,
+            })?,
+        )?;
+        transaction.commit()?;
+        Ok(())
+    }
+
+    pub(crate) fn start_recrawl_invocation(
+        &self,
+        generation: u64,
+        override_budget: Option<usize>,
+    ) -> anyhow::Result<Option<usize>> {
+        let mut connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        require_generation(&transaction, generation)?;
+        let RunPlan::SelectedRecrawl(plan) =
+            metadata::<RunPlan>(&transaction, "run_plan")?.context("Missing selected run plan")?
+        else {
+            bail!("Attempt budget applies only to selected recrawl");
+        };
+        let previous: Option<RecrawlInvocation> = metadata(&transaction, "recrawl_invocation")?;
+        let max_attempts = match override_budget {
+            Some(value) => (value > 0).then_some(value),
+            None => previous.map_or(plan.default_max_attempts, |old| old.max_attempts),
+        };
+        put_metadata(
+            &transaction,
+            "recrawl_invocation",
+            &serde_json::to_string(&RecrawlInvocation {
+                generation,
+                max_attempts,
+                admitted: 0,
+                committed: 0,
+            })?,
+        )?;
+        transaction.commit()?;
+        Ok(max_attempts)
+    }
+
+    pub(crate) fn admit_selected(&self, url: &str, generation: u64) -> anyhow::Result<()> {
+        let mut connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        require_generation(&transaction, generation)?;
+        let mut invocation: RecrawlInvocation =
+            metadata(&transaction, "recrawl_invocation")?.context("Missing selected invocation")?;
+        if invocation.generation != generation
+            || invocation
+                .max_attempts
+                .is_some_and(|limit| invocation.admitted >= limit)
+        {
+            bail!("Selected admission exceeds this invocation budget or generation");
+        }
+        let updated = transaction.execute("UPDATE recrawl_targets SET admitted_attempts=admitted_attempts+1,last_admitted_generation=?2 WHERE url=?1 AND committed_generation IS NULL AND (last_admitted_generation IS NULL OR last_admitted_generation<>?2) AND EXISTS(SELECT 1 FROM frontier WHERE frontier.url=?1 AND done=0)", params![url,i64::try_from(generation)?])?;
+        if updated != 1 {
+            bail!("Selected admission is not a pending target");
+        }
+        invocation.admitted = invocation
+            .admitted
+            .checked_add(1)
+            .context("Selected admission count overflow")?;
+        put_metadata(
+            &transaction,
+            "recrawl_invocation",
+            &serde_json::to_string(&invocation)?,
+        )?;
+        transaction.commit()?;
+        Ok(())
+    }
+
+    pub(crate) fn recrawl_operation_for_runner(
+        &self,
+    ) -> anyhow::Result<Option<SelectedRecrawlOperation>> {
+        let connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        recrawl_operation(&connection)
     }
 
     pub fn checkpoint(&self) -> anyhow::Result<Option<CrawlCheckpoint>> {
@@ -152,6 +378,12 @@ impl CrawlStore {
             .connection
             .lock()
             .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        if let RunPlan::SelectedRecrawl(plan) = load_run_plan(&connection)? {
+            let bytes = parent_snapshot(&connection)?
+                .context("Selected recrawl has no immutable parent")?;
+            crate::recrawl::validate_saved_plan(&plan, &bytes, config)?;
+            verify_recrawl_rows(&connection, &RunPlan::SelectedRecrawl(plan))?;
+        }
         let saved: Option<String> = connection
             .query_row("SELECT value FROM metadata WHERE key='config'", [], |row| {
                 row.get(0)
@@ -364,15 +596,43 @@ impl CrawlStore {
         discovered: &[QueueEntry],
         generation: u64,
     ) -> anyhow::Result<()> {
+        let page_text = serde_json::to_string(page)?;
         let mut connection = self
             .connection
             .lock()
             .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
         let transaction = connection.transaction()?;
         require_generation(&transaction, generation)?;
+        if metadata_text(&transaction, "operation_kind")?.as_deref() == Some("selected_recrawl") {
+            if !discovered.is_empty() {
+                bail!("Selected recrawl cannot expand its frontier");
+            }
+            let target: (i64,Option<String>) = transaction.query_row("SELECT frontier.depth,frontier.discovered_from FROM frontier JOIN recrawl_targets ON frontier.url=recrawl_targets.url WHERE frontier.url=?1", [&page.url], |row| Ok((row.get(0)?,row.get(1)?)))?;
+            if page.depth != usize::try_from(target.0)? || page.discovered_from != target.1 {
+                bail!("Selected observation changed parent discovery provenance");
+            }
+            let updated = transaction.execute("UPDATE recrawl_targets SET committed_generation=?2,committed_payload_sha256=?3 WHERE url=?1 AND admitted_attempts>0 AND last_admitted_generation=?2 AND committed_generation IS NULL", params![page.url, i64::try_from(generation)?,sha256(&page_text)])?;
+            if updated != 1 {
+                bail!("Selected target is not pending/admitted");
+            }
+            let mut invocation: RecrawlInvocation = metadata(&transaction, "recrawl_invocation")?
+                .context("Selected invocation missing")?;
+            if invocation.generation != generation {
+                bail!("Stale selected invocation");
+            }
+            invocation.committed = invocation
+                .committed
+                .checked_add(1)
+                .context("Selected commit count overflow")?;
+            put_metadata(
+                &transaction,
+                "recrawl_invocation",
+                &serde_json::to_string(&invocation)?,
+            )?;
+        }
         transaction.execute(
-            "INSERT OR REPLACE INTO pages(url,data) VALUES(?1,?2)",
-            params![page.url, serde_json::to_string(page)?],
+            "INSERT INTO pages(url,data) VALUES(?1,?2) ON CONFLICT(url) DO UPDATE SET data=excluded.data",
+            params![page.url, page_text],
         )?;
         transaction.execute("UPDATE frontier SET done=1 WHERE url=?1", [&page.url])?;
         for entry in discovered {
@@ -390,9 +650,14 @@ impl CrawlStore {
             .connection
             .lock()
             .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
-        let mut statement = connection.prepare(
-            "SELECT url,depth,discovered_from FROM frontier WHERE done=0 ORDER BY depth,rowid",
-        )?;
+        let sql = if metadata_text(&connection, "operation_kind")?.as_deref()
+            == Some("selected_recrawl")
+        {
+            "SELECT frontier.url,frontier.depth,frontier.discovered_from FROM frontier JOIN recrawl_pages ON frontier.url=recrawl_pages.url WHERE frontier.done=0 ORDER BY recrawl_pages.ordinal"
+        } else {
+            "SELECT url,depth,discovered_from FROM frontier WHERE done=0 ORDER BY depth,rowid"
+        };
+        let mut statement = connection.prepare(sql)?;
         statement
             .query_map([], |row| {
                 Ok(QueueEntry {
@@ -410,7 +675,14 @@ impl CrawlStore {
             .connection
             .lock()
             .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
-        let mut statement = connection.prepare("SELECT data FROM pages ORDER BY rowid")?;
+        let sql = if metadata_text(&connection, "operation_kind")?.as_deref()
+            == Some("selected_recrawl")
+        {
+            "SELECT pages.data FROM pages JOIN recrawl_pages ON pages.url=recrawl_pages.url ORDER BY recrawl_pages.ordinal"
+        } else {
+            "SELECT data FROM pages ORDER BY rowid"
+        };
+        let mut statement = connection.prepare(sql)?;
         let values = statement
             .query_map([], |row| row.get::<_, String>(0))?
             .collect::<Result<Vec<_>, _>>()?;
@@ -458,6 +730,9 @@ impl CrawlStore {
         if completed != report.summary.completed || pending != report.summary.pending {
             bail!("Report does not match the committed page frontier");
         }
+        if report.operation != recrawl_operation(&transaction)? {
+            bail!("Report selected operation does not match committed target evidence");
+        }
         let config =
             metadata_text(&transaction, "config")?.context("Crawl has no saved configuration")?;
         let checkpoint = CrawlCheckpoint {
@@ -499,6 +774,230 @@ impl CrawlStore {
             .map(|value| serde_json::from_str(&value).map_err(Into::into))
             .transpose()
     }
+}
+
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+struct RecrawlInvocation {
+    generation: u64,
+    max_attempts: Option<usize>,
+    admitted: usize,
+    committed: usize,
+}
+
+fn parent_snapshot(connection: &Connection) -> anyhow::Result<Option<Vec<u8>>> {
+    let exists: bool = connection.query_row(
+        "SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE type='table' AND name='recrawl_base')",
+        [],
+        |row| row.get(0),
+    )?;
+    if !exists {
+        return Ok(None);
+    }
+    Ok(connection
+        .query_row(
+            "SELECT snapshot FROM recrawl_base WHERE id=1 AND length(snapshot)<=268435456",
+            [],
+            |row| row.get(0),
+        )
+        .optional()?)
+}
+
+fn load_run_plan(connection: &Connection) -> anyhow::Result<RunPlan> {
+    let plan: RunPlan = metadata(connection, "run_plan")?.unwrap_or_default();
+    if let RunPlan::SelectedRecrawl(selected) = &plan {
+        if metadata_text(connection, "operation_kind")?.as_deref() != Some("selected_recrawl") {
+            bail!("Selected operation kind marker is inconsistent");
+        }
+        let bytes = parent_snapshot(connection)?
+            .context("Selected recrawl has no immutable parent snapshot")?;
+        let config: CrawlConfig = metadata(connection, "config")?
+            .context("Selected recrawl has no inherited configuration")?;
+        crate::recrawl::validate_saved_plan(selected, &bytes, &config)?;
+    } else if parent_snapshot(connection)?.is_some()
+        || metadata_text(connection, "operation_kind")?.is_some()
+    {
+        bail!("Immutable recrawl parent exists without a selected run plan");
+    }
+    Ok(plan)
+}
+
+fn verify_recrawl_rows(connection: &Connection, plan: &RunPlan) -> anyhow::Result<()> {
+    let RunPlan::SelectedRecrawl(plan) = plan else {
+        return Ok(());
+    };
+    let bytes = parent_snapshot(connection)?.context("Immutable parent missing")?;
+    let base: CrawlReport = serde_json::from_slice(&bytes)?;
+    let run: Option<CrawlRunState> = metadata(connection, "run_state")?;
+    let run_generation = run.map_or(0, |run| run.generation);
+    let selected = plan.targets_set();
+    let current: usize = count(connection, "SELECT count(*) FROM recrawl_pages")?;
+    if current != base.pages.len()
+        || count(connection, "SELECT count(*) FROM recrawl_targets")? != plan.targets.len()
+        || count(connection, "SELECT count(*) FROM frontier")? != plan.targets.len()
+        || discovery_pending_count(connection)? != 0
+    {
+        bail!("Selected recrawl rows/frontier do not match its immutable plan");
+    }
+    for (ordinal, page) in base.pages.iter().enumerate() {
+        let saved: (i64, String, bool) = connection.query_row(
+            "SELECT ordinal,payload_sha256,inherited FROM recrawl_pages WHERE url=?1",
+            [&page.url],
+            |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?)),
+        )?;
+        if usize::try_from(saved.0)? != ordinal
+            || saved.1 != crate::recrawl::payload_sha256(page)?
+            || saved.2 == selected.contains(page.url.as_str())
+        {
+            bail!("Retained parent payload identity is inconsistent");
+        }
+        let data: Option<String> = connection
+            .query_row("SELECT data FROM pages WHERE url=?1", [&page.url], |row| {
+                row.get(0)
+            })
+            .optional()?;
+        if saved.2 {
+            if data.as_deref().map(sha256).as_deref() != Some(saved.1.as_str()) {
+                bail!("Inherited page payload was altered");
+            }
+        } else {
+            let frontier: (i64, Option<String>, i64) = connection.query_row(
+                "SELECT depth,discovered_from,done FROM frontier WHERE url=?1",
+                [&page.url],
+                |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?)),
+            )?;
+            if usize::try_from(frontier.0)? != page.depth
+                || frontier.1 != page.discovered_from
+                || !matches!(frontier.2, 0 | 1)
+            {
+                bail!("Selected frontier changed immutable parent discovery provenance");
+            }
+            let (attempts,last_admitted,committed,payload): (i64,Option<i64>,Option<i64>,Option<String>) = connection.query_row(
+                "SELECT admitted_attempts,last_admitted_generation,committed_generation,committed_payload_sha256 FROM recrawl_targets WHERE url=?1",
+                [&page.url],
+                |row| Ok((row.get(0)?,row.get(1)?,row.get(2)?,row.get(3)?)),
+            )?;
+            let attempts = u64::try_from(attempts)?;
+            let last_admitted = last_admitted.map(u64::try_from).transpose()?;
+            let committed = committed.map(u64::try_from).transpose()?;
+            if attempts > run_generation
+                || (attempts == 0) != last_admitted.is_none()
+                || last_admitted
+                    .is_some_and(|generation| generation == 0 || generation > run_generation)
+                || committed.is_some_and(|generation| {
+                    generation == 0
+                        || generation > run_generation
+                        || Some(generation) != last_admitted
+                })
+                || committed.is_some() != payload.is_some()
+            {
+                bail!("Selected admission/commit generation evidence is inconsistent");
+            }
+            let done = frontier.2 == 1;
+            if committed.is_some() != done || data.is_some() != done {
+                bail!("Selected pending/committed rows are inconsistent");
+            }
+            if let Some(data) = data {
+                if payload.as_deref() != Some(sha256(&data).as_str()) {
+                    bail!("Committed selected payload was altered");
+                }
+                let fresh: PageRecord = serde_json::from_str(&data)?;
+                if fresh.url != page.url
+                    || fresh.depth != page.depth
+                    || fresh.discovered_from != page.discovered_from
+                {
+                    bail!("Selected row changed requested identity/discovery provenance");
+                }
+            }
+        }
+    }
+    if count(
+        connection,
+        "SELECT count(*) FROM pages WHERE url NOT IN(SELECT url FROM recrawl_pages)",
+    )? != 0
+    {
+        bail!("Unexpected current page outside selected plan");
+    }
+    let invocation: RecrawlInvocation =
+        metadata(connection, "recrawl_invocation")?.context("Selected invocation missing")?;
+    if invocation.generation > run_generation
+        || invocation.committed > invocation.admitted
+        || invocation
+            .max_attempts
+            .is_some_and(|limit| limit == 0 || invocation.admitted > limit)
+    {
+        bail!("Selected invocation counters/budget are inconsistent");
+    }
+    let admitted: i64 = connection.query_row(
+        "SELECT count(*) FROM recrawl_targets WHERE last_admitted_generation=?1",
+        [i64::try_from(invocation.generation)?],
+        |row| row.get(0),
+    )?;
+    let committed: i64 = connection.query_row(
+        "SELECT count(*) FROM recrawl_targets WHERE committed_generation=?1",
+        [i64::try_from(invocation.generation)?],
+        |row| row.get(0),
+    )?;
+    if usize::try_from(admitted)? != invocation.admitted
+        || usize::try_from(committed)? != invocation.committed
+    {
+        bail!("Selected invocation counters disagree with target evidence");
+    }
+    Ok(())
+}
+
+fn recrawl_operation(connection: &Connection) -> anyhow::Result<Option<SelectedRecrawlOperation>> {
+    let Some(RunPlan::SelectedRecrawl(plan)) = metadata::<RunPlan>(connection, "run_plan")? else {
+        return Ok(None);
+    };
+    let invocation: RecrawlInvocation = metadata(connection, "recrawl_invocation")?
+        .context("Selected invocation evidence missing")?;
+    let retained = count(
+        connection,
+        "SELECT count(*) FROM recrawl_pages WHERE inherited=1",
+    )?;
+    let mut statement = connection
+        .prepare("SELECT url,admitted_attempts,committed_generation FROM recrawl_targets")?;
+    let rows = statement
+        .query_map([], |row| {
+            Ok((
+                row.get::<_, String>(0)?,
+                row.get::<_, i64>(1)?,
+                row.get::<_, Option<i64>>(2)?,
+            ))
+        })?
+        .collect::<Result<Vec<_>, _>>()?;
+    let mut records: std::collections::HashMap<_, _> = rows
+        .into_iter()
+        .map(|(url, attempts, generation)| (url, (attempts, generation)))
+        .collect();
+    let mut targets = Vec::with_capacity(plan.targets.len());
+    for target in &plan.targets {
+        let (attempts, generation) = records
+            .remove(&target.requested_url)
+            .context("Selected target evidence missing")?;
+        targets.push(RecrawlTargetObservation {
+            requested_url: target.requested_url.clone(),
+            parent_ordinal: target.parent_ordinal,
+            parent_page_sha256: target.parent_page_sha256.clone(),
+            state: if generation.is_some() {
+                RecrawlTargetState::Committed
+            } else {
+                RecrawlTargetState::Pending
+            },
+            admitted_attempts: usize::try_from(attempts)?,
+            committed_generation: generation.map(u64::try_from).transpose()?,
+        });
+    }
+    if !records.is_empty() {
+        bail!("Unexpected selected target evidence");
+    }
+    Ok(Some(plan.operation(
+        retained,
+        targets,
+        invocation.max_attempts,
+        invocation.admitted,
+        invocation.committed,
+    )))
 }
 
 fn metadata_text(connection: &Connection, key: &str) -> anyhow::Result<Option<String>> {
@@ -564,6 +1063,7 @@ mod tests {
 
     fn report(config: CrawlConfig, pending: usize) -> CrawlReport {
         CrawlReport {
+            operation: None,
             config,
             pages: Vec::new(),
             issues: Vec::new(),
@@ -572,6 +1072,220 @@ mod tests {
                 ..Default::default()
             },
             warnings: Vec::new(),
+        }
+    }
+
+    fn selected_preparation() -> PreparedSelectedRecrawl {
+        let mut source = report(
+            CrawlConfig {
+                seed_urls: vec!["https://example.org/".into()],
+                ..Default::default()
+            },
+            0,
+        );
+        source.pages = vec![
+            PageRecord {
+                url: "https://example.org/retained".into(),
+                fetched_at: "parent-time".into(),
+                ..Default::default()
+            },
+            PageRecord {
+                url: "https://example.org/selected".into(),
+                depth: 3,
+                discovered_from: Some("https://example.org/source".into()),
+                ..Default::default()
+            },
+        ];
+        crate::prepare_selected_recrawl(
+            crate::SelectedRecrawlParent {
+                job_id: "store-fixture".into(),
+                checkpoint_revision: None,
+                source_kind: crate::RecrawlSourceKind::ImportedSnapshot,
+            },
+            &serde_json::to_vec_pretty(&source).unwrap(),
+            &["https://example.org/selected".into()],
+            Some(1),
+        )
+        .unwrap()
+    }
+
+    #[test]
+    fn selected_initialization_is_atomic_and_never_inserts_historical_selected_pages() {
+        let temp = tempfile::tempdir().unwrap();
+        let store = CrawlStore::open(temp.path().join("child.sqlite")).unwrap();
+        let prepared = selected_preparation();
+        store.connection.lock().unwrap().execute_batch("CREATE TRIGGER fail_initial_frontier BEFORE INSERT ON frontier BEGIN SELECT RAISE(ABORT,'fixture initialization failed'); END;").unwrap();
+        assert!(store.initialize_selected_recrawl(&prepared).is_err());
+        assert!(store.config().unwrap().is_none());
+        assert!(store.parent_snapshot_bytes().unwrap().is_none());
+        assert!(store.pages().unwrap().is_empty());
+        store
+            .connection
+            .lock()
+            .unwrap()
+            .execute_batch("DROP TRIGGER fail_initial_frontier;")
+            .unwrap();
+        store.initialize_selected_recrawl(&prepared).unwrap();
+        assert_eq!(store.pages().unwrap().len(), 1);
+        assert_eq!(
+            store.pages().unwrap()[0].url,
+            "https://example.org/retained"
+        );
+        assert_eq!(
+            store.parent_snapshot_bytes().unwrap().unwrap(),
+            prepared.base_snapshot_bytes
+        );
+        let inspection = store.inspection().unwrap();
+        assert_eq!(inspection.operation.unwrap().pending_count, 1);
+        assert!(!inspection.checkpoint_valid);
+        assert!(store.initialize_selected_recrawl(&prepared).is_err());
+    }
+
+    #[test]
+    fn selected_read_only_inspection_rejects_tampered_base_plan_payload_and_frontier() {
+        let mutations = [
+            "UPDATE recrawl_base SET snapshot=CAST(snapshot AS TEXT)||' '",
+            "UPDATE metadata SET value=json_set(value,'$.plan.unknown_future_semantics',true) WHERE key='run_plan'",
+            "UPDATE pages SET data='{}' WHERE url='https://example.org/retained'",
+            "INSERT INTO pages(url,data) VALUES('https://example.org/selected','{}')",
+            "UPDATE frontier SET depth=999 WHERE url='https://example.org/selected'",
+            "UPDATE frontier SET discovered_from='forged' WHERE url='https://example.org/selected'",
+            "DELETE FROM recrawl_targets",
+            "UPDATE metadata SET value='unknown' WHERE key='operation_kind'",
+        ];
+        for (index, mutation) in mutations.iter().enumerate() {
+            let temp = tempfile::tempdir().unwrap();
+            let path = temp.path().join("tampered.sqlite");
+            let store = CrawlStore::open(&path).unwrap();
+            let prepared = selected_preparation();
+            store.initialize_selected_recrawl(&prepared).unwrap();
+            store
+                .connection
+                .lock()
+                .unwrap()
+                .execute_batch(mutation)
+                .unwrap();
+            assert!(CrawlStore::inspect(&path).is_err(), "mutation {index}");
+            assert!(store.run_plan().is_err(), "mutation {index}");
+            assert!(store.recrawl_operation().is_err(), "mutation {index}");
+        }
+    }
+
+    #[test]
+    fn selected_failed_page_commit_rolls_back_target_state_and_counts_and_budget_override_persists()
+    {
+        let temp = tempfile::tempdir().unwrap();
+        let path = temp.path().join("rollback.sqlite");
+        let store = CrawlStore::open(&path).unwrap();
+        let prepared = selected_preparation();
+        store.initialize_selected_recrawl(&prepared).unwrap();
+        let generation = store.begin_run("first").unwrap();
+        assert_eq!(
+            store.start_recrawl_invocation(generation, None).unwrap(),
+            Some(1)
+        );
+        store
+            .admit_selected("https://example.org/selected", generation)
+            .unwrap();
+        assert!(
+            store
+                .admit_selected("https://example.org/selected", generation)
+                .is_err()
+        );
+        let fresh = PageRecord {
+            url: "https://example.org/selected".into(),
+            depth: 3,
+            discovered_from: Some("https://example.org/source".into()),
+            fetched_at: "new-time".into(),
+            ..Default::default()
+        };
+        store.connection.lock().unwrap().execute_batch("CREATE TRIGGER fail_selected_page BEFORE INSERT ON pages BEGIN SELECT RAISE(ABORT,'fixture page failed'); END;").unwrap();
+        assert!(store.complete(&fresh, &[], generation).is_err());
+        let op = store.recrawl_operation().unwrap().unwrap();
+        assert_eq!(
+            (
+                op.admitted_this_run,
+                op.committed_this_run,
+                op.pending_count
+            ),
+            (1, 0, 1)
+        );
+        assert_eq!(op.targets[0].state, RecrawlTargetState::Pending);
+        assert_eq!(store.pending_count().unwrap(), 1);
+        store
+            .connection
+            .lock()
+            .unwrap()
+            .execute_batch("DROP TRIGGER fail_selected_page;")
+            .unwrap();
+        store.complete(&fresh, &[], generation).unwrap();
+        let op = store.recrawl_operation().unwrap().unwrap();
+        assert_eq!(
+            (op.committed_this_run, op.refreshed_count, op.pending_count),
+            (1, 1, 0)
+        );
+        let second = store.begin_run("second").unwrap();
+        assert_eq!(
+            store.start_recrawl_invocation(second, Some(0)).unwrap(),
+            None
+        );
+        let third = store.begin_run("third").unwrap();
+        assert_eq!(store.start_recrawl_invocation(third, None).unwrap(), None);
+        assert_eq!(
+            store.parent_snapshot_bytes().unwrap().unwrap(),
+            prepared.base_snapshot_bytes
+        );
+        assert_eq!(store.pages().unwrap()[0].fetched_at, "parent-time");
+    }
+
+    #[test]
+    fn selected_committed_admission_generation_and_payload_tampering_are_rejected() {
+        for mutation in [
+            "UPDATE recrawl_targets SET admitted_attempts=0",
+            "UPDATE recrawl_targets SET committed_generation=0",
+            "UPDATE recrawl_targets SET committed_generation=999",
+            "UPDATE recrawl_targets SET last_admitted_generation=0",
+            "UPDATE pages SET data=json_set(data,'$.titles',json('[\"tampered\"]')) WHERE url='https://example.org/selected'",
+            "UPDATE metadata SET value=json_set(value,'$.committed',999) WHERE key='recrawl_invocation'",
+        ] {
+            let temp = tempfile::tempdir().unwrap();
+            let path = temp.path().join("committed.sqlite");
+            let store = CrawlStore::open(&path).unwrap();
+            let prepared = selected_preparation();
+            store.initialize_selected_recrawl(&prepared).unwrap();
+            let generation = store.begin_run("first").unwrap();
+            store.start_recrawl_invocation(generation, None).unwrap();
+            store
+                .admit_selected("https://example.org/selected", generation)
+                .unwrap();
+            let fresh = PageRecord {
+                url: "https://example.org/selected".into(),
+                depth: 3,
+                discovered_from: Some("https://example.org/source".into()),
+                ..Default::default()
+            };
+            store.complete(&fresh, &[], generation).unwrap();
+            let mut report = report(prepared.config.clone(), 0);
+            report.pages = store.pages().unwrap();
+            report.summary.completed = 2;
+            report.operation = store.recrawl_operation().unwrap();
+            store
+                .save_checkpoint(&report, CrawlOutcome::Completed, generation)
+                .unwrap();
+            assert!(CrawlStore::inspect(&path).unwrap().checkpoint_valid);
+            store
+                .connection
+                .lock()
+                .unwrap()
+                .execute_batch(mutation)
+                .unwrap();
+            assert!(CrawlStore::inspect(&path).is_err(), "{mutation}");
+            assert!(store.run_plan().is_err(), "{mutation}");
+            assert!(store.recrawl_operation().is_err(), "{mutation}");
+            assert_eq!(
+                store.parent_snapshot_bytes().unwrap().unwrap(),
+                prepared.base_snapshot_bytes
+            );
         }
     }
 

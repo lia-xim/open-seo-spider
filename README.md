@@ -133,6 +133,16 @@ revisions are described in [crawl control](docs/crawl-control.md). An exhausted
 operator limit can be explicitly changed when resuming; it is not a commercial
 URL allowance. The MCP tool `spider_pause` exposes the same lifecycle.
 
+Selected recrawl creates a new child job from a stable source snapshot. Select
+exact recorded requested URLs in the page table, or use
+`open-seo-spider recrawl parent.json https://example.com/page --output child.json`.
+Only selected targets are admitted; source seeds, sitemaps and new outward links
+are not traversed. The parent and unselected observations are retained, pending
+selected old rows are excluded, and JSON/CSV disclose mixed-age coverage. Its
+optional `max_attempts` budget is separate from the source page-count limit.
+See [selected recrawl](docs/selected-recrawl.md) for identity, recovery and export
+contracts. `spider_recrawl` exposes the same derived-job operation over MCP.
+
 `open-seo-spider preview-policy policy.json --output decisions.json` and
 `POST /api/policy/preview` evaluate explicit scope/query/rewrite rules without
 network requests. [Policy preview](docs/crawl-policy.md) is a separate pure engine;
@@ -145,7 +155,7 @@ The running application exposes stateless Streamable HTTP MCP at
 open-seo-spider mcp --server http://127.0.0.1:8787
 ```
 
-Twelve tools cover crawl start/status/list/pause/cancel/resume, bounded pages, issues,
+Thirteen tools cover crawl start/status/list/pause/cancel/resume/selected recrawl, bounded pages, issues,
 analysis, snapshot retrieval and comparison. The browser application must be
 running. JSON API routes and acceptance limits are documented in
 [architecture](docs/architecture.md). MCP implementation follows the

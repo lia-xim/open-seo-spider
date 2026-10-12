@@ -5,8 +5,9 @@ mod server;
 use clap::{Parser, Subcommand};
 use open_seo_spider_core::{
     CrawlConfig, Crawler, ListColumnSelector, ListCsvDelimiter, ListImportFormat, ListImportLimits,
-    ListImportOptions, export_input_occurrences_csv, export_pages_csv, export_sitemap_xml,
-    export_url_list_csv, import_url_list, inspect_xlsx_list,
+    ListImportOptions, RecrawlSourceKind, SelectedRecrawlParent, export_input_occurrences_csv,
+    export_pages_csv, export_sitemap_xml, export_url_list_csv, import_url_list, inspect_xlsx_list,
+    prepare_selected_recrawl,
 };
 use std::{
     path::PathBuf,
@@ -44,6 +45,21 @@ enum Command {
         input: PathBuf,
         #[arg(long)]
         output: Option<PathBuf>,
+    },
+    /// Refresh selected exact requested URLs in a derived report; retain the source snapshot.
+    Recrawl {
+        snapshot: PathBuf,
+        #[arg(required = true)]
+        urls: Vec<String>,
+        #[arg(long)]
+        max_attempts: Option<usize>,
+        /// Optional new SQLite destination; an existing file is refused.
+        #[arg(long)]
+        store: Option<PathBuf>,
+        #[arg(long, default_value = "recrawl.json")]
+        output: PathBuf,
+        #[arg(long)]
+        csv: Option<PathBuf>,
     },
     /// Serve MCP tools over stdio against the running local application.
     Mcp {
@@ -110,6 +126,83 @@ async fn main() -> anyhow::Result<()> {
             } else {
                 println!("{json}");
             }
+        }
+        Command::Recrawl {
+            snapshot,
+            urls,
+            max_attempts,
+            store,
+            output,
+            csv,
+        } => {
+            let source = tokio::fs::canonicalize(&snapshot).await?;
+            let mut destinations = std::collections::HashSet::new();
+            for destination in std::iter::once(&output)
+                .chain(csv.iter())
+                .chain(store.iter())
+            {
+                let resolved = canonical_destination(destination).await?;
+                anyhow::ensure!(
+                    resolved != source,
+                    "A selected recrawl destination cannot overwrite its parent snapshot"
+                );
+                anyhow::ensure!(
+                    destinations.insert(destination_identity(&resolved)),
+                    "Selected recrawl JSON, CSV and SQLite destinations must be distinct"
+                );
+                match tokio::fs::symlink_metadata(destination).await {
+                    Ok(_) => anyhow::bail!(
+                        "Selected recrawl destinations must be new files: {}",
+                        destination.display()
+                    ),
+                    Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+                    Err(error) => return Err(error.into()),
+                }
+            }
+            let bytes = read_bounded(&snapshot, 256 * 1024 * 1024).await?;
+            let prepared = prepare_selected_recrawl(
+                SelectedRecrawlParent {
+                    job_id: "cli-json".into(),
+                    checkpoint_revision: None,
+                    source_kind: RecrawlSourceKind::StoredJson,
+                },
+                &bytes,
+                &urls,
+                max_attempts,
+            )?;
+            let mut crawler =
+                Crawler::new(prepared.config.clone())?.with_selected_recrawl(prepared)?;
+            if let Some(store) = store {
+                // Reserve only a new destination, preserving an unrelated existing store.
+                let reservation = tokio::fs::OpenOptions::new()
+                    .write(true)
+                    .create_new(true)
+                    .open(&store)
+                    .await?;
+                drop(reservation);
+                crawler = crawler.with_store(store)?;
+            }
+            let mut report = crawler.run(None, Arc::new(AtomicBool::new(false))).await?;
+            analysis::extend_report(&mut report);
+            write_new_report(&output, &serde_json::to_vec_pretty(&report)?).await?;
+            if let Some(csv) = csv {
+                write_new_report(&csv, export_pages_csv(&report)?.as_bytes()).await?;
+            }
+            println!(
+                "Refreshed {} selected targets; retained {} source observations; {} selected targets remain pending.",
+                report
+                    .operation
+                    .as_ref()
+                    .map_or(0, |operation| operation.refreshed_count),
+                report
+                    .operation
+                    .as_ref()
+                    .map_or(0, |operation| operation.retained_count),
+                report
+                    .operation
+                    .as_ref()
+                    .map_or(0, |operation| operation.pending_count)
+            );
         }
         Command::ImportList {
             file,
@@ -220,6 +313,43 @@ async fn main() -> anyhow::Result<()> {
         }
     }
     Ok(())
+}
+
+async fn write_new_report(path: &std::path::Path, bytes: &[u8]) -> anyhow::Result<()> {
+    use tokio::io::AsyncWriteExt;
+    let mut file = tokio::fs::OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .open(path)
+        .await?;
+    file.write_all(bytes).await?;
+    file.flush().await?;
+    Ok(())
+}
+
+fn destination_identity(path: &std::path::Path) -> PathBuf {
+    #[cfg(windows)]
+    {
+        PathBuf::from(path.as_os_str().to_string_lossy().to_lowercase())
+    }
+    #[cfg(not(windows))]
+    {
+        path.to_path_buf()
+    }
+}
+
+async fn canonical_destination(path: &std::path::Path) -> anyhow::Result<PathBuf> {
+    if let Ok(existing) = tokio::fs::canonicalize(path).await {
+        return Ok(existing);
+    }
+    let parent = path
+        .parent()
+        .filter(|parent| !parent.as_os_str().is_empty())
+        .unwrap_or(std::path::Path::new("."));
+    let name = path
+        .file_name()
+        .ok_or_else(|| anyhow::anyhow!("Output destination needs a file name"))?;
+    Ok(tokio::fs::canonicalize(parent).await?.join(name))
 }
 
 async fn read_bounded(path: &std::path::Path, limit: usize) -> anyhow::Result<Vec<u8>> {

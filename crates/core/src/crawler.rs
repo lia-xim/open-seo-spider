@@ -1,7 +1,8 @@
 use crate::{
     ControlledCrawlResult, CrawlConfig, CrawlControl, CrawlEvent, CrawlOutcome, CrawlReport,
-    CrawlRequest, CrawlStore, CrawlSummary, PageRecord, RedirectHop, Severity,
-    audit_pages_with_thresholds, normalize_url, parse_sitemap,
+    CrawlRequest, CrawlStore, CrawlSummary, PageRecord, PreparedSelectedRecrawl,
+    RecrawlResumeOverride, RecrawlTargetObservation, RecrawlTargetState, RedirectHop, RunPlan,
+    Severity, audit_pages_with_thresholds, normalize_url, parse_sitemap,
 };
 use crate::{
     audit::set_indexability,
@@ -17,7 +18,7 @@ use reqwest::{
     header::{HeaderMap, HeaderName, HeaderValue},
 };
 use std::{
-    collections::{BTreeMap, HashSet, VecDeque},
+    collections::{BTreeMap, HashMap, HashSet, VecDeque},
     path::Path,
     sync::{Arc, atomic::AtomicBool},
     time::{Duration, Instant},
@@ -38,6 +39,9 @@ pub struct Crawler {
     rate: Arc<RateLimiter>,
     store: Option<Arc<CrawlStore>>,
     pdf_slots: Arc<Semaphore>,
+    asserted_plan: Option<RunPlan>,
+    selected_base: Option<PreparedSelectedRecrawl>,
+    recrawl_override: RecrawlResumeOverride,
     #[cfg(test)]
     pdf_parse_hook: Option<PdfParseHook>,
 }
@@ -130,6 +134,9 @@ impl Crawler {
             rate,
             store: None,
             pdf_slots: Arc::new(Semaphore::new(2)),
+            asserted_plan: None,
+            selected_base: None,
+            recrawl_override: RecrawlResumeOverride::default(),
             #[cfg(test)]
             pdf_parse_hook: None,
         })
@@ -138,6 +145,46 @@ impl Crawler {
     pub fn with_store(mut self, path: impl AsRef<Path>) -> anyhow::Result<Self> {
         self.store = Some(Arc::new(CrawlStore::open(path)?));
         Ok(self)
+    }
+
+    pub fn effective_config(&self) -> &CrawlConfig {
+        &self.config
+    }
+
+    pub(crate) fn selected_target_allowed(&self, url: &Url) -> bool {
+        same_scope(url, &self.seeds, self.config.include_subdomains) || self.config.check_external
+    }
+
+    /// An optional assertion. A saved selected store is always detected even
+    /// when the caller does not supply its plan (SQLite-only resume).
+    pub fn with_run_plan(mut self, plan: RunPlan) -> anyhow::Result<Self> {
+        if let RunPlan::SelectedRecrawl(plan) = &plan
+            && plan.engine != crate::SELECTED_RECRAWL_ENGINE
+        {
+            bail!("Unsupported selected-recrawl engine");
+        }
+        self.asserted_plan = Some(plan);
+        Ok(self)
+    }
+
+    pub fn with_selected_recrawl(
+        mut self,
+        prepared: PreparedSelectedRecrawl,
+    ) -> anyhow::Result<Self> {
+        prepared.validate()?;
+        crate::recrawl::validate_saved_plan(
+            &prepared.plan,
+            &prepared.base_snapshot_bytes,
+            &self.config,
+        )?;
+        self.asserted_plan = Some(RunPlan::SelectedRecrawl(prepared.plan.clone()));
+        self.selected_base = Some(prepared);
+        Ok(self)
+    }
+
+    pub fn with_recrawl_resume_override(mut self, options: RecrawlResumeOverride) -> Self {
+        self.recrawl_override = options;
+        self
     }
 
     pub async fn run(
@@ -163,6 +210,40 @@ impl Crawler {
                 "A finished crawl controller cannot be reused; create one for the new invocation"
             );
         }
+        if let (Some(store), Some(prepared)) = (&self.store, &self.selected_base) {
+            match store.run_plan()? {
+                RunPlan::FullCrawl => store.initialize_selected_recrawl(prepared)?,
+                RunPlan::SelectedRecrawl(plan) if plan == prepared.plan => {}
+                _ => bail!("Saved selected plan differs from requested plan"),
+            }
+        }
+        let run_plan = match &self.store {
+            Some(store) => store.run_plan()?,
+            None => self.asserted_plan.clone().unwrap_or_default(),
+        };
+        if self
+            .asserted_plan
+            .as_ref()
+            .is_some_and(|expected| expected != &run_plan)
+        {
+            bail!("Saved run plan differs from the caller's asserted plan");
+        }
+        let selected = match &run_plan {
+            RunPlan::FullCrawl => None,
+            RunPlan::SelectedRecrawl(plan) => Some(plan),
+        };
+        let memory_base = if self.store.is_none() && selected.is_some() {
+            Some(
+                self.selected_base
+                    .as_ref()
+                    .context("An in-memory selected run needs its immutable parent snapshot")?,
+            )
+        } else {
+            None
+        };
+        if selected.is_none() && self.recrawl_override.max_attempts.is_some() {
+            bail!("max_attempts applies only to selected recrawl");
+        }
         let started_at = Utc::now().to_rfc3339();
         let started = Instant::now();
         let resumed = match &self.store {
@@ -174,20 +255,102 @@ impl Crawler {
             .as_ref()
             .map(|store| store.begin_run(&started_at))
             .transpose()?;
+        let max_attempts = if let Some(plan) = selected {
+            match (&self.store, generation) {
+                (Some(store), Some(generation)) => store
+                    .start_recrawl_invocation(generation, self.recrawl_override.max_attempts)?,
+                _ => self
+                    .recrawl_override
+                    .max_attempts
+                    .map_or(plan.default_max_attempts, |value| {
+                        (value > 0).then_some(value)
+                    }),
+            }
+        } else {
+            None
+        };
         let mut pages = match &self.store {
             Some(store) => store.pages()?,
-            None => Vec::new(),
+            None => memory_base
+                .map(|prepared| {
+                    let targets = prepared.plan.targets_set();
+                    prepared
+                        .base_report
+                        .pages
+                        .iter()
+                        .filter(|page| !targets.contains(page.url.as_str()))
+                        .cloned()
+                        .collect()
+                })
+                .unwrap_or_default(),
         };
         let mut queue: VecDeque<QueueEntry> = match &self.store {
             Some(store) => store.pending()?.into(),
-            None => VecDeque::new(),
+            None => selected
+                .map(|plan| {
+                    plan.targets
+                        .iter()
+                        .map(|target| QueueEntry {
+                            url: target.requested_url.clone(),
+                            depth: target.depth,
+                            discovered_from: target.discovered_from.clone(),
+                        })
+                        .collect()
+                })
+                .unwrap_or_default(),
         };
+        let mut operation = if let Some(plan) = selected {
+            if let Some(store) = &self.store {
+                store.recrawl_operation_for_runner()?
+            } else {
+                Some(
+                    plan.operation(
+                        pages.len(),
+                        plan.targets
+                            .iter()
+                            .map(|target| RecrawlTargetObservation {
+                                requested_url: target.requested_url.clone(),
+                                parent_ordinal: target.parent_ordinal,
+                                parent_page_sha256: target.parent_page_sha256.clone(),
+                                state: RecrawlTargetState::Pending,
+                                admitted_attempts: 0,
+                                committed_generation: None,
+                            })
+                            .collect(),
+                        max_attempts,
+                        0,
+                        0,
+                    ),
+                )
+            }
+        } else {
+            None
+        };
+        let target_indices: HashMap<_, _> = operation
+            .as_ref()
+            .map(|operation| {
+                operation
+                    .targets
+                    .iter()
+                    .enumerate()
+                    .map(|(index, target)| (target.requested_url.clone(), index))
+                    .collect()
+            })
+            .unwrap_or_default();
+        if let Some(operation) = &operation {
+            emit(
+                &events,
+                CrawlEvent::Operation {
+                    operation: Box::new(operation.clone()),
+                },
+            );
+        }
         let mut seen: HashSet<String> = pages
             .iter()
             .map(|page| page.url.clone())
             .chain(queue.iter().map(|entry| entry.url.clone()))
             .collect();
-        if resumed {
+        if resumed || selected.is_some() {
             for page in &pages {
                 emit(
                     &events,
@@ -199,7 +362,7 @@ impl Crawler {
         }
         // Always ensure seeds exist, including after an interruption immediately
         // after the configuration was first saved.
-        for seed in &self.config.seed_urls {
+        for seed in self.config.seed_urls.iter().filter(|_| selected.is_none()) {
             let entry = QueueEntry {
                 url: seed.clone(),
                 depth: 0,
@@ -212,17 +375,23 @@ impl Crawler {
                 queue.push_back(entry);
             }
         }
-        let discovery = self
-            .run_discovery(
+        let discovery = if selected.is_some() {
+            DiscoveryProgress::default()
+        } else {
+            self.run_discovery(
                 &control,
                 &events,
                 &mut seen,
                 (pages.len(), queue.len()),
                 generation,
             )
-            .await?;
+            .await?
+        };
         queue.extend(discovery.pages);
-        let warnings = discovery.warnings;
+        let mut warnings = discovery.warnings;
+        if selected.is_some() {
+            warnings.push("Selected recrawl: unselected observations are inherited unchanged; pending selected historical rows are excluded. This is mixed-age coverage, not a fresh full-site crawl.".into());
+        }
         let context = Arc::new(FetchContext {
             config: self.config.clone(),
             seeds: self.seeds.clone(),
@@ -244,15 +413,31 @@ impl Crawler {
                 && tasks.len() < self.config.concurrency
                 && !queue.is_empty()
             {
-                if self
-                    .config
-                    .max_pages
-                    .is_some_and(|limit| pages.len() + tasks.len() >= limit)
-                {
+                let at_limit = match &operation {
+                    Some(operation) => operation
+                        .max_attempts
+                        .is_some_and(|limit| operation.admitted_this_run >= limit),
+                    None => self
+                        .config
+                        .max_pages
+                        .is_some_and(|limit| pages.len() + tasks.len() >= limit),
+                };
+                if at_limit {
                     limited = true;
                     break;
                 }
                 let entry = queue.pop_front().expect("nonempty queue");
+                if let Some(operation) = &mut operation {
+                    if let Some(store) = &self.store {
+                        store.admit_selected(&entry.url, generation.expect("stored generation"))?;
+                    }
+                    let index = *target_indices
+                        .get(&entry.url)
+                        .context("Pending URL is not a selected target")?;
+                    operation.admitted_this_run += 1;
+                    operation.targets[index].admitted_attempts += 1;
+                    emit_recrawl_progress(&events, operation, index);
+                }
                 let fetch = context.clone();
                 tasks.push(async move { fetch.document(entry).await.0 }.boxed());
             }
@@ -272,7 +457,8 @@ impl Crawler {
                 _ = control.changed() => continue,
             };
             let mut discoveries = Vec::new();
-            if self.config.crawl_links
+            if selected.is_none()
+                && self.config.crawl_links
                 && page.internal
                 && !page.blocked_by_robots
                 && self.config.max_depth.is_none_or(|limit| page.depth < limit)
@@ -298,6 +484,17 @@ impl Crawler {
                     generation.expect("stored run generation"),
                 )?;
             }
+            if let Some(operation) = &mut operation {
+                let index = *target_indices
+                    .get(&page.url)
+                    .context("Result is not a selected target")?;
+                operation.targets[index].state = RecrawlTargetState::Committed;
+                operation.targets[index].committed_generation = Some(generation.unwrap_or(1));
+                operation.committed_this_run += 1;
+                operation.refreshed_count += 1;
+                operation.pending_count -= 1;
+                emit_recrawl_progress(&events, operation, index);
+            }
             queue.extend(discoveries);
             emit(
                 &events,
@@ -309,6 +506,37 @@ impl Crawler {
         }
         let pending = queue.len() + tasks.len();
         drop(tasks); // In-flight requests remain pending in SQLite and can be resumed.
+        if let Some(plan) = selected {
+            let order: HashMap<_, _> = if let Some(store) = &self.store {
+                // One immutable snapshot read at terminal publication, not per
+                // page. Ordinary store ordering is already stable on resume.
+                let bytes = store
+                    .parent_snapshot_bytes()?
+                    .context("Immutable parent missing")?;
+                let base: CrawlReport = serde_json::from_slice(&bytes)?;
+                base.pages
+                    .iter()
+                    .enumerate()
+                    .map(|(index, page)| (page.url.clone(), index))
+                    .collect()
+            } else {
+                memory_base
+                    .expect("validated memory base")
+                    .base_report
+                    .pages
+                    .iter()
+                    .enumerate()
+                    .map(|(index, page)| (page.url.clone(), index))
+                    .collect()
+            };
+            pages.sort_by_key(|page| order.get(&page.url).copied().unwrap_or(usize::MAX));
+            if operation
+                .as_ref()
+                .is_none_or(|op| op.plan_sha256 != plan.plan_sha256 || op.pending_count != pending)
+            {
+                bail!("Selected outcome does not match pending plan evidence");
+            }
+        }
         let mut issues = audit_pages_with_thresholds(&pages, &self.config.audit_thresholds);
         issues.extend(crate::audit_dom_metadata(&pages));
         let mut status_counts = BTreeMap::new();
@@ -357,6 +585,7 @@ impl Crawler {
             issues,
             summary: summary.clone(),
             warnings,
+            operation: operation.clone(),
         };
         let checkpoint = self
             .store
@@ -366,6 +595,14 @@ impl Crawler {
             })
             .transpose()?;
         emit(&events, CrawlEvent::Finished { summary });
+        if let Some(operation) = operation {
+            emit(
+                &events,
+                CrawlEvent::Operation {
+                    operation: Box::new(operation),
+                },
+            );
+        }
         Ok(ControlledCrawlResult {
             report,
             outcome,
@@ -622,6 +859,23 @@ fn emit(events: &Option<UnboundedSender<CrawlEvent>>, event: CrawlEvent) {
     if let Some(events) = events {
         let _ = events.send(event);
     }
+}
+
+fn emit_recrawl_progress(
+    events: &Option<UnboundedSender<CrawlEvent>>,
+    operation: &crate::SelectedRecrawlOperation,
+    index: usize,
+) {
+    emit(
+        events,
+        CrawlEvent::RecrawlProgress {
+            target: Box::new(operation.targets[index].clone()),
+            admitted_this_run: operation.admitted_this_run,
+            committed_this_run: operation.committed_this_run,
+            refreshed_count: operation.refreshed_count,
+            pending_count: operation.pending_count,
+        },
+    );
 }
 
 struct FetchContext {

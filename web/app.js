@@ -3,6 +3,7 @@
 (() => {
   const $ = (id) => document.getElementById(id);
   const state = {
+    recrawlURLs: new Set(),
     crawl: null, crawls: [], pages: [], issues: [], section: 'overview',
     search: '', filter: 'all', sort: 'url', direction: 1, page: 0, pageSize: 50,
     selected: null, selectedResponse: null, selectedInput: null, responses: null, responsesError: '', fragments: null, fragmentsError: '', inspectorTab: 'details', polling: false, starting: false,
@@ -55,6 +56,7 @@
   };
   const listUI = { controller: null, page: 0, acceptedText: null, snapshot: null };
   let limitResumeContext = null;
+  let selectedRecrawlContext = null;
   const number = (value) => Number(value || 0).toLocaleString('de-DE');
   const array = (value) => Array.isArray(value) ? value : value == null || value === '' ? [] : [value];
   const first = (value) => array(value).join(' | ');
@@ -77,6 +79,26 @@
   const active = () => state.crawl && activeStatus(state.crawl.status);
   const canResume = () => state.crawl && state.crawl.resume_available !== false && ['paused', 'limited', 'cancelled', 'canceled', 'failed', 'interrupted'].includes(state.crawl.status);
   const actionBusy = () => Boolean(state.control || state.starting);
+  const recrawlOperation = () => state.crawl?.operation?.coverage === 'mixed_age_selected_recrawl' ? state.crawl.operation : null;
+  const pendingRecrawlURLs = crawl => new Set(crawl?.operation?.coverage === 'mixed_age_selected_recrawl' ? array(crawl.operation.targets).filter(target => target.state === 'pending').map(target => target.requested_url) : []);
+  const canRecrawl = () => Boolean(state.crawl && state.crawl.recrawl_available !== false && !active() && !actionBusy() && state.recrawlURLs.size);
+  // Resource/link occurrences can contain source facts beside a different target URL.
+  // Only a row whose displayed URL is itself the stored document is selectable here.
+  const recrawlPage = row => !row._page || row._page.url === row.url ? state.pageMap.get(row.url) : null;
+  function observationAge(url) {
+    const operation = recrawlOperation();
+    if (!operation) return '';
+    const target = array(operation.targets).find(entry => entry.requested_url === url);
+    return target?.state === 'committed' ? 'Neu geprüft' : target?.state === 'pending' ? 'Ausstehend · kein aktueller Befund' : 'Beibehalten · vorheriger Abruf';
+  }
+  function setRecrawlSelected(url, selected) {
+    if (!state.pageMap.has(url) || active() || actionBusy() || state.crawl?.recrawl_available === false) return;
+    if (selected) state.recrawlURLs.add(url); else state.recrawlURLs.delete(url);
+    const restoreFocus = document.activeElement?.dataset?.recrawlUrl === url;
+    renderControls();
+    if (!['overview', 'graph'].includes(state.section)) renderTable();
+    if (restoreFocus) [...document.querySelectorAll('[data-recrawl-url]')].find(input => input.dataset.recrawlUrl === url)?.focus({ preventScroll: true });
+  }
   function invalidatePoll() {
     state.generation += 1;
     clearTimeout(state.pollTimer);
@@ -231,13 +253,15 @@
         if (!current()) return;
       }
       state.crawl = nextCrawl;
-      state.pages = from ? [...state.pages, ...pages] : pages;
+      const pendingSelected = pendingRecrawlURLs(nextCrawl);
+      state.pages = (from ? [...state.pages, ...pages] : pages).filter(page => !pendingSelected.has(page.url));
       state.pageMap = new Map(state.pages.map(page => [page.url, page])); state.cache = {};
       state.analysis = analysis; state.analysisError = analysisError;
       state.responses = responses; state.responsesError = responsesError;
       state.fragments = fragments; state.fragmentsError = fragmentsError;
       state.issues = Array.isArray(issueResult) ? issueResult : issueResult.issues || issueResult.items || [];
       if (analysis) state.issues.push(...array(analysis.issues));
+      state.issues = state.issues.filter(issue => !pendingSelected.has(issue.url));
       reindexIssues(); connection(true); render();
       if (state.selectedResponse || state.selectedInput) renderInspector();
       else if (state.selected) { state.selected = state.pages.find(page => page.url === state.selected.url) || state.selected; renderInspector(); }
@@ -261,6 +285,9 @@
     state.control = null; state.startOperation = null; state.starting = false;
     limitResumeContext = null;
     if ($('resume-limit-dialog').open) $('resume-limit-dialog').close();
+    selectedRecrawlContext = null;
+    if ($('selected-recrawl-dialog').open) $('selected-recrawl-dialog').close();
+    state.recrawlURLs.clear();
     state.pages = [];
     state.issues = [];
     state.selected = null;
@@ -373,12 +400,69 @@
   function resumeCrawl() {
     if (!canResume() || actionBusy()) return;
     if (state.crawl.status !== 'limited') { controlCrawl('resume'); return; }
-    limitResumeContext = { id: state.crawl.id, generation: state.generation };
-    const limit = state.crawl.config?.max_pages ?? 0;
-    $('resume-limit-current').textContent = `Gespeicherte URL-Grenze: ${number(limit)}${limit === 0 ? ' (keine konfigurierte URL-Grenze)' : ''}.`;
+    const selected = Boolean(recrawlOperation());
+    limitResumeContext = { id: state.crawl.id, generation: state.generation, budgetKey: selected ? 'max_attempts' : 'max_pages' };
+    const limit = selected ? recrawlOperation().max_attempts ?? 0 : state.crawl.config?.max_pages ?? 0;
+    $('resume-limit-heading').textContent = selected ? 'Abrufbudget festlegen' : 'URL-Grenze festlegen';
+    $('resume-limit-current').textContent = `Gespeichertes ${selected ? 'Abrufbudget' : 'URL-Limit'}: ${number(limit)}${limit === 0 ? ' (unbegrenzt)' : ''}.`;
+    $('resume-limit-explanation').textContent = selected ? 'Das Abrufbudget gilt für die nächste Ausführung der ausgewählten Wiederprüfung. 0 entfernt diese Grenze; die ursprüngliche URL-Grenze des Eltern-Crawls wird nicht verändert. Laufzeit und Speicherbedarf hängen von deinem Rechner und der Website ab.' : 'Die Grenze bleibt unverändert, bis du hier eine andere Zahl bestätigst. Bei unveränderter Grenze kann der Crawl sofort wieder anhalten. 0 entfernt die konfigurierte URL-Grenze; Laufzeit und Speicherbedarf hängen von deinem Rechner und der Website ab.';
+    $('resume-limit-label').textContent = selected ? 'Maximal gestartete Abrufe in der nächsten Ausführung' : 'Maximal erfasste URLs insgesamt';
     $('resume-max-pages').value = limit;
     $('resume-limit-error').hidden = true;
     $('resume-limit-dialog').showModal();
+  }
+
+  function openSelectedRecrawl() {
+    if (!canRecrawl()) return;
+    selectedRecrawlContext = { id: state.crawl.id, generation: state.generation, urls: [...state.recrawlURLs] };
+    $('selected-recrawl-urls').replaceChildren(...selectedRecrawlContext.urls.map(url => { const item = document.createElement('li'); item.textContent = url; return item; }));
+    $('selected-recrawl-count').textContent = `${number(selectedRecrawlContext.urls.length)} angeforderte URLs aus dem gespeicherten Bericht.`;
+    $('recrawl-max-attempts').value = '';
+    $('selected-recrawl-error').hidden = true;
+    $('selected-recrawl-dialog').showModal();
+  }
+
+  async function selectedRecrawl(event) {
+    event.preventDefault();
+    const expected = selectedRecrawlContext;
+    if (!expected || expected.id !== state.crawl?.id || expected.generation !== state.generation || !canRecrawl()) { $('selected-recrawl-dialog').close(); selectedRecrawlContext = null; return; }
+    if (!expected.urls.every(url => state.pageMap.has(url))) { $('selected-recrawl-error').textContent = 'Mindestens eine ausgewählte URL gehört nicht mehr zum angezeigten Inventar. Schließe die Bestätigung und aktualisiere die Auswahl.'; $('selected-recrawl-error').hidden = false; return; }
+    const text = $('recrawl-max-attempts').value;
+    const maxAttempts = text === '' ? null : Number(text);
+    if (maxAttempts != null && (!Number.isSafeInteger(maxAttempts) || maxAttempts < 0)) { $('selected-recrawl-error').textContent = 'Das Abrufbudget muss eine nicht negative ganze Zahl sein. Leer oder 0 bedeutet unbegrenzt.'; $('selected-recrawl-error').hidden = false; return; }
+    const body = { urls: expected.urls, ...(maxAttempts == null ? {} : { max_attempts: maxAttempts }) };
+    selectedRecrawlContext = null; $('selected-recrawl-dialog').close();
+    const operation = { id: expected.id, generation: invalidatePoll(), action: 'recrawl', sequence: ++state.operationSequence };
+    state.control = operation; renderControls(); message('');
+    const current = () => state.control === operation && state.crawl?.id === operation.id && state.generation === operation.generation;
+    try {
+      const result = await request('/api/crawls/' + encodeURIComponent(operation.id) + '/recrawl', { method: 'POST', body: JSON.stringify(body) });
+      if (!result || typeof result.id !== 'string' || !result.id || typeof result.status !== 'string') throw new Error('Der Server hat keine gültige Kennung des neuen Laufs geliefert. Prüfe die Laufhistorie vor einem erneuten Start.');
+      if (!current()) { await loadHistory(); return; }
+      state.crawls = [...state.crawls.filter(crawl => crawl.id !== result.id), { id: result.id, status: result.status, parent_id: operation.id }];
+      state.control = null;
+      $('crawl-history').value = result.id;
+      await selectCrawl(result.id);
+      await loadHistory();
+    } catch (error) {
+      if (current()) { state.control = null; message('Die Wiederprüfung konnte nicht gestartet werden: ' + error.message, true); renderControls(); await refresh(operation.generation); }
+    } finally {
+      if (state.control === operation) { state.control = null; renderControls(); }
+    }
+  }
+
+  function renderRecrawlOperation() {
+    const operation = recrawlOperation(), element = $('recrawl-operation');
+    element.hidden = !operation;
+    if (!operation) return;
+    const count = key => operation[key] == null ? 'nicht erfasst' : number(operation[key]);
+    $('recrawl-operation-summary').textContent = `Neu geprüft: ${count('refreshed_count')} · Beibehalten: ${count('retained_count')} · Ausstehend: ${count('pending_count')}`;
+    $('recrawl-operation-budget').textContent = `Eigenes Abrufbudget: ${operation.max_attempts == null || operation.max_attempts === 0 ? 'unbegrenzt' : number(operation.max_attempts)} · Gestartete Abrufe in dieser Ausführung: ${count('admitted_this_run')} · Gespeicherte Befunde: ${count('committed_this_run')}. Die ursprüngliche URL-Grenze steuert dieses Budget nicht.`;
+    $('recrawl-operation-targets').replaceChildren(...array(operation.targets).map(target => { const item = document.createElement('li'); item.textContent = `${target.requested_url} · ${target.state === 'committed' ? 'Neu geprüft' : target.state === 'pending' ? 'Ausstehend · kein aktueller Befund' : 'Zustand nicht erfasst'}`; return item; }));
+    $('recrawl-parent').hidden = !operation.parent?.job_id;
+    $('recrawl-parent').textContent = 'Elternlauf in Historie öffnen';
+    $('recrawl-parent-snapshot').hidden = state.crawl.parent_snapshot_available !== true;
+    $('recrawl-parent-evidence').textContent = `Originalquelle: ${operation.parent?.source_kind || 'nicht erfasst'} · Originalbericht SHA-256: ${operation.parent?.snapshot_sha256 || 'nicht erfasst'}${state.crawl.parent_snapshot_available === true ? '' : ' · Exakter Originalbericht nicht zum Download verfügbar.'}`;
   }
 
   function renderControls() {
@@ -399,10 +483,18 @@
     $('export-sitemap').disabled = !hasData || Boolean(busy || active());
     $('export-project').disabled = !state.crawl || Boolean(busy || active());
     $('export-resources').disabled = !state.crawl || Boolean(busy || active());
+    $('recrawl-selected-count').textContent = `${number(state.recrawlURLs.size)} URLs ausgewählt`;
+    $('recrawl-selected').disabled = !canRecrawl();
+    $('recrawl-clear').disabled = !state.recrawlURLs.size || busy;
+    $('recrawl-selection-hint').textContent = active() ? 'Die Auswahl ist nach dem Anhalten oder Abschluss verfügbar.' : state.crawl?.recrawl_available === false ? 'Für diesen Bericht ist keine Wiederprüfung verfügbar.' : 'Auswahl gilt nur für vorhandene Anfrage-URLs in diesem Bericht; Filter und Pagination ändern sie nicht.';
+    $('inspector-recrawl-selection').hidden = !state.selected || !state.pageMap.has(state.selected.url) || Boolean(state.selectedResponse || state.selectedInput);
+    $('inspector-recrawl-checkbox').checked = Boolean(state.selected && state.recrawlURLs.has(state.selected.url));
+    $('inspector-recrawl-checkbox').disabled = Boolean(busy || active() || state.crawl?.recrawl_available === false);
     $('settings-summary').textContent = `${state.settings.concurrency} parallele Requests · ${state.settings.obey_robots ? 'Robots.txt beachten' : 'Robots.txt ignorieren'}${state.settings.max_pages ? ` · Grenze ${number(state.settings.max_pages)}` : ''}${state.settings.javascript_rendering ? ' · JavaScript-Rendering' : ''}`;
   }
 
   function renderMetrics() {
+    renderRecrawlOperation();
     const current = stats();
     const fetched = current.fetched ?? state.pages.filter((page) => page.status != null || page.error || page.blocked_by_robots).length;
     const discovered = current.discovered ?? state.pages.length;
@@ -717,12 +809,24 @@
     state.page = Math.max(0, Math.min(state.page, pages - 1));
     const offset = state.page * state.pageSize;
     const visible = rows.slice(offset, offset + state.pageSize);
+    const selectionCell = row => {
+      if (['inputs', 'responses'].includes(state.section)) return '';
+      const page = recrawlPage(row);
+      if (!page) return '';
+      return `<input class="recrawl-row-checkbox" type="checkbox" data-recrawl-url="${escape(page.url)}" aria-label="Für Wiederprüfung auswählen: ${escape(page.url)}" ${state.recrawlURLs.has(page.url) ? 'checked' : ''} ${active() || actionBusy() || state.crawl?.recrawl_available === false ? 'disabled' : ''}>`;
+    };
+    const cell = (column, row, index) => `${index === 0 ? selectionCell(row) : ''}${column.render(row)}${index === 0 && !['inputs', 'responses'].includes(state.section) && recrawlPage(row) && observationAge(recrawlPage(row).url) ? `<small class="observation-age">${escape(observationAge(recrawlPage(row).url))}</small>` : ''}`;
     const isSelected = row => state.section === 'inputs' ? state.selectedInput && row.list_index === state.selectedInput.list_index && row.occurrence_index === state.selectedInput.occurrence_index : state.section === 'responses' ? state.selectedResponse && state.selectedResponse.requested_url === row.requested_url && state.selectedResponse.response_index === row.response_index : state.selected && (row._page?.url || row.url) === state.selected.url;
     const emptyNote = state.section === 'responses' ? state.responsesError || (state.responses == null ? 'Diese Beobachtungen werden nach Abschluss oder Stopp des Crawls geladen. Nicht erfasste Antworten bleiben unbekannt.' : 'Es wurden keine nativen HTTP-Antworten erfasst, beispielsweise bei DNS-Fehlern oder Robots-Sperren.') : state.section === 'fragments' ? state.fragmentsError || (!state.fragments ? 'Fragmentbeobachtungen werden nach Abschluss oder Stopp geladen.' : !state.fragments.enabled ? 'Fragmentprüfung ist für diesen Crawl deaktiviert. Aktiviere sie in den Einstellungen für einen neuen Crawl.' : 'Keine Fragmentreferenzen im erfassten Inventar. Crawl- und Capture-Grenzen gelten weiterhin.') : null;
     const table = $('results-table');
     const inputEmptyNote = state.section === 'inputs' ? array(state.crawl?.config?.input_imports).length ? 'Die gespeicherten Importergebnisse enthalten keine Eingabezeilen.' : 'Eingabeherkunft nicht erfasst. Bei älteren Projekten bleibt sie unbekannt; dies ist kein Nachweis einer leeren Eingabe.' : null;
     table.querySelector('thead').innerHTML = `<tr>${currentColumns.map((column) => `<th scope="col" aria-sort="${state.sort === column.key ? state.direction > 0 ? 'ascending' : 'descending' : 'none'}"><button type="button" data-sort="${escape(column.key)}">${escape(column.label)}<span aria-hidden="true">${state.sort === column.key ? state.direction > 0 ? '↑' : '↓' : '↕'}</span></button></th>`).join('')}</tr>`;
-    table.querySelector('tbody').innerHTML = visible.length ? visible.map((row, index) => `<tr class="click-row${isSelected(row) ? ' selected' : ''}" data-row="${index}" tabindex="0" aria-label="Details zu ${escape(row.url)} öffnen">${currentColumns.map((column) => `<td>${column.render(row)}</td>`).join('')}</tr>`).join('') : `<tr><td class="empty-cell" colspan="${currentColumns.length}"><strong>${state.search || state.filter !== 'all' ? 'Keine passenden Ergebnisse' : state.crawl ? 'Noch keine Daten in diesem Bereich' : 'Starte einen Crawl, um Ergebnisse zu sehen'}</strong>${escape(state.search || state.filter !== 'all' ? 'Ändere den Filter oder den Suchbegriff.' : inputEmptyNote || emptyNote || (['linkmetrics', 'structured'].includes(state.section) ? state.analysisError || 'Diese Auswertung wird nach Abschluss oder Stopp des Crawls berechnet.' : state.section === 'images' ? 'Bildreferenzen erscheinen nach der Auswertung von HTML-Seiten.' : state.section === 'external' ? 'Externe Links erscheinen, sobald sie im HTML entdeckt werden.' : 'Nur tatsächlich erfasste Daten werden angezeigt.'))}</td></tr>`;
+    table.querySelector('tbody').innerHTML = visible.length ? visible.map((row, index) => `<tr class="click-row${isSelected(row) ? ' selected' : ''}" data-row="${index}" tabindex="0" aria-label="Details zu ${escape(row.url)} öffnen">${currentColumns.map((column, columnIndex) => `<td>${cell(column, row, columnIndex)}</td>`).join('')}</tr>`).join('') : `<tr><td class="empty-cell" colspan="${currentColumns.length}"><strong>${state.search || state.filter !== 'all' ? 'Keine passenden Ergebnisse' : state.crawl ? 'Noch keine Daten in diesem Bereich' : 'Starte einen Crawl, um Ergebnisse zu sehen'}</strong>${escape(state.search || state.filter !== 'all' ? 'Ändere den Filter oder den Suchbegriff.' : inputEmptyNote || emptyNote || (['linkmetrics', 'structured'].includes(state.section) ? state.analysisError || 'Diese Auswertung wird nach Abschluss oder Stopp des Crawls berechnet.' : state.section === 'images' ? 'Bildreferenzen erscheinen nach der Auswertung von HTML-Seiten.' : state.section === 'external' ? 'Externe Links erscheinen, sobald sie im HTML entdeckt werden.' : 'Nur tatsächlich erfasste Daten werden angezeigt.'))}</td></tr>`;
+    table.querySelectorAll('[data-recrawl-url]').forEach(input => {
+      input.addEventListener('click', event => event.stopPropagation());
+      input.addEventListener('keydown', event => event.stopPropagation());
+      input.addEventListener('change', () => setRecrawlSelected(input.dataset.recrawlUrl, input.checked));
+    });
     table.querySelectorAll('[data-sort]').forEach((button) => button.addEventListener('click', () => {
       state.direction = state.sort === button.dataset.sort ? -state.direction : 1;
       state.sort = button.dataset.sort;
@@ -746,6 +850,7 @@
     $('page-label').textContent = rows.length ? `${number(offset + 1)}–${number(Math.min(offset + state.pageSize, rows.length))} von ${number(rows.length)}` : 'Keine Ergebnisse';
     $('page-prev').disabled = state.page === 0;
     $('page-next').disabled = state.page + 1 >= pages;
+    renderControls();
   }
 
   function selectSection(section) {
@@ -833,6 +938,7 @@
   }
 
   function renderInspector() {
+    renderControls();
     if (state.selectedInput) { renderInputInspector(state.selectedInput); return; }
     if (state.selectedResponse) { renderResponseInspector(state.selectedResponse); return; }
     const page = state.selected;
@@ -845,6 +951,7 @@
     const element = $('inspector-content');
     if (state.inspectorTab === 'details') {
       const fields = [
+        ...(observationAge(page.url) ? [['Alter des Befunds', observationAge(page.url)]] : []),
         ['HTTP initial / final', `${page.status ?? '—'} / ${effectiveStatus(page) ?? '—'}`],
         ['Finale URL', page.final_url || '—'], ['Content-Type', page.content_type || '—'],
         ['Antwortzeit', duration(page.response_ms)], ['Seitentitel', first(page.titles) || '—'],
@@ -1038,6 +1145,17 @@
     if (['overview', 'graph'].includes(original)) state.section = 'internal';
     const cols = columns();
     const rows = filteredRows();
+    const operation = state.crawl?.operation;
+    const selected = operation?.coverage === 'mixed_age_selected_recrawl';
+    const targets = new Map(array(operation?.targets).map(target => [target.requested_url, target]));
+    const metadata = row => {
+      const page = ['inputs', 'responses'].includes(state.section) ? null : recrawlPage(row);
+      const target = page ? targets.get(page.url) : null;
+      const selectedState = selected && target ? target.state || '' : '';
+      const basis = !page ? 'unknown_or_mixed_row_identity' : ['issues', 'linkmetrics', 'structured'].includes(state.section) ? 'derived_report_observation' : !operation ? 'captured' : !selected ? 'unknown_operation' : selectedState === 'committed' ? 'refreshed_in_selected_job' : selectedState === 'pending' ? 'selected_pending_not_refreshed' : 'inherited_from_parent';
+      return { coverage: operation?.coverage ?? 'crawl_snapshot', basis, selectedState, parentHash: operation?.parent?.snapshot_sha256 ?? '', fetchedAt: page?.fetched_at ?? '', requestedURL: page?.url ?? '' };
+    };
+    for (const [key, label] of [['coverage', 'Crawl Coverage'], ['basis', 'Observation Basis'], ['selectedState', 'Selected State'], ['parentHash', 'Parent Snapshot SHA256'], ['fetchedAt', 'Fetched At'], ['requestedURL', 'Observation Requested URL']]) cols.push(textColumn('observation_' + key, label, row => metadata(row)[key]));
     const csvCell = (input) => { let value = String(input ?? ''); if (typeof input !== 'number' && typeof input !== 'boolean' && /^[\s\uFEFF]*[=+@-]/u.test(value)) value = `'${value}`; return `"${value.replace(/"/g, '""')}"`; };
     const data = [cols.map((column) => csvCell(column.label)).join(','), ...rows.map((row) => cols.map((column) => csvCell(column.value(row))).join(','))].join('\r\n');
     const section = state.section;
@@ -1311,6 +1429,16 @@
   }
 
   function bindEvents() {
+    $('recrawl-selected').addEventListener('click', openSelectedRecrawl);
+    $('recrawl-clear').addEventListener('click', () => { if (actionBusy()) return; state.recrawlURLs.clear(); renderControls(); if (!['overview', 'graph'].includes(state.section)) renderTable(); });
+    $('inspector-recrawl-checkbox').addEventListener('change', event => { if (state.selected) setRecrawlSelected(state.selected.url, event.target.checked); });
+    $('selected-recrawl-form').addEventListener('submit', selectedRecrawl);
+    const closeRecrawl = () => { selectedRecrawlContext = null; $('selected-recrawl-dialog').close(); };
+    $('selected-recrawl-close').addEventListener('click', closeRecrawl);
+    $('selected-recrawl-cancel').addEventListener('click', closeRecrawl);
+    $('selected-recrawl-dialog').addEventListener('cancel', () => { selectedRecrawlContext = null; });
+    $('recrawl-parent').addEventListener('click', () => { const id = recrawlOperation()?.parent?.job_id; if (id) selectCrawl(id).then(() => { $('crawl-history').value = state.crawl?.id || ''; }); });
+    $('recrawl-parent-snapshot').addEventListener('click', () => serverDownload('parent.json', `open-seo-spider-${state.crawl.id}-originalbericht.json`));
     bindListImporter();
     $('crawl-form').addEventListener('submit', startCrawl);
     $('pause-button').addEventListener('click', pauseCrawl);
@@ -1323,7 +1451,7 @@
       const maxPages = Number($('resume-max-pages').value), expected = limitResumeContext;
       if (!$('resume-max-pages').value.trim() || !Number.isSafeInteger(maxPages) || maxPages < 0) { $('resume-limit-error').textContent = 'Eine nichtnegative ganze URL-Grenze eingeben. 0 hebt die konfigurierte Grenze auf.'; $('resume-limit-error').hidden = false; return; }
       if (!expected || state.crawl?.id !== expected.id || state.generation !== expected.generation) { $('resume-limit-dialog').close(); return; }
-      limitResumeContext = null; $('resume-limit-dialog').close(); controlCrawl('resume', { max_pages: maxPages }, expected);
+      limitResumeContext = null; $('resume-limit-dialog').close(); controlCrawl('resume', { [expected.budgetKey || 'max_pages']: maxPages }, expected);
     });
     $('crawl-mode').addEventListener('change', () => {
       const list = $('crawl-mode').value === 'list';

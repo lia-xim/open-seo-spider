@@ -15,6 +15,7 @@ mod metadata;
 mod models;
 mod onpage;
 mod pdf;
+mod recrawl;
 mod renderer;
 mod response_observations;
 mod robots;
@@ -52,6 +53,12 @@ pub use list_import::{
 };
 pub use metadata::{applicable_robot_directives, parse_link_header, parse_x_robots_tag};
 pub use models::*;
+pub use recrawl::{
+    PreparedSelectedRecrawl, RecrawlParentReference, RecrawlResumeOverride,
+    RecrawlSelectionOccurrence, RecrawlSourceKind, RecrawlTarget, RecrawlTargetObservation,
+    RecrawlTargetState, RunPlan, SELECTED_RECRAWL_COVERAGE, SELECTED_RECRAWL_ENGINE,
+    SelectedRecrawlOperation, SelectedRecrawlParent, SelectedRecrawlPlan, prepare_selected_recrawl,
+};
 pub use response_observations::{
     ResponseObservation, export_response_observations_csv, response_observations,
 };

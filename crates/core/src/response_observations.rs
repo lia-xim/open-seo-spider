@@ -110,6 +110,7 @@ mod tests {
     use crate::{PageRecord, RedirectHop};
     fn report(page: PageRecord) -> CrawlReport {
         CrawlReport {
+            operation: None,
             config: Default::default(),
             pages: vec![page],
             issues: vec![],

@@ -136,8 +136,40 @@ pub fn export_pages_csv(report: &CrawlReport) -> anyhow::Result<String> {
         "Title Pixel Measurements",
         "Description Pixel Measurements",
         "Text Metrics Engine",
+        "Crawl Coverage",
+        "Observation Basis",
+        "Selected State",
+        "Parent Snapshot SHA256",
+        "Fetched At",
     ])?;
+    let known_operation = report
+        .operation
+        .as_ref()
+        .filter(|operation| operation.engine == crate::SELECTED_RECRAWL_ENGINE);
+    let targets: std::collections::HashMap<_, _> = known_operation
+        .map(|operation| {
+            operation
+                .targets
+                .iter()
+                .map(|target| (target.requested_url.as_str(), target))
+                .collect()
+        })
+        .unwrap_or_default();
     for page in &report.pages {
+        let target = targets.get(page.url.as_str());
+        let selected_state = target
+            .map(|target| match target.state {
+                crate::RecrawlTargetState::Pending => "pending",
+                crate::RecrawlTargetState::Committed => "committed",
+            })
+            .unwrap_or_default();
+        let observation_basis = match (report.operation.as_ref(), known_operation, selected_state) {
+            (None, _, _) => "captured",
+            (Some(_), None, _) => "unknown_operation",
+            (Some(_), Some(_), "committed") => "refreshed_in_selected_job",
+            (Some(_), Some(_), "pending") => "selected_pending_not_refreshed",
+            (Some(_), Some(_), _) => "inherited_from_parent",
+        };
         writer.write_record([
             csv_text(&page.url),
             csv_text(&page.final_url),
@@ -206,6 +238,21 @@ pub fn export_pages_csv(report: &CrawlReport) -> anyhow::Result<String> {
                 serde_json::to_string(&page.description_pixel_widths)?
             },
             csv_text(page.text_metrics_engine.as_deref().unwrap_or_default()),
+            csv_text(
+                report
+                    .operation
+                    .as_ref()
+                    .map_or("crawl_snapshot", |operation| operation.coverage.as_str()),
+            ),
+            observation_basis.into(),
+            selected_state.into(),
+            csv_text(
+                report
+                    .operation
+                    .as_ref()
+                    .map_or("", |operation| operation.parent.snapshot_sha256.as_str()),
+            ),
+            csv_text(&page.fetched_at),
         ])?;
     }
     Ok(String::from_utf8(writer.into_inner()?)?)
@@ -798,6 +845,7 @@ mod tests {
 
     fn report(pages: Vec<PageRecord>) -> CrawlReport {
         CrawlReport {
+            operation: None,
             config: CrawlConfig::default(),
             pages,
             issues: vec![],
@@ -1172,9 +1220,9 @@ mod tests {
         };
         let (headers, rows) =
             read_csv(&export_pages_csv(&report(vec![observed, legacy, zero])).unwrap());
-        assert_eq!(headers.len(), 37);
+        assert_eq!(headers.len(), 42);
         assert_eq!(
-            &headers[32..],
+            &headers[32..37],
             [
                 "Title Pixels",
                 "Description Pixels",
@@ -1184,7 +1232,7 @@ mod tests {
             ]
         );
         assert_eq!(
-            &rows[0][32..],
+            &rows[0][32..37],
             [
                 "561",
                 "",
@@ -1195,8 +1243,9 @@ mod tests {
         );
         let positions: Vec<Option<u32>> = serde_json::from_str(&rows[0][34]).unwrap();
         assert_eq!(positions, vec![Some(561), None, Some(0)]);
-        assert!(rows[1][32..].iter().all(String::is_empty));
-        assert_eq!(&rows[2][32..], ["0", "0", "[0]", "[0]", ""]);
+        assert!(rows[1][32..37].iter().all(String::is_empty));
+        assert_eq!(&rows[2][32..37], ["0", "0", "[0]", "[0]", ""]);
+        assert_eq!(&rows[1][37..], ["crawl_snapshot", "captured", "", "", ""]);
     }
 
     #[test]
@@ -1210,13 +1259,119 @@ mod tests {
         assert_eq!(rows[0][26], "");
         assert_eq!(rows[0][27], "googlebot");
         assert_eq!(rows[0][28], "noindex");
-        assert!(rows[0][29..].iter().all(String::is_empty));
+        assert!(rows[0][29..37].iter().all(String::is_empty));
+        assert_eq!(&rows[0][37..], ["crawl_snapshot", "captured", "", "", ""]);
         let empty = report(vec![]);
         for csv in [
             export_custom_javascript_csv(&empty).unwrap(),
             export_browser_cookies_csv(&empty).unwrap(),
         ] {
             assert!(read_csv(&csv).1.is_empty());
+        }
+    }
+
+    #[test]
+    fn pages_csv_preserves_selected_observation_basis_and_protects_untrusted_metadata() {
+        let mut source = report(vec![
+            PageRecord {
+                url: "https://fixture.test/retained".into(),
+                fetched_at: "2026-10-11T12:00:00Z".into(),
+                ..Default::default()
+            },
+            PageRecord {
+                url: "https://fixture.test/refreshed".into(),
+                fetched_at: "2026-10-12T12:00:00Z".into(),
+                ..Default::default()
+            },
+            // Imported reports can contain a stale pending page; this must never claim freshness.
+            PageRecord {
+                url: "https://fixture.test/pending".into(),
+                fetched_at: "\t=untrusted_timestamp".into(),
+                ..Default::default()
+            },
+        ]);
+        source.config.seed_urls = vec!["https://fixture.test/retained".into()];
+        let prepared = crate::prepare_selected_recrawl(
+            crate::SelectedRecrawlParent {
+                job_id: "csv-parent".into(),
+                checkpoint_revision: Some(1),
+                source_kind: crate::RecrawlSourceKind::CapturedCheckpoint,
+            },
+            &serde_json::to_vec(&source).unwrap(),
+            &[
+                "https://fixture.test/refreshed".into(),
+                "https://fixture.test/pending".into(),
+            ],
+            Some(1),
+        )
+        .unwrap();
+        let targets = prepared
+            .plan
+            .targets
+            .iter()
+            .map(|target| crate::RecrawlTargetObservation {
+                requested_url: target.requested_url.clone(),
+                parent_ordinal: target.parent_ordinal,
+                parent_page_sha256: target.parent_page_sha256.clone(),
+                state: if target.requested_url.ends_with("/refreshed") {
+                    crate::RecrawlTargetState::Committed
+                } else {
+                    crate::RecrawlTargetState::Pending
+                },
+                admitted_attempts: usize::from(target.requested_url.ends_with("/refreshed")),
+                committed_generation: target.requested_url.ends_with("/refreshed").then_some(1),
+            })
+            .collect();
+        let mut operation = prepared.plan.operation(1, targets, Some(1), 1, 1);
+        operation.parent.snapshot_sha256 = "=untrusted_parent".into();
+        operation.coverage = "+untrusted_coverage".into();
+        source.operation = Some(operation);
+        let (headers, rows) = read_csv(&export_pages_csv(&source).unwrap());
+        assert_eq!(
+            &headers[37..],
+            [
+                "Crawl Coverage",
+                "Observation Basis",
+                "Selected State",
+                "Parent Snapshot SHA256",
+                "Fetched At"
+            ]
+        );
+        assert_eq!(
+            &rows[0][37..],
+            [
+                "'+untrusted_coverage",
+                "inherited_from_parent",
+                "",
+                "'=untrusted_parent",
+                "2026-10-11T12:00:00Z"
+            ]
+        );
+        assert_eq!(
+            &rows[1][37..],
+            [
+                "'+untrusted_coverage",
+                "refreshed_in_selected_job",
+                "committed",
+                "'=untrusted_parent",
+                "2026-10-12T12:00:00Z"
+            ]
+        );
+        assert_eq!(
+            &rows[2][37..],
+            [
+                "'+untrusted_coverage",
+                "selected_pending_not_refreshed",
+                "pending",
+                "'=untrusted_parent",
+                "'\t=untrusted_timestamp"
+            ]
+        );
+        source.operation.as_mut().unwrap().engine = "future-operation/v2".into();
+        let (_, future_rows) = read_csv(&export_pages_csv(&source).unwrap());
+        for row in future_rows {
+            assert_eq!(row[38], "unknown_operation");
+            assert_eq!(row[39], "");
         }
     }
 

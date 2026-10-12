@@ -44,6 +44,14 @@ work. Page and sitemap/robots discovery frontiers remain separate. Explicit
 resume archives exact prior report bytes; each published generation has an
 immutable report revision. See [crawl control](crawl-control.md) for recovery,
 projection failures, legacy state and at-least-once interrupted requests.
+Selected recrawl stores an immutable run plan, the exact parent JSON bytes and
+their hash in a new SQLite job. Unselected rows are inherited unchanged; selected
+rows become current only when a new observation commits. The selection neither
+expands scope/credential origins nor starts seed/sitemap/link discovery. Its
+invocation budget counts newly admitted targets rather than inherited pages.
+Read-only recovery validates plan/config/base and row consistency before claiming
+resume availability. This is consistency validation for the controlled writer,
+not external integrity attestation. See [selected recrawl](selected-recrawl.md).
 Loading an existing completed snapshot is read-only: startup preserves stored
 JSON bytes, formatting and unknown extension fields. Importing a new report may
 derive current analysis and write a new snapshot. Typed API exports can contain
@@ -68,6 +76,7 @@ does not claim identical behavior to the HTTP crawler or reference product.
 | `GET /api/crawls/{id}/issues`, `/analysis` | Audit findings and graph/JSON-LD facts |
 | `GET /api/crawls/{id}/responses`, `/responses.csv` | Separate native response observations, including intermediate redirects; unretained hop headers/bodies remain unknown |
 | `POST /api/crawls/{id}/pause`, `/cancel`, `/resume` | Stop admission and drain to a checkpoint; cancellation and saved-frontier resume |
+| `POST /api/crawls/{id}/recrawl`; `GET /api/crawls/{id}/parent.json` | Create a derived job from exact selected requested URLs; download its immutable parent snapshot |
 | `GET /api/crawls/{id}/export.csv`, `/issues.csv`, `/links.csv`, `/extractions.csv` | Observed page, issue, link and configured extraction exports |
 | `GET /api/crawls/{id}/javascript.csv`, `/cookies.csv`, `/pdf.csv`, `/images.csv` | Typed script results, redacted cookie attributes, native PDF observations and fetched image metadata |
 | `GET /api/crawls/{id}/fragments`, `/fragments.csv`, `/dom.csv` | Opt-in fragment target checks and source-preserving DOM observations |

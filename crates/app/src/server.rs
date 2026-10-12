@@ -10,13 +10,15 @@ use base64::{Engine as _, engine::general_purpose::STANDARD};
 use open_seo_spider_core::{
     AuditIssue, CrawlCheckpoint, CrawlConfig, CrawlControl, CrawlEvent, CrawlOutcome,
     CrawlPolicyPreviewInput, CrawlReport, CrawlStore, Crawler, ListImportLimits, ListImportOptions,
-    PageRecord, RobotsSimulationInput, SerpInputRow, compare_crawls, export_browser_cookies_csv,
-    export_custom_extractions_csv, export_custom_javascript_csv, export_dom_observations_csv,
-    export_fragments_csv, export_image_resources_csv, export_input_occurrences_csv,
-    export_issues_csv, export_links_csv, export_pages_csv, export_pdf_csv,
-    export_response_observations_csv, export_robots_simulation_csv, export_serp_csv,
-    export_sitemap_xml, import_serp_csv, import_url_list, inspect_xlsx_list, preview_crawl_policy,
-    preview_serp, response_observations, simulate_robots, validate_fragments,
+    PageRecord, RecrawlResumeOverride, RecrawlSourceKind, RobotsSimulationInput, RunPlan,
+    SelectedRecrawlOperation, SelectedRecrawlParent, SerpInputRow, compare_crawls,
+    export_browser_cookies_csv, export_custom_extractions_csv, export_custom_javascript_csv,
+    export_dom_observations_csv, export_fragments_csv, export_image_resources_csv,
+    export_input_occurrences_csv, export_issues_csv, export_links_csv, export_pages_csv,
+    export_pdf_csv, export_response_observations_csv, export_robots_simulation_csv,
+    export_serp_csv, export_sitemap_xml, import_serp_csv, import_url_list, inspect_xlsx_list,
+    prepare_selected_recrawl, preview_crawl_policy, preview_serp, response_observations,
+    simulate_robots, validate_fragments,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
@@ -48,6 +50,8 @@ struct Job {
     generation: u64,
     checkpoint: Option<CrawlCheckpoint>,
     frontier_available: bool,
+    operation: Option<SelectedRecrawlOperation>,
+    recrawl_override: RecrawlResumeOverride,
 }
 #[derive(Serialize, Deserialize)]
 struct JobManifest {
@@ -81,7 +85,8 @@ impl Job {
                 page.error.is_some() || page.final_status.is_some_and(|status| status >= 400)
             })
             .count();
-        json!({"id":self.id,"status":self.status,"seed_url":self.config.seed_urls.first(),"config":self.config,"started_at":self.started_at,"finished_at":self.finished_at,"generation":self.generation,"checkpoint":self.checkpoint,"resume_available":self.frontier_available && !matches!(self.status.as_str(),"running"|"pausing"|"cancelling"),"stats":{"discovered":self.pages.len()+self.queued+self.in_flight,"queued":self.queued,"discovery_pending":self.discovery_pending,"fetched":self.pages.len(),"failed":failed,"issues":self.issues.len(),"in_flight":self.in_flight},"warnings":self.warnings,"error":self.error,"summary":self.report.as_ref().map(|report| &report.summary)})
+        let active = matches!(self.status.as_str(), "running" | "pausing" | "cancelling");
+        json!({"id":self.id,"status":self.status,"seed_url":self.config.seed_urls.first(),"config":self.config,"started_at":self.started_at,"finished_at":self.finished_at,"generation":self.generation,"checkpoint":self.checkpoint,"operation":self.operation,"resume_available":self.frontier_available && !active,"recrawl_available":self.report.is_some() && !active,"parent_snapshot_available":self.operation.is_some() && self.frontier_available,"stats":{"discovered":self.pages.len()+self.queued+self.in_flight,"queued":self.queued,"discovery_pending":self.discovery_pending,"fetched":self.pages.len(),"failed":failed,"issues":self.issues.len(),"in_flight":self.in_flight},"warnings":self.warnings,"error":self.error,"summary":self.report.as_ref().map(|report| &report.summary)})
     }
 }
 #[derive(Serialize)]
@@ -162,6 +167,8 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
         .route("/api/lists/inspect", post(list_inspect))
         .route("/api/lists/import", post(list_import))
         .route("/api/policy/preview", post(policy_preview))
+        .route("/api/crawls/{id}/recrawl", post(recrawl))
+        .route("/api/crawls/{id}/parent.json", get(export_recrawl_parent))
         .route(
             "/serp",
             get(|| async {
@@ -303,6 +310,7 @@ async fn capabilities() -> Json<Value> {
             "http":true,"list":true,"sitemap":true,"robots":true,
             "agent_scoped_indexing_directives":true,"http_link_relationships":true,
             "redirects":true,"intermediate_response_inventory":true,
+            "selected_recrawl":true,"selected_recrawl_profile":"new_child_exact_requested_urls_no_outward_discovery",
             "cancel":true,"pause":true,"pause_semantics":"stop_admission_then_drain_then_checkpoint","resume":true,"sqlite_only_recovery":true,"immutable_report_revisions":true,"url_limit":null,"url_regex_filters":true,
             "css_extraction":true,"xpath_1_0_extraction":true,"regex_extraction":true,
             "html_extraction_output":true,"configurable_audit_thresholds":true,
@@ -415,6 +423,8 @@ async fn create_crawl(
         generation: 1,
         checkpoint: None,
         frontier_available: false,
+        operation: None,
+        recrawl_override: RecrawlResumeOverride::default(),
     }));
     save_manifest(&state, &job)
         .await
@@ -422,6 +432,169 @@ async fn create_crawl(
     state.jobs.write().await.insert(id, job.clone());
     launch(state, job).await;
     Ok(Json(json!({"id":id,"status":"running"})))
+}
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct RecrawlRequest {
+    urls: Vec<String>,
+    #[serde(default)]
+    max_attempts: Option<usize>,
+}
+async fn recrawl(
+    State(state): State<AppState>,
+    Path(parent_id): Path<Uuid>,
+    Json(request): Json<RecrawlRequest>,
+) -> ApiResult<Json<Value>> {
+    let parent = get_job(&state, parent_id).await?;
+    let guard = parent.read().await;
+    if matches!(guard.status.as_str(), "running" | "pausing" | "cancelling") {
+        return Err(api_error(
+            StatusCode::CONFLICT,
+            "Wait for a stable source checkpoint before selected recrawl",
+        ));
+    }
+    let report = guard.report.as_ref().ok_or_else(|| {
+        api_error(
+            StatusCode::CONFLICT,
+            "Selected recrawl needs a captured source report",
+        )
+    })?;
+    let current = serde_json::to_vec(report)
+        .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?;
+    let stored_path = state.data_dir.join(format!("{parent_id}.json"));
+    let stored = match tokio::fs::metadata(&stored_path).await {
+        Ok(metadata) if metadata.len() <= 256 * 1024 * 1024 => {
+            tokio::fs::read(&stored_path).await.ok()
+        }
+        _ => None,
+    };
+    let unchanged = stored.as_ref().is_some_and(|bytes| {
+        serde_json::from_slice::<CrawlReport>(bytes)
+            .ok()
+            .and_then(|report| serde_json::to_vec(&report).ok())
+            .as_ref()
+            == Some(&current)
+    });
+    let source_kind = if !unchanged {
+        RecrawlSourceKind::CurrentProjection
+    } else if guard.checkpoint.is_some() {
+        RecrawlSourceKind::CapturedCheckpoint
+    } else if guard.frontier_available {
+        RecrawlSourceKind::StoredJson
+    } else {
+        RecrawlSourceKind::ImportedSnapshot
+    };
+    let reference = SelectedRecrawlParent {
+        job_id: parent_id.to_string(),
+        checkpoint_revision: guard
+            .checkpoint
+            .as_ref()
+            .map(|checkpoint| checkpoint.revision),
+        source_kind,
+    };
+    let bytes = if unchanged {
+        stored.expect("checked source bytes")
+    } else {
+        current
+    };
+    drop(guard);
+    let prepared = tokio::task::spawn_blocking(move || {
+        prepare_selected_recrawl(reference, &bytes, &request.urls, request.max_attempts)
+    })
+    .await
+    .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?
+    .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))?;
+    let id = Uuid::new_v4();
+    let database = state.data_dir.join(format!("{id}.sqlite"));
+    // Reserve this exact new UUID before any initialization/cleanup can touch it.
+    let reservation = tokio::fs::OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .open(&database)
+        .await
+        .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?;
+    drop(reservation);
+    let config = prepared.config.clone();
+    let initialization = tokio::task::spawn_blocking(move || -> anyhow::Result<_> {
+        let store = CrawlStore::open(&database)?;
+        store.initialize_selected_recrawl(&prepared)?;
+        Ok((store.pages()?, store.recrawl_operation()?))
+    })
+    .await
+    .map_err(|error| anyhow::anyhow!(error))
+    .and_then(|result| result);
+    let (pages, operation) = match initialization {
+        Ok(value) => value,
+        Err(error) => {
+            remove_reserved_job_files(&state, id).await;
+            return Err(api_error(StatusCode::INTERNAL_SERVER_ERROR, error));
+        }
+    };
+    let queued = operation
+        .as_ref()
+        .map_or(0, |operation| operation.pending_count);
+    let job = Arc::new(RwLock::new(Job {
+        id, config, status:"running".into(), started_at:chrono::Utc::now().to_rfc3339(), finished_at:None,
+        pages, issues:Vec::new(), queued, discovery_pending:0, in_flight:0,
+        warnings:vec!["Selected recrawl retains unrelated source observations; current coverage combines inherited and newly captured results.".into()],
+        error:None, report:None, control:CrawlControl::new(), generation:1, checkpoint:None,
+        frontier_available:true, operation, recrawl_override:RecrawlResumeOverride::default(),
+    }));
+    if let Err(error) = save_manifest(&state, &job).await {
+        remove_reserved_job_files(&state, id).await;
+        return Err(api_error(StatusCode::INTERNAL_SERVER_ERROR, error));
+    }
+    state.jobs.write().await.insert(id, job.clone());
+    launch(state, job).await;
+    Ok(Json(
+        json!({"id":id,"status":"running","parent_id":parent_id}),
+    ))
+}
+async fn remove_reserved_job_files(state: &AppState, id: Uuid) {
+    for suffix in [
+        ".sqlite",
+        ".sqlite-wal",
+        ".sqlite-shm",
+        ".job.json",
+        ".job.tmp",
+    ] {
+        let path = state.data_dir.join(format!("{id}{suffix}"));
+        if let Err(error) = tokio::fs::remove_file(&path).await
+            && error.kind() != std::io::ErrorKind::NotFound
+        {
+            tracing::warn!(%id,%error,path=?path,"Could not remove failed reserved child initialization");
+        }
+    }
+}
+async fn export_recrawl_parent(
+    State(state): State<AppState>,
+    Path(id): Path<Uuid>,
+) -> ApiResult<Response> {
+    get_job(&state, id).await?;
+    let database = state.data_dir.join(format!("{id}.sqlite"));
+    let bytes = tokio::task::spawn_blocking(move || -> anyhow::Result<Vec<u8>> {
+        let store = CrawlStore::open_read_only(database)?;
+        if !matches!(store.run_plan()?, RunPlan::SelectedRecrawl(_)) {
+            anyhow::bail!("This job has no immutable selected-recrawl parent snapshot");
+        }
+        store
+            .parent_snapshot_bytes()?
+            .ok_or_else(|| anyhow::anyhow!("Saved immutable parent snapshot is unavailable"))
+    })
+    .await
+    .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?
+    .map_err(|error| api_error(StatusCode::CONFLICT, error))?;
+    Ok((
+        [
+            (header::CONTENT_TYPE, "application/json; charset=utf-8"),
+            (
+                header::CONTENT_DISPOSITION,
+                "attachment; filename=parent-snapshot.json",
+            ),
+        ],
+        bytes,
+    )
+        .into_response())
 }
 async fn get_job(state: &AppState, id: Uuid) -> ApiResult<Arc<RwLock<Job>>> {
     state
@@ -544,6 +717,7 @@ async fn pause_crawl(
 struct ResumeOptions {
     /// Omitted retains the saved limit; an explicit zero removes this operator limit.
     max_pages: Option<usize>,
+    max_attempts: Option<usize>,
     concurrency: Option<usize>,
     delay_ms: Option<u64>,
     request_timeout_secs: Option<u64>,
@@ -577,6 +751,19 @@ async fn resume_crawl(
             return Err(api_error(
                 StatusCode::CONFLICT,
                 "Saved frontier has no crawl configuration",
+            ));
+        }
+        let selected = inspection.operation.is_some();
+        if selected && options.max_pages.is_some() {
+            return Err(api_error(
+                StatusCode::BAD_REQUEST,
+                "Selected recrawl uses max_attempts; its inherited page limit is not changed",
+            ));
+        }
+        if !selected && options.max_attempts.is_some() {
+            return Err(api_error(
+                StatusCode::BAD_REQUEST,
+                "max_attempts applies only to selected recrawl",
             ));
         }
         let generation = inspection
@@ -620,19 +807,24 @@ async fn resume_crawl(
         guard.finished_at = None;
         guard.error = None;
         guard.report = None;
+        guard.operation = inspection.operation;
+        guard.recrawl_override = RecrawlResumeOverride {
+            max_attempts: options.max_attempts,
+        };
     }
     launch(state, job).await;
     Ok(Json(json!({"id":id,"status":"running"})))
 }
 async fn launch(state: AppState, job: Arc<RwLock<Job>>) {
     tokio::spawn(async move {
-        let (config, id, control, generation) = {
+        let (config, id, control, generation, recrawl_override) = {
             let guard = job.read().await;
             (
                 guard.config.clone(),
                 guard.id,
                 guard.control.clone(),
                 guard.generation,
+                guard.recrawl_override.clone(),
             )
         };
         let (sender, mut receiver) = tokio::sync::mpsc::unbounded_channel();
@@ -646,6 +838,20 @@ async fn launch(state: AppState, job: Arc<RwLock<Job>>) {
                 .enumerate()
                 .map(|(index, page)| (page.url.clone(), index))
                 .collect();
+            let mut target_indices: HashMap<String, usize> = event_job
+                .read()
+                .await
+                .operation
+                .as_ref()
+                .map(|operation| {
+                    operation
+                        .targets
+                        .iter()
+                        .enumerate()
+                        .map(|(index, target)| (target.requested_url.clone(), index))
+                        .collect()
+                })
+                .unwrap_or_default();
             while let Some(event) = receiver.recv().await {
                 let mut guard = event_job.write().await;
                 if guard.generation != generation {
@@ -667,13 +873,44 @@ async fn launch(state: AppState, job: Arc<RwLock<Job>>) {
                         guard.in_flight = in_flight;
                     }
                     CrawlEvent::Warning { message } => guard.warnings.push(message),
+                    CrawlEvent::Operation { operation } => {
+                        target_indices = operation
+                            .targets
+                            .iter()
+                            .enumerate()
+                            .map(|(index, target)| (target.requested_url.clone(), index))
+                            .collect();
+                        guard.operation = Some(*operation);
+                    }
+                    CrawlEvent::RecrawlProgress {
+                        target,
+                        admitted_this_run,
+                        committed_this_run,
+                        refreshed_count,
+                        pending_count,
+                    } => {
+                        if let Some(operation) = &mut guard.operation {
+                            if let Some(index) = target_indices.get(&target.requested_url) {
+                                operation.targets[*index] = *target;
+                            }
+                            operation.admitted_this_run = admitted_this_run;
+                            operation.committed_this_run = committed_this_run;
+                            operation.refreshed_count = refreshed_count;
+                            operation.pending_count = pending_count;
+                        }
+                    }
                     CrawlEvent::Finished { .. } => {}
                 }
             }
         });
         let result = match Crawler::new(config) {
             Ok(crawler) => match crawler.with_store(state.data_dir.join(format!("{id}.sqlite"))) {
-                Ok(crawler) => crawler.run_controlled(Some(sender.clone()), control).await,
+                Ok(crawler) => {
+                    crawler
+                        .with_recrawl_resume_override(recrawl_override)
+                        .run_controlled(Some(sender.clone()), control)
+                        .await
+                }
                 Err(error) => Err(error),
             },
             Err(error) => Err(error),
@@ -702,6 +939,7 @@ async fn launch(state: AppState, job: Arc<RwLock<Job>>) {
                 guard.pages = report.pages.clone();
                 guard.issues = report.issues.clone();
                 guard.warnings = report.warnings.clone();
+                guard.operation = report.operation.clone();
                 guard.report = Some(report.clone());
                 let path = state.data_dir.join(format!("{id}.json"));
                 if let Err(error) = write_json(path, &report).await {
@@ -1059,6 +1297,7 @@ async fn persist_import(state: &AppState, id: Uuid, mut report: CrawlReport) -> 
     Ok(())
 }
 async fn register_report(state: &AppState, id: Uuid, report: CrawlReport) {
+    let operation = report.operation.clone();
     let job = Job {
         id,
         config: report.config.clone(),
@@ -1084,6 +1323,8 @@ async fn register_report(state: &AppState, id: Uuid, report: CrawlReport) {
         generation: 0,
         checkpoint: None,
         frontier_available: false,
+        operation,
+        recrawl_override: RecrawlResumeOverride::default(),
     };
     state
         .jobs
@@ -1325,6 +1566,8 @@ async fn load_reports(state: &AppState) -> anyhow::Result<()> {
                 None
             },
             frontier_available: true,
+            operation: inspection.operation,
+            recrawl_override: RecrawlResumeOverride::default(),
         };
         state
             .jobs
@@ -1376,6 +1619,8 @@ async fn load_reports(state: &AppState) -> anyhow::Result<()> {
             generation: manifest.generation,
             checkpoint: None,
             frontier_available: false,
+            operation: None,
+            recrawl_override: RecrawlResumeOverride::default(),
         };
         state
             .jobs

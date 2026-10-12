@@ -4243,8 +4243,16 @@
       "artifact": "docs/verification/crawl-control-batch.json",
       "result": "PASS",
       "tested_at": "2026-10-12T11:43:07.983Z",
-      "scope": "215 default Rust plus two explicit Chrome gates, native/API/CLI/MCP/browser control and preserved installed runtime; exact-source cross-platform CI pending.",
+      "scope": "215 default Rust plus two explicit Chrome gates, native/API/CLI/MCP/browser control and preserved installed runtime; exact-source Windows/Linux/Chromium/Linux Docker CI PASS.",
       "limits": "Bounded independent acceptance only; full parity and next slices incomplete."
+    },
+    {
+      "id": "crawl-control-ci",
+      "artifact": "docs/verification/crawl-control-ci.json",
+      "result": "PASS",
+      "tested_at": "2026-10-12T11:56:21.634Z",
+      "scope": "Four CI jobs pass against e6c6ea697f0a399d1d0ac6694386e28245280221. Local Windows Docker installation remains NOT_PROVEN.",
+      "limits": "Exact historical source commit; new source slices require their own gates."
     }
   ],
   "reference_workflows": [

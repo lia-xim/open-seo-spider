@@ -896,11 +896,25 @@ pub struct CrawlReport {
     pub issues: Vec<AuditIssue>,
     pub summary: CrawlSummary,
     pub warnings: Vec<String>,
+    /// Absent on ordinary and legacy crawls. Selected snapshots have mixed-age
+    /// observations and exclude selected historical rows until fresh commit.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub operation: Option<crate::SelectedRecrawlOperation>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "type", rename_all = "snake_case")]
 pub enum CrawlEvent {
+    Operation {
+        operation: Box<crate::SelectedRecrawlOperation>,
+    },
+    RecrawlProgress {
+        target: Box<crate::RecrawlTargetObservation>,
+        admitted_this_run: usize,
+        committed_this_run: usize,
+        refreshed_count: usize,
+        pending_count: usize,
+    },
     Page {
         page: Box<PageRecord>,
     },
