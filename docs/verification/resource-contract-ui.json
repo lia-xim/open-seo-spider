@@ -330,14 +330,54 @@
     {
       "name": "resource-contract",
       "result": "PASS",
-      "checks": 10,
-      "tested_at": "2026-10-12T21:39:13.253Z",
-      "scope": "Isolated authored API fixture, not native runtime proof",
+      "checks": 11,
+      "tested_at": "2026-10-12T22:43:40.339Z",
+      "scope": "Isolated authored API fixture with deterministic delayed GET and forbidden-effect negative controls; not native runtime or CI rerun proof",
       "artifact": {
         "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\outputs\\open-seo-spider\\web\\verification\\ui-resource-contract-fixture-results.json",
-        "sha256": "55738f4384358bfc9fba68611c7ab63838cb0758a11d452d5dc3e9b2137c3868",
-        "archive_path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\resource-discovery\\b10-ui-final-2026-10-12T22-13-21-936Z\\ui-resource-contract-fixture-results.json"
-      }
+        "sha256": "604c12142005202a4eaee0a0cafc1ac677923d2da25a15f89fc70497d1edfa20",
+        "archive_path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\resource-discovery\\b10-ui-ci-repair-2026-10-12\\after-ui-resource-contract-fixture-results.json"
+      },
+      "source": {
+        "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\outputs\\open-seo-spider\\web\\verification\\ui-resource-contract-smoke.cjs",
+        "sha256": "0fd07abf51582332b37caf0c7b101ee39bb92671d085699b347e56fb6bc0e983",
+        "archive_path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\resource-discovery\\b10-ui-ci-repair-2026-10-12\\after-ui-resource-contract-smoke.cjs"
+      },
+      "guarded_actions": 26,
+      "repair_proof": {
+        "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\resource-discovery\\b10-ui-ci-repair-2026-10-12\\repair-proof.json",
+        "sha256": "54fdf847d54a2a27f461f3cddd074d3097c66ee0799b62d65bbe16a4b92673c3"
+      },
+      "original_pass": {
+        "name": "resource-contract",
+        "result": "PASS",
+        "checks": 10,
+        "tested_at": "2026-10-12T21:39:13.253Z",
+        "scope": "Isolated authored API fixture, not native runtime proof",
+        "artifact": {
+          "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\outputs\\open-seo-spider\\web\\verification\\ui-resource-contract-fixture-results.json",
+          "sha256": "55738f4384358bfc9fba68611c7ab63838cb0758a11d452d5dc3e9b2137c3868",
+          "archive_path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\resource-discovery\\b10-ui-final-2026-10-12T22-13-21-936Z\\ui-resource-contract-fixture-results.json"
+        },
+        "counted_as_latest_mock": false,
+        "original_source": {
+          "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\outputs\\open-seo-spider\\web\\verification\\ui-resource-contract-smoke.cjs",
+          "sha256": "a39a6b18556f80c7ce2f30cc8e36226d525f80750d45cb8ec485c9333416ec09",
+          "archive_path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\resource-discovery\\b10-ui-final-2026-10-12T22-13-21-936Z\\ui-resource-contract-smoke.cjs"
+        }
+      },
+      "ci_failure": {
+        "result": "FAIL",
+        "source_commit_reported_by_root": "d0f3edd",
+        "artifact": {
+          "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\resource-discovery\\b10-ui-ci-repair-2026-10-12\\ci-renderer-job-fail.log",
+          "sha256": "9c3c7a7909f63e927cff5da006b21fefaecad3875bfddd5cd42100075e3f888a"
+        },
+        "old_total_actual": 110,
+        "old_total_expected": 108,
+        "exact_extra_ci_paths": "not retained; controlled replay records permitted responses/fragments GETs"
+      },
+      "reviewer_closure": "Independent read-only review closed total-counter and pre-delivery fence concerns; no product defect or source edit."
     }
   ],
   "additional_fixture_source": {

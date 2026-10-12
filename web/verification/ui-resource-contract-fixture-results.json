@@ -1,18 +1,19 @@
 {
-  "tested_at": "2026-10-12T21:39:13.253Z",
+  "tested_at": "2026-10-12T22:43:40.339Z",
   "result": "PASS",
-  "scope": "isolated contract settings and immutable saved-provenance browser/API fixture; no native discovery/persistence/website-HTTP proof",
+  "scope": "isolated contract settings and immutable saved-provenance browser/API fixture; controlled delayed-read and forbidden-mutation/network oracle probes are separate; no native discovery/persistence/website-HTTP proof",
   "checks": [
     "01 default disabled and enabled empty config reopen/reload/start/report-import never silently adopt V2",
     "02 absent/null retain exact V1 while contract:{} explicitly opts into serde-default V2 without UI-injected engine or flags",
     "03 explicit adoption preserves roles/origins and sets both legacy flags false; equal old flags copy and mixed flags conservatively start false",
     "04 independent internal/external qualified-link toggles preserve exact typed JSON and all four truth combinations",
-    "05 invalid contract shape engine keys types and either legacy-true contradiction reject Save visibly with exact raw settings and zero HTTP",
+    "05 invalid contract shape engine keys types and either legacy contradiction reject Save with raw settings and zero mutations/website attempts despite controlled delayed background GETs",
     "06 restored invalid engine/type or Rel/document contradiction blocks Start before POST and retains exact enabled settings",
     "07 disabled malformed or contradictory settings are preserved while every optional resource payload field is omitted",
     "08 bound V1/V2 profiles grants qualifications and three-origin redirect facts remain exact/inert; missing history differs from false/empty unsupported and declarative profiles; inspector bounded200",
     "09 semantic/full-config/generation/grant mismatches reject rows; held project and same-project Resume responses/finally cannot overwrite or unlock the new pending snapshot",
-    "10 320px contract settings bottom inspector and footer are reachable without overflow runtime errors or website requests"
+    "10 320px contract settings bottom inspector and footer are reachable without overflow runtime errors or website requests",
+    "11 ingress guard detects arbitrary API mutation and aborted website negative controls without confusing permitted bounded background GETs"
   ],
   "crawl_payloads": [
     {
@@ -2446,5 +2447,229 @@
     }
   ],
   "javascript_runtime_errors": [],
-  "unexpected_network_requests": []
+  "unexpected_network_requests": [],
+  "blocked_product_network_attempts": [],
+  "guarded_actions": [
+    {
+      "label": "explicit adoption",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "explicit adoption",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "explicit adoption",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "explicit adoption",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "qualified toggles",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "qualified toggles",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "qualified toggles",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "qualified toggles",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "invalid Save",
+      "allowed_reads": [
+        {
+          "method": "GET",
+          "path": "/api/crawls/started-15/responses",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/api/crawls/started-15/fragments",
+          "query": ""
+        }
+      ],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "invalid Save",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "invalid Save",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "invalid Save",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "invalid Save",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "invalid Save",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "invalid Save",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "invalid Save",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "invalid Save",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "invalid Save",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "invalid Save",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "invalid Save",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "invalid Save",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "invalid restored Start",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "invalid restored Start",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "invalid restored Start",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "invalid restored Start",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "label": "loaded-page CSV",
+      "allowed_reads": [],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    }
+  ],
+  "oracle_controls": [
+    {
+      "name": "old total-API oracle false positive under delayed permitted terminal reads",
+      "old_total_would_fail": true,
+      "allowed_reads": [
+        {
+          "method": "GET",
+          "path": "/api/crawls/started-15/responses",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/api/crawls/started-15/fragments",
+          "query": ""
+        }
+      ],
+      "forbidden_mutations": 0,
+      "website_attempts": 0
+    },
+    {
+      "name": "arbitrary API POST ingress rejected even without Start/import/control payload counters",
+      "caught": true,
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/fixture/oracle-mutation",
+          "query": ""
+        }
+      ]
+    },
+    {
+      "name": "attempted website request is rejected by guard and aborted before network delivery by the same global fence active for product groups",
+      "caught": true,
+      "attempts": [
+        "https://oracle-control.invalid/website-probe"
+      ],
+      "blocked_before_delivery": [
+        "https://oracle-control.invalid/website-probe"
+      ]
+    }
+  ],
+  "injected_oracle_api_requests": [
+    {
+      "method": "POST",
+      "path": "/api/fixture/oracle-mutation",
+      "query": ""
+    }
+  ],
+  "injected_oracle_network_attempts": [
+    "https://oracle-control.invalid/website-probe"
+  ],
+  "injected_oracle_blocked_network_attempts": [
+    "https://oracle-control.invalid/website-probe"
+  ]
 }

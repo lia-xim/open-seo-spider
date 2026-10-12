@@ -42,7 +42,8 @@
     "full_feature_acceptance": "PARTIAL",
     "reference_parity": "NOT_PROVEN",
     "additional_redirect_boundaries": "PASS_24_PROFILE_EXECUTIONS",
-    "additional_redirect_rust_tests": 1
+    "additional_redirect_rust_tests": 1,
+    "ui_mock": "PASS_11_SEPARATE_FIXTURES"
   },
   "artifacts": [
     {
@@ -88,8 +89,8 @@
     {
       "id": "resource-contract-ui",
       "artifact": "docs/verification/resource-contract-ui.json",
-      "artifact_sha256": "6355ad7cb584301f312076288240800bb407ff71096a4c106237ecfebfc5ad4a",
-      "bytes": 22817,
+      "artifact_sha256": "62fb901b3a31c8d962586aff1da1a12c4c4b1670f0b3366556907b4d36d6a962",
+      "bytes": 25783,
       "result": "PASS",
       "tested_at": "2026-10-12T22:12:52.024Z"
     },
@@ -145,5 +146,14 @@
     "Robots and sitemap protocol transfers do not yet have resource role grants.",
     "Immutable transport permissions remain separate from later independent report witnesses.",
     "No full vendor/filter/workflow parity claim."
+  ],
+  "prior_ci_attempts": [
+    {
+      "source_commit": "d0f3eddbbb03e2127f0533494597cdbddfa6f645",
+      "run_url": "https://github.com/lia-xim/open-seo-spider/actions/runs/38317039185",
+      "result": "RENDERER_FAIL",
+      "cause": "Total API counter wrongly treated permitted background GETs as forbidden effects; targeted held-response regression and separate mutation/network negative controls now pass11. Exact two original CI paths were not retained by the old logger.",
+      "source_and_original_failed_log_preserved": true
+    }
   ]
 }
