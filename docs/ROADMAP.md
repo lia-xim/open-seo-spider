@@ -6,7 +6,9 @@ Aktuell: **25 eigene Abnahmen erfüllt, 72 teilweise geprüft, 47 offen**. Zusä
 
 ## Aktueller nächster Baustein
 
-**B9: Lokaler Ressourcenpfad und Neustartreparatur sind geprüft.** Der [finale B9-Aggregatbeleg](verification/resource-discovery-batch.json) bindet 362 Standard-Rust-Tests, 15 native Ressourcenfälle, 15 CSS-Tests, API9, MCP22 und tatsächliche UI65 am reparierten Debug142c0a… . Die [historische Stackoverflow-Reproduktion](verification/resource-discovery-restart-failure.json) bleibt erhalten; [exakter Replay und frische Neustartregression](verification/resource-discovery-restart-repair.json) bestehen. Die [zehn breiteren Abnahmegruppen](resource-discovery.md) bleiben teilweise erfüllt; B9-Commit-CI, Release und Installation noch offen. B8-Commit667bc97 behält seine [vier CI-Jobs](verification/content-capture-ci.json) und den [unveränderlichen installierten Release](verification/content-capture-installed.json) als eigene historische Belege.
+**B9 ist als begrenzte Grundlage abgeschlossen und lokal installiert.** Der [Aggregatbeleg](verification/resource-discovery-batch.json) bindet 362 Standard-Rust-Tests, API9, MCP22 und tatsächliche UI65. Alle vier [exakten CI-Jobs an Commit f107ce7](verification/resource-discovery-ci.json) sind grün. Der [unveränderliche Windows-Release](verification/resource-discovery-release.json) besteht zusätzlich API9, Capture-/Neustart8, MCP22 und UI12. Die [Installation auf localhost8787](verification/resource-discovery-installed.json) erhält sieben Jobs und elf JSON-Dateien byteidentisch. Die historische Stackoverflow-Reproduktion und ihre Reparatur bleiben getrennt gespeichert. Breitere Feature-Abnahmen bleiben PARTIAL.
+
+**Als Nächstes: B10.** Der [gerichtete Matrixplan](parity/resource-matrix-plan.md) trennt konkrete Vertragsfragen von fehlenden Tests. Zuerst folgen Redirect-/Rollen- und HTTP-Link-Direktivenkontrollen, danach 108 Schalterfälle für sieben Ressourcentypen und zehn Navigationsquellen. Der Plan ist DESIGN_ONLY; daraus wird erst nach tatsächlichen HTTP-/Persistenz-Prüfungen ein Häkchen.
 
 ## Was bereits als Grundlage dient
 

@@ -1,6 +1,6 @@
 # Ressourcen-Erkennung: eigener B9-Vertrag
 
-Stand: **B9 ist lokal geprüft, mit offenen breiteren Feature-Abnahmen.** Die Neustartregression ist repariert und am finalen lokalen Build erneut geprüft. B9-Commit-CI, Release und Installation bleiben eigene offene Gates. Die [Feature-To-do-Liste](FEATURE_TODO.md) und [der Katalog](feature-parity.json) behalten 25 erfüllte eigene Abnahmen, 72 teilweise geprüfte und 47 offene Fähigkeiten. B8-native/API/UI-Beweise sowie [exakte B8-Commit-CI](verification/content-capture-ci.json) und [installierter Release](verification/content-capture-installed.json) bleiben historische B8-Belege. Hersteller-, Filter- und Workflow-Parität bleibt NOT_PROVEN.
+Stand: **Die begrenzte B9-Grundlage ist geprüft und lokal installiert; breitere Feature-Abnahmen bleiben offen.** [Exakte Commit-CI](verification/resource-discovery-ci.json), [unveränderlicher Release](verification/resource-discovery-release.json) und [Installation mit erhaltenem Nutzerbestand](verification/resource-discovery-installed.json) bestehen. B10 führt die gerichtete vollständige Matrix als [DESIGN_ONLY-Plan](parity/resource-matrix-plan.md) weiter. Die [Feature-To-do-Liste](FEATURE_TODO.md) und [der Katalog](feature-parity.json) behalten 25 erfüllte eigene Abnahmen, 72 teilweise geprüfte und 47 offene Fähigkeiten. B8-native/API/UI-Beweise sowie [exakte B8-Commit-CI](verification/content-capture-ci.json) und [installierter Release](verification/content-capture-installed.json) bleiben historische B8-Belege. Hersteller-, Filter- und Workflow-Parität bleibt NOT_PROVEN.
 
 ## Behobene Neustartregression und historischer Fehler
 
@@ -8,13 +8,13 @@ Der [dreifach reproduzierte historische Fehler](verification/resource-discovery-
 
 ## Finaler lokal geprüfter Stand
 
-Der eingefrorene Debug-Stand `142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724` besteht [362 Standard-Rust-Tests](verification/resource-discovery-core.json), darunter 15 native Ressourcen-Integrationsfälle und 15 CSS-Parser-Tests. Vier Live-Gates bleiben im Standardlauf ausdrücklich ignoriert; eine tatsächliche Chrome-Prüfung wurde separat bestanden. Formatierung und Clippy sind bestanden. Der [öffentliche B9-Aggregatbeleg](verification/resource-discovery-batch.json) bindet die aktuellen Core-/API-/MCP-/[UI65-Beweise](verification/resource-discovery-ui.json), sieben Regressionsgruppen sowie historischen Fehler und Reparatur per Hash. B9-Commit-CI, Release und Installation sind darin ausdrücklich PENDING.
+Der eingefrorene Debug-Stand `142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724` besteht [362 Standard-Rust-Tests](verification/resource-discovery-core.json), darunter 15 native Ressourcen-Integrationsfälle und 15 CSS-Parser-Tests. Vier Live-Gates bleiben im Standardlauf ausdrücklich ignoriert; eine tatsächliche Chrome-Prüfung wurde separat bestanden. Formatierung und Clippy sind bestanden. Der [öffentliche B9-Aggregatbeleg](verification/resource-discovery-batch.json) bindet die aktuellen Core-/API-/MCP-/[UI65-Beweise](verification/resource-discovery-ui.json), sieben Regressionsgruppen sowie historischen Fehler und Reparatur per Hash. Der Abschlussbeleg ergänzt exakte f107-Commit-CI, Release und Installation mit ihren getrennten Artefakten.
 
 Die [neun nativen API-/CLI-Gruppen](verification/resource-discovery-e2e.json) prüfen unter anderem 505 erhaltene Quellvorkommen, 506 unterschiedliche Ressourcen-URL-Transporte ohne feste 500-URL-Grenze, private Antwort-Metadaten, vollständige gepinnte Exporte und vier gezielte SQLite-Manipulationskontrollen. Vollständige typisierte Crawl-Konfiguration und Generation werden beim Lesen gebunden. Das [offizielle MCP-SDK](verification/mcp-e2e.json) prüft 22 Tools über stdio und Streamable HTTP.
 
 Die [tatsächliche Ressourcen-UI](../web/verification/ui-resource-discovery-live-results.json) besteht 12 Prüfungen gegen Rust, eigene HTTP-Fixtures und SQLite. Weitere 53 tatsächliche Prüfungen der Content-/Policy-/Selected-/Control-/Renderer-Oberflächen bestehen am selben Debug-Stand. Die separate [Settings-Fixture](../web/verification/ui-resource-discovery-fixture-results.json) mit 10 und [Ledger-Fixture](../web/verification/ui-resource-ledger-fixture-results.json) mit 16 Prüfungen verwenden API-Mocks und ersetzen diesen nativen Beleg nicht.
 
-Die [API-, CLI- und MCP-Verträge](resource-discovery-api.md) und [UI-Verträge](resource-discovery-ui.md) beschreiben die geprüfte Integration. Die breitere Zehn-Gruppen-Abnahme bleibt teilweise erfüllt: insbesondere ist die komplette vierfache Speichern-/Abrufen-Matrix bislang für Bilder belegt, nicht für jeden Ressourcentyp und jede Navigation. B9-CI, Release und Installation bleiben eigene offene Gates.
+Die [API-, CLI- und MCP-Verträge](resource-discovery-api.md) und [UI-Verträge](resource-discovery-ui.md) beschreiben die geprüfte Integration. Die breitere Zehn-Gruppen-Abnahme bleibt teilweise erfüllt: insbesondere ist die komplette vierfache Speichern-/Abrufen-Matrix bislang für Bilder belegt, nicht für jeden Ressourcentyp und jede Navigation. B9-CI, Release und Installation bestehen als eigene getrennte Gates; die vollständige Feature-Matrix bleibt offen.
 
 ## Zweck und Grenzen
 
@@ -82,8 +82,8 @@ Quellvorkommen, Grants, Transport-/Parser-Beobachtung, offene Expansion, Policy-
 Zusätzlich offen sind `relationship-discovery-each-positive-negative`, `link-directive-four-way-traversal` und `resource-native-renderer-enforcement`. Konfigurationsfelder oder native Kandidaten ersetzen ihre tatsächlichen positiven und negativen Requestkontrollen nicht.
 
 - [x] Begrenztes natives Ressourcen-Subset, API/CLI/MCP und tatsächliche Browser-UI geprüft.
-- [ ] Eigene exakte B9-Commit-CI.
-- [ ] Eigener unveränderlicher B9-Release und installierte Runtime, einschließlich unverändertem Nutzerbestand.
+- [x] Eigene exakte B9-Commit-CI: vier Jobs am unveränderlichen f107-Source-Commit bestanden.
+- [x] Eigener unveränderlicher B9-Release und installierte Runtime: zusätzliche Release-API9, Capture-/Neustart8, MCP22 und UI12 bestanden; sieben Jobs/elf JSON-Dateien byteidentisch erhalten.
 
 Private Transport-Projektionen enthalten begrenzte Metadaten und keine Body-/Custom-Extraction-/PDF-/Capture-Texte. `retained_response` beschreibt die aktuelle Aufnahme in den Bericht; ursprüngliche Projektionsfakten bleiben getrennt. `completed_transports` zählt Frontier-Fetch-Einheiten, nicht jede Redirect-Stufe oder Discovery-Protokollanfrage. Integritätsprüfung pro Seite priorisiert Korrektheit; große Ledger benötigen zusätzliche Performance-Gates.
 

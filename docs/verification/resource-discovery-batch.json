@@ -206,6 +206,34 @@
     {
       "path": "docs/verification/b9-legacy-content-capture.json",
       "sha256": "f545678eb12905c06b1584018e52347b2bdd9558317c7c3aa3d1262ede145dc0"
+    },
+    {
+      "path": "docs/verification/resource-discovery-ci.json",
+      "sha256": "8b3548b404787f2d89a0334ed4a8b10313b309d4be09083bc230c1ce38c6fb52"
+    },
+    {
+      "path": "docs/verification/resource-discovery-release.json",
+      "sha256": "09cb254427e93b0fa98c1420a431955a6437c1996a38930da4dc6614283cccde"
+    },
+    {
+      "path": "docs/verification/resource-discovery-installed.json",
+      "sha256": "dc879c38154a2e2595b85d37b852ef41f091957b6c0733b56173e05a6cf46cee"
+    },
+    {
+      "path": "docs/verification/resource-discovery-release-api.json",
+      "sha256": "6b77967302e0adcef95598c27600554ea2be4ebb33228febe4439d0bc934c15b"
+    },
+    {
+      "path": "docs/verification/resource-discovery-release-capture.json",
+      "sha256": "83d8b79944938c6587720cf47a72b0943ad7c575f921c88236cf9d162b23eb21"
+    },
+    {
+      "path": "docs/verification/resource-discovery-release-mcp.json",
+      "sha256": "c40226a72051d84943a0cf291d6384ebbc579b27f3d9edf5dce6fdebe188e901"
+    },
+    {
+      "path": "docs/verification/resource-discovery-release-ui.json",
+      "sha256": "0bdcb8c68b3806f0d7a143f5f75a033e8dbffe4f69fe9826bf435164a0418be8"
     }
   ],
   "pending": {
@@ -214,9 +242,39 @@
     "css_environment_encoding": "NOT_PROVEN",
     "resource_plus_renderer": "UNSUPPORTED_PRE_HTTP",
     "all_type_navigation_switch_matrix": "NOT_PROVEN",
-    "exact_commit_ci": "PENDING",
-    "immutable_release": "PENDING",
-    "installed_runtime": "PENDING",
+    "exact_commit_ci": "PASS",
+    "immutable_release": "PASS",
+    "installed_runtime": "PASS",
     "full_vendor_parity": "NOT_PROVEN"
+  },
+  "finalized_at": "2026-10-12T19:10:25.415Z",
+  "source_commit": "f107ce7cc5e610494f30df8a3a1d46d98d7870e4",
+  "artifacts_source_commit": "f107ce7cc5e610494f30df8a3a1d46d98d7870e4",
+  "exact_commit_ci": {
+    "result": "PASS",
+    "source_commit": "f107ce7cc5e610494f30df8a3a1d46d98d7870e4",
+    "run_id": 38294574230,
+    "url": "https://github.com/lia-xim/open-seo-spider/actions/runs/38294574230",
+    "jobs": 4,
+    "path": "docs/verification/resource-discovery-ci.json"
+  },
+  "immutable_release": {
+    "result": "PASS",
+    "source_commit": "f107ce7cc5e610494f30df8a3a1d46d98d7870e4",
+    "sha256": "bfcbbb0039936b1b6046f3014a1c035f6f14ece8b16d9141d80984fe788985f2",
+    "native_api_cli_groups": 9,
+    "native_capture_restart_groups": 8,
+    "mcp_tools": 22,
+    "actual_resource_ui_checks": 12,
+    "path": "docs/verification/resource-discovery-release.json"
+  },
+  "installed_runtime": {
+    "result": "PASS",
+    "source_commit": "f107ce7cc5e610494f30df8a3a1d46d98d7870e4",
+    "sha256": "bfcbbb0039936b1b6046f3014a1c035f6f14ece8b16d9141d80984fe788985f2",
+    "saved_jobs": 7,
+    "preserved_json_files": 11,
+    "byte_identical_after_restart": true,
+    "path": "docs/verification/resource-discovery-installed.json"
   }
 }

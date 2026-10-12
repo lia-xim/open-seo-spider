@@ -1,0 +1,38 @@
+{
+  "recorded_at": "2026-10-12T19:10:25.415Z",
+  "result": "PASS",
+  "source_commit": "f107ce7cc5e610494f30df8a3a1d46d98d7870e4",
+  "release_sha256": "bfcbbb0039936b1b6046f3014a1c035f6f14ece8b16d9141d80984fe788985f2",
+  "source_archive_sha256": "cc7588a5db2ec6653a3274ca06ada9fe8da58d241c3feae3ff7523962d312481",
+  "build_command": "cargo build --release --locked -p open-seo-spider",
+  "source": "Fresh git archive of the exact source commit; isolated release target directory.",
+  "native_api_cli_groups": 9,
+  "native_capture_restart_groups": 8,
+  "mcp_tools": 22,
+  "mcp_transports": [
+    "stdio",
+    "streamable_http"
+  ],
+  "actual_resource_ui_checks": 12,
+  "artifacts": [
+    {
+      "path": "docs/verification/resource-discovery-release-api.json",
+      "sha256": "6b77967302e0adcef95598c27600554ea2be4ebb33228febe4439d0bc934c15b"
+    },
+    {
+      "path": "docs/verification/resource-discovery-release-capture.json",
+      "sha256": "83d8b79944938c6587720cf47a72b0943ad7c575f921c88236cf9d162b23eb21"
+    },
+    {
+      "path": "docs/verification/resource-discovery-release-mcp.json",
+      "sha256": "c40226a72051d84943a0cf291d6384ebbc579b27f3d9edf5dce6fdebe188e901"
+    },
+    {
+      "path": "docs/verification/resource-discovery-release-ui.json",
+      "sha256": "0bdcb8c68b3806f0d7a143f5f75a033e8dbffe4f69fe9826bf435164a0418be8"
+    }
+  ],
+  "invocation_binding": "SPIDER_BINARY explicitly selected this release exe for all three native harnesses. UI ran against a fresh owned data directory and preview spawned from the same executable. Executable SHA rechecked before recording.",
+  "scope": "Windows optimized native release and embedded resource UI; fixtures use only owned localhost targets, never user crawl data.",
+  "limits": "The 362 Rust and 65 broad debug UI checks retain their separate debug/source proofs. Release UI12 does not attest the whole resource matrix or vendor parity."
+}

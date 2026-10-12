@@ -1,0 +1,5145 @@
+{
+  "schema_version": 1,
+  "engine": "open-seo-spider/resource-matrix-plan-v1",
+  "status": "DESIGN_ONLY",
+  "title_de": "B10: Ressourcen-Schaltermatrix und Vertragsentscheidungen",
+  "tracking_issue": "https://github.com/lia-xim/open-seo-spider/issues/17",
+  "baseline_commit": "f107ce7cc5e610494f30df8a3a1d46d98d7870e4",
+  "created_at": "2026-10-12T19:12:34.806719+00:00",
+  "scope": "Independent authored acceptance design from own frozen B9 source. No new test execution, runtime result, vendor binary/source/assets or license changes.",
+  "source_design_sha256": "dc285a8a11b23b0b030b99c64b9c54e213ea42e0672c00ff4f3ddf03a22cba8b",
+  "source_snapshot": [
+    {
+      "path": "crates/core/src/resource_policy.rs",
+      "sha256": "988662dcfc99e0cbbe55eea9e89a5d163c695135af8a44a430ed62a088377880",
+      "scope": "B9_CODE_BASELINE"
+    },
+    {
+      "path": "crates/core/src/crawler.rs",
+      "sha256": "e1dd5d7b34fd9ab5e6f803bdf21e6cb7d2de92ef89c0449fcd444e0d0454df84",
+      "scope": "B9_CODE_BASELINE"
+    },
+    {
+      "path": "crates/core/src/resource_html.rs",
+      "sha256": "536b347b17ac79e4cca36483046242a5a4d5b87bc48e9348a9f383760c0c1f2f",
+      "scope": "B9_CODE_BASELINE"
+    },
+    {
+      "path": "crates/core/src/resource_capture.rs",
+      "sha256": "717640e9f82e4c8e6c1e9bd8d710de5ac6b28d7743c1b2d2568602f1e618fe2d",
+      "scope": "B9_CODE_BASELINE"
+    },
+    {
+      "path": "crates/core/src/resource_ledger.rs",
+      "sha256": "4719569df922f4f70f3e0d7a246348ac81491319b7fbe213650fc94e1a05f133",
+      "scope": "B9_CODE_BASELINE"
+    },
+    {
+      "path": "crates/core/src/metadata.rs",
+      "sha256": "a291e59a3dff640a13efec5a82d64a6dfa6e2af22a3782f7abe9ca262c4d8d0a",
+      "scope": "B9_CODE_BASELINE"
+    },
+    {
+      "path": "crates/core/tests/resource_discovery_fixtures.rs",
+      "sha256": "645e24ffd701bc5df5fedab186dc080ce9928da96d61479de67b20943e211828",
+      "scope": "B9_CODE_BASELINE"
+    }
+  ],
+  "evidence_boundary": {
+    "baseline_artifact": "docs/verification/resource-discovery-batch.json",
+    "b9_native_resource_subset": 15,
+    "b9_standard_workspace_tests": 362,
+    "b9_image_four_products": "bounded observed subset only; not all resource or navigation types",
+    "b10_executed_cases": 0,
+    "current_v1_predictions_are_test_results": false,
+    "full_vendor_parity": "NOT_PROVEN",
+    "coverage_percent": null
+  },
+  "matrix_counts": {
+    "resource_categories": 7,
+    "resource_cells": 28,
+    "navigation_categories": 10,
+    "navigation_cells": 80,
+    "navigation_valid_cells": 60,
+    "navigation_invalid_pre_http_cells": 20,
+    "total_cells": 108,
+    "valid_cells_total": 88,
+    "b10_executed": 0
+  },
+  "preconditions": {
+    "default_full_config": "optional resource_discovery None retains legacy serialization/hash and behavior; no B10 change",
+    "present_config": "own v1 default resource store/fetch true; missing whole navigation family internal_anchors/iframe/refresh true/true/true; other families true/false/false",
+    "provided_partial_navigation_family": "generic NavigationSwitch defaults true/false/false, not family-specific defaults",
+    "source": "known complete200 actual eligible source; exact decoding forHTML/CSS; generated valid PDF annotation source; no renderer",
+    "scope": "owned explicit local origins; original credentials only exact original seed origins",
+    "limits": "sufficient explicit fixture budgets; fixed resource limits validated before HTTP; max_pages counts completed/admitted frontier units including unretained responses",
+    "matrix_isolation": "fresh SQLite per cell; unique target URL; no alternative occurrence/seed authorizes target; one allowed child positive control not shared with another cell",
+    "non_http_local_refs": "retain literal invalid/data/blob/local-fragment occurrences without fake document fetch or response facts"
+  },
+  "grant_oracle": {
+    "resource_css": "fetch -> CSS capability only if css.stylesheets and policy_traverse; store independent",
+    "resource_pdf": "fetch -> PDF annotation capability only if navigation.pdf_annotations.fetch and policy_traverse; navigation master still gates annotation candidate admission",
+    "other_resource_kinds": "fetch grants observation/check only; observed HTML/CSS/PDF MIME never upgrades role",
+    "navigation": "fetch+expand -> navigation (crawl_links&&policy_traverse), resources(policy_traverse), conditional PDF; no standalone CSS grant",
+    "initial_input": "always own initial store/fetch; CSS allowed by css.stylesheets, resources allowed by traverse even crawl_linksfalse; navigation only crawl_links&&traverse; PDF conditional. Initial is not one of the17 matrix families.",
+    "selected_recrawl": "every outward candidate denied selected_no_expansion irrespective all switches; selection only refetches immutable requested targets",
+    "check_once": "can_check may admit one target but no descendant capability; any nontraversable redirect caps descendant expansion permanently",
+    "independent_roles": "capabilities OR only from genuinely allowed immutable grants; denied occurrence contributes nothing; report retention OR from allowed storetrue grants; task HTTP coalesces by actual requested fetch identity"
+  },
+  "family_definitions": {
+    "resources": {
+      "css": {
+        "reference_kind": "css",
+        "config_path": "resource_discovery.resources.css",
+        "source_declaration": "<link rel=\"stylesheet\" href=\"/target\">",
+        "authored_response": {
+          "status": 200,
+          "content_type": "text/css; charset=utf-8",
+          "fixture_body": "@import \"/css-child\";body{background:url(\"/image-child\")}"
+        },
+        "expansion_control": "css.stylesheets=true; annotation discovery is not implied",
+        "status": "DESIGN_ONLY"
+      },
+      "javascript": {
+        "reference_kind": "java_script",
+        "config_path": "resource_discovery.resources.javascript",
+        "source_declaration": "<script src=\"/target\"></script>",
+        "authored_response": {
+          "status": 200,
+          "content_type": "text/javascript; charset=utf-8",
+          "fixture_body": "/* independently authored script; no execution */"
+        },
+        "expansion_control": "script execution and ES-module imports remain outside the native declaration profile",
+        "status": "DESIGN_ONLY"
+      },
+      "images": {
+        "reference_kind": "image",
+        "config_path": "resource_discovery.resources.images",
+        "source_declaration": "<img src=\"/target\" alt=\"Own matrix\">",
+        "authored_response": {
+          "status": 200,
+          "content_type": "image/png",
+          "fixture_body": "generated 1x1 PNG"
+        },
+        "expansion_control": "intrinsic dimensions are response facts, separate from HTML alt/declared dimensions",
+        "status": "DESIGN_ONLY"
+      },
+      "media": {
+        "reference_kind": "media",
+        "config_path": "resource_discovery.resources.media",
+        "source_declaration": "<audio src=\"/target\"></audio>",
+        "authored_response": {
+          "status": 200,
+          "content_type": "audio/wav",
+          "fixture_body": "generated small PCM WAV"
+        },
+        "expansion_control": "no playback, codec support or browser source selection claim",
+        "status": "DESIGN_ONLY"
+      },
+      "pdf": {
+        "reference_kind": "pdf",
+        "config_path": "resource_discovery.resources.pdf",
+        "source_declaration": "<object data=\"/target\" type=\"application/pdf\"></object>",
+        "authored_response": {
+          "status": 200,
+          "content_type": "application/pdf",
+          "fixture_body": "generated valid one-page PDF with URI annotation /pdf-child"
+        },
+        "expansion_control": "enable navigation.pdf_annotations.fetch=true for this explicit expansion control",
+        "status": "DESIGN_ONLY"
+      },
+      "swf": {
+        "reference_kind": "swf",
+        "config_path": "resource_discovery.resources.swf",
+        "source_declaration": "<embed src=\"/target\" type=\"application/x-shockwave-flash\">",
+        "authored_response": {
+          "status": 200,
+          "content_type": "application/x-shockwave-flash",
+          "fixture_body": "owned FWS-prefixed transport fixture; not a Flash execution test"
+        },
+        "expansion_control": "native inventory and HTTP facts only; no SWF script/parser or playback claim",
+        "status": "DESIGN_ONLY"
+      },
+      "other": {
+        "reference_kind": "other",
+        "config_path": "resource_discovery.resources.other",
+        "source_declaration": "<track src=\"/target\" kind=\"captions\" srclang=\"en\">",
+        "authored_response": {
+          "status": 200,
+          "content_type": "text/vtt; charset=utf-8",
+          "fixture_body": "WEBVTT\n\n00:00.000 --> 00:00.500\nOwn text"
+        },
+        "expansion_control": "font/CSS Other and generic embed contexts need additional provenance controls",
+        "status": "DESIGN_ONLY"
+      }
+    },
+    "navigation": {
+      "internal_anchors": {
+        "reference_kind": "internal_anchor",
+        "config_path": "resource_discovery.navigation.internal_anchors",
+        "source_declaration": "<a href=\"/target\">Own link</a>",
+        "source_kind": "native_html",
+        "specific_preconditions": [
+          "crawl_links=true; complete source; exact accepted URL; depth allowed; no directives; no filter/policy denial",
+          "external_anchors: owned origin_b, check_external=true, resource allowlist alone is not navigation scope",
+          "PDF annotations: generated complete PDF is an initial source; fetch=false also disables its source annotation-expansion grant, so native decision is source_check_only rather than the abstract pure oracle fetch_disabled",
+          "All unrelated resource fetch switches and navigation fetch switches disabled except children deliberately used as positive expansion controls"
+        ],
+        "status": "DESIGN_ONLY"
+      },
+      "external_anchors": {
+        "reference_kind": "external_anchor",
+        "config_path": "resource_discovery.navigation.external_anchors",
+        "source_declaration": "<a href=\"{origin_b}/target\">Own external link</a>",
+        "source_kind": "native_html",
+        "specific_preconditions": [
+          "crawl_links=true; complete source; exact accepted URL; depth allowed; no directives; no filter/policy denial",
+          "external_anchors: owned origin_b, check_external=true, resource allowlist alone is not navigation scope",
+          "PDF annotations: generated complete PDF is an initial source; fetch=false also disables its source annotation-expansion grant, so native decision is source_check_only rather than the abstract pure oracle fetch_disabled",
+          "All unrelated resource fetch switches and navigation fetch switches disabled except children deliberately used as positive expansion controls"
+        ],
+        "status": "DESIGN_ONLY"
+      },
+      "iframes": {
+        "reference_kind": "iframe",
+        "config_path": "resource_discovery.navigation.iframes",
+        "source_declaration": "<iframe src=\"/target\"></iframe>",
+        "source_kind": "native_html",
+        "specific_preconditions": [
+          "crawl_links=true; complete source; exact accepted URL; depth allowed; no directives; no filter/policy denial",
+          "external_anchors: owned origin_b, check_external=true, resource allowlist alone is not navigation scope",
+          "PDF annotations: generated complete PDF is an initial source; fetch=false also disables its source annotation-expansion grant, so native decision is source_check_only rather than the abstract pure oracle fetch_disabled",
+          "All unrelated resource fetch switches and navigation fetch switches disabled except children deliberately used as positive expansion controls"
+        ],
+        "status": "DESIGN_ONLY"
+      },
+      "refresh": {
+        "reference_kind": "refresh",
+        "config_path": "resource_discovery.navigation.refresh",
+        "source_declaration": "<meta http-equiv=\"refresh\" content=\"0;url=/target\">",
+        "source_kind": "native_html",
+        "specific_preconditions": [
+          "crawl_links=true; complete source; exact accepted URL; depth allowed; no directives; no filter/policy denial",
+          "external_anchors: owned origin_b, check_external=true, resource allowlist alone is not navigation scope",
+          "PDF annotations: generated complete PDF is an initial source; fetch=false also disables its source annotation-expansion grant, so native decision is source_check_only rather than the abstract pure oracle fetch_disabled",
+          "All unrelated resource fetch switches and navigation fetch switches disabled except children deliberately used as positive expansion controls"
+        ],
+        "status": "DESIGN_ONLY"
+      },
+      "canonical": {
+        "reference_kind": "canonical",
+        "config_path": "resource_discovery.navigation.canonical",
+        "source_declaration": "<link rel=\"canonical\" href=\"/target\">",
+        "source_kind": "native_html",
+        "specific_preconditions": [
+          "crawl_links=true; complete source; exact accepted URL; depth allowed; no directives; no filter/policy denial",
+          "external_anchors: owned origin_b, check_external=true, resource allowlist alone is not navigation scope",
+          "PDF annotations: generated complete PDF is an initial source; fetch=false also disables its source annotation-expansion grant, so native decision is source_check_only rather than the abstract pure oracle fetch_disabled",
+          "All unrelated resource fetch switches and navigation fetch switches disabled except children deliberately used as positive expansion controls"
+        ],
+        "status": "DESIGN_ONLY"
+      },
+      "hreflang": {
+        "reference_kind": "hreflang",
+        "config_path": "resource_discovery.navigation.hreflang",
+        "source_declaration": "<link rel=\"alternate\" hreflang=\"de\" href=\"/target\">",
+        "source_kind": "native_html",
+        "specific_preconditions": [
+          "crawl_links=true; complete source; exact accepted URL; depth allowed; no directives; no filter/policy denial",
+          "external_anchors: owned origin_b, check_external=true, resource allowlist alone is not navigation scope",
+          "PDF annotations: generated complete PDF is an initial source; fetch=false also disables its source annotation-expansion grant, so native decision is source_check_only rather than the abstract pure oracle fetch_disabled",
+          "All unrelated resource fetch switches and navigation fetch switches disabled except children deliberately used as positive expansion controls"
+        ],
+        "status": "DESIGN_ONLY"
+      },
+      "pagination": {
+        "reference_kind": "pagination",
+        "config_path": "resource_discovery.navigation.pagination",
+        "source_declaration": "<link rel=\"next\" href=\"/target\">",
+        "source_kind": "native_html",
+        "specific_preconditions": [
+          "crawl_links=true; complete source; exact accepted URL; depth allowed; no directives; no filter/policy denial",
+          "external_anchors: owned origin_b, check_external=true, resource allowlist alone is not navigation scope",
+          "PDF annotations: generated complete PDF is an initial source; fetch=false also disables its source annotation-expansion grant, so native decision is source_check_only rather than the abstract pure oracle fetch_disabled",
+          "All unrelated resource fetch switches and navigation fetch switches disabled except children deliberately used as positive expansion controls"
+        ],
+        "status": "DESIGN_ONLY"
+      },
+      "amp": {
+        "reference_kind": "amp",
+        "config_path": "resource_discovery.navigation.amp",
+        "source_declaration": "<link rel=\"amphtml\" href=\"/target\">",
+        "source_kind": "native_html",
+        "specific_preconditions": [
+          "crawl_links=true; complete source; exact accepted URL; depth allowed; no directives; no filter/policy denial",
+          "external_anchors: owned origin_b, check_external=true, resource allowlist alone is not navigation scope",
+          "PDF annotations: generated complete PDF is an initial source; fetch=false also disables its source annotation-expansion grant, so native decision is source_check_only rather than the abstract pure oracle fetch_disabled",
+          "All unrelated resource fetch switches and navigation fetch switches disabled except children deliberately used as positive expansion controls"
+        ],
+        "status": "DESIGN_ONLY"
+      },
+      "mobile_alternate": {
+        "reference_kind": "mobile_alternate",
+        "config_path": "resource_discovery.navigation.mobile_alternate",
+        "source_declaration": "<link rel=\"alternate\" media=\"only screen and (max-width: 600px)\" href=\"/target\">",
+        "source_kind": "native_html",
+        "specific_preconditions": [
+          "crawl_links=true; complete source; exact accepted URL; depth allowed; no directives; no filter/policy denial",
+          "external_anchors: owned origin_b, check_external=true, resource allowlist alone is not navigation scope",
+          "PDF annotations: generated complete PDF is an initial source; fetch=false also disables its source annotation-expansion grant, so native decision is source_check_only rather than the abstract pure oracle fetch_disabled",
+          "All unrelated resource fetch switches and navigation fetch switches disabled except children deliberately used as positive expansion controls"
+        ],
+        "status": "DESIGN_ONLY"
+      },
+      "pdf_annotations": {
+        "reference_kind": "pdf_annotation",
+        "config_path": "resource_discovery.navigation.pdf_annotations",
+        "source_declaration": "generated PDF /URI annotation targeting /target",
+        "source_kind": "pdf_annotation",
+        "specific_preconditions": [
+          "crawl_links=true; complete source; exact accepted URL; depth allowed; no directives; no filter/policy denial",
+          "external_anchors: owned origin_b, check_external=true, resource allowlist alone is not navigation scope",
+          "PDF annotations: generated complete PDF is an initial source; fetch=false also disables its source annotation-expansion grant, so native decision is source_check_only rather than the abstract pure oracle fetch_disabled",
+          "All unrelated resource fetch switches and navigation fetch switches disabled except children deliberately used as positive expansion controls"
+        ],
+        "status": "DESIGN_ONLY"
+      }
+    }
+  },
+  "resource_matrix": [
+    {
+      "id": "resource-css-s0f0",
+      "status": "DESIGN_ONLY",
+      "category": "css",
+      "switches": {
+        "store": false,
+        "fetch": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "target_private_transport_row": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "target_response_mime_known": false,
+        "target_entity_sha_known": false,
+        "target_completed_frontier_units": 0,
+        "target_retained_response_count": 0,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-css-s0f1",
+      "status": "DESIGN_ONLY",
+      "category": "css",
+      "switches": {
+        "store": false,
+        "fetch": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "target_private_transport_row": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": true,
+          "can_expand_pdf": false
+        },
+        "target_response_mime_known": true,
+        "target_entity_sha_known": true,
+        "target_completed_frontier_units": 1,
+        "target_retained_response_count": 0,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-css-s1f0",
+      "status": "DESIGN_ONLY",
+      "category": "css",
+      "switches": {
+        "store": true,
+        "fetch": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "target_private_transport_row": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "target_response_mime_known": false,
+        "target_entity_sha_known": false,
+        "target_completed_frontier_units": 0,
+        "target_retained_response_count": 0,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-css-s1f1",
+      "status": "DESIGN_ONLY",
+      "category": "css",
+      "switches": {
+        "store": true,
+        "fetch": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "target_private_transport_row": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": true,
+          "can_expand_pdf": false
+        },
+        "target_response_mime_known": true,
+        "target_entity_sha_known": true,
+        "target_completed_frontier_units": 1,
+        "target_retained_response_count": 1,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-javascript-s0f0",
+      "status": "DESIGN_ONLY",
+      "category": "javascript",
+      "switches": {
+        "store": false,
+        "fetch": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "target_private_transport_row": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "target_response_mime_known": false,
+        "target_entity_sha_known": false,
+        "target_completed_frontier_units": 0,
+        "target_retained_response_count": 0,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-javascript-s0f1",
+      "status": "DESIGN_ONLY",
+      "category": "javascript",
+      "switches": {
+        "store": false,
+        "fetch": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "target_private_transport_row": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "target_response_mime_known": true,
+        "target_entity_sha_known": true,
+        "target_completed_frontier_units": 1,
+        "target_retained_response_count": 0,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-javascript-s1f0",
+      "status": "DESIGN_ONLY",
+      "category": "javascript",
+      "switches": {
+        "store": true,
+        "fetch": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "target_private_transport_row": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "target_response_mime_known": false,
+        "target_entity_sha_known": false,
+        "target_completed_frontier_units": 0,
+        "target_retained_response_count": 0,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-javascript-s1f1",
+      "status": "DESIGN_ONLY",
+      "category": "javascript",
+      "switches": {
+        "store": true,
+        "fetch": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "target_private_transport_row": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "target_response_mime_known": true,
+        "target_entity_sha_known": true,
+        "target_completed_frontier_units": 1,
+        "target_retained_response_count": 1,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-images-s0f0",
+      "status": "DESIGN_ONLY",
+      "category": "images",
+      "switches": {
+        "store": false,
+        "fetch": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "target_private_transport_row": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "target_response_mime_known": false,
+        "target_entity_sha_known": false,
+        "target_completed_frontier_units": 0,
+        "target_retained_response_count": 0,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-images-s0f1",
+      "status": "DESIGN_ONLY",
+      "category": "images",
+      "switches": {
+        "store": false,
+        "fetch": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "target_private_transport_row": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "target_response_mime_known": true,
+        "target_entity_sha_known": true,
+        "target_completed_frontier_units": 1,
+        "target_retained_response_count": 0,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-images-s1f0",
+      "status": "DESIGN_ONLY",
+      "category": "images",
+      "switches": {
+        "store": true,
+        "fetch": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "target_private_transport_row": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "target_response_mime_known": false,
+        "target_entity_sha_known": false,
+        "target_completed_frontier_units": 0,
+        "target_retained_response_count": 0,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-images-s1f1",
+      "status": "DESIGN_ONLY",
+      "category": "images",
+      "switches": {
+        "store": true,
+        "fetch": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "target_private_transport_row": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "target_response_mime_known": true,
+        "target_entity_sha_known": true,
+        "target_completed_frontier_units": 1,
+        "target_retained_response_count": 1,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-media-s0f0",
+      "status": "DESIGN_ONLY",
+      "category": "media",
+      "switches": {
+        "store": false,
+        "fetch": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "target_private_transport_row": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "target_response_mime_known": false,
+        "target_entity_sha_known": false,
+        "target_completed_frontier_units": 0,
+        "target_retained_response_count": 0,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-media-s0f1",
+      "status": "DESIGN_ONLY",
+      "category": "media",
+      "switches": {
+        "store": false,
+        "fetch": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "target_private_transport_row": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "target_response_mime_known": true,
+        "target_entity_sha_known": true,
+        "target_completed_frontier_units": 1,
+        "target_retained_response_count": 0,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-media-s1f0",
+      "status": "DESIGN_ONLY",
+      "category": "media",
+      "switches": {
+        "store": true,
+        "fetch": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "target_private_transport_row": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "target_response_mime_known": false,
+        "target_entity_sha_known": false,
+        "target_completed_frontier_units": 0,
+        "target_retained_response_count": 0,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-media-s1f1",
+      "status": "DESIGN_ONLY",
+      "category": "media",
+      "switches": {
+        "store": true,
+        "fetch": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "target_private_transport_row": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "target_response_mime_known": true,
+        "target_entity_sha_known": true,
+        "target_completed_frontier_units": 1,
+        "target_retained_response_count": 1,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-pdf-s0f0",
+      "status": "DESIGN_ONLY",
+      "category": "pdf",
+      "switches": {
+        "store": false,
+        "fetch": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "target_private_transport_row": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "target_response_mime_known": false,
+        "target_entity_sha_known": false,
+        "target_completed_frontier_units": 0,
+        "target_retained_response_count": 0,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-pdf-s0f1",
+      "status": "DESIGN_ONLY",
+      "category": "pdf",
+      "switches": {
+        "store": false,
+        "fetch": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "target_private_transport_row": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": true
+        },
+        "target_response_mime_known": true,
+        "target_entity_sha_known": true,
+        "target_completed_frontier_units": 1,
+        "target_retained_response_count": 0,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-pdf-s1f0",
+      "status": "DESIGN_ONLY",
+      "category": "pdf",
+      "switches": {
+        "store": true,
+        "fetch": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "target_private_transport_row": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "target_response_mime_known": false,
+        "target_entity_sha_known": false,
+        "target_completed_frontier_units": 0,
+        "target_retained_response_count": 0,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-pdf-s1f1",
+      "status": "DESIGN_ONLY",
+      "category": "pdf",
+      "switches": {
+        "store": true,
+        "fetch": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "target_private_transport_row": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": true
+        },
+        "target_response_mime_known": true,
+        "target_entity_sha_known": true,
+        "target_completed_frontier_units": 1,
+        "target_retained_response_count": 1,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-swf-s0f0",
+      "status": "DESIGN_ONLY",
+      "category": "swf",
+      "switches": {
+        "store": false,
+        "fetch": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "target_private_transport_row": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "target_response_mime_known": false,
+        "target_entity_sha_known": false,
+        "target_completed_frontier_units": 0,
+        "target_retained_response_count": 0,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-swf-s0f1",
+      "status": "DESIGN_ONLY",
+      "category": "swf",
+      "switches": {
+        "store": false,
+        "fetch": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "target_private_transport_row": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "target_response_mime_known": true,
+        "target_entity_sha_known": true,
+        "target_completed_frontier_units": 1,
+        "target_retained_response_count": 0,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-swf-s1f0",
+      "status": "DESIGN_ONLY",
+      "category": "swf",
+      "switches": {
+        "store": true,
+        "fetch": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "target_private_transport_row": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "target_response_mime_known": false,
+        "target_entity_sha_known": false,
+        "target_completed_frontier_units": 0,
+        "target_retained_response_count": 0,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-swf-s1f1",
+      "status": "DESIGN_ONLY",
+      "category": "swf",
+      "switches": {
+        "store": true,
+        "fetch": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "target_private_transport_row": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "target_response_mime_known": true,
+        "target_entity_sha_known": true,
+        "target_completed_frontier_units": 1,
+        "target_retained_response_count": 1,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-other-s0f0",
+      "status": "DESIGN_ONLY",
+      "category": "other",
+      "switches": {
+        "store": false,
+        "fetch": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "target_private_transport_row": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "target_response_mime_known": false,
+        "target_entity_sha_known": false,
+        "target_completed_frontier_units": 0,
+        "target_retained_response_count": 0,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-other-s0f1",
+      "status": "DESIGN_ONLY",
+      "category": "other",
+      "switches": {
+        "store": false,
+        "fetch": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "target_private_transport_row": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "target_response_mime_known": true,
+        "target_entity_sha_known": true,
+        "target_completed_frontier_units": 1,
+        "target_retained_response_count": 0,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-other-s1f0",
+      "status": "DESIGN_ONLY",
+      "category": "other",
+      "switches": {
+        "store": true,
+        "fetch": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "target_private_transport_row": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "target_response_mime_known": false,
+        "target_entity_sha_known": false,
+        "target_completed_frontier_units": 0,
+        "target_retained_response_count": 0,
+        "body_reconstruction_claim": false
+      }
+    },
+    {
+      "id": "resource-other-s1f1",
+      "status": "DESIGN_ONLY",
+      "category": "other",
+      "switches": {
+        "store": true,
+        "fetch": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "target_private_transport_row": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "target_response_mime_known": true,
+        "target_entity_sha_known": true,
+        "target_completed_frontier_units": 1,
+        "target_retained_response_count": 1,
+        "body_reconstruction_claim": false
+      }
+    }
+  ],
+  "navigation_matrix": [
+    {
+      "id": "navigation-internal_anchors-s0f0e0",
+      "status": "DESIGN_ONLY",
+      "category": "internal_anchors",
+      "switches": {
+        "store": false,
+        "fetch": false,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-internal_anchors-s0f0e1",
+      "status": "DESIGN_ONLY",
+      "category": "internal_anchors",
+      "switches": {
+        "store": false,
+        "fetch": false,
+        "expand": true
+      },
+      "config_valid": false,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": 0,
+        "validation_error": "Navigation expand requires fetch",
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": false,
+        "grant_present": false,
+        "decision_reason": null,
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-internal_anchors-s0f1e0",
+      "status": "DESIGN_ONLY",
+      "category": "internal_anchors",
+      "switches": {
+        "store": false,
+        "fetch": true,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-internal_anchors-s0f1e1",
+      "status": "DESIGN_ONLY",
+      "category": "internal_anchors",
+      "switches": {
+        "store": false,
+        "fetch": true,
+        "expand": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": true,
+          "can_expand_resources": true,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 1,
+        "html_resource_child_gets": 1,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-internal_anchors-s1f0e0",
+      "status": "DESIGN_ONLY",
+      "category": "internal_anchors",
+      "switches": {
+        "store": true,
+        "fetch": false,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-internal_anchors-s1f0e1",
+      "status": "DESIGN_ONLY",
+      "category": "internal_anchors",
+      "switches": {
+        "store": true,
+        "fetch": false,
+        "expand": true
+      },
+      "config_valid": false,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": 0,
+        "validation_error": "Navigation expand requires fetch",
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": false,
+        "grant_present": false,
+        "decision_reason": null,
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-internal_anchors-s1f1e0",
+      "status": "DESIGN_ONLY",
+      "category": "internal_anchors",
+      "switches": {
+        "store": true,
+        "fetch": true,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-internal_anchors-s1f1e1",
+      "status": "DESIGN_ONLY",
+      "category": "internal_anchors",
+      "switches": {
+        "store": true,
+        "fetch": true,
+        "expand": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": true,
+          "can_expand_resources": true,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 1,
+        "html_resource_child_gets": 1,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-external_anchors-s0f0e0",
+      "status": "DESIGN_ONLY",
+      "category": "external_anchors",
+      "switches": {
+        "store": false,
+        "fetch": false,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-external_anchors-s0f0e1",
+      "status": "DESIGN_ONLY",
+      "category": "external_anchors",
+      "switches": {
+        "store": false,
+        "fetch": false,
+        "expand": true
+      },
+      "config_valid": false,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": 0,
+        "validation_error": "Navigation expand requires fetch",
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": false,
+        "grant_present": false,
+        "decision_reason": null,
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-external_anchors-s0f1e0",
+      "status": "DESIGN_ONLY",
+      "category": "external_anchors",
+      "switches": {
+        "store": false,
+        "fetch": true,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-external_anchors-s0f1e1",
+      "status": "DESIGN_ONLY",
+      "category": "external_anchors",
+      "switches": {
+        "store": false,
+        "fetch": true,
+        "expand": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": true,
+          "can_expand_resources": true,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 1,
+        "html_resource_child_gets": 1,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-external_anchors-s1f0e0",
+      "status": "DESIGN_ONLY",
+      "category": "external_anchors",
+      "switches": {
+        "store": true,
+        "fetch": false,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-external_anchors-s1f0e1",
+      "status": "DESIGN_ONLY",
+      "category": "external_anchors",
+      "switches": {
+        "store": true,
+        "fetch": false,
+        "expand": true
+      },
+      "config_valid": false,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": 0,
+        "validation_error": "Navigation expand requires fetch",
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": false,
+        "grant_present": false,
+        "decision_reason": null,
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-external_anchors-s1f1e0",
+      "status": "DESIGN_ONLY",
+      "category": "external_anchors",
+      "switches": {
+        "store": true,
+        "fetch": true,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-external_anchors-s1f1e1",
+      "status": "DESIGN_ONLY",
+      "category": "external_anchors",
+      "switches": {
+        "store": true,
+        "fetch": true,
+        "expand": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": true,
+          "can_expand_resources": true,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 1,
+        "html_resource_child_gets": 1,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-iframes-s0f0e0",
+      "status": "DESIGN_ONLY",
+      "category": "iframes",
+      "switches": {
+        "store": false,
+        "fetch": false,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-iframes-s0f0e1",
+      "status": "DESIGN_ONLY",
+      "category": "iframes",
+      "switches": {
+        "store": false,
+        "fetch": false,
+        "expand": true
+      },
+      "config_valid": false,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": 0,
+        "validation_error": "Navigation expand requires fetch",
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": false,
+        "grant_present": false,
+        "decision_reason": null,
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-iframes-s0f1e0",
+      "status": "DESIGN_ONLY",
+      "category": "iframes",
+      "switches": {
+        "store": false,
+        "fetch": true,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-iframes-s0f1e1",
+      "status": "DESIGN_ONLY",
+      "category": "iframes",
+      "switches": {
+        "store": false,
+        "fetch": true,
+        "expand": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": true,
+          "can_expand_resources": true,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 1,
+        "html_resource_child_gets": 1,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-iframes-s1f0e0",
+      "status": "DESIGN_ONLY",
+      "category": "iframes",
+      "switches": {
+        "store": true,
+        "fetch": false,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-iframes-s1f0e1",
+      "status": "DESIGN_ONLY",
+      "category": "iframes",
+      "switches": {
+        "store": true,
+        "fetch": false,
+        "expand": true
+      },
+      "config_valid": false,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": 0,
+        "validation_error": "Navigation expand requires fetch",
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": false,
+        "grant_present": false,
+        "decision_reason": null,
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-iframes-s1f1e0",
+      "status": "DESIGN_ONLY",
+      "category": "iframes",
+      "switches": {
+        "store": true,
+        "fetch": true,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-iframes-s1f1e1",
+      "status": "DESIGN_ONLY",
+      "category": "iframes",
+      "switches": {
+        "store": true,
+        "fetch": true,
+        "expand": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": true,
+          "can_expand_resources": true,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 1,
+        "html_resource_child_gets": 1,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-refresh-s0f0e0",
+      "status": "DESIGN_ONLY",
+      "category": "refresh",
+      "switches": {
+        "store": false,
+        "fetch": false,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-refresh-s0f0e1",
+      "status": "DESIGN_ONLY",
+      "category": "refresh",
+      "switches": {
+        "store": false,
+        "fetch": false,
+        "expand": true
+      },
+      "config_valid": false,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": 0,
+        "validation_error": "Navigation expand requires fetch",
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": false,
+        "grant_present": false,
+        "decision_reason": null,
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-refresh-s0f1e0",
+      "status": "DESIGN_ONLY",
+      "category": "refresh",
+      "switches": {
+        "store": false,
+        "fetch": true,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-refresh-s0f1e1",
+      "status": "DESIGN_ONLY",
+      "category": "refresh",
+      "switches": {
+        "store": false,
+        "fetch": true,
+        "expand": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": true,
+          "can_expand_resources": true,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 1,
+        "html_resource_child_gets": 1,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-refresh-s1f0e0",
+      "status": "DESIGN_ONLY",
+      "category": "refresh",
+      "switches": {
+        "store": true,
+        "fetch": false,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-refresh-s1f0e1",
+      "status": "DESIGN_ONLY",
+      "category": "refresh",
+      "switches": {
+        "store": true,
+        "fetch": false,
+        "expand": true
+      },
+      "config_valid": false,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": 0,
+        "validation_error": "Navigation expand requires fetch",
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": false,
+        "grant_present": false,
+        "decision_reason": null,
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-refresh-s1f1e0",
+      "status": "DESIGN_ONLY",
+      "category": "refresh",
+      "switches": {
+        "store": true,
+        "fetch": true,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-refresh-s1f1e1",
+      "status": "DESIGN_ONLY",
+      "category": "refresh",
+      "switches": {
+        "store": true,
+        "fetch": true,
+        "expand": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": true,
+          "can_expand_resources": true,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 1,
+        "html_resource_child_gets": 1,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-canonical-s0f0e0",
+      "status": "DESIGN_ONLY",
+      "category": "canonical",
+      "switches": {
+        "store": false,
+        "fetch": false,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-canonical-s0f0e1",
+      "status": "DESIGN_ONLY",
+      "category": "canonical",
+      "switches": {
+        "store": false,
+        "fetch": false,
+        "expand": true
+      },
+      "config_valid": false,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": 0,
+        "validation_error": "Navigation expand requires fetch",
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": false,
+        "grant_present": false,
+        "decision_reason": null,
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-canonical-s0f1e0",
+      "status": "DESIGN_ONLY",
+      "category": "canonical",
+      "switches": {
+        "store": false,
+        "fetch": true,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-canonical-s0f1e1",
+      "status": "DESIGN_ONLY",
+      "category": "canonical",
+      "switches": {
+        "store": false,
+        "fetch": true,
+        "expand": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": true,
+          "can_expand_resources": true,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 1,
+        "html_resource_child_gets": 1,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-canonical-s1f0e0",
+      "status": "DESIGN_ONLY",
+      "category": "canonical",
+      "switches": {
+        "store": true,
+        "fetch": false,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-canonical-s1f0e1",
+      "status": "DESIGN_ONLY",
+      "category": "canonical",
+      "switches": {
+        "store": true,
+        "fetch": false,
+        "expand": true
+      },
+      "config_valid": false,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": 0,
+        "validation_error": "Navigation expand requires fetch",
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": false,
+        "grant_present": false,
+        "decision_reason": null,
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-canonical-s1f1e0",
+      "status": "DESIGN_ONLY",
+      "category": "canonical",
+      "switches": {
+        "store": true,
+        "fetch": true,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-canonical-s1f1e1",
+      "status": "DESIGN_ONLY",
+      "category": "canonical",
+      "switches": {
+        "store": true,
+        "fetch": true,
+        "expand": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": true,
+          "can_expand_resources": true,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 1,
+        "html_resource_child_gets": 1,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-hreflang-s0f0e0",
+      "status": "DESIGN_ONLY",
+      "category": "hreflang",
+      "switches": {
+        "store": false,
+        "fetch": false,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-hreflang-s0f0e1",
+      "status": "DESIGN_ONLY",
+      "category": "hreflang",
+      "switches": {
+        "store": false,
+        "fetch": false,
+        "expand": true
+      },
+      "config_valid": false,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": 0,
+        "validation_error": "Navigation expand requires fetch",
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": false,
+        "grant_present": false,
+        "decision_reason": null,
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-hreflang-s0f1e0",
+      "status": "DESIGN_ONLY",
+      "category": "hreflang",
+      "switches": {
+        "store": false,
+        "fetch": true,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-hreflang-s0f1e1",
+      "status": "DESIGN_ONLY",
+      "category": "hreflang",
+      "switches": {
+        "store": false,
+        "fetch": true,
+        "expand": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": true,
+          "can_expand_resources": true,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 1,
+        "html_resource_child_gets": 1,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-hreflang-s1f0e0",
+      "status": "DESIGN_ONLY",
+      "category": "hreflang",
+      "switches": {
+        "store": true,
+        "fetch": false,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-hreflang-s1f0e1",
+      "status": "DESIGN_ONLY",
+      "category": "hreflang",
+      "switches": {
+        "store": true,
+        "fetch": false,
+        "expand": true
+      },
+      "config_valid": false,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": 0,
+        "validation_error": "Navigation expand requires fetch",
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": false,
+        "grant_present": false,
+        "decision_reason": null,
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-hreflang-s1f1e0",
+      "status": "DESIGN_ONLY",
+      "category": "hreflang",
+      "switches": {
+        "store": true,
+        "fetch": true,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-hreflang-s1f1e1",
+      "status": "DESIGN_ONLY",
+      "category": "hreflang",
+      "switches": {
+        "store": true,
+        "fetch": true,
+        "expand": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": true,
+          "can_expand_resources": true,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 1,
+        "html_resource_child_gets": 1,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-pagination-s0f0e0",
+      "status": "DESIGN_ONLY",
+      "category": "pagination",
+      "switches": {
+        "store": false,
+        "fetch": false,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-pagination-s0f0e1",
+      "status": "DESIGN_ONLY",
+      "category": "pagination",
+      "switches": {
+        "store": false,
+        "fetch": false,
+        "expand": true
+      },
+      "config_valid": false,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": 0,
+        "validation_error": "Navigation expand requires fetch",
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": false,
+        "grant_present": false,
+        "decision_reason": null,
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-pagination-s0f1e0",
+      "status": "DESIGN_ONLY",
+      "category": "pagination",
+      "switches": {
+        "store": false,
+        "fetch": true,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-pagination-s0f1e1",
+      "status": "DESIGN_ONLY",
+      "category": "pagination",
+      "switches": {
+        "store": false,
+        "fetch": true,
+        "expand": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": true,
+          "can_expand_resources": true,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 1,
+        "html_resource_child_gets": 1,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-pagination-s1f0e0",
+      "status": "DESIGN_ONLY",
+      "category": "pagination",
+      "switches": {
+        "store": true,
+        "fetch": false,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-pagination-s1f0e1",
+      "status": "DESIGN_ONLY",
+      "category": "pagination",
+      "switches": {
+        "store": true,
+        "fetch": false,
+        "expand": true
+      },
+      "config_valid": false,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": 0,
+        "validation_error": "Navigation expand requires fetch",
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": false,
+        "grant_present": false,
+        "decision_reason": null,
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-pagination-s1f1e0",
+      "status": "DESIGN_ONLY",
+      "category": "pagination",
+      "switches": {
+        "store": true,
+        "fetch": true,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-pagination-s1f1e1",
+      "status": "DESIGN_ONLY",
+      "category": "pagination",
+      "switches": {
+        "store": true,
+        "fetch": true,
+        "expand": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": true,
+          "can_expand_resources": true,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 1,
+        "html_resource_child_gets": 1,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-amp-s0f0e0",
+      "status": "DESIGN_ONLY",
+      "category": "amp",
+      "switches": {
+        "store": false,
+        "fetch": false,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-amp-s0f0e1",
+      "status": "DESIGN_ONLY",
+      "category": "amp",
+      "switches": {
+        "store": false,
+        "fetch": false,
+        "expand": true
+      },
+      "config_valid": false,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": 0,
+        "validation_error": "Navigation expand requires fetch",
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": false,
+        "grant_present": false,
+        "decision_reason": null,
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-amp-s0f1e0",
+      "status": "DESIGN_ONLY",
+      "category": "amp",
+      "switches": {
+        "store": false,
+        "fetch": true,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-amp-s0f1e1",
+      "status": "DESIGN_ONLY",
+      "category": "amp",
+      "switches": {
+        "store": false,
+        "fetch": true,
+        "expand": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": true,
+          "can_expand_resources": true,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 1,
+        "html_resource_child_gets": 1,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-amp-s1f0e0",
+      "status": "DESIGN_ONLY",
+      "category": "amp",
+      "switches": {
+        "store": true,
+        "fetch": false,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-amp-s1f0e1",
+      "status": "DESIGN_ONLY",
+      "category": "amp",
+      "switches": {
+        "store": true,
+        "fetch": false,
+        "expand": true
+      },
+      "config_valid": false,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": 0,
+        "validation_error": "Navigation expand requires fetch",
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": false,
+        "grant_present": false,
+        "decision_reason": null,
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-amp-s1f1e0",
+      "status": "DESIGN_ONLY",
+      "category": "amp",
+      "switches": {
+        "store": true,
+        "fetch": true,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-amp-s1f1e1",
+      "status": "DESIGN_ONLY",
+      "category": "amp",
+      "switches": {
+        "store": true,
+        "fetch": true,
+        "expand": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": true,
+          "can_expand_resources": true,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 1,
+        "html_resource_child_gets": 1,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-mobile_alternate-s0f0e0",
+      "status": "DESIGN_ONLY",
+      "category": "mobile_alternate",
+      "switches": {
+        "store": false,
+        "fetch": false,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-mobile_alternate-s0f0e1",
+      "status": "DESIGN_ONLY",
+      "category": "mobile_alternate",
+      "switches": {
+        "store": false,
+        "fetch": false,
+        "expand": true
+      },
+      "config_valid": false,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": 0,
+        "validation_error": "Navigation expand requires fetch",
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": false,
+        "grant_present": false,
+        "decision_reason": null,
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-mobile_alternate-s0f1e0",
+      "status": "DESIGN_ONLY",
+      "category": "mobile_alternate",
+      "switches": {
+        "store": false,
+        "fetch": true,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-mobile_alternate-s0f1e1",
+      "status": "DESIGN_ONLY",
+      "category": "mobile_alternate",
+      "switches": {
+        "store": false,
+        "fetch": true,
+        "expand": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": true,
+          "can_expand_resources": true,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 1,
+        "html_resource_child_gets": 1,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-mobile_alternate-s1f0e0",
+      "status": "DESIGN_ONLY",
+      "category": "mobile_alternate",
+      "switches": {
+        "store": true,
+        "fetch": false,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "fetch_disabled",
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-mobile_alternate-s1f0e1",
+      "status": "DESIGN_ONLY",
+      "category": "mobile_alternate",
+      "switches": {
+        "store": true,
+        "fetch": false,
+        "expand": true
+      },
+      "config_valid": false,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": 0,
+        "validation_error": "Navigation expand requires fetch",
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": false,
+        "grant_present": false,
+        "decision_reason": null,
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-mobile_alternate-s1f1e0",
+      "status": "DESIGN_ONLY",
+      "category": "mobile_alternate",
+      "switches": {
+        "store": true,
+        "fetch": true,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-mobile_alternate-s1f1e1",
+      "status": "DESIGN_ONLY",
+      "category": "mobile_alternate",
+      "switches": {
+        "store": true,
+        "fetch": true,
+        "expand": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": true,
+          "can_expand_resources": true,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 1,
+        "html_resource_child_gets": 1,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-pdf_annotations-s0f0e0",
+      "status": "DESIGN_ONLY",
+      "category": "pdf_annotations",
+      "switches": {
+        "store": false,
+        "fetch": false,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "source_check_only",
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-pdf_annotations-s0f0e1",
+      "status": "DESIGN_ONLY",
+      "category": "pdf_annotations",
+      "switches": {
+        "store": false,
+        "fetch": false,
+        "expand": true
+      },
+      "config_valid": false,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": 0,
+        "validation_error": "Navigation expand requires fetch",
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": false,
+        "grant_present": false,
+        "decision_reason": null,
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-pdf_annotations-s0f1e0",
+      "status": "DESIGN_ONLY",
+      "category": "pdf_annotations",
+      "switches": {
+        "store": false,
+        "fetch": true,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-pdf_annotations-s0f1e1",
+      "status": "DESIGN_ONLY",
+      "category": "pdf_annotations",
+      "switches": {
+        "store": false,
+        "fetch": true,
+        "expand": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": true,
+          "can_expand_resources": true,
+          "can_expand_css": false,
+          "can_expand_pdf": true
+        },
+        "html_navigation_child_gets": 1,
+        "html_resource_child_gets": 1,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-pdf_annotations-s1f0e0",
+      "status": "DESIGN_ONLY",
+      "category": "pdf_annotations",
+      "switches": {
+        "store": true,
+        "fetch": false,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": true,
+        "grant_present": false,
+        "decision_reason": "source_check_only",
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-pdf_annotations-s1f0e1",
+      "status": "DESIGN_ONLY",
+      "category": "pdf_annotations",
+      "switches": {
+        "store": true,
+        "fetch": false,
+        "expand": true
+      },
+      "config_valid": false,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": 0,
+        "validation_error": "Navigation expand requires fetch",
+        "target_document_gets": 0,
+        "target_report_inclusion": false,
+        "source_occurrence_preserved": false,
+        "grant_present": false,
+        "decision_reason": null,
+        "target_grant_capabilities": null,
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-pdf_annotations-s1f1e0",
+      "status": "DESIGN_ONLY",
+      "category": "pdf_annotations",
+      "switches": {
+        "store": true,
+        "fetch": true,
+        "expand": false
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": false,
+          "can_expand_resources": false,
+          "can_expand_css": false,
+          "can_expand_pdf": false
+        },
+        "html_navigation_child_gets": 0,
+        "html_resource_child_gets": 0,
+        "standalone_css_response_import_gets": 0
+      }
+    },
+    {
+      "id": "navigation-pdf_annotations-s1f1e1",
+      "status": "DESIGN_ONLY",
+      "category": "pdf_annotations",
+      "switches": {
+        "store": true,
+        "fetch": true,
+        "expand": true
+      },
+      "config_valid": true,
+      "current_v1_predictions": {
+        "all_fixture_http_before_invalid_config_rejection": null,
+        "validation_error": null,
+        "target_document_gets": 1,
+        "target_report_inclusion": true,
+        "source_occurrence_preserved": true,
+        "grant_present": true,
+        "decision_reason": "allowed",
+        "target_grant_capabilities": {
+          "can_expand_navigation": true,
+          "can_expand_resources": true,
+          "can_expand_css": false,
+          "can_expand_pdf": true
+        },
+        "html_navigation_child_gets": 1,
+        "html_resource_child_gets": 1,
+        "standalone_css_response_import_gets": 0
+      }
+    }
+  ],
+  "contract_gaps": [
+    {
+      "id": "CG-01-rel-qualifiers",
+      "priority": 1,
+      "classification": "SOURCE_DERIVED_CONTRACT_QUESTION",
+      "current_code": "Only exact nofollow token sets occurrence.nofollow; ugc/sponsored alone remain false and are admitted if other gates pass.",
+      "desired_acceptance": "Explicit policy for ugc/sponsored and internal/external overrides; recommended qualified-link suppression under an opt-in versioned profile, retaining originals.",
+      "decision_required_before_claim": "Do not silently change serialized B9 v1 config/checkpoint meanings. Establish legacy/default behavior and additive config/profile or migration contract first.",
+      "source_refs": [
+        "crates/core/src/resource_html.rs:358",
+        "crates/core/src/resource_policy.rs:443"
+      ],
+      "public_source": "https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/#follow-internal-or-external-nofollow",
+      "runtime_status": "NOT_PROVEN; source-derived baseline prediction, not executed runtime evidence",
+      "status": "DESIGN_ONLY",
+      "priority_order": 2
+    },
+    {
+      "id": "CG-02-header-rel-nofollow",
+      "priority": 1,
+      "classification": "SOURCE_DERIVED_CONTRACT_QUESTION",
+      "current_code": "Resource HTTP Link-header relationships append nofollow=false; identical HTML link rel=\"canonical nofollow\" sets true.",
+      "desired_acceptance": "Preserve parsed header rel qualifiers and apply the same explicit qualification policy to equivalent relationship declarations, or document a deliberate source distinction.",
+      "decision_required_before_claim": "Freeze source-specific qualifier provenance and exact reason before fixing/testing.",
+      "source_refs": [
+        "crates/core/src/resource_capture.rs:130",
+        "crates/core/src/resource_capture.rs:222",
+        "crates/core/src/resource_html.rs:358"
+      ],
+      "runtime_status": "NOT_PROVEN; source-derived baseline prediction, not executed runtime evidence",
+      "status": "DESIGN_ONLY",
+      "priority_order": 3
+    },
+    {
+      "id": "CG-03-redirect-role-scope",
+      "priority": 1,
+      "classification": "SOURCE_DERIVED_CONTRACT_QUESTION",
+      "current_code": "Legacy redirect guard allows same_scope OR check_external OR any resource-origin allowlist, regardless of immutable grant role; native policy path bypasses this ordinary resource-origin guard and uses policy redirect decision.",
+      "desired_acceptance": "Every actual hop must have both a relevant immutable original role grant and the applicable resource/navigation scope; navigation checking must not turn resource allowlists into arbitrary navigation rights, nor check_external into a wildcard resource-origin allowance.",
+      "decision_required_before_claim": "Define mixed-grant OR scope and initial-input redirects; never infer request role from response MIME or expansion booleans alone. Existing grant flags do not fully distinguish check-only navigation from assets.",
+      "source_refs": [
+        "crates/core/src/crawler.rs:924",
+        "crates/core/src/crawler.rs:1886",
+        "crates/core/src/resource_ledger.rs:739"
+      ],
+      "runtime_status": "NOT_PROVEN; source-derived baseline prediction, not executed runtime evidence",
+      "status": "DESIGN_ONLY",
+      "priority_order": 1
+    }
+  ],
+  "semantic_decisions": [
+    {
+      "id": "SD-01-all-kind-nofollow",
+      "classification": "EXPLICIT_SEMANTIC_DECISION",
+      "current_v1": "rel/document nofollow suppress every eligible resource and navigation occurrence; CSS/PDF/header rows have no rel flag, but page directives can suppress their descendants.",
+      "recommendation": "Prove and document current own-v1 blanket behavior. If navigation-only or per-kind behavior is desired, define a new backward-compatible profile rather than claim browser/vendor equivalence.",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "SD-02-indexability-agent",
+      "classification": "KNOWN_PROFILE_BOUNDARY",
+      "current_v1": "Document directives use indexability_agent; robots.txt uses transport user_agent. These can intentionally differ.",
+      "recommendation": "Preserve and prove both independent controls; no implicit derivation from current request UA.",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "SD-03-navigation-css-response",
+      "classification": "KNOWN_ROLE_BOUNDARY",
+      "current_v1": "Navigation expand=true grants navigation/resources (and conditionally PDF), but not standalone CSS expansion. A navigation target whose response is text/css cannot import descendants without a separate CSS or initial-input grant.",
+      "recommendation": "Test this explicit role/MIME cross-control; avoid introducing response-MIME-based permission upgrades.",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "SD-04-redirect-response-directives",
+      "classification": "EXPLICIT_SEMANTIC_DECISION",
+      "current_v1": "X-Robots facts are extracted on terminal nonredirect response; earlier redirect headers are overwritten and do not become terminal-source document nofollow.",
+      "recommendation": "Test 302-only versus terminal-only directives and preserve unknown redirect metadata; do not fabricate inheritance across hops.",
+      "status": "DESIGN_ONLY"
+    }
+  ],
+  "directive_controls": {
+    "status": "DESIGN_ONLY",
+    "total": 49,
+    "nofollow_truth_table": [
+      {
+        "id": "nofollow-r0d0-fr0fd0",
+        "status": "DESIGN_ONLY",
+        "rel_nofollow_observed": false,
+        "effective_document_nofollow": false,
+        "follow_rel_nofollow": false,
+        "follow_document_nofollow": false,
+        "current_v1_reason": "allowed",
+        "target_document_gets": 1,
+        "occurrence_retained_when_denied": true,
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "nofollow-r0d0-fr0fd1",
+        "status": "DESIGN_ONLY",
+        "rel_nofollow_observed": false,
+        "effective_document_nofollow": false,
+        "follow_rel_nofollow": false,
+        "follow_document_nofollow": true,
+        "current_v1_reason": "allowed",
+        "target_document_gets": 1,
+        "occurrence_retained_when_denied": true,
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "nofollow-r0d0-fr1fd0",
+        "status": "DESIGN_ONLY",
+        "rel_nofollow_observed": false,
+        "effective_document_nofollow": false,
+        "follow_rel_nofollow": true,
+        "follow_document_nofollow": false,
+        "current_v1_reason": "allowed",
+        "target_document_gets": 1,
+        "occurrence_retained_when_denied": true,
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "nofollow-r0d0-fr1fd1",
+        "status": "DESIGN_ONLY",
+        "rel_nofollow_observed": false,
+        "effective_document_nofollow": false,
+        "follow_rel_nofollow": true,
+        "follow_document_nofollow": true,
+        "current_v1_reason": "allowed",
+        "target_document_gets": 1,
+        "occurrence_retained_when_denied": true,
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "nofollow-r0d1-fr0fd0",
+        "status": "DESIGN_ONLY",
+        "rel_nofollow_observed": false,
+        "effective_document_nofollow": true,
+        "follow_rel_nofollow": false,
+        "follow_document_nofollow": false,
+        "current_v1_reason": "document_nofollow",
+        "target_document_gets": 0,
+        "occurrence_retained_when_denied": true,
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "nofollow-r0d1-fr0fd1",
+        "status": "DESIGN_ONLY",
+        "rel_nofollow_observed": false,
+        "effective_document_nofollow": true,
+        "follow_rel_nofollow": false,
+        "follow_document_nofollow": true,
+        "current_v1_reason": "allowed",
+        "target_document_gets": 1,
+        "occurrence_retained_when_denied": true,
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "nofollow-r0d1-fr1fd0",
+        "status": "DESIGN_ONLY",
+        "rel_nofollow_observed": false,
+        "effective_document_nofollow": true,
+        "follow_rel_nofollow": true,
+        "follow_document_nofollow": false,
+        "current_v1_reason": "document_nofollow",
+        "target_document_gets": 0,
+        "occurrence_retained_when_denied": true,
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "nofollow-r0d1-fr1fd1",
+        "status": "DESIGN_ONLY",
+        "rel_nofollow_observed": false,
+        "effective_document_nofollow": true,
+        "follow_rel_nofollow": true,
+        "follow_document_nofollow": true,
+        "current_v1_reason": "allowed",
+        "target_document_gets": 1,
+        "occurrence_retained_when_denied": true,
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "nofollow-r1d0-fr0fd0",
+        "status": "DESIGN_ONLY",
+        "rel_nofollow_observed": true,
+        "effective_document_nofollow": false,
+        "follow_rel_nofollow": false,
+        "follow_document_nofollow": false,
+        "current_v1_reason": "rel_nofollow",
+        "target_document_gets": 0,
+        "occurrence_retained_when_denied": true,
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "nofollow-r1d0-fr0fd1",
+        "status": "DESIGN_ONLY",
+        "rel_nofollow_observed": true,
+        "effective_document_nofollow": false,
+        "follow_rel_nofollow": false,
+        "follow_document_nofollow": true,
+        "current_v1_reason": "rel_nofollow",
+        "target_document_gets": 0,
+        "occurrence_retained_when_denied": true,
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "nofollow-r1d0-fr1fd0",
+        "status": "DESIGN_ONLY",
+        "rel_nofollow_observed": true,
+        "effective_document_nofollow": false,
+        "follow_rel_nofollow": true,
+        "follow_document_nofollow": false,
+        "current_v1_reason": "allowed",
+        "target_document_gets": 1,
+        "occurrence_retained_when_denied": true,
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "nofollow-r1d0-fr1fd1",
+        "status": "DESIGN_ONLY",
+        "rel_nofollow_observed": true,
+        "effective_document_nofollow": false,
+        "follow_rel_nofollow": true,
+        "follow_document_nofollow": true,
+        "current_v1_reason": "allowed",
+        "target_document_gets": 1,
+        "occurrence_retained_when_denied": true,
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "nofollow-r1d1-fr0fd0",
+        "status": "DESIGN_ONLY",
+        "rel_nofollow_observed": true,
+        "effective_document_nofollow": true,
+        "follow_rel_nofollow": false,
+        "follow_document_nofollow": false,
+        "current_v1_reason": "rel_nofollow",
+        "target_document_gets": 0,
+        "occurrence_retained_when_denied": true,
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "nofollow-r1d1-fr0fd1",
+        "status": "DESIGN_ONLY",
+        "rel_nofollow_observed": true,
+        "effective_document_nofollow": true,
+        "follow_rel_nofollow": false,
+        "follow_document_nofollow": true,
+        "current_v1_reason": "rel_nofollow",
+        "target_document_gets": 0,
+        "occurrence_retained_when_denied": true,
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "nofollow-r1d1-fr1fd0",
+        "status": "DESIGN_ONLY",
+        "rel_nofollow_observed": true,
+        "effective_document_nofollow": true,
+        "follow_rel_nofollow": true,
+        "follow_document_nofollow": false,
+        "current_v1_reason": "document_nofollow",
+        "target_document_gets": 0,
+        "occurrence_retained_when_denied": true,
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "nofollow-r1d1-fr1fd1",
+        "status": "DESIGN_ONLY",
+        "rel_nofollow_observed": true,
+        "effective_document_nofollow": true,
+        "follow_rel_nofollow": true,
+        "follow_document_nofollow": true,
+        "current_v1_reason": "allowed",
+        "target_document_gets": 1,
+        "occurrence_retained_when_denied": true,
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      }
+    ],
+    "rel_controls": [
+      {
+        "id": "plain",
+        "rel": "",
+        "current_v1_nofollow": false,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "exact",
+        "rel": "nofollow",
+        "current_v1_nofollow": true,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "mixed-case",
+        "rel": "NoFoLlOw",
+        "current_v1_nofollow": true,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "ascii-spaces",
+        "rel": "nofollow\tnoopener\n",
+        "current_v1_nofollow": true,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "negative-prefix",
+        "rel": "nofollowish",
+        "current_v1_nofollow": false,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "negative-other",
+        "rel": "noopener noreferrer",
+        "current_v1_nofollow": false,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "ugc",
+        "rel": "ugc",
+        "current_v1_nofollow": false,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "sponsored",
+        "rel": "sponsored",
+        "current_v1_nofollow": false,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "ugc-nofollow",
+        "rel": "ugc nofollow",
+        "current_v1_nofollow": true,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "sponsored-nofollow",
+        "rel": "sponsored nofollow",
+        "current_v1_nofollow": true,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "comma",
+        "rel": "ugc,nofollow",
+        "current_v1_nofollow": false,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      }
+    ],
+    "agent_controls": [
+      {
+        "id": "meta-generic-nofollow",
+        "meta_html": "<meta name=\"robots\" content=\"nofollow\">",
+        "x_robots_header_values": [],
+        "indexability_agent": "googlebot",
+        "transport_user_agent": "OwnTransport/1",
+        "current_v1_effective_nofollow": true,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "meta-none",
+        "meta_html": "<meta name=\"robots\" content=\"none\">",
+        "x_robots_header_values": [],
+        "indexability_agent": "googlebot",
+        "transport_user_agent": "OwnTransport/1",
+        "current_v1_effective_nofollow": true,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "meta-noindex-only",
+        "meta_html": "<meta name=\"robots\" content=\"noindex\">",
+        "x_robots_header_values": [],
+        "indexability_agent": "googlebot",
+        "transport_user_agent": "OwnTransport/1",
+        "current_v1_effective_nofollow": false,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "meta-matched",
+        "meta_html": "<meta name=\"GoOgLeBoT\" content=\"NoFoLlOw\">",
+        "x_robots_header_values": [],
+        "indexability_agent": "googlebot",
+        "transport_user_agent": "Bingbot",
+        "current_v1_effective_nofollow": true,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "meta-unmatched",
+        "meta_html": "<meta name=\"bingbot\" content=\"nofollow\">",
+        "x_robots_header_values": [],
+        "indexability_agent": "googlebot",
+        "transport_user_agent": "Bingbot",
+        "current_v1_effective_nofollow": false,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "meta-custom",
+        "meta_html": "<meta name=\"ownbot\" content=\"nofollow\">",
+        "x_robots_header_values": [],
+        "indexability_agent": "ownbot",
+        "transport_user_agent": "Googlebot",
+        "current_v1_effective_nofollow": true,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "header-unscoped",
+        "meta_html": "",
+        "x_robots_header_values": [
+          "nofollow"
+        ],
+        "indexability_agent": "googlebot",
+        "transport_user_agent": "OwnTransport/1",
+        "current_v1_effective_nofollow": true,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "header-matched",
+        "meta_html": "",
+        "x_robots_header_values": [
+          "GOOGLEBOT: NOFOLLOW"
+        ],
+        "indexability_agent": "googlebot",
+        "transport_user_agent": "Bingbot",
+        "current_v1_effective_nofollow": true,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "header-unmatched",
+        "meta_html": "",
+        "x_robots_header_values": [
+          "bingbot: nofollow"
+        ],
+        "indexability_agent": "googlebot",
+        "transport_user_agent": "Bingbot",
+        "current_v1_effective_nofollow": false,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "header-wildcard",
+        "meta_html": "",
+        "x_robots_header_values": [
+          "*: nofollow"
+        ],
+        "indexability_agent": "ownbot",
+        "transport_user_agent": "Googlebot",
+        "current_v1_effective_nofollow": true,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "header-comma-scope",
+        "meta_html": "",
+        "x_robots_header_values": [
+          "bingbot: noindex, nofollow"
+        ],
+        "indexability_agent": "googlebot",
+        "transport_user_agent": "Bingbot",
+        "current_v1_effective_nofollow": false,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "header-separate-scope-reset",
+        "meta_html": "",
+        "x_robots_header_values": [
+          "bingbot: noindex",
+          "nofollow"
+        ],
+        "indexability_agent": "googlebot",
+        "transport_user_agent": "Bingbot",
+        "current_v1_effective_nofollow": true,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "restrictive-union",
+        "meta_html": "<meta name=\"robots\" content=\"nofollow\"><meta name=\"googlebot\" content=\"follow\">",
+        "x_robots_header_values": [
+          "googlebot: follow"
+        ],
+        "indexability_agent": "googlebot",
+        "transport_user_agent": "OwnTransport/1",
+        "current_v1_effective_nofollow": true,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "valued-whitespace",
+        "meta_html": "<meta name=\"robots\" content=\"max-snippet:50 nofollow\">",
+        "x_robots_header_values": [],
+        "indexability_agent": "googlebot",
+        "transport_user_agent": "OwnTransport/1",
+        "current_v1_effective_nofollow": true,
+        "status": "DESIGN_ONLY",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      }
+    ],
+    "header_qualifier_controls": [
+      {
+        "id": "qualifier-html-canonical",
+        "status": "DESIGN_ONLY",
+        "source": "html",
+        "relation": "canonical",
+        "qualifier": "nofollow",
+        "current_v1_nofollow": true,
+        "current_v1_gets": 0,
+        "desired_equivalent_source_contract": "DECISION_REQUIRED_CG-02",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "qualifier-html-next",
+        "status": "DESIGN_ONLY",
+        "source": "html",
+        "relation": "next",
+        "qualifier": "nofollow",
+        "current_v1_nofollow": true,
+        "current_v1_gets": 0,
+        "desired_equivalent_source_contract": "DECISION_REQUIRED_CG-02",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "qualifier-html-alternate_hreflang",
+        "status": "DESIGN_ONLY",
+        "source": "html",
+        "relation": "alternate_hreflang",
+        "qualifier": "nofollow",
+        "current_v1_nofollow": true,
+        "current_v1_gets": 0,
+        "desired_equivalent_source_contract": "DECISION_REQUIRED_CG-02",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "qualifier-html-amphtml",
+        "status": "DESIGN_ONLY",
+        "source": "html",
+        "relation": "amphtml",
+        "qualifier": "nofollow",
+        "current_v1_nofollow": true,
+        "current_v1_gets": 0,
+        "desired_equivalent_source_contract": "DECISION_REQUIRED_CG-02",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "qualifier-http_link_header-canonical",
+        "status": "DESIGN_ONLY",
+        "source": "http_link_header",
+        "relation": "canonical",
+        "qualifier": "nofollow",
+        "current_v1_nofollow": false,
+        "current_v1_gets": 1,
+        "desired_equivalent_source_contract": "DECISION_REQUIRED_CG-02",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "qualifier-http_link_header-next",
+        "status": "DESIGN_ONLY",
+        "source": "http_link_header",
+        "relation": "next",
+        "qualifier": "nofollow",
+        "current_v1_nofollow": false,
+        "current_v1_gets": 1,
+        "desired_equivalent_source_contract": "DECISION_REQUIRED_CG-02",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "qualifier-http_link_header-alternate_hreflang",
+        "status": "DESIGN_ONLY",
+        "source": "http_link_header",
+        "relation": "alternate_hreflang",
+        "qualifier": "nofollow",
+        "current_v1_nofollow": false,
+        "current_v1_gets": 1,
+        "desired_equivalent_source_contract": "DECISION_REQUIRED_CG-02",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      },
+      {
+        "id": "qualifier-http_link_header-amphtml",
+        "status": "DESIGN_ONLY",
+        "source": "http_link_header",
+        "relation": "amphtml",
+        "qualifier": "nofollow",
+        "current_v1_nofollow": false,
+        "current_v1_gets": 1,
+        "desired_equivalent_source_contract": "DECISION_REQUIRED_CG-02",
+        "fixed_permission_preconditions": {
+          "source_complete": true,
+          "source_can_expand": true,
+          "selected": false,
+          "navigation_enabled": true,
+          "depth_allowed": true,
+          "scope_allowed": true,
+          "filters_allowed": true,
+          "policy_check": true,
+          "policy_traverse": true,
+          "robots_txt_allowed": true,
+          "original_credential_origins_only": true,
+          "no_independent_target_admission": true
+        }
+      }
+    ]
+  },
+  "response_controls": [
+    {
+      "id": "mime-css-actual-css",
+      "category": "css",
+      "actual_mime": "text/css; charset=utf-8",
+      "owned_body": "valid own CSS",
+      "expected_scope": "one @import + one image allowed, no navigation upgrade",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "mime-css-actual-html",
+      "category": "css",
+      "actual_mime": "text/html; charset=utf-8",
+      "owned_body": "own HTML with anchor/image/inline CSS",
+      "expected_scope": "no HTML descendants from CSS-only role",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "mime-css-missing",
+      "category": "css",
+      "actual_mime": "",
+      "owned_body": "ASCII CSS-looking body",
+      "expected_scope": "no CSS imports: actual MIME is not text/css",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "mime-css-misleading",
+      "category": "css",
+      "actual_mime": "application/x-text/css-extra",
+      "owned_body": "CSS-looking body",
+      "expected_scope": "no CSS imports; exact media type gate",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "mime-css-mixed-case",
+      "category": "css",
+      "actual_mime": "Text/CSS; Charset=UTF-8",
+      "owned_body": "own ASCII CSS",
+      "expected_scope": "same declared CSS role and actual MIME eligibility",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "mime-css-lossy",
+      "category": "css",
+      "actual_mime": "text/css; charset=utf-8",
+      "owned_body": "invalid UTF8 in URL bytes",
+      "expected_scope": "source incomplete; no descendant admission",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "mime-css-nonascii-fallback",
+      "category": "css",
+      "actual_mime": "text/css",
+      "owned_body": "valid nonASCII UTF8 URL without declaration",
+      "expected_scope": "decode Unknown in v1; no descendant admission",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "mime-css-non200",
+      "category": "css",
+      "actual_mime": "text/css",
+      "owned_body": "valid CSS under404",
+      "expected_scope": "source incomplete; zero imports",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "mime-css-body-cap",
+      "category": "css",
+      "actual_mime": "text/css",
+      "owned_body": "valid CSS larger than max_body_bytes",
+      "expected_scope": "truncated/incomplete; no descendants; actual captured bytes/hash separate",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "mime-js-actual-html",
+      "category": "javascript",
+      "actual_mime": "text/html",
+      "owned_body": "HTML containing anchor",
+      "expected_scope": "metadata may be observed; no descendants or JS execution",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "mime-image-actual-html",
+      "category": "images",
+      "actual_mime": "text/html",
+      "owned_body": "HTML with links/resources",
+      "expected_scope": "metadata only; no automatic navigation/resource upgrade",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "mime-image-valid-png",
+      "category": "images",
+      "actual_mime": "image/png",
+      "owned_body": "generated1x1PNG",
+      "expected_scope": "intrinsic dimensions only after complete response analysis",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "mime-media-valid-wav",
+      "category": "media",
+      "actual_mime": "audio/wav",
+      "owned_body": "generatedPCM WAV",
+      "expected_scope": "transport metadata; no codec/playback test",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "mime-media-actual-html",
+      "category": "media",
+      "actual_mime": "text/html",
+      "owned_body": "HTML with anchor",
+      "expected_scope": "no navigation upgrade",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "mime-pdf-complete",
+      "category": "pdf",
+      "actual_mime": "application/pdf",
+      "owned_body": "generatedPDF URI annotation",
+      "expected_scope": "annotation observed and admitted only when own annotation rules enabled",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "mime-pdf-encrypted",
+      "category": "pdf",
+      "actual_mime": "application/pdf",
+      "owned_body": "generated encrypted PDF",
+      "expected_scope": "unknown/error/encrypted status; no invented annotation absence",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "mime-pdf-malformed",
+      "category": "pdf",
+      "actual_mime": "application/pdf",
+      "owned_body": "malformed owned PDF bytes",
+      "expected_scope": "error; no successful pagecount/text/annotation claims",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "mime-pdf-body-cap",
+      "category": "pdf",
+      "actual_mime": "application/pdf",
+      "owned_body": "PDF exceeding body cap",
+      "expected_scope": "truncated/analysis incomplete; no annotation child admission",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "mime-swf-transport",
+      "category": "swf",
+      "actual_mime": "application/x-shockwave-flash",
+      "owned_body": "owned FWS-prefixed bytes",
+      "expected_scope": "HTTP facts only; no execution/parser claim",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "mime-other-font",
+      "category": "other",
+      "actual_mime": "font/woff2",
+      "owned_body": "bounded owned font-transport fixture",
+      "expected_scope": "category from CSS font source; no font parsing/browser application claim",
+      "status": "DESIGN_ONLY"
+    },
+    {
+      "id": "mime-nav-actual-css",
+      "category": "internal_anchors",
+      "actual_mime": "text/css",
+      "owned_body": "valid CSS importing child",
+      "expected_scope": "expand=true alone has no CSS permission: child0; independent later stylesheet role positive",
+      "status": "DESIGN_ONLY"
+    }
+  ],
+  "redirect_controls": {
+    "status": "DESIGN_ONLY",
+    "templates": [
+      {
+        "id": "hops-two-allowlisted",
+        "chain": [
+          "seed_A/start",
+          "asset_B/mid",
+          "asset_C/final"
+        ],
+        "role": "every7resource",
+        "cfg": "B,C explicitly allowlisted; check_external=false; robots allow",
+        "required_gets": [
+          1,
+          1,
+          1
+        ],
+        "credentials": [
+          "seed_headers",
+          "none",
+          "none"
+        ],
+        "desired_result": "complete final metadata; CSS dependencies relative to C/final; immutable requested_url A/start"
+      },
+      {
+        "id": "hops-third-denied",
+        "chain": [
+          "seed_A/start",
+          "asset_B/mid",
+          "unlisted_C/final"
+        ],
+        "role": "every7resource",
+        "cfg": "B only allowlisted; check_external=false; no policy",
+        "required_gets": [
+          1,
+          1,
+          0
+        ],
+        "credentials": [
+          "seed_headers",
+          "none",
+          "none"
+        ],
+        "desired_result": "stop before C request; no C body or descendants"
+      },
+      {
+        "id": "hops-checkexternal-not-resource-wildcard",
+        "chain": [
+          "seed_A/start",
+          "asset_B/mid",
+          "unlisted_C/final"
+        ],
+        "role": "every7resource",
+        "cfg": "B only allowlisted; check_external=true; no policy",
+        "required_gets": [
+          1,
+          1,
+          0
+        ],
+        "credentials": [
+          "seed_headers",
+          "none",
+          "none"
+        ],
+        "desired_result": "CG-03 target: navigation option must not bypass resource-specific per-hop grant scope; CURRENT_CODE_PREDICTS_C_GET"
+      },
+      {
+        "id": "hops-policy-wide-resource-narrow",
+        "chain": [
+          "seed_A/start",
+          "asset_B/mid",
+          "unlisted_C/final"
+        ],
+        "role": "every7resource",
+        "cfg": "policy traverses A,B,C; resource allowlist B only",
+        "required_gets": [
+          1,
+          1,
+          0
+        ],
+        "credentials": [
+          "seed_headers",
+          "none",
+          "none"
+        ],
+        "desired_result": "CG-03 target: policy is upper ceiling, not substitute for role-specific resource scope; CURRENT_CODE_PREDICTS_C_GET"
+      },
+      {
+        "id": "hops-robots-middle-denied",
+        "chain": [
+          "seed_A/start",
+          "asset_B/mid",
+          "asset_C/final"
+        ],
+        "role": "every7resource",
+        "cfg": "B,C allowlisted; B robots disallows /mid",
+        "required_gets": [
+          1,
+          0,
+          0
+        ],
+        "credentials": [
+          "seed_headers",
+          "none",
+          "none"
+        ],
+        "desired_result": "blocked_by_robots; robots GET itself expected separately without credentials"
+      },
+      {
+        "id": "hops-robots-final-denied",
+        "chain": [
+          "seed_A/start",
+          "asset_B/mid",
+          "asset_C/final"
+        ],
+        "role": "every7resource",
+        "cfg": "B,C allowlisted; C robots disallows /final",
+        "required_gets": [
+          1,
+          1,
+          0
+        ],
+        "credentials": [
+          "seed_headers",
+          "none",
+          "none"
+        ],
+        "desired_result": "no final captured entity; no final descendants"
+      },
+      {
+        "id": "hops-return-seed",
+        "chain": [
+          "seed_A/start",
+          "asset_B/mid",
+          "seed_A/final"
+        ],
+        "role": "every7resource",
+        "cfg": "B allowlisted; A original authorized seed origin; redirects allowed",
+        "required_gets": [
+          1,
+          1,
+          1
+        ],
+        "credentials": [
+          "seed_headers",
+          "none",
+          "seed_headers"
+        ],
+        "desired_result": "original credential origin is restored on A; no broadened external authority"
+      },
+      {
+        "id": "hops-policy-deny",
+        "chain": [
+          "seed_A/start",
+          "asset_B/mid",
+          "asset_C/final"
+        ],
+        "role": "every7resource",
+        "cfg": "resource B,C allowed; native policy denies C",
+        "required_gets": [
+          1,
+          1,
+          0
+        ],
+        "credentials": [
+          "seed_headers",
+          "none",
+          "none"
+        ],
+        "desired_result": "redirect_denied literal observed; upper-bound policy stops HTTP"
+      },
+      {
+        "id": "hops-policy-checkonce",
+        "chain": [
+          "seed_A/start",
+          "asset_B/mid",
+          "seed_A/final"
+        ],
+        "role": "every7resource",
+        "cfg": "native policy check_once on B; A traversable",
+        "required_gets": [
+          1,
+          1,
+          1
+        ],
+        "credentials": [
+          "seed_headers",
+          "none",
+          "seed_headers"
+        ],
+        "desired_result": "any nontraversable hop permanently caps all descendant expansion; no permission resurrection"
+      },
+      {
+        "id": "hops-scope-port",
+        "chain": [
+          "seed_A/start",
+          "asset_B_same_host_different_port/final"
+        ],
+        "role": "every7resource",
+        "cfg": "only original B port allowlisted",
+        "required_gets": [
+          1,
+          0
+        ],
+        "credentials": [
+          "seed_headers",
+          "none"
+        ],
+        "desired_result": "exact-origin mismatch; URL origin observation remains independent"
+      },
+      {
+        "id": "hops-scope-scheme",
+        "chain": [
+          "seed_A/start",
+          "asset_B_same_host_different_scheme/final"
+        ],
+        "role": "every7resource",
+        "cfg": "only https B allowlisted; own HTTP target",
+        "required_gets": [
+          1,
+          0
+        ],
+        "credentials": [
+          "seed_headers",
+          "none"
+        ],
+        "desired_result": "scheme mismatch does not broaden exact origin; TLS positive requires owned trusted fixture"
+      },
+      {
+        "id": "hops-loop",
+        "chain": [
+          "seed_A/start",
+          "asset_B/mid",
+          "seed_A/start"
+        ],
+        "role": "every7resource",
+        "cfg": "B allowed; loop detection before repeated request",
+        "required_gets": [
+          1,
+          1,
+          0
+        ],
+        "credentials": [
+          "seed_headers",
+          "none",
+          "none"
+        ],
+        "desired_result": "loop-closing literal retained, no duplicate transport claim"
+      }
+    ],
+    "resource_families_per_template": 7,
+    "parameterized_resource_chains": 84,
+    "navigation_role_controls": [
+      {
+        "id": "nav-redirect-resource-origin-only",
+        "source_role": "internal_anchor expand=true",
+        "chain": [
+          "A/nav",
+          "B/asset-listed-html"
+        ],
+        "cfg": "B resource allowlist only; check_external=false; no policy",
+        "current_v1_predicted_gets": [
+          1,
+          1
+        ],
+        "desired_gets": [
+          1,
+          0
+        ],
+        "status": "DESIGN_ONLY_CONTRACT_GAP_CG-03"
+      },
+      {
+        "id": "nav-redirect-with-explicit-nav-scope",
+        "source_role": "internal_anchor expand=true",
+        "chain": [
+          "A/nav",
+          "B/html"
+        ],
+        "cfg": "check_external=true or explicit policy traversal B",
+        "current_v1_predicted_gets": [
+          1,
+          1
+        ],
+        "desired_gets": [
+          1,
+          1
+        ],
+        "status": "DESIGN_ONLY_POSITIVE_CONTROL"
+      },
+      {
+        "id": "image-redirect-html-no-upgrade",
+        "source_role": "image",
+        "chain": [
+          "A/image",
+          "B/html"
+        ],
+        "cfg": "B resource allowed; response HTML has anchor back A/child",
+        "current_v1_predicted_gets": [
+          1,
+          1
+        ],
+        "desired_gets": [
+          1,
+          1
+        ],
+        "desired_child_gets": 0,
+        "status": "DESIGN_ONLY_NO_ROLE_UPGRADE"
+      },
+      {
+        "id": "nav-allowlisted-backlink-current-behavior",
+        "source_role": "internal_anchor expand=true",
+        "chain": [
+          "A/nav",
+          "B/asset-listed-html",
+          "DOM backlink A/child"
+        ],
+        "cfg": "B resource allowlist only; check_external=false; no policy",
+        "current_v1_predicted_gets": [
+          1,
+          1,
+          1
+        ],
+        "desired_gets": [
+          1,
+          0,
+          0
+        ],
+        "status": "DESIGN_ONLY_CONTRACT_GAP_CG-03"
+      }
+    ],
+    "total_planned_chains": 88
+  },
+  "media_context_controls": [
+    "video poster=image while video/audio src=media; each target unique, no chosen-source claim",
+    "immediate picture/source srcset=image candidates; src under picture=invalid nonmedia occurrence; orphan source.src=observed error, zero request",
+    "type on source/object/embed remains declared_mime, never overwrites observed response MIME; fallback nested content observed without claiming active loading",
+    "srcset duplicate candidate URLs -> retained distinct occurrences but one transport; invalid descriptors/data/blob/fragment zero artificial HTTP",
+    "same image URL across two source pages keeps each alt absent/empty/whitespace/nonempty state and DOM path; private storefalse response must not delete source facts",
+    "CSS font URLs classified Other; source category remains hint and fetched observed MIME is independent"
+  ],
+  "assertions_every_executed_case": [
+    "Exact method/path/origin hit ledger including separate robots/discovery-protocol hits; assert positive control truly requested before trusting negative0",
+    "Read authoritative persisted occurrence raw/resolved/category/source-unit-completeness/reason/grant; do not infer permission or hit from status alone",
+    "Retained report inclusion and private transport observation separately; storefalse must not retain hidden body/custom/PDF/capture text",
+    "requested URL identity, final observed URL/status, raw declared MIME and actual Content-Type preserved separately; never manufacture final response after denied hop",
+    "Known captured entity digest only on observed entity; genuine empty200 SHA(empty) positive versus blocked/error/denied redirect None",
+    "Atomic generation/checkpoint/source/grant/frontier commit and same-transaction read verification; failed source budget leaves pending, not completion",
+    "Credentials only original exact seed origins at every hop, never on external resource or robots request; returning original origin positive",
+    "No second HTTP on late allowed role; immutable first grant unchanged; private-only promotion cannot resurrect unretained text or prior-generation captures",
+    "CLI/API/MCP share same typed native config and decisions; original JSON remains exact; CSV formula protection only affects exported text representation"
+  ],
+  "test_gaps": [
+    {
+      "id": "resource-products-every-type-and-navigation",
+      "status": "DESIGN_ONLY",
+      "priority": 1,
+      "next_evidence": "108 matrix cells; explicit real MIME/body controls and report/private ledger checks",
+      "plan_section": "resource_matrix +navigation_matrix",
+      "b9_pass_claim": false,
+      "runtime_result": "NOT_RUN"
+    },
+    {
+      "id": "relationship-discovery-each-positive-negative",
+      "status": "DESIGN_ONLY",
+      "priority": 1,
+      "next_evidence": "Every10 navigation role; HTML/header channels and dual next/prev; no grant when fetch disabled; expanded descendants only with expand",
+      "plan_section": "navigation_matrix +header_qualifier_controls",
+      "b9_pass_claim": false,
+      "runtime_result": "NOT_RUN"
+    },
+    {
+      "id": "link-directive-four-way-traversal",
+      "status": "DESIGN_ONLY",
+      "priority": 1,
+      "next_evidence": "16 override truth cells,11 token controls,14 agent/channel controls,8 HTML/header equivalent relations; new qualification/scope contract first",
+      "plan_section": "nofollow_truth_table +rel_controls +agent_controls +header_qualifier_controls",
+      "b9_pass_claim": false,
+      "runtime_result": "NOT_RUN"
+    },
+    {
+      "id": "resource-role-unions-reverse-and-concurrent",
+      "status": "DESIGN_ONLY",
+      "priority": 2,
+      "next_evidence": "CSS/anchor, PDF/anchor, media/anchor and stylesheet/image: both orders plus barrier-controlled concurrent/late admission; exact1 transport; original grants unchanged",
+      "plan_section": "independent_roles",
+      "b9_pass_claim": false,
+      "runtime_result": "NOT_RUN"
+    },
+    {
+      "id": "css-encoding-environment-fallback",
+      "status": "DESIGN_ONLY",
+      "priority": 2,
+      "next_evidence": "unknown nonASCII fallback, inherited legacy charset, imported source encoding; known BOM/HTTP/@charset and ASCII positives; no unauthorized target requests",
+      "plan_section": "response_controls CSS +future environment contract",
+      "b9_pass_claim": false,
+      "runtime_result": "NOT_RUN"
+    },
+    {
+      "id": "css-native-grammar-context-and-decoding",
+      "status": "DESIGN_ONLY",
+      "priority": 2,
+      "next_evidence": "Fonts, image-set, conditional imports, valid independent options and malformed unrelated units; native actual MIME/decode revision bound",
+      "plan_section": "parser fixture replay +native response controls",
+      "b9_pass_claim": false,
+      "runtime_result": "NOT_RUN"
+    },
+    {
+      "id": "resource-cross-origin-redirect-hop-credentials",
+      "status": "DESIGN_ONLY",
+      "priority": 1,
+      "next_evidence": "12 chains across each7 resource category =84 parameterized controls;4 navigation-role controls; exact per-hop HTTP/robots/headers",
+      "plan_section": "redirect_templates +role_redirect_controls",
+      "b9_pass_claim": false,
+      "runtime_result": "NOT_RUN"
+    },
+    {
+      "id": "resource-interruption-each-stage",
+      "status": "DESIGN_ONLY",
+      "priority": 3,
+      "next_evidence": "owned process barriers preparse/postparse/precommit/postcommit/pending expansion, plus pause drain; SQLite-only resume and at-least-once unresolved attempts",
+      "plan_section": "crash_barriers",
+      "b9_pass_claim": false,
+      "runtime_result": "NOT_RUN"
+    },
+    {
+      "id": "resource-budget-exact-plus-one-all-limits",
+      "status": "DESIGN_ONLY",
+      "priority": 3,
+      "next_evidence": "Each8 configured resource limits and effective CSS limits: exact/one-over; unit counted bytes not chars; atomic pending rollback; null total-unlimited",
+      "plan_section": "budget_boundaries",
+      "b9_pass_claim": false,
+      "runtime_result": "NOT_RUN"
+    },
+    {
+      "id": "resource-selected-all-kind-targets",
+      "status": "DESIGN_ONLY",
+      "priority": 2,
+      "next_evidence": "All7 resource and10 nav historical roles, success/failure/blocked/truncated/pending; no descendant requests, inherited bytes untouched",
+      "plan_section": "selected_role_matrix",
+      "b9_pass_claim": false,
+      "runtime_result": "NOT_RUN"
+    },
+    {
+      "id": "image-occurrence-alt-and-selected-source",
+      "status": "DESIGN_ONLY",
+      "priority": 2,
+      "next_evidence": "Two source pages, absent/empty/whitespace/nonempty alt; same URL distinct occurrence/position; picture/srcset/media contexts; chosen browser candidate unknown",
+      "plan_section": "media_context_controls",
+      "b9_pass_claim": false,
+      "runtime_result": "NOT_RUN"
+    },
+    {
+      "id": "resource-native-renderer-enforcement",
+      "status": "DESIGN_ONLY",
+      "priority": 4,
+      "next_evidence": "Keep native resource+renderer guard0 requests. Future browser scope requires exact native policy decisions per navigation/subrequest, separate permission ledger contract",
+      "plan_section": "guard_now; future renderer enforcement",
+      "b9_pass_claim": false,
+      "runtime_result": "NOT_RUN"
+    }
+  ],
+  "next_todo_order": [
+    {
+      "step": 1,
+      "name": "Freeze qualification and per-hop role contract",
+      "closes": "CG-01/02/03 decisions",
+      "minimum_work": "source-bound baseline controls before any production fix; define legacy optional-none/hash invariants and exact failure reasons"
+    },
+    {
+      "step": 2,
+      "name": "Full17-family product matrix",
+      "closes": "resource-products-every-type-and-navigation +relationship-discovery-each-positive-negative",
+      "minimum_work": "108 declared cells;88 valid native cells and20 zero-HTTP invalid cells; one parameterized group per family"
+    },
+    {
+      "step": 3,
+      "name": "Qualified links and directives",
+      "closes": "link-directive-four-way-traversal",
+      "minimum_work": "16 override +11 rel-token +14 agent/channel +8 equivalent HTML/header cases =49 directed cases; ugc/sponsored/header cells baseline predicted versus accepted revised contract separated"
+    },
+    {
+      "step": 4,
+      "name": "Role-aware redirect authority",
+      "closes": "resource-cross-origin-redirect-hop-credentials",
+      "minimum_work": "12 templates x7 resource families=84;4 navigation role controls;88 bounded chains. At minimum execute CSS/image/PDF canaries first, but do not call every-family gate complete."
+    },
+    {
+      "step": 5,
+      "name": "MIME/source, reversed roles, selected freshness",
+      "closes": "response controls +role-unions +selected role target gap",
+      "minimum_work": "21 response cases; reversed and barrier-controlled concurrent independent roles; selected17 families no outward requests"
+    },
+    {
+      "step": 6,
+      "name": "Decoding, all bounds and crash phases",
+      "closes": "remaining encoding/grammar/budget/interruption gaps",
+      "minimum_work": "exact+one over each bound and true process interruption at declared transaction boundaries; no source/complete false positives"
+    },
+    {
+      "step": 7,
+      "name": "Native-browser enforcement",
+      "closes": "resource-native-renderer-enforcement only after new contract",
+      "minimum_work": "current reject-before-HTTP remains positive guard; no browser support assertion until actual every-subrequest native-policy enforcement"
+    }
+  ],
+  "minimum_useful_next_gate": {
+    "status": "DESIGN_ONLY",
+    "matrix_cells": 108,
+    "comparative_canary_groups": 4,
+    "acceptance_units": 112,
+    "units_are_independent_crawl_invocations": false,
+    "canaries": [
+      "HTML versus HTTP Link canonical nofollow",
+      "UGC/sponsored alone versus exact nofollow negative/positive pair",
+      "Resource B->unlisted C with check_external=true",
+      "Navigation A->resource-only allowlisted B HTML backlink"
+    ],
+    "test_result": "NOT_RUN",
+    "subtest_handling": "Every cell logged independently, failure preserves config/fixture/current predictions; do not stop after first cell and claim whole matrix passed"
+  },
+  "runtime_results": [],
+  "primary_sources": [
+    {
+      "url": "https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/#follow-internal-or-external-nofollow",
+      "reviewed": "2026-10-12",
+      "bounded_note": "Published vendor settings group nofollow, sponsored and ugc, plus meta/header page nofollow. This is a documented feature gap for current literal-only qualification, not runtime parity proof."
+    },
+    {
+      "url": "https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag",
+      "reviewed": "2026-10-12",
+      "bounded_note": "Public page rules support generic/scoped meta and X-Robots headers, restrictive combinations, and none=noindex+nofollow. They require access to the response before observation."
+    },
+    {
+      "url": "https://developers.google.com/search/docs/crawling-indexing/qualify-outbound-links",
+      "reviewed": "2026-10-12",
+      "bounded_note": "Google describes nofollow/ugc/sponsored qualification and independent discovery through other links. This is not a deterministic browser fetch prohibition or a vendor execution trace."
+    },
+    {
+      "url": "https://www.rfc-editor.org/rfc/rfc8288.html#section-3",
+      "reviewed": "2026-10-12",
+      "bounded_note": "Public HTTP Link serialization/context/relation definitions inform source-specific fixture design; no browser/vendor request or implemented parser completeness claim."
+    }
+  ],
+  "design_document_observations": [
+    {
+      "path": "docs/resource-discovery.md",
+      "sha256": "0210ead952ddf3076fefd8c09e9db0c95ec694fcc0ad700d185a35e9fd2a5690",
+      "scope": "DESIGN_TIME_DOCUMENT_OBSERVATION",
+      "current_document_status": "EVOLVING_ROOT_OWNED_DOCUMENTATION",
+      "hash_meaning": "Historical input observed when the design was prepared; not a claim about the latest document revision."
+    },
+    {
+      "path": "docs/feature-parity.json",
+      "sha256": "6a46d2c62281c956ab38ea0e2617d1f514a6a0d8a020d9412f1f6c6fdbdcf435",
+      "scope": "DESIGN_TIME_DOCUMENT_OBSERVATION",
+      "current_document_status": "EVOLVING_ROOT_OWNED_DOCUMENTATION",
+      "hash_meaning": "Historical input observed when the design was prepared; not a claim about the latest document revision."
+    }
+  ]
+}
