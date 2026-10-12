@@ -26,7 +26,7 @@ try{
     client=new Client({name:'open-seo-spider-acceptance',version:'0.1.0'});
     const transport=kind==='stdio'?new StdioClientTransport({command:binary,args:['mcp','--server',api],cwd:root,stderr:'pipe'}):new StreamableHTTPClientTransport(new URL(api+'/mcp'));
     await client.connect(transport);
-    const inventory=await client.listTools();assert.equal(inventory.tools.length,16);
+    const inventory=await client.listTools();assert.equal(inventory.tools.length,19);
     assert.ok(inventory.tools.some(tool=>tool.name==='spider_pause'&&tool.annotations.readOnlyHint===false));
     assert.ok(inventory.tools.some(tool=>tool.name==='spider_recrawl'&&tool.annotations.readOnlyHint===false&&tool.annotations.openWorldHint===true));
     const caps=await call('spider_capabilities');assert.equal(caps.crawl.url_limit,null);
@@ -42,10 +42,14 @@ try{
     const preview=await call('spider_preview_policy',{input:{config:policy,inputs:[{occurrence_id:'own-mcp-seed',source_kind:'seed',raw_value:'http://127.0.0.1:19089/a',base_url:null,source_url:null,source_location:null}]}});
     assert.equal(preview.website_requests,0);assert.equal(preview.decisions[0].fetch_candidate_url,'http://127.0.0.1:19089/a');
     revision=0;
-    const started=await call('spider_start_crawl',{config:{seed_urls:['http://127.0.0.1:19089/a','http://127.0.0.1:19089/b'],crawl_links:false,discover_sitemaps:false,delay_ms:0}});
+    const started=await call('spider_start_crawl',{config:{seed_urls:['http://127.0.0.1:19089/a','http://127.0.0.1:19089/b'],crawl_links:false,discover_sitemaps:false,delay_ms:0,content_capture:{}}});
     const finished=await until(async()=>{const status=await call('spider_status',{id:started.id});return status.status==='completed'&&status;});assert.equal(finished.stats.fetched,2);
     const disabledLedger=await call('spider_policy',{id:started.id,limit:1});assert.equal(disabledLedger.enabled,false);assert.equal(disabledLedger.ledger_available,false);assert.deepEqual(disabledLedger.observations,[]);
     const pages=await call('spider_pages',{id:started.id,offset:1,limit:1});assert.equal(pages.pages.length,1);assert.equal(pages.total,2);
+    const contentRows=await call('spider_content',{id:started.id,limit:1});assert.equal(contentRows.rows.length,1);assert.equal(contentRows.text_included,false);assert.equal(contentRows.has_more,true);assert.equal(contentRows.rows[0].status,'complete');
+    assert.equal((await client.callTool({name:'spider_content',arguments:{id:started.id,source_kind:1}})).isError,true);
+    const contentDocument=await call('spider_content_document',{id:started.id,url:contentRows.rows[0].requested_url});assert.equal(contentDocument.capture.result.text,'Fixture');assert.equal(contentDocument.capture.result.html_language,'de');
+    const savedAnalysis=await call('spider_analyze_crawl_content',{id:started.id,input:{urls:['http://127.0.0.1:19089/a','http://127.0.0.1:19089/b'],expected_generation:finished.generation}});assert.equal(savedAnalysis.website_requests,0);assert.equal(savedAnalysis.site_wide_coverage,false);assert.equal(savedAnalysis.documents.length,2);assert.equal(savedAnalysis.analysis.pairs[0].identical_supplied_text,true);
     assert((await call('spider_issues',{id:started.id})).issues.length>0);
     assert.equal((await call('spider_project',{id:started.id})).pages.length,2);
     assert.equal((await call('spider_analysis',{id:started.id})).graph.nodes.length,2);
@@ -62,7 +66,7 @@ try{
     await until(async()=>{const status=await call('spider_status',{id:policyJob.id});if(status.status==='failed')throw Error(status.error);return status.status==='completed';});
     const firstPolicyPage=await call('spider_policy',{id:policyJob.id,limit:1});assert.equal(firstPolicyPage.enabled,true);assert.equal(firstPolicyPage.ledger_available,true);assert.equal(firstPolicyPage.observations.length,1);assert.equal(firstPolicyPage.has_more,true);
     const secondPolicyPage=await call('spider_policy',{id:policyJob.id,after_sequence:firstPolicyPage.next_after_sequence,limit:1});assert.equal(secondPolicyPage.observations.length,1);assert.equal(secondPolicyPage.has_more,false);assert.notEqual(secondPolicyPage.observations[0].sequence,firstPolicyPage.observations[0].sequence);
-    checks.push(`${kind}: SDK initialize, 16 tools, supplied-text analysis with unknown missing row, zero-HTTP policy preview, native policy cursor without repeated rows, disabled-policy evidence, crawl/read/analysis/compare, completed-pause conflict, derived selected recrawl with fresh selected row and exact retained parent/unselected rows`);
+    checks.push(`${kind}: SDK initialize, 19 tools, native saved-source inventory/document/cohort without website fetching, supplied-text analysis with unknown missing row, zero-HTTP policy preview, native policy cursor without repeated rows, disabled-policy evidence, crawl/read/analysis/compare, completed-pause conflict, derived selected recrawl with fresh selected row and exact retained parent/unselected rows`);
     await client.close();client=null;
   }
   const evidence={tested_at:new Date().toISOString(),sdk:'@modelcontextprotocol/client 2.3.1',platform:process.platform,result:'PASS',checks};

@@ -1,0 +1,12 @@
+[
+  {"id":"document-order-across-includes","html":"<body><section id='first'>First <b>bold</b></section><section id='second'>Second</section></body>","include":["#second","#first","b"],"exclude":[],"expected":"First bold Second"},
+  {"id":"excluded-ancestor-wins","html":"<body>A<nav><main>B</main></nav><main>C</main>D</body>","include":["body","main"],"exclude":["nav"],"expected":"A C D"},
+  {"id":"nested-include-single-observation","html":"<main>A<section>B<p>C<em>D</em>E</p>F</section>G</main>","include":["main","section","p","em"],"exclude":[],"expected":"A B C D E F G"},
+  {"id":"complete-no-match","html":"<body><p>Outside</p></body>","include":["article"],"exclude":[],"expected":""},
+  {"id":"whitespace-only-is-empty","html":"<p> \t&nbsp;&#x2003;\n</p>","include":["p"],"exclude":[],"expected":""},
+  {"id":"comment-and-attributes-are-not-text","html":"<body>A<!-- ignored --><img alt='ALT'><input value='VALUE'><p title='TITLE'>B</p></body>","include":["body"],"exclude":[],"expected":"A B"},
+  {"id":"template-extra-fragment-excluded","html":"<body>A<template><p>B<template>C</template>D</p></template>E</body>","include":["body","template p"],"exclude":["template"],"expected":"A E"},
+  {"id":"malformed-html-recovery-own-profile","html":"<main>A<p>B<b>C</b>D<p>E</main>","include":["main"],"exclude":[],"expected":"A B C D E"},
+  {"id":"entity-and-inline-node-boundaries","html":"<p>Fish&amp;chips<em>today</em>!</p>","include":["p"],"exclude":[],"expected":"Fish&chips today !"},
+  {"id":"explicit-script-style-inclusion","html":"<body>A<script>const x = 1;</script><style>.x { color: red; }</style>B</body>","include":["body"],"exclude":[],"expected":"A const x = 1; .x { color: red; } B"}
+]

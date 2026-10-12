@@ -88,6 +88,7 @@ impl CrawlStore {
             .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
         let transaction = connection.transaction()?;
         let config: Option<CrawlConfig> = metadata(&transaction, "config")?;
+        verify_saved_content_captures(&transaction)?;
         let run_state: Option<CrawlRunState> = metadata(&transaction, "run_state")?;
         let checkpoint: Option<CrawlCheckpoint> = metadata(&transaction, "checkpoint")?;
         let completed = count(&transaction, "SELECT count(*) FROM pages")?;
@@ -389,6 +390,7 @@ impl CrawlStore {
             .lock()
             .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
         let transaction = connection.transaction()?;
+        verify_saved_content_captures(&transaction)?;
         let previous: Option<CrawlRunState> = metadata(&transaction, "run_state")?;
         let generation = previous
             .map_or(0, |run| run.generation)
@@ -410,6 +412,7 @@ impl CrawlStore {
             .connection
             .lock()
             .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        verify_saved_content_captures(&connection)?;
         if let RunPlan::SelectedRecrawl(plan) = load_run_plan(&connection)? {
             let bytes = parent_snapshot(&connection)?
                 .context("Selected recrawl has no immutable parent")?;
@@ -864,6 +867,14 @@ impl CrawlStore {
         let transaction = connection.transaction()?;
         require_generation(&transaction, generation)?;
         let mut scheduled = Vec::new();
+        let config: CrawlConfig =
+            metadata(&transaction, "config")?.context("Missing saved crawl config")?;
+        crate::content_binding::validate_native_content_captures(
+            page,
+            &config,
+            Some(generation),
+            true,
+        )?;
         if let Some((rows, limits)) = policy {
             let observation = page
                 .policy
@@ -1002,9 +1013,14 @@ impl CrawlStore {
         let values = statement
             .query_map([], |row| row.get::<_, String>(0))?
             .collect::<Result<Vec<_>, _>>()?;
+        verify_saved_content_captures(&connection)?;
         values
             .into_iter()
-            .map(|value| serde_json::from_str(&value).map_err(Into::into))
+            .map(|value| {
+                let page: PageRecord = serde_json::from_str(&value)?;
+                crate::validate_page_content_captures(&page)?;
+                Ok(page)
+            })
             .collect()
     }
 
@@ -1035,6 +1051,21 @@ impl CrawlStore {
             metadata(&transaction, "run_state")?.context("Crawl has no active generation")?;
         if run.generation != generation || run.outcome.is_some() {
             bail!("Stale or already finalized crawl generation cannot publish a checkpoint");
+        }
+        verify_saved_content_captures(&transaction)?;
+        for page in &report.pages {
+            crate::validate_page_content_captures(page)?;
+            if page.content_captures.is_some() {
+                let stored: String = transaction.query_row(
+                    "SELECT data FROM pages WHERE url=?1",
+                    [&page.url],
+                    |row| row.get(0),
+                )?;
+                let stored: PageRecord = serde_json::from_str(&stored)?;
+                if stored.content_captures != page.content_captures {
+                    bail!("Checkpoint capture differs from committed page observation");
+                }
+            }
         }
         let previous: Option<CrawlCheckpoint> = metadata(&transaction, "checkpoint")?;
         let revision = previous
@@ -1091,9 +1122,67 @@ impl CrawlStore {
             })
             .optional()?;
         value
-            .map(|value| serde_json::from_str(&value).map_err(Into::into))
+            .map(|value| {
+                let report: CrawlReport = serde_json::from_str(&value)?;
+                for page in &report.pages {
+                    crate::validate_page_content_captures(page)?;
+                }
+                Ok(report)
+            })
             .transpose()
     }
+}
+
+/// One bounded row at a time; the SQLite run state is an internal provenance
+/// boundary, not authentication of imported or externally rewritten databases.
+fn verify_saved_content_captures(connection: &Connection) -> anyhow::Result<()> {
+    let Some(config) = metadata::<CrawlConfig>(connection, "config")? else {
+        return Ok(());
+    };
+    if config.content_capture.is_none() {
+        let has_captures: bool = connection.query_row("SELECT EXISTS(SELECT 1 FROM pages WHERE json_type(data,'$.content_captures') IS NOT NULL AND json_type(data,'$.content_captures') <> 'null' LIMIT 1)", [], |row| row.get(0))?;
+        if !has_captures {
+            return Ok(());
+        }
+    }
+    let run: Option<CrawlRunState> = metadata(connection, "run_state")?;
+    let selected =
+        metadata_text(connection, "operation_kind")?.as_deref() == Some("selected_recrawl");
+    let sql = if selected {
+        "SELECT pages.url,pages.data,recrawl_pages.inherited,recrawl_targets.committed_generation FROM pages JOIN recrawl_pages ON pages.url=recrawl_pages.url LEFT JOIN recrawl_targets ON pages.url=recrawl_targets.url"
+    } else {
+        "SELECT url,data,0,NULL FROM pages"
+    };
+    let mut statement = connection.prepare(sql)?;
+    let mut rows = statement.query([])?;
+    while let Some(row) = rows.next()? {
+        let url: String = row.get(0)?;
+        let page: PageRecord = serde_json::from_str(&row.get::<_, String>(1)?)?;
+        let inherited: bool = row.get(2)?;
+        let committed = row
+            .get::<_, Option<i64>>(3)?
+            .map(u64::try_from)
+            .transpose()?;
+        if page.url != url {
+            bail!("Stored capture enclosing requested URL differs from row identity");
+        }
+        crate::content_binding::validate_native_content_captures(
+            &page, &config, committed, !inherited,
+        )?;
+        if !inherited && let Some(captures) = &page.content_captures {
+            for capture in captures {
+                if !capture.observed_generation.is_some_and(|generation| {
+                    run.as_ref()
+                        .is_some_and(|run| generation > 0 && generation <= run.generation)
+                }) {
+                    bail!(
+                        "Saved capture generation is missing or outside the observed run history"
+                    );
+                }
+            }
+        }
+    }
+    Ok(())
 }
 
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]

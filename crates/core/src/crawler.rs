@@ -44,6 +44,7 @@ pub struct Crawler {
     recrawl_override: RecrawlResumeOverride,
     policy: Option<Arc<crate::CompiledCrawlPolicy>>,
     policy_limits: crate::LiveCrawlPolicyLimits,
+    capture: Option<Arc<crate::CompiledContentCaptureConfig>>,
     #[cfg(test)]
     pdf_parse_hook: Option<PdfParseHook>,
 }
@@ -51,6 +52,12 @@ pub struct Crawler {
 impl Crawler {
     pub fn new(mut config: CrawlConfig) -> anyhow::Result<Self> {
         config.prepare_input_lists()?;
+        let capture = config
+            .content_capture
+            .as_ref()
+            .map(crate::ContentCaptureConfig::compile)
+            .transpose()?
+            .map(Arc::new);
         let policy_limits = config.live_policy_limits.clone().unwrap_or_default();
         policy_limits.validate()?;
         if config.crawl_policy.is_none() && config.live_policy_limits.is_some() {
@@ -165,6 +172,7 @@ impl Crawler {
             recrawl_override: RecrawlResumeOverride::default(),
             policy,
             policy_limits,
+            capture,
             #[cfg(test)]
             pdf_parse_hook: None,
         })
@@ -440,6 +448,8 @@ impl Crawler {
             warnings.push("Selected recrawl: unselected observations are inherited unchanged; pending selected historical rows are excluded. This is mixed-age coverage, not a fresh full-site crawl.".into());
         }
         let context = Arc::new(FetchContext {
+            capture: self.capture.clone(),
+            generation,
             config: self.config.clone(),
             seeds: self.seeds.clone(),
             client: self.client.clone(),
@@ -947,6 +957,8 @@ impl Crawler {
             (queue, discovered, 0)
         };
         let context = FetchContext {
+            capture: self.capture.clone(),
+            generation,
             config: self.config.clone(),
             seeds: self.seeds.clone(),
             client: self.client.clone(),
@@ -1281,6 +1293,8 @@ fn emit_recrawl_progress(
 }
 
 struct FetchContext {
+    capture: Option<Arc<crate::CompiledContentCaptureConfig>>,
+    generation: Option<u64>,
     config: CrawlConfig,
     seeds: Vec<Url>,
     client: Client,
@@ -1307,12 +1321,28 @@ impl FetchContext {
         if let Some(policy) = &self.policy {
             let Some(admission) = entry.admission else {
                 page.error = Some("Native policy admission missing; request was not made".into());
+                if let Some(capture) = &self.capture {
+                    crate::content_binding::unavailable_sources(
+                        &mut page,
+                        capture,
+                        self.generation,
+                        "native_admission_missing",
+                    );
+                }
                 return (page, None);
             };
             if let Err(error) =
                 admission.validate(policy.policy_sha256(), &page.url, admission.task_role)
             {
                 page.error = Some(error.to_string());
+                if let Some(capture) = &self.capture {
+                    crate::content_binding::unavailable_sources(
+                        &mut page,
+                        capture,
+                        self.generation,
+                        "native_admission_invalid",
+                    );
+                }
                 return (page, None);
             }
             let can_expand = admission.can_expand;
@@ -1328,6 +1358,14 @@ impl FetchContext {
         let Some(mut current) = normalize_url(&entry.url, None) else {
             page.error = Some("Invalid HTTP(S) URL".into());
             set_indexability(&mut page);
+            if let Some(capture) = &self.capture {
+                crate::content_binding::unavailable_sources(
+                    &mut page,
+                    capture,
+                    self.generation,
+                    "invalid_request_url",
+                );
+            }
             return (page, None);
         };
         page.internal = same_scope(&current, &self.seeds, self.config.include_subdomains);
@@ -1540,6 +1578,25 @@ impl FetchContext {
             break;
         }
         page.size_bytes = body.len();
+        let entity = self
+            .capture
+            .as_ref()
+            .filter(|capture| {
+                capture
+                    .config()
+                    .sources
+                    .contains(&crate::ContentCaptureSourceKind::RawHttpHtml)
+            })
+            .and_then(|_| {
+                page.final_status
+                    .filter(|status| !matches!(status, 301 | 302 | 303 | 307 | 308))
+            })
+            .map(|_| {
+                crate::content_binding::entity_bytes(
+                    &body,
+                    page.error.is_none() && !page.truncated && !page.blocked_by_robots,
+                )
+            });
         let pdf = crate::pdf::is_pdf(&body, &page.content_type);
         if pdf {
             let record = if page.error.is_some() || page.truncated || page.final_status != Some(200)
@@ -1607,7 +1664,13 @@ impl FetchContext {
             || media_type.ends_with("+xml")
             || media_type.ends_with("+json")
             || media_type.is_empty();
-        let text = if !pdf && page.image_metadata.is_none() && textual && !body.is_empty() {
+        let mut decode_status = crate::ContentCaptureDecodeStatus::Unknown;
+        let mut decode_encoding = None;
+        let text = if !pdf
+            && page.image_metadata.is_none()
+            && textual
+            && (!body.is_empty() || page.is_html())
+        {
             let charset = page
                 .content_type
                 .split(';')
@@ -1618,10 +1681,18 @@ impl FetchContext {
                         .map(|(_, value)| value.trim())
                 })
                 .map(|name| name.trim_matches(['\'', '"']));
-            let encoding = charset
-                .and_then(|label| encoding_rs::Encoding::for_label(label.as_bytes()))
-                .unwrap_or(encoding_rs::UTF_8);
-            let (decoded, _, errors) = encoding.decode(&body);
+            let declared_encoding =
+                charset.and_then(|label| encoding_rs::Encoding::for_label(label.as_bytes()));
+            let encoding = declared_encoding.unwrap_or(encoding_rs::UTF_8);
+            let (decoded, used_encoding, errors) = encoding.decode(&body);
+            decode_status = if errors {
+                crate::ContentCaptureDecodeStatus::Lossy
+            } else if charset.is_some() && declared_encoding.is_none() {
+                crate::ContentCaptureDecodeStatus::Unknown
+            } else {
+                crate::ContentCaptureDecodeStatus::Exact
+            };
+            decode_encoding = Some(used_encoding.name().into());
             if errors {
                 page.warnings.push(
                     "Response text contains invalid bytes for the declared character encoding"
@@ -1632,6 +1703,69 @@ impl FetchContext {
         } else {
             None
         };
+        if let Some(capture) = &self.capture {
+            let unavailable = if page.blocked_by_robots {
+                Some("blocked_by_robots")
+            } else if entity.is_none() {
+                Some("native_response_not_observed")
+            } else if !page.is_html() {
+                Some("native_non_html")
+            } else {
+                None
+            };
+            let complete = page.final_status == Some(200)
+                && page.error.is_none()
+                && !page.truncated
+                && !page.blocked_by_robots;
+            let document_url = entity.as_ref().map(|_| page.final_url.clone());
+            crate::content_binding::observe(
+                &mut page,
+                capture,
+                self.generation,
+                crate::content_binding::SourceObservation {
+                    source_kind: crate::ContentCaptureSourceKind::RawHttpHtml,
+                    html: if unavailable.is_none() {
+                        text.as_deref()
+                    } else {
+                        None
+                    },
+                    source_complete: complete && unavailable.is_none(),
+                    decode_status,
+                    decode_encoding,
+                    incomplete_reason: if !complete && unavailable.is_none() {
+                        Some("native_response_incomplete_or_non200".into())
+                    } else {
+                        None
+                    },
+                    unavailable_reason: unavailable.map(str::to_owned),
+                    document_url,
+                    rendered_at: None,
+                    entity,
+                },
+            );
+            let reason = if self.config.renderer.is_none() {
+                "renderer_not_configured"
+            } else {
+                "native_response_not_render_eligible"
+            };
+            crate::content_binding::observe(
+                &mut page,
+                capture,
+                self.generation,
+                crate::content_binding::SourceObservation {
+                    source_kind: crate::ContentCaptureSourceKind::RenderedDomHtml,
+                    html: None,
+                    source_complete: false,
+                    decode_status: crate::ContentCaptureDecodeStatus::Unknown,
+                    decode_encoding: None,
+                    incomplete_reason: None,
+                    unavailable_reason: Some(reason.into()),
+                    document_url: None,
+                    rendered_at: None,
+                    entity: None,
+                },
+            );
+        }
         if page.is_html()
             && let Some(text) = &text
         {
@@ -1656,7 +1790,14 @@ impl FetchContext {
             && !page.truncated
             && !page.blocked_by_robots
         {
-            crate::renderer::render_page(&mut page, &self.config, &self.seeds).await;
+            crate::renderer::render_page(
+                &mut page,
+                &self.config,
+                &self.seeds,
+                self.capture.as_deref(),
+                self.generation,
+            )
+            .await;
         }
         crate::metadata::evaluate_robots(&mut page);
         crate::metadata::sync_relationship_links(

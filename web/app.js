@@ -3,6 +3,7 @@
 (() => {
   const $ = (id) => document.getElementById(id);
   const state = {
+    content: { inventory:null, inventoryToken:null, cursor:0, back:[], error:'', selected:new Set(), source:null, sourceToken:null, sourceError:'', result:null, analysisToken:null, analysisError:'', revision:0, resultPage:0, sort:0, direction:1, resultSort:1, resultDirection:-1 },
     recrawlURLs: new Set(), policy: null, policyError: '', policyToken: null, policyCursor: 0, policyBack: [], policySelected: null, policySort: 0, policyDirection: 1,
     crawl: null, crawls: [], pages: [], issues: [], section: 'overview',
     search: '', filter: 'all', sort: 'url', direction: 1, page: 0, pageSize: 50,
@@ -14,7 +15,7 @@
       javascript_rendering: false, renderer_endpoint: 'http://127.0.0.1:8790/render',
       renderer_wait_ms: 500, renderer_accessibility: false, renderer_screenshot: false,
       renderer_collect_cookies: false, custom_javascript_json: '[]',
-      include_patterns_text: '', exclude_patterns_text: '', custom_extractions_json: '[]', audit_thresholds_json: '{}', pdf_analysis_json: '{}', validate_fragments: false, link_position_rules_json: '[]', crawl_policy_enabled: false, crawl_policy_json: '{"scope":{"roots":[{"origin":"https://example.test","folders":["/"],"subdomains":false,"exact_paths":[]}]}}', live_policy_limits_json: '{}'
+      include_patterns_text: '', exclude_patterns_text: '', custom_extractions_json: '[]', audit_thresholds_json: '{}', pdf_analysis_json: '{}', validate_fragments: false, link_position_rules_json: '[]', crawl_policy_enabled: false, crawl_policy_json: '{"scope":{"roots":[{"origin":"https://example.test","folders":["/"],"subdomains":false,"exact_paths":[]}]}}', live_policy_limits_json: '{}', content_capture_enabled:false, content_capture_json:'{"sources":["raw_http_html"],"include_selectors":["body"],"exclude_selectors":["script","style","template","noscript","nav","footer"]}'
     }
   };
   const sections = {
@@ -25,6 +26,7 @@
     responses: ['HTTP BEOBACHTUNGEN', 'Antworten', 'Jede erfasste native HTTP-Antwort einschließlich Zwischenredirects. Nicht gespeicherte Header und Body bleiben unbekannt; Dokumentdaten stehen separat.'],
     policy: ['NATIVE URL-POLICY', 'Policy-Entscheidungen', 'Gespeicherte Vorkommen und tatsächliche Zulassungsbefunde, begrenzt nach Ledger-Seite. Verweigerte Kandidaten sind keine abgerufenen Dokumente.'],
     policyaliases: ['NATIVE URL-POLICY', 'URL-Transformationen', 'Tatsächlich gespeicherte Transformationen von beobachteten Zielen zu Abrufkandidaten. Kein HTTP-Redirect und kein Erfolgsnachweis für das Originalziel.'],
+    content: ['GESPEICHERTE INHALTE', 'Inhaltstexte & Analyse', 'Explizite Textquellen und ausgewählte Kohorten. Die Analyse verwendet gespeicherte Texte und startet keine Website-Anfragen.'],
     inputs: ['EINGABEHERKUNFT', 'Eingabezeilen', 'Gespeicherte, deklarierte Importherkunft mit ursprünglicher Reihenfolge, Duplikaten und ungültigen Zeilen. Der vollständige CSV-Export ergänzt tatsächliche Abrufbefunde.'],
     titles: ['ONPAGE ANALYSE', 'Seitentitel', 'Title-Tags, Zeichenlänge und mehrfach verwendete Titel. Längen sind Hinweise.'],
     meta: ['ONPAGE ANALYSE', 'Meta Descriptions', 'Descriptions, Zeichenlänge und Duplikate im abgerufenen HTML.'],
@@ -106,6 +108,7 @@
     if (restoreFocus) [...document.querySelectorAll('[data-recrawl-url]')].find(input => input.dataset.recrawlUrl === url)?.focus({ preventScroll: true });
   }
   function invalidatePoll() {
+    invalidateContentRequests('Der Crawl-Stand wurde geändert.', true);
     state.generation += 1;
     state.policyToken?.controller.abort();
     state.policyToken = null;
@@ -272,6 +275,7 @@
       state.issues = state.issues.filter(issue => !pendingSelected.has(issue.url));
       reindexIssues(); connection(true); render();
       if (policySection() && !state.policyToken) loadPolicyPage(state.policyCursor);
+      if (contentSection() && !active() && !state.content.inventory && !state.content.inventoryToken) loadContentInventory();
       if (state.selectedResponse || state.selectedInput) renderInspector();
       else if (state.selected) { state.selected = state.pages.find(page => page.url === state.selected.url) || state.selected; renderInspector(); }
       if (previousStatus !== state.crawl.status && terminal) {
@@ -291,6 +295,7 @@
 
   async function selectCrawl(id) {
     invalidatePoll();
+    resetContent();
     invalidatePolicyPreview();
     resetPolicyLedger();
     state.control = null; state.startOperation = null; state.starting = false;
@@ -359,7 +364,7 @@
       if ($('crawl-mode').value !== mode) throw new Error('Der Crawl-Modus wurde während der Prüfung geändert. Bitte erneut starten.');
       if (!current()) return;
       const payload = { ...state.settings, ...advanced, mode, seed_url: mode === 'sitemap' ? '' : urls[0] || '', urls: mode === 'sitemap' ? [] : urls, seed_urls: mode === 'sitemap' ? [] : urls, sitemap_urls: mode === 'sitemap' ? urls : sitemapUrls, input_imports: inputImports, crawl_links: mode !== 'list', include_subdomains: state.settings.follow_subdomains, request_timeout_secs: state.settings.timeout_seconds, max_body_bytes: state.settings.max_body_mb * 1024 * 1024 };
-      for (const key of ['crawl_policy_enabled', 'crawl_policy_json', 'live_policy_limits_json']) delete payload[key];
+      for (const key of ['crawl_policy_enabled', 'crawl_policy_json', 'live_policy_limits_json', 'content_capture_enabled', 'content_capture_json']) delete payload[key];
       payload.renderer = state.settings.javascript_rendering ? { endpoint: state.settings.renderer_endpoint, wait_ms: state.settings.renderer_wait_ms, accessibility: state.settings.renderer_accessibility, screenshot: state.settings.renderer_screenshot, collect_cookies: state.settings.renderer_collect_cookies, custom_javascript: parseCustomJavascript(state.settings.custom_javascript_json) } : null;
       const result = await request('/api/crawls', { method: 'POST', body: JSON.stringify(payload) });
       const crawl = result.crawl || result;
@@ -499,6 +504,7 @@
     $('recrawl-selected').disabled = !canRecrawl();
     $('recrawl-clear').disabled = !state.recrawlURLs.size || busy;
     $('recrawl-selection-hint').textContent = active() ? 'Die Auswahl ist nach dem Anhalten oder Abschluss verfügbar.' : state.crawl?.recrawl_available === false ? 'Für diesen Bericht ist keine Wiederprüfung verfügbar.' : 'Auswahl gilt nur für vorhandene Anfrage-URLs in diesem Bericht; Filter und Pagination ändern sie nicht.';
+    if (contentSection()) $('export-csv').disabled = active() || Boolean(state.content.inventoryToken || state.content.error) || !contentVisibleRows().length;
     $('inspector-recrawl-selection').hidden = !state.selected || !state.pageMap.has(state.selected.url) || Boolean(state.selectedResponse || state.selectedInput);
     $('inspector-recrawl-checkbox').checked = Boolean(state.selected && state.recrawlURLs.has(state.selected.url));
     $('inspector-recrawl-checkbox').disabled = Boolean(busy || active() || state.crawl?.recrawl_available === false);
@@ -881,6 +887,7 @@
     });
     renderSection();
     if (policySection() && state.crawl && !state.policy && !state.policyToken) loadPolicyPage();
+    if (contentSection() && state.crawl && !active() && !state.content.inventory && !state.content.inventoryToken) loadContentInventory();
   }
 
   function renderSection() {
@@ -891,7 +898,8 @@
     $('overview-view').hidden = state.section !== 'overview';
     $('graph-view').hidden = state.section !== 'graph';
     $('policy-view').hidden = !policySection();
-    $('table-view').hidden = ['overview', 'graph'].includes(state.section) || policySection();
+    $('table-view').hidden = ['overview', 'graph', 'content'].includes(state.section) || policySection();
+    $('content-view').hidden = state.section !== 'content';
     $('export-csv').disabled = policySection() ? !policyVisibleRows().length || Boolean(state.policyToken || state.policyError) : (state.section === 'inputs' ? !getRows().length : !state.pages.length && !state.issues.length) || state.section === 'responses' && state.responses == null || state.section === 'fragments' && (!state.fragments || !state.fragments.enabled);
     $('export-csv').title = policySection() ? 'Nur gefilterte Vorkommen der aktuell geladenen Ledger-Seite exportieren' : 'Alle aktuell gefilterten Ergebnisse dieses Bereichs exportieren';
     $('export-resources').hidden = !['inputs', 'pdf', 'imagefiles', 'responses', 'fragments', 'linkdom', ...domSections].includes(state.section);
@@ -900,6 +908,7 @@
     if (state.section === 'overview') renderOverview();
     else if (state.section === 'graph') renderGraph();
     else if (policySection()) renderPolicyLedger();
+    else if (state.section === 'content') renderContent();
     else renderTable();
   }
 
@@ -1164,6 +1173,7 @@
 
   function exportCSV() {
     if (policySection()) { exportPolicyPage(); return; }
+    if (contentSection()) { exportContentRows(); return; }
     const original = state.section;
     if (['overview', 'graph'].includes(original)) state.section = 'internal';
     const cols = columns();
@@ -1227,7 +1237,7 @@
   function saveSettings(event) {
     event.preventDefault();
     const form = $('settings-form');
-    const advancedText = { include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value, link_position_rules_json: form.elements.link_position_rules_json.value, validate_fragments: form.elements.validate_fragments.checked, crawl_policy_enabled: form.elements.crawl_policy_enabled.checked, crawl_policy_json: form.elements.crawl_policy_json.value, live_policy_limits_json: form.elements.live_policy_limits_json.value, javascript_rendering: form.elements.javascript_rendering.checked };
+    const advancedText = { include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value, link_position_rules_json: form.elements.link_position_rules_json.value, validate_fragments: form.elements.validate_fragments.checked, crawl_policy_enabled: form.elements.crawl_policy_enabled.checked, crawl_policy_json: form.elements.crawl_policy_json.value, live_policy_limits_json: form.elements.live_policy_limits_json.value, javascript_rendering: form.elements.javascript_rendering.checked, content_capture_enabled:form.elements.content_capture_enabled.checked, content_capture_json:form.elements.content_capture_json.value };
     try { parseAdvanced(advancedText); validateRendererSettings({ javascript_rendering: form.elements.javascript_rendering.checked, renderer_endpoint: form.elements.renderer_endpoint.value.trim(), renderer_wait_ms: Number(form.elements.renderer_wait_ms.value), timeout_seconds: Number(form.elements.timeout_seconds.value) }); }
     catch (error) {
       $('settings-error').textContent = error.message;
@@ -1238,10 +1248,12 @@
     }
     state.settings = { concurrency: Number(form.elements.concurrency.value), timeout_seconds: Number(form.elements.timeout_seconds.value), max_pages: Number(form.elements.max_pages.value), max_depth: Number(form.elements.max_depth.value), user_agent: form.elements.user_agent.value.trim(), indexability_agent: form.elements.indexability_agent.value.trim(), obey_robots: form.elements.obey_robots.checked, follow_subdomains: form.elements.follow_subdomains.checked, delay_ms: Number(form.elements.delay_ms.value), max_body_mb: Number(form.elements.max_body_mb.value), check_external: form.elements.check_external.checked, javascript_rendering: form.elements.javascript_rendering.checked, renderer_endpoint: form.elements.renderer_endpoint.value.trim(), renderer_wait_ms: Number(form.elements.renderer_wait_ms.value), renderer_accessibility: form.elements.renderer_accessibility.checked, renderer_screenshot: form.elements.renderer_screenshot.checked, renderer_collect_cookies: form.elements.renderer_collect_cookies.checked };
     Object.assign(state.settings, advancedText);
+    invalidateContentRequests('Die Konfiguration wurde geändert. Gespeicherte Quellen bleiben unverändert.');
     try { localStorage.setItem('open-seo-spider-settings', JSON.stringify(state.settings)); } catch (_) { /* Crawl settings still apply when storage is unavailable. */ }
     $('settings-dialog').close();
     invalidatePolicyPreview();
     renderControls();
+    if (contentSection()) renderContent();
   }
 
   function restoreSettings() {
@@ -1253,6 +1265,7 @@
         state.settings = { concurrency: positive(saved.concurrency, 8, 64), timeout_seconds: positive(saved.timeout_seconds, 20, 300), max_pages: nonnegative(saved.max_pages), max_depth: nonnegative(saved.max_depth), user_agent: String(saved.user_agent || 'Open SEO Spider/0.1').slice(0, 256), obey_robots: saved.obey_robots !== false, follow_subdomains: saved.follow_subdomains === true, delay_ms: nonnegative(saved.delay_ms ?? 100), max_body_mb: positive(saved.max_body_mb, 5, 100), check_external: saved.check_external === true, javascript_rendering: saved.javascript_rendering === true, renderer_endpoint: String(saved.renderer_endpoint || 'http://127.0.0.1:8790/render'), renderer_wait_ms: nonnegative(saved.renderer_wait_ms ?? 500), renderer_accessibility: saved.renderer_accessibility === true, renderer_screenshot: saved.renderer_screenshot === true };
         Object.assign(state.settings, { indexability_agent: String(saved.indexability_agent || 'googlebot'), renderer_collect_cookies: saved.renderer_collect_cookies === true, custom_javascript_json: String(saved.custom_javascript_json || '[]'), audit_thresholds_json: String(saved.audit_thresholds_json || '{}'), pdf_analysis_json: String(saved.pdf_analysis_json || '{}'), include_patterns_text: String(saved.include_patterns_text || ''), exclude_patterns_text: String(saved.exclude_patterns_text || ''), custom_extractions_json: String(saved.custom_extractions_json || '[]'), validate_fragments: saved.validate_fragments === true, link_position_rules_json: String(saved.link_position_rules_json || '[]') });
         Object.assign(state.settings, { crawl_policy_enabled: saved.crawl_policy_enabled === true, crawl_policy_json: String(saved.crawl_policy_json || '{"scope":{"roots":[{"origin":"https://example.test","folders":["/"]}]}}'), live_policy_limits_json: String(saved.live_policy_limits_json || '{}') });
+        Object.assign(state.settings, { content_capture_enabled:saved.content_capture_enabled === true, content_capture_json:String(saved.content_capture_json || '{"sources":["raw_http_html"],"include_selectors":["body"],"exclude_selectors":["script","style","template","noscript","nav","footer"]}') });
       }
     } catch (_) { /* Invalid saved settings fall back to safe defaults. */ }
   }
@@ -1296,7 +1309,7 @@
       return { name, selector, attribute: definition.attribute == null ? null : definition.attribute.trim(), method, output, max_results, regex_group, regex_flags, namespaces };
     });
     const lines = (value) => [...new Set(String(value || '').split(/\r?\n/).map((line) => line.trim()).filter(Boolean))];
-    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), pdf_analysis: parsePdfAnalysis(settings.pdf_analysis_json), link_position_rules: parsePositionRules(settings.link_position_rules_json), validate_fragments: settings.validate_fragments === true, include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text), ...parseNativePolicy(settings) };
+    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), pdf_analysis: parsePdfAnalysis(settings.pdf_analysis_json), link_position_rules: parsePositionRules(settings.link_position_rules_json), validate_fragments: settings.validate_fragments === true, include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text), ...parseNativePolicy(settings), ...parseContentCapture(settings) };
   }
 
   function policyObject(value, allowed, label) {
@@ -1361,11 +1374,245 @@
     return { crawl_policy, ...(Object.keys(limits).length ? { live_policy_limits: limits } : {}) };
   }
 
+  function contentJSON(text, keys, label) {
+    let value; try { value = JSON.parse(text || '{}'); } catch (_) { throw new Error(`${label}: Gültiges JSON ist erforderlich.`); }
+    return policyObject(value, keys, label);
+  }
+  function contentLimits(value, ceilings, label) {
+    policyObject(value, Object.keys(ceilings), label);
+    for (const [key, limit] of Object.entries(value)) if (!Number.isSafeInteger(limit) || limit < 1 || limit > ceilings[key]) throw new Error(`${label} ${key}: positive ganze Zahl bis ${ceilings[key]} erforderlich.`);
+  }
+  function parseContentCapture(settings) {
+    if (!settings.content_capture_enabled) return {};
+    const config = contentJSON(settings.content_capture_json, ['sources','include_selectors','exclude_selectors','limits'], 'Text-Erfassung');
+    if (config.sources != null && (!Array.isArray(config.sources) || !config.sources.length || config.sources.length > 2 || new Set(config.sources).size !== config.sources.length || config.sources.some(source => !['raw_http_html','rendered_dom_html'].includes(source)))) throw new Error('Text-Erfassung: sources muss eine oder zwei verschiedene Quellen raw_http_html/rendered_dom_html enthalten.');
+    const limits = { max_html_utf8_bytes:8388608,max_text_utf8_bytes:524288,max_visited_dom_nodes:250000,max_dom_depth:1024,max_selectors:64,max_selector_utf8_bytes:4096,max_selector_checks:2000000,max_config_json_bytes:65536,max_output_json_bytes:4194304 };
+    if (config.limits != null) contentLimits(config.limits, limits, 'Text-Erfassungsgrenze');
+    const maxSelectors = config.limits?.max_selectors ?? 64, maxSelectorBytes = config.limits?.max_selector_utf8_bytes ?? 4096;
+    for (const key of ['include_selectors','exclude_selectors']) if (config[key] != null && (!Array.isArray(config[key]) || config[key].some(selector => typeof selector !== 'string' || !selector.trim() || selector.includes('\0') || new TextEncoder().encode(selector).length > maxSelectorBytes))) throw new Error(`Text-Erfassung ${key}: Ein Array nicht leerer CSS-Strings innerhalb der UTF-8-Grenze ist erforderlich.`);
+    if (config.include_selectors?.length === 0) throw new Error('Text-Erfassung: Mindestens ein Include-Selektor ist erforderlich.');
+    if ((config.include_selectors?.length ?? 1) + (config.exclude_selectors?.length ?? 6) > maxSelectors) throw new Error('Text-Erfassung: Die gesamte Selektoranzahl überschreitet max_selectors.');
+    if (new TextEncoder().encode(JSON.stringify(config)).length > (config.limits?.max_config_json_bytes ?? 65536)) throw new Error('Text-Erfassung: Konfiguration überschreitet max_config_json_bytes.');
+    return { content_capture:config };
+  }
+  function parseContentAnalysisConfig() {
+    const config = contentJSON($('content-analysis-config').value, ['case_behavior','stopwords','similarity','readability','limits'], 'Inhaltsanalyse');
+    if (config.case_behavior != null && !['preserve','unicode_lowercase'].includes(config.case_behavior)) throw new Error('Inhaltsanalyse: case_behavior muss preserve oder unicode_lowercase sein.');
+    if (config.stopwords != null && (!Array.isArray(config.stopwords) || config.stopwords.length > 1024 || config.stopwords.some(word => typeof word !== 'string' || !word || word.trim() !== word))) throw new Error('Inhaltsanalyse: Höchstens 1024 nicht leere, ungepolsterte Stopword-Strings. Rust prüft das genaue Tokenprofil.');
+    const ceilings = { max_documents:128,max_input_bytes:8388608,max_text_bytes:524288,max_tokens_per_document:50000,max_token_bytes:4096,max_unique_ngrams_per_document:100000,max_ngram_key_bytes:16777216,max_pairs:8192,max_pair_feature_visits:20000000,max_position_samples:16,max_shared_shingle_samples:16,max_output_bytes:16777216 };
+    if (config.limits != null) contentLimits(config.limits, ceilings, 'Analysegrenze');
+    const maxTokens = config.limits?.max_tokens_per_document ?? 50000;
+    if (config.similarity != null) {
+      policyObject(config.similarity,['shingle_size','threshold','min_tokens'],'Textähnlichkeit');
+      const n = config.similarity.shingle_size ?? 3, threshold = config.similarity.threshold ?? 0.9, minTokens = config.similarity.min_tokens ?? 10;
+      if (![1,2,3].includes(n) || typeof threshold !== 'number' || !Number.isFinite(threshold) || threshold < 0 || threshold > 1 || !Number.isSafeInteger(minTokens) || minTokens < n || minTokens > maxTokens) throw new Error('Textähnlichkeit: shingle_size 1–3, threshold 0–1 und min_tokens mindestens shingle_size innerhalb des Tokenbudgets.');
+    }
+    if (config.readability != null) { policyObject(config.readability,['min_words'],'Lesbarkeit'); const minimum = config.readability.min_words ?? 30; if (!Number.isSafeInteger(minimum) || minimum < 1 || minimum > maxTokens) throw new Error('Lesbarkeit: min_words muss positiv und innerhalb des Tokenbudgets sein.'); }
+    return config;
+  }
+
   function invalidatePolicyPreview() {
     policyPreview.revision += 1; policyPreview.token?.controller.abort(); policyPreview.token = null; policyPreview.result = null;
     if (!$('policy-preview-results')) return;
     $('policy-preview-results').hidden = true; $('policy-preview-error').hidden = true; $('policy-preview-button').disabled = false;
     $('policy-preview-status').textContent = 'Noch keine gültige Offline-Probe für diese Eingabe.';
+  }
+
+  const savedContentEngine = 'open-seo-spider/saved-content-cohort-v1';
+  const contentProfiles = { engine:'open-seo-spider/content-analysis-v1',token:'unicode-alphanumeric-mark-runs-no-normalization-v1',similarity:'exact-token-shingle-set-jaccard-v1',readability:'declared-en-de-vowel-groups-terminal-e-v1',capture:'open-seo-spider/native-content-binding-v1',captureEngine:'open-seo-spider/html-content-capture-v1',selection:'css-ancestor-membership-document-order-v1',whitespace:'unicode-whitespace-and-nonempty-node-boundaries-ascii-space-v1',parser:'scraper-0.27.0-html5ever-document-recovery-v1',htmlHash:'supplied-html-string-utf8-v1' };
+  const contentSection = () => state.section === 'content';
+  const contentSource = () => $('content-source').value;
+  const contentBasis = basis => ({captured_in_crawl:'Erfasst in diesem Crawl',refreshed_selected:'Neu geprüft im ausgewählten Lauf',inherited_parent:'Beibehalten aus Elternbericht',pending_selected:'Ausstehend · kein aktueller Text',unknown_operation:'Befundalter unbekannt'}[basis] || 'Befundbasis unbekannt');
+  const contentParent = row => !row ? 'Elternquelle unbekannt' : row.parent_source_kind == null ? 'Elternquelle unbekannt' : `${row.parent_source_kind}${row.parent_source_kind==='imported_snapshot' ? ' · deklarierter Import; keine authentifizierte Netzwerkquelle' : ''}`;
+  const contentStatus = status => ({complete:'Vollständig',empty:'Beobachtet leer',incomplete:'Unvollständig',unavailable:'Quelle nicht verfügbar',error:'Erfassungsfehler',missing:'Nicht erfasst / Legacy'}[status] || 'Nicht unterstützter Zustand');
+  const contentOrigin = origin => origin === 'native_saved_report' ? 'Nativ gespeicherter Bericht' : origin === 'declared_imported_report' ? 'Deklarierter importierter Bericht; keine authentifizierte Netzwerkquelle' : 'Herkunft nicht unterstützt';
+  const contentReason = row => [row.reason,...array(row.capture_reasons).map(reason => [reason.code,reason.detail].filter(value => value != null).join(': ')),row.capture_failure && `${row.capture_failure.code}: ${row.capture_failure.detail}`].filter(Boolean).join(' · ');
+  function invalidateContentRequests(reason = 'Eingabe geändert; vorherige Analyse ungültig.', inventory = false) {
+    const content = state.content; content.revision += 1;
+    for (const key of ['analysisToken','sourceToken','inventoryToken']) { content[key]?.controller.abort(); content[key] = null; }
+    content.result = null; content.analysisError = ''; content.source = null; content.sourceError = ''; content.resultPage = 0;
+    if (inventory) { content.inventory = null; content.error = ''; content.cursor = 0; content.back = []; }
+    if ($('content-analysis-status')) { $('content-analysis-status').textContent = reason; $('content-analysis-results').hidden = true; $('content-source-inspector').hidden = true; $('content-analysis-json').disabled = true; $('content-source-json').disabled = true; $('content-analysis-cancel').hidden = true; }
+  }
+  function resetContent() {
+    state.content.inventoryToken?.controller.abort(); state.content.inventoryToken = null;
+    state.content.inventory = null; state.content.selected.clear(); state.content.cursor = 0; state.content.back = []; state.content.error = '';
+    state.content.sort = 0; state.content.direction = 1;
+    if ($('content-search')) { $('content-search').value = ''; $('content-filter').value = 'all'; $('content-result-search').value = ''; }
+  }
+  function contentToken(kind) {
+    const token = { kind,id:state.crawl.id,generation:state.generation,revision:state.content.revision,source:contentSource(),controller:new AbortController() };
+    state.content[kind] = token; return token;
+  }
+  function contentCurrent(token) { return state.content[token.kind] === token && token.id === state.crawl?.id && token.generation === state.generation && token.revision === state.content.revision && token.source === contentSource(); }
+  function validateContentEnvelope(result, source) {
+    if (!result || result.engine !== savedContentEngine || result.source_kind !== source || result.website_requests !== 0 || result.site_wide_coverage !== false || result.snapshot?.sha_profile !== 'typed-crawl-report-serde-json-v1' || typeof result.snapshot.sha256 !== 'string' || !/^[a-fA-F0-9]{64}$/.test(result.snapshot.sha256) || !['native_saved_report','declared_imported_report'].includes(result.snapshot.origin) || !(result.snapshot.generation == null || Number.isSafeInteger(result.snapshot.generation) && result.snapshot.generation >= 0)) throw new Error('Nicht unterstützte gespeicherte Inhaltsbindung, Quelle oder Snapshot-Profil.');
+  }
+  function validateContentRow(row, source) {
+    if (!row || typeof row.requested_url !== 'string' || !Number.isSafeInteger(row.ordinal) || row.ordinal < 0 || row.source_kind !== source || row.text_included !== false) throw new Error('Ungültige Metadaten einer gespeicherten Textquelle.');
+  }
+  async function loadContentInventory(cursor = state.content.cursor, navigation = null) {
+    const content = state.content;
+    if (!state.crawl || active() || content.inventoryToken || !contentSection()) return;
+    const token = contentToken('inventoryToken'); content.error = ''; renderContent();
+    try {
+      const result = await request(`/api/crawls/${encodeURIComponent(token.id)}/content?after_ordinal=${cursor}&limit=200&source_kind=${token.source}`,{signal:token.controller.signal});
+      if (!contentCurrent(token)) return;
+      validateContentEnvelope(result,token.source);
+      if (!Array.isArray(result.rows) || result.rows.length > 200 || result.limit !== 200 || result.text_included !== false || result.after_ordinal !== cursor || typeof result.has_more !== 'boolean' || !Number.isSafeInteger(result.total_saved_pages) || result.total_saved_pages < 0 || result.has_more && (!Number.isSafeInteger(result.next_after_ordinal) || result.next_after_ordinal <= cursor)) throw new Error('Ungültige oder unbeschränkte gespeicherte Quellseite.');
+      result.rows.forEach(row => validateContentRow(row,token.source));
+      if (content.inventory && content.inventory.snapshot.sha256 !== result.snapshot.sha256) {
+        invalidateContentRequests('Der gespeicherte Snapshot wurde geändert. Kohorte erneut auswählen.'); content.selected.clear();
+        // This accepted inventory is the new basis; older document/analysis tokens remain invalid.
+        token.revision=content.revision; content.inventoryToken=token;
+      }
+      if (navigation === 'next') content.back.push(content.cursor); else if (navigation === 'back') content.back.pop();
+      content.cursor = cursor; content.inventory = result;
+    } catch (error) { if (contentCurrent(token)) content.error = `Gespeicherte Textquellen nicht verfügbar: ${error.message}`; }
+    finally { if (content.inventoryToken === token) { content.inventoryToken = null; if (token.id === state.crawl?.id && token.generation === state.generation) renderContent(); } }
+  }
+  const contentColumns = [
+    ['Ordinal',row => row.ordinal],['Exakte Anfrage-URL',row => row.requested_url],['Befundbasis',row => contentBasis(row.basis)],['Quelle',row => row.source_kind],['HTTP-Dokumentstatus',row => row.page_http_status],['Textzustand',row => contentStatus(row.status)],['Textbytes',row => row.text_bytes],['Quellsprache',row => row.html_language],['Sprachgrund',row => row.html_language_reason],['Vollständiges Textsample',row => row.sample_complete],['Quellgeneration',row => row.observed_generation],['Quelle/Dokument-URL',row => row.source_document_url],['Quellrevision',row => row.source_revision],['Erfassungsprofil',row => row.capture_engine],['Auswahlprofil',row => row.selection_profile],['Erfassungskonfiguration SHA256',row => row.capture_config_sha256],['Text SHA256',row => row.text_sha256],['Grund / Fehler',contentReason],['Elternquelltyp',contentParent],['Eltern-Snapshot SHA256',row=>row.parent_snapshot_sha256]
+  ];
+  function contentVisibleRows() {
+    const content = state.content, search = $('content-search').value.toLocaleLowerCase(), filter = $('content-filter').value;
+    return array(content.inventory?.rows).filter(row => (filter === 'all' || row.status === filter) && (!search || JSON.stringify(row).toLocaleLowerCase().includes(search))).sort((left,right) => compareContentValues(contentColumns[content.sort][1](left),contentColumns[content.sort][1](right),content.direction));
+  }
+  function compareContentValues(a,b,direction) { if (a == null && b == null) return 0; if (a == null) return 1; if (b == null) return -1; return (typeof a === 'number' && typeof b === 'number' ? a-b : String(a).localeCompare(String(b),'de',{numeric:true})) * direction; }
+  function setContentSelected(url, selected) {
+    const content = state.content;
+    if (active() || actionBusy() || content.inventoryToken || !array(content.inventory?.rows).some(row => row.requested_url === url)) return;
+    if (selected && !content.selected.has(url) && content.selected.size >= 128) { content.analysisError = 'Maximal 128 exakte Anfrage-URLs. Keine erste Teilmenge wird automatisch gewählt.'; renderContent(); return; }
+    if (selected) content.selected.add(url); else content.selected.delete(url);
+    invalidateContentRequests('Kohorte geändert. Vorherige Berechnung ist nicht mehr gültig.'); renderContent();
+    [...document.querySelectorAll('[data-content-select]')].find(input => input.dataset.contentSelect === url)?.focus({preventScroll:true});
+  }
+  function renderContent() {
+    if (!contentSection()) return;
+    const content = state.content, inventory = content.inventory, snapshot = inventory?.snapshot;
+    $('content-summary').textContent = !state.crawl ? 'Einen gespeicherten Crawl auswählen.' : active() ? 'Der Crawl ist aktiv. Textquellen werden erst aus einem ruhenden gespeicherten Stand gelesen.' : content.inventoryToken ? 'Gespeicherte Quellseite wird geladen …' : !inventory ? 'Noch keine gespeicherten Textquellen geladen.' : `${contentOrigin(snapshot.origin)} · Snapshot ${snapshot.sha256} · Generation ${snapshot.generation ?? 'unbekannt'} · ${number(inventory.total_saved_pages)} gespeicherte Dokumente; diese API-Seite enthält keinen Text.`;
+    $('content-scope').textContent = 'Quelle: ' + contentSource() + ' · Snapshot-Profil: ' + (snapshot?.sha_profile || 'noch nicht erfasst') + ' · Keine Website-Vollständigkeit abgeleitet. Befundalter, Textvollständigkeit und Herkunft bleiben getrennt.';
+    $('content-error').hidden = !content.error; $('content-error').textContent = content.error;
+    const rows = contentVisibleRows(), usable = Boolean(inventory && !content.error && !active()), busy = Boolean(content.inventoryToken);
+    const table = $('content-table');
+    table.querySelector('thead').innerHTML = `<tr><th scope="col">Kohorte</th>${contentColumns.map(([label],index) => `<th scope="col" aria-sort="${content.sort===index ? content.direction===1?'ascending':'descending':'none'}"><button type="button" data-content-sort="${index}">${escape(label)} ${content.sort===index ? content.direction===1?'↑':'↓':'↕'}</button></th>`).join('')}</tr>`;
+    table.querySelector('tbody').innerHTML = rows.length && !content.error ? rows.map(row => `<tr data-content-row="${row.ordinal}"><td><input class="content-row-checkbox" type="checkbox" data-content-select="${escape(row.requested_url)}" aria-label="${escape(row.requested_url)} zur Textkohorte auswählen" ${content.selected.has(row.requested_url)?'checked':''} ${!usable || busy || actionBusy()?'disabled':''}></td>${contentColumns.map(([,value],index) => `<td>${index===1 ? `<button class="text-button source-open" type="button" data-content-open="${escape(row.requested_url)}" ${!usable?'disabled':''}>${escape(row.requested_url)}</button>` : escape(value(row) == null ? 'Unbekannt' : typeof value(row)==='boolean' ? value(row)?'Ja':'Nein' : value(row))}</td>`).join('')}</tr>`).join('') : `<tr><td class="empty-cell" colspan="${contentColumns.length+1}">${escape(content.error ? 'Quelle konnte nicht geladen werden; kein leeres vollständiges Ergebnis.' : active() ? 'Ein ruhender gespeicherter Stand ist erforderlich.' : inventory ? 'Keine passenden Befunde auf der geladenen Quellseite.' : 'Noch keine gespeicherten Textquellen geladen.')}</td></tr>`;
+    table.querySelectorAll('[data-content-sort]').forEach(button => button.addEventListener('click',()=>{ const sort=Number(button.dataset.contentSort); content.direction=content.sort===sort?-content.direction:1; content.sort=sort; renderContent(); }));
+    table.querySelectorAll('[data-content-select]').forEach(input => input.addEventListener('change',()=>setContentSelected(input.dataset.contentSelect,input.checked)));
+    table.querySelectorAll('[data-content-open]').forEach(button => button.addEventListener('click',()=>loadContentDocument(button.dataset.contentOpen)));
+    $('content-prev').disabled = busy || !usable || !content.back.length; $('content-next').disabled = busy || !usable || !inventory.has_more;
+    $('content-refresh').disabled = !state.crawl || active() || busy; $('content-page-label').textContent = `${number(rows.length)} passende von ${number(inventory?.rows?.length || 0)} geladenen Befunden · Ordinal ab ${content.cursor} · maximal 200 pro API-Seite`;
+    $('content-selection-summary').textContent = `${number(content.selected.size)} exakte Anfrage-URLs ausgewählt · Quelle ${contentSource()} · höchstens 128, keine automatische Teilmenge`;
+    $('content-selection-list').replaceChildren(...[...content.selected].map(url=>{const element=document.createElement('li');element.textContent=url;return element;}));
+    $('content-clear').disabled = !content.selected.size || Boolean(content.analysisToken);
+    $('content-analyze').disabled = !usable || busy || Boolean(content.analysisToken) || content.selected.size<1 || content.selected.size>128 || actionBusy();
+    $('content-analysis-cancel').hidden = !content.analysisToken;
+    $('content-analysis-error').hidden = !content.analysisError; $('content-analysis-error').textContent = content.analysisError;
+    $('export-csv').disabled = !usable || busy || !rows.length;
+    renderContentSource(); renderContentAnalysis();
+  }
+  async function loadContentDocument(url) {
+    const content = state.content;
+    if (active() || !content.inventory || !array(content.inventory.rows).some(row=>row.requested_url===url)) return;
+    content.sourceToken?.controller.abort(); const token=contentToken('sourceToken'); content.source=null; content.sourceError=''; $('content-source-inspector').hidden=false; $('content-source-text').textContent='Gespeicherte Quelle wird geladen …'; $('content-source-json').disabled=true; $('content-source-inspector').scrollIntoView({block:'nearest'});
+    try {
+      const result=await request(`/api/crawls/${encodeURIComponent(token.id)}/content/document?url=${encodeURIComponent(url)}&source_kind=${token.source}`,{signal:token.controller.signal});
+      if (!contentCurrent(token)) return;
+      validateContentEnvelope(result,token.source); validateContentRow(result.row,token.source);
+      if (result.row.requested_url!==url || result.snapshot.sha256!==content.inventory.snapshot.sha256 || result.snapshot.generation!==content.inventory.snapshot.generation) throw new Error('Textquelle gehört nicht zum ausgewählten gespeicherten Snapshot. Quellseite aktualisieren.');
+      content.source=result;
+    } catch(error) { if(contentCurrent(token)) content.sourceError='Textquelle nicht verfügbar: '+error.message; }
+    finally { if(content.sourceToken===token) { content.sourceToken=null; if(token.id===state.crawl?.id && token.generation===state.generation) renderContentSource(); } }
+  }
+  function renderContentSource() {
+    const content=state.content, source=content.source;
+    $('content-source-inspector').hidden=!source && !content.sourceToken && !content.sourceError;
+    if(content.sourceToken) return;
+    if(!source) { if(content.sourceError) $('content-source-text').textContent=content.sourceError; $('content-source-json').disabled=true; return; }
+    const row=source.row,result=source.capture?.result;
+    $('content-source-heading').textContent=row.requested_url;
+    $('content-source-basis').textContent=`${contentBasis(row.basis)} · ${contentOrigin(source.snapshot.origin)}${['inherited_parent','pending_selected'].includes(row.basis) ? ' · Elternquelle '+contentParent(row)+' · Eltern-Snapshot '+(row.parent_snapshot_sha256 ?? 'unbekannt') : ''} · Quelle ${source.source_kind} · ${contentStatus(row.status)} · Quellsprache ${row.html_language ?? 'unbekannt'}${row.html_language_reason ? ' ('+row.html_language_reason+')' : ''}. Textvollständigkeit belegt keinen neuen Abruf.`;
+    const supported = !source.capture || source.capture.engine===contentProfiles.capture && (!result || result.engine===contentProfiles.captureEngine && result.selection_profile===contentProfiles.selection && result.whitespace_profile===contentProfiles.whitespace && result.parser_profile===contentProfiles.parser && result.html_hash_representation===contentProfiles.htmlHash);
+    $('content-source-text').textContent=!supported ? 'Nicht unterstütztes Erfassungsprofil. Exakte Daten bleiben im JSON sichtbar; kein Text wird als geprüfte Quelle umgedeutet.' : result?.text == null ? `Kein gespeicherter Text. ${contentReason(row) || 'Quelle nicht verfügbar.'}` : result.text==='' ? '[Beobachtet leere Textauswahl: exakter Text ist eine leere Zeichenfolge.]' : result.text;
+    $('content-source-evidence').textContent=JSON.stringify(source,null,2); $('content-source-json').disabled=false;
+  }
+  async function analyzeSavedContent() {
+    const content=state.content;
+    if(active() || actionBusy() || content.analysisToken || !content.inventory || content.error) return;
+    let config; try { config=parseContentAnalysisConfig(); if(content.selected.size<1 || content.selected.size>128 || content.selected.size>(config.limits?.max_documents ?? 128)) throw new Error('1 bis höchstens max_documents/128 konkrete Anfrage-URLs auswählen; keine automatische Teilmenge.'); }
+    catch(error) { content.analysisError=error.message; renderContent(); return; }
+    invalidateContentRequests('Gespeicherte Texte werden offline berechnet …');
+    const token=contentToken('analysisToken'),snapshot=content.inventory.snapshot;
+    const body={urls:[...content.selected],source_kind:token.source,config,indexable_only:$('content-indexable-only').checked,complete_only:$('content-complete-only').checked,...(snapshot.generation==null ? {} : {expected_generation:snapshot.generation})};
+    renderContent();
+    try {
+      const result=await request(`/api/crawls/${encodeURIComponent(token.id)}/content/analyze`,{method:'POST',body:JSON.stringify(body),signal:token.controller.signal});
+      if(!contentCurrent(token)) return;
+      validateContentEnvelope(result,token.source);
+      if(result.snapshot.sha256!==snapshot.sha256 || result.snapshot.generation!==snapshot.generation || !Array.isArray(result.requested_urls) || JSON.stringify(result.requested_urls)!==JSON.stringify(body.urls) || result.selected_count!==body.urls.length || !Array.isArray(result.documents) || !Array.isArray(result.excluded) || result.included_count!==result.documents.length || result.included_count+result.excluded.length!==result.selected_count || !['ready','empty_filtered_cohort'].includes(result.status) || result.status==='ready' && !result.analysis || result.status==='empty_filtered_cohort' && (result.analysis!==null || result.included_count!==0)) throw new Error('Analyse ist nicht eindeutig an den ausgewählten Snapshot und die vollständige explizite Kohorte gebunden.');
+      if(result.indexable_only!==body.indexable_only || result.complete_only!==body.complete_only) throw new Error('Analysefilter stimmen nicht mit der ausgewählten Kohorte überein.');
+      const observed=new Set(),ids=new Set();
+      for(const entry of [...result.documents,...result.excluded]) { validateContentRow(entry.row,token.source); if(!body.urls.includes(entry.row.requested_url) || observed.has(entry.row.requested_url)) throw new Error('Analysedokumente/Ausschlüsse verändern die exakte Kohortenidentität.'); observed.add(entry.row.requested_url); }
+      for(const entry of result.documents) { if(typeof entry.analysis_document_id!=='string' || ids.has(entry.analysis_document_id)) throw new Error('Analysedokumente haben keine eindeutige Quellbindung.'); ids.add(entry.analysis_document_id); }
+      if(result.analysis && (!Array.isArray(result.analysis.documents) || result.analysis.documents.length!==result.documents.length || new Set(result.analysis.documents.map(document=>document.id)).size!==ids.size || result.analysis.documents.some(document=>!ids.has(document.id)) || !Array.isArray(result.analysis.pairs) || result.analysis.pairs.some(pair=>!ids.has(pair.left_id) || !ids.has(pair.right_id)))) throw new Error('Analysewerte sind nicht an alle enthaltenen Dokumente gebunden.');
+      content.result=result; content.resultPage=0; $('content-result-search').value=''; $('content-analysis-status').textContent=result.status==='empty_filtered_cohort' ? 'Alle ausgewählten Quellen wurden ausdrücklich ausgeschlossen; keine Analyse erfunden.' : 'Ausgewählte gespeicherte Texte berechnet · 0 Website-Anfragen.';
+    } catch(error) { if(contentCurrent(token)) { content.analysisError='Inhaltsanalyse fehlgeschlagen: '+error.message; $('content-analysis-status').textContent='Keine gültige Analyse für diese Kohorte.'; } }
+    finally { if(content.analysisToken===token) { content.analysisToken=null; if(token.id===state.crawl?.id && token.generation===state.generation) renderContent(); } }
+  }
+  function supportedContentAnalysis(result) { return result?.engine===contentProfiles.engine && result.token_profile===contentProfiles.token && result.similarity_profile===contentProfiles.similarity; }
+  function contentResultData() {
+    const result=state.content.result, analysis=result?.analysis, kind=$('content-result-kind').value;
+    if(!analysis || !supportedContentAnalysis(analysis)) return {columns:[],rows:[],evidence:analysis?'Nicht unterstütztes Analyse-/Token-/Ähnlichkeitsprofil; keine abgeleiteten Werte angezeigt.':'Keine enthaltenen Texte nach ausdrücklichen Filtern.'};
+    const provenance=new Map(array(result.documents).map(document=>[document.analysis_document_id,document.row]));
+    const label=id=>provenance.get(id)?.requested_url || id;
+    if(kind==='similarity') return {columns:[['Linke Anfrage-URL',row=>label(row.left_id)],['Rechte Anfrage-URL',row=>label(row.right_id)],['Linke Befundbasis',row=>contentBasis(provenance.get(row.left_id)?.basis)],['Rechte Befundbasis',row=>contentBasis(provenance.get(row.right_id)?.basis)],['Shingle-Länge',row=>row.shingle_size],['Schwelle',row=>row.threshold],['Schnittmenge',row=>row.intersection],['Vereinigung',row=>row.union],['Beobachteter Jaccard',row=>row.observed_jaccard],['Near-Duplicate',row=>row.near_duplicate],['Exakter Text identisch',row=>row.identical_supplied_text],['Vollständige Samples',row=>row.sample_complete],['Grund',row=>row.reason],['Gemeinsame Beispiele',row=>JSON.stringify(row.shared_shingle_samples)],['Beispiele gekürzt',row=>row.shared_samples_truncated]],rows:array(analysis.pairs),evidence:`Alle ausgegebenen Paare dieser Kohorte. Jaccard 1 ist keine Byte-Identität. Unvollständige Samples können einen beobachteten Wert mit unbekannter Klassifikation haben. Paarprofil ${analysis.similarity_profile}.`};
+    if(kind==='readability') return {columns:[['Anfrage-URL',row=>label(row.id)],['Befundbasis',row=>contentBasis(provenance.get(row.id)?.basis)],['Textzustand',row=>row.status],['Deklarierte Quellsprache',row=>row.readability?.declared_language],['Profil',row=>row.readability?.profile],['Formel',row=>row.readability?.formula],['Wörter',row=>row.readability?.words],['Sätze',row=>row.readability?.sentences],['Silbenheuristik',row=>row.readability?.syllables],['Score',row=>row.readability?.profile===contentProfiles.readability ? row.readability.score : null],['Grund',row=>row.readability?.profile===contentProfiles.readability ? row.readability.reason : 'unsupported_readability_profile'],['Nicht unterstützte Tokens',row=>row.readability?.unsupported_tokens],['Tokenbeispiele',row=>JSON.stringify(row.readability?.unsupported_token_samples)],['Sample vollständig',row=>row.readability?.sample_complete]],rows:array(analysis.documents),evidence:'Nur deklarierte EN/DE-Quellsprache; unabhängige Vokalgruppen- und Satzzeichenheuristik. Scores bleiben unbeschnitten, auch unter 0/über 100. Keine Sprachdetektion, Schulstufe, Verständnis- oder Rankingprognose.'};
+    const document=array(analysis.documents).find(row=>row.id===$('content-result-document').value),n=Number($('content-result-n').value),group=array(document?.ngrams).find(row=>row.n===n);
+    return {columns:[['Tokenfolge',row=>row.tokens.join(' ')],['Vorkommen',row=>row.occurrences],['Erste Positionen (1-basiert)',row=>JSON.stringify(row.first_positions)],['Positionen nur Stichprobe',row=>row.positions_sampled]],rows:array(group?.rows),evidence:document ? `${label(document.id)} · ${document.status} · ${group?.candidate_windows ?? 'unbekannt'} Kandidatenfenster, ${group?.excluded_stopword_windows ?? 'unbekannt'} mit Stopwords ausgeschlossen, ${group?.included_windows ?? 'unbekannt'} eingeschlossen. Exakte Anzahl und begrenzte Positionsbeispiele bleiben getrennt. ${analysis.token_profile}; ${analysis.config?.case_behavior || 'unbekannt'}; Unicode ${array(analysis.lowercase_unicode_version).join('.')}.` : 'Ein enthaltenes Dokument wählen. Fehlender Text ist kein beobachtet leeres Sample.'};
+  }
+  function renderContentAnalysis() {
+    const content=state.content,result=content.result,analysis=result?.analysis;
+    $('content-analysis-results').hidden=!result; $('content-analysis-json').disabled=!result;
+    if(!result) return;
+    $('content-analysis-summary').textContent=`${result.selected_count} ausgewählt · ${result.included_count} enthalten · ${result.excluded.length} ausdrücklich ausgeschlossen · ${contentOrigin(result.snapshot.origin)} · Snapshot ${result.snapshot.sha256}, Generation ${result.snapshot.generation ?? 'unbekannt'} · Quelle ${result.source_kind} · 0 Website-Anfragen. Keine Website-Vollständigkeit behauptet.`;
+    $('content-analysis-profile').textContent=!analysis ? 'Leere Kohorte nach ausdrücklichen Filtern; Ausschlüsse sind vollständig in der Evidenz aufgeführt.' : !supportedContentAnalysis(analysis) ? 'Nicht unterstütztes Analyseprofil. Keine N-Grams, Ähnlichkeits- oder Lesbarkeitswerte werden daraus abgeleitet.' : `Engine ${analysis.engine} · Tokenprofil ${analysis.token_profile} · Paarprofil ${analysis.similarity_profile} · Input SHA256 ${analysis.input_sha256} · Config SHA256 ${analysis.config_sha256} · ${analysis.corpus?.pairs_emitted ?? 'unbekannt'} ausgegebene / ${analysis.corpus?.possible_pairs ?? 'unbekannt'} mögliche Paare; ${analysis.corpus?.pairs_scored ?? 'unbekannt'} bewertet.`;
+    const selector=$('content-result-document'), previous=selector.value;
+    selector.replaceChildren(...array(analysis?.documents).map(analysisDocument=>{const option=document.createElement('option');option.value=analysisDocument.id;option.textContent=array(result.documents).find(row=>row.analysis_document_id===analysisDocument.id)?.row.requested_url || analysisDocument.id;return option;}));
+    if([...selector.options].some(option=>option.value===previous)) selector.value=previous;
+    const ngram=$('content-result-kind').value==='ngrams'; $('content-result-document-label').hidden=!ngram; $('content-result-n-label').hidden=!ngram;
+    $('content-analysis-evidence').textContent=JSON.stringify(result,null,2);
+    const data=contentResultData(),search=$('content-result-search').value.toLocaleLowerCase(),sort=Math.min(content.resultSort,Math.max(0,data.columns.length-1));
+    const rows=data.rows.filter(row=>!search || JSON.stringify(row).toLocaleLowerCase().includes(search)).sort((left,right)=>compareContentValues(data.columns[sort]?.[1](left),data.columns[sort]?.[1](right),content.resultDirection));
+    const size=200,pages=Math.max(1,Math.ceil(rows.length/size)); content.resultPage=Math.min(content.resultPage,pages-1);
+    const visible=rows.slice(content.resultPage*size,(content.resultPage+1)*size),table=$('content-result-table');
+    $('content-result-evidence').textContent=data.evidence;
+    table.querySelector('thead').innerHTML=`<tr>${data.columns.map(([label],index)=>`<th scope="col" aria-sort="${sort===index?content.resultDirection===1?'ascending':'descending':'none'}"><button type="button" data-content-result-sort="${index}">${escape(label)}</button></th>`).join('')}</tr>`;
+    table.querySelector('tbody').innerHTML=visible.length ? visible.map(row=>`<tr data-content-result-row>${data.columns.map(([,value])=>{const cell=value(row);return `<td>${escape(cell==null?'Unbekannt':typeof cell==='boolean'?cell?'Ja':'Nein':cell)}</td>`;}).join('')}</tr>`).join('') : `<tr><td class="empty-cell" colspan="${Math.max(1,data.columns.length)}">${escape(data.rows.length ? 'Keine passenden Zeilen in dieser Ergebnisansicht.' : data.evidence)}</td></tr>`;
+    table.querySelectorAll('[data-content-result-sort]').forEach(button=>button.addEventListener('click',()=>{const index=Number(button.dataset.contentResultSort);content.resultDirection=content.resultSort===index?-content.resultDirection:1;content.resultSort=index;content.resultPage=0;renderContentAnalysis();}));
+    $('content-result-prev').disabled=content.resultPage===0; $('content-result-next').disabled=content.resultPage>=pages-1; $('content-result-page').textContent=`${number(visible.length)} von ${number(rows.length)} passenden Ergebniszeilen · Seite ${content.resultPage+1}/${pages} · maximal 200 gerenderte Zeilen`;
+  }
+  function exportContentRows() {
+    const inventory=state.content.inventory,rows=contentVisibleRows(); if(active() || !inventory || state.content.inventoryToken || state.content.error || !rows.length) return;
+    const cell=value=>{let text=String(value??'');if(typeof value!=='number' && typeof value!=='boolean' && /^[\s\uFEFF]*[=+@-]/u.test(text))text="'"+text;return '"'+text.replace(/"/g,'""')+'"';};
+    const columns=[['Snapshot SHA256',()=>inventory.snapshot.sha256],['Snapshot Generation',()=>inventory.snapshot.generation],['Snapshot Origin',()=>inventory.snapshot.origin],...contentColumns];
+    const csv=[columns.map(([label])=>cell(label)).join(','),...rows.map(row=>columns.map(([,value])=>cell(value(row))).join(','))].join('\r\n'); downloadBlob(new Blob(['\uFEFF',csv],{type:'text/csv;charset=utf-8'}),`open-seo-spider-${state.crawl.id}-content-page-${state.content.cursor}.csv`);
+  }
+  function bindContentEvents() {
+    $('content-source').addEventListener('change',()=>{invalidateContentRequests('Textquelle geändert; vorherige Berechnung ungültig.',true);renderContent();loadContentInventory();});
+    $('content-refresh').addEventListener('click',()=>loadContentInventory());
+    $('content-prev').addEventListener('click',()=>{if(state.content.back.length)loadContentInventory(state.content.back.at(-1),'back');});
+    $('content-next').addEventListener('click',()=>{if(state.content.inventory?.has_more)loadContentInventory(state.content.inventory.next_after_ordinal,'next');});
+    for(const id of ['content-search','content-filter']) $(id).addEventListener(id==='content-search'?'input':'change',renderContent);
+    $('content-clear').addEventListener('click',()=>{state.content.selected.clear();invalidateContentRequests('Auswahl aufgehoben.');renderContent();});
+    for(const id of ['content-analysis-config','content-indexable-only','content-complete-only']) $(id).addEventListener(id==='content-analysis-config'?'input':'change',()=>{invalidateContentRequests('Analyse-Eingaben geändert; vorheriges Ergebnis ungültig.');renderContent();});
+    $('content-analyze').addEventListener('click',analyzeSavedContent);
+    $('content-analysis-cancel').addEventListener('click',()=>{invalidateContentRequests('Berechnung im Browser abgebrochen; kein neues Ergebnis übernommen.');renderContent();});
+    $('content-source-close').addEventListener('click',()=>{state.content.sourceToken?.controller.abort();state.content.sourceToken=null;state.content.source=null;state.content.sourceError='';renderContentSource();});
+    $('content-source-json').addEventListener('click',()=>{if(state.content.source)downloadBlob(new Blob([JSON.stringify(state.content.source,null,2)+'\n'],{type:'application/json'}),`open-seo-spider-${state.crawl.id}-content-source.json`);});
+    $('content-analysis-json').addEventListener('click',()=>{if(state.content.result)downloadBlob(new Blob([JSON.stringify(state.content.result,null,2)+'\n'],{type:'application/json'}),`open-seo-spider-${state.crawl.id}-content-analysis.json`);});
+    for(const id of ['content-result-kind','content-result-document','content-result-n','content-result-search']) $(id).addEventListener(id==='content-result-search'?'input':'change',()=>{state.content.resultPage=0;renderContentAnalysis();});
+    $('content-result-prev').addEventListener('click',()=>{state.content.resultPage=Math.max(0,state.content.resultPage-1);renderContentAnalysis();});
+    $('content-result-next').addEventListener('click',()=>{state.content.resultPage+=1;renderContentAnalysis();});
   }
 
   async function previewPolicy() {
@@ -1645,6 +1892,7 @@
   }
 
   function bindEvents() {
+    bindContentEvents();
     $('policy-settings').addEventListener('input', invalidatePolicyPreview);
     $('policy-settings').addEventListener('change', invalidatePolicyPreview);
     $('policy-preview-button').addEventListener('click', previewPolicy);
@@ -1733,6 +1981,7 @@
 
   async function initialize() {
     $('advanced-config').append($('policy-settings-template').content.cloneNode(true));
+    $('advanced-config').append($('content-settings-template').content.cloneNode(true));
     restoreSettings();
     bindEvents();
     selectSection('overview');

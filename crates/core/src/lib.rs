@@ -2,6 +2,8 @@
 //! No commercial URL cap is imposed. Resource limits are user configuration.
 mod audit;
 mod content_analysis;
+mod content_binding;
+mod content_capture;
 mod control;
 mod crawl_policy;
 mod crawler;
@@ -31,6 +33,11 @@ mod urls;
 
 pub use audit::{audit_pages, audit_pages_with_thresholds};
 pub use content_analysis::*;
+pub use content_binding::{
+    ContentCaptureFailure, PAGE_CONTENT_CAPTURE_ENGINE, PageContentCapture,
+    PageContentCaptureStatus, validate_page_content_captures,
+};
+pub use content_capture::*;
 pub use control::{
     ControlledCrawlResult, CrawlCheckpoint, CrawlControl, CrawlOutcome, CrawlRequest,
     CrawlRunState, CrawlStoreInspection,

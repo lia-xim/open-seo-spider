@@ -42,6 +42,8 @@ pub struct CrawlConfig {
     pub crawl_policy: Option<crate::CrawlPolicyConfig>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub live_policy_limits: Option<crate::LiveCrawlPolicyLimits>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub content_capture: Option<crate::ContentCaptureConfig>,
 }
 
 impl Default for CrawlConfig {
@@ -76,6 +78,7 @@ impl Default for CrawlConfig {
             exclude_patterns: Vec::new(),
             crawl_policy: None,
             live_policy_limits: None,
+            content_capture: None,
         }
     }
 }
@@ -752,6 +755,9 @@ pub struct PageRecord {
     pub discovered_from: Option<String>,
     pub internal: bool,
     pub fetched_at: String,
+    /// None is unobserved/legacy; configured sources have explicit result/error observations.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub content_captures: Option<Vec<crate::PageContentCapture>>,
     /// Status of the initially requested URL; final_status belongs to final_url.
     pub status: Option<u16>,
     pub final_status: Option<u16>,

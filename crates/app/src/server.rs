@@ -26,6 +26,7 @@ use serde_json::{Value, json};
 use std::{collections::HashMap, path::PathBuf, sync::Arc};
 use tokio::sync::RwLock;
 use uuid::Uuid;
+mod content;
 mod policy;
 
 #[derive(Clone)]
@@ -171,6 +172,9 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
         .route("/api/lists/import", post(list_import))
         .route("/api/policy/preview", post(policy_preview))
         .route("/api/content/analyze", post(content_analysis))
+        .route("/api/crawls/{id}/content", get(content::inventory))
+        .route("/api/crawls/{id}/content/document", get(content::document))
+        .route("/api/crawls/{id}/content/analyze", post(content::analyze))
         .route("/api/crawls/{id}/recrawl", post(recrawl))
         .route("/api/crawls/{id}/parent.json", get(export_recrawl_parent))
         .route(
@@ -331,6 +335,8 @@ async fn capabilities() -> Json<Value> {
         "offline_policy_preview":{"endpoint":"/api/policy/preview","website_requests":0,"applied_to_crawls":true},
         "native_crawl_policy":{"opt_in":true,"engine":open_seo_spider_core::LIVE_CRAWL_POLICY_ENGINE,"durable_sqlite_ledger":true,"paged_observations":true,"streamed_snapshot_exports":true,"renderer_supported":false,"scope_does_not_grant_credentials":true,"occurrence_limit":null},
         "offline_content_analysis":{"endpoint":"/api/content/analyze","website_requests":0,"similarity":"exact_token_shingle_jaccard","readability":"explicit_en_de_heuristic","full_reference_parity":false},
+        "saved_content_analysis":{"endpoint":"/api/crawls/{id}/content/analyze","engine":crate::content_cohort::SAVED_CONTENT_ENGINE,"website_requests":0,"explicit_cohort":true,"max_documents":128,"site_wide_coverage":false},
+        "native_content_capture":{"opt_in":true,"sources":["raw_http_html","rendered_dom_html"],"body_retention":false,"source_binding":"persisted_consistency","full_reference_parity":false},
         "offline_serp":{"path":"/serp","website_requests":0,"csv_import":true,"row_limit":10000},
         "offline_robots":{"path":"/robots","website_requests":0,"engine":"crawler_policy","remote_rules_fetch":false},
         "offline_list_import":{"formats":["txt","csv","xml","xlsx"],"website_requests":0,"max_input_bytes":8388608,"max_rows_per_file":50000,"row_order":true,"duplicates":true,"xlsx_formulas":"reject_or_explicit_cached_string_only","provenance":"declared_client_input"},

@@ -112,6 +112,12 @@ impl Bridge {
                     "spider_issues" => "/issues",
                     "spider_analysis" => "/analysis",
                     "spider_policy" => "/policy",
+                    "spider_content" => "/content",
+                    "spider_content_document" => "/content/document",
+                    "spider_analyze_crawl_content" => {
+                        body = Some(args.get("input").cloned().context("input required")?);
+                        "/content/analyze"
+                    }
                     "spider_cancel" => {
                         body = Some(json!({}));
                         "/cancel"
@@ -157,7 +163,49 @@ impl Bridge {
                 route.push_str(&format!("&after_sequence={sequence}"));
             }
         }
-        let url = self.base.join(&route)?;
+        let mut url = self.base.join(&route)?;
+        if matches!(name, "spider_content" | "spider_content_document") {
+            let source = args
+                .get("source_kind")
+                .map(|value| value.as_str().context("source_kind must be a string"))
+                .transpose()?
+                .unwrap_or("raw_http_html");
+            anyhow::ensure!(
+                matches!(source, "raw_http_html" | "rendered_dom_html"),
+                "Unknown capture source_kind"
+            );
+            url.query_pairs_mut().append_pair("source_kind", source);
+            if name == "spider_content" {
+                let limit = args
+                    .get("limit")
+                    .map(|value| value.as_u64().context("limit must be an integer"))
+                    .transpose()?
+                    .unwrap_or(200);
+                anyhow::ensure!((1..=200).contains(&limit), "limit must be 1..200");
+                let after = args
+                    .get("after_ordinal")
+                    .map(|value| {
+                        value
+                            .as_u64()
+                            .context("after_ordinal must be a nonnegative integer")
+                    })
+                    .transpose()?
+                    .unwrap_or(0);
+                url.query_pairs_mut()
+                    .append_pair("limit", &limit.to_string())
+                    .append_pair("after_ordinal", &after.to_string());
+            } else {
+                let requested = args
+                    .get("url")
+                    .and_then(Value::as_str)
+                    .context("exact requested url required")?;
+                anyhow::ensure!(
+                    !requested.is_empty() && requested.len() <= 16 * 1024,
+                    "Invalid requested URL length"
+                );
+                url.query_pairs_mut().append_pair("url", requested);
+            }
+        }
         let mut response = if let Some(body) = body {
             self.client.post(url).json(&body).send().await?
         } else {
@@ -198,6 +246,9 @@ fn inventory() -> Vec<Value> {
         ("spider_issues","Read observed audit issues",json!({"id":uuid}),vec!["id"],true),
         ("spider_analysis","Read graph and relationship/security/JSON-LD observations",json!({"id":uuid}),vec!["id"],true),
         ("spider_policy","Read bounded native admission evidence; advance the returned sequence cursor",json!({"id":uuid,"after_sequence":{"type":"integer","minimum":0},"limit":{"type":"integer","minimum":1,"maximum":1000}}),vec!["id"],true),
+        ("spider_content","Read a bounded saved-content inventory without text or website requests",json!({"id":uuid,"source_kind":{"type":"string","enum":["raw_http_html","rendered_dom_html"]},"after_ordinal":{"type":"integer","minimum":0},"limit":{"type":"integer","minimum":1,"maximum":200}}),vec!["id"],true),
+        ("spider_content_document","Read one exact saved requested URL and source capture without fetching it",json!({"id":uuid,"url":{"type":"string"},"source_kind":{"type":"string","enum":["raw_http_html","rendered_dom_html"]}}),vec!["id","url"],true),
+        ("spider_analyze_crawl_content","Analyze an explicit bounded cohort of saved source captures; no website is fetched",json!({"id":uuid,"input":{"type":"object"}}),vec!["id","input"],true),
         ("spider_analyze_content","Analyze supplied text locally with an explicit similarity/readability profile; no website is fetched",json!({"input":{"type":"object"}}),vec!["input"],true),
         ("spider_preview_policy","Preview supplied scope, query and rewrite decisions locally; no crawl is started",json!({"input":{"type":"object"}}),vec!["input"],true),
         ("spider_cancel","Cancel and retain the saved frontier",json!({"id":uuid}),vec!["id"],false),
@@ -255,7 +306,7 @@ mod tests {
                 .await
                 .is_none()
         );
-        assert_eq!(inventory().len(), 16);
+        assert_eq!(inventory().len(), 19);
     }
     #[test]
     fn only_loopback_bridge() {

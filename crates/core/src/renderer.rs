@@ -83,7 +83,13 @@ pub(crate) fn validate_renderer(config: &RendererConfig, timeout_secs: u64) -> a
     Ok(())
 }
 
-pub(crate) async fn render_page(page: &mut PageRecord, config: &CrawlConfig, seeds: &[Url]) {
+pub(crate) async fn render_page(
+    page: &mut PageRecord,
+    config: &CrawlConfig,
+    seeds: &[Url],
+    capture: Option<&crate::CompiledContentCaptureConfig>,
+    generation: Option<u64>,
+) {
     let Some(renderer) = &config.renderer else {
         return;
     };
@@ -163,11 +169,63 @@ pub(crate) async fn render_page(page: &mut PageRecord, config: &CrawlConfig, see
             page.screenshot_base64 = document.screenshot_base64;
             page.custom_javascript_results = document.custom_javascript_results;
             page.browser_cookies = document.browser_cookies;
+            if let Some(capture) = capture {
+                let html_type = page
+                    .rendered_headers
+                    .iter()
+                    .find(|(name, _)| name.eq_ignore_ascii_case("content-type"))
+                    .map(|(_, value)| value.split(';').next().unwrap_or("").trim())
+                    .is_some_and(|mime| {
+                        mime.eq_ignore_ascii_case("text/html")
+                            || mime.eq_ignore_ascii_case("application/xhtml+xml")
+                    });
+                let document_url = page.rendered_url.clone();
+                let rendered_at = page.rendered_at.clone();
+                let complete = html_type && rendered_at.is_some();
+                crate::content_binding::observe(
+                    page,
+                    capture,
+                    generation,
+                    crate::content_binding::SourceObservation {
+                        source_kind: crate::ContentCaptureSourceKind::RenderedDomHtml,
+                        html: html_type.then_some(document.html.as_str()),
+                        source_complete: complete,
+                        decode_status: crate::ContentCaptureDecodeStatus::Exact,
+                        decode_encoding: None,
+                        incomplete_reason: (html_type && !complete)
+                            .then(|| "render_timestamp_not_observed".into()),
+                        unavailable_reason: (!html_type)
+                            .then(|| "rendered_content_type_unknown_or_non_html".into()),
+                        document_url,
+                        rendered_at,
+                        entity: None,
+                    },
+                );
+            }
         }
         Err(error) => {
             let message = format!("Browser rendering failed: {error:#}");
             page.renderer_error = Some(message.clone());
             page.warnings.push(message);
+            if let Some(capture) = capture {
+                crate::content_binding::observe(
+                    page,
+                    capture,
+                    generation,
+                    crate::content_binding::SourceObservation {
+                        source_kind: crate::ContentCaptureSourceKind::RenderedDomHtml,
+                        html: None,
+                        source_complete: false,
+                        decode_status: crate::ContentCaptureDecodeStatus::Unknown,
+                        decode_encoding: None,
+                        incomplete_reason: None,
+                        unavailable_reason: Some("renderer_failed_or_response_unverified".into()),
+                        document_url: None,
+                        rendered_at: None,
+                        entity: None,
+                    },
+                );
+            }
         }
     }
 }

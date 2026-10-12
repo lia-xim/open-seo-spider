@@ -1,4 +1,5 @@
 mod analysis;
+mod content_cohort;
 mod mcp;
 mod policy_export;
 mod server;
@@ -28,6 +29,14 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Analyze an explicit cohort of captures in a saved crawl; makes no website requests.
+    AnalyzeCrawlContent {
+        snapshot: PathBuf,
+        #[arg(long)]
+        selection: PathBuf,
+        #[arg(long)]
+        output: Option<PathBuf>,
+    },
     /// Read native admission evidence locally or export every row in one read snapshot.
     PolicyLedger {
         store: PathBuf,
@@ -196,6 +205,32 @@ async fn main() -> anyhow::Result<()> {
                 Ok(())
             })
             .await??;
+        }
+        Command::AnalyzeCrawlContent {
+            snapshot,
+            selection,
+            output,
+        } => {
+            let report: open_seo_spider_core::CrawlReport =
+                serde_json::from_slice(&read_bounded(&snapshot, 256 * 1024 * 1024).await?)?;
+            let request: content_cohort::SavedContentRequest =
+                serde_json::from_slice(&read_bounded(&selection, 128 * 1024).await?)?;
+            let context =
+                content_cohort::snapshot_context(&report, None, "declared_imported_report")?;
+            let (envelope, input) =
+                content_cohort::prepare_saved_analysis(&report, &context, &request)?;
+            let result = content_cohort::finish_saved_analysis(envelope, input)?;
+            let json = serde_json::to_vec_pretty(&result)?;
+            if let Some(output) = output {
+                let mut file = tokio::fs::OpenOptions::new()
+                    .write(true)
+                    .create_new(true)
+                    .open(output)
+                    .await?;
+                tokio::io::AsyncWriteExt::write_all(&mut file, &json).await?;
+            } else {
+                println!("{}", String::from_utf8(json)?);
+            }
         }
         Command::AnalyzeContent { input, output } => {
             let request: open_seo_spider_core::ContentAnalysisInput =

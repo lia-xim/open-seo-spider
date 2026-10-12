@@ -14,6 +14,16 @@ not a measure of complete feature coverage. See [feature catalog](docs/feature-c
 [parity ledger](docs/feature-parity.json), and
 [observed installed architecture](docs/research/installed-architecture.md).
 
+Die fortlaufende [deutsche Feature-To-do-Liste](docs/FEATURE_TODO.md) führt alle
+144 Fähigkeiten mit offenen Abnahmekriterien und Nachweisen. Haken stehen für
+erfüllte eigene Abnahmen. Sie bestätigen keine vollständige Hersteller-Parität.
+`node scripts/update-feature-todo.mjs` hält die Übersicht mit dem Katalog synchron;
+`node scripts/update-feature-todo.mjs --check` prüft auf Abweichungen.
+
+Opt-in [saved source capture and cohort analysis](docs/content-cohort.md) keeps
+raw/DOM text and language separate. The CLI `analyze-crawl-content`, saved-content
+API and MCP analyze explicit persisted samples without fetching websites again.
+
 ## Local run
 
 Requires Rust with a native compiler toolchain. Windows is supported with MSVC

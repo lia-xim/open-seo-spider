@@ -179,6 +179,7 @@ pub fn prepare_selected_recrawl(
     let config = crawler.effective_config().clone();
     let mut pages = HashMap::new();
     for (ordinal, page) in base_report.pages.iter().enumerate() {
+        crate::content_binding::validate_native_content_captures(page, &config, None, false)?;
         ensure!(
             !pages.contains_key(page.url.as_str()),
             "Parent has ambiguous duplicate requested URL: {}",

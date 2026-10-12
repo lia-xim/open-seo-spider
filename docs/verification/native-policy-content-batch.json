@@ -139,8 +139,56 @@
     "proprietary_source_in_repository": false,
     "full_vendor_parity": "NOT_PROVEN",
     "local_windows_docker_installation": "NOT_PROVEN",
-    "exact_batch_ci": "PENDING",
-    "immutable_release_build": "PENDING",
-    "installed_user_runtime": "Previous verified selected-recrawl release; replacement follows immutable release build."
+    "exact_batch_ci": "PASS",
+    "immutable_release_build": "PASS",
+    "installed_user_runtime": "PASS"
+  },
+  "source_commit": "915e175f8a5df0595da2e1fed98489dab6a405da",
+  "artifacts_source_commit": "915e175f8a5df0595da2e1fed98489dab6a405da",
+  "exact_ci": {
+    "observed_at": "2026-10-12T16:13:25.656Z",
+    "result": "PASS",
+    "commit": "915e175f8a5df0595da2e1fed98489dab6a405da",
+    "url": "https://github.com/lia-xim/open-seo-spider/actions/runs/38262879386",
+    "jobs": [
+      {
+        "name": "container",
+        "result": "success",
+        "url": "https://github.com/lia-xim/open-seo-spider/actions/runs/38262879386/job/114857605126"
+      },
+      {
+        "name": "renderer",
+        "result": "success",
+        "url": "https://github.com/lia-xim/open-seo-spider/actions/runs/38262879386/job/114857605450"
+      },
+      {
+        "name": "test (ubuntu-latest)",
+        "result": "success",
+        "url": "https://github.com/lia-xim/open-seo-spider/actions/runs/38262879386/job/114857605592"
+      },
+      {
+        "name": "test (windows-latest)",
+        "result": "success",
+        "url": "https://github.com/lia-xim/open-seo-spider/actions/runs/38262879386/job/114857605599"
+      }
+    ],
+    "scope": "Exact-source native policy/content CLI/API and official MCP SDK on Windows/Linux; Chromium worker/policy UI; Linux Docker unprivileged persistent-volume integration.",
+    "local_windows_docker_installation": "NOT_PROVEN",
+    "full_vendor_parity": "NOT_PROVEN"
+  },
+  "installed_runtime": {
+    "tested_at": "2026-10-12T16:12:16.0716083Z",
+    "mcp_tools": 16,
+    "debug_sha256": "92f8d68294451852a7dcdb47dcd1be6b5f595e7184decf79b1f0bb9b224e1b78",
+    "release_sha256": "60d82e59cbe5941e31bf301b3662e22ec52e46cd088b15a5335d49481e4a916c",
+    "user_data_fixture_requests": 0,
+    "byte_identical_after_restart": true,
+    "source_commit": "915e175f8a5df0595da2e1fed98489dab6a405da",
+    "original_batch3_files_identical": true,
+    "preserved_json_files": 11,
+    "result": "PASS",
+    "native_policy": true,
+    "offline_content_analysis": true,
+    "saved_jobs": 7
   }
 }
