@@ -52,6 +52,20 @@ jobs:
       - name: Select the matching installed Playwright Chromium
         working-directory: renderer
         run: node --input-type=module -e 'import {chromium} from "playwright-core"; import {appendFileSync} from "node:fs"; appendFileSync(process.env.GITHUB_ENV, `OPEN_SEO_BROWSER_PATH=${chromium.executablePath()}\n`);'
+      - name: Allow the selected Chromium to create its Linux sandbox
+        shell: bash
+        run: |
+          if [[ -f /proc/sys/kernel/apparmor_restrict_unprivileged_userns ]]; then
+            # Exact downloaded executable only; Chromium sandbox remains enabled.
+            sudo tee /etc/apparmor.d/open-seo-spider-ci-chromium > /dev/null <<EOF
+          abi <abi/4.0>,
+          include <tunables/global>
+          profile open-seo-spider-ci-chromium "$OPEN_SEO_BROWSER_PATH" flags=(unconfined) {
+            userns,
+          }
+          EOF
+            sudo apparmor_parser -r /etc/apparmor.d/open-seo-spider-ci-chromium
+          fi
       - run: npm test
         working-directory: renderer
       - run: node web/verification/ui-smoke.cjs
