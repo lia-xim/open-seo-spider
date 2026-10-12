@@ -1,12 +1,13 @@
 //! Original extraction adapters over HTML5 parsing, Rust regex and sxd XPath.
 //! XPath operates on the repaired HTML DOM, not an XML parse of HTML source.
+use crate::models::ExtractionOutput;
 use crate::{CustomExtraction, CustomExtractionConfig, ExtractionMethod};
 use anyhow::{Context as _, Result, bail};
 use regex::{Regex, RegexBuilder};
-use scraper::{Html, Selector, node::Node};
+use scraper::{ElementRef, Html, Selector, node::Node};
 use std::collections::{HashMap, HashSet};
 use sxd_document::{Package, QName};
-use sxd_xpath::{Context, Factory, Value};
+use sxd_xpath::{Context, Factory, Value, nodeset::Node as XPathNode};
 
 const HTML_NS: &str = "http://www.w3.org/1999/xhtml";
 const XML_NS: &str = "http://www.w3.org/XML/1998/namespace";
@@ -182,6 +183,15 @@ pub(crate) fn validate_definition(config: &CustomExtractionConfig) -> Result<()>
             "attribute is supported only for CSS; select XPath attributes with /@name or use a regex capture group"
         );
     }
+    if config.attribute.is_some() && config.output != ExtractionOutput::Auto {
+        bail!("CSS attribute cannot be combined with an explicit output mode; use output auto");
+    }
+    if config.method == ExtractionMethod::Regex && config.output != ExtractionOutput::Auto {
+        bail!("Regex supports only output auto");
+    }
+    if config.method == ExtractionMethod::Css && config.output == ExtractionOutput::FunctionValue {
+        bail!("output function_value requires XPath with a scalar result");
+    }
     if config.method != ExtractionMethod::Regex
         && (config.regex_group.is_some() || !config.regex_flags.is_empty())
     {
@@ -236,9 +246,10 @@ pub(crate) fn validate_definition(config: &CustomExtractionConfig) -> Result<()>
             document
                 .root()
                 .append_child(document.create_element("html"));
-            xpath
+            let value = xpath
                 .evaluate(&xpath_context(config), document.root())
                 .context("Invalid XPath evaluation")?;
+            validate_xpath_output(config.output, &value)?;
         }
     }
     Ok(())
@@ -275,12 +286,24 @@ fn xpath_context<'d>(config: &CustomExtractionConfig) -> Context<'d> {
     context
 }
 
-/// Iterative conversion avoids XML parse errors and preserves repaired HTML,
-/// text nodes, comments, foreign namespaces and attribute namespaces.
-fn html_xpath_package(html: &Html) -> Result<Package> {
-    let package = Package::new();
-    let document = package.as_document();
+struct XPathDom<'d, 'h> {
+    document: sxd_document::dom::Document<'d>,
+    html: &'h Html,
+    elements: HashMap<sxd_document::dom::Element<'d>, ElementRef<'h>>,
+}
+
+/// Iterative conversion preserves repaired HTML and namespace evidence.
+/// The reverse map serializes selected elements with the same HTML5 serializer
+/// as CSS, rather than reinterpreting the HTML tree as XML output.
+fn html_xpath_document<'d, 'h>(
+    html: &'h Html,
+    document: sxd_document::dom::Document<'d>,
+) -> Result<XPathDom<'d, 'h>> {
     let mut elements: HashMap<_, sxd_document::dom::Element<'_>> = HashMap::new();
+    // sxd-document 0.3.2 hashes/compares Element by its stable raw node pointer,
+    // never by the mutable document storage; this conversion retains that document.
+    #[allow(clippy::mutable_key_type)]
+    let mut serialized_elements = HashMap::new();
     let mut depths = HashMap::new();
     for (count, node) in html.tree.root().descendants().enumerate() {
         if count >= MAX_DOM_NODES {
@@ -344,6 +367,9 @@ fn html_xpath_package(html: &Html) -> Result<Package> {
                     None => document.root().append_child(element),
                 }
                 elements.insert(node.id(), element);
+                if let Some(html_element) = ElementRef::wrap(node) {
+                    serialized_elements.insert(element, html_element);
+                }
             }
             Node::Text(text) => {
                 if let Some(parent) = parent {
@@ -368,7 +394,11 @@ fn html_xpath_package(html: &Html) -> Result<Package> {
             _ => {} // Document, fragment and doctype are not XPath element nodes.
         }
     }
-    Ok(package)
+    Ok(XPathDom {
+        document,
+        html,
+        elements: serialized_elements,
+    })
 }
 
 fn clean(text: &str) -> String {
@@ -381,6 +411,7 @@ fn base_result(config: &CustomExtractionConfig, source: &str) -> CustomExtractio
         selector: config.selector.clone(),
         attribute: config.attribute.clone(),
         method: config.method,
+        output: config.output,
         source: source.into(),
         engine: match config.method {
             ExtractionMethod::Css => "scraper-html5-css",
@@ -402,10 +433,35 @@ fn append_value(result: &mut CustomExtraction, value: String, limit: usize) {
     }
 }
 
+fn validate_xpath_output(output: ExtractionOutput, value: &Value<'_>) -> Result<()> {
+    match (output, value) {
+        (ExtractionOutput::FunctionValue, Value::Nodeset(_)) => {
+            bail!(
+                "XPath output function_value requires a scalar, but expression returned a nodeset"
+            );
+        }
+        (ExtractionOutput::InnerHtml | ExtractionOutput::OuterHtml, Value::Nodeset(nodes))
+            if nodes
+                .into_iter()
+                .any(|node| !matches!(node, XPathNode::Element(_) | XPathNode::Root(_))) =>
+        {
+            bail!(
+                "XPath HTML output supports only element or document-root nodes; use text/auto for attributes, text, comments or namespaces"
+            );
+        }
+        (ExtractionOutput::InnerHtml | ExtractionOutput::OuterHtml, Value::Nodeset(_)) => {}
+        (ExtractionOutput::InnerHtml | ExtractionOutput::OuterHtml, _) => {
+            bail!("XPath HTML output requires nodes, but expression returned a scalar");
+        }
+        _ => {}
+    }
+    Ok(())
+}
+
 fn evaluate(
     html: &str,
     doc: Option<&Html>,
-    package: Option<&Package>,
+    xpath_dom: Option<&XPathDom<'_, '_>>,
     config: &CustomExtractionConfig,
     source: &str,
 ) -> Result<CustomExtraction> {
@@ -416,16 +472,21 @@ fn evaluate(
             let doc = doc.ok_or_else(|| anyhow::anyhow!("HTML DOM missing"))?;
             let selector = Selector::parse(&config.selector)
                 .map_err(|e| anyhow::anyhow!("Invalid CSS selector: {e:?}"))?;
-            result.result_type = if config.attribute.is_some() {
-                "attribute"
-            } else {
-                "text"
+            result.result_type = match config.output {
+                ExtractionOutput::InnerHtml => "inner_html",
+                ExtractionOutput::OuterHtml => "outer_html",
+                _ if config.attribute.is_some() => "attribute",
+                _ => "text",
             }
             .into();
             for node in doc.select(&selector) {
-                let value = match &config.attribute {
-                    Some(attribute) => node.value().attr(attribute).map(str::to_owned),
-                    None => Some(clean(&node.text().collect::<String>())),
+                let value = match config.output {
+                    ExtractionOutput::InnerHtml => Some(node.inner_html()),
+                    ExtractionOutput::OuterHtml => Some(node.html()),
+                    _ => match &config.attribute {
+                        Some(attribute) => node.value().attr(attribute).map(str::to_owned),
+                        None => Some(clean(&node.text().collect::<String>())),
+                    },
                 };
                 if let Some(value) = value {
                     append_value(&mut result, value, config.max_results);
@@ -444,24 +505,50 @@ fn evaluate(
             }
         }
         ExtractionMethod::XPath => {
-            let package = package.ok_or_else(|| anyhow::anyhow!("XPath DOM missing"))?;
+            let xpath_dom = xpath_dom.ok_or_else(|| anyhow::anyhow!("XPath DOM missing"))?;
             let xpath = Factory::new()
                 .build(&config.selector)
                 .context("Invalid XPath 1.0 expression")?
                 .ok_or_else(|| anyhow::anyhow!("Empty XPath expression"))?;
             let value = xpath
-                .evaluate(&xpath_context(config), package.as_document().root())
+                .evaluate(&xpath_context(config), xpath_dom.document.root())
                 .context("XPath evaluation failed")?;
+            validate_xpath_output(config.output, &value)?;
             if let Value::Nodeset(nodes) = value {
-                result.result_type = "nodeset".into();
+                result.result_type = match config.output {
+                    ExtractionOutput::InnerHtml => "inner_html",
+                    ExtractionOutput::OuterHtml => "outer_html",
+                    _ => "nodeset",
+                }
+                .into();
+                let ordered = nodes.document_order();
                 result.matched_count = Some(nodes.size());
                 result.truncated = nodes.size() > config.max_results;
-                result.values = nodes
-                    .document_order()
+                result.values = ordered
                     .into_iter()
                     .take(config.max_results)
-                    .map(|node| node.string_value())
-                    .collect();
+                    .map(|node| match (config.output, node) {
+                        (ExtractionOutput::OuterHtml, XPathNode::Element(element)) => xpath_dom
+                            .elements
+                            .get(&element)
+                            .map(ElementRef::html)
+                            .ok_or_else(|| {
+                                anyhow::anyhow!("XPath element has no HTML serialization mapping")
+                            }),
+                        (ExtractionOutput::InnerHtml, XPathNode::Element(element)) => xpath_dom
+                            .elements
+                            .get(&element)
+                            .map(ElementRef::inner_html)
+                            .ok_or_else(|| {
+                                anyhow::anyhow!("XPath element has no HTML serialization mapping")
+                            }),
+                        (
+                            ExtractionOutput::InnerHtml | ExtractionOutput::OuterHtml,
+                            XPathNode::Root(_),
+                        ) => Ok(xpath_dom.html.html()),
+                        _ => Ok(node.string_value()),
+                    })
+                    .collect::<Result<Vec<_>>>()?;
             } else {
                 result.result_type = match &value {
                     Value::String(_) => "string",
@@ -486,14 +573,16 @@ pub fn extract_configured(
 ) -> Result<CustomExtraction> {
     validate_definition(config)?;
     let doc = (config.method != ExtractionMethod::Regex).then(|| Html::parse_document(html));
-    let package = if config.method == ExtractionMethod::XPath {
-        Some(html_xpath_package(
+    let package = Package::new();
+    let xpath_dom = if config.method == ExtractionMethod::XPath {
+        Some(html_xpath_document(
             doc.as_ref().expect("parsed XPath HTML"),
+            package.as_document(),
         )?)
     } else {
         None
     };
-    evaluate(html, doc.as_ref(), package.as_ref(), config, source)
+    evaluate(html, doc.as_ref(), xpath_dom.as_ref(), config, source)
 }
 
 pub(crate) fn extract_all(
@@ -505,11 +594,15 @@ pub(crate) fn extract_all(
         .iter()
         .any(|item| item.method != ExtractionMethod::Regex)
         .then(|| Html::parse_document(html));
-    let package = if config
+    let package = Package::new();
+    let xpath_dom = if config
         .iter()
         .any(|item| item.method == ExtractionMethod::XPath)
     {
-        Some(html_xpath_package(doc.as_ref().expect("parsed XPath HTML")))
+        Some(html_xpath_document(
+            doc.as_ref().expect("parsed XPath HTML"),
+            package.as_document(),
+        ))
     } else {
         None
     };
@@ -518,14 +611,14 @@ pub(crate) fn extract_all(
         .map(|definition| {
             match validate_definition(definition).and_then(|()| {
                 if definition.method == ExtractionMethod::XPath
-                    && let Some(Err(error)) = &package
+                    && let Some(Err(error)) = &xpath_dom
                 {
                     bail!("{error:#}");
                 }
                 evaluate(
                     html,
                     doc.as_ref(),
-                    package.as_ref().and_then(|value| value.as_ref().ok()),
+                    xpath_dom.as_ref().and_then(|value| value.as_ref().ok()),
                     definition,
                     source,
                 )
@@ -543,6 +636,7 @@ pub(crate) fn extract_all(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::collections::BTreeMap;
 
     fn definition(method: ExtractionMethod, selector: &str) -> CustomExtractionConfig {
         CustomExtractionConfig {
@@ -551,6 +645,200 @@ mod tests {
             method,
             ..Default::default()
         }
+    }
+
+    #[test]
+    fn css_html_modes_keep_markup_entities_empty_values_and_legacy_text() {
+        let html = "<section class=piece>  A &amp; <b>Grüße</b><!--C--><br><script>if(a<b)c&d;</script></section><section class=piece></section>";
+        let inner = "  A &amp; <b>Grüße</b><!--C--><br><script>if(a<b)c&d;</script>";
+        for (output, kind, expected) in [
+            (
+                ExtractionOutput::InnerHtml,
+                "inner_html",
+                vec![inner.to_string(), String::new()],
+            ),
+            (
+                ExtractionOutput::OuterHtml,
+                "outer_html",
+                vec![
+                    format!("<section class=\"piece\">{inner}</section>"),
+                    "<section class=\"piece\"></section>".into(),
+                ],
+            ),
+        ] {
+            let mut config = definition(ExtractionMethod::Css, ".piece");
+            config.output = output;
+            let result = extract_configured(html, &config, "raw_html").unwrap();
+            assert_eq!(result.values, expected);
+            assert_eq!(result.matched_count, Some(2));
+            assert_eq!(result.output, output);
+            assert_eq!(result.result_type, kind);
+        }
+        let mut config = definition(ExtractionMethod::Css, "p");
+        let old = extract_configured("<p>  A &amp; <b>B</b>  </p>", &config, "raw_html").unwrap();
+        config.output = ExtractionOutput::Text;
+        let text = extract_configured("<p>  A &amp; <b>B</b>  </p>", &config, "raw_html").unwrap();
+        assert_eq!(old.values, vec!["A & B"]);
+        assert_eq!(old.values, text.values);
+        config.output = ExtractionOutput::Auto;
+        config.attribute = Some("data-missing".into());
+        assert_eq!(
+            extract_configured(html, &config, "raw_html")
+                .unwrap()
+                .matched_count,
+            Some(0)
+        );
+    }
+
+    #[test]
+    fn xpath_and_css_html_share_repaired_dom_including_void_and_foreign_elements() {
+        let html = "<!doctype html><table><tr><td> A &amp; <b>B<tr><td>C</table><svg><title>V &amp; W</title></svg>";
+        for (css, xpath, namespaces) in [
+            ("table", "//table", BTreeMap::new()),
+            ("td", "//td", BTreeMap::new()),
+            (
+                "svg",
+                "//svg:svg",
+                BTreeMap::from([("svg".into(), "http://www.w3.org/2000/svg".into())]),
+            ),
+        ] {
+            for output in [ExtractionOutput::InnerHtml, ExtractionOutput::OuterHtml] {
+                let mut css_config = definition(ExtractionMethod::Css, css);
+                css_config.output = output;
+                let mut xpath_config = definition(ExtractionMethod::XPath, xpath);
+                xpath_config.output = output;
+                xpath_config.namespaces = namespaces.clone();
+                let css_result = extract_configured(html, &css_config, "raw_html").unwrap();
+                let xpath_result = extract_configured(html, &xpath_config, "raw_html").unwrap();
+                assert_eq!(css_result.values, xpath_result.values, "{css} {output:?}");
+                assert!(
+                    xpath_result
+                        .values
+                        .iter()
+                        .all(|value| !value.contains("<?xml"))
+                );
+                if css == "table" {
+                    assert!(xpath_result.values[0].contains("<tbody>"));
+                    assert!(xpath_result.values[0].contains("&amp;"));
+                }
+            }
+        }
+        let mut root = definition(ExtractionMethod::XPath, "/");
+        root.output = ExtractionOutput::OuterHtml;
+        let result = extract_configured("<!doctype html><p>x<br>y</p>", &root, "raw_html").unwrap();
+        assert!(result.values[0].starts_with("<!DOCTYPE html>"));
+        assert!(result.values[0].contains("<p>x<br>y</p>"));
+        assert!(!result.values[0].contains("</br>"));
+        root.output = ExtractionOutput::InnerHtml;
+        assert_eq!(
+            extract_configured("<!doctype html><p>x<br>y</p>", &root, "raw_html")
+                .unwrap()
+                .values,
+            result.values
+        );
+    }
+
+    #[test]
+    fn explicit_function_values_retain_zero_false_and_empty_strings() {
+        for (selector, value, kind) in [
+            ("count(//missing)", "0", "number"),
+            ("boolean(//missing)", "false", "boolean"),
+            ("string(//missing)", "", "string"),
+        ] {
+            let mut config = definition(ExtractionMethod::XPath, selector);
+            config.output = ExtractionOutput::FunctionValue;
+            let result = extract_configured("<p>x</p>", &config, "raw_html").unwrap();
+            assert_eq!(result.values, vec![value]);
+            assert_eq!(result.result_type, kind);
+            assert_eq!(result.matched_count, Some(1));
+            config.output = ExtractionOutput::Text;
+            assert_eq!(
+                extract_configured("<p>x</p>", &config, "raw_html")
+                    .unwrap()
+                    .values,
+                result.values
+            );
+        }
+    }
+
+    #[test]
+    fn output_type_mismatches_are_explicit_even_with_empty_matches() {
+        for (method, selector, output, attribute) in [
+            (ExtractionMethod::Regex, "x", ExtractionOutput::Text, None),
+            (
+                ExtractionMethod::Css,
+                "p",
+                ExtractionOutput::FunctionValue,
+                None,
+            ),
+            (
+                ExtractionMethod::Css,
+                "p",
+                ExtractionOutput::OuterHtml,
+                Some("href"),
+            ),
+            (
+                ExtractionMethod::XPath,
+                "//missing",
+                ExtractionOutput::FunctionValue,
+                None,
+            ),
+            (
+                ExtractionMethod::XPath,
+                "count(//p)",
+                ExtractionOutput::InnerHtml,
+                None,
+            ),
+        ] {
+            let mut config = definition(method, selector);
+            config.output = output;
+            config.attribute = attribute.map(Into::into);
+            assert!(
+                validate_definition(&config).is_err(),
+                "{method:?} {output:?}"
+            );
+        }
+        let mut config = definition(ExtractionMethod::XPath, "//p | //p/@id");
+        config.output = ExtractionOutput::OuterHtml;
+        config.max_results = 1;
+        let results = extract_all("<p id=x>Text</p>", &[config], "raw_html");
+        assert!(
+            results[0]
+                .error
+                .as_deref()
+                .unwrap()
+                .contains("only element or document-root")
+        );
+        assert!(results[0].values.is_empty());
+        assert_eq!(results[0].matched_count, None);
+        assert_eq!(results[0].output, ExtractionOutput::OuterHtml);
+        let invalid: Result<CustomExtractionConfig, _> =
+            serde_json::from_str(r#"{"name":"x","selector":"p","output":"execute_html"}"#);
+        assert!(invalid.is_err());
+    }
+
+    #[test]
+    fn html_output_limits_count_all_matches_and_keep_source_and_old_defaults() {
+        for (method, selector) in [
+            (ExtractionMethod::Css, "p"),
+            (ExtractionMethod::XPath, "//p"),
+        ] {
+            let mut config = definition(method, selector);
+            config.output = ExtractionOutput::OuterHtml;
+            config.max_results = 2;
+            let result =
+                extract_configured("<p>a</p><p>b</p><p>c</p>", &config, "rendered_html").unwrap();
+            assert_eq!(result.values, vec!["<p>a</p>", "<p>b</p>"]);
+            assert_eq!(result.matched_count, Some(3));
+            assert!(result.truncated);
+            assert_eq!(result.source, "rendered_html");
+        }
+        let old: CustomExtractionConfig =
+            serde_json::from_str(r#"{"name":"old","selector":"p"}"#).unwrap();
+        assert_eq!(old.output, ExtractionOutput::Auto);
+        let old_result: CustomExtraction =
+            serde_json::from_str(r#"{"name":"old","values":["a"]}"#).unwrap();
+        assert_eq!(old_result.output, ExtractionOutput::Auto);
     }
 
     #[test]

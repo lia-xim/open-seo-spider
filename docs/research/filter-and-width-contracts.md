@@ -31,6 +31,15 @@ See [font provenance](../../assets/fonts/README.md) and
 [actual local comparison](../parity/reference-comparison.md). Widths that need
 unsupported shaping or missing glyphs remain unknown.
 
+The earlier observations above are retained as historical evidence. The later
+[independent text-width calibration](text-width-calibration.md) and its
+[per-position measurement artifact](../parity/text-width-calibration.json)
+identify the observed Windows scale-1.5 quantization, reproduce the bounded
+title/description CSV values with the existing public font, and distinguish that
+measurement proof from a new native integration gate. They also clarify that
+the public source tag and the selected font's internal version are different
+provenance facts.
+
 The runtime comparison also distinguishes initial URL status from final response
 metadata, intermediary redirect rows, anchor metrics from resource references,
 resource-indexability profiles and localized reason labels. These differences

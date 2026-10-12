@@ -4,11 +4,34 @@ use open_seo_spider_core::{
     export_pages_csv, export_sitemap_xml,
 };
 
+fn original_blank_ascii_pdf() -> String {
+    let objects = [
+        "<< /Type /Catalog /Pages 2 0 R >>",
+        "<< /Type /Pages /Count 1 /Kids [3 0 R] >>",
+        "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << >> >>",
+    ];
+    let mut pdf = "%PDF-1.7\n".to_owned();
+    let mut offsets = Vec::new();
+    for (index, object) in objects.iter().enumerate() {
+        offsets.push(pdf.len());
+        pdf.push_str(&format!("{} 0 obj\n{object}\nendobj\n", index + 1));
+    }
+    let xref = pdf.len();
+    pdf.push_str("xref\n0 4\n0000000000 65535 f \n");
+    for offset in offsets {
+        pdf.push_str(&format!("{offset:010} 00000 n \n"));
+    }
+    pdf.push_str(&format!(
+        "trailer\n<< /Size 4 /Root 1 0 R >>\nstartxref\n{xref}\n%%EOF\n"
+    ));
+    pdf
+}
+
 #[tokio::test]
 async fn http_link_metadata_uses_response_base_and_preserves_non_document_context() {
     let fixture = Fixture::new(|origin, path| match path {
         "/robots.txt" => (404, vec![], String::new()),
-        "/canonical.pdf" => (200, vec![("Content-Type".into(), "application/pdf".into()), ("Link".into(), format!("<{origin}/canonical.pdf>; rel=canonical"))], "%PDF-fixture".into()),
+        "/canonical.pdf" => (200, vec![("Content-Type".into(), "application/pdf".into()), ("Link".into(), format!("<{origin}/canonical.pdf>; rel=canonical"))], original_blank_ascii_pdf()),
         _ => (200, vec![
             ("Content-Type".into(), "text/html".into()),
             ("Link".into(), "</canonical.pdf>; rel=CANONICAL; title=\"PDF, title; safe\"; rel=next".into()),

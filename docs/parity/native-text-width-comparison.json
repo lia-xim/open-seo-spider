@@ -1,0 +1,572 @@
+{
+  "schema_version": 1,
+  "tested_at": "2026-10-12T08:47:28.286Z",
+  "result": "PASS_BOUNDED_NATIVE_PROFILE",
+  "full_vendor_parity": "NOT_PROVEN",
+  "app_url": "http://127.0.0.1:18789",
+  "binary_sha256": "0e6e71fcb9807e059b361916419e0b07c52d06f3ff9892d9283620e0506a6a38",
+  "measurement_profile": "roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic",
+  "reference_fixture_sha256": "928545b1b70ae07da917fddd0fd1fd137878e7819326741dbbd6c23cb4607072",
+  "reference_run_at": "2026-10-12T07:08:34.587Z",
+  "files": [
+    {
+      "name": "seitentitel_alle.csv",
+      "size_bytes": 4313,
+      "sha256": "92f477dae7c7cc21ee05aeeab901d858c1c315f74b119def03a90c635b76b070"
+    },
+    {
+      "name": "meta_description_alle.csv",
+      "size_bytes": 4795,
+      "sha256": "80479b0158722aab15d92d19b4cad2b7821f5b0da57173ba8578340700b49e96"
+    }
+  ],
+  "website_requests": 0,
+  "counts": {
+    "MATCH": 58,
+    "DIFFERENT": 0,
+    "UNAVAILABLE": 0
+  },
+  "absent_placeholders_excluded": [
+    {
+      "url": "http://127.0.0.1:58405/missing-title",
+      "field": "title",
+      "reference_display": "0",
+      "eligibility": "absent metadata is not a present measured element"
+    },
+    {
+      "url": "http://127.0.0.1:58405/missing-description",
+      "field": "description",
+      "reference_display": "0",
+      "eligibility": "absent metadata is not a present measured element"
+    }
+  ],
+  "observations": [
+    {
+      "url": "http://127.0.0.1:58405/",
+      "field": "title",
+      "slot": 1,
+      "text": "An independently authored local SEO reference fixture /",
+      "expected": 491,
+      "native": 491,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/long-title",
+      "field": "title",
+      "slot": 1,
+      "text": "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+      "expected": 1350,
+      "native": 1350,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/empty-title",
+      "field": "title",
+      "slot": 1,
+      "text": "",
+      "expected": 0,
+      "native": 0,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/canonical-conflict",
+      "field": "title",
+      "slot": 1,
+      "text": "An independently authored local SEO reference fixture /canonical-conflict",
+      "expected": 649,
+      "native": 649,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/noindex",
+      "field": "title",
+      "slot": 1,
+      "text": "An independently authored local SEO reference fixture /noindex",
+      "expected": 562,
+      "native": 562,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/links",
+      "field": "title",
+      "slot": 1,
+      "text": "An independently authored local SEO reference fixture /links",
+      "expected": 532,
+      "native": 532,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/jsonld-valid",
+      "field": "title",
+      "slot": 1,
+      "text": "An independently authored local SEO reference fixture /jsonld-valid",
+      "expected": 591,
+      "native": 591,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/multiple-description",
+      "field": "title",
+      "slot": 1,
+      "text": "An independently authored local SEO reference fixture /multiple-description",
+      "expected": 667,
+      "native": 667,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/canonical-other",
+      "field": "title",
+      "slot": 1,
+      "text": "An independently authored local SEO reference fixture /canonical-other",
+      "expected": 629,
+      "native": 629,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/jsonld-invalid",
+      "field": "title",
+      "slot": 1,
+      "text": "An independently authored local SEO reference fixture /jsonld-invalid",
+      "expected": 607,
+      "native": 607,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/baseline",
+      "field": "title",
+      "slot": 1,
+      "text": "An independently authored local SEO reference fixture /baseline",
+      "expected": 565,
+      "native": 565,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/Upper_Case",
+      "field": "title",
+      "slot": 1,
+      "text": "An independently authored local SEO reference fixture /Upper_Case",
+      "expected": 598,
+      "native": 598,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/header-noindex",
+      "field": "title",
+      "slot": 1,
+      "text": "An independently authored local SEO reference fixture /header-noindex",
+      "expected": 629,
+      "native": 629,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/missing-description",
+      "field": "title",
+      "slot": 1,
+      "text": "An independently authored local SEO reference fixture /missing-description",
+      "expected": 665,
+      "native": 665,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/canonical-404",
+      "field": "title",
+      "slot": 1,
+      "text": "An independently authored local SEO reference fixture /canonical-404",
+      "expected": 617,
+      "native": 617,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/images",
+      "field": "title",
+      "slot": 1,
+      "text": "An independently authored local SEO reference fixture /images",
+      "expected": 556,
+      "native": 556,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/soft-error",
+      "field": "title",
+      "slot": 1,
+      "text": "An independently authored local SEO reference fixture /soft-error",
+      "expected": 573,
+      "native": 573,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/duplicate-b",
+      "field": "title",
+      "slot": 1,
+      "text": "A duplicate title for both controlled pages",
+      "expected": 365,
+      "native": 365,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/duplicate-a",
+      "field": "title",
+      "slot": 1,
+      "text": "A duplicate title for both controlled pages",
+      "expected": 365,
+      "native": 365,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/lang-de",
+      "field": "title",
+      "slot": 1,
+      "text": "An independently authored local SEO reference fixture /lang-de",
+      "expected": 557,
+      "native": 557,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/multiple-title",
+      "field": "title",
+      "slot": 1,
+      "text": "An independently authored local SEO reference fixture /multiple-title",
+      "expected": 601,
+      "native": 601,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/multiple-title",
+      "field": "title",
+      "slot": 2,
+      "text": "Second controlled title",
+      "expected": 199,
+      "native": 199,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/canonical-self",
+      "field": "title",
+      "slot": 1,
+      "text": "An independently authored local SEO reference fixture /canonical-self",
+      "expected": 615,
+      "native": 615,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/empty-description",
+      "field": "title",
+      "slot": 1,
+      "text": "An independently authored local SEO reference fixture /empty-description",
+      "expected": 651,
+      "native": 651,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/body-metadata",
+      "field": "title",
+      "slot": 1,
+      "text": "Title in the body",
+      "expected": 141,
+      "native": 141,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/lang-en",
+      "field": "title",
+      "slot": 1,
+      "text": "An independently authored local SEO reference fixture /lang-en",
+      "expected": 557,
+      "native": 557,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/short-title",
+      "field": "title",
+      "slot": 1,
+      "text": "Tiny",
+      "expected": 37,
+      "native": 37,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/blank-title",
+      "field": "title",
+      "slot": 1,
+      "text": "",
+      "expected": 0,
+      "native": 0,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/baseline?a=1&b=2",
+      "field": "title",
+      "slot": 1,
+      "text": "An independently authored local SEO reference fixture /baseline",
+      "expected": 565,
+      "native": 565,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /",
+      "expected": 404,
+      "native": 404,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/long-title",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /long-title",
+      "expected": 459,
+      "native": 459,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/empty-title",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /empty-title",
+      "expected": 470,
+      "native": 470,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/canonical-conflict",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /canonical-conflict",
+      "expected": 515,
+      "native": 515,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/noindex",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /noindex",
+      "expected": 453,
+      "native": 453,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/links",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /links",
+      "expected": 433,
+      "native": 433,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/jsonld-valid",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /jsonld-valid",
+      "expected": 475,
+      "native": 475,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/multiple-description",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /multiple-description",
+      "expected": 528,
+      "native": 528,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/multiple-description",
+      "field": "description",
+      "slot": 2,
+      "text": "Second controlled description",
+      "expected": 186,
+      "native": 186,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/canonical-other",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /canonical-other",
+      "expected": 501,
+      "native": 501,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/jsonld-invalid",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /jsonld-invalid",
+      "expected": 486,
+      "native": 486,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/baseline",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /baseline",
+      "expected": 456,
+      "native": 456,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/Upper_Case",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /Upper_Case",
+      "expected": 479,
+      "native": 479,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/header-noindex",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /header-noindex",
+      "expected": 500,
+      "native": 500,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/canonical-404",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /canonical-404",
+      "expected": 492,
+      "native": 492,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/missing-title",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /missing-title",
+      "expected": 481,
+      "native": 481,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/images",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /images",
+      "expected": 449,
+      "native": 449,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/soft-error",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /soft-error",
+      "expected": 462,
+      "native": 462,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/duplicate-b",
+      "field": "description",
+      "slot": 1,
+      "text": "The same description for two controlled pages.",
+      "expected": 293,
+      "native": 293,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/duplicate-a",
+      "field": "description",
+      "slot": 1,
+      "text": "The same description for two controlled pages.",
+      "expected": 293,
+      "native": 293,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/lang-de",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /lang-de",
+      "expected": 450,
+      "native": 450,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/multiple-title",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /multiple-title",
+      "expected": 481,
+      "native": 481,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/canonical-self",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /canonical-self",
+      "expected": 491,
+      "native": 491,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/empty-description",
+      "field": "description",
+      "slot": 1,
+      "text": "",
+      "expected": 0,
+      "native": 0,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/body-metadata",
+      "field": "description",
+      "slot": 1,
+      "text": "Description in the body",
+      "expected": 143,
+      "native": 143,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/lang-en",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /lang-en",
+      "expected": 450,
+      "native": 450,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/short-title",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /short-title",
+      "expected": 464,
+      "native": 464,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/blank-title",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /blank-title",
+      "expected": 465,
+      "native": 465,
+      "status": "MATCH"
+    },
+    {
+      "url": "http://127.0.0.1:58405/baseline?a=1&b=2",
+      "field": "description",
+      "slot": 1,
+      "text": "A useful independently authored description for the local fixture /baseline",
+      "expected": 456,
+      "native": 456,
+      "status": "MATCH"
+    }
+  ],
+  "limitations": [
+    "Only the retained ordinary Windows reference fixture and fixed 150-percent metric profile are compared.",
+    "Other DPI/font profiles, complex shaping and unavailable glyphs remain outside this proof.",
+    "This compares text measurements, not issue-filter membership or whole features."
+  ]
+}

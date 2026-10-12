@@ -8,9 +8,10 @@ use axum::{
 };
 use open_seo_spider_core::{
     AuditIssue, CrawlConfig, CrawlEvent, CrawlReport, CrawlStore, Crawler, PageRecord,
-    compare_crawls, export_browser_cookies_csv, export_custom_extractions_csv,
-    export_custom_javascript_csv, export_issues_csv, export_links_csv, export_pages_csv,
-    export_sitemap_xml,
+    SerpInputRow, compare_crawls, export_browser_cookies_csv, export_custom_extractions_csv,
+    export_custom_javascript_csv, export_image_resources_csv, export_issues_csv, export_links_csv,
+    export_pages_csv, export_pdf_csv, export_response_observations_csv, export_serp_csv,
+    export_sitemap_xml, import_serp_csv, preview_serp, response_observations,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
@@ -132,6 +133,27 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
             }),
         )
         .route("/api/capabilities", get(capabilities))
+        .route(
+            "/serp",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/html; charset=utf-8")],
+                    include_str!("../../../web/serp.html"),
+                )
+            }),
+        )
+        .route(
+            "/serp.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+                    include_str!("../../../web/serp.js"),
+                )
+            }),
+        )
+        .route("/api/serp/preview", post(serp_preview))
+        .route("/api/serp/import", post(serp_import))
+        .route("/api/serp/export.csv", post(serp_export))
         .route("/mcp", post(mcp_http))
         .route("/api/crawls", get(list_crawls).post(create_crawl))
         .route("/api/crawls/import", post(import_report))
@@ -139,6 +161,8 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
         .route("/api/crawls/{id}/pages", get(pages))
         .route("/api/crawls/{id}/issues", get(issues))
         .route("/api/crawls/{id}/analysis", get(advanced_analysis))
+        .route("/api/crawls/{id}/responses", get(response_inventory))
+        .route("/api/crawls/{id}/responses.csv", get(export_responses))
         .route("/api/crawls/{id}/cancel", post(cancel_crawl))
         .route("/api/crawls/{id}/resume", post(resume_crawl))
         .route("/api/crawls/{id}/export.csv", get(export_csv))
@@ -149,6 +173,8 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
             get(export_javascript_csv),
         )
         .route("/api/crawls/{id}/cookies.csv", get(export_cookie_csv))
+        .route("/api/crawls/{id}/pdf.csv", get(export_pdf))
+        .route("/api/crawls/{id}/images.csv", get(export_images))
         .route(
             "/api/crawls/{id}/extractions.csv",
             get(export_extraction_csv),
@@ -217,9 +243,27 @@ async fn local_origin(request: Request, next: Next) -> Response {
 }
 
 async fn capabilities() -> Json<Value> {
-    Json(
-        json!({"product":"Open SEO Spider","crawl":{"http":true,"list":true,"sitemap":true,"robots":true,"agent_scoped_indexing_directives":true,"http_link_relationships":true,"redirects":true,"cancel":true,"resume":true,"url_limit":null,"url_regex_filters":true,"css_extraction":true,"xpath_1_0_extraction":true,"regex_extraction":true,"configurable_audit_thresholds":true,"local_font_pixel_profile":true},"optional_worker":{"javascript_rendering":true,"custom_javascript":true,"redacted_cookie_observations":true,"screenshots":true,"accessibility_axe":true,"endpoint":"http://127.0.0.1:8790/render","enabled_by_default":false},"mcp":{"stdio":true,"streamable_http":"/mcp"},"exports":["pages_csv","issues_csv","links_csv","extractions_csv","javascript_csv","cookies_csv","sitemap_xml","project_json"],"unimplemented":["api_integrations","spelling_grammar","pdf_analysis","embedding_semantic_search","scheduling","full_structured_data_validation"],"parity":"in progress; see docs/parity/reference-cli-inventory.json"}),
-    )
+    Json(json!({
+        "product":"Open SEO Spider",
+        "crawl":{
+            "http":true,"list":true,"sitemap":true,"robots":true,
+            "agent_scoped_indexing_directives":true,"http_link_relationships":true,
+            "redirects":true,"intermediate_response_inventory":true,
+            "cancel":true,"resume":true,"url_limit":null,"url_regex_filters":true,
+            "css_extraction":true,"xpath_1_0_extraction":true,"regex_extraction":true,
+            "html_extraction_output":true,"configurable_audit_thresholds":true,
+            "local_font_pixel_profile":true,"native_pdf_observations":true,
+            "fetched_image_dimensions":true
+        },
+        "offline_serp":{"path":"/serp","website_requests":0,"csv_import":true,"row_limit":10000},
+        "optional_worker":{"javascript_rendering":true,"custom_javascript":true,
+            "redacted_cookie_observations":true,"screenshots":true,"accessibility_axe":true,
+            "endpoint":"http://127.0.0.1:8790/render","enabled_by_default":false},
+        "mcp":{"stdio":true,"streamable_http":"/mcp"},
+        "exports":["pages_csv","issues_csv","links_csv","extractions_csv","javascript_csv","cookies_csv","pdf_csv","image_resources_csv","responses_csv","sitemap_xml","project_json"],
+        "unimplemented":["api_integrations","spelling_grammar","pdf_ocr_and_rendering","shared_authenticated_browser_sessions","embedding_semantic_search","scheduling","full_structured_data_validation"],
+        "parity":"in progress; see docs/parity/granular-acceptance.json"
+    }))
 }
 async fn list_crawls(State(state): State<AppState>) -> Json<Value> {
     let jobs: Vec<_> = state.jobs.read().await.values().cloned().collect();
@@ -543,6 +587,76 @@ async fn export_csv(State(state): State<AppState>, Path(id): Path<Uuid>) -> ApiR
             .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?,
         "text/csv; charset=utf-8",
         "pages.csv",
+    ))
+}
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct SerpRowsRequest {
+    rows: Vec<SerpInputRow>,
+}
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct SerpCsvRequest {
+    csv: String,
+}
+async fn serp_preview(
+    Json(input): Json<SerpRowsRequest>,
+) -> ApiResult<Json<open_seo_spider_core::SerpPreview>> {
+    preview_serp(&input.rows)
+        .map(Json)
+        .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))
+}
+async fn serp_import(
+    Json(input): Json<SerpCsvRequest>,
+) -> ApiResult<Json<open_seo_spider_core::SerpPreview>> {
+    let rows =
+        import_serp_csv(&input.csv).map_err(|error| api_error(StatusCode::BAD_REQUEST, error))?;
+    preview_serp(&rows)
+        .map(Json)
+        .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))
+}
+async fn serp_export(Json(input): Json<SerpRowsRequest>) -> ApiResult<Response> {
+    Ok(download(
+        export_serp_csv(&input.rows).map_err(|error| api_error(StatusCode::BAD_REQUEST, error))?,
+        "text/csv; charset=utf-8",
+        "serp.csv",
+    ))
+}
+async fn export_pdf(State(state): State<AppState>, Path(id): Path<Uuid>) -> ApiResult<Response> {
+    Ok(download(
+        export_pdf_csv(&require_report(&state, id).await?)
+            .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?,
+        "text/csv; charset=utf-8",
+        "pdf.csv",
+    ))
+}
+async fn export_images(State(state): State<AppState>, Path(id): Path<Uuid>) -> ApiResult<Response> {
+    Ok(download(
+        export_image_resources_csv(&require_report(&state, id).await?)
+            .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?,
+        "text/csv; charset=utf-8",
+        "images.csv",
+    ))
+}
+async fn response_inventory(
+    State(state): State<AppState>,
+    Path(id): Path<Uuid>,
+) -> ApiResult<Json<Value>> {
+    let rows = response_observations(&require_report(&state, id).await?);
+    Ok(Json(
+        json!({"responses":rows,"scope":"captured_native_response_observations","unretained_redirect_headers_and_body":"unknown","document_records_are_separate":true}),
+    ))
+}
+async fn export_responses(
+    State(state): State<AppState>,
+    Path(id): Path<Uuid>,
+) -> ApiResult<Response> {
+    Ok(download(
+        export_response_observations_csv(&require_report(&state, id).await?)
+            .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?,
+        "text/csv; charset=utf-8",
+        "responses.csv",
     ))
 }
 async fn export_issue_csv(

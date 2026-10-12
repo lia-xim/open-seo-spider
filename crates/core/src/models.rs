@@ -28,6 +28,7 @@ pub struct CrawlConfig {
     pub renderer: Option<RendererConfig>,
     pub custom_extractions: Vec<CustomExtractionConfig>,
     pub audit_thresholds: AuditThresholds,
+    pub pdf_analysis: PdfAnalysisConfig,
     /// Full normalized URL regex filters for discovery; explicit seeds are exempt.
     pub include_patterns: Vec<String>,
     pub exclude_patterns: Vec<String>,
@@ -57,10 +58,140 @@ impl Default for CrawlConfig {
             renderer: None,
             custom_extractions: Vec::new(),
             audit_thresholds: AuditThresholds::default(),
+            pdf_analysis: PdfAnalysisConfig::default(),
             include_patterns: Vec::new(),
             exclude_patterns: Vec::new(),
         }
     }
+}
+
+/// Bounds for the independent native PDF parser, separate from crawl URL limits.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(default)]
+pub struct PdfAnalysisConfig {
+    pub enabled: bool,
+    pub max_pages: usize,
+    pub max_objects: usize,
+    /// Per-stream and combined page-content decompression limit.
+    pub max_decompressed_bytes: usize,
+    pub max_text_bytes: usize,
+    pub max_text_bytes_per_page: usize,
+    pub max_annotations: usize,
+}
+
+impl Default for PdfAnalysisConfig {
+    fn default() -> Self {
+        Self {
+            enabled: true,
+            max_pages: 1000,
+            max_objects: 100_000,
+            max_decompressed_bytes: 8 * 1024 * 1024,
+            max_text_bytes: 4 * 1024 * 1024,
+            max_text_bytes_per_page: 1024 * 1024,
+            max_annotations: 10_000,
+        }
+    }
+}
+
+impl PdfAnalysisConfig {
+    pub fn validate(&self) -> anyhow::Result<()> {
+        for (name, value, ceiling) in [
+            ("max_pages", self.max_pages, 100_000),
+            ("max_objects", self.max_objects, 1_000_000),
+            (
+                "max_decompressed_bytes",
+                self.max_decompressed_bytes,
+                128 * 1024 * 1024,
+            ),
+            ("max_text_bytes", self.max_text_bytes, 64 * 1024 * 1024),
+            (
+                "max_text_bytes_per_page",
+                self.max_text_bytes_per_page,
+                64 * 1024 * 1024,
+            ),
+            ("max_annotations", self.max_annotations, 1_000_000),
+        ] {
+            if value == 0 || value > ceiling {
+                anyhow::bail!("PDF {name} must be between 1 and {ceiling}");
+            }
+        }
+        Ok(())
+    }
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum ResourceAnalysisStatus {
+    Complete,
+    Partial,
+    #[default]
+    Error,
+    Encrypted,
+    Disabled,
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
+pub struct PdfAnnotationLink {
+    pub page: u32,
+    pub raw_uri: String,
+    /// Only normalized HTTP(S) URI actions have a discovery URL.
+    pub url: Option<String>,
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
+pub struct PdfPageText {
+    pub page: u32,
+    pub chars: Option<usize>,
+    pub word_count: Option<usize>,
+    pub preview: Option<String>,
+    pub truncated: bool,
+    pub error: Option<String>,
+}
+
+/// Text means decoded page text operators, not OCR, visual layout or full conformance.
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
+pub struct PdfRecord {
+    pub engine: String,
+    pub status: ResourceAnalysisStatus,
+    pub version: Option<String>,
+    pub page_count: Option<usize>,
+    pub declared_page_count: Option<usize>,
+    pub encrypted: Option<bool>,
+    pub info_metadata: BTreeMap<String, String>,
+    pub text_pages_processed: usize,
+    pub text_chars: Option<usize>,
+    pub word_count: Option<usize>,
+    pub text_hash: Option<String>,
+    pub text_preview: Option<String>,
+    pub text_complete: bool,
+    pub text_pages: Vec<PdfPageText>,
+    pub annotation_links: Vec<PdfAnnotationLink>,
+    pub annotations_complete: bool,
+    pub warnings: Vec<String>,
+    pub errors: Vec<String>,
+    pub parse_error: Option<String>,
+    pub limits_reached: Vec<String>,
+}
+
+/// Actual fetched image resource headers; unrelated to HTML img attributes.
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
+pub struct ImageResourceMetadata {
+    pub engine: String,
+    pub status: ResourceAnalysisStatus,
+    pub format: Option<String>,
+    /// Raster pixels, or explicit absolute SVG lengths converted to CSS pixels.
+    pub width: Option<f64>,
+    pub height: Option<f64>,
+    pub dimension_unit: Option<String>,
+    pub encoded_bytes: usize,
+    pub body_complete: bool,
+    pub svg_view_box: Option<[f64; 4]>,
+    pub warnings: Vec<String>,
+    pub parse_error: Option<String>,
 }
 
 /// Original heuristic thresholds; text lengths use Unicode scalar values.
@@ -321,6 +452,7 @@ pub struct CustomExtraction {
     pub values: Vec<String>,
     pub source: String,
     pub method: ExtractionMethod,
+    pub output: ExtractionOutput,
     pub engine: String,
     pub result_type: String,
     /// Extractable values before the configured result bound; None means unknown.
@@ -338,6 +470,8 @@ pub struct CustomExtractionConfig {
     #[serde(default)]
     pub attribute: Option<String>,
     pub method: ExtractionMethod,
+    /// Auto preserves historical text/attribute/scalar behavior.
+    pub output: ExtractionOutput,
     /// Numeric regex capture group; None selects the entire match.
     pub regex_group: Option<usize>,
     /// Supported flags: i, m, s, x, U. Inline Rust regex flags also work.
@@ -357,6 +491,17 @@ pub enum ExtractionMethod {
     Regex,
 }
 
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ExtractionOutput {
+    #[default]
+    Auto,
+    Text,
+    InnerHtml,
+    OuterHtml,
+    FunctionValue,
+}
+
 impl Default for CustomExtractionConfig {
     fn default() -> Self {
         Self {
@@ -364,6 +509,7 @@ impl Default for CustomExtractionConfig {
             selector: String::new(),
             attribute: None,
             method: ExtractionMethod::Css,
+            output: ExtractionOutput::Auto,
             regex_group: None,
             regex_flags: String::new(),
             namespaces: BTreeMap::new(),
@@ -449,6 +595,8 @@ pub struct PageRecord {
     pub custom_extractions: Vec<CustomExtraction>,
     pub custom_javascript_results: Vec<serde_json::Value>,
     pub browser_cookies: Vec<serde_json::Value>,
+    pub pdf: Option<PdfRecord>,
+    pub image_metadata: Option<ImageResourceMetadata>,
 }
 
 impl PageRecord {
@@ -460,11 +608,14 @@ impl PageRecord {
         }
     }
     pub fn is_html(&self) -> bool {
-        self.content_type.contains("text/html")
-            || self.content_type.contains("application/xhtml+xml")
+        self.pdf.is_none()
+            && self.image_metadata.is_none()
+            && (self.content_type.contains("text/html")
+                || self.content_type.contains("application/xhtml+xml"))
     }
     pub fn is_indexable_document(&self) -> bool {
         self.is_html()
+            || self.pdf.is_some()
             || matches!(
                 self.content_type.split(';').next().unwrap_or("").trim(),
                 "application/pdf" | "text/plain"

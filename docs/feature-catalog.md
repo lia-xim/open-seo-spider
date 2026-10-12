@@ -27,7 +27,7 @@ Version 24 added MCP, automatic crawl comparison, richer email change summaries,
 
 ## Capability requirements
 
-The source link in each row supports the reference product area. Acceptance criteria are independent Open SEO Spider requirements and do not imply reference execution. Keys are stable and match the JSON manifest. `implemented` means the stated independent acceptance is supported; `partial` has a verified slice with outstanding acceptance; `planned` has no sufficient tracked implementation slice. Every reference comparison remains `NOT_PROVEN`. Exact evidence and remaining acceptance are recorded per key in the JSON manifest.
+The source link in each row supports the reference product area. Acceptance criteria are independent Open SEO Spider requirements and do not imply reference execution. Keys are stable and match the JSON manifest. `implemented` means the stated independent acceptance is supported; `partial` has a verified slice with outstanding acceptance; `planned` has no sufficient tracked implementation slice. Full feature and workflow parity remains `NOT_PROVEN`; bounded reference observations are reported separately. Exact evidence and remaining acceptance are recorded per key in the JSON manifest.
 
 ### Crawl modes and control (P1)
 
@@ -35,7 +35,7 @@ The source link in each row supports the reference product area. Acceptance crit
 | --- | --- | --- | --- | --- |
 | `modes.spider` | `implemented` | Website spider | Crawl a synthetic linked graph; fetch each normalized URL once and preserve every link occurrence. | [Configuration](https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/) |
 | `modes.list` | `partial` | List import | Import TXT, CSV, XLSX and XML; keep original row order and duplicate inputs in exports while deduplicating network work. | [List mode](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-use-list-mode/) |
-| `modes.serp` | `planned` | Offline SERP editing | Import URL/title/description rows, calculate length and approximate width, and export without making network requests. | [Configuration](https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/) |
+| `modes.serp` | `implemented` | Offline SERP editing | Import URL/title/description rows, calculate length and approximate width, and export without making network requests. | [Configuration](https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/) |
 | `modes.apis` | `planned` | API-only enrichment | Enrich supplied URLs using a mock API; record zero website requests. | [Configuration](https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/) |
 | `modes.compare` | `partial` | Snapshot comparison | Compare two saved fixture snapshots and classify new, missing and changed URLs. | [Crawl comparison](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-compare-crawls/) |
 | `modes.control` | `partial` | Pause, stop, resume | Pause with requests in flight, persist frontier, restart, and complete with no missing or duplicated results. | [General operation](https://www.screamingfrog.co.uk/seo-spider/user-guide/general/) |
@@ -68,7 +68,7 @@ The source link in each row supports the reference product area. Acceptance crit
 | `robots.matching` | `partial` | Agent matching and directives | Run fixtures for multiple user-agent groups, allow/disallow wildcards, end anchors and sitemap declarations. | [Robots testing](https://www.screamingfrog.co.uk/seo-spider/tutorials/robots-txt-tester/) |
 | `robots.test` | `planned` | Custom policy simulation | Evaluate supplied rules against a URL list without editing the remote site's robots.txt. | [Robots testing](https://www.screamingfrog.co.uk/seo-spider/tutorials/robots-txt-tester/) |
 | `robots.override` | `partial` | Explicit robots override | Keep respect as the default; require a saved explicit override and show its state in crawl metadata. | [Robots testing](https://www.screamingfrog.co.uk/seo-spider/tutorials/robots-txt-tester/) |
-| `robots.meta` | `partial` | Meta and HTTP robots | Extract multiple meta robots and X-Robots-Tag fields; distinguish general and agent-specific directives. | [Data tabs](https://www.screamingfrog.co.uk/seo-spider/user-guide/tabs/) |
+| `robots.meta` | `implemented` | Meta and HTTP robots | Extract multiple meta robots and X-Robots-Tag fields; distinguish general and agent-specific directives. | [Data tabs](https://www.screamingfrog.co.uk/seo-spider/user-guide/tabs/) |
 | `robots.indexability` | `partial` | Indexability explanations | Report concrete reasons for redirect, robots blocking, noindex, non-HTML and canonicalization with supporting evidence. | [Data tabs](https://www.screamingfrog.co.uk/seo-spider/user-guide/tabs/) |
 | `robots.traversal` | `planned` | Directive-dependent discovery | Verify saved noindex/canonical/pagination policies influence expansion without suppressing observed evidence. | [Configuration](https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/) |
 
@@ -90,7 +90,7 @@ The source link in each row supports the reference product area. Acceptance crit
 | `metadata.titles` | `partial` | Title extraction and audits | Test absent, empty, multiple, duplicate and configurable character/width thresholds with a known HTML fixture. | [Data tabs](https://www.screamingfrog.co.uk/seo-spider/user-guide/tabs/) |
 | `metadata.descriptions` | `partial` | Description extraction and audits | Test absent, duplicate, multiple and length/width limits without assuming a fixed search-engine display width. | [Data tabs](https://www.screamingfrog.co.uk/seo-spider/user-guide/tabs/) |
 | `metadata.headings` | `partial` | H1/H2 and meta keyword evidence | Record heading order and duplicate/missing/multiple conditions plus meta keyword values as observational fields. | [Data tabs](https://www.screamingfrog.co.uk/seo-spider/user-guide/tabs/) |
-| `metadata.serp_preview` | `planned` | SERP preview | Show editable title/description preview; identify it as an approximation and export edited values. | [General operation](https://www.screamingfrog.co.uk/seo-spider/user-guide/general/) |
+| `metadata.serp_preview` | `implemented` | SERP preview | Show editable title/description preview; identify it as an approximation and export edited values. | [General operation](https://www.screamingfrog.co.uk/seo-spider/user-guide/general/) |
 | `metadata.area` | `planned` | Configurable content area | Exclude shared navigation/footer and include a chosen selector; prove selected text feeds analysis. | [Duplicate content](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-check-for-duplicate-content/) |
 | `metadata.wordcount` | `partial` | Text count and ratio | Use fixture paragraphs and hidden/script content to prove documented tokenization and text/code calculations. | [Readability](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-test-readability/) |
 | `metadata.readability` | `planned` | Readability scoring | Return score and formula/language version; classify unsupported language explicitly. | [Readability](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-test-readability/) |
@@ -135,8 +135,8 @@ The source link in each row supports the reference product area. Acceptance crit
 | `images.alt` | `partial` | Missing alt distinctions | Separate missing attribute from empty/whitespace alt using three deliberately different image elements. | [Image auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-find-missing-image-alt-text/) |
 | `images.size` | `partial` | Image dimensions and size audits | Record intrinsic/rendered dimensions, transfer size and configurable thresholds without mislabeling unavailable data. | [Image auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-find-missing-image-alt-text/) |
 | `images.cookies` | `implemented` | Cookie audit | Collect response and script cookies with domain/path/security attributes and distinguish session contexts. | [Cookies](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-perform-a-cookie-audit/) |
-| `images.pdf` | `planned` | PDF metadata and text | Extract title, author, dates, pages and text from an owned fixture PDF; show unsupported encrypted files explicitly. | [PDF auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-pdfs/) |
-| `images.pdf_links` | `planned` | PDF links and anchor evidence | Resolve link annotations, record source document/page and extract text where reliable. | [PDF auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-pdfs/) |
+| `images.pdf` | `partial` | PDF metadata and text | Extract title, author, dates, pages and text from an owned fixture PDF; show unsupported encrypted files explicitly. | [PDF auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-pdfs/) |
+| `images.pdf_links` | `partial` | PDF links and anchor evidence | Resolve link annotations, record source document/page and extract text where reliable. | [PDF auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-pdfs/) |
 
 ### Browser rendering and custom scripts (P3)
 
@@ -150,7 +150,7 @@ The source link in each row supports the reference product area. Acceptance crit
 | `rendering.console` | `partial` | Console and blocked-resource evidence | Save browser JS errors and failed/robots-blocked resource loads with URLs and error types. | [JavaScript crawling](https://www.screamingfrog.co.uk/seo-spider/tutorials/crawl-javascript-seo/) |
 | `rendering.flatten` | `planned` | Shadow DOM and iframe flattening | Extract owned fixtures with shadow roots and same-origin iframe content; preserve source context. | [JavaScript crawling](https://www.screamingfrog.co.uk/seo-spider/tutorials/crawl-javascript-seo/) |
 | `rendering.archive` | `planned` | Website archiving | Save configured page/resource artifacts and verify a manifest can locate each stored file. | [Configuration](https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/) |
-| `rendering.custom_extract` | `partial` | CSS/XPath/regex extraction | Return text, attributes, HTML, inner HTML and function values from a known fixture with multi-value results. | [Custom extraction](https://www.screamingfrog.co.uk/seo-spider/tutorials/web-scraping/) |
+| `rendering.custom_extract` | `implemented` | CSS/XPath/regex extraction | Return text, attributes, HTML, inner HTML and function values from a known fixture with multi-value results. | [Custom extraction](https://www.screamingfrog.co.uk/seo-spider/tutorials/web-scraping/) |
 | `rendering.visual_extract` | `planned` | Visual selector authoring | Choose an element, preview raw/rendered extraction, save selector and verify it on a second fixture. | [Custom extraction](https://www.screamingfrog.co.uk/seo-spider/tutorials/web-scraping/) |
 | `rendering.custom_search` | `planned` | Literal and regex search | Search source, rendered content and selected text with occurrence counts and match evidence. | [Custom search](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-use-custom-search/) |
 | `rendering.javascript` | `implemented` | Custom JavaScript extraction | Run a user-authored script against a fixture with timeout/error handling and typed returned columns. | [JavaScript debugging](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-debug-custom-javascript-snippets/) |
@@ -255,11 +255,20 @@ The source link in each row supports the reference product area. Acceptance crit
 
 ## Evidence-based implementation status
 
-Review: 12 October 2026. **12 implemented, 71 partial, 61 planned; 144 grouped requirements.** This is independent acceptance, never a vendor-coverage percentage. The separate [416-filter ledger](parity/granular-acceptance.md) records exact parameters, trigger/control fixtures and edge contracts with all reference parity statuses still NOT_PROVEN.
+Review: 12 October 2026. **16 implemented, 71 partial, 57 planned; 144 grouped requirements.** This is independent acceptance, never a vendor-coverage percentage. The separate [416-filter ledger](parity/granular-acceptance.md) records exact parameters, trigger/control fixtures and edge contracts with all reference parity statuses still NOT_PROVEN.
 
-[Integrated batch verification](verification/advanced-batch.json) records native Rust tests, Clippy, worker, real UI→Rust→Chrome, persistence, all eight exports and SDK MCP tests. [Original fixture comparison](parity/reference-comparison.md) records 863 equal cells, 53 differences and three unavailable measurements in a small scoped reference run. [Membership evidence](parity/reference-membership/membership.md) covers 78 selected filters; empty or unconfirmed probes remain open. These observations do not establish complete features or rule boundaries.
+The preserved [earlier advanced batch](verification/advanced-batch.json) records its original 91 Rust tests and earlier export/browser checks. The fresh [resource and offline batch](verification/resource-offline-batch.json) records **126 default Rust tests** (28 app, 71 core, 23 crawl, four resource fixtures), one explicit real-browser gate, Clippy/build checks, 16 worker tests, 33 UI fixtures, 14 actual renderer-flow checks, 13 actual resource-flow checks, six offline SERP browser checks, and 13 editor-race regressions. The API gate covers all eleven crawl export endpoints, recovery and offline import/export; official MCP SDK tests pass in both transports with 11 tools. The actual offline SERP fixture receives **zero website requests**.
 
-Broad imports and crawl policies, full relationship formats, archives, PDF/resource analysis, provider/AI adapters, authentication, scheduling and large-scale performance still have explicit remaining acceptance. See the JSON ledger for each contract.
+The [current original fixture comparison](parity/reference-comparison.md) records **887 matching cells, 29 differences and three unavailable measurements**, across 35 reference rows and 34 independent document rows. Native response inventories separately retain intermediate redirect observations; they do not manufacture document rows. The [native text-width comparison](parity/native-text-width-comparison.json) matches **58 present title/description measurements** for the fixed public-font 150-percent profile, with two absent-element placeholders excluded. Other display profiles and complex shaping remain outside that proof. [Membership evidence](parity/reference-membership/membership.md) covers 78 selected filters; empty or unconfirmed probes remain open. Matching cells and measurements do not count as complete features or prove all filter boundaries.
+
+The offline SERP editor, meta/HTTP robots extraction and supported HTML extraction modes now meet their independent acceptance. PDF and image analysis remain partial: PDF unsupported fonts, Form XObjects, rendering/OCR and annotation anchor text, plus rendered image dimensions, wire-transfer bytes and configurable dimension/size thresholds, still require proof. Broad imports/crawl policies, full relationship formats, archives, provider/AI adapters, authentication, scheduling and large-scale performance retain explicit remaining acceptance. See the JSON ledger for each contract.
+
+| Phase | Implemented | Partial | Planned | Total |
+| --- | ---: | ---: | ---: | ---: |
+| P1 | 5 | 27 | 13 | 45 |
+| P2 | 4 | 31 | 10 | 45 |
+| P3 | 5 | 8 | 11 | 24 |
+| P4 | 2 | 5 | 23 | 30 |
 
 ## Reference workflow evidence
 

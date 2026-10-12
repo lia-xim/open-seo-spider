@@ -218,10 +218,6 @@ pub(crate) fn extract_http_metadata(page: &mut PageRecord) {
     evaluate_robots(page);
 }
 
-fn directive_name(value: &str) -> &str {
-    value.split_once(':').map_or(value, |(name, _)| name).trim()
-}
-
 fn recognized(name: &str) -> bool {
     matches!(
         name,
@@ -246,20 +242,129 @@ fn recognized(name: &str) -> bool {
 }
 
 fn normalize_directives(value: &str) -> Vec<String> {
-    let mut result = Vec::new();
+    let mut result: Vec<String> = Vec::new();
     for part in split_quoted(value, ',') {
         let part = part.trim().to_ascii_lowercase();
-        if part.contains(':') && recognized(directive_name(&part)) {
-            result.push(part);
-        } else {
-            result.extend(
-                part.split_ascii_whitespace()
-                    .filter(|token| recognized(token))
-                    .map(str::to_owned),
-            );
+        let starts = directive_starts(&part);
+        if starts.is_empty()
+            && let Some(last) = result.last_mut()
+            && last.starts_with("unavailable_after:")
+        {
+            last.push_str(", ");
+            last.push_str(&part);
+        }
+        if let Some(first) = starts.first()
+            && first.0 > 0
+            && let Some(last) = result.last_mut()
+            && last.starts_with("unavailable_after:")
+        {
+            last.push_str(", ");
+            last.push_str(part[..first.0].trim());
+        }
+        for (index, (start, name_end, colon)) in starts.iter().copied().enumerate() {
+            let end = starts.get(index + 1).map_or(part.len(), |v| v.0);
+            let name = &part[start..name_end];
+            if let Some(colon) = colon {
+                result.push(format!("{name}:{}", part[colon + 1..end].trim_end()));
+            } else {
+                result.push(name.to_owned());
+            }
         }
     }
     result
+}
+
+fn valued_directive(name: &str) -> bool {
+    matches!(
+        name,
+        "max-snippet" | "max-image-preview" | "max-video-preview" | "unavailable_after"
+    )
+}
+
+// Tolerate whitespace between ordinary combined directives, while values and
+// date/time colons remain attached to their directive. Quoted values are opaque.
+fn directive_starts(value: &str) -> Vec<(usize, usize, Option<usize>)> {
+    let bytes = value.as_bytes();
+    let mut starts = Vec::new();
+    let mut index = 0;
+    let mut quote = None;
+    let mut escaped = false;
+    while index < bytes.len() {
+        let byte = bytes[index];
+        if let Some(delimiter) = quote {
+            if escaped {
+                escaped = false;
+            } else if byte == b'\\' {
+                escaped = true;
+            } else if byte == delimiter {
+                quote = None;
+            }
+            index += 1;
+            continue;
+        }
+        if matches!(byte, b'\'' | b'"') {
+            quote = Some(byte);
+            index += 1;
+            continue;
+        }
+        if index == 0 || bytes[index - 1].is_ascii_whitespace() {
+            let start = index;
+            while index < bytes.len()
+                && (bytes[index].is_ascii_alphanumeric() || matches!(bytes[index], b'-' | b'_'))
+            {
+                index += 1;
+            }
+            if index > start {
+                let name = &value[start..index];
+                let mut colon = index;
+                while colon < bytes.len() && bytes[colon].is_ascii_whitespace() {
+                    colon += 1;
+                }
+                let has_colon = bytes.get(colon) == Some(&b':');
+                let terminated =
+                    index == bytes.len() || bytes[index].is_ascii_whitespace() || has_colon;
+                if recognized(name) && terminated && (valued_directive(name) == has_colon) {
+                    starts.push((start, index, has_colon.then_some(colon)));
+                }
+                continue;
+            }
+        }
+        index += 1;
+    }
+    starts
+}
+
+/// Preserve cookie names/attributes but never store the Set-Cookie pair value.
+pub(crate) fn redact_set_cookie(value: &str) -> String {
+    let mut quoted = false;
+    let mut escaped = false;
+    let mut delimiter = None;
+    for (index, ch) in value.char_indices() {
+        if escaped {
+            escaped = false;
+            continue;
+        }
+        if quoted && ch == '\\' {
+            escaped = true;
+        } else if ch == '"' {
+            quoted = !quoted;
+        } else if ch == ';' && !quoted {
+            delimiter = Some(index);
+            break;
+        }
+    }
+    let pair = &value[..delimiter.unwrap_or(value.len())];
+    let Some((name, _)) = pair.split_once('=') else {
+        return "[redacted]".into();
+    };
+    let name = name.trim();
+    if name.is_empty() || name.chars().any(char::is_control) || name.contains([';', ',']) {
+        return "[redacted]".into();
+    }
+    format!(
+        "{name}=[redacted]{}",
+        delimiter.map_or("", |index| &value[index..])
+    )
 }
 
 /// Each header field starts unscoped. A bot prefix scopes subsequent comma
@@ -280,6 +385,21 @@ pub fn parse_x_robots_tag(value: &str) -> Vec<RobotsDirective> {
             }
         }
         let directives = normalize_directives(content);
+        let lower = content.to_ascii_lowercase();
+        if let Some(first) = directive_starts(&lower).first()
+            && first.0 > 0
+            && let Some(previous) = result.last_mut()
+            && let Some(date) = previous.directives.last_mut()
+            && date.starts_with("unavailable_after:")
+        {
+            let continuation = content[..first.0].trim();
+            if !continuation.is_empty() {
+                previous.raw.push_str(", ");
+                previous.raw.push_str(continuation);
+                date.push_str(", ");
+                date.push_str(&continuation.to_ascii_lowercase());
+            }
+        }
         if directives.is_empty() {
             // Date continuations are retained in the previous valued directive.
             if let Some(previous) = result.last_mut()
@@ -423,6 +543,65 @@ pub(crate) fn sync_relationship_links(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn whitespace_after_valued_robot_rules_preserves_restrictions_and_quotes() {
+        for (value, expected) in [
+            ("max-snippet:50 noindex", vec!["max-snippet:50", "noindex"]),
+            (
+                "MAX-SNIPPET: 50  noindex nofollow",
+                vec!["max-snippet: 50", "noindex", "nofollow"],
+            ),
+            (
+                "max-image-preview : large noimageindex",
+                vec!["max-image-preview: large", "noimageindex"],
+            ),
+            (
+                "max-snippet:\"50 noindex\" follow",
+                vec!["max-snippet:\"50 noindex\"", "follow"],
+            ),
+            (
+                "max-snippet:'50 noindex' follow",
+                vec!["max-snippet:'50 noindex'", "follow"],
+            ),
+            ("noindex:foo max-snippet nofollow", vec!["nofollow"]),
+        ] {
+            assert_eq!(normalize_directives(value), expected, "{value}");
+        }
+        let mut page = PageRecord {
+            indexability_agent: "googlebot".into(),
+            ..Default::default()
+        };
+        add_meta_robots(&mut page, "robots", "max-video-preview: 10 noindex");
+        page.robots_directives.extend(parse_x_robots_tag("bingbot:max-snippet:5 nofollow, googlebot: unavailable_after: Wed, 03 Dec 2099 13:00:00 GMT noarchive"));
+        evaluate_robots(&mut page);
+        assert!(page.effective_robots.contains(&"noindex".into()));
+        assert!(page.effective_robots.contains(&"noarchive".into()));
+        assert!(!page.effective_robots.contains(&"nofollow".into()));
+        assert!(
+            page.effective_robots
+                .contains(&"unavailable_after: wed, 03 dec 2099 13:00:00 gmt".into())
+        );
+    }
+
+    #[test]
+    fn set_cookie_values_are_redacted_with_quoted_separators_and_attributes_preserved() {
+        assert_eq!(
+            redact_set_cookie("sid=private_fixture_value; Path=/; HttpOnly; Secure; SameSite=Lax"),
+            "sid=[redacted]; Path=/; HttpOnly; Secure; SameSite=Lax"
+        );
+        assert_eq!(
+            redact_set_cookie(
+                "sid=\"private;fixture\"; Expires=Wed, 03 Dec 2099 13:00:00 GMT; Path=/"
+            ),
+            "sid=[redacted]; Expires=Wed, 03 Dec 2099 13:00:00 GMT; Path=/"
+        );
+        assert_eq!(
+            redact_set_cookie("sid=\"unfinished; private"),
+            "sid=[redacted]"
+        );
+        assert_eq!(redact_set_cookie("malformed private cookie"), "[redacted]");
+    }
 
     #[test]
     fn link_header_handles_quoted_delimiters_repeated_parameters_and_contexts() {

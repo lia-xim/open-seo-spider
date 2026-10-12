@@ -2,11 +2,22 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import http from 'node:http';
 import { setTimeout as delay } from 'node:timers/promises';
-import { createRendererServer, findBrowserExecutable, JobPool, validateRenderRequest } from '../server.mjs';
+import { createRendererServer, findBrowserExecutable, JobPool, validateRenderRequest, observationHeaders, redactSetCookie } from '../server.mjs';
 
 const listen = server => new Promise(resolve => server.listen(0, '127.0.0.1', () => resolve(`http://127.0.0.1:${server.address().port}`)));
 const close = server => new Promise(resolve => { server.close(resolve); server.closeAllConnections(); });
 const html = (title, body = '', script = '') => `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>${title}</title></head><body>${body}<script>${script}</script></body></html>`;
+
+test('response header observations redact cookie values while preserving independent attributes', () => {
+  assert.equal(redactSetCookie('session=private-token; Path=/; HttpOnly'), 'session=[redacted]; Path=/; HttpOnly');
+  assert.equal(redactSetCookie('quoted="private;token"; Secure'), 'quoted=[redacted]; Secure');
+  assert.equal(redactSetCookie('broken="private;secret'), 'broken=[redacted]');
+  assert.equal(redactSetCookie('malformed private-token'), '[redacted]');
+  const headers=observationHeaders([{name:'Set-Cookie',value:'a=first-private; Path=/'},{name:'set-cookie',value:'b=second-private; Expires=Wed, 21 Oct 2030 07:28:00 GMT'},{name:'Link',value:'</a>;rel=next'},{name:'link',value:'</b>;rel=prev'}]);
+  assert.equal(headers['set-cookie'], 'a=[redacted]; Path=/\nb=[redacted]; Expires=Wed, 21 Oct 2030 07:28:00 GMT');
+  assert.equal(headers.link, '</a>;rel=next, </b>;rel=prev');
+  assert.ok(!JSON.stringify(headers).includes('private'));
+});
 
 test('validation rejects non-HTTP URLs, header injection and unbounded options', () => {
   for (const input of [{ url: 'file:///C:/secret' }, { url: 'http://user:password@fixture.test/' },
@@ -63,6 +74,7 @@ test('real installed browser renders JavaScript, isolates jobs and audits owned 
       const pending = setTimeout(() => { if (!response.destroyed) { response.writeHead(200, {'content-type': 'text/html'}); response.end(html('Too late')); } }, 3000);
       response.on('close', () => clearTimeout(pending)); return;
     }
+    if (request.url === '/cookie-set') response.setHeader('set-cookie', 'serverSession=owned-private-value; HttpOnly; Path=/; SameSite=Lax');
     response.writeHead(request.url === '/missing' ? 404 : 200,
       {'content-type': 'text/html; charset=utf-8', 'x-fixture': 'rendered-evidence'});
     if (request.url === '/dynamic') {
@@ -135,6 +147,8 @@ test('real installed browser renders JavaScript, isolates jobs and audits owned 
     const cookie = result.body.browser_cookies.find(entry => entry.name === 'isolated');
     assert.ok(cookie); assert.equal(cookie.path, '/'); assert.equal(cookie.httpOnly, false);
     assert.equal(cookie.value_length, 3); assert.equal(Object.hasOwn(cookie, 'value'), false);
+    assert.match(result.body.headers['set-cookie'], /serverSession=\[redacted\]/);
+    assert.ok(!JSON.stringify(result.body.headers).includes('owned-private-value'));
     assert.equal((await render('/cookie-check', { collect_cookies: true })).body.browser_cookies.length, 0);
     assert.equal((await render('/cookie-set')).body.browser_cookies.length, 0);
   });

@@ -1,0 +1,96 @@
+{
+  "tested_at": "2026-10-12T08:51:33.858Z",
+  "result": "PASS",
+  "platform": "native Windows",
+  "release_binary_sha256": "02d09500b901a2cbba97dd435f8bc6b7d30d6a2d90a1621c425a23165cf9d6a2",
+  "debug_binary_sha256": "0e6e71fcb9807e059b361916419e0b07c52d06f3ff9892d9283620e0506a6a38",
+  "rust": {
+    "default_passed": 126,
+    "breakdown": {
+      "app": 28,
+      "core": 71,
+      "crawl": 23,
+      "resources": 4
+    },
+    "default_ignored": 1,
+    "explicit_real_browser_passed": 1,
+    "format": "PASS",
+    "clippy": "PASS",
+    "debug_build": "PASS",
+    "release_build": "PASS"
+  },
+  "worker": {
+    "passed": 16
+  },
+  "ui": {
+    "fixture_passed": 33,
+    "actual_renderer_flow_passed": 14,
+    "actual_resource_flow_passed": 13,
+    "offline_serp_flow_passed": 6,
+    "serp_race_regressions": 13,
+    "offline_website_requests": 0
+  },
+  "reference": {
+    "counts": {
+      "MATCH": 887,
+      "DIFFERENT": 29,
+      "UNAVAILABLE": 3
+    },
+    "reference_rows": 35,
+    "independent_rows": 34,
+    "native_text_measurements": {
+      "MATCH": 58,
+      "DIFFERENT": 0,
+      "UNAVAILABLE": 0
+    },
+    "absent_width_placeholders_excluded": 2,
+    "full_parity": "NOT_PROVEN"
+  },
+  "artifacts": [
+    {
+      "artifact": "docs/verification/api-e2e.json",
+      "sha256": "f914be8ffb8717cd57d36883bda075633977cd73f214b169956287d6db8b4ab1"
+    },
+    {
+      "artifact": "docs/verification/mcp-e2e.json",
+      "sha256": "72bb45af81ed943f8e5bcc4ac7c66238db36b886ad1bd007f9c81016812575aa"
+    },
+    {
+      "artifact": "web/verification/ui-fixture-results.json",
+      "sha256": "84e9a0bef6608167fa8314b97cb9f46f497dbe59cea5423515419107ae2cf190"
+    },
+    {
+      "artifact": "web/verification/ui-renderer-live-results.json",
+      "sha256": "4827347b56b22c948d35ff73f2774ed064eb93dcd7827fdf4098a94a6e2b2d11"
+    },
+    {
+      "artifact": "web/verification/ui-resource-live-results.json",
+      "sha256": "b8f92136e8d543844417ac2c477de99144dd82897d7ec868c0bba7d52e4552d7"
+    },
+    {
+      "artifact": "web/verification/ui-serp-live-results.json",
+      "sha256": "3bc4776753b0d3cef6acc3d70885705652687e8f89a6bd5ee8a9de653ffedcc7"
+    },
+    {
+      "artifact": "docs/parity/native-text-width-comparison.json",
+      "sha256": "f047d33b2965d0415f5b568039d22527f0500395f5494845a981f9fe94ff93bf"
+    },
+    {
+      "artifact": "docs/parity/reference-comparison.json",
+      "sha256": "ce6eeefe7f4c409df9d5c27d5f58773dc9bc858378489cb5f9969fd3acb94cc4"
+    }
+  ],
+  "scope": "Original bounded PDF text/metadata/annotation and encoded image observations; HTML extraction modes; cookie-header redaction; individual native redirect responses; offline metadata editing, import/export, race protection and calibrated public font profile.",
+  "runtime": {
+    "url": "http://127.0.0.1:8787",
+    "fresh_release_installed": true,
+    "existing_user_snapshots_preserved": true
+  },
+  "limitations": [
+    "Full vendor parity remains NOT_PROVEN.",
+    "PDF OCR/rendering, Form XObjects and unsupported font mappings remain outside the text parser.",
+    "Intermediate redirect bodies and most intermediate headers are not retained and remain unknown.",
+    "Complex text shaping and other display profiles are unproven.",
+    "Docker runtime and production-scale performance remain NOT_PROVEN."
+  ]
+}

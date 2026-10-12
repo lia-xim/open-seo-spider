@@ -176,6 +176,7 @@ pub fn export_custom_extractions_csv(report: &CrawlReport) -> anyhow::Result<Str
         "Observed Match Count",
         "Truncated",
         "Error",
+        "Output Mode",
     ])?;
     for page in &report.pages {
         for extraction in &page.custom_extractions {
@@ -217,6 +218,14 @@ pub fn export_custom_extractions_csv(report: &CrawlReport) -> anyhow::Result<Str
                         .unwrap_or_default(),
                     extraction.truncated.to_string(),
                     csv_text(extraction.error.as_deref().unwrap_or_default()),
+                    match extraction.output {
+                        crate::ExtractionOutput::Auto => "auto",
+                        crate::ExtractionOutput::Text => "text",
+                        crate::ExtractionOutput::InnerHtml => "inner_html",
+                        crate::ExtractionOutput::OuterHtml => "outer_html",
+                        crate::ExtractionOutput::FunctionValue => "function_value",
+                    }
+                    .into(),
                 ])?;
             }
         }
@@ -292,6 +301,122 @@ pub fn export_browser_cookies_csv(report: &CrawlReport) -> anyhow::Result<String
     Ok(String::from_utf8(writer.into_inner()?)?)
 }
 
+/// Native PDF observations. Unknown numbers remain empty cells, while parse
+/// errors, unsupported extraction and exhausted limits stay explicit.
+pub fn export_pdf_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let mut writer = csv::Writer::from_writer(Vec::new());
+    writer.write_record([
+        "URL",
+        "Final URL",
+        "HTTP Status",
+        "Analysis Status",
+        "Engine",
+        "PDF Version",
+        "Encrypted",
+        "Page Count",
+        "Declared Page Count",
+        "Text Pages Processed",
+        "Text Characters",
+        "Word Count",
+        "Text Complete",
+        "Annotations Complete",
+        "Info JSON",
+        "Text Preview",
+        "Text Hash",
+        "Page Text JSON",
+        "Annotation Links JSON",
+        "Warnings JSON",
+        "Errors JSON",
+        "Parse Error",
+        "Limits Reached JSON",
+    ])?;
+    for page in &report.pages {
+        let Some(pdf) = &page.pdf else { continue };
+        writer.write_record([
+            csv_text(&page.url),
+            csv_text(&page.final_url),
+            page.final_status.map(|v| v.to_string()).unwrap_or_default(),
+            resource_status(pdf.status),
+            csv_text(&pdf.engine),
+            csv_text(pdf.version.as_deref().unwrap_or_default()),
+            pdf.encrypted.map(|v| v.to_string()).unwrap_or_default(),
+            pdf.page_count.map(|v| v.to_string()).unwrap_or_default(),
+            pdf.declared_page_count
+                .map(|v| v.to_string())
+                .unwrap_or_default(),
+            pdf.text_pages_processed.to_string(),
+            pdf.text_chars.map(|v| v.to_string()).unwrap_or_default(),
+            pdf.word_count.map(|v| v.to_string()).unwrap_or_default(),
+            pdf.text_complete.to_string(),
+            pdf.annotations_complete.to_string(),
+            serde_json::to_string(&pdf.info_metadata)?,
+            csv_text(pdf.text_preview.as_deref().unwrap_or_default()),
+            csv_text(pdf.text_hash.as_deref().unwrap_or_default()),
+            serde_json::to_string(&pdf.text_pages)?,
+            serde_json::to_string(&pdf.annotation_links)?,
+            serde_json::to_string(&pdf.warnings)?,
+            serde_json::to_string(&pdf.errors)?,
+            csv_text(pdf.parse_error.as_deref().unwrap_or_default()),
+            serde_json::to_string(&pdf.limits_reached)?,
+        ])?;
+    }
+    Ok(String::from_utf8(writer.into_inner()?)?)
+}
+
+/// Fetched image resource metadata, separate from declared img width/height/alt.
+pub fn export_image_resources_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let mut writer = csv::Writer::from_writer(Vec::new());
+    writer.write_record([
+        "URL",
+        "Final URL",
+        "HTTP Status",
+        "Analysis Status",
+        "Engine",
+        "Format",
+        "Width",
+        "Height",
+        "Dimension Unit",
+        "Encoded Bytes",
+        "Body Complete",
+        "SVG ViewBox JSON",
+        "Warnings JSON",
+        "Parse Error",
+    ])?;
+    for page in &report.pages {
+        let Some(image) = &page.image_metadata else {
+            continue;
+        };
+        writer.write_record([
+            csv_text(&page.url),
+            csv_text(&page.final_url),
+            page.final_status.map(|v| v.to_string()).unwrap_or_default(),
+            resource_status(image.status),
+            csv_text(&image.engine),
+            csv_text(image.format.as_deref().unwrap_or_default()),
+            image.width.map(|v| v.to_string()).unwrap_or_default(),
+            image.height.map(|v| v.to_string()).unwrap_or_default(),
+            csv_text(image.dimension_unit.as_deref().unwrap_or_default()),
+            image.encoded_bytes.to_string(),
+            image.body_complete.to_string(),
+            serde_json::to_string(&image.svg_view_box)?,
+            serde_json::to_string(&image.warnings)?,
+            csv_text(image.parse_error.as_deref().unwrap_or_default()),
+        ])?;
+    }
+    Ok(String::from_utf8(writer.into_inner()?)?)
+}
+
+fn resource_status(status: crate::ResourceAnalysisStatus) -> String {
+    match status {
+        crate::ResourceAnalysisStatus::Complete => "complete",
+        crate::ResourceAnalysisStatus::Partial => "partial",
+        crate::ResourceAnalysisStatus::Error => "error",
+        crate::ResourceAnalysisStatus::Encrypted => "encrypted",
+        crate::ResourceAnalysisStatus::Disabled => "disabled",
+    }
+    .into()
+}
+
 fn scalar_json_field(value: &serde_json::Value, field: &str) -> String {
     match value.get(field) {
         Some(serde_json::Value::String(value)) => csv_text(value),
@@ -306,7 +431,7 @@ fn scalar_json_field(value: &serde_json::Value, field: &str) -> String {
 /// Leading Unicode whitespace, tabs, CR/LF and BOM cannot hide a formula prefix.
 /// Numeric/boolean columns bypass this helper; JSON project exports keep the
 /// original strings exactly, including any leading apostrophe or whitespace.
-fn csv_text(value: &str) -> String {
+pub(crate) fn csv_text(value: &str) -> String {
     let significant = value
         .trim_start_matches(|character: char| character.is_whitespace() || character == '\u{feff}');
     if matches!(significant.chars().next(), Some('=' | '+' | '-' | '@')) {
@@ -721,14 +846,15 @@ mod tests {
                 "Result Type",
                 "Observed Match Count",
                 "Truncated",
-                "Error"
+                "Error",
+                "Output Mode"
             ]
         );
         assert_eq!(rows.len(), 4);
         assert_eq!(&rows[0][4..8], ["rendered_html", "2", "1", "10,\"quote\""]);
         assert_eq!(
             &rows[0][8..],
-            ["regex", "rust-regex", "string", "5", "true", ""]
+            ["regex", "rust-regex", "string", "5", "true", "", "auto"]
         );
         assert_eq!(rows[1][7], "20\nline");
         assert_eq!(rows[2][5], "0");
@@ -741,7 +867,8 @@ mod tests {
                 "",
                 "",
                 "false",
-                "Parser, error\nnext line"
+                "Parser, error\nnext line",
+                "auto"
             ]
         );
         assert_eq!(rows[3][8], "css");
@@ -839,6 +966,62 @@ mod tests {
         let json = serde_json::to_value(&snapshot).unwrap();
         assert_eq!(json["pages"][0]["titles"][0], "=SUM(1,2)");
         assert_eq!(json["issues"][0]["message"], " \t=ISSUE()");
+    }
+
+    #[test]
+    fn resource_csv_distinguishes_unknown_from_zero_and_preserves_errors() {
+        let pages = vec![
+            PageRecord {
+                url: "https://fixture.test/document.pdf".into(),
+                pdf: Some(crate::PdfRecord {
+                    status: crate::ResourceAnalysisStatus::Partial,
+                    page_count: Some(2),
+                    text_chars: None,
+                    word_count: Some(0),
+                    parse_error: Some(" \t=FAILED()".into()),
+                    limits_reached: vec!["max_pages".into()],
+                    ..Default::default()
+                }),
+                ..Default::default()
+            },
+            PageRecord {
+                url: "https://fixture.test/vector.svg".into(),
+                image_metadata: Some(crate::ImageResourceMetadata {
+                    format: Some("svg".into()),
+                    width: None,
+                    height: Some(30.5),
+                    body_complete: true,
+                    svg_view_box: Some([0.0, 0.0, 80.0, 40.0]),
+                    parse_error: Some("decode, error\nnext".into()),
+                    ..Default::default()
+                }),
+                ..Default::default()
+            },
+        ];
+        let snapshot = report(pages);
+        let (_, pdf) = read_csv(&export_pdf_csv(&snapshot).unwrap());
+        assert_eq!(pdf.len(), 1);
+        assert_eq!(pdf[0][3], "partial");
+        assert_eq!(pdf[0][7], "2");
+        assert_eq!(pdf[0][10], "");
+        assert_eq!(pdf[0][11], "0");
+        assert_eq!(pdf[0][21], "' \t=FAILED()");
+        let (_, images) = read_csv(&export_image_resources_csv(&snapshot).unwrap());
+        assert_eq!(images.len(), 1);
+        assert_eq!(images[0][6], "");
+        assert_eq!(images[0][7], "30.5");
+        assert_eq!(images[0][11], "[0.0,0.0,80.0,40.0]");
+        assert_eq!(images[0][13], "decode, error\nnext");
+        assert!(
+            read_csv(&export_pdf_csv(&report(vec![])).unwrap())
+                .1
+                .is_empty()
+        );
+        assert!(
+            read_csv(&export_image_resources_csv(&report(vec![])).unwrap())
+                .1
+                .is_empty()
+        );
     }
 
     #[test]

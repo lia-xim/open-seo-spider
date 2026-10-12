@@ -24,7 +24,7 @@ async function stop() {
   const exited = new Promise(resolveExit => child.once('exit', resolveExit)); child.kill(); await exited;
 }
 function fieldReasons(field) {
-  const reasons = { title_pixels: 'Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable.',
+  const reasons = { title_pixels: 'Present ordinary HTML-200 text uses the bounded calibrated profile. Initial-response versus final-document extraction and absent metadata remain distinct; other glyphs or display profiles are unproven.',
     inlinks: 'Reference source/link occurrence and resource accounting can differ; require lower-link exports to calibrate.',
     outlinks: 'Comparable anchor occurrences only; total non-anchor references remain separate independent facts.',
     unique_inlinks: 'Reference graph identity and resource inclusion need calibration.', unique_outlinks: 'Reference graph identity and resource inclusion need calibration.',

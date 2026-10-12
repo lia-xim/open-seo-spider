@@ -61,6 +61,13 @@ URL-Formmerkmale bleiben beobachtbare Fakten der Anfrage-URL und können auch
 ohne vollständigen Body geprüft werden. HTTP-, Robots-, Body- und Rendererfehler
 bleiben eigene bestehende Meldungen.
 
+PDFs und Bilddateien erhalten keine HTML-Abwesenheitsregeln aus fehlenden
+Title-Tags, Headings oder Alt-Attributen. PDF-Metadatentitel, geprüfte Seitenzahlen
+und Textoperatoren stehen in einem eigenen Ressourcenbefund. Bilddateimaße aus
+Dateiköpfen bleiben getrennt von den Attributen eines HTML-Bildvorkommens.
+Parserstatus und unbekannte Werte sind in [Native Ressourcen](resource-analysis.md)
+dokumentiert.
+
 ## Onpage-Hinweise
 
 | Bereich | Issue-Codes und Bedeutung |
@@ -119,6 +126,16 @@ Ein beobachteter Null-Pixelwert bleibt `0`. Das Engine-Feld bewahrt das Profil;
 alte Projekte erhalten keine erfundenen Messwerte oder Engine-Angaben.
 
 ## Beziehungen und Crawl-Grenzen
+
+Die Ansicht „Antworten“ verwendet ein separates natives HTTP-Inventar
+(`/api/crawls/{id}/responses`), einschließlich der bekannten Status-/Location-
+Fakten von Zwischenredirects. Nicht aufbewahrte Hop-Header und Bodydaten bleiben
+`null` beziehungsweise in der UI unbekannt. Die Ansicht kopiert keine Titel,
+Indexierbarkeit oder sonstigen Dokumentmetadaten auf einen Redirect-Schritt.
+Der finale Dokumentdatensatz zur Anfrage lässt sich separat öffnen; Browser-
+Antworten stehen weiterhin im Renderbefund. `responses.csv` exportiert die
+native Beobachtungsliste. Diese Inventare sind keine zusätzlichen gecrawlten
+Dokumentdatensätze und erhöhen nicht künstlich den Seitenzähler.
 
 Die Analyse berücksichtigt HTML- und HTTP-Link-Deklarationen mit ihrer Herkunft,
 anwendbare Robots-Direktiven und die tatsächliche erfolgreiche Dokumentadresse.

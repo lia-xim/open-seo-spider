@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "tested_at": "2026-10-12T07:44:00.559Z",
+  "tested_at": "2026-10-12T08:47:28.796Z",
   "status": "COMPARISON_EXECUTED",
   "full_parity": "NOT_PROVEN",
   "fixture_sha256": "928545b1b70ae07da917fddd0fd1fd137878e7819326741dbbd6c23cb4607072",
@@ -14,10 +14,10 @@
   },
   "independent": {
     "binary": "open-seo-spider.exe",
-    "binary_sha256": "986a7f8534692e37fb78dda322b6c4fcbea60bd712aaa04a3824c7b68b860a3f",
+    "binary_sha256": "0e6e71fcb9807e059b361916419e0b07c52d06f3ff9892d9283620e0506a6a38",
     "config": {
       "seed_urls": [
-        "http://127.0.0.1:56183/"
+        "http://127.0.0.1:63790/"
       ],
       "sitemap_urls": [],
       "discover_sitemaps": false,
@@ -55,6 +55,15 @@
         "min_description_pixels": 400,
         "max_description_pixels": 985
       },
+      "pdf_analysis": {
+        "enabled": true,
+        "max_pages": 1000,
+        "max_objects": 100000,
+        "max_decompressed_bytes": 8388608,
+        "max_text_bytes": 4194304,
+        "max_text_bytes_per_page": 1048576,
+        "max_annotations": 10000
+      },
       "include_patterns": [],
       "exclude_patterns": []
     },
@@ -70,8 +79,8 @@
   ],
   "reused_reference": true,
   "counts": {
-    "MATCH": 863,
-    "DIFFERENT": 53,
+    "MATCH": 887,
+    "DIFFERENT": 29,
     "UNAVAILABLE": 3
   },
   "comparisons": [
@@ -127,10 +136,9 @@
     {
       "path": "/",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 491,
-      "independent": 495,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 491
     },
     {
       "path": "/",
@@ -317,10 +325,9 @@
     {
       "path": "/Upper_Case",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 598,
-      "independent": 602,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 598
     },
     {
       "path": "/Upper_Case",
@@ -507,10 +514,9 @@
     {
       "path": "/baseline",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 565,
-      "independent": 570,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 565
     },
     {
       "path": "/baseline",
@@ -697,10 +703,9 @@
     {
       "path": "/baseline?a=1&b=2",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 565,
-      "independent": 570,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 565
     },
     {
       "path": "/baseline?a=1&b=2",
@@ -1080,7 +1085,7 @@
       "status": "UNAVAILABLE",
       "reference": 0,
       "independent": null,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "reason": "Present ordinary HTML-200 text uses the bounded calibrated profile. Initial-response versus final-document extraction and absent metadata remain distinct; other glyphs or display profiles are unproven."
     },
     {
       "path": "/blocked",
@@ -1267,10 +1272,9 @@
     {
       "path": "/body-metadata",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 141,
-      "independent": 142,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 141
     },
     {
       "path": "/body-metadata",
@@ -1458,10 +1462,9 @@
     {
       "path": "/canonical-404",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 617,
-      "independent": 619,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 617
     },
     {
       "path": "/canonical-404",
@@ -1649,10 +1652,9 @@
     {
       "path": "/canonical-conflict",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 649,
-      "independent": 652,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 649
     },
     {
       "path": "/canonical-conflict",
@@ -1840,10 +1842,9 @@
     {
       "path": "/canonical-other",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 629,
-      "independent": 633,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 629
     },
     {
       "path": "/canonical-other",
@@ -2030,10 +2031,9 @@
     {
       "path": "/canonical-self",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 615,
-      "independent": 619,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 615
     },
     {
       "path": "/canonical-self",
@@ -2220,10 +2220,9 @@
     {
       "path": "/duplicate-a",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 365,
-      "independent": 368,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 365
     },
     {
       "path": "/duplicate-a",
@@ -2410,10 +2409,9 @@
     {
       "path": "/duplicate-b",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 365,
-      "independent": 368,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 365
     },
     {
       "path": "/duplicate-b",
@@ -2600,10 +2598,9 @@
     {
       "path": "/empty-description",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 651,
-      "independent": 656,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 651
     },
     {
       "path": "/empty-description",
@@ -2980,10 +2977,9 @@
     {
       "path": "/header-noindex",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 629,
-      "independent": 633,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 629
     },
     {
       "path": "/header-noindex",
@@ -3175,7 +3171,7 @@
       "status": "UNAVAILABLE",
       "reference": 0,
       "independent": null,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "reason": "Present ordinary HTML-200 text uses the bounded calibrated profile. Initial-response versus final-document extraction and absent metadata remain distinct; other glyphs or display profiles are unproven."
     },
     {
       "path": "/image.png",
@@ -3362,10 +3358,9 @@
     {
       "path": "/images",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 556,
-      "independent": 561,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 556
     },
     {
       "path": "/images",
@@ -3552,10 +3547,9 @@
     {
       "path": "/jsonld-invalid",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 607,
-      "independent": 612,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 607
     },
     {
       "path": "/jsonld-invalid",
@@ -3742,10 +3736,9 @@
     {
       "path": "/jsonld-valid",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 591,
-      "independent": 596,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 591
     },
     {
       "path": "/jsonld-valid",
@@ -3932,10 +3925,9 @@
     {
       "path": "/lang-de",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 557,
-      "independent": 561,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 557
     },
     {
       "path": "/lang-de",
@@ -4122,10 +4114,9 @@
     {
       "path": "/lang-en",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 557,
-      "independent": 561,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 557
     },
     {
       "path": "/lang-en",
@@ -4312,10 +4303,9 @@
     {
       "path": "/links",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 532,
-      "independent": 536,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 532
     },
     {
       "path": "/links",
@@ -4697,8 +4687,8 @@
       "field": "title_pixels",
       "status": "DIFFERENT",
       "reference": 0,
-      "independent": 163,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 161,
+      "reason": "Present ordinary HTML-200 text uses the bounded calibrated profile. Initial-response versus final-document extraction and absent metadata remain distinct; other glyphs or display profiles are unproven."
     },
     {
       "path": "/missing",
@@ -4885,10 +4875,9 @@
     {
       "path": "/missing-description",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 665,
-      "independent": 670,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 665
     },
     {
       "path": "/missing-description",
@@ -5078,7 +5067,7 @@
       "status": "UNAVAILABLE",
       "reference": 0,
       "independent": null,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "reason": "Present ordinary HTML-200 text uses the bounded calibrated profile. Initial-response versus final-document extraction and absent metadata remain distinct; other glyphs or display profiles are unproven."
     },
     {
       "path": "/missing-title",
@@ -5265,10 +5254,9 @@
     {
       "path": "/multiple-description",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 667,
-      "independent": 673,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 667
     },
     {
       "path": "/multiple-description",
@@ -5455,10 +5443,9 @@
     {
       "path": "/multiple-title",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 601,
-      "independent": 609,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 601
     },
     {
       "path": "/multiple-title",
@@ -5646,10 +5633,9 @@
     {
       "path": "/noindex",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 562,
-      "independent": 565,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 562
     },
     {
       "path": "/noindex",
@@ -5842,8 +5828,8 @@
       "field": "title_pixels",
       "status": "DIFFERENT",
       "reference": 0,
-      "independent": 570,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 565,
+      "reason": "Present ordinary HTML-200 text uses the bounded calibrated profile. Initial-response versus final-document extraction and absent metadata remain distinct; other glyphs or display profiles are unproven."
     },
     {
       "path": "/redirect-one",
@@ -6049,8 +6035,8 @@
       "field": "title_pixels",
       "status": "DIFFERENT",
       "reference": 0,
-      "independent": 130,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 131,
+      "reason": "Present ordinary HTML-200 text uses the bounded calibrated profile. Initial-response versus final-document extraction and absent metadata remain distinct; other glyphs or display profiles are unproven."
     },
     {
       "path": "/server-error",
@@ -6426,10 +6412,9 @@
     {
       "path": "/soft-error",
       "field": "title_pixels",
-      "status": "DIFFERENT",
+      "status": "MATCH",
       "reference": 573,
-      "independent": 579,
-      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+      "independent": 573
     },
     {
       "path": "/soft-error",
@@ -6726,11 +6711,11 @@
         "method": "GET"
       },
       {
-        "path": "/empty-title",
+        "path": "/blank-title",
         "method": "GET"
       },
       {
-        "path": "/blank-title",
+        "path": "/empty-title",
         "method": "GET"
       },
       {
@@ -6742,11 +6727,11 @@
         "method": "GET"
       },
       {
-        "path": "/short-title",
+        "path": "/long-title",
         "method": "GET"
       },
       {
-        "path": "/long-title",
+        "path": "/short-title",
         "method": "GET"
       },
       {
@@ -6762,15 +6747,15 @@
         "method": "GET"
       },
       {
-        "path": "/body-metadata",
-        "method": "GET"
-      },
-      {
         "path": "/multiple-description",
         "method": "GET"
       },
       {
         "path": "/noindex",
+        "method": "GET"
+      },
+      {
+        "path": "/body-metadata",
         "method": "GET"
       },
       {
@@ -6802,11 +6787,11 @@
         "method": "GET"
       },
       {
-        "path": "/images",
+        "path": "/links",
         "method": "GET"
       },
       {
-        "path": "/links",
+        "path": "/images",
         "method": "GET"
       },
       {

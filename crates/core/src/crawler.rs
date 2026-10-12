@@ -24,7 +24,7 @@ use std::{
     },
     time::{Duration, Instant},
 };
-use tokio::sync::mpsc::UnboundedSender;
+use tokio::sync::{Semaphore, mpsc::UnboundedSender};
 use url::Url;
 
 pub struct Crawler {
@@ -36,6 +36,7 @@ pub struct Crawler {
     robots: Arc<RobotsCache>,
     rate: Arc<RateLimiter>,
     store: Option<Arc<CrawlStore>>,
+    pdf_slots: Arc<Semaphore>,
 }
 
 impl Crawler {
@@ -63,6 +64,7 @@ impl Crawler {
         }
         crate::extract::validate_custom_extractions(&config.custom_extractions)?;
         config.audit_thresholds.validate()?;
+        config.pdf_analysis.validate()?;
         let filters = UrlFilters::new(&config.include_patterns, &config.exclude_patterns)?;
         if config.max_pages == Some(0) {
             config.max_pages = None;
@@ -119,6 +121,7 @@ impl Crawler {
             robots,
             rate,
             store: None,
+            pdf_slots: Arc::new(Semaphore::new(2)),
         })
     }
 
@@ -219,6 +222,7 @@ impl Crawler {
             headers: self.headers.clone(),
             robots: self.robots.clone(),
             rate: self.rate.clone(),
+            pdf_slots: self.pdf_slots.clone(),
         });
         let mut tasks: FuturesUnordered<BoxFuture<'static, PageRecord>> = FuturesUnordered::new();
         let mut limited = false;
@@ -367,6 +371,7 @@ impl Crawler {
             headers: self.headers.clone(),
             robots: self.robots.clone(),
             rate: self.rate.clone(),
+            pdf_slots: self.pdf_slots.clone(),
         };
         while let Some(url) = queue.pop_front() {
             if cancel.load(Ordering::Relaxed) {
@@ -455,6 +460,7 @@ struct FetchContext {
     headers: HeaderMap,
     robots: Arc<RobotsCache>,
     rate: Arc<RateLimiter>,
+    pdf_slots: Arc<Semaphore>,
 }
 
 impl FetchContext {
@@ -522,13 +528,18 @@ impl FetchContext {
             page.headers.clear();
             for (name, value) in response.headers() {
                 if let Ok(value) = value.to_str() {
+                    let value = if name == reqwest::header::SET_COOKIE {
+                        crate::metadata::redact_set_cookie(value)
+                    } else {
+                        value.to_owned()
+                    };
                     page.headers
                         .entry(name.to_string())
                         .and_modify(|existing| {
                             existing.push_str(", ");
-                            existing.push_str(value);
+                            existing.push_str(&value);
                         })
-                        .or_insert_with(|| value.to_owned());
+                        .or_insert(value);
                 }
             }
             page.header_link_values = response
@@ -610,7 +621,65 @@ impl FetchContext {
             break;
         }
         page.size_bytes = body.len();
-        let text = if !body.is_empty() {
+        let pdf = crate::pdf::is_pdf(&body, &page.content_type);
+        if pdf {
+            let record = if page.error.is_some() || page.truncated || page.final_status != Some(200)
+            {
+                crate::pdf::incomplete(
+                    "PDF body was not captured as a complete successful HTTP 200 response",
+                )
+            } else {
+                let config = self.config.pdf_analysis.clone();
+                let url = current.clone();
+                let pdf_body = std::mem::take(&mut body);
+                let permit = self
+                    .pdf_slots
+                    .clone()
+                    .acquire_owned()
+                    .await
+                    .expect("PDF semaphore is never closed");
+                match tokio::task::spawn_blocking(move || {
+                    let _permit = permit;
+                    crate::pdf::analyze(&pdf_body, &url, &config)
+                })
+                .await
+                {
+                    Ok(record) => record,
+                    Err(error) => {
+                        crate::pdf::incomplete(&format!("Native PDF analysis task failed: {error}"))
+                    }
+                }
+            };
+            for link in &record.annotation_links {
+                if let Some(url) = link.url.as_deref().and_then(|url| normalize_url(url, None)) {
+                    page.links.push(crate::LinkRecord {
+                        url: url.to_string(),
+                        text: format!("PDF URI annotation (page {})", link.page),
+                        internal: same_scope(&url, &self.seeds, self.config.include_subdomains),
+                        kind: "pdf_annotation".into(),
+                        ..Default::default()
+                    });
+                }
+            }
+            if record.status != crate::ResourceAnalysisStatus::Complete
+                && record.status != crate::ResourceAnalysisStatus::Disabled
+            {
+                page.warnings.push(format!("PDF analysis is {:?}; consult PDF errors and limits before drawing absence conclusions", record.status));
+            }
+            page.pdf = Some(record);
+        } else {
+            page.image_metadata = crate::image_metadata::analyze(
+                &body,
+                &page.content_type,
+                page.error.is_none() && !page.truncated && page.final_status == Some(200),
+            );
+        }
+        let textual = page.is_html()
+            || page.content_type.starts_with("text/")
+            || page.content_type.contains("xml")
+            || page.content_type.contains("json")
+            || page.content_type.is_empty();
+        let text = if !pdf && page.image_metadata.is_none() && textual && !body.is_empty() {
             let charset = page
                 .content_type
                 .split(';')
@@ -657,6 +726,16 @@ impl FetchContext {
             self.config.include_subdomains,
         );
         set_indexability(&mut page);
+        if let Some(pdf) = &page.pdf
+            && !matches!(
+                pdf.status,
+                crate::ResourceAnalysisStatus::Complete | crate::ResourceAnalysisStatus::Disabled
+            )
+        {
+            page.indexable = false;
+            page.indexability_reasons
+                .push("PDF analysis incomplete; document indexability not established".into());
+        }
         (page, text)
     }
 }

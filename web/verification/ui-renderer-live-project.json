@@ -1,7 +1,7 @@
 {
   "config": {
     "seed_urls": [
-      "http://127.0.0.1:60140/dynamic"
+      "http://127.0.0.1:50235/dynamic"
     ],
     "sitemap_urls": [],
     "discover_sitemaps": true,
@@ -48,6 +48,7 @@
         "selector": ".price",
         "attribute": null,
         "method": "css",
+        "output": "auto",
         "regex_group": null,
         "regex_flags": "",
         "namespaces": {},
@@ -58,6 +59,7 @@
         "selector": "a",
         "attribute": "href",
         "method": "css",
+        "output": "auto",
         "regex_group": null,
         "regex_flags": "",
         "namespaces": {},
@@ -65,9 +67,10 @@
       },
       {
         "name": "xpathPrice",
-        "selector": "//span[@class=\"price\"]/text()",
+        "selector": "//span[@class=\"price\"]//text()",
         "attribute": null,
         "method": "xpath",
+        "output": "auto",
         "regex_group": null,
         "regex_flags": "",
         "namespaces": {},
@@ -78,6 +81,7 @@
         "selector": "count(//a)",
         "attribute": null,
         "method": "xpath",
+        "output": "function_value",
         "regex_group": null,
         "regex_flags": "",
         "namespaces": {},
@@ -85,10 +89,33 @@
       },
       {
         "name": "regexPrice",
-        "selector": "class=\"price\">([0-9.]+)",
+        "selector": "class=\"price\">(?:<strong>)?([0-9.]+)",
         "attribute": null,
         "method": "regex",
+        "output": "auto",
         "regex_group": 1,
+        "regex_flags": "",
+        "namespaces": {},
+        "max_results": 10000
+      },
+      {
+        "name": "priceOuter",
+        "selector": ".price",
+        "attribute": null,
+        "method": "css",
+        "output": "outer_html",
+        "regex_group": null,
+        "regex_flags": "",
+        "namespaces": {},
+        "max_results": 10000
+      },
+      {
+        "name": "priceInner",
+        "selector": "//span[@class=\"price\"]",
+        "attribute": null,
+        "method": "xpath",
+        "output": "inner_html",
+        "regex_group": null,
         "regex_flags": "",
         "namespaces": {},
         "max_results": 10000
@@ -111,6 +138,15 @@
       "min_description_pixels": 400,
       "max_description_pixels": 985
     },
+    "pdf_analysis": {
+      "enabled": true,
+      "max_pages": 1000,
+      "max_objects": 100000,
+      "max_decompressed_bytes": 8388608,
+      "max_text_bytes": 4194304,
+      "max_text_bytes_per_page": 1048576,
+      "max_annotations": 10000
+    },
     "include_patterns": [],
     "exclude_patterns": [
       "/excluded"
@@ -118,17 +154,17 @@
   },
   "pages": [
     {
-      "url": "http://127.0.0.1:60140/dynamic",
-      "final_url": "http://127.0.0.1:60140/dynamic",
+      "url": "http://127.0.0.1:50235/dynamic",
+      "final_url": "http://127.0.0.1:50235/dynamic",
       "depth": 0,
       "discovered_from": null,
       "internal": true,
-      "fetched_at": "2026-10-12T07:51:32.902109600+00:00",
+      "fetched_at": "2026-10-12T08:48:24.183194600+00:00",
       "status": 200,
       "final_status": 200,
       "content_type": "text/html; charset=utf-8",
       "response_ms": 1,
-      "size_bytes": 785,
+      "size_bytes": 800,
       "truncated": false,
       "error": null,
       "warnings": [],
@@ -137,11 +173,11 @@
       "redirect_chain": [],
       "headers": {
         "connection": "keep-alive",
-        "content-length": "785",
+        "content-length": "800",
         "content-type": "text/html; charset=utf-8",
-        "date": "Mon, 12 Oct 2026 07:51:32 GMT",
+        "date": "Mon, 12 Oct 2026 08:48:24 GMT",
         "keep-alive": "timeout=5",
-        "set-cookie": "seo_fixture=private_fixture_value; Path=/; SameSite=Lax"
+        "set-cookie": "seo_fixture=[redacted]; Path=/; SameSite=Lax"
       },
       "titles": [
         "Rendered SEO title"
@@ -150,21 +186,21 @@
         "Owned rendering fixture"
       ],
       "title_pixel_widths": [
-        167
+        165
       ],
       "description_pixel_widths": [
         149
       ],
-      "text_metrics_engine": "roboto-2.138-simple-rounded-advances-v1; title20px; description14px; latin-greek-cyrillic",
+      "text_metrics_engine": "roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic",
       "h1": [
         "Rendered heading"
       ],
       "h2": [],
       "canonical": [
-        "http://127.0.0.1:60140/dynamic"
+        "http://127.0.0.1:50235/dynamic"
       ],
       "html_canonical": [
-        "http://127.0.0.1:60140/dynamic"
+        "http://127.0.0.1:50235/dynamic"
       ],
       "header_canonical": [],
       "meta_robots": [],
@@ -176,16 +212,16 @@
       "hreflang": [],
       "html_hreflang": [],
       "header_hreflang": [],
-      "document_base_url": "http://127.0.0.1:60140/dynamic",
+      "document_base_url": "http://127.0.0.1:50235/dynamic",
       "base_href": null,
       "link_relationships": [
         {
-          "url": "http://127.0.0.1:60140/dynamic",
+          "url": "http://127.0.0.1:50235/dynamic",
           "rel": [
             "canonical"
           ],
           "source": "html_link",
-          "context_url": "http://127.0.0.1:60140/dynamic",
+          "context_url": "http://127.0.0.1:50235/dynamic",
           "applies_to_document": true,
           "hreflang": [],
           "media": null,
@@ -202,7 +238,7 @@
       "images": [],
       "links": [
         {
-          "url": "http://127.0.0.1:60140/excluded",
+          "url": "http://127.0.0.1:50235/excluded",
           "text": "Excluded target",
           "rel": "",
           "internal": true,
@@ -210,7 +246,7 @@
           "kind": "anchor"
         },
         {
-          "url": "http://127.0.0.1:60140/js-only",
+          "url": "http://127.0.0.1:50235/js-only",
           "text": "Discovered through JavaScript",
           "rel": "",
           "internal": true,
@@ -218,7 +254,7 @@
           "kind": "anchor"
         },
         {
-          "url": "http://127.0.0.1:60140/dynamic",
+          "url": "http://127.0.0.1:50235/dynamic",
           "text": "",
           "rel": "canonical",
           "internal": true,
@@ -241,21 +277,21 @@
           "Owned rendering fixture"
         ],
         "title_pixel_widths": [
-          120
+          118
         ],
         "description_pixel_widths": [
           149
         ],
-        "text_metrics_engine": "roboto-2.138-simple-rounded-advances-v1; title20px; description14px; latin-greek-cyrillic",
+        "text_metrics_engine": "roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic",
         "h1": [
           "Raw heading"
         ],
         "h2": [],
         "canonical": [
-          "http://127.0.0.1:60140/dynamic"
+          "http://127.0.0.1:50235/dynamic"
         ],
         "html_canonical": [
-          "http://127.0.0.1:60140/dynamic"
+          "http://127.0.0.1:50235/dynamic"
         ],
         "header_canonical": [],
         "meta_robots": [],
@@ -265,16 +301,16 @@
         "hreflang": [],
         "html_hreflang": [],
         "header_hreflang": [],
-        "document_base_url": "http://127.0.0.1:60140/dynamic",
+        "document_base_url": "http://127.0.0.1:50235/dynamic",
         "base_href": null,
         "link_relationships": [
           {
-            "url": "http://127.0.0.1:60140/dynamic",
+            "url": "http://127.0.0.1:50235/dynamic",
             "rel": [
               "canonical"
             ],
             "source": "html_link",
-            "context_url": "http://127.0.0.1:60140/dynamic",
+            "context_url": "http://127.0.0.1:50235/dynamic",
             "applies_to_document": true,
             "hreflang": [],
             "media": null,
@@ -290,7 +326,7 @@
         "content_hash": "86be1a6d8cc930785a66fcb2dc66aecb7af9ffa8d5ee0b3679407b5ae1149d60",
         "links": [
           {
-            "url": "http://127.0.0.1:60140/excluded",
+            "url": "http://127.0.0.1:50235/excluded",
             "text": "Excluded target",
             "rel": "",
             "internal": true,
@@ -298,7 +334,7 @@
             "kind": "anchor"
           },
           {
-            "url": "http://127.0.0.1:60140/dynamic",
+            "url": "http://127.0.0.1:50235/dynamic",
             "text": "",
             "rel": "canonical",
             "internal": true,
@@ -316,6 +352,7 @@
             ],
             "source": "raw_html",
             "method": "css",
+            "output": "auto",
             "engine": "scraper-html5-css",
             "result_type": "text",
             "matched_count": 1,
@@ -331,6 +368,7 @@
             ],
             "source": "raw_html",
             "method": "css",
+            "output": "auto",
             "engine": "scraper-html5-css",
             "result_type": "attribute",
             "matched_count": 1,
@@ -339,13 +377,14 @@
           },
           {
             "name": "xpathPrice",
-            "selector": "//span[@class=\"price\"]/text()",
+            "selector": "//span[@class=\"price\"]//text()",
             "attribute": null,
             "values": [
               "10.00"
             ],
             "source": "raw_html",
             "method": "xpath",
+            "output": "auto",
             "engine": "sxd-xpath-1.0-html-dom",
             "result_type": "nodeset",
             "matched_count": 1,
@@ -361,6 +400,7 @@
             ],
             "source": "raw_html",
             "method": "xpath",
+            "output": "function_value",
             "engine": "sxd-xpath-1.0-html-dom",
             "result_type": "number",
             "matched_count": 1,
@@ -369,15 +409,48 @@
           },
           {
             "name": "regexPrice",
-            "selector": "class=\"price\">([0-9.]+)",
+            "selector": "class=\"price\">(?:<strong>)?([0-9.]+)",
             "attribute": null,
             "values": [
               "10.00"
             ],
             "source": "raw_html",
             "method": "regex",
+            "output": "auto",
             "engine": "rust-regex",
             "result_type": "regex_match",
+            "matched_count": 1,
+            "truncated": false,
+            "error": null
+          },
+          {
+            "name": "priceOuter",
+            "selector": ".price",
+            "attribute": null,
+            "values": [
+              "<span class=\"price\">10.00</span>"
+            ],
+            "source": "raw_html",
+            "method": "css",
+            "output": "outer_html",
+            "engine": "scraper-html5-css",
+            "result_type": "outer_html",
+            "matched_count": 1,
+            "truncated": false,
+            "error": null
+          },
+          {
+            "name": "priceInner",
+            "selector": "//span[@class=\"price\"]",
+            "attribute": null,
+            "values": [
+              "10.00"
+            ],
+            "source": "raw_html",
+            "method": "xpath",
+            "output": "inner_html",
+            "engine": "sxd-xpath-1.0-html-dom",
+            "result_type": "inner_html",
             "matched_count": 1,
             "truncated": false,
             "error": null
@@ -386,17 +459,17 @@
       },
       "rendered": true,
       "renderer_error": null,
-      "rendered_url": "http://127.0.0.1:60140/dynamic",
+      "rendered_url": "http://127.0.0.1:50235/dynamic",
       "rendered_status": 200,
       "rendered_headers": {
         "connection": "keep-alive",
-        "content-length": "785",
+        "content-length": "800",
         "content-type": "text/html; charset=utf-8",
-        "date": "Mon, 12 Oct 2026 07:51:33 GMT",
+        "date": "Mon, 12 Oct 2026 08:48:24 GMT",
         "keep-alive": "timeout=5",
-        "set-cookie": "seo_fixture=private_fixture_value; Path=/; SameSite=Lax"
+        "set-cookie": "seo_fixture=[redacted]; Path=/; SameSite=Lax"
       },
-      "rendered_at": "2026-10-12T07:51:34.175Z",
+      "rendered_at": "2026-10-12T08:48:25.284Z",
       "browser_version": "154.0.8037.99",
       "rendered_viewport": {
         "height": 800,
@@ -411,18 +484,18 @@
             "columnNumber": 0,
             "line": 0,
             "lineNumber": 0,
-            "url": "http://127.0.0.1:60140/favicon.ico"
+            "url": "http://127.0.0.1:50235/favicon.ico"
           },
           "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
           "type": "console"
         },
         {
           "location": {
-            "column": 725,
-            "columnNumber": 725,
+            "column": 740,
+            "columnNumber": 740,
             "line": 0,
             "lineNumber": 0,
-            "url": "http://127.0.0.1:60140/dynamic"
+            "url": "http://127.0.0.1:50235/dynamic"
           },
           "message": "owned-renderer-fixture",
           "type": "console"
@@ -434,7 +507,7 @@
           "method": "GET",
           "resource_type": "document",
           "status": 200,
-          "url": "http://127.0.0.1:60140/dynamic"
+          "url": "http://127.0.0.1:50235/dynamic"
         }
       ],
       "accessibility": {
@@ -606,7 +679,7 @@
           }
         ]
       },
-      "screenshot_base64": "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wAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAACQAAEQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACH8LwAAAP//Mnj4JgAAAAZJREFUAwBZ7ean4csKlAAAAABJRU5ErkJggg==",
+      "screenshot_base64": "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GAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGSAAAiEAAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAhBAAMAABCCAAYAACAEAQwAAEAIAhgAAIAQBDAAAAAhCGAAAABCEMAAAACEIIABAAAIQQADAAAQggAGAAAgBAEMAABACAIYAACAEAQwAAAAIQhgAAAAQhDAAAAAhCCAAQAACEEAAwAAEIIABgAAIAQBDAAAQAgCGAAAgBAEMAAAACEIYAAAAEIQwAAAAIQggAEAAAjhfwEAAP//GcU3fwAAAAZJREFUAwABFdW4LcZndAAAAABJRU5ErkJggg==",
       "custom_extractions": [
         {
           "name": "price",
@@ -617,6 +690,7 @@
           ],
           "source": "rendered_html",
           "method": "css",
+          "output": "auto",
           "engine": "scraper-html5-css",
           "result_type": "text",
           "matched_count": 1,
@@ -633,6 +707,7 @@
           ],
           "source": "rendered_html",
           "method": "css",
+          "output": "auto",
           "engine": "scraper-html5-css",
           "result_type": "attribute",
           "matched_count": 2,
@@ -641,13 +716,14 @@
         },
         {
           "name": "xpathPrice",
-          "selector": "//span[@class=\"price\"]/text()",
+          "selector": "//span[@class=\"price\"]//text()",
           "attribute": null,
           "values": [
             "20.00"
           ],
           "source": "rendered_html",
           "method": "xpath",
+          "output": "auto",
           "engine": "sxd-xpath-1.0-html-dom",
           "result_type": "nodeset",
           "matched_count": 1,
@@ -663,6 +739,7 @@
           ],
           "source": "rendered_html",
           "method": "xpath",
+          "output": "function_value",
           "engine": "sxd-xpath-1.0-html-dom",
           "result_type": "number",
           "matched_count": 1,
@@ -671,15 +748,48 @@
         },
         {
           "name": "regexPrice",
-          "selector": "class=\"price\">([0-9.]+)",
+          "selector": "class=\"price\">(?:<strong>)?([0-9.]+)",
           "attribute": null,
           "values": [
             "20.00"
           ],
           "source": "rendered_html",
           "method": "regex",
+          "output": "auto",
           "engine": "rust-regex",
           "result_type": "regex_match",
+          "matched_count": 1,
+          "truncated": false,
+          "error": null
+        },
+        {
+          "name": "priceOuter",
+          "selector": ".price",
+          "attribute": null,
+          "values": [
+            "<span class=\"price\"><strong>20.00</strong></span>"
+          ],
+          "source": "rendered_html",
+          "method": "css",
+          "output": "outer_html",
+          "engine": "scraper-html5-css",
+          "result_type": "outer_html",
+          "matched_count": 1,
+          "truncated": false,
+          "error": null
+        },
+        {
+          "name": "priceInner",
+          "selector": "//span[@class=\"price\"]",
+          "attribute": null,
+          "values": [
+            "<strong>20.00</strong>"
+          ],
+          "source": "rendered_html",
+          "method": "xpath",
+          "output": "inner_html",
+          "engine": "sxd-xpath-1.0-html-dom",
+          "result_type": "inner_html",
           "matched_count": 1,
           "truncated": false,
           "error": null
@@ -722,19 +832,21 @@
           "secure": false,
           "value_length": 21
         }
-      ]
+      ],
+      "pdf": null,
+      "image_metadata": null
     },
     {
-      "url": "http://127.0.0.1:60140/js-only",
-      "final_url": "http://127.0.0.1:60140/js-only",
+      "url": "http://127.0.0.1:50235/js-only",
+      "final_url": "http://127.0.0.1:50235/js-only",
       "depth": 1,
-      "discovered_from": "http://127.0.0.1:60140/dynamic",
+      "discovered_from": "http://127.0.0.1:50235/dynamic",
       "internal": true,
-      "fetched_at": "2026-10-12T07:51:34.457754600+00:00",
+      "fetched_at": "2026-10-12T08:48:25.530505300+00:00",
       "status": 200,
       "final_status": 200,
       "content_type": "text/html; charset=utf-8",
-      "response_ms": 3,
+      "response_ms": 1,
       "size_bytes": 140,
       "truncated": false,
       "error": null,
@@ -746,7 +858,7 @@
         "connection": "keep-alive",
         "content-length": "140",
         "content-type": "text/html; charset=utf-8",
-        "date": "Mon, 12 Oct 2026 07:51:34 GMT",
+        "date": "Mon, 12 Oct 2026 08:48:25 GMT",
         "keep-alive": "timeout=5"
       },
       "titles": [
@@ -757,7 +869,7 @@
         94
       ],
       "description_pixel_widths": [],
-      "text_metrics_engine": "roboto-2.138-simple-rounded-advances-v1; title20px; description14px; latin-greek-cyrillic",
+      "text_metrics_engine": "roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic",
       "h1": [
         "Child page"
       ],
@@ -774,7 +886,7 @@
       "hreflang": [],
       "html_hreflang": [],
       "header_hreflang": [],
-      "document_base_url": "http://127.0.0.1:60140/js-only",
+      "document_base_url": "http://127.0.0.1:50235/js-only",
       "base_href": null,
       "link_relationships": [],
       "pagination_next": [],
@@ -800,7 +912,7 @@
           94
         ],
         "description_pixel_widths": [],
-        "text_metrics_engine": "roboto-2.138-simple-rounded-advances-v1; title20px; description14px; latin-greek-cyrillic",
+        "text_metrics_engine": "roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic",
         "h1": [
           "Child page"
         ],
@@ -815,7 +927,7 @@
         "hreflang": [],
         "html_hreflang": [],
         "header_hreflang": [],
-        "document_base_url": "http://127.0.0.1:60140/js-only",
+        "document_base_url": "http://127.0.0.1:50235/js-only",
         "base_href": null,
         "link_relationships": [],
         "pagination_next": [],
@@ -834,6 +946,7 @@
             ],
             "source": "raw_html",
             "method": "css",
+            "output": "auto",
             "engine": "scraper-html5-css",
             "result_type": "text",
             "matched_count": 1,
@@ -847,6 +960,7 @@
             "values": [],
             "source": "raw_html",
             "method": "css",
+            "output": "auto",
             "engine": "scraper-html5-css",
             "result_type": "attribute",
             "matched_count": 0,
@@ -855,13 +969,14 @@
           },
           {
             "name": "xpathPrice",
-            "selector": "//span[@class=\"price\"]/text()",
+            "selector": "//span[@class=\"price\"]//text()",
             "attribute": null,
             "values": [
               "30.00"
             ],
             "source": "raw_html",
             "method": "xpath",
+            "output": "auto",
             "engine": "sxd-xpath-1.0-html-dom",
             "result_type": "nodeset",
             "matched_count": 1,
@@ -877,6 +992,7 @@
             ],
             "source": "raw_html",
             "method": "xpath",
+            "output": "function_value",
             "engine": "sxd-xpath-1.0-html-dom",
             "result_type": "number",
             "matched_count": 1,
@@ -885,15 +1001,48 @@
           },
           {
             "name": "regexPrice",
-            "selector": "class=\"price\">([0-9.]+)",
+            "selector": "class=\"price\">(?:<strong>)?([0-9.]+)",
             "attribute": null,
             "values": [
               "30.00"
             ],
             "source": "raw_html",
             "method": "regex",
+            "output": "auto",
             "engine": "rust-regex",
             "result_type": "regex_match",
+            "matched_count": 1,
+            "truncated": false,
+            "error": null
+          },
+          {
+            "name": "priceOuter",
+            "selector": ".price",
+            "attribute": null,
+            "values": [
+              "<span class=\"price\">30.00</span>"
+            ],
+            "source": "raw_html",
+            "method": "css",
+            "output": "outer_html",
+            "engine": "scraper-html5-css",
+            "result_type": "outer_html",
+            "matched_count": 1,
+            "truncated": false,
+            "error": null
+          },
+          {
+            "name": "priceInner",
+            "selector": "//span[@class=\"price\"]",
+            "attribute": null,
+            "values": [
+              "30.00"
+            ],
+            "source": "raw_html",
+            "method": "xpath",
+            "output": "inner_html",
+            "engine": "sxd-xpath-1.0-html-dom",
+            "result_type": "inner_html",
             "matched_count": 1,
             "truncated": false,
             "error": null
@@ -902,16 +1051,16 @@
       },
       "rendered": true,
       "renderer_error": null,
-      "rendered_url": "http://127.0.0.1:60140/js-only",
+      "rendered_url": "http://127.0.0.1:50235/js-only",
       "rendered_status": 200,
       "rendered_headers": {
         "connection": "keep-alive",
         "content-length": "140",
         "content-type": "text/html; charset=utf-8",
-        "date": "Mon, 12 Oct 2026 07:51:34 GMT",
+        "date": "Mon, 12 Oct 2026 08:48:25 GMT",
         "keep-alive": "timeout=5"
       },
-      "rendered_at": "2026-10-12T07:51:35.259Z",
+      "rendered_at": "2026-10-12T08:48:26.254Z",
       "browser_version": "154.0.8037.99",
       "rendered_viewport": {
         "height": 800,
@@ -926,7 +1075,7 @@
           "method": "GET",
           "resource_type": "document",
           "status": 200,
-          "url": "http://127.0.0.1:60140/js-only"
+          "url": "http://127.0.0.1:50235/js-only"
         }
       ],
       "accessibility": {
@@ -1039,6 +1188,7 @@
           ],
           "source": "rendered_html",
           "method": "css",
+          "output": "auto",
           "engine": "scraper-html5-css",
           "result_type": "text",
           "matched_count": 1,
@@ -1052,6 +1202,7 @@
           "values": [],
           "source": "rendered_html",
           "method": "css",
+          "output": "auto",
           "engine": "scraper-html5-css",
           "result_type": "attribute",
           "matched_count": 0,
@@ -1060,13 +1211,14 @@
         },
         {
           "name": "xpathPrice",
-          "selector": "//span[@class=\"price\"]/text()",
+          "selector": "//span[@class=\"price\"]//text()",
           "attribute": null,
           "values": [
             "30.00"
           ],
           "source": "rendered_html",
           "method": "xpath",
+          "output": "auto",
           "engine": "sxd-xpath-1.0-html-dom",
           "result_type": "nodeset",
           "matched_count": 1,
@@ -1082,6 +1234,7 @@
           ],
           "source": "rendered_html",
           "method": "xpath",
+          "output": "function_value",
           "engine": "sxd-xpath-1.0-html-dom",
           "result_type": "number",
           "matched_count": 1,
@@ -1090,15 +1243,48 @@
         },
         {
           "name": "regexPrice",
-          "selector": "class=\"price\">([0-9.]+)",
+          "selector": "class=\"price\">(?:<strong>)?([0-9.]+)",
           "attribute": null,
           "values": [
             "30.00"
           ],
           "source": "rendered_html",
           "method": "regex",
+          "output": "auto",
           "engine": "rust-regex",
           "result_type": "regex_match",
+          "matched_count": 1,
+          "truncated": false,
+          "error": null
+        },
+        {
+          "name": "priceOuter",
+          "selector": ".price",
+          "attribute": null,
+          "values": [
+            "<span class=\"price\">30.00</span>"
+          ],
+          "source": "rendered_html",
+          "method": "css",
+          "output": "outer_html",
+          "engine": "scraper-html5-css",
+          "result_type": "outer_html",
+          "matched_count": 1,
+          "truncated": false,
+          "error": null
+        },
+        {
+          "name": "priceInner",
+          "selector": "//span[@class=\"price\"]",
+          "attribute": null,
+          "values": [
+            "30.00"
+          ],
+          "source": "rendered_html",
+          "method": "xpath",
+          "output": "inner_html",
+          "engine": "sxd-xpath-1.0-html-dom",
+          "result_type": "inner_html",
           "matched_count": 1,
           "truncated": false,
           "error": null
@@ -1106,7 +1292,7 @@
       ],
       "custom_javascript_results": [
         {
-          "elapsed_ms": 9,
+          "elapsed_ms": 3,
           "error": null,
           "name": "titleAndLinks",
           "value": {
@@ -1116,183 +1302,185 @@
           "value_type": "object"
         },
         {
-          "elapsed_ms": 4,
+          "elapsed_ms": 2,
           "error": "page.evaluate: Error: Owned script error\n    at eval (eval at evaluate (:370:30), <anonymous>:2:7)\n    at eval (eval at evaluate (:370:30), <anonymous>:3:3)\n    at eval (eval at evaluate (:370:30), <anonymous>:7:74)\n    at eval (<anonymous>)\n    at UtilityScript.evaluate (<anonymous>:370:30)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
           "name": "scriptFailure",
           "value": null,
           "value_type": null
         },
         {
-          "elapsed_ms": 4,
+          "elapsed_ms": 1,
           "error": null,
           "name": "laterResult",
           "value": 42,
           "value_type": "number"
         }
       ],
-      "browser_cookies": []
+      "browser_cookies": [],
+      "pdf": null,
+      "image_metadata": null
     }
   ],
   "issues": [
     {
       "code": "title_short",
       "severity": "notice",
-      "url": "http://127.0.0.1:60140/dynamic",
+      "url": "http://127.0.0.1:50235/dynamic",
       "message": "Primary title has 18 Unicode characters, below configured minimum 30; review content and search appearance",
       "related_urls": []
     },
     {
       "code": "description_short",
       "severity": "notice",
-      "url": "http://127.0.0.1:60140/dynamic",
+      "url": "http://127.0.0.1:50235/dynamic",
       "message": "Primary meta description has 23 Unicode characters, below configured minimum 70; review content and search appearance",
       "related_urls": []
     },
     {
       "code": "title_pixels_short",
       "severity": "notice",
-      "url": "http://127.0.0.1:60140/dynamic",
-      "message": "Primary title measured 167px below configured 200px minimum (profile roboto-2.138-simple-rounded-advances-v1; title20px; description14px; latin-greek-cyrillic)",
+      "url": "http://127.0.0.1:50235/dynamic",
+      "message": "Primary title measured 165px below configured 200px minimum (profile roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic)",
       "related_urls": []
     },
     {
       "code": "description_pixels_short",
       "severity": "notice",
-      "url": "http://127.0.0.1:60140/dynamic",
-      "message": "Primary meta description measured 149px below configured 400px minimum (profile roboto-2.138-simple-rounded-advances-v1; title20px; description14px; latin-greek-cyrillic)",
+      "url": "http://127.0.0.1:50235/dynamic",
+      "message": "Primary meta description measured 149px below configured 400px minimum (profile roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic)",
       "related_urls": []
     },
     {
       "code": "h2_missing",
       "severity": "notice",
-      "url": "http://127.0.0.1:60140/dynamic",
+      "url": "http://127.0.0.1:50235/dynamic",
       "message": "No nonempty H2 heading was observed in the complete captured document; sections may not need H2 headings",
       "related_urls": []
     },
     {
       "code": "content_low_word_count",
       "severity": "notice",
-      "url": "http://127.0.0.1:60140/dynamic",
+      "url": "http://127.0.0.1:50235/dynamic",
       "message": "Captured normalized visible text has 8 words, below configured minimum 200; word count alone does not establish content quality",
       "related_urls": []
     },
     {
       "code": "http_url",
       "severity": "warning",
-      "url": "http://127.0.0.1:60140/dynamic",
+      "url": "http://127.0.0.1:50235/dynamic",
       "message": "HTML served over unencrypted HTTP",
       "related_urls": []
     },
     {
       "code": "viewport_missing",
       "severity": "notice",
-      "url": "http://127.0.0.1:60140/dynamic",
+      "url": "http://127.0.0.1:50235/dynamic",
       "message": "No viewport meta tag",
       "related_urls": []
     },
     {
       "code": "browser_console_errors",
       "severity": "warning",
-      "url": "http://127.0.0.1:60140/dynamic",
+      "url": "http://127.0.0.1:50235/dynamic",
       "message": "Browser reported 2 console or page error(s)",
       "related_urls": []
     },
     {
       "code": "accessibility_button-name",
       "severity": "error",
-      "url": "http://127.0.0.1:60140/dynamic",
+      "url": "http://127.0.0.1:50235/dynamic",
       "message": "Buttons must have discernible text (1 affected nodes; automated check only)",
       "related_urls": []
     },
     {
       "code": "accessibility_image-alt",
       "severity": "error",
-      "url": "http://127.0.0.1:60140/dynamic",
+      "url": "http://127.0.0.1:50235/dynamic",
       "message": "Images must have alternative text (1 affected nodes; automated check only)",
       "related_urls": []
     },
     {
       "code": "title_short",
       "severity": "notice",
-      "url": "http://127.0.0.1:60140/js-only",
+      "url": "http://127.0.0.1:50235/js-only",
       "message": "Primary title has 10 Unicode characters, below configured minimum 30; review content and search appearance",
       "related_urls": []
     },
     {
       "code": "title_pixels_short",
       "severity": "notice",
-      "url": "http://127.0.0.1:60140/js-only",
-      "message": "Primary title measured 94px below configured 200px minimum (profile roboto-2.138-simple-rounded-advances-v1; title20px; description14px; latin-greek-cyrillic)",
+      "url": "http://127.0.0.1:50235/js-only",
+      "message": "Primary title measured 94px below configured 200px minimum (profile roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic)",
       "related_urls": []
     },
     {
       "code": "h2_missing",
       "severity": "notice",
-      "url": "http://127.0.0.1:60140/js-only",
+      "url": "http://127.0.0.1:50235/js-only",
       "message": "No nonempty H2 heading was observed in the complete captured document; sections may not need H2 headings",
       "related_urls": []
     },
     {
       "code": "content_low_word_count",
       "severity": "notice",
-      "url": "http://127.0.0.1:60140/js-only",
+      "url": "http://127.0.0.1:50235/js-only",
       "message": "Captured normalized visible text has 3 words, below configured minimum 200; word count alone does not establish content quality",
       "related_urls": []
     },
     {
       "code": "internal_outlinks_missing",
       "severity": "notice",
-      "url": "http://127.0.0.1:60140/js-only",
+      "url": "http://127.0.0.1:50235/js-only",
       "message": "No internal anchor outlinks were observed in the complete captured document; this can be intentional",
       "related_urls": []
     },
     {
       "code": "http_url",
       "severity": "warning",
-      "url": "http://127.0.0.1:60140/js-only",
+      "url": "http://127.0.0.1:50235/js-only",
       "message": "HTML served over unencrypted HTTP",
       "related_urls": []
     },
     {
       "code": "description_missing",
       "severity": "notice",
-      "url": "http://127.0.0.1:60140/js-only",
+      "url": "http://127.0.0.1:50235/js-only",
       "message": "Meta description is missing or empty",
       "related_urls": []
     },
     {
       "code": "canonical_missing",
       "severity": "notice",
-      "url": "http://127.0.0.1:60140/js-only",
+      "url": "http://127.0.0.1:50235/js-only",
       "message": "No HTML canonical link",
       "related_urls": []
     },
     {
       "code": "viewport_missing",
       "severity": "notice",
-      "url": "http://127.0.0.1:60140/js-only",
+      "url": "http://127.0.0.1:50235/js-only",
       "message": "No viewport meta tag",
       "related_urls": []
     },
     {
       "code": "accessibility_landmark-one-main",
       "severity": "warning",
-      "url": "http://127.0.0.1:60140/js-only",
+      "url": "http://127.0.0.1:50235/js-only",
       "message": "Document should have one main landmark (1 affected nodes; automated check only)",
       "related_urls": []
     },
     {
       "code": "accessibility_region",
       "severity": "warning",
-      "url": "http://127.0.0.1:60140/js-only",
+      "url": "http://127.0.0.1:50235/js-only",
       "message": "All page content should be contained by landmarks (2 affected nodes; automated check only)",
       "related_urls": []
     }
   ],
   "summary": {
-    "started_at": "2026-10-12T07:51:32.891368100+00:00",
-    "finished_at": "2026-10-12T07:51:35.574794200+00:00",
-    "elapsed_ms": 2683,
+    "started_at": "2026-10-12T08:48:24.172093600+00:00",
+    "finished_at": "2026-10-12T08:48:26.467794800+00:00",
+    "elapsed_ms": 2295,
     "completed": 2,
     "discovered": 2,
     "pending": 0,

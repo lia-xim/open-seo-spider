@@ -466,18 +466,27 @@
     {
       "id": "modes.serp",
       "name": "Offline SERP editing",
-      "status": "planned",
+      "status": "implemented",
       "phase": "P1",
       "source_ids": [
         "config"
       ],
       "acceptance_test": "Import URL/title/description rows, calculate length and approximate width, and export without making network requests.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "api",
+            "offline-serp",
+            "serp-state-races",
+            "resource-offline-batch"
+          ],
+          "proves": "Offline import/measurement/export uses native Rust without fetching supplied website URLs. The actual browser fixture observes zero website requests; quoted newline/Unicode values, ordered duplicate URLs, malformed CSV errors, unknown versus zero widths, reload persistence and formula-safe CSV versus exact JSON values are verified. Thirteen focused editor regressions cover file-read/import/preview races and concurrent edits/add/delete."
+        }
+      ],
       "parity_evidence": [],
       "group": "modes",
-      "remaining_acceptance": [
-        "Import URL/title/description rows, calculate length and approximate width, and export without making network requests."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -987,7 +996,7 @@
     {
       "id": "robots.meta",
       "name": "Meta and HTTP robots",
-      "status": "partial",
+      "status": "implemented",
       "phase": "P1",
       "source_ids": [
         "tabs"
@@ -1006,13 +1015,19 @@
             "advanced-batch"
           ],
           "proves": "Multiple meta/X-Robots directives retain agent, source and raw evidence. Configured indexability agent is independent of HTTP UA; restrictive directives win and renderer response sources remain separate."
+        },
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "resource-fixtures",
+            "resource-offline-batch"
+          ],
+          "proves": "Valued robots directives tolerate whitespace while preserving date-valued unavailable_after content. Multiple native X-Robots-Tag/meta values retain general versus configured-agent scope; a real fixture proves googlebot noindex is applied while bingbot-only nofollow is excluded. Previously pending whitespace handling is covered by the current unit/integration gates."
         }
       ],
       "parity_evidence": [],
       "group": "robots",
-      "remaining_acceptance": [
-        "Tolerant whitespace handling around valued directives has a known pending regression; preserve date-valued directives while fixing."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -1127,12 +1142,21 @@
             "renderer"
           ],
           "proves": "Redirect hop records, initial/final status and loop detection are tested. Worker same-origin and foreign-origin redirect behavior is verified without header leakage."
+        },
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "api",
+            "ui-resources",
+            "resource-offline-batch"
+          ],
+          "proves": "A separate native-response inventory and CSV retain each captured redirect-hop status/location/identity and terminal response without manufacturing intermediate document records. Actual 302 -> 307 -> 200 flow is verified. Real stopped-off-scope and loop regressions bind retained headers only to the last captured response by index, keep unrequested targets unobserved and preserve unknown intermediate headers/body facts."
         }
       ],
       "parity_evidence": [],
       "group": "http",
       "remaining_acceptance": [
-        "Add multi-hop/non-200-ending/off-scope fixtures and explicit chain report acceptance."
+        "Extend explicit chain-report acceptance across non-200 endings, malformed Location and traversal-limit combinations; intermediate bodies and most intermediate headers remain unretained and unknown."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -1227,12 +1251,21 @@
             "advanced-batch"
           ],
           "proves": "Absent/empty/multiple/duplicate and configurable character/pixel thresholds are tested. An openly licensed font profile returns unknown for unsupported shaping/glyphs; reference comparison records measured differences."
+        },
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "native-text-width",
+            "reference-fields",
+            "resource-offline-batch"
+          ],
+          "proves": "The fixed public-font 150-percent glyph-quantization profile is tested through the actual offline Rust API against ordinary original CLI title20px/description14px CSV observations: all 58 present measurements match, including empty elements and multiple positions; two absent-element zero placeholders are excluded. This is a bounded measurement comparison, not issue-filter membership or whole-feature parity."
         }
       ],
       "parity_evidence": [],
       "group": "metadata",
       "remaining_acceptance": [
-        "Calibrate public font/rasterization against normal fixture widths; current matching long-W width does not establish full pixel equivalence."
+        "Representative other font/DPI display profiles and complex-language shaping/fallback remain outside the calibrated fixed 150-percent profile; unsupported glyphs/shaping must continue to report unknown."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -1258,12 +1291,21 @@
             "advanced-batch"
           ],
           "proves": "Configurable length and public-profile width thresholds are tested; unknown widths are excluded from filters and disabled thresholds produce no invented finding."
+        },
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "native-text-width",
+            "reference-fields",
+            "resource-offline-batch"
+          ],
+          "proves": "The fixed public-font 150-percent glyph-quantization profile is tested through the actual offline Rust API against ordinary original CLI title20px/description14px CSV observations: all 58 present measurements match, including empty elements and multiple positions; two absent-element zero placeholders are excluded. This is a bounded measurement comparison, not issue-filter membership or whole-feature parity."
         }
       ],
       "parity_evidence": [],
       "group": "metadata",
       "remaining_acceptance": [
-        "Reference font/rasterization calibration and full representative language/shaping profile remain."
+        "Representative other font/DPI display profiles and complex-language shaping/fallback remain outside the calibrated fixed 150-percent profile; unsupported glyphs/shaping must continue to report unknown."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -1301,18 +1343,26 @@
     {
       "id": "metadata.serp_preview",
       "name": "SERP preview",
-      "status": "planned",
+      "status": "implemented",
       "phase": "P1",
       "source_ids": [
         "general"
       ],
       "acceptance_test": "Show editable title/description preview; identify it as an approximation and export edited values.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "offline-serp",
+            "serp-state-races",
+            "resource-offline-batch"
+          ],
+          "proves": "Editable title/description previews display character counts and supported-profile approximate widths, label the preview as an approximation, retain unknown widths explicitly, and export edited input as safe CSV or exact JSON. Actual desktop/mobile browser checks and stale-response protection are verified; this does not predict a live search-engine result."
+        }
+      ],
       "parity_evidence": [],
       "group": "metadata",
-      "remaining_acceptance": [
-        "Show editable title/description preview; identify it as an approximation and export edited values."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -1923,12 +1973,21 @@
             "core-unit"
           ],
           "proves": "Declared HTML image dimensions are captured as observational strings; independently fetched resources have native byte evidence."
+        },
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "resource-fixtures",
+            "ui-resources",
+            "resource-offline-batch"
+          ],
+          "proves": "Fetched image resources expose dimensions from encoded raster headers and bounded SVG absolute lengths, encoded captured bytes, completeness/parse status and units. Actual PNG and fractional SVG measurements persist through SQLite/JSON, tables and CSV; viewBox-only SVG, malformed/truncated input and legacy missing observations stay explicit unknown/error states. HTML width/height and each alt occurrence remain separate from file dimensions; this is header inspection, not full pixel decoding."
         }
       ],
       "parity_evidence": [],
       "group": "images",
       "remaining_acceptance": [
-        "Measure intrinsic and rendered dimensions/transfer bytes with configurable thresholds and explicit unavailable states."
+        "Rendered image dimensions and wire-transfer byte measurements remain unproven; encoded captured bytes are not wire size. Add configurable dimension/size threshold acceptance and broader raster-format/animation orientation fixtures."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -1957,34 +2016,54 @@
     {
       "id": "images.pdf",
       "name": "PDF metadata and text",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "pdf"
       ],
       "acceptance_test": "Extract title, author, dates, pages and text from an owned fixture PDF; show unsupported encrypted files explicitly.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "resource-fixtures",
+            "ui-resources",
+            "resource-offline-batch"
+          ],
+          "proves": "Owned original PDFs prove Info title/author/date metadata, validated page-tree count separate from declared count, compressed native text, per-page source facts, text/count/hash and configurable object/page/decompression/text limits. Encrypted, malformed, partial, disabled and legitimate blank cases remain distinct; incomplete input has no invented counts. Actual UI/CSV/project export and SQLite/legacy round trips preserve resource facts without inventing HTML metadata."
+        }
+      ],
       "parity_evidence": [],
       "group": "images",
       "remaining_acceptance": [
-        "Extract title, author, dates, pages and text from an owned fixture PDF; show unsupported encrypted files explicitly."
+        "PDF text coverage remains bounded to supported font mappings and native text operators; unsupported fonts, Form XObjects, rendering/OCR and scanned-page readable text require separate support and acceptance."
       ],
       "parity_status": "NOT_PROVEN"
     },
     {
       "id": "images.pdf_links",
       "name": "PDF links and anchor evidence",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "pdf"
       ],
       "acceptance_test": "Resolve link annotations, record source document/page and extract text where reliable.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "resource-fixtures",
+            "ui-resources",
+            "resource-offline-batch"
+          ],
+          "proves": "Direct/indirect HTTP URI link annotations resolve supported document URI bases, retain source document/page/rectangle/action evidence and enqueue eligible targets. Actual PDF-only local target discovery, per-page inspector facts, JSON/SQLite and dedicated CSV are verified; malformed bases/actions and annotation limits remain visible. Anchor text is not inferred from a nearby text stream."
+        }
+      ],
       "parity_evidence": [],
       "group": "images",
       "remaining_acceptance": [
-        "Resolve link annotations, record source document/page and extract text where reliable."
+        "Associate reliable annotation anchor text with extracted page text and extend accepted PDF link action/annotation cases; unsupported non-HTTP actions remain explicit rather than fabricated web links."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -2179,7 +2258,7 @@
     {
       "id": "rendering.custom_extract",
       "name": "CSS/XPath/regex extraction",
-      "status": "partial",
+      "status": "implemented",
       "phase": "P3",
       "source_ids": [
         "extract"
@@ -2201,13 +2280,21 @@
             "advanced-batch"
           ],
           "proves": "CSS, namespace-aware supported XPath1.0 and Rust regex run on repaired raw and rendered HTML. Real browser fixture proves price10→20 and count scalar; source/type/engine/count/truncation/error survive snapshots and CSV."
+        },
+        {
+          "verification_run_ids": [
+            "core-unit",
+            "core-fixtures",
+            "core-browser",
+            "ui-renderer",
+            "resource-offline-batch"
+          ],
+          "proves": "CSS and supported XPath 1.0 return text, attributes, serialized outer/inner HTML, multi-value results and typed scalar/function values; Rust regex keeps captures. Actual raw/rendered nested markup is escaped in the UI and survives dedicated CSV and project JSON. XPath id/lang/extension functions and PCRE-only syntax are rejected upfront; the supported repaired-HTML/XPath 1.0/Rust regex contract is bounded and is not arbitrary XML or full vendor-language equivalence."
         }
       ],
       "parity_evidence": [],
       "group": "rendering",
-      "remaining_acceptance": [
-        "Outer/inner HTML extraction modes and explicit XPath node serialization options remain unimplemented; XPath id/lang/extensions and PCRE-only syntax are unsupported with upfront errors."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -3575,13 +3662,14 @@
       "artifact": "docs/verification/api-e2e.json",
       "command": "node scripts/api-e2e.mjs",
       "result": "PASS",
-      "tested_at": "2026-10-12T07:54:30.757Z",
+      "tested_at": "2026-10-12T08:44:16.496Z",
       "scope": [
         "604 URL HTTP/API crawl",
         "robots excluded target",
-        "redirect initial/final status",
+        "redirect initial/final status and separate intermediate-response inventory with unknown unretained body/headers",
         "graph and issue API",
-        "named CSS extraction and all eight export endpoints including empty script/cookie headers",
+        "named extraction and all eleven crawl export endpoints including empty resource/script/cookie headers",
+        "offline SERP CSV import, Unicode/unknown widths, duplicate input order and formula-safe export without website requests",
         "JSON import and snapshot comparison",
         "cancel and resume",
         "failed resume manifest write retains cancelled state and snapshot",
@@ -3605,8 +3693,8 @@
       "artifact": "crates/core/src",
       "command": "cargo test -p open-seo-spider-core",
       "result": "PASS",
-      "scope": "40 core unit tests passed, including bounded CSS/XPath/regex extraction, HTTP Link parsing, agent-scoped directives, audit thresholds, public font metrics and additive CSV contracts.",
-      "reported_by": "Core implementation agent in this session",
+      "scope": "71 core unit tests passed, including bounded PDF metadata/text/URI annotations and malformed/encrypted/limited states, encoded image and SVG dimensions, CSS/XPath/regex HTML modes, agent-scoped robots whitespace, redacted headers, native response inventories, offline CSV metadata editing and calibrated public-font metrics.",
+      "reported_by": "Root implementation agent; exact aggregate is recorded in resource-offline-batch.",
       "limits": "Individual assertions cover only their owned fixtures; broad rule compliance is not inferred.",
       "tested_at": "2026-10-12"
     },
@@ -3624,7 +3712,7 @@
       "artifact": "renderer/tests/worker.test.mjs",
       "command": "npm test (renderer/)",
       "result": "PASS",
-      "scope": "15 real Chrome worker tests passed, including async named scripts, errors, infinite-execution termination and worker reuse, bounded JSON, isolated redacted cookies and existing network/axe/PNG behavior.",
+      "scope": "16 real Chrome worker tests passed, including async named scripts, isolated errors, infinite-execution termination and reuse, bounded JSON, isolated redacted cookies/response headers, network, axe and PNG observations.",
       "limits": "Local worker fixtures; cross-platform/large-crawl performance not proven.",
       "tested_at": "2026-10-12"
     },
@@ -3642,7 +3730,7 @@
       "id": "ui-fixture",
       "artifact": "web/verification/ui-fixture-results.json",
       "result": "PASS",
-      "tested_at": "2026-10-12T07:42:47.369Z",
+      "tested_at": "2026-10-12T08:37:10.821Z",
       "scope": [
         "empty state",
         "snapshot and advanced analysis",
@@ -3652,7 +3740,10 @@
         "pixel filters require observed widths and preserve unknown older reports",
         "duplicate canonical declarations and HTTP relationships on non-HTML remain visible",
         "untrusted metadata escaped",
+        "visible CSV protects equals plus minus and at-sign after whitespace CR tab and BOM",
+        "visible CSV keeps actual numeric negatives zero and ordinary tab text unchanged",
         "image alt filter",
+        "native response table keeps redirect hops unknown body headers and separate keyboard accessible document details",
         "advanced issue filter",
         "link metrics and JSON-LD",
         "CSS extraction results and source in table and inspector",
@@ -3697,18 +3788,20 @@
       "id": "ui-renderer",
       "artifact": "web/verification/ui-renderer-live-results.json",
       "result": "PASS",
-      "tested_at": "2026-10-12T07:51:38.068Z",
+      "tested_at": "2026-10-12T08:48:29.349Z",
       "scope": [
         "real renderer discovers JS-only links and respects URL exclusion",
         "raw and rendered named CSS extraction evidence",
         "actual XPath text and scalar plus regex capture compare raw and rendered HTML",
-        "Rust persists async JavaScript results individual errors and isolated redacted cookies",
+        "CSS outerHTML and XPath innerHTML retain actual raw and rendered nested markup",
+        "Rust persists async JavaScript results individual errors isolated cookies and redacted native and browser headers",
         "actual axe violations screenshot PNG network console and browser provenance observations",
         "live UI rendered metadata raw comparison and lazy screenshot preview",
         "live extraction table displays actual DOM values",
+        "HTML output is escaped in the UI and survives dedicated extraction CSV",
         "live JavaScript and cookie tables filter captured results",
         "dedicated JavaScript and cookie CSV exports contain persisted observations",
-        "render evidence scripts cookies and browser provenance survive project export",
+        "render evidence scripts cookie redaction and browser provenance survive project export",
         "legacy pre-extraction JSON report import remains compatible",
         "final live mobile no overflow and footer reachable"
       ],
@@ -3719,7 +3812,7 @@
       "artifact": "docs/verification/mcp-e2e.json",
       "command": "node scripts/mcp-e2e.mjs",
       "result": "PASS",
-      "tested_at": "2026-10-11T12:55:31.406Z",
+      "tested_at": "2026-10-12T08:43:52.173Z",
       "scope": [
         "stdio: SDK initialize, 11 tools, start/status/pages/issues/project/analysis/compare/list and tool error",
         "streamable_http: SDK initialize, 11 tools, start/status/pages/issues/project/analysis/compare/list and tool error"
@@ -3733,6 +3826,138 @@
       "tested_at": "2026-10-12",
       "scope": "Integrated native build, 91 default Rust tests, explicit browser gate, Clippy, 30 UI fixtures, 12 actual renderer UI assertions, 15 worker tests, HTTP/API recovery and official MCP SDK.",
       "limits": "Own fixtures and bounded implementations; full reference parity and Docker runtime remain NOT_PROVEN."
+    },
+    {
+      "id": "resource-offline-batch",
+      "artifact": "docs/verification/resource-offline-batch.json",
+      "result": "PASS",
+      "tested_at": "2026-10-12T08:51:33.858Z",
+      "scope": {
+        "rust_default_passed": 126,
+        "rust_breakdown": {
+          "app": 28,
+          "core": 71,
+          "crawl": 23,
+          "resources": 4
+        },
+        "explicit_real_browser_passed": 1,
+        "worker_passed": 16,
+        "ui_fixture_passed": 33,
+        "actual_renderer_flow_passed": 14,
+        "actual_resource_flow_passed": 13,
+        "offline_serp_flow_passed": 6,
+        "serp_race_regressions": 13,
+        "offline_website_requests": 0,
+        "format": "PASS",
+        "clippy": "PASS",
+        "debug_build": "PASS",
+        "release_build": "PASS"
+      },
+      "limits": [
+        "Full vendor parity remains NOT_PROVEN.",
+        "PDF OCR/rendering, Form XObjects and unsupported font mappings remain outside the text parser.",
+        "Intermediate redirect bodies and most intermediate headers are not retained and remain unknown.",
+        "Complex text shaping and other display profiles are unproven.",
+        "Docker runtime and production-scale performance remain NOT_PROVEN."
+      ]
+    },
+    {
+      "id": "resource-fixtures",
+      "artifact": "crates/core/tests/resource_fixtures.rs",
+      "command": "cargo test -p open-seo-spider-core --test resource_fixtures",
+      "result": "PASS",
+      "tested_at": "2026-10-12",
+      "scope": "Four native integration tests prove original PDF/PNG parsing and URI discovery with SQLite/JSON round trips, incomplete/malformed resources, robots whitespace and repeated redacted cookie headers, and invalid configuration rejected before website requests.",
+      "reported_by": "Root implementation agent; aggregate result is recorded in resource-offline-batch.",
+      "limits": "Owned binary fixtures; not whole-format support or vendor comparison."
+    },
+    {
+      "id": "ui-resources",
+      "artifact": "web/verification/ui-resource-live-results.json",
+      "command": "node web/verification/ui-resource-live.cjs",
+      "result": "PASS",
+      "tested_at": "2026-10-12T08:48:00.899Z",
+      "scope": [
+        "native PDF parses original metadata verified page count and text without invented HTML title",
+        "PDF URI annotation discovers local target and native scoped headers remain separate",
+        "real PNG encoded headers and fractional SVG absolute lengths are persisted",
+        "viewBox is not an invented intrinsic size and invalid resource failures remain explicit",
+        "actual PDF table inspector renders metadata as safe text and keeps source page evidence",
+        "resource filters sort unknown dimensions separately from parser failure and show fractional SVG measurements",
+        "same actual image keeps two alt occurrences and HTML attributes distinct from file dimensions",
+        "filtered UI neutralizes formula text while dedicated Rust CSV retains exact metadata in safe JSON cells",
+        "native resource records survive full project JSON export unchanged",
+        "actual two-hop redirects appear as native responses with unknown unretained facts and separate terminal document plus CSV",
+        "legacy import missing new observations remains unknown in actual Rust and UI",
+        "PDF configuration validates before start and an actual disabled analysis is not an empty success",
+        "resource views and expanded settings fit narrow and wide browser widths with bottom reachable"
+      ],
+      "limits": "Actual browser -> Rust native resource parsing -> original local PDF/PNG/SVG -> UI/filter/export/legacy/disabled configuration"
+    },
+    {
+      "id": "offline-serp",
+      "artifact": "web/verification/ui-serp-live-results.json",
+      "command": "node web/verification/ui-serp-live.cjs",
+      "result": "PASS",
+      "tested_at": "2026-10-12T08:43:53.082Z",
+      "scope": [
+        "Actual offline form uses native metrics without requesting website URL",
+        "CSV quoted newline Unicode duplicate URL order and unknown width survive actual import",
+        "Offline draft survives reload with all original rows",
+        "CSV formula protection and exact JSON draft values have separate real downloads",
+        "Malformed CSV has an explicit API error",
+        "Live offline editor fits desktop and narrow mobile with reachable footer"
+      ],
+      "limits": "Actual browser→offline Rust import/measurement/export with owned HTTP fixture receiving zero requests",
+      "website_requests": 0
+    },
+    {
+      "id": "serp-state-races",
+      "artifact": "web/verification/serp-state-race.test.cjs",
+      "command": "node --test web/verification/serp-state-race.test.cjs",
+      "result": "PASS",
+      "tested_at": "2026-10-12",
+      "scope": "13 focused regressions execute the actual SERP editor script with deferred file/API responses. Edits, add/delete, unsubmitted editor changes, reverse concurrent imports and stale preview/error responses cannot overwrite current state; exact ordered inputs and local-only API calls remain observable.",
+      "limits": "Fake DOM/deferred API proves editor state sequencing. Real browser/backend/zero website request evidence is a separate offline-serp run."
+    },
+    {
+      "id": "native-text-width",
+      "artifact": "docs/parity/native-text-width-comparison.json",
+      "result": "PASS_BOUNDED_NATIVE_PROFILE",
+      "tested_at": "2026-10-12T08:47:28.286Z",
+      "scope": {
+        "measurement_profile": "roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic",
+        "counts": {
+          "MATCH": 58,
+          "DIFFERENT": 0,
+          "UNAVAILABLE": 0
+        },
+        "absent_placeholders_excluded": 2,
+        "website_requests": 0
+      },
+      "limits": [
+        "Only the retained ordinary Windows reference fixture and fixed 150-percent metric profile are compared.",
+        "Other DPI/font profiles, complex shaping and unavailable glyphs remain outside this proof.",
+        "This compares text measurements, not issue-filter membership or whole features."
+      ]
+    },
+    {
+      "id": "reference-fields",
+      "artifact": "docs/parity/reference-comparison.json",
+      "command": "node scripts/reference-parity.mjs --reuse-reference",
+      "result": "COMPARISON_EXECUTED",
+      "tested_at": "2026-10-12T08:47:28.796Z",
+      "scope": {
+        "counts": {
+          "MATCH": 887,
+          "DIFFERENT": 29,
+          "UNAVAILABLE": 3
+        },
+        "reference_rows": 35,
+        "independent_rows": 34,
+        "fixture_sha256": "928545b1b70ae07da917fddd0fd1fd137878e7819326741dbbd6c23cb4607072"
+      },
+      "limits": "Compared exported cells are observations, not feature coverage or filter-membership proof. Full vendor parity remains NOT_PROVEN; reference and independent build identities are recorded in the artifact."
     }
   ],
   "reference_workflows": [
@@ -3854,27 +4079,27 @@
   ],
   "status_summary": {
     "overall": {
-      "implemented": 12,
+      "implemented": 16,
       "partial": 71,
-      "planned": 61,
+      "planned": 57,
       "total": 144
     },
     "phases": {
       "P1": {
-        "implemented": 2,
-        "partial": 28,
-        "planned": 15,
+        "implemented": 5,
+        "partial": 27,
+        "planned": 13,
         "total": 45
       },
       "P2": {
         "implemented": 4,
-        "partial": 29,
-        "planned": 12,
+        "partial": 31,
+        "planned": 10,
         "total": 45
       },
       "P3": {
-        "implemented": 4,
-        "partial": 9,
+        "implemented": 5,
+        "partial": 8,
         "planned": 11,
         "total": 24
       },
@@ -3887,9 +4112,9 @@
     },
     "groups": {
       "modes": {
-        "implemented": 1,
+        "implemented": 2,
         "partial": 3,
-        "planned": 3,
+        "planned": 2,
         "total": 7
       },
       "crawl": {
@@ -3899,8 +4124,8 @@
         "total": 14
       },
       "robots": {
-        "implemented": 0,
-        "partial": 5,
+        "implemented": 1,
+        "partial": 4,
         "planned": 2,
         "total": 7
       },
@@ -3911,9 +4136,9 @@
         "total": 6
       },
       "metadata": {
-        "implemented": 0,
+        "implemented": 1,
         "partial": 5,
-        "planned": 6,
+        "planned": 5,
         "total": 11
       },
       "links": {
@@ -3930,13 +4155,13 @@
       },
       "images": {
         "implemented": 1,
-        "partial": 3,
-        "planned": 2,
+        "partial": 5,
+        "planned": 0,
         "total": 6
       },
       "rendering": {
-        "implemented": 3,
-        "partial": 5,
+        "implemented": 4,
+        "partial": 4,
         "planned": 6,
         "total": 14
       },

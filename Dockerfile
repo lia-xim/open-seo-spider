@@ -3,6 +3,7 @@ WORKDIR /build
 COPY Cargo.toml Cargo.lock ./
 COPY crates ./crates
 COPY web ./web
+COPY assets ./assets
 RUN cargo build --locked --release -p open-seo-spider
 
 FROM debian:bookworm-slim

@@ -312,7 +312,7 @@ class BrowserRenderer {
       if (Buffer.byteLength(html) > MAX_HTML_BYTES) throw new WorkerError(413, 'html_too_large', 'Rendered HTML exceeds 20 MiB');
       const result = { html, final_url: finalUrl,
         status: documentResponse?.status() ?? null,
-        headers: documentResponse ? await documentResponse.allHeaders() : {},
+        headers: documentResponse ? observationHeaders(await documentResponse.headersArray()) : {},
         title: await page.title(), console_errors: consoleErrors,
         network_requests: [...requests.values()], network_events_dropped: droppedEvents,
         rendered_at: new Date().toISOString(), browser_version: browser.version(),
@@ -368,6 +368,32 @@ async function readJson(request) {
   }
   try { return JSON.parse(Buffer.concat(chunks).toString('utf8')); }
   catch { throw new WorkerError(400, 'invalid_json', 'Request body is not valid JSON'); }
+}
+
+// Cookie audit attributes remain useful without persisting session values in
+// the otherwise independent response-header observations.
+export function redactSetCookie(value) {
+  const equals = value.indexOf('=');
+  if (equals <= 0 || !/^[!#$%&'*+.^_`|~0-9A-Za-z-]+$/.test(value.slice(0, equals).trim())) return '[redacted]';
+  let quoted = false, escaped = false, separator = -1;
+  for (let i = equals + 1; i < value.length; i++) {
+    const ch = value[i];
+    if (escaped) { escaped = false; continue; }
+    if (quoted && ch === '\\') { escaped = true; continue; }
+    if (ch === '"') quoted = !quoted;
+    else if (!quoted && ch === ';') { separator = i; break; }
+  }
+  return `${value.slice(0, equals).trim()}=[redacted]${separator >= 0 ? value.slice(separator) : ''}`;
+}
+
+export function observationHeaders(entries) {
+  const headers = Object.create(null);
+  for (const entry of entries) {
+    const name = entry.name.toLowerCase();
+    const value = name === 'set-cookie' ? redactSetCookie(entry.value) : entry.value;
+    headers[name] = Object.hasOwn(headers, name) ? `${headers[name]}${name === 'set-cookie' ? '\n' : ', '}${value}` : value;
+  }
+  return headers;
 }
 
 function send(response, status, value) {

@@ -95,7 +95,7 @@ Browser certificate, CSP, cross-origin and local-network protections remain enab
 
 Each script has a two-second deadline. The worker terminates browser execution if a script hangs, including a synchronous infinite loop. The rendered observation then fails explicitly; the Rust crawler retains its native HTTP observation. Scripts can change the inspected DOM or navigate and their effects are captured afterwards. This is a separate original execution contract, not a claim of Screaming Frog's script helper compatibility.
 
-`collect_cookies:true` captures the current isolated context's cookie name, domain, path, expiry, Secure, HttpOnly and SameSite attributes plus the byte length of its value. The value itself is omitted. Capture is disabled by default. Each URL has a fresh context, so these observations do not represent a shared crawl login session or cookies from the user's browser.
+`collect_cookies:true` captures the current isolated context's cookie name, domain, path, expiry, Secure, HttpOnly and SameSite attributes plus the byte length of its value. The value itself is omitted. Response `Set-Cookie` observations also redact the cookie-pair value while retaining name and attributes; repeated fields remain separate newline entries. Capture is disabled by default. Each URL has a fresh context, so these observations do not represent a shared crawl login session or cookies from the user's browser. Explicit user scripts can return their own values and are a separate execution contract.
 
 ## Accessibility
 
@@ -107,7 +107,7 @@ With `accessibility:true`, the worker injects the installed open-source axe-core
 npm test
 ```
 
-On 2026-10-12, Node 24.15.0 with the installed Windows Chrome passed **15 tests, 0 failures, 0 skips**. Tests use owned temporary loopback HTTP fixtures and a real isolated headless browser:
+On 2026-10-12, Node 24.15.0 with the installed Windows Chrome passed **16 tests, 0 failures, 0 skips**. Tests use owned temporary loopback HTTP fixtures and a real isolated headless browser:
 
 - JavaScript changes the raw title and inserts a previously absent crawlable link; the worker observes both.
 - Console errors, HTTP request status, custom headers, user agent and valid PNG bytes are captured.

@@ -18,7 +18,8 @@ const fixture = http.createServer(async (req, res) => {
   const html = (title, content) => `<html lang="de"><head><title>${title}</title><meta name="description" content="A local deterministic acceptance fixture"></head><body><h1>${title}</h1>${content}</body></html>`;
   if (req.url === '/robots.txt') return res.end('User-agent: *\nDisallow: /blocked\n');
   if (req.url === '/sitemap.xml') { res.writeHead(404); return res.end(); }
-  if (req.url === '/redirect') { res.writeHead(301, { location: '/p/1' }); return res.end(); }
+  if (req.url === '/redirect') { res.writeHead(301, { location: '/redirect-middle' }); return res.end(); }
+  if (req.url === '/redirect-middle') { res.writeHead(302, { location: '/p/1' }); return res.end(); }
   if (req.url === '/missing') { res.writeHead(404, { 'content-type': 'text/html' }); return res.end(html('Missing', '404')); }
   res.setHeader('content-type', 'text/html; charset=utf-8');
   if (req.url === '/') return res.end(html('Fixture home', Array.from({ length: 600 }, (_, i) => `<a href="/p/${i + 1}">Page ${i + 1}</a>`).join('') + '<a href="/redirect">Redirect</a><a href="/missing">Missing</a><a href="/blocked">Blocked</a>'));
@@ -56,6 +57,13 @@ try {
   const foreignHostStatus = await new Promise((resolve, reject) => { const request = http.get(api + '/healthz', { headers: { host: 'attacker.example' } }, response => { response.resume(); resolve(response.statusCode); }); request.on('error', reject); });
   assert.equal(foreignHostStatus, 403);
   assert.equal((await fetch(api + '/api/crawls', { method: 'POST', headers: { origin: 'https://attacker.example', 'content-type': 'application/json' }, body: '{}' })).status, 403);
+  const offlineUrl='http://127.0.0.1:19099/offline-unrequested';
+  const offlineRows=[{url:offlineUrl,title:'Über "uns"',description:'two\nlines'},{url:offlineUrl,title:'😀',description:' \t=FORMULA()'}];
+  const offline=await post('/api/serp/preview',{rows:offlineRows});
+  assert.equal(offline.website_requests,0);assert.equal(offline.rows.length,2);assert.equal(offline.rows[0].title_characters,10);assert.equal(offline.rows[1].title_pixels,null);
+  const offlineCsv=await post('/api/serp/import',{csv:`URL,Title,Description\r\n${offlineUrl},"Über ""uns""","two\nlines"\r\n${offlineUrl},😀," \t=FORMULA()"\r\n`});
+  assert.deepEqual(offlineCsv.rows,offline.rows);assert.equal(requests.get('/offline-unrequested'),undefined);
+  const offlineExport=await fetch(api+'/api/serp/export.csv',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({rows:offlineRows})});assert.equal(offlineExport.status,200);assert.match(await offlineExport.text(),/' \t=FORMULA\(\)/);
   const job = await post('/api/crawls', { seed_url: 'http://127.0.0.1:19099/', delay_ms: 0, concurrency: 16, discover_sitemaps: false, custom_extractions:[{name:'heading',selector:'h1',attribute:null}] });
   const finished = await terminal(job.id);
   assert.equal(finished.status, 'completed');
@@ -65,12 +73,15 @@ try {
   assert.equal(pages.pages.length, 604);
   assert.equal(pages.pages.find(page => page.url.endsWith('/redirect')).status, 301);
   assert.equal(pages.pages.find(page => page.url.endsWith('/redirect')).final_status, 200);
+  const responseView=await call(`/api/crawls/${job.id}/responses`);
+  const middle=responseView.responses.find(row=>row.response_url.endsWith('/redirect-middle'));
+  assert.equal(middle.status,302);assert.equal(middle.document_metadata_available,false);assert.equal(middle.body_bytes,null);assert.equal(middle.headers,null);
   assert.deepEqual(pages.pages.find(page=>page.url.endsWith('/p/1')).custom_extractions[0].values,['/p/1']);
   const issues = await call(`/api/crawls/${job.id}/issues`);
   assert(issues.issues.some(issue => issue.code === 'broken_outlinks'));
   const analysis = await call(`/api/crawls/${job.id}/analysis`);
   assert(analysis.graph.nodes.length > 500);
-  for (const endpoint of ['export.csv', 'issues.csv', 'links.csv', 'extractions.csv', 'javascript.csv', 'cookies.csv', 'sitemap.xml', 'project.json']) {
+  for (const endpoint of ['export.csv', 'issues.csv', 'links.csv', 'extractions.csv', 'javascript.csv', 'cookies.csv', 'pdf.csv', 'images.csv', 'responses.csv', 'sitemap.xml', 'project.json']) {
     const response = await fetch(`${api}/api/crawls/${job.id}/${endpoint}`);
     assert.equal(response.status, 200);
     const contents = await response.text();
@@ -108,7 +119,7 @@ try {
   assert.equal(resumed.stats.fetched, 725);
   assert.equal(requests.get('/slow'), 1, 'completed seed must survive process restart');
   assert.equal((await status(job.id)).stats.fetched, 604);
-  const evidence = { tested_at: new Date().toISOString(), platform: process.platform, assertions: ['604 URL HTTP/API crawl', 'robots excluded target', 'redirect initial/final status', 'graph and issue API', 'named CSS extraction and all eight export endpoints including empty script/cookie headers', 'JSON import and snapshot comparison', 'cancel and resume', 'failed resume manifest write retains cancelled state and snapshot', 'process termination and SQLite frontier recovery', 'host/origin protection'], result: 'PASS' };
+  const evidence = { tested_at: new Date().toISOString(), platform: process.platform, assertions: ['604 URL HTTP/API crawl', 'robots excluded target', 'redirect initial/final status and separate intermediate-response inventory with unknown unretained body/headers', 'graph and issue API', 'named extraction and all eleven crawl export endpoints including empty resource/script/cookie headers', 'offline SERP CSV import, Unicode/unknown widths, duplicate input order and formula-safe export without website requests', 'JSON import and snapshot comparison', 'cancel and resume', 'failed resume manifest write retains cancelled state and snapshot', 'process termination and SQLite frontier recovery', 'host/origin protection'], result: 'PASS' };
   console.log(JSON.stringify(evidence, null, 2));
   if (process.env.SPIDER_EVIDENCE) { await mkdir(path.dirname(process.env.SPIDER_EVIDENCE), { recursive: true }); await writeFile(process.env.SPIDER_EVIDENCE, JSON.stringify(evidence, null, 2) + '\n'); }
 } finally {

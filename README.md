@@ -44,7 +44,8 @@ List mode uses `--list` and one or more explicit URL arguments. `max_pages` is
 optional; the default has no product-imposed page limit. Crawls obey robots.txt
 by default and pace requests by origin. Optional include/exclude regular
 expressions filter discovered URLs. Named CSS, XPath1.0 and Rust-regex
-extractions retain values with their source, result type, observed count,
+extractions retain text, attributes, inner/outer HTML and supported XPath scalar
+values with their source, result type, observed count,
 capture bound and errors. XPath uses the repaired HTML DOM and explicit foreign
 namespace bindings; id(), lang(), variables and extension functions are not
 supported. Regex does not support lookaround or backreferences.
@@ -56,6 +57,20 @@ anchor contexts. Page-level indexing directives are evaluated for a configured
 bot separately from the request User-Agent. Configurable onpage/URL/link
 thresholds can be disabled individually. Title/description pixel widths use an
 openly licensed Roboto profile; complex shaping and missing glyphs remain unknown.
+The fixed 150% measurement profile is calibrated against the retained Windows
+reference fixture; other display settings and universal font equivalence remain
+unproven. See [pixel calibration](docs/research/text-width-calibration.md).
+
+Native PDF observations include Info metadata, bounded page text and HTTP(S)
+annotation-link discovery. Encryption, malformed content and extraction limits
+remain explicit rather than turning into empty successful text. Fetched image
+dimensions are separate from declared HTML image attributes. Dedicated PDF,
+image-resource and intermediate-response views and CSV endpoints preserve that
+evidence. See [resource contract](docs/resource-analysis.md).
+
+The [offline SERP editor](http://127.0.0.1:8787/serp) imports CSV metadata,
+preserves duplicate URL rows and ordering, supports editing and local drafts,
+and exports approximate measurements without requesting the entered websites.
 
 ## JavaScript rendering
 
