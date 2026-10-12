@@ -263,9 +263,9 @@
     "arbitrary_imported_json": "declared persisted consistency evidence only",
     "controlled_writer_generation": "No externally signed attestation; coherent manual database/payload rewrites are outside the claimed consistency boundary.",
     "local_windows_docker_installation": "NOT_PROVEN",
-    "immutable_release": "PENDING",
-    "exact_commit_ci": "PENDING",
-    "installed_runtime": "Previous verified B7 immutable release"
+    "immutable_release": "PASS",
+    "exact_commit_ci": "PASS",
+    "installed_runtime": "PASS"
   },
   "source_files": [
     {
@@ -358,5 +358,55 @@
       "artifact": "web/verification/ui-fixture-results.json",
       "sha256": "3f72471ae4a9878735098d56c75a66d244ccfb2310467405e4e6dd4432212951"
     }
-  ]
+  ],
+  "source_commit": "667bc97ea238b83a7ad117365a0dbf5f3ac24bec",
+  "artifacts_source_commit": "667bc97ea238b83a7ad117365a0dbf5f3ac24bec",
+  "exact_ci": {
+    "observed_at": "2026-10-12T17:25:51.590Z",
+    "result": "PASS",
+    "commit": "667bc97ea238b83a7ad117365a0dbf5f3ac24bec",
+    "url": "https://github.com/lia-xim/open-seo-spider/actions/runs/38283066205",
+    "jobs": [
+      {
+        "name": "container",
+        "result": "success",
+        "url": "https://github.com/lia-xim/open-seo-spider/actions/runs/38283066205/job/114924766561"
+      },
+      {
+        "name": "renderer",
+        "result": "success",
+        "url": "https://github.com/lia-xim/open-seo-spider/actions/runs/38283066205/job/114924766819"
+      },
+      {
+        "name": "test (windows-latest)",
+        "result": "success",
+        "url": "https://github.com/lia-xim/open-seo-spider/actions/runs/38283066205/job/114924766889"
+      },
+      {
+        "name": "test (ubuntu-latest)",
+        "result": "success",
+        "url": "https://github.com/lia-xim/open-seo-spider/actions/runs/38283066205/job/114924767058"
+      }
+    ],
+    "scope": "Exact-source raw/DOM capture, saved cohort CLI/API and official19-tool MCP SDK on Windows/Linux; actual Chromium source capture and UI; Linux Docker unprivileged persistent-volume integration.",
+    "local_windows_docker_installation": "NOT_PROVEN",
+    "full_vendor_parity": "NOT_PROVEN"
+  },
+  "installed_runtime": {
+    "debug_sha256": "bcb59848694ef3b5181e428a783c7f2b1fa990c8baac3ded47a9befca29df115",
+    "release_sha256": "5861bf483b68899d8644e47ab16b69c683f71a9f2007ab6eae859a89bd1481ef",
+    "mcp_tools": 19,
+    "saved_jobs": 7,
+    "offline_content_analysis": true,
+    "result": "PASS",
+    "native_content_capture": true,
+    "byte_identical_after_restart": true,
+    "saved_content_analysis": true,
+    "original_batch3_files_identical": true,
+    "preserved_json_files": 11,
+    "tested_at": "2026-10-12T17:23:53.7769732Z",
+    "native_policy": true,
+    "source_commit": "667bc97ea238b83a7ad117365a0dbf5f3ac24bec",
+    "user_data_fixture_requests": 0
+  }
 }

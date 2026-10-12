@@ -1,6 +1,6 @@
 # Content selection: retained reference facts and independent capture contract
 
-Reviewed 12 October 2026. This document distinguishes public requirements, retained ordinary original CLI observations and the independently authored B8 capture profile. It changes no catalog status. The subsequent [B8 final aggregate](verification/content-capture-batch.json) verifies the bounded native capture/persistence/cohort contracts below; complete vendor parity remains `NOT_PROVEN`. Exact B8 commit CI, immutable release and installed runtime are separate pending gates.
+Reviewed 12 October 2026. This document distinguishes public requirements, retained ordinary original CLI observations and the independently authored B8 capture profile. It changes no catalog status. The subsequent [B8 final aggregate](verification/content-capture-batch.json) verifies the bounded native capture/persistence/cohort contracts below; complete vendor parity remains `NOT_PROVEN`. The exact B8 source667bc97 passes [four CI jobs](verification/content-capture-ci.json) and an [immutable installed release](verification/content-capture-installed.json); subsequent B9 changes require their own proofs.
 
 ## Primary documented behavior
 

@@ -195,7 +195,7 @@ const lines = [
   'Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.json) bilden ein zusätzliches Register. Ihre positiven Fälle, Kontrollfälle, Parameter und Grenzfälle müssen jeweils geprüft werden. Ein implementierter Kern, ein leerer Export oder übereinstimmende CSV-Zellen ersetzen diese Einzelabnahme nicht.', '',
   '## Aktuelle Arbeit und nächste Schritte', '',
 ];
-for (const work of catalog.current_work ?? []) {
+for (const work of [...(catalog.current_work ?? [])].sort((a, b) => (a.priority ?? 100) - (b.priority ?? 100))) {
   lines.push(`- [${work.status === 'COMPLETED' ? 'x' : ' '}] **${work.title_de}** — ${work.status}. ${work.summary_de}`);
   if (work.completed_acceptance_de?.length) lines.push(...work.completed_acceptance_de.map(item => `  - [x] ${item}`));
   if (work.pending_acceptance_de?.length) lines.push(...work.pending_acceptance_de.map(item => `  - ${item}`));
@@ -243,7 +243,7 @@ lines.push('## Pflege und Beweisgrenzen', '',
   '4. Erst bei vollständig erfüllter eigener Abnahme den Status auf `implemented` setzen; Referenzparität separat nachweisen.',
   '5. Den Generator ausführen und mit `--check` prüfen. Historische Beweise bleiben erhalten.', '',
   'Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.', '',
-  `Reproduktionsbindung: SHA-256 des verwendeten Katalogs \`${catalogSha}\`. Letzter im Katalog erfasster Beweisstand: \`${catalog.last_verified_at ?? catalog.implementation_review_date ?? catalog.catalog_date}\`. Ein laufender B8-Arbeitsstand aktualisiert frühere Beweise nicht.`, '',
+  `Reproduktionsbindung: SHA-256 des verwendeten Katalogs \`${catalogSha}\`. Letzter im Katalog erfasster Beweisstand: \`${catalog.last_verified_at ?? catalog.implementation_review_date ?? catalog.catalog_date}\`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.`, '',
 );
 const output = `${lines.join('\n').trimEnd()}\n`;
 const target = path.join(root, 'docs/FEATURE_TODO.md');

@@ -10,18 +10,30 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
 
 ## Aktuelle Arbeit und nächste Schritte
 
-- [ ] **B8: optionale Textaufnahme und gespeicherte Inhaltsanalyse** — IN_PROGRESS. Die optionale native Roh-/DOM-Textaufnahme und die gespeicherte ausgewählte Inhaltsanalyse sind auf eigenen Fixtures geprüft. Getrennte Dokumentquelle, Sprache, Hash, Dekodierung, Vollständigkeit und Generation bleiben erhalten; standardmäßig ist Capture abgeschaltet. Vollständige Website-Analyse, neue CSS-Auswahl ohne erhaltenes HTML/DOM sowie B8-CI/Release/Installation bleiben offen.
+- [ ] **Jetzt in Arbeit – B9: Ressourcen und CSS-Abhängigkeiten** — IN_PROGRESS. Eigene Quell-Inventare und getrennte Speichern-/Abrufen-/Weiterentdecken-Schalter werden implementiert. CSS, Bilder, JavaScript, Medien und Dokumentbeziehungen erhalten ihre tatsächliche Herkunft und unveränderliche Berechtigungen. Noch keine B9-Abnahme oder tatsächliche Integration ist als bestanden nachgewiesen.
+  - Positive und negative HTML-/CSS-Quellen inklusive picture, source, poster, object/embed, image-set, Imports, Escapes, Unicode und Syntaxfehler prüfen; Kandidaten sind keine tatsächliche Browserauswahl.
+  - Alle Speichern-/Abrufen-Kombinationen mit exaktem Requestlog prüfen. Nicht abgerufene Ziele behalten unbekannte Antwortdaten, gespeicherte Quellvorkommen bleiben erhalten.
+  - Doppelte Ziele aus verschiedenen Rollen zusammenführen, ohne frühere Erlaubnisse zu verändern; Ressource mit HTML-Antwort darf keine unbegründete Navigation freischalten.
+  - Finale Stylesheet-Basis, tatsächlichen MIME-Typ, begrenzte Dekodierung und Body-Vollständigkeit getrennt binden; CSS-Kandidaten erlauben noch keinen Abruf.
+  - Robots, URL-Regeln und exakte Origin-Grenzen einschließlich Redirects prüfen. CDN-Ressourcen erweitern weder Navigation noch Credential-Origins.
+  - Seite, Quellvorkommen, Entscheidungen, Transport und offene Expansion atomar speichern; Pause/Crash/SQLite-Recovery sowie ausgewählten Recrawl ohne neue Expansion prüfen.
+  - Byte-/Token-/Tiefe-/Kandidaten-/Diagnostik-Grenzen mit exakt/plus-eins Kontrollen prüfen; kein still gespeicherter Prefix und keine feste 500-URL-Grenze.
+  - Nach den zehn nativen Gate-Gruppen erst API/CLI/MCP, UI, exakte Commit-CI, unveränderlichen Release und Installation separat nachweisen.
+  - Verträge: [resource-discovery.md](resource-discovery.md), [ROADMAP.md](ROADMAP.md).
+  - Gate-Stand: pure_css_inventory: PENDING; resource_policy: PENDING; native_fixture_groups_10: PENDING; api_cli_mcp: PENDING; actual_ui: PENDING; exact_commit_ci: PENDING; immutable_release: PENDING; installed_runtime: PENDING.
+
+- [x] **B8: optionale Textaufnahme und gespeicherte Inhaltsanalyse** — COMPLETED. Der begrenzte B8-Baustein für optionale Roh-/DOM-Textaufnahme und gespeicherte ausgewählte Inhaltsanalyse ist mit eigenen nativen/API/UI-Gates, exakter Commit-CI und unveränderlichem installiertem Release geprüft. Vollständige Website-Analyse und CSS-Neuauswahl ohne erhaltenes HTML/DOM bleiben zusätzliche offene Feature-Abnahmen.
   - [x] Pure CSS-/Unicode-Auswahl20 und Binding4 sowie16 echte native Fixtures geprüft; ungültige Konfiguration scheitert vor HTTP.
   - [x] Rohe und tatsächliche Chromium-DOM-Quellen behalten getrennte Texte, Sprachen, Hashes und Herkunft; fehlender Renderer ersetzt keine Quelle.
   - [x] Capture, Seite, Ledger und Frontier werden zusammen gespeichert; Pause/Crash/Recrawl erhalten die tatsächliche Generation und unveränderte Eltern-/Restdaten.
   - [x] Acht native API-/CLI-Gruppen prüfen gespeicherte ausgewählte Analyse ohne Website-Anfragen; fehlend, leer, unvollständig und deklarativ bleiben getrennt.
   - [x] Tatsächliche gespeicherte Content-UI mit 12 Prüfungen und nativer/Chromium-Quelle bestanden; getrennte Fixture18 geprüft.
+  - [x] Exakte B8-Commit-CI mit vier Jobs und unveränderlicher nativer Release installiert; sieben bestehende Jobs und elf JSON-Dateien nach Neustart byteidentisch erhalten.
   - Vollständige Website-Analyse und skalierbare große Corpora benötigen weitere Scheduler-/Index-/Budget-Fixtures; aktuell ist die Auswahl ausdrücklich auf1..128 gespeicherte Quellen begrenzt.
   - Geänderte CSS-Auswahl ohne HTTP braucht gespeichertes volles HTML/DOM. Ausgewählter Text und HTML-Hash ersetzen dieses Artefakt nicht.
   - Eigene Text-/Readability-/Jaccard-Profile und begrenzte Originalbeobachtungen sind keine vollständige Hersteller- oder Filter-Parität.
-  - B8 exakte Commit-CI, unveränderlicher Release-Build und installierte Version erst nach eigenen Beweisen abhaken; B7-CI/Installation belegt den früheren Commit915e175.
   - Verträge: [content-capture.md](content-capture.md), [content-analysis.md](content-analysis.md), [reference-content-capture.md](reference-content-capture.md), [ROADMAP.md](ROADMAP.md).
-  - Gate-Stand: pure_capture: PASS; native_capture_and_persistence: PASS; actual_chromium_capture: PASS; saved_corpus_api_cli: PASS; content_ui_fixture: PASS; content_ui_actual: PASS; aggregate: PASS; batch_ci_release_install: PENDING; related_actual_browser_53: PASS.
+  - Gate-Stand: pure_capture: PASS; native_capture_and_persistence: PASS; actual_chromium_capture: PASS; saved_corpus_api_cli: PASS; content_ui_fixture: PASS; content_ui_actual: PASS; aggregate: PASS; batch_ci_release_install: PASS; related_actual_browser_53: PASS; exact_commit_ci: PASS; immutable_release: PASS; installed_runtime: PASS.
 
 Das nächste Häkchen entsteht erst nach nachvollziehbaren Tests der offenen Kriterien und einem passenden Beweis im Katalog. Änderungen an Status oder Abnahme erfolgen dort; diese Datei wird danach neu erzeugt.
 
@@ -1358,7 +1370,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Native Roh-/DOM-Textbindung ist geprüft; Offline-Neuauswahl per geändertem CSS braucht noch erhaltenes HTML/DOM und eigene Artefaktbudgets.
 
-  Beweisregister: [content-capture-core](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-native-chrome](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-api-cli](verification/content-capture-e2e.json) (PASS), [ui-content-fixture](../web/verification/ui-content-fixture-results.json) (PASS), [ui-content-live](../web/verification/ui-content-live-results.json) (PASS), [content-capture-batch](verification/content-capture-batch.json) (PASS).
+  Beweisregister: [content-capture-core](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-native-chrome](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-api-cli](verification/content-capture-e2e.json) (PASS), [ui-content-fixture](../web/verification/ui-content-fixture-results.json) (PASS), [ui-content-live](../web/verification/ui-content-live-results.json) (PASS), [content-capture-batch](verification/content-capture-batch.json) (PASS), [content-capture-ci](verification/content-capture-ci.json) (PASS), [content-capture-installed](verification/content-capture-installed.json) (PASS).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -1388,6 +1400,13 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "content-capture-batch"
         ],
         "proves": "Opt-in native CSS-selected text excludes shared nav/footer and respects selected/nested/excluded/template/document-order/Unicode boundaries. Capture disabled by default keeps legacy JSON absent; strict invalid CSS/limits reject before HTTP. Real raw and actual Chromium DOM sources bind independent text/language/UTF-8-representation/entity hashes, requested/final URL, timestamp/config/profile, completeness and committed generation. SQLite pause/crash/rollback and selected recrawl retain inherited captures while failed fresh/pending text is never old-success fallback. Eight actual API/CLI groups feed saved selected text to offline analysis with zero website requests. UI fixture evidence is isolated; actual UI evidence is included only when its fresh file exists. Full HTML/DOM and offline CSS re-selection are not implemented."
+      },
+      {
+        "verification_run_ids": [
+          "content-capture-ci",
+          "content-capture-installed"
+        ],
+        "proves": "Exact-source B8 commit667bc97 passes four CI jobs (Windows/Linux, renderer, Linux container) and its immutable native Windows release runs the bounded raw/DOM saved-text contracts with19 MCP tools while preserving seven jobs/eleven original JSON bytes after restart. This does not prove whole-site analysis, saved full-HTML CSS reselection or subsequent B9 source changes."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -1400,7 +1419,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Versteckte Inhalte, Absätze und Text-/Code-Verhältnis explizit prüfen.
 
-  Beweisregister: [core-unit](../crates/core/src) (PASS), [content-capture-core](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-native-chrome](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-api-cli](verification/content-capture-e2e.json) (PASS), [ui-content-fixture](../web/verification/ui-content-fixture-results.json) (PASS), [ui-content-live](../web/verification/ui-content-live-results.json) (PASS), [content-capture-batch](verification/content-capture-batch.json) (PASS).
+  Beweisregister: [core-unit](../crates/core/src) (PASS), [content-capture-core](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-native-chrome](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-api-cli](verification/content-capture-e2e.json) (PASS), [ui-content-fixture](../web/verification/ui-content-fixture-results.json) (PASS), [ui-content-live](../web/verification/ui-content-live-results.json) (PASS), [content-capture-batch](verification/content-capture-batch.json) (PASS), [content-capture-ci](verification/content-capture-ci.json) (PASS), [content-capture-installed](verification/content-capture-installed.json) (PASS).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -1432,6 +1451,13 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "content-capture-batch"
         ],
         "proves": "B8 persists exact selected text and versioned whitespace/Unicode profile, with source-specific language, hash and completeness. Hidden/CSS-invisible text remains source DOM text unless explicitly excluded; no computed visibility is inferred. Downstream own Unicode token counts are reproducible over this selected saved sample; legacy page.word_count remains a separately labelled extraction metric."
+      },
+      {
+        "verification_run_ids": [
+          "content-capture-ci",
+          "content-capture-installed"
+        ],
+        "proves": "Exact-source B8 commit667bc97 passes four CI jobs (Windows/Linux, renderer, Linux container) and its immutable native Windows release runs the bounded raw/DOM saved-text contracts with19 MCP tools while preserving seven jobs/eleven original JSON bytes after restart. This does not prove whole-site analysis, saved full-HTML CSS reselection or subsequent B9 source changes."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -1444,7 +1470,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Gespeicherte Roh-/DOM-Quelle ist angebunden; breitere Sprach-/Silben-/Klassifikationsprofile und größere Corpora weiter prüfen.
 
-  Beweisregister: [content-analysis-core](../crates/core/src/content_analysis.rs) (PASS), [content-analysis-api-cli](verification/content-analysis-e2e.json) (PASS), [original-content-observations](reference-content-observations.json) (BOUNDED_ORIGINAL_REFERENCE_OBSERVED), [native-policy-ci](verification/native-policy-ci.json) (PASS), [native-policy-installed](verification/native-policy-installed.json) (PASS), [content-capture-core](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-native-chrome](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-api-cli](verification/content-capture-e2e.json) (PASS), [ui-content-fixture](../web/verification/ui-content-fixture-results.json) (PASS), [ui-content-live](../web/verification/ui-content-live-results.json) (PASS), [content-capture-batch](verification/content-capture-batch.json) (PASS).
+  Beweisregister: [content-analysis-core](../crates/core/src/content_analysis.rs) (PASS), [content-analysis-api-cli](verification/content-analysis-e2e.json) (PASS), [original-content-observations](reference-content-observations.json) (BOUNDED_ORIGINAL_REFERENCE_OBSERVED), [native-policy-ci](verification/native-policy-ci.json) (PASS), [native-policy-installed](verification/native-policy-installed.json) (PASS), [content-capture-core](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-native-chrome](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-api-cli](verification/content-capture-e2e.json) (PASS), [ui-content-fixture](../web/verification/ui-content-fixture-results.json) (PASS), [ui-content-live](../web/verification/ui-content-live-results.json) (PASS), [content-capture-batch](verification/content-capture-batch.json) (PASS), [content-capture-ci](verification/content-capture-ci.json) (PASS), [content-capture-installed](verification/content-capture-installed.json) (PASS).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -1485,6 +1511,13 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "content-capture-batch"
         ],
         "proves": "Actual saved raw/DOM text carries its own root-declared language and completeness through finite exact-requested-URL cohort analysis. Supported own EN/DE heuristic formulas retain nullable short/incomplete/unsupported results, source revisions and mixed retained/refreshed basis. Raw text never borrows effective rendered page language. Parameter changes and saved analysis make zero website requests. This does not calibrate the original sentence/syllable/classification profile."
+      },
+      {
+        "verification_run_ids": [
+          "content-capture-ci",
+          "content-capture-installed"
+        ],
+        "proves": "Exact-source B8 commit667bc97 passes four CI jobs (Windows/Linux, renderer, Linux container) and its immutable native Windows release runs the bounded raw/DOM saved-text contracts with19 MCP tools while preserving seven jobs/eleven original JSON bytes after restart. This does not prove whole-site analysis, saved full-HTML CSS reselection or subsequent B9 source changes."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -1497,7 +1530,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Identische und um ein Zeichen veränderte Dokumente mit Digest-Herkunft gemeinsam prüfen.
 
-  Beweisregister: [core-unit](../crates/core/src) (PASS), [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [content-capture-core](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-native-chrome](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-api-cli](verification/content-capture-e2e.json) (PASS), [ui-content-fixture](../web/verification/ui-content-fixture-results.json) (PASS), [ui-content-live](../web/verification/ui-content-live-results.json) (PASS), [content-capture-batch](verification/content-capture-batch.json) (PASS).
+  Beweisregister: [core-unit](../crates/core/src) (PASS), [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [content-capture-core](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-native-chrome](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-api-cli](verification/content-capture-e2e.json) (PASS), [ui-content-fixture](../web/verification/ui-content-fixture-results.json) (PASS), [ui-content-live](../web/verification/ui-content-live-results.json) (PASS), [content-capture-batch](verification/content-capture-batch.json) (PASS), [content-capture-ci](verification/content-capture-ci.json) (PASS), [content-capture-installed](verification/content-capture-installed.json) (PASS).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -1529,6 +1562,13 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "content-capture-batch"
         ],
         "proves": "Selected text SHA-256 and separate supplied UTF-8 HTML/entity hashes persist with exact source/revision/config identity; raw and DOM representations never share a fabricated digest. Controlled identical selected samples remain distinct requested identities and byte identity is separate from token-shingle similarity. Legacy content-hash grouping remains separate from saved-corpus analysis."
+      },
+      {
+        "verification_run_ids": [
+          "content-capture-ci",
+          "content-capture-installed"
+        ],
+        "proves": "Exact-source B8 commit667bc97 passes four CI jobs (Windows/Linux, renderer, Linux container) and its immutable native Windows release runs the bounded raw/DOM saved-text contracts with19 MCP tools while preserving seven jobs/eleven original JSON bytes after restart. This does not prove whole-site analysis, saved full-HTML CSS reselection or subsequent B9 source changes."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -1541,7 +1581,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Ausgewählte gespeicherte Quellen und Aktualität sind angebunden; vollständige Website-/große Corpus-Analyse und Referenz-MinHash-Prädikate bleiben offen.
 
-  Beweisregister: [content-analysis-core](../crates/core/src/content_analysis.rs) (PASS), [content-analysis-api-cli](verification/content-analysis-e2e.json) (PASS), [original-content-observations](reference-content-observations.json) (BOUNDED_ORIGINAL_REFERENCE_OBSERVED), [native-policy-ci](verification/native-policy-ci.json) (PASS), [native-policy-installed](verification/native-policy-installed.json) (PASS), [content-capture-core](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-native-chrome](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-api-cli](verification/content-capture-e2e.json) (PASS), [ui-content-fixture](../web/verification/ui-content-fixture-results.json) (PASS), [ui-content-live](../web/verification/ui-content-live-results.json) (PASS), [content-capture-batch](verification/content-capture-batch.json) (PASS).
+  Beweisregister: [content-analysis-core](../crates/core/src/content_analysis.rs) (PASS), [content-analysis-api-cli](verification/content-analysis-e2e.json) (PASS), [original-content-observations](reference-content-observations.json) (BOUNDED_ORIGINAL_REFERENCE_OBSERVED), [native-policy-ci](verification/native-policy-ci.json) (PASS), [native-policy-installed](verification/native-policy-installed.json) (PASS), [content-capture-core](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-native-chrome](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-api-cli](verification/content-capture-e2e.json) (PASS), [ui-content-fixture](../web/verification/ui-content-fixture-results.json) (PASS), [ui-content-live](../web/verification/ui-content-live-results.json) (PASS), [content-capture-batch](verification/content-capture-batch.json) (PASS), [content-capture-ci](verification/content-capture-ci.json) (PASS), [content-capture-installed](verification/content-capture-installed.json) (PASS).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -1582,6 +1622,13 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "content-capture-batch"
         ],
         "proves": "Opt-in persisted text feeds exact finite selected requested-URL/source cohorts with URL→analysis-id provenance, source revision, complete/empty/missing/incomplete/error states, eligibility exclusions and inherited/refreshed/pending basis. Controlled duplicate pair score1 remains known while failed selected500 replacement is incomplete and near_duplicate stays null; unselected/parent captures remain unchanged. Own exact shingle-set Jaccard is not a reference MinHash/threshold proof."
+      },
+      {
+        "verification_run_ids": [
+          "content-capture-ci",
+          "content-capture-installed"
+        ],
+        "proves": "Exact-source B8 commit667bc97 passes four CI jobs (Windows/Linux, renderer, Linux container) and its immutable native Windows release runs the bounded raw/DOM saved-text contracts with19 MCP tools while preserving seven jobs/eleven original JSON bytes after restart. This does not prove whole-site analysis, saved full-HTML CSS reselection or subsequent B9 source changes."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -1594,7 +1641,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Gespeicherte Crawl-Texte und Quellrevisionen sind angebunden; große Corpus-Aggregation und vollständige spezielle N-Gramm-Exporte weiter prüfen.
 
-  Beweisregister: [content-analysis-core](../crates/core/src/content_analysis.rs) (PASS), [content-analysis-api-cli](verification/content-analysis-e2e.json) (PASS), [native-policy-ci](verification/native-policy-ci.json) (PASS), [native-policy-installed](verification/native-policy-installed.json) (PASS), [content-capture-core](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-native-chrome](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-api-cli](verification/content-capture-e2e.json) (PASS), [ui-content-fixture](../web/verification/ui-content-fixture-results.json) (PASS), [ui-content-live](../web/verification/ui-content-live-results.json) (PASS), [content-capture-batch](verification/content-capture-batch.json) (PASS).
+  Beweisregister: [content-analysis-core](../crates/core/src/content_analysis.rs) (PASS), [content-analysis-api-cli](verification/content-analysis-e2e.json) (PASS), [native-policy-ci](verification/native-policy-ci.json) (PASS), [native-policy-installed](verification/native-policy-installed.json) (PASS), [content-capture-core](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-native-chrome](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-api-cli](verification/content-capture-e2e.json) (PASS), [ui-content-fixture](../web/verification/ui-content-fixture-results.json) (PASS), [ui-content-live](../web/verification/ui-content-live-results.json) (PASS), [content-capture-batch](verification/content-capture-batch.json) (PASS), [content-capture-ci](verification/content-capture-ci.json) (PASS), [content-capture-installed](verification/content-capture-installed.json) (PASS).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -1633,6 +1680,13 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "content-capture-batch"
         ],
         "proves": "Persisted selected raw/DOM text now feeds the own overlapping1/2/3-gram engine through offline saved-source API/CLI and explicit cohort provenance. Case/stopword/config edits bind hashes and current source revision; duplicate source identities are rejected, 1..128 selection is explicit, and max input/pair/output budgets fail without silent first-N site coverage. Browser fixture controls show ngram paging/display; actual UI is a separately retained gate."
+      },
+      {
+        "verification_run_ids": [
+          "content-capture-ci",
+          "content-capture-installed"
+        ],
+        "proves": "Exact-source B8 commit667bc97 passes four CI jobs (Windows/Linux, renderer, Linux container) and its immutable native Windows release runs the bounded raw/DOM saved-text contracts with19 MCP tools while preserving seven jobs/eleven original JSON bytes after restart. This does not prove whole-site analysis, saved full-HTML CSS reselection or subsequent B9 source changes."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -3998,7 +4052,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Schema-Version und vollständige optionale Artefakte roundtrippen.
 
-  Beweisregister: [api](verification/api-e2e.json) (PASS), [ui-fixture](../web/verification/ui-fixture-results.json) (PASS), [ui-live](../web/verification/ui-live-results.json) (PASS), [ui-renderer](../web/verification/ui-renderer-live-results.json) (PASS), [crawl-control](verification/crawl-control-e2e.json) (PASS), [ui-control-live](../web/verification/ui-crawl-control-live-results.json) (PASS), [content-capture-core](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-native-chrome](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-api-cli](verification/content-capture-e2e.json) (PASS), [ui-content-fixture](../web/verification/ui-content-fixture-results.json) (PASS), [ui-content-live](../web/verification/ui-content-live-results.json) (PASS), [content-capture-batch](verification/content-capture-batch.json) (PASS).
+  Beweisregister: [api](verification/api-e2e.json) (PASS), [ui-fixture](../web/verification/ui-fixture-results.json) (PASS), [ui-live](../web/verification/ui-live-results.json) (PASS), [ui-renderer](../web/verification/ui-renderer-live-results.json) (PASS), [crawl-control](verification/crawl-control-e2e.json) (PASS), [ui-control-live](../web/verification/ui-crawl-control-live-results.json) (PASS), [content-capture-core](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-native-chrome](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-api-cli](verification/content-capture-e2e.json) (PASS), [ui-content-fixture](../web/verification/ui-content-fixture-results.json) (PASS), [ui-content-live](../web/verification/ui-content-live-results.json) (PASS), [content-capture-batch](verification/content-capture-batch.json) (PASS), [content-capture-ci](verification/content-capture-ci.json) (PASS), [content-capture-installed](verification/content-capture-installed.json) (PASS).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -4039,6 +4093,13 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "content-capture-batch"
         ],
         "proves": "Optional saved PageRecord content_captures and source/config/profile/revision facts roundtrip in native project JSON without changing capture-disabled legacy serialization. Typed snapshot SHA is explicitly distinct from original archived file-byte hashes; selected parent bytes and unrelated capture bytes remain unchanged."
+      },
+      {
+        "verification_run_ids": [
+          "content-capture-ci",
+          "content-capture-installed"
+        ],
+        "proves": "Exact-source B8 commit667bc97 passes four CI jobs (Windows/Linux, renderer, Linux container) and its immutable native Windows release runs the bounded raw/DOM saved-text contracts with19 MCP tools while preserving seven jobs/eleven original JSON bytes after restart. This does not prove whole-site analysis, saved full-HTML CSS reselection or subsequent B9 source changes."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -4275,7 +4336,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Der eigene persistente Kern mit Wiederherstellung ist geprüft.
 
-  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [api](verification/api-e2e.json) (PASS), [native-policy-core](../crates/core/tests/policy_fixtures.rs) (PASS), [native-policy-api-cli](verification/crawl-policy-e2e.json) (PASS), [ui-policy-live](../web/verification/ui-policy-live-results.json) (PASS), [native-policy-ci](verification/native-policy-ci.json) (PASS), [native-policy-installed](verification/native-policy-installed.json) (PASS), [content-capture-core](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-native-chrome](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-api-cli](verification/content-capture-e2e.json) (PASS), [ui-content-fixture](../web/verification/ui-content-fixture-results.json) (PASS), [ui-content-live](../web/verification/ui-content-live-results.json) (PASS), [content-capture-batch](verification/content-capture-batch.json) (PASS).
+  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [api](verification/api-e2e.json) (PASS), [native-policy-core](../crates/core/tests/policy_fixtures.rs) (PASS), [native-policy-api-cli](verification/crawl-policy-e2e.json) (PASS), [ui-policy-live](../web/verification/ui-policy-live-results.json) (PASS), [native-policy-ci](verification/native-policy-ci.json) (PASS), [native-policy-installed](verification/native-policy-installed.json) (PASS), [content-capture-core](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-native-chrome](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-api-cli](verification/content-capture-e2e.json) (PASS), [ui-content-fixture](../web/verification/ui-content-fixture-results.json) (PASS), [ui-content-live](../web/verification/ui-content-live-results.json) (PASS), [content-capture-batch](verification/content-capture-batch.json) (PASS), [content-capture-ci](verification/content-capture-ci.json) (PASS), [content-capture-installed](verification/content-capture-installed.json) (PASS).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -4320,6 +4381,13 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "content-capture-batch"
         ],
         "proves": "Configured content observations validate source/config/generation and commit with page/frontier/native-policy ledger in one transaction. Native capture fixtures verify rollback, SQLite-only pause/crash recovery, immutable source config, tamper rejection and selected inherited/fresh capture isolation. Read-only restart retains valid checkpoint binding; JSON beside malformed SQLite remains declarative with unknown generation."
+      },
+      {
+        "verification_run_ids": [
+          "content-capture-ci",
+          "content-capture-installed"
+        ],
+        "proves": "Exact-source B8 commit667bc97 passes four CI jobs (Windows/Linux, renderer, Linux container) and its immutable native Windows release runs the bounded raw/DOM saved-text contracts with19 MCP tools while preserving seven jobs/eleven original JSON bytes after restart. This does not prove whole-site analysis, saved full-HTML CSS reselection or subsequent B9 source changes."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -4918,4 +4986,4 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `c4bfa4b6c434ce0e49482c06c0e0d20e1a46eb5ec503017993f8e6ece682f3bc`. Letzter im Katalog erfasster Beweisstand: `2026-10-12T17:14:21.869Z`. Ein laufender B8-Arbeitsstand aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `c725a865d47ef27d78997697d2e9feda75ebdc1fec752562ca7f59c2217c0240`. Letzter im Katalog erfasster Beweisstand: `2026-10-12T17:25:51.590Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

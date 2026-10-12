@@ -4,32 +4,19 @@ Diese Roadmap ordnet die nächsten Arbeitsschritte. Der vollständige laufende S
 
 Aktuell: **25 eigene Abnahmen erfüllt, 72 teilweise geprüft, 47 offen**. Zusätzlich bleiben [416 benannte Filter und 32 Ablaufverträge](parity/granular-acceptance.json) getrennt zu prüfen. Alle Hersteller-Parität bleibt **NOT_PROVEN**. Es wird kein Fertigstellungsprozentsatz berechnet.
 
+## Aktueller nächster Baustein
+
+**B9: Ressourcen-Erkennung ist jetzt in Implementierung.** Der [konkrete Quell- und Berechtigungsvertrag](resource-discovery.md) enthält zehn noch offene native Gate-Gruppen. Erst ihre tatsächlichen Beweise ändern Feature-Haken. B8-native/API/UI bleibt geprüft; B8-Commit667bc97 hat inzwischen [vier CI-Jobs](verification/content-capture-ci.json) und einen [unveränderlichen installierten Release](verification/content-capture-installed.json) bestanden; B9 braucht eigene Beweise.
+
 ## Was bereits als Grundlage dient
 
-Native Crawls, geordnete Listenimporte, SQLite-Pause/Recovery, ausgewähltes erneutes Crawlen, eigene URL-Regeln, Chromium, Extraktion und lokale CLI/MCP sind geprüft. B8 ergänzt opt-in gespeicherte Roh-/DOM-Texte und ausgewählte Offline-Inhaltsanalyse: [native API/CLI](verification/content-capture-e2e.json), [tatsächliche Content-UI](../web/verification/ui-content-live-results.json). Exakte B8-Commit-CI, Release und Installation sind zusätzliche Gates; frühere B7-Beweise attestieren diesen späteren Code nicht.
+Native Crawls, geordnete Listenimporte, SQLite-Pause/Recovery, ausgewähltes erneutes Crawlen, eigene URL-Regeln, Chromium, Extraktion und lokale CLI/MCP sind geprüft. B8 ergänzt opt-in gespeicherte Roh-/DOM-Texte und ausgewählte Offline-Inhaltsanalyse: [native API/CLI](verification/content-capture-e2e.json), [tatsächliche Content-UI](../web/verification/ui-content-live-results.json). Exakte [B8-Commit-CI](verification/content-capture-ci.json) und [unveränderlicher installierter Release](verification/content-capture-installed.json) sind ebenfalls geprüft; frühere B7-Beweise attestieren diesen späteren Code nicht.
 
 Diese Grundlagen ersetzen keine vollständige Abnahme aller Filter, Source-Profile, Exporte, Anbieter und Grenzfälle. Die folgende Reihenfolge priorisiert praktische Lücken und ihre Abhängigkeiten; jeder neue Baustein bekommt eigene positive Fälle, Kontrollfälle, unbekannte Daten und gespeicherte Beweise.
 
 ## Ausbau in konkreten Slices
 
-### 1. Gespeicherte Inhaltsanalyse vervollständigen
-
-Native Restarbeiten: Native Roh-/DOM-Textbindung und ausgewählte Analyse sind inzwischen geprüft. Weitere Arbeit betrifft Offline-Neuauswahl, große Corpora, vollständige Gruppierung und Spezialberichte.
-
-Referenzgrenze: 22 eigene Original-Fixtures liefern Wort-/Satz-/Readability-Beobachtungen; near checking war ausgeschaltet. Jaccard und EN/DE-Silbenheuristik sind eigene Profile.
-
-- [ ] Volles Roh-HTML/DOM optional unter eigenen Artefakt-/Retention-Budgets speichern; geänderte CSS-Auswahl auf diesen Artefakten ohne Website-Anfrage neu berechnen und Quell-/Config-Revision erhalten.
-- [ ] Große gespeicherte Corpora über wiederaufnehmbare Index-/Analyseaufgaben bearbeiten. Fehlende/unvollständige Quellen, Pair-/Output-Budgets und tatsächlich verarbeitete Teilmengen sichtbar machen; keine stillen ersten128 Seiten als gesamte Website.
-- [ ] Persistierte exakte Textgruppen mit identisch/ein-Zeichen-verändert/leer/incomplete und wechselndem Source-Profil prüfen; vollständige Gruppenmitglieder und1/2/3-Gramm-Berichte exportieren.
-- [ ] EN/DE-Heuristik sowie zusätzliche Sprach-/Silben-/Satzprofile mit benannten positiven und negativen Beispielen prüfen. Original22 Content-Beobachtungen bleiben Kalibrierungshinweise, keine Algorithmus-Parität.
-
-Zugeordnete Katalog-IDs: `metadata.area`, `metadata.wordcount`, `metadata.readability`, `metadata.exact`, `metadata.near`, `metadata.ngrams`.
-
-Abhängigkeiten: keine zusätzliche Slice-Abhängigkeit.
-
-Primärquellen: [how-to-check-for-duplicate-content](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-check-for-duplicate-content/), [how-to-test-readability](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-test-readability/), [how-to-use-n-grams](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-use-n-grams/).
-
-### 2. Entdeckungsquellen und Ressourcenschalter vervollständigen
+### 1. Entdeckungsquellen und Ressourcenschalter vervollständigen
 
 Native Restarbeiten: Ressourcen und Beziehungen werden beobachtet, aber unabhängige store/fetch/expand-Schalter und das vollständige Regelwerk je Quelltyp fehlen.
 
@@ -46,6 +33,23 @@ Zugeordnete Katalog-IDs: `crawl.resources`, `crawl.relationships`, `crawl.cdns`,
 Abhängigkeiten: `B8-content-capture`.
 
 Primärquellen: [configuration](https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/), [how-to-find-missing-image-alt-text](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-find-missing-image-alt-text/), [how-to-perform-a-cookie-audit](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-perform-a-cookie-audit/), [how-to-audit-pdfs](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-pdfs/).
+
+### 2. Gespeicherte Inhaltsanalyse vervollständigen
+
+Native Restarbeiten: Native Roh-/DOM-Textbindung und ausgewählte Analyse sind inzwischen geprüft. Weitere Arbeit betrifft Offline-Neuauswahl, große Corpora, vollständige Gruppierung und Spezialberichte.
+
+Referenzgrenze: 22 eigene Original-Fixtures liefern Wort-/Satz-/Readability-Beobachtungen; near checking war ausgeschaltet. Jaccard und EN/DE-Silbenheuristik sind eigene Profile.
+
+- [ ] Volles Roh-HTML/DOM optional unter eigenen Artefakt-/Retention-Budgets speichern; geänderte CSS-Auswahl auf diesen Artefakten ohne Website-Anfrage neu berechnen und Quell-/Config-Revision erhalten.
+- [ ] Große gespeicherte Corpora über wiederaufnehmbare Index-/Analyseaufgaben bearbeiten. Fehlende/unvollständige Quellen, Pair-/Output-Budgets und tatsächlich verarbeitete Teilmengen sichtbar machen; keine stillen ersten128 Seiten als gesamte Website.
+- [ ] Persistierte exakte Textgruppen mit identisch/ein-Zeichen-verändert/leer/incomplete und wechselndem Source-Profil prüfen; vollständige Gruppenmitglieder und1/2/3-Gramm-Berichte exportieren.
+- [ ] EN/DE-Heuristik sowie zusätzliche Sprach-/Silben-/Satzprofile mit benannten positiven und negativen Beispielen prüfen. Original22 Content-Beobachtungen bleiben Kalibrierungshinweise, keine Algorithmus-Parität.
+
+Zugeordnete Katalog-IDs: `metadata.area`, `metadata.wordcount`, `metadata.readability`, `metadata.exact`, `metadata.near`, `metadata.ngrams`.
+
+Abhängigkeiten: keine zusätzliche Slice-Abhängigkeit.
+
+Primärquellen: [how-to-check-for-duplicate-content](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-check-for-duplicate-content/), [how-to-test-readability](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-test-readability/), [how-to-use-n-grams](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-use-n-grams/).
 
 ### 3. Request-, Robots-, Scope- und Budget-Verträge abrunden
 
