@@ -49,6 +49,9 @@ jobs:
         working-directory: renderer
       - run: node node_modules/playwright-core/cli.js install chromium --with-deps
         working-directory: renderer
+      - name: Select the matching installed Playwright Chromium
+        working-directory: renderer
+        run: node --input-type=module -e 'import {chromium} from "playwright-core"; import {appendFileSync} from "node:fs"; appendFileSync(process.env.GITHUB_ENV, `OPEN_SEO_BROWSER_PATH=${chromium.executablePath()}\n`);'
       - run: npm test
         working-directory: renderer
       - run: node web/verification/ui-smoke.cjs

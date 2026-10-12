@@ -50,8 +50,9 @@ test('job pool caps concurrency, queue growth and shutdown', async () => {
   await first; await draining.waitForIdle();
 });
 
-test('real installed browser renders JavaScript, isolates jobs and audits owned fixtures', { timeout: 60000 }, async t => {
+test('real installed browser renders JavaScript, isolates jobs and audits owned fixtures', { timeout: 120000 }, async t => {
   const executable = await findBrowserExecutable(); assert.ok(executable);
+  t.diagnostic(`Browser executable: ${executable}`);
   const observedForeign = []; const observedMain = [];
   const foreign = http.createServer((request, response) => {
     observedForeign.push({url: request.url, headers: request.headers});
@@ -107,11 +108,21 @@ test('real installed browser renders JavaScript, isolates jobs and audits owned 
     assert.equal(response.status, 200); assert.equal(value.browser.available, true);
     assert.equal(value.max_concurrency, 4); assert.equal(value.active, 0);
   });
+  await t.test('bounded cold browser launch completes before ordinary functional requests', async () => {
+    const started = Date.now();
+    const result = await render('/cold-start', {timeout_ms: 60000, wait_ms: 0});
+    assert.equal(result.status, 200, JSON.stringify(result.body));
+    assert.equal(result.body.status, 200, JSON.stringify(result.body));
+    assert.equal(result.body.title, 'Fixture page');
+    assert.equal(typeof result.body.browser_version, 'string');
+    await worker.pool.waitForIdle(); assert.equal(worker.pool.active, 0);
+    t.diagnostic(`Cold browser launch and first render: ${Date.now() - started} ms`);
+  });
   await t.test('dynamic title and link, console errors, network and PNG are captured', async () => {
     const raw = await (await fetch(`${fixtureOrigin}/dynamic`)).text();
     assert.ok(raw.includes('<title>Raw title</title>')); assert.ok(!raw.includes('<a id="late"'));
     const result = await render('/dynamic', {screenshot: true, user_agent: 'OpenSEOFixture/1', custom_headers: {'X-Job': 'owned-fixture'}});
-    assert.equal(result.status, 200); assert.equal(result.body.status, 200);
+    assert.equal(result.status, 200, JSON.stringify(result.body)); assert.equal(result.body.status, 200, JSON.stringify(result.body));
     assert.equal(result.body.title, 'Rendered SEO title'); assert.ok(result.body.html.includes('<a id="late"'));
     assert.ok(result.body.console_errors.some(error => error.message === 'owned-fixture-console'));
     assert.ok(result.body.network_requests.some(request => request.url.endsWith('/dynamic') && request.status === 200));
@@ -121,8 +132,11 @@ test('real installed browser renders JavaScript, isolates jobs and audits owned 
       && request.headers['x-job'] === 'owned-fixture'));
   });
   await t.test('cookies and local storage do not leak across jobs', async () => {
-    assert.equal((await render('/cookie-set')).status, 200);
-    assert.equal((await render('/cookie-check')).body.title, 'fresh|empty');
+    const setter = await render('/cookie-set');
+    assert.equal(setter.status, 200, JSON.stringify(setter.body));
+    const checker = await render('/cookie-check');
+    assert.equal(checker.status, 200, JSON.stringify(checker.body));
+    assert.equal(checker.body.title, 'fresh|empty');
     assert.ok(observedMain.filter(request => request.url === '/cookie-check').every(request => !request.headers.cookie));
   });
   await t.test('named browser scripts await DOM values and retain individual errors', async () => {
@@ -134,7 +148,7 @@ test('real installed browser renders JavaScript, isolates jobs and audits owned 
       { name: 'big', script: 'return "x".repeat(65537);' },
       { name: 'after', script: 'return 42;' }
     ] });
-    assert.equal(result.status, 200);
+    assert.equal(result.status, 200, JSON.stringify(result.body));
     const rows = result.body.custom_javascript_results;
     assert.equal(rows[0].value, 'Rendered SEO title'); assert.equal(rows[0].value_type, 'string');
     assert.equal(rows[1].value.links, 1); assert.match(rows[2].error, /owned-script-error/);
@@ -143,7 +157,7 @@ test('real installed browser renders JavaScript, isolates jobs and audits owned 
   });
   await t.test('cookie audit records attributes without cookie values and remains isolated', async () => {
     const result = await render('/cookie-set', { collect_cookies: true });
-    assert.equal(result.status, 200);
+    assert.equal(result.status, 200, JSON.stringify(result.body));
     const cookie = result.body.browser_cookies.find(entry => entry.name === 'isolated');
     assert.ok(cookie); assert.equal(cookie.path, '/'); assert.equal(cookie.httpOnly, false);
     assert.equal(cookie.value_length, 3); assert.equal(Object.hasOwn(cookie, 'value'), false);
@@ -154,15 +168,18 @@ test('real installed browser renders JavaScript, isolates jobs and audits owned 
   });
   await t.test('CPU-bound custom script deadline aborts rendering and leaves worker reusable', async () => {
     const result = await render('/dynamic', { wait_ms: 0, custom_javascript: [{ name: 'timeout', script: 'while(true){}' }] });
-    assert.equal(result.status, 504); assert.equal(result.body.error.code, 'custom_javascript_timeout');
-    assert.equal((await render('/dynamic')).body.title, 'Rendered SEO title');
+    assert.equal(result.status, 504, JSON.stringify(result.body)); assert.equal(result.body.error.code, 'custom_javascript_timeout');
+    await worker.pool.waitForIdle(); assert.equal(worker.pool.active, 0);
+    const after = await render('/dynamic');
+    assert.equal(after.status, 200, JSON.stringify(after.body));
+    assert.equal(after.body.title, 'Rendered SEO title');
   });
   await t.test('custom credentials stay on their origin for resources and redirects', async () => {
     const headers = {Authorization: 'Bearer OWNED_TEST_ONLY', 'X-Private-Fixture': 'owned-value'};
     const external = await render('/external', {custom_headers: headers});
-    assert.equal(external.status, 200);
+    assert.equal(external.status, 200, JSON.stringify(external.body));
     const redirected = await render('/redirect-external', {custom_headers: headers});
-    assert.equal(redirected.status, 200); assert.equal(redirected.body.final_url, `${foreignOrigin}/target`);
+    assert.equal(redirected.status, 200, JSON.stringify(redirected.body)); assert.equal(redirected.body.final_url, `${foreignOrigin}/target`);
     assert.equal(redirected.body.title, 'Foreign target');
     assert.ok(observedMain.some(request => request.url === '/redirect-external' && request.headers.authorization === headers.Authorization));
     assert.ok(observedForeign.some(request => request.url === '/resource.js'), JSON.stringify({network: external.body.network_requests, errors: external.body.console_errors}));
@@ -174,7 +191,7 @@ test('real installed browser renders JavaScript, isolates jobs and audits owned 
   });
   await t.test('axe violations are reported without claiming full accessibility compliance', async () => {
     const result = await render('/accessibility', {accessibility: true});
-    assert.equal(result.status, 200); assert.equal(result.body.accessibility.engine, 'axe-core');
+    assert.equal(result.status, 200, JSON.stringify(result.body)); assert.equal(result.body.accessibility.engine, 'axe-core');
     assert.equal(result.body.accessibility.version, '4.14.0');
     assert.equal(result.body.accessibility.automated_only, true);
     const unnamedButton = result.body.accessibility.violations.find(violation => violation.id === 'button-name');
@@ -184,13 +201,13 @@ test('real installed browser renders JavaScript, isolates jobs and audits owned 
     assert.ok(result.body.accessibility.violations.some(violation => violation.id === 'image-alt'));
   });
   await t.test('HTTP error status remains an observation rather than a worker failure', async () => {
-    const result = await render('/missing'); assert.equal(result.status, 200); assert.equal(result.body.status, 404);
+    const result = await render('/missing'); assert.equal(result.status, 200, JSON.stringify(result.body)); assert.equal(result.body.status, 404);
   });
   await t.test('navigation timeout closes its context and releases capacity', async () => {
     const result = await render('/slow', {timeout_ms: 500, wait_ms: 0});
-    assert.equal(result.status, 504); assert.equal(result.body.error.code, 'render_timeout');
+    assert.equal(result.status, 504, JSON.stringify(result.body)); assert.equal(result.body.error.code, 'render_timeout');
     await worker.pool.waitForIdle(); assert.equal(worker.pool.active, 0);
-    assert.equal((await render('/dynamic')).status, 200);
+    const after = await render('/dynamic'); assert.equal(after.status, 200, JSON.stringify(after.body));
   });
   await t.test('HTTP boundary rejects malformed inputs and foreign browser origins', async () => {
     const nonJson = await fetch(`${origin}/render`, {method: 'POST', body: 'hello'}); assert.equal(nonJson.status, 415);

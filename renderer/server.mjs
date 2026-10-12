@@ -217,7 +217,9 @@ class BrowserRenderer {
     if (!this.browserPromise) {
       const launching = (async () => {
         const executablePath = await findBrowserExecutable(this.env);
-        const browser = await chromium.launch({ executablePath, headless: true, timeout: 15000,
+        // Cold browser startup has a bounded launch deadline. Each render's
+        // whole-request timeout still includes this await and may expire earlier.
+        const browser = await chromium.launch({ executablePath, headless: true, timeout: 30000,
           chromiumSandbox: this.env.OPEN_SEO_BROWSER_NO_SANDBOX !== '1',
           handleSIGINT: false, handleSIGTERM: false, handleSIGHUP: false });
         browser.on('disconnected', () => { if (this.browserPromise === launching) this.browserPromise = null; });
