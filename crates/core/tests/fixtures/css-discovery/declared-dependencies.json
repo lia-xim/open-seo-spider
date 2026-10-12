@@ -1,0 +1,17 @@
+[
+  {"id":"empty","css_text":"","syntax":"stylesheet","expected_urls":[],"expected_complete":true},
+  {"id":"nested-escaped","css_text":"@media print { @supports (display:grid) { .x { background:u\\72l(\"im\\61 ge.png\"); } } }","syntax":"stylesheet","expected_urls":["image.png"],"expected_complete":true},
+  {"id":"namespace-and-selector-negative","css_text":"@namespace p url(https://example.test/ns); .x[data-x=\"a.png\"] { content:\"b.png\"; }","syntax":"stylesheet","expected_urls":[],"expected_complete":true},
+  {"id":"font-local-negative","css_text":"@font-face { src:local(\"name.woff2\"),url(font.woff2); }","syntax":"stylesheet","expected_urls":["font.woff2"],"expected_complete":true},
+  {"id":"image-set-string-type-negative","css_text":".x { background:image-set(\"one.png\" type(\"image/png\") 1x, url(two.png) 2x, linear-gradient(red,blue) 3x); }","syntax":"stylesheet","expected_urls":["one.png","two.png"],"expected_complete":true},
+  {"id":"image-string-orientation","css_text":".x { background:image(rtl \"image.png\", red); }","syntax":"stylesheet","expected_urls":["image.png"],"expected_complete":true},
+  {"id":"conditional-import","css_text":"@import \"one.css\" layer(site) supports(display:grid) screen; @import url(one.css);","syntax":"stylesheet","expected_urls":["one.css","one.css"],"expected_complete":true},
+  {"id":"malformed-with-independent-control","css_text":".x { background:url(bad path.png); } .y { mask:url(ok.svg); }","syntax":"stylesheet","expected_urls":["ok.svg"],"expected_complete":false},
+  {"id":"eof-string-no-candidate","css_text":".x { background:url(\"unterminated","syntax":"stylesheet","expected_urls":[],"expected_complete":false},
+  {"id":"eof-block-lower-bound-observation","css_text":".x { background:url(ok.png)","syntax":"stylesheet","expected_urls":["ok.png"],"expected_complete":false},
+  {"id":"declaration-list-custom-fallback","css_text":"background:url(one.png); --KeepCase:url(two.png); mask:var(--known,url(fallback.svg));","syntax":"declaration_list","expected_urls":["one.png","two.png","fallback.svg"],"expected_complete":true},
+  {"id":"nested-selector-context","css_text":".root { a:hover { background:url(one.png); } &:has([src=\"not-a-dependency\"]) { mask:url(two.svg); } }","syntax":"stylesheet","expected_urls":["one.png","two.svg"],"expected_complete":true},
+  {"id":"local-non-http-literal-observations","css_text":".x { mask:url(\"  #clip\"); background:url(data:image/png;base64,AA); cursor:url(blob:https://example.test/id),auto; }","syntax":"stylesheet","expected_urls":["  #clip","data:image/png;base64,AA","blob:https://example.test/id"],"expected_complete":true},
+  {"id":"query-encoding-not-rewritten","css_text":".x { background:url(asset.png?v=1+2&x=%2F#clip); }","syntax":"stylesheet","expected_urls":["asset.png?v=1+2&x=%2F#clip"],"expected_complete":true},
+  {"id":"unsupported-at-rule-source-incomplete","css_text":"@future { .x { background:url(not-inventoried.png); } } .x { mask:url(actual.svg); }","syntax":"stylesheet","expected_urls":["actual.svg"],"expected_complete":false}
+]

@@ -685,12 +685,27 @@
             "core-unit"
           ],
           "proves": "HTML extraction records anchors, stylesheet, script, image, iframe and selected media references; enabled link discovery fetches observed destinations and records response evidence."
+        },
+        {
+          "batch": "B9-resource-discovery",
+          "verification_run_ids": [
+            "resource-discovery-api-cli",
+            "ui-resource-discovery-live",
+            "resource-discovery-batch"
+          ],
+          "proves": "Optional typed store/fetch controls and durable occurrences/grants/transports are integrated. Native/image four-product controls, observed HTML/CSS/JS/media/PDF/SWF families, private store=false responses, late role unions, pinned full exports and 506 distinct resource units are bounded-tested.",
+          "limits": "All resource-type/navigation four-product combinations are not yet tested; native renderer combination rejected, browser cascade/selection unknown.",
+          "source_debug_sha256_by_run": {
+            "resource-discovery-api-cli": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+            "ui-resource-discovery-live": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724"
+          }
         }
       ],
       "parity_evidence": [],
       "group": "crawl",
       "remaining_acceptance": [
-        "Add independent fetch/store switches per resource type and dedicated CSS/JS/media/PDF/SWF acceptance fixtures."
+        "Prove the full independent four-product store/fetch matrix for CSS, JavaScript, media, PDF, legacy SWF and navigation with positive/negative native fixtures; the completed matrix is currently for images.",
+        "Extend native CSS encoding/context and cross-origin redirect/interruption/budget fixtures; browser resource enforcement remains a separate unsupported combination."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -710,12 +725,26 @@
             "analysis"
           ],
           "proves": "HTML canonical/hreflang values are resolved and audited against observed targets; iframe references are recorded."
+        },
+        {
+          "batch": "B9-resource-discovery",
+          "verification_run_ids": [
+            "resource-discovery-api-cli",
+            "ui-resource-discovery-live",
+            "resource-discovery-batch"
+          ],
+          "proves": "Typed per-kind navigation grants preserve observed relationship sources; record-only canonical/frame references and navigation-disabled/list/selected controls remain unfetched in native/API/UI fixtures.",
+          "limits": "Each relationship kind still needs independent enabled and disabled native paths; enum/config availability is not a complete behavior gate.",
+          "source_debug_sha256_by_run": {
+            "resource-discovery-api-cli": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+            "ui-resource-discovery-live": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724"
+          }
         }
       ],
       "parity_evidence": [],
       "group": "crawl",
       "remaining_acceptance": [
-        "Add independent relationship discovery controls and next/prev, AMP, mobile alternate and refresh extraction/discovery."
+        "Prove separate enabled/disabled native request paths for canonical, hreflang, next/prev, AMP, iframe, mobile alternate and meta refresh, including source evidence, scope and selected-recrawl ceilings."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -827,11 +856,26 @@
         "config"
       ],
       "acceptance_test": "Classify configured CDN hosts as internal while preventing unrestricted external traversal.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "batch": "B9-resource-discovery",
+          "verification_run_ids": [
+            "resource-discovery-api-cli",
+            "ui-resource-discovery-live",
+            "resource-discovery-batch"
+          ],
+          "proves": "Exact configured external resource origin is fetched without external navigation or expanded credential origins; two-origin robots and allowed/blocked request controls passed.",
+          "limits": "This is an explicit external resource grant. Classifying CDN hosts as internal under the original grouped acceptance is not implemented or claimed.",
+          "source_debug_sha256_by_run": {
+            "resource-discovery-api-cli": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+            "ui-resource-discovery-live": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724"
+          }
+        }
+      ],
       "parity_evidence": [],
       "group": "crawl",
       "remaining_acceptance": [
-        "Classify configured CDN hosts as internal while preventing unrestricted external traversal."
+        "Implement and prove the declared internal-CDN classification semantics while preventing unrestricted navigation; preserve the existing exact external-resource origin and credential boundaries."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -851,12 +895,26 @@
             "analysis"
           ],
           "proves": "Anchor rel/nofollow values remain observable. Independent graph scoring excludes nofollow/ugc/sponsored/page nofollow; discovery currently follows stored references."
+        },
+        {
+          "batch": "B9-resource-discovery",
+          "verification_run_ids": [
+            "resource-discovery-api-cli",
+            "ui-resource-discovery-live",
+            "resource-discovery-batch"
+          ],
+          "proves": "Actual native/UI nofollow target is retained as a source occurrence and remains unfetched under saved traversal settings.",
+          "limits": "The observed nofollow control does not prove ugc, sponsored and page-nofollow in all enabled/disabled combinations.",
+          "source_debug_sha256_by_run": {
+            "resource-discovery-api-cli": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+            "ui-resource-discovery-live": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724"
+          }
         }
       ],
       "parity_evidence": [],
       "group": "crawl",
       "remaining_acceptance": [
-        "Add configurable traversal policy and dedicated fixtures for all four directives while preserving link occurrences."
+        "Complete dedicated native enabled/disabled traversal fixtures for nofollow, ugc, sponsored and page nofollow; verify every source occurrence remains observable independently of target fetching."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -2219,12 +2277,26 @@
             "dom-robots-batch"
           ],
           "proves": "Raw/rendered responsive image observations retain img src/srcset/sizes and preceding picture sources, width/density/height descriptors, media/type eligibility, malformed candidates, per-occurrence alt and locations; eligible HTTP candidates use normal crawl policy."
+        },
+        {
+          "batch": "B9-resource-discovery",
+          "verification_run_ids": [
+            "resource-discovery-api-cli",
+            "ui-resource-discovery-live",
+            "resource-discovery-batch"
+          ],
+          "proves": "Responsive image/source duplicates and local-fragment controls are preserved in the native occurrence ledger; same URL image/anchor grants remain independent while network transport coalesces.",
+          "limits": "Cross-source-page alt/occurrence acceptance and actual browser currentSrc/media/density selection are not proven by native candidates.",
+          "source_debug_sha256_by_run": {
+            "resource-discovery-api-cli": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+            "ui-resource-discovery-live": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724"
+          }
         }
       ],
       "parity_evidence": [],
       "group": "images",
       "remaining_acceptance": [
-        "Explicit multi-page occurrence acceptance and actual browser-selected currentSrc, media and density selection remain."
+        "Explicit multi-page occurrence/alt acceptance remains. Actual browser-selected currentSrc, media and density selection remains a separate unproven observation profile."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -4930,6 +5002,173 @@
       "source_release_sha256": "5861bf483b68899d8644e47ab16b69c683f71a9f2007ab6eae859a89bd1481ef",
       "scope": "Immutable exact-source native Windows release installed; raw/DOM and saved/offline content analysis, native policy and19 MCP tools checked. Seven existing jobs and eleven original JSON files remain byte-identical after restart, with zero fixture website requests against user data.",
       "limits": "Exact B8 source commit667bc97 only; subsequent B9 source changes are not attested. Full vendor/filter/workflow parity and local Windows Docker installation remain NOT_PROVEN."
+    },
+    {
+      "id": "resource-discovery-api-cli",
+      "artifact": "docs/verification/resource-discovery-e2e.json",
+      "artifact_sha256": "1e93595c13052adc695d9d1fd8a7bd7817bfbfa5f780ba0cf9972f1b6b418557",
+      "result": "PASS",
+      "tested_at": "2026-10-12T18:50:49.207Z",
+      "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+      "scope": "Nine native local API/CLI groups: response-MIME CSS inventory, private store=false transports, exact external resource grants, 505 occurrences/coalescing and 506 distinct resource URL units; bounded paged/full JSON/CSV snapshots, strict zero-HTTP CSS inspection, selected recrawl and four SQLite payload/full-config/generation tamper controls.",
+      "limits": "Bounded original Windows debug contract only; no universal type/product/context matrix, browser resource enforcement, inherited CSS environment encoding, wire-hop request accounting or vendor parity. B9 exact commit CI/release/install pending."
+    },
+    {
+      "id": "resource-discovery-mcp",
+      "artifact": "docs/verification/mcp-e2e.json",
+      "artifact_sha256": "0b87174bc04d88d24650343f36c90670c7d835408dac51e61282735434827d32",
+      "result": "PASS",
+      "tested_at": "2026-10-12T18:50:43.385Z",
+      "scope": "Official SDK 2.3.1 initializes 22 tools over stdio and streamable HTTP, including native resource occurrence/transport cursors, zero-HTTP supplied CSS inventory, strict arguments and related saved-source/policy/crawl/recrawl reads.",
+      "limits": "Own bounded transport/API acceptance only; this artifact has no independent executable hash. Frozen B9 runtime association is recorded in the aggregate task proof; exact-source CI/release/install remain pending."
+    },
+    {
+      "id": "ui-resource-discovery-live",
+      "artifact": "web/verification/ui-resource-discovery-live-results.json",
+      "artifact_sha256": "3dc82db03176f2b6d117c0cb2cfdc2e6b17d567ff83d060c131e3f40da713e73",
+      "result": "PASS",
+      "tested_at": "2026-10-12T18:52:22.645Z",
+      "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+      "scope": "12 actual browser → frozen Rust → owned HTTP/SQLite controls: role grants, malformed independent CSS units, private response projections, pagination/full export, selected/imported history and 320px reachability.",
+      "limits": "Own declared native-resource profile; no browser-selected image/cascade parity, renderer resource enforcement or complete per-type product matrix. B9 exact-source CI/release/install pending."
+    },
+    {
+      "id": "ui-resource-discovery-fixture",
+      "artifact": "web/verification/ui-resource-discovery-fixture-results.json",
+      "artifact_sha256": "2fe5b9597ac60aa0a51a57b145472df82f0fee0f984bb7edcf4650840be77749",
+      "result": "PASS",
+      "tested_at": "2026-10-12T18:07:47.776Z",
+      "scope": "10 isolated browser/API fixture controls; no native HTTP/persistence proof.",
+      "limits": "Mock API fixtures remain separate from the actual 12-check native resource UI. No vendor parity or release/CI assertion."
+    },
+    {
+      "id": "ui-resource-ledger-fixture",
+      "artifact": "web/verification/ui-resource-ledger-fixture-results.json",
+      "artifact_sha256": "c2b738e1ec6b6344abf4ab68a2a8bdfdf306af0153a15056097217005d7e99a6",
+      "result": "PASS",
+      "tested_at": "2026-10-12T18:07:29.774Z",
+      "scope": "16 isolated browser/API fixture controls; no native HTTP/persistence proof.",
+      "limits": "Mock API fixtures remain separate from the actual 12-check native resource UI. No vendor parity or release/CI assertion."
+    },
+    {
+      "id": "resource-discovery-restart-failure",
+      "artifact": "docs/verification/resource-discovery-restart-failure.json",
+      "artifact_sha256": "b3a7158f0b63d5c654acf3a8f15163af6057121f545da734ba5ec95a4fa0fa9a",
+      "result": "FAIL",
+      "tested_at": "2026-10-12T18:39:44.423506Z",
+      "source_debug_sha256": "1fc72a7772c2c8534fd5145feaf2e45384260b5fbefc61b1435417eea77a8c93",
+      "scope": "Three actual pre-repair Windows cold-start stack-overflow reproductions after valid saved raw/DOM/selected reports; isolated owned fixture, no user runtime changes.",
+      "limits": "Historical source1fc failure retained after repair; no vendor parity or current repaired-build failure claim."
+    },
+    {
+      "id": "resource-discovery-restart-repair",
+      "artifact": "docs/verification/resource-discovery-restart-repair.json",
+      "artifact_sha256": "f0d8ad2006abe9ebd5973afb273c0f3299e6b3eee3c805ce9941c9d21d1bcabe",
+      "result": "PASS",
+      "tested_at": "2026-10-12T18:50:43.296Z",
+      "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+      "scope": "Exact formerly failing fixture cold replay loads six completed jobs, ignores deliberately invalid SQLite, and has no stack overflow. Fresh eight-group saved capture/selected/restart regression passes; read-only parse/SQLite/analysis runs in spawn_blocking, Serve is heap pinned.",
+      "limits": "Own local Windows debug replay; full repaired-source Core/UI aggregates, exact commit CI, release and installed runtime still pending. No global stack increase or historical data rewrite."
+    },
+    {
+      "id": "resource-discovery-legacy-content-capture",
+      "artifact": "docs/verification/b9-legacy-content-capture.json",
+      "artifact_sha256": "f545678eb12905c06b1584018e52347b2bdd9558317c7c3aa3d1262ede145dc0",
+      "result": "PASS",
+      "tested_at": "2026-10-12T18:50:43.296Z",
+      "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+      "scope": "8 local content-capture legacy regression groups on repaired B9 debug; saved reports/recovery retain their declared scope.",
+      "limits": "Bounded original B9 profile; broad native ten groups and all type/navigation matrices remain PARTIAL. CSS environment encoding and native+renderer are unsupported/unproven. Exact B9 commit CI/release/install pending; no vendor parity."
+    },
+    {
+      "id": "resource-discovery-core",
+      "artifact": "docs/verification/resource-discovery-core.json",
+      "artifact_sha256": "b6ea5dcdd23c611ca36d091913a0d41507908cdd43e0851de3976c55f84e7b03",
+      "result": "PASS",
+      "tested_at": "2026-10-12T18:55:00.474356+00:00",
+      "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+      "scope": "Final repaired B9 workspace362 default tests, four ignored; native resources15, CSS15, separately actual Chrome1 and bounded512KiB raw/mock-rendered/selected read-only recovery regression; fmt/Clippy PASS.",
+      "limits": "Bounded original B9 profile; broad native ten groups and all type/navigation matrices remain PARTIAL. CSS environment encoding and native+renderer are unsupported/unproven. Exact B9 commit CI/release/install pending; no vendor parity."
+    },
+    {
+      "id": "resource-discovery-ui",
+      "artifact": "docs/verification/resource-discovery-ui.json",
+      "artifact_sha256": "e838860cbd545ae7406f8ee99388109dee7df0d00b020f99447cfab59ddbaace",
+      "result": "PASS",
+      "tested_at": "2026-10-12T18:54:55.015Z",
+      "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+      "scope": "Final repaired debug actual resource12 plus related53 browser checks, aggregate65; separate Settings10/Ledger16 mocks.",
+      "limits": "Bounded original B9 profile; broad native ten groups and all type/navigation matrices remain PARTIAL. CSS environment encoding and native+renderer are unsupported/unproven. Exact B9 commit CI/release/install pending; no vendor parity."
+    },
+    {
+      "id": "resource-discovery-batch",
+      "artifact": "docs/verification/resource-discovery-batch.json",
+      "artifact_sha256": "c678b979ff1cfe5145a13c91a2b23bba8d3fe7e1552e118baa10166d08360ef1",
+      "result": "PASS",
+      "tested_at": "2026-10-12T18:55:35.738Z",
+      "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+      "scope": "Final source142c local aggregate:362 Rust default, resources15/CSS15/Chrome1, native API9, MCP22 both transports, actual UI65, all seven legacy regression groups, retained historical stack failure and successful exact replay repair.",
+      "limits": "Bounded original B9 profile; broad native ten groups and all type/navigation matrices remain PARTIAL. CSS environment encoding and native+renderer are unsupported/unproven. Exact B9 commit CI/release/install pending; no vendor parity."
+    },
+    {
+      "id": "resource-discovery-legacy-api",
+      "artifact": "docs/verification/b9-legacy-api.json",
+      "artifact_sha256": "7af90501e897fa4b5af7537ade2cdcaed3b1ef7825bb2a2c1dd48fc81b553c6a",
+      "result": "PASS",
+      "tested_at": "2026-10-12T18:52:42.457Z",
+      "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+      "scope": "13 local api legacy regression groups on repaired B9 debug; saved reports/recovery retain their declared scope.",
+      "limits": "Bounded original B9 profile; broad native ten groups and all type/navigation matrices remain PARTIAL. CSS environment encoding and native+renderer are unsupported/unproven. Exact B9 commit CI/release/install pending; no vendor parity."
+    },
+    {
+      "id": "resource-discovery-legacy-list-import",
+      "artifact": "docs/verification/b9-legacy-list-import.json",
+      "artifact_sha256": "756ee28bb709e0ba5155ac875c8e1099af1b73c78a3e0f599829f8d5c45d20f1",
+      "result": "PASS",
+      "tested_at": "2026-10-12T18:52:11.431Z",
+      "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+      "scope": "11 local list-import legacy regression groups on repaired B9 debug; saved reports/recovery retain their declared scope.",
+      "limits": "Bounded original B9 profile; broad native ten groups and all type/navigation matrices remain PARTIAL. CSS environment encoding and native+renderer are unsupported/unproven. Exact B9 commit CI/release/install pending; no vendor parity."
+    },
+    {
+      "id": "resource-discovery-legacy-crawl-control",
+      "artifact": "docs/verification/b9-legacy-crawl-control.json",
+      "artifact_sha256": "b1d3761eeba082519eed4d06f2b20d75622096b107925669f387769915c5d16d",
+      "result": "PASS",
+      "tested_at": "2026-10-12T18:52:12.997Z",
+      "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+      "scope": "11 local crawl-control legacy regression groups on repaired B9 debug; saved reports/recovery retain their declared scope.",
+      "limits": "Bounded original B9 profile; broad native ten groups and all type/navigation matrices remain PARTIAL. CSS environment encoding and native+renderer are unsupported/unproven. Exact B9 commit CI/release/install pending; no vendor parity."
+    },
+    {
+      "id": "resource-discovery-legacy-selected-recrawl",
+      "artifact": "docs/verification/b9-legacy-selected-recrawl.json",
+      "artifact_sha256": "8c5d49a339bb664ea936a33532b19ace34eb0d43a21f8d10f9a982c53d00f37c",
+      "result": "PASS",
+      "tested_at": "2026-10-12T18:52:14.502Z",
+      "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+      "scope": "11 local selected-recrawl legacy regression groups on repaired B9 debug; saved reports/recovery retain their declared scope.",
+      "limits": "Bounded original B9 profile; broad native ten groups and all type/navigation matrices remain PARTIAL. CSS environment encoding and native+renderer are unsupported/unproven. Exact B9 commit CI/release/install pending; no vendor parity."
+    },
+    {
+      "id": "resource-discovery-legacy-crawl-policy",
+      "artifact": "docs/verification/b9-legacy-crawl-policy.json",
+      "artifact_sha256": "a673f4f24155c8a1a869d90c69ebe2785d56489b9703413d8b8d29078f67d81d",
+      "result": "PASS",
+      "tested_at": "2026-10-12T18:52:12.460Z",
+      "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+      "scope": "2 local crawl-policy legacy regression groups on repaired B9 debug; saved reports/recovery retain their declared scope.",
+      "limits": "Bounded original B9 profile; broad native ten groups and all type/navigation matrices remain PARTIAL. CSS environment encoding and native+renderer are unsupported/unproven. Exact B9 commit CI/release/install pending; no vendor parity."
+    },
+    {
+      "id": "resource-discovery-legacy-content-analysis",
+      "artifact": "docs/verification/b9-legacy-content-analysis.json",
+      "artifact_sha256": "251aeac488ad632d4f8935141789182ff4b6e6ab5c93bad39befd57486d84f9b",
+      "result": "PASS",
+      "tested_at": "2026-10-12T18:52:10.650Z",
+      "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+      "scope": "4 local content-analysis legacy regression groups on repaired B9 debug; saved reports/recovery retain their declared scope.",
+      "limits": "Bounded original B9 profile; broad native ten groups and all type/navigation matrices remain PARTIAL. CSS environment encoding and native+renderer are unsupported/unproven. Exact B9 commit CI/release/install pending; no vendor parity."
     }
   ],
   "reference_workflows": [
@@ -5187,7 +5426,7 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-12T17:25:51.590Z",
+  "last_verified_at": "2026-10-12T18:55:35.738Z",
   "current_work": [
     {
       "id": "batch-b8-content-capture",
@@ -5253,11 +5492,11 @@
     },
     {
       "id": "batch-b9-resource-discovery",
-      "status": "IN_PROGRESS",
-      "stage": "DESIGN_IMPLEMENTATION",
+      "status": "LOCAL_VERIFIED_OPEN_FEATURE_GATES",
+      "stage": "LOCAL_VERIFIED_OPEN_FEATURE_GATES",
       "priority": 1,
       "title_de": "Jetzt in Arbeit – B9: Ressourcen und CSS-Abhängigkeiten",
-      "summary_de": "Eigene Quell-Inventare und getrennte Speichern-/Abrufen-/Weiterentdecken-Schalter werden implementiert. CSS, Bilder, JavaScript, Medien und Dokumentbeziehungen erhalten ihre tatsächliche Herkunft und unveränderliche Berechtigungen. Noch keine B9-Abnahme oder tatsächliche Integration ist als bestanden nachgewiesen.",
+      "summary_de": "Der reparierte lokale B9-Build 142c0a… ist vollständig an die aktuellen eigenen Runtime-Gates gebunden: 362 Standard-Rust-Tests, 15 native Ressourcenfälle,15 CSS-Tests, API9, MCP22 und 65 tatsächliche UI-Prüfungen plus sieben bestehende Regressionsgruppen. Die zuvor fehlgeschlagene Neustart-Fixture lädt korrekt; der dreifache alte Stackoverflow bleibt historisch gespeichert. Breitere Typ-/Navigations-/Encoding-Abnahmen bleiben PARTIAL; B9-Commit-CI, Release und Installation noch PENDING.",
       "feature_ids": [
         "crawl.resources",
         "crawl.relationships",
@@ -5270,34 +5509,335 @@
         "images.pdf",
         "images.pdf_links"
       ],
-      "completed_acceptance_de": [],
+      "completed_acceptance_de": [
+        "Finaler reparierter Debug 142c: 362 Standard-Rust-Tests, vier ignorierte Live-Gates; separat echte Chrome-Prüfung, Formatierung/Clippy und 512KiB-Core-Recovery bestanden. Alle sieben bestehenden Regressionstestsuiten sind am reparierten Build geprüft.",
+        "15 native Ressourcenfälle und 15 CSS-Tests prüfen Quellrollen, Bild-Speichern/Abrufen in vier Kombinationen, späte unabhängige Grants, MIME/Basis, fehlerhafte getrennte CSS-Einheiten und atomare Budgets.",
+        "Pause/Recovery und ausgewählter Recrawl erhalten private Transportbeobachtungen, Eltern-/Restdaten und unveränderliche Grants; paged/streamed Leser prüfen vollständige Config, Generation und Datenintegrität in einem SQLite-Snapshot.",
+        "Neun echte API-/CLI-Gruppen prüfen unter anderem 506 unterschiedliche Ressourcen-URL-Transporte ohne feste 500-URL-Grenze, vollständige Exporte, null Website-Anfragen bei CSS-Inspektion und vier gezielte SQLite-Manipulationskontrollen.",
+        "Offizieller MCP-SDK: 22 Tools über stdio und Streamable HTTP geprüft. Die tatsächliche Browser-UI besteht 12 Ressourcenprüfungen plus 53 zugehörige bestehende Prüfungen; separate Settings10/Ledger16-Mocks bleiben als solche ausgewiesen.",
+        "Lokale Neustartreparatur an 142c0a…: exakt fehlgeschlagene Fixture lädt sechs fertige Jobs; frische achtteilige Capture-/Restart-Prüfung, API9 und MCP22 bestehen. Historische Dateien werden nicht umgeschrieben, die globale Stackgrenze nicht erhöht."
+      ],
       "pending_acceptance_de": [
-        "Positive und negative HTML-/CSS-Quellen inklusive picture, source, poster, object/embed, image-set, Imports, Escapes, Unicode und Syntaxfehler prüfen; Kandidaten sind keine tatsächliche Browserauswahl.",
-        "Alle Speichern-/Abrufen-Kombinationen mit exaktem Requestlog prüfen. Nicht abgerufene Ziele behalten unbekannte Antwortdaten, gespeicherte Quellvorkommen bleiben erhalten.",
-        "Doppelte Ziele aus verschiedenen Rollen zusammenführen, ohne frühere Erlaubnisse zu verändern; Ressource mit HTML-Antwort darf keine unbegründete Navigation freischalten.",
-        "Finale Stylesheet-Basis, tatsächlichen MIME-Typ, begrenzte Dekodierung und Body-Vollständigkeit getrennt binden; CSS-Kandidaten erlauben noch keinen Abruf.",
-        "Robots, URL-Regeln und exakte Origin-Grenzen einschließlich Redirects prüfen. CDN-Ressourcen erweitern weder Navigation noch Credential-Origins.",
-        "Seite, Quellvorkommen, Entscheidungen, Transport und offene Expansion atomar speichern; Pause/Crash/SQLite-Recovery sowie ausgewählten Recrawl ohne neue Expansion prüfen.",
-        "Byte-/Token-/Tiefe-/Kandidaten-/Diagnostik-Grenzen mit exakt/plus-eins Kontrollen prüfen; kein still gespeicherter Prefix und keine feste 500-URL-Grenze.",
-        "Nach den zehn nativen Gate-Gruppen erst API/CLI/MCP, UI, exakte Commit-CI, unveränderlichen Release und Installation separat nachweisen."
+        "resource-products-every-type-and-navigation: Die vier Speichern/Abrufen-Kombinationen sind nativ für Bilder geprüft; CSS, JavaScript, Medien, PDF, SWF und jede Navigation benötigen ihre eigene vollständige Matrix.",
+        "relationship-discovery-each-positive-negative und link-directive-four-way-traversal: Für Canonical, hreflang, Pagination, AMP, mobile Alternate, iframe/Refresh sowie nofollow/ugc/sponsored/page-nofollow je aktivierte und gesperrte Ziele mit exaktem Requestlog prüfen.",
+        "resource-role-unions-reverse-and-concurrent: Anchor/Bild und späte Store-/Navigations-Grants sind geprüft. Umgekehrte parallele Rollen anderer Typen und tatsächliche Media-/Source-Kontexte gezielt ergänzen.",
+        "css-encoding-environment-fallback: BOM/HTTP-Charset/exakte führende @charset-Deklaration sind das eigene Profil. Verweisendes HTML und importierende CSS-Umgebungen liefern noch keine vererbte Encoding-Herkunft; mehrdeutige nicht-ASCII-Quellen bleiben unbekannt.",
+        "css-native-grammar-context-and-decoding: Die 15 eigenen Parserfälle und native Imports/Zyklen sind geprüft; zusätzliche Fonts, moderne URL-Grammatik, bedingte Regeln und Decoding-Revisionen benötigen gerichtete native Kontrollen. Kandidaten beweisen kein tatsächliches Browserladen.",
+        "resource-cross-origin-redirect-hop-credentials: Zwei Origins und direkte Robots-/Credential-Grenzen sind geprüft; mehrgliedrige Redirects je Ressourcentyp mit jedem verbotenen Ziel und unveränderten Credential-Origins ergänzen.",
+        "resource-interruption-each-stage und resource-budget-exact-plus-one-all-limits: Atomare Rollbacks, Pause, Wiederaufnahme und gepinnte parallele Leser sind geprüft; Prozessabbruch an jedem Parser-/Grant-/Expansion-Punkt und jede einzelne Grenze exakt/plus-eins weiter prüfen.",
+        "resource-selected-all-kind-targets und image-occurrence-alt-and-selected-source: Selektiver Recrawl ohne Expansion ist geprüft; CSS/Bild/PDF/Navigations-Matrix, mehrere Quellseiten sowie fehlendes/leeres/Whitespace-Alt und Browser-currentSrc bleiben zusätzliche Abnahmen.",
+        "resource-native-renderer-enforcement: Native Ressourcenschalter plus Rendering werden weiterhin vor HTTP abgelehnt. Browser-Navigation und Subrequests müssen erst unter denselben Regeln tatsächlich kontrolliert und geprüft werden.",
+        "Eigene exakte B9-Commit-CI, unveränderlichen Release und installierte Runtime separat nachweisen. Die bestandenen B8-Belege attestieren ausschließlich ihren früheren Commit."
       ],
       "documentation": [
         "docs/resource-discovery.md",
-        "docs/ROADMAP.md"
+        "docs/ROADMAP.md",
+        "docs/resource-discovery-api.md",
+        "docs/resource-discovery-ui.md"
       ],
       "gates": {
-        "pure_css_inventory": "PENDING",
-        "resource_policy": "PENDING",
-        "native_fixture_groups_10": "PENDING",
-        "api_cli_mcp": "PENDING",
-        "actual_ui": "PENDING",
+        "pure_css_inventory": "PASS",
+        "resource_policy_bounded": "PASS",
+        "native_fixture_subset": "PASS",
+        "native_fixture_groups_10": "PARTIAL",
+        "api_cli_mcp": "PASS",
+        "actual_ui": "PASS",
+        "related_actual_browser_53": "PASS",
+        "ui_settings_fixture": "PASS",
+        "ui_ledger_fixture": "PASS",
         "exact_commit_ci": "PENDING",
         "immutable_release": "PENDING",
-        "installed_runtime": "PENDING"
+        "installed_runtime": "PENDING",
+        "legacy_restart_regression": "PASS",
+        "full_core_and_ui_on_repaired_source": "PASS",
+        "legacy_regression_groups_7": "PASS"
       },
-      "proof_run_ids": [],
+      "proof_run_ids": [
+        "resource-discovery-api-cli",
+        "resource-discovery-mcp",
+        "ui-resource-discovery-live",
+        "ui-resource-discovery-fixture",
+        "ui-resource-ledger-fixture",
+        "resource-discovery-restart-failure",
+        "resource-discovery-restart-repair",
+        "resource-discovery-legacy-content-capture",
+        "resource-discovery-core",
+        "resource-discovery-ui",
+        "resource-discovery-batch",
+        "resource-discovery-legacy-api",
+        "resource-discovery-legacy-list-import",
+        "resource-discovery-legacy-crawl-control",
+        "resource-discovery-legacy-selected-recrawl",
+        "resource-discovery-legacy-crawl-policy",
+        "resource-discovery-legacy-content-analysis"
+      ],
       "reference_parity": "NOT_PROVEN",
-      "policy": "Implementation-stage tracking only. Planned tests and primary-source review are not execution evidence. Existing B8 native/API/UI PASS records and its pending release/CI/install boundary are preserved."
+      "policy": "Final repaired local B9 source142c is bound to public Core/UI/batch proof artifacts. The historical source1fc cold-start FAIL remains recorded; exact failed fixture replay and all local regression gates pass on142c. Broad native type/navigation/encoding acceptance remains partial; exact-source B9 CI, immutable release and installation pending. B8 exact667bc proofs remain historical PASS. Vendor/filter/workflow parity NOT_PROVEN.",
+      "stage_evidence": [
+        {
+          "id": "resource-discovery-api-cli",
+          "artifact": "docs/verification/resource-discovery-e2e.json",
+          "artifact_sha256": "1e93595c13052adc695d9d1fd8a7bd7817bfbfa5f780ba0cf9972f1b6b418557",
+          "result": "PASS",
+          "tested_at": "2026-10-12T18:50:49.207Z",
+          "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+          "scope": "Nine native local API/CLI groups: response-MIME CSS inventory, private store=false transports, exact external resource grants, 505 occurrences/coalescing and 506 distinct resource URL units; bounded paged/full JSON/CSV snapshots, strict zero-HTTP CSS inspection, selected recrawl and four SQLite payload/full-config/generation tamper controls.",
+          "limits": "Bounded original Windows debug contract only; no universal type/product/context matrix, browser resource enforcement, inherited CSS environment encoding, wire-hop request accounting or vendor parity. B9 exact commit CI/release/install pending."
+        },
+        {
+          "id": "resource-discovery-mcp",
+          "artifact": "docs/verification/mcp-e2e.json",
+          "artifact_sha256": "0b87174bc04d88d24650343f36c90670c7d835408dac51e61282735434827d32",
+          "result": "PASS",
+          "tested_at": "2026-10-12T18:50:43.385Z",
+          "scope": "Official SDK 2.3.1 initializes 22 tools over stdio and streamable HTTP, including native resource occurrence/transport cursors, zero-HTTP supplied CSS inventory, strict arguments and related saved-source/policy/crawl/recrawl reads.",
+          "limits": "Own bounded transport/API acceptance only; this artifact has no independent executable hash. Frozen B9 runtime association is recorded in the aggregate task proof; exact-source CI/release/install remain pending."
+        },
+        {
+          "id": "ui-resource-discovery-live",
+          "artifact": "web/verification/ui-resource-discovery-live-results.json",
+          "artifact_sha256": "3dc82db03176f2b6d117c0cb2cfdc2e6b17d567ff83d060c131e3f40da713e73",
+          "result": "PASS",
+          "tested_at": "2026-10-12T18:52:22.645Z",
+          "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+          "scope": "12 actual browser → frozen Rust → owned HTTP/SQLite controls: role grants, malformed independent CSS units, private response projections, pagination/full export, selected/imported history and 320px reachability.",
+          "limits": "Own declared native-resource profile; no browser-selected image/cascade parity, renderer resource enforcement or complete per-type product matrix. B9 exact-source CI/release/install pending."
+        },
+        {
+          "id": "ui-resource-discovery-fixture",
+          "artifact": "web/verification/ui-resource-discovery-fixture-results.json",
+          "artifact_sha256": "2fe5b9597ac60aa0a51a57b145472df82f0fee0f984bb7edcf4650840be77749",
+          "result": "PASS",
+          "tested_at": "2026-10-12T18:07:47.776Z",
+          "scope": "10 isolated browser/API fixture controls; no native HTTP/persistence proof.",
+          "limits": "Mock API fixtures remain separate from the actual 12-check native resource UI. No vendor parity or release/CI assertion."
+        },
+        {
+          "id": "ui-resource-ledger-fixture",
+          "artifact": "web/verification/ui-resource-ledger-fixture-results.json",
+          "artifact_sha256": "c2b738e1ec6b6344abf4ab68a2a8bdfdf306af0153a15056097217005d7e99a6",
+          "result": "PASS",
+          "tested_at": "2026-10-12T18:07:29.774Z",
+          "scope": "16 isolated browser/API fixture controls; no native HTTP/persistence proof.",
+          "limits": "Mock API fixtures remain separate from the actual 12-check native resource UI. No vendor parity or release/CI assertion."
+        },
+        {
+          "id": "resource-discovery-restart-failure",
+          "artifact": "docs/verification/resource-discovery-restart-failure.json",
+          "artifact_sha256": "b3a7158f0b63d5c654acf3a8f15163af6057121f545da734ba5ec95a4fa0fa9a",
+          "result": "FAIL",
+          "tested_at": "2026-10-12T18:39:44.423506Z",
+          "source_debug_sha256": "1fc72a7772c2c8534fd5145feaf2e45384260b5fbefc61b1435417eea77a8c93",
+          "scope": "Three actual pre-repair Windows cold-start stack-overflow reproductions after valid saved raw/DOM/selected reports; isolated owned fixture, no user runtime changes.",
+          "limits": "Historical source1fc failure retained after repair; no vendor parity or current repaired-build failure claim."
+        },
+        {
+          "id": "resource-discovery-restart-repair",
+          "artifact": "docs/verification/resource-discovery-restart-repair.json",
+          "artifact_sha256": "f0d8ad2006abe9ebd5973afb273c0f3299e6b3eee3c805ce9941c9d21d1bcabe",
+          "result": "PASS",
+          "tested_at": "2026-10-12T18:50:43.296Z",
+          "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+          "scope": "Exact formerly failing fixture cold replay loads six completed jobs, ignores deliberately invalid SQLite, and has no stack overflow. Fresh eight-group saved capture/selected/restart regression passes; read-only parse/SQLite/analysis runs in spawn_blocking, Serve is heap pinned.",
+          "limits": "Own local Windows debug replay; full repaired-source Core/UI aggregates, exact commit CI, release and installed runtime still pending. No global stack increase or historical data rewrite."
+        },
+        {
+          "id": "resource-discovery-legacy-content-capture",
+          "artifact": "docs/verification/b9-legacy-content-capture.json",
+          "artifact_sha256": "f545678eb12905c06b1584018e52347b2bdd9558317c7c3aa3d1262ede145dc0",
+          "result": "PASS",
+          "tested_at": "2026-10-12T18:50:43.296Z",
+          "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+          "scope": "8 local content-capture legacy regression groups on repaired B9 debug; saved reports/recovery retain their declared scope.",
+          "limits": "Bounded original B9 profile; broad native ten groups and all type/navigation matrices remain PARTIAL. CSS environment encoding and native+renderer are unsupported/unproven. Exact B9 commit CI/release/install pending; no vendor parity."
+        },
+        {
+          "id": "resource-discovery-core",
+          "artifact": "docs/verification/resource-discovery-core.json",
+          "artifact_sha256": "b6ea5dcdd23c611ca36d091913a0d41507908cdd43e0851de3976c55f84e7b03",
+          "result": "PASS",
+          "tested_at": "2026-10-12T18:55:00.474356+00:00",
+          "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+          "scope": "Final repaired B9 workspace362 default tests, four ignored; native resources15, CSS15, separately actual Chrome1 and bounded512KiB raw/mock-rendered/selected read-only recovery regression; fmt/Clippy PASS.",
+          "limits": "Bounded original B9 profile; broad native ten groups and all type/navigation matrices remain PARTIAL. CSS environment encoding and native+renderer are unsupported/unproven. Exact B9 commit CI/release/install pending; no vendor parity."
+        },
+        {
+          "id": "resource-discovery-ui",
+          "artifact": "docs/verification/resource-discovery-ui.json",
+          "artifact_sha256": "e838860cbd545ae7406f8ee99388109dee7df0d00b020f99447cfab59ddbaace",
+          "result": "PASS",
+          "tested_at": "2026-10-12T18:54:55.015Z",
+          "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+          "scope": "Final repaired debug actual resource12 plus related53 browser checks, aggregate65; separate Settings10/Ledger16 mocks.",
+          "limits": "Bounded original B9 profile; broad native ten groups and all type/navigation matrices remain PARTIAL. CSS environment encoding and native+renderer are unsupported/unproven. Exact B9 commit CI/release/install pending; no vendor parity."
+        },
+        {
+          "id": "resource-discovery-batch",
+          "artifact": "docs/verification/resource-discovery-batch.json",
+          "artifact_sha256": "c678b979ff1cfe5145a13c91a2b23bba8d3fe7e1552e118baa10166d08360ef1",
+          "result": "PASS",
+          "tested_at": "2026-10-12T18:55:35.738Z",
+          "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+          "scope": "Final source142c local aggregate:362 Rust default, resources15/CSS15/Chrome1, native API9, MCP22 both transports, actual UI65, all seven legacy regression groups, retained historical stack failure and successful exact replay repair.",
+          "limits": "Bounded original B9 profile; broad native ten groups and all type/navigation matrices remain PARTIAL. CSS environment encoding and native+renderer are unsupported/unproven. Exact B9 commit CI/release/install pending; no vendor parity."
+        },
+        {
+          "id": "resource-discovery-legacy-api",
+          "artifact": "docs/verification/b9-legacy-api.json",
+          "artifact_sha256": "7af90501e897fa4b5af7537ade2cdcaed3b1ef7825bb2a2c1dd48fc81b553c6a",
+          "result": "PASS",
+          "tested_at": "2026-10-12T18:52:42.457Z",
+          "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+          "scope": "13 local api legacy regression groups on repaired B9 debug; saved reports/recovery retain their declared scope.",
+          "limits": "Bounded original B9 profile; broad native ten groups and all type/navigation matrices remain PARTIAL. CSS environment encoding and native+renderer are unsupported/unproven. Exact B9 commit CI/release/install pending; no vendor parity."
+        },
+        {
+          "id": "resource-discovery-legacy-list-import",
+          "artifact": "docs/verification/b9-legacy-list-import.json",
+          "artifact_sha256": "756ee28bb709e0ba5155ac875c8e1099af1b73c78a3e0f599829f8d5c45d20f1",
+          "result": "PASS",
+          "tested_at": "2026-10-12T18:52:11.431Z",
+          "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+          "scope": "11 local list-import legacy regression groups on repaired B9 debug; saved reports/recovery retain their declared scope.",
+          "limits": "Bounded original B9 profile; broad native ten groups and all type/navigation matrices remain PARTIAL. CSS environment encoding and native+renderer are unsupported/unproven. Exact B9 commit CI/release/install pending; no vendor parity."
+        },
+        {
+          "id": "resource-discovery-legacy-crawl-control",
+          "artifact": "docs/verification/b9-legacy-crawl-control.json",
+          "artifact_sha256": "b1d3761eeba082519eed4d06f2b20d75622096b107925669f387769915c5d16d",
+          "result": "PASS",
+          "tested_at": "2026-10-12T18:52:12.997Z",
+          "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+          "scope": "11 local crawl-control legacy regression groups on repaired B9 debug; saved reports/recovery retain their declared scope.",
+          "limits": "Bounded original B9 profile; broad native ten groups and all type/navigation matrices remain PARTIAL. CSS environment encoding and native+renderer are unsupported/unproven. Exact B9 commit CI/release/install pending; no vendor parity."
+        },
+        {
+          "id": "resource-discovery-legacy-selected-recrawl",
+          "artifact": "docs/verification/b9-legacy-selected-recrawl.json",
+          "artifact_sha256": "8c5d49a339bb664ea936a33532b19ace34eb0d43a21f8d10f9a982c53d00f37c",
+          "result": "PASS",
+          "tested_at": "2026-10-12T18:52:14.502Z",
+          "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+          "scope": "11 local selected-recrawl legacy regression groups on repaired B9 debug; saved reports/recovery retain their declared scope.",
+          "limits": "Bounded original B9 profile; broad native ten groups and all type/navigation matrices remain PARTIAL. CSS environment encoding and native+renderer are unsupported/unproven. Exact B9 commit CI/release/install pending; no vendor parity."
+        },
+        {
+          "id": "resource-discovery-legacy-crawl-policy",
+          "artifact": "docs/verification/b9-legacy-crawl-policy.json",
+          "artifact_sha256": "a673f4f24155c8a1a869d90c69ebe2785d56489b9703413d8b8d29078f67d81d",
+          "result": "PASS",
+          "tested_at": "2026-10-12T18:52:12.460Z",
+          "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+          "scope": "2 local crawl-policy legacy regression groups on repaired B9 debug; saved reports/recovery retain their declared scope.",
+          "limits": "Bounded original B9 profile; broad native ten groups and all type/navigation matrices remain PARTIAL. CSS environment encoding and native+renderer are unsupported/unproven. Exact B9 commit CI/release/install pending; no vendor parity."
+        },
+        {
+          "id": "resource-discovery-legacy-content-analysis",
+          "artifact": "docs/verification/b9-legacy-content-analysis.json",
+          "artifact_sha256": "251aeac488ad632d4f8935141789182ff4b6e6ab5c93bad39befd57486d84f9b",
+          "result": "PASS",
+          "tested_at": "2026-10-12T18:52:10.650Z",
+          "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+          "scope": "4 local content-analysis legacy regression groups on repaired B9 debug; saved reports/recovery retain their declared scope.",
+          "limits": "Bounded original B9 profile; broad native ten groups and all type/navigation matrices remain PARTIAL. CSS environment encoding and native+renderer are unsupported/unproven. Exact B9 commit CI/release/install pending; no vendor parity."
+        }
+      ],
+      "last_stage_evidence_at": "2026-10-12T18:55:35.738Z",
+      "profile_limits_de": [
+        "Environment-Encoding aus verweisendem HTML/importierendem CSS fehlt; mehrdeutige nicht-ASCII-Quellen bleiben unbekannt.",
+        "Private Transport-Projektionen enthalten begrenzte Metadaten, keinen Body, Custom-Extraction-/PDF-/Capture-Text. retained_response bezeichnet die aktuelle Aufnahme in den Bericht; historische Projektionsfakten bleiben davon getrennt.",
+        "completed_transports zählt Page-/Resource-Frontier-Fetch-Einheiten und umfasst nicht jede Redirect-Stufe oder Discovery-Protokollanfrage.",
+        "Native Deklarationsinventare behaupten weder Browser-Cascade/Ladeauswahl noch tatsächliche responsive Bildauswahl. Vollständige Integritätsprüfung pro Seite priorisiert Korrektheit; Skalierung benötigt weitere Performance-Gates."
+      ],
+      "pending_named_fixtures": [
+        {
+          "id": "resource-products-every-type-and-navigation",
+          "status": "PENDING",
+          "scope": "Independent four-product controls per CSS/JS/media/PDF/SWF/navigation type; native images are the observed four-product subset."
+        },
+        {
+          "id": "relationship-discovery-each-positive-negative",
+          "status": "PENDING",
+          "scope": "Separately allow/deny each canonical/hreflang/pagination/AMP/mobile/iframe/refresh kind with exact HTTP paths."
+        },
+        {
+          "id": "link-directive-four-way-traversal",
+          "status": "PENDING",
+          "scope": "Rel nofollow, ugc, sponsored and page nofollow; preserve occurrences for allowed and denied targets."
+        },
+        {
+          "id": "resource-role-unions-reverse-and-concurrent",
+          "status": "PENDING",
+          "scope": "Reversed and concurrent same-target role orders for non-image type combinations; no duplicate transport or mutable grants."
+        },
+        {
+          "id": "css-encoding-environment-fallback",
+          "status": "PENDING",
+          "scope": "Legacy HTML and imported stylesheet non-ASCII URL bytes without explicit encoding; unknown provenance, no unauthorized request; inherited environment encoding remains separately open.",
+          "primary_source": "https://www.w3.org/TR/css-syntax-3/#input-byte-stream"
+        },
+        {
+          "id": "css-native-grammar-context-and-decoding",
+          "status": "PENDING",
+          "scope": "Native fonts/modern URL contexts/conditions and decode revisions beyond the declared 15-case parser subset."
+        },
+        {
+          "id": "resource-cross-origin-redirect-hop-credentials",
+          "status": "PENDING",
+          "scope": "Multiple redirect hops for resource types across owned origins; per-hop policy/robots and credentials without scope expansion."
+        },
+        {
+          "id": "resource-interruption-each-stage",
+          "status": "PENDING",
+          "scope": "Actual process interruption during parser/grant/expansion phases and no duplicated committed transport after recovery."
+        },
+        {
+          "id": "resource-budget-exact-plus-one-all-limits",
+          "status": "PENDING",
+          "scope": "Individual byte/token/depth/candidate/diagnostic/total limits exactly and one over; native rollback and explicit larger budgets."
+        },
+        {
+          "id": "resource-selected-all-kind-targets",
+          "status": "PENDING",
+          "scope": "Selected CSS/image/PDF/navigation targets, errors/pending freshness, inherited history unavailable and no outward discovery."
+        },
+        {
+          "id": "image-occurrence-alt-and-selected-source",
+          "status": "PENDING",
+          "scope": "Same candidate across different source pages; absent/empty/whitespace alt; actual browser currentSrc/media/density selection kept separate."
+        },
+        {
+          "id": "resource-native-renderer-enforcement",
+          "status": "PENDING",
+          "scope": "Native resource configuration currently rejected with renderer; future enforce every actual browser navigation/subrequest under saved policy."
+        }
+      ],
+      "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+      "release_eligible": true,
+      "legacy_restart_regression": {
+        "result": "PASS",
+        "root_cause": "CONFIRMED_WINDOWS_ASYNC_STARTUP_STACK_PRESSURE",
+        "artifact": "docs/verification/resource-discovery-restart-repair.json",
+        "artifact_sha256": "f0d8ad2006abe9ebd5973afb273c0f3299e6b3eee3c805ce9941c9d21d1bcabe",
+        "tested_at": "2026-10-12T18:50:43.296Z",
+        "source_debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+        "previous_failure_run_id": "resource-discovery-restart-failure",
+        "exact_failed_fixture_jobs_loaded": 6,
+        "fresh_capture_restart_groups": 8,
+        "change": "Read-only saved JSON parsing, SQLite inspection/recovery and derived in-memory analysis run in spawn_blocking; the Serve future is heap pinned. No global stack limit increase or historical data rewrite.",
+        "limits": "Local repair/replay proof only; final repaired-source aggregates and CI/release/install remain pending."
+      },
+      "previous_source_debug_sha256": "1fc72a7772c2c8534fd5145feaf2e45384260b5fbefc61b1435417eea77a8c93",
+      "legacy_restart_failure": {
+        "result": "FAIL",
+        "artifact": "docs/verification/resource-discovery-restart-failure.json",
+        "artifact_sha256": "b3a7158f0b63d5c654acf3a8f15163af6057121f545da734ba5ec95a4fa0fa9a",
+        "observed_at": "2026-10-12T18:39:44.423506Z",
+        "source_debug_sha256": "1fc72a7772c2c8534fd5145feaf2e45384260b5fbefc61b1435417eea77a8c93",
+        "reproductions": 3,
+        "root_cause": "CONFIRMED_WINDOWS_ASYNC_STARTUP_STACK_PRESSURE",
+        "diagnosis": "Synchronous selected-store recovery passes on a standalone 512KiB thread but exhausts remaining stack under async main/serve/load_reports on Windows. Production repair moves synchronous parse/SQLite/analysis to spawn_blocking; repair gates are separate and pending."
+      }
     }
   ]
 }

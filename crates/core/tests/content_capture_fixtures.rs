@@ -12,6 +12,82 @@ use tokio::{
     sync::{Semaphore, mpsc},
 };
 
+#[tokio::test]
+async fn readonly_saved_raw_rendered_and_selected_capture_recovery_fits_a_bounded_blocking_thread()
+{
+    let fixture = Fixture::new(|request| Response::html(format!(
+        "<html lang='de'><head><title>Saved {}</title></head><body><main>Native captured {}</main></body></html>",
+        request.path, request.path,
+    ))).await;
+    let worker = Fixture::new(|request| {
+        rendered_response(
+            request,
+            "<html lang='en'><body><main>Independently rendered capture</main></body></html>",
+            Some(200),
+            Some("text/html;charset=utf-8"),
+            Some("2026-10-12T18:00:00Z"),
+        )
+    })
+    .await;
+    let temp = tempfile::tempdir().unwrap();
+    let raw_path = temp.path().join("raw.sqlite");
+    let cfg = config(&fixture, &["/a", "/b", "/c", "/d", "/e", "/f"]);
+    Crawler::new(cfg.clone())
+        .unwrap()
+        .with_store(&raw_path)
+        .unwrap()
+        .run_controlled(None, CrawlControl::new())
+        .await
+        .unwrap();
+    let mut rendered_cfg = cfg;
+    both(&mut rendered_cfg, &worker);
+    let rendered_path = temp.path().join("rendered.sqlite");
+    let parent_report = Crawler::new(rendered_cfg)
+        .unwrap()
+        .with_store(&rendered_path)
+        .unwrap()
+        .run_controlled(None, CrawlControl::new())
+        .await
+        .unwrap()
+        .report;
+    let parent_bytes = serde_json::to_vec(&parent_report).unwrap();
+    let prepared =
+        prepare_selected_recrawl(parent(), &parent_bytes, &[fixture.url("/a")], None).unwrap();
+    let selected_path = temp.path().join("selected.sqlite");
+    Crawler::new(prepared.config.clone())
+        .unwrap()
+        .with_store(&selected_path)
+        .unwrap()
+        .with_selected_recrawl(prepared)
+        .unwrap()
+        .run_controlled(None, CrawlControl::new())
+        .await
+        .unwrap();
+    // Recovery cannot accidentally depend on any still-running fixture service.
+    drop(fixture);
+    drop(worker);
+    std::thread::Builder::new()
+        .name("bounded-recovery".into())
+        .stack_size(512 * 1024)
+        .spawn(move || {
+            for path in [raw_path, rendered_path, selected_path] {
+                let inspection = CrawlStore::inspect(&path).unwrap();
+                assert!(inspection.checkpoint_valid);
+                assert_eq!(inspection.completed, 6);
+                let store = CrawlStore::open_read_only(&path).unwrap();
+                let report = store.load_report().unwrap().unwrap();
+                assert_eq!(report.pages.len(), 6);
+                for page in &report.pages {
+                    validate_page_content_captures(page).unwrap();
+                }
+                let _ = store.run_plan().unwrap();
+            }
+        })
+        .unwrap()
+        .join()
+        .unwrap();
+}
+
 struct Response {
     status: u16,
     body: Vec<u8>,

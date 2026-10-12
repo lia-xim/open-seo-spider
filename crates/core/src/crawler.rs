@@ -52,6 +52,21 @@ pub struct Crawler {
 impl Crawler {
     pub fn new(mut config: CrawlConfig) -> anyhow::Result<Self> {
         config.prepare_input_lists()?;
+        if let Some(resource) = &config.resource_discovery {
+            resource.validate()?;
+            config
+                .resource_discovery_limits
+                .clone()
+                .unwrap_or_default()
+                .validate()?;
+            if config.renderer.is_some() {
+                bail!(
+                    "Native resource discovery cannot be combined with browser rendering: browser resource enforcement is not implemented"
+                );
+            }
+        } else if config.resource_discovery_limits.is_some() {
+            bail!("Resource discovery limits require resource discovery configuration");
+        }
         let capture = config
             .content_capture
             .as_ref()
@@ -188,7 +203,15 @@ impl Crawler {
     }
 
     pub(crate) fn selected_target_allowed(&self, url: &Url) -> bool {
-        same_scope(url, &self.seeds, self.config.include_subdomains) || self.config.check_external
+        same_scope(url, &self.seeds, self.config.include_subdomains)
+            || self.config.check_external
+            || self
+                .config
+                .resource_discovery
+                .as_ref()
+                .is_some_and(|config| {
+                    config.permits_resource_origin(url, &self.seeds, self.config.include_subdomains)
+                })
     }
 
     /// An optional assertion. A saved selected store is always detected even
@@ -249,6 +272,11 @@ impl Crawler {
         if self.policy.is_some() && self.store.is_none() {
             bail!(
                 "Native crawl policy requires explicit SQLite storage for durable admission and ledger evidence"
+            );
+        }
+        if self.config.resource_discovery.is_some() && self.store.is_none() {
+            bail!(
+                "Native resource discovery requires explicit SQLite storage for transport, source and grant evidence"
             );
         }
         if let (Some(store), Some(prepared)) = (&self.store, &self.selected_base) {
@@ -443,11 +471,25 @@ impl Crawler {
             .await?
         };
         queue.extend(discovery.pages);
+        if let (Some(config), Some(store), Some(generation)) =
+            (&self.config.resource_discovery, &self.store, generation)
+        {
+            store.initialize_resources(
+                config,
+                &self
+                    .config
+                    .resource_discovery_limits
+                    .clone()
+                    .unwrap_or_default(),
+                generation,
+            )?;
+        }
         let mut warnings = discovery.warnings;
         if selected.is_some() {
             warnings.push("Selected recrawl: unselected observations are inherited unchanged; pending selected historical rows are excluded. This is mixed-age coverage, not a fresh full-site crawl.".into());
         }
         let context = Arc::new(FetchContext {
+            store: self.store.clone(),
             capture: self.capture.clone(),
             generation,
             config: self.config.clone(),
@@ -461,11 +503,41 @@ impl Crawler {
             #[cfg(test)]
             pdf_parse_hook: self.pdf_parse_hook.clone(),
         });
-        let mut tasks: FuturesUnordered<BoxFuture<'static, PageRecord>> = FuturesUnordered::new();
+        let mut tasks: FuturesUnordered<BoxFuture<'static, anyhow::Result<PageRecord>>> =
+            FuturesUnordered::new();
+        let mut completed_transports = self
+            .store
+            .as_ref()
+            .map(|store| store.resource_ledger_summary())
+            .transpose()?
+            .flatten()
+            .map(|summary| summary.completed_transports);
         let mut limited = false;
         loop {
             if control.request() == CrawlRequest::CancelRequested {
                 break;
+            }
+            // Expansion is a durable metadata-only unit. No second HTTP is
+            // issued when an independent late role augments a captured URL.
+            if control.request() == CrawlRequest::Running
+                && let Some(store) = &self.store
+                && self.config.resource_discovery.is_some()
+                && let Some(mut page) = store.resource_expansion()?
+            {
+                let (mut rows, mut policy_rows) = self.resource_rows(
+                    &mut page,
+                    selected.is_some(),
+                    generation.expect("stored generation"),
+                )?;
+                let discovered = store.complete_resources(
+                    &page,
+                    &mut rows,
+                    &mut policy_rows,
+                    generation.expect("stored generation"),
+                    true,
+                )?;
+                queue.extend(discovered);
+                continue;
             }
             while control.request() == CrawlRequest::Running
                 && tasks.len() < self.config.concurrency
@@ -475,10 +547,9 @@ impl Crawler {
                     Some(operation) => operation
                         .max_attempts
                         .is_some_and(|limit| operation.admitted_this_run >= limit),
-                    None => self
-                        .config
-                        .max_pages
-                        .is_some_and(|limit| pages.len() + tasks.len() >= limit),
+                    None => self.config.max_pages.is_some_and(|limit| {
+                        completed_transports.unwrap_or(pages.len()) + tasks.len() >= limit
+                    }),
                 };
                 if at_limit {
                     limited = true;
@@ -497,7 +568,34 @@ impl Crawler {
                     emit_recrawl_progress(&events, operation, index);
                 }
                 let fetch = context.clone();
-                tasks.push(async move { fetch.document(entry).await.0 }.boxed());
+                tasks.push(
+                    async move {
+                        let (mut page, text) = fetch.document(entry).await;
+                        if let Some(config) = &fetch.config.resource_discovery {
+                            let decode = page
+                                .resource_response
+                                .as_ref()
+                                .map_or(crate::ContentCaptureDecodeStatus::Unknown, |facts| {
+                                    facts.decode_status
+                                });
+                            page.resource_source = Some(crate::resource_capture::inventory(
+                                &page,
+                                text.as_deref(),
+                                decode,
+                                &fetch.seeds,
+                                fetch.config.include_subdomains,
+                                config,
+                                &fetch
+                                    .config
+                                    .resource_discovery_limits
+                                    .clone()
+                                    .unwrap_or_default(),
+                            )?);
+                        }
+                        Ok(page)
+                    }
+                    .boxed(),
+                );
             }
             emit(
                 &events,
@@ -511,11 +609,12 @@ impl Crawler {
                 break;
             }
             let mut page = tokio::select! {
-                page = tasks.next() => page.expect("nonempty tasks"),
+                page = tasks.next() => page.expect("nonempty tasks")?,
                 _ = control.changed() => continue,
             };
             let mut discoveries = Vec::new();
-            if self.policy.is_none()
+            if self.config.resource_discovery.is_none()
+                && self.policy.is_none()
                 && selected.is_none()
                 && self.config.crawl_links
                 && page.internal
@@ -537,7 +636,36 @@ impl Crawler {
                     }
                 }
             }
-            if let (Some(policy), Some(store)) = (&self.policy, &self.store) {
+            let retained = page
+                .resource_permission
+                .as_ref()
+                .is_none_or(|permission| permission.store);
+            if self.config.resource_discovery.is_some() {
+                let store = self.store.as_ref().expect("resource storage required");
+                let (mut rows, mut policy_rows) = self.resource_rows(
+                    &mut page,
+                    selected.is_some(),
+                    generation.expect("stored generation"),
+                )?;
+                discoveries = store.complete_resources(
+                    &page,
+                    &mut rows,
+                    &mut policy_rows,
+                    generation.expect("stored generation"),
+                    false,
+                )?;
+                if let Some(count) = &mut completed_transports {
+                    *count += 1;
+                }
+                if let Some(ledger) = store.resource_ledger_summary()? {
+                    emit(
+                        &events,
+                        CrawlEvent::ResourceProgress {
+                            ledger: Box::new(ledger),
+                        },
+                    );
+                }
+            } else if let (Some(policy), Some(store)) = (&self.policy, &self.store) {
                 let mut rows = self.page_policy_rows(&mut page, policy, selected.is_some())?;
                 discoveries = store.complete_with_policy(
                     &page,
@@ -575,16 +703,23 @@ impl Crawler {
                 emit_recrawl_progress(&events, operation, index);
             }
             queue.extend(discoveries);
-            emit(
-                &events,
-                CrawlEvent::Page {
-                    page: Box::new(page.clone()),
-                },
-            );
-            pages.push(page);
+            if retained {
+                emit(
+                    &events,
+                    CrawlEvent::Page {
+                        page: Box::new(page.clone()),
+                    },
+                );
+                pages.push(page);
+            }
         }
         let pending = queue.len() + tasks.len();
         drop(tasks); // In-flight requests remain pending in SQLite and can be resumed.
+        if self.config.resource_discovery.is_some()
+            && let Some(store) = &self.store
+        {
+            pages = store.pages()?;
+        }
         if let Some(plan) = selected {
             let order: HashMap<_, _> = if let Some(store) = &self.store {
                 // One immutable snapshot read at terminal publication, not per
@@ -665,6 +800,12 @@ impl Crawler {
             summary: summary.clone(),
             warnings,
             operation: operation.clone(),
+            resource_ledger: self
+                .store
+                .as_ref()
+                .map(|store| store.resource_ledger_summary())
+                .transpose()?
+                .flatten(),
             policy_ledger: self
                 .store
                 .as_ref()
@@ -694,6 +835,172 @@ impl Crawler {
             checkpoint,
             discovery_pending: discovery.pending,
         })
+    }
+
+    fn resource_rows(
+        &self,
+        page: &mut PageRecord,
+        selected: bool,
+        generation: u64,
+    ) -> anyhow::Result<(
+        Vec<crate::StoredResourceOccurrence>,
+        Vec<crate::PolicyOccurrence>,
+    )> {
+        let config = self
+            .config
+            .resource_discovery
+            .as_ref()
+            .context("Resource configuration missing")?;
+        let permission = page
+            .resource_permission
+            .as_ref()
+            .context("Resource permission missing")?;
+        permission.validate()?;
+        let batch = page
+            .resource_source
+            .as_ref()
+            .context("Resource source inventory missing")?;
+        let evaluation = crate::resource_policy::digest(format!(
+            "{}:{}",
+            batch.source_revision,
+            permission.revision()?
+        ));
+        let redirects_traverse = page.policy.as_ref().is_none_or(|policy| {
+            policy
+                .redirect_decisions
+                .iter()
+                .all(|row| row.decision.traverse)
+        });
+        let mut rows = Vec::new();
+        let mut policy_rows = page
+            .policy
+            .as_ref()
+            .map(|observation| observation.redirect_decisions.clone())
+            .unwrap_or_default();
+        if page
+            .policy
+            .as_ref()
+            .is_some_and(|observation| observation.source_revision.starts_with("resource:"))
+        {
+            policy_rows.clear();
+        }
+        for occurrence in &batch.occurrences {
+            let mut policy_row = self.policy.as_ref().map(|policy| {
+                crate::policy_ledger::decide(
+                    policy,
+                    &format!("resource:{evaluation}"),
+                    occurrence.source_ordinal,
+                    if occurrence.reference_kind.is_navigation() {
+                        crate::CandidateSourceKind::Anchor
+                    } else {
+                        crate::CandidateSourceKind::Resource
+                    },
+                    occurrence
+                        .decoded_value
+                        .clone()
+                        .unwrap_or_else(|| occurrence.raw_value.clone()),
+                    Some(
+                        page.document_base_url
+                            .as_deref()
+                            .unwrap_or(&page.final_url)
+                            .into(),
+                    ),
+                    Some(page.url.clone()),
+                    if occurrence.classification_basis == "resolved_http_link_header_target" {
+                        crate::PolicyInputBasis::ResolvedLegacyFallback
+                    } else {
+                        crate::PolicyInputBasis::ObservedAttribute
+                    },
+                    crate::PolicyTaskRole::PageDocument,
+                )
+            });
+            let mut candidate = occurrence.clone();
+            if let Some(row) = &policy_row {
+                candidate.resolved_url = row.decision.fetch_candidate_url.clone();
+            }
+            let target = candidate
+                .resolved_url
+                .as_deref()
+                .and_then(|url| normalize_url(url, None));
+            let scope = target.as_ref().is_some_and(|url| {
+                if occurrence.reference_kind.is_navigation() {
+                    same_scope(url, &self.seeds, self.config.include_subdomains)
+                        || self.config.check_external
+                } else {
+                    config.permits_resource_origin(url, &self.seeds, self.config.include_subdomains)
+                }
+            });
+            let source_can_expand = match batch.source_kind {
+                crate::ResourceSourceKind::NativeCss => permission.can_expand_css,
+                crate::ResourceSourceKind::PdfAnnotation
+                    if occurrence.reference_kind == crate::ResourceReferenceKind::PdfAnnotation =>
+                {
+                    permission.can_expand_pdf
+                }
+                _ if occurrence.reference_kind.is_navigation() => permission.can_expand_navigation,
+                _ => permission.can_expand_resources,
+            } && redirects_traverse;
+            let mut decision = config.decide(
+                &candidate,
+                crate::resource_policy::ResourcePermission {
+                    source_complete: occurrence.source_complete,
+                    source_can_expand,
+                    selected,
+                    navigation_enabled: self.config.crawl_links,
+                    depth_allowed: self.config.max_depth.is_none_or(|limit| page.depth < limit),
+                    scope_allowed: if occurrence.reference_kind.is_navigation()
+                        && self.policy.is_some()
+                    {
+                        policy_row.as_ref().is_some_and(|row| {
+                            row.decision.decision != crate::CrawlPolicyDecisionKind::Deny
+                        })
+                    } else {
+                        scope
+                    },
+                    filters_allowed: candidate
+                        .resolved_url
+                        .as_deref()
+                        .is_some_and(|url| self.filters.allows(url)),
+                    policy_check: policy_row.as_ref().is_none_or(|row| {
+                        row.decision.decision != crate::CrawlPolicyDecisionKind::Deny
+                    }),
+                    policy_traverse: policy_row.as_ref().is_none_or(|row| row.decision.traverse),
+                    document_nofollow: page
+                        .effective_robots
+                        .iter()
+                        .any(|directive| directive == "nofollow" || directive == "none"),
+                },
+            )?;
+            if let Some(row) = &mut policy_row {
+                if let Some(grant) = &mut decision.grant {
+                    grant.policy_sha256 = Some(row.decision.policy_sha256.clone());
+                    grant.policy_occurrence_id = Some(row.decision.occurrence_id.clone());
+                } else {
+                    row.task_role = crate::PolicyTaskRole::ObservationOnly;
+                    row.admission_reason = format!("resource:{}", decision.reason);
+                }
+            }
+            rows.push(crate::StoredResourceOccurrence {
+                sequence: 0,
+                generation,
+                basis: crate::ResourceObservationBasis::Current,
+                evaluation_revision: evaluation.clone(),
+                occurrence: occurrence.clone(),
+                decision,
+            });
+            if let Some(row) = policy_row {
+                policy_rows.push(row);
+            }
+        }
+        if let Some(observation) = &mut page.policy {
+            observation.source_revision = format!("resource:{evaluation}");
+            observation.candidates_complete = batch.complete;
+            observation.candidate_count = batch.occurrences.len();
+        }
+        if let Some(facts) = &mut page.resource_response {
+            facts.retained_response = permission.store;
+        }
+        Ok((rows, policy_rows))
     }
 
     fn initial_policy_rows(
@@ -957,6 +1264,7 @@ impl Crawler {
             (queue, discovered, 0)
         };
         let context = FetchContext {
+            store: self.store.clone(),
             capture: self.capture.clone(),
             generation,
             config: self.config.clone(),
@@ -1293,6 +1601,7 @@ fn emit_recrawl_progress(
 }
 
 struct FetchContext {
+    store: Option<Arc<CrawlStore>>,
     capture: Option<Arc<crate::CompiledContentCaptureConfig>>,
     generation: Option<u64>,
     config: CrawlConfig,
@@ -1318,6 +1627,30 @@ impl FetchContext {
             indexability_agent: self.config.indexability_agent.clone(),
             ..Default::default()
         };
+        if self.config.resource_discovery.is_some()
+            && !entry.admission.as_ref().is_some_and(|admission| {
+                admission.task_role == crate::PolicyTaskRole::SitemapDocument
+            })
+        {
+            page.resource_permission = self
+                .store
+                .as_ref()
+                .and_then(|store| store.resource_permission(&entry.url).ok())
+                .flatten();
+            if page.resource_permission.is_none() {
+                page.error =
+                    Some("Durable resource permission missing; request was not made".into());
+                if let Some(capture) = &self.capture {
+                    crate::content_binding::unavailable_sources(
+                        &mut page,
+                        capture,
+                        self.generation,
+                        "resource_admission_missing",
+                    );
+                }
+                return (page, None);
+            }
+        }
         if let Some(policy) = &self.policy {
             let Some(admission) = entry.admission else {
                 page.error = Some("Native policy admission missing; request was not made".into());
@@ -1345,7 +1678,15 @@ impl FetchContext {
                 }
                 return (page, None);
             }
-            let can_expand = admission.can_expand;
+            let can_expand =
+                page.resource_permission
+                    .as_ref()
+                    .map_or(admission.can_expand, |permission| {
+                        permission.can_expand_navigation
+                            || permission.can_expand_resources
+                            || permission.can_expand_css
+                            || permission.can_expand_pdf
+                    });
             page.policy = Some(crate::PagePolicyObservation {
                 admission,
                 effective_can_expand: can_expand,
@@ -1545,6 +1886,17 @@ impl FetchContext {
                 if self.policy.is_none()
                     && !same_scope(&target, &self.seeds, self.config.include_subdomains)
                     && !self.config.check_external
+                    && !self
+                        .config
+                        .resource_discovery
+                        .as_ref()
+                        .is_some_and(|config| {
+                            config.permits_resource_origin(
+                                &target,
+                                &self.seeds,
+                                self.config.include_subdomains,
+                            )
+                        })
                 {
                     page.warnings.push(
                         "Redirect target outside crawl scope was recorded without fetching it"
@@ -1578,6 +1930,16 @@ impl FetchContext {
             break;
         }
         page.size_bytes = body.len();
+        let resource_entity = self
+            .config
+            .resource_discovery
+            .as_ref()
+            .filter(|_| {
+                page.final_status
+                    .is_some_and(|status| !matches!(status, 301 | 302 | 303 | 307 | 308))
+                    && !page.blocked_by_robots
+            })
+            .map(|_| crate::resource_policy::digest(&body));
         let entity = self
             .capture
             .as_ref()
@@ -1699,7 +2061,15 @@ impl FetchContext {
                         .into(),
                 );
             }
-            Some(decoded.into_owned())
+            if self.config.resource_discovery.is_some() && media_type == "text/css" {
+                let (decoded, status, encoding) =
+                    crate::resource_capture::decode_css(&body, &page.content_type);
+                decode_status = status;
+                decode_encoding = Some(encoding);
+                Some(decoded)
+            } else {
+                Some(decoded.into_owned())
+            }
         } else {
             None
         };
@@ -1731,7 +2101,7 @@ impl FetchContext {
                     },
                     source_complete: complete && unavailable.is_none(),
                     decode_status,
-                    decode_encoding,
+                    decode_encoding: decode_encoding.clone(),
                     incomplete_reason: if !complete && unavailable.is_none() {
                         Some("native_response_incomplete_or_non200".into())
                     } else {
@@ -1806,6 +2176,29 @@ impl FetchContext {
             self.config.include_subdomains,
         );
         set_indexability(&mut page);
+        if self.config.resource_discovery.is_some() && page.resource_permission.is_some() {
+            page.resource_response = Some(crate::ResourceResponseFacts {
+                engine: crate::RESOURCE_DISCOVERY_ENGINE.into(),
+                observed_generation: self.generation.unwrap_or(1),
+                retained_response: page
+                    .resource_permission
+                    .as_ref()
+                    .is_some_and(|permission| permission.store),
+                entity_body_retained: false,
+                captured_entity_sha256: resource_entity,
+                captured_entity_bytes: page.size_bytes,
+                captured_entity_complete: page.final_status.is_some()
+                    && !matches!(page.final_status, Some(301 | 302 | 303 | 307 | 308))
+                    && page.error.is_none()
+                    && !page.truncated
+                    && !page.blocked_by_robots,
+                decoded_source_sha256: text.as_ref().map(crate::resource_policy::digest),
+                decode_status,
+                decode_encoding,
+                metadata_projection_complete: true,
+                unretained_fields: vec!["entity_body".into()],
+            });
+        }
         if let Some(pdf) = &page.pdf
             && !matches!(
                 pdf.status,

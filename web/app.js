@@ -3,6 +3,7 @@
 (() => {
   const $ = (id) => document.getElementById(id);
   const state = {
+    resources: { result:null, token:null, revision:0, cursor:0, back:[], error:'', selected:null, sort:0, direction:1 },
     content: { inventory:null, inventoryToken:null, cursor:0, back:[], error:'', selected:new Set(), source:null, sourceToken:null, sourceError:'', result:null, analysisToken:null, analysisError:'', revision:0, resultPage:0, sort:0, direction:1, resultSort:1, resultDirection:-1 },
     recrawlURLs: new Set(), policy: null, policyError: '', policyToken: null, policyCursor: 0, policyBack: [], policySelected: null, policySort: 0, policyDirection: 1,
     crawl: null, crawls: [], pages: [], issues: [], section: 'overview',
@@ -15,7 +16,7 @@
       javascript_rendering: false, renderer_endpoint: 'http://127.0.0.1:8790/render',
       renderer_wait_ms: 500, renderer_accessibility: false, renderer_screenshot: false,
       renderer_collect_cookies: false, custom_javascript_json: '[]',
-      include_patterns_text: '', exclude_patterns_text: '', custom_extractions_json: '[]', audit_thresholds_json: '{}', pdf_analysis_json: '{}', validate_fragments: false, link_position_rules_json: '[]', crawl_policy_enabled: false, crawl_policy_json: '{"scope":{"roots":[{"origin":"https://example.test","folders":["/"],"subdomains":false,"exact_paths":[]}]}}', live_policy_limits_json: '{}', content_capture_enabled:false, content_capture_json:'{"sources":["raw_http_html"],"include_selectors":["body"],"exclude_selectors":["script","style","template","noscript","nav","footer"]}'
+      include_patterns_text: '', exclude_patterns_text: '', custom_extractions_json: '[]', audit_thresholds_json: '{}', pdf_analysis_json: '{}', validate_fragments: false, link_position_rules_json: '[]', crawl_policy_enabled: false, crawl_policy_json: '{"scope":{"roots":[{"origin":"https://example.test","folders":["/"],"subdomains":false,"exact_paths":[]}]}}', live_policy_limits_json: '{}', content_capture_enabled:false, content_capture_json:'{"sources":["raw_http_html"],"include_selectors":["body"],"exclude_selectors":["script","style","template","noscript","nav","footer"]}',resource_discovery_enabled:false,resource_discovery_json:'{}',resource_discovery_limits_json:'{}'
     }
   };
   const sections = {
@@ -27,6 +28,7 @@
     policy: ['NATIVE URL-POLICY', 'Policy-Entscheidungen', 'Gespeicherte Vorkommen und tatsächliche Zulassungsbefunde, begrenzt nach Ledger-Seite. Verweigerte Kandidaten sind keine abgerufenen Dokumente.'],
     policyaliases: ['NATIVE URL-POLICY', 'URL-Transformationen', 'Tatsächlich gespeicherte Transformationen von beobachteten Zielen zu Abrufkandidaten. Kein HTTP-Redirect und kein Erfolgsnachweis für das Originalziel.'],
     content: ['GESPEICHERTE INHALTE', 'Inhaltstexte & Analyse', 'Explizite Textquellen und ausgewählte Kohorten. Die Analyse verwendet gespeicherte Texte und startet keine Website-Anfragen.'],
+    'resource-discovery': ['NATIVE RESSOURCEN', 'Ressourcenermittlung', 'Quellvorkommen und Abrufentscheidungen bleiben getrennt von Zielantworten und Browserauswahl.'],
     inputs: ['EINGABEHERKUNFT', 'Eingabezeilen', 'Gespeicherte, deklarierte Importherkunft mit ursprünglicher Reihenfolge, Duplikaten und ungültigen Zeilen. Der vollständige CSV-Export ergänzt tatsächliche Abrufbefunde.'],
     titles: ['ONPAGE ANALYSE', 'Seitentitel', 'Title-Tags, Zeichenlänge und mehrfach verwendete Titel. Längen sind Hinweise.'],
     meta: ['ONPAGE ANALYSE', 'Meta Descriptions', 'Descriptions, Zeichenlänge und Duplikate im abgerufenen HTML.'],
@@ -109,6 +111,7 @@
   }
   function invalidatePoll() {
     invalidateContentRequests('Der Crawl-Stand wurde geändert.', true);
+    resetResourceLedger();
     state.generation += 1;
     state.policyToken?.controller.abort();
     state.policyToken = null;
@@ -263,6 +266,7 @@
         } catch (error) { fragmentsError = 'Fragment-Inventar nicht verfügbar: ' + error.message; }
         if (!current()) return;
       }
+      if ((nextCrawl.generation ?? null) !== (state.crawl.generation ?? null)) resetResourceLedger();
       state.crawl = nextCrawl;
       const pendingSelected = pendingRecrawlURLs(nextCrawl);
       state.pages = (from ? [...state.pages, ...pages] : pages).filter(page => !pendingSelected.has(page.url));
@@ -276,6 +280,7 @@
       reindexIssues(); connection(true); render();
       if (policySection() && !state.policyToken) loadPolicyPage(state.policyCursor);
       if (contentSection() && !active() && !state.content.inventory && !state.content.inventoryToken) loadContentInventory();
+      if (resourceSection() && !state.resources.token) loadResourcePage();
       if (state.selectedResponse || state.selectedInput) renderInspector();
       else if (state.selected) { state.selected = state.pages.find(page => page.url === state.selected.url) || state.selected; renderInspector(); }
       if (previousStatus !== state.crawl.status && terminal) {
@@ -364,7 +369,7 @@
       if ($('crawl-mode').value !== mode) throw new Error('Der Crawl-Modus wurde während der Prüfung geändert. Bitte erneut starten.');
       if (!current()) return;
       const payload = { ...state.settings, ...advanced, mode, seed_url: mode === 'sitemap' ? '' : urls[0] || '', urls: mode === 'sitemap' ? [] : urls, seed_urls: mode === 'sitemap' ? [] : urls, sitemap_urls: mode === 'sitemap' ? urls : sitemapUrls, input_imports: inputImports, crawl_links: mode !== 'list', include_subdomains: state.settings.follow_subdomains, request_timeout_secs: state.settings.timeout_seconds, max_body_bytes: state.settings.max_body_mb * 1024 * 1024 };
-      for (const key of ['crawl_policy_enabled', 'crawl_policy_json', 'live_policy_limits_json', 'content_capture_enabled', 'content_capture_json']) delete payload[key];
+      for (const key of ['crawl_policy_enabled', 'crawl_policy_json', 'live_policy_limits_json', 'content_capture_enabled', 'content_capture_json','resource_discovery_enabled','resource_discovery_json','resource_discovery_limits_json']) delete payload[key];
       payload.renderer = state.settings.javascript_rendering ? { endpoint: state.settings.renderer_endpoint, wait_ms: state.settings.renderer_wait_ms, accessibility: state.settings.renderer_accessibility, screenshot: state.settings.renderer_screenshot, collect_cookies: state.settings.renderer_collect_cookies, custom_javascript: parseCustomJavascript(state.settings.custom_javascript_json) } : null;
       const result = await request('/api/crawls', { method: 'POST', body: JSON.stringify(payload) });
       const crawl = result.crawl || result;
@@ -505,10 +510,11 @@
     $('recrawl-clear').disabled = !state.recrawlURLs.size || busy;
     $('recrawl-selection-hint').textContent = active() ? 'Die Auswahl ist nach dem Anhalten oder Abschluss verfügbar.' : state.crawl?.recrawl_available === false ? 'Für diesen Bericht ist keine Wiederprüfung verfügbar.' : 'Auswahl gilt nur für vorhandene Anfrage-URLs in diesem Bericht; Filter und Pagination ändern sie nicht.';
     if (contentSection()) $('export-csv').disabled = active() || Boolean(state.content.inventoryToken || state.content.error) || !contentVisibleRows().length;
+    if (state.section==='resource-discovery') $('export-csv').disabled=true;
     $('inspector-recrawl-selection').hidden = !state.selected || !state.pageMap.has(state.selected.url) || Boolean(state.selectedResponse || state.selectedInput);
     $('inspector-recrawl-checkbox').checked = Boolean(state.selected && state.recrawlURLs.has(state.selected.url));
     $('inspector-recrawl-checkbox').disabled = Boolean(busy || active() || state.crawl?.recrawl_available === false);
-    $('settings-summary').textContent = `${state.settings.concurrency} parallele Requests · ${state.settings.obey_robots ? 'Robots.txt beachten' : 'Robots.txt ignorieren'}${state.settings.max_pages ? ` · Grenze ${number(state.settings.max_pages)}` : ''}${state.settings.javascript_rendering ? ' · JavaScript-Rendering' : ''}${state.settings.crawl_policy_enabled ? ' · Native URL-Policy' : ''}`;
+    $('settings-summary').textContent = `${state.settings.concurrency} parallele Requests · ${state.settings.obey_robots ? 'Robots.txt beachten' : 'Robots.txt ignorieren'}${state.settings.max_pages ? ` · Grenze ${number(state.settings.max_pages)}` : ''}${state.settings.javascript_rendering ? ' · JavaScript-Rendering' : ''}${state.settings.crawl_policy_enabled ? ' · Native URL-Policy' : ''}${state.settings.resource_discovery_enabled ? ' · Native Ressourcenregeln' : ''}`;
   }
 
   function renderMetrics() {
@@ -873,6 +879,7 @@
 
   function selectSection(section) {
     if (!sections[section]) return;
+    if (resourceSection() && section !== 'resource-discovery') invalidateResourceRequest();
     state.section = section;
     state.page = 0;
     state.filter = 'all';
@@ -888,6 +895,7 @@
     renderSection();
     if (policySection() && state.crawl && !state.policy && !state.policyToken) loadPolicyPage();
     if (contentSection() && state.crawl && !active() && !state.content.inventory && !state.content.inventoryToken) loadContentInventory();
+    if (resourceSection() && state.crawl && !state.resources.result && !state.resources.token) loadResourcePage();
   }
 
   function renderSection() {
@@ -898,10 +906,12 @@
     $('overview-view').hidden = state.section !== 'overview';
     $('graph-view').hidden = state.section !== 'graph';
     $('policy-view').hidden = !policySection();
-    $('table-view').hidden = ['overview', 'graph', 'content'].includes(state.section) || policySection();
+    $('table-view').hidden = ['overview', 'graph', 'content','resource-discovery'].includes(state.section) || policySection();
     $('content-view').hidden = state.section !== 'content';
+    $('resource-discovery-view').hidden = state.section !== 'resource-discovery';
     $('export-csv').disabled = policySection() ? !policyVisibleRows().length || Boolean(state.policyToken || state.policyError) : (state.section === 'inputs' ? !getRows().length : !state.pages.length && !state.issues.length) || state.section === 'responses' && state.responses == null || state.section === 'fragments' && (!state.fragments || !state.fragments.enabled);
     $('export-csv').title = policySection() ? 'Nur gefilterte Vorkommen der aktuell geladenen Ledger-Seite exportieren' : 'Alle aktuell gefilterten Ergebnisse dieses Bereichs exportieren';
+    if (state.section==='resource-discovery') $('export-csv').disabled=true;
     $('export-resources').hidden = !['inputs', 'pdf', 'imagefiles', 'responses', 'fragments', 'linkdom', ...domSections].includes(state.section);
     $('export-resources').disabled = !state.crawl || Boolean(actionBusy() || active());
     $('export-resources').textContent = state.section === 'inputs' ? '↓ Alle Eingabezeilen CSV' : domSections.includes(state.section) ? '↓ Alle DOM-Beobachtungen CSV' : state.section === 'pdf' ? '↓ PDF-Details CSV' : state.section === 'responses' ? '↓ Alle Antworten CSV' : state.section === 'fragments' ? '↓ Alle Fragmentziele CSV' : state.section === 'linkdom' ? '↓ Alle Linkvorkommen CSV' : '↓ Bilddateien CSV';
@@ -909,6 +919,7 @@
     else if (state.section === 'graph') renderGraph();
     else if (policySection()) renderPolicyLedger();
     else if (state.section === 'content') renderContent();
+    else if (state.section === 'resource-discovery') renderResourceLedger();
     else renderTable();
   }
 
@@ -1174,6 +1185,7 @@
   function exportCSV() {
     if (policySection()) { exportPolicyPage(); return; }
     if (contentSection()) { exportContentRows(); return; }
+    if (state.section==='resource-discovery') return;
     const original = state.section;
     if (['overview', 'graph'].includes(original)) state.section = 'internal';
     const cols = columns();
@@ -1237,7 +1249,7 @@
   function saveSettings(event) {
     event.preventDefault();
     const form = $('settings-form');
-    const advancedText = { include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value, link_position_rules_json: form.elements.link_position_rules_json.value, validate_fragments: form.elements.validate_fragments.checked, crawl_policy_enabled: form.elements.crawl_policy_enabled.checked, crawl_policy_json: form.elements.crawl_policy_json.value, live_policy_limits_json: form.elements.live_policy_limits_json.value, javascript_rendering: form.elements.javascript_rendering.checked, content_capture_enabled:form.elements.content_capture_enabled.checked, content_capture_json:form.elements.content_capture_json.value };
+    const advancedText = { include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value, link_position_rules_json: form.elements.link_position_rules_json.value, validate_fragments: form.elements.validate_fragments.checked, crawl_policy_enabled: form.elements.crawl_policy_enabled.checked, crawl_policy_json: form.elements.crawl_policy_json.value, live_policy_limits_json: form.elements.live_policy_limits_json.value, javascript_rendering: form.elements.javascript_rendering.checked, content_capture_enabled:form.elements.content_capture_enabled.checked, content_capture_json:form.elements.content_capture_json.value,resource_discovery_enabled:form.elements.resource_discovery_enabled.checked,resource_discovery_json:form.elements.resource_discovery_json.value,resource_discovery_limits_json:form.elements.resource_discovery_limits_json.value };
     try { parseAdvanced(advancedText); validateRendererSettings({ javascript_rendering: form.elements.javascript_rendering.checked, renderer_endpoint: form.elements.renderer_endpoint.value.trim(), renderer_wait_ms: Number(form.elements.renderer_wait_ms.value), timeout_seconds: Number(form.elements.timeout_seconds.value) }); }
     catch (error) {
       $('settings-error').textContent = error.message;
@@ -1266,6 +1278,7 @@
         Object.assign(state.settings, { indexability_agent: String(saved.indexability_agent || 'googlebot'), renderer_collect_cookies: saved.renderer_collect_cookies === true, custom_javascript_json: String(saved.custom_javascript_json || '[]'), audit_thresholds_json: String(saved.audit_thresholds_json || '{}'), pdf_analysis_json: String(saved.pdf_analysis_json || '{}'), include_patterns_text: String(saved.include_patterns_text || ''), exclude_patterns_text: String(saved.exclude_patterns_text || ''), custom_extractions_json: String(saved.custom_extractions_json || '[]'), validate_fragments: saved.validate_fragments === true, link_position_rules_json: String(saved.link_position_rules_json || '[]') });
         Object.assign(state.settings, { crawl_policy_enabled: saved.crawl_policy_enabled === true, crawl_policy_json: String(saved.crawl_policy_json || '{"scope":{"roots":[{"origin":"https://example.test","folders":["/"]}]}}'), live_policy_limits_json: String(saved.live_policy_limits_json || '{}') });
         Object.assign(state.settings, { content_capture_enabled:saved.content_capture_enabled === true, content_capture_json:String(saved.content_capture_json || '{"sources":["raw_http_html"],"include_selectors":["body"],"exclude_selectors":["script","style","template","noscript","nav","footer"]}') });
+        Object.assign(state.settings,{resource_discovery_enabled:saved.resource_discovery_enabled===true,resource_discovery_json:String(saved.resource_discovery_json || '{}'),resource_discovery_limits_json:String(saved.resource_discovery_limits_json || '{}')});
       }
     } catch (_) { /* Invalid saved settings fall back to safe defaults. */ }
   }
@@ -1309,7 +1322,7 @@
       return { name, selector, attribute: definition.attribute == null ? null : definition.attribute.trim(), method, output, max_results, regex_group, regex_flags, namespaces };
     });
     const lines = (value) => [...new Set(String(value || '').split(/\r?\n/).map((line) => line.trim()).filter(Boolean))];
-    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), pdf_analysis: parsePdfAnalysis(settings.pdf_analysis_json), link_position_rules: parsePositionRules(settings.link_position_rules_json), validate_fragments: settings.validate_fragments === true, include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text), ...parseNativePolicy(settings), ...parseContentCapture(settings) };
+    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), pdf_analysis: parsePdfAnalysis(settings.pdf_analysis_json), link_position_rules: parsePositionRules(settings.link_position_rules_json), validate_fragments: settings.validate_fragments === true, include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text), ...parseNativePolicy(settings), ...parseContentCapture(settings),...parseResourceDiscovery(settings) };
   }
 
   function policyObject(value, allowed, label) {
@@ -1409,6 +1422,182 @@
     }
     if (config.readability != null) { policyObject(config.readability,['min_words'],'Lesbarkeit'); const minimum = config.readability.min_words ?? 30; if (!Number.isSafeInteger(minimum) || minimum < 1 || minimum > maxTokens) throw new Error('Lesbarkeit: min_words muss positiv und innerhalb des Tokenbudgets sein.'); }
     return config;
+  }
+
+  function parseResourceDiscovery(settings) {
+    if (!settings.resource_discovery_enabled) return {};
+    if (settings.javascript_rendering) throw new Error('Native Ressourcenermittlung und JavaScript-Rendering können nicht gemeinsam verwendet werden. Keine Einstellung wird automatisch ausgeschaltet.');
+    const config=contentJSON(settings.resource_discovery_json,['resources','navigation','css','resource_scope','follow_rel_nofollow','follow_document_nofollow'],'Ressourcenermittlung');
+    const booleanFields=(value,keys,label)=>{policyObject(value,keys,label);for(const [key,flag] of Object.entries(value))if(typeof flag!=='boolean')throw new Error(`${label}.${key}: true oder false erforderlich.`);};
+    if(Object.hasOwn(config,'resources')) {
+      policyObject(config.resources,['css','javascript','images','media','pdf','swf','other'],'Ressourcentypen');
+      for(const [kind,rule] of Object.entries(config.resources)) booleanFields(rule,['store','fetch'],`Ressourcen.${kind}`);
+    }
+    if(Object.hasOwn(config,'navigation')) {
+      policyObject(config.navigation,['internal_anchors','external_anchors','iframes','refresh','canonical','hreflang','pagination','amp','mobile_alternate','pdf_annotations'],'Navigation');
+      for(const [kind,rule] of Object.entries(config.navigation)) {
+        booleanFields(rule,['store','fetch','expand'],`Navigation.${kind}`);
+        if(rule.expand===true && rule.fetch!==true)throw new Error(`Navigation.${kind}: expand true benötigt fetch true; fehlendes fetch in einer angegebenen Regel ist false.`);
+      }
+    }
+    if(Object.hasOwn(config,'css')) booleanFields(config.css,['stylesheets','style_elements','style_attributes'],'CSS-Quellen');
+    for(const key of ['follow_rel_nofollow','follow_document_nofollow']) if(Object.hasOwn(config,key) && typeof config[key]!=='boolean') throw new Error(`Ressourcenermittlung.${key}: true oder false erforderlich.`);
+    if(Object.hasOwn(config,'resource_scope')) {
+      policyObject(config.resource_scope,['external_origins'],'Ressourcen-Origin-Scope');
+      if(Object.hasOwn(config.resource_scope,'external_origins')) {
+        const origins=config.resource_scope.external_origins;
+        if(!Array.isArray(origins) || origins.length>32)throw new Error('Ressourcen-Origin-Scope: Höchstens 32 vollständige HTTP(S)-Origins.');
+        const seen=new Set();
+        for(const origin of origins) {
+          let url;try{if(typeof origin!=='string')throw new Error('type');url=new URL(origin);}catch(_){throw new Error('Ressourcen-Origin-Scope: Vollständige HTTP(S)-Origin erforderlich.');}
+          if(!['http:','https:'].includes(url.protocol) || !url.hostname || origin.includes('*') || /\*|%2a/i.test(url.hostname) || url.username || url.password || url.pathname!=='/' || /[?#]/.test(url.href))throw new Error('Ressourcen-Origin-Scope: Nur exakte HTTP(S)-Origins ohne Wildcard, Inhaltspfad, Zugangsdaten, Query oder Fragment.');
+          if(seen.has(url.origin))throw new Error('Ressourcen-Origin-Scope: Doppelte normalisierte Origin (Scheme, Host und Port).');seen.add(url.origin);
+        }
+      }
+    }
+    const limits=contentJSON(settings.resource_discovery_limits_json,['max_source_candidates','max_occurrence_utf8_bytes','max_source_batch_bytes','max_css_utf8_bytes','max_css_tokens','max_css_nesting','max_diagnostics','max_ledger_bytes'],'Ressourcenermittlungsgrenzen');
+    const ceilings={max_source_candidates:1000000,max_occurrence_utf8_bytes:65536,max_source_batch_bytes:134217728,max_css_utf8_bytes:67108864,max_css_tokens:8000000,max_css_nesting:128,max_diagnostics:10000,max_ledger_bytes:Number.MAX_SAFE_INTEGER};
+    for(const [key,value] of Object.entries(limits))if(!(key==='max_ledger_bytes' && value===null) && (!Number.isSafeInteger(value) || value<1 || value>ceilings[key]))throw new Error(`Ressourcengrenze ${key}: positive ganze Zahl bis ${ceilings[key]}${key==='max_ledger_bytes'?' oder null':''} erforderlich.`);
+    return {resource_discovery:config,...(Object.keys(limits).length?{resource_discovery_limits:limits}:{})};
+  }
+
+  const nativeResourceEngine = 'open-seo-spider/resource-discovery-v1';
+  const resourceSection = () => state.section === 'resource-discovery';
+  const resourceView = () => $('resource-discovery-kind').value;
+  const resourceBasis = value => value === 'current' ? 'Aktuelle Ledger-Beobachtung' : value === 'inherited' ? 'Geerbte Ledger-Historie' : 'Basis unbekannt';
+  const resourceValue = value => value == null ? 'Unbekannt / nicht erfasst' : value === '' ? '[leer]' : typeof value === 'boolean' ? value ? 'Ja' : 'Nein' : String(value);
+  function invalidateResourceRequest() {
+    state.resources.revision += 1; state.resources.token?.controller.abort(); state.resources.token = null;
+  }
+  function resetResourceLedger() {
+    invalidateResourceRequest(); Object.assign(state.resources,{ result:null, cursor:resourceView()==='transports'?'':0, back:[], error:'', selected:null, sort:0, direction:1 });
+    if ($('resource-discovery-search')) { $('resource-discovery-search').value=''; $('resource-discovery-inspector').hidden=true; syncResourceFilter(); }
+    if(resourceSection())renderResourceLedger();
+  }
+  function syncResourceFilter() {
+    const options=resourceView()==='transports' ? [['all','Alle geladenen Transporte'],['retained','Antwort im Seitenbericht gespeichert'],['not_retained','Antwort nicht im Seitenbericht gespeichert'],['error','Transportfehler / Robots'],['metadata_unknown','Metadatenvollständigkeit unbekannt']] : [['all','Alle geladenen Vorkommen'],['granted','Eigenständiger Grant vorhanden'],['no_grant','Kein Grant für dieses Vorkommen'],['coalesced','Mit anderer Task zusammengeführt'],['source_incomplete','Quelleinheit unvollständig'],['current','Aktuelle Ledger-Beobachtung'],['inherited','Geerbte Ledger-Historie']];
+    $('resource-discovery-filter').innerHTML=options.map(([value,label])=>`<option value="${escape(value)}">${escape(label)}</option>`).join('');
+  }
+  function validateResourceEnvelope(result,cursor,kind,expectedGeneration) {
+    if(!result || typeof result.enabled!=='boolean' || typeof result.ledger_available!=='boolean' || typeof result.has_more!=='boolean' || result.website_requests!==0 || result.entity_bodies_included!==false || result.snapshot_scope!=='sqlite_read_snapshot')throw new Error('Nicht unterstützte Ressourcen-Snapshot-Bindung; keine Zielbefunde werden abgeleitet.');
+    const rows=kind==='transports'?result.transports:result.observations;
+    if(!Array.isArray(rows) || rows.length>200)throw new Error('Ungültige oder unbeschränkte Ressourcen-Seite.');
+    if(result.enabled && result.engine!==nativeResourceEngine)throw new Error('Unbekanntes Ressourcen-Profil.');
+    if(!result.ledger_available){if(result.snapshot!==null)throw new Error('Nicht verfügbares Ledger darf keinen verifizierten nativen Snapshot behaupten.');return;}
+    const snapshot=result.snapshot;
+    if(!snapshot || !Number.isSafeInteger(snapshot.generation) || snapshot.generation<1 || snapshot.generation!==result.crawl_generation || expectedGeneration!=null && snapshot.generation!==expectedGeneration || typeof snapshot.crawl_config_sha256!=='string' || !/^[a-fA-F0-9]{64}$/.test(snapshot.crawl_config_sha256) || snapshot.crawl_config_sha256!==result.crawl_config_sha256)throw new Error('Ressourcen-Snapshot passt nicht zur aktuellen Crawl-Generation oder vollständigen Job-Konfiguration.');
+    const summary=result.checkpoint;
+    if(!result.enabled || summary?.engine!==nativeResourceEngine || summary.config_sha256!==result.config_sha256 || typeof summary.complete!=='boolean' || !['config_sha256','rolling_sha256'].every(key=>typeof summary[key]==='string' && /^[a-fA-F0-9]{64}$/.test(summary[key])) || ['revision','decision_rows','committed_bytes','completed_transports','retained_responses','pending_transports','pending_expansions','incomplete_sources'].some(key=>!Number.isSafeInteger(summary[key]) || summary[key]<0))throw new Error('Ressourcen-Ledger ohne unterstützte Zusammenfassung oder erwartete Job-Config-Bindung.');
+    if(summary.inherited_history!=null && (typeof summary.inherited_history.rows_available!=='boolean' || typeof summary.inherited_history.parent_snapshot_sha256!=='string'))throw new Error('Unbekannte Verfügbarkeit der geerbten Ledger-Historie.');
+    if(kind==='transports') {
+      let previous=cursor;
+      for(const row of rows) {
+        if(row.engine!==nativeResourceEngine || typeof row.requested_url!=='string' || !row.requested_url || row.requested_url<=previous || !Number.isSafeInteger(row.observed_generation) || row.observed_generation<1 || typeof row.retained_response!=='boolean' || !row.projection || row.projection.url!==row.requested_url || row.projection.resource_response!=null && row.projection.resource_response.engine!==nativeResourceEngine)throw new Error('Transport ohne unterstützte Anfrage-Identität, geordneten Cursor oder Metadatenprojektion.');
+        previous=row.requested_url;
+      }
+      if(result.next_after_url!== (rows.length?rows.at(-1).requested_url:null) || result.has_more && !rows.length)throw new Error('Ungültiger Transport-Cursor.');
+    } else {
+      let previous=cursor;
+      for(const row of rows) {
+        const observed=row.occurrence, grant=row.decision?.grant;
+        if(!Number.isSafeInteger(row.sequence) || row.sequence<=previous || !Number.isSafeInteger(row.generation) || row.generation<1 || !['current','inherited'].includes(row.basis) || !observed || ['occurrence_id','requested_source_url','source_document_url','raw_value','reference_kind','classification_basis','source_revision'].some(key=>typeof observed[key]!=='string') || !observed.occurrence_id || typeof observed.nofollow!=='boolean' || !Number.isSafeInteger(observed.source_ordinal) || observed.source_ordinal<0 || typeof row.evaluation_revision!=='string' || !row.decision || typeof row.decision.reason!=='string')throw new Error('Ressourcenvorkommen ohne gespeicherte Sequenz, Quelle oder Entscheidung.');
+        if(grant!=null && (grant.engine!==nativeResourceEngine || grant.config_sha256!==summary.config_sha256 || grant.occurrence_id!==observed.occurrence_id || typeof grant.fetch_url!=='string' || ['store','can_expand_navigation','can_expand_resources','can_expand_css','can_expand_pdf'].some(key=>typeof grant[key]!=='boolean')))throw new Error('Nicht unterstützter eigenständiger Ressourcen-Grant.');
+        previous=row.sequence;
+      }
+      if(result.next_after_sequence!== (rows.length?rows.at(-1).sequence:null) || result.has_more && !rows.length)throw new Error('Ungültiger oder nicht fortschreitender Vorkommens-Cursor.');
+    }
+  }
+  async function loadResourcePage(cursor=state.resources.cursor,navigation=null) {
+    if(!state.crawl || !resourceSection() || state.resources.token)return;
+    const resources=state.resources, kind=resourceView();
+    const token={id:state.crawl.id,generation:state.generation,serverGeneration:state.crawl.generation??null,revision:resources.revision,kind,cursor,controller:new AbortController()};
+    const current=()=>resources.token===token && token.id===state.crawl?.id && token.generation===state.generation && token.serverGeneration===(state.crawl?.generation??null) && token.revision===resources.revision && token.kind===resourceView() && resourceSection();
+    resources.token=token; resources.error=''; resources.selected=null; renderResourceLedger();
+    try {
+      const suffix=kind==='transports'?`resources/transports?${cursor===''?'':`after_url=${encodeURIComponent(cursor)}&`}`:`resources?after_sequence=${encodeURIComponent(cursor)}&`;
+      const result=await request(`/api/crawls/${encodeURIComponent(token.id)}/${suffix}limit=200`,{signal:token.controller.signal});
+      if(!current())return;
+      validateResourceEnvelope(result,cursor,kind,token.serverGeneration);
+      if(navigation==='next')resources.back.push(resources.cursor); else if(navigation==='back')resources.back.pop();
+      resources.cursor=cursor; resources.result=result;
+    }catch(error){if(current())resources.error=`Ressourcenbeobachtungen nicht verfügbar: ${error.message}`;}
+    finally{if(resources.token===token){resources.token=null;if(token.id===state.crawl?.id && token.generation===state.generation && token.revision===resources.revision && resourceSection())renderResourceLedger();}}
+  }
+  const resourceOccurrenceColumns=[
+    ['Sequenz',row=>row.sequence],['Generation',row=>row.generation],['Ledger-Basis',row=>resourceBasis(row.basis)],['Referenzrolle',row=>row.occurrence.reference_kind],
+    ['Anfrage-Identität der Quelle',row=>row.occurrence.requested_source_url],['Quelldokument-URL aus Vorkommen',row=>row.occurrence.source_document_url],['Originalwert',row=>row.occurrence.raw_value],['Dekodierter Wert',row=>row.occurrence.decoded_value],['Aufgelöste Referenz',row=>row.occurrence.resolved_url],
+    ['Entscheidungsgrund',row=>row.decision.reason],['Eigenständige Grant-Abruf-URL',row=>row.decision.grant?.fetch_url],['Antwort speichern · Grant',row=>row.decision.grant?.store],['Navigation expandieren · Grant',row=>row.decision.grant?.can_expand_navigation],['Ressourcen expandieren · Grant',row=>row.decision.grant?.can_expand_resources],['CSS expandieren · Grant',row=>row.decision.grant?.can_expand_css],['PDF expandieren · Grant',row=>row.decision.grant?.can_expand_pdf],
+    ['Zusammengeführte Grant-ID',row=>row.decision.coalesced_into],['Quellordinal',row=>row.occurrence.source_ordinal],['Quelleinheit vollständig',row=>row.occurrence.source_complete],['Quelleinheit-Revision',row=>row.occurrence.source_unit_revision],['DOM-Pfad',row=>row.occurrence.dom_location],['UTF-8-Bytebeginn',row=>row.occurrence.byte_start],['UTF-8-Byteende',row=>row.occurrence.byte_end],['Deklarierter MIME-Hinweis',row=>row.occurrence.declared_mime],['Klassifikationsbasis',row=>row.occurrence.classification_basis],['Nofollow beobachtet',row=>row.occurrence.nofollow],['Beobachtungsfehler',row=>row.occurrence.observation_error],['Quellrevision',row=>row.occurrence.source_revision],['Vorkommen-ID',row=>row.occurrence.occurrence_id],['Auswertungsrevision',row=>row.evaluation_revision]
+  ];
+  const resourceTransportColumns=[
+    ['Anfrage-Identität',row=>row.requested_url],['Gespeicherte finale URL',row=>row.projection.final_url],['Beobachtete Generation',row=>row.observed_generation],['Antwort im Seitenbericht gespeichert',row=>row.retained_response],['Erster HTTP-Status',row=>row.projection.status],['Finaler HTTP-Status',row=>row.projection.final_status],['Beobachteter Content-Type',row=>row.projection.content_type],['Antwortzeit ms',row=>row.projection.response_ms],['Erfasste Größe Bytes',row=>row.projection.size_bytes],['Transportfehler',row=>row.projection.error],['Robots blockiert',row=>row.projection.blocked_by_robots],['Response abgeschnitten',row=>row.projection.truncated],
+    ['Metadatenprojektion vollständig',row=>row.projection.resource_response?.metadata_projection_complete],['Nicht erhaltene Projektionsfelder',row=>row.projection.resource_response?.unretained_fields==null?null:JSON.stringify(row.projection.resource_response.unretained_fields)],['Entity-Body in Projektion erhalten',row=>row.projection.resource_response?.entity_body_retained],['Erfasste Entity-Bytes',row=>row.projection.resource_response?.captured_entity_bytes],['Entity-Erfassung vollständig',row=>row.projection.resource_response?.captured_entity_complete],['Dekodierungsstatus',row=>row.projection.resource_response?.decode_status],['Dekodierte Quelle SHA256',row=>row.projection.resource_response?.decoded_source_sha256],['Entity-SHA256',row=>row.projection.resource_response?.captured_entity_sha256],['Erfasst am',row=>row.projection.fetched_at]
+  ];
+  const resourceColumns=()=>resourceView()==='transports'?resourceTransportColumns:resourceOccurrenceColumns;
+  const resourceUsable=()=>Boolean(state.resources.result?.enabled && state.resources.result.ledger_available && state.resources.result.engine===nativeResourceEngine && !state.resources.error && !state.resources.token);
+  function resourceVisibleRows() {
+    if(!resourceUsable())return [];
+    const kind=resourceView(), search=$('resource-discovery-search').value.toLocaleLowerCase(), filter=$('resource-discovery-filter').value;
+    const rows=kind==='transports'?state.resources.result.transports:state.resources.result.observations;
+    return rows.filter(row=>{
+      if(kind==='transports'){
+        if(filter==='retained' && !row.retained_response || filter==='not_retained' && row.retained_response || filter==='error' && !row.projection.error && !row.projection.blocked_by_robots || filter==='metadata_unknown' && row.projection.resource_response?.metadata_projection_complete!=null)return false;
+      }else if(filter==='granted' && !row.decision.grant || filter==='no_grant' && row.decision.grant || filter==='coalesced' && row.decision.coalesced_into==null || filter==='source_incomplete' && row.occurrence.source_complete!==false || ['current','inherited'].includes(filter) && row.basis!==filter)return false;
+      return !search || JSON.stringify(row).toLocaleLowerCase().includes(search);
+    }).sort((left,right)=>{const value=resourceColumns()[state.resources.sort][1],a=value(left),b=value(right);if(a==null && b==null)return 0;if(a==null)return 1;if(b==null)return -1;return (typeof a==='number' && typeof b==='number'?a-b:String(a).localeCompare(String(b),'de',{numeric:true}))*state.resources.direction;});
+  }
+  function renderResourceLedger() {
+    if(!resourceSection())return;
+    const resources=state.resources,result=resources.result,summary=result?.checkpoint,busy=Boolean(resources.token),usable=resourceUsable(),kind=resourceView(),rows=resourceVisibleRows(),columns=resourceColumns();
+    $('resource-discovery-error').hidden=!resources.error; $('resource-discovery-error').textContent=resources.error;
+    $('resource-discovery-summary').textContent=!state.crawl?'Kein Crawl ausgewählt.':busy?'Gespeicherte Ressourcen-Seite wird geladen …':resources.error?'Snapshot nicht verfügbar; kein vollständiges leeres Ergebnis.':!result?'Noch keine gespeicherte Ledger-Seite geladen.':!result.enabled?'Native Ressourcenermittlung war für diesen Bericht nicht aktiviert.':!result.ledger_available?'Echtes SQLite-Ledger nicht verfügbar. Eine deklarierte Zusammenfassung rekonstruiert keine gespeicherten Vorkommen.':`${number(summary.decision_rows)} gespeicherte Entscheidungen · ${number(summary.completed_transports)} Abgeschlossene URL-Abrufe (vorliegendes Protokoll) · ${number(summary.retained_responses)} Gespeicherte Ergebniszeilen · ${number(summary.pending_transports)} Transporte ausstehend · ${number(summary.pending_expansions)} Expansionen ausstehend · ${number(summary.incomplete_sources)} unvollständige Quellen · Entdeckung ${summary.complete?'vollständig laut Ledger':'unvollständig'}`;
+    const inherited=summary?.inherited_history;
+    $('resource-discovery-scope').textContent=result?[`API-Snapshot: ${result.snapshot_scope}; Website-Anfragen: ${result.website_requests}; Entity-Bodies enthalten: ${resourceValue(result.entity_bodies_included)}.`,result.reason?`Verfügbarkeitsgrund: ${result.reason}.`:'',summary?`${result.ledger_available?'SQLite-Zusammenfassung':'Nur deklarierte Zusammenfassung'} · Revision ${resourceValue(summary.revision)} · Config-SHA256 ${resourceValue(summary.config_sha256)}.`:'',inherited?`Elternsnapshot ${inherited.parent_snapshot_sha256}; geerbte Historienzeilen ${inherited.rows_available?'verfügbar':'NICHT verfügbar; Herkunftsabdeckung unvollständig'}. Eine deklarierte Elternzusammenfassung bestätigt keine vorhandenen Zeilen.`:''].filter(Boolean).join(' '):'Metadaten werden ausschließlich aus gespeicherten API-Beobachtungen gelesen; keine Website-Anfrage wird gestartet.';
+    $('resource-discovery-checkpoint').textContent=JSON.stringify({enabled:result?.enabled??null,ledger_available:result?.ledger_available??null,engine:result?.engine??null,checkpoint:summary??null,snapshot:result?.snapshot??null,crawl_config_sha256:result?.crawl_config_sha256??null,crawl_generation:result?.crawl_generation??null,reason:result?.reason??null,snapshot_scope:result?.snapshot_scope??null,entity_bodies_included:result?.entity_bodies_included??null},null,2);
+    const table=$('resource-discovery-table');
+    table.querySelector('thead').innerHTML=`<tr>${columns.map(([label],index)=>`<th scope="col" aria-sort="${resources.sort===index?resources.direction===1?'ascending':'descending':'none'}"><button type="button" data-resource-sort="${index}">${escape(label)} ${resources.sort===index?resources.direction===1?'↑':'↓':'↕'}</button></th>`).join('')}</tr>`;
+    const empty=busy?'Seite wird geladen; bisherige Zeilen werden nicht als neuer Snapshot angezeigt.':resources.error?'Lesefehler; dies ist kein leeres vollständiges Ergebnis.':!result?.ledger_available?'Keine verifizierten Ledger-Zeilen verfügbar.':!rows.length?'Keine passenden Beobachtungen auf der geladenen Seite. Weitere Seiten können andere Vorkommen enthalten.':'';
+    table.querySelector('tbody').innerHTML=rows.length?rows.map((row,index)=>`<tr data-resource-row="${index}" tabindex="0" aria-label="Details zur gespeicherten Ressourcenbeobachtung ${escape(kind==='transports'?row.requested_url:row.occurrence.occurrence_id)}">${columns.map(([,value])=>`<td>${escape(resourceValue(value(row)))}</td>`).join('')}</tr>`).join(''):`<tr><td class="empty-cell" colspan="${columns.length}">${escape(empty)}</td></tr>`;
+    table.querySelectorAll('[data-resource-sort]').forEach(button=>button.addEventListener('click',()=>{const sort=Number(button.dataset.resourceSort);resources.direction=resources.sort===sort?-resources.direction:1;resources.sort=sort;renderResourceLedger();}));
+    table.querySelectorAll('[data-resource-row]').forEach(element=>{const open=()=>{resources.selected=rows[Number(element.dataset.resourceRow)];renderResourceInspector();$('resource-discovery-inspector').scrollIntoView({block:'nearest'});};element.addEventListener('click',open);element.addEventListener('keydown',event=>{if(['Enter',' '].includes(event.key)){event.preventDefault();open();}});});
+    $('resource-discovery-prev').disabled=busy || !resources.back.length; $('resource-discovery-next').disabled=!usable || !result.has_more; $('resource-discovery-refresh').disabled=busy || !state.crawl;
+    for(const suffix of ['csv','json'])$('resource-discovery-export-'+suffix).disabled=!usable;
+    $('resource-discovery-export-page').disabled=!usable || !rows.length;
+    const loaded=kind==='transports'?result?.transports?.length:result?.observations?.length;
+    $('resource-discovery-page-label').textContent=`${number(rows.length)} gefilterte/sortierte von ${loaded==null?'unbekannt':number(loaded)} geladenen Zeilen · nach ${kind==='transports'?'Anfrage-URL':'Sequenz'} ${resources.cursor===''?'[Start]':resources.cursor} · maximal 200`;
+    renderResourceInspector();
+  }
+  function renderResourceInspector() {
+    const row=state.resources.selected; $('resource-discovery-inspector').hidden=!row;if(!row)return;
+    const transport=resourceView()==='transports';
+    $('resource-discovery-inspector-heading').textContent=transport?'Abgeschlossene native Transportbeobachtung':'Gespeichertes Quellvorkommen und eigenständiger Grant';
+    $('resource-discovery-inspector-basis').textContent=transport?`Tatsächliche Anfrage ${row.requested_url}; beobachtete Generation ${row.observed_generation}; Antwort ${row.retained_response?'im Seitenbericht gespeichert':'nicht im Seitenbericht gespeichert'}. Diese Projektion enthält keine Entity-HTML/CSS-Bodies; fehlende Quellerfassung oder Metadatenvollständigkeit bleiben unbekannt. Vereinigte Task-Erlaubnisse erweitern keinen früheren einzelnen Grant.`:`${resourceBasis(row.basis)}; Generation ${row.generation}; Sequenz ${row.sequence}. Quelle und Originalwert sind beobachtet. Der eigenständige Grant ${row.decision.grant?'erteilt Erlaubnisse für dieses Vorkommen':'fehlt für dieses Vorkommen'}; Zusammenführung beweist keinen gestarteten oder erfolgreichen Transport und verändert seine bisherigen Erlaubnisse nicht.`;
+    $('resource-discovery-inspector-data').textContent=JSON.stringify(row,null,2);
+  }
+  function exportResourcePage() {
+    const rows=resourceVisibleRows();if(!rows.length)return;
+    const result=state.resources.result,summary=result.checkpoint;
+    const meta=[['API Snapshot-Scope',()=>result.snapshot_scope],['Vollständige Crawl-Config SHA256',()=>result.snapshot.crawl_config_sha256],['SQL-Snapshot Generation',()=>result.snapshot.generation],['Ledger-Engine',()=>result.engine],['Ledger-Config SHA256',()=>summary.config_sha256],['Ledger-Snapshot Revision',()=>summary.revision],['Ledger-Rolling SHA256',()=>summary.rolling_sha256],['Ledger-Entdeckung vollständig',()=>summary.complete],['Geerbte Historienzeilen verfügbar',()=>summary.inherited_history?.rows_available],['Geladener Cursor',()=>state.resources.cursor],['Exportumfang',()=> 'filtered_loaded_page_only']];
+    const columns=[...resourceColumns(),...meta],cell=input=>{let value=String(input??'');if(typeof input!=='number' && typeof input!=='boolean' && /^[\s\uFEFF]*[=+@-]/u.test(value))value=`'${value}`;return `"${value.replace(/"/g,'""')}"`;};
+    const data=[columns.map(([label])=>cell(label)).join(','),...rows.map(row=>columns.map(([,value])=>cell(value(row))).join(','))].join('\r\n');
+    downloadBlob(new Blob(['\uFEFF',data],{type:'text/csv;charset=utf-8'}),`open-seo-spider-${state.crawl.id}-resources-${resourceView()}-loaded-page.csv`);
+    message(`${number(rows.length)} gefilterte Zeilen der geladenen Ressourcen-Seite exportiert; weitere gespeicherte Zeilen sind darin nicht enthalten.`);
+  }
+  function downloadResourceSnapshot(extension) {
+    if(!resourceUsable() || !state.crawl)return;
+    const link=document.createElement('a');link.href=`/api/crawls/${encodeURIComponent(state.crawl.id)}/resources.${extension}`;link.download=`open-seo-spider-${state.crawl.id}-resources.${extension}`;document.body.append(link);link.click();link.remove();
+    message('Export aller gespeicherten Vorkommen angefordert. Er exportiert einen SQLite-Snapshot; vollständige Zeilen sind keine vollständige Entdeckung.');
+  }
+  function bindResourceEvents() {
+    syncResourceFilter();
+    $('resource-discovery-kind').addEventListener('change',()=>{resetResourceLedger();renderResourceLedger();loadResourcePage();});
+    $('resource-discovery-search').addEventListener('input',renderResourceLedger); $('resource-discovery-filter').addEventListener('change',renderResourceLedger);
+    $('resource-discovery-refresh').addEventListener('click',()=>loadResourcePage());
+    $('resource-discovery-next').addEventListener('click',()=>{if(resourceUsable() && state.resources.result.has_more)loadResourcePage(resourceView()==='transports'?state.resources.result.next_after_url:state.resources.result.next_after_sequence,'next');});
+    $('resource-discovery-prev').addEventListener('click',()=>{if(state.resources.back.length)loadResourcePage(state.resources.back.at(-1),'back');});
+    $('resource-discovery-inspector-close').addEventListener('click',()=>{state.resources.selected=null;renderResourceInspector();});
+    $('resource-discovery-export-page').addEventListener('click',exportResourcePage);
+    $('resource-discovery-export-csv').addEventListener('click',()=>downloadResourceSnapshot('csv')); $('resource-discovery-export-json').addEventListener('click',()=>downloadResourceSnapshot('json'));
   }
 
   function invalidatePolicyPreview() {
@@ -1892,6 +2081,7 @@
   }
 
   function bindEvents() {
+    bindResourceEvents();
     bindContentEvents();
     $('policy-settings').addEventListener('input', invalidatePolicyPreview);
     $('policy-settings').addEventListener('change', invalidatePolicyPreview);
@@ -1982,6 +2172,7 @@
   async function initialize() {
     $('advanced-config').append($('policy-settings-template').content.cloneNode(true));
     $('advanced-config').append($('content-settings-template').content.cloneNode(true));
+    $('advanced-config').append($('resource-discovery-settings-template').content.cloneNode(true));
     restoreSettings();
     bindEvents();
     selectSection('overview');

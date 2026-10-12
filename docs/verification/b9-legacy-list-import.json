@@ -1,0 +1,26 @@
+{
+  "tested_at": "2026-10-12T18:52:11.431Z",
+  "result": "PASS",
+  "platform": "win32",
+  "checks": [
+    "TXT preserves original empty, invalid and duplicate fragment rows; import makes zero HTTP requests",
+    "CSV explicit exact header/delimiter selection retains duplicate and invalid source rows",
+    "XML sitemap index retains document candidate identity and fetches nothing during import",
+    "XLSX sheet inspection/selection, missing selected cells and formula reject/explicit cached string preserve provenance with zero HTTP",
+    "Invalid base64/bounds and transported normalized-target forgery rejected before any network work",
+    "Actual API list crawl fetches two distinct identities once, preserves five declared occurrences and exports per-input observations",
+    "Saved original input order/invalids/duplicates persist byte-identically across server restart",
+    "Sitemap document inputs use recursive sitemap discovery after explicit crawl start and are never manufactured page records",
+    "Offline CLI TXT import and XLSX inspection have native/API equivalent outputs with zero crawl requests",
+    "CLI config values survive unset flags; list-file crawl retains five source rows and deduplicates network work",
+    "CLI analysis/export succeeds with exit 0; invalid workbook selection/config/scheme exit 1 and unknown option exits 2 without requests or output"
+  ],
+  "offline_website_requests": 0,
+  "formats": [
+    "txt",
+    "csv",
+    "xml",
+    "xlsx"
+  ],
+  "limitations": "Owned byte/HTTP/API/CLI fixtures only; proprietary file compatibility and complete vendor list workflow parity remain NOT_PROVEN."
+}

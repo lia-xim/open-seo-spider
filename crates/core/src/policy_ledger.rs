@@ -743,6 +743,7 @@ mod tests {
         let old: crate::PageRecord = serde_json::from_value(value.clone()).unwrap();
         assert_eq!(serde_json::to_value(old).unwrap(), value);
         let target = crate::RecrawlTarget {
+            resource_permission: None,
             requested_url: "https://example.org/".into(),
             parent_ordinal: 0,
             parent_page_sha256: "prior".into(),
@@ -768,6 +769,7 @@ mod tests {
             discovery_pending: 0,
             discovery_complete: true,
             policy_ledger: None,
+            resource_ledger: None,
         };
         let text = serde_json::to_string(&checkpoint).unwrap();
         assert!(!text.contains("policy_ledger"));

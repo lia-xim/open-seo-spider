@@ -62,6 +62,7 @@ impl CrawlStore {
             CREATE TABLE IF NOT EXISTS recrawl_pages(url TEXT PRIMARY KEY,ordinal INTEGER NOT NULL,payload_sha256 TEXT NOT NULL,inherited INTEGER NOT NULL);
             CREATE TABLE IF NOT EXISTS recrawl_targets(url TEXT PRIMARY KEY,admitted_attempts INTEGER NOT NULL DEFAULT 0,last_admitted_generation INTEGER,committed_generation INTEGER,committed_payload_sha256 TEXT);")?;
         connection.execute_batch(crate::policy_ledger::SCHEMA)?;
+        connection.execute_batch(crate::resource_ledger::SCHEMA)?;
         Ok(Self {
             connection: Mutex::new(connection),
         })
@@ -88,6 +89,9 @@ impl CrawlStore {
             .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
         let transaction = connection.transaction()?;
         let config: Option<CrawlConfig> = metadata(&transaction, "config")?;
+        if let Some(config) = &config {
+            crate::resource_ledger::verify(&transaction, config)?;
+        }
         verify_saved_content_captures(&transaction)?;
         let run_state: Option<CrawlRunState> = metadata(&transaction, "run_state")?;
         let checkpoint: Option<CrawlCheckpoint> = metadata(&transaction, "checkpoint")?;
@@ -144,6 +148,14 @@ impl CrawlStore {
                 bail!("Terminal selected operation differs from its checkpoint report");
             }
         }
+        let resource_ledger = crate::resource_ledger::summary(&transaction)?;
+        if checkpoint_valid
+            && checkpoint
+                .as_ref()
+                .is_some_and(|checkpoint| checkpoint.resource_ledger != resource_ledger)
+        {
+            bail!("Terminal resource ledger differs from checkpoint binding");
+        }
         transaction.commit()?;
         Ok(CrawlStoreInspection {
             config,
@@ -156,6 +168,7 @@ impl CrawlStore {
             checkpoint_valid,
             operation,
             policy_ledger,
+            resource_ledger,
         })
     }
 
@@ -271,6 +284,9 @@ impl CrawlStore {
             if let Some(admission) = &target.policy_admission {
                 crate::policy_ledger::save_admission(&transaction, admission)?;
             }
+            if let Some(permission) = &target.resource_permission {
+                crate::resource_ledger::save_permission(&transaction, permission, true)?;
+            }
         }
         if let Some(policy) = &prepared.config.crawl_policy {
             let policy = crate::CompiledCrawlPolicy::new(policy)?;
@@ -281,6 +297,24 @@ impl CrawlStore {
                 true,
             )?;
             put_metadata(&transaction, "policy_initialized", "true")?;
+        }
+        if let Some(config) = &prepared.config.resource_discovery {
+            crate::resource_ledger::initialize(
+                &transaction,
+                config,
+                Some(crate::ResourceInheritedHistory {
+                    parent_snapshot_sha256: prepared.plan.parent.snapshot_sha256.clone(),
+                    declared_parent_summary: prepared
+                        .base_report
+                        .resource_ledger
+                        .clone()
+                        .map(Box::new),
+                    rows_available: false,
+                }),
+            )?;
+        }
+        if prepared.config.resource_discovery.is_some() {
+            crate::resource_ledger::initialize_counts(&transaction)?;
         }
         put_metadata(&transaction, "discovery_initialized", "true")?;
         put_metadata(&transaction, "discovery_complete", "true")?;
@@ -426,6 +460,7 @@ impl CrawlStore {
             .optional()?;
         if let Some(saved) = saved {
             let mut old: CrawlConfig = serde_json::from_str(&saved)?;
+            crate::resource_ledger::verify(&connection, &old)?;
             if let Some(policy) = &old.crawl_policy {
                 crate::policy_ledger::verify(
                     &connection,
@@ -482,6 +517,209 @@ impl CrawlStore {
                 row.get(0)
             })?;
         Ok(count as usize)
+    }
+
+    pub fn resource_ledger_summary(&self) -> anyhow::Result<Option<crate::ResourceLedgerSummary>> {
+        let connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        crate::resource_ledger::summary(&connection)
+    }
+    pub fn resource_occurrences(
+        &self,
+        after: Option<u64>,
+        limit: usize,
+    ) -> anyhow::Result<crate::ResourceOccurrencePage> {
+        let mut connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        let config = metadata::<CrawlConfig>(&transaction, "config")?;
+        if let Some(config) = &config {
+            verify_resource_read_context(&transaction, config)?;
+        }
+        let limits = config
+            .and_then(|config| config.resource_discovery_limits)
+            .unwrap_or_default();
+        limits.validate()?;
+        let page = crate::resource_ledger::page(
+            &transaction,
+            after,
+            limit,
+            limits.max_source_batch_bytes,
+        )?;
+        transaction.commit()?;
+        Ok(page)
+    }
+    pub fn resource_transports(
+        &self,
+        after_url: Option<&str>,
+        limit: usize,
+    ) -> anyhow::Result<crate::ResourceTransportPage> {
+        let mut connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        let config = metadata::<CrawlConfig>(&transaction, "config")?;
+        if let Some(config) = &config {
+            verify_resource_read_context(&transaction, config)?;
+        }
+        let limits = config
+            .and_then(|config| config.resource_discovery_limits)
+            .unwrap_or_default();
+        limits.validate()?;
+        let page = crate::resource_ledger::transports(
+            &transaction,
+            after_url,
+            limit,
+            limits.max_source_batch_bytes,
+        )?;
+        transaction.commit()?;
+        Ok(page)
+    }
+    pub fn visit_resource_occurrences(
+        &self,
+        limit: usize,
+        mut visitor: impl FnMut(&crate::ResourceOccurrencePage) -> anyhow::Result<()>,
+    ) -> anyhow::Result<Option<crate::ResourceLedgerSummary>> {
+        let mut connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        let config = metadata::<CrawlConfig>(&transaction, "config")?;
+        if let Some(config) = &config {
+            verify_resource_read_context(&transaction, config)?;
+        }
+        let limits = config
+            .and_then(|config| config.resource_discovery_limits)
+            .unwrap_or_default();
+        limits.validate()?;
+        let summary = crate::resource_ledger::summary(&transaction)?;
+        let mut after = None;
+        loop {
+            let page = crate::resource_ledger::page(
+                &transaction,
+                after,
+                limit,
+                limits.max_source_batch_bytes,
+            )?;
+            visitor(&page)?;
+            if !page.has_more {
+                break;
+            }
+            after = page.next_sequence;
+        }
+        transaction.commit()?;
+        Ok(summary)
+    }
+    pub(crate) fn resource_permission(
+        &self,
+        url: &str,
+    ) -> anyhow::Result<Option<crate::ResourceTaskPermission>> {
+        let connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        crate::resource_ledger::permission(&connection, url)
+    }
+    pub(crate) fn resource_expansion(&self) -> anyhow::Result<Option<PageRecord>> {
+        let connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        crate::resource_ledger::pending_expansion(&connection)
+    }
+    pub(crate) fn initialize_resources(
+        &self,
+        config: &crate::ResourceDiscoveryConfig,
+        limits: &crate::ResourceDiscoveryLimits,
+        generation: u64,
+    ) -> anyhow::Result<()> {
+        let mut connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        require_generation(&transaction, generation)?;
+        crate::resource_ledger::initialize(&transaction, config, None)?;
+        let mut entries = Vec::new();
+        let mut statement =
+            transaction.prepare("SELECT url FROM frontier WHERE done=0 ORDER BY rowid")?;
+        for url in statement.query_map([], |row| row.get::<_, String>(0))? {
+            entries.push(url?);
+        }
+        drop(statement);
+        let revision = format!("initial:{}", config.sha256()?);
+        let mut rows = Vec::new();
+        for (ordinal, url) in entries.iter().enumerate() {
+            if crate::resource_ledger::permission(&transaction, url)?.is_some() {
+                continue;
+            }
+            let occurrence = crate::ResourceOccurrence {
+                source_complete: true,
+                source_unit_revision: revision.clone(),
+                occurrence_id: crate::resource_policy::occurrence_id(&revision, ordinal),
+                source_revision: revision.clone(),
+                source_ordinal: ordinal,
+                requested_source_url: url.clone(),
+                source_document_url: url.clone(),
+                raw_value: url.clone(),
+                decoded_value: None,
+                resolved_url: Some(url.clone()),
+                reference_kind: crate::ResourceReferenceKind::InitialInput,
+                classification_basis: "admitted_initial_frontier".into(),
+                declared_mime: None,
+                dom_location: None,
+                byte_start: None,
+                byte_end: None,
+                attributes: Default::default(),
+                nofollow: false,
+                observation_error: None,
+            };
+            let admission = crate::policy_ledger::saved_admission(
+                &transaction,
+                crate::PolicyTaskRole::PageDocument,
+                url,
+            )?;
+            let traverse = admission
+                .as_ref()
+                .is_none_or(|admission| admission.can_expand);
+            let grant = crate::ResourceGrant {
+                engine: crate::RESOURCE_DISCOVERY_ENGINE.into(),
+                config_sha256: config.sha256()?,
+                occurrence_id: occurrence.occurrence_id.clone(),
+                fetch_url: url.clone(),
+                store: true,
+                can_expand_navigation: traverse,
+                can_expand_resources: traverse,
+                can_expand_css: traverse && config.css.stylesheets,
+                can_expand_pdf: traverse && config.navigation.pdf_annotations.fetch,
+                policy_sha256: admission.as_ref().map(|row| row.policy_sha256.clone()),
+                policy_occurrence_id: admission.map(|row| row.occurrence_id),
+            };
+            rows.push(crate::StoredResourceOccurrence {
+                sequence: 0,
+                generation,
+                basis: crate::ResourceObservationBasis::Current,
+                evaluation_revision: revision.clone(),
+                occurrence,
+                decision: crate::ResourceDecision {
+                    reason: "initial_admitted".into(),
+                    grant: Some(grant),
+                    coalesced_into: None,
+                },
+            });
+        }
+        if !rows.is_empty() {
+            crate::resource_ledger::commit(&transaction, &mut rows, limits, None)?;
+        }
+        crate::resource_ledger::initialize_counts(&transaction)?;
+        transaction.commit()?;
+        Ok(())
     }
 
     pub fn policy_ledger_summary(&self) -> anyhow::Result<Option<crate::PolicyLedgerSummary>> {
@@ -849,6 +1087,29 @@ impl CrawlStore {
         self.complete_impl(page, &[], generation, Some((rows, limits)))
     }
 
+    pub(crate) fn complete_resources(
+        &self,
+        page: &PageRecord,
+        rows: &mut [crate::StoredResourceOccurrence],
+        policy_rows: &mut [crate::PolicyOccurrence],
+        generation: u64,
+        expansion: bool,
+    ) -> anyhow::Result<Vec<QueueEntry>> {
+        let config = self.config()?.context("Saved resource config missing")?;
+        let limits = config.resource_discovery_limits.clone().unwrap_or_default();
+        let policy_limits = config.live_policy_limits.clone().unwrap_or_default();
+        self.complete_transaction(
+            page,
+            &[],
+            generation,
+            config
+                .crawl_policy
+                .as_ref()
+                .map(|_| (policy_rows, &policy_limits)),
+            Some((rows, &limits, expansion)),
+        )
+    }
+
     fn complete_impl(
         &self,
         page: &PageRecord,
@@ -857,6 +1118,24 @@ impl CrawlStore {
         policy: Option<(
             &mut [crate::PolicyOccurrence],
             &crate::LiveCrawlPolicyLimits,
+        )>,
+    ) -> anyhow::Result<Vec<QueueEntry>> {
+        self.complete_transaction(page, discovered, generation, policy, None)
+    }
+    #[allow(clippy::too_many_arguments)]
+    fn complete_transaction(
+        &self,
+        page: &PageRecord,
+        discovered: &[QueueEntry],
+        generation: u64,
+        policy: Option<(
+            &mut [crate::PolicyOccurrence],
+            &crate::LiveCrawlPolicyLimits,
+        )>,
+        resources: Option<(
+            &mut [crate::StoredResourceOccurrence],
+            &crate::ResourceDiscoveryLimits,
+            bool,
         )>,
     ) -> anyhow::Result<Vec<QueueEntry>> {
         let page_text = serde_json::to_string(page)?;
@@ -869,10 +1148,27 @@ impl CrawlStore {
         let mut scheduled = Vec::new();
         let config: CrawlConfig =
             metadata(&transaction, "config")?.context("Missing saved crawl config")?;
+        let expansion = resources
+            .as_ref()
+            .is_some_and(|(_, _, expansion)| *expansion);
+        let resource_enabled = resources.is_some();
+        let already_retained = resource_enabled
+            && transaction.query_row(
+                "SELECT EXISTS(SELECT 1 FROM pages WHERE url=?1)",
+                [&page.url],
+                |row| row.get::<_, bool>(0),
+            )?;
+        let mut new_resource_pending = 0usize;
         crate::content_binding::validate_native_content_captures(
             page,
             &config,
-            Some(generation),
+            if expansion {
+                page.resource_response
+                    .as_ref()
+                    .map(|facts| facts.observed_generation)
+            } else {
+                Some(generation)
+            },
             true,
         )?;
         if let Some((rows, limits)) = policy {
@@ -894,12 +1190,12 @@ impl CrawlStore {
                 rows,
                 generation,
                 limits,
-                Some((
+                (!expansion).then_some((
                     &observation.source_revision,
                     observation.candidates_complete,
                 )),
             )?;
-            for row in rows {
+            for row in rows.iter().filter(|_| resources.is_none()) {
                 if let Some(url) = &row.scheduled_fetch_url {
                     if row.task_role != crate::PolicyTaskRole::PageDocument {
                         bail!("Page source scheduled invalid task role");
@@ -944,11 +1240,80 @@ impl CrawlStore {
                 &serde_json::to_string(&invocation)?,
             )?;
         }
-        transaction.execute(
+        let mut retain = true;
+        if let Some((rows, limits, expansion)) = resources {
+            let permission = page
+                .resource_permission
+                .as_ref()
+                .context("Resource response lacks permission")?;
+            let saved = crate::resource_ledger::permission(&transaction, &page.url)?
+                .context("Resource task missing")?;
+            permission.validate()?;
+            // An independently discovered grant may have augmented the task
+            // during the fetch. The actually used permission remains a subset.
+            for grant in &permission.authorizing_grants {
+                if !saved.authorizing_grants.contains(grant) {
+                    bail!("Resource response permission was not saved");
+                }
+            }
+            retain = permission.store;
+            let batch = page
+                .resource_source
+                .as_ref()
+                .context("Resource response source inventory missing")?;
+            limits.check_batch(batch)?;
+            let urls = crate::resource_ledger::commit(
+                &transaction,
+                rows,
+                limits,
+                (!expansion).then_some((batch.source_revision.as_str(), batch.complete)),
+            )?;
+            if expansion {
+                crate::resource_ledger::mark_expanded(&transaction, &page.url, permission)?;
+            } else {
+                crate::resource_ledger::save_transport(
+                    &transaction,
+                    page,
+                    generation,
+                    &config,
+                    limits,
+                )?;
+            }
+            for url in urls {
+                let inserted = transaction.execute(
+                    "INSERT OR IGNORE INTO frontier(url,depth,discovered_from) VALUES(?1,?2,?3)",
+                    params![url, i64::try_from(page.depth + 1)?, page.url],
+                )?;
+                new_resource_pending += inserted;
+                if inserted == 1 {
+                    scheduled.push(QueueEntry {
+                        url: url.clone(),
+                        depth: page.depth + 1,
+                        discovered_from: Some(page.url.clone()),
+                        admission: crate::policy_ledger::saved_admission(
+                            &transaction,
+                            crate::PolicyTaskRole::PageDocument,
+                            &url,
+                        )?,
+                    });
+                }
+            }
+        }
+        if retain {
+            transaction.execute(
             "INSERT INTO pages(url,data) VALUES(?1,?2) ON CONFLICT(url) DO UPDATE SET data=excluded.data",
             params![page.url, page_text],
         )?;
+        }
         transaction.execute("UPDATE frontier SET done=1 WHERE url=?1", [&page.url])?;
+        if resource_enabled {
+            crate::resource_ledger::frontier_committed(
+                &transaction,
+                new_resource_pending,
+                !expansion,
+                retain && !already_retained,
+            )?;
+        }
         for entry in discovered.iter().chain(scheduled.iter()) {
             transaction.execute(
                 "INSERT OR IGNORE INTO frontier(url,depth,discovered_from) VALUES(?1,?2,?3)",
@@ -1095,9 +1460,13 @@ impl CrawlStore {
             discovery_complete: metadata_text(&transaction, "discovery_complete")?.as_deref()
                 == Some("true"),
             policy_ledger: crate::policy_ledger::summary(&transaction)?,
+            resource_ledger: crate::resource_ledger::summary(&transaction)?,
         };
         if report.policy_ledger != checkpoint.policy_ledger {
             bail!("Report policy ledger differs from committed evidence");
+        }
+        if report.resource_ledger != checkpoint.resource_ledger {
+            bail!("Report resource ledger differs from committed evidence");
         }
         run.finished_at = Some(checkpoint.created_at.clone());
         run.outcome = Some(outcome);
@@ -1209,6 +1578,22 @@ fn parent_snapshot(connection: &Connection) -> anyhow::Result<Option<Vec<u8>>> {
             |row| row.get(0),
         )
         .optional()?)
+}
+
+fn verify_resource_read_context(
+    connection: &Connection,
+    config: &CrawlConfig,
+) -> anyhow::Result<()> {
+    if config.resource_discovery.is_none() {
+        return Ok(());
+    }
+    // The mutable plan table cannot independently authorize inherited grants.
+    // Rebuild its contract from the exact saved parent before emitting a page.
+    let plan = load_run_plan(connection)?;
+    if matches!(plan, RunPlan::SelectedRecrawl(_)) {
+        verify_recrawl_rows(connection, &plan)?;
+    }
+    crate::resource_ledger::verify(connection, config)
 }
 
 fn load_run_plan(connection: &Connection) -> anyhow::Result<RunPlan> {
@@ -1619,6 +2004,7 @@ mod tests {
         CrawlReport {
             operation: None,
             policy_ledger: None,
+            resource_ledger: None,
             config,
             pages: Vec::new(),
             issues: Vec::new(),

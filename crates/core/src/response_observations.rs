@@ -112,6 +112,7 @@ mod tests {
         CrawlReport {
             operation: None,
             policy_ledger: None,
+            resource_ledger: None,
             config: Default::default(),
             pages: vec![page],
             issues: vec![],

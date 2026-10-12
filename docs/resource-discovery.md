@@ -1,12 +1,26 @@
 # Ressourcen-Erkennung: eigener B9-Vertrag
 
-Stand: B9 in Design/Implementierung, noch keine bestandene B9-Abnahme. Die [Feature-To-do-Liste](FEATURE_TODO.md) und [der Katalog](feature-parity.json) behalten 25 erfüllte eigene Abnahmen, 72 teilweise geprüfte und 47 offene Fähigkeiten. B8-native/API/UI-Beweise sowie [exakte B8-Commit-CI](verification/content-capture-ci.json) und [installierter Release](verification/content-capture-installed.json) bleiben bestehen; B9-Commit-CI, Release und Installation werden separat nachgewiesen. Hersteller-, Filter- und Workflow-Parität bleibt NOT_PROVEN.
+Stand: **B9 ist lokal geprüft, mit offenen breiteren Feature-Abnahmen.** Die Neustartregression ist repariert und am finalen lokalen Build erneut geprüft. B9-Commit-CI, Release und Installation bleiben eigene offene Gates. Die [Feature-To-do-Liste](FEATURE_TODO.md) und [der Katalog](feature-parity.json) behalten 25 erfüllte eigene Abnahmen, 72 teilweise geprüfte und 47 offene Fähigkeiten. B8-native/API/UI-Beweise sowie [exakte B8-Commit-CI](verification/content-capture-ci.json) und [installierter Release](verification/content-capture-installed.json) bleiben historische B8-Belege. Hersteller-, Filter- und Workflow-Parität bleibt NOT_PROVEN.
+
+## Behobene Neustartregression und historischer Fehler
+
+Der [dreifach reproduzierte historische Fehler](verification/resource-discovery-restart-failure.json) am Build `1fc72a7772c2c8534fd5145feaf2e45384260b5fbefc61b1435417eea77a8c93` bleibt gespeichert: Synchrones Laden/SQLite-Recovery unter dem asynchronen Windows-Startup erschöpfte den Main-Thread-Stack. Die [lokale Reparatur](verification/resource-discovery-restart-repair.json) verlagert synchrones Parsing, SQLite und abgeleitete Analyse nach `spawn_blocking` und hält den Serve-Future auf dem Heap. Globale Stackgrenzen und historische Dateien wurden nicht verändert. Am neuen Build lädt die exakt fehlgeschlagene Fixture sechs fertige Jobs; die frische achtteilige Capture-/Restart-Prüfung und alle sieben bestehenden Regressionsgruppen bestehen. `legacy_restart_regression` ist jetzt **PASS**.
+
+## Finaler lokal geprüfter Stand
+
+Der eingefrorene Debug-Stand `142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724` besteht [362 Standard-Rust-Tests](verification/resource-discovery-core.json), darunter 15 native Ressourcen-Integrationsfälle und 15 CSS-Parser-Tests. Vier Live-Gates bleiben im Standardlauf ausdrücklich ignoriert; eine tatsächliche Chrome-Prüfung wurde separat bestanden. Formatierung und Clippy sind bestanden. Der [öffentliche B9-Aggregatbeleg](verification/resource-discovery-batch.json) bindet die aktuellen Core-/API-/MCP-/[UI65-Beweise](verification/resource-discovery-ui.json), sieben Regressionsgruppen sowie historischen Fehler und Reparatur per Hash. B9-Commit-CI, Release und Installation sind darin ausdrücklich PENDING.
+
+Die [neun nativen API-/CLI-Gruppen](verification/resource-discovery-e2e.json) prüfen unter anderem 505 erhaltene Quellvorkommen, 506 unterschiedliche Ressourcen-URL-Transporte ohne feste 500-URL-Grenze, private Antwort-Metadaten, vollständige gepinnte Exporte und vier gezielte SQLite-Manipulationskontrollen. Vollständige typisierte Crawl-Konfiguration und Generation werden beim Lesen gebunden. Das [offizielle MCP-SDK](verification/mcp-e2e.json) prüft 22 Tools über stdio und Streamable HTTP.
+
+Die [tatsächliche Ressourcen-UI](../web/verification/ui-resource-discovery-live-results.json) besteht 12 Prüfungen gegen Rust, eigene HTTP-Fixtures und SQLite. Weitere 53 tatsächliche Prüfungen der Content-/Policy-/Selected-/Control-/Renderer-Oberflächen bestehen am selben Debug-Stand. Die separate [Settings-Fixture](../web/verification/ui-resource-discovery-fixture-results.json) mit 10 und [Ledger-Fixture](../web/verification/ui-resource-ledger-fixture-results.json) mit 16 Prüfungen verwenden API-Mocks und ersetzen diesen nativen Beleg nicht.
+
+Die [API-, CLI- und MCP-Verträge](resource-discovery-api.md) und [UI-Verträge](resource-discovery-ui.md) beschreiben die geprüfte Integration. Die breitere Zehn-Gruppen-Abnahme bleibt teilweise erfüllt: insbesondere ist die komplette vierfache Speichern-/Abrufen-Matrix bislang für Bilder belegt, nicht für jeden Ressourcentyp und jede Navigation. B9-CI, Release und Installation bleiben eigene offene Gates.
 
 ## Zweck und Grenzen
 
-Der native Crawler soll Quellvorkommen und erlaubte Abrufe gezielt steuern: HTML-Navigation, CSS, JavaScript-Dateien, Bilder, Medien, PDF, ältere SWF-Referenzen und andere Ressourcen. Eine deklarierte Quelle ist noch kein Browser-Request, ausgewähltes Bild, ausgeführtes Script oder tatsächlich beobachteter MIME-Typ. JavaScript-Quelltext wird nicht nach vermeintlichen URLs durchsucht.
+Der native Crawler steuert Quellvorkommen und erlaubte Abrufe gezielt: HTML-Navigation, CSS, JavaScript-Dateien, Bilder, Medien, PDF, ältere SWF-Referenzen und andere Ressourcen. Eine deklarierte Quelle ist noch kein Browser-Request, ausgewähltes Bild, ausgeführtes Script oder tatsächlich beobachteter MIME-Typ. JavaScript-Quelltext wird nicht nach vermeintlichen URLs durchsucht.
 
-Die neue optionale Konfiguration bleibt standardmäßig abwesend. Alte Crawl-Konfigurationen, gespeicherte Berichte und ihre Hashes behalten den früheren Pfad. Explizite Ressourcenschalter werden vor HTTP streng geprüft. Der genaue öffentlich exponierte Transport-/API-Schema-Stand wird erst mit der Integration festgeschrieben; dieser Vertrag kündigt keine bereits verfügbare API an.
+Die optionale Konfiguration bleibt standardmäßig abwesend. Alte Crawl-Konfigurationen, gespeicherte Berichte und ihre Hashes behalten den früheren Pfad. Explizite Ressourcenschalter werden vor HTTP streng geprüft. Native Decoder-/Parser-Grenzen und fehlende Quellen werden in den eigenen Zuständen ausgewiesen.
 
 ## Quell- und Berechtigungsvertrag
 
@@ -38,21 +52,39 @@ Jede Abhängigkeit behält Originalspanne in UTF-8-Bytes, dekodierten URL-Wert, 
 
 Externe CSS-Referenzen verwenden die finale Stylesheet-URL; eingebettete Styles verwenden die Dokumentbasis. Bedingte Regeln, Cascade, Custom-Property-Anwendung und tatsächliches Laden werden nicht aus dem Inventar abgeleitet. Syntaxfehler, unbekannte Grammatik und unvollständige Quellen brauchen eigene Diagnose-/Coverage-Zustände. [CSS relative URLs](https://www.w3.org/TR/css-values-4/#relative-urls).
 
+### Begrenztes Encoding-Profil
+
+Der native B9-Decoder verwendet laut aktuellem Core-Vertrag BOM, dann gültiges HTTP-Charset, dann die exakt am Anfang stehende `@charset`-Byte-Deklaration und schließlich UTF-8 als Fallback. Die Environment-Encoding-Herkunft aus dem verweisenden Dokument oder importierenden Stylesheet wird bislang nicht mitgeführt. Deshalb bleiben mehrdeutige nicht-ASCII-Quellen ohne solche expliziten Angaben unbekannt; reine ASCII-Quellen können im eigenen Profil eindeutig verarbeitet werden. Das reine CSS-Modul erhält bereits dekodierten Text und beweist diese Byte-Dekodierung nicht.
+
+Die öffentliche CSS-Spezifikation berücksichtigt vor dem UTF-8-Fallback auch ein geliefertes Environment-Encoding. Diese verbleibende Lücke verhindert eine Aussage über universelle CSS-Encoding- oder Browser-Parität. [CSS Syntax: Eingabebytes und Environment-Encoding](https://www.w3.org/TR/css-syntax-3/#input-byte-stream).
+
+- [ ] **`css-encoding-environment-fallback`:** Eigene Legacy-HTML- und importierte Stylesheet-Quellen mit nicht-ASCII-URL-Bytes, ohne BOM/HTTP-Charset/`@charset`, gegen ASCII-, explizite UTF-8- und widersprüchliche BOM-/HTTP-Kontrollen prüfen. Zunächst den unbekannten Herkunftszustand und null daraus unberechtigt abgeleitete Zielanfragen belegen; Environment-Encoding-Vererbung bleibt ein separater offener Vertrag.
+
 ## Wiederaufnahme und gespeicherte Entscheidungen
 
 Quellvorkommen, Grants, Transport-/Parser-Beobachtung, offene Expansion, Policy-Ledger und Frontier müssen zusammen mit der Seite atomar speichern. Offene Parser-/Expansionseinheiten verhindern falsche Completion. Pause stoppt neue Admission und lässt bereits zugelassene Einheiten auslaufen. SQLite-Recovery verwendet gespeicherte tatsächliche Fetch-Identitäten, gültige Grants und unveränderte Config-/Quellrevisionen; URL-Rewrites laufen nicht erneut. Ausgewählter Recrawl lädt nur ausgewählte gespeicherte Ziele und schaltet neue Navigation/CSS/XML-Expansion ab. Nicht ausgewählte Elternbeobachtungen bleiben unverändert.
 
-## Zehn noch offene native Gate-Gruppen
+## Zehn native Abnahmegruppen: geprüft und verbleibend
 
-- [ ] HTML-Inventar: alle Quellfamilien, Base, DOM-Reparaturen, Alt/Vorkommen, Poster, Source-Eltern und ungültige/nicht-HTTP Kontrollen.
-- [ ] Speichern/Abrufen: alle vier Kombinationen pro Typ und Navigation, exakte Zielanfragen und fehlende Ziel-Fakten bei Nichtabruf.
-- [ ] Rollen-Zusammenführung: Anchor/Bild-Reihenfolge, unabhängige Check-/Navigation-Grants, spätere Expansion höchstens einmal, kein Doppeltransport.
-- [ ] MIME/Basis/Dekodierung: widersprüchliche Typ-/Extension-Hinweise, Redirect-finale CSS-Basis, fehlender MIME, Body-Cap und Unicode/Charset.
-- [ ] CSS-Tokens: Escapes, quoted/unquoted, Import, image-set/image, Comments, Daten-/Fragmentwerte, Original-UTF-8-Spannen und echte Syntaxfehler.
-- [ ] CSS-Kontext: verschachtelte Regeln/Imports, Zyklen, Font-Quellen, Custom-Properties, Bedingungen und unterschiedliche Decode-Revisionen.
-- [ ] Scope/Robots/Credentials: zwei eigene Origins, CDN-Freigabe, deny/check-only, Redirect und null verbotene Zielanfragen.
-- [ ] Pause/Crash/Recovery: aktive HTTP-/Parser-Barrieren, offene späte Grants, atomare Rollbacks, Tamper-Reject vor HTTP und Legacy-None.
-- [ ] Budgets: exakt/plus-eins Grenzen, kein gespeicherter Prefix, kontrollierte größere Limits und 501 Ziele ohne feste URL-Sperre.
-- [ ] Ausgewählte Ressourcen: gespeicherte CSS/Bild/PDF-/Navigation-Ziele, Fehler/Pending ohne Altdaten-Fallback, Restdaten unverändert, keine neue Expansion.
+| Gruppe | Begrenzter eigener Beleg | Verbleibende benannte Kontrollen |
+|---|---|---|
+| HTML-Inventar | Native Quellfamilien, Poster/Source-Kontext, responsive Duplikate und lokale Fragmente geprüft | `image-occurrence-alt-and-selected-source`: mehrere Quellseiten, fehlendes/leeres/Whitespace-Alt, zusätzliche DOM-Reparaturen; Browser-Auswahl bleibt separat |
+| Speichern/Abrufen | Alle vier Kombinationen für Bilder geprüft, private Metadaten und optionaler Bericht erhalten | `resource-products-every-type-and-navigation`: vollständige Matrix für CSS/JS/Medien/PDF/SWF und Navigation |
+| Rollen-Grants | Bild/Anchor, spätere Navigation/Store und einmaliger Transport geprüft | `resource-role-unions-reverse-and-concurrent`: umgekehrte/parallele Rollen anderer Typen |
+| MIME/Basis/Decode | Antwort-MIME, finale CSS-Basis und echte Antwort-/Keine-Antwort-Hashes geprüft | `css-encoding-environment-fallback`: vererbte Encoding-Herkunft; zusätzliche fehlende/widersprüchliche Angaben und Body-Caps |
+| CSS-Tokens | 15 deklarierte Parserfälle einschließlich Escapes, EOF, indirektem image-set und Originalspannen bestanden | Unterstütztes eigenes Profil ist geprüft; keine vollständige CSS-Grammatik- oder Browser-Ladeabnahme |
+| CSS-Kontext | Native Imports/Zyklen und unabhängige fehlerhafte CSS-Einheiten geprüft | `css-native-grammar-context-and-decoding`: weitere Fonts, moderne Kontexte, Bedingungen und Decode-Revisionen |
+| Scope/Robots/Credentials | Zwei Origins, erlaubtes/gesperrtes Ziel, Credential-Grenze und Policy/check-only geprüft | `resource-cross-origin-redirect-hop-credentials`: mehrgliedrige Redirects je Ressourcentyp und jede verbotene Stufe |
+| Pause/Recovery/Integrität | Pause, Wiederaufnahme, atomare Rollbacks, Tamper-Reject und gepinnte gleichzeitige Leser geprüft | `resource-interruption-each-stage`: Prozessabbruch an jedem Parser-/Grant-/Expansion-Punkt |
+| Budgets | Quell-/Gesamtbudget-Rollback, private Transportgrenze und mehr als 500 Ziele geprüft | `resource-budget-exact-plus-one-all-limits`: jede einzelne Grenze exakt/plus-eins und größere erlaubte Limits |
+| Ausgewählte Ressourcen | Keine neue Expansion, unveränderte Eltern-/Restdaten und immutable Eltern-Grants geprüft | `resource-selected-all-kind-targets`: CSS/Bild/PDF/Navigation sowie Fehler-/Pending-Matrix |
 
-API/CLI/MCP, tatsächliche Browser-UI, exakte Commit-CI, unveränderlicher Release und installierter Runtime sind nach diesen Gruppen eigene Gates. Bis ihre Beweise existieren bleibt jede Checkbox offen. Diese Abnahme ist ein eigener nachvollziehbarer Vertrag; sie beweist keine vollständige Screaming-Frog-Gleichheit.
+Zusätzlich offen sind `relationship-discovery-each-positive-negative`, `link-directive-four-way-traversal` und `resource-native-renderer-enforcement`. Konfigurationsfelder oder native Kandidaten ersetzen ihre tatsächlichen positiven und negativen Requestkontrollen nicht.
+
+- [x] Begrenztes natives Ressourcen-Subset, API/CLI/MCP und tatsächliche Browser-UI geprüft.
+- [ ] Eigene exakte B9-Commit-CI.
+- [ ] Eigener unveränderlicher B9-Release und installierte Runtime, einschließlich unverändertem Nutzerbestand.
+
+Private Transport-Projektionen enthalten begrenzte Metadaten und keine Body-/Custom-Extraction-/PDF-/Capture-Texte. `retained_response` beschreibt die aktuelle Aufnahme in den Bericht; ursprüngliche Projektionsfakten bleiben getrennt. `completed_transports` zählt Frontier-Fetch-Einheiten, nicht jede Redirect-Stufe oder Discovery-Protokollanfrage. Integritätsprüfung pro Seite priorisiert Korrektheit; große Ledger benötigen zusätzliche Performance-Gates.
+
+Diese Abnahme ist ein eigener nachvollziehbarer Vertrag; sie beweist keine vollständige Screaming-Frog-Gleichheit.

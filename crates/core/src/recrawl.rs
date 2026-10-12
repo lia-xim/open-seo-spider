@@ -61,6 +61,8 @@ pub struct RecrawlTarget {
     pub discovered_from: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub policy_admission: Option<crate::PolicyAdmission>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub resource_permission: Option<crate::ResourceTaskPermission>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
@@ -246,6 +248,22 @@ pub fn prepare_selected_recrawl(
                 depth: page.depth,
                 discovered_from: page.discovered_from.clone(),
                 policy_admission,
+                resource_permission: match &base_report.config.resource_discovery {
+                    Some(config) => {
+                        let permission = page
+                            .resource_permission
+                            .clone()
+                            .context("Resource parent page lacks durable task permission")?;
+                        permission.validate()?;
+                        ensure!(
+                            permission.fetch_url == *raw
+                                && permission.config_sha256 == config.sha256()?,
+                            "Resource parent permission differs from config/target"
+                        );
+                        Some(permission)
+                    }
+                    None => None,
+                },
             });
         }
         selection.push(RecrawlSelectionOccurrence {
@@ -405,6 +423,7 @@ mod tests {
             warnings: Vec::new(),
             operation: None,
             policy_ledger: None,
+            resource_ledger: None,
         })
         .unwrap()
     }

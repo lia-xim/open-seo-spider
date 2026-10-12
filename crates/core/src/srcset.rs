@@ -9,10 +9,14 @@ fn whitespace(c: char) -> bool {
 /// Retains rejected descriptor candidates with visible errors, unlike the browser's
 /// source-set algorithm which discards them. URLs are not split on embedded commas.
 pub(crate) fn parse_srcset(input: &str) -> Vec<ImageCandidate> {
+    parse_srcset_bounded(input, 10_000)
+}
+
+pub(crate) fn parse_srcset_bounded(input: &str, limit: usize) -> Vec<ImageCandidate> {
     let chars: Vec<char> = input.chars().collect();
     let mut at = 0;
     let mut output = Vec::new();
-    while at < chars.len() && output.len() < 10_000 {
+    while at < chars.len() && output.len() < limit {
         while at < chars.len() && (whitespace(chars[at]) || chars[at] == ',') {
             at += 1;
         }

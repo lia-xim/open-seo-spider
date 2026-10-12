@@ -44,6 +44,10 @@ pub struct CrawlConfig {
     pub live_policy_limits: Option<crate::LiveCrawlPolicyLimits>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub content_capture: Option<crate::ContentCaptureConfig>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub resource_discovery: Option<crate::ResourceDiscoveryConfig>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub resource_discovery_limits: Option<crate::ResourceDiscoveryLimits>,
 }
 
 impl Default for CrawlConfig {
@@ -79,6 +83,8 @@ impl Default for CrawlConfig {
             crawl_policy: None,
             live_policy_limits: None,
             content_capture: None,
+            resource_discovery: None,
+            resource_discovery_limits: None,
         }
     }
 }
@@ -831,6 +837,12 @@ pub struct PageRecord {
     pub dom_metadata: Option<DomMetadata>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub policy: Option<crate::PagePolicyObservation>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub resource_source: Option<crate::ResourceSourceBatch>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub resource_permission: Option<crate::ResourceTaskPermission>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub resource_response: Option<crate::ResourceResponseFacts>,
 }
 
 impl PageRecord {
@@ -916,11 +928,16 @@ pub struct CrawlReport {
     pub operation: Option<crate::SelectedRecrawlOperation>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub policy_ledger: Option<crate::PolicyLedgerSummary>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub resource_ledger: Option<crate::ResourceLedgerSummary>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "type", rename_all = "snake_case")]
 pub enum CrawlEvent {
+    ResourceProgress {
+        ledger: Box<crate::ResourceLedgerSummary>,
+    },
     PolicyProgress {
         ledger: Box<crate::PolicyLedgerSummary>,
     },

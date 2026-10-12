@@ -28,6 +28,7 @@ use tokio::sync::RwLock;
 use uuid::Uuid;
 mod content;
 mod policy;
+pub(crate) mod resources;
 
 #[derive(Clone)]
 struct AppState {
@@ -56,6 +57,7 @@ struct Job {
     operation: Option<SelectedRecrawlOperation>,
     recrawl_override: RecrawlResumeOverride,
     policy_ledger: Option<open_seo_spider_core::PolicyLedgerSummary>,
+    resource_ledger: Option<open_seo_spider_core::ResourceLedgerSummary>,
 }
 #[derive(Serialize, Deserialize)]
 struct JobManifest {
@@ -90,7 +92,7 @@ impl Job {
             })
             .count();
         let active = matches!(self.status.as_str(), "running" | "pausing" | "cancelling");
-        json!({"id":self.id,"status":self.status,"seed_url":self.config.seed_urls.first(),"config":self.config,"started_at":self.started_at,"finished_at":self.finished_at,"generation":self.generation,"checkpoint":self.checkpoint,"operation":self.operation,"policy_ledger":self.policy_ledger,"resume_available":self.frontier_available && !active,"recrawl_available":self.report.is_some() && !active,"parent_snapshot_available":self.operation.is_some() && self.frontier_available,"stats":{"discovered":self.pages.len()+self.queued+self.in_flight,"queued":self.queued,"discovery_pending":self.discovery_pending,"fetched":self.pages.len(),"failed":failed,"issues":self.issues.len(),"in_flight":self.in_flight},"warnings":self.warnings,"error":self.error,"summary":self.report.as_ref().map(|report| &report.summary)})
+        json!({"id":self.id,"status":self.status,"seed_url":self.config.seed_urls.first(),"config":self.config,"started_at":self.started_at,"finished_at":self.finished_at,"generation":self.generation,"checkpoint":self.checkpoint,"operation":self.operation,"policy_ledger":self.policy_ledger,"resource_ledger":self.resource_ledger,"resume_available":self.frontier_available && !active,"recrawl_available":self.report.is_some() && !active,"parent_snapshot_available":self.operation.is_some() && self.frontier_available,"stats":{"discovered":self.pages.len()+self.queued+self.in_flight,"queued":self.queued,"discovery_pending":self.discovery_pending,"fetched":self.pages.len(),"failed":failed,"issues":self.issues.len(),"in_flight":self.in_flight},"warnings":self.warnings,"error":self.error,"summary":self.report.as_ref().map(|report| &report.summary)})
     }
 }
 #[derive(Serialize)]
@@ -172,6 +174,7 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
         .route("/api/lists/import", post(list_import))
         .route("/api/policy/preview", post(policy_preview))
         .route("/api/content/analyze", post(content_analysis))
+        .route("/api/css/inspect", post(resources::inspect_css))
         .route("/api/crawls/{id}/content", get(content::inventory))
         .route("/api/crawls/{id}/content/document", get(content::document))
         .route("/api/crawls/{id}/content/analyze", post(content::analyze))
@@ -228,6 +231,16 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
         .route("/api/crawls/{id}/policy", get(policy::inventory))
         .route("/api/crawls/{id}/policy.json", get(policy::export_json))
         .route("/api/crawls/{id}/policy.csv", get(policy::export_csv))
+        .route("/api/crawls/{id}/resources", get(resources::inventory))
+        .route(
+            "/api/crawls/{id}/resources/transports",
+            get(resources::transports),
+        )
+        .route(
+            "/api/crawls/{id}/resources.json",
+            get(resources::export_json),
+        )
+        .route("/api/crawls/{id}/resources.csv", get(resources::export_csv))
         .route("/api/crawls/{id}/responses", get(response_inventory))
         .route("/api/crawls/{id}/responses.csv", get(export_responses))
         .route("/api/crawls/{id}/fragments", get(fragment_inventory))
@@ -337,6 +350,7 @@ async fn capabilities() -> Json<Value> {
         "offline_content_analysis":{"endpoint":"/api/content/analyze","website_requests":0,"similarity":"exact_token_shingle_jaccard","readability":"explicit_en_de_heuristic","full_reference_parity":false},
         "saved_content_analysis":{"endpoint":"/api/crawls/{id}/content/analyze","engine":crate::content_cohort::SAVED_CONTENT_ENGINE,"website_requests":0,"explicit_cohort":true,"max_documents":128,"site_wide_coverage":false},
         "native_content_capture":{"opt_in":true,"sources":["raw_http_html","rendered_dom_html"],"body_retention":false,"source_binding":"persisted_consistency","full_reference_parity":false},
+        "native_resource_discovery":{"opt_in":true,"engine":open_seo_spider_core::RESOURCE_DISCOVERY_ENGINE,"durable_sqlite_ledger":true,"paged_occurrences":true,"paged_transport_metadata":true,"streamed_snapshot_exports":true,"entity_body_retention":false,"renderer_supported":false,"full_reference_parity":false},
         "offline_serp":{"path":"/serp","website_requests":0,"csv_import":true,"row_limit":10000},
         "offline_robots":{"path":"/robots","website_requests":0,"engine":"crawler_policy","remote_rules_fetch":false},
         "offline_list_import":{"formats":["txt","csv","xml","xlsx"],"website_requests":0,"max_input_bytes":8388608,"max_rows_per_file":50000,"row_order":true,"duplicates":true,"xlsx_formulas":"reject_or_explicit_cached_string_only","provenance":"declared_client_input"},
@@ -419,8 +433,7 @@ fn config_from_input(mut value: Value) -> anyhow::Result<CrawlConfig> {
     }
     let mut config: CrawlConfig = serde_json::from_value(value)?;
     config.prepare_input_lists()?;
-    Crawler::new(config.clone())?;
-    Ok(config)
+    Ok(Crawler::new(config)?.effective_config().clone())
 }
 async fn create_crawl(
     State(state): State<AppState>,
@@ -450,6 +463,7 @@ async fn create_crawl(
         operation: None,
         recrawl_override: RecrawlResumeOverride::default(),
         policy_ledger: None,
+        resource_ledger: None,
     }));
     save_manifest(&state, &job)
         .await
@@ -563,7 +577,7 @@ async fn recrawl(
         pages, issues:Vec::new(), queued, discovery_pending:0, in_flight:0,
         warnings:vec!["Selected recrawl retains unrelated source observations; current coverage combines inherited and newly captured results.".into()],
         error:None, report:None, control:CrawlControl::new(), generation:1, checkpoint:None,
-        frontier_available:true, operation, recrawl_override:RecrawlResumeOverride::default(), policy_ledger:None,
+        frontier_available:true, operation, recrawl_override:RecrawlResumeOverride::default(), policy_ledger:None, resource_ledger:None,
     }));
     if let Err(error) = save_manifest(&state, &job).await {
         remove_reserved_job_files(&state, id).await;
@@ -899,6 +913,9 @@ async fn launch(state: AppState, job: Arc<RwLock<Job>>) {
                     }
                     CrawlEvent::Warning { message } => guard.warnings.push(message),
                     CrawlEvent::PolicyProgress { ledger } => guard.policy_ledger = Some(*ledger),
+                    CrawlEvent::ResourceProgress { ledger } => {
+                        guard.resource_ledger = Some(*ledger)
+                    }
                     CrawlEvent::Operation { operation } => {
                         target_indices = operation
                             .targets
@@ -967,6 +984,7 @@ async fn launch(state: AppState, job: Arc<RwLock<Job>>) {
                 guard.warnings = report.warnings.clone();
                 guard.operation = report.operation.clone();
                 guard.policy_ledger = report.policy_ledger.clone();
+                guard.resource_ledger = report.resource_ledger.clone();
                 guard.report = Some(report.clone());
                 let path = state.data_dir.join(format!("{id}.json"));
                 if let Err(error) = write_json(path, &report).await {
@@ -1326,6 +1344,7 @@ async fn persist_import(state: &AppState, id: Uuid, mut report: CrawlReport) -> 
 async fn register_report(state: &AppState, id: Uuid, report: CrawlReport) {
     let operation = report.operation.clone();
     let policy_ledger = report.policy_ledger.clone();
+    let resource_ledger = report.resource_ledger.clone();
     let job = Job {
         id,
         config: report.config.clone(),
@@ -1354,6 +1373,7 @@ async fn register_report(state: &AppState, id: Uuid, report: CrawlReport) {
         operation,
         recrawl_override: RecrawlResumeOverride::default(),
         policy_ledger,
+        resource_ledger,
     };
     state
         .jobs
@@ -1444,11 +1464,15 @@ async fn load_reports(state: &AppState) -> anyhow::Result<()> {
         else {
             continue;
         };
-        match tokio::fs::read(path)
-            .await
-            .ok()
-            .and_then(|bytes| serde_json::from_slice::<CrawlReport>(&bytes).ok())
-        {
+        let report = match tokio::fs::read(path).await {
+            Ok(bytes) => {
+                tokio::task::spawn_blocking(move || serde_json::from_slice::<CrawlReport>(&bytes))
+                    .await?
+                    .ok()
+            }
+            Err(_) => None,
+        };
+        match report {
             Some(report) => {
                 // Loading a historical snapshot is read-only. Importing a new
                 // report is a separate operation that may derive and persist
@@ -1467,13 +1491,15 @@ async fn load_reports(state: &AppState) -> anyhow::Result<()> {
         {
             continue;
         }
-        let manifest: JobManifest = match serde_json::from_slice(&tokio::fs::read(path).await?) {
-            Ok(value) => value,
-            Err(error) => {
-                tracing::warn!(path=?path,%error,"Ignoring invalid job manifest");
-                continue;
-            }
-        };
+        let bytes = tokio::fs::read(path).await?;
+        let manifest: JobManifest =
+            match tokio::task::spawn_blocking(move || serde_json::from_slice(&bytes)).await? {
+                Ok(value) => value,
+                Err(error) => {
+                    tracing::warn!(path=?path,%error,"Ignoring invalid job manifest");
+                    continue;
+                }
+            };
         manifests.insert(manifest.id, manifest);
     }
     for path in &paths {
@@ -1487,13 +1513,15 @@ async fn load_reports(state: &AppState) -> anyhow::Result<()> {
         else {
             continue;
         };
-        let inspection = match CrawlStore::inspect(path) {
-            Ok(inspection) => inspection,
-            Err(error) => {
-                tracing::warn!(path=?path,%error,"Ignoring invalid saved frontier");
-                continue;
-            }
-        };
+        let recovery_path = path.clone();
+        let inspection =
+            match tokio::task::spawn_blocking(move || CrawlStore::inspect(recovery_path)).await? {
+                Ok(inspection) => inspection,
+                Err(error) => {
+                    tracing::warn!(path=?path,%error,"Ignoring invalid saved frontier");
+                    continue;
+                }
+            };
         let Some(config) = inspection.config else {
             continue;
         };
@@ -1514,17 +1542,29 @@ async fn load_reports(state: &AppState) -> anyhow::Result<()> {
             }
             continue;
         }
-        let store = CrawlStore::open_read_only(path)?;
-        let mut report = if inspection.checkpoint_valid {
-            store.load_report()?
-        } else {
-            None
-        };
-        if let Some(report) = &mut report {
-            // Rebuild the app projection in memory only; historical JSON bytes
-            // and unknown fields are never rewritten by startup reconciliation.
-            crate::analysis::extend_report(report);
-        }
+        let recovery_path = path.clone();
+        let checkpoint_valid = inspection.checkpoint_valid;
+        // SQLite, typed snapshot parsing and derived analysis are synchronous
+        // recovery work. Keep them off the async startup poll's Windows stack.
+        let (report, pages) = tokio::task::spawn_blocking(move || -> anyhow::Result<_> {
+            let store = CrawlStore::open_read_only(recovery_path)?;
+            let mut report = if checkpoint_valid {
+                store.load_report()?
+            } else {
+                None
+            };
+            if let Some(report) = &mut report {
+                // In-memory projection only; never rewrite historical JSON.
+                crate::analysis::extend_report(report);
+            }
+            let pages = if let Some(report) = &report {
+                report.pages.clone()
+            } else {
+                store.pages()?
+            };
+            Ok((report, pages))
+        })
+        .await??;
         let status = if inspection.checkpoint_valid {
             inspection
                 .checkpoint
@@ -1557,11 +1597,6 @@ async fn load_reports(state: &AppState) -> anyhow::Result<()> {
             || manifest.as_ref().map_or(0, |manifest| manifest.generation),
             |run| run.generation,
         );
-        let pages = if let Some(report) = &report {
-            report.pages.clone()
-        } else {
-            store.pages()?
-        };
         let issues = report
             .as_ref()
             .map(|report| report.issues.clone())
@@ -1598,6 +1633,7 @@ async fn load_reports(state: &AppState) -> anyhow::Result<()> {
             operation: inspection.operation,
             recrawl_override: RecrawlResumeOverride::default(),
             policy_ledger: inspection.policy_ledger,
+            resource_ledger: inspection.resource_ledger,
         };
         state
             .jobs
@@ -1652,6 +1688,7 @@ async fn load_reports(state: &AppState) -> anyhow::Result<()> {
             operation: None,
             recrawl_override: RecrawlResumeOverride::default(),
             policy_ledger: None,
+            resource_ledger: None,
         };
         state
             .jobs

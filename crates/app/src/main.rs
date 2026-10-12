@@ -2,6 +2,7 @@ mod analysis;
 mod content_cohort;
 mod mcp;
 mod policy_export;
+mod resource_export;
 mod server;
 
 use clap::{Parser, Subcommand};
@@ -29,6 +30,32 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Inspect declared dependencies in supplied CSS locally; no website is fetched.
+    InspectCss {
+        input: PathBuf,
+        /// New output file; an existing destination is refused.
+        #[arg(long)]
+        output: Option<PathBuf>,
+    },
+    /// Read native resource decisions or export every decision in one read snapshot.
+    ResourceLedger {
+        store: PathBuf,
+        #[arg(long)]
+        after_sequence: Option<u64>,
+        #[arg(long, default_value_t = 200)]
+        limit: usize,
+        /// Read bounded extracted transport metadata instead of occurrence decisions.
+        #[arg(long)]
+        transports: bool,
+        #[arg(long)]
+        after_url: Option<String>,
+        /// New JSON destination for every occurrence; pagination does not apply.
+        #[arg(long)]
+        json: Option<PathBuf>,
+        /// New CSV destination for every occurrence; pagination does not apply.
+        #[arg(long)]
+        csv: Option<PathBuf>,
+    },
     /// Analyze an explicit cohort of captures in a saved crawl; makes no website requests.
     AnalyzeCrawlContent {
         snapshot: PathBuf,
@@ -148,8 +175,106 @@ async fn main() -> anyhow::Result<()> {
         listen: "127.0.0.1:8787".into(),
         data_dir: "data".into(),
     }) {
-        Command::Serve { listen, data_dir } => server::serve(&listen, data_dir).await?,
+        Command::Serve { listen, data_dir } => Box::pin(server::serve(&listen, data_dir)).await?,
         Command::Mcp { server } => mcp::stdio(&server).await?,
+        Command::InspectCss { input, output } => {
+            let request: server::resources::CssInspectRequest =
+                serde_json::from_slice(&read_bounded(&input, 64 * 1024 * 1024).await?)?;
+            let result = open_seo_spider_core::discover_css(&request.source, &request.limits)?;
+            let bytes = serde_json::to_vec_pretty(&result)?;
+            if let Some(output) = output {
+                let mut file = tokio::fs::OpenOptions::new()
+                    .write(true)
+                    .create_new(true)
+                    .open(output)
+                    .await?;
+                tokio::io::AsyncWriteExt::write_all(&mut file, &bytes).await?;
+            } else {
+                println!("{}", String::from_utf8(bytes)?);
+            }
+        }
+        Command::ResourceLedger {
+            store,
+            after_sequence,
+            limit,
+            transports,
+            after_url,
+            json,
+            csv,
+        } => {
+            anyhow::ensure!((1..=1000).contains(&limit), "limit must be 1..1000");
+            anyhow::ensure!(
+                after_sequence.is_none_or(|v| v <= i64::MAX as u64),
+                "after_sequence exceeds SQLite integer range"
+            );
+            anyhow::ensure!(
+                !transports || after_sequence.is_none(),
+                "--transports uses --after-url, not --after-sequence"
+            );
+            anyhow::ensure!(
+                transports || after_url.is_none(),
+                "--after-url requires --transports"
+            );
+            anyhow::ensure!(
+                after_url
+                    .as_ref()
+                    .is_none_or(|v| !v.is_empty() && v.len() <= 65536),
+                "Invalid after_url length"
+            );
+            let exporting = json.is_some() || csv.is_some();
+            anyhow::ensure!(
+                !exporting || (!transports && after_sequence.is_none() && after_url.is_none()),
+                "Complete occurrence exports cannot be combined with transport mode or cursors"
+            );
+            let source = tokio::fs::canonicalize(&store).await?;
+            let mut destinations = std::collections::HashSet::new();
+            for path in json.iter().chain(csv.iter()) {
+                let resolved = canonical_destination(path).await?;
+                anyhow::ensure!(
+                    resolved != source,
+                    "Resource export cannot overwrite its SQLite source"
+                );
+                anyhow::ensure!(
+                    destinations.insert(destination_identity(&resolved)),
+                    "Resource JSON and CSV destinations must differ"
+                );
+                anyhow::ensure!(
+                    !tokio::fs::try_exists(path).await?,
+                    "Resource export destinations must be new files"
+                );
+            }
+            tokio::task::spawn_blocking(move || -> anyhow::Result<()> {
+                let database = open_seo_spider_core::CrawlStore::open_read_only(store)?;
+                anyhow::ensure!(
+                    !exporting || database.resource_ledger_summary()?.is_some(),
+                    "This database has no native resource ledger"
+                );
+                for (path, format) in json
+                    .iter()
+                    .map(|p| (p, resource_export::Format::Json))
+                    .chain(csv.iter().map(|p| (p, resource_export::Format::Csv)))
+                {
+                    let file = std::fs::OpenOptions::new()
+                        .write(true)
+                        .create_new(true)
+                        .open(path)?;
+                    let mut writer = std::io::BufWriter::new(file);
+                    resource_export::write_snapshot(&database, format, &mut writer, |_, _| Ok(()))?;
+                }
+                if !exporting {
+                    let page = if transports {
+                        serde_json::to_value(
+                            database.resource_transports(after_url.as_deref(), limit)?,
+                        )?
+                    } else {
+                        serde_json::to_value(database.resource_occurrences(after_sequence, limit)?)?
+                    };
+                    println!("{}", serde_json::to_string_pretty(&page)?);
+                }
+                Ok(())
+            })
+            .await??;
+        }
         Command::PolicyLedger {
             store,
             after_sequence,

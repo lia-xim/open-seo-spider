@@ -50,6 +50,8 @@ pub struct CrawlCheckpoint {
     pub discovery_complete: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub policy_ledger: Option<crate::PolicyLedgerSummary>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub resource_ledger: Option<crate::ResourceLedgerSummary>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -68,6 +70,8 @@ pub struct CrawlStoreInspection {
     pub operation: Option<crate::SelectedRecrawlOperation>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub policy_ledger: Option<crate::PolicyLedgerSummary>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub resource_ledger: Option<crate::ResourceLedgerSummary>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

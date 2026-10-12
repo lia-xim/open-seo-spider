@@ -1,0 +1,14 @@
+{
+  "observed_at": "2026-10-12T18:39:44.423506Z",
+  "result": "FAIL",
+  "source_debug_sha256": "1fc72a7772c2c8534fd5145feaf2e45384260b5fbefc61b1435417eea77a8c93",
+  "command": "node scripts/content-capture-e2e.mjs",
+  "reproductions": 3,
+  "phase": "cold startup after saved native raw/DOM captures and selected500 child; deliberate invalid SQLite is ignored as expected",
+  "exit_code": 3221225725,
+  "stderr": "thread 'main' (57028) has overflowed its stack",
+  "retained_owned_fixture": "C:/Users/matth/AppData/Local/Temp/open-seo-spider-content-capture-Ac1JUE",
+  "user_runtime_touched": false,
+  "diagnosis": "Synchronous selected-store recovery passes on a standalone 512KiB thread but exhausts remaining stack under async main/serve/load_reports on Windows. Production repair moves synchronous parse/SQLite/analysis to spawn_blocking; repair gates are separate and pending.",
+  "policy": "Retain this pre-repair failure when later gates pass; do not treat earlier feature/UI PASS as successful cold recovery."
+}

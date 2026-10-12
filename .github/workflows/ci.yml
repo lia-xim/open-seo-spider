@@ -39,6 +39,7 @@ jobs:
       - run: node scripts/crawl-policy-e2e.mjs
       - run: node scripts/content-analysis-e2e.mjs
       - run: node scripts/content-capture-e2e.mjs
+      - run: node scripts/resource-discovery-e2e.mjs
       - run: npm ci --ignore-scripts
         working-directory: scripts
       - run: node scripts/mcp-e2e.mjs
@@ -79,6 +80,8 @@ jobs:
       - run: node web/verification/ui-selected-recrawl-smoke.cjs
       - run: node web/verification/ui-policy-smoke.cjs
       - run: node web/verification/ui-content-smoke.cjs
+      - run: node web/verification/ui-resource-discovery-smoke.cjs
+      - run: node web/verification/ui-resource-ledger-smoke.cjs
       - run: node scripts/update-feature-todo.mjs --check
       - run: node --test web/verification/serp-state-race.test.cjs
       - run: node --test web/verification/robots-input-state.test.cjs
@@ -107,3 +110,4 @@ jobs:
           node web/verification/ui-selected-recrawl-live.cjs
           node web/verification/ui-policy-live.cjs
           node web/verification/ui-content-live.cjs
+          SPIDER_APP_URL=http://127.0.0.1:8787 node web/verification/ui-resource-discovery-live.cjs

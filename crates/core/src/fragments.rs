@@ -272,6 +272,7 @@ mod tests {
         CrawlReport {
             operation: None,
             policy_ledger: None,
+            resource_ledger: None,
             config: CrawlConfig {
                 validate_fragments: true,
                 ..Default::default()

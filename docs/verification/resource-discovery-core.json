@@ -1,0 +1,188 @@
+{
+  "engine": "open-seo-spider/resource-discovery-v1",
+  "recorded_at": "2026-10-12T18:55:00.474356+00:00",
+  "scope": "original Rust implementation; owned local HTTP/CSS/HTML fixtures; no vendor parity attestation",
+  "workspace_before_final_retention_delta": {
+    "command": "cargo test --workspace --locked",
+    "passed": 359,
+    "ignored": 4
+  },
+  "post_delta_native": {
+    "command": "cargo test --locked -p open-seo-spider-core --test resource_discovery_fixtures",
+    "passed": 15,
+    "failed": 0,
+    "tests": [
+      "native_contexts_inventory_all_resource_families_and_do_not_confuse_response_mime",
+      "native_store_fetch_four_products_preserve_declared_graph_and_optional_report_inclusion",
+      "native_late_navigation_reuses_one_http_and_preserves_original_retained_capture",
+      "native_late_store_true_materializes_known_metadata_without_resurrecting_hidden_text",
+      "native_list_navigation_off_keeps_resources_and_css_final_url_base",
+      "native_invalid_inline_css_does_not_poison_independent_html_or_css_units",
+      "native_store_false_fetch_budget_above_500_resumes_without_refetching_committed_sources",
+      "native_source_budget_rolls_back_all_decisions_and_leaves_the_source_pending",
+      "native_resource_scope_and_robots_preserve_original_credential_origins",
+      "native_pause_drains_unretained_transport_and_selected_recrawl_never_expands",
+      "native_policy_aliases_and_independent_grants_preserve_both_ledgers_and_check_only_ceiling",
+      "native_paged_snapshots_and_recovery_reject_tampered_rows_transports_and_forged_inherited_permissions",
+      "native_total_ledger_budget_rolls_back_source_frontier_projection_and_dependent_admissions_atomically",
+      "native_streamed_resource_snapshot_stays_pinned_while_another_connection_changes_rows_and_generation",
+      "native_selected_resource_reads_rebuild_inherited_permissions_from_immutable_parent_before_emitting"
+    ]
+  },
+  "css_parser": {
+    "passed": 15,
+    "fixture_cases": 15
+  },
+  "chrome": {
+    "command": "cargo test --locked -p open-seo-spider-core --test content_capture_fixtures live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness -- --ignored",
+    "passed": 1,
+    "worker": "http://127.0.0.1:8790",
+    "scope": "existing raw/rendered and selected-freshness integration; resource+renderer remains rejected pre-HTTP"
+  },
+  "clippy": "PASS workspace/all-targets --locked -D warnings",
+  "fmt": "PASS cargo fmt --all -- --check",
+  "debug": {
+    "command": "cargo build --locked -p open-seo-spider",
+    "status": "PASS",
+    "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/outputs/open-seo-spider/target/debug/open-seo-spider.exe",
+    "sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724"
+  },
+  "source_hashes": [
+    {
+      "path": "crates/core/src/resource_policy.rs",
+      "sha256": "988662dcfc99e0cbbe55eea9e89a5d163c695135af8a44a430ed62a088377880"
+    },
+    {
+      "path": "crates/core/src/resource_html.rs",
+      "sha256": "536b347b17ac79e4cca36483046242a5a4d5b87bc48e9348a9f383760c0c1f2f"
+    },
+    {
+      "path": "crates/core/src/resource_capture.rs",
+      "sha256": "717640e9f82e4c8e6c1e9bd8d710de5ac6b28d7743c1b2d2568602f1e618fe2d"
+    },
+    {
+      "path": "crates/core/src/resource_ledger.rs",
+      "sha256": "4719569df922f4f70f3e0d7a246348ac81491319b7fbe213650fc94e1a05f133"
+    },
+    {
+      "path": "crates/core/src/css_discovery.rs",
+      "sha256": "b458744ceb45a335590beacf4687a728e4d30018e8ffceabfe6441ab7d3136e6"
+    },
+    {
+      "path": "crates/core/src/crawler.rs",
+      "sha256": "e1dd5d7b34fd9ab5e6f803bdf21e6cb7d2de92ef89c0449fcd444e0d0454df84"
+    },
+    {
+      "path": "crates/core/src/store.rs",
+      "sha256": "993ce43b91cba94fa5c4e2c2643e0896d199aab6ff85494b4f3a92e968c40fb1"
+    },
+    {
+      "path": "crates/core/tests/resource_discovery_fixtures.rs",
+      "sha256": "645e24ffd701bc5df5fedab186dc080ce9928da96d61479de67b20943e211828"
+    },
+    {
+      "path": "crates/core/tests/content_capture_fixtures.rs",
+      "sha256": "2c8d69ca1735a871b313e2ee7fa7dd0ad6590984ef848e0fca973ddc126ab4f7"
+    },
+    {
+      "path": "crates/app/src/main.rs",
+      "sha256": "a6c9d6b3dd97f2085593fe400c198edcccf2d1a51b0731d2b66acbd9b3d97929"
+    },
+    {
+      "path": "crates/app/src/server.rs",
+      "sha256": "de9780c0b256d0ede4b61fb2b3be91181f6d845695ba6fba5e3368748d516462"
+    }
+  ],
+  "limitations": [
+    "Native declaration profile is not browser load/cascade validation or vendor parity",
+    "CSS inherited environment encoding is not propagated; unmarked non-ASCII fallback is Unknown",
+    "Private transport projection retains bounded extracted metadata only, no body/custom extraction/PDF text/content capture text",
+    "completed_transports counts page/resource frontier fetch units; not every redirect hop or discovery protocol request",
+    "Full paged integrity verification prioritizes correctness and currently rescans the saved ledger"
+  ],
+  "final_delta": "Selected resource paged/stream readers reconstruct immutable parent plan before same-transaction resource verification. Final 362-test workspace gate passed after App startup repair and bounded Core recovery regression; 15 native resource fixtures passed within the same gate.",
+  "final_workspace": {
+    "command": "cargo test --workspace --locked",
+    "session_id": 65216,
+    "passed": 362,
+    "failed": 0,
+    "ignored": 4,
+    "counts": {
+      "app": 44,
+      "core": 229,
+      "capture": 17,
+      "control": 6,
+      "crawl": 23,
+      "dom": 5,
+      "policy": 13,
+      "recrawl": 6,
+      "resource_discovery": 15,
+      "pdf_image_resources": 4
+    },
+    "scope": "final frozen B9 source, including App readonly startup repair and new 512KiB Core recovery regression"
+  },
+  "startup_regression": {
+    "reproduced_source_sha256": "1fc72a7772c2c8534fd5145feaf2e45384260b5fbefc61b1435417eea77a8c93",
+    "dataset": "C:/Users/matth/AppData/Local/Temp/open-seo-spider-content-capture-Ac1JUE",
+    "diagnosis": "Exact selected/renderer stores inspect/load_report/run_plan synchronously fit512KiB; selected inspection aborts256KiB. CPU serde/SQLite verification called under main/serve/load_reports asynchronous frames exhausted remaining main stack.",
+    "repair": "Root moved persisted serde/SQLite/recovery analysis to spawn_blocking and boxed Serve future; no process stack-size increase, no core model/JSON changes.",
+    "core_test": "readonly_saved_raw_rendered_and_selected_capture_recovery_fits_a_bounded_blocking_thread",
+    "core_test_passed": 1,
+    "app_tests_passed": 44,
+    "clippy": "PASS workspace/all-targets --locked -D warnings",
+    "fmt": "PASS",
+    "debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+    "actual_restart_replay": {
+      "status": "PASS",
+      "basis": "reported by Root owner of native replay; same final binary hash",
+      "dataset": "C:/Users/matth/AppData/Local/Temp/open-seo-spider-content-capture-Ac1JUE",
+      "completed_jobs": 6,
+      "expected_invalid_sqlite_ignored": true,
+      "stack_overflow": false,
+      "port": 18807
+    },
+    "actual_capture_regression": {
+      "status": "PASS",
+      "groups": 8,
+      "reported_at": "2026-10-12T18:50:43Z",
+      "basis": "Root-owned content-capture-e2e cold restart on final binary"
+    },
+    "actual_resource_api": {
+      "status": "PASS",
+      "groups": 9,
+      "reported_at": "2026-10-12T18:50:49Z",
+      "basis": "Root-owned resource native API gate on final binary"
+    },
+    "actual_mcp": {
+      "status": "PASS",
+      "tools": 22,
+      "transports": [
+        "stdio",
+        "HTTP"
+      ],
+      "basis": "Root-owned SDK proof on final binary"
+    },
+    "core_test_command": "cargo test --locked -p open-seo-spider-core --test content_capture_fixtures readonly_saved_raw_rendered_and_selected_capture_recovery_fits_a_bounded_blocking_thread",
+    "stack_budget_bytes": 524288,
+    "stack_budget_scope": "Owned raw, raw+mock-rendered and selected SQLite snapshots are read only after fixture HTTP services close; bounded blocking thread regression, no universal maximum-size codec claim."
+  },
+  "workspace_before_startup_repair": {
+    "command": "cargo test --workspace --locked",
+    "passed": 361,
+    "failed": 0,
+    "ignored": 4,
+    "counts": {
+      "app": 44,
+      "core": 229,
+      "capture": 16,
+      "control": 6,
+      "crawl": 23,
+      "dom": 5,
+      "policy": 13,
+      "recrawl": 6,
+      "resource_discovery": 15,
+      "pdf_image_resources": 4
+    }
+  },
+  "source_ownership_note": "Core production/tests owned by rust_core except catalog-authored CSS; App main/server repair owned by Root. Source hashes identify frozen local evidence, not external attestation."
+}

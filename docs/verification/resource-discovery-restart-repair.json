@@ -1,0 +1,26 @@
+{
+  "observed_at": "2026-10-12T18:50:43.296Z",
+  "result": "PASS",
+  "debug_sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+  "previous_failure": "docs/verification/resource-discovery-restart-failure.json",
+  "change": "Read-only saved JSON parsing, SQLite inspection/recovery and derived in-memory analysis run in spawn_blocking; the Serve future is heap pinned. No global stack limit increase or historical data rewrite.",
+  "exact_failed_fixture_replay": {
+    "fixture": "C:/Users/matth/AppData/Local/Temp/open-seo-spider-content-capture-Ac1JUE",
+    "isolated_url": "http://127.0.0.1:18807",
+    "health": true,
+    "jobs_loaded": 6,
+    "completed_jobs": 6,
+    "invalid_sqlite": "ignored with expected warning",
+    "stack_overflow": false,
+    "stopped_owned_session": 62803
+  },
+  "fresh_capture_restart_regression": {
+    "command": "node scripts/content-capture-e2e.mjs",
+    "groups": 8,
+    "result": "PASS",
+    "artifact": "docs/verification/b9-legacy-content-capture.json",
+    "scope": "Raw and renderer-protocol captures, selected500 freshness, exact parent/unselected retention, invalid SQLite with declared unknown generation, native checkpoint recovery and no website refetch during read/restart. Actual Chrome is a separate gate."
+  },
+  "user_runtime_touched": false,
+  "full_vendor_parity": "NOT_PROVEN"
+}

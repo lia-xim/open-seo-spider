@@ -7,6 +7,7 @@ mod content_capture;
 mod control;
 mod crawl_policy;
 mod crawler;
+mod css_discovery;
 mod dom_facts;
 mod export;
 mod extract;
@@ -21,6 +22,10 @@ mod pdf;
 mod policy_ledger;
 mod recrawl;
 mod renderer;
+mod resource_capture;
+mod resource_html;
+mod resource_ledger;
+mod resource_policy;
 mod response_observations;
 mod robots;
 mod robots_simulation;
@@ -44,9 +49,10 @@ pub use control::{
 };
 pub use crawl_policy::*;
 pub use crawler::Crawler;
+pub use css_discovery::*;
 pub use dom_facts::audit_dom_metadata;
 pub use export::{
-    compare_crawls, export_browser_cookies_csv, export_custom_extractions_csv,
+    compare_crawls, csv_text, export_browser_cookies_csv, export_custom_extractions_csv,
     export_custom_javascript_csv, export_dom_observations_csv, export_fragments_csv,
     export_image_resources_csv, export_input_occurrences_csv, export_issues_csv, export_links_csv,
     export_pages_csv, export_pdf_csv, export_sitemap_xml,
@@ -75,6 +81,8 @@ pub use recrawl::{
     RecrawlTargetState, RunPlan, SELECTED_RECRAWL_COVERAGE, SELECTED_RECRAWL_ENGINE,
     SelectedRecrawlOperation, SelectedRecrawlParent, SelectedRecrawlPlan, prepare_selected_recrawl,
 };
+pub use resource_ledger::*;
+pub use resource_policy::*;
 pub use response_observations::{
     ResponseObservation, export_response_observations_csv, response_observations,
 };

@@ -27,16 +27,17 @@ const fixture=http.createServer((request,response)=>{
 // An owned renderer protocol fixture, explicitly not an actual Chromium proof.
 const worker=http.createServer(async(request,response)=>{let body='';for await(const chunk of request)body+=chunk;const input=JSON.parse(body);response.setHeader('content-type','application/json');response.end(JSON.stringify({html:'<html lang="de"><main>Gerenderter eigener Beispieltext mit einer getrennten Sprache.</main></html>',final_url:input.url,status:200,headers:{'content-type':'text/html; charset=utf-8'},rendered_at:'2026-10-12T12:00:00Z',browser_version:'owned-protocol-fixture',console_errors:[],network_requests:[]}));});
 await new Promise(resolve=>fixture.listen(19097,'127.0.0.1',resolve));await new Promise(resolve=>worker.listen(19098,'127.0.0.1',resolve));
-let server;const checks=[];const hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
+let server,serverStderr='',passed=false;const checks=[];const hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
+function launch(){const process=spawn(binary,['serve','--listen','127.0.0.1:18797','--data-dir',data],{cwd:root,windowsHide:true,stdio:['ignore','ignore','pipe']});process.stderr.on('data',chunk=>{serverStderr+=chunk;});return process;}
 const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
-async function until(fn){for(let i=0;i<600;i++){const value=await fn();if(value)return value;await wait(25);}throw Error('Native content acceptance timeout');}
+async function until(fn){for(let i=0;i<600;i++){if(server?.exitCode!=null)throw Error(`Native content server exited (${server.exitCode}): ${serverStderr}`);const value=await fn();if(value)return value;await wait(25);}throw Error(`Native content acceptance timeout: ${serverStderr}`);}
 async function request(route,body){return fetch(api+route,body===undefined?undefined:{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});}
 async function get(route,body){const response=await request(route,body);assert.equal(response.status,200,await response.clone().text());return response.json();}
 async function completed(id){return until(async()=>{const result=await get('/api/crawls/'+id);if(result.status==='failed')throw Error(result.error);return ['completed','limited','paused'].includes(result.status)&&result;});}
 async function start(config){const result=await get('/api/crawls',config);await completed(result.id);return result.id;}
-async function execute(args){return new Promise((resolve,reject)=>{const child=spawn(binary,args,{cwd:root,windowsHide:true,stdio:['ignore','pipe','pipe']});let stdout='',stderr='';child.stdout.on('data',chunk=>stdout+=chunk);child.stderr.on('data',chunk=>stderr+=chunk);child.on('error',reject);child.on('exit',code=>resolve({code,stdout,stderr}));});}
+async function execute(args){return new Promise((resolve,reject)=>{const child=spawn(binary,args,{cwd:root,windowsHide:true,stdio:['ignore','pipe','pipe']});let stdout='',stderr='';child.stdout.on('data',chunk=>stdout+=chunk);child.stderr.on('data',chunk=>stderr+=chunk);child.on('error',reject);child.on('close',code=>resolve({code,stdout,stderr}));});}
 try{
-  server=spawn(binary,['serve','--listen','127.0.0.1:18797','--data-dir',data],{cwd:root,windowsHide:true,stdio:'ignore'});
+  server=launch();
   await until(async()=>{try{return(await fetch(api+'/healthz')).ok;}catch{return false;}});
   const base={crawl_links:false,discover_sitemaps:false,obey_robots:false,delay_ms:0,concurrency:2};
   const beforeInvalid=hits.length;
@@ -75,16 +76,16 @@ try{
   const corruptId='11111111-1111-4111-8111-111111111111',corruptJSON=Buffer.from(JSON.stringify(disabledReport,null,2)+'\n');
   const stopped=new Promise(resolve=>server.once('exit',resolve));server.kill();await stopped;
   await writeFile(path.join(data,corruptId+'.json'),corruptJSON);await writeFile(path.join(data,corruptId+'.sqlite'),'owned deliberately invalid SQLite');
-  server=spawn(binary,['serve','--listen','127.0.0.1:18797','--data-dir',data],{cwd:root,windowsHide:true,stdio:'ignore'});
+  server=launch();
   await until(async()=>{try{return(await fetch(api+'/healthz')).ok;}catch{return false;}});
   const beforeRecoveryRead=hits.length,declared=await get(`/api/crawls/${corruptId}/content`);
   assert.equal(declared.snapshot.origin,'declared_imported_report');assert.equal(declared.snapshot.generation,null);assert.equal(hits.length,beforeRecoveryRead);assert.deepEqual(await readFile(path.join(data,corruptId+'.json')),corruptJSON);
   const recoveredNative=await get(`/api/crawls/${id}/content`);assert.equal(recoveredNative.snapshot.origin,'native_saved_report');assert.equal(recoveredNative.snapshot.generation,1);
   checks.push('Read-only restart keeps valid native checkpoint binding; retained JSON beside malformed SQLite stays declared with unknown generation and unchanged bytes');
   const evidence={tested_at:new Date().toISOString(),platform:process.platform,result:'PASS',checks,website_targets:'owned localhost only',analysis_website_requests:0,actual_chromium:'separate explicit Core/UI gate',full_vendor_parity:'NOT_PROVEN'};
-  await mkdir(path.join(root,'docs/verification'),{recursive:true});await writeFile(process.env.SPIDER_EVIDENCE||path.join(root,'docs/verification/content-capture-e2e.json'),JSON.stringify(evidence,null,2)+'\n');console.log(JSON.stringify(evidence,null,2));
+  await mkdir(path.join(root,'docs/verification'),{recursive:true});await writeFile(process.env.SPIDER_EVIDENCE||path.join(root,'docs/verification/content-capture-e2e.json'),JSON.stringify(evidence,null,2)+'\n');console.log(JSON.stringify(evidence,null,2));passed=true;
 } finally {
   if(server?.exitCode===null){const stopped=new Promise(resolve=>server.once('exit',resolve));server.kill();await stopped;}
   fixture.closeAllConnections();worker.closeAllConnections();await new Promise(resolve=>fixture.close(resolve));await new Promise(resolve=>worker.close(resolve));
-  const owned=path.resolve(data);assert.equal(path.dirname(owned),path.resolve(os.tmpdir()));assert.ok(path.basename(owned).startsWith('open-seo-spider-content-capture-'));await rm(owned,{recursive:true,force:true});
+  const owned=path.resolve(data);assert.equal(path.dirname(owned),path.resolve(os.tmpdir()));assert.ok(path.basename(owned).startsWith('open-seo-spider-content-capture-'));if(!passed&&process.env.SPIDER_KEEP_FAILED_FIXTURE==='1')console.error('Retained owned failed fixture: '+owned);else await rm(owned,{recursive:true,force:true});
 }

@@ -11,8 +11,8 @@ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const binary=process.env.SPIDER_BINARY||path.join(root,'target','debug',`open-seo-spider${process.platform==='win32'?'.exe':''}`);
 const data=await mkdtemp(path.join(os.tmpdir(),'open-seo-spider-mcp-'));
 const api='http://127.0.0.1:18788';
-let revision=0;
-const fixture=http.createServer((request,response)=>{if(request.url==='/robots.txt'){response.end('User-agent: *\nAllow: /');return;}response.setHeader('content-type','text/html');response.end(`<html lang="de"><title>MCP ${request.url} revision ${revision}</title><body><h1>Fixture</h1></body></html>`);});
+let revision=0,websiteRequests=0;
+const fixture=http.createServer((request,response)=>{websiteRequests++;if(request.url==='/robots.txt'){response.end('User-agent: *\nAllow: /');return;}response.setHeader('content-type','text/html');response.end(`<html lang="de"><title>MCP ${request.url} revision ${revision}</title><body><h1>Fixture</h1></body></html>`);});
 await new Promise(resolve=>fixture.listen(19089,'127.0.0.1',resolve));
 const server=spawn(binary,['serve','--listen','127.0.0.1:18788','--data-dir',data],{cwd:root,windowsHide:true,stdio:'ignore'});
 let client;
@@ -26,7 +26,7 @@ try{
     client=new Client({name:'open-seo-spider-acceptance',version:'0.1.0'});
     const transport=kind==='stdio'?new StdioClientTransport({command:binary,args:['mcp','--server',api],cwd:root,stderr:'pipe'}):new StreamableHTTPClientTransport(new URL(api+'/mcp'));
     await client.connect(transport);
-    const inventory=await client.listTools();assert.equal(inventory.tools.length,19);
+    const inventory=await client.listTools();assert.equal(inventory.tools.length,22);
     assert.ok(inventory.tools.some(tool=>tool.name==='spider_pause'&&tool.annotations.readOnlyHint===false));
     assert.ok(inventory.tools.some(tool=>tool.name==='spider_recrawl'&&tool.annotations.readOnlyHint===false&&tool.annotations.openWorldHint===true));
     const caps=await call('spider_capabilities');assert.equal(caps.crawl.url_limit,null);
@@ -54,6 +54,18 @@ try{
     assert.equal((await call('spider_project',{id:started.id})).pages.length,2);
     assert.equal((await call('spider_analysis',{id:started.id})).graph.nodes.length,2);
     assert.equal((await call('spider_compare',{before:started.id,after:started.id})).changes.length,0);
+    const beforeRead=websiteRequests;
+    for(const name of ['spider_resources','spider_resource_transports']){
+      assert.ok(inventory.tools.some(tool=>tool.name===name&&tool.annotations.readOnlyHint===true&&tool.annotations.openWorldHint===false));
+      const rows=await call(name,{id:started.id,limit:1});assert.equal(rows.ledger_available,false);assert.equal(rows.website_requests,0);
+    }
+    const css=await call('spider_inspect_css',{input:{source:{css_text:'a{background:url("owned.png")}',base_url:'http://127.0.0.1:19089/css/main',source_url:'http://127.0.0.1:19089/css/main',source_revision:'mcp-supplied-css',inline:false}}});
+    assert.equal(css.website_requests,0);assert.equal(css.dependencies[0].resolved_url,'http://127.0.0.1:19089/css/owned.png');assert.equal(websiteRequests,beforeRead);
+    assert.equal((await client.callTool({name:'spider_resources',arguments:{id:started.id,limit:'1'}})).isError,true);
+    assert.equal((await client.callTool({name:'spider_resource_transports',arguments:{id:started.id,after_url:1}})).isError,true);
+    await assert.rejects(client.callTool({name:'spider_resources',arguments:{id:started.id,after_url:'https://example.test/'}}),/Unexpected or missing tool argument/);
+    await assert.rejects(client.callTool({name:'spider_inspect_css',arguments:{input:{},options:{}}}),/Unexpected or missing tool argument/);
+    assert.equal(websiteRequests,beforeRead);
     assert((await call('spider_list_crawls')).crawls.length>0);
     const missing=await client.callTool({name:'spider_status',arguments:{id:'00000000-0000-0000-0000-000000000000'}});assert.equal(missing.isError,true);
     const latePause=await client.callTool({name:'spider_pause',arguments:{id:started.id}});assert.equal(latePause.isError,true);
@@ -66,7 +78,14 @@ try{
     await until(async()=>{const status=await call('spider_status',{id:policyJob.id});if(status.status==='failed')throw Error(status.error);return status.status==='completed';});
     const firstPolicyPage=await call('spider_policy',{id:policyJob.id,limit:1});assert.equal(firstPolicyPage.enabled,true);assert.equal(firstPolicyPage.ledger_available,true);assert.equal(firstPolicyPage.observations.length,1);assert.equal(firstPolicyPage.has_more,true);
     const secondPolicyPage=await call('spider_policy',{id:policyJob.id,after_sequence:firstPolicyPage.next_after_sequence,limit:1});assert.equal(secondPolicyPage.observations.length,1);assert.equal(secondPolicyPage.has_more,false);assert.notEqual(secondPolicyPage.observations[0].sequence,firstPolicyPage.observations[0].sequence);
-    checks.push(`${kind}: SDK initialize, 19 tools, native saved-source inventory/document/cohort without website fetching, supplied-text analysis with unknown missing row, zero-HTTP policy preview, native policy cursor without repeated rows, disabled-policy evidence, crawl/read/analysis/compare, completed-pause conflict, derived selected recrawl with fresh selected row and exact retained parent/unselected rows`);
+    const resourceJob=await call('spider_start_crawl',{config:{seed_urls:['http://127.0.0.1:19089/a?owned=1&next=%23','http://127.0.0.1:19089/b'],obey_robots:false,crawl_links:false,discover_sitemaps:false,delay_ms:0,resource_discovery:{}}});
+    await until(async()=>{const status=await call('spider_status',{id:resourceJob.id});if(status.status==='failed')throw Error(status.error);return status.status==='completed';});
+    const resourceBeforeRead=websiteRequests;
+    const firstResource=await call('spider_resources',{id:resourceJob.id,limit:1});assert.equal(firstResource.observations.length,1);assert.equal(firstResource.has_more,true);
+    const secondResource=await call('spider_resources',{id:resourceJob.id,limit:1,after_sequence:firstResource.next_after_sequence});assert.equal(secondResource.observations.length,1);assert.equal(secondResource.has_more,false);assert.notEqual(secondResource.observations[0].sequence,firstResource.observations[0].sequence);
+    const firstTransport=await call('spider_resource_transports',{id:resourceJob.id,limit:1});assert.equal(firstTransport.transports.length,1);assert.match(firstTransport.next_after_url,/\?owned=1&next=%23$/);
+    const nextTransport=await call('spider_resource_transports',{id:resourceJob.id,limit:1,after_url:firstTransport.next_after_url});assert.equal(nextTransport.transports.length,1);assert.equal(nextTransport.has_more,false);assert.equal(websiteRequests,resourceBeforeRead);
+    checks.push(`${kind}: SDK initialize, 22 tools; bounded native resource occurrences and transport metadata with encoded URL cursor, zero-HTTP supplied CSS inspection and strict resource argument types; native saved-source inventory/document/cohort, supplied-text analysis, zero-HTTP policy preview, native policy cursor, disabled ledgers, crawl/read/analysis/compare, completed-pause conflict, derived selected recrawl preserving parent/unselected rows`);
     await client.close();client=null;
   }
   const evidence={tested_at:new Date().toISOString(),sdk:'@modelcontextprotocol/client 2.3.1',platform:process.platform,result:'PASS',checks};

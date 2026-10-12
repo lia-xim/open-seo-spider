@@ -1,0 +1,222 @@
+{
+  "recorded_at": "2026-10-12T18:55:35.738Z",
+  "result": "PASS",
+  "scope": "Bounded independent B9 native resource foundation; full feature/type/navigation matrix remains PARTIAL and vendor parity NOT_PROVEN.",
+  "debug": {
+    "sha256": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724"
+  },
+  "workspace": {
+    "command": "cargo test --workspace --locked",
+    "session_id": 65216,
+    "passed": 362,
+    "failed": 0,
+    "ignored": 4,
+    "counts": {
+      "app": 44,
+      "core": 229,
+      "capture": 17,
+      "control": 6,
+      "crawl": 23,
+      "dom": 5,
+      "policy": 13,
+      "recrawl": 6,
+      "resource_discovery": 15,
+      "pdf_image_resources": 4
+    },
+    "scope": "final frozen B9 source, including App readonly startup repair and new 512KiB Core recovery regression"
+  },
+  "native_resource_fixtures": {
+    "command": "cargo test --locked -p open-seo-spider-core --test resource_discovery_fixtures",
+    "passed": 15,
+    "failed": 0,
+    "tests": [
+      "native_contexts_inventory_all_resource_families_and_do_not_confuse_response_mime",
+      "native_store_fetch_four_products_preserve_declared_graph_and_optional_report_inclusion",
+      "native_late_navigation_reuses_one_http_and_preserves_original_retained_capture",
+      "native_late_store_true_materializes_known_metadata_without_resurrecting_hidden_text",
+      "native_list_navigation_off_keeps_resources_and_css_final_url_base",
+      "native_invalid_inline_css_does_not_poison_independent_html_or_css_units",
+      "native_store_false_fetch_budget_above_500_resumes_without_refetching_committed_sources",
+      "native_source_budget_rolls_back_all_decisions_and_leaves_the_source_pending",
+      "native_resource_scope_and_robots_preserve_original_credential_origins",
+      "native_pause_drains_unretained_transport_and_selected_recrawl_never_expands",
+      "native_policy_aliases_and_independent_grants_preserve_both_ledgers_and_check_only_ceiling",
+      "native_paged_snapshots_and_recovery_reject_tampered_rows_transports_and_forged_inherited_permissions",
+      "native_total_ledger_budget_rolls_back_source_frontier_projection_and_dependent_admissions_atomically",
+      "native_streamed_resource_snapshot_stays_pinned_while_another_connection_changes_rows_and_generation",
+      "native_selected_resource_reads_rebuild_inherited_permissions_from_immutable_parent_before_emitting"
+    ]
+  },
+  "css_parser": {
+    "passed": 15,
+    "fixture_cases": 15
+  },
+  "chrome": {
+    "command": "cargo test --locked -p open-seo-spider-core --test content_capture_fixtures live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness -- --ignored",
+    "passed": 1,
+    "worker": "http://127.0.0.1:8790",
+    "scope": "existing raw/rendered and selected-freshness integration; resource+renderer remains rejected pre-HTTP"
+  },
+  "fmt": "PASS cargo fmt --all -- --check",
+  "clippy": "PASS workspace/all-targets --locked -D warnings",
+  "native_api_cli": {
+    "result": "PASS",
+    "groups": 9,
+    "path": "docs/verification/resource-discovery-e2e.json",
+    "tamper_controls": 4,
+    "distinct_url_transport_control": 506
+  },
+  "mcp": {
+    "result": "PASS",
+    "tools": 22,
+    "transports": 2,
+    "path": "docs/verification/mcp-e2e.json"
+  },
+  "ui": {
+    "result": "PASS",
+    "actual_checks": 65,
+    "gates": [
+      {
+        "name": "resource-discovery",
+        "result": "PASS"
+      },
+      {
+        "name": "content",
+        "result": "PASS"
+      },
+      {
+        "name": "policy",
+        "result": "PASS"
+      },
+      {
+        "name": "selected-recrawl",
+        "result": "PASS"
+      },
+      {
+        "name": "crawl-control",
+        "result": "PASS"
+      },
+      {
+        "name": "renderer",
+        "result": "PASS"
+      }
+    ],
+    "mock_settings": 10,
+    "mock_ledger": 16
+  },
+  "legacy_regressions": [
+    {
+      "name": "api",
+      "path": "docs/verification/b9-legacy-api.json",
+      "sha256": "7af90501e897fa4b5af7537ade2cdcaed3b1ef7825bb2a2c1dd48fc81b553c6a",
+      "checks": 13
+    },
+    {
+      "name": "list-import",
+      "path": "docs/verification/b9-legacy-list-import.json",
+      "sha256": "756ee28bb709e0ba5155ac875c8e1099af1b73c78a3e0f599829f8d5c45d20f1",
+      "checks": 11
+    },
+    {
+      "name": "crawl-control",
+      "path": "docs/verification/b9-legacy-crawl-control.json",
+      "sha256": "b1d3761eeba082519eed4d06f2b20d75622096b107925669f387769915c5d16d",
+      "checks": 11
+    },
+    {
+      "name": "selected-recrawl",
+      "path": "docs/verification/b9-legacy-selected-recrawl.json",
+      "sha256": "8c5d49a339bb664ea936a33532b19ace34eb0d43a21f8d10f9a982c53d00f37c",
+      "checks": 11
+    },
+    {
+      "name": "crawl-policy",
+      "path": "docs/verification/b9-legacy-crawl-policy.json",
+      "sha256": "a673f4f24155c8a1a869d90c69ebe2785d56489b9703413d8b8d29078f67d81d",
+      "checks": 2
+    },
+    {
+      "name": "content-analysis",
+      "path": "docs/verification/b9-legacy-content-analysis.json",
+      "sha256": "251aeac488ad632d4f8935141789182ff4b6e6ab5c93bad39befd57486d84f9b",
+      "checks": 4
+    },
+    {
+      "name": "content-capture",
+      "path": "docs/verification/b9-legacy-content-capture.json",
+      "sha256": "f545678eb12905c06b1584018e52347b2bdd9558317c7c3aa3d1262ede145dc0",
+      "checks": 8
+    }
+  ],
+  "restart_repair": {
+    "result": "PASS",
+    "exact_failed_fixture_replayed": true,
+    "global_stack_limit_increased": false,
+    "old_failure_retained": true
+  },
+  "artifacts": [
+    {
+      "path": "docs/verification/resource-discovery-core.json",
+      "sha256": "b6ea5dcdd23c611ca36d091913a0d41507908cdd43e0851de3976c55f84e7b03"
+    },
+    {
+      "path": "docs/verification/resource-discovery-ui.json",
+      "sha256": "e838860cbd545ae7406f8ee99388109dee7df0d00b020f99447cfab59ddbaace"
+    },
+    {
+      "path": "docs/verification/resource-discovery-e2e.json",
+      "sha256": "1e93595c13052adc695d9d1fd8a7bd7817bfbfa5f780ba0cf9972f1b6b418557"
+    },
+    {
+      "path": "docs/verification/mcp-e2e.json",
+      "sha256": "0b87174bc04d88d24650343f36c90670c7d835408dac51e61282735434827d32"
+    },
+    {
+      "path": "docs/verification/resource-discovery-restart-failure.json",
+      "sha256": "b3a7158f0b63d5c654acf3a8f15163af6057121f545da734ba5ec95a4fa0fa9a"
+    },
+    {
+      "path": "docs/verification/resource-discovery-restart-repair.json",
+      "sha256": "f0d8ad2006abe9ebd5973afb273c0f3299e6b3eee3c805ce9941c9d21d1bcabe"
+    },
+    {
+      "path": "docs/verification/b9-legacy-api.json",
+      "sha256": "7af90501e897fa4b5af7537ade2cdcaed3b1ef7825bb2a2c1dd48fc81b553c6a"
+    },
+    {
+      "path": "docs/verification/b9-legacy-list-import.json",
+      "sha256": "756ee28bb709e0ba5155ac875c8e1099af1b73c78a3e0f599829f8d5c45d20f1"
+    },
+    {
+      "path": "docs/verification/b9-legacy-crawl-control.json",
+      "sha256": "b1d3761eeba082519eed4d06f2b20d75622096b107925669f387769915c5d16d"
+    },
+    {
+      "path": "docs/verification/b9-legacy-selected-recrawl.json",
+      "sha256": "8c5d49a339bb664ea936a33532b19ace34eb0d43a21f8d10f9a982c53d00f37c"
+    },
+    {
+      "path": "docs/verification/b9-legacy-crawl-policy.json",
+      "sha256": "a673f4f24155c8a1a869d90c69ebe2785d56489b9703413d8b8d29078f67d81d"
+    },
+    {
+      "path": "docs/verification/b9-legacy-content-analysis.json",
+      "sha256": "251aeac488ad632d4f8935141789182ff4b6e6ab5c93bad39befd57486d84f9b"
+    },
+    {
+      "path": "docs/verification/b9-legacy-content-capture.json",
+      "sha256": "f545678eb12905c06b1584018e52347b2bdd9558317c7c3aa3d1262ede145dc0"
+    }
+  ],
+  "pending": {
+    "full_resource_feature_acceptance": "PARTIAL",
+    "native_ten_broad_groups": "PARTIAL",
+    "css_environment_encoding": "NOT_PROVEN",
+    "resource_plus_renderer": "UNSUPPORTED_PRE_HTTP",
+    "all_type_navigation_switch_matrix": "NOT_PROVEN",
+    "exact_commit_ci": "PENDING",
+    "immutable_release": "PENDING",
+    "installed_runtime": "PENDING",
+    "full_vendor_parity": "NOT_PROVEN"
+  }
+}

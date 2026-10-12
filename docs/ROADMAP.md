@@ -6,7 +6,7 @@ Aktuell: **25 eigene Abnahmen erfüllt, 72 teilweise geprüft, 47 offen**. Zusä
 
 ## Aktueller nächster Baustein
 
-**B9: Ressourcen-Erkennung ist jetzt in Implementierung.** Der [konkrete Quell- und Berechtigungsvertrag](resource-discovery.md) enthält zehn noch offene native Gate-Gruppen. Erst ihre tatsächlichen Beweise ändern Feature-Haken. B8-native/API/UI bleibt geprüft; B8-Commit667bc97 hat inzwischen [vier CI-Jobs](verification/content-capture-ci.json) und einen [unveränderlichen installierten Release](verification/content-capture-installed.json) bestanden; B9 braucht eigene Beweise.
+**B9: Lokaler Ressourcenpfad und Neustartreparatur sind geprüft.** Der [finale B9-Aggregatbeleg](verification/resource-discovery-batch.json) bindet 362 Standard-Rust-Tests, 15 native Ressourcenfälle, 15 CSS-Tests, API9, MCP22 und tatsächliche UI65 am reparierten Debug142c0a… . Die [historische Stackoverflow-Reproduktion](verification/resource-discovery-restart-failure.json) bleibt erhalten; [exakter Replay und frische Neustartregression](verification/resource-discovery-restart-repair.json) bestehen. Die [zehn breiteren Abnahmegruppen](resource-discovery.md) bleiben teilweise erfüllt; B9-Commit-CI, Release und Installation noch offen. B8-Commit667bc97 behält seine [vier CI-Jobs](verification/content-capture-ci.json) und den [unveränderlichen installierten Release](verification/content-capture-installed.json) als eigene historische Belege.
 
 ## Was bereits als Grundlage dient
 
@@ -18,14 +18,15 @@ Diese Grundlagen ersetzen keine vollständige Abnahme aller Filter, Source-Profi
 
 ### 1. Entdeckungsquellen und Ressourcenschalter vervollständigen
 
-Native Restarbeiten: Ressourcen und Beziehungen werden beobachtet, aber unabhängige store/fetch/expand-Schalter und das vollständige Regelwerk je Quelltyp fehlen.
+Native Restarbeiten: Unabhängige store/fetch/expand-Schalter und dauerhafte Grants sind integriert. Die vier Speichern-/Abrufen-Kombinationen sind bisher nativ für Bilder geprüft; die vollständige Matrix je Quelltyp/Navigationsquelle, vererbtes CSS-Environment-Encoding, zusätzliche Redirect-/Unterbrechungsfälle und Browser-Policy bleiben offen.
 
 Referenzgrenze: Anchor-, IMG-, Script-, Stylesheet- und Relationship-Zahlen sind unterschiedliche Messkonzepte. Kein Graph-Link darf nur für übereinstimmende CSV-Zahlen umklassifiziert werden.
 
-- [ ] Eigene lokale Fixture mit anchor/img/srcset/picture/script/stylesheet/video/audio/iframe/refresh/canonical/hreflang/pagination/AMP/mobile; jedes Vorkommen und jede Quelle erhalten.
-- [ ] Je Quelltyp vier store/fetch-Schalterkombinationen mit exaktem Requestlog und gesonderten observation/expansion-Entscheidungen prüfen; identisches Ziel aus mehreren Quellen coalescen.
-- [ ] IMG-Ziel zusätzlich als anchor kontrollieren: Quell-spezifischer ausgeschalteter IMG-Fetch darf nicht still einen unabhängig erlaubten anchor-Fetch verbieten.
-- [ ] MIME/Extension, CDN/interner Host, denied target, check-only sowie robots und Credential-Origin über Redirects prüfen.
+- [x] Begrenzte native HTML-/CSS-Quellfamilien, Bild-Schaltermatrix, unveränderliche Bild/Anchor-Grants, finaler Stylesheet-Bezug, private Transporte und gepinnte API/CLI-Exporte gegen eigene Fixtures prüfen.
+- [ ] `resource-products-every-type-and-navigation`: Vier store/fetch-Kombinationen für CSS/JS/Medien/PDF/SWF und jede Navigation mit exaktem Requestlog ergänzen.
+- [ ] `relationship-discovery-each-positive-negative` und `link-directive-four-way-traversal`: jede Beziehungsquelle und alle nofollow/ugc/sponsored/page-nofollow-Varianten einzeln erlauben/sperren und Vorkommen erhalten.
+- [ ] `resource-role-unions-reverse-and-concurrent`: umgekehrte/parallele Rollen anderer Typen; `resource-cross-origin-redirect-hop-credentials`: jede Redirect-Stufe und Credential-/Robots-Grenze prüfen.
+- [ ] `css-encoding-environment-fallback`, `css-native-grammar-context-and-decoding`, `resource-interruption-each-stage` und `resource-budget-exact-plus-one-all-limits` mit positiven und unbekannten Kontrollfällen ergänzen.
 - [ ] Responsive Bilder: deklarierte Kandidaten von tatsächlich browsergewähltem currentSrc und gerenderten Maßen trennen; PDF unsupported fonts/Form XObjects/OCR nicht als vollständiger Text.
 
 Zugeordnete Katalog-IDs: `crawl.resources`, `crawl.relationships`, `crawl.cdns`, `crawl.nofollow`, `robots.traversal`, `images.sources`, `images.alt`, `images.size`, `images.cookies`, `images.pdf`, `images.pdf_links`.

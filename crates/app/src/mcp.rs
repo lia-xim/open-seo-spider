@@ -63,12 +63,24 @@ impl Bridge {
                     .get("arguments")
                     .cloned()
                     .unwrap_or(json!({}));
-                if !args.is_object()
-                    || !inventory()
-                        .iter()
-                        .any(|tool| tool["name"].as_str() == Some(name))
-                {
+                let definitions = inventory();
+                let definition = definitions
+                    .iter()
+                    .find(|tool| tool["name"].as_str() == Some(name));
+                if !args.is_object() || definition.is_none() {
                     return Some(error(id, -32602, "Invalid tool or arguments"));
+                }
+                let schema = &definition.expect("checked definition")["inputSchema"];
+                let values = args.as_object().expect("checked object");
+                if values
+                    .keys()
+                    .any(|key| schema["properties"].get(key).is_none())
+                    || schema["required"].as_array().is_some_and(|keys| {
+                        keys.iter()
+                            .any(|key| key.as_str().is_some_and(|key| !values.contains_key(key)))
+                    })
+                {
+                    return Some(error(id, -32602, "Unexpected or missing tool argument"));
                 }
                 match self.call(name, args).await {
                     Ok(value) => {
@@ -96,6 +108,10 @@ impl Bridge {
                 body = Some(args.get("input").cloned().context("input required")?);
                 "api/policy/preview".to_owned()
             }
+            "spider_inspect_css" => {
+                body = Some(args.get("input").cloned().context("input required")?);
+                "api/css/inspect".to_owned()
+            }
             "spider_start_crawl" => {
                 body = Some(args.get("config").cloned().context("config required")?);
                 "api/crawls".to_owned()
@@ -112,6 +128,8 @@ impl Bridge {
                     "spider_issues" => "/issues",
                     "spider_analysis" => "/analysis",
                     "spider_policy" => "/policy",
+                    "spider_resources" => "/resources",
+                    "spider_resource_transports" => "/resources/transports",
                     "spider_content" => "/content",
                     "spider_content_document" => "/content/document",
                     "spider_analyze_crawl_content" => {
@@ -164,6 +182,36 @@ impl Bridge {
             }
         }
         let mut url = self.base.join(&route)?;
+        if matches!(name, "spider_resources" | "spider_resource_transports") {
+            let limit = args
+                .get("limit")
+                .map(|v| v.as_u64().context("limit must be an integer"))
+                .transpose()?
+                .unwrap_or(200);
+            anyhow::ensure!((1..=1000).contains(&limit), "limit must be 1..1000");
+            url.query_pairs_mut()
+                .append_pair("limit", &limit.to_string());
+            if name == "spider_resources" {
+                if let Some(value) = args.get("after_sequence") {
+                    let sequence = value
+                        .as_u64()
+                        .context("after_sequence must be a nonnegative integer")?;
+                    anyhow::ensure!(
+                        sequence <= i64::MAX as u64,
+                        "after_sequence exceeds SQLite integer range"
+                    );
+                    url.query_pairs_mut()
+                        .append_pair("after_sequence", &sequence.to_string());
+                }
+            } else if let Some(value) = args.get("after_url") {
+                let cursor = value.as_str().context("after_url must be a string")?;
+                anyhow::ensure!(
+                    !cursor.is_empty() && cursor.len() <= 65536,
+                    "Invalid after_url length"
+                );
+                url.query_pairs_mut().append_pair("after_url", cursor);
+            }
+        }
         if matches!(name, "spider_content" | "spider_content_document") {
             let source = args
                 .get("source_kind")
@@ -246,6 +294,9 @@ fn inventory() -> Vec<Value> {
         ("spider_issues","Read observed audit issues",json!({"id":uuid}),vec!["id"],true),
         ("spider_analysis","Read graph and relationship/security/JSON-LD observations",json!({"id":uuid}),vec!["id"],true),
         ("spider_policy","Read bounded native admission evidence; advance the returned sequence cursor",json!({"id":uuid,"after_sequence":{"type":"integer","minimum":0},"limit":{"type":"integer","minimum":1,"maximum":1000}}),vec!["id"],true),
+        ("spider_resources","Read bounded native source occurrences and immutable resource grants without fetching websites",json!({"id":uuid,"after_sequence":{"type":"integer","minimum":0},"limit":{"type":"integer","minimum":1,"maximum":1000}}),vec!["id"],true),
+        ("spider_resource_transports","Read bounded stored transport metadata, including checked responses excluded from report rows",json!({"id":uuid,"after_url":{"type":"string","minLength":1,"maxLength":65536},"limit":{"type":"integer","minimum":1,"maximum":1000}}),vec!["id"],true),
+        ("spider_inspect_css","Inspect declared dependencies in supplied CSS with an explicit bounded parser profile; no website is fetched",json!({"input":{"type":"object"}}),vec!["input"],true),
         ("spider_content","Read a bounded saved-content inventory without text or website requests",json!({"id":uuid,"source_kind":{"type":"string","enum":["raw_http_html","rendered_dom_html"]},"after_ordinal":{"type":"integer","minimum":0},"limit":{"type":"integer","minimum":1,"maximum":200}}),vec!["id"],true),
         ("spider_content_document","Read one exact saved requested URL and source capture without fetching it",json!({"id":uuid,"url":{"type":"string"},"source_kind":{"type":"string","enum":["raw_http_html","rendered_dom_html"]}}),vec!["id","url"],true),
         ("spider_analyze_crawl_content","Analyze an explicit bounded cohort of saved source captures; no website is fetched",json!({"id":uuid,"input":{"type":"object"}}),vec!["id","input"],true),
@@ -306,7 +357,7 @@ mod tests {
                 .await
                 .is_none()
         );
-        assert_eq!(inventory().len(), 19);
+        assert_eq!(inventory().len(), 22);
     }
     #[test]
     fn only_loopback_bridge() {
@@ -316,6 +367,25 @@ mod tests {
             "http://user:password@127.0.0.1",
         ] {
             assert!(Bridge::new(base).is_err());
+        }
+    }
+    #[tokio::test]
+    async fn advertised_resource_argument_shapes_reject_before_api_io() {
+        let bridge = Bridge::new("http://127.0.0.1:1").unwrap();
+        for (name, args) in [
+            (
+                "spider_resources",
+                json!({"id":"00000000-0000-0000-0000-000000000000","after_url":"https://example.test/"}),
+            ),
+            (
+                "spider_resource_transports",
+                json!({"id":"00000000-0000-0000-0000-000000000000","after_sequence":1}),
+            ),
+            ("spider_inspect_css", json!({"input":{},"options":{}})),
+            ("spider_resources", json!({"limit":1})),
+        ] {
+            let result=bridge.dispatch(json!({"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":name,"arguments":args}})).await.unwrap();
+            assert_eq!(result["error"]["code"], -32602);
         }
     }
 }

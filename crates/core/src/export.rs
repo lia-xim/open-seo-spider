@@ -753,7 +753,7 @@ fn scalar_json_field(value: &serde_json::Value, field: &str) -> String {
 /// Leading Unicode whitespace, tabs, CR/LF and BOM cannot hide a formula prefix.
 /// Numeric/boolean columns bypass this helper; JSON project exports keep the
 /// original strings exactly, including any leading apostrophe or whitespace.
-pub(crate) fn csv_text(value: &str) -> String {
+pub fn csv_text(value: &str) -> String {
     let significant = value
         .trim_start_matches(|character: char| character.is_whitespace() || character == '\u{feff}');
     if matches!(significant.chars().next(), Some('=' | '+' | '-' | '@')) {
@@ -847,6 +847,7 @@ mod tests {
         CrawlReport {
             operation: None,
             policy_ledger: None,
+            resource_ledger: None,
             config: CrawlConfig::default(),
             pages,
             issues: vec![],

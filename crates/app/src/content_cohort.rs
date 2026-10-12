@@ -389,6 +389,7 @@ mod tests {
             warnings: vec![],
             operation: None,
             policy_ledger: None,
+            resource_ledger: None,
         }
     }
     fn request() -> SavedContentRequest {
