@@ -954,18 +954,23 @@
     {
       "id": "robots.test",
       "name": "Custom policy simulation",
-      "status": "planned",
+      "status": "implemented",
       "phase": "P1",
       "source_ids": [
         "robots"
       ],
       "acceptance_test": "Evaluate supplied rules against a URL list without editing the remote site's robots.txt.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "dom-robots-batch"
+          ],
+          "proves": "Pure local shared crawler robots matcher accepts supplied rules and ordered URL occurrences, exposes invalid rows and limits, exports safe CSV and makes zero website or sitemap requests; actual browser and input-race fixtures pass."
+        }
+      ],
       "parity_evidence": [],
       "group": "robots",
-      "remaining_acceptance": [
-        "Evaluate supplied rules against a URL list without editing the remote site's robots.txt."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -1312,7 +1317,7 @@
     {
       "id": "metadata.headings",
       "name": "H1/H2 and meta keyword evidence",
-      "status": "partial",
+      "status": "implemented",
       "phase": "P1",
       "source_ids": [
         "tabs"
@@ -1331,13 +1336,17 @@
             "advanced-batch"
           ],
           "proves": "Missing/multiple/duplicate/long H1/H2 cases use configurable bounds and captured HTML evidence."
+        },
+        {
+          "verification_run_ids": [
+            "dom-robots-batch"
+          ],
+          "proves": "Bounded raw/rendered DOM facts preserve literal heading order, raw text, inline image-alt display profile, locations and meta keywords; duplicate/missing/multiple/nonsequential/alt rules have fixtures. Corrected native H1/H2 memberships match 48 retained reference observations across 24 authored HTML cases."
         }
       ],
       "parity_evidence": [],
       "group": "metadata",
-      "remaining_acceptance": [
-        "Heading document order/nonsequential checks and meta-keyword fields remain."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -1526,18 +1535,23 @@
     {
       "id": "links.positions",
       "name": "Link position and path",
-      "status": "planned",
+      "status": "implemented",
       "phase": "P2",
       "source_ids": [
         "links"
       ],
       "acceptance_test": "Classify nav/header/footer/content links and custom positions; retain selector/path per occurrence.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "dom-robots-batch"
+          ],
+          "proves": "Every retained link occurrence carries raw/resolved href, fragment, bounded DOM path/index/ancestors and first-match custom CSS position or nearest semantic default. Fixture and browser exports retain provenance and duplicates."
+        }
+      ],
       "parity_evidence": [],
       "group": "links",
-      "remaining_acceptance": [
-        "Classify nav/header/footer/content links and custom positions; retain selector/path per occurrence."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -1617,35 +1631,47 @@
     {
       "id": "links.uncrawlable",
       "name": "Nonstandard link evidence",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "release24"
       ],
       "acceptance_test": "Record onclick, javascript URLs and href on non-anchor elements without assuming a valid navigable target.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "dom-robots-batch"
+          ],
+          "proves": "DOM navigation candidates preserve non-anchor href, javascript schemes, router/onclick attributes and reason without guessing a navigable target."
+        }
+      ],
       "parity_evidence": [],
       "group": "links",
       "remaining_acceptance": [
-        "Record onclick, javascript URLs and href on non-anchor elements without assuming a valid navigable target."
+        "Plain onclick-only elements and the broader client navigation patterns need dedicated observation/discovery acceptance; no JavaScript navigation inference is claimed."
       ],
       "parity_status": "NOT_PROVEN"
     },
     {
       "id": "links.fragments",
       "name": "Bookmark validation",
-      "status": "planned",
+      "status": "implemented",
       "phase": "P2",
       "source_ids": [
         "general"
       ],
       "acceptance_test": "Verify decoded fragment destinations against IDs/names; distinguish a missing fragment from a failed page.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "dom-robots-batch"
+          ],
+          "proves": "Opt-in captured-document validation checks raw fragment then UTF-8 decoded fallback against ID and legacy anchor name; raw/decoded/top/missing/unknown/unsupported outcomes are distinct. No validation request is made; failed, incomplete, legacy and status-unknown rendered targets remain unknown."
+        }
+      ],
       "parity_evidence": [],
       "group": "links",
-      "remaining_acceptance": [
-        "Verify decoded fragment destinations against IDs/names; distinguish a missing fragment from a failed page."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -1923,12 +1949,18 @@
             "ui-fixture"
           ],
           "proves": "Each img src occurrence retains its source PageRecord, alt and declared width/height/loading; browser inspector exposes image evidence."
+        },
+        {
+          "verification_run_ids": [
+            "dom-robots-batch"
+          ],
+          "proves": "Raw/rendered responsive image observations retain img src/srcset/sizes and preceding picture sources, width/density/height descriptors, media/type eligibility, malformed candidates, per-occurrence alt and locations; eligible HTTP candidates use normal crawl policy."
         }
       ],
       "parity_evidence": [],
       "group": "images",
       "remaining_acceptance": [
-        "Add srcset/picture candidates and explicit multi-page occurrence acceptance."
+        "Explicit multi-page occurrence acceptance and actual browser-selected currentSrc, media and density selection remain."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -3662,15 +3694,17 @@
       "artifact": "docs/verification/api-e2e.json",
       "command": "node scripts/api-e2e.mjs",
       "result": "PASS",
-      "tested_at": "2026-10-12T08:44:16.496Z",
+      "tested_at": "2026-10-12T09:59:29.902Z",
       "scope": [
         "604 URL HTTP/API crawl",
         "robots excluded target",
         "redirect initial/final status and separate intermediate-response inventory with unknown unretained body/headers",
         "graph and issue API",
-        "named extraction and all eleven crawl export endpoints including empty resource/script/cookie headers",
+        "named extraction and all thirteen crawl export endpoints, disabled-fragment headers and effective DOM provenance",
         "offline SERP CSV import, Unicode/unknown widths, duplicate input order and formula-safe export without website requests",
+        "offline robots shared matcher, ordered duplicate and invalid rows, CSV, invalid bounds and zero website requests",
         "JSON import and snapshot comparison",
+        "completed and imported snapshot bytes, formatting and unknown future extension preserved on startup",
         "cancel and resume",
         "failed resume manifest write retains cancelled state and snapshot",
         "process termination and SQLite frontier recovery",
@@ -3693,8 +3727,8 @@
       "artifact": "crates/core/src",
       "command": "cargo test -p open-seo-spider-core",
       "result": "PASS",
-      "scope": "71 core unit tests passed, including bounded PDF metadata/text/URI annotations and malformed/encrypted/limited states, encoded image and SVG dimensions, CSS/XPath/regex HTML modes, agent-scoped robots whitespace, redacted headers, native response inventories, offline CSV metadata editing and calibrated public-font metrics.",
-      "reported_by": "Root implementation agent; exact aggregate is recorded in resource-offline-batch.",
+      "scope": "99 core unit tests passed, including DOM facts, srcset grammar, captured fragments, exact MIME, status-unknown rendered evidence and offline robots simulation, plus the previously supported extraction/resource/font contracts.",
+      "reported_by": "Core implementation agent; aggregate recorded in dom-robots-batch.",
       "limits": "Individual assertions cover only their owned fixtures; broad rule compliance is not inferred.",
       "tested_at": "2026-10-12"
     },
@@ -3703,7 +3737,7 @@
       "artifact": "docs/analysis-acceptance.md",
       "command": "cargo test -p open-seo-spider analysis::tests -- --nocapture",
       "result": "PASS",
-      "scope": "25 deterministic analysis tests passed; graph, canonical/hreflang/pagination target states, source provenance, incomplete captures and redirect aliases.",
+      "scope": "27 deterministic analysis tests passed, including unknown rendered source/target status and existing graph/relationship behavior.",
       "limits": "Captured snapshot only; no whole-site/reference completeness or provider validation.",
       "tested_at": "2026-10-12"
     },
@@ -3730,7 +3764,7 @@
       "id": "ui-fixture",
       "artifact": "web/verification/ui-fixture-results.json",
       "result": "PASS",
-      "tested_at": "2026-10-12T08:37:10.821Z",
+      "tested_at": "2026-10-12T09:34:29.248Z",
       "scope": [
         "empty state",
         "snapshot and advanced analysis",
@@ -3743,6 +3777,11 @@
         "visible CSV protects equals plus minus and at-sign after whitespace CR tab and BOM",
         "visible CSV keeps actual numeric negatives zero and ordinary tab text unchanged",
         "image alt filter",
+        "ordered heading DOM facts and legacy unknowns remain distinct and safely inspected",
+        "alternative heading text keeps empty vs unknown raw text profile CSV and 320px contained horizontal scrolling",
+        "keywords missing attribute and empty zero differ and responsive declarations never infer selection",
+        "custom navigation stays data while actual link occurrence retains DOM path position and fragment",
+        "fragment statuses found missing unknown and unsupported remain independently filterable",
         "native response table keeps redirect hops unknown body headers and separate keyboard accessible document details",
         "advanced issue filter",
         "link metrics and JSON-LD",
@@ -3753,12 +3792,14 @@
         "invalid extraction JSON blocks settings save",
         "invalid CSS rejected before starting",
         "duplicate JavaScript output names rejected in settings",
+        "position rule invalid CSS and duplicate trimmed names rejected before start",
         "inconsistent thresholds rejected and individual checks can be disabled",
         "persisted settings",
-        "list mode POST contract",
+        "list mode POST contract and default fragment opt-in remains false",
         "opt-in renderer POST contract, no runtime claim",
         "named CSS Rust regex and custom audit thresholds POST contract",
         "sitemap mode POST contract",
+        "explicit fragment opt-in and custom CSS rule order survive settings and POST",
         "report import",
         "viewport 1920: no document overflow, footer reachable",
         "viewport 1440: no document overflow, footer reachable",
@@ -3788,7 +3829,7 @@
       "id": "ui-renderer",
       "artifact": "web/verification/ui-renderer-live-results.json",
       "result": "PASS",
-      "tested_at": "2026-10-12T08:48:29.349Z",
+      "tested_at": "2026-10-12T09:47:46.713Z",
       "scope": [
         "real renderer discovers JS-only links and respects URL exclusion",
         "raw and rendered named CSS extraction evidence",
@@ -3812,7 +3853,7 @@
       "artifact": "docs/verification/mcp-e2e.json",
       "command": "node scripts/mcp-e2e.mjs",
       "result": "PASS",
-      "tested_at": "2026-10-12T08:43:52.173Z",
+      "tested_at": "2026-10-12T10:08:05.620Z",
       "scope": [
         "stdio: SDK initialize, 11 tools, start/status/pages/issues/project/analysis/compare/list and tool error",
         "streamable_http: SDK initialize, 11 tools, start/status/pages/issues/project/analysis/compare/list and tool error"
@@ -3876,7 +3917,7 @@
       "artifact": "web/verification/ui-resource-live-results.json",
       "command": "node web/verification/ui-resource-live.cjs",
       "result": "PASS",
-      "tested_at": "2026-10-12T08:48:00.899Z",
+      "tested_at": "2026-10-12T09:48:10.964Z",
       "scope": [
         "native PDF parses original metadata verified page count and text without invented HTML title",
         "PDF URI annotation discovers local target and native scoped headers remain separate",
@@ -3899,7 +3940,7 @@
       "artifact": "web/verification/ui-serp-live-results.json",
       "command": "node web/verification/ui-serp-live.cjs",
       "result": "PASS",
-      "tested_at": "2026-10-12T08:43:53.082Z",
+      "tested_at": "2026-10-12T09:47:22.813Z",
       "scope": [
         "Actual offline form uses native metrics without requesting website URL",
         "CSV quoted newline Unicode duplicate URL order and unknown width survive actual import",
@@ -3924,7 +3965,7 @@
       "id": "native-text-width",
       "artifact": "docs/parity/native-text-width-comparison.json",
       "result": "PASS_BOUNDED_NATIVE_PROFILE",
-      "tested_at": "2026-10-12T08:47:28.286Z",
+      "tested_at": "2026-10-12T10:07:20.543Z",
       "scope": {
         "measurement_profile": "roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic",
         "counts": {
@@ -3946,7 +3987,7 @@
       "artifact": "docs/parity/reference-comparison.json",
       "command": "node scripts/reference-parity.mjs --reuse-reference",
       "result": "COMPARISON_EXECUTED",
-      "tested_at": "2026-10-12T08:47:28.796Z",
+      "tested_at": "2026-10-12T10:07:21.429Z",
       "scope": {
         "counts": {
           "MATCH": 887,
@@ -3958,6 +3999,54 @@
         "fixture_sha256": "928545b1b70ae07da917fddd0fd1fd137878e7819326741dbbd6c23cb4607072"
       },
       "limits": "Compared exported cells are observations, not feature coverage or filter-membership proof. Full vendor parity remains NOT_PROVEN; reference and independent build identities are recorded in the artifact."
+    },
+    {
+      "id": "dom-robots-batch",
+      "artifact": "docs/verification/dom-robots-batch.json",
+      "result": "PASS",
+      "scope": "163 default Rust tests plus one explicit Chrome gate; final startup read-only regression, 40 UI fixtures, actual DOM and robots flows, 13 export/API/MCP gates, installed release with seven user jobs and eleven byte-identical JSON files.",
+      "tested_at": "2026-10-12",
+      "limits": "Own bounded fixtures; complete vendor feature, filter and workflow parity remain NOT_PROVEN."
+    },
+    {
+      "id": "dom-fixtures",
+      "artifact": "crates/core/tests/dom_fixtures.rs",
+      "result": "PASS",
+      "scope": "Five actual HTTP fixtures, including exact 24-case heading membership, custom DOM positions, responsive image discovery, source provenance and opt-in fragments.",
+      "tested_at": "2026-10-12",
+      "limits": "Own bounded fixtures; complete vendor feature, filter and workflow parity remain NOT_PROVEN."
+    },
+    {
+      "id": "ui-dom",
+      "artifact": "web/verification/ui-dom-live-results.json",
+      "result": "PASS",
+      "scope": "19 actual Chrome UI/API checks including raw/rendered DOM, unknown rendered status, legacy snapshots, fragment settings, MIME filtering, CSV and narrow width.",
+      "tested_at": "2026-10-12T10:00:26.784Z",
+      "limits": "Own bounded fixtures; complete vendor feature, filter and workflow parity remain NOT_PROVEN."
+    },
+    {
+      "id": "ui-robots",
+      "artifact": "web/verification/ui-robots-live-results.json",
+      "result": "PASS",
+      "scope": "Eight actual browser checks; ordered invalid/duplicate URL observations and CSV with zero supplied website/sitemap requests.",
+      "tested_at": "2026-10-12T09:46:36.894Z",
+      "limits": "Own bounded fixtures; complete vendor feature, filter and workflow parity remain NOT_PROVEN."
+    },
+    {
+      "id": "robots-input-state",
+      "artifact": "web/verification/robots-input-state.test.cjs",
+      "result": "PASS",
+      "scope": "Seven focused async input/export race and invalidation regressions.",
+      "tested_at": "2026-10-12",
+      "limits": "Own bounded fixtures; complete vendor feature, filter and workflow parity remain NOT_PROVEN."
+    },
+    {
+      "id": "native-heading-membership",
+      "artifact": "docs/parity/native-heading-comparison.json",
+      "result": "PASS_BOUNDED_NATIVE_HEADING_MEMBERSHIP",
+      "scope": "48 matching H1/H2 membership comparisons on 24 authored HTML cases; retained original CSV/HTML hashes checked.",
+      "tested_at": "2026-10-12T10:07:20.298Z",
+      "limits": "Own bounded fixtures; complete vendor feature, filter and workflow parity remain NOT_PROVEN."
     }
   ],
   "reference_workflows": [
@@ -4079,22 +4168,22 @@
   ],
   "status_summary": {
     "overall": {
-      "implemented": 16,
+      "implemented": 20,
       "partial": 71,
-      "planned": 57,
+      "planned": 53,
       "total": 144
     },
     "phases": {
       "P1": {
-        "implemented": 5,
-        "partial": 27,
-        "planned": 13,
+        "implemented": 7,
+        "partial": 26,
+        "planned": 12,
         "total": 45
       },
       "P2": {
-        "implemented": 4,
-        "partial": 31,
-        "planned": 10,
+        "implemented": 6,
+        "partial": 32,
+        "planned": 7,
         "total": 45
       },
       "P3": {
@@ -4124,9 +4213,9 @@
         "total": 14
       },
       "robots": {
-        "implemented": 1,
+        "implemented": 2,
         "partial": 4,
-        "planned": 2,
+        "planned": 1,
         "total": 7
       },
       "http": {
@@ -4136,15 +4225,15 @@
         "total": 6
       },
       "metadata": {
-        "implemented": 1,
-        "partial": 5,
+        "implemented": 2,
+        "partial": 4,
         "planned": 5,
         "total": 11
       },
       "links": {
-        "implemented": 1,
-        "partial": 4,
-        "planned": 6,
+        "implemented": 3,
+        "partial": 5,
+        "planned": 3,
         "total": 11
       },
       "relationships": {

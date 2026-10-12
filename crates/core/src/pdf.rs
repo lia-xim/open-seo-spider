@@ -14,7 +14,12 @@ const PREVIEW_CHARS: usize = 1024;
 
 pub(crate) fn is_pdf(body: &[u8], content_type: &str) -> bool {
     body.starts_with(b"%PDF-")
-        || content_type.split(';').next().unwrap_or("").trim() == "application/pdf"
+        || content_type
+            .split(';')
+            .next()
+            .unwrap_or("")
+            .trim()
+            .eq_ignore_ascii_case("application/pdf")
 }
 
 pub(crate) fn incomplete(reason: &str) -> PdfRecord {

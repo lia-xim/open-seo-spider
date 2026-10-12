@@ -29,6 +29,10 @@ pub struct CrawlConfig {
     pub custom_extractions: Vec<CustomExtractionConfig>,
     pub audit_thresholds: AuditThresholds,
     pub pdf_analysis: PdfAnalysisConfig,
+    /// Fragment checks require captured target DOMs and are an explicit audit opt-in.
+    pub validate_fragments: bool,
+    /// First matching configured selector wins; matches the link or its ancestors.
+    pub link_position_rules: Vec<LinkPositionRule>,
     /// Full normalized URL regex filters for discovery; explicit seeds are exempt.
     pub include_patterns: Vec<String>,
     pub exclude_patterns: Vec<String>,
@@ -59,6 +63,8 @@ impl Default for CrawlConfig {
             custom_extractions: Vec::new(),
             audit_thresholds: AuditThresholds::default(),
             pdf_analysis: PdfAnalysisConfig::default(),
+            validate_fragments: false,
+            link_position_rules: Vec::new(),
             include_patterns: Vec::new(),
             exclude_patterns: Vec::new(),
         }
@@ -375,6 +381,7 @@ pub struct RawMetadata {
     pub content_hash: Option<String>,
     pub links: Vec<LinkRecord>,
     pub custom_extractions: Vec<CustomExtraction>,
+    pub dom_metadata: Option<DomMetadata>,
 }
 
 impl From<&PageRecord> for RawMetadata {
@@ -407,11 +414,13 @@ impl From<&PageRecord> for RawMetadata {
             content_hash: page.content_hash.clone(),
             links: page.links.clone(),
             custom_extractions: page.custom_extractions.clone(),
+            dom_metadata: page.dom_metadata.clone(),
         }
     }
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
 pub struct LinkRecord {
     pub url: String,
     pub text: String,
@@ -419,6 +428,158 @@ pub struct LinkRecord {
     pub internal: bool,
     pub nofollow: bool,
     pub kind: String,
+    pub raw_href: Option<String>,
+    /// Resolved HTTP(S) address including its original fragment; url is the fetch identity.
+    pub resolved_href: Option<String>,
+    pub fragment: Option<String>,
+    pub dom_location: Option<DomLocation>,
+    pub position: Option<String>,
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
+pub struct LinkPositionRule {
+    pub name: String,
+    pub selector: String,
+}
+
+/// Location in the repaired HTML5 tree, not an original byte offset or rendered coordinate.
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
+pub struct DomLocation {
+    pub index: usize,
+    pub path: Option<String>,
+    pub path_truncated: bool,
+    pub semantic_ancestors: Vec<String>,
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
+pub struct HeadingRecord {
+    pub tag_level: u8,
+    pub text: String,
+    pub raw_text: String,
+    /// Independent DOM-order text profile with inline img alt; None is unobserved/legacy.
+    pub text_with_image_alt: Option<String>,
+    pub image_alt: Vec<Option<String>>,
+    pub aria_level: Option<String>,
+    pub heading_offset: Option<String>,
+    pub hidden_attribute: bool,
+    pub dom_location: DomLocation,
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
+pub struct MetaKeywordRecord {
+    pub content: Option<String>,
+    pub normalized: String,
+    pub chars: Option<usize>,
+    pub dom_location: DomLocation,
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
+pub struct FragmentTarget {
+    /// id or legacy_anchor_name; only a[name] supplies the latter.
+    pub kind: String,
+    pub value: String,
+    pub dom_location: DomLocation,
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
+pub struct NavigationCandidate {
+    pub tag: String,
+    pub raw_href: Option<String>,
+    pub resolved_href: Option<String>,
+    pub potential_url: Option<String>,
+    pub scheme: Option<String>,
+    pub reason: String,
+    pub onclick: Option<String>,
+    pub router_link: Option<String>,
+    pub text: String,
+    pub internal: Option<bool>,
+    pub dom_location: DomLocation,
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
+pub struct ImageCandidate {
+    pub source: String,
+    pub raw_url: String,
+    pub url: Option<String>,
+    pub descriptors: Vec<String>,
+    pub width: Option<u64>,
+    pub density: Option<f64>,
+    pub height: Option<u64>,
+    pub media: Option<String>,
+    pub type_hint: Option<String>,
+    pub sizes: Option<String>,
+    /// A syntactically accepted candidate associated with this img; selection is unknown.
+    pub eligible: bool,
+    pub error: Option<String>,
+    pub dom_location: DomLocation,
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
+pub struct ResponsiveImageRecord {
+    pub src: Option<String>,
+    pub srcset: Option<String>,
+    pub sizes: Option<String>,
+    pub alt: Option<String>,
+    pub width: Option<String>,
+    pub height: Option<String>,
+    pub loading: Option<String>,
+    pub candidates: Vec<ImageCandidate>,
+    pub dom_location: DomLocation,
+}
+
+/// Some(empty) establishes an observed empty snapshot; None is legacy/unavailable.
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
+pub struct DomMetadata {
+    pub engine: String,
+    pub source: String,
+    /// Identifies the independent normalization applied to text_with_image_alt.
+    pub heading_text_engine: Option<String>,
+    /// Observation collection completeness; does not prove HTTP/render success or future JS state.
+    pub complete: bool,
+    pub limits_reached: Vec<String>,
+    pub headings: Vec<HeadingRecord>,
+    pub meta_keywords: Vec<MetaKeywordRecord>,
+    pub fragment_targets: Vec<FragmentTarget>,
+    pub navigation_candidates: Vec<NavigationCandidate>,
+    pub responsive_images: Vec<ResponsiveImageRecord>,
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum FragmentStatus {
+    MatchedId,
+    MatchedName,
+    Top,
+    Missing,
+    #[default]
+    Unknown,
+    Unsupported,
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
+pub struct FragmentObservation {
+    pub source_url: String,
+    pub source_document_url: String,
+    pub target_url: String,
+    pub resolved_href: String,
+    pub fragment: String,
+    pub decoded_fragment: Option<String>,
+    pub source_dom_location: Option<DomLocation>,
+    pub target_document_url: Option<String>,
+    pub status: FragmentStatus,
+    pub reason: String,
+    pub matched_target: Option<FragmentTarget>,
+    pub target_complete: bool,
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -597,6 +758,7 @@ pub struct PageRecord {
     pub browser_cookies: Vec<serde_json::Value>,
     pub pdf: Option<PdfRecord>,
     pub image_metadata: Option<ImageResourceMetadata>,
+    pub dom_metadata: Option<DomMetadata>,
 }
 
 impl PageRecord {
@@ -610,16 +772,19 @@ impl PageRecord {
     pub fn is_html(&self) -> bool {
         self.pdf.is_none()
             && self.image_metadata.is_none()
-            && (self.content_type.contains("text/html")
-                || self.content_type.contains("application/xhtml+xml"))
+            && (self.media_type().eq_ignore_ascii_case("text/html")
+                || self
+                    .media_type()
+                    .eq_ignore_ascii_case("application/xhtml+xml"))
+    }
+    pub fn media_type(&self) -> &str {
+        self.content_type.split(';').next().unwrap_or("").trim()
     }
     pub fn is_indexable_document(&self) -> bool {
         self.is_html()
             || self.pdf.is_some()
-            || matches!(
-                self.content_type.split(';').next().unwrap_or("").trim(),
-                "application/pdf" | "text/plain"
-            )
+            || self.media_type().eq_ignore_ascii_case("application/pdf")
+            || self.media_type().eq_ignore_ascii_case("text/plain")
     }
     pub fn title(&self) -> &str {
         self.titles.first().map(String::as_str).unwrap_or("")

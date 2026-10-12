@@ -66,7 +66,7 @@ The source link in each row supports the reference product area. Acceptance crit
 | --- | --- | --- | --- | --- |
 | `robots.fetch` | `partial` | robots.txt retrieval and caching | Cache per origin and test distinct policy on scheme/host/port; record blocked URLs without fabricated status codes. | [Robots testing](https://www.screamingfrog.co.uk/seo-spider/tutorials/robots-txt-tester/) |
 | `robots.matching` | `partial` | Agent matching and directives | Run fixtures for multiple user-agent groups, allow/disallow wildcards, end anchors and sitemap declarations. | [Robots testing](https://www.screamingfrog.co.uk/seo-spider/tutorials/robots-txt-tester/) |
-| `robots.test` | `planned` | Custom policy simulation | Evaluate supplied rules against a URL list without editing the remote site's robots.txt. | [Robots testing](https://www.screamingfrog.co.uk/seo-spider/tutorials/robots-txt-tester/) |
+| `robots.test` | `implemented` | Custom policy simulation | Evaluate supplied rules against a URL list without editing the remote site's robots.txt. | [Robots testing](https://www.screamingfrog.co.uk/seo-spider/tutorials/robots-txt-tester/) |
 | `robots.override` | `partial` | Explicit robots override | Keep respect as the default; require a saved explicit override and show its state in crawl metadata. | [Robots testing](https://www.screamingfrog.co.uk/seo-spider/tutorials/robots-txt-tester/) |
 | `robots.meta` | `implemented` | Meta and HTTP robots | Extract multiple meta robots and X-Robots-Tag fields; distinguish general and agent-specific directives. | [Data tabs](https://www.screamingfrog.co.uk/seo-spider/user-guide/tabs/) |
 | `robots.indexability` | `partial` | Indexability explanations | Report concrete reasons for redirect, robots blocking, noindex, non-HTML and canonicalization with supporting evidence. | [Data tabs](https://www.screamingfrog.co.uk/seo-spider/user-guide/tabs/) |
@@ -89,7 +89,7 @@ The source link in each row supports the reference product area. Acceptance crit
 | --- | --- | --- | --- | --- |
 | `metadata.titles` | `partial` | Title extraction and audits | Test absent, empty, multiple, duplicate and configurable character/width thresholds with a known HTML fixture. | [Data tabs](https://www.screamingfrog.co.uk/seo-spider/user-guide/tabs/) |
 | `metadata.descriptions` | `partial` | Description extraction and audits | Test absent, duplicate, multiple and length/width limits without assuming a fixed search-engine display width. | [Data tabs](https://www.screamingfrog.co.uk/seo-spider/user-guide/tabs/) |
-| `metadata.headings` | `partial` | H1/H2 and meta keyword evidence | Record heading order and duplicate/missing/multiple conditions plus meta keyword values as observational fields. | [Data tabs](https://www.screamingfrog.co.uk/seo-spider/user-guide/tabs/) |
+| `metadata.headings` | `implemented` | H1/H2 and meta keyword evidence | Record heading order and duplicate/missing/multiple conditions plus meta keyword values as observational fields. | [Data tabs](https://www.screamingfrog.co.uk/seo-spider/user-guide/tabs/) |
 | `metadata.serp_preview` | `implemented` | SERP preview | Show editable title/description preview; identify it as an approximation and export edited values. | [General operation](https://www.screamingfrog.co.uk/seo-spider/user-guide/general/) |
 | `metadata.area` | `planned` | Configurable content area | Exclude shared navigation/footer and include a chosen selector; prove selected text feeds analysis. | [Duplicate content](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-check-for-duplicate-content/) |
 | `metadata.wordcount` | `partial` | Text count and ratio | Use fixture paragraphs and hidden/script content to prove documented tokenization and text/code calculations. | [Readability](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-test-readability/) |
@@ -104,12 +104,12 @@ The source link in each row supports the reference product area. Acceptance crit
 | Key | Status | Capability | Independent acceptance test | Source |
 | --- | --- | --- | --- | --- |
 | `links.occurrences` | `implemented` | Inlinks and outlinks | For repeated A-to-B anchors, expose total occurrences and unique sources separately with anchor text and rel. | [Link auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/internal-linking-audit-with-the-seo-spider/) |
-| `links.positions` | `planned` | Link position and path | Classify nav/header/footer/content links and custom positions; retain selector/path per occurrence. | [Link auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/internal-linking-audit-with-the-seo-spider/) |
+| `links.positions` | `implemented` | Link position and path | Classify nav/header/footer/content links and custom positions; retain selector/path per occurrence. | [Link auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/internal-linking-audit-with-the-seo-spider/) |
 | `links.depth` | `partial` | Shortest crawl depth | On a graph with multiple routes, compute minimum click depth deterministically after complete discovery. | [Link auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/internal-linking-audit-with-the-seo-spider/) |
 | `links.score` | `partial` | Internal authority scoring | Run a documented independent PageRank-style method on a known graph; save algorithm and parameter version. | [Link auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/internal-linking-audit-with-the-seo-spider/) |
 | `links.orphans` | `partial` | Orphan URL discovery | Merge sitemap/analytics/search data; distinguish absent internal links from incomplete crawl coverage. | [Orphan auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/find-orphan-pages/) |
-| `links.uncrawlable` | `planned` | Nonstandard link evidence | Record onclick, javascript URLs and href on non-anchor elements without assuming a valid navigable target. | [Version 24 release (19 May 2026)](https://www.screamingfrog.co.uk/blog/seo-spider-24/) |
-| `links.fragments` | `planned` | Bookmark validation | Verify decoded fragment destinations against IDs/names; distinguish a missing fragment from a failed page. | [General operation](https://www.screamingfrog.co.uk/seo-spider/user-guide/general/) |
+| `links.uncrawlable` | `partial` | Nonstandard link evidence | Record onclick, javascript URLs and href on non-anchor elements without assuming a valid navigable target. | [Version 24 release (19 May 2026)](https://www.screamingfrog.co.uk/blog/seo-spider-24/) |
+| `links.fragments` | `implemented` | Bookmark validation | Verify decoded fragment destinations against IDs/names; distinguish a missing fragment from a failed page. | [General operation](https://www.screamingfrog.co.uk/seo-spider/user-guide/general/) |
 | `links.crawl_graph` | `partial` | Crawl tree and graph views | Render shortest-path hierarchy, focus/expand and status/indexability coloring from fixture data. | [Architecture visualization](https://www.screamingfrog.co.uk/seo-spider/tutorials/site-architecture-crawl-visualisations/) |
 | `links.directory_graph` | `planned` | Directory architecture views | Build directory hierarchy including synthetic grouping paths and label paths that are not fetched URLs. | [Architecture visualization](https://www.screamingfrog.co.uk/seo-spider/tutorials/site-architecture-crawl-visualisations/) |
 | `links.graphs_3d` | `planned` | 3D graph views | Display a bounded large graph and expose truncation/focus rather than silently omitting nodes. | [Architecture visualization](https://www.screamingfrog.co.uk/seo-spider/tutorials/site-architecture-crawl-visualisations/) |
@@ -255,9 +255,11 @@ The source link in each row supports the reference product area. Acceptance crit
 
 ## Evidence-based implementation status
 
-Review: 12 October 2026. **16 implemented, 71 partial, 57 planned; 144 grouped requirements.** This is independent acceptance, never a vendor-coverage percentage. The separate [416-filter ledger](parity/granular-acceptance.md) records exact parameters, trigger/control fixtures and edge contracts with all reference parity statuses still NOT_PROVEN.
+Review: 12 October 2026. **20 implemented, 71 partial, 53 planned; 144 grouped requirements.** This is independent acceptance, never a vendor-coverage percentage. The separate [416-filter ledger](parity/granular-acceptance.md) records exact parameters, trigger/control fixtures and edge contracts with all reference parity statuses still NOT_PROVEN.
 
-The preserved [earlier advanced batch](verification/advanced-batch.json) records its original 91 Rust tests and earlier export/browser checks. The fresh [resource and offline batch](verification/resource-offline-batch.json) records **126 default Rust tests** (28 app, 71 core, 23 crawl, four resource fixtures), one explicit real-browser gate, Clippy/build checks, 16 worker tests, 33 UI fixtures, 14 actual renderer-flow checks, 13 actual resource-flow checks, six offline SERP browser checks, and 13 editor-race regressions. The API gate covers all eleven crawl export endpoints, recovery and offline import/export; official MCP SDK tests pass in both transports with 11 tools. The actual offline SERP fixture receives **zero website requests**.
+The preserved [earlier advanced batch](verification/advanced-batch.json) records its original 91 Rust tests and earlier export/browser checks. The preserved [resource and offline batch](verification/resource-offline-batch.json) records **126 default Rust tests** (28 app, 71 core, 23 crawl, four resource fixtures), one explicit real-browser gate, Clippy/build checks, 16 worker tests, 33 UI fixtures, 14 actual renderer-flow checks, 13 actual resource-flow checks, six offline SERP browser checks, and 13 editor-race regressions. The API gate covers all eleven crawl export endpoints, recovery and offline import/export; official MCP SDK tests pass in both transports with 11 tools. The actual offline SERP fixture receives **zero website requests**.
+
+The current [DOM and robots batch](verification/dom-robots-batch.json) records **163 default Rust tests**, one explicit Chrome gate, 40 UI fixtures, 19 actual DOM browser checks, eight offline robots browser checks, 13 crawl exports and a startup regression preserving completed/imported snapshot bytes and unknown future fields. Seven existing user crawls and eleven original JSON files remain byte-identical after the installed release restart.
 
 The [current original fixture comparison](parity/reference-comparison.md) records **887 matching cells, 29 differences and three unavailable measurements**, across 35 reference rows and 34 independent document rows. Native response inventories separately retain intermediate redirect observations; they do not manufacture document rows. The [native text-width comparison](parity/native-text-width-comparison.json) matches **58 present title/description measurements** for the fixed public-font 150-percent profile, with two absent-element placeholders excluded. Other display profiles and complex shaping remain outside that proof. [Membership evidence](parity/reference-membership/membership.md) covers 78 selected filters; empty or unconfirmed probes remain open. Matching cells and measurements do not count as complete features or prove all filter boundaries.
 
@@ -265,14 +267,14 @@ The offline SERP editor, meta/HTTP robots extraction and supported HTML extracti
 
 | Phase | Implemented | Partial | Planned | Total |
 | --- | ---: | ---: | ---: | ---: |
-| P1 | 5 | 27 | 13 | 45 |
-| P2 | 4 | 31 | 10 | 45 |
+| P1 | 7 | 26 | 12 | 45 |
+| P2 | 6 | 32 | 7 | 45 |
 | P3 | 5 | 8 | 11 | 24 |
 | P4 | 2 | 5 | 23 | 30 |
 
 ## Reference workflow evidence
 
-Small HTTP/graph/robots/relationship comparisons are now recorded with known differences. Full workflow parity, browser parity, provider comparison, Docker runtime and production-scale proof remain NOT_PROVEN.
+Small HTTP/graph/robots/relationship comparisons are now recorded with known differences. Full workflow parity, browser parity, provider comparison and production-scale proof remain NOT_PROVEN. Linux container and four-job CI are verified at the exact prior commit in [the CI proof](verification/resource-offline-ci.json); Windows Docker/WSL installation remains unproven.
 
 ## Required proof before a complete-parity claim
 

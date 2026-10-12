@@ -141,6 +141,15 @@ pub fn export_links_csv(report: &CrawlReport) -> anyhow::Result<String> {
         "Internal",
         "Rel",
         "Nofollow",
+        "Raw Href",
+        "Resolved Href",
+        "Fragment",
+        "DOM Source",
+        "DOM Index",
+        "DOM Path",
+        "DOM Path Truncated",
+        "Semantic Ancestors",
+        "Position",
     ])?;
     for page in &report.pages {
         for link in &page.links {
@@ -152,7 +161,178 @@ pub fn export_links_csv(report: &CrawlReport) -> anyhow::Result<String> {
                 link.internal.to_string(),
                 csv_text(&link.rel),
                 link.nofollow.to_string(),
+                csv_text(link.raw_href.as_deref().unwrap_or_default()),
+                csv_text(link.resolved_href.as_deref().unwrap_or_default()),
+                csv_text(link.fragment.as_deref().unwrap_or_default()),
+                csv_text(
+                    link.dom_location
+                        .as_ref()
+                        .and(page.dom_metadata.as_ref())
+                        .map(|dom| dom.source.as_str())
+                        .unwrap_or_default(),
+                ),
+                link.dom_location
+                    .as_ref()
+                    .map(|location| location.index.to_string())
+                    .unwrap_or_default(),
+                csv_text(
+                    link.dom_location
+                        .as_ref()
+                        .and_then(|location| location.path.as_deref())
+                        .unwrap_or_default(),
+                ),
+                link.dom_location
+                    .as_ref()
+                    .map(|location| location.path_truncated.to_string())
+                    .unwrap_or_default(),
+                csv_text(
+                    &link
+                        .dom_location
+                        .as_ref()
+                        .map(|location| location.semantic_ancestors.join(" | "))
+                        .unwrap_or_default(),
+                ),
+                csv_text(link.position.as_deref().unwrap_or_default()),
             ])?;
+        }
+    }
+    Ok(String::from_utf8(writer.into_inner()?)?)
+}
+
+pub fn export_fragments_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let mut writer = csv::Writer::from_writer(Vec::new());
+    writer.write_record([
+        "Source URL",
+        "Source Document URL",
+        "Target URL",
+        "Resolved Href",
+        "Fragment",
+        "Decoded Fragment",
+        "Status",
+        "Reason",
+        "Target Document URL",
+        "Target Complete",
+        "Source DOM JSON",
+        "Matched Target JSON",
+    ])?;
+    for row in crate::validate_fragments(report) {
+        let status = serde_json::to_value(row.status)?;
+        writer.write_record([
+            csv_text(&row.source_url),
+            csv_text(&row.source_document_url),
+            csv_text(&row.target_url),
+            csv_text(&row.resolved_href),
+            csv_text(&row.fragment),
+            csv_text(row.decoded_fragment.as_deref().unwrap_or_default()),
+            csv_text(status.as_str().unwrap_or_default()),
+            csv_text(&row.reason),
+            csv_text(row.target_document_url.as_deref().unwrap_or_default()),
+            row.target_complete.to_string(),
+            row.source_dom_location
+                .as_ref()
+                .map(serde_json::to_string)
+                .transpose()?
+                .unwrap_or_default(),
+            row.matched_target
+                .as_ref()
+                .map(serde_json::to_string)
+                .transpose()?
+                .unwrap_or_default(),
+        ])?;
+    }
+    Ok(String::from_utf8(writer.into_inner()?)?)
+}
+
+/// Original typed facts, with explicit legacy/availability records per snapshot.
+pub fn export_dom_observations_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let mut writer = csv::Writer::from_writer(Vec::new());
+    writer.write_record([
+        "URL",
+        "Snapshot Role",
+        "Source",
+        "Collection Complete",
+        "Family",
+        "DOM Index",
+        "DOM Path",
+        "DOM Path Truncated",
+        "Details JSON",
+    ])?;
+    for page in &report.pages {
+        let mut snapshots = vec![("effective", page.dom_metadata.as_ref())];
+        if let Some(raw) = page.raw_metadata.as_ref() {
+            snapshots.push(("native_predecessor", raw.dom_metadata.as_ref()));
+        }
+        for (role, dom) in snapshots {
+            let source = dom.map(|value| value.source.as_str()).unwrap_or_default();
+            let complete = dom
+                .map(|value| value.complete.to_string())
+                .unwrap_or_default();
+            let mut fact = |family: &str,
+                            location: Option<&crate::DomLocation>,
+                            value: serde_json::Value|
+             -> anyhow::Result<()> {
+                writer.write_record([
+                    csv_text(&page.url),
+                    role.into(),
+                    csv_text(source),
+                    complete.clone(),
+                    family.into(),
+                    location
+                        .map(|value| value.index.to_string())
+                        .unwrap_or_default(),
+                    csv_text(
+                        location
+                            .and_then(|value| value.path.as_deref())
+                            .unwrap_or_default(),
+                    ),
+                    location
+                        .map(|value| value.path_truncated.to_string())
+                        .unwrap_or_default(),
+                    serde_json::to_string(&value)?,
+                ])?;
+                Ok(())
+            };
+            fact(
+                "availability",
+                None,
+                serde_json::json!({"available":dom.is_some(),"engine":dom.map(|value|value.engine.as_str()),"limits_reached":dom.map(|value|&value.limits_reached)}),
+            )?;
+            let Some(dom) = dom else { continue };
+            for value in &dom.headings {
+                fact(
+                    "heading",
+                    Some(&value.dom_location),
+                    serde_json::to_value(value)?,
+                )?;
+            }
+            for value in &dom.meta_keywords {
+                fact(
+                    "meta_keywords",
+                    Some(&value.dom_location),
+                    serde_json::to_value(value)?,
+                )?;
+            }
+            for value in &dom.fragment_targets {
+                fact(
+                    "fragment_target",
+                    Some(&value.dom_location),
+                    serde_json::to_value(value)?,
+                )?;
+            }
+            for value in &dom.navigation_candidates {
+                fact(
+                    "navigation_candidate",
+                    Some(&value.dom_location),
+                    serde_json::to_value(value)?,
+                )?;
+            }
+            for value in &dom.responsive_images {
+                fact(
+                    "responsive_image",
+                    Some(&value.dom_location),
+                    serde_json::to_value(value)?,
+                )?;
+            }
         }
     }
     Ok(String::from_utf8(writer.into_inner()?)?)
@@ -544,6 +724,161 @@ mod tests {
             .map(|record| record.unwrap().iter().map(str::to_owned).collect())
             .collect();
         (headers, rows)
+    }
+
+    #[test]
+    fn link_dom_csv_keeps_legacy_columns_and_unknowns_separate_from_zero() {
+        let mut page = PageRecord {
+            url: "https://fixture.test/source".into(),
+            ..Default::default()
+        };
+        page.links = vec![
+            crate::LinkRecord {
+                url: "https://fixture.test/target".into(),
+                kind: "anchor".into(),
+                raw_href: Some(" \t=SUM(1,2)".into()),
+                fragment: Some("=fragment".into()),
+                position: Some("@custom".into()),
+                dom_location: Some(crate::DomLocation {
+                    index: 0,
+                    path: Some("html/body/a[1]".into()),
+                    ..Default::default()
+                }),
+                ..Default::default()
+            },
+            crate::LinkRecord {
+                url: "https://fixture.test/legacy".into(),
+                kind: "anchor".into(),
+                ..Default::default()
+            },
+        ];
+        page.dom_metadata = Some(crate::DomMetadata {
+            source: "raw_html".into(),
+            complete: true,
+            ..Default::default()
+        });
+        let (headers, rows) = read_csv(&export_links_csv(&report(vec![page])).unwrap());
+        assert_eq!(
+            &headers[..7],
+            &[
+                "Source",
+                "Target",
+                "Anchor Text",
+                "Kind",
+                "Internal",
+                "Rel",
+                "Nofollow"
+            ]
+        );
+        assert_eq!(rows[0][7], "' \t=SUM(1,2)");
+        assert_eq!(rows[0][9], "'=fragment");
+        assert_eq!(rows[0][11], "0");
+        assert_eq!(rows[0][15], "'@custom");
+        assert!(rows[1][7..].iter().all(String::is_empty));
+    }
+
+    #[test]
+    fn dom_csv_preserves_raw_rendered_facts_and_exact_json_with_legacy_availability() {
+        let text = " \t=SUM(1,2), \"Über\"\n<img src=x>";
+        let dom = crate::DomMetadata {
+            source: "rendered_html".into(),
+            complete: true,
+            headings: vec![crate::HeadingRecord {
+                tag_level: 2,
+                text: text.into(),
+                dom_location: crate::DomLocation {
+                    index: 0,
+                    path: Some("html/body/h2[1]".into()),
+                    ..Default::default()
+                },
+                ..Default::default()
+            }],
+            ..Default::default()
+        };
+        let mut raw_dom = dom.clone();
+        raw_dom.source = "raw_html".into();
+        raw_dom.headings[0].text = "Original".into();
+        let page = PageRecord {
+            url: "https://fixture.test/observed".into(),
+            dom_metadata: Some(dom),
+            raw_metadata: Some(crate::RawMetadata {
+                dom_metadata: Some(raw_dom),
+                ..Default::default()
+            }),
+            ..Default::default()
+        };
+        let legacy = PageRecord {
+            url: "https://fixture.test/legacy".into(),
+            ..Default::default()
+        };
+        let (headers, rows) =
+            read_csv(&export_dom_observations_csv(&report(vec![page, legacy])).unwrap());
+        assert_eq!(headers.len(), 9);
+        let heading = rows
+            .iter()
+            .find(|row| row[1] == "effective" && row[4] == "heading")
+            .unwrap();
+        assert_eq!(heading[5], "0");
+        assert_eq!(heading[3], "true");
+        assert_eq!(
+            serde_json::from_str::<serde_json::Value>(&heading[8]).unwrap()["text"],
+            text
+        );
+        assert!(rows.iter().any(|row| row[1] == "native_predecessor"
+            && row[2] == "raw_html"
+            && row[4] == "heading"));
+        let legacy = rows.iter().find(|row| row[0].ends_with("/legacy")).unwrap();
+        assert_eq!(legacy[4], "availability");
+        assert_eq!(legacy[3], "");
+        assert_eq!(legacy[5], "");
+        assert_eq!(
+            serde_json::from_str::<serde_json::Value>(&legacy[8]).unwrap()["available"],
+            false
+        );
+    }
+
+    #[test]
+    fn fragment_csv_preserves_occurrences_and_unobserved_targets_are_unknown() {
+        let url = "https://fixture.test/source";
+        let mut page = PageRecord {
+            url: url.into(),
+            final_url: url.into(),
+            status: Some(200),
+            final_status: Some(200),
+            content_type: "text/html".into(),
+            internal: true,
+            ..Default::default()
+        };
+        crate::extract_html(
+            &mut page,
+            "<h1 id='here'>Here</h1><a href='#here'>Found</a><a href='#gone'>Missing</a><a href='/absent#id'>Unobserved</a>",
+            &[url::Url::parse(url).unwrap()],
+            false,
+        );
+        let mut snapshot = report(vec![page]);
+        snapshot.config.validate_fragments = true;
+        let (headers, rows) = read_csv(&export_fragments_csv(&snapshot).unwrap());
+        assert_eq!(headers.len(), 12);
+        assert_eq!(rows.len(), 3);
+        assert!(
+            rows.iter()
+                .any(|row| row[4] == "here" && row[6] == "matched_id" && !row[11].is_empty())
+        );
+        assert!(
+            rows.iter()
+                .any(|row| row[4] == "gone" && row[6] == "missing" && row[9] == "true")
+        );
+        assert!(
+            rows.iter().any(|row| row[4] == "id"
+                && row[6] == "unknown"
+                && row[7] == "target_not_observed")
+        );
+        snapshot.config.validate_fragments = false;
+        assert!(
+            read_csv(&export_fragments_csv(&snapshot).unwrap())
+                .1
+                .is_empty()
+        );
     }
 
     #[test]

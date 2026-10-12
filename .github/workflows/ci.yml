@@ -53,6 +53,7 @@ jobs:
         working-directory: renderer
       - run: node web/verification/ui-smoke.cjs
       - run: node --test web/verification/serp-state-race.test.cjs
+      - run: node --test web/verification/robots-input-state.test.cjs
       - run: cargo build --locked -p open-seo-spider
       - name: Rust and browser integration
         shell: bash
@@ -67,3 +68,5 @@ jobs:
           node web/verification/ui-renderer-live.cjs
           node web/verification/ui-serp-live.cjs
           node web/verification/ui-resource-live.cjs
+          node web/verification/ui-dom-live.cjs
+          node web/verification/ui-robots-live.cjs

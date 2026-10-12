@@ -124,3 +124,7 @@ Official primary sources for reviewed specifics:
 General references: [configuration](https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/), [tabs](https://www.screamingfrog.co.uk/seo-spider/user-guide/tabs/), [normal CLI](https://www.screamingfrog.co.uk/seo-spider/user-guide/general/).
 
 Regenerate with `node scripts/reference-backlog.mjs`; validate that exactly416 unique named arguments remain mapped. Do not count unresolved contract design as implementation work completed.
+
+## Bounded heading-order calibration
+
+The corrected native implementation matches 48 retained H1/H2 membership observations on 24 authored raw HTML cases: [native comparison](native-heading-comparison.json). The two scoped contracts retain their former trigger proposals and original contradictions, alongside the refined first-H1/first-H2 behavior. This does not establish rendered, noindex, malformed, incomplete or whole-filter parity. All parity statuses remain NOT_PROVEN.

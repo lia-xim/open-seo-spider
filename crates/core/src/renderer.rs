@@ -1,5 +1,5 @@
 use crate::urls::{origin, same_scope};
-use crate::{CrawlConfig, PageRecord, RawMetadata, RendererConfig, extract_html, normalize_url};
+use crate::{CrawlConfig, PageRecord, RawMetadata, RendererConfig, normalize_url};
 use anyhow::{Context, bail};
 use reqwest::Client;
 use serde::Deserialize;
@@ -127,7 +127,14 @@ pub(crate) async fn render_page(page: &mut PageRecord, config: &CrawlConfig, see
             page.script_count = 0;
             page.language = None;
             page.viewport = None;
-            extract_html(page, &document.html, seeds, config.include_subdomains);
+            crate::extract::extract_html_in_source(
+                page,
+                &document.html,
+                seeds,
+                config.include_subdomains,
+                &config.link_position_rules,
+                "rendered_html",
+            );
             crate::extract::apply_custom_extractions(
                 page,
                 &document.html,

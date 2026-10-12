@@ -8,10 +8,12 @@ use axum::{
 };
 use open_seo_spider_core::{
     AuditIssue, CrawlConfig, CrawlEvent, CrawlReport, CrawlStore, Crawler, PageRecord,
-    SerpInputRow, compare_crawls, export_browser_cookies_csv, export_custom_extractions_csv,
-    export_custom_javascript_csv, export_image_resources_csv, export_issues_csv, export_links_csv,
-    export_pages_csv, export_pdf_csv, export_response_observations_csv, export_serp_csv,
-    export_sitemap_xml, import_serp_csv, preview_serp, response_observations,
+    RobotsSimulationInput, SerpInputRow, compare_crawls, export_browser_cookies_csv,
+    export_custom_extractions_csv, export_custom_javascript_csv, export_dom_observations_csv,
+    export_fragments_csv, export_image_resources_csv, export_issues_csv, export_links_csv,
+    export_pages_csv, export_pdf_csv, export_response_observations_csv,
+    export_robots_simulation_csv, export_serp_csv, export_sitemap_xml, import_serp_csv,
+    preview_serp, response_observations, simulate_robots, validate_fragments,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
@@ -154,6 +156,26 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
         .route("/api/serp/preview", post(serp_preview))
         .route("/api/serp/import", post(serp_import))
         .route("/api/serp/export.csv", post(serp_export))
+        .route(
+            "/robots",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/html; charset=utf-8")],
+                    include_str!("../../../web/robots.html"),
+                )
+            }),
+        )
+        .route(
+            "/robots.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+                    include_str!("../../../web/robots.js"),
+                )
+            }),
+        )
+        .route("/api/robots/simulate", post(robots_simulate))
+        .route("/api/robots/export.csv", post(robots_export))
         .route("/mcp", post(mcp_http))
         .route("/api/crawls", get(list_crawls).post(create_crawl))
         .route("/api/crawls/import", post(import_report))
@@ -163,6 +185,9 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
         .route("/api/crawls/{id}/analysis", get(advanced_analysis))
         .route("/api/crawls/{id}/responses", get(response_inventory))
         .route("/api/crawls/{id}/responses.csv", get(export_responses))
+        .route("/api/crawls/{id}/fragments", get(fragment_inventory))
+        .route("/api/crawls/{id}/fragments.csv", get(export_fragments))
+        .route("/api/crawls/{id}/dom.csv", get(export_dom))
         .route("/api/crawls/{id}/cancel", post(cancel_crawl))
         .route("/api/crawls/{id}/resume", post(resume_crawl))
         .route("/api/crawls/{id}/export.csv", get(export_csv))
@@ -253,14 +278,19 @@ async fn capabilities() -> Json<Value> {
             "css_extraction":true,"xpath_1_0_extraction":true,"regex_extraction":true,
             "html_extraction_output":true,"configurable_audit_thresholds":true,
             "local_font_pixel_profile":true,"native_pdf_observations":true,
-            "fetched_image_dimensions":true
+            "fetched_image_dimensions":true,
+            "heading_dom_observations":true,"meta_keyword_observations":true,
+            "link_dom_positions":true,"custom_css_link_positions":true,
+            "responsive_image_candidates":true,"nonstandard_navigation_observations":true,
+            "fragment_validation":{"opt_in":true,"requires_captured_target":true,"unknown_is_not_missing":true}
         },
         "offline_serp":{"path":"/serp","website_requests":0,"csv_import":true,"row_limit":10000},
+        "offline_robots":{"path":"/robots","website_requests":0,"engine":"crawler_policy","remote_rules_fetch":false},
         "optional_worker":{"javascript_rendering":true,"custom_javascript":true,
             "redacted_cookie_observations":true,"screenshots":true,"accessibility_axe":true,
             "endpoint":"http://127.0.0.1:8790/render","enabled_by_default":false},
         "mcp":{"stdio":true,"streamable_http":"/mcp"},
-        "exports":["pages_csv","issues_csv","links_csv","extractions_csv","javascript_csv","cookies_csv","pdf_csv","image_resources_csv","responses_csv","sitemap_xml","project_json"],
+        "exports":["pages_csv","issues_csv","links_csv","extractions_csv","javascript_csv","cookies_csv","pdf_csv","image_resources_csv","responses_csv","fragments_csv","dom_csv","sitemap_xml","project_json"],
         "unimplemented":["api_integrations","spelling_grammar","pdf_ocr_and_rendering","shared_authenticated_browser_sessions","embedding_semantic_search","scheduling","full_structured_data_validation"],
         "parity":"in progress; see docs/parity/granular-acceptance.json"
     }))
@@ -544,7 +574,7 @@ async fn launch(state: AppState, job: Arc<RwLock<Job>>) {
                 guard.error = Some(error.to_string());
             }
         }
-        // Keep the write lock until the terminal checkpoint is durable. A status
+        // Keep the write lock until the terminal checkpoint write is complete. A status
         // reader or immediate resume must not race this write to the same file.
         let manifest = JobManifest {
             id: guard.id,
@@ -637,6 +667,56 @@ async fn serp_export(Json(input): Json<SerpRowsRequest>) -> ApiResult<Response> 
         export_serp_csv(&input.rows).map_err(|error| api_error(StatusCode::BAD_REQUEST, error))?,
         "text/csv; charset=utf-8",
         "serp.csv",
+    ))
+}
+async fn robots_simulate(
+    Json(input): Json<RobotsSimulationInput>,
+) -> ApiResult<Json<open_seo_spider_core::RobotsSimulation>> {
+    tokio::task::spawn_blocking(move || simulate_robots(&input))
+        .await
+        .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?
+        .map(Json)
+        .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))
+}
+async fn robots_export(Json(input): Json<RobotsSimulationInput>) -> ApiResult<Response> {
+    let csv = tokio::task::spawn_blocking(move || export_robots_simulation_csv(&input))
+        .await
+        .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?
+        .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))?;
+    Ok(download(
+        csv,
+        "text/csv; charset=utf-8",
+        "robots-simulation.csv",
+    ))
+}
+async fn fragment_inventory(
+    State(state): State<AppState>,
+    Path(id): Path<Uuid>,
+) -> ApiResult<Json<Value>> {
+    let report = require_report(&state, id).await?;
+    Ok(Json(
+        json!({"observations":validate_fragments(&report),"enabled":report.config.validate_fragments,"scope":"declared_anchor_fragments_in_captured_documents","unknown_is_not_missing":true}),
+    ))
+}
+async fn export_fragments(
+    State(state): State<AppState>,
+    Path(id): Path<Uuid>,
+) -> ApiResult<Response> {
+    let report = require_report(&state, id).await?;
+    Ok(download(
+        export_fragments_csv(&report)
+            .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?,
+        "text/csv; charset=utf-8",
+        "fragments.csv",
+    ))
+}
+async fn export_dom(State(state): State<AppState>, Path(id): Path<Uuid>) -> ApiResult<Response> {
+    let report = require_report(&state, id).await?;
+    Ok(download(
+        export_dom_observations_csv(&report)
+            .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?,
+        "text/csv; charset=utf-8",
+        "dom-observations.csv",
     ))
 }
 async fn export_pdf(State(state): State<AppState>, Path(id): Path<Uuid>) -> ApiResult<Response> {
@@ -765,6 +845,13 @@ async fn import_report(
 }
 async fn persist_import(state: &AppState, id: Uuid, mut report: CrawlReport) -> ApiResult<()> {
     crate::analysis::extend_report(&mut report);
+    write_json(state.data_dir.join(format!("{id}.json")), &report)
+        .await
+        .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?;
+    register_report(state, id, report).await;
+    Ok(())
+}
+async fn register_report(state: &AppState, id: Uuid, report: CrawlReport) {
     let job = Job {
         id,
         config: report.config.clone(),
@@ -782,18 +869,14 @@ async fn persist_import(state: &AppState, id: Uuid, mut report: CrawlReport) -> 
         in_flight: 0,
         warnings: report.warnings.clone(),
         error: None,
-        report: Some(report.clone()),
+        report: Some(report),
         cancel: Arc::new(AtomicBool::new(false)),
     };
-    write_json(state.data_dir.join(format!("{id}.json")), &report)
-        .await
-        .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?;
     state
         .jobs
         .write()
         .await
         .insert(id, Arc::new(RwLock::new(job)));
-    Ok(())
 }
 async fn write_json<T: Serialize>(path: PathBuf, value: &T) -> anyhow::Result<()> {
     let temporary = path.with_extension("tmp");
@@ -840,9 +923,10 @@ async fn load_reports(state: &AppState) -> anyhow::Result<()> {
             .and_then(|bytes| serde_json::from_slice::<CrawlReport>(&bytes).ok())
         {
             Some(report) => {
-                persist_import(state, id, report)
-                    .await
-                    .map_err(|error| anyhow::anyhow!(error.1.0.error))?;
+                // Loading a historical snapshot is read-only. Importing a new
+                // report is a separate operation that may derive and persist
+                // current analysis; startup must not overwrite stored bytes.
+                register_report(state, id, report).await;
             }
             None => tracing::warn!(path=?path,"Ignoring invalid saved crawl"),
         }

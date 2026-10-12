@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "input": {
+    "robots_text": "User-agent: *\nDisallow: /private\nAllow: /private/public\nDisallow: /*.pdf$\nDisallow: /find?blocked=1$\nCrawl-delay: 4\nNoindex: /\nSitemap: http://127.0.0.1:56353/unrequested-map.xml\nUser-agent: Googlebot\nDisallow: /google-only\nDisallow: /*.pdf$\n",
+    "user_agent": "OpenSEOSpider",
+    "urls": [
+      "http://127.0.0.1:56353/private/secret",
+      "http://127.0.0.1:56353/private/public/a",
+      "http://127.0.0.1:56353/report.pdf#part",
+      "http://127.0.0.1:56353/report.pdf?download=1",
+      "http://127.0.0.1:56353/find?blocked=1#fragment",
+      "http://127.0.0.1:56353/find?blocked=1&other=2",
+      "http://127.0.0.1:56353/google-only",
+      "http://127.0.0.1:56353/private/secret",
+      "not a URL",
+      "ftp://example.invalid/file",
+      "=FORMULA()",
+      "",
+      "http://127.0.0.1:56353/<img src=x onerror=window.__robots_xss=true>"
+    ],
+    "limits": {
+      "max_robots_bytes": 524288,
+      "max_urls": 10000,
+      "max_url_bytes": 8192,
+      "max_input_bytes": 8388608,
+      "max_evaluation_bytes": 67108864
+    }
+  },
+  "result": {
+    "engine": "robotstxt-0.3.0/Google-DefaultMatcher/crawler-policy",
+    "rules_sha256": "37a902abfcdf692606dd091244a3c86141e1a9a7cecaa5ed040e5fc7080a9f25",
+    "rules_bytes": 242,
+    "user_agent": "OpenSEOSpider",
+    "rows": [
+      {
+        "source_row": 1,
+        "input_url": "http://127.0.0.1:56353/private/secret",
+        "normalized_url": "http://127.0.0.1:56353/private/secret",
+        "path_query": "/private/secret",
+        "fragment": null,
+        "allowed": false,
+        "error": null
+      },
+      {
+        "source_row": 2,
+        "input_url": "http://127.0.0.1:56353/private/public/a",
+        "normalized_url": "http://127.0.0.1:56353/private/public/a",
+        "path_query": "/private/public/a",
+        "fragment": null,
+        "allowed": true,
+        "error": null
+      },
+      {
+        "source_row": 3,
+        "input_url": "http://127.0.0.1:56353/report.pdf#part",
+        "normalized_url": "http://127.0.0.1:56353/report.pdf",
+        "path_query": "/report.pdf",
+        "fragment": "part",
+        "allowed": false,
+        "error": null
+      },
+      {
+        "source_row": 4,
+        "input_url": "http://127.0.0.1:56353/report.pdf?download=1",
+        "normalized_url": "http://127.0.0.1:56353/report.pdf?download=1",
+        "path_query": "/report.pdf?download=1",
+        "fragment": null,
+        "allowed": true,
+        "error": null
+      },
+      {
+        "source_row": 5,
+        "input_url": "http://127.0.0.1:56353/find?blocked=1#fragment",
+        "normalized_url": "http://127.0.0.1:56353/find?blocked=1",
+        "path_query": "/find?blocked=1",
+        "fragment": "fragment",
+        "allowed": false,
+        "error": null
+      },
+      {
+        "source_row": 6,
+        "input_url": "http://127.0.0.1:56353/find?blocked=1&other=2",
+        "normalized_url": "http://127.0.0.1:56353/find?blocked=1&other=2",
+        "path_query": "/find?blocked=1&other=2",
+        "fragment": null,
+        "allowed": true,
+        "error": null
+      },
+      {
+        "source_row": 7,
+        "input_url": "http://127.0.0.1:56353/google-only",
+        "normalized_url": "http://127.0.0.1:56353/google-only",
+        "path_query": "/google-only",
+        "fragment": null,
+        "allowed": true,
+        "error": null
+      },
+      {
+        "source_row": 8,
+        "input_url": "http://127.0.0.1:56353/private/secret",
+        "normalized_url": "http://127.0.0.1:56353/private/secret",
+        "path_query": "/private/secret",
+        "fragment": null,
+        "allowed": false,
+        "error": null
+      },
+      {
+        "source_row": 9,
+        "input_url": "not a URL",
+        "normalized_url": null,
+        "path_query": null,
+        "fragment": null,
+        "allowed": null,
+        "error": "Invalid absolute URL: relative URL without a base"
+      },
+      {
+        "source_row": 10,
+        "input_url": "ftp://example.invalid/file",
+        "normalized_url": null,
+        "path_query": null,
+        "fragment": null,
+        "allowed": null,
+        "error": "Only absolute HTTP/HTTPS URLs with a host are supported"
+      },
+      {
+        "source_row": 11,
+        "input_url": "=FORMULA()",
+        "normalized_url": null,
+        "path_query": null,
+        "fragment": null,
+        "allowed": null,
+        "error": "Invalid absolute URL: relative URL without a base"
+      },
+      {
+        "source_row": 12,
+        "input_url": "",
+        "normalized_url": null,
+        "path_query": null,
+        "fragment": null,
+        "allowed": null,
+        "error": "Invalid absolute URL: relative URL without a base"
+      },
+      {
+        "source_row": 13,
+        "input_url": "http://127.0.0.1:56353/<img src=x onerror=window.__robots_xss=true>",
+        "normalized_url": "http://127.0.0.1:56353/%3Cimg%20src=x%20onerror=window.__robots_xss=true%3E",
+        "path_query": "/%3Cimg%20src=x%20onerror=window.__robots_xss=true%3E",
+        "fragment": null,
+        "allowed": true,
+        "error": null
+      }
+    ],
+    "website_requests": 0,
+    "ignored_directives": [
+      "crawl-delay",
+      "noindex",
+      "sitemap"
+    ],
+    "limitations": [
+      "Only pasted UTF-8 robots text is simulated. HTTP retrieval, cache state, redirects, robots fetch failures, site scope and meta/X-Robots-Tag indexability are not simulated.",
+      "Allow/Disallow and User-agent decisions use the crawler's installed Google DefaultMatcher. Crawl-delay, Request-rate, Host, Noindex and Sitemap do not change this access decision; no sitemap is fetched.",
+      "Input URL order/duplicates and fragments are retained. Matching uses the crawler-normalized HTTP URL with fragments removed and path/query preserved; no additional percent-decoding is applied, and encoded-unreserved RFC equivalence is not asserted.",
+      "The matcher does not expose a verified winning rule/line trace. No matched-rule explanation is fabricated; ignored_directives lists parser-classified nondecision fields, not a complete syntax validator."
+    ]
+  }
+}

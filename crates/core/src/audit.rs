@@ -30,6 +30,15 @@ pub(crate) fn set_indexability(page: &mut PageRecord) {
     if page.renderer_error.is_some() {
         reasons.push("Browser rendering incomplete; rendered indexability not established".into());
     }
+    if page.rendered && page.rendered_status != Some(200) {
+        reasons.push(match page.rendered_status {
+            Some(status) => format!(
+                "Rendered response returns HTTP {status}; rendered indexability not established"
+            ),
+            None => "Rendered response status not observed; rendered indexability not established"
+                .into(),
+        });
+    }
     page.indexable = reasons.is_empty();
     page.indexability_reasons = reasons;
 }
@@ -166,7 +175,7 @@ pub fn audit_pages_with_thresholds(
             || page.error.is_some()
             || page.truncated
             || page.renderer_error.is_some()
-            || (page.rendered && page.rendered_status.is_some_and(|status| status != 200))
+            || (page.rendered && page.rendered_status != Some(200))
         {
             continue;
         }
@@ -410,7 +419,7 @@ pub fn audit_pages_with_thresholds(
                 && target.final_status == Some(200)
                 && target.error.is_none()
                 && target.renderer_error.is_none()
-                && (!target.rendered || target.rendered_status.is_none_or(|status| status == 200))
+                && (!target.rendered || target.rendered_status == Some(200))
                 && !target.truncated
                 && !target.blocked_by_robots
                 && !target.hreflang.iter().any(|h| h.url == page.document_url())
@@ -585,6 +594,43 @@ pub fn audit_pages_with_thresholds(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn rendered_indexability_requires_known_success_without_inventing_noindex() {
+        let base = PageRecord {
+            url: "https://fixture.test/a".into(),
+            final_url: "https://fixture.test/a".into(),
+            status: Some(200),
+            final_status: Some(200),
+            content_type: "text/html".into(),
+            rendered: true,
+            ..Default::default()
+        };
+        for status in [None, Some(404), Some(200)] {
+            let mut page = base.clone();
+            page.rendered_status = status;
+            set_indexability(&mut page);
+            assert_eq!(page.indexable, status == Some(200));
+            assert!(
+                !page
+                    .indexability_reasons
+                    .iter()
+                    .any(|reason| reason.contains("Noindex"))
+            );
+            if status == Some(200) {
+                assert!(page.indexability_reasons.is_empty());
+            } else {
+                assert!(page.indexability_reasons.iter().any(|reason| {
+                    reason.contains("Rendered response")
+                        && reason.contains("indexability not established")
+                }));
+            }
+        }
+        let mut native = base;
+        native.rendered = false;
+        set_indexability(&mut native);
+        assert!(native.indexable);
+    }
     #[test]
     fn configured_long_thresholds_replace_legacy_fixed_rules_without_duplicate_notices() {
         let page = PageRecord {
@@ -637,14 +683,18 @@ mod tests {
             content_type: "text/html".into(),
             ..Default::default()
         };
-        for condition in 0..3 {
+        for condition in 0..4 {
             let mut page = base.clone();
             match condition {
                 0 => page.truncated = true,
                 1 => page.renderer_error = Some("worker unavailable".into()),
-                _ => {
+                2 => {
                     page.rendered = true;
                     page.rendered_status = Some(404)
+                }
+                _ => {
+                    page.rendered = true;
+                    page.rendered_status = None
                 }
             }
             let issues = audit_pages(&[page]);
@@ -746,6 +796,22 @@ mod tests {
         );
         let mut complete = target;
         complete.truncated = false;
+        let mut unknown_rendered = complete.clone();
+        unknown_rendered.rendered = true;
+        unknown_rendered.rendered_status = None;
+        assert!(
+            !audit_pages(&[source.clone(), unknown_rendered])
+                .iter()
+                .any(|i| i.code == "hreflang_return_missing")
+        );
+        let mut successful_rendered = complete.clone();
+        successful_rendered.rendered = true;
+        successful_rendered.rendered_status = Some(200);
+        assert!(
+            audit_pages(&[source.clone(), successful_rendered])
+                .iter()
+                .any(|i| i.code == "hreflang_return_missing")
+        );
         assert!(
             audit_pages(&[source, complete])
                 .iter()

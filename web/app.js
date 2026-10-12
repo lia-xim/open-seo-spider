@@ -5,7 +5,7 @@
   const state = {
     crawl: null, crawls: [], pages: [], issues: [], section: 'overview',
     search: '', filter: 'all', sort: 'url', direction: 1, page: 0, pageSize: 50,
-    selected: null, selectedResponse: null, responses: null, responsesError: '', inspectorTab: 'details', polling: false, starting: false,
+    selected: null, selectedResponse: null, responses: null, responsesError: '', fragments: null, fragmentsError: '', inspectorTab: 'details', polling: false, starting: false,
     generation: 0, issueMap: new Map(), pageMap: new Map(), cache: {}, analysis: null, analysisError: '', settings: {
       concurrency: 8, timeout_seconds: 20, max_pages: 0, max_depth: 0,
       user_agent: 'Open SEO Spider/0.1', indexability_agent: 'googlebot', obey_robots: true, follow_subdomains: false,
@@ -13,7 +13,7 @@
       javascript_rendering: false, renderer_endpoint: 'http://127.0.0.1:8790/render',
       renderer_wait_ms: 500, renderer_accessibility: false, renderer_screenshot: false,
       renderer_collect_cookies: false, custom_javascript_json: '[]',
-      include_patterns_text: '', exclude_patterns_text: '', custom_extractions_json: '[]', audit_thresholds_json: '{}', pdf_analysis_json: '{}'
+      include_patterns_text: '', exclude_patterns_text: '', custom_extractions_json: '[]', audit_thresholds_json: '{}', pdf_analysis_json: '{}', validate_fragments: false, link_position_rules_json: '[]'
     }
   };
   const sections = {
@@ -25,6 +25,12 @@
     titles: ['ONPAGE ANALYSE', 'Seitentitel', 'Title-Tags, Zeichenlänge und mehrfach verwendete Titel. Längen sind Hinweise.'],
     meta: ['ONPAGE ANALYSE', 'Meta Descriptions', 'Descriptions, Zeichenlänge und Duplikate im abgerufenen HTML.'],
     headings: ['ONPAGE ANALYSE', 'Überschriften', 'H1- und H2-Struktur deiner Seiten, einschließlich mehrfacher Überschriften.'],
+    headingorder: ['DOM BEOBACHTUNGEN', 'Überschriftenfolge', 'H1 bis H6 in erfasster DOM-Reihenfolge. Tag-Level, Bild-Alt und ARIA-Attribute bleiben getrennt; visuelle Ebenen werden nicht berechnet.'],
+    keywords: ['DOM BEOBACHTUNGEN', 'Meta Keywords', 'Einzelne erfasste Keywords-Deklarationen, mit originalem content und normalisiertem Text. Keine Aussage über Rankingwirkung.'],
+    linkdom: ['DOM BEOBACHTUNGEN', 'Linkvorkommen', 'Erfasste Linkziele, Fragmente, DOM-Pfade und Positionen. DOM-Index ist keine Quellzeile oder Bildschirmkoordinate.'],
+    imagecandidates: ['DOM BEOBACHTUNGEN', 'Bildkandidaten', 'Deklarationen aus img src/srcset und picture source. Browserauswahl bleibt unbekannt; ein Kandidat ist kein tatsächlich angezeigtes Bild.'],
+    navigation: ['DOM BEOBACHTUNGEN', 'Weitere Navigation', 'Nicht standardmäßige href-, Router- und Rollenbeobachtungen. Scripts werden hier nicht ausgeführt und daraus keine Graphlinks erfunden.'],
+    fragments: ['ZIELBEZIEHUNGEN', 'Fragmentziele', 'Optionale Prüfung gegen erfasste IDs und benannte Anker. Fehlende, unbekannte und nicht unterstützte Ziele bleiben getrennte Befunde.'],
     canonical: ['ONPAGE ANALYSE', 'Canonicals', 'Deklarierte Canonical-Ziele und die Anzahl der Canonical-Tags.'],
     robots: ['TECHNISCHE ANALYSE', 'Robots & Directives', 'Robots.txt-Ausschlüsse, Meta-Robots und X-Robots-Tag aus der HTTP-Antwort.'],
     hreflang: ['INTERNATIONALES SEO', 'Hreflang', 'Sprachalternativen aus HTML und HTTP-Link-Headern. Beobachtete Ziel- und Rückverbindungen werden nach Crawl-Abschluss geprüft.'],
@@ -55,8 +61,14 @@
   const duration = (ms) => ms == null ? '—' : `${number(Math.round(Number(ms)))} ms`;
   const effectiveStatus = (page) => page.final_status ?? page.status ?? page.status_code ?? null;
   const resourceStatus = (status) => ({ complete: 'Erfasst', partial: 'Unvollständig', error: 'Fehler', encrypted: 'Verschlüsselt', disabled: 'Deaktiviert' }[status] || 'Nicht erfasst');
-  const isPDF = (page) => Boolean(page.pdf) || /\bapplication\/pdf\b/i.test(page.content_type);
-  const isImageFile = (page) => Boolean(page.image_metadata) || /^image\//i.test(page.content_type);
+  const domSections = ['headingorder', 'keywords', 'imagecandidates', 'navigation'];
+  const domSource = row => row._page?.dom_metadata?.source === 'raw_html' ? 'HTML-Antwort' : row._page?.dom_metadata?.source === 'rendered_html' ? 'Gerenderter DOM' : row._page?.dom_metadata?.source || 'Nicht erfasst';
+  const domPath = row => row.dom_location?.path ?? (row.dom_location?.path_truncated ? '[Pfadbegrenzung]' : 'Nicht erfasst');
+  const completeDOM = page => Boolean(page?.dom_metadata?.complete && page.final_status === 200 && !page.error && !page.truncated && !page.blocked_by_robots && !page.renderer_error && (page.dom_metadata.source !== 'rendered_html' || page.rendered_status === 200));
+  const fragmentStatus = value => ({ matched_id: 'ID gefunden', matched_name: 'Ankername gefunden', top: 'Dokumentanfang', missing: 'Ziel fehlt', unknown: 'Unbekannt / nicht prüfbar', unsupported: 'Nicht unterstützt' }[value] || 'Nicht erfasst');
+  const mediaType = page => String(page.content_type || '').split(';', 1)[0].trim().toLowerCase();
+  const isPDF = page => Boolean(page.pdf) || mediaType(page) === 'application/pdf';
+  const isImageFile = page => Boolean(page.image_metadata) || mediaType(page).startsWith('image/');
   const statusBadge = (status) => status == null ? '<span class="badge neutral">—</span>' : `<span class="badge ${Number(status) >= 400 ? 'danger' : Number(status) >= 300 ? 'warning' : 'good'}">${escape(status)}</span>`;
   const active = () => state.crawl && ['running', 'queued', 'pending', 'cancelling'].includes(state.crawl.status);
   const normalPage = (page) => ({
@@ -79,7 +91,7 @@
     indexable: page.indexable ?? null,
     indexability_reasons: array(page.indexability_reasons)
   });
-  const isHTML = (page) => /(?:text\/html|application\/xhtml)/i.test(page.content_type) || (!page.content_type && (page.titles.length > 0 || page.h1.length > 0));
+  const isHTML = page => !page.pdf && !page.image_metadata && (['text/html', 'application/xhtml+xml'].includes(mediaType(page)) || (!mediaType(page) && (page.titles.length > 0 || page.h1.length > 0)));
   const internals = () => state.pages.filter((page) => page.internal);
   const htmlPages = () => internals().filter(isHTML);
   const stats = () => state.crawl?.stats || state.crawl?.statistics || {};
@@ -197,6 +209,14 @@
           state.responsesError = '';
         } catch (error) { if (generation === state.generation) state.responsesError = `Antworten-Inventar nicht verfügbar: ${error.message}`; }
       }
+      if (terminal && state.fragments == null) {
+        try {
+          const result = await request(`/api/crawls/${encodeURIComponent(id)}/fragments`);
+          if (generation !== state.generation) return;
+          if (!Array.isArray(result.observations) || typeof result.enabled !== 'boolean') throw new Error('Ungültiges Fragment-Inventar');
+          state.fragments = result; state.fragmentsError = '';
+        } catch (error) { if (generation === state.generation) state.fragmentsError = `Fragment-Inventar nicht verfügbar: ${error.message}`; }
+      }
       if (state.analysis) state.issues.push(...array(state.analysis.issues));
       reindexIssues();
       connection(true);
@@ -226,6 +246,8 @@
     state.selectedResponse = null;
     state.responses = null;
     state.responsesError = '';
+    state.fragments = null;
+    state.fragmentsError = '';
     state.page = 0;
     state.crawl = id ? state.crawls.find((crawl) => crawl.id === id) || { id, status: 'running' } : null;
     state.issueMap = new Map();
@@ -296,6 +318,8 @@
       state.analysisError = '';
       state.responses = null;
       state.responsesError = '';
+      state.fragments = null;
+      state.fragmentsError = '';
       state.selectedResponse = null;
       const generation = state.generation;
       while (state.polling) await new Promise((resolve) => setTimeout(resolve, 25));
@@ -312,7 +336,7 @@
     $('seed-url').disabled = Boolean(active());
     $('url-list').disabled = Boolean(active());
     const hasData = Boolean(state.crawl && state.pages.length);
-    $('export-csv').disabled = (!hasData && !state.issues.length) || state.section === 'responses' && state.responses == null;
+    $('export-csv').disabled = (!hasData && !state.issues.length) || state.section === 'responses' && state.responses == null || state.section === 'fragments' && (!state.fragments || !state.fragments.enabled);
     $('export-sitemap').disabled = !hasData || Boolean(active());
     $('export-project').disabled = !state.crawl || Boolean(active());
     $('settings-summary').textContent = `${state.settings.concurrency} parallele Requests · ${state.settings.obey_robots ? 'Robots.txt beachten' : 'Robots.txt ignorieren'}${state.settings.max_pages ? ` · Grenze ${number(state.settings.max_pages)}` : ''}${state.settings.javascript_rendering ? ' · JavaScript-Rendering' : ''}`;
@@ -443,6 +467,20 @@
     return state.pages.filter(isPDF).map(page => ({ ...page, _page: page, resource_status: page.pdf?.status, pdf_title: page.pdf?.info_metadata?.Title, author: page.pdf?.info_metadata?.Author, page_count: page.pdf?.page_count, declared_page_count: page.pdf?.declared_page_count, pdf_words: page.pdf?.word_count, text_complete: page.pdf?.text_complete, annotation_count: page.pdf ? array(page.pdf.annotation_links).length : null, annotations_complete: page.pdf?.annotations_complete, parse_error: page.pdf?.parse_error || array(page.pdf?.errors).join(' | ') }));
   }
 
+  function domRows(key) {
+    if (state.cache[key]) return state.cache[key];
+    state.cache[key] = htmlPages().flatMap(page => {
+      if (!page.dom_metadata) return [{ url: page.url, _page: page, _unavailable: true }];
+      if (key === 'responsive_images') return array(page.dom_metadata.responsive_images).flatMap(image => array(image.candidates).map(candidate => ({ ...candidate, url: page.url, candidate_url: candidate.url, image_src: image.src, image_alt: image.alt, image_dom_location: image.dom_location, _page: page })));
+      return array(page.dom_metadata[key]).map(record => ({ ...record, url: page.url, _page: page }));
+    });
+    return state.cache[key];
+  }
+
+  function linkDomRows() {
+    return internals().flatMap(page => page.links.map(link => ({ ...(typeof link === 'object' ? link : { url: link }), source_url: page.url, _page: page, _unavailable: typeof link !== 'object' || !link.dom_location })));
+  }
+
   function getRows() {
     switch (state.section) {
       case 'external': return externalRows();
@@ -450,6 +488,12 @@
       case 'imagefiles': return imageFileRows();
       case 'pdf': return pdfRows();
       case 'responses': return array(state.responses).map(response => ({ ...response, url: response.response_url }));
+      case 'headingorder': return domRows('headings');
+      case 'keywords': return domRows('meta_keywords');
+      case 'imagecandidates': return domRows('responsive_images');
+      case 'navigation': return domRows('navigation_candidates');
+      case 'linkdom': return linkDomRows();
+      case 'fragments': return array(state.fragments?.observations).map(record => ({ ...record, url: record.source_url, dom_location: record.source_dom_location, _page: state.pageMap.get(record.source_url) }));
       case 'issues': return state.issues.map((issue) => ({ ...issue, _page: state.pageMap.get(issue.url) }));
       case 'linkmetrics': return array(state.analysis?.graph?.nodes).map((node) => ({ ...node, _page: state.pageMap.get(node.url) }));
       case 'structured': return array(state.analysis?.structured_data).map((entry) => ({ ...entry, types_text: Object.entries(entry.types || {}).map(([type, count]) => `${type} (${count})`).join(' | '), _page: state.pageMap.get(entry.url) }));
@@ -469,6 +513,7 @@
   const statusColumn = { key: 'status', label: 'HTTP final', value: effectiveStatus, render: (row) => statusBadge(effectiveStatus(row)) };
   const indexColumn = { key: 'indexable', label: 'Indexierbarkeit', value: (row) => row.indexable === true ? 'Indexierbar' : row.indexable === false ? 'Nicht indexierbar' : 'Unbekannt', render: (row) => `<span class="badge ${row.indexable === false ? 'warning' : row.indexable == null ? 'neutral' : ''}">${row.indexable === true ? 'Indexierbar' : row.indexable === false ? 'Nicht indexierbar' : 'Unbekannt'}</span>` };
   const issueColumn = numberColumn('issue_count', 'Probleme', (row) => pageIssues(row.url).length);
+  const domColumns = () => [numberColumn('dom_index', 'DOM-Index', row => row.dom_location?.index), textColumn('dom_path', 'DOM-Pfad', domPath), textColumn('dom_source', 'DOM-Quelle', domSource), textColumn('dom_complete', 'Vollständiger Prüfbefund', row => !row._page?.dom_metadata ? 'Nicht erfasst' : completeDOM(row._page) ? 'Ja' : 'Nein / unklar')];
 
   function columns() {
     switch (state.section) {
@@ -478,6 +523,12 @@
       case 'titles': return [urlColumn, textColumn('title_text', 'Seitentitel'), numberColumn('title_length', 'Zeichen'), numberColumn('title_pixels', 'Pixelprofil 20px', row => array(row.title_pixel_widths)[0]), numberColumn('title_count', 'Title-Tags', (row) => row.titles.length), numberColumn('duplicates', 'Vorkommen'), statusColumn];
       case 'meta': return [urlColumn, textColumn('description_text', 'Meta Description'), numberColumn('description_length', 'Zeichen'), numberColumn('description_pixels', 'Pixelprofil 14px', row => array(row.description_pixel_widths)[0]), numberColumn('meta_count', 'Meta-Tags', (row) => row.meta_descriptions.length), numberColumn('duplicates', 'Vorkommen'), statusColumn];
       case 'headings': return [urlColumn, textColumn('h1', 'H1', (row) => first(row.h1)), numberColumn('h1_count', 'H1-Anzahl', (row) => row.h1.length), textColumn('h2', 'H2', (row) => first(row.h2)), numberColumn('h2_count', 'H2-Anzahl', (row) => row.h2.length), numberColumn('word_count', 'Wörter')];
+      case 'headingorder': return [urlColumn, numberColumn('tag_level', 'Tag-Level'), textColumn('text', 'Heading-Text'), textColumn('raw_text', 'Originaler Text'), textColumn('text_with_image_alt', 'Text mit Inline-Bild-Alt', row => row.text_with_image_alt == null ? 'Nicht erfasst' : row.text_with_image_alt === '' ? '[leer]' : row.text_with_image_alt), textColumn('heading_text_engine', 'Text-/Alt-Profil', row => row._page?.dom_metadata?.heading_text_engine || 'Nicht erfasst'), textColumn('image_alt', 'Bild-Alt im Heading', row => row._unavailable ? 'Nicht erfasst' : array(row.image_alt).map(value => value == null ? '[Attribut fehlt]' : value === '' ? '[leer]' : value).join(' | ')), textColumn('aria_level', 'aria-level'), textColumn('heading_offset', 'headingoffset'), textColumn('hidden_attribute', 'hidden-Attribut', row => row.hidden_attribute == null ? 'Nicht erfasst' : row.hidden_attribute ? 'Ja' : 'Nein'), ...domColumns()];
+      case 'keywords': return [urlColumn, textColumn('content', 'Originaler content', row => row._unavailable ? 'Nicht erfasst' : row.content == null ? '[content-Attribut fehlt]' : row.content === '' ? '[leer]' : row.content), textColumn('normalized', 'Normalisierter Text'), numberColumn('chars', 'Originale Zeichen'), ...domColumns()];
+      case 'linkdom': return [urlColumn, textColumn('source_url', 'Quellseite'), textColumn('kind', 'Linkart'), textColumn('text', 'Linktext'), textColumn('raw_href', 'Originales Attribut'), textColumn('resolved_href', 'Aufgelöst inkl. Fragment'), textColumn('fragment', 'Fragment'), textColumn('position', 'Position', row => row.position ?? 'Nicht erfasst'), ...domColumns()];
+      case 'imagecandidates': return [urlColumn, textColumn('image_src', 'img src'), textColumn('image_alt', 'img Alt'), textColumn('source', 'Kandidatenquelle'), textColumn('raw_url', 'Deklarierter Kandidat'), textColumn('candidate_url', 'Aufgelöste HTTP(S)-URL'), textColumn('descriptors', 'Deskriptoren', row => first(row.descriptors)), numberColumn('width', 'w-Deskriptor'), numberColumn('density', 'x-Deskriptor'), textColumn('media', 'Media'), textColumn('type_hint', 'Typdeklaration'), textColumn('sizes', 'Sizes'), textColumn('eligible', 'Deklaration akzeptiert', row => row.eligible == null ? 'Nicht erfasst' : row.eligible ? 'Ja' : 'Nein'), textColumn('selection', 'Browserauswahl', () => 'Nicht erfasst'), textColumn('error', 'Kandidatenfehler'), ...domColumns()];
+      case 'navigation': return [urlColumn, textColumn('tag', 'Element'), textColumn('reason', 'Beobachtung'), textColumn('text', 'Elementtext'), textColumn('raw_href', 'Originales href / Routerattribut'), textColumn('resolved_href', 'Aufgelöste Adresse'), textColumn('potential_url', 'Mögliche HTTP(S)-URL'), textColumn('scheme', 'Scheme'), textColumn('onclick', 'onclick-Attribut'), textColumn('router_link', 'Router-/Data-Attribut'), ...domColumns()];
+      case 'fragments': return [urlColumn, textColumn('source_document_url', 'Quelldokument'), textColumn('target_url', 'Ziel-URL'), textColumn('resolved_href', 'Aufgelöstes href'), textColumn('fragment', 'Originalfragment'), textColumn('decoded_fragment', 'Dekodiertes Fragment'), textColumn('status', 'Prüfergebnis', row => fragmentStatus(row.status)), textColumn('reason', 'Begründung'), textColumn('target_document_url', 'Erfasstes Zieldokument'), textColumn('target_complete', 'Ziel vollständig', row => row.target_complete ? 'Ja' : 'Nein / unklar'), textColumn('matched_target', 'Gefundener Zieltyp', row => row.matched_target?.kind), textColumn('target_dom_path', 'Ziel-DOM-Pfad', row => row.matched_target?.dom_location?.path), ...domColumns().slice(0, 2)];
       case 'canonical': return [urlColumn, textColumn('canonical', 'Canonical-Ziel', (row) => first(row.canonical)), numberColumn('canonical_count', 'Deklarationen', canonicalCount), textColumn('self_reference', 'Selbstreferenz', (row) => row.canonical.length ? row.canonical.includes(row.rendered && !row.renderer_error ? row.rendered_url || row.final_url || row.url : row.final_url || row.url) ? 'Ja' : 'Nein' : '—'), indexColumn];
       case 'robots': return [urlColumn, textColumn('blocked', 'Robots.txt', (row) => row.blocked_by_robots ? 'Ausgeschlossen' : row.robots_warning ? `Hinweis: ${row.robots_warning}` : effectiveStatus(row) == null ? 'Unbekannt' : 'Nicht ausgeschlossen'), textColumn('meta_robots', 'Meta Robots', (row) => first(row.meta_robots)), textColumn('x_robots_tag', 'X-Robots-Tag', (row) => first(row.x_robots_tag)), indexColumn, textColumn('indexability_reasons', 'Begründung', (row) => first(row.indexability_reasons))];
       case 'hreflang': return [urlColumn, textColumn('language', 'HTML-Sprache'), numberColumn('alternates', 'Sprachalternativen', (row) => row.hreflang.length), textColumn('hreflang', 'Deklarierte Alternativen', (row) => row.hreflang.map((entry) => `${entry.language || entry.lang || '?'}: ${entry.url || entry.href || ''}`).join(' | ')), statusColumn];
@@ -498,6 +549,12 @@
   function filterOptions() {
     const base = [['all', 'Alle Ergebnisse']];
     switch (state.section) {
+      case 'fragments': return [...base, ['matched', 'ID / Name / Dokumentanfang gefunden'], ['missing', 'Ziel fehlt'], ['unknown', 'Unbekannt / nicht prüfbar'], ['unsupported', 'Nicht unterstützt']];
+      case 'headingorder': return [...base, ['unavailable', 'Nicht erfasst'], ['partial', 'Unvollständiger Prüfbefund'], ['raw', 'HTML-Antwort'], ['rendered', 'Gerenderter DOM'], ...[1, 2, 3, 4, 5, 6].map(level => [`h${level}`, `H${level}`])];
+      case 'keywords': return [...base, ['unavailable', 'Nicht erfasst'], ['partial', 'Unvollständiger Prüfbefund'], ['raw', 'HTML-Antwort'], ['rendered', 'Gerenderter DOM'], ['content_missing', 'content-Attribut fehlt'], ['empty', 'Vorhandener content leer']];
+      case 'imagecandidates': return [...base, ['unavailable', 'Nicht erfasst'], ['partial', 'Unvollständiger Prüfbefund'], ['raw', 'HTML-Antwort'], ['rendered', 'Gerenderter DOM'], ['error', 'Kandidatenfehler'], ['picture_source', 'picture source'], ['img_srcset', 'img srcset'], ['img_src', 'img src']];
+      case 'navigation': return [...base, ['unavailable', 'Nicht erfasst'], ['partial', 'Unvollständiger Prüfbefund'], ['raw', 'HTML-Antwort'], ['rendered', 'Gerenderter DOM'], ['javascript_href', 'javascript href'], ['non_http_scheme', 'Anderes Scheme'], ['custom_navigation_attribute', 'Router-/Data-Attribut']];
+      case 'linkdom': return [...base, ['unavailable', 'DOM-Position nicht erfasst'], ['anchor', 'Ankerlinks'], ['fragment', 'Mit Fragment'], ...['nav', 'header', 'footer', 'aside', 'head', 'content'].map(position => [`position:${position}`, `Position: ${position}`]), ...array(state.crawl?.config?.link_position_rules).map(rule => [`position:${rule.name}`, `Eigene Position: ${rule.name}`])];
       case 'responses': return [...base, ['2xx', 'HTTP 2xx'], ['3xx', 'HTTP 3xx'], ['4xx', 'HTTP 4xx'], ['5xx', 'HTTP 5xx'], ['redirect_hop', 'Zwischenredirects'], ['headers_unknown', 'Header unbekannt'], ['body_unknown', 'Body unbekannt'], ['body_partial', 'Body unvollständig']];
       case 'issues': return [...base, ['error', 'Fehler'], ['warning', 'Warnungen'], ['notice', 'Hinweise']];
       case 'titles': case 'meta': return [...base, ['missing', 'Fehlend'], ['multiple', 'Mehrere Tags'], ['duplicate', 'Duplikate'], ['short', 'Unter konfigurierter Zeichengrenze'], ['long', 'Über konfigurierter Zeichengrenze'], ['pixels', 'Über konfigurierter Pixelgrenze']];
@@ -522,6 +579,18 @@
   function matchesFilter(row) {
     const filter = state.filter;
     if (filter === 'all') return true;
+    if (state.section === 'fragments') return filter === 'matched' ? ['matched_id', 'matched_name', 'top'].includes(row.status) : row.status === filter;
+    if (state.section === 'linkdom') return filter === 'unavailable' ? row._unavailable : filter === 'fragment' ? row.fragment != null : filter.startsWith('position:') ? row.position === filter.slice(9) : row.kind === filter;
+    if (domSections.includes(state.section)) {
+      if (filter === 'unavailable') return row._unavailable;
+      if (filter === 'partial') return Boolean(row._page?.dom_metadata) && !completeDOM(row._page);
+      if (filter === 'raw' || filter === 'rendered') return row._page?.dom_metadata?.source === `${filter}_html`;
+      if (row._unavailable) return false;
+      if (state.section === 'headingorder') return row.tag_level === Number(filter.slice(1));
+      if (state.section === 'keywords') return filter === 'content_missing' ? row.content == null : row.content != null && String(row.content).trim() === '';
+      if (state.section === 'imagecandidates') return filter === 'error' ? Boolean(row.error) : row.source === filter;
+      return row.reason === filter;
+    }
     if (state.section === 'responses') return filter === 'redirect_hop' ? row.capture_kind === 'redirect_hop' : filter === 'headers_unknown' ? row.headers == null : filter === 'body_unknown' ? row.body_bytes == null : filter === 'body_partial' ? row.body_complete === false : Math.floor(row.status / 100) === Number(filter[0]);
     if (['pdf', 'imagefiles'].includes(state.section)) return filter === 'unavailable' ? !row.resource_status : filter === 'dimensions_unknown' ? row.intrinsic_width == null || row.intrinsic_height == null : row.resource_status === filter;
     if (state.section === 'issues') return row.severity === filter;
@@ -576,7 +645,7 @@
     const offset = state.page * state.pageSize;
     const visible = rows.slice(offset, offset + state.pageSize);
     const isSelected = row => state.section === 'responses' ? state.selectedResponse && state.selectedResponse.requested_url === row.requested_url && state.selectedResponse.response_index === row.response_index : state.selected && (row._page?.url || row.url) === state.selected.url;
-    const emptyNote = state.section === 'responses' ? state.responsesError || (state.responses == null ? 'Diese Beobachtungen werden nach Abschluss oder Stopp des Crawls geladen. Nicht erfasste Antworten bleiben unbekannt.' : 'Es wurden keine nativen HTTP-Antworten erfasst, beispielsweise bei DNS-Fehlern oder Robots-Sperren.') : null;
+    const emptyNote = state.section === 'responses' ? state.responsesError || (state.responses == null ? 'Diese Beobachtungen werden nach Abschluss oder Stopp des Crawls geladen. Nicht erfasste Antworten bleiben unbekannt.' : 'Es wurden keine nativen HTTP-Antworten erfasst, beispielsweise bei DNS-Fehlern oder Robots-Sperren.') : state.section === 'fragments' ? state.fragmentsError || (!state.fragments ? 'Fragmentbeobachtungen werden nach Abschluss oder Stopp geladen.' : !state.fragments.enabled ? 'Fragmentprüfung ist für diesen Crawl deaktiviert. Aktiviere sie in den Einstellungen für einen neuen Crawl.' : 'Keine Fragmentreferenzen im erfassten Inventar. Crawl- und Capture-Grenzen gelten weiterhin.') : null;
     const table = $('results-table');
     table.querySelector('thead').innerHTML = `<tr>${currentColumns.map((column) => `<th scope="col" aria-sort="${state.sort === column.key ? state.direction > 0 ? 'ascending' : 'descending' : 'none'}"><button type="button" data-sort="${escape(column.key)}">${escape(column.label)}<span aria-hidden="true">${state.sort === column.key ? state.direction > 0 ? '↑' : '↓' : '↕'}</span></button></th>`).join('')}</tr>`;
     table.querySelector('tbody').innerHTML = visible.length ? visible.map((row, index) => `<tr class="click-row${isSelected(row) ? ' selected' : ''}" data-row="${index}" tabindex="0" aria-label="Details zu ${escape(row.url)} öffnen">${currentColumns.map((column) => `<td>${column.render(row)}</td>`).join('')}</tr>`).join('') : `<tr><td class="empty-cell" colspan="${currentColumns.length}"><strong>${state.search || state.filter !== 'all' ? 'Keine passenden Ergebnisse' : state.crawl ? 'Noch keine Daten in diesem Bereich' : 'Starte einen Crawl, um Ergebnisse zu sehen'}</strong>${escape(state.search || state.filter !== 'all' ? 'Ändere den Filter oder den Suchbegriff.' : emptyNote || (['linkmetrics', 'structured'].includes(state.section) ? state.analysisError || 'Diese Auswertung wird nach Abschluss oder Stopp des Crawls berechnet.' : state.section === 'images' ? 'Bildreferenzen erscheinen nach der Auswertung von HTML-Seiten.' : state.section === 'external' ? 'Externe Links erscheinen, sobald sie im HTML entdeckt werden.' : 'Nur tatsächlich erfasste Daten werden angezeigt.'))}</td></tr>`;
@@ -590,8 +659,10 @@
       const open = () => {
         const row = visible[Number(rowElement.dataset.row)];
         if (state.section === 'responses') { selectResponse(row); return; }
+        if (state.section === 'fragments' && !row._page) { message('Kein gespeicherter Dokumentdatensatz zur Quell-URL verfügbar.', true); return; }
         const page = row._page || state.pageMap.get(row.url) || row;
         selectPage(page);
+        if (domSections.includes(state.section) || ['linkdom', 'fragments'].includes(state.section)) { state.inspectorTab = 'dom'; renderInspector(); }
       };
       rowElement.addEventListener('click', open);
       rowElement.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); open(); } });
@@ -627,10 +698,10 @@
     $('overview-view').hidden = state.section !== 'overview';
     $('graph-view').hidden = state.section !== 'graph';
     $('table-view').hidden = ['overview', 'graph'].includes(state.section);
-    $('export-csv').disabled = (!state.pages.length && !state.issues.length) || state.section === 'responses' && state.responses == null;
-    $('export-resources').hidden = !['pdf', 'imagefiles', 'responses'].includes(state.section);
+    $('export-csv').disabled = (!state.pages.length && !state.issues.length) || state.section === 'responses' && state.responses == null || state.section === 'fragments' && (!state.fragments || !state.fragments.enabled);
+    $('export-resources').hidden = !['pdf', 'imagefiles', 'responses', 'fragments', 'linkdom', ...domSections].includes(state.section);
     $('export-resources').disabled = !state.crawl || Boolean(active());
-    $('export-resources').textContent = state.section === 'pdf' ? '↓ PDF-Details CSV' : state.section === 'responses' ? '↓ Alle Antworten CSV' : '↓ Bilddateien CSV';
+    $('export-resources').textContent = domSections.includes(state.section) ? '↓ Alle DOM-Beobachtungen CSV' : state.section === 'pdf' ? '↓ PDF-Details CSV' : state.section === 'responses' ? '↓ Alle Antworten CSV' : state.section === 'fragments' ? '↓ Alle Fragmentziele CSV' : state.section === 'linkdom' ? '↓ Alle Linkvorkommen CSV' : '↓ Bilddateien CSV';
     if (state.section === 'overview') renderOverview();
     else if (state.section === 'graph') renderGraph();
     else renderTable();
@@ -782,6 +853,21 @@
         });
         element.append(details);
       }
+    } else if (state.inspectorTab === 'dom') {
+      const facts = page.dom_metadata;
+      const fields = [
+        ['DOM-Engine', facts?.engine || 'Nicht erfasst'], ['Heading-Text-/Alt-Profil', facts?.heading_text_engine || 'Nicht erfasst'], ['DOM-Quelle', facts?.source || 'Nicht erfasst'],
+        ['DOM-Sammlung vollständig', facts == null ? 'Nicht erfasst' : facts.complete ? 'Ja' : 'Nein'],
+        ['Vollständiger Prüfbefund', facts == null ? 'Nicht erfasst' : completeDOM(page) ? 'Ja' : 'Nein / unklar; Capture-, HTTP- und Rendererstatus prüfen'],
+        ['DOM-Grenzen erreicht', facts == null ? 'Nicht erfasst' : first(facts.limits_reached) || 'Keine gemeldet'],
+        ['Überschriften / Keywords / Ziel-IDs', facts == null ? 'Nicht erfasst' : `${array(facts.headings).length} / ${array(facts.meta_keywords).length} / ${array(facts.fragment_targets).length}`]
+      ];
+      const preview = (name, values) => {
+        if (values == null) return `<p class="detail-empty">${escape(name)}: Nicht erfasst.</p>`;
+        const rows = array(values), text = JSON.stringify(rows.slice(0, 100), null, 2);
+        return `<details class="dom-preview"><summary>${escape(name)} · ${number(rows.length)} erfasst</summary><pre>${escape(text.slice(0, 30000))}</pre>${rows.length > 100 || text.length > 30000 ? '<p class="detail-empty">UI-Vorschau auf 100 Einträge / 30000 Zeichen begrenzt; der JSON-Export enthält die gespeicherten Beobachtungen.</p>' : ''}</details>`;
+      };
+      element.innerHTML = `<p class="detail-empty">Beobachtungen aus dem reparierten HTML5-DOM. DOM-Pfad und Reihenfolge sind keine Quellzeilen oder Bildschirmkoordinaten. Kandidaten-Syntax belegt keine Browserauswahl.</p><dl class="details-grid">${fields.map(([name, value]) => `<dt>${escape(name)}</dt><dd>${escape(value)}</dd>`).join('')}</dl>${preview('Überschriftenfolge', facts?.headings)}${preview('Meta Keywords', facts?.meta_keywords)}${preview('Fragmentziele im Dokument', facts?.fragment_targets)}${preview('Weitere Navigation', facts?.navigation_candidates)}${preview('Responsive Bildvorkommen', facts?.responsive_images)}${preview('Linkvorkommen und Position', page.links)}${preview('DOM vor Rendering', page.raw_metadata?.dom_metadata ? [page.raw_metadata.dom_metadata] : null)}${preview('Fragmentreferenzen dieser Quell-URL', state.fragments?.enabled ? array(state.fragments.observations).filter(record => record.source_url === page.url) : null)}`;
     } else if (state.inspectorTab === 'outlinks') {
       element.innerHTML = page.links.length ? `<ul class="detail-links">${page.links.map((link) => `<li>${safeLink(linkURL(link))}${typeof link === 'object' ? `<small>${escape(link.text || '(ohne Linktext)')} · ${link.internal ? 'intern' : 'extern'}${link.nofollow ? ' · nofollow' : ''}${link.kind ? ` · ${escape(link.kind)}` : ''}</small>` : ''}</li>`).join('')}</ul>` : '<p class="detail-empty">Keine ausgehenden Links erfasst.</p>';
     } else if (state.inspectorTab === 'inlinks') {
@@ -911,7 +997,7 @@
   function saveSettings(event) {
     event.preventDefault();
     const form = $('settings-form');
-    const advancedText = { include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value };
+    const advancedText = { include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value, link_position_rules_json: form.elements.link_position_rules_json.value, validate_fragments: form.elements.validate_fragments.checked };
     try { parseAdvanced(advancedText); validateRendererSettings({ javascript_rendering: form.elements.javascript_rendering.checked, renderer_endpoint: form.elements.renderer_endpoint.value.trim(), renderer_wait_ms: Number(form.elements.renderer_wait_ms.value), timeout_seconds: Number(form.elements.timeout_seconds.value) }); }
     catch (error) {
       $('settings-error').textContent = error.message;
@@ -934,7 +1020,7 @@
         const positive = (value, fallback, max) => Number.isInteger(Number(value)) && Number(value) > 0 && Number(value) <= max ? Number(value) : fallback;
         const nonnegative = (value) => Number.isInteger(Number(value)) && Number(value) >= 0 ? Number(value) : 0;
         state.settings = { concurrency: positive(saved.concurrency, 8, 64), timeout_seconds: positive(saved.timeout_seconds, 20, 300), max_pages: nonnegative(saved.max_pages), max_depth: nonnegative(saved.max_depth), user_agent: String(saved.user_agent || 'Open SEO Spider/0.1').slice(0, 256), obey_robots: saved.obey_robots !== false, follow_subdomains: saved.follow_subdomains === true, delay_ms: nonnegative(saved.delay_ms ?? 100), max_body_mb: positive(saved.max_body_mb, 5, 100), check_external: saved.check_external === true, javascript_rendering: saved.javascript_rendering === true, renderer_endpoint: String(saved.renderer_endpoint || 'http://127.0.0.1:8790/render'), renderer_wait_ms: nonnegative(saved.renderer_wait_ms ?? 500), renderer_accessibility: saved.renderer_accessibility === true, renderer_screenshot: saved.renderer_screenshot === true };
-        Object.assign(state.settings, { indexability_agent: String(saved.indexability_agent || 'googlebot'), renderer_collect_cookies: saved.renderer_collect_cookies === true, custom_javascript_json: String(saved.custom_javascript_json || '[]'), audit_thresholds_json: String(saved.audit_thresholds_json || '{}'), pdf_analysis_json: String(saved.pdf_analysis_json || '{}'), include_patterns_text: String(saved.include_patterns_text || ''), exclude_patterns_text: String(saved.exclude_patterns_text || ''), custom_extractions_json: String(saved.custom_extractions_json || '[]') });
+        Object.assign(state.settings, { indexability_agent: String(saved.indexability_agent || 'googlebot'), renderer_collect_cookies: saved.renderer_collect_cookies === true, custom_javascript_json: String(saved.custom_javascript_json || '[]'), audit_thresholds_json: String(saved.audit_thresholds_json || '{}'), pdf_analysis_json: String(saved.pdf_analysis_json || '{}'), include_patterns_text: String(saved.include_patterns_text || ''), exclude_patterns_text: String(saved.exclude_patterns_text || ''), custom_extractions_json: String(saved.custom_extractions_json || '[]'), validate_fragments: saved.validate_fragments === true, link_position_rules_json: String(saved.link_position_rules_json || '[]') });
       }
     } catch (_) { /* Invalid saved settings fall back to safe defaults. */ }
   }
@@ -978,7 +1064,22 @@
       return { name, selector, attribute: definition.attribute == null ? null : definition.attribute.trim(), method, output, max_results, regex_group, regex_flags, namespaces };
     });
     const lines = (value) => [...new Set(String(value || '').split(/\r?\n/).map((line) => line.trim()).filter(Boolean))];
-    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), pdf_analysis: parsePdfAnalysis(settings.pdf_analysis_json), include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text) };
+    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), pdf_analysis: parsePdfAnalysis(settings.pdf_analysis_json), link_position_rules: parsePositionRules(settings.link_position_rules_json), validate_fragments: settings.validate_fragments === true, include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text) };
+  }
+
+  function parsePositionRules(text) {
+    let rules;
+    try { rules = JSON.parse(text || '[]'); } catch (_) { throw new Error('Linkpositionen müssen ein gültiges JSON-Array sein.'); }
+    if (!Array.isArray(rules) || rules.length > 32) throw new Error('Linkpositionen: Höchstens 32 geordnete Regeln sind erlaubt.');
+    const names = new Set(), bytes = value => new TextEncoder().encode(value).length;
+    return rules.map((rule, index) => {
+      if (!rule || typeof rule !== 'object' || Array.isArray(rule) || typeof rule.name !== 'string' || typeof rule.selector !== 'string') throw new Error(`Linkposition ${index + 1}: name und selector sind erforderlich.`);
+      const name = rule.name.trim(), selector = rule.selector.trim();
+      if (!name || bytes(name) > 128 || /[\u0000-\u001f\u007f-\u009f]/.test(name) || names.has(name)) throw new Error(`Linkposition ${index + 1}: Namen müssen eindeutig sein, ohne Steuerzeichen, maximal 128 UTF-8-Bytes.`);
+      if (!selector || bytes(selector) > 8192) throw new Error(`Linkposition „${name}“: CSS-Selektor muss 1 bis 8192 UTF-8-Bytes enthalten.`);
+      try { document.createDocumentFragment().querySelector(selector); } catch (_) { throw new Error(`Linkposition „${name}“: Ungültiger CSS-Selektor.`); }
+      names.add(name); return { name, selector };
+    });
   }
 
   function parsePdfAnalysis(text) {
@@ -1089,7 +1190,7 @@
     $('settings-form').addEventListener('submit', saveSettings);
     $('settings-form').elements.javascript_rendering.addEventListener('change', (event) => toggleRendererSettings(event.target.checked));
     $('export-csv').addEventListener('click', exportCSV);
-    $('export-resources').addEventListener('click', () => serverDownload(state.section === 'pdf' ? 'pdf.csv' : state.section === 'responses' ? 'responses.csv' : 'images.csv', `open-seo-spider-${state.crawl.id}-${state.section}.csv`));
+    $('export-resources').addEventListener('click', () => serverDownload(domSections.includes(state.section) ? 'dom.csv' : ({ pdf: 'pdf.csv', responses: 'responses.csv', fragments: 'fragments.csv', linkdom: 'links.csv', imagefiles: 'images.csv' })[state.section], `open-seo-spider-${state.crawl.id}-${state.section}.csv`));
     $('import-project').addEventListener('click', () => $('import-file').click());
     $('import-file').addEventListener('change', (event) => importProject(event.target.files[0]));
     $('export-sitemap').addEventListener('click', () => serverDownload('sitemap.xml', `open-seo-spider-${state.crawl.id}-sitemap.xml`));

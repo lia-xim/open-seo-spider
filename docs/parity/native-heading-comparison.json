@@ -1,0 +1,727 @@
+{
+  "schema_version": 1,
+  "tested_at": "2026-10-12T10:07:20.298Z",
+  "result": "PASS_BOUNDED_NATIVE_HEADING_MEMBERSHIP",
+  "full_vendor_parity": "NOT_PROVEN",
+  "app_url": "http://127.0.0.1:18789",
+  "binary_sha256": "77e16925d14bf253cfa187258a1331b7a4b2d79e8ab24a10a68d4dc54c445df4",
+  "native_job_id": "e8213c02-8aa0-4782-8bc8-67b040009036",
+  "fixture_sha256": "7e73d9f36e911dccea72c4086b4f84d3084f550d16ebeed64e47e7cf08252e86",
+  "reference_run_at": "2026-10-12T09:28:04.233Z",
+  "files": [
+    {
+      "argument": "H1:All",
+      "file": "h1_alle.csv",
+      "sha256": "0db8041b21b95c013e3bd3e2374bf1c534b13fb8903625405cb590bee5673477",
+      "row_count": 24
+    },
+    {
+      "argument": "H1:Non-Sequential",
+      "file": "h1_nicht_sequenziell.csv",
+      "sha256": "20cdac03472707659d52907546fdcb89b977441acd788ac671e338636bac21ab",
+      "row_count": 6
+    },
+    {
+      "argument": "H2:All",
+      "file": "h2_alle.csv",
+      "sha256": "08e355c513f1419b44e277055a6e9764873559d944cc7a2b9e0166d560651730",
+      "row_count": 24
+    },
+    {
+      "argument": "H2:Non-Sequential",
+      "file": "h2_nicht_sequenziell.csv",
+      "sha256": "311682045a0ad6f19b0659564919f2b2a1b4f2eb936d668b5fc036b187093035",
+      "row_count": 2
+    }
+  ],
+  "html_cases": 24,
+  "counts": {
+    "MATCH": 48,
+    "DIFFERENT": 0
+  },
+  "observations": [
+    {
+      "path": "/",
+      "level": "h1",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/",
+      "level": "h2",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/h1-h2",
+      "level": "h1",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/h1-h2",
+      "level": "h2",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/h2-h1",
+      "level": "h1",
+      "expected": true,
+      "native": true,
+      "status": "MATCH",
+      "observed_levels": [
+        2,
+        1
+      ]
+    },
+    {
+      "path": "/h2-h1",
+      "level": "h2",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        2,
+        1
+      ]
+    },
+    {
+      "path": "/h1-h3-h2",
+      "level": "h1",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        3,
+        2
+      ]
+    },
+    {
+      "path": "/h1-h3-h2",
+      "level": "h2",
+      "expected": true,
+      "native": true,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        3,
+        2
+      ]
+    },
+    {
+      "path": "/h1-h2-h3-h2",
+      "level": "h1",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        2,
+        3,
+        2
+      ]
+    },
+    {
+      "path": "/h1-h2-h3-h2",
+      "level": "h2",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        2,
+        3,
+        2
+      ]
+    },
+    {
+      "path": "/h3-h2-no-h1",
+      "level": "h1",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        3,
+        2
+      ]
+    },
+    {
+      "path": "/h3-h2-no-h1",
+      "level": "h2",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        3,
+        2
+      ]
+    },
+    {
+      "path": "/repeated-h2",
+      "level": "h1",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        2,
+        2
+      ]
+    },
+    {
+      "path": "/repeated-h2",
+      "level": "h2",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        2,
+        2
+      ]
+    },
+    {
+      "path": "/h2-only",
+      "level": "h1",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        2
+      ]
+    },
+    {
+      "path": "/h2-only",
+      "level": "h2",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        2
+      ]
+    },
+    {
+      "path": "/h3-h1-h2",
+      "level": "h1",
+      "expected": true,
+      "native": true,
+      "status": "MATCH",
+      "observed_levels": [
+        3,
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/h3-h1-h2",
+      "level": "h2",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        3,
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/empty-h1-before-h2",
+      "level": "h1",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/empty-h1-before-h2",
+      "level": "h2",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/empty-h2-before-h1",
+      "level": "h1",
+      "expected": true,
+      "native": true,
+      "status": "MATCH",
+      "observed_levels": [
+        2,
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/empty-h2-before-h1",
+      "level": "h2",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        2,
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/hidden-h2-before-h1",
+      "level": "h1",
+      "expected": true,
+      "native": true,
+      "status": "MATCH",
+      "observed_levels": [
+        2,
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/hidden-h2-before-h1",
+      "level": "h2",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        2,
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/css-hidden-h2-before-h1",
+      "level": "h1",
+      "expected": true,
+      "native": true,
+      "status": "MATCH",
+      "observed_levels": [
+        2,
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/css-hidden-h2-before-h1",
+      "level": "h2",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        2,
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/hidden-h1-before-h2",
+      "level": "h1",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/hidden-h1-before-h2",
+      "level": "h2",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/image-alt-h1-before-h2",
+      "level": "h1",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/image-alt-h1-before-h2",
+      "level": "h2",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/image-alt-h2-before-h1",
+      "level": "h1",
+      "expected": true,
+      "native": true,
+      "status": "MATCH",
+      "observed_levels": [
+        2,
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/image-alt-h2-before-h1",
+      "level": "h2",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        2,
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/image-alt-only-h1-h2",
+      "level": "h1",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/image-alt-only-h1-h2",
+      "level": "h2",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/empty-h2-after-h1",
+      "level": "h1",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/empty-h2-after-h1",
+      "level": "h2",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/no-headings",
+      "level": "h1",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": []
+    },
+    {
+      "path": "/no-headings",
+      "level": "h2",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": []
+    },
+    {
+      "path": "/h3-only",
+      "level": "h1",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        3
+      ]
+    },
+    {
+      "path": "/h3-only",
+      "level": "h2",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        3
+      ]
+    },
+    {
+      "path": "/aria-heading-before-h1",
+      "level": "h1",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/aria-heading-before-h1",
+      "level": "h2",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/h1-h3-h1-h2",
+      "level": "h1",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        3,
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/h1-h3-h1-h2",
+      "level": "h2",
+      "expected": true,
+      "native": true,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        3,
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/h1-h1-h2",
+      "level": "h1",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/h1-h1-h2",
+      "level": "h2",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/h1-h2-h1-h2",
+      "level": "h1",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        2,
+        1,
+        2
+      ]
+    },
+    {
+      "path": "/h1-h2-h1-h2",
+      "level": "h2",
+      "expected": false,
+      "native": false,
+      "status": "MATCH",
+      "observed_levels": [
+        1,
+        2,
+        1,
+        2
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "path": "/robots.txt",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/h1-h2",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/h2-h1",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/h1-h2-h3-h2",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/h1-h3-h2",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/h3-h2-no-h1",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/repeated-h2",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/h2-only",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/empty-h1-before-h2",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/h3-h1-h2",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/empty-h2-before-h1",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/hidden-h2-before-h1",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/css-hidden-h2-before-h1",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/hidden-h1-before-h2",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/image-alt-h1-before-h2",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/image-alt-h2-before-h1",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/image-alt-only-h1-h2",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/empty-h2-after-h1",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/no-headings",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/h3-only",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/aria-heading-before-h1",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/image.png",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/h1-h3-h1-h2",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/h1-h2-h1-h2",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    },
+    {
+      "path": "/h1-h1-h2",
+      "method": "GET",
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)"
+    }
+  ],
+  "limitations": [
+    "Only literal heading order in this bounded ordinary Windows HTTP fixture is compared.",
+    "This does not establish computed visibility, accessibility outline, parser equivalence on arbitrary malformed HTML or whole-feature parity.",
+    "The more general heading_level_skipped finding is an independent rule and is excluded from this membership comparison."
+  ]
+}

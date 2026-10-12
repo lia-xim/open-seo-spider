@@ -2,7 +2,7 @@ use crate::urls::{normalize_url, same_scope};
 use crate::{
     CustomExtraction, CustomExtractionConfig, ImageRecord, LinkRecord, LinkRelationship, PageRecord,
 };
-use scraper::{Html, Selector};
+use scraper::{ElementRef, Html, Selector};
 use sha2::{Digest, Sha256};
 use url::Url;
 
@@ -14,11 +14,33 @@ fn clean(text: &str) -> String {
 }
 fn texts(doc: &Html, selector: &str) -> Vec<String> {
     doc.select(&select(selector))
+        .filter(|node| document_element(*node))
         .map(|node| clean(&node.text().collect::<String>()))
         .collect()
 }
 
+fn document_element(node: ElementRef<'_>) -> bool {
+    !node.ancestors().any(|ancestor| {
+        ancestor
+            .value()
+            .as_element()
+            .is_some_and(|element| element.name() == "template")
+    })
+}
+
 pub fn extract_html(page: &mut PageRecord, html: &str, seeds: &[Url], include_subdomains: bool) {
+    extract_html_in_source(page, html, seeds, include_subdomains, &[], "raw_html");
+}
+
+pub(crate) fn extract_html_in_source(
+    page: &mut PageRecord,
+    html: &str,
+    seeds: &[Url],
+    include_subdomains: bool,
+    rules: &[crate::LinkPositionRule],
+    source: &str,
+) {
+    page.dom_metadata = None;
     let doc = Html::parse_document(html);
     let Some(request_url) = normalize_url(&page.final_url, None) else {
         return;
@@ -36,7 +58,7 @@ pub fn extract_html(page: &mut PageRecord, html: &str, seeds: &[Url], include_su
     page.viewport = None;
     page.base_href = doc
         .select(&select("base[href]"))
-        .next()
+        .find(|node| document_element(*node))
         .and_then(|n| n.value().attr("href"))
         .map(str::to_owned);
     let base = page
@@ -46,6 +68,7 @@ pub fn extract_html(page: &mut PageRecord, html: &str, seeds: &[Url], include_su
         .filter(|url| !matches!(url.scheme(), "data" | "javascript"))
         .unwrap_or_else(|| request_url.clone());
     page.document_base_url = Some(base.to_string());
+    let dom = crate::dom_facts::DomContext::new(&doc, rules);
     page.titles = texts(&doc, "title");
     page.h1 = texts(&doc, "h1");
     page.h2 = texts(&doc, "h2");
@@ -54,7 +77,10 @@ pub fn extract_html(page: &mut PageRecord, html: &str, seeds: &[Url], include_su
         .next()
         .and_then(|n| n.value().attr("lang"))
         .map(str::to_owned);
-    for node in doc.select(&select("meta")) {
+    for node in doc
+        .select(&select("meta"))
+        .filter(|node| document_element(*node))
+    {
         let name = node.value().attr("name").unwrap_or("").to_ascii_lowercase();
         let content = node.value().attr("content").unwrap_or("").trim().to_owned();
         match name.as_str() {
@@ -64,7 +90,10 @@ pub fn extract_html(page: &mut PageRecord, html: &str, seeds: &[Url], include_su
         }
     }
     crate::text_metrics::measure_metadata(page);
-    for node in doc.select(&select("link[href]")) {
+    for node in doc
+        .select(&select("link[href]"))
+        .filter(|node| document_element(*node))
+    {
         let rel = node.value().attr("rel").unwrap_or("").to_ascii_lowercase();
         let Some(target) = node
             .value()
@@ -93,16 +122,26 @@ pub fn extract_html(page: &mut PageRecord, html: &str, seeds: &[Url], include_su
             },
         );
         if rel.split_whitespace().any(|r| r == "stylesheet") {
-            page.links.push(LinkRecord {
+            let mut link = LinkRecord {
                 url: target.to_string(),
                 rel,
                 internal: same_scope(&target, seeds, include_subdomains),
                 kind: "stylesheet".into(),
                 ..Default::default()
-            });
+            };
+            dom.enrich_link(
+                &mut link,
+                node,
+                node.value().attr("href").unwrap_or_default(),
+                &base,
+            );
+            page.links.push(link);
         }
     }
-    for node in doc.select(&select("a[href], area[href]")) {
+    for node in doc
+        .select(&select("a[href], area[href]"))
+        .filter(|node| document_element(*node))
+    {
         let Some(target) = node
             .value()
             .attr("href")
@@ -124,16 +163,27 @@ pub fn extract_html(page: &mut PageRecord, html: &str, seeds: &[Url], include_su
                 },
             );
         }
-        page.links.push(LinkRecord {
+        let mut link = LinkRecord {
             url: target.to_string(),
             text: clean(&node.text().collect::<String>()),
             nofollow: rel.split_whitespace().any(|r| r == "nofollow"),
             rel,
             internal: same_scope(&target, seeds, include_subdomains),
             kind: "anchor".into(),
-        });
+            ..Default::default()
+        };
+        dom.enrich_link(
+            &mut link,
+            node,
+            node.value().attr("href").unwrap_or_default(),
+            &base,
+        );
+        page.links.push(link);
     }
-    for node in doc.select(&select("img")) {
+    for node in doc
+        .select(&select("img"))
+        .filter(|node| document_element(*node))
+    {
         let Some(target) = node
             .value()
             .attr("src")
@@ -148,16 +198,26 @@ pub fn extract_html(page: &mut PageRecord, html: &str, seeds: &[Url], include_su
             height: node.value().attr("height").map(str::to_owned),
             loading: node.value().attr("loading").map(str::to_owned),
         });
-        page.links.push(LinkRecord {
+        let mut link = LinkRecord {
             url: target.to_string(),
             internal: same_scope(&target, seeds, include_subdomains),
             kind: "image".into(),
             ..Default::default()
-        });
+        };
+        dom.enrich_link(
+            &mut link,
+            node,
+            node.value().attr("src").unwrap_or_default(),
+            &base,
+        );
+        page.links.push(link);
     }
-    for node in doc.select(&select(
-        "script[src], iframe[src], video[src], audio[src], source[src]",
-    )) {
+    for node in doc
+        .select(&select(
+            "script[src], iframe[src], video[src], audio[src], source[src]",
+        ))
+        .filter(|node| document_element(*node))
+    {
         let Some(target) = node
             .value()
             .attr("src")
@@ -165,16 +225,29 @@ pub fn extract_html(page: &mut PageRecord, html: &str, seeds: &[Url], include_su
         else {
             continue;
         };
-        page.links.push(LinkRecord {
+        let mut link = LinkRecord {
             url: target.to_string(),
             internal: same_scope(&target, seeds, include_subdomains),
             kind: node.value().name().into(),
             ..Default::default()
-        });
+        };
+        dom.enrich_link(
+            &mut link,
+            node,
+            node.value().attr("src").unwrap_or_default(),
+            &base,
+        );
+        page.links.push(link);
     }
-    page.script_count = doc.select(&select("script")).count();
+    page.script_count = doc
+        .select(&select("script"))
+        .filter(|node| document_element(*node))
+        .count();
     crate::metadata::evaluate_robots(page);
-    for node in doc.select(&select("script[type='application/ld+json']")) {
+    for node in doc
+        .select(&select("script[type='application/ld+json']"))
+        .filter(|node| document_element(*node))
+    {
         match serde_json::from_str(&node.text().collect::<String>()) {
             Ok(value) => page.structured_data.push(value),
             Err(_) => page.invalid_structured_data += 1,
@@ -200,6 +273,41 @@ pub fn extract_html(page: &mut PageRecord, html: &str, seeds: &[Url], include_su
         page.word_count = normalized.split_whitespace().count();
         page.content_hash = Some(format!("{:x}", Sha256::digest(normalized.as_bytes())));
     }
+    let facts = dom.collect(&doc, &base, seeds, include_subdomains, source);
+    for image in &facts.responsive_images {
+        for candidate in image
+            .candidates
+            .iter()
+            .filter(|candidate| candidate.eligible && candidate.source != "img_src")
+        {
+            let Some(target) = candidate
+                .url
+                .as_ref()
+                .and_then(|url| normalize_url(url, None))
+            else {
+                continue;
+            };
+            page.links.push(LinkRecord {
+                url: target.to_string(),
+                internal: same_scope(&target, seeds, include_subdomains),
+                kind: "image_srcset".into(),
+                raw_href: Some(candidate.raw_url.clone()),
+                resolved_href: base
+                    .join(candidate.raw_url.trim())
+                    .ok()
+                    .map(|url| url.to_string()),
+                dom_location: Some(candidate.dom_location.clone()),
+                ..Default::default()
+            });
+        }
+    }
+    if !facts.complete {
+        page.warnings.push(format!(
+            "DOM observation collection is incomplete: {}",
+            facts.limits_reached.join(", ")
+        ));
+    }
+    page.dom_metadata = Some(facts);
     crate::metadata::sync_relationship_links(page, seeds, include_subdomains);
 }
 

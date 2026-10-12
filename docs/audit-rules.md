@@ -81,6 +81,11 @@ dokumentiert.
 | Linkmenge | `high_internal_outlinks`, `high_external_outlinks`: Zahl der Anchor-Vorkommen, inklusive wiederholter Ziele. Ressourcenlinks zählen hier nicht. `internal_outlinks_missing` beschreibt den vollständigen erfassten DOM, nicht sämtliche möglichen Navigationen. |
 | Linkannotation | `internal_nofollow_outlinks`, `external_nofollow_outlinks` berücksichtigen Linkannotation und die anwendbare Seitenpolicy des gewählten `indexability_agent`. `internal_sponsored_outlinks`, `external_sponsored_outlinks`, `internal_ugc_outlinks`, `external_ugc_outlinks` beschreiben beobachtete rel-Tokens. Die zusätzlichen sponsored/ugc-Regeln sind eigene Regeln, keine nachgewiesenen Referenzfilter. |
 | Anchor-Text | `internal_outlinks_empty_anchor` prüft erfassten Anchor-Text. Bild-Alt, ARIA und berechnete zugängliche Namen werden daraus nicht abgeleitet. |
+| DOM-Heading-Reihenfolge | `h1_nonsequential`, `h2_nonsequential` verwenden erfasste Tag-Reihenfolge und separat geprüfte Trigger/Controls. `heading_level_skipped` ist eine eigene Gliederungsheuristik. ARIA-, hidden- und CSS-Attribute ersetzen die HTML-Tagstufe nicht. |
+| Bild-Headings | `h1_image_alt`, `h2_image_alt` bewahren Alt-Beobachtungen innerhalb des Heading-Elements; sie behaupten keine berechneten zugänglichen Namen. |
+| Meta Keywords | `meta_keywords_missing`, `meta_keywords_empty`, `meta_keywords_multiple`, `meta_keywords_duplicate` unterscheiden Abwesenheit, fehlendes/leeres content-Attribut, mehrere Deklarationen und gleiche normalisierte Werte auf verschiedenen vollständigen indexierbaren URLs. Ein Altprojekt ohne DOM-Fakten erhält keine Abwesenheitsmeldung. |
+| Navigation | `nonstandard_internal_navigation` beschreibt deklarierte potenzielle interne Navigation ohne gewöhnlichen HTTP-Anchor. Der Befund rekonstruiert keine ausgeführte JavaScript-Navigation. |
+| Sprungmarken | `broken_bookmark` wird nur bei eingeschalteter Prüfung und einem tatsächlich erfassten vollständigen HTML-Ziel ohne passende ID oder Anchor-Name ausgegeben. Unbekannte, unvollständige und nicht unterstützte Zielbeobachtungen bleiben eigene Zustände. |
 
 ## URL-Formmerkmale
 
@@ -96,8 +101,8 @@ Query-Parameter; `+` wird für den Space-Hinweis nicht pauschal als Leerzeichen
 interpretiert. `url_long` verwendet die vollständige normalisierte Anfrage-URL.
 Lokalisierte Zeichen, Groß-/Kleinschreibung und Parameter können absichtlich
 verwendet werden; diese Hinweise stellen kein Sicherheits- oder Indexierungsrisiko
-fest. Es gibt hier keine erfundene Prüfung fehlender Fragmentziele, solange
-die dafür notwendigen DOM-ID-Fakten nicht erfasst werden.
+fest. Sprungmarkenziele werden separat aus gespeicherten DOM-ID-/Anchor-Fakten
+geprüft; ein Fragment löst keinen zusätzlichen HTTP-Request aus.
 
 ## Pixelprofil
 
@@ -107,10 +112,12 @@ leerer Text; `None` beziehungsweise JSON `null` bedeutet unbekannt. Eine leere
 Liste bedeutet, dass keine positionsbezogenen Messungen vorhanden sind.
 
 Das aktuelle lokale Profil ist
-`roboto-2.138-simple-rounded-advances-v1; title20px; description14px; latin-greek-cyrillic`.
+`roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic`.
 Es verwendet den offen lizenzierten eingebetteten Roboto-Regular-Font und
-aufsummierte, pro Glyph auf Pixel gerundete Font-Advances bei 20 px für Titel
-und 14 px für Descriptions. Nicht unterstützte Schriften, kombinierende Zeichen,
+aufsummierte, bei festem 150%-Profil pro Glyph gerundete Font-Advances bei 20 px
+für Titel und 14 px für Descriptions. Die kalibrierte Messung stimmt für 58
+beobachtete Referenzwerte überein; das belegt keine universelle Font- oder
+Display-Äquivalenz. Nicht unterstützte Schriften, kombinierende Zeichen,
 Emoji, fehlende Glyphen und Überläufe bleiben unbekannt. Unbekannte Messungen
 lösen keinen Pixelhinweis aus und werden nicht mit Schätzwerten aufgefüllt.
 Die Messung ist keine Browser-Layoutmessung und keine Vorhersage der Schrift,

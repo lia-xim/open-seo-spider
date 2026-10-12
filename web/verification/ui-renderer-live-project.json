@@ -1,7 +1,7 @@
 {
   "config": {
     "seed_urls": [
-      "http://127.0.0.1:50235/dynamic"
+      "http://127.0.0.1:58349/dynamic"
     ],
     "sitemap_urls": [],
     "discover_sitemaps": true,
@@ -147,6 +147,8 @@
       "max_text_bytes_per_page": 1048576,
       "max_annotations": 10000
     },
+    "validate_fragments": false,
+    "link_position_rules": [],
     "include_patterns": [],
     "exclude_patterns": [
       "/excluded"
@@ -154,12 +156,12 @@
   },
   "pages": [
     {
-      "url": "http://127.0.0.1:50235/dynamic",
-      "final_url": "http://127.0.0.1:50235/dynamic",
+      "url": "http://127.0.0.1:58349/dynamic",
+      "final_url": "http://127.0.0.1:58349/dynamic",
       "depth": 0,
       "discovered_from": null,
       "internal": true,
-      "fetched_at": "2026-10-12T08:48:24.183194600+00:00",
+      "fetched_at": "2026-10-12T09:47:41.504670200+00:00",
       "status": 200,
       "final_status": 200,
       "content_type": "text/html; charset=utf-8",
@@ -175,7 +177,7 @@
         "connection": "keep-alive",
         "content-length": "800",
         "content-type": "text/html; charset=utf-8",
-        "date": "Mon, 12 Oct 2026 08:48:24 GMT",
+        "date": "Mon, 12 Oct 2026 09:47:41 GMT",
         "keep-alive": "timeout=5",
         "set-cookie": "seo_fixture=[redacted]; Path=/; SameSite=Lax"
       },
@@ -197,10 +199,10 @@
       ],
       "h2": [],
       "canonical": [
-        "http://127.0.0.1:50235/dynamic"
+        "http://127.0.0.1:58349/dynamic"
       ],
       "html_canonical": [
-        "http://127.0.0.1:50235/dynamic"
+        "http://127.0.0.1:58349/dynamic"
       ],
       "header_canonical": [],
       "meta_robots": [],
@@ -212,16 +214,16 @@
       "hreflang": [],
       "html_hreflang": [],
       "header_hreflang": [],
-      "document_base_url": "http://127.0.0.1:50235/dynamic",
+      "document_base_url": "http://127.0.0.1:58349/dynamic",
       "base_href": null,
       "link_relationships": [
         {
-          "url": "http://127.0.0.1:50235/dynamic",
+          "url": "http://127.0.0.1:58349/dynamic",
           "rel": [
             "canonical"
           ],
           "source": "html_link",
-          "context_url": "http://127.0.0.1:50235/dynamic",
+          "context_url": "http://127.0.0.1:58349/dynamic",
           "applies_to_document": true,
           "hreflang": [],
           "media": null,
@@ -238,28 +240,59 @@
       "images": [],
       "links": [
         {
-          "url": "http://127.0.0.1:50235/excluded",
+          "url": "http://127.0.0.1:58349/excluded",
           "text": "Excluded target",
           "rel": "",
           "internal": true,
           "nofollow": false,
-          "kind": "anchor"
+          "kind": "anchor",
+          "raw_href": "/excluded",
+          "resolved_href": "http://127.0.0.1:58349/excluded",
+          "fragment": null,
+          "dom_location": {
+            "index": 11,
+            "path": "/html[1]/body[1]/main[1]/a[1]",
+            "path_truncated": false,
+            "semantic_ancestors": [
+              "body",
+              "main"
+            ]
+          },
+          "position": "content"
         },
         {
-          "url": "http://127.0.0.1:50235/js-only",
+          "url": "http://127.0.0.1:58349/js-only",
           "text": "Discovered through JavaScript",
           "rel": "",
           "internal": true,
           "nofollow": false,
-          "kind": "anchor"
+          "kind": "anchor",
+          "raw_href": "/js-only",
+          "resolved_href": "http://127.0.0.1:58349/js-only",
+          "fragment": null,
+          "dom_location": {
+            "index": 14,
+            "path": "/html[1]/body[1]/main[1]/a[2]",
+            "path_truncated": false,
+            "semantic_ancestors": [
+              "body",
+              "main"
+            ]
+          },
+          "position": "content"
         },
         {
-          "url": "http://127.0.0.1:50235/dynamic",
+          "url": "http://127.0.0.1:58349/dynamic",
           "text": "",
           "rel": "canonical",
           "internal": true,
           "nofollow": false,
-          "kind": "relationship"
+          "kind": "relationship",
+          "raw_href": null,
+          "resolved_href": null,
+          "fragment": null,
+          "dom_location": null,
+          "position": null
         }
       ],
       "word_count": 8,
@@ -288,10 +321,10 @@
         ],
         "h2": [],
         "canonical": [
-          "http://127.0.0.1:50235/dynamic"
+          "http://127.0.0.1:58349/dynamic"
         ],
         "html_canonical": [
-          "http://127.0.0.1:50235/dynamic"
+          "http://127.0.0.1:58349/dynamic"
         ],
         "header_canonical": [],
         "meta_robots": [],
@@ -301,16 +334,16 @@
         "hreflang": [],
         "html_hreflang": [],
         "header_hreflang": [],
-        "document_base_url": "http://127.0.0.1:50235/dynamic",
+        "document_base_url": "http://127.0.0.1:58349/dynamic",
         "base_href": null,
         "link_relationships": [
           {
-            "url": "http://127.0.0.1:50235/dynamic",
+            "url": "http://127.0.0.1:58349/dynamic",
             "rel": [
               "canonical"
             ],
             "source": "html_link",
-            "context_url": "http://127.0.0.1:50235/dynamic",
+            "context_url": "http://127.0.0.1:58349/dynamic",
             "applies_to_document": true,
             "hreflang": [],
             "media": null,
@@ -326,20 +359,38 @@
         "content_hash": "86be1a6d8cc930785a66fcb2dc66aecb7af9ffa8d5ee0b3679407b5ae1149d60",
         "links": [
           {
-            "url": "http://127.0.0.1:50235/excluded",
+            "url": "http://127.0.0.1:58349/excluded",
             "text": "Excluded target",
             "rel": "",
             "internal": true,
             "nofollow": false,
-            "kind": "anchor"
+            "kind": "anchor",
+            "raw_href": "/excluded",
+            "resolved_href": "http://127.0.0.1:58349/excluded",
+            "fragment": null,
+            "dom_location": {
+              "index": 10,
+              "path": "/html[1]/body[1]/main[1]/a[1]",
+              "path_truncated": false,
+              "semantic_ancestors": [
+                "body",
+                "main"
+              ]
+            },
+            "position": "content"
           },
           {
-            "url": "http://127.0.0.1:50235/dynamic",
+            "url": "http://127.0.0.1:58349/dynamic",
             "text": "",
             "rel": "canonical",
             "internal": true,
             "nofollow": false,
-            "kind": "relationship"
+            "kind": "relationship",
+            "raw_href": null,
+            "resolved_href": null,
+            "fragment": null,
+            "dom_location": null,
+            "position": null
           }
         ],
         "custom_extractions": [
@@ -455,21 +506,97 @@
             "truncated": false,
             "error": null
           }
-        ]
+        ],
+        "dom_metadata": {
+          "engine": "independent_html5_dom_v1",
+          "source": "raw_html",
+          "heading_text_engine": "independent_dom_text_with_inline_image_alt_v1",
+          "complete": true,
+          "limits_reached": [],
+          "headings": [
+            {
+              "tag_level": 1,
+              "text": "Raw heading",
+              "raw_text": "Raw heading",
+              "text_with_image_alt": "Raw heading",
+              "image_alt": [],
+              "aria_level": null,
+              "heading_offset": null,
+              "hidden_attribute": false,
+              "dom_location": {
+                "index": 8,
+                "path": "/html[1]/body[1]/main[1]/h1[1]",
+                "path_truncated": false,
+                "semantic_ancestors": [
+                  "body",
+                  "main"
+                ]
+              }
+            }
+          ],
+          "meta_keywords": [],
+          "fragment_targets": [],
+          "navigation_candidates": [],
+          "responsive_images": [
+            {
+              "src": "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22/%3E",
+              "srcset": null,
+              "sizes": null,
+              "alt": null,
+              "width": null,
+              "height": null,
+              "loading": null,
+              "candidates": [
+                {
+                  "source": "img_src",
+                  "raw_url": "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22/%3E",
+                  "url": null,
+                  "descriptors": [],
+                  "width": null,
+                  "density": null,
+                  "height": null,
+                  "media": null,
+                  "type_hint": null,
+                  "sizes": null,
+                  "eligible": true,
+                  "error": null,
+                  "dom_location": {
+                    "index": 12,
+                    "path": "/html[1]/body[1]/main[1]/img[1]",
+                    "path_truncated": false,
+                    "semantic_ancestors": [
+                      "body",
+                      "main"
+                    ]
+                  }
+                }
+              ],
+              "dom_location": {
+                "index": 12,
+                "path": "/html[1]/body[1]/main[1]/img[1]",
+                "path_truncated": false,
+                "semantic_ancestors": [
+                  "body",
+                  "main"
+                ]
+              }
+            }
+          ]
+        }
       },
       "rendered": true,
       "renderer_error": null,
-      "rendered_url": "http://127.0.0.1:50235/dynamic",
+      "rendered_url": "http://127.0.0.1:58349/dynamic",
       "rendered_status": 200,
       "rendered_headers": {
         "connection": "keep-alive",
         "content-length": "800",
         "content-type": "text/html; charset=utf-8",
-        "date": "Mon, 12 Oct 2026 08:48:24 GMT",
+        "date": "Mon, 12 Oct 2026 09:47:41 GMT",
         "keep-alive": "timeout=5",
         "set-cookie": "seo_fixture=[redacted]; Path=/; SameSite=Lax"
       },
-      "rendered_at": "2026-10-12T08:48:25.284Z",
+      "rendered_at": "2026-10-12T09:47:42.288Z",
       "browser_version": "154.0.8037.99",
       "rendered_viewport": {
         "height": 800,
@@ -484,7 +611,7 @@
             "columnNumber": 0,
             "line": 0,
             "lineNumber": 0,
-            "url": "http://127.0.0.1:50235/favicon.ico"
+            "url": "http://127.0.0.1:58349/favicon.ico"
           },
           "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
           "type": "console"
@@ -495,7 +622,7 @@
             "columnNumber": 740,
             "line": 0,
             "lineNumber": 0,
-            "url": "http://127.0.0.1:50235/dynamic"
+            "url": "http://127.0.0.1:58349/dynamic"
           },
           "message": "owned-renderer-fixture",
           "type": "console"
@@ -507,7 +634,7 @@
           "method": "GET",
           "resource_type": "document",
           "status": 200,
-          "url": "http://127.0.0.1:50235/dynamic"
+          "url": "http://127.0.0.1:58349/dynamic"
         }
       ],
       "accessibility": {
@@ -814,7 +941,7 @@
           "value_type": null
         },
         {
-          "elapsed_ms": 1,
+          "elapsed_ms": 0,
           "error": null,
           "name": "laterResult",
           "value": 42,
@@ -834,15 +961,91 @@
         }
       ],
       "pdf": null,
-      "image_metadata": null
+      "image_metadata": null,
+      "dom_metadata": {
+        "engine": "independent_html5_dom_v1",
+        "source": "rendered_html",
+        "heading_text_engine": "independent_dom_text_with_inline_image_alt_v1",
+        "complete": true,
+        "limits_reached": [],
+        "headings": [
+          {
+            "tag_level": 1,
+            "text": "Rendered heading",
+            "raw_text": "Rendered heading",
+            "text_with_image_alt": "Rendered heading",
+            "image_alt": [],
+            "aria_level": null,
+            "heading_offset": null,
+            "hidden_attribute": false,
+            "dom_location": {
+              "index": 8,
+              "path": "/html[1]/body[1]/main[1]/h1[1]",
+              "path_truncated": false,
+              "semantic_ancestors": [
+                "body",
+                "main"
+              ]
+            }
+          }
+        ],
+        "meta_keywords": [],
+        "fragment_targets": [],
+        "navigation_candidates": [],
+        "responsive_images": [
+          {
+            "src": "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22/%3E",
+            "srcset": null,
+            "sizes": null,
+            "alt": null,
+            "width": null,
+            "height": null,
+            "loading": null,
+            "candidates": [
+              {
+                "source": "img_src",
+                "raw_url": "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22/%3E",
+                "url": null,
+                "descriptors": [],
+                "width": null,
+                "density": null,
+                "height": null,
+                "media": null,
+                "type_hint": null,
+                "sizes": null,
+                "eligible": true,
+                "error": null,
+                "dom_location": {
+                  "index": 13,
+                  "path": "/html[1]/body[1]/main[1]/img[1]",
+                  "path_truncated": false,
+                  "semantic_ancestors": [
+                    "body",
+                    "main"
+                  ]
+                }
+              }
+            ],
+            "dom_location": {
+              "index": 13,
+              "path": "/html[1]/body[1]/main[1]/img[1]",
+              "path_truncated": false,
+              "semantic_ancestors": [
+                "body",
+                "main"
+              ]
+            }
+          }
+        ]
+      }
     },
     {
-      "url": "http://127.0.0.1:50235/js-only",
-      "final_url": "http://127.0.0.1:50235/js-only",
+      "url": "http://127.0.0.1:58349/js-only",
+      "final_url": "http://127.0.0.1:58349/js-only",
       "depth": 1,
-      "discovered_from": "http://127.0.0.1:50235/dynamic",
+      "discovered_from": "http://127.0.0.1:58349/dynamic",
       "internal": true,
-      "fetched_at": "2026-10-12T08:48:25.530505300+00:00",
+      "fetched_at": "2026-10-12T09:47:42.603021600+00:00",
       "status": 200,
       "final_status": 200,
       "content_type": "text/html; charset=utf-8",
@@ -858,7 +1061,7 @@
         "connection": "keep-alive",
         "content-length": "140",
         "content-type": "text/html; charset=utf-8",
-        "date": "Mon, 12 Oct 2026 08:48:25 GMT",
+        "date": "Mon, 12 Oct 2026 09:47:42 GMT",
         "keep-alive": "timeout=5"
       },
       "titles": [
@@ -886,7 +1089,7 @@
       "hreflang": [],
       "html_hreflang": [],
       "header_hreflang": [],
-      "document_base_url": "http://127.0.0.1:50235/js-only",
+      "document_base_url": "http://127.0.0.1:58349/js-only",
       "base_href": null,
       "link_relationships": [],
       "pagination_next": [],
@@ -927,7 +1130,7 @@
         "hreflang": [],
         "html_hreflang": [],
         "header_hreflang": [],
-        "document_base_url": "http://127.0.0.1:50235/js-only",
+        "document_base_url": "http://127.0.0.1:58349/js-only",
         "base_href": null,
         "link_relationships": [],
         "pagination_next": [],
@@ -1047,20 +1250,51 @@
             "truncated": false,
             "error": null
           }
-        ]
+        ],
+        "dom_metadata": {
+          "engine": "independent_html5_dom_v1",
+          "source": "raw_html",
+          "heading_text_engine": "independent_dom_text_with_inline_image_alt_v1",
+          "complete": true,
+          "limits_reached": [],
+          "headings": [
+            {
+              "tag_level": 1,
+              "text": "Child page",
+              "raw_text": "Child page",
+              "text_with_image_alt": "Child page",
+              "image_alt": [],
+              "aria_level": null,
+              "heading_offset": null,
+              "hidden_attribute": false,
+              "dom_location": {
+                "index": 5,
+                "path": "/html[1]/body[1]/h1[1]",
+                "path_truncated": false,
+                "semantic_ancestors": [
+                  "body"
+                ]
+              }
+            }
+          ],
+          "meta_keywords": [],
+          "fragment_targets": [],
+          "navigation_candidates": [],
+          "responsive_images": []
+        }
       },
       "rendered": true,
       "renderer_error": null,
-      "rendered_url": "http://127.0.0.1:50235/js-only",
+      "rendered_url": "http://127.0.0.1:58349/js-only",
       "rendered_status": 200,
       "rendered_headers": {
         "connection": "keep-alive",
         "content-length": "140",
         "content-type": "text/html; charset=utf-8",
-        "date": "Mon, 12 Oct 2026 08:48:25 GMT",
+        "date": "Mon, 12 Oct 2026 09:47:42 GMT",
         "keep-alive": "timeout=5"
       },
-      "rendered_at": "2026-10-12T08:48:26.254Z",
+      "rendered_at": "2026-10-12T09:47:43.389Z",
       "browser_version": "154.0.8037.99",
       "rendered_viewport": {
         "height": 800,
@@ -1075,7 +1309,7 @@
           "method": "GET",
           "resource_type": "document",
           "status": 200,
-          "url": "http://127.0.0.1:50235/js-only"
+          "url": "http://127.0.0.1:58349/js-only"
         }
       ],
       "accessibility": {
@@ -1292,7 +1526,7 @@
       ],
       "custom_javascript_results": [
         {
-          "elapsed_ms": 3,
+          "elapsed_ms": 12,
           "error": null,
           "name": "titleAndLinks",
           "value": {
@@ -1318,169 +1552,214 @@
       ],
       "browser_cookies": [],
       "pdf": null,
-      "image_metadata": null
+      "image_metadata": null,
+      "dom_metadata": {
+        "engine": "independent_html5_dom_v1",
+        "source": "rendered_html",
+        "heading_text_engine": "independent_dom_text_with_inline_image_alt_v1",
+        "complete": true,
+        "limits_reached": [],
+        "headings": [
+          {
+            "tag_level": 1,
+            "text": "Child page",
+            "raw_text": "Child page",
+            "text_with_image_alt": "Child page",
+            "image_alt": [],
+            "aria_level": null,
+            "heading_offset": null,
+            "hidden_attribute": false,
+            "dom_location": {
+              "index": 5,
+              "path": "/html[1]/body[1]/h1[1]",
+              "path_truncated": false,
+              "semantic_ancestors": [
+                "body"
+              ]
+            }
+          }
+        ],
+        "meta_keywords": [],
+        "fragment_targets": [],
+        "navigation_candidates": [],
+        "responsive_images": []
+      }
     }
   ],
   "issues": [
     {
       "code": "title_short",
       "severity": "notice",
-      "url": "http://127.0.0.1:50235/dynamic",
+      "url": "http://127.0.0.1:58349/dynamic",
       "message": "Primary title has 18 Unicode characters, below configured minimum 30; review content and search appearance",
       "related_urls": []
     },
     {
       "code": "description_short",
       "severity": "notice",
-      "url": "http://127.0.0.1:50235/dynamic",
+      "url": "http://127.0.0.1:58349/dynamic",
       "message": "Primary meta description has 23 Unicode characters, below configured minimum 70; review content and search appearance",
       "related_urls": []
     },
     {
       "code": "title_pixels_short",
       "severity": "notice",
-      "url": "http://127.0.0.1:50235/dynamic",
+      "url": "http://127.0.0.1:58349/dynamic",
       "message": "Primary title measured 165px below configured 200px minimum (profile roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic)",
       "related_urls": []
     },
     {
       "code": "description_pixels_short",
       "severity": "notice",
-      "url": "http://127.0.0.1:50235/dynamic",
+      "url": "http://127.0.0.1:58349/dynamic",
       "message": "Primary meta description measured 149px below configured 400px minimum (profile roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic)",
       "related_urls": []
     },
     {
       "code": "h2_missing",
       "severity": "notice",
-      "url": "http://127.0.0.1:50235/dynamic",
+      "url": "http://127.0.0.1:58349/dynamic",
       "message": "No nonempty H2 heading was observed in the complete captured document; sections may not need H2 headings",
       "related_urls": []
     },
     {
       "code": "content_low_word_count",
       "severity": "notice",
-      "url": "http://127.0.0.1:50235/dynamic",
+      "url": "http://127.0.0.1:58349/dynamic",
       "message": "Captured normalized visible text has 8 words, below configured minimum 200; word count alone does not establish content quality",
       "related_urls": []
     },
     {
       "code": "http_url",
       "severity": "warning",
-      "url": "http://127.0.0.1:50235/dynamic",
+      "url": "http://127.0.0.1:58349/dynamic",
       "message": "HTML served over unencrypted HTTP",
       "related_urls": []
     },
     {
       "code": "viewport_missing",
       "severity": "notice",
-      "url": "http://127.0.0.1:50235/dynamic",
+      "url": "http://127.0.0.1:58349/dynamic",
       "message": "No viewport meta tag",
       "related_urls": []
     },
     {
       "code": "browser_console_errors",
       "severity": "warning",
-      "url": "http://127.0.0.1:50235/dynamic",
+      "url": "http://127.0.0.1:58349/dynamic",
       "message": "Browser reported 2 console or page error(s)",
       "related_urls": []
     },
     {
       "code": "accessibility_button-name",
       "severity": "error",
-      "url": "http://127.0.0.1:50235/dynamic",
+      "url": "http://127.0.0.1:58349/dynamic",
       "message": "Buttons must have discernible text (1 affected nodes; automated check only)",
       "related_urls": []
     },
     {
       "code": "accessibility_image-alt",
       "severity": "error",
-      "url": "http://127.0.0.1:50235/dynamic",
+      "url": "http://127.0.0.1:58349/dynamic",
       "message": "Images must have alternative text (1 affected nodes; automated check only)",
       "related_urls": []
     },
     {
       "code": "title_short",
       "severity": "notice",
-      "url": "http://127.0.0.1:50235/js-only",
+      "url": "http://127.0.0.1:58349/js-only",
       "message": "Primary title has 10 Unicode characters, below configured minimum 30; review content and search appearance",
       "related_urls": []
     },
     {
       "code": "title_pixels_short",
       "severity": "notice",
-      "url": "http://127.0.0.1:50235/js-only",
+      "url": "http://127.0.0.1:58349/js-only",
       "message": "Primary title measured 94px below configured 200px minimum (profile roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic)",
       "related_urls": []
     },
     {
       "code": "h2_missing",
       "severity": "notice",
-      "url": "http://127.0.0.1:50235/js-only",
+      "url": "http://127.0.0.1:58349/js-only",
       "message": "No nonempty H2 heading was observed in the complete captured document; sections may not need H2 headings",
       "related_urls": []
     },
     {
       "code": "content_low_word_count",
       "severity": "notice",
-      "url": "http://127.0.0.1:50235/js-only",
+      "url": "http://127.0.0.1:58349/js-only",
       "message": "Captured normalized visible text has 3 words, below configured minimum 200; word count alone does not establish content quality",
       "related_urls": []
     },
     {
       "code": "internal_outlinks_missing",
       "severity": "notice",
-      "url": "http://127.0.0.1:50235/js-only",
+      "url": "http://127.0.0.1:58349/js-only",
       "message": "No internal anchor outlinks were observed in the complete captured document; this can be intentional",
       "related_urls": []
     },
     {
       "code": "http_url",
       "severity": "warning",
-      "url": "http://127.0.0.1:50235/js-only",
+      "url": "http://127.0.0.1:58349/js-only",
       "message": "HTML served over unencrypted HTTP",
       "related_urls": []
     },
     {
       "code": "description_missing",
       "severity": "notice",
-      "url": "http://127.0.0.1:50235/js-only",
+      "url": "http://127.0.0.1:58349/js-only",
       "message": "Meta description is missing or empty",
       "related_urls": []
     },
     {
       "code": "canonical_missing",
       "severity": "notice",
-      "url": "http://127.0.0.1:50235/js-only",
+      "url": "http://127.0.0.1:58349/js-only",
       "message": "No HTML canonical link",
       "related_urls": []
     },
     {
       "code": "viewport_missing",
       "severity": "notice",
-      "url": "http://127.0.0.1:50235/js-only",
+      "url": "http://127.0.0.1:58349/js-only",
       "message": "No viewport meta tag",
       "related_urls": []
     },
     {
       "code": "accessibility_landmark-one-main",
       "severity": "warning",
-      "url": "http://127.0.0.1:50235/js-only",
+      "url": "http://127.0.0.1:58349/js-only",
       "message": "Document should have one main landmark (1 affected nodes; automated check only)",
       "related_urls": []
     },
     {
       "code": "accessibility_region",
       "severity": "warning",
-      "url": "http://127.0.0.1:50235/js-only",
+      "url": "http://127.0.0.1:58349/js-only",
       "message": "All page content should be contained by landmarks (2 affected nodes; automated check only)",
+      "related_urls": []
+    },
+    {
+      "code": "meta_keywords_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:58349/dynamic",
+      "message": "No meta keyword element was observed; keywords are metadata observations, not a recommended ranking input",
+      "related_urls": []
+    },
+    {
+      "code": "meta_keywords_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:58349/js-only",
+      "message": "No meta keyword element was observed; keywords are metadata observations, not a recommended ranking input",
       "related_urls": []
     }
   ],
   "summary": {
-    "started_at": "2026-10-12T08:48:24.172093600+00:00",
-    "finished_at": "2026-10-12T08:48:26.467794800+00:00",
-    "elapsed_ms": 2295,
+    "started_at": "2026-10-12T09:47:41.485561500+00:00",
+    "finished_at": "2026-10-12T09:47:43.717386400+00:00",
+    "elapsed_ms": 2231,
     "completed": 2,
     "discovered": 2,
     "pending": 0,

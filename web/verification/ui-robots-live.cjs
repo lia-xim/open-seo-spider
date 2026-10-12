@@ -1,0 +1,65 @@
+// Real browser -> local Rust simulation/export -> zero supplied-website requests.
+const assert=require('node:assert/strict');
+const http=require('node:http');
+const fs=require('node:fs');
+const path=require('node:path');
+const {chromium}=require('../../renderer/node_modules/playwright-core');
+const app=process.env.SPIDER_URL||'http://127.0.0.1:8787';
+const executable=process.env.SPIDER_BROWSER_EXECUTABLE||(()=>{for(const candidate of ['C:/Program Files/Google/Chrome/Application/chrome.exe','C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'])if(fs.existsSync(candidate))return candidate;return undefined;})();
+const checks=[];const checked=message=>{checks.push(message);console.log(`PASS ${message}`);};
+let websiteRequests=0,apiRequests=0;
+const fixture=http.createServer((req,res)=>{websiteRequests++;res.end('Robots simulation must never fetch supplied URLs or sitemap');});
+const submit=async page=>{await page.click('#simulate');await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('Zeilen geprüft'));};
+(async()=>{
+  await new Promise(resolve=>fixture.listen(0,'127.0.0.1',resolve));
+  const origin=`http://127.0.0.1:${fixture.address().port}`;
+  const browser=await chromium.launch(executable?{executablePath:executable}:{channel:process.platform==='win32'?'chrome':undefined});
+  const context=await browser.newContext({acceptDownloads:true});const page=await context.newPage();
+  const errors=[];page.on('pageerror',error=>errors.push(error.message));
+  page.on('request',request=>{if(request.url()===app+'/api/robots/simulate')apiRequests++;});
+  try{
+    await page.goto(app+'/robots');
+    const rules=`User-agent: *\nDisallow: /private\nAllow: /private/public\nDisallow: /*.pdf$\nDisallow: /find?blocked=1$\nCrawl-delay: 4\nNoindex: /\nSitemap: ${origin}/unrequested-map.xml\nUser-agent: Googlebot\nDisallow: /google-only\nDisallow: /*.pdf$\n`;
+    const urls=[`${origin}/private/secret`,`${origin}/private/public/a`,`${origin}/report.pdf#part`,`${origin}/report.pdf?download=1`,`${origin}/find?blocked=1#fragment`,`${origin}/find?blocked=1&other=2`,`${origin}/google-only`,`${origin}/private/secret`,'not a URL','ftp://example.invalid/file','=FORMULA()','',`${origin}/<img src=x onerror=window.__robots_xss=true>`];
+    await page.selectOption('#agent-preset','OpenSEOSpider');await page.fill('#robots-text',rules);await page.fill('#urls',urls.join('\n'));await submit(page);
+    assert.equal(await page.locator('#results-table tbody tr').count(),13);assert.match(await page.locator('#status').innerText(),/13 Zeilen geprüft · 4 unbekannt · 0 Website-Anfragen/);
+    const decisions=await page.locator('#results-table tbody tr .decision').allTextContents();
+    assert.deepEqual(decisions,['Gesperrt','Erlaubt','Gesperrt','Erlaubt','Gesperrt','Erlaubt','Erlaubt','Gesperrt','Unbekannt','Unbekannt','Unbekannt','Unbekannt','Erlaubt']);
+    assert.match(await page.locator('#ignored').innerText(),/crawl-delay/);assert.match(await page.locator('#ignored').innerText(),/noindex/);assert.match(await page.locator('#ignored').innerText(),/sitemap/);assert.equal(websiteRequests,0);
+    checked('Actual shared native matcher proves wildcard end-anchor query and longest-Allow behavior with zero website or sitemap fetches');
+    const rows=await page.locator('#results-table tbody tr').allTextContents();assert.match(rows[2],/report\.pdf#part/);assert.match(rows[2],/part/);assert.equal(await page.locator('#results-table tbody tr[data-source-row="8"] td').first().innerText(),'8');
+    await page.selectOption('#decision-filter','unknown');assert.equal(await page.locator('#results-table tbody tr').count(),4);assert.match(await page.locator('#results-table tbody').innerText(),/Invalid absolute URL|Only absolute HTTP/);await page.selectOption('#decision-filter','all');
+    assert.equal(await page.locator('#results-table img').count(),0);assert.equal(await page.evaluate(()=>Boolean(window.__robots_xss)),false);
+    checked('Duplicate source rows fragments malformed/non-HTTP/blank unknowns and untrusted URL text remain distinct and safely displayed');
+    const jsonPromise=page.waitForEvent('download');await page.click('#export-json');const jsonPath=path.join(__dirname,'ui-robots-live-export.json');await(await jsonPromise).saveAs(jsonPath);const saved=JSON.parse(fs.readFileSync(jsonPath,'utf8'));
+    assert.deepEqual(saved.input.urls,urls);assert.equal(saved.input.robots_text,rules);assert.equal(saved.result.website_requests,0);assert.equal(saved.result.rules_sha256,require('node:crypto').createHash('sha256').update(rules).digest('hex'));
+    assert.equal(saved.result.rows[0].input_url,saved.result.rows[7].input_url);assert.equal(saved.result.rows[2].fragment,'part');assert.equal(saved.result.rows[2].normalized_url,`${origin}/report.pdf`);assert.equal(saved.result.rows[4].path_query,'/find?blocked=1');assert.equal(saved.result.rows[10].allowed,null);assert.equal(saved.result.matched_rule,undefined);
+    const csvPromise=page.waitForEvent('download');await page.click('#export-csv');const csvPath=path.join(__dirname,'ui-robots-live-export.csv');await(await csvPromise).saveAs(csvPath);const csv=fs.readFileSync(csvPath,'utf8');assert.match(csv,/'=FORMULA\(\)/);assert.match(csv,/Rules SHA256/);assert.match(csv,/false/);assert.match(csv,/true/);
+    checked('Real native CSV neutralizes formulas while exact JSON preserves original rules ordered duplicate inputs hash and tri-state observations');
+    await page.selectOption('#agent-preset','Googlebot');await submit(page);
+    const agentDecision=await page.locator('#results-table tbody tr .decision').allTextContents();assert.equal(agentDecision[0],'Erlaubt');assert.equal(agentDecision[6],'Gesperrt');assert.equal(agentDecision[4],'Erlaubt');assert.match(await page.locator('#facts').innerText(),/Agent: Googlebot/);
+    checked('Actual agent selection uses the specific group instead of inheriting wildcard-group restrictions');
+    const beforeValidation=apiRequests;
+    await page.locator('#robots-form details summary').click();
+    await page.fill('#user-agent','éBot');await page.click('#simulate');await page.waitForFunction(()=>document.querySelector('#status').getAttribute('role')==='alert');assert.match(await page.locator('#status').innerText(),/ASCII/);assert.equal(apiRequests,beforeValidation);
+    await page.selectOption('#agent-preset','OpenSEOSpider');await page.fill('#max-urls','0');await page.locator('#robots-form').evaluate(form=>form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true})));assert.match(await page.locator('#status').innerText(),/max_urls/);assert.equal(apiRequests,beforeValidation);
+    await page.fill('#max-urls','10000');await page.fill('#max-robots-bytes','10');await page.fill('#robots-text','é'.repeat(6));await page.click('#simulate');await page.waitForFunction(()=>document.querySelector('#status').getAttribute('role')==='alert');assert.match(await page.locator('#status').innerText(),/UTF-8-Bytegrenze/);assert.equal(apiRequests,beforeValidation);
+    await page.fill('#max-robots-bytes','524288');await page.fill('#robots-text',rules);await page.fill('#max-evaluation-bytes','1');await page.click('#simulate');await page.waitForFunction(()=>document.querySelector('#status').getAttribute('role')==='alert');assert.match(await page.locator('#status').innerText(),/Regelbytes/);assert.equal(apiRequests,beforeValidation);
+    await page.fill('#max-evaluation-bytes','67108864');
+    checked('Browser byte-aware agent and positive field/row/work validation rejects invalid input before local API submission');
+    const bad=await fetch(app+'/api/robots/simulate',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({robots_text:rules,user_agent:'Bot',urls:[origin+'/private'],limits:{max_urls:0}})});assert.equal(bad.status,400);
+    const malformed=await fetch(app+'/api/robots/simulate',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({robots_text:rules,user_agent:'Bot',urls:['not a URL',origin+'/private']})});assert.equal(malformed.status,200);const unknown=await malformed.json();assert.equal(unknown.rows[0].allowed,null);assert.ok(unknown.rows[0].error);assert.equal(unknown.rows[1].allowed,false);assert.equal(unknown.website_requests,0);
+    checked('Actual API rejects invalid configuration while retaining malformed individual rows as unknown without stopping valid decisions');
+    let release,entered;const hold=new Promise(resolve=>{release=resolve;}),waiting=new Promise(resolve=>{entered=resolve;});
+    await page.route('**/api/robots/simulate',async route=>{entered();await hold;await route.continue();});
+    await page.click('#simulate');await waiting;await page.fill('#urls',origin+'/newer-unsent');const lateResponse=page.waitForResponse(response=>response.url()===app+'/api/robots/simulate');release();await(await lateResponse).finished();
+    await page.waitForTimeout(80);assert.equal(await page.locator('#result-card').isVisible(),false);assert.equal(await page.locator('#export-json').isDisabled(),true);assert.match(await page.locator('#status').innerText(),/Eingabe geändert/);await page.unroute('**/api/robots/simulate');
+    checked('A real deferred simulation response cannot overwrite newer input or enable stale result exports');
+    await page.fill('#urls',urls.join('\n'));await submit(page);
+    for(const width of [1440,390,320]){await page.setViewportSize({width,height:900});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);await page.locator('footer').scrollIntoViewIfNeeded();assert.equal(await page.locator('footer').isVisible(),true);}
+    assert.equal(websiteRequests,0);assert.deepEqual(errors,[]);
+    checked('Actual tester and result table fit desktop and narrow mobile with reachable footer and zero website requests');
+    const proof={tested_at:new Date().toISOString(),result:'PASS',scope:'Actual browser -> offline Rust robots matcher and CSV -> supplied owned HTTP URLs/sitemap receive zero requests',app_url:app,website_requests:websiteRequests,checks,javascript_runtime_errors:errors};
+    fs.writeFileSync(path.join(__dirname,'ui-robots-live-results.json'),JSON.stringify(proof,null,2)+'\n');console.log(JSON.stringify(proof));
+  }finally{await context.close();await browser.close();await new Promise(resolve=>fixture.close(resolve));}
+})().catch(error=>{console.error(error);process.exitCode=1;fixture.close();});

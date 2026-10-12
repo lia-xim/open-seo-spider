@@ -19,6 +19,8 @@ flowchart LR
     Export --> API
     Offline[Offline SERP editor] --> Metrics[Local text measurement / CSV parsing]
     Metrics --> API
+    Rules[Offline robots tester] --> Matcher[Same robots policy as crawler]
+    Matcher --> API
 ```
 
 The crawler fetches HTTP URLs concurrently, normalizes URL fragments without
@@ -33,6 +35,13 @@ URLs remain pending until their result is committed. A job manifest makes
 unfinished crawls visible as interrupted after application restart. Reports and
 manifests use temporary-file replacement. Finished reports merge the independent
 relationship/security audits before exports and UI retrieval.
+Terminal job status becomes visible only after its manifest replacement has
+completed. This synchronizes immediate resume; it does not establish power-loss
+durability or filesystem fsync behavior.
+Loading an existing completed snapshot is read-only: startup preserves stored
+JSON bytes, formatting and unknown extension fields. Importing a new report may
+derive current analysis and write a new snapshot. Typed API exports can contain
+new optional fields; they are separate from the original stored file bytes.
 
 An optional browser worker runs each page in an isolated context. The native
 response status remains native; Set-Cookie values are redacted in stored response
@@ -55,11 +64,13 @@ does not claim identical behavior to the HTTP crawler or reference product.
 | `POST /api/crawls/{id}/cancel`, `/resume` | Durable lifecycle control |
 | `GET /api/crawls/{id}/export.csv`, `/issues.csv`, `/links.csv`, `/extractions.csv` | Observed page, issue, link and configured extraction exports |
 | `GET /api/crawls/{id}/javascript.csv`, `/cookies.csv`, `/pdf.csv`, `/images.csv` | Typed script results, redacted cookie attributes, native PDF observations and fetched image metadata |
+| `GET /api/crawls/{id}/fragments`, `/fragments.csv`, `/dom.csv` | Opt-in fragment target checks and source-preserving DOM observations |
 | `GET /api/crawls/{id}/sitemap.xml`, `/project.json` | Sitemap candidates / own project snapshot |
 | `POST /api/crawls/import` | Import an Open SEO Spider snapshot |
 | `GET /api/compare?before={id}&after={id}` | Changes in observed fields between snapshots |
 | `POST /mcp` | Stateless Streamable HTTP MCP; GET returns 405 |
 | `GET /serp`; `POST /api/serp/preview`, `/import`, `/export.csv` | Offline metadata editing, measurement and CSV parsing; no website requests |
+| `GET /robots`; `POST /api/robots/simulate`, `/export.csv` | Bounded supplied-rule evaluation using the crawler matcher; no website requests |
 
 The service is intended for loopback access. Host and browser Origin checks
 protect local mutations. Custom crawl headers go only to explicitly configured
@@ -77,6 +88,20 @@ establish complete pixel-decode integrity, animation behavior or EXIF display
 orientation. SVG absolute sizing is separate from viewBox and viewport-dependent
 or stylesheet-dependent sizes.
 
+DOM facts preserve document order and node paths, explicit hidden/ARIA attributes,
+meta keywords, fragment IDs and legacy anchor names. Link locations and configured
+CSS position labels are occurrence observations. Responsive image candidates keep
+raw URL/descriptors and picture source context separately from any browser network
+observation. Nonstandard navigation attributes are potential-navigation facts;
+arbitrary JavaScript strings are not guessed to be URLs or added as real anchors.
+Collection bounds and absent historical DOM facts remain explicit.
+
+Fragment checks make no additional request and require the target to have been
+captured successfully as a complete HTML document. Redirect ambiguity, failures,
+limits and absent targets remain unknown. Unsupported media, text directives and
+application fragment routing do not become missing-element findings. Validation
+must be enabled in the crawl configuration.
+
 ## Evidence boundaries
 
 Deterministic HTTP/API tests prove more than 500 URL observations, cancellation,
@@ -87,3 +112,6 @@ and type observations, not a complete rich-results validator. Axe findings are
 automated page checks. Compatibility with proprietary project files, every
 reference audit rule, all providers, cross-platform UI behavior, Docker runtime
 and million-URL performance remain separate acceptance work.
+Linux container build and unprivileged persistent runtime are separately proved
+in [CI evidence](verification/resource-offline-ci.json); Windows Docker installation
+and a containerized browser worker remain unproved.

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "tested_at": "2026-10-12T08:47:28.796Z",
+  "tested_at": "2026-10-12T10:07:21.429Z",
   "status": "COMPARISON_EXECUTED",
   "full_parity": "NOT_PROVEN",
   "fixture_sha256": "928545b1b70ae07da917fddd0fd1fd137878e7819326741dbbd6c23cb4607072",
@@ -14,10 +14,10 @@
   },
   "independent": {
     "binary": "open-seo-spider.exe",
-    "binary_sha256": "0e6e71fcb9807e059b361916419e0b07c52d06f3ff9892d9283620e0506a6a38",
+    "binary_sha256": "77e16925d14bf253cfa187258a1331b7a4b2d79e8ab24a10a68d4dc54c445df4",
     "config": {
       "seed_urls": [
-        "http://127.0.0.1:63790/"
+        "http://127.0.0.1:50078/"
       ],
       "sitemap_urls": [],
       "discover_sitemaps": false,
@@ -64,6 +64,8 @@
         "max_text_bytes_per_page": 1048576,
         "max_annotations": 10000
       },
+      "validate_fragments": false,
+      "link_position_rules": [],
       "include_patterns": [],
       "exclude_patterns": []
     },
@@ -6771,11 +6773,11 @@
         "method": "GET"
       },
       {
-        "path": "/canonical-conflict",
+        "path": "/canonical-404",
         "method": "GET"
       },
       {
-        "path": "/canonical-404",
+        "path": "/canonical-conflict",
         "method": "GET"
       },
       {

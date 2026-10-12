@@ -9,7 +9,7 @@ pub(crate) fn complete_html(page: &PageRecord) -> bool {
     page.internal
         && page.is_html()
         && page.final_status.or(page.status) == Some(200)
-        && (!page.rendered || page.rendered_status.is_none_or(|status| status == 200))
+        && (!page.rendered || page.rendered_status == Some(200))
         && page.error.is_none()
         && !page.blocked_by_robots
         && !page.truncated
@@ -774,7 +774,7 @@ mod tests {
         base.h2.clear();
         base.titles.clear();
         base.word_count = 0;
-        for condition in 0..7 {
+        for condition in 0..8 {
             let mut p = base.clone();
             match condition {
                 0 => p.truncated = true,
@@ -785,6 +785,10 @@ mod tests {
                 5 => {
                     p.rendered = true;
                     p.rendered_status = Some(500)
+                }
+                6 => {
+                    p.rendered = true;
+                    p.rendered_status = None
                 }
                 _ => p.content_type = "application/pdf".into(),
             }

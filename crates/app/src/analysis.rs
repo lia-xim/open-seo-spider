@@ -1,7 +1,8 @@
 //! Deterministic analysis of already captured crawl observations.
 //! No network requests, provider access, or proprietary rule sets are used.
 use open_seo_spider_core::{
-    AuditIssue, CrawlReport, PageRecord, Severity, applicable_robot_directives, normalize_url,
+    AuditIssue, CrawlReport, FragmentStatus, PageRecord, Severity, applicable_robot_directives,
+    audit_dom_metadata, normalize_url, validate_fragments,
 };
 use serde_json::{Value, json};
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
@@ -65,6 +66,27 @@ pub fn analyze_report(report: &CrawlReport) -> Value {
         analyze_relationships(page, &lookup, &mut issues);
         if page.is_html() {
             analyze_security(page, &mut issues);
+        }
+    }
+    issues.extend(audit_dom_metadata(&report.pages));
+    let fragments = validate_fragments(report);
+    for fragment in &fragments {
+        if fragment.status == FragmentStatus::Missing
+            && let Some(page) = pages.get(fragment.source_url.as_str())
+            && page.internal
+            && usable_html(page)
+        {
+            issue(
+                &mut issues,
+                page,
+                "broken_bookmark",
+                Severity::Warning,
+                format!(
+                    "Declared fragment {:?} has no matching ID or legacy named anchor in the complete captured target document; this is a snapshot observation",
+                    fragment.fragment
+                ),
+                vec![fragment.resolved_href.clone()],
+            );
         }
     }
     let cycles = canonical_cycles(&pages, &lookup);
@@ -138,6 +160,8 @@ pub fn analyze_report(report: &CrawlReport) -> Value {
         "graph": graph,
         "canonical_cycles": cycles,
         "structured_data": structured_data,
+        "fragments": {"enabled":report.config.validate_fragments,"observations":fragments,"basis":"captured_declared_anchor_fragments","unknown_is_not_missing":true},
+        "dom_rules": {"basis":"repaired_HTML5_tree_observations","headings":"tag levels and first-heading order; computed accessibility outlines and CSS visibility are not inferred","meta_keywords":"declaration and exact duplicate review observations, not a search ranking recommendation"},
         "issues": issues,
         "relationship_rules": {
             "basis": "observed_declarations_and_captured_target_responses",
@@ -170,7 +194,7 @@ fn usable_html(page: &PageRecord) -> bool {
 
 fn usable_document(page: &PageRecord) -> bool {
     page.final_status.or(page.status) == Some(200)
-        && (!page.rendered || page.rendered_status.is_none_or(|status| status == 200))
+        && (!page.rendered || page.rendered_status == Some(200))
         && page.error.is_none()
         && !page.blocked_by_robots
 }
@@ -298,7 +322,10 @@ fn analyze_target(
             vec![address.into()],
         );
     }
-    if target.truncated || target.renderer_error.is_some() {
+    if target.truncated
+        || target.renderer_error.is_some()
+        || (target.rendered && target.rendered_status.is_none())
+    {
         issue(
             issues,
             source,
@@ -1265,6 +1292,121 @@ mod tests {
     }
 
     #[test]
+    fn bookmark_findings_require_captured_target_absence_and_remain_deduplicated() {
+        let mut source = page("a");
+        let mut target = page("b");
+        let seeds = [normalize_url(&source.url, None).unwrap()];
+        open_seo_spider_core::extract_html(
+            &mut source,
+            "<h1>A</h1><a href='/b#present'>Known</a><a href='/b#missing'>Absent</a><a href='/unobserved#missing'>Unknown</a>",
+            &seeds,
+            false,
+        );
+        open_seo_spider_core::extract_html(&mut target, "<h1 id='present'>B</h1>", &seeds, false);
+        let mut snapshot = report(vec![source, target]);
+        snapshot.config.validate_fragments = true;
+        let analysis = analyze_report(&snapshot);
+        assert!(has_issue(&analysis, "broken_bookmark", "a"));
+        let findings: Vec<_> = analysis["issues"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter(|issue| issue["code"] == "broken_bookmark")
+            .collect();
+        assert_eq!(findings.len(), 1);
+        assert_eq!(
+            findings[0]["related_urls"][0],
+            "https://fixture.test/b#missing"
+        );
+        assert_eq!(
+            analysis["fragments"]["observations"]
+                .as_array()
+                .unwrap()
+                .len(),
+            3
+        );
+        assert!(
+            analysis["fragments"]["observations"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|row| row["status"] == "unknown")
+        );
+        extend_report(&mut snapshot);
+        assert!(
+            !analyze_report(&snapshot)["issues"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|issue| issue["code"] == "broken_bookmark")
+        );
+        assert_eq!(
+            snapshot
+                .issues
+                .iter()
+                .filter(|issue| issue.code == "broken_bookmark")
+                .count(),
+            1
+        );
+    }
+
+    #[test]
+    fn disabled_legacy_and_incomplete_bookmark_targets_never_become_missing() {
+        let mut source = page("a");
+        let target = page("b");
+        let seeds = [normalize_url(&source.url, None).unwrap()];
+        open_seo_spider_core::extract_html(
+            &mut source,
+            "<h1>A</h1><a href='/b#missing'>Link</a>",
+            &seeds,
+            false,
+        );
+        let mut snapshot = report(vec![source, target]);
+        assert_eq!(analyze_report(&snapshot)["fragments"]["enabled"], false);
+        assert!(
+            analyze_report(&snapshot)["fragments"]["observations"]
+                .as_array()
+                .unwrap()
+                .is_empty()
+        );
+        snapshot.config.validate_fragments = true;
+        let unknown = analyze_report(&snapshot);
+        assert_eq!(
+            unknown["fragments"]["observations"][0]["reason"],
+            "target_dom_not_observed"
+        );
+        assert!(!has_issue(&unknown, "broken_bookmark", "a"));
+        open_seo_spider_core::extract_html(&mut snapshot.pages[1], "<h1>B</h1>", &seeds, false);
+        snapshot.pages[1].truncated = true;
+        let partial = analyze_report(&snapshot);
+        assert_eq!(partial["fragments"]["observations"][0]["status"], "unknown");
+        assert!(!has_issue(&partial, "broken_bookmark", "a"));
+    }
+
+    #[test]
+    fn dom_review_issues_use_shared_core_rules_and_do_not_invent_legacy_absence() {
+        let mut observed = page("a");
+        let legacy = page("legacy");
+        let seeds = [normalize_url(&observed.url, None).unwrap()];
+        open_seo_spider_core::extract_html(
+            &mut observed,
+            "<h1>A</h1><h3>Skipped</h3><h2>First H2</h2><meta name='keywords' content=' '><meta name='keywords'>",
+            &seeds,
+            false,
+        );
+        let mut snapshot = report(vec![observed, legacy]);
+        let analysis = analyze_report(&snapshot);
+        assert!(has_issue(&analysis, "h2_nonsequential", "a"));
+        assert!(has_issue(&analysis, "heading_level_skipped", "a"));
+        assert!(has_issue(&analysis, "meta_keywords_empty", "a"));
+        assert!(has_issue(&analysis, "meta_keywords_multiple", "a"));
+        assert!(!has_issue(&analysis, "meta_keywords_missing", "legacy"));
+        snapshot.pages[0].renderer_error = Some("renderer failed".into());
+        let incomplete = analyze_report(&snapshot);
+        assert!(!has_issue(&incomplete, "h2_nonsequential", "a"));
+    }
+
+    #[test]
     fn graph_separates_occurrences_resources_and_followable_rank() {
         let mut a = page("a");
         a.links = vec![anchor("b"), anchor("b")];
@@ -1743,6 +1885,28 @@ mod tests {
             assert!(!has_issue(&value, "pagination_next_return_missing", "a"));
             assert!(!has_issue(&value, "pagination_next_anchor_missing", "a"));
         }
+    }
+
+    #[test]
+    fn unknown_rendered_response_never_proves_absent_return_declarations() {
+        let mut a = page("a");
+        a.hreflang = vec![alternate("de", "a"), alternate("en", "b")];
+        a.pagination_next.push(page("b").url);
+        let mut b = page("b");
+        b.rendered = true;
+        b.rendered_status = None;
+        assert!(!complete_document(&b));
+        let value = analyze_report(&report(vec![a.clone(), b]));
+        assert!(has_issue(&value, "hreflang_target_incomplete", "a"));
+        assert!(!has_issue(&value, "hreflang_return_missing", "a"));
+        assert!(!has_issue(&value, "pagination_next_return_missing", "a"));
+        // The source is complete: its absent anchor is independent of the
+        // target's unknown response and remains an observed source finding.
+        assert!(has_issue(&value, "pagination_next_anchor_missing", "a"));
+        a.rendered = true;
+        a.rendered_status = None;
+        let value = analyze_report(&report(vec![a, page("b")]));
+        assert!(!has_issue(&value, "pagination_next_anchor_missing", "a"));
     }
 
     #[test]

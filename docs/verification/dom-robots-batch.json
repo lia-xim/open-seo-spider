@@ -1,0 +1,108 @@
+{
+  "tested_at": "2026-10-12T10:09:51.664Z",
+  "result": "PASS",
+  "platform": "native Windows",
+  "release_binary_sha256": "76041790b2930071b07c6c872624ba71d6d749da97c5998812d4d3d27fec1d54",
+  "debug_binary_sha256": "77e16925d14bf253cfa187258a1331b7a4b2d79e8ab24a10a68d4dc54c445df4",
+  "rust": {
+    "default_passed": 163,
+    "breakdown": {
+      "app": 32,
+      "core": 99,
+      "crawl": 23,
+      "dom": 5,
+      "resources": 4
+    },
+    "default_ignored": 1,
+    "explicit_real_browser_passed": 1,
+    "format": "PASS",
+    "clippy": "PASS",
+    "debug_build": "PASS",
+    "release_build": "PASS",
+    "startup_fix_targeted_app_regression": "32 PASS; Clippy and build PASS after last server change"
+  },
+  "worker": {
+    "passed": 16,
+    "scope": "Unchanged worker from resource batch; repeated actual browser flows establish current connection."
+  },
+  "ui": {
+    "fixture_passed": 40,
+    "actual_dom_passed": 19,
+    "actual_robots_passed": 8,
+    "robots_state_regressions": 7,
+    "offline_website_requests": 0
+  },
+  "api": {
+    "crawl_urls": 604,
+    "recovery_urls": 725,
+    "exports": 13,
+    "readonly_snapshot_restart": "PASS"
+  },
+  "mcp": {
+    "transports": 2,
+    "tools": 11,
+    "sdk": "2.3.1"
+  },
+  "installed_runtime": {
+    "debug_sha256": "77e16925d14bf253cfa187258a1331b7a4b2d79e8ab24a10a68d4dc54c445df4",
+    "saved_jobs": 7,
+    "result": "PASS",
+    "release_sha256": "76041790b2930071b07c6c872624ba71d6d749da97c5998812d4d3d27fec1d54",
+    "byte_identical_after_restart": true,
+    "tested_at": "2026-10-12T10:06:26.3017326Z",
+    "preserved_json_files": 11
+  },
+  "reference": {
+    "heading_memberships": {
+      "MATCH": 48,
+      "DIFFERENT": 0
+    },
+    "text_widths": {
+      "MATCH": 58,
+      "DIFFERENT": 0,
+      "UNAVAILABLE": 0
+    },
+    "fields": {
+      "MATCH": 887,
+      "DIFFERENT": 29,
+      "UNAVAILABLE": 3
+    },
+    "full_parity": "NOT_PROVEN"
+  },
+  "artifacts": [
+    {
+      "artifact": "docs/verification/api-e2e.json",
+      "sha256": "187ad42c42b2feb3f777cc943da12f515feec446ae6081f02fb5e0dadfbff916"
+    },
+    {
+      "artifact": "docs/verification/mcp-e2e.json",
+      "sha256": "42fa72d6aabaca2b85ed2adf095dad5a2717558b2bdfb52dca91068f1ce842ec"
+    },
+    {
+      "artifact": "web/verification/ui-fixture-results.json",
+      "sha256": "531eacc9507eaa9b034ee5b0d0e9e7c7202a845f0af247ec5a08a2eb5d053f60"
+    },
+    {
+      "artifact": "web/verification/ui-dom-live-results.json",
+      "sha256": "9e82974b1d86d0de00ed3dbe3366790d65c0a8259c133a304d9f968348d6a832"
+    },
+    {
+      "artifact": "web/verification/ui-robots-live-results.json",
+      "sha256": "6e240d15915950f895409588503c07f8e02393b8a97ec60a8ff468b822d65c66"
+    },
+    {
+      "artifact": "docs/parity/native-heading-comparison.json",
+      "sha256": "445e77af4bbdcca1d0dd561c3d0e8b0150aaad5e84c901e773a562032d574119"
+    },
+    {
+      "artifact": "docs/parity/native-text-width-comparison.json",
+      "sha256": "cc8c4797294601cd136b9b2b8bd2b1ff1c1108a5cfeab11497ae0b2251da3a16"
+    },
+    {
+      "artifact": "docs/parity/reference-comparison.json",
+      "sha256": "e93c78b9908163d433b6838a2fd1f6270e2b5134982a2c28cdd5391daf4dd459"
+    }
+  ],
+  "scope": "Independent DOM facts and rules, captured fragments, responsive candidates and pure offline robots. Earlier renderer/resource/SERP artifacts are separate bounded gates. Native launch is current; Linux container proof belongs to exact prior commit and the new CI gate is pending.",
+  "remaining": "Full vendor functionality, complete filter/workflow boundaries, imports, providers, advanced crawl policy and large-scale performance remain incomplete."
+}

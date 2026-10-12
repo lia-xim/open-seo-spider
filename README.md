@@ -72,6 +72,19 @@ The [offline SERP editor](http://127.0.0.1:8787/serp) imports CSV metadata,
 preserves duplicate URL rows and ordering, supports editing and local drafts,
 and exports approximate measurements without requesting the entered websites.
 
+Captured DOM observations retain heading order, image alt text, meta keywords,
+link locations, explicit CSS position rules, responsive image candidates and
+nonstandard navigation attributes. Declared image candidates do not imply the
+browser selected or fetched them. Optional fragment validation checks only
+captured, complete HTML targets; unavailable targets remain unknown. These
+observations are available in the URL inspector, dedicated tables and CSV.
+See [DOM contracts and unknown states](docs/dom-observations.md).
+
+The [offline robots.txt tester](http://127.0.0.1:8787/robots) evaluates supplied
+rules and URLs with the crawler's own matcher. It makes no website requests;
+invalid rows and unsupported directives remain explicit. See
+[matcher scope and limits](docs/robots-simulation.md).
+
 ## JavaScript rendering
 
 Install the optional worker dependencies once and use an installed Chrome/Edge:
@@ -119,8 +132,10 @@ docker compose up --build -d
 
 The service publishes only to loopback and stores crawls in a named volume.
 This image packages the Rust HTTP application. A Chromium worker needs its own
-runtime in the same local network namespace. Docker runtime validation remains
-**NOT PROVEN** on this machine; the native Windows application is the tested path.
+runtime in the same local network namespace. Linux CI verifies the image build,
+unprivileged runtime, offline font measurements and a persistent crawl snapshot
+after a container restart. Docker installation and runtime remain **NOT PROVEN**
+on this Windows machine; the native Windows application is the tested local path.
 
 ## Validation
 

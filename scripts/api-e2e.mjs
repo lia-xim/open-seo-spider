@@ -64,6 +64,16 @@ try {
   const offlineCsv=await post('/api/serp/import',{csv:`URL,Title,Description\r\n${offlineUrl},"Über ""uns""","two\nlines"\r\n${offlineUrl},😀," \t=FORMULA()"\r\n`});
   assert.deepEqual(offlineCsv.rows,offline.rows);assert.equal(requests.get('/offline-unrequested'),undefined);
   const offlineExport=await fetch(api+'/api/serp/export.csv',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({rows:offlineRows})});assert.equal(offlineExport.status,200);assert.match(await offlineExport.text(),/' \t=FORMULA\(\)/);
+  const robotInput={robots_text:'User-agent: *\nDisallow: /offline-unrequested\nAllow: /offline-unrequested?allow=1$\n',user_agent:'OpenSEOSpider',urls:[offlineUrl,offlineUrl+'?allow=1',offlineUrl,'not a URL']};
+  const robotSimulation=await post('/api/robots/simulate',robotInput);
+  assert.equal(robotSimulation.website_requests,0);
+  assert.deepEqual(robotSimulation.rows.map(row=>row.allowed),[false,true,false,null]);
+  assert.ok(robotSimulation.rows[3].error);
+  const robotExport=await fetch(api+'/api/robots/export.csv',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(robotInput)});
+  assert.equal(robotExport.status,200);assert.match(await robotExport.text(),/Source Row/);
+  assert.equal(requests.get('/offline-unrequested'),undefined);
+  const invalidRobot=await fetch(api+'/api/robots/simulate',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({...robotInput,limits:{max_urls:0}})});
+  assert.equal(invalidRobot.status,400);
   const job = await post('/api/crawls', { seed_url: 'http://127.0.0.1:19099/', delay_ms: 0, concurrency: 16, discover_sitemaps: false, custom_extractions:[{name:'heading',selector:'h1',attribute:null}] });
   const finished = await terminal(job.id);
   assert.equal(finished.status, 'completed');
@@ -81,13 +91,15 @@ try {
   assert(issues.issues.some(issue => issue.code === 'broken_outlinks'));
   const analysis = await call(`/api/crawls/${job.id}/analysis`);
   assert(analysis.graph.nodes.length > 500);
-  for (const endpoint of ['export.csv', 'issues.csv', 'links.csv', 'extractions.csv', 'javascript.csv', 'cookies.csv', 'pdf.csv', 'images.csv', 'responses.csv', 'sitemap.xml', 'project.json']) {
+  for (const endpoint of ['export.csv', 'issues.csv', 'links.csv', 'extractions.csv', 'javascript.csv', 'cookies.csv', 'pdf.csv', 'images.csv', 'responses.csv', 'fragments.csv', 'dom.csv', 'sitemap.xml', 'project.json']) {
     const response = await fetch(`${api}/api/crawls/${job.id}/${endpoint}`);
     assert.equal(response.status, 200);
     const contents = await response.text();
     assert(contents.length > 0);
     if (endpoint === 'javascript.csv') assert(contents.startsWith('URL,Script Name,Value Type,Value JSON,Error,Elapsed ms'));
     else if (endpoint === 'cookies.csv') assert(contents.startsWith('URL,Name,Domain,Path,Expires,HTTP Only,Secure,Same Site,Value Length'));
+    else if (endpoint === 'fragments.csv') assert.equal(contents.trim().split(/\r?\n/).length,1,'Disabled fragment validation exports headers only');
+    else if (endpoint === 'dom.csv') assert.ok(contents.includes(',effective,raw_html,true,heading,'),'DOM export preserves effective raw heading provenance');
     else assert(contents.length > 100);
   }
   const snapshot = await call(`/api/crawls/${job.id}/project.json`);
@@ -95,6 +107,11 @@ try {
   const comparison = await call(`/api/compare?before=${job.id}&after=${imported.id}`);
   assert.equal(comparison.changes.length, 0);
   assert.equal((await fetch(`${api}/api/crawls/${imported.id}/resume`, { method: 'POST' })).status, 409);
+  const importedFile=path.join(data,`${imported.id}.json`);
+  // Deliberately retain formatting and an unknown future extension: reopening
+  // a snapshot must not silently migrate or truncate its original file.
+  await writeFile(importedFile,JSON.stringify({...snapshot,_future_extension:{uninterpreted:'preserve on startup'}},null,3)+'\n');
+  const preservedFiles=await Promise.all([path.join(data,`${job.id}.json`),importedFile].map(async file=>({file,bytes:await readFile(file)})));
   const slow = await post('/api/crawls', { seed_url: 'http://127.0.0.1:19099/slow', delay_ms: 10, concurrency: 3, crawl_links: true, discover_sitemaps: false });
   await until(async () => (await status(slow.id)).stats.fetched > 3, 'crawl progress');
   await post(`/api/crawls/${slow.id}/cancel`);
@@ -112,6 +129,7 @@ try {
   await until(async () => (await status(slow.id)).stats.fetched > 10, 'resumed progress');
   await stop();
   await launch();
+  for(const preserved of preservedFiles)assert.ok((await readFile(preserved.file)).equals(preserved.bytes),'Completed/imported snapshot bytes and unknown extensions survive read-only startup');
   const recovered = await status(slow.id);
   assert.equal(recovered.status, 'interrupted');
   assert(recovered.stats.fetched > 0);
@@ -122,7 +140,7 @@ try {
   assert.equal(resumed.stats.fetched, 725);
   assert.equal(requests.get('/slow'), 1, 'completed seed must survive process restart');
   assert.equal((await status(job.id)).stats.fetched, 604);
-  const evidence = { tested_at: new Date().toISOString(), platform: process.platform, assertions: ['604 URL HTTP/API crawl', 'robots excluded target', 'redirect initial/final status and separate intermediate-response inventory with unknown unretained body/headers', 'graph and issue API', 'named extraction and all eleven crawl export endpoints including empty resource/script/cookie headers', 'offline SERP CSV import, Unicode/unknown widths, duplicate input order and formula-safe export without website requests', 'JSON import and snapshot comparison', 'cancel and resume', 'failed resume manifest write retains cancelled state and snapshot', 'process termination and SQLite frontier recovery', 'host/origin protection'], result: 'PASS' };
+  const evidence = { tested_at: new Date().toISOString(), platform: process.platform, assertions: ['604 URL HTTP/API crawl', 'robots excluded target', 'redirect initial/final status and separate intermediate-response inventory with unknown unretained body/headers', 'graph and issue API', 'named extraction and all thirteen crawl export endpoints, disabled-fragment headers and effective DOM provenance', 'offline SERP CSV import, Unicode/unknown widths, duplicate input order and formula-safe export without website requests', 'offline robots shared matcher, ordered duplicate and invalid rows, CSV, invalid bounds and zero website requests', 'JSON import and snapshot comparison', 'completed and imported snapshot bytes, formatting and unknown future extension preserved on startup', 'cancel and resume', 'failed resume manifest write retains cancelled state and snapshot', 'process termination and SQLite frontier recovery', 'host/origin protection'], result: 'PASS' };
   console.log(JSON.stringify(evidence, null, 2));
   if (process.env.SPIDER_EVIDENCE) { await mkdir(path.dirname(process.env.SPIDER_EVIDENCE), { recursive: true }); await writeFile(process.env.SPIDER_EVIDENCE, JSON.stringify(evidence, null, 2) + '\n'); }
 } finally {

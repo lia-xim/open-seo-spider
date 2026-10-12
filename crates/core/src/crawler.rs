@@ -1,6 +1,6 @@
 use crate::{
     CrawlConfig, CrawlEvent, CrawlReport, CrawlStore, CrawlSummary, PageRecord, RedirectHop,
-    Severity, audit_pages_with_thresholds, extract_html, normalize_url, parse_sitemap,
+    Severity, audit_pages_with_thresholds, normalize_url, parse_sitemap,
 };
 use crate::{
     audit::set_indexability,
@@ -65,6 +65,7 @@ impl Crawler {
         crate::extract::validate_custom_extractions(&config.custom_extractions)?;
         config.audit_thresholds.validate()?;
         config.pdf_analysis.validate()?;
+        crate::dom_facts::validate_position_rules(&config.link_position_rules)?;
         let filters = UrlFilters::new(&config.include_patterns, &config.exclude_patterns)?;
         if config.max_pages == Some(0) {
             config.max_pages = None;
@@ -292,7 +293,8 @@ impl Crawler {
         }
         let pending = queue.len() + tasks.len();
         drop(tasks); // In-flight requests remain pending in SQLite and can be resumed.
-        let issues = audit_pages_with_thresholds(&pages, &self.config.audit_thresholds);
+        let mut issues = audit_pages_with_thresholds(&pages, &self.config.audit_thresholds);
+        issues.extend(crate::audit_dom_metadata(&pages));
         let mut status_counts = BTreeMap::new();
         for page in &pages {
             let key = if page.blocked_by_robots {
@@ -524,7 +526,7 @@ impl FetchContext {
                 .get(reqwest::header::CONTENT_TYPE)
                 .and_then(|value| value.to_str().ok())
                 .unwrap_or("")
-                .to_ascii_lowercase();
+                .to_owned();
             page.headers.clear();
             for (name, value) in response.headers() {
                 if let Ok(value) = value.to_str() {
@@ -674,17 +676,23 @@ impl FetchContext {
                 page.error.is_none() && !page.truncated && page.final_status == Some(200),
             );
         }
+        let media_type = page.media_type().to_ascii_lowercase();
         let textual = page.is_html()
-            || page.content_type.starts_with("text/")
-            || page.content_type.contains("xml")
-            || page.content_type.contains("json")
-            || page.content_type.is_empty();
+            || media_type.starts_with("text/")
+            || matches!(media_type.as_str(), "application/xml" | "application/json")
+            || media_type.ends_with("+xml")
+            || media_type.ends_with("+json")
+            || media_type.is_empty();
         let text = if !pdf && page.image_metadata.is_none() && textual && !body.is_empty() {
             let charset = page
                 .content_type
                 .split(';')
                 .skip(1)
-                .find_map(|part| part.trim().strip_prefix("charset="))
+                .find_map(|part| {
+                    part.split_once('=')
+                        .filter(|(name, _)| name.trim().eq_ignore_ascii_case("charset"))
+                        .map(|(_, value)| value.trim())
+                })
                 .map(|name| name.trim_matches(['\'', '"']));
             let encoding = charset
                 .and_then(|label| encoding_rs::Encoding::for_label(label.as_bytes()))
@@ -703,7 +711,14 @@ impl FetchContext {
         if page.is_html()
             && let Some(text) = &text
         {
-            extract_html(&mut page, text, &self.seeds, self.config.include_subdomains);
+            crate::extract::extract_html_in_source(
+                &mut page,
+                text,
+                &self.seeds,
+                self.config.include_subdomains,
+                &self.config.link_position_rules,
+                "raw_html",
+            );
             crate::extract::apply_custom_extractions(
                 &mut page,
                 text,

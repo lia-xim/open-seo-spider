@@ -1,0 +1,675 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-12T09:28:04.233Z",
+  "purpose": "Scoped proposal for root reconciliation; no existing granular filter ledger or capability status mutated",
+  "full_vendor_parity": "NOT_PROVEN",
+  "updates": [
+    {
+      "target_filter_id": "filter.h1-non-sequential",
+      "reference_argument": "H1:Non-Sequential",
+      "priority": "R1",
+      "proposed_action": "Append bounded heading_order_run reference evidence without overwriting historical membership_run or upgrading full filter parity",
+      "reference_evidence_to_append": {
+        "proof": "docs/parity/reference-headings/2026-10-12T09-27-54-745Z/run.json",
+        "fixture": "docs/parity/reference-headings/2026-10-12T09-27-54-745Z/fixture-cases.json",
+        "fixture_sha256": "7e73d9f36e911dccea72c4086b4f84d3084f550d16ebeed64e47e7cf08252e86",
+        "observed_at": "2026-10-12T09:28:04.233Z",
+        "reference_version": "24.3",
+        "file": "h1_nicht_sequenziell.csv",
+        "file_sha256": "20cdac03472707659d52907546fdcb89b977441acd788ac671e338636bac21ab",
+        "paths": [
+          "/css-hidden-h2-before-h1",
+          "/empty-h2-before-h1",
+          "/h2-h1",
+          "/h3-h1-h2",
+          "/hidden-h2-before-h1",
+          "/image-alt-h2-before-h1"
+        ],
+        "case_checks": [
+          {
+            "path": "/",
+            "levels": [
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/h1-h2",
+            "levels": [
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/h2-h1",
+            "levels": [
+              2,
+              1
+            ],
+            "observed_in_all": true,
+            "observed_member": true,
+            "role": "measured_trigger"
+          },
+          {
+            "path": "/h1-h3-h2",
+            "levels": [
+              1,
+              3,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/h1-h2-h3-h2",
+            "levels": [
+              1,
+              2,
+              3,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/h3-h2-no-h1",
+            "levels": [
+              3,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/repeated-h2",
+            "levels": [
+              1,
+              2,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/h2-only",
+            "levels": [
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/h3-h1-h2",
+            "levels": [
+              3,
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": true,
+            "role": "measured_trigger"
+          },
+          {
+            "path": "/empty-h1-before-h2",
+            "levels": [
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/empty-h2-before-h1",
+            "levels": [
+              2,
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": true,
+            "role": "measured_trigger"
+          },
+          {
+            "path": "/hidden-h2-before-h1",
+            "levels": [
+              2,
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": true,
+            "role": "measured_trigger"
+          },
+          {
+            "path": "/css-hidden-h2-before-h1",
+            "levels": [
+              2,
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": true,
+            "role": "measured_trigger"
+          },
+          {
+            "path": "/hidden-h1-before-h2",
+            "levels": [
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/image-alt-h1-before-h2",
+            "levels": [
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/image-alt-h2-before-h1",
+            "levels": [
+              2,
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": true,
+            "role": "measured_trigger"
+          },
+          {
+            "path": "/image-alt-only-h1-h2",
+            "levels": [
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/empty-h2-after-h1",
+            "levels": [
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/no-headings",
+            "levels": [],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/h3-only",
+            "levels": [
+              3
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/aria-heading-before-h1",
+            "levels": [
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/h1-h3-h1-h2",
+            "levels": [
+              1,
+              3,
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/h1-h1-h2",
+            "levels": [
+              1,
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/h1-h2-h1-h2",
+            "levels": [
+              1,
+              2,
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          }
+        ],
+        "scope": "Every authored HTML case appears in the All cohort; measured positive and negative memberships are retained. No rendered/noindex/provider/whole-filter equivalence is claimed."
+      },
+      "proposed_positive_fixture": {
+        "markup": "<h2>Before</h2><h1>Main</h1>"
+      },
+      "proposed_negative_fixture": {
+        "markup": "<h1>Main</h1><h2>Section</h2>"
+      },
+      "independent_source_comparison": {
+        "source_sha256": "b6f54bfca62e8e7440b66d8d4e3777e2e372850df92818943e18a192365c2c22",
+        "scope": "Source-bound pre-calibration prediction, not a newly executed Rust comparison",
+        "differences": []
+      },
+      "remaining_acceptance": [
+        "Execute the same immutable fixture through the corrected native Rust build and compare exact filter memberships.",
+        "Measure noindex/non-200/truncated/extraction-disabled cohorts and rendered heading changes separately.",
+        "Preserve literal tag/text/image-alt/visibility facts without turning computed-visibility or rank effects into assumptions."
+      ],
+      "parity_status": "NOT_PROVEN"
+    },
+    {
+      "target_filter_id": "filter.h2-non-sequential",
+      "reference_argument": "H2:Non-Sequential",
+      "priority": "R1",
+      "proposed_action": "Append bounded heading_order_run reference evidence without overwriting historical membership_run or upgrading full filter parity",
+      "reference_evidence_to_append": {
+        "proof": "docs/parity/reference-headings/2026-10-12T09-27-54-745Z/run.json",
+        "fixture": "docs/parity/reference-headings/2026-10-12T09-27-54-745Z/fixture-cases.json",
+        "fixture_sha256": "7e73d9f36e911dccea72c4086b4f84d3084f550d16ebeed64e47e7cf08252e86",
+        "observed_at": "2026-10-12T09:28:04.233Z",
+        "reference_version": "24.3",
+        "file": "h2_nicht_sequenziell.csv",
+        "file_sha256": "311682045a0ad6f19b0659564919f2b2a1b4f2eb936d668b5fc036b187093035",
+        "paths": [
+          "/h1-h3-h1-h2",
+          "/h1-h3-h2"
+        ],
+        "case_checks": [
+          {
+            "path": "/",
+            "levels": [
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/h1-h2",
+            "levels": [
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/h2-h1",
+            "levels": [
+              2,
+              1
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/h1-h3-h2",
+            "levels": [
+              1,
+              3,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": true,
+            "role": "measured_trigger"
+          },
+          {
+            "path": "/h1-h2-h3-h2",
+            "levels": [
+              1,
+              2,
+              3,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/h3-h2-no-h1",
+            "levels": [
+              3,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/repeated-h2",
+            "levels": [
+              1,
+              2,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/h2-only",
+            "levels": [
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/h3-h1-h2",
+            "levels": [
+              3,
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/empty-h1-before-h2",
+            "levels": [
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/empty-h2-before-h1",
+            "levels": [
+              2,
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/hidden-h2-before-h1",
+            "levels": [
+              2,
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/css-hidden-h2-before-h1",
+            "levels": [
+              2,
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/hidden-h1-before-h2",
+            "levels": [
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/image-alt-h1-before-h2",
+            "levels": [
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/image-alt-h2-before-h1",
+            "levels": [
+              2,
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/image-alt-only-h1-h2",
+            "levels": [
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/empty-h2-after-h1",
+            "levels": [
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/no-headings",
+            "levels": [],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/h3-only",
+            "levels": [
+              3
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/aria-heading-before-h1",
+            "levels": [
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/h1-h3-h1-h2",
+            "levels": [
+              1,
+              3,
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": true,
+            "role": "measured_trigger"
+          },
+          {
+            "path": "/h1-h1-h2",
+            "levels": [
+              1,
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          },
+          {
+            "path": "/h1-h2-h1-h2",
+            "levels": [
+              1,
+              2,
+              1,
+              2
+            ],
+            "observed_in_all": true,
+            "observed_member": false,
+            "role": "measured_negative_control"
+          }
+        ],
+        "scope": "Every authored HTML case appears in the All cohort; measured positive and negative memberships are retained. No rendered/noindex/provider/whole-filter equivalence is claimed."
+      },
+      "proposed_positive_fixture": {
+        "markup": "<h1>Main</h1><h3>Detail</h3><h2>Section</h2>"
+      },
+      "proposed_negative_fixture": {
+        "markup": "<h1>Main</h1><h2>Section</h2>"
+      },
+      "independent_source_comparison": {
+        "source_sha256": "b6f54bfca62e8e7440b66d8d4e3777e2e372850df92818943e18a192365c2c22",
+        "scope": "Source-bound pre-calibration prediction, not a newly executed Rust comparison",
+        "differences": [
+          {
+            "path": "/h2-h1",
+            "level": "h2",
+            "observed_in_all": true,
+            "reference_member": false,
+            "independent_source_prediction": true
+          },
+          {
+            "path": "/h3-h2-no-h1",
+            "level": "h2",
+            "observed_in_all": true,
+            "reference_member": false,
+            "independent_source_prediction": true
+          },
+          {
+            "path": "/h2-only",
+            "level": "h2",
+            "observed_in_all": true,
+            "reference_member": false,
+            "independent_source_prediction": true
+          },
+          {
+            "path": "/empty-h2-before-h1",
+            "level": "h2",
+            "observed_in_all": true,
+            "reference_member": false,
+            "independent_source_prediction": true
+          },
+          {
+            "path": "/hidden-h2-before-h1",
+            "level": "h2",
+            "observed_in_all": true,
+            "reference_member": false,
+            "independent_source_prediction": true
+          },
+          {
+            "path": "/css-hidden-h2-before-h1",
+            "level": "h2",
+            "observed_in_all": true,
+            "reference_member": false,
+            "independent_source_prediction": true
+          },
+          {
+            "path": "/image-alt-h2-before-h1",
+            "level": "h2",
+            "observed_in_all": true,
+            "reference_member": false,
+            "independent_source_prediction": true
+          },
+          {
+            "path": "/h1-h3-h1-h2",
+            "level": "h2",
+            "observed_in_all": true,
+            "reference_member": true,
+            "independent_source_prediction": false
+          }
+        ]
+      },
+      "remaining_acceptance": [
+        "Execute the same immutable fixture through the corrected native Rust build and compare exact filter memberships.",
+        "Measure noindex/non-200/truncated/extraction-disabled cohorts and rendered heading changes separately.",
+        "Preserve literal tag/text/image-alt/visibility facts without turning computed-visibility or rank effects into assumptions."
+      ],
+      "parity_status": "NOT_PROVEN"
+    }
+  ],
+  "refined_h2_contract": {
+    "bounded_inference": "The first H1 must precede the first H2. A heading with tag level greater than2 between that FIRST H1 and FIRST H2 is the observed positive condition; a later H1 does not erase the earlier greater-than2 tag.",
+    "confirmed_positive_paths": [
+      "/h1-h3-h2",
+      "/h1-h3-h1-h2"
+    ],
+    "confirmed_controls": [
+      "/h1-h2",
+      "/h1-h2-h3-h2",
+      "/repeated-h2",
+      "/h1-h1-h2",
+      "/h1-h2-h1-h2",
+      "/h2-only",
+      "/h3-h2-no-h1",
+      "/h2-h1",
+      "/h3-h1-h2"
+    ],
+    "historical_proposal_refinement": "The former <h3>Before</h3><h2>Section</h2> trigger is directly contradicted by the measured original filter; retain it as a measured negative control instead of discarding its prior contradiction.",
+    "unproven": "Other heading levels, malformed tag repair, configured cohorts and rendered/computed visibility need separate cases."
+  },
+  "display_profile_observation": {
+    "source": "docs/parity/reference-headings/2026-10-12T09-27-54-745Z/run.json",
+    "facts": [
+      "Original H1/H2 All exports include image alt as displayed heading text for image-alt-only cases.",
+      "Empty literal H1/H2 tags retain occurrence counts and an empty first text value.",
+      "Hidden/inline-CSS-hidden early H2 tags still affect original H1 Non-Sequential membership under this ordinary raw capture."
+    ],
+    "recommended_mapping": "Keep independent raw DOM text and image_alt fields. If legacy title-style heading columns need reference-like display, add an explicitly named text-with-image-alt profile; never overwrite raw facts.",
+    "missing_filter_membership": "NOT_PROVEN; Missing filters were not requested."
+  }
+}

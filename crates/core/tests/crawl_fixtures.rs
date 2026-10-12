@@ -1079,6 +1079,29 @@ async fn live_browser_worker_executes_javascript_for_core_crawl() {
         vec!["Raw title"]
     );
     assert_eq!(page.raw_metadata.as_ref().unwrap().h1, vec!["Raw heading"]);
+    let native_dom = page
+        .raw_metadata
+        .as_ref()
+        .unwrap()
+        .dom_metadata
+        .as_ref()
+        .unwrap();
+    let rendered_dom = page.dom_metadata.as_ref().unwrap();
+    assert_eq!(native_dom.source, "raw_html");
+    assert_eq!(rendered_dom.source, "rendered_html");
+    assert_eq!(native_dom.headings[0].text, "Raw heading");
+    assert_eq!(
+        rendered_dom.headings[0].text_with_image_alt.as_deref(),
+        Some("JavaScript heading")
+    );
+    assert!(native_dom.complete && rendered_dom.complete);
+    let discovered = page
+        .links
+        .iter()
+        .find(|link| link.url.ends_with("/javascript-discovered"))
+        .unwrap();
+    assert!(discovered.dom_location.is_some());
+    assert_eq!(discovered.position.as_deref(), Some("content"));
     for (raw, rendered) in page
         .raw_metadata
         .as_ref()

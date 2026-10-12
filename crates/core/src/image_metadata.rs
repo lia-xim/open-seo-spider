@@ -15,16 +15,24 @@ pub(crate) fn analyze(
     content_type: &str,
     body_complete: bool,
 ) -> Option<ImageResourceMetadata> {
-    let media_type = content_type.split(';').next().unwrap_or("").trim();
+    let normalized_type = content_type
+        .split(';')
+        .next()
+        .unwrap_or("")
+        .trim()
+        .to_ascii_lowercase();
+    let media_type = normalized_type.as_str();
     let declared_image = media_type.starts_with("image/");
     let prefix = String::from_utf8_lossy(&body[..body.len().min(4096)]);
+    let declared_html = matches!(media_type, "text/html" | "application/xhtml+xml");
     let svg = media_type == "image/svg+xml"
-        || prefix
-            .trim_start_matches('\u{feff}')
-            .trim_start()
-            .starts_with("<svg")
-        || (prefix.trim_start().starts_with("<?xml")
-            && (prefix.contains("<svg") || prefix.contains(":svg")));
+        || (!declared_html
+            && (prefix
+                .trim_start_matches('\u{feff}')
+                .trim_start()
+                .starts_with("<svg")
+                || (prefix.trim_start().starts_with("<?xml")
+                    && (prefix.contains("<svg") || prefix.contains(":svg")))));
     let kind = imagesize::image_type(body).ok();
     if !declared_image && !svg && kind.is_none() {
         return None;
