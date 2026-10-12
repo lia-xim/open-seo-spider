@@ -4,19 +4,27 @@
 
 Die Liste hält alle 144 gruppierten Fähigkeiten fest. Ein Haken bedeutet, dass das **eigene gespeicherte Abnahmekriterium** mit Beweisen erfüllt ist. Er bedeutet keine vollständige Gleichheit mit Screaming Frog. Diese Referenzparität bleibt für alle Einträge **NOT_PROVEN**.
 
-Aktueller Katalogstand: **25 eigene Abnahmen erfüllt**, **72 teilweise geprüft**, **47 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
+Aktueller Katalogstand: **26 eigene Abnahmen erfüllt**, **71 teilweise geprüft**, **47 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
 
 Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.json) bilden ein zusätzliches Register. Ihre positiven Fälle, Kontrollfälle, Parameter und Grenzfälle müssen jeweils geprüft werden. Ein implementierter Kern, ein leerer Export oder übereinstimmende CSV-Zellen ersetzen diese Einzelabnahme nicht.
 
 ## Aktuelle Arbeit und nächste Schritte
 
-- [ ] **Nächste Arbeit – B10: vollständige Ressourcenmatrix und gerichtete Sonderfälle** — PLANNED. Den B9-Vertrag zuerst um gerichtete Redirect-/Rollen- und HTTP-Link-Direktivenkontrollen absichern, danach 28 Ressourcen- und 80 Navigations-Schalterkombinationen prüfen. 60 Navigationskombinationen sind gültig, 20 müssen vor HTTP scheitern. Der Plan ist noch kein Laufzeitbeweis; aktuelle Vertragslücken und reine Testlücken bleiben getrennt. GitHub: [B10-Issue #17](https://github.com/lia-xim/open-seo-spider/issues/17).
-  - Redirect-Rollen: exakte externe Ressourcen-Origins je Zwischenstufe dürfen keine allgemeine Navigationserlaubnis erzeugen; Request-/Credential-/Robots-Kontrollen und Policy/check-only gemeinsam prüfen.
-  - HTML- und HTTP-Link-Direktiven: nofollow, ugc, sponsored und dokumentweites nofollow mit gleichem positiven/negativen Requestlog vergleichen; Abweichungen im Vertrag explizit beheben oder kennzeichnen.
-  - 108 geplante Schalterfälle: 28 Ressourcenfälle plus 80 Navigationsfälle; Beobachtung, gespeicherte Reportzeilen, HTTP-Abruf, Expansion, MIME und Grants getrennt abnehmen.
-  - CSS-Encoding-Herkunft, unabhängige parallele Rollen, ausgewählter Recrawl, Abbruchphasen und jede Budgetgrenze exakt/plus-eins mit nativen Fixtures ergänzen.
-  - Verträge: [resource-matrix-plan.md](parity/resource-matrix-plan.md), [resource-matrix-plan.json](parity/resource-matrix-plan.json), [resource-discovery.md](resource-discovery.md), [ROADMAP.md](ROADMAP.md).
-  - Gate-Stand: contract_regressions: PENDING; resource_products_28: PENDING; navigation_products_80: PENDING; native_request_logs: PENDING; full_feature_acceptance: PARTIAL.
+- [ ] **Aktuelle Arbeit – B10: vollständige Ressourcenmatrix und gerichtete Sonderfälle** — IN_PROGRESS. Der ausdrücklich wählbare V2-Vertrag ist in Rust, API/CLI/MCP und Oberfläche implementiert. 108 Schalterfälle bestehen in beiden Profilen (216 Ausführungen), ebenso 44 Antwortkontrollen, 200 gerichtete Redirect-/Boundary-Ausführungen und 13 echte API-/CLI-/MCP-Gruppen mit 19 gespeicherten Jobs. Zehn echte UI-Prüfungen bestehen; der bisherige V1-Vertrag bleibt kompatibel. Weitere Encoding-/Browser-/Budget-Kontrollen, exakte Source-CI, Release und Installation bleiben offen. GitHub: [B10-Issue #17](https://github.com/lia-xim/open-seo-spider/issues/17).
+  - [x] Ausdrückliche V2-Auswahl mit getrennten internen/externen nofollow-/ugc-/sponsored-/Dokument-Schaltern, unveränderlichen Rollen und Scope-Witnesses implementiert; 22 fokussierte Contract-Tests und historische B9-JSON-/Hash-Pins bestehen.
+  - [x] Exakte 108 Schalterfälle in V1 und V2: 216 Ausführungen bestehen, darunter 40 ungültige Konfigurationen vor jedem HTTP-Request. Beobachtung, Reportaufnahme, Fetch, Expansion, MIME und Grants sind getrennt geprüft.
+  - [x] 21 eingefrorene MIME-/Antwortkontrollen in beiden Profilen plus PDF-Annotationsvarianten: 44 tatsächliche Ausführungen bestehen. Ursprüngliche Transport-Permissions und spätere unabhängige Report-Witnesses bleiben getrennt.
+  - [x] 13 echte API-/CLI-/MCP-Gruppen mit 19 eigenen Jobs prüfen Profile, Rollen, Exporte, manipulierte SQLite-Zellen, ausgewählten Recrawl und Kaltstart. Read-only-Prüfungen verursachen null Website-Anfragen; ein fremder Health-Server wird vor allen HTTP-Aufrufen abgelehnt.
+  - [x] 387 Standard-Rust-Tests, Formatprüfung und Workspace-Alltargets-Clippy bestehen am lokalen Debug a5881b7c; vier explizite Chromium-Live-Gates bleiben getrennt.
+  - [x] Zehn echte Browser-zu-Rust-Prüfungen bestehen am isolierten Debug: erfolgreiche V1/V2-Jobs, keine automatische Umstellung, exakte gesperrte CSV-/JSON-Werte, unveränderliche Rollen, drei Origins, Read-only-Exporte und 320px-Breite. Gemockte zehn UI-Fälle bleiben separate Belege.
+  - [x] Eigenes Kriterium crawl.nofollow erfüllt: nofollow/ugc/sponsored und Meta-/X-Robots-Dokument-Nofollow sind mit Follow aus/an, tatsächlichem GET0/1 und erhaltenen Quellvorkommen geprüft. Dieses Häkchen gilt für die ausdrücklich gewählten V2-Follow-Schalter; globale crawl_links:false-Kontrollen bleiben zusätzlich offen.
+  - [x] Alle 88 eingefrorenen Redirect-IDs in beiden Profilen plus zwölf zusätzliche Boundary-IDs: 200 tatsächliche Ausführungen bestehen. Originale Rollen, jedes Location-/Status-/Scope-/Policy-/Robots-Faktum, Credential-Herkunft und erlaubte/verbotene Zielrequests sind separat geprüft; der zusätzliche Rust-Test und Core-Clippy bestehen.
+  - CSS-Encoding-Herkunft, unabhängige parallele Rollen, alle ausgewählten Ressourcentypen, Abbruchphasen und jede Budgetgrenze exakt/plus-eins mit zusätzlichen nativen Fixtures ergänzen.
+  - Exakte Source-CI mit Windows/Linux/Chromium/Container, unveränderlicher Release und datenbewahrende lokale Installation gesondert nachweisen.
+  - Zusätzliche Vier-Direktiven-Kontrollen unter globalem crawl_links:false als eigenen Master-Schalter-Vertrag prüfen; die belegten V2-Follow-Schalter nicht damit gleichsetzen.
+  - Einen vertrauenswürdigen eigenen HTTPS-Positivfall ergänzen; die belegte Scheme-Mismatch-Sperre gegenüber einem HTTP-Ziel ersetzt keine tatsächliche TLS-Verbindung.
+  - Verträge: [resource-matrix-plan.md](parity/resource-matrix-plan.md), [resource-matrix-plan.json](parity/resource-matrix-plan.json), [resource-discovery.md](resource-discovery.md), [resource-contract-v2.md](resource-contract-v2.md), [ROADMAP.md](ROADMAP.md).
+  - Gate-Stand: contract_regressions: PASS_V2_WITH_PRESERVED_V1_COMPATIBILITY; resource_products_28: PASS_BOTH_PROFILES; navigation_products_80: PASS_BOTH_PROFILES; response_controls_21: PASS_44_EXECUTIONS; native_request_logs: PASS_BOUNDED_SLICE; api_cli_mcp: PASS_13_GROUPS; redirect_controls_88: PASS_176_PROFILE_EXECUTIONS; workspace_tests_clippy: PASS; exact_commit_ci: PENDING; immutable_release: PENDING; installed_runtime: B9_UNCHANGED; full_feature_acceptance: PARTIAL; actual_browser_ui: PASS_10_NATIVE_CHECKS; ui_mock: PASS_10_SEPARATE_FIXTURES; additional_redirect_boundaries: PASS_24_PROFILE_EXECUTIONS.
 
 - [x] **B9: Ressourcen und CSS-Abhängigkeiten – geprüfte Grundlage** — COMPLETED. Die begrenzte native B9-Grundlage ist implementiert, an Commit f107ce7 geprüft und lokal installiert. 362 Standard-Rust-Tests, API9, MCP22 und tatsächliche UI65 bestehen; alle vier exakten CI-Jobs sind grün. Der unveränderliche Release besteht zusätzlich API9, Capture-/Neustart8, MCP22 und UI12. Sieben vorhandene Jobs und elf JSON-Dateien bleiben byteidentisch. Die vollständige Ressourcen-/Navigations-/Encoding-Abnahme bleibt PARTIAL und wird als B10 weitergeführt.
   - [x] Finaler reparierter Debug 142c: 362 Standard-Rust-Tests, vier ignorierte Live-Gates; separat echte Chrome-Prüfung, Formatierung/Clippy und 512KiB-Core-Recovery bestanden. Alle sieben bestehenden Regressionstestsuiten sind am reparierten Build geprüft.
@@ -37,6 +45,15 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - resource-native-renderer-enforcement: Native Ressourcenschalter plus Rendering werden weiterhin vor HTTP abgelehnt. Browser-Navigation und Subrequests müssen erst unter denselben Regeln tatsächlich kontrolliert und geprüft werden.
   - Verträge: [resource-discovery.md](resource-discovery.md), [ROADMAP.md](ROADMAP.md), [resource-discovery-api.md](resource-discovery-api.md), [resource-discovery-ui.md](resource-discovery-ui.md).
   - Gate-Stand: pure_css_inventory: PASS; resource_policy_bounded: PASS; native_fixture_subset: PASS; native_fixture_groups_10: PARTIAL; api_cli_mcp: PASS; actual_ui: PASS; related_actual_browser_53: PASS; ui_settings_fixture: PASS; ui_ledger_fixture: PASS; exact_commit_ci: PASS; immutable_release: PASS; installed_runtime: PASS; legacy_restart_regression: PASS; full_core_and_ui_on_repaired_source: PASS; legacy_regression_groups_7: PASS.
+
+- [ ] **Nächste Funktion – B11: gespeicherte Crawls vollständig vergleichen** — PLANNED. Den bisherigen Vergleich um konkrete Vorher/Nachher-Werte, Link-/JSON-LD-/Textquellen, ausdrückliches URL-Mapping und kombinierte Exporte erweitern. Der Vergleich nutzt ausschließlich gespeicherte Beobachtungen und benötigt keine neue Website-Abfrage. Derzeit Planung, noch keine Implementierungs- oder Laufzeitabnahme. GitHub: [B11-Issue #18](https://github.com/lia-xim/open-seo-spider/issues/18).
+  - Versionierten Vergleich mit exakten URL-Schlüsseln, added/removed/changed/unchanged und konkreten Vorher/Nachher-Feldwerten implementieren; bisherigen Vertrag kompatibel erhalten.
+  - Linkvorkommen, JSON-LD und gespeicherte vollständige/partielle/unbekannte Textquellen samt Herkunft und Aktualität getrennt vergleichen.
+  - Ausdrückliches Staging/Production-Mapping mit unveränderten ursprünglichen URLs und Kollisionserkennung vor dem Join abnehmen.
+  - Beide vollständigen Report-Snapshots mit Hash/Generation/Herkunft binden; gemischt alte ausgewählte Recrawls und aktive Checkpoints sichtbar begrenzen.
+  - Gemeinsamen JSON-/CSV-Export, API/CLI/MCP und lokale Vergleichsoberfläche mit identischen Ergebnissen prüfen; nach Abschalten der Fixture und Kaltstart null Website-Anfragen belegen.
+  - Verträge: [FEATURE_TODO.md](FEATURE_TODO.md), [ROADMAP.md](ROADMAP.md).
+  - Gate-Stand: core_contract: PENDING; api_cli_mcp: PENDING; actual_browser_ui: PENDING; snapshot_and_mapping_integrity: PENDING; offline_restart_zero_requests: PENDING.
 
 - [x] **B8: optionale Textaufnahme und gespeicherte Inhaltsanalyse** — COMPLETED. Der begrenzte B8-Baustein für optionale Roh-/DOM-Textaufnahme und gespeicherte ausgewählte Inhaltsanalyse ist mit eigenen nativen/API/UI-Gates, exakter Commit-CI und unveränderlichem installiertem Release geprüft. Vollständige Website-Analyse und CSS-Neuauswahl ohne erhaltenes HTML/DOM bleiben zusätzliche offene Feature-Abnahmen.
   - [x] Pure CSS-/Unicode-Auswahl20 und Binding4 sowie16 echte native Fixtures geprüft; ungültige Konfiguration scheitert vor HTTP.
@@ -322,7 +339,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 ### Entdeckung, Scope und URL-Regeln
 
-14 Einträge: 2 eigene Abnahmen erfüllt, 10 teilweise geprüft, 2 offen.
+14 Einträge: 3 eigene Abnahmen erfüllt, 9 teilweise geprüft, 2 offen.
 
 #### Teilweise vorhanden – Restarbeiten
 
@@ -372,7 +389,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Unabhängige Schalter und Fixtures für CSS, JavaScript, Medien, PDF und SWF ergänzen.
 
-  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [core-unit](../crates/core/src) (PASS), [resource-discovery-api-cli](verification/resource-discovery-e2e.json) (PASS), [ui-resource-discovery-live](../web/verification/ui-resource-discovery-live-results.json) (PASS), [resource-discovery-batch](verification/resource-discovery-batch.json) (PASS).
+  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [core-unit](../crates/core/src) (PASS), [resource-discovery-api-cli](verification/resource-discovery-e2e.json) (PASS), [ui-resource-discovery-live](../web/verification/ui-resource-discovery-live-results.json) (PASS), [resource-discovery-batch](verification/resource-discovery-batch.json) (PASS), [resource-contract-matrix](verification/resource-contract-matrix.json) (PASS), [resource-contract-responses](verification/resource-contract-responses.json) (PASS), [resource-contract-api-cli-mcp](verification/resource-contract-e2e.json) (PASS), [resource-contract-ui](verification/resource-contract-ui.json) (PASS).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -408,6 +425,17 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "resource-discovery-api-cli": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
           "ui-resource-discovery-live": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724"
         }
+      },
+      {
+        "batch": "B10-resource-contract-v2",
+        "verification_run_ids": [
+          "resource-contract-matrix",
+          "resource-contract-responses",
+          "resource-contract-api-cli-mcp",
+          "resource-contract-ui"
+        ],
+        "proves": "Seven declared resource kinds in all four store/fetch products across both profiles, actual MIME and immutable role facts; explicit profile selection, persisted exports and UI checked.",
+        "limits": "Bounded own native/local acceptance. Existing remaining acceptance and reference parity remain separately tracked; CI/release/installation pending."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -420,7 +448,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Eigene Entdeckungsschalter für Canonical, Pagination, AMP, mobile Alternativen und Refresh ergänzen.
 
-  Beweisregister: [core-unit](../crates/core/src) (PASS), [analysis](analysis-acceptance.md) (PASS), [resource-discovery-api-cli](verification/resource-discovery-e2e.json) (PASS), [ui-resource-discovery-live](../web/verification/ui-resource-discovery-live-results.json) (PASS), [resource-discovery-batch](verification/resource-discovery-batch.json) (PASS).
+  Beweisregister: [core-unit](../crates/core/src) (PASS), [analysis](analysis-acceptance.md) (PASS), [resource-discovery-api-cli](verification/resource-discovery-e2e.json) (PASS), [ui-resource-discovery-live](../web/verification/ui-resource-discovery-live-results.json) (PASS), [resource-discovery-batch](verification/resource-discovery-batch.json) (PASS), [resource-contract-matrix](verification/resource-contract-matrix.json) (PASS), [resource-contract-core](verification/resource-contract-core.json) (FOCUSED_CORE_PASS_FULL_MATRIX_PENDING).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -455,6 +483,15 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "resource-discovery-api-cli": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
           "ui-resource-discovery-live": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724"
         }
+      },
+      {
+        "batch": "B10-resource-contract-v2",
+        "verification_run_ids": [
+          "resource-contract-matrix",
+          "resource-contract-core"
+        ],
+        "proves": "All ten navigation source roles in eight store/fetch/expand products, positive child controls and invalid combinations before HTTP; HTML/HTTP qualification retains source provenance.",
+        "limits": "Bounded own native/local acceptance. Existing remaining acceptance and reference parity remain separately tracked; CI/release/installation pending."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -531,53 +568,6 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "ui-policy-live"
         ],
         "proves": "Explicit native policy records include/exclude decisions with per-occurrence reasons and raw/fetch identities instead of silently deleting observed links; denied redirects are never fetched and outside-scope check-once responses never expand. Legacy top-level regex and native policy cannot be silently combined; explicit seeds/import errors stay differentiated."
-      }
-    ],
-    "parity_status": "NOT_PROVEN"
-  }
-  ```
-
-  </details>
-
-- [ ] **Nofollow- und verwandte Traversierungsregeln** — Teilweise geprüft; `crawl.nofollow`, P1.
-
-  Orientierung: Alle vier Direktiven mit konfigurierbarem Verhalten und erhaltenen Linkbeobachtungen prüfen.
-
-  Beweisregister: [core-unit](../crates/core/src) (PASS), [analysis](analysis-acceptance.md) (PASS), [resource-discovery-api-cli](verification/resource-discovery-e2e.json) (PASS), [ui-resource-discovery-live](../web/verification/ui-resource-discovery-live-results.json) (PASS), [resource-discovery-batch](verification/resource-discovery-batch.json) (PASS).
-
-  <details>
-  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
-
-  ```json
-  {
-    "id": "crawl.nofollow",
-    "reference_name": "Link directive policy",
-    "status": "partial",
-    "acceptance_test": "Exercise nofollow, ugc, sponsored and page nofollow; store links regardless of whether discovery is enabled.",
-    "remaining_acceptance": [
-      "Complete dedicated native enabled/disabled traversal fixtures for nofollow, ugc, sponsored and page nofollow; verify every source occurrence remains observable independently of target fetching."
-    ],
-    "implementation_evidence": [
-      {
-        "verification_run_ids": [
-          "core-unit",
-          "analysis"
-        ],
-        "proves": "Anchor rel/nofollow values remain observable. Independent graph scoring excludes nofollow/ugc/sponsored/page nofollow; discovery currently follows stored references."
-      },
-      {
-        "batch": "B9-resource-discovery",
-        "verification_run_ids": [
-          "resource-discovery-api-cli",
-          "ui-resource-discovery-live",
-          "resource-discovery-batch"
-        ],
-        "proves": "Actual native/UI nofollow target is retained as a source occurrence and remains unfetched under saved traversal settings.",
-        "limits": "The observed nofollow control does not prove ugc, sponsored and page-nofollow in all enabled/disabled combinations.",
-        "source_debug_sha256_by_run": {
-          "resource-discovery-api-cli": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
-          "ui-resource-discovery-live": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724"
-        }
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -724,7 +714,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Konfigurierte CDN-Grenzen ohne unbegrenzte externe Traversierung ergänzen.
 
-  Beweisregister: [resource-discovery-api-cli](verification/resource-discovery-e2e.json) (PASS), [ui-resource-discovery-live](../web/verification/ui-resource-discovery-live-results.json) (PASS), [resource-discovery-batch](verification/resource-discovery-batch.json) (PASS).
+  Beweisregister: [resource-discovery-api-cli](verification/resource-discovery-e2e.json) (PASS), [ui-resource-discovery-live](../web/verification/ui-resource-discovery-live-results.json) (PASS), [resource-discovery-batch](verification/resource-discovery-batch.json) (PASS), [resource-contract-core](verification/resource-contract-core.json) (FOCUSED_CORE_PASS_FULL_MATRIX_PENDING), [resource-contract-api-cli-mcp](verification/resource-contract-e2e.json) (PASS), [resource-contract-ui](verification/resource-contract-ui.json) (PASS).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -752,6 +742,16 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "resource-discovery-api-cli": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
           "ui-resource-discovery-live": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724"
         }
+      },
+      {
+        "batch": "B10-resource-contract-v2",
+        "verification_run_ids": [
+          "resource-contract-core",
+          "resource-contract-api-cli-mcp",
+          "resource-contract-ui"
+        ],
+        "proves": "Exact resource origins stay separate from navigation scope at each directed hop; unlisted third origin and navigation to resource-only origin denied with actual first-hop positive controls.",
+        "limits": "Bounded own native/local acceptance. Existing remaining acceptance and reference parity remain separately tracked; CI/release/installation pending."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -858,6 +858,61 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "native-policy-installed"
         ],
         "proves": "Exact B7 source915e175 has four successful Windows/Linux/Chromium/Linux Docker CI jobs and an installed native Windows immutable release. Existing seven jobs and eleven original JSON files remain byte-identical after restart; no user-data fixture requests. This confirms the already documented B7 slice only; ongoing B8 capture/corpus changes and full reference parity are not attested."
+      }
+    ],
+    "parity_status": "NOT_PROVEN"
+  }
+  ```
+
+  </details>
+
+- [x] **Nofollow- und verwandte Traversierungsregeln** — Eigene Abnahme erfüllt; `crawl.nofollow`, P1.
+
+  Orientierung: Alle vier Direktiven mit konfigurierbarem Verhalten und erhaltenen Linkbeobachtungen prüfen.
+
+  Beweisregister: [core-unit](../crates/core/src) (PASS), [analysis](analysis-acceptance.md) (PASS), [resource-discovery-api-cli](verification/resource-discovery-e2e.json) (PASS), [ui-resource-discovery-live](../web/verification/ui-resource-discovery-live-results.json) (PASS), [resource-discovery-batch](verification/resource-discovery-batch.json) (PASS), [resource-contract-core](verification/resource-contract-core.json) (FOCUSED_CORE_PASS_FULL_MATRIX_PENDING), [resource-contract-api-cli-mcp](verification/resource-contract-e2e.json) (PASS), [resource-contract-ui](verification/resource-contract-ui.json) (PASS).
+
+  <details>
+  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
+
+  ```json
+  {
+    "id": "crawl.nofollow",
+    "reference_name": "Link directive policy",
+    "status": "implemented",
+    "acceptance_test": "Exercise nofollow, ugc, sponsored and page nofollow; store links regardless of whether discovery is enabled.",
+    "remaining_acceptance": [],
+    "implementation_evidence": [
+      {
+        "verification_run_ids": [
+          "core-unit",
+          "analysis"
+        ],
+        "proves": "Anchor rel/nofollow values remain observable. Independent graph scoring excludes nofollow/ugc/sponsored/page nofollow; discovery currently follows stored references."
+      },
+      {
+        "batch": "B9-resource-discovery",
+        "verification_run_ids": [
+          "resource-discovery-api-cli",
+          "ui-resource-discovery-live",
+          "resource-discovery-batch"
+        ],
+        "proves": "Actual native/UI nofollow target is retained as a source occurrence and remains unfetched under saved traversal settings.",
+        "limits": "The observed nofollow control does not prove ugc, sponsored and page-nofollow in all enabled/disabled combinations.",
+        "source_debug_sha256_by_run": {
+          "resource-discovery-api-cli": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+          "ui-resource-discovery-live": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724"
+        }
+      },
+      {
+        "batch": "B10-resource-contract-v2",
+        "verification_run_ids": [
+          "resource-contract-core",
+          "resource-contract-api-cli-mcp",
+          "resource-contract-ui"
+        ],
+        "proves": "Explicit V2 internal/external qualifier switches cover nofollow/ugc/sponsored and actual document directives; original source occurrences and HTML/HTTP provenance remain visible, V1 compatibility remains separate. The exact stored native enabled/disabled traversal and source-preservation acceptance is fulfilled for the explicit V2 follow switches, confirmed by separate read-only acceptance review. This does not redefine global crawl_links:false or convert the preserved V1 behavior.",
+        "limits": "Own explicitly selected V2 follow-switch contract only. A separate four-directive matrix under global crawl_links:false remains an additional B10 control; existing V1 behavior is intentionally preserved. Exact-source CI, release and installation remain separate pending gates; full reference parity NOT_PROVEN."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -1020,7 +1075,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Noindex-, Canonical- und Pagination-Regeln anwenden, ohne Beobachtungen zu unterdrücken.
 
-  Beweisregister: keine zugeordnete ausgeführte Prüfung.
+  Beweisregister: [resource-contract-core](verification/resource-contract-core.json) (FOCUSED_CORE_PASS_FULL_MATRIX_PENDING), [resource-contract-api-cli-mcp](verification/resource-contract-e2e.json) (PASS).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -1034,7 +1089,17 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
     "remaining_acceptance": [
       "Verify saved noindex/canonical/pagination policies influence expansion without suppressing observed evidence."
     ],
-    "implementation_evidence": [],
+    "implementation_evidence": [
+      {
+        "batch": "B10-resource-contract-v2",
+        "verification_run_ids": [
+          "resource-contract-core",
+          "resource-contract-api-cli-mcp"
+        ],
+        "proves": "Actual meta and X-Robots nofollow share independent internal/external target overrides; document observations persist, redirects cannot borrow unrelated role scope.",
+        "limits": "Bounded own native/local acceptance. Existing remaining acceptance and reference parity remain separately tracked; CI/release/installation pending."
+      }
+    ],
     "parity_status": "NOT_PROVEN"
   }
   ```
@@ -2478,7 +2543,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Mehrseitige Vorkommen und tatsächlich gewähltes currentSrc mit Media-/Dichteauswahl prüfen.
 
-  Beweisregister: [core-unit](../crates/core/src) (PASS), [ui-fixture](../web/verification/ui-fixture-results.json) (PASS), [dom-robots-batch](verification/dom-robots-batch.json) (PASS), [resource-discovery-api-cli](verification/resource-discovery-e2e.json) (PASS), [ui-resource-discovery-live](../web/verification/ui-resource-discovery-live-results.json) (PASS), [resource-discovery-batch](verification/resource-discovery-batch.json) (PASS).
+  Beweisregister: [core-unit](../crates/core/src) (PASS), [ui-fixture](../web/verification/ui-fixture-results.json) (PASS), [dom-robots-batch](verification/dom-robots-batch.json) (PASS), [resource-discovery-api-cli](verification/resource-discovery-e2e.json) (PASS), [ui-resource-discovery-live](../web/verification/ui-resource-discovery-live-results.json) (PASS), [resource-discovery-batch](verification/resource-discovery-batch.json) (PASS), [resource-contract-matrix](verification/resource-contract-matrix.json) (PASS), [resource-contract-responses](verification/resource-contract-responses.json) (PASS).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -2519,6 +2584,15 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "resource-discovery-api-cli": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
           "ui-resource-discovery-live": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724"
         }
+      },
+      {
+        "batch": "B10-resource-contract-v2",
+        "verification_run_ids": [
+          "resource-contract-matrix",
+          "resource-contract-responses"
+        ],
+        "proves": "Independent declared resource occurrences, requested identity, actual response MIME and coalesced fetch behavior checked in both profiles; browser-selected currentSrc remains unproven.",
+        "limits": "Bounded own native/local acceptance. Existing remaining acceptance and reference parity remain separately tracked; CI/release/installation pending."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -2565,7 +2639,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Gerenderte Maße, echte Transferbytes, Schwellen und zusätzliche Format-/Orientierungsfälle prüfen.
 
-  Beweisregister: [core-unit](../crates/core/src) (PASS), [resource-fixtures](../crates/core/tests/resource_fixtures.rs) (PASS), [ui-resources](../web/verification/ui-resource-live-results.json) (PASS), [resource-offline-batch](verification/resource-offline-batch.json) (PASS).
+  Beweisregister: [core-unit](../crates/core/src) (PASS), [resource-fixtures](../crates/core/tests/resource_fixtures.rs) (PASS), [ui-resources](../web/verification/ui-resource-live-results.json) (PASS), [resource-offline-batch](verification/resource-offline-batch.json) (PASS), [resource-contract-matrix](verification/resource-contract-matrix.json) (PASS), [resource-contract-responses](verification/resource-contract-responses.json) (PASS).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -2594,6 +2668,15 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "resource-offline-batch"
         ],
         "proves": "Fetched image resources expose dimensions from encoded raster headers and bounded SVG absolute lengths, encoded captured bytes, completeness/parse status and units. Actual PNG and fractional SVG measurements persist through SQLite/JSON, tables and CSV; viewBox-only SVG, malformed/truncated input and legacy missing observations stay explicit unknown/error states. HTML width/height and each alt occurrence remain separate from file dimensions; this is header inspection, not full pixel decoding."
+      },
+      {
+        "batch": "B10-resource-contract-v2",
+        "verification_run_ids": [
+          "resource-contract-matrix",
+          "resource-contract-responses"
+        ],
+        "proves": "Real valid PNG responses provide independently asserted dimensions/entity hashes under all resource switch products; no font/audio/SWF execution claim.",
+        "limits": "Bounded own native/local acceptance. Existing remaining acceptance and reference parity remain separately tracked; CI/release/installation pending."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -2606,7 +2689,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Schriftabdeckung, Form XObjects und gescannte PDFs/OCR getrennt unterstützen und prüfen.
 
-  Beweisregister: [core-unit](../crates/core/src) (PASS), [resource-fixtures](../crates/core/tests/resource_fixtures.rs) (PASS), [ui-resources](../web/verification/ui-resource-live-results.json) (PASS), [resource-offline-batch](verification/resource-offline-batch.json) (PASS).
+  Beweisregister: [core-unit](../crates/core/src) (PASS), [resource-fixtures](../crates/core/tests/resource_fixtures.rs) (PASS), [ui-resources](../web/verification/ui-resource-live-results.json) (PASS), [resource-offline-batch](verification/resource-offline-batch.json) (PASS), [resource-contract-responses](verification/resource-contract-responses.json) (PASS).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -2629,6 +2712,14 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "resource-offline-batch"
         ],
         "proves": "Owned original PDFs prove Info title/author/date metadata, validated page-tree count separate from declared count, compressed native text, per-page source facts, text/count/hash and configurable object/page/decompression/text limits. Encrypted, malformed, partial, disabled and legitimate blank cases remain distinct; incomplete input has no invented counts. Actual UI/CSV/project export and SQLite/legacy round trips preserve resource facts without inventing HTML metadata."
+      },
+      {
+        "batch": "B10-resource-contract-v2",
+        "verification_run_ids": [
+          "resource-contract-responses"
+        ],
+        "proves": "Actual valid and password-encrypted authored PDFs distinguish stored/fetched/parser outcomes and completeness without treating MIME hints as successful parsing.",
+        "limits": "Bounded own native/local acceptance. Existing remaining acceptance and reference parity remain separately tracked; CI/release/installation pending."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -2641,7 +2732,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Zuverlässigen Ankertext und weitere Link-Aktionen prüfen; Nicht-HTTP-Aktionen nicht zu Weblinks umdeuten.
 
-  Beweisregister: [core-unit](../crates/core/src) (PASS), [resource-fixtures](../crates/core/tests/resource_fixtures.rs) (PASS), [ui-resources](../web/verification/ui-resource-live-results.json) (PASS), [resource-offline-batch](verification/resource-offline-batch.json) (PASS).
+  Beweisregister: [core-unit](../crates/core/src) (PASS), [resource-fixtures](../crates/core/tests/resource_fixtures.rs) (PASS), [ui-resources](../web/verification/ui-resource-live-results.json) (PASS), [resource-offline-batch](verification/resource-offline-batch.json) (PASS), [resource-contract-responses](verification/resource-contract-responses.json) (PASS).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -2664,6 +2755,14 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "resource-offline-batch"
         ],
         "proves": "Direct/indirect HTTP URI link annotations resolve supported document URI bases, retain source document/page/rectangle/action evidence and enqueue eligible targets. Actual PDF-only local target discovery, per-page inspector facts, JSON/SQLite and dedicated CSV are verified; malformed bases/actions and annotation limits remain visible. Anchor text is not inferred from a nearby text stream."
+      },
+      {
+        "batch": "B10-resource-contract-v2",
+        "verification_run_ids": [
+          "resource-contract-responses"
+        ],
+        "proves": "Valid PDF annotations have separate fetch-disabled and fetch-enabled native request controls in both profiles, with preserved original PDF role witnesses.",
+        "limits": "Bounded own native/local acceptance. Existing remaining acceptance and reference parity remain separately tracked; CI/release/installation pending."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -5074,4 +5173,4 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `3b064a3dca6478f645453d362cef98e8bc2b41c7411681800a8323841049201e`. Letzter im Katalog erfasster Beweisstand: `2026-10-12T19:10:25.415Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `8f64ecc45e3d047af377b29e0ee90f369968b15e4830493dee0e964201319af5`. Letzter im Katalog erfasster Beweisstand: `2026-10-12T19:10:25.415Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

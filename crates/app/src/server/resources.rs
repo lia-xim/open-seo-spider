@@ -52,6 +52,12 @@ async fn context(state: &AppState, id: Uuid) -> ApiResult<(Value, Option<PathBuf
         .map(|config| config.sha256())
         .transpose()
         .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?;
+    let configured_semantic_contract = guard.config.resource_discovery.as_ref().map(|config| {
+        config.contract.as_ref().map_or(
+            open_seo_spider_core::RESOURCE_DISCOVERY_ENGINE,
+            |contract| contract.engine.as_str(),
+        )
+    });
     let crawl_config_sha256 = format!(
         "{:x}",
         Sha256::digest(
@@ -60,6 +66,7 @@ async fn context(state: &AppState, id: Uuid) -> ApiResult<(Value, Option<PathBuf
         )
     );
     let metadata = json!({"enabled":enabled,"engine":open_seo_spider_core::RESOURCE_DISCOVERY_ENGINE,
+        "configured_semantic_contract":configured_semantic_contract,"semantic_contract_binding":if enabled {"declared_config_only"} else {"not_configured"},
         "checkpoint":guard.resource_ledger,"config_sha256":config_sha256,"crawl_config_sha256":crawl_config_sha256,"crawl_generation":guard.generation,"snapshot":null,"website_requests":0,"entity_bodies_included":false,
         "snapshot_scope":"sqlite_read_snapshot"});
     drop(guard);
@@ -98,10 +105,14 @@ fn validate_snapshot(
     snapshot: Option<&open_seo_spider_core::ResourceReadSnapshot>,
 ) -> ApiResult<()> {
     let expected_generation = metadata["crawl_generation"].as_u64().filter(|v| *v > 0);
+    let expected_contract = metadata["configured_semantic_contract"]
+        .as_str()
+        .filter(|engine| *engine != open_seo_spider_core::RESOURCE_DISCOVERY_ENGINE);
     if snapshot.is_none_or(|snapshot| {
         metadata["crawl_config_sha256"].as_str() != Some(snapshot.crawl_config_sha256.as_str())
             || expected_generation.is_none()
             || snapshot.generation != expected_generation
+            || snapshot.resource_contract_engine.as_deref() != expected_contract
     }) {
         return Err(api_error(
             StatusCode::CONFLICT,
@@ -141,6 +152,7 @@ pub(super) async fn inventory(
         validate_snapshot(&metadata, page.snapshot.as_ref())?;
         metadata["checkpoint"] = json!(page.ledger);
         metadata["ledger_available"] = json!(true);
+        metadata["semantic_contract_binding"] = json!("validated_full_config_and_generation");
         metadata["snapshot"] = json!(page.snapshot);
     } else {
         metadata = unavailable(metadata);
@@ -185,6 +197,7 @@ pub(super) async fn transports(
         validate_snapshot(&metadata, page.snapshot.as_ref())?;
         metadata["checkpoint"] = json!(page.ledger);
         metadata["ledger_available"] = json!(true);
+        metadata["semantic_contract_binding"] = json!("validated_full_config_and_generation");
         metadata["snapshot"] = json!(page.snapshot);
     } else {
         metadata = unavailable(metadata);
@@ -280,7 +293,11 @@ async fn export(state: AppState, id: Uuid, format: Format) -> ApiResult<Response
         Format::Json => ("application/json; charset=utf-8", "json"),
         Format::Csv => ("text/csv; charset=utf-8", "csv"),
     };
-    Response::builder()
+    let mut response = Response::builder();
+    if let Some(engine) = &snapshot.resource_contract_engine {
+        response = response.header("x-resource-contract-engine", engine);
+    }
+    response
         .header(header::CONTENT_TYPE, kind)
         .header(
             header::CONTENT_DISPOSITION,

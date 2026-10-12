@@ -2,13 +2,15 @@
 
 Diese Roadmap ordnet die nächsten Arbeitsschritte. Der vollständige laufende Status aller 144 Fähigkeiten steht in [FEATURE_TODO.md](FEATURE_TODO.md); die exakten Abnahmen und Belege stehen in [feature-parity.json](feature-parity.json).
 
-Aktuell: **25 eigene Abnahmen erfüllt, 72 teilweise geprüft, 47 offen**. Zusätzlich bleiben [416 benannte Filter und 32 Ablaufverträge](parity/granular-acceptance.json) getrennt zu prüfen. Alle Hersteller-Parität bleibt **NOT_PROVEN**. Es wird kein Fertigstellungsprozentsatz berechnet.
+Aktuell: **26 eigene Abnahmen erfüllt, 71 teilweise geprüft, 47 offen**. Zusätzlich bleiben [416 benannte Filter und 32 Ablaufverträge](parity/granular-acceptance.json) getrennt zu prüfen. Alle Hersteller-Parität bleibt **NOT_PROVEN**. Es wird kein Fertigstellungsprozentsatz berechnet.
 
 ## Aktueller nächster Baustein
 
 **B9 ist als begrenzte Grundlage abgeschlossen und lokal installiert.** Der [Aggregatbeleg](verification/resource-discovery-batch.json) bindet 362 Standard-Rust-Tests, API9, MCP22 und tatsächliche UI65. Alle vier [exakten CI-Jobs an Commit f107ce7](verification/resource-discovery-ci.json) sind grün. Der [unveränderliche Windows-Release](verification/resource-discovery-release.json) besteht zusätzlich API9, Capture-/Neustart8, MCP22 und UI12. Die [Installation auf localhost8787](verification/resource-discovery-installed.json) erhält sieben Jobs und elf JSON-Dateien byteidentisch. Die historische Stackoverflow-Reproduktion und ihre Reparatur bleiben getrennt gespeichert. Breitere Feature-Abnahmen bleiben PARTIAL.
 
-**Als Nächstes: B10.** Der [gerichtete Matrixplan](parity/resource-matrix-plan.md) trennt konkrete Vertragsfragen von fehlenden Tests. Zuerst folgen Redirect-/Rollen- und HTTP-Link-Direktivenkontrollen, danach 108 Schalterfälle für sieben Ressourcentypen und zehn Navigationsquellen. Der Plan ist DESIGN_ONLY; daraus wird erst nach tatsächlichen HTTP-/Persistenz-Prüfungen ein Häkchen.
+**Aktuell: B10.** Der [eigene V2-Vertrag](resource-contract-v2.md) ergänzt ausdrückliche interne/externe Follow-Schalter und dauerhaft erhaltene Redirect-Rollen. Die [lokale Abnahme](verification/resource-contract-checkpoint.json) besteht 387 Standard-Rust-Tests, 108 exakte Schalterfälle in beiden Profilen (216 Ausführungen), 44 Antwortkontrollen, 13 API-/CLI-/MCP-Gruppen und zehn echte UI-Prüfungen. Das eigene V2-Linkdirektiven-Kriterium ist damit erfüllt; bestehende V1-Crawls bleiben kompatibel. Weitere Redirect-/Encoding-/Unterbrechungs-/Budget-/Browser-Kontrollen sowie exakte Source-CI, Release und Installation bleiben offen. Der unveränderte [historische Designplan](parity/resource-matrix-plan.md) bleibt DESIGN_ONLY; tatsächliche Beweise stehen getrennt davon.
+
+**Nächste größere Funktion: B11.** [Issue18](https://github.com/lia-xim/open-seo-spider/issues/18) verfolgt den Vergleich gespeicherter Crawls mit konkreten Vorher/Nachher-Werten, Link-/JSON-LD-/Textquellen, explizitem URL-Mapping und kombinierten JSON-/CSV-Exporten. Fehlende Quellen bleiben unbekannt. Dieser Baustein ist geplant, seine Laufzeitabnahme steht noch aus.
 
 ## Was bereits als Grundlage dient
 
@@ -20,13 +22,13 @@ Diese Grundlagen ersetzen keine vollständige Abnahme aller Filter, Source-Profi
 
 ### 1. Entdeckungsquellen und Ressourcenschalter vervollständigen
 
-Native Restarbeiten: Unabhängige store/fetch/expand-Schalter und dauerhafte Grants sind integriert. Die vier Speichern-/Abrufen-Kombinationen sind bisher nativ für Bilder geprüft; die vollständige Matrix je Quelltyp/Navigationsquelle, vererbtes CSS-Environment-Encoding, zusätzliche Redirect-/Unterbrechungsfälle und Browser-Policy bleiben offen.
+Native Restarbeiten: Unabhängige store/fetch/expand-Schalter und dauerhafte Grants sind integriert. B10 prüft die vollständige eigene Matrix für sieben Ressourcentypen und zehn Navigationsquellen in beiden Profilen. Vererbtes CSS-Environment-Encoding, zusätzliche Redirect-/Unterbrechungsfälle und Browser-Policy bleiben offen.
 
 Referenzgrenze: Anchor-, IMG-, Script-, Stylesheet- und Relationship-Zahlen sind unterschiedliche Messkonzepte. Kein Graph-Link darf nur für übereinstimmende CSV-Zahlen umklassifiziert werden.
 
 - [x] Begrenzte native HTML-/CSS-Quellfamilien, Bild-Schaltermatrix, unveränderliche Bild/Anchor-Grants, finaler Stylesheet-Bezug, private Transporte und gepinnte API/CLI-Exporte gegen eigene Fixtures prüfen.
-- [ ] `resource-products-every-type-and-navigation`: Vier store/fetch-Kombinationen für CSS/JS/Medien/PDF/SWF und jede Navigation mit exaktem Requestlog ergänzen.
-- [ ] `relationship-discovery-each-positive-negative` und `link-directive-four-way-traversal`: jede Beziehungsquelle und alle nofollow/ugc/sponsored/page-nofollow-Varianten einzeln erlauben/sperren und Vorkommen erhalten.
+- [x] Eigene `resource-products-every-type-and-navigation`-Matrix: sieben Ressourcenrollen mal vier store/fetch-Kombinationen und zehn Navigationsquellen mal acht store/fetch/expand-Produkte, beide Profile und genaue HTTP-/MIME-/Grant-Kontrollen.
+- [x] Eigene direkte Beziehungsquellen-Schaltermatrix und V2-Linkdirektiven: nofollow/ugc/sponsored sowie Meta-/X-Robots-Dokument-Nofollow einzeln erlauben/sperren und Vorkommen erhalten. Globale crawl_links:false-Direktivenkontrollen sind zusätzliche offene Fälle.
 - [ ] `resource-role-unions-reverse-and-concurrent`: umgekehrte/parallele Rollen anderer Typen; `resource-cross-origin-redirect-hop-credentials`: jede Redirect-Stufe und Credential-/Robots-Grenze prüfen.
 - [ ] `css-encoding-environment-fallback`, `css-native-grammar-context-and-decoding`, `resource-interruption-each-stage` und `resource-budget-exact-plus-one-all-limits` mit positiven und unbekannten Kontrollfällen ergänzen.
 - [ ] Responsive Bilder: deklarierte Kandidaten von tatsächlich browsergewähltem currentSrc und gerenderten Maßen trennen; PDF unsupported fonts/Form XObjects/OCR nicht als vollständiger Text.

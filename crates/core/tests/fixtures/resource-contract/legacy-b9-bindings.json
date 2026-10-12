@@ -1,0 +1,373 @@
+{
+  "schema_version": 1,
+  "basis": "owned B9 retained fixture; immutable observed legacy configuration hash",
+  "source_report_sha256": "09b166aed16c61e6f0014a5e163a04be69a12aaadc4e478581d56e405ff6c77f",
+  "config": {
+    "seed_urls": [
+      "http://127.0.0.1:63166/"
+    ],
+    "input_imports": [
+      {
+        "engine": "open-seo-spider/offline-list-v1/calamine-0.36.1",
+        "input_sha256": "a25445f0223ed5d9fb4b4e4aada77dc65bf4dd52047277416e6143f7d237788c",
+        "input_bytes": 23,
+        "options": {
+          "format": {
+            "kind": "txt"
+          },
+          "limits": {
+            "max_input_bytes": 8388608,
+            "max_rows": 50000,
+            "max_field_bytes": 8192,
+            "max_zip_entries": 1024,
+            "max_zip_entry_bytes": 8388608,
+            "max_zip_total_bytes": 33554432,
+            "max_xml_events": 500000,
+            "max_xml_depth": 64,
+            "max_shared_strings": 100000,
+            "max_sheet_cells": 200000,
+            "max_csv_fields": 200000,
+            "max_output_bytes": 8388608,
+            "max_sheets": 128
+          }
+        },
+        "selected_sheet": null,
+        "selected_column": null,
+        "rows": [
+          {
+            "source_index": 1,
+            "source_row": 1,
+            "source_line": 1,
+            "sheet": null,
+            "cell": null,
+            "raw_value": "http://127.0.0.1:63166/",
+            "cell_type": "text",
+            "formula_metadata": null,
+            "candidate_kind": "page_url",
+            "normalized_url": "http://127.0.0.1:63166/",
+            "fragment": null,
+            "error": null
+          }
+        ],
+        "website_requests": 0,
+        "warnings": [],
+        "limitations": [
+          "Import does not start a crawl, follow links, evaluate formulas or fetch sitemap indexes.",
+          "Only absolute HTTP/HTTPS values are URL candidates; original values and duplicate rows are retained.",
+          "Independent import contract; complete original parser/filter parity is NOT_PROVEN."
+        ]
+      }
+    ],
+    "sitemap_urls": [],
+    "discover_sitemaps": true,
+    "max_sitemap_documents": 1000,
+    "crawl_links": true,
+    "include_subdomains": false,
+    "concurrency": 8,
+    "request_timeout_secs": 20,
+    "max_pages": null,
+    "max_depth": null,
+    "delay_ms": 0,
+    "obey_robots": true,
+    "check_external": false,
+    "max_body_bytes": 5242880,
+    "max_redirects": 10,
+    "user_agent": "Open SEO Spider/0.1",
+    "indexability_agent": "googlebot",
+    "custom_headers": {},
+    "renderer": null,
+    "custom_extractions": [],
+    "audit_thresholds": {
+      "min_title_chars": 30,
+      "max_title_chars": 60,
+      "min_description_chars": 70,
+      "max_description_chars": 155,
+      "max_h1_chars": 70,
+      "max_h2_chars": 70,
+      "max_alt_chars": 100,
+      "max_url_chars": 115,
+      "min_word_count": 200,
+      "max_internal_outlinks": 1000,
+      "max_external_outlinks": 10,
+      "min_title_pixels": 200,
+      "max_title_pixels": 561,
+      "min_description_pixels": 400,
+      "max_description_pixels": 985
+    },
+    "pdf_analysis": {
+      "enabled": true,
+      "max_pages": 1000,
+      "max_objects": 100000,
+      "max_decompressed_bytes": 8388608,
+      "max_text_bytes": 4194304,
+      "max_text_bytes_per_page": 1048576,
+      "max_annotations": 10000
+    },
+    "validate_fragments": false,
+    "link_position_rules": [],
+    "include_patterns": [],
+    "exclude_patterns": [],
+    "content_capture": {
+      "sources": [
+        "raw_http_html"
+      ],
+      "include_selectors": [
+        "body"
+      ],
+      "exclude_selectors": [
+        "script",
+        "style",
+        "template",
+        "noscript",
+        "nav",
+        "footer"
+      ],
+      "limits": {
+        "max_html_utf8_bytes": 8388608,
+        "max_text_utf8_bytes": 524288,
+        "max_visited_dom_nodes": 250000,
+        "max_dom_depth": 1024,
+        "max_selectors": 64,
+        "max_selector_utf8_bytes": 4096,
+        "max_selector_checks": 2000000,
+        "max_config_json_bytes": 65536,
+        "max_output_json_bytes": 4194304
+      }
+    },
+    "resource_discovery": {
+      "resources": {
+        "css": {
+          "store": false,
+          "fetch": true
+        },
+        "javascript": {
+          "store": true,
+          "fetch": false
+        },
+        "images": {
+          "store": false,
+          "fetch": true
+        },
+        "media": {
+          "store": true,
+          "fetch": false
+        },
+        "pdf": {
+          "store": true,
+          "fetch": false
+        },
+        "swf": {
+          "store": true,
+          "fetch": false
+        },
+        "other": {
+          "store": true,
+          "fetch": false
+        }
+      },
+      "navigation": {
+        "internal_anchors": {
+          "store": true,
+          "fetch": true,
+          "expand": true
+        },
+        "external_anchors": {
+          "store": true,
+          "fetch": false,
+          "expand": false
+        },
+        "iframes": {
+          "store": true,
+          "fetch": false,
+          "expand": false
+        },
+        "refresh": {
+          "store": true,
+          "fetch": false,
+          "expand": false
+        },
+        "canonical": {
+          "store": true,
+          "fetch": false,
+          "expand": false
+        },
+        "hreflang": {
+          "store": true,
+          "fetch": false,
+          "expand": false
+        },
+        "pagination": {
+          "store": true,
+          "fetch": false,
+          "expand": false
+        },
+        "amp": {
+          "store": true,
+          "fetch": false,
+          "expand": false
+        },
+        "mobile_alternate": {
+          "store": true,
+          "fetch": false,
+          "expand": false
+        },
+        "pdf_annotations": {
+          "store": true,
+          "fetch": false,
+          "expand": false
+        }
+      },
+      "css": {
+        "stylesheets": true,
+        "style_elements": true,
+        "style_attributes": true
+      },
+      "resource_scope": {
+        "external_origins": [
+          "http://localhost:63165"
+        ]
+      },
+      "follow_rel_nofollow": false,
+      "follow_document_nofollow": false
+    }
+  },
+  "config_sha256": "2dc7f3f644d8cbd49795d2ca665d2ef4a6f9bff371f23a566b6407bc5aa83212",
+  "resource_config": {
+    "resources": {
+      "css": {
+        "store": false,
+        "fetch": true
+      },
+      "javascript": {
+        "store": true,
+        "fetch": false
+      },
+      "images": {
+        "store": false,
+        "fetch": true
+      },
+      "media": {
+        "store": true,
+        "fetch": false
+      },
+      "pdf": {
+        "store": true,
+        "fetch": false
+      },
+      "swf": {
+        "store": true,
+        "fetch": false
+      },
+      "other": {
+        "store": true,
+        "fetch": false
+      }
+    },
+    "navigation": {
+      "internal_anchors": {
+        "store": true,
+        "fetch": true,
+        "expand": true
+      },
+      "external_anchors": {
+        "store": true,
+        "fetch": false,
+        "expand": false
+      },
+      "iframes": {
+        "store": true,
+        "fetch": false,
+        "expand": false
+      },
+      "refresh": {
+        "store": true,
+        "fetch": false,
+        "expand": false
+      },
+      "canonical": {
+        "store": true,
+        "fetch": false,
+        "expand": false
+      },
+      "hreflang": {
+        "store": true,
+        "fetch": false,
+        "expand": false
+      },
+      "pagination": {
+        "store": true,
+        "fetch": false,
+        "expand": false
+      },
+      "amp": {
+        "store": true,
+        "fetch": false,
+        "expand": false
+      },
+      "mobile_alternate": {
+        "store": true,
+        "fetch": false,
+        "expand": false
+      },
+      "pdf_annotations": {
+        "store": true,
+        "fetch": false,
+        "expand": false
+      }
+    },
+    "css": {
+      "stylesheets": true,
+      "style_elements": true,
+      "style_attributes": true
+    },
+    "resource_scope": {
+      "external_origins": [
+        "http://localhost:63165"
+      ]
+    },
+    "follow_rel_nofollow": false,
+    "follow_document_nofollow": false
+  },
+  "resource_config_sha256": "8afd79e47f3f11b28b28d7bf328fdbe9c4780678c9361cb988a5b33de1fd7a74",
+  "permission": {
+    "engine": "open-seo-spider/resource-discovery-v1",
+    "config_sha256": "8afd79e47f3f11b28b28d7bf328fdbe9c4780678c9361cb988a5b33de1fd7a74",
+    "fetch_url": "http://127.0.0.1:63166/",
+    "store": true,
+    "can_expand_navigation": true,
+    "can_expand_resources": true,
+    "can_expand_css": true,
+    "can_expand_pdf": false,
+    "authorizing_grants": [
+      {
+        "engine": "open-seo-spider/resource-discovery-v1",
+        "config_sha256": "8afd79e47f3f11b28b28d7bf328fdbe9c4780678c9361cb988a5b33de1fd7a74",
+        "occurrence_id": "9c1d072fd5ffcf428f3ca37df74409d01933df5c868d51e5c2c8d6094b900fa3",
+        "fetch_url": "http://127.0.0.1:63166/",
+        "store": true,
+        "can_expand_navigation": true,
+        "can_expand_resources": true,
+        "can_expand_css": true,
+        "can_expand_pdf": false,
+        "policy_sha256": null,
+        "policy_occurrence_id": null
+      }
+    ]
+  },
+  "response_facts": {
+    "engine": "open-seo-spider/resource-discovery-v1",
+    "observed_generation": 1,
+    "retained_response": true,
+    "entity_body_retained": false,
+    "captured_entity_sha256": "1db34ed9b096dfa779e7294b5b18f94f300d0a1319d796f2aea4e7244fe57071",
+    "captured_entity_bytes": 9004,
+    "captured_entity_complete": true,
+    "decoded_source_sha256": "1db34ed9b096dfa779e7294b5b18f94f300d0a1319d796f2aea4e7244fe57071",
+    "decode_status": "exact",
+    "decode_encoding": "UTF-8",
+    "metadata_projection_complete": true,
+    "unretained_fields": [
+      "entity_body"
+    ]
+  }
+}

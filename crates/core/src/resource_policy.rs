@@ -6,6 +6,69 @@ use std::collections::{BTreeMap, HashSet};
 use url::Url;
 
 pub const RESOURCE_DISCOVERY_ENGINE: &str = "open-seo-spider/resource-discovery-v1";
+pub const RESOURCE_CONTRACT_ENGINE: &str = "open-seo-spider/resource-contract-v2";
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(default, deny_unknown_fields)]
+pub struct ResourceContractConfig {
+    pub engine: String,
+    pub follow_internal_qualified_links: bool,
+    pub follow_external_qualified_links: bool,
+}
+impl Default for ResourceContractConfig {
+    fn default() -> Self {
+        Self {
+            engine: RESOURCE_CONTRACT_ENGINE.into(),
+            follow_internal_qualified_links: false,
+            follow_external_qualified_links: false,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ResourceLinkScope {
+    Internal,
+    External,
+    Unknown,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ResourceQualifierSource {
+    HtmlRel,
+    HttpLinkRel,
+    NotApplicable,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ResourceQualificationDecision {
+    pub engine: String,
+    pub scope: ResourceLinkScope,
+    pub rel_qualifiers: Vec<String>,
+    pub source: ResourceQualifierSource,
+    pub document_nofollow: bool,
+    pub follow_allowed: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ResourceRedirectDecision {
+    pub source_url: String,
+    pub raw_location: String,
+    pub target_url: Option<String>,
+    pub original_reference_kinds: Vec<ResourceReferenceKind>,
+    pub authorizing_occurrence_ids: Vec<String>,
+    pub scope_allowed: bool,
+    pub policy_check: Option<bool>,
+    pub policy_traverse: Option<bool>,
+    pub robots_allowed: Option<bool>,
+    pub allowed: bool,
+    pub reason: String,
+    /// Admission/request initiation is observed; delivery to the server is not inferred.
+    pub request_started: bool,
+}
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(default, deny_unknown_fields)]
@@ -113,6 +176,8 @@ pub struct ResourceScopeConfig {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(default, deny_unknown_fields)]
 pub struct ResourceDiscoveryConfig {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contract: Option<ResourceContractConfig>,
     pub resources: ResourceTypeRules,
     pub navigation: NavigationDiscoveryRules,
     pub css: CssSourceRules,
@@ -302,6 +367,8 @@ pub struct ResourceGrant {
     pub config_sha256: String,
     pub occurrence_id: String,
     pub fetch_url: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub reference_kind: Option<ResourceReferenceKind>,
     pub store: bool,
     pub can_expand_navigation: bool,
     pub can_expand_resources: bool,
@@ -317,6 +384,8 @@ pub struct ResourceDecision {
     pub reason: String,
     pub grant: Option<ResourceGrant>,
     pub coalesced_into: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub qualification: Option<ResourceQualificationDecision>,
 }
 
 /// Caller supplies observed source and actual native scope/policy facts. This
@@ -333,10 +402,21 @@ pub(crate) struct ResourcePermission {
     pub policy_check: bool,
     pub policy_traverse: bool,
     pub document_nofollow: bool,
+    pub target_internal: Option<bool>,
 }
 
 impl ResourceDiscoveryConfig {
     pub fn validate(&self) -> Result<()> {
+        if let Some(contract) = &self.contract {
+            ensure!(
+                contract.engine == RESOURCE_CONTRACT_ENGINE,
+                "Unknown resource contract engine"
+            );
+            ensure!(
+                !self.follow_rel_nofollow && !self.follow_document_nofollow,
+                "Resource contract v2 conflicts with legacy follow_rel_nofollow/follow_document_nofollow; use scoped qualified-link switches"
+            );
+        }
         ensure!(
             self.resource_scope.external_origins.len() <= 32,
             "At most 32 external resource origins"
@@ -428,6 +508,48 @@ impl ResourceDiscoveryConfig {
         facts: ResourcePermission,
     ) -> Result<ResourceDecision> {
         let (switch, expand) = self.switches(row.reference_kind);
+        let qualification = self.contract.as_ref().map(|contract| {
+            let tokens = row.attributes.get("rel").map(String::as_str).unwrap_or("");
+            let mut rel_qualifiers = ["nofollow", "ugc", "sponsored"]
+                .into_iter()
+                .filter(|qualifier| {
+                    tokens
+                        .split_ascii_whitespace()
+                        .any(|token| token.eq_ignore_ascii_case(qualifier))
+                })
+                .map(String::from)
+                .collect::<Vec<_>>();
+            if row.nofollow && !rel_qualifiers.iter().any(|token| token == "nofollow") {
+                rel_qualifiers.insert(0, "nofollow".into());
+            }
+            let scope = match facts.target_internal {
+                Some(true) => ResourceLinkScope::Internal,
+                Some(false) => ResourceLinkScope::External,
+                None => ResourceLinkScope::Unknown,
+            };
+            let enabled = match scope {
+                ResourceLinkScope::Internal => contract.follow_internal_qualified_links,
+                ResourceLinkScope::External => contract.follow_external_qualified_links,
+                ResourceLinkScope::Unknown => false,
+            };
+            ResourceQualificationDecision {
+                engine: contract.engine.clone(),
+                scope,
+                follow_allowed: (rel_qualifiers.is_empty() && !facts.document_nofollow) || enabled,
+                rel_qualifiers,
+                source: if row.classification_basis == "resolved_http_link_header_target" {
+                    ResourceQualifierSource::HttpLinkRel
+                } else if matches!(
+                    row.classification_basis.as_str(),
+                    "html_attribute_context" | "anchor_context" | "html_link_rel"
+                ) {
+                    ResourceQualifierSource::HtmlRel
+                } else {
+                    ResourceQualifierSource::NotApplicable
+                },
+                document_nofollow: facts.document_nofollow,
+            }
+        });
         let reason = if facts.selected {
             "selected_no_expansion"
         } else if row.observation_error.is_some() || row.resolved_url.is_none() {
@@ -440,9 +562,26 @@ impl ResourceDiscoveryConfig {
             "depth_limit"
         } else if row.reference_kind.is_navigation() && !facts.navigation_enabled {
             "navigation_disabled"
-        } else if row.nofollow && !self.follow_rel_nofollow {
+        } else if qualification
+            .as_ref()
+            .is_some_and(|fact| !fact.follow_allowed)
+        {
+            match qualification
+                .as_ref()
+                .and_then(|fact| fact.rel_qualifiers.first())
+                .map(String::as_str)
+            {
+                Some("nofollow") => "rel_nofollow",
+                Some("ugc") => "rel_ugc",
+                Some("sponsored") => "rel_sponsored",
+                _ => "document_nofollow",
+            }
+        } else if self.contract.is_none() && row.nofollow && !self.follow_rel_nofollow {
             "rel_nofollow"
-        } else if facts.document_nofollow && !self.follow_document_nofollow {
+        } else if self.contract.is_none()
+            && facts.document_nofollow
+            && !self.follow_document_nofollow
+        {
             "document_nofollow"
         } else if !switch.fetch {
             "fetch_disabled"
@@ -463,6 +602,7 @@ impl ResourceDiscoveryConfig {
                 config_sha256: self.sha256()?,
                 occurrence_id: row.occurrence_id.clone(),
                 fetch_url: row.resolved_url.clone().expect("checked URL"),
+                reference_kind: self.contract.as_ref().map(|_| row.reference_kind),
                 store: switch.store,
                 can_expand_navigation: nav && facts.navigation_enabled && facts.policy_traverse,
                 can_expand_resources: nav && facts.policy_traverse,
@@ -484,6 +624,7 @@ impl ResourceDiscoveryConfig {
             reason: reason.into(),
             grant,
             coalesced_into: None,
+            qualification,
         })
     }
     pub(crate) fn permits_resource_origin(
@@ -499,6 +640,140 @@ impl ResourceDiscoveryConfig {
                 .iter()
                 .filter_map(|value| Url::parse(value).ok())
                 .any(|allowed| crate::urls::origin(&allowed) == crate::urls::origin(url))
+    }
+
+    #[allow(clippy::too_many_arguments)] // Explicit original-role, origin, and policy boundaries.
+    pub(crate) fn redirect_decision(
+        &self,
+        permission: &crate::ResourceTaskPermission,
+        source: &Url,
+        raw: &str,
+        target: Option<&Url>,
+        seeds: &[Url],
+        subdomains: bool,
+        check_external: bool,
+        policy: Option<(bool, bool)>,
+        prior: &[ResourceRedirectDecision],
+    ) -> Result<ResourceRedirectDecision> {
+        self.validate()?;
+        ensure!(self.contract.is_some(), "Strict redirect contract missing");
+        permission.validate()?;
+        let mut kinds = Vec::new();
+        let mut authorizing = Vec::new();
+        for grant in &permission.authorizing_grants {
+            let kind = grant.reference_kind.ok_or_else(|| {
+                anyhow::anyhow!("Strict resource grant has no immutable original role")
+            })?;
+            if !kinds.contains(&kind) {
+                kinds.push(kind);
+            }
+            let allowed = prior.iter().all(|hop| {
+                hop.authorizing_occurrence_ids
+                    .contains(&grant.occurrence_id)
+            }) && target.is_some_and(|target| {
+                if kind == ResourceReferenceKind::InitialInput || kind.is_navigation() {
+                    crate::urls::same_scope(target, seeds, subdomains)
+                        || check_external
+                        || policy.is_some_and(|(check, _)| check)
+                } else {
+                    self.permits_resource_origin(target, seeds, subdomains)
+                }
+            });
+            if allowed {
+                authorizing.push(grant.occurrence_id.clone());
+            }
+        }
+        let scope_allowed = !authorizing.is_empty();
+        let allowed = target.is_some() && scope_allowed && policy.is_none_or(|(check, _)| check);
+        let reason = if target.is_none() {
+            "redirect_invalid"
+        } else if policy.is_some_and(|(check, _)| !check) {
+            "redirect_policy_denied"
+        } else if !scope_allowed {
+            "redirect_role_scope_denied"
+        } else {
+            "redirect_allowed"
+        };
+        Ok(ResourceRedirectDecision {
+            source_url: source.to_string(),
+            raw_location: raw.into(),
+            target_url: target.map(ToString::to_string),
+            original_reference_kinds: kinds,
+            authorizing_occurrence_ids: authorizing,
+            scope_allowed,
+            policy_check: policy.map(|(check, _)| check),
+            policy_traverse: policy.map(|(_, traverse)| traverse),
+            robots_allowed: None,
+            allowed,
+            reason: reason.into(),
+            request_started: false,
+        })
+    }
+
+    pub(crate) fn eligible_authority(
+        &self,
+        page: &crate::PageRecord,
+        permission: &crate::ResourceTaskPermission,
+        seeds: &[Url],
+        subdomains: bool,
+        check_external: bool,
+        captured_responses_only: bool,
+    ) -> Result<HashSet<String>> {
+        if self.contract.is_none() {
+            return Ok(permission
+                .authorizing_grants
+                .iter()
+                .map(|grant| grant.occurrence_id.clone())
+                .collect());
+        }
+        let facts = page
+            .resource_response
+            .as_ref()
+            .ok_or_else(|| anyhow::anyhow!("Strict response facts missing"))?;
+        let mut evaluated = Vec::new();
+        for observed in &facts.redirect_decisions {
+            if captured_responses_only
+                && !observed.target_url.as_deref().is_some_and(|target| {
+                    page.redirect_chain.iter().any(|hop| hop.url == target)
+                        || (page.final_status.is_some() && page.final_url == target)
+                })
+            {
+                break;
+            }
+            let source = crate::normalize_url(&observed.source_url, None)
+                .ok_or_else(|| anyhow::anyhow!("Invalid observed redirect source"))?;
+            let target = observed
+                .target_url
+                .as_deref()
+                .and_then(|url| crate::normalize_url(url, None));
+            let policy = observed
+                .policy_check
+                .map(|check| (check, observed.policy_traverse.unwrap_or(false)));
+            evaluated.push(self.redirect_decision(
+                permission,
+                &source,
+                &observed.raw_location,
+                target.as_ref(),
+                seeds,
+                subdomains,
+                check_external,
+                policy,
+                &evaluated,
+            )?);
+        }
+        Ok(permission
+            .authorizing_grants
+            .iter()
+            .filter(|grant| {
+                evaluated.iter().all(|hop| {
+                    hop.allowed
+                        && hop
+                            .authorizing_occurrence_ids
+                            .contains(&grant.occurrence_id)
+                })
+            })
+            .map(|grant| grant.occurrence_id.clone())
+            .collect())
     }
 }
 
@@ -547,6 +822,7 @@ mod tests {
             policy_check: true,
             policy_traverse: true,
             document_nofollow: false,
+            target_internal: Some(true),
         }
     }
     #[test]

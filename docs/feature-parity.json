@@ -699,6 +699,17 @@
             "resource-discovery-api-cli": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
             "ui-resource-discovery-live": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724"
           }
+        },
+        {
+          "batch": "B10-resource-contract-v2",
+          "verification_run_ids": [
+            "resource-contract-matrix",
+            "resource-contract-responses",
+            "resource-contract-api-cli-mcp",
+            "resource-contract-ui"
+          ],
+          "proves": "Seven declared resource kinds in all four store/fetch products across both profiles, actual MIME and immutable role facts; explicit profile selection, persisted exports and UI checked.",
+          "limits": "Bounded own native/local acceptance. Existing remaining acceptance and reference parity remain separately tracked; CI/release/installation pending."
         }
       ],
       "parity_evidence": [],
@@ -739,6 +750,15 @@
             "resource-discovery-api-cli": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
             "ui-resource-discovery-live": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724"
           }
+        },
+        {
+          "batch": "B10-resource-contract-v2",
+          "verification_run_ids": [
+            "resource-contract-matrix",
+            "resource-contract-core"
+          ],
+          "proves": "All ten navigation source roles in eight store/fetch/expand products, positive child controls and invalid combinations before HTTP; HTML/HTTP qualification retains source provenance.",
+          "limits": "Bounded own native/local acceptance. Existing remaining acceptance and reference parity remain separately tracked; CI/release/installation pending."
         }
       ],
       "parity_evidence": [],
@@ -870,6 +890,16 @@
             "resource-discovery-api-cli": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
             "ui-resource-discovery-live": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724"
           }
+        },
+        {
+          "batch": "B10-resource-contract-v2",
+          "verification_run_ids": [
+            "resource-contract-core",
+            "resource-contract-api-cli-mcp",
+            "resource-contract-ui"
+          ],
+          "proves": "Exact resource origins stay separate from navigation scope at each directed hop; unlisted third origin and navigation to resource-only origin denied with actual first-hop positive controls.",
+          "limits": "Bounded own native/local acceptance. Existing remaining acceptance and reference parity remain separately tracked; CI/release/installation pending."
         }
       ],
       "parity_evidence": [],
@@ -882,7 +912,7 @@
     {
       "id": "crawl.nofollow",
       "name": "Link directive policy",
-      "status": "partial",
+      "status": "implemented",
       "phase": "P1",
       "source_ids": [
         "config"
@@ -909,13 +939,21 @@
             "resource-discovery-api-cli": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
             "ui-resource-discovery-live": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724"
           }
+        },
+        {
+          "batch": "B10-resource-contract-v2",
+          "verification_run_ids": [
+            "resource-contract-core",
+            "resource-contract-api-cli-mcp",
+            "resource-contract-ui"
+          ],
+          "proves": "Explicit V2 internal/external qualifier switches cover nofollow/ugc/sponsored and actual document directives; original source occurrences and HTML/HTTP provenance remain visible, V1 compatibility remains separate. The exact stored native enabled/disabled traversal and source-preservation acceptance is fulfilled for the explicit V2 follow switches, confirmed by separate read-only acceptance review. This does not redefine global crawl_links:false or convert the preserved V1 behavior.",
+          "limits": "Own explicitly selected V2 follow-switch contract only. A separate four-directive matrix under global crawl_links:false remains an additional B10 control; existing V1 behavior is intentionally preserved. Exact-source CI, release and installation remain separate pending gates; full reference parity NOT_PROVEN."
         }
       ],
       "parity_evidence": [],
       "group": "crawl",
-      "remaining_acceptance": [
-        "Complete dedicated native enabled/disabled traversal fixtures for nofollow, ugc, sponsored and page nofollow; verify every source occurrence remains observable independently of target fetching."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -1213,7 +1251,17 @@
         "config"
       ],
       "acceptance_test": "Verify saved noindex/canonical/pagination policies influence expansion without suppressing observed evidence.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "batch": "B10-resource-contract-v2",
+          "verification_run_ids": [
+            "resource-contract-core",
+            "resource-contract-api-cli-mcp"
+          ],
+          "proves": "Actual meta and X-Robots nofollow share independent internal/external target overrides; document observations persist, redirects cannot borrow unrelated role scope.",
+          "limits": "Bounded own native/local acceptance. Existing remaining acceptance and reference parity remain separately tracked; CI/release/installation pending."
+        }
+      ],
       "parity_evidence": [],
       "group": "robots",
       "remaining_acceptance": [
@@ -2291,6 +2339,15 @@
             "resource-discovery-api-cli": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
             "ui-resource-discovery-live": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724"
           }
+        },
+        {
+          "batch": "B10-resource-contract-v2",
+          "verification_run_ids": [
+            "resource-contract-matrix",
+            "resource-contract-responses"
+          ],
+          "proves": "Independent declared resource occurrences, requested identity, actual response MIME and coalesced fetch behavior checked in both profiles; browser-selected currentSrc remains unproven.",
+          "limits": "Bounded own native/local acceptance. Existing remaining acceptance and reference parity remain separately tracked; CI/release/installation pending."
         }
       ],
       "parity_evidence": [],
@@ -2350,6 +2407,15 @@
             "resource-offline-batch"
           ],
           "proves": "Fetched image resources expose dimensions from encoded raster headers and bounded SVG absolute lengths, encoded captured bytes, completeness/parse status and units. Actual PNG and fractional SVG measurements persist through SQLite/JSON, tables and CSV; viewBox-only SVG, malformed/truncated input and legacy missing observations stay explicit unknown/error states. HTML width/height and each alt occurrence remain separate from file dimensions; this is header inspection, not full pixel decoding."
+        },
+        {
+          "batch": "B10-resource-contract-v2",
+          "verification_run_ids": [
+            "resource-contract-matrix",
+            "resource-contract-responses"
+          ],
+          "proves": "Real valid PNG responses provide independently asserted dimensions/entity hashes under all resource switch products; no font/audio/SWF execution claim.",
+          "limits": "Bounded own native/local acceptance. Existing remaining acceptance and reference parity remain separately tracked; CI/release/installation pending."
         }
       ],
       "parity_evidence": [],
@@ -2399,6 +2465,14 @@
             "resource-offline-batch"
           ],
           "proves": "Owned original PDFs prove Info title/author/date metadata, validated page-tree count separate from declared count, compressed native text, per-page source facts, text/count/hash and configurable object/page/decompression/text limits. Encrypted, malformed, partial, disabled and legitimate blank cases remain distinct; incomplete input has no invented counts. Actual UI/CSV/project export and SQLite/legacy round trips preserve resource facts without inventing HTML metadata."
+        },
+        {
+          "batch": "B10-resource-contract-v2",
+          "verification_run_ids": [
+            "resource-contract-responses"
+          ],
+          "proves": "Actual valid and password-encrypted authored PDFs distinguish stored/fetched/parser outcomes and completeness without treating MIME hints as successful parsing.",
+          "limits": "Bounded own native/local acceptance. Existing remaining acceptance and reference parity remain separately tracked; CI/release/installation pending."
         }
       ],
       "parity_evidence": [],
@@ -2426,6 +2500,14 @@
             "resource-offline-batch"
           ],
           "proves": "Direct/indirect HTTP URI link annotations resolve supported document URI bases, retain source document/page/rectangle/action evidence and enqueue eligible targets. Actual PDF-only local target discovery, per-page inspector facts, JSON/SQLite and dedicated CSV are verified; malformed bases/actions and annotation limits remain visible. Anchor text is not inferred from a nearby text stream."
+        },
+        {
+          "batch": "B10-resource-contract-v2",
+          "verification_run_ids": [
+            "resource-contract-responses"
+          ],
+          "proves": "Valid PDF annotations have separate fetch-disabled and fetch-enabled native request controls in both profiles, with preserved original PDF role witnesses.",
+          "limits": "Bounded own native/local acceptance. Existing remaining acceptance and reference parity remain separately tracked; CI/release/installation pending."
         }
       ],
       "parity_evidence": [],
@@ -5203,6 +5285,131 @@
       "scope": "Windows localhost8787 runtime, seven preserved jobs/eleven byte-identical JSON files and22 MCP tools; zero user-data fixture requests.",
       "limits": "Bounded B9 foundation only; full resource/type/navigation matrix and native+renderer remain open. Exact-source CI, immutable release and local installation now passed. Full vendor parity NOT_PROVEN.",
       "artifact_sha256": "dc879c38154a2e2595b85d37b852ef41f091957b6c0733b56173e05a6cf46cee"
+    },
+    {
+      "id": "resource-contract-core",
+      "artifact": "docs/verification/resource-contract-core.json",
+      "artifact_sha256": "249d997b251086b8cff7993aa73caaa9b61fbb93cf714a2dd042d9085ea281da",
+      "bytes": 26324,
+      "result": "FOCUSED_CORE_PASS_FULL_MATRIX_PENDING",
+      "tested_at": null,
+      "scope": "22 own native contract tests, exact V1 serialization/hash pins, scoped qualifiers and immutable role/selected/recovery behavior; focused Core proof.",
+      "limits": "Bounded own local debug evidence. Exact commit CI, immutable release and installed runtime are separate gates. Full reference parity NOT_PROVEN."
+    },
+    {
+      "id": "resource-contract-matrix",
+      "artifact": "docs/verification/resource-contract-matrix.json",
+      "artifact_sha256": "cd256f68b9176acab95dd760151f5038afbc2b0fc8a629434edac797e5ca4d2e",
+      "bytes": 3286658,
+      "result": "PASS",
+      "tested_at": null,
+      "scope": "108 exact frozen switch cells in two profiles, 216 actual executions and 40 invalid configurations rejected before all HTTP.",
+      "limits": "Bounded own local debug evidence. Exact commit CI, immutable release and installed runtime are separate gates. Full reference parity NOT_PROVEN."
+    },
+    {
+      "id": "resource-contract-responses",
+      "artifact": "docs/verification/resource-contract-responses.json",
+      "artifact_sha256": "ba0222e14d31b542664accce883838784e24d2e8bb2089c4b400afa8a92ec118",
+      "bytes": 754055,
+      "result": "PASS",
+      "tested_at": null,
+      "scope": "21 exact frozen response/MIME controls across both profiles plus PDF variants, 44 executions; immutable original transport and independent late report grants separately asserted.",
+      "limits": "Bounded own local debug evidence. Exact commit CI, immutable release and installed runtime are separate gates. Full reference parity NOT_PROVEN."
+    },
+    {
+      "id": "resource-contract-native-summary",
+      "artifact": "docs/verification/resource-contract-native-summary.json",
+      "artifact_sha256": "191cdb8d8c9a3eaafb4e59d851dbe4fae88094d425c29d18d414c71d200ff938",
+      "bytes": 5941,
+      "result": "PASS",
+      "tested_at": null,
+      "scope": "Hash-bound matrix/response commands, exit codes, preserved failure attempts and artifact registry; no release claim.",
+      "limits": "Bounded own local debug evidence. Exact commit CI, immutable release and installed runtime are separate gates. Full reference parity NOT_PROVEN."
+    },
+    {
+      "id": "resource-contract-api-cli-mcp",
+      "artifact": "docs/verification/resource-contract-e2e.json",
+      "artifact_sha256": "af8953fffb68b3aeba5805a3b144cb30f2a6adce417bc6ede667265e229b883d",
+      "bytes": 12579,
+      "result": "PASS",
+      "tested_at": "2026-10-12T22:09:59.821Z",
+      "source_debug_sha256": "a5881b7c8cffff68a1e47e8a22d9d02e6ca2f1c1c698cebc74036b06dbf92d0f",
+      "scope": "13 native API/CLI/official SDK groups with 19 saved jobs, exact V1/V2 profiles, role decisions, export equality, controlled tamper rejections, selected recrawl, restart and zero website requests for reads.",
+      "limits": "Bounded own local debug evidence. Exact commit CI, immutable release and installed runtime are separate gates. Full reference parity NOT_PROVEN."
+    },
+    {
+      "id": "resource-contract-ui",
+      "artifact": "docs/verification/resource-contract-ui.json",
+      "artifact_sha256": "6355ad7cb584301f312076288240800bb407ff71096a4c106237ecfebfc5ad4a",
+      "bytes": 22817,
+      "result": "PASS",
+      "tested_at": "2026-10-12T22:12:52.024Z",
+      "source_debug_sha256": "a5881b7c8cffff68a1e47e8a22d9d02e6ca2f1c1c698cebc74036b06dbf92d0f",
+      "scope": "10 actual browser-to-native checks on owned preview18789, exact completed jobs, denied CSV/JSON cells, three-origin redirect facts, readonly exports and 320px reachability.",
+      "limits": "Bounded own local debug evidence. Exact commit CI, immutable release and installed runtime are separate gates. Full reference parity NOT_PROVEN."
+    },
+    {
+      "id": "resource-contract-legacy-api",
+      "artifact": "docs/verification/resource-contract-legacy-api.json",
+      "artifact_sha256": "ca5a00a9a7267e0031af9f1e11928f4044ad4498715b3a45b202238ff779508a",
+      "bytes": 28274,
+      "result": "PASS",
+      "tested_at": "2026-10-12T22:10:05.399Z",
+      "source_debug_sha256": "a5881b7c8cffff68a1e47e8a22d9d02e6ca2f1c1c698cebc74036b06dbf92d0f",
+      "scope": "Nine previous native resource API/CLI groups replayed against B10 debug including more than500 own URL transports and immutable saved exports.",
+      "limits": "Bounded own local debug evidence. Exact commit CI, immutable release and installed runtime are separate gates. Full reference parity NOT_PROVEN."
+    },
+    {
+      "id": "resource-contract-legacy-capture",
+      "artifact": "docs/verification/resource-contract-legacy-capture.json",
+      "artifact_sha256": "6dc2f9ad554713284d3d90268370757386665fdd7ee494d6c30921b2f7b3a634",
+      "bytes": 1509,
+      "result": "PASS",
+      "tested_at": "2026-10-12T22:09:53.555Z",
+      "source_debug_sha256": "a5881b7c8cffff68a1e47e8a22d9d02e6ca2f1c1c698cebc74036b06dbf92d0f",
+      "scope": "Eight previous capture/recovery/API/CLI groups replayed against B10 debug; owned actual Chromium remains a separate gate.",
+      "limits": "Bounded own local debug evidence. Exact commit CI, immutable release and installed runtime are separate gates. Full reference parity NOT_PROVEN."
+    },
+    {
+      "id": "resource-contract-checkpoint",
+      "artifact": "docs/verification/resource-contract-checkpoint.json",
+      "artifact_sha256": "d74610ca230d1bb69258a69a8bb199e84f77455594e6c4b7389992e51622b1cf",
+      "result": "LOCAL_BOUNDED_ACCEPTANCE_PASS",
+      "tested_at": "2026-10-12T22:26:00.203Z",
+      "source_debug_sha256": "a5881b7c8cffff68a1e47e8a22d9d02e6ca2f1c1c698cebc74036b06dbf92d0f",
+      "scope": "Own native loopback resources, exact switch/MIME/qualification/role provenance and persisted API/CLI/SDK/browser acceptance. Original V1 compatibility remains a separate profile.",
+      "limits": "Supplemental encoding/interruption/budget/browser resource gates and a trusted owned HTTPS positive fixture remain separately open. The installed user runtime remains the separately proven B9 release; this debug proof is no release or installation claim. Robots and sitemap protocol transfers do not yet have resource role grants. Immutable transport permissions remain separate from later independent report witnesses. No full vendor/filter/workflow parity claim."
+    },
+    {
+      "id": "resource-contract-mcp-regression",
+      "artifact": "docs/verification/resource-contract-mcp-regression.json",
+      "artifact_sha256": "dae5712379acc5c5efd124c0020bff4590ea1692479b4c5e49d6f396e2d2d822",
+      "bytes": 1054,
+      "result": "PASS",
+      "tested_at": "2026-10-12T22:15:54.934Z",
+      "source_debug_sha256": "a5881b7c8cffff68a1e47e8a22d9d02e6ca2f1c1c698cebc74036b06dbf92d0f",
+      "scope": "All22 existing MCP tools replayed using the official SDK across both stdio and Streamable HTTP, including native transport and saved-source cursors.",
+      "limits": "Bounded own local debug evidence. Exact commit CI, immutable release and installed runtime are separate gates. Full reference parity NOT_PROVEN."
+    },
+    {
+      "id": "resource-contract-redirect-summary",
+      "artifact": "docs/verification/resource-contract-redirect-summary.json",
+      "artifact_sha256": "3b71accb7e3e7c595bb879f1d13745bc8c730c20850d685e1d384a3a353949af",
+      "bytes": 8881,
+      "result": "PASS",
+      "tested_at": null,
+      "scope": "Exact frozen88 plan IDs in both profiles and12 separate boundary IDs, native200 PASS, source/log/failed-attempt hashes and explicit TLS proof boundary.",
+      "limits": "Bounded own local debug evidence. Exact commit CI, immutable release and installed runtime are separate gates. Full reference parity NOT_PROVEN."
+    },
+    {
+      "id": "resource-contract-redirects",
+      "artifact": "docs/verification/resource-contract-redirects.json",
+      "artifact_sha256": "f672cc2846919ef768ee21374ea19366d3f35a31d834b7fa268477a1c0d5a3d7",
+      "bytes": 3956710,
+      "result": "PASS",
+      "tested_at": null,
+      "scope": "200 directed executions with exact own HTTP/Robots/credential-origin controls, immutable per-hop roles, actual MIME/hash/parser facts, preserved original source identity and explicitly separate legacy expectations.",
+      "limits": "Bounded own local debug evidence. Exact commit CI, immutable release and installed runtime are separate gates. Full reference parity NOT_PROVEN."
     }
   ],
   "reference_workflows": [
@@ -5324,15 +5531,15 @@
   ],
   "status_summary": {
     "overall": {
-      "implemented": 25,
-      "partial": 72,
+      "implemented": 26,
+      "partial": 71,
       "planned": 47,
       "total": 144
     },
     "phases": {
       "P1": {
-        "implemented": 11,
-        "partial": 28,
+        "implemented": 12,
+        "partial": 27,
         "planned": 6,
         "total": 45
       },
@@ -5363,8 +5570,8 @@
         "total": 7
       },
       "crawl": {
-        "implemented": 2,
-        "partial": 10,
+        "implemented": 3,
+        "partial": 9,
         "planned": 2,
         "total": 14
       },
@@ -5914,11 +6121,11 @@
     },
     {
       "id": "batch-b10-resource-matrix",
-      "status": "PLANNED",
-      "stage": "DESIGN_ONLY",
+      "status": "IN_PROGRESS",
+      "stage": "NATIVE_PLAN_AND_API_UI_PASS_CI_RELEASE_PENDING",
       "priority": 1,
-      "title_de": "Nächste Arbeit – B10: vollständige Ressourcenmatrix und gerichtete Sonderfälle",
-      "summary_de": "Den B9-Vertrag zuerst um gerichtete Redirect-/Rollen- und HTTP-Link-Direktivenkontrollen absichern, danach 28 Ressourcen- und 80 Navigations-Schalterkombinationen prüfen. 60 Navigationskombinationen sind gültig, 20 müssen vor HTTP scheitern. Der Plan ist noch kein Laufzeitbeweis; aktuelle Vertragslücken und reine Testlücken bleiben getrennt. GitHub: [B10-Issue #17](https://github.com/lia-xim/open-seo-spider/issues/17).",
+      "title_de": "Aktuelle Arbeit – B10: vollständige Ressourcenmatrix und gerichtete Sonderfälle",
+      "summary_de": "Der ausdrücklich wählbare V2-Vertrag ist in Rust, API/CLI/MCP und Oberfläche implementiert. 108 Schalterfälle bestehen in beiden Profilen (216 Ausführungen), ebenso 44 Antwortkontrollen, 200 gerichtete Redirect-/Boundary-Ausführungen und 13 echte API-/CLI-/MCP-Gruppen mit 19 gespeicherten Jobs. Zehn echte UI-Prüfungen bestehen; der bisherige V1-Vertrag bleibt kompatibel. Weitere Encoding-/Browser-/Budget-Kontrollen, exakte Source-CI, Release und Installation bleiben offen. GitHub: [B10-Issue #17](https://github.com/lia-xim/open-seo-spider/issues/17).",
       "feature_ids": [
         "crawl.resources",
         "crawl.relationships",
@@ -5931,29 +6138,62 @@
         "images.pdf",
         "images.pdf_links"
       ],
-      "completed_acceptance_de": [],
+      "completed_acceptance_de": [
+        "Ausdrückliche V2-Auswahl mit getrennten internen/externen nofollow-/ugc-/sponsored-/Dokument-Schaltern, unveränderlichen Rollen und Scope-Witnesses implementiert; 22 fokussierte Contract-Tests und historische B9-JSON-/Hash-Pins bestehen.",
+        "Exakte 108 Schalterfälle in V1 und V2: 216 Ausführungen bestehen, darunter 40 ungültige Konfigurationen vor jedem HTTP-Request. Beobachtung, Reportaufnahme, Fetch, Expansion, MIME und Grants sind getrennt geprüft.",
+        "21 eingefrorene MIME-/Antwortkontrollen in beiden Profilen plus PDF-Annotationsvarianten: 44 tatsächliche Ausführungen bestehen. Ursprüngliche Transport-Permissions und spätere unabhängige Report-Witnesses bleiben getrennt.",
+        "13 echte API-/CLI-/MCP-Gruppen mit 19 eigenen Jobs prüfen Profile, Rollen, Exporte, manipulierte SQLite-Zellen, ausgewählten Recrawl und Kaltstart. Read-only-Prüfungen verursachen null Website-Anfragen; ein fremder Health-Server wird vor allen HTTP-Aufrufen abgelehnt.",
+        "387 Standard-Rust-Tests, Formatprüfung und Workspace-Alltargets-Clippy bestehen am lokalen Debug a5881b7c; vier explizite Chromium-Live-Gates bleiben getrennt.",
+        "Zehn echte Browser-zu-Rust-Prüfungen bestehen am isolierten Debug: erfolgreiche V1/V2-Jobs, keine automatische Umstellung, exakte gesperrte CSV-/JSON-Werte, unveränderliche Rollen, drei Origins, Read-only-Exporte und 320px-Breite. Gemockte zehn UI-Fälle bleiben separate Belege.",
+        "Eigenes Kriterium crawl.nofollow erfüllt: nofollow/ugc/sponsored und Meta-/X-Robots-Dokument-Nofollow sind mit Follow aus/an, tatsächlichem GET0/1 und erhaltenen Quellvorkommen geprüft. Dieses Häkchen gilt für die ausdrücklich gewählten V2-Follow-Schalter; globale crawl_links:false-Kontrollen bleiben zusätzlich offen.",
+        "Alle 88 eingefrorenen Redirect-IDs in beiden Profilen plus zwölf zusätzliche Boundary-IDs: 200 tatsächliche Ausführungen bestehen. Originale Rollen, jedes Location-/Status-/Scope-/Policy-/Robots-Faktum, Credential-Herkunft und erlaubte/verbotene Zielrequests sind separat geprüft; der zusätzliche Rust-Test und Core-Clippy bestehen."
+      ],
       "pending_acceptance_de": [
-        "Redirect-Rollen: exakte externe Ressourcen-Origins je Zwischenstufe dürfen keine allgemeine Navigationserlaubnis erzeugen; Request-/Credential-/Robots-Kontrollen und Policy/check-only gemeinsam prüfen.",
-        "HTML- und HTTP-Link-Direktiven: nofollow, ugc, sponsored und dokumentweites nofollow mit gleichem positiven/negativen Requestlog vergleichen; Abweichungen im Vertrag explizit beheben oder kennzeichnen.",
-        "108 geplante Schalterfälle: 28 Ressourcenfälle plus 80 Navigationsfälle; Beobachtung, gespeicherte Reportzeilen, HTTP-Abruf, Expansion, MIME und Grants getrennt abnehmen.",
-        "CSS-Encoding-Herkunft, unabhängige parallele Rollen, ausgewählter Recrawl, Abbruchphasen und jede Budgetgrenze exakt/plus-eins mit nativen Fixtures ergänzen."
+        "CSS-Encoding-Herkunft, unabhängige parallele Rollen, alle ausgewählten Ressourcentypen, Abbruchphasen und jede Budgetgrenze exakt/plus-eins mit zusätzlichen nativen Fixtures ergänzen.",
+        "Exakte Source-CI mit Windows/Linux/Chromium/Container, unveränderlicher Release und datenbewahrende lokale Installation gesondert nachweisen.",
+        "Zusätzliche Vier-Direktiven-Kontrollen unter globalem crawl_links:false als eigenen Master-Schalter-Vertrag prüfen; die belegten V2-Follow-Schalter nicht damit gleichsetzen.",
+        "Einen vertrauenswürdigen eigenen HTTPS-Positivfall ergänzen; die belegte Scheme-Mismatch-Sperre gegenüber einem HTTP-Ziel ersetzt keine tatsächliche TLS-Verbindung."
       ],
       "documentation": [
         "docs/parity/resource-matrix-plan.md",
         "docs/parity/resource-matrix-plan.json",
         "docs/resource-discovery.md",
+        "docs/resource-contract-v2.md",
         "docs/ROADMAP.md"
       ],
       "gates": {
-        "contract_regressions": "PENDING",
-        "resource_products_28": "PENDING",
-        "navigation_products_80": "PENDING",
-        "native_request_logs": "PENDING",
-        "full_feature_acceptance": "PARTIAL"
+        "contract_regressions": "PASS_V2_WITH_PRESERVED_V1_COMPATIBILITY",
+        "resource_products_28": "PASS_BOTH_PROFILES",
+        "navigation_products_80": "PASS_BOTH_PROFILES",
+        "response_controls_21": "PASS_44_EXECUTIONS",
+        "native_request_logs": "PASS_BOUNDED_SLICE",
+        "api_cli_mcp": "PASS_13_GROUPS",
+        "redirect_controls_88": "PASS_176_PROFILE_EXECUTIONS",
+        "workspace_tests_clippy": "PASS",
+        "exact_commit_ci": "PENDING",
+        "immutable_release": "PENDING",
+        "installed_runtime": "B9_UNCHANGED",
+        "full_feature_acceptance": "PARTIAL",
+        "actual_browser_ui": "PASS_10_NATIVE_CHECKS",
+        "ui_mock": "PASS_10_SEPARATE_FIXTURES",
+        "additional_redirect_boundaries": "PASS_24_PROFILE_EXECUTIONS"
       },
-      "proof_run_ids": [],
+      "proof_run_ids": [
+        "resource-contract-core",
+        "resource-contract-matrix",
+        "resource-contract-responses",
+        "resource-contract-native-summary",
+        "resource-contract-api-cli-mcp",
+        "resource-contract-ui",
+        "resource-contract-legacy-api",
+        "resource-contract-legacy-capture",
+        "resource-contract-mcp-regression",
+        "resource-contract-redirect-summary",
+        "resource-contract-redirects",
+        "resource-contract-checkpoint"
+      ],
       "reference_parity": "NOT_PROVEN",
-      "policy": "Actionable plan only, bound to B9 source f107. No production edits or B10 runtime gates have passed.",
+      "policy": "B10 local V2 implementation and bounded native/API/CLI/MCP acceptance passed against frozen B9 baseline f107. Four historical V1 controls remain observed contract gaps, not a V2 fix or parity proof. Exact-source CI, release and installed-runtime gates remain pending. The frozen design artifact intentionally retains its historical zero-execution status; actual execution proofs are separate. Robots and sitemap protocol transfers do not yet carry resource role grants and require separate scope acceptance. Full vendor/filter/workflow parity NOT_PROVEN.",
       "tracking_issue": "https://github.com/lia-xim/open-seo-spider/issues/17",
       "source_baseline_commit": "f107ce7cc5e610494f30df8a3a1d46d98d7870e4",
       "design_plan": {
@@ -5963,7 +6203,45 @@
         "matrix_cells": 108,
         "executed_b10_cases": 0,
         "contract_questions": 3
-      }
+      },
+      "last_stage_evidence_at": "2026-10-12T22:26:00.203Z"
+    },
+    {
+      "id": "batch-b11-saved-comparison",
+      "status": "PLANNED",
+      "stage": "DESIGN_ONLY",
+      "priority": 2,
+      "title_de": "Nächste Funktion – B11: gespeicherte Crawls vollständig vergleichen",
+      "summary_de": "Den bisherigen Vergleich um konkrete Vorher/Nachher-Werte, Link-/JSON-LD-/Textquellen, ausdrückliches URL-Mapping und kombinierte Exporte erweitern. Der Vergleich nutzt ausschließlich gespeicherte Beobachtungen und benötigt keine neue Website-Abfrage. Derzeit Planung, noch keine Implementierungs- oder Laufzeitabnahme. GitHub: [B11-Issue #18](https://github.com/lia-xim/open-seo-spider/issues/18).",
+      "feature_ids": [
+        "modes.compare",
+        "storage.compare_changes",
+        "storage.compare_mapping",
+        "storage.compare_export"
+      ],
+      "completed_acceptance_de": [],
+      "pending_acceptance_de": [
+        "Versionierten Vergleich mit exakten URL-Schlüsseln, added/removed/changed/unchanged und konkreten Vorher/Nachher-Feldwerten implementieren; bisherigen Vertrag kompatibel erhalten.",
+        "Linkvorkommen, JSON-LD und gespeicherte vollständige/partielle/unbekannte Textquellen samt Herkunft und Aktualität getrennt vergleichen.",
+        "Ausdrückliches Staging/Production-Mapping mit unveränderten ursprünglichen URLs und Kollisionserkennung vor dem Join abnehmen.",
+        "Beide vollständigen Report-Snapshots mit Hash/Generation/Herkunft binden; gemischt alte ausgewählte Recrawls und aktive Checkpoints sichtbar begrenzen.",
+        "Gemeinsamen JSON-/CSV-Export, API/CLI/MCP und lokale Vergleichsoberfläche mit identischen Ergebnissen prüfen; nach Abschalten der Fixture und Kaltstart null Website-Anfragen belegen."
+      ],
+      "documentation": [
+        "docs/FEATURE_TODO.md",
+        "docs/ROADMAP.md"
+      ],
+      "gates": {
+        "core_contract": "PENDING",
+        "api_cli_mcp": "PENDING",
+        "actual_browser_ui": "PENDING",
+        "snapshot_and_mapping_integrity": "PENDING",
+        "offline_restart_zero_requests": "PENDING"
+      },
+      "proof_run_ids": [],
+      "reference_parity": "NOT_PROVEN",
+      "tracking_issue": "https://github.com/lia-xim/open-seo-spider/issues/18",
+      "policy": "Planned additional functionality, no B11 implementation or runtime claims. Existing feature totals and statuses are unchanged. Full HTML/DOM archives, semantic similarity, automatic recurring comparison and vendor parity are separate requirements."
     }
   ]
 }

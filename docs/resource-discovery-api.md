@@ -1,12 +1,14 @@
 # Ressourcen-Protokoll: API, CLI und MCP
 
-Stand B9: Die begrenzte native Integration, API/CLI, beide MCP-Transporte und tatsächliche UI sind [lokal geprüft](verification/resource-discovery-batch.json). Exakte Commit-CI, unveränderlicher Release und Installation werden separat nachgewiesen. Der installierte B8-Release erhält dadurch keine nachträgliche B9-Zusage. Die vollständige Typ-/Navigation-/Encoding-Matrix bleibt offen. [Feature-To-do](FEATURE_TODO.md), [Quellvertrag](resource-discovery.md), [UI-Vertrag](resource-discovery-ui.md).
+Stand B9: Die begrenzte native Integration, API/CLI, beide MCP-Transporte und tatsächliche UI sind [lokal geprüft](verification/resource-discovery-batch.json). Exakte Commit-CI, unveränderlicher Release und B9-Installation sind mit getrennten Artefakten belegt. Der [V2-Vertrag](resource-contract-v2.md) ist laufende B10-Arbeit mit eigenen noch ausstehenden nativen, Release- und Installationsgates. Die vollständige Typ-/Navigation-/Encoding-Matrix bleibt offen. [Feature-To-do](FEATURE_TODO.md), [Quellvertrag](resource-discovery.md), [UI-Vertrag](resource-discovery-ui.md).
 
 ## Native Quellvorkommen
 
 `GET /api/crawls/{id}/resources?limit=200&after_sequence=123`
 
 Das Ergebnis enthält `enabled`, `engine`, `config_sha256`, `crawl_config_sha256`, `crawl_generation`, `snapshot`, `ledger_available`, `checkpoint`, `observations`, `next_after_sequence`, `has_more`, `snapshot_scope`, `website_requests:0` und `entity_bodies_included:false`. `limit` liegt zwischen1 und1000. Der optionale nichtnegative Cursor darf die SQLite-Integergrenze nicht überschreiten. Unbekannte Queryfelder werden abgelehnt.
+
+Die B10-Erweiterung nennt zusätzlich `configured_semantic_contract` und `semantic_contract_binding`. Die Bindung lautet erst nach erfolgreicher Prüfung von Ledger, vollständiger Konfiguration und Generation `validated_full_config_and_generation`. Ein importiertes oder noch initialisierendes Projekt kann nur `declared_config_only` erhalten. Ein ausdrücklich ausgewählter V2-Vertrag ergänzt `snapshot.resource_contract_engine` aus derselben SQLite-Transaktion, optionale ursprüngliche Grant-Rollen, `decision.qualification` und tatsächlich beobachtete Redirect-Entscheidungen. Fehlende historische Felder bleiben unbekannt; sie werden nicht aus einer Editor-Konfiguration rekonstruiert. Voll-JSON erhält dieselbe Snapshot-Engine; HTTP-JSON-/CSV-Exporte erhalten bei V2 zusätzlich `x-resource-contract-engine`. V1-Felder und V1-CSV-Spalten werden nicht umgestellt.
 
 Ein Vorkommen bewahrt Reihenfolge, Generation, current/inherited-Basis, Auswertungsrevision sowie Originalwert, dekodierten Wert, Auflösung, Quelle, DOM-/Byteposition, Klassifizierung, deklarierte MIME-Hinweise und Fehler. `source_unit_revision` und `source_complete` unterscheiden unabhängige HTML-/CSS-Quelleinheiten. Eine Entscheidung enthält ihren Grund und gegebenenfalls einen unveränderlichen Grant. Zusammengeführte Zielabrufe verändern frühere Grants nicht.
 

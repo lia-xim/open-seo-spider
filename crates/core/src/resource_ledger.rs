@@ -237,6 +237,7 @@ pub(crate) fn save_transport(
     generation: u64,
     config: &crate::CrawlConfig,
     limits: &ResourceDiscoveryLimits,
+    retained_response: bool,
 ) -> Result<()> {
     let permission = page
         .resource_permission
@@ -247,7 +248,7 @@ pub(crate) fn save_transport(
         engine: RESOURCE_DISCOVERY_ENGINE.into(),
         requested_url: page.url.clone(),
         observed_generation: generation,
-        retained_response: permission.store,
+        retained_response,
         projection,
     };
     let data = serde_json::to_string(&observation)?;
@@ -289,6 +290,7 @@ pub(crate) fn mark_expanded(
     conn: &Connection,
     url: &str,
     permission: &ResourceTaskPermission,
+    retained: bool,
 ) -> Result<()> {
     let mut state = read::<ResourceLedgerSummary>(conn, "resource_ledger")?
         .context("Resource ledger missing")?;
@@ -315,7 +317,7 @@ pub(crate) fn mark_expanded(
         "UPDATE resource_expansions SET processed_revision=?2,pending=?3 WHERE url=?1",
         params![url, permission.revision()?, remains],
     )?;
-    if permission.store {
+    if retained {
         let data: String = conn.query_row(
             "SELECT data FROM resource_transports WHERE url=?1",
             [url],
@@ -536,6 +538,19 @@ pub(crate) fn verify(conn: &Connection, cfg: &crate::CrawlConfig) -> Result<()> 
     })? {
         let (sequence, id, evaluation, data) = data?;
         let row: StoredResourceOccurrence = serde_json::from_str(&data)?;
+        ensure!(
+            row.decision
+                .qualification
+                .as_ref()
+                .map(|fact| fact.engine.as_str())
+                == config
+                    .contract
+                    .as_ref()
+                    .and_then(|_| (row.occurrence.reference_kind
+                        != crate::ResourceReferenceKind::InitialInput)
+                        .then_some(crate::RESOURCE_CONTRACT_ENGINE)),
+            "Resource qualification profile differs from saved configuration"
+        );
         count += 1;
         ensure!(
             row.sequence == count as u64
@@ -551,6 +566,14 @@ pub(crate) fn verify(conn: &Connection, cfg: &crate::CrawlConfig) -> Result<()> 
             .context("Resource ledger size overflow")?;
         hash = digest(format!("{hash}:{}:{data}", data.len()));
         if let Some(grant) = row.decision.grant {
+            ensure!(
+                grant.reference_kind
+                    == config
+                        .contract
+                        .as_ref()
+                        .map(|_| row.occurrence.reference_kind),
+                "Resource grant original role/profile differs from occurrence"
+            );
             let saved: String = conn.query_row(
                 "SELECT data FROM resource_grants WHERE occurrence_id=?1",
                 [&grant.occurrence_id],
@@ -617,6 +640,14 @@ pub(crate) fn verify(conn: &Connection, cfg: &crate::CrawlConfig) -> Result<()> 
         let (url, data, inherited) = value?;
         let saved: SavedTask = serde_json::from_str(&data)?;
         saved.permission.validate()?;
+        ensure!(
+            saved
+                .permission
+                .authorizing_grants
+                .iter()
+                .all(|grant| grant.reference_kind.is_some() == config.contract.is_some()),
+            "Resource task original role/profile changed"
+        );
         ensure!(
             saved.permission.fetch_url == url
                 && saved.permission.config_sha256 == state.config_sha256
@@ -700,9 +731,24 @@ pub(crate) fn verify(conn: &Connection, cfg: &crate::CrawlConfig) -> Result<()> 
         );
         ensure!(
             facts.engine == RESOURCE_DISCOVERY_ENGINE
+                && facts.contract_engine.as_deref()
+                    == config
+                        .contract
+                        .as_ref()
+                        .map(|contract| contract.engine.as_str())
+                && (config.contract.is_some() || facts.redirect_decisions.is_empty())
                 && facts.observed_generation == observation.observed_generation
                 && !facts.entity_body_retained,
             "Resource response facts generation/retention changed"
+        );
+        ensure!(
+            facts
+                .selected_materialization_reason
+                .as_deref()
+                .is_none_or(|reason| reason == "selected_scope_limited_projection"
+                    && config.contract.is_some()
+                    && matches!(&saved_plan, Some(crate::RunPlan::SelectedRecrawl(_)))),
+            "Unknown or unbound selected projection materialization"
         );
         ensure!(
             observation.projection.screenshot_base64.is_none()
@@ -740,7 +786,9 @@ pub struct ResourceTaskPermission {
     pub can_expand_resources: bool,
     pub can_expand_css: bool,
     pub can_expand_pdf: bool,
-    /// At most six immutable grants suffice to prove each effective permission.
+    /// Legacy: at most six capability witnesses. V2: navigation/initial has
+    /// five capability bits plus its first check-only grant (six), resource has
+    /// store/CSS/PDF bits plus its first check-only grant (four): at most ten.
     /// Coalescing adds independent grants; it never mutates a check-only grant.
     pub authorizing_grants: Vec<ResourceGrant>,
 }
@@ -770,7 +818,30 @@ impl ResourceTaskPermission {
             || (grant.can_expand_navigation && !self.can_expand_navigation)
             || (grant.can_expand_resources && !self.can_expand_resources)
             || (grant.can_expand_css && !self.can_expand_css)
-            || (grant.can_expand_pdf && !self.can_expand_pdf);
+            || (grant.can_expand_pdf && !self.can_expand_pdf)
+            || grant.reference_kind.is_some_and(|kind| {
+                let navigation =
+                    kind == crate::ResourceReferenceKind::InitialInput || kind.is_navigation();
+                let class = self
+                    .authorizing_grants
+                    .iter()
+                    .filter(|saved| {
+                        saved.reference_kind.is_some_and(|saved| {
+                            (saved == crate::ResourceReferenceKind::InitialInput
+                                || saved.is_navigation())
+                                == navigation
+                        })
+                    })
+                    .collect::<Vec<_>>();
+                class.is_empty()
+                    || (grant.store && !class.iter().any(|saved| saved.store))
+                    || (grant.can_expand_navigation
+                        && !class.iter().any(|saved| saved.can_expand_navigation))
+                    || (grant.can_expand_resources
+                        && !class.iter().any(|saved| saved.can_expand_resources))
+                    || (grant.can_expand_css && !class.iter().any(|saved| saved.can_expand_css))
+                    || (grant.can_expand_pdf && !class.iter().any(|saved| saved.can_expand_pdf))
+            });
         if changed {
             self.store |= grant.store;
             self.can_expand_navigation |= grant.can_expand_navigation;
@@ -783,10 +854,18 @@ impl ResourceTaskPermission {
         Ok(changed)
     }
     pub fn validate(&self) -> Result<()> {
+        let strict = self
+            .authorizing_grants
+            .iter()
+            .any(|grant| grant.reference_kind.is_some());
         ensure!(
             self.engine == RESOURCE_DISCOVERY_ENGINE
                 && !self.authorizing_grants.is_empty()
-                && self.authorizing_grants.len() <= 6,
+                && self
+                    .authorizing_grants
+                    .iter()
+                    .all(|grant| grant.reference_kind.is_some() == strict)
+                && self.authorizing_grants.len() <= if strict { 10 } else { 6 },
             "Unknown or invalid resource task permission"
         );
         let mut store = false;
@@ -795,6 +874,23 @@ impl ResourceTaskPermission {
         let mut css = false;
         let mut pdf = false;
         for grant in &self.authorizing_grants {
+            if let Some(kind) = grant.reference_kind {
+                let nav =
+                    kind == crate::ResourceReferenceKind::InitialInput || kind.is_navigation();
+                ensure!(
+                    (!grant.can_expand_navigation && !grant.can_expand_resources || nav)
+                        && (!grant.can_expand_css
+                            || matches!(
+                                kind,
+                                crate::ResourceReferenceKind::InitialInput
+                                    | crate::ResourceReferenceKind::Css
+                            ))
+                        && (!grant.can_expand_pdf
+                            || nav
+                            || kind == crate::ResourceReferenceKind::Pdf),
+                    "Resource role carries capabilities belonging to a different family"
+                );
+            }
             ensure!(
                 grant.engine == self.engine
                     && grant.config_sha256 == self.config_sha256
@@ -895,6 +991,14 @@ pub struct ResourceTransportObservation {
 #[serde(deny_unknown_fields)]
 pub struct ResourceResponseFacts {
     pub engine: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub contract_engine: Option<String>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub redirect_decisions: Vec<crate::ResourceRedirectDecision>,
+    /// Selected attempts remain visible as bounded metadata when no surviving
+    /// grant permits retaining their complete extracted response payload.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub selected_materialization_reason: Option<String>,
     pub observed_generation: u64,
     pub retained_response: bool,
     pub entity_body_retained: bool,
@@ -923,14 +1027,24 @@ pub struct ResourceTransportPage {
 pub struct ResourceReadSnapshot {
     pub crawl_config_sha256: String,
     pub generation: Option<u64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub resource_contract_engine: Option<String>,
 }
 fn read_snapshot(conn: &Connection) -> Result<Option<ResourceReadSnapshot>> {
     read::<crate::CrawlConfig>(conn, "config")?
         .map(|config| {
+            if let Some(resource) = &config.resource_discovery {
+                resource.validate()?;
+            }
             Ok(ResourceReadSnapshot {
                 crawl_config_sha256: digest(serde_json::to_vec(&config)?),
                 generation: read::<crate::CrawlRunState>(conn, "run_state")?
                     .map(|run| run.generation),
+                resource_contract_engine: config
+                    .resource_discovery
+                    .as_ref()
+                    .and_then(|resource| resource.contract.as_ref())
+                    .map(|contract| contract.engine.clone()),
             })
         })
         .transpose()
@@ -945,6 +1059,7 @@ mod tests {
             config_sha256: "cfg".into(),
             occurrence_id: id.into(),
             fetch_url: "https://example.test/image".into(),
+            reference_kind: None,
             store: false,
             can_expand_navigation: nav,
             can_expand_resources: nav,
@@ -953,6 +1068,53 @@ mod tests {
             policy_sha256: None,
             policy_occurrence_id: None,
         }
+    }
+    #[test]
+    fn strict_scope_witnesses_have_a_bounded_ten_grant_union_without_role_upgrades() {
+        use crate::ResourceReferenceKind as K;
+        let mut first = grant("nav-baseline", false);
+        first.reference_kind = Some(K::InitialInput);
+        let mut task = ResourceTaskPermission::new(first);
+        for (id, kind, bit) in [
+            ("nav-store", K::InternalAnchor, 0),
+            ("nav-nav", K::InternalAnchor, 1),
+            ("nav-resources", K::InternalAnchor, 2),
+            ("nav-css", K::InitialInput, 3),
+            ("nav-pdf", K::InternalAnchor, 4),
+            ("resource-baseline", K::Image, 5),
+            ("resource-store", K::JavaScript, 0),
+            ("resource-css", K::Css, 3),
+            ("resource-pdf", K::Pdf, 4),
+        ] {
+            let mut incoming = grant(id, false);
+            incoming.reference_kind = Some(kind);
+            match bit {
+                0 => incoming.store = true,
+                1 => incoming.can_expand_navigation = true,
+                2 => incoming.can_expand_resources = true,
+                3 => incoming.can_expand_css = true,
+                4 => incoming.can_expand_pdf = true,
+                _ => {}
+            }
+            assert!(
+                task.merge(&incoming).unwrap(),
+                "{id} must retain a new scope/capability witness"
+            );
+        }
+        assert_eq!(task.authorizing_grants.len(), 10);
+        task.validate().unwrap();
+        let mut redundant = grant("redundant", false);
+        redundant.reference_kind = Some(K::JavaScript);
+        redundant.store = true;
+        assert!(!task.merge(&redundant).unwrap());
+        assert_eq!(task.authorizing_grants.len(), 10);
+        let mut upgraded = ResourceTaskPermission::new(redundant);
+        upgraded.authorizing_grants[0].can_expand_navigation = true;
+        upgraded.can_expand_navigation = true;
+        assert!(
+            upgraded.validate().is_err(),
+            "Resource role must never acquire navigation capabilities"
+        );
     }
     #[test]
     fn independent_grants_never_mutate_check_only_and_cannot_forge_union() {

@@ -693,6 +693,10 @@ impl CrawlStore {
                 config_sha256: config.sha256()?,
                 occurrence_id: occurrence.occurrence_id.clone(),
                 fetch_url: url.clone(),
+                reference_kind: config
+                    .contract
+                    .as_ref()
+                    .map(|_| crate::ResourceReferenceKind::InitialInput),
                 store: true,
                 can_expand_navigation: traverse,
                 can_expand_resources: traverse,
@@ -711,6 +715,7 @@ impl CrawlStore {
                     reason: "initial_admitted".into(),
                     grant: Some(grant),
                     coalesced_into: None,
+                    qualification: None,
                 },
             });
         }
@@ -1256,7 +1261,23 @@ impl CrawlStore {
                     bail!("Resource response permission was not saved");
                 }
             }
-            retain = permission.store;
+            retain = if config
+                .resource_discovery
+                .as_ref()
+                .is_some_and(|config| config.contract.is_some())
+            {
+                let facts = page
+                    .resource_response
+                    .as_ref()
+                    .context("Strict resource response facts missing")?;
+                facts.retained_response
+                    || (metadata_text(&transaction, "operation_kind")?.as_deref()
+                        == Some("selected_recrawl")
+                        && facts.selected_materialization_reason.as_deref()
+                            == Some("selected_scope_limited_projection"))
+            } else {
+                permission.store
+            };
             let batch = page
                 .resource_source
                 .as_ref()
@@ -1269,7 +1290,7 @@ impl CrawlStore {
                 (!expansion).then_some((batch.source_revision.as_str(), batch.complete)),
             )?;
             if expansion {
-                crate::resource_ledger::mark_expanded(&transaction, &page.url, permission)?;
+                crate::resource_ledger::mark_expanded(&transaction, &page.url, permission, retain)?;
             } else {
                 crate::resource_ledger::save_transport(
                     &transaction,
@@ -1277,6 +1298,7 @@ impl CrawlStore {
                     generation,
                     &config,
                     limits,
+                    retain,
                 )?;
             }
             for url in urls {

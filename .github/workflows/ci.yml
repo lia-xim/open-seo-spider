@@ -43,6 +43,7 @@ jobs:
       - run: npm ci --ignore-scripts
         working-directory: scripts
       - run: node scripts/mcp-e2e.mjs
+      - run: node scripts/resource-contract-e2e.mjs
   renderer:
     runs-on: ubuntu-latest
     steps:
@@ -82,6 +83,7 @@ jobs:
       - run: node web/verification/ui-content-smoke.cjs
       - run: node web/verification/ui-resource-discovery-smoke.cjs
       - run: node web/verification/ui-resource-ledger-smoke.cjs
+      - run: node web/verification/ui-resource-contract-smoke.cjs
       - run: node scripts/update-feature-todo.mjs --check
       - run: node --test web/verification/serp-state-race.test.cjs
       - run: node --test web/verification/robots-input-state.test.cjs
@@ -94,8 +96,10 @@ jobs:
           renderer_pid=$!
           target/debug/open-seo-spider serve --listen 127.0.0.1:8787 --data-dir "$RUNNER_TEMP/spider-data" > "$RUNNER_TEMP/spider.log" 2>&1 &
           spider_pid=$!
-          trap 'kill "$spider_pid" "$renderer_pid" 2>/dev/null || true' EXIT
-          node --input-type=module -e 'const urls=["http://127.0.0.1:8787/healthz","http://127.0.0.1:8790/health"];for(const url of urls){let ready=false;for(let i=0;i<80;i++){try{if((await fetch(url)).ok){ready=true;break}}catch{}await new Promise(r=>setTimeout(r,250))}if(!ready)throw new Error(`Service unavailable: ${url}`)}'
+          target/debug/open-seo-spider serve --listen 127.0.0.1:18789 --data-dir "$RUNNER_TEMP/spider-contract-data" > "$RUNNER_TEMP/spider-contract.log" 2>&1 &
+          contract_pid=$!
+          trap 'kill "$contract_pid" "$spider_pid" "$renderer_pid" 2>/dev/null || true' EXIT
+          node --input-type=module -e 'const urls=["http://127.0.0.1:8787/healthz","http://127.0.0.1:18789/healthz","http://127.0.0.1:8790/health"];for(const url of urls){let ready=false;for(let i=0;i<80;i++){try{if((await fetch(url)).ok){ready=true;break}}catch{}await new Promise(r=>setTimeout(r,250))}if(!ready)throw new Error(`Service unavailable: ${url}`)}'
           cargo test --locked -p open-seo-spider-core --test crawl_fixtures live_browser_worker_executes_javascript_for_core_crawl -- --ignored
           cargo test --locked -p open-seo-spider-core --test control_fixtures live_browser_worker_pause_drains_render_and_retains_rendered_discoveries -- --ignored
           cargo test --locked -p open-seo-spider-core --test recrawl_fixtures live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion -- --ignored
@@ -111,3 +115,4 @@ jobs:
           node web/verification/ui-policy-live.cjs
           node web/verification/ui-content-live.cjs
           SPIDER_APP_URL=http://127.0.0.1:8787 node web/verification/ui-resource-discovery-live.cjs
+          SPIDER_APP_URL=http://127.0.0.1:18789 node web/verification/ui-resource-contract-live.cjs

@@ -636,7 +636,7 @@ impl Crawler {
                     }
                 }
             }
-            let retained = page
+            let mut retained = page
                 .resource_permission
                 .as_ref()
                 .is_none_or(|permission| permission.store);
@@ -647,6 +647,19 @@ impl Crawler {
                     selected.is_some(),
                     generation.expect("stored generation"),
                 )?;
+                if self
+                    .config
+                    .resource_discovery
+                    .as_ref()
+                    .is_some_and(|resource| resource.contract.is_some())
+                {
+                    let facts = page
+                        .resource_response
+                        .as_ref()
+                        .context("Strict response facts missing")?;
+                    retained =
+                        facts.retained_response || facts.selected_materialization_reason.is_some();
+                }
                 discoveries = store.complete_resources(
                     &page,
                     &mut rows,
@@ -871,6 +884,44 @@ impl Crawler {
                 .iter()
                 .all(|row| row.decision.traverse)
         });
+        // A late independent role can reuse known source metadata, but it must
+        // satisfy the same actual redirect chain; earlier observed grants stay
+        // immutable in ResourceResponseFacts rather than being rewritten.
+        let eligible_grants = if config.contract.is_some() {
+            Some(config.eligible_authority(
+                page,
+                permission,
+                &self.seeds,
+                self.config.include_subdomains,
+                self.config.check_external,
+                false,
+            )?)
+        } else {
+            None
+        };
+        let retained_response = if config.contract.is_some() {
+            let eligible = config.eligible_authority(
+                page,
+                permission,
+                &self.seeds,
+                self.config.include_subdomains,
+                self.config.check_external,
+                true,
+            )?;
+            permission
+                .authorizing_grants
+                .iter()
+                .any(|grant| grant.store && eligible.contains(&grant.occurrence_id))
+        } else {
+            permission.store
+        };
+        let expands = |predicate: fn(&crate::ResourceGrant) -> bool, legacy: bool| {
+            eligible_grants.as_ref().map_or(legacy, |eligible| {
+                permission.authorizing_grants.iter().any(|grant| {
+                    eligible.contains(grant.occurrence_id.as_str()) && predicate(grant)
+                })
+            })
+        };
         let mut rows = Vec::new();
         let mut policy_rows = page
             .policy
@@ -931,14 +982,22 @@ impl Crawler {
                 }
             });
             let source_can_expand = match batch.source_kind {
-                crate::ResourceSourceKind::NativeCss => permission.can_expand_css,
+                crate::ResourceSourceKind::NativeCss => {
+                    expands(|grant| grant.can_expand_css, permission.can_expand_css)
+                }
                 crate::ResourceSourceKind::PdfAnnotation
                     if occurrence.reference_kind == crate::ResourceReferenceKind::PdfAnnotation =>
                 {
-                    permission.can_expand_pdf
+                    expands(|grant| grant.can_expand_pdf, permission.can_expand_pdf)
                 }
-                _ if occurrence.reference_kind.is_navigation() => permission.can_expand_navigation,
-                _ => permission.can_expand_resources,
+                _ if occurrence.reference_kind.is_navigation() => expands(
+                    |grant| grant.can_expand_navigation,
+                    permission.can_expand_navigation,
+                ),
+                _ => expands(
+                    |grant| grant.can_expand_resources,
+                    permission.can_expand_resources,
+                ),
             } && redirects_traverse;
             let mut decision = config.decide(
                 &candidate,
@@ -969,6 +1028,9 @@ impl Crawler {
                         .effective_robots
                         .iter()
                         .any(|directive| directive == "nofollow" || directive == "none"),
+                    target_internal: target
+                        .as_ref()
+                        .map(|url| same_scope(url, &self.seeds, self.config.include_subdomains)),
                 },
             )?;
             if let Some(row) = &mut policy_row {
@@ -998,7 +1060,14 @@ impl Crawler {
             observation.candidate_count = batch.occurrences.len();
         }
         if let Some(facts) = &mut page.resource_response {
-            facts.retained_response = permission.store;
+            facts.retained_response = retained_response;
+        }
+        if selected && !retained_response && config.contract.is_some() {
+            *page = crate::resource_capture::private_projection(page, &self.config, generation)?;
+            page.resource_response
+                .as_mut()
+                .context("Selected projection facts missing")?
+                .selected_materialization_reason = Some("selected_scope_limited_projection".into());
         }
         Ok((rows, policy_rows))
     }
@@ -1713,10 +1782,21 @@ impl FetchContext {
         let mut visited = HashSet::new();
         visited.insert(current.to_string());
         let mut body = Vec::new();
+        let mut resource_redirects: Vec<crate::ResourceRedirectDecision> = Vec::new();
         loop {
             if self.config.obey_robots {
                 let policy = self.robots.get(&current).await;
-                if !policy.allowed(&self.config.user_agent, current.as_str()) {
+                let allowed = policy.allowed(&self.config.user_agent, current.as_str());
+                if let Some(hop) = resource_redirects.last_mut()
+                    && hop.target_url.as_deref() == Some(current.as_str())
+                {
+                    hop.robots_allowed = Some(allowed);
+                    if !allowed {
+                        hop.allowed = false;
+                        hop.reason = "redirect_robots_denied".into();
+                    }
+                }
+                if !allowed {
                     page.blocked_by_robots = true;
                     page.robots_warning = policy.warning.clone();
                     break;
@@ -1736,6 +1816,11 @@ impl FetchContext {
             } else {
                 request
             };
+            if let Some(hop) = resource_redirects.last_mut()
+                && hop.target_url.as_deref() == Some(current.as_str())
+            {
+                hop.request_started = true;
+            }
             let response = request.send().await;
             let mut response = match response {
                 Ok(response) => response,
@@ -1821,9 +1906,51 @@ impl FetchContext {
                     } else {
                         None
                     };
-                let Some(target) =
-                    location.and_then(|location| normalize_url(location, Some(&current)))
-                else {
+                let target = location.and_then(|location| normalize_url(location, Some(&current)));
+                let strict_redirect = if let (Some(resource), Some(permission), Some(raw)) = (
+                    &self.config.resource_discovery,
+                    &page.resource_permission,
+                    location,
+                ) && resource.contract.is_some()
+                {
+                    let policy = redirect_decision.map(|index| {
+                        let decision = &page
+                            .policy
+                            .as_ref()
+                            .expect("observed policy")
+                            .redirect_decisions[index]
+                            .decision;
+                        (
+                            decision.decision != crate::CrawlPolicyDecisionKind::Deny,
+                            decision.traverse,
+                        )
+                    });
+                    match resource.redirect_decision(
+                        permission,
+                        &current,
+                        raw,
+                        target.as_ref(),
+                        &self.seeds,
+                        self.config.include_subdomains,
+                        self.config.check_external,
+                        policy,
+                        &resource_redirects,
+                    ) {
+                        Ok(decision) => {
+                            let index = resource_redirects.len();
+                            resource_redirects.push(decision);
+                            Some(index)
+                        }
+                        Err(error) => {
+                            page.error =
+                                Some(format!("Invalid resource redirect admission: {error}"));
+                            break;
+                        }
+                    }
+                } else {
+                    None
+                };
+                let Some(target) = target else {
                     if let Some(index) = redirect_decision {
                         page.policy
                             .as_mut()
@@ -1842,6 +1969,10 @@ impl FetchContext {
                 page.final_url = target.to_string();
                 page.final_status = None;
                 if !visited.insert(target.to_string()) {
+                    if let Some(index) = strict_redirect {
+                        resource_redirects[index].allowed = false;
+                        resource_redirects[index].reason = "redirect_stopped_loop".into();
+                    }
                     if let Some(index) = redirect_decision {
                         page.policy
                             .as_mut()
@@ -1854,6 +1985,10 @@ impl FetchContext {
                     break;
                 }
                 if page.redirect_chain.len() > self.config.max_redirects {
+                    if let Some(index) = strict_redirect {
+                        resource_redirects[index].allowed = false;
+                        resource_redirects[index].reason = "redirect_stopped_limit".into();
+                    }
                     if let Some(index) = redirect_decision {
                         page.policy
                             .as_mut()
@@ -1866,6 +2001,10 @@ impl FetchContext {
                         self.config.max_redirects
                     ));
                     page.final_status = None;
+                    break;
+                }
+                if strict_redirect.is_some_and(|index| !resource_redirects[index].allowed) {
+                    page.warnings.push("Redirect target denied by immutable resource role/scope; no target request was made".into());
                     break;
                 }
                 if redirect_decision.is_some_and(|index| {
@@ -1883,7 +2022,8 @@ impl FetchContext {
                     );
                     break;
                 }
-                if self.policy.is_none()
+                if strict_redirect.is_none()
+                    && self.policy.is_none()
                     && !same_scope(&target, &self.seeds, self.config.include_subdomains)
                     && !self.config.check_external
                     && !self
@@ -2179,6 +2319,14 @@ impl FetchContext {
         if self.config.resource_discovery.is_some() && page.resource_permission.is_some() {
             page.resource_response = Some(crate::ResourceResponseFacts {
                 engine: crate::RESOURCE_DISCOVERY_ENGINE.into(),
+                contract_engine: self
+                    .config
+                    .resource_discovery
+                    .as_ref()
+                    .and_then(|config| config.contract.as_ref())
+                    .map(|contract| contract.engine.clone()),
+                redirect_decisions: resource_redirects,
+                selected_materialization_reason: None,
                 observed_generation: self.generation.unwrap_or(1),
                 retained_response: page
                     .resource_permission

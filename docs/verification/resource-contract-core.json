@@ -1,0 +1,920 @@
+{
+  "schema_version": 1,
+  "engine": "open-seo-spider/resource-contract-proof-v1",
+  "created_at": "2026-10-12T22:01:44.866Z",
+  "baseline_commit": "806a6b7",
+  "status": "FOCUSED_CORE_PASS_FULL_MATRIX_PENDING",
+  "source_hashes": [
+    {
+      "path": "crates/core/src/resource_policy.rs",
+      "sha256": "492ad0217934b7a772e7eb544aa96f9d4855bdf2054e3e69c32cb49c6691026e"
+    },
+    {
+      "path": "crates/core/src/resource_capture.rs",
+      "sha256": "05b926749b2211510dab136c4a64cf8ccdd4b982a6430e3690f3290b4824c446"
+    },
+    {
+      "path": "crates/core/src/resource_ledger.rs",
+      "sha256": "08aa3c0efa78f07f1385a43343aa2e33cf72a85dc5f23efe5c34f1391c6bee71"
+    },
+    {
+      "path": "crates/core/src/crawler.rs",
+      "sha256": "3baa929146c0d879fa183f2cb3e9fd40ced17935bd8d1dc24195c2f6f5ec59f2"
+    },
+    {
+      "path": "crates/core/src/store.rs",
+      "sha256": "3cde304cea5943503bf305a0ada454bbb0b57c0123ee0a8e4d8a76925f84b494"
+    },
+    {
+      "path": "crates/core/tests/resource_contract_fixtures.rs",
+      "sha256": "0a0281d5defe42c71a16b7595521337a60b8487ff0310551bf164abac0cfc94a"
+    },
+    {
+      "path": "crates/core/tests/fixtures/resource-contract/directive-plan.json",
+      "sha256": "3ba2c3a7a275b4f6d976999317be677b6d1c27fd6200c3beef7bc4fe42a365b0"
+    },
+    {
+      "path": "crates/core/tests/fixtures/resource-contract/legacy-b9-bindings.json",
+      "sha256": "e5bb0f06cf0338ff984d4ddbbbff75b1c6d7e922c495ccc721a9a33f7c575d05"
+    }
+  ],
+  "production_profile": "open-seo-spider/resource-contract-v2",
+  "legacy_ledger_engine": "open-seo-spider/resource-discovery-v1",
+  "before_fix": [
+    {
+      "id": "CG-01",
+      "test": "legacy_v1_preserves_ugc_and_sponsored_admission_before_contract_opt_in",
+      "observed": {
+        "ugc_gets": 1,
+        "sponsored_gets": 1,
+        "nofollow_gets": 0
+      },
+      "status": "OBSERVED_V1_CONTRACT_GAPS",
+      "desired_v2_acceptance": "FAIL_BEFORE_FIX",
+      "v1_compatibility": "PASS"
+    },
+    {
+      "id": "CG-02",
+      "test": "legacy_v1_preserves_html_vs_http_link_nofollow_difference",
+      "observed": {
+        "html_canonical_nofollow_gets": 0,
+        "http_link_canonical_nofollow_gets": 1
+      },
+      "status": "OBSERVED_V1_CONTRACT_GAPS",
+      "desired_v2_acceptance": "FAIL_BEFORE_FIX",
+      "v1_compatibility": "PASS"
+    },
+    {
+      "id": "CG-03-resource-only-navigation",
+      "test": "legacy_v1_preserves_navigation_redirect_via_resource_only_origin",
+      "observed": {
+        "resource_only_external_landing_gets": 1,
+        "backlink_gets": 1,
+        "external_sibling_gets": 0
+      },
+      "status": "OBSERVED_V1_CONTRACT_GAPS",
+      "desired_v2_acceptance": "FAIL_BEFORE_FIX",
+      "v1_compatibility": "PASS"
+    },
+    {
+      "id": "CG-03-resource-third-origin",
+      "test": "legacy_v1_preserves_check_external_resource_redirect_scope_exception",
+      "observed": {
+        "unlisted_third_origin_gets": 1
+      },
+      "status": "OBSERVED_V1_CONTRACT_GAPS",
+      "desired_v2_acceptance": "FAIL_BEFORE_FIX",
+      "v1_compatibility": "PASS"
+    }
+  ],
+  "before_fix_command": "cargo test --locked -p open-seo-spider-core --test resource_contract_fixtures legacy_v1_ -- --nocapture",
+  "before_fix_session": 90453,
+  "gates": [
+    {
+      "command": "cargo test --locked -p open-seo-spider-core --test resource_contract_fixtures -- --nocapture",
+      "session": 99069,
+      "exit_code": 0,
+      "passed": 21,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "command": "cargo test --locked -p open-seo-spider-core --test resource_contract_fixtures frozen_b9 -- --nocapture",
+      "session": 8426,
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "command": "cargo test --locked -p open-seo-spider-core --lib resource_",
+      "session": 64578,
+      "exit_code": 0,
+      "passed": 17,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "command": "cargo test --locked -p open-seo-spider-core --test resource_discovery_fixtures",
+      "session": 73234,
+      "exit_code": 0,
+      "passed": 15,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "command": "cargo clippy --locked -p open-seo-spider-core --lib --test resource_contract_fixtures --test resource_discovery_fixtures -- -D warnings",
+      "chunk": "186c39",
+      "exit_code": 0
+    },
+    {
+      "command": "cargo clippy --locked -p open-seo-spider-core --all-targets -- -D warnings",
+      "session": 18376,
+      "exit_code": 1,
+      "status": "PENDING_MATRIX_STYLE_FIX",
+      "detail": "resource_response_fixtures.rs:712,732 needless borrowed pdf.status; no owned production/fixture diagnostic"
+    }
+  ],
+  "directive_plan_v1": [
+    {
+      "id": "nofollow-r0d0-fr0fd0",
+      "group": "nofollow_truth_table",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "nofollow-r0d0-fr0fd1",
+      "group": "nofollow_truth_table",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "nofollow-r0d0-fr1fd0",
+      "group": "nofollow_truth_table",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "nofollow-r0d0-fr1fd1",
+      "group": "nofollow_truth_table",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "nofollow-r0d1-fr0fd0",
+      "group": "nofollow_truth_table",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "nofollow-r0d1-fr0fd1",
+      "group": "nofollow_truth_table",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "nofollow-r0d1-fr1fd0",
+      "group": "nofollow_truth_table",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "nofollow-r0d1-fr1fd1",
+      "group": "nofollow_truth_table",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "nofollow-r1d0-fr0fd0",
+      "group": "nofollow_truth_table",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "nofollow-r1d0-fr0fd1",
+      "group": "nofollow_truth_table",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "nofollow-r1d0-fr1fd0",
+      "group": "nofollow_truth_table",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "nofollow-r1d0-fr1fd1",
+      "group": "nofollow_truth_table",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "nofollow-r1d1-fr0fd0",
+      "group": "nofollow_truth_table",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "nofollow-r1d1-fr0fd1",
+      "group": "nofollow_truth_table",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "nofollow-r1d1-fr1fd0",
+      "group": "nofollow_truth_table",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "nofollow-r1d1-fr1fd1",
+      "group": "nofollow_truth_table",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "plain",
+      "group": "rel_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "exact",
+      "group": "rel_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "mixed-case",
+      "group": "rel_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "ascii-spaces",
+      "group": "rel_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "negative-prefix",
+      "group": "rel_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "negative-other",
+      "group": "rel_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "ugc",
+      "group": "rel_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "sponsored",
+      "group": "rel_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "ugc-nofollow",
+      "group": "rel_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "sponsored-nofollow",
+      "group": "rel_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "comma",
+      "group": "rel_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "meta-generic-nofollow",
+      "group": "agent_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "meta-none",
+      "group": "agent_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "meta-noindex-only",
+      "group": "agent_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "meta-matched",
+      "group": "agent_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "meta-unmatched",
+      "group": "agent_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "meta-custom",
+      "group": "agent_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "header-unscoped",
+      "group": "agent_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "header-matched",
+      "group": "agent_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "header-unmatched",
+      "group": "agent_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "header-wildcard",
+      "group": "agent_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "header-comma-scope",
+      "group": "agent_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "header-separate-scope-reset",
+      "group": "agent_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "restrictive-union",
+      "group": "agent_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "valued-whitespace",
+      "group": "agent_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "qualifier-html-canonical",
+      "group": "header_qualifier_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "qualifier-html-next",
+      "group": "header_qualifier_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "qualifier-html-alternate_hreflang",
+      "group": "header_qualifier_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "qualifier-html-amphtml",
+      "group": "header_qualifier_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "qualifier-http_link_header-canonical",
+      "group": "header_qualifier_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "qualifier-http_link_header-next",
+      "group": "header_qualifier_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "qualifier-http_link_header-alternate_hreflang",
+      "group": "header_qualifier_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "qualifier-http_link_header-amphtml",
+      "group": "header_qualifier_controls",
+      "profile": "v1_frozen_contract",
+      "status": "PASS",
+      "observed_target_gets": 1
+    }
+  ],
+  "directive_plan_v2_equivalent": [
+    {
+      "id": "plain",
+      "group": "rel_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "exact",
+      "group": "rel_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "mixed-case",
+      "group": "rel_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "ascii-spaces",
+      "group": "rel_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "negative-prefix",
+      "group": "rel_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "negative-other",
+      "group": "rel_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "ugc",
+      "group": "rel_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "sponsored",
+      "group": "rel_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "ugc-nofollow",
+      "group": "rel_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "sponsored-nofollow",
+      "group": "rel_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "comma",
+      "group": "rel_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "meta-generic-nofollow",
+      "group": "agent_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "meta-none",
+      "group": "agent_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "meta-noindex-only",
+      "group": "agent_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "meta-matched",
+      "group": "agent_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "meta-unmatched",
+      "group": "agent_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "meta-custom",
+      "group": "agent_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "header-unscoped",
+      "group": "agent_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "header-matched",
+      "group": "agent_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "header-unmatched",
+      "group": "agent_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "header-wildcard",
+      "group": "agent_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "header-comma-scope",
+      "group": "agent_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 1
+    },
+    {
+      "id": "header-separate-scope-reset",
+      "group": "agent_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "restrictive-union",
+      "group": "agent_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "valued-whitespace",
+      "group": "agent_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "qualifier-html-canonical",
+      "group": "header_qualifier_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "qualifier-html-next",
+      "group": "header_qualifier_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "qualifier-html-alternate_hreflang",
+      "group": "header_qualifier_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "qualifier-html-amphtml",
+      "group": "header_qualifier_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "qualifier-http_link_header-canonical",
+      "group": "header_qualifier_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "qualifier-http_link_header-next",
+      "group": "header_qualifier_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "qualifier-http_link_header-alternate_hreflang",
+      "group": "header_qualifier_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    },
+    {
+      "id": "qualifier-http_link_header-amphtml",
+      "group": "header_qualifier_controls",
+      "profile": "v2_equivalent",
+      "status": "PASS",
+      "observed_target_gets": 0
+    }
+  ],
+  "additional_v2_scoped": [
+    {
+      "id": "v2-scoped-r0d0-fi0fe0",
+      "profile": "open-seo-spider/resource-contract-v2",
+      "status": "PASS",
+      "rel_qualified": false,
+      "document_nofollow": false,
+      "follow_internal_qualified_links": false,
+      "follow_external_qualified_links": false,
+      "observed_internal_gets": 1,
+      "observed_external_gets": 1
+    },
+    {
+      "id": "v2-scoped-r0d0-fi0fe1",
+      "profile": "open-seo-spider/resource-contract-v2",
+      "status": "PASS",
+      "rel_qualified": false,
+      "document_nofollow": false,
+      "follow_internal_qualified_links": false,
+      "follow_external_qualified_links": true,
+      "observed_internal_gets": 1,
+      "observed_external_gets": 1
+    },
+    {
+      "id": "v2-scoped-r0d0-fi1fe0",
+      "profile": "open-seo-spider/resource-contract-v2",
+      "status": "PASS",
+      "rel_qualified": false,
+      "document_nofollow": false,
+      "follow_internal_qualified_links": true,
+      "follow_external_qualified_links": false,
+      "observed_internal_gets": 1,
+      "observed_external_gets": 1
+    },
+    {
+      "id": "v2-scoped-r0d0-fi1fe1",
+      "profile": "open-seo-spider/resource-contract-v2",
+      "status": "PASS",
+      "rel_qualified": false,
+      "document_nofollow": false,
+      "follow_internal_qualified_links": true,
+      "follow_external_qualified_links": true,
+      "observed_internal_gets": 1,
+      "observed_external_gets": 1
+    },
+    {
+      "id": "v2-scoped-r0d1-fi0fe0",
+      "profile": "open-seo-spider/resource-contract-v2",
+      "status": "PASS",
+      "rel_qualified": false,
+      "document_nofollow": true,
+      "follow_internal_qualified_links": false,
+      "follow_external_qualified_links": false,
+      "observed_internal_gets": 0,
+      "observed_external_gets": 0
+    },
+    {
+      "id": "v2-scoped-r0d1-fi0fe1",
+      "profile": "open-seo-spider/resource-contract-v2",
+      "status": "PASS",
+      "rel_qualified": false,
+      "document_nofollow": true,
+      "follow_internal_qualified_links": false,
+      "follow_external_qualified_links": true,
+      "observed_internal_gets": 0,
+      "observed_external_gets": 1
+    },
+    {
+      "id": "v2-scoped-r0d1-fi1fe0",
+      "profile": "open-seo-spider/resource-contract-v2",
+      "status": "PASS",
+      "rel_qualified": false,
+      "document_nofollow": true,
+      "follow_internal_qualified_links": true,
+      "follow_external_qualified_links": false,
+      "observed_internal_gets": 1,
+      "observed_external_gets": 0
+    },
+    {
+      "id": "v2-scoped-r0d1-fi1fe1",
+      "profile": "open-seo-spider/resource-contract-v2",
+      "status": "PASS",
+      "rel_qualified": false,
+      "document_nofollow": true,
+      "follow_internal_qualified_links": true,
+      "follow_external_qualified_links": true,
+      "observed_internal_gets": 1,
+      "observed_external_gets": 1
+    },
+    {
+      "id": "v2-scoped-r1d0-fi0fe0",
+      "profile": "open-seo-spider/resource-contract-v2",
+      "status": "PASS",
+      "rel_qualified": true,
+      "document_nofollow": false,
+      "follow_internal_qualified_links": false,
+      "follow_external_qualified_links": false,
+      "observed_internal_gets": 0,
+      "observed_external_gets": 0
+    },
+    {
+      "id": "v2-scoped-r1d0-fi0fe1",
+      "profile": "open-seo-spider/resource-contract-v2",
+      "status": "PASS",
+      "rel_qualified": true,
+      "document_nofollow": false,
+      "follow_internal_qualified_links": false,
+      "follow_external_qualified_links": true,
+      "observed_internal_gets": 0,
+      "observed_external_gets": 1
+    },
+    {
+      "id": "v2-scoped-r1d0-fi1fe0",
+      "profile": "open-seo-spider/resource-contract-v2",
+      "status": "PASS",
+      "rel_qualified": true,
+      "document_nofollow": false,
+      "follow_internal_qualified_links": true,
+      "follow_external_qualified_links": false,
+      "observed_internal_gets": 1,
+      "observed_external_gets": 0
+    },
+    {
+      "id": "v2-scoped-r1d0-fi1fe1",
+      "profile": "open-seo-spider/resource-contract-v2",
+      "status": "PASS",
+      "rel_qualified": true,
+      "document_nofollow": false,
+      "follow_internal_qualified_links": true,
+      "follow_external_qualified_links": true,
+      "observed_internal_gets": 1,
+      "observed_external_gets": 1
+    },
+    {
+      "id": "v2-scoped-r1d1-fi0fe0",
+      "profile": "open-seo-spider/resource-contract-v2",
+      "status": "PASS",
+      "rel_qualified": true,
+      "document_nofollow": true,
+      "follow_internal_qualified_links": false,
+      "follow_external_qualified_links": false,
+      "observed_internal_gets": 0,
+      "observed_external_gets": 0
+    },
+    {
+      "id": "v2-scoped-r1d1-fi0fe1",
+      "profile": "open-seo-spider/resource-contract-v2",
+      "status": "PASS",
+      "rel_qualified": true,
+      "document_nofollow": true,
+      "follow_internal_qualified_links": false,
+      "follow_external_qualified_links": true,
+      "observed_internal_gets": 0,
+      "observed_external_gets": 1
+    },
+    {
+      "id": "v2-scoped-r1d1-fi1fe0",
+      "profile": "open-seo-spider/resource-contract-v2",
+      "status": "PASS",
+      "rel_qualified": true,
+      "document_nofollow": true,
+      "follow_internal_qualified_links": true,
+      "follow_external_qualified_links": false,
+      "observed_internal_gets": 1,
+      "observed_external_gets": 0
+    },
+    {
+      "id": "v2-scoped-r1d1-fi1fe1",
+      "profile": "open-seo-spider/resource-contract-v2",
+      "status": "PASS",
+      "rel_qualified": true,
+      "document_nofollow": true,
+      "follow_internal_qualified_links": true,
+      "follow_external_qualified_links": true,
+      "observed_internal_gets": 1,
+      "observed_external_gets": 1
+    }
+  ],
+  "counts": {
+    "frozen_v1_plan_ids": 49,
+    "v2_equivalent_plan_ids": 33,
+    "additional_v2_scoped_ids": 16,
+    "frozen_replay_crawl_invocations": 82,
+    "additional_native_directive_crawl_invocations": 82,
+    "additional_native_directive_target_outcomes": 98,
+    "contract_suite_tests_combined_gate": 21,
+    "legacy_serialization_pin_separate": 1,
+    "resource_unit_tests": 17,
+    "legacy_resource_native_tests": 15
+  },
+  "limitations": [
+    "No complete vendor parity claim.",
+    "robots.txt and sitemap protocol transfers have no ResourceTaskPermission and are outside this versioned role-grant slice.",
+    "108-cell matrix and 21-response/88-redirect-plan groups are separate gates, not claimed completed here.",
+    "All HTTP fixtures are authored loopback targets, not internet websites.",
+    "Controlled SQLite writer consistency is not externally signed attestation.",
+    "Selected scope-limited attempts are explicitly bounded private projections; original parent bytes and fresh capture-unavailable evidence are preserved."
+  ],
+  "primary_sources": [
+    "https://html.spec.whatwg.org/multipage/links.html#link-type-nofollow",
+    "https://developers.google.com/search/docs/crawling-indexing/qualify-outbound-links",
+    "https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag",
+    "https://www.rfc-editor.org/rfc/rfc8288#section-3.3"
+  ]
+}

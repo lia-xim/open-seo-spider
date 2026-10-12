@@ -1,10 +1,12 @@
 # Open SEO Spider capability catalog
 
-Catalog prepared: 11 October 2026; implementation/evidence review: 12 October 2026. Reference: public Screaming Frog SEO Spider documentation, whose download panels advertised version **24.3** at review time. The vendor describes more than 300 SEO issue checks; this catalog groups the documented product areas into **144 implementation requirements**, rather than claiming to enumerate every individual issue filter. [Product overview](https://www.screamingfrog.co.uk/seo-spider/) · [Official guide](https://www.screamingfrog.co.uk/seo-spider/user-guide/).
+Catalog prepared: 11 October 2026; implementation/evidence review: 13 October 2026. Reference: public Screaming Frog SEO Spider documentation, whose download panels advertised version **24.3** at the initial reference review. The vendor describes more than 300 SEO issue checks; this catalog groups the documented product areas into **144 implementation requirements**, rather than claiming to enumerate every individual issue filter. [Product overview](https://www.screamingfrog.co.uk/seo-spider/) · [Official guide](https://www.screamingfrog.co.uk/seo-spider/user-guide/).
 
 This is an independent product specification. The initial grouped catalog was prepared from public documentation. Subsequent private static inspection and ordinary original CLI runs inform the granular contracts and comparisons. No vendor executable, implementation code, font, artwork, credential or license mechanism is copied into this repository. Public feature behavior provides a reference; the acceptance tests below are newly authored tests for Open SEO Spider. The user prefers Rust and local operation. Docker, WSL and native packaging are separate delivery choices.
 
 **Independent implementation status is tracked below. Full parity is NOT PROVEN.** The machine-readable [feature-parity.json](feature-parity.json) is the tracking baseline. Implementation and passing tests must be linked before a feature changes status. A passing Open SEO Spider fixture establishes its behavior; a separately authorized, reproducible reference comparison is needed for a parity claim.
+
+B10 fulfills the own link-directive acceptance for the explicitly selected [V2 follow switches](resource-contract-v2.md), with native positive/negative HTTP controls and preserved occurrences. Existing V1 behavior is kept compatible; separate global `crawl_links:false` controls, exact-source CI, release and installation remain open. Current own counts: 26 implemented, 71 partial, 47 planned.
 
 “No commercial URL ceiling” does not remove machine resource limits, site crawl policy, or third-party API quotas and fees. Provider integrations need independent accounts and authorization. Open SEO Spider must not reuse Screaming Frog credentials or proprietary integration identity.
 
@@ -53,7 +55,7 @@ The source link in each row supports the reference product area. Acceptance crit
 | `crawl.rewrite` | `implemented` | URL rewriting rules | Apply saved query removal, regex replacement and rewrite rules; keep original and requested addresses for evidence. | [Configuration](https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/) |
 | `crawl.include_exclude` | `partial` | Include/exclude expressions | Exercise allow and deny regexes against links and resources with an explained exclusion reason. | [Configuration](https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/) |
 | `crawl.cdns` | `planned` | CDN classification | Classify configured CDN hosts as internal while preventing unrestricted external traversal. | [Configuration](https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/) |
-| `crawl.nofollow` | `partial` | Link directive policy | Exercise nofollow, ugc, sponsored and page nofollow; store links regardless of whether discovery is enabled. | [Configuration](https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/) |
+| `crawl.nofollow` | `implemented` | Link directive policy | Exercise nofollow, ugc, sponsored and page nofollow; store links regardless of whether discovery is enabled. | [Configuration](https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/) |
 | `crawl.limits` | `partial` | Operator crawl controls | Test total, depth, URLs-per-depth, folder, query, subdomain, redirect, URL length, link-count and response-size bounds. | [Configuration](https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/) |
 | `crawl.speed` | `partial` | Concurrency and request speed | Use a timestamped fixture to prove request-rate bounds and bounded concurrency under latency. | [Configuration](https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/) |
 | `crawl.timeouts_retries` | `partial` | Timeout and retry policy | Distinguish timeout, DNS/network and HTTP errors; retry selected 5xx responses with bounded attempts. | [Configuration](https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/) |
@@ -255,7 +257,7 @@ The source link in each row supports the reference product area. Acceptance crit
 
 ## Evidence-based implementation status
 
-Review: 12 October 2026. **25 implemented, 72 partial, 47 planned; 144 grouped requirements.** This is independent acceptance, never a vendor-coverage percentage. The separate [416-filter ledger](parity/granular-acceptance.md) records exact parameters, trigger/control fixtures and edge contracts with all reference parity statuses still NOT_PROVEN.
+Review: 13 October 2026. **26 implemented, 71 partial, 47 planned; 144 grouped requirements.** This is independent acceptance, never a vendor-coverage percentage. The separate [416-filter ledger](parity/granular-acceptance.md) records exact parameters, trigger/control fixtures and edge contracts with all reference parity statuses still NOT_PROVEN.
 
 The preserved [earlier advanced batch](verification/advanced-batch.json) records its original 91 Rust tests and earlier export/browser checks. The preserved [resource and offline batch](verification/resource-offline-batch.json) records **126 default Rust tests** (28 app, 71 core, 23 crawl, four resource fixtures), one explicit real-browser gate, Clippy/build checks, 16 worker tests, 33 UI fixtures, 14 actual renderer-flow checks, 13 actual resource-flow checks, six offline SERP browser checks, and 13 editor-race regressions. The API gate covers all eleven crawl export endpoints, recovery and offline import/export; official MCP SDK tests pass in both transports with 11 tools. The actual offline SERP fixture receives **zero website requests**.
 
@@ -267,7 +269,7 @@ The offline SERP editor, meta/HTTP robots extraction and supported HTML extracti
 
 | Phase | Implemented | Partial | Planned | Total |
 | --- | ---: | ---: | ---: | ---: |
-| P1 | 11 | 28 | 6 | 45 |
+| P1 | 12 | 27 | 6 | 45 |
 | P2 | 6 | 32 | 7 | 45 |
 | P3 | 5 | 8 | 11 | 24 |
 | P4 | 3 | 4 | 23 | 30 |

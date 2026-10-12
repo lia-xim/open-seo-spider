@@ -155,6 +155,14 @@ pub(crate) fn inventory(
                     limits,
                 )?;
                 batch.occurrences.last_mut().unwrap().source_complete = complete;
+                if cfg.contract.is_some() {
+                    let row = batch.occurrences.last_mut().unwrap();
+                    row.attributes.insert("rel".into(), target.rel.join(" "));
+                    row.nofollow = target
+                        .rel
+                        .iter()
+                        .any(|value| value.eq_ignore_ascii_case("nofollow"));
+                }
             }
         }
     }

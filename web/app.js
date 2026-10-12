@@ -1242,6 +1242,7 @@
       if (element.type === 'checkbox') element.checked = Boolean(value); else element.value = value;
     }
     toggleRendererSettings(state.settings.javascript_rendering);
+    syncResourceContractSettings();
     $('settings-error').hidden = true;
     $('settings-dialog').showModal();
   }
@@ -1427,7 +1428,7 @@
   function parseResourceDiscovery(settings) {
     if (!settings.resource_discovery_enabled) return {};
     if (settings.javascript_rendering) throw new Error('Native Ressourcenermittlung und JavaScript-Rendering können nicht gemeinsam verwendet werden. Keine Einstellung wird automatisch ausgeschaltet.');
-    const config=contentJSON(settings.resource_discovery_json,['resources','navigation','css','resource_scope','follow_rel_nofollow','follow_document_nofollow'],'Ressourcenermittlung');
+    const config=contentJSON(settings.resource_discovery_json,['resources','navigation','css','resource_scope','follow_rel_nofollow','follow_document_nofollow','contract'],'Ressourcenermittlung');
     const booleanFields=(value,keys,label)=>{policyObject(value,keys,label);for(const [key,flag] of Object.entries(value))if(typeof flag!=='boolean')throw new Error(`${label}.${key}: true oder false erforderlich.`);};
     if(Object.hasOwn(config,'resources')) {
       policyObject(config.resources,['css','javascript','images','media','pdf','swf','other'],'Ressourcentypen');
@@ -1442,6 +1443,12 @@
     }
     if(Object.hasOwn(config,'css')) booleanFields(config.css,['stylesheets','style_elements','style_attributes'],'CSS-Quellen');
     for(const key of ['follow_rel_nofollow','follow_document_nofollow']) if(Object.hasOwn(config,key) && typeof config[key]!=='boolean') throw new Error(`Ressourcenermittlung.${key}: true oder false erforderlich.`);
+    if(config.contract!=null) {
+      policyObject(config.contract,['engine','follow_internal_qualified_links','follow_external_qualified_links'],'Aktuelle Ressourcenregeln');
+      if(Object.hasOwn(config.contract,'engine') && config.contract.engine!==resourceContractEngine)throw new Error('Nicht unterstützte aktuelle Ressourcenregeln. Vorhandene Einstellungen wurden nicht umgestellt.');
+      for(const key of ['follow_internal_qualified_links','follow_external_qualified_links'])if(Object.hasOwn(config.contract,key) && typeof config.contract[key]!=='boolean')throw new Error(`Aktuelle Ressourcenregeln.${key}: true oder false erforderlich.`);
+      if(config.follow_rel_nofollow===true || config.follow_document_nofollow===true)throw new Error('Aktuelle Ressourcenregeln und die bisherigen Rel-/Dokument-Nofollow-Schalter widersprechen sich. Unter den aktuellen Regeln müssen beide bisherigen Schalter false sein.');
+    }
     if(Object.hasOwn(config,'resource_scope')) {
       policyObject(config.resource_scope,['external_origins'],'Ressourcen-Origin-Scope');
       if(Object.hasOwn(config.resource_scope,'external_origins')) {
@@ -1462,6 +1469,47 @@
   }
 
   const nativeResourceEngine = 'open-seo-spider/resource-discovery-v1';
+  const resourceContractEngine = 'open-seo-spider/resource-contract-v2';
+  const resourceReferenceKinds = ['initial_input','internal_anchor','external_anchor','css','java_script','image','media','pdf','swf','other','iframe','refresh','canonical','hreflang','pagination','amp','mobile_alternate','pdf_annotation'];
+  const resourceContractLabel=engine=>engine==null?null:engine===resourceContractEngine?'Aktuelle Regeln':engine===nativeResourceEngine?'Bisherige Regeln':'Nicht unterstützt';
+  const qualificationValue=(row,key)=>row.decision.qualification?.engine===resourceContractEngine?row.decision.qualification[key]:null;
+  function syncResourceContractSettings() {
+    const form=$('settings-form'),enabled=form.elements.resource_discovery_enabled.checked;
+    let config,error;try{config=JSON.parse(form.elements.resource_discovery_json.value);}catch(_){error='Regel-JSON ist ungültig; kein Profil wird automatisch eingesetzt.';}
+    const object=config && typeof config==='object' && !Array.isArray(config),contract=object?config.contract:null,current=contract && typeof contract==='object' && !Array.isArray(contract) && (!Object.hasOwn(contract,'engine') || contract.engine===resourceContractEngine);
+    const mixed=object && (config.follow_rel_nofollow===true)!==(config.follow_document_nofollow===true);
+    $('resource-contract-status').textContent=!enabled?'Ressourcenregeln sind aus; diese Konfiguration wird nicht an den Crawl gesendet.':error?error:!object?'Regel-JSON muss ein Objekt sein.':contract==null?`Bisherige Regeln: Die gespeicherte Konfiguration bleibt unverändert. Aktuelle Regeln fassen qualifizierte Rel-Links und Dokument-Nofollow gemeinsam je intern/extern zusammen.${mixed?' Die bisherigen Rel-/Dokumentschalter unterscheiden sich; beim ausdrücklich gewählten Wechsel starten beide neuen Schalter deshalb aus.':' Beim ausdrücklich gewählten Wechsel wird der gemeinsame bisherige Wert in beide neuen Schalter übernommen.'}`:current?'Aktuelle Regeln: nofollow, ugc und sponsored sowie Dokument-Nofollow werden gemeinsam berücksichtigt; Overrides gelten getrennt für interne und externe Links.':'Dieses Semantikprofil wird nicht unterstützt; die vorhandenen Werte bleiben erhalten.';
+    $('resource-contract-use-current').disabled=!enabled || !object || contract!=null && !current;
+    for(const [id,key] of [['resource-follow-internal-qualified','follow_internal_qualified_links'],['resource-follow-external-qualified','follow_external_qualified_links']]){const input=$(id);input.disabled=!enabled || !current;input.checked=current && contract[key]===true;}
+  }
+  function useCurrentResourceContract() {
+    const form=$('settings-form');
+    try {
+      const parsed=parseResourceDiscovery({resource_discovery_enabled:true,javascript_rendering:false,resource_discovery_json:form.elements.resource_discovery_json.value,resource_discovery_limits_json:form.elements.resource_discovery_limits_json.value}),config=parsed.resource_discovery;
+      if(config.contract==null){const rel=config.follow_rel_nofollow===true,document=config.follow_document_nofollow===true,follow=rel===document?rel:false;config.contract={engine:resourceContractEngine,follow_internal_qualified_links:follow,follow_external_qualified_links:follow};config.follow_rel_nofollow=false;config.follow_document_nofollow=false;form.elements.resource_discovery_json.value=JSON.stringify(config,null,2);}
+      $('settings-error').hidden=true;syncResourceContractSettings();
+    }catch(error){$('settings-error').textContent=error.message;$('settings-error').hidden=false;}
+  }
+  function changeResourceQualifiedLinks() {
+    const form=$('settings-form');
+    try {
+      const parsed=parseResourceDiscovery({resource_discovery_enabled:true,javascript_rendering:false,resource_discovery_json:form.elements.resource_discovery_json.value,resource_discovery_limits_json:form.elements.resource_discovery_limits_json.value}),config=parsed.resource_discovery;
+      if(config.contract==null || Object.hasOwn(config.contract,'engine') && config.contract.engine!==resourceContractEngine)throw new Error('Zuerst die aktuellen Regeln ausdrücklich verwenden.');
+      config.contract.follow_internal_qualified_links=$('resource-follow-internal-qualified').checked;config.contract.follow_external_qualified_links=$('resource-follow-external-qualified').checked;
+      form.elements.resource_discovery_json.value=JSON.stringify(config,null,2);$('settings-error').hidden=true;
+    }catch(error){$('settings-error').textContent=error.message;$('settings-error').hidden=false;}
+    syncResourceContractSettings();
+  }
+  function resourceSavedContractLabel() {
+    const result=state.resources.result,profile=result?.configured_semantic_contract,binding=result?.semantic_contract_binding;
+    if(!result)return 'Semantikprofil des gespeicherten Snapshots noch nicht erfasst.';
+    if(!result.enabled)return 'Für diesen Bericht wurden keine Ressourcenregeln konfiguriert.';
+    if(profile==null || binding==null)return 'Semantikprofil des gespeicherten Snapshots nicht erfasst. Fehlende Grant-Rollen bleiben unbekannt.';
+    if(![nativeResourceEngine,resourceContractEngine].includes(profile))return 'Gespeichertes Semantikprofil nicht unterstützt; genaue Rohdaten bleiben separat sichtbar.';
+    const label=profile===resourceContractEngine?'aktuelle Ressourcenregeln':'bisherige Ressourcenregeln';
+    if(binding!=='validated_full_config_and_generation')return `Nur deklarierte Konfiguration: ${label}. Kein durch SQLite-Config und Generation gebundenes Semantikprofil; historische Grants werden nicht umgestellt.`;
+    return `Validierter SQLite-Snapshot: ${label}. Die Rolle jedes Grants stammt ausschließlich aus dessen eigener Beobachtung; fehlende Rollen bleiben unbekannt.`;
+  }
   const resourceSection = () => state.section === 'resource-discovery';
   const resourceView = () => $('resource-discovery-kind').value;
   const resourceBasis = value => value === 'current' ? 'Aktuelle Ledger-Beobachtung' : value === 'inherited' ? 'Geerbte Ledger-Historie' : 'Basis unbekannt';
@@ -1482,10 +1530,15 @@
     if(!result || typeof result.enabled!=='boolean' || typeof result.ledger_available!=='boolean' || typeof result.has_more!=='boolean' || result.website_requests!==0 || result.entity_bodies_included!==false || result.snapshot_scope!=='sqlite_read_snapshot')throw new Error('Nicht unterstützte Ressourcen-Snapshot-Bindung; keine Zielbefunde werden abgeleitet.');
     const rows=kind==='transports'?result.transports:result.observations;
     if(!Array.isArray(rows) || rows.length>200)throw new Error('Ungültige oder unbeschränkte Ressourcen-Seite.');
-    if(result.enabled && result.engine!==nativeResourceEngine)throw new Error('Unbekanntes Ressourcen-Profil.');
+    if(result.enabled && result.engine!==nativeResourceEngine)throw new Error('Nicht unterstützte Ressourcen-Ledger-Engine; dies ist keine fehlende Quellbeobachtung.');
     if(!result.ledger_available){if(result.snapshot!==null)throw new Error('Nicht verfügbares Ledger darf keinen verifizierten nativen Snapshot behaupten.');return;}
     const snapshot=result.snapshot;
     if(!snapshot || !Number.isSafeInteger(snapshot.generation) || snapshot.generation<1 || snapshot.generation!==result.crawl_generation || expectedGeneration!=null && snapshot.generation!==expectedGeneration || typeof snapshot.crawl_config_sha256!=='string' || !/^[a-fA-F0-9]{64}$/.test(snapshot.crawl_config_sha256) || snapshot.crawl_config_sha256!==result.crawl_config_sha256)throw new Error('Ressourcen-Snapshot passt nicht zur aktuellen Crawl-Generation oder vollständigen Job-Konfiguration.');
+    if(result.semantic_contract_binding!=null) {
+      if(result.semantic_contract_binding!=='validated_full_config_and_generation')throw new Error('Native Semantikprofil-Bindung ist nur deklariert; kein Profil wird daraus als verifiziert angezeigt.');
+      const configured=result.configured_semantic_contract,recorded=snapshot.resource_contract_engine;
+      if(configured===resourceContractEngine && recorded!==resourceContractEngine || configured===nativeResourceEngine && recorded!=null)throw new Error('Semantikprofil des SQL-Snapshots stimmt nicht mit der gebundenen Konfiguration überein.');
+    }
     const summary=result.checkpoint;
     if(!result.enabled || summary?.engine!==nativeResourceEngine || summary.config_sha256!==result.config_sha256 || typeof summary.complete!=='boolean' || !['config_sha256','rolling_sha256'].every(key=>typeof summary[key]==='string' && /^[a-fA-F0-9]{64}$/.test(summary[key])) || ['revision','decision_rows','committed_bytes','completed_transports','retained_responses','pending_transports','pending_expansions','incomplete_sources'].some(key=>!Number.isSafeInteger(summary[key]) || summary[key]<0))throw new Error('Ressourcen-Ledger ohne unterstützte Zusammenfassung oder erwartete Job-Config-Bindung.');
     if(summary.inherited_history!=null && (typeof summary.inherited_history.rows_available!=='boolean' || typeof summary.inherited_history.parent_snapshot_sha256!=='string'))throw new Error('Unbekannte Verfügbarkeit der geerbten Ledger-Historie.');
@@ -1493,6 +1546,8 @@
       let previous=cursor;
       for(const row of rows) {
         if(row.engine!==nativeResourceEngine || typeof row.requested_url!=='string' || !row.requested_url || row.requested_url<=previous || !Number.isSafeInteger(row.observed_generation) || row.observed_generation<1 || typeof row.retained_response!=='boolean' || !row.projection || row.projection.url!==row.requested_url || row.projection.resource_response!=null && row.projection.resource_response.engine!==nativeResourceEngine)throw new Error('Transport ohne unterstützte Anfrage-Identität, geordneten Cursor oder Metadatenprojektion.');
+        const redirects=row.projection.resource_response?.redirect_decisions;
+        if(redirects!=null && (!Array.isArray(redirects) || redirects.some(hop=>!hop || ['source_url','raw_location','reason'].some(key=>typeof hop[key]!=='string') || hop.target_url!=null && typeof hop.target_url!=='string' || !Array.isArray(hop.original_reference_kinds) || hop.original_reference_kinds.some(kind=>!resourceReferenceKinds.includes(kind)) || !Array.isArray(hop.authorizing_occurrence_ids) || hop.authorizing_occurrence_ids.some(id=>typeof id!=='string') || ['scope_allowed','allowed','request_started'].some(key=>typeof hop[key]!=='boolean') || ['policy_check','policy_traverse','robots_allowed'].some(key=>hop[key]!=null && typeof hop[key]!=='boolean'))))throw new Error('Redirect-Rollenbeobachtung ist beschädigt; fehlende Zulassungs- oder Quellenfakten werden nicht ergänzt.');
         previous=row.requested_url;
       }
       if(result.next_after_url!== (rows.length?rows.at(-1).requested_url:null) || result.has_more && !rows.length)throw new Error('Ungültiger Transport-Cursor.');
@@ -1502,6 +1557,10 @@
         const observed=row.occurrence, grant=row.decision?.grant;
         if(!Number.isSafeInteger(row.sequence) || row.sequence<=previous || !Number.isSafeInteger(row.generation) || row.generation<1 || !['current','inherited'].includes(row.basis) || !observed || ['occurrence_id','requested_source_url','source_document_url','raw_value','reference_kind','classification_basis','source_revision'].some(key=>typeof observed[key]!=='string') || !observed.occurrence_id || typeof observed.nofollow!=='boolean' || !Number.isSafeInteger(observed.source_ordinal) || observed.source_ordinal<0 || typeof row.evaluation_revision!=='string' || !row.decision || typeof row.decision.reason!=='string')throw new Error('Ressourcenvorkommen ohne gespeicherte Sequenz, Quelle oder Entscheidung.');
         if(grant!=null && (grant.engine!==nativeResourceEngine || grant.config_sha256!==summary.config_sha256 || grant.occurrence_id!==observed.occurrence_id || typeof grant.fetch_url!=='string' || ['store','can_expand_navigation','can_expand_resources','can_expand_css','can_expand_pdf'].some(key=>typeof grant[key]!=='boolean')))throw new Error('Nicht unterstützter eigenständiger Ressourcen-Grant.');
+        if(grant?.reference_kind!=null && !resourceReferenceKinds.includes(grant.reference_kind))throw new Error('Nicht unterstützte beobachtete Grant-Rolle; keine Rolle wird aus URL, MIME oder Quellreferenz abgeleitet.');
+        const qualification=row.decision.qualification;
+        if(qualification!=null && (typeof qualification!=='object' || Array.isArray(qualification) || typeof qualification.engine!=='string'))throw new Error('Qualifizierungsprofil ohne beobachtete Profilkennung.');
+        if(qualification?.engine===resourceContractEngine && (!['internal','external','unknown'].includes(qualification.scope) || !['html_rel','http_link_rel','not_applicable'].includes(qualification.source) || !Array.isArray(qualification.rel_qualifiers) || qualification.rel_qualifiers.some(value=>!['nofollow','ugc','sponsored'].includes(value)) || ['document_nofollow','follow_allowed'].some(key=>typeof qualification[key]!=='boolean')))throw new Error('Qualifizierungsbeobachtung enthält keine unterstützten Bereichs-, Quellen- oder Direktivenfakten.');
         previous=row.sequence;
       }
       if(result.next_after_sequence!== (rows.length?rows.at(-1).sequence:null) || result.has_more && !rows.length)throw new Error('Ungültiger oder nicht fortschreitender Vorkommens-Cursor.');
@@ -1527,11 +1586,11 @@
     ['Sequenz',row=>row.sequence],['Generation',row=>row.generation],['Ledger-Basis',row=>resourceBasis(row.basis)],['Referenzrolle',row=>row.occurrence.reference_kind],
     ['Anfrage-Identität der Quelle',row=>row.occurrence.requested_source_url],['Quelldokument-URL aus Vorkommen',row=>row.occurrence.source_document_url],['Originalwert',row=>row.occurrence.raw_value],['Dekodierter Wert',row=>row.occurrence.decoded_value],['Aufgelöste Referenz',row=>row.occurrence.resolved_url],
     ['Entscheidungsgrund',row=>row.decision.reason],['Eigenständige Grant-Abruf-URL',row=>row.decision.grant?.fetch_url],['Antwort speichern · Grant',row=>row.decision.grant?.store],['Navigation expandieren · Grant',row=>row.decision.grant?.can_expand_navigation],['Ressourcen expandieren · Grant',row=>row.decision.grant?.can_expand_resources],['CSS expandieren · Grant',row=>row.decision.grant?.can_expand_css],['PDF expandieren · Grant',row=>row.decision.grant?.can_expand_pdf],
-    ['Zusammengeführte Grant-ID',row=>row.decision.coalesced_into],['Quellordinal',row=>row.occurrence.source_ordinal],['Quelleinheit vollständig',row=>row.occurrence.source_complete],['Quelleinheit-Revision',row=>row.occurrence.source_unit_revision],['DOM-Pfad',row=>row.occurrence.dom_location],['UTF-8-Bytebeginn',row=>row.occurrence.byte_start],['UTF-8-Byteende',row=>row.occurrence.byte_end],['Deklarierter MIME-Hinweis',row=>row.occurrence.declared_mime],['Klassifikationsbasis',row=>row.occurrence.classification_basis],['Nofollow beobachtet',row=>row.occurrence.nofollow],['Beobachtungsfehler',row=>row.occurrence.observation_error],['Quellrevision',row=>row.occurrence.source_revision],['Vorkommen-ID',row=>row.occurrence.occurrence_id],['Auswertungsrevision',row=>row.evaluation_revision]
+    ['Zusammengeführte Grant-ID',row=>row.decision.coalesced_into],['Quellordinal',row=>row.occurrence.source_ordinal],['Quelleinheit vollständig',row=>row.occurrence.source_complete],['Quelleinheit-Revision',row=>row.occurrence.source_unit_revision],['DOM-Pfad',row=>row.occurrence.dom_location],['UTF-8-Bytebeginn',row=>row.occurrence.byte_start],['UTF-8-Byteende',row=>row.occurrence.byte_end],['Deklarierter MIME-Hinweis',row=>row.occurrence.declared_mime],['Klassifikationsbasis',row=>row.occurrence.classification_basis],['Nofollow beobachtet',row=>row.occurrence.nofollow],['Beobachtungsfehler',row=>row.occurrence.observation_error],['Quellrevision',row=>row.occurrence.source_revision],['Vorkommen-ID',row=>row.occurrence.occurrence_id],['Auswertungsrevision',row=>row.evaluation_revision],['Tatsächlich beobachtete Grant-Rolle',row=>row.decision.grant?.reference_kind],['Beobachtetes Qualifizierungsprofil',row=>resourceContractLabel(row.decision.qualification?.engine)],['Beobachteter Link-Bereich',row=>qualificationValue(row,'scope')],['Beobachtete Rel-Qualifikatoren',row=>qualificationValue(row,'rel_qualifiers')==null?null:JSON.stringify(qualificationValue(row,'rel_qualifiers'))],['Qualifizierungsquelle',row=>qualificationValue(row,'source')],['Dokument-Nofollow · beobachtet',row=>qualificationValue(row,'document_nofollow')],['Folgen laut gespeicherter Entscheidung',row=>qualificationValue(row,'follow_allowed')]
   ];
   const resourceTransportColumns=[
     ['Anfrage-Identität',row=>row.requested_url],['Gespeicherte finale URL',row=>row.projection.final_url],['Beobachtete Generation',row=>row.observed_generation],['Antwort im Seitenbericht gespeichert',row=>row.retained_response],['Erster HTTP-Status',row=>row.projection.status],['Finaler HTTP-Status',row=>row.projection.final_status],['Beobachteter Content-Type',row=>row.projection.content_type],['Antwortzeit ms',row=>row.projection.response_ms],['Erfasste Größe Bytes',row=>row.projection.size_bytes],['Transportfehler',row=>row.projection.error],['Robots blockiert',row=>row.projection.blocked_by_robots],['Response abgeschnitten',row=>row.projection.truncated],
-    ['Metadatenprojektion vollständig',row=>row.projection.resource_response?.metadata_projection_complete],['Nicht erhaltene Projektionsfelder',row=>row.projection.resource_response?.unretained_fields==null?null:JSON.stringify(row.projection.resource_response.unretained_fields)],['Entity-Body in Projektion erhalten',row=>row.projection.resource_response?.entity_body_retained],['Erfasste Entity-Bytes',row=>row.projection.resource_response?.captured_entity_bytes],['Entity-Erfassung vollständig',row=>row.projection.resource_response?.captured_entity_complete],['Dekodierungsstatus',row=>row.projection.resource_response?.decode_status],['Dekodierte Quelle SHA256',row=>row.projection.resource_response?.decoded_source_sha256],['Entity-SHA256',row=>row.projection.resource_response?.captured_entity_sha256],['Erfasst am',row=>row.projection.fetched_at]
+    ['Metadatenprojektion vollständig',row=>row.projection.resource_response?.metadata_projection_complete],['Nicht erhaltene Projektionsfelder',row=>row.projection.resource_response?.unretained_fields==null?null:JSON.stringify(row.projection.resource_response.unretained_fields)],['Entity-Body in Projektion erhalten',row=>row.projection.resource_response?.entity_body_retained],['Erfasste Entity-Bytes',row=>row.projection.resource_response?.captured_entity_bytes],['Entity-Erfassung vollständig',row=>row.projection.resource_response?.captured_entity_complete],['Dekodierungsstatus',row=>row.projection.resource_response?.decode_status],['Dekodierte Quelle SHA256',row=>row.projection.resource_response?.decoded_source_sha256],['Entity-SHA256',row=>row.projection.resource_response?.captured_entity_sha256],['Erfasst am',row=>row.projection.fetched_at],['Beobachtetes Antwort-Semantikprofil',row=>resourceContractLabel(row.projection.resource_response?.contract_engine)],['Gespeicherte Redirect-Entscheidungen',row=>row.projection.resource_response?.redirect_decisions?.length]
   ];
   const resourceColumns=()=>resourceView()==='transports'?resourceTransportColumns:resourceOccurrenceColumns;
   const resourceUsable=()=>Boolean(state.resources.result?.enabled && state.resources.result.ledger_available && state.resources.result.engine===nativeResourceEngine && !state.resources.error && !state.resources.token);
@@ -1549,11 +1608,12 @@
   function renderResourceLedger() {
     if(!resourceSection())return;
     const resources=state.resources,result=resources.result,summary=result?.checkpoint,busy=Boolean(resources.token),usable=resourceUsable(),kind=resourceView(),rows=resourceVisibleRows(),columns=resourceColumns();
+    $('resource-discovery-profile').textContent=resourceSavedContractLabel();
     $('resource-discovery-error').hidden=!resources.error; $('resource-discovery-error').textContent=resources.error;
     $('resource-discovery-summary').textContent=!state.crawl?'Kein Crawl ausgewählt.':busy?'Gespeicherte Ressourcen-Seite wird geladen …':resources.error?'Snapshot nicht verfügbar; kein vollständiges leeres Ergebnis.':!result?'Noch keine gespeicherte Ledger-Seite geladen.':!result.enabled?'Native Ressourcenermittlung war für diesen Bericht nicht aktiviert.':!result.ledger_available?'Echtes SQLite-Ledger nicht verfügbar. Eine deklarierte Zusammenfassung rekonstruiert keine gespeicherten Vorkommen.':`${number(summary.decision_rows)} gespeicherte Entscheidungen · ${number(summary.completed_transports)} Abgeschlossene URL-Abrufe (vorliegendes Protokoll) · ${number(summary.retained_responses)} Gespeicherte Ergebniszeilen · ${number(summary.pending_transports)} Transporte ausstehend · ${number(summary.pending_expansions)} Expansionen ausstehend · ${number(summary.incomplete_sources)} unvollständige Quellen · Entdeckung ${summary.complete?'vollständig laut Ledger':'unvollständig'}`;
     const inherited=summary?.inherited_history;
     $('resource-discovery-scope').textContent=result?[`API-Snapshot: ${result.snapshot_scope}; Website-Anfragen: ${result.website_requests}; Entity-Bodies enthalten: ${resourceValue(result.entity_bodies_included)}.`,result.reason?`Verfügbarkeitsgrund: ${result.reason}.`:'',summary?`${result.ledger_available?'SQLite-Zusammenfassung':'Nur deklarierte Zusammenfassung'} · Revision ${resourceValue(summary.revision)} · Config-SHA256 ${resourceValue(summary.config_sha256)}.`:'',inherited?`Elternsnapshot ${inherited.parent_snapshot_sha256}; geerbte Historienzeilen ${inherited.rows_available?'verfügbar':'NICHT verfügbar; Herkunftsabdeckung unvollständig'}. Eine deklarierte Elternzusammenfassung bestätigt keine vorhandenen Zeilen.`:''].filter(Boolean).join(' '):'Metadaten werden ausschließlich aus gespeicherten API-Beobachtungen gelesen; keine Website-Anfrage wird gestartet.';
-    $('resource-discovery-checkpoint').textContent=JSON.stringify({enabled:result?.enabled??null,ledger_available:result?.ledger_available??null,engine:result?.engine??null,checkpoint:summary??null,snapshot:result?.snapshot??null,crawl_config_sha256:result?.crawl_config_sha256??null,crawl_generation:result?.crawl_generation??null,reason:result?.reason??null,snapshot_scope:result?.snapshot_scope??null,entity_bodies_included:result?.entity_bodies_included??null},null,2);
+    $('resource-discovery-checkpoint').textContent=JSON.stringify({enabled:result?.enabled??null,ledger_available:result?.ledger_available??null,engine:result?.engine??null,configured_semantic_contract:result?.configured_semantic_contract??null,semantic_contract_binding:result?.semantic_contract_binding??null,checkpoint:summary??null,snapshot:result?.snapshot??null,crawl_config_sha256:result?.crawl_config_sha256??null,crawl_generation:result?.crawl_generation??null,reason:result?.reason??null,snapshot_scope:result?.snapshot_scope??null,entity_bodies_included:result?.entity_bodies_included??null},null,2);
     const table=$('resource-discovery-table');
     table.querySelector('thead').innerHTML=`<tr>${columns.map(([label],index)=>`<th scope="col" aria-sort="${resources.sort===index?resources.direction===1?'ascending':'descending':'none'}"><button type="button" data-resource-sort="${index}">${escape(label)} ${resources.sort===index?resources.direction===1?'↑':'↓':'↕'}</button></th>`).join('')}</tr>`;
     const empty=busy?'Seite wird geladen; bisherige Zeilen werden nicht als neuer Snapshot angezeigt.':resources.error?'Lesefehler; dies ist kein leeres vollständiges Ergebnis.':!result?.ledger_available?'Keine verifizierten Ledger-Zeilen verfügbar.':!rows.length?'Keine passenden Beobachtungen auf der geladenen Seite. Weitere Seiten können andere Vorkommen enthalten.':'';
@@ -1573,11 +1633,19 @@
     $('resource-discovery-inspector-heading').textContent=transport?'Abgeschlossene native Transportbeobachtung':'Gespeichertes Quellvorkommen und eigenständiger Grant';
     $('resource-discovery-inspector-basis').textContent=transport?`Tatsächliche Anfrage ${row.requested_url}; beobachtete Generation ${row.observed_generation}; Antwort ${row.retained_response?'im Seitenbericht gespeichert':'nicht im Seitenbericht gespeichert'}. Diese Projektion enthält keine Entity-HTML/CSS-Bodies; fehlende Quellerfassung oder Metadatenvollständigkeit bleiben unbekannt. Vereinigte Task-Erlaubnisse erweitern keinen früheren einzelnen Grant.`:`${resourceBasis(row.basis)}; Generation ${row.generation}; Sequenz ${row.sequence}. Quelle und Originalwert sind beobachtet. Der eigenständige Grant ${row.decision.grant?'erteilt Erlaubnisse für dieses Vorkommen':'fehlt für dieses Vorkommen'}; Zusammenführung beweist keinen gestarteten oder erfolgreichen Transport und verändert seine bisherigen Erlaubnisse nicht.`;
     $('resource-discovery-inspector-data').textContent=JSON.stringify(row,null,2);
+    $('resource-redirect-details').hidden=!transport;
+    if(transport){
+      const decisions=row.projection.resource_response?.redirect_decisions,known=Array.isArray(decisions),rows=known?decisions.slice(0,200):[],table=$('resource-redirect-table');
+      const columns=[['Position',(_,index)=>index+1],['Quell-URL',hop=>hop.source_url],['Original-Location',hop=>hop.raw_location],['Beobachtetes Redirect-Ziel',hop=>hop.target_url],['Ursprüngliche Grant-Rollen',hop=>JSON.stringify(hop.original_reference_kinds)],['Erlaubende Vorkommen',hop=>JSON.stringify(hop.authorizing_occurrence_ids)],['Rollen-Scope erlaubt',hop=>hop.scope_allowed],['Policy-Prüfung',hop=>hop.policy_check],['Policy-Traversierung',hop=>hop.policy_traverse],['Robots-Zulassung',hop=>hop.robots_allowed],['Zugelassen',hop=>hop.allowed],['Gespeicherter Grund',hop=>hop.reason],['Anfrage begonnen',hop=>hop.request_started]];
+      $('resource-redirect-scope').textContent=!known?'Redirect-Rollenfakten nicht erfasst. Aus finaler URL oder Status werden keine früheren Zulassungen, Header oder Anfragen abgeleitet.':`${decisions.length} gespeicherte Entscheidungen; ${rows.length} hier angezeigt. Anfrage begonnen bedeutet Initiierung, keinen bestätigten Empfang oder Erfolg am Ziel. Fehlende Policy-/Robots-Fakten bleiben unbekannt; frühere Direktiven werden nicht zu finalen Dokumentdirektiven umgedeutet.`;
+      table.querySelector('thead').innerHTML=`<tr>${columns.map(([label])=>`<th scope="col">${escape(label)}</th>`).join('')}</tr>`;
+      table.querySelector('tbody').innerHTML=rows.length?rows.map((hop,index)=>`<tr>${columns.map(([,value])=>`<td>${escape(resourceValue(value(hop,index)))}</td>`).join('')}</tr>`).join(''):`<tr><td class="empty-cell" colspan="${columns.length}">${known?'Beobachtet ohne gespeicherte Redirect-Entscheidungen.':'Nicht erfasst; kein Beweis für eine leere Redirectkette.'}</td></tr>`;
+    }
   }
   function exportResourcePage() {
     const rows=resourceVisibleRows();if(!rows.length)return;
     const result=state.resources.result,summary=result.checkpoint;
-    const meta=[['API Snapshot-Scope',()=>result.snapshot_scope],['Vollständige Crawl-Config SHA256',()=>result.snapshot.crawl_config_sha256],['SQL-Snapshot Generation',()=>result.snapshot.generation],['Ledger-Engine',()=>result.engine],['Ledger-Config SHA256',()=>summary.config_sha256],['Ledger-Snapshot Revision',()=>summary.revision],['Ledger-Rolling SHA256',()=>summary.rolling_sha256],['Ledger-Entdeckung vollständig',()=>summary.complete],['Geerbte Historienzeilen verfügbar',()=>summary.inherited_history?.rows_available],['Geladener Cursor',()=>state.resources.cursor],['Exportumfang',()=> 'filtered_loaded_page_only']];
+    const meta=[['API Snapshot-Scope',()=>result.snapshot_scope],['Vollständige Crawl-Config SHA256',()=>result.snapshot.crawl_config_sha256],['SQL-Snapshot Generation',()=>result.snapshot.generation],['Ledger-Engine',()=>result.engine],['Ledger-Config SHA256',()=>summary.config_sha256],['Ledger-Snapshot Revision',()=>summary.revision],['Ledger-Rolling SHA256',()=>summary.rolling_sha256],['Ledger-Entdeckung vollständig',()=>summary.complete],['Geerbte Historienzeilen verfügbar',()=>summary.inherited_history?.rows_available],['Geladener Cursor',()=>state.resources.cursor],['Exportumfang',()=> 'filtered_loaded_page_only'],['Konfiguriertes Semantikprofil',()=>result.configured_semantic_contract],['Semantikprofil-Bindung',()=>result.semantic_contract_binding],['SQL-Snapshot Semantikprofil',()=>result.snapshot.resource_contract_engine]];
     const columns=[...resourceColumns(),...meta],cell=input=>{let value=String(input??'');if(typeof input!=='number' && typeof input!=='boolean' && /^[\s\uFEFF]*[=+@-]/u.test(value))value=`'${value}`;return `"${value.replace(/"/g,'""')}"`;};
     const data=[columns.map(([label])=>cell(label)).join(','),...rows.map(row=>columns.map(([,value])=>cell(value(row))).join(','))].join('\r\n');
     downloadBlob(new Blob(['\uFEFF',data],{type:'text/csv;charset=utf-8'}),`open-seo-spider-${state.crawl.id}-resources-${resourceView()}-loaded-page.csv`);
@@ -1589,6 +1657,10 @@
     message('Export aller gespeicherten Vorkommen angefordert. Er exportiert einen SQLite-Snapshot; vollständige Zeilen sind keine vollständige Entdeckung.');
   }
   function bindResourceEvents() {
+    $('resource-contract-use-current').addEventListener('click',useCurrentResourceContract);
+    for(const id of ['resource-follow-internal-qualified','resource-follow-external-qualified'])$(id).addEventListener('change',changeResourceQualifiedLinks);
+    $('settings-form').elements.resource_discovery_json.addEventListener('input',syncResourceContractSettings);
+    $('settings-form').elements.resource_discovery_enabled.addEventListener('change',syncResourceContractSettings);
     syncResourceFilter();
     $('resource-discovery-kind').addEventListener('change',()=>{resetResourceLedger();renderResourceLedger();loadResourcePage();});
     $('resource-discovery-search').addEventListener('input',renderResourceLedger); $('resource-discovery-filter').addEventListener('change',renderResourceLedger);

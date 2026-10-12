@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "engine": "open-seo-spider/resource-contract-v2",
+  "collected_at": "2026-10-12T22:26:00.203Z",
+  "result": "LOCAL_BOUNDED_ACCEPTANCE_PASS",
+  "source_debug_sha256": "a5881b7c8cffff68a1e47e8a22d9d02e6ca2f1c1c698cebc74036b06dbf92d0f",
+  "source_baseline_commit": "f107ce7cc5e610494f30df8a3a1d46d98d7870e4",
+  "source_file_hashes": {
+    "scripts/resource-contract-e2e.mjs": "10e42b85dfa27bb51fcfb81fe9aa42128926073df705ca6e1ff774faabc4974b",
+    "crates/app/src/server.rs": "718de4c430a8a95e7792eb3c06520fa5e33072ac66436bb6b5f2c7e67e89c376",
+    "crates/app/src/server/resources.rs": "c7e812d55d9102c3b296ecfd71a6f64b77dc4850dd8c65847c00792164de3c05",
+    "crates/core/src/crawler.rs": "3baa929146c0d879fa183f2cb3e9fd40ced17935bd8d1dc24195c2f6f5ec59f2",
+    "crates/core/src/resource_policy.rs": "492ad0217934b7a772e7eb544aa96f9d4855bdf2054e3e69c32cb49c6691026e",
+    "crates/core/src/resource_html.rs": "536b347b17ac79e4cca36483046242a5a4d5b87bc48e9348a9f383760c0c1f2f",
+    "crates/core/src/resource_capture.rs": "05b926749b2211510dab136c4a64cf8ccdd4b982a6430e3690f3290b4824c446",
+    "crates/core/src/resource_ledger.rs": "08aa3c0efa78f07f1385a43343aa2e33cf72a85dc5f23efe5c34f1391c6bee71",
+    "crates/core/src/store.rs": "3cde304cea5943503bf305a0ada454bbb0b57c0123ee0a8e4d8a76925f84b494"
+  },
+  "frozen_plan_sha256": "06ac2ef019370b234d4fda56cba687923305e9a148aebf1c967d145068cbd18d",
+  "gates": {
+    "focused_contract_tests": 22,
+    "matrix_unique_cells": 108,
+    "matrix_profile_executions": 216,
+    "matrix_before_http_rejections": 40,
+    "response_unique_controls": 21,
+    "response_profile_executions": 44,
+    "api_cli_mcp_groups": 13,
+    "api_cli_mcp_jobs": 19,
+    "actual_native_ui_checks": 10,
+    "standard_workspace_tests": {
+      "passed": 387,
+      "failed": 0,
+      "ignored": 4,
+      "suites": 14
+    },
+    "workspace_clippy": "PASS",
+    "format": "PASS",
+    "exact_commit_ci": "PENDING",
+    "immutable_release": "PENDING",
+    "installed_runtime": "B9_UNCHANGED",
+    "redirect_plan_88": "PASS_176_PROFILE_EXECUTIONS",
+    "full_feature_acceptance": "PARTIAL",
+    "reference_parity": "NOT_PROVEN",
+    "additional_redirect_boundaries": "PASS_24_PROFILE_EXECUTIONS",
+    "additional_redirect_rust_tests": 1
+  },
+  "artifacts": [
+    {
+      "id": "resource-contract-core",
+      "artifact": "docs/verification/resource-contract-core.json",
+      "artifact_sha256": "249d997b251086b8cff7993aa73caaa9b61fbb93cf714a2dd042d9085ea281da",
+      "bytes": 26324,
+      "result": "FOCUSED_CORE_PASS_FULL_MATRIX_PENDING",
+      "tested_at": null
+    },
+    {
+      "id": "resource-contract-matrix",
+      "artifact": "docs/verification/resource-contract-matrix.json",
+      "artifact_sha256": "cd256f68b9176acab95dd760151f5038afbc2b0fc8a629434edac797e5ca4d2e",
+      "bytes": 3286658,
+      "result": "PASS",
+      "tested_at": null
+    },
+    {
+      "id": "resource-contract-responses",
+      "artifact": "docs/verification/resource-contract-responses.json",
+      "artifact_sha256": "ba0222e14d31b542664accce883838784e24d2e8bb2089c4b400afa8a92ec118",
+      "bytes": 754055,
+      "result": "PASS",
+      "tested_at": null
+    },
+    {
+      "id": "resource-contract-native-summary",
+      "artifact": "docs/verification/resource-contract-native-summary.json",
+      "artifact_sha256": "191cdb8d8c9a3eaafb4e59d851dbe4fae88094d425c29d18d414c71d200ff938",
+      "bytes": 5941,
+      "result": "PASS",
+      "tested_at": null
+    },
+    {
+      "id": "resource-contract-api-cli-mcp",
+      "artifact": "docs/verification/resource-contract-e2e.json",
+      "artifact_sha256": "af8953fffb68b3aeba5805a3b144cb30f2a6adce417bc6ede667265e229b883d",
+      "bytes": 12579,
+      "result": "PASS",
+      "tested_at": "2026-10-12T22:09:59.821Z"
+    },
+    {
+      "id": "resource-contract-ui",
+      "artifact": "docs/verification/resource-contract-ui.json",
+      "artifact_sha256": "6355ad7cb584301f312076288240800bb407ff71096a4c106237ecfebfc5ad4a",
+      "bytes": 22817,
+      "result": "PASS",
+      "tested_at": "2026-10-12T22:12:52.024Z"
+    },
+    {
+      "id": "resource-contract-legacy-api",
+      "artifact": "docs/verification/resource-contract-legacy-api.json",
+      "artifact_sha256": "ca5a00a9a7267e0031af9f1e11928f4044ad4498715b3a45b202238ff779508a",
+      "bytes": 28274,
+      "result": "PASS",
+      "tested_at": "2026-10-12T22:10:05.399Z"
+    },
+    {
+      "id": "resource-contract-legacy-capture",
+      "artifact": "docs/verification/resource-contract-legacy-capture.json",
+      "artifact_sha256": "6dc2f9ad554713284d3d90268370757386665fdd7ee494d6c30921b2f7b3a634",
+      "bytes": 1509,
+      "result": "PASS",
+      "tested_at": "2026-10-12T22:09:53.555Z"
+    },
+    {
+      "id": "resource-contract-mcp-regression",
+      "artifact": "docs/verification/resource-contract-mcp-regression.json",
+      "artifact_sha256": "dae5712379acc5c5efd124c0020bff4590ea1692479b4c5e49d6f396e2d2d822",
+      "bytes": 1054,
+      "result": "PASS",
+      "tested_at": "2026-10-12T22:15:54.934Z"
+    },
+    {
+      "id": "resource-contract-redirect-summary",
+      "artifact": "docs/verification/resource-contract-redirect-summary.json",
+      "artifact_sha256": "3b71accb7e3e7c595bb879f1d13745bc8c730c20850d685e1d384a3a353949af",
+      "bytes": 8881,
+      "result": "PASS",
+      "tested_at": null
+    },
+    {
+      "id": "resource-contract-redirects",
+      "artifact": "docs/verification/resource-contract-redirects.json",
+      "artifact_sha256": "f672cc2846919ef768ee21374ea19366d3f35a31d834b7fa268477a1c0d5a3d7",
+      "bytes": 3956710,
+      "result": "PASS",
+      "tested_at": null
+    }
+  ],
+  "private_log_hashes": {
+    "workspace_tests": "98bbf6f009b80c42bb20b1a5800e70817cb31a4178d5babeb44691d805f7a487",
+    "workspace_clippy": "dab65bdfda3e1f6f55acd4c4a17b9624e2daca1aceb9bd166103f0d3daf0332d"
+  },
+  "scope": "Own native loopback resources, exact switch/MIME/qualification/role provenance and persisted API/CLI/SDK/browser acceptance. Original V1 compatibility remains a separate profile.",
+  "limits": [
+    "Supplemental encoding/interruption/budget/browser resource gates and a trusted owned HTTPS positive fixture remain separately open.",
+    "The installed user runtime remains the separately proven B9 release; this debug proof is no release or installation claim.",
+    "Robots and sitemap protocol transfers do not yet have resource role grants.",
+    "Immutable transport permissions remain separate from later independent report witnesses.",
+    "No full vendor/filter/workflow parity claim."
+  ]
+}
