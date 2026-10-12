@@ -28,6 +28,10 @@ struct RenderedDocument {
     network_events_dropped: usize,
     accessibility: Option<serde_json::Value>,
     screenshot_base64: Option<String>,
+    #[serde(default)]
+    custom_javascript_results: Vec<serde_json::Value>,
+    #[serde(default)]
+    browser_cookies: Vec<serde_json::Value>,
 }
 
 pub(crate) fn validate_renderer(config: &RendererConfig, timeout_secs: u64) -> anyhow::Result<()> {
@@ -52,6 +56,30 @@ pub(crate) fn validate_renderer(config: &RendererConfig, timeout_secs: u64) -> a
     if config.wait_ms >= timeout_secs.saturating_mul(1000) {
         bail!("Renderer wait must be less than the request timeout");
     }
+    if config.custom_javascript.len() > 32 {
+        bail!("At most 32 custom JavaScript definitions are supported");
+    }
+    let mut names = std::collections::HashSet::new();
+    let mut total_script_bytes = 0usize;
+    for definition in &config.custom_javascript {
+        let name = definition.name.trim();
+        if name.is_empty()
+            || name.len() > 128
+            || name.chars().any(char::is_control)
+            || !names.insert(name)
+        {
+            bail!(
+                "Custom JavaScript names must be unique, nonempty, contain no controls and fit within 128 UTF-8 bytes"
+            );
+        }
+        if definition.script.trim().is_empty() || definition.script.len() > 65536 {
+            bail!("Custom JavaScript scripts must contain 1 to 65536 UTF-8 bytes");
+        }
+        total_script_bytes += definition.script.len();
+    }
+    if total_script_bytes > 262144 {
+        bail!("Combined custom JavaScript exceeds 262144 UTF-8 bytes");
+    }
     Ok(())
 }
 
@@ -64,6 +92,25 @@ pub(crate) async fn render_page(page: &mut PageRecord, config: &CrawlConfig, see
         Ok(document) => {
             let native_final_url = page.final_url.clone();
             page.final_url = document.final_url.clone();
+            if page.final_url != native_final_url {
+                // A JavaScript navigation establishes a different document;
+                // its native predecessor's headers cannot govern that DOM.
+                page.header_link_values =
+                    document.headers.get("link").cloned().into_iter().collect();
+                page.x_robots_tag = document
+                    .headers
+                    .get("x-robots-tag")
+                    .cloned()
+                    .into_iter()
+                    .collect();
+                crate::metadata::extract_http_metadata(page);
+                for relationship in &mut page.link_relationships {
+                    relationship.source = "rendered_http_header".into();
+                }
+                for rule in &mut page.robots_directives {
+                    rule.source = "rendered_http_header".into();
+                }
+            }
             page.titles.clear();
             page.meta_descriptions.clear();
             page.h1.clear();
@@ -107,6 +154,8 @@ pub(crate) async fn render_page(page: &mut PageRecord, config: &CrawlConfig, see
             page.network_requests = document.network_requests;
             page.accessibility = document.accessibility;
             page.screenshot_base64 = document.screenshot_base64;
+            page.custom_javascript_results = document.custom_javascript_results;
+            page.browser_cookies = document.browser_cookies;
         }
         Err(error) => {
             let message = format!("Browser rendering failed: {error:#}");
@@ -129,7 +178,7 @@ async fn request_render(
         BTreeMap::new()
     };
     let body = serde_json::to_vec(
-        &serde_json::json!({"url":page.final_url,"user_agent":config.user_agent,"timeout_ms":config.request_timeout_secs.saturating_mul(1000),"wait_ms":renderer.wait_ms,"custom_headers":headers,"accessibility":renderer.accessibility,"screenshot":renderer.screenshot}),
+        &serde_json::json!({"url":page.final_url,"user_agent":config.user_agent,"timeout_ms":config.request_timeout_secs.saturating_mul(1000),"wait_ms":renderer.wait_ms,"custom_headers":headers,"accessibility":renderer.accessibility,"screenshot":renderer.screenshot,"custom_javascript":renderer.custom_javascript,"collect_cookies":renderer.collect_cookies}),
     )?;
     let client = Client::builder()
         .redirect(reqwest::redirect::Policy::none())

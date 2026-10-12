@@ -1,7 +1,7 @@
 {
   "config": {
     "seed_urls": [
-      "http://127.0.0.1:51130/dynamic"
+      "http://127.0.0.1:60140/dynamic"
     ],
     "sitemap_urls": [],
     "discover_sitemaps": true,
@@ -18,26 +18,99 @@
     "max_body_bytes": 5242880,
     "max_redirects": 10,
     "user_agent": "Open SEO Spider/0.1",
+    "indexability_agent": "googlebot",
     "custom_headers": {},
     "renderer": {
       "endpoint": "http://127.0.0.1:8790/render",
       "wait_ms": 500,
       "accessibility": true,
       "screenshot": true,
+      "custom_javascript": [
+        {
+          "name": "titleAndLinks",
+          "script": "await Promise.resolve(); return {title:document.title,links:document.links.length};"
+        },
+        {
+          "name": "scriptFailure",
+          "script": "throw new Error(\"Owned script error\");"
+        },
+        {
+          "name": "laterResult",
+          "script": "return 42;"
+        }
+      ],
+      "collect_cookies": true,
       "max_response_bytes": 33554432
     },
     "custom_extractions": [
       {
         "name": "price",
         "selector": ".price",
-        "attribute": null
+        "attribute": null,
+        "method": "css",
+        "regex_group": null,
+        "regex_flags": "",
+        "namespaces": {},
+        "max_results": 10000
       },
       {
         "name": "links",
         "selector": "a",
-        "attribute": "href"
+        "attribute": "href",
+        "method": "css",
+        "regex_group": null,
+        "regex_flags": "",
+        "namespaces": {},
+        "max_results": 10000
+      },
+      {
+        "name": "xpathPrice",
+        "selector": "//span[@class=\"price\"]/text()",
+        "attribute": null,
+        "method": "xpath",
+        "regex_group": null,
+        "regex_flags": "",
+        "namespaces": {},
+        "max_results": 10000
+      },
+      {
+        "name": "xpathCount",
+        "selector": "count(//a)",
+        "attribute": null,
+        "method": "xpath",
+        "regex_group": null,
+        "regex_flags": "",
+        "namespaces": {},
+        "max_results": 10000
+      },
+      {
+        "name": "regexPrice",
+        "selector": "class=\"price\">([0-9.]+)",
+        "attribute": null,
+        "method": "regex",
+        "regex_group": 1,
+        "regex_flags": "",
+        "namespaces": {},
+        "max_results": 10000
       }
     ],
+    "audit_thresholds": {
+      "min_title_chars": 30,
+      "max_title_chars": 60,
+      "min_description_chars": 70,
+      "max_description_chars": 155,
+      "max_h1_chars": 70,
+      "max_h2_chars": 70,
+      "max_alt_chars": 100,
+      "max_url_chars": 115,
+      "min_word_count": 200,
+      "max_internal_outlinks": 1000,
+      "max_external_outlinks": 10,
+      "min_title_pixels": 200,
+      "max_title_pixels": 561,
+      "min_description_pixels": 400,
+      "max_description_pixels": 985
+    },
     "include_patterns": [],
     "exclude_patterns": [
       "/excluded"
@@ -45,12 +118,12 @@
   },
   "pages": [
     {
-      "url": "http://127.0.0.1:51130/dynamic",
-      "final_url": "http://127.0.0.1:51130/dynamic",
+      "url": "http://127.0.0.1:60140/dynamic",
+      "final_url": "http://127.0.0.1:60140/dynamic",
       "depth": 0,
       "discovered_from": null,
       "internal": true,
-      "fetched_at": "2026-10-11T12:55:10.121449100+00:00",
+      "fetched_at": "2026-10-12T07:51:32.902109600+00:00",
       "status": 200,
       "final_status": 200,
       "content_type": "text/html; charset=utf-8",
@@ -66,8 +139,9 @@
         "connection": "keep-alive",
         "content-length": "785",
         "content-type": "text/html; charset=utf-8",
-        "date": "Sun, 11 Oct 2026 12:55:10 GMT",
-        "keep-alive": "timeout=5"
+        "date": "Mon, 12 Oct 2026 07:51:32 GMT",
+        "keep-alive": "timeout=5",
+        "set-cookie": "seo_fixture=private_fixture_value; Path=/; SameSite=Lax"
       },
       "titles": [
         "Rendered SEO title"
@@ -75,22 +149,60 @@
       "meta_descriptions": [
         "Owned rendering fixture"
       ],
+      "title_pixel_widths": [
+        167
+      ],
+      "description_pixel_widths": [
+        149
+      ],
+      "text_metrics_engine": "roboto-2.138-simple-rounded-advances-v1; title20px; description14px; latin-greek-cyrillic",
       "h1": [
         "Rendered heading"
       ],
       "h2": [],
       "canonical": [
-        "http://127.0.0.1:51130/dynamic"
+        "http://127.0.0.1:60140/dynamic"
       ],
+      "html_canonical": [
+        "http://127.0.0.1:60140/dynamic"
+      ],
+      "header_canonical": [],
       "meta_robots": [],
       "x_robots_tag": [],
+      "robots_directives": [],
+      "effective_robots": [],
+      "indexability_agent": "googlebot",
+      "header_link_values": [],
       "hreflang": [],
+      "html_hreflang": [],
+      "header_hreflang": [],
+      "document_base_url": "http://127.0.0.1:60140/dynamic",
+      "base_href": null,
+      "link_relationships": [
+        {
+          "url": "http://127.0.0.1:60140/dynamic",
+          "rel": [
+            "canonical"
+          ],
+          "source": "html_link",
+          "context_url": "http://127.0.0.1:60140/dynamic",
+          "applies_to_document": true,
+          "hreflang": [],
+          "media": null,
+          "type_hint": null,
+          "title": null,
+          "parameters": {}
+        }
+      ],
+      "pagination_next": [],
+      "pagination_prev": [],
+      "amphtml": [],
       "language": "de",
       "viewport": null,
       "images": [],
       "links": [
         {
-          "url": "http://127.0.0.1:51130/excluded",
+          "url": "http://127.0.0.1:60140/excluded",
           "text": "Excluded target",
           "rel": "",
           "internal": true,
@@ -98,12 +210,20 @@
           "kind": "anchor"
         },
         {
-          "url": "http://127.0.0.1:51130/js-only",
+          "url": "http://127.0.0.1:60140/js-only",
           "text": "Discovered through JavaScript",
           "rel": "",
           "internal": true,
           "nofollow": false,
           "kind": "anchor"
+        },
+        {
+          "url": "http://127.0.0.1:60140/dynamic",
+          "text": "",
+          "rel": "canonical",
+          "internal": true,
+          "nofollow": false,
+          "kind": "relationship"
         }
       ],
       "word_count": 8,
@@ -120,25 +240,70 @@
         "meta_descriptions": [
           "Owned rendering fixture"
         ],
+        "title_pixel_widths": [
+          120
+        ],
+        "description_pixel_widths": [
+          149
+        ],
+        "text_metrics_engine": "roboto-2.138-simple-rounded-advances-v1; title20px; description14px; latin-greek-cyrillic",
         "h1": [
           "Raw heading"
         ],
         "h2": [],
         "canonical": [
-          "http://127.0.0.1:51130/dynamic"
+          "http://127.0.0.1:60140/dynamic"
         ],
+        "html_canonical": [
+          "http://127.0.0.1:60140/dynamic"
+        ],
+        "header_canonical": [],
         "meta_robots": [],
+        "robots_directives": [],
+        "effective_robots": [],
+        "indexability_agent": "googlebot",
         "hreflang": [],
+        "html_hreflang": [],
+        "header_hreflang": [],
+        "document_base_url": "http://127.0.0.1:60140/dynamic",
+        "base_href": null,
+        "link_relationships": [
+          {
+            "url": "http://127.0.0.1:60140/dynamic",
+            "rel": [
+              "canonical"
+            ],
+            "source": "html_link",
+            "context_url": "http://127.0.0.1:60140/dynamic",
+            "applies_to_document": true,
+            "hreflang": [],
+            "media": null,
+            "type_hint": null,
+            "title": null,
+            "parameters": {}
+          }
+        ],
+        "pagination_next": [],
+        "pagination_prev": [],
+        "amphtml": [],
         "word_count": 5,
         "content_hash": "86be1a6d8cc930785a66fcb2dc66aecb7af9ffa8d5ee0b3679407b5ae1149d60",
         "links": [
           {
-            "url": "http://127.0.0.1:51130/excluded",
+            "url": "http://127.0.0.1:60140/excluded",
             "text": "Excluded target",
             "rel": "",
             "internal": true,
             "nofollow": false,
             "kind": "anchor"
+          },
+          {
+            "url": "http://127.0.0.1:60140/dynamic",
+            "text": "",
+            "rel": "canonical",
+            "internal": true,
+            "nofollow": false,
+            "kind": "relationship"
           }
         ],
         "custom_extractions": [
@@ -149,7 +314,13 @@
             "values": [
               "10.00"
             ],
-            "source": "raw_html"
+            "source": "raw_html",
+            "method": "css",
+            "engine": "scraper-html5-css",
+            "result_type": "text",
+            "matched_count": 1,
+            "truncated": false,
+            "error": null
           },
           {
             "name": "links",
@@ -158,22 +329,74 @@
             "values": [
               "/excluded"
             ],
-            "source": "raw_html"
+            "source": "raw_html",
+            "method": "css",
+            "engine": "scraper-html5-css",
+            "result_type": "attribute",
+            "matched_count": 1,
+            "truncated": false,
+            "error": null
+          },
+          {
+            "name": "xpathPrice",
+            "selector": "//span[@class=\"price\"]/text()",
+            "attribute": null,
+            "values": [
+              "10.00"
+            ],
+            "source": "raw_html",
+            "method": "xpath",
+            "engine": "sxd-xpath-1.0-html-dom",
+            "result_type": "nodeset",
+            "matched_count": 1,
+            "truncated": false,
+            "error": null
+          },
+          {
+            "name": "xpathCount",
+            "selector": "count(//a)",
+            "attribute": null,
+            "values": [
+              "1"
+            ],
+            "source": "raw_html",
+            "method": "xpath",
+            "engine": "sxd-xpath-1.0-html-dom",
+            "result_type": "number",
+            "matched_count": 1,
+            "truncated": false,
+            "error": null
+          },
+          {
+            "name": "regexPrice",
+            "selector": "class=\"price\">([0-9.]+)",
+            "attribute": null,
+            "values": [
+              "10.00"
+            ],
+            "source": "raw_html",
+            "method": "regex",
+            "engine": "rust-regex",
+            "result_type": "regex_match",
+            "matched_count": 1,
+            "truncated": false,
+            "error": null
           }
         ]
       },
       "rendered": true,
       "renderer_error": null,
-      "rendered_url": "http://127.0.0.1:51130/dynamic",
+      "rendered_url": "http://127.0.0.1:60140/dynamic",
       "rendered_status": 200,
       "rendered_headers": {
         "connection": "keep-alive",
         "content-length": "785",
         "content-type": "text/html; charset=utf-8",
-        "date": "Sun, 11 Oct 2026 12:55:10 GMT",
-        "keep-alive": "timeout=5"
+        "date": "Mon, 12 Oct 2026 07:51:33 GMT",
+        "keep-alive": "timeout=5",
+        "set-cookie": "seo_fixture=private_fixture_value; Path=/; SameSite=Lax"
       },
-      "rendered_at": "2026-10-11T12:55:11.254Z",
+      "rendered_at": "2026-10-12T07:51:34.175Z",
       "browser_version": "154.0.8037.99",
       "rendered_viewport": {
         "height": 800,
@@ -188,7 +411,7 @@
             "columnNumber": 0,
             "line": 0,
             "lineNumber": 0,
-            "url": "http://127.0.0.1:51130/favicon.ico"
+            "url": "http://127.0.0.1:60140/favicon.ico"
           },
           "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
           "type": "console"
@@ -199,7 +422,7 @@
             "columnNumber": 725,
             "line": 0,
             "lineNumber": 0,
-            "url": "http://127.0.0.1:51130/dynamic"
+            "url": "http://127.0.0.1:60140/dynamic"
           },
           "message": "owned-renderer-fixture",
           "type": "console"
@@ -211,7 +434,7 @@
           "method": "GET",
           "resource_type": "document",
           "status": 200,
-          "url": "http://127.0.0.1:51130/dynamic"
+          "url": "http://127.0.0.1:60140/dynamic"
         }
       ],
       "accessibility": {
@@ -392,7 +615,13 @@
           "values": [
             "20.00"
           ],
-          "source": "rendered_html"
+          "source": "rendered_html",
+          "method": "css",
+          "engine": "scraper-html5-css",
+          "result_type": "text",
+          "matched_count": 1,
+          "truncated": false,
+          "error": null
         },
         {
           "name": "links",
@@ -402,21 +631,110 @@
             "/excluded",
             "/js-only"
           ],
-          "source": "rendered_html"
+          "source": "rendered_html",
+          "method": "css",
+          "engine": "scraper-html5-css",
+          "result_type": "attribute",
+          "matched_count": 2,
+          "truncated": false,
+          "error": null
+        },
+        {
+          "name": "xpathPrice",
+          "selector": "//span[@class=\"price\"]/text()",
+          "attribute": null,
+          "values": [
+            "20.00"
+          ],
+          "source": "rendered_html",
+          "method": "xpath",
+          "engine": "sxd-xpath-1.0-html-dom",
+          "result_type": "nodeset",
+          "matched_count": 1,
+          "truncated": false,
+          "error": null
+        },
+        {
+          "name": "xpathCount",
+          "selector": "count(//a)",
+          "attribute": null,
+          "values": [
+            "2"
+          ],
+          "source": "rendered_html",
+          "method": "xpath",
+          "engine": "sxd-xpath-1.0-html-dom",
+          "result_type": "number",
+          "matched_count": 1,
+          "truncated": false,
+          "error": null
+        },
+        {
+          "name": "regexPrice",
+          "selector": "class=\"price\">([0-9.]+)",
+          "attribute": null,
+          "values": [
+            "20.00"
+          ],
+          "source": "rendered_html",
+          "method": "regex",
+          "engine": "rust-regex",
+          "result_type": "regex_match",
+          "matched_count": 1,
+          "truncated": false,
+          "error": null
+        }
+      ],
+      "custom_javascript_results": [
+        {
+          "elapsed_ms": 4,
+          "error": null,
+          "name": "titleAndLinks",
+          "value": {
+            "links": 2,
+            "title": "Rendered SEO title"
+          },
+          "value_type": "object"
+        },
+        {
+          "elapsed_ms": 2,
+          "error": "page.evaluate: Error: Owned script error\n    at eval (eval at evaluate (:370:30), <anonymous>:2:7)\n    at eval (eval at evaluate (:370:30), <anonymous>:3:3)\n    at eval (eval at evaluate (:370:30), <anonymous>:7:74)\n    at eval (<anonymous>)\n    at UtilityScript.evaluate (<anonymous>:370:30)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+          "name": "scriptFailure",
+          "value": null,
+          "value_type": null
+        },
+        {
+          "elapsed_ms": 1,
+          "error": null,
+          "name": "laterResult",
+          "value": 42,
+          "value_type": "number"
+        }
+      ],
+      "browser_cookies": [
+        {
+          "domain": "127.0.0.1",
+          "expires": -1,
+          "httpOnly": false,
+          "name": "seo_fixture",
+          "path": "/",
+          "sameSite": "Lax",
+          "secure": false,
+          "value_length": 21
         }
       ]
     },
     {
-      "url": "http://127.0.0.1:51130/js-only",
-      "final_url": "http://127.0.0.1:51130/js-only",
+      "url": "http://127.0.0.1:60140/js-only",
+      "final_url": "http://127.0.0.1:60140/js-only",
       "depth": 1,
-      "discovered_from": "http://127.0.0.1:51130/dynamic",
+      "discovered_from": "http://127.0.0.1:60140/dynamic",
       "internal": true,
-      "fetched_at": "2026-10-11T12:55:11.517759900+00:00",
+      "fetched_at": "2026-10-12T07:51:34.457754600+00:00",
       "status": 200,
       "final_status": 200,
       "content_type": "text/html; charset=utf-8",
-      "response_ms": 0,
+      "response_ms": 3,
       "size_bytes": 140,
       "truncated": false,
       "error": null,
@@ -428,21 +746,40 @@
         "connection": "keep-alive",
         "content-length": "140",
         "content-type": "text/html; charset=utf-8",
-        "date": "Sun, 11 Oct 2026 12:55:11 GMT",
+        "date": "Mon, 12 Oct 2026 07:51:34 GMT",
         "keep-alive": "timeout=5"
       },
       "titles": [
         "Child page"
       ],
       "meta_descriptions": [],
+      "title_pixel_widths": [
+        94
+      ],
+      "description_pixel_widths": [],
+      "text_metrics_engine": "roboto-2.138-simple-rounded-advances-v1; title20px; description14px; latin-greek-cyrillic",
       "h1": [
         "Child page"
       ],
       "h2": [],
       "canonical": [],
+      "html_canonical": [],
+      "header_canonical": [],
       "meta_robots": [],
       "x_robots_tag": [],
+      "robots_directives": [],
+      "effective_robots": [],
+      "indexability_agent": "googlebot",
+      "header_link_values": [],
       "hreflang": [],
+      "html_hreflang": [],
+      "header_hreflang": [],
+      "document_base_url": "http://127.0.0.1:60140/js-only",
+      "base_href": null,
+      "link_relationships": [],
+      "pagination_next": [],
+      "pagination_prev": [],
+      "amphtml": [],
       "language": "de",
       "viewport": null,
       "images": [],
@@ -459,13 +796,31 @@
           "Child page"
         ],
         "meta_descriptions": [],
+        "title_pixel_widths": [
+          94
+        ],
+        "description_pixel_widths": [],
+        "text_metrics_engine": "roboto-2.138-simple-rounded-advances-v1; title20px; description14px; latin-greek-cyrillic",
         "h1": [
           "Child page"
         ],
         "h2": [],
         "canonical": [],
+        "html_canonical": [],
+        "header_canonical": [],
         "meta_robots": [],
+        "robots_directives": [],
+        "effective_robots": [],
+        "indexability_agent": "googlebot",
         "hreflang": [],
+        "html_hreflang": [],
+        "header_hreflang": [],
+        "document_base_url": "http://127.0.0.1:60140/js-only",
+        "base_href": null,
+        "link_relationships": [],
+        "pagination_next": [],
+        "pagination_prev": [],
+        "amphtml": [],
         "word_count": 3,
         "content_hash": "e01ea331eace0a6b627a09d1c991387944de2cabaa58a601a0541062d29a0e92",
         "links": [],
@@ -477,29 +832,86 @@
             "values": [
               "30.00"
             ],
-            "source": "raw_html"
+            "source": "raw_html",
+            "method": "css",
+            "engine": "scraper-html5-css",
+            "result_type": "text",
+            "matched_count": 1,
+            "truncated": false,
+            "error": null
           },
           {
             "name": "links",
             "selector": "a",
             "attribute": "href",
             "values": [],
-            "source": "raw_html"
+            "source": "raw_html",
+            "method": "css",
+            "engine": "scraper-html5-css",
+            "result_type": "attribute",
+            "matched_count": 0,
+            "truncated": false,
+            "error": null
+          },
+          {
+            "name": "xpathPrice",
+            "selector": "//span[@class=\"price\"]/text()",
+            "attribute": null,
+            "values": [
+              "30.00"
+            ],
+            "source": "raw_html",
+            "method": "xpath",
+            "engine": "sxd-xpath-1.0-html-dom",
+            "result_type": "nodeset",
+            "matched_count": 1,
+            "truncated": false,
+            "error": null
+          },
+          {
+            "name": "xpathCount",
+            "selector": "count(//a)",
+            "attribute": null,
+            "values": [
+              "0"
+            ],
+            "source": "raw_html",
+            "method": "xpath",
+            "engine": "sxd-xpath-1.0-html-dom",
+            "result_type": "number",
+            "matched_count": 1,
+            "truncated": false,
+            "error": null
+          },
+          {
+            "name": "regexPrice",
+            "selector": "class=\"price\">([0-9.]+)",
+            "attribute": null,
+            "values": [
+              "30.00"
+            ],
+            "source": "raw_html",
+            "method": "regex",
+            "engine": "rust-regex",
+            "result_type": "regex_match",
+            "matched_count": 1,
+            "truncated": false,
+            "error": null
           }
         ]
       },
       "rendered": true,
       "renderer_error": null,
-      "rendered_url": "http://127.0.0.1:51130/js-only",
+      "rendered_url": "http://127.0.0.1:60140/js-only",
       "rendered_status": 200,
       "rendered_headers": {
         "connection": "keep-alive",
         "content-length": "140",
         "content-type": "text/html; charset=utf-8",
-        "date": "Sun, 11 Oct 2026 12:55:11 GMT",
+        "date": "Mon, 12 Oct 2026 07:51:34 GMT",
         "keep-alive": "timeout=5"
       },
-      "rendered_at": "2026-10-11T12:55:12.303Z",
+      "rendered_at": "2026-10-12T07:51:35.259Z",
       "browser_version": "154.0.8037.99",
       "rendered_viewport": {
         "height": 800,
@@ -514,7 +926,7 @@
           "method": "GET",
           "resource_type": "document",
           "status": 200,
-          "url": "http://127.0.0.1:51130/js-only"
+          "url": "http://127.0.0.1:60140/js-only"
         }
       ],
       "accessibility": {
@@ -625,101 +1037,262 @@
           "values": [
             "30.00"
           ],
-          "source": "rendered_html"
+          "source": "rendered_html",
+          "method": "css",
+          "engine": "scraper-html5-css",
+          "result_type": "text",
+          "matched_count": 1,
+          "truncated": false,
+          "error": null
         },
         {
           "name": "links",
           "selector": "a",
           "attribute": "href",
           "values": [],
-          "source": "rendered_html"
+          "source": "rendered_html",
+          "method": "css",
+          "engine": "scraper-html5-css",
+          "result_type": "attribute",
+          "matched_count": 0,
+          "truncated": false,
+          "error": null
+        },
+        {
+          "name": "xpathPrice",
+          "selector": "//span[@class=\"price\"]/text()",
+          "attribute": null,
+          "values": [
+            "30.00"
+          ],
+          "source": "rendered_html",
+          "method": "xpath",
+          "engine": "sxd-xpath-1.0-html-dom",
+          "result_type": "nodeset",
+          "matched_count": 1,
+          "truncated": false,
+          "error": null
+        },
+        {
+          "name": "xpathCount",
+          "selector": "count(//a)",
+          "attribute": null,
+          "values": [
+            "0"
+          ],
+          "source": "rendered_html",
+          "method": "xpath",
+          "engine": "sxd-xpath-1.0-html-dom",
+          "result_type": "number",
+          "matched_count": 1,
+          "truncated": false,
+          "error": null
+        },
+        {
+          "name": "regexPrice",
+          "selector": "class=\"price\">([0-9.]+)",
+          "attribute": null,
+          "values": [
+            "30.00"
+          ],
+          "source": "rendered_html",
+          "method": "regex",
+          "engine": "rust-regex",
+          "result_type": "regex_match",
+          "matched_count": 1,
+          "truncated": false,
+          "error": null
         }
-      ]
+      ],
+      "custom_javascript_results": [
+        {
+          "elapsed_ms": 9,
+          "error": null,
+          "name": "titleAndLinks",
+          "value": {
+            "links": 0,
+            "title": "Child page"
+          },
+          "value_type": "object"
+        },
+        {
+          "elapsed_ms": 4,
+          "error": "page.evaluate: Error: Owned script error\n    at eval (eval at evaluate (:370:30), <anonymous>:2:7)\n    at eval (eval at evaluate (:370:30), <anonymous>:3:3)\n    at eval (eval at evaluate (:370:30), <anonymous>:7:74)\n    at eval (<anonymous>)\n    at UtilityScript.evaluate (<anonymous>:370:30)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+          "name": "scriptFailure",
+          "value": null,
+          "value_type": null
+        },
+        {
+          "elapsed_ms": 4,
+          "error": null,
+          "name": "laterResult",
+          "value": 42,
+          "value_type": "number"
+        }
+      ],
+      "browser_cookies": []
     }
   ],
   "issues": [
     {
+      "code": "title_short",
+      "severity": "notice",
+      "url": "http://127.0.0.1:60140/dynamic",
+      "message": "Primary title has 18 Unicode characters, below configured minimum 30; review content and search appearance",
+      "related_urls": []
+    },
+    {
+      "code": "description_short",
+      "severity": "notice",
+      "url": "http://127.0.0.1:60140/dynamic",
+      "message": "Primary meta description has 23 Unicode characters, below configured minimum 70; review content and search appearance",
+      "related_urls": []
+    },
+    {
+      "code": "title_pixels_short",
+      "severity": "notice",
+      "url": "http://127.0.0.1:60140/dynamic",
+      "message": "Primary title measured 167px below configured 200px minimum (profile roboto-2.138-simple-rounded-advances-v1; title20px; description14px; latin-greek-cyrillic)",
+      "related_urls": []
+    },
+    {
+      "code": "description_pixels_short",
+      "severity": "notice",
+      "url": "http://127.0.0.1:60140/dynamic",
+      "message": "Primary meta description measured 149px below configured 400px minimum (profile roboto-2.138-simple-rounded-advances-v1; title20px; description14px; latin-greek-cyrillic)",
+      "related_urls": []
+    },
+    {
+      "code": "h2_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:60140/dynamic",
+      "message": "No nonempty H2 heading was observed in the complete captured document; sections may not need H2 headings",
+      "related_urls": []
+    },
+    {
+      "code": "content_low_word_count",
+      "severity": "notice",
+      "url": "http://127.0.0.1:60140/dynamic",
+      "message": "Captured normalized visible text has 8 words, below configured minimum 200; word count alone does not establish content quality",
+      "related_urls": []
+    },
+    {
       "code": "http_url",
       "severity": "warning",
-      "url": "http://127.0.0.1:51130/dynamic",
+      "url": "http://127.0.0.1:60140/dynamic",
       "message": "HTML served over unencrypted HTTP",
       "related_urls": []
     },
     {
       "code": "viewport_missing",
       "severity": "notice",
-      "url": "http://127.0.0.1:51130/dynamic",
+      "url": "http://127.0.0.1:60140/dynamic",
       "message": "No viewport meta tag",
       "related_urls": []
     },
     {
       "code": "browser_console_errors",
       "severity": "warning",
-      "url": "http://127.0.0.1:51130/dynamic",
+      "url": "http://127.0.0.1:60140/dynamic",
       "message": "Browser reported 2 console or page error(s)",
       "related_urls": []
     },
     {
       "code": "accessibility_button-name",
       "severity": "error",
-      "url": "http://127.0.0.1:51130/dynamic",
+      "url": "http://127.0.0.1:60140/dynamic",
       "message": "Buttons must have discernible text (1 affected nodes; automated check only)",
       "related_urls": []
     },
     {
       "code": "accessibility_image-alt",
       "severity": "error",
-      "url": "http://127.0.0.1:51130/dynamic",
+      "url": "http://127.0.0.1:60140/dynamic",
       "message": "Images must have alternative text (1 affected nodes; automated check only)",
+      "related_urls": []
+    },
+    {
+      "code": "title_short",
+      "severity": "notice",
+      "url": "http://127.0.0.1:60140/js-only",
+      "message": "Primary title has 10 Unicode characters, below configured minimum 30; review content and search appearance",
+      "related_urls": []
+    },
+    {
+      "code": "title_pixels_short",
+      "severity": "notice",
+      "url": "http://127.0.0.1:60140/js-only",
+      "message": "Primary title measured 94px below configured 200px minimum (profile roboto-2.138-simple-rounded-advances-v1; title20px; description14px; latin-greek-cyrillic)",
+      "related_urls": []
+    },
+    {
+      "code": "h2_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:60140/js-only",
+      "message": "No nonempty H2 heading was observed in the complete captured document; sections may not need H2 headings",
+      "related_urls": []
+    },
+    {
+      "code": "content_low_word_count",
+      "severity": "notice",
+      "url": "http://127.0.0.1:60140/js-only",
+      "message": "Captured normalized visible text has 3 words, below configured minimum 200; word count alone does not establish content quality",
+      "related_urls": []
+    },
+    {
+      "code": "internal_outlinks_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:60140/js-only",
+      "message": "No internal anchor outlinks were observed in the complete captured document; this can be intentional",
       "related_urls": []
     },
     {
       "code": "http_url",
       "severity": "warning",
-      "url": "http://127.0.0.1:51130/js-only",
+      "url": "http://127.0.0.1:60140/js-only",
       "message": "HTML served over unencrypted HTTP",
       "related_urls": []
     },
     {
       "code": "description_missing",
       "severity": "notice",
-      "url": "http://127.0.0.1:51130/js-only",
+      "url": "http://127.0.0.1:60140/js-only",
       "message": "Meta description is missing or empty",
       "related_urls": []
     },
     {
       "code": "canonical_missing",
       "severity": "notice",
-      "url": "http://127.0.0.1:51130/js-only",
+      "url": "http://127.0.0.1:60140/js-only",
       "message": "No HTML canonical link",
       "related_urls": []
     },
     {
       "code": "viewport_missing",
       "severity": "notice",
-      "url": "http://127.0.0.1:51130/js-only",
+      "url": "http://127.0.0.1:60140/js-only",
       "message": "No viewport meta tag",
       "related_urls": []
     },
     {
       "code": "accessibility_landmark-one-main",
       "severity": "warning",
-      "url": "http://127.0.0.1:51130/js-only",
+      "url": "http://127.0.0.1:60140/js-only",
       "message": "Document should have one main landmark (1 affected nodes; automated check only)",
       "related_urls": []
     },
     {
       "code": "accessibility_region",
       "severity": "warning",
-      "url": "http://127.0.0.1:51130/js-only",
+      "url": "http://127.0.0.1:60140/js-only",
       "message": "All page content should be contained by landmarks (2 affected nodes; automated check only)",
       "related_urls": []
     }
   ],
   "summary": {
-    "started_at": "2026-10-11T12:55:10.108881700+00:00",
-    "finished_at": "2026-10-11T12:55:12.595515600+00:00",
-    "elapsed_ms": 2486,
+    "started_at": "2026-10-12T07:51:32.891368100+00:00",
+    "finished_at": "2026-10-12T07:51:35.574794200+00:00",
+    "elapsed_ms": 2683,
     "completed": 2,
     "discovered": 2,
     "pending": 0,

@@ -5,9 +5,12 @@ with desktop SEO crawlers without a commercial URL cap. This repository is
 currently private and under active development.
 
 **Full Screaming Frog feature parity is not achieved or claimed.** The acceptance
-ledger tracks 144 grouped requirements across 16 product areas; these must still
-be expanded into individual audit rules and verified against representative
-fixtures. See [feature catalog](docs/feature-catalog.md),
+ledger tracks 144 grouped requirements across 16 product areas and now 416 named
+filters observed in the installed original CLI. Granular acceptance contracts
+and actual comparisons on an independently authored local website are retained
+in [reference evidence](docs/parity/reference-comparison.md) and the
+[rule backlog](docs/parity/granular-acceptance.md). Matching exported cells are
+not a measure of complete feature coverage. See [feature catalog](docs/feature-catalog.md),
 [parity ledger](docs/feature-parity.json), and
 [observed installed architecture](docs/research/installed-architecture.md).
 
@@ -40,8 +43,19 @@ cargo run -p open-seo-spider -- crawl --sitemap https://example.com/sitemap.xml
 List mode uses `--list` and one or more explicit URL arguments. `max_pages` is
 optional; the default has no product-imposed page limit. Crawls obey robots.txt
 by default and pace requests by origin. Optional include/exclude regular
-expressions filter discovered URLs. Named CSS extractions retain every match
-and can export one value per CSV row. The default HTTP path does not run JavaScript.
+expressions filter discovered URLs. Named CSS, XPath1.0 and Rust-regex
+extractions retain values with their source, result type, observed count,
+capture bound and errors. XPath uses the repaired HTML DOM and explicit foreign
+namespace bindings; id(), lang(), variables and extension functions are not
+supported. Regex does not support lookaround or backreferences.
+The default HTTP path does not run JavaScript.
+
+HTML and HTTP Link-header canonical/hreflang declarations remain distinguishable,
+including PDF/non-HTML response relationships, base-URL resolution and alternate
+anchor contexts. Page-level indexing directives are evaluated for a configured
+bot separately from the request User-Agent. Configurable onpage/URL/link
+thresholds can be disabled individually. Title/description pixel widths use an
+openly licensed Roboto profile; complex shaping and missing glyphs remain unknown.
 
 ## JavaScript rendering
 
@@ -57,6 +71,15 @@ Enable JavaScript rendering in the application's settings. The worker runs at
 `http://127.0.0.1:8790/render`. Raw HTTP evidence and rendered DOM observations
 remain separate. Optional PNG screenshots and axe accessibility findings appear
 in the URL inspector and project JSON. See [worker contract](renderer/README.md).
+
+Optional custom async JavaScript evaluates named function bodies after the render
+wait. Per-script results/errors and redacted cookie attributes have dedicated
+UI tables and CSV exports. Cookies remain isolated per URL; this does not provide
+a shared authenticated browser session.
+
+CSV exports prefix potentially active spreadsheet formulas with an apostrophe.
+Typed numeric fields remain numeric; exact captured strings remain in project
+JSON.
 
 ## MCP and local API
 

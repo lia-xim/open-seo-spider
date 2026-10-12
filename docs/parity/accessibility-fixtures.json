@@ -1,0 +1,658 @@
+{
+  "schema_version": 1,
+  "axe_version": "4.14.0",
+  "mapping_basis": "Independent mapping by documented rule semantics; installed vendor engine mapping not measured.",
+  "fixtures": [
+    {
+      "filter_argument": "Accessibility:Accesskey Attribute Value Must Be Unique",
+      "proposed_axe_rule_id": "accesskeys",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><button accesskey=\"a\">One</button><button accesskey=\"a\">Two</button></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><button accesskey=\"a\">One</button><button accesskey=\"b\">Two</button></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Ensure Elements Marked Presentational Are Ignored",
+      "proposed_axe_rule_id": "presentation-role-conflict",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><button role=\"presentation\">One</button></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"presentation\">One</div></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Elements Must Not Have Tabindex Greater Than Zero",
+      "proposed_axe_rule_id": "tabindex",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><button tabindex=\"2\">One</button></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><button tabindex=\"0\">One</button></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Scrollable Region Requires Keyboard Access",
+      "proposed_axe_rule_id": "scrollable-region-focusable",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div style=\"height:30px;overflow:auto\">Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br></div></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div tabindex=\"0\" style=\"height:30px;overflow:auto\">Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br>Long controlled text<br></div></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Skip-link Target Should Exist & Be Focusable",
+      "proposed_axe_rule_id": "skip-link",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><a style=\"position:absolute;left:-10000px\" href=\"#main-missing\">Skip to main content</a></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><a style=\"position:absolute;left:-10000px\" href=\"#main-content\">Skip to main content</a><div id=\"main-content\" tabindex=\"-1\">Content</div></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Required ARIA Attributes Must Be Provided",
+      "proposed_axe_rule_id": "aria-required-attr",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"checkbox\" aria-label=\"Choice\"></div></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"checkbox\" aria-label=\"Choice\" aria-checked=\"false\"></div></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Role=text Should Have No Focusable Descendants",
+      "proposed_axe_rule_id": "aria-text",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"text\"><button>Focusable</button></div></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"text\">Plain text</div></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Attribute Must Be Used As Specified For Role",
+      "proposed_axe_rule_id": "aria-conditional-attr",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><input type=\"checkbox\" aria-checked=\"true\" aria-label=\"Choice\"></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><input type=\"checkbox\" aria-checked=\"false\" aria-label=\"Choice\"></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Attributes Require Valid Values",
+      "proposed_axe_rule_id": "aria-valid-attr-value",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><button aria-expanded=\"nonsense\">Expand</button></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><button aria-expanded=\"false\">Expand</button></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Attributes Require Valid Names",
+      "proposed_axe_rule_id": "aria-valid-attr",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><button aria-spelledwrong=\"x\">Name</button></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><button aria-label=\"Name\">Name</button></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Commands Require Accessible Name",
+      "proposed_axe_rule_id": "aria-command-name",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"button\" tabindex=\"0\"></div></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"button\" tabindex=\"0\" aria-label=\"Action\"></div></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Dialog & Alertdialog Require Accessible Name",
+      "proposed_axe_rule_id": "aria-dialog-name",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"dialog\">Dialog body</div></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"dialog\" aria-label=\"Dialog name\">Dialog body</div></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Input Fields Require Accessible Name",
+      "proposed_axe_rule_id": "aria-input-field-name",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"textbox\" contenteditable=\"true\"></div></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"textbox\" contenteditable=\"true\" aria-label=\"Input\"></div></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Meter Nodes Require Accessible Name",
+      "proposed_axe_rule_id": "aria-meter-name",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"meter\" aria-valuemin=\"0\" aria-valuemax=\"10\" aria-valuenow=\"2\"></div></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"meter\" aria-label=\"Meter\" aria-valuemin=\"0\" aria-valuemax=\"10\" aria-valuenow=\"2\"></div></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Progressbar Nodes Require Accessible Name",
+      "proposed_axe_rule_id": "aria-progressbar-name",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"progressbar\" aria-valuenow=\"2\"></div></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"progressbar\" aria-label=\"Progress\" aria-valuenow=\"2\"></div></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Role Should Be Appropriate For Element",
+      "proposed_axe_rule_id": "aria-allowed-role",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><input type=\"text\" role=\"heading\" aria-label=\"Input\"></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><input type=\"text\" aria-label=\"Input\"></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Roles Must Be Contained By Required Parent",
+      "proposed_axe_rule_id": "aria-required-parent",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"listitem\">Orphan</div></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"list\"><div role=\"listitem\">Item</div></div></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Roles Require Valid Values",
+      "proposed_axe_rule_id": "aria-roles",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"not-real-role\">Text</div></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"button\" aria-label=\"Button\">Text</div></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Toggle Fields Require Accessible Name",
+      "proposed_axe_rule_id": "aria-toggle-field-name",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"switch\" aria-checked=\"false\"></div></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"switch\" aria-checked=\"false\" aria-label=\"Toggle\"></div></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Tooltip Nodes Require Accessible Name",
+      "proposed_axe_rule_id": "aria-tooltip-name",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"tooltip\"></div></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"tooltip\">Hint</div></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Treeitem Nodes Require Accessible Name",
+      "proposed_axe_rule_id": "aria-treeitem-name",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"tree\"><div role=\"treeitem\"></div></div></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"tree\"><div role=\"treeitem\">Tree item</div></div></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Certain ARIA Roles Must Contain Specific Children",
+      "proposed_axe_rule_id": "aria-required-children",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"list\">Text only</div></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"list\"><div role=\"listitem\">Item</div></div></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Deprecated ARIA Roles Must Not Be Used",
+      "proposed_axe_rule_id": "aria-deprecated-role",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"directory\"><div role=\"listitem\">Item</div></div></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"list\"><div role=\"listitem\">Item</div></div></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Aria-braille Require Non-braille Equivalent",
+      "proposed_axe_rule_id": "aria-braille-equivalent",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><button aria-braillelabel=\"Braille\"></button></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><button aria-label=\"Action\" aria-braillelabel=\"Braille\"></button></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Aria-hidden Elements Contains Focusable Elements",
+      "proposed_axe_rule_id": "aria-hidden-focus",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div aria-hidden=\"true\"><button>Hidden focus</button></div></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div aria-hidden=\"true\"><button tabindex=\"-1\">Hidden unfocusable</button></div></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Aria-hidden=true Must Not Be Used In <body>",
+      "proposed_axe_rule_id": "aria-hidden-body",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body aria-hidden=\"true\"><main><h1>Independent accessible heading</h1></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Elements Must Only Use Permitted ARIA Attributes",
+      "proposed_axe_rule_id": "aria-prohibited-attr",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><p aria-label=\"Unsupported\">Text</p></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><p>Text</p></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Elements Must Use Allowed ARIA Attributes",
+      "proposed_axe_rule_id": "aria-allowed-attr",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"button\" aria-selected=\"true\" aria-label=\"Action\"></div></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"button\" aria-label=\"Action\"></div></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:IDs Used In ARIA & Labels Must Be Unique",
+      "proposed_axe_rule_id": "duplicate-id-aria",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><span id=\"name\">One</span><span id=\"name\">Two</span><input aria-labelledby=\"name\"></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><span id=\"name\">One</span><span id=\"other\">Two</span><input aria-labelledby=\"name\"></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Page Requires Means To Bypass Repeated Blocks",
+      "proposed_axe_rule_id": "bypass",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><header><nav><a href=\"#\">Nav</a></nav></header><p>Body</p></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><main><h1>Main</h1></main></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:All Page Content Must Be Contained By Landmarks",
+      "proposed_axe_rule_id": "region",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><h1>Independent accessible heading</h1><p>Content outside landmarks</p></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><p>Content inside main</p></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Page Requires One Main Landmark",
+      "proposed_axe_rule_id": "landmark-one-main",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><h1>Independent accessible heading</h1><p>Body</p></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><p>Body</p></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Page Must Not Have More Than One Banner Landmark",
+      "proposed_axe_rule_id": "landmark-no-duplicate-banner",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><h1>Independent accessible heading</h1><header>Banner1</header><header>Banner2</header></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><h1>Independent accessible heading</h1><header>Banner</header></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Banner Landmark Must Not Be In Another Landmark",
+      "proposed_axe_rule_id": "landmark-banner-is-top-level",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"navigation\"><div role=\"banner\">Nested</div></div></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><h1>Independent accessible heading</h1><div role=\"banner\">Top</div></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Page Must Not Have Multiple Contentinfo Landmarks",
+      "proposed_axe_rule_id": "landmark-no-duplicate-contentinfo",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><h1>Independent accessible heading</h1><footer>Footer1</footer><footer>Footer2</footer></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><h1>Independent accessible heading</h1><footer>Footer</footer></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Page Requires At Most One Main Landmark",
+      "proposed_axe_rule_id": "landmark-no-duplicate-main",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><h1>Independent accessible heading</h1><main>Main1</main><main>Main2</main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><h1>Independent accessible heading</h1><main>Main</main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Complementary Landmarks & Asides Must Be Top Level",
+      "proposed_axe_rule_id": "landmark-complementary-is-top-level",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><nav><aside>Nested aside</aside></nav></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><h1>Independent accessible heading</h1><aside>Top aside</aside></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Contentinfo Landmark Must Be Top Level Landmark",
+      "proposed_axe_rule_id": "landmark-contentinfo-is-top-level",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"contentinfo\">Nested footer</div></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><h1>Independent accessible heading</h1><div role=\"contentinfo\">Top footer</div></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Main Landmark Must Not Be In Another Landmark",
+      "proposed_axe_rule_id": "landmark-main-is-top-level",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"main\">Nested main</div></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><h1>Independent accessible heading</h1><div role=\"main\">Top main</div></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Landmarks Require Unique Role Or Accessible Name",
+      "proposed_axe_rule_id": "landmark-unique",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><nav>One</nav><nav>Two</nav></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><nav aria-label=\"Primary\">One</nav><nav aria-label=\"Secondary\">Two</nav></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Form <input> Elements Require Labels",
+      "proposed_axe_rule_id": "label",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><input></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><label for=\"x\">Field</label><input id=\"x\"></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Form Elements Should Have Visible Label",
+      "proposed_axe_rule_id": "label-title-only",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><input title=\"Field\"></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><label for=\"x\">Field</label><input id=\"x\"></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Form Field Must Not Have Multiple Label Elements",
+      "proposed_axe_rule_id": "form-field-multiple-labels",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><label for=\"x\">One</label><label for=\"x\">Two</label><input id=\"x\"></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><label for=\"x\">One</label><input id=\"x\"></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Autocomplete Attribute Must Be Used Correctly",
+      "proposed_axe_rule_id": "autocomplete-valid",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><label>Field<input autocomplete=\"invalid-token\"></label></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><label>Field<input autocomplete=\"given-name\"></label></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Frames Require Title Attribute",
+      "proposed_axe_rule_id": "frame-title",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><iframe srcdoc=\"<p>Frame</p>\"></iframe></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><iframe title=\"Controlled frame\" srcdoc=\"<p>Frame</p>\"></iframe></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Frames Require Unique Title Attribute",
+      "proposed_axe_rule_id": "frame-title-unique",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><iframe title=\"Same\" srcdoc=\"<p>One</p>\"></iframe><iframe title=\"Same\" srcdoc=\"<p>Two</p>\"></iframe></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><iframe title=\"One\" srcdoc=\"<p>One</p>\"></iframe><iframe title=\"Two\" srcdoc=\"<p>Two</p>\"></iframe></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Frames Should Be Tested With axe-core",
+      "proposed_axe_rule_id": "frame-tested",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><iframe title=\"Frame\" srcdoc=\"<p>Not injected</p>\"></iframe></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><p>No untested frame</p></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Frames With Focusable Content Must Not Use tabindex=-1",
+      "proposed_axe_rule_id": "frame-focusable-content",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><iframe title=\"Frame\" tabindex=\"-1\" srcdoc=\"<button>Focus</button>\"></iframe></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><iframe title=\"Frame\" tabindex=\"0\" srcdoc=\"<button>Focus</button>\"></iframe></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Page Must Contain <title>",
+      "proposed_axe_rule_id": "document-title",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head></head><body ><main><h1>Independent accessible heading</h1></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Page Must Contain <h1>",
+      "proposed_axe_rule_id": "page-has-heading-one",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><p>Body</p></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><p>Body</p></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Heading Levels Should Only Increase By One",
+      "proposed_axe_rule_id": "heading-order",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><h3>Skipped level</h3></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><h2>Next level</h2></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Headings Should Not Be Empty",
+      "proposed_axe_rule_id": "empty-heading",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><h2></h2></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><h2>Section</h2></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Meta Viewport Should Allow Zoom & Scale Up to 500%",
+      "proposed_axe_rule_id": "meta-viewport-large",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title><meta name=\"viewport\" content=\"maximum-scale=2\"></head><body ><main><h1>Independent accessible heading</h1></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"></head><body ><main><h1>Independent accessible heading</h1></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Meta Viewport Zoom & Scaling Disabled",
+      "proposed_axe_rule_id": "meta-viewport",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title><meta name=\"viewport\" content=\"user-scalable=no\"></head><body ><main><h1>Independent accessible heading</h1></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"></head><body ><main><h1>Independent accessible heading</h1></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:HTML Element Lang Attribute Value Must Be Valid",
+      "proposed_axe_rule_id": "html-lang-valid",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"xyzxyz\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:HTML Element Requires Lang Attribute",
+      "proposed_axe_rule_id": "html-has-lang",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html  ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:HTML Lang & XML Lang Value Should Match",
+      "proposed_axe_rule_id": "html-xml-lang-mismatch",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" xml:lang=\"fr\"><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" xml:lang=\"en\"><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Lang Attribute Requires Valid Value",
+      "proposed_axe_rule_id": "valid-lang",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><p lang=\"xyzxyz\">Text</p></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><p lang=\"en\">Text</p></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Delayed Meta Refresh Must Not Be Used",
+      "proposed_axe_rule_id": "meta-refresh",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title><meta http-equiv=\"refresh\" content=\"5;url=#\"></head><body ><main><h1>Independent accessible heading</h1></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Timed Meta Refresh Must Not Exist",
+      "proposed_axe_rule_id": "meta-refresh-no-exceptions",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title><meta http-equiv=\"refresh\" content=\"5;url=#\"></head><body ><main><h1>Independent accessible heading</h1></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Image Button Requires Alternate Text",
+      "proposed_axe_rule_id": "input-image-alt",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><input type=\"image\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jXnQAAAAASUVORK5CYII=\"></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><input type=\"image\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jXnQAAAAASUVORK5CYII=\" alt=\"Submit\"></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Images Require Alternate Text",
+      "proposed_axe_rule_id": "image-alt",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><img src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jXnQAAAAASUVORK5CYII=\"></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><img src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jXnQAAAAASUVORK5CYII=\" alt=\"Controlled image\"></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:<object> Elements Require Alternate Text",
+      "proposed_axe_rule_id": "object-alt",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><object type=\"image/svg+xml\" data=\"data:image/svg+xml,%3Csvg%3E%3C/svg%3E\"></object></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><object aria-label=\"Image\" type=\"image/svg+xml\" data=\"data:image/svg+xml,%3Csvg%3E%3C/svg%3E\"></object></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Active <area> Elements Require Alternate Text",
+      "proposed_axe_rule_id": "area-alt",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><img src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jXnQAAAAASUVORK5CYII=\" alt=\"Map\" usemap=\"#map\"><map name=\"map\"><area href=\"#\" shape=\"rect\" coords=\"0,0,100,100\"></map></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><img src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jXnQAAAAASUVORK5CYII=\" alt=\"Map\" usemap=\"#map\"><map name=\"map\"><area href=\"#\" alt=\"Destination\" shape=\"rect\" coords=\"0,0,100,100\"></map></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Alt Text Should Not Be Repeated As Text",
+      "proposed_axe_rule_id": "image-redundant-alt",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><p>Controlled text<img src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jXnQAAAAASUVORK5CYII=\" alt=\"Controlled text\"></p></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><p>Controlled text<img src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jXnQAAAAASUVORK5CYII=\" alt=\"Independent illustration\"></p></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Elements Marked role=img Require Alternate Text",
+      "proposed_axe_rule_id": "role-img-alt",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"img\">Graphic</div></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><div role=\"img\" aria-label=\"Graphic\">Graphic</div></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:SVG Images & Graphics Require Accessible Text",
+      "proposed_axe_rule_id": "svg-img-alt",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><svg role=\"img\" width=\"40\" height=\"40\"><rect width=\"40\" height=\"40\"></rect></svg></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><svg role=\"img\" aria-label=\"Graphic\" width=\"40\" height=\"40\"><rect width=\"40\" height=\"40\"></rect></svg></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Server-Side Image Maps Must Not Be Used",
+      "proposed_axe_rule_id": "server-side-image-map",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><a href=\"#\"><img src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jXnQAAAAASUVORK5CYII=\" alt=\"Map\" ismap></a></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><a href=\"#\"><img src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jXnQAAAAASUVORK5CYII=\" alt=\"Map\"></a></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:<video> Elements Require <track> For Captions",
+      "proposed_axe_rule_id": "video-caption",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><video controls src=\"data:video/mp4,\"></video></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><video controls src=\"data:video/mp4,\"><track kind=\"captions\" src=\"data:text/vtt,WEBVTT\"></video></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:<video> or <audio> Elements Must Not Auto-play",
+      "proposed_axe_rule_id": "no-autoplay-audio",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><audio autoplay src=\"data:audio/wav,\"></audio></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><audio controls src=\"data:audio/wav,\"></audio></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Buttons Require Discernible Text",
+      "proposed_axe_rule_id": "button-name",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><button></button></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><button>Action</button></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Inline Text Spacing Must Be Adjustable",
+      "proposed_axe_rule_id": "avoid-inline-spacing",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><p style=\"line-height:12px!important;letter-spacing:0px!important\">Text spacing</p></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><p>Text spacing</p></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Input Buttons Require Discernible Text",
+      "proposed_axe_rule_id": "input-button-name",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><input type=\"button\"></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><input type=\"button\" value=\"Action\"></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Links Must Be Distinguishable",
+      "proposed_axe_rule_id": "link-in-text-block",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><p style=\"color:#000\">Text <a href=\"#\" style=\"color:#111;text-decoration:none\">link</a> text</p></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><p>Text <a href=\"#\" style=\"text-decoration:underline\">link</a> text</p></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Links Require Discernible Text",
+      "proposed_axe_rule_id": "link-name",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><a href=\"#\"></a></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><a href=\"#\">Destination</a></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Links With Same Accessible Name",
+      "proposed_axe_rule_id": "identical-links-same-purpose",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><a href=\"https://example.invalid/one\">Same</a><a href=\"https://example.invalid/two\">Same</a></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><a href=\"https://example.invalid/one\">One</a><a href=\"https://example.invalid/two\">Two</a></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Select Element Requires Accessible Name",
+      "proposed_axe_rule_id": "select-name",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><select><option>Choice</option></select></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><label>Choice<select><option>Choice</option></select></label></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Summary Elements Require Discernible Text",
+      "proposed_axe_rule_id": "summary-name",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><details><summary></summary>Body</details></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><details><summary>Details</summary>Body</details></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Deprecated <marquee> Element Must Not Be Used",
+      "proposed_axe_rule_id": "marquee",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><marquee>Moving text</marquee></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><p>Static text</p></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:<blink> Elements Deprecated & Must Not Be Used",
+      "proposed_axe_rule_id": "blink",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><blink>Blinking text</blink></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><p>Static text</p></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Text Requires Higher Color Contrast Ratio",
+      "proposed_axe_rule_id": "color-contrast-enhanced",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><p style=\"color:#666;background:#fff\">Contrast text</p></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><p style=\"color:#000;background:#fff\">Contrast text</p></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Text Requires Higher Color Contrast to Background",
+      "proposed_axe_rule_id": "color-contrast",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><p style=\"color:#aaa;background:#fff\">Contrast text</p></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><p style=\"color:#000;background:#fff\">Contrast text</p></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Touch Targets Require Sufficient Size & Spacing",
+      "proposed_axe_rule_id": "target-size",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><button style=\"width:10px;height:10px;padding:0;min-width:0;font-size:8px\">A</button><button style=\"width:10px;height:10px;padding:0;min-width:0;font-size:8px\">B</button></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><button style=\"width:40px;height:40px\">A</button><button style=\"width:40px;height:40px\">B</button></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Interactive Controls Must Not Be Nested",
+      "proposed_axe_rule_id": "nested-interactive",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><button><a href=\"#\">Nested</a></button></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><button>Action</button><a href=\"#\">Separate</a></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:List Items Must Be Contained In List Elements",
+      "proposed_axe_rule_id": "listitem",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><li>Orphan item</li></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><ul><li>Item</li></ul></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Lists Must Only Contain <li> Content Elements",
+      "proposed_axe_rule_id": "list",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><ul><div>Invalid child</div></ul></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><ul><li>Item</li></ul></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:<dl> Must Only Have Ordered <dt> & <dd> Groups",
+      "proposed_axe_rule_id": "definition-list",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><dl><dd>Definition without term</dd></dl></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><dl><dt>Term</dt><dd>Definition</dd></dl></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:<dt> & <dd> Elements Must Be Contained by <dl>",
+      "proposed_axe_rule_id": "dlitem",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><dt>Orphan term</dt><dd>Orphan definition</dd></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><dl><dt>Term</dt><dd>Definition</dd></dl></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:<th> Element Requires Associated Data Cells",
+      "proposed_axe_rule_id": "th-has-data-cells",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><table><tr><th>Lonely</th></tr></table></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><table><tr><th scope=\"col\">Header</th></tr><tr><td>Value</td></tr></table></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Table Header Attr Must Refer To Cell In Same Table",
+      "proposed_axe_rule_id": "td-headers-attr",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><table><tr><th id=\"head\">Head</th><td headers=\"missing\">Value</td></tr></table></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><table><tr><th id=\"head\">Head</th><td headers=\"head\">Value</td></tr></table></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Table Headers Require Discernible Text",
+      "proposed_axe_rule_id": "empty-table-header",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><table><tr><th></th><td>Value</td></tr></table></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><table><tr><th>Header</th><td>Value</td></tr></table></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Table With Identical Summary & Caption Text",
+      "proposed_axe_rule_id": "table-duplicate-name",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><table summary=\"Same\"><caption>Same</caption><tr><td>Value</td></tr></table></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><table><caption>Caption</caption><tr><td>Value</td></tr></table></main></body></html>"
+    },
+    {
+      "filter_argument": "Accessibility:Scope Attribute Should Be Used Correctly On Tables",
+      "proposed_axe_rule_id": "scope-attr-valid",
+      "mapping_status": "INDEPENDENT_CANDIDATE_NOT_VENDOR_PROVEN",
+      "positive_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><table><tr><th scope=\"invalid\">Head</th><td>Value</td></tr></table></main></body></html>",
+      "negative_html": "<!doctype html><html lang=\"en\" ><head><title>Independent rule fixture</title></head><body ><main><h1>Independent accessible heading</h1><table><tr><th scope=\"row\">Head</th><td>Value</td></tr></table></main></body></html>"
+    }
+  ]
+}

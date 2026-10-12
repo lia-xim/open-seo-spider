@@ -1,0 +1,6863 @@
+{
+  "schema_version": 1,
+  "tested_at": "2026-10-12T07:44:00.559Z",
+  "status": "COMPARISON_EXECUTED",
+  "full_parity": "NOT_PROVEN",
+  "fixture_sha256": "928545b1b70ae07da917fddd0fd1fd137878e7819326741dbbd6c23cb4607072",
+  "reference": {
+    "version": "24.3",
+    "run_at": "2026-10-12T07:08:34.587Z",
+    "licence_state": "Missing",
+    "executable": "ScreamingFrogSEOSpiderCli.exe",
+    "normal_profile_write": true,
+    "rows": 35
+  },
+  "independent": {
+    "binary": "open-seo-spider.exe",
+    "binary_sha256": "986a7f8534692e37fb78dda322b6c4fcbea60bd712aaa04a3824c7b68b860a3f",
+    "config": {
+      "seed_urls": [
+        "http://127.0.0.1:56183/"
+      ],
+      "sitemap_urls": [],
+      "discover_sitemaps": false,
+      "max_sitemap_documents": 1000,
+      "crawl_links": true,
+      "include_subdomains": false,
+      "concurrency": 4,
+      "request_timeout_secs": 30,
+      "max_pages": null,
+      "max_depth": null,
+      "delay_ms": 0,
+      "obey_robots": true,
+      "check_external": false,
+      "max_body_bytes": 5242880,
+      "max_redirects": 10,
+      "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)",
+      "indexability_agent": "googlebot",
+      "custom_headers": {},
+      "renderer": null,
+      "custom_extractions": [],
+      "audit_thresholds": {
+        "min_title_chars": 30,
+        "max_title_chars": 60,
+        "min_description_chars": 70,
+        "max_description_chars": 155,
+        "max_h1_chars": 70,
+        "max_h2_chars": 70,
+        "max_alt_chars": 100,
+        "max_url_chars": 115,
+        "min_word_count": 200,
+        "max_internal_outlinks": 1000,
+        "max_external_outlinks": 10,
+        "min_title_pixels": 200,
+        "max_title_pixels": 561,
+        "min_description_pixels": 400,
+        "max_description_pixels": 985
+      },
+      "include_patterns": [],
+      "exclude_patterns": []
+    },
+    "rows": 34
+  },
+  "normalization": [
+    "Both crawls use the same live local fixture unless --reuse-reference explicitly requests the retained identical case definition.",
+    "Fixture origin becomes path; Content-Type parameters omitted; equivalent localized indexability names mapped.",
+    "Crawl timestamps, wall-clock latency, job IDs and cache-related headers excluded.",
+    "Outlinks comparisons count actual anchor/legacy-anchor records; total references by kind remain separate independent facts.",
+    "Recorded title_pixel_widths[0] is compared when available; absent metric stays unavailable.",
+    "No semantic mismatches are suppressed. Pixel/word/link-model metrics remain visible as unavailable or different."
+  ],
+  "reused_reference": true,
+  "counts": {
+    "MATCH": 863,
+    "DIFFERENT": 53,
+    "UNAVAILABLE": 3
+  },
+  "comparisons": [
+    {
+      "path": "/",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "An independently authored local SEO reference fixture /",
+      "independent": "An independently authored local SEO reference fixture /"
+    },
+    {
+      "path": "/",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 55,
+      "independent": 55
+    },
+    {
+      "path": "/",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 491,
+      "independent": 495,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /",
+      "independent": "A useful independently authored description for the local fixture /"
+    },
+    {
+      "path": "/",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 67,
+      "independent": 67
+    },
+    {
+      "path": "/",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "Fixture index",
+      "independent": "Fixture index"
+    },
+    {
+      "path": "/",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 31,
+      "independent": 31
+    },
+    {
+      "path": "/",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 31,
+      "independent": 31
+    },
+    {
+      "path": "/",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 116,
+      "independent": 116
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "An independently authored local SEO reference fixture /Upper_Case",
+      "independent": "An independently authored local SEO reference fixture /Upper_Case"
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 65,
+      "independent": 65
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 598,
+      "independent": 602,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /Upper_Case",
+      "independent": "A useful independently authored description for the local fixture /Upper_Case"
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 77,
+      "independent": 77
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/Upper_Case",
+      "independent": "/Upper_Case"
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/Upper_Case",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 82,
+      "independent": 82
+    },
+    {
+      "path": "/baseline",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/baseline",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/baseline",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/baseline",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/baseline",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "An independently authored local SEO reference fixture /baseline",
+      "independent": "An independently authored local SEO reference fixture /baseline"
+    },
+    {
+      "path": "/baseline",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/baseline",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 63,
+      "independent": 63
+    },
+    {
+      "path": "/baseline",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 565,
+      "independent": 570,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/baseline",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/baseline",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /baseline",
+      "independent": "A useful independently authored description for the local fixture /baseline"
+    },
+    {
+      "path": "/baseline",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/baseline",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 75,
+      "independent": 75
+    },
+    {
+      "path": "/baseline",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/baseline",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/baseline",
+      "independent": "/baseline"
+    },
+    {
+      "path": "/baseline",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/baseline",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/baseline",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/baseline",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/baseline",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/baseline",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/baseline",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/baseline",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 5,
+      "independent": 5
+    },
+    {
+      "path": "/baseline",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 2,
+      "independent": 2
+    },
+    {
+      "path": "/baseline",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/baseline",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/baseline",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/baseline",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "An independently authored local SEO reference fixture /baseline",
+      "independent": "An independently authored local SEO reference fixture /baseline"
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 63,
+      "independent": 63
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 565,
+      "independent": 570,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /baseline",
+      "independent": "A useful independently authored description for the local fixture /baseline"
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 75,
+      "independent": 75
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/baseline",
+      "independent": "/baseline"
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 2,
+      "independent": 2
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/baseline?a=1&b=2",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/blank-title",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/blank-title",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/blank-title",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/blank-title",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/blank-title",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/blank-title",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/blank-title",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/blank-title",
+      "field": "title_pixels",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/blank-title",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/blank-title",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /blank-title",
+      "independent": "A useful independently authored description for the local fixture /blank-title"
+    },
+    {
+      "path": "/blank-title",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/blank-title",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 78,
+      "independent": 78
+    },
+    {
+      "path": "/blank-title",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/blank-title",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/blank-title",
+      "independent": "/blank-title"
+    },
+    {
+      "path": "/blank-title",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/blank-title",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/blank-title",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/blank-title",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/blank-title",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/blank-title",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/blank-title",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/blank-title",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/blank-title",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/blank-title",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/blank-title",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/blank-title",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/blank-title",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/blocked",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": null,
+      "independent": null
+    },
+    {
+      "path": "/blocked",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/blocked",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "non-indexable",
+      "independent": "non-indexable"
+    },
+    {
+      "path": "/blocked",
+      "field": "indexability_reason",
+      "status": "DIFFERENT",
+      "reference": "von robots.txt gesperrt",
+      "independent": "blocked by robots.txt, requested url does not return http 200, not a supported indexable document type",
+      "reason": "Different reason precedence/coverage may explain mismatches; both raw reason lists are retained."
+    },
+    {
+      "path": "/blocked",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/blocked",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/blocked",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/blocked",
+      "field": "title_pixels",
+      "status": "UNAVAILABLE",
+      "reference": 0,
+      "independent": null,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/blocked",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/blocked",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/blocked",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/blocked",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/blocked",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/blocked",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/blocked",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/blocked",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/blocked",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/blocked",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/blocked",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/blocked",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/blocked",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/blocked",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 2,
+      "independent": 2
+    },
+    {
+      "path": "/blocked",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 2,
+      "independent": 2
+    },
+    {
+      "path": "/blocked",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/blocked",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/blocked",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/blocked",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/body-metadata",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/body-metadata",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/body-metadata",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/body-metadata",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/body-metadata",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "Title in the body",
+      "independent": "Title in the body"
+    },
+    {
+      "path": "/body-metadata",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/body-metadata",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 17,
+      "independent": 17
+    },
+    {
+      "path": "/body-metadata",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 141,
+      "independent": 142,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/body-metadata",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/body-metadata",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "Description in the body",
+      "independent": "Description in the body"
+    },
+    {
+      "path": "/body-metadata",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/body-metadata",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 23,
+      "independent": 23
+    },
+    {
+      "path": "/body-metadata",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/body-metadata",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/body-metadata",
+      "independent": "/body-metadata"
+    },
+    {
+      "path": "/body-metadata",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/body-metadata",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/body-metadata",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/body-metadata",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/body-metadata",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/body-metadata",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/body-metadata",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/body-metadata",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/body-metadata",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/body-metadata",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/body-metadata",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/body-metadata",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/body-metadata",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 85,
+      "independent": 85
+    },
+    {
+      "path": "/canonical-404",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/canonical-404",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/canonical-404",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "non-indexable",
+      "independent": "non-indexable"
+    },
+    {
+      "path": "/canonical-404",
+      "field": "indexability_reason",
+      "status": "DIFFERENT",
+      "reference": "canonicalized",
+      "independent": "canonical points to another url",
+      "reason": "Different reason precedence/coverage may explain mismatches; both raw reason lists are retained."
+    },
+    {
+      "path": "/canonical-404",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "An independently authored local SEO reference fixture /canonical-404",
+      "independent": "An independently authored local SEO reference fixture /canonical-404"
+    },
+    {
+      "path": "/canonical-404",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-404",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 68,
+      "independent": 68
+    },
+    {
+      "path": "/canonical-404",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 617,
+      "independent": 619,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/canonical-404",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-404",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /canonical-404",
+      "independent": "A useful independently authored description for the local fixture /canonical-404"
+    },
+    {
+      "path": "/canonical-404",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-404",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 80,
+      "independent": 80
+    },
+    {
+      "path": "/canonical-404",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-404",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/canonical-404",
+      "independent": "/canonical-404"
+    },
+    {
+      "path": "/canonical-404",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-404",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-404",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-404",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "/missing",
+      "independent": "/missing"
+    },
+    {
+      "path": "/canonical-404",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-404",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-404",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-404",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-404",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-404",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/canonical-404",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/canonical-404",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-404",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "non-indexable",
+      "independent": "non-indexable"
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "indexability_reason",
+      "status": "DIFFERENT",
+      "reference": "canonicalized",
+      "independent": "canonical points to another url",
+      "reason": "Different reason precedence/coverage may explain mismatches; both raw reason lists are retained."
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "An independently authored local SEO reference fixture /canonical-conflict",
+      "independent": "An independently authored local SEO reference fixture /canonical-conflict"
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 73,
+      "independent": 73
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 649,
+      "independent": 652,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /canonical-conflict",
+      "independent": "A useful independently authored description for the local fixture /canonical-conflict"
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 85,
+      "independent": 85
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/canonical-conflict",
+      "independent": "/canonical-conflict"
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "/baseline",
+      "independent": "/baseline"
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "/noindex",
+      "independent": "/noindex"
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 2,
+      "independent": 2
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-conflict",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/canonical-other",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/canonical-other",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/canonical-other",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "non-indexable",
+      "independent": "non-indexable"
+    },
+    {
+      "path": "/canonical-other",
+      "field": "indexability_reason",
+      "status": "DIFFERENT",
+      "reference": "canonicalized",
+      "independent": "canonical points to another url",
+      "reason": "Different reason precedence/coverage may explain mismatches; both raw reason lists are retained."
+    },
+    {
+      "path": "/canonical-other",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "An independently authored local SEO reference fixture /canonical-other",
+      "independent": "An independently authored local SEO reference fixture /canonical-other"
+    },
+    {
+      "path": "/canonical-other",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-other",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 70,
+      "independent": 70
+    },
+    {
+      "path": "/canonical-other",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 629,
+      "independent": 633,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/canonical-other",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-other",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /canonical-other",
+      "independent": "A useful independently authored description for the local fixture /canonical-other"
+    },
+    {
+      "path": "/canonical-other",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-other",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 82,
+      "independent": 82
+    },
+    {
+      "path": "/canonical-other",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-other",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/canonical-other",
+      "independent": "/canonical-other"
+    },
+    {
+      "path": "/canonical-other",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-other",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-other",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-other",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "/baseline",
+      "independent": "/baseline"
+    },
+    {
+      "path": "/canonical-other",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-other",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-other",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-other",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-other",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-other",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/canonical-other",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/canonical-other",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-other",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/canonical-self",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/canonical-self",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/canonical-self",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/canonical-self",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-self",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "An independently authored local SEO reference fixture /canonical-self",
+      "independent": "An independently authored local SEO reference fixture /canonical-self"
+    },
+    {
+      "path": "/canonical-self",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-self",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 69,
+      "independent": 69
+    },
+    {
+      "path": "/canonical-self",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 615,
+      "independent": 619,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/canonical-self",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-self",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /canonical-self",
+      "independent": "A useful independently authored description for the local fixture /canonical-self"
+    },
+    {
+      "path": "/canonical-self",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-self",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/canonical-self",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-self",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/canonical-self",
+      "independent": "/canonical-self"
+    },
+    {
+      "path": "/canonical-self",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-self",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-self",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-self",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "/canonical-self",
+      "independent": "/canonical-self"
+    },
+    {
+      "path": "/canonical-self",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-self",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-self",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-self",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-self",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/canonical-self",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/canonical-self",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/canonical-self",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/canonical-self",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "A duplicate title for both controlled pages",
+      "independent": "A duplicate title for both controlled pages"
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 43,
+      "independent": 43
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 365,
+      "independent": 368,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "The same description for two controlled pages.",
+      "independent": "The same description for two controlled pages."
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 46,
+      "independent": 46
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/duplicate-a",
+      "independent": "/duplicate-a"
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/duplicate-a",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "A duplicate title for both controlled pages",
+      "independent": "A duplicate title for both controlled pages"
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 43,
+      "independent": 43
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 365,
+      "independent": 368,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "The same description for two controlled pages.",
+      "independent": "The same description for two controlled pages."
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 46,
+      "independent": 46
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/duplicate-b",
+      "independent": "/duplicate-b"
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/duplicate-b",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/empty-description",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/empty-description",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/empty-description",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/empty-description",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/empty-description",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "An independently authored local SEO reference fixture /empty-description",
+      "independent": "An independently authored local SEO reference fixture /empty-description"
+    },
+    {
+      "path": "/empty-description",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/empty-description",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 72,
+      "independent": 72
+    },
+    {
+      "path": "/empty-description",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 651,
+      "independent": 656,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/empty-description",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/empty-description",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/empty-description",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/empty-description",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/empty-description",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/empty-description",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/empty-description",
+      "independent": "/empty-description"
+    },
+    {
+      "path": "/empty-description",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/empty-description",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/empty-description",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/empty-description",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/empty-description",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/empty-description",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/empty-description",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/empty-description",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/empty-description",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/empty-description",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/empty-description",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/empty-description",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/empty-description",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/empty-title",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/empty-title",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/empty-title",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/empty-title",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/empty-title",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/empty-title",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/empty-title",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/empty-title",
+      "field": "title_pixels",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/empty-title",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/empty-title",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /empty-title",
+      "independent": "A useful independently authored description for the local fixture /empty-title"
+    },
+    {
+      "path": "/empty-title",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/empty-title",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 78,
+      "independent": 78
+    },
+    {
+      "path": "/empty-title",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/empty-title",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/empty-title",
+      "independent": "/empty-title"
+    },
+    {
+      "path": "/empty-title",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/empty-title",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/empty-title",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/empty-title",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/empty-title",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/empty-title",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/empty-title",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/empty-title",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/empty-title",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/empty-title",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/empty-title",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/empty-title",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/empty-title",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/header-noindex",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/header-noindex",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/header-noindex",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "non-indexable",
+      "independent": "non-indexable"
+    },
+    {
+      "path": "/header-noindex",
+      "field": "indexability_reason",
+      "status": "DIFFERENT",
+      "reference": "noindex",
+      "independent": "noindex directive",
+      "reason": "Different reason precedence/coverage may explain mismatches; both raw reason lists are retained."
+    },
+    {
+      "path": "/header-noindex",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "An independently authored local SEO reference fixture /header-noindex",
+      "independent": "An independently authored local SEO reference fixture /header-noindex"
+    },
+    {
+      "path": "/header-noindex",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/header-noindex",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 69,
+      "independent": 69
+    },
+    {
+      "path": "/header-noindex",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 629,
+      "independent": 633,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/header-noindex",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/header-noindex",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /header-noindex",
+      "independent": "A useful independently authored description for the local fixture /header-noindex"
+    },
+    {
+      "path": "/header-noindex",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/header-noindex",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/header-noindex",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/header-noindex",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/header-noindex",
+      "independent": "/header-noindex"
+    },
+    {
+      "path": "/header-noindex",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/header-noindex",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/header-noindex",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "noindex, nofollow",
+      "independent": "noindex, nofollow"
+    },
+    {
+      "path": "/header-noindex",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/header-noindex",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/header-noindex",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/header-noindex",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/header-noindex",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/header-noindex",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/header-noindex",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/header-noindex",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/header-noindex",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/header-noindex",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/image.png",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/image.png",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "image/png",
+      "independent": "image/png"
+    },
+    {
+      "path": "/image.png",
+      "field": "indexability",
+      "status": "DIFFERENT",
+      "reference": "indexable",
+      "independent": "non-indexable",
+      "reason": "Observed field mismatch requires an implementation or reference-scope decision; not waived."
+    },
+    {
+      "path": "/image.png",
+      "field": "indexability_reason",
+      "status": "DIFFERENT",
+      "reference": "",
+      "independent": "not a supported indexable document type",
+      "reason": "Different reason precedence/coverage may explain mismatches; both raw reason lists are retained."
+    },
+    {
+      "path": "/image.png",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/image.png",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/image.png",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/image.png",
+      "field": "title_pixels",
+      "status": "UNAVAILABLE",
+      "reference": 0,
+      "independent": null,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/image.png",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/image.png",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/image.png",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/image.png",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/image.png",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/image.png",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/image.png",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/image.png",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/image.png",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/image.png",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/image.png",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/image.png",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/image.png",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 2,
+      "independent": 2
+    },
+    {
+      "path": "/image.png",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/image.png",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/image.png",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/image.png",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/image.png",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/image.png",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/images",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/images",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/images",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/images",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/images",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "An independently authored local SEO reference fixture /images",
+      "independent": "An independently authored local SEO reference fixture /images"
+    },
+    {
+      "path": "/images",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/images",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 61,
+      "independent": 61
+    },
+    {
+      "path": "/images",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 556,
+      "independent": 561,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/images",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/images",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /images",
+      "independent": "A useful independently authored description for the local fixture /images"
+    },
+    {
+      "path": "/images",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/images",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 73,
+      "independent": 73
+    },
+    {
+      "path": "/images",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/images",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/images",
+      "independent": "/images"
+    },
+    {
+      "path": "/images",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/images",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/images",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/images",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/images",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/images",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/images",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/images",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/images",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/images",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/images",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/images",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/images",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "An independently authored local SEO reference fixture /jsonld-invalid",
+      "independent": "An independently authored local SEO reference fixture /jsonld-invalid"
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 69,
+      "independent": 69
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 607,
+      "independent": 612,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /jsonld-invalid",
+      "independent": "A useful independently authored description for the local fixture /jsonld-invalid"
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/jsonld-invalid",
+      "independent": "/jsonld-invalid"
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/jsonld-invalid",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "An independently authored local SEO reference fixture /jsonld-valid",
+      "independent": "An independently authored local SEO reference fixture /jsonld-valid"
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 67,
+      "independent": 67
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 591,
+      "independent": 596,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /jsonld-valid",
+      "independent": "A useful independently authored description for the local fixture /jsonld-valid"
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 79,
+      "independent": 79
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/jsonld-valid",
+      "independent": "/jsonld-valid"
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/jsonld-valid",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/lang-de",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/lang-de",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/lang-de",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/lang-de",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/lang-de",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "An independently authored local SEO reference fixture /lang-de",
+      "independent": "An independently authored local SEO reference fixture /lang-de"
+    },
+    {
+      "path": "/lang-de",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/lang-de",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 62,
+      "independent": 62
+    },
+    {
+      "path": "/lang-de",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 557,
+      "independent": 561,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/lang-de",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/lang-de",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /lang-de",
+      "independent": "A useful independently authored description for the local fixture /lang-de"
+    },
+    {
+      "path": "/lang-de",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/lang-de",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 74,
+      "independent": 74
+    },
+    {
+      "path": "/lang-de",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/lang-de",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/lang-de",
+      "independent": "/lang-de"
+    },
+    {
+      "path": "/lang-de",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/lang-de",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/lang-de",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/lang-de",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/lang-de",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/lang-de",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/lang-de",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/lang-de",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/lang-de",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/lang-de",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/lang-de",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/lang-de",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/lang-de",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/lang-en",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/lang-en",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/lang-en",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/lang-en",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/lang-en",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "An independently authored local SEO reference fixture /lang-en",
+      "independent": "An independently authored local SEO reference fixture /lang-en"
+    },
+    {
+      "path": "/lang-en",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/lang-en",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 62,
+      "independent": 62
+    },
+    {
+      "path": "/lang-en",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 557,
+      "independent": 561,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/lang-en",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/lang-en",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /lang-en",
+      "independent": "A useful independently authored description for the local fixture /lang-en"
+    },
+    {
+      "path": "/lang-en",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/lang-en",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 74,
+      "independent": 74
+    },
+    {
+      "path": "/lang-en",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/lang-en",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/lang-en",
+      "independent": "/lang-en"
+    },
+    {
+      "path": "/lang-en",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/lang-en",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/lang-en",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/lang-en",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/lang-en",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/lang-en",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/lang-en",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/lang-en",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/lang-en",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/lang-en",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/lang-en",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/lang-en",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/lang-en",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/links",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/links",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/links",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/links",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/links",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "An independently authored local SEO reference fixture /links",
+      "independent": "An independently authored local SEO reference fixture /links"
+    },
+    {
+      "path": "/links",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/links",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 60,
+      "independent": 60
+    },
+    {
+      "path": "/links",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 532,
+      "independent": 536,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/links",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/links",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /links",
+      "independent": "A useful independently authored description for the local fixture /links"
+    },
+    {
+      "path": "/links",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/links",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 72,
+      "independent": 72
+    },
+    {
+      "path": "/links",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/links",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/links",
+      "independent": "/links"
+    },
+    {
+      "path": "/links",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/links",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/links",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/links",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/links",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/links",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/links",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/links",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/links",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/links",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 7,
+      "independent": 7
+    },
+    {
+      "path": "/links",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 4,
+      "independent": 4
+    },
+    {
+      "path": "/links",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/links",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 91,
+      "independent": 91
+    },
+    {
+      "path": "/long-title",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/long-title",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/long-title",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/long-title",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/long-title",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+      "independent": "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
+    },
+    {
+      "path": "/long-title",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/long-title",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 75,
+      "independent": 75
+    },
+    {
+      "path": "/long-title",
+      "field": "title_pixels",
+      "status": "MATCH",
+      "reference": 1350,
+      "independent": 1350
+    },
+    {
+      "path": "/long-title",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/long-title",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /long-title",
+      "independent": "A useful independently authored description for the local fixture /long-title"
+    },
+    {
+      "path": "/long-title",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/long-title",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 77,
+      "independent": 77
+    },
+    {
+      "path": "/long-title",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/long-title",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/long-title",
+      "independent": "/long-title"
+    },
+    {
+      "path": "/long-title",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/long-title",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/long-title",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/long-title",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/long-title",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/long-title",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/long-title",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/long-title",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/long-title",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/long-title",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/long-title",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/long-title",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/long-title",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/missing",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 404,
+      "independent": 404
+    },
+    {
+      "path": "/missing",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/missing",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "non-indexable",
+      "independent": "non-indexable"
+    },
+    {
+      "path": "/missing",
+      "field": "indexability_reason",
+      "status": "DIFFERENT",
+      "reference": "client-fehler",
+      "independent": "requested url does not return http 200",
+      "reason": "Different reason precedence/coverage may explain mismatches; both raw reason lists are retained."
+    },
+    {
+      "path": "/missing",
+      "field": "title",
+      "status": "DIFFERENT",
+      "reference": "",
+      "independent": "Real missing page",
+      "reason": "Observed field mismatch requires an implementation or reference-scope decision; not waived."
+    },
+    {
+      "path": "/missing",
+      "field": "title_occurrences",
+      "status": "DIFFERENT",
+      "reference": 0,
+      "independent": 1,
+      "reason": "Empty-element preservation and initial versus final redirect document extraction can differ."
+    },
+    {
+      "path": "/missing",
+      "field": "title_length",
+      "status": "DIFFERENT",
+      "reference": 0,
+      "independent": 17,
+      "reason": "Observed field mismatch requires an implementation or reference-scope decision; not waived."
+    },
+    {
+      "path": "/missing",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 0,
+      "independent": 163,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/missing",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/missing",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/missing",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/missing",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/missing",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 2,
+      "independent": 2
+    },
+    {
+      "path": "/missing",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 2,
+      "independent": 2
+    },
+    {
+      "path": "/missing",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/missing",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/missing",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/missing-description",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/missing-description",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/missing-description",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/missing-description",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing-description",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "An independently authored local SEO reference fixture /missing-description",
+      "independent": "An independently authored local SEO reference fixture /missing-description"
+    },
+    {
+      "path": "/missing-description",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/missing-description",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 74,
+      "independent": 74
+    },
+    {
+      "path": "/missing-description",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 665,
+      "independent": 670,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/missing-description",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing-description",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing-description",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/missing-description",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/missing-description",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing-description",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/missing-description",
+      "independent": "/missing-description"
+    },
+    {
+      "path": "/missing-description",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing-description",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing-description",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing-description",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing-description",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing-description",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/missing-description",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/missing-description",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/missing-description",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/missing-description",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/missing-description",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/missing-description",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing-description",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/missing-title",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/missing-title",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/missing-title",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/missing-title",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing-title",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing-title",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/missing-title",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/missing-title",
+      "field": "title_pixels",
+      "status": "UNAVAILABLE",
+      "reference": 0,
+      "independent": null,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/missing-title",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing-title",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /missing-title",
+      "independent": "A useful independently authored description for the local fixture /missing-title"
+    },
+    {
+      "path": "/missing-title",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/missing-title",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 80,
+      "independent": 80
+    },
+    {
+      "path": "/missing-title",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing-title",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/missing-title",
+      "independent": "/missing-title"
+    },
+    {
+      "path": "/missing-title",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing-title",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing-title",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing-title",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing-title",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing-title",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/missing-title",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/missing-title",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/missing-title",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/missing-title",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/missing-title",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/missing-title",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/missing-title",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/multiple-description",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/multiple-description",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/multiple-description",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/multiple-description",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/multiple-description",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "An independently authored local SEO reference fixture /multiple-description",
+      "independent": "An independently authored local SEO reference fixture /multiple-description"
+    },
+    {
+      "path": "/multiple-description",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/multiple-description",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 75,
+      "independent": 75
+    },
+    {
+      "path": "/multiple-description",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 667,
+      "independent": 673,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/multiple-description",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/multiple-description",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /multiple-description",
+      "independent": "A useful independently authored description for the local fixture /multiple-description"
+    },
+    {
+      "path": "/multiple-description",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 2,
+      "independent": 2
+    },
+    {
+      "path": "/multiple-description",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 87,
+      "independent": 87
+    },
+    {
+      "path": "/multiple-description",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "Second controlled description",
+      "independent": "Second controlled description"
+    },
+    {
+      "path": "/multiple-description",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/multiple-description",
+      "independent": "/multiple-description"
+    },
+    {
+      "path": "/multiple-description",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/multiple-description",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/multiple-description",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/multiple-description",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/multiple-description",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/multiple-description",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/multiple-description",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/multiple-description",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/multiple-description",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/multiple-description",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/multiple-description",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/multiple-description",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/multiple-description",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/multiple-title",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/multiple-title",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/multiple-title",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/multiple-title",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/multiple-title",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "An independently authored local SEO reference fixture /multiple-title",
+      "independent": "An independently authored local SEO reference fixture /multiple-title"
+    },
+    {
+      "path": "/multiple-title",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 2,
+      "independent": 2
+    },
+    {
+      "path": "/multiple-title",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 69,
+      "independent": 69
+    },
+    {
+      "path": "/multiple-title",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 601,
+      "independent": 609,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/multiple-title",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "Second controlled title",
+      "independent": "Second controlled title"
+    },
+    {
+      "path": "/multiple-title",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /multiple-title",
+      "independent": "A useful independently authored description for the local fixture /multiple-title"
+    },
+    {
+      "path": "/multiple-title",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/multiple-title",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/multiple-title",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/multiple-title",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/multiple-title",
+      "independent": "/multiple-title"
+    },
+    {
+      "path": "/multiple-title",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/multiple-title",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/multiple-title",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/multiple-title",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/multiple-title",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/multiple-title",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/multiple-title",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/multiple-title",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/multiple-title",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/multiple-title",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/multiple-title",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/multiple-title",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/multiple-title",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/noindex",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/noindex",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/noindex",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "non-indexable",
+      "independent": "non-indexable"
+    },
+    {
+      "path": "/noindex",
+      "field": "indexability_reason",
+      "status": "DIFFERENT",
+      "reference": "noindex",
+      "independent": "noindex directive",
+      "reason": "Different reason precedence/coverage may explain mismatches; both raw reason lists are retained."
+    },
+    {
+      "path": "/noindex",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "An independently authored local SEO reference fixture /noindex",
+      "independent": "An independently authored local SEO reference fixture /noindex"
+    },
+    {
+      "path": "/noindex",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/noindex",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 62,
+      "independent": 62
+    },
+    {
+      "path": "/noindex",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 562,
+      "independent": 565,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/noindex",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/noindex",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /noindex",
+      "independent": "A useful independently authored description for the local fixture /noindex"
+    },
+    {
+      "path": "/noindex",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/noindex",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 74,
+      "independent": 74
+    },
+    {
+      "path": "/noindex",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/noindex",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/noindex",
+      "independent": "/noindex"
+    },
+    {
+      "path": "/noindex",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/noindex",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "noindex, follow",
+      "independent": "noindex, follow"
+    },
+    {
+      "path": "/noindex",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/noindex",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/noindex",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/noindex",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/noindex",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/noindex",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/noindex",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/noindex",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/noindex",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/noindex",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/noindex",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/redirect-one",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 301,
+      "independent": 301
+    },
+    {
+      "path": "/redirect-one",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/redirect-one",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "non-indexable",
+      "independent": "non-indexable"
+    },
+    {
+      "path": "/redirect-one",
+      "field": "indexability_reason",
+      "status": "DIFFERENT",
+      "reference": "umgeleitet",
+      "independent": "requested url does not return http 200",
+      "reason": "Different reason precedence/coverage may explain mismatches; both raw reason lists are retained."
+    },
+    {
+      "path": "/redirect-one",
+      "field": "title",
+      "status": "DIFFERENT",
+      "reference": "",
+      "independent": "An independently authored local SEO reference fixture /baseline",
+      "reason": "Observed field mismatch requires an implementation or reference-scope decision; not waived."
+    },
+    {
+      "path": "/redirect-one",
+      "field": "title_occurrences",
+      "status": "DIFFERENT",
+      "reference": 0,
+      "independent": 1,
+      "reason": "Empty-element preservation and initial versus final redirect document extraction can differ."
+    },
+    {
+      "path": "/redirect-one",
+      "field": "title_length",
+      "status": "DIFFERENT",
+      "reference": 0,
+      "independent": 63,
+      "reason": "Observed field mismatch requires an implementation or reference-scope decision; not waived."
+    },
+    {
+      "path": "/redirect-one",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 0,
+      "independent": 570,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/redirect-one",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/redirect-one",
+      "field": "description",
+      "status": "DIFFERENT",
+      "reference": "",
+      "independent": "A useful independently authored description for the local fixture /baseline",
+      "reason": "Observed field mismatch requires an implementation or reference-scope decision; not waived."
+    },
+    {
+      "path": "/redirect-one",
+      "field": "description_occurrences",
+      "status": "DIFFERENT",
+      "reference": 0,
+      "independent": 1,
+      "reason": "Observed field mismatch requires an implementation or reference-scope decision; not waived."
+    },
+    {
+      "path": "/redirect-one",
+      "field": "description_length",
+      "status": "DIFFERENT",
+      "reference": 0,
+      "independent": 75,
+      "reason": "Observed field mismatch requires an implementation or reference-scope decision; not waived."
+    },
+    {
+      "path": "/redirect-one",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/redirect-one",
+      "field": "h1",
+      "status": "DIFFERENT",
+      "reference": "",
+      "independent": "/baseline",
+      "reason": "Observed field mismatch requires an implementation or reference-scope decision; not waived."
+    },
+    {
+      "path": "/redirect-one",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/redirect-one",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/redirect-one",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/redirect-one",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/redirect-one",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/redirect-one",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/redirect-one",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/redirect-one",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 2,
+      "independent": 2
+    },
+    {
+      "path": "/redirect-one",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 2,
+      "independent": 2
+    },
+    {
+      "path": "/redirect-one",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/redirect-one",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/redirect-one",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "/redirect-two",
+      "independent": "/redirect-two"
+    },
+    {
+      "path": "/redirect-one",
+      "field": "word_count",
+      "status": "DIFFERENT",
+      "reference": 0,
+      "independent": 81,
+      "reason": "Content-area/tokenization must be calibrated against reference; metadata-only proxies are insufficient."
+    },
+    {
+      "path": "/redirect-two",
+      "field": "coverage",
+      "status": "DIFFERENT",
+      "reference": true,
+      "independent": false,
+      "reason": "Discovery/resource policy differs; all missing and additional paths remain visible."
+    },
+    {
+      "path": "/server-error",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 503,
+      "independent": 503
+    },
+    {
+      "path": "/server-error",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/server-error",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "non-indexable",
+      "independent": "non-indexable"
+    },
+    {
+      "path": "/server-error",
+      "field": "indexability_reason",
+      "status": "DIFFERENT",
+      "reference": "server-fehler",
+      "independent": "requested url does not return http 200",
+      "reason": "Different reason precedence/coverage may explain mismatches; both raw reason lists are retained."
+    },
+    {
+      "path": "/server-error",
+      "field": "title",
+      "status": "DIFFERENT",
+      "reference": "",
+      "independent": "Controlled 503",
+      "reason": "Observed field mismatch requires an implementation or reference-scope decision; not waived."
+    },
+    {
+      "path": "/server-error",
+      "field": "title_occurrences",
+      "status": "DIFFERENT",
+      "reference": 0,
+      "independent": 1,
+      "reason": "Empty-element preservation and initial versus final redirect document extraction can differ."
+    },
+    {
+      "path": "/server-error",
+      "field": "title_length",
+      "status": "DIFFERENT",
+      "reference": 0,
+      "independent": 14,
+      "reason": "Observed field mismatch requires an implementation or reference-scope decision; not waived."
+    },
+    {
+      "path": "/server-error",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 0,
+      "independent": 130,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/server-error",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/server-error",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/server-error",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/server-error",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/server-error",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/server-error",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/server-error",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/server-error",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/server-error",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/server-error",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/server-error",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/server-error",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/server-error",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/server-error",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/server-error",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/server-error",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/server-error",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/server-error",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/server-error",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/short-title",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/short-title",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/short-title",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/short-title",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/short-title",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "Tiny",
+      "independent": "Tiny"
+    },
+    {
+      "path": "/short-title",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/short-title",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 4,
+      "independent": 4
+    },
+    {
+      "path": "/short-title",
+      "field": "title_pixels",
+      "status": "MATCH",
+      "reference": 37,
+      "independent": 37
+    },
+    {
+      "path": "/short-title",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/short-title",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /short-title",
+      "independent": "A useful independently authored description for the local fixture /short-title"
+    },
+    {
+      "path": "/short-title",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/short-title",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 78,
+      "independent": 78
+    },
+    {
+      "path": "/short-title",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/short-title",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/short-title",
+      "independent": "/short-title"
+    },
+    {
+      "path": "/short-title",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/short-title",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/short-title",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/short-title",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/short-title",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/short-title",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/short-title",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/short-title",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/short-title",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/short-title",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/short-title",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/short-title",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/short-title",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 81,
+      "independent": 81
+    },
+    {
+      "path": "/soft-error",
+      "field": "http_status",
+      "status": "MATCH",
+      "reference": 200,
+      "independent": 200
+    },
+    {
+      "path": "/soft-error",
+      "field": "content_type",
+      "status": "MATCH",
+      "reference": "text/html",
+      "independent": "text/html"
+    },
+    {
+      "path": "/soft-error",
+      "field": "indexability",
+      "status": "MATCH",
+      "reference": "indexable",
+      "independent": "indexable"
+    },
+    {
+      "path": "/soft-error",
+      "field": "indexability_reason",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/soft-error",
+      "field": "title",
+      "status": "MATCH",
+      "reference": "An independently authored local SEO reference fixture /soft-error",
+      "independent": "An independently authored local SEO reference fixture /soft-error"
+    },
+    {
+      "path": "/soft-error",
+      "field": "title_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/soft-error",
+      "field": "title_length",
+      "status": "MATCH",
+      "reference": 65,
+      "independent": 65
+    },
+    {
+      "path": "/soft-error",
+      "field": "title_pixels",
+      "status": "DIFFERENT",
+      "reference": 573,
+      "independent": 579,
+      "reason": "Recorded font-based metrics need calibration for glyph advances, kerning and rounding; an absent native metric remains unavailable."
+    },
+    {
+      "path": "/soft-error",
+      "field": "second_title",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/soft-error",
+      "field": "description",
+      "status": "MATCH",
+      "reference": "A useful independently authored description for the local fixture /soft-error",
+      "independent": "A useful independently authored description for the local fixture /soft-error"
+    },
+    {
+      "path": "/soft-error",
+      "field": "description_occurrences",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/soft-error",
+      "field": "description_length",
+      "status": "MATCH",
+      "reference": 77,
+      "independent": 77
+    },
+    {
+      "path": "/soft-error",
+      "field": "second_description",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/soft-error",
+      "field": "h1",
+      "status": "MATCH",
+      "reference": "/soft-error",
+      "independent": "/soft-error"
+    },
+    {
+      "path": "/soft-error",
+      "field": "h2",
+      "status": "MATCH",
+      "reference": "404 Page Not Found",
+      "independent": "404 Page Not Found"
+    },
+    {
+      "path": "/soft-error",
+      "field": "robots_meta",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/soft-error",
+      "field": "robots_header",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/soft-error",
+      "field": "canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/soft-error",
+      "field": "second_canonical",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/soft-error",
+      "field": "canonical_occurrences",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/soft-error",
+      "field": "depth",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/soft-error",
+      "field": "inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/soft-error",
+      "field": "unique_inlinks",
+      "status": "MATCH",
+      "reference": 1,
+      "independent": 1
+    },
+    {
+      "path": "/soft-error",
+      "field": "outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/soft-error",
+      "field": "unique_outlinks",
+      "status": "MATCH",
+      "reference": 0,
+      "independent": 0
+    },
+    {
+      "path": "/soft-error",
+      "field": "redirect_to",
+      "status": "MATCH",
+      "reference": "",
+      "independent": ""
+    },
+    {
+      "path": "/soft-error",
+      "field": "word_count",
+      "status": "MATCH",
+      "reference": 85,
+      "independent": 85
+    }
+  ],
+  "requests": {
+    "reference": [
+      {
+        "path": "/robots.txt",
+        "method": "GET"
+      },
+      {
+        "path": "/",
+        "method": "GET"
+      },
+      {
+        "path": "/canonical-conflict",
+        "method": "GET"
+      },
+      {
+        "path": "/long-title",
+        "method": "GET"
+      },
+      {
+        "path": "/empty-title",
+        "method": "GET"
+      },
+      {
+        "path": "/links",
+        "method": "GET"
+      },
+      {
+        "path": "/noindex",
+        "method": "GET"
+      },
+      {
+        "path": "/jsonld-valid",
+        "method": "GET"
+      },
+      {
+        "path": "/multiple-description",
+        "method": "GET"
+      },
+      {
+        "path": "/redirect-one",
+        "method": "GET"
+      },
+      {
+        "path": "/canonical-other",
+        "method": "GET"
+      },
+      {
+        "path": "/jsonld-invalid",
+        "method": "GET"
+      },
+      {
+        "path": "/baseline",
+        "method": "GET"
+      },
+      {
+        "path": "/Upper_Case",
+        "method": "GET"
+      },
+      {
+        "path": "/header-noindex",
+        "method": "GET"
+      },
+      {
+        "path": "/missing-description",
+        "method": "GET"
+      },
+      {
+        "path": "/canonical-404",
+        "method": "GET"
+      },
+      {
+        "path": "/missing-title",
+        "method": "GET"
+      },
+      {
+        "path": "/images",
+        "method": "GET"
+      },
+      {
+        "path": "/soft-error",
+        "method": "GET"
+      },
+      {
+        "path": "/server-error",
+        "method": "GET"
+      },
+      {
+        "path": "/duplicate-b",
+        "method": "GET"
+      },
+      {
+        "path": "/duplicate-a",
+        "method": "GET"
+      },
+      {
+        "path": "/missing",
+        "method": "GET"
+      },
+      {
+        "path": "/lang-de",
+        "method": "GET"
+      },
+      {
+        "path": "/multiple-title",
+        "method": "GET"
+      },
+      {
+        "path": "/canonical-self",
+        "method": "GET"
+      },
+      {
+        "path": "/empty-description",
+        "method": "GET"
+      },
+      {
+        "path": "/body-metadata",
+        "method": "GET"
+      },
+      {
+        "path": "/lang-en",
+        "method": "GET"
+      },
+      {
+        "path": "/short-title",
+        "method": "GET"
+      },
+      {
+        "path": "/blank-title",
+        "method": "GET"
+      },
+      {
+        "path": "/image.png",
+        "method": "GET"
+      },
+      {
+        "path": "/baseline?a=1&b=2",
+        "method": "GET"
+      },
+      {
+        "path": "/redirect-two",
+        "method": "GET"
+      }
+    ],
+    "independent": [
+      {
+        "path": "/robots.txt",
+        "method": "GET"
+      },
+      {
+        "path": "/",
+        "method": "GET"
+      },
+      {
+        "path": "/baseline",
+        "method": "GET"
+      },
+      {
+        "path": "/missing-title",
+        "method": "GET"
+      },
+      {
+        "path": "/empty-title",
+        "method": "GET"
+      },
+      {
+        "path": "/blank-title",
+        "method": "GET"
+      },
+      {
+        "path": "/duplicate-a",
+        "method": "GET"
+      },
+      {
+        "path": "/duplicate-b",
+        "method": "GET"
+      },
+      {
+        "path": "/short-title",
+        "method": "GET"
+      },
+      {
+        "path": "/long-title",
+        "method": "GET"
+      },
+      {
+        "path": "/multiple-title",
+        "method": "GET"
+      },
+      {
+        "path": "/missing-description",
+        "method": "GET"
+      },
+      {
+        "path": "/empty-description",
+        "method": "GET"
+      },
+      {
+        "path": "/body-metadata",
+        "method": "GET"
+      },
+      {
+        "path": "/multiple-description",
+        "method": "GET"
+      },
+      {
+        "path": "/noindex",
+        "method": "GET"
+      },
+      {
+        "path": "/header-noindex",
+        "method": "GET"
+      },
+      {
+        "path": "/canonical-self",
+        "method": "GET"
+      },
+      {
+        "path": "/canonical-other",
+        "method": "GET"
+      },
+      {
+        "path": "/canonical-conflict",
+        "method": "GET"
+      },
+      {
+        "path": "/canonical-404",
+        "method": "GET"
+      },
+      {
+        "path": "/lang-en",
+        "method": "GET"
+      },
+      {
+        "path": "/lang-de",
+        "method": "GET"
+      },
+      {
+        "path": "/images",
+        "method": "GET"
+      },
+      {
+        "path": "/links",
+        "method": "GET"
+      },
+      {
+        "path": "/jsonld-invalid",
+        "method": "GET"
+      },
+      {
+        "path": "/jsonld-valid",
+        "method": "GET"
+      },
+      {
+        "path": "/soft-error",
+        "method": "GET"
+      },
+      {
+        "path": "/Upper_Case",
+        "method": "GET"
+      },
+      {
+        "path": "/redirect-one",
+        "method": "GET"
+      },
+      {
+        "path": "/missing",
+        "method": "GET"
+      },
+      {
+        "path": "/server-error",
+        "method": "GET"
+      },
+      {
+        "path": "/redirect-two",
+        "method": "GET"
+      },
+      {
+        "path": "/image.png",
+        "method": "GET"
+      },
+      {
+        "path": "/baseline",
+        "method": "GET"
+      },
+      {
+        "path": "/baseline?a=1&b=2",
+        "method": "GET"
+      }
+    ]
+  },
+  "limitations": [
+    "These compare exported fields, not vendor issue-filter membership.",
+    "A native release hash binds findings to this build; rerun after implementation changes.",
+    "No paid rendering/auth/provider configuration or >500 URL reference behavior was tested."
+  ]
+}

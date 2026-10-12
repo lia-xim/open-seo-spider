@@ -8,11 +8,12 @@
     selected: null, inspectorTab: 'details', polling: false, starting: false,
     generation: 0, issueMap: new Map(), pageMap: new Map(), cache: {}, analysis: null, analysisError: '', settings: {
       concurrency: 8, timeout_seconds: 20, max_pages: 0, max_depth: 0,
-      user_agent: 'Open SEO Spider/0.1', obey_robots: true, follow_subdomains: false,
+      user_agent: 'Open SEO Spider/0.1', indexability_agent: 'googlebot', obey_robots: true, follow_subdomains: false,
       delay_ms: 100, max_body_mb: 5, check_external: false,
       javascript_rendering: false, renderer_endpoint: 'http://127.0.0.1:8790/render',
       renderer_wait_ms: 500, renderer_accessibility: false, renderer_screenshot: false,
-      include_patterns_text: '', exclude_patterns_text: '', custom_extractions_json: '[]'
+      renderer_collect_cookies: false, custom_javascript_json: '[]',
+      include_patterns_text: '', exclude_patterns_text: '', custom_extractions_json: '[]', audit_thresholds_json: '{}'
     }
   };
   const sections = {
@@ -25,13 +26,16 @@
     headings: ['ONPAGE ANALYSE', 'Überschriften', 'H1- und H2-Struktur deiner Seiten, einschließlich mehrfacher Überschriften.'],
     canonical: ['ONPAGE ANALYSE', 'Canonicals', 'Deklarierte Canonical-Ziele und die Anzahl der Canonical-Tags.'],
     robots: ['TECHNISCHE ANALYSE', 'Robots & Directives', 'Robots.txt-Ausschlüsse, Meta-Robots und X-Robots-Tag aus der HTTP-Antwort.'],
-    hreflang: ['INTERNATIONALES SEO', 'Hreflang', 'Sprachalternativen aus dem HTML. Beobachtete Ziel- und Rückverbindungen werden nach Crawl-Abschluss geprüft.'],
+    hreflang: ['INTERNATIONALES SEO', 'Hreflang', 'Sprachalternativen aus HTML und HTTP-Link-Headern. Beobachtete Ziel- und Rückverbindungen werden nach Crawl-Abschluss geprüft.'],
     images: ['ONPAGE ANALYSE', 'Bilder', 'Bildreferenzen, Alt-Texte und HTML-Dimensionen. Die Bilddateien werden nicht automatisch analysiert.'],
     issues: ['PRIORISIERUNG', 'Probleme', 'Erkannte Fehler, Warnungen und Hinweise aus der tatsächlichen Crawl-Analyse.'],
     graph: ['LINK ARCHITECTURE', 'Linkgraph', 'Interne Ankerverbindungen aus den abgerufenen Seiten. Der sichtbare Graph zeigt einen begrenzten Ausschnitt.'],
     linkmetrics: ['LINK ARCHITECTURE', 'Linkmetriken', 'Eigene PageRank-artige Berechnung auf dem beobachteten Linkgraph. Kein Suchmaschinen- oder Vendor-Score.'],
     structured: ['ONPAGE ANALYSE', 'Strukturierte Daten', 'JSON-LD-Blöcke und beobachtete Typen. Schema.org- und Google-Rich-Result-Validierung werden nicht ausgeführt.'],
-    extractions: ['CUSTOM DATA', 'CSS-Extraktionen', 'Benannte CSS-Selektoren mit Text- oder Attributwerten aus dem tatsächlich analysierten HTML oder DOM.']
+    extractions: ['CUSTOM DATA', 'Eigene Extraktionen', 'Benannte Auswertungen aus dem tatsächlich analysierten HTML oder DOM.'],
+    javascript: ['CUSTOM DATA', 'JavaScript-Auswertungen', 'Eigene Scripts im isolierten Seitenkontext nach der Render-Wartezeit. Werte und Fehler bleiben getrennt.'],
+    cookies: ['BROWSER ANALYSE', 'Cookies', 'Cookie-Eigenschaften aus einzelnen isolierten Seitenaufrufen. Aufnahme muss aktiviert werden; Werte werden ausgelassen.'],
+    pagination: ['TECHNISCHE ANALYSE', 'Pagination & AMP', 'Deklarierte next-, prev- und amphtml-Ziele aus HTML und HTTP-Link-Headern.']
   };
   const labels = {
     running: 'Crawl läuft', queued: 'Crawl wartet', pending: 'Crawl wartet',
@@ -43,6 +47,7 @@
   const array = (value) => Array.isArray(value) ? value : value == null || value === '' ? [] : [value];
   const first = (value) => array(value).join(' | ');
   const primary = (value) => String(array(value)[0] ?? '');
+  const canonicalCount = (page) => array(page.html_canonical).length + array(page.header_canonical).length || page.canonical.length;
   const escape = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
   const duration = (ms) => ms == null ? '—' : `${number(Math.round(Number(ms)))} ms`;
   const effectiveStatus = (page) => page.final_status ?? page.status ?? page.status_code ?? null;
@@ -59,6 +64,7 @@
     meta_robots: array(page.meta_robots ?? page.robots),
     x_robots_tag: array(page.x_robots_tag),
     hreflang: array(page.hreflang), images: array(page.images), custom_extractions: array(page.custom_extractions),
+    custom_javascript_results: array(page.custom_javascript_results), browser_cookies: array(page.browser_cookies),
     links: array(page.links ?? page.outlinks),
     inlinks: array(page.inlinks),
     redirect_chain: array(page.redirect_chain),
@@ -237,7 +243,7 @@
     message('');
     try {
       const payload = { ...state.settings, ...advanced, mode, seed_url: mode === 'sitemap' ? '' : urls[0], urls: mode === 'sitemap' ? [] : urls, seed_urls: mode === 'sitemap' ? [] : urls, sitemap_urls: mode === 'sitemap' ? urls : [], crawl_links: mode !== 'list', include_subdomains: state.settings.follow_subdomains, request_timeout_secs: state.settings.timeout_seconds, max_body_bytes: state.settings.max_body_mb * 1024 * 1024 };
-      payload.renderer = state.settings.javascript_rendering ? { endpoint: state.settings.renderer_endpoint, wait_ms: state.settings.renderer_wait_ms, accessibility: state.settings.renderer_accessibility, screenshot: state.settings.renderer_screenshot } : null;
+      payload.renderer = state.settings.javascript_rendering ? { endpoint: state.settings.renderer_endpoint, wait_ms: state.settings.renderer_wait_ms, accessibility: state.settings.renderer_accessibility, screenshot: state.settings.renderer_screenshot, collect_cookies: state.settings.renderer_collect_cookies, custom_javascript: parseCustomJavascript(state.settings.custom_javascript_json) } : null;
       const result = await request('/api/crawls', { method: 'POST', body: JSON.stringify(payload) });
       const crawl = result.crawl || result;
       if (!crawl.id) throw new Error('Der Server hat keine Crawl-ID zurückgegeben.');
@@ -405,9 +411,11 @@
       case 'linkmetrics': return array(state.analysis?.graph?.nodes).map((node) => ({ ...node, _page: state.pageMap.get(node.url) }));
       case 'structured': return array(state.analysis?.structured_data).map((entry) => ({ ...entry, types_text: Object.entries(entry.types || {}).map(([type, count]) => `${type} (${count})`).join(' | '), _page: state.pageMap.get(entry.url) }));
       case 'extractions': return internals().flatMap((page) => page.custom_extractions.map((entry) => ({ ...entry, url: page.url, name: entry.name || entry.selector, values: array(entry.values), _page: page })));
-      case 'titles': { if (state.cache.titles) return state.cache.titles; const duplicates = duplicateValues('titles'); state.cache.titles = htmlPages().map((page) => ({ ...page, title_text: primary(page.titles), title_length: primary(page.titles).length, duplicates: duplicates.get(primary(page.titles).trim()) || 0 })); return state.cache.titles; }
-      case 'meta': { if (state.cache.meta) return state.cache.meta; const duplicates = duplicateValues('meta_descriptions'); state.cache.meta = htmlPages().map((page) => ({ ...page, description_text: primary(page.meta_descriptions), description_length: primary(page.meta_descriptions).length, duplicates: duplicates.get(primary(page.meta_descriptions).trim()) || 0 })); return state.cache.meta; }
-      case 'headings': case 'canonical': case 'hreflang': return htmlPages();
+      case 'javascript': return internals().flatMap(page => page.custom_javascript_results.map(entry => ({ ...entry, url: page.url, value_json: entry.error ? '' : JSON.stringify(entry.value), _page: page })));
+      case 'cookies': return internals().flatMap(page => page.browser_cookies.map(entry => ({ ...entry, url: page.url, _page: page })));
+      case 'titles': { if (state.cache.titles) return state.cache.titles; const duplicates = duplicateValues('titles'); state.cache.titles = htmlPages().map((page) => ({ ...page, title_text: primary(page.titles), title_length: Array.from(primary(page.titles)).length, duplicates: duplicates.get(primary(page.titles).trim()) || 0 })); return state.cache.titles; }
+      case 'meta': { if (state.cache.meta) return state.cache.meta; const duplicates = duplicateValues('meta_descriptions'); state.cache.meta = htmlPages().map((page) => ({ ...page, description_text: primary(page.meta_descriptions), description_length: Array.from(primary(page.meta_descriptions)).length, duplicates: duplicates.get(primary(page.meta_descriptions).trim()) || 0 })); return state.cache.meta; }
+      case 'headings': return htmlPages();
       default: return internals();
     }
   }
@@ -423,17 +431,20 @@
     switch (state.section) {
       case 'external': return [urlColumn, { key: 'status', label: 'HTTP geprüft', value: (row) => row.status, render: (row) => statusBadge(row.status) }, textColumn('text', 'Linktext'), numberColumn('source_count', 'Verlinkende Seiten'), textColumn('nofollow', 'Nofollow', (row) => row.nofollow ? 'Ja' : 'Nein')];
       case 'status': return [urlColumn, { key: 'initial_status', label: 'HTTP initial', value: (row) => row.status, render: (row) => statusBadge(row.status) }, statusColumn, textColumn('final_url', 'Finale URL'), numberColumn('redirects', 'Redirects', (row) => row.redirect_chain.length), { key: 'response_ms', label: 'Antwortzeit', value: (row) => row.response_ms, render: (row) => duration(row.response_ms) }, indexColumn, textColumn('error', 'Abruffehler')];
-      case 'titles': return [urlColumn, textColumn('title_text', 'Seitentitel'), numberColumn('title_length', 'Zeichen'), numberColumn('title_count', 'Title-Tags', (row) => row.titles.length), numberColumn('duplicates', 'Vorkommen'), statusColumn];
-      case 'meta': return [urlColumn, textColumn('description_text', 'Meta Description'), numberColumn('description_length', 'Zeichen'), numberColumn('meta_count', 'Meta-Tags', (row) => row.meta_descriptions.length), numberColumn('duplicates', 'Vorkommen'), statusColumn];
+      case 'titles': return [urlColumn, textColumn('title_text', 'Seitentitel'), numberColumn('title_length', 'Zeichen'), numberColumn('title_pixels', 'Pixelprofil 20px', row => array(row.title_pixel_widths)[0]), numberColumn('title_count', 'Title-Tags', (row) => row.titles.length), numberColumn('duplicates', 'Vorkommen'), statusColumn];
+      case 'meta': return [urlColumn, textColumn('description_text', 'Meta Description'), numberColumn('description_length', 'Zeichen'), numberColumn('description_pixels', 'Pixelprofil 14px', row => array(row.description_pixel_widths)[0]), numberColumn('meta_count', 'Meta-Tags', (row) => row.meta_descriptions.length), numberColumn('duplicates', 'Vorkommen'), statusColumn];
       case 'headings': return [urlColumn, textColumn('h1', 'H1', (row) => first(row.h1)), numberColumn('h1_count', 'H1-Anzahl', (row) => row.h1.length), textColumn('h2', 'H2', (row) => first(row.h2)), numberColumn('h2_count', 'H2-Anzahl', (row) => row.h2.length), numberColumn('word_count', 'Wörter')];
-      case 'canonical': return [urlColumn, textColumn('canonical', 'Canonical-Ziel', (row) => first(row.canonical)), numberColumn('canonical_count', 'Canonical-Tags', (row) => row.canonical.length), textColumn('self_reference', 'Selbstreferenz', (row) => row.canonical.length ? row.canonical.includes(row.final_url || row.url) ? 'Ja' : 'Nein' : '—'), indexColumn];
+      case 'canonical': return [urlColumn, textColumn('canonical', 'Canonical-Ziel', (row) => first(row.canonical)), numberColumn('canonical_count', 'Deklarationen', canonicalCount), textColumn('self_reference', 'Selbstreferenz', (row) => row.canonical.length ? row.canonical.includes(row.rendered && !row.renderer_error ? row.rendered_url || row.final_url || row.url : row.final_url || row.url) ? 'Ja' : 'Nein' : '—'), indexColumn];
       case 'robots': return [urlColumn, textColumn('blocked', 'Robots.txt', (row) => row.blocked_by_robots ? 'Ausgeschlossen' : row.robots_warning ? `Hinweis: ${row.robots_warning}` : effectiveStatus(row) == null ? 'Unbekannt' : 'Nicht ausgeschlossen'), textColumn('meta_robots', 'Meta Robots', (row) => first(row.meta_robots)), textColumn('x_robots_tag', 'X-Robots-Tag', (row) => first(row.x_robots_tag)), indexColumn, textColumn('indexability_reasons', 'Begründung', (row) => first(row.indexability_reasons))];
       case 'hreflang': return [urlColumn, textColumn('language', 'HTML-Sprache'), numberColumn('alternates', 'Sprachalternativen', (row) => row.hreflang.length), textColumn('hreflang', 'Deklarierte Alternativen', (row) => row.hreflang.map((entry) => `${entry.language || entry.lang || '?'}: ${entry.url || entry.href || ''}`).join(' | ')), statusColumn];
       case 'images': return [urlColumn, textColumn('alt', 'Alt-Text', (row) => row.alt == null ? '[Attribut fehlt]' : row.alt === '' ? '[leer]' : row.alt), textColumn('source', 'Quellseite'), textColumn('width', 'Breite (HTML)'), textColumn('height', 'Höhe (HTML)'), textColumn('loading', 'Loading')];
       case 'issues': return [urlColumn, { key: 'severity', label: 'Priorität', value: (row) => row.severity, render: (row) => `<span class="badge ${row.severity === 'error' ? 'danger' : row.severity === 'warning' ? 'warning' : 'neutral'}">${row.severity === 'error' ? 'Fehler' : row.severity === 'warning' ? 'Warnung' : 'Hinweis'}</span>` }, textColumn('code', 'Problem', (row) => issueTitle(row.code)), textColumn('message', 'Details'), numberColumn('related', 'Weitere URLs', (row) => array(row.related_urls).length)];
       case 'linkmetrics': return [urlColumn, { key: 'link_score', label: 'Eigener Linkscore', value: (row) => row.link_score, render: (row) => Number(row.link_score || 0).toLocaleString('de-DE', { maximumFractionDigits: 2 }) }, numberColumn('in_degree', 'Verlinkende URLs'), numberColumn('out_degree', 'Verlinkte URLs'), numberColumn('inlink_occurrences', 'Eingehende Anker'), numberColumn('outlink_occurrences', 'Ausgehende Anker'), numberColumn('crawl_depth', 'Crawl-Tiefe'), numberColumn('shortest_link_depth', 'Kürzester Linkweg'), indexColumn];
       case 'structured': return [urlColumn, numberColumn('parsed_blocks', 'JSON-LD-Blöcke'), numberColumn('invalid_json_blocks', 'Ungültiges JSON'), textColumn('types_text', 'Beobachtete @type-Werte'), numberColumn('typed_nodes', 'Knoten mit @type', (row) => array(row.typed_nodes).length), textColumn('validation', 'Schema-Validierung', () => 'Nicht ausgeführt')];
-      case 'extractions': return [urlColumn, textColumn('name', 'Feldname'), textColumn('selector', 'CSS-Selektor'), textColumn('attribute', 'Attribut', (row) => row.attribute || '[Text]'), textColumn('source', 'Quelle', (row) => row.source === 'raw_html' ? 'HTML-Antwort' : row.source === 'rendered_html' ? 'Gerenderter DOM' : row.source || 'Unbekannt'), numberColumn('matches', 'Werte', (row) => row.values.length), textColumn('values', 'Erfasste Werte', (row) => row.values.join(' | '))];
+      case 'extractions': return [urlColumn, textColumn('name', 'Feldname'), textColumn('method', 'Methode', row => row.method || 'css'), textColumn('selector', 'Ausdruck'), textColumn('attribute', 'Attribut', (row) => row.attribute || '—'), textColumn('source', 'Quelle', (row) => row.source === 'raw_html' ? 'HTML-Antwort' : row.source === 'rendered_html' ? 'Gerenderter DOM' : row.source || 'Unbekannt'), numberColumn('matches', 'Erfasste Werte', (row) => row.values.length), numberColumn('matched_count', 'Beobachtete Treffer'), textColumn('truncated', 'Abgeschnitten', row => row.truncated ? 'Ja' : 'Nein'), textColumn('values', 'Werte', (row) => row.values.join(' | ')), textColumn('error', 'Fehler')];
+      case 'javascript': return [urlColumn, textColumn('name', 'Feldname'), textColumn('value_type', 'Datentyp'), textColumn('value_json', 'JSON-Rückgabe'), textColumn('error', 'Auswertungsfehler'), { key: 'elapsed_ms', label: 'Ausführungszeit', value: row => row.elapsed_ms, render: row => duration(row.elapsed_ms) }];
+      case 'cookies': return [urlColumn, textColumn('name', 'Cookie-Name'), textColumn('domain', 'Domain'), textColumn('path', 'Pfad'), textColumn('sameSite', 'SameSite'), textColumn('httpOnly', 'HttpOnly', row => row.httpOnly ? 'Ja' : 'Nein'), textColumn('secure', 'Secure', row => row.secure ? 'Ja' : 'Nein'), numberColumn('value_length', 'Wertlänge in Bytes'), textColumn('expires', 'Ablauf', row => row.expires < 0 ? 'Session' : new Date(row.expires * 1000).toISOString())];
+      case 'pagination': return [urlColumn, textColumn('pagination_next', 'Next', row => first(row.pagination_next)), textColumn('pagination_prev', 'Prev', row => first(row.pagination_prev)), textColumn('amphtml', 'AMP-Ziel', row => first(row.amphtml)), statusColumn, indexColumn];
       default: return [urlColumn, statusColumn, textColumn('content_type', 'Content-Type'), textColumn('titles', 'Seitentitel', (row) => first(row.titles)), indexColumn, numberColumn('depth', 'Tiefe'), { key: 'response_ms', label: 'Antwortzeit', value: (row) => row.response_ms, render: (row) => duration(row.response_ms) }, numberColumn('word_count', 'Wörter'), issueColumn];
     }
   }
@@ -442,7 +453,7 @@
     const base = [['all', 'Alle Ergebnisse']];
     switch (state.section) {
       case 'issues': return [...base, ['error', 'Fehler'], ['warning', 'Warnungen'], ['notice', 'Hinweise']];
-      case 'titles': case 'meta': return [...base, ['missing', 'Fehlend'], ['multiple', 'Mehrere Tags'], ['duplicate', 'Duplikate'], ['long', state.section === 'titles' ? 'Mehr als 60 Zeichen' : 'Mehr als 160 Zeichen']];
+      case 'titles': case 'meta': return [...base, ['missing', 'Fehlend'], ['multiple', 'Mehrere Tags'], ['duplicate', 'Duplikate'], ['short', 'Unter konfigurierter Zeichengrenze'], ['long', 'Über konfigurierter Zeichengrenze'], ['pixels', 'Über konfigurierter Pixelgrenze']];
       case 'headings': return [...base, ['missing', 'H1 fehlt'], ['multiple', 'Mehrere H1']];
       case 'canonical': return [...base, ['missing', 'Canonical fehlt'], ['multiple', 'Mehrere Canonicals'], ['other', 'Nicht selbstreferenziert']];
       case 'robots': return [...base, ['blocked', 'Robots.txt-Ausschluss'], ['nonindexable', 'Nicht indexierbar'], ['noindex', 'Noindex-Direktive']];
@@ -451,7 +462,10 @@
       case 'external': return [...base, ['unverified', 'Nicht geprüft'], ['error', 'HTTP-Fehler'], ['nofollow', 'Nofollow']];
       case 'linkmetrics': return [...base, ['zero', 'Keine beobachteten Eingangslinks'], ['unreachable', 'Kein beobachteter Weg ab Start-URL']];
       case 'structured': return [...base, ['invalid', 'Mit ungültigem JSON'], ['types', 'Mit @type-Werten']];
-      case 'extractions': return [...base, ['present', 'Mit Werten'], ['empty', 'Ohne Werte']];
+      case 'extractions': return [...base, ['present', 'Mit Werten'], ['empty', 'Ohne Werte'], ['error', 'Mit Fehler'], ['truncated', 'Erfassung abgeschnitten']];
+      case 'javascript': return [...base, ['success', 'Mit Rückgabe'], ['error', 'Mit Auswertungsfehler']];
+      case 'cookies': return [...base, ['insecure', 'Ohne Secure'], ['scriptable', 'Ohne HttpOnly'], ['session', 'Session-Cookies']];
+      case 'pagination': return [...base, ['present', 'Mit Pagination'], ['amp', 'Mit AMP-Verweis']];
       default: return [...base, ['html', 'HTML'], ['2xx', 'HTTP 2xx'], ['3xx', 'Weiterleitungen'], ['4xx', 'HTTP 4xx'], ['5xx', 'HTTP 5xx'], ['nonindexable', 'Nicht indexierbar'], ['issues', 'Mit Problemen'], ['failed', 'Abruffehler']];
     }
   }
@@ -462,18 +476,25 @@
     if (state.section === 'issues') return row.severity === filter;
     if (state.section === 'linkmetrics') return filter === 'zero' ? row.in_degree === 0 : row.shortest_link_depth == null;
     if (state.section === 'structured') return filter === 'invalid' ? row.invalid_json_blocks > 0 : Boolean(row.types_text);
-    if (state.section === 'extractions') return filter === 'present' ? row.values.length > 0 : row.values.length === 0;
+    if (state.section === 'extractions') return filter === 'present' ? row.values.length > 0 : filter === 'error' ? Boolean(row.error) : filter === 'truncated' ? row.truncated : !row.error && row.values.length === 0;
+    if (state.section === 'javascript') return filter === 'error' ? Boolean(row.error) : !row.error;
+    if (state.section === 'cookies') return filter === 'insecure' ? !row.secure : filter === 'scriptable' ? !row.httpOnly : row.expires < 0;
+    if (state.section === 'pagination') return filter === 'amp' ? array(row.amphtml).length > 0 : array(row.pagination_next).length + array(row.pagination_prev).length > 0;
     if (state.section === 'external') return filter === 'unverified' ? row.status == null : filter === 'error' ? row.status >= 400 : row.nofollow;
     if (state.section === 'images') return filter === 'missing' ? row.alt == null : filter === 'empty' ? row.alt === '' : row.loading === 'lazy';
     if (['titles', 'meta'].includes(state.section)) {
       const values = state.section === 'titles' ? row.titles : row.meta_descriptions;
-      return filter === 'missing' ? !values.length || !primary(values).trim() : filter === 'multiple' ? values.length > 1 : filter === 'duplicate' ? row.duplicates > 1 : primary(values).length > (state.section === 'titles' ? 60 : 160);
+      const kind = state.section === 'titles' ? 'title' : 'description', thresholds = state.crawl?.config?.audit_thresholds || {};
+      const threshold = (key, fallback) => Object.hasOwn(thresholds, key) ? thresholds[key] : fallback;
+      const max = threshold(`max_${kind}_chars`, kind === 'title' ? 60 : 155), min = threshold(`min_${kind}_chars`, kind === 'title' ? 30 : 70), length = Array.from(primary(values)).length;
+      if (filter === 'pixels') { const width = array(row[kind === 'title' ? 'title_pixel_widths' : 'description_pixel_widths'])[0], limit = threshold(`max_${kind}_pixels`, kind === 'title' ? 561 : 985); return width != null && limit != null && width > limit; }
+      return filter === 'missing' ? !values.length || !primary(values).trim() : filter === 'multiple' ? values.length > 1 : filter === 'duplicate' ? row.duplicates > 1 : filter === 'short' ? min != null && length > 0 && length < min : max != null && length > max;
     }
     if (state.section === 'headings') return filter === 'missing' ? !row.h1.length : row.h1.length > 1;
-    if (state.section === 'canonical') return filter === 'missing' ? !row.canonical.length : filter === 'multiple' ? row.canonical.length > 1 : row.canonical.length && !row.canonical.includes(row.final_url || row.url);
+    if (state.section === 'canonical') return filter === 'missing' ? !row.canonical.length : filter === 'multiple' ? canonicalCount(row) > 1 : row.canonical.length && !row.canonical.includes(row.rendered && !row.renderer_error ? row.rendered_url || row.final_url || row.url : row.final_url || row.url);
     if (state.section === 'hreflang') return filter === 'present' ? row.hreflang.length > 0 : row.hreflang.length === 0;
     if (filter === 'blocked') return Boolean(row.blocked_by_robots);
-    if (filter === 'noindex') return /(?:^|[\s,])noindex(?:$|[\s,])/i.test([...row.meta_robots, ...row.x_robots_tag].join(' '));
+    if (filter === 'noindex') return array(row.robots_directives).length ? array(row.effective_robots).includes('noindex') : /(?:^|[\s,])noindex(?:$|[\s,])/i.test([...row.meta_robots, ...row.x_robots_tag].join(' '));
     if (filter === 'nonindexable') return row.indexable === false;
     if (filter === 'html') return isHTML(row);
     if (filter === 'issues') return pageIssues(row.url).length > 0;
@@ -578,10 +599,19 @@
         ['Finale URL', page.final_url || '—'], ['Content-Type', page.content_type || '—'],
         ['Antwortzeit', duration(page.response_ms)], ['Seitentitel', first(page.titles) || '—'],
         ['Meta Description', first(page.meta_descriptions) || '—'], ['H1', first(page.h1) || '—'],
+        ['Pixelbreiten Titel / Description', `${JSON.stringify(page.title_pixel_widths || [])}\n${JSON.stringify(page.description_pixel_widths || [])}`],
+        ['Text-Messprofil', page.text_metrics_engine || 'Keine Messung erfasst'],
         ['H2', first(page.h2) || '—'], ['Canonical', first(page.canonical) || '—'],
+        ['Canonical aus HTML / HTTP', `${first(page.html_canonical) || '—'}\n${first(page.header_canonical) || '—'}`],
+        ['Dokumentbasis', page.document_base_url || page.final_url || page.url],
+        ['Pagination next / prev', `${first(page.pagination_next) || '—'}\n${first(page.pagination_prev) || '—'}`],
+        ['AMP-Verweise', first(page.amphtml) || '—'],
         ['Meta Robots', first(page.meta_robots) || '—'], ['X-Robots-Tag', first(page.x_robots_tag) || '—'],
         ['Indexierbarkeit', page.indexable === true ? 'Indexierbar nach der lokalen Prüfung' : page.indexable === false ? 'Nicht indexierbar' : 'Noch nicht bestimmt'],
         ['Begründung', first(page.indexability_reasons) || '—'],
+        ['Indexierungs-Bot', page.indexability_agent || 'Aus älterem Bericht nicht bekannt'],
+        ['Wirksame Robots-Anweisungen', first(page.effective_robots) || 'Keine erfasst'],
+        ['Robots-Quellen', array(page.robots_directives).map(entry => `${entry.source} · ${entry.agent || 'alle Bots'}: ${entry.raw}`).join('\n') || '—'],
         ['HTML-Sprache', page.language || '—'], ['Hreflang', page.hreflang.map((entry) => `${entry.language || entry.lang}: ${entry.url || entry.href}`).join('\n') || '—'],
         ['Wörter / Tiefe', `${page.word_count ?? '—'} / ${page.depth ?? '—'}`],
         ['Antwortgröße', page.size_bytes == null ? '—' : `${number(page.size_bytes)} Bytes${page.truncated ? ' · Antwort abgeschnitten' : ''}`],
@@ -602,6 +632,8 @@
         ['Axe-Ergebnis', page.accessibility ? JSON.stringify(page.accessibility, null, 2) : 'Keine Prüfung erfasst'],
         ['CSS-Extraktionen', page.custom_extractions.length ? page.custom_extractions.map((entry) => `${entry.name || entry.selector} (${entry.selector}${entry.attribute ? ` @${entry.attribute}` : ''}; ${entry.source || 'Quelle unbekannt'}): ${array(entry.values).join(' | ') || '[keine Werte]'}`).join('\n') : 'Keine Extraktionen konfiguriert oder erfasst'],
         ['Extraktionen vor Rendering', page.raw_metadata ? array(page.raw_metadata.custom_extractions).map((entry) => `${entry.name || entry.selector}: ${array(entry.values).join(' | ') || '[keine Werte]'}`).join('\n') || '[keine Extraktionen]' : '—'],
+        ['JavaScript-Auswertungen', page.custom_javascript_results.length ? page.custom_javascript_results.map(entry => `${entry.name} (${entry.value_type || 'Fehler'}; ${duration(entry.elapsed_ms)}): ${entry.error || JSON.stringify(entry.value)}`).join('\n') : 'Keine Auswertungen erfasst'],
+        ['Browser-Cookies', page.browser_cookies.length ? JSON.stringify(page.browser_cookies, null, 2) : 'Keine erfasst; Aufnahme ist optional und pro Seitenaufruf isoliert'],
         ['HTTP-Header', Object.entries(page.headers || {}).map(([key, value]) => `${key}: ${value}`).join('\n') || '—']
       ];
       element.innerHTML = `<dl class="details-grid">${fields.map(([label, value]) => `<dt>${escape(label)}</dt><dd>${escape(value)}</dd>`).join('')}</dl>`;
@@ -749,7 +781,7 @@
   function saveSettings(event) {
     event.preventDefault();
     const form = $('settings-form');
-    const advancedText = { include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value };
+    const advancedText = { include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value };
     try { parseAdvanced(advancedText); validateRendererSettings({ javascript_rendering: form.elements.javascript_rendering.checked, renderer_endpoint: form.elements.renderer_endpoint.value.trim(), renderer_wait_ms: Number(form.elements.renderer_wait_ms.value), timeout_seconds: Number(form.elements.timeout_seconds.value) }); }
     catch (error) {
       $('settings-error').textContent = error.message;
@@ -758,7 +790,7 @@
       $('settings-error').scrollIntoView({block:'nearest'});
       return;
     }
-    state.settings = { concurrency: Number(form.elements.concurrency.value), timeout_seconds: Number(form.elements.timeout_seconds.value), max_pages: Number(form.elements.max_pages.value), max_depth: Number(form.elements.max_depth.value), user_agent: form.elements.user_agent.value.trim(), obey_robots: form.elements.obey_robots.checked, follow_subdomains: form.elements.follow_subdomains.checked, delay_ms: Number(form.elements.delay_ms.value), max_body_mb: Number(form.elements.max_body_mb.value), check_external: form.elements.check_external.checked, javascript_rendering: form.elements.javascript_rendering.checked, renderer_endpoint: form.elements.renderer_endpoint.value.trim(), renderer_wait_ms: Number(form.elements.renderer_wait_ms.value), renderer_accessibility: form.elements.renderer_accessibility.checked, renderer_screenshot: form.elements.renderer_screenshot.checked };
+    state.settings = { concurrency: Number(form.elements.concurrency.value), timeout_seconds: Number(form.elements.timeout_seconds.value), max_pages: Number(form.elements.max_pages.value), max_depth: Number(form.elements.max_depth.value), user_agent: form.elements.user_agent.value.trim(), indexability_agent: form.elements.indexability_agent.value.trim(), obey_robots: form.elements.obey_robots.checked, follow_subdomains: form.elements.follow_subdomains.checked, delay_ms: Number(form.elements.delay_ms.value), max_body_mb: Number(form.elements.max_body_mb.value), check_external: form.elements.check_external.checked, javascript_rendering: form.elements.javascript_rendering.checked, renderer_endpoint: form.elements.renderer_endpoint.value.trim(), renderer_wait_ms: Number(form.elements.renderer_wait_ms.value), renderer_accessibility: form.elements.renderer_accessibility.checked, renderer_screenshot: form.elements.renderer_screenshot.checked, renderer_collect_cookies: form.elements.renderer_collect_cookies.checked };
     Object.assign(state.settings, advancedText);
     try { localStorage.setItem('open-seo-spider-settings', JSON.stringify(state.settings)); } catch (_) { /* Crawl settings still apply when storage is unavailable. */ }
     $('settings-dialog').close();
@@ -772,32 +804,84 @@
         const positive = (value, fallback, max) => Number.isInteger(Number(value)) && Number(value) > 0 && Number(value) <= max ? Number(value) : fallback;
         const nonnegative = (value) => Number.isInteger(Number(value)) && Number(value) >= 0 ? Number(value) : 0;
         state.settings = { concurrency: positive(saved.concurrency, 8, 64), timeout_seconds: positive(saved.timeout_seconds, 20, 300), max_pages: nonnegative(saved.max_pages), max_depth: nonnegative(saved.max_depth), user_agent: String(saved.user_agent || 'Open SEO Spider/0.1').slice(0, 256), obey_robots: saved.obey_robots !== false, follow_subdomains: saved.follow_subdomains === true, delay_ms: nonnegative(saved.delay_ms ?? 100), max_body_mb: positive(saved.max_body_mb, 5, 100), check_external: saved.check_external === true, javascript_rendering: saved.javascript_rendering === true, renderer_endpoint: String(saved.renderer_endpoint || 'http://127.0.0.1:8790/render'), renderer_wait_ms: nonnegative(saved.renderer_wait_ms ?? 500), renderer_accessibility: saved.renderer_accessibility === true, renderer_screenshot: saved.renderer_screenshot === true };
-        Object.assign(state.settings, { include_patterns_text: String(saved.include_patterns_text || ''), exclude_patterns_text: String(saved.exclude_patterns_text || ''), custom_extractions_json: String(saved.custom_extractions_json || '[]') });
+        Object.assign(state.settings, { indexability_agent: String(saved.indexability_agent || 'googlebot'), renderer_collect_cookies: saved.renderer_collect_cookies === true, custom_javascript_json: String(saved.custom_javascript_json || '[]'), audit_thresholds_json: String(saved.audit_thresholds_json || '{}'), include_patterns_text: String(saved.include_patterns_text || ''), exclude_patterns_text: String(saved.exclude_patterns_text || ''), custom_extractions_json: String(saved.custom_extractions_json || '[]') });
       }
     } catch (_) { /* Invalid saved settings fall back to safe defaults. */ }
   }
 
   function parseAdvanced(settings) {
+    parseCustomJavascript(settings.custom_javascript_json);
     let definitions;
     try { definitions = JSON.parse(settings.custom_extractions_json || '[]'); }
-    catch (_) { throw new Error('CSS-Extraktionen müssen ein gültiges JSON-Array sein.'); }
-    if (!Array.isArray(definitions)) throw new Error('CSS-Extraktionen müssen ein JSON-Array sein.');
+    catch (_) { throw new Error('Eigene Extraktionen müssen ein gültiges JSON-Array sein.'); }
+    if (!Array.isArray(definitions) || definitions.length > 128) throw new Error('Eigene Extraktionen: Ein JSON-Array mit höchstens 128 Definitionen ist erforderlich.');
     const names = new Set();
     const custom_extractions = definitions.map((definition, index) => {
       if (!definition || typeof definition !== 'object' || Array.isArray(definition)) throw new Error(`Extraktion ${index + 1}: Ein Objekt mit name, selector und optional attribute ist erforderlich.`);
       if (typeof definition.name !== 'string' || !definition.name.trim()) throw new Error(`Extraktion ${index + 1}: Ein Feldname ist erforderlich.`);
       const name = definition.name.trim();
-      if (names.has(name)) throw new Error(`Der Extraktionsname „${name}“ ist mehrfach vorhanden.`);
-      names.add(name);
-      if (typeof definition.selector !== 'string' || !definition.selector.trim()) throw new Error(`Extraktion „${name}“: Ein CSS-Selektor ist erforderlich.`);
+      if (Array.from(name).length > 128 || /[\x00-\x1f\x7f]/.test(name)) throw new Error(`Extraktion „${name}“: Name zu lang oder mit Steuerzeichen.`);
+      const key = name.replace(/[A-Z]/g, character => character.toLowerCase());
+      if (names.has(key)) throw new Error(`Der Extraktionsname „${name}“ ist mehrfach vorhanden.`);
+      names.add(key);
+      const method = definition.method || 'css';
+      if (!['css', 'xpath', 'regex'].includes(method)) throw new Error(`Extraktion „${name}“: method muss css, xpath oder regex sein.`);
+      if (typeof definition.selector !== 'string' || !definition.selector.trim() || new TextEncoder().encode(definition.selector).length > 8192) throw new Error(`Extraktion „${name}“: Ein Ausdruck mit höchstens 8192 UTF-8-Bytes ist erforderlich.`);
       const selector = definition.selector.trim();
-      try { document.createDocumentFragment().querySelector(selector); }
-      catch (_) { throw new Error(`Extraktion „${name}“: Der Browser erkennt „${selector}“ nicht als gültigen CSS-Selektor. Der Crawler prüft die unterstützte CSS-Syntax zusätzlich.`); }
+      if (method === 'css') {
+        try { document.createDocumentFragment().querySelector(selector); }
+        catch (_) { throw new Error(`Extraktion „${name}“: Der Browser erkennt „${selector}“ nicht als gültigen CSS-Selektor. Der Crawler prüft die unterstützte CSS-Syntax zusätzlich.`); }
+      }
       if (definition.attribute != null && (typeof definition.attribute !== 'string' || !definition.attribute.trim())) throw new Error(`Extraktion „${name}“: attribute muss null oder ein nicht leerer Attributname sein.`);
-      return { name, selector, attribute: definition.attribute == null ? null : definition.attribute.trim() };
+      if (method !== 'css' && definition.attribute != null) throw new Error(`Extraktion „${name}“: attribute ist nur für CSS verfügbar. XPath-Attribute mit /@name auswählen.`);
+      const max_results = definition.max_results ?? 10000, regex_group = definition.regex_group ?? null, regex_flags = definition.regex_flags ?? '', namespaces = definition.namespaces ?? {};
+      if (!Number.isSafeInteger(max_results) || max_results < 1 || max_results > 100000) throw new Error(`Extraktion „${name}“: max_results muss zwischen 1 und 100000 liegen.`);
+      if (regex_group != null && (!Number.isSafeInteger(regex_group) || regex_group < 0) || typeof regex_flags !== 'string' || /[^imsxU]/.test(regex_flags)) throw new Error(`Extraktion „${name}“: Ungültige Regex-Gruppe oder Flags.`);
+      if (method !== 'regex' && (regex_group != null || regex_flags)) throw new Error(`Extraktion „${name}“: Regex-Optionen benötigen method regex.`);
+      if (!namespaces || typeof namespaces !== 'object' || Array.isArray(namespaces) || Object.entries(namespaces).some(([prefix, uri]) => !prefix || typeof uri !== 'string' || !uri.trim()) || Object.keys(namespaces).length > 32) throw new Error(`Extraktion „${name}“: namespaces muss ein Objekt mit höchstens 32 Präfix-/URI-Paaren sein.`);
+      if (method !== 'xpath' && Object.keys(namespaces).length) throw new Error(`Extraktion „${name}“: namespaces benötigt method xpath.`);
+      return { name, selector, attribute: definition.attribute == null ? null : definition.attribute.trim(), method, max_results, regex_group, regex_flags, namespaces };
     });
     const lines = (value) => [...new Set(String(value || '').split(/\r?\n/).map((line) => line.trim()).filter(Boolean))];
-    return { custom_extractions, include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text) };
+    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text) };
+  }
+
+  function parseAuditThresholds(text) {
+    let thresholds;
+    try { thresholds = JSON.parse(text || '{}'); } catch (_) { throw new Error('Prüfgrenzen müssen ein gültiges JSON-Objekt sein.'); }
+    const allowed = new Set(['min_title_chars','max_title_chars','min_description_chars','max_description_chars','max_h1_chars','max_h2_chars','max_alt_chars','max_url_chars','min_word_count','max_internal_outlinks','max_external_outlinks','min_title_pixels','max_title_pixels','min_description_pixels','max_description_pixels']);
+    if (!thresholds || typeof thresholds !== 'object' || Array.isArray(thresholds)) throw new Error('Prüfgrenzen müssen ein JSON-Objekt sein.');
+    for (const [key, value] of Object.entries(thresholds)) {
+      if (!allowed.has(key)) throw new Error(`Unbekannte Prüfgrenze: ${key}`);
+      if (value !== null && (!Number.isSafeInteger(value) || value < 0 || value > 1000000)) throw new Error(`Prüfgrenze „${key}“ muss null oder eine ganze Zahl von 0 bis 1000000 sein.`);
+    }
+    for (const kind of ['title_chars','description_chars','title_pixels','description_pixels']) {
+      const min = thresholds[`min_${kind}`], max = thresholds[`max_${kind}`];
+      if (min != null && max != null && min > max) throw new Error(`Prüfgrenze „${kind}“: Minimum ist größer als Maximum.`);
+    }
+    return thresholds;
+  }
+
+  function parseCustomJavascript(text) {
+    let definitions;
+    try { definitions = JSON.parse(text || '[]'); }
+    catch (_) { throw new Error('JavaScript-Auswertungen müssen ein gültiges JSON-Array sein.'); }
+    if (!Array.isArray(definitions) || definitions.length > 32) throw new Error('JavaScript-Auswertungen: Ein Array mit höchstens 32 Einträgen ist erforderlich.');
+    const names = new Set(), encoder = new TextEncoder();
+    let bytes = 0;
+    return definitions.map((definition, index) => {
+      if (!definition || typeof definition !== 'object' || Array.isArray(definition) || typeof definition.name !== 'string' || typeof definition.script !== 'string') throw new Error(`JavaScript ${index + 1}: name und script müssen Strings sein.`);
+      const name = definition.name.trim();
+      if (!name || encoder.encode(name).length > 128 || /[\x00-\x1f\x7f]/.test(name)) throw new Error(`JavaScript ${index + 1}: Ein Name mit höchstens 128 UTF-8-Bytes ohne Steuerzeichen ist erforderlich.`);
+      if (names.has(name)) throw new Error(`Der JavaScript-Name „${name}“ ist mehrfach vorhanden.`);
+      names.add(name);
+      const script = definition.script;
+      const size = encoder.encode(script).length;
+      if (!script.trim() || size > 65536) throw new Error(`JavaScript „${name}“: Ein nicht leeres Script mit höchstens 65536 UTF-8-Bytes ist erforderlich.`);
+      bytes += size;
+      if (bytes > 262144) throw new Error('JavaScript-Auswertungen dürfen insgesamt höchstens 262144 UTF-8-Bytes enthalten.');
+      return { name, script };
+    });
   }
 
   function validateRendererSettings(settings) {
@@ -811,7 +895,7 @@
 
   function toggleRendererSettings(enabled) {
     $('renderer-settings').hidden = !enabled;
-    $('renderer-settings').querySelectorAll('input').forEach((input) => { input.disabled = !enabled; });
+    $('renderer-settings').querySelectorAll('input, textarea').forEach((input) => { input.disabled = !enabled; });
   }
 
   function bindEvents() {

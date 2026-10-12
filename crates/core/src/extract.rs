@@ -1,6 +1,6 @@
 use crate::urls::{normalize_url, same_scope};
 use crate::{
-    CustomExtraction, CustomExtractionConfig, HreflangRecord, ImageRecord, LinkRecord, PageRecord,
+    CustomExtraction, CustomExtractionConfig, ImageRecord, LinkRecord, LinkRelationship, PageRecord,
 };
 use scraper::{Html, Selector};
 use sha2::{Digest, Sha256};
@@ -23,12 +23,29 @@ pub fn extract_html(page: &mut PageRecord, html: &str, seeds: &[Url], include_su
     let Some(request_url) = normalize_url(&page.final_url, None) else {
         return;
     };
-    let base = doc
+    crate::metadata::reset_html_relationships(page);
+    page.meta_descriptions.clear();
+    page.meta_robots.clear();
+    page.robots_directives
+        .retain(|rule| rule.source.ends_with("http_header"));
+    page.images.clear();
+    page.links.clear();
+    page.structured_data.clear();
+    page.invalid_structured_data = 0;
+    page.language = None;
+    page.viewport = None;
+    page.base_href = doc
         .select(&select("base[href]"))
         .next()
         .and_then(|n| n.value().attr("href"))
-        .and_then(|href| normalize_url(href, Some(&request_url)))
+        .map(str::to_owned);
+    let base = page
+        .base_href
+        .as_ref()
+        .and_then(|href| request_url.join(href.trim()).ok())
+        .filter(|url| !matches!(url.scheme(), "data" | "javascript"))
         .unwrap_or_else(|| request_url.clone());
+    page.document_base_url = Some(base.to_string());
     page.titles = texts(&doc, "title");
     page.h1 = texts(&doc, "h1");
     page.h2 = texts(&doc, "h2");
@@ -42,11 +59,11 @@ pub fn extract_html(page: &mut PageRecord, html: &str, seeds: &[Url], include_su
         let content = node.value().attr("content").unwrap_or("").trim().to_owned();
         match name.as_str() {
             "description" => page.meta_descriptions.push(content),
-            "robots" | "googlebot" => page.meta_robots.push(content),
             "viewport" => page.viewport = Some(content),
-            _ => {}
+            _ => crate::metadata::add_meta_robots(page, &name, &content),
         }
     }
+    crate::text_metrics::measure_metadata(page);
     for node in doc.select(&select("link[href]")) {
         let rel = node.value().attr("rel").unwrap_or("").to_ascii_lowercase();
         let Some(target) = node
@@ -56,17 +73,25 @@ pub fn extract_html(page: &mut PageRecord, html: &str, seeds: &[Url], include_su
         else {
             continue;
         };
-        if rel.split_whitespace().any(|r| r == "canonical") {
-            page.canonical.push(target.to_string());
-        }
-        if rel.split_whitespace().any(|r| r == "alternate")
-            && let Some(language) = node.value().attr("hreflang")
-        {
-            page.hreflang.push(HreflangRecord {
-                language: language.into(),
+        crate::metadata::apply_relationship(
+            page,
+            LinkRelationship {
                 url: target.to_string(),
-            });
-        }
+                rel: rel.split_ascii_whitespace().map(str::to_owned).collect(),
+                source: "html_link".into(),
+                context_url: request_url.to_string(),
+                applies_to_document: true,
+                hreflang: node
+                    .value()
+                    .attr("hreflang")
+                    .map(|language| vec![language.to_owned()])
+                    .unwrap_or_default(),
+                media: node.value().attr("media").map(str::to_owned),
+                type_hint: node.value().attr("type").map(str::to_owned),
+                title: node.value().attr("title").map(str::to_owned),
+                ..Default::default()
+            },
+        );
         if rel.split_whitespace().any(|r| r == "stylesheet") {
             page.links.push(LinkRecord {
                 url: target.to_string(),
@@ -86,6 +111,19 @@ pub fn extract_html(page: &mut PageRecord, html: &str, seeds: &[Url], include_su
             continue;
         };
         let rel = node.value().attr("rel").unwrap_or("").to_ascii_lowercase();
+        if !rel.is_empty() {
+            crate::metadata::apply_relationship(
+                page,
+                LinkRelationship {
+                    url: target.to_string(),
+                    rel: rel.split_ascii_whitespace().map(str::to_owned).collect(),
+                    source: "html_anchor".into(),
+                    context_url: request_url.to_string(),
+                    applies_to_document: true,
+                    ..Default::default()
+                },
+            );
+        }
         page.links.push(LinkRecord {
             url: target.to_string(),
             text: clean(&node.text().collect::<String>()),
@@ -135,6 +173,7 @@ pub fn extract_html(page: &mut PageRecord, html: &str, seeds: &[Url], include_su
         });
     }
     page.script_count = doc.select(&select("script")).count();
+    crate::metadata::evaluate_robots(page);
     for node in doc.select(&select("script[type='application/ld+json']")) {
         match serde_json::from_str(&node.text().collect::<String>()) {
             Ok(value) => page.structured_data.push(value),
@@ -161,6 +200,7 @@ pub fn extract_html(page: &mut PageRecord, html: &str, seeds: &[Url], include_su
         page.word_count = normalized.split_whitespace().count();
         page.content_hash = Some(format!("{:x}", Sha256::digest(normalized.as_bytes())));
     }
+    crate::metadata::sync_relationship_links(page, seeds, include_subdomains);
 }
 
 /// CSS selectors are explicit user input; invalid selectors return an error.
@@ -169,61 +209,19 @@ pub fn extract_custom(
     selector: &str,
     attribute: Option<&str>,
 ) -> anyhow::Result<CustomExtraction> {
-    let parsed =
-        Selector::parse(selector).map_err(|e| anyhow::anyhow!("Invalid CSS selector: {e:?}"))?;
-    let doc = Html::parse_document(html);
-    let values = doc
-        .select(&parsed)
-        .filter_map(|node| match attribute {
-            Some(attribute) => node.value().attr(attribute).map(str::to_owned),
-            None => Some(clean(&node.text().collect::<String>())),
-        })
-        .collect();
-    Ok(CustomExtraction {
-        selector: selector.into(),
-        attribute: attribute.map(str::to_owned),
-        values,
-        ..Default::default()
-    })
+    crate::extraction_engine::extract_configured(
+        html,
+        &CustomExtractionConfig {
+            selector: selector.into(),
+            attribute: attribute.map(str::to_owned),
+            ..Default::default()
+        },
+        "raw_html",
+    )
 }
 
 pub(crate) fn validate_custom_extractions(config: &[CustomExtractionConfig]) -> anyhow::Result<()> {
-    if config.len() > 128 {
-        anyhow::bail!("At most 128 custom extraction definitions are supported per crawl");
-    }
-    let mut names = std::collections::HashSet::new();
-    for extraction in config {
-        if extraction.name.trim().is_empty() || extraction.name.chars().count() > 128 {
-            anyhow::bail!("Custom extraction name must contain 1 to 128 characters");
-        }
-        if !names.insert(extraction.name.trim().to_ascii_lowercase()) {
-            anyhow::bail!("Duplicate custom extraction name: {}", extraction.name);
-        }
-        if extraction.selector.len() > 8192 {
-            anyhow::bail!("CSS selector exceeds 8192 bytes");
-        }
-        Selector::parse(&extraction.selector).map_err(|error| {
-            anyhow::anyhow!(
-                "Invalid CSS selector for extraction {}: {error:?}",
-                extraction.name
-            )
-        })?;
-        if let Some(attribute) = &extraction.attribute
-            && (attribute.is_empty()
-                || attribute.len() > 128
-                || attribute.chars().any(|character| {
-                    character.is_whitespace()
-                        || character.is_control()
-                        || matches!(character, '<' | '>' | '=' | '\'' | '"')
-                }))
-        {
-            anyhow::bail!(
-                "Invalid attribute name for custom extraction {}",
-                extraction.name
-            );
-        }
-    }
-    Ok(())
+    crate::extraction_engine::validate_custom_extractions(config)
 }
 
 pub(crate) fn apply_custom_extractions(
@@ -232,38 +230,19 @@ pub(crate) fn apply_custom_extractions(
     config: &[CustomExtractionConfig],
     source: &str,
 ) {
-    page.custom_extractions.clear();
-    if config.is_empty() {
-        return;
-    }
-    let doc = Html::parse_document(html);
-    for extraction in config {
-        // Validated before the first HTTP request; keep a visible error if that
-        // invariant is ever broken rather than panicking while crawling.
-        let parsed = match Selector::parse(&extraction.selector) {
-            Ok(selector) => selector,
-            Err(error) => {
-                page.warnings.push(format!(
-                    "Custom extraction {} failed: {error:?}",
-                    extraction.name
-                ));
-                continue;
-            }
-        };
-        let values = doc
-            .select(&parsed)
-            .filter_map(|node| match &extraction.attribute {
-                Some(attribute) => node.value().attr(attribute).map(str::to_owned),
-                None => Some(clean(&node.text().collect::<String>())),
-            })
-            .collect();
-        page.custom_extractions.push(CustomExtraction {
-            name: extraction.name.clone(),
-            selector: extraction.selector.clone(),
-            attribute: extraction.attribute.clone(),
-            values,
-            source: source.into(),
-        });
+    page.custom_extractions = crate::extraction_engine::extract_all(html, config, source);
+    for result in &page.custom_extractions {
+        if let Some(error) = &result.error {
+            page.warnings
+                .push(format!("Custom extraction {} failed: {error}", result.name));
+        } else if result.truncated {
+            page.warnings.push(format!(
+                "Custom extraction {} retained {} of {} matching values",
+                result.name,
+                result.values.len(),
+                result.matched_count.unwrap_or_default()
+            ));
+        }
     }
 }
 
@@ -299,5 +278,46 @@ mod tests {
             vec!["/test"]
         );
         assert!(extract_custom("", "[", None).is_err());
+    }
+
+    #[test]
+    fn first_base_governs_links_and_unsupported_base_does_not_invent_http_targets() {
+        let seeds = [Url::parse("https://example.org/").unwrap()];
+        for (base_markup, expected_base, expected_link) in [
+            (
+                "<base href='/first/'><base href='/second/'>",
+                "https://example.org/first/",
+                Some("https://example.org/first/path"),
+            ),
+            (
+                "<base href='https://[invalid'><base href='/second/'>",
+                "https://example.org/original/",
+                Some("https://example.org/original/path"),
+            ),
+            (
+                "<base href='data:text/plain,a'><base href='/second/'>",
+                "https://example.org/original/",
+                Some("https://example.org/original/path"),
+            ),
+            ("<base href='file:///tmp/'>", "file:///tmp/", None),
+        ] {
+            let mut page = PageRecord {
+                final_url: "https://example.org/original/".into(),
+                ..Default::default()
+            };
+            extract_html(
+                &mut page,
+                &format!(
+                    "<html><head>{base_markup}</head><body><a href='path'>Link</a></body></html>"
+                ),
+                &seeds,
+                false,
+            );
+            assert_eq!(page.document_base_url.as_deref(), Some(expected_base));
+            assert_eq!(
+                page.links.first().map(|link| link.url.as_str()),
+                expected_link
+            );
+        }
     }
 }

@@ -1,4 +1,4 @@
-use crate::{AuditIssue, PageRecord, Severity};
+use crate::{AuditIssue, AuditThresholds, PageRecord, Severity};
 use std::collections::{BTreeMap, HashMap, HashSet};
 
 pub(crate) fn set_indexability(page: &mut PageRecord) {
@@ -12,23 +12,16 @@ pub(crate) fn set_indexability(page: &mut PageRecord) {
     if page.status != Some(200) {
         reasons.push("Requested URL does not return HTTP 200".into());
     }
-    if !page.is_html() {
-        reasons.push("Not an HTML document".into());
+    if !page.is_indexable_document() {
+        reasons.push("Not a supported indexable document type".into());
     }
-    if page
-        .meta_robots
+    let noindex = crate::applicable_robot_directives(page)
         .iter()
-        .chain(&page.x_robots_tag)
-        .any(|value| {
-            value
-                .to_ascii_lowercase()
-                .split(|c: char| c == ',' || c == ':' || c.is_whitespace())
-                .any(|v| v == "noindex" || v == "none")
-        })
-    {
+        .any(|value| matches!(value.as_str(), "noindex" | "none"));
+    if noindex {
         reasons.push("Noindex directive".into());
     }
-    if page.canonical.iter().any(|url| url != &page.final_url) {
+    if page.canonical.iter().any(|url| url != page.document_url()) {
         reasons.push("Canonical points to another URL".into());
     }
     if page.truncated {
@@ -59,10 +52,20 @@ fn issue(
 }
 
 pub fn audit_pages(pages: &[PageRecord]) -> Vec<AuditIssue> {
+    audit_pages_with_thresholds(pages, &AuditThresholds::default())
+}
+
+/// Rules inspect captured facts and use the supplied independent review limits.
+/// Absent body metadata is assessed only for complete successful HTML captures.
+pub fn audit_pages_with_thresholds(
+    pages: &[PageRecord],
+    thresholds: &AuditThresholds,
+) -> Vec<AuditIssue> {
     let mut issues = Vec::new();
     let by_url: HashMap<&str, &PageRecord> =
         pages.iter().map(|page| (page.url.as_str(), page)).collect();
     for page in pages {
+        crate::onpage::audit_page(page, thresholds, &mut issues);
         if page.blocked_by_robots {
             issue(
                 &mut issues,
@@ -163,6 +166,7 @@ pub fn audit_pages(pages: &[PageRecord]) -> Vec<AuditIssue> {
             || page.error.is_some()
             || page.truncated
             || page.renderer_error.is_some()
+            || (page.rendered && page.rendered_status.is_some_and(|status| status != 200))
         {
             continue;
         }
@@ -196,16 +200,6 @@ pub fn audit_pages(pages: &[PageRecord]) -> Vec<AuditIssue> {
                 vec![],
             );
         }
-        if page.title().chars().count() > 60 {
-            issue(
-                &mut issues,
-                page,
-                "title_long",
-                Severity::Notice,
-                "Title exceeds 60 characters; review its search appearance",
-                vec![],
-            );
-        }
         if page.meta_descriptions.is_empty() || page.description().trim().is_empty() {
             issue(
                 &mut issues,
@@ -223,16 +217,6 @@ pub fn audit_pages(pages: &[PageRecord]) -> Vec<AuditIssue> {
                 "description_multiple",
                 Severity::Warning,
                 "Multiple meta descriptions",
-                vec![],
-            );
-        }
-        if page.description().chars().count() > 160 {
-            issue(
-                &mut issues,
-                page,
-                "description_long",
-                Severity::Notice,
-                "Description exceeds 160 characters; review its search appearance",
                 vec![],
             );
         }
@@ -266,7 +250,10 @@ pub fn audit_pages(pages: &[PageRecord]) -> Vec<AuditIssue> {
                 vec![],
             );
         }
-        if page.canonical.len() > 1 {
+        if page.canonical.len() > 1
+            || page.html_canonical.len() > 1
+            || page.header_canonical.len() > 1
+        {
             issue(
                 &mut issues,
                 page,
@@ -386,7 +373,14 @@ pub fn audit_pages(pages: &[PageRecord]) -> Vec<AuditIssue> {
         for canonical in &page.canonical {
             if let Some(target) = by_url.get(canonical.as_str())
                 && !target.blocked_by_robots
-                && (target.status != Some(200) || !target.indexable)
+                && (target.status.is_some_and(|status| status != 200)
+                    || crate::applicable_robot_directives(target)
+                        .iter()
+                        .any(|rule| matches!(rule.as_str(), "noindex" | "none"))
+                    || target
+                        .canonical
+                        .iter()
+                        .any(|url| url != target.document_url()))
             {
                 issue(
                     &mut issues,
@@ -415,12 +409,11 @@ pub fn audit_pages(pages: &[PageRecord]) -> Vec<AuditIssue> {
                 && target.is_html()
                 && target.final_status == Some(200)
                 && target.error.is_none()
+                && target.renderer_error.is_none()
+                && (!target.rendered || target.rendered_status.is_none_or(|status| status == 200))
                 && !target.truncated
                 && !target.blocked_by_robots
-                && !target
-                    .hreflang
-                    .iter()
-                    .any(|h| h.url == page.final_url || h.url == page.url)
+                && !target.hreflang.iter().any(|h| h.url == page.document_url())
             {
                 issue(
                     &mut issues,
@@ -585,12 +578,92 @@ pub fn audit_pages(pages: &[PageRecord]) -> Vec<AuditIssue> {
             );
         }
     }
+    crate::onpage::audit_heading_duplicates(pages, &mut issues);
     issues
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn configured_long_thresholds_replace_legacy_fixed_rules_without_duplicate_notices() {
+        let page = PageRecord {
+            url: "https://fixture.test/a".into(),
+            final_url: "https://fixture.test/a".into(),
+            status: Some(200),
+            final_status: Some(200),
+            internal: true,
+            content_type: "text/html".into(),
+            titles: vec!["x".repeat(61)],
+            meta_descriptions: vec!["y".repeat(156)],
+            ..Default::default()
+        };
+        let issues = audit_pages(std::slice::from_ref(&page));
+        assert_eq!(
+            issues
+                .iter()
+                .filter(|issue| issue.code == "title_long")
+                .count(),
+            1
+        );
+        assert_eq!(
+            issues
+                .iter()
+                .filter(|issue| issue.code == "description_long")
+                .count(),
+            1
+        );
+        let limits = AuditThresholds {
+            max_title_chars: None,
+            max_description_chars: Some(160),
+            ..Default::default()
+        };
+        let issues = audit_pages_with_thresholds(std::slice::from_ref(&page), &limits);
+        assert!(
+            !issues
+                .iter()
+                .any(|issue| issue.code == "title_long" || issue.code == "description_long")
+        );
+    }
+
+    #[test]
+    fn complete_capture_guard_applies_to_old_and_new_absence_checks() {
+        let base = PageRecord {
+            url: "https://fixture.test/a".into(),
+            final_url: "https://fixture.test/a".into(),
+            status: Some(200),
+            final_status: Some(200),
+            internal: true,
+            content_type: "text/html".into(),
+            ..Default::default()
+        };
+        for condition in 0..3 {
+            let mut page = base.clone();
+            match condition {
+                0 => page.truncated = true,
+                1 => page.renderer_error = Some("worker unavailable".into()),
+                _ => {
+                    page.rendered = true;
+                    page.rendered_status = Some(404)
+                }
+            }
+            let issues = audit_pages(&[page]);
+            for code in [
+                "title_missing",
+                "description_missing",
+                "h1_missing",
+                "h2_missing",
+                "canonical_missing",
+                "internal_outlinks_missing",
+            ] {
+                assert!(
+                    !issues.iter().any(|issue| issue.code == code),
+                    "false {code} for {condition}"
+                );
+            }
+        }
+    }
+
     #[test]
     fn reports_duplicates_and_broken_inlinks() {
         let page = PageRecord {

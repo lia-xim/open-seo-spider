@@ -4,9 +4,9 @@
   "catalog_date": "2026-10-11",
   "reference_product": "Screaming Frog SEO Spider",
   "reference_advertised_version": "24.3",
-  "method": "Independent capability requirements from public official documentation; no proprietary binary inspection or implementation code was used.",
+  "method": "Independent implementation and newly authored acceptance fixtures; public documentation, installed-artifact metadata, focused private static inspection and ordinary unlicensed original CLI fixture runs inform behavioral requirements. No vendor source, binaries, fonts or license mechanisms are distributed in this repository.",
   "status_policy": "implemented means this entry's independent acceptance is supported by current tests/runtime and code evidence; partial means a verified slice exists with explicit remaining acceptance. Neither status means reference-product parity. planned means no sufficient implementation slice is tracked. All reference parity is NOT_PROVEN.",
-  "coverage_note": "144 grouped capability requirements cover documented product areas. They are not a reproduction or verified inventory of every individual issue filter. Full parity is NOT PROVEN.",
+  "coverage_note": "144 grouped capability requirements plus a separate 416 named-filter acceptance ledger and 32 workflow contracts. Filter labels, configured slots, matching cells and engine fixtures never establish whole-feature parity. Full parity remains NOT_PROVEN.",
   "project_constraints": {
     "implementation": "Independent Rust implementation preferred by user",
     "operation": "Local operation; container/WSL/native launch packaging can be selected separately",
@@ -1000,12 +1000,18 @@
             "core-unit"
           ],
           "proves": "Multiple extracted meta directives and X-Robots-Tag values remain evidence. Noindex affects indexability in the list-mode fixture."
+        },
+        {
+          "verification_run_ids": [
+            "advanced-batch"
+          ],
+          "proves": "Multiple meta/X-Robots directives retain agent, source and raw evidence. Configured indexability agent is independent of HTTP UA; restrictive directives win and renderer response sources remain separate."
         }
       ],
       "parity_evidence": [],
       "group": "robots",
       "remaining_acceptance": [
-        "Preserve the directive agent identity separately and test general versus agent-specific directives rather than conflating them."
+        "Tolerant whitespace handling around valued directives has a known pending regression; preserve date-valued directives while fixing."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -1215,12 +1221,18 @@
             "ui-fixture"
           ],
           "proves": "Title extraction, missing/multiple/duplicate and fixed character checks exist; duplicate fixture and UI title filter/inspector are tested."
+        },
+        {
+          "verification_run_ids": [
+            "advanced-batch"
+          ],
+          "proves": "Absent/empty/multiple/duplicate and configurable character/pixel thresholds are tested. An openly licensed font profile returns unknown for unsupported shaping/glyphs; reference comparison records measured differences."
         }
       ],
       "parity_evidence": [],
       "group": "metadata",
       "remaining_acceptance": [
-        "Exercise empty/multiple cases and configurable character plus measured/approximate width thresholds."
+        "Calibrate public font/rasterization against normal fixture widths; current matching long-W width does not establish full pixel equivalence."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -1240,12 +1252,18 @@
             "core-fixtures"
           ],
           "proves": "Description extraction and missing/multiple/duplicate/fixed-length issue code are implemented; extraction and duplicate audit source are exercised."
+        },
+        {
+          "verification_run_ids": [
+            "advanced-batch"
+          ],
+          "proves": "Configurable length and public-profile width thresholds are tested; unknown widths are excluded from filters and disabled thresholds produce no invented finding."
         }
       ],
       "parity_evidence": [],
       "group": "metadata",
       "remaining_acceptance": [
-        "Add configurable length/width thresholds and complete absent/multiple/duplicate threshold fixtures."
+        "Reference font/rasterization calibration and full representative language/shaping profile remain."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -1265,12 +1283,18 @@
             "core-browser"
           ],
           "proves": "H1/H2 lists and H1 missing/multiple findings exist. Raw and JavaScript-changed H1 are separately retained in the live browser fixture."
+        },
+        {
+          "verification_run_ids": [
+            "advanced-batch"
+          ],
+          "proves": "Missing/multiple/duplicate/long H1/H2 cases use configurable bounds and captured HTML evidence."
         }
       ],
       "parity_evidence": [],
       "group": "metadata",
       "remaining_acceptance": [
-        "Add heading duplicate/order acceptance and meta keyword observational fields."
+        "Heading document order/nonsequential checks and meta-keyword fields remain."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -1654,7 +1678,7 @@
     {
       "id": "relationships.canonical",
       "name": "Canonical extraction",
-      "status": "partial",
+      "status": "implemented",
       "phase": "P2",
       "source_ids": [
         "canonical"
@@ -1667,13 +1691,17 @@
             "analysis"
           ],
           "proves": "Relative HTML canonical links resolve against base URL; multiple/conflicting/self/target-cycle facts are analyzed."
+        },
+        {
+          "verification_run_ids": [
+            "advanced-batch"
+          ],
+          "proves": "HTML and multi-line HTTP Link canonical declarations retain distinct source/context and resolve relative/multiple/self values. Header targets use the response URL independently of HTML base. Complete unit and HTTP fixtures test context/quoting and mixed-source cases."
         }
       ],
       "parity_evidence": [],
       "group": "relationships",
-      "remaining_acceptance": [
-        "Extract HTTP Link canonical values and test HTML/HTTP relative/multiple/self precedence."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -1704,17 +1732,24 @@
     {
       "id": "relationships.pagination",
       "name": "Pagination relationship validation",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "pagination"
       ],
       "acceptance_test": "Extract HTML/HTTP next and prev; test broken links, absent returns and inconsistent chains.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "advanced-batch"
+          ],
+          "proves": "HTML/HTTP next/prev extraction, source preservation, malformed/conflicting/self declarations, target status/robots/canonicalization and return/anchor diagnostics are tested and displayed."
+        }
+      ],
       "parity_evidence": [],
       "group": "relationships",
       "remaining_acceptance": [
-        "Extract HTML/HTTP next and prev; test broken links, absent returns and inconsistent chains."
+        "Dedicated long-chain/cycle boundary fixtures and configurable relationship-discovery policies remain."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -1734,12 +1769,18 @@
             "analysis"
           ],
           "proves": "HTML alternate hreflang language strings and resolved URLs are retained; language labels normalize for conflict checks."
+        },
+        {
+          "verification_run_ids": [
+            "advanced-batch"
+          ],
+          "proves": "HTML and HTTP declarations preserve language/region/script/x-default and sources. Tests cover registered profile, self/return/cluster/duplicate conflicts, bad captured targets and unknown/incomplete evidence."
         }
       ],
       "parity_evidence": [],
       "group": "relationships",
       "remaining_acceptance": [
-        "Add HTTP Link and XML sitemap alternates plus explicit language/region/x-default extraction fixtures."
+        "XML sitemap alternate extraction and source joining remain."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -1771,34 +1812,48 @@
     {
       "id": "relationships.amp",
       "name": "AMP extraction and validation",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "amp"
       ],
       "acceptance_test": "Detect amphtml/canonical reciprocity and report versioned AMP validation findings.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "advanced-batch"
+          ],
+          "proves": "HTML/HTTP amphtml relationships retain target and declaration provenance."
+        }
+      ],
       "parity_evidence": [],
       "group": "relationships",
       "remaining_acceptance": [
-        "Detect amphtml/canonical reciprocity and report versioned AMP validation findings."
+        "AMP/canonical return validation and a version-pinned AMP validator remain."
       ],
       "parity_status": "NOT_PROVEN"
     },
     {
       "id": "relationships.mobile",
       "name": "Mobile alternate relationships",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "mobile"
       ],
       "acceptance_test": "Resolve alternate media relationships and surface missing or non-indexable target evidence.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "advanced-batch"
+          ],
+          "proves": "HTML/HTTP media alternates preserve media and target provenance."
+        }
+      ],
       "parity_evidence": [],
       "group": "relationships",
       "remaining_acceptance": [
-        "Resolve alternate media relationships and surface missing or non-indexable target evidence."
+        "Dedicated alternate-mobile reciprocity and target-state fixture coverage remains."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -1880,18 +1935,23 @@
     {
       "id": "images.cookies",
       "name": "Cookie audit",
-      "status": "planned",
+      "status": "implemented",
       "phase": "P2",
       "source_ids": [
         "cookies"
       ],
       "acceptance_test": "Collect response and script cookies with domain/path/security attributes and distinguish session contexts.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "advanced-batch"
+          ],
+          "proves": "Opt-in browser captures response/script cookies with domain/path/expiry/httpOnly/secure/sameSite and value byte length. Fresh contexts per URL are explicit and fixture-tested; cookie values are omitted from persist/export. Shared authenticated sessions are a separate unfinished feature."
+        }
+      ],
       "parity_evidence": [],
       "group": "images",
-      "remaining_acceptance": [
-        "Collect response and script cookies with domain/path/security attributes and distinguish session contexts."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -2135,12 +2195,18 @@
             "ui-renderer"
           ],
           "proves": "Named CSS text/attribute extraction is validated before HTTP, applies to raw/rendered DOM, keeps all matches and empty results, and exports exact values. UI config and inspector are fixture-tested. The actual final app/browser→Rust→Chrome fixture additionally proves raw price10 versus rendered price20, saved extraction evidence and rendered-DOM table values."
+        },
+        {
+          "verification_run_ids": [
+            "advanced-batch"
+          ],
+          "proves": "CSS, namespace-aware supported XPath1.0 and Rust regex run on repaired raw and rendered HTML. Real browser fixture proves price10→20 and count scalar; source/type/engine/count/truncation/error survive snapshots and CSV."
         }
       ],
       "parity_evidence": [],
       "group": "rendering",
       "remaining_acceptance": [
-        "Implement XPath, regex content extraction, outer/inner HTML and function-value modes with acceptance for each."
+        "Outer/inner HTML extraction modes and explicit XPath node serialization options remain unimplemented; XPath id/lang/extensions and PCRE-only syntax are unsupported with upfront errors."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -2181,18 +2247,23 @@
     {
       "id": "rendering.javascript",
       "name": "Custom JavaScript extraction",
-      "status": "planned",
+      "status": "implemented",
       "phase": "P3",
       "source_ids": [
         "jsdebug"
       ],
       "acceptance_test": "Run a user-authored script against a fixture with timeout/error handling and typed returned columns.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "advanced-batch"
+          ],
+          "proves": "Up to 32 named async scripts execute in captured page context with bounded time/output, typed JSON and per-script errors. Real UI→Rust→Chrome verifies error continuation, typed values, persistence, table filters and CSV. Worker verifies nonterminating execution ends and next URL remains usable."
+        }
+      ],
       "parity_evidence": [],
       "group": "rendering",
-      "remaining_acceptance": [
-        "Run a user-authored script against a fixture with timeout/error handling and typed returned columns."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -3496,7 +3567,7 @@
       "parity_status": "NOT_PROVEN"
     }
   ],
-  "implementation_review_date": "2026-10-11",
+  "implementation_review_date": "2026-10-12",
   "parity_status": "NOT_PROVEN",
   "verification_runs": [
     {
@@ -3504,13 +3575,13 @@
       "artifact": "docs/verification/api-e2e.json",
       "command": "node scripts/api-e2e.mjs",
       "result": "PASS",
-      "tested_at": "2026-10-11T12:55:30.737Z",
+      "tested_at": "2026-10-12T07:54:30.757Z",
       "scope": [
         "604 URL HTTP/API crawl",
         "robots excluded target",
         "redirect initial/final status",
         "graph and issue API",
-        "named CSS extraction and all six export endpoints",
+        "named CSS extraction and all eight export endpoints including empty script/cookie headers",
         "JSON import and snapshot comparison",
         "cancel and resume",
         "failed resume manifest write retains cancelled state and snapshot",
@@ -3524,55 +3595,62 @@
       "artifact": "crates/core/tests/crawl_fixtures.rs",
       "command": "cargo test -p open-seo-spider-core",
       "result": "PASS",
-      "scope": "17 integration tests passed; live browser gate ignored in this default run. 8 core unit tests passed.",
+      "scope": "23 integration tests passed; one actual-browser gate is separately executed explicitly. Native headers/PDF content-type observations, relationships, raw/rendered extraction and restart paths are exercised.",
       "reported_by": "Root and core implementation agents in this session",
-      "limits": "Test source is linked; this registry records the session result, not a saved terminal log."
+      "limits": "Test source is linked; this registry records the session result, not a saved terminal log.",
+      "tested_at": "2026-10-12"
     },
     {
       "id": "core-unit",
       "artifact": "crates/core/src",
       "command": "cargo test -p open-seo-spider-core",
       "result": "PASS",
-      "scope": "8 core unit tests passed with the integration suite.",
+      "scope": "40 core unit tests passed, including bounded CSS/XPath/regex extraction, HTTP Link parsing, agent-scoped directives, audit thresholds, public font metrics and additive CSV contracts.",
       "reported_by": "Core implementation agent in this session",
-      "limits": "Individual assertions cover only their owned fixtures; broad rule compliance is not inferred."
+      "limits": "Individual assertions cover only their owned fixtures; broad rule compliance is not inferred.",
+      "tested_at": "2026-10-12"
     },
     {
       "id": "analysis",
       "artifact": "docs/analysis-acceptance.md",
       "command": "cargo test -p open-seo-spider analysis::tests -- --nocapture",
       "result": "PASS",
-      "scope": "8 deterministic analysis tests; graph, relationships, headers, JSON-LD facts and incomplete scope.",
-      "limits": "Captured snapshot only; no whole-site/reference completeness or provider validation."
+      "scope": "25 deterministic analysis tests passed; graph, canonical/hreflang/pagination target states, source provenance, incomplete captures and redirect aliases.",
+      "limits": "Captured snapshot only; no whole-site/reference completeness or provider validation.",
+      "tested_at": "2026-10-12"
     },
     {
       "id": "renderer",
       "artifact": "renderer/tests/worker.test.mjs",
       "command": "npm test (renderer/)",
       "result": "PASS",
-      "scope": "12 tests, 0 fail/skip, real installed Windows Chrome. JS DOM, PNG, axe tags/nodes/impact/version, origin-scoped credentials, isolation, queue, timeout, shutdown.",
-      "limits": "Local worker fixtures; cross-platform/large-crawl performance not proven."
+      "scope": "15 real Chrome worker tests passed, including async named scripts, errors, infinite-execution termination and worker reuse, bounded JSON, isolated redacted cookies and existing network/axe/PNG behavior.",
+      "limits": "Local worker fixtures; cross-platform/large-crawl performance not proven.",
+      "tested_at": "2026-10-12"
     },
     {
       "id": "core-browser",
       "artifact": "crates/core/tests/crawl_fixtures.rs",
       "command": "cargo test -p open-seo-spider-core live_browser_worker_executes_javascript_for_core_crawl -- --ignored",
       "result": "PASS",
-      "scope": "One explicit real Rust→loopback worker→Chrome test. Executed title/H1, JS-only link, retained raw metadata, axe JSON, PNG and network evidence. Fresh rerun passes browser version, rendered viewport, render wait100ms and dropped-event count0 provenance assertions.",
+      "scope": "One explicit real Rust→worker→Chrome test passed, including raw/rendered CSS/XPath/regex values, typed XPath scalar and browser provenance.",
       "reported_by": "Core implementation agent in this session",
-      "limits": "Owned fixture integration; no vendor comparison or sustained-scale browser proof."
+      "limits": "Owned fixture integration; no vendor comparison or sustained-scale browser proof.",
+      "tested_at": "2026-10-12"
     },
     {
       "id": "ui-fixture",
       "artifact": "web/verification/ui-fixture-results.json",
       "result": "PASS",
-      "tested_at": "2026-10-11T12:44:38.742Z",
+      "tested_at": "2026-10-12T07:42:47.369Z",
       "scope": [
         "empty state",
         "snapshot and advanced analysis",
         "bounded pagination",
         "search and URL inspector links",
         "title filter and numeric sorting",
+        "pixel filters require observed widths and preserve unknown older reports",
+        "duplicate canonical declarations and HTTP relationships on non-HTML remain visible",
         "untrusted metadata escaped",
         "image alt filter",
         "advanced issue filter",
@@ -3583,10 +3661,12 @@
         "CSV sitemap project downloads",
         "invalid extraction JSON blocks settings save",
         "invalid CSS rejected before starting",
+        "duplicate JavaScript output names rejected in settings",
+        "inconsistent thresholds rejected and individual checks can be disabled",
         "persisted settings",
         "list mode POST contract",
         "opt-in renderer POST contract, no runtime claim",
-        "named CSS and Rust regex configuration POST contract",
+        "named CSS Rust regex and custom audit thresholds POST contract",
         "sitemap mode POST contract",
         "report import",
         "viewport 1920: no document overflow, footer reachable",
@@ -3617,14 +3697,18 @@
       "id": "ui-renderer",
       "artifact": "web/verification/ui-renderer-live-results.json",
       "result": "PASS",
-      "tested_at": "2026-10-11T12:55:15.232Z",
+      "tested_at": "2026-10-12T07:51:38.068Z",
       "scope": [
         "real renderer discovers JS-only links and respects URL exclusion",
         "raw and rendered named CSS extraction evidence",
+        "actual XPath text and scalar plus regex capture compare raw and rendered HTML",
+        "Rust persists async JavaScript results individual errors and isolated redacted cookies",
         "actual axe violations screenshot PNG network console and browser provenance observations",
         "live UI rendered metadata raw comparison and lazy screenshot preview",
         "live extraction table displays actual DOM values",
-        "render evidence and browser provenance survive project export",
+        "live JavaScript and cookie tables filter captured results",
+        "dedicated JavaScript and cookie CSV exports contain persisted observations",
+        "render evidence scripts cookies and browser provenance survive project export",
         "legacy pre-extraction JSON report import remains compatible",
         "final live mobile no overflow and footer reachable"
       ],
@@ -3641,12 +3725,20 @@
         "streamable_http: SDK initialize, 11 tools, start/status/pages/issues/project/analysis/compare/list and tool error"
       ],
       "limits": "Official SDK against local owned fixtures; not an external-client deployment or reference-product parity test."
+    },
+    {
+      "id": "advanced-batch",
+      "artifact": "docs/verification/advanced-batch.json",
+      "result": "PASS",
+      "tested_at": "2026-10-12",
+      "scope": "Integrated native build, 91 default Rust tests, explicit browser gate, Clippy, 30 UI fixtures, 12 actual renderer UI assertions, 15 worker tests, HTTP/API recovery and official MCP SDK.",
+      "limits": "Own fixtures and bounded implementations; full reference parity and Docker runtime remain NOT_PROVEN."
     }
   ],
   "reference_workflows": [
     {
       "id": "reference.http_graph",
-      "status": "missing",
+      "status": "partial",
       "parity_status": "NOT_PROVEN",
       "feature_ids": [
         "modes.spider",
@@ -3656,11 +3748,16 @@
         "http.response"
       ],
       "acceptance": "On an owned multiroute graph compare normalized URL identities, response fields, anchor occurrences and shortest depth at recorded reference version/settings.",
-      "evidence": []
+      "evidence": [
+        {
+          "artifact": "docs/parity/reference-comparison.json",
+          "proves": "Ordinary original CLI versus owned local fixture comparison executed with recorded version, settings and hashes. Differences remain explicitly listed; this is not complete workflow parity."
+        }
+      ]
     },
     {
       "id": "reference.robots_redirects",
-      "status": "missing",
+      "status": "partial",
       "parity_status": "NOT_PROVEN",
       "feature_ids": [
         "robots.fetch",
@@ -3670,7 +3767,12 @@
         "http.redirects"
       ],
       "acceptance": "Compare agent-specific robots/noindex, controlled redirect chains/loops, initial/final status and blocked/unknown states using authorized ordinary reference operation.",
-      "evidence": []
+      "evidence": [
+        {
+          "artifact": "docs/parity/reference-comparison.json",
+          "proves": "Ordinary original CLI versus owned local fixture comparison executed with recorded version, settings and hashes. Differences remain explicitly listed; this is not complete workflow parity."
+        }
+      ]
     },
     {
       "id": "reference.javascript",
@@ -3688,7 +3790,7 @@
     },
     {
       "id": "reference.relationships",
-      "status": "missing",
+      "status": "partial",
       "parity_status": "NOT_PROVEN",
       "feature_ids": [
         "relationships.canonical",
@@ -3697,7 +3799,12 @@
         "relationships.hreflang_checks"
       ],
       "acceptance": "Compare controlled HTML/HTTP/XML declarations, target states, reciprocity and conflicts; preserve legitimate unobserved-target uncertainty.",
-      "evidence": []
+      "evidence": [
+        {
+          "artifact": "docs/parity/reference-comparison.json",
+          "proves": "Ordinary original CLI versus owned local fixture comparison executed with recorded version, settings and hashes. Differences remain explicitly listed; this is not complete workflow parity."
+        }
+      ]
     },
     {
       "id": "reference.quality",
@@ -3747,9 +3854,9 @@
   ],
   "status_summary": {
     "overall": {
-      "implemented": 9,
-      "partial": 69,
-      "planned": 66,
+      "implemented": 12,
+      "partial": 71,
+      "planned": 61,
       "total": 144
     },
     "phases": {
@@ -3760,15 +3867,15 @@
         "total": 45
       },
       "P2": {
-        "implemented": 2,
-        "partial": 27,
-        "planned": 16,
+        "implemented": 4,
+        "partial": 29,
+        "planned": 12,
         "total": 45
       },
       "P3": {
-        "implemented": 3,
+        "implemented": 4,
         "partial": 9,
-        "planned": 12,
+        "planned": 11,
         "total": 24
       },
       "P4": {
@@ -3816,21 +3923,21 @@
         "total": 11
       },
       "relationships": {
-        "implemented": 0,
-        "partial": 4,
-        "planned": 3,
+        "implemented": 1,
+        "partial": 6,
+        "planned": 0,
         "total": 7
       },
       "images": {
-        "implemented": 0,
+        "implemented": 1,
         "partial": 3,
-        "planned": 3,
+        "planned": 2,
         "total": 6
       },
       "rendering": {
-        "implemented": 2,
+        "implemented": 3,
         "partial": 5,
-        "planned": 7,
+        "planned": 6,
         "total": 14
       },
       "quality": {
@@ -3876,5 +3983,11 @@
         "total": 6
       }
     }
+  },
+  "granular_acceptance": {
+    "artifact": "docs/parity/granular-acceptance.json",
+    "named_filters": 416,
+    "workflow_contracts": 32,
+    "parity_status": "NOT_PROVEN"
   }
 }

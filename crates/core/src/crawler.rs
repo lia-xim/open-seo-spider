@@ -1,6 +1,6 @@
 use crate::{
     CrawlConfig, CrawlEvent, CrawlReport, CrawlStore, CrawlSummary, PageRecord, RedirectHop,
-    Severity, audit_pages, extract_html, normalize_url, parse_sitemap,
+    Severity, audit_pages_with_thresholds, extract_html, normalize_url, parse_sitemap,
 };
 use crate::{
     audit::set_indexability,
@@ -49,10 +49,20 @@ impl Crawler {
         if config.request_timeout_secs == 0 || config.max_body_bytes == 0 {
             bail!("Timeout and response-body limit must be positive");
         }
+        config.indexability_agent = config.indexability_agent.trim().to_ascii_lowercase();
+        if config.indexability_agent.is_empty()
+            || config.indexability_agent.len() > 128
+            || !config.indexability_agent.bytes().all(|byte| {
+                byte.is_ascii_alphanumeric() || matches!(byte, b'-' | b'_' | b'*' | b'.')
+            })
+        {
+            bail!("Indexability agent must be a bot token with 1 to 128 ASCII characters");
+        }
         if let Some(renderer) = &config.renderer {
             crate::renderer::validate_renderer(renderer, config.request_timeout_secs)?;
         }
         crate::extract::validate_custom_extractions(&config.custom_extractions)?;
+        config.audit_thresholds.validate()?;
         let filters = UrlFilters::new(&config.include_patterns, &config.exclude_patterns)?;
         if config.max_pages == Some(0) {
             config.max_pages = None;
@@ -278,7 +288,7 @@ impl Crawler {
         }
         let pending = queue.len() + tasks.len();
         drop(tasks); // In-flight requests remain pending in SQLite and can be resumed.
-        let issues = audit_pages(&pages);
+        let issues = audit_pages_with_thresholds(&pages, &self.config.audit_thresholds);
         let mut status_counts = BTreeMap::new();
         for page in &pages {
             let key = if page.blocked_by_robots {
@@ -455,6 +465,7 @@ impl FetchContext {
             depth: entry.depth,
             discovered_from: entry.discovered_from,
             fetched_at: Utc::now().to_rfc3339(),
+            indexability_agent: self.config.indexability_agent.clone(),
             ..Default::default()
         };
         let Some(mut current) = normalize_url(&entry.url, None) else {
@@ -508,15 +519,23 @@ impl FetchContext {
                 .and_then(|value| value.to_str().ok())
                 .unwrap_or("")
                 .to_ascii_lowercase();
-            page.headers = response
+            page.headers.clear();
+            for (name, value) in response.headers() {
+                if let Ok(value) = value.to_str() {
+                    page.headers
+                        .entry(name.to_string())
+                        .and_modify(|existing| {
+                            existing.push_str(", ");
+                            existing.push_str(value);
+                        })
+                        .or_insert_with(|| value.to_owned());
+                }
+            }
+            page.header_link_values = response
                 .headers()
+                .get_all("link")
                 .iter()
-                .filter_map(|(name, value)| {
-                    value
-                        .to_str()
-                        .ok()
-                        .map(|value| (name.to_string(), value.to_owned()))
-                })
+                .filter_map(|value| value.to_str().ok().map(str::to_owned))
                 .collect();
             page.x_robots_tag = response
                 .headers()
@@ -569,6 +588,7 @@ impl FetchContext {
                 current = target;
                 continue;
             }
+            crate::metadata::extract_http_metadata(&mut page);
             loop {
                 match response.chunk().await {
                     Ok(Some(chunk)) => {
@@ -630,6 +650,12 @@ impl FetchContext {
         {
             crate::renderer::render_page(&mut page, &self.config, &self.seeds).await;
         }
+        crate::metadata::evaluate_robots(&mut page);
+        crate::metadata::sync_relationship_links(
+            &mut page,
+            &self.seeds,
+            self.config.include_subdomains,
+        );
         set_indexability(&mut page);
         (page, text)
     }

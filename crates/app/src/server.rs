@@ -8,8 +8,9 @@ use axum::{
 };
 use open_seo_spider_core::{
     AuditIssue, CrawlConfig, CrawlEvent, CrawlReport, CrawlStore, Crawler, PageRecord,
-    compare_crawls, export_custom_extractions_csv, export_issues_csv, export_links_csv,
-    export_pages_csv, export_sitemap_xml,
+    compare_crawls, export_browser_cookies_csv, export_custom_extractions_csv,
+    export_custom_javascript_csv, export_issues_csv, export_links_csv, export_pages_csv,
+    export_sitemap_xml,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
@@ -144,6 +145,11 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
         .route("/api/crawls/{id}/issues.csv", get(export_issue_csv))
         .route("/api/crawls/{id}/links.csv", get(export_link_csv))
         .route(
+            "/api/crawls/{id}/javascript.csv",
+            get(export_javascript_csv),
+        )
+        .route("/api/crawls/{id}/cookies.csv", get(export_cookie_csv))
+        .route(
             "/api/crawls/{id}/extractions.csv",
             get(export_extraction_csv),
         )
@@ -212,7 +218,7 @@ async fn local_origin(request: Request, next: Next) -> Response {
 
 async fn capabilities() -> Json<Value> {
     Json(
-        json!({"product":"Open SEO Spider","crawl":{"http":true,"list":true,"sitemap":true,"robots":true,"redirects":true,"cancel":true,"resume":true,"url_limit":null,"url_regex_filters":true,"css_extraction":true},"optional_worker":{"javascript_rendering":true,"screenshots":true,"accessibility_axe":true,"endpoint":"http://127.0.0.1:8790/render","enabled_by_default":false},"mcp":{"stdio":true,"streamable_http":"/mcp"},"exports":["pages_csv","issues_csv","links_csv","extractions_csv","sitemap_xml","project_json"],"unimplemented":["custom_javascript","xpath_extraction","api_integrations","spelling_grammar","pdf_analysis","embedding_semantic_search","scheduling","full_structured_data_validation"],"parity":"in progress; see docs/feature-parity.json"}),
+        json!({"product":"Open SEO Spider","crawl":{"http":true,"list":true,"sitemap":true,"robots":true,"agent_scoped_indexing_directives":true,"http_link_relationships":true,"redirects":true,"cancel":true,"resume":true,"url_limit":null,"url_regex_filters":true,"css_extraction":true,"xpath_1_0_extraction":true,"regex_extraction":true,"configurable_audit_thresholds":true,"local_font_pixel_profile":true},"optional_worker":{"javascript_rendering":true,"custom_javascript":true,"redacted_cookie_observations":true,"screenshots":true,"accessibility_axe":true,"endpoint":"http://127.0.0.1:8790/render","enabled_by_default":false},"mcp":{"stdio":true,"streamable_http":"/mcp"},"exports":["pages_csv","issues_csv","links_csv","extractions_csv","javascript_csv","cookies_csv","sitemap_xml","project_json"],"unimplemented":["api_integrations","spelling_grammar","pdf_analysis","embedding_semantic_search","scheduling","full_structured_data_validation"],"parity":"in progress; see docs/parity/reference-cli-inventory.json"}),
     )
 }
 async fn list_crawls(State(state): State<AppState>) -> Json<Value> {
@@ -581,6 +587,30 @@ async fn export_xml(State(state): State<AppState>, Path(id): Path<Uuid>) -> ApiR
         export_sitemap_xml(&report),
         "application/xml; charset=utf-8",
         "sitemap.xml",
+    ))
+}
+async fn export_javascript_csv(
+    State(state): State<AppState>,
+    Path(id): Path<Uuid>,
+) -> ApiResult<Response> {
+    let report = require_report(&state, id).await?;
+    Ok(download(
+        export_custom_javascript_csv(&report)
+            .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?,
+        "text/csv; charset=utf-8",
+        "javascript.csv",
+    ))
+}
+async fn export_cookie_csv(
+    State(state): State<AppState>,
+    Path(id): Path<Uuid>,
+) -> ApiResult<Response> {
+    let report = require_report(&state, id).await?;
+    Ok(download(
+        export_browser_cookies_csv(&report)
+            .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?,
+        "text/csv; charset=utf-8",
+        "cookies.csv",
     ))
 }
 async fn export_project(

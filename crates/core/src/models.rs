@@ -22,9 +22,12 @@ pub struct CrawlConfig {
     pub max_body_bytes: usize,
     pub max_redirects: usize,
     pub user_agent: String,
+    /// Bot token used to evaluate page-level indexing directives; independent of HTTP UA.
+    pub indexability_agent: String,
     pub custom_headers: BTreeMap<String, String>,
     pub renderer: Option<RendererConfig>,
     pub custom_extractions: Vec<CustomExtractionConfig>,
+    pub audit_thresholds: AuditThresholds,
     /// Full normalized URL regex filters for discovery; explicit seeds are exempt.
     pub include_patterns: Vec<String>,
     pub exclude_patterns: Vec<String>,
@@ -49,12 +52,108 @@ impl Default for CrawlConfig {
             max_body_bytes: 5 * 1024 * 1024,
             max_redirects: 10,
             user_agent: "OpenSEOSpider/0.1 (+local SEO audit)".into(),
+            indexability_agent: "googlebot".into(),
             custom_headers: BTreeMap::new(),
             renderer: None,
             custom_extractions: Vec::new(),
+            audit_thresholds: AuditThresholds::default(),
             include_patterns: Vec::new(),
             exclude_patterns: Vec::new(),
         }
+    }
+}
+
+/// Original heuristic thresholds; text lengths use Unicode scalar values.
+/// Pixel checks use an explicitly recorded local font profile.
+/// None disables an individual check; these are not search engine limits.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(default)]
+pub struct AuditThresholds {
+    pub min_title_chars: Option<usize>,
+    pub max_title_chars: Option<usize>,
+    pub min_description_chars: Option<usize>,
+    pub max_description_chars: Option<usize>,
+    pub max_h1_chars: Option<usize>,
+    pub max_h2_chars: Option<usize>,
+    pub max_alt_chars: Option<usize>,
+    pub max_url_chars: Option<usize>,
+    pub min_word_count: Option<usize>,
+    pub max_internal_outlinks: Option<usize>,
+    pub max_external_outlinks: Option<usize>,
+    pub min_title_pixels: Option<usize>,
+    pub max_title_pixels: Option<usize>,
+    pub min_description_pixels: Option<usize>,
+    pub max_description_pixels: Option<usize>,
+}
+
+impl Default for AuditThresholds {
+    fn default() -> Self {
+        Self {
+            min_title_chars: Some(30),
+            max_title_chars: Some(60),
+            min_description_chars: Some(70),
+            max_description_chars: Some(155),
+            max_h1_chars: Some(70),
+            max_h2_chars: Some(70),
+            max_alt_chars: Some(100),
+            max_url_chars: Some(115),
+            min_word_count: Some(200),
+            max_internal_outlinks: Some(1000),
+            max_external_outlinks: Some(10),
+            min_title_pixels: Some(200),
+            max_title_pixels: Some(561),
+            min_description_pixels: Some(400),
+            max_description_pixels: Some(985),
+        }
+    }
+}
+
+impl AuditThresholds {
+    pub fn validate(&self) -> anyhow::Result<()> {
+        if [
+            self.min_title_chars,
+            self.max_title_chars,
+            self.min_description_chars,
+            self.max_description_chars,
+            self.max_h1_chars,
+            self.max_h2_chars,
+            self.max_alt_chars,
+            self.max_url_chars,
+            self.min_word_count,
+            self.max_internal_outlinks,
+            self.max_external_outlinks,
+            self.min_title_pixels,
+            self.max_title_pixels,
+            self.min_description_pixels,
+            self.max_description_pixels,
+        ]
+        .into_iter()
+        .flatten()
+        .any(|v| v > 1_000_000)
+        {
+            anyhow::bail!("Audit thresholds must not exceed 1000000");
+        }
+        for (name, min, max) in [
+            ("title", self.min_title_chars, self.max_title_chars),
+            (
+                "description",
+                self.min_description_chars,
+                self.max_description_chars,
+            ),
+            ("title pixels", self.min_title_pixels, self.max_title_pixels),
+            (
+                "description pixels",
+                self.min_description_pixels,
+                self.max_description_pixels,
+            ),
+        ] {
+            if let (Some(min), Some(max)) = (min, max)
+                && min > max
+            {
+                anyhow::bail!("Minimum {name} length exceeds maximum length");
+            }
+        }
+        Ok(())
     }
 }
 
@@ -66,6 +165,8 @@ pub struct RendererConfig {
     pub wait_ms: u64,
     pub accessibility: bool,
     pub screenshot: bool,
+    pub custom_javascript: Vec<CustomJavaScriptConfig>,
+    pub collect_cookies: bool,
     pub max_response_bytes: usize,
 }
 
@@ -76,9 +177,41 @@ impl Default for RendererConfig {
             wait_ms: 500,
             accessibility: false,
             screenshot: false,
+            custom_javascript: Vec::new(),
+            collect_cookies: false,
             max_response_bytes: 32 * 1024 * 1024,
         }
     }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CustomJavaScriptConfig {
+    pub name: String,
+    pub script: String,
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
+pub struct RobotsDirective {
+    pub source: String,
+    pub agent: Option<String>,
+    pub raw: String,
+    pub directives: Vec<String>,
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(default)]
+pub struct LinkRelationship {
+    pub url: String,
+    pub rel: Vec<String>,
+    pub source: String,
+    pub context_url: String,
+    pub applies_to_document: bool,
+    pub hreflang: Vec<String>,
+    pub media: Option<String>,
+    pub type_hint: Option<String>,
+    pub title: Option<String>,
+    pub parameters: BTreeMap<String, Vec<String>>,
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -86,11 +219,27 @@ impl Default for RendererConfig {
 pub struct RawMetadata {
     pub titles: Vec<String>,
     pub meta_descriptions: Vec<String>,
+    pub title_pixel_widths: Vec<Option<u32>>,
+    pub description_pixel_widths: Vec<Option<u32>>,
+    pub text_metrics_engine: Option<String>,
     pub h1: Vec<String>,
     pub h2: Vec<String>,
     pub canonical: Vec<String>,
+    pub html_canonical: Vec<String>,
+    pub header_canonical: Vec<String>,
     pub meta_robots: Vec<String>,
+    pub robots_directives: Vec<RobotsDirective>,
+    pub effective_robots: Vec<String>,
+    pub indexability_agent: String,
     pub hreflang: Vec<HreflangRecord>,
+    pub html_hreflang: Vec<HreflangRecord>,
+    pub header_hreflang: Vec<HreflangRecord>,
+    pub document_base_url: Option<String>,
+    pub base_href: Option<String>,
+    pub link_relationships: Vec<LinkRelationship>,
+    pub pagination_next: Vec<String>,
+    pub pagination_prev: Vec<String>,
+    pub amphtml: Vec<String>,
     pub word_count: usize,
     pub content_hash: Option<String>,
     pub links: Vec<LinkRecord>,
@@ -102,11 +251,27 @@ impl From<&PageRecord> for RawMetadata {
         Self {
             titles: page.titles.clone(),
             meta_descriptions: page.meta_descriptions.clone(),
+            title_pixel_widths: page.title_pixel_widths.clone(),
+            description_pixel_widths: page.description_pixel_widths.clone(),
+            text_metrics_engine: page.text_metrics_engine.clone(),
             h1: page.h1.clone(),
             h2: page.h2.clone(),
             canonical: page.canonical.clone(),
+            html_canonical: page.html_canonical.clone(),
+            header_canonical: page.header_canonical.clone(),
             meta_robots: page.meta_robots.clone(),
+            robots_directives: page.robots_directives.clone(),
+            effective_robots: page.effective_robots.clone(),
+            indexability_agent: page.indexability_agent.clone(),
             hreflang: page.hreflang.clone(),
+            html_hreflang: page.html_hreflang.clone(),
+            header_hreflang: page.header_hreflang.clone(),
+            document_base_url: page.document_base_url.clone(),
+            base_href: page.base_href.clone(),
+            link_relationships: page.link_relationships.clone(),
+            pagination_next: page.pagination_next.clone(),
+            pagination_prev: page.pagination_prev.clone(),
+            amphtml: page.amphtml.clone(),
             word_count: page.word_count,
             content_hash: page.content_hash.clone(),
             links: page.links.clone(),
@@ -155,14 +320,56 @@ pub struct CustomExtraction {
     pub attribute: Option<String>,
     pub values: Vec<String>,
     pub source: String,
+    pub method: ExtractionMethod,
+    pub engine: String,
+    pub result_type: String,
+    /// Extractable values before the configured result bound; None means unknown.
+    pub matched_count: Option<usize>,
+    pub truncated: bool,
+    pub error: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(default)]
 pub struct CustomExtractionConfig {
     pub name: String,
+    /// CSS selector, XPath 1.0 expression, or Rust regex pattern.
     pub selector: String,
     #[serde(default)]
     pub attribute: Option<String>,
+    pub method: ExtractionMethod,
+    /// Numeric regex capture group; None selects the entire match.
+    pub regex_group: Option<usize>,
+    /// Supported flags: i, m, s, x, U. Inline Rust regex flags also work.
+    pub regex_flags: String,
+    /// XPath expression prefix to namespace URI bindings. HTML names are unnamespaced.
+    pub namespaces: BTreeMap<String, String>,
+    /// Per-definition value bound; excess matches retain count/truncation evidence.
+    pub max_results: usize,
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum ExtractionMethod {
+    #[default]
+    Css,
+    XPath,
+    Regex,
+}
+
+impl Default for CustomExtractionConfig {
+    fn default() -> Self {
+        Self {
+            name: String::new(),
+            selector: String::new(),
+            attribute: None,
+            method: ExtractionMethod::Css,
+            regex_group: None,
+            regex_flags: String::new(),
+            namespaces: BTreeMap::new(),
+            max_results: 10000,
+        }
+    }
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -189,12 +396,29 @@ pub struct PageRecord {
     pub headers: BTreeMap<String, String>,
     pub titles: Vec<String>,
     pub meta_descriptions: Vec<String>,
+    pub title_pixel_widths: Vec<Option<u32>>,
+    pub description_pixel_widths: Vec<Option<u32>>,
+    pub text_metrics_engine: Option<String>,
     pub h1: Vec<String>,
     pub h2: Vec<String>,
     pub canonical: Vec<String>,
+    pub html_canonical: Vec<String>,
+    pub header_canonical: Vec<String>,
     pub meta_robots: Vec<String>,
     pub x_robots_tag: Vec<String>,
+    pub robots_directives: Vec<RobotsDirective>,
+    pub effective_robots: Vec<String>,
+    pub indexability_agent: String,
+    pub header_link_values: Vec<String>,
     pub hreflang: Vec<HreflangRecord>,
+    pub html_hreflang: Vec<HreflangRecord>,
+    pub header_hreflang: Vec<HreflangRecord>,
+    pub document_base_url: Option<String>,
+    pub base_href: Option<String>,
+    pub link_relationships: Vec<LinkRelationship>,
+    pub pagination_next: Vec<String>,
+    pub pagination_prev: Vec<String>,
+    pub amphtml: Vec<String>,
     pub language: Option<String>,
     pub viewport: Option<String>,
     pub images: Vec<ImageRecord>,
@@ -223,12 +447,28 @@ pub struct PageRecord {
     pub accessibility: Option<serde_json::Value>,
     pub screenshot_base64: Option<String>,
     pub custom_extractions: Vec<CustomExtraction>,
+    pub custom_javascript_results: Vec<serde_json::Value>,
+    pub browser_cookies: Vec<serde_json::Value>,
 }
 
 impl PageRecord {
+    pub fn document_url(&self) -> &str {
+        if self.rendered && self.renderer_error.is_none() {
+            self.rendered_url.as_deref().unwrap_or(&self.final_url)
+        } else {
+            &self.final_url
+        }
+    }
     pub fn is_html(&self) -> bool {
         self.content_type.contains("text/html")
             || self.content_type.contains("application/xhtml+xml")
+    }
+    pub fn is_indexable_document(&self) -> bool {
+        self.is_html()
+            || matches!(
+                self.content_type.split(';').next().unwrap_or("").trim(),
+                "application/pdf" | "text/plain"
+            )
     }
     pub fn title(&self) -> &str {
         self.titles.first().map(String::as_str).unwrap_or("")

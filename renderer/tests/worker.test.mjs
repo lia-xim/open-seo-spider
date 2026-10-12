@@ -14,7 +14,11 @@ test('validation rejects non-HTTP URLs, header injection and unbounded options',
     { url: 'https://fixture.test/', custom_headers: { Host: 'other.test' } },
     { url: 'https://fixture.test/', custom_headers: { Test: 'a', test: 'b' } },
     { url: 'https://fixture.test/', timeout_ms: 0 },
-    { url: 'https://fixture.test/', screenshot: 'yes' }]) {
+    { url: 'https://fixture.test/', screenshot: 'yes' },
+    { url: 'https://fixture.test/', collect_cookies: 'yes' },
+    { url: 'https://fixture.test/', custom_javascript: [{ name: 'x', script: '' }] },
+    { url: 'https://fixture.test/', custom_javascript: [{ name: 'x', script: 'return 1' }, { name: 'x', script: 'return 2' }] },
+    { url: 'https://fixture.test/', custom_javascript: [{ name: 'x', script: 'x'.repeat(65537) }] }]) {
     assert.throws(() => validateRenderRequest(input), error => error.status === 400);
   }
   assert.equal(validateRenderRequest({url: 'https://fixture.test/'}).wait_ms, 1000);
@@ -108,6 +112,36 @@ test('real installed browser renders JavaScript, isolates jobs and audits owned 
     assert.equal((await render('/cookie-set')).status, 200);
     assert.equal((await render('/cookie-check')).body.title, 'fresh|empty');
     assert.ok(observedMain.filter(request => request.url === '/cookie-check').every(request => !request.headers.cookie));
+  });
+  await t.test('named browser scripts await DOM values and retain individual errors', async () => {
+    const result = await render('/dynamic', { custom_javascript: [
+      { name: 'title', script: 'return document.title;' },
+      { name: 'async', script: 'await new Promise(r=>setTimeout(r,10)); return {links:document.querySelectorAll("a").length};' },
+      { name: 'failure', script: 'throw new Error("owned-script-error");' },
+      { name: 'circular', script: 'const x={};x.x=x;return x;' },
+      { name: 'big', script: 'return "x".repeat(65537);' },
+      { name: 'after', script: 'return 42;' }
+    ] });
+    assert.equal(result.status, 200);
+    const rows = result.body.custom_javascript_results;
+    assert.equal(rows[0].value, 'Rendered SEO title'); assert.equal(rows[0].value_type, 'string');
+    assert.equal(rows[1].value.links, 1); assert.match(rows[2].error, /owned-script-error/);
+    assert.match(rows[3].error, /circular/i); assert.match(rows[4].error, /65536/);
+    assert.equal(rows[5].value, 42); assert.equal(rows[5].error, null);
+  });
+  await t.test('cookie audit records attributes without cookie values and remains isolated', async () => {
+    const result = await render('/cookie-set', { collect_cookies: true });
+    assert.equal(result.status, 200);
+    const cookie = result.body.browser_cookies.find(entry => entry.name === 'isolated');
+    assert.ok(cookie); assert.equal(cookie.path, '/'); assert.equal(cookie.httpOnly, false);
+    assert.equal(cookie.value_length, 3); assert.equal(Object.hasOwn(cookie, 'value'), false);
+    assert.equal((await render('/cookie-check', { collect_cookies: true })).body.browser_cookies.length, 0);
+    assert.equal((await render('/cookie-set')).body.browser_cookies.length, 0);
+  });
+  await t.test('CPU-bound custom script deadline aborts rendering and leaves worker reusable', async () => {
+    const result = await render('/dynamic', { wait_ms: 0, custom_javascript: [{ name: 'timeout', script: 'while(true){}' }] });
+    assert.equal(result.status, 504); assert.equal(result.body.error.code, 'custom_javascript_timeout');
+    assert.equal((await render('/dynamic')).body.title, 'Rendered SEO title');
   });
   await t.test('custom credentials stay on their origin for resources and redirects', async () => {
     const headers = {Authorization: 'Bearer OWNED_TEST_ONLY', 'X-Private-Fixture': 'owned-value'};

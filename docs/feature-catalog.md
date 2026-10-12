@@ -1,8 +1,8 @@
 # Open SEO Spider capability catalog
 
-Catalog date: 11 October 2026. Reference: public Screaming Frog SEO Spider documentation, whose download panels advertised version **24.3** at review time. The vendor describes more than 300 SEO issue checks; this catalog groups the documented product areas into **144 implementation requirements**, rather than claiming to enumerate every individual issue filter. [Product overview](https://www.screamingfrog.co.uk/seo-spider/) · [Official guide](https://www.screamingfrog.co.uk/seo-spider/user-guide/).
+Catalog prepared: 11 October 2026; implementation/evidence review: 12 October 2026. Reference: public Screaming Frog SEO Spider documentation, whose download panels advertised version **24.3** at review time. The vendor describes more than 300 SEO issue checks; this catalog groups the documented product areas into **144 implementation requirements**, rather than claiming to enumerate every individual issue filter. [Product overview](https://www.screamingfrog.co.uk/seo-spider/) · [Official guide](https://www.screamingfrog.co.uk/seo-spider/user-guide/).
 
-This is an independent product specification. No proprietary executable, code, artwork, credential or license mechanism was inspected or copied to prepare it. Public feature behavior provides a reference; the acceptance tests below are newly authored tests for Open SEO Spider. The user prefers Rust and local operation. Docker, WSL and native packaging are separate delivery choices.
+This is an independent product specification. The initial grouped catalog was prepared from public documentation. Subsequent private static inspection and ordinary original CLI runs inform the granular contracts and comparisons. No vendor executable, implementation code, font, artwork, credential or license mechanism is copied into this repository. Public feature behavior provides a reference; the acceptance tests below are newly authored tests for Open SEO Spider. The user prefers Rust and local operation. Docker, WSL and native packaging are separate delivery choices.
 
 **Independent implementation status is tracked below. Full parity is NOT PROVEN.** The machine-readable [feature-parity.json](feature-parity.json) is the tracking baseline. Implementation and passing tests must be linked before a feature changes status. A passing Open SEO Spider fixture establishes its behavior; a separately authorized, reproducible reference comparison is needed for a parity claim.
 
@@ -119,13 +119,13 @@ The source link in each row supports the reference product area. Acceptance crit
 
 | Key | Status | Capability | Independent acceptance test | Source |
 | --- | --- | --- | --- | --- |
-| `relationships.canonical` | `partial` | Canonical extraction | Extract HTML and HTTP Link canonical entries including relative, multiple and self-referencing values. | [Canonical auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-canonicals/) |
+| `relationships.canonical` | `implemented` | Canonical extraction | Extract HTML and HTTP Link canonical entries including relative, multiple and self-referencing values. | [Canonical auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-canonicals/) |
 | `relationships.canonical_checks` | `partial` | Canonical validation | Flag malformed, conflicting, redirecting, blocked and non-indexable targets and canonical chains. | [Canonical auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-canonicals/) |
-| `relationships.pagination` | `planned` | Pagination relationship validation | Extract HTML/HTTP next and prev; test broken links, absent returns and inconsistent chains. | [Pagination auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-pagination/) |
+| `relationships.pagination` | `partial` | Pagination relationship validation | Extract HTML/HTTP next and prev; test broken links, absent returns and inconsistent chains. | [Pagination auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-pagination/) |
 | `relationships.hreflang` | `partial` | Hreflang extraction | Read HTML, HTTP Link and XML sitemap alternates with language/region and x-default. | [Hreflang auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-hreflang/) |
 | `relationships.hreflang_checks` | `partial` | Hreflang reciprocity and validity | Test unsupported codes, missing returns/self-reference, duplicates and non-indexable targets. | [Hreflang auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-hreflang/) |
-| `relationships.amp` | `planned` | AMP extraction and validation | Detect amphtml/canonical reciprocity and report versioned AMP validation findings. | [AMP auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-validate-amp/) |
-| `relationships.mobile` | `planned` | Mobile alternate relationships | Resolve alternate media relationships and surface missing or non-indexable target evidence. | [Mobile usability](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-mobile-usability/) |
+| `relationships.amp` | `partial` | AMP extraction and validation | Detect amphtml/canonical reciprocity and report versioned AMP validation findings. | [AMP auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-validate-amp/) |
+| `relationships.mobile` | `partial` | Mobile alternate relationships | Resolve alternate media relationships and surface missing or non-indexable target evidence. | [Mobile usability](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-mobile-usability/) |
 
 ### Images and resource evidence (P2)
 
@@ -134,7 +134,7 @@ The source link in each row supports the reference product area. Acceptance crit
 | `images.sources` | `partial` | Image candidates and occurrences | Record src/srcset candidates and every source page independently; preserve per-occurrence alt. | [Image auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-find-missing-image-alt-text/) |
 | `images.alt` | `partial` | Missing alt distinctions | Separate missing attribute from empty/whitespace alt using three deliberately different image elements. | [Image auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-find-missing-image-alt-text/) |
 | `images.size` | `partial` | Image dimensions and size audits | Record intrinsic/rendered dimensions, transfer size and configurable thresholds without mislabeling unavailable data. | [Image auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-find-missing-image-alt-text/) |
-| `images.cookies` | `planned` | Cookie audit | Collect response and script cookies with domain/path/security attributes and distinguish session contexts. | [Cookies](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-perform-a-cookie-audit/) |
+| `images.cookies` | `implemented` | Cookie audit | Collect response and script cookies with domain/path/security attributes and distinguish session contexts. | [Cookies](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-perform-a-cookie-audit/) |
 | `images.pdf` | `planned` | PDF metadata and text | Extract title, author, dates, pages and text from an owned fixture PDF; show unsupported encrypted files explicitly. | [PDF auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-pdfs/) |
 | `images.pdf_links` | `planned` | PDF links and anchor evidence | Resolve link annotations, record source document/page and extract text where reliable. | [PDF auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-pdfs/) |
 
@@ -153,7 +153,7 @@ The source link in each row supports the reference product area. Acceptance crit
 | `rendering.custom_extract` | `partial` | CSS/XPath/regex extraction | Return text, attributes, HTML, inner HTML and function values from a known fixture with multi-value results. | [Custom extraction](https://www.screamingfrog.co.uk/seo-spider/tutorials/web-scraping/) |
 | `rendering.visual_extract` | `planned` | Visual selector authoring | Choose an element, preview raw/rendered extraction, save selector and verify it on a second fixture. | [Custom extraction](https://www.screamingfrog.co.uk/seo-spider/tutorials/web-scraping/) |
 | `rendering.custom_search` | `planned` | Literal and regex search | Search source, rendered content and selected text with occurrence counts and match evidence. | [Custom search](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-use-custom-search/) |
-| `rendering.javascript` | `planned` | Custom JavaScript extraction | Run a user-authored script against a fixture with timeout/error handling and typed returned columns. | [JavaScript debugging](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-debug-custom-javascript-snippets/) |
+| `rendering.javascript` | `implemented` | Custom JavaScript extraction | Run a user-authored script against a fixture with timeout/error handling and typed returned columns. | [JavaScript debugging](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-debug-custom-javascript-snippets/) |
 | `rendering.interact` | `planned` | Scripted interactions | Execute authored hover/click/scroll actions in declared order and discover resulting links. | [User interaction scripts](https://www.screamingfrog.co.uk/seo-spider/tutorials/simulating-user-interactions-with-custom-javascript/) |
 | `rendering.snippet_library` | `planned` | User snippet library | Import/export user-owned snippets without storing provider secrets in shared library files. | [JavaScript debugging](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-debug-custom-javascript-snippets/) |
 
@@ -255,53 +255,15 @@ The source link in each row supports the reference product area. Acceptance crit
 
 ## Evidence-based implementation status
 
-Review date: 11 October 2026. **9 implemented, 69 partial, 66 planned; 144 requirements total.** This counts independent grouped acceptance, not vendor parity or the vendor's individual issue filters. All `parity_evidence` arrays remain empty and every parity status remains `NOT_PROVEN`.
+Review: 12 October 2026. **12 implemented, 71 partial, 61 planned; 144 grouped requirements.** This is independent acceptance, never a vendor-coverage percentage. The separate [416-filter ledger](parity/granular-acceptance.md) records exact parameters, trigger/control fixtures and edge contracts with all reference parity statuses still NOT_PROVEN.
 
-| Phase | Implemented | Partial | Planned | Total |
-| --- | ---: | ---: | ---: | ---: |
-| P1 | 2 | 28 | 15 | 45 |
-| P2 | 2 | 27 | 16 | 45 |
-| P3 | 3 | 9 | 12 | 24 |
-| P4 | 2 | 5 | 23 | 30 |
+[Integrated batch verification](verification/advanced-batch.json) records native Rust tests, Clippy, worker, real UI→Rust→Chrome, persistence, all eight exports and SDK MCP tests. [Original fixture comparison](parity/reference-comparison.md) records 863 equal cells, 53 differences and three unavailable measurements in a small scoped reference run. [Membership evidence](parity/reference-membership/membership.md) covers 78 selected filters; empty or unconfirmed probes remain open. These observations do not establish complete features or rule boundaries.
 
-| Capability group | Implemented | Partial | Planned | Total |
-| --- | ---: | ---: | ---: | ---: |
-| Crawl modes and control | 1 | 3 | 3 | 7 |
-| Discovery, scope and URL policy | 1 | 10 | 3 | 14 |
-| Robots and indexability | 0 | 5 | 2 | 7 |
-| Transport, status and redirects | 0 | 5 | 1 | 6 |
-| Page metadata and content | 0 | 5 | 6 | 11 |
-| Link graph and architecture | 1 | 4 | 6 | 11 |
-| Canonical, multilingual and alternative pages | 0 | 4 | 3 | 7 |
-| Images and resource evidence | 0 | 3 | 3 | 6 |
-| Browser rendering and custom scripts | 2 | 5 | 7 | 14 |
-| Structured data, usability and validation | 1 | 4 | 5 | 10 |
-| Sitemaps | 0 | 4 | 1 | 5 |
-| Authorized API integrations | 0 | 0 | 10 | 10 |
-| Optional AI and semantic analysis | 0 | 0 | 9 | 9 |
-| Persistence, projects and portability | 1 | 7 | 2 | 10 |
-| Automation, exports and agent access | 2 | 5 | 4 | 11 |
-| Analyst interface | 0 | 5 | 1 | 6 |
+Broad imports and crawl policies, full relationship formats, archives, PDF/resource analysis, provider/AI adapters, authentication, scheduling and large-scale performance still have explicit remaining acceptance. See the JSON ledger for each contract.
 
-The [604-URL API and recovery proof](verification/api-e2e.json) covers owned local fixtures, exports, import/comparison, cancellation and actual process restart. [Analysis acceptance](analysis-acceptance.md) records eight deterministic graph/relationship/security/JSON-LD tests. The core implementation agent reported 8 unit and 17 integration tests passing, followed by one explicit live Rust→worker→Chrome gate, including saved browser/version/viewport/wait/network-count provenance. [Renderer tests](../renderer/tests/worker.test.mjs) passed 12 real-browser/validation/lifecycle tests. [UI fixture proof](../web/verification/ui-fixture-results.json) covers layout and payload contracts; [live UI proof](../web/verification/ui-live-results.json) separately covers the actual local form→Rust→HTTP fixture→inspector/export path. The [live rendered UI proof](../web/verification/ui-renderer-live-results.json) separately proves actual browser→Rust→Chrome→DOM extraction, raw/rendered values, axe/PNG/network and persisted export. [MCP SDK proof](verification/mcp-e2e.json) covers 11 tools through stdio and Streamable HTTP. Fixture UI contracts alone never prove a runtime renderer.
+## Reference workflow evidence
 
-The largest remaining slices are broad import formats, detailed crawl policies, complete HTTP/HTML relationship formats, report/source archives, advanced rendering/scripts, validators/PDF/text analysis, provider/AI adapters and scheduling. Passing the current crawler or browser test does not complete those requirements.
-
-## Reference workflows still missing
-
-No reference-product acceptance comparison was run. The JSON `reference_workflows` entries track the following missing comparisons with empty evidence:
-
-| Workflow | Required comparison | Status |
-| --- | --- | --- |
-| `reference.http_graph` | On an owned multiroute graph compare normalized URL identities, response fields, anchor occurrences and shortest depth at recorded reference version/settings. | `NOT_PROVEN` |
-| `reference.robots_redirects` | Compare agent-specific robots/noindex, controlled redirect chains/loops, initial/final status and blocked/unknown states using authorized ordinary reference operation. | `NOT_PROVEN` |
-| `reference.javascript` | Compare one script-dependent owned fixture with declared browser/wait/viewport/resources settings; retain both DOM captures and classify observed differences. | `NOT_PROVEN` |
-| `reference.relationships` | Compare controlled HTML/HTTP/XML declarations, target states, reciprocity and conflicts; preserve legitimate unobserved-target uncertainty. | `NOT_PROVEN` |
-| `reference.quality` | Use owned text/schema/accessibility/security fixtures with pinned rules/engines, compare raw findings and document unsupported checks individually. | `NOT_PROVEN` |
-| `reference.persistence_exports` | Compare controlled interruption/resume and exported observations using each product's own documented formats; validate stable fields and all-occurrence evidence without claiming proprietary-file compatibility. | `NOT_PROVEN` |
-| `reference.providers_automation` | Use separately authorized provider accounts or mock providers and local MCP clients; version settings, quotas/errors and automation lifecycle before comparison. | `NOT_PROVEN` |
-
-Record reference version, configuration, owned fixture inputs, observed outputs and differences before claiming any behavioral parity. Native local operation, the current Rust/browser pilot, large-site performance, cross-platform packaging and complete vendor parity remain distinct claims.
+Small HTTP/graph/robots/relationship comparisons are now recorded with known differences. Full workflow parity, browser parity, provider comparison, Docker runtime and production-scale proof remain NOT_PROVEN.
 
 ## Required proof before a complete-parity claim
 

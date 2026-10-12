@@ -46,6 +46,8 @@ The browser starts lazily on the first render request and is reused. Every job c
   "custom_headers": {},
   "screenshot": false,
   "accessibility": false,
+  "collect_cookies": false,
+  "custom_javascript": [{"name":"document_title","script":"return document.title;"}],
   "viewport": { "width": 1280, "height": 800 }
 }
 ```
@@ -70,6 +72,8 @@ The result has the following fields:
 | `screenshot_base64` | Optional viewport PNG encoded in base64 |
 | `screenshot_mime_type` | `image/png` when screenshot requested |
 | `accessibility` | Optional axe results described below |
+| `custom_javascript_results` | Per-script name, JSON value, value_type, error and elapsed_ms |
+| `browser_cookies` | Optional redacted cookie attributes, including value_length; never cookie values |
 
 An HTTP 404 or 500 from the website remains a successful worker response with that website status in `status`. Navigation waits for `DOMContentLoaded` and then the requested delay; it does not claim all delayed or user-triggered content has loaded. This follows the [documented navigation behavior](https://playwright.dev/docs/api/class-page#page-goto). Network entries are observations during that interval, not a complete HAR or resource-body archive.
 
@@ -85,6 +89,14 @@ Custom headers are applied to main-page requests only when their origin exactly 
 
 Browser certificate, CSP, cross-origin and local-network protections remain enabled. The default Chromium sandbox remains enabled. No HTTP authentication-session persistence, cookie import, interactive login or browser extension loading is implemented here.
 
+## Custom JavaScript and cookie observations
+
+`custom_javascript` accepts up to32 uniquely named function bodies. Scripts run in the inspected page after the configured wait, before DOM collection, screenshots and axe. `await` is supported. Each return value must be JSON-serializable; individual script exceptions, circular values and oversized results produce an error row while subsequent scripts continue. Names are limited to128 UTF-8 bytes, each body to65536 bytes and all bodies to262144 bytes. Each JSON result is limited to65536 bytes.
+
+Each script has a two-second deadline. The worker terminates browser execution if a script hangs, including a synchronous infinite loop. The rendered observation then fails explicitly; the Rust crawler retains its native HTTP observation. Scripts can change the inspected DOM or navigate and their effects are captured afterwards. This is a separate original execution contract, not a claim of Screaming Frog's script helper compatibility.
+
+`collect_cookies:true` captures the current isolated context's cookie name, domain, path, expiry, Secure, HttpOnly and SameSite attributes plus the byte length of its value. The value itself is omitted. Capture is disabled by default. Each URL has a fresh context, so these observations do not represent a shared crawl login session or cookies from the user's browser.
+
 ## Accessibility
 
 With `accessibility:true`, the worker injects the installed open-source axe-core engine and calls `axe.run(document)`. `accessibility` contains `engine`, `version`, `violations`, `incomplete`, `passes_count`, `inapplicable_count` and `automated_only:true`. Failures include `error` and null results rather than an empty pass report. These are automated page observations; they are not a complete accessibility compliance assessment. See the [axe-core API](https://github.com/dequelabs/axe-core/blob/develop/doc/API.md).
@@ -95,11 +107,14 @@ With `accessibility:true`, the worker injects the installed open-source axe-core
 npm test
 ```
 
-On 2026-10-11, Node 24.15.0 with the installed Windows Chrome passed **12 tests, 0 failures, 0 skips**. Tests use owned temporary loopback HTTP fixtures and a real isolated headless browser:
+On 2026-10-12, Node 24.15.0 with the installed Windows Chrome passed **15 tests, 0 failures, 0 skips**. Tests use owned temporary loopback HTTP fixtures and a real isolated headless browser:
 
 - JavaScript changes the raw title and inserts a previously absent crawlable link; the worker observes both.
 - Console errors, HTTP request status, custom headers, user agent and valid PNG bytes are captured.
 - A second job has fresh cookies and local storage.
+- Custom async JavaScript captures values, retains individual exceptions and bounds circular or oversized results.
+- Opt-in cookie properties omit values and do not carry into the next context.
+- A synchronous infinite script loop is terminated and a subsequent job succeeds.
 - A second origin receives external scripts and redirects without Authorization or the private test header; same-origin redirect requests retain the headers.
 - axe identifies an unnamed button and image with missing alt text.
 - A website 404 remains a recorded observation.

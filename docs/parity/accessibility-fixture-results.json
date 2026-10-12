@@ -1,0 +1,3695 @@
+{
+  "schema_version": 1,
+  "tested_at": "2026-10-12T07:30:35.692Z",
+  "axe_version": "4.14.0",
+  "browser_version": "154.0.8037.99",
+  "fixture_sha256": "c01510a6fe302b198794275f6f43d2f9f962dfc73abce50131b74629d6798a01",
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "scope": "Independent local browser→pinned axe rule fixture calibration. No original Screaming Frog JS rendering executed; vendor rule mapping and whole-product parity NOT_PROVEN.",
+  "counts": {
+    "PASS_PAIR": 79,
+    "INCOMPLETE_REVIEW_PAIR": 12,
+    "POSITIVE_NOT_CONFIRMED": 2,
+    "CONTROL_STILL_VIOLATES": 0
+  },
+  "checks": [
+    {
+      "filter_argument": "Accessibility:Accesskey Attribute Value Must Be Unique",
+      "proposed_axe_rule_id": "accesskeys",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "accesskeys",
+            "impact": "serious",
+            "tags": [
+              "cat.keyboard",
+              "best-practice"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "button:nth-child(2)"
+                ],
+                "failure_summary": "Fix all of the following:\n  Document has multiple elements with the same accesskey"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "accesskeys"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Ensure Elements Marked Presentational Are Ignored",
+      "proposed_axe_rule_id": "presentation-role-conflict",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "presentation-role-conflict",
+            "impact": "minor",
+            "tags": [
+              "cat.aria",
+              "best-practice",
+              "ACT"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "button"
+                ],
+                "failure_summary": "Fix all of the following:\n  Element is not focusable."
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": [
+          "presentation-role-conflict"
+        ]
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Elements Must Not Have Tabindex Greater Than Zero",
+      "proposed_axe_rule_id": "tabindex",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "tabindex",
+            "impact": "serious",
+            "tags": [
+              "cat.keyboard",
+              "best-practice"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "button"
+                ],
+                "failure_summary": "Fix any of the following:\n  Element has a tabindex greater than 0"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "tabindex"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Scrollable Region Requires Keyboard Access",
+      "proposed_axe_rule_id": "scrollable-region-focusable",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "scrollable-region-focusable",
+            "impact": "serious",
+            "tags": [
+              "cat.keyboard",
+              "wcag2a",
+              "wcag211",
+              "wcag213",
+              "TTv5",
+              "TT4.a",
+              "EN-301-549",
+              "EN-9.2.1.1",
+              "EN-9.2.1.3",
+              "RGAAv4",
+              "RGAA-7.3.2"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "div"
+                ],
+                "failure_summary": "Fix any of the following:\n  Element should have focusable content\n  Element should be focusable"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "scrollable-region-focusable"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Skip-link Target Should Exist & Be Focusable",
+      "proposed_axe_rule_id": "skip-link",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "skip-link",
+            "impact": "moderate",
+            "tags": [
+              "cat.keyboard",
+              "best-practice",
+              "RGAAv4",
+              "RGAA-12.7.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "a"
+                ],
+                "failure_summary": "Fix any of the following:\n  No skip link target"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "skip-link"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Required ARIA Attributes Must Be Provided",
+      "proposed_axe_rule_id": "aria-required-attr",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "aria-required-attr",
+            "impact": "critical",
+            "tags": [
+              "cat.aria",
+              "wcag2a",
+              "wcag412",
+              "EN-301-549",
+              "EN-9.4.1.2",
+              "RGAAv4",
+              "RGAA-7.1.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "div"
+                ],
+                "failure_summary": "Fix any of the following:\n  Required ARIA attribute not present: aria-checked"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "aria-required-attr"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Role=text Should Have No Focusable Descendants",
+      "proposed_axe_rule_id": "aria-text",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "aria-text",
+            "impact": "serious",
+            "tags": [
+              "cat.aria",
+              "best-practice"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "div"
+                ],
+                "failure_summary": "Fix any of the following:\n  Element has focusable descendants. Move them outside of the element, or remove them."
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "aria-text"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Attribute Must Be Used As Specified For Role",
+      "proposed_axe_rule_id": "aria-conditional-attr",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "aria-conditional-attr",
+            "impact": "serious",
+            "tags": [
+              "cat.aria",
+              "wcag2a",
+              "wcag412",
+              "EN-301-549",
+              "EN-9.4.1.2",
+              "RGAAv4",
+              "RGAA-7.1.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "input"
+                ],
+                "failure_summary": "Fix all of the following:\n  Remove aria-checked, or set it to \"false\" to match the real checkbox state"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "aria-conditional-attr"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Attributes Require Valid Values",
+      "proposed_axe_rule_id": "aria-valid-attr-value",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "aria-valid-attr-value",
+            "impact": "critical",
+            "tags": [
+              "cat.aria",
+              "wcag2a",
+              "wcag412",
+              "EN-301-549",
+              "EN-9.4.1.2",
+              "RGAAv4",
+              "RGAA-7.1.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "button"
+                ],
+                "failure_summary": "Fix all of the following:\n  Invalid ARIA attribute value: aria-expanded=\"nonsense\""
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "aria-valid-attr-value"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Attributes Require Valid Names",
+      "proposed_axe_rule_id": "aria-valid-attr",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "aria-valid-attr",
+            "impact": "critical",
+            "tags": [
+              "cat.aria",
+              "wcag2a",
+              "wcag412",
+              "EN-301-549",
+              "EN-9.4.1.2",
+              "RGAAv4",
+              "RGAA-7.1.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "button"
+                ],
+                "failure_summary": "Fix any of the following:\n  Invalid ARIA attribute name: aria-spelledwrong"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "aria-valid-attr"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Commands Require Accessible Name",
+      "proposed_axe_rule_id": "aria-command-name",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "aria-command-name",
+            "impact": "serious",
+            "tags": [
+              "cat.aria",
+              "wcag2a",
+              "wcag412",
+              "TTv5",
+              "TT6.a",
+              "EN-301-549",
+              "EN-9.4.1.2",
+              "ACT",
+              "RGAAv4",
+              "RGAA-11.9.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "div"
+                ],
+                "failure_summary": "Fix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "aria-command-name"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Dialog & Alertdialog Require Accessible Name",
+      "proposed_axe_rule_id": "aria-dialog-name",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "aria-dialog-name",
+            "impact": "serious",
+            "tags": [
+              "cat.aria",
+              "best-practice"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "div"
+                ],
+                "failure_summary": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "aria-dialog-name"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Input Fields Require Accessible Name",
+      "proposed_axe_rule_id": "aria-input-field-name",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "aria-input-field-name",
+            "impact": "serious",
+            "tags": [
+              "cat.aria",
+              "wcag2a",
+              "wcag412",
+              "TTv5",
+              "TT5.c",
+              "EN-301-549",
+              "EN-9.4.1.2",
+              "ACT",
+              "RGAAv4",
+              "RGAA-11.1.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "div"
+                ],
+                "failure_summary": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "aria-input-field-name"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Meter Nodes Require Accessible Name",
+      "proposed_axe_rule_id": "aria-meter-name",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "aria-meter-name",
+            "impact": "serious",
+            "tags": [
+              "cat.aria",
+              "wcag2a",
+              "wcag111",
+              "EN-301-549",
+              "EN-9.1.1.1",
+              "RGAAv4",
+              "RGAA-11.1.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "div"
+                ],
+                "failure_summary": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "aria-meter-name"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Progressbar Nodes Require Accessible Name",
+      "proposed_axe_rule_id": "aria-progressbar-name",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "aria-progressbar-name",
+            "impact": "serious",
+            "tags": [
+              "cat.aria",
+              "wcag2a",
+              "wcag111",
+              "EN-301-549",
+              "EN-9.1.1.1",
+              "RGAAv4",
+              "RGAA-11.1.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "div"
+                ],
+                "failure_summary": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "aria-progressbar-name"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Role Should Be Appropriate For Element",
+      "proposed_axe_rule_id": "aria-allowed-role",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "aria-allowed-role",
+            "impact": "minor",
+            "tags": [
+              "cat.aria",
+              "best-practice"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "input"
+                ],
+                "failure_summary": "Fix any of the following:\n  ARIA role heading is not allowed for given element"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": [
+          "aria-allowed-role"
+        ]
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Roles Must Be Contained By Required Parent",
+      "proposed_axe_rule_id": "aria-required-parent",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "aria-required-parent",
+            "impact": "critical",
+            "tags": [
+              "cat.aria",
+              "wcag2a",
+              "wcag131",
+              "EN-301-549",
+              "EN-9.1.3.1",
+              "RGAAv4",
+              "RGAA-9.3.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "div"
+                ],
+                "failure_summary": "Fix any of the following:\n  Required ARIA parent role not present: list"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "aria-required-parent"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Roles Require Valid Values",
+      "proposed_axe_rule_id": "aria-roles",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "aria-roles",
+            "impact": "critical",
+            "tags": [
+              "cat.aria",
+              "wcag2a",
+              "wcag412",
+              "EN-301-549",
+              "EN-9.4.1.2",
+              "RGAAv4",
+              "RGAA-7.1.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "div"
+                ],
+                "failure_summary": "Fix all of the following:\n  Role must be one of the valid ARIA roles: not-real-role"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "aria-roles"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Toggle Fields Require Accessible Name",
+      "proposed_axe_rule_id": "aria-toggle-field-name",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "aria-toggle-field-name",
+            "impact": "serious",
+            "tags": [
+              "cat.aria",
+              "wcag2a",
+              "wcag412",
+              "TTv5",
+              "TT5.c",
+              "EN-301-549",
+              "EN-9.4.1.2",
+              "ACT",
+              "RGAAv4",
+              "RGAA-7.1.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "div"
+                ],
+                "failure_summary": "Fix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "aria-toggle-field-name"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Tooltip Nodes Require Accessible Name",
+      "proposed_axe_rule_id": "aria-tooltip-name",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "aria-tooltip-name",
+            "impact": "serious",
+            "tags": [
+              "cat.aria",
+              "wcag2a",
+              "wcag412",
+              "EN-301-549",
+              "EN-9.4.1.2"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "div"
+                ],
+                "failure_summary": "Fix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "aria-tooltip-name"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:ARIA Treeitem Nodes Require Accessible Name",
+      "proposed_axe_rule_id": "aria-treeitem-name",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "aria-treeitem-name",
+            "impact": "serious",
+            "tags": [
+              "cat.aria",
+              "best-practice"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "div[role=\"treeitem\"]"
+                ],
+                "failure_summary": "Fix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "aria-treeitem-name"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Certain ARIA Roles Must Contain Specific Children",
+      "proposed_axe_rule_id": "aria-required-children",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "aria-required-children",
+            "impact": "critical",
+            "tags": [
+              "cat.aria",
+              "wcag2a",
+              "wcag131",
+              "EN-301-549",
+              "EN-9.1.3.1",
+              "RGAAv4",
+              "RGAA-9.3.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "div"
+                ],
+                "failure_summary": "Fix any of the following:\n  Required ARIA child role not present: listitem"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "aria-required-children"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Deprecated ARIA Roles Must Not Be Used",
+      "proposed_axe_rule_id": "aria-deprecated-role",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "aria-deprecated-role",
+            "impact": "minor",
+            "tags": [
+              "cat.aria",
+              "wcag2a",
+              "wcag412",
+              "EN-301-549",
+              "EN-9.4.1.2",
+              "RGAAv4",
+              "RGAA-7.1.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "div[role=\"directory\"]"
+                ],
+                "failure_summary": "Fix all of the following:\n  The role used is deprecated: directory"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [
+          "aria-deprecated-role"
+        ],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "aria-deprecated-role"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Aria-braille Require Non-braille Equivalent",
+      "proposed_axe_rule_id": "aria-braille-equivalent",
+      "fixture_status": "INCOMPLETE_REVIEW_PAIR",
+      "positive": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "aria-braille-equivalent",
+            "nodes": 1
+          }
+        ],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "aria-braille-equivalent"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Aria-hidden Elements Contains Focusable Elements",
+      "proposed_axe_rule_id": "aria-hidden-focus",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "aria-hidden-focus",
+            "impact": "serious",
+            "tags": [
+              "cat.name-role-value",
+              "wcag2a",
+              "wcag412",
+              "TTv5",
+              "TT6.a",
+              "EN-301-549",
+              "EN-9.4.1.2",
+              "RGAAv4",
+              "RGAA-10.8.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "div"
+                ],
+                "failure_summary": "Fix all of the following:\n  Focusable content should be disabled, be removed from the DOM, or not be hidden with aria-hidden"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "aria-hidden-focus"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Aria-hidden=true Must Not Be Used In <body>",
+      "proposed_axe_rule_id": "aria-hidden-body",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "aria-hidden-body",
+            "impact": "critical",
+            "tags": [
+              "cat.aria",
+              "wcag2a",
+              "wcag131",
+              "wcag412",
+              "EN-301-549",
+              "EN-9.1.3.1",
+              "EN-9.4.1.2",
+              "RGAAv4",
+              "RGAA-10.8.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "body"
+                ],
+                "failure_summary": "Fix any of the following:\n  aria-hidden=true should not be present on the document body"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "aria-hidden-body"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Elements Must Only Use Permitted ARIA Attributes",
+      "proposed_axe_rule_id": "aria-prohibited-attr",
+      "fixture_status": "INCOMPLETE_REVIEW_PAIR",
+      "positive": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "aria-prohibited-attr",
+            "nodes": 1
+          }
+        ],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": [
+          "aria-prohibited-attr"
+        ]
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Elements Must Use Allowed ARIA Attributes",
+      "proposed_axe_rule_id": "aria-allowed-attr",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "aria-allowed-attr",
+            "impact": "critical",
+            "tags": [
+              "cat.aria",
+              "wcag2a",
+              "wcag412",
+              "EN-301-549",
+              "EN-9.4.1.2",
+              "RGAAv4",
+              "RGAA-7.1.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "div"
+                ],
+                "failure_summary": "Fix all of the following:\n  ARIA attribute is not allowed: aria-selected=\"true\""
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "aria-allowed-attr"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:IDs Used In ARIA & Labels Must Be Unique",
+      "proposed_axe_rule_id": "duplicate-id-aria",
+      "fixture_status": "INCOMPLETE_REVIEW_PAIR",
+      "positive": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "duplicate-id-aria",
+            "nodes": 1
+          }
+        ],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "duplicate-id-aria"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Page Requires Means To Bypass Repeated Blocks",
+      "proposed_axe_rule_id": "bypass",
+      "fixture_status": "INCOMPLETE_REVIEW_PAIR",
+      "positive": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "bypass",
+            "nodes": 1
+          }
+        ],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": [
+          "bypass"
+        ]
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:All Page Content Must Be Contained By Landmarks",
+      "proposed_axe_rule_id": "region",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "region",
+            "impact": "moderate",
+            "tags": [
+              "cat.keyboard",
+              "best-practice",
+              "RGAAv4",
+              "RGAA-9.2.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "h1"
+                ],
+                "failure_summary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+              },
+              {
+                "target": [
+                  "p"
+                ],
+                "failure_summary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "region"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Page Requires One Main Landmark",
+      "proposed_axe_rule_id": "landmark-one-main",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "landmark-one-main",
+            "impact": "moderate",
+            "tags": [
+              "cat.semantics",
+              "best-practice"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "html"
+                ],
+                "failure_summary": "Fix all of the following:\n  Document does not have a main landmark"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "landmark-one-main"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Page Must Not Have More Than One Banner Landmark",
+      "proposed_axe_rule_id": "landmark-no-duplicate-banner",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "landmark-no-duplicate-banner",
+            "impact": "moderate",
+            "tags": [
+              "cat.semantics",
+              "best-practice"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "header:nth-child(2)"
+                ],
+                "failure_summary": "Fix any of the following:\n  Document has more than one banner landmark"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "landmark-no-duplicate-banner"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Banner Landmark Must Not Be In Another Landmark",
+      "proposed_axe_rule_id": "landmark-banner-is-top-level",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "landmark-banner-is-top-level",
+            "impact": "moderate",
+            "tags": [
+              "cat.semantics",
+              "best-practice"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "div[role=\"banner\"]"
+                ],
+                "failure_summary": "Fix any of the following:\n  The banner landmark is contained in another landmark."
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "landmark-banner-is-top-level"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Page Must Not Have Multiple Contentinfo Landmarks",
+      "proposed_axe_rule_id": "landmark-no-duplicate-contentinfo",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "landmark-no-duplicate-contentinfo",
+            "impact": "moderate",
+            "tags": [
+              "cat.semantics",
+              "best-practice"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "footer:nth-child(2)"
+                ],
+                "failure_summary": "Fix any of the following:\n  Document has more than one contentinfo landmark"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "landmark-no-duplicate-contentinfo"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Page Requires At Most One Main Landmark",
+      "proposed_axe_rule_id": "landmark-no-duplicate-main",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "landmark-no-duplicate-main",
+            "impact": "moderate",
+            "tags": [
+              "cat.semantics",
+              "best-practice"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "main:nth-child(2)"
+                ],
+                "failure_summary": "Fix any of the following:\n  Document has more than one main landmark"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "landmark-no-duplicate-main"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Complementary Landmarks & Asides Must Be Top Level",
+      "proposed_axe_rule_id": "landmark-complementary-is-top-level",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "landmark-complementary-is-top-level",
+            "impact": "moderate",
+            "tags": [
+              "cat.semantics",
+              "best-practice",
+              "deprecated"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "aside"
+                ],
+                "failure_summary": "Fix any of the following:\n  The null landmark is contained in another landmark."
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "landmark-complementary-is-top-level"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Contentinfo Landmark Must Be Top Level Landmark",
+      "proposed_axe_rule_id": "landmark-contentinfo-is-top-level",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "landmark-contentinfo-is-top-level",
+            "impact": "moderate",
+            "tags": [
+              "cat.semantics",
+              "best-practice"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "div"
+                ],
+                "failure_summary": "Fix any of the following:\n  The contentinfo landmark is contained in another landmark."
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "landmark-contentinfo-is-top-level"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Main Landmark Must Not Be In Another Landmark",
+      "proposed_axe_rule_id": "landmark-main-is-top-level",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "landmark-main-is-top-level",
+            "impact": "moderate",
+            "tags": [
+              "cat.semantics",
+              "best-practice"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "div"
+                ],
+                "failure_summary": "Fix any of the following:\n  The main landmark is contained in another landmark."
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [
+          "landmark-main-is-top-level"
+        ],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "landmark-main-is-top-level"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Landmarks Require Unique Role Or Accessible Name",
+      "proposed_axe_rule_id": "landmark-unique",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "landmark-unique",
+            "impact": "moderate",
+            "tags": [
+              "cat.semantics",
+              "best-practice"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "nav:nth-child(2)"
+                ],
+                "failure_summary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [
+          "landmark-unique"
+        ],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "landmark-unique"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Form <input> Elements Require Labels",
+      "proposed_axe_rule_id": "label",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "label",
+            "impact": "critical",
+            "tags": [
+              "cat.forms",
+              "wcag2a",
+              "wcag412",
+              "section508",
+              "section508.22.n",
+              "TTv5",
+              "TT5.c",
+              "EN-301-549",
+              "EN-9.4.1.2",
+              "ACT",
+              "RGAAv4",
+              "RGAA-11.1.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "input"
+                ],
+                "failure_summary": "Fix any of the following:\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element has no placeholder attribute\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "label"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Form Elements Should Have Visible Label",
+      "proposed_axe_rule_id": "label-title-only",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "label-title-only",
+            "impact": "serious",
+            "tags": [
+              "cat.forms",
+              "best-practice"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "input"
+                ],
+                "failure_summary": "Fix all of the following:\n  Only title used to generate label for form element"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "label-title-only"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Form Field Must Not Have Multiple Label Elements",
+      "proposed_axe_rule_id": "form-field-multiple-labels",
+      "fixture_status": "INCOMPLETE_REVIEW_PAIR",
+      "positive": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "form-field-multiple-labels",
+            "nodes": 1
+          }
+        ],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "form-field-multiple-labels"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Autocomplete Attribute Must Be Used Correctly",
+      "proposed_axe_rule_id": "autocomplete-valid",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "autocomplete-valid",
+            "impact": "serious",
+            "tags": [
+              "cat.forms",
+              "wcag21aa",
+              "wcag135",
+              "EN-301-549",
+              "EN-9.1.3.5",
+              "ACT",
+              "RGAAv4",
+              "RGAA-11.13.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "input"
+                ],
+                "failure_summary": "Fix all of the following:\n  the autocomplete attribute is incorrectly formatted"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "autocomplete-valid"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Frames Require Title Attribute",
+      "proposed_axe_rule_id": "frame-title",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "frame-title",
+            "impact": "serious",
+            "tags": [
+              "cat.text-alternatives",
+              "wcag2a",
+              "wcag412",
+              "section508",
+              "section508.22.i",
+              "TTv5",
+              "TT12.d",
+              "EN-301-549",
+              "EN-9.4.1.2",
+              "RGAAv4",
+              "RGAA-2.1.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "iframe"
+                ],
+                "failure_summary": "Fix any of the following:\n  Element has no title attribute\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "frame-title"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Frames Require Unique Title Attribute",
+      "proposed_axe_rule_id": "frame-title-unique",
+      "fixture_status": "INCOMPLETE_REVIEW_PAIR",
+      "positive": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "frame-title-unique",
+            "nodes": 2
+          }
+        ],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "frame-title-unique"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Frames Should Be Tested With axe-core",
+      "proposed_axe_rule_id": "frame-tested",
+      "fixture_status": "INCOMPLETE_REVIEW_PAIR",
+      "positive": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "frame-tested",
+            "nodes": 1
+          }
+        ],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": [
+          "frame-tested"
+        ]
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Frames With Focusable Content Must Not Use tabindex=-1",
+      "proposed_axe_rule_id": "frame-focusable-content",
+      "fixture_status": "POSITIVE_NOT_CONFIRMED",
+      "positive": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": [
+          "frame-focusable-content"
+        ]
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": [
+          "frame-focusable-content"
+        ]
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Page Must Contain <title>",
+      "proposed_axe_rule_id": "document-title",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "document-title",
+            "impact": "serious",
+            "tags": [
+              "cat.text-alternatives",
+              "wcag2a",
+              "wcag242",
+              "TTv5",
+              "TT12.a",
+              "EN-301-549",
+              "EN-9.2.4.2",
+              "ACT",
+              "RGAAv4",
+              "RGAA-8.5.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "html"
+                ],
+                "failure_summary": "Fix any of the following:\n  Document does not have a non-empty <title> element"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "document-title"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Page Must Contain <h1>",
+      "proposed_axe_rule_id": "page-has-heading-one",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "page-has-heading-one",
+            "impact": "moderate",
+            "tags": [
+              "cat.semantics",
+              "best-practice"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "html"
+                ],
+                "failure_summary": "Fix all of the following:\n  Page must have a level-one heading"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "page-has-heading-one"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Heading Levels Should Only Increase By One",
+      "proposed_axe_rule_id": "heading-order",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "heading-order",
+            "impact": "moderate",
+            "tags": [
+              "cat.semantics",
+              "best-practice"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "h3"
+                ],
+                "failure_summary": "Fix any of the following:\n  Heading order invalid"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [
+          "heading-order"
+        ],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "heading-order"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Headings Should Not Be Empty",
+      "proposed_axe_rule_id": "empty-heading",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "empty-heading",
+            "impact": "minor",
+            "tags": [
+              "cat.name-role-value",
+              "best-practice"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "h2"
+                ],
+                "failure_summary": "Fix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [
+          "empty-heading"
+        ],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "empty-heading"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Meta Viewport Should Allow Zoom & Scale Up to 500%",
+      "proposed_axe_rule_id": "meta-viewport-large",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "meta-viewport-large",
+            "impact": "minor",
+            "tags": [
+              "cat.sensory-and-visual-cues",
+              "best-practice"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "meta"
+                ],
+                "failure_summary": "Fix any of the following:\n  <meta> tag limits zooming on mobile devices"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "meta-viewport-large"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Meta Viewport Zoom & Scaling Disabled",
+      "proposed_axe_rule_id": "meta-viewport",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "tags": [
+              "cat.sensory-and-visual-cues",
+              "wcag2aa",
+              "wcag144",
+              "EN-301-549",
+              "EN-9.1.4.4",
+              "ACT",
+              "RGAAv4",
+              "RGAA-10.4.2"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "meta"
+                ],
+                "failure_summary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "meta-viewport"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:HTML Element Lang Attribute Value Must Be Valid",
+      "proposed_axe_rule_id": "html-lang-valid",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "html-lang-valid",
+            "impact": "serious",
+            "tags": [
+              "cat.language",
+              "wcag2a",
+              "wcag311",
+              "TTv5",
+              "TT11.a",
+              "EN-301-549",
+              "EN-9.3.1.1",
+              "ACT",
+              "RGAAv4",
+              "RGAA-8.4.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "html"
+                ],
+                "failure_summary": "Fix all of the following:\n  Value of lang attribute not included in the list of valid languages"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "html-lang-valid"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:HTML Element Requires Lang Attribute",
+      "proposed_axe_rule_id": "html-has-lang",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "html-has-lang",
+            "impact": "serious",
+            "tags": [
+              "cat.language",
+              "wcag2a",
+              "wcag311",
+              "TTv5",
+              "TT11.a",
+              "EN-301-549",
+              "EN-9.3.1.1",
+              "ACT",
+              "RGAAv4",
+              "RGAA-8.3.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "html"
+                ],
+                "failure_summary": "Fix any of the following:\n  The <html> element does not have a lang attribute"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "html-has-lang"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:HTML Lang & XML Lang Value Should Match",
+      "proposed_axe_rule_id": "html-xml-lang-mismatch",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "html-xml-lang-mismatch",
+            "impact": "moderate",
+            "tags": [
+              "cat.language",
+              "wcag2a",
+              "wcag311",
+              "EN-301-549",
+              "EN-9.3.1.1",
+              "ACT",
+              "RGAAv4",
+              "RGAA-8.3.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "html"
+                ],
+                "failure_summary": "Fix all of the following:\n  Lang and xml:lang attributes do not have the same base language"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "html-xml-lang-mismatch"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Lang Attribute Requires Valid Value",
+      "proposed_axe_rule_id": "valid-lang",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "valid-lang",
+            "impact": "serious",
+            "tags": [
+              "cat.language",
+              "wcag2aa",
+              "wcag312",
+              "TTv5",
+              "TT11.b",
+              "EN-301-549",
+              "EN-9.3.1.2",
+              "ACT",
+              "RGAAv4",
+              "RGAA-8.8.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "p"
+                ],
+                "failure_summary": "Fix all of the following:\n  Value of lang attribute not included in the list of valid languages"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "valid-lang"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Delayed Meta Refresh Must Not Be Used",
+      "proposed_axe_rule_id": "meta-refresh",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "meta-refresh",
+            "impact": "critical",
+            "tags": [
+              "cat.time-and-media",
+              "wcag2a",
+              "wcag221",
+              "TTv5",
+              "TT8.a",
+              "EN-301-549",
+              "EN-9.2.2.1",
+              "RGAAv4",
+              "RGAA-13.1.2"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "meta"
+                ],
+                "failure_summary": "Fix any of the following:\n  <meta> tag forces timed refresh of page (less than 20 hours)"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": [
+          "meta-refresh"
+        ]
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Timed Meta Refresh Must Not Exist",
+      "proposed_axe_rule_id": "meta-refresh-no-exceptions",
+      "fixture_status": "POSITIVE_NOT_CONFIRMED",
+      "positive": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "meta-refresh-no-exceptions"
+        ],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": [
+          "meta-refresh-no-exceptions"
+        ]
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Image Button Requires Alternate Text",
+      "proposed_axe_rule_id": "input-image-alt",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "input-image-alt",
+            "impact": "critical",
+            "tags": [
+              "cat.text-alternatives",
+              "wcag2a",
+              "wcag111",
+              "wcag412",
+              "section508",
+              "section508.22.a",
+              "TTv5",
+              "TT7.a",
+              "EN-301-549",
+              "EN-9.1.1.1",
+              "EN-9.4.1.2",
+              "ACT",
+              "RGAAv4",
+              "RGAA-1.1.3"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "input"
+                ],
+                "failure_summary": "Fix any of the following:\n  Element has no alt attribute\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "input-image-alt"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Images Require Alternate Text",
+      "proposed_axe_rule_id": "image-alt",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "image-alt",
+            "impact": "critical",
+            "tags": [
+              "cat.text-alternatives",
+              "wcag2a",
+              "wcag111",
+              "section508",
+              "section508.22.a",
+              "TTv5",
+              "TT7.a",
+              "TT7.b",
+              "EN-301-549",
+              "EN-9.1.1.1",
+              "ACT",
+              "RGAAv4",
+              "RGAA-1.1.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "img"
+                ],
+                "failure_summary": "Fix any of the following:\n  Element does not have an alt attribute\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "image-alt"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:<object> Elements Require Alternate Text",
+      "proposed_axe_rule_id": "object-alt",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "object-alt",
+            "impact": "serious",
+            "tags": [
+              "cat.text-alternatives",
+              "wcag2a",
+              "wcag111",
+              "section508",
+              "section508.22.a",
+              "EN-301-549",
+              "EN-9.1.1.1",
+              "RGAAv4",
+              "RGAA-1.1.6"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "object"
+                ],
+                "failure_summary": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "object-alt"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Active <area> Elements Require Alternate Text",
+      "proposed_axe_rule_id": "area-alt",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "area-alt",
+            "impact": "critical",
+            "tags": [
+              "cat.text-alternatives",
+              "wcag2a",
+              "wcag244",
+              "wcag412",
+              "section508",
+              "section508.22.a",
+              "TTv5",
+              "TT6.a",
+              "EN-301-549",
+              "EN-9.2.4.4",
+              "EN-9.4.1.2",
+              "ACT",
+              "RGAAv4",
+              "RGAA-1.1.2"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "area"
+                ],
+                "failure_summary": "Fix any of the following:\n  Element has no alt attribute\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "area-alt"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Alt Text Should Not Be Repeated As Text",
+      "proposed_axe_rule_id": "image-redundant-alt",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "image-redundant-alt",
+            "impact": "minor",
+            "tags": [
+              "cat.text-alternatives",
+              "best-practice"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "img"
+                ],
+                "failure_summary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "image-redundant-alt"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Elements Marked role=img Require Alternate Text",
+      "proposed_axe_rule_id": "role-img-alt",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "role-img-alt",
+            "impact": "serious",
+            "tags": [
+              "cat.text-alternatives",
+              "wcag2a",
+              "wcag111",
+              "section508",
+              "section508.22.a",
+              "TTv5",
+              "TT7.a",
+              "EN-301-549",
+              "EN-9.1.1.1",
+              "ACT",
+              "RGAAv4",
+              "RGAA-1.1.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "div"
+                ],
+                "failure_summary": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "role-img-alt"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:SVG Images & Graphics Require Accessible Text",
+      "proposed_axe_rule_id": "svg-img-alt",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "svg-img-alt",
+            "impact": "serious",
+            "tags": [
+              "cat.text-alternatives",
+              "wcag2a",
+              "wcag111",
+              "section508",
+              "section508.22.a",
+              "TTv5",
+              "TT7.a",
+              "EN-301-549",
+              "EN-9.1.1.1",
+              "ACT",
+              "RGAAv4",
+              "RGAA-1.1.5"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "svg"
+                ],
+                "failure_summary": "Fix any of the following:\n  Element has no child that is a title\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "svg-img-alt"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Server-Side Image Maps Must Not Be Used",
+      "proposed_axe_rule_id": "server-side-image-map",
+      "fixture_status": "INCOMPLETE_REVIEW_PAIR",
+      "positive": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "server-side-image-map",
+            "nodes": 1
+          }
+        ],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": [
+          "server-side-image-map"
+        ]
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:<video> Elements Require <track> For Captions",
+      "proposed_axe_rule_id": "video-caption",
+      "fixture_status": "INCOMPLETE_REVIEW_PAIR",
+      "positive": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "video-caption",
+            "nodes": 1
+          }
+        ],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "video-caption"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:<video> or <audio> Elements Must Not Auto-play",
+      "proposed_axe_rule_id": "no-autoplay-audio",
+      "fixture_status": "INCOMPLETE_REVIEW_PAIR",
+      "positive": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "no-autoplay-audio",
+            "nodes": 1
+          }
+        ],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": [
+          "no-autoplay-audio"
+        ]
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Buttons Require Discernible Text",
+      "proposed_axe_rule_id": "button-name",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "button-name",
+            "impact": "critical",
+            "tags": [
+              "cat.name-role-value",
+              "wcag2a",
+              "wcag412",
+              "section508",
+              "section508.22.a",
+              "TTv5",
+              "TT6.a",
+              "EN-301-549",
+              "EN-9.4.1.2",
+              "ACT",
+              "RGAAv4",
+              "RGAA-11.9.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "button"
+                ],
+                "failure_summary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "button-name"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Inline Text Spacing Must Be Adjustable",
+      "proposed_axe_rule_id": "avoid-inline-spacing",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "avoid-inline-spacing",
+            "impact": "serious",
+            "tags": [
+              "cat.structure",
+              "wcag21aa",
+              "wcag1412",
+              "EN-301-549",
+              "EN-9.1.4.12",
+              "ACT"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "p"
+                ],
+                "failure_summary": "Fix all of the following:\n  letter-spacing in the style attribute must not use !important, or be at 0.12em (current 0em)"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": [
+          "avoid-inline-spacing"
+        ]
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Input Buttons Require Discernible Text",
+      "proposed_axe_rule_id": "input-button-name",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "input-button-name",
+            "impact": "critical",
+            "tags": [
+              "cat.name-role-value",
+              "wcag2a",
+              "wcag412",
+              "section508",
+              "section508.22.a",
+              "TTv5",
+              "TT5.c",
+              "EN-301-549",
+              "EN-9.4.1.2",
+              "ACT",
+              "RGAAv4",
+              "RGAA-11.9.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "input"
+                ],
+                "failure_summary": "Fix any of the following:\n  Element has a value attribute and the value attribute is empty\n  Element has no value attribute\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "input-button-name"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Links Must Be Distinguishable",
+      "proposed_axe_rule_id": "link-in-text-block",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "link-in-text-block",
+            "impact": "serious",
+            "tags": [
+              "cat.color",
+              "wcag2a",
+              "wcag141",
+              "TTv5",
+              "TT13.a",
+              "EN-301-549",
+              "EN-9.1.4.1",
+              "RGAAv4",
+              "RGAA-10.6.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "a"
+                ],
+                "failure_summary": "Fix any of the following:\n  The link has insufficient color contrast of 1.11:1 with the surrounding text. (Minimum contrast is 3:1, link text: #111111, surrounding text: #000000)\n  The link has no styling (such as underline) to distinguish it from the surrounding text"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "link-in-text-block"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Links Require Discernible Text",
+      "proposed_axe_rule_id": "link-name",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "link-name",
+            "impact": "serious",
+            "tags": [
+              "cat.name-role-value",
+              "wcag2a",
+              "wcag244",
+              "wcag412",
+              "section508",
+              "section508.22.a",
+              "TTv5",
+              "TT6.a",
+              "EN-301-549",
+              "EN-9.2.4.4",
+              "EN-9.4.1.2",
+              "ACT",
+              "RGAAv4",
+              "RGAA-6.2.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "a"
+                ],
+                "failure_summary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "link-name"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Links With Same Accessible Name",
+      "proposed_axe_rule_id": "identical-links-same-purpose",
+      "fixture_status": "INCOMPLETE_REVIEW_PAIR",
+      "positive": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "identical-links-same-purpose",
+            "nodes": 1
+          }
+        ],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "identical-links-same-purpose"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Select Element Requires Accessible Name",
+      "proposed_axe_rule_id": "select-name",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "select-name",
+            "impact": "critical",
+            "tags": [
+              "cat.forms",
+              "wcag2a",
+              "wcag412",
+              "section508",
+              "section508.22.n",
+              "TTv5",
+              "TT5.c",
+              "EN-301-549",
+              "EN-9.4.1.2",
+              "ACT",
+              "RGAAv4",
+              "RGAA-11.1.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "select"
+                ],
+                "failure_summary": "Fix any of the following:\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "select-name"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Summary Elements Require Discernible Text",
+      "proposed_axe_rule_id": "summary-name",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "summary-name",
+            "impact": "serious",
+            "tags": [
+              "cat.name-role-value",
+              "wcag2a",
+              "wcag412",
+              "section508",
+              "section508.22.a",
+              "TTv5",
+              "TT6.a",
+              "EN-301-549",
+              "EN-9.4.1.2"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "summary"
+                ],
+                "failure_summary": "Fix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "summary-name"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Deprecated <marquee> Element Must Not Be Used",
+      "proposed_axe_rule_id": "marquee",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "marquee",
+            "impact": "serious",
+            "tags": [
+              "cat.parsing",
+              "wcag2a",
+              "wcag222",
+              "TTv5",
+              "TT2.b",
+              "EN-301-549",
+              "EN-9.2.2.2",
+              "RGAAv4",
+              "RGAA-13.8.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "marquee"
+                ],
+                "failure_summary": "Fix all of the following:\n  Element is visible"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": [
+          "marquee"
+        ]
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:<blink> Elements Deprecated & Must Not Be Used",
+      "proposed_axe_rule_id": "blink",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "blink",
+            "impact": "serious",
+            "tags": [
+              "cat.time-and-media",
+              "wcag2a",
+              "wcag222",
+              "section508",
+              "section508.22.j",
+              "TTv5",
+              "TT2.b",
+              "EN-301-549",
+              "EN-9.2.2.2",
+              "RGAAv4",
+              "RGAA-13.8.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "blink"
+                ],
+                "failure_summary": "Fix all of the following:\n  Element is visible"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": [
+          "blink"
+        ]
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Text Requires Higher Color Contrast Ratio",
+      "proposed_axe_rule_id": "color-contrast-enhanced",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "color-contrast-enhanced",
+            "impact": "serious",
+            "tags": [
+              "cat.color",
+              "wcag2aaa",
+              "wcag146",
+              "ACT"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "p"
+                ],
+                "failure_summary": "Fix any of the following:\n  Element has insufficient color contrast of 5.74 (foreground color: #666666, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 7:1"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [
+          "color-contrast-enhanced"
+        ],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "color-contrast-enhanced"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Text Requires Higher Color Contrast to Background",
+      "proposed_axe_rule_id": "color-contrast",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "tags": [
+              "cat.color",
+              "wcag2aa",
+              "wcag143",
+              "TTv5",
+              "TT13.c",
+              "EN-301-549",
+              "EN-9.1.4.3",
+              "ACT",
+              "RGAAv4",
+              "RGAA-3.2.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "p"
+                ],
+                "failure_summary": "Fix any of the following:\n  Element has insufficient color contrast of 2.32 (foreground color: #aaaaaa, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [
+          "color-contrast"
+        ],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "color-contrast"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Touch Targets Require Sufficient Size & Spacing",
+      "proposed_axe_rule_id": "target-size",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "target-size",
+            "impact": "serious",
+            "tags": [
+              "cat.sensory-and-visual-cues",
+              "wcag22aa",
+              "wcag258",
+              "EN-301-549v4",
+              "EN-9.2.5.8"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "button:nth-child(2)"
+                ],
+                "failure_summary": "Fix any of the following:\n  Target has insufficient size (10px by 10px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 0px instead of at least 24px."
+              },
+              {
+                "target": [
+                  "button:nth-child(3)"
+                ],
+                "failure_summary": "Fix any of the following:\n  Target has insufficient size (10px by 10px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 0px instead of at least 24px."
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "target-size"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Interactive Controls Must Not Be Nested",
+      "proposed_axe_rule_id": "nested-interactive",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "nested-interactive",
+            "impact": "serious",
+            "tags": [
+              "cat.keyboard",
+              "wcag2a",
+              "wcag412",
+              "TTv5",
+              "TT6.a",
+              "EN-301-549",
+              "EN-9.4.1.2",
+              "RGAAv4",
+              "RGAA-7.1.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "button"
+                ],
+                "failure_summary": "Fix any of the following:\n  Element has focusable descendants. Move them outside of the element, or remove them."
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "nested-interactive"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:List Items Must Be Contained In List Elements",
+      "proposed_axe_rule_id": "listitem",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "listitem",
+            "impact": "serious",
+            "tags": [
+              "cat.structure",
+              "wcag2a",
+              "wcag131",
+              "EN-301-549",
+              "EN-9.1.3.1",
+              "RGAAv4",
+              "RGAA-9.3.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "li"
+                ],
+                "failure_summary": "Fix any of the following:\n  List item does not have a <ul> or <ol> parent element. Ensure the <li> is a direct child of a <ul> or <ol>, or that the parent has role=\"list\"."
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "listitem"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Lists Must Only Contain <li> Content Elements",
+      "proposed_axe_rule_id": "list",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "list",
+            "impact": "serious",
+            "tags": [
+              "cat.structure",
+              "wcag2a",
+              "wcag131",
+              "EN-301-549",
+              "EN-9.1.3.1",
+              "RGAAv4",
+              "RGAA-9.3.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "ul"
+                ],
+                "failure_summary": "Fix all of the following:\n  List element has direct children that are not allowed: div"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "list"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:<dl> Must Only Have Ordered <dt> & <dd> Groups",
+      "proposed_axe_rule_id": "definition-list",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "definition-list",
+            "impact": "serious",
+            "tags": [
+              "cat.structure",
+              "wcag2a",
+              "wcag131",
+              "EN-301-549",
+              "EN-9.1.3.1",
+              "RGAAv4",
+              "RGAA-9.3.3"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "dl"
+                ],
+                "failure_summary": "Fix all of the following:\n  When not empty, element does not have at least one <dt> element followed by at least one <dd> element"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "definition-list"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:<dt> & <dd> Elements Must Be Contained by <dl>",
+      "proposed_axe_rule_id": "dlitem",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "dlitem",
+            "impact": "serious",
+            "tags": [
+              "cat.structure",
+              "wcag2a",
+              "wcag131",
+              "EN-301-549",
+              "EN-9.1.3.1",
+              "RGAAv4",
+              "RGAA-9.3.3"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "dt"
+                ],
+                "failure_summary": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+              },
+              {
+                "target": [
+                  "dd"
+                ],
+                "failure_summary": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "dlitem"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:<th> Element Requires Associated Data Cells",
+      "proposed_axe_rule_id": "th-has-data-cells",
+      "fixture_status": "INCOMPLETE_REVIEW_PAIR",
+      "positive": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "th-has-data-cells",
+            "nodes": 1
+          }
+        ],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "th-has-data-cells"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Table Header Attr Must Refer To Cell In Same Table",
+      "proposed_axe_rule_id": "td-headers-attr",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "td-headers-attr",
+            "impact": "serious",
+            "tags": [
+              "cat.tables",
+              "wcag2a",
+              "wcag131",
+              "section508",
+              "section508.22.g",
+              "TTv5",
+              "TT14.b",
+              "EN-301-549",
+              "EN-9.1.3.1",
+              "RGAAv4",
+              "RGAA-5.7.4"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "table"
+                ],
+                "failure_summary": "Fix all of the following:\n  The headers attribute is not exclusively used to refer to other header cells in the table"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "td-headers-attr"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Table Headers Require Discernible Text",
+      "proposed_axe_rule_id": "empty-table-header",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "empty-table-header",
+            "impact": "minor",
+            "tags": [
+              "cat.name-role-value",
+              "best-practice"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "th"
+                ],
+                "failure_summary": "Fix any of the following:\n  Element does not have text that is visible to screen readers"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "empty-table-header"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Table With Identical Summary & Caption Text",
+      "proposed_axe_rule_id": "table-duplicate-name",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "table-duplicate-name",
+            "impact": "minor",
+            "tags": [
+              "cat.tables",
+              "best-practice",
+              "RGAAv4",
+              "RGAA-5.2.1"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "table"
+                ],
+                "failure_summary": "Fix all of the following:\n  Content of summary attribute and <caption> element are identical"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "table-duplicate-name"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    },
+    {
+      "filter_argument": "Accessibility:Scope Attribute Should Be Used Correctly On Tables",
+      "proposed_axe_rule_id": "scope-attr-valid",
+      "fixture_status": "PASS_PAIR",
+      "positive": {
+        "violations": [
+          {
+            "id": "scope-attr-valid",
+            "impact": "moderate",
+            "tags": [
+              "cat.tables",
+              "best-practice"
+            ],
+            "nodes": [
+              {
+                "target": [
+                  "th"
+                ],
+                "failure_summary": "Fix all of the following:\n  The value of the scope attribute may only be 'row' or 'col'"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [],
+        "inapplicable": []
+      },
+      "negative": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          "scope-attr-valid"
+        ],
+        "inapplicable": []
+      },
+      "vendor_mapping": "NOT_PROVEN"
+    }
+  ]
+}

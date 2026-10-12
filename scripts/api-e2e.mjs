@@ -70,9 +70,14 @@ try {
   assert(issues.issues.some(issue => issue.code === 'broken_outlinks'));
   const analysis = await call(`/api/crawls/${job.id}/analysis`);
   assert(analysis.graph.nodes.length > 500);
-  for (const endpoint of ['export.csv', 'issues.csv', 'links.csv', 'extractions.csv', 'sitemap.xml', 'project.json']) {
+  for (const endpoint of ['export.csv', 'issues.csv', 'links.csv', 'extractions.csv', 'javascript.csv', 'cookies.csv', 'sitemap.xml', 'project.json']) {
     const response = await fetch(`${api}/api/crawls/${job.id}/${endpoint}`);
-    assert.equal(response.status, 200); assert((await response.text()).length > 100);
+    assert.equal(response.status, 200);
+    const contents = await response.text();
+    assert(contents.length > 0);
+    if (endpoint === 'javascript.csv') assert(contents.startsWith('URL,Script Name,Value Type,Value JSON,Error,Elapsed ms'));
+    else if (endpoint === 'cookies.csv') assert(contents.startsWith('URL,Name,Domain,Path,Expires,HTTP Only,Secure,Same Site,Value Length'));
+    else assert(contents.length > 100);
   }
   const snapshot = await call(`/api/crawls/${job.id}/project.json`);
   const imported = await post('/api/crawls/import', snapshot);
@@ -103,7 +108,7 @@ try {
   assert.equal(resumed.stats.fetched, 725);
   assert.equal(requests.get('/slow'), 1, 'completed seed must survive process restart');
   assert.equal((await status(job.id)).stats.fetched, 604);
-  const evidence = { tested_at: new Date().toISOString(), platform: process.platform, assertions: ['604 URL HTTP/API crawl', 'robots excluded target', 'redirect initial/final status', 'graph and issue API', 'named CSS extraction and all six export endpoints', 'JSON import and snapshot comparison', 'cancel and resume', 'failed resume manifest write retains cancelled state and snapshot', 'process termination and SQLite frontier recovery', 'host/origin protection'], result: 'PASS' };
+  const evidence = { tested_at: new Date().toISOString(), platform: process.platform, assertions: ['604 URL HTTP/API crawl', 'robots excluded target', 'redirect initial/final status', 'graph and issue API', 'named CSS extraction and all eight export endpoints including empty script/cookie headers', 'JSON import and snapshot comparison', 'cancel and resume', 'failed resume manifest write retains cancelled state and snapshot', 'process termination and SQLite frontier recovery', 'host/origin protection'], result: 'PASS' };
   console.log(JSON.stringify(evidence, null, 2));
   if (process.env.SPIDER_EVIDENCE) { await mkdir(path.dirname(process.env.SPIDER_EVIDENCE), { recursive: true }); await writeFile(process.env.SPIDER_EVIDENCE, JSON.stringify(evidence, null, 2) + '\n'); }
 } finally {

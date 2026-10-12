@@ -10,6 +10,8 @@ import axe from 'axe-core';
 const MAX_BODY_BYTES = 1024 * 1024;
 const MAX_HTML_BYTES = 20 * 1024 * 1024;
 const MAX_EVENTS = 10000;
+const MAX_SCRIPT_RESULT_BYTES = 65536;
+const SCRIPT_TIMEOUT_MS = 2000;
 const DEFAULT_USER_AGENT = 'OpenSEOSpider/0.1 (+local Chromium SEO audit)';
 const HEADER_NAME = /^[!#$%&'*+.^_`|~0-9A-Za-z-]+$/;
 const FORBIDDEN_HEADERS = new Set(['host', 'cookie', 'content-length', 'connection',
@@ -66,20 +68,76 @@ export function validateRenderRequest(input) {
   }
   if (headerBytes > 32768) throw new WorkerError(400, 'invalid_headers', 'Custom headers exceed 32768 bytes');
   const flags = {};
-  for (const name of ['screenshot', 'accessibility']) {
+  for (const name of ['screenshot', 'accessibility', 'collect_cookies']) {
     if (input[name] !== undefined && typeof input[name] !== 'boolean') {
       throw new WorkerError(400, 'invalid_request', `${name} must be a boolean`);
     }
     flags[name] = input[name] === true;
   }
+  const customJavascript = input.custom_javascript ?? [];
+  if (!Array.isArray(customJavascript) || customJavascript.length > 32) {
+    throw new WorkerError(400, 'invalid_request', 'custom_javascript must be an array with at most 32 entries');
+  }
+  const scriptNames = new Set(); let scriptBytes = 0;
+  const scripts = customJavascript.map((entry) => {
+    if (!entry || typeof entry !== 'object' || Array.isArray(entry)
+        || typeof entry.name !== 'string' || !entry.name.trim()
+        || Buffer.byteLength(entry.name.trim()) > 128 || /[\x00-\x1f\x7f]/.test(entry.name)
+        || typeof entry.script !== 'string' || !entry.script.trim()
+        || Buffer.byteLength(entry.script) > 65536) {
+      throw new WorkerError(400, 'invalid_request', 'Each JavaScript entry needs a name up to 128 bytes and a nonempty script up to 65536 bytes');
+    }
+    const name = entry.name.trim();
+    if (scriptNames.has(name)) throw new WorkerError(400, 'invalid_request', 'JavaScript names must be unique');
+    scriptNames.add(name); scriptBytes += Buffer.byteLength(entry.script);
+    if (scriptBytes > 262144) throw new WorkerError(400, 'invalid_request', 'JavaScript source exceeds 262144 bytes');
+    return { name, script: entry.script };
+  });
   const viewport = input.viewport ?? { width: 1280, height: 800 };
   if (!viewport || typeof viewport !== 'object' || Array.isArray(viewport)) {
     throw new WorkerError(400, 'invalid_request', 'viewport must contain integer width and height');
   }
   return { url: url.href, origin: url.origin, user_agent: userAgent,
-    timeout_ms: timeout, wait_ms: wait, custom_headers: headers, ...flags,
+    timeout_ms: timeout, wait_ms: wait, custom_headers: headers, custom_javascript: scripts, ...flags,
     viewport: { width: boundedInteger(viewport.width, 1280, 100, 4096, 'viewport.width'),
       height: boundedInteger(viewport.height, 800, 100, 4096, 'viewport.height') } };
+}
+
+// This code is an explicitly configured browser function body. It never runs
+// in Node or shares a filesystem/runtime with the worker process.
+async function evaluateCustomJavascript(page, definitions) {
+  if (!definitions.length) return [];
+  const session = await page.context().newCDPSession(page);
+  const results = [];
+  try {
+    for (const definition of definitions) {
+      const started = Date.now(); let timer;
+      try {
+        const expression = `(async()=>{const value=await(async()=>{\n${definition.script}\n})();
+          const value_type=value===null?'null':typeof value;
+          if(value_type==='function'||value_type==='symbol'||value_type==='bigint'
+             ||(value_type==='number'&&!Number.isFinite(value)))throw new Error('Result must be JSON-compatible');
+          return {serialized:JSON.stringify(value)??'null',value_type};})()`;
+        const output = await Promise.race([
+          page.evaluate(expression),
+          new Promise((_, reject) => { timer = setTimeout(() => reject(new WorkerError(504, 'custom_javascript_timeout', `JavaScript ${definition.name} exceeded ${SCRIPT_TIMEOUT_MS} ms`)), SCRIPT_TIMEOUT_MS); })
+        ]);
+        if (Buffer.byteLength(output.serialized) > MAX_SCRIPT_RESULT_BYTES) throw new Error('JavaScript result exceeds 65536 bytes');
+        results.push({ name: definition.name, value: JSON.parse(output.serialized), value_type: output.value_type,
+          error: null, elapsed_ms: Date.now() - started });
+      } catch (error) {
+        if (error instanceof WorkerError && error.code === 'custom_javascript_timeout') {
+          // A CPU loop must be terminated before context cleanup; a timeout
+          // invalidates the rendered observation instead of claiming success.
+          await session.send('Runtime.terminateExecution').catch(() => {});
+          throw error;
+        }
+        results.push({ name: definition.name, value: null, value_type: null,
+          error: String(error.message).slice(0, 8192), elapsed_ms: Date.now() - started });
+      } finally { clearTimeout(timer); }
+    }
+  } finally { await session.detach().catch(() => {}); }
+  return results;
 }
 
 export async function findBrowserExecutable(env = process.env, platform = process.platform) {
@@ -245,6 +303,7 @@ class BrowserRenderer {
       page.on('requestfailed', request => { const record = requests.get(request); if (record) record.error = request.failure()?.errorText ?? 'Request failed'; });
       await page.goto(options.url, { waitUntil: 'domcontentloaded', timeout: options.timeout_ms });
       if (options.wait_ms) await delay(options.wait_ms, undefined, { signal: waitController.signal });
+      const customJavascriptResults = await evaluateCustomJavascript(page, options.custom_javascript);
       const finalUrl = page.url();
       if (!['http:', 'https:'].includes(new URL(finalUrl).protocol)) {
         throw new WorkerError(502, 'unsupported_navigation', 'Rendered page left HTTP(S) URL space');
@@ -257,7 +316,9 @@ class BrowserRenderer {
         title: await page.title(), console_errors: consoleErrors,
         network_requests: [...requests.values()], network_events_dropped: droppedEvents,
         rendered_at: new Date().toISOString(), browser_version: browser.version(),
-        viewport: options.viewport, render_wait_ms: options.wait_ms };
+        viewport: options.viewport, render_wait_ms: options.wait_ms,
+        custom_javascript_results: customJavascriptResults,
+        browser_cookies: options.collect_cookies ? (await context.cookies()).map(({ value, ...cookie }) => ({ ...cookie, value_length: Buffer.byteLength(value) })) : [] };
       if (options.screenshot) {
         result.screenshot_base64 = (await page.screenshot({ type: 'png', fullPage: false, timeout: options.timeout_ms })).toString('base64');
         result.screenshot_mime_type = 'image/png';

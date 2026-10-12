@@ -1,8 +1,258 @@
 use open_seo_spider_core::{
-    CrawlConfig, CrawlEvent, CrawlStore, Crawler, CustomExtractionConfig, RendererConfig,
-    compare_crawls, export_custom_extractions_csv, export_links_csv, export_pages_csv,
-    export_sitemap_xml,
+    CrawlConfig, CrawlEvent, CrawlStore, Crawler, CustomExtractionConfig, ExtractionMethod,
+    RendererConfig, compare_crawls, export_custom_extractions_csv, export_links_csv,
+    export_pages_csv, export_sitemap_xml,
 };
+
+#[tokio::test]
+async fn http_link_metadata_uses_response_base_and_preserves_non_document_context() {
+    let fixture = Fixture::new(|origin, path| match path {
+        "/robots.txt" => (404, vec![], String::new()),
+        "/canonical.pdf" => (200, vec![("Content-Type".into(), "application/pdf".into()), ("Link".into(), format!("<{origin}/canonical.pdf>; rel=canonical"))], "%PDF-fixture".into()),
+        _ => (200, vec![
+            ("Content-Type".into(), "text/html".into()),
+            ("Link".into(), "</canonical.pdf>; rel=CANONICAL; title=\"PDF, title; safe\"; rel=next".into()),
+            ("Link".into(), "<next?page=1,2>; rel=next, </previous>; rel=prev, </de>; rel=alternate; hreflang=de; hreflang=en, </wrong>; rel=canonical; anchor=/another-document".into()),
+        ], "<html><head><base href='/assets/'><title>Start</title><link rel='canonical' href='../canonical.pdf'><link rel='NEXT' href='html-next'><link rel='amphtml' href='../amp'><link rel='alternate' href='https://m.example.org/page' media='only screen and (max-width: 640px)'></head><body><h1>Start</h1><a rel='prev' href='html-previous'>Previous</a></body></html>".into()),
+    }).await;
+    let mut options = config(fixture.url("/start"));
+    options.seed_urls.push(fixture.url("/canonical.pdf"));
+    options.crawl_links = false;
+    let report = Crawler::new(options)
+        .unwrap()
+        .run(None, cancel())
+        .await
+        .unwrap();
+    let page = report
+        .pages
+        .iter()
+        .find(|page| page.url.ends_with("/start"))
+        .unwrap();
+    assert_eq!(page.header_link_values.len(), 2);
+    assert!(page.headers["link"].contains("another-document"));
+    assert_eq!(page.canonical, vec![fixture.url("/canonical.pdf")]);
+    assert_eq!(page.html_canonical, page.header_canonical);
+    assert_eq!(
+        page.pagination_next,
+        vec![
+            fixture.url("/next?page=1,2"),
+            fixture.url("/assets/html-next")
+        ]
+    );
+    assert_eq!(
+        page.pagination_prev,
+        vec![
+            fixture.url("/previous"),
+            fixture.url("/assets/html-previous")
+        ]
+    );
+    assert_eq!(page.amphtml, vec![fixture.url("/amp")]);
+    assert_eq!(page.header_hreflang.len(), 2);
+    assert!(
+        page.link_relationships
+            .iter()
+            .any(|relationship| relationship.media.as_deref()
+                == Some("only screen and (max-width: 640px)"))
+    );
+    assert!(
+        page.link_relationships
+            .iter()
+            .any(|relationship| relationship.url.ends_with("/wrong")
+                && !relationship.applies_to_document)
+    );
+    assert!(!page.canonical.iter().any(|url| url.ends_with("/wrong")));
+    let pdf = report
+        .pages
+        .iter()
+        .find(|page| page.url.ends_with("/canonical.pdf"))
+        .unwrap();
+    assert!(pdf.indexable);
+    assert!(
+        !report
+            .issues
+            .iter()
+            .any(|issue| issue.code == "canonical_nonindexable")
+    );
+    assert_eq!(fixture.count("/next?page=1,2"), 0);
+}
+
+#[tokio::test]
+async fn robot_agent_scopes_combine_restrictively_without_cross_bot_noindex() {
+    let fixture = Fixture::new(|_, path| match path {
+        "/robots.txt" => (404, vec![], String::new()),
+        "/google-blocked" => html("<html><head><title>Blocked</title><meta name='ROBOTS' content='index, follow'><meta name='GoogleBot' content='NOINDEX'></head><body><h1>Blocked</h1></body></html>"),
+        _ => (200, vec![("Content-Type".into(), "text/html".into()), ("X-Robots-Tag".into(), "BingBot: noindex, nofollow".into()), ("X-Robots-Tag".into(), "index, follow, max-snippet:50".into())], "<html><head><title>Allowed</title><meta name='robots' content='index, follow'><meta name='googlebot-news' content='noindex'></head><body><h1>Allowed</h1></body></html>".into()),
+    }).await;
+    let mut options = config(fixture.url("/allowed"));
+    options.seed_urls.push(fixture.url("/google-blocked"));
+    options.crawl_links = false;
+    let google = Crawler::new(options)
+        .unwrap()
+        .run(None, cancel())
+        .await
+        .unwrap();
+    let allowed = google
+        .pages
+        .iter()
+        .find(|page| page.url.ends_with("/allowed"))
+        .unwrap();
+    assert_eq!(allowed.indexability_agent, "googlebot");
+    assert!(allowed.indexable);
+    assert_eq!(allowed.x_robots_tag.len(), 2);
+    assert!(
+        !allowed
+            .effective_robots
+            .iter()
+            .any(|directive| directive == "noindex")
+    );
+    assert!(
+        allowed
+            .robots_directives
+            .iter()
+            .any(|rule| rule.agent.as_deref() == Some("googlebot-news"))
+    );
+    let blocked = google
+        .pages
+        .iter()
+        .find(|page| page.url.ends_with("/google-blocked"))
+        .unwrap();
+    assert!(!blocked.indexable);
+    assert!(
+        blocked
+            .effective_robots
+            .iter()
+            .any(|directive| directive == "noindex")
+    );
+    assert!(
+        !blocked
+            .effective_robots
+            .iter()
+            .any(|directive| directive == "index")
+    );
+    let mut options = config(fixture.url("/allowed"));
+    options.crawl_links = false;
+    options.indexability_agent = "BINGBOT".into();
+    let bing = Crawler::new(options)
+        .unwrap()
+        .run(None, cancel())
+        .await
+        .unwrap();
+    assert!(!bing.pages[0].indexable);
+    assert!(bing.pages[0].effective_robots.contains(&"nofollow".into()));
+}
+
+#[tokio::test]
+async fn rendered_navigation_uses_new_document_headers_and_retains_raw_predecessor_facts() {
+    let native = Fixture::new(|origin, path| match path {
+        "/robots.txt" => (404, vec![], String::new()),
+        _ => (
+            200,
+            vec![
+                ("Content-Type".into(), "text/html".into()),
+                ("Link".into(), format!("<{origin}/>; rel=canonical")),
+                ("X-Robots-Tag".into(), "noindex".into()),
+            ],
+            "<html><head><title>Predecessor</title></head><body><h1>Native</h1></body></html>"
+                .into(),
+        ),
+    })
+    .await;
+    let rendered_url = native.url("/javascript-target");
+    let document = serde_json::json!({"html":"<html><head><title>Destination</title><link rel='canonical' href='/javascript-target'></head><body><h1>Destination</h1></body></html>","final_url":rendered_url,"status":200,"headers":{"link":"</javascript-target>; rel=canonical","x-robots-tag":"index, follow"}}).to_string();
+    let worker = Fixture::new(move |_, _| {
+        (
+            200,
+            vec![("Content-Type".into(), "application/json".into())],
+            document.clone(),
+        )
+    })
+    .await;
+    let mut options = config(native.url("/"));
+    options.crawl_links = false;
+    options.renderer = Some(RendererConfig {
+        endpoint: worker.url("/render"),
+        ..Default::default()
+    });
+    let report = Crawler::new(options)
+        .unwrap()
+        .run(None, cancel())
+        .await
+        .unwrap();
+    let page = &report.pages[0];
+    assert!(page.rendered);
+    assert!(page.indexable);
+    assert_eq!(page.document_url(), native.url("/javascript-target"));
+    assert_eq!(page.canonical, vec![native.url("/javascript-target")]);
+    assert!(
+        page.link_relationships
+            .iter()
+            .any(|relationship| relationship.source == "rendered_http_header")
+    );
+    let raw = page.raw_metadata.as_ref().unwrap();
+    assert_eq!(raw.header_canonical, vec![native.url("/")]);
+    assert!(raw.effective_robots.contains(&"noindex".into()));
+    assert_eq!(page.headers["x-robots-tag"], "noindex");
+    assert!(!page.effective_robots.contains(&"noindex".into()));
+}
+
+#[test]
+fn custom_javascript_worker_constraints_are_validated_before_any_crawl() {
+    use open_seo_spider_core::CustomJavaScriptConfig;
+    for definitions in [
+        vec![CustomJavaScriptConfig {
+            name: "".into(),
+            script: "return 1".into(),
+        }],
+        vec![CustomJavaScriptConfig {
+            name: "x".into(),
+            script: " ".into(),
+        }],
+        vec![CustomJavaScriptConfig {
+            name: "x".into(),
+            script: "x".repeat(65537),
+        }],
+        vec![
+            CustomJavaScriptConfig {
+                name: "x".into(),
+                script: "return 1".into()
+            };
+            33
+        ],
+        vec![
+            CustomJavaScriptConfig {
+                name: "x".into(),
+                script: "return 1".into(),
+            },
+            CustomJavaScriptConfig {
+                name: " x ".into(),
+                script: "return 2".into(),
+            },
+        ],
+        (0..5)
+            .map(|index| CustomJavaScriptConfig {
+                name: index.to_string(),
+                script: "x".repeat(65536),
+            })
+            .collect(),
+    ] {
+        let mut options = config("https://example.org/".into());
+        options.renderer = Some(RendererConfig {
+            custom_javascript: definitions,
+            ..Default::default()
+        });
+        assert!(Crawler::new(options).is_err());
+    }
+    let mut options = config("https://example.org/".into());
+    options.renderer = Some(RendererConfig {
+        collect_cookies: true,
+        custom_javascript: vec![CustomJavaScriptConfig {
+            name: "Metadata".into(),
+            script: "return document.title".into(),
+        }],
+        ..Default::default()
+    });
+    assert!(Crawler::new(options).is_ok());
+}
 use std::{
     collections::HashMap,
     sync::{
@@ -558,11 +808,26 @@ async fn renderer_replaces_dom_metadata_and_retains_native_evidence() {
         screenshot: true,
         ..Default::default()
     });
-    options.custom_extractions = vec![CustomExtractionConfig {
-        name: "Headings".into(),
-        selector: "h1".into(),
-        attribute: None,
-    }];
+    options.custom_extractions = vec![
+        CustomExtractionConfig {
+            name: "Headings".into(),
+            selector: "h1".into(),
+            ..Default::default()
+        },
+        CustomExtractionConfig {
+            name: "XPath headings".into(),
+            selector: "//h1/text()".into(),
+            method: ExtractionMethod::XPath,
+            ..Default::default()
+        },
+        CustomExtractionConfig {
+            name: "Regex headings".into(),
+            selector: "<h1>([^<]+)</h1>".into(),
+            method: ExtractionMethod::Regex,
+            regex_group: Some(1),
+            ..Default::default()
+        },
+    ];
     let report = Crawler::new(options)
         .unwrap()
         .run(None, cancel())
@@ -578,6 +843,23 @@ async fn renderer_replaces_dom_metadata_and_retains_native_evidence() {
     );
     assert_eq!(page.custom_extractions[0].values, vec!["Rendered heading"]);
     assert_eq!(page.custom_extractions[0].source, "rendered_html");
+    for (raw, rendered) in page
+        .raw_metadata
+        .as_ref()
+        .unwrap()
+        .custom_extractions
+        .iter()
+        .zip(&page.custom_extractions)
+    {
+        assert_eq!(raw.values, vec!["Raw heading"]);
+        assert_eq!(rendered.values, vec!["Rendered heading"]);
+        assert_eq!(raw.source, "raw_html");
+        assert_eq!(rendered.source, "rendered_html");
+        assert_eq!(raw.matched_count, Some(1));
+        assert_eq!(rendered.matched_count, Some(1));
+        assert!(raw.error.is_none());
+        assert!(rendered.error.is_none());
+    }
     assert_eq!(
         page.raw_metadata.as_ref().unwrap().titles,
         vec!["Raw title"]
@@ -736,6 +1018,22 @@ async fn live_browser_worker_executes_javascript_for_core_crawl() {
     }).await;
     let mut options = config(native.url("/"));
     options.crawl_links = false;
+    options.custom_extractions = vec![
+        CustomExtractionConfig {
+            name: "Live XPath heading".into(),
+            selector: "//h1/text()".into(),
+            method: ExtractionMethod::XPath,
+            ..Default::default()
+        },
+        CustomExtractionConfig {
+            name: "Live regex heading".into(),
+            selector: "<h1>([^<]+)</h1>".into(),
+            method: ExtractionMethod::Regex,
+            regex_group: Some(1),
+            regex_flags: "i".into(),
+            ..Default::default()
+        },
+    ];
     options.renderer = Some(RendererConfig {
         endpoint: std::env::var("OPEN_SEO_SPIDER_RENDERER")
             .unwrap_or_else(|_| "http://127.0.0.1:8790/render".into()),
@@ -758,6 +1056,30 @@ async fn live_browser_worker_executes_javascript_for_core_crawl() {
         vec!["Raw title"]
     );
     assert_eq!(page.raw_metadata.as_ref().unwrap().h1, vec!["Raw heading"]);
+    for (raw, rendered) in page
+        .raw_metadata
+        .as_ref()
+        .unwrap()
+        .custom_extractions
+        .iter()
+        .zip(&page.custom_extractions)
+    {
+        assert_eq!(raw.values, vec!["Raw heading"]);
+        assert_eq!(rendered.values, vec!["JavaScript heading"]);
+        assert_eq!(raw.source, "raw_html");
+        assert_eq!(rendered.source, "rendered_html");
+        assert!(rendered.error.is_none());
+    }
+    assert_ne!(
+        page.title_pixel_widths,
+        page.raw_metadata.as_ref().unwrap().title_pixel_widths
+    );
+    assert!(
+        page.text_metrics_engine
+            .as_ref()
+            .unwrap()
+            .contains("title20px")
+    );
     assert!(
         page.links
             .iter()
@@ -793,16 +1115,19 @@ async fn configured_custom_extractions_preserve_all_matches_and_export_exact_val
             name: "Labels".into(),
             selector: "a".into(),
             attribute: None,
+            ..Default::default()
         },
         CustomExtractionConfig {
             name: "SKUs".into(),
             selector: "a".into(),
             attribute: Some("data-sku".into()),
+            ..Default::default()
         },
         CustomExtractionConfig {
             name: "Absent".into(),
             selector: ".absent".into(),
             attribute: None,
+            ..Default::default()
         },
     ];
     let report = Crawler::new(options)
@@ -882,16 +1207,19 @@ fn extraction_and_regex_configuration_fail_before_network_requests() {
             name: "".into(),
             selector: "a".into(),
             attribute: None,
+            ..Default::default()
         },
         CustomExtractionConfig {
             name: "Invalid selector".into(),
             selector: "[".into(),
             attribute: None,
+            ..Default::default()
         },
         CustomExtractionConfig {
             name: "Invalid attribute".into(),
             selector: "a".into(),
             attribute: Some("".into()),
+            ..Default::default()
         },
     ] {
         let mut options = config("https://example.org/".into());
@@ -904,11 +1232,13 @@ fn extraction_and_regex_configuration_fail_before_network_requests() {
             name: "Name".into(),
             selector: "a".into(),
             attribute: None,
+            ..Default::default()
         },
         CustomExtractionConfig {
             name: "Name".into(),
             selector: "p".into(),
             attribute: None,
+            ..Default::default()
         },
     ];
     assert!(Crawler::new(options).is_err());
@@ -917,4 +1247,100 @@ fn extraction_and_regex_configuration_fail_before_network_requests() {
         options.exclude_patterns = vec![pattern.into()];
         assert!(Crawler::new(options).is_err());
     }
+}
+
+#[test]
+fn audit_threshold_configuration_is_validated_and_old_configs_receive_defaults() {
+    let mut options = config("https://example.org/".into());
+    options.audit_thresholds.min_title_chars = Some(61);
+    assert!(Crawler::new(options).is_err());
+    let mut options = config("https://example.org/".into());
+    options.audit_thresholds.max_h1_chars = Some(1_000_001);
+    assert!(Crawler::new(options).is_err());
+    let mut options = config("https://example.org/".into());
+    options.audit_thresholds.min_title_pixels = Some(562);
+    assert!(Crawler::new(options).is_err());
+    let legacy: CrawlConfig =
+        serde_json::from_str(r#"{"seed_urls":["https://example.org/"]}"#).unwrap();
+    assert_eq!(legacy.audit_thresholds.max_description_chars, Some(155));
+    assert_eq!(legacy.audit_thresholds.max_url_chars, Some(115));
+    let mut options = legacy;
+    options.audit_thresholds.max_description_chars = Some(160);
+    options.audit_thresholds.min_description_chars = None;
+    options.audit_thresholds.max_h1_chars = Some(0);
+    assert!(Crawler::new(options).is_ok());
+}
+
+#[tokio::test]
+async fn xpath_regex_validation_precedes_http_and_crawl_results_show_bounds() {
+    let fixture = Fixture::new(|_, _| html("<html><title>Fixture</title><body><li data-id='α'>A<li data-id='β'>B<li data-id='γ'>C</body></html>")).await;
+    for (method, expression) in [
+        (ExtractionMethod::XPath, "//li["),
+        (ExtractionMethod::XPath, "//missing[unknown()]"),
+        (ExtractionMethod::Regex, "(?<=x)y"),
+    ] {
+        let mut options = config(fixture.url("/"));
+        options.custom_extractions = vec![CustomExtractionConfig {
+            name: "Invalid".into(),
+            selector: expression.into(),
+            method,
+            ..Default::default()
+        }];
+        assert!(Crawler::new(options).is_err());
+        assert_eq!(fixture.count("/"), 0);
+        assert_eq!(fixture.count("/robots.txt"), 0);
+    }
+    let mut options = config(fixture.url("/"));
+    options.crawl_links = false;
+    options.discover_sitemaps = false;
+    options.custom_extractions = vec![
+        CustomExtractionConfig {
+            name: "XPath ids".into(),
+            selector: "//li/@data-id".into(),
+            method: ExtractionMethod::XPath,
+            max_results: 2,
+            ..Default::default()
+        },
+        CustomExtractionConfig {
+            name: "Regex ids".into(),
+            selector: "data-id='([^']+)'".into(),
+            method: ExtractionMethod::Regex,
+            regex_group: Some(1),
+            max_results: 2,
+            ..Default::default()
+        },
+        CustomExtractionConfig {
+            name: "No match".into(),
+            selector: "//missing".into(),
+            method: ExtractionMethod::XPath,
+            ..Default::default()
+        },
+    ];
+    let report = Crawler::new(options)
+        .unwrap()
+        .run(None, cancel())
+        .await
+        .unwrap();
+    let page = &report.pages[0];
+    for result in &page.custom_extractions[..2] {
+        assert_eq!(result.values, vec!["α", "β"]);
+        assert_eq!(result.matched_count, Some(3));
+        assert!(result.truncated);
+        assert!(result.error.is_none());
+        assert_eq!(result.source, "raw_html");
+    }
+    assert!(page.custom_extractions[2].values.is_empty());
+    assert_eq!(page.custom_extractions[2].matched_count, Some(0));
+    assert!(!page.custom_extractions[2].truncated);
+    assert_eq!(
+        page.warnings
+            .iter()
+            .filter(|warning| warning.contains("retained 2 of 3"))
+            .count(),
+        2
+    );
+    let csv = export_custom_extractions_csv(&report).unwrap();
+    assert!(csv.contains("xpath"));
+    assert!(csv.contains("regex"));
+    assert!(csv.contains("sxd-xpath-1.0-html-dom"));
 }
