@@ -126,6 +126,18 @@ JSON.
 
 ## MCP and local API
 
+The app supports graceful pause: stop admitting URLs, finish active native/browser
+work, save a checkpoint, then resume the remaining frontier. Page and sitemap
+discovery queues are stored separately. SQLite-only recovery and immutable report
+revisions are described in [crawl control](docs/crawl-control.md). An exhausted
+operator limit can be explicitly changed when resuming; it is not a commercial
+URL allowance. The MCP tool `spider_pause` exposes the same lifecycle.
+
+`open-seo-spider preview-policy policy.json --output decisions.json` and
+`POST /api/policy/preview` evaluate explicit scope/query/rewrite rules without
+network requests. [Policy preview](docs/crawl-policy.md) is a separate pure engine;
+its rules are not yet applied by the live crawler.
+
 The running application exposes stateless Streamable HTTP MCP at
 `http://127.0.0.1:8787/mcp`. For stdio, configure a client to execute:
 
@@ -133,7 +145,7 @@ The running application exposes stateless Streamable HTTP MCP at
 open-seo-spider mcp --server http://127.0.0.1:8787
 ```
 
-Eleven tools cover crawl start/status/list/cancel/resume, bounded pages, issues,
+Twelve tools cover crawl start/status/list/pause/cancel/resume, bounded pages, issues,
 analysis, snapshot retrieval and comparison. The browser application must be
 running. JSON API routes and acceptance limits are documented in
 [architecture](docs/architecture.md). MCP implementation follows the

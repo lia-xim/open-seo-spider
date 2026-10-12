@@ -1,0 +1,21 @@
+{
+  "tested_at": "2026-10-12T11:37:34.620Z",
+  "result": "PASS",
+  "platform": "win32",
+  "checks": [
+    "Pause is idempotent, refuses concurrent resume, stops new admissions, drains two held requests and durably retains three discovered pending pages",
+    "Paused startup verifies SQLite checkpoint while preserving existing JSON whitespace/future fields exactly and performing no HTTP",
+    "A paused report/manifest with missing SQLite never becomes completed or resumable; its original snapshot remains available and byte-identical",
+    "A paused SQLite-only project with no report or manifest recovers its checkpoint and observations without requests",
+    "Resume increments generation/revision, finishes six unique pages without refetching committed rows, and archives exact prior bytes with immutable earlier revision",
+    "Completed pause and manifest-only resume are explicit conflicts, never invented saved-frontier work",
+    "An interrupted SQLite-only project retains committed seed and retries uncommitted admitted URL, explicitly providing at-least-once request recovery",
+    "Pause drains the admitted sitemap unit, preserves two child discovery units, survives restart and resumes discovery without falsely marking completion or refetching committed index",
+    "A real operator-limited checkpoint can explicitly remove the limit on resume; invalid operational settings preserve status/bytes and cause zero requests",
+    "Legacy limited report/frontier retains limited status and pending count with or without manifest, preserving bytes and making zero startup requests",
+    "Explicit folder/query policy preview has equal API/CLI decisions with zero HTTP and honestly reports that live crawl policy integration is pending"
+  ],
+  "paused_revision_sha256": "475744eaa9ca9bf01c4023f7e6af090489ec6ab7d85b73a4a5e66890ce81eee7",
+  "archived_original_sha256": "7aa4d6ee22989eb549b2f8d09abefb2691006c1789bf9f8c795f411dfe4efc7c",
+  "limits": "Owned local fixtures; exactly-once remote requests, power-loss durability and full vendor control/workflow parity remain NOT_PROVEN. Policy preview is independent and not yet applied by live crawler."
+}

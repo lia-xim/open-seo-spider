@@ -1,0 +1,43 @@
+{
+  "whole_vendor_parity": "NOT_PROVEN",
+  "files": [
+    {
+      "path": "authored-policy-cases.json",
+      "bytes": 66900,
+      "sha256": "1c1b1729298c2fd4458762efbb68483cc77a0b5a248d9eb4d34523167be051b6"
+    },
+    {
+      "path": "regenerate-design-cases.py",
+      "bytes": 12348,
+      "sha256": "b5089ea04119092eae75bf3624489f9bf95c41beabbc335e2692286849f15107"
+    }
+  ],
+  "integration_scenarios": 9,
+  "provenance": "Independently authored policy expectations, no vendor source/assets or user site requests. Generator retains historical DESIGN_ONLY status; native execution is recorded separately.",
+  "schema": 1,
+  "candidate_contracts": 47,
+  "status": "NATIVE_FOCUSED_GATE_PASS",
+  "native_gate": {
+    "recorded_at": "2026-10-12T11:09:48Z",
+    "command": "cargo test --locked -p open-seo-spider-core --lib crawl_policy::tests",
+    "passed": 11,
+    "failed": 0,
+    "candidate_contracts_executed": 47,
+    "website_requests": 0,
+    "module": "crates/core/src/crawl_policy.rs",
+    "module_sha256": "718d38bdc4d46165bd20774e46aa6e92eeed2469285243328280fc47b3ed4429",
+    "scope": "Pure policy engine only; scheduler, API, CLI and browser integration are separate gates.",
+    "post_gate_change": "Semantics-preserving collapsible_if cleanup requested by full core Clippy; root/core rerun owns final verification.",
+    "current_module_sha256": "ea379e32d381e9e5075950f4ec5fbe99b47f776732b1fa216a2647bc56c00725"
+  },
+  "final_workspace_gate": {
+    "tested_at": "2026-10-12T11:43:07.983Z",
+    "result": "PASS",
+    "command": "cargo test --locked --workspace; cargo clippy --locked --workspace --all-targets -- -D warnings",
+    "module_sha256": "ea379e32d381e9e5075950f4ec5fbe99b47f776732b1fa216a2647bc56c00725",
+    "candidate_contracts_executed": 47,
+    "website_requests": 0,
+    "api_cli_equal": true,
+    "live_crawler_integration": "NOT_PROVEN"
+  }
+}

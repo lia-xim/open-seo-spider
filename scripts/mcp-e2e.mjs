@@ -25,7 +25,8 @@ try{
     client=new Client({name:'open-seo-spider-acceptance',version:'0.1.0'});
     const transport=kind==='stdio'?new StdioClientTransport({command:binary,args:['mcp','--server',api],cwd:root,stderr:'pipe'}):new StreamableHTTPClientTransport(new URL(api+'/mcp'));
     await client.connect(transport);
-    const inventory=await client.listTools();assert.equal(inventory.tools.length,11);
+    const inventory=await client.listTools();assert.equal(inventory.tools.length,12);
+    assert.ok(inventory.tools.some(tool=>tool.name==='spider_pause'&&tool.annotations.readOnlyHint===false));
     const caps=await call('spider_capabilities');assert.equal(caps.crawl.url_limit,null);
     const started=await call('spider_start_crawl',{config:{seed_urls:['http://127.0.0.1:19089/a','http://127.0.0.1:19089/b'],crawl_links:false,discover_sitemaps:false,delay_ms:0}});
     const finished=await until(async()=>{const status=await call('spider_status',{id:started.id});return status.status==='completed'&&status;});assert.equal(finished.stats.fetched,2);
@@ -36,7 +37,8 @@ try{
     assert.equal((await call('spider_compare',{before:started.id,after:started.id})).changes.length,0);
     assert((await call('spider_list_crawls')).crawls.length>0);
     const missing=await client.callTool({name:'spider_status',arguments:{id:'00000000-0000-0000-0000-000000000000'}});assert.equal(missing.isError,true);
-    checks.push(`${kind}: SDK initialize, 11 tools, start/status/pages/issues/project/analysis/compare/list and tool error`);
+    const latePause=await client.callTool({name:'spider_pause',arguments:{id:started.id}});assert.equal(latePause.isError,true);
+    checks.push(`${kind}: SDK initialize, 12 tools, start/status/pages/issues/project/analysis/compare/list and completed-pause conflict/tool error`);
     await client.close();client=null;
   }
   const evidence={tested_at:new Date().toISOString(),sdk:'@modelcontextprotocol/client 2.3.1',platform:process.platform,result:'PASS',checks};

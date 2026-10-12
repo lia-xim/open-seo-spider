@@ -1,0 +1,23 @@
+{
+  "tested_at": "2026-10-12T11:37:34.216Z",
+  "result": "PASS",
+  "app_url": "http://127.0.0.1:18789",
+  "fixture_origin": "http://127.0.0.1:49335",
+  "crawl_id": "3d4ed6ff-3983-4dc5-8754-e45f7e59f339",
+  "limited_crawl_id": "0f1f46a4-1483-42f2-a47f-1b1813df217b",
+  "discovery_crawl_id": "7e861b80-c924-479e-b39d-46cba97917c6",
+  "checks": [
+    "actual UI starts native crawl and two owned requests remain admitted behind independent barriers",
+    "double pause sends one POST and native pausing blocks resume/start without admitting queued URLs",
+    "actual draining pause controls fit 320px with document footer reachable",
+    "native pause drains and commits both responses plus their discovered frontier before showing durable revision and zero in-flight",
+    "genuine delayed running poll is discarded after pause and cannot erase committed paused state",
+    "one resume increments generation/revision and finishes six unique captured URLs without refetching committed pages",
+    "actual configured URL boundary is limited rather than complete and opening/cancelling dialog changes no saved limit",
+    "explicit zero limit confirmation reaches actual Rust override and resumes pending URL once with mobile dialog bottom reachable",
+    "paused sitemap discovery shows two discovery units separately from zero page URLs and does not claim discovery complete",
+    "actual UI resumes native discovery frontier without replaying committed sitemap index"
+  ],
+  "javascript_runtime_errors": [],
+  "limits": "Owned HTTP barriers and current process only. Restart/power-loss/exactly-once remote request claims require separate evidence."
+}

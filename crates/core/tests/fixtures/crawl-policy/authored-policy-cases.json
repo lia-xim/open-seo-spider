@@ -1,0 +1,2404 @@
+{
+  "schema": 1,
+  "status": "DESIGN_ONLY",
+  "vendor_parity": "NOT_PROVEN",
+  "engine": "open-seo-spider/crawl-policy-v1",
+  "test_count": 47,
+  "executed_tests": 0,
+  "candidate_cases": [
+    {
+      "id": "cp-001",
+      "name": "Relative fragment retains observation while fetch omits fragment",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "next?b=2&a=1#part",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop/next?b=2&a=1",
+        "fragment": "part",
+        "resolved_discovered_url": "https://example.test/shop/next?b=2&a=1#part"
+      }
+    },
+    {
+      "id": "cp-002",
+      "name": "Directory itself included",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop/"
+      }
+    },
+    {
+      "id": "cp-003",
+      "name": "Prefix sibling is outside folder",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shopping/item",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "outside_folder"
+      }
+    },
+    {
+      "id": "cp-004",
+      "name": "No inferred slash for folder landing",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "outside_folder"
+      }
+    },
+    {
+      "id": "cp-005",
+      "name": "Explicit exact path permits distinct unslashed landing",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": [
+                "/shop"
+              ]
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop"
+      }
+    },
+    {
+      "id": "cp-006",
+      "name": "Folder path case is significant",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/Shop/item",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "outside_folder"
+      }
+    },
+    {
+      "id": "cp-007",
+      "name": "Encoded separator does not form configured folder boundary",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop%2Fitem",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "outside_folder"
+      }
+    },
+    {
+      "id": "cp-008",
+      "name": "Actual URL resolution removes parent segment before scope",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "../outside",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "outside_folder"
+      }
+    },
+    {
+      "id": "cp-009",
+      "name": "Outside folder check has no onward traversal",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/outside",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "check_once",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "check_only",
+        "fetch_candidate_url": "https://example.test/outside",
+        "traverse": false
+      }
+    },
+    {
+      "id": "cp-010",
+      "name": "Scheme switch requires explicit origin",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "http://example.test/shop/a",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "outside_origin"
+      }
+    },
+    {
+      "id": "cp-011",
+      "name": "Different explicit port requires origin",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "https://example.test:8443/shop/a",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "outside_origin"
+      }
+    },
+    {
+      "id": "cp-012",
+      "name": "Subdomain default is exact",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "https://a.example.test/shop/a",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "outside_origin"
+      }
+    },
+    {
+      "id": "cp-013",
+      "name": "Explicit base host permits strict descendant",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "https://a.example.test/shop/a",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": true,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://a.example.test/shop/a"
+      }
+    },
+    {
+      "id": "cp-014",
+      "name": "Suffix lookalike is never a subdomain",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "https://badexample.test/shop/a",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": true,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "outside_origin"
+      }
+    },
+    {
+      "id": "cp-015",
+      "name": "External suffix after root is not a subdomain",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "https://example.test.attacker.test/shop/a",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": true,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "outside_origin"
+      }
+    },
+    {
+      "id": "cp-016",
+      "name": "Credentials rejected before request",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "https://user:secret@example.test/shop/a",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "unsafe_url"
+      }
+    },
+    {
+      "id": "cp-017",
+      "name": "Unsupported protocol does not become HTTP",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "javascript:goto('/shop/a')",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "unsafe_url"
+      }
+    },
+    {
+      "id": "cp-018",
+      "name": "Raw controls rejected without URL parser repair",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "https://example.test/shop/a\t",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "unsafe_url"
+      }
+    },
+    {
+      "id": "cp-019",
+      "name": "Default query bytes and duplicates unchanged",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/a?b=%20&a=+&a=%2f&&flag&empty=&",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop/a?b=%20&a=+&a=%2f&&flag&empty=&"
+      }
+    },
+    {
+      "id": "cp-020",
+      "name": "Named removal deletes every selected occurrence",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/a?utm_source=x&keep=%20&utm_source=y&keep=+",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [
+            "utm_source"
+          ],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop/a?keep=%20&keep=+"
+      }
+    },
+    {
+      "id": "cp-021",
+      "name": "Names are exact and case-sensitive",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/a?UTM_source=x&utm_source_extra=y",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [
+            "utm_source"
+          ],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop/a?UTM_source=x&utm_source_extra=y"
+      }
+    },
+    {
+      "id": "cp-022",
+      "name": "Percent-decoded UTF8 comparison does not reencode retained tokens",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/a?utm%5Fsource=x&a=%2f",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [
+            "utm_source"
+          ],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop/a?a=%2f"
+      }
+    },
+    {
+      "id": "cp-023",
+      "name": "Encoded-key profile does not decode for comparison",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/a?utm%5Fsource=x",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [
+            "utm_source"
+          ],
+          "key_match": "encoded_bytes",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop/a?utm%5Fsource=x"
+      }
+    },
+    {
+      "id": "cp-024",
+      "name": "Invalid encoded key remains unknown and unchanged",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/a?utm%ZZsource=x",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [
+            "utm_source"
+          ],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop/a?utm%ZZsource=x",
+        "query_key_warning": true
+      }
+    },
+    {
+      "id": "cp-025",
+      "name": "Plus is literal in key matching",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/a?a+b=x&a%20b=y",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [
+            "a b"
+          ],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop/a?a+b=x"
+      }
+    },
+    {
+      "id": "cp-026",
+      "name": "All real query tokens removed deletes query",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/a?utm_source=x",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [
+            "utm_source"
+          ],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop/a"
+      }
+    },
+    {
+      "id": "cp-027",
+      "name": "An actually retained blank token retains empty query marker",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/a?utm_source=x&",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [
+            "utm_source"
+          ],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop/a?"
+      }
+    },
+    {
+      "id": "cp-028",
+      "name": "Stable raw-key ordering keeps repeated-key order and values",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/a?b=1&a=%20&a=+&b=2",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "stable_encoded_key"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop/a?a=%20&a=+&b=1&b=2"
+      }
+    },
+    {
+      "id": "cp-029",
+      "name": "Rewrite retains raw and discovered identity",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/old",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [
+          {
+            "id": "legacy",
+            "pattern": "/shop/old",
+            "replacement": {
+              "kind": "literal",
+              "text": "/shop/new"
+            }
+          }
+        ],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop/new",
+        "normalized_discovered_url": "https://example.test/shop/old",
+        "changed_steps": 1
+      }
+    },
+    {
+      "id": "cp-030",
+      "name": "First match profile changes one substring per rule",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/old/old",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [
+          {
+            "id": "first",
+            "pattern": "old",
+            "replacement": {
+              "kind": "literal",
+              "text": "new"
+            }
+          }
+        ],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop/new/old"
+      }
+    },
+    {
+      "id": "cp-031",
+      "name": "Literal dollar is not a capture",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/old",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [
+          {
+            "id": "literal",
+            "pattern": "old",
+            "replacement": {
+              "kind": "literal",
+              "text": "$1"
+            }
+          }
+        ],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop/$1"
+      }
+    },
+    {
+      "id": "cp-032",
+      "name": "Explicit capture template uses validated named groups",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/old/123",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [
+          {
+            "id": "capture",
+            "pattern": "/old/(?P<id>[0-9]+)$",
+            "replacement": {
+              "kind": "captures",
+              "template": "/new/${id}"
+            }
+          }
+        ],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop/new/123"
+      }
+    },
+    {
+      "id": "cp-033",
+      "name": "Rules run once in saved order",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/old",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [
+          {
+            "id": "one",
+            "pattern": "old",
+            "replacement": {
+              "kind": "literal",
+              "text": "new"
+            }
+          },
+          {
+            "id": "two",
+            "pattern": "new",
+            "replacement": {
+              "kind": "literal",
+              "text": "final"
+            }
+          }
+        ],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop/final"
+      }
+    },
+    {
+      "id": "cp-034",
+      "name": "Revisited changed identity is explicit cycle",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/old",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [
+          {
+            "id": "one",
+            "pattern": "old",
+            "replacement": {
+              "kind": "literal",
+              "text": "new"
+            }
+          },
+          {
+            "id": "two",
+            "pattern": "new",
+            "replacement": {
+              "kind": "literal",
+              "text": "old"
+            }
+          }
+        ],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "rewrite_cycle"
+      }
+    },
+    {
+      "id": "cp-035",
+      "name": "No-op replacement is not a cycle",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/old",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [
+          {
+            "id": "noop",
+            "pattern": "old",
+            "replacement": {
+              "kind": "literal",
+              "text": "old"
+            }
+          }
+        ],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop/old"
+      }
+    },
+    {
+      "id": "cp-036",
+      "name": "Unsafe rewrite cannot reach network",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/a",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [
+          {
+            "id": "bad",
+            "pattern": "^https://",
+            "replacement": {
+              "kind": "literal",
+              "text": "javascript:"
+            }
+          }
+        ],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "unsafe_rewrite"
+      }
+    },
+    {
+      "id": "cp-037",
+      "name": "Credential-bearing rewrite rejected",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/a",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [
+          {
+            "id": "bad",
+            "pattern": "https://",
+            "replacement": {
+              "kind": "literal",
+              "text": "https://user:secret@"
+            }
+          }
+        ],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "unsafe_rewrite"
+      }
+    },
+    {
+      "id": "cp-038",
+      "name": "Rewrite does not authorize foreign origin",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/a",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [
+          {
+            "id": "host",
+            "pattern": "example.test",
+            "replacement": {
+              "kind": "literal",
+              "text": "other.test"
+            }
+          }
+        ],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "outside_origin"
+      }
+    },
+    {
+      "id": "cp-039",
+      "name": "Fragment-bearing rewrite is explicit error",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/a",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [
+          {
+            "id": "fragment",
+            "pattern": "$",
+            "replacement": {
+              "kind": "literal",
+              "text": "#new"
+            }
+          }
+        ],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "unsafe_rewrite"
+      }
+    },
+    {
+      "id": "cp-040",
+      "name": "Initial seeds preserved by default",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "https://example.test/shop/old",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "seed"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [
+          {
+            "id": "legacy",
+            "pattern": "/shop/old",
+            "replacement": {
+              "kind": "literal",
+              "text": "/shop/new"
+            }
+          }
+        ],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop/old"
+      }
+    },
+    {
+      "id": "cp-041",
+      "name": "Initial rewrite opt-in is explicit",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "https://example.test/shop/old",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "list_page"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [
+          {
+            "id": "legacy",
+            "pattern": "/shop/old",
+            "replacement": {
+              "kind": "literal",
+              "text": "/shop/new"
+            }
+          }
+        ],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "apply",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop/new"
+      }
+    },
+    {
+      "id": "cp-042",
+      "name": "Excludes take precedence over includes",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/denied",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [
+          "/shop/"
+        ],
+        "exclude_patterns": [
+          "denied"
+        ],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "excluded",
+        "matched_rule_ids": [
+          "include-1",
+          "exclude-1"
+        ]
+      }
+    },
+    {
+      "id": "cp-043",
+      "name": "Filter fetch identity after rewrite",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/old",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [
+          {
+            "id": "legacy",
+            "pattern": "/shop/old",
+            "replacement": {
+              "kind": "literal",
+              "text": "/shop/new"
+            }
+          }
+        ],
+        "include_patterns": [],
+        "exclude_patterns": [
+          "/new"
+        ],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "excluded"
+      }
+    },
+    {
+      "id": "cp-044",
+      "name": "Filter original identity is separately selectable",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/old",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [
+          {
+            "id": "legacy",
+            "pattern": "/shop/old",
+            "replacement": {
+              "kind": "literal",
+              "text": "/shop/new"
+            }
+          }
+        ],
+        "include_patterns": [],
+        "exclude_patterns": [
+          "/new"
+        ],
+        "filter_identity": "discovered",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop/new"
+      }
+    },
+    {
+      "id": "cp-045",
+      "name": "Initial filter exemption preserves literal operator list",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "https://example.test/shop/denied",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "list_page"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [
+          "denied"
+        ],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "fetch_and_traverse",
+        "fetch_candidate_url": "https://example.test/shop/denied"
+      }
+    },
+    {
+      "id": "cp-046",
+      "name": "Initial filtering opt-in denies seed visibly",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "https://example.test/shop/denied",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "seed"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [
+          "denied"
+        ],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "apply"
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "excluded"
+      }
+    },
+    {
+      "id": "cp-047",
+      "name": "Exclude means no guesses about downstream links",
+      "status": "NOT_PROVEN",
+      "input": {
+        "raw_value": "/shop/denied",
+        "base_url": "https://example.test/shop/index",
+        "source_kind": "anchor"
+      },
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [
+          "denied"
+        ],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "expected": {
+        "decision": "deny",
+        "reason_code": "excluded",
+        "discovered_descendants": []
+      }
+    }
+  ],
+  "integration_scenarios": [
+    {
+      "id": "cp-integration-collision",
+      "status": "NOT_PROVEN",
+      "inputs": [
+        "/shop/a?utm_source=one",
+        "/shop/a?utm_source=two"
+      ],
+      "policy": {
+        "engine": "open-seo-spider/crawl-policy-v1",
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://example.test",
+              "subdomains": false,
+              "folders": [
+                "/shop/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [
+            "utm_source"
+          ],
+          "key_match": "percent_decoded_utf8",
+          "order": "preserve"
+        },
+        "rewrites": [],
+        "include_patterns": [],
+        "exclude_patterns": [],
+        "filter_identity": "fetch",
+        "initial_inputs": {
+          "rewrite": "preserve",
+          "filters": "exempt"
+        }
+      },
+      "required_observations": [
+        "two immutable candidate occurrences",
+        "one fetch identity and one HTTP request",
+        "neither original tracking URL requested",
+        "both aliases survive SQLite/JSON/CSV/project export and resume"
+      ]
+    },
+    {
+      "id": "cp-integration-robots-fetch",
+      "status": "NOT_PROVEN",
+      "required_observations": [
+        "query/removal/regex transforms discovered path",
+        "shared matcher checks actual transformed origin/path/query",
+        "blocked transformed target has zero document requests",
+        "no fabricated matched-rule trace"
+      ]
+    },
+    {
+      "id": "cp-integration-redirect-stop",
+      "status": "NOT_PROVEN",
+      "required_observations": [
+        "initial302 response retained",
+        "off-folder/filter-disallowed Location remains observed unrequested target",
+        "allowed target checks its actual robots origin/path",
+        "redirect locations never run discovery rewriting"
+      ]
+    },
+    {
+      "id": "cp-integration-credentials",
+      "status": "NOT_PROVEN",
+      "required_observations": [
+        "authorized scope expansion/rewritten host gets no original origin custom credentials",
+        "robots gets no custom credentials",
+        "renderer subresources and navigation have independent isolation proof"
+      ]
+    },
+    {
+      "id": "cp-integration-graph",
+      "status": "NOT_PROVEN",
+      "required_observations": [
+        "raw DOM link and graph target retain actual discovered URL",
+        "rewritten fetch alias explicitly labeled",
+        "resource references are not fabricated navigation anchors"
+      ]
+    },
+    {
+      "id": "cp-integration-source-kinds",
+      "status": "NOT_PROVEN",
+      "required_observations": [
+        "raw/rendered/PDF/header/sitemap location candidates share actual typed policy",
+        "explicit sitemap_document retains kind and is not rewritten or promoted to page seed",
+        "no regex scraping or unobserved navigation discovery"
+      ]
+    },
+    {
+      "id": "cp-integration-preview-zero-network",
+      "status": "NOT_PROVEN",
+      "required_observations": [
+        "preview processes ordered duplicate/invalid inputs offline",
+        "local supplied URL and sitemap counters stay zero",
+        "bounded client/server input validation",
+        "stale preview cannot overwrite edited inputs"
+      ]
+    },
+    {
+      "id": "cp-integration-bounds",
+      "status": "NOT_PROVEN",
+      "required_observations": [
+        "positive input/rule/compiledpattern/capture/query/output/ledger guards",
+        "all config validation before native/robots HTTP",
+        "limit failure explicit without silently omitted decision rows"
+      ]
+    },
+    {
+      "id": "cp-config-errors",
+      "status": "NOT_PROVEN",
+      "inputs": [
+        "unknown capture name",
+        "unclosed capture placeholder",
+        "unescaped replacement dollar syntax",
+        "lookbehind/pattern backreference",
+        "duplicate rule id",
+        "ambiguous folder scope",
+        "oversize pattern or URL",
+        "zero limit"
+      ],
+      "required_observations": [
+        "configuration compile error before every website request"
+      ]
+    }
+  ],
+  "provenance": "Own authored expectations from independent contract; not original engine membership or runtime proof."
+}

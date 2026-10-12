@@ -64,18 +64,20 @@
           <div class="mode-control"><label for="crawl-mode">Modus</label><select id="crawl-mode"><option value="spider">Website crawlen</option><option value="list">URL-Liste</option><option value="sitemap">Sitemap crawlen</option></select></div>
           <div class="seed-control"><label for="seed-url">Start-URL</label><div class="url-input"><span aria-hidden="true">↗</span><input id="seed-url" name="seed_url" type="url" placeholder="https://example.com" autocomplete="url" spellcheck="false" required></div></div>
           <button id="start-button" class="button primary" type="submit"><span aria-hidden="true">▶</span>Crawl starten</button>
+          <button id="pause-button" class="button" type="button" hidden title="Neue Anfragen anhalten; laufende Anfragen abschließen und danach den Stand speichern">Ⅱ Pausieren</button>
           <button id="cancel-button" class="button" type="button" hidden>■ Stoppen</button>
           <button id="resume-button" class="button" type="button" hidden>↻ Fortsetzen</button>
         </form>
         <div id="list-control" class="list-control" hidden><label for="url-list">Eine vollständige HTTP(S)-URL pro Zeile</label><textarea id="url-list" rows="4" placeholder="https://example.com/&#10;https://example.com/about" spellcheck="false"></textarea><div class="list-import-actions"><button id="list-import-open" type="button" class="button">↑ Datei importieren</button><span id="list-origin-state">Manueller Text · wird vor dem Crawl lokal geprüft</span></div><p>Import und Vorschau starten keine Website-Requests. Der Crawl beginnt erst mit „Crawl starten“.</p></div>
         <div class="crawl-bottom"><div id="crawl-state" class="crawl-state"><span class="status-dot idle"></span>Bereit für deinen ersten Crawl</div><div class="crawl-options"><span id="settings-summary">8 parallele Requests · Robots.txt beachten</span><button id="settings-inline" type="button" class="text-button">Anpassen ↗</button></div></div>
+        <div id="crawl-checkpoint" class="crawl-checkpoint" hidden aria-label="Gespeicherter Crawlstand"></div>
         <div class="progress-track" aria-hidden="true"><div id="progress-bar"></div></div>
         <p id="message" class="message" role="status" hidden></p>
         <details id="crawl-notices" class="crawl-notices" hidden><summary>Hinweise zu diesem Crawl</summary><ul></ul></details>
       </section>
       <section class="metrics" aria-label="Crawl-Kennzahlen">
         <div class="metric"><div><span>ERFASSTE URLS</span><span class="metric-icon">↗</span></div><strong id="metric-fetched">0</strong><small id="metric-progress">Noch keine URLs</small></div>
-        <div class="metric"><div><span>IN DER WARTESCHLANGE</span><span class="metric-icon">≋</span></div><strong id="metric-queued">0</strong><small id="metric-discovered">0 URLs entdeckt</small></div>
+        <div class="metric"><div><span>URL-WARTESCHLANGE</span><span class="metric-icon">≋</span></div><strong id="metric-queued">0</strong><small id="metric-discovered">0 URLs entdeckt</small><small id="metric-inflight">Laufende Anfragen: nicht erfasst</small><small id="metric-discovery">Sitemap-Discovery: nicht erfasst</small></div>
         <div class="metric"><div><span>HTML-SEITEN</span><span class="metric-icon">⌘</span></div><strong id="metric-html">0</strong><small id="metric-indexable">0 indexierbar</small></div>
         <div class="metric"><div><span>PROBLEME</span><span class="metric-icon warn">!</span></div><strong id="metric-issues">0</strong><small id="metric-failed">0 fehlgeschlagene Abrufe</small></div>
       </section>
@@ -93,6 +95,7 @@
       <footer class="main-footer"><span>Open SEO Spider · lokal, transparent, unabhängig</span><span>HTTP-Crawling &amp; HTML-Analyse · keine künstliche URL-Lizenzgrenze</span></footer>
     </main>
   </div>
+  <dialog id="resume-limit-dialog" aria-labelledby="resume-limit-heading"><form id="resume-limit-form"><div class="dialog-heading"><div><p class="eyebrow">GESPEICHERTEN STAND FORTSETZEN</p><h2 id="resume-limit-heading">URL-Grenze festlegen</h2></div><button id="resume-limit-close" class="icon-button" type="button" aria-label="Fortsetzen abbrechen">×</button></div><p id="resume-limit-current"></p><p>Die Grenze bleibt unverändert, bis du hier eine andere Zahl bestätigst. Bei unveränderter Grenze kann der Crawl sofort wieder anhalten. 0 entfernt die konfigurierte URL-Grenze; Laufzeit und Speicherbedarf hängen von deinem Rechner und der Website ab.</p><label class="limit-setting" for="resume-max-pages">Maximal erfasste URLs insgesamt<input id="resume-max-pages" type="number" min="0" step="1" required></label><p class="detail-empty">Crawl-Bereich, Robots-Regeln, Header, Browser und Extraktionen bleiben wie gespeichert.</p><p id="resume-limit-error" class="message error" role="alert" hidden></p><div class="dialog-footer"><button class="button primary" type="submit">Grenze bestätigen &amp; fortsetzen</button></div></form></dialog>
   <dialog id="list-import-dialog" aria-labelledby="list-import-heading" class="list-import-dialog">
     <div class="dialog-heading"><div><p class="eyebrow">LOKALER LISTENIMPORT</p><h2 id="list-import-heading">URL-Liste prüfen</h2></div><button id="list-import-close" type="button" class="icon-button" aria-label="Listenimport schließen">×</button></div>
     <p>Datei und Spalte auswählen, Zeilen prüfen und anschließend übernehmen. Formeln und Website-URLs werden beim Import nicht ausgeführt oder abgerufen.</p>

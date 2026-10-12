@@ -107,6 +107,10 @@ impl Bridge {
                         body = Some(json!({}));
                         "/cancel"
                     }
+                    "spider_pause" => {
+                        body = Some(json!({}));
+                        "/pause"
+                    }
                     "spider_resume" => {
                         body = Some(json!({}));
                         "/resume"
@@ -165,6 +169,7 @@ fn inventory() -> Vec<Value> {
         ("spider_issues","Read observed audit issues",json!({"id":uuid}),vec!["id"],true),
         ("spider_analysis","Read graph and relationship/security/JSON-LD observations",json!({"id":uuid}),vec!["id"],true),
         ("spider_cancel","Cancel and retain the saved frontier",json!({"id":uuid}),vec!["id"],false),
+        ("spider_pause","Stop admitting new documents, drain active work and persist a resumable checkpoint",json!({"id":uuid}),vec!["id"],false),
         ("spider_resume","Resume a local crawl from SQLite",json!({"id":uuid}),vec!["id"],false),
         ("spider_project","Read the original project snapshot; paginate large crawls via spider_pages",json!({"id":uuid}),vec!["id"],true),
         ("spider_compare","Compare two crawl snapshots",json!({"before":uuid,"after":uuid}),vec!["before","after"],true),
@@ -217,7 +222,7 @@ mod tests {
                 .await
                 .is_none()
         );
-        assert_eq!(inventory().len(), 11);
+        assert_eq!(inventory().len(), 12);
     }
     #[test]
     fn only_loopback_bridge() {

@@ -6,7 +6,7 @@
     crawl: null, crawls: [], pages: [], issues: [], section: 'overview',
     search: '', filter: 'all', sort: 'url', direction: 1, page: 0, pageSize: 50,
     selected: null, selectedResponse: null, selectedInput: null, responses: null, responsesError: '', fragments: null, fragmentsError: '', inspectorTab: 'details', polling: false, starting: false,
-    generation: 0, issueMap: new Map(), pageMap: new Map(), cache: {}, analysis: null, analysisError: '', settings: {
+    generation: 0, pollToken: null, pollTimer: null, control: null, operationSequence: 0, startOperation: null, historySequence: 0, issueMap: new Map(), pageMap: new Map(), cache: {}, analysis: null, analysisError: '', settings: {
       concurrency: 8, timeout_seconds: 20, max_pages: 0, max_depth: 0,
       user_agent: 'Open SEO Spider/0.1', indexability_agent: 'googlebot', obey_robots: true, follow_subdomains: false,
       delay_ms: 100, max_body_mb: 5, check_external: false,
@@ -51,9 +51,10 @@
     running: 'Crawl läuft', queued: 'Crawl wartet', pending: 'Crawl wartet',
     completed: 'Crawl abgeschlossen', complete: 'Crawl abgeschlossen', finished: 'Crawl abgeschlossen',
     cancelled: 'Crawl gestoppt', canceled: 'Crawl gestoppt', failed: 'Crawl fehlgeschlagen',
-    paused: 'Crawl pausiert', interrupted: 'Crawl unterbrochen', cancelling: 'Crawl wird gestoppt'
+    pausing: 'Pause angefordert · laufende Anfragen werden beendet', paused: 'Crawl pausiert', limited: 'Crawl-Grenze erreicht', interrupted: 'Crawl unterbrochen', cancelling: 'Crawl wird gestoppt'
   };
   const listUI = { controller: null, page: 0, acceptedText: null, snapshot: null };
+  let limitResumeContext = null;
   const number = (value) => Number(value || 0).toLocaleString('de-DE');
   const array = (value) => Array.isArray(value) ? value : value == null || value === '' ? [] : [value];
   const first = (value) => array(value).join(' | ');
@@ -72,7 +73,18 @@
   const isPDF = page => Boolean(page.pdf) || mediaType(page) === 'application/pdf';
   const isImageFile = page => Boolean(page.image_metadata) || mediaType(page).startsWith('image/');
   const statusBadge = (status) => status == null ? '<span class="badge neutral">—</span>' : `<span class="badge ${Number(status) >= 400 ? 'danger' : Number(status) >= 300 ? 'warning' : 'good'}">${escape(status)}</span>`;
-  const active = () => state.crawl && ['running', 'queued', 'pending', 'cancelling'].includes(state.crawl.status);
+  const activeStatus = status => ['running', 'queued', 'pending', 'pausing', 'cancelling'].includes(status);
+  const active = () => state.crawl && activeStatus(state.crawl.status);
+  const canResume = () => state.crawl && state.crawl.resume_available !== false && ['paused', 'limited', 'cancelled', 'canceled', 'failed', 'interrupted'].includes(state.crawl.status);
+  const actionBusy = () => Boolean(state.control || state.starting);
+  function invalidatePoll() {
+    state.generation += 1;
+    clearTimeout(state.pollTimer);
+    state.pollTimer = null;
+    state.pollToken = null;
+    state.polling = false;
+    return state.generation;
+  }
   const normalPage = (page) => ({
     ...page,
     url: page.url || page.address || '',
@@ -135,7 +147,9 @@
   }
 
   async function loadHistory() {
+    const sequence = ++state.historySequence, generation = state.generation;
     const response = await request('/api/crawls');
+    if (sequence !== state.historySequence || generation !== state.generation) return;
     state.crawls = Array.isArray(response) ? response : response.crawls || response.items || [];
     connection(true);
     renderHistory();
@@ -177,71 +191,76 @@
   }
 
   async function refresh(generation = state.generation) {
-    if (!state.crawl || state.polling) return;
-    state.polling = true;
-    const id = state.crawl.id;
+    if (!state.crawl || state.pollToken || state.control || generation !== state.generation) return;
+    const id = state.crawl.id, token = { id, generation };
+    state.pollToken = token; state.polling = true;
+    const current = () => state.pollToken === token && generation === state.generation && state.crawl?.id === id;
     try {
       const [crawlResult, issueResult] = await Promise.all([
-        request(`/api/crawls/${encodeURIComponent(id)}`),
-        request(`/api/crawls/${encodeURIComponent(id)}/issues`)
+        request('/api/crawls/' + encodeURIComponent(id)),
+        request('/api/crawls/' + encodeURIComponent(id) + '/issues')
       ]);
-      if (generation !== state.generation) return;
-      const previousStatus = state.crawl.status;
-      const nextCrawl = crawlResult.crawl || crawlResult;
-      const terminal = !['running', 'queued', 'pending', 'cancelling'].includes(nextCrawl.status);
-      const from = terminal || !['running', 'queued', 'pending'].includes(previousStatus) ? 0 : state.pages.length;
+      if (!current()) return;
+      const previousStatus = state.crawl.status, nextCrawl = crawlResult.crawl || crawlResult;
+      const terminal = !activeStatus(nextCrawl.status);
+      const from = terminal || !['running', 'queued', 'pending', 'pausing'].includes(previousStatus) ? 0 : state.pages.length;
       const pages = await loadPages(id, generation, from);
-      if (generation !== state.generation || !pages) return;
+      if (!current() || !pages) return;
+      let analysis = state.analysis, analysisError = state.analysisError;
+      let responses = state.responses, responsesError = state.responsesError;
+      let fragments = state.fragments, fragmentsError = state.fragmentsError;
+      if (terminal && !analysis) {
+        try { analysis = await request('/api/crawls/' + encodeURIComponent(id) + '/analysis'); analysisError = ''; }
+        catch (error) { analysisError = 'Weiterführende Analyse nicht verfügbar: ' + error.message; }
+        if (!current()) return;
+      }
+      if (terminal && responses == null) {
+        try {
+          const result = await request('/api/crawls/' + encodeURIComponent(id) + '/responses');
+          if (!Array.isArray(result.responses)) throw new Error('Ungültiges Antworten-Inventar');
+          responses = result.responses; responsesError = '';
+        } catch (error) { responsesError = 'Antworten-Inventar nicht verfügbar: ' + error.message; }
+        if (!current()) return;
+      }
+      if (terminal && fragments == null) {
+        try {
+          const result = await request('/api/crawls/' + encodeURIComponent(id) + '/fragments');
+          if (!Array.isArray(result.observations) || typeof result.enabled !== 'boolean') throw new Error('Ungültiges Fragment-Inventar');
+          fragments = result; fragmentsError = '';
+        } catch (error) { fragmentsError = 'Fragment-Inventar nicht verfügbar: ' + error.message; }
+        if (!current()) return;
+      }
       state.crawl = nextCrawl;
       state.pages = from ? [...state.pages, ...pages] : pages;
-      state.pageMap = new Map(state.pages.map((page) => [page.url, page]));
-      state.cache = {};
+      state.pageMap = new Map(state.pages.map(page => [page.url, page])); state.cache = {};
+      state.analysis = analysis; state.analysisError = analysisError;
+      state.responses = responses; state.responsesError = responsesError;
+      state.fragments = fragments; state.fragmentsError = fragmentsError;
       state.issues = Array.isArray(issueResult) ? issueResult : issueResult.issues || issueResult.items || [];
-      if (terminal && !state.analysis) {
-        try { state.analysis = await request(`/api/crawls/${encodeURIComponent(id)}/analysis`); state.analysisError = ''; }
-        catch (error) { state.analysisError = `Weiterführende Analyse nicht verfügbar: ${error.message}`; }
-        if (generation !== state.generation) return;
-      }
-      if (terminal && state.responses == null) {
-        try {
-          const responseResult = await request(`/api/crawls/${encodeURIComponent(id)}/responses`);
-          if (generation !== state.generation) return;
-          if (!Array.isArray(responseResult.responses)) throw new Error('Ungültiges Antworten-Inventar');
-          state.responses = responseResult.responses;
-          state.responsesError = '';
-        } catch (error) { if (generation === state.generation) state.responsesError = `Antworten-Inventar nicht verfügbar: ${error.message}`; }
-      }
-      if (terminal && state.fragments == null) {
-        try {
-          const result = await request(`/api/crawls/${encodeURIComponent(id)}/fragments`);
-          if (generation !== state.generation) return;
-          if (!Array.isArray(result.observations) || typeof result.enabled !== 'boolean') throw new Error('Ungültiges Fragment-Inventar');
-          state.fragments = result; state.fragmentsError = '';
-        } catch (error) { if (generation === state.generation) state.fragmentsError = `Fragment-Inventar nicht verfügbar: ${error.message}`; }
-      }
-      if (state.analysis) state.issues.push(...array(state.analysis.issues));
-      reindexIssues();
-      connection(true);
-      render();
-      if (state.selectedResponse) renderInspector();
-      else if (state.selected) {
-        state.selected = state.pages.find((page) => page.url === state.selected.url) || state.selected;
-        renderInspector();
-      }
-      if (previousStatus !== state.crawl.status && !active()) {
+      if (analysis) state.issues.push(...array(analysis.issues));
+      reindexIssues(); connection(true); render();
+      if (state.selectedResponse || state.selectedInput) renderInspector();
+      else if (state.selected) { state.selected = state.pages.find(page => page.url === state.selected.url) || state.selected; renderInspector(); }
+      if (previousStatus !== state.crawl.status && terminal) {
         await loadHistory();
+        if (!current()) return;
         if (state.crawl.status === 'failed') message(state.crawl.error || 'Der Crawl ist fehlgeschlagen. Die bisherigen Daten bleiben sichtbar.', true);
       }
     } catch (error) {
-      if (generation === state.generation) { connection(false); message(`Crawl-Daten konnten nicht geladen werden: ${error.message}`, true); }
+      if (current()) { connection(false); message('Crawl-Daten konnten nicht geladen werden: ' + error.message, true); }
     } finally {
-      state.polling = false;
-      if (generation === state.generation && active()) setTimeout(() => refresh(generation), 2000);
+      if (state.pollToken === token) {
+        state.pollToken = null; state.polling = false;
+        if (generation === state.generation && state.crawl?.id === id && active()) state.pollTimer = setTimeout(() => refresh(generation), 2000);
+      }
     }
   }
 
   async function selectCrawl(id) {
-    state.generation += 1;
+    invalidatePoll();
+    state.control = null; state.startOperation = null; state.starting = false;
+    limitResumeContext = null;
+    if ($('resume-limit-dialog').open) $('resume-limit-dialog').close();
     state.pages = [];
     state.issues = [];
     state.selected = null;
@@ -263,15 +282,13 @@
     render();
     if (id) {
       const generation = state.generation;
-      // An older polling request may still be resolving; allow its generation check to discard it.
-      while (state.polling) await new Promise((resolve) => setTimeout(resolve, 25));
       if (generation === state.generation) await refresh(generation);
     }
   }
 
   async function startCrawl(event) {
     event.preventDefault();
-    if (state.starting || active()) return;
+    if (actionBusy() || active()) return;
     const mode = $('crawl-mode').value;
     let urls = mode === 'list' ? [] : [$('seed-url').value.trim()], sitemapUrls = [], inputImports = [];
     if (mode !== 'list' && !urls[0]) { message('Bitte gib mindestens eine URL ein.', true); return; }
@@ -282,7 +299,9 @@
     let advanced;
     try { advanced = parseAdvanced(state.settings); validateRendererSettings(state.settings); }
     catch (error) { message(`Ungültige Crawl-Einstellung: ${error.message}`, true); return; }
-    state.starting = true;
+    const operation = { sequence: ++state.operationSequence, generation: state.generation, id: state.crawl?.id || null };
+    const current = () => state.startOperation === operation && state.generation === operation.generation && (state.crawl?.id || null) === operation.id;
+    state.startOperation = operation; state.starting = true;
     $('start-button').disabled = true;
     message('');
     try {
@@ -292,6 +311,7 @@
         if (!imported || listUI.acceptedText !== $('url-list').value) {
           listUI.controller.setEditedText($('url-list').value);
           imported = await listUI.controller.preview();
+          if (!current()) return;
           if (!imported) throw new Error(listUI.controller.state.error || 'Die Liste wurde während der Prüfung geändert. Bitte erneut starten.');
         }
         const summary = window.ListImportTools.summarizeRows(imported.rows);
@@ -299,62 +319,86 @@
         urls = summary.page_urls; sitemapUrls = summary.sitemap_urls; inputImports = [imported];
       }
       if ($('crawl-mode').value !== mode) throw new Error('Der Crawl-Modus wurde während der Prüfung geändert. Bitte erneut starten.');
+      if (!current()) return;
       const payload = { ...state.settings, ...advanced, mode, seed_url: mode === 'sitemap' ? '' : urls[0] || '', urls: mode === 'sitemap' ? [] : urls, seed_urls: mode === 'sitemap' ? [] : urls, sitemap_urls: mode === 'sitemap' ? urls : sitemapUrls, input_imports: inputImports, crawl_links: mode !== 'list', include_subdomains: state.settings.follow_subdomains, request_timeout_secs: state.settings.timeout_seconds, max_body_bytes: state.settings.max_body_mb * 1024 * 1024 };
       payload.renderer = state.settings.javascript_rendering ? { endpoint: state.settings.renderer_endpoint, wait_ms: state.settings.renderer_wait_ms, accessibility: state.settings.renderer_accessibility, screenshot: state.settings.renderer_screenshot, collect_cookies: state.settings.renderer_collect_cookies, custom_javascript: parseCustomJavascript(state.settings.custom_javascript_json) } : null;
       const result = await request('/api/crawls', { method: 'POST', body: JSON.stringify(payload) });
       const crawl = result.crawl || result;
       if (!crawl.id) throw new Error('Der Server hat keine Crawl-ID zurückgegeben.');
+      if (!current()) { await loadHistory(); return; }
       state.crawls.unshift(crawl);
       renderHistory();
-      await selectCrawl(crawl.id);
       $('crawl-history').value = crawl.id;
-    } catch (error) { message(`Der Crawl konnte nicht gestartet werden: ${error.message}`, true); }
-    finally { state.starting = false; renderControls(); }
+      await selectCrawl(crawl.id);
+    } catch (error) { if (current()) message(`Der Crawl konnte nicht gestartet werden: ${error.message}`, true); }
+    finally { if (state.startOperation === operation) { state.startOperation = null; state.starting = false; renderControls(); } }
   }
 
-  async function cancelCrawl() {
-    if (!state.crawl || !active()) return;
-    $('cancel-button').disabled = true;
+  async function controlCrawl(action, body, expected) {
+    if (!state.crawl || actionBusy()) return;
+    if (expected && (expected.id !== state.crawl.id || expected.generation !== state.generation)) return;
+    const status = state.crawl.status;
+    if (action === 'pause' && !['running', 'queued', 'pending'].includes(status)) return;
+    if (action === 'cancel' && !active()) return;
+    if (action === 'resume' && !canResume()) return;
+    const id = state.crawl.id, generation = invalidatePoll();
+    const operation = { id, generation, action, sequence: ++state.operationSequence };
+    state.control = operation; renderControls();
+    const current = () => state.control === operation && state.generation === generation && state.crawl?.id === id;
     try {
-      await request(`/api/crawls/${encodeURIComponent(state.crawl.id)}/cancel`, { method: 'POST' });
-      message('Stopp angefordert. Bereits laufende Requests werden beendet; die erfassten Daten bleiben erhalten.');
-      await refresh();
-    } catch (error) { message(`Der Crawl konnte nicht gestoppt werden: ${error.message}`, true); }
-    finally { $('cancel-button').disabled = false; }
+      const response = await request('/api/crawls/' + encodeURIComponent(id) + '/' + action, { method: 'POST', ...(body ? { body: JSON.stringify(body) } : {}) });
+      if (!current()) return;
+      const observed = response?.crawl || response;
+      if (observed && typeof observed.status === 'string') state.crawl = { ...state.crawl, ...observed };
+      if (action === 'resume') {
+        state.analysis = null; state.analysisError = ''; state.responses = null; state.responsesError = '';
+        state.fragments = null; state.fragmentsError = ''; state.selectedResponse = null;
+      }
+      message(action === 'pause' ? 'Pause angefordert. Laufende Anfragen werden beendet, danach wird der Stand gespeichert.' : action === 'resume' ? 'Crawl wird aus dem validierten lokal gespeicherten Stand fortgesetzt.' : 'Stopp angefordert. Laufende Anfragen werden beendet; erfasste Daten bleiben erhalten.');
+      state.control = null; render();
+      await refresh(generation);
+    } catch (error) {
+      if (!current()) return;
+      const verb = action === 'pause' ? 'pausiert' : action === 'resume' ? 'fortgesetzt' : 'gestoppt';
+      message('Der Crawl konnte nicht ' + verb + ' werden: ' + error.message, true);
+      state.control = null; renderControls();
+      await refresh(generation);
+    } finally {
+      if (state.control === operation) { state.control = null; renderControls(); }
+    }
   }
 
-  async function resumeCrawl() {
-    if (!state.crawl || active()) return;
-    $('resume-button').disabled = true;
-    try {
-      await request(`/api/crawls/${encodeURIComponent(state.crawl.id)}/resume`, { method: 'POST' });
-      message('Crawl wird aus dem lokal gespeicherten Stand fortgesetzt.');
-      state.generation += 1;
-      state.analysis = null;
-      state.analysisError = '';
-      state.responses = null;
-      state.responsesError = '';
-      state.fragments = null;
-      state.fragmentsError = '';
-      state.selectedResponse = null;
-      const generation = state.generation;
-      while (state.polling) await new Promise((resolve) => setTimeout(resolve, 25));
-      if (generation === state.generation) await refresh(generation);
-    } catch (error) { message(`Der Crawl konnte nicht fortgesetzt werden: ${error.message}`, true); }
-    finally { $('resume-button').disabled = false; }
+  const pauseCrawl = () => controlCrawl('pause');
+  const cancelCrawl = () => controlCrawl('cancel');
+  function resumeCrawl() {
+    if (!canResume() || actionBusy()) return;
+    if (state.crawl.status !== 'limited') { controlCrawl('resume'); return; }
+    limitResumeContext = { id: state.crawl.id, generation: state.generation };
+    const limit = state.crawl.config?.max_pages ?? 0;
+    $('resume-limit-current').textContent = `Gespeicherte URL-Grenze: ${number(limit)}${limit === 0 ? ' (keine konfigurierte URL-Grenze)' : ''}.`;
+    $('resume-max-pages').value = limit;
+    $('resume-limit-error').hidden = true;
+    $('resume-limit-dialog').showModal();
   }
 
   function renderControls() {
-    $('start-button').disabled = Boolean(state.starting || active());
+    const busy = actionBusy();
+    $('start-button').disabled = Boolean(busy || active());
+    $('pause-button').hidden = !state.crawl || !['running', 'queued', 'pending', 'pausing'].includes(state.crawl.status);
+    $('pause-button').disabled = busy || state.crawl?.status === 'pausing';
     $('cancel-button').hidden = !active();
-    $('resume-button').hidden = !state.crawl || !['cancelled', 'canceled', 'failed', 'interrupted'].includes(state.crawl.status);
-    $('crawl-mode').disabled = Boolean(active());
-    $('seed-url').disabled = Boolean(active());
-    $('url-list').disabled = Boolean(active());
+    $('cancel-button').disabled = busy || state.crawl?.status === 'cancelling';
+    $('resume-button').hidden = !canResume();
+    $('resume-button').disabled = busy;
+    $('crawl-mode').disabled = Boolean(busy || active());
+    $('seed-url').disabled = Boolean(busy || active());
+    $('url-list').disabled = Boolean(busy || active());
+    $('list-import-open').disabled = !window.ListImportTools || Boolean(busy || active());
     const hasData = Boolean(state.crawl && state.pages.length);
     $('export-csv').disabled = (!hasData && !state.issues.length) || state.section === 'responses' && state.responses == null || state.section === 'fragments' && (!state.fragments || !state.fragments.enabled);
-    $('export-sitemap').disabled = !hasData || Boolean(active());
-    $('export-project').disabled = !state.crawl || Boolean(active());
+    $('export-sitemap').disabled = !hasData || Boolean(busy || active());
+    $('export-project').disabled = !state.crawl || Boolean(busy || active());
+    $('export-resources').disabled = !state.crawl || Boolean(busy || active());
     $('settings-summary').textContent = `${state.settings.concurrency} parallele Requests · ${state.settings.obey_robots ? 'Robots.txt beachten' : 'Robots.txt ignorieren'}${state.settings.max_pages ? ` · Grenze ${number(state.settings.max_pages)}` : ''}${state.settings.javascript_rendering ? ' · JavaScript-Rendering' : ''}`;
   }
 
@@ -370,6 +414,14 @@
     $('metric-html').textContent = number(html.length);
     $('metric-issues').textContent = number(Math.max(current.issues || 0, state.issues.length));
     $('metric-discovered').textContent = `${number(discovered)} URLs entdeckt`;
+    $('metric-inflight').textContent = current.in_flight == null ? 'Laufende Anfragen: nicht erfasst' : `${number(current.in_flight)} laufende Anfragen`;
+    $('metric-discovery').textContent = current.discovery_pending == null ? 'Sitemap-Discovery: nicht erfasst' : `${number(current.discovery_pending)} ausstehende Sitemap-Discovery-Einheiten`;
+    const checkpoint = state.crawl?.checkpoint;
+    const checkpointParts = state.crawl ? [`Generation ${state.crawl.generation == null ? 'nicht erfasst' : number(state.crawl.generation)}`] : [];
+    if (checkpoint) checkpointParts.push(`Gespeicherte Revision ${checkpoint.revision == null ? 'nicht erfasst' : number(checkpoint.revision)}`, `Checkpoint-Generation ${checkpoint.generation == null ? 'nicht erfasst' : number(checkpoint.generation)}`, `Befund: ${checkpoint.outcome || 'nicht erfasst'}`, `Discovery ${checkpoint.discovery_complete === true ? 'abgeschlossen' : checkpoint.discovery_complete === false ? 'unvollständig' : 'nicht erfasst'}`);
+    else if (state.crawl) checkpointParts.push('Checkpoint nicht erfasst');
+    $('crawl-checkpoint').hidden = !state.crawl;
+    $('crawl-checkpoint').textContent = checkpointParts.join(' · ');
     $('metric-failed').textContent = `${number(failed)} fehlgeschlagene Abrufe`;
     $('metric-indexable').textContent = `${number(html.filter((page) => page.indexable === true).length)} indexierbar`;
     const started = state.crawl?.started_at || state.crawl?.created_at;
@@ -377,15 +429,16 @@
     const elapsed = started ? Math.max(0, Math.floor(((finished ? new Date(finished).getTime() : Date.now()) - new Date(started).getTime()) / 1000)) : 0;
     $('metric-progress').textContent = state.crawl ? `${number(state.pages.length)} Datensätze · ${Number.isFinite(elapsed) ? `${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, '0')} min` : '—'}` : 'Noch keine URLs';
     const status = state.crawl?.status || 'idle';
-    const notices = [...array(state.crawl?.warnings), ...(state.crawl?.error ? [state.crawl.error] : []), ...(state.analysisError ? [state.analysisError] : []), ...(state.crawl?.summary?.limited ? ['Die konfigurierte Crawl-Grenze wurde erreicht. Die Website wurde nicht vollständig erfasst.'] : []), ...(state.crawl?.summary?.pending ? [`${number(state.crawl.summary.pending)} entdeckte URLs wurden in diesem Crawl noch nicht verarbeitet.`] : [])];
+    const notices = [...array(state.crawl?.warnings), ...(state.crawl?.error ? [state.crawl.error] : []), ...(state.analysisError ? [state.analysisError] : []), ...(status === 'limited' || state.crawl?.summary?.limited ? ['Die konfigurierte Crawl-Grenze wurde erreicht. Die Website wurde nicht vollständig erfasst. Fortsetzen verwendet die gespeicherten Crawl-Einstellungen.'] : []), ...(state.crawl?.resume_available === false && ['paused', 'limited', 'cancelled', 'failed', 'interrupted'].includes(status) ? ['Fortsetzen ist für diesen gespeicherten Stand nicht verfügbar. Die bisherigen Befunde bleiben einsehbar.'] : []), ...(state.crawl?.summary?.pending ? [`${number(state.crawl.summary.pending)} entdeckte URLs wurden in diesem Crawl noch nicht verarbeitet.`] : [])];
     $('crawl-notices').hidden = !notices.length;
     $('crawl-notices').querySelector('ul').innerHTML = notices.map((notice) => `<li>${escape(notice)}</li>`).join('');
     const statusClass = ['completed', 'complete', 'finished'].includes(status) ? 'completed' : status;
     $('crawl-state').innerHTML = `<span class="status-dot ${escape(statusClass)}"></span>${escape(labels[status] || (state.crawl ? status : 'Bereit für deinen ersten Crawl'))}`;
     const fraction = discovered ? Math.min(1, fetched / discovered) : 0;
     $('progress-bar').style.width = `${state.crawl && ['completed', 'complete', 'finished'].includes(status) ? 100 : fraction * 100}%`;
-    $('progress-bar').style.backgroundColor = status === 'failed' ? 'var(--danger)' : ['cancelled', 'canceled', 'cancelling'].includes(status) ? 'var(--warning)' : '';
-    if (active()) $('crawl-state').insertAdjacentHTML('beforeend', '<span>· Warteschlange kann während des Crawls wachsen</span>');
+    $('progress-bar').style.backgroundColor = status === 'failed' ? 'var(--danger)' : ['cancelled', 'canceled', 'cancelling', 'pausing', 'paused', 'limited', 'interrupted'].includes(status) ? 'var(--warning)' : '';
+    if (status === 'pausing') $('crawl-state').insertAdjacentHTML('beforeend', '<span>· Noch kein fertiger Pause-Checkpoint</span>');
+    else if (active()) $('crawl-state').insertAdjacentHTML('beforeend', '<span>· Warteschlange kann während des Crawls wachsen</span>');
     const counts = { overview: state.crawl ? number(fetched) : '—', internal: number(internals().length), external: number(externalRows().length), responses: state.responses == null ? '—' : number(state.responses.length), images: number(imageRows().length), imagefiles: number(imageFileRows().length), pdf: number(pdfRows().length), issues: number(state.issues.length) };
     document.querySelectorAll('[data-count]').forEach((element) => { element.textContent = counts[element.dataset.count]; });
     renderControls();
@@ -722,7 +775,7 @@
     $('table-view').hidden = ['overview', 'graph'].includes(state.section);
     $('export-csv').disabled = (state.section === 'inputs' ? !getRows().length : !state.pages.length && !state.issues.length) || state.section === 'responses' && state.responses == null || state.section === 'fragments' && (!state.fragments || !state.fragments.enabled);
     $('export-resources').hidden = !['inputs', 'pdf', 'imagefiles', 'responses', 'fragments', 'linkdom', ...domSections].includes(state.section);
-    $('export-resources').disabled = !state.crawl || Boolean(active());
+    $('export-resources').disabled = !state.crawl || Boolean(actionBusy() || active());
     $('export-resources').textContent = state.section === 'inputs' ? '↓ Alle Eingabezeilen CSV' : domSections.includes(state.section) ? '↓ Alle DOM-Beobachtungen CSV' : state.section === 'pdf' ? '↓ PDF-Details CSV' : state.section === 'responses' ? '↓ Alle Antworten CSV' : state.section === 'fragments' ? '↓ Alle Fragmentziele CSV' : state.section === 'linkdom' ? '↓ Alle Linkvorkommen CSV' : '↓ Bilddateien CSV';
     if (state.section === 'overview') renderOverview();
     else if (state.section === 'graph') renderGraph();
@@ -1260,8 +1313,18 @@
   function bindEvents() {
     bindListImporter();
     $('crawl-form').addEventListener('submit', startCrawl);
+    $('pause-button').addEventListener('click', pauseCrawl);
     $('cancel-button').addEventListener('click', cancelCrawl);
     $('resume-button').addEventListener('click', resumeCrawl);
+    $('resume-limit-close').addEventListener('click', () => { limitResumeContext = null; $('resume-limit-dialog').close(); });
+    $('resume-limit-dialog').addEventListener('cancel', () => { limitResumeContext = null; });
+    $('resume-limit-form').addEventListener('submit', event => {
+      event.preventDefault();
+      const maxPages = Number($('resume-max-pages').value), expected = limitResumeContext;
+      if (!$('resume-max-pages').value.trim() || !Number.isSafeInteger(maxPages) || maxPages < 0) { $('resume-limit-error').textContent = 'Eine nichtnegative ganze URL-Grenze eingeben. 0 hebt die konfigurierte Grenze auf.'; $('resume-limit-error').hidden = false; return; }
+      if (!expected || state.crawl?.id !== expected.id || state.generation !== expected.generation) { $('resume-limit-dialog').close(); return; }
+      limitResumeContext = null; $('resume-limit-dialog').close(); controlCrawl('resume', { max_pages: maxPages }, expected);
+    });
     $('crawl-mode').addEventListener('change', () => {
       const list = $('crawl-mode').value === 'list';
       $('list-control').hidden = !list;

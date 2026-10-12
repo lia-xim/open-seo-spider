@@ -541,7 +541,7 @@
     {
       "id": "modes.control",
       "name": "Pause, stop, resume",
-      "status": "partial",
+      "status": "implemented",
       "phase": "P1",
       "source_ids": [
         "general"
@@ -555,13 +555,20 @@
             "ui-live"
           ],
           "proves": "Cancellation preserves a resumable report/frontier. API cancel/resume and process termination/restart finish 725 observations without re-fetching the completed seed."
+        },
+        {
+          "verification_run_ids": [
+            "crawl-control-core",
+            "crawl-control",
+            "ui-control-fixture",
+            "ui-control-live"
+          ],
+          "proves": "Actual admitted HTTP/browser/PDF work drains; pending page/discovery work persists, SQLite-only restart makes zero HTTP, generation resume completes exact unique results with unchanged committed payloads. UI actions and delayed history/polls are generation-bound. Missing storage errors remain explicit."
         }
       ],
       "parity_evidence": [],
       "group": "modes",
-      "remaining_acceptance": [
-        "Prove explicit pause semantics/UI and complete in-flight result/occurrence equality before and after pause."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -708,17 +715,25 @@
     {
       "id": "crawl.rewrite",
       "name": "URL rewriting rules",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "config"
       ],
       "acceptance_test": "Apply saved query removal, regex replacement and rewrite rules; keep original and requested addresses for evidence.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "policy-preview",
+            "crawl-control"
+          ],
+          "proves": "Pure explicit query removal and bounded regex replacement preserve original/resolved/normalized/fetch identities, duplicate source occurrences and explained denies. API/CLI preview agree with zero HTTP; live integration remains pending."
+        }
+      ],
       "parity_evidence": [],
       "group": "crawl",
       "remaining_acceptance": [
-        "Apply saved query removal, regex replacement and rewrite rules; keep original and requested addresses for evidence."
+        "Apply the validated saved policy to live discovery and persist original/requested identity decisions and aliases atomically with the frontier; prove credentials, robots, redirects and resumed saved fetch identities."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -3148,6 +3163,13 @@
             "ui-renderer"
           ],
           "proves": "Complete CrawlReport JSON exports/imports config/pages/links/issues and optional inline browser fields. API round-trip compare has zero changes; live browser report download works. Actual browser render evidence survives project export and a legacy pre-extraction JSON report remains importable."
+        },
+        {
+          "verification_run_ids": [
+            "crawl-control",
+            "ui-control-live"
+          ],
+          "proves": "Explicit resume archives exact current JSON bytes including unknown extensions/formatting, immutable earlier generation remains identical, and read-only startup never rewrites historical reports."
         }
       ],
       "parity_evidence": [],
@@ -3719,7 +3741,7 @@
       "artifact": "docs/verification/api-e2e.json",
       "command": "node scripts/api-e2e.mjs",
       "result": "PASS",
-      "tested_at": "2026-10-12T10:36:30.918Z",
+      "tested_at": "2026-10-12T11:31:47.745Z",
       "scope": [
         "604 URL HTTP/API crawl",
         "robots excluded target",
@@ -3752,10 +3774,10 @@
       "artifact": "crates/core/src",
       "command": "cargo test -p open-seo-spider-core",
       "result": "PASS",
-      "scope": "121 core unit tests pass, including bounded TXT/CSV/XML/XLSX parser and transported provenance validation, indexed captured fragments including 20,000 targets and 20,000 links, plus all prior extraction/resource/robots contracts.",
+      "scope": "141 core unit tests pass, including pure policy, control freeze, atomic checkpoint rollback, legacy/read-only storage and all previous parser/audit contracts.",
       "reported_by": "Root and implementation agents; aggregate recorded in list-import-batch.",
       "limits": "Individual assertions cover only their owned fixtures; broad rule compliance is not inferred.",
-      "tested_at": "2026-10-12"
+      "tested_at": "2026-10-12T11:43:07.983Z"
     },
     {
       "id": "analysis",
@@ -3789,7 +3811,7 @@
       "id": "ui-fixture",
       "artifact": "web/verification/ui-fixture-results.json",
       "result": "PASS",
-      "tested_at": "2026-10-12T10:35:28.210Z",
+      "tested_at": "2026-10-12T11:35:03.743Z",
       "scope": [
         "empty state",
         "historical source index and row zero remain explicit zero while absent positions remain unknown",
@@ -3861,7 +3883,7 @@
       "id": "ui-renderer",
       "artifact": "web/verification/ui-renderer-live-results.json",
       "result": "PASS",
-      "tested_at": "2026-10-12T10:41:03.777Z",
+      "tested_at": "2026-10-12T11:38:45.741Z",
       "scope": [
         "real renderer discovers JS-only links and respects URL exclusion",
         "raw and rendered named CSS extraction evidence",
@@ -3885,10 +3907,10 @@
       "artifact": "docs/verification/mcp-e2e.json",
       "command": "node scripts/mcp-e2e.mjs",
       "result": "PASS",
-      "tested_at": "2026-10-12T10:36:05.820Z",
+      "tested_at": "2026-10-12T11:31:51.440Z",
       "scope": [
-        "stdio: SDK initialize, 11 tools, start/status/pages/issues/project/analysis/compare/list and tool error",
-        "streamable_http: SDK initialize, 11 tools, start/status/pages/issues/project/analysis/compare/list and tool error"
+        "stdio: SDK initialize, 12 tools, start/status/pages/issues/project/analysis/compare/list and completed-pause conflict/tool error",
+        "streamable_http: SDK initialize, 12 tools, start/status/pages/issues/project/analysis/compare/list and completed-pause conflict/tool error"
       ],
       "limits": "Official SDK against local owned fixtures; not an external-client deployment or reference-product parity test."
     },
@@ -3949,7 +3971,7 @@
       "artifact": "web/verification/ui-resource-live-results.json",
       "command": "node web/verification/ui-resource-live.cjs",
       "result": "PASS",
-      "tested_at": "2026-10-12T10:39:48.545Z",
+      "tested_at": "2026-10-12T11:38:26.242Z",
       "scope": [
         "native PDF parses original metadata verified page count and text without invented HTML title",
         "PDF URI annotation discovers local target and native scoped headers remain separate",
@@ -4052,8 +4074,28 @@
       "id": "ui-dom",
       "artifact": "web/verification/ui-dom-live-results.json",
       "result": "PASS",
-      "scope": "19 actual Chrome UI/API checks including raw/rendered DOM, unknown rendered status, legacy snapshots, fragment settings, MIME filtering, CSV and narrow width.",
-      "tested_at": "2026-10-12T10:39:32.282Z",
+      "scope": [
+        "default fragment checks remain explicitly disabled in actual API and UI",
+        "native H1-H3-H2 positive probe retains order hidden ARIA offset and image alt as separate facts",
+        "actual H1-H2 control has no non-sequential H2 notice while positive probe does",
+        "original Unicode keywords preserve missing content empty content zero characters and normalization",
+        "ordered custom ancestor rule wins while semantic positions and full href remain independent of crawl identity",
+        "srcset and picture declarations record width density applicability and invalid syntax without claiming browser selection",
+        "nonstandard navigation facts retain inert attributes without invented discovery or executable links",
+        "mixed-case exact HTML MIME is parsed and displayed while substring MIME remains outside HTML tables",
+        "opt-in ID legacy name Unicode and document-top matches differ from complete native missing targets",
+        "failed excluded truncated non-HTML XHTML and text directives never become false missing results",
+        "actual heading table opens safe DOM inspector and stored markup is inert text",
+        "actual keyword image candidate and navigation filters retain distinct evidence states",
+        "actual link occurrence and fragment tables export all native provenance and explicit unknown reasons",
+        "DOM-family Rust CSV and exact project JSON preserve the actual captured facts",
+        "actual Chrome changes effective DOM while native predecessor and rendered fragment match remain separately persisted",
+        "rendered table filter inspector and saved JSON retain the native predecessor",
+        "actual import of missing rendered response status proves neither present nor absent target and stays explicit Unknown",
+        "actual legacy import treats absent DOM paths and target captures as unknown rather than missing",
+        "DOM tables safe inspector and expanded settings preserve wide and 320px bottom reachability"
+      ],
+      "tested_at": "2026-10-12T11:38:09.895Z",
       "limits": "Own bounded fixtures; complete vendor feature, filter and workflow parity remain NOT_PROVEN."
     },
     {
@@ -4114,6 +4156,95 @@
       "result": "PASS",
       "tested_at": "2026-10-12T10:50:24.929Z",
       "limits": "Independent owned fixtures; complete vendor feature/filter/workflow parity remains NOT_PROVEN."
+    },
+    {
+      "id": "crawl-control",
+      "artifact": "docs/verification/crawl-control-e2e.json",
+      "command": "node scripts/crawl-control-e2e.mjs",
+      "result": "PASS",
+      "tested_at": "2026-10-12T11:37:34.620Z",
+      "scope": [
+        "Pause is idempotent, refuses concurrent resume, stops new admissions, drains two held requests and durably retains three discovered pending pages",
+        "Paused startup verifies SQLite checkpoint while preserving existing JSON whitespace/future fields exactly and performing no HTTP",
+        "A paused report/manifest with missing SQLite never becomes completed or resumable; its original snapshot remains available and byte-identical",
+        "A paused SQLite-only project with no report or manifest recovers its checkpoint and observations without requests",
+        "Resume increments generation/revision, finishes six unique pages without refetching committed rows, and archives exact prior bytes with immutable earlier revision",
+        "Completed pause and manifest-only resume are explicit conflicts, never invented saved-frontier work",
+        "An interrupted SQLite-only project retains committed seed and retries uncommitted admitted URL, explicitly providing at-least-once request recovery",
+        "Pause drains the admitted sitemap unit, preserves two child discovery units, survives restart and resumes discovery without falsely marking completion or refetching committed index",
+        "A real operator-limited checkpoint can explicitly remove the limit on resume; invalid operational settings preserve status/bytes and cause zero requests",
+        "Legacy limited report/frontier retains limited status and pending count with or without manifest, preserving bytes and making zero startup requests",
+        "Explicit folder/query policy preview has equal API/CLI decisions with zero HTTP and honestly reports that live crawl policy integration is pending"
+      ],
+      "limits": "Independent owned fixtures; full reference parity remains NOT_PROVEN."
+    },
+    {
+      "id": "ui-control-fixture",
+      "artifact": "web/verification/ui-crawl-control-fixture-results.json",
+      "command": "node web/verification/ui-crawl-control-smoke.cjs",
+      "result": "PASS",
+      "tested_at": "2026-10-12T11:34:49.090Z",
+      "scope": [
+        "running controls expose pause and stop while resume and start stay blocked",
+        "double pause posts once and old running poll cannot overwrite same-project paused acknowledgement",
+        "URL queue in-flight and discovery units stay distinct with observed generation checkpoint revision",
+        "late resume acknowledgement cannot change newly selected project counters controls or status",
+        "old action completion cannot unlock or clear a newer project action awaiting its own acknowledgement",
+        "late old-project action error is discarded and cannot erase current action state",
+        "pausing stays active and keeps polling until durable paused state enables resume",
+        "limited resume preserves displayed limit until explicit zero confirmation and dialog bottom stays reachable at 320px",
+        "project switch invalidates open limit confirmation and stale form cannot resume previous project",
+        "explicit false resume availability hides action and missing checkpoint generation stay unknown",
+        "control states and observed checkpoint keep document width bounded with footer reachable",
+        "pre-start terminal history reply cannot remove successfully selected new crawl from dropdown",
+        "late successful start is retained in history but cannot select itself over newer project or clear newer controls"
+      ],
+      "limits": "Independent owned fixtures; full reference parity remains NOT_PROVEN."
+    },
+    {
+      "id": "ui-control-live",
+      "artifact": "web/verification/ui-crawl-control-live-results.json",
+      "command": "node web/verification/ui-crawl-control-live.cjs",
+      "result": "PASS",
+      "tested_at": "2026-10-12T11:37:34.216Z",
+      "scope": [
+        "actual UI starts native crawl and two owned requests remain admitted behind independent barriers",
+        "double pause sends one POST and native pausing blocks resume/start without admitting queued URLs",
+        "actual draining pause controls fit 320px with document footer reachable",
+        "native pause drains and commits both responses plus their discovered frontier before showing durable revision and zero in-flight",
+        "genuine delayed running poll is discarded after pause and cannot erase committed paused state",
+        "one resume increments generation/revision and finishes six unique captured URLs without refetching committed pages",
+        "actual configured URL boundary is limited rather than complete and opening/cancelling dialog changes no saved limit",
+        "explicit zero limit confirmation reaches actual Rust override and resumes pending URL once with mobile dialog bottom reachable",
+        "paused sitemap discovery shows two discovery units separately from zero page URLs and does not claim discovery complete",
+        "actual UI resumes native discovery frontier without replaying committed sitemap index"
+      ],
+      "limits": "Independent owned fixtures; full reference parity remains NOT_PROVEN."
+    },
+    {
+      "id": "crawl-control-core",
+      "artifact": "crates/core/tests/control_fixtures.rs",
+      "result": "PASS",
+      "tested_at": "2026-10-12T11:43:07.983Z",
+      "scope": "Six native HTTP-control fixtures, three store checkpoint/legacy unit contracts and actual blocking PDF drain plus one explicit real Chrome pause/render/drain fixture. The second explicit Chrome integration is the existing rendered crawl gate.",
+      "reported_by": "Core agent and root workspace gate",
+      "limits": "Owned request barriers and controlled checkpoint writer; no general edited-database integrity or power-loss guarantee."
+    },
+    {
+      "id": "policy-preview",
+      "artifact": "crates/core/tests/fixtures/crawl-policy/manifest.json",
+      "result": "PASS",
+      "tested_at": "2026-10-12T11:43:07.983Z",
+      "scope": "11 pure native tests execute 47 authored candidates; API/CLI outputs equal with zero HTTP. Scope/query/rewrite identity traces and aliases remain an independent profile.",
+      "limits": "Live crawler integration and vendor policy equivalence remain NOT_PROVEN."
+    },
+    {
+      "id": "crawl-control-batch",
+      "artifact": "docs/verification/crawl-control-batch.json",
+      "result": "PASS",
+      "tested_at": "2026-10-12T11:43:07.983Z",
+      "scope": "215 default Rust plus two explicit Chrome gates, native/API/CLI/MCP/browser control and preserved installed runtime; exact-source cross-platform CI pending.",
+      "limits": "Bounded independent acceptance only; full parity and next slices incomplete."
     }
   ],
   "reference_workflows": [
@@ -4235,16 +4366,16 @@
   ],
   "status_summary": {
     "overall": {
-      "implemented": 22,
+      "implemented": 23,
       "partial": 69,
-      "planned": 53,
+      "planned": 52,
       "total": 144
     },
     "phases": {
       "P1": {
-        "implemented": 8,
+        "implemented": 9,
         "partial": 25,
-        "planned": 12,
+        "planned": 11,
         "total": 45
       },
       "P2": {
@@ -4268,15 +4399,15 @@
     },
     "groups": {
       "modes": {
-        "implemented": 3,
-        "partial": 2,
+        "implemented": 4,
+        "partial": 1,
         "planned": 2,
         "total": 7
       },
       "crawl": {
         "implemented": 1,
-        "partial": 10,
-        "planned": 3,
+        "partial": 11,
+        "planned": 2,
         "total": 14
       },
       "robots": {
@@ -4370,5 +4501,6 @@
     "named_filters": 416,
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
-  }
+  },
+  "last_verified_at": "2026-10-12T11:43:07.983Z"
 }

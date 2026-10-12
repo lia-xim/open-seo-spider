@@ -1,0 +1,112 @@
+{
+  "tested_at": "2026-10-12T11:43:07.983Z",
+  "result": "PASS",
+  "platform": "native Windows",
+  "rust": {
+    "default_passed": 215,
+    "breakdown": {
+      "app": 36,
+      "core": 141,
+      "control": 6,
+      "crawl": 23,
+      "dom": 5,
+      "resources": 4
+    },
+    "default_ignored": 2,
+    "explicit_real_browser_passed": 2,
+    "format": "PASS",
+    "clippy": "PASS",
+    "debug_build": "PASS",
+    "release_build": "PASS"
+  },
+  "api_cli": {
+    "control_checks": 11,
+    "list_import_checks": 11,
+    "crawl_urls": 604,
+    "recovery_urls": 725,
+    "exports": 14
+  },
+  "mcp": {
+    "tools": 12,
+    "transports": 2,
+    "sdk": "2.3.1"
+  },
+  "ui": {
+    "fixture_passed": 47,
+    "control_fixture_passed": 13,
+    "actual_control_passed": 10,
+    "actual_dom_passed": 19,
+    "actual_resources_passed": 13,
+    "actual_list_import_passed": 14,
+    "actual_renderer_passed": 14,
+    "javascript_runtime_errors": []
+  },
+  "policy": {
+    "pure_unit_tests": 11,
+    "authored_candidate_contracts": 47,
+    "website_requests": 0,
+    "api_cli_equal": true,
+    "applied_to_live_crawls": false
+  },
+  "installed_runtime": {
+    "offline_website_requests": 0,
+    "preserved_json_files": 11,
+    "original_batch3_files_identical": true,
+    "offline_policy_preview": true,
+    "tested_at": "2026-10-12T11:42:57.2125017Z",
+    "release_sha256": "aa4e4fd67449410d3357481271d24bb68f4b283aadfc0a6d49f39c4a70cdaa1a",
+    "result": "PASS",
+    "saved_jobs": 7,
+    "mcp_tools": 12,
+    "byte_identical_after_restart": true,
+    "debug_sha256": "b35bd95ee691af1114ccd802730fb156d56486ab7f892d6252b7638eaea055bc"
+  },
+  "artifacts": [
+    {
+      "artifact": "docs/verification/crawl-control-e2e.json",
+      "sha256": "75a5386ab9e734a5ec0b3b6fa62bb4dece67259f2cb9513456ba365a8a558127"
+    },
+    {
+      "artifact": "docs/verification/api-e2e.json",
+      "sha256": "977b77e3cd81856bd6d614c61eed5e4c77ac1661bc495ecaa9fd2041df038e19"
+    },
+    {
+      "artifact": "docs/verification/mcp-e2e.json",
+      "sha256": "f54c1d3f102a2bb29d6159492915c5de930511657fb4ee1024e0c75b5f89251b"
+    },
+    {
+      "artifact": "docs/verification/list-import-e2e.json",
+      "sha256": "f90c6d5c00bba31970b4b20b4d023c8ea1b71c5cb93e46215af0c43fb30ac162"
+    },
+    {
+      "artifact": "web/verification/ui-fixture-results.json",
+      "sha256": "95c7d00e4401c11e2547e24f5055dc2be56242889751214735e9c9e36f57df6d"
+    },
+    {
+      "artifact": "web/verification/ui-crawl-control-fixture-results.json",
+      "sha256": "267ce725adf96139d856cb05946f10b908e755dde73f3fcf2714e62b7f208b00"
+    },
+    {
+      "artifact": "web/verification/ui-crawl-control-live-results.json",
+      "sha256": "535b64b7a04957e7a05d26777d7eb6ee1434679301d49d047d84472b52bdbd14"
+    },
+    {
+      "artifact": "web/verification/ui-dom-live-results.json",
+      "sha256": "d4e9ff21f1452b7b60c1b52094dae4cd64b8e95614f6261489373225eda7d2a2"
+    },
+    {
+      "artifact": "web/verification/ui-resource-live-results.json",
+      "sha256": "1e580b4f0bee6bb83177ae32dd5ce29175b6e7b1c988bd2ba052661305289870"
+    },
+    {
+      "artifact": "web/verification/ui-list-import-live-results.json",
+      "sha256": "9a39edce33776c0a8daa1da177659a0b16cc7b6b0dd69bf3704831d68212e58c"
+    },
+    {
+      "artifact": "web/verification/ui-renderer-live-results.json",
+      "sha256": "943186b4603d45797354086cd99663dc7e4fa33b0d9a949da5f83639ccc3a886"
+    }
+  ],
+  "scope": "Independent graceful pause/drain, durable page and discovery frontiers, SQLite-only read-only recovery, exact historical byte preservation, immutable generation reports, explicit operational resume overrides and stale UI/API generation protection. Pure URL-policy preview is separately bounded and offline.",
+  "remaining": "Full vendor feature/filter/workflow parity, selected recrawl, live crawl-policy integration, providers and large-scale performance remain incomplete. Local Windows Docker installation and power-loss/exactly-once remote-request durability are NOT_PROVEN. Cross-platform CI for this batch is pending."
+}

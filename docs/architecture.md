@@ -31,13 +31,19 @@ still apply; the current UI/server retains page observations in memory as well
 as SQLite. Million-URL throughput and memory scale have not been benchmarked.
 
 SQLite commits a completed page and its discovered links atomically. In-flight
-URLs remain pending until their result is committed. A job manifest makes
-unfinished crawls visible as interrupted after application restart. Reports and
+URLs remain pending until their result is committed. A controlled run records
+its generation and terminal checkpoint in SQLite. Read-only startup inspects
+that frontier even when report JSON and manifest are absent. Reports and
 manifests use temporary-file replacement. Finished reports merge the independent
 relationship/security audits before exports and UI retrieval.
 Terminal job status becomes visible only after its manifest replacement has
 completed. This synchronizes immediate resume; it does not establish power-loss
 durability or filesystem fsync behavior.
+Graceful pause stops new admission and drains admitted HTTP, browser and PDF
+work. Page and sitemap/robots discovery frontiers remain separate. Explicit
+resume archives exact prior report bytes; each published generation has an
+immutable report revision. See [crawl control](crawl-control.md) for recovery,
+projection failures, legacy state and at-least-once interrupted requests.
 Loading an existing completed snapshot is read-only: startup preserves stored
 JSON bytes, formatting and unknown extension fields. Importing a new report may
 derive current analysis and write a new snapshot. Typed API exports can contain
@@ -61,7 +67,7 @@ does not claim identical behavior to the HTTP crawler or reference product.
 | `GET /api/crawls/{id}/pages?offset=0&limit=200` | Bounded page observations, optional `q` and `internal` |
 | `GET /api/crawls/{id}/issues`, `/analysis` | Audit findings and graph/JSON-LD facts |
 | `GET /api/crawls/{id}/responses`, `/responses.csv` | Separate native response observations, including intermediate redirects; unretained hop headers/bodies remain unknown |
-| `POST /api/crawls/{id}/cancel`, `/resume` | Durable lifecycle control |
+| `POST /api/crawls/{id}/pause`, `/cancel`, `/resume` | Stop admission and drain to a checkpoint; cancellation and saved-frontier resume |
 | `GET /api/crawls/{id}/export.csv`, `/issues.csv`, `/links.csv`, `/extractions.csv` | Observed page, issue, link and configured extraction exports |
 | `GET /api/crawls/{id}/javascript.csv`, `/cookies.csv`, `/pdf.csv`, `/images.csv` | Typed script results, redacted cookie attributes, native PDF observations and fetched image metadata |
 | `GET /api/crawls/{id}/fragments`, `/fragments.csv`, `/dom.csv` | Opt-in fragment target checks and source-preserving DOM observations |
@@ -71,6 +77,7 @@ does not claim identical behavior to the HTTP crawler or reference product.
 | `POST /mcp` | Stateless Streamable HTTP MCP; GET returns 405 |
 | `GET /serp`; `POST /api/serp/preview`, `/import`, `/export.csv` | Offline metadata editing, measurement and CSV parsing; no website requests |
 | `GET /robots`; `POST /api/robots/simulate`, `/export.csv` | Bounded supplied-rule evaluation using the crawler matcher; no website requests |
+| `POST /api/policy/preview` | Explicit independent scope/query/rewrite decisions; zero HTTP, live crawler integration pending |
 
 The service is intended for loopback access. Host and browser Origin checks
 protect local mutations. Custom crawl headers go only to explicitly configured
@@ -113,6 +120,11 @@ frontier deduplication controls requests. Sitemap-index inputs enter sitemap
 discovery separately from page seeds. `inputs.csv` joins original occurrences to
 captured request identities without inventing status for invalid or unfetched
 rows. The CLI and HTTP transports share the same parser and validator.
+
+The independent pure [crawl policy preview](crawl-policy.md) evaluates explicit
+scope, query handling and regex replacements with ordered source occurrences,
+identity traces, alias coalescing and zero HTTP requests. It is exposed through
+the API and CLI; applying this policy to live crawl discovery is still pending.
 
 Fragment validation lazily indexes IDs and legacy names for each queried captured
 document. Repeated lookups preserve first-DOM-occurrence selection and raw-before-

@@ -1,11 +1,12 @@
 use crate::{
-    CrawlConfig, CrawlEvent, CrawlReport, CrawlStore, CrawlSummary, PageRecord, RedirectHop,
-    Severity, audit_pages_with_thresholds, normalize_url, parse_sitemap,
+    ControlledCrawlResult, CrawlConfig, CrawlControl, CrawlEvent, CrawlOutcome, CrawlReport,
+    CrawlRequest, CrawlStore, CrawlSummary, PageRecord, RedirectHop, Severity,
+    audit_pages_with_thresholds, normalize_url, parse_sitemap,
 };
 use crate::{
     audit::set_indexability,
     robots::{RateLimiter, RobotsCache},
-    store::QueueEntry,
+    store::{DiscoveryEntry, DiscoveryKind, QueueEntry},
     urls::{UrlFilters, origin, same_scope},
 };
 use anyhow::{Context, bail};
@@ -18,14 +19,14 @@ use reqwest::{
 use std::{
     collections::{BTreeMap, HashSet, VecDeque},
     path::Path,
-    sync::{
-        Arc,
-        atomic::{AtomicBool, Ordering},
-    },
+    sync::{Arc, atomic::AtomicBool},
     time::{Duration, Instant},
 };
 use tokio::sync::{Semaphore, mpsc::UnboundedSender};
 use url::Url;
+
+#[cfg(test)]
+type PdfParseHook = Arc<dyn Fn() + Send + Sync>;
 
 pub struct Crawler {
     config: CrawlConfig,
@@ -37,6 +38,8 @@ pub struct Crawler {
     rate: Arc<RateLimiter>,
     store: Option<Arc<CrawlStore>>,
     pdf_slots: Arc<Semaphore>,
+    #[cfg(test)]
+    pdf_parse_hook: Option<PdfParseHook>,
 }
 
 impl Crawler {
@@ -127,6 +130,8 @@ impl Crawler {
             rate,
             store: None,
             pdf_slots: Arc::new(Semaphore::new(2)),
+            #[cfg(test)]
+            pdf_parse_hook: None,
         })
     }
 
@@ -140,12 +145,35 @@ impl Crawler {
         events: Option<UnboundedSender<CrawlEvent>>,
         cancel: Arc<AtomicBool>,
     ) -> anyhow::Result<CrawlReport> {
+        Ok(self
+            .run_controlled(events, CrawlControl::from_cancel(cancel))
+            .await?
+            .report)
+    }
+
+    /// Pause stops admission and awaits every already admitted document. Cancel
+    /// keeps the compatibility abort behavior; aborted requests remain pending.
+    pub async fn run_controlled(
+        &self,
+        events: Option<UnboundedSender<CrawlEvent>>,
+        control: CrawlControl,
+    ) -> anyhow::Result<ControlledCrawlResult> {
+        if control.is_finished() {
+            bail!(
+                "A finished crawl controller cannot be reused; create one for the new invocation"
+            );
+        }
         let started_at = Utc::now().to_rfc3339();
         let started = Instant::now();
         let resumed = match &self.store {
             Some(store) => store.prepare(&self.config)?,
             None => false,
         };
+        let generation = self
+            .store
+            .as_ref()
+            .map(|store| store.begin_run(&started_at))
+            .transpose()?;
         let mut pages = match &self.store {
             Some(store) => store.pages()?,
             None => Vec::new(),
@@ -159,7 +187,6 @@ impl Crawler {
             .map(|page| page.url.clone())
             .chain(queue.iter().map(|entry| entry.url.clone()))
             .collect();
-        let mut warnings = Vec::new();
         if resumed {
             for page in &pages {
                 emit(
@@ -185,41 +212,17 @@ impl Crawler {
                 queue.push_back(entry);
             }
         }
-        // Sitemap discovery is skipped in list mode so an explicit URL list stays exact.
-        let discovery_complete = match &self.store {
-            Some(store) => store.discovery_complete()?,
-            None => false,
-        };
-        if !discovery_complete && (self.config.crawl_links || !self.config.sitemap_urls.is_empty())
-        {
-            let discovery = async {
-                let sitemap_urls = self.sitemap_seeds(&cancel).await;
-                self.ingest_sitemaps(sitemap_urls, &cancel).await
-            };
-            let (entries, sitemap_warnings) = tokio::select! {
-                result = discovery => result,
-                _ = wait_for_cancel(&cancel) => (Vec::new(),Vec::new()),
-            };
-            for warning in sitemap_warnings {
-                emit(
-                    &events,
-                    CrawlEvent::Warning {
-                        message: warning.clone(),
-                    },
-                );
-                warnings.push(warning);
-            }
-            let entries: Vec<_> = entries
-                .into_iter()
-                .filter(|entry| self.filters.allows(&entry.url) && seen.insert(entry.url.clone()))
-                .collect();
-            if let Some(store) = &self.store {
-                store.save_discovery(&entries, !cancel.load(Ordering::Relaxed))?;
-            }
-            for entry in entries {
-                queue.push_back(entry);
-            }
-        }
+        let discovery = self
+            .run_discovery(
+                &control,
+                &events,
+                &mut seen,
+                (pages.len(), queue.len()),
+                generation,
+            )
+            .await?;
+        queue.extend(discovery.pages);
+        let warnings = discovery.warnings;
         let context = Arc::new(FetchContext {
             config: self.config.clone(),
             seeds: self.seeds.clone(),
@@ -228,14 +231,19 @@ impl Crawler {
             robots: self.robots.clone(),
             rate: self.rate.clone(),
             pdf_slots: self.pdf_slots.clone(),
+            #[cfg(test)]
+            pdf_parse_hook: self.pdf_parse_hook.clone(),
         });
         let mut tasks: FuturesUnordered<BoxFuture<'static, PageRecord>> = FuturesUnordered::new();
         let mut limited = false;
         loop {
-            if cancel.load(Ordering::Relaxed) {
+            if control.request() == CrawlRequest::CancelRequested {
                 break;
             }
-            while tasks.len() < self.config.concurrency && !queue.is_empty() {
+            while control.request() == CrawlRequest::Running
+                && tasks.len() < self.config.concurrency
+                && !queue.is_empty()
+            {
                 if self
                     .config
                     .max_pages
@@ -261,7 +269,7 @@ impl Crawler {
             }
             let page = tokio::select! {
                 page = tasks.next() => page.expect("nonempty tasks"),
-                _ = tokio::time::sleep(Duration::from_millis(100)) => continue,
+                _ = control.changed() => continue,
             };
             let mut discoveries = Vec::new();
             if self.config.crawl_links
@@ -284,7 +292,11 @@ impl Crawler {
                 }
             }
             if let Some(store) = &self.store {
-                store.complete(&page, &discoveries)?;
+                store.complete(
+                    &page,
+                    &discoveries,
+                    generation.expect("stored run generation"),
+                )?;
             }
             queue.extend(discoveries);
             emit(
@@ -310,6 +322,14 @@ impl Crawler {
             };
             *status_counts.entry(key).or_insert(0) += 1;
         }
+        let final_request = control.finish();
+        let is_limited = (limited && pending > 0) || discovery.limited;
+        let outcome = match final_request {
+            CrawlRequest::CancelRequested => CrawlOutcome::Cancelled,
+            CrawlRequest::PauseRequested => CrawlOutcome::Paused,
+            CrawlRequest::Running if is_limited => CrawlOutcome::Limited,
+            CrawlRequest::Running => CrawlOutcome::Completed,
+        };
         let summary = CrawlSummary {
             started_at,
             finished_at: Utc::now().to_rfc3339(),
@@ -327,8 +347,8 @@ impl Crawler {
                 .iter()
                 .filter(|i| i.severity == Severity::Warning)
                 .count(),
-            cancelled: cancel.load(Ordering::Relaxed),
-            limited: limited && pending > 0,
+            cancelled: outcome == CrawlOutcome::Cancelled,
+            limited: is_limited,
             status_counts,
         };
         let report = CrawlReport {
@@ -338,38 +358,74 @@ impl Crawler {
             summary: summary.clone(),
             warnings,
         };
-        if let Some(store) = &self.store {
-            store.save_report(&report)?;
-        }
+        let checkpoint = self
+            .store
+            .as_ref()
+            .map(|store| {
+                store.save_checkpoint(&report, outcome, generation.expect("stored run generation"))
+            })
+            .transpose()?;
         emit(&events, CrawlEvent::Finished { summary });
-        Ok(report)
+        Ok(ControlledCrawlResult {
+            report,
+            outcome,
+            checkpoint,
+            discovery_pending: discovery.pending,
+        })
     }
 
-    async fn sitemap_seeds(&self, cancel: &AtomicBool) -> Vec<String> {
-        let mut sitemaps = self.config.sitemap_urls.clone();
+    fn discovery_seeds(&self) -> Vec<DiscoveryEntry> {
+        let mut entries = Vec::new();
         if self.config.crawl_links && self.config.discover_sitemaps && self.config.obey_robots {
             let mut origins = HashSet::new();
             for seed in &self.seeds {
-                if cancel.load(Ordering::Relaxed) {
-                    break;
-                }
                 if origins.insert(origin(seed)) {
-                    sitemaps.extend(self.robots.get(seed).await.sitemaps.clone());
+                    entries.push(DiscoveryEntry {
+                        kind: DiscoveryKind::Robots,
+                        url: format!("{}/", origin(seed)),
+                    });
                 }
             }
         }
-        sitemaps
+        entries.extend(self.config.sitemap_urls.iter().map(|url| DiscoveryEntry {
+            kind: DiscoveryKind::Sitemap,
+            url: url.clone(),
+        }));
+        entries
     }
 
-    async fn ingest_sitemaps(
+    async fn run_discovery(
         &self,
-        seeds: Vec<String>,
-        cancel: &AtomicBool,
-    ) -> (Vec<QueueEntry>, Vec<String>) {
-        let mut queue: VecDeque<String> = seeds.into();
-        let mut seen = HashSet::new();
-        let mut entries = Vec::new();
-        let mut warnings = Vec::new();
+        control: &CrawlControl,
+        events: &Option<UnboundedSender<CrawlEvent>>,
+        page_seen: &mut HashSet<String>,
+        initial: (usize, usize),
+        generation: Option<u64>,
+    ) -> anyhow::Result<DiscoveryProgress> {
+        let seeds = self.discovery_seeds();
+        let mut progress = DiscoveryProgress::default();
+        let (mut queue, mut discovered, mut completed_sitemaps) = if let Some(store) = &self.store {
+            store.initialize_discovery(&seeds)?;
+            progress.warnings = store.discovery_warnings()?;
+            if store.discovery_complete()? {
+                return Ok(progress);
+            }
+            (
+                VecDeque::from(store.discovery_entries(true)?),
+                store
+                    .discovery_entries(false)?
+                    .into_iter()
+                    .collect::<HashSet<_>>(),
+                store.completed_sitemaps()?,
+            )
+        } else {
+            let mut discovered = HashSet::new();
+            let queue = seeds
+                .into_iter()
+                .filter(|entry| discovered.insert(entry.clone()))
+                .collect();
+            (queue, discovered, 0)
+        };
         let context = FetchContext {
             config: self.config.clone(),
             seeds: self.seeds.clone(),
@@ -378,84 +434,193 @@ impl Crawler {
             robots: self.robots.clone(),
             rate: self.rate.clone(),
             pdf_slots: self.pdf_slots.clone(),
+            #[cfg(test)]
+            pdf_parse_hook: self.pdf_parse_hook.clone(),
         };
-        while let Some(url) = queue.pop_front() {
-            if cancel.load(Ordering::Relaxed) {
+        while let Some(entry) = queue.front().cloned() {
+            if control.request() != CrawlRequest::Running {
                 break;
             }
-            if !seen.insert(url.clone()) {
-                continue;
-            }
-            if seen.len() > self.config.max_sitemap_documents {
-                warnings.push(format!(
+            if entry.kind == DiscoveryKind::Sitemap
+                && completed_sitemaps >= self.config.max_sitemap_documents
+            {
+                let warning = format!(
                     "Sitemap document resource limit ({}) reached",
                     self.config.max_sitemap_documents
-                ));
+                );
+                emit(
+                    events,
+                    CrawlEvent::Warning {
+                        message: warning.clone(),
+                    },
+                );
+                progress.warnings.push(warning);
+                progress.limited = true;
                 break;
             }
-            let Some(parsed) = normalize_url(&url, None) else {
-                warnings.push(format!("Invalid sitemap URL {url}"));
-                continue;
+            emit(
+                events,
+                CrawlEvent::Progress {
+                    completed: initial.0,
+                    queued: initial.1 + progress.pages.len() + queue.len().saturating_sub(1),
+                    in_flight: 1,
+                },
+            );
+            // Pause deliberately does not drop this future. Cancel retains the
+            // existing abort behavior and leaves this unit pending in storage.
+            let mut output = tokio::select! {
+                output = self.discover_unit(&entry, &context) => output,
+                _ = control.cancelled() => break,
             };
-            if !same_scope(&parsed, &self.seeds, self.config.include_subdomains) {
-                warnings.push(format!("Sitemap outside configured scope skipped: {url}"));
-                continue;
+            output.pages.retain(|page| {
+                self.filters.allows(&page.url) && page_seen.insert(page.url.clone())
+            });
+            output
+                .children
+                .retain(|child| discovered.insert(child.clone()));
+            if let Some(store) = &self.store {
+                store.complete_discovery(
+                    &entry,
+                    &output.pages,
+                    &output.children,
+                    &output.warnings,
+                    generation.expect("stored run generation"),
+                )?;
             }
-            let (page, body) = context
-                .document(QueueEntry {
-                    url: url.clone(),
-                    depth: 0,
-                    discovered_from: None,
-                })
-                .await;
-            if page.error.is_some()
-                || page.final_status != Some(200)
-                || page.truncated
-                || body.is_none()
-            {
-                warnings.push(format!(
-                    "Sitemap could not be read completely: {url}: {}",
-                    page.error
-                        .unwrap_or_else(|| format!("status {:?}", page.final_status))
-                ));
-                continue;
+            queue.pop_front();
+            queue.extend(output.children);
+            if entry.kind == DiscoveryKind::Sitemap {
+                completed_sitemaps += 1;
             }
-            match parse_sitemap(&body.unwrap_or_default()) {
-                Ok(sitemap) => {
-                    for loc in sitemap.locations {
-                        let Some(parsed) = normalize_url(&loc, None) else {
-                            continue;
-                        };
-                        if !same_scope(&parsed, &self.seeds, self.config.include_subdomains) {
-                            continue;
-                        }
-                        if sitemap.is_index {
-                            queue.push_back(parsed.to_string());
-                        } else {
-                            entries.push(QueueEntry {
-                                url: parsed.to_string(),
-                                depth: 0,
-                                discovered_from: Some(url.clone()),
-                            });
-                        }
-                    }
+            progress.pages.extend(output.pages);
+            for warning in output.warnings {
+                emit(
+                    events,
+                    CrawlEvent::Warning {
+                        message: warning.clone(),
+                    },
+                );
+                if !progress.warnings.contains(&warning) {
+                    progress.warnings.push(warning);
                 }
-                Err(error) => warnings.push(format!("Invalid sitemap XML at {url}: {error}")),
             }
         }
-        (entries, warnings)
+        progress.pending = queue.len();
+        emit(
+            events,
+            CrawlEvent::Progress {
+                completed: initial.0,
+                queued: initial.1 + progress.pages.len() + progress.pending,
+                in_flight: 0,
+            },
+        );
+        Ok(progress)
     }
+
+    async fn discover_unit(
+        &self,
+        entry: &DiscoveryEntry,
+        context: &FetchContext,
+    ) -> DiscoveryOutput {
+        let mut output = DiscoveryOutput::default();
+        let Some(parsed) = normalize_url(&entry.url, None) else {
+            output
+                .warnings
+                .push(format!("Invalid sitemap URL {}", entry.url));
+            return output;
+        };
+        if !same_scope(&parsed, &self.seeds, self.config.include_subdomains) {
+            output.warnings.push(format!(
+                "Sitemap outside configured scope skipped: {}",
+                entry.url
+            ));
+            return output;
+        }
+        if entry.kind == DiscoveryKind::Robots {
+            output
+                .children
+                .extend(
+                    self.robots
+                        .get(&parsed)
+                        .await
+                        .sitemaps
+                        .iter()
+                        .map(|url| DiscoveryEntry {
+                            kind: DiscoveryKind::Sitemap,
+                            url: url.clone(),
+                        }),
+                );
+            return output;
+        }
+        let (page, body) = context
+            .document(QueueEntry {
+                url: parsed.to_string(),
+                depth: 0,
+                discovered_from: None,
+            })
+            .await;
+        if page.error.is_some()
+            || page.final_status != Some(200)
+            || page.truncated
+            || body.is_none()
+        {
+            output.warnings.push(format!(
+                "Sitemap could not be read completely: {}: {}",
+                entry.url,
+                page.error
+                    .unwrap_or_else(|| format!("status {:?}", page.final_status)),
+            ));
+            return output;
+        }
+        match parse_sitemap(&body.unwrap_or_default()) {
+            Ok(sitemap) => {
+                for loc in sitemap.locations {
+                    let Some(parsed) = normalize_url(&loc, None) else {
+                        continue;
+                    };
+                    if !same_scope(&parsed, &self.seeds, self.config.include_subdomains) {
+                        continue;
+                    }
+                    if sitemap.is_index {
+                        output.children.push(DiscoveryEntry {
+                            kind: DiscoveryKind::Sitemap,
+                            url: parsed.to_string(),
+                        });
+                    } else {
+                        output.pages.push(QueueEntry {
+                            url: parsed.to_string(),
+                            depth: 0,
+                            discovered_from: Some(entry.url.clone()),
+                        });
+                    }
+                }
+            }
+            Err(error) => output
+                .warnings
+                .push(format!("Invalid sitemap XML at {}: {error}", entry.url)),
+        }
+        output
+    }
+}
+
+#[derive(Default)]
+struct DiscoveryOutput {
+    pages: Vec<QueueEntry>,
+    children: Vec<DiscoveryEntry>,
+    warnings: Vec<String>,
+}
+
+#[derive(Default)]
+struct DiscoveryProgress {
+    pages: Vec<QueueEntry>,
+    warnings: Vec<String>,
+    pending: usize,
+    limited: bool,
 }
 
 fn emit(events: &Option<UnboundedSender<CrawlEvent>>, event: CrawlEvent) {
     if let Some(events) = events {
         let _ = events.send(event);
-    }
-}
-
-async fn wait_for_cancel(cancel: &AtomicBool) {
-    while !cancel.load(Ordering::Relaxed) {
-        tokio::time::sleep(Duration::from_millis(50)).await;
     }
 }
 
@@ -467,6 +632,8 @@ struct FetchContext {
     robots: Arc<RobotsCache>,
     rate: Arc<RateLimiter>,
     pdf_slots: Arc<Semaphore>,
+    #[cfg(test)]
+    pdf_parse_hook: Option<PdfParseHook>,
 }
 
 impl FetchContext {
@@ -644,8 +811,14 @@ impl FetchContext {
                     .acquire_owned()
                     .await
                     .expect("PDF semaphore is never closed");
+                #[cfg(test)]
+                let parse_hook = self.pdf_parse_hook.clone();
                 match tokio::task::spawn_blocking(move || {
                     let _permit = permit;
+                    #[cfg(test)]
+                    if let Some(hook) = parse_hook {
+                        hook();
+                    }
                     crate::pdf::analyze(&pdf_body, &url, &config)
                 })
                 .await
@@ -756,5 +929,142 @@ impl FetchContext {
                 .push("PDF analysis incomplete; document indexability not established".into());
         }
         (page, text)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use lopdf::dictionary;
+    use std::sync::{Condvar, Mutex};
+    use tokio::io::{AsyncReadExt, AsyncWriteExt};
+
+    struct ParserRelease(Arc<(Mutex<bool>, Condvar)>);
+
+    impl ParserRelease {
+        fn release(&self) {
+            *self.0.0.lock().unwrap() = true;
+            self.0.1.notify_all();
+        }
+    }
+
+    impl Drop for ParserRelease {
+        fn drop(&mut self) {
+            self.release();
+        }
+    }
+
+    #[tokio::test]
+    async fn pause_waits_for_the_started_blocking_pdf_parser_before_checkpointing() {
+        let mut pdf = lopdf::Document::with_version("1.7");
+        let pages_id = pdf.new_object_id();
+        let page = pdf.add_object(lopdf::dictionary! {
+            "Type" => "Page", "Parent" => pages_id,
+            "MediaBox" => vec![0.into(),0.into(),612.into(),792.into()],
+            "Resources" => lopdf::dictionary! {},
+        });
+        pdf.objects.insert(
+            pages_id,
+            lopdf::dictionary! {
+                "Type" => "Pages", "Kids" => vec![page.into()], "Count" => 1,
+            }
+            .into(),
+        );
+        let catalog =
+            pdf.add_object(lopdf::dictionary! { "Type" => "Catalog", "Pages" => pages_id });
+        pdf.trailer.set("Root", catalog);
+        let mut bytes = Vec::new();
+        pdf.save_to(&mut bytes).unwrap();
+        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let url = format!("http://{}/blank.pdf", listener.local_addr().unwrap());
+        let server = tokio::spawn(async move {
+            let (mut socket, _) = listener.accept().await.unwrap();
+            let mut request = Vec::new();
+            let mut buffer = [0; 1024];
+            while !request.windows(4).any(|part| part == b"\r\n\r\n") {
+                let n = socket.read(&mut buffer).await.unwrap();
+                if n == 0 {
+                    return;
+                }
+                request.extend_from_slice(&buffer[..n]);
+            }
+            let header = format!(
+                "HTTP/1.1 200 Fixture\r\nContent-Type: application/pdf\r\nContent-Length: {}\r\nConnection: close\r\n\r\n",
+                bytes.len()
+            );
+            socket.write_all(header.as_bytes()).await.unwrap();
+            socket.write_all(&bytes).await.unwrap();
+        });
+        let release = ParserRelease(Arc::new((Mutex::new(false), Condvar::new())));
+        let barrier = release.0.clone();
+        let (started_sender, started) = tokio::sync::oneshot::channel();
+        let started_sender = Mutex::new(Some(started_sender));
+        let temp = tempfile::tempdir().unwrap();
+        let path = temp.path().join("parser.sqlite");
+        let mut crawler = Crawler::new(CrawlConfig {
+            seed_urls: vec![url],
+            obey_robots: false,
+            discover_sitemaps: false,
+            crawl_links: false,
+            concurrency: 1,
+            request_timeout_secs: 5,
+            ..Default::default()
+        })
+        .unwrap()
+        .with_store(&path)
+        .unwrap();
+        crawler.pdf_parse_hook = Some(Arc::new(move || {
+            started_sender
+                .lock()
+                .unwrap()
+                .take()
+                .unwrap()
+                .send(())
+                .unwrap();
+            let (mutex, condition) = &*barrier;
+            let mut released = mutex.lock().unwrap();
+            while !*released {
+                released = condition.wait(released).unwrap();
+            }
+        }));
+        let control = CrawlControl::new();
+        let cloned = control.clone();
+        let (sender, mut events) = tokio::sync::mpsc::unbounded_channel();
+        let run = tokio::spawn(async move { crawler.run_controlled(Some(sender), cloned).await });
+        tokio::time::timeout(Duration::from_secs(5), started)
+            .await
+            .unwrap()
+            .unwrap();
+        while events.try_recv().is_ok() {}
+        control.request_pause();
+        tokio::time::timeout(Duration::from_secs(3), async {
+            while let Some(event) = events.recv().await {
+                if matches!(event, CrawlEvent::Progress { in_flight: 1, .. }) {
+                    return;
+                }
+            }
+            panic!("parser drain progress absent");
+        })
+        .await
+        .unwrap();
+        assert!(!run.is_finished());
+        let before = CrawlStore::inspect(&path).unwrap();
+        assert!(!before.checkpoint_valid);
+        assert_eq!(before.completed, 0);
+        assert_eq!(before.pending, 1);
+        release.release();
+        let result = tokio::time::timeout(Duration::from_secs(5), run)
+            .await
+            .unwrap()
+            .unwrap()
+            .unwrap();
+        assert_eq!(result.outcome, CrawlOutcome::Paused);
+        assert_eq!(result.report.pages.len(), 1);
+        assert_eq!(
+            result.report.pages[0].pdf.as_ref().unwrap().page_count,
+            Some(1)
+        );
+        assert!(CrawlStore::inspect(&path).unwrap().checkpoint_valid);
+        server.await.unwrap();
     }
 }

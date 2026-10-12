@@ -1,6 +1,8 @@
 //! Independent HTTP crawling, SEO extraction, durable storage and exports.
 //! No commercial URL cap is imposed. Resource limits are user configuration.
 mod audit;
+mod control;
+mod crawl_policy;
 mod crawler;
 mod dom_facts;
 mod export;
@@ -25,6 +27,11 @@ mod text_metrics;
 mod urls;
 
 pub use audit::{audit_pages, audit_pages_with_thresholds};
+pub use control::{
+    ControlledCrawlResult, CrawlCheckpoint, CrawlControl, CrawlOutcome, CrawlRequest,
+    CrawlRunState, CrawlStoreInspection,
+};
+pub use crawl_policy::*;
 pub use crawler::Crawler;
 pub use dom_facts::audit_dom_metadata;
 pub use export::{

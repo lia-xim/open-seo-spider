@@ -39,6 +39,12 @@ enum Command {
         #[arg(long)]
         csv: Option<PathBuf>,
     },
+    /// Preview explicit scope, query and rewrite decisions locally; no crawl is started.
+    PreviewPolicy {
+        input: PathBuf,
+        #[arg(long)]
+        output: Option<PathBuf>,
+    },
     /// Serve MCP tools over stdio against the running local application.
     Mcp {
         #[arg(long, default_value = "http://127.0.0.1:8787")]
@@ -94,6 +100,17 @@ async fn main() -> anyhow::Result<()> {
     }) {
         Command::Serve { listen, data_dir } => server::serve(&listen, data_dir).await?,
         Command::Mcp { server } => mcp::stdio(&server).await?,
+        Command::PreviewPolicy { input, output } => {
+            let request: open_seo_spider_core::CrawlPolicyPreviewInput =
+                serde_json::from_slice(&read_bounded(&input, 8 * 1024 * 1024).await?)?;
+            let preview = open_seo_spider_core::preview_crawl_policy(&request)?;
+            let json = serde_json::to_string_pretty(&preview)?;
+            if let Some(output) = output {
+                tokio::fs::write(output, json).await?;
+            } else {
+                println!("{json}");
+            }
+        }
         Command::ImportList {
             file,
             options,

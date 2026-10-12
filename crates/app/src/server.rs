@@ -8,25 +8,19 @@ use axum::{
 };
 use base64::{Engine as _, engine::general_purpose::STANDARD};
 use open_seo_spider_core::{
-    AuditIssue, CrawlConfig, CrawlEvent, CrawlReport, CrawlStore, Crawler, ListImportLimits,
-    ListImportOptions, PageRecord, RobotsSimulationInput, SerpInputRow, compare_crawls,
-    export_browser_cookies_csv, export_custom_extractions_csv, export_custom_javascript_csv,
-    export_dom_observations_csv, export_fragments_csv, export_image_resources_csv,
-    export_input_occurrences_csv, export_issues_csv, export_links_csv, export_pages_csv,
-    export_pdf_csv, export_response_observations_csv, export_robots_simulation_csv,
-    export_serp_csv, export_sitemap_xml, import_serp_csv, import_url_list, inspect_xlsx_list,
+    AuditIssue, CrawlCheckpoint, CrawlConfig, CrawlControl, CrawlEvent, CrawlOutcome,
+    CrawlPolicyPreviewInput, CrawlReport, CrawlStore, Crawler, ListImportLimits, ListImportOptions,
+    PageRecord, RobotsSimulationInput, SerpInputRow, compare_crawls, export_browser_cookies_csv,
+    export_custom_extractions_csv, export_custom_javascript_csv, export_dom_observations_csv,
+    export_fragments_csv, export_image_resources_csv, export_input_occurrences_csv,
+    export_issues_csv, export_links_csv, export_pages_csv, export_pdf_csv,
+    export_response_observations_csv, export_robots_simulation_csv, export_serp_csv,
+    export_sitemap_xml, import_serp_csv, import_url_list, inspect_xlsx_list, preview_crawl_policy,
     preview_serp, response_observations, simulate_robots, validate_fragments,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
-use std::{
-    collections::HashMap,
-    path::PathBuf,
-    sync::{
-        Arc,
-        atomic::{AtomicBool, Ordering},
-    },
-};
+use std::{collections::HashMap, path::PathBuf, sync::Arc};
 use tokio::sync::RwLock;
 use uuid::Uuid;
 
@@ -45,11 +39,15 @@ struct Job {
     pages: Vec<PageRecord>,
     issues: Vec<AuditIssue>,
     queued: usize,
+    discovery_pending: usize,
     in_flight: usize,
     warnings: Vec<String>,
     error: Option<String>,
     report: Option<CrawlReport>,
-    cancel: Arc<AtomicBool>,
+    control: CrawlControl,
+    generation: u64,
+    checkpoint: Option<CrawlCheckpoint>,
+    frontier_available: bool,
 }
 #[derive(Serialize, Deserialize)]
 struct JobManifest {
@@ -58,8 +56,23 @@ struct JobManifest {
     status: String,
     started_at: String,
     finished_at: Option<String>,
+    #[serde(default)]
+    generation: u64,
+    #[serde(default)]
+    checkpoint: Option<CrawlCheckpoint>,
 }
 impl Job {
+    fn manifest(&self) -> JobManifest {
+        JobManifest {
+            id: self.id,
+            config: self.config.clone(),
+            status: self.status.clone(),
+            started_at: self.started_at.clone(),
+            finished_at: self.finished_at.clone(),
+            generation: self.generation,
+            checkpoint: self.checkpoint.clone(),
+        }
+    }
     fn status(&self) -> Value {
         let failed = self
             .pages
@@ -68,7 +81,7 @@ impl Job {
                 page.error.is_some() || page.final_status.is_some_and(|status| status >= 400)
             })
             .count();
-        json!({"id":self.id,"status":self.status,"seed_url":self.config.seed_urls.first(),"config":self.config,"started_at":self.started_at,"finished_at":self.finished_at,"stats":{"discovered":self.pages.len()+self.queued+self.in_flight,"queued":self.queued,"fetched":self.pages.len(),"failed":failed,"issues":self.issues.len(),"in_flight":self.in_flight},"warnings":self.warnings,"error":self.error,"summary":self.report.as_ref().map(|report| &report.summary)})
+        json!({"id":self.id,"status":self.status,"seed_url":self.config.seed_urls.first(),"config":self.config,"started_at":self.started_at,"finished_at":self.finished_at,"generation":self.generation,"checkpoint":self.checkpoint,"resume_available":self.frontier_available && !matches!(self.status.as_str(),"running"|"pausing"|"cancelling"),"stats":{"discovered":self.pages.len()+self.queued+self.in_flight,"queued":self.queued,"discovery_pending":self.discovery_pending,"fetched":self.pages.len(),"failed":failed,"issues":self.issues.len(),"in_flight":self.in_flight},"warnings":self.warnings,"error":self.error,"summary":self.report.as_ref().map(|report| &report.summary)})
     }
 }
 #[derive(Serialize)]
@@ -148,6 +161,7 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
         )
         .route("/api/lists/inspect", post(list_inspect))
         .route("/api/lists/import", post(list_import))
+        .route("/api/policy/preview", post(policy_preview))
         .route(
             "/serp",
             get(|| async {
@@ -203,6 +217,7 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
         .route("/api/crawls/{id}/dom.csv", get(export_dom))
         .route("/api/crawls/{id}/inputs.csv", get(export_inputs))
         .route("/api/crawls/{id}/cancel", post(cancel_crawl))
+        .route("/api/crawls/{id}/pause", post(pause_crawl))
         .route("/api/crawls/{id}/resume", post(resume_crawl))
         .route("/api/crawls/{id}/export.csv", get(export_csv))
         .route("/api/crawls/{id}/issues.csv", get(export_issue_csv))
@@ -288,7 +303,7 @@ async fn capabilities() -> Json<Value> {
             "http":true,"list":true,"sitemap":true,"robots":true,
             "agent_scoped_indexing_directives":true,"http_link_relationships":true,
             "redirects":true,"intermediate_response_inventory":true,
-            "cancel":true,"resume":true,"url_limit":null,"url_regex_filters":true,
+            "cancel":true,"pause":true,"pause_semantics":"stop_admission_then_drain_then_checkpoint","resume":true,"sqlite_only_recovery":true,"immutable_report_revisions":true,"url_limit":null,"url_regex_filters":true,
             "css_extraction":true,"xpath_1_0_extraction":true,"regex_extraction":true,
             "html_extraction_output":true,"configurable_audit_thresholds":true,
             "local_font_pixel_profile":true,"native_pdf_observations":true,
@@ -298,6 +313,7 @@ async fn capabilities() -> Json<Value> {
             "responsive_image_candidates":true,"nonstandard_navigation_observations":true,
             "fragment_validation":{"opt_in":true,"requires_captured_target":true,"unknown_is_not_missing":true}
         },
+        "offline_policy_preview":{"endpoint":"/api/policy/preview","website_requests":0,"applied_to_crawls":false},
         "offline_serp":{"path":"/serp","website_requests":0,"csv_import":true,"row_limit":10000},
         "offline_robots":{"path":"/robots","website_requests":0,"engine":"crawler_policy","remote_rules_fetch":false},
         "offline_list_import":{"formats":["txt","csv","xml","xlsx"],"website_requests":0,"max_input_bytes":8388608,"max_rows_per_file":50000,"row_order":true,"duplicates":true,"xlsx_formulas":"reject_or_explicit_cached_string_only","provenance":"declared_client_input"},
@@ -309,6 +325,15 @@ async fn capabilities() -> Json<Value> {
         "unimplemented":["api_integrations","spelling_grammar","pdf_ocr_and_rendering","shared_authenticated_browser_sessions","embedding_semantic_search","scheduling","full_structured_data_validation"],
         "parity":"in progress; see docs/parity/granular-acceptance.json"
     }))
+}
+async fn policy_preview(Json(input): Json<CrawlPolicyPreviewInput>) -> ApiResult<Json<Value>> {
+    let preview = tokio::task::spawn_blocking(move || preview_crawl_policy(&input))
+        .await
+        .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?
+        .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))?;
+    Ok(Json(serde_json::to_value(preview).map_err(|error| {
+        api_error(StatusCode::INTERNAL_SERVER_ERROR, error)
+    })?))
 }
 async fn list_crawls(State(state): State<AppState>) -> Json<Value> {
     let jobs: Vec<_> = state.jobs.read().await.values().cloned().collect();
@@ -381,11 +406,15 @@ async fn create_crawl(
         pages: Vec::new(),
         issues: Vec::new(),
         queued: 0,
+        discovery_pending: 0,
         in_flight: 0,
         warnings: Vec::new(),
         error: None,
         report: None,
-        cancel: Arc::new(AtomicBool::new(false)),
+        control: CrawlControl::new(),
+        generation: 1,
+        checkpoint: None,
+        frontier_available: false,
     }));
     save_manifest(&state, &job)
         .await
@@ -471,42 +500,122 @@ async fn cancel_crawl(
 ) -> ApiResult<Json<Value>> {
     let job = get_job(&state, id).await?;
     let mut guard = job.write().await;
-    if guard.status != "running" {
+    if guard.status == "cancelling" {
+        return Ok(Json(guard.status()));
+    }
+    if !matches!(guard.status.as_str(), "running" | "pausing") {
         return Err(api_error(StatusCode::CONFLICT, "Crawl is not running"));
     }
-    guard.cancel.store(true, Ordering::Relaxed);
+    if !guard.control.request_cancel() {
+        return Err(api_error(
+            StatusCode::CONFLICT,
+            "Crawl is finalizing its checkpoint",
+        ));
+    }
     guard.status = "cancelling".into();
     Ok(Json(guard.status()))
 }
-async fn resume_crawl(
+async fn pause_crawl(
     State(state): State<AppState>,
     Path(id): Path<Uuid>,
 ) -> ApiResult<Json<Value>> {
     let job = get_job(&state, id).await?;
-    if !state.data_dir.join(format!("{id}.sqlite")).exists()
-        && !state.data_dir.join(format!("{id}.job.json")).exists()
-    {
+    let mut guard = job.write().await;
+    if matches!(guard.status.as_str(), "pausing" | "paused") {
+        return Ok(Json(guard.status()));
+    }
+    if guard.status != "running" {
         return Err(api_error(
             StatusCode::CONFLICT,
-            "Imported snapshots have no saved crawl frontier; start a new crawl",
+            "Only a running crawl can be paused",
+        ));
+    }
+    if !guard.control.request_pause() {
+        return Err(api_error(
+            StatusCode::CONFLICT,
+            "Crawl is finalizing its checkpoint",
+        ));
+    }
+    guard.status = "pausing".into();
+    Ok(Json(guard.status()))
+}
+#[derive(Default, Deserialize)]
+#[serde(default, deny_unknown_fields)]
+struct ResumeOptions {
+    /// Omitted retains the saved limit; an explicit zero removes this operator limit.
+    max_pages: Option<usize>,
+    concurrency: Option<usize>,
+    delay_ms: Option<u64>,
+    request_timeout_secs: Option<u64>,
+}
+async fn resume_crawl(
+    State(state): State<AppState>,
+    Path(id): Path<Uuid>,
+    options: Option<Json<ResumeOptions>>,
+) -> ApiResult<Json<Value>> {
+    let options = options.map(|Json(options)| options).unwrap_or_default();
+    let job = get_job(&state, id).await?;
+    let database = state.data_dir.join(format!("{id}.sqlite"));
+    if !database.exists() {
+        return Err(api_error(
+            StatusCode::CONFLICT,
+            "No saved SQLite crawl frontier is available; start a new crawl",
         ));
     }
     {
         let mut guard = job.write().await;
-        if guard.status == "running" || guard.status == "cancelling" {
+        if matches!(guard.status.as_str(), "running" | "pausing" | "cancelling") {
             return Err(api_error(StatusCode::CONFLICT, "Crawl is already active"));
         }
-        let manifest = JobManifest {
-            id,
-            config: guard.config.clone(),
-            status: "running".into(),
-            started_at: guard.started_at.clone(),
-            finished_at: None,
-        };
+        let inspection = CrawlStore::inspect(&database).map_err(|error| {
+            api_error(
+                StatusCode::CONFLICT,
+                format!("Invalid saved frontier: {error}"),
+            )
+        })?;
+        if inspection.config.is_none() {
+            return Err(api_error(
+                StatusCode::CONFLICT,
+                "Saved frontier has no crawl configuration",
+            ));
+        }
+        let generation = inspection
+            .run_state
+            .as_ref()
+            .map_or(1, |run| run.generation.saturating_add(1));
+        let mut config = guard.config.clone();
+        if let Some(max_pages) = options.max_pages {
+            config.max_pages = (max_pages > 0).then_some(max_pages);
+        }
+        if let Some(concurrency) = options.concurrency {
+            config.concurrency = concurrency;
+        }
+        if let Some(delay_ms) = options.delay_ms {
+            config.delay_ms = delay_ms;
+        }
+        if let Some(timeout) = options.request_timeout_secs {
+            config.request_timeout_secs = timeout;
+        }
+        config
+            .prepare_input_lists()
+            .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))?;
+        Crawler::new(config.clone()).map_err(|error| api_error(StatusCode::BAD_REQUEST, error))?;
+        archive_current_report(&state, id)
+            .await
+            .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?;
+        let mut manifest = guard.manifest();
+        manifest.config = config.clone();
+        manifest.status = "running".into();
+        manifest.finished_at = None;
+        manifest.generation = generation;
+        manifest.checkpoint = None;
         write_json(state.data_dir.join(format!("{id}.job.json")), &manifest)
             .await
             .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?;
-        guard.cancel = Arc::new(AtomicBool::new(false));
+        guard.control = CrawlControl::new();
+        guard.generation = generation;
+        guard.config = config;
+        guard.checkpoint = None;
         guard.status = "running".into();
         guard.finished_at = None;
         guard.error = None;
@@ -517,9 +626,14 @@ async fn resume_crawl(
 }
 async fn launch(state: AppState, job: Arc<RwLock<Job>>) {
     tokio::spawn(async move {
-        let (config, id, cancel) = {
+        let (config, id, control, generation) = {
             let guard = job.read().await;
-            (guard.config.clone(), guard.id, guard.cancel.clone())
+            (
+                guard.config.clone(),
+                guard.id,
+                guard.control.clone(),
+                guard.generation,
+            )
         };
         let (sender, mut receiver) = tokio::sync::mpsc::unbounded_channel();
         let event_job = job.clone();
@@ -534,6 +648,9 @@ async fn launch(state: AppState, job: Arc<RwLock<Job>>) {
                 .collect();
             while let Some(event) = receiver.recv().await {
                 let mut guard = event_job.write().await;
+                if guard.generation != generation {
+                    continue;
+                }
                 match event {
                     CrawlEvent::Page { page } => {
                         if let Some(index) = page_indices.get(&page.url) {
@@ -556,7 +673,7 @@ async fn launch(state: AppState, job: Arc<RwLock<Job>>) {
         });
         let result = match Crawler::new(config) {
             Ok(crawler) => match crawler.with_store(state.data_dir.join(format!("{id}.sqlite"))) {
-                Ok(crawler) => crawler.run(Some(sender.clone()), cancel).await,
+                Ok(crawler) => crawler.run_controlled(Some(sender.clone()), control).await,
                 Err(error) => Err(error),
             },
             Err(error) => Err(error),
@@ -564,46 +681,56 @@ async fn launch(state: AppState, job: Arc<RwLock<Job>>) {
         drop(sender);
         let _ = event_task.await;
         let mut guard = job.write().await;
+        if guard.generation != generation {
+            return;
+        }
         guard.queued = 0;
         guard.in_flight = 0;
         guard.finished_at = Some(chrono::Utc::now().to_rfc3339());
         match result {
-            Ok(mut report) => {
+            Ok(result) => {
+                guard.frontier_available = true;
+                let mut report = result.report;
                 crate::analysis::extend_report(&mut report);
-                guard.status = if report.summary.cancelled {
-                    "cancelled"
-                } else {
-                    "completed"
-                }
-                .into();
+                guard.status = outcome_status(result.outcome).into();
+                guard.queued = result
+                    .checkpoint
+                    .as_ref()
+                    .map_or(0, |checkpoint| checkpoint.pending);
+                guard.discovery_pending = result.discovery_pending;
+                guard.checkpoint = result.checkpoint;
                 guard.pages = report.pages.clone();
                 guard.issues = report.issues.clone();
                 guard.warnings = report.warnings.clone();
                 guard.report = Some(report.clone());
                 let path = state.data_dir.join(format!("{id}.json"));
                 if let Err(error) = write_json(path, &report).await {
+                    guard.status = "failed".into();
                     guard.error = Some(format!("Could not save report: {error}"));
+                }
+                if let Err(error) = save_revision(&state, id, generation, &report).await {
+                    guard.status = "failed".into();
+                    guard.error =
+                        Some(format!("Could not save immutable report revision: {error}"));
                 }
             }
             Err(error) => {
                 guard.status = "failed".into();
                 guard.error = Some(error.to_string());
+                guard.frontier_available =
+                    CrawlStore::inspect(state.data_dir.join(format!("{id}.sqlite")))
+                        .is_ok_and(|inspection| inspection.config.is_some());
             }
         }
         // Keep the write lock until the terminal checkpoint write is complete. A status
         // reader or immediate resume must not race this write to the same file.
-        let manifest = JobManifest {
-            id: guard.id,
-            config: guard.config.clone(),
-            status: guard.status.clone(),
-            started_at: guard.started_at.clone(),
-            finished_at: guard.finished_at.clone(),
-        };
+        let manifest = guard.manifest();
         if let Err(error) =
             write_json(state.data_dir.join(format!("{id}.job.json")), &manifest).await
         {
             tracing::error!(%id,%error,"Could not save job state");
             let message = format!("Could not save job state: {error}");
+            guard.status = "failed".into();
             guard.warnings.push(message.clone());
             guard.error = Some(match guard.error.take() {
                 Some(previous) => format!("{previous}; {message}"),
@@ -612,13 +739,21 @@ async fn launch(state: AppState, job: Arc<RwLock<Job>>) {
         }
     });
 }
+fn outcome_status(outcome: CrawlOutcome) -> &'static str {
+    match outcome {
+        CrawlOutcome::Completed => "completed",
+        CrawlOutcome::Paused => "paused",
+        CrawlOutcome::Cancelled => "cancelled",
+        CrawlOutcome::Limited => "limited",
+    }
+}
 async fn require_report(state: &AppState, id: Uuid) -> ApiResult<CrawlReport> {
     let job = get_job(state, id).await?;
     let guard = job.read().await;
     guard.report.clone().ok_or_else(|| {
         api_error(
             StatusCode::CONFLICT,
-            "Wait for the crawl to finish or cancel it before exporting",
+            "Wait for a completed, paused, limited or cancelled checkpoint before exporting",
         )
     })
 }
@@ -929,6 +1064,8 @@ async fn register_report(state: &AppState, id: Uuid, report: CrawlReport) {
         config: report.config.clone(),
         status: if report.summary.cancelled {
             "cancelled"
+        } else if report.summary.limited {
+            "limited"
         } else {
             "completed"
         }
@@ -937,12 +1074,16 @@ async fn register_report(state: &AppState, id: Uuid, report: CrawlReport) {
         finished_at: Some(report.summary.finished_at.clone()),
         pages: report.pages.clone(),
         issues: report.issues.clone(),
-        queued: 0,
+        queued: report.summary.pending,
+        discovery_pending: 0,
         in_flight: 0,
         warnings: report.warnings.clone(),
         error: None,
         report: Some(report),
-        cancel: Arc::new(AtomicBool::new(false)),
+        control: CrawlControl::new(),
+        generation: 0,
+        checkpoint: None,
+        frontier_available: false,
     };
     state
         .jobs
@@ -956,15 +1097,59 @@ async fn write_json<T: Serialize>(path: PathBuf, value: &T) -> anyhow::Result<()
     tokio::fs::rename(temporary, path).await?;
     Ok(())
 }
+async fn archive_current_report(state: &AppState, id: Uuid) -> anyhow::Result<()> {
+    let current = state.data_dir.join(format!("{id}.json"));
+    let bytes = match tokio::fs::read(current).await {
+        Ok(bytes) => bytes,
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => return Ok(()),
+        Err(error) => return Err(error.into()),
+    };
+    let directory = state.data_dir.join("snapshots").join(id.to_string());
+    tokio::fs::create_dir_all(&directory).await?;
+    use tokio::io::AsyncWriteExt;
+    let mut file = tokio::fs::OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .open(directory.join(format!("before-resume-{}.json", Uuid::new_v4())))
+        .await?;
+    file.write_all(&bytes).await?;
+    file.sync_all().await?;
+    Ok(())
+}
+async fn save_revision(
+    state: &AppState,
+    id: Uuid,
+    generation: u64,
+    report: &CrawlReport,
+) -> anyhow::Result<()> {
+    let directory = state.data_dir.join("snapshots").join(id.to_string());
+    tokio::fs::create_dir_all(&directory).await?;
+    let path = directory.join(format!("generation-{generation}.json"));
+    let bytes = serde_json::to_vec(report)?;
+    use tokio::io::AsyncWriteExt;
+    match tokio::fs::OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .open(&path)
+        .await
+    {
+        Ok(mut file) => {
+            file.write_all(&bytes).await?;
+            file.sync_all().await?;
+        }
+        Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => {
+            anyhow::ensure!(
+                tokio::fs::read(path).await? == bytes,
+                "Immutable report generation already contains different bytes"
+            );
+        }
+        Err(error) => return Err(error.into()),
+    }
+    Ok(())
+}
 async fn save_manifest(state: &AppState, job: &Arc<RwLock<Job>>) -> anyhow::Result<()> {
     let guard = job.read().await;
-    let manifest = JobManifest {
-        id: guard.id,
-        config: guard.config.clone(),
-        status: guard.status.clone(),
-        started_at: guard.started_at.clone(),
-        finished_at: guard.finished_at.clone(),
-    };
+    let manifest = guard.manifest();
     drop(guard);
     write_json(
         state.data_dir.join(format!("{}.job.json", manifest.id)),
@@ -1003,6 +1188,7 @@ async fn load_reports(state: &AppState) -> anyhow::Result<()> {
             None => tracing::warn!(path=?path,"Ignoring invalid saved crawl"),
         }
     }
+    let mut manifests = HashMap::new();
     for path in &paths {
         if !path
             .file_name()
@@ -1018,24 +1204,184 @@ async fn load_reports(state: &AppState) -> anyhow::Result<()> {
                 continue;
             }
         };
-        if state.jobs.read().await.contains_key(&manifest.id)
-            && matches!(manifest.status.as_str(), "completed" | "cancelled")
-        {
+        manifests.insert(manifest.id, manifest);
+    }
+    for path in &paths {
+        if path.extension().and_then(|value| value.to_str()) != Some("sqlite") {
             continue;
         }
-        let database = state.data_dir.join(format!("{}.sqlite", manifest.id));
-        let (pages, queued) = if database.exists() {
-            let store = CrawlStore::open(database)?;
-            (store.pages()?, store.pending_count()?)
-        } else {
-            (Vec::new(), 0)
+        let Some(id) = path
+            .file_stem()
+            .and_then(|value| value.to_str())
+            .and_then(|value| Uuid::parse_str(value).ok())
+        else {
+            continue;
         };
-        let job=Job{id:manifest.id,config:manifest.config,status:"interrupted".into(),started_at:manifest.started_at,finished_at:None,pages,issues:Vec::new(),queued,in_flight:0,warnings:vec!["The previous process stopped before this crawl finished. Resume uses the saved SQLite frontier.".into()],error:None,report:None,cancel:Arc::new(AtomicBool::new(false))};
+        let inspection = match CrawlStore::inspect(path) {
+            Ok(inspection) => inspection,
+            Err(error) => {
+                tracing::warn!(path=?path,%error,"Ignoring invalid saved frontier");
+                continue;
+            }
+        };
+        let Some(config) = inspection.config else {
+            continue;
+        };
+        let manifest = manifests.remove(&id);
+        // Completed legacy snapshots remain the source of their historical
+        // representation. New checkpoints are reconciled against SQLite.
+        if inspection.run_state.is_none()
+            && state.jobs.read().await.contains_key(&id)
+            && manifest.as_ref().is_none_or(|manifest| {
+                matches!(
+                    manifest.status.as_str(),
+                    "completed" | "cancelled" | "limited"
+                )
+            })
+        {
+            if let Some(job) = state.jobs.read().await.get(&id).cloned() {
+                job.write().await.frontier_available = true;
+            }
+            continue;
+        }
+        let store = CrawlStore::open_read_only(path)?;
+        let mut report = if inspection.checkpoint_valid {
+            store.load_report()?
+        } else {
+            None
+        };
+        if let Some(report) = &mut report {
+            // Rebuild the app projection in memory only; historical JSON bytes
+            // and unknown fields are never rewritten by startup reconciliation.
+            crate::analysis::extend_report(report);
+        }
+        let status = if inspection.checkpoint_valid {
+            inspection
+                .checkpoint
+                .as_ref()
+                .map(|checkpoint| outcome_status(checkpoint.outcome))
+                .unwrap_or("interrupted")
+        } else {
+            "interrupted"
+        };
+        let started_at = inspection
+            .run_state
+            .as_ref()
+            .map(|run| run.started_at.clone())
+            .or_else(|| {
+                manifest
+                    .as_ref()
+                    .map(|manifest| manifest.started_at.clone())
+            })
+            .or_else(|| {
+                report
+                    .as_ref()
+                    .map(|report| report.summary.started_at.clone())
+            })
+            .unwrap_or_default();
+        let finished_at = inspection
+            .run_state
+            .as_ref()
+            .and_then(|run| run.finished_at.clone());
+        let generation = inspection.run_state.as_ref().map_or_else(
+            || manifest.as_ref().map_or(0, |manifest| manifest.generation),
+            |run| run.generation,
+        );
+        let pages = if let Some(report) = &report {
+            report.pages.clone()
+        } else {
+            store.pages()?
+        };
+        let issues = report
+            .as_ref()
+            .map(|report| report.issues.clone())
+            .unwrap_or_default();
+        let mut warnings = report
+            .as_ref()
+            .map(|report| report.warnings.clone())
+            .unwrap_or_default();
+        if status == "interrupted" {
+            warnings.push("The previous process stopped before a terminal checkpoint. Resume uses committed SQLite work; uncommitted requests may repeat.".into());
+        }
+        let job = Job {
+            id,
+            config,
+            status: status.into(),
+            started_at,
+            finished_at,
+            pages,
+            issues,
+            queued: inspection.pending,
+            discovery_pending: inspection.discovery_pending,
+            in_flight: 0,
+            warnings,
+            error: None,
+            report,
+            control: CrawlControl::new(),
+            generation,
+            checkpoint: if inspection.checkpoint_valid {
+                inspection.checkpoint
+            } else {
+                None
+            },
+            frontier_available: true,
+        };
         state
             .jobs
             .write()
             .await
-            .insert(manifest.id, Arc::new(RwLock::new(job)));
+            .insert(id, Arc::new(RwLock::new(job)));
+    }
+    for (id, manifest) in manifests {
+        if let Some(job) = state.jobs.read().await.get(&id).cloned() {
+            if matches!(
+                manifest.status.as_str(),
+                "paused"
+                    | "pausing"
+                    | "running"
+                    | "cancelling"
+                    | "interrupted"
+                    | "limited"
+                    | "failed"
+            ) {
+                let mut guard = job.write().await;
+                guard.status = "failed".into();
+                guard.generation = manifest.generation;
+                guard.checkpoint = None;
+                guard.frontier_available = false;
+                guard.error = Some(format!(
+                    "Previous state '{}' has no valid SQLite frontier. The captured historical report remains available; start a new crawl.",
+                    manifest.status
+                ));
+            }
+            continue;
+        }
+        let job = Job {
+            id,
+            config: manifest.config,
+            status: "failed".into(),
+            started_at: manifest.started_at,
+            finished_at: manifest.finished_at,
+            pages: Vec::new(),
+            issues: Vec::new(),
+            queued: 0,
+            discovery_pending: 0,
+            in_flight: 0,
+            warnings: Vec::new(),
+            error: Some(
+                "Saved job metadata has no valid SQLite frontier; start a new crawl.".into(),
+            ),
+            report: None,
+            control: CrawlControl::new(),
+            generation: manifest.generation,
+            checkpoint: None,
+            frontier_available: false,
+        };
+        state
+            .jobs
+            .write()
+            .await
+            .insert(id, Arc::new(RwLock::new(job)));
     }
     Ok(())
 }
