@@ -544,9 +544,25 @@ async fn launch(state: AppState, job: Arc<RwLock<Job>>) {
                 guard.error = Some(error.to_string());
             }
         }
-        drop(guard);
-        if let Err(error) = save_manifest(&state, &job).await {
+        // Keep the write lock until the terminal checkpoint is durable. A status
+        // reader or immediate resume must not race this write to the same file.
+        let manifest = JobManifest {
+            id: guard.id,
+            config: guard.config.clone(),
+            status: guard.status.clone(),
+            started_at: guard.started_at.clone(),
+            finished_at: guard.finished_at.clone(),
+        };
+        if let Err(error) =
+            write_json(state.data_dir.join(format!("{id}.job.json")), &manifest).await
+        {
             tracing::error!(%id,%error,"Could not save job state");
+            let message = format!("Could not save job state: {error}");
+            guard.warnings.push(message.clone());
+            guard.error = Some(match guard.error.take() {
+                Some(previous) => format!("{previous}; {message}"),
+                None => message,
+            });
         }
     });
 }

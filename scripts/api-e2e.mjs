@@ -1,7 +1,7 @@
 // Deterministic local HTTP → API → SQLite → export/restart acceptance test.
 import http from 'node:http';
 import { spawn } from 'node:child_process';
-import { mkdtemp, rm, mkdir, rmdir, writeFile } from 'node:fs/promises';
+import { mkdtemp, rm, mkdir, rmdir, writeFile, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import assert from 'node:assert/strict';
@@ -100,6 +100,9 @@ try {
   await post(`/api/crawls/${slow.id}/cancel`);
   assert.equal((await terminal(slow.id)).status, 'cancelled');
   const temporaryManifest=path.join(data,`${slow.id}.job.tmp`);
+  // A terminal API status guarantees its checkpoint write has left the job lock.
+  assert.equal(JSON.parse(await readFile(path.join(data,`${slow.id}.job.json`),'utf8')).status,'cancelled');
+  await assert.rejects(stat(temporaryManifest), error => error.code === 'ENOENT');
   await mkdir(temporaryManifest);
   assert.equal((await fetch(`${api}/api/crawls/${slow.id}/resume`,{method:'POST'})).status,500);
   assert.equal((await status(slow.id)).status,'cancelled','failed manifest write must retain resumable state');
