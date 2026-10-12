@@ -948,7 +948,7 @@
             "resource-contract-ui"
           ],
           "proves": "Explicit V2 internal/external qualifier switches cover nofollow/ugc/sponsored and actual document directives; original source occurrences and HTML/HTTP provenance remain visible, V1 compatibility remains separate. The exact stored native enabled/disabled traversal and source-preservation acceptance is fulfilled for the explicit V2 follow switches, confirmed by separate read-only acceptance review. This does not redefine global crawl_links:false or convert the preserved V1 behavior.",
-          "limits": "Own explicitly selected V2 follow-switch contract only. A separate four-directive matrix under global crawl_links:false remains an additional B10 control; existing V1 behavior is intentionally preserved. Exact-source CI, release and installation remain separate pending gates; full reference parity NOT_PROVEN."
+          "limits": "Own explicitly selected V2 follow-switch contract only. A separate four-directive matrix under global crawl_links:false remains an additional B10 control; existing V1 behavior is intentionally preserved. Exact-source CI, optimized release and installation are independently passed in the B10 release checkpoint; full reference parity NOT_PROVEN."
         }
       ],
       "parity_evidence": [],
@@ -5116,21 +5116,33 @@
     },
     {
       "id": "ui-resource-discovery-fixture",
-      "artifact": "web/verification/ui-resource-discovery-fixture-results.json",
+      "artifact": "docs/verification/resource-discovery-ui-fixture-b9.json",
       "artifact_sha256": "2fe5b9597ac60aa0a51a57b145472df82f0fee0f984bb7edcf4650840be77749",
       "result": "PASS",
       "tested_at": "2026-10-12T18:07:47.776Z",
       "scope": "10 isolated browser/API fixture controls; no native HTTP/persistence proof.",
-      "limits": "Mock API fixtures remain separate from the actual 12-check native resource UI. No vendor parity or release/CI assertion."
+      "limits": "Mock API fixtures remain separate from the actual 12-check native resource UI. No vendor parity or release/CI assertion.",
+      "bytes": 50151,
+      "historical_source": {
+        "commit": "f107ce7cc5e610494f30df8a3a1d46d98d7870e4",
+        "path": "web/verification/ui-resource-discovery-fixture-results.json",
+        "byte_identical": true
+      }
     },
     {
       "id": "ui-resource-ledger-fixture",
-      "artifact": "web/verification/ui-resource-ledger-fixture-results.json",
+      "artifact": "docs/verification/resource-ledger-ui-fixture-b9.json",
       "artifact_sha256": "c2b738e1ec6b6344abf4ab68a2a8bdfdf306af0153a15056097217005d7e99a6",
       "result": "PASS",
       "tested_at": "2026-10-12T18:07:29.774Z",
       "scope": "16 isolated browser/API fixture controls; no native HTTP/persistence proof.",
-      "limits": "Mock API fixtures remain separate from the actual 12-check native resource UI. No vendor parity or release/CI assertion."
+      "limits": "Mock API fixtures remain separate from the actual 12-check native resource UI. No vendor parity or release/CI assertion.",
+      "bytes": 11555,
+      "historical_source": {
+        "commit": "f107ce7cc5e610494f30df8a3a1d46d98d7870e4",
+        "path": "web/verification/ui-resource-ledger-fixture-results.json",
+        "byte_identical": true
+      }
     },
     {
       "id": "resource-discovery-restart-failure",
@@ -5373,12 +5385,13 @@
     {
       "id": "resource-contract-checkpoint",
       "artifact": "docs/verification/resource-contract-checkpoint.json",
-      "artifact_sha256": "dca5ba905b643aa7a1726c16b1717e17a08c156b36612864ac83f6e051c5707b",
+      "artifact_sha256": "cb0e396de5df79f09216cc35982c3e1b968c0f9b9fb9ad03efacf4c6656598e6",
       "result": "LOCAL_BOUNDED_ACCEPTANCE_PASS",
       "tested_at": "2026-10-12T22:26:00.203Z",
       "source_debug_sha256": "a5881b7c8cffff68a1e47e8a22d9d02e6ca2f1c1c698cebc74036b06dbf92d0f",
       "scope": "Own native loopback resources, exact switch/MIME/qualification/role provenance and persisted API/CLI/SDK/browser acceptance. Original V1 compatibility remains a separate profile.",
-      "limits": "Supplemental encoding/interruption/budget/browser resource gates and a trusted owned HTTPS positive fixture remain separately open. The installed user runtime remains the separately proven B9 release; this debug proof is no release or installation claim. Robots and sitemap protocol transfers do not yet have resource role grants. Immutable transport permissions remain separate from later independent report witnesses. No full vendor/filter/workflow parity claim."
+      "limits": "Supplemental encoding/interruption/budget/browser resources, global crawl_links:false directive controls and trusted owned HTTPS positive fixture remain open. Published source8fab997 CI/release/install are separate bound artifacts. Full vendor/filter/workflow parity NOT_PROVEN.",
+      "bytes": 7865
     },
     {
       "id": "resource-contract-mcp-regression",
@@ -5410,6 +5423,42 @@
       "tested_at": null,
       "scope": "200 directed executions with exact own HTTP/Robots/credential-origin controls, immutable per-hop roles, actual MIME/hash/parser facts, preserved original source identity and explicitly separate legacy expectations.",
       "limits": "Bounded own local debug evidence. Exact commit CI, immutable release and installed runtime are separate gates. Full reference parity NOT_PROVEN."
+    },
+    {
+      "id": "resource-contract-ci",
+      "artifact": "docs/verification/resource-contract-ci.json",
+      "artifact_sha256": "9d2184bb6b39974465515fca3339f081248281ae9013935dbd228f9f5e5a2f85",
+      "bytes": 23471,
+      "result": "PASS",
+      "tested_at": "2026-10-12T23:04:22.462Z",
+      "source_commit": "8fab997d98ac6bf1e47f7e09e067ee55df921ed4",
+      "source_release_sha256": "8a6fa43ec67448b72a043b0b40168dfcf6cfb783da86c7cc9889b51f2207700b",
+      "scope": "All four required jobs at exact source8fab997 passed.",
+      "limits": "Bounded own acceptance only; full feature/filter/workflow/vendor parity remains NOT_PROVEN."
+    },
+    {
+      "id": "resource-contract-release",
+      "artifact": "docs/verification/resource-contract-release.json",
+      "artifact_sha256": "b6f67ad84295759527a3a848f91f9f6168c66714a5909aafead8a8a23964d0ea",
+      "bytes": 5586,
+      "result": "PASS",
+      "tested_at": "2026-10-12T22:59:59.448Z",
+      "source_commit": "8fab997d98ac6bf1e47f7e09e067ee55df921ed4",
+      "source_release_sha256": "8a6fa43ec67448b72a043b0b40168dfcf6cfb783da86c7cc9889b51f2207700b",
+      "scope": "Immutable optimized Windows binary passed API13, legacy resource9, capture8, owned dynamic SDK22 over both transports and actual native UI10; source/archive/binary/UI hashes bound separately.",
+      "limits": "Bounded own acceptance only; full feature/filter/workflow/vendor parity remains NOT_PROVEN."
+    },
+    {
+      "id": "resource-contract-installed",
+      "artifact": "docs/verification/resource-contract-installed.json",
+      "artifact_sha256": "19a5684279d2c4812724493261677da66bb5b691950fda26a4077be4beb8d2aa",
+      "bytes": 1815,
+      "result": "PASS",
+      "tested_at": "2026-10-12T23:03:56.0685548Z",
+      "source_commit": "8fab997d98ac6bf1e47f7e09e067ee55df921ed4",
+      "source_release_sha256": "8a6fa43ec67448b72a043b0b40168dfcf6cfb783da86c7cc9889b51f2207700b",
+      "scope": "Installed source8fab997 release on user8787 with seven saved jobs/eleven JSON bytes preserved, prior B3 files unchanged, V2 capabilities and MCP22.",
+      "limits": "Bounded own acceptance only; full feature/filter/workflow/vendor parity remains NOT_PROVEN."
     }
   ],
   "reference_workflows": [
@@ -5849,7 +5898,7 @@
         },
         {
           "id": "ui-resource-discovery-fixture",
-          "artifact": "web/verification/ui-resource-discovery-fixture-results.json",
+          "artifact": "docs/verification/resource-discovery-ui-fixture-b9.json",
           "artifact_sha256": "2fe5b9597ac60aa0a51a57b145472df82f0fee0f984bb7edcf4650840be77749",
           "result": "PASS",
           "tested_at": "2026-10-12T18:07:47.776Z",
@@ -5858,7 +5907,7 @@
         },
         {
           "id": "ui-resource-ledger-fixture",
-          "artifact": "web/verification/ui-resource-ledger-fixture-results.json",
+          "artifact": "docs/verification/resource-ledger-ui-fixture-b9.json",
           "artifact_sha256": "c2b738e1ec6b6344abf4ab68a2a8bdfdf306af0153a15056097217005d7e99a6",
           "result": "PASS",
           "tested_at": "2026-10-12T18:07:29.774Z",
@@ -6122,10 +6171,10 @@
     {
       "id": "batch-b10-resource-matrix",
       "status": "IN_PROGRESS",
-      "stage": "NATIVE_PLAN_AND_API_UI_PASS_CI_RELEASE_PENDING",
+      "stage": "RELEASED_BOUNDED_MATRIX_SUPPLEMENTAL_ACCEPTANCE_OPEN",
       "priority": 1,
       "title_de": "Aktuelle Arbeit – B10: vollständige Ressourcenmatrix und gerichtete Sonderfälle",
-      "summary_de": "Der ausdrücklich wählbare V2-Vertrag ist in Rust, API/CLI/MCP und Oberfläche implementiert. 108 Schalterfälle bestehen in beiden Profilen (216 Ausführungen), ebenso 44 Antwortkontrollen, 200 gerichtete Redirect-/Boundary-Ausführungen und 13 echte API-/CLI-/MCP-Gruppen mit 19 gespeicherten Jobs. Zehn echte UI-Prüfungen bestehen; der bisherige V1-Vertrag bleibt kompatibel. Weitere Encoding-/Browser-/Budget-Kontrollen, exakte Source-CI, Release und Installation bleiben offen. GitHub: [B10-Issue #17](https://github.com/lia-xim/open-seo-spider/issues/17).",
+      "summary_de": "Der ausdrücklich wählbare V2-Vertrag ist an Commit 8fab997 mit vier grünen CI-Jobs geprüft und lokal auf Port 8787 installiert. Eigene native Matrix: 216 Schalter-, 44 Antwort- und 200 Redirect-/Boundary-Ausführungen; API/CLI/MCP13 und echte UI10. Der optimierte Release besteht separat API13, Legacy-Ressourcen9, Capture-/Neustart8, beide SDK22-Transporte und UI10. Sieben vorhandene Jobs und elf JSON-Dateien bleiben byteidentisch. Weitere Encoding-/Browser-/Budget-/Master-Schalter-/TLS-Abnahmen bleiben offen; vollständige Hersteller-Parität ist NOT_PROVEN. GitHub: [B10-Issue #17](https://github.com/lia-xim/open-seo-spider/issues/17).",
       "feature_ids": [
         "crawl.resources",
         "crawl.relationships",
@@ -6146,11 +6195,11 @@
         "387 Standard-Rust-Tests, Formatprüfung und Workspace-Alltargets-Clippy bestehen am lokalen Debug a5881b7c; vier explizite Chromium-Live-Gates bleiben getrennt.",
         "Zehn echte Browser-zu-Rust-Prüfungen bestehen am isolierten Debug: erfolgreiche V1/V2-Jobs, keine automatische Umstellung, exakte gesperrte CSV-/JSON-Werte, unveränderliche Rollen, drei Origins, Read-only-Exporte und 320px-Breite. Elf gemockte UI-Fälle inklusive verzögerter Hintergrund-Lesezugriffe und Mutation-/Netzwerk-Negativkontrollen bleiben separate Belege.",
         "Eigenes Kriterium crawl.nofollow erfüllt: nofollow/ugc/sponsored und Meta-/X-Robots-Dokument-Nofollow sind mit Follow aus/an, tatsächlichem GET0/1 und erhaltenen Quellvorkommen geprüft. Dieses Häkchen gilt für die ausdrücklich gewählten V2-Follow-Schalter; globale crawl_links:false-Kontrollen bleiben zusätzlich offen.",
-        "Alle 88 eingefrorenen Redirect-IDs in beiden Profilen plus zwölf zusätzliche Boundary-IDs: 200 tatsächliche Ausführungen bestehen. Originale Rollen, jedes Location-/Status-/Scope-/Policy-/Robots-Faktum, Credential-Herkunft und erlaubte/verbotene Zielrequests sind separat geprüft; der zusätzliche Rust-Test und Core-Clippy bestehen."
+        "Alle 88 eingefrorenen Redirect-IDs in beiden Profilen plus zwölf zusätzliche Boundary-IDs: 200 tatsächliche Ausführungen bestehen. Originale Rollen, jedes Location-/Status-/Scope-/Policy-/Robots-Faktum, Credential-Herkunft und erlaubte/verbotene Zielrequests sind separat geprüft; der zusätzliche Rust-Test und Core-Clippy bestehen.",
+        "Exakte 8fab997-Source-CI: Windows, Linux, Chromium und Container erfolgreich. Separater unveränderlicher optimierter Windows-Release mit API13/Legacy9/Capture8/SDK22/UI10 geprüft und lokal installiert; sieben Nutzer-Jobs und elf JSON-Dateien byteidentisch erhalten."
       ],
       "pending_acceptance_de": [
         "CSS-Encoding-Herkunft, unabhängige parallele Rollen, alle ausgewählten Ressourcentypen, Abbruchphasen und jede Budgetgrenze exakt/plus-eins mit zusätzlichen nativen Fixtures ergänzen.",
-        "Exakte Source-CI mit Windows/Linux/Chromium/Container, unveränderlicher Release und datenbewahrende lokale Installation gesondert nachweisen.",
         "Zusätzliche Vier-Direktiven-Kontrollen unter globalem crawl_links:false als eigenen Master-Schalter-Vertrag prüfen; die belegten V2-Follow-Schalter nicht damit gleichsetzen.",
         "Einen vertrauenswürdigen eigenen HTTPS-Positivfall ergänzen; die belegte Scheme-Mismatch-Sperre gegenüber einem HTTP-Ziel ersetzt keine tatsächliche TLS-Verbindung."
       ],
@@ -6170,9 +6219,9 @@
         "api_cli_mcp": "PASS_13_GROUPS",
         "redirect_controls_88": "PASS_176_PROFILE_EXECUTIONS",
         "workspace_tests_clippy": "PASS",
-        "exact_commit_ci": "PENDING",
-        "immutable_release": "PENDING",
-        "installed_runtime": "B9_UNCHANGED",
+        "exact_commit_ci": "PASS",
+        "immutable_release": "PASS",
+        "installed_runtime": "PASS_B10",
         "full_feature_acceptance": "PARTIAL",
         "actual_browser_ui": "PASS_10_NATIVE_CHECKS",
         "ui_mock": "PASS_11_SEPARATE_FIXTURES",
@@ -6190,10 +6239,13 @@
         "resource-contract-mcp-regression",
         "resource-contract-redirect-summary",
         "resource-contract-redirects",
-        "resource-contract-checkpoint"
+        "resource-contract-checkpoint",
+        "resource-contract-ci",
+        "resource-contract-release",
+        "resource-contract-installed"
       ],
       "reference_parity": "NOT_PROVEN",
-      "policy": "B10 local V2 implementation and bounded native/API/CLI/MCP acceptance passed against frozen B9 baseline f107. Four historical V1 controls remain observed contract gaps, not a V2 fix or parity proof. Exact-source CI, release and installed-runtime gates remain pending. The frozen design artifact intentionally retains its historical zero-execution status; actual execution proofs are separate. Robots and sitemap protocol transfers do not yet carry resource role grants and require separate scope acceptance. Full vendor/filter/workflow parity NOT_PROVEN.",
+      "policy": "B10 bounded native V2 contract/matrix/API/CLI/MCP/UI passed, followed by exact source8fab997 CI, immutable optimized release and installed-runtime acceptance. Historic V1 controls remain separate compatibility gaps; the design artifact retains its historical zero-execution state. Supplemental encoding/interruption/budget/browser/master-switch/TLS gates remain open. Robots and sitemap protocol transfers still lack resource-role grants and require separate scope acceptance. Full vendor/filter/workflow parity NOT_PROVEN.",
       "tracking_issue": "https://github.com/lia-xim/open-seo-spider/issues/17",
       "source_baseline_commit": "f107ce7cc5e610494f30df8a3a1d46d98d7870e4",
       "design_plan": {
@@ -6204,15 +6256,17 @@
         "executed_b10_cases": 0,
         "contract_questions": 3
       },
-      "last_stage_evidence_at": "2026-10-12T22:26:00.203Z"
+      "last_stage_evidence_at": "2026-10-12T23:03:56.0685548Z",
+      "source_commit": "8fab997d98ac6bf1e47f7e09e067ee55df921ed4",
+      "source_release_sha256": "8a6fa43ec67448b72a043b0b40168dfcf6cfb783da86c7cc9889b51f2207700b"
     },
     {
       "id": "batch-b11-saved-comparison",
       "status": "PLANNED",
-      "stage": "DESIGN_ONLY",
+      "stage": "WORK_DRAFT_CORE_34_PASS_PRODUCT_INTEGRATION_PENDING",
       "priority": 2,
       "title_de": "Nächste Funktion – B11: gespeicherte Crawls vollständig vergleichen",
-      "summary_de": "Den bisherigen Vergleich um konkrete Vorher/Nachher-Werte, Link-/JSON-LD-/Textquellen, ausdrückliches URL-Mapping und kombinierte Exporte erweitern. Der Vergleich nutzt ausschließlich gespeicherte Beobachtungen und benötigt keine neue Website-Abfrage. Derzeit Planung, noch keine Implementierungs- oder Laufzeitabnahme. GitHub: [B11-Issue #18](https://github.com/lia-xim/open-seo-spider/issues/18).",
+      "summary_de": "Den bisherigen Vergleich um konkrete Vorher/Nachher-Werte, Link-/JSON-LD-/Textquellen, ausdrückliches URL-Mapping und kombinierte Exporte erweitern. Der Vergleich nutzt ausschließlich gespeicherte Beobachtungen und benötigt keine neue Website-Abfrage. Noch keine Integration oder Laufzeitabnahme im Produkt. GitHub: [B11-Issue #18](https://github.com/lia-xim/open-seo-spider/issues/18). Ein isolierter Rust-Core-Entwurf besteht 34 gerichtete Tests, Formatprüfung und Core-Clippy; vier konkrete Gegenbeispiele wurden zunächst rot reproduziert und repariert. Dieser Work-Entwurf ist noch nicht in das Produkt integriert. API, CLI, MCP, Exporte, Oberfläche, Persistenz und Kaltstart bleiben offene Produktabnahmen.",
       "feature_ids": [
         "modes.compare",
         "storage.compare_changes",
@@ -6236,12 +6290,22 @@
         "api_cli_mcp": "PENDING",
         "actual_browser_ui": "PENDING",
         "snapshot_and_mapping_integrity": "PENDING",
-        "offline_restart_zero_requests": "PENDING"
+        "offline_restart_zero_requests": "PENDING",
+        "work_draft_core": "PASS_34_ISOLATED_WORK_ONLY"
       },
       "proof_run_ids": [],
       "reference_parity": "NOT_PROVEN",
       "tracking_issue": "https://github.com/lia-xim/open-seo-spider/issues/18",
-      "policy": "Planned additional functionality, no B11 implementation or runtime claims. Existing feature totals and statuses are unchanged. Full HTML/DOM archives, semantic similarity, automatic recurring comparison and vendor parity are separate requirements."
+      "policy": "B11 remains planned at product level. The isolated Work-only core draft passes 34 directed cases, formatting and Core Clippy; production API, CLI, MCP, exports, browser, persistence and restart acceptance remain open. Feature totals and statuses are unchanged. Full HTML/DOM archives, semantic similarity, automatic recurring comparison and vendor parity are separate requirements.",
+      "work_draft": {
+        "source_baseline_commit": "d0f3eddbbb03e2127f0533494597cdbddfa6f645",
+        "manifest": "docs/verification/saved-comparison-draft-core.json",
+        "manifest_sha256": "a372a27457f72553fd95c2549a6745d22f3b9c17de0e2f9c4b357c4c65164406",
+        "core_sha256": "9fa36d02ab317e8337b971008f8c920214ec3aa341910bdab5f5503ffacb808a",
+        "test_sha256": "529e947ac5a6a120f8256b43acdcebc6b56be5616bece5f8da8997803d63b818",
+        "production_integrated": false,
+        "api_cli_mcp_ui": "NOT_PROVEN"
+      }
     }
   ]
 }

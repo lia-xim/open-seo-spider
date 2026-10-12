@@ -1,0 +1,95 @@
+{
+  "tested_at": "2026-10-12T22:59:59.448Z",
+  "result": "PASS",
+  "source_commit": "8fab997d98ac6bf1e47f7e09e067ee55df921ed4",
+  "release_sha256": "8a6fa43ec67448b72a043b0b40168dfcf6cfb783da86c7cc9889b51f2207700b",
+  "source_archive_sha256": "eefa99a3eeebb0f64353c77402febd0339f20829f7302b4823d9f8c5d2ab57db",
+  "gates": [
+    {
+      "name": "resource-contract",
+      "result": "PASS",
+      "script": "scripts/resource-contract-e2e.mjs",
+      "script_sha256": "10e42b85dfa27bb51fcfb81fe9aa42128926073df705ca6e1ff774faabc4974b",
+      "artifact": "docs/verification/resource-contract-release-resource-contract.json",
+      "artifact_sha256": "f0bb26b33ccc05bd6c7ea60a2e7eeea7fcbeaea188ed5e35a93f1938bd4ec842",
+      "checks": 13,
+      "legacy_ports_verified_free_immediately_before_start": [],
+      "original_run": "2026-10-12T22:55 original wrapper, PASS before next helper not found",
+      "binary_identity_bound_by_original_wrapper": true,
+      "private_work_artifact": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\b10-release-verification\\resource-contract.json"
+    },
+    {
+      "name": "legacy-resource",
+      "result": "PASS",
+      "script": "scripts/resource-discovery-e2e.mjs",
+      "script_sha256": "d115b5755ec9a6f1faa596fcc0a3ed6f7a1f0bdae46becdedd731aca355add91",
+      "artifact": "docs/verification/resource-contract-release-legacy-resource.json",
+      "artifact_sha256": "88ab913299446c76f2795fa0680c90b0cc8547630725f513c7e95aea8abe7daa",
+      "checks": 9,
+      "legacy_ports_verified_free_immediately_before_start": [
+        18803,
+        19203,
+        19204
+      ],
+      "original_run": "2026-10-12T22:55 original wrapper, PASS before next helper not found",
+      "binary_identity_bound_by_original_wrapper": true,
+      "private_work_artifact": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\b10-release-verification\\legacy-resource.json"
+    },
+    {
+      "name": "legacy-capture",
+      "result": "PASS",
+      "script": "scripts/content-capture-e2e.mjs",
+      "script_sha256": "a97e3397452a1807680e4fc31d7290a5080ce3eb5d56f96b1b2fcc012f54c83a",
+      "artifact": "docs/verification/resource-contract-release-legacy-capture.json",
+      "artifact_sha256": "c5fdb4b631cb342bc4fe9fa29746fcaab8d219403b0c0b881ec06731e6aaa885",
+      "checks": 8,
+      "legacy_ports_verified_free_immediately_before_start": [
+        18797,
+        19097,
+        19098
+      ],
+      "original_run": "2026-10-12T22:55 original wrapper, PASS before next helper not found",
+      "binary_identity_bound_by_original_wrapper": true,
+      "private_work_artifact": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\b10-release-verification\\legacy-capture.json"
+    },
+    {
+      "name": "mcp-sdk",
+      "result": "PASS",
+      "script": "..\\..\\work\\resource-discovery\\b10-release-mcp-owned.mjs",
+      "script_sha256": "bdf278d9af649ca9779dc0203ed33cc5204521953dd04496158b702249e24b9f",
+      "artifact": "docs/verification/resource-contract-release-mcp-sdk.json",
+      "artifact_sha256": "2820b01f8503a714ec27d9652a90018d00cf95fbb91cb6cf1fd3e458a6d3870f",
+      "checks": 2,
+      "legacy_ports_verified_free_immediately_before_start": [],
+      "private_work_artifact": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\b10-release-verification\\mcp-sdk.json",
+      "tracked_harness": "scripts/verification/b10-mcp-owned-e2e.mjs"
+    },
+    {
+      "name": "actual-native-ui",
+      "result": "PASS",
+      "checks": 10,
+      "script_sha256": "7ea97a62d3c776c5e4a0081ca2cfa554abc6bc7d02dc784133d66c93cfb53a22",
+      "artifact": "docs/verification/resource-contract-release-actual-native-ui.json",
+      "artifact_sha256": "03dc03417be9da1c5ef1d13020be213f97e7ad62ec1f7d27463b9ab4b49129b6",
+      "served_ui_sha256": {
+        "web/app.js": "513800b23361be5d7b4d8db741b742e353181db9cb437192cff797858dfd6e05",
+        "web/index.html": "b18ae1765320d464d31577f3048f555f4495aed18ad3dec1d97c5fd53c39ed8f",
+        "web/styles.css": "4367d87aa125e0fd5c146993510947495c134768f8feb7bb273d93e3e6c9235e"
+      },
+      "owned_preview_pid": 59116,
+      "owned_preview_url": "http://127.0.0.1:64181",
+      "private_work_artifact": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\b10-release-verification\\ui\\verification\\ui-resource-contract-live-results.json"
+    }
+  ],
+  "scope": "Optimized immutable Windows binary against owned fixtures; original user8787 untouched during acceptance; vendor parity NOT_PROVEN",
+  "verifier_executed_sha256": "ee1ffcc03260f5c0e47fd8573f459be5385f6a99842b7c64a95f1096147f9e28",
+  "verifier_archive": "work/b10-release-verification/verify-b10-release-executed.cjs",
+  "post_execution_address_review": {
+    "result": "PASS_ACTUAL_BINDING_RECHECK",
+    "actual_complete_stdout_address": "http://127.0.0.1:64181",
+    "artifact_app_address_matches": true,
+    "subsequent_parser_hardening": "Require newline before accepting address; partial-port negative and complete-port positive controls passed; earlier actual UI proof is preserved without relabeling its executed verifier source."
+  },
+  "exact_ci_artifact": "docs/verification/resource-contract-ci.json",
+  "historical_initial_wrapper_failure": "MCP helper missing before execution; first three passing optimized-binary gates preserved and resumed with unchanged script/artifact/binary hashes. Original error log retained in private work evidence."
+}

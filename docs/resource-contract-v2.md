@@ -1,12 +1,12 @@
 # Ressourcenvertrag V2: ausdrückliche Auswahl und erhaltene Herkunft
 
-Stand: **IN_PROGRESS**. Die Implementierung wird mit nativen Fixtures und separaten API-/CLI-/MCP-/UI-Gates geprüft. Ein bestandener historischer V1-Kompatibilitätstest oder API-Mock ist kein nativer V2-, Release- oder Screaming-Frog-Paritätsbeleg. Der installierte B9-Release bleibt bis zum gesondert geprüften Update der Laufzeitstand. [Aktueller Arbeitsstand](FEATURE_TODO.md), [B10-Issue 17](https://github.com/lia-xim/open-seo-spider/issues/17), [eingefrorener Abnahmeplan](parity/resource-matrix-plan.json).
+Stand: **Begrenzte native B10-Abnahme geprüft und lokal installiert; zusätzliche Feature-Abnahmen bleiben IN_PROGRESS.** [Vier exakte Source-CI-Jobs](verification/resource-contract-ci.json), [unveränderlicher optimierter Release](verification/resource-contract-release.json) und [Installation mit erhaltenem Nutzerbestand](verification/resource-contract-installed.json) bestehen an Commit `8fab997`. Bestehende V1-Konfigurationen wechseln weiterhin ausschließlich durch eine ausdrückliche Auswahl auf V2. [Aktueller Arbeitsstand](FEATURE_TODO.md), [B10-Issue17](https://github.com/lia-xim/open-seo-spider/issues/17). Vollständige Screaming-Frog-Parität bleibt NOT_PROVEN.
 
 Die [lokale Abnahme](verification/resource-contract-checkpoint.json) belegt jetzt 387 Standard-Rust-Tests, 108 exakte Schalterfälle in beiden Profilen (216 Ausführungen), 44 Antwortkontrollen, 13 tatsächliche API-/CLI-/MCP-Gruppen mit 19 gespeicherten Jobs und zehn echte Browser-zu-Rust-Prüfungen am Debug `a5881b7c…`. Workspace-Clippy und Formatprüfung bestehen. Die Einzelbelege erhalten vollständige Fallnamen, Quellhashes, ursprüngliche Grants, HTTP-Kontrollen und frühere Fehlversuche. Der eingefrorene Designplan behält seinen historischen `DESIGN_ONLY`-Stand; ausgeführte Fälle stehen in den separaten Beweisen.
 
 Die [zusätzliche native Redirect-Suite](verification/resource-contract-redirect-summary.json) besteht alle 88 geplanten IDs in beiden Profilen (176 Ausführungen) sowie zwölf getrennte Boundary-IDs in beiden Profilen (24 Ausführungen). Das ist ein zusätzlicher Rust-Test mit 200 tatsächlich ausgeführten Fällen. Originale Rollen und jeder tatsächliche Hop bleiben sichtbar; historische V1-Ausnahmen werden getrennt erwartet. Ein vertrauenswürdiger HTTPS-Positivfall bleibt offen.
 
-Zusätzliche Encoding-/Unterbrechungs-/Budget-/Browser-Abnahmen, exakte Commit-CI, unveränderlicher Release und Installation bleiben gesonderte offene Schritte. Aus diesen begrenzten eigenen Abnahmen entsteht keine vollständige Hersteller-Parität.
+Zusätzliche Encoding-/Unterbrechungs-/Budget-/Browser-Abnahmen, globale `crawl_links:false`-Direktivenkontrollen und ein vertrauenswürdiger eigener HTTPS-Positivfall bleiben offen. Die getrennten CI-/Release-/Installationsbelege sind bestanden. Aus diesen begrenzten eigenen Abnahmen entsteht keine vollständige Hersteller-Parität.
 
 ## Auswahl
 

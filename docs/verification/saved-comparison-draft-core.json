@@ -1,0 +1,332 @@
+{
+  "status": "WORK_COPY_CORE_PASS",
+  "generated_at": "2026-10-12T23:07:00.5724087Z",
+  "engine": "open-seo-spider/saved-comparison-v1",
+  "compile_run": true,
+  "tests_run": true,
+  "product_repository_mutated": false,
+  "source_commit": "d0f3eddbbb03e2127f0533494597cdbddfa6f645",
+  "source_archive_sha256": "a382314e141af3c81848db4b5c09ee2e6f42f8e1b34e22bc5910874398d072d8",
+  "source_copy_manifest": {
+    "path": "build-copy-manifest.json",
+    "sha256": "93d81b3432fab9be91bdf60d6dd43e96fe729c103f83104ec5534c71550fe78c",
+    "bytes": 17608
+  },
+  "work_build_root": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\comparison-b11\\build-source",
+  "cargo_target_dir": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\comparison-b11\\cargo-target",
+  "build_scope": "open-seo-spider-core only; no App, Release, Website fetch, ports, SQL or main target",
+  "environment": {
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2"
+  },
+  "tools": {
+    "cargo": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)",
+    "rustc": "rustc 1.95.0 (59807616e 2026-04-14)",
+    "rustfmt": "rustfmt 1.9.0-stable (59807616e1 2026-04-14)"
+  },
+  "authored_test_count": 34,
+  "executed_test_names": [
+    "declared_exact_byte_hash_has_separate_profile_and_no_core_attestation",
+    "empty_legacy_arrays_are_unknown_and_never_proven_equal",
+    "collisions_on_both_sides_are_reported_before_join_with_all_original_ordinals",
+    "changed_capture_text_cannot_bypass_existing_binding_integrity",
+    "complete_declared_header_inventory_supports_observed_empty_relationships",
+    "explicit_origin_and_path_mapping_preserves_original_facts_and_raw_query",
+    "combined_input_exact_boundary_succeeds_and_plus_one_rejects",
+    "failed_selection_cannot_make_retained_prefix_html_hash_complete",
+    "graph_and_jsonld_changes_are_detected_with_same_issue_count",
+    "overlapping_mapping_rules_reject_even_if_current_cohort_has_no_matching_url",
+    "path_mapping_obeys_slash_boundaries_and_preserves_encoded_slashes",
+    "exact_query_order_and_encoding_are_distinct_without_mapping",
+    "incomplete_equal_text_prefixes_are_unknown_and_remain_partial",
+    "review_mapping_rejects_empty_raw_authority_but_preserves_actual_path_slashes",
+    "json_object_key_order_is_ignored_but_block_and_array_order_are_retained",
+    "actual_bounded_and_failed_custom_extractions_keep_partial_error_states",
+    "changed_selection_profile_is_reported_separately_from_content_equivalence",
+    "strict_engine_limits_unknown_config_and_invalid_mapping_inputs_reject",
+    "missing_source_becoming_complete_records_availability_not_old_empty_content",
+    "selected_target_index_rejects_targets_without_saved_rows",
+    "page_and_output_budgets_fail_without_silent_first_n",
+    "native_generation_is_never_invented_and_typed_caller_hash_is_checked",
+    "review_mapping_rejects_ambiguous_backslash_authority_instead_of_wrong_join",
+    "all_four_saved_membership_classes_with_old_new_values",
+    "default_indexability_and_header_arrays_have_no_fabricated_observation_basis",
+    "pending_selected_text_stays_unknown_and_retains_historical_provenance",
+    "selected_generation_mismatch_and_duplicate_targets_reject",
+    "inherited_and_refreshed_selected_rows_retain_separate_actual_generation_provenance",
+    "unrecognized_dom_engine_cannot_make_declared_empty_arrays_complete",
+    "observed_empty_graph_and_empty_captured_text_are_not_missing",
+    "timestamp_and_generation_only_changes_keep_value_classification_unchanged",
+    "review_navigated_header_fields_use_rendered_inventory_not_native_predecessor",
+    "selected_text_is_only_included_when_explicitly_requested",
+    "review_legacy_body_hash_requires_complete_declared_matching_source"
+  ],
+  "gates": {
+    "rust_type_errors": 0,
+    "initial_directed_tests": {
+      "failed": 0,
+      "exit_code": 0,
+      "passed": 30,
+      "log": "cargo-test-attempt1.log"
+    },
+    "strengthened_indexability_red": {
+      "failed": 1,
+      "exit_code": 101,
+      "expected_failure": true,
+      "passed": 0,
+      "log": "cargo-test-indexability-red.log"
+    },
+    "independent_review_red": {
+      "failed": 3,
+      "exit_code": 101,
+      "expected_failure": true,
+      "passed": 0,
+      "log": "cargo-test-review-red.log"
+    },
+    "empty_raw_authority_red": {
+      "failed": 1,
+      "exit_code": 101,
+      "expected_failure": true,
+      "passed": 0,
+      "log": "cargo-test-authority-red.log"
+    },
+    "final_directed_tests": {
+      "command": "cargo test --locked --offline -p open-seo-spider-core --lib comparison::tests:: -- --nocapture",
+      "failed": 0,
+      "filtered": 230,
+      "log": "cargo-test-authority-final.log",
+      "exit_code": 0,
+      "passed": 34
+    },
+    "focused_rustfmt_check": {
+      "exit_code": 0,
+      "command": "rustfmt --edition 2024 --config skip_children=true --check crates/core/src/lib.rs crates/core/src/comparison.rs crates/core/src/comparison_tests.rs",
+      "log": "rustfmt-authority-final.log"
+    },
+    "initial_clippy": {
+      "exit_code": 101,
+      "owned_style_findings": 2,
+      "log": "cargo-clippy-attempt1.log"
+    },
+    "final_clippy": {
+      "exit_code": 0,
+      "command": "cargo clippy --locked --offline -p open-seo-spider-core --lib --tests -- -D warnings",
+      "log": "cargo-clippy-authority-final.log"
+    },
+    "schema_json_parse": true,
+    "schema_validator": "NOT_RUN",
+    "native_persistence_api_cli_mcp_export_ui_cold_restart": "NOT_RUN",
+    "product_integration_ci_release_vendor_parity": "NOT_RUN"
+  },
+  "independent_review": "initial_and_comparison_review_findings_corrected_review_of_latest_fix_pending",
+  "previous_30_case_manifest": {
+    "path": "draft-manifest-30-core-pass.json",
+    "sha256": "5568d6febffb9c3ae922cf8497e3a825067d3df311438b22db87e7020c3b4b6d",
+    "bytes": 10479
+  },
+  "previous_33_case_manifest": {
+    "path": "draft-manifest-33-core-pass.json",
+    "sha256": "1af6e07fb78886adcb318c4a410cfcfe46a6087455d8dfd0547d2be5afd4d382",
+    "bytes": 11790
+  },
+  "input_source_models": [
+    {
+      "path": "crates/core/src/models.rs",
+      "sha256": "af7b39704b99f40785867ca82befc79d67d5fe6cf532c7c4997a0bb692a68dcd",
+      "bytes": 32781
+    },
+    {
+      "path": "crates/core/src/content_capture.rs",
+      "sha256": "e4911917fb156e5f2812e60b242d8bc3960c04b1c7d00f42d559bff9b57c7454",
+      "bytes": 44187
+    },
+    {
+      "path": "crates/core/src/content_binding.rs",
+      "sha256": "450414f2ed6c74342ae605f0c1ddbf1dac9bced316123b3e972af9b3a8c8ac6f",
+      "bytes": 29393
+    },
+    {
+      "path": "crates/core/src/recrawl.rs",
+      "sha256": "6073843e42adf15f77f459a1b46d55c74fccf54462077960b4a8e5a93d6b9bf6",
+      "bytes": 19094
+    },
+    {
+      "path": "crates/core/src/extract.rs",
+      "sha256": "74233dfad4b4301936c665d55e9f6ae8840f6f00123e8ad7f113c41901f7baed",
+      "bytes": 15466
+    },
+    {
+      "path": "crates/core/src/dom_facts.rs",
+      "sha256": "3c30b53379b68726731e0f6435113bb3883f25f469c888454587e62127f63d26",
+      "bytes": 41733
+    },
+    {
+      "path": "crates/core/src/extraction_engine.rs",
+      "sha256": "78fef540b56306cbaec03a8795a8d47e141277cdb5ee9f204177644182de0b05",
+      "bytes": 40335
+    },
+    {
+      "path": "crates/core/src/metadata.rs",
+      "sha256": "a291e59a3dff640a13efec5a82d64a6dfa6e2af22a3782f7abe9ca262c4d8d0a",
+      "bytes": 25424
+    },
+    {
+      "path": "crates/core/src/lib.rs",
+      "sha256": "24f79948baa1a123fb225e572dc9d13176950c11e2f12007b7674e66c450675b",
+      "bytes": 3511
+    },
+    {
+      "path": "crates/core/Cargo.toml",
+      "sha256": "9f788f04b4e3ca15e946ec55333739bfbe290c27c04d175a378cc8f446fa996e",
+      "bytes": 1160
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "6bf9cbc17a5d17435e44a7088db3d1b450f8eab4b8a0db1978fc32a6c8c29a1e",
+      "bytes": 75704
+    }
+  ],
+  "drafts": [
+    {
+      "path": "comparison.rs",
+      "sha256": "9fa36d02ab317e8337b971008f8c920214ec3aa341910bdab5f5503ffacb808a",
+      "bytes": 53501
+    },
+    {
+      "path": "comparison_tests.rs",
+      "sha256": "529e947ac5a6a120f8256b43acdcebc6b56be5616bece5f8da8997803d63b818",
+      "bytes": 40343
+    },
+    {
+      "path": "comparison-schema.json",
+      "sha256": "08fe718c2e8c51198a8952b0691419d4b751f9fb9a25cd8d60e7324bc614bcc5",
+      "bytes": 15089
+    },
+    {
+      "path": "README.md",
+      "sha256": "f8c5b56d042be6f4deaefe50b907db5b891c1f14e709d6c3639d36f8c0b0a4f0",
+      "bytes": 11332
+    },
+    {
+      "path": "review-findings.json",
+      "sha256": "0875ad7483b5837eeeb7d2eaa76970c4e024b701290997694ccfcae40d837d2b",
+      "bytes": 5688
+    },
+    {
+      "path": "finalize-proof.ps1",
+      "sha256": "16e8fbfd914a3b36d891ee52137272dd780850d01599cce1f7515347a7f339aa",
+      "bytes": 11782
+    }
+  ],
+  "integrated_work_files": [
+    {
+      "path": "crates/core/src/lib.rs",
+      "sha256": "7ec6ee339f134c8b1010e27119942bfc72d98fd4f6997215b94695adc2d93a83",
+      "bytes": 3552
+    },
+    {
+      "path": "crates/core/src/comparison.rs",
+      "sha256": "9fa36d02ab317e8337b971008f8c920214ec3aa341910bdab5f5503ffacb808a",
+      "bytes": 53501
+    },
+    {
+      "path": "crates/core/src/comparison_tests.rs",
+      "sha256": "529e947ac5a6a120f8256b43acdcebc6b56be5616bece5f8da8997803d63b818",
+      "bytes": 40343
+    }
+  ],
+  "gate_logs": [
+    {
+      "path": "cargo-test-attempt1.log",
+      "sha256": "69f628ad7d107381b14b75afc264f1f744c4ad4be52ff01d0a98755014946461",
+      "bytes": 11071
+    },
+    {
+      "path": "cargo-test-indexability-red.log",
+      "sha256": "5f2e772d4a17c3423226c54a5173bc096fb2c7eb22c663201f9eda78bdec706b",
+      "bytes": 1174
+    },
+    {
+      "path": "cargo-test-final.log",
+      "sha256": "15f1b3f7afab2ef31fff538ce9fa8fb9ca69ba6db59076ba0d1ada45e2f5dab1",
+      "bytes": 3509
+    },
+    {
+      "path": "cargo-test-frozen.log",
+      "sha256": "152a7e0edc850964a3ecb022d5a865a08310b63f5bfab95cf60ccf3fa4ed4b8b",
+      "bytes": 3509
+    },
+    {
+      "path": "cargo-clippy-attempt1.log",
+      "sha256": "dafc504ef82e7678851d5bd31ab1f6c362e3418e1ae8912dd6f6a3bbed268c39",
+      "bytes": 8947
+    },
+    {
+      "path": "cargo-clippy-final.log",
+      "sha256": "76b258f63148387188fdf38c8949bedc35a5c982d4a41a817cb564c600eb3fd2",
+      "bytes": 228
+    },
+    {
+      "path": "rustfmt-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "cargo-test-review-red.log",
+      "sha256": "06875be913a0a81fe36bffce5ab39860fb5955728bfedc81f43febdb20501846",
+      "bytes": 31924
+    },
+    {
+      "path": "cargo-test-review-final.log",
+      "sha256": "579ae022da665c0e2d87ccd8738f607a596327a4c53c135d51ce937a25ec3f47",
+      "bytes": 3824
+    },
+    {
+      "path": "cargo-clippy-review-final.log",
+      "sha256": "0394699bd7577181e71cc6c04eabdacfa9ae4fb1318ff288af21b89f577874da",
+      "bytes": 228
+    },
+    {
+      "path": "rustfmt-review-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "cargo-test-authority-red.log",
+      "sha256": "2070703f69a4e6db9a338f5bdcfee229e8afb28433a76dcfe118fdbeddb0d25c",
+      "bytes": 1216
+    },
+    {
+      "path": "cargo-test-authority-final.log",
+      "sha256": "2f92c07f22ee5946280a72ba5e42e5c6a3d010803c6280ecab490acf89275c6d",
+      "bytes": 3933
+    },
+    {
+      "path": "cargo-clippy-authority-final.log",
+      "sha256": "c3a8092467238392ff19d73e73b15aa75456b7150c2c61006212750f487f784c",
+      "bytes": 228
+    },
+    {
+      "path": "rustfmt-authority-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  ],
+  "source_preservation": {
+    "original_copied_files": 98,
+    "unchanged_non_owned_files_verified": 97,
+    "only_base_file_changed_in_work_copy": "crates/core/src/lib.rs (two module export declarations)",
+    "draft_and_integrated_comparison_sources_identical": true,
+    "base_snapshot_files_rehashed_and_unchanged": true,
+    "main_core_lib_still_matches_base": true,
+    "main_core_lib_current_sha256": "24f79948baa1a123fb225e572dc9d13176950c11e2f12007b7674e66c450675b",
+    "main_comparison_module_absent": true,
+    "main_comparison_tests_absent": true,
+    "main_todo_statuses_changed": false,
+    "git_commands_used_for_build_and_verification": false,
+    "app_or_release_build_run": false,
+    "target_deletion_performed": false
+  }
+}

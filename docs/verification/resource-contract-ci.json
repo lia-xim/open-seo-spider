@@ -1,0 +1,716 @@
+{
+  "tested_at": "2026-10-12T23:04:22.462Z",
+  "result": "PASS",
+  "source_commit": "8fab997d98ac6bf1e47f7e09e067ee55df921ed4",
+  "workflow": "Rust checks",
+  "run_id": "38318640116",
+  "run_url": "https://github.com/lia-xim/open-seo-spider/actions/runs/38318640116",
+  "jobs": [
+    {
+      "name": "renderer",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-12T22:47:25Z",
+      "completedAt": "2026-10-12T22:53:34Z",
+      "steps": [
+        {
+          "completedAt": "2026-10-12T22:47:27Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-12T22:47:26Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:47:28Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "startedAt": "2026-10-12T22:47:27Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:47:29Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@v4",
+          "number": 3,
+          "startedAt": "2026-10-12T22:47:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:47:30Z",
+          "conclusion": "success",
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "number": 4,
+          "startedAt": "2026-10-12T22:47:29Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:47:43Z",
+          "conclusion": "success",
+          "name": "Run Swatinem/rust-cache@v2",
+          "number": 5,
+          "startedAt": "2026-10-12T22:47:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:47:44Z",
+          "conclusion": "success",
+          "name": "Run npm ci --ignore-scripts",
+          "number": 6,
+          "startedAt": "2026-10-12T22:47:43Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:48:12Z",
+          "conclusion": "success",
+          "name": "Run node node_modules/playwright-core/cli.js install chromium --with-deps",
+          "number": 7,
+          "startedAt": "2026-10-12T22:47:44Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:48:13Z",
+          "conclusion": "success",
+          "name": "Select the matching installed Playwright Chromium",
+          "number": 8,
+          "startedAt": "2026-10-12T22:48:12Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:48:13Z",
+          "conclusion": "success",
+          "name": "Allow the selected Chromium to create its Linux sandbox",
+          "number": 9,
+          "startedAt": "2026-10-12T22:48:13Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:48:26Z",
+          "conclusion": "success",
+          "name": "Run npm test",
+          "number": 10,
+          "startedAt": "2026-10-12T22:48:13Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:48:34Z",
+          "conclusion": "success",
+          "name": "Run node web/verification/ui-smoke.cjs",
+          "number": 11,
+          "startedAt": "2026-10-12T22:48:26Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:48:43Z",
+          "conclusion": "success",
+          "name": "Run node web/verification/ui-crawl-control-smoke.cjs",
+          "number": 12,
+          "startedAt": "2026-10-12T22:48:34Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:48:50Z",
+          "conclusion": "success",
+          "name": "Run node web/verification/ui-selected-recrawl-smoke.cjs",
+          "number": 13,
+          "startedAt": "2026-10-12T22:48:43Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:48:59Z",
+          "conclusion": "success",
+          "name": "Run node web/verification/ui-policy-smoke.cjs",
+          "number": 14,
+          "startedAt": "2026-10-12T22:48:50Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:49:32Z",
+          "conclusion": "success",
+          "name": "Run node web/verification/ui-content-smoke.cjs",
+          "number": 15,
+          "startedAt": "2026-10-12T22:48:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:49:51Z",
+          "conclusion": "success",
+          "name": "Run node web/verification/ui-resource-discovery-smoke.cjs",
+          "number": 16,
+          "startedAt": "2026-10-12T22:49:32Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:50:02Z",
+          "conclusion": "success",
+          "name": "Run node web/verification/ui-resource-ledger-smoke.cjs",
+          "number": 17,
+          "startedAt": "2026-10-12T22:49:51Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:50:17Z",
+          "conclusion": "success",
+          "name": "Run node web/verification/ui-resource-contract-smoke.cjs",
+          "number": 18,
+          "startedAt": "2026-10-12T22:50:02Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:50:17Z",
+          "conclusion": "success",
+          "name": "Run node scripts/update-feature-todo.mjs --check",
+          "number": 19,
+          "startedAt": "2026-10-12T22:50:17Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:50:17Z",
+          "conclusion": "success",
+          "name": "Run node --test web/verification/serp-state-race.test.cjs",
+          "number": 20,
+          "startedAt": "2026-10-12T22:50:17Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:50:18Z",
+          "conclusion": "success",
+          "name": "Run node --test web/verification/robots-input-state.test.cjs",
+          "number": 21,
+          "startedAt": "2026-10-12T22:50:17Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:50:18Z",
+          "conclusion": "success",
+          "name": "Run node --test web/verification/list-import-state.test.mjs",
+          "number": 22,
+          "startedAt": "2026-10-12T22:50:18Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:50:56Z",
+          "conclusion": "success",
+          "name": "Run cargo build --locked -p open-seo-spider",
+          "number": 23,
+          "startedAt": "2026-10-12T22:50:18Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:53:31Z",
+          "conclusion": "success",
+          "name": "Rust and browser integration",
+          "number": 24,
+          "startedAt": "2026-10-12T22:50:56Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:53:31Z",
+          "conclusion": "success",
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "number": 46,
+          "startedAt": "2026-10-12T22:53:31Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:53:32Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@v4",
+          "number": 47,
+          "startedAt": "2026-10-12T22:53:31Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:53:32Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 48,
+          "startedAt": "2026-10-12T22:53:32Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:53:32Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 49,
+          "startedAt": "2026-10-12T22:53:32Z",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "name": "test (ubuntu-latest)",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-12T22:47:26Z",
+      "completedAt": "2026-10-12T22:53:55Z",
+      "steps": [
+        {
+          "completedAt": "2026-10-12T22:47:30Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-12T22:47:26Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:47:32Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "startedAt": "2026-10-12T22:47:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:47:34Z",
+          "conclusion": "success",
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "number": 3,
+          "startedAt": "2026-10-12T22:47:32Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:47:55Z",
+          "conclusion": "success",
+          "name": "Run Swatinem/rust-cache@v2",
+          "number": 4,
+          "startedAt": "2026-10-12T22:47:34Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:47:57Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@v4",
+          "number": 5,
+          "startedAt": "2026-10-12T22:47:55Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:48:01Z",
+          "conclusion": "success",
+          "name": "Run cargo fmt --all --check",
+          "number": 6,
+          "startedAt": "2026-10-12T22:47:57Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:52:13Z",
+          "conclusion": "success",
+          "name": "Run cargo test --workspace --locked",
+          "number": 7,
+          "startedAt": "2026-10-12T22:48:01Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:52:29Z",
+          "conclusion": "success",
+          "name": "Run cargo clippy --workspace --all-targets --locked -- -D warnings",
+          "number": 8,
+          "startedAt": "2026-10-12T22:52:13Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:52:55Z",
+          "conclusion": "success",
+          "name": "Run cargo build --locked -p open-seo-spider",
+          "number": 9,
+          "startedAt": "2026-10-12T22:52:29Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:53:24Z",
+          "conclusion": "success",
+          "name": "Run node scripts/api-e2e.mjs",
+          "number": 10,
+          "startedAt": "2026-10-12T22:52:55Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:53:25Z",
+          "conclusion": "success",
+          "name": "Run node scripts/list-import-e2e.mjs",
+          "number": 11,
+          "startedAt": "2026-10-12T22:53:24Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:53:30Z",
+          "conclusion": "success",
+          "name": "Run node scripts/crawl-control-e2e.mjs",
+          "number": 12,
+          "startedAt": "2026-10-12T22:53:25Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:53:34Z",
+          "conclusion": "success",
+          "name": "Run node scripts/selected-recrawl-e2e.mjs",
+          "number": 13,
+          "startedAt": "2026-10-12T22:53:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:53:36Z",
+          "conclusion": "success",
+          "name": "Run node scripts/crawl-policy-e2e.mjs",
+          "number": 14,
+          "startedAt": "2026-10-12T22:53:34Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:53:36Z",
+          "conclusion": "success",
+          "name": "Run node scripts/content-analysis-e2e.mjs",
+          "number": 15,
+          "startedAt": "2026-10-12T22:53:36Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:53:37Z",
+          "conclusion": "success",
+          "name": "Run node scripts/content-capture-e2e.mjs",
+          "number": 16,
+          "startedAt": "2026-10-12T22:53:36Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:53:44Z",
+          "conclusion": "success",
+          "name": "Run node scripts/resource-discovery-e2e.mjs",
+          "number": 17,
+          "startedAt": "2026-10-12T22:53:37Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:53:46Z",
+          "conclusion": "success",
+          "name": "Run npm ci --ignore-scripts",
+          "number": 18,
+          "startedAt": "2026-10-12T22:53:44Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:53:47Z",
+          "conclusion": "success",
+          "name": "Run node scripts/mcp-e2e.mjs",
+          "number": 19,
+          "startedAt": "2026-10-12T22:53:46Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:53:51Z",
+          "conclusion": "success",
+          "name": "Run node scripts/resource-contract-e2e.mjs",
+          "number": 20,
+          "startedAt": "2026-10-12T22:53:47Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:53:51Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@v4",
+          "number": 38,
+          "startedAt": "2026-10-12T22:53:51Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:53:51Z",
+          "conclusion": "success",
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "number": 39,
+          "startedAt": "2026-10-12T22:53:51Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:53:52Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 40,
+          "startedAt": "2026-10-12T22:53:51Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:53:52Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 41,
+          "startedAt": "2026-10-12T22:53:52Z",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "name": "container",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-12T22:47:25Z",
+      "completedAt": "2026-10-12T22:55:45Z",
+      "steps": [
+        {
+          "completedAt": "2026-10-12T22:47:28Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-12T22:47:26Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:47:29Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "startedAt": "2026-10-12T22:47:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:47:30Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@v4",
+          "number": 3,
+          "startedAt": "2026-10-12T22:47:29Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:55:42Z",
+          "conclusion": "success",
+          "name": "Run node scripts/container-e2e.mjs",
+          "number": 4,
+          "startedAt": "2026-10-12T22:47:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:55:42Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@v4",
+          "number": 7,
+          "startedAt": "2026-10-12T22:55:42Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:55:42Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 8,
+          "startedAt": "2026-10-12T22:55:42Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:55:42Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 9,
+          "startedAt": "2026-10-12T22:55:42Z",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "name": "test (windows-latest)",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-12T22:47:25Z",
+      "completedAt": "2026-10-12T23:01:50Z",
+      "steps": [
+        {
+          "completedAt": "2026-10-12T22:47:29Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-12T22:47:27Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:47:44Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "startedAt": "2026-10-12T22:47:29Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:48:07Z",
+          "conclusion": "success",
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "number": 3,
+          "startedAt": "2026-10-12T22:47:44Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:48:24Z",
+          "conclusion": "success",
+          "name": "Run Swatinem/rust-cache@v2",
+          "number": 4,
+          "startedAt": "2026-10-12T22:48:07Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:48:29Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@v4",
+          "number": 5,
+          "startedAt": "2026-10-12T22:48:24Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:48:38Z",
+          "conclusion": "success",
+          "name": "Run cargo fmt --all --check",
+          "number": 6,
+          "startedAt": "2026-10-12T22:48:29Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:57:53Z",
+          "conclusion": "success",
+          "name": "Run cargo test --workspace --locked",
+          "number": 7,
+          "startedAt": "2026-10-12T22:48:38Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:58:37Z",
+          "conclusion": "success",
+          "name": "Run cargo clippy --workspace --all-targets --locked -- -D warnings",
+          "number": 8,
+          "startedAt": "2026-10-12T22:57:53Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T22:59:21Z",
+          "conclusion": "success",
+          "name": "Run cargo build --locked -p open-seo-spider",
+          "number": 9,
+          "startedAt": "2026-10-12T22:58:37Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T23:00:07Z",
+          "conclusion": "success",
+          "name": "Run node scripts/api-e2e.mjs",
+          "number": 10,
+          "startedAt": "2026-10-12T22:59:21Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T23:00:09Z",
+          "conclusion": "success",
+          "name": "Run node scripts/list-import-e2e.mjs",
+          "number": 11,
+          "startedAt": "2026-10-12T23:00:07Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T23:00:13Z",
+          "conclusion": "success",
+          "name": "Run node scripts/crawl-control-e2e.mjs",
+          "number": 12,
+          "startedAt": "2026-10-12T23:00:09Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T23:00:45Z",
+          "conclusion": "success",
+          "name": "Run node scripts/selected-recrawl-e2e.mjs",
+          "number": 13,
+          "startedAt": "2026-10-12T23:00:13Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T23:00:48Z",
+          "conclusion": "success",
+          "name": "Run node scripts/crawl-policy-e2e.mjs",
+          "number": 14,
+          "startedAt": "2026-10-12T23:00:45Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T23:00:49Z",
+          "conclusion": "success",
+          "name": "Run node scripts/content-analysis-e2e.mjs",
+          "number": 15,
+          "startedAt": "2026-10-12T23:00:48Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T23:00:52Z",
+          "conclusion": "success",
+          "name": "Run node scripts/content-capture-e2e.mjs",
+          "number": 16,
+          "startedAt": "2026-10-12T23:00:49Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T23:01:06Z",
+          "conclusion": "success",
+          "name": "Run node scripts/resource-discovery-e2e.mjs",
+          "number": 17,
+          "startedAt": "2026-10-12T23:00:52Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T23:01:18Z",
+          "conclusion": "success",
+          "name": "Run npm ci --ignore-scripts",
+          "number": 18,
+          "startedAt": "2026-10-12T23:01:06Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T23:01:23Z",
+          "conclusion": "success",
+          "name": "Run node scripts/mcp-e2e.mjs",
+          "number": 19,
+          "startedAt": "2026-10-12T23:01:18Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T23:01:34Z",
+          "conclusion": "success",
+          "name": "Run node scripts/resource-contract-e2e.mjs",
+          "number": 20,
+          "startedAt": "2026-10-12T23:01:23Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T23:01:42Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@v4",
+          "number": 38,
+          "startedAt": "2026-10-12T23:01:34Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T23:01:43Z",
+          "conclusion": "success",
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "number": 39,
+          "startedAt": "2026-10-12T23:01:42Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T23:01:48Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 40,
+          "startedAt": "2026-10-12T23:01:43Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T23:01:48Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 41,
+          "startedAt": "2026-10-12T23:01:48Z",
+          "status": "completed"
+        }
+      ]
+    }
+  ],
+  "prior_renderer_failure": {
+    "source_commit": "d0f3eddbbb03e2127f0533494597cdbddfa6f645",
+    "run_url": "https://github.com/lia-xim/open-seo-spider/actions/runs/38317039185",
+    "cause": "Mock total API count incorrectly included permitted background reads; preserved original failure and separate controlled regression/negative probes."
+  },
+  "reference_parity": "NOT_PROVEN"
+}
