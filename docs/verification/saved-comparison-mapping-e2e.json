@@ -1,0 +1,228 @@
+{
+  "tested_at": "2026-10-13T00:01:14.753Z",
+  "result": "PASS",
+  "engine": "open-seo-spider/saved-comparison-v1",
+  "binary_sha256": "68acfbb2cd344184d383f85569e1c337d558b4b7039621a496d0cbc0af095381",
+  "harness_sha256": "06291f0cfd67113552fe2b890579f340fea3303b14c079ee680a30c67e3d3456",
+  "checks": [
+    "Four genuine native crawl cohorts on two distinct port-0 fixture origins; each row has an observed HTTP request, positive generation, and saved report bytes",
+    "Actual staging /stage URLs map to production /site keys with query preserved: unmapped added2/removed2 becomes mapped changed2 and added0/removed0; typed input hashes stay fixed",
+    "Mapping rewrites join keys only: original requested/final redirect URLs, duplicate ordered link occurrences and fragments, JSON-LD values, selected text/hash and provenance stay byte-for-value equal to each genuine source report",
+    "Actual after-side production→staging mapping changes only the chosen join namespace and retains identical original references and field deltas",
+    "Two distinct actually crawled before URLs mapped to one key reject400 with the before side, exact mapped key, both original URLs and their correct report ordinals",
+    "Two distinct actually crawled after URLs mapped to one key reject400 with the after side, exact mapped key, both original URLs and correct ordinals",
+    "A genuine two-sided mapped collision reports both sides together and returns no truncated or partially joined comparison",
+    "Native CLI JSON matches API projections; every ordered CSV field row and all 21 columns match API keys, classes, original URLs/ordinals/JSON values, states, outcomes, profiles, provenance and typed hashes with formula defence; caller declarations remain distinct",
+    "All mapping/error/export read-only phases leave API comparison output bytes, four typed/exported reports, original saved/revision JSON bytes and existing CLI exports unchanged; both live fixture hit counters remain fixed",
+    "After both website responders are closed and App cold restarts, forward/reverse mappings, CLI deltas/hashes and all three structured collision errors remain identical; both active 410 witnesses stay open through final owned-child close and then each observe zero attempts; all original report/export bytes remain unchanged"
+  ],
+  "counts": {
+    "added": 0,
+    "removed": 0,
+    "changed": 2,
+    "unchanged": 0,
+    "pages_with_unknown_fields": 2
+  },
+  "origins": {
+    "stage": "http://127.0.0.1:52371",
+    "production": "http://127.0.0.1:52372"
+  },
+  "owned_api": "http://127.0.0.1:52387",
+  "actual_native_crawl_count": 4,
+  "imported_fixture_report_count": 0,
+  "jobs": [
+    {
+      "id": "a88b72c4-1cfc-4789-b078-5e7631f72283",
+      "generation": 1,
+      "pages": 2,
+      "exported_json_sha256": "0fc339aedee010cf7ecb12fef35fe86ef00c8b26f0cbc097c6aeee997e48971a"
+    },
+    {
+      "id": "d41eba12-61ce-48d2-b61a-90617a31f9a4",
+      "generation": 1,
+      "pages": 2,
+      "exported_json_sha256": "f17e98900e9cbfc90543a9ad52788a80be12b6298408ba8592a5508025d2378c"
+    },
+    {
+      "id": "8e35ee12-0cee-4daf-b2e2-bee7de861820",
+      "generation": 1,
+      "pages": 2,
+      "exported_json_sha256": "eef74fc681e9d379d2f4055791aed464065a2a9e4a4bb7349071ae9eca208a0e"
+    },
+    {
+      "id": "a9ee8384-5929-4332-8cc0-c6e23045eb87",
+      "generation": 1,
+      "pages": 2,
+      "exported_json_sha256": "f0d534f7f068f21840dbfa3e983e65b50546fea174298cab98439ae07e916713"
+    }
+  ],
+  "report_files": [
+    {
+      "relative_path": "a88b72c4-1cfc-4789-b078-5e7631f72283.json",
+      "bytes": 21255,
+      "sha256": "c68cb95ee0c5726848351d924232407b4ed331d1d423a39ae389b0652168162d"
+    },
+    {
+      "relative_path": "d41eba12-61ce-48d2-b61a-90617a31f9a4.json",
+      "bytes": 21263,
+      "sha256": "52a7ab980229c430a6a5635fae222a42796f734c0e28aae754573f749c921b49"
+    },
+    {
+      "relative_path": "8e35ee12-0cee-4daf-b2e2-bee7de861820.json",
+      "bytes": 20389,
+      "sha256": "27402aa528e2965292580eaba66160ddc90ee0621989e19f197254c9aed025e1"
+    },
+    {
+      "relative_path": "a9ee8384-5929-4332-8cc0-c6e23045eb87.json",
+      "bytes": 20460,
+      "sha256": "c0fa9cee5bb84bbedb14ffd898dca2e75f2e69b99635907c248616c23f8ea4b3"
+    },
+    {
+      "relative_path": "snapshots\\8e35ee12-0cee-4daf-b2e2-bee7de861820\\generation-1.json",
+      "bytes": 20389,
+      "sha256": "27402aa528e2965292580eaba66160ddc90ee0621989e19f197254c9aed025e1"
+    },
+    {
+      "relative_path": "snapshots\\a88b72c4-1cfc-4789-b078-5e7631f72283\\generation-1.json",
+      "bytes": 21255,
+      "sha256": "c68cb95ee0c5726848351d924232407b4ed331d1d423a39ae389b0652168162d"
+    },
+    {
+      "relative_path": "snapshots\\a9ee8384-5929-4332-8cc0-c6e23045eb87\\generation-1.json",
+      "bytes": 20460,
+      "sha256": "c0fa9cee5bb84bbedb14ffd898dca2e75f2e69b99635907c248616c23f8ea4b3"
+    },
+    {
+      "relative_path": "snapshots\\d41eba12-61ce-48d2-b61a-90617a31f9a4\\generation-1.json",
+      "bytes": 21263,
+      "sha256": "52a7ab980229c430a6a5635fae222a42796f734c0e28aae754573f749c921b49"
+    }
+  ],
+  "typed_before_sha256": "c68cb95ee0c5726848351d924232407b4ed331d1d423a39ae389b0652168162d",
+  "typed_after_sha256": "52a7ab980229c430a6a5635fae222a42796f734c0e28aae754573f749c921b49",
+  "api_repeat_output_sha256": "fccf167ea6b741932e5c748f4582bc1fa71bb875b469c4ae3ce146676a0e7d5a",
+  "cli_json_sha256": "305fd58f4b68407638c12a9542d1f4d5cba7b79a281a5eaae1f4afdd9d7552cc",
+  "cli_csv_sha256": "afa768cd9d605de2376625b53f3f4d428a642040c5c6ab88a8e5e5e3405f57d5",
+  "csv_oracle": {
+    "data_rows": 98,
+    "columns": 21,
+    "checked_cells": 2058
+  },
+  "oracle_controls": {
+    "result": "PASS",
+    "pure_tests": 24,
+    "proof_sha256": "99f9c88c2d192b8708a9ac1f2daf72bbdbb10a10d0b9c675faf1f6800d366054",
+    "oracle_helper_sha256": "d904002b1b5eea488906c4bdec6fa764050f70ff90e0eb008a048c742589e08c",
+    "test_sha256": "ccd9eff5126459d2e5eca8b184c428fe3c9420606f8eba44a371914c5e865da1"
+  },
+  "collision_sides": [
+    "before",
+    "after"
+  ],
+  "website_requests_for_read_only_phases": 0,
+  "limitations": [
+    "Own native/API/CLI mapping acceptance on bounded localhost fixtures; browser UI, MCP, release and vendor parity are separate gates.",
+    "Mapping changes requested URL join keys only; URL-bearing source facts remain original and can therefore compare as changed.",
+    "CLI and restarted App caller declarations may differ; exact compared projections, profiles, configuration, coverage, deltas and typed input hashes are asserted equal.",
+    "Report JSON and immutable report revision bytes are covered; caller SQL authenticity and every auxiliary storage file are not attested.",
+    "No combined full-original-report bundle or full website completeness claim."
+  ],
+  "cleanup": {
+    "owned_children_closed": true,
+    "owned_servers_closed": true,
+    "temporary_data_removed": true
+  },
+  "binary_hash_checks": [
+    {
+      "phase": "before_app_spawn_1",
+      "sha256": "68acfbb2cd344184d383f85569e1c337d558b4b7039621a496d0cbc0af095381"
+    },
+    {
+      "phase": "before_cli_spawn_1",
+      "sha256": "68acfbb2cd344184d383f85569e1c337d558b4b7039621a496d0cbc0af095381"
+    },
+    {
+      "phase": "before_app_spawn_2",
+      "sha256": "68acfbb2cd344184d383f85569e1c337d558b4b7039621a496d0cbc0af095381"
+    },
+    {
+      "phase": "before_cli_spawn_2",
+      "sha256": "68acfbb2cd344184d383f85569e1c337d558b4b7039621a496d0cbc0af095381"
+    },
+    {
+      "phase": "final_after_owned_children_closed",
+      "sha256": "68acfbb2cd344184d383f85569e1c337d558b4b7039621a496d0cbc0af095381"
+    }
+  ],
+  "offline_endpoint_attempts": [
+    {
+      "origin": "http://127.0.0.1:52371",
+      "attempts": 0
+    },
+    {
+      "origin": "http://127.0.0.1:52372",
+      "attempts": 0
+    }
+  ],
+  "native_fixture_requests": [
+    {
+      "origin": "http://127.0.0.1:52371",
+      "count": 5,
+      "paths": [
+        {
+          "method": "GET",
+          "path": "/stage/item?view=full"
+        },
+        {
+          "method": "GET",
+          "path": "/stage/final/item?view=full"
+        },
+        {
+          "method": "GET",
+          "path": "/stage/common"
+        },
+        {
+          "method": "GET",
+          "path": "/alias/collision"
+        },
+        {
+          "method": "GET",
+          "path": "/stage/collision"
+        }
+      ]
+    },
+    {
+      "origin": "http://127.0.0.1:52372",
+      "count": 5,
+      "paths": [
+        {
+          "method": "GET",
+          "path": "/site/common"
+        },
+        {
+          "method": "GET",
+          "path": "/site/item?view=full"
+        },
+        {
+          "method": "GET",
+          "path": "/site/final/item?view=full"
+        },
+        {
+          "method": "GET",
+          "path": "/site/collision"
+        },
+        {
+          "method": "GET",
+          "path": "/shadow/collision"
+        }
+      ]
+    }
+  ],
+  "final_counter_collection": {
+    "phase": "after_all_owned_children_and_witness_server_close_events",
+    "live_children": 0,
+    "website_requests_after_read_only_baseline": 0,
+    "witnesses_open_until_children_closed": true,
+    "witness_active_requests_drained_without_forced_disconnect": true
+  }
+}

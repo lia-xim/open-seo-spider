@@ -1,4 +1,5 @@
 mod analysis;
+mod comparison_app;
 mod content_cohort;
 mod mcp;
 mod policy_export;
@@ -30,6 +31,19 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Compare saved crawl JSON files locally with exact identities; no website is fetched.
+    CompareSaved {
+        before: PathBuf,
+        after: PathBuf,
+        #[arg(long)]
+        config: Option<PathBuf>,
+        /// New JSON destination; omit to print the same envelope to stdout.
+        #[arg(long)]
+        output: Option<PathBuf>,
+        /// New CSV destination containing one row per compared field.
+        #[arg(long)]
+        csv: Option<PathBuf>,
+    },
     /// Inspect declared dependencies in supplied CSS locally; no website is fetched.
     InspectCss {
         input: PathBuf,
@@ -177,6 +191,18 @@ async fn main() -> anyhow::Result<()> {
     }) {
         Command::Serve { listen, data_dir } => Box::pin(server::serve(&listen, data_dir)).await?,
         Command::Mcp { server } => mcp::stdio(&server).await?,
+        Command::CompareSaved {
+            before,
+            after,
+            config,
+            output,
+            csv,
+        } => {
+            if let Err(error) = comparison_app::run_cli(before, after, config, output, csv).await {
+                eprintln!("{}", serde_json::to_string(&error)?);
+                std::process::exit(2);
+            }
+        }
         Command::InspectCss { input, output } => {
             let request: server::resources::CssInspectRequest =
                 serde_json::from_slice(&read_bounded(&input, 64 * 1024 * 1024).await?)?;

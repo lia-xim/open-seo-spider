@@ -61,7 +61,7 @@ const server = http.createServer(async (req, res) => { try {
     return send(res, { error: 'No authored fixture for ' + suffix }, 404);
   }
   const file = url.pathname === '/' ? 'index.html' : url.pathname.slice(1);
-  if (!['index.html', 'app.js', 'list-import.js', 'styles.css'].includes(file)) { res.statusCode = 404; return res.end(); }
+  if (!['index.html', 'app.js', 'list-import.js', 'styles.css', 'saved-comparison.js'].includes(file)) { res.statusCode = 404; return res.end(); }
   res.setHeader('cache-control', 'no-store'); res.setHeader('content-type', file.endsWith('.js') ? 'text/javascript' : file.endsWith('.css') ? 'text/css' : 'text/html'); res.end(fs.readFileSync(path.join(web, file)));
 } catch (error) { errors.push('Fixture server: ' + error.message); send(res, { error: error.message }, 500); } });
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));

@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "scope": "pure UI result contract and local CSV helpers; no Rust/API/native proof",
+  "node": "v24.15.0",
+  "source_sha256": {
+    "web/saved-comparison.js": "71a6bb04b0f70c829b09c544f9020259bed357e50622761ecfe188eb14e1acb4",
+    "web/verification/saved-comparison-fixtures.cjs": "d73b104573ac5975cc0fb0bf3fe90f8962bd8bfdd6c28bc2c29c4e6b0abe792e",
+    "web/verification/saved-comparison-contract.test.cjs": "f233a6dfc2d81e73480ea85ce70e2f8fe20a91fee79599277a432afa62cb0bee"
+  },
+  "checks": [
+    "accepts versioned complete result shape and exact page counts",
+    "unknown and partial facts retain source profiles without empty coercion",
+    "rejects unknown engine",
+    "rejects wrong counts",
+    "rejects duplicate identity",
+    "rejects missing fact state",
+    "rejects duplicate field",
+    "rejects inconsistent added identity",
+    "rejects nonzero website request claim",
+    "CSV formula protection includes BOM and whitespace",
+    "CSV quotes and multiline old/new JSON plus profile/provenance preserved",
+    "CSV refuses imprecise integer instead of silently rounding",
+    "empty cohort exports explicit CSV header",
+    "safeJSON preserves ordinary metadata and safe integer boundary",
+    "safeJSON removes rounded numeric metadata while preserving other keys",
+    "safeJSON keeps exact decimal strings unchanged"
+  ]
+}

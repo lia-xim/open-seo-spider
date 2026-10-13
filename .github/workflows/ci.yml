@@ -43,6 +43,17 @@ jobs:
       - run: npm ci --ignore-scripts
         working-directory: scripts
       - run: node scripts/mcp-e2e.mjs
+      - run: node scripts/saved-comparison-e2e.mjs
+      - name: Saved-comparison mapping oracle negative controls
+        run: node --test scripts/saved-comparison-mapping-oracles.test.mjs
+        env:
+          SPIDER_COMPARISON_MAPPING_CONTROL_PROOF: ${{ runner.temp }}/saved-comparison-mapping-oracle-controls.json
+      - name: Native saved-comparison cross-origin mappings and collisions
+        run: node scripts/saved-comparison-mapping-e2e.mjs
+        env:
+          SPIDER_BINARY: ${{ runner.os == 'Windows' && 'target/debug/open-seo-spider.exe' || 'target/debug/open-seo-spider' }}
+          SPIDER_COMPARISON_MAPPING_PROOF: ${{ runner.temp }}/saved-comparison-mapping-e2e.json
+          SPIDER_COMPARISON_MAPPING_CONTROL_PROOF: ${{ runner.temp }}/saved-comparison-mapping-oracle-controls.json
       - run: node scripts/resource-contract-e2e.mjs
   renderer:
     runs-on: ubuntu-latest
@@ -84,11 +95,19 @@ jobs:
       - run: node web/verification/ui-resource-discovery-smoke.cjs
       - run: node web/verification/ui-resource-ledger-smoke.cjs
       - run: node web/verification/ui-resource-contract-smoke.cjs
+      - run: node web/verification/saved-comparison-contract.test.cjs
+      - run: node web/verification/saved-comparison-native-fence.test.cjs
+      - run: node web/verification/ui-saved-comparison-smoke.cjs
       - run: node scripts/update-feature-todo.mjs --check
       - run: node --test web/verification/serp-state-race.test.cjs
       - run: node --test web/verification/robots-input-state.test.cjs
       - run: node --test web/verification/list-import-state.test.mjs
       - run: cargo build --locked -p open-seo-spider
+      - name: Native saved-comparison browser and offline restart
+        run: node web/verification/ui-saved-comparison-live.cjs
+        env:
+          SPIDER_BINARY: target/debug/open-seo-spider
+          SPIDER_COMPARISON_UI_PROOF: ${{ runner.temp }}/saved-comparison-ui-native.json
       - name: Rust and browser integration
         shell: bash
         run: |

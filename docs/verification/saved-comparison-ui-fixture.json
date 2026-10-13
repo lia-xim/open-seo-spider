@@ -1,0 +1,179 @@
+{
+  "status": "PASS",
+  "scope": "isolated Work-overlay browser/API fixture; no actual Rust comparison, SQL persistence, CI, installed runtime or vendor-parity proof",
+  "node": "v24.15.0",
+  "browser_version": "154.0.8037.99",
+  "source_sha256": {
+    "web/app.js": "a83eedcd6a745ae24166dc1b721ec6eada90cfa09810128a4bdf5e532a0f01c2",
+    "web/index.html": "714c533a3c9d0f84e3b6e50a7a6d36f32734a1bae107052139dd9ce79eefa669",
+    "web/styles.css": "c2f4b4f2665eb89084a2ef66f2fb71af71be8956be4ec139744fd98bd287a0d1",
+    "web/list-import.js": "cd8702fd31122eccfefaf5ed7404bb47cc65223efa5394d3e687f329cfbf47ba",
+    "web/saved-comparison.js": "71a6bb04b0f70c829b09c544f9020259bed357e50622761ecfe188eb14e1acb4",
+    "web/verification/saved-comparison-fixtures.cjs": "d73b104573ac5975cc0fb0bf3fe90f8962bd8bfdd6c28bc2c29c4e6b0abe792e",
+    "web/verification/ui-saved-comparison-smoke.cjs": "1c65237bd38b15a3ff1e01e74f17e6a3f4d91b6620e2dec082dc35262cabedb6"
+  },
+  "checks": [
+    "open reads only history, disables unstable jobs and preserves crawl draft",
+    "POST uses saved UUIDs and captured precise expected generations",
+    "four counts, unknown count and incomplete mixed-age coverage shown",
+    "URL pagination reaches all 55 received rows",
+    "all four change-class filters preserve full-result counts",
+    "old/new, partial vs empty vs unknown, incompatible profiles and hostile JSON-LD remain escaped",
+    "field pagination and unknown filter reach all fields",
+    "JSON downloads exact raw API body without API or website fetch",
+    "CSV includes all URL and field pages with source and provenance, no follow-up fetch",
+    "filtered CSV exports full fields for filtered URLs regardless of field display filter",
+    "empty filter shows zero and prevents misleading filtered download",
+    "320px outer width contained and bottom/detail/close controls reachable",
+    "Escape preserves comparison options, job selection and existing crawl draft",
+    "invalid config rejected before comparison request",
+    "409 generation conflict preserves structured context and blocks exports",
+    "400 collision exposes original occurrences without lossy strings or markup execution",
+    "malformed result counts rejected without usable partial result",
+    "late comparison completion after config edit ignored even when fetch abort is bypassed",
+    "late completion after close/reopen ignored and draft retained",
+    "keyboard URL selection moves focus to details",
+    "zero external requests, zero crawl/import/control mutations and no JS runtime errors",
+    "unsafe snapshot/reference/provenance metadata hidden behind precision guard while JSON keeps exact original integer",
+    "unsafe generation-conflict metadata also protected by the same display helper"
+  ],
+  "calls": [
+    {
+      "method": "GET",
+      "path": "/api/crawls",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {},
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {},
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {},
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {},
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {},
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {
+          "include_selected_text": true
+        },
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {
+          "include_selected_text": true
+        },
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {
+          "include_selected_text": true
+        },
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {
+          "include_selected_text": true
+        },
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    }
+  ],
+  "unexpected_external_requests": [],
+  "javascript_runtime_errors": [],
+  "fixture_server_errors": [],
+  "failure": null,
+  "fixture_port": 52906,
+  "screenshots": [
+    "comparison-wide.png",
+    "comparison-320.png"
+  ],
+  "no_user_ports_contacted": true
+}

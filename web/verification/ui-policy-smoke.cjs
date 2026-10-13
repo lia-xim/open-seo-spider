@@ -162,7 +162,7 @@ const server = http.createServer(async (req, res) => {
       if (suffix === 'fragments') return send(res, { enabled: false, observations: [] });
     }
     const file = url.pathname === '/' ? 'index.html' : url.pathname.slice(1);
-    if (!['index.html', 'app.js', 'list-import.js', 'styles.css'].includes(file)) { res.statusCode = 404; return res.end(); }
+    if (!['index.html', 'app.js', 'list-import.js', 'styles.css', 'saved-comparison.js'].includes(file)) { res.statusCode = 404; return res.end(); }
     res.setHeader('content-type', file.endsWith('.js') ? 'text/javascript' : file.endsWith('.css') ? 'text/css' : 'text/html');
     res.end(fs.readFileSync(path.join(web, file)));
   } catch (error) { errors.push('Fixture server: ' + error.message); send(res, { error: error.message }, 500); }

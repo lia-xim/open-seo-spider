@@ -4,6 +4,7 @@ use reqwest::{Client, Url};
 use serde_json::{Value, json};
 use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
 pub const PROTOCOLS: &[&str] = &["2025-06-18", "2025-11-25"];
+mod saved_comparison;
 #[derive(Clone)]
 pub struct Bridge {
     client: Client,
@@ -81,6 +82,10 @@ impl Bridge {
                     })
                 {
                     return Some(error(id, -32602, "Unexpected or missing tool argument"));
+                }
+                if name == "spider_compare_saved" {
+                    let result = saved_comparison::call(self, args).await;
+                    return Some(json!({"jsonrpc":"2.0","id":id,"result":result}));
                 }
                 match self.call(name, args).await {
                     Ok(value) => {
@@ -285,7 +290,7 @@ fn error(id: Value, code: i64, message: &str) -> Value {
 }
 fn inventory() -> Vec<Value> {
     let uuid = json!({"type":"string","format":"uuid"});
-    vec![
+    let mut tools: Vec<Value> = vec![
         ("spider_capabilities","Read implemented and optional capabilities",json!({}),vec![],true),
         ("spider_list_crawls","List saved and active crawls",json!({}),vec![],true),
         ("spider_start_crawl","Start a crawl for user-requested targets",json!({"config":{"type":"object","description":"CrawlConfig: seed_urls or seed_url, sitemap_urls, concurrency, delay_ms, obey_robots, max_pages, optional renderer"}}),vec!["config"],false),
@@ -308,7 +313,9 @@ fn inventory() -> Vec<Value> {
         ("spider_recrawl","Create a derived crawl that refreshes only selected exact requested URLs and retains the source snapshot",json!({"id":uuid,"urls":{"type":"array","items":{"type":"string"},"minItems":1},"max_attempts":{"type":"integer","minimum":0,"description":"Optional selected-attempt budget; zero means unlimited"}}),vec!["id","urls"],false),
         ("spider_project","Read the original project snapshot; paginate large crawls via spider_pages",json!({"id":uuid}),vec!["id"],true),
         ("spider_compare","Compare two crawl snapshots",json!({"before":uuid,"after":uuid}),vec!["before","after"],true),
-    ].into_iter().map(|(name,description,properties,required,read)|json!({"name":name,"description":description,"inputSchema":{"type":"object","properties":properties,"required":required,"additionalProperties":false},"annotations":{"readOnlyHint":read,"destructiveHint":false,"openWorldHint":name=="spider_start_crawl"||name=="spider_resume"||name=="spider_recrawl"}})).collect()
+    ].into_iter().map(|(name,description,properties,required,read)|json!({"name":name,"description":description,"inputSchema":{"type":"object","properties":properties,"required":required,"additionalProperties":false},"annotations":{"readOnlyHint":read,"destructiveHint":false,"openWorldHint":name=="spider_start_crawl"||name=="spider_resume"||name=="spider_recrawl"}})).collect();
+    tools.push(saved_comparison::definition());
+    tools
 }
 pub async fn stdio(base: &str) -> anyhow::Result<()> {
     let bridge = Bridge::new(base)?;
@@ -357,7 +364,7 @@ mod tests {
                 .await
                 .is_none()
         );
-        assert_eq!(inventory().len(), 22);
+        assert_eq!(inventory().len(), 23);
     }
     #[test]
     fn only_loopback_bridge() {

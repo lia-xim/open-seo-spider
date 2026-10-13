@@ -2,7 +2,7 @@
 
 Diese Roadmap ordnet die nächsten Arbeitsschritte. Der vollständige laufende Status aller 144 Fähigkeiten steht in [FEATURE_TODO.md](FEATURE_TODO.md); die exakten Abnahmen und Belege stehen in [feature-parity.json](feature-parity.json).
 
-Aktuell: **26 eigene Abnahmen erfüllt, 71 teilweise geprüft, 47 offen**. Zusätzlich bleiben [416 benannte Filter und 32 Ablaufverträge](parity/granular-acceptance.json) getrennt zu prüfen. Alle Hersteller-Parität bleibt **NOT_PROVEN**. Es wird kein Fertigstellungsprozentsatz berechnet.
+Aktuell: **29 eigene Abnahmen erfüllt, 69 teilweise geprüft, 46 offen**. Zusätzlich bleiben [416 benannte Filter und 32 Ablaufverträge](parity/granular-acceptance.json) getrennt zu prüfen. Alle Hersteller-Parität bleibt **NOT_PROVEN**. Es wird kein Fertigstellungsprozentsatz berechnet.
 
 ## Aktueller nächster Baustein
 
@@ -10,7 +10,7 @@ Aktuell: **26 eigene Abnahmen erfüllt, 71 teilweise geprüft, 47 offen**. Zusä
 
 **Aktuell: B10 ist lokal installiert.** Der [eigene V2-Vertrag](resource-contract-v2.md) ergänzt ausdrückliche interne/externe Follow-Schalter und unveränderliche Rollen bei jedem Redirect. [216 Schalter-, 44 Antwort- und 200 Redirect-/Boundary-Ausführungen](verification/resource-contract-checkpoint.json), API13 und echte UI10 sind geprüft. [Alle vier exakten CI-Jobs](verification/resource-contract-ci.json), [optimierter Release](verification/resource-contract-release.json) und [Installation auf localhost8787](verification/resource-contract-installed.json) bestehen. Sieben vorhandene Jobs und elf JSON-Dateien bleiben byteidentisch. Weitere Encoding-/Unterbrechungs-/Budget-/Browser-/Master-Schalter-/TLS-Kontrollen bleiben offen. Der [historische Designplan](parity/resource-matrix-plan.md) bleibt unverändert; tatsächliche Beweise sind getrennt.
 
-**Nächste größere Funktion: B11.** [Issue18](https://github.com/lia-xim/open-seo-spider/issues/18) verfolgt den Vergleich gespeicherter Crawls mit konkreten Vorher/Nachher-Werten, Link-/JSON-LD-/Textquellen, explizitem URL-Mapping und kombinierten JSON-/CSV-Exporten. Fehlende Quellen bleiben unbekannt. Ein isolierter Rust-Core-Entwurf besteht 34 gerichtete Tests und Clippy; Produktintegration, API/CLI/MCP, Export, Oberfläche und tatsächliche Laufzeitabnahme stehen noch aus.
+**Nächste größere Funktion: B11.** [Issue18](https://github.com/lia-xim/open-seo-spider/issues/18) verfolgt den Vergleich gespeicherter Crawls mit konkreten Vorher/Nachher-Werten, Link-/JSON-LD-/Textquellen, explizitem URL-Mapping und kombinierten JSON-/CSV-Exporten. Fehlende Quellen bleiben unbekannt. Der [integrierte gespeicherte Vergleich](saved-comparison.md) besteht 34 Core-Fälle, 62 App-Tests, insgesamt 440 Standard-Rust-Tests und neun echte API/CLI/SDK-Gruppen mit Offline-Kaltstart. Acht tatsächliche Browsergruppen und zehn Zwei-Origin-Mappinggruppen sind ebenfalls geprüft. Vollständiges Originalbericht-Bundle und exakte CI/Release/Installation stehen noch aus.
 
 ## Was bereits als Grundlage dient
 

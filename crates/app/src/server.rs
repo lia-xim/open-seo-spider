@@ -26,6 +26,7 @@ use serde_json::{Value, json};
 use std::{collections::HashMap, path::PathBuf, sync::Arc};
 use tokio::sync::RwLock;
 use uuid::Uuid;
+mod comparison;
 mod content;
 mod policy;
 pub(crate) mod resources;
@@ -140,6 +141,15 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
                 (
                     [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
                     include_str!("../../../web/app.js"),
+                )
+            }),
+        )
+        .route(
+            "/saved-comparison.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+                    include_str!("../../../web/saved-comparison.js"),
                 )
             }),
         )
@@ -267,6 +277,12 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
         .route("/api/crawls/{id}/sitemap.xml", get(export_xml))
         .route("/api/crawls/{id}/project.json", get(export_project))
         .route("/api/compare", get(compare))
+        .route(
+            "/api/compare/saved",
+            post(comparison::compare_saved).layer(axum::extract::DefaultBodyLimit::max(
+                crate::comparison_app::MAX_REQUEST_BYTES,
+            )),
+        )
         .layer(axum::extract::DefaultBodyLimit::max(64 * 1024 * 1024))
         .layer(middleware::from_fn(local_origin))
         .with_state(state);
@@ -349,6 +365,7 @@ async fn capabilities() -> Json<Value> {
         "native_crawl_policy":{"opt_in":true,"engine":open_seo_spider_core::LIVE_CRAWL_POLICY_ENGINE,"durable_sqlite_ledger":true,"paged_observations":true,"streamed_snapshot_exports":true,"renderer_supported":false,"scope_does_not_grant_credentials":true,"occurrence_limit":null},
         "offline_content_analysis":{"endpoint":"/api/content/analyze","website_requests":0,"similarity":"exact_token_shingle_jaccard","readability":"explicit_en_de_heuristic","full_reference_parity":false},
         "saved_content_analysis":{"endpoint":"/api/crawls/{id}/content/analyze","engine":crate::content_cohort::SAVED_CONTENT_ENGINE,"website_requests":0,"explicit_cohort":true,"max_documents":128,"site_wide_coverage":false},
+        "saved_comparison":{"endpoint":"/api/compare/saved","engine":open_seo_spider_core::SAVED_COMPARISON_ENGINE,"website_requests":0,"exact_requested_identity":true,"explicit_mapping":true,"unknown_facts_preserved":true,"full_original_report_bundle":false,"sql_attested":false,"full_reference_parity":false},
         "native_content_capture":{"opt_in":true,"sources":["raw_http_html","rendered_dom_html"],"body_retention":false,"source_binding":"persisted_consistency","full_reference_parity":false},
         "native_resource_discovery":{"opt_in":true,"engine":open_seo_spider_core::RESOURCE_DISCOVERY_ENGINE,"semantic_contracts":[open_seo_spider_core::RESOURCE_DISCOVERY_ENGINE,open_seo_spider_core::RESOURCE_CONTRACT_ENGINE],"contract_selection":"explicit_optional_config","qualified_directives":["nofollow","ugc","sponsored"],"qualified_link_scope":"target_internal_external_including_document_nofollow","durable_original_reference_roles":true,"durable_sqlite_ledger":true,"paged_occurrences":true,"paged_transport_metadata":true,"streamed_snapshot_exports":true,"entity_body_retention":false,"renderer_supported":false,"full_reference_parity":false},
         "offline_serp":{"path":"/serp","website_requests":0,"csv_import":true,"row_limit":10000},

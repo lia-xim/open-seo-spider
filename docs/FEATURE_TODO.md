@@ -4,7 +4,7 @@
 
 Die Liste hält alle 144 gruppierten Fähigkeiten fest. Ein Haken bedeutet, dass das **eigene gespeicherte Abnahmekriterium** mit Beweisen erfüllt ist. Er bedeutet keine vollständige Gleichheit mit Screaming Frog. Diese Referenzparität bleibt für alle Einträge **NOT_PROVEN**.
 
-Aktueller Katalogstand: **26 eigene Abnahmen erfüllt**, **71 teilweise geprüft**, **47 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
+Aktueller Katalogstand: **29 eigene Abnahmen erfüllt**, **69 teilweise geprüft**, **46 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
 
 Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.json) bilden ein zusätzliches Register. Ihre positiven Fälle, Kontrollfälle, Parameter und Grenzfälle müssen jeweils geprüft werden. Ein implementierter Kern, ein leerer Export oder übereinstimmende CSV-Zellen ersetzen diese Einzelabnahme nicht.
 
@@ -46,14 +46,17 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - Verträge: [resource-discovery.md](resource-discovery.md), [ROADMAP.md](ROADMAP.md), [resource-discovery-api.md](resource-discovery-api.md), [resource-discovery-ui.md](resource-discovery-ui.md).
   - Gate-Stand: pure_css_inventory: PASS; resource_policy_bounded: PASS; native_fixture_subset: PASS; native_fixture_groups_10: PARTIAL; api_cli_mcp: PASS; actual_ui: PASS; related_actual_browser_53: PASS; ui_settings_fixture: PASS; ui_ledger_fixture: PASS; exact_commit_ci: PASS; immutable_release: PASS; installed_runtime: PASS; legacy_restart_regression: PASS; full_core_and_ui_on_repaired_source: PASS; legacy_regression_groups_7: PASS.
 
-- [ ] **Nächste Funktion – B11: gespeicherte Crawls vollständig vergleichen** — PLANNED. Den bisherigen Vergleich um konkrete Vorher/Nachher-Werte, Link-/JSON-LD-/Textquellen, ausdrückliches URL-Mapping und kombinierte Exporte erweitern. Der Vergleich nutzt ausschließlich gespeicherte Beobachtungen und benötigt keine neue Website-Abfrage. Noch keine Integration oder Laufzeitabnahme im Produkt. GitHub: [B11-Issue #18](https://github.com/lia-xim/open-seo-spider/issues/18). Ein isolierter Rust-Core-Entwurf besteht 34 gerichtete Tests, Formatprüfung und Core-Clippy; vier konkrete Gegenbeispiele wurden zunächst rot reproduziert und repariert. Dieser Work-Entwurf ist noch nicht in das Produkt integriert. API, CLI, MCP, Exporte, Oberfläche, Persistenz und Kaltstart bleiben offene Produktabnahmen.
-  - Versionierten Vergleich mit exakten URL-Schlüsseln, added/removed/changed/unchanged und konkreten Vorher/Nachher-Feldwerten implementieren; bisherigen Vertrag kompatibel erhalten.
-  - Linkvorkommen, JSON-LD und gespeicherte vollständige/partielle/unbekannte Textquellen samt Herkunft und Aktualität getrennt vergleichen.
-  - Ausdrückliches Staging/Production-Mapping mit unveränderten ursprünglichen URLs und Kollisionserkennung vor dem Join abnehmen.
-  - Beide vollständigen Report-Snapshots mit Hash/Generation/Herkunft binden; gemischt alte ausgewählte Recrawls und aktive Checkpoints sichtbar begrenzen.
-  - Gemeinsamen JSON-/CSV-Export, API/CLI/MCP und lokale Vergleichsoberfläche mit identischen Ergebnissen prüfen; nach Abschalten der Fixture und Kaltstart null Website-Anfragen belegen.
+- [ ] **Nächste Funktion – B11: gespeicherte Crawls vollständig vergleichen** — IN_PROGRESS. Gespeicherter Rust-Vergleich ist integriert: 34 Core-Fälle, 62 App-Tests und 440 Standard-Rust-Tests bestehen. API/CLI/MCP sind mit neun tatsächlichen Gruppen und 23 SDK-Werkzeugen geprüft. Acht native Browsergruppen und zehn echte Zwei-Origin-Mappinggruppen mit beidseitigen Kollisionen, unveränderten Originaldaten und Offline-Kaltstart bestehen. Das vollständige Originalbericht-Bundle sowie exakte Source-CI/Release/Installation bleiben offen. GitHub: [B11-Issue #18](https://github.com/lia-xim/open-seo-spider/issues/18).
+  - [x] Versionierter exakter URL-Vergleich mit added/removed/changed/unchanged und konkreten Feldwerten in zwei tatsächlichen gespeicherten nativen Crawls geprüft.
+  - [x] Titel, Description, H1/H2, Direktiven, Linkvorkommen, JSON-LD und ausgewählte Texte ändern sich nachvollziehbar trotz gleicher Issue-Zahl; fehlende, partielle und nicht verfügbare Quellen bleiben getrennt.
+  - [x] API/CLI/MCP liefern identische Deltas und typisierte Report-Hashes; nach Abschaltung der Fixture-Website und App-Kaltstart beobachten ein eigener HTTP-Witness und beide SDK-Transporte null Website-Anfragen.
+  - [x] Zwei App/Core-Vertragsfehler rot reproduziert und repariert; 440 Standard-Rust-Tests sowie Alltargets-Clippy bestehen.
+  - [x] Vergleichsoberfläche, alle vier Klassen, Details, fehlende/partielle Quellen, genaue JSON-/CSV-Downloads und 320px-Erreichbarkeit an tatsächlichen gespeicherten nativen Crawls geprüft; eingebettete Assets und Mutation-Fence sind gebunden.
+  - [x] Vier tatsächliche Crawls auf zwei Origins prüfen Staging/Production-Prefix-Joins und beidseitige Mapping-Kollisionen; alle Originalfakten und Report-/Revisions-/Exportbytes bleiben erhalten, zwei Offline-Witnesses bleiben nach finalem Prozessende bei null.
+  - Einen gemeinsamen JSON-Download mit beiden vollständigen unveränderten geladenen typisierten Originalberichten und hashgebundenen Deltas ergänzen.
+  - Exakte Commit-CI, unveränderlichen optimierten Release und datenbewahrende Installation separat prüfen.
   - Verträge: [FEATURE_TODO.md](FEATURE_TODO.md), [ROADMAP.md](ROADMAP.md).
-  - Gate-Stand: core_contract: PENDING; api_cli_mcp: PENDING; actual_browser_ui: PENDING; snapshot_and_mapping_integrity: PENDING; offline_restart_zero_requests: PENDING; work_draft_core: PASS_34_ISOLATED_WORK_ONLY.
+  - Gate-Stand: core_contract: PASS_34; api_cli_mcp: PASS_NATIVE_9_AND_SDK23; actual_browser_ui: PASS_NATIVE_8_WITH_SERVED_ASSETS_AND_MUTATION_CONTROL; snapshot_and_mapping_integrity: PASS_NATIVE_10_TWO_ORIGINS_BOTH_COLLISION_SIDES; offline_restart_zero_requests: PASS_FINAL_DRAINED_HTTP_WITNESSES_0; work_draft_core: PASS_34_ISOLATED_WORK_ONLY; workspace_tests: PASS_440_WITH_4_BROWSER_IGNORED; workspace_clippy: PASS; combined_full_original_bundle: PENDING; exact_commit_ci: PENDING; immutable_release: PENDING; installed_runtime: PENDING; ui_contract: PASS_16; ui_browser_fixture: PASS_23; mapping_oracle_controls: PASS.
 
 - [x] **B8: optionale Textaufnahme und gespeicherte Inhaltsanalyse** — COMPLETED. Der begrenzte B8-Baustein für optionale Roh-/DOM-Textaufnahme und gespeicherte ausgewählte Inhaltsanalyse ist mit eigenen nativen/API/UI-Gates, exakter Commit-CI und unveränderlichem installiertem Release geprüft. Vollständige Website-Analyse und CSS-Neuauswahl ohne erhaltenes HTML/DOM bleiben zusätzliche offene Feature-Abnahmen.
   - [x] Pure CSS-/Unicode-Auswahl20 und Binding4 sowie16 echte native Fixtures geprüft; ungültige Konfiguration scheitert vor HTTP.
@@ -76,42 +79,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 ### Crawl-Modi und Steuerung
 
-7 Einträge: 5 eigene Abnahmen erfüllt, 1 teilweise geprüft, 1 offen.
-
-#### Teilweise vorhanden – Restarbeiten
-
-- [ ] **Gespeicherte Crawls vergleichen** — Teilweise geprüft; `modes.compare`, P1.
-
-  Orientierung: Neue, entfernte und veränderte Seiten gemeinsam in einer Fixture prüfen.
-
-  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [api](verification/api-e2e.json) (PASS).
-
-  <details>
-  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
-
-  ```json
-  {
-    "id": "modes.compare",
-    "reference_name": "Snapshot comparison",
-    "status": "partial",
-    "acceptance_test": "Compare two saved fixture snapshots and classify new, missing and changed URLs.",
-    "remaining_acceptance": [
-      "Add complete saved-fixture assertions for new, removed and changed classifications together."
-    ],
-    "implementation_evidence": [
-      {
-        "verification_run_ids": [
-          "core-fixtures",
-          "api"
-        ],
-        "proves": "Snapshot comparison classifies added/removed/changed URL keys in code. Core recovery checks added URLs; API JSON reimport comparison proves an unchanged snapshot has zero changes."
-      }
-    ],
-    "parity_status": "NOT_PROVEN"
-  }
-  ```
-
-  </details>
+7 Einträge: 6 eigene Abnahmen erfüllt, 0 teilweise geprüft, 1 offen.
 
 #### Noch offen
 
@@ -240,6 +208,45 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "resource-offline-batch"
         ],
         "proves": "Offline import/measurement/export uses native Rust without fetching supplied website URLs. The actual browser fixture observes zero website requests; quoted newline/Unicode values, ordered duplicate URLs, malformed CSV errors, unknown versus zero widths, reload persistence and formula-safe CSV versus exact JSON values are verified. Thirteen focused editor regressions cover file-read/import/preview races and concurrent edits/add/delete."
+      }
+    ],
+    "parity_status": "NOT_PROVEN"
+  }
+  ```
+
+  </details>
+
+- [x] **Gespeicherte Crawls vergleichen** — Eigene Abnahme erfüllt; `modes.compare`, P1.
+
+  Orientierung: Neue, entfernte und veränderte Seiten gemeinsam in einer Fixture prüfen.
+
+  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [api](verification/api-e2e.json) (PASS), [saved-comparison-native](verification/saved-comparison-e2e.json) (PASS), [saved-comparison-backend-checkpoint](verification/saved-comparison-backend-checkpoint.json) (PASS).
+
+  <details>
+  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
+
+  ```json
+  {
+    "id": "modes.compare",
+    "reference_name": "Snapshot comparison",
+    "status": "implemented",
+    "acceptance_test": "Compare two saved fixture snapshots and classify new, missing and changed URLs.",
+    "remaining_acceptance": [],
+    "implementation_evidence": [
+      {
+        "verification_run_ids": [
+          "core-fixtures",
+          "api"
+        ],
+        "proves": "Snapshot comparison classifies added/removed/changed URL keys in code. Core recovery checks added URLs; API JSON reimport comparison proves an unchanged snapshot has zero changes."
+      },
+      {
+        "verification_run_ids": [
+          "saved-comparison-native",
+          "saved-comparison-backend-checkpoint"
+        ],
+        "proves": "Two actual saved native cohorts jointly classify added, removed, changed and unchanged; API/CLI/SDK share identical deltas and typed hashes after website shutdown and App cold restart.",
+        "limits": "Own versioned stored-fact comparison acceptance only; browser/release and full vendor parity remain separate."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -4199,7 +4206,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 ### Speicherung, Projekte und Vergleiche
 
-10 Einträge: 1 eigene Abnahmen erfüllt, 7 teilweise geprüft, 2 offen.
+10 Einträge: 3 eigene Abnahmen erfüllt, 6 teilweise geprüft, 1 offen.
 
 #### Teilweise vorhanden – Restarbeiten
 
@@ -4400,44 +4407,11 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   </details>
 
-- [ ] **Veränderte Inhalte und Regeln vergleichen** — Teilweise geprüft; `storage.compare_changes`, P2.
-
-  Orientierung: Graph-/Schema-Deltas und Änderungen bei gleicher Issue-Anzahl prüfen.
-
-  Beweisregister: [api](verification/api-e2e.json) (PASS), [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS).
-
-  <details>
-  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
-
-  ```json
-  {
-    "id": "storage.compare_changes",
-    "reference_name": "Field and content changes",
-    "status": "partial",
-    "acceptance_test": "Detect title, description, headings, graph, directives, structured data and content changes even if issue counts are unchanged.",
-    "remaining_acceptance": [
-      "Add graph and structured-data comparisons and prove all changed-field cases when issue counts remain equal."
-    ],
-    "implementation_evidence": [
-      {
-        "verification_run_ids": [
-          "api",
-          "core-fixtures"
-        ],
-        "proves": "Comparison joins stable URL keys and checks status/finalURL/title/description/headings/canonical/robots/hash/count/render fields; imported-identical report and added URLs are tested."
-      }
-    ],
-    "parity_status": "NOT_PROVEN"
-  }
-  ```
-
-  </details>
-
 - [ ] **Vergleiche vollständig exportieren** — Teilweise geprüft; `storage.compare_export`, P2.
 
   Orientierung: Gemeinsamen Export mit allen Delta-Arten und beiden Snapshot-Herkünften prüfen.
 
-  Beweisregister: [api](verification/api-e2e.json) (PASS).
+  Beweisregister: [api](verification/api-e2e.json) (PASS), [saved-comparison-native](verification/saved-comparison-e2e.json) (PASS), [saved-comparison-backend-checkpoint](verification/saved-comparison-backend-checkpoint.json) (PASS), [saved-comparison-native-ui](verification/saved-comparison-ui-native.json) (PASS), [saved-comparison-native-mapping](verification/saved-comparison-mapping-e2e.json) (PASS), [saved-comparison-ui-fixture](verification/saved-comparison-ui-fixture.json) (PASS).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -4457,6 +4431,23 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "api"
         ],
         "proves": "Snapshot exports and JSON comparison endpoint expose before/after IDs and added/removed/changed URL field deltas."
+      },
+      {
+        "verification_run_ids": [
+          "saved-comparison-native",
+          "saved-comparison-backend-checkpoint"
+        ],
+        "proves": "Local-file CLI writes comparison JSON and formula-protected CSV with concrete field values/states/profiles/provenance and both typed report hashes; existing destinations retain their exact bytes.",
+        "limits": "The JSON currently includes snapshot descriptors and field projections. Both complete original reports in one downloadable bound bundle remain open."
+      },
+      {
+        "verification_run_ids": [
+          "saved-comparison-native-ui",
+          "saved-comparison-native-mapping",
+          "saved-comparison-ui-fixture"
+        ],
+        "proves": "Native/browser comparison JSON preserves exact received response bytes; CSV carries every compared field rather than only visible rows, with filter, profile, provenance and formula protection. Actual cross-origin CLI output agrees column-for-column with API.",
+        "limits": "Snapshot descriptors and fact projections are included; both complete original typed reports in one combined bundle remain open."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -4484,31 +4475,6 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
     "acceptance_test": "Use test timestamps to expire unlocked fixture snapshots while preserving locked snapshots and active jobs.",
     "remaining_acceptance": [
       "Use test timestamps to expire unlocked fixture snapshots while preserving locked snapshots and active jobs."
-    ],
-    "implementation_evidence": [],
-    "parity_status": "NOT_PROVEN"
-  }
-  ```
-
-  </details>
-
-- [ ] **URL-Mapping vor Vergleichen** — Offen; `storage.compare_mapping`, P2.
-
-  Orientierung: Staging-/Produktions- oder Migrationspräfixe mit sichtbaren Kollisionen abgleichen.
-
-  Beweisregister: keine zugeordnete ausgeführte Prüfung.
-
-  <details>
-  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
-
-  ```json
-  {
-    "id": "storage.compare_mapping",
-    "reference_name": "Cross-host comparison mapping",
-    "status": "planned",
-    "acceptance_test": "Map staging/production or migrated URL prefixes before joining snapshots and expose collisions.",
-    "remaining_acceptance": [
-      "Map staging/production or migrated URL prefixes before joining snapshots and expose collisions."
     ],
     "implementation_evidence": [],
     "parity_status": "NOT_PROVEN"
@@ -4575,6 +4541,86 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "content-capture-installed"
         ],
         "proves": "Exact-source B8 commit667bc97 passes four CI jobs (Windows/Linux, renderer, Linux container) and its immutable native Windows release runs the bounded raw/DOM saved-text contracts with19 MCP tools while preserving seven jobs/eleven original JSON bytes after restart. This does not prove whole-site analysis, saved full-HTML CSS reselection or subsequent B9 source changes."
+      }
+    ],
+    "parity_status": "NOT_PROVEN"
+  }
+  ```
+
+  </details>
+
+- [x] **Veränderte Inhalte und Regeln vergleichen** — Eigene Abnahme erfüllt; `storage.compare_changes`, P2.
+
+  Orientierung: Graph-/Schema-Deltas und Änderungen bei gleicher Issue-Anzahl prüfen.
+
+  Beweisregister: [api](verification/api-e2e.json) (PASS), [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [saved-comparison-native](verification/saved-comparison-e2e.json) (PASS), [saved-comparison-backend-checkpoint](verification/saved-comparison-backend-checkpoint.json) (PASS).
+
+  <details>
+  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
+
+  ```json
+  {
+    "id": "storage.compare_changes",
+    "reference_name": "Field and content changes",
+    "status": "implemented",
+    "acceptance_test": "Detect title, description, headings, graph, directives, structured data and content changes even if issue counts are unchanged.",
+    "remaining_acceptance": [],
+    "implementation_evidence": [
+      {
+        "verification_run_ids": [
+          "api",
+          "core-fixtures"
+        ],
+        "proves": "Comparison joins stable URL keys and checks status/finalURL/title/description/headings/canonical/robots/hash/count/render fields; imported-identical report and added URLs are tested."
+      },
+      {
+        "verification_run_ids": [
+          "saved-comparison-native",
+          "saved-comparison-backend-checkpoint"
+        ],
+        "proves": "Actual native title, description, H1, H2, robots-directive, link graph occurrence, JSON-LD and selected raw-text changes are detected together while issue counts are equal. Source absence/partiality and unavailable rendering remain explicit; original field values are retained.",
+        "limits": "Own versioned stored-fact comparison acceptance only; browser/release and full vendor parity remain separate."
+      }
+    ],
+    "parity_status": "NOT_PROVEN"
+  }
+  ```
+
+  </details>
+
+- [x] **URL-Mapping vor Vergleichen** — Eigene Abnahme erfüllt; `storage.compare_mapping`, P2.
+
+  Orientierung: Staging-/Produktions- oder Migrationspräfixe mit sichtbaren Kollisionen abgleichen.
+
+  Beweisregister: [saved-comparison-native](verification/saved-comparison-e2e.json) (PASS), [saved-comparison-backend-checkpoint](verification/saved-comparison-backend-checkpoint.json) (PASS), [saved-comparison-native-mapping](verification/saved-comparison-mapping-e2e.json) (PASS), [saved-comparison-mapping-oracles](verification/saved-comparison-mapping-oracle-controls.json) (PASS), [saved-comparison-native-ui](verification/saved-comparison-ui-native.json) (PASS).
+
+  <details>
+  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
+
+  ```json
+  {
+    "id": "storage.compare_mapping",
+    "reference_name": "Cross-host comparison mapping",
+    "status": "implemented",
+    "acceptance_test": "Map staging/production or migrated URL prefixes before joining snapshots and expose collisions.",
+    "remaining_acceptance": [],
+    "implementation_evidence": [
+      {
+        "verification_run_ids": [
+          "saved-comparison-native",
+          "saved-comparison-backend-checkpoint"
+        ],
+        "proves": "Explicit origin/segment-prefix mappings transform only join keys. Native controls retain original requested/final URLs and reject overlap; directed Core tests cover collisions on both sides, percent-encoded boundaries, malformed authorities and query identity.",
+        "limits": "Full native cross-origin/mapping-induced collision and browser workflow remain open."
+      },
+      {
+        "verification_run_ids": [
+          "saved-comparison-native-mapping",
+          "saved-comparison-mapping-oracles",
+          "saved-comparison-native-ui"
+        ],
+        "proves": "Four actual native crawls on two distinct origins preserve every original URL/link/JSON-LD/text fact while explicit origin/segment-prefix mappings join stage and production identities, support reverse mapping and reject before/after/two-sided mapped collisions with all source ordinals. CLI all-column CSV and JSON agree; original report/revision/export bytes and offline results survive cold restart with two drained HTTP witnesses at zero.",
+        "limits": "Own recorded-identity mapping acceptance. Raw historical bytes, SQL authenticity, full website equality and vendor parity are not established."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -5173,4 +5219,4 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `6194ac510c03513a380e30c5d9f7f5f4002c295d300cb295fc23817a0d286564`. Letzter im Katalog erfasster Beweisstand: `2026-10-12T19:10:25.415Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `419d6eb703db0d6c48e14fde76460203ded94d773c8a527de7b9f1dd365a9af7`. Letzter im Katalog erfasster Beweisstand: `2026-10-13T00:01:51.410Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

@@ -516,7 +516,7 @@
     {
       "id": "modes.compare",
       "name": "Snapshot comparison",
-      "status": "partial",
+      "status": "implemented",
       "phase": "P1",
       "source_ids": [
         "compare"
@@ -529,13 +529,19 @@
             "api"
           ],
           "proves": "Snapshot comparison classifies added/removed/changed URL keys in code. Core recovery checks added URLs; API JSON reimport comparison proves an unchanged snapshot has zero changes."
+        },
+        {
+          "verification_run_ids": [
+            "saved-comparison-native",
+            "saved-comparison-backend-checkpoint"
+          ],
+          "proves": "Two actual saved native cohorts jointly classify added, removed, changed and unchanged; API/CLI/SDK share identical deltas and typed hashes after website shutdown and App cold restart.",
+          "limits": "Own versioned stored-fact comparison acceptance only; browser/release and full vendor parity remain separate."
         }
       ],
       "parity_evidence": [],
       "group": "modes",
-      "remaining_acceptance": [
-        "Add complete saved-fixture assertions for new, removed and changed classifications together."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -3720,7 +3726,7 @@
     {
       "id": "storage.compare_changes",
       "name": "Field and content changes",
-      "status": "partial",
+      "status": "implemented",
       "phase": "P2",
       "source_ids": [
         "compare"
@@ -3733,30 +3739,52 @@
             "core-fixtures"
           ],
           "proves": "Comparison joins stable URL keys and checks status/finalURL/title/description/headings/canonical/robots/hash/count/render fields; imported-identical report and added URLs are tested."
+        },
+        {
+          "verification_run_ids": [
+            "saved-comparison-native",
+            "saved-comparison-backend-checkpoint"
+          ],
+          "proves": "Actual native title, description, H1, H2, robots-directive, link graph occurrence, JSON-LD and selected raw-text changes are detected together while issue counts are equal. Source absence/partiality and unavailable rendering remain explicit; original field values are retained.",
+          "limits": "Own versioned stored-fact comparison acceptance only; browser/release and full vendor parity remain separate."
         }
       ],
       "parity_evidence": [],
       "group": "storage",
-      "remaining_acceptance": [
-        "Add graph and structured-data comparisons and prove all changed-field cases when issue counts remain equal."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
       "id": "storage.compare_mapping",
       "name": "Cross-host comparison mapping",
-      "status": "planned",
+      "status": "implemented",
       "phase": "P2",
       "source_ids": [
         "compare"
       ],
       "acceptance_test": "Map staging/production or migrated URL prefixes before joining snapshots and expose collisions.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "saved-comparison-native",
+            "saved-comparison-backend-checkpoint"
+          ],
+          "proves": "Explicit origin/segment-prefix mappings transform only join keys. Native controls retain original requested/final URLs and reject overlap; directed Core tests cover collisions on both sides, percent-encoded boundaries, malformed authorities and query identity.",
+          "limits": "Full native cross-origin/mapping-induced collision and browser workflow remain open."
+        },
+        {
+          "verification_run_ids": [
+            "saved-comparison-native-mapping",
+            "saved-comparison-mapping-oracles",
+            "saved-comparison-native-ui"
+          ],
+          "proves": "Four actual native crawls on two distinct origins preserve every original URL/link/JSON-LD/text fact while explicit origin/segment-prefix mappings join stage and production identities, support reverse mapping and reject before/after/two-sided mapped collisions with all source ordinals. CLI all-column CSV and JSON agree; original report/revision/export bytes and offline results survive cold restart with two drained HTTP witnesses at zero.",
+          "limits": "Own recorded-identity mapping acceptance. Raw historical bytes, SQL authenticity, full website equality and vendor parity are not established."
+        }
+      ],
       "parity_evidence": [],
       "group": "storage",
-      "remaining_acceptance": [
-        "Map staging/production or migrated URL prefixes before joining snapshots and expose collisions."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -3774,6 +3802,23 @@
             "api"
           ],
           "proves": "Snapshot exports and JSON comparison endpoint expose before/after IDs and added/removed/changed URL field deltas."
+        },
+        {
+          "verification_run_ids": [
+            "saved-comparison-native",
+            "saved-comparison-backend-checkpoint"
+          ],
+          "proves": "Local-file CLI writes comparison JSON and formula-protected CSV with concrete field values/states/profiles/provenance and both typed report hashes; existing destinations retain their exact bytes.",
+          "limits": "The JSON currently includes snapshot descriptors and field projections. Both complete original reports in one downloadable bound bundle remain open."
+        },
+        {
+          "verification_run_ids": [
+            "saved-comparison-native-ui",
+            "saved-comparison-native-mapping",
+            "saved-comparison-ui-fixture"
+          ],
+          "proves": "Native/browser comparison JSON preserves exact received response bytes; CSV carries every compared field rather than only visible rows, with filter, profile, provenance and formula protection. Actual cross-origin CLI output agrees column-for-column with API.",
+          "limits": "Snapshot descriptors and fact projections are included; both complete original typed reports in one combined bundle remain open."
         }
       ],
       "parity_evidence": [],
@@ -5459,6 +5504,106 @@
       "source_release_sha256": "8a6fa43ec67448b72a043b0b40168dfcf6cfb783da86c7cc9889b51f2207700b",
       "scope": "Installed source8fab997 release on user8787 with seven saved jobs/eleven JSON bytes preserved, prior B3 files unchanged, V2 capabilities and MCP22.",
       "limits": "Bounded own acceptance only; full feature/filter/workflow/vendor parity remains NOT_PROVEN."
+    },
+    {
+      "id": "saved-comparison-native",
+      "artifact": "docs/verification/saved-comparison-e2e.json",
+      "artifact_sha256": "28bc69b2741a476215ecafa827461c802143532a99a759880aeaa762368de5f5",
+      "bytes": 2554,
+      "result": "PASS",
+      "tested_at": "2026-10-12T23:27:59.243Z",
+      "scope": "Nine actual HTTP/API/CLI/official SDK controls, concrete deltas despite equal issue counts and offline cold restart with zero HTTP attempts.",
+      "limits": "Bounded independent saved-report profile. Browser, full original-report bundle, exact source CI/release/installation and vendor parity remain separate gates."
+    },
+    {
+      "id": "saved-comparison-sdk",
+      "artifact": "docs/verification/saved-comparison-mcp-sdk.json",
+      "artifact_sha256": "ccab0500dd606325e0ae8b8dbf959c8c8b204193fd5e43cd44110f8502113ad3",
+      "bytes": 1166,
+      "result": "PASS",
+      "tested_at": "2026-10-12T23:25:58.784Z",
+      "scope": "Existing SDK acceptance with 23 tools over stdio and Streamable HTTP; original tools remain compatible.",
+      "limits": "Bounded independent saved-report profile. Browser, full original-report bundle, exact source CI/release/installation and vendor parity remain separate gates."
+    },
+    {
+      "id": "saved-comparison-backend-checkpoint",
+      "artifact": "docs/verification/saved-comparison-backend-checkpoint.json",
+      "artifact_sha256": "a3fd1dc83c1a1b359ab7da62acef74d1aff5475f67f94be2496d24ebeb55becb",
+      "bytes": 1786,
+      "result": "PASS",
+      "tested_at": "2026-10-12T23:30:03.982Z",
+      "scope": "34 directed Core cases, 62 App tests, complete standard workspace440, two actual App/Core counterexample regressions and bounded native9.",
+      "limits": "Bounded independent saved-report profile. Browser, full original-report bundle, exact source CI/release/installation and vendor parity remain separate gates."
+    },
+    {
+      "id": "saved-comparison-ui-contract",
+      "artifact": "docs/verification/saved-comparison-ui-contract.json",
+      "artifact_sha256": "6c7d23d9ef400d4de41c5752bf89190ab6485d1887edb4e5cddcdf198e67ef4f",
+      "bytes": 1367,
+      "result": "PASS",
+      "tested_at": "2026-10-13T00:01:51.410Z",
+      "scope": "16 UI schema/CSV/precision helper controls.",
+      "limits": "Own bounded saved-fact contract. Full original-report bundle, exact source CI/release/install and vendor parity remain separate."
+    },
+    {
+      "id": "saved-comparison-ui-fixture",
+      "artifact": "docs/verification/saved-comparison-ui-fixture.json",
+      "artifact_sha256": "c44cc69fbec3aee34a13de5d0fc304c1eeb0c86e01fbe142260d44a7bac54489",
+      "bytes": 6415,
+      "result": "PASS",
+      "tested_at": "2026-10-13T00:01:51.410Z",
+      "scope": "23 actual headless browser controls against owned API fixture and current Main assets, including paging, stale responses and exact raw JSON export.",
+      "limits": "Own bounded saved-fact contract. Full original-report bundle, exact source CI/release/install and vendor parity remain separate."
+    },
+    {
+      "id": "saved-comparison-mutation-fence",
+      "artifact": "docs/verification/saved-comparison-native-fence.json",
+      "artifact_sha256": "c31d3953aec90be3a8f3120c8c0ad2baab558aa0cdd23d06b33ab1ca840be9cd",
+      "bytes": 765,
+      "result": "PASS",
+      "tested_at": "2026-10-13T00:01:51.410Z",
+      "scope": "Four callback controls against the exact final native harness; no App run claimed by these controls.",
+      "limits": "Own bounded saved-fact contract. Full original-report bundle, exact source CI/release/install and vendor parity remain separate."
+    },
+    {
+      "id": "saved-comparison-native-ui",
+      "artifact": "docs/verification/saved-comparison-ui-native.json",
+      "artifact_sha256": "d346d447e734bdc2d6dffed3f8d3cd377c4ed0c8b26ce8339c8f8c71208905b7",
+      "bytes": 7280,
+      "result": "PASS",
+      "tested_at": "2026-10-12T23:55:12.048Z",
+      "scope": "Eight actual native saved-crawl/browser/cold restart/export/mobile groups; five embedded assets hash-bound, all App mutations guarded and a separate awaited MCP crawl probe blocked; final drained HTTP witness0.",
+      "limits": "Own bounded saved-fact contract. Full original-report bundle, exact source CI/release/install and vendor parity remain separate."
+    },
+    {
+      "id": "saved-comparison-native-mapping",
+      "artifact": "docs/verification/saved-comparison-mapping-e2e.json",
+      "artifact_sha256": "c4dc5c937c6afce6d2bc10dfe18981ede6a2e4f95d5617f5560e670ee70e3962",
+      "bytes": 9223,
+      "result": "PASS",
+      "tested_at": "2026-10-13T00:01:14.753Z",
+      "scope": "Ten genuine four-crawl/two-origin mapping, reverse mapping, both-side collisions, every CSV column, unchanged original files and offline cold-restart controls.",
+      "limits": "Own bounded saved-fact contract. Full original-report bundle, exact source CI/release/install and vendor parity remain separate."
+    },
+    {
+      "id": "saved-comparison-mapping-oracles",
+      "artifact": "docs/verification/saved-comparison-mapping-oracle-controls.json",
+      "artifact_sha256": "99f9c88c2d192b8708a9ac1f2daf72bbdbb10a10d0b9c675faf1f6800d366054",
+      "bytes": 2260,
+      "result": "PASS",
+      "tested_at": "2026-10-13T00:01:13.406Z",
+      "scope": "Pure negative controls reject swapped CSV values/keys/classes/hashes, late witness changes and binary changes; native execution is a separate proof.",
+      "limits": "Own bounded saved-fact contract. Full original-report bundle, exact source CI/release/install and vendor parity remain separate."
+    },
+    {
+      "id": "saved-comparison-checkpoint",
+      "artifact": "docs/verification/saved-comparison-checkpoint.json",
+      "artifact_sha256": "e8632ce6c1855c6ba649f887c944ed818f36a1f2c495ddc2c1fde695cac320a5",
+      "bytes": 4419,
+      "result": "PASS",
+      "tested_at": "2026-10-13T00:01:51.410Z",
+      "scope": "Current stored-comparison backend, actual UI and two-origin mapping checkpoint with explicit open full-report-bundle and release gates.",
+      "limits": "Own bounded saved-fact contract. Full original-report bundle, exact source CI/release/install and vendor parity remain separate."
     }
   ],
   "reference_workflows": [
@@ -5580,22 +5725,22 @@
   ],
   "status_summary": {
     "overall": {
-      "implemented": 26,
-      "partial": 71,
-      "planned": 47,
+      "implemented": 29,
+      "partial": 69,
+      "planned": 46,
       "total": 144
     },
     "phases": {
       "P1": {
-        "implemented": 12,
-        "partial": 27,
+        "implemented": 13,
+        "partial": 26,
         "planned": 6,
         "total": 45
       },
       "P2": {
-        "implemented": 6,
-        "partial": 32,
-        "planned": 7,
+        "implemented": 8,
+        "partial": 31,
+        "planned": 6,
         "total": 45
       },
       "P3": {
@@ -5613,8 +5758,8 @@
     },
     "groups": {
       "modes": {
-        "implemented": 5,
-        "partial": 1,
+        "implemented": 6,
+        "partial": 0,
         "planned": 1,
         "total": 7
       },
@@ -5691,9 +5836,9 @@
         "total": 9
       },
       "storage": {
-        "implemented": 1,
-        "partial": 7,
-        "planned": 2,
+        "implemented": 3,
+        "partial": 6,
+        "planned": 1,
         "total": 10
       },
       "automation": {
@@ -5716,7 +5861,7 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-12T19:10:25.415Z",
+  "last_verified_at": "2026-10-13T00:01:51.410Z",
   "current_work": [
     {
       "id": "batch-b8-content-capture",
@@ -6262,49 +6407,70 @@
     },
     {
       "id": "batch-b11-saved-comparison",
-      "status": "PLANNED",
-      "stage": "WORK_DRAFT_CORE_34_PASS_PRODUCT_INTEGRATION_PENDING",
+      "status": "IN_PROGRESS",
+      "stage": "BACKEND_BROWSER_MAPPING_PASS_FULL_ORIGINAL_BUNDLE_RELEASE_PENDING",
       "priority": 2,
       "title_de": "Nächste Funktion – B11: gespeicherte Crawls vollständig vergleichen",
-      "summary_de": "Den bisherigen Vergleich um konkrete Vorher/Nachher-Werte, Link-/JSON-LD-/Textquellen, ausdrückliches URL-Mapping und kombinierte Exporte erweitern. Der Vergleich nutzt ausschließlich gespeicherte Beobachtungen und benötigt keine neue Website-Abfrage. Noch keine Integration oder Laufzeitabnahme im Produkt. GitHub: [B11-Issue #18](https://github.com/lia-xim/open-seo-spider/issues/18). Ein isolierter Rust-Core-Entwurf besteht 34 gerichtete Tests, Formatprüfung und Core-Clippy; vier konkrete Gegenbeispiele wurden zunächst rot reproduziert und repariert. Dieser Work-Entwurf ist noch nicht in das Produkt integriert. API, CLI, MCP, Exporte, Oberfläche, Persistenz und Kaltstart bleiben offene Produktabnahmen.",
+      "summary_de": "Gespeicherter Rust-Vergleich ist integriert: 34 Core-Fälle, 62 App-Tests und 440 Standard-Rust-Tests bestehen. API/CLI/MCP sind mit neun tatsächlichen Gruppen und 23 SDK-Werkzeugen geprüft. Acht native Browsergruppen und zehn echte Zwei-Origin-Mappinggruppen mit beidseitigen Kollisionen, unveränderten Originaldaten und Offline-Kaltstart bestehen. Das vollständige Originalbericht-Bundle sowie exakte Source-CI/Release/Installation bleiben offen. GitHub: [B11-Issue #18](https://github.com/lia-xim/open-seo-spider/issues/18).",
       "feature_ids": [
         "modes.compare",
         "storage.compare_changes",
         "storage.compare_mapping",
         "storage.compare_export"
       ],
-      "completed_acceptance_de": [],
+      "completed_acceptance_de": [
+        "Versionierter exakter URL-Vergleich mit added/removed/changed/unchanged und konkreten Feldwerten in zwei tatsächlichen gespeicherten nativen Crawls geprüft.",
+        "Titel, Description, H1/H2, Direktiven, Linkvorkommen, JSON-LD und ausgewählte Texte ändern sich nachvollziehbar trotz gleicher Issue-Zahl; fehlende, partielle und nicht verfügbare Quellen bleiben getrennt.",
+        "API/CLI/MCP liefern identische Deltas und typisierte Report-Hashes; nach Abschaltung der Fixture-Website und App-Kaltstart beobachten ein eigener HTTP-Witness und beide SDK-Transporte null Website-Anfragen.",
+        "Zwei App/Core-Vertragsfehler rot reproduziert und repariert; 440 Standard-Rust-Tests sowie Alltargets-Clippy bestehen.",
+        "Vergleichsoberfläche, alle vier Klassen, Details, fehlende/partielle Quellen, genaue JSON-/CSV-Downloads und 320px-Erreichbarkeit an tatsächlichen gespeicherten nativen Crawls geprüft; eingebettete Assets und Mutation-Fence sind gebunden.",
+        "Vier tatsächliche Crawls auf zwei Origins prüfen Staging/Production-Prefix-Joins und beidseitige Mapping-Kollisionen; alle Originalfakten und Report-/Revisions-/Exportbytes bleiben erhalten, zwei Offline-Witnesses bleiben nach finalem Prozessende bei null."
+      ],
       "pending_acceptance_de": [
-        "Versionierten Vergleich mit exakten URL-Schlüsseln, added/removed/changed/unchanged und konkreten Vorher/Nachher-Feldwerten implementieren; bisherigen Vertrag kompatibel erhalten.",
-        "Linkvorkommen, JSON-LD und gespeicherte vollständige/partielle/unbekannte Textquellen samt Herkunft und Aktualität getrennt vergleichen.",
-        "Ausdrückliches Staging/Production-Mapping mit unveränderten ursprünglichen URLs und Kollisionserkennung vor dem Join abnehmen.",
-        "Beide vollständigen Report-Snapshots mit Hash/Generation/Herkunft binden; gemischt alte ausgewählte Recrawls und aktive Checkpoints sichtbar begrenzen.",
-        "Gemeinsamen JSON-/CSV-Export, API/CLI/MCP und lokale Vergleichsoberfläche mit identischen Ergebnissen prüfen; nach Abschalten der Fixture und Kaltstart null Website-Anfragen belegen."
+        "Einen gemeinsamen JSON-Download mit beiden vollständigen unveränderten geladenen typisierten Originalberichten und hashgebundenen Deltas ergänzen.",
+        "Exakte Commit-CI, unveränderlichen optimierten Release und datenbewahrende Installation separat prüfen."
       ],
       "documentation": [
         "docs/FEATURE_TODO.md",
         "docs/ROADMAP.md"
       ],
       "gates": {
-        "core_contract": "PENDING",
-        "api_cli_mcp": "PENDING",
-        "actual_browser_ui": "PENDING",
-        "snapshot_and_mapping_integrity": "PENDING",
-        "offline_restart_zero_requests": "PENDING",
-        "work_draft_core": "PASS_34_ISOLATED_WORK_ONLY"
+        "core_contract": "PASS_34",
+        "api_cli_mcp": "PASS_NATIVE_9_AND_SDK23",
+        "actual_browser_ui": "PASS_NATIVE_8_WITH_SERVED_ASSETS_AND_MUTATION_CONTROL",
+        "snapshot_and_mapping_integrity": "PASS_NATIVE_10_TWO_ORIGINS_BOTH_COLLISION_SIDES",
+        "offline_restart_zero_requests": "PASS_FINAL_DRAINED_HTTP_WITNESSES_0",
+        "work_draft_core": "PASS_34_ISOLATED_WORK_ONLY",
+        "workspace_tests": "PASS_440_WITH_4_BROWSER_IGNORED",
+        "workspace_clippy": "PASS",
+        "combined_full_original_bundle": "PENDING",
+        "exact_commit_ci": "PENDING",
+        "immutable_release": "PENDING",
+        "installed_runtime": "PENDING",
+        "ui_contract": "PASS_16",
+        "ui_browser_fixture": "PASS_23",
+        "mapping_oracle_controls": "PASS"
       },
-      "proof_run_ids": [],
+      "proof_run_ids": [
+        "saved-comparison-native",
+        "saved-comparison-sdk",
+        "saved-comparison-backend-checkpoint",
+        "saved-comparison-native-ui",
+        "saved-comparison-native-mapping",
+        "saved-comparison-mapping-oracles",
+        "saved-comparison-checkpoint"
+      ],
       "reference_parity": "NOT_PROVEN",
       "tracking_issue": "https://github.com/lia-xim/open-seo-spider/issues/18",
-      "policy": "B11 remains planned at product level. The isolated Work-only core draft passes 34 directed cases, formatting and Core Clippy; production API, CLI, MCP, exports, browser, persistence and restart acceptance remain open. Feature totals and statuses are unchanged. Full HTML/DOM archives, semantic similarity, automatic recurring comparison and vendor parity are separate requirements.",
+      "policy": "Independent stored-fact backend/UI/mapping acceptance is supported by actual own native fixtures and bounded controls. Full original typed-report bundle, source CI/release/install, large-crawl scale and vendor parity remain separate. Historical drafts, failed harness attempts and repaired counterexamples remain historical.",
       "work_draft": {
         "source_baseline_commit": "d0f3eddbbb03e2127f0533494597cdbddfa6f645",
         "manifest": "docs/verification/saved-comparison-draft-core.json",
         "manifest_sha256": "a372a27457f72553fd95c2549a6745d22f3b9c17de0e2f9c4b357c4c65164406",
         "core_sha256": "9fa36d02ab317e8337b971008f8c920214ec3aa341910bdab5f5503ffacb808a",
         "test_sha256": "529e947ac5a6a120f8256b43acdcebc6b56be5616bece5f8da8997803d63b818",
-        "production_integrated": false,
-        "api_cli_mcp_ui": "NOT_PROVEN"
+        "production_integrated": true,
+        "api_cli_mcp_ui": "API_CLI_MCP_UI_PASS"
       }
     }
   ]

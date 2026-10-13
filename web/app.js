@@ -2153,6 +2153,7 @@
   }
 
   function bindEvents() {
+    window.SavedComparisonUI?.bind({ downloadBlob, selectedJob: () => state.crawl?.id });
     bindResourceEvents();
     bindContentEvents();
     $('policy-settings').addEventListener('input', invalidatePolicyPreview);

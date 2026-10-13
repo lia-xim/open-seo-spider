@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "collected_at": "2026-10-13T00:01:51.410Z",
+  "result": "BOUNDED_BACKEND_BROWSER_MAPPING_PASS_ORIGINAL_BUNDLE_RELEASE_PENDING",
+  "source_baseline_commit": "4e02493f077da652d8ec755e8ac5af682b60b633",
+  "workspace_dirty_when_tested": true,
+  "engine": "open-seo-spider/saved-comparison-v1",
+  "current_native_debug_sha256": "68acfbb2cd344184d383f85569e1c337d558b4b7039621a496d0cbc0af095381",
+  "gates": {
+    "directed_core": 34,
+    "app_unit_total": 62,
+    "new_app_cases": 18,
+    "standard_workspace_tests": 440,
+    "standard_workspace_ignored_browser_cases": 4,
+    "backend_native_api_cli_official_sdk_groups": 9,
+    "official_sdk_tool_inventory": 23,
+    "sdk_transports": 2,
+    "ui_contract_checks": 16,
+    "ui_mock_browser_checks": 23,
+    "ui_native_checks": 8,
+    "mutation_fence_callback_checks": 4,
+    "two_origin_native_mapping_groups": 10,
+    "mapping_oracle_controls": "PASS",
+    "full_original_report_bundle": "PENDING",
+    "exact_source_ci": "PENDING",
+    "optimized_immutable_release": "PENDING",
+    "installed_b11_runtime": "PENDING",
+    "reference_parity": "NOT_PROVEN"
+  },
+  "independent_review": {
+    "app_binding_budget_and_import_generation": "RED_REPRODUCED_FIXED",
+    "ui_metadata_precision_and_mcp_mutation_oracle": "RED_REPRODUCED_FIXED",
+    "mapping_csv_columns_shutdown_counters_and_binary_binding": "FIXED_WITH_PURE_NEGATIVE_CONTROLS_AND_FRESH_NATIVE_RUN",
+    "ui_harness_fixture_corrections": "Malformed empty capture array changed to genuinely absent field; all fact outcomes and field pages inspected. Initial failed harness runs remain archived in Work."
+  },
+  "artifacts": [
+    {
+      "artifact": "docs/verification/saved-comparison-ui-contract.json",
+      "artifact_sha256": "6c7d23d9ef400d4de41c5752bf89190ab6485d1887edb4e5cddcdf198e67ef4f",
+      "bytes": 1367,
+      "result": "PASS"
+    },
+    {
+      "artifact": "docs/verification/saved-comparison-ui-fixture.json",
+      "artifact_sha256": "c44cc69fbec3aee34a13de5d0fc304c1eeb0c86e01fbe142260d44a7bac54489",
+      "bytes": 6415,
+      "result": "PASS"
+    },
+    {
+      "artifact": "docs/verification/saved-comparison-native-fence.json",
+      "artifact_sha256": "c31d3953aec90be3a8f3120c8c0ad2baab558aa0cdd23d06b33ab1ca840be9cd",
+      "bytes": 765,
+      "result": "PASS"
+    },
+    {
+      "artifact": "docs/verification/saved-comparison-ui-native.json",
+      "artifact_sha256": "d346d447e734bdc2d6dffed3f8d3cd377c4ed0c8b26ce8339c8f8c71208905b7",
+      "bytes": 7280,
+      "result": "PASS"
+    },
+    {
+      "artifact": "docs/verification/saved-comparison-mapping-e2e.json",
+      "artifact_sha256": "c4dc5c937c6afce6d2bc10dfe18981ede6a2e4f95d5617f5560e670ee70e3962",
+      "bytes": 9223,
+      "result": "PASS"
+    },
+    {
+      "artifact": "docs/verification/saved-comparison-mapping-oracle-controls.json",
+      "artifact_sha256": "99f9c88c2d192b8708a9ac1f2daf72bbdbb10a10d0b9c675faf1f6800d366054",
+      "bytes": 2260,
+      "result": "PASS"
+    },
+    {
+      "artifact": "docs/verification/saved-comparison-e2e.json",
+      "artifact_sha256": "28bc69b2741a476215ecafa827461c802143532a99a759880aeaa762368de5f5",
+      "bytes": 2554,
+      "result": "PASS"
+    },
+    {
+      "artifact": "docs/verification/saved-comparison-mcp-sdk.json",
+      "artifact_sha256": "ccab0500dd606325e0ae8b8dbf959c8c8b204193fd5e43cd44110f8502113ad3",
+      "bytes": 1166,
+      "result": "PASS"
+    },
+    {
+      "artifact": "docs/verification/saved-comparison-backend-checkpoint.json",
+      "artifact_sha256": "a3fd1dc83c1a1b359ab7da62acef74d1aff5475f67f94be2496d24ebeb55becb",
+      "bytes": 1786,
+      "result": "PASS"
+    }
+  ],
+  "limits": [
+    "The workspace440/backend9 proof precedes UI integration and is bound separately to its earlier debug binary; fresh UI8/mapping10 bind the current executable and unchanged comparison code.",
+    "Current source is a dirty continuation of the stated baseline; exact committed CI and optimized immutable release/installation remain separate pending gates.",
+    "Comparison JSON includes snapshot descriptors and field projections. Both complete original typed reports in one bundle remain open.",
+    "Independent acceptance does not prove vendor parity, website completeness, raw historical report bytes or SQL authenticity.",
+    "The installed user service on localhost8787 remains the previously validated B10 release."
+  ]
+}

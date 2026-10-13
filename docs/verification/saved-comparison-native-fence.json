@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "scope": "actual native harness route callback with fake request/route; no App or browser launched",
+  "harness_source_sha256": "d927bc6311ab15b22e088867df41894cda7fc0a49b8b6361287f0f9a6959a556",
+  "source_sha256": {
+    "web/verification/ui-saved-comparison-live.cjs": "d927bc6311ab15b22e088867df41894cda7fc0a49b8b6361287f0f9a6959a556",
+    "web/verification/saved-comparison-native-fence.test.cjs": "b92138ff4b7a1824ef3077a4ed27a602acdbef4eea5fc1c78673c569ac45e934"
+  },
+  "checks": [
+    "MCP crawl mutation blocked before delivery",
+    "same-origin direct crawl mutation blocked before delivery",
+    "DELETE outside /api inventory blocked and captured",
+    "saved comparison POST remains allowed and captured"
+  ],
+  "failures": []
+}

@@ -130,9 +130,9 @@ try{
   const output=path.join(data,'contract-full.json'),command=await cli(['resource-ledger',path.join(data,`${roles.id}.sqlite`),'--json',output]);assert.equal(command.code,0,command.stderr);assert.deepEqual(JSON.parse(await readFile(output,'utf8')),full);
   for(const kind of ['stdio','streamable_http']){
     const client=new Client({name:'resource-contract-acceptance',version:'0.1.0'});
-    try{await client.connect(kind==='stdio'?new StdioClientTransport({command:binary,args:['mcp','--server',api],cwd:root,stderr:'pipe'}):new StreamableHTTPClientTransport(new URL(api+'/mcp')));assert.equal((await client.listTools()).tools.length,22);const result=await client.callTool({name:'spider_resources',arguments:{id:roles.id,limit:1000}});assert.equal(result.isError,false,JSON.stringify(result));assert.equal(result.structuredContent.snapshot.resource_contract_engine,ENGINE);assert.deepEqual(result.structuredContent.observations,roleLedger.observations);}finally{await client.close();}
+    try{await client.connect(kind==='stdio'?new StdioClientTransport({command:binary,args:['mcp','--server',api],cwd:root,stderr:'pipe'}):new StreamableHTTPClientTransport(new URL(api+'/mcp')));assert.equal((await client.listTools()).tools.length,23);const result=await client.callTool({name:'spider_resources',arguments:{id:roles.id,limit:1000}});assert.equal(result.isError,false,JSON.stringify(result));assert.equal(result.structuredContent.snapshot.resource_contract_engine,ENGINE);assert.deepEqual(result.structuredContent.observations,roleLedger.observations);}finally{await client.close();}
   }
-  assert.equal(hits.length,readsBefore);checks.push('full native API/CLI snapshot equality and official22-tool SDK over stdio/StreamableHTTP preserve V2 provenance without website requests');
+  assert.equal(hits.length,readsBefore);checks.push('full native API/CLI snapshot equality and official23-tool SDK over stdio/StreamableHTTP preserve V2 provenance without website requests');
   const dbPath=path.join(data,`${roles.id}.sqlite`);assert.equal(path.dirname(path.resolve(dbPath)),path.resolve(data));
   const database=new DatabaseSync(dbPath,{timeout:5000});
   async function mutated({name,select,update,key,change}){
