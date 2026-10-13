@@ -8,6 +8,8 @@ pub struct CrawlConfig {
     /// Declared original input occurrences; network deduplication is separate.
     pub input_imports: Vec<crate::ListImportResult>,
     pub sitemap_urls: Vec<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub explicit_sitemap_inputs: Option<Vec<String>>,
     pub discover_sitemaps: bool,
     pub max_sitemap_documents: usize,
     pub crawl_links: bool,
@@ -56,6 +58,7 @@ impl Default for CrawlConfig {
             seed_urls: Vec::new(),
             input_imports: Vec::new(),
             sitemap_urls: Vec::new(),
+            explicit_sitemap_inputs: None,
             discover_sitemaps: true,
             max_sitemap_documents: 1000,
             crawl_links: true,
@@ -90,7 +93,17 @@ impl Default for CrawlConfig {
 }
 
 impl CrawlConfig {
-    /// Prepare declared input provenance and discovery URLs without any network work.
+    /// Call only at a fresh-input boundary, before the first import merge.
+    /// Repeated preparation must not replace an already declared original vector.
+    pub fn capture_explicit_sitemap_inputs(&mut self) {
+        if self.explicit_sitemap_inputs.is_none() {
+            self.explicit_sitemap_inputs = Some(self.sitemap_urls.clone());
+        }
+    }
+
+    /// Prepare input provenance and discovery URLs without inventing original
+    /// explicit sitemap declarations for unknown saved configurations.
+    /// Fresh callers must capture before this method's first import merge.
     pub fn prepare_input_lists(&mut self) -> anyhow::Result<()> {
         use crate::{ListCandidateKind, ListImportFormat, ListImportLimits, ListImportOptions};
         if self.input_imports.is_empty() && !self.seed_urls.is_empty() {
@@ -139,6 +152,31 @@ impl CrawlConfig {
                     _ => {}
                 }
             }
+        }
+        self.validate_input_provenance_budget()?;
+        Ok(())
+    }
+
+    /// Final budget check for retained original inputs; never drops raw values.
+    /// A constructor's provisional fresh capture is checked after store/parent
+    /// binding, or before a memory-only run can issue its first request.
+    pub fn validate_input_provenance_budget(&self) -> anyhow::Result<()> {
+        let mut total_bytes = self
+            .explicit_sitemap_inputs
+            .as_ref()
+            .map(serde_json::to_vec)
+            .transpose()?
+            .map_or(0, |bytes| bytes.len());
+        anyhow::ensure!(
+            total_bytes <= 32 * 1024 * 1024,
+            "Combined input provenance exceeds 32 MiB"
+        );
+        for input in &self.input_imports {
+            total_bytes = total_bytes.saturating_add(serde_json::to_vec(input)?.len());
+            anyhow::ensure!(
+                total_bytes <= 32 * 1024 * 1024,
+                "Combined input provenance exceeds 32 MiB"
+            );
         }
         Ok(())
     }
@@ -930,6 +968,8 @@ pub struct CrawlReport {
     pub policy_ledger: Option<crate::PolicyLedgerSummary>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub resource_ledger: Option<crate::ResourceLedgerSummary>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sitemap_catalog: Option<crate::SitemapCatalog>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

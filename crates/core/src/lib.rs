@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 //! Independent HTTP crawling, SEO extraction, durable storage and exports.
 //! No commercial URL cap is imposed. Resource limits are user configuration.
 mod audit;
@@ -33,6 +34,8 @@ mod robots_simulation;
 mod robots_sitemap_source;
 mod serp;
 mod sitemap;
+mod sitemap_ledger;
+pub use sitemap_ledger::*;
 mod srcset;
 mod store;
 mod text_metrics;
@@ -108,3 +111,10 @@ pub use robots_sitemap_source::{
     ROBOTS_BODY_CAP, ROBOTS_SITEMAP_SOURCE_ENGINE, RobotsBodyBuffer, RobotsSitemapDeclaration,
     RobotsSitemapSource,
 };
+
+#[cfg(test)]
+#[path = "explicit_sitemap_inputs_tests.rs"]
+mod explicit_sitemap_inputs;
+
+mod sitemap_discovery;
+mod sitemap_initial_roots;

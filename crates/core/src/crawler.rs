@@ -38,6 +38,8 @@ pub struct Crawler {
     robots: Arc<RobotsCache>,
     rate: Arc<RateLimiter>,
     store: Option<Arc<CrawlStore>>,
+    // Ephemeral construction fact; never persisted as original source evidence.
+    automatically_captured_sitemap_inputs: bool,
     pdf_slots: Arc<Semaphore>,
     asserted_plan: Option<RunPlan>,
     selected_base: Option<PreparedSelectedRecrawl>,
@@ -50,8 +52,28 @@ pub struct Crawler {
 }
 
 impl Crawler {
-    pub fn new(mut config: CrawlConfig) -> anyhow::Result<Self> {
+    /// Construct a new crawl from declarations that have not yet been merged.
+    pub fn new(config: CrawlConfig) -> anyhow::Result<Self> {
+        Self::new_with_input_capture(config, true)
+    }
+
+    /// Validate/normalize a saved or inherited configuration while preserving
+    /// the declared original-input Option exactly, including legacy None.
+    pub fn from_saved_config(config: CrawlConfig) -> anyhow::Result<Self> {
+        Self::new_with_input_capture(config, false)
+    }
+
+    fn new_with_input_capture(mut config: CrawlConfig, fresh_input: bool) -> anyhow::Result<Self> {
+        let automatically_captured_sitemap_inputs =
+            fresh_input && config.explicit_sitemap_inputs.is_none();
+        // Snapshot before merge, but defer the provisional fresh budget until
+        // with_store / with_selected_recrawl has identified the actual mode.
+        let original_sitemap_inputs =
+            automatically_captured_sitemap_inputs.then(|| config.sitemap_urls.clone());
         config.prepare_input_lists()?;
+        if automatically_captured_sitemap_inputs {
+            config.explicit_sitemap_inputs = original_sitemap_inputs;
+        }
         if let Some(resource) = &config.resource_discovery {
             resource.validate()?;
             config
@@ -181,6 +203,7 @@ impl Crawler {
             robots,
             rate,
             store: None,
+            automatically_captured_sitemap_inputs,
             pdf_slots: Arc::new(Semaphore::new(2)),
             asserted_plan: None,
             selected_base: None,
@@ -194,7 +217,18 @@ impl Crawler {
     }
 
     pub fn with_store(mut self, path: impl AsRef<Path>) -> anyhow::Result<Self> {
-        self.store = Some(Arc::new(CrawlStore::open(path)?));
+        let store = Arc::new(CrawlStore::open(path)?);
+        if self.automatically_captured_sitemap_inputs
+            && let Some(saved) = store.config()?
+        {
+            // A stored config identifies resume even with an empty frontier.
+            // Only undo this constructor's provisional fresh interpretation.
+            // Caller-supplied Some is left intact for Store::prepare to compare.
+            self.config.explicit_sitemap_inputs = saved.explicit_sitemap_inputs;
+            self.automatically_captured_sitemap_inputs = false;
+        }
+        self.config.validate_input_provenance_budget()?;
+        self.store = Some(store);
         Ok(self)
     }
 
@@ -231,6 +265,10 @@ impl Crawler {
         prepared: PreparedSelectedRecrawl,
     ) -> anyhow::Result<Self> {
         prepared.validate()?;
+        if self.automatically_captured_sitemap_inputs {
+            self.config.explicit_sitemap_inputs = prepared.config.explicit_sitemap_inputs.clone();
+            self.automatically_captured_sitemap_inputs = false;
+        }
         crate::recrawl::validate_saved_plan(
             &prepared.plan,
             &prepared.base_snapshot_bytes,
@@ -264,6 +302,7 @@ impl Crawler {
         events: Option<UnboundedSender<CrawlEvent>>,
         control: CrawlControl,
     ) -> anyhow::Result<ControlledCrawlResult> {
+        self.config.validate_input_provenance_budget()?;
         if control.is_finished() {
             bail!(
                 "A finished crawl controller cannot be reused; create one for the new invocation"
@@ -330,6 +369,11 @@ impl Crawler {
         {
             let mut rows = self.initial_policy_rows(policy);
             store.initialize_policy(policy, &mut rows, &self.policy_limits, generation)?;
+        }
+        if selected.is_none()
+            && let Some(generation) = generation
+        {
+            self.initialize_original_sitemaps(generation)?;
         }
         let max_attempts = if let Some(plan) = selected {
             match (&self.store, generation) {
@@ -807,6 +851,28 @@ impl Crawler {
             status_counts,
         };
         let report = CrawlReport {
+            sitemap_catalog: match &self.store {
+                Some(store) => store.sitemap_catalog()?,
+                None => match memory_base {
+                    Some(prepared) => {
+                        // Parent validation binds the exact bytes, typed plan and config;
+                        // inheritance retains original identities without current discovery.
+                        prepared.validate()?;
+                        prepared
+                            .base_report
+                            .sitemap_catalog
+                            .as_ref()
+                            .map(|catalog| {
+                                crate::sitemap_ledger::project_inherited_catalog(
+                                    catalog,
+                                    &prepared.plan.parent.snapshot_sha256,
+                                )
+                            })
+                            .transpose()?
+                    }
+                    None => None,
+                },
+            },
             config: self.config.clone(),
             pages,
             issues,
@@ -1123,12 +1189,17 @@ impl Crawler {
             (
                 Role::SitemapDocument,
                 Kind::SitemapDocument,
-                &self.config.sitemap_urls,
+                self.config
+                    .explicit_sitemap_inputs
+                    .as_ref()
+                    .unwrap_or(&self.config.sitemap_urls),
             ),
         ] {
             let revision = format!("initial:{}:explicit:{}", policy.policy_sha256(), role.key());
             for (index, url) in urls.iter().enumerate() {
-                if !covered.contains(&(role.key(), url.clone())) {
+                if (role == Role::SitemapDocument && self.config.explicit_sitemap_inputs.is_some())
+                    || !covered.contains(&(role.key(), url.clone()))
+                {
                     rows.push(crate::policy_ledger::decide(
                         policy,
                         &revision,
@@ -1259,6 +1330,80 @@ impl Crawler {
         Ok(rows)
     }
 
+    fn initialize_original_sitemaps(&self, generation: u64) -> anyhow::Result<()> {
+        let Some(store) = &self.store else {
+            return Ok(());
+        };
+        let entries = self.discovery_seeds()?;
+        if let Some(catalog) = store.sitemap_catalog()? {
+            return store.initialize_sitemap_discovery(
+                &entries,
+                generation,
+                &crate::store::SitemapCatalogInit {
+                    config_sha256: catalog.summary.config_sha256,
+                    limits: catalog.summary.limits,
+                    roots: vec![],
+                    legacy_history_unknown: catalog.summary.legacy_history_unknown,
+                },
+            );
+        }
+        // Legacy saved input absence is unknown. It cannot be reconstructed
+        // from normalized or merged task URLs, even when those URLs are empty.
+        if self.config.explicit_sitemap_inputs.is_none() {
+            return Ok(());
+        }
+        let config_sha256 = store.saved_config_bytes_sha256()?;
+        let original = crate::sitemap_initial_roots::initial_roots(
+            self.config.explicit_sitemap_inputs.as_deref(),
+            &self.config.input_imports,
+            &config_sha256,
+            self.policy.as_ref().map(|policy| policy.policy_sha256()),
+        )?
+        .context("Known initial sitemap provenance unexpectedly absent")?;
+        let initial = crate::store::SitemapCatalogInit {
+            config_sha256,
+            limits: crate::SitemapLedgerLimits::default(),
+            roots: original.iter().map(|item| item.root.clone()).collect(),
+            legacy_history_unknown: false,
+        };
+        let sitemap_tasks = entries
+            .iter()
+            .filter(|entry| entry.kind == DiscoveryKind::Sitemap)
+            .map(|entry| entry.url.clone())
+            .collect::<Vec<_>>();
+        store.initialize_sitemap_discovery_with(
+            &entries,
+            generation,
+            &initial,
+            |transaction, roots| {
+                let mut items = original;
+                anyhow::ensure!(
+                    roots.len() == items.len()
+                        && roots
+                            .iter()
+                            .zip(&items)
+                            .all(|(root, item)| root == &item.root),
+                    "Initializer changed original sitemap root coordinates"
+                );
+                if self.policy.is_some() {
+                    crate::sitemap_initial_roots::finalize_policy_roots(
+                        transaction,
+                        &mut items,
+                        generation,
+                    )?;
+                } else {
+                    crate::sitemap_initial_roots::finalize_ordinary_roots(
+                        transaction,
+                        &mut items,
+                        &sitemap_tasks,
+                    )?;
+                }
+                *roots = items.into_iter().map(|item| item.root).collect();
+                Ok(())
+            },
+        )
+    }
+
     fn discovery_seeds(&self) -> anyhow::Result<Vec<DiscoveryEntry>> {
         if self.policy.is_some() {
             let mut origins = HashSet::new();
@@ -1309,9 +1454,31 @@ impl Crawler {
         generation: Option<u64>,
     ) -> anyhow::Result<DiscoveryProgress> {
         let seeds = self.discovery_seeds()?;
+        // Initial-root/bootstrap owner enables typed mode by committing an honest
+        // catalog first. No catalog remains qualified legacy behavior, not empty proof.
+        let sitemap_catalog = self
+            .store
+            .as_ref()
+            .map(|store| store.sitemap_catalog())
+            .transpose()?
+            .flatten();
+        let observed_discovery = sitemap_catalog.is_some();
         let mut progress = DiscoveryProgress::default();
         let (mut queue, mut discovered, mut completed_sitemaps) = if let Some(store) = &self.store {
-            store.initialize_discovery(&seeds)?;
+            if let Some(catalog) = &sitemap_catalog {
+                store.initialize_sitemap_discovery(
+                    &seeds,
+                    generation.context("Stored discovery needs generation")?,
+                    &crate::store::SitemapCatalogInit {
+                        config_sha256: catalog.summary.config_sha256.clone(),
+                        limits: catalog.summary.limits.clone(),
+                        roots: vec![],
+                        legacy_history_unknown: catalog.summary.legacy_history_unknown,
+                    },
+                )?;
+            } else {
+                store.initialize_discovery(&seeds)?;
+            }
             progress.warnings = store.discovery_warnings()?;
             if store.discovery_complete()? {
                 return Ok(progress);
@@ -1379,24 +1546,47 @@ impl Crawler {
             // Pause deliberately does not drop this future. Cancel retains the
             // existing abort behavior and leaves this unit pending in storage.
             let mut output = tokio::select! {
-                output = self.discover_unit(&entry, &context) => output?,
+                output = async {
+                    if observed_discovery { self.discover_unit_observed(&entry, &context).await }
+                    else { self.discover_unit(&entry, &context).await }
+                } => output?,
                 _ = control.cancelled() => break,
             };
             if self.policy.is_some()
                 && let Some(store) = &self.store
             {
-                let revision = output
-                    .policy_revision
-                    .as_deref()
-                    .context("Policy discovery produced no source revision")?;
-                (output.pages, output.children) = store.complete_discovery_with_policy(
-                    &entry,
-                    &mut output.policy_rows,
-                    (revision, output.policy_complete),
-                    &output.warnings,
-                    generation.expect("stored generation"),
-                    &self.policy_limits,
-                )?;
+                if observed_discovery {
+                    let batch = output
+                        .sitemap_batch
+                        .take()
+                        .context("Observed policy source lost whole batch")?;
+                    let revision = batch.document.source_revision.clone();
+                    let complete = batch.document.complete();
+                    (output.pages, output.children) = store
+                        .complete_discovery_with_policy_observed(
+                            &entry,
+                            &mut output.policy_rows,
+                            (&revision, complete),
+                            &output.warnings,
+                            generation.context("Stored generation absent")?,
+                            &self.policy_limits,
+                            batch,
+                            finalize_protocol_policy_roots,
+                        )?;
+                } else {
+                    let revision = output
+                        .policy_revision
+                        .as_deref()
+                        .context("Policy discovery produced no source revision")?;
+                    (output.pages, output.children) = store.complete_discovery_with_policy(
+                        &entry,
+                        &mut output.policy_rows,
+                        (revision, output.policy_complete),
+                        &output.warnings,
+                        generation.expect("stored generation"),
+                        &self.policy_limits,
+                    )?;
+                }
                 for page in &output.pages {
                     page_seen.insert(page.url.clone());
                 }
@@ -1411,6 +1601,30 @@ impl Crawler {
                         },
                     );
                 }
+            } else if observed_discovery {
+                self.finalize_ordinary_protocol(&mut output, page_seen, &discovered)?;
+                let batch = output
+                    .sitemap_batch
+                    .take()
+                    .context("Observed ordinary source lost whole batch")?;
+                self.store
+                    .as_ref()
+                    .context("Observed source has no Store")?
+                    .complete_discovery_observed(
+                        &entry,
+                        &output.pages,
+                        &output.children,
+                        &output.warnings,
+                        generation.context("Stored generation absent")?,
+                        batch,
+                    )?;
+                // No global dedupe state leaks from a rolled-back source transaction.
+                for page in &output.pages {
+                    page_seen.insert(page.url.clone());
+                }
+                for child in &output.children {
+                    discovered.insert(child.clone());
+                }
             } else {
                 output.pages.retain(|page| {
                     self.filters.allows(&page.url) && page_seen.insert(page.url.clone())
@@ -1419,7 +1633,8 @@ impl Crawler {
                     .children
                     .retain(|child| discovered.insert(child.clone()));
             }
-            if self.policy.is_none()
+            if !observed_discovery
+                && self.policy.is_none()
                 && let Some(store) = &self.store
             {
                 store.complete_discovery(
@@ -1458,6 +1673,450 @@ impl Crawler {
             },
         );
         Ok(progress)
+    }
+
+    async fn discover_unit_observed(
+        &self,
+        entry: &DiscoveryEntry,
+        context: &FetchContext,
+    ) -> anyhow::Result<DiscoveryOutput> {
+        use crate::sitemap_ledger::{SitemapSourceKind as K, SitemapTransportFacts};
+        let generation = context
+            .generation
+            .context("Typed sitemap source needs durable generation")?;
+        let revision = format!("protocol:{}:{}", entry.kind.as_str(), entry.url);
+        let parsed = normalize_url(&entry.url, None);
+        let preflight_failure = match parsed.as_ref() {
+            None => Some("sitemap_invalid_task_url"),
+            Some(url)
+                if self.policy.is_none()
+                    && !self.config.check_external
+                    && !same_scope(url, &self.seeds, self.config.include_subdomains) =>
+            {
+                Some("sitemap_outside_scope")
+            }
+            Some(_) => None,
+        };
+        if let Some(code) = preflight_failure {
+            let batch = match entry.kind {
+                DiscoveryKind::Sitemap => crate::sitemap_discovery::xml_batch(
+                    &entry.url,
+                    generation,
+                    &revision,
+                    SitemapTransportFacts {
+                        request_started: false,
+                        requested_url: None,
+                        final_url: None,
+                        initial_status: None,
+                        final_status: None,
+                        blocked_by_robots: false,
+                        body_complete: false,
+                        post_http_decoding_bytes: 0,
+                        post_http_decoding_sha256: None,
+                        retained_post_http_prefix_sha256: None,
+                        failure_code: Some(code.into()),
+                    },
+                    None,
+                    None,
+                    Some(code.into()),
+                )?,
+                DiscoveryKind::Robots => {
+                    let requested = parsed
+                        .as_ref()
+                        .map(|url| format!("{}/robots.txt", origin(url)))
+                        .unwrap_or_else(|| entry.url.clone());
+                    let source = crate::RobotsSitemapSource::unavailable(
+                        requested,
+                        false,
+                        None,
+                        None,
+                        code.into(),
+                    );
+                    // Invalid origin task has no valid request identity. Do not fabricate one.
+                    let mut batch = crate::sitemap_discovery::robots_batch(
+                        &entry.url, generation, &revision, &source,
+                    )?;
+                    if parsed.is_none() {
+                        batch
+                            .document
+                            .transport
+                            .as_mut()
+                            .expect("robots transport")
+                            .requested_url = None;
+                    }
+                    batch
+                }
+            };
+            return Ok(discovery_from_batch(
+                batch,
+                vec![format!("{code}: {}", entry.url)],
+            ));
+        }
+        let parsed = parsed.expect("checked valid task");
+        if entry.kind == DiscoveryKind::Robots {
+            let robots = self.robots.get(&parsed).await;
+            let unavailable;
+            let source = if let Some(source) = &robots.sitemap_source {
+                source
+            } else {
+                unavailable = crate::RobotsSitemapSource::unavailable(
+                    format!("{}/robots.txt", origin(&parsed)),
+                    false,
+                    None,
+                    None,
+                    "robots_source_observation_unavailable".into(),
+                );
+                &unavailable
+            };
+            // Revision uses actual retained source facts, not warning absence or lenient URLs.
+            let revision = crate::sitemap_ledger::digest(serde_json::to_vec(&(
+                "robots-source-v1",
+                &entry.url,
+                &source.requested_url,
+                &source.final_url,
+                source.status,
+                &source.retained_prefix_sha256,
+                source.retained_post_http_decoding_bytes,
+                source.body_complete,
+                source.complete,
+                &source.failure,
+            ))?);
+            let batch =
+                crate::sitemap_discovery::robots_batch(&entry.url, generation, &revision, source)?;
+            let mut warnings = Vec::new();
+            if let Some(warning) = &robots.warning {
+                warnings.push(warning.clone());
+            }
+            if !batch.document.complete() {
+                warnings.push(format!(
+                    "Robots sitemap declarations incomplete: {}",
+                    entry.url
+                ));
+            }
+            let mut output = discovery_from_batch(batch, warnings);
+            self.protocol_policy_rows(&mut output, false)?;
+            return Ok(output);
+        }
+        let (page, mut protocol) = context
+            .sitemap_protocol(QueueEntry {
+                url: entry.url.clone(),
+                depth: 0,
+                discovered_from: None,
+                admission: if self.policy.is_some() {
+                    self.store
+                        .as_ref()
+                        .context("Native policy discovery requires durable storage")?
+                        .task_policy(crate::PolicyTaskRole::SitemapDocument, &entry.url)?
+                } else {
+                    None
+                },
+            })
+            .await;
+        let revision = protocol
+            .entity_decode
+            .as_ref()
+            .map(|decoded| {
+                crate::sitemap_ledger::digest(
+                    serde_json::to_vec(&(
+                        "sitemap-decoded-xml-source-v1",
+                        &entry.url,
+                        &decoded.decoded_xml_sha256,
+                    ))
+                    .expect("fixed typed source tuple"),
+                )
+            })
+            .unwrap_or_else(|| {
+                crate::sitemap_ledger::digest(
+                    serde_json::to_vec(&(
+                        "sitemap-source-failure-v1",
+                        &entry.url,
+                        protocol.request_started,
+                        &protocol.requested_url,
+                        &protocol.final_url,
+                        protocol.final_status,
+                        protocol.retained_post_http_entity_bytes,
+                        &protocol.post_http_entity_sha256,
+                        &protocol.failure,
+                    ))
+                    .expect("fixed typed source tuple"),
+                )
+            });
+        let transport = SitemapTransportFacts {
+            request_started: protocol.request_started,
+            requested_url: protocol.requested_url.clone(),
+            // Base PageRecord may hold an unfetched redirect target when status
+            // is unavailable. Do not relabel that proposed target a final response.
+            final_url: protocol.final_status.and(protocol.final_url.clone()),
+            initial_status: protocol.initial_status,
+            final_status: protocol.final_status,
+            blocked_by_robots: protocol.blocked_by_robots,
+            body_complete: protocol.body_complete,
+            post_http_decoding_bytes: u64::try_from(protocol.retained_post_http_entity_bytes)?,
+            post_http_decoding_sha256: protocol.post_http_entity_sha256.clone(),
+            // Incomplete entity prefixes are not hashed by the current private capture.
+            // Copy only the actual complete hash; never invent a prefix digest.
+            retained_post_http_prefix_sha256: protocol.post_http_entity_sha256.clone(),
+            failure_code: protocol
+                .failure
+                .as_ref()
+                .map(|failure| failure.code.clone()),
+        };
+        let batch = crate::sitemap_discovery::xml_batch(
+            &entry.url,
+            generation,
+            &revision,
+            transport,
+            protocol.entity_decode.as_ref(),
+            protocol.parser.take(),
+            protocol
+                .failure
+                .as_ref()
+                .map(|failure| failure.code.clone()),
+        )?;
+        let mut warnings = Vec::new();
+        if !batch.document.complete() {
+            warnings.push(format!(
+                "Sitemap could not be read completely: {}: {}",
+                entry.url,
+                protocol
+                    .failure
+                    .as_ref()
+                    .map(|failure| failure.code.clone())
+                    .or(page.error.clone())
+                    .unwrap_or_else(|| format!("status {:?}", page.final_status))
+            ));
+        }
+        let xml_allowed = self.policy.is_none()
+            || page.policy.as_ref().is_some_and(|observed| {
+                observed.admission.can_discover_xml
+                    && observed
+                        .redirect_decisions
+                        .iter()
+                        .all(|row| row.decision.folder_internal)
+            });
+        let mut output = discovery_from_batch(batch, warnings);
+        if let Some(observed) = &page.policy {
+            anyhow::ensure!(
+                observed.redirect_decisions.iter().all(|row| row.task_role
+                    == crate::PolicyTaskRole::ObservationOnly
+                    && row.scheduled_fetch_url.is_none()),
+                "Protocol redirect observation must not schedule another task"
+            );
+            output
+                .policy_rows
+                .extend(observed.redirect_decisions.clone());
+        }
+        output.protocol_observation = Some(protocol);
+        self.protocol_policy_rows(&mut output, xml_allowed)?;
+        anyhow::ensure!(
+            output
+                .sitemap_batch
+                .as_ref()
+                .is_some_and(|batch| batch.document.kind == K::SitemapXml),
+            "Typed XML source lost its whole batch"
+        );
+        Ok(output)
+    }
+
+    fn protocol_policy_rows(
+        &self,
+        output: &mut DiscoveryOutput,
+        xml_allowed: bool,
+    ) -> anyhow::Result<()> {
+        use crate::sitemap_ledger::SitemapSourceKind as K;
+        use crate::{CandidateSourceKind as C, PolicyInputBasis as B, PolicyTaskRole as R};
+        let Some(policy) = &self.policy else {
+            return Ok(());
+        };
+        let batch = output
+            .sitemap_batch
+            .as_ref()
+            .context("Typed discovery has no source batch")?;
+        if !batch.document.complete() {
+            return Ok(());
+        }
+        match batch.document.kind {
+            K::RobotsDirectives => {
+                for root in &batch.roots {
+                    if root.normalized_document_url.is_none() {
+                        continue;
+                    }
+                    output.policy_rows.push(crate::policy_ledger::decide(
+                        policy,
+                        &batch.document.source_revision,
+                        usize::try_from(root.source_ordinal)?,
+                        C::SitemapDocument,
+                        root.raw_value.clone(),
+                        None,
+                        Some(batch.document.task_url.clone()),
+                        B::DeclaredInput,
+                        R::SitemapDocument,
+                    ));
+                }
+            }
+            K::SitemapXml => {
+                for location in &batch.locations {
+                    if location.observed.loc_ordinal.is_none()
+                        || location.observed.validation_error.is_some()
+                        || location.observed.normalized_fetch_url.is_none()
+                    {
+                        continue;
+                    }
+                    let (kind, role) = match location.observed.role {
+                        crate::SitemapLocationRole::PageLocation => {
+                            (C::SitemapLocation, R::PageDocument)
+                        }
+                        crate::SitemapLocationRole::ChildSitemap => {
+                            (C::SitemapDocument, R::SitemapDocument)
+                        }
+                    };
+                    let mut row = crate::policy_ledger::decide(
+                        policy,
+                        &batch.document.source_revision,
+                        location.observed.ordinal,
+                        kind,
+                        location
+                            .observed
+                            .decoded_value
+                            .clone()
+                            .context("Valid original Loc has no decoded value")?,
+                        None,
+                        Some(batch.document.task_url.clone()),
+                        B::ParserObservedXml,
+                        role,
+                    );
+                    if !xml_allowed && row.admission_reason == "pending_admission" {
+                        row.admission_reason = "source_check_only".into();
+                    }
+                    output.policy_rows.push(row);
+                }
+            }
+        }
+        Ok(())
+    }
+
+    /// Every final ordinary decision is assigned to its ORIGINAL occurrence.
+    /// Stage only new unit targets; global sets change only after Store commit.
+    fn finalize_ordinary_protocol(
+        &self,
+        output: &mut DiscoveryOutput,
+        page_seen: &HashSet<String>,
+        discovered: &HashSet<DiscoveryEntry>,
+    ) -> anyhow::Result<()> {
+        use crate::sitemap_ledger::SitemapAdmissionDecision as D;
+        let batch = output
+            .sitemap_batch
+            .as_mut()
+            .context("Typed discovery has no batch")?;
+        if !batch.document.complete() {
+            return Ok(());
+        }
+        output.pages.clear();
+        output.children.clear();
+        // check_external permits checking a source, not recursively expanding
+        // another origin. Preserve ordinary sitemap target scope and require
+        // both original task and actual final response to be internal sources.
+        let source_internal = normalize_url(&batch.document.task_url, None)
+            .is_some_and(|url| same_scope(&url, &self.seeds, self.config.include_subdomains))
+            && batch
+                .document
+                .transport
+                .as_ref()
+                .and_then(|transport| transport.final_url.as_deref())
+                .and_then(|url| normalize_url(url, None))
+                .is_some_and(|url| same_scope(&url, &self.seeds, self.config.include_subdomains));
+        if !source_internal {
+            for root in &mut batch.roots {
+                if root.normalized_document_url.is_some() {
+                    root.admission.decision = D::SourceCheckOnly;
+                }
+            }
+            for location in &mut batch.locations {
+                if location.observed.loc_ordinal.is_some()
+                    && location.observed.validation_error.is_none()
+                    && location.observed.normalized_fetch_url.is_some()
+                {
+                    location.admission.decision = D::SourceCheckOnly;
+                }
+            }
+            return Ok(());
+        }
+        let mut new_pages = HashSet::new();
+        let mut new_children = HashSet::new();
+        for root in &mut batch.roots {
+            let Some(url) = &root.normalized_document_url else {
+                continue;
+            };
+            let parsed = normalize_url(url, None).context("Strict root normalized URL invalid")?;
+            if !same_scope(&parsed, &self.seeds, self.config.include_subdomains) {
+                root.admission.decision = D::OutsideScope;
+                continue;
+            }
+            let child = DiscoveryEntry {
+                kind: DiscoveryKind::Sitemap,
+                url: url.clone(),
+            };
+            root.admission.decision =
+                if !discovered.contains(&child) && new_children.insert(child.clone()) {
+                    output.children.push(child);
+                    D::Scheduled
+                } else {
+                    D::Coalesced
+                };
+            root.admission.admitted_fetch_url = Some(url.clone());
+        }
+        for location in &mut batch.locations {
+            if location.observed.loc_ordinal.is_none()
+                || location.observed.validation_error.is_some()
+            {
+                continue;
+            }
+            let Some(url) = &location.observed.normalized_fetch_url else {
+                continue;
+            };
+            let parsed = normalize_url(url, None).context("Strict Loc normalized URL invalid")?;
+            if !same_scope(&parsed, &self.seeds, self.config.include_subdomains) {
+                location.admission.decision = D::OutsideScope;
+                continue;
+            }
+            match location.observed.role {
+                crate::SitemapLocationRole::PageLocation => {
+                    if !self.filters.allows(url) {
+                        location.admission.decision = D::FilterDenied;
+                        continue;
+                    }
+                    location.admission.decision =
+                        if !page_seen.contains(url) && new_pages.insert(url.clone()) {
+                            output.pages.push(QueueEntry {
+                                url: url.clone(),
+                                depth: 0,
+                                discovered_from: Some(batch.document.task_url.clone()),
+                                admission: None,
+                            });
+                            D::Scheduled
+                        } else {
+                            D::Coalesced
+                        };
+                    location.admission.admitted_fetch_url = Some(url.clone());
+                }
+                crate::SitemapLocationRole::ChildSitemap => {
+                    let child = DiscoveryEntry {
+                        kind: DiscoveryKind::Sitemap,
+                        url: url.clone(),
+                    };
+                    location.admission.decision =
+                        if !discovered.contains(&child) && new_children.insert(child.clone()) {
+                            output.children.push(child);
+                            D::Scheduled
+                        } else {
+                            D::Coalesced
+                        };
+                    location.admission.admitted_fetch_url = Some(url.clone());
+                    location.referenced_sitemap_task = Some(url.clone());
+                }
+            }
+        }
+        Ok(())
     }
 
     async fn discover_unit(
@@ -1676,6 +2335,7 @@ struct DiscoveryOutput {
     policy_complete: bool,
     // Work integration seam: full ledger must consume this whole unit atomically.
     protocol_observation: Option<SitemapProtocolObservation>,
+    sitemap_batch: Option<crate::SitemapDiscoveryBatch>,
 }
 
 #[derive(Default)]
@@ -1684,6 +2344,81 @@ struct DiscoveryProgress {
     warnings: Vec<String>,
     pending: usize,
     limited: bool,
+}
+
+fn discovery_from_batch(
+    batch: crate::SitemapDiscoveryBatch,
+    warnings: Vec<String>,
+) -> DiscoveryOutput {
+    DiscoveryOutput {
+        policy_revision: Some(batch.document.source_revision.clone()),
+        policy_complete: batch.document.complete(),
+        sitemap_batch: Some(batch),
+        warnings,
+        ..Default::default()
+    }
+}
+
+fn finalize_protocol_policy_roots(
+    transaction: &rusqlite::Transaction<'_>,
+    batch: &mut crate::SitemapDiscoveryBatch,
+    rows: &[crate::PolicyOccurrence],
+) -> anyhow::Result<()> {
+    use crate::sitemap_ledger::SitemapSourceKind as K;
+    if batch.document.kind != K::RobotsDirectives {
+        return Ok(());
+    }
+    if !batch.document.complete() {
+        anyhow::ensure!(
+            rows.iter()
+                .all(|row| row.input_basis != crate::PolicyInputBasis::DeclaredInput),
+            "Incomplete robots source has scheduling inputs"
+        );
+        return Ok(());
+    }
+    let observed: Vec<_> = rows
+        .iter()
+        .filter(|row| {
+            row.input_basis == crate::PolicyInputBasis::DeclaredInput
+                && row.source_revision == batch.document.source_revision
+        })
+        .collect();
+    let mut bound = HashSet::new();
+    for root in &mut batch.roots {
+        if root.normalized_document_url.is_none() {
+            continue;
+        }
+        let ordinal = usize::try_from(root.source_ordinal)?;
+        let matching: Vec<_> = observed
+            .iter()
+            .filter(|row| row.source_ordinal == ordinal)
+            .collect();
+        anyhow::ensure!(
+            matching.len() == 1,
+            "Missing/duplicate final robots directive policy decision"
+        );
+        let row = *matching[0];
+        crate::sitemap_discovery::finalize_root_policy(
+            transaction,
+            root,
+            row,
+            &crate::sitemap_discovery::RootPolicyContext {
+                source_revision: &batch.document.source_revision,
+                source_ordinal: ordinal,
+                generation: batch.document.generation,
+                source_url: Some(&batch.document.task_url),
+            },
+        )?;
+        anyhow::ensure!(
+            bound.insert(ordinal),
+            "Duplicate final robots directive ordinal"
+        );
+    }
+    anyhow::ensure!(
+        bound.len() == observed.len(),
+        "Unexpected robots policy rows not represented by valid raw directives"
+    );
+    Ok(())
 }
 
 fn emit(events: &Option<UnboundedSender<CrawlEvent>>, event: CrawlEvent) {
@@ -2840,3 +3575,11 @@ mod tests {
 #[cfg(test)]
 #[path = "crawler/sitemap_protocol_tests.rs"]
 mod sitemap_protocol_tests;
+
+#[cfg(test)]
+#[path = "crawler/discovery_ledger_tests.rs"]
+mod discovery_ledger_tests;
+
+#[cfg(test)]
+#[path = "crawler/bootstrap_tests.rs"]
+mod bootstrap_ledger_tests;

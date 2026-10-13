@@ -177,7 +177,11 @@ pub fn prepare_selected_recrawl(
     );
     let base_report: CrawlReport =
         serde_json::from_slice(snapshot_bytes).context("Invalid parent crawl snapshot")?;
-    let crawler = Crawler::new(base_report.config.clone())?;
+
+    if let Some(catalog) = &base_report.sitemap_catalog {
+        crate::sitemap_ledger::validate_catalog(catalog)?;
+    }
+    let crawler = Crawler::from_saved_config(base_report.config.clone())?;
     let config = crawler.effective_config().clone();
     let mut pages = HashMap::new();
     for (ordinal, page) in base_report.pages.iter().enumerate() {
@@ -424,6 +428,7 @@ mod tests {
             operation: None,
             policy_ledger: None,
             resource_ledger: None,
+            sitemap_catalog: None,
         })
         .unwrap()
     }

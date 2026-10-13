@@ -9,6 +9,17 @@ use serde::de::DeserializeOwned;
 use sha2::{Digest, Sha256};
 use std::{path::Path, sync::Mutex};
 
+/// Roots are original declarations; source/task aliases must already be finalized.
+/// config_sha256 binds the actual saved configuration bytes at FIRST initialization.
+/// Resume retains that hash while Store::prepare permits operational overrides.
+#[derive(Debug, Clone)]
+pub(crate) struct SitemapCatalogInit {
+    pub config_sha256: String,
+    pub limits: crate::SitemapLedgerLimits,
+    pub roots: Vec<crate::SitemapRootDeclaration>,
+    pub legacy_history_unknown: bool,
+}
+
 #[derive(Debug, Clone)]
 pub(crate) struct QueueEntry {
     pub url: String,
@@ -63,6 +74,7 @@ impl CrawlStore {
             CREATE TABLE IF NOT EXISTS recrawl_targets(url TEXT PRIMARY KEY,admitted_attempts INTEGER NOT NULL DEFAULT 0,last_admitted_generation INTEGER,committed_generation INTEGER,committed_payload_sha256 TEXT);")?;
         connection.execute_batch(crate::policy_ledger::SCHEMA)?;
         connection.execute_batch(crate::resource_ledger::SCHEMA)?;
+        connection.execute_batch(crate::sitemap_ledger::SCHEMA)?;
         Ok(Self {
             connection: Mutex::new(connection),
         })
@@ -156,6 +168,27 @@ impl CrawlStore {
         {
             bail!("Terminal resource ledger differs from checkpoint binding");
         }
+        let sitemap_catalog = load_sitemap_catalog_verified(&transaction)?;
+        let sitemap_ledger = sitemap_catalog
+            .as_ref()
+            .map(|catalog| catalog.summary.clone());
+        if checkpoint_valid {
+            anyhow::ensure!(
+                checkpoint
+                    .as_ref()
+                    .is_some_and(|value| value.sitemap_ledger == sitemap_ledger),
+                "Terminal sitemap summary differs from checkpoint binding"
+            );
+            let saved: CrawlReport = serde_json::from_str(
+                report
+                    .as_deref()
+                    .context("Terminal sitemap checkpoint has no report")?,
+            )?;
+            anyhow::ensure!(
+                saved.sitemap_catalog == sitemap_catalog,
+                "Terminal sitemap catalog differs from checkpoint report"
+            );
+        }
         transaction.commit()?;
         Ok(CrawlStoreInspection {
             config,
@@ -169,6 +202,7 @@ impl CrawlStore {
             operation,
             policy_ledger,
             resource_ledger,
+            sitemap_ledger,
         })
     }
 
@@ -232,6 +266,10 @@ impl CrawlStore {
             "recrawl_base",
             "recrawl_pages",
             "recrawl_targets",
+            "sitemap_documents",
+            "sitemap_roots",
+            "sitemap_entries",
+            "sitemap_locations",
         ] {
             let exists: i64 =
                 transaction.query_row(&format!("SELECT count(*) FROM {table}"), [], |row| {
@@ -257,6 +295,13 @@ impl CrawlStore {
             "INSERT INTO recrawl_base(id,snapshot) VALUES(1,?1)",
             [&prepared.base_snapshot_bytes],
         )?;
+        if let Some(parent) = &prepared.base_report.sitemap_catalog {
+            crate::sitemap_ledger::inherit(
+                &transaction,
+                parent,
+                &prepared.plan.parent.snapshot_sha256,
+            )?;
+        }
         for (ordinal, page) in prepared.base_report.pages.iter().enumerate() {
             let text = serde_json::to_string(page)?;
             let inherited = !selected.contains(page.url.as_str());
@@ -442,6 +487,7 @@ impl CrawlStore {
     }
 
     pub(crate) fn prepare(&self, config: &CrawlConfig) -> anyhow::Result<bool> {
+        config.validate_input_provenance_budget()?;
         let connection = self
             .connection
             .lock()
@@ -460,6 +506,9 @@ impl CrawlStore {
             .optional()?;
         if let Some(saved) = saved {
             let mut old: CrawlConfig = serde_json::from_str(&saved)?;
+            if old.explicit_sitemap_inputs != config.explicit_sitemap_inputs {
+                bail!("Saved crawl cannot change original explicit sitemap provenance");
+            }
             crate::resource_ledger::verify(&connection, &old)?;
             if let Some(policy) = &old.crawl_policy {
                 crate::policy_ledger::verify(
@@ -494,6 +543,45 @@ impl CrawlStore {
         }
     }
 
+    pub(crate) fn saved_config_bytes_sha256(&self) -> anyhow::Result<String> {
+        let mut connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        let bytes: i64 = transaction.query_row(
+            "SELECT length(CAST(value AS BLOB)) FROM metadata WHERE key='config'",
+            [],
+            |row| row.get(0),
+        )?;
+        anyhow::ensure!(
+            bytes > 0,
+            "Sitemap initialization requires actual saved config bytes"
+        );
+        // Hash the existing authoritative bytes in bounded chunks. Serialization
+        // round trips can change byte order; an arbitrary full-config ceiling
+        // would also reject otherwise valid imports or headers.
+        let mut hasher = sha2::Sha256::new();
+        let mut offset = 0i64;
+        while offset < bytes {
+            let length = (bytes - offset).min(65536);
+            let chunk: Vec<u8> = transaction.query_row(
+                "SELECT substr(CAST(value AS BLOB),?1,?2) FROM metadata WHERE key='config'",
+                params![offset + 1, length],
+                |row| row.get(0),
+            )?;
+            anyhow::ensure!(
+                i64::try_from(chunk.len())? == length,
+                "Saved config chunk differs from the authoritative byte length"
+            );
+            hasher.update(&chunk);
+            offset += length;
+        }
+        let digest = format!("{:x}", hasher.finalize());
+        transaction.commit()?;
+        Ok(digest)
+    }
+
     pub fn config(&self) -> anyhow::Result<Option<CrawlConfig>> {
         let value: Option<String> = self
             .connection
@@ -517,6 +605,23 @@ impl CrawlStore {
                 row.get(0)
             })?;
         Ok(count as usize)
+    }
+
+    /// Validated catalog from one SQLite read snapshot. Inherited values require
+    /// the whole existing selected-plan/row validator plus exact parent binding.
+    pub fn sitemap_catalog(&self) -> anyhow::Result<Option<crate::SitemapCatalog>> {
+        let mut connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        let catalog = load_sitemap_catalog_verified(&transaction)?;
+        transaction.commit()?;
+        Ok(catalog)
+    }
+
+    pub fn sitemap_ledger_summary(&self) -> anyhow::Result<Option<crate::SitemapLedgerSummary>> {
+        Ok(self.sitemap_catalog()?.map(|catalog| catalog.summary))
     }
 
     pub fn resource_ledger_summary(&self) -> anyhow::Result<Option<crate::ResourceLedgerSummary>> {
@@ -878,12 +983,111 @@ impl CrawlStore {
         Ok(value.as_deref() == Some("true"))
     }
 
+    /// Saves initial original declarations with discovery tasks/markers in ONE
+    /// transaction. Initial policy rows are already committed by initialize_policy.
+    pub(crate) fn initialize_sitemap_discovery(
+        &self,
+        entries: &[DiscoveryEntry],
+        generation: u64,
+        init: &SitemapCatalogInit,
+    ) -> anyhow::Result<()> {
+        self.initialize_sitemap_discovery_with(entries, generation, init, |_, _| Ok(()))
+    }
+
+    pub(crate) fn initialize_sitemap_discovery_with<F>(
+        &self,
+        entries: &[DiscoveryEntry],
+        generation: u64,
+        init: &SitemapCatalogInit,
+        finalize_roots: F,
+    ) -> anyhow::Result<()>
+    where
+        F: FnOnce(
+            &rusqlite::Transaction<'_>,
+            &mut Vec<crate::SitemapRootDeclaration>,
+        ) -> anyhow::Result<()>,
+    {
+        let mut connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        require_generation(&transaction, generation)?;
+        anyhow::ensure!(
+            matches!(load_run_plan(&transaction)?, RunPlan::FullCrawl),
+            "Selected recrawl must retain inherited sitemap history without discovery initialization"
+        );
+        let previous = load_sitemap_catalog_verified(&transaction)?;
+        let initialized =
+            metadata_text(&transaction, "discovery_initialized")?.as_deref() == Some("true");
+        let complete =
+            metadata_text(&transaction, "discovery_complete")?.as_deref() == Some("true");
+        if let Some(previous) = previous {
+            anyhow::ensure!(
+                previous.summary.limits == init.limits,
+                "Sitemap retention limits changed after initialization"
+            );
+            // Preserve initialization-config binding across allowed resume knobs.
+            // Root need not re-create old policy roots using a new generation.
+            crate::sitemap_ledger::initialize(
+                &transaction,
+                &previous.summary.config_sha256,
+                &init.limits,
+                previous.summary.legacy_history_unknown,
+            )?;
+        } else {
+            let config = metadata_text(&transaction, "config")?
+                .context("Sitemap initialization requires saved configuration")?;
+            anyhow::ensure!(
+                sha256(&config) == init.config_sha256,
+                "Sitemap initialization SHA differs from actual saved configuration bytes"
+            );
+            let any_done: bool = transaction.query_row(
+                "SELECT EXISTS(SELECT 1 FROM discovery_frontier WHERE done=1)",
+                [],
+                |row| row.get(0),
+            )?;
+            let unknown = init.legacy_history_unknown || initialized || complete || any_done;
+            crate::sitemap_ledger::initialize(
+                &transaction,
+                &init.config_sha256,
+                &init.limits,
+                unknown,
+            )?;
+            if !unknown {
+                let mut roots = init.roots.clone();
+                // Root matches immutable input coordinates to actual saved finalized
+                // policy rows here, including already-initialized policy.
+                finalize_roots(&transaction, &mut roots)?;
+                crate::sitemap_ledger::append_roots(&transaction, generation, roots)?;
+            }
+            // Normalized/merged legacy config cannot recover original declarations.
+            // History-unknown initialization never retroactively creates roots.
+        }
+        // Check/catalog initialization is BEFORE the legacy scheduler early return.
+        if !initialized && !complete {
+            for entry in entries {
+                enqueue_discovery(&transaction, entry)?;
+            }
+            put_metadata(&transaction, "discovery_initialized", "true")?;
+            if discovery_pending_count(&transaction)? == 0 {
+                put_metadata(&transaction, "discovery_complete", "true")?;
+            }
+        }
+        transaction.commit()?;
+        Ok(())
+    }
+
     pub(crate) fn initialize_discovery(&self, entries: &[DiscoveryEntry]) -> anyhow::Result<()> {
         let mut connection = self
             .connection
             .lock()
             .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
         let transaction = connection.transaction()?;
+        anyhow::ensure!(
+            crate::sitemap_ledger::load_catalog(&transaction)?.is_none(),
+            "Initialized sitemap catalog requires typed discovery initialization"
+        );
         if metadata_text(&transaction, "discovery_initialized")?.as_deref() == Some("true")
             || metadata_text(&transaction, "discovery_complete")?.as_deref() == Some("true")
         {
@@ -952,6 +1156,7 @@ impl CrawlStore {
 
     /// Commit one fully observed discovery unit and its output before admitting
     /// another unit. A pause cannot lose children already found in an index.
+    /// Compatibility caller: no catalog may exist, otherwise observations must be supplied.
     pub(crate) fn complete_discovery(
         &self,
         entry: &DiscoveryEntry,
@@ -960,16 +1165,61 @@ impl CrawlStore {
         warnings: &[String],
         generation: u64,
     ) -> anyhow::Result<()> {
+        self.complete_discovery_impl(entry, pages, children, warnings, generation, None)
+    }
+
+    pub(crate) fn complete_discovery_observed(
+        &self,
+        entry: &DiscoveryEntry,
+        pages: &[QueueEntry],
+        children: &[DiscoveryEntry],
+        warnings: &[String],
+        generation: u64,
+        batch: crate::SitemapDiscoveryBatch,
+    ) -> anyhow::Result<()> {
+        self.complete_discovery_impl(entry, pages, children, warnings, generation, Some(batch))
+    }
+
+    fn complete_discovery_impl(
+        &self,
+        entry: &DiscoveryEntry,
+        pages: &[QueueEntry],
+        children: &[DiscoveryEntry],
+        warnings: &[String],
+        generation: u64,
+        batch: Option<crate::SitemapDiscoveryBatch>,
+    ) -> anyhow::Result<()> {
         let mut connection = self
             .connection
             .lock()
             .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
         let transaction = connection.transaction()?;
-        require_generation(&transaction, generation)?;
-        transaction.execute(
-            "UPDATE discovery_frontier SET done=1 WHERE kind=?1 AND url=?2",
-            params![entry.kind.as_str(), entry.url],
+        let kind = sitemap_source_kind(&entry.kind);
+        // First admission-sensitive operation: stale/repeated tasks cannot enqueue.
+        let token = crate::sitemap_ledger::guard_pending_source(
+            &transaction,
+            generation,
+            kind,
+            &entry.url,
         )?;
+        if batch.is_none() {
+            anyhow::ensure!(
+                crate::sitemap_ledger::load_catalog(&transaction)?.is_none(),
+                "Initialized sitemap catalog requires an observed source batch"
+            );
+        }
+        if let Some(batch) = &batch {
+            anyhow::ensure!(
+                batch.document.kind == kind
+                    && batch.document.task_url == entry.url
+                    && batch.document.generation == generation,
+                "Discovery/batch identity differs"
+            );
+            anyhow::ensure!(
+                batch.document.complete() || (pages.is_empty() && children.is_empty()),
+                "Incomplete sitemap source cannot admit page/child tasks"
+            );
+        }
         for page in pages {
             transaction.execute(
                 "INSERT OR IGNORE INTO frontier(url,depth,discovered_from) VALUES(?1,?2,?3)",
@@ -979,18 +1229,16 @@ impl CrawlStore {
         for child in children {
             enqueue_discovery(&transaction, child)?;
         }
-        let mut saved: Vec<String> =
-            metadata(&transaction, "discovery_warnings")?.unwrap_or_default();
-        for warning in warnings {
-            if !saved.contains(warning) {
-                saved.push(warning.clone());
+        merge_discovery_warnings(&transaction, warnings)?;
+        match batch {
+            Some(batch) => {
+                crate::sitemap_ledger::append_source(&transaction, token, batch)?;
+            }
+            None => {
+                // No authoritative rows are invented for legacy compatibility callers.
+                mark_discovery_done_once(&transaction, entry)?;
             }
         }
-        put_metadata(
-            &transaction,
-            "discovery_warnings",
-            &serde_json::to_string(&saved)?,
-        )?;
         if discovery_pending_count(&transaction)? == 0 {
             put_metadata(&transaction, "discovery_complete", "true")?;
         }
@@ -1009,16 +1257,134 @@ impl CrawlStore {
         generation: u64,
         limits: &crate::LiveCrawlPolicyLimits,
     ) -> anyhow::Result<(Vec<QueueEntry>, Vec<DiscoveryEntry>)> {
+        self.complete_discovery_with_policy_impl(
+            entry,
+            rows,
+            source,
+            warnings,
+            generation,
+            limits,
+            None,
+            |_, _, _| Ok(()),
+        )
+    }
+
+    /// Root owns the finalizer: it projects original robots/root declarations from
+    /// actual finalized rows. XML bindings are enforced separately by the Store.
+    #[allow(clippy::too_many_arguments)]
+    pub(crate) fn complete_discovery_with_policy_observed<F>(
+        &self,
+        entry: &DiscoveryEntry,
+        rows: &mut [crate::PolicyOccurrence],
+        source: (&str, bool),
+        warnings: &[String],
+        generation: u64,
+        limits: &crate::LiveCrawlPolicyLimits,
+        batch: crate::SitemapDiscoveryBatch,
+        finalize: F,
+    ) -> anyhow::Result<(Vec<QueueEntry>, Vec<DiscoveryEntry>)>
+    where
+        F: FnOnce(
+            &rusqlite::Transaction<'_>,
+            &mut crate::SitemapDiscoveryBatch,
+            &[crate::PolicyOccurrence],
+        ) -> anyhow::Result<()>,
+    {
+        self.complete_discovery_with_policy_impl(
+            entry,
+            rows,
+            source,
+            warnings,
+            generation,
+            limits,
+            Some(batch),
+            finalize,
+        )
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    fn complete_discovery_with_policy_impl<F>(
+        &self,
+        entry: &DiscoveryEntry,
+        rows: &mut [crate::PolicyOccurrence],
+        source: (&str, bool),
+        warnings: &[String],
+        generation: u64,
+        limits: &crate::LiveCrawlPolicyLimits,
+        mut batch: Option<crate::SitemapDiscoveryBatch>,
+        finalize: F,
+    ) -> anyhow::Result<(Vec<QueueEntry>, Vec<DiscoveryEntry>)>
+    where
+        F: FnOnce(
+            &rusqlite::Transaction<'_>,
+            &mut crate::SitemapDiscoveryBatch,
+            &[crate::PolicyOccurrence],
+        ) -> anyhow::Result<()>,
+    {
         let mut connection = self
             .connection
             .lock()
             .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
         let transaction = connection.transaction()?;
-        require_generation(&transaction, generation)?;
-        crate::policy_ledger::commit(&transaction, rows, generation, limits, Some(source))?;
+        let kind = sitemap_source_kind(&entry.kind);
+        let token = crate::sitemap_ledger::guard_pending_source(
+            &transaction,
+            generation,
+            kind,
+            &entry.url,
+        )?;
+        if let Some(batch) = &batch {
+            anyhow::ensure!(
+                batch.document.kind == kind
+                    && batch.document.task_url == entry.url
+                    && batch.document.generation == generation,
+                "Discovery/batch identity differs"
+            );
+            anyhow::ensure!(
+                source.0 == batch.document.source_revision && source.1 == batch.document.complete(),
+                "Policy source completeness/revision differs from sitemap observation"
+            );
+        } else {
+            anyhow::ensure!(
+                crate::sitemap_ledger::load_catalog(&transaction)?.is_none(),
+                "Initialized sitemap catalog requires an observed source batch"
+            );
+        }
+        anyhow::ensure!(
+            rows.len() <= limits.max_batch_occurrences,
+            "Policy source occurrence budget exceeded; source remains pending"
+        );
+        // SQL rollback must not leave caller rows pointing at rolled-back grants.
+        // Copy bounded rows, publish final in-memory state only AFTER TX commit.
+        let mut staged_rows = rows.to_vec();
+        crate::policy_ledger::commit(
+            &transaction,
+            &mut staged_rows,
+            generation,
+            limits,
+            Some(source),
+        )?;
+        if let Some(batch) = &mut batch {
+            let original_document = batch.document.clone();
+            finalize(&transaction, batch, &staged_rows)?;
+            anyhow::ensure!(
+                batch.document == original_document,
+                "Policy finalizer altered original source observation facts"
+            );
+            if kind == crate::SitemapSourceKind::SitemapXml {
+                crate::sitemap_ledger::bind_final_policy(&transaction, batch, &staged_rows)?;
+            }
+            anyhow::ensure!(
+                batch.document.complete()
+                    || staged_rows
+                        .iter()
+                        .all(|row| row.scheduled_fetch_url.is_none()),
+                "Incomplete sitemap source cannot admit policy tasks"
+            );
+        }
         let mut pages = Vec::new();
         let mut children = Vec::new();
-        for row in rows {
+        for row in &staged_rows {
             if let Some(url) = &row.scheduled_fetch_url {
                 match row.task_role {
                     crate::PolicyTaskRole::PageDocument => {
@@ -1049,26 +1415,20 @@ impl CrawlStore {
                 }
             }
         }
-        transaction.execute(
-            "UPDATE discovery_frontier SET done=1 WHERE kind=?1 AND url=?2",
-            params![entry.kind.as_str(), entry.url],
-        )?;
-        let mut saved: Vec<String> =
-            metadata(&transaction, "discovery_warnings")?.unwrap_or_default();
-        for warning in warnings {
-            if !saved.contains(warning) {
-                saved.push(warning.clone());
+        merge_discovery_warnings(&transaction, warnings)?;
+        match batch {
+            Some(batch) => {
+                crate::sitemap_ledger::append_source(&transaction, token, batch)?;
+            }
+            None => {
+                mark_discovery_done_once(&transaction, entry)?;
             }
         }
-        put_metadata(
-            &transaction,
-            "discovery_warnings",
-            &serde_json::to_string(&saved)?,
-        )?;
         if discovery_pending_count(&transaction)? == 0 {
             put_metadata(&transaction, "discovery_complete", "true")?;
         }
         transaction.commit()?;
+        rows.clone_from_slice(&staged_rows);
         Ok((pages, children))
     }
 
@@ -1412,6 +1772,9 @@ impl CrawlStore {
     }
 
     pub fn save_report(&self, report: &CrawlReport) -> anyhow::Result<()> {
+        if let Some(catalog) = &report.sitemap_catalog {
+            crate::sitemap_ledger::validate_catalog(catalog)?;
+        }
         self.connection
             .lock()
             .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?
@@ -1467,6 +1830,11 @@ impl CrawlStore {
         if report.operation != recrawl_operation(&transaction)? {
             bail!("Report selected operation does not match committed target evidence");
         }
+        let sitemap_catalog = load_sitemap_catalog_verified(&transaction)?;
+        anyhow::ensure!(
+            report.sitemap_catalog == sitemap_catalog,
+            "Report sitemap catalog differs from committed evidence"
+        );
         let config =
             metadata_text(&transaction, "config")?.context("Crawl has no saved configuration")?;
         let checkpoint = CrawlCheckpoint {
@@ -1483,6 +1851,7 @@ impl CrawlStore {
                 == Some("true"),
             policy_ledger: crate::policy_ledger::summary(&transaction)?,
             resource_ledger: crate::resource_ledger::summary(&transaction)?,
+            sitemap_ledger: sitemap_catalog.map(|catalog| catalog.summary),
         };
         if report.policy_ledger != checkpoint.policy_ledger {
             bail!("Report policy ledger differs from committed evidence");
@@ -1503,25 +1872,118 @@ impl CrawlStore {
         Ok(checkpoint)
     }
 
+    /// Returns the saved immutable report snapshot, which may predate active SQL rows.
+    /// inspection/save_checkpoint bind it to current rows only for a matching checkpoint.
     pub fn load_report(&self) -> anyhow::Result<Option<CrawlReport>> {
-        let value: Option<String> = self
+        let mut connection = self
             .connection
             .lock()
-            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?
-            .query_row("SELECT value FROM metadata WHERE key='report'", [], |row| {
-                row.get(0)
-            })
-            .optional()?;
-        value
-            .map(|value| {
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        load_sitemap_catalog_verified(&transaction)?;
+        let value = metadata_text(&transaction, "report")?;
+        let report = value
+            .map(|value| -> anyhow::Result<CrawlReport> {
                 let report: CrawlReport = serde_json::from_str(&value)?;
                 for page in &report.pages {
                     crate::validate_page_content_captures(page)?;
                 }
+                if let Some(catalog) = &report.sitemap_catalog {
+                    crate::sitemap_ledger::validate_catalog(catalog)?;
+                }
                 Ok(report)
             })
-            .transpose()
+            .transpose()?;
+        transaction.commit()?;
+        Ok(report)
     }
+}
+
+fn sitemap_source_kind(kind: &DiscoveryKind) -> crate::SitemapSourceKind {
+    match kind {
+        DiscoveryKind::Robots => crate::SitemapSourceKind::RobotsDirectives,
+        DiscoveryKind::Sitemap => crate::SitemapSourceKind::SitemapXml,
+    }
+}
+
+fn mark_discovery_done_once(
+    transaction: &rusqlite::Transaction<'_>,
+    entry: &DiscoveryEntry,
+) -> anyhow::Result<()> {
+    let changed = transaction.execute(
+        "UPDATE discovery_frontier SET done=1 WHERE kind=?1 AND url=?2 AND done=0",
+        params![entry.kind.as_str(), entry.url],
+    )?;
+    anyhow::ensure!(
+        changed == 1,
+        "Source commit did not affect exactly one pending task"
+    );
+    Ok(())
+}
+
+fn merge_discovery_warnings(
+    transaction: &rusqlite::Transaction<'_>,
+    warnings: &[String],
+) -> anyhow::Result<()> {
+    let mut saved: Vec<String> = metadata(transaction, "discovery_warnings")?.unwrap_or_default();
+    for warning in warnings {
+        if !saved.contains(warning) {
+            saved.push(warning.clone());
+        }
+    }
+    put_metadata(
+        transaction,
+        "discovery_warnings",
+        &serde_json::to_string(&saved)?,
+    )
+}
+
+/// Full selected validator first, exact inherited catalog anchor second. The
+/// ledger SQL anchor projection alone is intentionally insufficient here.
+fn load_sitemap_catalog_verified(
+    connection: &Connection,
+) -> anyhow::Result<Option<crate::SitemapCatalog>> {
+    if let Some(config_text) = metadata_text(connection, "config")? {
+        let config: CrawlConfig = serde_json::from_str(&config_text)?;
+        for input in &config.input_imports {
+            crate::validate_import_result(input)?;
+        }
+        if let Some(policy) = &config.crawl_policy {
+            crate::policy_ledger::verify(connection, &crate::CompiledCrawlPolicy::new(policy)?)?;
+        }
+    }
+    let plan = load_run_plan(connection)?;
+    if matches!(plan, RunPlan::SelectedRecrawl(_)) {
+        verify_recrawl_rows(connection, &plan)?;
+    }
+    let catalog = crate::sitemap_ledger::load_catalog(connection)?;
+    if let RunPlan::SelectedRecrawl(plan) = plan {
+        #[derive(serde::Deserialize)]
+        struct ParentCatalog {
+            sitemap_catalog: Option<crate::SitemapCatalog>,
+        }
+        let bytes = parent_snapshot(connection)?
+            .context("Selected sitemap read lacks exact parent bytes")?;
+        // load_run_plan has already verified whole exact bytes/config/typed plan.
+        let parent = serde_json::from_slice::<ParentCatalog>(&bytes)?.sitemap_catalog;
+        match (&parent, &catalog) {
+            (None, None) => {} // Legacy absence is unknown, never invented empty history.
+            (Some(_), Some(catalog)) => {
+                anyhow::ensure!(
+                    catalog
+                        .inherited
+                        .as_ref()
+                        .is_some_and(|basis| basis.parent_snapshot_sha256
+                            == plan.parent.snapshot_sha256
+                            && !basis.current_discovery_executed),
+                    "Selected sitemap catalog lacks immutable inherited basis"
+                );
+                // load_catalog verifies exact parent BLOB + canonical typed catalog rows.
+            }
+            _ => bail!("Selected sitemap catalog presence differs from immutable parent"),
+        }
+    }
+    Ok(catalog)
 }
 
 /// One bounded row at a time; the SQLite run state is an internal provenance
@@ -2027,6 +2489,7 @@ mod tests {
             operation: None,
             policy_ledger: None,
             resource_ledger: None,
+            sitemap_catalog: None,
             config,
             pages: Vec::new(),
             issues: Vec::new(),
@@ -2491,5 +2954,95 @@ mod tests {
             2
         );
         assert!(CrawlStore::inspect(&path).unwrap().checkpoint_valid);
+    }
+}
+
+#[cfg(test)]
+#[path = "store-sitemap-tests.rs"]
+mod sitemap_store_tests;
+
+// Append as a sibling cfg(test) module in crates/core/src/store.rs.
+// AUTHORED ONLY; Root owns integration and test execution.
+#[cfg(test)]
+mod explicit_sitemap_input_regressions {
+    use super::*;
+
+    fn configured_store(config: &CrawlConfig) -> (tempfile::TempDir, CrawlStore) {
+        let temp = tempfile::tempdir().unwrap();
+        let store = CrawlStore::open(temp.path().join("owned-input-fixture.sqlite")).unwrap();
+        store.prepare(config).unwrap();
+        (temp, store)
+    }
+    fn normalized_config(original: Option<Vec<String>>) -> CrawlConfig {
+        let config = CrawlConfig {
+            seed_urls: vec!["https://example.test/".into()],
+            sitemap_urls: vec!["https://example.test/map.xml".into()],
+            explicit_sitemap_inputs: original,
+            ..Default::default()
+        };
+        crate::Crawler::from_saved_config(config)
+            .unwrap()
+            .effective_config()
+            .clone()
+    }
+
+    #[test]
+    fn legacy_unknown_resume_allows_only_four_operational_overrides() {
+        let original = normalized_config(None);
+        let (_temp, store) = configured_store(&original);
+        let mut resumed = original.clone();
+        resumed.max_pages = Some(200);
+        resumed.concurrency = 3;
+        resumed.delay_ms = 7;
+        resumed.request_timeout_secs = 42;
+        assert!(store.prepare(&resumed).unwrap());
+        let saved = store.config().unwrap().unwrap();
+        assert_eq!(saved.explicit_sitemap_inputs, None);
+        assert_eq!(
+            serde_json::to_value(&saved).unwrap(),
+            serde_json::to_value(&resumed).unwrap()
+        );
+    }
+
+    #[test]
+    fn unknown_and_known_empty_provenance_are_not_interchangeable_on_resume() {
+        for (saved, replacement) in [(None, Some(vec![])), (Some(vec![]), None)] {
+            let original = normalized_config(saved);
+            let (_temp, store) = configured_store(&original);
+            let before = metadata_text(&store.connection.lock().unwrap(), "config").unwrap();
+            let mut changed = original;
+            changed.explicit_sitemap_inputs = replacement;
+            assert!(store.prepare(&changed).is_err());
+            assert_eq!(
+                metadata_text(&store.connection.lock().unwrap(), "config").unwrap(),
+                before
+            );
+        }
+    }
+
+    #[test]
+    fn rejected_raw_reorder_dedup_and_rewrite_leave_saved_config_unchanged() {
+        let raw = vec![
+            "https://example.test/map.xml#first".into(),
+            "https://example.test/map.xml#second".into(),
+            "https://example.test/map.xml#first".into(),
+        ];
+        let original = normalized_config(Some(raw.clone()));
+        let (_temp, store) = configured_store(&original);
+        let before = metadata_text(&store.connection.lock().unwrap(), "config").unwrap();
+        let variants = vec![
+            vec![raw[1].clone(), raw[0].clone(), raw[2].clone()],
+            vec![raw[0].clone(), raw[1].clone()],
+            vec!["https://example.test/map.xml".into(); 3],
+        ];
+        for replacement in variants {
+            let mut changed = original.clone();
+            changed.explicit_sitemap_inputs = Some(replacement);
+            assert!(store.prepare(&changed).is_err());
+            assert_eq!(
+                metadata_text(&store.connection.lock().unwrap(), "config").unwrap(),
+                before
+            );
+        }
     }
 }

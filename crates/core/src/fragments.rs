@@ -273,6 +273,7 @@ mod tests {
             operation: None,
             policy_ledger: None,
             resource_ledger: None,
+            sitemap_catalog: None,
             config: CrawlConfig {
                 validate_fragments: true,
                 ..Default::default()

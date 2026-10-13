@@ -1,0 +1,21 @@
+# Dauerhafte Sitemap-Herkunft und Mitgliedschaft
+
+Der Hauptcode speichert Sitemap-Quellen als eigene, vollständig validierte SQLite-Kataloge. Ursprüngliche Konfigurationseingaben, importierte Sitemap-Zeilen, Robots-Deklarationen, Dokumente, XML-Einträge und einzelne Loc-Vorkommen behalten ihre Rohwerte, Ordinalzahlen und Herkunft. Duplikate, fehlende und ungültige Locs bleiben sichtbar. Eine originale Mitgliedschaft ist von einem tatsächlich zugelassenen Fetch-Ziel und einem Policy-Alias getrennt.
+
+Der Writer verbindet die initialen Roots mit den tatsächlich gespeicherten Originaldaten. Auch Ordinary-Roots ohne Policy-ID müssen Rohwert, ursprünglichen Ordinal und normalisierte Identität nachweisen. Policy-Zuordnungen benötigen zusätzlich den endgültig gespeicherten Policy-Datensatz. Quellfakten, Admission, neue Frontier-Aufgaben und genau ein abgeschlossenes Discovery-Element werden gemeinsam gespeichert; fehlgeschlagene Transaktionen übernehmen weder neue Aufgaben noch globale Dedupe-Zustände.
+
+Die gespeicherten Quellfakten unterscheiden einen gestarteten Request, tatsächliche Antworten, vollständigen Body, HTTP-/Datei-Gzip-Decoding, XML-Parsing und Fehlerzustände. Unvollständige Quellen erlauben keine neue Admission. Die eigene strikte HTTP(S)-Identität originaler Sitemap-Angaben bleibt von historischer, toleranter Robots-Alias-Auflösung getrennt. Externe Quellenchecks erweitern den Ordinary-Crawl nicht um externe Sitemap-Ziele.
+
+Kataloge verwenden geordnete Zeilen, feste IDs, Referenzprüfungen, Zeilenzahlen und SHA256-Bindungen. Die vollständige JSON-Projektion ist auf32MiB und eine Million Zeilen begrenzt; die Standard-Zeilengrenze beträgt256KiB. Überschreitungen brechen die gesamte betroffene Transaktion ab und erzeugen keinen still gekürzten Erfolgsbericht. Die SQLite-Lesepfade prüfen zusätzlich Original-Config, Imports, Policy-Zuordnungen und gegebenenfalls den exakt gebundenen Parent-Snapshot.
+
+Neue vollständige Crawler-Läufe mit gespeicherten Originaleingaben erhalten den Katalog. `None` bedeutet bei Altbeständen oder nicht gespeicherten Quellen weiterhin „unbekannt“; ein vorhandener leerer Katalog bedeutet nur „keine aufgezeichneten Vorkommen“. Ausgewählte Recrawls übernehmen die geprüfte ursprüngliche Basis. Berichte und Checkpoints lesen dieselben validierten Daten.
+
+`declared_source_cohort_complete` bleibt ausdrücklich `false`. Eine leere Aufgabenliste beweist weder, dass alle Sitemap-Quellen verarbeitet wurden, noch dass eine URL außerhalb aller Sitemaps liegt. Auch gespeicherte vollständige Einzelquellen begründen keine vollständige Website-Abdeckung.
+
+## Tatsächlicher Prüfstand
+
+Der [neue Main-Core-Beleg](verification/sitemap-ledger-main-core.json) bindet den Snapshot der tatsächlich formatierten Hauptquellen an508 ausgeführte Core-Tests und die bestandene Alltargets-Clippy-Prüfung des Rust-Workspaces. Darin enthalten sind acht vollständige Crawler-Bootstrap-Fixtures. Gerichtete Ordinary-Bindungskontrollen zeigen17 erwartete negative Assertions gegen den früheren V4-Reader und erfolgreiche Ausführung derselben21 Kontrollen gegen V5. Diese Zahlen aus Teilmengen und wiederholten Läufen werden nicht addiert.
+
+Die historische [437-Test-Work-Abnahme](verification/sitemap-durable-work-core.json) bleibt unverändert und dokumentiert die damalige zusätzliche Review-Lücke. Frühere fehlgeschlagene Test-Fixtures und deren eng begrenzte Reparaturen sind im neuen Beleg getrennt festgehalten.
+
+App-/Workspace-Laufzeittests, die neue exakte Quell-CI und der optimierte Release sind eigene offene Gates. Auf dem Benutzerrechner bleibt aktuell der [bereits geprüfte Robots-Release6597c9c](verification/robots-sitemap-source-installed.json) installiert. Read-only Snapshot-Cursor-API, CSV, MCP und die Sitemap-Ansicht werden als nächster Slice umgesetzt. Vollständige rekursive Quellenabdeckung, Recovery-/Fehler-/Budgetmatrix und Hersteller-Parität bleiben `NOT_PROVEN`.

@@ -448,9 +448,13 @@ fn config_from_input(mut value: Value) -> anyhow::Result<CrawlConfig> {
             object.insert(key.into(), Value::Null);
         }
     }
-    let mut config: CrawlConfig = serde_json::from_value(value)?;
-    config.prepare_input_lists()?;
-    Ok(Crawler::new(config)?.effective_config().clone())
+    let config: CrawlConfig = serde_json::from_value(value)?;
+    // Fresh construction captures explicit raw sitemap declarations before merging imports.
+    let crawler = Crawler::new(config)?;
+    crawler
+        .effective_config()
+        .validate_input_provenance_budget()?;
+    Ok(crawler.effective_config().clone())
 }
 async fn create_crawl(
     State(state): State<AppState>,
@@ -826,7 +830,12 @@ async fn resume_crawl(
             .run_state
             .as_ref()
             .map_or(1, |run| run.generation.saturating_add(1));
-        let mut config = guard.config.clone();
+        let mut config = inspection.config.clone().ok_or_else(|| {
+            api_error(
+                StatusCode::CONFLICT,
+                "Saved frontier has no crawl configuration",
+            )
+        })?;
         if let Some(max_pages) = options.max_pages {
             config.max_pages = (max_pages > 0).then_some(max_pages);
         }
@@ -842,7 +851,8 @@ async fn resume_crawl(
         config
             .prepare_input_lists()
             .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))?;
-        Crawler::new(config.clone()).map_err(|error| api_error(StatusCode::BAD_REQUEST, error))?;
+        Crawler::from_saved_config(config.clone())
+            .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))?;
         archive_current_report(&state, id)
             .await
             .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?;
@@ -963,7 +973,7 @@ async fn launch(state: AppState, job: Arc<RwLock<Job>>) {
                 }
             }
         });
-        let result = match Crawler::new(config) {
+        let result = match Crawler::from_saved_config(config) {
             Ok(crawler) => match crawler.with_store(state.data_dir.join(format!("{id}.sqlite"))) {
                 Ok(crawler) => {
                     crawler
@@ -1790,5 +1800,61 @@ mod tests {
         assert_eq!(config.max_depth, None);
         assert!(!config.crawl_links);
         assert!(config.include_subdomains);
+    }
+}
+
+// Append as a sibling cfg(test) module in crates/app/src/server.rs.
+// AUTHORED ONLY; calls pure config DTO normalization, never launch/HTTP.
+#[cfg(test)]
+mod explicit_sitemap_dto_regressions {
+    use super::*;
+
+    #[test]
+    fn create_dto_captures_original_explicit_duplicates_before_imported_sitemaps() {
+        let imported = import_url_list(
+            br#"<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>https://example.test/imported.xml</loc></sitemap></sitemapindex>"#,
+            &ListImportOptions {
+                format: open_seo_spider_core::ListImportFormat::Xml,
+                limits: ListImportLimits::default(),
+            },
+        ).unwrap();
+        let original = vec![
+            "HTTPS://EXAMPLE.TEST/explicit.xml#one".to_owned(),
+            "HTTPS://EXAMPLE.TEST/explicit.xml#one".to_owned(),
+        ];
+        let config = config_from_input(json!({
+            "seed_urls":["https://example.test/"],
+            "sitemap_urls":original,
+            "input_imports":[imported]
+        }))
+        .unwrap();
+        assert_eq!(config.explicit_sitemap_inputs, Some(original));
+        assert!(
+            config
+                .sitemap_urls
+                .contains(&"https://example.test/imported.xml".to_owned())
+        );
+        let repeated = config_from_input(serde_json::to_value(&config).unwrap()).unwrap();
+        assert_eq!(
+            serde_json::to_value(repeated).unwrap(),
+            serde_json::to_value(config).unwrap()
+        );
+    }
+
+    #[test]
+    fn create_import_only_dto_is_known_empty_while_saved_validation_remains_unknown() {
+        let imported = import_url_list(
+            br#"<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>https://example.test/imported.xml</loc></sitemap></sitemapindex>"#,
+            &ListImportOptions {
+                format: open_seo_spider_core::ListImportFormat::Xml,
+                limits: ListImportLimits::default(),
+            },
+        ).unwrap();
+        let config = config_from_input(json!({"input_imports":[imported]})).unwrap();
+        assert_eq!(config.explicit_sitemap_inputs, Some(vec![]));
+        let mut legacy = config;
+        legacy.explicit_sitemap_inputs = None;
+        let preserved = Crawler::from_saved_config(legacy).unwrap();
+        assert_eq!(preserved.effective_config().explicit_sitemap_inputs, None);
     }
 }

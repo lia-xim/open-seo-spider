@@ -5868,6 +5868,15 @@
       "recorded_at": "2026-10-13T04:44:57.371Z",
       "scope": "Actual isolated437 Core tests; unintegrated Work candidate with additional ordinary Root original-binding requirement open.",
       "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "sitemap-ledger-main-core",
+      "artifact": "docs/verification/sitemap-ledger-main-core.json",
+      "artifact_sha256": "ef828c31a693b4f75033bb5fb1922dd10ebd64fd67346f6dbebe1a080d05ff80",
+      "result": "PARTIAL",
+      "recorded_at": "2026-10-13T05:42:55.552Z",
+      "scope": "Actual formatted Main Core source snapshot508PASS and local all-targets workspace Clippy. App/native/API/UI/new source-CI/release/install and full cohort remain separate gates.",
+      "reference_parity": "NOT_PROVEN"
     }
   ],
   "reference_workflows": [
@@ -6753,10 +6762,10 @@
     {
       "id": "batch-b12-sitemap-membership",
       "status": "IN_PROGRESS",
-      "stage": "MAIN_ROBOTS_SOURCE_INSTALLED_DURABLE_CORE_WORK_PASS_BINDING_REVIEW_OPEN",
+      "stage": "MAIN_DURABLE_WRITER_CORE_508_PASS_API_CSV_UI_IN_PROGRESS",
       "priority": 3,
       "title_de": "Nächster Baustein – B12: Sitemaps und Mitgliedschaft",
-      "summary_de": "Parser, Transport und originale Robots-Quellfakten sind installiert. Robots-Commit6597c9c besteht alle vier CI-Jobs, Windows/Linux jeweils565 Standardtests; derselbe optimierte Release besteht16 Sitemap-Fälle, native11/SDK12 und Browser13. Sieben Jobs und19 dauerhafte Dateien bleiben unverändert. Der isolierte Core mit Ledger, Store und originalen Eingaben besteht437 Tests, ist aber noch nicht integriert: Ordinary-Root-Zuordnung muss vor Integration zusätzlich an Originaldaten gebunden werden. Quell-Kohorten, Recovery/Vererbung und API/CSV/UI bleiben offen.",
+      "summary_de": "Der dauerhafte Sitemap-Writer ist im Hauptcode integriert: originale Eingaben/Ordinalzahlen, vollständige Dokument-/Root-/Entry-/Loc-Vorkommen und Ordinary-/Policy-Zulassungen sind atomar gespeichert. Der Snapshot des formatierten Main-Core besteht508 Tests, einschließlich8 vollständiger Crawler-Bootstrap-Fälle; Workspace-Alltargets-Clippy ist grün. Die Ordinary-Root-Bindungslücke wurde mit gerichteten V4-Fehler-/V5-Erfolgskontrollen geschlossen. Installiert bleibt Robots6597c9c. Quellenabdeckung, vollständige Recovery-Matrix, neue Quell-CI/Release/Installation und API/CSV/MCP/UI bleiben offen.",
       "feature_ids": [
         "sitemap.discovery",
         "sitemap.coverage"
@@ -6772,23 +6781,26 @@
         "Originale Robots-Sitemap-Deklarationen mit LF/CRLF/CR, Byte-Spans, Rohwerten, echten EOF-/512KiB-Grenzen und qualifizierten206-/UTF8-/Readfehlern im Core erhalten; alle353 Core-Unit-Tests und Alltargets-Clippy bestehen.",
         "Strikter gespeicherter Transport-Beweisprüfer besteht eine synthetische Positivkontrolle und24 Negativkontrollen sowie tatsächliche Debug-/Release-Companion-Prüfungen. Exakte Robots-CI6597c9c archiviert vollständige Requests, App-Logs und Originalpfad-Validierung mit festen Namen und vollständigen Hashes/Bytes.",
         "Robots-Quellcommit6597c9c: vier exakte CI-Jobs grün, Windows/Linux jeweils565 Standardtests; derselbe optimierte Release besteht lokal16 Sitemap-Fälle/46 geleerte Requests, native11/SDK12 und Browser13 und ist datenbewahrend installiert.",
-        "Isolierter vollständiger Core-Kandidat mit LedgerV4, Store und Original-Input-Erfassung:437 Tests bestehen, darunter18 gerichtete Eingabetests. Kein Main-/Runtime-Nachweis; eine zusätzlich gefundene Ordinary-Root-Bindungslücke bleibt offen."
+        "Historischer V4-Work-Kandidat:437 Tests bestanden, die anschließend gefundene Ordinary-Root-Bindungslücke war damals offen. Neuer Main-Beleg dokumentiert V5-Reparatur und508 bestandene Core-Tests; der historische Beleg bleibt unverändert.",
+        "Ordinary-Root-Rohwert, ursprünglicher Ordinal und normalisierte Originalidentität werden auch ohne Policy-ID an gespeicherte Originaldaten gebunden. Dieselben21 Kontrollen zeigen17 erwartete negative Assertions gegenV4 und alle21 erfolgreich gegenV5;63 V5-Modultests bestehen.",
+        "Dauerhafte typisierte Dokument-/Root-/Entry-/Loc-Vorkommen, originale Config-/Import-Bindung und atomare Ordinary-/Policy-Admission im Hauptcode integriert. Formatierter Main-Core-Snapshot besteht508 Tests, einschließlich8 vollständiger Crawler-Bootstrap-Fälle; Workspace-Alltargets-Clippy besteht.",
+        "Bericht/Checkpoint lesen vollständig validierte Kataloge; bekannte leere Daten und unbekannte Altbestände bleiben getrennt. Ausgewählte Vererbung bindet den exakten Parent-Snapshot. Diese Core-Abnahme beweist noch keine vollständige Quellenabdeckung oder native Recovery-Matrix."
       ],
       "pending_acceptance_de": [
-        "Originale Dokument-/Entry-/Loc-/Root-Vorkommen atomar in Ordinary/Policy speichern; Ordinary-Root-Rohwert/Ordinal/Original-Identität auch ohne Policy-ID verbindlich prüfen und danach Crawler/Store integrieren.",
-        "Quell-Kohorten, Fehler-/Budgetzustände, Checkpoint/Recovery, unbekannte Altbestände und ausgewählt geerbte Mitgliedschaft erklären.",
-        "Read-only API-Cursor, CSV und native Browseransicht für Mitgliedschaft/Abdeckung ergänzen.",
-        "Dauerhafte native Matrix mit Zyklen/Fehlern, vollständigen Admission-Zuordnungen und Recovery sowie neue Ledger-Quell-CI, optimierten Release und Installation prüfen."
+        "Vollständige rekursive Quellen-Kohorten, Fehler-/Budgetzustände und native Checkpoint-/Recovery-Matrix prüfen. Leerer Frontier und fehlende Mitgliedschaft beweisen keine vollständige Abdeckung.",
+        "Read-only Snapshot-Cursor-API, begrenzte CSV-Ausgabe, MCP und native Browseransicht für originale Mitgliedschaft/Herkunft/Zulassung ergänzen.",
+        "App-/Workspace-Laufzeittests sowie neue exakte Ledger-Quell-CI, optimierten Release und datenbewahrende Installation abschließen."
       ],
       "documentation": [
         "docs/parity/sitemap-b12-plan.md",
         "docs/sitemap-parser.md",
         "docs/sitemap-transport.md",
-        "docs/robots-sitemap-source.md"
+        "docs/robots-sitemap-source.md",
+        "docs/sitemap-ledger.md"
       ],
       "gates": {
         "source_review": "PARSER_AND_FETCH_NO_CONCRETE_P1_P2",
-        "implementation": "MAIN_ROBOTS_SOURCE_INSTALLED_DURABLE_WRITER_PENDING",
+        "implementation": "MAIN_DURABLE_WRITER_INTEGRATED",
         "native_acceptance": "PASS_DIRECTED_DEBUG_APP_16_DURABLE_LEDGER_PENDING",
         "work_parser": "PASS_53_PLUS_EXISTING_NORMALIZER2",
         "main_core_parser": "PASS_54",
@@ -6797,7 +6809,7 @@
         "work_mutations": "PASS_4_EXPECTED_RUNTIME_ASSERTION_FAILURES",
         "exact_commit_ci": "PASS_6597C9C_FOUR_JOBS_565_EACH",
         "main_core_fetch_http": "PASS_12",
-        "main_core_all_unit": "PASS_353_ROBOTS_SOURCE_INTEGRATION",
+        "main_core_all_unit": "PASS_ACTUAL_MAIN_CORE_SNAPSHOT_508",
         "main_portable_transport": "PASS_16_FINAL_DRAIN",
         "parser_exact_commit_ci": "PASS_FOUR_JOBS_6171a32",
         "optimized_transport_release": "PASS_SAME_OPTIMIZED_EXE_16_NATIVE_SDK_BROWSER",
@@ -6805,8 +6817,15 @@
         "robots_source_core": "PASS_353_AND_ALLTARGETS_CLIPPY",
         "transport_proof_validator": "PASS_SYNTHETIC_1POSITIVE_24NEGATIVE_AND_ACTUAL_DEBUG_RELEASE_COMPANIONS",
         "new_robots_validator_ci": "PASS_6597C9C_FOUR_JOBS_FULL_RAW_ARCHIVE",
-        "durable_source_ledger": "PENDING_MAIN_INTEGRATION",
-        "durable_work_core": "PASS_437_ORDINARY_ROOT_BINDING_REVIEW_GAP_OPEN"
+        "durable_source_ledger": "MAIN_INTEGRATED_CORE_ACCEPTANCE_PASS_NATIVE_MATRIX_PENDING",
+        "durable_work_core": "HISTORICAL_437_V4_GAP_FIXED_BY_V5",
+        "durable_original_binding": "PASS_V4_17_EXPECTED_FAILURES_V5_ALL_21_CONTROLS",
+        "durable_full_crawler_bootstrap": "PASS_8_INCLUDED_IN_CORE_508",
+        "durable_workspace_clippy": "PASS_ALL_TARGETS",
+        "durable_source_cohort": "NOT_PROVEN",
+        "durable_exact_commit_ci": "PENDING_NEW_SOURCE_COMMIT",
+        "durable_api_csv_ui": "WORK_DRAFT_IN_PROGRESS",
+        "durable_installation": "PENDING_INSTALLED_SOURCE_REMAINS_6597C9C"
       },
       "reference_parity": "NOT_PROVEN",
       "proof_run_ids": [
@@ -6819,7 +6838,8 @@
         "sitemap-transport-installed",
         "robots-sitemap-source-ci",
         "robots-sitemap-source-installed",
-        "sitemap-durable-work-core"
+        "sitemap-durable-work-core",
+        "sitemap-ledger-main-core"
       ],
       "tracking_issue": "https://github.com/lia-xim/open-seo-spider/issues/11"
     }

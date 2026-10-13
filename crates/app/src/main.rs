@@ -466,8 +466,8 @@ async fn main() -> anyhow::Result<()> {
                 &urls,
                 max_attempts,
             )?;
-            let mut crawler =
-                Crawler::new(prepared.config.clone())?.with_selected_recrawl(prepared)?;
+            let mut crawler = Crawler::from_saved_config(prepared.config.clone())?
+                .with_selected_recrawl(prepared)?;
             if let Some(store) = store {
                 // Reserve only a new destination, preserving an unrelated existing store.
                 let reservation = tokio::fs::OpenOptions::new()
@@ -557,7 +557,15 @@ async fn main() -> anyhow::Result<()> {
                 CrawlConfig::default()
             };
             if !config.seed_urls.is_empty() && config.input_imports.is_empty() {
-                config.prepare_input_lists()?;
+                // Retain the existing separate manual-seed import without merging
+                // sitemap imports before Crawler::new captures original declarations.
+                config.input_imports.push(import_url_list(
+                    config.seed_urls.join("\n").as_bytes(),
+                    &ListImportOptions {
+                        format: ListImportFormat::Txt,
+                        limits: ListImportLimits::default(),
+                    },
+                )?);
             }
             if !urls.is_empty() {
                 config.input_imports.push(import_url_list(
@@ -568,6 +576,9 @@ async fn main() -> anyhow::Result<()> {
                     },
                 )?);
                 config.seed_urls.extend(urls);
+            }
+            if let Some(original) = &mut config.explicit_sitemap_inputs {
+                original.extend(sitemap.iter().cloned());
             }
             config.sitemap_urls.extend(sitemap);
             if list || !list_file.is_empty() {
@@ -586,7 +597,7 @@ async fn main() -> anyhow::Result<()> {
                     .input_imports
                     .push(import_url_list(&bytes, &options)?);
             }
-            config.prepare_input_lists()?;
+            // Crawler::new performs the first sitemap-import merge after capture.
             let mut crawler = Crawler::new(config)?;
             if let Some(store) = store {
                 crawler = crawler.with_store(store)?;

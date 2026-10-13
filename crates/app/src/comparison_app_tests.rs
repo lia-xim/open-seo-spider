@@ -134,6 +134,7 @@ fn bundle_report() -> CrawlReport {
         operation: None,
         policy_ledger: None,
         resource_ledger: None,
+        sitemap_catalog: None,
     }
 }
 fn bundle_comparison(before: &CrawlReport, after: &CrawlReport) -> SavedComparisonResult {
@@ -645,6 +646,7 @@ async fn cli_json_csv_roundtrip_retains_unknown_states_and_declared_file_origin(
             operation: None,
             policy_ledger: None,
             resource_ledger: None,
+            sitemap_catalog: None,
         }
     };
     tokio::fs::write(&before, serde_json::to_vec(&make("Old")).unwrap())
