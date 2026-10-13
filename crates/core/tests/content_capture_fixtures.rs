@@ -930,7 +930,7 @@ async fn source_page_frontier_and_capture_rollback_together_after_sqlite_commit_
 }
 
 #[tokio::test]
-#[ignore = "Requires real loopback Chrome worker on port 8790"]
+#[ignore = "Requires the local browser worker at OPEN_SEO_SPIDER_RENDERER or 127.0.0.1:8790"]
 async fn live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness() {
     let fixture=Fixture::new(|_|Response::html("<html lang='de'><body><main>Nativer Text</main><script>document.documentElement.lang='en';document.querySelector('main').textContent='Rendered own text';</script></body></html>")).await;
     let mut cfg = config(&fixture, &["/selected", "/retained"]);
@@ -940,6 +940,8 @@ async fn live_browser_worker_captures_actual_raw_and_rendered_sources_and_select
     ];
     cfg.request_timeout_secs = 20;
     cfg.renderer = Some(RendererConfig {
+        endpoint: std::env::var("OPEN_SEO_SPIDER_RENDERER")
+            .unwrap_or_else(|_| "http://127.0.0.1:8790/render".into()),
         wait_ms: 20,
         ..Default::default()
     });

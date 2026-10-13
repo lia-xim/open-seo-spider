@@ -694,12 +694,14 @@ async fn tampered_saved_plan_and_pending_provenance_are_rejected_before_http_or_
 }
 
 #[tokio::test]
-#[ignore = "Requires the real loopback Chrome worker on port 8790"]
+#[ignore = "Requires the local browser worker at OPEN_SEO_SPIDER_RENDERER or 127.0.0.1:8790"]
 async fn live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion() {
     let fixture=Fixture::new(|_,_|Response::html("<title>Fresh native</title><h1>Fresh</h1><a href='/outward'>Outward</a><script>document.title='Fresh rendered';</script>")).await;
     let mut cfg = config(&fixture);
     cfg.request_timeout_secs = 20;
     cfg.renderer = Some(RendererConfig {
+        endpoint: std::env::var("OPEN_SEO_SPIDER_RENDERER")
+            .unwrap_or_else(|_| "http://127.0.0.1:8790/render".into()),
         screenshot: true,
         collect_cookies: true,
         ..Default::default()

@@ -453,9 +453,15 @@ async fn sitemap_resource_limit_does_not_claim_discovery_complete() {
 }
 
 #[tokio::test]
-#[ignore = "requires the local real Chrome renderer worker at 127.0.0.1:8790"]
+#[ignore = "Requires the local browser worker at OPEN_SEO_SPIDER_RENDERER or 127.0.0.1:8790"]
 async fn live_browser_worker_pause_drains_render_and_retains_rendered_discoveries() {
-    let health = reqwest::get("http://127.0.0.1:8790/health").await.unwrap();
+    let renderer_endpoint = std::env::var("OPEN_SEO_SPIDER_RENDERER")
+        .unwrap_or_else(|_| "http://127.0.0.1:8790/render".into());
+    let health_endpoint = url::Url::parse(&renderer_endpoint)
+        .unwrap()
+        .join("/health")
+        .unwrap();
+    let health = reqwest::get(health_endpoint).await.unwrap();
     assert!(
         health.status().is_success(),
         "real renderer worker must be healthy"
@@ -471,6 +477,7 @@ async fn live_browser_worker_pause_drains_render_and_retains_rendered_discoverie
     options.concurrency = 1;
     options.request_timeout_secs = 10;
     options.renderer = Some(RendererConfig {
+        endpoint: renderer_endpoint,
         wait_ms: 1000,
         ..Default::default()
     });
