@@ -29,6 +29,7 @@
     policyaliases: ['NATIVE URL-POLICY', 'URL-Transformationen', 'Tatsächlich gespeicherte Transformationen von beobachteten Zielen zu Abrufkandidaten. Kein HTTP-Redirect und kein Erfolgsnachweis für das Originalziel.'],
     content: ['GESPEICHERTE INHALTE', 'Inhaltstexte & Analyse', 'Explizite Textquellen und ausgewählte Kohorten. Die Analyse verwendet gespeicherte Texte und startet keine Website-Anfragen.'],
     'resource-discovery': ['NATIVE RESSOURCEN', 'Ressourcenermittlung', 'Quellvorkommen und Abrufentscheidungen bleiben getrennt von Zielantworten und Browserauswahl.'],
+    'sitemap-membership': ['SITEMAP-QUELLEN', 'Sitemaps & URL-Mitgliedschaft', 'Originale Deklarationen, Quellen und XML-URLs aus dem gespeicherten Crawl. Mitgliedschaft und Abrufzulassung bleiben getrennt.'],
     inputs: ['EINGABEHERKUNFT', 'Eingabezeilen', 'Gespeicherte, deklarierte Importherkunft mit ursprünglicher Reihenfolge, Duplikaten und ungültigen Zeilen. Der vollständige CSV-Export ergänzt tatsächliche Abrufbefunde.'],
     titles: ['ONPAGE ANALYSE', 'Seitentitel', 'Title-Tags, Zeichenlänge und mehrfach verwendete Titel. Längen sind Hinweise.'],
     meta: ['ONPAGE ANALYSE', 'Meta Descriptions', 'Descriptions, Zeichenlänge und Duplikate im abgerufenen HTML.'],
@@ -112,6 +113,7 @@
   function invalidatePoll() {
     invalidateContentRequests('Der Crawl-Stand wurde geändert.', true);
     resetResourceLedger();
+    resetSitemapMembership();
     state.generation += 1;
     state.policyToken?.controller.abort();
     state.policyToken = null;
@@ -266,7 +268,7 @@
         } catch (error) { fragmentsError = 'Fragment-Inventar nicht verfügbar: ' + error.message; }
         if (!current()) return;
       }
-      if ((nextCrawl.generation ?? null) !== (state.crawl.generation ?? null)) resetResourceLedger();
+      if ((nextCrawl.generation ?? null) !== (state.crawl.generation ?? null)) { resetResourceLedger(); resetSitemapMembership(); }
       state.crawl = nextCrawl;
       const pendingSelected = pendingRecrawlURLs(nextCrawl);
       state.pages = (from ? [...state.pages, ...pages] : pages).filter(page => !pendingSelected.has(page.url));
@@ -281,6 +283,7 @@
       if (policySection() && !state.policyToken) loadPolicyPage(state.policyCursor);
       if (contentSection() && !active() && !state.content.inventory && !state.content.inventoryToken) loadContentInventory();
       if (resourceSection() && !state.resources.token) loadResourcePage();
+      if (sitemapSection() && !sitemapMembership.result && !sitemapMembership.token) loadSitemapPage();
       if (state.selectedResponse || state.selectedInput) renderInspector();
       else if (state.selected) { state.selected = state.pages.find(page => page.url === state.selected.url) || state.selected; renderInspector(); }
       if (previousStatus !== state.crawl.status && terminal) {
@@ -510,7 +513,7 @@
     $('recrawl-clear').disabled = !state.recrawlURLs.size || busy;
     $('recrawl-selection-hint').textContent = active() ? 'Die Auswahl ist nach dem Anhalten oder Abschluss verfügbar.' : state.crawl?.recrawl_available === false ? 'Für diesen Bericht ist keine Wiederprüfung verfügbar.' : 'Auswahl gilt nur für vorhandene Anfrage-URLs in diesem Bericht; Filter und Pagination ändern sie nicht.';
     if (contentSection()) $('export-csv').disabled = active() || Boolean(state.content.inventoryToken || state.content.error) || !contentVisibleRows().length;
-    if (state.section==='resource-discovery') $('export-csv').disabled=true;
+    if (state.section==='resource-discovery' || sitemapSection()) $('export-csv').disabled=true;
     $('inspector-recrawl-selection').hidden = !state.selected || !state.pageMap.has(state.selected.url) || Boolean(state.selectedResponse || state.selectedInput);
     $('inspector-recrawl-checkbox').checked = Boolean(state.selected && state.recrawlURLs.has(state.selected.url));
     $('inspector-recrawl-checkbox').disabled = Boolean(busy || active() || state.crawl?.recrawl_available === false);
@@ -880,6 +883,7 @@
   function selectSection(section) {
     if (!sections[section]) return;
     if (resourceSection() && section !== 'resource-discovery') invalidateResourceRequest();
+    if (sitemapSection() && section !== 'sitemap-membership') invalidateSitemapRequest();
     state.section = section;
     state.page = 0;
     state.filter = 'all';
@@ -896,6 +900,7 @@
     if (policySection() && state.crawl && !state.policy && !state.policyToken) loadPolicyPage();
     if (contentSection() && state.crawl && !active() && !state.content.inventory && !state.content.inventoryToken) loadContentInventory();
     if (resourceSection() && state.crawl && !state.resources.result && !state.resources.token) loadResourcePage();
+    if (sitemapSection() && state.crawl && !sitemapMembership.result && !sitemapMembership.token) loadSitemapPage();
   }
 
   function renderSection() {
@@ -906,12 +911,13 @@
     $('overview-view').hidden = state.section !== 'overview';
     $('graph-view').hidden = state.section !== 'graph';
     $('policy-view').hidden = !policySection();
-    $('table-view').hidden = ['overview', 'graph', 'content','resource-discovery'].includes(state.section) || policySection();
+    $('table-view').hidden = ['overview', 'graph', 'content','resource-discovery','sitemap-membership'].includes(state.section) || policySection();
     $('content-view').hidden = state.section !== 'content';
     $('resource-discovery-view').hidden = state.section !== 'resource-discovery';
+    $('sitemap-membership-view').hidden = !sitemapSection();
     $('export-csv').disabled = policySection() ? !policyVisibleRows().length || Boolean(state.policyToken || state.policyError) : (state.section === 'inputs' ? !getRows().length : !state.pages.length && !state.issues.length) || state.section === 'responses' && state.responses == null || state.section === 'fragments' && (!state.fragments || !state.fragments.enabled);
     $('export-csv').title = policySection() ? 'Nur gefilterte Vorkommen der aktuell geladenen Ledger-Seite exportieren' : 'Alle aktuell gefilterten Ergebnisse dieses Bereichs exportieren';
-    if (state.section==='resource-discovery') $('export-csv').disabled=true;
+    if (state.section==='resource-discovery' || sitemapSection()) $('export-csv').disabled=true;
     $('export-resources').hidden = !['inputs', 'pdf', 'imagefiles', 'responses', 'fragments', 'linkdom', ...domSections].includes(state.section);
     $('export-resources').disabled = !state.crawl || Boolean(actionBusy() || active());
     $('export-resources').textContent = state.section === 'inputs' ? '↓ Alle Eingabezeilen CSV' : domSections.includes(state.section) ? '↓ Alle DOM-Beobachtungen CSV' : state.section === 'pdf' ? '↓ PDF-Details CSV' : state.section === 'responses' ? '↓ Alle Antworten CSV' : state.section === 'fragments' ? '↓ Alle Fragmentziele CSV' : state.section === 'linkdom' ? '↓ Alle Linkvorkommen CSV' : '↓ Bilddateien CSV';
@@ -920,6 +926,7 @@
     else if (policySection()) renderPolicyLedger();
     else if (state.section === 'content') renderContent();
     else if (state.section === 'resource-discovery') renderResourceLedger();
+    else if (sitemapSection()) renderSitemapMembership();
     else renderTable();
   }
 
@@ -1185,7 +1192,7 @@
   function exportCSV() {
     if (policySection()) { exportPolicyPage(); return; }
     if (contentSection()) { exportContentRows(); return; }
-    if (state.section==='resource-discovery') return;
+    if (state.section==='resource-discovery' || sitemapSection()) return;
     const original = state.section;
     if (['overview', 'graph'].includes(original)) state.section = 'internal';
     const cols = columns();
@@ -1466,6 +1473,186 @@
     const ceilings={max_source_candidates:1000000,max_occurrence_utf8_bytes:65536,max_source_batch_bytes:134217728,max_css_utf8_bytes:67108864,max_css_tokens:8000000,max_css_nesting:128,max_diagnostics:10000,max_ledger_bytes:Number.MAX_SAFE_INTEGER};
     for(const [key,value] of Object.entries(limits))if(!(key==='max_ledger_bytes' && value===null) && (!Number.isSafeInteger(value) || value<1 || value>ceilings[key]))throw new Error(`Ressourcengrenze ${key}: positive ganze Zahl bis ${ceilings[key]}${key==='max_ledger_bytes'?' oder null':''} erforderlich.`);
     return {resource_discovery:config,...(Object.keys(limits).length?{resource_discovery_limits:limits}:{})};
+  }
+
+  // B12 draft: tagged stored facts. No target document status is inferred here.
+  const sitemapMembership = { result:null, token:null, revision:0, cursor:null, back:[], error:'', stale:false, selected:null, sort:0, direction:1 };
+  const sitemapEngine = 'open-seo-spider/sitemap-membership-ledger-v1';
+  const sitemapSection = () => state.section === 'sitemap-membership';
+  const sitemapKind = () => $('sitemap-membership-kind').value;
+  const sitemapLimit = () => Number($('sitemap-membership-limit').value);
+  const sitemapValue = value => value == null ? 'Nicht erfasst' : value === '' ? '[leer]' : typeof value === 'boolean' ? value ? 'Ja' : 'Nein' : String(value);
+  const sitemapDecisionLabel = value => ({ unbound:'Noch nicht zugeordnet', invalid_location:'Ungültige URL', missing_location:'URL fehlt', incomplete_source:'Quelle unvollständig', outside_scope:'Außerhalb Crawl-Bereich', filter_denied:'Filter verweigert', source_check_only:'Quelle nur geprüft', policy_denied:'Policy verweigert', coalesced:'Zusammengeführt', scheduled:'Eingeplant' }[value] || value || 'Nicht erfasst');
+  const sitemapKindLabel = value => ({ root:'Deklaration', document:'Quelle', entry:'XML-Eintrag', location:'XML-URL' }[value] || value);
+  const sitemapRootLabel = value => ({ explicit_config:'Explizite Eingabe', imported_sitemap_row:'Importzeile', robots_directive:'robots.txt' }[value] || value || 'Nicht erfasst');
+  const sitemapLastmod = fields => fields.length ? fields.map(value=>value.decoded_value===''?'[leere Deklaration]':value.decoded_value).join(' | ') : 'Keine lastmod-Deklaration';
+  function invalidateSitemapRequest() {
+    sitemapMembership.revision += 1;
+    sitemapMembership.token?.controller.abort();
+    sitemapMembership.token = null;
+  }
+  function resetSitemapMembership() {
+    invalidateSitemapRequest();
+    Object.assign(sitemapMembership,{result:null,cursor:null,back:[],error:'',stale:false,selected:null,sort:0,direction:1});
+    if ($('sitemap-membership-search')) { $('sitemap-membership-search').value=''; $('sitemap-membership-filter').value='all'; }
+    if (sitemapSection()) renderSitemapMembership();
+  }
+  function sitemapDocumentComplete(row) {
+    const transport=row.transport;
+    if(row.failure_code!=null || row.retained_rows_complete!==true || !transport || transport.request_started!==true || transport.body_complete!==true || transport.final_status!==200 || transport.blocked_by_robots!==false || transport.failure_code!=null || !transport.requested_url || !transport.final_url)return false;
+    let requested=row.task_url;
+    if(row.kind==='robots_directives'){try{requested=new URL(row.task_url).origin+'/robots.txt';}catch(_){return false;}}
+    if(transport.requested_url!==requested)return false;
+    return row.kind==='robots_directives' ? row.declaration_scan_complete===true && row.declaration_utf8_lossy===false : row.parser?.complete===true && row.parser.failure==null && row.entity_decode!=null;
+  }
+  function sitemapRowFacts(tagged) {
+    const row=tagged.row;
+    if(tagged.kind==='root')return {kind:sitemapRootLabel(row.kind),original:row.raw_value,membership:row.admission.membership_url,admitted:row.admission.admitted_fetch_url,decision:row.admission.decision,ordinal:row.source_ordinal,source:row.source_observation_id,diagnostic:null};
+    if(tagged.kind==='location')return {kind:row.observed.role==='child_sitemap'?'XML-Kind-Sitemap':'XML-Seiten-URL',original:row.observed.decoded_value,membership:row.admission.membership_url,admitted:row.admission.admitted_fetch_url,decision:row.admission.decision,ordinal:row.observed.ordinal,source:row.observation_id,diagnostic:row.observed.validation_error};
+    if(tagged.kind==='document')return {kind:row.kind==='robots_directives'?'robots.txt-Quelle':'XML-Sitemap-Quelle',original:row.task_url,membership:null,admitted:null,decision:null,ordinal:null,source:row.observation_id,diagnostic:row.failure_code || row.transport?.failure_code || row.parser?.failure?.code || null,complete:sitemapDocumentComplete(row)};
+    return {kind:'XML-Eintrag',original:sitemapLastmod(row.observed.lastmod),membership:null,admitted:null,decision:null,ordinal:row.observed.ordinal,source:row.observation_id,diagnostic:row.observed.diagnostics.join(' | ') || null,complete:row.observed.complete};
+  }
+  const sitemapColumns = [
+    ['Position',tagged=>tagged.row.sequence],['Vorkommen',tagged=>sitemapRowFacts(tagged).kind],['Originalwert',tagged=>sitemapRowFacts(tagged).original],['Ursprüngliche Mitgliedschaft',tagged=>sitemapRowFacts(tagged).membership],['Zugelassene Anfrage-URL',tagged=>sitemapRowFacts(tagged).admitted],['Zulassung / Quelle',tagged=>{const facts=sitemapRowFacts(tagged);return facts.decision?sitemapDecisionLabel(facts.decision):facts.complete===true?'Quelleinheit vollständig':facts.complete===false?'Quelleinheit unvollständig':'Nicht erfasst';}],['Quellordinal',tagged=>sitemapRowFacts(tagged).ordinal],['Quellenhinweis',tagged=>sitemapRowFacts(tagged).diagnostic]
+  ];
+  function sitemapUsable() { return Boolean(sitemapMembership.result?.catalog_available && !sitemapMembership.token && !sitemapMembership.error); }
+  function sitemapVisibleRows() {
+    if(!sitemapUsable())return [];
+    const search=$('sitemap-membership-search').value.toLocaleLowerCase(), filter=$('sitemap-membership-filter').value;
+    return sitemapMembership.result.rows.filter(tagged=>{
+      const facts=sitemapRowFacts(tagged);
+      if(filter==='alias' && !(facts.membership && facts.admitted && facts.membership!==facts.admitted))return false;
+      if(filter==='denied' && !(facts.decision && !['scheduled','coalesced'].includes(facts.decision)))return false;
+      if(filter==='invalid' && !['invalid_location','missing_location'].includes(facts.decision))return false;
+      if(filter==='incomplete' && !(facts.complete===false || facts.decision==='incomplete_source'))return false;
+      return !search || [facts.kind,facts.original,facts.membership,facts.admitted,facts.diagnostic].some(value=>String(value??'').toLocaleLowerCase().includes(search));
+    }).sort((left,right)=>{const value=sitemapColumns[sitemapMembership.sort][1],a=value(left),b=value(right);if(a==null && b==null)return 0;if(a==null)return 1;if(b==null)return -1;return (typeof a==='number' && typeof b==='number'?a-b:String(a).localeCompare(String(b),'de',{numeric:true}))*sitemapMembership.direction;});
+  }
+  function renderSitemapMembership() {
+    if(!sitemapSection())return;
+    const current=sitemapMembership, result=current.result, summary=result?.summary, busy=Boolean(current.token), usable=sitemapUsable(), rows=sitemapVisibleRows();
+    $('sitemap-membership-error').hidden=!current.error; $('sitemap-membership-error').textContent=current.error;
+    $('sitemap-membership-summary').textContent=!state.crawl?'Einen gespeicherten Crawl auswählen.':busy?'Gespeicherte Sitemap-Seite wird geladen …':current.error?'Sitemap-Stand nicht verfügbar. Dies ist kein vollständiges leeres Ergebnis.':!result?'Noch kein gespeicherter Sitemap-Stand geladen.':!result.catalog_available?'Keine verfügbare ursprüngliche Sitemap-Aufzeichnung. Historische oder importierte Berichte werden nicht nachträglich als leer rekonstruiert.':`${number(summary.root_rows)} Deklarationen · ${number(summary.document_rows)} Quellen · ${number(summary.entry_rows)} XML-Einträge · ${number(summary.location_rows)} XML-URL-Vorkommen · ${number(summary.incomplete_documents)} unvollständige Quellen`;
+    $('sitemap-membership-scope').textContent=result?.catalog_available ? ['Gespeicherte Vorkommen verfügbar. Vollständige rekursive Quellenabdeckung nicht bestätigt.',summary.legacy_history_unknown?'Frühere Quellenhistorie unbekannt.':'',result.inherited?'Geerbter Stand des Elternlaufs; Sitemap-Ermittlung wurde in diesem Lauf nicht neu ausgeführt.':'',summary.incomplete_documents?`${number(summary.incomplete_documents)} Quelleinheiten sind unvollständig; ihre URLs beweisen keine vollständige Mitgliedschaft.`:'', 'Nicht gelistete URLs bleiben unbekannt. Ziel-Antwortstatus wurde hier nicht verknüpft. Eine vollständige Quelleinheit bestätigt keine vollständige Website-Abdeckung.'].filter(Boolean).join(' '):'Diese Ansicht liest gespeicherte Beobachtungen und startet keine Website-Anfrage.';
+    const table=$('sitemap-membership-table');
+    table.querySelector('thead').innerHTML=`<tr>${sitemapColumns.map(([label],index)=>`<th scope="col" aria-sort="${current.sort===index?current.direction===1?'ascending':'descending':'none'}"><button type="button" data-sitemap-sort="${index}">${escape(label)} ${current.sort===index?current.direction===1?'↑':'↓':'↕'}</button></th>`).join('')}</tr>`;
+    const empty=busy?'Sitemap-Seite wird geladen …':current.error?'Gespeicherte Beobachtungen konnten nicht geladen werden.':!state.crawl?'Kein Crawl ausgewählt.':!result?.catalog_available?'Ursprüngliche Quellen nicht verfügbar; keine Aussage über leere Sitemaps.':!result.rows.length?'Dieser gespeicherte Stand enthält hier keine Vorkommen.':!rows.length?'Keine passenden Vorkommen auf dieser geladenen Seite. Weitere gespeicherte Seiten können andere Befunde enthalten.':'';
+    table.querySelector('tbody').innerHTML=rows.length?rows.map((tagged,index)=>`<tr data-sitemap-row="${index}" tabindex="0" aria-label="Details zu ${escape(sitemapRowFacts(tagged).kind)}, Position ${tagged.row.sequence}">${sitemapColumns.map(([,value],column)=>`<td${column===2?' class="sitemap-raw"':''}>${escape(sitemapValue(value(tagged)))}</td>`).join('')}</tr>`).join(''):`<tr><td class="empty-cell" colspan="${sitemapColumns.length}">${escape(empty)}</td></tr>`;
+    table.querySelectorAll('[data-sitemap-sort]').forEach(button=>button.addEventListener('click',()=>{const column=Number(button.dataset.sitemapSort);current.direction=current.sort===column?-current.direction:1;current.sort=column;renderSitemapMembership();}));
+    table.querySelectorAll('[data-sitemap-row]').forEach(element=>{const open=()=>{current.selected=rows[Number(element.dataset.sitemapRow)];renderSitemapInspector();$('sitemap-membership-inspector').scrollIntoView({block:'nearest'});};element.addEventListener('click',open);element.addEventListener('keydown',event=>{if(['Enter',' '].includes(event.key)){event.preventDefault();open();}});});
+    $('sitemap-membership-prev').disabled=busy || current.stale || !current.back.length;
+    $('sitemap-membership-next').disabled=!usable || !result.has_more;
+    $('sitemap-membership-refresh').disabled=busy || !state.crawl;
+    $('sitemap-membership-limit').disabled=!state.crawl;
+    $('sitemap-membership-export-page').disabled=!usable || !rows.length;
+    $('sitemap-membership-export-csv').disabled=!usable;
+    $('sitemap-membership-page-label').textContent=`${number(rows.length)} gefilterte von ${result?.rows==null?'unbekannt':number(result.rows.length)} geladenen Zeilen · maximal ${sitemapLimit()}${current.stale?' · Stand geändert, aktuellen Stand neu laden':''}`;
+    $('sitemap-membership-checkpoint').textContent=JSON.stringify({catalog_available:result?.catalog_available??null,snapshot:result?.snapshot??null,summary:summary??null,inherited:result?.inherited??null,availability_reason:result?.availability_reason??null,coverage:result?.coverage??null},null,2);
+    renderSitemapInspector();
+  }
+  function renderSitemapInspector() {
+    const tagged=sitemapMembership.selected, inspector=$('sitemap-membership-inspector');
+    inspector.hidden=!tagged || !sitemapUsable(); if(inspector.hidden)return;
+    const row=tagged.row, facts=sitemapRowFacts(tagged);
+    $('sitemap-membership-inspector-heading').textContent=`${facts.kind} · Position ${row.sequence}`;
+    $('sitemap-membership-inspector-basis').textContent=tagged.kind==='root'?'Originale Deklaration und ihre eigene Abrufzulassung. Explizite Eingaben und robots.txt-Zeilen zählen ab 0.':tagged.kind==='location'?'XML-Original und dekodierter Wert bleiben getrennt. XML-Vorkommen zählen ab 1. Eine zugelassene Alias-URL ersetzt die ursprüngliche Mitgliedschaft nicht.':tagged.kind==='entry'?'Originale XML-Felder und lastmod-Deklarationen. Aus dem Text wird kein gültiges Datum und keine Aktualität abgeleitet.':'Gespeicherte Quellen- und Transportfakten. Fehlende Werte bleiben nicht erfasst; die eigene Quelleinheit bestimmt keine vollständige rekursive Abdeckung.';
+    const fields=[['Originalwert',facts.original],['Ursprüngliche Mitgliedschaft',facts.membership],['Zugelassene Anfrage-URL',facts.admitted],['Zulassungsgrund',facts.decision?sitemapDecisionLabel(facts.decision):null],['Quellordinal',facts.ordinal],['Quellhinweis',facts.diagnostic]];
+    if(tagged.kind==='root')fields.push(['Originalzeile',row.raw_line],['Robots-Zeilen vollständig',row.robots_evidence?.line_complete],['Ursprüngliche Quellzeile',row.robots_evidence?.line_ordinal]);
+    if(tagged.kind==='location')fields.push(['Originales XML-Element',row.observed.raw_element_xml],['Originaler XML-Inhalt',row.observed.raw_inner_xml],['XML-Eintragsordinal',row.observed.entry_ordinal],['Loc-Ordinal',row.observed.loc_ordinal],['Rolle',row.observed.role]);
+    if(tagged.kind==='document')fields.push(['Anfrage begonnen',row.transport?.request_started],['Tatsächliche Anfrage-URL',row.transport?.requested_url],['Beobachtete finale URL',row.transport?.final_url],['Erster HTTP-Status',row.transport?.initial_status],['Finaler HTTP-Status',row.transport?.final_status],['Antwort vollständig',row.transport?.body_complete],['Parser vollständig',row.parser?.complete],['Quelleinheit vollständig',facts.complete]);
+    if(tagged.kind==='entry')fields.push(['XML-Eintrag vollständig',row.observed.complete],['lastmod-Deklarationen',sitemapLastmod(row.observed.lastmod)],['XML-Diagnosen',row.observed.diagnostics.join(' | ')]);
+    $('sitemap-membership-inspector-fields').innerHTML=fields.map(([label,value])=>`<dt>${escape(label)}</dt><dd>${escape(sitemapValue(value))}</dd>`).join('');
+    $('sitemap-membership-inspector-data').textContent=JSON.stringify(tagged,null,2);
+  }
+  function exportSitemapLoadedPage() {
+    if(!sitemapUsable())return;
+    const rows=sitemapVisibleRows();if(!rows.length)return;
+    const result=sitemapMembership.result, columns=[...sitemapColumns,['Exportumfang',()=> 'filtered_loaded_page_only'],['Quellenabdeckung vollständig',()=>result.summary.declared_source_cohort_complete],['Frühere Historie unbekannt',()=>result.summary.legacy_history_unknown]];
+    const cell=input=>{let value=String(input??'');if(typeof input!=='number' && typeof input!=='boolean' && /^[\s\uFEFF]*[=+@-]/u.test(value))value=`'${value}`;return `"${value.replace(/"/g,'""')}"`;};
+    const data=[columns.map(([label])=>cell(label)).join(','),...rows.map(row=>columns.map(([,value])=>cell(value(row))).join(','))].join('\r\n');
+    downloadBlob(new Blob(['\uFEFF',data],{type:'text/csv;charset=utf-8'}),`open-seo-spider-${state.crawl.id}-sitemaps-loaded-page.csv`);
+    message(`${number(rows.length)} gefilterte Vorkommen der geladenen Sitemap-Seite exportiert.`);
+  }
+  function validateSitemapEnvelope(result,token,expectedSnapshotToken) {
+    const object=value=>Boolean(value && typeof value==='object' && !Array.isArray(value)),hash=value=>typeof value==='string' && /^[a-f0-9]{64}$/.test(value),integer=value=>Number.isSafeInteger(value) && value>=0,text=value=>typeof value==='string',nullableText=value=>value===null || text(value),opaque=value=>text(value) && value.length>0 && value.length<=4096 && /^[A-Za-z0-9_-]+$/.test(value);
+    const reject=message=>{throw new Error(message);};
+    if(!object(result) || result.schema_version!==1 || result.job_id!==token.id || typeof result.catalog_available!=='boolean' || typeof result.has_more!=='boolean' || result.website_requests!==0 || result.snapshot_scope!=='validated_sqlite_read_snapshot' || !object(result.coverage) || result.coverage.declared_source_cohort_complete!==false || result.coverage.negative_membership!=='unknown' || result.coverage.fetch_status_join!=='not_performed' || result.coverage.scope!=='retained_original_declarations_and_memberships')reject('Nicht unterstützter Sitemap-Snapshot oder unbestätigte Abdeckung.');
+    if(!object(result.filter) || result.filter.kind!==token.kind || result.filter.source_observation_id!==null || result.filter.membership_url!==null)reject('Sitemap-Seite passt nicht zur angeforderten Auswahl.');
+    if(!result.catalog_available){
+      if(!['sitemap_catalog_unavailable','sqlite_history_unavailable'].includes(result.availability_reason) || result.rows!==null || result.summary!==null || result.snapshot!==null || result.snapshot_token!==null || result.inherited!==null || result.next_cursor!==null || result.has_more)reject('Nicht verfügbare Quellen dürfen keinen vollständigen leeren Stand behaupten.');
+      return;
+    }
+    const summary=result.summary,snapshot=result.snapshot;
+    if(result.availability_reason!=='saved_validated_sqlite_catalog' || !object(summary) || summary.engine!==sitemapEngine || summary.rows_available!==true || summary.declared_source_cohort_complete!==false || typeof summary.legacy_history_unknown!=='boolean' || ['revision','last_sequence','root_rows','document_rows','entry_rows','location_rows','incomplete_documents','catalog_json_bytes'].some(key=>!integer(summary[key])) || !hash(summary.config_sha256) || !hash(summary.rolling_sha256) || summary.hash_profile!=='sha256-tagged-canonical-rust-serde-rows-v1')reject('Sitemap-Stand hat keine unterstützte gespeicherte Zusammenfassung.');
+    if(!object(snapshot) || snapshot.job_id!==token.id || !integer(snapshot.crawl_generation) || snapshot.crawl_generation<1 || token.serverGeneration!==null && snapshot.crawl_generation!==token.serverGeneration || !hash(snapshot.crawl_config_sha256) || !hash(snapshot.catalog_config_sha256) || !hash(snapshot.catalog_rolling_sha256) || !hash(snapshot.catalog_state_sha256) || snapshot.catalog_config_sha256!==summary.config_sha256 || snapshot.catalog_revision!==summary.revision || snapshot.catalog_rolling_sha256!==summary.rolling_sha256 || !opaque(result.snapshot_token) || expectedSnapshotToken!==null && result.snapshot_token!==expectedSnapshotToken)reject('Sitemap-Seite gehört nicht zum aktuellen gebundenen Stand.');
+    if(result.inherited!==null && (!object(result.inherited) || !hash(result.inherited.parent_snapshot_sha256) || !hash(result.inherited.parent_catalog_sha256) || result.inherited.current_discovery_executed!==false))reject('Geerbte Herkunft ist nicht unterstützt.');
+    if(JSON.stringify(snapshot.inherited_basis)!==JSON.stringify(result.inherited))reject('Geerbte Herkunft passt nicht zum Snapshot.');
+    if(!Array.isArray(result.rows) || result.rows.length>token.limit || result.has_more && (!result.rows.length || !opaque(result.next_cursor) || result.next_cursor===token.cursor) || !result.has_more && result.next_cursor!==null)reject('Ungültige begrenzte Sitemap-Seite oder Cursor.');
+    let previous=0;
+    for(const tagged of result.rows){
+      if(!object(tagged) || !['root','document','entry','location'].includes(tagged.kind) || token.kind!=='all' && tagged.kind!==token.kind || !object(tagged.row) || !integer(tagged.row.sequence) || tagged.row.sequence<=previous || tagged.row.sequence>summary.last_sequence)reject('Sitemap-Vorkommen ohne geordnete gespeicherte Identität.');
+      previous=tagged.row.sequence;const row=tagged.row;
+      if(tagged.kind==='root' || tagged.kind==='location'){
+        const binding=row.admission;
+        if(!object(binding) || !['unbound','invalid_location','missing_location','incomplete_source','outside_scope','filter_denied','source_check_only','policy_denied','coalesced','scheduled'].includes(binding.decision) || ['membership_url','admitted_fetch_url','coalesced_policy_occurrence_id','policy_occurrence_id','policy_source_revision'].some(key=>!nullableText(binding[key])))reject('Sitemap-Zulassungsbindung ist beschädigt.');
+        if(tagged.kind==='root' && (!['explicit_config','imported_sitemap_row','robots_directive'].includes(row.kind) || !text(row.raw_value) || !nullableText(row.raw_line) || !integer(row.source_ordinal)))reject('Originale Sitemap-Deklaration ist beschädigt.');
+        if(tagged.kind==='location' && (!object(row.observed) || !['page_location','child_sitemap'].includes(row.observed.role) || !integer(row.observed.ordinal) || row.observed.ordinal<1 || !integer(row.observed.entry_ordinal) || row.observed.entry_ordinal<1 || row.observed.loc_ordinal!==null && (!integer(row.observed.loc_ordinal) || row.observed.loc_ordinal<1) || ['decoded_value','validation_error','raw_element_xml','raw_inner_xml'].some(key=>!nullableText(row.observed[key]))))reject('Originales XML-URL-Vorkommen ist beschädigt.');
+      }
+      if(tagged.kind==='document' && (!['robots_directives','sitemap_xml'].includes(row.kind) || !text(row.task_url) || typeof row.retained_rows_complete!=='boolean' || typeof row.declaration_scan_complete!=='boolean' || !nullableText(row.failure_code)))reject('Sitemap-Quelleinheit ist beschädigt.');
+      if(tagged.kind==='entry' && (!object(row.observed) || !integer(row.observed.ordinal) || row.observed.ordinal<1 || typeof row.observed.complete!=='boolean' || !Array.isArray(row.observed.lastmod) || row.observed.lastmod.some(value=>!object(value) || !text(value.decoded_value)) || !Array.isArray(row.observed.diagnostics) || row.observed.diagnostics.some(value=>!text(value))))reject('XML-Eintragsbeobachtung ist beschädigt.');
+    }
+  }
+  async function readSitemapPage(path,signal) {
+    const response=await fetch(path,{signal,headers:{Accept:'application/json'}}),type=response.headers.get('content-type') || '';
+    if(!type.includes('application/json'))throw new Error('Sitemap-API hat keine unterstützte JSON-Antwort geliefert.');
+    const raw=await response.text();
+    if(new TextEncoder().encode(raw).length>8388608)throw new Error('Sitemap-Antwort überschreitet die begrenzte Seitengröße.');
+    const body=JSON.parse(raw);
+    if(!response.ok){const error=new Error(typeof body.error==='string'?body.error:`HTTP ${response.status}`);error.code=body.code;error.status=response.status;throw error;}
+    return body;
+  }
+  async function loadSitemapPage(cursor=sitemapMembership.cursor,navigation=null) {
+    if(!state.crawl || !sitemapSection() || sitemapMembership.token)return;
+    const current=sitemapMembership,token={id:state.crawl.id,generation:state.generation,serverGeneration:state.crawl.generation??null,revision:current.revision,kind:sitemapKind(),limit:sitemapLimit(),cursor,controller:new AbortController()};
+    const expectedSnapshotToken=navigation?current.result?.snapshot_token??null:null;
+    const owns=()=>current.token===token && token.id===state.crawl?.id && token.generation===state.generation && token.serverGeneration===(state.crawl?.generation??null) && token.revision===current.revision && token.kind===sitemapKind() && token.limit===sitemapLimit() && sitemapSection();
+    current.token=token;current.error='';current.stale=false;current.selected=null;renderSitemapMembership();
+    try{
+      if(![200,100,50,10,1].includes(token.limit))throw new Error('Eine unterstützte Anzahl Zeilen je Seite auswählen.');
+      const query=new URLSearchParams({kind:token.kind,limit:String(token.limit)});if(cursor!==null)query.set('cursor',cursor);
+      const result=await readSitemapPage(`/api/crawls/${encodeURIComponent(token.id)}/sitemaps?${query}`,token.controller.signal);
+      if(!owns())return;
+      validateSitemapEnvelope(result,token,expectedSnapshotToken);
+      if(navigation==='next')current.back.push(current.cursor);else if(navigation==='back')current.back.pop();
+      current.cursor=cursor;current.result=result;
+    }catch(error){
+      if(owns()){
+        current.stale=['stale_sitemap_cursor','invalid_sitemap_cursor','sitemap_job_snapshot_conflict'].includes(error.code);
+        if(current.stale){current.cursor=null;current.back=[];}
+        current.error=error.status===413 && error.code==='sitemap_response_byte_budget'?'Diese Sitemap-Seite enthält zu umfangreiche Originaldaten. Unter „Zeilen je Seite“ weniger Zeilen wählen, um den gespeicherten Stand erneut zu laden. Es wurden keine Vorkommen abgeschnitten.':current.stale?'Der gespeicherte Sitemap-Stand wurde geändert oder der Cursor ist ungültig. „Aktuellen Stand laden“ lädt die erste Seite des aktuellen Stands.':`Sitemap-Beobachtungen nicht verfügbar: ${error.message}`;
+      }
+    }finally{
+      if(current.token===token){current.token=null;if(token.id===state.crawl?.id && token.generation===state.generation && token.revision===current.revision && token.kind===sitemapKind() && token.limit===sitemapLimit() && sitemapSection())renderSitemapMembership();}
+    }
+  }
+  function downloadSitemapSnapshot() {
+    if(!sitemapUsable() || !state.crawl)return;
+    const result=sitemapMembership.result,query=new URLSearchParams({kind:result.filter.kind,snapshot:result.snapshot_token}),link=document.createElement('a');
+    link.href=`/api/crawls/${encodeURIComponent(state.crawl.id)}/sitemaps/export.csv?${query}`;
+    link.download=`open-seo-spider-${state.crawl.id}-sitemaps.csv`;document.body.append(link);link.click();link.remove();
+    message('CSV des gebundenen gespeicherten Sitemap-Stands angefordert. Dies bestätigt keine vollständige Quellenabdeckung.');
+  }
+  function bindSitemapEvents() {
+    $('sitemap-membership-kind').addEventListener('change',()=>{resetSitemapMembership();renderSitemapMembership();loadSitemapPage();});
+    $('sitemap-membership-limit').addEventListener('change',()=>{resetSitemapMembership();loadSitemapPage(null);});
+    $('sitemap-membership-search').addEventListener('input',renderSitemapMembership);
+    $('sitemap-membership-filter').addEventListener('change',renderSitemapMembership);
+    $('sitemap-membership-refresh').addEventListener('click',()=>{resetSitemapMembership();loadSitemapPage(null);});
+    $('sitemap-membership-next').addEventListener('click',()=>{if(sitemapUsable() && sitemapMembership.result.has_more)loadSitemapPage(sitemapMembership.result.next_cursor,'next');});
+    $('sitemap-membership-prev').addEventListener('click',()=>{if(sitemapUsable() && sitemapMembership.back.length)loadSitemapPage(sitemapMembership.back.at(-1),'back');});
+    $('sitemap-membership-inspector-close').addEventListener('click',()=>{sitemapMembership.selected=null;renderSitemapInspector();});
+    $('sitemap-membership-export-page').addEventListener('click',exportSitemapLoadedPage);
+    $('sitemap-membership-export-csv').addEventListener('click',downloadSitemapSnapshot);
   }
 
   const nativeResourceEngine = 'open-seo-spider/resource-discovery-v1';
@@ -2155,6 +2342,7 @@
   function bindEvents() {
     window.SavedComparisonUI?.bind({ downloadBlob, selectedJob: () => state.crawl?.id });
     bindResourceEvents();
+    bindSitemapEvents();
     bindContentEvents();
     $('policy-settings').addEventListener('input', invalidatePolicyPreview);
     $('policy-settings').addEventListener('change', invalidatePolicyPreview);

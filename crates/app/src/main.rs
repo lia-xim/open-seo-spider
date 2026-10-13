@@ -5,6 +5,7 @@ mod mcp;
 mod policy_export;
 mod resource_export;
 mod server;
+mod sitemap_membership;
 
 use clap::{Parser, Subcommand};
 use open_seo_spider_core::{

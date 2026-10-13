@@ -11,7 +11,8 @@ fn descriptor_is_read_only_strict_and_additional_to_existing_tools() {
         .iter()
         .map(|tool| tool["name"].as_str().unwrap().to_owned())
         .collect();
-    assert_eq!(names.len(), 23);
+    assert_eq!(names.len(), 24);
+    assert!(names.contains(&"spider_sitemaps".into()));
     assert!(names.contains(&"spider_compare".into()));
     assert_eq!(names.last().unwrap(), "spider_compare_saved");
 }
@@ -86,7 +87,7 @@ fn opt_in_mcp_returns_complete_validated_reports_and_retains_read_only_descripto
         definition()["inputSchema"]["properties"]["include_original_reports"]["type"],
         "boolean"
     );
-    assert_eq!(inventory().len(), 23);
+    assert_eq!(inventory().len(), 24);
 }
 #[test]
 fn bundle_missing_unrequested_or_tampered_report_is_an_explicit_mcp_error() {

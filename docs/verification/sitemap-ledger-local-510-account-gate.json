@@ -1,0 +1,685 @@
+{
+  "schema_version": 1,
+  "result": "PASS_LOCAL_CORE_510_CI_NOT_STARTED_ACCOUNT_GATE",
+  "recorded_at": "2026-10-13T06:20:24.684Z",
+  "source_commit": "59e8453beed9a06b5e2d92f14912ee959f03c8b0",
+  "local_core": {
+    "source_manifest": {
+      "path": "core-store-candidate-v14/manifest.json",
+      "sha256": "6d17b04f948c4e8bac8187bd7676d8ed26b297d7ba45bd28259b2557d2f4b467",
+      "bytes": 19387
+    },
+    "source_files": [
+      {
+        "path": "assets/fonts/LICENSE.txt",
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+        "bytes": 11357
+      },
+      {
+        "path": "assets/fonts/README.md",
+        "sha256": "283e7b2cbb1e7e0482eb546c636b926a894df06694f6349617fd384f758a8c0a",
+        "bytes": 1493
+      },
+      {
+        "path": "assets/fonts/Roboto-Regular.ttf",
+        "sha256": "56a45233d29f11b4dfb86d248e921939d115778f87325e7ae8cc108383d6664d",
+        "bytes": 515100
+      },
+      {
+        "path": "crates/app/src/main.rs",
+        "sha256": "2a25d4304d3a39e4fec1d8b6e2a649ff318428a3a62aabdaf46189371aac2b17",
+        "bytes": 27216
+      },
+      {
+        "path": "crates/app/src/server.rs",
+        "sha256": "8282e670e87aedb2b79afa4f88aec925f120b9174aa5083609a8261d0a653882",
+        "bytes": 73403
+      },
+      {
+        "path": "crates/core/src/audit.rs",
+        "sha256": "99b3df6f74101a560209544b7f22a5809da6b9720636d6123673a439d83235f6",
+        "bytes": 27566
+      },
+      {
+        "path": "crates/core/src/comparison.rs",
+        "sha256": "9fa36d02ab317e8337b971008f8c920214ec3aa341910bdab5f5503ffacb808a",
+        "bytes": 53501
+      },
+      {
+        "path": "crates/core/src/comparison_tests.rs",
+        "sha256": "8cb3cf915b8a60a0c3b856f7da5a2b8efabff88696e00ee2f1d0e68e8815fa45",
+        "bytes": 40374
+      },
+      {
+        "path": "crates/core/src/content_analysis.rs",
+        "sha256": "906d51c65e81cd0d954244479a90f0d11ae123e1247e2b0c612d645c15a4d333",
+        "bytes": 53038
+      },
+      {
+        "path": "crates/core/src/content_binding.rs",
+        "sha256": "450414f2ed6c74342ae605f0c1ddbf1dac9bced316123b3e972af9b3a8c8ac6f",
+        "bytes": 29393
+      },
+      {
+        "path": "crates/core/src/content_capture.rs",
+        "sha256": "e4911917fb156e5f2812e60b242d8bc3960c04b1c7d00f42d559bff9b57c7454",
+        "bytes": 44187
+      },
+      {
+        "path": "crates/core/src/control.rs",
+        "sha256": "70fb5b038d32a0458620dcd5af852bd435ea0d9cdbe63efb4d799b69c10fbc8b",
+        "bytes": 8340
+      },
+      {
+        "path": "crates/core/src/crawler/sitemap_protocol_tests.rs",
+        "sha256": "415c8a5a6eec681900842a4fc90484fb90e97b98df494c89f74a8895fe3d7dba",
+        "bytes": 38447
+      },
+      {
+        "path": "crates/core/src/crawler.rs",
+        "sha256": "1f4ebca789de42f7d2612a57caeda42ec8d66a455bebb715c6c387ae498ee1a3",
+        "bytes": 146582
+      },
+      {
+        "path": "crates/core/src/crawl_policy.rs",
+        "sha256": "ea379e32d381e9e5075950f4ec5fbe99b47f776732b1fa216a2647bc56c00725",
+        "bytes": 56385
+      },
+      {
+        "path": "crates/core/src/css_discovery.rs",
+        "sha256": "b458744ceb45a335590beacf4687a728e4d30018e8ffceabfe6441ab7d3136e6",
+        "bytes": 55723
+      },
+      {
+        "path": "crates/core/src/dom_facts.rs",
+        "sha256": "3c30b53379b68726731e0f6435113bb3883f25f469c888454587e62127f63d26",
+        "bytes": 41733
+      },
+      {
+        "path": "crates/core/src/explicit_sitemap_inputs_tests.rs",
+        "sha256": "46689d4a37a1d50a78e1f3e8de1680dae55cb746b8d1a4be0d1e1d75faeff93c",
+        "bytes": 12464
+      },
+      {
+        "path": "crates/core/src/export.rs",
+        "sha256": "6c7e6d639f69119992527d66a65cab9f7f5b477a2cbb65b856a058c5b9041472",
+        "bytes": 62569
+      },
+      {
+        "path": "crates/core/src/extract.rs",
+        "sha256": "74233dfad4b4301936c665d55e9f6ae8840f6f00123e8ad7f113c41901f7baed",
+        "bytes": 15466
+      },
+      {
+        "path": "crates/core/src/extraction_engine.rs",
+        "sha256": "78fef540b56306cbaec03a8795a8d47e141277cdb5ee9f204177644182de0b05",
+        "bytes": 40335
+      },
+      {
+        "path": "crates/core/src/fragments.rs",
+        "sha256": "0997036b16bb00fea32f83f45e8be268b2b549f662f5d81921cac1700464e445",
+        "bytes": 20952
+      },
+      {
+        "path": "crates/core/src/image_metadata.rs",
+        "sha256": "5b63da87221014a8a83c2b84cc1bd32eda889d6b5db58944ed9a13c4130361b2",
+        "bytes": 14798
+      },
+      {
+        "path": "crates/core/src/lib.rs",
+        "sha256": "2e11d9a8f68559031a1bf079ec134fd9141ca2058dd2a315bb1e08b94718f344",
+        "bytes": 4317
+      },
+      {
+        "path": "crates/core/src/list_import.rs",
+        "sha256": "3c6181438375dcbe9c52d423eaf01c1e78dc06091a4fc5da5d7d5d6a3daf5655",
+        "bytes": 99082
+      },
+      {
+        "path": "crates/core/src/metadata.rs",
+        "sha256": "a291e59a3dff640a13efec5a82d64a6dfa6e2af22a3782f7abe9ca262c4d8d0a",
+        "bytes": 25424
+      },
+      {
+        "path": "crates/core/src/models.rs",
+        "sha256": "396104268acfb354cf0b6251414a6c6156603d11474cec9d540bdb6d824409bb",
+        "bytes": 34573
+      },
+      {
+        "path": "crates/core/src/onpage.rs",
+        "sha256": "a66f97221488e75865123b1388a06b6cae004411ffc05714ace4383eba5c46e4",
+        "bytes": 30720
+      },
+      {
+        "path": "crates/core/src/ordinary_coordinate_controls.rs",
+        "sha256": "c8f04d24b42c972feee3a7474ca79a3ef63bfeebd1d3ba27fbf8706e1cd0ddec",
+        "bytes": 20139
+      },
+      {
+        "path": "crates/core/src/pdf.rs",
+        "sha256": "a784ed47dfec6be28b53c4992e211854124853f42cec30ab574f78ec6f46b7dc",
+        "bytes": 42118
+      },
+      {
+        "path": "crates/core/src/policy_ledger.rs",
+        "sha256": "3eb13c78100f190c15c30af328b809e04ce2c8916e6d63d096ac33b1c7cbde51",
+        "bytes": 34168
+      },
+      {
+        "path": "crates/core/src/recrawl.rs",
+        "sha256": "13c7684a1d41d052aead61be8c859adc90920780352a9834c7d7f87ee53b1e28",
+        "bytes": 19267
+      },
+      {
+        "path": "crates/core/src/renderer.rs",
+        "sha256": "aed93b6224fc659fd24deade61021a0417b733ddafe93da91dfef0e8ac3bb3fa",
+        "bytes": 12217
+      },
+      {
+        "path": "crates/core/src/resource_capture.rs",
+        "sha256": "05b926749b2211510dab136c4a64cf8ccdd4b982a6430e3690f3290b4824c446",
+        "bytes": 16828
+      },
+      {
+        "path": "crates/core/src/resource_html.rs",
+        "sha256": "536b347b17ac79e4cca36483046242a5a4d5b87bc48e9348a9f383760c0c1f2f",
+        "bytes": 19081
+      },
+      {
+        "path": "crates/core/src/resource_ledger.rs",
+        "sha256": "08aa3c0efa78f07f1385a43343aa2e33cf72a85dc5f23efe5c34f1391c6bee71",
+        "bytes": 45092
+      },
+      {
+        "path": "crates/core/src/resource_policy.rs",
+        "sha256": "492ad0217934b7a772e7eb544aa96f9d4855bdf2054e3e69c32cb49c6691026e",
+        "bytes": 34880
+      },
+      {
+        "path": "crates/core/src/response_observations.rs",
+        "sha256": "66a183d851c70b314802aa94f49689929711f54bcadc167ddace1814370d79c0",
+        "bytes": 15025
+      },
+      {
+        "path": "crates/core/src/robots/sitemap_source_tests.rs",
+        "sha256": "606d1153bab513edb493d4e69f59dd6acd7124e3c789a311c899f17b683a6a3c",
+        "bytes": 5194
+      },
+      {
+        "path": "crates/core/src/robots.rs",
+        "sha256": "e7ab7fb40713766d7c33ddfbf0dbb07a87d22898ad1fc1aabaa8b1994e800291",
+        "bytes": 6680
+      },
+      {
+        "path": "crates/core/src/robots_simulation.rs",
+        "sha256": "23ab89fcd2875bbb64fc79701795e90b7c8c65db72faeb20ea8b6834fd55287a",
+        "bytes": 19660
+      },
+      {
+        "path": "crates/core/src/robots_sitemap_source.rs",
+        "sha256": "8202a9c2666dc5263d340d3c18004eea20f7aab45360ca420e6c9f322d402edd",
+        "bytes": 17449
+      },
+      {
+        "path": "crates/core/src/schema.sql",
+        "sha256": "bb38607c2b5d0875d3d0c849dfc1be6d5d0d0b0b660114e182146ab78359df5e",
+        "bytes": 1740
+      },
+      {
+        "path": "crates/core/src/serp.rs",
+        "sha256": "bbb0a07e63e8a950abe0fee95270a24f4513fb4960f19d2da927583dc20d9e55",
+        "bytes": 8806
+      },
+      {
+        "path": "crates/core/src/sitemap/entity.rs",
+        "sha256": "5cfbc3b97221467665f8ca9b2eef0eb9202edd196637875bc51ec1c8b782bb76",
+        "bytes": 2956
+      },
+      {
+        "path": "crates/core/src/sitemap/models.rs",
+        "sha256": "2bccc73f511e39bb7170d9f92d67df236f6709ae1dc64ee1ef4edf3e9cefe56f",
+        "bytes": 7455
+      },
+      {
+        "path": "crates/core/src/sitemap/tests.rs",
+        "sha256": "bc0a242b5b78de30a23c8377c5c50d92ce3f5d25bc561eabcb058723fbdd3e8c",
+        "bytes": 31491
+      },
+      {
+        "path": "crates/core/src/sitemap/xml.rs",
+        "sha256": "74ef8737b8b1aff83ef8ee6960ee864e283fe9d94b9e679fcdbc473ae0c47707",
+        "bytes": 35954
+      },
+      {
+        "path": "crates/core/src/sitemap.rs",
+        "sha256": "dd5e26aa487ca370ee2b3d6290a6afd99b73341a57173de741d2ee19b327f43a",
+        "bytes": 2337
+      },
+      {
+        "path": "crates/core/src/sitemap_discovery.rs",
+        "sha256": "62ba13bbcd809c111e954484d557724d9303d53e75e8a29f83519d555ed30b22",
+        "bytes": 10674
+      },
+      {
+        "path": "crates/core/src/sitemap_discovery_tests.rs",
+        "sha256": "2561e2b667152d7062cfee2ec30b6c2528d200884b62aacadaa34ca1f804cd94",
+        "bytes": 18952
+      },
+      {
+        "path": "crates/core/src/sitemap_initial_roots.rs",
+        "sha256": "69fd2f60c5c28c059317e3efcd9e8a5151a48e9bed8c1ce63d696fa2b6cec833",
+        "bytes": 8629
+      },
+      {
+        "path": "crates/core/src/sitemap_initial_roots_tests.rs",
+        "sha256": "e240f54d4fa4c6da0e09e1c64be75da4b96bccf97412adad63f31ea4f45b048d",
+        "bytes": 26689
+      },
+      {
+        "path": "crates/core/src/sitemap_ledger.rs",
+        "sha256": "dea5001ce0adf16ee99aa1ceedd7f5b20a3d87726ec578ff5bf7201d44b29e68",
+        "bytes": 72097
+      },
+      {
+        "path": "crates/core/src/sitemap_ledger_models.rs",
+        "sha256": "e5b06268d0a695837e9d151abe845f3a91f04f9d487c3bdd952cd77a0d43ce72",
+        "bytes": 19901
+      },
+      {
+        "path": "crates/core/src/sitemap_ledger_tests.rs",
+        "sha256": "7bedcdb3905ee94f68595d797eae3a2ad60de4a0d17de2916cb14c29e9ee86ce",
+        "bytes": 68737
+      },
+      {
+        "path": "crates/core/src/srcset.rs",
+        "sha256": "e97e5d358d51f3a290cabb7bbd90ba45d5f534348fae6e53e8c4781ae90e546c",
+        "bytes": 7381
+      },
+      {
+        "path": "crates/core/src/store-sitemap-tests.rs",
+        "sha256": "bc6bdefd70082106a6494bed7cbf993f9f277beb6074262b4de86e94b51abae3",
+        "bytes": 33099
+      },
+      {
+        "path": "crates/core/src/store.rs",
+        "sha256": "4a586fc575162399c641dc3624641e212cc3a18b732653d438b5450a73d8aa79",
+        "bytes": 123848
+      },
+      {
+        "path": "crates/core/src/text_metrics.rs",
+        "sha256": "a1603eee9aed4ff99dfc3feabafefd794aa1c48ad47c0bc3dbd968a44a1d3fd2",
+        "bytes": 4228
+      },
+      {
+        "path": "crates/core/src/urls.rs",
+        "sha256": "d4bb14a54e3770362c51aeef7072c8fee1c72c2e5e35a24a58ffcabaa6c95155",
+        "bytes": 3602
+      },
+      {
+        "path": "crates/core/tests/content_capture_fixtures.rs",
+        "sha256": "2c8d69ca1735a871b313e2ee7fa7dd0ad6590984ef848e0fca973ddc126ab4f7",
+        "bytes": 44398
+      },
+      {
+        "path": "crates/core/tests/control_fixtures.rs",
+        "sha256": "b8161cf23f63ccb0072ea99c20bcbe3f955e789be23d709bbee7609760a0fc54",
+        "bytes": 19831
+      },
+      {
+        "path": "crates/core/tests/crawl_fixtures.rs",
+        "sha256": "4126c441cceef82154d84bab4ac0ea05108e83cc7f4b88bf6d470bb70816647c",
+        "bytes": 50731
+      },
+      {
+        "path": "crates/core/tests/dom_fixtures.rs",
+        "sha256": "89a1f5580588efb96c9704834fd0e93d1cd93c606ec5ecdb9642f02a1051b227",
+        "bytes": 18588
+      },
+      {
+        "path": "crates/core/tests/fixtures/content-capture/README.md",
+        "sha256": "3840f52f8688ed52ffa83dac84c1457b06aea4ad9217c6e4eab6339ae7bc2410",
+        "bytes": 719
+      },
+      {
+        "path": "crates/core/tests/fixtures/content-capture/selection.json",
+        "sha256": "8cce8af52bbc90d7d16a0f6e124336951eda2c396c6a473d52b1ced3d19d4329",
+        "bytes": 1713
+      },
+      {
+        "path": "crates/core/tests/fixtures/crawl-policy/authored-policy-cases.json",
+        "sha256": "1c1b1729298c2fd4458762efbb68483cc77a0b5a248d9eb4d34523167be051b6",
+        "bytes": 66900
+      },
+      {
+        "path": "crates/core/tests/fixtures/crawl-policy/manifest.json",
+        "sha256": "74339518479ae3927daa1ddc0f013a937716cc016dd14e23ee7929fe1718d8f2",
+        "bytes": 1878
+      },
+      {
+        "path": "crates/core/tests/fixtures/crawl-policy/regenerate-design-cases.py",
+        "sha256": "b5089ea04119092eae75bf3624489f9bf95c41beabbc335e2692286849f15107",
+        "bytes": 12348
+      },
+      {
+        "path": "crates/core/tests/fixtures/css-discovery/declared-dependencies.json",
+        "sha256": "d1a7e31b7ac03fb0d4ab45e589997549df35029046710369e2bb0aed98678a6a",
+        "bytes": 3081
+      },
+      {
+        "path": "crates/core/tests/fixtures/css-discovery/README.md",
+        "sha256": "384c1afd30ab9a64938c8c7b1d360dfa615649800806d19a07d7596da2f984a9",
+        "bytes": 1126
+      },
+      {
+        "path": "crates/core/tests/fixtures/list-import/case-colliding-entry.xlsx",
+        "sha256": "9064038e497814e6ae0d0c1dda9ca5b06942303e362d02cee813a641f0e3176e",
+        "bytes": 3238
+      },
+      {
+        "path": "crates/core/tests/fixtures/list-import/duplicate-cell.xlsx",
+        "sha256": "33f585670a3ff7378b336f1b01c5e109fa5d4c892bd131ed8fd9322498c72d5e",
+        "bytes": 2955
+      },
+      {
+        "path": "crates/core/tests/fixtures/list-import/duplicate-header.xlsx",
+        "sha256": "5374677c613babcf0660b6c3cfdd0de1189861a4b561f7e4bba37e306869680c",
+        "bytes": 2946
+      },
+      {
+        "path": "crates/core/tests/fixtures/list-import/external-worksheet.xlsx",
+        "sha256": "83616d2457f4df6fc0be5c232b18fa9a2c2414f941a9c7dce4fca84974b40e0d",
+        "bytes": 2979
+      },
+      {
+        "path": "crates/core/tests/fixtures/list-import/huge-observed-row.xlsx",
+        "sha256": "9aab7d7a3883a9b5715b9b59f02065adc72337762b3b574fb81f8b818985cfa9",
+        "bytes": 2950
+      },
+      {
+        "path": "crates/core/tests/fixtures/list-import/huge-shared-count.xlsx",
+        "sha256": "0956c2f579a55d381b97c60bc49994f6c2d00b691ea1c5b406c175c291821730",
+        "bytes": 2968
+      },
+      {
+        "path": "crates/core/tests/fixtures/list-import/inflation-budget.xlsx",
+        "sha256": "94f46efadcbc755034385914ab9b5f48b27c732f64883a40eaab17d41cb32697",
+        "bytes": 3033
+      },
+      {
+        "path": "crates/core/tests/fixtures/list-import/manifest.json",
+        "sha256": "cfcfaa55891b0869083869c321d87e5c10c74152ae298e74c306bfd91bd7474b",
+        "bytes": 4561
+      },
+      {
+        "path": "crates/core/tests/fixtures/list-import/ordered-formulas.xlsx",
+        "sha256": "e57c641ffb5cbabedc2b4b164093e3862a1a8767f0911134801daaeae75e7af5",
+        "bytes": 2950
+      },
+      {
+        "path": "crates/core/tests/fixtures/list-import/regenerate.py",
+        "sha256": "a6453bc9281a250a6f1329e31607995279970899b4c077cf587a7866a03850d0",
+        "bytes": 5790
+      },
+      {
+        "path": "crates/core/tests/fixtures/list-import/sample-index.xml",
+        "sha256": "d9cefc051f1340c361c197daa1afdc6d4505b36f11129eb0af3b712f3973aaf7",
+        "bytes": 246
+      },
+      {
+        "path": "crates/core/tests/fixtures/list-import/sample-occurrences.csv",
+        "sha256": "261eed6b646d4b62c13e400d2e68aae1473f6836b306d2d57c3fdc19d08ef2d0",
+        "bytes": 1582
+      },
+      {
+        "path": "crates/core/tests/fixtures/list-import/sample.csv",
+        "sha256": "68f766000052ff469188e91caa9af6b2d856df5f7b452bc5d5384ebc832f44d0",
+        "bytes": 82
+      },
+      {
+        "path": "crates/core/tests/fixtures/list-import/sample.txt",
+        "sha256": "ccdd7e497a7144c7ee327dab019c2602c3d71508e1ae00d55760f56a8be7c333",
+        "bytes": 76
+      },
+      {
+        "path": "crates/core/tests/fixtures/list-import/serialized-contracts.json",
+        "sha256": "28b1c835d8bc6292aeedc36a38dd31987b7f260af0242568a03942dcb6a0ff93",
+        "bytes": 29116
+      },
+      {
+        "path": "crates/core/tests/fixtures/list-import/wrong-cell-row.xlsx",
+        "sha256": "9604cb57a01e935e916b3da6ee3322602118ee6e5ea6f969f26ae7e399c18e57",
+        "bytes": 2951
+      },
+      {
+        "path": "crates/core/tests/fixtures/resource-contract/directive-plan.json",
+        "sha256": "3ba2c3a7a275b4f6d976999317be677b6d1c27fd6200c3beef7bc4fe42a365b0",
+        "bytes": 38611
+      },
+      {
+        "path": "crates/core/tests/fixtures/resource-contract/legacy-b9-bindings.json",
+        "sha256": "e5bb0f06cf0338ff984d4ddbbbff75b1c6d7e922c495ccc721a9a33f7c575d05",
+        "bytes": 10204
+      },
+      {
+        "path": "crates/core/tests/policy_fixtures.rs",
+        "sha256": "7a90747c7705c6ad7bec34ea3b8d7c77436c20b64c7a3abd695316d446604e7c",
+        "bytes": 34761
+      },
+      {
+        "path": "crates/core/tests/recrawl_fixtures.rs",
+        "sha256": "b0665525dafcdc24c910b71dd0bf0849f446893f8936c445a9747199e30eee03",
+        "bytes": 27017
+      },
+      {
+        "path": "crates/core/tests/resource_contract_fixtures.rs",
+        "sha256": "0a0281d5defe42c71a16b7595521337a60b8487ff0310551bf164abac0cfc94a",
+        "bytes": 65092
+      },
+      {
+        "path": "crates/core/tests/resource_discovery_fixtures.rs",
+        "sha256": "645e24ffd701bc5df5fedab186dc080ce9928da96d61479de67b20943e211828",
+        "bytes": 39601
+      },
+      {
+        "path": "crates/core/tests/resource_fixtures.rs",
+        "sha256": "b3f731a87cd97b8435169aad0b1a7e0c656142c57a1f1c90c118b9597bcfc711",
+        "bytes": 14725
+      },
+      {
+        "path": "crates/core/tests/resource_matrix_fixtures.rs",
+        "sha256": "6bf317ef15b1c38b1eb8361b4125e92250a39887cbbbc28d9561dd74785b908a",
+        "bytes": 42653
+      },
+      {
+        "path": "crates/core/tests/resource_redirect_fixtures.rs",
+        "sha256": "5f946d218ecc5268f3726da29f9e7f102273ad13e55789cd12b1a27e939974bd",
+        "bytes": 57069
+      },
+      {
+        "path": "crates/core/tests/resource_response_fixtures.rs",
+        "sha256": "14a8e66cead875aff05b2226737e3d2be4f3abce6ac743e7ccad0cb9c3bbb03f",
+        "bytes": 37253
+      },
+      {
+        "path": "crates/core/src/crawler/discovery_ledger_tests.rs",
+        "sha256": "ac0deb0a17563c1e2bef0297796d6833f744e2c071fb1d0c1024e0f1a5506364",
+        "bytes": 31780
+      },
+      {
+        "path": "crates/core/src/crawler/bootstrap_tests.rs",
+        "sha256": "bb649d9a06147a7d454af8bbeb6471dbfcf8694f1b29442ad665c813cf74b3b8",
+        "bytes": 32196
+      },
+      {
+        "path": "crates/app/src/analysis.rs",
+        "sha256": "2371e204aaed0606220d9942c9cfab81a9610a548734232a303257cb74a8920d",
+        "bytes": 83996
+      },
+      {
+        "path": "crates/app/src/content_cohort.rs",
+        "sha256": "66183932a359254c33d46a3efda7c63ce9c301e2ff46cba7a28f70518c5c010a",
+        "bytes": 20312
+      },
+      {
+        "path": "crates/app/src/comparison_app_tests.rs",
+        "sha256": "052623cbe2298c48a4cbb95ce65489a4211a4c95b9445d2ec5108349adfc92d5",
+        "bytes": 31663
+      },
+      {
+        "path": "crates/app/src/server/comparison_tests.rs",
+        "sha256": "a027c903f55b23c2f70252e88dbef08a7a85cb58053e8a7fe8f8826a243012ed",
+        "bytes": 11367
+      },
+      {
+        "path": "crates/app/src/mcp/saved_comparison_tests.rs",
+        "sha256": "6fc0e40a25d3f6417ebc179328587bc3d026ac1e29d8bb6caf9cba1d8ea3090d",
+        "bytes": 25988
+      }
+    ],
+    "compile_and_directed": {
+      "path": "core-store-candidate-v14/tests-first/proof.json",
+      "sha256": "c8a0ced058eeb51323ce9c623fdf9a337918b4709cf828c21cdc5a64fab6d201",
+      "bytes": 955
+    },
+    "compiler_inputs": {
+      "path": "core-store-candidate-v14/tests-first/inputs.json",
+      "sha256": "2fb2c5b91bde7eb792361abde0991429cdda55290fbfecf0f98d30c22ed8d698",
+      "bytes": 18660
+    },
+    "compiler_log": {
+      "path": "core-store-candidate-v14/tests-first/compile.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "directed_log": {
+      "path": "core-store-candidate-v14/tests-first/tests.log",
+      "sha256": "adffddf031c51e9f1fcc0a643e6ab783b710fc7752b45eb1fb67a3ee4680facd",
+      "bytes": 1462
+    },
+    "full_result": {
+      "result": "PASS_ACTUAL_WORK_CORE_TESTS",
+      "recorded_at": "2026-10-13T06:18:34.072Z",
+      "filter": "all",
+      "expected_tests": 510,
+      "observed_tests": 510,
+      "source_manifest_sha256": "6d17b04f948c4e8bac8187bd7676d8ed26b297d7ba45bd28259b2557d2f4b467",
+      "binary_sha256": "f6ffb07f6af9a156e1ccab86d4c0acccac7b6f6308800e58e6bb3febae4a4dc9",
+      "test_exit_code": 0,
+      "summary": {
+        "state": "ok",
+        "passed": 510,
+        "failed": 0,
+        "ignored": 0
+      },
+      "test_log_sha256": "8ffb5809092730304ad688ffa0714f0a9a228265c780a6b7f078fa459d243229",
+      "scope": "Actual formatted Main source snapshot after fixing missing invalid-present XML Loc policy observations. Core runtime tests below are separate from actual workspace external policy fixture CI. Incomplete source gates retained, current installed6597 unchanged, API/CSV/UI and cohort remain unproven."
+    },
+    "full_proof": {
+      "path": "core-store-candidate-v14/tests-all-first/proof.json",
+      "sha256": "1f99bf41c83d0892074d855e7da97c62a540184e164e86a973496a1cd7f623dc",
+      "bytes": 859
+    },
+    "full_log": {
+      "path": "core-store-candidate-v14/tests-all-first/tests.log",
+      "sha256": "8ffb5809092730304ad688ffa0714f0a9a228265c780a6b7f078fa459d243229",
+      "bytes": 53002
+    },
+    "qualification": "Actual formatted Main Core snapshot, cached27 external dependencies, rustc--test/debuginfo0/noPDB, same pinned executable directed12 then510 full unit tests. Subsets and repeated checks are not added. External policy integration fixture and App runtime are separate pending gates."
+  },
+  "source_ci": {
+    "schema_version": 1,
+    "status": "CI_NOT_STARTED_ACCOUNT_BILLING_GATE",
+    "recorded_at": "2026-10-13T06:17:22.719Z",
+    "run_id": 38355115138,
+    "run_url": "https://github.com/lia-xim/open-seo-spider/actions/runs/38355115138",
+    "source_commit": "59e8453beed9a06b5e2d92f14912ee959f03c8b0",
+    "conclusion": "failure",
+    "tests_executed": 0,
+    "jobs": [
+      {
+        "id": 115156075721,
+        "name": "test (windows-latest)",
+        "conclusion": "cancelled",
+        "step_count": 0
+      },
+      {
+        "id": 115156075810,
+        "name": "test (ubuntu-latest)",
+        "conclusion": "failure",
+        "step_count": 0
+      },
+      {
+        "id": 115156075986,
+        "name": "container",
+        "conclusion": "failure",
+        "step_count": 0
+      },
+      {
+        "id": 115156076007,
+        "name": "renderer",
+        "conclusion": "failure",
+        "step_count": 0
+      }
+    ],
+    "account_gate": {
+      "job_id": 115156075810,
+      "message": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the 'Billing & plans' section in your settings"
+    },
+    "files": [
+      {
+        "path": "run.json",
+        "sha256": "3d11bde671135e7cc7b36b14de3a6fe1c4861547404dcf561f0175c19008c937",
+        "bytes": 12420
+      },
+      {
+        "path": "jobs.json",
+        "sha256": "9f5893c1b2b0996dcc7c968968b6170ad20f841c17e9c7e99f65d965d9c3f728",
+        "bytes": 3471
+      },
+      {
+        "path": "ubuntu-job.json",
+        "sha256": "0598b63a7859ca9365f5e418b67008e72eaf432916649a55654de418a1e06c51",
+        "bytes": 865
+      },
+      {
+        "path": "ubuntu-check-annotations.json",
+        "sha256": "d562dc3e8729040ea7b7fa6dfa6bcf5b3d8028f4cd7324c666e98c2eea8733d4",
+        "bytes": 866
+      }
+    ],
+    "qualification": "GitHub account billing/spending gate before job steps. This is neither a code-test failure nor a passing source CI. Earlier265062 Linux external policy fixture failure remains a separate actual executed result. No payment, spending or account setting changed."
+  },
+  "source_ci_raw_proof": {
+    "path": "billing-ci-38355115138/proof.json",
+    "sha256": "37497eb3abeb2d68dde8c0da5274315dbb7b03b14352ba991a94618546782632",
+    "bytes": 2003
+  },
+  "historical_attempts_preserved": [
+    "v12 compile failure before runtime",
+    "v13 linker disk-space failure before runtime",
+    "265062f actual Linux external policy fixture regression"
+  ],
+  "disk_management": {
+    "archive_receipt": {
+      "path": "owned-build-archives/archive-receipt.json",
+      "sha256": "19e7ccc0c19581f67f07eb97e7eebe9bd1838a1f97550d521c06769322a6134b",
+      "bytes": 2419
+    },
+    "removal_receipt": {
+      "path": "owned-build-archives/removal-receipt.json",
+      "sha256": "23877e84869e1382b3770a5a33357e184cbed47ff2602d2e6feddc115d1ac9ce",
+      "bytes": 1625
+    },
+    "qualification": "Two older Root-owned generated Work test executables archived with exact gzip roundtrip byte hashes; all old source/input/log/proof and latest Mainv11 remain. No user files, data, installed runtime or backups changed."
+  },
+  "installed": false,
+  "current_installed_source": "6597c9c94148211a099934244a272d6ab0fe56aa",
+  "pending": [
+    "Unchanged external policy integration fixture runtime recheck",
+    "App API/CSV/MCP and Browser/native durable acceptance",
+    "Exact Windows/Linux source CI after account gate resolves",
+    "Recursive source cohort and recovery/error/budget matrix",
+    "Optimized release and data-preserving installation"
+  ],
+  "reference_parity": "NOT_PROVEN"
+}

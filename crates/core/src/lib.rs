@@ -104,7 +104,7 @@ pub use sitemap::{
     SitemapParseObservation, SitemapParserContext, SitemapParserLimits, decode_sitemap_entity,
     observe_sitemap_xml, parse_sitemap,
 };
-pub use store::CrawlStore;
+pub use store::{CrawlStore, SitemapReadSnapshot};
 pub use urls::normalize_url;
 
 pub use robots_sitemap_source::{

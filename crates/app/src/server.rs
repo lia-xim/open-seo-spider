@@ -30,6 +30,7 @@ mod comparison;
 mod content;
 mod policy;
 pub(crate) mod resources;
+mod sitemaps;
 
 #[derive(Clone)]
 struct AppState {
@@ -241,6 +242,11 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
         .route("/api/crawls/{id}/policy", get(policy::inventory))
         .route("/api/crawls/{id}/policy.json", get(policy::export_json))
         .route("/api/crawls/{id}/policy.csv", get(policy::export_csv))
+        .route("/api/crawls/{id}/sitemaps", get(sitemaps::inventory))
+        .route(
+            "/api/crawls/{id}/sitemaps/export.csv",
+            get(sitemaps::export_csv),
+        )
         .route("/api/crawls/{id}/resources", get(resources::inventory))
         .route(
             "/api/crawls/{id}/resources/transports",

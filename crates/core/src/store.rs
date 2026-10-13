@@ -49,6 +49,14 @@ pub(crate) struct DiscoveryEntry {
     pub url: String,
 }
 
+/// One fully validated existing SQLite read transaction. No migration or HTTP.
+#[derive(Debug, Clone)]
+pub struct SitemapReadSnapshot {
+    pub crawl_config_sha256: Option<String>,
+    pub generation: Option<u64>,
+    pub catalog: Option<crate::SitemapCatalog>,
+}
+
 /// SQLite WAL storage. A fetched page and its frontier state commit atomically.
 /// Interrupted in-flight requests remain pending and are fetched on resume.
 pub struct CrawlStore {
@@ -609,6 +617,53 @@ impl CrawlStore {
 
     /// Validated catalog from one SQLite read snapshot. Inherited values require
     /// the whole existing selected-plan/row validator plus exact parent binding.
+    pub fn sitemap_read_snapshot(&self) -> anyhow::Result<SitemapReadSnapshot> {
+        let mut connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        // Retain ALL existing config/import/policy/selected/parent validators.
+        let catalog = load_sitemap_catalog_verified(&transaction)?;
+        let generation = metadata::<CrawlRunState>(&transaction, "run_state")?
+            .map(|run| run.generation)
+            .filter(|generation| *generation > 0);
+        let length: Option<i64> = transaction
+            .query_row(
+                "SELECT length(CAST(value AS BLOB)) FROM metadata WHERE key='config'",
+                [],
+                |row| row.get(0),
+            )
+            .optional()?;
+        let crawl_config_sha256 =
+            length
+                .map(|length| -> anyhow::Result<String> {
+                    anyhow::ensure!(length > 0, "Saved config is empty");
+                    let mut hasher = Sha256::new();
+                    let mut offset = 0i64;
+                    while offset < length {
+                        let count = (length - offset).min(65536);
+                        let chunk:Vec<u8>=transaction.query_row(
+                    "SELECT substr(CAST(value AS BLOB),?1,?2) FROM metadata WHERE key='config'",
+                    params![offset+1,count],|row|row.get(0))?;
+                        anyhow::ensure!(
+                            i64::try_from(chunk.len())? == count,
+                            "Saved config chunk length differs"
+                        );
+                        hasher.update(&chunk);
+                        offset += count;
+                    }
+                    Ok(format!("{:x}", hasher.finalize()))
+                })
+                .transpose()?;
+        transaction.commit()?;
+        Ok(SitemapReadSnapshot {
+            crawl_config_sha256,
+            generation,
+            catalog,
+        })
+    }
+
     pub fn sitemap_catalog(&self) -> anyhow::Result<Option<crate::SitemapCatalog>> {
         let mut connection = self
             .connection
