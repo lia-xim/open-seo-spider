@@ -6831,9 +6831,16 @@
         "Native Skripte im Repository versioniert und über gemeinsamen Runner tatsächlich erneut ausgeführt. Ledger byteidentisch zum eingefrorenen V5; Membership entfernt Work-Pfadabhängigkeit und bindet den Harness vor/nach Ausführung. CI-Verdrahtung für Windows/Linux, optimierten Windows-Ledger und Linux-Browser ergänzt; tatsächlicher CI-Lauf bleibt offen. Wiederholungen zählen nicht als zusätzliche Feature-Abdeckung."
       ],
       "pending_acceptance_de": [
-        "Tatsächliche JSON8MiB-/CSV64MiB-Grenzen exakt/plus-eins und Live-Generationswechsel; durable Budget-Rollback/Fehler-Injektion und große Datenmengen prüfen.",
+        "Budget1: Echte Rust-Kalibrierung für originale URL-Fragmente und wiederholte Lastmod-Felder; tatsächliche Parser-/Serializer-/Writer-Größen messen.",
+        "Budget2: Native JSON-Seite exakt8MiB und ein Byte darüber; kleinere Seite muss am selben gespeicherten Snapshot tatsächlich funktionieren.",
+        "Budget3: Nativer CSV-Export exakt64MiB und ein Byte darüber mit echten ursprünglichen Sitemap-Deklarationen; Überlauf ohne Teil-Download oder Mutation.",
+        "Budget4: Native einzelne Ledger-Zeile exakt256KiB und ein Byte darüber aus echter XML-Parserbeobachtung; neue Rows/Tasks müssen bei Überlauf gemeinsam zurückrollen.",
+        "Budget5: Nativer vollständiger Katalog exakt32MiB und ein Byte darüber über zwei reale Quellen; zuvor committed Quelle erhalten, zweite Quelle atomar ablehnen.",
+        "Budget6: Gezielte SQL-Fehler-Injektion ausschließlich offline in eigener bereits echt erzeugter Fixture-Datenbank; Ordinary/Policy-Rollback und Wiederaufnahme ohne erfundene Herkunft prüfen.",
+        "Budget7: Nur tatsächlich bestandene physische Grenzen veröffentlichen, gescheiterte Kandidaten erhalten und TODO/GitHub aktualisieren; Quell-CI/Release/Installation bleiben getrennt.",
+        "Live-Generationswechsel im nativen API-/Browserpfad prüfen.",
         "Vollständige rekursive Quellen-Kohorten und Fetch-/Inlink-Statusprojektionen implementieren und prüfen. Leerer Frontier/fehlende Mitgliedschaft beweisen keine vollständige Abdeckung.",
-        "Vier aktuelle separate Renderer-/Browser-Gates, neue exakte Ledger-/Membership-Quell-CI, optimierten Release und datenbewahrende Installation abschließen. GitHub-Konto-/Billing-Sperre wird vom Nutzer geprüft."
+        "Vier aktuelle separate Renderer-/Browser-Gates, exakte Ledger-/Membership-Quell-CI, optimierten Release und datenbewahrende Installation abschließen. GitHub-Konto-/Billing-Sperre wird vom Nutzer geprüft."
       ],
       "documentation": [
         "docs/parity/sitemap-b12-plan.md",
@@ -6842,7 +6849,9 @@
         "docs/robots-sitemap-source.md",
         "docs/sitemap-ledger.md",
         "docs/sitemap-membership.md",
-        "docs/sitemap-native-acceptance.md"
+        "docs/sitemap-native-acceptance.md",
+        "docs/parity/sitemap-budget-plan.md",
+        "docs/parity/sitemap-budget-plan-source-pins.json"
       ],
       "gates": {
         "source_review": "PARSER_AND_FETCH_NO_CONCRETE_P1_P2",
@@ -6880,7 +6889,8 @@
         "durable_native_matrix": "PASS_WINDOWS_DEV11_SCENARIOS11_SQL_REQUEST_DRAIN",
         "durable_native_byte_budgets": "PENDING_FULL_SIZE_EXACT_PLUS1_JSON_CSV",
         "durable_native_generation_race": "PENDING_LIVE_ACTIVE_GENERATION",
-        "durable_native_rollback_budget": "PENDING_FAILURE_INJECTION"
+        "durable_native_rollback_budget": "PENDING_FAILURE_INJECTION",
+        "durable_budget_plan": "SOURCE_PINNED_SEVEN_TASKS_NOT_EXECUTED"
       },
       "reference_parity": "NOT_PROVEN",
       "proof_run_ids": [
