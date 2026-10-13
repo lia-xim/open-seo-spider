@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "result": "PASS_EXECUTED_WORK_CORE_WITH_OPEN_REVIEW_FINDING",
+  "recorded_at": "2026-10-13T04:44:57.371Z",
+  "source_basis_commit": "6597c9c94148211a099934244a272d6ab0fe56aa",
+  "work_candidate": "core-store-candidate-v4",
+  "manifest": {
+    "sha256": "fc598844022e8bbca0f9029e703a6ba37f128bbf146aac15f271e0fe83d2bd7f",
+    "bytes": 32980
+  },
+  "actual_full_copied_core": {
+    "passed": 437,
+    "failed": 0,
+    "ignored": 0,
+    "binary_sha256": "26ba3bd001959e537192e9244345b58d240a7c31469add8c788913c4cc46ad5a",
+    "test_log_sha256": "b313581103762ef4e728fc99c67833e1d2c226bd840e97d76d083860ab22a779",
+    "proof": {
+      "sha256": "e6b2d131ba632c548a0a78ccb30ac273c335c4f140cc0d85845eee93ddf0c20f",
+      "bytes": 685
+    }
+  },
+  "directed_original_input_capture": {
+    "passed": 18,
+    "failed": 0,
+    "proof": {
+      "sha256": "2753b03b2537bb40850ee62b72895e612ebf24879cd35a759ff1aff9e7bc93b6",
+      "bytes": 878
+    }
+  },
+  "included_tests": {
+    "existing_main_core": 353,
+    "work_ledger_v4": 41,
+    "work_store": 25,
+    "work_original_inputs": 18,
+    "total": 437,
+    "qualification": "These groups are constituents of the same437-test run, not additive results from repeated runs."
+  },
+  "app_original_input_tests": {
+    "authored": 2,
+    "executed": 0
+  },
+  "scope": "Actual all tests in isolated full copied Core with ledger V4, Store and original-input candidate. No Main/App/typed full crawler/native/API/UI/installed acceptance claim.",
+  "open_review_finding": "Ordinary initial roots must bind original raw/config ordinal/normalized identity even without policy occurrence. V4 durable reader skips this check for absent policy IDs. V5 fix and directed regression under development; 437 tests do not establish this missing requirement.",
+  "other_pending": [
+    "Initial-root/crawler writer/source adapters must be connected",
+    "New modules are not in Main or installed runtime",
+    "Source cohort completeness, failure budgets and API/CSV/UI remain unproven"
+  ],
+  "main_integrated": false,
+  "installed": false,
+  "reference_parity": "NOT_PROVEN"
+}

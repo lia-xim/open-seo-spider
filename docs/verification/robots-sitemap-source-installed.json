@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "result": "PASS_EXACT_ROBOTS_OPTIMIZED_RELEASE_AND_DATA_PRESERVING_INSTALL",
+  "recorded_at": "2026-10-13T04:44:57.371Z",
+  "installed_at": "2026-10-13T04:41:30.1010753Z",
+  "source_commit": "6597c9c94148211a099934244a272d6ab0fe56aa",
+  "exact_ci_run": "38344619747",
+  "ci": {
+    "artifact": "docs/verification/robots-sitemap-source-ci.json",
+    "sha256": "b88ac741da681ef1f84905a32f388c9a55be48d094f11e8468f40ce13526b60b",
+    "jobs": 4,
+    "windows_standard_tests": 565,
+    "linux_standard_tests": 565,
+    "ignored_per_platform": 4
+  },
+  "immutable_binary": {
+    "sha256": "82e90700d387a0fb70f115a99e6f255e75098d580b95df97a6fefe6d0b771d00",
+    "bytes": 30058496,
+    "manifest": {
+      "bytes": 2023,
+      "sha256": "93fa0ecdc0bc2a293c5500d4ab3ce30a5a3bbc1cbaf4922580dc3802148525f7"
+    }
+  },
+  "remote_archive": {
+    "files": 8,
+    "consistency": {
+      "sha256": "f155a48d262dd8b6429d79fab417e627cfb1ba18871185b6632061709a618d10",
+      "bytes": 3329
+    },
+    "independent_verification": {
+      "sha256": "166b643b39409270cbec7e798144b93a5bfec3026039cdb1f1490d197a6be7f1",
+      "bytes": 2507
+    },
+    "companions": {
+      "proof": {
+        "name": "sitemap-transport-release-e2e.json",
+        "bytes": 34880,
+        "sha256": "941b4c9ad821e26311be1272c54604ce6624a324219acb39067bd9956f214c08"
+      },
+      "requests": {
+        "name": "sitemap-transport-release-e2e.json.requests.json",
+        "bytes": 8920,
+        "sha256": "17cfa9a1baa590283735b77c1d1659e1cd02f769580947d2cef27b355c3eeb8e"
+      },
+      "app_log": {
+        "name": "sitemap-transport-release-e2e.json.app.log",
+        "bytes": 66,
+        "sha256": "59fe1b94b08db389cf1221a7cdb38fccc2ddf657575450d5930b4e51bb548e89"
+      },
+      "validation": {
+        "name": "sitemap-transport-release-validation.json",
+        "bytes": 1366,
+        "sha256": "3d25175cc46badfaa3187f3b7be963e8b01d45bbc3932e77910add5383ec64d5"
+      }
+    },
+    "original_path_validation": {
+      "result": "PASS_ARCHIVED_ORIGINAL_PATH_VALIDATION_CONSISTENCY",
+      "original_path_validator_result": "PASS_PROOF_VALIDATION",
+      "local_relocated_validator_executed": false,
+      "source_runtime_attested": false,
+      "scope": "Complete archived bytes and consistency only. Exact CI checkout/build/manifest and fresh original-path local native acceptance are independent gates."
+    },
+    "qualification": "Original CI absolute references retained. Downloaded archive binding does not rerun Main validator at relocated paths; original CI receipt and fresh actual local original-path acceptance are separate evidence."
+  },
+  "local_optimized_transport": {
+    "cases": 16,
+    "passes": 16,
+    "request_rows": 46,
+    "final_target_http_witness": "DRAINED",
+    "proof": {
+      "sha256": "75a33623a0e687d8d6e7a8e4df97256ac4544badf20cdc6e5d951a50b512f634",
+      "bytes": 35227
+    },
+    "requests": {
+      "sha256": "6dd6edb2410152a51d6ab45fb1308c8ea3a6a23950b01c40531e97e867f2ba8b",
+      "bytes": 8976
+    },
+    "app_log": {
+      "sha256": "eff2f2ab8c578bcb192fa868dfb76457210f360471ee17026f27402fefc97382",
+      "bytes": 66
+    },
+    "validation": {
+      "sha256": "6a86c347e784c9210c1d17faadeac991c10cf8a8be2367dfec4bea440fc3b690",
+      "bytes": 1654
+    }
+  },
+  "local_regression": {
+    "native_checks": 11,
+    "sdk_checks": 12,
+    "native_sdk": {
+      "sha256": "ae72e03107fa31519c8fd6dcbb20ba11b162e3d134a9f44815129adbf60975b4",
+      "bytes": 26638
+    },
+    "browser_checks": 13,
+    "served_assets": 5,
+    "browser": {
+      "sha256": "8851439537d8428305082d73e240fc62ac387121c7fd52aabb1d48fc96ac1242",
+      "bytes": 12029
+    }
+  },
+  "install_verifier_only_controls": {
+    "tests": 47,
+    "proof": {
+      "sha256": "fb48c13db1bbe5812ad6731f52a914ed165eb3c779cc340ec098320d6c548e29",
+      "bytes": 601
+    },
+    "native_app_launched": false
+  },
+  "installed_read_only": {
+    "proof": {
+      "sha256": "88afd6f56a82a63bea8728cd5ffab462c7a05551cfceaca4e0fb822c19a786a1",
+      "bytes": 9379
+    },
+    "saved_jobs": 7,
+    "durable_files": 19,
+    "historical_json_files": 11,
+    "durable_bytes_unchanged": true,
+    "job_metadata_unchanged": true,
+    "served_assets": 5,
+    "mcp_inventory_tools": 23,
+    "product_mutation_requests": 0,
+    "scope": "Actual installed read-only health, saved metadata, exact Git-blob UI assets, static MCP inventory and durable byte preservation. Process/port ownership and local optimized browser acceptance are separate root gates. No project-body/API float identity or vendor parity claim."
+  },
+  "root_install_record": {
+    "sha256": "fa18ac118e7a011ed5fe4f078634f232a5b9afc667c78d1e8bb03ec96f5b781c",
+    "bytes": 725
+  },
+  "installer_sha256": "d8aff41b004adb46df5e18c36d534f602cfefa77bfdac4c3e07ec71ad577b181",
+  "previous_release_sha256": "87e6473039cb4ea96de48a437065d6d0772615e3acc8c9b97a17744e7a23e336",
+  "backup": {
+    "created": true,
+    "complete_data_and_previous_executable": true,
+    "private_path_retained_in_work": true
+  },
+  "renderer_process_preserved": true,
+  "user_browser_refreshed": false,
+  "private_baseline_published": false,
+  "historical_D3_remote_companions": "NOT_ARCHIVED; original historical gap unchanged",
+  "pending": [
+    "Durable initial Root/source/entry/Loc ledger integration into Crawler",
+    "Recursive source cohorts and failure/budget recovery",
+    "Read-only membership API/CSV/UI",
+    "Full durable native matrix and new exact-source release/install"
+  ],
+  "reference_parity": "NOT_PROVEN"
+}

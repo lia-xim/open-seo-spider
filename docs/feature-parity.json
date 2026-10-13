@@ -5841,6 +5841,33 @@
       "recorded_at": "2026-10-13T03:59:46.689Z",
       "scope": "Exact immutable D3 optimized binary, local transport16/native11/SDK12/browser13 and installed data preservation7jobs/19files. No durable ledger/vendor parity.",
       "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "robots-sitemap-source-ci",
+      "artifact": "docs/verification/robots-sitemap-source-ci.json",
+      "artifact_sha256": "b88ac741da681ef1f84905a32f388c9a55be48d094f11e8468f40ce13526b60b",
+      "result": "PASS",
+      "recorded_at": "2026-10-13T04:44:57.371Z",
+      "scope": "Exact Robots source6597c9c: four CI jobs, Windows/Linux565 actual standard tests each.",
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "robots-sitemap-source-installed",
+      "artifact": "docs/verification/robots-sitemap-source-installed.json",
+      "artifact_sha256": "7b7cca4060409e66a4178c8ca27b2411f199deadfbba2f283c7e882996d17eca",
+      "result": "PASS",
+      "recorded_at": "2026-10-13T04:44:57.371Z",
+      "scope": "Same exact optimized Robots executable: local16/native11/SDK12/browser13, full remote companions and7jobs/19files preserved on installation.",
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "sitemap-durable-work-core",
+      "artifact": "docs/verification/sitemap-durable-work-core.json",
+      "artifact_sha256": "d34fe8cea58a5d45cac55d7901c9d1089a1275436f758b78e2efe77586b3fe7d",
+      "result": "PARTIAL",
+      "recorded_at": "2026-10-13T04:44:57.371Z",
+      "scope": "Actual isolated437 Core tests; unintegrated Work candidate with additional ordinary Root original-binding requirement open.",
+      "reference_parity": "NOT_PROVEN"
     }
   ],
   "reference_workflows": [
@@ -6726,10 +6753,10 @@
     {
       "id": "batch-b12-sitemap-membership",
       "status": "IN_PROGRESS",
-      "stage": "MAIN_PARSER_FETCH_INSTALLED_ROBOTS_CORE_PASS_DURABLE_LEDGER_PENDING",
+      "stage": "MAIN_ROBOTS_SOURCE_INSTALLED_DURABLE_CORE_WORK_PASS_BINDING_REVIEW_OPEN",
       "priority": 3,
       "title_de": "Nächster Baustein – B12: Sitemaps und Mitgliedschaft",
-      "summary_de": "Parser und Sitemap-Netzwerkpfad sind installiert: Transport-Commit d3d1e04 besteht alle vier exakten CI-Jobs, Windows/Linux jeweils541 Standardtests. Derselbe optimierte Release besteht16 Sitemap-Fälle, native11/SDK12 und Browser13; sieben Jobs und19 dauerhafte Dateien bleiben unverändert. Neu integrierte Robots-Quellfakten bestehen353 Core-Unit-Tests; ihre neue Quell-CI/Release/Installation bleibt offen. Dauerhafte Mitgliedschaft, Quell-Kohorten, Recovery/Vererbung und API/CSV/UI bleiben in Arbeit; beide Feature-Status bleiben teilweise geprüft.",
+      "summary_de": "Parser, Transport und originale Robots-Quellfakten sind installiert. Robots-Commit6597c9c besteht alle vier CI-Jobs, Windows/Linux jeweils565 Standardtests; derselbe optimierte Release besteht16 Sitemap-Fälle, native11/SDK12 und Browser13. Sieben Jobs und19 dauerhafte Dateien bleiben unverändert. Der isolierte Core mit Ledger, Store und originalen Eingaben besteht437 Tests, ist aber noch nicht integriert: Ordinary-Root-Zuordnung muss vor Integration zusätzlich an Originaldaten gebunden werden. Quell-Kohorten, Recovery/Vererbung und API/CSV/UI bleiben offen.",
       "feature_ids": [
         "sitemap.discovery",
         "sitemap.coverage"
@@ -6743,13 +6770,15 @@
         "Transport d3d1e04: vier exakte CI-Jobs grün, Windows/Linux jeweils541 Standardtests; optimierter unveränderlicher Windows-Release lokal mit16 Sitemap-Fällen und46 vollständig geleerten Request-Zeilen geprüft.",
         "Derselbe optimierte Release besteht native11/SDK12 und Browser13; datenbewahrend auf Port8787 installiert. Sieben bestehende Jobs und19 dauerhafte Dateien sind byteidentisch, fünf Assets und23 read-only Inventar-Tools geprüft.",
         "Originale Robots-Sitemap-Deklarationen mit LF/CRLF/CR, Byte-Spans, Rohwerten, echten EOF-/512KiB-Grenzen und qualifizierten206-/UTF8-/Readfehlern im Core erhalten; alle353 Core-Unit-Tests und Alltargets-Clippy bestehen.",
-        "Strikter gespeicherter Transport-Beweisprüfer besteht eine synthetische Positivkontrolle und24 Negativkontrollen sowie tatsächliche Debug-/Release-Companion-Prüfungen. Neue CI archiviert künftig vollständige Requests und App-Logs; dieser neue Workflow ist noch nicht durchgelaufen."
+        "Strikter gespeicherter Transport-Beweisprüfer besteht eine synthetische Positivkontrolle und24 Negativkontrollen sowie tatsächliche Debug-/Release-Companion-Prüfungen. Exakte Robots-CI6597c9c archiviert vollständige Requests, App-Logs und Originalpfad-Validierung mit festen Namen und vollständigen Hashes/Bytes.",
+        "Robots-Quellcommit6597c9c: vier exakte CI-Jobs grün, Windows/Linux jeweils565 Standardtests; derselbe optimierte Release besteht lokal16 Sitemap-Fälle/46 geleerte Requests, native11/SDK12 und Browser13 und ist datenbewahrend installiert.",
+        "Isolierter vollständiger Core-Kandidat mit LedgerV4, Store und Original-Input-Erfassung:437 Tests bestehen, darunter18 gerichtete Eingabetests. Kein Main-/Runtime-Nachweis; eine zusätzlich gefundene Ordinary-Root-Bindungslücke bleibt offen."
       ],
       "pending_acceptance_de": [
-        "Vollständige Dokument-/Entry-/Loc-/Root-Vorkommen atomar in Ordinary/Policy speichern; Originalordinalzahlen und Rohwerte direkt aus typisierten Beobachtungen anbinden, Task-Deduplizierung und einmalige Completion getrennt halten.",
+        "Originale Dokument-/Entry-/Loc-/Root-Vorkommen atomar in Ordinary/Policy speichern; Ordinary-Root-Rohwert/Ordinal/Original-Identität auch ohne Policy-ID verbindlich prüfen und danach Crawler/Store integrieren.",
         "Quell-Kohorten, Fehler-/Budgetzustände, Checkpoint/Recovery, unbekannte Altbestände und ausgewählt geerbte Mitgliedschaft erklären.",
         "Read-only API-Cursor, CSV und native Browseransicht für Mitgliedschaft/Abdeckung ergänzen.",
-        "Dauerhafte native Matrix mit Zyklen/Fehlern und vollständigen Admission-Zuordnungen sowie neue Robots-/Validator-/Ledger-Quell-CI, optimierten Release und Installation prüfen."
+        "Dauerhafte native Matrix mit Zyklen/Fehlern, vollständigen Admission-Zuordnungen und Recovery sowie neue Ledger-Quell-CI, optimierten Release und Installation prüfen."
       ],
       "documentation": [
         "docs/parity/sitemap-b12-plan.md",
@@ -6759,24 +6788,25 @@
       ],
       "gates": {
         "source_review": "PARSER_AND_FETCH_NO_CONCRETE_P1_P2",
-        "implementation": "MAIN_PARSER_FETCH_INSTALLED_ROBOTS_SOURCE_DURABLE_LEDGER_PENDING",
+        "implementation": "MAIN_ROBOTS_SOURCE_INSTALLED_DURABLE_WRITER_PENDING",
         "native_acceptance": "PASS_DIRECTED_DEBUG_APP_16_DURABLE_LEDGER_PENDING",
         "work_parser": "PASS_53_PLUS_EXISTING_NORMALIZER2",
         "main_core_parser": "PASS_54",
         "main_core_clippy": "PASS_ALL_TARGETS",
         "main_standalone": "PASS_56_SEPARATE",
         "work_mutations": "PASS_4_EXPECTED_RUNTIME_ASSERTION_FAILURES",
-        "exact_commit_ci": "PASS_D3D1E04_FOUR_JOBS",
+        "exact_commit_ci": "PASS_6597C9C_FOUR_JOBS_565_EACH",
         "main_core_fetch_http": "PASS_12",
         "main_core_all_unit": "PASS_353_ROBOTS_SOURCE_INTEGRATION",
         "main_portable_transport": "PASS_16_FINAL_DRAIN",
         "parser_exact_commit_ci": "PASS_FOUR_JOBS_6171a32",
         "optimized_transport_release": "PASS_SAME_OPTIMIZED_EXE_16_NATIVE_SDK_BROWSER",
-        "installation": "PASS_D3_7JOBS_19DURABLE_FILES",
+        "installation": "PASS_6597C9C_7JOBS_19DURABLE_FILES",
         "robots_source_core": "PASS_353_AND_ALLTARGETS_CLIPPY",
         "transport_proof_validator": "PASS_SYNTHETIC_1POSITIVE_24NEGATIVE_AND_ACTUAL_DEBUG_RELEASE_COMPANIONS",
-        "new_robots_validator_ci": "PENDING_NEW_EXACT_SOURCE",
-        "durable_source_ledger": "PENDING_MAIN_INTEGRATION"
+        "new_robots_validator_ci": "PASS_6597C9C_FOUR_JOBS_FULL_RAW_ARCHIVE",
+        "durable_source_ledger": "PENDING_MAIN_INTEGRATION",
+        "durable_work_core": "PASS_437_ORDINARY_ROOT_BINDING_REVIEW_GAP_OPEN"
       },
       "reference_parity": "NOT_PROVEN",
       "proof_run_ids": [
@@ -6786,7 +6816,10 @@
         "sitemap-transport-ci",
         "robots-sitemap-source-core",
         "sitemap-proof-validator",
-        "sitemap-transport-installed"
+        "sitemap-transport-installed",
+        "robots-sitemap-source-ci",
+        "robots-sitemap-source-installed",
+        "sitemap-durable-work-core"
       ],
       "tracking_issue": "https://github.com/lia-xim/open-seo-spider/issues/11"
     }
