@@ -1,0 +1,1035 @@
+{
+  "config": {
+    "seed_urls": [
+      "http://127.0.0.1:52764/policy-seed"
+    ],
+    "input_imports": [
+      {
+        "engine": "open-seo-spider/offline-list-v1/calamine-0.36.1",
+        "input_sha256": "8077ad4419709818207e1faaebeb13673ca17d327cd6080c14f0464e50720116",
+        "input_bytes": 34,
+        "options": {
+          "format": {
+            "kind": "txt"
+          },
+          "limits": {
+            "max_input_bytes": 8388608,
+            "max_rows": 50000,
+            "max_field_bytes": 8192,
+            "max_zip_entries": 1024,
+            "max_zip_entry_bytes": 8388608,
+            "max_zip_total_bytes": 33554432,
+            "max_xml_events": 500000,
+            "max_xml_depth": 64,
+            "max_shared_strings": 100000,
+            "max_sheet_cells": 200000,
+            "max_csv_fields": 200000,
+            "max_output_bytes": 8388608,
+            "max_sheets": 128
+          }
+        },
+        "selected_sheet": null,
+        "selected_column": null,
+        "rows": [
+          {
+            "source_index": 1,
+            "source_row": 1,
+            "source_line": 1,
+            "sheet": null,
+            "cell": null,
+            "raw_value": "http://127.0.0.1:52764/policy-seed",
+            "cell_type": "text",
+            "formula_metadata": null,
+            "candidate_kind": "page_url",
+            "normalized_url": "http://127.0.0.1:52764/policy-seed",
+            "fragment": null,
+            "error": null
+          }
+        ],
+        "website_requests": 0,
+        "warnings": [],
+        "limitations": [
+          "Import does not start a crawl, follow links, evaluate formulas or fetch sitemap indexes.",
+          "Only absolute HTTP/HTTPS values are URL candidates; original values and duplicate rows are retained.",
+          "Independent import contract; complete original parser/filter parity is NOT_PROVEN."
+        ]
+      }
+    ],
+    "sitemap_urls": [
+      "http://127.0.0.1:52764/policy.xml"
+    ],
+    "explicit_sitemap_inputs": [
+      "http://127.0.0.1:52764/policy.xml"
+    ],
+    "discover_sitemaps": false,
+    "max_sitemap_documents": 1000,
+    "crawl_links": false,
+    "include_subdomains": false,
+    "concurrency": 1,
+    "request_timeout_secs": 5,
+    "max_pages": 20,
+    "max_depth": null,
+    "delay_ms": 0,
+    "obey_robots": false,
+    "check_external": false,
+    "max_body_bytes": 1048576,
+    "max_redirects": 10,
+    "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)",
+    "indexability_agent": "googlebot",
+    "custom_headers": {},
+    "renderer": null,
+    "custom_extractions": [],
+    "audit_thresholds": {
+      "min_title_chars": 30,
+      "max_title_chars": 60,
+      "min_description_chars": 70,
+      "max_description_chars": 155,
+      "max_h1_chars": 70,
+      "max_h2_chars": 70,
+      "max_alt_chars": 100,
+      "max_url_chars": 115,
+      "min_word_count": 200,
+      "max_internal_outlinks": 1000,
+      "max_external_outlinks": 10,
+      "min_title_pixels": 200,
+      "max_title_pixels": 561,
+      "min_description_pixels": 400,
+      "max_description_pixels": 985
+    },
+    "pdf_analysis": {
+      "enabled": true,
+      "max_pages": 1000,
+      "max_objects": 100000,
+      "max_decompressed_bytes": 8388608,
+      "max_text_bytes": 4194304,
+      "max_text_bytes_per_page": 1048576,
+      "max_annotations": 10000
+    },
+    "validate_fragments": false,
+    "link_position_rules": [],
+    "include_patterns": [],
+    "exclude_patterns": [],
+    "crawl_policy": {
+      "engine": "open-seo-spider/crawl-policy-v1",
+      "scope": {
+        "roots": [
+          {
+            "origin": "http://127.0.0.1:52764",
+            "subdomains": false,
+            "folders": [
+              "/"
+            ],
+            "exact_paths": []
+          }
+        ],
+        "outside_folder": "deny",
+        "external": "deny"
+      },
+      "query": {
+        "remove_keys": [],
+        "key_match": "percent_decoded_utf8",
+        "order": "preserve"
+      },
+      "rewrites": [
+        {
+          "id": "native-alias",
+          "pattern": "/policy-original$",
+          "replacement": {
+            "kind": "literal",
+            "text": "/policy-alias"
+          }
+        }
+      ],
+      "include_patterns": [],
+      "exclude_patterns": [],
+      "filter_identity": "fetch",
+      "initial_inputs": {
+        "rewrite": "preserve",
+        "filters": "exempt"
+      },
+      "limits": {
+        "max_inputs": 10000,
+        "max_input_bytes": 8388608,
+        "max_url_bytes": 16384,
+        "max_roots": 32,
+        "max_scope_paths": 128,
+        "max_query_keys": 128,
+        "max_query_tokens": 1024,
+        "max_rewrite_rules": 64,
+        "max_filters": 128,
+        "max_pattern_bytes": 8192,
+        "max_total_pattern_bytes": 65536,
+        "max_replacement_bytes": 4096,
+        "max_capture_groups": 32,
+        "max_trace_steps": 256,
+        "max_output_bytes": 16777216,
+        "regex_size_limit": 1048576,
+        "dfa_size_limit": 1048576
+      }
+    }
+  },
+  "pages": [
+    {
+      "url": "http://127.0.0.1:52764/policy-seed",
+      "final_url": "http://127.0.0.1:52764/policy-seed",
+      "depth": 0,
+      "discovered_from": null,
+      "internal": true,
+      "fetched_at": "2026-10-13T07:49:15.420955500+00:00",
+      "status": 200,
+      "final_status": 200,
+      "content_type": "text/html",
+      "response_ms": 0,
+      "size_bytes": 118,
+      "truncated": false,
+      "error": null,
+      "warnings": [],
+      "blocked_by_robots": false,
+      "robots_warning": null,
+      "redirect_chain": [],
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "text/html",
+        "date": "Tue, 13 Oct 2026 07:49:15 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "titles": [
+        "Native sitemap acceptance"
+      ],
+      "meta_descriptions": [],
+      "title_pixel_widths": [
+        241
+      ],
+      "description_pixel_widths": [],
+      "text_metrics_engine": "roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic",
+      "h1": [],
+      "h2": [],
+      "canonical": [],
+      "html_canonical": [],
+      "header_canonical": [],
+      "meta_robots": [],
+      "x_robots_tag": [],
+      "robots_directives": [],
+      "effective_robots": [],
+      "indexability_agent": "googlebot",
+      "header_link_values": [],
+      "hreflang": [],
+      "html_hreflang": [],
+      "header_hreflang": [],
+      "document_base_url": "http://127.0.0.1:52764/policy-seed",
+      "base_href": null,
+      "link_relationships": [],
+      "pagination_next": [],
+      "pagination_prev": [],
+      "amphtml": [],
+      "language": null,
+      "viewport": null,
+      "images": [],
+      "links": [],
+      "word_count": 4,
+      "content_hash": "aba13c4c17865c8e37bf9e0a964dc9fd58bca25278edd07c1bc42a41a2d5351e",
+      "structured_data": [],
+      "invalid_structured_data": 0,
+      "script_count": 0,
+      "indexable": true,
+      "indexability_reasons": [],
+      "raw_metadata": null,
+      "rendered": false,
+      "renderer_error": null,
+      "rendered_url": null,
+      "rendered_status": null,
+      "rendered_headers": {},
+      "rendered_at": null,
+      "browser_version": null,
+      "rendered_viewport": null,
+      "render_wait_ms": null,
+      "network_events_dropped": 0,
+      "console_errors": [],
+      "network_requests": [],
+      "accessibility": null,
+      "screenshot_base64": null,
+      "custom_extractions": [],
+      "custom_javascript_results": [],
+      "browser_cookies": [],
+      "pdf": null,
+      "image_metadata": null,
+      "dom_metadata": {
+        "engine": "independent_html5_dom_v1",
+        "source": "raw_html",
+        "heading_text_engine": "independent_dom_text_with_inline_image_alt_v1",
+        "complete": true,
+        "limits_reached": [],
+        "headings": [],
+        "meta_keywords": [],
+        "fragment_targets": [],
+        "navigation_candidates": [],
+        "responsive_images": []
+      },
+      "policy": {
+        "admission": {
+          "engine": "open-seo-spider/native-crawl-policy-v1",
+          "policy_sha256": "279e054d59c9b0a90d13e9ef8ee7d39cb29ee64f342736ad37c02fb3eeb11235",
+          "occurrence_id": "764d7c7f82349c2f147656887ecb6a1ebe697d0029c870a6c3c36d9ae3517de8",
+          "fetch_url": "http://127.0.0.1:52764/policy-seed",
+          "source_kind": "list_page",
+          "task_role": "page_document",
+          "can_expand": true,
+          "can_discover_xml": false,
+          "inherited": false
+        },
+        "effective_can_expand": true,
+        "redirect_decisions": [],
+        "source_revision": "05a92fcd65d775b9f1f84ca5b89b82f34b5727c60697e7de867427d6126f31d5",
+        "candidates_complete": true,
+        "candidate_count": 0
+      }
+    },
+    {
+      "url": "http://127.0.0.1:52764/policy-alias",
+      "final_url": "http://127.0.0.1:52764/policy-alias",
+      "depth": 0,
+      "discovered_from": "http://127.0.0.1:52764/policy.xml",
+      "internal": true,
+      "fetched_at": "2026-10-13T07:49:15.423372400+00:00",
+      "status": 200,
+      "final_status": 200,
+      "content_type": "text/html",
+      "response_ms": 0,
+      "size_bytes": 118,
+      "truncated": false,
+      "error": null,
+      "warnings": [],
+      "blocked_by_robots": false,
+      "robots_warning": null,
+      "redirect_chain": [],
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "text/html",
+        "date": "Tue, 13 Oct 2026 07:49:15 GMT",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      },
+      "titles": [
+        "Native sitemap acceptance"
+      ],
+      "meta_descriptions": [],
+      "title_pixel_widths": [
+        241
+      ],
+      "description_pixel_widths": [],
+      "text_metrics_engine": "roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic",
+      "h1": [],
+      "h2": [],
+      "canonical": [],
+      "html_canonical": [],
+      "header_canonical": [],
+      "meta_robots": [],
+      "x_robots_tag": [],
+      "robots_directives": [],
+      "effective_robots": [],
+      "indexability_agent": "googlebot",
+      "header_link_values": [],
+      "hreflang": [],
+      "html_hreflang": [],
+      "header_hreflang": [],
+      "document_base_url": "http://127.0.0.1:52764/policy-alias",
+      "base_href": null,
+      "link_relationships": [],
+      "pagination_next": [],
+      "pagination_prev": [],
+      "amphtml": [],
+      "language": null,
+      "viewport": null,
+      "images": [],
+      "links": [],
+      "word_count": 4,
+      "content_hash": "aba13c4c17865c8e37bf9e0a964dc9fd58bca25278edd07c1bc42a41a2d5351e",
+      "structured_data": [],
+      "invalid_structured_data": 0,
+      "script_count": 0,
+      "indexable": true,
+      "indexability_reasons": [],
+      "raw_metadata": null,
+      "rendered": false,
+      "renderer_error": null,
+      "rendered_url": null,
+      "rendered_status": null,
+      "rendered_headers": {},
+      "rendered_at": null,
+      "browser_version": null,
+      "rendered_viewport": null,
+      "render_wait_ms": null,
+      "network_events_dropped": 0,
+      "console_errors": [],
+      "network_requests": [],
+      "accessibility": null,
+      "screenshot_base64": null,
+      "custom_extractions": [],
+      "custom_javascript_results": [],
+      "browser_cookies": [],
+      "pdf": null,
+      "image_metadata": null,
+      "dom_metadata": {
+        "engine": "independent_html5_dom_v1",
+        "source": "raw_html",
+        "heading_text_engine": "independent_dom_text_with_inline_image_alt_v1",
+        "complete": true,
+        "limits_reached": [],
+        "headings": [],
+        "meta_keywords": [],
+        "fragment_targets": [],
+        "navigation_candidates": [],
+        "responsive_images": []
+      },
+      "policy": {
+        "admission": {
+          "engine": "open-seo-spider/native-crawl-policy-v1",
+          "policy_sha256": "279e054d59c9b0a90d13e9ef8ee7d39cb29ee64f342736ad37c02fb3eeb11235",
+          "occurrence_id": "9f147ed1670858ba4225c891863343d1a5b5489662429b17466b2566e6cc1024",
+          "fetch_url": "http://127.0.0.1:52764/policy-alias",
+          "source_kind": "sitemap_location",
+          "task_role": "page_document",
+          "can_expand": true,
+          "can_discover_xml": false,
+          "inherited": false
+        },
+        "effective_can_expand": true,
+        "redirect_decisions": [],
+        "source_revision": "79ee0a4db12d6efae9e797459f13a6a55558fe755ee9acc64a0202e2c1a3618c",
+        "candidates_complete": true,
+        "candidate_count": 0
+      }
+    }
+  ],
+  "issues": [
+    {
+      "code": "title_short",
+      "severity": "notice",
+      "url": "http://127.0.0.1:52764/policy-seed",
+      "message": "Primary title has 25 Unicode characters, below configured minimum 30; review content and search appearance",
+      "related_urls": []
+    },
+    {
+      "code": "h2_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:52764/policy-seed",
+      "message": "No nonempty H2 heading was observed in the complete captured document; sections may not need H2 headings",
+      "related_urls": []
+    },
+    {
+      "code": "content_low_word_count",
+      "severity": "notice",
+      "url": "http://127.0.0.1:52764/policy-seed",
+      "message": "Captured normalized visible text has 4 words, below configured minimum 200; word count alone does not establish content quality",
+      "related_urls": []
+    },
+    {
+      "code": "internal_outlinks_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:52764/policy-seed",
+      "message": "No internal anchor outlinks were observed in the complete captured document; this can be intentional",
+      "related_urls": []
+    },
+    {
+      "code": "http_url",
+      "severity": "warning",
+      "url": "http://127.0.0.1:52764/policy-seed",
+      "message": "HTML served over unencrypted HTTP",
+      "related_urls": []
+    },
+    {
+      "code": "description_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:52764/policy-seed",
+      "message": "Meta description is missing or empty",
+      "related_urls": []
+    },
+    {
+      "code": "h1_missing",
+      "severity": "warning",
+      "url": "http://127.0.0.1:52764/policy-seed",
+      "message": "No nonempty H1 heading",
+      "related_urls": []
+    },
+    {
+      "code": "canonical_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:52764/policy-seed",
+      "message": "No HTML canonical link",
+      "related_urls": []
+    },
+    {
+      "code": "language_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:52764/policy-seed",
+      "message": "HTML language attribute is missing",
+      "related_urls": []
+    },
+    {
+      "code": "viewport_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:52764/policy-seed",
+      "message": "No viewport meta tag",
+      "related_urls": []
+    },
+    {
+      "code": "title_short",
+      "severity": "notice",
+      "url": "http://127.0.0.1:52764/policy-alias",
+      "message": "Primary title has 25 Unicode characters, below configured minimum 30; review content and search appearance",
+      "related_urls": []
+    },
+    {
+      "code": "h2_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:52764/policy-alias",
+      "message": "No nonempty H2 heading was observed in the complete captured document; sections may not need H2 headings",
+      "related_urls": []
+    },
+    {
+      "code": "content_low_word_count",
+      "severity": "notice",
+      "url": "http://127.0.0.1:52764/policy-alias",
+      "message": "Captured normalized visible text has 4 words, below configured minimum 200; word count alone does not establish content quality",
+      "related_urls": []
+    },
+    {
+      "code": "internal_outlinks_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:52764/policy-alias",
+      "message": "No internal anchor outlinks were observed in the complete captured document; this can be intentional",
+      "related_urls": []
+    },
+    {
+      "code": "http_url",
+      "severity": "warning",
+      "url": "http://127.0.0.1:52764/policy-alias",
+      "message": "HTML served over unencrypted HTTP",
+      "related_urls": []
+    },
+    {
+      "code": "description_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:52764/policy-alias",
+      "message": "Meta description is missing or empty",
+      "related_urls": []
+    },
+    {
+      "code": "h1_missing",
+      "severity": "warning",
+      "url": "http://127.0.0.1:52764/policy-alias",
+      "message": "No nonempty H1 heading",
+      "related_urls": []
+    },
+    {
+      "code": "canonical_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:52764/policy-alias",
+      "message": "No HTML canonical link",
+      "related_urls": []
+    },
+    {
+      "code": "language_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:52764/policy-alias",
+      "message": "HTML language attribute is missing",
+      "related_urls": []
+    },
+    {
+      "code": "viewport_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:52764/policy-alias",
+      "message": "No viewport meta tag",
+      "related_urls": []
+    },
+    {
+      "code": "title_duplicate",
+      "severity": "warning",
+      "url": "http://127.0.0.1:52764/policy-seed",
+      "message": "Same title on 2 indexable URLs",
+      "related_urls": [
+        "http://127.0.0.1:52764/policy-alias"
+      ]
+    },
+    {
+      "code": "title_duplicate",
+      "severity": "warning",
+      "url": "http://127.0.0.1:52764/policy-alias",
+      "message": "Same title on 2 indexable URLs",
+      "related_urls": [
+        "http://127.0.0.1:52764/policy-seed"
+      ]
+    },
+    {
+      "code": "content_duplicate",
+      "severity": "warning",
+      "url": "http://127.0.0.1:52764/policy-seed",
+      "message": "Identical normalized visible text; this is an exact-content comparison",
+      "related_urls": [
+        "http://127.0.0.1:52764/policy-alias"
+      ]
+    },
+    {
+      "code": "content_duplicate",
+      "severity": "warning",
+      "url": "http://127.0.0.1:52764/policy-alias",
+      "message": "Identical normalized visible text; this is an exact-content comparison",
+      "related_urls": [
+        "http://127.0.0.1:52764/policy-seed"
+      ]
+    },
+    {
+      "code": "meta_keywords_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:52764/policy-alias",
+      "message": "No meta keyword element was observed; keywords are metadata observations, not a recommended ranking input",
+      "related_urls": []
+    },
+    {
+      "code": "meta_keywords_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:52764/policy-seed",
+      "message": "No meta keyword element was observed; keywords are metadata observations, not a recommended ranking input",
+      "related_urls": []
+    },
+    {
+      "code": "crawl_orphan_candidate",
+      "severity": "notice",
+      "url": "http://127.0.0.1:52764/policy-alias",
+      "message": "No incoming anchor from another captured internal document was observed; this is a crawl-bounded candidate, not proof of a site-wide orphan",
+      "related_urls": [
+        "http://127.0.0.1:52764/policy.xml"
+      ]
+    }
+  ],
+  "summary": {
+    "started_at": "2026-10-13T07:49:15.392965900+00:00",
+    "finished_at": "2026-10-13T07:49:15.425653300+00:00",
+    "elapsed_ms": 32,
+    "completed": 2,
+    "discovered": 2,
+    "pending": 0,
+    "html_pages": 2,
+    "indexable_pages": 2,
+    "errors": 0,
+    "warnings": 8,
+    "cancelled": false,
+    "limited": false,
+    "status_counts": {
+      "200": 2
+    }
+  },
+  "warnings": [],
+  "policy_ledger": {
+    "engine": "open-seo-spider/native-crawl-policy-v1",
+    "policy_sha256": "279e054d59c9b0a90d13e9ef8ee7d39cb29ee64f342736ad37c02fb3eeb11235",
+    "revision": 4,
+    "occurrences": 7,
+    "committed_bytes": 9738,
+    "rolling_sha256": "bc1b87e3ef44618394f028fc7b54bfc0ad763f17c5dfcc7a8d0c68b2b80feb41",
+    "incomplete_sources": 0,
+    "complete": true
+  },
+  "sitemap_catalog": {
+    "schema_version": 1,
+    "summary": {
+      "engine": "open-seo-spider/sitemap-membership-ledger-v1",
+      "hash_profile": "sha256-tagged-canonical-rust-serde-rows-v1",
+      "config_sha256": "e78b9336457f9d35cd7f189a0eaf15b09e6d9e2a53dd965c055a34d013173302",
+      "limits": {
+        "max_catalog_json_bytes": 33554432,
+        "max_row_json_bytes": 262144,
+        "max_rows": 1000000
+      },
+      "revision": 2,
+      "last_sequence": 14,
+      "root_rows": 1,
+      "document_rows": 1,
+      "entry_rows": 6,
+      "location_rows": 6,
+      "incomplete_documents": 0,
+      "catalog_json_bytes": 10740,
+      "rolling_sha256": "e86abc5418900f701421c954b4643bc4ef11511121a9f27b0e0d488b4d96852c",
+      "rows_available": true,
+      "declared_source_cohort_complete": false,
+      "legacy_history_unknown": false
+    },
+    "inherited": null,
+    "rows": [
+      {
+        "kind": "root",
+        "row": {
+          "sequence": 1,
+          "declaration_id": "e0fe6bee4b50ed5c2f315efec4463a7d1766c72d023553b688a3940e8923f05c",
+          "kind": "explicit_config",
+          "source_observation_id": null,
+          "source_ordinal": 0,
+          "raw_line": null,
+          "raw_value": "http://127.0.0.1:52764/policy.xml",
+          "normalized_document_url": "http://127.0.0.1:52764/policy.xml",
+          "robots_evidence": null,
+          "admission": {
+            "decision": "scheduled",
+            "membership_url": "http://127.0.0.1:52764/policy.xml",
+            "admitted_fetch_url": "http://127.0.0.1:52764/policy.xml",
+            "coalesced_policy_occurrence_id": null,
+            "policy_occurrence_id": "d59554675a9e98a6b5531fae6f36d48fb69ff86c131c2e33d2ae5ca76fd4186a",
+            "policy_source_revision": "initial:279e054d59c9b0a90d13e9ef8ee7d39cb29ee64f342736ad37c02fb3eeb11235:explicit:sitemap_document"
+          }
+        }
+      },
+      {
+        "kind": "document",
+        "row": {
+          "sequence": 2,
+          "observation_id": "92d6bf4b6567203e3cf7dc2e6d933b40e463c49d22544f817e8696e3a74b3d18",
+          "kind": "sitemap_xml",
+          "task_url": "http://127.0.0.1:52764/policy.xml",
+          "generation": 1,
+          "source_revision": "55dfbba34a93c8e17918b7fca69636dc5b447363984f772a5ff179e3362da7ce",
+          "transport": {
+            "request_started": true,
+            "requested_url": "http://127.0.0.1:52764/policy.xml",
+            "final_url": "http://127.0.0.1:52764/policy.xml",
+            "initial_status": 200,
+            "final_status": 200,
+            "blocked_by_robots": false,
+            "body_complete": true,
+            "post_http_decoding_bytes": 359,
+            "post_http_decoding_sha256": "254d3931ea885df04517b2b932d0c77d3d69a44b32391fe21a39cdaf4308e17a",
+            "retained_post_http_prefix_sha256": "254d3931ea885df04517b2b932d0c77d3d69a44b32391fe21a39cdaf4308e17a",
+            "failure_code": null
+          },
+          "entity_decode": {
+            "encoding": "identity",
+            "post_http_decode_entity_bytes": 359,
+            "decoded_xml_bytes": 359,
+            "decoded_xml_sha256": "254d3931ea885df04517b2b932d0c77d3d69a44b32391fe21a39cdaf4308e17a"
+          },
+          "parser": {
+            "schema_version": 1,
+            "engine": "open-seo-spider/sitemap-xml-occurrences-v1",
+            "context_basis": "caller_declared_parser_context",
+            "context": {
+              "requested_document_url": "http://127.0.0.1:52764/policy.xml",
+              "final_document_url": "http://127.0.0.1:52764/policy.xml",
+              "originating_occurrence_id": null
+            },
+            "xml_bytes": 359,
+            "xml_sha256": "254d3931ea885df04517b2b932d0c77d3d69a44b32391fe21a39cdaf4308e17a",
+            "xml_sha_profile": "decoded-sitemap-xml-bytes-v1",
+            "namespace_profile": "sitemap09",
+            "xml_name_profile": "ascii-qname-v1",
+            "kind": "url_set",
+            "events_observed": 31,
+            "retained_text_utf8_bytes": 715,
+            "entry_count": 6,
+            "location_count": 6,
+            "complete": true,
+            "failure": null
+          },
+          "declaration_scan_complete": false,
+          "declaration_utf8_lossy": null,
+          "declaration_count": null,
+          "retained_rows_complete": true,
+          "failure_code": null
+        }
+      },
+      {
+        "kind": "entry",
+        "row": {
+          "sequence": 3,
+          "observation_id": "92d6bf4b6567203e3cf7dc2e6d933b40e463c49d22544f817e8696e3a74b3d18",
+          "entry_id": "d7eea61ee64aa6b8ecc585669f60d6e712e4cf73cd2261f7765566f1700e1dc3",
+          "observed": {
+            "ordinal": 1,
+            "xml_byte_start": 60,
+            "xml_byte_end": 120,
+            "complete": true,
+            "loc_occurrence_ordinals": [
+              1
+            ],
+            "lastmod": [],
+            "diagnostics": []
+          }
+        }
+      },
+      {
+        "kind": "entry",
+        "row": {
+          "sequence": 4,
+          "observation_id": "92d6bf4b6567203e3cf7dc2e6d933b40e463c49d22544f817e8696e3a74b3d18",
+          "entry_id": "4decefc1fde68259e9181b4add5e91ebe55ec01f11afa95f7b8c6a5af4bd2471",
+          "observed": {
+            "ordinal": 2,
+            "xml_byte_start": 120,
+            "xml_byte_end": 180,
+            "complete": true,
+            "loc_occurrence_ordinals": [
+              2
+            ],
+            "lastmod": [],
+            "diagnostics": []
+          }
+        }
+      },
+      {
+        "kind": "entry",
+        "row": {
+          "sequence": 5,
+          "observation_id": "92d6bf4b6567203e3cf7dc2e6d933b40e463c49d22544f817e8696e3a74b3d18",
+          "entry_id": "3e17db562323dbcfdccf6039bcd75469cac001a35d3d719bcb97fd03bbef3469",
+          "observed": {
+            "ordinal": 3,
+            "xml_byte_start": 180,
+            "xml_byte_end": 186,
+            "complete": true,
+            "loc_occurrence_ordinals": [],
+            "lastmod": [],
+            "diagnostics": [
+              "missing_location"
+            ]
+          }
+        }
+      },
+      {
+        "kind": "entry",
+        "row": {
+          "sequence": 6,
+          "observation_id": "92d6bf4b6567203e3cf7dc2e6d933b40e463c49d22544f817e8696e3a74b3d18",
+          "entry_id": "de5fa88bd526f8b70ae418b0f74d6ebd442b4bb1330777626c43b9dedf494d65",
+          "observed": {
+            "ordinal": 4,
+            "xml_byte_start": 186,
+            "xml_byte_end": 227,
+            "complete": true,
+            "loc_occurrence_ordinals": [
+              4
+            ],
+            "lastmod": [],
+            "diagnostics": []
+          }
+        }
+      },
+      {
+        "kind": "entry",
+        "row": {
+          "sequence": 7,
+          "observation_id": "92d6bf4b6567203e3cf7dc2e6d933b40e463c49d22544f817e8696e3a74b3d18",
+          "entry_id": "2fc965c02cf7be5bda05ed47ec6c2169492619ff1687a0d29ad77e8621f11358",
+          "observed": {
+            "ordinal": 5,
+            "xml_byte_start": 227,
+            "xml_byte_end": 287,
+            "complete": true,
+            "loc_occurrence_ordinals": [
+              5
+            ],
+            "lastmod": [],
+            "diagnostics": []
+          }
+        }
+      },
+      {
+        "kind": "entry",
+        "row": {
+          "sequence": 8,
+          "observation_id": "92d6bf4b6567203e3cf7dc2e6d933b40e463c49d22544f817e8696e3a74b3d18",
+          "entry_id": "ff05a4f253a728e3f11136ca5c6aac9725ab3bfd2c5c5266b01dad8c9376030b",
+          "observed": {
+            "ordinal": 6,
+            "xml_byte_start": 287,
+            "xml_byte_end": 350,
+            "complete": true,
+            "loc_occurrence_ordinals": [
+              6
+            ],
+            "lastmod": [],
+            "diagnostics": []
+          }
+        }
+      },
+      {
+        "kind": "location",
+        "row": {
+          "sequence": 9,
+          "observation_id": "92d6bf4b6567203e3cf7dc2e6d933b40e463c49d22544f817e8696e3a74b3d18",
+          "occurrence_id": "38edda86fe0bce69d82b9af80274e8802114e8f7f6aa78e497614c8967358c18",
+          "observed": {
+            "ordinal": 1,
+            "entry_ordinal": 1,
+            "loc_ordinal": 1,
+            "role": "page_location",
+            "xml_byte_start": 65,
+            "xml_byte_end": 114,
+            "raw_element_xml": "<loc>http://127.0.0.1:52764/policy-original</loc>",
+            "raw_inner_xml": "http://127.0.0.1:52764/policy-original",
+            "decoded_value": "http://127.0.0.1:52764/policy-original",
+            "normalized_fetch_url": "http://127.0.0.1:52764/policy-original",
+            "validation_error": null
+          },
+          "admission": {
+            "decision": "scheduled",
+            "membership_url": "http://127.0.0.1:52764/policy-original",
+            "admitted_fetch_url": "http://127.0.0.1:52764/policy-alias",
+            "coalesced_policy_occurrence_id": null,
+            "policy_occurrence_id": "9f147ed1670858ba4225c891863343d1a5b5489662429b17466b2566e6cc1024",
+            "policy_source_revision": "55dfbba34a93c8e17918b7fca69636dc5b447363984f772a5ff179e3362da7ce"
+          },
+          "referenced_sitemap_task": null
+        }
+      },
+      {
+        "kind": "location",
+        "row": {
+          "sequence": 10,
+          "observation_id": "92d6bf4b6567203e3cf7dc2e6d933b40e463c49d22544f817e8696e3a74b3d18",
+          "occurrence_id": "157367e0a06babde63cea8db9268abc24a3edeb54fc02dcb53beb6818a749286",
+          "observed": {
+            "ordinal": 2,
+            "entry_ordinal": 2,
+            "loc_ordinal": 1,
+            "role": "page_location",
+            "xml_byte_start": 125,
+            "xml_byte_end": 174,
+            "raw_element_xml": "<loc>http://127.0.0.1:52764/policy-original</loc>",
+            "raw_inner_xml": "http://127.0.0.1:52764/policy-original",
+            "decoded_value": "http://127.0.0.1:52764/policy-original",
+            "normalized_fetch_url": "http://127.0.0.1:52764/policy-original",
+            "validation_error": null
+          },
+          "admission": {
+            "decision": "coalesced",
+            "membership_url": "http://127.0.0.1:52764/policy-original",
+            "admitted_fetch_url": "http://127.0.0.1:52764/policy-alias",
+            "coalesced_policy_occurrence_id": "9f147ed1670858ba4225c891863343d1a5b5489662429b17466b2566e6cc1024",
+            "policy_occurrence_id": "33b2050e72d7af642c099d43d2345654bf84befec976dd335464e8b23410c0ed",
+            "policy_source_revision": "55dfbba34a93c8e17918b7fca69636dc5b447363984f772a5ff179e3362da7ce"
+          },
+          "referenced_sitemap_task": null
+        }
+      },
+      {
+        "kind": "location",
+        "row": {
+          "sequence": 11,
+          "observation_id": "92d6bf4b6567203e3cf7dc2e6d933b40e463c49d22544f817e8696e3a74b3d18",
+          "occurrence_id": "6573c3c1d7abf14fdde06dc8d85feebd541dafcf673d5b60a727bed53bbecf6d",
+          "observed": {
+            "ordinal": 3,
+            "entry_ordinal": 3,
+            "loc_ordinal": null,
+            "role": "page_location",
+            "xml_byte_start": 180,
+            "xml_byte_end": 186,
+            "raw_element_xml": null,
+            "raw_inner_xml": null,
+            "decoded_value": null,
+            "normalized_fetch_url": null,
+            "validation_error": "missing_location"
+          },
+          "admission": {
+            "decision": "missing_location",
+            "membership_url": null,
+            "admitted_fetch_url": null,
+            "coalesced_policy_occurrence_id": null,
+            "policy_occurrence_id": null,
+            "policy_source_revision": null
+          },
+          "referenced_sitemap_task": null
+        }
+      },
+      {
+        "kind": "location",
+        "row": {
+          "sequence": 12,
+          "observation_id": "92d6bf4b6567203e3cf7dc2e6d933b40e463c49d22544f817e8696e3a74b3d18",
+          "occurrence_id": "6536c9df11628e5324dfd64445867dd1177ec54afb34cd5d31b9ee032f02c537",
+          "observed": {
+            "ordinal": 4,
+            "entry_ordinal": 4,
+            "loc_ordinal": 1,
+            "role": "page_location",
+            "xml_byte_start": 191,
+            "xml_byte_end": 221,
+            "raw_element_xml": "<loc>not an absolute URI</loc>",
+            "raw_inner_xml": "not an absolute URI",
+            "decoded_value": "not an absolute URI",
+            "normalized_fetch_url": null,
+            "validation_error": "invalid_absolute_http_location"
+          },
+          "admission": {
+            "decision": "invalid_location",
+            "membership_url": null,
+            "admitted_fetch_url": null,
+            "coalesced_policy_occurrence_id": null,
+            "policy_occurrence_id": "6c198433964d00a68619c8574c141febad57d4127ea9c6dc550b4e61c738007c",
+            "policy_source_revision": "55dfbba34a93c8e17918b7fca69636dc5b447363984f772a5ff179e3362da7ce"
+          },
+          "referenced_sitemap_task": null
+        }
+      },
+      {
+        "kind": "location",
+        "row": {
+          "sequence": 13,
+          "observation_id": "92d6bf4b6567203e3cf7dc2e6d933b40e463c49d22544f817e8696e3a74b3d18",
+          "occurrence_id": "da0a42434d888373be9155e0b910d44f6c01851ce6d8534942604cfe03aaef8b",
+          "observed": {
+            "ordinal": 5,
+            "entry_ordinal": 5,
+            "loc_ordinal": 1,
+            "role": "page_location",
+            "xml_byte_start": 232,
+            "xml_byte_end": 281,
+            "raw_element_xml": "<loc> http://127.0.0.1:52764/policy-nbsp </loc>",
+            "raw_inner_xml": " http://127.0.0.1:52764/policy-nbsp ",
+            "decoded_value": " http://127.0.0.1:52764/policy-nbsp ",
+            "normalized_fetch_url": null,
+            "validation_error": "invalid_absolute_http_location"
+          },
+          "admission": {
+            "decision": "invalid_location",
+            "membership_url": null,
+            "admitted_fetch_url": null,
+            "coalesced_policy_occurrence_id": null,
+            "policy_occurrence_id": "c89618705e81f6911eb10c012a4249835f1c110d5dba7af3f64c23e583efa28a",
+            "policy_source_revision": "55dfbba34a93c8e17918b7fca69636dc5b447363984f772a5ff179e3362da7ce"
+          },
+          "referenced_sitemap_task": null
+        }
+      },
+      {
+        "kind": "location",
+        "row": {
+          "sequence": 14,
+          "observation_id": "92d6bf4b6567203e3cf7dc2e6d933b40e463c49d22544f817e8696e3a74b3d18",
+          "occurrence_id": "db7f33bf7a5c86ccaa6186668b91892e24873232a56ca5ca1c083c0a4372163c",
+          "observed": {
+            "ordinal": 6,
+            "entry_ordinal": 6,
+            "loc_ordinal": 1,
+            "role": "page_location",
+            "xml_byte_start": 292,
+            "xml_byte_end": 344,
+            "raw_element_xml": "<loc>http://127.0.0.1:52764/policy&#x9;control</loc>",
+            "raw_inner_xml": "http://127.0.0.1:52764/policy&#x9;control",
+            "decoded_value": "http://127.0.0.1:52764/policy\tcontrol",
+            "normalized_fetch_url": null,
+            "validation_error": "invalid_absolute_http_location"
+          },
+          "admission": {
+            "decision": "invalid_location",
+            "membership_url": null,
+            "admitted_fetch_url": null,
+            "coalesced_policy_occurrence_id": null,
+            "policy_occurrence_id": "4e976d18b6af06a4e16055f3eb4e05a51c774fd9fca5a27aef06045103aa7bbf",
+            "policy_source_revision": "55dfbba34a93c8e17918b7fca69636dc5b447363984f772a5ff179e3362da7ce"
+          },
+          "referenced_sitemap_task": null
+        }
+      }
+    ]
+  }
+}

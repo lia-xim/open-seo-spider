@@ -1,0 +1,594 @@
+{
+  "schema_version": 1,
+  "result": "PASS",
+  "scope_name": "native_sitemap_durable_11_drained_v5",
+  "recorded_at": "2026-10-13T07:49:00.784Z",
+  "source_commit": "ae77438f1362f9df5ee9eb0f49c195caa5b479c0",
+  "expected_source_commit": "ae77438f1362f9df5ee9eb0f49c195caa5b479c0",
+  "source_basis": "caller_declared; independent CI build/manifest binding required",
+  "source_runtime_attested": false,
+  "binary_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\cargo-target\\debug\\open-seo-spider.exe",
+  "binary_bytes": 51603456,
+  "binary_sha256": "f06a950086d37e2e921f85969690dafbdf0c93c248a1690cb43934986031e51b",
+  "expected_binary_sha256": "f06a950086d37e2e921f85969690dafbdf0c93c248a1690cb43934986031e51b",
+  "final_binary_sha256": "f06a950086d37e2e921f85969690dafbdf0c93c248a1690cb43934986031e51b",
+  "harness_sha256": "51c99a54cd5a9665f17e419596e8bbae23b13ce901035b9275087358324ca9b8",
+  "scenario_ids": [
+    "ordinary-original-nested",
+    "policy-original-alias",
+    "robots-complete-originals",
+    "robots-206-incomplete",
+    "file-gzip-corruption",
+    "known-empty",
+    "pause-source-restart-resume",
+    "selected-ordinary-inheritance",
+    "selected-policy-inheritance",
+    "legacy-none-import-selected-restart",
+    "invalid-parent-catalog-rejected"
+  ],
+  "matrix_sha256": "b2e612cac6c0eace8a0cd793cfa5a250c18c6a8caad92e70a6b69183d60c6412",
+  "platform": "win32",
+  "node_version": "v24.15.0",
+  "limits": {
+    "runMs": 180000,
+    "startMs": 20000,
+    "scenarioMs": 30000,
+    "requestMs": 5000,
+    "stopMs": 5000,
+    "drainMs": 8000,
+    "quietMs": 250,
+    "fixtureCloseMs": 5000,
+    "apiBytes": 8388608,
+    "apiCount": 1024,
+    "apiCompanionBytes": 67108864,
+    "appLogBytes": 262144,
+    "fixtureRequests": 4096
+  },
+  "fixture_origin": "http://127.0.0.1:52738",
+  "user_runtime_contacted": false,
+  "renderer_contacted": false,
+  "owned_api_origin_basis": "exact complete post-bind lines from run-owned child handles",
+  "owned_apps": [
+    {
+      "ordinal": 1,
+      "label": "initial",
+      "pid": 49504,
+      "origin": "http://127.0.0.1:52739",
+      "started_ms": 61.976399999999984,
+      "bind_line": "Open SEO Spider: http://127.0.0.1:52739",
+      "bind_line_sha256": "ae67ee91599f445cd1e07f07839c8966cf2b37daa4db01075424fe8da2c27820",
+      "stop_requested_ms": 833.1455,
+      "planned_stop": true,
+      "closed": true,
+      "close_meta": {
+        "code": null,
+        "signal": "SIGTERM",
+        "closed_ms": 838.3969
+      },
+      "stdout_bytes": 40,
+      "stderr_bytes": 0,
+      "stdout_truncated": false,
+      "stderr_truncated": false
+    },
+    {
+      "ordinal": 2,
+      "label": "paused-restart",
+      "pid": 48916,
+      "origin": "http://127.0.0.1:52752",
+      "started_ms": 893.8512,
+      "bind_line": "Open SEO Spider: http://127.0.0.1:52752",
+      "bind_line_sha256": "a0c0c3c03a75b4c6a387ee344fa02d76c5e5d169188585a62dfa211a060fdb4d",
+      "stop_requested_ms": 1755.3989000000001,
+      "planned_stop": true,
+      "closed": true,
+      "close_meta": {
+        "code": null,
+        "signal": "SIGTERM",
+        "closed_ms": 1760.7435999999998
+      },
+      "stdout_bytes": 40,
+      "stderr_bytes": 0,
+      "stdout_truncated": false,
+      "stderr_truncated": false
+    },
+    {
+      "ordinal": 3,
+      "label": "legacy-restart",
+      "pid": 44484,
+      "origin": "http://127.0.0.1:52759",
+      "started_ms": 1814.3939,
+      "bind_line": "Open SEO Spider: http://127.0.0.1:52759",
+      "bind_line_sha256": "b8d9396a00295f3c58b0b8149004061547a6e249aa5ee5603259614e7bd8b85d",
+      "stop_requested_ms": 2360.1089,
+      "planned_stop": true,
+      "closed": true,
+      "close_meta": {
+        "code": null,
+        "signal": "SIGTERM",
+        "closed_ms": 2365.0044000000003
+      },
+      "stdout_bytes": 40,
+      "stderr_bytes": 0,
+      "stdout_truncated": false,
+      "stderr_truncated": false
+    }
+  ],
+  "all_owned_apps_closed": true,
+  "fixture_closed_cleanly": true,
+  "final_target_http_witness": "DRAINED",
+  "drain": {
+    "recorded_at": "2026-10-13T07:49:00.695Z",
+    "all_owned_apps_closed": true,
+    "fixture_kept_listening_until_drained": true,
+    "active_requests": 0,
+    "connected_sockets": 0,
+    "quiet_ms": 250,
+    "total_requests": 28,
+    "fixture_closed_cleanly": true,
+    "forced_socket_cleanup": false,
+    "accepted_connections": 14,
+    "final_total_requests": 28
+  },
+  "witness_complete": true,
+  "scenarios": [
+    {
+      "id": "ordinary-original-nested",
+      "assertions": [
+        "4 fragment/ASCII-space original roots and raw/ordinal import overlap",
+        "two primary XML tasks and exact ordinary/policy Loc counts; child fragments normalize and duplicates coalesce",
+        "ordinary missing/invalid original Locs remain without invented policy references",
+        "page Loc membership remains original while policy page aliases schedule/coalesce",
+        "ordinary protocol identities normalize only their original safe declarations",
+        "full report/checkpoint catalogue binding"
+      ],
+      "recorded_ms": 224.7928
+    },
+    {
+      "id": "policy-original-alias",
+      "assertions": [
+        "4 fragment/ASCII-space original roots and raw/ordinal import overlap",
+        "two primary XML tasks and exact ordinary/policy Loc counts; child fragments normalize and duplicates coalesce",
+        "invalid present policy Locs retain rejected SQL inputs; NBSP/tab aliases stay unrequested",
+        "page Loc membership remains original while policy page aliases schedule/coalesce",
+        "separate queried root and queried child preserve protocol queries even with Apply; bare aliases stay unrequested",
+        "full report/checkpoint catalogue binding"
+      ],
+      "recorded_ms": 445.91139999999996
+    },
+    {
+      "id": "robots-complete-originals",
+      "assertions": [
+        "3 original zero-based raw directives",
+        "true entity EOF distinct from HTTP source completeness",
+        "absolute duplicate roots coalesce and relative directive stays invalid"
+      ],
+      "recorded_ms": 524.3747
+    },
+    {
+      "id": "robots-206-incomplete",
+      "assertions": [
+        "3 original zero-based raw directives",
+        "true entity EOF distinct from HTTP source completeness",
+        "206 makes zero admitted sitemap/page tasks"
+      ],
+      "recorded_ms": 598.0064
+    },
+    {
+      "id": "file-gzip-corruption",
+      "assertions": [
+        "complete actual HTTP entity",
+        "corrupt file-gzip footer retained as source failure",
+        "no fabricated XML parser or page admission"
+      ],
+      "recorded_ms": 665.3094
+    },
+    {
+      "id": "known-empty",
+      "assertions": [
+        "known original empty vector",
+        "available empty catalogue",
+        "cohort completeness remains false"
+      ],
+      "recorded_ms": 728.8536
+    },
+    {
+      "id": "pause-source-restart-resume",
+      "assertions": [
+        "pause drains admitted source before checkpoint",
+        "restart preserves exact report bytes and does not issue fixture requests",
+        "resume preserves initial roots/config hash and fetches only saved pending children"
+      ],
+      "recorded_ms": 1183.4038
+    },
+    {
+      "id": "selected-ordinary-inheritance",
+      "assertions": [
+        "exact parent bytes and inherited unchanged sitemap rows",
+        "duplicate selection coalesces one refresh",
+        "no current sitemap discovery; final drained parent route counts establish absence"
+      ],
+      "recorded_ms": 1369.5816
+    },
+    {
+      "id": "selected-policy-inheritance",
+      "assertions": [
+        "exact parent bytes and inherited unchanged sitemap rows",
+        "duplicate selection coalesces one refresh",
+        "no current sitemap discovery; final drained parent route counts establish absence"
+      ],
+      "recorded_ms": 1617.9099999999999
+    },
+    {
+      "id": "legacy-none-import-selected-restart",
+      "assertions": [
+        "publicly imported historical field absence preserved",
+        "selected native store and immutable parent remain catalogue-unavailable",
+        "restart neither upgrades history nor discovers declared forbidden source"
+      ],
+      "recorded_ms": 2338.9407
+    },
+    {
+      "id": "invalid-parent-catalog-rejected",
+      "assertions": [
+        "bad immutable parent catalogue rejected by selected validation",
+        "no derived files created",
+        "original imported snapshot bytes preserved; final witness establishes no website requests"
+      ],
+      "recorded_ms": 2360.0574
+    }
+  ],
+  "final_http_counts": [
+    {
+      "group": "ordinary-original-nested",
+      "route": "/ordinary-original-nested/seed",
+      "expected": 1,
+      "actual": 1,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "ordinary-original-nested",
+      "route": "/ordinary-original-nested/map.xml",
+      "expected": 1,
+      "actual": 1,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "ordinary-original-nested",
+      "route": "/ordinary-original-nested/child.xml",
+      "expected": 1,
+      "actual": 1,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "ordinary-original-nested",
+      "route": "/ordinary-original-nested/page",
+      "expected": 2,
+      "actual": 2,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "policy-original-alias",
+      "route": "/policy-original-alias/seed",
+      "expected": 1,
+      "actual": 1,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "policy-original-alias",
+      "route": "/policy-original-alias/map.xml",
+      "expected": 1,
+      "actual": 1,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "policy-original-alias",
+      "route": "/policy-original-alias/child.xml",
+      "expected": 1,
+      "actual": 1,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "policy-original-alias",
+      "route": "/policy-original-alias/page",
+      "expected": 2,
+      "actual": 2,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "policy-original-alias",
+      "route": "/policy-original-alias/listed?utm=1",
+      "expected": 0,
+      "actual": 0,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "policy-original-alias",
+      "route": "/policy-original-alias/listed?utm=2",
+      "expected": 0,
+      "actual": 0,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "policy-original-alias",
+      "route": "/policy-original-alias/map.xml?tracking=1",
+      "expected": 0,
+      "actual": 0,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "policy-original-alias",
+      "route": "/policy-original-alias/child.xml?tracking=8",
+      "expected": 0,
+      "actual": 0,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "policy-original-alias",
+      "route": "/policy-original-alias/nbsp",
+      "expected": 0,
+      "actual": 0,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "policy-original-alias",
+      "route": "/policy-original-alias/ab",
+      "expected": 0,
+      "actual": 0,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "policy-original-alias",
+      "route": "/policy-original-alias/query-control-seed",
+      "expected": 1,
+      "actual": 1,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "policy-original-alias",
+      "route": "/policy-original-alias/query-map.xml?tracking=protocolkeep",
+      "expected": 1,
+      "actual": 1,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "policy-original-alias",
+      "route": "/policy-original-alias/query-child.xml?tracking=childkeep",
+      "expected": 1,
+      "actual": 1,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "policy-original-alias",
+      "route": "/policy-original-alias/query-control-seed?tracking=initialpage",
+      "expected": 0,
+      "actual": 0,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "policy-original-alias",
+      "route": "/policy-original-alias/query-map.xml",
+      "expected": 0,
+      "actual": 0,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "policy-original-alias",
+      "route": "/policy-original-alias/query-child.xml",
+      "expected": 0,
+      "actual": 0,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "robots-complete-originals",
+      "route": "/robots.txt",
+      "expected": 1,
+      "actual": 1,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "robots-complete-originals",
+      "route": "/robots-complete-originals/seed",
+      "expected": 1,
+      "actual": 1,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "robots-complete-originals",
+      "route": "/robots-complete-originals/map.xml",
+      "expected": 1,
+      "actual": 1,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "robots-complete-originals",
+      "route": "/robots-complete-originals/page",
+      "expected": 1,
+      "actual": 1,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "robots-complete-originals",
+      "route": "/relative.xml",
+      "expected": 0,
+      "actual": 0,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "robots-206-incomplete",
+      "route": "/robots.txt",
+      "expected": 1,
+      "actual": 1,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "robots-206-incomplete",
+      "route": "/robots-206-incomplete/seed",
+      "expected": 1,
+      "actual": 1,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "robots-206-incomplete",
+      "route": "/robots-206-incomplete/map.xml",
+      "expected": 0,
+      "actual": 0,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "robots-206-incomplete",
+      "route": "/robots-206-incomplete/page",
+      "expected": 0,
+      "actual": 0,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "robots-206-incomplete",
+      "route": "/relative.xml",
+      "expected": 0,
+      "actual": 0,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "file-gzip-corruption",
+      "route": "/file-gzip-corruption/seed",
+      "expected": 1,
+      "actual": 1,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "file-gzip-corruption",
+      "route": "/file-gzip-corruption/map.xml",
+      "expected": 1,
+      "actual": 1,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "file-gzip-corruption",
+      "route": "/file-gzip-corruption/page",
+      "expected": 0,
+      "actual": 0,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "known-empty",
+      "route": "/known-empty/seed",
+      "expected": 2,
+      "actual": 2,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "pause-source-restart-resume",
+      "route": "/pause-source-restart-resume/index.xml",
+      "expected": 1,
+      "actual": 1,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "pause-source-restart-resume",
+      "route": "/pause-source-restart-resume/a.xml",
+      "expected": 1,
+      "actual": 1,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "pause-source-restart-resume",
+      "route": "/pause-source-restart-resume/b.xml",
+      "expected": 1,
+      "actual": 1,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "pause-source-restart-resume",
+      "route": "/pause-source-restart-resume/a",
+      "expected": 1,
+      "actual": 1,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "pause-source-restart-resume",
+      "route": "/pause-source-restart-resume/b",
+      "expected": 1,
+      "actual": 1,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    },
+    {
+      "group": "legacy-none-import-selected-restart",
+      "route": "/legacy-none-import-selected-restart/forbidden.xml",
+      "expected": 0,
+      "actual": 0,
+      "witness_phase": "after_all_owned_apps_close_and_clean_fixture_drain"
+    }
+  ],
+  "final_zero_request_intervals": [
+    {
+      "id": "paused-startup",
+      "started_ms": 838.4471,
+      "finished_ms": 1105.5254,
+      "after_request_ordinal": 21,
+      "through_request_ordinal": 21,
+      "website_requests": 0,
+      "witness_basis": "final_drained_rows_between_exact_observed_request_ordinals"
+    },
+    {
+      "id": "legacy-startup",
+      "started_ms": 1760.7613000000001,
+      "finished_ms": 2338.9278,
+      "after_request_ordinal": 28,
+      "through_request_ordinal": 28,
+      "website_requests": 0,
+      "witness_basis": "final_drained_rows_between_exact_observed_request_ordinals"
+    },
+    {
+      "id": "invalid-parent-before-child-creation",
+      "started_ms": 2353.543,
+      "finished_ms": 2360.0492,
+      "after_request_ordinal": 28,
+      "through_request_ordinal": 28,
+      "website_requests": 0,
+      "witness_basis": "final_drained_rows_between_exact_observed_request_ordinals"
+    }
+  ],
+  "companions": {
+    "requests": {
+      "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\tracked-ledger-first\\ledger.json.requests.json",
+      "bytes": 12470,
+      "sha256": "d3a6c7fcdccd99524d0455518622dbda006839a06e0dfeca38e28a04a0be1dea"
+    },
+    "api": {
+      "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\tracked-ledger-first\\ledger.json.api.json",
+      "bytes": 776175,
+      "sha256": "7db366b126b78df44d6c311efeb54e8e29372b0bac2d290d19e0154f01bac232"
+    },
+    "log": {
+      "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\tracked-ledger-first\\ledger.json.app-log.json",
+      "bytes": 2348,
+      "sha256": "4bc56a3684b04a405842a16914f91f67882c8612a22838d5dec405f943bd93f8"
+    },
+    "sql": {
+      "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\tracked-ledger-first\\ledger.json.sqlite-read-witness.json",
+      "bytes": 501351,
+      "sha256": "71fd0c4070a558affea40c66dadec2c9f498ccec993f5e1d527fda2b715a0344"
+    },
+    "fixtures": {
+      "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\tracked-ledger-first\\ledger.json.fixtures.json",
+      "bytes": 18164,
+      "sha256": "c277f098f5b31ad663262797645ac8d8b6372cc47f6e52e5a0e8b11c6c7781c0"
+    }
+  },
+  "read_only_sqlite_witness_jobs": 11,
+  "tracked_native_jobs": 11,
+  "data_directory_preserved": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\temp\\sitemap-ledger-e2e-OuqLeb\\data",
+  "run_directory_preserved": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\temp\\sitemap-ledger-e2e-OuqLeb",
+  "failures": [],
+  "proof_limits": [
+    "11 owned native scenario groups only",
+    "imported legacy absence is an explicit API snapshot contract, not an old-version migration test",
+    "invalid parent catalogue is rejected at selected preparation; report import is not asserted to reject it",
+    "no SQL corruption writes or durable row/catalog-budget injection",
+    "no exactly-once remote request or power-loss guarantee",
+    "pending dedicated sitemap API/MCP/CSV/UI are not covered",
+    "declared source-cohort completeness and full reference parity remain NOT_PROVEN"
+  ],
+  "declared_source_cohort_complete": "NOT_PROVEN",
+  "reference_parity": "NOT_PROVEN"
+}

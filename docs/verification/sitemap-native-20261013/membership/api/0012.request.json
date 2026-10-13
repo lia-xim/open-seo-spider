@@ -1,0 +1,6 @@
+{
+  "url": "http://127.0.0.1:52766/api/crawls",
+  "method": "POST",
+  "body": "{\"crawl_links\":false,\"discover_sitemaps\":false,\"obey_robots\":false,\"concurrency\":1,\"delay_ms\":0,\"max_pages\":20,\"request_timeout_secs\":5,\"max_body_bytes\":1048576,\"seed_urls\":[\"http://127.0.0.1:52764/policy-seed\"],\"sitemap_urls\":[\"http://127.0.0.1:52764/policy.xml\"],\"crawl_policy\":{\"scope\":{\"roots\":[{\"origin\":\"http://127.0.0.1:52764\",\"subdomains\":false,\"folders\":[\"/\"],\"exact_paths\":[]}],\"external\":\"deny\",\"outside_folder\":\"deny\"},\"rewrites\":[{\"id\":\"native-alias\",\"pattern\":\"/policy-original$\",\"replacement\":{\"kind\":\"literal\",\"text\":\"/policy-alias\"}}]}}",
+  "started_ms": 213
+}

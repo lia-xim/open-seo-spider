@@ -47,6 +47,13 @@ jobs:
           SPIDER_SOURCE_COMMIT: ${{ github.sha }}
           SPIDER_EXPECTED_SOURCE_COMMIT: ${{ github.sha }}
           SPIDER_SITEMAP_TRANSPORT_PROOF: ${{ runner.temp }}/sitemap-transport-debug-e2e.json
+      - name: Native stored sitemap restart and inheritance
+        run: node scripts/run-sitemap-native-checks.mjs ledger
+        env:
+          SPIDER_BINARY: ${{ runner.os == 'Windows' && 'target/debug/open-seo-spider.exe' || 'target/debug/open-seo-spider' }}
+          SPIDER_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_EXPECTED_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_SITEMAP_NATIVE_OUTPUT: ${{ runner.temp }}/sitemap-ledger-debug
       - name: Verify stored debug sitemap proof and raw companions
         if: runner.os == 'Windows'
         shell: pwsh
@@ -124,6 +131,14 @@ jobs:
           SPIDER_SOURCE_COMMIT: ${{ github.sha }}
           SPIDER_EXPECTED_SOURCE_COMMIT: ${{ github.sha }}
           SPIDER_SITEMAP_TRANSPORT_PROOF: ${{ runner.temp }}/sitemap-transport-release-e2e.json
+      - name: Verify optimized Windows stored sitemap restart and inheritance
+        if: runner.os == 'Windows'
+        run: node scripts/run-sitemap-native-checks.mjs ledger
+        env:
+          SPIDER_BINARY: target/release/open-seo-spider.exe
+          SPIDER_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_EXPECTED_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_SITEMAP_NATIVE_OUTPUT: ${{ runner.temp }}/sitemap-ledger-release
       - name: Bind the optimized Windows artifact to its source and tests
         if: runner.os == 'Windows'
         shell: pwsh
@@ -185,6 +200,16 @@ jobs:
             ${{ runner.temp }}/sitemap-transport-release-e2e.json*
             ${{ runner.temp }}/sitemap-transport-debug-validation.json
             ${{ runner.temp }}/sitemap-transport-release-validation.json
+      - name: Save private stored sitemap debug and release witnesses
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sitemap-ledger-witnesses-${{ runner.os }}-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            ${{ runner.temp }}/sitemap-ledger-debug/**
+            ${{ runner.temp }}/sitemap-ledger-release/**
   renderer:
     runs-on: ubuntu-latest
     steps:
@@ -234,6 +259,23 @@ jobs:
       - run: node --test web/verification/robots-input-state.test.cjs
       - run: node --test web/verification/list-import-state.test.mjs
       - run: cargo build --locked -p open-seo-spider
+      - run: npm ci --ignore-scripts
+        working-directory: scripts
+      - name: Native stored sitemap API CSV SDK and browser
+        run: node scripts/run-sitemap-native-checks.mjs membership
+        env:
+          SPIDER_BINARY: target/debug/open-seo-spider
+          SPIDER_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_EXPECTED_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_SITEMAP_NATIVE_OUTPUT: ${{ runner.temp }}/sitemap-membership-native
+      - name: Save private stored sitemap API and browser witnesses
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sitemap-membership-witnesses-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: ${{ runner.temp }}/sitemap-membership-native/**
       - name: Native saved-comparison browser and offline restart
         run: node web/verification/ui-saved-comparison-live.cjs
         env:
