@@ -20,7 +20,7 @@
   const validReference = reference => reference === null || object(reference) && safeInteger(reference.ordinal) && ['original_requested_url', 'document_url', 'fetched_at', 'basis'].every(key => typeof reference[key] === 'string');
   const validSnapshot = snapshot => object(snapshot) && /^[a-f0-9]{64}$/.test(snapshot.typed_report_sha256) && typeof snapshot.typed_report_sha_profile === 'string' && object(snapshot.coverage) && safeInteger(snapshot.coverage.saved_page_count) && safeInteger(snapshot.coverage.pending) && ['limited','cancelled','mixed_age_selected_recrawl','website_completeness_proven'].every(key => typeof snapshot.coverage[key] === 'boolean') && (snapshot.caller_binding === null || object(snapshot.caller_binding));
 
-  function validateEnvelope(envelope) {
+  function validateEnvelope(envelope, includeOriginalReports = false) {
     const result = envelope?.comparison;
     if (!object(envelope) || envelope.website_requests !== 0 || !object(result) || result.schema_version !== 1 || result.engine !== ENGINE || result.website_requests !== 0 || !Array.isArray(result.pages) || !object(result.counts) || !object(result.config) || !validSnapshot(result.before_snapshot) || !validSnapshot(result.after_snapshot) || !strings(result.limitations)) throw Error('Unbekanntes oder unvollständiges Vergleichsformat. Es wird kein Ergebnis als vollständig angezeigt.');
     const counts = { added:0, removed:0, changed:0, unchanged:0, pages_with_unknown_fields:0 }, keys = new Set();
@@ -36,7 +36,27 @@
       }
     }
     if (Object.keys(counts).some(key => !safeInteger(result.counts[key]) || counts[key] !== result.counts[key])) throw Error('Die Zähler stimmen nicht mit den gespeicherten Vergleichszeilen überein.');
+    validateOriginalReports(envelope, includeOriginalReports);
     return envelope;
+  }
+
+  function validateOriginalReports(envelope, expected) {
+    const present = Object.hasOwn(envelope, 'original_reports');
+    if (!expected) { if (present) throw Error('Unerwartetes Berichtsbundle ohne gewählte Option.'); return; }
+    const bundle = envelope.original_reports, result = envelope.comparison;
+    const exactKeys = (value, keys) => object(value) && Object.keys(value).length === keys.length && keys.every(key => Object.hasOwn(value, key));
+    if (!present || !exactKeys(bundle, ['schema_version','representation','binding','before','after']) || bundle.schema_version !== 1 || bundle.representation !== 'typed-crawl-report-serde-json-v1' || bundle.binding !== 'same-typed-reports-as-comparison') throw Error('Die gewählten gespeicherten Berichte fehlen oder haben ein unbekanntes Bundleformat.');
+    for (const side of ['before','after']) {
+      const original = bundle[side], snapshot = result[side + '_snapshot'], report = original?.report;
+      if (!exactKeys(original, ['report','typed_report_sha256','typed_report_json_bytes']) || !safeInteger(original.typed_report_json_bytes) || original.typed_report_json_bytes > MAX_RESPONSE || original.typed_report_sha256 !== snapshot.typed_report_sha256 || original.typed_report_json_bytes !== snapshot.typed_report_json_bytes || snapshot.typed_report_sha_profile !== bundle.representation || !object(report) || !object(report.config) || !object(report.summary) || !Array.isArray(report.pages) || !report.pages.every(page => object(page) && typeof page.url === 'string') || report.pages.length !== snapshot.coverage.saved_page_count || !Array.isArray(report.issues) || !report.issues.every(object) || !strings(report.warnings)) throw Error('Gespeicherter Bericht und Vergleichsbezug passen nicht zusammen.');
+      for (const page of result.pages) {
+        const reference = page[side];
+        if (reference && report.pages[reference.ordinal]?.url !== reference.original_requested_url) throw Error('Original-URL im Bericht und Vergleichsreferenz passen nicht zusammen.');
+      }
+    }
+    // Checks declared profile/hash/count/reference consistency only. Browser
+    // parsed numbers cannot reconstruct Rust's typed report hash. Exact report
+    // bytes are retained exclusively in resultRaw for the JSON download.
   }
 
   // Same formula defence as the existing product CSV export. JSON keeps originals.
@@ -80,12 +100,14 @@
       $('saved-comparison-run').disabled = busy() || !eligible(state.jobs.find(job => job.id === $('saved-comparison-before').value)) || !eligible(state.jobs.find(job => job.id === $('saved-comparison-after').value));
       $('saved-comparison-refresh').disabled = busy();
       $('saved-comparison-export-json').disabled = !usable;
+      $('saved-comparison-export-json').textContent = $('saved-comparison-original-reports').checked ? 'Vergleich mit gespeicherten Berichten' : 'Vergleichs-JSON';
+      $('saved-comparison-export-scope').textContent = $('saved-comparison-original-reports').checked ? 'JSON enthält den Vergleich und beide geladenen gespeicherten Berichte mit ihren vorhandenen Daten. Unbekannte und teilweise Befunde bleiben erhalten. Die Berichtsinhalte werden mit der unveränderten Antwort exportiert. CSV enthält die verglichenen Felder der gewählten URLs. Exporte verwenden die bereits geladenen Daten.' : 'Exporte verwenden das bereits geladene Vergleichsergebnis. Das Vergleichs-JSON enthält die verglichenen Befunde und Berichtsbezüge. Mit der Option oben kann JSON auch beide geladenen gespeicherten Berichte enthalten. CSV enthält die verglichenen Felder der gewählten URLs, unabhängig von der sichtbaren Tabellen- oder Feldseite. JSON bewahrt die erhaltene Antwort; CSV schützt Textzellen vor Formelausführung.';
       $('saved-comparison-export-csv').disabled = !usable;
       $('saved-comparison-export-filtered').disabled = !usable || !filtered().length;
       $('saved-comparison-form').setAttribute('aria-busy', String(Boolean(state.token)));
     }
     function abortComparison() { state.revision += 1; state.token?.controller.abort(); state.token = null; controls(); }
-    function invalidate() { abortComparison(); state.result = null; state.error = null; state.selected = null; state.page = 0; $('saved-comparison-results').hidden = true; $('saved-comparison-detail').hidden = true; showError(null); announce('Auswahl oder Optionen geändert. Gespeicherten Vergleich erneut berechnen.'); controls(); }
+    function invalidate() { abortComparison(); state.result = null; state.resultRaw = null; state.error = null; state.selected = null; state.page = 0; $('saved-comparison-results').hidden = true; $('saved-comparison-detail').hidden = true; showError(null); announce('Auswahl oder Optionen geändert. Gespeicherten Vergleich erneut berechnen.'); controls(); }
     function showError(error) {
       state.error = error; $('saved-comparison-error').hidden = !error;
       if (!error) return;
@@ -134,6 +156,9 @@
       $('saved-comparison-results').hidden = false;
       $('saved-comparison-counts').innerHTML = Object.entries(KINDS).map(([kind,label]) => `<span>${escape(label)} <strong>${numeric(result.counts[kind])}</strong></span>`).join('') + `<span>Mit unbekannten Feldern <strong>${numeric(result.counts.pages_with_unknown_fields)}</strong></span>`;
       $('saved-comparison-coverage').textContent = snapshotDescription(result.before_snapshot, 'Vorher') + '\n' + snapshotDescription(result.after_snapshot, 'Nachher');
+      const bundle = state.result.original_reports;
+      $('saved-comparison-bundle-status').hidden = !bundle;
+      $('saved-comparison-bundle-status').textContent = bundle ? `JSON enthält beide geladenen gespeicherten Berichte · Vorher ${numeric(bundle.before.typed_report_json_bytes)} Bytes · Nachher ${numeric(bundle.after.typed_report_json_bytes)} Bytes. Unbekannte und teilweise Befunde bleiben gekennzeichnet.` : '';
       $('saved-comparison-profile').textContent = safeJSON({engine:result.engine,identity_profile:result.identity_profile,mapping_profile:result.mapping_profile,config:result.config,config_sha256:result.config_sha256,before_snapshot:result.before_snapshot,after_snapshot:result.after_snapshot,ignored_runtime_fields:result.ignored_runtime_fields,limitations:result.limitations,website_requests:result.website_requests,vendor_parity:result.vendor_parity});
       const rows = filtered(); state.page = Math.max(0,Math.min(state.page,Math.max(0,Math.ceil(rows.length / PAGE_SIZE)-1))); const offset = state.page * PAGE_SIZE;
       $('saved-comparison-table').querySelector('tbody').innerHTML = rows.slice(offset,offset+PAGE_SIZE).map(page => `<tr><td><span class="badge ${page.kind === 'changed' ? 'warning' : page.kind === 'removed' ? 'danger' : 'neutral'}">${escape(KINDS[page.kind])}</span></td><td><button class="saved-comparison-row" type="button" data-comparison-key="${escape(page.comparison_key)}">${escape(page.comparison_key)}</button><small>Vorher: ${escape(page.before?.original_requested_url ?? 'URL fehlt in diesem Bericht')}<br>Nachher: ${escape(page.after?.original_requested_url ?? 'URL fehlt in diesem Bericht')}</small></td><td>${numeric(page.fields.filter(field => field.outcome === 'changed').length)} geändert · ${numeric(page.unknown_fields.length)} unbekannt<small>${page.equality_proven_for_compared_fields ? 'Gleichheit für die verglichenen Felder belegt' : 'Gleichheit für die verglichenen Felder nicht belegt'}</small></td></tr>`).join('') || '<tr><td colspan="3" class="empty-cell">Keine Vergleichszeilen für diesen Filter.</td></tr>';
@@ -160,15 +185,17 @@
       try { config = JSON.parse($('saved-comparison-config').value); if (!object(config)) throw Error('Vergleichsoptionen müssen ein JSON-Objekt sein.'); }
       catch (error) { showError({message:error.message}); return; }
       const body = {before:before.id,after:after.id,config}; const omitted = [];
+      const includeOriginalReports = $('saved-comparison-original-reports').checked;
+      if (includeOriginalReports) body.include_original_reports = true;
       for (const [side,job] of [['before',before],['after',after]]) { if (safeInteger(job.generation)) body['expected_' + side + '_generation'] = job.generation; else omitted.push(side === 'before' ? 'Vorher' : 'Nachher'); }
       const payload = JSON.stringify(body);
       if (new TextEncoder().encode(payload).length > 1024*1024) { showError({message:'Vergleichsoptionen überschreiten das Request-Budget von 1 MiB.'}); return; }
-      abortComparison(); const token = {controller:new AbortController(),revision:state.revision}; state.token = token; state.result = null; state.selected = null; $('saved-comparison-results').hidden = true; $('saved-comparison-detail').hidden = true; showError(null); controls(); announce('Gespeicherte Berichte werden verglichen …');
+      abortComparison(); const token = {controller:new AbortController(),revision:state.revision}; state.token = token; state.result = null; state.resultRaw = null; state.selected = null; $('saved-comparison-results').hidden = true; $('saved-comparison-detail').hidden = true; showError(null); controls(); announce('Gespeicherte Berichte werden verglichen …');
       try {
         const response = await fetch('/api/compare/saved', {method:'POST',headers:{'Content-Type':'application/json'},body:payload,signal:token.controller.signal}); const {body:envelope,text:raw} = await boundedJSON(response);
         if (state.token !== token || state.revision !== token.revision || !dialog.open) return;
         if (!response.ok) { if (!object(envelope.error) || typeof envelope.error.code !== 'string' || typeof envelope.error.message !== 'string' || !Array.isArray(envelope.error.collisions)) throw Error(`Ungültiger strukturierter API-Fehler: HTTP ${response.status}`); showError(envelope); announce(response.status === 409 ? 'Gespeicherter Jobstand geändert oder nicht stabil. Historie aktualisieren und erneut vergleichen.' : `Vergleich abgewiesen: HTTP ${response.status}`); return; }
-        state.result = validateEnvelope(envelope); state.resultRaw = raw; state.page = 0; render(); announce(`Vergleich gespeichert geladener Berichte abgeschlossen · ${numeric(envelope.comparison.pages.length)} URLs · keine Website-Anfragen.${omitted.length ? ` Keine präzise erwartete Jobgeneration für ${omitted.join(', ')} verfügbar; ohne diese Erwartung verglichen.` : ''}`);
+        state.result = validateEnvelope(envelope, includeOriginalReports); state.resultRaw = raw; state.page = 0; render(); announce(`Vergleich gespeichert geladener Berichte abgeschlossen · ${numeric(envelope.comparison.pages.length)} URLs · keine Website-Anfragen.${omitted.length ? ` Keine präzise erwartete Jobgeneration für ${omitted.join(', ')} verfügbar; ohne diese Erwartung verglichen.` : ''}`);
       } catch (error) { if (state.token === token && error.name !== 'AbortError') { showError({message:error.message}); announce('Vergleich nicht verfügbar. Kein Teilergebnis wird exportiert.'); } }
       finally { if (state.token === token) { state.token = null; controls(); } }
     }
@@ -177,8 +204,9 @@
       try {
         const envelope = state.result, rows = filteredOnly ? filtered() : envelope.comparison.pages;
         const text = kind === 'json' ? state.resultRaw : csvExport(envelope,rows);
-        await downloadBlob(new Blob([text], {type:kind === 'json' ? 'application/json;charset=utf-8' : 'text/csv;charset=utf-8'}), `open-seo-spider-gespeicherter-vergleich-${envelope.comparison.before_snapshot.typed_report_sha256.slice(0,12)}-${envelope.comparison.after_snapshot.typed_report_sha256.slice(0,12)}${filteredOnly ? '-gefiltert' : ''}.${kind}`);
-        announce(kind === 'json' ? 'Vollständiges erhaltenes Vergleichsergebnis als JSON exportiert.' : `${numeric(rows.length)} ${filteredOnly ? 'gefilterte' : 'gespeicherte Vergleichs-'}URLs als CSV exportiert, einschließlich aller zugehörigen Felder und Herkunft. Keine weiteren Berichte abgerufen.`);
+        const bundled = kind === 'json' && Boolean(envelope.original_reports);
+        await downloadBlob(new Blob([text], {type:kind === 'json' ? 'application/json;charset=utf-8' : 'text/csv;charset=utf-8'}), `open-seo-spider-gespeicherter-vergleich-${envelope.comparison.before_snapshot.typed_report_sha256.slice(0,12)}-${envelope.comparison.after_snapshot.typed_report_sha256.slice(0,12)}${bundled ? '-mit-gespeicherten-berichten' : ''}${filteredOnly ? '-gefiltert' : ''}.${kind}`);
+        announce(kind === 'json' ? (bundled ? 'Vergleich mit beiden geladenen gespeicherten Berichten als unverändertes JSON exportiert.' : 'Vergleichs-JSON mit den verglichenen Befunden exportiert.') : `${numeric(rows.length)} ${filteredOnly ? 'gefilterte' : 'gespeicherte Vergleichs-'}URLs als CSV exportiert, einschließlich aller zugehörigen Felder und Herkunft. Keine weiteren Berichte abgerufen.`);
       } catch (error) { showError({message:error.message}); }
       finally { state.exportBusy = false; controls(); }
     }
@@ -190,6 +218,7 @@
     $('saved-comparison-form').addEventListener('submit', compare);
     for (const id of ['saved-comparison-before','saved-comparison-after']) $(id).addEventListener('change', invalidate);
     $('saved-comparison-config').addEventListener('input', invalidate);
+    $('saved-comparison-original-reports').addEventListener('change', invalidate);
     for (const id of ['saved-comparison-filter','saved-comparison-search']) $(id).addEventListener(id.endsWith('search') ? 'input' : 'change', () => {state.page=0;render();});
     $('saved-comparison-prev').addEventListener('click', () => {state.page-=1;render();}); $('saved-comparison-next').addEventListener('click', () => {state.page+=1;render();});
     $('saved-comparison-table').addEventListener('click', event => { const button = event.target.closest('[data-comparison-key]'); if (!button) return; state.selected = button.dataset.comparisonKey; state.fieldPage=0; detail(); $('saved-comparison-detail-heading').focus(); });

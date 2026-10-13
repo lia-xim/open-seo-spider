@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "scope": "pure UI result contract and local CSV helpers; no Rust/API/native proof",
+  "node": "v24.15.0",
+  "source_sha256": {
+    "web/saved-comparison.js": "8f8c08b92bab53d6303aa436564eee3b5a2a3efa70f14845fd642f1783dd898c",
+    "web/verification/saved-comparison-fixtures.cjs": "80fbffbaa2789d4c01a9174c7774dcec93a69ee4e45df442a5b50fff00e4232e",
+    "web/verification/saved-comparison-contract.test.cjs": "ff95de59f54194f208012864c7f1f61ce1fd1f6e650494882b621ed6d5feb56f"
+  },
+  "checks": [
+    "accepts versioned complete result shape and exact page counts",
+    "unknown and partial facts retain source profiles without empty coercion",
+    "rejects unknown engine",
+    "rejects wrong counts",
+    "rejects duplicate identity",
+    "rejects missing fact state",
+    "rejects duplicate field",
+    "rejects inconsistent added identity",
+    "rejects nonzero website request claim",
+    "CSV formula protection includes BOM and whitespace",
+    "CSV quotes and multiline old/new JSON plus profile/provenance preserved",
+    "CSV refuses imprecise integer instead of silently rounding",
+    "empty cohort exports explicit CSV header",
+    "safeJSON preserves ordinary metadata and safe integer boundary",
+    "safeJSON removes rounded numeric metadata while preserving other keys",
+    "safeJSON keeps exact decimal strings unchanged",
+    "opt-in full report shape binds declared profiles counts hashes and original URL references",
+    "bundle must be explicitly requested and cannot be silently absent",
+    "opt-in rejects future bundle version",
+    "opt-in rejects unknown report representation",
+    "opt-in rejects unknown typed binding",
+    "opt-in rejects snapshot hash mismatch",
+    "opt-in rejects snapshot byte count mismatch",
+    "opt-in rejects report page inventory mismatch",
+    "opt-in rejects report reference URL mismatch",
+    "opt-in rejects unexpected bundle wrapper property",
+    "bundle validation retains received original bodies and unknown/partial comparison states without coercion",
+    "CSV remains compared facts and excludes optional report body data"
+  ]
+}

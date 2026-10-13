@@ -2,7 +2,7 @@
 use super::*;
 use crate::comparison_app::{
     ComparisonConflictContext, SavedComparisonFailure, SavedComparisonRequest,
-    SavedComparisonResponse, failure,
+    SavedComparisonResponse, bounded_bundle_failure, failure,
 };
 use axum::extract::rejection::JsonRejection;
 use open_seo_spider_core::{
@@ -174,6 +174,28 @@ async fn stable_pair(
         )?,
     ))
 }
+fn compare_stable_reports(
+    before: StableSavedReport,
+    after: StableSavedReport,
+    config: open_seo_spider_core::SavedComparisonConfig,
+    include_original_reports: bool,
+) -> Result<SavedComparisonResponse, SavedComparisonFailure> {
+    let result = compare_saved_crawls(
+        &before.report,
+        &after.report,
+        &config,
+        Some(&before.binding),
+        Some(&after.binding),
+    )
+    .map_err(SavedComparisonFailure::from)?;
+    if include_original_reports {
+        // Move the very reports passed by reference to Core; no second read
+        // or clone supplies the original-report bundle after releasing locks.
+        SavedComparisonResponse::with_original_reports(result, before.report, after.report)
+    } else {
+        SavedComparisonResponse::new(result)
+    }
+}
 pub(super) async fn compare_saved(
     State(state): State<AppState>,
     request: Result<Json<SavedComparisonRequest>, JsonRejection>,
@@ -184,19 +206,27 @@ pub(super) async fn compare_saved(
             Json(failure("invalid_comparison_request", error.body_text())),
         )
     })?;
-    let (before, after) = stable_pair(&state, &request).await?;
+    let include_original_reports = request.include_original_reports;
+    let (before, after) =
+        stable_pair(&state, &request)
+            .await
+            .map_err(|(status, Json(error))| {
+                if include_original_reports {
+                    let bounded = bounded_bundle_failure(error);
+                    let status = if bounded.error.code == "original_report_bundle_byte_budget" {
+                        StatusCode::BAD_REQUEST
+                    } else {
+                        status
+                    };
+                    (status, Json(bounded))
+                } else {
+                    (status, Json(error))
+                }
+            })?;
     let config = request.config.unwrap_or_default();
     // All locks are released. Core alone computes and validates report hashes.
     tokio::task::spawn_blocking(move || {
-        let result = compare_saved_crawls(
-            &before.report,
-            &after.report,
-            &config,
-            Some(&before.binding),
-            Some(&after.binding),
-        )
-        .map_err(SavedComparisonFailure::from)?;
-        SavedComparisonResponse::new(result)
+        compare_stable_reports(before, after, config, include_original_reports)
     })
     .await
     .map_err(|error| {
@@ -206,7 +236,19 @@ pub(super) async fn compare_saved(
         )
     })?
     .map(Json)
-    .map_err(|error| (StatusCode::BAD_REQUEST, Json(error)))
+    .map_err(|error| {
+        let error = if include_original_reports {
+            bounded_bundle_failure(error)
+        } else {
+            error
+        };
+        let status = if error.error.code == "original_report_binding_mismatch" {
+            StatusCode::INTERNAL_SERVER_ERROR
+        } else {
+            StatusCode::BAD_REQUEST
+        };
+        (status, Json(error))
+    })
 }
 
 #[cfg(test)]

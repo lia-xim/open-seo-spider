@@ -55,6 +55,74 @@ jobs:
           SPIDER_COMPARISON_MAPPING_PROOF: ${{ runner.temp }}/saved-comparison-mapping-e2e.json
           SPIDER_COMPARISON_MAPPING_CONTROL_PROOF: ${{ runner.temp }}/saved-comparison-mapping-oracle-controls.json
       - run: node scripts/resource-contract-e2e.mjs
+      - name: Original-report bundle oracle negative controls
+        run: node --test scripts/saved-comparison-bundle-oracles.test.mjs
+        env:
+          SPIDER_BUNDLE_CONTROL_PROOF: ${{ runner.temp }}/saved-comparison-original-bundle-oracle-controls.json
+      - name: Native saved-comparison complete original reports
+        run: node scripts/saved-comparison-bundle-e2e.mjs
+        env:
+          SPIDER_BINARY: ${{ runner.os == 'Windows' && 'target/debug/open-seo-spider.exe' || 'target/debug/open-seo-spider' }}
+          SPIDER_BUNDLE_PROOF: ${{ runner.temp }}/saved-comparison-original-bundle-e2e.json
+          SPIDER_BUNDLE_CONTROL_PROOF: ${{ runner.temp }}/saved-comparison-original-bundle-oracle-controls.json
+      - name: Native CLI original-report bundle fixed byte ceiling
+        run: node scripts/saved-comparison-bundle-budget-e2e.mjs
+        env:
+          SPIDER_BINARY: ${{ github.workspace }}/${{ runner.os == 'Windows' && 'target/debug/open-seo-spider.exe' || 'target/debug/open-seo-spider' }}
+          SPIDER_BUNDLE_BUDGET_PROOF: ${{ runner.temp }}/saved-comparison-original-bundle-cli-budget.json
+      - name: Build immutable optimized Windows artifact
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $releaseSourcePaths=@('Cargo.toml','Cargo.lock','crates/core/src','crates/app/src','crates/core/Cargo.toml','crates/app/Cargo.toml','assets','web/index.html','web/app.js','web/saved-comparison.js','web/styles.css','web/list-import.js','web/serp.html','web/serp.js','web/robots.html','web/robots.js')
+          git diff --quiet HEAD -- $releaseSourcePaths
+          if($LASTEXITCODE -ne 0){throw 'Compiled source differs from the exact CI commit'}
+          cargo build --release --locked -p open-seo-spider
+          if($LASTEXITCODE -ne 0){exit $LASTEXITCODE}
+          git diff --quiet HEAD -- $releaseSourcePaths
+          if($LASTEXITCODE -ne 0){throw 'Compiled source changed during release build'}
+      - name: Verify optimized Windows original-report bundle
+        if: runner.os == 'Windows'
+        run: node scripts/saved-comparison-bundle-e2e.mjs
+        env:
+          SPIDER_BINARY: target/release/open-seo-spider.exe
+          SPIDER_BUNDLE_PROOF: ${{ runner.temp }}/saved-comparison-original-bundle-release-e2e.json
+          SPIDER_BUNDLE_CONTROL_PROOF: ${{ runner.temp }}/saved-comparison-original-bundle-oracle-controls.json
+      - name: Verify optimized Windows bundle byte ceiling
+        if: runner.os == 'Windows'
+        run: node scripts/saved-comparison-bundle-budget-e2e.mjs
+        env:
+          SPIDER_BINARY: ${{ github.workspace }}/target/release/open-seo-spider.exe
+          SPIDER_BUNDLE_BUDGET_PROOF: ${{ runner.temp }}/saved-comparison-original-bundle-release-cli-budget.json
+      - name: Bind the optimized Windows artifact to its source and tests
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $releaseCommit=(git rev-parse HEAD).Trim()
+          if($releaseCommit -ne $env:GITHUB_SHA){throw 'Unexpected artifact source commit'}
+          $releaseExe=Join-Path (Get-Location) 'target/release/open-seo-spider.exe'
+          $releaseBundleProof=Join-Path $env:RUNNER_TEMP 'saved-comparison-original-bundle-release-e2e.json'
+          $releaseBudgetProof=Join-Path $env:RUNNER_TEMP 'saved-comparison-original-bundle-release-cli-budget.json'
+          $releaseHash=(Get-FileHash -LiteralPath $releaseExe -Algorithm SHA256).Hash.ToLowerInvariant()
+          foreach($releaseProofPath in @($releaseBundleProof,$releaseBudgetProof)){
+            $releaseProof=Get-Content -LiteralPath $releaseProofPath -Raw | ConvertFrom-Json
+            if($releaseProof.result -ne 'PASS' -or $releaseProof.binary_sha256 -ne $releaseHash){throw 'Optimized proof/binary mismatch'}
+          }
+          $releaseManifest=@{source_commit=$releaseCommit;run_id=$env:GITHUB_RUN_ID;profile='release';platform='windows-x86_64-msvc';binary_sha256=$releaseHash;binary_bytes=(Get-Item -LiteralPath $releaseExe).Length;rustc=(rustc --version);bundle_proof_sha256=(Get-FileHash -LiteralPath $releaseBundleProof -Algorithm SHA256).Hash.ToLowerInvariant();budget_proof_sha256=(Get-FileHash -LiteralPath $releaseBudgetProof -Algorithm SHA256).Hash.ToLowerInvariant();scope='Optimized executable from exact CI source; native bundle and CLI ceiling pass. Local browser/install and all other CI jobs are separate gates.'}
+          $releaseArtifactFolder=Join-Path (Get-Location) 'target/release-artifact'
+          New-Item -ItemType Directory -Path $releaseArtifactFolder -Force | Out-Null
+          $releaseManifest | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $releaseArtifactFolder 'open-seo-spider-windows-release.json') -Encoding utf8NoBOM
+          Copy-Item -LiteralPath $releaseExe -Destination $releaseArtifactFolder
+          Copy-Item -LiteralPath $releaseBundleProof -Destination $releaseArtifactFolder
+          Copy-Item -LiteralPath $releaseBudgetProof -Destination $releaseArtifactFolder
+      - name: Save the private optimized Windows artifact
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: open-seo-spider-windows-release-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: error
+          path: target/release-artifact/*
   renderer:
     runs-on: ubuntu-latest
     steps:
@@ -97,6 +165,7 @@ jobs:
       - run: node web/verification/ui-resource-contract-smoke.cjs
       - run: node web/verification/saved-comparison-contract.test.cjs
       - run: node web/verification/saved-comparison-native-fence.test.cjs
+      - run: node web/verification/saved-comparison-bundle-native-fence.test.cjs
       - run: node web/verification/ui-saved-comparison-smoke.cjs
       - run: node scripts/update-feature-todo.mjs --check
       - run: node --test web/verification/serp-state-race.test.cjs
@@ -108,6 +177,11 @@ jobs:
         env:
           SPIDER_BINARY: target/debug/open-seo-spider
           SPIDER_COMPARISON_UI_PROOF: ${{ runner.temp }}/saved-comparison-ui-native.json
+      - name: Native optional-original-report browser export and offline restart
+        run: node web/verification/ui-saved-comparison-bundle-live.cjs
+        env:
+          SPIDER_BINARY: target/debug/open-seo-spider
+          SPIDER_UI_PROOF: ${{ runner.temp }}/saved-comparison-original-bundle-ui-native.json
       - name: Rust and browser integration
         shell: bash
         run: |

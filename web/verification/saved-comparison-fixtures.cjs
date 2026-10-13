@@ -23,4 +23,27 @@ function envelope() {
 }
 const jobs=[{id:AFTER,status:'completed',seed_url:'https://after.fixture/',started_at:'2026-10-13T09:00:00Z',generation:3,recrawl_available:true,stats:{}},{id:BEFORE,status:'limited',seed_url:'https://before.fixture/',started_at:'2026-10-12T09:00:00Z',generation:2,recrawl_available:true,stats:{}},{id:ACTIVE,status:'pausing',seed_url:'https://active.fixture/',started_at:'2026-10-13T10:00:00Z',generation:7,recrawl_available:false,stats:{}}];
 const failure=(code='comparison_identity_collision')=>({error:{code,message:markup,collisions:[{side:'before',comparison_key:'https://production.fixture/private',occurrences:[{ordinal:0,original_requested_url:'https://staging.fixture/private'},{ordinal:1,original_requested_url:markup}]}]},context:{side:'before',job_id:BEFORE,status:'paused',observed_generation:4,expected_generation:2},website_requests:0});
-module.exports={BEFORE,AFTER,ACTIVE,markup,formula,envelope,jobs,failure};
+const bodyOnly='BUNDLE_BODY_ONLY_DO_NOT_RENDER '+markup;
+function bundledEnvelope() {
+  const value=envelope();
+  const reports={};
+  for(const side of ['before','after']) {
+    const pages=[];
+    for(const page of value.comparison.pages) {
+      const reference=page[side];if(!reference)continue;
+      reference.ordinal=pages.length;
+      pages.push({url:reference.original_requested_url,final_url:reference.document_url,
+        screenshot_base64:bodyOnly,custom_javascript_results:[{body_only:bodyOnly,integer:'__UNSAFE_INTEGER__'}]});
+    }
+    reports[side]={report:{config:{seed_urls:[`https://${side}.fixture/`]},pages,issues:[],
+      summary:{elapsed_ms:'__UNSAFE_INTEGER__',pending:1},warnings:[bodyOnly]},
+      typed_report_sha256:value.comparison[side+'_snapshot'].typed_report_sha256,
+      typed_report_json_bytes:value.comparison[side+'_snapshot'].typed_report_json_bytes};
+  }
+  value.original_reports={schema_version:1,representation:'typed-crawl-report-serde-json-v1',
+    binding:'same-typed-reports-as-comparison',before:reports.before,after:reports.after};
+  // Mock metadata only; hashes/counts are not a Rust comparison attestation.
+  return value;
+}
+const rawBundle=value=>JSON.stringify(value,null,1).replaceAll('"__UNSAFE_INTEGER__"','9007199254740993');
+module.exports={BEFORE,AFTER,ACTIVE,markup,formula,envelope,jobs,failure,bundledEnvelope,rawBundle,bodyOnly};

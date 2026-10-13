@@ -84,8 +84,19 @@ impl Bridge {
                     return Some(error(id, -32602, "Unexpected or missing tool argument"));
                 }
                 if name == "spider_compare_saved" {
+                    let include_original_reports = args
+                        .get("include_original_reports")
+                        .and_then(Value::as_bool)
+                        .unwrap_or(false);
                     let result = saved_comparison::call(self, args).await;
-                    return Some(json!({"jsonrpc":"2.0","id":id,"result":result}));
+                    return Some(
+                        saved_comparison::complete_response_on_worker(
+                            id,
+                            result,
+                            include_original_reports,
+                        )
+                        .await,
+                    );
                 }
                 match self.call(name, args).await {
                     Ok(value) => {
@@ -336,7 +347,11 @@ pub async fn stdio(base: &str) -> anyhow::Result<()> {
             }
         };
         if let Some(response) = response {
-            output.write_all(response.to_string().as_bytes()).await?;
+            // Serialize and drop recursive response values on a blocking
+            // worker; the Windows stdio main stack only handles flat bytes.
+            let bytes =
+                tokio::task::spawn_blocking(move || serde_json::to_vec(&response)).await??;
+            output.write_all(&bytes).await?;
             output.write_all(b"\n").await?;
             output.flush().await?;
         }

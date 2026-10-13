@@ -23,6 +23,20 @@ check('empty cohort exports explicit CSV header',()=>assert.equal(ui.csvExport(f
 check('safeJSON preserves ordinary metadata and safe integer boundary',()=>{const value={generation:Number.MAX_SAFE_INTEGER,origin:'app_declared',optional:null};assert.equal(ui.safeJSON(value),JSON.stringify(value,null,2));});
 check('safeJSON removes rounded numeric metadata while preserving other keys',()=>{const value=JSON.parse('{"generation":9007199254740993,"nested":{"source":"raw_http_html","revisions":[9007199254740993]}}');const text=ui.safeJSON(value);assert.ok(text.includes('präzisen Browser-Darstellung'));assert.ok(!text.includes('9007199254740992'));assert.ok(text.includes('raw_http_html'));assert.ok(text.includes('generation'));});
 check('safeJSON keeps exact decimal strings unchanged',()=>{const value={generation:'9007199254740993'};assert.equal(ui.safeJSON(value),JSON.stringify(value,null,2));});
+check('opt-in full report shape binds declared profiles counts hashes and original URL references',()=>{const value=fixture.bundledEnvelope();assert.equal(ui.validateEnvelope(value,true),value);assert.equal(value.original_reports.before.report.pages.length,54);assert.equal(value.comparison.before_snapshot.coverage.website_completeness_proven,false);});
+check('bundle must be explicitly requested and cannot be silently absent',()=>{assert.throws(()=>ui.validateEnvelope(fixture.bundledEnvelope()),/Unerwartetes/);assert.throws(()=>ui.validateEnvelope(fixture.envelope(),true),/fehlen/);});
+for(const [name,mutate]of[
+  ['future bundle version',value=>value.original_reports.schema_version=2],
+  ['unknown report representation',value=>value.original_reports.representation='raw-file-bytes'],
+  ['unknown typed binding',value=>value.original_reports.binding='sql-attested'],
+  ['snapshot hash mismatch',value=>value.original_reports.before.typed_report_sha256='a'.repeat(64)],
+  ['snapshot byte count mismatch',value=>value.original_reports.after.typed_report_json_bytes++],
+  ['report page inventory mismatch',value=>value.original_reports.before.report.pages.pop()],
+  ['report reference URL mismatch',value=>value.original_reports.before.report.pages[0].url='https://wrong.fixture/'],
+  ['unexpected bundle wrapper property',value=>value.original_reports.extra=true],
+])check('opt-in rejects '+name,()=>{const value=fixture.bundledEnvelope();mutate(value);assert.throws(()=>ui.validateEnvelope(value,true));});
+check('bundle validation retains received original bodies and unknown/partial comparison states without coercion',()=>{const value=fixture.bundledEnvelope(),before=JSON.stringify(value);ui.validateEnvelope(value,true);assert.equal(JSON.stringify(value),before);assert.equal(value.comparison.pages[0].fields[1].before.state,'partial');assert.ok(fixture.rawBundle(value).includes('9007199254740993'));});
+check('CSV remains compared facts and excludes optional report body data',()=>{const value=fixture.bundledEnvelope();ui.validateEnvelope(value,true);const csv=ui.csvExport(value,value.comparison.pages);assert.equal(csv.split('\r\n').length,117);assert.ok(!csv.includes('BUNDLE_BODY_ONLY_DO_NOT_RENDER'));assert.ok(csv.includes('extra_55'));});
 const hashes=Object.fromEntries(['web/saved-comparison.js','web/verification/saved-comparison-fixtures.cjs','web/verification/saved-comparison-contract.test.cjs'].map(file=>[file,crypto.createHash('sha256').update(fs.readFileSync(path.join(root,file))).digest('hex')]));
 fs.writeFileSync(proofPath,JSON.stringify({status:'PASS',scope:'pure UI result contract and local CSV helpers; no Rust/API/native proof',node:process.version,source_sha256:hashes,checks},null,2)+'\n');
 

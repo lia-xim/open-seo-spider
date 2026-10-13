@@ -1,0 +1,288 @@
+{
+  "status": "PASS",
+  "scope": "owned actual native crawl/persistence/cold-restarted App/browser optional typed-report bundle flow; exact direct API raw report slices and unsafe-u64 lexemes; release/CI/vendor parity separate",
+  "tested_at": "2026-10-13T01:02:21.663Z",
+  "binary_sha256": "e09692b8d628499eb5d399d654a91d4d93ad34ae972ea8bad5d5d6be9da54062",
+  "tested_script_sha256": "352cdc0e0b0d7c7ed1808e0410a9607cb47b8a5b87d55049e4fc4afc95a7cb06",
+  "tested_script_path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\outputs\\open-seo-spider\\web\\verification\\ui-saved-comparison-bundle-live.cjs",
+  "source_sha256": {
+    "web/app.js": "a83eedcd6a745ae24166dc1b721ec6eada90cfa09810128a4bdf5e532a0f01c2",
+    "web/index.html": "eee82e96467e581acc4239b2ae06899cd58a90a91ee1324f4feaffa1b273c5a2",
+    "web/styles.css": "c2f4b4f2665eb89084a2ef66f2fb71af71be8956be4ec139744fd98bd287a0d1",
+    "web/list-import.js": "cd8702fd31122eccfefaf5ed7404bb47cc65223efa5394d3e687f329cfbf47ba",
+    "web/saved-comparison.js": "8f8c08b92bab53d6303aa436564eee3b5a2a3efa70f14845fd642f1783dd898c",
+    "web/verification/ui-saved-comparison-bundle-live.cjs": "352cdc0e0b0d7c7ed1808e0410a9607cb47b8a5b87d55049e4fc4afc95a7cb06",
+    "scripts/saved-comparison-bundle-oracles.mjs": "7557662dd4d2a72226bd59055c8fd9caecf88ad3bc8a20eed29f141053523707",
+    "scripts/saved-comparison-mapping-oracles.mjs": "d904002b1b5eea488906c4bdec6fa764050f70ff90e0eb008a048c742589e08c"
+  },
+  "served_embedded_assets": [
+    {
+      "source": "web/app.js",
+      "path": "/app.js",
+      "sha256": "a83eedcd6a745ae24166dc1b721ec6eada90cfa09810128a4bdf5e532a0f01c2",
+      "bytes": 263665,
+      "status": 200
+    },
+    {
+      "source": "web/index.html",
+      "path": "/",
+      "sha256": "eee82e96467e581acc4239b2ae06899cd58a90a91ee1324f4feaffa1b273c5a2",
+      "bytes": 60326,
+      "status": 200
+    },
+    {
+      "source": "web/styles.css",
+      "path": "/styles.css",
+      "sha256": "c2f4b4f2665eb89084a2ef66f2fb71af71be8956be4ec139744fd98bd287a0d1",
+      "bytes": 33991,
+      "status": 200
+    },
+    {
+      "source": "web/list-import.js",
+      "path": "/list-import.js",
+      "sha256": "cd8702fd31122eccfefaf5ed7404bb47cc65223efa5394d3e687f329cfbf47ba",
+      "bytes": 8829,
+      "status": 200
+    },
+    {
+      "source": "web/saved-comparison.js",
+      "path": "/saved-comparison.js",
+      "sha256": "8f8c08b92bab53d6303aa436564eee3b5a2a3efa70f14845fd642f1783dd898c",
+      "bytes": 31289,
+      "status": 200
+    }
+  ],
+  "original_report_bindings": [
+    {
+      "case": "native-pair",
+      "bindings": [
+        {
+          "side": "before",
+          "typed_report_sha256": "b3c6297c532d3bf6979f86b59a85d98f41fb925d384bbf19f91249faeaa8dbee",
+          "typed_report_json_bytes": 30823,
+          "direct_embedded_slice_verified": true,
+          "unsafe_integer_lexemes": []
+        },
+        {
+          "side": "after",
+          "typed_report_sha256": "35e2f467b7b1b84a27f972c1e43635426bfeb038bb5fee50eaabe2d224911fdd",
+          "typed_report_json_bytes": 30778,
+          "direct_embedded_slice_verified": true,
+          "unsafe_integer_lexemes": []
+        }
+      ]
+    },
+    {
+      "case": "partial-self",
+      "bindings": [
+        {
+          "side": "before",
+          "typed_report_sha256": "b6bc472b690a0b3d649d41dfa3022d3a936067fe36ddbb626881484685df5bf4",
+          "typed_report_json_bytes": 10211,
+          "direct_embedded_slice_verified": true,
+          "unsafe_integer_lexemes": []
+        },
+        {
+          "side": "after",
+          "typed_report_sha256": "b6bc472b690a0b3d649d41dfa3022d3a936067fe36ddbb626881484685df5bf4",
+          "typed_report_json_bytes": 10211,
+          "direct_embedded_slice_verified": true,
+          "unsafe_integer_lexemes": []
+        }
+      ]
+    },
+    {
+      "case": "imported-u64",
+      "bindings": [
+        {
+          "side": "before",
+          "typed_report_sha256": "a476066ae8474f365dff49a8e8e8e0e54d6e34c02b299ee05129fd681f887d8d",
+          "typed_report_json_bytes": 17297,
+          "direct_embedded_slice_verified": true,
+          "unsafe_integer_lexemes": [
+            {
+              "path": "$.summary.elapsed_ms",
+              "lexeme": "9007199254740993"
+            }
+          ]
+        },
+        {
+          "side": "after",
+          "typed_report_sha256": "b3c6297c532d3bf6979f86b59a85d98f41fb925d384bbf19f91249faeaa8dbee",
+          "typed_report_json_bytes": 30823,
+          "direct_embedded_slice_verified": true,
+          "unsafe_integer_lexemes": []
+        }
+      ]
+    }
+  ],
+  "output_folder": "C:\\Users\\matth\\AppData\\Local\\Temp\\open-seo-spider-comparison-live-2MR4GR",
+  "owned_api": "http://127.0.0.1:62474",
+  "owned_origin": "http://127.0.0.1:62465",
+  "checks": [
+    "Cold restarted real native browser comparison matches API pages/hashes and all four filters",
+    "Unchecked option preserves the exact default response field set and omitted request flag",
+    "Real concrete title/JSON-LD deltas and browser JSON/CSV export retain comparison projection",
+    "Actual bounded saved text remains Partial/Unknown in native UI and JSON",
+    "Imported legacy absent text sources stay Missing in native UI",
+    "Opt-in browser raw JSON retains both complete typed native reports and exact independent Core hash/byte bindings",
+    "Bundled actual partial captures retain full saved bodies while compared text remains Partial/Unknown",
+    "Imported report exact unsafe u64 survives raw download without body rendering; opt-in controls/export fit at 320px",
+    "Disabling bundle invalidates the old export and restores the omitted flag/default envelope",
+    "Explicit mapping changes join identity while original native URL facts remain preserved",
+    "Actual duplicate identity API error remains structured and exports are blocked",
+    "320px native result/details/bottom controls reachable; Escape preserves existing crawl draft",
+    "Original reports unchanged; active 410 endpoint witness sees zero attempts and all App-origin mutations captured/guarded"
+  ],
+  "before_job": "5b448585-7cc2-45b7-91d6-6346c0ddf2ea",
+  "after_job": "55532fc7-5c6f-4274-9eb8-43d5f4667f36",
+  "typed_before_sha256": "b3c6297c532d3bf6979f86b59a85d98f41fb925d384bbf19f91249faeaa8dbee",
+  "typed_after_sha256": "35e2f467b7b1b84a27f972c1e43635426bfeb038bb5fee50eaabe2d224911fdd",
+  "website_requests_read_only_phase": 0,
+  "external_browser_requests": [],
+  "javascript_runtime_errors": [],
+  "ui_api_calls": [
+    {
+      "method": "GET",
+      "path": "/api/crawls"
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls"
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved"
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved"
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved"
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved"
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved"
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved"
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved"
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved"
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved"
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved"
+    }
+  ],
+  "app_origin_product_mutations": [
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "payload": "{\"before\":\"5b448585-7cc2-45b7-91d6-6346c0ddf2ea\",\"after\":\"55532fc7-5c6f-4274-9eb8-43d5f4667f36\",\"config\":{\"include_selected_text\":true},\"expected_before_generation\":1,\"expected_after_generation\":1}",
+      "allowed": true,
+      "delivered": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "payload": "{\"before\":\"ab11fe5b-5aa6-4b99-9ff1-3a1adc68413b\",\"after\":\"ab11fe5b-5aa6-4b99-9ff1-3a1adc68413b\",\"config\":{\"include_selected_text\":true},\"expected_before_generation\":1,\"expected_after_generation\":1}",
+      "allowed": true,
+      "delivered": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "payload": "{\"before\":\"4f6689f0-5d64-4151-84f2-28ea26582513\",\"after\":\"5b448585-7cc2-45b7-91d6-6346c0ddf2ea\",\"config\":{\"include_selected_text\":true},\"expected_before_generation\":0,\"expected_after_generation\":1}",
+      "allowed": true,
+      "delivered": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "payload": "{\"before\":\"5b448585-7cc2-45b7-91d6-6346c0ddf2ea\",\"after\":\"55532fc7-5c6f-4274-9eb8-43d5f4667f36\",\"config\":{\"include_selected_text\":true},\"include_original_reports\":true,\"expected_before_generation\":1,\"expected_after_generation\":1}",
+      "allowed": true,
+      "delivered": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "payload": "{\"before\":\"ab11fe5b-5aa6-4b99-9ff1-3a1adc68413b\",\"after\":\"ab11fe5b-5aa6-4b99-9ff1-3a1adc68413b\",\"config\":{\"include_selected_text\":true},\"include_original_reports\":true,\"expected_before_generation\":1,\"expected_after_generation\":1}",
+      "allowed": true,
+      "delivered": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "payload": "{\"before\":\"4f6689f0-5d64-4151-84f2-28ea26582513\",\"after\":\"5b448585-7cc2-45b7-91d6-6346c0ddf2ea\",\"config\":{\"include_selected_text\":true},\"include_original_reports\":true,\"expected_before_generation\":0,\"expected_after_generation\":1}",
+      "allowed": true,
+      "delivered": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "payload": "{\"before\":\"5b448585-7cc2-45b7-91d6-6346c0ddf2ea\",\"after\":\"55532fc7-5c6f-4274-9eb8-43d5f4667f36\",\"config\":{\"include_selected_text\":true},\"expected_before_generation\":1,\"expected_after_generation\":1}",
+      "allowed": true,
+      "delivered": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "payload": "{\"before\":\"5b448585-7cc2-45b7-91d6-6346c0ddf2ea\",\"after\":\"55532fc7-5c6f-4274-9eb8-43d5f4667f36\",\"config\":{\"mappings\":[{\"side\":\"before\",\"from_origin\":\"http://127.0.0.1:62465\",\"from_path_prefix\":\"/\",\"to_origin\":\"https://production.fixture\",\"to_path_prefix\":\"/site\"}]},\"expected_before_generation\":1,\"expected_after_generation\":1}",
+      "allowed": true,
+      "delivered": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "payload": "{\"before\":\"dc0faf97-3e63-4d14-a659-b0153e579f67\",\"after\":\"55532fc7-5c6f-4274-9eb8-43d5f4667f36\",\"config\":{\"include_selected_text\":true},\"expected_before_generation\":0,\"expected_after_generation\":1}",
+      "allowed": true,
+      "delivered": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "payload": "{\"before\":\"5b448585-7cc2-45b7-91d6-6346c0ddf2ea\",\"after\":\"55532fc7-5c6f-4274-9eb8-43d5f4667f36\",\"config\":{\"include_selected_text\":true},\"expected_before_generation\":1,\"expected_after_generation\":1}",
+      "allowed": true,
+      "delivered": true
+    }
+  ],
+  "negative_controls": {
+    "status": "PASS",
+    "scope": "Harness-injected MCP crawl mutation; separate from product requests/checks",
+    "controls": [
+      {
+        "method": "POST",
+        "path": "/mcp",
+        "payload": "{\"jsonrpc\":\"2.0\",\"id\":991,\"method\":\"tools/call\",\"params\":{\"name\":\"spider_start_crawl\",\"arguments\":{\"config\":{\"seed_urls\":[\"http://127.0.0.1:62465/oracle-must-not-fetch\"],\"crawl_links\":false,\"obey_robots\":false,\"discover_sitemaps\":false}}}}",
+        "allowed": false,
+        "delivered": false
+      }
+    ],
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/mcp"
+      }
+    ],
+    "app_delivery": false,
+    "jobs_unchanged": true,
+    "website_requests": 0
+  }
+}

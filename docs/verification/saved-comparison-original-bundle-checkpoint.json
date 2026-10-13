@@ -1,0 +1,156 @@
+{
+  "result": "PASS",
+  "tested_at": "2026-10-13T01:02:52.584Z",
+  "scope": "Local optional-original-report bundle implementation checkpoint; baseline CI is source-bounded and final bundle CI/release/install remain separate.",
+  "source_baseline_commit": "b8d690887968046802796ccf80618f16cbc9236e",
+  "source_sha256": {
+    "crates/app/Cargo.toml": "fbe2ceb925eec174d3152778d1ef933f0e5ee358f099d608a6b9b988c812dea1",
+    "crates/app/src/comparison_app.rs": "1cb80381a797c8ab8f0b0c46f421b510ab0d6369d8602f2ea0f08dbd1398a4c1",
+    "crates/app/src/comparison_app/original_reports.rs": "26ced93af9297a2d85be146fcd0f3f0195bc6102d433982ad45bfdd3b20d493d",
+    "crates/app/src/comparison_app_tests.rs": "b8572bb34fa1a11b799447402f51d8cded013d77cf924f7801e3d1edd2933561",
+    "crates/app/src/main.rs": "16702972a99fd270a53262a044552f342ccb5775edb5ab38f1fe80fc08673e17",
+    "crates/app/src/mcp.rs": "3f682649ccede2c123a53ae1745a154d1fc4213a72a26eb94f4769bfc4686a07",
+    "crates/app/src/mcp/saved_comparison.rs": "67585fa1bbc88d1cf2f3ec030ee9525d4a20e8ea7f2fa8f30f536c274e41bab1",
+    "crates/app/src/mcp/saved_comparison_tests.rs": "8c1bae3ac1fd8c0e87e50959724fada37a2f99ef6d8517e87124b74c2d43e5ac",
+    "crates/app/src/server/comparison.rs": "0b78ec9aca28ffed7990fed9277ecf4d6ae55888e7da4bbf7f54933e4a6573fa",
+    "crates/app/src/server/comparison_tests.rs": "638ac4ca1b09b00ea6c10ca3b894e4f9516959fb0752d2e6b8f1943e6f1812f5",
+    "web/index.html": "eee82e96467e581acc4239b2ae06899cd58a90a91ee1324f4feaffa1b273c5a2",
+    "web/saved-comparison.js": "8f8c08b92bab53d6303aa436564eee3b5a2a3efa70f14845fd642f1783dd898c",
+    "web/verification/saved-comparison-contract.test.cjs": "ff95de59f54194f208012864c7f1f61ce1fd1f6e650494882b621ed6d5feb56f",
+    "web/verification/saved-comparison-fixtures.cjs": "80fbffbaa2789d4c01a9174c7774dcec93a69ee4e45df442a5b50fff00e4232e",
+    "web/verification/ui-saved-comparison-smoke.cjs": "f67d18309c337b58ec8dacc3c822cee1d36fdad7393cbf02e97d102880e3d8b6",
+    "scripts/saved-comparison-bundle-e2e.mjs": "c9d94aebae33005e5de9db36a65fcf19c8567f8803f619b417bdba6ffc2aaa56",
+    "scripts/saved-comparison-bundle-budget-e2e.mjs": "d0bd47b5b4e696d749e7350ae032ddc5ae65ec010ff51518c15aa269a6a5b3af",
+    "scripts/saved-comparison-bundle-oracles.mjs": "7557662dd4d2a72226bd59055c8fd9caecf88ad3bc8a20eed29f141053523707",
+    "scripts/saved-comparison-bundle-oracles.test.mjs": "b65cb1c486ae590e9c8e3c824b601fc1dba6c3333d7b5e5b73054b39fedde585",
+    "web/verification/ui-saved-comparison-bundle-live.cjs": "352cdc0e0b0d7c7ed1808e0410a9607cb47b8a5b87d55049e4fc4afc95a7cb06",
+    "web/verification/saved-comparison-bundle-native-fence.test.cjs": "4e5a6dec20114ce7abf7183817a2c8fce647f577715d589f97e86c6b1951974d"
+  },
+  "core_unchanged_since_baseline": true,
+  "proofs": [
+    {
+      "id": "saved-comparison-ci-baseline",
+      "artifact": "docs/verification/saved-comparison-ci-baseline.json",
+      "artifact_sha256": "8d307f873d8f7227a4e6f1aeb213bc27b41ce2658601faf963164720a8223994",
+      "bytes": 26856,
+      "result": "PASS",
+      "tested_at": "2026-10-13T00:24:58.304Z",
+      "scope": "Exact b8d6908 comparison baseline: four successful CI jobs; later bundle sources excluded.",
+      "limits": "Bounded own contract. Historical original file bytes, unknown imported fields, missing source bodies, source/database authenticity, large-crawl scale and vendor parity are not established. Exact final bundle source CI/release/install are separate gates."
+    },
+    {
+      "id": "saved-comparison-original-bundle-native",
+      "artifact": "docs/verification/saved-comparison-original-bundle-e2e.json",
+      "artifact_sha256": "914a57c0d5e3a87a0058958fe91ef0c99128975837444227e103c59bf51d9cb6",
+      "bytes": 26638,
+      "result": "PASS",
+      "tested_at": "2026-10-13T00:47:38.791Z",
+      "scope": "Eleven native complete-report/API/CLI groups and twelve official SDK cases on both transports, genuine f64/u64, declared deep imports, mixed-age and partial states, terminal-state conflicts and drained two-origin offline restart.",
+      "limits": "Bounded own contract. Historical original file bytes, unknown imported fields, missing source bodies, source/database authenticity, large-crawl scale and vendor parity are not established. Exact final bundle source CI/release/install are separate gates."
+    },
+    {
+      "id": "saved-comparison-original-bundle-oracles",
+      "artifact": "docs/verification/saved-comparison-original-bundle-oracle-controls.json",
+      "artifact_sha256": "f9b0df945d8ff1ff9da831d0c7e71345c52344f34fa29df1dc0afc4abaf9f6b4",
+      "bytes": 2830,
+      "result": "PASS",
+      "tested_at": "2026-10-13T00:32:45.629Z",
+      "scope": "Twenty-eight pure lossless numeric/report/CSV/lifecycle oracle controls; native execution separately recorded.",
+      "limits": "Bounded own contract. Historical original file bytes, unknown imported fields, missing source bodies, source/database authenticity, large-crawl scale and vendor parity are not established. Exact final bundle source CI/release/install are separate gates."
+    },
+    {
+      "id": "saved-comparison-original-bundle-cli-budget",
+      "artifact": "docs/verification/saved-comparison-original-bundle-cli-budget.json",
+      "artifact_sha256": "4adbe20b3a4eda2b41838fe62807dabccb13cd9665d829124ae168fffd3c1cdf",
+      "bytes": 2038,
+      "result": "PASS",
+      "tested_at": "2026-10-13T00:49:34.679Z",
+      "scope": "Four actual native CLI controls with synthetic typed reports: exact 64 MiB success, plus-one pre-reservation refusal and unchanged default projection. No API/MCP fixed-ceiling or crawl-authenticity claim.",
+      "limits": "Bounded own contract. Historical original file bytes, unknown imported fields, missing source bodies, source/database authenticity, large-crawl scale and vendor parity are not established. Exact final bundle source CI/release/install are separate gates."
+    },
+    {
+      "id": "saved-comparison-original-bundle-ui-contract",
+      "artifact": "docs/verification/saved-comparison-original-bundle-ui-contract.json",
+      "artifact_sha256": "18c2c0cce6e3b478782db031725815d2dbba4b848ebd3cebb3231b727c978c33",
+      "bytes": 2122,
+      "result": "PASS",
+      "tested_at": null,
+      "scope": "Twenty-eight pure browser-contract/CSV controls; declared binding consistency is distinct from Rust hash reconstruction.",
+      "limits": "Bounded own contract. Historical original file bytes, unknown imported fields, missing source bodies, source/database authenticity, large-crawl scale and vendor parity are not established. Exact final bundle source CI/release/install are separate gates."
+    },
+    {
+      "id": "saved-comparison-original-bundle-ui-fixture",
+      "artifact": "docs/verification/saved-comparison-original-bundle-ui-fixture.json",
+      "artifact_sha256": "ca6359b4211c2adc3b954583a69ce46de64aa67382e31b2617feace744643e90",
+      "bytes": 9995,
+      "result": "PASS",
+      "tested_at": null,
+      "scope": "Thirty-four isolated browser/API-fixture groups, explicit option, old payload omission, exact raw u64 JSON export, late-request invalidation and 320px controls; no native proof from mocks.",
+      "limits": "Bounded own contract. Historical original file bytes, unknown imported fields, missing source bodies, source/database authenticity, large-crawl scale and vendor parity are not established. Exact final bundle source CI/release/install are separate gates."
+    },
+    {
+      "id": "saved-comparison-original-bundle-ui-native",
+      "artifact": "docs/verification/saved-comparison-original-bundle-ui-native.json",
+      "artifact_sha256": "33e799d46bc5cfe62fc7cf66310c0c261cd761b11924c4bc53e3dd6d821615e9",
+      "bytes": 11981,
+      "result": "PASS",
+      "tested_at": "2026-10-13T01:02:21.663Z",
+      "scope": "Actual native saved-report/browser opt-in, exact raw original-report exports, served-asset hashes, unchanged saved bytes and drained offline witness.",
+      "limits": "Bounded own contract. Historical original file bytes, unknown imported fields, missing source bodies, source/database authenticity, large-crawl scale and vendor parity are not established. Exact final bundle source CI/release/install are separate gates."
+    },
+    {
+      "id": "saved-comparison-original-bundle-mutation-fence",
+      "artifact": "docs/verification/saved-comparison-original-bundle-native-fence.json",
+      "artifact_sha256": "cf3d30e0c6ea1526499536a69e400f374d83eaa348abd8688f74e494d3a41d99",
+      "bytes": 1075,
+      "result": "PASS",
+      "tested_at": null,
+      "scope": "Four independent callback controls against the actual opt-in native harness; no App execution claimed by these controls.",
+      "limits": "Bounded own contract. Historical original file bytes, unknown imported fields, missing source bodies, source/database authenticity, large-crawl scale and vendor parity are not established. Exact final bundle source CI/release/install are separate gates."
+    }
+  ],
+  "tests": {
+    "final_app": {
+      "passed": 98,
+      "failed": 0,
+      "log_sha256": "24479c8943e7d67603339bbafd4e2e8a4805ea5f79cb3e21fdf06d0b7a9ffbc3"
+    },
+    "full_workspace_before_async_worker_fix": {
+      "passed": 475,
+      "failed": 0,
+      "ignored": 4,
+      "log_sha256": "54ce5eed0fade7070d6152cd9e06e045a67fa1f884f992062e49f96599cdb2f7"
+    },
+    "final_worker_boundary": {
+      "result": "PASS",
+      "caller_stack_bytes": 1048576,
+      "accepted_api_depth": 256,
+      "rejected_api_depth": 257,
+      "complete_rpc_depth": 258,
+      "recursive_decode_hash_build_serialize_drop_on_workers": true,
+      "log_sha256": "0d54ecc7d1a332a7c515afa713ce9228704d710dac526836a73872fc88a5b61a"
+    },
+    "final_workspace_clippy": {
+      "result": "PASS",
+      "all_targets": true,
+      "log_sha256": "4e994c0ecfe8cdc3dc2c0d6f642834bb1302fde98d235886233f6c5b0340cf55"
+    },
+    "full_final_workspace": "EXACT_SOURCE_CI_PENDING"
+  },
+  "repaired_counterexamples": [
+    "Typed f64 51.248178375505404 changed bits without float_roundtrip; directed red/green and native genuine SVG retain exact value.",
+    "Valid standalone deep reports gained wrapper depth above the default JSON recursion limit; bounded quote/escape-aware 256 preflight and grammar/end validation repair the opted path.",
+    "Actual Windows stdio depth123 overflowed the main stack; full decode/build/budget/serialize/drop now run on blocking workers and native both-transport controls plus maximum-depth small-caller regression pass."
+  ],
+  "open_gates": [
+    "Exact final bundle commit CI",
+    "Immutable optimized Windows release",
+    "Data-preserving installed user runtime"
+  ],
+  "installed_user_runtime": {
+    "batch": "B10",
+    "port": 8787,
+    "unchanged_by_this_checkpoint": true
+  },
+  "vendor_parity": "NOT_PROVEN"
+}

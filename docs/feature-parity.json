@@ -3790,7 +3790,7 @@
     {
       "id": "storage.compare_export",
       "name": "Comparison export",
-      "status": "partial",
+      "status": "implemented",
       "phase": "P2",
       "source_ids": [
         "compare"
@@ -3809,7 +3809,7 @@
             "saved-comparison-backend-checkpoint"
           ],
           "proves": "Local-file CLI writes comparison JSON and formula-protected CSV with concrete field values/states/profiles/provenance and both typed report hashes; existing destinations retain their exact bytes.",
-          "limits": "The JSON currently includes snapshot descriptors and field projections. Both complete original reports in one downloadable bound bundle remain open."
+          "limits": "Historical projection-only checkpoint; full original typed reports are covered by the separately registered bundle proofs."
         },
         {
           "verification_run_ids": [
@@ -3818,14 +3818,26 @@
             "saved-comparison-ui-fixture"
           ],
           "proves": "Native/browser comparison JSON preserves exact received response bytes; CSV carries every compared field rather than only visible rows, with filter, profile, provenance and formula protection. Actual cross-origin CLI output agrees column-for-column with API.",
-          "limits": "Snapshot descriptors and fact projections are included; both complete original typed reports in one combined bundle remain open."
+          "limits": "Historical projection-only checkpoint; full original typed reports are covered by the separately registered bundle proofs."
+        },
+        {
+          "verification_run_ids": [
+            "saved-comparison-original-bundle-native",
+            "saved-comparison-original-bundle-oracles",
+            "saved-comparison-original-bundle-cli-budget",
+            "saved-comparison-original-bundle-ui-contract",
+            "saved-comparison-original-bundle-ui-fixture",
+            "saved-comparison-original-bundle-ui-native",
+            "saved-comparison-original-bundle-mutation-fence",
+            "saved-comparison-original-bundle-checkpoint"
+          ],
+          "proves": "Optional complete typed original-report bundle retains both source reports and all four delta classes in API/CLI/MCP and native browser JSON downloads; ordered original values, exact numeric lexemes, report hashes/counts and all compared CSV fields are independently checked. Default projection stays unchanged; over-budget or invalid requested bundles never silently fall back.",
+          "limits": "Typed loaded reports, not historical input-file bytes or SQL authenticity. Browser exports exact received JSON and does not reconstruct Rust hashes. Native CLI fixed-ceiling control is synthetic; API/MCP fixed64MiB boundary and vendor parity remain separately unproven."
         }
       ],
       "parity_evidence": [],
       "group": "storage",
-      "remaining_acceptance": [
-        "Add combined downloadable comparison export with fixture assertions for all delta classes and both snapshots."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -5604,6 +5616,96 @@
       "tested_at": "2026-10-13T00:01:51.410Z",
       "scope": "Current stored-comparison backend, actual UI and two-origin mapping checkpoint with explicit open full-report-bundle and release gates.",
       "limits": "Own bounded saved-fact contract. Full original-report bundle, exact source CI/release/install and vendor parity remain separate."
+    },
+    {
+      "id": "saved-comparison-ci-baseline",
+      "artifact": "docs/verification/saved-comparison-ci-baseline.json",
+      "artifact_sha256": "8d307f873d8f7227a4e6f1aeb213bc27b41ce2658601faf963164720a8223994",
+      "bytes": 26856,
+      "result": "PASS",
+      "tested_at": "2026-10-13T00:24:58.304Z",
+      "scope": "Exact b8d6908 comparison baseline: four successful CI jobs; later bundle sources excluded.",
+      "limits": "Bounded own contract. Historical original file bytes, unknown imported fields, missing source bodies, source/database authenticity, large-crawl scale and vendor parity are not established. Exact final bundle source CI/release/install are separate gates."
+    },
+    {
+      "id": "saved-comparison-original-bundle-native",
+      "artifact": "docs/verification/saved-comparison-original-bundle-e2e.json",
+      "artifact_sha256": "914a57c0d5e3a87a0058958fe91ef0c99128975837444227e103c59bf51d9cb6",
+      "bytes": 26638,
+      "result": "PASS",
+      "tested_at": "2026-10-13T00:47:38.791Z",
+      "scope": "Eleven native complete-report/API/CLI groups and twelve official SDK cases on both transports, genuine f64/u64, declared deep imports, mixed-age and partial states, terminal-state conflicts and drained two-origin offline restart.",
+      "limits": "Bounded own contract. Historical original file bytes, unknown imported fields, missing source bodies, source/database authenticity, large-crawl scale and vendor parity are not established. Exact final bundle source CI/release/install are separate gates."
+    },
+    {
+      "id": "saved-comparison-original-bundle-oracles",
+      "artifact": "docs/verification/saved-comparison-original-bundle-oracle-controls.json",
+      "artifact_sha256": "f9b0df945d8ff1ff9da831d0c7e71345c52344f34fa29df1dc0afc4abaf9f6b4",
+      "bytes": 2830,
+      "result": "PASS",
+      "tested_at": "2026-10-13T00:32:45.629Z",
+      "scope": "Twenty-eight pure lossless numeric/report/CSV/lifecycle oracle controls; native execution separately recorded.",
+      "limits": "Bounded own contract. Historical original file bytes, unknown imported fields, missing source bodies, source/database authenticity, large-crawl scale and vendor parity are not established. Exact final bundle source CI/release/install are separate gates."
+    },
+    {
+      "id": "saved-comparison-original-bundle-cli-budget",
+      "artifact": "docs/verification/saved-comparison-original-bundle-cli-budget.json",
+      "artifact_sha256": "4adbe20b3a4eda2b41838fe62807dabccb13cd9665d829124ae168fffd3c1cdf",
+      "bytes": 2038,
+      "result": "PASS",
+      "tested_at": "2026-10-13T00:49:34.679Z",
+      "scope": "Four actual native CLI controls with synthetic typed reports: exact 64 MiB success, plus-one pre-reservation refusal and unchanged default projection. No API/MCP fixed-ceiling or crawl-authenticity claim.",
+      "limits": "Bounded own contract. Historical original file bytes, unknown imported fields, missing source bodies, source/database authenticity, large-crawl scale and vendor parity are not established. Exact final bundle source CI/release/install are separate gates."
+    },
+    {
+      "id": "saved-comparison-original-bundle-ui-contract",
+      "artifact": "docs/verification/saved-comparison-original-bundle-ui-contract.json",
+      "artifact_sha256": "18c2c0cce6e3b478782db031725815d2dbba4b848ebd3cebb3231b727c978c33",
+      "bytes": 2122,
+      "result": "PASS",
+      "tested_at": null,
+      "scope": "Twenty-eight pure browser-contract/CSV controls; declared binding consistency is distinct from Rust hash reconstruction.",
+      "limits": "Bounded own contract. Historical original file bytes, unknown imported fields, missing source bodies, source/database authenticity, large-crawl scale and vendor parity are not established. Exact final bundle source CI/release/install are separate gates."
+    },
+    {
+      "id": "saved-comparison-original-bundle-ui-fixture",
+      "artifact": "docs/verification/saved-comparison-original-bundle-ui-fixture.json",
+      "artifact_sha256": "ca6359b4211c2adc3b954583a69ce46de64aa67382e31b2617feace744643e90",
+      "bytes": 9995,
+      "result": "PASS",
+      "tested_at": null,
+      "scope": "Thirty-four isolated browser/API-fixture groups, explicit option, old payload omission, exact raw u64 JSON export, late-request invalidation and 320px controls; no native proof from mocks.",
+      "limits": "Bounded own contract. Historical original file bytes, unknown imported fields, missing source bodies, source/database authenticity, large-crawl scale and vendor parity are not established. Exact final bundle source CI/release/install are separate gates."
+    },
+    {
+      "id": "saved-comparison-original-bundle-ui-native",
+      "artifact": "docs/verification/saved-comparison-original-bundle-ui-native.json",
+      "artifact_sha256": "33e799d46bc5cfe62fc7cf66310c0c261cd761b11924c4bc53e3dd6d821615e9",
+      "bytes": 11981,
+      "result": "PASS",
+      "tested_at": "2026-10-13T01:02:21.663Z",
+      "scope": "Actual native saved-report/browser opt-in, exact raw original-report exports, served-asset hashes, unchanged saved bytes and drained offline witness.",
+      "limits": "Bounded own contract. Historical original file bytes, unknown imported fields, missing source bodies, source/database authenticity, large-crawl scale and vendor parity are not established. Exact final bundle source CI/release/install are separate gates."
+    },
+    {
+      "id": "saved-comparison-original-bundle-mutation-fence",
+      "artifact": "docs/verification/saved-comparison-original-bundle-native-fence.json",
+      "artifact_sha256": "cf3d30e0c6ea1526499536a69e400f374d83eaa348abd8688f74e494d3a41d99",
+      "bytes": 1075,
+      "result": "PASS",
+      "tested_at": null,
+      "scope": "Four independent callback controls against the actual opt-in native harness; no App execution claimed by these controls.",
+      "limits": "Bounded own contract. Historical original file bytes, unknown imported fields, missing source bodies, source/database authenticity, large-crawl scale and vendor parity are not established. Exact final bundle source CI/release/install are separate gates."
+    },
+    {
+      "id": "saved-comparison-original-bundle-checkpoint",
+      "artifact": "docs/verification/saved-comparison-original-bundle-checkpoint.json",
+      "artifact_sha256": "527f754eee32b9c9043d95942c995b19404bedcf0c5043bf0f84ebb47c15fd10",
+      "bytes": 10821,
+      "result": "PASS",
+      "tested_at": "2026-10-13T01:02:52.584Z",
+      "scope": "Local optional-original-report bundle implementation checkpoint; baseline CI is source-bounded and final bundle CI/release/install remain separate.",
+      "limits": "Final App98 and maximum-depth worker regression are current; full workspace475 is explicitly pre-worker-fix historical. Final full workspace, exact source CI/release/install and vendor parity remain separate."
     }
   ],
   "reference_workflows": [
@@ -5725,8 +5827,8 @@
   ],
   "status_summary": {
     "overall": {
-      "implemented": 29,
-      "partial": 69,
+      "implemented": 30,
+      "partial": 68,
       "planned": 46,
       "total": 144
     },
@@ -5738,8 +5840,8 @@
         "total": 45
       },
       "P2": {
-        "implemented": 8,
-        "partial": 31,
+        "implemented": 9,
+        "partial": 30,
         "planned": 6,
         "total": 45
       },
@@ -5836,8 +5938,8 @@
         "total": 9
       },
       "storage": {
-        "implemented": 3,
-        "partial": 6,
+        "implemented": 4,
+        "partial": 5,
         "planned": 1,
         "total": 10
       },
@@ -5861,7 +5963,7 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-13T00:01:51.410Z",
+  "last_verified_at": "2026-10-13T01:02:52.584Z",
   "current_work": [
     {
       "id": "batch-b8-content-capture",
@@ -6408,10 +6510,10 @@
     {
       "id": "batch-b11-saved-comparison",
       "status": "IN_PROGRESS",
-      "stage": "BACKEND_BROWSER_MAPPING_PASS_FULL_ORIGINAL_BUNDLE_RELEASE_PENDING",
+      "stage": "FULL_ORIGINAL_BUNDLE_PASS_EXACT_COMMIT_CI_RELEASE_PENDING",
       "priority": 2,
       "title_de": "Nächste Funktion – B11: gespeicherte Crawls vollständig vergleichen",
-      "summary_de": "Gespeicherter Rust-Vergleich ist integriert: 34 Core-Fälle, 62 App-Tests und 440 Standard-Rust-Tests bestehen. API/CLI/MCP sind mit neun tatsächlichen Gruppen und 23 SDK-Werkzeugen geprüft. Acht native Browsergruppen und zehn echte Zwei-Origin-Mappinggruppen mit beidseitigen Kollisionen, unveränderten Originaldaten und Offline-Kaltstart bestehen. Das vollständige Originalbericht-Bundle sowie exakte Source-CI/Release/Installation bleiben offen. GitHub: [B11-Issue #18](https://github.com/lia-xim/open-seo-spider/issues/18).",
+      "summary_de": "Gespeicherte Vergleiche mit konkreten Änderungen, URL-Mapping und vollständigem Originalbericht-JSON bestehen die eigenen Abnahmen. Das neue Bundle besteht elf native Gruppen, zwölf SDK-Fälle auf beiden Transporten, vier native CLI-Budgetgruppen und echte Browser-Abnahme; 98 finale App-Tests und Alltargets-Clippy bestehen. Der Vergleichs-Basiscommit b8d6908 hat vier grüne CI-Jobs. Exakte Bundle-Commit-CI, optimierter Release und Installation stehen noch aus; Port8787 bleibt B10. GitHub: [B11-Issue #18](https://github.com/lia-xim/open-seo-spider/issues/18).",
       "feature_ids": [
         "modes.compare",
         "storage.compare_changes",
@@ -6424,11 +6526,11 @@
         "API/CLI/MCP liefern identische Deltas und typisierte Report-Hashes; nach Abschaltung der Fixture-Website und App-Kaltstart beobachten ein eigener HTTP-Witness und beide SDK-Transporte null Website-Anfragen.",
         "Zwei App/Core-Vertragsfehler rot reproduziert und repariert; 440 Standard-Rust-Tests sowie Alltargets-Clippy bestehen.",
         "Vergleichsoberfläche, alle vier Klassen, Details, fehlende/partielle Quellen, genaue JSON-/CSV-Downloads und 320px-Erreichbarkeit an tatsächlichen gespeicherten nativen Crawls geprüft; eingebettete Assets und Mutation-Fence sind gebunden.",
-        "Vier tatsächliche Crawls auf zwei Origins prüfen Staging/Production-Prefix-Joins und beidseitige Mapping-Kollisionen; alle Originalfakten und Report-/Revisions-/Exportbytes bleiben erhalten, zwei Offline-Witnesses bleiben nach finalem Prozessende bei null."
+        "Vier tatsächliche Crawls auf zwei Origins prüfen Staging/Production-Prefix-Joins und beidseitige Mapping-Kollisionen; alle Originalfakten und Report-/Revisions-/Exportbytes bleiben erhalten, zwei Offline-Witnesses bleiben nach finalem Prozessende bei null.",
+        "Gemeinsamer optionaler JSON-Export erhält beide vollständigen geladenen typisierten Reports mit Hash-/Bytebindung und allen Delta-Klassen; native SDK-, Browser-, Kaltstart- und CLI-Grenzprüfungen bestehen."
       ],
       "pending_acceptance_de": [
-        "Einen gemeinsamen JSON-Download mit beiden vollständigen unveränderten geladenen typisierten Originalberichten und hashgebundenen Deltas ergänzen.",
-        "Exakte Commit-CI, unveränderlichen optimierten Release und datenbewahrende Installation separat prüfen."
+        "Exakte Bundle-Commit-CI, unveränderlichen optimierten Release und datenbewahrende Installation separat prüfen."
       ],
       "documentation": [
         "docs/FEATURE_TODO.md",
@@ -6441,15 +6543,19 @@
         "snapshot_and_mapping_integrity": "PASS_NATIVE_10_TWO_ORIGINS_BOTH_COLLISION_SIDES",
         "offline_restart_zero_requests": "PASS_FINAL_DRAINED_HTTP_WITNESSES_0",
         "work_draft_core": "PASS_34_ISOLATED_WORK_ONLY",
-        "workspace_tests": "PASS_440_WITH_4_BROWSER_IGNORED",
-        "workspace_clippy": "PASS",
-        "combined_full_original_bundle": "PENDING",
-        "exact_commit_ci": "PENDING",
+        "workspace_tests": "PASS_475_PRE_ASYNC_WORKER_FIX_FINAL_APP98_FULL_FINAL_CI_PENDING",
+        "workspace_clippy": "PASS_ALL_TARGETS",
+        "combined_full_original_bundle": "PASS_NATIVE11_SDK12_AND_NATIVE_BROWSER",
+        "exact_commit_ci": "PENDING_BUNDLE_SOURCE",
         "immutable_release": "PENDING",
         "installed_runtime": "PENDING",
-        "ui_contract": "PASS_16",
-        "ui_browser_fixture": "PASS_23",
-        "mapping_oracle_controls": "PASS"
+        "ui_contract": "PASS_28",
+        "ui_browser_fixture": "PASS_34",
+        "mapping_oracle_controls": "PASS",
+        "final_app_tests": "PASS_98",
+        "worker_maximum_depth": "PASS_256_PLUS1_REFUSED_ON_1MIB_CALLER",
+        "cli_bundle_fixed_ceiling": "PASS_NATIVE_64MIB_EXACT_PLUS1",
+        "baseline_exact_commit_ci": "PASS_B8D6908_ALL4"
       },
       "proof_run_ids": [
         "saved-comparison-native",
@@ -6458,11 +6564,20 @@
         "saved-comparison-native-ui",
         "saved-comparison-native-mapping",
         "saved-comparison-mapping-oracles",
-        "saved-comparison-checkpoint"
+        "saved-comparison-checkpoint",
+        "saved-comparison-ci-baseline",
+        "saved-comparison-original-bundle-native",
+        "saved-comparison-original-bundle-oracles",
+        "saved-comparison-original-bundle-cli-budget",
+        "saved-comparison-original-bundle-ui-contract",
+        "saved-comparison-original-bundle-ui-fixture",
+        "saved-comparison-original-bundle-ui-native",
+        "saved-comparison-original-bundle-mutation-fence",
+        "saved-comparison-original-bundle-checkpoint"
       ],
       "reference_parity": "NOT_PROVEN",
       "tracking_issue": "https://github.com/lia-xim/open-seo-spider/issues/18",
-      "policy": "Independent stored-fact backend/UI/mapping acceptance is supported by actual own native fixtures and bounded controls. Full original typed-report bundle, source CI/release/install, large-crawl scale and vendor parity remain separate. Historical drafts, failed harness attempts and repaired counterexamples remain historical.",
+      "policy": "Independent stored-fact comparison and optional complete typed-report export are supported by actual owned native/browser/SDK fixtures. Historical baseline and earlier projection proofs remain source-bounded. Exact bundle source CI/release/install, source authenticity, missing source-body capture, large-crawl scale and vendor parity remain separate.",
       "work_draft": {
         "source_baseline_commit": "d0f3eddbbb03e2127f0533494597cdbddfa6f645",
         "manifest": "docs/verification/saved-comparison-draft-core.json",
@@ -6472,6 +6587,33 @@
         "production_integrated": true,
         "api_cli_mcp_ui": "API_CLI_MCP_UI_PASS"
       }
+    },
+    {
+      "id": "batch-b12-sitemap-membership",
+      "status": "PLANNED",
+      "stage": "SOURCE_REVIEW_PLAN_IMPLEMENTATION_PENDING",
+      "priority": 3,
+      "title_de": "Nächster Baustein – B12: Sitemaps und Mitgliedschaft",
+      "summary_de": "Konkreter Source-Entwurf für striktes XML-Parsing, begrenztes Gzip und persistierte Sitemap-Mitgliedschaft liegt vor. Positive Sitemap-Beobachtungen bleiben getrennt von abgerufenen, ausgeschlossenen und blockierten Zielen. Implementierung und eigene Abnahmen stehen aus; Feature-Status bleibt unverändert.",
+      "feature_ids": [
+        "sitemap.discovery",
+        "sitemap.coverage"
+      ],
+      "completed_acceptance_de": [],
+      "pending_acceptance_de": [
+        "Namespace-/Elternstruktur, .gz-Dateidekodierung und tatsächliche Inflationsbudgets prüfen.",
+        "Vollständige Loc-Vorkommen und Dokument-/Child-Herkunft dauerhaft erhalten; Discovery-Frontier nicht als Vollständigkeitsbeweis verwenden.",
+        "Ordinary/Policy × Ressourcen an/aus, Zyklen/Fehler, Pause/Recovery, unbekannte Altbestände und read-only API/CSV/UI getrennt prüfen."
+      ],
+      "documentation": [
+        "docs/parity/sitemap-b12-plan.md"
+      ],
+      "gates": {
+        "source_review": "PLAN_ONLY",
+        "implementation": "PENDING",
+        "native_acceptance": "NOT_RUN"
+      },
+      "reference_parity": "NOT_PROVEN"
     }
   ]
 }

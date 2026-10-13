@@ -43,6 +43,9 @@ enum Command {
         /// New CSV destination containing one row per compared field.
         #[arg(long)]
         csv: Option<PathBuf>,
+        /// Include complete loaded typed reports bound to the compared snapshots.
+        #[arg(long)]
+        include_original_reports: bool,
     },
     /// Inspect declared dependencies in supplied CSS locally; no website is fetched.
     InspectCss {
@@ -197,8 +200,18 @@ async fn main() -> anyhow::Result<()> {
             config,
             output,
             csv,
+            include_original_reports,
         } => {
-            if let Err(error) = comparison_app::run_cli(before, after, config, output, csv).await {
+            if let Err(error) = comparison_app::run_cli(
+                before,
+                after,
+                config,
+                output,
+                csv,
+                include_original_reports,
+            )
+            .await
+            {
                 eprintln!("{}", serde_json::to_string(&error)?);
                 std::process::exit(2);
             }

@@ -12,6 +12,8 @@ use std::{
 };
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use uuid::Uuid;
+mod original_reports;
+use original_reports::OriginalReportsBundle;
 
 pub(crate) const MAX_REQUEST_BYTES: usize = 1024 * 1024;
 pub(crate) const MAX_RESPONSE_BYTES: usize = 64 * 1024 * 1024;
@@ -28,6 +30,11 @@ pub(crate) struct SavedComparisonRequest {
     pub expected_before_generation: Option<u64>,
     #[serde(default)]
     pub expected_after_generation: Option<u64>,
+    #[serde(default, skip_serializing_if = "bool_is_false")]
+    pub include_original_reports: bool,
+}
+fn bool_is_false(value: &bool) -> bool {
+    !value
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -35,20 +42,54 @@ pub(crate) struct SavedComparisonRequest {
 pub(crate) struct SavedComparisonResponse {
     pub comparison: SavedComparisonResult,
     pub website_requests: usize,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub original_reports: Option<OriginalReportsBundle>,
 }
 impl SavedComparisonResponse {
     pub fn new(comparison: SavedComparisonResult) -> Result<Self, SavedComparisonFailure> {
         let response = Self {
             comparison,
             website_requests: 0,
+            original_reports: None,
         };
-        let mut counter = ByteBudget {
-            writer: std::io::sink(),
-            remaining: MAX_RESPONSE_BYTES,
-        };
-        serde_json::to_writer(&mut counter, &response)
-            .map_err(|error| failure("comparison_response_byte_budget", error.to_string()))?;
+        response.check_response_budget(MAX_RESPONSE_BYTES)?;
         Ok(response)
+    }
+    pub fn with_original_reports(
+        comparison: SavedComparisonResult,
+        before: CrawlReport,
+        after: CrawlReport,
+    ) -> Result<Self, SavedComparisonFailure> {
+        Self::with_original_reports_limit(comparison, before, after, MAX_RESPONSE_BYTES)
+    }
+    fn with_original_reports_limit(
+        comparison: SavedComparisonResult,
+        before: CrawlReport,
+        after: CrawlReport,
+        maximum: usize,
+    ) -> Result<Self, SavedComparisonFailure> {
+        let bundle = OriginalReportsBundle::new(&comparison, before, after)?;
+        let response = Self {
+            comparison,
+            website_requests: 0,
+            original_reports: Some(bundle),
+        };
+        response.check_response_budget(maximum)?;
+        Ok(response)
+    }
+    fn check_response_budget(&self, maximum: usize) -> Result<(), SavedComparisonFailure> {
+        let code = if self.original_reports.is_some() {
+            "original_report_bundle_byte_budget"
+        } else {
+            "comparison_response_byte_budget"
+        };
+        check_serialized_budget(self, maximum.min(MAX_RESPONSE_BYTES), code)
+    }
+    pub(crate) fn validate_original_reports(&self) -> Result<(), SavedComparisonFailure> {
+        if let Some(bundle) = &self.original_reports {
+            bundle.validate(&self.comparison)?;
+        }
+        Ok(())
     }
 }
 
@@ -86,6 +127,28 @@ pub(crate) fn failure(code: &str, message: impl Into<String>) -> SavedComparison
         collisions: Vec::new(),
     }
     .into()
+}
+pub(crate) fn bounded_bundle_failure(error: SavedComparisonFailure) -> SavedComparisonFailure {
+    bounded_bundle_failure_with_limit(error, MAX_RESPONSE_BYTES)
+}
+fn bounded_bundle_failure_with_limit(
+    error: SavedComparisonFailure,
+    maximum: usize,
+) -> SavedComparisonFailure {
+    if check_serialized_budget(
+        &error,
+        maximum.min(MAX_RESPONSE_BYTES),
+        "original_report_bundle_byte_budget",
+    )
+    .is_ok()
+    {
+        error
+    } else {
+        failure(
+            "original_report_bundle_byte_budget",
+            "Complete structured comparison failure exceeds its output byte budget; no detail subset returned",
+        )
+    }
 }
 
 // Advertised MCP schema mirrors the strict shared request model. Core performs
@@ -128,8 +191,21 @@ pub(crate) fn request_schema() -> Value {
     json!({"type":"object","additionalProperties":false,"required":["before","after"],"properties":{
         "before":{"type":"string","format":"uuid"},"after":{"type":"string","format":"uuid"},
         "config":{"anyOf":[config,{"type":"null"}]},
-        "expected_before_generation":generation,"expected_after_generation":generation
+        "expected_before_generation":generation,"expected_after_generation":generation,
+        "include_original_reports":{"type":"boolean","default":false}
     }})
+}
+
+pub(crate) fn check_serialized_budget(
+    value: &impl Serialize,
+    maximum: usize,
+    code: &str,
+) -> Result<(), SavedComparisonFailure> {
+    let mut counter = ByteBudget {
+        writer: std::io::sink(),
+        remaining: maximum,
+    };
+    serde_json::to_writer(&mut counter, value).map_err(|error| failure(code, error.to_string()))
 }
 
 struct ByteBudget<W> {
@@ -183,9 +259,16 @@ pub(crate) fn write_csv(
     result: &SavedComparisonResult,
     writer: &mut impl Write,
 ) -> Result<(), SavedComparisonFailure> {
+    write_csv_with_limit(result, writer, MAX_CSV_BYTES)
+}
+fn write_csv_with_limit(
+    result: &SavedComparisonResult,
+    writer: &mut impl Write,
+    maximum: usize,
+) -> Result<(), SavedComparisonFailure> {
     let mut bounded = ByteBudget {
         writer,
-        remaining: MAX_CSV_BYTES,
+        remaining: maximum.min(MAX_CSV_BYTES),
     };
     csv_record(
         &mut bounded,
@@ -330,6 +413,42 @@ pub(crate) async fn run_cli(
     config_file: Option<PathBuf>,
     output: Option<PathBuf>,
     csv: Option<PathBuf>,
+    include_original_reports: bool,
+) -> Result<(), SavedComparisonFailure> {
+    let result = run_cli_with_options(
+        before,
+        after,
+        config_file,
+        output,
+        csv,
+        SavedCliOptions {
+            include_original_reports,
+            response_maximum: MAX_RESPONSE_BYTES,
+            csv_maximum: MAX_CSV_BYTES,
+        },
+    )
+    .await;
+    result.map_err(|error| {
+        if include_original_reports {
+            bounded_bundle_failure(error)
+        } else {
+            error
+        }
+    })
+}
+#[derive(Clone, Copy)]
+struct SavedCliOptions {
+    include_original_reports: bool,
+    response_maximum: usize,
+    csv_maximum: usize,
+}
+async fn run_cli_with_options(
+    before: PathBuf,
+    after: PathBuf,
+    config_file: Option<PathBuf>,
+    output: Option<PathBuf>,
+    csv: Option<PathBuf>,
+    options: SavedCliOptions,
 ) -> Result<(), SavedComparisonFailure> {
     let mut destinations = HashSet::new();
     for path in output.iter().chain(csv.iter()) {
@@ -362,10 +481,35 @@ pub(crate) async fn run_cli(
             Some(&binding),
         )
         .map_err(SavedComparisonFailure::from)?;
-        SavedComparisonResponse::new(result)
+        if options.include_original_reports {
+            SavedComparisonResponse::with_original_reports_limit(
+                result,
+                before_report,
+                after_report,
+                options.response_maximum,
+            )
+        } else {
+            let response = SavedComparisonResponse::new(result)?;
+            response.check_response_budget(options.response_maximum)?;
+            Ok(response)
+        }
     })
     .await
     .map_err(|error| failure("comparison_task_failed", error.to_string()))??;
+    // The complete immutable envelope is bounded and serialized before any
+    // output destination is reserved. This includes both opt-in reports.
+    let bytes = serde_json::to_vec(&response)
+        .map_err(|error| failure("comparison_json_serialization", error.to_string()))?;
+    if csv.is_some() {
+        // Count CSV with the same serializer before reserving JSON or CSV.
+        // Genuine filesystem write failures can still occur after reservation.
+        write_csv_with_limit(
+            &response.comparison,
+            &mut std::io::sink(),
+            options.csv_maximum,
+        )
+        .map_err(|error| failure("comparison_csv_byte_budget", error.error.message))?;
+    }
     // Each reservation is atomic create_new. Two-file export is not a filesystem
     // transaction: an IO failure may leave newly created empty/partial artifacts.
     let mut output_file = if let Some(path) = output {
@@ -402,22 +546,18 @@ pub(crate) async fn run_cli(
     } else {
         None
     };
-    let response = if let Some(csv_file) = csv_file {
+    if let Some(csv_file) = csv_file {
         let file = csv_file.into_std().await;
         tokio::task::spawn_blocking(move || {
             let mut writer = std::io::BufWriter::new(file);
             write_csv(&response.comparison, &mut writer)?;
             writer.flush().map_err(csv_io)?;
             writer.get_ref().sync_all().map_err(csv_io)?;
-            Ok::<_, SavedComparisonFailure>(response)
+            Ok::<_, SavedComparisonFailure>(())
         })
         .await
         .map_err(|error| failure("comparison_csv_task_failed", error.to_string()))??
-    } else {
-        response
-    };
-    let bytes = serde_json::to_vec(&response)
-        .map_err(|error| failure("comparison_json_serialization", error.to_string()))?;
+    }
     if let Some(file) = output_file.as_mut() {
         file.write_all(&bytes)
             .await
