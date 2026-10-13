@@ -1,3 +1,4 @@
+use crate::robots_sitemap_source::{ROBOTS_BODY_CAP, RobotsBodyBuffer, RobotsSitemapSource};
 use crate::urls::origin;
 use reqwest::Client;
 use std::{
@@ -14,6 +15,7 @@ pub(crate) struct RobotsPolicy {
     pub deny_all: bool,
     pub warning: Option<String>,
     pub sitemaps: Vec<String>,
+    pub sitemap_source: Option<RobotsSitemapSource>,
 }
 
 impl RobotsPolicy {
@@ -47,43 +49,68 @@ impl RobotsCache {
         let mut policy = RobotsPolicy::default();
         match self.client.get(&robots_url).send().await {
             Ok(mut response) if response.status().is_success() => {
-                let mut data = Vec::new();
-                // RFC 9309 requires parsing at least 500 KiB; keep a bounded 512 KiB.
-                let mut failed = false;
+                let final_url = response.url().to_string();
+                let status = response.status().as_u16();
+                let mut body = RobotsBodyBuffer::default();
+                // Preserve 512KiB of matching input. Exact fit still needs true EOF;
+                // actual overflow retains a qualified prefix and stops the transfer.
                 loop {
                     match response.chunk().await {
                         Ok(Some(chunk)) => {
-                            let remaining = 512 * 1024 - data.len();
-                            data.extend_from_slice(&chunk[..chunk.len().min(remaining)]);
-                            if data.len() == 512 * 1024 {
+                            if !body.push_chunk(&chunk) {
                                 break;
                             }
                         }
-                        Ok(None) => break,
+                        Ok(None) => {
+                            body.observe_eof();
+                            break;
+                        }
                         Err(error) => {
-                            policy.warning = Some(format!("robots.txt body failed: {error}"));
-                            failed = true;
+                            let message = format!("robots.txt body failed: {error}");
+                            body.read_failure = Some(message.clone());
+                            // A new EOF probe after the historical matching cap must not change allow/deny behavior.
+                            if body.bytes.len() < ROBOTS_BODY_CAP {
+                                policy.warning = Some(message);
+                            }
                             break;
                         }
                     }
                 }
-                policy.deny_all = failed;
-                policy.text = String::from_utf8_lossy(&data).into_owned();
-                for line in policy.text.lines() {
-                    if let Some((key, value)) = line.split_once(':')
-                        && key.trim().eq_ignore_ascii_case("sitemap")
-                        && let Some(sitemap) = crate::normalize_url(
-                            value.split('#').next().unwrap_or("").trim(),
-                            Some(url),
-                        )
-                    {
-                        policy.sitemaps.push(sitemap.to_string());
-                    }
-                }
+                policy.deny_all = body.read_failure.is_some() && body.bytes.len() < ROBOTS_BODY_CAP;
+                policy.text = String::from_utf8_lossy(&body.bytes).into_owned();
+                policy.sitemap_source = Some(RobotsSitemapSource::observed(
+                    robots_url.clone(),
+                    final_url,
+                    status,
+                    &body,
+                    url,
+                ));
+                policy.sitemaps = policy
+                    .sitemap_source
+                    .as_ref()
+                    .expect("observed robots")
+                    .legacy_sitemaps
+                    .clone();
             }
             Ok(response)
-                if response.status().is_client_error() && response.status().as_u16() != 429 => {}
+                if response.status().is_client_error() && response.status().as_u16() != 429 =>
+            {
+                policy.sitemap_source = Some(RobotsSitemapSource::unavailable(
+                    robots_url.clone(),
+                    true,
+                    Some(response.url().to_string()),
+                    Some(response.status().as_u16()),
+                    format!("robots_http_status_{}", response.status().as_u16()),
+                ));
+            }
             Ok(response) => {
+                policy.sitemap_source = Some(RobotsSitemapSource::unavailable(
+                    robots_url.clone(),
+                    true,
+                    Some(response.url().to_string()),
+                    Some(response.status().as_u16()),
+                    format!("robots_http_status_{}", response.status().as_u16()),
+                ));
                 policy.deny_all = true;
                 policy.warning = Some(format!(
                     "robots.txt returned {}; this origin was skipped",
@@ -91,6 +118,13 @@ impl RobotsCache {
                 ));
             }
             Err(error) => {
+                policy.sitemap_source = Some(RobotsSitemapSource::unavailable(
+                    robots_url.clone(),
+                    true,
+                    None,
+                    None,
+                    "robots_transport_failed".into(),
+                ));
                 policy.deny_all = true;
                 policy.warning = Some(format!(
                     "robots.txt unavailable: {error}; this origin was skipped"
@@ -140,3 +174,7 @@ mod tests {
         assert!(!policy.allowed("Other", "https://e.org/"));
     }
 }
+
+#[cfg(test)]
+#[path = "robots/sitemap_source_tests.rs"]
+mod sitemap_source_tests;

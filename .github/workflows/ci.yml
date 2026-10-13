@@ -34,6 +34,12 @@ jobs:
       - run: cargo build --locked -p open-seo-spider
       - name: Sitemap transport ownership and final-witness controls
         run: node --test scripts/sitemap-transport-oracles.test.mjs
+      - name: Stored sitemap proof validator negative controls
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $validatorControls=& ./scripts/verify-sitemap-transport-proof-controls.ps1 -OutputDirectory (Join-Path $env:RUNNER_TEMP 'sitemap-proof-validator-controls')
+          if($validatorControls.result -ne 'PASS_VALIDATOR_ONLY_CONTROLS' -or $validatorControls.negative_controls -ne 24){throw 'Stored proof validator controls did not pass'}
       - name: Native bounded sitemap transport in ordinary and policy modes
         run: node scripts/sitemap-transport-e2e.mjs
         env:
@@ -41,6 +47,13 @@ jobs:
           SPIDER_SOURCE_COMMIT: ${{ github.sha }}
           SPIDER_EXPECTED_SOURCE_COMMIT: ${{ github.sha }}
           SPIDER_SITEMAP_TRANSPORT_PROOF: ${{ runner.temp }}/sitemap-transport-debug-e2e.json
+      - name: Verify stored debug sitemap proof and raw companions
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $debugSitemapValidation=& ./scripts/verify-sitemap-transport-proof.ps1 -ProofPath (Join-Path $env:RUNNER_TEMP 'sitemap-transport-debug-e2e.json') -BinaryPath './target/debug/open-seo-spider.exe' -HarnessPath './scripts/sitemap-transport-e2e.mjs' -SourceCommit $env:GITHUB_SHA
+          if($debugSitemapValidation.result -ne 'PASS_PROOF_VALIDATION'){throw 'Stored debug sitemap proof did not validate'}
+          $debugSitemapValidation | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath (Join-Path $env:RUNNER_TEMP 'sitemap-transport-debug-validation.json') -Encoding utf8NoBOM
       - run: node scripts/api-e2e.mjs
       - run: node scripts/list-import-e2e.mjs
       - run: node scripts/crawl-control-e2e.mjs
@@ -122,11 +135,26 @@ jobs:
           $releaseBudgetProof=Join-Path $env:RUNNER_TEMP 'saved-comparison-original-bundle-release-cli-budget.json'
           $releaseSitemapProof=Join-Path $env:RUNNER_TEMP 'sitemap-transport-release-e2e.json'
           $releaseHash=(Get-FileHash -LiteralPath $releaseExe -Algorithm SHA256).Hash.ToLowerInvariant()
-          foreach($releaseProofPath in @($releaseBundleProof,$releaseBudgetProof,$releaseSitemapProof)){
+          foreach($releaseProofPath in @($releaseBundleProof,$releaseBudgetProof)){
             $releaseProof=Get-Content -LiteralPath $releaseProofPath -Raw | ConvertFrom-Json
             if($releaseProof.result -ne 'PASS' -or $releaseProof.binary_sha256 -ne $releaseHash){throw 'Optimized proof/binary mismatch'}
           }
-          $releaseManifest=@{source_commit=$releaseCommit;run_id=$env:GITHUB_RUN_ID;profile='release';platform='windows-x86_64-msvc';binary_sha256=$releaseHash;binary_bytes=(Get-Item -LiteralPath $releaseExe).Length;rustc=(rustc --version);bundle_proof_sha256=(Get-FileHash -LiteralPath $releaseBundleProof -Algorithm SHA256).Hash.ToLowerInvariant();budget_proof_sha256=(Get-FileHash -LiteralPath $releaseBudgetProof -Algorithm SHA256).Hash.ToLowerInvariant();sitemap_transport_proof_sha256=(Get-FileHash -LiteralPath $releaseSitemapProof -Algorithm SHA256).Hash.ToLowerInvariant();scope='Optimized executable from exact CI source; native bundle, CLI ceiling and16 drained sitemap transport cases pass. Local browser/install and all other CI jobs are separate gates.'}
+          $releaseSitemapValidation=& ./scripts/verify-sitemap-transport-proof.ps1 -ProofPath $releaseSitemapProof -BinaryPath $releaseExe -HarnessPath './scripts/sitemap-transport-e2e.mjs' -SourceCommit $releaseCommit
+          if($releaseSitemapValidation.result -ne 'PASS_PROOF_VALIDATION'){throw 'Optimized sitemap proof/companions did not validate'}
+          $releaseSitemapRequests=$releaseSitemapProof+'.requests.json'
+          $releaseSitemapLog=$releaseSitemapProof+'.app.log'
+          $releaseSitemapValidationPath=Join-Path $env:RUNNER_TEMP 'sitemap-transport-release-validation.json'
+          $releaseSitemapValidation | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $releaseSitemapValidationPath -Encoding utf8NoBOM
+          $sitemapArchive=@{
+            proof=@{name=[IO.Path]::GetFileName($releaseSitemapProof);sha256=$releaseSitemapValidation.proof_sha256;bytes=$releaseSitemapValidation.proof_bytes}
+            requests=@{name=[IO.Path]::GetFileName($releaseSitemapRequests);sha256=$releaseSitemapValidation.requests_sha256;bytes=$releaseSitemapValidation.requests_bytes}
+            app_log=@{name=[IO.Path]::GetFileName($releaseSitemapLog);sha256=$releaseSitemapValidation.app_log_sha256;bytes=$releaseSitemapValidation.app_log_bytes}
+            validation=@{name=[IO.Path]::GetFileName($releaseSitemapValidationPath);sha256=(Get-FileHash -LiteralPath $releaseSitemapValidationPath -Algorithm SHA256).Hash.ToLowerInvariant();bytes=(Get-Item -LiteralPath $releaseSitemapValidationPath).Length}
+            harness_sha256=$releaseSitemapValidation.harness_sha256
+            validator_sha256=(Get-FileHash -LiteralPath './scripts/verify-sitemap-transport-proof.ps1' -Algorithm SHA256).Hash.ToLowerInvariant()
+            validation_location='Original generated paths before archive copy; fixed names and complete hashes bind copied companions'
+          }
+          $releaseManifest=@{source_commit=$releaseCommit;run_id=$env:GITHUB_RUN_ID;profile='release';platform='windows-x86_64-msvc';binary_sha256=$releaseHash;binary_bytes=(Get-Item -LiteralPath $releaseExe).Length;rustc=(rustc --version);bundle_proof_sha256=(Get-FileHash -LiteralPath $releaseBundleProof -Algorithm SHA256).Hash.ToLowerInvariant();budget_proof_sha256=(Get-FileHash -LiteralPath $releaseBudgetProof -Algorithm SHA256).Hash.ToLowerInvariant();sitemap_transport_proof_sha256=$releaseSitemapValidation.proof_sha256;sitemap_transport_archive=$sitemapArchive;scope='Optimized executable from exact CI source; native bundle, CLI ceiling and16 drained sitemap transport cases pass. Sitemap proof and complete raw companions validated at original paths and archived. Local browser/install and all other CI jobs are separate gates.'}
           $releaseArtifactFolder=Join-Path (Get-Location) 'target/release-artifact'
           New-Item -ItemType Directory -Path $releaseArtifactFolder -Force | Out-Null
           $releaseManifest | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $releaseArtifactFolder 'open-seo-spider-windows-release.json') -Encoding utf8NoBOM
@@ -134,6 +162,9 @@ jobs:
           Copy-Item -LiteralPath $releaseBundleProof -Destination $releaseArtifactFolder
           Copy-Item -LiteralPath $releaseBudgetProof -Destination $releaseArtifactFolder
           Copy-Item -LiteralPath $releaseSitemapProof -Destination $releaseArtifactFolder
+          Copy-Item -LiteralPath $releaseSitemapRequests -Destination $releaseArtifactFolder
+          Copy-Item -LiteralPath $releaseSitemapLog -Destination $releaseArtifactFolder
+          Copy-Item -LiteralPath $releaseSitemapValidationPath -Destination $releaseArtifactFolder
       - name: Save the private optimized Windows artifact
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4
@@ -142,6 +173,18 @@ jobs:
           retention-days: 14
           if-no-files-found: error
           path: target/release-artifact/*
+      - name: Save private sitemap transport debug and release witnesses
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sitemap-transport-witnesses-${{ runner.os }}-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            ${{ runner.temp }}/sitemap-transport-debug-e2e.json*
+            ${{ runner.temp }}/sitemap-transport-release-e2e.json*
+            ${{ runner.temp }}/sitemap-transport-debug-validation.json
+            ${{ runner.temp }}/sitemap-transport-release-validation.json
   renderer:
     runs-on: ubuntu-latest
     steps:

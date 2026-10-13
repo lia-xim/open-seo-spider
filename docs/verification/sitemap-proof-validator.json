@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "result": "PASS_LOCAL_VALIDATOR_CONTROLS_AND_NATIVE_COMPANIONS",
+  "recorded_at": "2026-10-13T03:59:46.689Z",
+  "source_basis_commit": "d3d1e0455a6a874d09e92f13ecfdcd00ff831a78",
+  "files": [
+    {
+      "path": "scripts/verify-sitemap-transport-proof.ps1",
+      "sha256": "fe6c74f049452be2851700def1c582900df24822a588fca6c1d1a2547ed6be68",
+      "bytes": 18359
+    },
+    {
+      "path": "scripts/verify-sitemap-transport-proof-controls.ps1",
+      "sha256": "e52e45b34911abce0f55fd752c165a47d3d447fa39a89461dcd5fabe52f5f7c0",
+      "bytes": 13093
+    },
+    {
+      "path": "scripts/fixtures/validator-only-binary.bin",
+      "sha256": "eb82ddf5043b254c02d86f72a2380e71ba168fa3ef0349b00d4f92f5fd6887d0",
+      "bytes": 70
+    },
+    {
+      "path": "scripts/fixtures/validator-only-harness.mjs",
+      "sha256": "7569b3cc64d80abea9760df5a7d4dc9e3678513dcd533a9c8135455e086523a2",
+      "bytes": 78
+    }
+  ],
+  "controls": {
+    "result": "PASS_VALIDATOR_ONLY_CONTROLS",
+    "synthetic_positive": 1,
+    "negative_controls": 24,
+    "proof": {
+      "sha256": "611824f3adf6fb519914fae17a8f76f5eb5bb8ba56d8c12ab84b70be656b1cab",
+      "bytes": 5043
+    },
+    "native_executable_launched": false,
+    "app_or_http_server_launched": false,
+    "website_requests": 0,
+    "scope": "Tiny synthetic stored-file fixtures; proves validator rejections only, not native execution or release correctness"
+  },
+  "actual_native_companion_validation": {
+    "debug": {
+      "binary_sha256": "e1863029fd9c112b7ce45e13cbb4c3a99ca0938be8f667edd41528e390287c66",
+      "binary_bytes": 52530688,
+      "harness_sha256": "ec832b9c4bf725bd89c0d47d2dd0dfc2c5ec90a1c265a1a5fb494604e3410d7c",
+      "proof": {
+        "sha256": "83da7b8b2ffcc242fc4b8d0f43af32c14bd56be9cf6cdd3d8fcf42c34d744de4",
+        "bytes": 35257
+      },
+      "requests": {
+        "sha256": "aca647b8bcb1d2d13c25a1db9fe60cda1765ea7cacba051eb244d169e8a0a36e",
+        "bytes": 8964
+      },
+      "app_log": {
+        "sha256": "31f89cc65dbd4765eaf90e176d4a4683a11fa4f24d2a82bf84f6a3ec54145673",
+        "bytes": 66
+      },
+      "validation": {
+        "sha256": "f66ff09b991de3154f8aa3fc70f2a3de9b32dedb28530cef03311f721c192ace",
+        "bytes": 1696
+      },
+      "cases": 16,
+      "passes": 16,
+      "request_rows": 46,
+      "final_target_http_witness": "DRAINED",
+      "source_commit": "d3d1e0455a6a874d09e92f13ecfdcd00ff831a78",
+      "source_runtime_attested": false,
+      "scope": "Actual owned native execution followed by read-only consistency validation at original generated paths. Binary provenance for optimized release additionally bound to downloaded CI artifact."
+    },
+    "optimized": {
+      "binary_sha256": "87e6473039cb4ea96de48a437065d6d0772615e3acc8c9b97a17744e7a23e336",
+      "binary_bytes": 30038528,
+      "harness_sha256": "ec832b9c4bf725bd89c0d47d2dd0dfc2c5ec90a1c265a1a5fb494604e3410d7c",
+      "proof": {
+        "sha256": "f451e05ded89295e95c1af06830a1a63883f297ce48662af04712100f35b5016",
+        "bytes": 35212
+      },
+      "requests": {
+        "sha256": "0be29a76bc1f08bbb42173ee7664ce00500ce58b879bcb03f5eedfc272e7ce65",
+        "bytes": 8970
+      },
+      "app_log": {
+        "sha256": "d7cff8275486587494bf61ea86ee7f3d0be2510a2866027d805aaeec97abd927",
+        "bytes": 66
+      },
+      "validation": {
+        "sha256": "987a8ff379da7266a7e16e750fe77ffbb8e3a37e72f6946bf2dfffd156fe248e",
+        "bytes": 1633
+      },
+      "cases": 16,
+      "passes": 16,
+      "request_rows": 46,
+      "final_target_http_witness": "DRAINED",
+      "source_commit": "d3d1e0455a6a874d09e92f13ecfdcd00ff831a78",
+      "source_runtime_attested": false,
+      "scope": "Actual owned native execution followed by read-only consistency validation at original generated paths. Binary provenance for optimized release additionally bound to downloaded CI artifact."
+    }
+  },
+  "workflow_sha256": "ed32d30ceb124d3836dd7ef1f2fe3aefff35ce021a8d7f21b30dd72b219878d2",
+  "new_workflow_ci": "PENDING_NEW_EXACT_SOURCE",
+  "historical_remote_d3_companions": "NOT_ARCHIVED",
+  "qualification": "Validator checks complete stored bytes, digests, exact source/harness/binary, matrix, cleanup and recomputed drained request counts. Validation alone does not authenticate native execution; synthetic controls are separate from actual native runs. Original absolute references reject relocation: validate before copying, archive fixed names and full digests.",
+  "reference_parity": "NOT_PROVEN"
+}

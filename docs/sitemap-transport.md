@@ -24,7 +24,17 @@ cargo build -p open-seo-spider --locked
 node scripts/sitemap-transport-e2e.mjs
 ```
 
-## Weiter offen
+## Optimierter Release und lokale Installation
+
+Transport-Commit `d3d1e04` besteht [alle vier exakten CI-Jobs](verification/sitemap-transport-ci.json); Windows und Linux bestehen jeweils541 Standard-Rust-Tests, vier separat geprüfte Browser-Tests bleiben in diesen Standardläufen ignoriert. Der aus diesem Lauf heruntergeladene optimierte Windows-Release ist über Manifest, Executable und Prüfdateien gebunden.
+
+Derselbe optimierte Release besteht lokal16 tatsächliche Sitemap-Fälle mit46 nach Prozessende und Server-Drain vollständig gezählten Request-Zeilen. Zusätzlich bestehen native11/SDK12 und13 Browsergruppen für die bestehende Vergleichsfunktion. Die [Installation auf localhost8787](verification/sitemap-transport-installed.json) erhält sieben vorhandene Jobs und19 dauerhafte Dateien byteidentisch. Renderer und offene Nutzer-Browserseite bleiben erhalten. Neuere Robots-Quellfakten und dauerhafte Mitgliedschaft sind nicht Teil dieses installierten Releases.
+
+Der historische D3-CI-Lauf archivierte die Sitemap-Prüfdatei, jedoch keine dazugehörigen Roh-Request-/App-Log-Dateien. Dieser Archivnachweis bleibt offen. Frische lokale Debug-/Release-Läufe erhalten ihre vollständigen Begleitdateien und bestehen den [strikten Beweisprüfer](verification/sitemap-proof-validator.json). Eine synthetische Positivkontrolle und24 Negativkontrollen prüfen ausschließlich diesen Dateivalidator. Seine Konsistenzprüfung ersetzt keine unabhängig gebundene native Ausführung.
+
+Die neue CI validiert Begleitdateien an den ursprünglichen Erzeugungspfaden und archiviert feste Dateinamen, vollständige Digests und Bytezahlen. Ihr eigener exakter Quelllauf steht noch aus. Bei verschobenen Dateien werden historische absolute Referenzen nicht stillschweigend umgeschrieben.
+
+## Dauerhafte Mitgliedschaft bleibt offen
 
 Die Discovery-Aufrufer verwenden weiterhin eine reduzierte Kompatibilitätsprojektion. Sie erhält keine vollständige Zuordnung aller originalen XML-Vorkommen zu gespeicherten Admission-Entscheidungen. Vollständige Rohwerte und Originalordinalzahlen müssen direkt aus dem typisierten Parser in atomare Dokument-/Entry-/Loc-/Root-Zeilen übernommen werden. Task-Deduplizierung und einmalige Completion benötigen getrennte Nachweise.
 

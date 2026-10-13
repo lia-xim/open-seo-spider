@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "result": "PASS_ACTUAL_MAIN_ROBOTS_CORE_GATES",
+  "recorded_at": "2026-10-13T03:15:13.266Z",
+  "source_basis_commit": "d3d1e0455a6a874d09e92f13ecfdcd00ff831a78",
+  "source_sha256": {
+    "crates/core/src/lib.rs": "879565c30f18389f05f6c0244e54e5cd15c0c8969a20fd0efab116ed91605c40",
+    "crates/core/src/robots.rs": "e7ab7fb40713766d7c33ddfbf0dbb07a87d22898ad1fc1aabaa8b1994e800291",
+    "crates/core/src/robots_sitemap_source.rs": "8202a9c2666dc5263d340d3c18004eea20f7aab45360ca420e6c9f322d402edd",
+    "crates/core/src/robots/sitemap_source_tests.rs": "606d1153bab513edb493d4e69f59dd6acd7124e3c789a311c899f17b683a6a3c"
+  },
+  "work_manifest_sha256": "949d8babd56420a43efc00c51ce6b37a0364536bf694c6c0ee08e8a7b6674cbd",
+  "checks": {
+    "actual_core_all_unit_tests": {
+      "passed": 353,
+      "failed": 0,
+      "ignored": 0,
+      "log_sha256": "79c26a0e0d6952404f6e619d3fa00a13f69c7c1ab6fa37a153fbc5e904f52d1a",
+      "scope": "Includes eighteen new pure source tests and six actual owned TCP/reqwest RobotsCache tests. Previous tests remain in this same actual Core run."
+    },
+    "actual_core_alltargets_clippy": {
+      "result": "PASS",
+      "log_sha256": "44317e3a3248e1a97f2a64414250b91475fe6d4a745a0457fa2488ee475fae6e"
+    },
+    "independent_work_source_review": {
+      "result": "NO_CONCRETE_P1_P2_V2_FINDING",
+      "scope": "Reviewer checked the repaired Workv2 pure/network code. Main register/export/header-fixture changes are Root-owned and covered by these Cargo gates."
+    }
+  },
+  "scope": "Actual Main Core integration; no durable source ledger, full App evidence exposure, new full-source CI, optimized release or installation claim.",
+  "pending": [
+    "Durable robots source/root adapters",
+    "Recursive source-cohort completeness",
+    "Atomic membership ledger/recovery/selected inheritance",
+    "API/CSV/UI",
+    "Exact newer source CI/release/install"
+  ],
+  "user_runtime_contacted": false,
+  "reference_parity": "NOT_PROVEN"
+}

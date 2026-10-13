@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "result": "PASS_OPTIMIZED_TRANSPORT_AND_DATA_PRESERVING_INSTALL",
+  "recorded_at": "2026-10-13T03:59:46.689Z",
+  "installed_at": "2026-10-13T03:51:32.2843642Z",
+  "source_commit": "d3d1e0455a6a874d09e92f13ecfdcd00ff831a78",
+  "exact_ci_run": "38340022023",
+  "ci": {
+    "artifact": "docs/verification/sitemap-transport-ci.json",
+    "sha256": "76f126aa6fbb68afa8b1e2980759917d5d04b46521bba58e533723983097ded2",
+    "jobs": 4,
+    "result": "PASS",
+    "windows_standard_tests": 541,
+    "linux_standard_tests": 541,
+    "ignored_per_platform": 4
+  },
+  "immutable_binary": {
+    "sha256": "87e6473039cb4ea96de48a437065d6d0772615e3acc8c9b97a17744e7a23e336",
+    "bytes": 30038528,
+    "manifest": {
+      "bytes": 814,
+      "sha256": "44e62288b7908f6d5a0f306397d333e605d820a330fb219e38ca218ee74f4a3f"
+    },
+    "proofs": [
+      {
+        "name": "saved-comparison-original-bundle-release-e2e.json",
+        "bytes": 26638,
+        "sha256": "2d90f998fb8dbb7ad900f8c4f74a3d306bbaddd7182a32c048c41ed3761f1e9a"
+      },
+      {
+        "name": "saved-comparison-original-bundle-release-cli-budget.json",
+        "bytes": 2038,
+        "sha256": "f3e1424e23a01987f2942e8a89209477aa79979411f94affef07d8bbf556fcc2"
+      },
+      {
+        "name": "sitemap-transport-release-e2e.json",
+        "bytes": 34880,
+        "sha256": "c96a00a018fbc97d6993dc3d0e2bbf1d69ccb932b9514facc8c0300eb7189f1b"
+      }
+    ]
+  },
+  "local_optimized_transport": {
+    "binary_sha256": "87e6473039cb4ea96de48a437065d6d0772615e3acc8c9b97a17744e7a23e336",
+    "binary_bytes": 30038528,
+    "harness_sha256": "ec832b9c4bf725bd89c0d47d2dd0dfc2c5ec90a1c265a1a5fb494604e3410d7c",
+    "proof": {
+      "sha256": "f451e05ded89295e95c1af06830a1a63883f297ce48662af04712100f35b5016",
+      "bytes": 35212
+    },
+    "requests": {
+      "sha256": "0be29a76bc1f08bbb42173ee7664ce00500ce58b879bcb03f5eedfc272e7ce65",
+      "bytes": 8970
+    },
+    "app_log": {
+      "sha256": "d7cff8275486587494bf61ea86ee7f3d0be2510a2866027d805aaeec97abd927",
+      "bytes": 66
+    },
+    "validation": {
+      "sha256": "987a8ff379da7266a7e16e750fe77ffbb8e3a37e72f6946bf2dfffd156fe248e",
+      "bytes": 1633
+    },
+    "cases": 16,
+    "passes": 16,
+    "request_rows": 46,
+    "final_target_http_witness": "DRAINED",
+    "source_commit": "d3d1e0455a6a874d09e92f13ecfdcd00ff831a78",
+    "source_runtime_attested": false,
+    "scope": "Actual owned native execution followed by read-only consistency validation at original generated paths. Binary provenance for optimized release additionally bound to downloaded CI artifact."
+  },
+  "local_original_bundle_regression": {
+    "native_checks": 11,
+    "sdk_checks": 12,
+    "proof": {
+      "sha256": "e22111dfafe35bf5d039d5dfda5a322744299b6e89e70bcb73536e361616d37c",
+      "bytes": 26638
+    },
+    "scope": "Actual optimized native API/CLI/cold restart plus both official MCP SDK transports; separate from sitemap membership"
+  },
+  "local_browser_regression": {
+    "checks": 13,
+    "served_assets": 5,
+    "proof": {
+      "sha256": "5290123bd12d82e7103a650f1f3a0b112262dd632fbff31434c6c1b99cb39290",
+      "bytes": 12022
+    },
+    "scope": "Actual optimized own App, stored reports, exports, cold restart and320px browser; user tab untouched"
+  },
+  "installed_read_only": {
+    "proof": {
+      "sha256": "12db3d040f78635a2e53c5c923937e8cdb0e18bb63c92922aa83762b87dbea6c",
+      "bytes": 7899
+    },
+    "saved_jobs": 7,
+    "durable_files": 19,
+    "historical_json_files": 11,
+    "durable_bytes_unchanged": true,
+    "job_metadata_unchanged": true,
+    "served_assets": 5,
+    "mcp_inventory_tools": 23,
+    "product_mutation_requests": 0,
+    "scope": "Actual installed read-only health, saved metadata, exact Git-blob UI assets, static MCP inventory and durable byte preservation. Process/port ownership and local optimized browser acceptance are separate root gates. No project-body/API float identity or vendor parity claim."
+  },
+  "root_install_record": {
+    "sha256": "5b0fc118531df35169e893c4611defa53adefac6f57159714a45b8d280f4b652",
+    "bytes": 718
+  },
+  "installer_sha256": "f1f975245851c548308e1d71f135f8b67604fc4a2d73cdbfb3d5967f6011d778",
+  "previous_release_sha256": "0bbc4c33b115c45467eb6bb1b8b400d31c312fcc501fcafbd186764269b5a9ce",
+  "backup": {
+    "created": true,
+    "complete_data_and_previous_executable": true,
+    "private_path_retained_in_work": true
+  },
+  "renderer_process_preserved": true,
+  "user_browser_refreshed": false,
+  "private_baseline_published": false,
+  "historical_remote_sitemap_companions": "NOT_ARCHIVED_IN_D3_WORKFLOW; fresh local optimized raw companions retained and independently validated",
+  "pending": [
+    "New Robots source exact-source CI/release/install",
+    "Durable source/entry/Loc/root ledger and admission integration",
+    "Source cohorts, failure/budget recovery and selected inheritance",
+    "Read-only API/CSV/UI membership coverage"
+  ],
+  "reference_parity": "NOT_PROVEN"
+}

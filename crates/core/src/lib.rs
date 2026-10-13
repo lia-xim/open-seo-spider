@@ -30,6 +30,7 @@ mod resource_policy;
 mod response_observations;
 mod robots;
 mod robots_simulation;
+mod robots_sitemap_source;
 mod serp;
 mod sitemap;
 mod srcset;
@@ -102,3 +103,8 @@ pub use sitemap::{
 };
 pub use store::CrawlStore;
 pub use urls::normalize_url;
+
+pub use robots_sitemap_source::{
+    ROBOTS_BODY_CAP, ROBOTS_SITEMAP_SOURCE_ENGINE, RobotsBodyBuffer, RobotsSitemapDeclaration,
+    RobotsSitemapSource,
+};

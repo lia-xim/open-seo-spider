@@ -5805,6 +5805,42 @@
       "tested_at": "2026-10-13T03:03:50.097Z",
       "scope": "Explicit protocol fetch and post-HTTP file-gzip integration; directed real HTTP and full native App16 cases pass, durable membership pending",
       "limits": "No feature promotion or manufacturer parity. Scoped test runs are never summed."
+    },
+    {
+      "id": "sitemap-transport-ci",
+      "artifact": "docs/verification/sitemap-transport-ci.json",
+      "artifact_sha256": "76f126aa6fbb68afa8b1e2980759917d5d04b46521bba58e533723983097ded2",
+      "result": "PASS",
+      "recorded_at": "2026-10-13T03:59:46.689Z",
+      "scope": "Exact D3 source: four CI jobs successful, Windows/Linux standard workspace tests each541; historical remote raw sitemap companions absent.",
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "robots-sitemap-source-core",
+      "artifact": "docs/verification/robots-sitemap-source-core.json",
+      "artifact_sha256": "3e43a092443b3ead26fb7e1f3f703fe10208ad4896443c40407fc30070a379b8",
+      "result": "PASS",
+      "recorded_at": "2026-10-13T03:59:46.689Z",
+      "scope": "Actual newer Main Core353/Clippy only; not installed or exact-source CI.",
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "sitemap-proof-validator",
+      "artifact": "docs/verification/sitemap-proof-validator.json",
+      "artifact_sha256": "e3579ecb2d8a9fd4f82ddfa7394160d479ba7035bb53bec0bc226e877c2fc582",
+      "result": "PASS",
+      "recorded_at": "2026-10-13T03:59:46.689Z",
+      "scope": "Synthetic stored-file validator1+24 controls and separate actual native debug/release full raw companion checks. New workflow CI pending.",
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "sitemap-transport-installed",
+      "artifact": "docs/verification/sitemap-transport-installed.json",
+      "artifact_sha256": "170177374ba8add7897135b412925d0f1bffdbf88ca536165e5c10fc75321734",
+      "result": "PASS",
+      "recorded_at": "2026-10-13T03:59:46.689Z",
+      "scope": "Exact immutable D3 optimized binary, local transport16/native11/SDK12/browser13 and installed data preservation7jobs/19files. No durable ledger/vendor parity.",
+      "reference_parity": "NOT_PROVEN"
     }
   ],
   "reference_workflows": [
@@ -6690,10 +6726,10 @@
     {
       "id": "batch-b12-sitemap-membership",
       "status": "IN_PROGRESS",
-      "stage": "MAIN_PARSER_FETCH_PASS_DURABLE_LEDGER_PENDING",
+      "stage": "MAIN_PARSER_FETCH_INSTALLED_ROBOTS_CORE_PASS_DURABLE_LEDGER_PENDING",
       "priority": 3,
       "title_de": "Nächster Baustein – B12: Sitemaps und Mitgliedschaft",
-      "summary_de": "Der XML-/Gzip-Parser und zweckgebundene Sitemap-Netzwerkpfad sind im Core integriert. Zwölf HTTP-Tests, alle329 Core-Unit-Tests und die vollständige App-Matrix mit16 Fällen bestehen; sieben zuvor nachgewiesene B11-Fehlerfälle sind geschlossen. Parser6171 hat vier grüne CI-Jobs. Dauerhafte Mitgliedschaft, Quell-Kohorten, Recovery/Vererbung und API/CSV/UI sowie neue Transport-CI/Release/Installation bleiben offen; beide Feature-Status bleiben teilweise geprüft.",
+      "summary_de": "Parser und Sitemap-Netzwerkpfad sind installiert: Transport-Commit d3d1e04 besteht alle vier exakten CI-Jobs, Windows/Linux jeweils541 Standardtests. Derselbe optimierte Release besteht16 Sitemap-Fälle, native11/SDK12 und Browser13; sieben Jobs und19 dauerhafte Dateien bleiben unverändert. Neu integrierte Robots-Quellfakten bestehen353 Core-Unit-Tests; ihre neue Quell-CI/Release/Installation bleibt offen. Dauerhafte Mitgliedschaft, Quell-Kohorten, Recovery/Vererbung und API/CSV/UI bleiben in Arbeit; beide Feature-Status bleiben teilweise geprüft.",
       "feature_ids": [
         "sitemap.discovery",
         "sitemap.coverage"
@@ -6703,41 +6739,54 @@
         "Vier absichtlich beschädigte Work-Varianten werden durch gerichtete Laufzeit-Assertions erkannt; integrierte Quellen unabhängig geprüft, Alltargets-Clippy grün.",
         "Expliziter Sitemap-Fetch-Zweck, Datei-Gzip nach tatsächlichem HTTP-Decoding und unabhängige Ressourcenrechte im realen Netzwerkpfad angebunden; zwölf gerichtete HTTP-Core-Tests und alle329 Core-Unit-Tests bestehen.",
         "Ordinary/Policy × Ressourcen an/aus sowie Dateiname-/HTTP-Gzip-/CRC-/Namespace-Kontrollen über vollständige App/API und tatsächliche Zielrequests geprüft:16 grün; portable CI-Fixture prüft finale Request-Zähler nach eigenem Prozessstopp.",
-        "Vorheriger Parser-Commit6171a32 besteht alle vier Quell-CI-Jobs; jeweils529 Standardtests bestehen auf Windows/Linux bei vier separat geprüften Browser-Tests."
+        "Vorheriger Parser-Commit6171a32 besteht alle vier Quell-CI-Jobs; jeweils529 Standardtests bestehen auf Windows/Linux bei vier separat geprüften Browser-Tests.",
+        "Transport d3d1e04: vier exakte CI-Jobs grün, Windows/Linux jeweils541 Standardtests; optimierter unveränderlicher Windows-Release lokal mit16 Sitemap-Fällen und46 vollständig geleerten Request-Zeilen geprüft.",
+        "Derselbe optimierte Release besteht native11/SDK12 und Browser13; datenbewahrend auf Port8787 installiert. Sieben bestehende Jobs und19 dauerhafte Dateien sind byteidentisch, fünf Assets und23 read-only Inventar-Tools geprüft.",
+        "Originale Robots-Sitemap-Deklarationen mit LF/CRLF/CR, Byte-Spans, Rohwerten, echten EOF-/512KiB-Grenzen und qualifizierten206-/UTF8-/Readfehlern im Core erhalten; alle353 Core-Unit-Tests und Alltargets-Clippy bestehen.",
+        "Strikter gespeicherter Transport-Beweisprüfer besteht eine synthetische Positivkontrolle und24 Negativkontrollen sowie tatsächliche Debug-/Release-Companion-Prüfungen. Neue CI archiviert künftig vollständige Requests und App-Logs; dieser neue Workflow ist noch nicht durchgelaufen."
       ],
       "pending_acceptance_de": [
         "Vollständige Dokument-/Entry-/Loc-/Root-Vorkommen atomar in Ordinary/Policy speichern; Originalordinalzahlen und Rohwerte direkt aus typisierten Beobachtungen anbinden, Task-Deduplizierung und einmalige Completion getrennt halten.",
         "Quell-Kohorten, Fehler-/Budgetzustände, Checkpoint/Recovery, unbekannte Altbestände und ausgewählt geerbte Mitgliedschaft erklären.",
         "Read-only API-Cursor, CSV und native Browseransicht für Mitgliedschaft/Abdeckung ergänzen.",
-        "Dauerhafte native Matrix mit Zyklen/Fehlern und vollständigen Admission-Zuordnungen sowie exakte neue Transport-/Ledger-CI, optimierten Release und Installation prüfen."
+        "Dauerhafte native Matrix mit Zyklen/Fehlern und vollständigen Admission-Zuordnungen sowie neue Robots-/Validator-/Ledger-Quell-CI, optimierten Release und Installation prüfen."
       ],
       "documentation": [
         "docs/parity/sitemap-b12-plan.md",
         "docs/sitemap-parser.md",
-        "docs/sitemap-transport.md"
+        "docs/sitemap-transport.md",
+        "docs/robots-sitemap-source.md"
       ],
       "gates": {
         "source_review": "PARSER_AND_FETCH_NO_CONCRETE_P1_P2",
-        "implementation": "MAIN_PARSER_AND_PROTOCOL_FETCH_DURABLE_LEDGER_PENDING",
+        "implementation": "MAIN_PARSER_FETCH_INSTALLED_ROBOTS_SOURCE_DURABLE_LEDGER_PENDING",
         "native_acceptance": "PASS_DIRECTED_DEBUG_APP_16_DURABLE_LEDGER_PENDING",
         "work_parser": "PASS_53_PLUS_EXISTING_NORMALIZER2",
         "main_core_parser": "PASS_54",
         "main_core_clippy": "PASS_ALL_TARGETS",
         "main_standalone": "PASS_56_SEPARATE",
         "work_mutations": "PASS_4_EXPECTED_RUNTIME_ASSERTION_FAILURES",
-        "exact_commit_ci": "NEW_TRANSPORT_PENDING",
+        "exact_commit_ci": "PASS_D3D1E04_FOUR_JOBS",
         "main_core_fetch_http": "PASS_12",
-        "main_core_all_unit": "PASS_329",
+        "main_core_all_unit": "PASS_353_ROBOTS_SOURCE_INTEGRATION",
         "main_portable_transport": "PASS_16_FINAL_DRAIN",
         "parser_exact_commit_ci": "PASS_FOUR_JOBS_6171a32",
-        "optimized_transport_release": "PENDING",
-        "installation": "B11_PRESERVED"
+        "optimized_transport_release": "PASS_SAME_OPTIMIZED_EXE_16_NATIVE_SDK_BROWSER",
+        "installation": "PASS_D3_7JOBS_19DURABLE_FILES",
+        "robots_source_core": "PASS_353_AND_ALLTARGETS_CLIPPY",
+        "transport_proof_validator": "PASS_SYNTHETIC_1POSITIVE_24NEGATIVE_AND_ACTUAL_DEBUG_RELEASE_COMPANIONS",
+        "new_robots_validator_ci": "PENDING_NEW_EXACT_SOURCE",
+        "durable_source_ledger": "PENDING_MAIN_INTEGRATION"
       },
       "reference_parity": "NOT_PROVEN",
       "proof_run_ids": [
         "sitemap-parser-checkpoint",
         "sitemap-parser-ci",
-        "sitemap-transport-checkpoint"
+        "sitemap-transport-checkpoint",
+        "sitemap-transport-ci",
+        "robots-sitemap-source-core",
+        "sitemap-proof-validator",
+        "sitemap-transport-installed"
       ],
       "tracking_issue": "https://github.com/lia-xim/open-seo-spider/issues/11"
     }
