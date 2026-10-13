@@ -1,0 +1,741 @@
+{
+  "schema_version": 1,
+  "result": "PASS_LOCAL_WINDOWS_OPTIMIZED_RELEASE_AND_INSTALL",
+  "recorded_at": "2026-10-13T08:50:37.978Z",
+  "acceptance_origin": "local_user_authorized_ci_unavailable",
+  "source_commit": "9f12e114c1d4da9b7ed2082172d8300cb5d065fa",
+  "binary": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\cargo-target\\release\\open-seo-spider.exe",
+    "sha256": "072d798f421febe242c44d6a5afba73907eec26088a5830097f7f10de02649eb",
+    "bytes": 32609280
+  },
+  "compiler_closure_files": 197,
+  "test_closure_files": 201,
+  "test_only_source_differences": [
+    "crates/core/tests/content_capture_fixtures.rs",
+    "crates/core/tests/control_fixtures.rs",
+    "crates/core/tests/recrawl_fixtures.rs"
+  ],
+  "workspace": {
+    "schema_version": 1,
+    "result": "PASS_LOCAL_WORKSPACE740_REAL_RENDERER_CLIPPY_FMT",
+    "recorded_at": "2026-10-13T08:33:29.902Z",
+    "source_manifest_sha256": "f0af3b181fc4e090eb4dd1b60577037cab76a59b60089c5a565bdcdadd3a9919",
+    "files": 201,
+    "passed": 740,
+    "ignored": 0,
+    "runs": [
+      {
+        "name": "workspace-live",
+        "args": [
+          "test",
+          "--workspace",
+          "--locked",
+          "--",
+          "--include-ignored",
+          "--test-threads=1"
+        ],
+        "pid": 51712,
+        "actual_close_event": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "elapsed_ms": 202631,
+        "log_sha256": "81f11d9ffeff91c8c5a50e72823331e9ec25fceb49008423480eddca8e30ff87",
+        "summaries": [
+          {
+            "state": "ok",
+            "passed": 112,
+            "failed": 0,
+            "ignored": 0
+          },
+          {
+            "state": "ok",
+            "passed": 510,
+            "failed": 0,
+            "ignored": 0
+          },
+          {
+            "state": "ok",
+            "passed": 18,
+            "failed": 0,
+            "ignored": 0
+          },
+          {
+            "state": "ok",
+            "passed": 7,
+            "failed": 0,
+            "ignored": 0
+          },
+          {
+            "state": "ok",
+            "passed": 24,
+            "failed": 0,
+            "ignored": 0
+          },
+          {
+            "state": "ok",
+            "passed": 5,
+            "failed": 0,
+            "ignored": 0
+          },
+          {
+            "state": "ok",
+            "passed": 13,
+            "failed": 0,
+            "ignored": 0
+          },
+          {
+            "state": "ok",
+            "passed": 7,
+            "failed": 0,
+            "ignored": 0
+          },
+          {
+            "state": "ok",
+            "passed": 22,
+            "failed": 0,
+            "ignored": 0
+          },
+          {
+            "state": "ok",
+            "passed": 15,
+            "failed": 0,
+            "ignored": 0
+          },
+          {
+            "state": "ok",
+            "passed": 4,
+            "failed": 0,
+            "ignored": 0
+          },
+          {
+            "state": "ok",
+            "passed": 1,
+            "failed": 0,
+            "ignored": 0
+          },
+          {
+            "state": "ok",
+            "passed": 1,
+            "failed": 0,
+            "ignored": 0
+          },
+          {
+            "state": "ok",
+            "passed": 1,
+            "failed": 0,
+            "ignored": 0
+          },
+          {
+            "state": "ok",
+            "passed": 0,
+            "failed": 0,
+            "ignored": 0
+          }
+        ]
+      },
+      {
+        "name": "clippy",
+        "args": [
+          "clippy",
+          "--workspace",
+          "--all-targets",
+          "--locked",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "pid": 58964,
+        "actual_close_event": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "elapsed_ms": 16582,
+        "log_sha256": "932878d0077ee1fbe46721b329614ed7174e221323708096440ad6d5354fa195",
+        "summaries": []
+      },
+      {
+        "name": "format",
+        "args": [
+          "fmt",
+          "--all",
+          "--check"
+        ],
+        "pid": 56252,
+        "actual_close_event": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "elapsed_ms": 1093,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "summaries": []
+      }
+    ],
+    "owned_worker_port": 64456,
+    "owned_worker_closed": true,
+    "user_renderer_contacted": false,
+    "failures": [],
+    "qualification": "Actual Windows workspace including four previously ignored browser tests, against own warmed ephemeral renderer. Runtime source equal to optimized source-v3; only three integration-test endpoint overrides differ. Existing renderer npm17 actual gate remains separately recorded. GitHub/Linux/container not executed."
+  },
+  "optimized_native": {
+    "result": "PASS_LOCAL_OPTIMIZED_SITEMAPS_AND_BUNDLE",
+    "recorded_at": "2026-10-13T08:32:00.826Z",
+    "binary_sha256": "072d798f421febe242c44d6a5afba73907eec26088a5830097f7f10de02649eb",
+    "binary_bytes": 32609280,
+    "build_proof_sha256": "812ac6d35e8b5a9f360733134b28e0c9675529b22b93afad23f5207753dafa59",
+    "source_manifest_sha256": "0395c9e94a59360c2a967a066703bc3ac5d357ba938109b7169068a3bea80fa8",
+    "declared_source_commit": "82cebd374bcc33512121d4617521dbc20325096f",
+    "test_only_changes_outside_compiled_application": [
+      "crates/core/tests/control_fixtures.rs",
+      "crates/core/tests/recrawl_fixtures.rs",
+      "crates/core/tests/content_capture_fixtures.rs"
+    ],
+    "results": [
+      {
+        "name": "ledger",
+        "script": "scripts/sitemap-ledger-e2e.mjs",
+        "harness_sha256": "51c99a54cd5a9665f17e419596e8bbae23b13ce901035b9275087358324ca9b8",
+        "exit_code": 0,
+        "elapsed_ms": 1819,
+        "log_sha256": "685ea4b37087c126a43a12e1fce9e2fb4f4082eab02155e062214ca4560e4706"
+      },
+      {
+        "name": "membership",
+        "script": "scripts/sitemap-membership-e2e.mjs",
+        "harness_sha256": "a2d2dfebd188d7f1c033532ad9d4f7b20b50d5fff987b898feb62ee4607e2d0d",
+        "exit_code": 0,
+        "elapsed_ms": 4242,
+        "log_sha256": "74edead56a0fb727b10839bd55442642e6199f89ad15a944826e8b094cafd00a"
+      },
+      {
+        "name": "transport",
+        "script": "scripts/sitemap-transport-e2e.mjs",
+        "harness_sha256": "ec832b9c4bf725bd89c0d47d2dd0dfc2c5ec90a1c265a1a5fb494604e3410d7c",
+        "exit_code": 0,
+        "elapsed_ms": 1533,
+        "log_sha256": "5a5000c2e210e8f395839dab99fbe557d19e79ac23e055cae3b6586194b667b9"
+      },
+      {
+        "name": "bundle",
+        "script": "scripts/saved-comparison-bundle-e2e.mjs",
+        "harness_sha256": "f818fa258d4d7546152089ba5ddd9c465102098c4f80afbde38afcffc291d7e2",
+        "exit_code": 0,
+        "elapsed_ms": 9221,
+        "log_sha256": "4d4e9d8247dd00ac07a1df5cb07d63da00a53e4abcb0d367df4e5bdfffb81164"
+      },
+      {
+        "name": "bundle-budget",
+        "script": "scripts/saved-comparison-bundle-budget-e2e.mjs",
+        "harness_sha256": "d0bd47b5b4e696d749e7350ae032ddc5ae65ec010ff51518c15aa269a6a5b3af",
+        "exit_code": 0,
+        "elapsed_ms": 1493,
+        "log_sha256": "a897c65cba4ccc0c5f5e16a378bbbb7f110734429ce7603ea7ee9ea0717e1993"
+      }
+    ],
+    "qualification": "Actual new optimized Windows candidate. Current production source/embedded assets unchanged; only three integration-test renderer endpoint overrides differ. Genuine ledger/API/CSV/SDK/browser plus historical transport/bundle/CLI budget proofs have separate scopes. No remote CI or install claim."
+  },
+  "installation": {
+    "result": "PASS_LOCAL_USER_AUTHORIZED_INSTALL",
+    "recorded_at": "2026-10-13T08:48:48.8027735Z",
+    "acceptance_origin": "local_user_authorized_ci_unavailable",
+    "source_commit": "9f12e114c1d4da9b7ed2082172d8300cb5d065fa",
+    "binary_sha256": "072d798f421febe242c44d6a5afba73907eec26088a5830097f7f10de02649eb",
+    "binary_bytes": 32609280,
+    "old_pid": 47172,
+    "new_pid": 34440,
+    "old_process_closed": true,
+    "renderer_pid": 17312,
+    "renderer_unchanged": true,
+    "jobs": 7,
+    "durable_files": 19,
+    "original_job_metadata_unchanged": true,
+    "original_file_bytes_unchanged": true,
+    "backup_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\backups\\local-ci-fallback-first",
+    "backup_verified": true,
+    "assets": [
+      {
+        "path": "web/index.html",
+        "sha256": "bfadf84118efdd93aaea05650903c6e0626339a5fe2708fe0a69fb9833fe4726",
+        "bytes": 64843
+      },
+      {
+        "path": "web/app.js",
+        "sha256": "baace6ab3ab842850f5b5478a17f33340bd9cfe1fc6c116029a3bf01e1a89bd6",
+        "bytes": 291109
+      },
+      {
+        "path": "web/styles.css",
+        "sha256": "150e7d0f5e3b03fabc0b60d7fd22974726df2debd1ca4f5aa9d224fcb92ecf91",
+        "bytes": 36889
+      },
+      {
+        "path": "web/list-import.js",
+        "sha256": "cd8702fd31122eccfefaf5ed7404bb47cc65223efa5394d3e687f329cfbf47ba",
+        "bytes": 8829
+      },
+      {
+        "path": "web/saved-comparison.js",
+        "sha256": "8f8c08b92bab53d6303aa436564eee3b5a2a3efa70f14845fd642f1783dd898c",
+        "bytes": 31289
+      }
+    ],
+    "mcp_tools": [
+      "spider_analysis",
+      "spider_analyze_content",
+      "spider_analyze_crawl_content",
+      "spider_cancel",
+      "spider_capabilities",
+      "spider_compare",
+      "spider_compare_saved",
+      "spider_content",
+      "spider_content_document",
+      "spider_inspect_css",
+      "spider_issues",
+      "spider_list_crawls",
+      "spider_pages",
+      "spider_pause",
+      "spider_policy",
+      "spider_preview_policy",
+      "spider_project",
+      "spider_recrawl",
+      "spider_resource_transports",
+      "spider_resources",
+      "spider_resume",
+      "spider_sitemaps",
+      "spider_start_crawl",
+      "spider_status"
+    ],
+    "historical_sitemap_unknown": [
+      {
+        "id": "1d50cf74-ebc5-4f5e-96a8-849aaeb58533",
+        "negative_membership": "unknown",
+        "availability": "sqlite_history_unavailable"
+      },
+      {
+        "id": "4c6378a7-6ee8-4432-a6dc-f9b35f3a9554",
+        "negative_membership": "unknown",
+        "availability": "sitemap_catalog_unavailable"
+      },
+      {
+        "id": "6a6f0f12-fc2d-475f-9f71-59ee66f39383",
+        "negative_membership": "unknown",
+        "availability": "sqlite_history_unavailable"
+      },
+      {
+        "id": "825c05aa-58c5-4a4e-835e-cb82b0794680",
+        "negative_membership": "unknown",
+        "availability": "sitemap_catalog_unavailable"
+      },
+      {
+        "id": "8d8dffeb-ae9b-46f3-a103-e14f06a9d79c",
+        "negative_membership": "unknown",
+        "availability": "sitemap_catalog_unavailable"
+      },
+      {
+        "id": "d19faa10-7e6f-45b4-a677-a00c672f6a52",
+        "negative_membership": "unknown",
+        "availability": "sqlite_history_unavailable"
+      },
+      {
+        "id": "f8408f31-56b3-4707-a0d7-bc465e35ba0e",
+        "negative_membership": "unknown",
+        "availability": "sitemap_catalog_unavailable"
+      }
+    ],
+    "github_ci": "NOT_PROVEN",
+    "linux_ci": "NOT_PROVEN",
+    "docker_ci": "NOT_PROVEN",
+    "rollback_exercised": false,
+    "reference_parity": "NOT_PROVEN"
+  },
+  "durable_file_hashes": [
+    {
+      "path": "1d50cf74-ebc5-4f5e-96a8-849aaeb58533.json",
+      "bytes": 62083,
+      "sha256": "c0957fd1736066f1ab1421d6bdd31d442975dfa9403d6700516a29ff65d06d09"
+    },
+    {
+      "path": "4c6378a7-6ee8-4432-a6dc-f9b35f3a9554.job.json",
+      "bytes": 570,
+      "sha256": "ac5d007dc5d42328ad95bedafc567c28d321fe3d6fb2fb2ca36b0e8d1914aa47"
+    },
+    {
+      "path": "4c6378a7-6ee8-4432-a6dc-f9b35f3a9554.json",
+      "bytes": 62083,
+      "sha256": "c0957fd1736066f1ab1421d6bdd31d442975dfa9403d6700516a29ff65d06d09"
+    },
+    {
+      "path": "4c6378a7-6ee8-4432-a6dc-f9b35f3a9554.sqlite",
+      "bytes": 114688,
+      "sha256": "5dddd20c22029be8ef523194d6c7398db400018b2c740c3a993dcbd0f7bdeebe"
+    },
+    {
+      "path": "4c6378a7-6ee8-4432-a6dc-f9b35f3a9554.sqlite-wal",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "6a6f0f12-fc2d-475f-9f71-59ee66f39383.json",
+      "bytes": 62083,
+      "sha256": "c0957fd1736066f1ab1421d6bdd31d442975dfa9403d6700516a29ff65d06d09"
+    },
+    {
+      "path": "825c05aa-58c5-4a4e-835e-cb82b0794680.job.json",
+      "bytes": 898,
+      "sha256": "85a74985c11c4eb3bc0304762c5e34d0ba3113ef7cf0dea9dcfc026a38bdeeba"
+    },
+    {
+      "path": "825c05aa-58c5-4a4e-835e-cb82b0794680.json",
+      "bytes": 44022,
+      "sha256": "46fd8a335133ca18dacd2834225af591cf53bb3369a45a4d3a0cc37fbdc45a32"
+    },
+    {
+      "path": "825c05aa-58c5-4a4e-835e-cb82b0794680.sqlite",
+      "bytes": 118784,
+      "sha256": "518635965338fc49e9adc255aa123eb02ef82869b679ddf082ceb137fa188e46"
+    },
+    {
+      "path": "825c05aa-58c5-4a4e-835e-cb82b0794680.sqlite-wal",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "8d8dffeb-ae9b-46f3-a103-e14f06a9d79c.job.json",
+      "bytes": 2256,
+      "sha256": "f09b97bd8a9c0da6e92322ca90e77ffe665c4051386cf9eb3e9a6f9fe8043bea"
+    },
+    {
+      "path": "8d8dffeb-ae9b-46f3-a103-e14f06a9d79c.json",
+      "bytes": 53569,
+      "sha256": "ca48f74a31f6b3a08774cb92f0588e3602e5304f0a9d6dabf0c631035763937b"
+    },
+    {
+      "path": "8d8dffeb-ae9b-46f3-a103-e14f06a9d79c.sqlite",
+      "bytes": 139264,
+      "sha256": "c947faab30896693c02e016ccd022da656c9db053df561f2118f79846a320a93"
+    },
+    {
+      "path": "8d8dffeb-ae9b-46f3-a103-e14f06a9d79c.sqlite-wal",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "d19faa10-7e6f-45b4-a677-a00c672f6a52.json",
+      "bytes": 62083,
+      "sha256": "c0957fd1736066f1ab1421d6bdd31d442975dfa9403d6700516a29ff65d06d09"
+    },
+    {
+      "path": "f8408f31-56b3-4707-a0d7-bc465e35ba0e.job.json",
+      "bytes": 895,
+      "sha256": "e58cc076394ac4669b2d7137dc8b802484228ce89e971154bdc9d719a860a76f"
+    },
+    {
+      "path": "f8408f31-56b3-4707-a0d7-bc465e35ba0e.json",
+      "bytes": 44088,
+      "sha256": "d4d4843ebddd64860f57004352287d9933ad73efae130d383480ea16e0e57336"
+    },
+    {
+      "path": "f8408f31-56b3-4707-a0d7-bc465e35ba0e.sqlite",
+      "bytes": 118784,
+      "sha256": "54286ccfae1f8ba452be86a037f4483f3ee22473817e6c098ca52b25262b26c3"
+    },
+    {
+      "path": "f8408f31-56b3-4707-a0d7-bc465e35ba0e.sqlite-wal",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "original_jobs": [
+    {
+      "id": "1d50cf74-ebc5-4f5e-96a8-849aaeb58533",
+      "status": "completed",
+      "generation": 0
+    },
+    {
+      "id": "4c6378a7-6ee8-4432-a6dc-f9b35f3a9554",
+      "status": "completed",
+      "generation": 0
+    },
+    {
+      "id": "6a6f0f12-fc2d-475f-9f71-59ee66f39383",
+      "status": "completed",
+      "generation": 0
+    },
+    {
+      "id": "825c05aa-58c5-4a4e-835e-cb82b0794680",
+      "status": "completed",
+      "generation": 0
+    },
+    {
+      "id": "8d8dffeb-ae9b-46f3-a103-e14f06a9d79c",
+      "status": "completed",
+      "generation": 0
+    },
+    {
+      "id": "d19faa10-7e6f-45b4-a677-a00c672f6a52",
+      "status": "completed",
+      "generation": 0
+    },
+    {
+      "id": "f8408f31-56b3-4707-a0d7-bc465e35ba0e",
+      "status": "completed",
+      "generation": 0
+    }
+  ],
+  "full_job_metadata_sha256": "1351a95340c7c8721b7329982bfc8fe8ca67411b7315f0fe132f7162442a80bd",
+  "backup_preserved": true,
+  "rollback_exercised": false,
+  "local_release_manifest_sha256": "caf7f9944b2d43a54e29f8962ba337aa343c55dd295ab8da2d770b5f5802dfd6",
+  "installer_sha256": "f43c538bf57e7cf2c358c8e352810b23ea57890963e07eccb84dc1b3de89b17e",
+  "raw_proof_archive": [
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/local-release-build-first/inputs.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-build-first\\inputs.json",
+      "bytes": 1150,
+      "sha256": "cb557b6a25b3219db5d0cdbc2bc0553deb4691fdbbafc9f227100d1dfdc0f586"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/local-release-build-first/output.log",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-build-first\\output.log",
+      "bytes": 8536,
+      "sha256": "87e5aabef57132274465c20109f02508ec5091fc52f5a07d968ccd43cc4745d7"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/local-release-build-first/proof.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-build-first\\proof.json",
+      "bytes": 699,
+      "sha256": "812ac6d35e8b5a9f360733134b28e0c9675529b22b93afad23f5207753dafa59"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/local-renderer-suite-first/clippy.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-renderer-suite-first\\clippy.json",
+      "bytes": 368,
+      "sha256": "8a5528ce2d08f9423821c7afd8a44e775c682d6a443333810c4b4dbe5561d03e"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/local-renderer-suite-first/clippy.log",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-renderer-suite-first\\clippy.log",
+      "bytes": 291,
+      "sha256": "932878d0077ee1fbe46721b329614ed7174e221323708096440ad6d5354fa195"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/local-renderer-suite-first/format.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-renderer-suite-first\\format.json",
+      "bytes": 300,
+      "sha256": "8f978f92d5ee8bcd802d18a7f482963e4b236af08664b85fb01e6668c432e2cb"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/local-renderer-suite-first/format.log",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-renderer-suite-first\\format.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/local-renderer-suite-first/owned-worker.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-renderer-suite-first\\owned-worker.json",
+      "bytes": 1425,
+      "sha256": "3c87998909653fd17329c47012a08e3e27c54672d7082fce81f88c4dccbf8b5e"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/local-renderer-suite-first/proof.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-renderer-suite-first\\proof.json",
+      "bytes": 3768,
+      "sha256": "775201058b66f388b0f133ff1bbc4c2c0823e53c980c9354d6634c6072218df8"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/local-renderer-suite-first/workspace-live.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-renderer-suite-first\\workspace-live.json",
+      "bytes": 1753,
+      "sha256": "23e7a5e0a997e068dbe4990b8599e6133d9c7c7b3d2b61d77d27181820c770dc"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/local-renderer-suite-first/workspace-live.log",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-renderer-suite-first\\workspace-live.log",
+      "bytes": 78638,
+      "sha256": "81f11d9ffeff91c8c5a50e72823331e9ec25fceb49008423480eddca8e30ff87"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/source-local-v1-manifest.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-local-v1\\manifest.json",
+      "bytes": 35749,
+      "sha256": "f0af3b181fc4e090eb4dd1b60577037cab76a59b60089c5a565bdcdadd3a9919"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/accepted-release.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-manifest-first.json",
+      "bytes": 4063,
+      "sha256": "caf7f9944b2d43a54e29f8962ba337aa343c55dd295ab8da2d770b5f5802dfd6"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/install.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-install-first\\proof.json",
+      "bytes": 3513,
+      "sha256": "f5c806b2a8c2d0146052af29697fe56e0e5ee01c0d6a203ed9b2f1c2109eb59b"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/bundle-budget.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\bundle-budget.json",
+      "bytes": 2038,
+      "sha256": "bcdde21eb1a09f202d575b01d1ecc8ec15e780991a2286e1a8fbb0780e748cee"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/bundle-budget.log",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\bundle-budget.log",
+      "bytes": 239,
+      "sha256": "a897c65cba4ccc0c5f5e16a378bbbb7f110734429ce7603ea7ee9ea0717e1993"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/bundle.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\bundle.json",
+      "bytes": 26670,
+      "sha256": "7cf586235eda15aafaf4414a73fbd18d24b0c692953a674b15d6439800969a9a"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/bundle.log",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\bundle.log",
+      "bytes": 375,
+      "sha256": "4d4e9d8247dd00ac07a1df5cb07d63da00a53e4abcb0d367df4e5bdfffb81164"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/ledger.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\ledger.json",
+      "bytes": 20681,
+      "sha256": "76e66136d791f14bbed2d5b7da4ab66b603c1847fbb063674c85be4410a8946b"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/ledger.json.api.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\ledger.json.api.json",
+      "bytes": 719287,
+      "sha256": "6cc62af256e1336859c1f745b8ae0c3726e2bb8ef8cb0faaf4de84b27493973a"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/ledger.json.app-log.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\ledger.json.app-log.json",
+      "bytes": 2318,
+      "sha256": "234ac69bf361fee24a7adeea64cc6cf528c86a40d58c3e5f0ca815647e5b71ea"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/ledger.json.fixtures.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\ledger.json.fixtures.json",
+      "bytes": 18184,
+      "sha256": "3a65aaed80a78f19d0a27c61574610e2f0bd4280418931aa0a523914994dd340"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/ledger.json.requests.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\ledger.json.requests.json",
+      "bytes": 12473,
+      "sha256": "eb8371a6ed1bb83911ca07c17d60643ba664b00f5970c32b6bf3b896afeef9d1"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/ledger.json.sqlite-read-witness.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\ledger.json.sqlite-read-witness.json",
+      "bytes": 501343,
+      "sha256": "9ed5669b13d7e23b10ce9f9b90648c4656e8c54865b99a0a487910397d232707"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/ledger.log",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\ledger.log",
+      "bytes": 284,
+      "sha256": "685ea4b37087c126a43a12e1fce9e2fb4f4082eab02155e062214ca4560e4706"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/membership.log",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\membership.log",
+      "bytes": 1476,
+      "sha256": "74edead56a0fb727b10839bd55442642e6199f89ad15a944826e8b094cafd00a"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/proof.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\proof.json",
+      "bytes": 2633,
+      "sha256": "cb4e7f07ca088ed97033409752ca39fbcb0ea941abcb7ae61f03cf8bfd6e4af6"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/transport.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\transport.json",
+      "bytes": 34945,
+      "sha256": "9ae4374a0a811aa874bf6a32ab92dd33fd4dd1f54f2ba8b0e1817787ec25ec2a"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/transport.json.app.log",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\transport.json.app.log",
+      "bytes": 66,
+      "sha256": "0d187532c4bcf5a3c854661860b23ed1115e9cd43999e3f8ca13617331cdabcd"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/transport.json.requests.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\transport.json.requests.json",
+      "bytes": 8932,
+      "sha256": "717633032b0d78b99da4656cbbc3451c6b08b21dc750ed3d456c2079d65dcc88"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/transport.log",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\transport.log",
+      "bytes": 316,
+      "sha256": "5a5000c2e210e8f395839dab99fbe557d19e79ac23e055cae3b6586194b667b9"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/membership/proof.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\membership\\proof.json",
+      "bytes": 287696,
+      "sha256": "c214eb2c5784befbe7cc942e3f33d2d635acbfca4ca5d1595793076afbc1e25f"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/membership/inputs.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\membership\\inputs.json",
+      "bytes": 1285,
+      "sha256": "a93a6c8e9f5cc6b1ea42e66dd4187681da673a01d84c8daa6c4316d429af3e05"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/membership/source-manifest.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\membership\\source-manifest.json",
+      "bytes": 37085,
+      "sha256": "0395c9e94a59360c2a967a066703bc3ac5d357ba938109b7169068a3bea80fa8"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/membership/requests.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\membership\\requests.json",
+      "bytes": 2539,
+      "sha256": "d5fdfcf34e50dc0477cf674918eab4896609a8a0025a6372cc0814549cb2da64"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/membership/browser/native-sitemap-download.csv",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\membership\\browser\\native-sitemap-download.csv",
+      "bytes": 14009,
+      "sha256": "4ed1c2a6269bd4e95b1336e5dcd4ef7b4ff9dd301fb527708e229ddc8c4825b7"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/membership/browser/native-sitemap-download.json",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\membership\\browser\\native-sitemap-download.json",
+      "bytes": 1222,
+      "sha256": "4235f0ff9100bb9ca0178be298f1b7f2dc7506507e389352fe16557f9a120471"
+    },
+    {
+      "path": "docs/verification/sitemap-local-windows-20261013/native/membership/browser/native-sitemap-320.png",
+      "original_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\membership\\browser\\native-sitemap-320.png",
+      "bytes": 27669,
+      "sha256": "a95820fe6a6a5a6d2e621448eb8957f07c7cae7de4206b0c977cc57174d9fce8"
+    }
+  ],
+  "renderer_npm_gate": {
+    "passed": 17,
+    "failed": 0,
+    "origin": "Actual tool execution this turn, not a fabricated raw stdout artifact"
+  },
+  "source_ci": "NOT_PROVEN",
+  "linux_ci": "NOT_PROVEN",
+  "docker_ci": "NOT_PROVEN",
+  "billing_settings_changed": false,
+  "pending": [
+    "Physical JSON/CSV/row/catalog boundary tests and native failure injection",
+    "Full recursive source cohort and fetch/inlink coverage",
+    "Linux/container/remote GitHub CI after account availability",
+    "Additional sitemap and remaining feature catalog requirements"
+  ],
+  "reference_parity": "NOT_PROVEN",
+  "qualification": "User explicitly accepted local route while Actions unavailable. Actual local Windows optimized build and isolated native acceptances plus live740 workspace,17renderer,Clippy/format. Exact seven full historical job metadata and nineteen original durable files preserved; five Git-bound assets and24tools confirmed. Backups verified; rollback was not needed or exercised. Original private job configs are retained only in the local backup, not published here. Large native API/SDK/browser body companions and temporary data remain retained on E; this compact archive pins representative raw proofs, not every large payload."
+}

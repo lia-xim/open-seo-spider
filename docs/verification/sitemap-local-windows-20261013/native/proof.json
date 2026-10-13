@@ -1,0 +1,57 @@
+{
+  "result": "PASS_LOCAL_OPTIMIZED_SITEMAPS_AND_BUNDLE",
+  "recorded_at": "2026-10-13T08:32:00.826Z",
+  "binary_sha256": "072d798f421febe242c44d6a5afba73907eec26088a5830097f7f10de02649eb",
+  "binary_bytes": 32609280,
+  "build_proof_sha256": "812ac6d35e8b5a9f360733134b28e0c9675529b22b93afad23f5207753dafa59",
+  "source_manifest_sha256": "0395c9e94a59360c2a967a066703bc3ac5d357ba938109b7169068a3bea80fa8",
+  "declared_source_commit": "82cebd374bcc33512121d4617521dbc20325096f",
+  "test_only_changes_outside_compiled_application": [
+    "crates/core/tests/control_fixtures.rs",
+    "crates/core/tests/recrawl_fixtures.rs",
+    "crates/core/tests/content_capture_fixtures.rs"
+  ],
+  "results": [
+    {
+      "name": "ledger",
+      "script": "scripts/sitemap-ledger-e2e.mjs",
+      "harness_sha256": "51c99a54cd5a9665f17e419596e8bbae23b13ce901035b9275087358324ca9b8",
+      "exit_code": 0,
+      "elapsed_ms": 1819,
+      "log_sha256": "685ea4b37087c126a43a12e1fce9e2fb4f4082eab02155e062214ca4560e4706"
+    },
+    {
+      "name": "membership",
+      "script": "scripts/sitemap-membership-e2e.mjs",
+      "harness_sha256": "a2d2dfebd188d7f1c033532ad9d4f7b20b50d5fff987b898feb62ee4607e2d0d",
+      "exit_code": 0,
+      "elapsed_ms": 4242,
+      "log_sha256": "74edead56a0fb727b10839bd55442642e6199f89ad15a944826e8b094cafd00a"
+    },
+    {
+      "name": "transport",
+      "script": "scripts/sitemap-transport-e2e.mjs",
+      "harness_sha256": "ec832b9c4bf725bd89c0d47d2dd0dfc2c5ec90a1c265a1a5fb494604e3410d7c",
+      "exit_code": 0,
+      "elapsed_ms": 1533,
+      "log_sha256": "5a5000c2e210e8f395839dab99fbe557d19e79ac23e055cae3b6586194b667b9"
+    },
+    {
+      "name": "bundle",
+      "script": "scripts/saved-comparison-bundle-e2e.mjs",
+      "harness_sha256": "f818fa258d4d7546152089ba5ddd9c465102098c4f80afbde38afcffc291d7e2",
+      "exit_code": 0,
+      "elapsed_ms": 9221,
+      "log_sha256": "4d4e9d8247dd00ac07a1df5cb07d63da00a53e4abcb0d367df4e5bdfffb81164"
+    },
+    {
+      "name": "bundle-budget",
+      "script": "scripts/saved-comparison-bundle-budget-e2e.mjs",
+      "harness_sha256": "d0bd47b5b4e696d749e7350ae032ddc5ae65ec010ff51518c15aa269a6a5b3af",
+      "exit_code": 0,
+      "elapsed_ms": 1493,
+      "log_sha256": "a897c65cba4ccc0c5f5e16a378bbbb7f110734429ce7603ea7ee9ea0717e1993"
+    }
+  ],
+  "qualification": "Actual new optimized Windows candidate. Current production source/embedded assets unchanged; only three integration-test renderer endpoint overrides differ. Genuine ledger/API/CSV/SDK/browser plus historical transport/bundle/CLI budget proofs have separate scopes. No remote CI or install claim."
+}

@@ -1,0 +1,100 @@
+{
+  "phase": "AFTER_OWNED_APP_CLOSE_AND_CLEAN_FIXTURE_DRAIN",
+  "fixtures": [
+    {
+      "name": "website",
+      "origin": "http://127.0.0.1:51656",
+      "drained": true,
+      "forced_cleanup": false,
+      "active_requests": 0,
+      "connected_sockets": 0,
+      "total_requests": 8,
+      "rows": [
+        {
+          "ordinal": 1,
+          "method": "GET",
+          "path": "/ordinary.xml",
+          "started_ms": 150,
+          "finished_ms": 151,
+          "response_state": "finished",
+          "registered_route": true
+        },
+        {
+          "ordinal": 2,
+          "method": "GET",
+          "path": "/ordinary-seed",
+          "started_ms": 153,
+          "finished_ms": 154,
+          "response_state": "finished",
+          "registered_route": true
+        },
+        {
+          "ordinal": 3,
+          "method": "GET",
+          "path": "/ordinary-target",
+          "started_ms": 155,
+          "finished_ms": 155,
+          "response_state": "finished",
+          "registered_route": true
+        },
+        {
+          "ordinal": 4,
+          "method": "GET",
+          "path": "/policy.xml",
+          "started_ms": 234,
+          "finished_ms": 234,
+          "response_state": "finished",
+          "registered_route": true
+        },
+        {
+          "ordinal": 5,
+          "method": "GET",
+          "path": "/policy-seed",
+          "started_ms": 237,
+          "finished_ms": 237,
+          "response_state": "finished",
+          "registered_route": true
+        },
+        {
+          "ordinal": 6,
+          "method": "GET",
+          "path": "/policy-alias",
+          "started_ms": 238,
+          "finished_ms": 238,
+          "response_state": "finished",
+          "registered_route": true
+        },
+        {
+          "ordinal": 7,
+          "method": "GET",
+          "path": "/empty-seed",
+          "started_ms": 966,
+          "finished_ms": 966,
+          "response_state": "finished",
+          "registered_route": true
+        },
+        {
+          "ordinal": 8,
+          "method": "GET",
+          "path": "/ordinary-seed",
+          "started_ms": 1059,
+          "finished_ms": 1060,
+          "response_state": "finished",
+          "registered_route": true
+        }
+      ],
+      "errors": []
+    },
+    {
+      "name": "offline_mcp_api",
+      "origin": "http://127.0.0.1:51657",
+      "drained": true,
+      "forced_cleanup": false,
+      "active_requests": 0,
+      "connected_sockets": 0,
+      "total_requests": 0,
+      "rows": [],
+      "errors": []
+    }
+  ]
+}

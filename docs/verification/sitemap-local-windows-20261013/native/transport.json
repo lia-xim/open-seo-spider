@@ -1,0 +1,1117 @@
+{
+  "schema_version": 1,
+  "result": "PASS",
+  "scope_name": "native_sitemap_transport_16_drained_v1",
+  "recorded_at": "2026-10-13T08:31:50.018Z",
+  "scope": "16 existing owned native sitemap transport cases; final HTTP counts only after owned App close and clean fixture drain. No commercial parity or complete occurrence ledger claim.",
+  "source_commit": "82cebd374bcc33512121d4617521dbc20325096f",
+  "expected_source_commit": "82cebd374bcc33512121d4617521dbc20325096f",
+  "source_basis": "caller_declared; CI checkout/build/manifest must independently bind commit to executable",
+  "source_runtime_attested": false,
+  "binary_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\cargo-target\\release\\open-seo-spider.exe",
+  "binary_bytes": 32609280,
+  "binary_sha256": "072d798f421febe242c44d6a5afba73907eec26088a5830097f7f10de02649eb",
+  "final_binary_sha256": "072d798f421febe242c44d6a5afba73907eec26088a5830097f7f10de02649eb",
+  "expected_binary_sha256": "072d798f421febe242c44d6a5afba73907eec26088a5830097f7f10de02649eb",
+  "expected_binary_sha_checked": true,
+  "harness_sha256": "ec832b9c4bf725bd89c0d47d2dd0dfc2c5ec90a1c265a1a5fb494604e3410d7c",
+  "matrix_sha256": "ed90247db514c4d0b1f73ebf373a1823990c1b289687a415e058c2260e716e85",
+  "platform": "win32",
+  "node_version": "v24.15.0",
+  "limits": {
+    "runMs": 120000,
+    "startupMs": 20000,
+    "caseMs": 30000,
+    "requestMs": 5000,
+    "stopMs": 5000,
+    "drainMs": 8000,
+    "quietMs": 250,
+    "fixtureCloseMs": 5000,
+    "apiBytes": 8388608,
+    "outputTailChars": 65536,
+    "bindLineChars": 8192,
+    "witnessRequests": 1024
+  },
+  "fixture_origin": "http://127.0.0.1:49802",
+  "owned_native_origin": "http://127.0.0.1:49804",
+  "owned_native_pid": 36028,
+  "bind_origin_basis": "complete post-bind owned child stdout only",
+  "bind_line_sha256": "de95e1b247f4901d93a1a618de894bb884bd7993a16d38a212133060537a07b3",
+  "listen_argument": "127.0.0.1:0",
+  "user_runtime_contacted": false,
+  "renderer_contacted": false,
+  "foreign_listener_or_process_controls_used": false,
+  "owned_app_stop_requested_ms": 1112,
+  "owned_app_close": {
+    "code": null,
+    "signal": "SIGTERM",
+    "closed_ms": 1116
+  },
+  "owned_app_closed": true,
+  "final_target_http_witness": "DRAINED",
+  "drain": {
+    "recorded_at": "2026-10-13T08:31:49.969Z",
+    "owned_app_closed": true,
+    "fixture_kept_listening_until_requests_drained": true,
+    "quiet_ms": 250,
+    "active_requests": 0,
+    "connected_sockets": 0,
+    "total_requests": 46,
+    "fixture_closed_cleanly": true,
+    "forced_socket_cleanup": false,
+    "final_total_requests": 46
+  },
+  "witness_complete": true,
+  "requests_sha256": "717633032b0d78b99da4656cbbc3451c6b08b21dc750ed3d456c2079d65dcc88",
+  "requests_file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\transport.json.requests.json",
+  "app_log_sha256": "0d187532c4bcf5a3c854661860b23ed1115e9cd43999e3f8ca13617331cdabcd",
+  "app_log_file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\local-release-acceptance-first\\transport.json.app.log",
+  "fixture_routes": [
+    {
+      "route": "/seed-plain-00",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-plain-00.xml",
+      "body_bytes": 159,
+      "body_sha256": "4662d26474618e74d4f3573cb3354e843ce831eed83bab3d2ae12814e37a1b44",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-plain-00",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-plain-00",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-plain-01",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-plain-01.xml",
+      "body_bytes": 159,
+      "body_sha256": "9f187e44e6c16dd9828d6be9842f80899710e3b25174c867a761ed6aa705bccf",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-plain-01",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-plain-01",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-plain-10",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-plain-10.xml",
+      "body_bytes": 159,
+      "body_sha256": "44daa3ca71b10168385577f3d490649dfa0bb001983151629bf14c328d7c9aeb",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-plain-10",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-plain-10",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-plain-11",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-plain-11.xml",
+      "body_bytes": 159,
+      "body_sha256": "0811dcd628adad263a260f2eefd284beeb0e51fe0e7ddbff3588bc114833ceb3",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-plain-11",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-plain-11",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-file-gzip-00",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-file-gzip-00.xml",
+      "body_bytes": 144,
+      "body_sha256": "25a817e9940a4e9a81b8cbe2e86ed952e04b728c6a1c14076ac1c509f770894a",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-file-gzip-00",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-file-gzip-00",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-file-gzip-01",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-file-gzip-01.xml",
+      "body_bytes": 144,
+      "body_sha256": "6a6ab18aa2b77ebef2c62656b84457e0bd91bf64ccbd3b4bdbfbc34af3702a10",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-file-gzip-01",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-file-gzip-01",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-file-gzip-10",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-file-gzip-10.xml",
+      "body_bytes": 144,
+      "body_sha256": "481f922de6a82616324f9ba563e74213aedd592c1adef5ef3eea98c0ffe5a0dc",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-file-gzip-10",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-file-gzip-10",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-file-gzip-11",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-file-gzip-11.xml",
+      "body_bytes": 144,
+      "body_sha256": "9cf0f9c328f1df9550193683dbfdfc3b9fb479751a1dc43ef43fb37404ad526c",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-file-gzip-11",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-file-gzip-11",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-misleading-gz-0",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-misleading-gz-0.xml.gz",
+      "body_bytes": 166,
+      "body_sha256": "d2e1373787a08f1563aa4507d710781d486dc0fbb0af6d246fd4e181c8a9f2ca",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-misleading-gz-0",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-misleading-gz-0",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-misleading-gz-1",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-misleading-gz-1.xml.gz",
+      "body_bytes": 166,
+      "body_sha256": "ccb5ee49a022e6bb734a2f2dd58407f7f1992e7d41cbfe65325c8651129d6303",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-misleading-gz-1",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-misleading-gz-1",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-http-gzip-0",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-http-gzip-0.xml",
+      "body_bytes": 143,
+      "body_sha256": "fdc82a22ef4ead7da418bde0c46728078686b1f6ba1c0c9dc956a97d45af3f2f",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8",
+        "content-encoding": "gzip"
+      }
+    },
+    {
+      "route": "/target-http-gzip-0",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-http-gzip-0",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-http-gzip-1",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-http-gzip-1.xml",
+      "body_bytes": 142,
+      "body_sha256": "fd4e27c6d6c3c5a7cd767f0914e1bfef63a1600ad7067c5f7c6daf1d0e910fcb",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8",
+        "content-encoding": "gzip"
+      }
+    },
+    {
+      "route": "/target-http-gzip-1",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-http-gzip-1",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-corrupt-gzip-0",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-corrupt-gzip-0.xml",
+      "body_bytes": 145,
+      "body_sha256": "0e75a67ed077a642483574ac1a7073cd595f3f2218a47b40b4f8aad9e9657219",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-corrupt-gzip-0",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-corrupt-gzip-0",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-corrupt-gzip-1",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-corrupt-gzip-1.xml",
+      "body_bytes": 146,
+      "body_sha256": "21c1ad63c291d55b46d30e520cba49fd2dd2ec50597d35f24902348393a5fcb0",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-corrupt-gzip-1",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-corrupt-gzip-1",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-extension-0",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-extension-0.xml",
+      "body_bytes": 242,
+      "body_sha256": "43728f574e91208704cfc551070dff5038d28b9a2d6ad547b91e5a9fc431fdf0",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-extension-0",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-extension-0",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-extension-1",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-extension-1.xml",
+      "body_bytes": 242,
+      "body_sha256": "d8caeb61f9676c86616b76b95a03552a1f9472399c4311e3d3e6c9f3693e54af",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-extension-1",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-extension-1",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "id": "plain-00",
+      "policy": false,
+      "resources": false,
+      "format": "plain",
+      "extension": false,
+      "job_id": "0264387a-dfd7-406b-b094-9569bbfa2639",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "b0073b33dd4e1340787ce1cedb08212cfd611ead91afa68e02ab22f3da7c2a41",
+      "config_sha256": "ac19fedc847cd9db053a75070417be3a019d1ed3072dc5b0c86d2769b9ce9845",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "plain-01",
+      "policy": false,
+      "resources": true,
+      "format": "plain",
+      "extension": false,
+      "job_id": "30e3391d-fd5a-4439-b96a-77c1e7b5398f",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "4a9f434a0e272f925b878eb217d6805ae8e9f7db7ced03b6a78b3ec22dd1e093",
+      "config_sha256": "a7fca77415d5ee0b0dc6c8a27da38ca70db1caae4a2783d92e42e88076ff1478",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "plain-10",
+      "policy": true,
+      "resources": false,
+      "format": "plain",
+      "extension": false,
+      "job_id": "2538351b-27dc-4180-a0c8-c106019aa576",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "331fe7f893fcc642b08eaa600f530604f075439ceb3514cab01424d0cc02ca51",
+      "config_sha256": "5a05fa459096aa073d6f95defd62eee431f2aaf67f845b9d4c8d6deab3eac273",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "plain-11",
+      "policy": true,
+      "resources": true,
+      "format": "plain",
+      "extension": false,
+      "job_id": "dc99b454-549b-4a15-8985-004ad6fe211e",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "2064e9a59880a646f8602689c3a47c11e5ff21f8a2999785d18246ca3c792317",
+      "config_sha256": "a2d46bbb7719e46c0851261073c6060c2dba2245e8f475d742d6693a35cb013b",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "file-gzip-00",
+      "policy": false,
+      "resources": false,
+      "format": "file-gzip",
+      "extension": false,
+      "job_id": "11af4ace-9f68-4799-8c9b-05b640371120",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "47a9dea10482d83044536977159d740489a9c699538400c8776d8852c32381a6",
+      "config_sha256": "d44c357236548653e2535c834290e59b6be762ba6f7ec1ff5c5d18dbec28bd9b",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "file-gzip-01",
+      "policy": false,
+      "resources": true,
+      "format": "file-gzip",
+      "extension": false,
+      "job_id": "66e9c0d5-b5ba-4c4e-bdc6-69a4d9c8f9b1",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "24b885d3623f4c721bdaf392030634a81148abb75d6f382f7263914a35fc871c",
+      "config_sha256": "55010a3152e3b27bc1a0ebeabac126f7be5979eeadaec31fed21645e009e1766",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "file-gzip-10",
+      "policy": true,
+      "resources": false,
+      "format": "file-gzip",
+      "extension": false,
+      "job_id": "861436b5-4f47-40d9-a8d7-068521ba0253",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "501092dfcad679080b798b6098da3e67bd1064041a32049c24ad8e3f3a96c3fe",
+      "config_sha256": "d91a2441bf0bb8a3e06c45276e5da1bebbd131b052d6ab6b45e4612d4602d83e",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "file-gzip-11",
+      "policy": true,
+      "resources": true,
+      "format": "file-gzip",
+      "extension": false,
+      "job_id": "f40e484b-2b73-46c0-94e4-93f6775043ce",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "e6d3541a98473ce69d9d8940f5ff2fb95105b76f5b7e77d27d61d6af6120dd84",
+      "config_sha256": "e23a14401ee7fdbf5e992b12888ef2d70080a3b5d7ff87044bf5a4749c797291",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "misleading-gz-0",
+      "policy": false,
+      "resources": false,
+      "format": "misleading-gz",
+      "extension": false,
+      "job_id": "347b5b53-fa3e-4019-aade-8a63fa901653",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "9f3eb26b4363751bbdb3eaff42d562404a99add82dde0b9c09156c2cd3f7fdf8",
+      "config_sha256": "5adb61d2788c8edffe76d8a106bf5adc6a5a041a6fe63fdb27c2e9b2dfbc5979",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "misleading-gz-1",
+      "policy": true,
+      "resources": false,
+      "format": "misleading-gz",
+      "extension": false,
+      "job_id": "f038b302-7f78-4132-9c41-c16c29f843b4",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "1b0966a0b70c213e88fbb14965b3b631038a04e7738c97014e98d97b995aad2d",
+      "config_sha256": "6f0ace6d6456dab261d5b7aeb703fe6de10ee3ce3aebcadc8fc09e06e807efcb",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "http-gzip-0",
+      "policy": false,
+      "resources": false,
+      "format": "http-gzip",
+      "extension": false,
+      "job_id": "9e915a97-1ef1-449a-9eaf-adf8590fe202",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "b222c70bbfacd93a87e65b6260d62a3c237237582f29ace1703422612b94df1d",
+      "config_sha256": "4f74e3daa58f8eefe1cdab63c9a9e7b3d1f8bc529f02801df909509af217e598",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "http-gzip-1",
+      "policy": true,
+      "resources": false,
+      "format": "http-gzip",
+      "extension": false,
+      "job_id": "3f48564b-ecbf-4613-b24b-93293fa45677",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "e263d84544a7eec3a0c9deab15affc71414411961c84b737304c6817a0abeb6b",
+      "config_sha256": "bf73003db872cf7e3c0154558b4f7fe0bb9794807017f752a220b45800b15c8f",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "corrupt-gzip-0",
+      "policy": false,
+      "resources": false,
+      "format": "corrupt-gzip",
+      "extension": false,
+      "job_id": "14f68736-5020-4517-911b-84a1749aee66",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "9cb6aba4435ff6f1bbf362511edfd104d624820ffbc0408099220bfbe01d9a4a",
+      "config_sha256": "b42db21e9f449c49163479dbb44c48d58360356ef7dce05e5fd65c33a7d81c95",
+      "warning_count": 1,
+      "warnings": [
+        "Sitemap could not be read completely: http://127.0.0.1:49802/map-corrupt-gzip-0.xml: sitemap_invalid_gzip_entity"
+      ],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 0,
+        "target_pages": 0,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 0,
+        "target_pages": 0,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "corrupt-gzip-1",
+      "policy": true,
+      "resources": false,
+      "format": "corrupt-gzip",
+      "extension": false,
+      "job_id": "05feebe4-673e-4d5b-93d1-9fbf4149a234",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "f40900556d2e20088ecab9b7956baebd52a269e34781eda6937102f182ea2527",
+      "config_sha256": "d4583fb83be17d68f18255f8514b02d496e32b940b549179bf3cb5b9dcab7cd3",
+      "warning_count": 1,
+      "warnings": [
+        "Sitemap could not be read completely: http://127.0.0.1:49802/map-corrupt-gzip-1.xml: sitemap_invalid_gzip_entity"
+      ],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 0,
+        "target_pages": 0,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 0,
+        "target_pages": 0,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "extension-0",
+      "policy": false,
+      "resources": false,
+      "format": "plain",
+      "extension": true,
+      "job_id": "ffc0a4ff-0b5b-4081-b010-5b9a5fd762a0",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "5aec342611458f1b5687bf8ce38c38b8e0333bf294b53190d30fd4ebfde21c72",
+      "config_sha256": "16a8ff90c5312dab97f3240686a766714a250d7a57577d0436921dfb35c356d2",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "extension-1",
+      "policy": true,
+      "resources": false,
+      "format": "plain",
+      "extension": true,
+      "job_id": "a3620b80-ff41-4f26-8a02-f4c1cf83a8e0",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "999f3e9a6ddee1ce33706e1dfb54b6407247e2e40464cf7239c0bcfa94696577",
+      "config_sha256": "e4efaaf6d8f1db8f02dbc50636642ae618bef708e0b489f5a321d41fb41576f7",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    }
+  ],
+  "summary": {
+    "cases": 16,
+    "passes": 16,
+    "failures": 0,
+    "unproven": 0
+  },
+  "cleanup": {
+    "owned_data_removed": true,
+    "owned_fixture_closed": true,
+    "owned_app_closed": true,
+    "run_directory_preserved_for_proof": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\temp\\sitemap-transport-e2e-K3jOzS"
+  },
+  "failures": [],
+  "reference_parity": "NOT_PROVEN"
+}

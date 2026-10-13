@@ -1,0 +1,58 @@
+{
+  "tested_at": "2026-10-13T08:32:00.766Z",
+  "result": "PASS",
+  "scope": "Actual native CLI fixed-ceiling control on synthetic typed reports; no crawl authenticity or API/MCP fixed-ceiling claim",
+  "binary_sha256": "072d798f421febe242c44d6a5afba73907eec26088a5830097f7f10de02649eb",
+  "harness_sha256": "d0bd47b5b4e696d749e7350ae032ddc5ae65ec010ff51518c15aa269a6a5b3af",
+  "ceiling_bytes": 67108864,
+  "checks": [
+    {
+      "id": "native-small-envelope-calibration",
+      "bytes": 6368,
+      "before_report_bytes": 1420,
+      "after_report_bytes": 1420
+    },
+    {
+      "id": "actual-fixed-ceiling-exact-fit",
+      "bytes": 67108864,
+      "sha256": "db5b790aec31ab90b46878f56e0b65de0cf1252661c0be3b880ecac0564d25f9",
+      "csv_sha256": "d35b2d35a8a03ee8f02bb5df5e76499e6404924aa01cd98609e9c8ae33a73218",
+      "before_padding": 33551248,
+      "after_padding": 33551232
+    },
+    {
+      "id": "actual-fixed-ceiling-plus-one-refuses-both-reservations",
+      "would_be_bytes": 67108865,
+      "error_code": "original_report_bundle_byte_budget",
+      "existing_fit_bytes_unchanged": true
+    },
+    {
+      "id": "default-remains-explicit-projection",
+      "bytes": 3118
+    }
+  ],
+  "binary_checks": [
+    {
+      "label": "calibrate-small-complete-envelope",
+      "sha256": "072d798f421febe242c44d6a5afba73907eec26088a5830097f7f10de02649eb"
+    },
+    {
+      "label": "exact-64MiB-envelope",
+      "sha256": "072d798f421febe242c44d6a5afba73907eec26088a5830097f7f10de02649eb"
+    },
+    {
+      "label": "64MiB-plus-one-envelope",
+      "sha256": "072d798f421febe242c44d6a5afba73907eec26088a5830097f7f10de02649eb"
+    },
+    {
+      "label": "default-projection-from-same-large-inputs",
+      "sha256": "072d798f421febe242c44d6a5afba73907eec26088a5830097f7f10de02649eb"
+    },
+    {
+      "label": "final-all-native-children-closed",
+      "sha256": "072d798f421febe242c44d6a5afba73907eec26088a5830097f7f10de02649eb"
+    }
+  ],
+  "final_active_children": 0,
+  "website_attempts_after_children_and_witness_drained": 0
+}
