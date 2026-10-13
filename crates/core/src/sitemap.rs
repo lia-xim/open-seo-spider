@@ -1,4 +1,14 @@
-use quick_xml::{Reader, events::Event};
+//! Bounded sitemap XML observations and gzip file-entity decoding.
+//! Pure bounded XML/entity inspection; no request, storage or source-authenticity claim.
+#[path = "sitemap/entity.rs"]
+mod entity;
+#[path = "sitemap/models.rs"]
+mod models;
+#[path = "sitemap/xml.rs"]
+mod xml;
+pub use entity::decode_sitemap_entity;
+pub use models::*;
+pub use xml::observe_sitemap_xml;
 
 #[derive(Debug, Clone, Default)]
 pub struct SitemapEntries {
@@ -6,73 +16,37 @@ pub struct SitemapEntries {
     pub locations: Vec<String>,
 }
 
-/// Reads URL sets and sitemap indexes without executing XML external entities.
+/// Existing signature retained for ordinary/policy callers. New callers must
+/// retain the observation, not this intentionally lossy compatibility projection.
+/// Invalid URI values are deliberately passed to the existing policy evaluator.
 pub fn parse_sitemap(xml: &str) -> anyhow::Result<SitemapEntries> {
-    let mut reader = Reader::from_str(xml);
-    reader.config_mut().trim_text(true);
-    let mut result = SitemapEntries::default();
-    let mut in_loc = false;
-    let mut location = String::new();
-    let mut root_seen = false;
-    let mut depth = 0usize;
-    loop {
-        match reader.read_event()? {
-            Event::Start(e) => {
-                if depth == 0 {
-                    if root_seen {
-                        anyhow::bail!("Sitemap has multiple document roots");
-                    }
-                    root_seen = true;
-                    match e.local_name().as_ref() {
-                        "sitemapindex" => result.is_index = true,
-                        "urlset" => {}
-                        _ => anyhow::bail!("Expected sitemapindex or urlset document root"),
-                    }
-                }
-                depth += 1;
-                if e.local_name().as_ref() == "loc" {
-                    in_loc = true;
-                    location.clear();
-                }
-            }
-            Event::Empty(e) if depth == 0 => {
-                if root_seen {
-                    anyhow::bail!("Sitemap has multiple document roots");
-                }
-                root_seen = true;
-                match e.local_name().as_ref() {
-                    "sitemapindex" => result.is_index = true,
-                    "urlset" => {}
-                    _ => anyhow::bail!("Expected sitemapindex or urlset document root"),
-                }
-            }
-            Event::Text(text) if in_loc => location.push_str(&text),
-            Event::CData(text) if in_loc => location.push_str(&text),
-            Event::GeneralRef(reference) if in_loc => {
-                if let Some(character) = reference.resolve_char_ref()? {
-                    location.push(character);
-                } else {
-                    location.push_str(&quick_xml::escape::unescape(&format!("&{};", &*reference))?);
-                }
-            }
-            Event::End(e) => {
-                depth = depth.saturating_sub(1);
-                if e.local_name().as_ref() == "loc" {
-                    in_loc = false;
-                    if !location.trim().is_empty() {
-                        result.locations.push(location.trim().into());
-                    }
-                }
-            }
-            Event::Eof => break,
-            _ => {}
-        }
+    let observation = observe_sitemap_xml(
+        xml.as_bytes(),
+        SitemapParserContext::default(),
+        &SitemapParserLimits::default(),
+    )
+    .map_err(|error| anyhow::anyhow!("{}: {}", error.code, error.message))?;
+    if !observation.complete {
+        let error = observation
+            .failure
+            .expect("incomplete observations have a failure");
+        anyhow::bail!("{}: {}", error.code, error.message);
     }
-    if !root_seen || depth != 0 {
-        anyhow::bail!("Sitemap document is empty or incomplete");
-    }
-    Ok(result)
+    Ok(SitemapEntries {
+        is_index: observation.kind == Some(SitemapDocumentKind::SitemapIndex),
+        locations: observation
+            .locations
+            .into_iter()
+            .filter_map(|row| row.decoded_value)
+            .map(|value| value.trim().to_owned())
+            .filter(|value| !value.is_empty())
+            .collect(),
+    })
 }
+
+#[cfg(test)]
+#[path = "sitemap/tests.rs"]
+mod occurrence_tests;
 
 #[cfg(test)]
 mod tests {

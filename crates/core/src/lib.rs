@@ -93,6 +93,12 @@ pub use robots_simulation::{
     RobotsSimulationRow, export_robots_simulation_csv, simulate_robots,
 };
 pub use serp::{SerpInputRow, SerpPreview, export_serp_csv, import_serp_csv, preview_serp};
-pub use sitemap::parse_sitemap;
+pub use sitemap::{
+    SITEMAP_XML_ENGINE, SitemapDocumentKind, SitemapEntityDecode, SitemapEntityEncoding,
+    SitemapEntries, SitemapEntryObservation, SitemapFailure, SitemapFieldOccurrence,
+    SitemapLocationOccurrence, SitemapLocationRole, SitemapNamespaceProfile,
+    SitemapParseObservation, SitemapParserContext, SitemapParserLimits, decode_sitemap_entity,
+    observe_sitemap_xml, parse_sitemap,
+};
 pub use store::CrawlStore;
 pub use urls::normalize_url;

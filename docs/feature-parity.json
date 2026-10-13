@@ -5778,6 +5778,15 @@
       "exact_ci_run": "38330560999",
       "scope": "Optimized B11 installed on user8787; seven jobs and19 durable files retained, five exact Git-blob assets,23 read-only inventory tools.",
       "limits": "Bounded own saved-comparison/export acceptance. Whole vendor parity, large-crawl scale, historical input-file bytes and SQL authenticity are not established."
+    },
+    {
+      "id": "sitemap-parser-checkpoint",
+      "artifact": "docs/verification/sitemap-parser-checkpoint.json",
+      "artifact_sha256": "a2677d02e0413c99404b449433a3fe3ad62f1cabd2b4db195e836351646cc4d1",
+      "result": "PASS_BOUNDED_PARSER_LAYER",
+      "tested_at": "2026-10-13T02:09:22.006Z",
+      "scope": "Integrated pure Core XML observation and gzip file-entity layer only. Existing compatibility callers use the new XML parser; complete observation retention and file-gzip network wiring are not integrated.",
+      "limits": "Core parser54 and standalone56 are distinct runs, never summed. Four mutation controls exercise the frozen Work draft. Network/SQLite/coverage/release/install and full reference parity remain pending."
     }
   ],
   "reference_workflows": [
@@ -6663,30 +6672,45 @@
     {
       "id": "batch-b12-sitemap-membership",
       "status": "IN_PROGRESS",
-      "stage": "WORK_PARSER55_PASS_MAIN_INTEGRATION_PENDING",
+      "stage": "MAIN_PARSER_PASS_NATIVE_DISCOVERY_LEDGER_PENDING",
       "priority": 3,
       "title_de": "Nächster Baustein – B12: Sitemaps und Mitgliedschaft",
-      "summary_de": "Der separate Rust-Parser-/Gzip-Entwurf besteht53 gezielte Kandidatentests und zwei vorhandene URL-Tests. Namespace-/Elternstruktur, vollständige Loc-Vorkommen, Rohwerte, Duplikate, XML-Syntax und tatsächliche Gzip-Grenzen sind im Work-Entwurf geprüft. Main-Integration, vollständiger Discovery-/Speicherpfad und native Abnahmen stehen aus; Feature-Status bleibt unverändert.",
+      "summary_de": "Der XML-/Gzip-Parser ist im Core integriert: 54 gezielte Cargo-Tests und Alltargets-Clippy bestehen. Vier absichtlich beschädigte Work-Varianten lösen jeweils die erwartete Test-Assertion aus. Vollständige Sitemap-Vorkommen, Gzip im Netzwerkpfad, dauerhafte Mitgliedschaft, Abdeckungszustände und native Abnahmen stehen als nächste Aufgaben offen; beide Feature-Status bleiben teilweise geprüft.",
       "feature_ids": [
         "sitemap.discovery",
         "sitemap.coverage"
       ],
-      "completed_acceptance_de": [],
+      "completed_acceptance_de": [
+        "Namespace-/Elternstruktur, Rohwerte, Duplikate, fehlende/ungültige Locs, vollständige XML-Prüfung und tatsächliche Gzip-Grenzen im integrierten Core-Parser geprüft: 53 neue Tests und ein erhaltener historischer Test.",
+        "Vier absichtlich beschädigte Work-Varianten werden durch gerichtete Laufzeit-Assertions erkannt; integrierte Quellen unabhängig geprüft, Alltargets-Clippy grün."
+      ],
       "pending_acceptance_de": [
-        "Namespace-/Elternstruktur, .gz-Dateidekodierung und tatsächliche Inflationsbudgets prüfen.",
-        "Vollständige Loc-Vorkommen und Dokument-/Child-Herkunft dauerhaft erhalten; Discovery-Frontier nicht als Vollständigkeitsbeweis verwenden.",
-        "Ordinary/Policy × Ressourcen an/aus, Zyklen/Fehler, Pause/Recovery, unbekannte Altbestände und read-only API/CSV/UI getrennt prüfen."
+        "Begrenzte Gzip-Dateidekodierung nach HTTP-Decoding und expliziten Sitemap-Fetch-Zweck im tatsächlichen Netzwerkpfad anbinden.",
+        "Vollständige Dokument-/Entry-/Loc-/Root-Vorkommen atomar in Ordinary/Policy speichern; Task-Deduplizierung getrennt und Completion einmalig halten.",
+        "Quellvollständigkeit, Checkpoint/Recovery, unbekannte Altbestände und ausgewählt geerbte Mitgliedschaft erklären.",
+        "Read-only API-Cursor, CSV und native Browseransicht für Mitgliedschaft/Abdeckung ergänzen.",
+        "Ordinary/Policy × Ressourcen an/aus, Zyklen/Fehler und native Matrix sowie exakte Quell-CI/Release/Installation prüfen."
       ],
       "documentation": [
-        "docs/parity/sitemap-b12-plan.md"
+        "docs/parity/sitemap-b12-plan.md",
+        "docs/sitemap-parser.md"
       ],
       "gates": {
-        "source_review": "PLAN_AND_WORK_INTERFACES_REVIEWED",
-        "implementation": "MAIN_PENDING",
+        "source_review": "MAIN_PARSER_SIX_FILES_NO_CONCRETE_P1_P2",
+        "implementation": "MAIN_PARSER_ONLY_NETWORK_LEDGER_PENDING",
         "native_acceptance": "NOT_RUN",
-        "work_parser": "PASS_53_PLUS_EXISTING_NORMALIZER2"
+        "work_parser": "PASS_53_PLUS_EXISTING_NORMALIZER2",
+        "main_core_parser": "PASS_54",
+        "main_core_clippy": "PASS_ALL_TARGETS",
+        "main_standalone": "PASS_56_SEPARATE",
+        "work_mutations": "PASS_4_EXPECTED_RUNTIME_ASSERTION_FAILURES",
+        "exact_commit_ci": "PENDING"
       },
-      "reference_parity": "NOT_PROVEN"
+      "reference_parity": "NOT_PROVEN",
+      "proof_run_ids": [
+        "sitemap-parser-checkpoint"
+      ],
+      "tracking_issue": "https://github.com/lia-xim/open-seo-spider/issues/11"
     }
   ]
 }

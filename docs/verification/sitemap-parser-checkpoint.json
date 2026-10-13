@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "result": "PASS_BOUNDED_PARSER_LAYER",
+  "recorded_at": "2026-10-13T02:09:22.006Z",
+  "source_basis_commit": "f6f6ce042d3a2a94913a01abd9424fa8a7f6c9d6",
+  "source_binding": "Exact integrated source SHA-256 values, including unchanged URL normalizer; publication commit necessarily follows this record.",
+  "source_sha256": {
+    "crates/core/src/lib.rs": "74b51d488dfe3f59fbee4fa0ad41b5b5d910e56e951a1327bfa5e7990407517b",
+    "crates/core/src/urls.rs": "d4bb14a54e3770362c51aeef7072c8fee1c72c2e5e35a24a58ffcabaa6c95155",
+    "crates/core/src/sitemap.rs": "dd5e26aa487ca370ee2b3d6290a6afd99b73341a57173de741d2ee19b327f43a",
+    "crates/core/src/sitemap/models.rs": "2bccc73f511e39bb7170d9f92d67df236f6709ae1dc64ee1ef4edf3e9cefe56f",
+    "crates/core/src/sitemap/entity.rs": "5cfbc3b97221467665f8ca9b2eef0eb9202edd196637875bc51ec1c8b782bb76",
+    "crates/core/src/sitemap/xml.rs": "74ef8737b8b1aff83ef8ee6960ee864e283fe9d94b9e679fcdbc473ae0c47707",
+    "crates/core/src/sitemap/tests.rs": "bc0a242b5b78de30a23c8377c5c50d92ce3f5d25bc561eabcb058723fbdd3e8c"
+  },
+  "engine": "open-seo-spider/sitemap-xml-occurrences-v1",
+  "scope": "Integrated pure Core XML observation and gzip file-entity layer only. Existing compatibility callers use the new XML parser; complete observation retention and file-gzip network wiring are not integrated.",
+  "checks": {
+    "actual_core_library": {
+      "command": "CARGO_INCREMENTAL=0 cargo test -p open-seo-spider-core --lib --locked sitemap::",
+      "result": "PASS",
+      "passed": 54,
+      "failed": 0,
+      "ignored": 0,
+      "filtered_out": 263,
+      "log_sha256": "857511df3ae6c629a29cc5194c4806fd08e254bec1e4cca643cd9279812457cd"
+    },
+    "actual_core_clippy_all_targets": {
+      "command": "CARGO_INCREMENTAL=0 cargo clippy -p open-seo-spider-core --all-targets --locked -- -D warnings",
+      "result": "PASS",
+      "log_sha256": "8b60086874920e10f2e0683c7dcbae4472ceb248dc4b10d3a6245983e9b9b073"
+    },
+    "main_standalone": {
+      "result": "PASS",
+      "tested_at": "2026-10-13T01:57:13.625Z",
+      "scope": "Actual Main parser modules, literal Core public export declaration and actual Main normalizer; no whole-Core/Cargo/native/storage/runtime or vendor parity claim",
+      "source_sha256": {
+        "crates/core/src/lib.rs": "74b51d488dfe3f59fbee4fa0ad41b5b5d910e56e951a1327bfa5e7990407517b",
+        "crates/core/src/urls.rs": "d4bb14a54e3770362c51aeef7072c8fee1c72c2e5e35a24a58ffcabaa6c95155",
+        "crates/core/src/sitemap.rs": "dd5e26aa487ca370ee2b3d6290a6afd99b73341a57173de741d2ee19b327f43a",
+        "crates/core/src/sitemap/models.rs": "2bccc73f511e39bb7170d9f92d67df236f6709ae1dc64ee1ef4edf3e9cefe56f",
+        "crates/core/src/sitemap/entity.rs": "5cfbc3b97221467665f8ca9b2eef0eb9202edd196637875bc51ec1c8b782bb76",
+        "crates/core/src/sitemap/xml.rs": "74ef8737b8b1aff83ef8ee6960ee864e283fe9d94b9e679fcdbc473ae0c47707",
+        "crates/core/src/sitemap/tests.rs": "bc0a242b5b78de30a23c8377c5c50d92ce3f5d25bc561eabcb058723fbdd3e8c"
+      },
+      "tested": 56,
+      "candidate_parser_tests": 53,
+      "preserved_historical_parser_tests": 1,
+      "actual_normalizer_tests": 2,
+      "binary_sha256": "c8bf1750eeff299e7a599a5acee28a6fc315d0e253f91f0b7b7c631542421f96",
+      "compile_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "test_log_sha256": "d67de9d5e76900bd8fdadb6c602e7429e472c9a7cf785db0266fa4e7c0c3225d",
+      "harness_sha256": "fb7abec6877e136d6ae6cca4bb13563081f7495d517356421725c2967c17ad49",
+      "exit_code": 0,
+      "limits": "53 new parser tests, one preserved historical parser test and two actual URL normalizer tests; separate from the actual Core Cargo54."
+    },
+    "frozen_work_baseline": {
+      "result": "PASS",
+      "passed": 55,
+      "proof_sha256": "46810eab66519b896543bcb814d6ecd9ba508dccc31dd9d08a744fae7fce198e",
+      "manifest_sha256": "f7922b75ece1118663caba42e6794bac8989ee14e02f80964b34cb59b458fce4",
+      "limits": "Historical Work candidate before Main formatting/module integration; not an additional Main/native test count."
+    },
+    "mutation_sensitivity": {
+      "result": "PASS",
+      "scope": "Four isolated parser mutations and exact named assertion oracles only; no Main integration, crawler, HTTP, storage, ports or vendor parity",
+      "source_proof_sha256": "5511cc8c29fef4d5533801033895181fc2f5299a073b407364fac5cc2ff04d90",
+      "harness_sha256": "1589186632f1289e2c294ccb848306f86b15ce852f67ee160d6795f4ac4637d6",
+      "cases": [
+        {
+          "id": "namespace-family-always-true",
+          "result": "EXPECTED_NAMED_RUNTIME_ASSERTION_FAILURE",
+          "test": "sitemap::tests::foreign_extension_locations_never_become_page_or_child_locations",
+          "original_source_sha256": "86d6cc054cb38d06b2c94f1700303ca6c3186841a14b02d2cde880ad790e7b07",
+          "mutated_source_sha256": "e68dcdfdceb88ea9a762e90d89f86936333da4e7f89ff3d1500a63719132e512",
+          "unchanged_tests_sha256": "d1be9d71bfb18eaee90f8ea65eb45723d7fd75b19e09e853b7d221e51c3e793d",
+          "limits": "Isolated Work mutation compiled successfully then the exact directed runtime assertion failed; no Main mutation."
+        },
+        {
+          "id": "admission-allows-incomplete-prefix",
+          "result": "EXPECTED_NAMED_RUNTIME_ASSERTION_FAILURE",
+          "test": "sitemap::tests::late_malformed_xml_retains_closed_occurrences_without_admission",
+          "original_source_sha256": "3894f3ad77f3f7a851d5b2033d8f2efed0229a8e57c627a8ea697938adda94b1",
+          "mutated_source_sha256": "e48750aed5998630b734c348abc490c18308dea0f1bb0f65edebf0e635e1c52b",
+          "unchanged_tests_sha256": "d1be9d71bfb18eaee90f8ea65eb45723d7fd75b19e09e853b7d221e51c3e793d",
+          "limits": "Isolated Work mutation compiled successfully then the exact directed runtime assertion failed; no Main mutation."
+        },
+        {
+          "id": "location-edge-unicode-trim",
+          "result": "EXPECTED_NAMED_RUNTIME_ASSERTION_FAILURE",
+          "test": "sitemap::tests::location_edge_profile_allows_xml_s_and_rejects_other_edges_or_internal_controls",
+          "original_source_sha256": "86d6cc054cb38d06b2c94f1700303ca6c3186841a14b02d2cde880ad790e7b07",
+          "mutated_source_sha256": "6f9c72e349e51d55a9824271fc60af6146352d51c2500d0f5cbe177d2c167a2f",
+          "unchanged_tests_sha256": "d1be9d71bfb18eaee90f8ea65eb45723d7fd75b19e09e853b7d221e51c3e793d",
+          "limits": "Isolated Work mutation compiled successfully then the exact directed runtime assertion failed; no Main mutation."
+        },
+        {
+          "id": "gzip-cap-skips-true-eof",
+          "result": "EXPECTED_NAMED_RUNTIME_ASSERTION_FAILURE",
+          "test": "sitemap::tests::gzip_inflation_cap_checks_combined_members_and_true_eof_at_fit",
+          "original_source_sha256": "fc7b3fba57b337b69a220135fa8a1266122e7081fed946646e9ad52562ceef00",
+          "mutated_source_sha256": "dd7b6090e707feff3e65090908186763f5647c516ce1278ea5e3495c7b8b4915",
+          "unchanged_tests_sha256": "d1be9d71bfb18eaee90f8ea65eb45723d7fd75b19e09e853b7d221e51c3e793d",
+          "limits": "Isolated Work mutation compiled successfully then the exact directed runtime assertion failed; no Main mutation."
+        }
+      ]
+    },
+    "independent_source_review": {
+      "result": "NO_CONCRETE_P1_P2_FINDING",
+      "reviewed_source_sha256": {
+        "crates/core/src/lib.rs": "74b51d488dfe3f59fbee4fa0ad41b5b5d910e56e951a1327bfa5e7990407517b",
+        "crates/core/src/sitemap.rs": "dd5e26aa487ca370ee2b3d6290a6afd99b73341a57173de741d2ee19b327f43a",
+        "crates/core/src/sitemap/models.rs": "2bccc73f511e39bb7170d9f92d67df236f6709ae1dc64ee1ef4edf3e9cefe56f",
+        "crates/core/src/sitemap/entity.rs": "5cfbc3b97221467665f8ca9b2eef0eb9202edd196637875bc51ec1c8b782bb76",
+        "crates/core/src/sitemap/xml.rs": "74ef8737b8b1aff83ef8ee6960ee864e283fe9d94b9e679fcdbc473ae0c47707",
+        "crates/core/src/sitemap/tests.rs": "bc0a242b5b78de30a23c8377c5c50d92ce3f5d25bc561eabcb058723fbdd3e8c"
+      },
+      "scope": "Independent source-only review of six integrated files; reviewer did not execute builds."
+    }
+  },
+  "pending": {
+    "complete_native_document_occurrences": "NOT_IMPLEMENTED",
+    "network_file_gzip_decoder": "NOT_WIRED",
+    "protocol_fetch_purpose": "NOT_IMPLEMENTED",
+    "sqlite_atomic_ledger_once_only": "NOT_IMPLEMENTED",
+    "coverage_legacy_selected_inheritance": "NOT_IMPLEMENTED",
+    "read_only_cursors_csv_ui": "NOT_IMPLEMENTED",
+    "exact_source_full_workspace_ci": "PENDING",
+    "native_release_installation": "NOT_RUN"
+  },
+  "installed_runtime": {
+    "source_commit": "2a8103693bd6e29bb928a51de9d15960725870c2",
+    "executable_sha256": "0bbc4c33b115c45467eb6bb1b8b400d31c312fcc501fcafbd186764269b5a9ce",
+    "basis": "Existing B11 installed proof; this parser checkpoint makes no new installation claim."
+  },
+  "reference_parity": "NOT_PROVEN"
+}

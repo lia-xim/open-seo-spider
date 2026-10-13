@@ -198,7 +198,7 @@ const lines = [
 for (const work of [...(catalog.current_work ?? [])].sort((a, b) => (a.priority ?? 100) - (b.priority ?? 100))) {
   lines.push(`- [${work.status === 'COMPLETED' ? 'x' : ' '}] **${work.title_de}** — ${work.status}. ${work.summary_de}`);
   if (work.completed_acceptance_de?.length) lines.push(...work.completed_acceptance_de.map(item => `  - [x] ${item}`));
-  if (work.pending_acceptance_de?.length) lines.push(...work.pending_acceptance_de.map(item => `  - ${item}`));
+  if (work.pending_acceptance_de?.length) lines.push(...work.pending_acceptance_de.map(item => `  - [ ] ${item}`));
   if (work.documentation?.length) lines.push(`  - Verträge: ${work.documentation.map(file => `[${path.basename(file)}](${path.relative('docs', file).replaceAll('\\', '/')})`).join(', ')}.`);
   if (work.gates) lines.push(`  - Gate-Stand: ${Object.entries(work.gates).map(([id, result]) => `${id}: ${result}`).join('; ')}.`);
   lines.push('');
