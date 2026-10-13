@@ -46,7 +46,7 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - Verträge: [resource-discovery.md](resource-discovery.md), [ROADMAP.md](ROADMAP.md), [resource-discovery-api.md](resource-discovery-api.md), [resource-discovery-ui.md](resource-discovery-ui.md).
   - Gate-Stand: pure_css_inventory: PASS; resource_policy_bounded: PASS; native_fixture_subset: PASS; native_fixture_groups_10: PARTIAL; api_cli_mcp: PASS; actual_ui: PASS; related_actual_browser_53: PASS; ui_settings_fixture: PASS; ui_ledger_fixture: PASS; exact_commit_ci: PASS; immutable_release: PASS; installed_runtime: PASS; legacy_restart_regression: PASS; full_core_and_ui_on_repaired_source: PASS; legacy_regression_groups_7: PASS.
 
-- [ ] **Nächste Funktion – B11: gespeicherte Crawls vollständig vergleichen** — IN_PROGRESS. Gespeicherte Vergleiche mit konkreten Änderungen, URL-Mapping und vollständigem Originalbericht-JSON bestehen die eigenen Abnahmen. Das neue Bundle besteht elf native Gruppen, zwölf SDK-Fälle auf beiden Transporten, vier native CLI-Budgetgruppen und echte Browser-Abnahme; 98 finale App-Tests und Alltargets-Clippy bestehen. Der Vergleichs-Basiscommit b8d6908 hat vier grüne CI-Jobs. Exakte Bundle-Commit-CI, optimierter Release und Installation stehen noch aus; Port8787 bleibt B10. GitHub: [B11-Issue #18](https://github.com/lia-xim/open-seo-spider/issues/18).
+- [x] **Abgeschlossen – B11: gespeicherte Crawls vergleichen** — COMPLETED. Vergleich gespeicherter Crawls mit konkreten Änderungen, URL-Mapping und optionalem vollständigem Originalbericht-JSON ist als eigener Baustein abgeschlossen und auf Port8787 installiert. Alle vier exakten CI-Jobs sind grün; Windows/Linux bestehen jeweils476 Standard-Rust-Tests. Derselbe optimierte Windows-Release besteht native11/SDK12, CLI-Grenzgruppen4 und lokale Browsergruppen13. Sieben vorhandene Jobs und19 dauerhaft gespeicherte Dateien bleiben unverändert. Hersteller-Parität bleibt NOT_PROVEN.
   - [x] Versionierter exakter URL-Vergleich mit added/removed/changed/unchanged und konkreten Feldwerten in zwei tatsächlichen gespeicherten nativen Crawls geprüft.
   - [x] Titel, Description, H1/H2, Direktiven, Linkvorkommen, JSON-LD und ausgewählte Texte ändern sich nachvollziehbar trotz gleicher Issue-Zahl; fehlende, partielle und nicht verfügbare Quellen bleiben getrennt.
   - [x] API/CLI/MCP liefern identische Deltas und typisierte Report-Hashes; nach Abschaltung der Fixture-Website und App-Kaltstart beobachten ein eigener HTTP-Witness und beide SDK-Transporte null Website-Anfragen.
@@ -54,16 +54,16 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - [x] Vergleichsoberfläche, alle vier Klassen, Details, fehlende/partielle Quellen, genaue JSON-/CSV-Downloads und 320px-Erreichbarkeit an tatsächlichen gespeicherten nativen Crawls geprüft; eingebettete Assets und Mutation-Fence sind gebunden.
   - [x] Vier tatsächliche Crawls auf zwei Origins prüfen Staging/Production-Prefix-Joins und beidseitige Mapping-Kollisionen; alle Originalfakten und Report-/Revisions-/Exportbytes bleiben erhalten, zwei Offline-Witnesses bleiben nach finalem Prozessende bei null.
   - [x] Gemeinsamer optionaler JSON-Export erhält beide vollständigen geladenen typisierten Reports mit Hash-/Bytebindung und allen Delta-Klassen; native SDK-, Browser-, Kaltstart- und CLI-Grenzprüfungen bestehen.
-  - Exakte Bundle-Commit-CI, unveränderlichen optimierten Release und datenbewahrende Installation separat prüfen.
-  - Verträge: [FEATURE_TODO.md](FEATURE_TODO.md), [ROADMAP.md](ROADMAP.md).
-  - Gate-Stand: core_contract: PASS_34; api_cli_mcp: PASS_NATIVE_9_AND_SDK23; actual_browser_ui: PASS_NATIVE_8_WITH_SERVED_ASSETS_AND_MUTATION_CONTROL; snapshot_and_mapping_integrity: PASS_NATIVE_10_TWO_ORIGINS_BOTH_COLLISION_SIDES; offline_restart_zero_requests: PASS_FINAL_DRAINED_HTTP_WITNESSES_0; work_draft_core: PASS_34_ISOLATED_WORK_ONLY; workspace_tests: PASS_475_PRE_ASYNC_WORKER_FIX_FINAL_APP98_FULL_FINAL_CI_PENDING; workspace_clippy: PASS_ALL_TARGETS; combined_full_original_bundle: PASS_NATIVE11_SDK12_AND_NATIVE_BROWSER; exact_commit_ci: PENDING_BUNDLE_SOURCE; immutable_release: PENDING; installed_runtime: PENDING; ui_contract: PASS_28; ui_browser_fixture: PASS_34; mapping_oracle_controls: PASS; final_app_tests: PASS_98; worker_maximum_depth: PASS_256_PLUS1_REFUSED_ON_1MIB_CALLER; cli_bundle_fixed_ceiling: PASS_NATIVE_64MIB_EXACT_PLUS1; baseline_exact_commit_ci: PASS_B8D6908_ALL4.
+  - [x] Exakter Quellcommit2a81036 mit vier grünen CI-Jobs, optimierter Windows-Release und tatsächliche lokale Browser-Abnahme13; datenbewahrend auf Nutzer-Port8787 installiert, sieben Jobs und19 dauerhafte Dateien byteidentisch.
+  - Verträge: [FEATURE_TODO.md](FEATURE_TODO.md), [ROADMAP.md](ROADMAP.md), [saved-comparison.md](saved-comparison.md).
+  - Gate-Stand: core_contract: PASS_34; api_cli_mcp: PASS_NATIVE_9_AND_SDK23; actual_browser_ui: PASS_NATIVE_8_WITH_SERVED_ASSETS_AND_MUTATION_CONTROL; snapshot_and_mapping_integrity: PASS_NATIVE_10_TWO_ORIGINS_BOTH_COLLISION_SIDES; offline_restart_zero_requests: PASS_FINAL_DRAINED_HTTP_WITNESSES_0; work_draft_core: PASS_34_ISOLATED_WORK_ONLY; workspace_tests: PASS_FINAL_SOURCE_CI_476_EACH_PLATFORM_4_IGNORED_SEPARATE_RENDERER; workspace_clippy: PASS_ALL_TARGETS; combined_full_original_bundle: PASS_SAME_OPTIMIZED_EXE_NATIVE_SDK_CLI_BROWSER; exact_commit_ci: PASS_2A81036_ALL4; immutable_release: PASS_NATIVE11_SDK12_CLI_BUDGET4_UI13; installed_runtime: PASS_B11_7JOBS_19DURABLE_FILES; ui_contract: PASS_28; ui_browser_fixture: PASS_34; mapping_oracle_controls: PASS; final_app_tests: PASS_98; worker_maximum_depth: PASS_256_PLUS1_REFUSED_ON_1MIB_CALLER; cli_bundle_fixed_ceiling: PASS_NATIVE_64MIB_EXACT_PLUS1; baseline_exact_commit_ci: PASS_B8D6908_ALL4.
 
-- [ ] **Nächster Baustein – B12: Sitemaps und Mitgliedschaft** — PLANNED. Konkreter Source-Entwurf für striktes XML-Parsing, begrenztes Gzip und persistierte Sitemap-Mitgliedschaft liegt vor. Positive Sitemap-Beobachtungen bleiben getrennt von abgerufenen, ausgeschlossenen und blockierten Zielen. Implementierung und eigene Abnahmen stehen aus; Feature-Status bleibt unverändert.
+- [ ] **Nächster Baustein – B12: Sitemaps und Mitgliedschaft** — IN_PROGRESS. Der separate Rust-Parser-/Gzip-Entwurf besteht53 gezielte Kandidatentests und zwei vorhandene URL-Tests. Namespace-/Elternstruktur, vollständige Loc-Vorkommen, Rohwerte, Duplikate, XML-Syntax und tatsächliche Gzip-Grenzen sind im Work-Entwurf geprüft. Main-Integration, vollständiger Discovery-/Speicherpfad und native Abnahmen stehen aus; Feature-Status bleibt unverändert.
   - Namespace-/Elternstruktur, .gz-Dateidekodierung und tatsächliche Inflationsbudgets prüfen.
   - Vollständige Loc-Vorkommen und Dokument-/Child-Herkunft dauerhaft erhalten; Discovery-Frontier nicht als Vollständigkeitsbeweis verwenden.
   - Ordinary/Policy × Ressourcen an/aus, Zyklen/Fehler, Pause/Recovery, unbekannte Altbestände und read-only API/CSV/UI getrennt prüfen.
   - Verträge: [sitemap-b12-plan.md](parity/sitemap-b12-plan.md).
-  - Gate-Stand: source_review: PLAN_ONLY; implementation: PENDING; native_acceptance: NOT_RUN.
+  - Gate-Stand: source_review: PLAN_AND_WORK_INTERFACES_REVIEWED; implementation: MAIN_PENDING; native_acceptance: NOT_RUN; work_parser: PASS_53_PLUS_EXISTING_NORMALIZER2.
 
 - [x] **B8: optionale Textaufnahme und gespeicherte Inhaltsanalyse** — COMPLETED. Der begrenzte B8-Baustein für optionale Roh-/DOM-Textaufnahme und gespeicherte ausgewählte Inhaltsanalyse ist mit eigenen nativen/API/UI-Gates, exakter Commit-CI und unveränderlichem installiertem Release geprüft. Vollständige Website-Analyse und CSS-Neuauswahl ohne erhaltenes HTML/DOM bleiben zusätzliche offene Feature-Abnahmen.
   - [x] Pure CSS-/Unicode-Auswahl20 und Binding4 sowie16 echte native Fixtures geprüft; ungültige Konfiguration scheitert vor HTTP.
@@ -227,7 +227,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Neue, entfernte und veränderte Seiten gemeinsam in einer Fixture prüfen.
 
-  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [api](verification/api-e2e.json) (PASS), [saved-comparison-native](verification/saved-comparison-e2e.json) (PASS), [saved-comparison-backend-checkpoint](verification/saved-comparison-backend-checkpoint.json) (PASS).
+  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [api](verification/api-e2e.json) (PASS), [saved-comparison-native](verification/saved-comparison-e2e.json) (PASS), [saved-comparison-backend-checkpoint](verification/saved-comparison-backend-checkpoint.json) (PASS), [saved-comparison-ci](verification/saved-comparison-ci.json) (PASS), [saved-comparison-release](verification/saved-comparison-release.json) (PASS), [saved-comparison-installed](verification/saved-comparison-installed.json) (PASS).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -254,6 +254,15 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
         ],
         "proves": "Two actual saved native cohorts jointly classify added, removed, changed and unchanged; API/CLI/SDK share identical deltas and typed hashes after website shutdown and App cold restart.",
         "limits": "Own versioned stored-fact comparison acceptance only; browser/release and full vendor parity remain separate."
+      },
+      {
+        "verification_run_ids": [
+          "saved-comparison-ci",
+          "saved-comparison-release",
+          "saved-comparison-installed"
+        ],
+        "proves": "Exact-source CI, immutable optimized native release and data-preserving user installation now pass the saved-fact comparison and optional complete typed-report export gates.",
+        "limits": "Own contracts and stored observations; reference parity remains NOT_PROVEN."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -4511,7 +4520,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Graph-/Schema-Deltas und Änderungen bei gleicher Issue-Anzahl prüfen.
 
-  Beweisregister: [api](verification/api-e2e.json) (PASS), [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [saved-comparison-native](verification/saved-comparison-e2e.json) (PASS), [saved-comparison-backend-checkpoint](verification/saved-comparison-backend-checkpoint.json) (PASS).
+  Beweisregister: [api](verification/api-e2e.json) (PASS), [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [saved-comparison-native](verification/saved-comparison-e2e.json) (PASS), [saved-comparison-backend-checkpoint](verification/saved-comparison-backend-checkpoint.json) (PASS), [saved-comparison-ci](verification/saved-comparison-ci.json) (PASS), [saved-comparison-release](verification/saved-comparison-release.json) (PASS), [saved-comparison-installed](verification/saved-comparison-installed.json) (PASS).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -4538,6 +4547,15 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
         ],
         "proves": "Actual native title, description, H1, H2, robots-directive, link graph occurrence, JSON-LD and selected raw-text changes are detected together while issue counts are equal. Source absence/partiality and unavailable rendering remain explicit; original field values are retained.",
         "limits": "Own versioned stored-fact comparison acceptance only; browser/release and full vendor parity remain separate."
+      },
+      {
+        "verification_run_ids": [
+          "saved-comparison-ci",
+          "saved-comparison-release",
+          "saved-comparison-installed"
+        ],
+        "proves": "Exact-source CI, immutable optimized native release and data-preserving user installation now pass the saved-fact comparison and optional complete typed-report export gates.",
+        "limits": "Own contracts and stored observations; reference parity remains NOT_PROVEN."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -4550,7 +4568,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Staging-/Produktions- oder Migrationspräfixe mit sichtbaren Kollisionen abgleichen.
 
-  Beweisregister: [saved-comparison-native](verification/saved-comparison-e2e.json) (PASS), [saved-comparison-backend-checkpoint](verification/saved-comparison-backend-checkpoint.json) (PASS), [saved-comparison-native-mapping](verification/saved-comparison-mapping-e2e.json) (PASS), [saved-comparison-mapping-oracles](verification/saved-comparison-mapping-oracle-controls.json) (PASS), [saved-comparison-native-ui](verification/saved-comparison-ui-native.json) (PASS).
+  Beweisregister: [saved-comparison-native](verification/saved-comparison-e2e.json) (PASS), [saved-comparison-backend-checkpoint](verification/saved-comparison-backend-checkpoint.json) (PASS), [saved-comparison-native-mapping](verification/saved-comparison-mapping-e2e.json) (PASS), [saved-comparison-mapping-oracles](verification/saved-comparison-mapping-oracle-controls.json) (PASS), [saved-comparison-native-ui](verification/saved-comparison-ui-native.json) (PASS), [saved-comparison-ci](verification/saved-comparison-ci.json) (PASS), [saved-comparison-release](verification/saved-comparison-release.json) (PASS), [saved-comparison-installed](verification/saved-comparison-installed.json) (PASS).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -4579,6 +4597,15 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
         ],
         "proves": "Four actual native crawls on two distinct origins preserve every original URL/link/JSON-LD/text fact while explicit origin/segment-prefix mappings join stage and production identities, support reverse mapping and reject before/after/two-sided mapped collisions with all source ordinals. CLI all-column CSV and JSON agree; original report/revision/export bytes and offline results survive cold restart with two drained HTTP witnesses at zero.",
         "limits": "Own recorded-identity mapping acceptance. Raw historical bytes, SQL authenticity, full website equality and vendor parity are not established."
+      },
+      {
+        "verification_run_ids": [
+          "saved-comparison-ci",
+          "saved-comparison-release",
+          "saved-comparison-installed"
+        ],
+        "proves": "Exact-source CI, immutable optimized native release and data-preserving user installation now pass the saved-fact comparison and optional complete typed-report export gates.",
+        "limits": "Own contracts and stored observations; reference parity remains NOT_PROVEN."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -4591,7 +4618,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Gemeinsamen Export mit allen Delta-Arten und beiden Snapshot-Herkünften prüfen.
 
-  Beweisregister: [api](verification/api-e2e.json) (PASS), [saved-comparison-native](verification/saved-comparison-e2e.json) (PASS), [saved-comparison-backend-checkpoint](verification/saved-comparison-backend-checkpoint.json) (PASS), [saved-comparison-native-ui](verification/saved-comparison-ui-native.json) (PASS), [saved-comparison-native-mapping](verification/saved-comparison-mapping-e2e.json) (PASS), [saved-comparison-ui-fixture](verification/saved-comparison-ui-fixture.json) (PASS), [saved-comparison-original-bundle-native](verification/saved-comparison-original-bundle-e2e.json) (PASS), [saved-comparison-original-bundle-oracles](verification/saved-comparison-original-bundle-oracle-controls.json) (PASS), [saved-comparison-original-bundle-cli-budget](verification/saved-comparison-original-bundle-cli-budget.json) (PASS), [saved-comparison-original-bundle-ui-contract](verification/saved-comparison-original-bundle-ui-contract.json) (PASS), [saved-comparison-original-bundle-ui-fixture](verification/saved-comparison-original-bundle-ui-fixture.json) (PASS), [saved-comparison-original-bundle-ui-native](verification/saved-comparison-original-bundle-ui-native.json) (PASS), [saved-comparison-original-bundle-mutation-fence](verification/saved-comparison-original-bundle-native-fence.json) (PASS), [saved-comparison-original-bundle-checkpoint](verification/saved-comparison-original-bundle-checkpoint.json) (PASS).
+  Beweisregister: [api](verification/api-e2e.json) (PASS), [saved-comparison-native](verification/saved-comparison-e2e.json) (PASS), [saved-comparison-backend-checkpoint](verification/saved-comparison-backend-checkpoint.json) (PASS), [saved-comparison-native-ui](verification/saved-comparison-ui-native.json) (PASS), [saved-comparison-native-mapping](verification/saved-comparison-mapping-e2e.json) (PASS), [saved-comparison-ui-fixture](verification/saved-comparison-ui-fixture.json) (PASS), [saved-comparison-original-bundle-native](verification/saved-comparison-original-bundle-e2e.json) (PASS), [saved-comparison-original-bundle-oracles](verification/saved-comparison-original-bundle-oracle-controls.json) (PASS), [saved-comparison-original-bundle-cli-budget](verification/saved-comparison-original-bundle-cli-budget.json) (PASS), [saved-comparison-original-bundle-ui-contract](verification/saved-comparison-original-bundle-ui-contract.json) (PASS), [saved-comparison-original-bundle-ui-fixture](verification/saved-comparison-original-bundle-ui-fixture.json) (PASS), [saved-comparison-original-bundle-ui-native](verification/saved-comparison-original-bundle-ui-native.json) (PASS), [saved-comparison-original-bundle-mutation-fence](verification/saved-comparison-original-bundle-native-fence.json) (PASS), [saved-comparison-original-bundle-checkpoint](verification/saved-comparison-original-bundle-checkpoint.json) (PASS), [saved-comparison-ci](verification/saved-comparison-ci.json) (PASS), [saved-comparison-release](verification/saved-comparison-release.json) (PASS), [saved-comparison-installed](verification/saved-comparison-installed.json) (PASS).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -4640,6 +4667,15 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
         ],
         "proves": "Optional complete typed original-report bundle retains both source reports and all four delta classes in API/CLI/MCP and native browser JSON downloads; ordered original values, exact numeric lexemes, report hashes/counts and all compared CSV fields are independently checked. Default projection stays unchanged; over-budget or invalid requested bundles never silently fall back.",
         "limits": "Typed loaded reports, not historical input-file bytes or SQL authenticity. Browser exports exact received JSON and does not reconstruct Rust hashes. Native CLI fixed-ceiling control is synthetic; API/MCP fixed64MiB boundary and vendor parity remain separately unproven."
+      },
+      {
+        "verification_run_ids": [
+          "saved-comparison-ci",
+          "saved-comparison-release",
+          "saved-comparison-installed"
+        ],
+        "proves": "Exact-source CI, immutable optimized native release and data-preserving user installation now pass the saved-fact comparison and optional complete typed-report export gates.",
+        "limits": "Own contracts and stored observations; reference parity remains NOT_PROVEN."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -5238,4 +5274,4 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `b18a11076b61391de8cfe60c7b111963b81ed5f941d063792dd3a5350784f164`. Letzter im Katalog erfasster Beweisstand: `2026-10-13T01:02:52.584Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `50ee5e0919781dec663efb038ce5e471adb9d363cbe867dcd910ede3dec09d0b`. Letzter im Katalog erfasster Beweisstand: `2026-10-13T01:46:09.224Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

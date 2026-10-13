@@ -537,6 +537,15 @@
           ],
           "proves": "Two actual saved native cohorts jointly classify added, removed, changed and unchanged; API/CLI/SDK share identical deltas and typed hashes after website shutdown and App cold restart.",
           "limits": "Own versioned stored-fact comparison acceptance only; browser/release and full vendor parity remain separate."
+        },
+        {
+          "verification_run_ids": [
+            "saved-comparison-ci",
+            "saved-comparison-release",
+            "saved-comparison-installed"
+          ],
+          "proves": "Exact-source CI, immutable optimized native release and data-preserving user installation now pass the saved-fact comparison and optional complete typed-report export gates.",
+          "limits": "Own contracts and stored observations; reference parity remains NOT_PROVEN."
         }
       ],
       "parity_evidence": [],
@@ -3747,6 +3756,15 @@
           ],
           "proves": "Actual native title, description, H1, H2, robots-directive, link graph occurrence, JSON-LD and selected raw-text changes are detected together while issue counts are equal. Source absence/partiality and unavailable rendering remain explicit; original field values are retained.",
           "limits": "Own versioned stored-fact comparison acceptance only; browser/release and full vendor parity remain separate."
+        },
+        {
+          "verification_run_ids": [
+            "saved-comparison-ci",
+            "saved-comparison-release",
+            "saved-comparison-installed"
+          ],
+          "proves": "Exact-source CI, immutable optimized native release and data-preserving user installation now pass the saved-fact comparison and optional complete typed-report export gates.",
+          "limits": "Own contracts and stored observations; reference parity remains NOT_PROVEN."
         }
       ],
       "parity_evidence": [],
@@ -3780,6 +3798,15 @@
           ],
           "proves": "Four actual native crawls on two distinct origins preserve every original URL/link/JSON-LD/text fact while explicit origin/segment-prefix mappings join stage and production identities, support reverse mapping and reject before/after/two-sided mapped collisions with all source ordinals. CLI all-column CSV and JSON agree; original report/revision/export bytes and offline results survive cold restart with two drained HTTP witnesses at zero.",
           "limits": "Own recorded-identity mapping acceptance. Raw historical bytes, SQL authenticity, full website equality and vendor parity are not established."
+        },
+        {
+          "verification_run_ids": [
+            "saved-comparison-ci",
+            "saved-comparison-release",
+            "saved-comparison-installed"
+          ],
+          "proves": "Exact-source CI, immutable optimized native release and data-preserving user installation now pass the saved-fact comparison and optional complete typed-report export gates.",
+          "limits": "Own contracts and stored observations; reference parity remains NOT_PROVEN."
         }
       ],
       "parity_evidence": [],
@@ -3833,6 +3860,15 @@
           ],
           "proves": "Optional complete typed original-report bundle retains both source reports and all four delta classes in API/CLI/MCP and native browser JSON downloads; ordered original values, exact numeric lexemes, report hashes/counts and all compared CSV fields are independently checked. Default projection stays unchanged; over-budget or invalid requested bundles never silently fall back.",
           "limits": "Typed loaded reports, not historical input-file bytes or SQL authenticity. Browser exports exact received JSON and does not reconstruct Rust hashes. Native CLI fixed-ceiling control is synthetic; API/MCP fixed64MiB boundary and vendor parity remain separately unproven."
+        },
+        {
+          "verification_run_ids": [
+            "saved-comparison-ci",
+            "saved-comparison-release",
+            "saved-comparison-installed"
+          ],
+          "proves": "Exact-source CI, immutable optimized native release and data-preserving user installation now pass the saved-fact comparison and optional complete typed-report export gates.",
+          "limits": "Own contracts and stored observations; reference parity remains NOT_PROVEN."
         }
       ],
       "parity_evidence": [],
@@ -5706,6 +5742,42 @@
       "tested_at": "2026-10-13T01:02:52.584Z",
       "scope": "Local optional-original-report bundle implementation checkpoint; baseline CI is source-bounded and final bundle CI/release/install remain separate.",
       "limits": "Final App98 and maximum-depth worker regression are current; full workspace475 is explicitly pre-worker-fix historical. Final full workspace, exact source CI/release/install and vendor parity remain separate."
+    },
+    {
+      "id": "saved-comparison-ci",
+      "artifact": "docs/verification/saved-comparison-ci.json",
+      "artifact_sha256": "f40a433f2e2dcad3ad4b390fd5153cbed516c6566155140bc366d2aabe108254",
+      "bytes": 32589,
+      "result": "PASS",
+      "tested_at": "2026-10-13T01:46:09.224Z",
+      "source_commit": "2a8103693bd6e29bb928a51de9d15960725870c2",
+      "exact_ci_run": "38330560999",
+      "scope": "Exact2a81036 all four CI jobs;476 standard tests on each Windows/Linux plus separate real Chromium integration.",
+      "limits": "Bounded own saved-comparison/export acceptance. Whole vendor parity, large-crawl scale, historical input-file bytes and SQL authenticity are not established."
+    },
+    {
+      "id": "saved-comparison-release",
+      "artifact": "docs/verification/saved-comparison-release.json",
+      "artifact_sha256": "7958e811a175785c1bcc1a3c1cefb3f22134fb3995ebd76fe8739c8f88b95ac5",
+      "bytes": 1628,
+      "result": "PASS",
+      "tested_at": "2026-10-13T01:46:09.224Z",
+      "source_commit": "2a8103693bd6e29bb928a51de9d15960725870c2",
+      "exact_ci_run": "38330560999",
+      "scope": "Same immutable Windows executable passes native11/SDK12, CLI budget4 and local actual browser13.",
+      "limits": "Bounded own saved-comparison/export acceptance. Whole vendor parity, large-crawl scale, historical input-file bytes and SQL authenticity are not established."
+    },
+    {
+      "id": "saved-comparison-installed",
+      "artifact": "docs/verification/saved-comparison-installed.json",
+      "artifact_sha256": "9d38064d27fee7577cad14df7c922e8fdfb4b45d5b8afd2a87b48c0c367da891",
+      "bytes": 9490,
+      "result": "PASS",
+      "tested_at": "2026-10-13T01:46:09.224Z",
+      "source_commit": "2a8103693bd6e29bb928a51de9d15960725870c2",
+      "exact_ci_run": "38330560999",
+      "scope": "Optimized B11 installed on user8787; seven jobs and19 durable files retained, five exact Git-blob assets,23 read-only inventory tools.",
+      "limits": "Bounded own saved-comparison/export acceptance. Whole vendor parity, large-crawl scale, historical input-file bytes and SQL authenticity are not established."
     }
   ],
   "reference_workflows": [
@@ -5963,7 +6035,7 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-13T01:02:52.584Z",
+  "last_verified_at": "2026-10-13T01:46:09.224Z",
   "current_work": [
     {
       "id": "batch-b8-content-capture",
@@ -6509,11 +6581,11 @@
     },
     {
       "id": "batch-b11-saved-comparison",
-      "status": "IN_PROGRESS",
-      "stage": "FULL_ORIGINAL_BUNDLE_PASS_EXACT_COMMIT_CI_RELEASE_PENDING",
+      "status": "COMPLETED",
+      "stage": "EXACT_SOURCE_CI_OPTIMIZED_RELEASE_AND_INSTALLED_RUNTIME_PASS",
       "priority": 2,
-      "title_de": "Nächste Funktion – B11: gespeicherte Crawls vollständig vergleichen",
-      "summary_de": "Gespeicherte Vergleiche mit konkreten Änderungen, URL-Mapping und vollständigem Originalbericht-JSON bestehen die eigenen Abnahmen. Das neue Bundle besteht elf native Gruppen, zwölf SDK-Fälle auf beiden Transporten, vier native CLI-Budgetgruppen und echte Browser-Abnahme; 98 finale App-Tests und Alltargets-Clippy bestehen. Der Vergleichs-Basiscommit b8d6908 hat vier grüne CI-Jobs. Exakte Bundle-Commit-CI, optimierter Release und Installation stehen noch aus; Port8787 bleibt B10. GitHub: [B11-Issue #18](https://github.com/lia-xim/open-seo-spider/issues/18).",
+      "title_de": "Abgeschlossen – B11: gespeicherte Crawls vergleichen",
+      "summary_de": "Vergleich gespeicherter Crawls mit konkreten Änderungen, URL-Mapping und optionalem vollständigem Originalbericht-JSON ist als eigener Baustein abgeschlossen und auf Port8787 installiert. Alle vier exakten CI-Jobs sind grün; Windows/Linux bestehen jeweils476 Standard-Rust-Tests. Derselbe optimierte Windows-Release besteht native11/SDK12, CLI-Grenzgruppen4 und lokale Browsergruppen13. Sieben vorhandene Jobs und19 dauerhaft gespeicherte Dateien bleiben unverändert. Hersteller-Parität bleibt NOT_PROVEN.",
       "feature_ids": [
         "modes.compare",
         "storage.compare_changes",
@@ -6527,14 +6599,14 @@
         "Zwei App/Core-Vertragsfehler rot reproduziert und repariert; 440 Standard-Rust-Tests sowie Alltargets-Clippy bestehen.",
         "Vergleichsoberfläche, alle vier Klassen, Details, fehlende/partielle Quellen, genaue JSON-/CSV-Downloads und 320px-Erreichbarkeit an tatsächlichen gespeicherten nativen Crawls geprüft; eingebettete Assets und Mutation-Fence sind gebunden.",
         "Vier tatsächliche Crawls auf zwei Origins prüfen Staging/Production-Prefix-Joins und beidseitige Mapping-Kollisionen; alle Originalfakten und Report-/Revisions-/Exportbytes bleiben erhalten, zwei Offline-Witnesses bleiben nach finalem Prozessende bei null.",
-        "Gemeinsamer optionaler JSON-Export erhält beide vollständigen geladenen typisierten Reports mit Hash-/Bytebindung und allen Delta-Klassen; native SDK-, Browser-, Kaltstart- und CLI-Grenzprüfungen bestehen."
+        "Gemeinsamer optionaler JSON-Export erhält beide vollständigen geladenen typisierten Reports mit Hash-/Bytebindung und allen Delta-Klassen; native SDK-, Browser-, Kaltstart- und CLI-Grenzprüfungen bestehen.",
+        "Exakter Quellcommit2a81036 mit vier grünen CI-Jobs, optimierter Windows-Release und tatsächliche lokale Browser-Abnahme13; datenbewahrend auf Nutzer-Port8787 installiert, sieben Jobs und19 dauerhafte Dateien byteidentisch."
       ],
-      "pending_acceptance_de": [
-        "Exakte Bundle-Commit-CI, unveränderlichen optimierten Release und datenbewahrende Installation separat prüfen."
-      ],
+      "pending_acceptance_de": [],
       "documentation": [
         "docs/FEATURE_TODO.md",
-        "docs/ROADMAP.md"
+        "docs/ROADMAP.md",
+        "docs/saved-comparison.md"
       ],
       "gates": {
         "core_contract": "PASS_34",
@@ -6543,12 +6615,12 @@
         "snapshot_and_mapping_integrity": "PASS_NATIVE_10_TWO_ORIGINS_BOTH_COLLISION_SIDES",
         "offline_restart_zero_requests": "PASS_FINAL_DRAINED_HTTP_WITNESSES_0",
         "work_draft_core": "PASS_34_ISOLATED_WORK_ONLY",
-        "workspace_tests": "PASS_475_PRE_ASYNC_WORKER_FIX_FINAL_APP98_FULL_FINAL_CI_PENDING",
+        "workspace_tests": "PASS_FINAL_SOURCE_CI_476_EACH_PLATFORM_4_IGNORED_SEPARATE_RENDERER",
         "workspace_clippy": "PASS_ALL_TARGETS",
-        "combined_full_original_bundle": "PASS_NATIVE11_SDK12_AND_NATIVE_BROWSER",
-        "exact_commit_ci": "PENDING_BUNDLE_SOURCE",
-        "immutable_release": "PENDING",
-        "installed_runtime": "PENDING",
+        "combined_full_original_bundle": "PASS_SAME_OPTIMIZED_EXE_NATIVE_SDK_CLI_BROWSER",
+        "exact_commit_ci": "PASS_2A81036_ALL4",
+        "immutable_release": "PASS_NATIVE11_SDK12_CLI_BUDGET4_UI13",
+        "installed_runtime": "PASS_B11_7JOBS_19DURABLE_FILES",
         "ui_contract": "PASS_28",
         "ui_browser_fixture": "PASS_34",
         "mapping_oracle_controls": "PASS",
@@ -6590,11 +6662,11 @@
     },
     {
       "id": "batch-b12-sitemap-membership",
-      "status": "PLANNED",
-      "stage": "SOURCE_REVIEW_PLAN_IMPLEMENTATION_PENDING",
+      "status": "IN_PROGRESS",
+      "stage": "WORK_PARSER55_PASS_MAIN_INTEGRATION_PENDING",
       "priority": 3,
       "title_de": "Nächster Baustein – B12: Sitemaps und Mitgliedschaft",
-      "summary_de": "Konkreter Source-Entwurf für striktes XML-Parsing, begrenztes Gzip und persistierte Sitemap-Mitgliedschaft liegt vor. Positive Sitemap-Beobachtungen bleiben getrennt von abgerufenen, ausgeschlossenen und blockierten Zielen. Implementierung und eigene Abnahmen stehen aus; Feature-Status bleibt unverändert.",
+      "summary_de": "Der separate Rust-Parser-/Gzip-Entwurf besteht53 gezielte Kandidatentests und zwei vorhandene URL-Tests. Namespace-/Elternstruktur, vollständige Loc-Vorkommen, Rohwerte, Duplikate, XML-Syntax und tatsächliche Gzip-Grenzen sind im Work-Entwurf geprüft. Main-Integration, vollständiger Discovery-/Speicherpfad und native Abnahmen stehen aus; Feature-Status bleibt unverändert.",
       "feature_ids": [
         "sitemap.discovery",
         "sitemap.coverage"
@@ -6609,9 +6681,10 @@
         "docs/parity/sitemap-b12-plan.md"
       ],
       "gates": {
-        "source_review": "PLAN_ONLY",
-        "implementation": "PENDING",
-        "native_acceptance": "NOT_RUN"
+        "source_review": "PLAN_AND_WORK_INTERFACES_REVIEWED",
+        "implementation": "MAIN_PENDING",
+        "native_acceptance": "NOT_RUN",
+        "work_parser": "PASS_53_PLUS_EXISTING_NORMALIZER2"
       },
       "reference_parity": "NOT_PROVEN"
     }
