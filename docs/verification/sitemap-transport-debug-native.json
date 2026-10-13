@@ -1,0 +1,366 @@
+{
+  "schema_version": 1,
+  "result": "PASS_CURRENT_FULL_NATIVE_MATRIX",
+  "recorded_at": "2026-10-13T02:37:20.480Z",
+  "source_commit": "6171a3200d8b14441d0e0420e1c3120096729f95+owned-fetch-uncommitted",
+  "binary_sha256": "e1863029fd9c112b7ce45e13cbb4c3a99ca0938be8f667edd41528e390287c66",
+  "harness_sha256": "b38c9df6cdfd529b6e1c6d1994f3f5065943d5d6d70276385a6b1cfbe9178790",
+  "scope": "16 owned full native debug App discovery/target-request cases after Main fetch integration. Source basis6171 plus exact2 owned source SHA; complete ledger and optimized/user installation remain pending.",
+  "source_sha256": {
+    "crates/core/src/crawler.rs": "78adb3bce0e3f9c0ff10a7ca949f99a0055a25e5ece8507fbf47c54ab7127b20",
+    "crates/core/src/crawler/sitemap_protocol_tests.rs": "415c8a5a6eec681900842a4fc90484fb90e97b98df494c89f74a8895fe3d7dba"
+  },
+  "build_log_sha256": "fea1247816afcdbb92be9bdb6270f46f6a9772a1d4c74b1e3d4995d8bc37a68c",
+  "fixture_origin": "http://127.0.0.1:58294",
+  "owned_native_origin": "http://127.0.0.1:58295",
+  "owned_native_pid": 39500,
+  "user_runtime_contacted": false,
+  "cases": [
+    {
+      "id": "plain-00",
+      "policy": false,
+      "resources": false,
+      "format": "plain",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 0,
+      "warnings": []
+    },
+    {
+      "id": "plain-01",
+      "policy": false,
+      "resources": true,
+      "format": "plain",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 0,
+      "warnings": []
+    },
+    {
+      "id": "plain-10",
+      "policy": true,
+      "resources": false,
+      "format": "plain",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 0,
+      "warnings": []
+    },
+    {
+      "id": "plain-11",
+      "policy": true,
+      "resources": true,
+      "format": "plain",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 0,
+      "warnings": []
+    },
+    {
+      "id": "file-gzip-00",
+      "policy": false,
+      "resources": false,
+      "format": "file-gzip",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 0,
+      "warnings": []
+    },
+    {
+      "id": "file-gzip-01",
+      "policy": false,
+      "resources": true,
+      "format": "file-gzip",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 0,
+      "warnings": []
+    },
+    {
+      "id": "file-gzip-10",
+      "policy": true,
+      "resources": false,
+      "format": "file-gzip",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 0,
+      "warnings": []
+    },
+    {
+      "id": "file-gzip-11",
+      "policy": true,
+      "resources": true,
+      "format": "file-gzip",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 0,
+      "warnings": []
+    },
+    {
+      "id": "misleading-gz-0",
+      "policy": false,
+      "resources": false,
+      "format": "misleading-gz",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 0,
+      "warnings": []
+    },
+    {
+      "id": "misleading-gz-1",
+      "policy": true,
+      "resources": false,
+      "format": "misleading-gz",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 0,
+      "warnings": []
+    },
+    {
+      "id": "http-gzip-0",
+      "policy": false,
+      "resources": false,
+      "format": "http-gzip",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 0,
+      "warnings": []
+    },
+    {
+      "id": "http-gzip-1",
+      "policy": true,
+      "resources": false,
+      "format": "http-gzip",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 0,
+      "warnings": []
+    },
+    {
+      "id": "corrupt-gzip-0",
+      "policy": false,
+      "resources": false,
+      "format": "corrupt-gzip",
+      "extension": false,
+      "expected": {
+        "target_requests": 0,
+        "target_pages": 0,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 0,
+        "target_pages": 0,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 1,
+      "warnings": [
+        "Sitemap could not be read completely: http://127.0.0.1:58294/map-corrupt-gzip-0.xml: sitemap_invalid_gzip_entity: Gzip entity did not complete: corrupt gzip stream does not have a matching checksum"
+      ]
+    },
+    {
+      "id": "corrupt-gzip-1",
+      "policy": true,
+      "resources": false,
+      "format": "corrupt-gzip",
+      "extension": false,
+      "expected": {
+        "target_requests": 0,
+        "target_pages": 0,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 0,
+        "target_pages": 0,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 1,
+      "warnings": [
+        "Sitemap could not be read completely: http://127.0.0.1:58294/map-corrupt-gzip-1.xml: sitemap_invalid_gzip_entity: Gzip entity did not complete: corrupt gzip stream does not have a matching checksum"
+      ]
+    },
+    {
+      "id": "extension-0",
+      "policy": false,
+      "resources": false,
+      "format": "plain",
+      "extension": true,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 0,
+      "warnings": []
+    },
+    {
+      "id": "extension-1",
+      "policy": true,
+      "resources": false,
+      "format": "plain",
+      "extension": true,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 0,
+      "warnings": []
+    }
+  ],
+  "summary": {
+    "cases": 16,
+    "passes": 16,
+    "gaps": 0
+  },
+  "reference_parity": "NOT_PROVEN"
+}

@@ -2,7 +2,7 @@ use crate::{
     ControlledCrawlResult, CrawlConfig, CrawlControl, CrawlEvent, CrawlOutcome, CrawlReport,
     CrawlRequest, CrawlStore, CrawlSummary, PageRecord, PreparedSelectedRecrawl,
     RecrawlResumeOverride, RecrawlTargetObservation, RecrawlTargetState, RedirectHop, RunPlan,
-    Severity, audit_pages_with_thresholds, normalize_url, parse_sitemap,
+    Severity, audit_pages_with_thresholds, normalize_url,
 };
 use crate::{
     audit::set_indexability,
@@ -1522,8 +1522,8 @@ impl Crawler {
                 );
             return Ok(output);
         }
-        let (page, body) = context
-            .document(QueueEntry {
+        let (page, protocol) = context
+            .sitemap_protocol(QueueEntry {
                 url: parsed.to_string(),
                 depth: 0,
                 discovered_from: None,
@@ -1542,87 +1542,125 @@ impl Crawler {
                 .policy_rows
                 .extend(observation.redirect_decisions.clone());
         }
+        // Retain complete transport/decoder facts and an incomplete typed XML
+        // prefix even when the unchanged compatibility admission path rejects it.
+        output.protocol_observation = Some(protocol);
+        let protocol = output
+            .protocol_observation
+            .as_ref()
+            .expect("protocol observation");
         if page.error.is_some()
             || page.final_status != Some(200)
             || page.truncated
-            || body.is_none()
+            || protocol.failure.is_some()
+            || !protocol
+                .parser
+                .as_ref()
+                .is_some_and(|parser| parser.complete)
         {
             output.warnings.push(format!(
                 "Sitemap could not be read completely: {}: {}",
                 entry.url,
-                page.error
+                protocol
+                    .failure
+                    .as_ref()
+                    .map(|failure| format!("{}: {}", failure.code, failure.message))
+                    .or(page.error)
                     .unwrap_or_else(|| format!("status {:?}", page.final_status)),
             ));
             return Ok(output);
         }
-        let body = body.unwrap_or_default();
+        let Some(body) = protocol
+            .entity_decode
+            .as_ref()
+            .map(|decoded| decoded.xml.as_slice())
+        else {
+            return Ok(output);
+        };
+        // Typed parser already verified UTF8; this exact slice only binds the
+        // existing source revision. No second XML parse or charset guessing.
+        let body = match std::str::from_utf8(body) {
+            Ok(body) => body,
+            Err(_) => {
+                output
+                    .warnings
+                    .push(format!("Invalid sitemap UTF8 at {}", entry.url));
+                return Ok(output);
+            }
+        };
+        let parser = protocol.parser.as_ref().expect("complete typed parser");
+        let is_index = parser.kind == Some(crate::SitemapDocumentKind::SitemapIndex);
         output.policy_revision = Some(crate::policy_ledger::digest(format!(
             "sitemap:{}:{body}",
             entry.url
         )));
-        match parse_sitemap(&body) {
-            Ok(sitemap) => {
-                output.policy_complete = true;
-                for (index, loc) in sitemap.locations.into_iter().enumerate() {
-                    if let Some(policy) = &self.policy {
-                        let role = if sitemap.is_index {
-                            crate::PolicyTaskRole::SitemapDocument
-                        } else {
-                            crate::PolicyTaskRole::PageDocument
-                        };
-                        let kind = if sitemap.is_index {
-                            crate::CandidateSourceKind::SitemapDocument
-                        } else {
-                            crate::CandidateSourceKind::SitemapLocation
-                        };
-                        let mut row = crate::policy_ledger::decide(
-                            policy,
-                            output.policy_revision.as_deref().expect("XML revision"),
-                            index,
-                            kind,
-                            loc,
-                            None,
-                            Some(entry.url.clone()),
-                            crate::PolicyInputBasis::ParserObservedXml,
-                            role,
-                        );
-                        let xml_allowed = page.policy.as_ref().is_some_and(|observation| {
-                            observation.admission.can_discover_xml
-                                && observation
-                                    .redirect_decisions
-                                    .iter()
-                                    .all(|row| row.decision.folder_internal)
-                        });
-                        if !xml_allowed && row.admission_reason == "pending_admission" {
-                            row.admission_reason = "source_check_only".into();
-                        }
-                        output.policy_rows.push(row);
-                        continue;
-                    }
-                    let Some(parsed) = normalize_url(&loc, None) else {
-                        continue;
-                    };
-                    if !same_scope(&parsed, &self.seeds, self.config.include_subdomains) {
-                        continue;
-                    }
-                    if sitemap.is_index {
-                        output.children.push(DiscoveryEntry {
-                            kind: DiscoveryKind::Sitemap,
-                            url: parsed.to_string(),
-                        });
-                    } else {
-                        output.pages.push(QueueEntry {
-                            url: parsed.to_string(),
-                            depth: 0,
-                            discovered_from: Some(entry.url.clone()),
-                            admission: None,
-                        });
-                    }
+        output.policy_complete = true;
+        // Exactly the legacy parse_sitemap projection: decoded values, Unicode
+        // trim, drop blank/missing, compact enumeration. This is NOT the original
+        // typed Loc ordinal/raw-value contract required by the future ledger.
+        for (index, loc) in parser
+            .locations
+            .iter()
+            .filter_map(|row| row.decoded_value.as_deref())
+            .map(str::trim)
+            .filter(|value| !value.is_empty())
+            .enumerate()
+        {
+            let loc = loc.to_owned();
+            if let Some(policy) = &self.policy {
+                let role = if is_index {
+                    crate::PolicyTaskRole::SitemapDocument
+                } else {
+                    crate::PolicyTaskRole::PageDocument
+                };
+                let kind = if is_index {
+                    crate::CandidateSourceKind::SitemapDocument
+                } else {
+                    crate::CandidateSourceKind::SitemapLocation
+                };
+                let mut row = crate::policy_ledger::decide(
+                    policy,
+                    output.policy_revision.as_deref().expect("XML revision"),
+                    index,
+                    kind,
+                    loc,
+                    None,
+                    Some(entry.url.clone()),
+                    crate::PolicyInputBasis::ParserObservedXml,
+                    role,
+                );
+                let xml_allowed = page.policy.as_ref().is_some_and(|observation| {
+                    observation.admission.can_discover_xml
+                        && observation
+                            .redirect_decisions
+                            .iter()
+                            .all(|row| row.decision.folder_internal)
+                });
+                if !xml_allowed && row.admission_reason == "pending_admission" {
+                    row.admission_reason = "source_check_only".into();
                 }
+                output.policy_rows.push(row);
+                continue;
             }
-            Err(error) => output
-                .warnings
-                .push(format!("Invalid sitemap XML at {}: {error}", entry.url)),
+            let Some(parsed) = normalize_url(&loc, None) else {
+                continue;
+            };
+            if !same_scope(&parsed, &self.seeds, self.config.include_subdomains) {
+                continue;
+            }
+            if is_index {
+                output.children.push(DiscoveryEntry {
+                    kind: DiscoveryKind::Sitemap,
+                    url: parsed.to_string(),
+                });
+            } else {
+                output.pages.push(QueueEntry {
+                    url: parsed.to_string(),
+                    depth: 0,
+                    discovered_from: Some(entry.url.clone()),
+                    admission: None,
+                });
+            }
         }
         Ok(output)
     }
@@ -1636,6 +1674,8 @@ struct DiscoveryOutput {
     policy_rows: Vec<crate::PolicyOccurrence>,
     policy_revision: Option<String>,
     policy_complete: bool,
+    // Work integration seam: full ledger must consume this whole unit atomically.
+    protocol_observation: Option<SitemapProtocolObservation>,
 }
 
 #[derive(Default)]
@@ -1669,6 +1709,154 @@ fn emit_recrawl_progress(
     );
 }
 
+// WORK draft: insert before FetchContext in crawler.rs. Private implementation.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum FetchPurpose {
+    PageDocument,
+    SitemapProtocol,
+}
+
+impl FetchPurpose {
+    fn policy_role(self) -> crate::PolicyTaskRole {
+        match self {
+            Self::PageDocument => crate::PolicyTaskRole::PageDocument,
+            Self::SitemapProtocol => crate::PolicyTaskRole::SitemapDocument,
+        }
+    }
+
+    fn requires_page_resource_permission(self) -> bool {
+        self == Self::PageDocument
+    }
+
+    fn body_limit(self, config: &CrawlConfig) -> usize {
+        match self {
+            Self::PageDocument => config.max_body_bytes,
+            Self::SitemapProtocol => config
+                .max_body_bytes
+                .min(crate::SitemapParserLimits::default().max_entity_bytes),
+        }
+    }
+}
+
+enum FetchPayload {
+    PageText(String),
+    SitemapProtocol(Box<SitemapProtocolObservation>),
+}
+
+/// Private staging value, not a report or persistence contract. Serialize allows
+/// Root's proposed ledger adapter to project the retained bounded facts explicitly.
+#[derive(Debug, serde::Serialize)]
+struct SitemapProtocolObservation {
+    request_started: bool,
+    /// Oversized context is unavailable rather than a fabricated truncated URL.
+    requested_url: Option<String>,
+    final_url: Option<String>,
+    initial_status: Option<u16>,
+    final_status: Option<u16>,
+    blocked_by_robots: bool,
+    truncated: bool,
+    redirect_count: usize,
+    body_complete: bool,
+    /// Retained bytes AFTER reqwest Content-Decoding, never compressed wire bytes.
+    /// On a truncated body this is a prefix count, not the full response size.
+    retained_post_http_entity_bytes: usize,
+    /// Only a complete actual entity is hashed; corrupt file-gzip can still have
+    /// a complete transport entity with a failing entity decoder.
+    post_http_entity_sha256: Option<String>,
+    entity_decode: Option<crate::SitemapEntityDecode>,
+    /// A late XML failure retains its typed bounded prefix and failure together.
+    parser: Option<crate::SitemapParseObservation>,
+    failure: Option<crate::SitemapFailure>,
+}
+
+impl SitemapProtocolObservation {
+    fn capture(page: &PageRecord, request_started: bool, body: &[u8]) -> Self {
+        let limits = crate::SitemapParserLimits::default();
+        let body_complete = page.final_status.is_some()
+            && !matches!(page.final_status, Some(301 | 302 | 303 | 307 | 308))
+            && page.error.is_none()
+            && !page.truncated
+            && !page.blocked_by_robots;
+        let mut observed = Self {
+            request_started,
+            requested_url: (page.url.len() <= limits.max_field_utf8_bytes)
+                .then(|| page.url.clone()),
+            final_url: (page.final_url.len() <= limits.max_field_utf8_bytes)
+                .then(|| page.final_url.clone()),
+            initial_status: page.status,
+            final_status: page.final_status,
+            blocked_by_robots: page.blocked_by_robots,
+            truncated: page.truncated,
+            redirect_count: page.redirect_chain.len(),
+            body_complete,
+            retained_post_http_entity_bytes: body.len(),
+            post_http_entity_sha256: body_complete.then(|| crate::resource_policy::digest(body)),
+            entity_decode: None,
+            parser: None,
+            failure: None,
+        };
+        if observed.requested_url.is_none() || observed.final_url.is_none() {
+            observed.failure = Some(crate::SitemapFailure::new(
+                "sitemap_transport_context_byte_budget",
+                "Exact protocol URL context exceeds the bounded field profile",
+                None,
+            ));
+            return observed;
+        }
+        if !body_complete || page.final_status != Some(200) {
+            let (code, message) = if page.blocked_by_robots {
+                (
+                    "sitemap_robots_denied",
+                    "Sitemap request was blocked by robots",
+                )
+            } else if page.truncated {
+                (
+                    "sitemap_transport_body_byte_budget",
+                    "Sitemap entity did not fit the post-HTTP byte cap",
+                )
+            } else if !request_started {
+                (
+                    "sitemap_request_not_started",
+                    "Sitemap request did not pass native admission",
+                )
+            } else if page.error.is_some() {
+                (
+                    "sitemap_transport_incomplete",
+                    "Sitemap transport did not complete",
+                )
+            } else {
+                (
+                    "sitemap_http_non200",
+                    "Sitemap did not end with a complete HTTP 200 body",
+                )
+            };
+            observed.failure = Some(crate::SitemapFailure::new(code, message, None));
+            return observed;
+        }
+        match crate::decode_sitemap_entity(body, &limits) {
+            Ok(entity) => {
+                let context = crate::SitemapParserContext {
+                    requested_document_url: Some(page.url.clone()),
+                    final_document_url: Some(page.final_url.clone()),
+                    // A coalesced task may have several declaring parents. The
+                    // occurrence ledger must bind every edge; do not invent one.
+                    originating_occurrence_id: None,
+                };
+                match crate::observe_sitemap_xml(&entity.xml, context, &limits) {
+                    Ok(parser) => {
+                        observed.failure = parser.failure.clone();
+                        observed.parser = Some(parser);
+                    }
+                    Err(failure) => observed.failure = Some(failure),
+                }
+                observed.entity_decode = Some(entity);
+            }
+            Err(failure) => observed.failure = Some(failure),
+        }
+        observed
+    }
+}
+
 struct FetchContext {
     store: Option<Arc<CrawlStore>>,
     capture: Option<Arc<crate::CompiledContentCaptureConfig>>,
@@ -1687,6 +1875,34 @@ struct FetchContext {
 
 impl FetchContext {
     async fn document(&self, entry: QueueEntry) -> (PageRecord, Option<String>) {
+        let (page, payload) = self.fetch(entry, FetchPurpose::PageDocument).await;
+        match payload {
+            Some(FetchPayload::PageText(text)) => (page, Some(text)),
+            None => (page, None),
+            Some(FetchPayload::SitemapProtocol(_)) => unreachable!("private page fetch purpose"),
+        }
+    }
+
+    async fn sitemap_protocol(
+        &self,
+        entry: QueueEntry,
+    ) -> (PageRecord, SitemapProtocolObservation) {
+        let (page, payload) = self.fetch(entry, FetchPurpose::SitemapProtocol).await;
+        let observed = match payload {
+            Some(FetchPayload::SitemapProtocol(observed)) => *observed,
+            // Existing early returns precede any send(). Keep an explicit
+            // failure envelope even when policy/resource/URL admission failed.
+            None => SitemapProtocolObservation::capture(&page, false, &[]),
+            Some(FetchPayload::PageText(_)) => unreachable!("private sitemap fetch purpose"),
+        };
+        (page, observed)
+    }
+
+    async fn fetch(
+        &self,
+        entry: QueueEntry,
+        purpose: FetchPurpose,
+    ) -> (PageRecord, Option<FetchPayload>) {
         let mut page = PageRecord {
             url: entry.url.clone(),
             final_url: entry.url.clone(),
@@ -1696,11 +1912,27 @@ impl FetchContext {
             indexability_agent: self.config.indexability_agent.clone(),
             ..Default::default()
         };
-        if self.config.resource_discovery.is_some()
-            && !entry.admission.as_ref().is_some_and(|admission| {
-                admission.task_role == crate::PolicyTaskRole::SitemapDocument
-            })
+        // Purpose comes only from private document/protocol wrappers. A supplied
+        // policy role cannot select a different transport privilege.
+        if entry
+            .admission
+            .as_ref()
+            .is_some_and(|admission| admission.task_role != purpose.policy_role())
         {
+            page.error = Some(
+                "Native admission role differs from fetch purpose; request was not made".into(),
+            );
+            if let Some(capture) = &self.capture {
+                crate::content_binding::unavailable_sources(
+                    &mut page,
+                    capture,
+                    self.generation,
+                    "native_admission_role_mismatch",
+                );
+            }
+            return (page, None);
+        }
+        if self.config.resource_discovery.is_some() && purpose.requires_page_resource_permission() {
             page.resource_permission = self
                 .store
                 .as_ref()
@@ -1734,7 +1966,7 @@ impl FetchContext {
                 return (page, None);
             };
             if let Err(error) =
-                admission.validate(policy.policy_sha256(), &page.url, admission.task_role)
+                admission.validate(policy.policy_sha256(), &page.url, purpose.policy_role())
             {
                 page.error = Some(error.to_string());
                 if let Some(capture) = &self.capture {
@@ -1782,6 +2014,8 @@ impl FetchContext {
         let mut visited = HashSet::new();
         visited.insert(current.to_string());
         let mut body = Vec::new();
+        let mut request_started = false;
+        let body_limit = purpose.body_limit(&self.config);
         let mut resource_redirects: Vec<crate::ResourceRedirectDecision> = Vec::new();
         loop {
             if self.config.obey_robots {
@@ -1821,6 +2055,7 @@ impl FetchContext {
             {
                 hop.request_started = true;
             }
+            request_started = true;
             let response = request.send().await;
             let mut response = match response {
                 Ok(response) => response,
@@ -2026,17 +2261,18 @@ impl FetchContext {
                     && self.policy.is_none()
                     && !same_scope(&target, &self.seeds, self.config.include_subdomains)
                     && !self.config.check_external
-                    && !self
-                        .config
-                        .resource_discovery
-                        .as_ref()
-                        .is_some_and(|config| {
-                            config.permits_resource_origin(
-                                &target,
-                                &self.seeds,
-                                self.config.include_subdomains,
-                            )
-                        })
+                    && !(purpose.requires_page_resource_permission()
+                        && self
+                            .config
+                            .resource_discovery
+                            .as_ref()
+                            .is_some_and(|config| {
+                                config.permits_resource_origin(
+                                    &target,
+                                    &self.seeds,
+                                    self.config.include_subdomains,
+                                )
+                            }))
                 {
                     page.warnings.push(
                         "Redirect target outside crawl scope was recorded without fetching it"
@@ -2052,7 +2288,7 @@ impl FetchContext {
             loop {
                 match response.chunk().await {
                     Ok(Some(chunk)) => {
-                        let remaining = self.config.max_body_bytes - body.len();
+                        let remaining = body_limit - body.len();
                         body.extend_from_slice(&chunk[..chunk.len().min(remaining)]);
                         if chunk.len() > remaining {
                             page.truncated = true;
@@ -2070,6 +2306,15 @@ impl FetchContext {
             break;
         }
         page.size_bytes = body.len();
+        if purpose == FetchPurpose::SitemapProtocol {
+            // response.chunk() already performed reqwest HTTP Content-Decoding.
+            // File-gzip magic is inspected exactly once here, before page sniffing.
+            let observed = SitemapProtocolObservation::capture(&page, request_started, &body);
+            return (
+                page,
+                Some(FetchPayload::SitemapProtocol(Box::new(observed))),
+            );
+        }
         let resource_entity = self
             .config
             .resource_discovery
@@ -2357,7 +2602,7 @@ impl FetchContext {
             page.indexability_reasons
                 .push("PDF analysis incomplete; document indexability not established".into());
         }
-        (page, text)
+        (page, text.map(FetchPayload::PageText))
     }
 }
 
@@ -2591,3 +2836,7 @@ mod tests {
         server.await.unwrap();
     }
 }
+
+#[cfg(test)]
+#[path = "crawler/sitemap_protocol_tests.rs"]
+mod sitemap_protocol_tests;

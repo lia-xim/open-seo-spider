@@ -32,6 +32,15 @@ jobs:
       - run: cargo test --workspace --locked
       - run: cargo clippy --workspace --all-targets --locked -- -D warnings
       - run: cargo build --locked -p open-seo-spider
+      - name: Sitemap transport ownership and final-witness controls
+        run: node --test scripts/sitemap-transport-oracles.test.mjs
+      - name: Native bounded sitemap transport in ordinary and policy modes
+        run: node scripts/sitemap-transport-e2e.mjs
+        env:
+          SPIDER_BINARY: ${{ runner.os == 'Windows' && 'target/debug/open-seo-spider.exe' || 'target/debug/open-seo-spider' }}
+          SPIDER_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_EXPECTED_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_SITEMAP_TRANSPORT_PROOF: ${{ runner.temp }}/sitemap-transport-debug-e2e.json
       - run: node scripts/api-e2e.mjs
       - run: node scripts/list-import-e2e.mjs
       - run: node scripts/crawl-control-e2e.mjs
@@ -94,6 +103,14 @@ jobs:
         env:
           SPIDER_BINARY: ${{ github.workspace }}/target/release/open-seo-spider.exe
           SPIDER_BUNDLE_BUDGET_PROOF: ${{ runner.temp }}/saved-comparison-original-bundle-release-cli-budget.json
+      - name: Verify optimized Windows sitemap transport
+        if: runner.os == 'Windows'
+        run: node scripts/sitemap-transport-e2e.mjs
+        env:
+          SPIDER_BINARY: target/release/open-seo-spider.exe
+          SPIDER_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_EXPECTED_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_SITEMAP_TRANSPORT_PROOF: ${{ runner.temp }}/sitemap-transport-release-e2e.json
       - name: Bind the optimized Windows artifact to its source and tests
         if: runner.os == 'Windows'
         shell: pwsh
@@ -103,18 +120,20 @@ jobs:
           $releaseExe=Join-Path (Get-Location) 'target/release/open-seo-spider.exe'
           $releaseBundleProof=Join-Path $env:RUNNER_TEMP 'saved-comparison-original-bundle-release-e2e.json'
           $releaseBudgetProof=Join-Path $env:RUNNER_TEMP 'saved-comparison-original-bundle-release-cli-budget.json'
+          $releaseSitemapProof=Join-Path $env:RUNNER_TEMP 'sitemap-transport-release-e2e.json'
           $releaseHash=(Get-FileHash -LiteralPath $releaseExe -Algorithm SHA256).Hash.ToLowerInvariant()
-          foreach($releaseProofPath in @($releaseBundleProof,$releaseBudgetProof)){
+          foreach($releaseProofPath in @($releaseBundleProof,$releaseBudgetProof,$releaseSitemapProof)){
             $releaseProof=Get-Content -LiteralPath $releaseProofPath -Raw | ConvertFrom-Json
             if($releaseProof.result -ne 'PASS' -or $releaseProof.binary_sha256 -ne $releaseHash){throw 'Optimized proof/binary mismatch'}
           }
-          $releaseManifest=@{source_commit=$releaseCommit;run_id=$env:GITHUB_RUN_ID;profile='release';platform='windows-x86_64-msvc';binary_sha256=$releaseHash;binary_bytes=(Get-Item -LiteralPath $releaseExe).Length;rustc=(rustc --version);bundle_proof_sha256=(Get-FileHash -LiteralPath $releaseBundleProof -Algorithm SHA256).Hash.ToLowerInvariant();budget_proof_sha256=(Get-FileHash -LiteralPath $releaseBudgetProof -Algorithm SHA256).Hash.ToLowerInvariant();scope='Optimized executable from exact CI source; native bundle and CLI ceiling pass. Local browser/install and all other CI jobs are separate gates.'}
+          $releaseManifest=@{source_commit=$releaseCommit;run_id=$env:GITHUB_RUN_ID;profile='release';platform='windows-x86_64-msvc';binary_sha256=$releaseHash;binary_bytes=(Get-Item -LiteralPath $releaseExe).Length;rustc=(rustc --version);bundle_proof_sha256=(Get-FileHash -LiteralPath $releaseBundleProof -Algorithm SHA256).Hash.ToLowerInvariant();budget_proof_sha256=(Get-FileHash -LiteralPath $releaseBudgetProof -Algorithm SHA256).Hash.ToLowerInvariant();sitemap_transport_proof_sha256=(Get-FileHash -LiteralPath $releaseSitemapProof -Algorithm SHA256).Hash.ToLowerInvariant();scope='Optimized executable from exact CI source; native bundle, CLI ceiling and16 drained sitemap transport cases pass. Local browser/install and all other CI jobs are separate gates.'}
           $releaseArtifactFolder=Join-Path (Get-Location) 'target/release-artifact'
           New-Item -ItemType Directory -Path $releaseArtifactFolder -Force | Out-Null
           $releaseManifest | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $releaseArtifactFolder 'open-seo-spider-windows-release.json') -Encoding utf8NoBOM
           Copy-Item -LiteralPath $releaseExe -Destination $releaseArtifactFolder
           Copy-Item -LiteralPath $releaseBundleProof -Destination $releaseArtifactFolder
           Copy-Item -LiteralPath $releaseBudgetProof -Destination $releaseArtifactFolder
+          Copy-Item -LiteralPath $releaseSitemapProof -Destination $releaseArtifactFolder
       - name: Save the private optimized Windows artifact
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4

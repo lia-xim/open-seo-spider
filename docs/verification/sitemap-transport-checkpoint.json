@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "result": "PASS_MAIN_BOUNDED_SITEMAP_TRANSPORT",
+  "recorded_at": "2026-10-13T03:03:50.097Z",
+  "source_basis_commit": "6171a3200d8b14441d0e0420e1c3120096729f95",
+  "source_binding": "Exact integrated source/harness/workflow SHA values; publication commit follows this record.",
+  "source_sha256": {
+    "crates/core/src/crawler.rs": "78adb3bce0e3f9c0ff10a7ca949f99a0055a25e5ece8507fbf47c54ab7127b20",
+    "crates/core/src/crawler/sitemap_protocol_tests.rs": "415c8a5a6eec681900842a4fc90484fb90e97b98df494c89f74a8895fe3d7dba",
+    "scripts/sitemap-transport-e2e.mjs": "ec832b9c4bf725bd89c0d47d2dd0dfc2c5ec90a1c265a1a5fb494604e3410d7c",
+    "scripts/sitemap-transport-oracles.test.mjs": "45a0fd867394af9d468a4539524353d81aeada8dbea5b5aa5353a64cf0936c89",
+    ".github/workflows/ci.yml": "395006d78bb7f4a0209045ba7e22dee052298e51b712290061899d5eafca7e7c"
+  },
+  "binary_sha256": "e1863029fd9c112b7ce45e13cbb4c3a99ca0938be8f667edd41528e390287c66",
+  "checks": {
+    "actual_core_targeted_http": {
+      "passed": 12,
+      "failed": 0,
+      "ignored": 0,
+      "log_sha256": "a9a5627f47169d9fb3b1284791af3c688d95efc137ee2f5f2b4b7c98480da240"
+    },
+    "actual_core_all_unit_tests": {
+      "passed": 329,
+      "failed": 0,
+      "ignored": 0,
+      "log_sha256": "8db03bdb4a11216cab556b3c8508914a75d7660acc558ac9901598bc6d5e6784"
+    },
+    "actual_core_alltargets_clippy": {
+      "result": "PASS",
+      "log_sha256": "45c5ce01491c38b1e2961a8fa96e041289d4b3a737b9b92d95475871eff694a1"
+    },
+    "actual_debug_app_build": {
+      "result": "PASS",
+      "log_sha256": "fea1247816afcdbb92be9bdb6270f46f6a9772a1d4c74b1e3d4995d8bc37a68c"
+    },
+    "baseline_native": {
+      "artifact": "docs/verification/sitemap-transport-baseline.json",
+      "artifact_sha256": "73594fa1197711efa6d153f84412e090dec1cb57ca03b621e3e17c885fa80b13",
+      "summary": {
+        "cases": 16,
+        "passes": 9,
+        "gaps": 7
+      },
+      "scope": "Old immutable B11 source2a behavior; checks were recorded before final child stop."
+    },
+    "current_debug_native": {
+      "artifact": "docs/verification/sitemap-transport-debug-native.json",
+      "artifact_sha256": "9363647cd46ddd7a237359656f93373d57489c6e0dbfda68821af3554b422008",
+      "summary": {
+        "cases": 16,
+        "passes": 16,
+        "gaps": 0
+      },
+      "scope": "Actual new full App/API/target-request matrix; checks were recorded before final child stop."
+    },
+    "portable_native": {
+      "artifact": "docs/verification/sitemap-transport-portable-native.json",
+      "artifact_sha256": "50cc53dbff6ae01a413916f67576943cb75280cf9fa3be2badb1a86b99cb36ab",
+      "result": "PASS",
+      "cases": 16,
+      "scope": "Tracked CI harness also checks final drained request counts after stopping only its owned App."
+    },
+    "independent_source_reviews": {
+      "result": "NO_CONCRETE_P1_P2_FETCH_FINDING",
+      "frozen_fetch_manifest_sha256": "09f9c7d4f1d6975b8533c0e499a19a16797437fa2b541dfbe6495e6c8105f379",
+      "scope": "Independent read-only review of private-purpose, redirect/credential/robots/body-limit paths. Reviewers did not run native code."
+    },
+    "previous_parser_exact_ci": {
+      "artifact": "docs/verification/sitemap-parser-ci.json",
+      "source_commit": "6171a3200d8b14441d0e0420e1c3120096729f95",
+      "result": "PASS_EXACT_SOURCE_FOUR_CI_JOBS",
+      "scope": "529 passed/4 ignored standard tests per Windows/Linux, plus existing browser/container/native suites for parser6171 only; not the newer fetch source."
+    },
+    "ownership_and_final_witness_controls": {
+      "result": "PASS",
+      "passed": 12,
+      "failed": 0,
+      "log_sha256": "e9b2dfb6f454514c47f42a73df196b061cabefe02dcad39571f386b99e764a9e",
+      "scope": "Pure tracked harness controls: reject foreign/user ports, incomplete endpoint lines and undrained negative witnesses; late or duplicate requests fail exact expectations. No native App launched by this separate run."
+    }
+  },
+  "pending": {
+    "full_xml_occurrence_admission": "COMPATIBILITY_PROJECTION_STILL_USED",
+    "durable_atomic_ledger": "NOT_IMPLEMENTED",
+    "cohort_coverage_recovery_legacy_selected": "NOT_IMPLEMENTED",
+    "read_only_api_csv_ui": "NOT_IMPLEMENTED",
+    "exact_new_source_full_ci": "PENDING",
+    "optimized_transport_release": "PENDING",
+    "local_installation": "NOT_RUN"
+  },
+  "installed_runtime": {
+    "source_commit": "2a8103693bd6e29bb928a51de9d15960725870c2",
+    "binary_sha256": "0bbc4c33b115c45467eb6bb1b8b400d31c312fcc501fcafbd186764269b5a9ce",
+    "changed": false
+  },
+  "reference_parity": "NOT_PROVEN"
+}

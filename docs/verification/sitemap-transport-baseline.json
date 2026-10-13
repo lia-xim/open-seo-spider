@@ -1,0 +1,371 @@
+{
+  "schema_version": 1,
+  "result": "BASELINE_GAPS_REPRODUCED_WITH_PASSING_CONTROLS",
+  "recorded_at": "2026-10-13T02:14:17.229Z",
+  "source_commit": "2a8103693bd6e29bb928a51de9d15960725870c2",
+  "binary_sha256": "0bbc4c33b115c45467eb6bb1b8b400d31c312fcc501fcafbd186764269b5a9ce",
+  "harness_sha256": "e3e2ea10e55d6882af11395cc8d625be0dcb6d414e7b24ba11ee61e36695c1ec",
+  "scope": "16 owned native B11 transport cases. New B12 code is not compiled or installed by this harness.",
+  "fixture_origin": "http://127.0.0.1:52306",
+  "owned_native_origin": "http://127.0.0.1:52307",
+  "owned_native_pid": 40620,
+  "user_runtime_contacted": false,
+  "cases": [
+    {
+      "id": "plain-00",
+      "policy": false,
+      "resources": false,
+      "format": "plain",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 0,
+      "warnings": []
+    },
+    {
+      "id": "plain-01",
+      "policy": false,
+      "resources": true,
+      "format": "plain",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 0,
+        "target_pages": 0,
+        "foreign_requests": 0,
+        "sitemap_requests": 0
+      },
+      "result": "REPRODUCED_BEHAVIOR_GAP",
+      "warning_count": 1,
+      "warnings": [
+        "Sitemap could not be read completely: http://127.0.0.1:52306/map-plain-01.xml: Durable resource permission missing; request was not made"
+      ]
+    },
+    {
+      "id": "plain-10",
+      "policy": true,
+      "resources": false,
+      "format": "plain",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 0,
+      "warnings": []
+    },
+    {
+      "id": "plain-11",
+      "policy": true,
+      "resources": true,
+      "format": "plain",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 0,
+      "warnings": []
+    },
+    {
+      "id": "file-gzip-00",
+      "policy": false,
+      "resources": false,
+      "format": "file-gzip",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 0,
+        "target_pages": 0,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "REPRODUCED_BEHAVIOR_GAP",
+      "warning_count": 1,
+      "warnings": [
+        "Invalid sitemap XML at http://127.0.0.1:52306/map-file-gzip-00.xml: Sitemap document is empty or incomplete"
+      ]
+    },
+    {
+      "id": "file-gzip-01",
+      "policy": false,
+      "resources": true,
+      "format": "file-gzip",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 0,
+        "target_pages": 0,
+        "foreign_requests": 0,
+        "sitemap_requests": 0
+      },
+      "result": "REPRODUCED_BEHAVIOR_GAP",
+      "warning_count": 1,
+      "warnings": [
+        "Sitemap could not be read completely: http://127.0.0.1:52306/map-file-gzip-01.xml: Durable resource permission missing; request was not made"
+      ]
+    },
+    {
+      "id": "file-gzip-10",
+      "policy": true,
+      "resources": false,
+      "format": "file-gzip",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 0,
+        "target_pages": 0,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "REPRODUCED_BEHAVIOR_GAP",
+      "warning_count": 1,
+      "warnings": [
+        "Invalid sitemap XML at http://127.0.0.1:52306/map-file-gzip-10.xml: Sitemap document is empty or incomplete"
+      ]
+    },
+    {
+      "id": "file-gzip-11",
+      "policy": true,
+      "resources": true,
+      "format": "file-gzip",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 0,
+        "target_pages": 0,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "REPRODUCED_BEHAVIOR_GAP",
+      "warning_count": 1,
+      "warnings": [
+        "Invalid sitemap XML at http://127.0.0.1:52306/map-file-gzip-11.xml: Sitemap document is empty or incomplete"
+      ]
+    },
+    {
+      "id": "misleading-gz-0",
+      "policy": false,
+      "resources": false,
+      "format": "misleading-gz",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 0,
+      "warnings": []
+    },
+    {
+      "id": "misleading-gz-1",
+      "policy": true,
+      "resources": false,
+      "format": "misleading-gz",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 0,
+      "warnings": []
+    },
+    {
+      "id": "http-gzip-0",
+      "policy": false,
+      "resources": false,
+      "format": "http-gzip",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 0,
+      "warnings": []
+    },
+    {
+      "id": "http-gzip-1",
+      "policy": true,
+      "resources": false,
+      "format": "http-gzip",
+      "extension": false,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 0,
+      "warnings": []
+    },
+    {
+      "id": "corrupt-gzip-0",
+      "policy": false,
+      "resources": false,
+      "format": "corrupt-gzip",
+      "extension": false,
+      "expected": {
+        "target_requests": 0,
+        "target_pages": 0,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 0,
+        "target_pages": 0,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 1,
+      "warnings": [
+        "Invalid sitemap XML at http://127.0.0.1:52306/map-corrupt-gzip-0.xml: syntax error: tag not closed: `>` not found before end of input"
+      ]
+    },
+    {
+      "id": "corrupt-gzip-1",
+      "policy": true,
+      "resources": false,
+      "format": "corrupt-gzip",
+      "extension": false,
+      "expected": {
+        "target_requests": 0,
+        "target_pages": 0,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 0,
+        "target_pages": 0,
+        "foreign_requests": 0,
+        "sitemap_requests": 1
+      },
+      "result": "EXPECTED_BEHAVIOR_PASS",
+      "warning_count": 1,
+      "warnings": [
+        "Invalid sitemap XML at http://127.0.0.1:52306/map-corrupt-gzip-1.xml: Sitemap document is empty or incomplete"
+      ]
+    },
+    {
+      "id": "extension-0",
+      "policy": false,
+      "resources": false,
+      "format": "plain",
+      "extension": true,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 1,
+        "sitemap_requests": 1
+      },
+      "result": "REPRODUCED_BEHAVIOR_GAP",
+      "warning_count": 0,
+      "warnings": []
+    },
+    {
+      "id": "extension-1",
+      "policy": true,
+      "resources": false,
+      "format": "plain",
+      "extension": true,
+      "expected": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0
+      },
+      "actual": {
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 1,
+        "sitemap_requests": 1
+      },
+      "result": "REPRODUCED_BEHAVIOR_GAP",
+      "warning_count": 0,
+      "warnings": []
+    }
+  ],
+  "summary": {
+    "cases": 16,
+    "passes": 9,
+    "gaps": 7
+  },
+  "reference_parity": "NOT_PROVEN"
+}

@@ -1,0 +1,1117 @@
+{
+  "schema_version": 1,
+  "result": "PASS",
+  "scope_name": "native_sitemap_transport_16_drained_v1",
+  "recorded_at": "2026-10-13T03:03:15.122Z",
+  "scope": "16 existing owned native sitemap transport cases; final HTTP counts only after owned App close and clean fixture drain. No commercial parity or complete occurrence ledger claim.",
+  "source_commit": null,
+  "expected_source_commit": null,
+  "source_basis": "caller_declared; CI checkout/build/manifest must independently bind commit to executable",
+  "source_runtime_attested": false,
+  "binary_path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\outputs\\open-seo-spider\\target\\debug\\open-seo-spider.exe",
+  "binary_bytes": 52530688,
+  "binary_sha256": "e1863029fd9c112b7ce45e13cbb4c3a99ca0938be8f667edd41528e390287c66",
+  "final_binary_sha256": "e1863029fd9c112b7ce45e13cbb4c3a99ca0938be8f667edd41528e390287c66",
+  "expected_binary_sha256": "e1863029fd9c112b7ce45e13cbb4c3a99ca0938be8f667edd41528e390287c66",
+  "expected_binary_sha_checked": true,
+  "harness_sha256": "ec832b9c4bf725bd89c0d47d2dd0dfc2c5ec90a1c265a1a5fb494604e3410d7c",
+  "matrix_sha256": "ed90247db514c4d0b1f73ebf373a1823990c1b289687a415e058c2260e716e85",
+  "platform": "win32",
+  "node_version": "v24.15.0",
+  "limits": {
+    "runMs": 120000,
+    "startupMs": 20000,
+    "caseMs": 30000,
+    "requestMs": 5000,
+    "stopMs": 5000,
+    "drainMs": 8000,
+    "quietMs": 250,
+    "fixtureCloseMs": 5000,
+    "apiBytes": 8388608,
+    "outputTailChars": 65536,
+    "bindLineChars": 8192,
+    "witnessRequests": 1024
+  },
+  "fixture_origin": "http://127.0.0.1:55953",
+  "owned_native_origin": "http://127.0.0.1:55954",
+  "owned_native_pid": 40564,
+  "bind_origin_basis": "complete post-bind owned child stdout only",
+  "bind_line_sha256": "9ea4f8c518392a40b19c8405e864c93ee35f1fd06c5a0ab2b168b6f1f1c8777f",
+  "listen_argument": "127.0.0.1:0",
+  "user_runtime_contacted": false,
+  "renderer_contacted": false,
+  "foreign_listener_or_process_controls_used": false,
+  "owned_app_stop_requested_ms": 1879,
+  "owned_app_close": {
+    "code": null,
+    "signal": "SIGTERM",
+    "closed_ms": 1885
+  },
+  "owned_app_closed": true,
+  "final_target_http_witness": "DRAINED",
+  "drain": {
+    "recorded_at": "2026-10-13T03:03:15.054Z",
+    "owned_app_closed": true,
+    "fixture_kept_listening_until_requests_drained": true,
+    "quiet_ms": 250,
+    "active_requests": 0,
+    "connected_sockets": 0,
+    "total_requests": 46,
+    "fixture_closed_cleanly": true,
+    "forced_socket_cleanup": false,
+    "final_total_requests": 46
+  },
+  "witness_complete": true,
+  "requests_sha256": "42f2f7a1b9020c23b453cafafdc9af97096d7a5273d0a7ea38a5e514138f10ff",
+  "requests_file": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\sitemap-b12\\portable-native-first\\proof.json.requests.json",
+  "app_log_sha256": "9445951a12ab0b4a3b5b2dfddd31735ec5a34f2f1c7b4cb3706a1a0975f34fad",
+  "app_log_file": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\sitemap-b12\\portable-native-first\\proof.json.app.log",
+  "fixture_routes": [
+    {
+      "route": "/seed-plain-00",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-plain-00.xml",
+      "body_bytes": 159,
+      "body_sha256": "7ca2ccc7b14c96273856bc38d0f2bdb88fce2a9e15dcb373d61f1ad15f467330",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-plain-00",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-plain-00",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-plain-01",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-plain-01.xml",
+      "body_bytes": 159,
+      "body_sha256": "335e279d0c35c3cf1c46a5c2870b3f93a6463122336c153382d068583dd8a204",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-plain-01",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-plain-01",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-plain-10",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-plain-10.xml",
+      "body_bytes": 159,
+      "body_sha256": "78accd7e11201c9237739edf950f8e2d1ed2fcfdcda384076b7d7cd4cd19499a",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-plain-10",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-plain-10",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-plain-11",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-plain-11.xml",
+      "body_bytes": 159,
+      "body_sha256": "74bafd3bb2034040edb1ed4c9cc184a46ba0edd6b9fc6ad589989c4588aad48b",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-plain-11",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-plain-11",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-file-gzip-00",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-file-gzip-00.xml",
+      "body_bytes": 144,
+      "body_sha256": "abff9ac4fea923bed7e9333fb3d3ab739f118c2c0e072308ff69f02b43d71713",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-file-gzip-00",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-file-gzip-00",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-file-gzip-01",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-file-gzip-01.xml",
+      "body_bytes": 144,
+      "body_sha256": "e6343a789add633b72c3b375b12c4a5d40a0e2b7bee5c0d7e481d8ff7ae91626",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-file-gzip-01",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-file-gzip-01",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-file-gzip-10",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-file-gzip-10.xml",
+      "body_bytes": 144,
+      "body_sha256": "05d25003cd58a5145133b2d22d008e5d4e9c338611ee879a03a4e5d217ab2092",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-file-gzip-10",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-file-gzip-10",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-file-gzip-11",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-file-gzip-11.xml",
+      "body_bytes": 144,
+      "body_sha256": "18d608026bceefe218fbca275e6a13895c4556f826415024e3afbd7b679d438f",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-file-gzip-11",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-file-gzip-11",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-misleading-gz-0",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-misleading-gz-0.xml.gz",
+      "body_bytes": 166,
+      "body_sha256": "369fe4085f8c5659d2bfc2b8211bc6b852b708ab016bb25e7caeea0b6a297065",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-misleading-gz-0",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-misleading-gz-0",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-misleading-gz-1",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-misleading-gz-1.xml.gz",
+      "body_bytes": 166,
+      "body_sha256": "1a9b9984b8e5ae5a88cc5e482527e8dac9b8185c4b474479d46f193d054b8dc9",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-misleading-gz-1",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-misleading-gz-1",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-http-gzip-0",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-http-gzip-0.xml",
+      "body_bytes": 143,
+      "body_sha256": "deb47ced2a64ece034902c532f9dba9b971306a29e49a772785c82b8d6d2d98c",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8",
+        "content-encoding": "gzip"
+      }
+    },
+    {
+      "route": "/target-http-gzip-0",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-http-gzip-0",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-http-gzip-1",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-http-gzip-1.xml",
+      "body_bytes": 143,
+      "body_sha256": "e689111569193b643653689844aceb970714f8915e3af94b5ab20aa87a22c9f7",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8",
+        "content-encoding": "gzip"
+      }
+    },
+    {
+      "route": "/target-http-gzip-1",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-http-gzip-1",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-corrupt-gzip-0",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-corrupt-gzip-0.xml",
+      "body_bytes": 146,
+      "body_sha256": "de33835448a522cf64e3178a219d0c96fe8883fe61409c5c119f065214caa64c",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-corrupt-gzip-0",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-corrupt-gzip-0",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-corrupt-gzip-1",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-corrupt-gzip-1.xml",
+      "body_bytes": 146,
+      "body_sha256": "4f533364925fdc03ba26d41d9cbf945fc7cea6b2fee3bd0a816afd02798d4685",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-corrupt-gzip-1",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-corrupt-gzip-1",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-extension-0",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-extension-0.xml",
+      "body_bytes": 242,
+      "body_sha256": "3281ebd92f82c348c125663ff2d1f18a703f12641d788ee26c6fffd16dcbab3f",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-extension-0",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-extension-0",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/seed-extension-1",
+      "body_bytes": 64,
+      "body_sha256": "65d5277299c68feec62299d3edf61f3e11185ebec092dd3f6fa405e4e01a1ede",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/map-extension-1.xml",
+      "body_bytes": 242,
+      "body_sha256": "a0cdce144e38d33cb633dac0cbf15ef9398c54422923d367edcf5bf0db55c1de",
+      "headers": {
+        "content-type": "application/xml; charset=utf-8"
+      }
+    },
+    {
+      "route": "/target-extension-1",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    },
+    {
+      "route": "/foreign-extension-1",
+      "body_bytes": 57,
+      "body_sha256": "9afa97b6f453960660896a1f608f1b6f641b1081217d4feca21c8f56c41a884f",
+      "headers": {
+        "content-type": "text/html"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "id": "plain-00",
+      "policy": false,
+      "resources": false,
+      "format": "plain",
+      "extension": false,
+      "job_id": "cb5a0f85-5e84-4c65-a421-1d8a9e5c93ef",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "46f4d96af726285041294ea9ed64acc19cf6072ef1ac392e683524b3d30619d9",
+      "config_sha256": "0e86ee816a552d4e9d1ad498b4a72db4115fbeb7cceee2628f3c391641509cab",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "plain-01",
+      "policy": false,
+      "resources": true,
+      "format": "plain",
+      "extension": false,
+      "job_id": "6ea8679f-1d7e-4154-83e7-0e25f2d02514",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "8f082f9bcde48ad76e76cdb4ca48d8b5beeb74c849f8a2ec74e26cbf345debc5",
+      "config_sha256": "f12619ab3a27926f0d2dbadbdf7873f23015f1914ca00d81f8576b161f2ea134",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "plain-10",
+      "policy": true,
+      "resources": false,
+      "format": "plain",
+      "extension": false,
+      "job_id": "15f2fac0-87f5-445e-8e09-e71c7cba2623",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "135ad335fbec7412d22791a845198fa3577eb4d35c5bb1a68f1a10a00abd07ce",
+      "config_sha256": "3df2e8dffeb60578ee87d77bcb07e72dc49e76c056b218442d1348d650a6cfcc",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "plain-11",
+      "policy": true,
+      "resources": true,
+      "format": "plain",
+      "extension": false,
+      "job_id": "9fb3089c-62ea-4b49-8236-264d3ea79a1d",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "3305abcca5e1255a37e38149d2c3517bd3211a53d7d8baa938dd7848d3db83a4",
+      "config_sha256": "c8b30e571e815c2d609cecfe80d14ef990b8ee556598ddfefb172ed2a2bb38a4",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "file-gzip-00",
+      "policy": false,
+      "resources": false,
+      "format": "file-gzip",
+      "extension": false,
+      "job_id": "c3c5c274-45a6-4dc4-828f-c8869e03eed2",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "a3c651e21e6a0efd040e58930da0d3a64d05ffb7d5e89d665710985695e55d28",
+      "config_sha256": "df1a7dc26ad0f9fa9cd80a30eb9b8d479d8feaff436698251881f1849e1bea7a",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "file-gzip-01",
+      "policy": false,
+      "resources": true,
+      "format": "file-gzip",
+      "extension": false,
+      "job_id": "2282cb40-4f1d-4679-9340-84d252429193",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "2bab50778a2783e23a2115de844288a14a9c0b32f1c379b942cc3ad5a17e75b7",
+      "config_sha256": "a002a44a0cf57188c6f543d3014198e79eda27dd8cdf441ad4cb892b4f68bf5d",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "file-gzip-10",
+      "policy": true,
+      "resources": false,
+      "format": "file-gzip",
+      "extension": false,
+      "job_id": "632e0260-abbd-4c2c-8d86-c405170d0d57",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "46a418b55f28ce97bb7db5755e6ff5502635e72ebed653ea5d66374949e5fa72",
+      "config_sha256": "5249ec0a58a40afaf2d44d46071bd6b8aa01930416eeff9317c73093f4e21fae",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "file-gzip-11",
+      "policy": true,
+      "resources": true,
+      "format": "file-gzip",
+      "extension": false,
+      "job_id": "8728198b-5ba8-4336-94e9-e04d6be164c8",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "6117e096fe78fb5a480e9d17a3ac4d7af2a29d896d016ce65e77943edacaf7fb",
+      "config_sha256": "9adb72f8f8d30940bcc8b66471331f464818a08198d9deffb05483652badea46",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "misleading-gz-0",
+      "policy": false,
+      "resources": false,
+      "format": "misleading-gz",
+      "extension": false,
+      "job_id": "03d36ad4-65e3-4fd7-8c43-4291cdf48391",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "89b07a98a905dbe465244e6b79810407a3f59b84288a964a233213b252dc6c1a",
+      "config_sha256": "814faad7a232f479eb8c9ad7a67a256f403797052128733f824416263071dffe",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "misleading-gz-1",
+      "policy": true,
+      "resources": false,
+      "format": "misleading-gz",
+      "extension": false,
+      "job_id": "ec1a8bc1-da26-4782-a0c3-2cb3a7e2c3d6",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "c9d6602ef37a5a0614d200c8d16d5b17328e37eabe42f8e4ebc6c8c81f2b9041",
+      "config_sha256": "d80841d9bec0bd9fbb07a430bd8da1a6481722aa0a3fc772754f8ec3da4d6488",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "http-gzip-0",
+      "policy": false,
+      "resources": false,
+      "format": "http-gzip",
+      "extension": false,
+      "job_id": "31e61d38-d8f3-4df0-a3c5-a38e0427ea88",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "22379e3ab26ee7882496808204d570c1cba6f996528f9fadb75b63db8aa2ed96",
+      "config_sha256": "f7a41aadb6f58d4f41a6041c3b6ca4fc1377fbc5bda7af57c37067998878c509",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "http-gzip-1",
+      "policy": true,
+      "resources": false,
+      "format": "http-gzip",
+      "extension": false,
+      "job_id": "82bedcfa-3be8-4a7f-8f64-647b71245c5f",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "d45b467d5676f8c1a404be95e88d2dc3dcefd086bf105359ef4a5f6f60616446",
+      "config_sha256": "37ed9a1d6aa9b73464830d00554e7a8d37db2830818a1e6878969d6d90d06892",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "corrupt-gzip-0",
+      "policy": false,
+      "resources": false,
+      "format": "corrupt-gzip",
+      "extension": false,
+      "job_id": "0f4736ea-63c1-4864-bb4a-da06fac7772a",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "e52b252f816488a36075cd53b0994e4df3c9dce1611111b55d9b9f255a1c1d07",
+      "config_sha256": "fa8a311995b2da37f431500151336a5f1b2d0684398749c604e65271e117be82",
+      "warning_count": 1,
+      "warnings": [
+        "Sitemap could not be read completely: http://127.0.0.1:55953/map-corrupt-gzip-0.xml: sitemap_invalid_gzip_entity: Gzip entity did not complete: corrupt gzip stream does not have a matching checksum"
+      ],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 0,
+        "target_pages": 0,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 0,
+        "target_pages": 0,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "corrupt-gzip-1",
+      "policy": true,
+      "resources": false,
+      "format": "corrupt-gzip",
+      "extension": false,
+      "job_id": "1a06d604-35c1-488b-9ca1-0f7de6730f30",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "42c727bc437425ff62188803d80e06315a59ee24c7877f133318022faa6ff8d9",
+      "config_sha256": "aa9fd3a4d5de1accf898c5c84a2ec06db990262a5a2fa6605a4b8a3963e5e84d",
+      "warning_count": 1,
+      "warnings": [
+        "Sitemap could not be read completely: http://127.0.0.1:55953/map-corrupt-gzip-1.xml: sitemap_invalid_gzip_entity: Gzip entity did not complete: corrupt gzip stream does not have a matching checksum"
+      ],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 0,
+        "target_pages": 0,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 0,
+        "target_pages": 0,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "extension-0",
+      "policy": false,
+      "resources": false,
+      "format": "plain",
+      "extension": true,
+      "job_id": "d24cb26d-d323-41a0-b4c0-a8895132fa3e",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "f2fc1c634c1ba9d1ef3b0d21e4dfbe49b0e3f618570766b784a92cccd262c8a6",
+      "config_sha256": "40ced80777c06e05166313aaf0add4b79598d7970444009be5f790c36208104a",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    },
+    {
+      "id": "extension-1",
+      "policy": true,
+      "resources": false,
+      "format": "plain",
+      "extension": true,
+      "job_id": "fa280cdb-2e86-48a4-a51d-48e51a70cb27",
+      "generation": 1,
+      "terminal_status": "completed",
+      "report_sha256": "74f3bc40ec855522237b040d6b6124fb1f09a5c2dc35ea660b84f0476332998d",
+      "config_sha256": "e2c89e46c80e5b256c817d1b14138d91fdfbc3c0e0e4855c1c899b7cfe247a7b",
+      "warning_count": 0,
+      "warnings": [],
+      "expected": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "actual": {
+        "seed_requests": 1,
+        "sitemap_requests": 1,
+        "target_requests": 1,
+        "target_pages": 1,
+        "foreign_requests": 0,
+        "foreign_pages": 0
+      },
+      "http_counts_phase": "after_owned_app_close_and_clean_fixture_drain",
+      "result": "EXPECTED_BEHAVIOR_PASS"
+    }
+  ],
+  "summary": {
+    "cases": 16,
+    "passes": 16,
+    "failures": 0,
+    "unproven": 0
+  },
+  "cleanup": {
+    "owned_data_removed": true,
+    "owned_fixture_closed": true,
+    "owned_app_closed": true,
+    "run_directory_preserved_for_proof": "C:\\Users\\matth\\AppData\\Local\\Temp\\sitemap-transport-e2e-LPRed4"
+  },
+  "failures": [],
+  "reference_parity": "NOT_PROVEN"
+}
