@@ -138,35 +138,54 @@ impl SitemapAdmissionBinding {
             crate::SitemapLocationRole::ChildSitemap => crate::PolicyTaskRole::SitemapDocument,
         };
         ensure!(row.task_role == role, "Policy/XML task role differs");
-        let decision = match row.admission_reason.as_str() {
-            "pending_admission" => anyhow::bail!("Policy scheduling is not finalized"),
-            "scheduled" => {
-                ensure!(
-                    row.decision.policy_complete,
-                    "Incomplete policy cannot schedule XML Loc"
-                );
-                ensure!(
-                    row.scheduled_fetch_url.is_some(),
-                    "Scheduled policy URL missing"
-                );
-                SitemapAdmissionDecision::Scheduled
+        let invalid =
+            location.validation_error.is_some() || location.normalized_fetch_url.is_none();
+        let decision = if invalid {
+            ensure!(
+                matches!(
+                    row.admission_reason.as_str(),
+                    "policy_denied" | "input_row_rejected"
+                ) && row.scheduled_fetch_url.is_none()
+                    && row.coalesced_task_occurrence_id.is_none(),
+                "Invalid XML Loc policy input cannot admit a task"
+            );
+            let expected_error = location
+                .validation_error
+                .as_deref()
+                .unwrap_or("Parser supplied no accepted normalized URL");
+            ensure!(
+                row.input_error.as_deref() == Some(expected_error),
+                "Policy input rejection differs from original XML parser error"
+            );
+            SitemapAdmissionDecision::InvalidLocation
+        } else {
+            match row.admission_reason.as_str() {
+                "pending_admission" => anyhow::bail!("Policy scheduling is not finalized"),
+                "scheduled" => {
+                    ensure!(
+                        row.decision.policy_complete,
+                        "Incomplete policy cannot schedule XML Loc"
+                    );
+                    ensure!(
+                        row.scheduled_fetch_url.is_some(),
+                        "Scheduled policy URL missing"
+                    );
+                    SitemapAdmissionDecision::Scheduled
+                }
+                "coalesced" => {
+                    ensure!(
+                        row.decision.policy_complete,
+                        "Incomplete policy cannot coalesce XML Loc"
+                    );
+                    ensure!(
+                        row.coalesced_task_occurrence_id.is_some(),
+                        "Coalesced policy reference missing"
+                    );
+                    SitemapAdmissionDecision::Coalesced
+                }
+                "source_check_only" => SitemapAdmissionDecision::SourceCheckOnly,
+                _ => SitemapAdmissionDecision::PolicyDenied,
             }
-            "coalesced" => {
-                ensure!(
-                    row.decision.policy_complete,
-                    "Incomplete policy cannot coalesce XML Loc"
-                );
-                ensure!(
-                    row.coalesced_task_occurrence_id.is_some(),
-                    "Coalesced policy reference missing"
-                );
-                SitemapAdmissionDecision::Coalesced
-            }
-            "source_check_only" => SitemapAdmissionDecision::SourceCheckOnly,
-            _ if location.validation_error.is_some() || location.normalized_fetch_url.is_none() => {
-                SitemapAdmissionDecision::InvalidLocation
-            }
-            _ => SitemapAdmissionDecision::PolicyDenied,
         };
         let admitted = if matches!(decision, SitemapAdmissionDecision::Scheduled) {
             row.scheduled_fetch_url.clone()

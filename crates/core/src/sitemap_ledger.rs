@@ -338,10 +338,7 @@ pub(crate) fn bind_final_policy(
     }
     let mut bound = BTreeSet::new();
     for location in &mut batch.locations {
-        if location.observed.loc_ordinal.is_none()
-            || location.observed.validation_error.is_some()
-            || location.observed.normalized_fetch_url.is_none()
-        {
+        if location.observed.loc_ordinal.is_none() {
             continue;
         }
         let matching: Vec<_> = observed
@@ -381,7 +378,7 @@ pub(crate) fn bind_final_policy(
     }
     ensure!(
         bound.len() == observed.len(),
-        "Policy has unexpected XML inputs not represented by valid Loc facts"
+        "Policy has unexpected XML inputs not represented by observed Loc facts"
     );
     Ok(())
 }

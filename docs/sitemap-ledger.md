@@ -19,3 +19,9 @@ Der [neue Main-Core-Beleg](verification/sitemap-ledger-main-core.json) bindet de
 Die historische [437-Test-Work-Abnahme](verification/sitemap-durable-work-core.json) bleibt unverändert und dokumentiert die damalige zusätzliche Review-Lücke. Frühere fehlgeschlagene Test-Fixtures und deren eng begrenzte Reparaturen sind im neuen Beleg getrennt festgehalten.
 
 App-/Workspace-Laufzeittests, die neue exakte Quell-CI und der optimierte Release sind eigene offene Gates. Auf dem Benutzerrechner bleibt aktuell der [bereits geprüfte Robots-Release6597c9c](verification/robots-sitemap-source-installed.json) installiert. Read-only Snapshot-Cursor-API, CSV, MCP und die Sitemap-Ansicht werden als nächster Slice umgesetzt. Vollständige rekursive Quellenabdeckung, Recovery-/Fehler-/Budgetmatrix und Hersteller-Parität bleiben `NOT_PROVEN`.
+
+## Zusätzliche Policy-Regression und Reparatur
+
+Die [zusätzliche Quell-CI265062f](verification/sitemap-ledger-policy-rejection-fix.json) fand eine fehlende Policy-Ablehnungszeile für einen ungültigen vorhandenen XML-Loc. Der unveränderte externe Regressionstest blieb fehlgeschlagen; Windows wurde nach dem Linux-Fehler abgebrochen. Die neue Main-Reparatur bindet auch ungültige vorhandene Locs an ihre tatsächlich gespeicherte Policy-Beobachtung und den exakten Parserfehler. Unicode-Leerzeichen und interne Steuerzeichen dürfen trotz lenienter Policy-Normalisierung keine Aufgaben erzeugen. Fehlende Locs und unvollständige XML-Quellen erhalten weiterhin keine Policy-Eingaben.
+
+Die aktuelle Alltargets-Clippy-Prüfung besteht; zwei zusätzliche Core-Grenztests sind geschrieben. Lokale Testausführung blieb wegen eines fehlgeschlagenen Linkers mit zu wenig Speicherplatz offen. Die vollständige neue Quell-CI und native Abnahme stehen aus. Der vorherige508-Test-Beleg bleibt an seine unveränderten früheren Quellen gebunden.

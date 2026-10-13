@@ -5877,6 +5877,15 @@
       "recorded_at": "2026-10-13T05:42:55.552Z",
       "scope": "Actual formatted Main Core source snapshot508PASS and local all-targets workspace Clippy. App/native/API/UI/new source-CI/release/install and full cohort remain separate gates.",
       "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "sitemap-ledger-policy-rejection-fix",
+      "artifact": "docs/verification/sitemap-ledger-policy-rejection-fix.json",
+      "artifact_sha256": "7de182911863df418339488366e3cc82bf07f98659084c038e0cbadd22a79559",
+      "result": "PARTIAL",
+      "recorded_at": "2026-10-13T06:07:44.245Z",
+      "scope": "Failed exact265062f CI preserved. Actual Main policy-Loc repair plus all-targets Clippy; new runtime/new source CI pending, local linker failed due disk.",
+      "reference_parity": "NOT_PROVEN"
     }
   ],
   "reference_workflows": [
@@ -6762,10 +6771,10 @@
     {
       "id": "batch-b12-sitemap-membership",
       "status": "IN_PROGRESS",
-      "stage": "MAIN_DURABLE_WRITER_CORE_508_PASS_API_CSV_UI_IN_PROGRESS",
+      "stage": "MAIN_WRITER_POLICY_LOC_FIX_CI_PENDING_API_UI_WORK",
       "priority": 3,
       "title_de": "Nächster Baustein – B12: Sitemaps und Mitgliedschaft",
-      "summary_de": "Der dauerhafte Sitemap-Writer ist im Hauptcode integriert: originale Eingaben/Ordinalzahlen, vollständige Dokument-/Root-/Entry-/Loc-Vorkommen und Ordinary-/Policy-Zulassungen sind atomar gespeichert. Der Snapshot des formatierten Main-Core besteht508 Tests, einschließlich8 vollständiger Crawler-Bootstrap-Fälle; Workspace-Alltargets-Clippy ist grün. Die Ordinary-Root-Bindungslücke wurde mit gerichteten V4-Fehler-/V5-Erfolgskontrollen geschlossen. Installiert bleibt Robots6597c9c. Quellenabdeckung, vollständige Recovery-Matrix, neue Quell-CI/Release/Installation und API/CSV/MCP/UI bleiben offen.",
+      "summary_de": "Dauerhafter Sitemap-Writer ist integriert. Der vorherige Main-Snapshot bestand508 Core-Tests; die zusätzliche Quell-CI265062f fand eine fehlende Ablehnungszeile für ungültige XML-Locs im bestehenden Policy-Protokoll. Die Reparatur erhält nun alle vorhandenen Locs als abgelehnte oder zugelassene Policy-Belege und besteht Workspace-Alltargets-Clippy. Zwei zusätzliche Core-Grenztests sind geschrieben; deren Laufzeitprüfung und die erneute Quell-CI bleiben offen. API/CSV/MCP/UI entstehen im Work-Entwurf. Installiert bleibt6597c9c; vollständige Abdeckung/Recovery/Release bleiben offen.",
       "feature_ids": [
         "sitemap.discovery",
         "sitemap.coverage"
@@ -6784,7 +6793,8 @@
         "Historischer V4-Work-Kandidat:437 Tests bestanden, die anschließend gefundene Ordinary-Root-Bindungslücke war damals offen. Neuer Main-Beleg dokumentiert V5-Reparatur und508 bestandene Core-Tests; der historische Beleg bleibt unverändert.",
         "Ordinary-Root-Rohwert, ursprünglicher Ordinal und normalisierte Originalidentität werden auch ohne Policy-ID an gespeicherte Originaldaten gebunden. Dieselben21 Kontrollen zeigen17 erwartete negative Assertions gegenV4 und alle21 erfolgreich gegenV5;63 V5-Modultests bestehen.",
         "Dauerhafte typisierte Dokument-/Root-/Entry-/Loc-Vorkommen, originale Config-/Import-Bindung und atomare Ordinary-/Policy-Admission im Hauptcode integriert. Formatierter Main-Core-Snapshot besteht508 Tests, einschließlich8 vollständiger Crawler-Bootstrap-Fälle; Workspace-Alltargets-Clippy besteht.",
-        "Bericht/Checkpoint lesen vollständig validierte Kataloge; bekannte leere Daten und unbekannte Altbestände bleiben getrennt. Ausgewählte Vererbung bindet den exakten Parent-Snapshot. Diese Core-Abnahme beweist noch keine vollständige Quellenabdeckung oder native Recovery-Matrix."
+        "Bericht/Checkpoint lesen vollständig validierte Kataloge; bekannte leere Daten und unbekannte Altbestände bleiben getrennt. Ausgewählte Vererbung bindet den exakten Parent-Snapshot. Diese Core-Abnahme beweist noch keine vollständige Quellenabdeckung oder native Recovery-Matrix.",
+        "Zusätzliche Quell-CI265062f meldete eine echte Regression im unveränderten externen Policy-Sitemap-Test. Main-Reparatur erhält ungültige vorhandene Locs im Policy-Protokoll mit ursprünglichem Wert/Ordinal/Parserfehler; leniente Normalisierung erzeugt keine Admission. Alltargets-Clippy besteht. Neue vollständige Quell-CI/Laufzeitabnahme stehen aus."
       ],
       "pending_acceptance_de": [
         "Vollständige rekursive Quellen-Kohorten, Fehler-/Budgetzustände und native Checkpoint-/Recovery-Matrix prüfen. Leerer Frontier und fehlende Mitgliedschaft beweisen keine vollständige Abdeckung.",
@@ -6800,7 +6810,7 @@
       ],
       "gates": {
         "source_review": "PARSER_AND_FETCH_NO_CONCRETE_P1_P2",
-        "implementation": "MAIN_DURABLE_WRITER_INTEGRATED",
+        "implementation": "MAIN_DURABLE_WRITER_POLICY_LOC_REPAIR",
         "native_acceptance": "PASS_DIRECTED_DEBUG_APP_16_DURABLE_LEDGER_PENDING",
         "work_parser": "PASS_53_PLUS_EXISTING_NORMALIZER2",
         "main_core_parser": "PASS_54",
@@ -6809,7 +6819,7 @@
         "work_mutations": "PASS_4_EXPECTED_RUNTIME_ASSERTION_FAILURES",
         "exact_commit_ci": "PASS_6597C9C_FOUR_JOBS_565_EACH",
         "main_core_fetch_http": "PASS_12",
-        "main_core_all_unit": "PASS_ACTUAL_MAIN_CORE_SNAPSHOT_508",
+        "main_core_all_unit": "HISTORICAL_PASS_508_AT_265062F_CURRENT_510_RUNTIME_PENDING",
         "main_portable_transport": "PASS_16_FINAL_DRAIN",
         "parser_exact_commit_ci": "PASS_FOUR_JOBS_6171a32",
         "optimized_transport_release": "PASS_SAME_OPTIMIZED_EXE_16_NATIVE_SDK_BROWSER",
@@ -6821,11 +6831,12 @@
         "durable_work_core": "HISTORICAL_437_V4_GAP_FIXED_BY_V5",
         "durable_original_binding": "PASS_V4_17_EXPECTED_FAILURES_V5_ALL_21_CONTROLS",
         "durable_full_crawler_bootstrap": "PASS_8_INCLUDED_IN_CORE_508",
-        "durable_workspace_clippy": "PASS_ALL_TARGETS",
+        "durable_workspace_clippy": "PASS_ACTUAL_REPAIR_ALL_TARGETS_WITH_LOG",
         "durable_source_cohort": "NOT_PROVEN",
-        "durable_exact_commit_ci": "PENDING_NEW_SOURCE_COMMIT",
+        "durable_exact_commit_ci": "FAIL_265062F_ONE_EXTERNAL_POLICY_REGRESSION_REPAIR_NEXT_CI_PENDING",
         "durable_api_csv_ui": "WORK_DRAFT_IN_PROGRESS",
-        "durable_installation": "PENDING_INSTALLED_SOURCE_REMAINS_6597C9C"
+        "durable_installation": "PENDING_INSTALLED_SOURCE_REMAINS_6597C9C",
+        "durable_policy_invalid_locs": "REPAIR_IN_MAIN_CLIPPY_PASS_RUNTIME_PENDING"
       },
       "reference_parity": "NOT_PROVEN",
       "proof_run_ids": [
@@ -6839,7 +6850,8 @@
         "robots-sitemap-source-ci",
         "robots-sitemap-source-installed",
         "sitemap-durable-work-core",
-        "sitemap-ledger-main-core"
+        "sitemap-ledger-main-core",
+        "sitemap-ledger-policy-rejection-fix"
       ],
       "tracking_issue": "https://github.com/lia-xim/open-seo-spider/issues/11"
     }

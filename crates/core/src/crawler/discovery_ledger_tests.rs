@@ -489,7 +489,9 @@ async fn policy_uses_original_one_based_loc_ordinals_and_committed_sql_bindings(
     assert_eq!(loc[1].admission.decision, D::Scheduled);
     assert_eq!(loc[2].admission.decision, D::Coalesced);
     assert!(loc[0].admission.policy_occurrence_id.is_none());
-    assert!(loc[3].admission.policy_occurrence_id.is_none());
+    assert_eq!(loc[3].admission.decision, D::InvalidLocation);
+    assert!(loc[3].admission.policy_occurrence_id.is_some());
+    assert!(loc[3].admission.admitted_fetch_url.is_none());
     assert_eq!(
         loc[1].observed.decoded_value.as_deref(),
         Some(format!("  {}/page?a=1&b=2  ", fixture.origin).as_str())
@@ -510,6 +512,69 @@ async fn policy_uses_original_one_based_loc_ordinals_and_committed_sql_bindings(
             .is_some()
     );
     assert!(!cat.summary.declared_source_cohort_complete);
+    assert_requests(&fixture.finish().await, &[("/task.xml", 1)]);
+}
+
+#[tokio::test]
+async fn rejected_present_xml_locs_keep_policy_evidence_without_lenient_admission() {
+    use crate::sitemap_ledger::SitemapAdmissionDecision as D;
+    let fixture = BinaryFixture::new(|origin, _| {
+        BinaryResponse::bytes(format!("<urlset><url/><url><loc>not an absolute URI</loc></url><url><loc>\u{a0}{origin}/nbsp\u{a0}</loc></url><url><loc>{origin}/a&#x9;b</loc></url><url><loc>{origin}/okay</loc></url></urlset>").into_bytes(), "application/xml")
+    }).await;
+    let (_temp, crawler, generation, _) = setup(config(&fixture, true), Default::default(), false);
+    let result = run(&crawler, generation, &mut HashSet::new())
+        .await
+        .unwrap();
+    assert_eq!(result.pages.len(), 1);
+    assert_eq!(result.pages[0].url, format!("{}/okay", fixture.origin));
+    let cat = catalog(&crawler);
+    let loc = locations(&cat);
+    assert_eq!(loc.len(), 5);
+    assert_eq!(loc[0].admission.decision, D::MissingLocation);
+    assert!(loc[0].admission.policy_occurrence_id.is_none());
+    for row in &loc[1..4] {
+        assert_eq!(row.admission.decision, D::InvalidLocation);
+        assert!(row.admission.policy_occurrence_id.is_some());
+        assert!(row.admission.admitted_fetch_url.is_none());
+        assert!(row.admission.coalesced_policy_occurrence_id.is_none());
+    }
+    assert_eq!(loc[4].admission.decision, D::Scheduled);
+    assert!(!cat.summary.declared_source_cohort_complete);
+    assert_requests(&fixture.finish().await, &[("/task.xml", 1)]);
+}
+
+#[tokio::test]
+async fn ambiguous_multiple_locs_remain_incomplete_without_policy_inputs() {
+    use crate::sitemap_ledger::SitemapAdmissionDecision as D;
+    let fixture = BinaryFixture::new(|origin, _| {
+        BinaryResponse::bytes(
+            format!(
+                "<urlset><url><loc>{origin}/amb-a</loc><loc>{origin}/amb-b</loc></url></urlset>"
+            )
+            .into_bytes(),
+            "application/xml",
+        )
+    })
+    .await;
+    let (_temp, crawler, generation, _) = setup(config(&fixture, true), Default::default(), false);
+    let result = run(&crawler, generation, &mut HashSet::new())
+        .await
+        .unwrap();
+    assert!(result.pages.is_empty());
+    assert_eq!(result.pending, 0);
+    let cat = catalog(&crawler);
+    let loc = locations(&cat);
+    assert_eq!(loc.len(), 2);
+    for row in loc {
+        assert_eq!(
+            row.observed.validation_error.as_deref(),
+            Some("ambiguous_multiple_locations")
+        );
+        assert_eq!(row.admission.decision, D::IncompleteSource);
+        assert!(row.admission.policy_occurrence_id.is_none());
+        assert!(row.admission.admitted_fetch_url.is_none());
+    }
+    assert!(!documents(&cat)[0].complete());
     assert_requests(&fixture.finish().await, &[("/task.xml", 1)]);
 }
 

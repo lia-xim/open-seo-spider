@@ -1956,10 +1956,7 @@ impl Crawler {
             }
             K::SitemapXml => {
                 for location in &batch.locations {
-                    if location.observed.loc_ordinal.is_none()
-                        || location.observed.validation_error.is_some()
-                        || location.observed.normalized_fetch_url.is_none()
-                    {
+                    if location.observed.loc_ordinal.is_none() {
                         continue;
                     }
                     let (kind, role) = match location.observed.role {
@@ -1979,13 +1976,26 @@ impl Crawler {
                             .observed
                             .decoded_value
                             .clone()
-                            .context("Valid original Loc has no decoded value")?,
+                            .context("Observed original Loc has no decoded value")?,
                         None,
                         Some(batch.document.task_url.clone()),
                         B::ParserObservedXml,
                         role,
                     );
-                    if !xml_allowed && row.admission_reason == "pending_admission" {
+                    if location.observed.validation_error.is_some()
+                        || location.observed.normalized_fetch_url.is_none()
+                    {
+                        // Preserve the policy evaluation even when the strict XML
+                        // parser rejected an otherwise leniently normalized URL.
+                        // The original parser rejection prevents any admission.
+                        row.input_error =
+                            location.observed.validation_error.clone().or_else(|| {
+                                Some("Parser supplied no accepted normalized URL".into())
+                            });
+                        if row.admission_reason == "pending_admission" {
+                            row.admission_reason = "input_row_rejected".into();
+                        }
+                    } else if !xml_allowed && row.admission_reason == "pending_admission" {
                         row.admission_reason = "source_check_only".into();
                     }
                     output.policy_rows.push(row);

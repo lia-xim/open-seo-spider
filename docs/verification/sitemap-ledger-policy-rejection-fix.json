@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "result": "MAIN_POLICY_LOC_REPAIR_CLIPPY_PASS_RUNTIME_PENDING",
+  "recorded_at": "2026-10-13T06:07:44.245Z",
+  "previous_source_commit": "265062f2bcd5dde158112f223148bf61af9fd456",
+  "previous_ci": {
+    "run_id": 38352984342,
+    "url": "https://github.com/lia-xim/open-seo-spider/actions/runs/38352984342",
+    "result": "FAILURE",
+    "jobs": [
+      {
+        "name": "test (windows-latest)",
+        "status": "completed",
+        "conclusion": "cancelled",
+        "job_id": 115149370930
+      },
+      {
+        "name": "test (ubuntu-latest)",
+        "status": "completed",
+        "conclusion": "failure",
+        "job_id": 115149371084
+      },
+      {
+        "name": "container",
+        "status": "completed",
+        "conclusion": "success",
+        "job_id": 115149371090
+      },
+      {
+        "name": "renderer",
+        "status": "completed",
+        "conclusion": "success",
+        "job_id": 115149371103
+      }
+    ],
+    "job_log": {
+      "sha256": "fe856a028d099437c23db0c64075d917a045fe1323565d113d856326c6e86432",
+      "bytes": 126000
+    },
+    "run_record": {
+      "sha256": "bbd643d55dd509211e31c7d00f393a1c05703986a9062ed9fe4427b1d0c2a595",
+      "bytes": 34815
+    },
+    "failure": {
+      "test": "sitemap_roles_preserve_invalid_duplicate_locs_and_check_only_does_not_discover",
+      "file": "crates/core/tests/policy_fixtures.rs",
+      "line": 393,
+      "assertion": "Invalid present XML Loc must retain a policy_denied observation.",
+      "existing_test_assertions_changed": false
+    },
+    "qualification": "App100 and Core508 unit groups passed, but the workspace failed at one external policy fixture. Windows test job cancelled; container and renderer succeeded. Not a successful release or724-test claim."
+  },
+  "repair": {
+    "source_files": [
+      {
+        "path": "crates/core/src/crawler.rs",
+        "sha256": "1f4ebca789de42f7d2612a57caeda42ec8d66a455bebb715c6c387ae498ee1a3",
+        "bytes": 146582
+      },
+      {
+        "path": "crates/core/src/crawler/discovery_ledger_tests.rs",
+        "sha256": "ac0deb0a17563c1e2bef0297796d6833f744e2c071fb1d0c1024e0f1a5506364",
+        "bytes": 31780
+      },
+      {
+        "path": "crates/core/src/sitemap_ledger.rs",
+        "sha256": "dea5001ce0adf16ee99aa1ceedd7f5b20a3d87726ec578ff5bf7201d44b29e68",
+        "bytes": 72097
+      },
+      {
+        "path": "crates/core/src/sitemap_ledger_models.rs",
+        "sha256": "e5b06268d0a695837e9d151abe845f3a91f04f9d487c3bdd952cd77a0d43ce72",
+        "bytes": 19901
+      }
+    ],
+    "description": "Generate denied/rejected policy evidence for every present Loc in a complete XML source, preserving original raw text/ordinal and exact parser rejection. Bind all present Locs to actual committed SQL. Strict parser-invalid values cannot schedule/coalesce even when lenient policy normalization accepts them. Missing Loc and whole incomplete XML remain unbound.",
+    "new_core_tests_authored": 2,
+    "new_core_tests_executed": 0,
+    "existing_core_assertion_strengthened": "Invalid FTP Loc now requires a committed policy binding plus no admitted target.",
+    "incomplete_gate_retained": true,
+    "external_fixture_unchanged": true
+  },
+  "local_clippy": {
+    "command": "cargo clippy --workspace --all-targets --locked -- -D warnings",
+    "exit_code": 0,
+    "log": {
+      "sha256": "2c322030d6f9522fefdd363e80f0504d2bd58f079fa555e66ca23185188e300b",
+      "bytes": 231
+    },
+    "scope": "Actual current Main all-targets compilation/check only; no test execution."
+  },
+  "local_attempts": {
+    "v12": {
+      "proof": {
+        "sha256": "9889786b293377a30d8b9b1461d596e72568820bf6db14f78e5696f185922cbd",
+        "bytes": 834
+      },
+      "result": "COMPILE_FAILURE",
+      "cause": "Authored fixture referenced non-existent DiscoveryProgress.children. Replaced with existing pending==0 check; final HTTP witness and no-admission assertions retained."
+    },
+    "v13": {
+      "proof": {
+        "sha256": "e175a91b11132bab2fbf21265d4b035e71f91e9b2dc005e6c5a91f65ce36eb56",
+        "bytes": 834
+      },
+      "manifest": {
+        "sha256": "7004b08e1da6802d8c5e662b9989af71459e055f0a8598133de25181da067c53",
+        "bytes": 19387
+      },
+      "result": "LINK_FAILURE_NO_TEST_EXECUTION",
+      "cause": "Windows LNK1180 insufficient disk space; not a Rust diagnostic or assertion result.",
+      "failed_generated_objects_removed": 17,
+      "cleanup_receipt": {
+        "sha256": "954b5a42096d9afdc1ce30094855dfe9428a5e48ad7738cbdce70cc64bddbcfd",
+        "bytes": 6353
+      },
+      "sources_inputs_logs_preserved": true
+    }
+  },
+  "installed": false,
+  "current_installed_source": "6597c9c94148211a099934244a272d6ab0fe56aa",
+  "pending": [
+    "Current source Core510/App100/external integration runtime execution in exact new CI",
+    "Native durable acceptance including pause/restart/selected/legacy cases",
+    "Read-only API/CSV/MCP and actual Sitemap UI",
+    "Recursive cohort and full recovery/error/budget matrix",
+    "Optimized release and data-preserving install"
+  ],
+  "reference_parity": "NOT_PROVEN"
+}
