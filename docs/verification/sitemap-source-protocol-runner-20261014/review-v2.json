@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "result": "STATIC_FIX_CLOSED_AND_ACTUAL_NODE_FAILURE_PATH_CONTROL_PASS",
+  "recorded_at": "2026-10-14T19:39:37.6359675Z",
+  "reviewer": "/root/s3_decode_review",
+  "baseline_review_receipt": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s3-runner-static-review-v1\\receipt.json",
+    "sha256": "b5cc3dd1bcb329fbc25536b11909b57290c2c9d95002039c919ad4ceeac8c3e6"
+  },
+  "suite": {
+    "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\run-sitemap-source-protocol-suite-v2.mjs",
+    "sha256": "6994b969fb65812c0bf3f424166a50c842a29626d8f9deafc8046aafe808bfea",
+    "node_check_exit_code": 0
+  },
+  "builder": {
+    "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\build-sitemap-source-protocol-v2.mjs",
+    "sha256": "42c28607372c8e58d2a807cf637dd1f4819bf88a236d4d7227129403135ae51f",
+    "node_check_exit_code": 0
+  },
+  "v1_scripts_unchanged": true,
+  "closure": {
+    "id": "S3RUNNER-001",
+    "status": "CLOSED_STATIC_AND_ACTUAL_NODE_ENOENT_CONTROL",
+    "lines": [
+      33,
+      46
+    ],
+    "effect": "spawn_error is captured; actual close is awaited; log descriptor closes in finally; command/log receipts persist before spawn/exit assertions"
+  },
+  "static_fixdelta_checks": [
+    "Suite output changed exclusively to results/sitemap-source-protocol-suite-v2",
+    "Builder consumes suite-v2/proof.json and writes mode-specific build-v2 output",
+    "Hold gate, source manifest, original renderer binding, minimum892/names110 and source guards unchanged",
+    "Previous executable backup and builder close/error logic unchanged",
+    "No new confirmed finding in reviewed minimal delta"
+  ],
+  "actual_control": {
+    "proof_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s3-runner-static-review-v2\\enoent-control-proof.json",
+    "proof_sha256": "bc474aef3aafc5ac14d5501a6e46ba1fdcec8bd4c91d359115d7014dacae35e8",
+    "extracted_run_body_sha256": "c8f3fca10c5237cb30caf396b0de3ee637f6f196fb3aa82ed5b380ed2a4211c9",
+    "exact_function_source_unmodified": true,
+    "injected_dependency": "spawn wrapper accepts literal Cargo path but actually calls node:child_process.spawn only with verified never-created absolute fixture.exe",
+    "invalid_executable_launch_attempts": 1,
+    "actual_childprocess_error_and_close_observed": true,
+    "exit_code": -4058,
+    "signal": null,
+    "log_descriptor_closed": true,
+    "command_json_and_log_hash_persisted": true,
+    "assertion_rejection_after_receipt": true,
+    "operating_system_child_pid_created": false,
+    "control_exit_code": 0,
+    "first_control_attempt": "Original wrapper extraction-end assertion failed before output directory creation or spawn; preserved original script. Corrected wrapper changes only that assertion, not extracted run body."
+  },
+  "artifacts": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s3-runner-static-review-v2\\enoent-control.mjs",
+      "sha256": "a42f42d95f33a5edf35e44a9c69a8f3bd827355e6a1f2d8e13feea8ae92887de",
+      "bytes": 4600
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s3-runner-static-review-v2\\enoent-control-fixed.mjs",
+      "sha256": "5f459d1f869c1b6f668f7fe27110da2855449736c19d8b93f629b5cd2676415a",
+      "bytes": 4600
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s3-runner-static-review-v2\\enoent-control-proof.json",
+      "sha256": "bc474aef3aafc5ac14d5501a6e46ba1fdcec8bd4c91d359115d7014dacae35e8",
+      "bytes": 1427
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s3-runner-static-review-v2\\enoent-control\\deliberate-missing-executable.json",
+      "sha256": "8aebc38d074c2ca3406d56401029c1985b1bb7124c2e9c6447d2edb91d745ccd",
+      "bytes": 449
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s3-runner-static-review-v2\\enoent-control\\deliberate-missing-executable.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  ],
+  "execution": {
+    "syntax_checks": "PASS_TWO_V2_FILES",
+    "isolated_node_enoent_control": "PASS",
+    "full_suite": "NOT_RUN",
+    "cargo": "NOT_RUN",
+    "compiler": "NOT_RUN",
+    "native": "NOT_RUN",
+    "renderer": "NOT_RUN",
+    "browser": "NOT_RUN",
+    "s3_authored_product_tests": 46,
+    "s3_executed_product_tests": 0
+  },
+  "qualifications": [
+    "Actual evidence covers only Node ChildProcess ENOENT error/close/log failure path",
+    "It proves no Cargo command, compiler behavior, normal child success path, browser shutdown, feature functionality or product-test acceptance",
+    "The full runner module is read as data and never imported or executed; only exact run function text is invoked with injected safe dependencies",
+    "No source, repository, installed runtime or coordinated execution hold was changed"
+  ],
+  "acceptance": "NOT_PROVEN_FOR_PRODUCT_OR_FULL_SUITE"
+}

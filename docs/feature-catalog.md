@@ -1,12 +1,12 @@
 # Open SEO Spider capability catalog
 
-Catalog prepared: 11 October 2026; implementation/evidence review: 13 October 2026. Reference: public Screaming Frog SEO Spider documentation, whose download panels advertised version **24.3** at the initial reference review. The vendor describes more than 300 SEO issue checks; this catalog groups the documented product areas into **144 implementation requirements**, rather than claiming to enumerate every individual issue filter. [Product overview](https://www.screamingfrog.co.uk/seo-spider/) · [Official guide](https://www.screamingfrog.co.uk/seo-spider/user-guide/).
+Catalog prepared: 11 October 2026; implementation/evidence review: 14 October 2026. Reference: public Screaming Frog SEO Spider documentation, whose download panels advertised version **24.3** at the initial reference review. The vendor describes more than 300 SEO issue checks; this catalog groups the documented product areas into **144 implementation requirements**, rather than claiming to enumerate every individual issue filter. [Product overview](https://www.screamingfrog.co.uk/seo-spider/) · [Official guide](https://www.screamingfrog.co.uk/seo-spider/user-guide/).
 
 This is an independent product specification. The initial grouped catalog was prepared from public documentation. Subsequent private static inspection and ordinary original CLI runs inform the granular contracts and comparisons. No vendor executable, implementation code, font, artwork, credential or license mechanism is copied into this repository. Public feature behavior provides a reference; the acceptance tests below are newly authored tests for Open SEO Spider. The user prefers Rust and local operation. Docker, WSL and native packaging are separate delivery choices.
 
 **Independent implementation status is tracked below. Full parity is NOT PROVEN.** The machine-readable [feature-parity.json](feature-parity.json) is the tracking baseline. Implementation and passing tests must be linked before a feature changes status. A passing Open SEO Spider fixture establishes its behavior; a separately authorized, reproducible reference comparison is needed for a parity claim.
 
-B10 fulfills the own link-directive acceptance for the explicitly selected [V2 follow switches](resource-contract-v2.md), with native positive/negative HTTP controls and preserved occurrences. Existing V1 behavior is kept compatible; separate global `crawl_links:false` controls, exact-source CI, release and installation remain open. Current own counts: 26 implemented, 71 partial, 47 planned.
+B10 fulfills the own link-directive acceptance for the explicitly selected [V2 follow switches](resource-contract-v2.md), with native positive/negative HTTP controls and preserved occurrences. Existing V1 behavior is kept compatible; separate global `crawl_links:false` controls, exact-source CI, release and installation remain open. Current own counts: 31 implemented, 67 partial, 46 planned. These are the current grouped acceptance states from the JSON ledger; the S3 source-only sitemap additions have not changed any capability status.
 
 “No commercial URL ceiling” does not remove machine resource limits, site crawl policy, or third-party API quotas and fees. Provider integrations need independent accounts and authorization. Open SEO Spider must not reuse Screaming Frog credentials or proprietary integration identity.
 
@@ -29,7 +29,7 @@ Version 24 added MCP, automatic crawl comparison, richer email change summaries,
 
 ## Capability requirements
 
-The source link in each row supports the reference product area. Acceptance criteria are independent Open SEO Spider requirements and do not imply reference execution. Keys are stable and match the JSON manifest. `implemented` means the stated independent acceptance is supported; `partial` has a verified slice with outstanding acceptance; `planned` has no sufficient tracked implementation slice. Full feature and workflow parity remains `NOT_PROVEN`; bounded reference observations are reported separately. Exact evidence and remaining acceptance are recorded per key in the JSON manifest.
+The source link in each row supports the reference product area. Acceptance criteria are independent Open SEO Spider requirements and do not imply reference execution. Keys are stable and match the JSON manifest. Table status cells are synchronized with the current ledger. The short acceptance summaries are an overview; the JSON and generated [FEATURE_TODO.md](FEATURE_TODO.md) contain the exact current criteria, open gates and proof scope. `implemented` means the stated independent acceptance is supported; `partial` has a verified slice with outstanding acceptance; `planned` has no sufficient tracked implementation slice. Full feature and workflow parity remains `NOT_PROVEN`; bounded reference observations are reported separately. Exact evidence and remaining acceptance are recorded per key in the JSON manifest.
 
 ### Crawl modes and control (P1)
 
@@ -39,7 +39,7 @@ The source link in each row supports the reference product area. Acceptance crit
 | `modes.list` | `implemented` | List import | Import TXT, CSV, XLSX and XML; keep original row order and duplicate inputs in exports while deduplicating network work. | [List mode](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-use-list-mode/) |
 | `modes.serp` | `implemented` | Offline SERP editing | Import URL/title/description rows, calculate length and approximate width, and export without making network requests. | [Configuration](https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/) |
 | `modes.apis` | `planned` | API-only enrichment | Enrich supplied URLs using a mock API; record zero website requests. | [Configuration](https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/) |
-| `modes.compare` | `partial` | Snapshot comparison | Compare two saved fixture snapshots and classify new, missing and changed URLs. | [Crawl comparison](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-compare-crawls/) |
+| `modes.compare` | `implemented` | Snapshot comparison | Compare two saved fixture snapshots and classify new, missing and changed URLs. | [Crawl comparison](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-compare-crawls/) |
 | `modes.control` | `implemented` | Pause, stop, resume | Pause with requests in flight, persist frontier, restart, and complete with no missing or duplicated results. | [General operation](https://www.screamingfrog.co.uk/seo-spider/user-guide/general/) |
 | `modes.recrawl` | `implemented` | Selective re-crawl | Re-fetch a chosen failed URL after the fixture changes without clearing unrelated saved results. | [General operation](https://www.screamingfrog.co.uk/seo-spider/user-guide/general/) |
 
@@ -178,7 +178,7 @@ The source link in each row supports the reference product area. Acceptance crit
 
 | Key | Status | Capability | Independent acceptance test | Source |
 | --- | --- | --- | --- | --- |
-| `sitemap.discovery` | `partial` | Robots and explicit sitemaps | Load a sitemap index, gzipped child sitemap and explicit input; handle loops/malformed XML safely. | [Sitemap auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-xml-sitemaps/) |
+| `sitemap.discovery` | `implemented` | Robots and explicit sitemaps | Load a sitemap index, gzipped child sitemap and explicit input; handle loops/malformed XML safely. | [Sitemap auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-xml-sitemaps/) |
 | `sitemap.coverage` | `partial` | Sitemap coverage and orphan checks | Compare fetched pages and sitemap locations; distinguish not listed, sitemap-only and incomplete crawl. | [Sitemap auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-xml-sitemaps/) |
 | `sitemap.validity` | `partial` | Sitemap URL validation | Find redirect/non-200/non-indexable URLs and invalid lastmod values in fixture XML. | [Sitemap auditing](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-audit-xml-sitemaps/) |
 | `sitemap.generate` | `partial` | XML sitemap generation | Export valid XML with optional lastmod, image entries and hreflang; parse output with an independent parser. | [Sitemap generation](https://www.screamingfrog.co.uk/seo-spider/tutorials/xml-sitemap-generator/) |
@@ -224,9 +224,9 @@ The source link in each row supports the reference product area. Acceptance crit
 | `storage.retention` | `planned` | Retention and locking | Use test timestamps to expire unlocked fixture snapshots while preserving locked snapshots and active jobs. | [Configuration](https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/) |
 | `storage.config` | `partial` | Reusable crawl configuration | Export/import typed config and validate missing credentials/paths without silently changing settings. | [Team workflows](https://www.screamingfrog.co.uk/seo-spider/tutorials/seo-spider-working-in-teams/) |
 | `storage.portable` | `partial` | Shared crawl portability | Copy an Open SEO Spider archive to a second local directory and open all declared portable artifacts. | [Team workflows](https://www.screamingfrog.co.uk/seo-spider/tutorials/seo-spider-working-in-teams/) |
-| `storage.compare_changes` | `partial` | Field and content changes | Detect title, description, headings, graph, directives, structured data and content changes even if issue counts are unchanged. | [Crawl comparison](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-compare-crawls/) |
-| `storage.compare_mapping` | `planned` | Cross-host comparison mapping | Map staging/production or migrated URL prefixes before joining snapshots and expose collisions. | [Crawl comparison](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-compare-crawls/) |
-| `storage.compare_export` | `partial` | Comparison export | Export both snapshots and deltas with new/missing/changed evidence and stable URL keys. | [Crawl comparison](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-compare-crawls/) |
+| `storage.compare_changes` | `implemented` | Field and content changes | Detect title, description, headings, graph, directives, structured data and content changes even if issue counts are unchanged. | [Crawl comparison](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-compare-crawls/) |
+| `storage.compare_mapping` | `implemented` | Cross-host comparison mapping | Map staging/production or migrated URL prefixes before joining snapshots and expose collisions. | [Crawl comparison](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-compare-crawls/) |
+| `storage.compare_export` | `implemented` | Comparison export | Export both snapshots and deltas with new/missing/changed evidence and stable URL keys. | [Crawl comparison](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-compare-crawls/) |
 
 ### Automation, exports and agent access (P4)
 

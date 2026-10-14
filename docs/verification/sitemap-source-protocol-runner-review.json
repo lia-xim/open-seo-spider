@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "result": "RUNNER_V2_STATIC_CORRECTION_AND_ACTUAL_NODE_ENOENT_CONTROL_ONLY",
+  "recorded_at": "2026-10-14T19:40:49.871Z",
+  "source_commit": "96e0adca94524f66de44087f36fe458e1a530c29",
+  "source_manifest_sha256": "d3dd0959c1b3a86b58a1a560ba9930251502cbed2e68f9633ad5871ca62864ff",
+  "source_inputs": 226,
+  "required_named_rust_tests": 110,
+  "minimum_expected_workspace_passes": 892,
+  "supersedes_only_future_runner_selection": "docs/verification/sitemap-source-protocol-preparation.json records unchanged v1 preparations; select the reviewed v2 suite/builder for future execution",
+  "v2_runners": [
+    {
+      "name": "run-sitemap-source-protocol-suite-v2.mjs",
+      "sha256": "6994b969fb65812c0bf3f424166a50c842a29626d8f9deafc8046aafe808bfea",
+      "node_syntax_exit": 0
+    },
+    {
+      "name": "build-sitemap-source-protocol-v2.mjs",
+      "sha256": "42c28607372c8e58d2a807cf637dd1f4819bf88a236d4d7227129403135ae51f",
+      "node_syntax_exit": 0
+    }
+  ],
+  "previous_v1_files_unchanged": true,
+  "confirmed_finding": "S3RUNNER-001: failed Cargo launch skipped actual close/log-fd/command receipt on original v1 suite error path",
+  "correction": "Capture spawn_error, await actual close, close fd in finally and persist command/log evidence before asserting",
+  "actual_control": {
+    "result": "PASS_NODE_ENOENT_ERROR_CLOSE_LOG_ONLY",
+    "attempts": 1,
+    "cargo_executable_started": false,
+    "compiler_started": false,
+    "renderer_browser_started": false,
+    "full_runner_executed": false,
+    "product_tests_executed": 0
+  },
+  "remaining": {
+    "workspace_compile_tests_clippy": "NOT_RUN_COORDINATED_COMPUTE_HOLD",
+    "native_acceptance": "NOT_RUN",
+    "installation": "NOT_RUN",
+    "new_s3_product_tests": "46_AUTHORED_ZERO_EXECUTED"
+  },
+  "files": [
+    {
+      "path": "docs/verification/sitemap-source-protocol-runner-20261014/review-v1.json",
+      "bytes": 3613,
+      "sha256": "b5cc3dd1bcb329fbc25536b11909b57290c2c9d95002039c919ad4ceeac8c3e6"
+    },
+    {
+      "path": "docs/verification/sitemap-source-protocol-runner-20261014/review-v2.json",
+      "bytes": 5124,
+      "sha256": "083c700bbf8af58a04f505861283bf08a8d5ca969dceaf704a2916db53b114ec"
+    },
+    {
+      "path": "docs/verification/sitemap-source-protocol-runner-20261014/enoent-control-proof.json",
+      "bytes": 1427,
+      "sha256": "bc474aef3aafc5ac14d5501a6e46ba1fdcec8bd4c91d359115d7014dacae35e8"
+    },
+    {
+      "path": "docs/verification/sitemap-source-protocol-runner-20261014/enoent-control-fixed.mjs",
+      "bytes": 4600,
+      "sha256": "5f459d1f869c1b6f668f7fe27110da2855449736c19d8b93f629b5cd2676415a"
+    },
+    {
+      "path": "docs/verification/sitemap-source-protocol-runner-20261014/deliberate-missing-executable.json",
+      "bytes": 449,
+      "sha256": "8aebc38d074c2ca3406d56401029c1985b1bb7124c2e9c6447d2edb91d745ccd"
+    },
+    {
+      "path": "docs/verification/sitemap-source-protocol-runner-20261014/deliberate-missing-executable.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "qualification": "The actual control executes only the exact extracted run() function with spawn redirected to a verified absent executable. It does not import the full runner, release the execution hold or establish product acceptance. All source226 hashes and the installed runtime remain unchanged."
+}

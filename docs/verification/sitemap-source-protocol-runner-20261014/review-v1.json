@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "result": "STATIC_ONE_CONFIRMED_ERROR_PATH_FINDING_NOT_EXECUTED",
+  "recorded_at": "2026-10-14T19:37:05.8244317Z",
+  "reviewer": "/root/s3_decode_review",
+  "suite": {
+    "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\run-sitemap-source-protocol-suite-v1.mjs",
+    "sha256": "e6ad2a35a243f0dc45fe6368e20a7b0e4d16e8262acea622ee89c70551bdfe5f",
+    "node_check_exit_code": 0
+  },
+  "builder": {
+    "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\build-sitemap-source-protocol-v1.mjs",
+    "sha256": "02f0fc89cdeb953e3b3f4576315cb63df0df0f963b688ad446ebc96fc7c1b218",
+    "node_check_exit_code": 0
+  },
+  "frozen_manifest_sha256": "d3dd0959c1b3a86b58a1a560ba9930251502cbed2e68f9633ad5871ca62864ff",
+  "findings": [
+    {
+      "id": "S3RUNNER-001",
+      "priority": "P2",
+      "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\run-sitemap-source-protocol-suite-v1.mjs",
+      "lines": [
+        31,
+        39
+      ],
+      "issue": "Cargo spawn error skips actual close evidence, command receipt and log descriptor cleanup",
+      "trigger": "spawn emits error, e.g. configured cargo.exe is missing or Windows denies starting it; no such run was attempted",
+      "path_evidence": "line34 error rejects Promise before close; control skips closeSync(log) line35 and record/write lines38-39 into outer catch",
+      "effect": "Failed launch produces no per-command JSON/log hash or actual close record and leaks the open log fd",
+      "correction": "Use the builder command pattern: capture spawn_error, await actual close, close fd in finally, persist receipt before validating exit"
+    }
+  ],
+  "static_checks": [
+    "Both hold gates run before writes, renderer import/listen or child launch",
+    "Source compilation cwd is frozen226 S3 source copy; hashes also compare S3 integration checkout, not original product source",
+    "Original repository is used only for pinned renderer code plus installed node_modules; worker listens on owned ephemeral ports excluding8787/8790",
+    "All110 required names are unique and actual fn declarations exist in their frozen files; manifest minimum is892",
+    "Suite requests include-ignored plus single Rust harness thread, searches required passing names and requires ignored0/minimum892",
+    "Successful command paths wait for close and hash complete logs; builder records spawn errors before asserting",
+    "Builder requires source-matching green suite with owned worker closed before creating output",
+    "Builder preserves existing E Cargo-target exe bytes with no-replace write and matching SHA before Cargo build; no installed executable or shared runtime mutation in builder"
+  ],
+  "limitations": [
+    "Original runtime node_modules is used, not frozen or reinstalled by these routes",
+    "Successful worker close uses worker.close contract and HTTP listening-state check; this is not an independently observed Browser process-close proof",
+    "No runner was invoked; normal/fault closure, actual892 tests and all native or compiler behavior remain NOT_RUN",
+    "Static guard inspection is not execution of all source-hash verification functions"
+  ],
+  "execution": {
+    "node_syntax": "PASS_TWO_FILES",
+    "runner": "NOT_RUN",
+    "cargo": "NOT_RUN",
+    "compiler": "NOT_RUN",
+    "tests": "NOT_RUN",
+    "renderer_browser_native": "NOT_RUN"
+  },
+  "source_changes": false,
+  "acceptance": "NOT_PROVEN"
+}
