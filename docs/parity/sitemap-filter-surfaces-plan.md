@@ -2,6 +2,8 @@
 
 Source-only bounded gap/design review. Root-declared basis: S3 source234, HEAD2a01db34; no Git inspection. Exact observed files are pinned in SOURCE-PINS.json and the seven complete acceptance entries copied in SEVEN-CONTRACTS.json. No product implementation, compiler, Cargo, tests, HTTP, browser or native run occurred. Manufacturer predicate equality remains NOT_PROVEN.
 
+Subsequent source candidate: `codex/sitemap-streaming-20261014` adds a separate [raw SQLite window and CLI reader](../sitemap-raw-window.md). It is uncompiled and uninstalled. The gap table below records the pinned earlier review; the new raw reader supplies no seven-filter predicate, full finding export, source-finding UI or rich API/MCP replacement. Those S6 requirements remain open.
+
 ## Actual public gaps
 
 | Gap | Concrete current path | Practical consequence |

@@ -7,6 +7,7 @@ mod policy_export;
 mod resource_export;
 mod server;
 mod sitemap_membership;
+mod sitemap_raw_cli;
 
 use clap::{Parser, Subcommand};
 use open_seo_spider_core::{
@@ -33,6 +34,16 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Read a verified raw sitemap window from local SQLite; no website is fetched.
+    SitemapRows {
+        store: PathBuf,
+        /// Strict JSON request with exact filters, page size and optional raw-state continuation.
+        #[arg(long)]
+        request: Option<PathBuf>,
+        /// New compact JSON destination; omit to print the same envelope to stdout.
+        #[arg(long)]
+        output: Option<PathBuf>,
+    },
     /// Generate a segmented sitemap ZIP from saved report JSON; no website is fetched.
     GenerateSitemaps {
         snapshot: PathBuf,
@@ -205,6 +216,13 @@ async fn main() -> anyhow::Result<()> {
     }) {
         Command::Serve { listen, data_dir } => Box::pin(server::serve(&listen, data_dir)).await?,
         Command::Mcp { server } => mcp::stdio(&server).await?,
+        Command::SitemapRows {
+            store,
+            request,
+            output,
+        } => {
+            sitemap_raw_cli::run(store, request, output).await?;
+        }
         Command::GenerateSitemaps {
             snapshot,
             options,

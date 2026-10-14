@@ -6,6 +6,8 @@ The installed accepted native XML parser has independent defaults of8MiB entity/
 
 A separate uninstalled S4 candidate adds an [explicit source-processing profile](../sitemap-source-processing.md) with bounded64MiB entity/XML work and2M events while preserving those defaults and retention limits. Compilation, actual large-source processing and native acceptance are not yet run. This candidate does not complete the remaining verified SQL-paging/streaming work or any S5/S6 gate. The concrete [filter-surface plan](sitemap-filter-surfaces-plan.md) records the current API/CLI/MCP/browser gaps and full stored-selection requirements separately.
 
+The next uninstalled source increment introduces a separate [verified raw SQLite window/CLI contract](../sitemap-raw-window.md). Ordinary raw/source scans, selected-parent materializing compatibility and rich-context costs have distinct proof boundaries. The existing App inventory/CSV paths are not switched by this increment; whole-path streaming and all S4 runtime/memory gates remain open.
+
 The published protocol permits up to50,000 URLs and52,428,800 uncompressed bytes per sitemap, with corresponding index entry/byte bounds. Gzip size is assessed after decompression. [Sitemaps protocol](https://www.sitemaps.org/protocol.html)
 
 ## Individual filters

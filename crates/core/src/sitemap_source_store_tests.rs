@@ -805,3 +805,6 @@ fn actual_writable_schema_never_repairs_missing_initialized_empty_tables() {
     assert_eq!(tables_present(&f.connection).unwrap(), 2);
     assert!(load(&f.connection).unwrap().is_none());
 }
+
+#[path = "sitemap_source_store/verified_read_tests.rs"]
+mod verified_read_tests;

@@ -1,0 +1,23 @@
+# Final bounded Root raw-window / CLI review, v2
+
+ONE P2 ADDRESSED; NO OTHER CONFIRMED FINDING in the examined Root-owned slice. All12 new groups remain AUTHORED / NOT_RUN:6 facade+2 actual Source/Selected+4 App CLI. No compiler/typecheck, Cargo, native, fixture, browser or CLI run occurred.
+
+This immutable receipt extends the preserved intermediate v1 receipt SHA256 af393c83f7bd29800cec784a8267d4ab386f3b6c40528e847a308b3a0ebc9f3c. Its complete bounded review is copied byte-for-byte to BASE-REVIEW.md; line references/hashes in that base describe the intermediate facade before the additional metadata preflight below. Current final actual source copies/hashes are in SOURCE-PINS.json and inputs/.
+
+Final facade SHA256 c53896c6c807e2ac0fd2da1555e228d497f72249ea459a3453773746e1ded27f; facade tests d8aa109f9a0354232986c5756bab490742e01d610840073b6909175aabe25449. Final CLI b53822aace0cd4288c31d99fb28387f2c6112f70b3f2472ee4d2a7b973ba9341 and CLI tests443fd3c62c3b9ebb839f7cd93298a4d0d72bcad3f96d5808c68363a72069016d preserve the actually reviewed P2 fix: local File.take(131073) then reject over131072 before Serde/DB. The old shared main read_bounded remains outside this repaired call path. Exact/+1 actual-file CLI controls were authored, not run.
+
+## Additional Root metadata bound, actually read
+
+Final facade176-197 adds preflight_context_metadata in the SAME transaction. It checks byte lengths of run_state/operation_kind<=65536 and run_plan<=268435456 before saved_config_sha, load_run_plan or generic run-state deserialization (call233, then234-235). Missing values are allowed for historical absence; invalid typed contents still go through existing validators, never become a synthetic empty state. The new SQL zeroblob(65537) run_state test211-230 requires the actual raw-absent facade to reject with a bounded-input error before generic metadata parsing. No fixture was executed.
+
+The old Ledger metadata contract already uses<=65536 (sitemap_ledger.rs133-149). The256MiB run_plan bound is an ADDITIVE NEW RAW-READER POLICY, not an inherited guarantee from the parent cap. Actual recrawl.rs10-13 bounds parent256MiB, selection50k/8MiB and eachURL16KiB; target construction304-323 also copies discovered_from/policy/resource permission. No existing serialized-run_plan cap or observed valid>256MiB example was found in this bounded read. Parent size alone does not establish a<=256MiB serialized plan theorem. The new cap may reject an otherwise valid unusually large old plan; document this explicit input policy, propagate its error, never clamp. It does not close full C/P/T or SQLite RSS bounds.
+
+Source comparison proves the final facade differs from the fully reviewed v1 facade ONLY by this helper and its single preflight call; final facade tests differ ONLY by the new actual SQL metadata-size group. The seven other previously reviewed Root-owned files (Store/source tests/exports/App formatter/main/CLI/tests) are byte-identical to their v1 receipt copies. Existing confirmed review conclusions therefore retain their stated scope without reinterpreting old line numbers as current lines.
+
+Final whole DTO is still bounded at299 before explicit Source/Raw token drops300-301 and consuming transaction commit302. Existing selected compatibility gates240-241 remain both present before tokens243-244. State/shape/sourceNone/pagination behavior is otherwise unchanged. Private reader types and actual dependency implementation validation remain separate Raw/Source handoff gates, not a typecheck PASS.
+
+## Preserved bounded conclusions / remaining gates
+
+The new facade returns owned raw rows plus verified raw/source summary context, not full Catalog/Source snapshots and not coverage/terminal analysis. Ordinary context/import/policy/run-plan checks remain in one read TX. Selected exact-parent/presence guards remain deliberately materializing, including historical None. Full DTO8MiB limit, exact current config bytes, source-only context changes and new state/filter domain are retained. Actual rich App read_context remains on its old path; CSV extraction preserves exact columns/mapping/sanitizer/quoting and existing buffered export behavior. New local CLI validates bounded strict request before read-only DB access, refuses existing output via create_new and writes only compact window JSON/new destination/stdout. No CSV/full-filter claim.
+
+No Root/Git/product mutation by reviewer. Only new owned review artifacts written. Actual whole8MiB/+1 response boundary, WAL read coherence, final Raw/Source binding, compiled12 groups, all broader workspace, RSS/performance/physical protocol/source-streamed App/export/platform acceptance remain NOT_RUN/NOT_PROVEN. No S4 or goal completion is established.

@@ -700,6 +700,107 @@ fn csv_record(writer: &mut impl Write, fields: &[String]) -> io::Result<()> {
     }
     writer.write_all(b"\r\n")
 }
+fn write_csv_fields(writer: &mut impl Write, fields: Vec<String>) -> Result<()> {
+    csv_record(writer, &fields).map_err(|error| Failure::new("sitemap_csv_byte_budget", error))
+}
+// Shared by the current buffered export and the planned verified SQL visitor.
+// Keep the column order and row encoding identical across output sinks.
+fn write_csv_header(writer: &mut impl Write) -> Result<()> {
+    write_csv_fields(
+        writer,
+        [
+            "kind",
+            "sequence",
+            "observation_id",
+            "occurrence_id",
+            "source_ordinal",
+            "raw_value",
+            "membership_url",
+            "admitted_fetch_url",
+            "admission_decision",
+            "typed_row_json",
+        ]
+        .map(str::to_owned)
+        .to_vec(),
+    )
+}
+fn write_csv_row(writer: &mut impl Write, row: &SitemapLedgerRow) -> Result<()> {
+    let (kind, source, id, ordinal, raw, member, alias, decision) = match row {
+        SitemapLedgerRow::Root(r) => (
+            "root",
+            r.source_observation_id.clone().unwrap_or_default(),
+            r.declaration_id.clone(),
+            r.source_ordinal.to_string(),
+            r.raw_value.clone(),
+            r.admission.membership_url.clone(),
+            r.admission.admitted_fetch_url.clone(),
+            Some(&r.admission.decision),
+        ),
+        SitemapLedgerRow::Document(r) => (
+            "document",
+            r.observation_id.clone(),
+            r.observation_id.clone(),
+            String::new(),
+            String::new(),
+            None,
+            None,
+            None,
+        ),
+        SitemapLedgerRow::Entry(r) => (
+            "entry",
+            r.observation_id.clone(),
+            r.entry_id.clone(),
+            r.observed.ordinal.to_string(),
+            String::new(),
+            None,
+            None,
+            None,
+        ),
+        SitemapLedgerRow::Location(r) => (
+            "location",
+            r.observation_id.clone(),
+            r.occurrence_id.clone(),
+            r.observed.ordinal.to_string(),
+            r.observed.decoded_value.clone().unwrap_or_default(),
+            r.admission.membership_url.clone(),
+            r.admission.admitted_fetch_url.clone(),
+            Some(&r.admission.decision),
+        ),
+    };
+    let decision = decision
+        .map(serde_json::to_value)
+        .transpose()
+        .map_err(|error| Failure::new("sitemap_read_failure", error))?
+        .and_then(|value| value.as_str().map(str::to_owned))
+        .unwrap_or_default();
+    let fields = vec![
+        kind.into(),
+        row.sequence().to_string(),
+        source,
+        id,
+        ordinal,
+        raw,
+        member.unwrap_or_default(),
+        alias.unwrap_or_default(),
+        decision,
+        String::from_utf8(encode(row)?)
+            .map_err(|error| Failure::new("sitemap_read_failure", error))?,
+    ];
+    write_csv_fields(
+        writer,
+        fields
+            .into_iter()
+            .enumerate()
+            .map(|(index, text)| {
+                if matches!(index, 1 | 4) {
+                    text
+                } else {
+                    open_seo_spider_core::csv_text(&text)
+                }
+            })
+            .collect(),
+    )
+}
 pub(crate) fn csv(
     job_id: Uuid,
     generation: u64,
@@ -726,26 +827,7 @@ pub(crate) fn csv(
         bytes: Vec::new(),
         max: MAX_CSV_BYTES,
     };
-    let mut write = |fields: Vec<String>| {
-        csv_record(&mut out, &fields)
-            .map_err(|error| Failure::new("sitemap_csv_byte_budget", error))
-    };
-    write(
-        [
-            "kind",
-            "sequence",
-            "observation_id",
-            "occurrence_id",
-            "source_ordinal",
-            "raw_value",
-            "membership_url",
-            "admitted_fetch_url",
-            "admission_decision",
-            "typed_row_json",
-        ]
-        .map(str::to_owned)
-        .to_vec(),
-    )?;
+    write_csv_header(&mut out)?;
     for row in catalog
         .rows
         .as_ref()
@@ -753,80 +835,7 @@ pub(crate) fn csv(
         .iter()
         .filter(|row| filter.matches(row))
     {
-        let (kind, source, id, ordinal, raw, member, alias, decision) = match row {
-            SitemapLedgerRow::Root(r) => (
-                "root",
-                r.source_observation_id.clone().unwrap_or_default(),
-                r.declaration_id.clone(),
-                r.source_ordinal.to_string(),
-                r.raw_value.clone(),
-                r.admission.membership_url.clone(),
-                r.admission.admitted_fetch_url.clone(),
-                Some(&r.admission.decision),
-            ),
-            SitemapLedgerRow::Document(r) => (
-                "document",
-                r.observation_id.clone(),
-                r.observation_id.clone(),
-                String::new(),
-                String::new(),
-                None,
-                None,
-                None,
-            ),
-            SitemapLedgerRow::Entry(r) => (
-                "entry",
-                r.observation_id.clone(),
-                r.entry_id.clone(),
-                r.observed.ordinal.to_string(),
-                String::new(),
-                None,
-                None,
-                None,
-            ),
-            SitemapLedgerRow::Location(r) => (
-                "location",
-                r.observation_id.clone(),
-                r.occurrence_id.clone(),
-                r.observed.ordinal.to_string(),
-                r.observed.decoded_value.clone().unwrap_or_default(),
-                r.admission.membership_url.clone(),
-                r.admission.admitted_fetch_url.clone(),
-                Some(&r.admission.decision),
-            ),
-        };
-        let decision = decision
-            .map(serde_json::to_value)
-            .transpose()
-            .map_err(|error| Failure::new("sitemap_read_failure", error))?
-            .and_then(|value| value.as_str().map(str::to_owned))
-            .unwrap_or_default();
-        let fields = vec![
-            kind.into(),
-            row.sequence().to_string(),
-            source,
-            id,
-            ordinal,
-            raw,
-            member.unwrap_or_default(),
-            alias.unwrap_or_default(),
-            decision,
-            String::from_utf8(encode(row)?)
-                .map_err(|error| Failure::new("sitemap_read_failure", error))?,
-        ];
-        write(
-            fields
-                .into_iter()
-                .enumerate()
-                .map(|(index, text)| {
-                    if matches!(index, 1 | 4) {
-                        text
-                    } else {
-                        open_seo_spider_core::csv_text(&text)
-                    }
-                })
-                .collect(),
-        )?;
+        write_csv_row(&mut out, row)?;
     }
     Ok((out.bytes, snapshot))
 }

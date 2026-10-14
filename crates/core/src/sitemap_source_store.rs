@@ -17,6 +17,7 @@ use std::{
 #[path = "sitemap_source_store_models.rs"]
 mod models;
 pub use models::*;
+pub(crate) mod verified_read;
 pub(crate) const SCHEMA: &str = include_str!("sitemap_source_schema.sql");
 const KEY: &str = "sitemap_source_store";
 const TABLES: [&str; 2] = [
@@ -267,80 +268,106 @@ fn commit_json(link: &SitemapSourceCommitAssociation) -> Result<String> {
     json(link, (SOURCE_COMMIT_RESERVE_BYTES - 1) as usize)
 }
 
+// Shared by the original portable/writer refresh and the verified SQL reader.
+// It owns only counters and rolling hashes, never payload rows or an ID set.
+struct SummaryAccumulator {
+    record_count: u64,
+    commit_count: u64,
+    record_json_bytes: u64,
+    commit_json_bytes: u64,
+    content_sha256: String,
+    links_sha256: String,
+}
+impl SummaryAccumulator {
+    fn new() -> Self {
+        Self {
+            record_count: 0,
+            commit_count: 0,
+            record_json_bytes: 0,
+            commit_json_bytes: 0,
+            content_sha256: seed("measurements"),
+            links_sha256: seed("commits"),
+        }
+    }
+    fn record(&mut self, data: &str) -> Result<()> {
+        self.record_count = add(self.record_count, 1)?;
+        self.record_json_bytes = add(self.record_json_bytes, data.len() as u64)?;
+        self.content_sha256 = roll(&self.content_sha256, "measurement", data);
+        Ok(())
+    }
+    fn commit(&mut self, data: &str) -> Result<()> {
+        self.commit_count = add(self.commit_count, 1)?;
+        self.commit_json_bytes = add(self.commit_json_bytes, data.len() as u64)?;
+        self.links_sha256 = roll(&self.links_sha256, "commit", data);
+        Ok(())
+    }
+    fn finish(self, summary: &mut SitemapSourceStoreSummary) -> Result<()> {
+        summary.record_count = self.record_count;
+        summary.commit_count = self.commit_count;
+        summary.last_sequence = self.record_count;
+        summary.record_json_bytes = self.record_json_bytes;
+        summary.commit_json_bytes = self.commit_json_bytes;
+        summary.content_sha256 = self.content_sha256;
+        summary.links_sha256 = self.links_sha256;
+        summary.revision = add(
+            add(summary.record_count, summary.commit_count)?,
+            u64::from(summary.omission.is_some()),
+        )?;
+        let unjoined = summary
+            .record_count
+            .checked_sub(summary.commit_count)
+            .context("More commits than measurements")?;
+        let link_reserve = unjoined
+            .checked_mul(SOURCE_COMMIT_RESERVE_BYTES)
+            .context("Source-store reserve overflow")?;
+        let framing = add(
+            FRAME_BYTES,
+            add(
+                summary.record_count.saturating_sub(1),
+                summary.commit_count.saturating_sub(1),
+            )?,
+        )?;
+        let data_bytes = add(
+            add(summary.record_json_bytes, summary.commit_json_bytes)?,
+            framing,
+        )?;
+        summary.charged_json_bytes = add(
+            add(data_bytes, SOURCE_METADATA_ALLOCATION_BYTES)?,
+            link_reserve,
+        )?;
+        // Allocation is fixed; actual canonical metadata and its unused reserve are
+        // reported separately. An omission cannot fail because record capacity is full.
+        summary.metadata_json_bytes = 0;
+        for _ in 0..16 {
+            ensure!(
+                summary.metadata_json_bytes <= SOURCE_METADATA_ALLOCATION_BYTES,
+                "Source-store metadata allocation exhausted"
+            );
+            summary.logical_json_bytes = add(data_bytes, summary.metadata_json_bytes)?;
+            summary.reserved_json_bytes = add(
+                link_reserve,
+                SOURCE_METADATA_ALLOCATION_BYTES - summary.metadata_json_bytes,
+            )?;
+            let size = json(summary, SOURCE_METADATA_ALLOCATION_BYTES as usize)?.len() as u64;
+            if size == summary.metadata_json_bytes {
+                return Ok(());
+            }
+            summary.metadata_json_bytes = size;
+        }
+        bail!("Source-store metadata size did not converge")
+    }
+}
 fn refresh(snapshot: &mut SitemapSourceStoreSnapshot) -> Result<()> {
-    let summary = &mut snapshot.summary;
-    summary.record_count = u64::try_from(snapshot.records.len())?;
-    summary.commit_count = u64::try_from(snapshot.commits.len())?;
-    summary.last_sequence = summary.record_count;
-    summary.record_json_bytes = 0;
-    summary.commit_json_bytes = 0;
-    summary.content_sha256 = seed("measurements");
-    summary.links_sha256 = seed("commits");
+    let mut totals = SummaryAccumulator::new();
     for record in &snapshot.records {
-        let data = record_json(record, &summary.limits)?;
-        summary.record_json_bytes = add(summary.record_json_bytes, data.len() as u64)?;
-        summary.content_sha256 = roll(&summary.content_sha256, "measurement", &data);
+        totals.record(&record_json(record, &snapshot.summary.limits)?)?;
     }
     for link in &snapshot.commits {
-        let data = commit_json(link)?;
-        summary.commit_json_bytes = add(summary.commit_json_bytes, data.len() as u64)?;
-        summary.links_sha256 = roll(&summary.links_sha256, "commit", &data);
+        totals.commit(&commit_json(link)?)?;
     }
-    summary.revision = add(
-        add(summary.record_count, summary.commit_count)?,
-        u64::from(summary.omission.is_some()),
-    )?;
-    let unjoined = summary
-        .record_count
-        .checked_sub(summary.commit_count)
-        .context("More commits than measurements")?;
-    let link_reserve = unjoined
-        .checked_mul(SOURCE_COMMIT_RESERVE_BYTES)
-        .context("Source-store reserve overflow")?;
-    let framing = add(
-        FRAME_BYTES,
-        add(
-            summary.record_count.saturating_sub(1),
-            summary.commit_count.saturating_sub(1),
-        )?,
-    )?;
-    let data_bytes = add(
-        add(summary.record_json_bytes, summary.commit_json_bytes)?,
-        framing,
-    )?;
-    summary.charged_json_bytes = add(
-        add(data_bytes, SOURCE_METADATA_ALLOCATION_BYTES)?,
-        link_reserve,
-    )?;
-    // Allocation is fixed; actual canonical metadata and its unused reserve are
-    // reported separately. An omission cannot fail because record capacity is full.
-    summary.metadata_json_bytes = 0;
-    for _ in 0..16 {
-        ensure!(
-            summary.metadata_json_bytes <= SOURCE_METADATA_ALLOCATION_BYTES,
-            "Source-store metadata allocation exhausted"
-        );
-        summary.logical_json_bytes = add(data_bytes, summary.metadata_json_bytes)?;
-        summary.reserved_json_bytes = add(
-            link_reserve,
-            SOURCE_METADATA_ALLOCATION_BYTES - summary.metadata_json_bytes,
-        )?;
-        let size = json(summary, SOURCE_METADATA_ALLOCATION_BYTES as usize)?.len() as u64;
-        if size == summary.metadata_json_bytes {
-            return Ok(());
-        }
-        summary.metadata_json_bytes = size;
-    }
-    bail!("Source-store metadata size did not converge")
+    totals.finish(&mut snapshot.summary)
 }
-
-/// Pure portable validation. SQL joins and exact parent bytes are checked by load.
-pub fn validate_snapshot(snapshot: &SitemapSourceStoreSnapshot) -> Result<()> {
-    ensure!(
-        snapshot.schema_version == 1,
-        "Unknown source-store snapshot version"
-    );
-    let s = &snapshot.summary;
+fn validate_summary_header(s: &SitemapSourceStoreSummary) -> Result<()> {
     s.limits.validate()?;
     ensure!(
         s.engine == SITEMAP_SOURCE_STORE_ENGINE
@@ -350,11 +377,6 @@ pub fn validate_snapshot(snapshot: &SitemapSourceStoreSnapshot) -> Result<()> {
     sha(&s.initial_catalog_config_sha256)?;
     sha(&s.content_sha256)?;
     sha(&s.links_sha256)?;
-    ensure!(
-        snapshot.records.len() as u64 <= s.limits.max_records
-            && snapshot.commits.len() <= snapshot.records.len(),
-        "Source-store record cap exceeded"
-    );
     if let Some(basis) = &s.inherited {
         sha(&basis.parent_snapshot_sha256)?;
         sha(&basis.parent_catalog_sha256)?;
@@ -373,23 +395,76 @@ pub fn validate_snapshot(snapshot: &SitemapSourceStoreSnapshot) -> Result<()> {
             "Invalid source-store omission revision"
         );
     }
+    Ok(())
+}
+fn validate_record(
+    record: &SitemapSourceStoredMeasurement,
+    s: &SitemapSourceStoreSummary,
+    sequence: u64,
+) -> Result<()> {
+    ensure!(
+        record.schema_version == 1
+            && record.engine == SITEMAP_SOURCE_STORE_ENGINE
+            && record.sequence == sequence,
+        "Source-store record sequence/profile differs"
+    );
+    ensure!(
+        record.initial_catalog_config_sha256 == s.initial_catalog_config_sha256,
+        "Source-store initial anchor differs"
+    );
+    sha(&record.staged_document_sha256)?;
+    crate::validate_sitemap_source_measurement(
+        &record.measurement,
+        &SitemapSourceMeasurementLimits::default(),
+    )?;
+    Ok(())
+}
+fn validate_link(link: &SitemapSourceCommitAssociation, previous: u64) -> Result<()> {
+    ensure!(
+        link.schema_version == 1
+            && link.engine == SITEMAP_SOURCE_STORE_ENGINE
+            && link.document_sequence > previous,
+        "Source commit sequence/profile differs"
+    );
+    sha(&link.measurement_envelope_sha256)?;
+    sha(&link.document_payload_sha256)?;
+    Ok(())
+}
+fn validate_link_record(
+    link: &SitemapSourceCommitAssociation,
+    record: &SitemapSourceStoredMeasurement,
+    limits: &SitemapSourceStoreLimits,
+) -> Result<()> {
+    ensure!(
+        link.measurement_id == record.measurement.measurement_id
+            && record
+                .measurement
+                .payload
+                .binding
+                .expected_source_observation_id
+                == link.document_id
+            && digest(record_json(record, limits)?) == link.measurement_envelope_sha256,
+        "Commit measurement binding differs"
+    );
+    Ok(())
+}
+
+/// Pure portable validation. SQL joins and exact parent bytes are checked by load.
+pub fn validate_snapshot(snapshot: &SitemapSourceStoreSnapshot) -> Result<()> {
+    ensure!(
+        snapshot.schema_version == 1,
+        "Unknown source-store snapshot version"
+    );
+    let s = &snapshot.summary;
+    validate_summary_header(s)?;
+    ensure!(
+        snapshot.records.len() as u64 <= s.limits.max_records
+            && snapshot.commits.len() <= snapshot.records.len(),
+        "Source-store record cap exceeded"
+    );
     let mut by_id = BTreeMap::new();
     for (ordinal, record) in snapshot.records.iter().enumerate() {
-        ensure!(
-            record.schema_version == 1
-                && record.engine == SITEMAP_SOURCE_STORE_ENGINE
-                && record.sequence == ordinal as u64 + 1,
-            "Source-store record sequence/profile differs"
-        );
-        ensure!(
-            record.initial_catalog_config_sha256 == s.initial_catalog_config_sha256,
-            "Source-store initial anchor differs"
-        );
-        sha(&record.staged_document_sha256)?;
-        crate::validate_sitemap_source_measurement(
-            &record.measurement,
-            &SitemapSourceMeasurementLimits::default(),
-        )?;
+        validate_record(record, s, ordinal as u64 + 1)?;
         ensure!(
             by_id
                 .insert(record.measurement.measurement_id.as_str(), record)
@@ -401,15 +476,8 @@ pub fn validate_snapshot(snapshot: &SitemapSourceStoreSnapshot) -> Result<()> {
     let mut measurements = BTreeSet::new();
     let mut previous = 0;
     for link in &snapshot.commits {
-        ensure!(
-            link.schema_version == 1
-                && link.engine == SITEMAP_SOURCE_STORE_ENGINE
-                && link.document_sequence > previous,
-            "Source commit sequence/profile differs"
-        );
+        validate_link(link, previous)?;
         previous = link.document_sequence;
-        sha(&link.measurement_envelope_sha256)?;
-        sha(&link.document_payload_sha256)?;
         ensure!(
             documents.insert(&link.document_id) && measurements.insert(&link.measurement_id),
             "Duplicate source commit association"
@@ -417,16 +485,7 @@ pub fn validate_snapshot(snapshot: &SitemapSourceStoreSnapshot) -> Result<()> {
         let record = by_id
             .get(link.measurement_id.as_str())
             .context("Commit has no measurement")?;
-        ensure!(
-            record
-                .measurement
-                .payload
-                .binding
-                .expected_source_observation_id
-                == link.document_id
-                && digest(record_json(record, &s.limits)?) == link.measurement_envelope_sha256,
-            "Commit measurement binding differs"
-        );
+        validate_link_record(link, record, &s.limits)?;
     }
     let mut rebuilt = snapshot.clone();
     refresh(&mut rebuilt)?;
@@ -503,10 +562,15 @@ pub fn validate_catalog_binding(
 pub fn snapshot_context(snapshot: Option<&SitemapSourceStoreSnapshot>) -> Result<String> {
     if let Some(snapshot) = snapshot {
         validate_snapshot(snapshot)?;
+    }
+    summary_context(snapshot.map(|snapshot| &snapshot.summary))
+}
+fn summary_context(summary: Option<&SitemapSourceStoreSummary>) -> Result<String> {
+    if let Some(summary) = summary {
         Ok(digest(serde_json::to_vec(&(
             SITEMAP_SOURCE_STORE_ENGINE,
             "present",
-            &snapshot.summary,
+            summary,
         ))?))
     } else {
         Ok(digest(serde_json::to_vec(&(
@@ -756,6 +820,58 @@ fn preflight_rows(connection: &Connection, summary: &SitemapSourceStoreSummary) 
     );
     Ok(())
 }
+
+// Keep canonical SQL projection checks shared between the portable loader and
+// the incremental reader. `offset` also permits an ordered SQL join without an
+// in-memory map of every source record.
+fn read_record_row(
+    row: &rusqlite::Row<'_>,
+    offset: usize,
+    limits: &SitemapSourceStoreLimits,
+) -> Result<(SitemapSourceStoredMeasurement, String)> {
+    let data: String = row.get(offset + 9)?;
+    let data_sha: String = row.get(offset + 10)?;
+    ensure!(
+        data.len() <= limits.max_record_json_bytes && digest(&data) == data_sha,
+        "Source measurement envelope SHA/size differs"
+    );
+    let record: SitemapSourceStoredMeasurement = serde_json::from_str(&data)?;
+    let b = &record.measurement.payload.binding;
+    ensure!(
+        record_json(&record, limits)? == data
+            && row.get::<_, i64>(offset)? == i64::try_from(record.sequence)?
+            && row.get::<_, String>(offset + 1)? == record.measurement.measurement_id
+            && row.get::<_, String>(offset + 2)? == "sitemap"
+            && row.get::<_, String>(offset + 3)? == b.requested_task_url
+            && row.get::<_, i64>(offset + 4)? == i64::try_from(b.run_generation)?
+            && row.get::<_, String>(offset + 5)? == b.source_revision
+            && row.get::<_, String>(offset + 6)? == b.expected_source_observation_id
+            && row.get::<_, String>(offset + 7)? == b.crawl_config_sha256
+            && row.get::<_, String>(offset + 8)? == record.initial_catalog_config_sha256,
+        "Source measurement SQL columns/canonical envelope differ"
+    );
+    Ok((record, data))
+}
+fn read_commit_row(
+    row: &rusqlite::Row<'_>,
+    offset: usize,
+) -> Result<(SitemapSourceCommitAssociation, String)> {
+    let data: String = row.get(offset + 3)?;
+    let hash: String = row.get(offset + 4)?;
+    ensure!(
+        data.len() < SOURCE_COMMIT_RESERVE_BYTES as usize && digest(&data) == hash,
+        "Source commit envelope SHA/size differs"
+    );
+    let link: SitemapSourceCommitAssociation = serde_json::from_str(&data)?;
+    ensure!(
+        commit_json(&link)? == data
+            && row.get::<_, String>(offset)? == link.document_id
+            && row.get::<_, String>(offset + 1)? == link.measurement_id
+            && row.get::<_, i64>(offset + 2)? == i64::try_from(link.document_sequence)?,
+        "Source commit SQL columns/canonical envelope differ"
+    );
+    Ok((link, data))
+}
 /// Caller MUST use its existing read TX; this function never opens another connection.
 pub(crate) fn load(connection: &Connection) -> Result<Option<SitemapSourceStoreSnapshot>> {
     let text = bounded_metadata(connection, KEY, SOURCE_METADATA_ALLOCATION_BYTES as usize)?;
@@ -780,28 +896,7 @@ pub(crate) fn load(connection: &Connection) -> Result<Option<SitemapSourceStoreS
     let mut stmt=connection.prepare("SELECT sequence,measurement_id,source_kind,task_url,generation,source_revision,expected_document_id,capture_config_sha256,initial_catalog_config_sha256,data,data_sha256 FROM sitemap_source_measurements ORDER BY sequence")?;
     let mut rows = stmt.query([])?;
     while let Some(row) = rows.next()? {
-        let data: String = row.get(9)?;
-        let data_sha: String = row.get(10)?;
-        ensure!(
-            data.len() <= summary.limits.max_record_json_bytes && digest(&data) == data_sha,
-            "Source measurement envelope SHA/size differs"
-        );
-        let record: SitemapSourceStoredMeasurement = serde_json::from_str(&data)?;
-        let b = &record.measurement.payload.binding;
-        ensure!(
-            record_json(&record, &summary.limits)? == data
-                && row.get::<_, i64>(0)? == i64::try_from(record.sequence)?
-                && row.get::<_, String>(1)? == record.measurement.measurement_id
-                && row.get::<_, String>(2)? == "sitemap"
-                && row.get::<_, String>(3)? == b.requested_task_url
-                && row.get::<_, i64>(4)? == i64::try_from(b.run_generation)?
-                && row.get::<_, String>(5)? == b.source_revision
-                && row.get::<_, String>(6)? == b.expected_source_observation_id
-                && row.get::<_, String>(7)? == b.crawl_config_sha256
-                && row.get::<_, String>(8)? == record.initial_catalog_config_sha256,
-            "Source measurement SQL columns/canonical envelope differ"
-        );
-        records.push(record);
+        records.push(read_record_row(row, 0, &summary.limits)?.0);
     }
     drop(rows);
     drop(stmt);
@@ -809,21 +904,7 @@ pub(crate) fn load(connection: &Connection) -> Result<Option<SitemapSourceStoreS
     let mut stmt=connection.prepare("SELECT document_id,measurement_id,document_sequence,data,data_sha256 FROM sitemap_source_measurement_commits ORDER BY document_sequence")?;
     let mut rows = stmt.query([])?;
     while let Some(row) = rows.next()? {
-        let data: String = row.get(3)?;
-        let hash: String = row.get(4)?;
-        ensure!(
-            data.len() < (SOURCE_COMMIT_RESERVE_BYTES as usize) && digest(&data) == hash,
-            "Source commit envelope SHA/size differs"
-        );
-        let link: SitemapSourceCommitAssociation = serde_json::from_str(&data)?;
-        ensure!(
-            commit_json(&link)? == data
-                && row.get::<_, String>(0)? == link.document_id
-                && row.get::<_, String>(1)? == link.measurement_id
-                && row.get::<_, i64>(2)? == i64::try_from(link.document_sequence)?,
-            "Source commit SQL columns/canonical envelope differ"
-        );
-        commits.push(link);
+        commits.push(read_commit_row(row, 0)?.0);
     }
     let snapshot = SitemapSourceStoreSnapshot {
         schema_version: 1,

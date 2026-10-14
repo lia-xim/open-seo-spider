@@ -131,7 +131,10 @@ pub use sitemap::{
     SitemapXmlCountFacts, count_sitemap_xml, decode_sitemap_entity, decode_sitemap_entity_observed,
     observe_sitemap_xml, parse_sitemap,
 };
-pub use store::{CrawlStore, SitemapReadSnapshot};
+pub use store::{
+    CrawlStore, SITEMAP_RAW_READ_ENGINE, SitemapRawReadContext, SitemapRawReadRequest,
+    SitemapRawReadWindow, SitemapRawRowKind, SitemapReadSnapshot,
+};
 pub use urls::normalize_url;
 
 pub use robots_sitemap_source::{

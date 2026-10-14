@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "immutable_handoff": "s4-source-read-core-v1",
+  "owner": "/root/s3_decode_review",
+  "status": "AUTHORED_NOT_COMPILED_NOT_RUN",
+  "source_root": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-streaming-integration-v1",
+  "base_head_declared_by_root": "380beb1ccacf73659d0ac8dd7fdb39c543b88883",
+  "existing_parent_guard": {
+    "path": "crates/core/src/sitemap_source_store.rs",
+    "sha256_before": "f1ae66933221d7b84f065d820642c65418ff18fd0b789be09b35fa03a095fefa"
+  },
+  "root_test_hook_guard": {
+    "path": "crates/core/src/sitemap_source_store_tests.rs",
+    "sha256_before": "6fa3e14f62670e27eb8be8647244e1b3cc914def024e6d50d99eebde41f12099",
+    "append_text": "#[path = \"sitemap_source_store/verified_read_tests.rs\"]\nmod verified_read_tests;"
+  },
+  "raw_peer_api": {
+    "module": "crate::sitemap_ledger::verified_read",
+    "type": "VerifiedRawRead",
+    "methods": [
+      "summary",
+      "inherited",
+      "connection",
+      "document_by_id"
+    ],
+    "frozen_peer_manifest": "Root must bind actual peer handoff pin separately; no guessed hash"
+  },
+  "product_files": 3,
+  "test_groups_authored": 9,
+  "product_tests_executed": 0,
+  "rustfmt_check_exit_code": 0,
+  "compute_hold_active": true,
+  "bounds": [
+    "Ordinary full-tail streaming; compact Rust summary plus one bounded record/link/document; SQLite working storage unproven",
+    "Selected actual parent/plan plus old materializing compatibility; no selected bounded-memory claim",
+    "Root retains selected legacy/source presence and recrawl row/frontier gates even for None"
+  ],
+  "entries": [
+    {
+      "path": "product/crates/core/src/sitemap_source_store.rs",
+      "bytes": 57405,
+      "sha256": "698166e4000da590af7a87ebb6b35bf49b5341f8c04c433e10ec7b98072a8170"
+    },
+    {
+      "path": "product/crates/core/src/sitemap_source_store/verified_read.rs",
+      "bytes": 11310,
+      "sha256": "1049f6ded60a2f12efef0e393fe7422fbfcf6f110b0c5e3c0d52df1172c5eab8"
+    },
+    {
+      "path": "product/crates/core/src/sitemap_source_store/verified_read_tests.rs",
+      "bytes": 15534,
+      "sha256": "e2b38f5b35c6289fa623e1935def92646e7836a2cc6a70050971cf5c1c43b99c"
+    },
+    {
+      "path": "HANDOFF.md",
+      "bytes": 6811,
+      "sha256": "9d534d1b24dc1a8e72cae072a3a4f73ea95b6488a1d0850379db8123cda186b5"
+    },
+    {
+      "path": "static-checks.json",
+      "bytes": 2105,
+      "sha256": "c8c6b9af92ab8e1a9eff17b3970137269ea4f718c0e7b0a39bf4459a00fe2c4e"
+    }
+  ]
+}

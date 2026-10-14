@@ -1,0 +1,62 @@
+{
+  "schema": "open-seo-spider.s4-sql-paging-design.v1",
+  "status": "IMMUTABLE_DESIGN_ONLY_NO_IMPLEMENTATION_NOT_RUN",
+  "author": "/root/finish_coverage",
+  "target_provided_by_root": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-streaming-integration-v1",
+    "head": "380beb1ccacf73659d0ac8dd7fdb39c543b88883"
+  },
+  "documents": [
+    {
+      "path": "PLAN.md",
+      "sha256": "6aa6673b9f94014dcb6294ce2177b6b22fd8120e97330fbf61385fc127c20e8e"
+    },
+    {
+      "path": "source-pins.json",
+      "sha256": "6dc8bab407e04e104b6496e677bcc92a1f3424e643a217ed3cb872b11ca660e0"
+    }
+  ],
+  "actual_source_files_pinned": 17,
+  "recommended_contract": "Private transaction-bound VerifiedRawRead, streamed canonical/global/relational validation, compact owned verified header plus bounded selected window. Streamed sidecar summary/context in the same transaction. Two-pass Count+SHA then bounded Write/channel CSV without all-output Vec or new spool. App must consume new window/header rather than full SitemapCatalog.",
+  "critical_invariants": [
+    "Global cross-table ID duplicates checked without trusting imported schema UNIQUE",
+    "Exact existing canonical row/SQL projections/tagged rolling hash/global sequence/counts/full serialized32MiB envelope",
+    "Entry declared Loc ordinal multiset sorted as current validator; no stronger input order; actual document entry/location sequence order remains strict",
+    "No unindexed per-entry full-location scan; ordered second relation pass, optional writable-only index",
+    "Exact raw/source parent BLOB/hash/projection plus selected Some/None presence and full saved-plan/config/row guards",
+    "Actual same-TX config/generation/inventory/coverage/source/analysis cursor binding",
+    "No successful page before whole validation; CSV validation/size errors before headers, late transport errors explicit"
+  ],
+  "ownership_slices": [
+    "Raw Core new reader + narrowly shared ledger helpers",
+    "Source Core streamed sidecar reader + narrowly shared source helpers",
+    "Root Store facade/exports + context/coverage/selected readers",
+    "App actual route/window binding + CSV transport after contracts freeze"
+  ],
+  "space_boundary": "Raw stream/page target O(D+W+R) Rust space. Full current context additionally C/P/T config-import/parent/task-root-graph memory; those must be refactored or explicitly qualified. SQLite sorting/JSON/RSS is separate. No32MiB fullVec relabelled as streaming.",
+  "reusable_actual_paths": [
+    "policy_ledger::verify row-by-row digest",
+    "sitemap_membership_analysis::report_hash borrowed SQLite bytes",
+    "sitemap_source_store::snapshot_context validated-summary v1 digest",
+    "existing bounded target page/inlink SQL columns",
+    "existing exact CSV columns/quoting/formula protection"
+  ],
+  "scope_qualification": "sitemap_ledger::page is not the current HTTP reader; changing it alone does not fix App full-snapshot materialization. Raw Core-first is an increment; full source-store/coverage/selected context and actual API/export/physical proof remain S4 gates.",
+  "execution": {
+    "implementation": "NOT_STARTED",
+    "compiler": "NOT_RUN",
+    "cargo": "NOT_RUN",
+    "tests": "NOT_RUN",
+    "sqlite_fixture": "NOT_RUN",
+    "source_generator": "NOT_RUN",
+    "http": "NOT_RUN",
+    "native": "NOT_RUN",
+    "browser": "NOT_RUN"
+  },
+  "mutations": {
+    "own_design_documents_only": true,
+    "root_repository": false,
+    "git_state": false,
+    "runtime": false
+  }
+}

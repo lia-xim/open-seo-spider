@@ -9,6 +9,13 @@ use serde::de::DeserializeOwned;
 use sha2::{Digest, Sha256};
 use std::{path::Path, sync::Mutex};
 
+#[path = "store/sitemap_raw_read.rs"]
+mod sitemap_raw_read;
+pub use sitemap_raw_read::{
+    SITEMAP_RAW_READ_ENGINE, SitemapRawReadContext, SitemapRawReadRequest, SitemapRawReadWindow,
+    SitemapRawRowKind,
+};
+
 /// Roots are original declarations; source/task aliases must already be finalized.
 /// config_sha256 binds the actual saved configuration bytes at FIRST initialization.
 /// Resume retains that hash while Store::prepare permits operational overrides.

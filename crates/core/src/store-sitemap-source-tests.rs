@@ -1044,3 +1044,76 @@ fn selected_historical_parent_none_remains_unknown_and_exact_parent_tamper_still
     assert!(child.load_report().is_err());
     assert!(child.inspection().is_err());
 }
+
+#[test]
+fn actual_raw_window_a_only_capture_changes_state_without_inventing_committed_raw_rows() {
+    let (_temp, store, generation) = fixture(false, Default::default());
+    let request = crate::SitemapRawReadRequest::default();
+    let before = store.sitemap_raw_window(&request).unwrap();
+    let value = batch(generation, &body(), true);
+    let _receipt = a(&store, generation, &value, &body());
+    let after = store.sitemap_raw_window(&request).unwrap();
+    assert_eq!(after.context.ledger, before.context.ledger);
+    assert_eq!(after.rows, before.rows);
+    assert_eq!(
+        after.context.source_summary.as_ref().unwrap().record_count,
+        1
+    );
+    assert_eq!(
+        after.context.source_summary.as_ref().unwrap().commit_count,
+        0
+    );
+    assert_ne!(after.state_sha256, before.state_sha256);
+    let old = store.sitemap_read_snapshot().unwrap();
+    assert_eq!(
+        after.context.source_context_sha256,
+        old.sitemap_source_measurement_context
+    );
+    let stale = crate::SitemapRawReadRequest {
+        expected_state_sha256: Some(before.state_sha256),
+        ..Default::default()
+    };
+    assert!(
+        store
+            .sitemap_raw_window(&stale)
+            .unwrap_err()
+            .to_string()
+            .contains("state stale")
+    );
+}
+
+#[test]
+fn actual_raw_window_selected_parent_presence_guards_remain_materializing_compatibility() {
+    for measurements in [false, true] {
+        let (_parent_dir, _parent, prepared) = prepared_parent_for_source_presence(measurements);
+        let child_dir = tempfile::tempdir().unwrap();
+        let child = CrawlStore::open(child_dir.path().join("raw-selected.sqlite")).unwrap();
+        child.initialize_selected_recrawl(&prepared).unwrap();
+        let read = child.sitemap_raw_window(&Default::default()).unwrap();
+        assert!(read.context.materializing_selected_compatibility);
+        assert_eq!(read.context.source_summary.is_some(), measurements);
+        if measurements {
+            let mut connection = child.connection.lock().unwrap();
+            let tx = connection.transaction().unwrap();
+            tx.execute("DELETE FROM sitemap_source_measurement_commits", [])
+                .unwrap();
+            tx.execute("DELETE FROM sitemap_source_measurements", [])
+                .unwrap();
+            tx.execute("DELETE FROM metadata WHERE key='sitemap_source_store'", [])
+                .unwrap();
+            tx.commit().unwrap();
+            drop(connection);
+            assert!(child.sitemap_raw_window(&Default::default()).is_err());
+        } else {
+            let mut changed = prepared.base_snapshot_bytes.clone();
+            changed.push(b' ');
+            child
+                .connection
+                .lock()
+                .unwrap()
+                .execute("UPDATE recrawl_base SET snapshot=?1 WHERE id=1", [changed])
+                .unwrap();
+            assert!(child.sitemap_raw_window(&Default::default()).is_err());
+        }
+    }
+}

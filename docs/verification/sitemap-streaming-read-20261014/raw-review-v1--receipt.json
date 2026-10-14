@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/s3_decode_review",
+  "review_kind": "independent-bounded-static",
+  "immutable": true,
+  "completed_at_utc": "2026-10-14T21:21:28.1231529Z",
+  "candidate_manifest": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s4-raw-read-core-v1/manifest.json",
+  "candidate_manifest_sha256": "14221c867291188534c0f5d7e9630ebc1250cbeccd3653266bdc02214441095c",
+  "verdict": "ONE_CONFIRMED_STATIC_FINDING",
+  "finding_count": 1,
+  "findings": [
+    {
+      "id": "RAW-V1-P2-TASK-COLLATION",
+      "priority": "P2",
+      "status": "OPEN_IN_FROZEN_V1",
+      "path": "files/crates/core/src/sitemap_ledger/verified_read.rs",
+      "line_start": 717,
+      "line_end": 723,
+      "effect": "NOCASE legacy task_url column grouping rejects old-loader-valid distinct case-sensitive source tasks /A.xml and /a.xml",
+      "minimal_reproducer": "Controlled imported documents table with task_url TEXT COLLATE NOCASE and no task UNIQUE; two canonical valid empty XML documents with exact projections and refreshed accounting; old Rust BTreeSet byte-distinct, new SQL grouping equal",
+      "fix": "Explicit COLLATE BINARY identity grouping",
+      "runtime_reproduced": false,
+      "root_accepted": true
+    }
+  ],
+  "other_confirmed_findings": 0,
+  "authored_tests_reviewed": 14,
+  "product_tests_executed": 0,
+  "compiler": "NOT_RUN",
+  "typecheck": "NOT_RUN",
+  "cargo": "NOT_RUN",
+  "sqlite": "NOT_RUN",
+  "http": "NOT_RUN",
+  "generators": "NOT_RUN",
+  "native": "NOT_RUN",
+  "browser": "NOT_RUN",
+  "sdk": "NOT_RUN",
+  "author_rustfmt": "PASS_REPORTED_IN_PINNED_MANIFEST_ONLY",
+  "reviewer_rustfmt": "NOT_RUN",
+  "payload_mutation": "NONE",
+  "root_mutation": "NONE",
+  "git_commands": "NONE",
+  "files": [
+    {
+      "path": "REVIEW.md",
+      "sha256": "e381fdebcdde109a3ce2ab82091b16f2cfabb6d7466c95aa988ada1fb63cd812"
+    },
+    {
+      "path": "source-pins.json",
+      "sha256": "b71ede5a92de07073852fb92106ab1d81b27eae137e78f7c4f973748a9277c75"
+    }
+  ],
+  "limits": [
+    "Source-only review; no TypePASS/compile/runtime claim",
+    "Same Connection active read-TX is a caller contract, not static prevention of end/restart/write misuse",
+    "Selected inherited path remains materializing compatibility; Root retains higher presence gates even None",
+    "No measured query plan, SQLite temp storage, RSS, timing, concurrency, CSV transport, App/UI or feature parity proof"
+  ]
+}

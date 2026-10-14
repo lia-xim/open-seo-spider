@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "result": "FROZEN246_FUTURE993_NAMED211_PREPARED_NOT_EXECUTED",
+  "recorded_at": "2026-10-14T21:22:56.479Z",
+  "source": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-streaming-read-source-v1",
+  "manifest_sha256": "1fc7c77677c82e7c9a9460aa30a8b261a54a2f7567e41a1b04638c965c93f85c",
+  "files": 246,
+  "minimum_expected": 993,
+  "required_names": 211,
+  "new_authored_tests": 36,
+  "new_test_groups": [
+    {
+      "path": "crates/core/src/sitemap_ledger/verified_read_tests.rs",
+      "names": [
+        "imported_nocase_task_column_preserves_distinct_case_sensitive_source_urls",
+        "verified_raw_requires_transaction_and_preserves_unknown_and_initialized_empty",
+        "raw_window_and_visitor_agree_with_full_oracle_for_all_filter_roles",
+        "filter_validation_is_exact_and_visitor_errors_propagate",
+        "corrupt_tail_and_same_row_sql_projection_fail_before_any_window",
+        "global_id_duplicates_are_rejected_even_without_imported_unique_constraints",
+        "duplicate_global_sequence_and_document_ordinal_reorder_are_rejected",
+        "entry_declared_loc_order_is_not_tightened_but_multiset_must_match",
+        "exact_full_serialized_envelope_size_is_verified_not_just_sql_data_sum",
+        "missing_entry_and_actual_committed_policy_row_are_not_skipped",
+        "inherited_raw_anchor_uses_explicit_old_materializing_compatibility",
+        "read_only_file_and_wal_snapshot_are_immutable_and_stable",
+        "partial_initialized_schema_is_rejected_without_repair",
+        "oversized_sql_projection_is_rejected_against_bounded_canonical_payload",
+        "real_eight_mib_window_cap_refuses_large_page_and_smaller_window_recovers"
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store/verified_read_tests.rs",
+      "names": [
+        "verified_source_actual_empty_a_only_and_b_match_portable_accounting_and_v1_context",
+        "verified_source_actual_capture_unknown_and_capacity_markers_keep_reserve_and_revision",
+        "verified_source_checks_last_unjoined_record_and_whole_summary_not_only_first_link",
+        "verified_source_resealed_link_and_record_still_need_actual_raw_document_seals",
+        "verified_source_detects_duplicate_ids_even_if_sql_unique_constraint_was_removed",
+        "verified_source_needs_actual_transaction_and_same_connection_raw_proof",
+        "verified_source_historical_none_empty_schema_and_partial_schema_are_distinct",
+        "verified_source_selected_exact_parent_some_and_none_remain_explicit_compatibility",
+        "verified_source_selected_parent_some_current_none_delete_all_never_becomes_historical"
+      ]
+    },
+    {
+      "path": "crates/core/src/store/sitemap_raw_read_tests.rs",
+      "names": [
+        "actual_raw_window_preserves_unknown_vs_known_empty_and_readonly_database",
+        "actual_raw_window_pagination_matches_original_catalog_and_binds_exact_filter",
+        "actual_raw_window_rejects_corrupt_tail_before_returning_the_requested_first_row",
+        "actual_raw_window_config_change_stales_state_and_orphan_parent_marker_is_rejected",
+        "raw_window_request_rejects_unknown_types_bounds_and_unbound_continuations",
+        "actual_raw_window_bounds_context_metadata_even_when_raw_history_is_absent"
+      ]
+    },
+    {
+      "path": "crates/app/src/sitemap_raw_cli_tests.rs",
+      "names": [
+        "raw_sitemap_cli_parser_accepts_only_the_explicit_read_command_arguments",
+        "actual_raw_sitemap_cli_reads_unknown_history_and_refuses_existing_destination",
+        "actual_raw_sitemap_cli_rejects_invalid_request_before_database_or_output_creation",
+        "actual_raw_sitemap_cli_request_file_accepts_exact_cap_and_refuses_sentinel_byte"
+      ]
+    },
+    {
+      "path": "crates/core/src/store-sitemap-source-tests.rs",
+      "names": [
+        "actual_raw_window_a_only_capture_changes_state_without_inventing_committed_raw_rows",
+        "actual_raw_window_selected_parent_presence_guards_remain_materializing_compatibility"
+      ]
+    }
+  ],
+  "staged_product_bindings": [
+    {
+      "path": "crates/app/src/main.rs",
+      "bytes": 28472,
+      "sha256": "dc86c227a229e00001c194f74d3e1c15101cda9f4381a0adc9dfc9644841016d"
+    },
+    {
+      "path": "crates/app/src/sitemap_membership.rs",
+      "bytes": 30159,
+      "sha256": "4e1143d1b460181352bd2f6bef5bf32862f0f5fb1562f7452264d106d52c50ec"
+    },
+    {
+      "path": "crates/app/src/sitemap_raw_cli.rs",
+      "bytes": 1963,
+      "sha256": "b53822aace0cd4288c31d99fb28387f2c6112f70b3f2472ee4d2a7b973ba9341"
+    },
+    {
+      "path": "crates/app/src/sitemap_raw_cli_tests.rs",
+      "bytes": 3981,
+      "sha256": "443fd3c62c3b9ebb839f7cd93298a4d0d72bcad3f96d5808c68363a72069016d"
+    },
+    {
+      "path": "crates/core/src/lib.rs",
+      "bytes": 5909,
+      "sha256": "04731061390f432483509ad28831d46a3e33b62b5a45af303ddef5c414a3c9d4"
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger.rs",
+      "bytes": 72369,
+      "sha256": "8ef116f6ae538f78dea5f5267db5c1fd1bceac1fa0e507ea9a9833440d14848e"
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/verified_read.rs",
+      "bytes": 30630,
+      "sha256": "173c4eb928e8bd4d2a1881d404d00f105416b5b943554357a2b126ba614afd5c"
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/verified_read_tests.rs",
+      "bytes": 25176,
+      "sha256": "c2e3d03a3ab4ccb82253bd6b3cd3c4d9fa32e8dd12a4a54927ebce3d9cc1830b"
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store.rs",
+      "bytes": 57405,
+      "sha256": "698166e4000da590af7a87ebb6b35bf49b5341f8c04c433e10ec7b98072a8170"
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store/verified_read.rs",
+      "bytes": 11310,
+      "sha256": "1049f6ded60a2f12efef0e393fe7422fbfcf6f110b0c5e3c0d52df1172c5eab8"
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store/verified_read_tests.rs",
+      "bytes": 15534,
+      "sha256": "e2b38f5b35c6289fa623e1935def92646e7836a2cc6a70050971cf5c1c43b99c"
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store_tests.rs",
+      "bytes": 31870,
+      "sha256": "f745be9102866d24273f0d192e49e971814dbf5d0dd4768785b9b22456d580a4"
+    },
+    {
+      "path": "crates/core/src/store-sitemap-source-tests.rs",
+      "bytes": 39156,
+      "sha256": "b9cdbe01e1192b7f2292bb96f9e75b30531dd1b6e67bca9147bb9f958799bebc"
+    },
+    {
+      "path": "crates/core/src/store.rs",
+      "bytes": 147641,
+      "sha256": "bc4631122ee39e9ece888c5186060aced00607501363e6447e64d978b83fe0f7"
+    },
+    {
+      "path": "crates/core/src/store/sitemap_raw_read.rs",
+      "bytes": 11489,
+      "sha256": "c53896c6c807e2ac0fd2da1555e228d497f72249ea459a3453773746e1ded27f"
+    },
+    {
+      "path": "crates/core/src/store/sitemap_raw_read_tests.rs",
+      "bytes": 8406,
+      "sha256": "d8aa109f9a0354232986c5756bab490742e01d610840073b6909175aabe25449"
+    }
+  ],
+  "runners": [
+    {
+      "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\run-sitemap-streaming-read-suite-v1.mjs",
+      "sha256": "ef3920ec29f3cf77dc62788b79fea8636698359cba1b104ccfc0e1b81fdce444",
+      "node_syntax_exit": 0,
+      "isolated_actual_repo_literal_verified": true,
+      "execution": "NOT_RUN"
+    },
+    {
+      "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\build-sitemap-streaming-read-v1.mjs",
+      "sha256": "1e7068826646cc939b407d69158eed9a4e111bc935a5ea905a075655a78ecf14",
+      "node_syntax_exit": 0,
+      "isolated_actual_repo_literal_verified": true,
+      "execution": "NOT_RUN"
+    }
+  ],
+  "previous_source_preserved": true,
+  "actual_checks": "SHA bytes, explicit staged ownership, unique required names, absolute existing JS path literal, node --check only",
+  "compiler_tests_native": "NOT_RUN_COORDINATED_COMPUTE_HOLD",
+  "installed_runtime_modified": false
+}

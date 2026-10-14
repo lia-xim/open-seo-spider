@@ -14,6 +14,9 @@ use std::{
 mod models;
 pub use models::*;
 
+#[path = "sitemap_ledger/verified_read.rs"]
+pub(crate) mod verified_read;
+
 pub(crate) const SCHEMA: &str = include_str!("schema.sql");
 const TABLES: [&str; 4] = [
     "sitemap_roots",
@@ -1306,101 +1309,117 @@ fn verify_current_policy_bindings(connection: &Connection, catalog: &SitemapCata
         })
         .collect();
     for row in rows {
-        let binding = match row {
-            SitemapLedgerRow::Root(row) => &row.admission,
-            SitemapLedgerRow::Location(row) => &row.admission,
-            _ => continue,
+        let document = match row {
+            SitemapLedgerRow::Location(row) => documents
+                .get(row.observation_id.as_str())
+                .copied()
+                .map(Box::as_ref),
+            SitemapLedgerRow::Root(row) => row
+                .source_observation_id
+                .as_deref()
+                .and_then(|id| documents.get(id).copied().map(Box::as_ref)),
+            _ => None,
         };
-        let Some(id) = &binding.policy_occurrence_id else {
-            if let SitemapLedgerRow::Root(root) = row {
-                verify_original_root_coordinates(connection, root)?;
-            }
-            continue;
-        };
-        let stored = committed_policy_occurrence(connection, id)?;
-        ensure!(
-            binding.policy_source_revision.as_deref()
-                == Some(stored.occurrence.source_revision.as_str()),
-            "Sitemap policy reference/source revision differs"
-        );
-        match row {
-            SitemapLedgerRow::Location(row) => {
-                let document = documents
-                    .get(row.observation_id.as_str())
-                    .context("Policy-bound Loc document missing")?;
+        verify_row_policy_binding(connection, row, document)?;
+    }
+    Ok(())
+}
+
+/// Shared by materializing portable reads and the transaction-bound raw reader.
+fn verify_row_policy_binding(
+    connection: &Connection,
+    row: &SitemapLedgerRow,
+    document: Option<&SitemapSourceDocument>,
+) -> Result<()> {
+    let binding = match row {
+        SitemapLedgerRow::Root(row) => &row.admission,
+        SitemapLedgerRow::Location(row) => &row.admission,
+        _ => return Ok(()),
+    };
+    let Some(id) = &binding.policy_occurrence_id else {
+        if let SitemapLedgerRow::Root(root) = row {
+            verify_original_root_coordinates(connection, root)?;
+        }
+        return Ok(());
+    };
+    let stored = committed_policy_occurrence(connection, id)?;
+    ensure!(
+        binding.policy_source_revision.as_deref()
+            == Some(stored.occurrence.source_revision.as_str()),
+        "Sitemap policy reference/source revision differs"
+    );
+    match row {
+        SitemapLedgerRow::Location(row) => {
+            let document = document.context("Policy-bound Loc document missing")?;
+            ensure!(
+                stored.generation == document.generation
+                    && stored.occurrence.decision.source_url.as_deref()
+                        == Some(document.task_url.as_str()),
+                "Policy-bound Loc generation/source differs"
+            );
+            let expected = match row.observed.role {
+                crate::SitemapLocationRole::PageLocation => {
+                    crate::CandidateSourceKind::SitemapLocation
+                }
+                crate::SitemapLocationRole::ChildSitemap => {
+                    crate::CandidateSourceKind::SitemapDocument
+                }
+            };
+            ensure!(
+                stored.occurrence.decision.source_kind == expected,
+                "Policy-bound Loc source kind differs"
+            );
+            ensure!(
+                SitemapAdmissionBinding::from_final_policy(&row.observed, &stored.occurrence)?
+                    == *binding,
+                "Persisted Loc binding differs from actual committed final policy decision"
+            );
+        }
+        SitemapLedgerRow::Root(root) => {
+            ensure!(
+                stored.occurrence.task_role == crate::PolicyTaskRole::SitemapDocument
+                    && stored.occurrence.decision.source_kind
+                        == crate::CandidateSourceKind::SitemapDocument,
+                "Root policy row is not a sitemap protocol admission"
+            );
+            verify_declared_root_coordinates(connection, root, &stored)?;
+            if root.source_observation_id.is_some() {
+                let document = document.context("Policy-bound robots source missing")?;
                 ensure!(
                     stored.generation == document.generation
                         && stored.occurrence.decision.source_url.as_deref()
-                            == Some(document.task_url.as_str()),
-                    "Policy-bound Loc generation/source differs"
-                );
-                let expected = match row.observed.role {
-                    crate::SitemapLocationRole::PageLocation => {
-                        crate::CandidateSourceKind::SitemapLocation
-                    }
-                    crate::SitemapLocationRole::ChildSitemap => {
-                        crate::CandidateSourceKind::SitemapDocument
-                    }
-                };
-                ensure!(
-                    stored.occurrence.decision.source_kind == expected,
-                    "Policy-bound Loc source kind differs"
-                );
-                ensure!(
-                    SitemapAdmissionBinding::from_final_policy(&row.observed, &stored.occurrence)?
-                        == *binding,
-                    "Persisted Loc binding differs from actual committed final policy decision"
+                            == Some(document.task_url.as_str())
+                        && u64::try_from(stored.occurrence.source_ordinal)? == root.source_ordinal
+                        && stored.occurrence.source_revision == document.source_revision,
+                    "Policy-bound robots generation/source/ordinal/revision differs"
                 );
             }
-            SitemapLedgerRow::Root(root) => {
-                ensure!(
-                    stored.occurrence.task_role == crate::PolicyTaskRole::SitemapDocument
-                        && stored.occurrence.decision.source_kind
-                            == crate::CandidateSourceKind::SitemapDocument,
-                    "Root policy row is not a sitemap protocol admission"
-                );
-                verify_declared_root_coordinates(connection, root, &stored)?;
-                if let Some(source) = &root.source_observation_id {
-                    let document = documents
-                        .get(source.as_str())
-                        .context("Policy-bound robots source missing")?;
-                    ensure!(
-                        stored.generation == document.generation
-                            && stored.occurrence.decision.source_url.as_deref()
-                                == Some(document.task_url.as_str())
-                            && u64::try_from(stored.occurrence.source_ordinal)?
-                                == root.source_ordinal
-                            && stored.occurrence.source_revision == document.source_revision,
-                        "Policy-bound robots generation/source/ordinal/revision differs"
-                    );
-                }
-                ensure!(
-                    stored.occurrence.admission_reason != "pending_admission",
-                    "Root policy scheduling is unfinished"
-                );
-                match binding.decision {
-                    SitemapAdmissionDecision::Scheduled => ensure!(
-                        stored.occurrence.admission_reason == "scheduled"
-                            && stored.occurrence.scheduled_fetch_url == binding.admitted_fetch_url,
-                        "Root policy scheduled alias differs"
-                    ),
-                    SitemapAdmissionDecision::Coalesced => ensure!(
-                        stored.occurrence.admission_reason == "coalesced"
-                            && stored.occurrence.decision.fetch_candidate_url
-                                == binding.admitted_fetch_url
-                            && stored.occurrence.coalesced_task_occurrence_id
-                                == binding.coalesced_policy_occurrence_id,
-                        "Root policy coalesced alias/reference differs"
-                    ),
-                    _ => ensure!(
-                        stored.occurrence.scheduled_fetch_url.is_none()
-                            && stored.occurrence.coalesced_task_occurrence_id.is_none(),
-                        "Unadmitted root has a committed policy task"
-                    ),
-                }
+            ensure!(
+                stored.occurrence.admission_reason != "pending_admission",
+                "Root policy scheduling is unfinished"
+            );
+            match binding.decision {
+                SitemapAdmissionDecision::Scheduled => ensure!(
+                    stored.occurrence.admission_reason == "scheduled"
+                        && stored.occurrence.scheduled_fetch_url == binding.admitted_fetch_url,
+                    "Root policy scheduled alias differs"
+                ),
+                SitemapAdmissionDecision::Coalesced => ensure!(
+                    stored.occurrence.admission_reason == "coalesced"
+                        && stored.occurrence.decision.fetch_candidate_url
+                            == binding.admitted_fetch_url
+                        && stored.occurrence.coalesced_task_occurrence_id
+                            == binding.coalesced_policy_occurrence_id,
+                    "Root policy coalesced alias/reference differs"
+                ),
+                _ => ensure!(
+                    stored.occurrence.scheduled_fetch_url.is_none()
+                        && stored.occurrence.coalesced_task_occurrence_id.is_none(),
+                    "Unadmitted root has a committed policy task"
+                ),
             }
-            _ => unreachable!("bindings only from roots/locations"),
         }
+        _ => unreachable!("bindings only from roots/locations"),
     }
     Ok(())
 }
