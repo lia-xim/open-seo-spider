@@ -4,7 +4,7 @@
 
 Die Liste hält alle 144 gruppierten Fähigkeiten fest. Ein Haken bedeutet, dass das **eigene gespeicherte Abnahmekriterium** mit Beweisen erfüllt ist. Er bedeutet keine vollständige Gleichheit mit Screaming Frog. Diese Referenzparität bleibt für alle Einträge **NOT_PROVEN**.
 
-Aktueller Katalogstand: **30 eigene Abnahmen erfüllt**, **68 teilweise geprüft**, **46 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
+Aktueller Katalogstand: **31 eigene Abnahmen erfüllt**, **67 teilweise geprüft**, **46 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
 
 Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.json) bilden ein zusätzliches Register. Ihre positiven Fälle, Kontrollfälle, Parameter und Grenzfälle müssen jeweils geprüft werden. Ein implementierter Kern, ein leerer Export oder übereinstimmende CSV-Zellen ersetzen diese Einzelabnahme nicht.
 
@@ -58,7 +58,7 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - Verträge: [FEATURE_TODO.md](FEATURE_TODO.md), [ROADMAP.md](ROADMAP.md), [saved-comparison.md](saved-comparison.md).
   - Gate-Stand: core_contract: PASS_34; api_cli_mcp: PASS_NATIVE_9_AND_SDK23; actual_browser_ui: PASS_NATIVE_8_WITH_SERVED_ASSETS_AND_MUTATION_CONTROL; snapshot_and_mapping_integrity: PASS_NATIVE_10_TWO_ORIGINS_BOTH_COLLISION_SIDES; offline_restart_zero_requests: PASS_FINAL_DRAINED_HTTP_WITNESSES_0; work_draft_core: PASS_34_ISOLATED_WORK_ONLY; workspace_tests: PASS_FINAL_SOURCE_CI_476_EACH_PLATFORM_4_IGNORED_SEPARATE_RENDERER; workspace_clippy: PASS_ALL_TARGETS; combined_full_original_bundle: PASS_SAME_OPTIMIZED_EXE_NATIVE_SDK_CLI_BROWSER; exact_commit_ci: PASS_2A81036_ALL4; immutable_release: PASS_NATIVE11_SDK12_CLI_BUDGET4_UI13; installed_runtime: PASS_B11_7JOBS_19DURABLE_FILES; ui_contract: PASS_28; ui_browser_fixture: PASS_34; mapping_oracle_controls: PASS; final_app_tests: PASS_98; worker_maximum_depth: PASS_256_PLUS1_REFUSED_ON_1MIB_CALLER; cli_bundle_fixed_ceiling: PASS_NATIVE_64MIB_EXACT_PLUS1; baseline_exact_commit_ci: PASS_B8D6908_ALL4.
 
-- [ ] **Nächster Baustein – B12: Sitemaps und Mitgliedschaft** — IN_PROGRESS. Sitemap-Writer und lesende Snapshot-API/CSV/MCP/Browser sind auf8787 installiert. Der Nutzer erlaubt ausdrücklich lokalen Ersatz für GitHub-Actions bis nächsten Monat. Optimierter Windows-Release072d798f besteht Ledger11/SQLite11, native API-/CSV-/SDK-/Browser11 mit24Tools/320px sowie Transport16 und Vergleichs-/Bundle-Grenzprüfungen. Lokaler vollständiger Workspace740 ohne Fehler/ignorierte Tests, echte Renderer17, Format und Clippy bestehen. Sieben historische Jobs und19 dauerhafte Dateien bleiben unverändert; vorhandener Renderer erhalten, Backup verifiziert. GitHub/Linux/Container bleiben ungeprüft. Physische Größen-/Rollback-/Kohorten- und übrige Feature-Gates bleiben offen.
+- [ ] **Nächster Baustein – B12: Sitemaps und Mitgliedschaft** — LOCAL_WINDOWS794_NATIVE13_OPTIMIZED_INSTALL_PENDING. Sitemap-Writer und lesende Snapshot-API/CSV/MCP/Browser sind auf8787 installiert. Der Nutzer erlaubt ausdrücklich lokalen Ersatz für GitHub-Actions bis nächsten Monat. Optimierter Windows-Release072d798f besteht Ledger11/SQLite11, native API-/CSV-/SDK-/Browser11 mit24Tools/320px sowie Transport16 und Vergleichs-/Bundle-Grenzprüfungen. Lokaler vollständiger Workspace740 ohne Fehler/ignorierte Tests, echte Renderer17, Format und Clippy bestehen. Sieben historische Jobs und19 dauerhafte Dateien bleiben unverändert; vorhandener Renderer erhalten, Backup verifiziert. GitHub/Linux/Container bleiben ungeprüft. Physische Größen-/Rollback-/Kohorten- und übrige Feature-Gates bleiben offen.
   - [x] Namespace-/Elternstruktur, Rohwerte, Duplikate, fehlende/ungültige Locs, vollständige XML-Prüfung und tatsächliche Gzip-Grenzen im integrierten Core-Parser geprüft: 53 neue Tests und ein erhaltener historischer Test.
   - [x] Vier absichtlich beschädigte Work-Varianten werden durch gerichtete Laufzeit-Assertions erkannt; integrierte Quellen unabhängig geprüft, Alltargets-Clippy grün.
   - [x] Expliziter Sitemap-Fetch-Zweck, Datei-Gzip nach tatsächlichem HTTP-Decoding und unabhängige Ressourcenrechte im realen Netzwerkpfad angebunden; zwölf gerichtete HTTP-Core-Tests und alle329 Core-Unit-Tests bestehen.
@@ -84,7 +84,7 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - [x] Nutzerfreigabe für lokalen Ersatz der GitHub-Actions-Sperre: optimierter Windows-Release tatsächlich gebaut und geprüft; Runtime-Rust/Lock/Assets entsprechen197 Compiler-Dateien, nur drei Integrationstest-Endpunkte wurden für eigenen Renderer anpassbar gemacht. GitHub/Linux/Container ausdrücklich NOT_PROVEN, keine Billing-Einstellungen geändert.
   - [x] Vier bisher ausgesparte Browser-Tests an eigenem aufgewärmtem dynamischem Renderer ausgeführt: vollständiger lokaler Workspace740 besteht ohne Fehler oder Ignorierung; Workspace-Alltargets-Clippy und Format bestehen. Separate echte Renderer17 bestehen. Nutzer-Renderer8790 blieb unangetastet.
   - [x] Derselbe optimierte Release besteht Ledger11/SQLite11, geroutete API-/CSV-/SDK-/Browser11 mit24Tools/320px, Transport16 und vorhandene Originalbericht-/CLI-Bundle-Grenzen. Erfolgreich auf8787 installiert: sieben vollständige Job-Metadaten und19 dauerhafte Dateien byteidentisch, fünf Git-Assets und24MCP-Tools geprüft; Legacy-Sitemap-Historie bleibt unbekannt. Backup aufE verifiziert, Rollback nicht benötigt/ausgeführt.
-  - [ ] Budget1: Echte Rust-Kalibrierung für originale URL-Fragmente und wiederholte Lastmod-Felder; tatsächliche Parser-/Serializer-/Writer-Größen messen.
+  - [x] Aktueller Erweiterungsstand: 54 zusätzliche Rust-Tests, gesamter Workspace794/0Fehler/0ausgespart mit eigenem echtem Renderer, Clippy/Format bestanden. Derselbe optimierte Release ab1ac93c besteht13 native API-/CSV-/SDK-/Browsergruppen mit24Tools/320px, Gzip/Index-Zyklus, unvollständigem XML, aktuellen und geerbten qualifizierten Quellen-Kohorten sowie Lastmod-Profilen. Installation separat offen.
   - [ ] Budget2: Native JSON-Seite exakt8MiB und ein Byte darüber; kleinere Seite muss am selben gespeicherten Snapshot tatsächlich funktionieren.
   - [ ] Budget3: Nativer CSV-Export exakt64MiB und ein Byte darüber mit echten ursprünglichen Sitemap-Deklarationen; Überlauf ohne Teil-Download oder Mutation.
   - [ ] Budget4: Native einzelne Ledger-Zeile exakt256KiB und ein Byte darüber aus echter XML-Parserbeobachtung; neue Rows/Tasks müssen bei Überlauf gemeinsam zurückrollen.
@@ -92,10 +92,10 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - [ ] Budget6: Gezielte SQL-Fehler-Injektion ausschließlich offline in eigener bereits echt erzeugter Fixture-Datenbank; Ordinary/Policy-Rollback und Wiederaufnahme ohne erfundene Herkunft prüfen.
   - [ ] Budget7: Nur tatsächlich bestandene physische Grenzen veröffentlichen, gescheiterte Kandidaten erhalten und TODO/GitHub aktualisieren; Quell-CI/Release/Installation bleiben getrennt.
   - [ ] Live-Generationswechsel im nativen API-/Browserpfad prüfen.
-  - [ ] Vollständige rekursive Quellen-Kohorten und Fetch-/Inlink-Statusprojektionen implementieren und prüfen. Leerer Frontier/fehlende Mitgliedschaft beweisen keine vollständige Abdeckung.
   - [ ] GitHub-/Linux-/Container-CI nach Konto-Verfügbarkeit getrennt ausführen. Lokale740/Renderer17, optimierter Release und datenbewahrende Installation sind bestanden; Remote-CI bleibt NOT_PROVEN.
-  - Verträge: [sitemap-b12-plan.md](parity/sitemap-b12-plan.md), [sitemap-parser.md](sitemap-parser.md), [sitemap-transport.md](sitemap-transport.md), [robots-sitemap-source.md](robots-sitemap-source.md), [sitemap-ledger.md](sitemap-ledger.md), [sitemap-membership.md](sitemap-membership.md), [sitemap-native-acceptance.md](sitemap-native-acceptance.md), [sitemap-budget-plan.md](parity/sitemap-budget-plan.md), [sitemap-budget-plan-source-pins.json](parity/sitemap-budget-plan-source-pins.json).
-  - Gate-Stand: source_review: PARSER_AND_FETCH_NO_CONCRETE_P1_P2; implementation: MAIN_DURABLE_WRITER_AND_READONLY_API_CSV_MCP_UI; native_acceptance: PASS_LOCAL_TRANSPORT16_LEDGER11_MEMBERSHIP11_SEPARATE_SCOPES; work_parser: PASS_53_PLUS_EXISTING_NORMALIZER2; main_core_parser: PASS_54; main_core_clippy: PASS_ALL_TARGETS; main_standalone: PASS_56_SEPARATE; work_mutations: PASS_4_EXPECTED_RUNTIME_ASSERTION_FAILURES; exact_commit_ci: PASS_6597C9C_FOUR_JOBS_565_EACH; main_core_fetch_http: PASS_12; main_core_all_unit: PASS_CURRENT_CARGO_CORE510; main_portable_transport: PASS_16_FINAL_DRAIN; parser_exact_commit_ci: PASS_FOUR_JOBS_6171a32; optimized_transport_release: PASS_SAME_OPTIMIZED_EXE_16_NATIVE_SDK_BROWSER; installation: PASS_LOCAL_OPTIMIZED_9F12E11_7JOBS_19FILES; robots_source_core: PASS_353_AND_ALLTARGETS_CLIPPY; transport_proof_validator: PASS_SYNTHETIC_1POSITIVE_24NEGATIVE_AND_ACTUAL_DEBUG_RELEASE_COMPANIONS; new_robots_validator_ci: PASS_6597C9C_FOUR_JOBS_FULL_RAW_ARCHIVE; durable_source_ledger: MAIN_PASS_NATIVE_LEDGER11_SQL11_DRAINED; durable_work_core: HISTORICAL_437_V4_GAP_FIXED_BY_V5; durable_original_binding: PASS_V4_17_EXPECTED_FAILURES_V5_ALL_21_CONTROLS; durable_full_crawler_bootstrap: PASS_8_INCLUDED_IN_CORE_508; durable_workspace_clippy: PASS_LOCAL_CARGO_ALLTARGETS_SAME_SOURCE; durable_source_cohort: NOT_PROVEN; durable_exact_commit_ci: NOT_PROVEN_GITHUB_ACCOUNT_UNAVAILABLE_LOCAL_SCOPE_SEPARATE; durable_api_csv_ui: PASS_ROUTED_NATIVE_API_CSV_SDK_BROWSER11; durable_installation: PASS_LOCAL_USER_AUTHORIZED_740_NATIVE_RELEASE_24TOOLS; durable_policy_invalid_locs: PASS_UNCHANGED_EXTERNAL_POLICY13_AND_CORE_DISCOVERY12; durable_account_gate: DEFERRED_REMOTE_CI_USER_AUTHORIZED_LOCAL_ROUTE_NO_SETTINGS_CHANGE; durable_workspace_tests: PASS_LOCAL740_0FAIL_0IGNORED_REAL_BROWSER; durable_actual_browser: PASS_NATIVE_CHROME_SAME_ASSETS_320PX; durable_official_mcp_sdk: PASS_BOTH_OFFICIAL_TRANSPORTS24_TOOLS; durable_native_matrix: PASS_WINDOWS_DEV11_SCENARIOS11_SQL_REQUEST_DRAIN; durable_native_byte_budgets: PENDING_FULL_SIZE_EXACT_PLUS1_JSON_CSV; durable_native_generation_race: PENDING_LIVE_ACTIVE_GENERATION; durable_native_rollback_budget: PENDING_FAILURE_INJECTION; durable_budget_plan: SOURCE_PINNED_SEVEN_TASKS_NOT_EXECUTED; durable_live_renderer4: PASS_OWNED_EPHEMERAL_CURRENT_SOURCE; durable_optimized_release: PASS_LOCAL_WINDOWS_THIN_LTO_072D798F.
+  - [ ] Originale Mitgliedschaften an tatsächliche Fetch-/Inlink-Zustände anbinden und konkrete Sitemap-Zielfehler ausgeben; vollständige Website-Abdeckung bleibt unbewiesen.
+  - Verträge: [sitemap-b12-plan.md](parity/sitemap-b12-plan.md), [sitemap-parser.md](sitemap-parser.md), [sitemap-transport.md](sitemap-transport.md), [robots-sitemap-source.md](robots-sitemap-source.md), [sitemap-ledger.md](sitemap-ledger.md), [sitemap-membership.md](sitemap-membership.md), [sitemap-native-acceptance.md](sitemap-native-acceptance.md), [sitemap-budget-plan.md](parity/sitemap-budget-plan.md), [sitemap-budget-plan-source-pins.json](parity/sitemap-budget-plan-source-pins.json), [sitemap-assessment.md](sitemap-assessment.md).
+  - Gate-Stand: source_review: PARSER_AND_FETCH_NO_CONCRETE_P1_P2; implementation: MAIN_DURABLE_WRITER_AND_READONLY_API_CSV_MCP_UI; native_acceptance: PASS_LOCAL_TRANSPORT16_LEDGER11_MEMBERSHIP11_SEPARATE_SCOPES; work_parser: PASS_53_PLUS_EXISTING_NORMALIZER2; main_core_parser: PASS_54; main_core_clippy: PASS_ALL_TARGETS; main_standalone: PASS_56_SEPARATE; work_mutations: PASS_4_EXPECTED_RUNTIME_ASSERTION_FAILURES; exact_commit_ci: PASS_6597C9C_FOUR_JOBS_565_EACH; main_core_fetch_http: PASS_12; main_core_all_unit: PASS_CURRENT_CARGO_CORE510; main_portable_transport: PASS_16_FINAL_DRAIN; parser_exact_commit_ci: PASS_FOUR_JOBS_6171a32; optimized_transport_release: PASS_SAME_OPTIMIZED_EXE_16_NATIVE_SDK_BROWSER; installation: PASS_LOCAL_OPTIMIZED_9F12E11_7JOBS_19FILES; robots_source_core: PASS_353_AND_ALLTARGETS_CLIPPY; transport_proof_validator: PASS_SYNTHETIC_1POSITIVE_24NEGATIVE_AND_ACTUAL_DEBUG_RELEASE_COMPANIONS; new_robots_validator_ci: PASS_6597C9C_FOUR_JOBS_FULL_RAW_ARCHIVE; durable_source_ledger: MAIN_PASS_NATIVE_LEDGER11_SQL11_DRAINED; durable_work_core: HISTORICAL_437_V4_GAP_FIXED_BY_V5; durable_original_binding: PASS_V4_17_EXPECTED_FAILURES_V5_ALL_21_CONTROLS; durable_full_crawler_bootstrap: PASS_8_INCLUDED_IN_CORE_508; durable_workspace_clippy: PASS_LOCAL_CARGO_ALLTARGETS_SAME_SOURCE; durable_source_cohort: PASS_25_CORE_AND_NATIVE13_QUALIFIED_DECLARED_SCOPE; durable_exact_commit_ci: NOT_PROVEN_GITHUB_ACCOUNT_UNAVAILABLE_LOCAL_SCOPE_SEPARATE; durable_api_csv_ui: PASS_ROUTED_NATIVE_API_CSV_SDK_BROWSER11; durable_installation: PASS_LOCAL_USER_AUTHORIZED_740_NATIVE_RELEASE_24TOOLS; durable_policy_invalid_locs: PASS_UNCHANGED_EXTERNAL_POLICY13_AND_CORE_DISCOVERY12; durable_account_gate: DEFERRED_REMOTE_CI_USER_AUTHORIZED_LOCAL_ROUTE_NO_SETTINGS_CHANGE; durable_workspace_tests: PASS_LOCAL794_0FAIL_0IGNORED_REAL_BROWSER; durable_actual_browser: PASS_NATIVE_CHROME_SAME_ASSETS_320PX; durable_official_mcp_sdk: PASS_BOTH_OFFICIAL_TRANSPORTS24_TOOLS; durable_native_matrix: PASS_WINDOWS_DEV11_SCENARIOS11_SQL_REQUEST_DRAIN; durable_native_byte_budgets: PENDING_FULL_SIZE_EXACT_PLUS1_JSON_CSV; durable_native_generation_race: PENDING_LIVE_ACTIVE_GENERATION; durable_native_rollback_budget: PENDING_FAILURE_INJECTION; durable_budget_plan: TASK1_PASS_3_INCLUDED_IN_WORKSPACE794_PHYSICAL_GATES_SEPARATE; durable_live_renderer4: PASS_OWNED_EPHEMERAL_CURRENT_SOURCE; durable_optimized_release: PASS_LOCAL_WINDOWS_THIN_LTO_AB1AC93C; durable_lastmod: PASS_22_CORE_4_REAL_STORE_APP_AND_NATIVE_BROWSER.
 
 - [x] **B8: optionale Textaufnahme und gespeicherte Inhaltsanalyse** — COMPLETED. Der begrenzte B8-Baustein für optionale Roh-/DOM-Textaufnahme und gespeicherte ausgewählte Inhaltsanalyse ist mit eigenen nativen/API/UI-Gates, exakter Commit-CI und unveränderlichem installiertem Release geprüft. Vollständige Website-Analyse und CSS-Neuauswahl ohne erhaltenes HTML/DOM bleiben zusätzliche offene Feature-Abnahmen.
   - [x] Pure CSS-/Unicode-Auswahl20 und Binding4 sowie16 echte native Fixtures geprüft; ungültige Konfiguration scheitert vor HTTP.
@@ -3602,48 +3602,15 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 ### Sitemaps
 
-5 Einträge: 0 eigene Abnahmen erfüllt, 4 teilweise geprüft, 1 offen.
+5 Einträge: 1 eigene Abnahmen erfüllt, 3 teilweise geprüft, 1 offen.
 
 #### Teilweise vorhanden – Restarbeiten
-
-- [ ] **XML-Sitemaps entdecken** — Teilweise geprüft; `sitemap.discovery`, P2.
-
-  Orientierung: Gzip, Indexschleifen und fehlerhaftes XML über echte Requests prüfen.
-
-  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [core-unit](../crates/core/src) (PASS).
-
-  <details>
-  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
-
-  ```json
-  {
-    "id": "sitemap.discovery",
-    "reference_name": "Robots and explicit sitemaps",
-    "status": "partial",
-    "acceptance_test": "Load a sitemap index, gzipped child sitemap and explicit input; handle loops/malformed XML safely.",
-    "remaining_acceptance": [
-      "Add owned gzipped child-sitemap decoding and explicit index-loop/malformed-XML end-to-end fixtures."
-    ],
-    "implementation_evidence": [
-      {
-        "verification_run_ids": [
-          "core-fixtures",
-          "core-unit"
-        ],
-        "proves": "Robots/explicit sitemap inputs, nested sitemap indexes, multiple explicit origins, XML escaping, malformed-root rejection and bounded/seen discovery exist and are fixture-tested."
-      }
-    ],
-    "parity_status": "NOT_PROVEN"
-  }
-  ```
-
-  </details>
 
 - [ ] **Sitemap-Mitgliedschaft abgleichen** — Teilweise geprüft; `sitemap.coverage`, P2.
 
   Orientierung: Vollständige Mitgliedschaft speichern und Sitemap-only sowie nicht gelistete Crawl-URLs getrennt prüfen.
 
-  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [analysis](analysis-acceptance.md) (PASS).
+  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [analysis](analysis-acceptance.md) (PASS), [sitemap-derived-assessment-local](verification/sitemap-assessment-local.json) (PASS_LOCAL_WINDOWS).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -3655,7 +3622,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
     "status": "partial",
     "acceptance_test": "Compare fetched pages and sitemap locations; distinguish not listed, sitemap-only and incomplete crawl.",
     "remaining_acceptance": [
-      "Persist complete sitemap membership and compare not-listed/sitemap-only observations rather than deriving only zero-inlink candidates."
+      "Join persisted original memberships to fetched page and inlink observations, distinguishing not-listed, sitemap-only, pending, unavailable and historical evidence without inventing whole-website completeness."
     ],
     "implementation_evidence": [
       {
@@ -3664,6 +3631,12 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "analysis"
         ],
         "proves": "Sitemap-only locations are fetched with discovery source; observed graph orphan candidates explicitly retain incomplete/limited coverage boundaries."
+      },
+      {
+        "verification_run_ids": [
+          "sitemap-derived-assessment-local"
+        ],
+        "proves": "Actual same-transaction inventory permits qualified Complete/KnownEmpty/Unknown for current or historical declared sources; missing/denied/incomplete sources remain unknown, invalid Page Locs separate. Target/inlink joins and full website coverage remain open."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -3676,7 +3649,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Lastmod erhalten/prüfen und Redirect-, Non-200- sowie nicht indexierbare Ziele getrennt melden.
 
-  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS).
+  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [sitemap-derived-assessment-local](verification/sitemap-assessment-local.json) (PASS_LOCAL_WINDOWS).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -3688,7 +3661,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
     "status": "partial",
     "acceptance_test": "Find redirect/non-200/non-indexable URLs and invalid lastmod values in fixture XML.",
     "remaining_acceptance": [
-      "Retain sitemap XML fields, validate lastmod and produce specific redirect/non200/nonindexable sitemap-url findings."
+      "Produce explicit sitemap target redirect/non200/nonindexable findings from actual page observations; preserve original membership beside rewritten fetch identities."
     ],
     "implementation_evidence": [
       {
@@ -3696,6 +3669,12 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "core-fixtures"
         ],
         "proves": "Discovered sitemap locations receive ordinary status/indexability observations and errors."
+      },
+      {
+        "verification_run_ids": [
+          "sitemap-derived-assessment-local"
+        ],
+        "proves": "Raw lastmod fields retained and assessed against named XSD1.0 date|dateTime and W3C precision profiles; actual API/SDK/browser handle calendar errors, duplicate elements, incomplete prefixes and undetermined leap seconds. Target redirect/non200/nonindexable findings remain open."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -3759,6 +3738,45 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
       "Split at configured URL/byte bounds, create index and prove segment URL membership."
     ],
     "implementation_evidence": [],
+    "parity_status": "NOT_PROVEN"
+  }
+  ```
+
+  </details>
+
+#### Geprüfter eigener Kern
+
+- [x] **XML-Sitemaps entdecken** — Eigene Abnahme erfüllt; `sitemap.discovery`, P2.
+
+  Orientierung: Gzip, Indexschleifen und fehlerhaftes XML über echte Requests prüfen.
+
+  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [core-unit](../crates/core/src) (PASS), [sitemap-derived-assessment-local](verification/sitemap-assessment-local.json) (PASS_LOCAL_WINDOWS).
+
+  <details>
+  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
+
+  ```json
+  {
+    "id": "sitemap.discovery",
+    "reference_name": "Robots and explicit sitemaps",
+    "status": "implemented",
+    "acceptance_test": "Load a sitemap index, gzipped child sitemap and explicit input; handle loops/malformed XML safely.",
+    "remaining_acceptance": [],
+    "implementation_evidence": [
+      {
+        "verification_run_ids": [
+          "core-fixtures",
+          "core-unit"
+        ],
+        "proves": "Robots/explicit sitemap inputs, nested sitemap indexes, multiple explicit origins, XML escaping, malformed-root rejection and bounded/seen discovery exist and are fixture-tested."
+      },
+      {
+        "verification_run_ids": [
+          "sitemap-derived-assessment-local"
+        ],
+        "proves": "Actual native explicit duplicate roots, recursive index/self-cycle, duplicate compressed child and malformed XML retain original occurrences, complete-source facts and bounded deduplication. Current workspace includes parser/transport/ledger cases. Independent discovery acceptance is met; vendor parity is unproven."
+      }
+    ],
     "parity_status": "NOT_PROVEN"
   }
   ```
@@ -5306,4 +5324,4 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `ffdc4d2e37ebcdc96354b393e598ad8394ea4eb1e862f3c2c7c2c967184e174c`. Letzter im Katalog erfasster Beweisstand: `2026-10-13T01:46:09.224Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `768116dd15977ec41cda8157e74ec0bbe015b99cb062626a96dbffac5281f38a`. Letzter im Katalog erfasster Beweisstand: `2026-10-14T17:11:45.817Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

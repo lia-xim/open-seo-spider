@@ -566,6 +566,76 @@ async fn fresh_ordinary_full_crawl_retains_original_raw_duplicates_and_import_ov
     }
 }
 
+/// Actual fresh constructor, HTTP and durable writer control. The larger roots
+/// establish a feasible CSV candidate; this is not a native CSV-cap acceptance.
+#[tokio::test]
+async fn budget_calibration_fresh_quoted_fragments_preserve_originals_and_coalesce() {
+    use crate::SitemapAdmissionDecision as D;
+    let fixture = BinaryFixture::new(|_, path| match path {
+        "/empty.xml" => BinaryResponse::bytes(b"<urlset/>".to_vec(), "application/xml"),
+        "/seed" => BinaryResponse::bytes(b"<html><title>seed</title></html>".to_vec(), "text/html"),
+        _ => panic!("unexpected calibration request: {path}"),
+    })
+    .await;
+    let task_url = fixture.url("/empty.xml");
+    let originals = [128usize, 129, 122_000]
+        .map(|quotes| format!("{task_url}#{}", "\"".repeat(quotes)))
+        .to_vec();
+    for original in &originals {
+        assert_eq!(
+            crate::normalize_url(original, None).unwrap().as_str(),
+            task_url
+        );
+    }
+    let mut cfg = config(&fixture, false);
+    cfg.sitemap_urls = originals.clone();
+    assert!(cfg.explicit_sitemap_inputs.is_none());
+    let temp = tempfile::tempdir().unwrap();
+    let crawler = Crawler::new(cfg)
+        .unwrap()
+        .with_store(temp.path().join("crawl.sqlite"))
+        .unwrap();
+    let result = full(&crawler).await;
+    assert_checkpoint(&crawler, &result);
+    assert_eq!(
+        result.report.config.explicit_sitemap_inputs.as_ref(),
+        Some(&originals)
+    );
+    let catalog = result.report.sitemap_catalog.as_ref().unwrap();
+    let retained = roots(catalog);
+    assert_eq!(retained.len(), originals.len());
+    for (ordinal, (row, original)) in retained.iter().zip(&originals).enumerate() {
+        assert_eq!(row.raw_value, *original);
+        assert_eq!(row.source_ordinal, ordinal as u64);
+        assert_eq!(
+            row.normalized_document_url.as_deref(),
+            Some(task_url.as_str())
+        );
+        assert_eq!(
+            row.admission.admitted_fetch_url.as_deref(),
+            Some(task_url.as_str())
+        );
+        assert_eq!(
+            row.admission.decision,
+            if ordinal == 0 {
+                D::Scheduled
+            } else {
+                D::Coalesced
+            }
+        );
+        let bytes = serde_json::to_vec(&crate::SitemapLedgerRow::Root((*row).clone()))
+            .unwrap()
+            .len();
+        assert!(bytes < crate::SitemapLedgerLimits::default().max_row_json_bytes);
+        eprintln!(
+            "BUDGET_CALIBRATION_ROOT ordinal={ordinal} quotes={} serialized_row_bytes={bytes}",
+            original.matches('"').count()
+        );
+    }
+    assert_eq!(documents(catalog).len(), 1);
+    assert_requests(&fixture.finish().await, &[("/seed", 1), ("/empty.xml", 1)]);
+}
+
 #[tokio::test]
 async fn fresh_policy_full_crawl_retains_every_original_sitemap_policy_input() {
     let fixture = website().await;

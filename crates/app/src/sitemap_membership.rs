@@ -1,8 +1,9 @@
 //! Read-only sitemap projection after full Store validation.
 use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
 use open_seo_spider_core::{
-    SitemapCatalog, SitemapInheritedBasis, SitemapLedgerRow, SitemapLedgerSummary,
-    SitemapReadSnapshot,
+    SITEMAP_LASTMOD_ENGINE, SitemapCatalog, SitemapCoverage, SitemapInheritedBasis,
+    SitemapLastmodEntryAssessment, SitemapLastmodLimits, SitemapLedgerRow, SitemapLedgerSummary,
+    SitemapReadSnapshot, assess_sitemap_lastmod_entry, project_sitemap_coverage,
 };
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -31,7 +32,9 @@ impl Failure {
             "stale_sitemap_cursor"
             | "sitemap_job_snapshot_conflict"
             | "sitemap_catalog_unavailable" => 409,
-            "sitemap_response_byte_budget" | "sitemap_csv_byte_budget" => 413,
+            "sitemap_response_byte_budget"
+            | "sitemap_csv_byte_budget"
+            | "sitemap_lastmod_assessment_budget" => 413,
             "job_not_found" => 404,
             _ => 500,
         }
@@ -311,7 +314,17 @@ fn bound_catalog(
         catalog_config_sha256: catalog.summary.config_sha256.clone(),
         catalog_revision: catalog.summary.revision,
         catalog_rolling_sha256: catalog.summary.rolling_sha256.clone(),
-        catalog_state_sha256: digest(encode(&(&catalog.summary, &catalog.inherited))?),
+        // Task completion/config/initialization context can change while the
+        // immutable source rows and revision stay identical. Bind the actual
+        // same-TX inventory and full derived projection, including its engine,
+        // alongside the assessment engine; never substitute an empty frontier.
+        catalog_state_sha256: digest(encode(&(
+            &catalog.summary,
+            &catalog.inherited,
+            &read.coverage_inventory,
+            &read.coverage,
+            SITEMAP_LASTMOD_ENGINE,
+        ))?),
         inherited_basis: catalog.inherited.clone(),
     };
     Ok(Some((catalog, snapshot)))
@@ -347,6 +360,9 @@ pub(crate) struct Coverage {
     pub negative_membership: &'static str,
     pub fetch_status_join: &'static str,
     pub scope: &'static str,
+    /// Separate computed source-graph evidence; the original stored summary
+    /// and broad/legacy negative_membership fields are never rewritten.
+    pub derived: SitemapCoverage,
 }
 #[derive(Debug, Serialize)]
 pub(crate) struct Inventory {
@@ -365,6 +381,10 @@ pub(crate) struct Inventory {
     pub website_requests: u8,
     pub snapshot_scope: &'static str,
     pub coverage: Coverage,
+    pub lastmod_assessment_engine: &'static str,
+    /// Only visible Entry rows are projected. None is unavailable history;
+    /// an available page with no entries has Some([]), not missing evidence.
+    pub lastmod_assessments: Option<Vec<SitemapLastmodEntryAssessment>>,
 }
 pub(crate) fn inventory(
     job_id: Uuid,
@@ -376,6 +396,12 @@ pub(crate) fn inventory(
     let limit = query.validate()?;
     let filter = query.filter();
     let sqlite_available = read.is_some();
+    let derived_coverage = if let Some(read) = &read {
+        read.coverage.clone()
+    } else {
+        project_sitemap_coverage(None, None)
+            .map_err(|error| Failure::new("sitemap_read_failure", error))?
+    };
     let bound = bound_catalog(job_id, generation, config_sha, read)?;
     let mut response = Inventory {
         schema_version: 1,
@@ -401,7 +427,10 @@ pub(crate) fn inventory(
             negative_membership: "unknown",
             fetch_status_join: "not_performed",
             scope: "retained_original_declarations_and_memberships",
+            derived: derived_coverage,
         },
+        lastmod_assessment_engine: SITEMAP_LASTMOD_ENGINE,
+        lastmod_assessments: None,
     };
     if let Some((catalog, snapshot)) = bound {
         let after = query
@@ -425,6 +454,18 @@ pub(crate) fn inventory(
             .filter(|row| filter.matches(row) && after.is_none_or(|after| row.sequence() > after));
         let rows: Vec<_> = matching.by_ref().take(limit).cloned().collect();
         let has_more = matching.next().is_some();
+        let limits = SitemapLastmodLimits::default();
+        let assessments = rows
+            .iter()
+            .filter_map(|row| match row {
+                SitemapLedgerRow::Entry(entry) => Some(entry),
+                _ => None,
+            })
+            .map(|entry| {
+                assess_sitemap_lastmod_entry(entry, &limits)
+                    .map_err(|error| Failure::new("sitemap_lastmod_assessment_budget", error))
+            })
+            .collect::<Result<Vec<_>>>()?;
         response.next_cursor = if has_more {
             Some(token(
                 &snapshot,
@@ -441,6 +482,7 @@ pub(crate) fn inventory(
         response.summary = Some(catalog.summary);
         response.inherited = catalog.inherited;
         response.rows = Some(rows);
+        response.lastmod_assessments = Some(assessments);
         response.has_more = has_more;
         response.catalog_available = true;
         response.availability_reason = "saved_validated_sqlite_catalog";
@@ -450,12 +492,23 @@ pub(crate) fn inventory(
             "Catalog is unavailable; no continuation exists",
         ));
     }
-    if encode(&response)?.len() > MAX_JSON_BYTES {
-        return Err(Failure::new(
-            "sitemap_response_byte_budget",
-            "JSON page exceeds 8 MiB; request a smaller limit",
-        ));
-    }
+    // Measure the complete actual response with a bounded serializer. Derived
+    // assessment/raw copies must not allocate an unbounded JSON buffer before
+    // rejecting the page. No successful prefix can escape on a cap failure.
+    let mut measured = BoundedBytes {
+        bytes: Vec::new(),
+        max: MAX_JSON_BYTES,
+    };
+    serde_json::to_writer(&mut measured, &response).map_err(|error| {
+        if error.is_io() {
+            Failure::new(
+                "sitemap_response_byte_budget",
+                "JSON page exceeds 8 MiB; request a smaller limit",
+            )
+        } else {
+            Failure::new("sitemap_read_failure", error)
+        }
+    })?;
     Ok(response)
 }
 struct BoundedBytes {

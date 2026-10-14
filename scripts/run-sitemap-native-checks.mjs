@@ -8,7 +8,7 @@ import {fileURLToPath} from 'node:url';
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const mode = process.argv[2];
-assert(['ledger', 'membership'].includes(mode), 'Select ledger or membership');
+assert(['ledger', 'membership', 'assessment'].includes(mode), 'Select ledger, membership or assessment');
 assert.equal(process.argv.length, 3, 'No additional runner arguments');
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const git = args => execFileSync('git', ['-C', repo, ...args], {encoding: 'utf8'});
@@ -54,11 +54,11 @@ const manifestSha = sha(readFileSync(manifestPath));
 const env = {...process.env, SPIDER_BINARY: binary, SPIDER_BINARY_SHA256: binarySha,
   SPIDER_SITEMAP_LEDGER_PROOF: path.join(out, 'ledger.json')};
 const args = [harness];
-if (mode === 'membership') {
+if (mode !== 'ledger') {
   assert(process.env.OPEN_SEO_BROWSER_PATH, 'Explicit installed Chromium executable required');
   args.push('--binary', binary, '--binary-sha256', binarySha, '--source-root', repo,
     '--source-manifest', manifestPath, '--source-manifest-sha256', manifestSha,
-    '--runtime-root', repo, '--out', path.join(out, 'membership'),
+    '--runtime-root', repo, '--out', path.join(out, mode),
     '--chrome', path.resolve(process.env.OPEN_SEO_BROWSER_PATH));
 }
 write('inputs.json', {mode, source_commit: commit, binary, binary_sha256: binarySha,
@@ -73,9 +73,9 @@ writeFileSync(path.join(out, 'stderr.log'), run.stderr || '', {flag: 'wx'});
 assert.equal(sha(readFileSync(binary)), binarySha, 'Binary changed during native run');
 assert.equal(sha(readFileSync(harness)), harnessSha, 'Harness changed during native run');
 for (const source of sourceFiles) assert.equal(sha(readFileSync(path.join(repo, source.path))), source.sha256, source.path);
-const proofPath = mode === 'ledger' ? path.join(out, 'ledger.json') : path.join(out, 'membership/proof.json');
+const proofPath = mode === 'ledger' ? path.join(out, 'ledger.json') : path.join(out, mode, 'proof.json');
 const proof = existsSync(proofPath) ? JSON.parse(readFileSync(proofPath)) : null;
-const expected = mode === 'ledger' ? 'PASS' : 'PASS_NATIVE_SITEMAP_API_SDK_BROWSER';
+const expected = mode === 'ledger' ? 'PASS' : mode === 'assessment' ? 'PASS_NATIVE_SITEMAP_ASSESSMENTS_API_SDK_BROWSER' : 'PASS_NATIVE_SITEMAP_API_SDK_BROWSER';
 write('result.json', {mode, exit_code: run.status, signal: run.signal, error: run.error?.message,
   result: proof?.result || 'NO_NATIVE_PROOF', elapsed_ms: Date.now() - started,
   binary_sha256: binarySha, harness_sha256: harnessSha, source_manifest_sha256: manifestSha,
@@ -88,4 +88,4 @@ assert.equal(run.status, 0, (run.stderr || run.stdout || run.error?.message || '
 assert.equal(proof?.result, expected);
 assert.equal(proof?.binary_sha256, binarySha);
 assert.equal(proof?.harness_sha256, harnessSha);
-assert.equal(mode === 'ledger' ? proof.scenarios.length : proof.checks.length, 11);
+assert.equal(mode === 'ledger' ? proof.scenarios.length : proof.checks.length, mode === 'assessment' ? 13 : 11);

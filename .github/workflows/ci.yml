@@ -268,6 +268,13 @@ jobs:
           SPIDER_SOURCE_COMMIT: ${{ github.sha }}
           SPIDER_EXPECTED_SOURCE_COMMIT: ${{ github.sha }}
           SPIDER_SITEMAP_NATIVE_OUTPUT: ${{ runner.temp }}/sitemap-membership-native
+      - name: Native declared sitemap source coverage and lastmod
+        run: node scripts/run-sitemap-native-checks.mjs assessment
+        env:
+          SPIDER_BINARY: target/debug/open-seo-spider
+          SPIDER_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_EXPECTED_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_SITEMAP_NATIVE_OUTPUT: ${{ runner.temp }}/sitemap-assessment-native
       - name: Save private stored sitemap API and browser witnesses
         if: always()
         uses: actions/upload-artifact@v4
@@ -275,7 +282,9 @@ jobs:
           name: sitemap-membership-witnesses-${{ github.sha }}
           retention-days: 14
           if-no-files-found: warn
-          path: ${{ runner.temp }}/sitemap-membership-native/**
+          path: |
+            ${{ runner.temp }}/sitemap-membership-native/**
+            ${{ runner.temp }}/sitemap-assessment-native/**
       - name: Native saved-comparison browser and offline restart
         run: node web/verification/ui-saved-comparison-live.cjs
         env:

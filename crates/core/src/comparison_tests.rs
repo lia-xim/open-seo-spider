@@ -16,6 +16,7 @@ fn report(pages: Vec<PageRecord>) -> CrawlReport {
         policy_ledger: None,
         resource_ledger: None,
         sitemap_catalog: None,
+        sitemap_coverage_inventory: None,
     }
 }
 fn html_page(url: &str, html: &str) -> PageRecord {

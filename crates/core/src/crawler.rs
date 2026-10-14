@@ -850,29 +850,57 @@ impl Crawler {
             limited: is_limited,
             status_counts,
         };
-        let report = CrawlReport {
-            sitemap_catalog: match &self.store {
-                Some(store) => store.sitemap_catalog()?,
-                None => match memory_base {
-                    Some(prepared) => {
-                        // Parent validation binds the exact bytes, typed plan and config;
-                        // inheritance retains original identities without current discovery.
-                        prepared.validate()?;
-                        prepared
-                            .base_report
-                            .sitemap_catalog
-                            .as_ref()
-                            .map(|catalog| {
-                                crate::sitemap_ledger::project_inherited_catalog(
-                                    catalog,
-                                    &prepared.plan.parent.snapshot_sha256,
-                                )
-                            })
-                            .transpose()?
-                    }
-                    None => None,
-                },
+        let sitemap_snapshot = self
+            .store
+            .as_ref()
+            .map(|store| store.sitemap_read_snapshot())
+            .transpose()?;
+        let sitemap_catalog = match &sitemap_snapshot {
+            Some(snapshot) => snapshot.catalog.clone(),
+            None => match memory_base {
+                Some(prepared) => {
+                    // Parent validation binds the exact bytes, typed plan and config;
+                    // inheritance retains original identities without current discovery.
+                    prepared.validate()?;
+                    prepared
+                        .base_report
+                        .sitemap_catalog
+                        .as_ref()
+                        .map(|catalog| {
+                            crate::sitemap_ledger::project_inherited_catalog(
+                                catalog,
+                                &prepared.plan.parent.snapshot_sha256,
+                            )
+                        })
+                        .transpose()?
+                }
+                None => None,
             },
+        };
+        let sitemap_coverage_inventory = match &sitemap_snapshot {
+            Some(snapshot) => snapshot.coverage_inventory.clone(),
+            None => match memory_base {
+                Some(prepared) => prepared
+                    .base_report
+                    .sitemap_coverage_inventory
+                    .clone()
+                    .map(|inventory| {
+                        inventory.bind_inherited_parent(
+                            prepared
+                                .base_report
+                                .sitemap_catalog
+                                .as_ref()
+                                .context("Coverage parent catalog missing")?,
+                            &prepared.base_snapshot_bytes,
+                        )
+                    })
+                    .transpose()?,
+                None => None,
+            },
+        };
+        let report = CrawlReport {
+            sitemap_catalog,
+            sitemap_coverage_inventory,
             config: self.config.clone(),
             pages,
             issues,

@@ -181,6 +181,11 @@ pub fn prepare_selected_recrawl(
     if let Some(catalog) = &base_report.sitemap_catalog {
         crate::sitemap_ledger::validate_catalog(catalog)?;
     }
+    crate::validate_sitemap_coverage_inventory(
+        &base_report.config,
+        base_report.sitemap_catalog.as_ref(),
+        base_report.sitemap_coverage_inventory.as_ref(),
+    )?;
     let crawler = Crawler::from_saved_config(base_report.config.clone())?;
     let config = crawler.effective_config().clone();
     let mut pages = HashMap::new();
@@ -429,6 +434,7 @@ mod tests {
             policy_ledger: None,
             resource_ledger: None,
             sitemap_catalog: None,
+            sitemap_coverage_inventory: None,
         })
         .unwrap()
     }

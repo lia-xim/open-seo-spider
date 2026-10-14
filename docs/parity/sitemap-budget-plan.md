@@ -1,6 +1,6 @@
 # B12 next budget slice: source-pinned plan
 
-Status: READ_ONLY_PLAN_NOT_EXECUTED. No Main/Git/Cargo/native/browser/test changes or executions by this author. Product basis is Main ae77438f1362f9df5ee9eb0f49c195caa5b479c0. source-pins.json records21 actual product/dependency-lock files plus one read-only installed URL parser source. Root owns implementation, compiler receipts, native execution and acceptance.
+Status: IN_PROGRESS_TASK1_PASSED. The original read-only plan and source pins describe Main ae77438f1362f9df5ee9eb0f49c195caa5b479c0. Task1 is now implemented and passes in the current Windows workspace794/0failed/0ignored. Root owns integration, native execution and acceptance. Physical exact-fit gates remain separately qualified; the newer derived lastmod/coverage response requires its own current-binary JSON measurements.
 
 ## Actual limits and semantics
 
@@ -28,8 +28,9 @@ ASCII nonquote characters contribute two CSV bytes (one in typed JSON plus one i
 
 ## Ordered work and acceptance tasks
 
-1. [ ] Actual serializer/constructor calibration controls.
+1. [x] Actual serializer/constructor calibration controls.
    Add focused Rust controls using real fresh Crawler preparation for quoted-fragment originals, actual parser observations for repeated lastmods, and exact production serializer/writer constants. Generate fixture bodies from counts, not enormous committed literal files. Confirm integer/key ordering/escaping with actual Rust serde, not a parallel JSON model. These controls establish candidate sizes; they are distinct from native acceptance.
+   Implemented three additive controls: fresh quoted-fragment originals preserve original capture and actual Scheduled/Coalesced admissions; real XML parser/writer entries measure262143/262144/262145bytes and roll back the overflow; real JSON/CSV serialization measures quote+2/+5 and ASCII+1/+2. All three pass in the combined current workspace. The native default-row and full JSON/CSV gates below are still separate.
 
 2. [ ] Native JSON8MiB exact fit and +1 with a smaller-page recovery.
    Real XML can contain about34 entries, each with about ten near8KiB lastmod fields. Three retained strings per lastmod yield an Entry row around250KiB below256KiB, while XML is only about2.8MiB and catalog about8.5MiB. Missing Loc diagnostics are genuine observations and admit no pages. Use kind=entry to isolate real Entry rows; choose a native page count <=200, tune one entry so the complete API envelope including summary/snapshot/tokens is exactly8,388,608. Exact success requires HTTP200, raw body exact byte length, complete returned rows equal actual SQL/catalog, appropriate has_more/cursor, unknown negative coverage and unchanged read interval. A separately generated candidate whose genuine encoded envelope is8,388,609 must return413 and exact error code; limit reduction must return a real nonempty page with the same saved snapshot authority. Keep the chosen first-page has_more state fixed during tuning; never reuse a stale token across jobs.

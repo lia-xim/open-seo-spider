@@ -1,0 +1,786 @@
+{
+  "label": "offline stdio inventory",
+  "result": {
+    "tools": [
+      {
+        "name": "spider_capabilities",
+        "description": "Read implemented and optional capabilities",
+        "inputSchema": {
+          "type": "object",
+          "properties": {},
+          "required": [],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "spider_list_crawls",
+        "description": "List saved and active crawls",
+        "inputSchema": {
+          "type": "object",
+          "properties": {},
+          "required": [],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "spider_start_crawl",
+        "description": "Start a crawl for user-requested targets",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "config": {
+              "description": "CrawlConfig: seed_urls or seed_url, sitemap_urls, concurrency, delay_ms, obey_robots, max_pages, optional renderer",
+              "type": "object"
+            }
+          },
+          "required": [
+            "config"
+          ],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": true
+        }
+      },
+      {
+        "name": "spider_status",
+        "description": "Read crawl progress and warnings",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "spider_pages",
+        "description": "Read a bounded page slice; increment offset for more",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "limit": {
+              "maximum": 10000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "offset": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "spider_issues",
+        "description": "Read observed audit issues",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "spider_analysis",
+        "description": "Read graph and relationship/security/JSON-LD observations",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "spider_policy",
+        "description": "Read bounded native admission evidence; advance the returned sequence cursor",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "after_sequence": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "id": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "limit": {
+              "maximum": 1000,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "spider_sitemaps",
+        "description": "Read bounded validated original sitemap declarations/memberships without fetching websites; unavailable/negative results do not imply complete coverage",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "cursor": {
+              "maxLength": 4096,
+              "minLength": 1,
+              "type": "string"
+            },
+            "id": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "all",
+                "root",
+                "document",
+                "entry",
+                "location"
+              ],
+              "type": "string"
+            },
+            "limit": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "membership_url": {
+              "maxLength": 65536,
+              "minLength": 1,
+              "type": "string"
+            },
+            "source_observation_id": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "spider_resources",
+        "description": "Read bounded native source occurrences and immutable resource grants without fetching websites",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "after_sequence": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "id": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "limit": {
+              "maximum": 1000,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "spider_resource_transports",
+        "description": "Read bounded stored transport metadata, including checked responses excluded from report rows",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "after_url": {
+              "maxLength": 65536,
+              "minLength": 1,
+              "type": "string"
+            },
+            "id": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "limit": {
+              "maximum": 1000,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "spider_inspect_css",
+        "description": "Inspect declared dependencies in supplied CSS with an explicit bounded parser profile; no website is fetched",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "input"
+          ],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "spider_content",
+        "description": "Read a bounded saved-content inventory without text or website requests",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "after_ordinal": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "id": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "limit": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "source_kind": {
+              "enum": [
+                "raw_http_html",
+                "rendered_dom_html"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "spider_content_document",
+        "description": "Read one exact saved requested URL and source capture without fetching it",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "source_kind": {
+              "enum": [
+                "raw_http_html",
+                "rendered_dom_html"
+              ],
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "url"
+          ],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "spider_analyze_crawl_content",
+        "description": "Analyze an explicit bounded cohort of saved source captures; no website is fetched",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "input": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "id",
+            "input"
+          ],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "spider_analyze_content",
+        "description": "Analyze supplied text locally with an explicit similarity/readability profile; no website is fetched",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "input"
+          ],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "spider_preview_policy",
+        "description": "Preview supplied scope, query and rewrite decisions locally; no crawl is started",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "input": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "input"
+          ],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "spider_cancel",
+        "description": "Cancel and retain the saved frontier",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "spider_pause",
+        "description": "Stop admitting new documents, drain active work and persist a resumable checkpoint",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "spider_resume",
+        "description": "Resume a local crawl from SQLite with optional explicit operational overrides",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "options": {
+              "additionalProperties": false,
+              "properties": {
+                "concurrency": {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "delay_ms": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "max_attempts": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "max_pages": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "request_timeout_secs": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": true
+        }
+      },
+      {
+        "name": "spider_recrawl",
+        "description": "Create a derived crawl that refreshes only selected exact requested URLs and retains the source snapshot",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "max_attempts": {
+              "description": "Optional selected-attempt budget; zero means unlimited",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "urls": {
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array"
+            }
+          },
+          "required": [
+            "id",
+            "urls"
+          ],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": true
+        }
+      },
+      {
+        "name": "spider_project",
+        "description": "Read the original project snapshot; paginate large crawls via spider_pages",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "spider_compare",
+        "description": "Compare two crawl snapshots",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "after": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "before": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          "required": [
+            "before",
+            "after"
+          ],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "spider_compare_saved",
+        "description": "Compare two stable saved report cohorts with exact identities, explicit mappings and actual old/new facts; no website is fetched",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "after": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "before": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "config": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "engine": {
+                      "enum": [
+                        "open-seo-spider/saved-comparison-v1"
+                      ],
+                      "type": "string"
+                    },
+                    "include_selected_text": {
+                      "type": "boolean"
+                    },
+                    "limits": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "max_input_json_bytes": {
+                          "maximum": 268435456,
+                          "minimum": 1,
+                          "type": "integer"
+                        },
+                        "max_mappings": {
+                          "maximum": 32,
+                          "minimum": 1,
+                          "type": "integer"
+                        },
+                        "max_output_json_bytes": {
+                          "maximum": 67108864,
+                          "minimum": 1,
+                          "type": "integer"
+                        },
+                        "max_pages_per_snapshot": {
+                          "maximum": 100000,
+                          "minimum": 1,
+                          "type": "integer"
+                        },
+                        "max_url_bytes": {
+                          "maximum": 16384,
+                          "minimum": 1,
+                          "type": "integer"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "mappings": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "from_origin": {
+                            "maxLength": 16384,
+                            "type": "string"
+                          },
+                          "from_path_prefix": {
+                            "maxLength": 16384,
+                            "type": "string"
+                          },
+                          "side": {
+                            "enum": [
+                              "before",
+                              "after"
+                            ],
+                            "type": "string"
+                          },
+                          "to_origin": {
+                            "maxLength": 16384,
+                            "type": "string"
+                          },
+                          "to_path_prefix": {
+                            "maxLength": 16384,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "side",
+                          "from_origin",
+                          "from_path_prefix",
+                          "to_origin",
+                          "to_path_prefix"
+                        ],
+                        "type": "object"
+                      },
+                      "maxItems": 32,
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "expected_after_generation": {
+              "anyOf": [
+                {
+                  "maximum": 18446744073709552000,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "expected_before_generation": {
+              "anyOf": [
+                {
+                  "maximum": 18446744073709552000,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "include_original_reports": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "before",
+            "after"
+          ],
+          "additionalProperties": false
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      }
+    ]
+  },
+  "at_ms": 1918
+}

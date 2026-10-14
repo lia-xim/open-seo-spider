@@ -3065,7 +3065,7 @@
     {
       "id": "sitemap.discovery",
       "name": "Robots and explicit sitemaps",
-      "status": "partial",
+      "status": "implemented",
       "phase": "P2",
       "source_ids": [
         "sitemaps"
@@ -3078,13 +3078,17 @@
             "core-unit"
           ],
           "proves": "Robots/explicit sitemap inputs, nested sitemap indexes, multiple explicit origins, XML escaping, malformed-root rejection and bounded/seen discovery exist and are fixture-tested."
+        },
+        {
+          "verification_run_ids": [
+            "sitemap-derived-assessment-local"
+          ],
+          "proves": "Actual native explicit duplicate roots, recursive index/self-cycle, duplicate compressed child and malformed XML retain original occurrences, complete-source facts and bounded deduplication. Current workspace includes parser/transport/ledger cases. Independent discovery acceptance is met; vendor parity is unproven."
         }
       ],
       "parity_evidence": [],
       "group": "sitemap",
-      "remaining_acceptance": [
-        "Add owned gzipped child-sitemap decoding and explicit index-loop/malformed-XML end-to-end fixtures."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -3103,12 +3107,18 @@
             "analysis"
           ],
           "proves": "Sitemap-only locations are fetched with discovery source; observed graph orphan candidates explicitly retain incomplete/limited coverage boundaries."
+        },
+        {
+          "verification_run_ids": [
+            "sitemap-derived-assessment-local"
+          ],
+          "proves": "Actual same-transaction inventory permits qualified Complete/KnownEmpty/Unknown for current or historical declared sources; missing/denied/incomplete sources remain unknown, invalid Page Locs separate. Target/inlink joins and full website coverage remain open."
         }
       ],
       "parity_evidence": [],
       "group": "sitemap",
       "remaining_acceptance": [
-        "Persist complete sitemap membership and compare not-listed/sitemap-only observations rather than deriving only zero-inlink candidates."
+        "Join persisted original memberships to fetched page and inlink observations, distinguishing not-listed, sitemap-only, pending, unavailable and historical evidence without inventing whole-website completeness."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -3127,12 +3137,18 @@
             "core-fixtures"
           ],
           "proves": "Discovered sitemap locations receive ordinary status/indexability observations and errors."
+        },
+        {
+          "verification_run_ids": [
+            "sitemap-derived-assessment-local"
+          ],
+          "proves": "Raw lastmod fields retained and assessed against named XSD1.0 date|dateTime and W3C precision profiles; actual API/SDK/browser handle calendar errors, duplicate elements, incomplete prefixes and undetermined leap seconds. Target redirect/non200/nonindexable findings remain open."
         }
       ],
       "parity_evidence": [],
       "group": "sitemap",
       "remaining_acceptance": [
-        "Retain sitemap XML fields, validate lastmod and produce specific redirect/non200/nonindexable sitemap-url findings."
+        "Produce explicit sitemap target redirect/non200/nonindexable findings from actual page observations; preserve original membership beside rewritten fetch identities."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -4303,7 +4319,7 @@
       "parity_status": "NOT_PROVEN"
     }
   ],
-  "implementation_review_date": "2026-10-12",
+  "implementation_review_date": "2026-10-14",
   "parity_status": "NOT_PROVEN",
   "verification_runs": [
     {
@@ -5922,6 +5938,15 @@
       "recorded_at": "2026-10-13T08:50:37.978Z",
       "scope": "User-authorized Windows local route:740workspace/0ignored,Clippy/fmt,renderer17,newoptimizedsamebinarynativeLedger11+SQL11/API-SDK24-browser11/transport16/bundle. Installed7fulljobs/19originalfiles/fiveassets/24tools; backup verified; remoteCI/Linux/container/fullparity remain unproven.",
       "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "sitemap-derived-assessment-local",
+      "artifact": "docs/verification/sitemap-assessment-local.json",
+      "artifact_sha256": "73ef6add07f5b683ccb40964252a9506d6cbdf3b611d0bae6ad875ba9b5f5c4c",
+      "result": "PASS_LOCAL_WINDOWS",
+      "recorded_at": "2026-10-14T17:11:45.817Z",
+      "scope": "Current Windows workspace794/0ignored,Clippy/fmt; same optimized206-source binary passes13 API/CSV/officialSDK24/browser groups including gzip child/index cycle, malformed prefix, qualified current/historical cohort and stored lastmod. Installation tracked separately. RemoteCI/vendorparity not proven.",
+      "reference_parity": "NOT_PROVEN"
     }
   ],
   "reference_workflows": [
@@ -6043,8 +6068,8 @@
   ],
   "status_summary": {
     "overall": {
-      "implemented": 30,
-      "partial": 68,
+      "implemented": 31,
+      "partial": 67,
       "planned": 46,
       "total": 144
     },
@@ -6056,8 +6081,8 @@
         "total": 45
       },
       "P2": {
-        "implemented": 9,
-        "partial": 30,
+        "implemented": 10,
+        "partial": 29,
         "planned": 6,
         "total": 45
       },
@@ -6136,8 +6161,8 @@
         "total": 10
       },
       "sitemap": {
-        "implemented": 0,
-        "partial": 4,
+        "implemented": 1,
+        "partial": 3,
         "planned": 1,
         "total": 5
       },
@@ -6179,7 +6204,7 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-13T01:46:09.224Z",
+  "last_verified_at": "2026-10-14T17:11:45.817Z",
   "current_work": [
     {
       "id": "batch-b8-content-capture",
@@ -6806,7 +6831,7 @@
     },
     {
       "id": "batch-b12-sitemap-membership",
-      "status": "IN_PROGRESS",
+      "status": "LOCAL_WINDOWS794_NATIVE13_OPTIMIZED_INSTALL_PENDING",
       "stage": "LOCAL_WINDOWS740_OPTIMIZED_INSTALLED_CI_UNAVAILABLE_USER_AUTHORIZED",
       "priority": 3,
       "title_de": "Nächster Baustein – B12: Sitemaps und Mitgliedschaft",
@@ -6840,10 +6865,10 @@
         "Native Skripte im Repository versioniert und über gemeinsamen Runner tatsächlich erneut ausgeführt. Ledger byteidentisch zum eingefrorenen V5; Membership entfernt Work-Pfadabhängigkeit und bindet den Harness vor/nach Ausführung. CI-Verdrahtung für Windows/Linux, optimierten Windows-Ledger und Linux-Browser ergänzt; tatsächlicher CI-Lauf bleibt offen. Wiederholungen zählen nicht als zusätzliche Feature-Abdeckung.",
         "Nutzerfreigabe für lokalen Ersatz der GitHub-Actions-Sperre: optimierter Windows-Release tatsächlich gebaut und geprüft; Runtime-Rust/Lock/Assets entsprechen197 Compiler-Dateien, nur drei Integrationstest-Endpunkte wurden für eigenen Renderer anpassbar gemacht. GitHub/Linux/Container ausdrücklich NOT_PROVEN, keine Billing-Einstellungen geändert.",
         "Vier bisher ausgesparte Browser-Tests an eigenem aufgewärmtem dynamischem Renderer ausgeführt: vollständiger lokaler Workspace740 besteht ohne Fehler oder Ignorierung; Workspace-Alltargets-Clippy und Format bestehen. Separate echte Renderer17 bestehen. Nutzer-Renderer8790 blieb unangetastet.",
-        "Derselbe optimierte Release besteht Ledger11/SQLite11, geroutete API-/CSV-/SDK-/Browser11 mit24Tools/320px, Transport16 und vorhandene Originalbericht-/CLI-Bundle-Grenzen. Erfolgreich auf8787 installiert: sieben vollständige Job-Metadaten und19 dauerhafte Dateien byteidentisch, fünf Git-Assets und24MCP-Tools geprüft; Legacy-Sitemap-Historie bleibt unbekannt. Backup aufE verifiziert, Rollback nicht benötigt/ausgeführt."
+        "Derselbe optimierte Release besteht Ledger11/SQLite11, geroutete API-/CSV-/SDK-/Browser11 mit24Tools/320px, Transport16 und vorhandene Originalbericht-/CLI-Bundle-Grenzen. Erfolgreich auf8787 installiert: sieben vollständige Job-Metadaten und19 dauerhafte Dateien byteidentisch, fünf Git-Assets und24MCP-Tools geprüft; Legacy-Sitemap-Historie bleibt unbekannt. Backup aufE verifiziert, Rollback nicht benötigt/ausgeführt.",
+        "Aktueller Erweiterungsstand: 54 zusätzliche Rust-Tests, gesamter Workspace794/0Fehler/0ausgespart mit eigenem echtem Renderer, Clippy/Format bestanden. Derselbe optimierte Release ab1ac93c besteht13 native API-/CSV-/SDK-/Browsergruppen mit24Tools/320px, Gzip/Index-Zyklus, unvollständigem XML, aktuellen und geerbten qualifizierten Quellen-Kohorten sowie Lastmod-Profilen. Installation separat offen."
       ],
       "pending_acceptance_de": [
-        "Budget1: Echte Rust-Kalibrierung für originale URL-Fragmente und wiederholte Lastmod-Felder; tatsächliche Parser-/Serializer-/Writer-Größen messen.",
         "Budget2: Native JSON-Seite exakt8MiB und ein Byte darüber; kleinere Seite muss am selben gespeicherten Snapshot tatsächlich funktionieren.",
         "Budget3: Nativer CSV-Export exakt64MiB und ein Byte darüber mit echten ursprünglichen Sitemap-Deklarationen; Überlauf ohne Teil-Download oder Mutation.",
         "Budget4: Native einzelne Ledger-Zeile exakt256KiB und ein Byte darüber aus echter XML-Parserbeobachtung; neue Rows/Tasks müssen bei Überlauf gemeinsam zurückrollen.",
@@ -6851,8 +6876,8 @@
         "Budget6: Gezielte SQL-Fehler-Injektion ausschließlich offline in eigener bereits echt erzeugter Fixture-Datenbank; Ordinary/Policy-Rollback und Wiederaufnahme ohne erfundene Herkunft prüfen.",
         "Budget7: Nur tatsächlich bestandene physische Grenzen veröffentlichen, gescheiterte Kandidaten erhalten und TODO/GitHub aktualisieren; Quell-CI/Release/Installation bleiben getrennt.",
         "Live-Generationswechsel im nativen API-/Browserpfad prüfen.",
-        "Vollständige rekursive Quellen-Kohorten und Fetch-/Inlink-Statusprojektionen implementieren und prüfen. Leerer Frontier/fehlende Mitgliedschaft beweisen keine vollständige Abdeckung.",
-        "GitHub-/Linux-/Container-CI nach Konto-Verfügbarkeit getrennt ausführen. Lokale740/Renderer17, optimierter Release und datenbewahrende Installation sind bestanden; Remote-CI bleibt NOT_PROVEN."
+        "GitHub-/Linux-/Container-CI nach Konto-Verfügbarkeit getrennt ausführen. Lokale740/Renderer17, optimierter Release und datenbewahrende Installation sind bestanden; Remote-CI bleibt NOT_PROVEN.",
+        "Originale Mitgliedschaften an tatsächliche Fetch-/Inlink-Zustände anbinden und konkrete Sitemap-Zielfehler ausgeben; vollständige Website-Abdeckung bleibt unbewiesen."
       ],
       "documentation": [
         "docs/parity/sitemap-b12-plan.md",
@@ -6863,7 +6888,8 @@
         "docs/sitemap-membership.md",
         "docs/sitemap-native-acceptance.md",
         "docs/parity/sitemap-budget-plan.md",
-        "docs/parity/sitemap-budget-plan-source-pins.json"
+        "docs/parity/sitemap-budget-plan-source-pins.json",
+        "docs/sitemap-assessment.md"
       ],
       "gates": {
         "source_review": "PARSER_AND_FETCH_NO_CONCRETE_P1_P2",
@@ -6889,22 +6915,23 @@
         "durable_original_binding": "PASS_V4_17_EXPECTED_FAILURES_V5_ALL_21_CONTROLS",
         "durable_full_crawler_bootstrap": "PASS_8_INCLUDED_IN_CORE_508",
         "durable_workspace_clippy": "PASS_LOCAL_CARGO_ALLTARGETS_SAME_SOURCE",
-        "durable_source_cohort": "NOT_PROVEN",
+        "durable_source_cohort": "PASS_25_CORE_AND_NATIVE13_QUALIFIED_DECLARED_SCOPE",
         "durable_exact_commit_ci": "NOT_PROVEN_GITHUB_ACCOUNT_UNAVAILABLE_LOCAL_SCOPE_SEPARATE",
         "durable_api_csv_ui": "PASS_ROUTED_NATIVE_API_CSV_SDK_BROWSER11",
         "durable_installation": "PASS_LOCAL_USER_AUTHORIZED_740_NATIVE_RELEASE_24TOOLS",
         "durable_policy_invalid_locs": "PASS_UNCHANGED_EXTERNAL_POLICY13_AND_CORE_DISCOVERY12",
         "durable_account_gate": "DEFERRED_REMOTE_CI_USER_AUTHORIZED_LOCAL_ROUTE_NO_SETTINGS_CHANGE",
-        "durable_workspace_tests": "PASS_LOCAL740_0FAIL_0IGNORED_REAL_BROWSER",
+        "durable_workspace_tests": "PASS_LOCAL794_0FAIL_0IGNORED_REAL_BROWSER",
         "durable_actual_browser": "PASS_NATIVE_CHROME_SAME_ASSETS_320PX",
         "durable_official_mcp_sdk": "PASS_BOTH_OFFICIAL_TRANSPORTS24_TOOLS",
         "durable_native_matrix": "PASS_WINDOWS_DEV11_SCENARIOS11_SQL_REQUEST_DRAIN",
         "durable_native_byte_budgets": "PENDING_FULL_SIZE_EXACT_PLUS1_JSON_CSV",
         "durable_native_generation_race": "PENDING_LIVE_ACTIVE_GENERATION",
         "durable_native_rollback_budget": "PENDING_FAILURE_INJECTION",
-        "durable_budget_plan": "SOURCE_PINNED_SEVEN_TASKS_NOT_EXECUTED",
+        "durable_budget_plan": "TASK1_PASS_3_INCLUDED_IN_WORKSPACE794_PHYSICAL_GATES_SEPARATE",
         "durable_live_renderer4": "PASS_OWNED_EPHEMERAL_CURRENT_SOURCE",
-        "durable_optimized_release": "PASS_LOCAL_WINDOWS_THIN_LTO_072D798F"
+        "durable_optimized_release": "PASS_LOCAL_WINDOWS_THIN_LTO_AB1AC93C",
+        "durable_lastmod": "PASS_22_CORE_4_REAL_STORE_APP_AND_NATIVE_BROWSER"
       },
       "reference_parity": "NOT_PROVEN",
       "proof_run_ids": [
@@ -6923,7 +6950,8 @@
         "sitemap-ledger-local-510-account-gate",
         "sitemap-membership-api-ui-local",
         "sitemap-native-checkpoint",
-        "sitemap-local-release-installed"
+        "sitemap-local-release-installed",
+        "sitemap-derived-assessment-local"
       ],
       "tracking_issue": "https://github.com/lia-xim/open-seo-spider/issues/11"
     }

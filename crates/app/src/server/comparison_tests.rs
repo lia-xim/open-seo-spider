@@ -11,6 +11,7 @@ fn report() -> CrawlReport {
         policy_ledger: None,
         resource_ledger: None,
         sitemap_catalog: None,
+        sitemap_coverage_inventory: None,
     }
 }
 fn job(status: &str) -> Job {

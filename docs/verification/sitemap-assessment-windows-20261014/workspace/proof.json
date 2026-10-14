@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "result": "PASS_LOCAL_CURRENT_WORKSPACE_REAL_RENDERER_CLIPPY_FMT",
+  "recorded_at": "2026-10-14T16:50:11.767Z",
+  "source_manifest_sha256": "faa666b97d3e9625eeee774dcc36be27ed38f9095a64667c157443af11034919",
+  "files": 206,
+  "passed": 794,
+  "ignored": 0,
+  "runs": [
+    {
+      "name": "format",
+      "args": [
+        "fmt",
+        "--all",
+        "--check"
+      ],
+      "pid": 32312,
+      "actual_close_event": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "elapsed_ms": 6964,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "summaries": []
+    },
+    {
+      "name": "workspace-live",
+      "args": [
+        "test",
+        "--workspace",
+        "--locked",
+        "--",
+        "--include-ignored",
+        "--test-threads=1"
+      ],
+      "pid": 23432,
+      "actual_close_event": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "elapsed_ms": 448403,
+      "log_sha256": "b632df47b4523257ea856bb9d19a1060612096c72fb2686d76e64af8ab3d8348",
+      "summaries": [
+        {
+          "state": "ok",
+          "passed": 117,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "state": "ok",
+          "passed": 559,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "state": "ok",
+          "passed": 18,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "state": "ok",
+          "passed": 7,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "state": "ok",
+          "passed": 24,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "state": "ok",
+          "passed": 5,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "state": "ok",
+          "passed": 13,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "state": "ok",
+          "passed": 7,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "state": "ok",
+          "passed": 22,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "state": "ok",
+          "passed": 15,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "state": "ok",
+          "passed": 4,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "state": "ok",
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "state": "ok",
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "state": "ok",
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "state": "ok",
+          "passed": 0,
+          "failed": 0,
+          "ignored": 0
+        }
+      ]
+    },
+    {
+      "name": "clippy",
+      "args": [
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "pid": 39888,
+      "actual_close_event": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "elapsed_ms": 57206,
+      "log_sha256": "bbab459354f1925a97ddb7fd1c9512d3645226331c41203f25e37bff0c368b0f",
+      "summaries": []
+    }
+  ],
+  "owned_worker_port": 53704,
+  "owned_worker_closed": true,
+  "user_renderer_contacted": false,
+  "failures": [],
+  "qualification": "Actual current Windows workspace, including four browser gates, on an owned warmed ephemeral renderer. GitHub/Linux/container gates unavailable and not claimed."
+}

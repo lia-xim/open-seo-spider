@@ -315,6 +315,118 @@ fn serialized_catalog_budget_rejects_whole_source_without_marking_done() {
     assert_eq!(load_catalog(&connection).unwrap(), before);
     assert_eq!(pending_done(&connection), 0);
 }
+
+fn calibration_lastmods_xml(ascii: usize, amp_entities: usize) -> String {
+    let full_payload =
+        crate::SitemapParserLimits::default().max_field_utf8_bytes - "<lastmod></lastmod>".len();
+    let mut xml = format!("<urlset><url><loc>{TASK}/target</loc>");
+    for _ in 0..10 {
+        xml.push_str("<lastmod>");
+        xml.push_str(&"a".repeat(full_payload));
+        xml.push_str("</lastmod>");
+    }
+    xml.push_str("<lastmod>");
+    xml.push_str(&"a".repeat(ascii));
+    xml.push_str(&"&amp;".repeat(amp_entities));
+    xml.push_str("</lastmod></url></urlset>");
+    xml
+}
+fn calibration_entry_bytes(xml: &str) -> usize {
+    let observed = batch(xml);
+    assert!(observed.document.complete());
+    assert_eq!(observed.entries.len(), 1);
+    assert_eq!(observed.entries[0].observed.lastmod.len(), 11);
+    assert_eq!(observed.locations.len(), 1);
+    assert_eq!(
+        observed.locations[0].admission.decision,
+        SitemapAdmissionDecision::Scheduled
+    );
+    let mut row = SitemapLedgerRow::Entry(observed.entries[0].clone());
+    // The actual append order is Document=1, Entry=2, Location=3 for this source.
+    row.set_sequence(2);
+    serde_json::to_vec(&row).unwrap().len()
+}
+fn calibration_exact_entry(target: usize) -> (String, usize, usize) {
+    // An ASCII byte contributes three retained JSON bytes; an XML &amp; entity
+    // contributes eleven. Trying three residues and binary search keeps this
+    // calibration bounded while measuring actual parser/serde offset changes.
+    for amp_entities in 0..3 {
+        let mut low = 0;
+        let mut high = 8000;
+        while low <= high {
+            let middle = low + (high - low) / 2;
+            let xml = calibration_lastmods_xml(middle, amp_entities);
+            match calibration_entry_bytes(&xml).cmp(&target) {
+                std::cmp::Ordering::Equal => return (xml, middle, amp_entities),
+                std::cmp::Ordering::Less => low = middle + 1,
+                std::cmp::Ordering::Greater => {
+                    if middle == 0 {
+                        break;
+                    }
+                    high = middle - 1;
+                }
+            }
+        }
+    }
+    panic!("No parser/serde candidate found for physical row bytes {target}");
+}
+/// Actual parser/serde and in-memory production writer control at the default
+/// physical row cap. HTTP App/native rollback acceptance remains separate.
+#[test]
+fn budget_calibration_repeated_lastmods_hit_default_row_cap_and_plus_one() {
+    let cap = SitemapLedgerLimits::default().max_row_json_bytes;
+    assert_eq!(cap, 262_144);
+    for target in [cap - 1, cap, cap + 1] {
+        let (xml, ascii, amp_entities) = calibration_exact_entry(target);
+        assert_eq!(calibration_entry_bytes(&xml), target);
+        assert!(xml.len() < crate::SitemapParserLimits::default().max_xml_bytes);
+        let observed = batch(&xml);
+        for field in &observed.entries[0].observed.lastmod {
+            assert!(
+                field.raw_element_xml.len()
+                    <= crate::SitemapParserLimits::default().max_field_utf8_bytes
+            );
+            assert!(
+                field.raw_inner_xml.len()
+                    <= crate::SitemapParserLimits::default().max_field_utf8_bytes
+            );
+            assert!(
+                field.decoded_value.len()
+                    <= crate::SitemapParserLimits::default().max_field_utf8_bytes
+            );
+        }
+        let mut connection = connection(SitemapLedgerLimits::default());
+        let before = load_catalog(&connection).unwrap();
+        if target <= cap {
+            commit(&mut connection, observed).unwrap();
+            let data: String = connection
+                .query_row("SELECT data FROM sitemap_entries", [], |row| row.get(0))
+                .unwrap();
+            assert_eq!(data.len(), target);
+            assert_eq!(
+                serde_json::from_str::<SitemapLedgerRow>(&data)
+                    .unwrap()
+                    .sequence(),
+                2
+            );
+            assert_eq!(pending_done(&connection), 1);
+            assert_eq!(count(&connection, "sitemap_documents"), 1);
+            assert_eq!(count(&connection, "sitemap_locations"), 1);
+        } else {
+            let error = commit(&mut connection, observed).unwrap_err();
+            assert!(format!("{error:#}").contains("sitemap_catalog_json_budget_exceeded"));
+            assert_eq!(load_catalog(&connection).unwrap(), before);
+            assert_eq!(pending_done(&connection), 0);
+            for table in TABLES {
+                assert_eq!(count(&connection, table), 0);
+            }
+        }
+        eprintln!(
+            "BUDGET_CALIBRATION_ENTRY target={target} xml_bytes={} lastmod_count=11 full_ascii_fields=10 tail_ascii={ascii} tail_amp_entities={amp_entities}",
+            xml.len()
+        );
+    }
+}
 #[test]
 fn incomplete_parser_prefix_is_durable_and_admits_nothing() {
     let mut connection = connection(SitemapLedgerLimits::default());

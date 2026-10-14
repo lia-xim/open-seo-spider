@@ -970,6 +970,9 @@ pub struct CrawlReport {
     pub resource_ledger: Option<crate::ResourceLedgerSummary>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub sitemap_catalog: Option<crate::SitemapCatalog>,
+    /// Exact captured source/task/config context, retained for historical selected inheritance.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sitemap_coverage_inventory: Option<crate::SitemapCoverageInventory>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

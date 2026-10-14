@@ -55,6 +55,8 @@ pub struct SitemapReadSnapshot {
     pub crawl_config_sha256: Option<String>,
     pub generation: Option<u64>,
     pub catalog: Option<crate::SitemapCatalog>,
+    pub coverage_inventory: Option<crate::SitemapCoverageInventory>,
+    pub coverage: crate::SitemapCoverage,
 }
 
 /// SQLite WAL storage. A fetched page and its frontier state commit atomically.
@@ -196,6 +198,20 @@ impl CrawlStore {
                 saved.sitemap_catalog == sitemap_catalog,
                 "Terminal sitemap catalog differs from checkpoint report"
             );
+            crate::validate_sitemap_coverage_inventory(
+                &saved.config,
+                saved.sitemap_catalog.as_ref(),
+                saved.sitemap_coverage_inventory.as_ref(),
+            )?;
+            // Old reports intentionally lack inventory. New captured reports must
+            // retain their exact task/config/generation context at the checkpoint.
+            if saved.sitemap_coverage_inventory.is_some() {
+                anyhow::ensure!(
+                    saved.sitemap_coverage_inventory
+                        == load_sitemap_read_snapshot_verified(&transaction)?.coverage_inventory,
+                    "Terminal sitemap coverage context differs from checkpoint report"
+                );
+            }
         }
         transaction.commit()?;
         Ok(CrawlStoreInspection {
@@ -623,45 +639,9 @@ impl CrawlStore {
             .lock()
             .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
         let transaction = connection.transaction()?;
-        // Retain ALL existing config/import/policy/selected/parent validators.
-        let catalog = load_sitemap_catalog_verified(&transaction)?;
-        let generation = metadata::<CrawlRunState>(&transaction, "run_state")?
-            .map(|run| run.generation)
-            .filter(|generation| *generation > 0);
-        let length: Option<i64> = transaction
-            .query_row(
-                "SELECT length(CAST(value AS BLOB)) FROM metadata WHERE key='config'",
-                [],
-                |row| row.get(0),
-            )
-            .optional()?;
-        let crawl_config_sha256 =
-            length
-                .map(|length| -> anyhow::Result<String> {
-                    anyhow::ensure!(length > 0, "Saved config is empty");
-                    let mut hasher = Sha256::new();
-                    let mut offset = 0i64;
-                    while offset < length {
-                        let count = (length - offset).min(65536);
-                        let chunk:Vec<u8>=transaction.query_row(
-                    "SELECT substr(CAST(value AS BLOB),?1,?2) FROM metadata WHERE key='config'",
-                    params![offset+1,count],|row|row.get(0))?;
-                        anyhow::ensure!(
-                            i64::try_from(chunk.len())? == count,
-                            "Saved config chunk length differs"
-                        );
-                        hasher.update(&chunk);
-                        offset += count;
-                    }
-                    Ok(format!("{:x}", hasher.finalize()))
-                })
-                .transpose()?;
+        let snapshot = load_sitemap_read_snapshot_verified(&transaction)?;
         transaction.commit()?;
-        Ok(SitemapReadSnapshot {
-            crawl_config_sha256,
-            generation,
-            catalog,
-        })
+        Ok(snapshot)
     }
 
     pub fn sitemap_catalog(&self) -> anyhow::Result<Option<crate::SitemapCatalog>> {
@@ -1827,6 +1807,11 @@ impl CrawlStore {
     }
 
     pub fn save_report(&self, report: &CrawlReport) -> anyhow::Result<()> {
+        crate::validate_sitemap_coverage_inventory(
+            &report.config,
+            report.sitemap_catalog.as_ref(),
+            report.sitemap_coverage_inventory.as_ref(),
+        )?;
         if let Some(catalog) = &report.sitemap_catalog {
             crate::sitemap_ledger::validate_catalog(catalog)?;
         }
@@ -1890,6 +1875,11 @@ impl CrawlStore {
             report.sitemap_catalog == sitemap_catalog,
             "Report sitemap catalog differs from committed evidence"
         );
+        let coverage_snapshot = load_sitemap_read_snapshot_verified(&transaction)?;
+        anyhow::ensure!(
+            report.sitemap_coverage_inventory == coverage_snapshot.coverage_inventory,
+            "Report sitemap coverage inventory differs from committed discovery context"
+        );
         let config =
             metadata_text(&transaction, "config")?.context("Crawl has no saved configuration")?;
         let checkpoint = CrawlCheckpoint {
@@ -1940,6 +1930,11 @@ impl CrawlStore {
         let report = value
             .map(|value| -> anyhow::Result<CrawlReport> {
                 let report: CrawlReport = serde_json::from_str(&value)?;
+                crate::validate_sitemap_coverage_inventory(
+                    &report.config,
+                    report.sitemap_catalog.as_ref(),
+                    report.sitemap_coverage_inventory.as_ref(),
+                )?;
                 for page in &report.pages {
                     crate::validate_page_content_captures(page)?;
                 }
@@ -2039,6 +2034,146 @@ fn load_sitemap_catalog_verified(
         }
     }
     Ok(catalog)
+}
+
+/// ALL context used by the coverage projection is captured in this caller-owned
+/// transaction; no migrations, source HTTP, report fallback, or independently read task lists.
+fn load_sitemap_read_snapshot_verified(
+    connection: &Connection,
+) -> anyhow::Result<SitemapReadSnapshot> {
+    let catalog = load_sitemap_catalog_verified(connection)?;
+    let generation = metadata::<CrawlRunState>(connection, "run_state")?
+        .map(|run| run.generation)
+        .filter(|generation| *generation > 0);
+    let length: Option<i64> = connection
+        .query_row(
+            "SELECT length(CAST(value AS BLOB)) FROM metadata WHERE key='config'",
+            [],
+            |row| row.get(0),
+        )
+        .optional()?;
+    let mut saved_config = Vec::new();
+    let crawl_config_sha256 = length
+        .map(|length| -> anyhow::Result<String> {
+            anyhow::ensure!(
+                (1..=67_108_864).contains(&length),
+                "Saved coverage config exceeds bounded input"
+            );
+            saved_config.reserve(usize::try_from(length)?);
+            let mut hasher = Sha256::new();
+            let mut offset = 0i64;
+            while offset < length {
+                let count = (length - offset).min(65536);
+                let chunk: Vec<u8> = connection.query_row(
+                    "SELECT substr(CAST(value AS BLOB),?1,?2) FROM metadata WHERE key='config'",
+                    params![offset + 1, count],
+                    |row| row.get(0),
+                )?;
+                anyhow::ensure!(
+                    i64::try_from(chunk.len())? == count,
+                    "Saved config chunk length differs"
+                );
+                hasher.update(&chunk);
+                saved_config.extend_from_slice(&chunk);
+                offset += count;
+            }
+            Ok(format!("{:x}", hasher.finalize()))
+        })
+        .transpose()?;
+    let coverage_inventory = match catalog.as_ref() {
+        None => None,
+        Some(catalog) if catalog.inherited.is_some() => {
+            let parent_bytes = parent_snapshot(connection)?
+                .context("Inherited coverage lacks immutable parent bytes")?;
+            let parent: CrawlReport = serde_json::from_slice(&parent_bytes)?;
+            crate::validate_sitemap_coverage_inventory(
+                &parent.config,
+                parent.sitemap_catalog.as_ref(),
+                parent.sitemap_coverage_inventory.as_ref(),
+            )?;
+            parent
+                .sitemap_coverage_inventory
+                .map(|inventory| {
+                    inventory.bind_inherited_parent(
+                        parent
+                            .sitemap_catalog
+                            .as_ref()
+                            .context("Inherited coverage parent catalog missing")?,
+                        &parent_bytes,
+                    )
+                })
+                .transpose()?
+        }
+        Some(catalog) => {
+            match (crawl_config_sha256.as_deref(), generation) {
+                (Some(sha), Some(generation)) => {
+                    let initialized = metadata_text(connection, "discovery_initialized")?
+                        .as_deref()
+                        == Some("true");
+                    let exists: bool = connection.query_row("SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE type='table' AND name='discovery_frontier')", [], |row| row.get(0))?;
+                    let mut tasks = Vec::new();
+                    if exists {
+                        let (rows, bytes): (i64,i64) = connection.query_row("SELECT count(*),coalesce(sum(length(CAST(url AS BLOB))),0) FROM discovery_frontier", [], |row| Ok((row.get(0)?,row.get(1)?)))?;
+                        anyhow::ensure!(
+                            (0..=1_000_000).contains(&rows) && (0..=33_554_432).contains(&bytes),
+                            "Coverage task inventory budget exceeded"
+                        );
+                        let mut query = connection.prepare(
+                            "SELECT kind,url,done FROM discovery_frontier ORDER BY kind,url",
+                        )?;
+                        let mut values = query.query([])?;
+                        while let Some(row) = values.next()? {
+                            let kind: String = row.get(0)?;
+                            let done: i64 = row.get(2)?;
+                            anyhow::ensure!(
+                                matches!(done, 0 | 1),
+                                "Invalid coverage discovery done flag"
+                            );
+                            tasks.push(crate::SitemapCoverageTask {
+                                kind: match kind.as_str() {
+                                    "robots" => crate::SitemapSourceKind::RobotsDirectives,
+                                    "sitemap" => crate::SitemapSourceKind::SitemapXml,
+                                    _ => bail!("Unknown coverage discovery task kind"),
+                                },
+                                task_url: row.get(1)?,
+                                done: done == 1,
+                            });
+                        }
+                    }
+                    let config: CrawlConfig = serde_json::from_slice(&saved_config)?;
+                    let initial_policy_urls = if config.crawl_policy.is_some() {
+                        // Existing policy verification ran above. Only ACTUAL finalized initial
+                        // page admissions determine policy-mode Robots origins, including aliases.
+                        let mut query = connection.prepare("SELECT json_extract(data,'$.occurrence.decision.fetch_candidate_url') FROM policy_occurrences WHERE json_extract(data,'$.occurrence.input_basis')='declared_input' AND json_extract(data,'$.occurrence.task_role')='page_document' AND json_extract(data,'$.occurrence.decision.source_kind') IN ('seed','list_page') AND json_extract(data,'$.occurrence.admission_reason') IN ('scheduled','coalesced') ORDER BY sequence")?;
+                        let values = query
+                            .query_map([], |row| row.get::<_, String>(0))?
+                            .collect::<Result<Vec<_>, _>>()?;
+                        Some(values)
+                    } else {
+                        None
+                    };
+                    Some(crate::SitemapCoverageInventory::from_saved_snapshot(
+                        catalog,
+                        &saved_config,
+                        sha,
+                        generation,
+                        initialized,
+                        tasks,
+                        initial_policy_urls.as_deref(),
+                    )?)
+                }
+                _ => None,
+            }
+        }
+    };
+    let coverage = crate::project_sitemap_coverage(catalog.as_ref(), coverage_inventory.as_ref())?;
+    Ok(SitemapReadSnapshot {
+        crawl_config_sha256,
+        generation,
+        catalog,
+        coverage_inventory,
+        coverage,
+    })
 }
 
 /// One bounded row at a time; the SQLite run state is an internal provenance
@@ -2545,6 +2680,7 @@ mod tests {
             policy_ledger: None,
             resource_ledger: None,
             sitemap_catalog: None,
+            sitemap_coverage_inventory: None,
             config,
             pages: Vec::new(),
             issues: Vec::new(),
@@ -3011,6 +3147,10 @@ mod tests {
         assert!(CrawlStore::inspect(&path).unwrap().checkpoint_valid);
     }
 }
+
+#[cfg(test)]
+#[path = "store-sitemap-coverage-tests.rs"]
+mod sitemap_coverage_store_tests;
 
 #[cfg(test)]
 #[path = "store-sitemap-tests.rs"]

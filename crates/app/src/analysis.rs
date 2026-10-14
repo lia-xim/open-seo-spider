@@ -1279,6 +1279,7 @@ mod tests {
             policy_ledger: None,
             resource_ledger: None,
             sitemap_catalog: None,
+            sitemap_coverage_inventory: None,
             config: CrawlConfig {
                 seed_urls: vec!["https://fixture.test/a".into()],
                 ..Default::default()

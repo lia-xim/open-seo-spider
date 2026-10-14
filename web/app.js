@@ -1486,6 +1486,46 @@
   const sitemapKindLabel = value => ({ root:'Deklaration', document:'Quelle', entry:'XML-Eintrag', location:'XML-URL' }[value] || value);
   const sitemapRootLabel = value => ({ explicit_config:'Explizite Eingabe', imported_sitemap_row:'Importzeile', robots_directive:'robots.txt' }[value] || value || 'Nicht erfasst');
   const sitemapLastmod = fields => fields.length ? fields.map(value=>value.decoded_value===''?'[leere Deklaration]':value.decoded_value).join(' | ') : 'Keine lastmod-Deklaration';
+
+  const sitemapLastmodEngine = 'sitemap-lastmod/xsd-1.0-second-edition+w3c-note-1998/v1';
+  const sitemapXsdProfile = 'sitemap-0.9/tLastmod/xsd-1.0-second-edition/date|dateTime';
+  const sitemapW3cProfile = 'W3C-NOTE-datetime-19980827/six-precision-levels';
+  const sitemapCoverageEngine = 'open-seo-spider/declared-sitemap-source-coverage-v1';
+  const sitemapLastmodPresence = value => ({ absent_optional:'Optional, nicht deklariert', unobserved_incomplete_entry:'Unbekannt: Eintrag unvollständig', observed_one:'Eine Deklaration', observed_multiple:'Mehrere Deklarationen' }[value] || 'Prüfung nicht verfügbar');
+  const sitemapLastmodReason = value => ({ empty:'Leerer Wert', lexical_grammar:'Format nicht zulässig', year_zero:'Jahr 0 nicht zulässig', invalid_calendar_date:'Kalenderdatum ungültig', invalid_time:'Uhrzeit ungültig', invalid_timezone:'Zeitzone ungültig', leap_second_needs_external_evidence:'Schaltsekunde benötigt externe Belege', w3c_year_zero_not_specified:'Jahr 0 im W3C-Profil nicht festgelegt' }[value] || value);
+  const sitemapLastmodPrecision = value => ({ year:'Jahr',month:'Monat',date:'Datum',minute:'Minute',second:'Sekunde',fractional_second:'Sekundenbruchteil' }[value] || value);
+  const sitemapCoverageReasons = {
+    catalog_unavailable:'Katalog nicht verfügbar',catalog_rows_unavailable:'Katalogzeilen nicht verfügbar',legacy_history_unknown:'Frühere Quellenhistorie unbekannt',source_inventory_unavailable:'Quelleninventar nicht verfügbar',historical_inventory_unavailable:'Historisches Quelleninventar nicht verfügbar',discovery_not_initialized:'Quellenermittlung nicht initialisiert',initial_root_inventory_unknown:'Ursprüngliche Deklarationen unbekannt',missing_initial_root_declaration:'Ursprüngliche Deklaration fehlt',unexpected_initial_root_declaration:'Unerwartete ursprüngliche Deklaration',initial_root_coordinates_differ:'Koordinaten ursprünglicher Deklarationen weichen ab',source_task_missing:'Quellenaufgabe fehlt',pending_source:'Quellenaufgabe noch offen',done_source_without_observation:'Abgeschlossene Quellenaufgabe ohne Beobachtung',observation_without_task:'Quellenbeobachtung ohne Aufgabe',source_generation_after_inventory:'Quellengeneration nach Inventarstand',source_not_complete:'Quelle nicht vollständig',source_request_not_started:'Quellenanfrage nicht begonnen',source_transport_unavailable:'Transportdaten nicht verfügbar',source_http_not200:'Quellenstatus ist nicht HTTP 200',source_body_incomplete:'Quellenantwort unvollständig',source_blocked_by_robots:'Quelle durch robots.txt blockiert',source_transport_failed:'Quellentransport fehlgeschlagen',source_decode_unavailable:'Quellendekodierung nicht verfügbar',source_parser_incomplete:'Quellenparser unvollständig',source_declarations_incomplete:'Quellendeklarationen unvollständig',source_rows_incomplete:'Gespeicherte Quellenzeilen unvollständig',source_failed:'Quelle fehlgeschlagen',root_invalid:'Sitemap-Deklaration ungültig',root_denied:'Sitemap-Deklaration nicht zugelassen',root_unbound:'Sitemap-Deklaration nicht zugeordnet',child_invalid:'Kind-Sitemap ungültig',child_denied:'Kind-Sitemap nicht zugelassen',child_unbound:'Kind-Sitemap nicht zugeordnet',source_graph_unbound_task:'Nicht zugeordnete Aufgabe im Quellenverbund',required_robots_inventory_unknown:'Erforderliche robots.txt-Quellen unbekannt',required_robots_task_missing:'Erforderliche robots.txt-Aufgabe fehlt'
+  };
+  function sitemapAssessment(tagged) {
+    if(tagged.kind!=='entry')return null;
+    return sitemapMembership.result?.lastmod_assessments?.find(value=>value.entry_id===tagged.row.entry_id && value.observation_id===tagged.row.observation_id && value.entry_sequence===tagged.row.sequence) || null;
+  }
+  function sitemapProfileSummary(assessment,profile) {
+    if(!assessment)return null;
+    if(!assessment.fields.length)return assessment.presence==='absent_optional'?'Nicht deklariert (optional)':'Unbekannt: Eintrag unvollständig';
+    return assessment.fields.map(field=>{const value=field[profile];return value.status==='valid'?'Gültig · '+sitemapLastmodPrecision(value.value.precision):value.status==='invalid'?'Ungültig · '+sitemapLastmodReason(value.reason):'Unbestimmt · '+sitemapLastmodReason(value.reason);}).join(' | ');
+  }
+  function sitemapParsedDetails(value) {
+    return [sitemapLastmodPrecision(value.precision),'Jahr: '+value.year,value.month==null?'':'Monat: '+value.month,value.day==null?'':'Tag: '+value.day,value.hour==null?'':'Stunde: '+value.hour,value.minute==null?'':'Minute: '+value.minute,value.second==null?'':'Sekunde: '+value.second,value.fraction==null?'':'Exakte Bruchstellen: '+value.fraction,value.timezone_lexeme==null?'Zeitzone nicht deklariert':'Originale Zeitzone: '+value.timezone_lexeme+' (Offset '+value.timezone_offset_minutes+' Minuten)',value.end_of_day?'24:00:00 bezeichnet den Beginn des Folgetags':''].filter(Boolean).join(' · ');
+  }
+  function sitemapValueAssessmentDetails(value) {
+    return value.status==='valid'?'Gültig · '+sitemapParsedDetails(value.value):value.status==='invalid'?'Ungültig · '+sitemapLastmodReason(value.reason):'Unbestimmt · '+sitemapLastmodReason(value.reason)+' · '+sitemapParsedDetails(value.lexical_value);
+  }
+  function renderSitemapDerivedCoverage(result,busy,error) {
+    const derived=!busy && !error?result?.coverage?.derived:null;
+    const label=derived?.scope==='inherited_historical_declared_sources'?'Historisch erfasste deklarierte Sitemap-Quellen':derived?.scope==='current_declared_sources'?'Aktuell erfasste deklarierte Sitemap-Quellen':'Deklarierte Sitemap-Quellen';
+    $('sitemap-membership-coverage-summary').textContent=busy?'Quellenabdeckung wird geladen …':error?'Quellenabdeckung nicht verfügbar.':!derived?'Noch keine abgeleitete Quellenprüfung verfügbar.':label+' · '+({complete:'rekursiver Quellenverbund vollständig erfasst',known_empty:'bekannt leerer Quellenverbund',unknown:'Vollständigkeit unbekannt'}[derived.completion]);
+    $('sitemap-membership-coverage-detail').textContent=!derived?'Diese Prüfung verwendet ausschließlich gespeicherte Quellen.':derived.scope==='unavailable'?'Die ursprünglichen Quellen sind nicht verfügbar; das ist kein bekannter leerer Quellenverbund.':[
+      'Die Prüfung gilt für den erfassten Verbund deklarierter Sitemap-Quellen. Die vollständige Website-Abdeckung bleibt unbekannt.',
+      derived.scope==='inherited_historical_declared_sources'?'Elternhistorie; die Quellen wurden in diesem Lauf nicht neu ermittelt.':'',
+      derived.current_valid_original_location_negative_permitted?'Für diesen aktuellen Quellenverbund kann das Fehlen einer gültigen ursprünglichen Seiten-Loc geprüft werden.':derived.historical_valid_original_location_negative_permitted?'Für diesen historischen Quellenverbund kann das Fehlen einer gültigen ursprünglichen Seiten-Loc geprüft werden.':'Eine fehlende ursprüngliche Seiten-Loc bleibt unbekannt.',
+      'Ungültige Locs und zugelassene Abrufaliase sind keine gültigen ursprünglichen Seiten-Locs. lastmod prüft deklarierte Datumswerte; Aktualität und Ziel-Antwortstatus werden nicht geprüft.'
+    ].filter(Boolean).join(' ');
+    const counts=derived?.counts,items=counts?[['Sitemap-Deklarationen',counts.root_declarations],['Kind-Sitemap-Deklarationen',counts.child_declarations],['Erfasste Quellenaufgaben',counts.discovery_tasks],['Beobachtete Quellen',counts.observed_documents],['Vollständig erfasste Quelleinheiten',counts.complete_documents],['Erreichte XML-Sitemap-Aufgaben',counts.reached_xml_tasks],['Ungültige / fehlende Seiten-Locs',counts.invalid_or_missing_page_locations]]:[];
+    $('sitemap-membership-coverage-counts').innerHTML=items.map(([name,count])=>'<dt>'+escape(name)+'</dt><dd>'+escape(number(count))+'</dd>').join('');
+    $('sitemap-membership-coverage-reasons').textContent=derived?Object.entries(derived.reason_counts).map(([reason,count])=>sitemapCoverageReasons[reason]+': '+number(count)).join(' · ') || 'Keine Lücken im erfassten Quellenverbund festgestellt.':'';
+  }
   function invalidateSitemapRequest() {
     sitemapMembership.revision += 1;
     sitemapMembership.token?.controller.abort();
@@ -1512,9 +1552,10 @@
     if(tagged.kind==='document')return {kind:row.kind==='robots_directives'?'robots.txt-Quelle':'XML-Sitemap-Quelle',original:row.task_url,membership:null,admitted:null,decision:null,ordinal:null,source:row.observation_id,diagnostic:row.failure_code || row.transport?.failure_code || row.parser?.failure?.code || null,complete:sitemapDocumentComplete(row)};
     return {kind:'XML-Eintrag',original:sitemapLastmod(row.observed.lastmod),membership:null,admitted:null,decision:null,ordinal:row.observed.ordinal,source:row.observation_id,diagnostic:row.observed.diagnostics.join(' | ') || null,complete:row.observed.complete};
   }
-  const sitemapColumns = [
+  const sitemapRawColumns = [
     ['Position',tagged=>tagged.row.sequence],['Vorkommen',tagged=>sitemapRowFacts(tagged).kind],['Originalwert',tagged=>sitemapRowFacts(tagged).original],['Ursprüngliche Mitgliedschaft',tagged=>sitemapRowFacts(tagged).membership],['Zugelassene Anfrage-URL',tagged=>sitemapRowFacts(tagged).admitted],['Zulassung / Quelle',tagged=>{const facts=sitemapRowFacts(tagged);return facts.decision?sitemapDecisionLabel(facts.decision):facts.complete===true?'Quelleinheit vollständig':facts.complete===false?'Quelleinheit unvollständig':'Nicht erfasst';}],['Quellordinal',tagged=>sitemapRowFacts(tagged).ordinal],['Quellenhinweis',tagged=>sitemapRowFacts(tagged).diagnostic]
   ];
+  const sitemapColumns = [...sitemapRawColumns,['lastmod-Vorkommen',tagged=>sitemapAssessment(tagged)?sitemapLastmodPresence(sitemapAssessment(tagged).presence):null],['lastmod · XSD-Union',tagged=>sitemapProfileSummary(sitemapAssessment(tagged),'xsd')],['lastmod · W3C-Profil',tagged=>sitemapProfileSummary(sitemapAssessment(tagged),'w3c_note')]];
   function sitemapUsable() { return Boolean(sitemapMembership.result?.catalog_available && !sitemapMembership.token && !sitemapMembership.error); }
   function sitemapVisibleRows() {
     if(!sitemapUsable())return [];
@@ -1525,7 +1566,17 @@
       if(filter==='denied' && !(facts.decision && !['scheduled','coalesced'].includes(facts.decision)))return false;
       if(filter==='invalid' && !['invalid_location','missing_location'].includes(facts.decision))return false;
       if(filter==='incomplete' && !(facts.complete===false || facts.decision==='incomplete_source'))return false;
-      return !search || [facts.kind,facts.original,facts.membership,facts.admitted,facts.diagnostic].some(value=>String(value??'').toLocaleLowerCase().includes(search));
+      const assessment=sitemapAssessment(tagged);
+      if(filter.startsWith('lastmod-')) {
+        if(!assessment)return false;
+        if(filter==='lastmod-invalid' && !assessment.fields.some(field=>field.xsd.status==='invalid'))return false;
+        if(filter==='lastmod-disagreement' && !assessment.findings.some(finding=>finding.code==='schema_profile_disagreement'))return false;
+        if(filter==='lastmod-undetermined' && !assessment.fields.some(field=>field.xsd.status==='undetermined' || field.w3c_note.status==='undetermined'))return false;
+        if(filter==='lastmod-multiple' && assessment.presence!=='observed_multiple')return false;
+        if(filter==='lastmod-absent' && assessment.presence!=='absent_optional')return false;
+        if(filter==='lastmod-incomplete' && assessment.all_entry_fields_observed!==false)return false;
+      }
+      return !search || [facts.kind,facts.original,facts.membership,facts.admitted,facts.diagnostic,assessment?sitemapLastmodPresence(assessment.presence):null,sitemapProfileSummary(assessment,'xsd'),sitemapProfileSummary(assessment,'w3c_note')].some(value=>String(value??'').toLocaleLowerCase().includes(search));
     }).sort((left,right)=>{const value=sitemapColumns[sitemapMembership.sort][1],a=value(left),b=value(right);if(a==null && b==null)return 0;if(a==null)return 1;if(b==null)return -1;return (typeof a==='number' && typeof b==='number'?a-b:String(a).localeCompare(String(b),'de',{numeric:true}))*sitemapMembership.direction;});
   }
   function renderSitemapMembership() {
@@ -1533,7 +1584,8 @@
     const current=sitemapMembership, result=current.result, summary=result?.summary, busy=Boolean(current.token), usable=sitemapUsable(), rows=sitemapVisibleRows();
     $('sitemap-membership-error').hidden=!current.error; $('sitemap-membership-error').textContent=current.error;
     $('sitemap-membership-summary').textContent=!state.crawl?'Einen gespeicherten Crawl auswählen.':busy?'Gespeicherte Sitemap-Seite wird geladen …':current.error?'Sitemap-Stand nicht verfügbar. Dies ist kein vollständiges leeres Ergebnis.':!result?'Noch kein gespeicherter Sitemap-Stand geladen.':!result.catalog_available?'Keine verfügbare ursprüngliche Sitemap-Aufzeichnung. Historische oder importierte Berichte werden nicht nachträglich als leer rekonstruiert.':`${number(summary.root_rows)} Deklarationen · ${number(summary.document_rows)} Quellen · ${number(summary.entry_rows)} XML-Einträge · ${number(summary.location_rows)} XML-URL-Vorkommen · ${number(summary.incomplete_documents)} unvollständige Quellen`;
-    $('sitemap-membership-scope').textContent=result?.catalog_available ? ['Gespeicherte Vorkommen verfügbar. Vollständige rekursive Quellenabdeckung nicht bestätigt.',summary.legacy_history_unknown?'Frühere Quellenhistorie unbekannt.':'',result.inherited?'Geerbter Stand des Elternlaufs; Sitemap-Ermittlung wurde in diesem Lauf nicht neu ausgeführt.':'',summary.incomplete_documents?`${number(summary.incomplete_documents)} Quelleinheiten sind unvollständig; ihre URLs beweisen keine vollständige Mitgliedschaft.`:'', 'Nicht gelistete URLs bleiben unbekannt. Ziel-Antwortstatus wurde hier nicht verknüpft. Eine vollständige Quelleinheit bestätigt keine vollständige Website-Abdeckung.'].filter(Boolean).join(' '):'Diese Ansicht liest gespeicherte Beobachtungen und startet keine Website-Anfrage.';
+    $('sitemap-membership-scope').textContent=result?.catalog_available ? ['Gespeicherte Vorkommen verfügbar. Vollständige Website-Abdeckung nicht bestätigt.',summary.legacy_history_unknown?'Frühere Quellenhistorie unbekannt.':'',result.inherited?'Geerbter Stand des Elternlaufs; Sitemap-Ermittlung wurde in diesem Lauf nicht neu ausgeführt.':'',summary.incomplete_documents?`${number(summary.incomplete_documents)} Quelleinheiten sind unvollständig; ihre URLs beweisen keine vollständige Mitgliedschaft.`:'', 'Ziel-Antwortstatus wurde hier nicht verknüpft. Die abgeleitete Quellenprüfung bewertet ausschließlich den erfassten Verbund deklarierter Sitemap-Quellen.'].filter(Boolean).join(' '):'Diese Ansicht liest gespeicherte Beobachtungen und startet keine Website-Anfrage.';
+    renderSitemapDerivedCoverage(result,busy,current.error);
     const table=$('sitemap-membership-table');
     table.querySelector('thead').innerHTML=`<tr>${sitemapColumns.map(([label],index)=>`<th scope="col" aria-sort="${current.sort===index?current.direction===1?'ascending':'descending':'none'}"><button type="button" data-sitemap-sort="${index}">${escape(label)} ${current.sort===index?current.direction===1?'↑':'↓':'↕'}</button></th>`).join('')}</tr>`;
     const empty=busy?'Sitemap-Seite wird geladen …':current.error?'Gespeicherte Beobachtungen konnten nicht geladen werden.':!state.crawl?'Kein Crawl ausgewählt.':!result?.catalog_available?'Ursprüngliche Quellen nicht verfügbar; keine Aussage über leere Sitemaps.':!result.rows.length?'Dieser gespeicherte Stand enthält hier keine Vorkommen.':!rows.length?'Keine passenden Vorkommen auf dieser geladenen Seite. Weitere gespeicherte Seiten können andere Befunde enthalten.':'';
@@ -1547,7 +1599,7 @@
     $('sitemap-membership-export-page').disabled=!usable || !rows.length;
     $('sitemap-membership-export-csv').disabled=!usable;
     $('sitemap-membership-page-label').textContent=`${number(rows.length)} gefilterte von ${result?.rows==null?'unbekannt':number(result.rows.length)} geladenen Zeilen · maximal ${sitemapLimit()}${current.stale?' · Stand geändert, aktuellen Stand neu laden':''}`;
-    $('sitemap-membership-checkpoint').textContent=JSON.stringify({catalog_available:result?.catalog_available??null,snapshot:result?.snapshot??null,summary:summary??null,inherited:result?.inherited??null,availability_reason:result?.availability_reason??null,coverage:result?.coverage??null},null,2);
+    $('sitemap-membership-checkpoint').textContent=JSON.stringify({catalog_available:result?.catalog_available??null,snapshot:result?.snapshot??null,summary:summary??null,inherited:result?.inherited??null,availability_reason:result?.availability_reason??null,coverage:result?.coverage??null,lastmod_assessment_engine:result?.lastmod_assessment_engine??null},null,2);
     renderSitemapInspector();
   }
   function renderSitemapInspector() {
@@ -1555,23 +1607,64 @@
     inspector.hidden=!tagged || !sitemapUsable(); if(inspector.hidden)return;
     const row=tagged.row, facts=sitemapRowFacts(tagged);
     $('sitemap-membership-inspector-heading').textContent=`${facts.kind} · Position ${row.sequence}`;
-    $('sitemap-membership-inspector-basis').textContent=tagged.kind==='root'?'Originale Deklaration und ihre eigene Abrufzulassung. Explizite Eingaben und robots.txt-Zeilen zählen ab 0.':tagged.kind==='location'?'XML-Original und dekodierter Wert bleiben getrennt. XML-Vorkommen zählen ab 1. Eine zugelassene Alias-URL ersetzt die ursprüngliche Mitgliedschaft nicht.':tagged.kind==='entry'?'Originale XML-Felder und lastmod-Deklarationen. Aus dem Text wird kein gültiges Datum und keine Aktualität abgeleitet.':'Gespeicherte Quellen- und Transportfakten. Fehlende Werte bleiben nicht erfasst; die eigene Quelleinheit bestimmt keine vollständige rekursive Abdeckung.';
+    $('sitemap-membership-inspector-basis').textContent=tagged.kind==='root'?'Originale Deklaration und ihre eigene Abrufzulassung. Explizite Eingaben und robots.txt-Zeilen zählen ab 0.':tagged.kind==='location'?'XML-Original und dekodierter Wert bleiben getrennt. XML-Vorkommen zählen ab 1. Eine zugelassene Alias-URL ersetzt die ursprüngliche Mitgliedschaft nicht.':tagged.kind==='entry'?'Originale XML-Felder bleiben unverändert. lastmod wird getrennt gegen die Sitemap-XSD-Union und das W3C-Datumsprofil geprüft. Die Prüfung bestätigt keine Aktualität und keinen Ziel-Antwortstatus.':'Gespeicherte Quellen- und Transportfakten. Fehlende Werte bleiben nicht erfasst; die eigene Quelleinheit bestimmt keine vollständige rekursive Abdeckung.';
     const fields=[['Originalwert',facts.original],['Ursprüngliche Mitgliedschaft',facts.membership],['Zugelassene Anfrage-URL',facts.admitted],['Zulassungsgrund',facts.decision?sitemapDecisionLabel(facts.decision):null],['Quellordinal',facts.ordinal],['Quellhinweis',facts.diagnostic]];
     if(tagged.kind==='root')fields.push(['Originalzeile',row.raw_line],['Robots-Zeilen vollständig',row.robots_evidence?.line_complete],['Ursprüngliche Quellzeile',row.robots_evidence?.line_ordinal]);
     if(tagged.kind==='location')fields.push(['Originales XML-Element',row.observed.raw_element_xml],['Originaler XML-Inhalt',row.observed.raw_inner_xml],['XML-Eintragsordinal',row.observed.entry_ordinal],['Loc-Ordinal',row.observed.loc_ordinal],['Rolle',row.observed.role]);
     if(tagged.kind==='document')fields.push(['Anfrage begonnen',row.transport?.request_started],['Tatsächliche Anfrage-URL',row.transport?.requested_url],['Beobachtete finale URL',row.transport?.final_url],['Erster HTTP-Status',row.transport?.initial_status],['Finaler HTTP-Status',row.transport?.final_status],['Antwort vollständig',row.transport?.body_complete],['Parser vollständig',row.parser?.complete],['Quelleinheit vollständig',facts.complete]);
     if(tagged.kind==='entry')fields.push(['XML-Eintrag vollständig',row.observed.complete],['lastmod-Deklarationen',sitemapLastmod(row.observed.lastmod)],['XML-Diagnosen',row.observed.diagnostics.join(' | ')]);
+    const assessment=sitemapAssessment(tagged);
+    if(assessment) {
+      fields.push(['lastmod-Vorkommen',sitemapLastmodPresence(assessment.presence)],['Alle lastmod-Felder des Eintrags beobachtet',assessment.all_entry_fields_observed],['Schema-Prüfung','Sitemap 0.9 · XSD 1.0 date | dateTime'],['Separate Profilprüfung','W3C-Datumsprofil mit sechs Präzisionsstufen'],['lastmod · XSD-Union',sitemapProfileSummary(assessment,'xsd')],['lastmod · W3C-Profil',sitemapProfileSummary(assessment,'w3c_note')],['Aktualität geprüft',assessment.freshness_assessed],['Ziel-Antwortstatus geprüft',assessment.http_status_assessed]);
+      for(const field of assessment.fields)fields.push(['lastmod '+field.observed.ordinal+' · Originalwert',field.observed.decoded_value],['lastmod '+field.observed.ordinal+' · Ausgewerteter Wert (XML-Whitespace)',field.evaluated_value],['lastmod '+field.observed.ordinal+' · XSD-Union',sitemapValueAssessmentDetails(field.xsd)],['lastmod '+field.observed.ordinal+' · W3C-Profil',sitemapValueAssessmentDetails(field.w3c_note)]);
+    }
+    $('sitemap-membership-inspector-assessment-section').hidden=!assessment;
+    $('sitemap-membership-inspector-assessment').textContent=assessment?JSON.stringify(assessment,null,2):'';
     $('sitemap-membership-inspector-fields').innerHTML=fields.map(([label,value])=>`<dt>${escape(label)}</dt><dd>${escape(sitemapValue(value))}</dd>`).join('');
     $('sitemap-membership-inspector-data').textContent=JSON.stringify(tagged,null,2);
   }
   function exportSitemapLoadedPage() {
     if(!sitemapUsable())return;
     const rows=sitemapVisibleRows();if(!rows.length)return;
-    const result=sitemapMembership.result, columns=[...sitemapColumns,['Exportumfang',()=> 'filtered_loaded_page_only'],['Quellenabdeckung vollständig',()=>result.summary.declared_source_cohort_complete],['Frühere Historie unbekannt',()=>result.summary.legacy_history_unknown]];
+    const result=sitemapMembership.result, columns=[...sitemapRawColumns,['Exportumfang',()=> 'filtered_loaded_page_only'],['Quellenabdeckung vollständig',()=>result.summary.declared_source_cohort_complete],['Frühere Historie unbekannt',()=>result.summary.legacy_history_unknown]];
     const cell=input=>{let value=String(input??'');if(typeof input!=='number' && typeof input!=='boolean' && /^[\s\uFEFF]*[=+@-]/u.test(value))value=`'${value}`;return `"${value.replace(/"/g,'""')}"`;};
     const data=[columns.map(([label])=>cell(label)).join(','),...rows.map(row=>columns.map(([,value])=>cell(value(row))).join(','))].join('\r\n');
     downloadBlob(new Blob(['\uFEFF',data],{type:'text/csv;charset=utf-8'}),`open-seo-spider-${state.crawl.id}-sitemaps-loaded-page.csv`);
     message(`${number(rows.length)} gefilterte Vorkommen der geladenen Sitemap-Seite exportiert.`);
+  }
+
+  function validateSitemapDerived(result,reject) {
+    const object=value=>Boolean(value && typeof value==='object' && !Array.isArray(value)),text=value=>typeof value==='string',integer=value=>Number.isSafeInteger(value) && value>=0,hash=value=>text(value) && /^[a-f0-9]{64}$/.test(value),nullableHash=value=>value===null || hash(value);
+    if(result.lastmod_assessment_engine!==sitemapLastmodEngine || !object(result.coverage.derived))reject('Abgeleitete Sitemap-Prüfung ist nicht unterstützt.');
+    const derived=result.coverage.derived,counts=derived.counts,basis=derived.basis;
+    if(derived.engine!==sitemapCoverageEngine || !['current_declared_sources','inherited_historical_declared_sources','unavailable'].includes(derived.scope) || !['complete','known_empty','unknown'].includes(derived.completion) || typeof derived.current_valid_original_location_negative_permitted!=='boolean' || typeof derived.historical_valid_original_location_negative_permitted!=='boolean' || !object(derived.reason_counts) || Object.entries(derived.reason_counts).some(([name,count])=>!Object.hasOwn(sitemapCoverageReasons,name) || !integer(count) || count<1) || !object(counts) || ['root_declarations','child_declarations','discovery_tasks','observed_documents','complete_documents','reached_xml_tasks','invalid_or_missing_page_locations'].some(name=>!integer(counts[name])) || counts.complete_documents>counts.observed_documents)reject('Abgeleitete Sitemap-Quellenabdeckung ist beschädigt.');
+    const permits=derived.completion==='complete' || derived.completion==='known_empty';
+    if(derived.current_valid_original_location_negative_permitted!==(permits && derived.scope==='current_declared_sources') || derived.historical_valid_original_location_negative_permitted!==(permits && derived.scope==='inherited_historical_declared_sources') || permits && (Object.keys(derived.reason_counts).length || counts.reached_xml_tasks>counts.discovery_tasks) || !permits && !Object.keys(derived.reason_counts).length || derived.completion==='known_empty' && (counts.root_declarations!==0 || counts.child_declarations!==0 || counts.reached_xml_tasks!==0))reject('Sitemap-Quellenprüfung behauptet eine unbestätigte Negativaussage.');
+    if(!result.catalog_available) {
+      if(result.lastmod_assessments!==null || derived.scope!=='unavailable' || derived.completion!=='unknown' || basis!==null || Object.values(counts).some(count=>count!==0))reject('Nicht verfügbare Sitemap-Quellen dürfen keine abgeleiteten Einträge liefern.');
+      return;
+    }
+    if(!Array.isArray(result.lastmod_assessments) || !object(basis) || derived.scope!==(result.inherited?'inherited_historical_declared_sources':'current_declared_sources') || basis.initial_config_sha256!==result.summary.config_sha256 || basis.catalog_revision!==result.summary.revision || basis.catalog_rolling_sha256!==result.summary.rolling_sha256 || !nullableHash(basis.captured_inventory_sha256) || !nullableHash(basis.inventory_saved_config_sha256) || basis.inventory_generation!==null && (!integer(basis.inventory_generation) || basis.inventory_generation<1) || (result.inherited?(basis.parent_snapshot_sha256!==result.inherited.parent_snapshot_sha256 || basis.parent_catalog_sha256!==result.inherited.parent_catalog_sha256):(basis.parent_snapshot_sha256!==null || basis.parent_catalog_sha256!==null)))reject('Sitemap-Quellenprüfung ist nicht an den gespeicherten Stand gebunden.');
+    if(counts.root_declarations!==result.summary.root_rows || counts.observed_documents!==result.summary.document_rows || counts.child_declarations>result.summary.location_rows || counts.invalid_or_missing_page_locations>result.summary.location_rows || permits && (!hash(basis.captured_inventory_sha256) || !hash(basis.inventory_saved_config_sha256) || basis.inventory_generation===null))reject('Sitemap-Quellenzählung oder vollständiges Inventar passt nicht zum gespeicherten Katalog.');
+    const entries=result.rows.filter(tagged=>tagged.kind==='entry'),seen=new Set(),invalidReasons=['empty','lexical_grammar','year_zero','invalid_calendar_date','invalid_time','invalid_timezone'],undeterminedReasons=['leap_second_needs_external_evidence','w3c_year_zero_not_specified'];
+    if(result.lastmod_assessments.length!==entries.length)reject('lastmod-Prüfung ist für die geladenen XML-Einträge unvollständig.');
+    const parsed=value=>object(value) && ['year','month','date','minute','second','fractional_second'].includes(value.precision) && text(value.year) && /^-?[0-9]+$/.test(value.year) && ['month','day','hour','minute','second'].every(name=>value[name]===null || integer(value[name])) && (value.fraction===null || text(value.fraction) && /^[0-9]+$/.test(value.fraction)) && (value.timezone_lexeme===null?value.timezone_offset_minutes===null:text(value.timezone_lexeme) && Number.isInteger(value.timezone_offset_minutes) && Math.abs(value.timezone_offset_minutes)<=1439) && typeof value.end_of_day==='boolean';
+    const assessed=value=>object(value) && (value.status==='valid'?parsed(value.value):value.status==='invalid'?invalidReasons.includes(value.reason):value.status==='undetermined' && undeterminedReasons.includes(value.reason) && parsed(value.lexical_value));
+    for(const assessment of result.lastmod_assessments) {
+      if(!object(assessment) || !hash(assessment.entry_id) || !hash(assessment.observation_id) || !integer(assessment.entry_sequence) || seen.has(assessment.entry_sequence))reject('lastmod-Prüfung ohne eindeutige Eintragsidentität.');
+      seen.add(assessment.entry_sequence);
+      const entry=entries.find(tagged=>tagged.row.entry_id===assessment.entry_id && tagged.row.observation_id===assessment.observation_id && tagged.row.sequence===assessment.entry_sequence)?.row;
+      if(!entry || assessment.engine!==sitemapLastmodEngine || assessment.xsd_profile!==sitemapXsdProfile || assessment.w3c_note_profile!==sitemapW3cProfile || assessment.entry_ordinal!==entry.observed.ordinal || assessment.entry_xml_byte_start!==entry.observed.xml_byte_start || assessment.entry_xml_byte_end!==entry.observed.xml_byte_end || assessment.entry_complete!==entry.observed.complete || assessment.all_entry_fields_observed!==entry.observed.complete || assessment.freshness_assessed!==false || assessment.http_status_assessed!==false || !Array.isArray(assessment.fields) || assessment.fields.length!==entry.observed.lastmod.length || !Array.isArray(assessment.findings))reject('lastmod-Prüfung passt nicht zum geladenen ursprünglichen XML-Eintrag.');
+      const presence=assessment.fields.length>1?'observed_multiple':assessment.fields.length===1?'observed_one':entry.observed.complete?'absent_optional':'unobserved_incomplete_entry';
+      if(assessment.presence!==presence)reject('lastmod-Vorkommen passen nicht zum ursprünglichen XML-Eintrag.');
+      for(let index=0;index<assessment.fields.length;index++) {
+        const field=assessment.fields[index],original=entry.observed.lastmod[index];
+        if(!object(field) || !object(field.observed) || ['ordinal','xml_byte_start','xml_byte_end','raw_element_xml','raw_inner_xml','decoded_value'].some(name=>field.observed[name]!==original[name]) || !text(field.evaluated_value) || !assessed(field.xsd) || !assessed(field.w3c_note))reject('lastmod-Feldprüfung passt nicht zum ursprünglichen XML-Feld.');
+      }
+      for(const finding of assessment.findings) {
+        if(!object(finding) || (finding.code==='multiple_lastmod_elements'?finding.observed_count!==assessment.fields.length || finding.observed_count<2:!assessment.fields.some(field=>field.observed.ordinal===finding.field_ordinal) || (finding.code==='invalid_schema_value'?!invalidReasons.includes(finding.reason):finding.code==='schema_value_undetermined'?!undeterminedReasons.includes(finding.reason):finding.code!=='schema_profile_disagreement')))reject('lastmod-Prüfhinweis ist nicht unterstützt.');
+      }
+    }
   }
   function validateSitemapEnvelope(result,token,expectedSnapshotToken) {
     const object=value=>Boolean(value && typeof value==='object' && !Array.isArray(value)),hash=value=>typeof value==='string' && /^[a-f0-9]{64}$/.test(value),integer=value=>Number.isSafeInteger(value) && value>=0,text=value=>typeof value==='string',nullableText=value=>value===null || text(value),opaque=value=>text(value) && value.length>0 && value.length<=4096 && /^[A-Za-z0-9_-]+$/.test(value);
@@ -1580,6 +1673,7 @@
     if(!object(result.filter) || result.filter.kind!==token.kind || result.filter.source_observation_id!==null || result.filter.membership_url!==null)reject('Sitemap-Seite passt nicht zur angeforderten Auswahl.');
     if(!result.catalog_available){
       if(!['sitemap_catalog_unavailable','sqlite_history_unavailable'].includes(result.availability_reason) || result.rows!==null || result.summary!==null || result.snapshot!==null || result.snapshot_token!==null || result.inherited!==null || result.next_cursor!==null || result.has_more)reject('Nicht verfügbare Quellen dürfen keinen vollständigen leeren Stand behaupten.');
+      validateSitemapDerived(result,reject);
       return;
     }
     const summary=result.summary,snapshot=result.snapshot;
@@ -1601,6 +1695,7 @@
       if(tagged.kind==='document' && (!['robots_directives','sitemap_xml'].includes(row.kind) || !text(row.task_url) || typeof row.retained_rows_complete!=='boolean' || typeof row.declaration_scan_complete!=='boolean' || !nullableText(row.failure_code)))reject('Sitemap-Quelleinheit ist beschädigt.');
       if(tagged.kind==='entry' && (!object(row.observed) || !integer(row.observed.ordinal) || row.observed.ordinal<1 || typeof row.observed.complete!=='boolean' || !Array.isArray(row.observed.lastmod) || row.observed.lastmod.some(value=>!object(value) || !text(value.decoded_value)) || !Array.isArray(row.observed.diagnostics) || row.observed.diagnostics.some(value=>!text(value))))reject('XML-Eintragsbeobachtung ist beschädigt.');
     }
+    validateSitemapDerived(result,reject);
   }
   async function readSitemapPage(path,signal) {
     const response=await fetch(path,{signal,headers:{Accept:'application/json'}}),type=response.headers.get('content-type') || '';

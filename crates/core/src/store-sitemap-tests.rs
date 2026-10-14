@@ -239,6 +239,7 @@ fn report(store: &CrawlStore, catalog: Option<crate::SitemapCatalog>) -> CrawlRe
         policy_ledger: store.policy_ledger_summary().unwrap(),
         resource_ledger: store.resource_ledger_summary().unwrap(),
         sitemap_catalog: catalog,
+        sitemap_coverage_inventory: store.sitemap_read_snapshot().unwrap().coverage_inventory,
         summary: crate::CrawlSummary {
             completed: store.pages().unwrap().len(),
             pending: store.pending_count().unwrap(),
