@@ -1,0 +1,148 @@
+{
+  "schema": "open-seo-spider.s4-source-processing-core-handoff.v1",
+  "status": "IMMUTABLE_SOURCE_ONLY_NOT_RUN",
+  "owner": "/root/finish_coverage",
+  "base": {
+    "root": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-large-source-integration-v1",
+    "head_provided_abbreviated": "2a01db34",
+    "root_writes": false,
+    "source_guards": "Each pre-existing payload guard was hashed against the new large-source Root worktree. New module/test paths were absent."
+  },
+  "payload_directory": "files",
+  "payloads": [
+    {
+      "path": "crates/core/src/sitemap_source_processing.rs",
+      "before_sha256": "ABSENT",
+      "after_sha256": "e8f760e139fd9949ed0ed8f9c6b293a728474f81cfef66298640eb9e63fd3a3f",
+      "bytes": 3387
+    },
+    {
+      "path": "crates/core/src/sitemap_source_processing_tests.rs",
+      "before_sha256": "ABSENT",
+      "after_sha256": "690ba426d293ab95206fff0ed8f790628262ccdfa9d5c0fe2fe2d322932d3120",
+      "bytes": 12599
+    },
+    {
+      "path": "crates/core/src/sitemap/models.rs",
+      "before_sha256": "2bccc73f511e39bb7170d9f92d67df236f6709ae1dc64ee1ef4edf3e9cefe56f",
+      "after_sha256": "816190a74403fdf3e31a379a9814d7a17cf2ac75d83485299ac269fd4d6c5e59",
+      "bytes": 7875
+    },
+    {
+      "path": "crates/core/src/sitemap/count_models.rs",
+      "before_sha256": "6bfb0408d228b63e6a57eed38a6c5ee8a6d52d98bc0085352973c18b2a724e2c",
+      "after_sha256": "2c6390285ca7a8da46c1e7cb3f29eae9d70edd64759492a65cd11ece44252b73",
+      "bytes": 4743
+    },
+    {
+      "path": "crates/core/src/sitemap/tests.rs",
+      "before_sha256": "bc0a242b5b78de30a23c8377c5c50d92ce3f5d25bc561eabcb058723fbdd3e8c",
+      "after_sha256": "959cc909ebef1b6073fa2ce2da76a26a3da973ed51f041180005320e30707ddf",
+      "bytes": 31460
+    },
+    {
+      "path": "crates/core/src/sitemap/entity_observation_tests.rs",
+      "before_sha256": "6a37fc3ed80cf82fad6b7f207c227b275bf2901afbc94469a587622dbe4f7ff2",
+      "after_sha256": "5927dd64f47cc625ba75dcb66c8d0e3bd5c908cbd68265f8f257907d73a1129a",
+      "bytes": 16692
+    },
+    {
+      "path": "crates/core/src/sitemap/count_tests.rs",
+      "before_sha256": "1a0e3b2749c0ac121804ca99159daa21bd346dac33926e47619c510eb47400b3",
+      "after_sha256": "c1ec9f784a4a834116f9de756491731a4ed9581bb08b1818206a8a1a9ffb3e97",
+      "bytes": 17110
+    }
+  ],
+  "contract": {
+    "type": "SitemapSourceProcessingConfig",
+    "serde": [
+      "default",
+      "deny_unknown_fields"
+    ],
+    "fields": [
+      "max_post_http_entity_bytes:usize",
+      "max_decoded_xml_bytes:usize",
+      "max_xml_events:usize"
+    ],
+    "default": [
+      8388608,
+      8388608,
+      500000
+    ],
+    "hard_max": [
+      67108864,
+      67108864,
+      2000000
+    ],
+    "public_methods": [
+      "validate()->Result<(),SitemapFailure>",
+      "parser_limits()->Result<SitemapParserLimits,SitemapFailure>"
+    ],
+    "public_constants": [
+      "MAX_SITEMAP_SOURCE_POST_HTTP_ENTITY_BYTES",
+      "MAX_SITEMAP_SOURCE_DECODED_XML_BYTES",
+      "MAX_SITEMAP_SOURCE_XML_EVENTS"
+    ],
+    "retention": "All parser depth/entry/location/field/text/namespace defaults and ceilings remain unchanged. Raw ledger/source-store limits and protocol thresholds are not changed.",
+    "invalid": "Explicit invalid values return an error; no clamping or repair."
+  },
+  "dependencies": {
+    "root_owned_models": "crates/core/src/models.rs",
+    "root_owned_models_sha256_at_read": "1b9e6b6d3330d6fd20d0e83feca2c891dd0b00cb9a6746b66b9254556f64e4ee",
+    "root_owned_helpers": [
+      "CrawlConfig::sitemap_source_parser_limits()->anyhow::Result<SitemapParserLimits>",
+      "CrawlConfig::sitemap_source_body_limit()->anyhow::Result<usize>"
+    ],
+    "root_owned_lib": "Register mod sitemap_source_processing and public re-export; no lib.rs payload authored here.",
+    "fetch_capture_store": "Separately owned by /root/s3_decode_review; actual source profile must be validated before HTTP and propagated without fallback through fetch/decode/count/capture/durable A guards."
+  },
+  "tests": {
+    "new_count": 10,
+    "new_names": [
+      "source_profile_defaults_and_nested_crawl_serde_preserve_legacy_absence",
+      "source_profile_rejects_unknown_fields_and_non_integer_shapes",
+      "source_profile_all_three_exact_caps_and_zero_plus_one_are_explicit",
+      "configured_protocol_byte_neighbors_are_valid_budgets_without_allocating_sources",
+      "actual_crawl_helpers_keep_none_clamp_and_explicit_source_page_independence",
+      "crawl_body_helper_validates_other_profile_fields_before_returning_entity_limit",
+      "parser_work_caps_expand_but_all_other_default_caps_remain_enforced",
+      "count_work_limits_accept_large_profile_and_keep_its_own_default",
+      "actual_small_xml_pipeline_honors_explicit_byte_and_event_boundaries",
+      "separately_lowered_entity_and_xml_budgets_are_not_reordered_or_repaired"
+    ],
+    "legacy_files_touched": 3,
+    "legacy_change_scope": "Only prior default8MiB+1-is-invalid values changed to hard64MiB+1, and corresponding max_xml_bytes validation messages changed from8388608 to67108864. Text-only normalized-line-ending comparison confirmed exactly those substitutions in all three legacy test payloads.",
+    "authored_scope": "Small deterministic profile/config/helper/decode/count/parser tests only. Protocol-neighbor values are validated as limits without allocating or asserting physical50MiB measurements.",
+    "execution": "NOT_RUN"
+  },
+  "checks": {
+    "rustfmt_edition_2024": "PASS",
+    "rustfmt_check_edition_2024": "PASS",
+    "legacy_test_exact_authorized_delta_text_check": "PASS",
+    "compiler": "NOT_RUN",
+    "cargo": "NOT_RUN",
+    "tests": "NOT_RUN",
+    "large_source_generation": "NOT_RUN",
+    "native": "NOT_RUN",
+    "browser": "NOT_RUN",
+    "sdk": "NOT_RUN"
+  },
+  "documents": [
+    {
+      "path": "DESIGN_AND_REMAINING.md",
+      "sha256": "db7c8efb9e018568c7911f3a9f9296514bd3bde47795bfd38357b9d9cd60a058"
+    },
+    {
+      "path": "source-pins.json",
+      "sha256": "86973a1ffabe75d9dd96ef3e013afb84250afa65869d65ab0ea0ab10591ccecc"
+    }
+  ],
+  "remaining": [
+    "Root integration and independent static review",
+    "Coordinated compiler and directed/full tests after hold",
+    "Actual production52,428,799/800/801-byte and49,999/50,000/50,001-entry matrix",
+    "Verified SQLite paging/bounded export without mandatory full catalog/report materialization",
+    "UI effective bounds/stop reasons and subsequent S5/S6/S7 acceptance"
+  ],
+  "acceptance_boundary": "This completes only authored Core configuration/validation for the first productive S4 slice. It is not actual large-source execution, a memory/RSS proof, S4 completion or feature/vendor parity."
+}

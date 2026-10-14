@@ -329,7 +329,7 @@ fn count_work_bounds_remain_separate_from_unchanged_retention_caps() {
             ..Default::default()
         },
         SitemapCountLimits {
-            max_xml_bytes: 8 * 1024 * 1024 + 1,
+            max_xml_bytes: 64 * 1024 * 1024 + 1,
             ..Default::default()
         },
     ] {

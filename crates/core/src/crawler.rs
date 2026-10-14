@@ -128,6 +128,10 @@ impl Crawler {
         if config.request_timeout_secs == 0 || config.max_body_bytes == 0 {
             bail!("Timeout and response-body limit must be positive");
         }
+        // Validate the saved source-only work profile before any client/store I/O.
+        // Page response limits and retained membership budgets remain independent.
+        config.sitemap_source_parser_limits()?;
+        config.sitemap_source_body_limit()?;
         config.indexability_agent = config.indexability_agent.trim().to_ascii_lowercase();
         if config.indexability_agent.is_empty()
             || config.indexability_agent.len() > 128
@@ -1887,15 +1891,20 @@ impl Crawler {
                     batch
                 }
             };
-            let capture = (batch.document.kind == K::SitemapXml).then(|| {
-                sitemap_capture::SourceCapture::not_invoked(
-                    sitemap_capture::ReceiveProgress::new(
-                        FetchPurpose::SitemapProtocol.body_limit(&context.config),
-                    ),
-                    crate::SitemapSourceMeasurementStop::RequestNotStarted,
+            let capture = if batch.document.kind == K::SitemapXml {
+                Some(
+                    sitemap_capture::SourceCapture::not_invoked(
+                        sitemap_capture::ReceiveProgress::new(
+                            FetchPurpose::SitemapProtocol.body_limit(&context.config),
+                        ),
+                        crate::SitemapSourceMeasurementStop::RequestNotStarted,
+                    )
+                    .with_limits(context.config.sitemap_source_parser_limits()?)
+                    .into_outcome(&batch.document, capture_basis),
                 )
-                .into_outcome(&batch.document, capture_basis)
-            });
+            } else {
+                None
+            };
             let mut output = discovery_from_batch(batch, vec![format!("{code}: {}", entry.url)]);
             output.source_capture = capture;
             return Ok(output);
@@ -2687,8 +2696,8 @@ impl FetchPurpose {
         match self {
             Self::PageDocument => config.max_body_bytes,
             Self::SitemapProtocol => config
-                .max_body_bytes
-                .min(crate::SitemapParserLimits::default().max_entity_bytes),
+                .sitemap_source_body_limit()
+                .expect("source processing profile was validated before fetch"),
         }
     }
 }
@@ -2730,7 +2739,7 @@ struct SitemapProtocolObservation {
 impl SitemapProtocolObservation {
     fn capture(page: &PageRecord, request_started: bool, body: &[u8]) -> Self {
         // Compatibility supplied-slice caller. The actual fetch passes the
-        // independently counted response.chunk progress to capture_with_progress.
+        // independently counted response.chunk progress to the configured capture.
         let mut progress = sitemap_capture::ReceiveProgress::new(
             crate::SitemapParserLimits::default().max_entity_bytes,
         );
@@ -2747,7 +2756,39 @@ impl SitemapProtocolObservation {
         body: &[u8],
         progress: sitemap_capture::ReceiveProgress,
     ) -> Self {
-        let limits = crate::SitemapParserLimits::default();
+        Self::capture_with_limits(
+            page,
+            request_started,
+            body,
+            progress,
+            crate::SitemapParserLimits::default(),
+        )
+    }
+
+    fn capture_for_config(
+        page: &PageRecord,
+        request_started: bool,
+        body: &[u8],
+        progress: sitemap_capture::ReceiveProgress,
+        config: &CrawlConfig,
+    ) -> Self {
+        let limits = config
+            .sitemap_source_parser_limits()
+            .expect("source processing profile was validated before fetch");
+        if config.sitemap_source_processing.is_none() {
+            Self::capture_with_progress(page, request_started, body, progress)
+        } else {
+            Self::capture_with_limits(page, request_started, body, progress, limits)
+        }
+    }
+
+    fn capture_with_limits(
+        page: &PageRecord,
+        request_started: bool,
+        body: &[u8],
+        progress: sitemap_capture::ReceiveProgress,
+        limits: crate::SitemapParserLimits,
+    ) -> Self {
         let body_complete = page.final_status.is_some()
             && !matches!(page.final_status, Some(301 | 302 | 303 | 307 | 308))
             && page.error.is_none()
@@ -2773,7 +2814,8 @@ impl SitemapProtocolObservation {
             source_capture: sitemap_capture::SourceCapture::not_invoked(
                 progress,
                 crate::SitemapSourceMeasurementStop::ContextUnavailable,
-            ),
+            )
+            .with_limits(limits.clone()),
         };
         if request_started && observed.source_capture.received.received_bytes.is_some() {
             observed.source_capture.retained_prefix_sha256 = Some(
@@ -2907,13 +2949,14 @@ impl FetchContext {
             Some(FetchPayload::SitemapProtocol(observed)) => *observed,
             // Existing early returns precede any send(). Keep an explicit
             // failure envelope even when policy/resource/URL admission failed.
-            None => SitemapProtocolObservation::capture_with_progress(
+            None => SitemapProtocolObservation::capture_for_config(
                 &page,
                 false,
                 &[],
                 sitemap_capture::ReceiveProgress::new(
                     FetchPurpose::SitemapProtocol.body_limit(&self.config),
                 ),
+                &self.config,
             ),
             Some(FetchPayload::PageText(_)) => unreachable!("private sitemap fetch purpose"),
         };
@@ -3338,11 +3381,12 @@ impl FetchContext {
         if purpose == FetchPurpose::SitemapProtocol {
             // response.chunk() already performed reqwest HTTP Content-Decoding.
             // File-gzip magic is inspected exactly once here, before page sniffing.
-            let observed = SitemapProtocolObservation::capture_with_progress(
+            let observed = SitemapProtocolObservation::capture_for_config(
                 &page,
                 request_started,
                 &body,
                 sitemap_received,
+                &self.config,
             );
             return (
                 page,

@@ -1075,3 +1075,6 @@ async fn actual_oversized_redirect_context_retains_known_transport_with_unknown_
         &[("/redirect.xml", 1), (expected_path.as_str(), 1)],
     );
 }
+
+#[path = "sitemap_large_capture_tests.rs"]
+mod large_source_tests;

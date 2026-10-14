@@ -957,6 +957,7 @@ struct ExpectedCapture {
     document_id: String,
     staged_document_sha256: String,
     body_limit_bytes: u64,
+    parser_limits: crate::SitemapParserLimits,
 }
 #[derive(Debug, Clone)]
 enum ReceiptProof {
@@ -1047,10 +1048,8 @@ fn guarded_stage(
         task_url: document.task_url.clone(),
         document_id: document.observation_id.clone(),
         staged_document_sha256: stage_sha(document)?,
-        body_limit_bytes: config
-            .max_body_bytes
-            .min(crate::SitemapParserLimits::default().max_entity_bytes)
-            as u64,
+        body_limit_bytes: u64::try_from(config.sitemap_source_body_limit()?)?,
+        parser_limits: config.sitemap_source_parser_limits()?,
     })
 }
 fn verify_receipt_snapshot(
@@ -1137,7 +1136,7 @@ pub(crate) fn record_a(
     )?;
     bind_record_document(measurement, document)?;
     let bounds = &measurement.payload.bounds;
-    let parser = crate::SitemapParserLimits::default();
+    let parser = &expected.parser_limits;
     ensure!(
         bounds.max_retained_post_http_bytes == expected.body_limit_bytes
             && bounds.max_retained_xml_bytes == parser.max_xml_bytes as u64
@@ -1147,7 +1146,7 @@ pub(crate) fn record_a(
             && bounds.max_retained_entries == parser.max_entries as u64
             && bounds.max_retained_location_occurrences == parser.max_location_occurrences as u64
             && bounds.max_retained_text_utf8_bytes == parser.max_retained_text_utf8_bytes as u64,
-        "Measurement bounds differ from actual saved-config/default protocol profile"
+        "Measurement bounds differ from actual saved-config source processing profile"
     );
     let mut snapshot = load(tx)?.context("Source-store A requires explicit initialization")?;
     ensure!(

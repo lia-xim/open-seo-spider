@@ -125,6 +125,12 @@ impl SourceCapture {
             allow_legacy_unqualified: self.limits.allow_legacy_unqualified,
         }
     }
+    /// Bind the actual validated per-crawl work profile, including unstarted
+    /// requests. Parser retention fields stay part of the exact recorded bounds.
+    pub(super) fn with_limits(mut self, limits: SitemapParserLimits) -> Self {
+        self.limits = limits;
+        self
+    }
     pub(super) fn into_outcome(
         self,
         document: &SitemapSourceDocument,

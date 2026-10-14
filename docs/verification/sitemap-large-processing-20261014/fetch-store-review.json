@@ -1,0 +1,243 @@
+{
+  "schema": "open-seo-spider.s4-fetch-store-independent-review.v1",
+  "recorded_at_utc": "2026-10-14T20:53:55Z",
+  "reviewer": "/root/finish_coverage",
+  "review_status": "BOUNDED_STATIC_REVIEW_NO_CONFIRMED_FINDINGS",
+  "reviewed_handoff": {
+    "manifest": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-large-source-fetch-store-v1/manifest.json",
+    "sha256": "e15db79ddf624e9115165f571a71b9c33025bea349ded6f2528be0cb04c4f355",
+    "manifest_hash_verified": true,
+    "payload_directory": "product",
+    "payloads": [
+      {
+        "path": "crates/core/src/crawler.rs",
+        "sha256": "ef99fff8bdba98ac09e9df494c1ae7eb20e86d229468b1e5bb94e27649091d68",
+        "verified": true
+      },
+      {
+        "path": "crates/core/src/crawler/sitemap_capture.rs",
+        "sha256": "741276e08981e852bcef6a67d36c9ceebbeb152599abcae3a3a77e7f74e5504a",
+        "verified": true
+      },
+      {
+        "path": "crates/core/src/sitemap_source_store.rs",
+        "sha256": "f1ae66933221d7b84f065d820642c65418ff18fd0b789be09b35fa03a095fefa",
+        "verified": true
+      },
+      {
+        "path": "crates/core/src/crawler/sitemap_large_capture_tests.rs",
+        "sha256": "41bf2cf0d433a9a99a79ca9b6cd0c2c75579d19483b767add748196c91e2d586",
+        "verified": true
+      }
+    ],
+    "documents": [
+      {
+        "path": "README.md",
+        "sha256": "128856feddcf628f7f110af2246acf426bc37336351d3f0743e3e60a1e007888",
+        "verified": true
+      },
+      {
+        "path": "SOURCE-PINS.json",
+        "sha256": "f7c1b9850e6f306457ee4a1868ed48a7430ace0a3f27c5f41d24919c54faecd4",
+        "verified": true
+      },
+      {
+        "path": "S3-S4-PATH-RECEIPT.json",
+        "sha256": "f2c5aa8413dc3f85188a9a5d7e78deae12e996407c0167108239e5ba80260435",
+        "verified": true
+      },
+      {
+        "path": "VERIFICATION.json",
+        "sha256": "a0646a2f21446314651c53117e484a628fb191f79b373a546e8e13364503c26b",
+        "verified": true
+      }
+    ]
+  },
+  "baseline_product_guards_rehashed": [
+    {
+      "path": "crates/core/src/crawler.rs",
+      "sha256": "b0dd37f367a6e375a2d30e4859a818e2f769165856b90f29c7578af6a5bf24a5"
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_capture.rs",
+      "sha256": "1c68762e749288e2d18670d0164c52eb26da0d10d5cbd4dfb8bb84c362d844a8"
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store.rs",
+      "sha256": "acfb8733563a969468ca9ea0ac26d83df6245efbbb56ce4d8453794424b35d13"
+    }
+  ],
+  "dependency_reads": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-large-source-integration-v1/crates/core/src/models.rs",
+      "sha256": "1b9e6b6d3330d6fd20d0e83feca2c891dd0b00cb9a6746b66b9254556f64e4ee",
+      "lines": [
+        100,
+        123
+      ],
+      "evidence": "Actual Root source helpers: None retains the legacy body clamp/default parser; Some validates profile and returns its independent entity budget."
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-large-source-integration-v1/crates/core/src/crawler/sitemap_capture_tests.rs",
+      "sha256": "182f08a5cfb8209bd800462d42406f9613082f8e824d229952c3a431e4b760b0",
+      "evidence": "Actual Root child module path hook present at file end. Read actual BinaryFixture finish/connection drain at148-195 and actual setup/context/collect/measurement helpers223-299. These helper bodies were read, not executed."
+    }
+  ],
+  "method": "Read immutable manifest, rehash all four payloads and four documents; read all changed production hunks and their actual caller/validator context; compare against pinned immutable S3 baselines using a read-only no-index diff; read all four new test bodies and actual Root module hook/fixture helpers. No product source was modified.",
+  "reviewed_invariants": [
+    {
+      "path": "crates/core/src/crawler.rs",
+      "lines": [
+        54,
+        66,
+        128,
+        134,
+        189,
+        198,
+        223,
+        224
+      ],
+      "conclusion": "new and from_saved_config share the constructor path validating both actual source helpers before Client construction and before with_store opens a Store. Profile errors propagate via Result at this public boundary."
+    },
+    {
+      "path": "crates/core/src/crawler.rs",
+      "lines": [
+        2695,
+        2702,
+        2768,
+        2782
+      ],
+      "conclusion": "Page budget stays config.max_body_bytes. Sitemap budget comes from actual source helper. None retains the default compatibility capture; Some passes the explicit parser limits. Internal expect calls rely on the validated private configuration invariant; no fallback/clamp introduced."
+    },
+    {
+      "path": "crates/core/src/crawler.rs",
+      "lines": [
+        1894,
+        1903,
+        2792,
+        2818,
+        2828,
+        2845,
+        2943,
+        2961,
+        3381,
+        3390
+      ],
+      "conclusion": "SourceCapture receives the actual parser limits before context/failure returns. Explicit early admission rejection, fetch-unstarted fallback, non200/robots/truncated/transport failure and normal fetch paths retain the actual configured work profile."
+    },
+    {
+      "path": "crates/core/src/crawler.rs",
+      "lines": [
+        2880,
+        2903,
+        3357,
+        3375
+      ],
+      "conclusion": "Actual chunk bytes are still counted before retained-prefix clipping. Successful observed decode runs once; count and legacy parser borrow the same actual decoded XML Vec with the same explicit work profile."
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_capture.rs",
+      "lines": [
+        119,
+        132,
+        218,
+        229,
+        246,
+        260,
+        315,
+        335
+      ],
+      "conclusion": "with_limits sets the actual capture profile. Count limits and sealed work/retention bounds derive from it. Decoder effective limits and count effective limits plus actual decoded byte/hash facts are cross-checked; no synthetic measured zero or durable commit claim is added."
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store.rs",
+      "lines": [
+        519,
+        541,
+        550,
+        574,
+        952,
+        960,
+        1014,
+        1053,
+        1127,
+        1157
+      ],
+      "conclusion": "Fresh active full-crawl generation and exact actual saved-config bytes/hash are read in the transaction; parser/body limits are derived from that actual parsed config. record_a checks all eight recorded work/retention bounds, including events, before dedupe/persistence. Initial catalog config SHA remains a separate historical anchor."
+    }
+  ],
+  "test_source_review": {
+    "new_functions": 4,
+    "source_fixture_bytes": 9437184,
+    "functions": [
+      {
+        "name": "real_missing_and_explicit_default_source_profiles_preserve_their_caps",
+        "lines": [
+          34,
+          110
+        ],
+        "evidence": "Actual HTTP response producer; None5MiB and None8MiB under larger page cap, Some(Default)8MiB independent of1024 page cap; explicit unknown decode/scan and received greater than retained assertions."
+      },
+      {
+        "name": "invalid_source_processing_profiles_fail_real_constructor_before_requests",
+        "lines": [
+          112,
+          137
+        ],
+        "evidence": "Public Crawler constructor rejects zero/ceiling+1 for all three explicit fields, with an owned loopback fixture requiring zero requests."
+      },
+      {
+        "name": "actual_nine_mib_plain_file_http_gzip_and_index_use_saved_optin_bounds",
+        "lines": [
+          139,
+          351
+        ],
+        "evidence": "Actual9MiB plain/file-gzip/HTTP-gzip/index producers, actual byte/hash/count and unchanged threshold assertions, actual A persistence without B association, real page1024 cap, non200 and robots-unstarted explicit profile bounds. Index child is counted, not fetched/admitted by this collector-only test."
+      },
+      {
+        "name": "actual_optin_capture_uses_current_saved_sha_and_store_rejects_wrong_work_bounds",
+        "lines": [
+          353,
+          430
+        ],
+        "evidence": "Legitimate delay override changes actual saved config SHA while preserving initial anchor. Wrong body/XML/event bounds are explicitly negative typed variants derived from the actual capture; actual Store A rejects them unchanged, then accepts the unmodified actual measurement."
+      }
+    ],
+    "fixture_producer_lines": [
+      16,
+      31
+    ],
+    "fixture_lifecycle": "Tests invoke actual fixture.finish before final request assertions; the existing fixture closes listener and drains its accepted connection JoinSet.",
+    "execution": "NOT_RUN",
+    "qualification": "Literal9MiB fixture/control logic reviewed statically only. No fixture generator was evaluated. These bodies do not prove the actual52,428,800/+1 protocol matrix, whole-discovery B admission, type correctness or runtime behavior."
+  },
+  "confirmed_findings": [],
+  "not_proven": [
+    "Compiler/type/module acceptance",
+    "Any new or existing test PASS",
+    "Actual9MiB or52MiB HTTP/gzip/SQLite outcomes",
+    "Memory/RSS/latency behavior",
+    "Crash/restart and concurrent writer behavior",
+    "Browser/SDK/native/platform behavior",
+    "S4 streaming/paging closure or vendor feature parity"
+  ],
+  "execution": {
+    "compiler": "NOT_RUN",
+    "cargo": "NOT_RUN",
+    "tests": "NOT_RUN",
+    "fixtures": "NOT_RUN",
+    "source_generators": "NOT_RUN",
+    "native": "NOT_RUN",
+    "browser": "NOT_RUN",
+    "sdk": "NOT_RUN",
+    "reason": "Coordinated compute hold."
+  },
+  "mutations": {
+    "review_receipt_only": true,
+    "product_source": false,
+    "root_repository": false,
+    "git_state": false,
+    "runtime": false
+  },
+  "boundary": "No confirmed finding in the bounded changed-path/source-contract review. This is not broad integration approval or execution evidence."
+}

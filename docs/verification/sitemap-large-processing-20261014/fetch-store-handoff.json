@@ -1,0 +1,138 @@
+{
+  "schema": "sitemap-large-source-fetch-store-handoff-v1",
+  "status": "IMMUTABLE_GUARDED_SOURCE_ONLY_NOT_COMPILED_NOT_RUN",
+  "recorded_at_utc": "2026-10-14T20:50:38.5800606Z",
+  "baseline_root": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-large-source-integration-v1",
+  "baseline_declared_head": "2a01db34",
+  "payload_directory": "product",
+  "payloads": [
+    {
+      "path": "crates/core/src/crawler.rs",
+      "before_sha256": "b0dd37f367a6e375a2d30e4859a818e2f769165856b90f29c7578af6a5bf24a5",
+      "require_absent": false,
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-large-source-fetch-store-v1/product/crates/core/src/crawler.rs",
+      "after_sha256": "ef99fff8bdba98ac09e9df494c1ae7eb20e86d229468b1e5bb94e27649091d68",
+      "bytes": 162506
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_capture.rs",
+      "before_sha256": "1c68762e749288e2d18670d0164c52eb26da0d10d5cbd4dfb8bb84c362d844a8",
+      "require_absent": false,
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-large-source-fetch-store-v1/product/crates/core/src/crawler/sitemap_capture.rs",
+      "after_sha256": "741276e08981e852bcef6a67d36c9ceebbeb152599abcae3a3a77e7f74e5504a",
+      "bytes": 18284
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store.rs",
+      "before_sha256": "acfb8733563a969468ca9ea0ac26d83df6245efbbb56ce4d8453794424b35d13",
+      "require_absent": false,
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-large-source-fetch-store-v1/product/crates/core/src/sitemap_source_store.rs",
+      "after_sha256": "f1ae66933221d7b84f065d820642c65418ff18fd0b789be09b35fa03a095fefa",
+      "bytes": 54727
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_large_capture_tests.rs",
+      "before_sha256": null,
+      "require_absent": true,
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-large-source-fetch-store-v1/product/crates/core/src/crawler/sitemap_large_capture_tests.rs",
+      "after_sha256": "41bf2cf0d433a9a99a79ca9b6cd0c2c75579d19483b767add748196c91e2d586",
+      "bytes": 15802
+    }
+  ],
+  "documents": [
+    {
+      "path": "README.md",
+      "sha256": "128856feddcf628f7f110af2246acf426bc37336351d3f0743e3e60a1e007888",
+      "bytes": 4554
+    },
+    {
+      "path": "SOURCE-PINS.json",
+      "sha256": "f7c1b9850e6f306457ee4a1868ed48a7430ace0a3f27c5f41d24919c54faecd4",
+      "bytes": 1706
+    },
+    {
+      "path": "S3-S4-PATH-RECEIPT.json",
+      "sha256": "f2c5aa8413dc3f85188a9a5d7e78deae12e996407c0167108239e5ba80260435",
+      "bytes": 4562
+    },
+    {
+      "path": "VERIFICATION.json",
+      "sha256": "a0646a2f21446314651c53117e484a628fb191f79b373a546e8e13364503c26b",
+      "bytes": 1260
+    }
+  ],
+  "dependencies": {
+    "profile_manifest": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-processing-core-v1/manifest.json",
+      "sha256": "1fda85d2356cbd834f519e51adacbdd14d71fb4956ebb7f35a45494ce63e9593",
+      "all7_declared_payload_hashes_verified": true
+    },
+    "root_models": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-large-source-integration-v1/crates/core/src/models.rs",
+      "sha256_at_read": "1b9e6b6d3330d6fd20d0e83feca2c891dd0b00cb9a6746b66b9254556f64e4ee",
+      "required_field": "sitemap_source_processing: Option<crate::SitemapSourceProcessingConfig>",
+      "actual_helpers": [
+        "sitemap_source_parser_limits(&self)->anyhow::Result<SitemapParserLimits>",
+        "sitemap_source_body_limit(&self)->anyhow::Result<usize>"
+      ],
+      "ownership": "Root-owned; not a payload or replacement guard"
+    },
+    "required_root_test_hook": {
+      "target": "crates/core/src/crawler/sitemap_capture_tests.rs",
+      "before_sha256_at_read": "0f027b39c4679bc0fc02514c9e0102ddbda3b8c74eba8e704bae3016515174e7",
+      "append_text": "#[path = \"sitemap_large_capture_tests.rs\"]\nmod large_source_tests;\n",
+      "ownership": "Root appends after checking guard; old test file not edited in handoff"
+    }
+  },
+  "implementation": "Actual saved-config source work profile is validated before constructor I/O and propagated through body cap, failure/unstarted/normal capture, observed decoder/count/legacy parser and durable A expected bounds. None legacy and default helper XML ownership preserved. No threshold or retention-budget changes here.",
+  "new_authored_test_count": 4,
+  "new_authored_test_names": [
+    "real_missing_and_explicit_default_source_profiles_preserve_their_caps",
+    "invalid_source_processing_profiles_fail_real_constructor_before_requests",
+    "actual_nine_mib_plain_file_http_gzip_and_index_use_saved_optin_bounds",
+    "actual_optin_capture_uses_current_saved_sha_and_store_rejects_wrong_work_bounds"
+  ],
+  "verification": {
+    "status": "FORMAT_PARSER_PASS_ONLY_PRODUCT_EXECUTION_NOT_RUN",
+    "formatter": "C:/Users/matth/.cargo/bin/rustfmt.exe",
+    "formatter_args": [
+      "--check",
+      "--edition",
+      "2024",
+      "--config",
+      "skip_children=true"
+    ],
+    "owned_rust_files": 4,
+    "observed_exit_code": 0,
+    "qualification": "Formatting/parser only; no Rust type/module check",
+    "new_test_functions": [
+      "real_missing_and_explicit_default_source_profiles_preserve_their_caps",
+      "invalid_source_processing_profiles_fail_real_constructor_before_requests",
+      "actual_nine_mib_plain_file_http_gzip_and_index_use_saved_optin_bounds",
+      "actual_optin_capture_uses_current_saved_sha_and_store_rejects_wrong_work_bounds"
+    ],
+    "authored_functions": 4,
+    "executed_functions": 0,
+    "http_fixtures_executed": 0,
+    "sqlite_fixture_writes_executed": 0,
+    "source_generators_executed": 0,
+    "compiler": "NOT_RUN_COMPUTE_HOLD",
+    "cargo": "NOT_RUN_COMPUTE_HOLD",
+    "native": "NOT_RUN",
+    "browser": "NOT_RUN",
+    "sdk": "NOT_RUN",
+    "physical_rss": "NOT_RUN",
+    "genuine_protocol_52m_boundary": "NOT_RUN",
+    "source_ownership": "Own E handoff copies/documents only; Root/models/lib/profile/oldtests/frozen234/Git/runtime not modified by this task"
+  },
+  "test_scope": "Authored actual9MiB Plain/File-gzip/HTTP-gzip/Index; page1024 cap, absent/default profile behavior, invalid public constructor/no source requests, non200 and robots-denied/unstarted capture bound persistence, legitimate current-config SHA override and strict internally valid negative body/XML/event provenance rejected by actual Store A. No fixtures executed.",
+  "remaining": [
+    "Root guarded promotion and exact child-test hook/module/export bindings",
+    "Independent bounded review",
+    "Type/compile/focused+combined tests after HOLD",
+    "Genuine52_428_800 and +1 Plain/Gzip/HTTP-gzip/Index physical/native matrix",
+    "Memory/RSS/latency/crash/restart and all SDK/browser/platform gates",
+    "Public S3/S4 feature surfaces/full parity remain open"
+  ],
+  "mutation_scope": "No Root/Git/Core-owned peer source/runtime mutation; this handoff only"
+}

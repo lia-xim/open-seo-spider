@@ -25,7 +25,7 @@ impl ReturnedProgress {
         }
     }
     fn returned(&mut self, bytes: &[u8]) {
-        // The unchanged validated 8 MiB XML ceiling plus one real sentinel fits.
+        // The validated bounded XML ceiling plus one real sentinel fits u64.
         self.bytes = self
             .bytes
             .checked_add(u64::try_from(bytes.len()).expect("bounded read fits u64"))

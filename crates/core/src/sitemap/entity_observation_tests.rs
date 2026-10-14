@@ -134,7 +134,7 @@ fn invalid_limits_and_entity_preflight_do_not_invent_encoding_or_decoded_zero() 
     failure(
         &outcome,
         "sitemap_invalid_limits",
-        Some("max_xml_bytes must be 1..=8388608"),
+        Some("max_xml_bytes must be 1..=67108864"),
     );
     assert_eq!(outcome.observation.effective_limits, None);
     assert_eq!(outcome.observation.encoding, None);
@@ -165,14 +165,14 @@ fn invalid_limits_and_entity_preflight_do_not_invent_encoding_or_decoded_zero() 
     assert_eq!(outcome.observation.encoding, None);
     no_output(&outcome.observation);
     let above_ceiling = SitemapParserLimits {
-        max_xml_bytes: 8 * 1024 * 1024 + 1,
+        max_xml_bytes: 64 * 1024 * 1024 + 1,
         ..Default::default()
     };
     let outcome = decode_sitemap_entity_observed(&input, &above_ceiling);
     failure(
         &outcome,
         "sitemap_invalid_limits",
-        Some("max_xml_bytes must be 1..=8388608"),
+        Some("max_xml_bytes must be 1..=67108864"),
     );
     no_output(&outcome.observation);
 }

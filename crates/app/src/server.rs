@@ -33,6 +33,10 @@ pub(crate) mod resources;
 mod sitemap_generation;
 mod sitemaps;
 
+#[cfg(test)]
+#[path = "server/sitemap_processing_config_tests.rs"]
+mod sitemap_processing_config_tests;
+
 #[derive(Clone)]
 struct AppState {
     mcp: crate::mcp::Bridge,

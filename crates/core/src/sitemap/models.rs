@@ -1,3 +1,7 @@
+use crate::sitemap_source_processing::{
+    MAX_SITEMAP_SOURCE_DECODED_XML_BYTES, MAX_SITEMAP_SOURCE_POST_HTTP_ENTITY_BYTES,
+    MAX_SITEMAP_SOURCE_XML_EVENTS,
+};
 use serde::{Deserialize, Serialize};
 pub const SITEMAP_XML_ENGINE: &str = "open-seo-spider/sitemap-xml-occurrences-v1";
 pub const SITEMAP_XML_NS: &str = "http://www.sitemaps.org/schemas/sitemap/0.9";
@@ -9,6 +13,7 @@ pub const XMLNS_NS: &str = "http://www.w3.org/2000/xmlns/";
 pub struct SitemapParserLimits {
     /// Bytes supplied after HTTP Content-Decoding; never claimed to be wire bytes.
     pub max_entity_bytes: usize,
+    /// Decoded XML work budget; its hard ceiling is separate from the default.
     pub max_xml_bytes: usize,
     pub max_xml_events: usize,
     pub max_xml_depth: usize,
@@ -42,10 +47,18 @@ impl SitemapParserLimits {
             (
                 "max_entity_bytes",
                 self.max_entity_bytes,
-                cap.max_entity_bytes,
+                MAX_SITEMAP_SOURCE_POST_HTTP_ENTITY_BYTES,
             ),
-            ("max_xml_bytes", self.max_xml_bytes, cap.max_xml_bytes),
-            ("max_xml_events", self.max_xml_events, cap.max_xml_events),
+            (
+                "max_xml_bytes",
+                self.max_xml_bytes,
+                MAX_SITEMAP_SOURCE_DECODED_XML_BYTES,
+            ),
+            (
+                "max_xml_events",
+                self.max_xml_events,
+                MAX_SITEMAP_SOURCE_XML_EVENTS,
+            ),
             ("max_xml_depth", self.max_xml_depth, cap.max_xml_depth),
             ("max_entries", self.max_entries, cap.max_entries),
             (

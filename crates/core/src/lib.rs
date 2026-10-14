@@ -46,6 +46,8 @@ mod sitemap_membership_analysis;
 pub use sitemap_membership_analysis::*;
 mod sitemap_source_measurement;
 pub use sitemap_source_measurement::*;
+mod sitemap_source_processing;
+pub use sitemap_source_processing::*;
 mod sitemap_source_store;
 pub use sitemap_source_store::{
     MAX_SOURCE_RECORD_BYTES, MAX_SOURCE_STORE_BYTES, SITEMAP_SOURCE_STORE_ENGINE,

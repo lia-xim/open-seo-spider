@@ -12,6 +12,10 @@ pub struct CrawlConfig {
     pub explicit_sitemap_inputs: Option<Vec<String>>,
     pub discover_sitemaps: bool,
     pub max_sitemap_documents: usize,
+    /// Explicit source-only work budgets. None preserves the legacy page-body
+    /// clamp and parser defaults; retained membership/catalog budgets are separate.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sitemap_source_processing: Option<crate::SitemapSourceProcessingConfig>,
     pub crawl_links: bool,
     pub include_subdomains: bool,
     pub concurrency: usize,
@@ -61,6 +65,7 @@ impl Default for CrawlConfig {
             explicit_sitemap_inputs: None,
             discover_sitemaps: true,
             max_sitemap_documents: 1000,
+            sitemap_source_processing: None,
             crawl_links: true,
             include_subdomains: false,
             concurrency: 8,
@@ -93,6 +98,30 @@ impl Default for CrawlConfig {
 }
 
 impl CrawlConfig {
+    /// Effective XML/decode work bounds, validated without repairing supplied
+    /// values. Retained entry/location/text limits keep their existing defaults.
+    pub fn sitemap_source_parser_limits(&self) -> anyhow::Result<crate::SitemapParserLimits> {
+        match &self.sitemap_source_processing {
+            Some(profile) => profile
+                .parser_limits()
+                .map_err(|error| anyhow::anyhow!("{}: {}", error.code, error.message)),
+            None => Ok(crate::SitemapParserLimits::default()),
+        }
+    }
+
+    /// Source-only opt-in is independent of page max_body_bytes. Historical
+    /// configurations keep the previous min(page body, default entity) behavior.
+    pub fn sitemap_source_body_limit(&self) -> anyhow::Result<usize> {
+        let parser = self.sitemap_source_parser_limits()?;
+        match &self.sitemap_source_processing {
+            Some(profile) => Ok(profile.max_post_http_entity_bytes),
+            None => {
+                anyhow::ensure!(self.max_body_bytes > 0, "Body byte budget must be positive");
+                Ok(self.max_body_bytes.min(parser.max_entity_bytes))
+            }
+        }
+    }
+
     /// Call only at a fresh-input boundary, before the first import merge.
     /// Repeated preparation must not replace an already declared original vector.
     pub fn capture_explicit_sitemap_inputs(&mut self) {

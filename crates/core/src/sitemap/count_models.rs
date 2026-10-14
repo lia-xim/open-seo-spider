@@ -8,7 +8,8 @@ pub const SITEMAP_COUNT_XML_ENGINE: &str = "open-seo-spider/sitemap-count-only-x
 pub const SITEMAP_COUNT_LOC_PROFILE: &str = "absolute-http-xml-loc-v1";
 
 /// Scanner work limits do not contain cumulative retained-row/text limits.
-/// Defaults and validated ceilings preserve the current XML/event/depth/field caps.
+/// Defaults preserve 8 MiB/500,000 events. XML/event hard ceilings permit the
+/// explicit large-source work profile; depth/field limits remain unchanged.
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(default, deny_unknown_fields)]
 pub struct SitemapCountLimits {

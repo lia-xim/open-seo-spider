@@ -323,7 +323,7 @@ fn inventory() -> Vec<Value> {
     let mut tools: Vec<Value> = vec![
         ("spider_capabilities","Read implemented and optional capabilities",json!({}),vec![],true),
         ("spider_list_crawls","List saved and active crawls",json!({}),vec![],true),
-        ("spider_start_crawl","Start a crawl for user-requested targets",json!({"config":{"type":"object","description":"CrawlConfig: seed_urls or seed_url, sitemap_urls, concurrency, delay_ms, obey_robots, max_pages, optional renderer"}}),vec!["config"],false),
+        ("spider_start_crawl","Start a crawl for user-requested targets",json!({"config":{"type":"object","description":"CrawlConfig: seed_urls or seed_url, sitemap_urls, concurrency, delay_ms, obey_robots, max_pages, optional renderer and sitemap_source_processing (max_post_http_entity_bytes, max_decoded_xml_bytes, max_xml_events); source work budgets do not widen page bodies or membership retention"}}),vec!["config"],false),
         ("spider_status","Read crawl progress and warnings",json!({"id":uuid}),vec!["id"],true),
         ("spider_pages","Read a bounded page slice; increment offset for more",json!({"id":uuid,"offset":{"type":"integer","minimum":0},"limit":{"type":"integer","minimum":1,"maximum":10000}}),vec!["id"],true),
         ("spider_issues","Read observed audit issues",json!({"id":uuid}),vec!["id"],true),

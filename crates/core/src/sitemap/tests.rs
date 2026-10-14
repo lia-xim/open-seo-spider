@@ -746,7 +746,7 @@ fn rejects_zero_or_above_ceiling_limits_before_inspection() {
     };
     assert_eq!(fail_code(b"<urlset/>", &zero), "sitemap_invalid_limits");
     let larger = SitemapParserLimits {
-        max_entity_bytes: SitemapParserLimits::default().max_entity_bytes + 1,
+        max_entity_bytes: 64 * 1024 * 1024 + 1,
         ..Default::default()
     };
     gzip_failure(b"<urlset/>", "sitemap_invalid_limits", &larger);
