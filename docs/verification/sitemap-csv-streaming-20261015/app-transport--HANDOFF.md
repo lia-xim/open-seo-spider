@@ -1,0 +1,34 @@
+# App CSV streaming source handoff
+
+Immutable after manifest publication. Source-only implementation; no compiler, tests, SQLite, HTTP, native product or browser execution under coordinated HOLD. Root is sole product integrator. Basis Root sitemap-csv-streaming-integration-v1, requested HEAD d105fb8; six guarded originals are pinned in before-pins.json. No Root/Git/runtime/dependency writes.
+
+Eight payloads: three product entry files (server.rs, server/sitemaps.rs, sitemap_membership.rs), one new transport/registry module, one new sink-test child, and three existing fixture files containing only additive `exports: Default::default()` fields (four literals in total). The new module is registered in the owned server.rs; its sink-test hook is inside the new module. The separate ActualStore/Wire test owner's new child and parent hook are NOT included here; Root must apply that separately after these guards.
+
+Actual route remains `/api/crawls/{id}/sitemaps/export.csv`. Query role/UUID/filter prechecks precede Store I/O after the existing missing-job priority. A new independently opened read-only Store enters Root's opaque verified Core callback. The actual header is bound to App job generation/config and recomputed shared rich state; fresh Inventory tokens use exactly the same existing reader engine and state profile. Root's RawNone callback exception is required: header.ledger=None yields existing catalog_unavailable409 before full header/token equality; no fake header or fallback report.
+
+Pass1 runs the unchanged CSV formatter across every matching stored row into an actual incremental count/SHA writer. Inclusive native64MiB cap and +1 refusal happen before Ready/HTTP200; no all-CSV Vec/spool and no extra SHA pass. Ready contains snapshot, exact Content-Length and additive x-sitemap-csv-sha256. App job readguard ends at Ready. Pass2 uses the same callback/session/transaction, same formatter, same fixed filter and validates byte length, SHA and row count.
+
+Transport uses four64KiB queued chunks plus fixed writer buffers. A final positive1..64KiB tail remains withheld even after flush and exact chunk-size multiples. It escapes only after matching second receipt, actual Core TX return and actual spawn_blocking worker join. Body prefix length is checked to remain strictly below advertised Content-Length; failures/panics/context mismatches end in Body error rather than normal EOF. The existing CSV formatter labels every I/O error as budget; a separate typed sink cause takes priority so disconnect/cancel/deadline cannot be relabelled as a CSV413.
+
+One registered async coordinator owns and always awaits the actual blocking worker. Its independent timer still runs when a slow client stops polling Body. Default preflight120s, stream300s and stalled queue30s; monotone Core control shared across clone, streaming deadline updated after real preflight. Cancel-on-drop closes/drains the bounded receiver and signals Control. Queue reserve is cancel/deadline-aware, not an unbounded blocking_send. Completed supervisors are reaped; shutdown closes admission, cancels all, joins all coordinators and waits active0 even with concurrent drain callers. Server Ctrl-C drain is wired before graceful shutdown, and server return also drains. Blocking-worker abort is never claimed. Native socket delivery/realtime cancellation latency remain unproved; selected materializing compatibility and Core coarse-input limits remain explicit.
+
+New before-Ready timeout code sitemap_export_timeout504 and shutdown cancellation sitemap_export_cancelled503 are additive. After Ready they become transport errors, not new JSON responses. Existing status codes and Token JSON/CSV byte encodings remain. As already accepted for rich reads, simultaneous stale token plus Appjob/actualDB mismatch may produce stale_sitemap_cursor409 before sitemap_job_snapshot_conflict409; no extra SQL read is added. No other intentional priority change. Full raw/source/config/coverage/analysis corruption is supplied by actual Core verification, not reclassified to stale.
+
+Required Core API is the Root-confirmed public contract: SitemapStoredRowsFilter, SitemapVerifiedReadHeader (analysis_context is actual and mandatory), opaque SitemapVerifiedStoredRows header/visit_all_filtered, CrawlStore::with_verified_sitemap_stored_rows returning only after TX commit, clone-shared SitemapReadControl with std::time::Instant deadline/cancel/expire/set_deadline/checkpoint and typed Cancelled/DeadlineExceeded. Actual Root stored_rows/header field source was inspected; compilation and final combined Core control hooks are not proved by this App artifact.
+
+Three new sink groups only, authored NOT_RUN:
+- counting_hash_sink_counts_actual_sixty_four_mib_and_refuses_next_byte
+- chunk_sink_keeps_positive_tail_for_exact_multiples_and_flush
+- cancelled_sink_retains_typed_cause_despite_unchanged_formatter_budget_label
+
+These are writer controls, not ActualStore/Wire proof. All14 design acceptance groups remain NOT_PROVEN pending the separate test-owner source and, after HOLD is lifted, actual compilation/execution. Existing formatter/control goldens are preserved, not substituted as native route proof.
+
+Stable test API in server::sitemap_csv_stream:
+- ExportRegistry Clone+Default; snapshot()->ExportStats; shutdown_and_drain()->anyhow::Result<()>; cfg(test) for_test(ExportTestLimits,ExportTestHooks).
+- ExportTestLimits fields prepare_timeout/stream_timeout/stall_timeout; never configurable CSV cap/chunk/queue values.
+- ExportTestHooks Default: before_ready (after full Pass1 before Ready), after_preflight (after Ready), before_core_return (after full Pass2 while Core callback/TX still live), after_core_return (after actual Core return), fault.
+- Arc<ExportTestGate> Default, wait_reached().await/is_reached()/release(); waits are cancellation/deadline-aware.
+- ExportTestFault: None, SecondPassAfterBytes(u64), BeforeCoreReturn, AfterCoreReturnPanic, SecondPassDigestMismatch, ResponseBuildAfterReady. The response fault feeds an invalid header into the actual ResponseBuilder with the actual Body so its error drops/cancels that Body.
+- Stats started/active/joined/failed/core_completed/prefix_bytes/peak_queued/max_chunk_bytes/prepared_sessions/completed_passes/first_pass_rows/second_pass_rows. prepared_sessions only actual Corecallback entry; passes only after full visits; core_completed immediately after CoreOk before after_core_return gate; joined only after Worker JoinHandle.await. Active tracks coordinator until worker joined and body complete/cancelled. A joined worker may have closed its TX while its Body still drains the bounded queue.
+
+checks.json records actual syntax/format/hash/text controls only: rustfmt0/check0 over eight owned files, byte-equivalent formatter function bodies ignoring visibility, and old fixture bodies unchanged except the requested default fields. No TypePASS or product-runtime result.

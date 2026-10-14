@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "artifact": "s4-csv-control-core-v1",
+  "status": "FROZEN_SOURCE_ONLY_NOT_COMPILED_NOT_RUN",
+  "baseline": {
+    "root": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-csv-streaming-integration-v1",
+    "head": "d105fb8a0c527ffd99164e44ec644bd0e49f61a5"
+  },
+  "files": [
+    {
+      "path": "crates/core/src/sitemap_coverage/verified_read.rs",
+      "before_sha256": "b526090b47f6582be6bff9998aaf2b3f62da89c49b4ce0c653da263b61db5556",
+      "before_state": "file",
+      "after_sha256": "95e776c6668716815f8a4ef3f4b2255b9083ea473b42ce045921ff66f379cf38",
+      "bytes": 28194,
+      "payload": "product/crates/core/src/sitemap_coverage/verified_read.rs"
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/verified_read.rs",
+      "before_sha256": "4c85393345be9eaa20f999550260f2463cb1f0473fe0f05ee0505f5e54ec6181",
+      "before_state": "file",
+      "after_sha256": "aac658b8af3eac7b50fa056d4370ce901ec76c7960d83dd7c67bff8e2de8a0d5",
+      "bytes": 33688,
+      "payload": "product/crates/core/src/sitemap_ledger/verified_read.rs"
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis/window.rs",
+      "before_sha256": "05fa126b7ff4480b3bb8e72a1e252db0d16026ba90ebd17d78abb6c25c2239f4",
+      "before_state": "file",
+      "after_sha256": "fe461667cdc78b5f5eea01e96f1f6b69b81c7e8ba5303d2918e102951993f7ac",
+      "bytes": 14003,
+      "payload": "product/crates/core/src/sitemap_membership_analysis/window.rs"
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis.rs",
+      "before_sha256": "4c69a5974a602f3535a7c08dc51faad70d8ba385984052a9434a2f41583aa825",
+      "before_state": "file",
+      "after_sha256": "2eb60bcee8fb1b3957c9ad52eea1a5c6d1c7d6163e71ed5b4553108079c44f28",
+      "bytes": 44846,
+      "payload": "product/crates/core/src/sitemap_membership_analysis.rs"
+    },
+    {
+      "path": "crates/core/src/sitemap_read_control.rs",
+      "before_sha256": null,
+      "before_state": "absent",
+      "after_sha256": "526fce14de68721f50ce607e6b07b857f77c512862abc28df3e1c97d2cd6d880",
+      "bytes": 6401,
+      "payload": "product/crates/core/src/sitemap_read_control.rs"
+    },
+    {
+      "path": "crates/core/src/sitemap_read_control_tests.rs",
+      "before_sha256": null,
+      "before_state": "absent",
+      "after_sha256": "08c773c05f4c4cd5c2340a3245609727fe9dc731d1f6ac95232601a62a773de5",
+      "bytes": 16291,
+      "payload": "product/crates/core/src/sitemap_read_control_tests.rs"
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store/verified_read.rs",
+      "before_sha256": "1049f6ded60a2f12efef0e393fe7422fbfcf6f110b0c5e3c0d52df1172c5eab8",
+      "before_state": "file",
+      "after_sha256": "ff7a41dea8417491245c08e279044f61f789bddb823734f1ef2f2780e096eb46",
+      "bytes": 12240,
+      "payload": "product/crates/core/src/sitemap_source_store/verified_read.rs"
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store/verified_report.rs",
+      "before_sha256": "454672bf19e7bf6b191652e48437456fb335b4d8005a18fa0575cd004c5c46ca",
+      "before_state": "file",
+      "after_sha256": "49764ffffe19dd06dc3b3be328aaecb4f8083aab0248dcb03ffbe7be0141da14",
+      "bytes": 22909,
+      "payload": "product/crates/core/src/sitemap_source_store/verified_report.rs"
+    }
+  ],
+  "contract": {
+    "path": "CONTRACT.md",
+    "sha256": "2c46d4daf76a3c2884cf54def18fb7c96b9fe14bd754d573d0c7d0e0223dcc9e"
+  },
+  "patch": {
+    "path": "change.patch",
+    "sha256": "97570b9432f07c5273380649a298301b3cafa5566619a62891e38343be035130"
+  },
+  "new_test_count": 10,
+  "new_test_functions": [
+    "control_default_clones_and_first_observed_stop_are_sticky",
+    "control_deadlines_are_shared_movable_clearable_and_typed",
+    "control_recovers_only_its_own_poisoned_state_lock",
+    "control_owned_interrupt_guards_drop_only_their_attachment_and_outlive_connection",
+    "control_maps_actual_sql_interrupt_but_preserves_unrelated_errors",
+    "control_chunk_hash_preserves_exact_bytes_and_stops_before_more_work",
+    "controlled_default_real_empty_store_matches_all_old_reader_results_without_mutation",
+    "controlled_actual_root_visit_cancel_never_returns_a_successful_prefix",
+    "controlled_readers_stop_before_sql_even_without_metadata_schema",
+    "controlled_prepared_analysis_and_raw_lookup_keep_the_shared_stop_after_prepare"
+  ],
+  "source_validation": {
+    "rustfmt_parser_format": "PASS",
+    "rustfmt_check": "PASS",
+    "baseline_before_guards": "PASS",
+    "cargo": "NOT_RUN_COMPUTE_HOLD",
+    "compiler": "NOT_RUN_COMPUTE_HOLD",
+    "tests": "NOT_RUN_COMPUTE_HOLD",
+    "sqlite_fixtures": "NOT_RUN_COMPUTE_HOLD",
+    "native_browser_sdk": "NOT_RUN_COMPUTE_HOLD"
+  },
+  "ownership": "Only isolated handoff payloads; Root repository/Git/runtime untouched",
+  "root_integration_required": [
+    "Register module and public Control/Error exports in lib.rs",
+    "Use all four controlled APIs and same clone in Root export Connection/TX session; guard owned/no Connectionborrow",
+    "App owns deadline/disconnect watcher and calls expire/cancel while SQL blocked",
+    "Retain selected/policy/import/materialization guards and all before-selection state checks",
+    "Compile/type/borrow/Clippy/tests/native acceptance after compute hold release"
+  ],
+  "remaining_limits": [
+    "No automatic timer or hard cancel/deadline latency claim",
+    "SQLite interrupt-before-step race remains cooperative; repeated notification actual test authored",
+    "Selected/config/policy/import legacy materializations and unrelated IgnoredAny parse have coarse boundaries",
+    "No allocation/RSS/query-plan/native performance evidence"
+  ]
+}

@@ -166,6 +166,7 @@ async fn setup(fixture: &Fixture, mode: Mode) -> (OwnedDirectory, AppState, Uuid
             Arc::new(RwLock::new(job)),
         )]))),
         data_dir: Arc::new(dir.0.clone()),
+        exports: Default::default(),
     };
     drop(crawler);
     fixture.offline.store(true, Ordering::SeqCst);
@@ -425,3 +426,6 @@ async fn full_csv_uses_same_snapshot_filter_safe_cells_and_exact_original_typed_
 
 #[path = "sitemaps_rich_read_tests.rs"]
 mod rich_read_window_tests;
+
+#[path = "sitemaps_streaming_tests.rs"]
+mod streaming_tests;

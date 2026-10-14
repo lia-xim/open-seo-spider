@@ -1,0 +1,2172 @@
+--- a/crates/core/src/sitemap_coverage/verified_read.rs
++++ b/crates/core/src/sitemap_coverage/verified_read.rs
+@@ -3,6 +3,7 @@
+ //! Selected history deliberately retains the old materializing compatibility path.
+ use super::*;
+ use crate::sitemap_ledger::verified_read::{SitemapLedgerFilter, VerifiedRawRead};
++use crate::sitemap_read_control::SitemapReadControl;
+ use rusqlite::{Connection, OptionalExtension, params};
+ use serde::ser::{Error as _, SerializeSeq, SerializeStruct};
+ use sha2::{Digest, Sha256};
+@@ -42,7 +43,12 @@
+         .optional()?)
+ }
+ 
+-fn validate_context(connection: &Connection, context: CoverageReadContext<'_>) -> Result<()> {
++fn validate_context(
++    connection: &Connection,
++    context: CoverageReadContext<'_>,
++    control: &SitemapReadControl,
++) -> Result<()> {
++    control.checkpoint()?;
+     let length: Option<i64> = connection
+         .query_row(
+             "SELECT length(CAST(value AS BLOB)) FROM metadata WHERE key='config'",
+@@ -60,7 +66,7 @@
+             ensure!(
+                 (1..=MAX_SAVED_CONFIG_BYTES as i64).contains(&length)
+                     && i64::try_from(bytes.len())? == length
+-                    && crate::sitemap_ledger::digest(bytes) == sha,
++                    && control.sha256(bytes)? == sha,
+                 "Coverage actual saved-config byte/hash context differs"
+             );
+             let equal: bool = connection.query_row(
+@@ -97,6 +103,7 @@
+ fn visit_tasks(
+     connection: &Connection,
+     exists: bool,
++    control: &SitemapReadControl,
+     mut visit: impl FnMut(&SitemapCoverageTask) -> Result<()>,
+ ) -> Result<()> {
+     if !exists {
+@@ -116,6 +123,7 @@
+     let mut cursor = query.query([])?;
+     let mut previous: Option<(SitemapSourceKind, String)> = None;
+     while let Some(row) = cursor.next()? {
++        control.checkpoint()?;
+         let kind = match row.get_ref(0)?.as_str()? {
+             "robots" => SitemapSourceKind::RobotsDirectives,
+             "sitemap" => SitemapSourceKind::SitemapXml,
+@@ -169,7 +177,16 @@
+         .transpose()
+ }
+ 
++#[cfg(test)]
+ fn expected_robots(connection: &Connection, config: &CrawlConfig) -> Result<Vec<String>> {
++    expected_robots_with_control(connection, config, &SitemapReadControl::default())
++}
++fn expected_robots_with_control(
++    connection: &Connection,
++    config: &CrawlConfig,
++    control: &SitemapReadControl,
++) -> Result<Vec<String>> {
++    control.checkpoint()?;
+     if !(config.crawl_links && config.discover_sitemaps && config.obey_robots) {
+         return Ok(vec![]);
+     }
+@@ -181,6 +198,7 @@
+         } else {
+             &config.seed_urls
+         } {
++            control.checkpoint()?;
+             insert_origin(&mut origins, &mut origin_bytes, value)?;
+         }
+         return Ok(origins.into_iter().collect());
+@@ -188,6 +206,7 @@
+     let mut query=connection.prepare("SELECT json_extract(data,'$.occurrence.decision.fetch_candidate_url') FROM policy_occurrences WHERE json_extract(data,'$.occurrence.input_basis')='declared_input' AND json_extract(data,'$.occurrence.task_role')='page_document' AND json_extract(data,'$.occurrence.decision.source_kind') IN ('seed','list_page') AND json_extract(data,'$.occurrence.admission_reason') IN ('scheduled','coalesced') ORDER BY sequence")?;
+     let mut cursor = query.query([])?;
+     while let Some(row) = cursor.next()? {
++        control.checkpoint()?;
+         let value = row.get_ref(0)?.as_str()?;
+         insert_origin(&mut origins, &mut origin_bytes, value)?;
+     }
+@@ -213,6 +232,7 @@
+ struct RootsJson<'a> {
+     config: &'a CrawlConfig,
+     initial_sha: &'a str,
++    control: &'a SitemapReadControl,
+ }
+ impl Serialize for RootsJson<'_> {
+     fn serialize<S: serde::Serializer>(
+@@ -226,6 +246,7 @@
+             self.initial_sha,
+             None,
+             |item| {
++                self.control.checkpoint()?;
+                 seq.serialize_element(&item.root)
+                     .map_err(|e| anyhow::anyhow!(e.to_string()))
+             },
+@@ -237,6 +258,7 @@
+ struct TasksJson<'a> {
+     connection: &'a Connection,
+     exists: bool,
++    control: &'a SitemapReadControl,
+ }
+ impl Serialize for TasksJson<'_> {
+     fn serialize<S: serde::Serializer>(
+@@ -244,11 +266,17 @@
+         serializer: S,
+     ) -> std::result::Result<S::Ok, S::Error> {
+         let mut seq = serializer.serialize_seq(None)?;
+-        visit_tasks(self.connection, self.exists, |task| {
+-            seq.serialize_element(task)
+-                .map_err(|e| anyhow::anyhow!(e.to_string()))
+-        })
+-        .map_err(S::Error::custom)?;
++        self.control
++            .map_result(visit_tasks(
++                self.connection,
++                self.exists,
++                self.control,
++                |task| {
++                    seq.serialize_element(task)
++                        .map_err(|e| anyhow::anyhow!(e.to_string()))
++                },
++            ))
++            .map_err(S::Error::custom)?;
+         seq.end()
+     }
+ }
+@@ -259,6 +287,7 @@
+     initial_sha: &'a str,
+     robots: &'a [String],
+     tasks_exist: bool,
++    control: &'a SitemapReadControl,
+ }
+ impl Serialize for InventoryJson<'_> {
+     fn serialize<S: serde::Serializer>(
+@@ -277,6 +306,7 @@
+                 &RootsJson {
+                     config: self.config,
+                     initial_sha: self.initial_sha,
++                    control: self.control,
+                 },
+             )?;
+         } else {
+@@ -288,16 +318,19 @@
+             &TasksJson {
+                 connection: self.connection,
+                 exists: self.tasks_exist,
++                control: self.control,
+             },
+         )?;
+         state.end()
+     }
+ }
+-struct InventoryHash {
++struct InventoryHash<'a> {
++    control: &'a SitemapReadControl,
++    next_check: usize,
+     bytes: usize,
+     hash: Sha256,
+ }
+-impl Write for InventoryHash {
++impl Write for InventoryHash<'_> {
+     fn write(&mut self, value: &[u8]) -> io::Result<usize> {
+         self.bytes = self
+             .bytes
+@@ -308,7 +341,15 @@
+                 "Coverage inventory serialized budget exceeded",
+             ));
+         }
+-        self.hash.update(value);
++        let start = self.bytes - value.len();
++        for (index, chunk) in value.chunks(65_536).enumerate() {
++            let offset = start + index * 65_536;
++            if offset + chunk.len() >= self.next_check {
++                self.control.checkpoint().map_err(io::Error::other)?;
++                self.next_check = offset + chunk.len() + 65_536;
++            }
++            self.hash.update(chunk);
++        }
+         Ok(value.len())
+     }
+     fn flush(&mut self) -> io::Result<()> {
+@@ -316,8 +357,13 @@
+     }
+ }
+ 
+-fn count_rows(raw: &VerifiedRawRead<'_>, out: &mut SitemapCoverage) -> Result<()> {
++fn count_rows(
++    raw: &VerifiedRawRead<'_>,
++    out: &mut SitemapCoverage,
++    control: &SitemapReadControl,
++) -> Result<()> {
+     raw.visit_filtered(&SitemapLedgerFilter::default(), |row| {
++        control.checkpoint()?;
+         match row {
+             SitemapLedgerRow::Document(document) => {
+                 out.counts.observed_documents += 1;
+@@ -351,6 +397,7 @@
+     raw: &VerifiedRawRead<'_>,
+     config: &CrawlConfig,
+     out: &mut SitemapCoverage,
++    control: &SitemapReadControl,
+ ) -> Result<()> {
+     let mut explicit = 0u64;
+     let mut imported = 0u64;
+@@ -360,6 +407,7 @@
+         &raw.summary().config_sha256,
+         None,
+         |item| {
++            control.checkpoint()?;
+             let expected = item.root;
+             match expected.kind {
+                 SitemapRootKind::ExplicitConfig => explicit += 1,
+@@ -401,6 +449,7 @@
+             ..Default::default()
+         },
+         |row| {
++            control.checkpoint()?;
+             if let SitemapLedgerRow::Root(root) = row {
+                 let expected = match root.kind {
+                     SitemapRootKind::ExplicitConfig => root.source_ordinal < explicit,
+@@ -441,6 +490,7 @@
+     connection: &Connection,
+     raw: &VerifiedRawRead<'_>,
+     context: CoverageReadContext<'_>,
++    control: &SitemapReadControl,
+ ) -> Result<VerifiedCoverageRead> {
+     use SitemapCoverageReason as R;
+     let mut out = empty_coverage();
+@@ -448,7 +498,7 @@
+     if raw.summary().legacy_history_unknown {
+         reason(&mut out, R::LegacyHistoryUnknown);
+     }
+-    count_rows(raw, &mut out)?;
++    count_rows(raw, &mut out, control)?;
+     let (Some(bytes), Some(sha), Some(generation)) = (
+         context.saved_config_bytes,
+         context.saved_config_sha256,
+@@ -469,13 +519,16 @@
+     if let Some(policy) = &config.crawl_policy {
+         crate::policy_ledger::verify(connection, &crate::CompiledCrawlPolicy::new(policy)?)?;
+     }
++    control.checkpoint()?;
+     let tasks_exist = task_table(connection)?;
+-    let robots = expected_robots(connection, &config)?;
++    let robots = expected_robots_with_control(connection, &config, control)?;
+     ensure!(
+         robots.len() <= MAX_INVENTORY_TASKS,
+         "Coverage Robots inventory row budget exceeded"
+     );
+     let mut hash = InventoryHash {
++        control,
++        next_check: 65_536,
+         bytes: 0,
+         hash: Sha256::new(),
+     };
+@@ -488,6 +541,7 @@
+             initial_sha: &raw.summary().config_sha256,
+             robots: &robots,
+             tasks_exist,
++            control,
+         },
+     )?;
+     let inventory_sha256 = format!("{:x}", hash.hash.finalize());
+@@ -498,13 +552,16 @@
+     if !context.discovery_initialized {
+         reason(&mut out, R::DiscoveryNotInitialized);
+     }
+-    compare_initial_roots(connection, raw, &config, &mut out)?;
++    control.checkpoint()?;
++    compare_initial_roots(connection, raw, &config, &mut out, control)?;
+     for origin in robots {
++        control.checkpoint()?;
+         if !task_exists(connection, tasks_exist, "robots", &origin)? {
+             reason(&mut out, R::RequiredRobotsTaskMissing);
+         }
+     }
+-    visit_tasks(connection, tasks_exist, |task| {
++    visit_tasks(connection, tasks_exist, control, |task| {
++        control.checkpoint()?;
+         out.counts.discovery_tasks += 1;
+         match document_identity(connection, task.kind.frontier_kind(), &task.task_url)? {
+             None => reason(
+@@ -532,6 +589,7 @@
+             ..Default::default()
+         },
+         |row| {
++            control.checkpoint()?;
+             if let SitemapLedgerRow::Document(doc) = row
+                 && !task_exists(
+                     connection,
+@@ -554,6 +612,7 @@
+             ..Default::default()
+         },
+         |row| {
++            control.checkpoint()?;
+             if let SitemapLedgerRow::Root(root) = row
+                 && let Some(url) = admitted_source_url(&mut out, &root.admission, true)
+             {
+@@ -563,6 +622,7 @@
+         },
+     )?;
+     while let Some(url) = queue.pop_front() {
++        control.checkpoint()?;
+         if !task_exists(connection, tasks_exist, "sitemap", &url)? {
+             reason(&mut out, R::SourceTaskMissing);
+         }
+@@ -572,6 +632,7 @@
+             let mut query=connection.prepare("SELECT data FROM sitemap_locations WHERE observation_id COLLATE BINARY=?1 AND json_extract(data,'$.row.observed.role')='child_sitemap' ORDER BY sequence")?;
+             let mut cursor = query.query([id])?;
+             while let Some(row) = cursor.next()? {
++                control.checkpoint()?;
+                 let SitemapLedgerRow::Location(edge) =
+                     serde_json::from_str(row.get_ref(0)?.as_str()?)?
+                 else {
+@@ -588,7 +649,8 @@
+         }
+     }
+     out.counts.reached_xml_tasks = reached.len() as u64;
+-    visit_tasks(connection, tasks_exist, |task| {
++    visit_tasks(connection, tasks_exist, control, |task| {
++        control.checkpoint()?;
+         if task.kind == SitemapSourceKind::SitemapXml && !reached.contains(&task.task_url) {
+             reason(&mut out, R::SourceGraphUnboundTask);
+         }
+@@ -602,7 +664,11 @@
+     })
+ }
+ 
+-fn project_selected(connection: &Connection) -> Result<VerifiedCoverageRead> {
++fn project_selected(
++    connection: &Connection,
++    control: &SitemapReadControl,
++) -> Result<VerifiedCoverageRead> {
++    control.checkpoint()?;
+     // Higher Store selected-plan/source-parent presence gates MUST already run.
+     // This is explicit bounded, materializing legacy compatibility, not ordinary
+     // streaming and not a complete S4 claim.
+@@ -644,7 +710,9 @@
+             )
+         })
+         .transpose()?;
++    control.checkpoint()?;
+     let coverage = project_sitemap_coverage(Some(&catalog), inventory.as_ref())?;
++    control.checkpoint()?;
+     let inventory_sha256 = coverage
+         .basis
+         .as_ref()
+@@ -661,11 +729,28 @@
+     raw: Option<&VerifiedRawRead<'_>>,
+     context: CoverageReadContext<'_>,
+ ) -> Result<VerifiedCoverageRead> {
++    project_read_with_control(connection, raw, context, &SitemapReadControl::default())
++}
++pub(crate) fn project_read_with_control(
++    connection: &Connection,
++    raw: Option<&VerifiedRawRead<'_>>,
++    context: CoverageReadContext<'_>,
++    control: &SitemapReadControl,
++) -> Result<VerifiedCoverageRead> {
++    let _binding = control.bind_connection(connection)?;
++    control.run(|| project_read_inner(connection, raw, context, control))
++}
++fn project_read_inner(
++    connection: &Connection,
++    raw: Option<&VerifiedRawRead<'_>>,
++    context: CoverageReadContext<'_>,
++    control: &SitemapReadControl,
++) -> Result<VerifiedCoverageRead> {
+     ensure!(
+         !connection.is_autocommit(),
+         "Coverage read requires caller-owned transaction"
+     );
+-    validate_context(connection, context)?;
++    validate_context(connection, context, control)?;
+     let Some(raw) = raw else {
+         return Ok(VerifiedCoverageRead {
+             coverage: project_sitemap_coverage(None, None)?,
+@@ -678,9 +763,9 @@
+         "Coverage raw proof belongs to another connection"
+     );
+     if raw.inherited().is_some() {
+-        project_selected(connection)
++        project_selected(connection, control)
+     } else {
+-        project_current(connection, raw, context)
++        project_current(connection, raw, context, control)
+     }
+ }
+ 
+--- a/crates/core/src/sitemap_ledger/verified_read.rs
++++ b/crates/core/src/sitemap_ledger/verified_read.rs
+@@ -4,6 +4,8 @@
+ //! The caller owns a read transaction and must not write through its Connection
+ //! while the token is alive. This is a crate-private provenance boundary.
+ use super::*;
++use crate::sitemap_read_control::SitemapReadControl;
++
+ use serde::ser::{Error as _, SerializeSeq, SerializeStruct};
+ 
+ const WINDOW_BYTES: usize = 8 * 1024 * 1024;
+@@ -17,9 +19,10 @@
+ }
+ impl std::error::Error for RawWindowByteBudget {}
+ 
+-struct WindowSize(usize);
+-impl Write for WindowSize {
++struct WindowSize<'a>(usize, &'a SitemapReadControl);
++impl Write for WindowSize<'_> {
+     fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
++        self.1.checkpoint().map_err(io::Error::other)?;
+         let size = self
+             .0
+             .checked_add(bytes.len())
+@@ -86,6 +89,7 @@
+     connection: &'conn Connection,
+     summary: SitemapLedgerSummary,
+     inherited: Option<SitemapInheritedBasis>,
++    control: SitemapReadControl,
+ }
+ impl VerifiedRawRead<'_> {
+     pub(crate) fn summary(&self) -> &SitemapLedgerSummary {
+@@ -98,8 +102,11 @@
+         self.connection
+     }
+     pub(crate) fn document_by_id(&self, id: &str) -> Result<Option<SitemapSourceDocument>> {
+-        sha(id)?;
+-        document(self.connection, &self.summary.limits, id)
++        let _binding = self.control.bind_connection(self.connection)?;
++        self.control.run(|| {
++            sha(id)?;
++            document(self.connection, &self.summary.limits, id)
++        })
+     }
+     pub(crate) fn visit_filtered(
+         &self,
+@@ -109,6 +116,18 @@
+         self.filtered(filter, 0, None, -1, |row| visitor(&row))
+     }
+     fn filtered(
++        &self,
++        filter: &SitemapLedgerFilter,
++        lower: u64,
++        upper: Option<u64>,
++        limit: i64,
++        visitor: impl FnMut(SitemapLedgerRow) -> Result<()>,
++    ) -> Result<()> {
++        let _binding = self.control.bind_connection(self.connection)?;
++        self.control
++            .run(|| self.filtered_inner(filter, lower, upper, limit, visitor))
++    }
++    fn filtered_inner(
+         &self,
+         filter: &SitemapLedgerFilter,
+         lower: u64,
+@@ -137,6 +156,7 @@
+             limit
+         ])?;
+         while let Some(row) = cursor.next()? {
++            self.control.checkpoint()?;
+             visitor(decode_row(row, &self.summary.limits)?)?;
+         }
+         Ok(())
+@@ -146,6 +166,7 @@
+         filter: &SitemapLedgerFilter,
+         after: u64,
+     ) -> Result<bool> {
++        self.control.checkpoint()?;
+         filter.validate()?;
+         ensure!(
+             !self.connection.is_autocommit(),
+@@ -167,6 +188,7 @@
+         after: Option<u64>,
+         limit: usize,
+     ) -> Result<SitemapLedgerPage> {
++        self.control.checkpoint()?;
+         ensure!(
+             (1..=1000).contains(&limit),
+             "Sitemap page limit must be 1..=1000"
+@@ -212,13 +234,17 @@
+             next_after_sequence: next,
+             has_more,
+         };
+-        serde_json::to_writer(&mut WindowSize(0), &page).map_err(|error| -> anyhow::Error {
+-            if error.is_io() {
+-                RawWindowByteBudget.into()
+-            } else {
+-                error.into()
+-            }
+-        })?;
++        let encoded = serde_json::to_writer(&mut WindowSize(0, &self.control), &page).map_err(
++            |error| -> anyhow::Error {
++                if error.is_io() && self.control.checkpoint().is_ok() {
++                    RawWindowByteBudget.into()
++                } else {
++                    error.into()
++                }
++            },
++        );
++        self.control.map_result(encoded)?;
++        self.control.checkpoint()?;
+         Ok(page)
+     }
+ }
+@@ -302,11 +328,13 @@
+ fn visit_all(
+     connection: &Connection,
+     limits: &SitemapLedgerLimits,
++    control: &SitemapReadControl,
+     mut visitor: impl FnMut(&SitemapLedgerRow) -> Result<()>,
+ ) -> Result<()> {
+     let mut statement = connection.prepare(&format!("{ROWS_SQL} ORDER BY 2"))?;
+     let mut cursor = statement.query([])?;
+     while let Some(row) = cursor.next()? {
++        control.checkpoint()?;
+         visitor(&decode_row(row, limits)?)?;
+     }
+     Ok(())
+@@ -613,7 +641,8 @@
+ 
+ /// One ordered relation pass, never a full locations scan per entry. Declared
+ /// lists are sorted exactly as the old validator; input order is not tightened.
+-fn verify_entry_locations(connection: &Connection) -> Result<()> {
++fn verify_entry_locations(connection: &Connection, control: &SitemapReadControl) -> Result<()> {
++    control.checkpoint()?;
+     let mut query = connection.prepare(
+         "SELECT e.row_id,e.data,l.data
+       FROM sitemap_entries e LEFT JOIN sitemap_locations l ON l.entry_id=e.row_id
+@@ -624,6 +653,7 @@
+     let mut declared = Vec::new();
+     let mut seen = 0usize;
+     while let Some(row) = cursor.next()? {
++        control.checkpoint()?;
+         let id: String = row.get(0)?;
+         if current.as_ref() != Some(&id) {
+             ensure!(seen == declared.len(), "Entry Loc references differ");
+@@ -690,6 +720,19 @@
+ }
+ 
+ pub(crate) fn verify_raw(connection: &Connection) -> Result<Option<VerifiedRawRead<'_>>> {
++    verify_raw_with_control(connection, &SitemapReadControl::default())
++}
++pub(crate) fn verify_raw_with_control<'conn>(
++    connection: &'conn Connection,
++    control: &SitemapReadControl,
++) -> Result<Option<VerifiedRawRead<'conn>>> {
++    let _binding = control.bind_connection(connection)?;
++    control.run(|| verify_raw_inner(connection, control))
++}
++fn verify_raw_inner<'conn>(
++    connection: &'conn Connection,
++    control: &SitemapReadControl,
++) -> Result<Option<VerifiedRawRead<'conn>>> {
+     ensure!(
+         !connection.is_autocommit(),
+         "Raw verification requires a caller-owned transaction"
+@@ -711,6 +754,7 @@
+             connection,
+             summary: catalog.summary,
+             inherited: catalog.inherited,
++            control: control.clone(),
+         }));
+     }
+     summary.limits.validate()?;
+@@ -729,6 +773,7 @@
+     let mut total_rows = 0u64;
+     let mut total_bytes = 0u64;
+     for table in TABLES {
++        control.checkpoint()?;
+         let (count, bytes, max): (i64,i64,i64) = connection.query_row(&format!(
+             "SELECT count(*),coalesce(sum(length(CAST(data AS BLOB))),0),coalesce(max(length(CAST(data AS BLOB))),0) FROM {table}"),
+             [], |r| Ok((r.get(0)?,r.get(1)?,r.get(2)?)))?;
+@@ -775,11 +820,12 @@
+     computed.rolling_sha256 = seed_hash();
+     let mut counters = BTreeMap::new();
+     let mut last_document = None;
+-    visit_all(connection, &summary.limits, |row| {
++    visit_all(connection, &summary.limits, control, |row| {
+         account(&mut computed, row)?;
+         relation_row(connection, &summary, &mut counters, &mut last_document, row)
+     })?;
+     for (id, stats) in counters {
++        control.checkpoint()?;
+         let doc =
+             document(connection, &summary.limits, &id)?.context("Missing counted document")?;
+         if let Some(count) = doc.declaration_count {
+@@ -804,11 +850,12 @@
+         computed == summary,
+         "Raw counts/rolling SHA/global sequence differ"
+     );
+-    verify_entry_locations(connection)?;
++    verify_entry_locations(connection, control)?;
+     let read = VerifiedRawRead {
+         connection,
+         summary,
+         inherited,
++        control: control.clone(),
+     };
+     ensure!(
+         measured(
+--- a/crates/core/src/sitemap_membership_analysis/window.rs
++++ b/crates/core/src/sitemap_membership_analysis/window.rs
+@@ -27,6 +27,21 @@
+     connection: &'conn Connection,
+     input: &AnalysisReadInput<'a, 'conn>,
+ ) -> Result<VerifiedAnalysisRead<'a, 'conn>> {
++    prepare_window_analysis_with_control(connection, input, &SitemapReadControl::default())
++}
++pub(crate) fn prepare_window_analysis_with_control<'a, 'conn>(
++    connection: &'conn Connection,
++    input: &AnalysisReadInput<'a, 'conn>,
++    control: &SitemapReadControl,
++) -> Result<VerifiedAnalysisRead<'a, 'conn>> {
++    let _binding = control.bind_connection(connection)?;
++    control.run(|| prepare_window_analysis_inner(connection, input, control))
++}
++fn prepare_window_analysis_inner<'a, 'conn>(
++    connection: &'conn Connection,
++    input: &AnalysisReadInput<'a, 'conn>,
++    control: &SitemapReadControl,
++) -> Result<VerifiedAnalysisRead<'a, 'conn>> {
+     ensure!(
+         !connection.is_autocommit(),
+         "Sitemap analysis requires a read transaction"
+@@ -55,7 +70,7 @@
+             "Analysis coverage/raw basis differs"
+         );
+     }
+-    let prepared = prepare_context(
++    let prepared = prepare_context_with_control(
+         connection,
+         ContextInput {
+             generation: input.generation,
+@@ -64,6 +79,7 @@
+             summary: input.raw.map(|v| v.summary()),
+             source: SourceBasis::Verified(input.source),
+         },
++        control,
+     )?;
+     Ok(VerifiedAnalysisRead {
+         connection,
+@@ -83,6 +99,7 @@
+     visible_rows: &[SitemapLedgerRow],
+     request: &SitemapMembershipAnalysisRequest,
+ ) -> Result<SitemapMembershipAnalysis> {
++    prepared.prepared.control.checkpoint()?;
+     request.validate()?;
+     ensure!(
+         !prepared.connection.is_autocommit(),
+@@ -150,13 +167,15 @@
+         &self,
+         connection: &Connection,
+         pages: &[SitemapTargetObservation],
++        control: &SitemapReadControl,
+     ) -> Result<BTreeMap<String, WindowCounts>> {
+         match self {
+-            Self::Materialized(rows) => legacy_counts(rows, pages),
++            Self::Materialized(rows) => legacy_counts(rows, pages, control),
+             Self::Verified(raw) => sql_counts(
+                 connection,
+                 raw.context("Saved page membership has no verified raw basis")?,
+                 pages,
++                control,
+             ),
+         }
+     }
+@@ -164,6 +183,7 @@
+ fn legacy_counts(
+     rows: &[SitemapLedgerRow],
+     pages: &[SitemapTargetObservation],
++    control: &SitemapReadControl,
+ ) -> Result<BTreeMap<String, WindowCounts>> {
+     let documents: BTreeMap<_, _> = rows
+         .iter()
+@@ -177,6 +197,7 @@
+         .map(|v| (v.requested_url.clone(), MembershipCounts::default()))
+         .collect();
+     for row in rows {
++        control.checkpoint()?;
+         if let SitemapLedgerRow::Location(loc) = row {
+             if loc.observed.role != SitemapLocationRole::PageLocation {
+                 continue;
+@@ -214,6 +235,7 @@
+     members
+         .into_iter()
+         .map(|(url, counts)| {
++            control.checkpoint()?;
+             let samples = counts
+                 .sources
+                 .iter()
+@@ -247,6 +269,7 @@
+     connection: &Connection,
+     raw: &VerifiedRawRead<'_>,
+     pages: &[SitemapTargetObservation],
++    control: &SitemapReadControl,
+ ) -> Result<BTreeMap<String, WindowCounts>> {
+     let mut out: BTreeMap<_, WindowCounts> = pages
+         .iter()
+@@ -270,6 +293,7 @@
+     let mut statement = connection.prepare(&sql)?;
+     let mut rows = statement.query([&keys])?;
+     while let Some(row) = rows.next()? {
++        control.checkpoint()?;
+         let url: String = row.get(0)?;
+         let counts = out
+             .get_mut(&url)
+@@ -282,6 +306,7 @@
+     let mut statement = connection.prepare(sql)?;
+     let mut rows = statement.query([&keys])?;
+     while let Some(row) = rows.next()? {
++        control.checkpoint()?;
+         let url: String = row.get(0)?;
+         out.get_mut(&url)
+             .context("Unknown alias count group")?
+@@ -293,6 +318,7 @@
+     let mut statement = connection.prepare(&sql)?;
+     let mut rows = statement.query(params![keys, SAMPLE_LIMIT as i64])?;
+     while let Some(row) = rows.next()? {
++        control.checkpoint()?;
+         let url: String = row.get(0)?;
+         let task: String = row.get(1)?;
+         let id: String = row.get(2)?;
+--- a/crates/core/src/sitemap_membership_analysis.rs
++++ b/crates/core/src/sitemap_membership_analysis.rs
+@@ -1,5 +1,6 @@
+ //! Read-only joins against original requested identities in a checkpoint-bound
+ //! saved report. Zero observed anchors never proves a website-wide orphan.
++use crate::sitemap_read_control::SitemapReadControl;
+ use crate::{
+     CrawlCheckpoint, CrawlOutcome, CrawlRunState, SitemapAdmissionDecision, SitemapCoverageScope,
+     SitemapLedgerRow, SitemapLocationRole, SitemapReadSnapshot,
+@@ -7,13 +8,13 @@
+ use anyhow::{Context, Result, ensure};
+ use rusqlite::{Connection, OptionalExtension, params};
+ use serde::{Deserialize, Serialize, de::DeserializeOwned};
+-use sha2::{Digest, Sha256};
+ use std::collections::{BTreeMap, BTreeSet};
+ 
+ mod window;
+ use window::MembershipBasis;
+ pub(crate) use window::{
+-    AnalysisReadInput, VerifiedAnalysisRead, prepare_window_analysis, project_prepared_window,
++    AnalysisReadInput, VerifiedAnalysisRead, prepare_window_analysis,
++    prepare_window_analysis_with_control, project_prepared_window,
+ };
+ 
+ pub const SITEMAP_MEMBERSHIP_ANALYSIS_ENGINE: &str =
+@@ -304,7 +305,11 @@
+         connection.query_row(sql, [], |r| r.get::<_, i64>(0))?,
+     )?)
+ }
+-fn report_hash(connection: &Connection) -> Result<Option<(String, u64)>> {
++fn report_hash(
++    connection: &Connection,
++    control: &SitemapReadControl,
++) -> Result<Option<(String, u64)>> {
++    control.checkpoint()?;
+     let length: Option<i64> = connection
+         .query_row(
+             "SELECT length(CAST(value AS BLOB)) FROM metadata WHERE key='report'",
+@@ -321,11 +326,12 @@
+     );
+     // Borrow SQLite's actual bounded value once: no Vec<PageRecord>, no full
+     // Rust report clone, and no repeated CAST+substr of the full TEXT value.
+-    let (sha, actual): (String, usize) =
+-        connection.query_row("SELECT value FROM metadata WHERE key='report'", [], |row| {
+-            let bytes = row.get_ref(0)?.as_bytes()?;
+-            Ok((format!("{:x}", Sha256::digest(bytes)), bytes.len()))
+-        })?;
++    let mut statement = connection.prepare("SELECT value FROM metadata WHERE key='report'")?;
++    let mut rows = statement.query([])?;
++    let row = rows.next()?.context("Saved report disappeared")?;
++    let bytes = row.get_ref(0)?.as_bytes()?;
++    let sha = control.sha256(bytes)?;
++    let actual = bytes.len();
+     ensure!(
+         i64::try_from(actual)? == length,
+         "Saved analysis report byte length differs"
+@@ -396,6 +402,24 @@
+             }
+         }
+     }
++    fn verify_report_with_control(
++        &self,
++        connection: &Connection,
++        control: &SitemapReadControl,
++    ) -> Result<()> {
++        control.checkpoint()?;
++        match self {
++            Self::Snapshot(_) => {
++                // Historical materialized compatibility: guarded coarse boundary.
++                control.map_result(self.verify_report(connection))
++            }
++            Self::Verified(value) => {
++                crate::sitemap_source_store::verified_report::verify_saved_report_with_control(
++                    connection, *value, control,
++                )
++            }
++        }
++    }
+ }
+ struct ContextInput<'a> {
+     generation: Option<u64>,
+@@ -405,6 +429,7 @@
+     source: SourceBasis<'a>,
+ }
+ struct PreparedContext {
++    control: SitemapReadControl,
+     base: SitemapMembershipAnalysis,
+     selected: bool,
+     generation: Option<u64>,
+@@ -454,6 +479,21 @@
+ }
+ 
+ fn prepare_context(connection: &Connection, input: ContextInput<'_>) -> Result<PreparedContext> {
++    prepare_context_with_control(connection, input, &SitemapReadControl::default())
++}
++fn prepare_context_with_control(
++    connection: &Connection,
++    input: ContextInput<'_>,
++    control: &SitemapReadControl,
++) -> Result<PreparedContext> {
++    let _binding = control.bind_connection(connection)?;
++    control.run(|| prepare_context_inner(connection, input, control))
++}
++fn prepare_context_inner(
++    connection: &Connection,
++    input: ContextInput<'_>,
++    control: &SitemapReadControl,
++) -> Result<PreparedContext> {
+     let ContextInput {
+         generation,
+         config_sha,
+@@ -466,7 +506,7 @@
+ 
+     let run: Option<CrawlRunState> = meta(connection, "run_state")?;
+     let checkpoint: Option<CrawlCheckpoint> = meta(connection, "checkpoint")?;
+-    let report = report_hash(connection)?;
++    let report = report_hash(connection, control)?;
+     let mut out = SitemapMembershipAnalysis {
+         context: SitemapAnalysisContext {
+             engine: SITEMAP_MEMBERSHIP_ANALYSIS_ENGINE.into(),
+@@ -492,6 +532,7 @@
+     let Some(summary) = summary else {
+         out.context.reason = "validated_source_catalog_unavailable".into();
+         return Ok(PreparedContext {
++            control: control.clone(),
+             base: out,
+             selected,
+             generation: report_generation,
+@@ -499,6 +540,7 @@
+     };
+     let (Some(run), Some(checkpoint), Some((sha, _))) = (run, checkpoint, report) else {
+         return Ok(PreparedContext {
++            control: control.clone(),
+             base: out,
+             selected,
+             generation: report_generation,
+@@ -507,11 +549,13 @@
+     if run.outcome.is_none() || run.finished_at.is_none() {
+         out.context.reason = "live_crawl_target_analysis_unavailable".into();
+         return Ok(PreparedContext {
++            control: control.clone(),
+             base: out,
+             selected,
+             generation: report_generation,
+         });
+     }
++    control.checkpoint()?;
+     let completed = count(connection, "SELECT count(*) FROM pages")?;
+     let pending = count(connection, "SELECT count(*) FROM frontier WHERE done=0")?;
+     let discovery_pending = count(
+@@ -532,6 +576,7 @@
+     {
+         out.context.reason = "saved_checkpoint_context_mismatch".into();
+         return Ok(PreparedContext {
++            control: control.clone(),
+             base: out,
+             selected,
+             generation: report_generation,
+@@ -540,6 +585,7 @@
+     if checkpoint.sitemap_source_measurements.as_ref() != source.summary() {
+         out.context.reason = "saved_source_measurement_context_mismatch".into();
+         return Ok(PreparedContext {
++            control: control.clone(),
+             base: out,
+             selected,
+             generation: report_generation,
+@@ -561,9 +607,12 @@
+             && summary_pending == Some(i64::try_from(pending)?),
+         "Sitemap analysis saved report envelope differs"
+     );
+-    source.verify_report(connection)?;
++    control.checkpoint()?;
++    source.verify_report_with_control(connection, control)?;
++    control.checkpoint()?;
+     // A controlled writer has unique requested page identities. Refuse malformed
+     // typed identity/anchor fields instead of silently dropping an unjoinable row.
++    control.checkpoint()?;
+     let (distinct,invalid,links): (i64,i64,i64) = connection.query_row(
+         "SELECT count(DISTINCT json_extract(p.value,'$.url')),coalesce(sum(CASE WHEN json_type(p.value,'$.url')='text' AND json_type(p.value,'$.links')='array' THEN 0 ELSE 1 END),0),coalesce(sum(json_array_length(p.value,'$.links')),0) FROM metadata m,json_each(m.value,'$.pages') p WHERE m.key='report'",[],
+         |r|Ok((r.get(0)?,r.get(1)?,r.get(2)?)))?;
+@@ -596,6 +645,7 @@
+     .into();
+     report_generation = Some(run.generation);
+     Ok(PreparedContext {
++        control: control.clone(),
+         base: out,
+         selected,
+         generation: report_generation,
+@@ -610,6 +660,20 @@
+     membership: MembershipBasis<'_>,
+     request: &SitemapMembershipAnalysisRequest,
+ ) -> Result<SitemapMembershipAnalysis> {
++    let _binding = prepared.control.bind_connection(connection)?;
++    prepared
++        .control
++        .run(|| project_rows_inner(connection, prepared, coverage, visible, membership, request))
++}
++fn project_rows_inner(
++    connection: &Connection,
++    prepared: &PreparedContext,
++    coverage: &crate::SitemapCoverage,
++    visible: Vec<&crate::StoredSitemapLocation>,
++    membership: MembershipBasis<'_>,
++    request: &SitemapMembershipAnalysisRequest,
++) -> Result<SitemapMembershipAnalysis> {
++    let control = &prepared.control;
+     let mut out = prepared.base.clone();
+     if !out.context.available {
+         return Ok(out);
+@@ -625,6 +689,7 @@
+     }
+     let mut wanted = BTreeSet::new();
+     for loc in &visible {
++        control.checkpoint()?;
+         if loc.observed.validation_error.is_none()
+             && loc.observed.loc_ordinal.is_some()
+             && let Some(url) = &loc.observed.normalized_fetch_url
+@@ -635,16 +700,19 @@
+             wanted.insert(url.clone());
+         }
+     }
+-    let mut page_window = read_page_window(connection, request, selected, generation)?;
++    let mut page_window = read_page_window(connection, request, selected, generation, control)?;
+     out.saved_pages_have_more = page_window.len() > request.page_limit;
+     page_window.truncate(request.page_limit);
+     for page in &page_window {
++        control.checkpoint()?;
+         wanted.insert(page.requested_url.clone());
+     }
+-    let mut observations = read_target_pages(connection, &wanted, selected, generation)?;
+-    let inlinks = read_inlinks(connection, &wanted)?;
++    let mut observations =
++        read_target_pages_with_control(connection, &wanted, selected, generation, control)?;
++    let inlinks = read_inlinks(connection, &wanted, control)?;
+     let mut pending_urls = BTreeSet::new();
+     for url in &wanted {
++        control.checkpoint()?;
+         let done: Option<i64> = connection
+             .query_row("SELECT done FROM frontier WHERE url=?1", [url], |r| {
+                 r.get(0)
+@@ -662,6 +730,7 @@
+         visible
+             .into_iter()
+             .map(|loc| {
++                control.checkpoint()?;
+                 let original = loc.observed.normalized_fetch_url.clone().filter(|_| {
+                     loc.observed.validation_error.is_none() && loc.observed.loc_ordinal.is_some()
+                 });
+@@ -681,7 +750,7 @@
+                     .admitted_fetch_url
+                     .as_ref()
+                     .filter(|u| Some(*u) != original.as_ref());
+-                SitemapLocationFinding {
++                Ok(SitemapLocationFinding {
+                     sequence: loc.sequence,
+                     observation_id: loc.observation_id.clone(),
+                     occurrence_id: loc.occurrence_id.clone(),
+@@ -695,17 +764,18 @@
+                     admitted_alias_pending: alias.is_some_and(|u| pending_urls.contains(u)),
+                     observed_original_inlinks: original
+                         .map(|u| inlinks.get(&u).cloned().unwrap_or_default()),
+-                }
++                })
+             })
+-            .collect(),
+-    );
+-    let mut members = membership.counts(connection, &page_window)?;
++            .collect::<Result<Vec<_>>>()?,
++    );
++    let mut members = membership.counts(connection, &page_window, control)?;
+     out.last_saved_page_url = page_window.last().map(|v| v.requested_url.clone());
+     out.last_saved_page_ordinal = page_window.last().map(|v| v.report_page_ordinal);
+     out.saved_pages = Some(
+         page_window
+             .into_iter()
+             .map(|page| {
++                control.checkpoint()?;
+                 let counts = members.remove(&page.requested_url).unwrap_or_default();
+                 let observed_inlinks = inlinks
+                     .get(&page.requested_url)
+@@ -724,7 +794,7 @@
+                 let original_source_document_count = counts.document_count;
+                 let original_source_observation_count = counts.observation_count;
+                 let original_source_document_samples = counts.samples;
+-                SitemapSavedPageFinding {
++                Ok(SitemapSavedPageFinding {
+                     listed_without_observed_nonself_inlinks: counts.occurrences > 0
+                         && observed_inlinks.nonself_anchor_occurrences == 0,
+                     observation: page,
+@@ -737,9 +807,9 @@
+                     original_source_document_samples,
+                     admitted_alias_occurrences: counts.aliases,
+                     observed_inlinks,
+-                }
++                })
+             })
+-            .collect(),
++            .collect::<Result<Vec<_>>>()?,
+     );
+     Ok(out)
+ }
+@@ -908,7 +978,9 @@
+     request: &SitemapMembershipAnalysisRequest,
+     selected: bool,
+     generation: u64,
++    control: &SitemapReadControl,
+ ) -> Result<Vec<SitemapTargetObservation>> {
++    control.checkpoint()?;
+     if request.page_limit == 0 {
+         return Ok(vec![]);
+     }
+@@ -923,16 +995,34 @@
+     ])?;
+     let mut pages = vec![];
+     while let Some(row) = rows.next()? {
++        control.checkpoint()?;
+         pages.push(page_from_row(row, selected, generation)?);
+     }
+     Ok(pages)
+ }
++#[cfg(test)]
+ fn read_target_pages(
+     connection: &Connection,
+     wanted: &BTreeSet<String>,
+     selected: bool,
+     generation: u64,
+ ) -> Result<BTreeMap<String, SitemapTargetObservation>> {
++    read_target_pages_with_control(
++        connection,
++        wanted,
++        selected,
++        generation,
++        &SitemapReadControl::default(),
++    )
++}
++fn read_target_pages_with_control(
++    connection: &Connection,
++    wanted: &BTreeSet<String>,
++    selected: bool,
++    generation: u64,
++    control: &SitemapReadControl,
++) -> Result<BTreeMap<String, SitemapTargetObservation>> {
++    control.checkpoint()?;
+     let mut pages = BTreeMap::new();
+     if wanted.is_empty() {
+         return Ok(pages);
+@@ -945,6 +1035,7 @@
+     let mut statement = connection.prepare(&sql)?;
+     let mut rows = statement.query([keys])?;
+     while let Some(row) = rows.next()? {
++        control.checkpoint()?;
+         let page = page_from_row(row, selected, generation)?;
+         pages.insert(page.requested_url.clone(), page);
+     }
+@@ -953,7 +1044,9 @@
+ fn read_inlinks(
+     connection: &Connection,
+     wanted: &BTreeSet<String>,
++    control: &SitemapReadControl,
+ ) -> Result<BTreeMap<String, SitemapObservedInlinks>> {
++    control.checkpoint()?;
+     let mut out = BTreeMap::new();
+     if wanted.is_empty() {
+         return Ok(out);
+@@ -966,6 +1059,7 @@
+     let mut statement = connection.prepare(&sql)?;
+     let mut rows = statement.query([&keys])?;
+     while let Some(row) = rows.next()? {
++        control.checkpoint()?;
+         let url: String = row.get(0)?;
+         let mut value = SitemapObservedInlinks {
+             anchor_occurrences: u64::try_from(row.get::<_, i64>(1)?)?,
+@@ -983,6 +1077,7 @@
+     let mut statement = connection.prepare(&sql)?;
+     let mut rows = statement.query(params![keys, i64::try_from(SAMPLE_LIMIT)?])?;
+     while let Some(row) = rows.next()? {
++        control.checkpoint()?;
+         let sample = SitemapInlinkSample {
+             source_requested_url: row.get(0)?,
+             target_requested_url: row.get(1)?,
+--- /dev/null
++++ b/crates/core/src/sitemap_read_control.rs
+@@ -0,0 +1,189 @@
++//! Transport-neutral cooperative stop control for owned sitemap read sessions.
++//! An interrupt attachment is an actual SQLite handle, not a snapshot proof.
++use anyhow::Result;
++use rusqlite::{Connection, InterruptHandle};
++use std::{
++    collections::BTreeMap,
++    error::Error,
++    fmt,
++    sync::{
++        Arc, Mutex, MutexGuard,
++        atomic::{AtomicBool, AtomicU8, Ordering},
++    },
++    time::Instant,
++};
++
++#[derive(Debug, Clone, Copy, PartialEq, Eq)]
++pub enum SitemapReadControlError {
++    Cancelled,
++    DeadlineExceeded,
++}
++impl fmt::Display for SitemapReadControlError {
++    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
++        f.write_str(match self {
++            Self::Cancelled => "Sitemap read cancelled",
++            Self::DeadlineExceeded => "Sitemap read deadline exceeded",
++        })
++    }
++}
++impl Error for SitemapReadControlError {}
++
++#[derive(Default)]
++struct State {
++    deadline: Option<Instant>,
++    next_id: u64,
++    attachments: BTreeMap<u64, InterruptHandle>,
++}
++#[derive(Default)]
++struct Inner {
++    stop: AtomicU8,
++    has_deadline: AtomicBool,
++    state: Mutex<State>,
++}
++
++/// Clones share stop/deadline state. Stops are sticky: the first observed stop
++/// wins; changing a deadline does not resume a cancelled/expired operation.
++/// Deadlines are checked at cooperative checkpoints. A caller that needs to
++/// interrupt a currently blocked SQL step must call `expire`/`cancel` from its
++/// owned deadline/disconnect watcher; this type starts no timer/thread.
++#[derive(Clone, Default)]
++pub struct SitemapReadControl {
++    inner: Arc<Inner>,
++}
++impl SitemapReadControl {
++    pub fn with_deadline(deadline: Instant) -> Self {
++        let control = Self::default();
++        control.set_deadline(Some(deadline));
++        control
++    }
++    fn state(&self) -> MutexGuard<'_, State> {
++        self.inner
++            .state
++            .lock()
++            .unwrap_or_else(std::sync::PoisonError::into_inner)
++    }
++    pub fn cancel(&self) {
++        self.stop(1);
++    }
++    pub fn expire(&self) {
++        self.stop(2);
++    }
++    fn stop(&self, value: u8) {
++        let _ = self
++            .inner
++            .stop
++            .compare_exchange(0, value, Ordering::AcqRel, Ordering::Acquire);
++        // Repeat notifications also interrupt a query that started just after a
++        // previous notification; SQLite interrupt is not a persistent token.
++        for handle in self.state().attachments.values() {
++            handle.interrupt();
++        }
++    }
++    pub fn set_deadline(&self, deadline: Option<Instant>) {
++        {
++            let mut state = self.state();
++            state.deadline = deadline;
++            self.inner
++                .has_deadline
++                .store(deadline.is_some(), Ordering::Release);
++        }
++        if deadline.is_some_and(|value| Instant::now() >= value) {
++            self.expire();
++        }
++    }
++    pub fn checkpoint(&self) -> Result<()> {
++        if self.inner.stop.load(Ordering::Acquire) == 0
++            && self.inner.has_deadline.load(Ordering::Acquire)
++        {
++            let deadline = self.state().deadline;
++            if deadline.is_some_and(|value| Instant::now() >= value) {
++                self.expire();
++            }
++        }
++        match self.inner.stop.load(Ordering::Acquire) {
++            0 => Ok(()),
++            1 => Err(SitemapReadControlError::Cancelled.into()),
++            _ => Err(SitemapReadControlError::DeadlineExceeded.into()),
++        }
++    }
++
++    /// Owned handle is safe after Connection close (rusqlite clears its shared
++    /// pointer). No Connection borrow blocks starting/closing the caller's TX.
++    pub(crate) fn bind_connection(
++        &self,
++        connection: &Connection,
++    ) -> Result<SitemapReadConnectionGuard> {
++        self.checkpoint()?;
++        let handle = connection.get_interrupt_handle();
++        let id = {
++            let mut state = self.state();
++            state.next_id = state
++                .next_id
++                .checked_add(1)
++                .ok_or_else(|| anyhow::anyhow!("Sitemap read attachment identity exhausted"))?;
++            let id = state.next_id;
++            state.attachments.insert(id, handle);
++            id
++        };
++        let guard = SitemapReadConnectionGuard {
++            control: self.clone(),
++            id,
++        };
++        self.checkpoint()?;
++        Ok(guard)
++    }
++
++    pub(crate) fn run<T>(&self, operation: impl FnOnce() -> Result<T>) -> Result<T> {
++        self.checkpoint()?;
++        self.map_result(operation())
++    }
++
++    pub(crate) fn sha256(&self, bytes: &[u8]) -> Result<String> {
++        use sha2::Digest;
++        let mut hash = sha2::Sha256::new();
++        self.checkpoint()?;
++        for chunk in bytes.chunks(65_536) {
++            self.checkpoint()?;
++            hash.update(chunk);
++        }
++        self.checkpoint()?;
++        Ok(format!("{:x}", hash.finalize()))
++    }
++
++    /// Preserve unrelated corruption/I/O failures. Restore a typed stop across
++    /// actual SQLite INTERRUPT or serde custom-error erasure from our checkpoints.
++    pub(crate) fn map_result<T>(&self, result: Result<T>) -> Result<T> {
++        match result {
++            Ok(value) => {
++                self.checkpoint()?;
++                Ok(value)
++            }
++            Err(error) => {
++                let interrupted=error.chain().any(|cause|{
++                    cause.downcast_ref::<SitemapReadControlError>().is_some()
++                    || matches!(cause.downcast_ref::<rusqlite::Error>(),Some(rusqlite::Error::SqliteFailure(code,_)) if code.code==rusqlite::ErrorCode::OperationInterrupted)
++                    || cause.to_string().starts_with("Sitemap read cancelled")
++                    || cause.to_string().starts_with("Sitemap read deadline exceeded")
++                });
++                if interrupted {
++                    self.checkpoint()?;
++                }
++                Err(error)
++            }
++        }
++    }
++}
++
++pub(crate) struct SitemapReadConnectionGuard {
++    control: SitemapReadControl,
++    id: u64,
++}
++impl Drop for SitemapReadConnectionGuard {
++    fn drop(&mut self) {
++        self.control.state().attachments.remove(&self.id);
++    }
++}
++
++#[cfg(test)]
++#[path = "sitemap_read_control_tests.rs"]
++mod tests;
+--- /dev/null
++++ b/crates/core/src/sitemap_read_control_tests.rs
+@@ -0,0 +1,436 @@
++//! AUTHORED / NOT COMPILED / NOT RUN while the compute hold is active.
++//! Real connections/Store writers below are directed fixtures, never fake read proofs.
++use super::*;
++use crate::sitemap_coverage::verified_read::{
++    CoverageReadContext, project_read, project_read_with_control,
++};
++use crate::sitemap_ledger::verified_read::{verify_raw, verify_raw_with_control};
++use crate::sitemap_membership_analysis::{
++    AnalysisReadInput, prepare_window_analysis, prepare_window_analysis_with_control,
++};
++use crate::sitemap_source_store::verified_read::{verify_source, verify_source_with_control};
++use crate::store::{DiscoveryEntry, DiscoveryKind, SitemapCatalogInit};
++use crate::{CrawlConfig, CrawlStore};
++use std::{sync::mpsc, time::Duration};
++
++fn stop<T>(result: Result<T>, expected: SitemapReadControlError) {
++    let error = match result {
++        Ok(_) => panic!("Expected typed sitemap stop"),
++        Err(error) => error,
++    };
++    assert_eq!(
++        error.downcast_ref::<SitemapReadControlError>(),
++        Some(&expected),
++        "{error:#}"
++    );
++}
++
++#[test]
++fn control_default_clones_and_first_observed_stop_are_sticky() {
++    let control = SitemapReadControl::default();
++    control.checkpoint().unwrap();
++    let clone = control.clone();
++    clone.cancel();
++    control.expire();
++    control.set_deadline(None);
++    stop(control.checkpoint(), SitemapReadControlError::Cancelled);
++    stop(clone.checkpoint(), SitemapReadControlError::Cancelled);
++    let expired = SitemapReadControl::default();
++    expired.expire();
++    expired.cancel();
++    stop(
++        expired.checkpoint(),
++        SitemapReadControlError::DeadlineExceeded,
++    );
++}
++
++#[test]
++fn control_deadlines_are_shared_movable_clearable_and_typed() {
++    let now = Instant::now();
++    let control = SitemapReadControl::with_deadline(now + Duration::from_secs(3600));
++    control.clone().set_deadline(None);
++    control.checkpoint().unwrap();
++    control.set_deadline(Some(now.checked_sub(Duration::from_secs(1)).unwrap()));
++    stop(
++        control.clone().checkpoint(),
++        SitemapReadControlError::DeadlineExceeded,
++    );
++    control.set_deadline(Some(now + Duration::from_secs(7200)));
++    stop(
++        control.checkpoint(),
++        SitemapReadControlError::DeadlineExceeded,
++    );
++    stop(
++        SitemapReadControl::with_deadline(now).checkpoint(),
++        SitemapReadControlError::DeadlineExceeded,
++    );
++}
++
++#[test]
++fn control_recovers_only_its_own_poisoned_state_lock() {
++    let control = SitemapReadControl::default();
++    let poison = control.clone();
++    assert!(
++        std::thread::spawn(move || {
++            let _locked = poison.inner.state.lock().unwrap();
++            panic!("directed private mutex poison");
++        })
++        .join()
++        .is_err()
++    );
++    control.set_deadline(None);
++    control.checkpoint().unwrap();
++    control.cancel();
++    stop(control.checkpoint(), SitemapReadControlError::Cancelled);
++}
++
++#[test]
++fn control_owned_interrupt_guards_drop_only_their_attachment_and_outlive_connection() {
++    let control = SitemapReadControl::default();
++    let mut first = Connection::open_in_memory().unwrap();
++    let second = Connection::open_in_memory().unwrap();
++    let a = control.bind_connection(&first).unwrap();
++    let b = control.bind_connection(&second).unwrap();
++    assert_eq!(control.state().attachments.len(), 2);
++    // An owned guard must not borrow first: mutable TX/commit and close remain possible.
++    first.transaction().unwrap().commit().unwrap();
++    first.close().unwrap();
++    drop(a);
++    assert_eq!(control.state().attachments.len(), 1);
++    assert!(control.state().attachments.contains_key(&b.id));
++    control.cancel(); // Actual second handle still attached; closed first is gone.
++    drop(b);
++    assert!(control.state().attachments.is_empty());
++    assert!(control.bind_connection(&second).is_err());
++    assert!(control.state().attachments.is_empty());
++}
++
++#[test]
++fn control_maps_actual_sql_interrupt_but_preserves_unrelated_errors() {
++    let control = SitemapReadControl::default();
++    let thread_control = control.clone();
++    let (ready_tx, ready_rx) = mpsc::channel();
++    let (done_tx, done_rx) = mpsc::channel();
++    let worker = std::thread::spawn(move || {
++        let connection = Connection::open_in_memory().unwrap();
++        let _binding = thread_control.bind_connection(&connection).unwrap();
++        ready_tx.send(connection.get_interrupt_handle()).unwrap();
++        // Deliberately enter actual SQL without an initial run/checkpoint: this
++        // fixture must exercise the real handle, not win via a pre-SQL stop.
++        let raw: Result<i64> = connection.query_row("WITH RECURSIVE t(n) AS (VALUES(1) UNION ALL SELECT n+1 FROM t WHERE n<1000000000) SELECT sum(n) FROM t", [], |r| r.get(0)).map_err(Into::into);
++        let actual_interrupt = raw.as_ref().err().is_some_and(|e| matches!(e.downcast_ref::<rusqlite::Error>(),Some(rusqlite::Error::SqliteFailure(code,_)) if code.code==rusqlite::ErrorCode::OperationInterrupted));
++        // Match the SQL -> serde custom -> outer reader mapping boundary.
++        let erased: Result<i64> = thread_control
++            .map_result(raw)
++            .map_err(|e| <serde_json::Error as serde::de::Error>::custom(e.to_string()).into());
++        let result = thread_control.map_result(erased);
++        done_tx.send((result, actual_interrupt)).unwrap();
++    });
++    let emergency = ready_rx.recv_timeout(Duration::from_secs(5)).unwrap();
++    // Repeat notification covers SQLite's nonpersistent interrupt-before-step race.
++    let mut finished = None;
++    for _ in 0..200 {
++        control.cancel();
++        match done_rx.recv_timeout(Duration::from_millis(10)) {
++            Ok(value) => {
++                finished = Some(value);
++                break;
++            }
++            Err(mpsc::RecvTimeoutError::Timeout) => {}
++            Err(error) => panic!("worker disconnected: {error}"),
++        }
++    }
++    let (result, actual_interrupt) = finished.unwrap_or_else(|| {
++        emergency.interrupt();
++        done_rx
++            .recv_timeout(Duration::from_secs(5))
++            .expect("owned SQL worker must stop")
++    });
++    worker.join().unwrap();
++    assert!(
++        actual_interrupt,
++        "Actual SQL must return SQLITE_INTERRUPT before serde conversion"
++    );
++    stop(result, SitemapReadControlError::Cancelled);
++    let unrelated: Result<()> = Err(anyhow::anyhow!("Directed corrupt payload"));
++    let error = control.map_result(unrelated).unwrap_err();
++    assert!(error.downcast_ref::<SitemapReadControlError>().is_none());
++    assert_eq!(error.to_string(), "Directed corrupt payload");
++    let external = SitemapReadControl::default();
++    let interrupted: Result<()> = Err(rusqlite::Error::SqliteFailure(
++        rusqlite::ffi::Error::new(rusqlite::ffi::SQLITE_INTERRUPT),
++        None,
++    )
++    .into());
++    let error = external.map_result(interrupted).unwrap_err();
++    assert!(error.downcast_ref::<SitemapReadControlError>().is_none());
++    assert!(error.downcast_ref::<rusqlite::Error>().is_some());
++}
++
++#[test]
++fn control_chunk_hash_preserves_exact_bytes_and_stops_before_more_work() {
++    use sha2::Digest;
++    let bytes = vec![b'x'; 131_073];
++    let control = SitemapReadControl::default();
++    assert_eq!(
++        control.sha256(&bytes).unwrap(),
++        format!("{:x}", sha2::Sha256::digest(&bytes))
++    );
++    control.expire();
++    stop(
++        control.sha256(&bytes),
++        SitemapReadControlError::DeadlineExceeded,
++    );
++    // Restore typed control erased into a serde custom-error string.
++    let erased: Result<()> = Err(<serde_json::Error as serde::ser::Error>::custom(
++        "Sitemap read deadline exceeded",
++    )
++    .into());
++    stop(
++        control.map_result(erased),
++        SitemapReadControlError::DeadlineExceeded,
++    );
++}
++
++struct Fixture {
++    _dir: tempfile::TempDir,
++    path: std::path::PathBuf,
++    config_bytes: Vec<u8>,
++    sha: String,
++    generation: u64,
++}
++impl Fixture {
++    fn new(root: bool) -> Self {
++        let dir = tempfile::tempdir().unwrap();
++        let path = dir.path().join("read.sqlite");
++        let store = CrawlStore::open(&path).unwrap();
++        let inputs = if root {
++            vec!["https://example.org/root.xml".to_string()]
++        } else {
++            vec![]
++        };
++        let config = CrawlConfig {
++            seed_urls: vec!["https://example.org/".into()],
++            obey_robots: false,
++            explicit_sitemap_inputs: Some(inputs.clone()),
++            sitemap_urls: inputs.clone(),
++            ..Default::default()
++        };
++        store.prepare(&config).unwrap();
++        let generation = store.begin_run("controlled-read").unwrap();
++        let connection = Connection::open(&path).unwrap();
++        let config_bytes: Vec<u8> = connection
++            .query_row(
++                "SELECT CAST(value AS BLOB) FROM metadata WHERE key='config'",
++                [],
++                |r| r.get(0),
++            )
++            .unwrap();
++        let sha = crate::sitemap_ledger::digest(&config_bytes);
++        let roots = crate::sitemap_initial_roots::initial_roots(Some(&inputs), &[], &sha, None)
++            .unwrap()
++            .unwrap()
++            .into_iter()
++            .map(|mut v| {
++                v.root.admission.decision = crate::SitemapAdmissionDecision::Scheduled;
++                v.root.admission.admitted_fetch_url = v.root.normalized_document_url.clone();
++                v.root
++            })
++            .collect();
++        let entries = inputs
++            .into_iter()
++            .map(|url| DiscoveryEntry {
++                kind: DiscoveryKind::Sitemap,
++                url,
++            })
++            .collect::<Vec<_>>();
++        store
++            .initialize_sitemap_discovery(
++                &entries,
++                generation,
++                &SitemapCatalogInit {
++                    config_sha256: sha.clone(),
++                    limits: Default::default(),
++                    roots,
++                    legacy_history_unknown: false,
++                },
++            )
++            .unwrap();
++        Self {
++            _dir: dir,
++            path,
++            config_bytes,
++            sha,
++            generation,
++        }
++    }
++    fn read_only(&self) -> Connection {
++        Connection::open_with_flags(&self.path, rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY).unwrap()
++    }
++    fn context(&self) -> CoverageReadContext<'_> {
++        CoverageReadContext {
++            saved_config_bytes: Some(&self.config_bytes),
++            saved_config_sha256: Some(&self.sha),
++            generation: Some(self.generation),
++            discovery_initialized: true,
++        }
++    }
++}
++
++#[test]
++fn controlled_default_real_empty_store_matches_all_old_reader_results_without_mutation() {
++    let fixture = Fixture::new(false);
++    let mut connection = fixture.read_only();
++    let tx = connection.transaction().unwrap();
++    let changes = tx.total_changes();
++    let control = SitemapReadControl::default();
++    let old_raw = verify_raw(&tx).unwrap().unwrap();
++    let raw = verify_raw_with_control(&tx, &control).unwrap().unwrap();
++    assert_eq!(
++        old_raw.window(&Default::default(), None, 20).unwrap(),
++        raw.window(&Default::default(), None, 20).unwrap()
++    );
++    let old_source = verify_source(&tx, Some(&old_raw)).unwrap().unwrap();
++    let source = verify_source_with_control(&tx, Some(&raw), &control)
++        .unwrap()
++        .unwrap();
++    assert_eq!(old_source.summary(), source.summary());
++    assert_eq!(old_source.context(), source.context());
++    let old_coverage = project_read(&tx, Some(&old_raw), fixture.context()).unwrap();
++    let coverage = project_read_with_control(&tx, Some(&raw), fixture.context(), &control).unwrap();
++    assert_eq!(old_coverage.coverage, coverage.coverage);
++    assert_eq!(old_coverage.inventory_sha256, coverage.inventory_sha256);
++    let input = AnalysisReadInput {
++        raw: Some(&raw),
++        source: Some(&source),
++        generation: Some(fixture.generation),
++        crawl_config_sha256: Some(&fixture.sha),
++        coverage: &coverage.coverage,
++    };
++    let old_analysis = prepare_window_analysis(&tx, &input).unwrap();
++    let analysis = prepare_window_analysis_with_control(&tx, &input, &control).unwrap();
++    assert_eq!(old_analysis.context(), analysis.context());
++    assert_eq!(tx.total_changes(), changes);
++    tx.commit().unwrap();
++}
++
++#[test]
++fn controlled_actual_root_visit_cancel_never_returns_a_successful_prefix() {
++    let fixture = Fixture::new(true);
++    let mut connection = fixture.read_only();
++    let tx = connection.transaction().unwrap();
++    let control = SitemapReadControl::default();
++    let raw = verify_raw_with_control(&tx, &control).unwrap().unwrap();
++    assert_eq!(raw.summary().root_rows, 1);
++    let mut visited = 0;
++    let result = raw.visit_filtered(&Default::default(), |_| {
++        visited += 1;
++        control.cancel();
++        Ok(())
++    });
++    stop(result, SitemapReadControlError::Cancelled);
++    assert_eq!(visited, 1);
++    stop(
++        raw.window(&Default::default(), None, 20),
++        SitemapReadControlError::Cancelled,
++    );
++    assert_eq!(tx.total_changes(), 0);
++}
++
++#[test]
++fn controlled_readers_stop_before_sql_even_without_metadata_schema() {
++    let connection = Connection::open_in_memory().unwrap();
++    let coverage = crate::project_sitemap_coverage(None, None).unwrap();
++    for deadline in [false, true] {
++        let control = SitemapReadControl::default();
++        let expected = if deadline {
++            control.expire();
++            SitemapReadControlError::DeadlineExceeded
++        } else {
++            control.cancel();
++            SitemapReadControlError::Cancelled
++        };
++        stop(verify_raw_with_control(&connection, &control), expected);
++        stop(
++            verify_source_with_control(&connection, None, &control),
++            expected,
++        );
++        stop(
++            project_read_with_control(
++                &connection,
++                None,
++                CoverageReadContext {
++                    saved_config_bytes: None,
++                    saved_config_sha256: None,
++                    generation: None,
++                    discovery_initialized: false,
++                },
++                &control,
++            ),
++            expected,
++        );
++        stop(
++            prepare_window_analysis_with_control(
++                &connection,
++                &AnalysisReadInput {
++                    raw: None,
++                    source: None,
++                    generation: None,
++                    crawl_config_sha256: None,
++                    coverage: &coverage,
++                },
++                &control,
++            ),
++            expected,
++        );
++        stop(
++            crate::sitemap_source_store::verified_report::verify_saved_report_with_control(
++                &connection,
++                None,
++                &control,
++            ),
++            expected,
++        );
++    }
++}
++
++#[test]
++fn controlled_prepared_analysis_and_raw_lookup_keep_the_shared_stop_after_prepare() {
++    let fixture = Fixture::new(false);
++    let mut connection = fixture.read_only();
++    let tx = connection.transaction().unwrap();
++    let control = SitemapReadControl::default();
++    let raw = verify_raw_with_control(&tx, &control).unwrap().unwrap();
++    let source = verify_source_with_control(&tx, Some(&raw), &control)
++        .unwrap()
++        .unwrap();
++    let coverage = project_read_with_control(&tx, Some(&raw), fixture.context(), &control).unwrap();
++    let prepared = prepare_window_analysis_with_control(
++        &tx,
++        &AnalysisReadInput {
++            raw: Some(&raw),
++            source: Some(&source),
++            generation: Some(fixture.generation),
++            crawl_config_sha256: Some(&fixture.sha),
++            coverage: &coverage.coverage,
++        },
++        &control,
++    )
++    .unwrap();
++    control.clone().expire();
++    stop(
++        crate::sitemap_membership_analysis::project_prepared_window(
++            &prepared,
++            Some(&raw),
++            &coverage.coverage,
++            &[],
++            &Default::default(),
++        ),
++        SitemapReadControlError::DeadlineExceeded,
++    );
++    stop(
++        raw.document_by_id(&"a".repeat(64)),
++        SitemapReadControlError::DeadlineExceeded,
++    );
++    assert_eq!(tx.total_changes(), 0);
++}
+--- a/crates/core/src/sitemap_source_store/verified_read.rs
++++ b/crates/core/src/sitemap_source_store/verified_read.rs
+@@ -6,6 +6,8 @@
+ //! Selected parent validation deliberately retains the old materializing
+ //! compatibility path, including the exact parent BLOB and source projection.
+ use super::*;
++use crate::sitemap_read_control::SitemapReadControl;
++
+ use crate::sitemap_ledger::verified_read::VerifiedRawRead;
+ 
+ /// Constructible only after the complete source tail and summary were checked.
+@@ -133,6 +135,21 @@
+     connection: &'conn Connection,
+     raw: Option<&VerifiedRawRead<'conn>>,
+ ) -> Result<Option<VerifiedSourceRead<'conn>>> {
++    verify_source_with_control(connection, raw, &SitemapReadControl::default())
++}
++pub(crate) fn verify_source_with_control<'conn>(
++    connection: &'conn Connection,
++    raw: Option<&VerifiedRawRead<'conn>>,
++    control: &SitemapReadControl,
++) -> Result<Option<VerifiedSourceRead<'conn>>> {
++    let _binding = control.bind_connection(connection)?;
++    control.run(|| verify_source_inner(connection, raw, control))
++}
++fn verify_source_inner<'conn>(
++    connection: &'conn Connection,
++    raw: Option<&VerifiedRawRead<'conn>>,
++    control: &SitemapReadControl,
++) -> Result<Option<VerifiedSourceRead<'conn>>> {
+     ensure!(
+         !connection.is_autocommit(),
+         "Verified source read needs the caller's transaction"
+@@ -143,10 +160,14 @@
+             "Verified source/raw reads use different connections"
+         );
+     }
+-    if let Some(expected) = selected_parent_projection(connection)? {
++    let selected = selected_parent_projection(connection)?;
++    control.checkpoint()?;
++    if let Some(expected) = selected {
+         // Explicit, bounded-by-existing-limits but materializing compatibility.
+         // load retains every existing canonical/SQL/doc/parent validation.
++        control.checkpoint()?;
+         let snapshot = load(connection)?;
++        control.checkpoint()?;
+         ensure!(
+             snapshot == expected,
+             "Selected source history presence/content differs from immutable parent"
+@@ -165,6 +186,7 @@
+         }));
+     }
+ 
++    control.checkpoint()?;
+     let text = bounded_metadata(connection, KEY, SOURCE_METADATA_ALLOCATION_BYTES as usize)?;
+     let Some(text) = text else {
+         match tables_present(connection)? {
+@@ -192,13 +214,16 @@
+         summary.inherited.is_none(),
+         "Inherited sources need a selected run plan"
+     );
++    control.checkpoint()?;
+     reject_duplicates(connection)?;
++    control.checkpoint()?;
+ 
+     let mut totals = SummaryAccumulator::new();
+     {
+         let mut statement = connection.prepare("SELECT sequence,measurement_id,source_kind,task_url,generation,source_revision,expected_document_id,capture_config_sha256,initial_catalog_config_sha256,data,data_sha256 FROM sitemap_source_measurements ORDER BY sequence")?;
+         let mut rows = statement.query([])?;
+         while let Some(row) = rows.next()? {
++            control.checkpoint()?;
+             let (record, data) = read_record_row(row, 0, &summary.limits)?;
+             validate_record(&record, &summary, add(totals.record_count, 1)?)?;
+             totals.record(&data)?;
+@@ -212,6 +237,7 @@
+         let mut statement = connection.prepare("SELECT c.document_id,c.measurement_id,c.document_sequence,c.data,c.data_sha256,m.sequence,m.measurement_id,m.source_kind,m.task_url,m.generation,m.source_revision,m.expected_document_id,m.capture_config_sha256,m.initial_catalog_config_sha256,m.data,m.data_sha256 FROM sitemap_source_measurement_commits c LEFT JOIN sitemap_source_measurements m ON m.measurement_id=c.measurement_id ORDER BY c.document_sequence")?;
+         let mut rows = statement.query([])?;
+         while let Some(row) = rows.next()? {
++            control.checkpoint()?;
+             let (link, data) = read_commit_row(row, 0)?;
+             validate_link(&link, previous)?;
+             previous = link.document_sequence;
+--- a/crates/core/src/sitemap_source_store/verified_report.rs
++++ b/crates/core/src/sitemap_source_store/verified_report.rs
+@@ -2,6 +2,7 @@
+ //! No report/source Vec is built. SQLite's report/JSON projection storage and
+ //! serde scratch remain outside a measured-RSS claim. No DDL or writes.
+ use super::{verified_read::VerifiedSourceRead, *};
++use crate::sitemap_read_control::SitemapReadControl;
+ use serde::de::{self, DeserializeSeed, IgnoredAny, MapAccess, SeqAccess, Visitor};
+ use std::fmt;
+ 
+@@ -16,6 +17,21 @@
+ pub(crate) fn verify_saved_report(
+     connection: &Connection,
+     expected: Option<&VerifiedSourceRead<'_>>,
++) -> Result<()> {
++    verify_saved_report_with_control(connection, expected, &SitemapReadControl::default())
++}
++pub(crate) fn verify_saved_report_with_control(
++    connection: &Connection,
++    expected: Option<&VerifiedSourceRead<'_>>,
++    control: &SitemapReadControl,
++) -> Result<()> {
++    let _binding = control.bind_connection(connection)?;
++    control.run(|| verify_saved_report_inner(connection, expected, control))
++}
++fn verify_saved_report_inner(
++    connection: &Connection,
++    expected: Option<&VerifiedSourceRead<'_>>,
++    control: &SitemapReadControl,
+ ) -> Result<()> {
+     ensure!(
+         !connection.is_autocommit(),
+@@ -45,7 +61,7 @@
+             Some(i64::try_from(slice.len())?) == bytes,
+             "Saved source envelope byte length differs"
+         );
+-        preflight(slice, proof)?;
++        preflight(slice, proof, control)?;
+     } else {
+         ensure!(
+             kind.is_none() || kind.as_deref() == Some("null"),
+@@ -60,9 +76,9 @@
+         (1..=MAX_REPORT).contains(&bytes.len()),
+         "Sitemap analysis report input budget exceeded"
+     );
+-    preflight_report_keys(bytes)?;
++    preflight_report_keys(bytes, control)?;
+     let mut decoder = serde_json::Deserializer::from_slice(bytes);
+-    ReportSeed { expected }
++    ReportSeed { expected, control }
+         .deserialize(&mut decoder)
+         .context("Sitemap analysis saved source measurement projection is invalid")?;
+     decoder.end()?;
+@@ -103,16 +119,17 @@
+ /// A 6,144-byte unescaped key can pass this raw cap; the decoded 1,024-byte
+ /// visitor then rejects it with bounded scratch. Maximally escaped valid keys
+ /// remain accepted at the exact raw bound.
+-fn preflight_report_keys(bytes: &[u8]) -> Result<()> {
++fn preflight_report_keys(bytes: &[u8], control: &SitemapReadControl) -> Result<()> {
++    control.checkpoint()?;
+     let mut pos = 0;
+-    byte(bytes, &mut pos, b'{')?;
++    byte(bytes, &mut pos, b'{', control)?;
+     loop {
+-        ws(bytes, &mut pos);
++        ws(bytes, &mut pos, control)?;
+         if bytes.get(pos) == Some(&b'}') {
+             pos += 1;
+             break;
+         }
+-        byte(bytes, &mut pos, b'"')?;
++        byte(bytes, &mut pos, b'"', control)?;
+         let content_start = pos;
+         let mut escaped = false;
+         loop {
+@@ -132,16 +149,16 @@
+                 escaped = true;
+             }
+         }
+-        byte(bytes, &mut pos, b':')?;
+-        skip_report_value(bytes, &mut pos)?;
+-        ws(bytes, &mut pos);
++        byte(bytes, &mut pos, b':', control)?;
++        skip_report_value(bytes, &mut pos, control)?;
++        ws(bytes, &mut pos, control)?;
+         if bytes.get(pos) == Some(&b'}') {
+             pos += 1;
+             break;
+         }
+-        byte(bytes, &mut pos, b',')?;
+-    }
+-    ws(bytes, &mut pos);
++        byte(bytes, &mut pos, b',', control)?;
++    }
++    ws(bytes, &mut pos, control)?;
+     ensure!(pos == bytes.len(), "Trailing report input");
+     Ok(())
+ }
+@@ -149,13 +166,17 @@
+ /// Skip one outer value with scalar counters only. Nested keys/string contents
+ /// are not outer identifiers and do not receive the outer-key cap. This is a
+ /// lexical resource guard, not a replacement JSON parser; serde is required.
+-fn skip_report_value(bytes: &[u8], pos: &mut usize) -> Result<()> {
+-    ws(bytes, pos);
++fn skip_report_value(bytes: &[u8], pos: &mut usize, control: &SitemapReadControl) -> Result<()> {
++    control.checkpoint()?;
++    ws(bytes, pos, control)?;
+     let start = *pos;
+     let mut depth = 0usize;
+     let mut quoted = false;
+     let mut escaped = false;
+     while let Some(&value) = bytes.get(*pos) {
++        if *pos & 65_535 == 0 {
++            control.checkpoint()?;
++        }
+         if !quoted && depth == 0 && matches!(value, b',' | b'}') {
+             break;
+         }
+@@ -213,6 +234,7 @@
+ }
+ struct ReportSeed<'a, 'conn> {
+     expected: Option<&'a VerifiedSourceRead<'conn>>,
++    control: &'a SitemapReadControl,
+ }
+ impl<'de> DeserializeSeed<'de> for ReportSeed<'_, '_> {
+     type Value = ();
+@@ -228,6 +250,9 @@
+     fn visit_map<A: MapAccess<'de>>(self, mut map: A) -> std::result::Result<(), A::Error> {
+         let mut seen = false;
+         while let Some(key) = map.next_key::<ReportField>()? {
++            self.control
++                .checkpoint()
++                .map_err(<A::Error as de::Error>::custom)?;
+             match key {
+                 ReportField::Source => {
+                     if seen {
+@@ -238,10 +263,14 @@
+                     seen = true;
+                     map.next_value_seed(SourceSeed {
+                         expected: self.expected,
++                        control: self.control,
+                     })?;
+                 }
+                 ReportField::Other => {
+                     map.next_value::<IgnoredAny>()?;
++                    self.control
++                        .checkpoint()
++                        .map_err(<A::Error as de::Error>::custom)?;
+                 }
+             }
+         }
+@@ -253,6 +282,7 @@
+ }
+ struct SourceSeed<'a, 'conn> {
+     expected: Option<&'a VerifiedSourceRead<'conn>>,
++    control: &'a SitemapReadControl,
+ }
+ impl<'de> DeserializeSeed<'de> for SourceSeed<'_, '_> {
+     type Value = ();
+@@ -278,6 +308,9 @@
+         })?;
+         let mut seen = [false; 4];
+         while let Some(key) = map.next_key::<SourceField>()? {
++            self.control
++                .checkpoint()
++                .map_err(<A::Error as de::Error>::custom)?;
+             let index = match key {
+                 SourceField::Version => 0,
+                 SourceField::Summary => 1,
+@@ -303,10 +336,12 @@
+                 }
+                 SourceField::Records => map.next_value_seed(ArraySeed {
+                     expected,
++                    control: self.control,
+                     records: true,
+                 })?,
+                 SourceField::Commits => map.next_value_seed(ArraySeed {
+                     expected,
++                    control: self.control,
+                     records: false,
+                 })?,
+             }
+@@ -319,6 +354,7 @@
+ }
+ struct ArraySeed<'a, 'conn> {
+     expected: &'a VerifiedSourceRead<'conn>,
++    control: &'a SitemapReadControl,
+     records: bool,
+ }
+ impl<'de> DeserializeSeed<'de> for ArraySeed<'_, '_> {
+@@ -338,15 +374,24 @@
+         } else {
+             "SELECT document_id,measurement_id,document_sequence,data,data_sha256 FROM sitemap_source_measurement_commits ORDER BY document_sequence"
+         };
++        // Restore typed SQLite stops BEFORE serde custom-error conversion
++        // would erase the rusqlite error's type/source chain.
+         let mut statement = self
+-            .expected
+-            .connection()
+-            .prepare(sql)
++            .control
++            .map_result(self.expected.connection().prepare(sql).map_err(Into::into))
+             .map_err(<A::Error as de::Error>::custom)?;
+-        let mut rows = statement
+-            .query([])
++        let mut rows = self
++            .control
++            .map_result(statement.query([]).map_err(Into::into))
+             .map_err(<A::Error as de::Error>::custom)?;
+-        while let Some(row) = rows.next().map_err(<A::Error as de::Error>::custom)? {
++        while let Some(row) = self
++            .control
++            .map_result(rows.next().map_err(Into::into))
++            .map_err(<A::Error as de::Error>::custom)?
++        {
++            self.control
++                .checkpoint()
++                .map_err(<A::Error as de::Error>::custom)?;
+             if self.records {
+                 let expected = read_record_row(row, 0, &self.expected.summary().limits)
+                     .map_err(<A::Error as de::Error>::custom)?;
+@@ -386,14 +431,18 @@
+ // (including whitespace/escapes), ignoring only JSON whitespace outside strings.
+ // Six bytes per canonical byte permits equivalent Unicode escapes and pretty
+ // printing without silently raising the durable SQL limits.
+-fn span(bytes: &[u8], pos: &mut usize, cap: usize) -> Result<()> {
+-    ws(bytes, pos);
++fn span(bytes: &[u8], pos: &mut usize, cap: usize, control: &SitemapReadControl) -> Result<()> {
++    control.checkpoint()?;
++    ws(bytes, pos, control)?;
+     let mut depth = 0usize;
+     let mut quoted = false;
+     let mut escaped = false;
+     let mut string_start = 0usize;
+     let mut charged = 0usize;
+     while let Some(&byte) = bytes.get(*pos) {
++        if *pos & 65_535 == 0 {
++            control.checkpoint()?;
++        }
+         if !quoted && depth == 0 && matches!(byte, b',' | b']' | b'}') {
+             break;
+         }
+@@ -415,7 +464,7 @@
+             } else if byte == b'"' {
+                 quoted = false;
+                 let mut next = *pos;
+-                ws(bytes, &mut next);
++                ws(bytes, &mut next, control)?;
+                 ensure!(
+                     bytes.get(next) != Some(&b':') || *pos - string_start <= 1024,
+                     "Oversized source field name"
+@@ -448,13 +497,18 @@
+     );
+     Ok(())
+ }
+-fn ws(bytes: &[u8], pos: &mut usize) {
++fn ws(bytes: &[u8], pos: &mut usize, control: &SitemapReadControl) -> Result<()> {
++    control.checkpoint()?;
+     while bytes.get(*pos).is_some_and(u8::is_ascii_whitespace) {
+         *pos += 1;
+-    }
+-}
+-fn byte(bytes: &[u8], pos: &mut usize, expected: u8) -> Result<()> {
+-    ws(bytes, pos);
++        if *pos & 65_535 == 0 {
++            control.checkpoint()?;
++        }
++    }
++    Ok(())
++}
++fn byte(bytes: &[u8], pos: &mut usize, expected: u8, control: &SitemapReadControl) -> Result<()> {
++    ws(bytes, pos, control)?;
+     ensure!(
+         bytes.get(*pos) == Some(&expected),
+         "Malformed source envelope"
+@@ -462,11 +516,16 @@
+     *pos += 1;
+     Ok(())
+ }
+-fn preflight(bytes: &[u8], proof: &VerifiedSourceRead<'_>) -> Result<()> {
++fn preflight(
++    bytes: &[u8],
++    proof: &VerifiedSourceRead<'_>,
++    control: &SitemapReadControl,
++) -> Result<()> {
++    control.checkpoint()?;
+     let mut pos = 0;
+-    byte(bytes, &mut pos, b'{')?;
++    byte(bytes, &mut pos, b'{', control)?;
+     loop {
+-        ws(bytes, &mut pos);
++        ws(bytes, &mut pos, control)?;
+         if bytes.get(pos) == Some(&b'}') {
+             pos += 1;
+             break;
+@@ -489,10 +548,10 @@
+             }
+         }
+         let key: String = serde_json::from_slice(&bytes[start..pos])?;
+-        byte(bytes, &mut pos, b':')?;
++        byte(bytes, &mut pos, b':', control)?;
+         match key.as_str() {
+             "records" | "commits" => {
+-                byte(bytes, &mut pos, b'[')?;
++                byte(bytes, &mut pos, b'[', control)?;
+                 let records = key == "records";
+                 let max = if records {
+                     proof.summary().record_count
+@@ -506,34 +565,34 @@
+                 };
+                 let mut count = 0u64;
+                 loop {
+-                    ws(bytes, &mut pos);
++                    ws(bytes, &mut pos, control)?;
+                     if bytes.get(pos) == Some(&b']') {
+                         pos += 1;
+                         break;
+                     }
+                     count += 1;
+                     ensure!(count <= max, "Saved source array has extra rows");
+-                    span(bytes, &mut pos, cap * 6 + 1024)?;
+-                    ws(bytes, &mut pos);
++                    span(bytes, &mut pos, cap * 6 + 1024, control)?;
++                    ws(bytes, &mut pos, control)?;
+                     if bytes.get(pos) == Some(&b']') {
+                         pos += 1;
+                         break;
+                     }
+-                    byte(bytes, &mut pos, b',')?;
+-                }
+-            }
+-            "summary" => span(bytes, &mut pos, 4096 * 6 + 1024)?,
+-            "schema_version" => span(bytes, &mut pos, 64)?,
++                    byte(bytes, &mut pos, b',', control)?;
++                }
++            }
++            "summary" => span(bytes, &mut pos, 4096 * 6 + 1024, control)?,
++            "schema_version" => span(bytes, &mut pos, 64, control)?,
+             _ => bail!("Unknown source snapshot field"),
+         }
+-        ws(bytes, &mut pos);
++        ws(bytes, &mut pos, control)?;
+         if bytes.get(pos) == Some(&b'}') {
+             pos += 1;
+             break;
+         }
+-        byte(bytes, &mut pos, b',')?;
+-    }
+-    ws(bytes, &mut pos);
++        byte(bytes, &mut pos, b',', control)?;
++    }
++    ws(bytes, &mut pos, control)?;
+     ensure!(pos == bytes.len(), "Trailing source envelope input");
+     Ok(())
+ }

@@ -4,6 +4,8 @@
 //! The caller owns a read transaction and must not write through its Connection
 //! while the token is alive. This is a crate-private provenance boundary.
 use super::*;
+use crate::sitemap_read_control::SitemapReadControl;
+
 use serde::ser::{Error as _, SerializeSeq, SerializeStruct};
 
 const WINDOW_BYTES: usize = 8 * 1024 * 1024;
@@ -17,9 +19,10 @@ impl std::fmt::Display for RawWindowByteBudget {
 }
 impl std::error::Error for RawWindowByteBudget {}
 
-struct WindowSize(usize);
-impl Write for WindowSize {
+struct WindowSize<'a>(usize, &'a SitemapReadControl);
+impl Write for WindowSize<'_> {
     fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
+        self.1.checkpoint().map_err(io::Error::other)?;
         let size = self
             .0
             .checked_add(bytes.len())
@@ -86,6 +89,7 @@ pub(crate) struct VerifiedRawRead<'conn> {
     connection: &'conn Connection,
     summary: SitemapLedgerSummary,
     inherited: Option<SitemapInheritedBasis>,
+    control: SitemapReadControl,
 }
 impl VerifiedRawRead<'_> {
     pub(crate) fn summary(&self) -> &SitemapLedgerSummary {
@@ -98,8 +102,11 @@ impl VerifiedRawRead<'_> {
         self.connection
     }
     pub(crate) fn document_by_id(&self, id: &str) -> Result<Option<SitemapSourceDocument>> {
-        sha(id)?;
-        document(self.connection, &self.summary.limits, id)
+        let _binding = self.control.bind_connection(self.connection)?;
+        self.control.run(|| {
+            sha(id)?;
+            document(self.connection, &self.summary.limits, id)
+        })
     }
     pub(crate) fn visit_filtered(
         &self,
@@ -109,6 +116,18 @@ impl VerifiedRawRead<'_> {
         self.filtered(filter, 0, None, -1, |row| visitor(&row))
     }
     fn filtered(
+        &self,
+        filter: &SitemapLedgerFilter,
+        lower: u64,
+        upper: Option<u64>,
+        limit: i64,
+        visitor: impl FnMut(SitemapLedgerRow) -> Result<()>,
+    ) -> Result<()> {
+        let _binding = self.control.bind_connection(self.connection)?;
+        self.control
+            .run(|| self.filtered_inner(filter, lower, upper, limit, visitor))
+    }
+    fn filtered_inner(
         &self,
         filter: &SitemapLedgerFilter,
         lower: u64,
@@ -137,6 +156,7 @@ impl VerifiedRawRead<'_> {
             limit
         ])?;
         while let Some(row) = cursor.next()? {
+            self.control.checkpoint()?;
             visitor(decode_row(row, &self.summary.limits)?)?;
         }
         Ok(())
@@ -146,6 +166,7 @@ impl VerifiedRawRead<'_> {
         filter: &SitemapLedgerFilter,
         after: u64,
     ) -> Result<bool> {
+        self.control.checkpoint()?;
         filter.validate()?;
         ensure!(
             !self.connection.is_autocommit(),
@@ -167,6 +188,7 @@ impl VerifiedRawRead<'_> {
         after: Option<u64>,
         limit: usize,
     ) -> Result<SitemapLedgerPage> {
+        self.control.checkpoint()?;
         ensure!(
             (1..=1000).contains(&limit),
             "Sitemap page limit must be 1..=1000"
@@ -212,13 +234,17 @@ impl VerifiedRawRead<'_> {
             next_after_sequence: next,
             has_more,
         };
-        serde_json::to_writer(&mut WindowSize(0), &page).map_err(|error| -> anyhow::Error {
-            if error.is_io() {
-                RawWindowByteBudget.into()
-            } else {
-                error.into()
-            }
-        })?;
+        let encoded = serde_json::to_writer(&mut WindowSize(0, &self.control), &page).map_err(
+            |error| -> anyhow::Error {
+                if error.is_io() && self.control.checkpoint().is_ok() {
+                    RawWindowByteBudget.into()
+                } else {
+                    error.into()
+                }
+            },
+        );
+        self.control.map_result(encoded)?;
+        self.control.checkpoint()?;
         Ok(page)
     }
 }
@@ -302,11 +328,13 @@ fn decode_row(sql: &rusqlite::Row<'_>, limits: &SitemapLedgerLimits) -> Result<S
 fn visit_all(
     connection: &Connection,
     limits: &SitemapLedgerLimits,
+    control: &SitemapReadControl,
     mut visitor: impl FnMut(&SitemapLedgerRow) -> Result<()>,
 ) -> Result<()> {
     let mut statement = connection.prepare(&format!("{ROWS_SQL} ORDER BY 2"))?;
     let mut cursor = statement.query([])?;
     while let Some(row) = cursor.next()? {
+        control.checkpoint()?;
         visitor(&decode_row(row, limits)?)?;
     }
     Ok(())
@@ -613,7 +641,8 @@ fn relation_row(
 
 /// One ordered relation pass, never a full locations scan per entry. Declared
 /// lists are sorted exactly as the old validator; input order is not tightened.
-fn verify_entry_locations(connection: &Connection) -> Result<()> {
+fn verify_entry_locations(connection: &Connection, control: &SitemapReadControl) -> Result<()> {
+    control.checkpoint()?;
     let mut query = connection.prepare(
         "SELECT e.row_id,e.data,l.data
       FROM sitemap_entries e LEFT JOIN sitemap_locations l ON l.entry_id=e.row_id
@@ -624,6 +653,7 @@ fn verify_entry_locations(connection: &Connection) -> Result<()> {
     let mut declared = Vec::new();
     let mut seen = 0usize;
     while let Some(row) = cursor.next()? {
+        control.checkpoint()?;
         let id: String = row.get(0)?;
         if current.as_ref() != Some(&id) {
             ensure!(seen == declared.len(), "Entry Loc references differ");
@@ -690,6 +720,19 @@ impl Serialize for CatalogEnvelope<'_, '_> {
 }
 
 pub(crate) fn verify_raw(connection: &Connection) -> Result<Option<VerifiedRawRead<'_>>> {
+    verify_raw_with_control(connection, &SitemapReadControl::default())
+}
+pub(crate) fn verify_raw_with_control<'conn>(
+    connection: &'conn Connection,
+    control: &SitemapReadControl,
+) -> Result<Option<VerifiedRawRead<'conn>>> {
+    let _binding = control.bind_connection(connection)?;
+    control.run(|| verify_raw_inner(connection, control))
+}
+fn verify_raw_inner<'conn>(
+    connection: &'conn Connection,
+    control: &SitemapReadControl,
+) -> Result<Option<VerifiedRawRead<'conn>>> {
     ensure!(
         !connection.is_autocommit(),
         "Raw verification requires a caller-owned transaction"
@@ -711,6 +754,7 @@ pub(crate) fn verify_raw(connection: &Connection) -> Result<Option<VerifiedRawRe
             connection,
             summary: catalog.summary,
             inherited: catalog.inherited,
+            control: control.clone(),
         }));
     }
     summary.limits.validate()?;
@@ -729,6 +773,7 @@ pub(crate) fn verify_raw(connection: &Connection) -> Result<Option<VerifiedRawRe
     let mut total_rows = 0u64;
     let mut total_bytes = 0u64;
     for table in TABLES {
+        control.checkpoint()?;
         let (count, bytes, max): (i64,i64,i64) = connection.query_row(&format!(
             "SELECT count(*),coalesce(sum(length(CAST(data AS BLOB))),0),coalesce(max(length(CAST(data AS BLOB))),0) FROM {table}"),
             [], |r| Ok((r.get(0)?,r.get(1)?,r.get(2)?)))?;
@@ -775,11 +820,12 @@ pub(crate) fn verify_raw(connection: &Connection) -> Result<Option<VerifiedRawRe
     computed.rolling_sha256 = seed_hash();
     let mut counters = BTreeMap::new();
     let mut last_document = None;
-    visit_all(connection, &summary.limits, |row| {
+    visit_all(connection, &summary.limits, control, |row| {
         account(&mut computed, row)?;
         relation_row(connection, &summary, &mut counters, &mut last_document, row)
     })?;
     for (id, stats) in counters {
+        control.checkpoint()?;
         let doc =
             document(connection, &summary.limits, &id)?.context("Missing counted document")?;
         if let Some(count) = doc.declaration_count {
@@ -804,11 +850,12 @@ pub(crate) fn verify_raw(connection: &Connection) -> Result<Option<VerifiedRawRe
         computed == summary,
         "Raw counts/rolling SHA/global sequence differ"
     );
-    verify_entry_locations(connection)?;
+    verify_entry_locations(connection, control)?;
     let read = VerifiedRawRead {
         connection,
         summary,
         inherited,
+        control: control.clone(),
     };
     ensure!(
         measured(

@@ -1,0 +1,23 @@
+# Independent bounded static review: CSV streaming regression handoff
+
+Result: NO_CONFIRMED_FINDINGS_IN_BOUNDED_SOURCE_TEST_SCOPE. This is a source review, not a type/compiler/runtime pass. The immutable handoff contains 13 actual async test functions and two new child files; 0 tests were executed.
+
+The reviewed input is manifest 83707b519f05b0b7e964ac25c4fdfacfbf998791409b7149218b0ae45fc891f0, with both payload hashes and all four local artifact hashes rechecked. App manifest 3dac7530 and reviewed postfix manifest 5f97d605 are mandatory dependencies. The postfix restores production BoundedBytes availability, keeps preparation ownership valid and refreshes consumer-prefix progress; the original App handoff alone is not the reviewed combined product. Parent child-module registration remains a Root-only guarded append; no existing fixture or assertion is replaced.
+
+## Source scope and evidence boundaries
+
+- Read both frozen files in full, their HANDOFF/14-design-group mapping, parent module/import/visibility boundaries and actual transport hooks/counters. No fabricated Header, Window or verified Session is used as a positive proof. Positive Store fixtures call the public Crawler and Store paths. Existing full-snapshot buffered CSV is an oracle over actual stored evidence, not a synthesized compact result.
+- Tests lines16-201 author all-stored/filter/typed-row byte comparisons and independently paged inventory-token binding. Source/entry/location/event/diagnostic kinds and exact source/member filters use real stored rows, including more than the first200. Counters refer to actual callback entry and completed full visits.
+- Lines202-564 author full-tail corruption, record/link/report/inventory rejection before Ready, context-only changes and selected-parent checks. A-only and omission-marker restorations are explicitly controlled SQL fixtures copied from actual producer output; they are not represented as a permitted terminal native writer history. A rehashed report tamper remains an integrity rejection, separate from a same-values pretty-report representation change.
+- Lines565-711 author a real WAL writer after Ready, unchanged original response, socket backpressure and client disconnect. The large cohort asserts its actual accepted CSV is greater than8MiB and less than64MiB; this is an unexecuted prerequisite, not an observed size. Queue/chunk/CSV caps are not lowered.
+- Lines712-867 author real idle socket and gated absolute/preparation deadlines. The preparation case uses the genuine small fixture and a2-second test deadline. The positive active-drain subsection deliberately polls the actual Axum Body, after actual Core completion and Worker join, while consuming remaining real64KiB prefixes every750ms under an idle1-second deadline. It is a direct Body progress control, not an extra network-wire proof; separate cases retain real TCP/HTTP behavior. Timing and scheduler/OS assumptions remain unexecuted.
+- Lines870-1004 author pre/post Core-return gates and actual Worker Join observations before a complete Content-Length body. The WAL checkpoint witness is after actual Core return. Late-error cases obtain real200 headers before releasing the producer fault; truncated asserts a body error and a shorter byte count. The builder failure goes through the actual response builder/drop path; cancelled gates are cooperative and require no manual release.
+- Lines1006-1144 author concurrent shutdown/drain, new admission rejection and existing status/token-role precedence. Existing DB with actual RawNone keeps catalog-unavailable409 priority; missing DB precedes worker admission. The accepted simultaneous stale-token/App-job-conflict409-code variation is not falsely asserted unchanged.
+
+## Explicitly open
+
+All 13 functions are AUTHORED / NOT_COMPILED / NOT_RUN. No TypePASS, native HTTP pass, cancellation latency bound, resource/RSS proof or complete S4/parity claim follows. The14 design rows are a mapping of goals, not a13/14 coverage percentage.
+
+The physical, accepted native Store plus HTTP pair at exactly67,108,864 and67,108,865 CSV bytes is NOT_AUTHORED / OPEN. The sink unit boundary elsewhere is not that proof. ParentNone/childSome inverse-presence HTTP, isolated selected-operation-only staleness and optional old-engine/alias priority controls remain explicit directed gaps. The handoff accurately discloses those limits and gives a calibration proposal without pretending a valid64MiB fixture already exists.
+
+No source edit, Root/Git/runtime write, compiler/Cargo/test, SQLite fixture, network request, browser/native product or generator was performed by this review. Own outputs only contain this receipt and source pins.

@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "name": "s4-csv-compat-wrappers-review-v1",
+  "result": "NO_CONFIRMED_FINDINGS_IN_EXACT_THREE_DELTAS",
+  "created_utc": "2026-10-14T22:22:03.4835328Z",
+  "input_manifest_sha256": "c1da9605e574e302edeaece94e7f220b73c7df9df76fdbc12502b0f7e4035024",
+  "before_after_hashes_verified": 3,
+  "exact_delta_checks": [
+    {
+      "path": "crates/core/src/sitemap_coverage/verified_read.rs",
+      "before_sha256": "95e776c6668716815f8a4ef3f4b2255b9083ea473b42ce045921ff66f379cf38",
+      "after_sha256": "38a4c60cc6362bcd21c9fbe15a86ddebdaf1aded6a9ab650b7ef11cf8ceadc4f",
+      "exact_delta_pass": true,
+      "kind": "Exactly one cfg(test) on default wrapper; controlled/inner bodies unchanged"
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis/window.rs",
+      "before_sha256": "fe461667cdc78b5f5eea01e96f1f6b69b81c7e8ba5303d2918e102951993f7ac",
+      "after_sha256": "ba143d5b535b71ee3572ccbf2c57dbee3afa09f327d98777d5da8e29f5f374b5",
+      "exact_delta_pass": true,
+      "kind": "Exactly one cfg(test) on default wrapper; controlled/inner bodies unchanged"
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis.rs",
+      "before_sha256": "2eb60bcee8fb1b3957c9ad52eea1a5c6d1c7d6163e71ed5b4553108079c44f28",
+      "after_sha256": "e3e407fefc99c0402424d45affceb69925bdc544551d0d166e02efd352811b18",
+      "exact_delta_pass": true,
+      "kind": "Exactly one default reexport moved behind cfg(test); all other source unchanged"
+    }
+  ],
+  "confirmed_findings": [],
+  "reachability": "Only actual cfg(test) callers for two default wrappers; verify_raw/verify_source still production",
+  "compiler_diagnostics_observed": false,
+  "runners": "Old255 scripts static only; environment guard recommendation accepted by Root",
+  "gates": {
+    "compiler": "NOT_RUN",
+    "tests": "NOT_RUN",
+    "cargo": "NOT_RUN",
+    "sqlite": "NOT_RUN",
+    "native": "NOT_RUN",
+    "http": "NOT_RUN",
+    "browser": "NOT_RUN",
+    "new_runner_execution": "NOT_RUN"
+  },
+  "artifacts": [
+    {
+      "path": "REVIEW.md",
+      "sha256": "a96f2a5082326a48f8ed44c7b7f8f104c288814831c86f125a260685f23e30c3"
+    },
+    {
+      "path": "source-pins.json",
+      "sha256": "103cdd209d2ec96bb4e26f0b9bc796f50cad66b5e84580abf7389dcaaf69ebd0"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "name": "s4-csv-root-session-review-v1",
+  "created_utc": "2026-10-14T22:12:50.5399750Z",
+  "result": "ONE_CONFIRMED_STATIC_BORROW_ISSUE",
+  "input_manifest_sha256": "115531f52ad1df716de592f68e317c1e3897470615a9ddc36c2833805358481a",
+  "payloads_verified": 8,
+  "findings": [
+    {
+      "priority": 1,
+      "file": "crates/core/src/store/sitemap_read_context.rs",
+      "borrow_line": 134,
+      "move_line": 154,
+      "last_analysis_use": 176,
+      "drop_line": 180,
+      "effect": "Saved config Option<String> moves while prepared-analysis input lifetime remains live",
+      "fix": "Clone into header; retain original until drop(analysis)",
+      "state": "Root accepted; separate postfix pending; v1 remains unchanged",
+      "compiler_diagnostic": "NOT_RUN"
+    }
+  ],
+  "additional_confirmed_findings": [],
+  "authored_new_tests_reviewed": 9,
+  "executed_tests": 0,
+  "controlled_dependency": "PENDING_IMMUTABLE_HANDOFF_NOT_REVIEWED",
+  "gates": {
+    "typecheck": "NOT_RUN",
+    "compiler": "NOT_RUN",
+    "tests": "NOT_RUN",
+    "sqlite": "NOT_RUN",
+    "http": "NOT_RUN",
+    "native": "NOT_RUN",
+    "browser": "NOT_RUN",
+    "runtime_correctness": "NOT_PROVEN"
+  },
+  "artifacts": [
+    {
+      "path": "REVIEW.md",
+      "sha256": "09f8224f399283a786f0254e20a08aa78f685cdca94714c906f247cd66dfe2c1"
+    },
+    {
+      "path": "source-pins.json",
+      "sha256": "060acb38a4665c9cf7b1725b01c0ea6911f2a52d0cfe8d7e7979756ddca32591"
+    }
+  ],
+  "writes": "Only this new own review directory"
+}

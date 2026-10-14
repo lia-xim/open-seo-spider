@@ -1,0 +1,20 @@
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{createHash}=require('node:crypto'),{execFileSync}=require('node:child_process');
+const root='E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-csv-streaming-integration-v1',sha=b=>createHash('sha256').update(b).digest('hex'),git=args=>execFileSync('git',args,{cwd:root,maxBuffer:32*1024*1024});
+const prep=JSON.parse(fs.readFileSync(path.join(__dirname,'prepare-sitemap-csv-streaming-v1.json'))),publication=JSON.parse(fs.readFileSync(path.join(__dirname,'publish-sitemap-csv-streaming-docs-v1.json'))),proofRaw=fs.readFileSync(path.join(root,'docs/verification/sitemap-csv-streaming-preparation.json'));assert.equal(sha(proofRaw),publication.proof_sha256,'Exact actual publication proof before deriving any owned path');const proof=JSON.parse(proofRaw);
+assert.equal(git(['rev-parse','HEAD']).toString().trim(),'d105fb8a0c527ffd99164e44ec644bd0e49f61a5');assert.equal(git(['branch','--show-current']).toString().trim(),'codex/sitemap-csv-streaming-20261014');
+const compilerRaw=fs.readFileSync(path.join(prep.source,'manifest.json'));assert.equal(sha(compilerRaw),'a31936510381cca40901eb547f15090a77c833f617f84f51f67b057fe7a5714e');assert.equal(sha(compilerRaw),proof.source_manifest_sha256);const compiler=JSON.parse(compilerRaw);
+assert.equal(compiler.files.length,265);assert.equal(compiler.required_test_names,288);assert.equal(compiler.minimum_expected_workspace_tests,1070);assert.equal(compiler.new_tests_executed,0);
+for(const f of compiler.files)for(const base of [root,prep.source]){const b=fs.readFileSync(path.join(base,f.path));assert.equal(b.length,f.bytes);assert.equal(sha(b),f.sha256,f.path);}
+const archivePrefix='docs/verification/sitemap-csv-streaming-20261015';
+for(const f of proof.companions){assert.equal(path.posix.dirname(f.path),archivePrefix,'Only flat newly owned evidence prefix');assert.equal(path.posix.normalize(f.path),f.path);assert(!f.path.includes('\\'));assert(/^[a-f0-9]{64}$/.test(f.sha256));assert(Number.isSafeInteger(f.bytes)&&f.bytes>=0);}
+const docs=['.gitattributes','docs/FEATURE_TODO.md','docs/feature-parity.json','docs/parity/sitemap-csv-streaming-plan.md','docs/sitemap-rich-window.md','docs/sitemap-csv-streaming.md','docs/verification/sitemap-csv-streaming-preparation.json',...proof.companions.map(x=>x.path)].sort();
+assert.deepEqual(compiler.approved_product_bindings,compiler.staged_product_bindings);assert.deepEqual(prep.staged_product_bindings,compiler.approved_product_bindings);
+const product=compiler.approved_product_bindings.map(x=>x.path),owned=[...product,...docs].sort();assert.equal(product.length,26);assert.equal(new Set(owned).size,owned.length);
+const actual=git(['status','--porcelain=v1','-uall']).toString().trimEnd().split(/\r?\n/).filter(Boolean).map(x=>x.slice(3)).sort();assert.deepEqual(actual,owned,'Exact owned product and documentation paths');
+for(const f of proof.companions){const b=fs.readFileSync(path.join(root,f.path));assert.equal(sha(b),f.sha256);assert.equal(b.length,f.bytes);}
+git(['add','--',...docs]);git(['diff','--cached','--check']);
+const staged=git(['diff','--cached','--name-only','-z']).toString().split('\0').filter(Boolean).sort();assert.deepEqual(staged,owned);
+for(const p of owned)assert.equal(sha(git(['show',':'+p])),sha(fs.readFileSync(path.join(root,p))),'Exact staged raw bytes '+p);
+for(const f of compiler.approved_product_bindings)assert.equal(sha(git(['show',':'+f.path])),f.sha256);
+const receipt={created_at:new Date().toISOString(),root,branch:'codex/sitemap-csv-streaming-20261014',baseline:'d105fb8a0c527ffd99164e44ec644bd0e49f61a5',owned_files:owned.length,product_files:26,doc_evidence_files:docs.length,all_staged_worktree_raw_sha_equal:true,source_manifest_sha256:prep.manifest_sha256,compiler_tests:'NOT_RUN_COMPUTE_HOLD',paths:owned};
+fs.writeFileSync(__filename.replace(/\.cjs$/,'.json'),JSON.stringify(receipt,null,2)+'\n',{flag:'wx'});console.log(JSON.stringify({owned_files:owned.length,product_files:26,doc_evidence_files:docs.length,all_raw_index_bytes_equal:true}));

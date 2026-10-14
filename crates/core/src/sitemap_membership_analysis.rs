@@ -1,5 +1,6 @@
 //! Read-only joins against original requested identities in a checkpoint-bound
 //! saved report. Zero observed anchors never proves a website-wide orphan.
+use crate::sitemap_read_control::SitemapReadControl;
 use crate::{
     CrawlCheckpoint, CrawlOutcome, CrawlRunState, SitemapAdmissionDecision, SitemapCoverageScope,
     SitemapLedgerRow, SitemapLocationRole, SitemapReadSnapshot,
@@ -7,13 +8,15 @@ use crate::{
 use anyhow::{Context, Result, ensure};
 use rusqlite::{Connection, OptionalExtension, params};
 use serde::{Deserialize, Serialize, de::DeserializeOwned};
-use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 
 mod window;
 use window::MembershipBasis;
+#[cfg(test)]
+pub(crate) use window::prepare_window_analysis;
 pub(crate) use window::{
-    AnalysisReadInput, VerifiedAnalysisRead, prepare_window_analysis, project_prepared_window,
+    AnalysisReadInput, VerifiedAnalysisRead, prepare_window_analysis_with_control,
+    project_prepared_window,
 };
 
 pub const SITEMAP_MEMBERSHIP_ANALYSIS_ENGINE: &str =
@@ -304,7 +307,11 @@ fn count(connection: &Connection, sql: &str) -> Result<u64> {
         connection.query_row(sql, [], |r| r.get::<_, i64>(0))?,
     )?)
 }
-fn report_hash(connection: &Connection) -> Result<Option<(String, u64)>> {
+fn report_hash(
+    connection: &Connection,
+    control: &SitemapReadControl,
+) -> Result<Option<(String, u64)>> {
+    control.checkpoint()?;
     let length: Option<i64> = connection
         .query_row(
             "SELECT length(CAST(value AS BLOB)) FROM metadata WHERE key='report'",
@@ -321,11 +328,12 @@ fn report_hash(connection: &Connection) -> Result<Option<(String, u64)>> {
     );
     // Borrow SQLite's actual bounded value once: no Vec<PageRecord>, no full
     // Rust report clone, and no repeated CAST+substr of the full TEXT value.
-    let (sha, actual): (String, usize) =
-        connection.query_row("SELECT value FROM metadata WHERE key='report'", [], |row| {
-            let bytes = row.get_ref(0)?.as_bytes()?;
-            Ok((format!("{:x}", Sha256::digest(bytes)), bytes.len()))
-        })?;
+    let mut statement = connection.prepare("SELECT value FROM metadata WHERE key='report'")?;
+    let mut rows = statement.query([])?;
+    let row = rows.next()?.context("Saved report disappeared")?;
+    let bytes = row.get_ref(0)?.as_bytes()?;
+    let sha = control.sha256(bytes)?;
+    let actual = bytes.len();
     ensure!(
         i64::try_from(actual)? == length,
         "Saved analysis report byte length differs"
@@ -396,6 +404,24 @@ impl SourceBasis<'_> {
             }
         }
     }
+    fn verify_report_with_control(
+        &self,
+        connection: &Connection,
+        control: &SitemapReadControl,
+    ) -> Result<()> {
+        control.checkpoint()?;
+        match self {
+            Self::Snapshot(_) => {
+                // Historical materialized compatibility: guarded coarse boundary.
+                control.map_result(self.verify_report(connection))
+            }
+            Self::Verified(value) => {
+                crate::sitemap_source_store::verified_report::verify_saved_report_with_control(
+                    connection, *value, control,
+                )
+            }
+        }
+    }
 }
 struct ContextInput<'a> {
     generation: Option<u64>,
@@ -405,6 +431,7 @@ struct ContextInput<'a> {
     source: SourceBasis<'a>,
 }
 struct PreparedContext {
+    control: SitemapReadControl,
     base: SitemapMembershipAnalysis,
     selected: bool,
     generation: Option<u64>,
@@ -454,6 +481,21 @@ pub(crate) fn project(
 }
 
 fn prepare_context(connection: &Connection, input: ContextInput<'_>) -> Result<PreparedContext> {
+    prepare_context_with_control(connection, input, &SitemapReadControl::default())
+}
+fn prepare_context_with_control(
+    connection: &Connection,
+    input: ContextInput<'_>,
+    control: &SitemapReadControl,
+) -> Result<PreparedContext> {
+    let _binding = control.bind_connection(connection)?;
+    control.run(|| prepare_context_inner(connection, input, control))
+}
+fn prepare_context_inner(
+    connection: &Connection,
+    input: ContextInput<'_>,
+    control: &SitemapReadControl,
+) -> Result<PreparedContext> {
     let ContextInput {
         generation,
         config_sha,
@@ -466,7 +508,7 @@ fn prepare_context(connection: &Connection, input: ContextInput<'_>) -> Result<P
 
     let run: Option<CrawlRunState> = meta(connection, "run_state")?;
     let checkpoint: Option<CrawlCheckpoint> = meta(connection, "checkpoint")?;
-    let report = report_hash(connection)?;
+    let report = report_hash(connection, control)?;
     let mut out = SitemapMembershipAnalysis {
         context: SitemapAnalysisContext {
             engine: SITEMAP_MEMBERSHIP_ANALYSIS_ENGINE.into(),
@@ -492,6 +534,7 @@ fn prepare_context(connection: &Connection, input: ContextInput<'_>) -> Result<P
     let Some(summary) = summary else {
         out.context.reason = "validated_source_catalog_unavailable".into();
         return Ok(PreparedContext {
+            control: control.clone(),
             base: out,
             selected,
             generation: report_generation,
@@ -499,6 +542,7 @@ fn prepare_context(connection: &Connection, input: ContextInput<'_>) -> Result<P
     };
     let (Some(run), Some(checkpoint), Some((sha, _))) = (run, checkpoint, report) else {
         return Ok(PreparedContext {
+            control: control.clone(),
             base: out,
             selected,
             generation: report_generation,
@@ -507,11 +551,13 @@ fn prepare_context(connection: &Connection, input: ContextInput<'_>) -> Result<P
     if run.outcome.is_none() || run.finished_at.is_none() {
         out.context.reason = "live_crawl_target_analysis_unavailable".into();
         return Ok(PreparedContext {
+            control: control.clone(),
             base: out,
             selected,
             generation: report_generation,
         });
     }
+    control.checkpoint()?;
     let completed = count(connection, "SELECT count(*) FROM pages")?;
     let pending = count(connection, "SELECT count(*) FROM frontier WHERE done=0")?;
     let discovery_pending = count(
@@ -532,6 +578,7 @@ fn prepare_context(connection: &Connection, input: ContextInput<'_>) -> Result<P
     {
         out.context.reason = "saved_checkpoint_context_mismatch".into();
         return Ok(PreparedContext {
+            control: control.clone(),
             base: out,
             selected,
             generation: report_generation,
@@ -540,6 +587,7 @@ fn prepare_context(connection: &Connection, input: ContextInput<'_>) -> Result<P
     if checkpoint.sitemap_source_measurements.as_ref() != source.summary() {
         out.context.reason = "saved_source_measurement_context_mismatch".into();
         return Ok(PreparedContext {
+            control: control.clone(),
             base: out,
             selected,
             generation: report_generation,
@@ -561,9 +609,12 @@ fn prepare_context(connection: &Connection, input: ContextInput<'_>) -> Result<P
             && summary_pending == Some(i64::try_from(pending)?),
         "Sitemap analysis saved report envelope differs"
     );
-    source.verify_report(connection)?;
+    control.checkpoint()?;
+    source.verify_report_with_control(connection, control)?;
+    control.checkpoint()?;
     // A controlled writer has unique requested page identities. Refuse malformed
     // typed identity/anchor fields instead of silently dropping an unjoinable row.
+    control.checkpoint()?;
     let (distinct,invalid,links): (i64,i64,i64) = connection.query_row(
         "SELECT count(DISTINCT json_extract(p.value,'$.url')),coalesce(sum(CASE WHEN json_type(p.value,'$.url')='text' AND json_type(p.value,'$.links')='array' THEN 0 ELSE 1 END),0),coalesce(sum(json_array_length(p.value,'$.links')),0) FROM metadata m,json_each(m.value,'$.pages') p WHERE m.key='report'",[],
         |r|Ok((r.get(0)?,r.get(1)?,r.get(2)?)))?;
@@ -596,6 +647,7 @@ fn prepare_context(connection: &Connection, input: ContextInput<'_>) -> Result<P
     .into();
     report_generation = Some(run.generation);
     Ok(PreparedContext {
+        control: control.clone(),
         base: out,
         selected,
         generation: report_generation,
@@ -610,6 +662,20 @@ fn project_rows(
     membership: MembershipBasis<'_>,
     request: &SitemapMembershipAnalysisRequest,
 ) -> Result<SitemapMembershipAnalysis> {
+    let _binding = prepared.control.bind_connection(connection)?;
+    prepared
+        .control
+        .run(|| project_rows_inner(connection, prepared, coverage, visible, membership, request))
+}
+fn project_rows_inner(
+    connection: &Connection,
+    prepared: &PreparedContext,
+    coverage: &crate::SitemapCoverage,
+    visible: Vec<&crate::StoredSitemapLocation>,
+    membership: MembershipBasis<'_>,
+    request: &SitemapMembershipAnalysisRequest,
+) -> Result<SitemapMembershipAnalysis> {
+    let control = &prepared.control;
     let mut out = prepared.base.clone();
     if !out.context.available {
         return Ok(out);
@@ -625,6 +691,7 @@ fn project_rows(
     }
     let mut wanted = BTreeSet::new();
     for loc in &visible {
+        control.checkpoint()?;
         if loc.observed.validation_error.is_none()
             && loc.observed.loc_ordinal.is_some()
             && let Some(url) = &loc.observed.normalized_fetch_url
@@ -635,16 +702,19 @@ fn project_rows(
             wanted.insert(url.clone());
         }
     }
-    let mut page_window = read_page_window(connection, request, selected, generation)?;
+    let mut page_window = read_page_window(connection, request, selected, generation, control)?;
     out.saved_pages_have_more = page_window.len() > request.page_limit;
     page_window.truncate(request.page_limit);
     for page in &page_window {
+        control.checkpoint()?;
         wanted.insert(page.requested_url.clone());
     }
-    let mut observations = read_target_pages(connection, &wanted, selected, generation)?;
-    let inlinks = read_inlinks(connection, &wanted)?;
+    let mut observations =
+        read_target_pages_with_control(connection, &wanted, selected, generation, control)?;
+    let inlinks = read_inlinks(connection, &wanted, control)?;
     let mut pending_urls = BTreeSet::new();
     for url in &wanted {
+        control.checkpoint()?;
         let done: Option<i64> = connection
             .query_row("SELECT done FROM frontier WHERE url=?1", [url], |r| {
                 r.get(0)
@@ -662,6 +732,7 @@ fn project_rows(
         visible
             .into_iter()
             .map(|loc| {
+                control.checkpoint()?;
                 let original = loc.observed.normalized_fetch_url.clone().filter(|_| {
                     loc.observed.validation_error.is_none() && loc.observed.loc_ordinal.is_some()
                 });
@@ -681,7 +752,7 @@ fn project_rows(
                     .admitted_fetch_url
                     .as_ref()
                     .filter(|u| Some(*u) != original.as_ref());
-                SitemapLocationFinding {
+                Ok(SitemapLocationFinding {
                     sequence: loc.sequence,
                     observation_id: loc.observation_id.clone(),
                     occurrence_id: loc.occurrence_id.clone(),
@@ -695,17 +766,18 @@ fn project_rows(
                     admitted_alias_pending: alias.is_some_and(|u| pending_urls.contains(u)),
                     observed_original_inlinks: original
                         .map(|u| inlinks.get(&u).cloned().unwrap_or_default()),
-                }
+                })
             })
-            .collect(),
+            .collect::<Result<Vec<_>>>()?,
     );
-    let mut members = membership.counts(connection, &page_window)?;
+    let mut members = membership.counts(connection, &page_window, control)?;
     out.last_saved_page_url = page_window.last().map(|v| v.requested_url.clone());
     out.last_saved_page_ordinal = page_window.last().map(|v| v.report_page_ordinal);
     out.saved_pages = Some(
         page_window
             .into_iter()
             .map(|page| {
+                control.checkpoint()?;
                 let counts = members.remove(&page.requested_url).unwrap_or_default();
                 let observed_inlinks = inlinks
                     .get(&page.requested_url)
@@ -724,7 +796,7 @@ fn project_rows(
                 let original_source_document_count = counts.document_count;
                 let original_source_observation_count = counts.observation_count;
                 let original_source_document_samples = counts.samples;
-                SitemapSavedPageFinding {
+                Ok(SitemapSavedPageFinding {
                     listed_without_observed_nonself_inlinks: counts.occurrences > 0
                         && observed_inlinks.nonself_anchor_occurrences == 0,
                     observation: page,
@@ -737,9 +809,9 @@ fn project_rows(
                     original_source_document_samples,
                     admitted_alias_occurrences: counts.aliases,
                     observed_inlinks,
-                }
+                })
             })
-            .collect(),
+            .collect::<Result<Vec<_>>>()?,
     );
     Ok(out)
 }
@@ -908,7 +980,9 @@ fn read_page_window(
     request: &SitemapMembershipAnalysisRequest,
     selected: bool,
     generation: u64,
+    control: &SitemapReadControl,
 ) -> Result<Vec<SitemapTargetObservation>> {
+    control.checkpoint()?;
     if request.page_limit == 0 {
         return Ok(vec![]);
     }
@@ -923,16 +997,34 @@ fn read_page_window(
     ])?;
     let mut pages = vec![];
     while let Some(row) = rows.next()? {
+        control.checkpoint()?;
         pages.push(page_from_row(row, selected, generation)?);
     }
     Ok(pages)
 }
+#[cfg(test)]
 fn read_target_pages(
     connection: &Connection,
     wanted: &BTreeSet<String>,
     selected: bool,
     generation: u64,
 ) -> Result<BTreeMap<String, SitemapTargetObservation>> {
+    read_target_pages_with_control(
+        connection,
+        wanted,
+        selected,
+        generation,
+        &SitemapReadControl::default(),
+    )
+}
+fn read_target_pages_with_control(
+    connection: &Connection,
+    wanted: &BTreeSet<String>,
+    selected: bool,
+    generation: u64,
+    control: &SitemapReadControl,
+) -> Result<BTreeMap<String, SitemapTargetObservation>> {
+    control.checkpoint()?;
     let mut pages = BTreeMap::new();
     if wanted.is_empty() {
         return Ok(pages);
@@ -945,6 +1037,7 @@ fn read_target_pages(
     let mut statement = connection.prepare(&sql)?;
     let mut rows = statement.query([keys])?;
     while let Some(row) = rows.next()? {
+        control.checkpoint()?;
         let page = page_from_row(row, selected, generation)?;
         pages.insert(page.requested_url.clone(), page);
     }
@@ -953,7 +1046,9 @@ fn read_target_pages(
 fn read_inlinks(
     connection: &Connection,
     wanted: &BTreeSet<String>,
+    control: &SitemapReadControl,
 ) -> Result<BTreeMap<String, SitemapObservedInlinks>> {
+    control.checkpoint()?;
     let mut out = BTreeMap::new();
     if wanted.is_empty() {
         return Ok(out);
@@ -966,6 +1061,7 @@ fn read_inlinks(
     let mut statement = connection.prepare(&sql)?;
     let mut rows = statement.query([&keys])?;
     while let Some(row) = rows.next()? {
+        control.checkpoint()?;
         let url: String = row.get(0)?;
         let mut value = SitemapObservedInlinks {
             anchor_occurrences: u64::try_from(row.get::<_, i64>(1)?)?,
@@ -983,6 +1079,7 @@ fn read_inlinks(
     let mut statement = connection.prepare(&sql)?;
     let mut rows = statement.query(params![keys, i64::try_from(SAMPLE_LIMIT)?])?;
     while let Some(row) = rows.next()? {
+        control.checkpoint()?;
         let sample = SitemapInlinkSample {
             source_requested_url: row.get(0)?,
             target_requested_url: row.get(1)?,

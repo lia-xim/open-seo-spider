@@ -30,6 +30,7 @@ mod comparison;
 mod content;
 mod policy;
 pub(crate) mod resources;
+mod sitemap_csv_stream;
 mod sitemap_generation;
 mod sitemaps;
 
@@ -42,6 +43,7 @@ struct AppState {
     mcp: crate::mcp::Bridge,
     jobs: Arc<RwLock<HashMap<Uuid, Arc<RwLock<Job>>>>>,
     data_dir: Arc<PathBuf>,
+    exports: sitemap_csv_stream::ExportRegistry,
 }
 struct Job {
     id: Uuid,
@@ -129,8 +131,11 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
         mcp: crate::mcp::Bridge::new(&format!("http://{mcp_host}:{}", address.port()))?,
         jobs: Arc::new(RwLock::new(HashMap::new())),
         data_dir: Arc::new(data_dir),
+        exports: Default::default(),
     };
     load_reports(&state).await?;
+    let exports = state.exports.clone();
+    let shutdown_exports = exports.clone();
     let router = Router::new()
         .route(
             "/",
@@ -302,14 +307,19 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
         .layer(middleware::from_fn(local_origin))
         .with_state(state);
     println!("Open SEO Spider: http://{}", listener.local_addr()?);
-    axum::serve(listener, router)
-        .with_graceful_shutdown(async {
+    let serving = axum::serve(listener, router)
+        .with_graceful_shutdown(async move {
             let _ = tokio::signal::ctrl_c().await;
+            if let Err(error) = shutdown_exports.shutdown_and_drain().await {
+                tracing::error!(%error, "CSV export shutdown drain failed");
+            }
         })
-        .await?;
+        .await;
+    let drain = exports.shutdown_and_drain().await;
+    serving?;
+    drain?;
     Ok(())
 }
-
 async fn mcp_http(
     State(state): State<AppState>,
     headers: axum::http::HeaderMap,

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "name": "s4-csv-compat-wrappers-v1",
+  "immutable": true,
+  "recorded_at": "2026-10-14T22:20:49.544Z",
+  "input_manifest_sha256": "aaceebb8167634bf0c748e92340948ed8b84ca3c1540e874b8c951f04782bebb",
+  "entries": [
+    {
+      "path": "crates/core/src/sitemap_coverage/verified_read.rs",
+      "payload": "product/crates/core/src/sitemap_coverage/verified_read.rs",
+      "before_payload": "s4-csv-control-core-v1/product/crates/core/src/sitemap_coverage/verified_read.rs",
+      "before_sha256": "95e776c6668716815f8a4ef3f4b2255b9083ea473b42ce045921ff66f379cf38",
+      "sha256": "38a4c60cc6362bcd21c9fbe15a86ddebdaf1aded6a9ab650b7ef11cf8ceadc4f",
+      "bytes": 28207
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis/window.rs",
+      "payload": "product/crates/core/src/sitemap_membership_analysis/window.rs",
+      "before_payload": "s4-csv-control-core-v1/product/crates/core/src/sitemap_membership_analysis/window.rs",
+      "before_sha256": "fe461667cdc78b5f5eea01e96f1f6b69b81c7e8ba5303d2918e102951993f7ac",
+      "sha256": "ba143d5b535b71ee3572ccbf2c57dbee3afa09f327d98777d5da8e29f5f374b5",
+      "bytes": 14017
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis.rs",
+      "payload": "product/crates/core/src/sitemap_membership_analysis.rs",
+      "before_payload": "s4-csv-control-core-v1/product/crates/core/src/sitemap_membership_analysis.rs",
+      "before_sha256": "2eb60bcee8fb1b3957c9ad52eea1a5c6d1c7d6163e71ed5b4553108079c44f28",
+      "sha256": "e3e407fefc99c0402424d45affceb69925bdc544551d0d166e02efd352811b18",
+      "bytes": 44882
+    }
+  ],
+  "scope": "After common production rich read switched to controlled entrypoints, retain old private default wrappers only for their existing actual test callers; move one parent reexport behind same cfg(test). verify_raw/verify_source remain production defaults. No function body, hashes, serde, proof or row behavior changed.",
+  "evidence": "Actual rg symbol-reachability scan independently confirmed by s3_decode_review; anticipated dead_code/unused-import under -D warnings, not an observed compiler diagnostic.",
+  "combined_format_exit": 0,
+  "compiler": "NOT_RUN",
+  "tests": "NOT_RUN",
+  "runtime": "NOT_PROVEN"
+}

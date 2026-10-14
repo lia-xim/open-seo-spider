@@ -1,14 +1,12 @@
 //! Same-TX rich sitemap window. Raw/source tails and analysis context are
 //! verified before a continuation is selected. No fabricated partial catalog.
+use super::sitemap_read_context::{SitemapVerifiedReadHeader, with_prepared_sitemap_read};
 use super::*;
-use crate::sitemap_coverage::verified_read::{CoverageReadContext, project_read};
 use crate::sitemap_ledger::verified_read::{
-    RawWindowByteBudget, SitemapLedgerFilter, SitemapLedgerRowKind, verify_raw,
+    RawWindowByteBudget, SitemapLedgerFilter, SitemapLedgerRowKind,
 };
-use crate::sitemap_membership_analysis::{
-    AnalysisReadInput, VerifiedAnalysisRead, prepare_window_analysis, project_prepared_window,
-};
-use crate::sitemap_source_store::verified_read::verify_source;
+use crate::sitemap_membership_analysis::project_prepared_window;
+use crate::sitemap_read_control::SitemapReadControl;
 use anyhow::ensure;
 use serde::Serialize;
 use std::io::{self, Write};
@@ -59,7 +57,7 @@ pub struct SitemapReadWindowExpectedContext {
     pub inherited_basis: Option<crate::SitemapInheritedBasis>,
 }
 impl SitemapReadWindowExpectedContext {
-    fn validate(&self) -> anyhow::Result<()> {
+    pub(super) fn validate(&self) -> anyhow::Result<()> {
         ensure!(
             self.generation > 0,
             "Expected sitemap generation must be positive"
@@ -80,7 +78,7 @@ impl SitemapReadWindowExpectedContext {
         }
         Ok(())
     }
-    fn matches(&self, read: &SitemapReadWindow) -> bool {
+    pub(super) fn matches_header(&self, read: &SitemapVerifiedReadHeader) -> bool {
         read.generation == Some(self.generation)
             && read.crawl_config_sha256.as_deref() == Some(self.crawl_config_sha256.as_str())
             && read.catalog_state_sha256.as_deref() == Some(self.catalog_state_sha256.as_str())
@@ -131,35 +129,6 @@ pub struct SitemapReadWindow {
     pub materializing_selected_compatibility: bool,
 }
 
-fn saved_config_bytes(connection: &Connection) -> anyhow::Result<Option<(Vec<u8>, String)>> {
-    let length: Option<i64> = connection
-        .query_row(
-            "SELECT length(CAST(value AS BLOB)) FROM metadata WHERE key='config'",
-            [],
-            |row| row.get(0),
-        )
-        .optional()?;
-    let Some(length) = length else {
-        return Ok(None);
-    };
-    ensure!(
-        (1..=67_108_864).contains(&length),
-        "Saved rich sitemap config exceeds bounded input"
-    );
-    let bytes: Vec<u8> = connection.query_row(
-        "SELECT CAST(value AS BLOB) FROM metadata WHERE key='config'",
-        [],
-        |row| row.get(0),
-    )?;
-    ensure!(
-        i64::try_from(bytes.len())? == length,
-        "Saved rich sitemap config length differs"
-    );
-    let config: CrawlConfig = serde_json::from_slice(&bytes)?;
-    verify_sitemap_config_context(connection, &config)?;
-    let sha = crate::sitemap_ledger::digest(&bytes);
-    Ok(Some((bytes, sha)))
-}
 fn raw_filter(request: &crate::SitemapMembershipAnalysisRequest) -> SitemapLedgerFilter {
     use crate::SitemapAnalysisRowKind as K;
     SitemapLedgerFilter {
@@ -191,148 +160,79 @@ impl Write for WindowSize {
 }
 
 impl CrawlStore {
-    /// Complete-tail verification, coverage and terminal-analysis context use
-    /// one actual read transaction. Expected context is checked before raw-page
-    /// position; typed errors preserve stale409 / invalid400 / budget413 in App.
-    /// Ordinary raw/source/report payloads are streamed. Selected-parent paths
-    /// retain explicit materializing compatibility until independently replaced.
+    /// Complete verification and Expected comparison precede continuation
+    /// selection. Shared preparation is also used by callback-bound exports.
     pub fn sitemap_read_window_with_membership_analysis(
         &self,
         request: &crate::SitemapMembershipAnalysisRequest,
         expected: Option<&SitemapReadWindowExpectedContext>,
     ) -> anyhow::Result<SitemapReadWindow> {
         request.validate()?;
-        if let Some(expected) = expected {
-            expected.validate()?;
-        }
-        let mut connection = self
-            .connection
-            .lock()
-            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
-        let transaction = connection.transaction()?;
-        super::sitemap_raw_read::preflight_context_metadata(&transaction)?;
-        let saved_config = saved_config_bytes(&transaction)?;
-        let crawl_config_sha256 = saved_config.as_ref().map(|(_, sha)| sha.clone());
-        let selected = matches!(load_run_plan(&transaction)?, RunPlan::SelectedRecrawl(_));
-        if selected {
-            // Keep both exact parent presence/plan/retained-row guards. Neither
-            // a low-level None token nor a parent hash substitutes for these.
-            load_sitemap_catalog_verified(&transaction)?;
-            load_sitemap_source_measurements_verified(&transaction)?;
-        }
-        let raw = verify_raw(&transaction)?;
-        let source = verify_source(&transaction, raw.as_ref())?;
-        let generation = metadata::<CrawlRunState>(&transaction, "run_state")?
-            .map(|run| run.generation)
-            .filter(|generation| *generation > 0);
-        let discovery_initialized =
-            metadata_text(&transaction, "discovery_initialized")?.as_deref() == Some("true");
-        let coverage = project_read(
-            &transaction,
-            raw.as_ref(),
-            CoverageReadContext {
-                saved_config_bytes: saved_config.as_ref().map(|(bytes, _)| bytes.as_slice()),
-                saved_config_sha256: crawl_config_sha256.as_deref(),
-                generation,
-                discovery_initialized,
-            },
-        )?;
-        let source_context = match source.as_ref() {
-            Some(source) => source.context().to_owned(),
-            None => crate::sitemap_source_store::snapshot_context(None)?,
-        };
-        let input = AnalysisReadInput {
-            raw: raw.as_ref(),
-            source: source.as_ref(),
-            generation,
-            crawl_config_sha256: crawl_config_sha256.as_deref(),
-            coverage: &coverage.coverage,
-        };
-        let analysis: VerifiedAnalysisRead<'_, '_> = prepare_window_analysis(&transaction, &input)?;
-        let state = raw
-            .as_ref()
-            .map(|raw| {
-                sitemap_read_state_sha256(&SitemapReadState {
-                    summary: raw.summary(),
-                    inherited: raw.inherited(),
-                    coverage_inventory_sha256: coverage.inventory_sha256.as_deref(),
-                    coverage: &coverage.coverage,
-                    source_measurement_context: &source_context,
-                    analysis_context: Some(analysis.context()),
-                })
-            })
-            .transpose()?;
-        let mut read = SitemapReadWindow {
-            crawl_config_sha256: crawl_config_sha256.clone(),
-            generation,
-            ledger: raw.as_ref().map(|raw| raw.summary().clone()),
-            inherited: raw.as_ref().and_then(|raw| raw.inherited().cloned()),
-            rows: raw.as_ref().map(|_| Vec::new()),
-            next_after_sequence: None,
-            has_more: false,
-            coverage: coverage.coverage.clone(),
-            coverage_inventory_sha256: coverage.inventory_sha256.clone(),
-            sitemap_source_measurement_summary: source
-                .as_ref()
-                .map(|source| source.summary().clone()),
-            sitemap_source_measurement_context: source_context,
-            membership_analysis: None,
-            reader_engine: SITEMAP_READ_WINDOW_ENGINE.into(),
-            catalog_state_sha256: state,
-            materializing_selected_compatibility: selected
-                || coverage.materializing_selected_compatibility
-                || source
-                    .as_ref()
-                    .is_some_and(|source| source.materializing_selected_compatibility()),
-        };
-        if expected.is_some_and(|expected| !expected.matches(&read)) {
-            return Err(SitemapReadWindowError::StaleContext.into());
-        }
-        let filter = raw_filter(request);
-        if let Some(after) = request.after_sequence {
-            let matching = match raw.as_ref() {
-                Some(raw) => raw.continuation_matches(&filter, after)?,
-                None => false,
+        with_prepared_sitemap_read(self, expected, &SitemapReadControl::default(), |prepared| {
+            if expected.is_some_and(|expected| !expected.matches_header(&prepared.header)) {
+                return Err(SitemapReadWindowError::StaleContext.into());
+            }
+            let header = prepared.header;
+            let rows = header.ledger.as_ref().map(|_| Vec::new());
+            let mut read = SitemapReadWindow {
+                crawl_config_sha256: header.crawl_config_sha256,
+                generation: header.generation,
+                ledger: header.ledger,
+                inherited: header.inherited,
+                rows,
+                next_after_sequence: None,
+                has_more: false,
+                coverage: header.coverage,
+                coverage_inventory_sha256: header.coverage_inventory_sha256,
+                sitemap_source_measurement_summary: header.sitemap_source_measurement_summary,
+                sitemap_source_measurement_context: header.sitemap_source_measurement_context,
+                membership_analysis: None,
+                reader_engine: header.reader_engine,
+                catalog_state_sha256: header.catalog_state_sha256,
+                materializing_selected_compatibility: header.materializing_selected_compatibility,
             };
-            if !matching {
-                return Err(SitemapReadWindowError::InvalidContinuation.into());
+            let filter = raw_filter(request);
+            if let Some(after) = request.after_sequence {
+                let matching = match prepared.raw {
+                    Some(raw) => raw.continuation_matches(&filter, after)?,
+                    None => false,
+                };
+                if !matching {
+                    return Err(SitemapReadWindowError::InvalidContinuation.into());
+                }
             }
-        }
-        if let Some(raw) = raw.as_ref()
-            && request.row_limit > 0
-        {
-            let page = raw
-                .window(&filter, request.after_sequence, request.row_limit)
-                .map_err(|error| {
-                    if error.is::<RawWindowByteBudget>() {
-                        SitemapReadWindowError::ResponseByteBudget.into()
-                    } else {
-                        error
-                    }
-                })?;
-            read.rows = Some(page.rows);
-            read.next_after_sequence = page.next_after_sequence;
-            read.has_more = page.has_more;
-        }
-        read.membership_analysis = Some(project_prepared_window(
-            &analysis,
-            raw.as_ref(),
-            &coverage.coverage,
-            read.rows.as_deref().unwrap_or(&[]),
-            request,
-        )?);
-        serde_json::to_writer(&mut WindowSize(0), &read).map_err(|error| -> anyhow::Error {
-            if error.is_io() {
-                SitemapReadWindowError::ResponseByteBudget.into()
-            } else {
-                error.into()
+            if let Some(raw) = prepared.raw
+                && request.row_limit > 0
+            {
+                let page = raw
+                    .window(&filter, request.after_sequence, request.row_limit)
+                    .map_err(|error| {
+                        if error.is::<RawWindowByteBudget>() {
+                            SitemapReadWindowError::ResponseByteBudget.into()
+                        } else {
+                            error
+                        }
+                    })?;
+                read.rows = Some(page.rows);
+                read.next_after_sequence = page.next_after_sequence;
+                read.has_more = page.has_more;
             }
-        })?;
-        drop(analysis);
-        drop(source);
-        drop(raw);
-        transaction.commit()?;
-        Ok(read)
+            read.membership_analysis = Some(project_prepared_window(
+                prepared.analysis,
+                prepared.raw,
+                prepared.coverage,
+                read.rows.as_deref().unwrap_or(&[]),
+                request,
+            )?);
+            serde_json::to_writer(&mut WindowSize(0), &read).map_err(|error| -> anyhow::Error {
+                if error.is_io() {
+                    SitemapReadWindowError::ResponseByteBudget.into()
+                } else {
+                    error.into()
+                }
+            })?;
+            Ok(read)
+        })
     }
 }
 

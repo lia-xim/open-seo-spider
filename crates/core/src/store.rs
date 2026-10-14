@@ -15,12 +15,18 @@ pub use sitemap_raw_read::{
     SITEMAP_RAW_READ_ENGINE, SitemapRawReadContext, SitemapRawReadRequest, SitemapRawReadWindow,
     SitemapRawRowKind,
 };
+#[path = "store/sitemap_read_context.rs"]
+mod sitemap_read_context;
 #[path = "store/sitemap_read_window.rs"]
 mod sitemap_read_window;
+pub use sitemap_read_context::SitemapVerifiedReadHeader;
+#[path = "store/sitemap_stored_rows.rs"]
+mod sitemap_stored_rows;
 pub use sitemap_read_window::{
     SITEMAP_READ_WINDOW_ENGINE, SitemapReadState, SitemapReadWindow, SitemapReadWindowError,
     SitemapReadWindowExpectedContext, sitemap_read_state_sha256,
 };
+pub use sitemap_stored_rows::{SitemapStoredRowsFilter, SitemapVerifiedStoredRows};
 
 /// Roots are original declarations; source/task aliases must already be finalized.
 /// config_sha256 binds the actual saved configuration bytes at FIRST initialization.

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "name": "s4-csv-control-independent-review-v1",
+  "created_utc": "2026-10-14T22:17:44.4509993Z",
+  "result": "NO_CONFIRMED_FINDINGS_IN_BOUNDED_CONTROL_SCOPE",
+  "input_manifest_sha256": "aaceebb8167634bf0c748e92340948ed8b84ca3c1540e874b8c951f04782bebb",
+  "payloads_verified": 8,
+  "authored_tests_read": 10,
+  "tests_executed": 0,
+  "confirmed_findings": [],
+  "separate_app_finding": {
+    "priority": 2,
+    "source": "frozen App supervise last_sent writer-only",
+    "effect": "Active postjoin prefix consumption can falsely expire idle deadline",
+    "root_fix": "Update same Progress.last_sent on successful Body prefix pop; absolute deadline unchanged",
+    "status": "Root postfix/test-owner control pending"
+  },
+  "gates": {
+    "compiler": "NOT_RUN",
+    "type_pass": "NOT_PROVEN",
+    "tests": "NOT_RUN",
+    "sqlite": "NOT_RUN",
+    "http": "NOT_RUN",
+    "native": "NOT_RUN",
+    "browser": "NOT_RUN",
+    "full_sixty_four_mib_route": "NOT_PROVEN"
+  },
+  "artifacts": [
+    {
+      "path": "REVIEW.md",
+      "sha256": "26385a844b7a908b06793ae34140edd1f17b5a3309d25a1e6d18723443a23a07"
+    },
+    {
+      "path": "source-pins.json",
+      "sha256": "0ee06e9ddcf9fc30877e70be3f76bade4349fb1c4611a25c5085422af2ac922e"
+    }
+  ],
+  "scope": "Only own new E review output; no product/Root/Git/runtime mutation"
+}

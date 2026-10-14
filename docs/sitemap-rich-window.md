@@ -1,5 +1,9 @@
 # Kompakter Sitemap-Kontext und Inventarzugriff
 
+Dieser Bericht beschreibt den vorherigen Rich-Kandidaten `d105fb8`.
+Der darauf aufbauende [CSV-Streaming-Kandidat](sitemap-csv-streaming.md)
+ersetzt dessen gepufferten Export im Quellcode; seine Laufzeitabnahme ist offen.
+
 Status: **Quellcodekandidat, noch nicht kompiliert oder ausgeführt.** Der Zweig
 `codex/sitemap-rich-read-20261014` baut auf `5091eb9` auf. Die installierte
 Anwendung erhält dadurch noch keine Änderung. Die Abnahme von S4 und die

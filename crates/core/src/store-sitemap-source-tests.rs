@@ -1304,3 +1304,6 @@ fn actual_rich_window_selected_imported_legacy_none_is_unknown_with_exact_parent
             .is_err()
     );
 }
+
+#[path = "store/sitemap_stored_source_tests.rs"]
+mod stored_source_session_tests;

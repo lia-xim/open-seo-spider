@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "name": "s4-csv-streaming-tests-v1",
+  "created_utc": "2026-10-14T22:21:15.1259194Z",
+  "status": "IMMUTABLE_AUTHORED_NOT_COMPILED_NOT_RUN",
+  "source_root": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-csv-streaming-integration-v1",
+  "basis_head_declared_by_root": "d105fb8",
+  "payloads": [
+    {
+      "path": "crates/app/src/server/sitemaps_streaming_tests.rs",
+      "new_file": true,
+      "before_sha256": null,
+      "after_sha256": "bf5f4d605dc67fbddb4911bcc77b4c64b56e72065aac9bebef281f08d43acb86",
+      "bytes": 43260
+    },
+    {
+      "path": "crates/app/src/server/sitemaps_streaming_fixture.rs",
+      "new_file": true,
+      "before_sha256": null,
+      "after_sha256": "84f3b285b71339f04a5af09773dc33223400f4d1ea10ad64161abfa63ce1f71b",
+      "bytes": 20612
+    }
+  ],
+  "parent_hook": {
+    "path": "crates/app/src/server/sitemaps_tests.rs",
+    "before_sha256": "9265c0c67b90513d8ad4736d8012e4db0957a735c7dac14d6db8b8bbd376b0d4",
+    "owner": "Root only",
+    "append_lines": [
+      "#[path = \"sitemaps_streaming_tests.rs\"]",
+      "mod streaming_tests;"
+    ]
+  },
+  "dependencies": [
+    {
+      "path": "s4-csv-streaming-app-v1/manifest.json",
+      "sha256": "3dac7530629186a60d9da074f12a765167dc5e470110d4c63469f6d9a90ed99e",
+      "bytes": 3511
+    },
+    {
+      "path": "s4-csv-reviewed-postfix-v1/manifest.json",
+      "sha256": "5f97d60596b1ba05549b81a124ada1f2680341696f4aaf569343a0bfbb744932",
+      "bytes": 4003
+    }
+  ],
+  "planned_design_groups": 14,
+  "authored_named_test_groups": 13,
+  "executed_test_groups": 0,
+  "remaining_physical_gate": "Exact 67108864/67108865 accepted native Store and HTTP pair NOT_AUTHORED / OPEN",
+  "remaining_directed_subgates": [
+    "Selected parentNone/childSome HTTP inverse-presence",
+    "Isolated selected-operation-only context409",
+    "Optional old-engine/alias priority variants"
+  ],
+  "source_runtime_pass": false,
+  "artifacts": [
+    {
+      "path": "HANDOFF.md",
+      "sha256": "a291c09254a99272a7d36f679c1e4afcc2ae0c762f0c7c1dbfa35b15fd347caa",
+      "bytes": 11952
+    },
+    {
+      "path": "authored-test-names.json",
+      "sha256": "83c4c4636b6f8bdf102e05a92f2d11e858dfd2247a478026a8a0ca1c81a8c4a5",
+      "bytes": 966
+    },
+    {
+      "path": "source-pins.json",
+      "sha256": "120d2b70621906b95fe55248d5a032106c014e1fea2aad54961b40d321b55bb4",
+      "bytes": 5526
+    },
+    {
+      "path": "checks.json",
+      "sha256": "45778d078dd838809ff8d81a2dcda2bfec3ec8af827367c47aef86e9c017330a",
+      "bytes": 899
+    }
+  ]
+}

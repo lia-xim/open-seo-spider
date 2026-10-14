@@ -1,6 +1,6 @@
 use super::*;
 use crate::sitemap_membership::{self as membership, CsvQuery, Failure, ReadQuery};
-use axum::{body::Body, extract::rejection::QueryRejection};
+use axum::extract::rejection::QueryRejection;
 use sha2::{Digest, Sha256};
 type SitemapApiResult<T> = Result<T, (StatusCode, Json<Failure>)>;
 fn fail(error: Failure) -> (StatusCode, Json<Failure>) {
@@ -100,44 +100,74 @@ pub(super) async fn export_csv(
 ) -> SitemapApiResult<Response> {
     let Query(query) = query.map_err(|error| fail(Failure::new("invalid_sitemap_query", error)))?;
     query.validate().map_err(fail)?;
-    // CSV remains the existing complete snapshot and buffered transport. Its
-    // shared rich state profile accepts fresh Inventory export tokens exactly.
-    let (generation, config, read) = read_context(
-        &state,
-        id,
-        || Ok(()),
-        |store, ()| store.sitemap_read_snapshot_with_membership_analysis(&Default::default()),
-    )
-    .await?;
-    let (bytes, snapshot) =
-        tokio::task::spawn_blocking(move || membership::csv(id, generation, &config, read, query))
-            .await
-            .map_err(|error| fail(Failure::new("sitemap_read_failure", error)))?
-            .map_err(fail)?;
-    Response::builder()
+    let job = get_job(&state, id).await.map_err(|(status, Json(error))| {
+        (status, Json(Failure::new("job_not_found", error.error)))
+    })?;
+    let guard = job.read().await;
+    // Missing-job priority is unchanged. UUID/filter/role precede Store I/O.
+    query.expected_context(id).map_err(fail)?;
+    let generation = guard.generation;
+    let config = format!(
+        "{:x}",
+        Sha256::digest(
+            serde_json::to_vec(&guard.config)
+                .map_err(|error| fail(Failure::new("sitemap_read_failure", error)))?
+        )
+    );
+    let path = state.data_dir.join(format!("{id}.sqlite"));
+    if !tokio::fs::try_exists(&path)
+        .await
+        .map_err(|error| fail(Failure::new("sitemap_read_failure", error)))?
+    {
+        return Err(fail(Failure::new(
+            "sitemap_catalog_unavailable",
+            "Saved SQLite sitemap catalog unavailable",
+        )));
+    }
+    let mut export = state
+        .exports
+        .start(path, id, generation, config, query)
+        .map_err(fail)?;
+    // This awaits the complete actual count/hash pass, not the streaming worker.
+    // PendingExport's body guard cancels/joins via its registered coordinator if
+    // the handler is dropped here. SQL is pinned while the App job is stable.
+    let ready = export.ready().await.map_err(fail)?;
+    drop(guard);
+    let body = export.into_body().map_err(fail)?;
+    let mut builder = Response::builder();
+    if state.exports.response_build_fault() {
+        // The actual builder rejects this header and drops the actual streaming
+        // body, exercising cancel/receiver-close rather than fabricating a 500.
+        builder = builder.header("x-csv-test-invalid", "\n");
+    }
+    builder
         .header(header::CONTENT_TYPE, "text/csv; charset=utf-8")
         .header(
             header::CONTENT_DISPOSITION,
             format!("attachment; filename=\"{id}-sitemaps.csv\""),
         )
+        .header(header::CONTENT_LENGTH, ready.length.to_string())
+        .header("x-sitemap-csv-sha256", ready.sha256)
         .header(
             "x-sitemap-catalog-revision",
-            snapshot.catalog_revision.to_string(),
+            ready.snapshot.catalog_revision.to_string(),
         )
         .header(
             "x-sitemap-catalog-state-sha256",
-            snapshot.catalog_state_sha256,
+            ready.snapshot.catalog_state_sha256,
         )
         .header(
             "x-sitemap-catalog-rolling-sha256",
-            snapshot.catalog_rolling_sha256,
+            ready.snapshot.catalog_rolling_sha256,
         )
-        .header("x-crawl-generation", snapshot.crawl_generation.to_string())
-        .header("x-crawl-config-sha256", snapshot.crawl_config_sha256)
-        .body(Body::from(bytes))
+        .header(
+            "x-crawl-generation",
+            ready.snapshot.crawl_generation.to_string(),
+        )
+        .header("x-crawl-config-sha256", ready.snapshot.crawl_config_sha256)
+        .body(body)
         .map_err(|error| fail(Failure::new("sitemap_read_failure", error)))
 }
-
 #[cfg(test)]
 #[path = "sitemaps_tests.rs"]
 mod tests;

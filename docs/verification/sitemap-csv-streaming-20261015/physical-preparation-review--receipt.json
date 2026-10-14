@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "name": "s4-csv-physical-preparation-review-v1",
+  "created_utc": "2026-10-14T22:37:00.7528214Z",
+  "reviewer": "/root/s3_decode_review",
+  "status": "NO_CONFIRMED_FINDINGS_IN_BOUNDED_PREPARATION_SCOPE",
+  "input_manifest_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s4-csv-physical-preparation-v1\\manifest.json",
+  "input_manifest_sha256": "2e23a24a7f056e53c75881ec03ffcb308dd7d4353f1d66a48991096343d5dca1",
+  "harness_sha256": "ad76f9dbeac76ed9ae85a9d34a6805ac27ef31a5200db2b3931a563558e8f7a2",
+  "current_source_manifest_sha256": "a31936510381cca40901eb547f15090a77c833f617f84f51f67b057fe7a5714e",
+  "confirmed_findings": [],
+  "source_files": 265,
+  "minimum_expected_workspace_tests": 1070,
+  "required_test_names": 288,
+  "native_cases_authored": 5,
+  "native_cases_executed": 0,
+  "new_rust_test_functions": 0,
+  "test_count_delta": 0,
+  "actual_review_checks": {
+    "immutable_manifest_and_payload_hashes": "MATCH",
+    "current_source_manifest_and_selected_contract_hashes": "MATCH",
+    "future_suite_build_schema_read": "COMPLETED",
+    "node_check": {
+      "argv": [
+        "node",
+        "--check",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s4-csv-physical-preparation-v1\\native-physical-csv-v1.mjs"
+      ],
+      "exit_code": 0,
+      "module_evaluated": false
+    },
+    "source_read": "FULL_HARNESS_AND_HANDOFF",
+    "product_source_modified": false,
+    "compute_hold_preserved": true
+  },
+  "not_run": [
+    "Harness/module evaluation",
+    "SQLite or generated fixture",
+    "Native public App/Crawler/HTTP jobs",
+    "Compiler/Cargo/tests/browser",
+    "Physical exact cap and plus-one transport",
+    "Runtime/resource measurements"
+  ],
+  "not_proven": [
+    "Current accepted physical 67108864/67108865 pair",
+    "Actual runtime guard/cleanup behavior",
+    "Private Ready/Join counters or graceful Windows process shutdown",
+    "Hard timing/RSS/platform/vendor/full S4 parity"
+  ],
+  "artifacts": [
+    {
+      "path": "REVIEW.md",
+      "sha256": "b614e8470da2ca83cd5806fa0c9cf0e06d6745996734481859670aabbb427ace"
+    },
+    {
+      "path": "source-pins.json",
+      "sha256": "49e87ad26181ea5d650afcb9588e2fbebe17554f95a97e5356684b1d87cb6767"
+    }
+  ]
+}

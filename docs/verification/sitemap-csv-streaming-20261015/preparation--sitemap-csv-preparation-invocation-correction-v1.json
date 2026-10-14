@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "scope": "Preparation tooling only; no compiler, tests, renderer, native product, SQLite fixture or HTTP execution",
+  "error": "Three intended Node syntax checks placed --check after the script filename, entering each guarded script instead of Node syntax-check mode.",
+  "blocked_before_mutation": [
+    {
+      "script": "publish-sitemap-csv-streaming-docs-v1.cjs",
+      "exit_code": 1,
+      "actual_stop": "Required physicalPin format assertion, before archive/document writes"
+    },
+    {
+      "script": "stage-sitemap-csv-streaming-v1.cjs",
+      "exit_code": 1,
+      "actual_stop": "Read of not-yet-created docs/verification/sitemap-csv-streaming-preparation.json, before git add"
+    },
+    {
+      "script": "update-sitemap-csv-streaming-issue-v1.cjs",
+      "exit_code": 1,
+      "actual_stop": "Required exact commit argument assertion, before gh read/edit or body-file write"
+    }
+  ],
+  "correction": "All three checks repeated as node --check ABSOLUTE_SCRIPT_PATH; each actual exit code 0.",
+  "postcheck": "Actual Git status retains exactly 26 staged owned product paths and three expected unstaged/new documentation paths; no archive/preparation proof or issue update was created by the failed invocations.",
+  "product_runtime_modified": false,
+  "remote_issue_modified": false,
+  "new_test_groups_executed": 0,
+  "heavy_execution": "NOT_RUN_COORDINATED_COMPUTE_HOLD"
+}

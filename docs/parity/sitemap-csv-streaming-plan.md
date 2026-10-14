@@ -1,6 +1,11 @@
 # S4: konkreter CSV-Streaming-Integrationsentwurf
 
-Status: DESIGN_ONLY. Kein Produktcode, keine Implementierung oder Laufzeitverifikation. Alle unten benannten Regressionen sind PLANNED / NOT_AUTHORED / NOT_RUN. Basis sind ausschließlich die in source-pins.json festgehaltenen tatsächlichen Root-Dateien.
+Historischer Entwurf vor der Implementierung. Der aktuelle
+[Quellcodekandidat mit geschriebenen Tests](../sitemap-csv-streaming.md)
+setzt diesen Plan teilweise um. Die folgenden DESIGN_ONLY-/PLANNED-Angaben
+beschreiben den ursprünglichen Entwurfsstand, keine aktuelle Abnahme.
+
+Status des ursprünglichen Entwurfs: DESIGN_ONLY. Damals kein Produktcode, keine Implementierung oder Laufzeitverifikation; alle unten benannten Regressionen waren PLANNED / NOT_AUTHORED / NOT_RUN. Basis waren ausschließlich die in source-pins.json festgehaltenen tatsächlichen Root-Dateien. Der aktuelle Implementierungs- und Testquellstand ist im oben verlinkten CSV-Vertrag getrennt dokumentiert.
 
 ## 1. Aktueller Pfad und erhaltene Verträge
 

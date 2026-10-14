@@ -48,7 +48,9 @@ mod sitemap_source_measurement;
 pub use sitemap_source_measurement::*;
 mod sitemap_source_processing;
 pub use sitemap_source_processing::*;
+mod sitemap_read_control;
 mod sitemap_source_store;
+pub use sitemap_read_control::{SitemapReadControl, SitemapReadControlError};
 pub use sitemap_source_store::{
     MAX_SOURCE_RECORD_BYTES, MAX_SOURCE_STORE_BYTES, SITEMAP_SOURCE_STORE_ENGINE,
     SITEMAP_SOURCE_STORE_HASH_PROFILE, SOURCE_COMMIT_RESERVE_BYTES,
@@ -135,6 +137,7 @@ pub use store::{
     CrawlStore, SITEMAP_RAW_READ_ENGINE, SITEMAP_READ_WINDOW_ENGINE, SitemapRawReadContext,
     SitemapRawReadRequest, SitemapRawReadWindow, SitemapRawRowKind, SitemapReadSnapshot,
     SitemapReadState, SitemapReadWindow, SitemapReadWindowError, SitemapReadWindowExpectedContext,
+    SitemapStoredRowsFilter, SitemapVerifiedReadHeader, SitemapVerifiedStoredRows,
     sitemap_read_state_sha256,
 };
 pub use urls::normalize_url;

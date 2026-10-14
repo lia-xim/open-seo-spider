@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "checks": [
+    {
+      "kind": "old_fixture_body_unchanged_except_exports_default",
+      "path": "crates/app/src/server/comparison_tests.rs",
+      "pass": true
+    },
+    {
+      "kind": "old_fixture_body_unchanged_except_exports_default",
+      "path": "crates/app/src/server/sitemaps_tests.rs",
+      "pass": true
+    },
+    {
+      "kind": "old_fixture_body_unchanged_except_exports_default",
+      "path": "crates/app/src/server/sitemap_generation_tests.rs",
+      "pass": true
+    },
+    {
+      "kind": "exact_formatter_body",
+      "function": "fn csv_record",
+      "pass": true
+    },
+    {
+      "kind": "exact_formatter_body",
+      "function": "fn write_csv_fields",
+      "pass": true
+    },
+    {
+      "kind": "exact_formatter_body",
+      "function": "fn write_csv_header",
+      "pass": true
+    },
+    {
+      "kind": "exact_formatter_body",
+      "function": "fn write_csv_row",
+      "pass": true
+    }
+  ],
+  "rustfmt": {
+    "format_exit_code": 0,
+    "check_exit_code": 0,
+    "skip_children": true,
+    "scope": "Eight owned payloads",
+    "meaning": "Syntax/format only; no typecheck"
+  },
+  "compiler": "NOT_RUN",
+  "tests": "NOT_RUN",
+  "sqlite": "NOT_RUN",
+  "http": "NOT_RUN",
+  "browser": "NOT_RUN",
+  "generators": "NOT_RUN"
+}

@@ -1,13 +1,13 @@
 //! Read-only sitemap projection after full Store validation. Inventory consumes
-//! a bounded rich window; CSV retains the materializing compatibility reader.
+//! a bounded rich window; CSV visits all stored rows in the same verified TX.
 use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
 use open_seo_spider_core::{
     SITEMAP_LASTMOD_ENGINE, SITEMAP_READ_WINDOW_ENGINE, SitemapAnalysisRowKind, SitemapCatalog,
     SitemapCoverage, SitemapInheritedBasis, SitemapLastmodEntryAssessment, SitemapLastmodLimits,
     SitemapLedgerRow, SitemapLedgerSummary, SitemapMembershipAnalysis,
     SitemapMembershipAnalysisRequest, SitemapReadSnapshot, SitemapReadState, SitemapReadWindow,
-    SitemapReadWindowExpectedContext, assess_sitemap_lastmod_entry, project_sitemap_coverage,
-    sitemap_read_state_sha256,
+    SitemapReadWindowExpectedContext, SitemapStoredRowsFilter, SitemapVerifiedReadHeader,
+    assess_sitemap_lastmod_entry, project_sitemap_coverage, sitemap_read_state_sha256,
 };
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -16,7 +16,7 @@ use uuid::Uuid;
 pub const MAX_JSON_BYTES: usize = 8 * 1024 * 1024;
 pub const MAX_CSV_BYTES: usize = 64 * 1024 * 1024;
 pub const MAX_TOKEN_BYTES: usize = 4096;
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub(crate) struct Failure {
     pub code: String,
     pub error: String,
@@ -41,10 +41,18 @@ impl Failure {
             | "sitemap_lastmod_assessment_budget" => 413,
             "sitemap_analysis_input_budget" => 413,
             "job_not_found" => 404,
+            "sitemap_export_timeout" => 504,
+            "sitemap_export_cancelled" => 503,
             _ => 500,
         }
     }
 }
+impl std::fmt::Display for Failure {
+    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        formatter.write_str(&self.error)
+    }
+}
+impl std::error::Error for Failure {}
 type Result<T> = std::result::Result<T, Failure>;
 fn digest(bytes: impl AsRef<[u8]>) -> String {
     format!("{:x}", Sha256::digest(bytes.as_ref()))
@@ -387,6 +395,7 @@ fn decode(value: &str) -> Result<Token> {
     }
     Ok(parsed)
 }
+#[cfg(test)]
 fn bound_catalog(
     job_id: Uuid,
     generation: u64,
@@ -919,7 +928,7 @@ fn write_csv_fields(writer: &mut impl Write, fields: Vec<String>) -> Result<()> 
 }
 // Shared by the current buffered export and the planned verified SQL visitor.
 // Keep the column order and row encoding identical across output sinks.
-fn write_csv_header(writer: &mut impl Write) -> Result<()> {
+pub(crate) fn write_csv_header(writer: &mut impl Write) -> Result<()> {
     write_csv_fields(
         writer,
         [
@@ -938,7 +947,7 @@ fn write_csv_header(writer: &mut impl Write) -> Result<()> {
         .to_vec(),
     )
 }
-fn write_csv_row(writer: &mut impl Write, row: &SitemapLedgerRow) -> Result<()> {
+pub(crate) fn write_csv_row(writer: &mut impl Write, row: &SitemapLedgerRow) -> Result<()> {
     let (kind, source, id, ordinal, raw, member, alias, decision) = match row {
         SitemapLedgerRow::Root(r) => (
             "root",
@@ -1015,6 +1024,7 @@ fn write_csv_row(writer: &mut impl Write, row: &SitemapLedgerRow) -> Result<()> 
             .collect(),
     )
 }
+#[cfg(test)]
 pub(crate) fn csv(
     job_id: Uuid,
     generation: u64,
@@ -1057,3 +1067,109 @@ pub(crate) fn csv(
 #[cfg(test)]
 #[path = "sitemap_membership_tests.rs"]
 mod tests;
+
+impl CsvQuery {
+    pub(crate) fn stored_filter(&self) -> SitemapStoredRowsFilter {
+        SitemapStoredRowsFilter {
+            kind: match self.kind {
+                RowKind::All => SitemapAnalysisRowKind::All,
+                RowKind::Root => SitemapAnalysisRowKind::Root,
+                RowKind::Document => SitemapAnalysisRowKind::Document,
+                RowKind::Entry => SitemapAnalysisRowKind::Entry,
+                RowKind::Location => SitemapAnalysisRowKind::Location,
+            },
+            source_observation_id: self.source_observation_id.clone(),
+            membership_url: self.membership_url.clone(),
+        }
+    }
+    fn csv_filter(&self) -> Filter {
+        Filter {
+            kind: self.kind,
+            source_observation_id: self.source_observation_id.clone(),
+            membership_url: self.membership_url.clone(),
+        }
+    }
+    pub(crate) fn expected_context(
+        &self,
+        job_id: Uuid,
+    ) -> Result<SitemapReadWindowExpectedContext> {
+        self.validate()?;
+        let parsed = decode(&self.snapshot)?;
+        if parsed.payload.snapshot.job_id != job_id
+            || parsed.payload.filter_sha256 != digest(encode(&self.csv_filter())?)
+        {
+            return Err(Failure::new(
+                "stale_sitemap_cursor",
+                "Snapshot, job or filter changed; restart export",
+            ));
+        }
+        let snapshot = parsed.payload.snapshot;
+        Ok(SitemapReadWindowExpectedContext {
+            generation: snapshot.crawl_generation,
+            crawl_config_sha256: snapshot.crawl_config_sha256,
+            catalog_config_sha256: snapshot.catalog_config_sha256,
+            catalog_revision: snapshot.catalog_revision,
+            catalog_rolling_sha256: snapshot.catalog_rolling_sha256,
+            catalog_state_sha256: snapshot.catalog_state_sha256,
+            inherited_basis: snapshot.inherited_basis,
+        })
+    }
+    /// The header is obtained only inside Core's actual opaque same-TX callback.
+    pub(crate) fn bind_verified_header(
+        &self,
+        job_id: Uuid,
+        generation: u64,
+        config_sha: &str,
+        header: &SitemapVerifiedReadHeader,
+    ) -> Result<Snapshot> {
+        let summary = header.ledger.as_ref().ok_or_else(|| {
+            Failure::new(
+                "sitemap_catalog_unavailable",
+                "Saved SQLite sitemap catalog unavailable",
+            )
+        })?;
+        self.expected_context(job_id)?;
+        if generation == 0
+            || header.generation != Some(generation)
+            || header.crawl_config_sha256.as_deref() != Some(config_sha)
+        {
+            return Err(Failure::new(
+                "sitemap_job_snapshot_conflict",
+                "Actual SQL generation/config differs from the App job",
+            ));
+        }
+        if header.reader_engine != SITEMAP_READ_WINDOW_ENGINE {
+            return Err(Failure::new(
+                "sitemap_read_failure",
+                "Unknown rich sitemap reader profile",
+            ));
+        }
+        let state = sitemap_read_state_sha256(&SitemapReadState {
+            summary,
+            inherited: header.inherited.as_ref(),
+            coverage_inventory_sha256: header.coverage_inventory_sha256.as_deref(),
+            coverage: &header.coverage,
+            source_measurement_context: &header.sitemap_source_measurement_context,
+            analysis_context: Some(&header.analysis_context),
+        })
+        .map_err(|error| Failure::new("sitemap_read_failure", error))?;
+        if header.catalog_state_sha256.as_deref() != Some(state.as_str()) {
+            return Err(Failure::new(
+                "sitemap_read_failure",
+                "Verified CSV state binding differs",
+            ));
+        }
+        let snapshot = Snapshot {
+            job_id,
+            crawl_generation: generation,
+            crawl_config_sha256: config_sha.into(),
+            catalog_config_sha256: summary.config_sha256.clone(),
+            catalog_revision: summary.revision,
+            catalog_rolling_sha256: summary.rolling_sha256.clone(),
+            catalog_state_sha256: state,
+            inherited_basis: header.inherited.clone(),
+        };
+        validate_token(&self.snapshot, &snapshot, &self.csv_filter(), false)?;
+        Ok(snapshot)
+    }
+}

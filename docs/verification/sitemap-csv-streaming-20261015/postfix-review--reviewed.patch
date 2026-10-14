@@ -1,0 +1,113 @@
+--- s4-csv-root-session-v1/product/crates/core/src/store/sitemap_read_context.rs
++++ product/crates/core/src/store/sitemap_read_context.rs
+@@ -38,7 +38,11 @@
+     pub(super) coverage: &'read crate::SitemapCoverage,
+ }
+ 
+-fn saved_config_bytes(connection: &Connection) -> anyhow::Result<Option<(Vec<u8>, String)>> {
++fn saved_config_bytes(
++    connection: &Connection,
++    control: &SitemapReadControl,
++) -> anyhow::Result<Option<(Vec<u8>, String)>> {
++    control.checkpoint()?;
+     let length: Option<i64> = connection
+         .query_row(
+             "SELECT length(CAST(value AS BLOB)) FROM metadata WHERE key='config'",
+@@ -63,8 +67,10 @@
+         "Saved rich sitemap config length differs"
+     );
+     let config: CrawlConfig = serde_json::from_slice(&bytes)?;
++    control.checkpoint()?;
+     verify_sitemap_config_context(connection, &config)?;
+-    let sha = crate::sitemap_ledger::digest(&bytes);
++    control.checkpoint()?;
++    let sha = control.sha256(&bytes)?;
+     Ok(Some((bytes, sha)))
+ }
+ 
+@@ -92,7 +98,7 @@
+         let transaction = connection.transaction()?;
+         super::sitemap_raw_read::preflight_context_metadata(&transaction)?;
+         control.checkpoint()?;
+-        let saved_config = saved_config_bytes(&transaction)?;
++        let saved_config = saved_config_bytes(&transaction, control)?;
+         control.checkpoint()?;
+         let crawl_config_sha256 = saved_config.as_ref().map(|(_, sha)| sha.clone());
+         let selected = matches!(load_run_plan(&transaction)?, RunPlan::SelectedRecrawl(_));
+@@ -151,7 +157,7 @@
+             })
+             .transpose()?;
+         let header = SitemapVerifiedReadHeader {
+-            crawl_config_sha256,
++            crawl_config_sha256: crawl_config_sha256.clone(),
+             generation,
+             ledger: raw.as_ref().map(|raw| raw.summary().clone()),
+             inherited: raw.as_ref().and_then(|raw| raw.inherited().cloned()),
+--- s4-csv-streaming-app-v1/crates/app/src/sitemap_membership.rs
++++ product/crates/app/src/sitemap_membership.rs
+@@ -886,12 +886,10 @@
+     }
+     Ok(result)
+ }
+-#[cfg(test)]
+ struct BoundedBytes {
+     bytes: Vec<u8>,
+     max: usize,
+ }
+-#[cfg(test)]
+ impl Write for BoundedBytes {
+     fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
+         if self
+--- s4-csv-streaming-app-v1/crates/app/src/server/sitemap_csv_stream.rs
++++ product/crates/app/src/server/sitemap_csv_stream.rs
+@@ -109,6 +109,7 @@
+     second_pass_rows: AtomicU64,
+     drained: tokio::sync::Notify,
+ }
++#[cfg(test)]
+ #[derive(Debug, Clone, Copy)]
+ pub(super) struct ExportStats {
+     pub started: u64,
+@@ -156,6 +157,7 @@
+     }
+ }
+ impl ExportRegistry {
++    #[cfg(test)]
+     pub(super) fn snapshot(&self) -> ExportStats {
+         let s = &self.0.counters;
+         ExportStats {
+@@ -268,6 +270,7 @@
+         let (completion, completed_result) = oneshot::channel();
+         let (body_done, body_done_result) = watch::channel(false);
+         let worker_stop = stop.clone();
++        let body_progress = progress.clone();
+         let registry = self.clone();
+         let runtime = tokio::runtime::Handle::current();
+         self.0.counters.started.fetch_add(1, Ordering::SeqCst);
+@@ -324,6 +327,7 @@
+                 stop_rx: stop.changed.subscribe(),
+                 stop,
+                 body_done,
++                progress: body_progress,
+                 finished: false,
+             }),
+         })
+@@ -465,6 +469,7 @@
+     stop_rx: watch::Receiver<bool>,
+     stop: Stop,
+     body_done: watch::Sender<bool>,
++    progress: watch::Sender<Progress>,
+     finished: bool,
+ }
+ impl BodyState {
+@@ -523,6 +528,10 @@
+                                 return self.fail(Failure::new("sitemap_read_failure", "CSV prefix consumed its terminal byte"));
+                             }
+                             self.delivered = count.unwrap_or(self.delivered);
++                            // A joined producer can leave queued prefix chunks.
++                            // Real consumer progress must keep the idle timer
++                            // alive while the absolute stream deadline stays fixed.
++                            self.progress.send_modify(|progress| progress.last_sent = Instant::now());
+                             return Some(Ok(bytes));
+                         }
+                         None => self.prefix_closed = true,

@@ -2,6 +2,7 @@
 //! No report/source Vec is built. SQLite's report/JSON projection storage and
 //! serde scratch remain outside a measured-RSS claim. No DDL or writes.
 use super::{verified_read::VerifiedSourceRead, *};
+use crate::sitemap_read_control::SitemapReadControl;
 use serde::de::{self, DeserializeSeed, IgnoredAny, MapAccess, SeqAccess, Visitor};
 use std::fmt;
 
@@ -16,6 +17,21 @@ const MAX_REPORT_KEY_ENCODED_BYTES: usize = 6 * MAX_REPORT_KEY_BYTES;
 pub(crate) fn verify_saved_report(
     connection: &Connection,
     expected: Option<&VerifiedSourceRead<'_>>,
+) -> Result<()> {
+    verify_saved_report_with_control(connection, expected, &SitemapReadControl::default())
+}
+pub(crate) fn verify_saved_report_with_control(
+    connection: &Connection,
+    expected: Option<&VerifiedSourceRead<'_>>,
+    control: &SitemapReadControl,
+) -> Result<()> {
+    let _binding = control.bind_connection(connection)?;
+    control.run(|| verify_saved_report_inner(connection, expected, control))
+}
+fn verify_saved_report_inner(
+    connection: &Connection,
+    expected: Option<&VerifiedSourceRead<'_>>,
+    control: &SitemapReadControl,
 ) -> Result<()> {
     ensure!(
         !connection.is_autocommit(),
@@ -45,7 +61,7 @@ pub(crate) fn verify_saved_report(
             Some(i64::try_from(slice.len())?) == bytes,
             "Saved source envelope byte length differs"
         );
-        preflight(slice, proof)?;
+        preflight(slice, proof, control)?;
     } else {
         ensure!(
             kind.is_none() || kind.as_deref() == Some("null"),
@@ -60,9 +76,9 @@ pub(crate) fn verify_saved_report(
         (1..=MAX_REPORT).contains(&bytes.len()),
         "Sitemap analysis report input budget exceeded"
     );
-    preflight_report_keys(bytes)?;
+    preflight_report_keys(bytes, control)?;
     let mut decoder = serde_json::Deserializer::from_slice(bytes);
-    ReportSeed { expected }
+    ReportSeed { expected, control }
         .deserialize(&mut decoder)
         .context("Sitemap analysis saved source measurement projection is invalid")?;
     decoder.end()?;
@@ -103,16 +119,17 @@ impl<'de> Deserialize<'de> for ReportField {
 /// A 6,144-byte unescaped key can pass this raw cap; the decoded 1,024-byte
 /// visitor then rejects it with bounded scratch. Maximally escaped valid keys
 /// remain accepted at the exact raw bound.
-fn preflight_report_keys(bytes: &[u8]) -> Result<()> {
+fn preflight_report_keys(bytes: &[u8], control: &SitemapReadControl) -> Result<()> {
+    control.checkpoint()?;
     let mut pos = 0;
-    byte(bytes, &mut pos, b'{')?;
+    byte(bytes, &mut pos, b'{', control)?;
     loop {
-        ws(bytes, &mut pos);
+        ws(bytes, &mut pos, control)?;
         if bytes.get(pos) == Some(&b'}') {
             pos += 1;
             break;
         }
-        byte(bytes, &mut pos, b'"')?;
+        byte(bytes, &mut pos, b'"', control)?;
         let content_start = pos;
         let mut escaped = false;
         loop {
@@ -132,16 +149,16 @@ fn preflight_report_keys(bytes: &[u8]) -> Result<()> {
                 escaped = true;
             }
         }
-        byte(bytes, &mut pos, b':')?;
-        skip_report_value(bytes, &mut pos)?;
-        ws(bytes, &mut pos);
+        byte(bytes, &mut pos, b':', control)?;
+        skip_report_value(bytes, &mut pos, control)?;
+        ws(bytes, &mut pos, control)?;
         if bytes.get(pos) == Some(&b'}') {
             pos += 1;
             break;
         }
-        byte(bytes, &mut pos, b',')?;
+        byte(bytes, &mut pos, b',', control)?;
     }
-    ws(bytes, &mut pos);
+    ws(bytes, &mut pos, control)?;
     ensure!(pos == bytes.len(), "Trailing report input");
     Ok(())
 }
@@ -149,13 +166,17 @@ fn preflight_report_keys(bytes: &[u8]) -> Result<()> {
 /// Skip one outer value with scalar counters only. Nested keys/string contents
 /// are not outer identifiers and do not receive the outer-key cap. This is a
 /// lexical resource guard, not a replacement JSON parser; serde is required.
-fn skip_report_value(bytes: &[u8], pos: &mut usize) -> Result<()> {
-    ws(bytes, pos);
+fn skip_report_value(bytes: &[u8], pos: &mut usize, control: &SitemapReadControl) -> Result<()> {
+    control.checkpoint()?;
+    ws(bytes, pos, control)?;
     let start = *pos;
     let mut depth = 0usize;
     let mut quoted = false;
     let mut escaped = false;
     while let Some(&value) = bytes.get(*pos) {
+        if *pos & 65_535 == 0 {
+            control.checkpoint()?;
+        }
         if !quoted && depth == 0 && matches!(value, b',' | b'}') {
             break;
         }
@@ -213,6 +234,7 @@ impl<'de> Deserialize<'de> for SourceField {
 }
 struct ReportSeed<'a, 'conn> {
     expected: Option<&'a VerifiedSourceRead<'conn>>,
+    control: &'a SitemapReadControl,
 }
 impl<'de> DeserializeSeed<'de> for ReportSeed<'_, '_> {
     type Value = ();
@@ -228,6 +250,9 @@ impl<'de> Visitor<'de> for ReportSeed<'_, '_> {
     fn visit_map<A: MapAccess<'de>>(self, mut map: A) -> std::result::Result<(), A::Error> {
         let mut seen = false;
         while let Some(key) = map.next_key::<ReportField>()? {
+            self.control
+                .checkpoint()
+                .map_err(<A::Error as de::Error>::custom)?;
             match key {
                 ReportField::Source => {
                     if seen {
@@ -238,10 +263,14 @@ impl<'de> Visitor<'de> for ReportSeed<'_, '_> {
                     seen = true;
                     map.next_value_seed(SourceSeed {
                         expected: self.expected,
+                        control: self.control,
                     })?;
                 }
                 ReportField::Other => {
                     map.next_value::<IgnoredAny>()?;
+                    self.control
+                        .checkpoint()
+                        .map_err(<A::Error as de::Error>::custom)?;
                 }
             }
         }
@@ -253,6 +282,7 @@ impl<'de> Visitor<'de> for ReportSeed<'_, '_> {
 }
 struct SourceSeed<'a, 'conn> {
     expected: Option<&'a VerifiedSourceRead<'conn>>,
+    control: &'a SitemapReadControl,
 }
 impl<'de> DeserializeSeed<'de> for SourceSeed<'_, '_> {
     type Value = ();
@@ -278,6 +308,9 @@ impl<'de> Visitor<'de> for SourceSeed<'_, '_> {
         })?;
         let mut seen = [false; 4];
         while let Some(key) = map.next_key::<SourceField>()? {
+            self.control
+                .checkpoint()
+                .map_err(<A::Error as de::Error>::custom)?;
             let index = match key {
                 SourceField::Version => 0,
                 SourceField::Summary => 1,
@@ -303,10 +336,12 @@ impl<'de> Visitor<'de> for SourceSeed<'_, '_> {
                 }
                 SourceField::Records => map.next_value_seed(ArraySeed {
                     expected,
+                    control: self.control,
                     records: true,
                 })?,
                 SourceField::Commits => map.next_value_seed(ArraySeed {
                     expected,
+                    control: self.control,
                     records: false,
                 })?,
             }
@@ -319,6 +354,7 @@ impl<'de> Visitor<'de> for SourceSeed<'_, '_> {
 }
 struct ArraySeed<'a, 'conn> {
     expected: &'a VerifiedSourceRead<'conn>,
+    control: &'a SitemapReadControl,
     records: bool,
 }
 impl<'de> DeserializeSeed<'de> for ArraySeed<'_, '_> {
@@ -338,15 +374,24 @@ impl<'de> Visitor<'de> for ArraySeed<'_, '_> {
         } else {
             "SELECT document_id,measurement_id,document_sequence,data,data_sha256 FROM sitemap_source_measurement_commits ORDER BY document_sequence"
         };
+        // Restore typed SQLite stops BEFORE serde custom-error conversion
+        // would erase the rusqlite error's type/source chain.
         let mut statement = self
-            .expected
-            .connection()
-            .prepare(sql)
+            .control
+            .map_result(self.expected.connection().prepare(sql).map_err(Into::into))
             .map_err(<A::Error as de::Error>::custom)?;
-        let mut rows = statement
-            .query([])
+        let mut rows = self
+            .control
+            .map_result(statement.query([]).map_err(Into::into))
             .map_err(<A::Error as de::Error>::custom)?;
-        while let Some(row) = rows.next().map_err(<A::Error as de::Error>::custom)? {
+        while let Some(row) = self
+            .control
+            .map_result(rows.next().map_err(Into::into))
+            .map_err(<A::Error as de::Error>::custom)?
+        {
+            self.control
+                .checkpoint()
+                .map_err(<A::Error as de::Error>::custom)?;
             if self.records {
                 let expected = read_record_row(row, 0, &self.expected.summary().limits)
                     .map_err(<A::Error as de::Error>::custom)?;
@@ -386,14 +431,18 @@ impl<'de> Visitor<'de> for ArraySeed<'_, '_> {
 // (including whitespace/escapes), ignoring only JSON whitespace outside strings.
 // Six bytes per canonical byte permits equivalent Unicode escapes and pretty
 // printing without silently raising the durable SQL limits.
-fn span(bytes: &[u8], pos: &mut usize, cap: usize) -> Result<()> {
-    ws(bytes, pos);
+fn span(bytes: &[u8], pos: &mut usize, cap: usize, control: &SitemapReadControl) -> Result<()> {
+    control.checkpoint()?;
+    ws(bytes, pos, control)?;
     let mut depth = 0usize;
     let mut quoted = false;
     let mut escaped = false;
     let mut string_start = 0usize;
     let mut charged = 0usize;
     while let Some(&byte) = bytes.get(*pos) {
+        if *pos & 65_535 == 0 {
+            control.checkpoint()?;
+        }
         if !quoted && depth == 0 && matches!(byte, b',' | b']' | b'}') {
             break;
         }
@@ -415,7 +464,7 @@ fn span(bytes: &[u8], pos: &mut usize, cap: usize) -> Result<()> {
             } else if byte == b'"' {
                 quoted = false;
                 let mut next = *pos;
-                ws(bytes, &mut next);
+                ws(bytes, &mut next, control)?;
                 ensure!(
                     bytes.get(next) != Some(&b':') || *pos - string_start <= 1024,
                     "Oversized source field name"
@@ -448,13 +497,18 @@ fn span(bytes: &[u8], pos: &mut usize, cap: usize) -> Result<()> {
     );
     Ok(())
 }
-fn ws(bytes: &[u8], pos: &mut usize) {
+fn ws(bytes: &[u8], pos: &mut usize, control: &SitemapReadControl) -> Result<()> {
+    control.checkpoint()?;
     while bytes.get(*pos).is_some_and(u8::is_ascii_whitespace) {
         *pos += 1;
+        if *pos & 65_535 == 0 {
+            control.checkpoint()?;
+        }
     }
+    Ok(())
 }
-fn byte(bytes: &[u8], pos: &mut usize, expected: u8) -> Result<()> {
-    ws(bytes, pos);
+fn byte(bytes: &[u8], pos: &mut usize, expected: u8, control: &SitemapReadControl) -> Result<()> {
+    ws(bytes, pos, control)?;
     ensure!(
         bytes.get(*pos) == Some(&expected),
         "Malformed source envelope"
@@ -462,11 +516,16 @@ fn byte(bytes: &[u8], pos: &mut usize, expected: u8) -> Result<()> {
     *pos += 1;
     Ok(())
 }
-fn preflight(bytes: &[u8], proof: &VerifiedSourceRead<'_>) -> Result<()> {
+fn preflight(
+    bytes: &[u8],
+    proof: &VerifiedSourceRead<'_>,
+    control: &SitemapReadControl,
+) -> Result<()> {
+    control.checkpoint()?;
     let mut pos = 0;
-    byte(bytes, &mut pos, b'{')?;
+    byte(bytes, &mut pos, b'{', control)?;
     loop {
-        ws(bytes, &mut pos);
+        ws(bytes, &mut pos, control)?;
         if bytes.get(pos) == Some(&b'}') {
             pos += 1;
             break;
@@ -489,10 +548,10 @@ fn preflight(bytes: &[u8], proof: &VerifiedSourceRead<'_>) -> Result<()> {
             }
         }
         let key: String = serde_json::from_slice(&bytes[start..pos])?;
-        byte(bytes, &mut pos, b':')?;
+        byte(bytes, &mut pos, b':', control)?;
         match key.as_str() {
             "records" | "commits" => {
-                byte(bytes, &mut pos, b'[')?;
+                byte(bytes, &mut pos, b'[', control)?;
                 let records = key == "records";
                 let max = if records {
                     proof.summary().record_count
@@ -506,34 +565,34 @@ fn preflight(bytes: &[u8], proof: &VerifiedSourceRead<'_>) -> Result<()> {
                 };
                 let mut count = 0u64;
                 loop {
-                    ws(bytes, &mut pos);
+                    ws(bytes, &mut pos, control)?;
                     if bytes.get(pos) == Some(&b']') {
                         pos += 1;
                         break;
                     }
                     count += 1;
                     ensure!(count <= max, "Saved source array has extra rows");
-                    span(bytes, &mut pos, cap * 6 + 1024)?;
-                    ws(bytes, &mut pos);
+                    span(bytes, &mut pos, cap * 6 + 1024, control)?;
+                    ws(bytes, &mut pos, control)?;
                     if bytes.get(pos) == Some(&b']') {
                         pos += 1;
                         break;
                     }
-                    byte(bytes, &mut pos, b',')?;
+                    byte(bytes, &mut pos, b',', control)?;
                 }
             }
-            "summary" => span(bytes, &mut pos, 4096 * 6 + 1024)?,
-            "schema_version" => span(bytes, &mut pos, 64)?,
+            "summary" => span(bytes, &mut pos, 4096 * 6 + 1024, control)?,
+            "schema_version" => span(bytes, &mut pos, 64, control)?,
             _ => bail!("Unknown source snapshot field"),
         }
-        ws(bytes, &mut pos);
+        ws(bytes, &mut pos, control)?;
         if bytes.get(pos) == Some(&b'}') {
             pos += 1;
             break;
         }
-        byte(bytes, &mut pos, b',')?;
+        byte(bytes, &mut pos, b',', control)?;
     }
-    ws(bytes, &mut pos);
+    ws(bytes, &mut pos, control)?;
     ensure!(pos == bytes.len(), "Trailing source envelope input");
     Ok(())
 }

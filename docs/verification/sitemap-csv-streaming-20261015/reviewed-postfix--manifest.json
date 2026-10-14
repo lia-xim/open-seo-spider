@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "name": "s4-csv-reviewed-postfix-v1",
+  "immutable": true,
+  "recorded_at": "2026-10-14T22:19:00.761Z",
+  "baseline_commit": "d105fb8a0c527ffd99164e44ec644bd0e49f61a5",
+  "inputs": [
+    {
+      "path": "s4-csv-root-session-v1/manifest.json",
+      "sha256": "115531f52ad1df716de592f68e317c1e3897470615a9ddc36c2833805358481a"
+    },
+    {
+      "path": "s4-csv-streaming-app-v1/manifest.json",
+      "sha256": "3dac7530629186a60d9da074f12a765167dc5e470110d4c63469f6d9a90ed99e"
+    },
+    {
+      "path": "s4-csv-root-session-review-v1/receipt.json",
+      "sha256": "d82396cf8c4d2bc5b80b4c2ab2bc16d145158b6d3733ca453a66ec3d7dbbd7c7"
+    },
+    {
+      "path": "s4-csv-app-independent-review-v1/receipt.json",
+      "sha256": "199aea85c56fd8d81b77fbaaff34580c59ba33a9a5743144cd7706a0d5260a52"
+    },
+    {
+      "path": "s4-csv-control-independent-review-v1/receipt.json",
+      "sha256": "1259eeb385f566f7f3819caf7bcfa99124894a214b9e8558d6a7dd1fbe534cc2"
+    }
+  ],
+  "entries": [
+    {
+      "path": "crates/core/src/store/sitemap_read_context.rs",
+      "payload": "product/crates/core/src/store/sitemap_read_context.rs",
+      "before_payload": "s4-csv-root-session-v1/product/crates/core/src/store/sitemap_read_context.rs",
+      "before_sha256": "0bafc0e1ca6a0378191b563d92bb9bf0f0ff5dfa3c75913363756d6d96d9bfa4",
+      "sha256": "5eea771c4c4c89af020d4625165306c22fc3842485e8275b3451c6f8ba864f0e",
+      "bytes": 8447
+    },
+    {
+      "path": "crates/app/src/sitemap_membership.rs",
+      "payload": "product/crates/app/src/sitemap_membership.rs",
+      "before_payload": "s4-csv-streaming-app-v1/crates/app/src/sitemap_membership.rs",
+      "before_sha256": "75de5dad4120e72f115fe337d83f6c7c0f12a196a45404cbb45918ba52b9b81d",
+      "sha256": "2151dc243d9b06a411a29c0cd883a51acae49de744139649a8fe982a8de764ed",
+      "bytes": 42803
+    },
+    {
+      "path": "crates/app/src/server/sitemap_csv_stream.rs",
+      "payload": "product/crates/app/src/server/sitemap_csv_stream.rs",
+      "before_payload": "s4-csv-streaming-app-v1/crates/app/src/server/sitemap_csv_stream.rs",
+      "before_sha256": "63a89da0150ea28346fc845c6dc83c2466015b3bb83d28c89dd4d4e2e76dfc56",
+      "sha256": "a1ff346402e5bd1afc65930029c3cab1432aeb2ac43b5eeae8b344e606a81fea",
+      "bytes": 33618
+    }
+  ],
+  "corrections": [
+    {
+      "file": "crates/core/src/store/sitemap_read_context.rs",
+      "issue": "Static saved-config borrow conflict",
+      "change": "Clone saved-config SHA into owned header; original remains borrowed by prepared analysis until actual drop."
+    },
+    {
+      "file": "crates/core/src/store/sitemap_read_context.rs",
+      "issue": "Cooperative saved-config work checkpoints",
+      "change": "Actual shared control before saved-config metadata and after parsing/policy; chunked control.sha256 over actual unchanged saved bytes."
+    },
+    {
+      "file": "crates/app/src/sitemap_membership.rs",
+      "issue": "Production JSON helper incorrectly gated as test-only",
+      "change": "Remove only two cfg(test) attributes on actual BoundedBytes type and Write implementation."
+    },
+    {
+      "file": "crates/app/src/server/sitemap_csv_stream.rs",
+      "issue": "Active queued drain falsely counted as idle after producer join",
+      "change": "Body retains shared progress sender and refreshes last activity on actual emitted prefix; fixed queue/chunk bounds and absolute stream deadline remain."
+    },
+    {
+      "file": "crates/app/src/server/sitemap_csv_stream.rs",
+      "issue": "Test-observation DTO/method unused in production",
+      "change": "Gate only ExportStats and snapshot with cfg(test); actual counters/worker behavior remain."
+    }
+  ],
+  "checks": {
+    "combined_cargo_fmt_exit": 0,
+    "git_diff_check_exit": 0,
+    "source_only": true,
+    "compiler": "NOT_RUN",
+    "tests": "NOT_RUN",
+    "sqlite": "NOT_RUN",
+    "http": "NOT_RUN",
+    "browser": "NOT_RUN",
+    "native": "NOT_RUN"
+  },
+  "runtime_correctness": "NOT_PROVEN"
+}

@@ -3,6 +3,7 @@
 //! Selected history deliberately retains the old materializing compatibility path.
 use super::*;
 use crate::sitemap_ledger::verified_read::{SitemapLedgerFilter, VerifiedRawRead};
+use crate::sitemap_read_control::SitemapReadControl;
 use rusqlite::{Connection, OptionalExtension, params};
 use serde::ser::{Error as _, SerializeSeq, SerializeStruct};
 use sha2::{Digest, Sha256};
@@ -42,7 +43,12 @@ fn scalar_text(connection: &Connection, key: &str) -> Result<Option<String>> {
         .optional()?)
 }
 
-fn validate_context(connection: &Connection, context: CoverageReadContext<'_>) -> Result<()> {
+fn validate_context(
+    connection: &Connection,
+    context: CoverageReadContext<'_>,
+    control: &SitemapReadControl,
+) -> Result<()> {
+    control.checkpoint()?;
     let length: Option<i64> = connection
         .query_row(
             "SELECT length(CAST(value AS BLOB)) FROM metadata WHERE key='config'",
@@ -60,7 +66,7 @@ fn validate_context(connection: &Connection, context: CoverageReadContext<'_>) -
             ensure!(
                 (1..=MAX_SAVED_CONFIG_BYTES as i64).contains(&length)
                     && i64::try_from(bytes.len())? == length
-                    && crate::sitemap_ledger::digest(bytes) == sha,
+                    && control.sha256(bytes)? == sha,
                 "Coverage actual saved-config byte/hash context differs"
             );
             let equal: bool = connection.query_row(
@@ -97,6 +103,7 @@ fn task_table(connection: &Connection) -> Result<bool> {
 fn visit_tasks(
     connection: &Connection,
     exists: bool,
+    control: &SitemapReadControl,
     mut visit: impl FnMut(&SitemapCoverageTask) -> Result<()>,
 ) -> Result<()> {
     if !exists {
@@ -116,6 +123,7 @@ fn visit_tasks(
     let mut cursor = query.query([])?;
     let mut previous: Option<(SitemapSourceKind, String)> = None;
     while let Some(row) = cursor.next()? {
+        control.checkpoint()?;
         let kind = match row.get_ref(0)?.as_str()? {
             "robots" => SitemapSourceKind::RobotsDirectives,
             "sitemap" => SitemapSourceKind::SitemapXml,
@@ -169,7 +177,16 @@ fn document_identity(
         .transpose()
 }
 
+#[cfg(test)]
 fn expected_robots(connection: &Connection, config: &CrawlConfig) -> Result<Vec<String>> {
+    expected_robots_with_control(connection, config, &SitemapReadControl::default())
+}
+fn expected_robots_with_control(
+    connection: &Connection,
+    config: &CrawlConfig,
+    control: &SitemapReadControl,
+) -> Result<Vec<String>> {
+    control.checkpoint()?;
     if !(config.crawl_links && config.discover_sitemaps && config.obey_robots) {
         return Ok(vec![]);
     }
@@ -181,6 +198,7 @@ fn expected_robots(connection: &Connection, config: &CrawlConfig) -> Result<Vec<
         } else {
             &config.seed_urls
         } {
+            control.checkpoint()?;
             insert_origin(&mut origins, &mut origin_bytes, value)?;
         }
         return Ok(origins.into_iter().collect());
@@ -188,6 +206,7 @@ fn expected_robots(connection: &Connection, config: &CrawlConfig) -> Result<Vec<
     let mut query=connection.prepare("SELECT json_extract(data,'$.occurrence.decision.fetch_candidate_url') FROM policy_occurrences WHERE json_extract(data,'$.occurrence.input_basis')='declared_input' AND json_extract(data,'$.occurrence.task_role')='page_document' AND json_extract(data,'$.occurrence.decision.source_kind') IN ('seed','list_page') AND json_extract(data,'$.occurrence.admission_reason') IN ('scheduled','coalesced') ORDER BY sequence")?;
     let mut cursor = query.query([])?;
     while let Some(row) = cursor.next()? {
+        control.checkpoint()?;
         let value = row.get_ref(0)?.as_str()?;
         insert_origin(&mut origins, &mut origin_bytes, value)?;
     }
@@ -213,6 +232,7 @@ fn insert_origin(origins: &mut BTreeSet<String>, bytes: &mut usize, value: &str)
 struct RootsJson<'a> {
     config: &'a CrawlConfig,
     initial_sha: &'a str,
+    control: &'a SitemapReadControl,
 }
 impl Serialize for RootsJson<'_> {
     fn serialize<S: serde::Serializer>(
@@ -226,6 +246,7 @@ impl Serialize for RootsJson<'_> {
             self.initial_sha,
             None,
             |item| {
+                self.control.checkpoint()?;
                 seq.serialize_element(&item.root)
                     .map_err(|e| anyhow::anyhow!(e.to_string()))
             },
@@ -237,6 +258,7 @@ impl Serialize for RootsJson<'_> {
 struct TasksJson<'a> {
     connection: &'a Connection,
     exists: bool,
+    control: &'a SitemapReadControl,
 }
 impl Serialize for TasksJson<'_> {
     fn serialize<S: serde::Serializer>(
@@ -244,11 +266,17 @@ impl Serialize for TasksJson<'_> {
         serializer: S,
     ) -> std::result::Result<S::Ok, S::Error> {
         let mut seq = serializer.serialize_seq(None)?;
-        visit_tasks(self.connection, self.exists, |task| {
-            seq.serialize_element(task)
-                .map_err(|e| anyhow::anyhow!(e.to_string()))
-        })
-        .map_err(S::Error::custom)?;
+        self.control
+            .map_result(visit_tasks(
+                self.connection,
+                self.exists,
+                self.control,
+                |task| {
+                    seq.serialize_element(task)
+                        .map_err(|e| anyhow::anyhow!(e.to_string()))
+                },
+            ))
+            .map_err(S::Error::custom)?;
         seq.end()
     }
 }
@@ -259,6 +287,7 @@ struct InventoryJson<'a> {
     initial_sha: &'a str,
     robots: &'a [String],
     tasks_exist: bool,
+    control: &'a SitemapReadControl,
 }
 impl Serialize for InventoryJson<'_> {
     fn serialize<S: serde::Serializer>(
@@ -277,6 +306,7 @@ impl Serialize for InventoryJson<'_> {
                 &RootsJson {
                     config: self.config,
                     initial_sha: self.initial_sha,
+                    control: self.control,
                 },
             )?;
         } else {
@@ -288,16 +318,19 @@ impl Serialize for InventoryJson<'_> {
             &TasksJson {
                 connection: self.connection,
                 exists: self.tasks_exist,
+                control: self.control,
             },
         )?;
         state.end()
     }
 }
-struct InventoryHash {
+struct InventoryHash<'a> {
+    control: &'a SitemapReadControl,
+    next_check: usize,
     bytes: usize,
     hash: Sha256,
 }
-impl Write for InventoryHash {
+impl Write for InventoryHash<'_> {
     fn write(&mut self, value: &[u8]) -> io::Result<usize> {
         self.bytes = self
             .bytes
@@ -308,7 +341,15 @@ impl Write for InventoryHash {
                 "Coverage inventory serialized budget exceeded",
             ));
         }
-        self.hash.update(value);
+        let start = self.bytes - value.len();
+        for (index, chunk) in value.chunks(65_536).enumerate() {
+            let offset = start + index * 65_536;
+            if offset + chunk.len() >= self.next_check {
+                self.control.checkpoint().map_err(io::Error::other)?;
+                self.next_check = offset + chunk.len() + 65_536;
+            }
+            self.hash.update(chunk);
+        }
         Ok(value.len())
     }
     fn flush(&mut self) -> io::Result<()> {
@@ -316,8 +357,13 @@ impl Write for InventoryHash {
     }
 }
 
-fn count_rows(raw: &VerifiedRawRead<'_>, out: &mut SitemapCoverage) -> Result<()> {
+fn count_rows(
+    raw: &VerifiedRawRead<'_>,
+    out: &mut SitemapCoverage,
+    control: &SitemapReadControl,
+) -> Result<()> {
     raw.visit_filtered(&SitemapLedgerFilter::default(), |row| {
+        control.checkpoint()?;
         match row {
             SitemapLedgerRow::Document(document) => {
                 out.counts.observed_documents += 1;
@@ -351,6 +397,7 @@ fn compare_initial_roots(
     raw: &VerifiedRawRead<'_>,
     config: &CrawlConfig,
     out: &mut SitemapCoverage,
+    control: &SitemapReadControl,
 ) -> Result<()> {
     let mut explicit = 0u64;
     let mut imported = 0u64;
@@ -360,6 +407,7 @@ fn compare_initial_roots(
         &raw.summary().config_sha256,
         None,
         |item| {
+            control.checkpoint()?;
             let expected = item.root;
             match expected.kind {
                 SitemapRootKind::ExplicitConfig => explicit += 1,
@@ -401,6 +449,7 @@ fn compare_initial_roots(
             ..Default::default()
         },
         |row| {
+            control.checkpoint()?;
             if let SitemapLedgerRow::Root(root) = row {
                 let expected = match root.kind {
                     SitemapRootKind::ExplicitConfig => root.source_ordinal < explicit,
@@ -441,6 +490,7 @@ fn project_current(
     connection: &Connection,
     raw: &VerifiedRawRead<'_>,
     context: CoverageReadContext<'_>,
+    control: &SitemapReadControl,
 ) -> Result<VerifiedCoverageRead> {
     use SitemapCoverageReason as R;
     let mut out = empty_coverage();
@@ -448,7 +498,7 @@ fn project_current(
     if raw.summary().legacy_history_unknown {
         reason(&mut out, R::LegacyHistoryUnknown);
     }
-    count_rows(raw, &mut out)?;
+    count_rows(raw, &mut out, control)?;
     let (Some(bytes), Some(sha), Some(generation)) = (
         context.saved_config_bytes,
         context.saved_config_sha256,
@@ -469,13 +519,16 @@ fn project_current(
     if let Some(policy) = &config.crawl_policy {
         crate::policy_ledger::verify(connection, &crate::CompiledCrawlPolicy::new(policy)?)?;
     }
+    control.checkpoint()?;
     let tasks_exist = task_table(connection)?;
-    let robots = expected_robots(connection, &config)?;
+    let robots = expected_robots_with_control(connection, &config, control)?;
     ensure!(
         robots.len() <= MAX_INVENTORY_TASKS,
         "Coverage Robots inventory row budget exceeded"
     );
     let mut hash = InventoryHash {
+        control,
+        next_check: 65_536,
         bytes: 0,
         hash: Sha256::new(),
     };
@@ -488,6 +541,7 @@ fn project_current(
             initial_sha: &raw.summary().config_sha256,
             robots: &robots,
             tasks_exist,
+            control,
         },
     )?;
     let inventory_sha256 = format!("{:x}", hash.hash.finalize());
@@ -498,13 +552,16 @@ fn project_current(
     if !context.discovery_initialized {
         reason(&mut out, R::DiscoveryNotInitialized);
     }
-    compare_initial_roots(connection, raw, &config, &mut out)?;
+    control.checkpoint()?;
+    compare_initial_roots(connection, raw, &config, &mut out, control)?;
     for origin in robots {
+        control.checkpoint()?;
         if !task_exists(connection, tasks_exist, "robots", &origin)? {
             reason(&mut out, R::RequiredRobotsTaskMissing);
         }
     }
-    visit_tasks(connection, tasks_exist, |task| {
+    visit_tasks(connection, tasks_exist, control, |task| {
+        control.checkpoint()?;
         out.counts.discovery_tasks += 1;
         match document_identity(connection, task.kind.frontier_kind(), &task.task_url)? {
             None => reason(
@@ -532,6 +589,7 @@ fn project_current(
             ..Default::default()
         },
         |row| {
+            control.checkpoint()?;
             if let SitemapLedgerRow::Document(doc) = row
                 && !task_exists(
                     connection,
@@ -554,6 +612,7 @@ fn project_current(
             ..Default::default()
         },
         |row| {
+            control.checkpoint()?;
             if let SitemapLedgerRow::Root(root) = row
                 && let Some(url) = admitted_source_url(&mut out, &root.admission, true)
             {
@@ -563,6 +622,7 @@ fn project_current(
         },
     )?;
     while let Some(url) = queue.pop_front() {
+        control.checkpoint()?;
         if !task_exists(connection, tasks_exist, "sitemap", &url)? {
             reason(&mut out, R::SourceTaskMissing);
         }
@@ -572,6 +632,7 @@ fn project_current(
             let mut query=connection.prepare("SELECT data FROM sitemap_locations WHERE observation_id COLLATE BINARY=?1 AND json_extract(data,'$.row.observed.role')='child_sitemap' ORDER BY sequence")?;
             let mut cursor = query.query([id])?;
             while let Some(row) = cursor.next()? {
+                control.checkpoint()?;
                 let SitemapLedgerRow::Location(edge) =
                     serde_json::from_str(row.get_ref(0)?.as_str()?)?
                 else {
@@ -588,7 +649,8 @@ fn project_current(
         }
     }
     out.counts.reached_xml_tasks = reached.len() as u64;
-    visit_tasks(connection, tasks_exist, |task| {
+    visit_tasks(connection, tasks_exist, control, |task| {
+        control.checkpoint()?;
         if task.kind == SitemapSourceKind::SitemapXml && !reached.contains(&task.task_url) {
             reason(&mut out, R::SourceGraphUnboundTask);
         }
@@ -602,7 +664,11 @@ fn project_current(
     })
 }
 
-fn project_selected(connection: &Connection) -> Result<VerifiedCoverageRead> {
+fn project_selected(
+    connection: &Connection,
+    control: &SitemapReadControl,
+) -> Result<VerifiedCoverageRead> {
+    control.checkpoint()?;
     // Higher Store selected-plan/source-parent presence gates MUST already run.
     // This is explicit bounded, materializing legacy compatibility, not ordinary
     // streaming and not a complete S4 claim.
@@ -644,7 +710,9 @@ fn project_selected(connection: &Connection) -> Result<VerifiedCoverageRead> {
             )
         })
         .transpose()?;
+    control.checkpoint()?;
     let coverage = project_sitemap_coverage(Some(&catalog), inventory.as_ref())?;
+    control.checkpoint()?;
     let inventory_sha256 = coverage
         .basis
         .as_ref()
@@ -656,16 +724,34 @@ fn project_selected(connection: &Connection) -> Result<VerifiedCoverageRead> {
     })
 }
 
+#[cfg(test)]
 pub(crate) fn project_read(
     connection: &Connection,
     raw: Option<&VerifiedRawRead<'_>>,
     context: CoverageReadContext<'_>,
 ) -> Result<VerifiedCoverageRead> {
+    project_read_with_control(connection, raw, context, &SitemapReadControl::default())
+}
+pub(crate) fn project_read_with_control(
+    connection: &Connection,
+    raw: Option<&VerifiedRawRead<'_>>,
+    context: CoverageReadContext<'_>,
+    control: &SitemapReadControl,
+) -> Result<VerifiedCoverageRead> {
+    let _binding = control.bind_connection(connection)?;
+    control.run(|| project_read_inner(connection, raw, context, control))
+}
+fn project_read_inner(
+    connection: &Connection,
+    raw: Option<&VerifiedRawRead<'_>>,
+    context: CoverageReadContext<'_>,
+    control: &SitemapReadControl,
+) -> Result<VerifiedCoverageRead> {
     ensure!(
         !connection.is_autocommit(),
         "Coverage read requires caller-owned transaction"
     );
-    validate_context(connection, context)?;
+    validate_context(connection, context, control)?;
     let Some(raw) = raw else {
         return Ok(VerifiedCoverageRead {
             coverage: project_sitemap_coverage(None, None)?,
@@ -678,9 +764,9 @@ pub(crate) fn project_read(
         "Coverage raw proof belongs to another connection"
     );
     if raw.inherited().is_some() {
-        project_selected(connection)
+        project_selected(connection, control)
     } else {
-        project_current(connection, raw, context)
+        project_current(connection, raw, context, control)
     }
 }
 

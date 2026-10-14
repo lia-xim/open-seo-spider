@@ -6,6 +6,8 @@
 //! Selected parent validation deliberately retains the old materializing
 //! compatibility path, including the exact parent BLOB and source projection.
 use super::*;
+use crate::sitemap_read_control::SitemapReadControl;
+
 use crate::sitemap_ledger::verified_read::VerifiedRawRead;
 
 /// Constructible only after the complete source tail and summary were checked.
@@ -133,6 +135,21 @@ pub(crate) fn verify_source<'conn>(
     connection: &'conn Connection,
     raw: Option<&VerifiedRawRead<'conn>>,
 ) -> Result<Option<VerifiedSourceRead<'conn>>> {
+    verify_source_with_control(connection, raw, &SitemapReadControl::default())
+}
+pub(crate) fn verify_source_with_control<'conn>(
+    connection: &'conn Connection,
+    raw: Option<&VerifiedRawRead<'conn>>,
+    control: &SitemapReadControl,
+) -> Result<Option<VerifiedSourceRead<'conn>>> {
+    let _binding = control.bind_connection(connection)?;
+    control.run(|| verify_source_inner(connection, raw, control))
+}
+fn verify_source_inner<'conn>(
+    connection: &'conn Connection,
+    raw: Option<&VerifiedRawRead<'conn>>,
+    control: &SitemapReadControl,
+) -> Result<Option<VerifiedSourceRead<'conn>>> {
     ensure!(
         !connection.is_autocommit(),
         "Verified source read needs the caller's transaction"
@@ -143,10 +160,14 @@ pub(crate) fn verify_source<'conn>(
             "Verified source/raw reads use different connections"
         );
     }
-    if let Some(expected) = selected_parent_projection(connection)? {
+    let selected = selected_parent_projection(connection)?;
+    control.checkpoint()?;
+    if let Some(expected) = selected {
         // Explicit, bounded-by-existing-limits but materializing compatibility.
         // load retains every existing canonical/SQL/doc/parent validation.
+        control.checkpoint()?;
         let snapshot = load(connection)?;
+        control.checkpoint()?;
         ensure!(
             snapshot == expected,
             "Selected source history presence/content differs from immutable parent"
@@ -165,6 +186,7 @@ pub(crate) fn verify_source<'conn>(
         }));
     }
 
+    control.checkpoint()?;
     let text = bounded_metadata(connection, KEY, SOURCE_METADATA_ALLOCATION_BYTES as usize)?;
     let Some(text) = text else {
         match tables_present(connection)? {
@@ -192,13 +214,16 @@ pub(crate) fn verify_source<'conn>(
         summary.inherited.is_none(),
         "Inherited sources need a selected run plan"
     );
+    control.checkpoint()?;
     reject_duplicates(connection)?;
+    control.checkpoint()?;
 
     let mut totals = SummaryAccumulator::new();
     {
         let mut statement = connection.prepare("SELECT sequence,measurement_id,source_kind,task_url,generation,source_revision,expected_document_id,capture_config_sha256,initial_catalog_config_sha256,data,data_sha256 FROM sitemap_source_measurements ORDER BY sequence")?;
         let mut rows = statement.query([])?;
         while let Some(row) = rows.next()? {
+            control.checkpoint()?;
             let (record, data) = read_record_row(row, 0, &summary.limits)?;
             validate_record(&record, &summary, add(totals.record_count, 1)?)?;
             totals.record(&data)?;
@@ -212,6 +237,7 @@ pub(crate) fn verify_source<'conn>(
         let mut statement = connection.prepare("SELECT c.document_id,c.measurement_id,c.document_sequence,c.data,c.data_sha256,m.sequence,m.measurement_id,m.source_kind,m.task_url,m.generation,m.source_revision,m.expected_document_id,m.capture_config_sha256,m.initial_catalog_config_sha256,m.data,m.data_sha256 FROM sitemap_source_measurement_commits c LEFT JOIN sitemap_source_measurements m ON m.measurement_id=c.measurement_id ORDER BY c.document_sequence")?;
         let mut rows = statement.query([])?;
         while let Some(row) = rows.next()? {
+            control.checkpoint()?;
             let (link, data) = read_commit_row(row, 0)?;
             validate_link(&link, previous)?;
             previous = link.document_sequence;

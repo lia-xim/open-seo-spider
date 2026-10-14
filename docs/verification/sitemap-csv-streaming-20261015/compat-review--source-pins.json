@@ -1,0 +1,62 @@
+{
+  "input_manifest_sha256": "c1da9605e574e302edeaece94e7f220b73c7df9df76fdbc12502b0f7e4035024",
+  "input_entries": [
+    {
+      "path": "crates/core/src/sitemap_coverage/verified_read.rs",
+      "payload": "product/crates/core/src/sitemap_coverage/verified_read.rs",
+      "before_payload": "s4-csv-control-core-v1/product/crates/core/src/sitemap_coverage/verified_read.rs",
+      "before_sha256": "95e776c6668716815f8a4ef3f4b2255b9083ea473b42ce045921ff66f379cf38",
+      "sha256": "38a4c60cc6362bcd21c9fbe15a86ddebdaf1aded6a9ab650b7ef11cf8ceadc4f",
+      "bytes": 28207
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis/window.rs",
+      "payload": "product/crates/core/src/sitemap_membership_analysis/window.rs",
+      "before_payload": "s4-csv-control-core-v1/product/crates/core/src/sitemap_membership_analysis/window.rs",
+      "before_sha256": "fe461667cdc78b5f5eea01e96f1f6b69b81c7e8ba5303d2918e102951993f7ac",
+      "sha256": "ba143d5b535b71ee3572ccbf2c57dbee3afa09f327d98777d5da8e29f5f374b5",
+      "bytes": 14017
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis.rs",
+      "payload": "product/crates/core/src/sitemap_membership_analysis.rs",
+      "before_payload": "s4-csv-control-core-v1/product/crates/core/src/sitemap_membership_analysis.rs",
+      "before_sha256": "2eb60bcee8fb1b3957c9ad52eea1a5c6d1c7d6163e71ed5b4553108079c44f28",
+      "sha256": "e3e407fefc99c0402424d45affceb69925bdc544551d0d166e02efd352811b18",
+      "bytes": 44882
+    }
+  ],
+  "exact_delta_checks": [
+    {
+      "path": "crates/core/src/sitemap_coverage/verified_read.rs",
+      "before_sha256": "95e776c6668716815f8a4ef3f4b2255b9083ea473b42ce045921ff66f379cf38",
+      "after_sha256": "38a4c60cc6362bcd21c9fbe15a86ddebdaf1aded6a9ab650b7ef11cf8ceadc4f",
+      "exact_delta_pass": true,
+      "kind": "Exactly one cfg(test) on default wrapper; controlled/inner bodies unchanged"
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis/window.rs",
+      "before_sha256": "fe461667cdc78b5f5eea01e96f1f6b69b81c7e8ba5303d2918e102951993f7ac",
+      "after_sha256": "ba143d5b535b71ee3572ccbf2c57dbee3afa09f327d98777d5da8e29f5f374b5",
+      "exact_delta_pass": true,
+      "kind": "Exactly one cfg(test) on default wrapper; controlled/inner bodies unchanged"
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis.rs",
+      "before_sha256": "2eb60bcee8fb1b3957c9ad52eea1a5c6d1c7d6163e71ed5b4553108079c44f28",
+      "after_sha256": "e3e407fefc99c0402424d45affceb69925bdc544551d0d166e02efd352811b18",
+      "exact_delta_pass": true,
+      "kind": "Exactly one default reexport moved behind cfg(test); all other source unchanged"
+    }
+  ],
+  "old_runners_read_only_pins": [
+    {
+      "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\run-sitemap-rich-read-suite-v1.mjs",
+      "sha256": "f49d32a8b2a584f38bd3474e6f85be636cdecd097a62cd2ece148ca51378fd8b"
+    },
+    {
+      "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\build-sitemap-rich-read-v1.mjs",
+      "sha256": "455f66230c81d9ad22f457660927f5826be575055ba74c2d520701a8546c2983"
+    }
+  ]
+}

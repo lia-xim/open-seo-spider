@@ -136,6 +136,7 @@ async fn same_job_pair_cannot_observe_two_different_expected_generations() {
             Arc::new(RwLock::new(source)),
         )]))),
         data_dir: Arc::new(PathBuf::from("unused-comparison-test-directory")),
+        exports: Default::default(),
     };
     let request = SavedComparisonRequest {
         before: id,
@@ -160,6 +161,7 @@ fn bundle_state(sources: Vec<Job>) -> AppState {
                 .collect(),
         )),
         data_dir: Arc::new(PathBuf::from("unused-original-report-bundle-directory")),
+        exports: Default::default(),
     }
 }
 fn bundle_request(before: Uuid, after: Uuid) -> SavedComparisonRequest {

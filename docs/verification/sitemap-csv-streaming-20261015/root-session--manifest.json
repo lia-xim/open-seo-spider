@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "name": "s4-csv-root-session-v1",
+  "immutable": true,
+  "recorded_at": "2026-10-14T22:10:18.578Z",
+  "baseline": "d105fb8a0c527ffd99164e44ec644bd0e49f61a5",
+  "entries": [
+    {
+      "path": "crates/core/src/lib.rs",
+      "payload": "product/crates/core/src/lib.rs",
+      "before_sha256": "ae3224a9221a630fc442ed632bfd992071ac5ff58c7f2b31b102dc033cf33075",
+      "sha256": "fc3c27868fb7653aa0f5151bdf507caa74bf078fe6969a5945e3ed91ea18d270",
+      "bytes": 6253
+    },
+    {
+      "path": "crates/core/src/store.rs",
+      "payload": "product/crates/core/src/store.rs",
+      "before_sha256": "ff5e2d42d62177c83d10afce5b350c986d0f0db58dc461f38ba96d3339f294e8",
+      "sha256": "a576766c998e78106b2f819ab9599f9cf83d3bac0d5c35f12ba9d68aee74c8af",
+      "bytes": 148339
+    },
+    {
+      "path": "crates/core/src/store-sitemap-source-tests.rs",
+      "payload": "product/crates/core/src/store-sitemap-source-tests.rs",
+      "before_sha256": "e97466f1a63bfcbbd69471a73becfc5aaa41f0b02c69a22c4d5f2dcc86b8a3fe",
+      "sha256": "9b0aed28274434c5d47157ad24b00966d9b8158c6a12555186c1fcce408cd9e3",
+      "bytes": 46108
+    },
+    {
+      "path": "crates/core/src/store/sitemap_read_window.rs",
+      "payload": "product/crates/core/src/store/sitemap_read_window.rs",
+      "before_sha256": "061236e3ab6a51a88b1e9496672bbb68a2c8e8a18d09367fd3978762361511f1",
+      "sha256": "424d8581b5bca41243bf2e2466de23bb997b75ab8187995710333c46509963ad",
+      "bytes": 10248
+    },
+    {
+      "path": "crates/core/src/store/sitemap_read_context.rs",
+      "payload": "product/crates/core/src/store/sitemap_read_context.rs",
+      "before_sha256": "ABSENT",
+      "sha256": "0bafc0e1ca6a0378191b563d92bb9bf0f0ff5dfa3c75913363756d6d96d9bfa4",
+      "bytes": 8301
+    },
+    {
+      "path": "crates/core/src/store/sitemap_stored_rows.rs",
+      "payload": "product/crates/core/src/store/sitemap_stored_rows.rs",
+      "before_sha256": "ABSENT",
+      "sha256": "007ab54f138d734072d39b4ec9b5b4497c7b3dd327d6e5d9d46d48e6f125424e",
+      "bytes": 4642
+    },
+    {
+      "path": "crates/core/src/store/sitemap_stored_rows_tests.rs",
+      "payload": "product/crates/core/src/store/sitemap_stored_rows_tests.rs",
+      "before_sha256": "ABSENT",
+      "sha256": "e9e51db2eb9601b424c5b196002489fb9dfa552a54624c8f83ae35b9861864fc",
+      "bytes": 16004
+    },
+    {
+      "path": "crates/core/src/store/sitemap_stored_source_tests.rs",
+      "payload": "product/crates/core/src/store/sitemap_stored_source_tests.rs",
+      "before_sha256": "ABSENT",
+      "sha256": "3d72d03ae9204b485abf5bd5f06a31b66692715f88fab6a6aca27b9825c6b8c6",
+      "bytes": 7542
+    }
+  ],
+  "new_authored_tests": 9,
+  "test_groups": [
+    {
+      "path": "crates/core/src/store/sitemap_stored_rows_tests.rs",
+      "names": [
+        "actual_stored_rows_two_full_visits_match_materialized_cohort_and_rich_state",
+        "actual_stored_rows_exact_original_filter_and_known_empty_matches_stored_oracle",
+        "actual_stored_rows_stale_state_and_full_tail_corruption_never_enter_callback",
+        "actual_stored_rows_wal_keeps_two_passes_while_later_valid_writer_changes_generation",
+        "actual_stored_rows_cancel_deadline_and_callback_failure_release_real_transaction",
+        "actual_stored_rows_pre_cancel_expired_control_and_invalid_filter_never_enter_callback",
+        "actual_stored_rows_historical_none_and_known_empty_remain_distinct"
+      ]
+    },
+    {
+      "path": "crates/core/src/store/sitemap_stored_source_tests.rs",
+      "names": [
+        "actual_stored_rows_a_only_and_committed_source_state_precede_user_output",
+        "actual_stored_rows_selected_presence_and_historical_none_keep_exact_parent_guards"
+      ]
+    }
+  ],
+  "format": "rustfmt --edition2024 skip_children=true parser only",
+  "compiler_tests_sqlite_native": "NOT_RUN_COMPUTE_HOLD",
+  "scope": "Shared actual read preparation, public opaque fixed-filter repeated allstored session, existing rich window state preserved. ActualRawNone unavailable priority preserved for allstored reader; strict window Expected preserved. Controlled private readers and App transport are separate coordinated handoffs.",
+  "product_root_owned_only": true
+}

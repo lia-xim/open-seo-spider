@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "name": "s4-csv-final-preparation-review-v1",
+  "recorded_utc": "2026-10-14T22:30:14.9043942Z",
+  "immutable": true,
+  "result": "PASS_BOUNDED_HASH_INDEX_SYNTAX_LITERAL_SOURCE_REVIEW_ONLY",
+  "validation": {
+    "path": "validation.json",
+    "sha256": "60ad13258c3c8b6c60fc848058e2d46903531283dacc22d6df63f0f9405508be",
+    "actual_exit_code": 0
+  },
+  "method": {
+    "path": "validate.cjs",
+    "sha256": "6f7fd887927a71f3ab7619803ae9377f7e3d5fc3311d28ba917a331a83462a53",
+    "actual_command": "node E:/CodexWork/open-seo-spider-01a12ac3-20261013/s4-csv-final-preparation-review-v1/validate.cjs",
+    "scope": "Read/hash/regex, read-only actual Git index, two Node --check invocations, isolated JSON-string VM literals only"
+  },
+  "source": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-csv-streaming-source-v1/manifest.json",
+    "sha256": "a31936510381cca40901eb547f15090a77c833f617f84f51f67b057fe7a5714e",
+    "files": 265,
+    "all_frozen_and_current_root_bytes_and_hashes_verified": true,
+    "previous_manifest_sha256": "6d0e319f2800a7d32fb8509c7120ccb45d6d6724c3495c9cf3911a96dd5b26d9",
+    "previous_paths_preserved": 255,
+    "unowned_previous_bytes_preserved": 239,
+    "new_files": 10
+  },
+  "bindings": {
+    "products": 26,
+    "chain": "Exact Root/App/Control/Postfix/Compat/Wire payloads + SHA9265 parent exact append + CRLF->LF only",
+    "approved_hashes_match_frozen_manifest_current_root_actual_index": true,
+    "actual_staged_crates_paths_exact": true,
+    "normalized_only": [
+      "crates/core/src/sitemap_membership_analysis/window.rs",
+      "crates/core/src/sitemap_read_control.rs"
+    ],
+    "earlier_P2": "Statically fixed and now actual final derived-byte/source/index binding independently verified"
+  },
+  "tests": {
+    "new_actual_named_functions": 35,
+    "required_names": 288,
+    "old_required_names_preserved": 253,
+    "minimum_expected": 1070,
+    "executed": 0,
+    "physical64mib_plus_one": "OPEN_NOT_AUTHORED_NOT_RUN",
+    "selected_inverse_wire_and_selected_only_context": "OPEN_DIRECTED_SUBGATES",
+    "parity": "NOT_PROVEN"
+  },
+  "runner_checks": [
+    {
+      "path": "work/run-sitemap-csv-streaming-suite-v1.mjs",
+      "sha256": "613aff8e49df6a50115922ff3aa61e8cacce2f6c14066a7a002d0c7f80010332",
+      "node_syntax_exit": 0,
+      "isolated_repo_literal": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-csv-streaming-integration-v1",
+      "complete_template_derivation": true,
+      "hold_and_compiler_guards_before_writes": true,
+      "route_execution": "NOT_RUN"
+    },
+    {
+      "path": "work/build-sitemap-csv-streaming-v1.mjs",
+      "sha256": "73c5f7dfc0d279025dd84bce629635378c1d8eff6efff08632406174f03ed0e5",
+      "node_syntax_exit": 0,
+      "isolated_repo_literal": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-csv-streaming-integration-v1",
+      "complete_template_derivation": true,
+      "hold_and_compiler_guards_before_writes": true,
+      "route_execution": "NOT_RUN"
+    }
+  ],
+  "preparer": {
+    "sha256": "cbce067286097a6d6d35f0ecb8b0cee5268c07556887bbfbb2c5ef1a8e867bf8",
+    "executed_by_reviewer": false,
+    "root_preparation_receipt_sha256": "c71fac509070a8ed4fc0d3a7583ddfd115fe42d162cfb1df6552b219240ee64c"
+  },
+  "prior_review": {
+    "path": "s4-csv-preparation-review-v1/receipt.json",
+    "sha256": "2a5e3e82828f5d107a2e2c4d3307a91e1868c61d11018f3a53e74ac2d2aa6f8a",
+    "retained_immutable": true
+  },
+  "findings_remaining": [],
+  "proof_boundary": [
+    "Generated routes match entire exact pinned-template derivation including only approved repo/namespace/sourceSHA/count/prose/guard substitutions",
+    "Compute HOLD guard is before route directory writes, renderer import and child spawn; all four RUSTFLAGS/WRAPPER exclusions present before writes in both routes",
+    "Future builder requires exact corresponding CSV suite proof and sourceSHA before build, preserves prior target before cargo build and never installs user runtime",
+    "Four installed renderer SOURCE assets hash checked; installed executable not independently rehashed or executed",
+    "No runner imported/executed, no source/product/Git mutation, no Cargo/compiler/tests/SQLite/HTTP/browser/renderer/native/RSS proof; HOLD remains active"
+  ]
+}

@@ -1,0 +1,30 @@
+# Independent App CSV transport review — source only
+
+Reviewed immutable App manifest `3dac7530629186a60d9da074f12a765167dc5e470110d4c63469f6d9a90ed99e`. All eight payload hashes were independently recomputed and matched. The payloads live directly under the handoff's `crates/`, not `product/`.
+
+## Confirmed P2: receiver activity does not reset idle timeout
+
+`sitemap_csv_stream.rs:415–418` derives the idle deadline from `Progress.last_sent`; this value is refreshed only after a producer enqueue (`647–648`). Successful Body queue pops (`518–526`) never update it. With four queued64KiB prefixes and a withheld positive tail, the producer can finish and join immediately. A healthy slow consumer then pops at t=8,16,24,32 seconds. At t=30, the supervisor expires the stream based on the last enqueue even though the last pop was only6seconds earlier. The remaining verified prefix/tail is aborted. This is a false idle timeout, independent of the absolute300second limit.
+
+The minimal correction is a clone-shared progress sender in BodyState and an idle activity update on each successful queue pop before yielding. Preserve the independent Ready-based absolute deadline, queue cap, watcher lifetime after worker join, and no-progress timeout. Actual Body consumption is the observable activity here; it is not proof of TCP delivery. A regression must let the producer join with buffered data, consume repeatedly at intervals below the idle limit while total drain exceeds it, and finish successfully; a truly unpolled body and the absolute deadline must still abort and join. No timing or network test was run in this review.
+
+## Previously known P1, not counted as a new finding
+
+The immutable `sitemap_membership.rs:889,894` gates BoundedBytes and its Write implementation with cfg(test), while production inventory JSON measurement uses it at852. Root's current copy independently matches exactly the frozen file with those two attributes removed (Root SHA `2151dc243d9b06a411a29c0cd883a51acae49de744139649a8fe982a8de764ed`). This is a source-level closure only; there is no compilation result.
+
+## Bounded checks without further confirmed functional findings
+
+- Pre-Ready: the fixed query/filter/token role is checked before Store I/O, then the actual opaque Core header is bound to App generation/config/shared state. Pass1 visits all matching stored rows and hashes/counts the actual unchanged formatter bytes with an inclusive64MiB cap before Ready (`sitemap_csv_stream.rs:727–776`; membership1073–1175). Existing CSV token schema/filter/original identity semantics remain. RawNone is rejected before formatting. No first-page substitute or CSV Vec/spool was found in this path.
+- Pass2: exact byte/hash/row receipt comparison is inside the same Core session and failure prevents Completion (`791–837`). The returned positive1..64KiB tail is obtained only after Core returns, then the async supervisor awaits the actual blocking JoinHandle before forwarding it (`424–431`, `843–856`). This review read the Root API signatures to check the App call shape; it does not independently re-prove Core's full transaction contract.
+- Body: a prefix is required to stay strictly below Content-Length (`520–526`). A closed prefix queue alone does not produce EOF; the body awaits joined completion and exact receipt before tail (`479–532`). Failure discards only the bounded queue and returns an I/O error; subsequent EOF follows the error, not a silently successful prefix. Failure/panic paths cannot release the positive tail in the inspected control flow.
+- Lifecycle: dropping pending/body state closes and drains the receiver and cancels Control (`535–543`); ResponseBuilder failure owns/drops the actual Body. Coordinator cancellation still awaits the worker. Registry admission and shutdown share a mutex; shutdown takes handles without holding the mutex over await, joins them, and concurrent drain callers also await active0 (`175–215`). Tokio's actual Notify implementation tracks notify_waiters generations, matching the create-notified-before-active-check pattern. App Ctrl-C and post-serve return call drain (`server.rs:310–320`). This is no hard shutdown/SQL latency or socket-close claim.
+- Queue reserve is bounded, stop/deadline-aware and uses the blocking worker's runtime handle (`611–648`). Actual sink causes are separately retained and take precedence over the unchanged formatter's generic budget label (`798–806`); the handler emits JSON503/504 only before Ready and body errors afterward. Three sink-only tests are authored, not actual Store/Wire proof.
+- Type/lifetime read: BodyState contains owned Send fields; no standard MutexGuard/watch Ref is held across await. The unfolded TryStream produces Bytes/io::Error and matches the locked Axum from_stream Send/static/BoxError contract. The owned Core Control guard and callback signature were inspected only as API context. No new type/borrow defect was confirmed from these App paths. This is not a compiler/Clippy pass.
+
+## Unexecuted warning risk
+
+`ExportStats:113` and `ExportRegistry::snapshot:159` are declared in production but have no production caller in the frozen App. Intended metrics consumers are tests. A deny-dead_code Clippy build may require cfg(test) on these items or a genuine production consumer. This is reported as an unexecuted static gate risk, not a second confirmed transport defect.
+
+The AppState source search found the production constructor plus four fixture literals (excluding the type declaration/function return annotation); their new exports field is present. No broader repository/feature parity approval is given. The64MiB cap, real wire completion, backpressure, SQL cancellation latency, actual native checksum and shutdown outcomes remain NOT_PROVEN until the held compiler and test/native gates run.
+
+Only read/search/hash and this isolated receipt write occurred. No product/handoff mutation, Git, compiler, Cargo, tests, SQL/fixture connection, HTTP, native app, browser or generator was executed.

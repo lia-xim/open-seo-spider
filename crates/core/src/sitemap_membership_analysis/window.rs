@@ -23,9 +23,25 @@ impl VerifiedAnalysisRead<'_, '_> {
         &self.prepared.base.context
     }
 }
+#[cfg(test)]
 pub(crate) fn prepare_window_analysis<'a, 'conn>(
     connection: &'conn Connection,
     input: &AnalysisReadInput<'a, 'conn>,
+) -> Result<VerifiedAnalysisRead<'a, 'conn>> {
+    prepare_window_analysis_with_control(connection, input, &SitemapReadControl::default())
+}
+pub(crate) fn prepare_window_analysis_with_control<'a, 'conn>(
+    connection: &'conn Connection,
+    input: &AnalysisReadInput<'a, 'conn>,
+    control: &SitemapReadControl,
+) -> Result<VerifiedAnalysisRead<'a, 'conn>> {
+    let _binding = control.bind_connection(connection)?;
+    control.run(|| prepare_window_analysis_inner(connection, input, control))
+}
+fn prepare_window_analysis_inner<'a, 'conn>(
+    connection: &'conn Connection,
+    input: &AnalysisReadInput<'a, 'conn>,
+    control: &SitemapReadControl,
 ) -> Result<VerifiedAnalysisRead<'a, 'conn>> {
     ensure!(
         !connection.is_autocommit(),
@@ -55,7 +71,7 @@ pub(crate) fn prepare_window_analysis<'a, 'conn>(
             "Analysis coverage/raw basis differs"
         );
     }
-    let prepared = prepare_context(
+    let prepared = prepare_context_with_control(
         connection,
         ContextInput {
             generation: input.generation,
@@ -64,6 +80,7 @@ pub(crate) fn prepare_window_analysis<'a, 'conn>(
             summary: input.raw.map(|v| v.summary()),
             source: SourceBasis::Verified(input.source),
         },
+        control,
     )?;
     Ok(VerifiedAnalysisRead {
         connection,
@@ -83,6 +100,7 @@ pub(crate) fn project_prepared_window(
     visible_rows: &[SitemapLedgerRow],
     request: &SitemapMembershipAnalysisRequest,
 ) -> Result<SitemapMembershipAnalysis> {
+    prepared.prepared.control.checkpoint()?;
     request.validate()?;
     ensure!(
         !prepared.connection.is_autocommit(),
@@ -150,13 +168,15 @@ impl MembershipBasis<'_> {
         &self,
         connection: &Connection,
         pages: &[SitemapTargetObservation],
+        control: &SitemapReadControl,
     ) -> Result<BTreeMap<String, WindowCounts>> {
         match self {
-            Self::Materialized(rows) => legacy_counts(rows, pages),
+            Self::Materialized(rows) => legacy_counts(rows, pages, control),
             Self::Verified(raw) => sql_counts(
                 connection,
                 raw.context("Saved page membership has no verified raw basis")?,
                 pages,
+                control,
             ),
         }
     }
@@ -164,6 +184,7 @@ impl MembershipBasis<'_> {
 fn legacy_counts(
     rows: &[SitemapLedgerRow],
     pages: &[SitemapTargetObservation],
+    control: &SitemapReadControl,
 ) -> Result<BTreeMap<String, WindowCounts>> {
     let documents: BTreeMap<_, _> = rows
         .iter()
@@ -177,6 +198,7 @@ fn legacy_counts(
         .map(|v| (v.requested_url.clone(), MembershipCounts::default()))
         .collect();
     for row in rows {
+        control.checkpoint()?;
         if let SitemapLedgerRow::Location(loc) = row {
             if loc.observed.role != SitemapLocationRole::PageLocation {
                 continue;
@@ -214,6 +236,7 @@ fn legacy_counts(
     members
         .into_iter()
         .map(|(url, counts)| {
+            control.checkpoint()?;
             let samples = counts
                 .sources
                 .iter()
@@ -247,6 +270,7 @@ fn sql_counts(
     connection: &Connection,
     raw: &VerifiedRawRead<'_>,
     pages: &[SitemapTargetObservation],
+    control: &SitemapReadControl,
 ) -> Result<BTreeMap<String, WindowCounts>> {
     let mut out: BTreeMap<_, WindowCounts> = pages
         .iter()
@@ -270,6 +294,7 @@ fn sql_counts(
     let mut statement = connection.prepare(&sql)?;
     let mut rows = statement.query([&keys])?;
     while let Some(row) = rows.next()? {
+        control.checkpoint()?;
         let url: String = row.get(0)?;
         let counts = out
             .get_mut(&url)
@@ -282,6 +307,7 @@ fn sql_counts(
     let mut statement = connection.prepare(sql)?;
     let mut rows = statement.query([&keys])?;
     while let Some(row) = rows.next()? {
+        control.checkpoint()?;
         let url: String = row.get(0)?;
         out.get_mut(&url)
             .context("Unknown alias count group")?
@@ -293,6 +319,7 @@ fn sql_counts(
     let mut statement = connection.prepare(&sql)?;
     let mut rows = statement.query(params![keys, SAMPLE_LIMIT as i64])?;
     while let Some(row) = rows.next()? {
+        control.checkpoint()?;
         let url: String = row.get(0)?;
         let task: String = row.get(1)?;
         let id: String = row.get(2)?;

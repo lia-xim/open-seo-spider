@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "name": "s4-csv-streaming-tests-review-v1",
+  "created_utc": "2026-10-14T22:27:08.4131724Z",
+  "reviewer": "/root/s3_decode_review",
+  "status": "NO_CONFIRMED_FINDINGS_IN_BOUNDED_SOURCE_TEST_SCOPE",
+  "input_manifest_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s4-csv-streaming-tests-v1\\manifest.json",
+  "input_manifest_sha256": "83707b519f05b0b7e964ac25c4fdfacfbf998791409b7149218b0ae45fc891f0",
+  "confirmed_findings": [],
+  "authored_functions": 13,
+  "executed_test_groups": 0,
+  "planned_design_groups": 14,
+  "source_read_only": true,
+  "product_mutated": false,
+  "compute_hold_preserved": true,
+  "gates": {
+    "source_payload_hashes": "MATCH",
+    "dependency_manifest_hashes": "MATCH",
+    "source_static_review": "COMPLETED_WITH_NO_CONFIRMED_FINDINGS",
+    "compiler": "NOT_RUN",
+    "cargo_tests": "NOT_RUN",
+    "sqlite_fixtures": "NOT_RUN",
+    "http_tcp": "NOT_RUN",
+    "native_product": "NOT_RUN",
+    "browser": "NOT_RUN",
+    "physical_64mib_exact_plus_one": "OPEN_NOT_AUTHORED",
+    "runtime_resource_proof": "NOT_RUN",
+    "feature_parity": "NOT_PROVEN"
+  },
+  "open_directed_cases": [
+    "Accepted native Store and HTTP pair at exactly 67108864/67108865 bytes",
+    "Selected parentNone/childSome inverse-presence HTTP",
+    "Isolated selected-operation-only context409",
+    "Optional old-engine/alias priority variations"
+  ],
+  "scope": "Frozen two child files and actual App hooks/dependencies; no global production type/runtime proof",
+  "artifacts": [
+    {
+      "sha256": "579c6f3ac90641ddb35e499d1a77e6147b06bbb44ed11e78b17464ed46db769a",
+      "path": "REVIEW.md"
+    },
+    {
+      "sha256": "5e65a167ea2f595ad491b05749a506d2f4acf79d38fc98220654e4530e8ed412",
+      "path": "source-pins.json"
+    }
+  ]
+}

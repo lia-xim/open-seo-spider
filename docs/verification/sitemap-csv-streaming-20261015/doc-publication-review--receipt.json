@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "name": "s4-csv-doc-publication-review-v1",
+  "immutable": true,
+  "recorded_utc": "2026-10-14T22:38:19.0589131Z",
+  "result": "BOUNDED_STATIC_GUARD_AND_WORDING_REVIEW_ONLY",
+  "scripts": [
+    {
+      "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\publish-sitemap-csv-streaming-docs-v1.cjs",
+      "sha256": "df11597fc7b7bae70a32d904c448d4cbfec9dc8215009760a198be7516e8e12a",
+      "bytes": 12143,
+      "examined_copy": "examined--publish-sitemap-csv-streaming-docs-v1.cjs",
+      "node_check_command": "node --check C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\publish-sitemap-csv-streaming-docs-v1.cjs",
+      "node_check_exit": 0,
+      "script_execution": "NOT_RUN",
+      "import": "NOT_RUN"
+    },
+    {
+      "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\stage-sitemap-csv-streaming-v1.cjs",
+      "sha256": "f47bf1eeb992857d58ee70436ff3607c8c42375364fad1a755cb72c24bb5162f",
+      "bytes": 4102,
+      "examined_copy": "examined--stage-sitemap-csv-streaming-v1.cjs",
+      "node_check_command": "node --check C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\stage-sitemap-csv-streaming-v1.cjs",
+      "node_check_exit": 0,
+      "script_execution": "NOT_RUN",
+      "import": "NOT_RUN"
+    },
+    {
+      "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\update-sitemap-csv-streaming-issue-v1.cjs",
+      "sha256": "5b98cf7fd6e5fc2903036c2d055cd60c6c316c10685c932751a0ef4d5ff66c46",
+      "bytes": 5986,
+      "examined_copy": "examined--update-sitemap-csv-streaming-issue-v1.cjs",
+      "node_check_command": "node --check C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\update-sitemap-csv-streaming-issue-v1.cjs",
+      "node_check_exit": 0,
+      "script_execution": "NOT_RUN",
+      "import": "NOT_RUN"
+    }
+  ],
+  "documentation_before_publication": [
+    {
+      "path": "docs/sitemap-csv-streaming.md",
+      "sha256": "f2ef74a6ebd85f0aa2db59ed7ad43fdaa8cb3af5c4388341d66336ab271423ec",
+      "bytes": 6525
+    },
+    {
+      "path": "docs/sitemap-rich-window.md",
+      "sha256": "aee5a6b7dbe2b9b5898fdebfc4f3fa41853a3bc5f4e2029cd97e76e774c9d4d6",
+      "bytes": 6410
+    },
+    {
+      "path": "docs/parity/sitemap-csv-streaming-plan.md",
+      "sha256": "3f4a4b72f3dd19946ca7a28fa4ea5a1fadd3993d37332b6cc751b9a07dd13bb8",
+      "bytes": 24913
+    },
+    {
+      "path": "docs/feature-parity.json",
+      "sha256": "320b944ae9491f6dee60c4367a686bed4249004a07f6a0e4b1e638ba1e3f368f",
+      "bytes": 378035
+    },
+    {
+      "path": ".gitattributes",
+      "sha256": "4c63d385d19d7dc1bf21831a03cc11ccca52c4a98e7bfc8d593c263c83131c03",
+      "bytes": 2925
+    },
+    {
+      "path": "scripts/update-feature-todo.mjs",
+      "sha256": "4515a89bab506506659dfb460e43aa50d22aae6caf7a9c8a1babb324cef950a1",
+      "bytes": 29747
+    }
+  ],
+  "findings": [
+    {
+      "priority": "P2",
+      "area": "Publisher preconditions before mutation",
+      "initial_sha256": "121941d02b662fd135daf89fe82178bdc1ffdf6e124b3ccbeaf7a22ced966d08",
+      "counterexample": "Missing or concurrently renamed old pending prefix causes assertion only after archive/proof/attributes were written; subsequent fresh-destination rerun then fails",
+      "status": "ADDRESSED_STATICALLY",
+      "final_lines": "43-61",
+      "closure": "Proof freshness, attributes rule absence, ledger/work/prefix/document duplication, derived complete bytes and receipt freshness are checked before first write; exact before-byte hashes and fresh destinations are rechecked; writer uses wx archives/proof and guarded attributes/ledger replacements"
+    },
+    {
+      "priority": "P2",
+      "area": "Staging authority over allowed paths",
+      "initial_sha256": "b9350b49eae96eb0b57844bd99816675477eaea2896c5f97e4cdae24e0f236d7",
+      "counterexample": "Appending unrelated dirty notes.txt with matching bytes/hash to an unbound proof.companions list could expand owned/docs and git add without changing frozen compiler input hashes",
+      "status": "ADDRESSED_STATICALLY",
+      "final_lines": "3-18",
+      "closure": "Exact publication receipt proof SHA is checked before deriving scope; canonical flat archive prefix only;26 products derive from SHA-pinned compiler.approved==compiler.staged==prep bindings; actual status/staged path sets and raw bytes must equal the exact scope"
+    }
+  ],
+  "unresolved_findings": [],
+  "verified_static_controls": [
+    "Archive byte buffers are hashed before copy, written exclusively and rehashed; new late -text attributes rule preserves exact bytes despite global rs/md/json/cjs LF rules",
+    "Existing attributes rules remain; old pending Rich paragraph is renamed as prior history rather than deleted; new source paragraph and gate strings remain WIP/NOT_RUN",
+    "Documentation labels current35 authored/0 executed,265 inputs,288 named required/min1070 future passes;144 grouped requirements remain31 implemented67 partial46 planned",
+    "Historical Rich and design documents have explicit prior-state headings, preserving buffered CSV and zero-run statements for that old source",
+    "Issue builder verifies exact old archived body SHA and point-in-time remote body equality before local body file or issue edit; body supplied via actual --body-file; previous Rich and older historical tail retained",
+    "Issue new checked items describe authored source only; compile/tests/native/physical/selected variants/filter/RSS/platform gates remain open",
+    "Current user executable SHA is a Root-declared historical pin; reviewer neither rehashed nor executed it",
+    "Initial misplaced syntax-check invocations are recorded separately; source order confirms their described guards precede archive/Git/remote mutation"
+  ],
+  "invocation_correction": {
+    "path": "work/sitemap-csv-preparation-invocation-correction-v1.json",
+    "sha256": "b2337e0ab3cbb1d940e066c0a9741979fa20011b76b8dda9e8be75913e5aae95",
+    "interpretation": "Root-reported prior accidental invocations, not repeated by reviewer; current review ran only correctly ordered Node --check"
+  },
+  "static_counts": {
+    "new_authored_tests": 35,
+    "new_tests_executed": 0,
+    "frozen_files": 265,
+    "required_test_names": 288,
+    "minimum_expected": 1070,
+    "grouped_status": "31/67/46",
+    "manufacturer_parity": "NOT_PROVEN"
+  },
+  "proof_boundary": [
+    "Three independent correctly ordered node --check invocations actual exit0, both initial sources and changed final source syntax checked",
+    "Publisher/staging/Issue scripts NEVER executed or imported by reviewer; no gh/API/HTTP/Git staging/ledger generation",
+    "No Root, product, index or runtime file mutation; only own review artifacts written",
+    "Publication/archive/staging/Issue results are not yet proved; final physical helper manifest/review remains a prerequisite",
+    "Issue body guard is point-in-time comparison, not an atomic compare-and-swap claim",
+    "Filesystem I/O failures are not claimed transactional or automatically recoverable; new preflights remove the confirmed avoidable prerequisite failure",
+    "No Cargo/compiler/tests/SQLite/renderer/browser/native/RSS execution; HOLD remains active"
+  ]
+}
