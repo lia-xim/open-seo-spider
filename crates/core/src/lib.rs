@@ -44,6 +44,8 @@ mod sitemap_lastmod;
 pub use sitemap_lastmod::*;
 mod sitemap_membership_analysis;
 pub use sitemap_membership_analysis::*;
+mod sitemap_source_measurement;
+pub use sitemap_source_measurement::*;
 mod srcset;
 mod store;
 mod text_metrics;
@@ -106,10 +108,14 @@ pub use robots_simulation::{
 };
 pub use serp::{SerpInputRow, SerpPreview, export_serp_csv, import_serp_csv, preview_serp};
 pub use sitemap::{
-    SITEMAP_XML_ENGINE, SitemapDocumentKind, SitemapEntityDecode, SitemapEntityEncoding,
-    SitemapEntries, SitemapEntryObservation, SitemapFailure, SitemapFieldOccurrence,
-    SitemapLocationOccurrence, SitemapLocationRole, SitemapNamespaceProfile,
-    SitemapParseObservation, SitemapParserContext, SitemapParserLimits, decode_sitemap_entity,
+    SITEMAP_COUNT_LOC_PROFILE, SITEMAP_COUNT_XML_ENGINE, SITEMAP_ENTITY_DECODE_OBSERVATION_ENGINE,
+    SITEMAP_XML_ENGINE, SitemapCountLimits, SitemapCountObservation, SitemapDocumentKind,
+    SitemapEntityDecode, SitemapEntityDecodeEffectiveLimits, SitemapEntityDecodeIntegrity,
+    SitemapEntityDecodeObservation, SitemapEntityDecodeOutcome, SitemapEntityDecodeReadErrorKind,
+    SitemapEntityEncoding, SitemapEntries, SitemapEntryObservation, SitemapFailure,
+    SitemapFieldOccurrence, SitemapLocationOccurrence, SitemapLocationRole,
+    SitemapNamespaceProfile, SitemapParseObservation, SitemapParserContext, SitemapParserLimits,
+    SitemapXmlCountFacts, count_sitemap_xml, decode_sitemap_entity, decode_sitemap_entity_observed,
     observe_sitemap_xml, parse_sitemap,
 };
 pub use store::{CrawlStore, SitemapReadSnapshot};

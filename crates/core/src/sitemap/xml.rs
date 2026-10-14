@@ -1,3 +1,4 @@
+use super::count_models::*;
 use super::models::*;
 use quick_xml::{Reader, events::Event};
 use sha2::{Digest, Sha256};
@@ -286,6 +287,112 @@ struct Entry {
     locs: Vec<usize>,
     lastmod: Vec<SitemapFieldOccurrence>,
 }
+// Count-only sink owns no retained row arrays or per-entry vectors.
+#[derive(Default)]
+struct CountSink {
+    facts: SitemapXmlCountFacts,
+    active_entry: Option<CountEntry>,
+}
+#[derive(Default)]
+struct CountEntry {
+    actual_locs: u64,
+    first_location_eligible: bool,
+}
+#[derive(Clone, Copy)]
+enum CountLoc {
+    Eligible,
+    Empty,
+    CharacterLimit,
+    Credentials,
+    MalformedPercent,
+    Fragment,
+    InvalidAbsoluteHttp,
+}
+fn count_loc(value: &str) -> CountLoc {
+    // Only XML S is formatting; do not let URL parsing silently trim/repair it.
+    let candidate = value.trim_matches(|ch| matches!(ch, ' ' | '\t' | '\r' | '\n'));
+    if candidate.is_empty() {
+        return CountLoc::Empty;
+    }
+    if candidate.chars().count() >= 2048 {
+        return CountLoc::CharacterLimit;
+    }
+    if candidate.chars().any(|ch| {
+        ch.is_control()
+            || ch.is_whitespace()
+            || matches!(ch, '\\' | '<' | '>' | '"' | '{' | '}' | '|' | '^')
+            || ch == char::from(96u8)
+    }) {
+        return CountLoc::InvalidAbsoluteHttp;
+    }
+    let bytes = candidate.as_bytes();
+    for (at, byte) in bytes.iter().enumerate() {
+        if *byte == b'%'
+            && !(bytes.get(at + 1).is_some_and(u8::is_ascii_hexdigit)
+                && bytes.get(at + 2).is_some_and(u8::is_ascii_hexdigit))
+        {
+            return CountLoc::MalformedPercent;
+        }
+    }
+    let Some((scheme, rest)) = candidate.split_once("://") else {
+        return CountLoc::InvalidAbsoluteHttp;
+    };
+    if !(scheme.eq_ignore_ascii_case("http") || scheme.eq_ignore_ascii_case("https")) {
+        return CountLoc::InvalidAbsoluteHttp;
+    }
+    let authority = rest.split(['/', '?', '#']).next().unwrap_or_default();
+    if authority.contains('@') {
+        return CountLoc::Credentials;
+    }
+    if authority.is_empty() {
+        return CountLoc::InvalidAbsoluteHttp;
+    }
+    if candidate.contains('#') {
+        return CountLoc::Fragment;
+    }
+    // URL parsers may accept raw square brackets and other repairs in a path.
+    // The ASCII path/query profile is RFC3986 pchar plus '/' and '?'; brackets
+    // remain available only to the parsed authority's IPv6 host syntax.
+    if rest[authority.len()..].chars().any(|ch| {
+        ch.is_ascii()
+            && !(ch.is_ascii_alphanumeric()
+                || matches!(
+                    ch,
+                    '-' | '.'
+                        | '_'
+                        | '~'
+                        | '!'
+                        | '$'
+                        | '&'
+                        | '\''
+                        | '('
+                        | ')'
+                        | '*'
+                        | '+'
+                        | ','
+                        | ';'
+                        | '='
+                        | ':'
+                        | '@'
+                        | '/'
+                        | '?'
+                        | '%'
+                ))
+    }) {
+        return CountLoc::InvalidAbsoluteHttp;
+    }
+    match url::Url::parse(candidate) {
+        Ok(url)
+            if matches!(url.scheme(), "http" | "https")
+                && url.host_str().is_some()
+                && url.username().is_empty()
+                && url.password().is_none() =>
+        {
+            CountLoc::Eligible
+        }
+        _ => CountLoc::InvalidAbsoluteHttp,
+    }
+}
 struct Inspection<'a> {
     source: &'a str,
     limits: &'a SitemapParserLimits,
@@ -294,9 +401,86 @@ struct Inspection<'a> {
     root_closed: bool,
     declaration_seen: bool,
     active_entry: Option<Entry>,
+    count_sink: Option<CountSink>,
     capture: Option<Capture>,
 }
 impl Inspection<'_> {
+    fn entry_active(&self) -> bool {
+        self.count_sink
+            .as_ref()
+            .map_or(self.active_entry.is_some(), |sink| {
+                sink.active_entry.is_some()
+            })
+    }
+    fn finish_count(&mut self, end_start: usize, end: usize, empty: bool) -> XmlResult<()> {
+        if self.stack.len() == 3 && self.capture.is_some() {
+            let capture = self.capture.take().expect("checked count capture");
+            // Borrow source spans: raw fields are bounded but never copied into a retained row.
+            let raw_element = &self.source[capture.start..end];
+            let raw_inner = if empty {
+                ""
+            } else {
+                &self.source[capture.inner_start..end_start]
+            };
+            field(raw_element, self.limits, capture.start)?;
+            field(raw_inner, self.limits, capture.start)?;
+            if matches!(capture.kind, CaptureKind::Loc) {
+                let sink = self.count_sink.as_mut().expect("count sink");
+                sink.facts.actual_document_namespace_loc_occurrences += 1;
+                let candidate = capture
+                    .decoded
+                    .trim_matches(|ch| matches!(ch, ' ' | '\t' | '\r' | '\n'));
+                if candidate != capture.decoded {
+                    sink.facts.xml_space_trimmed_location_occurrences += 1;
+                }
+                let assessment = count_loc(&capture.decoded);
+                let eligible = matches!(assessment, CountLoc::Eligible);
+                if !eligible {
+                    sink.facts.invalid_location_occurrences += 1;
+                    match assessment {
+                        CountLoc::Empty => sink.facts.empty_location_occurrences += 1,
+                        CountLoc::CharacterLimit => {
+                            sink.facts.over_character_limit_location_occurrences += 1
+                        }
+                        CountLoc::Credentials => sink.facts.credential_location_occurrences += 1,
+                        CountLoc::MalformedPercent => {
+                            sink.facts.malformed_percent_location_occurrences += 1
+                        }
+                        CountLoc::Fragment => sink.facts.fragment_location_occurrences += 1,
+                        CountLoc::InvalidAbsoluteHttp => {
+                            sink.facts.invalid_absolute_http_location_occurrences += 1
+                        }
+                        CountLoc::Eligible => unreachable!("checked assessment"),
+                    }
+                }
+                let entry = sink.active_entry.as_mut().expect("count entry capture");
+                if entry.actual_locs == 1 {
+                    entry.first_location_eligible = eligible;
+                }
+            }
+        }
+        if self.stack.len() == 2 {
+            let sink = self.count_sink.as_mut().expect("count sink");
+            if let Some(entry) = sink.active_entry.take() {
+                sink.facts.completed_immediate_entries += 1;
+                match entry.actual_locs {
+                    0 => sink.facts.missing_location_entries += 1,
+                    1 if entry.first_location_eligible => {
+                        sink.facts.protocol_eligible_completed_entries += 1
+                    }
+                    1 => sink.facts.invalid_single_location_entries += 1,
+                    _ => sink.facts.multiple_location_entries += 1,
+                }
+            }
+        }
+        self.stack
+            .pop()
+            .ok_or_else(|| fail("sitemap_unbalanced_end", "Unmatched XML end", end_start))?;
+        if self.stack.is_empty() {
+            self.root_closed = true;
+        }
+        Ok(())
+    }
     fn retain(&mut self, bytes: usize, at: usize) -> XmlResult<()> {
         let total = self
             .observation
@@ -379,25 +563,44 @@ impl Inspection<'_> {
             } else {
                 "url"
             };
-            if recognized && current.local == entry_name && self.stack.len() == 1 {
-                if self.observation.entries.len() >= self.limits.max_entries {
-                    return Err(fail(
-                        "sitemap_entry_budget",
-                        "Entry count exceeds budget",
-                        start,
-                    ));
+            if let Some(sink) = &mut self.count_sink {
+                if !recognized && current.local == entry_name {
+                    sink.facts.ignored_nonfamily_entry_elements += 1;
                 }
-                self.active_entry = Some(Entry {
-                    ordinal: self.observation.entries.len() + 1,
-                    start,
-                    locs: Vec::new(),
-                    lastmod: Vec::new(),
-                });
+                if !recognized && current.local == "loc" {
+                    sink.facts.ignored_nonfamily_loc_elements += 1;
+                }
+            }
+            if recognized && current.local == entry_name && self.stack.len() == 1 {
+                if let Some(sink) = &mut self.count_sink {
+                    sink.facts.immediate_entry_starts += 1;
+                    sink.active_entry = Some(CountEntry::default());
+                } else {
+                    if self.observation.entries.len() >= self.limits.max_entries {
+                        return Err(fail(
+                            "sitemap_entry_budget",
+                            "Entry count exceeds budget",
+                            start,
+                        ));
+                    }
+                    self.active_entry = Some(Entry {
+                        ordinal: self.observation.entries.len() + 1,
+                        start,
+                        locs: Vec::new(),
+                        lastmod: Vec::new(),
+                    });
+                }
             } else if recognized
                 && matches!(current.local.as_str(), "loc" | "lastmod")
                 && self.stack.len() == 2
-                && self.active_entry.is_some()
+                && self.entry_active()
             {
+                if current.local == "loc"
+                    && let Some(sink) = &mut self.count_sink
+                {
+                    sink.facts.started_document_namespace_loc_elements += 1;
+                    sink.active_entry.as_mut().expect("count entry").actual_locs += 1;
+                }
                 self.capture = Some(Capture {
                     kind: if current.local == "loc" {
                         CaptureKind::Loc
@@ -414,6 +617,9 @@ impl Inspection<'_> {
                     "url" | "sitemap" | "loc" | "lastmod" | "urlset" | "sitemapindex"
                 )
             {
+                if let Some(sink) = &mut self.count_sink {
+                    sink.facts.misplaced_family_elements += 1;
+                }
                 return Err(fail(
                     "sitemap_invalid_element_parent",
                     "Recognized sitemap element is not an immediate child of its expected parent",
@@ -471,6 +677,9 @@ impl Inspection<'_> {
         Ok(())
     }
     fn finish(&mut self, end_start: usize, end: usize, empty: bool) -> XmlResult<()> {
+        if self.count_sink.is_some() {
+            return self.finish_count(end_start, end, empty);
+        }
         if self.stack.len() == 3 && self.capture.is_some() {
             let capture = self.capture.take().expect("checked capture");
             let raw_element = self.source[capture.start..end].to_owned();
@@ -819,7 +1028,7 @@ impl Inspection<'_> {
             || !self.root_closed
             || !self.stack.is_empty()
             || self.capture.is_some()
-            || self.active_entry.is_some()
+            || self.entry_active()
         {
             return Err(fail(
                 "sitemap_incomplete_xml",
@@ -879,6 +1088,7 @@ pub fn observe_sitemap_xml(
         root_closed: false,
         declaration_seen: false,
         active_entry: None,
+        count_sink: None,
         capture: None,
         observation: SitemapParseObservation {
             schema_version: 1,
@@ -928,4 +1138,102 @@ pub fn observe_sitemap_xml(
         }
     }
     Ok(inspection.observation)
+}
+
+/// Second bounded pass over supplied decoded XML. It does not fetch, admit, retain
+/// membership rows or attest HTTP/entity integrity. Only invalid limits/input size
+/// return Err; bounded UTF8/control/syntax failures retain zero/prefix count facts.
+pub fn count_sitemap_xml(
+    input: &[u8],
+    limits: &SitemapCountLimits,
+) -> XmlResult<SitemapCountObservation> {
+    limits.validate()?;
+    if input.len() > limits.max_xml_bytes {
+        return Err(SitemapFailure::new(
+            "sitemap_xml_byte_budget",
+            "Actual XML bytes exceed budget",
+            None,
+        ));
+    }
+    let mut out = SitemapCountObservation {
+        schema_version: 1,
+        engine: SITEMAP_COUNT_XML_ENGINE.into(),
+        syntax_profile: "ascii-qname-xml10-no-dtd-v1".into(),
+        loc_lexical_profile: SITEMAP_COUNT_LOC_PROFILE.into(),
+        loc_whitespace_profile: "xml-s-edge-trim-v1".into(),
+        loc_character_limit_exclusive: 2048,
+        effective_limits: limits.clone(),
+        input_xml_bytes: input.len(),
+        input_xml_sha256: format!("{:x}", Sha256::digest(input)),
+        input_xml_sha_profile: "decoded-sitemap-xml-bytes-v1".into(),
+        kind: None,
+        namespace_profile: None,
+        events_observed: 0,
+        xml_scan_complete: false,
+        failure: None,
+        counts: SitemapXmlCountFacts::default(),
+    };
+    let source = match std::str::from_utf8(input) {
+        Ok(source) => source,
+        Err(_) => {
+            out.failure = Some(SitemapFailure::new(
+                "sitemap_invalid_utf8",
+                "Sitemap parser requires exact UTF-8 bytes",
+                None,
+            ));
+            return Ok(out);
+        }
+    };
+    if !source.chars().all(xml_char) {
+        out.failure = Some(SitemapFailure::new(
+            "sitemap_illegal_xml_character",
+            "Raw input contains an illegal XML1.0 character",
+            None,
+        ));
+        return Ok(out);
+    }
+    let parser_limits = limits.parser_limits();
+    let mut inspection = Inspection {
+        source,
+        limits: &parser_limits,
+        stack: Vec::new(),
+        root_closed: false,
+        declaration_seen: false,
+        active_entry: None,
+        count_sink: Some(CountSink::default()),
+        capture: None,
+        observation: SitemapParseObservation {
+            schema_version: 1,
+            engine: SITEMAP_XML_ENGINE.into(),
+            context_basis: "caller_declared_parser_context".into(),
+            context: SitemapParserContext::default(),
+            xml_bytes: input.len(),
+            xml_sha256: String::new(),
+            xml_sha_profile: "decoded-sitemap-xml-bytes-v1".into(),
+            namespace_profile: None,
+            xml_name_profile: "ascii-qname-v1".into(),
+            kind: None,
+            events_observed: 0,
+            retained_text_utf8_bytes: 0,
+            complete: false,
+            failure: None,
+            entries: Vec::new(),
+            locations: Vec::new(),
+        },
+    };
+    match inspection.run() {
+        Ok(()) => out.xml_scan_complete = true,
+        Err(error) => out.failure = Some(error),
+    }
+    out.kind = inspection.observation.kind;
+    out.namespace_profile = inspection.observation.namespace_profile;
+    out.events_observed = inspection.observation.events_observed;
+    out.counts = inspection
+        .count_sink
+        .expect("count sink remains present")
+        .facts;
+    debug_assert!(
+        inspection.observation.entries.is_empty() && inspection.observation.locations.is_empty()
+    );
+    Ok(out)
 }

@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "result": "SOURCE_ONLY_S3_COMPONENTS_MERGED_FORMAT_PASS_COMPILE_TEST_NATIVE_NOT_RUN",
+  "recorded_at": "2026-10-14T19:30:57.752Z",
+  "candidate_branch": "codex/sitemap-source-protocol-20261014",
+  "baseline_commit": "c48f8af33968bdca1abc956a873b221af2df2f98",
+  "candidate_source_manifest_sha256": "d3dd0959c1b3a86b58a1a560ba9930251502cbed2e68f9633ad5871ca62864ff",
+  "candidate_source_inputs": 226,
+  "authored_new_test_functions": {
+    "pure_model_validation_projection": 28,
+    "observed_entity_decoder": 11,
+    "shared_strict_count_scanner": 7,
+    "total": 46
+  },
+  "required_named_rust_tests": 110,
+  "minimum_expected_workspace_passes": 892,
+  "actual_format": {
+    "command": "cargo fmt --all --check",
+    "exit_code": 0,
+    "scope": "Combined S3 worktree, same twelve staged product input hashes; formatting only"
+  },
+  "actual_new_tests_executed": 0,
+  "actual_candidate_workspace": "NOT_RUN",
+  "actual_clippy": "NOT_RUN",
+  "actual_native_groups": 0,
+  "actual_candidate_installation": "NOT_RUN",
+  "compute_gate_at_preparation": "HELD_COORDINATED_LOCAL_MACHINE_WINDOW",
+  "installed_accepted_binary_sha256": "ab1ac93c82905aa627d100d8622a50acf93dd7fe59c3f854eecdaac667110bcf",
+  "installed_accepted_source": "ea31404",
+  "installed_runtime_modified": false,
+  "handoffs": [
+    {
+      "kind": "sitemap-source-measurement-pure-v2",
+      "sha256": "88d84b652aeca051253000dae7c4740f31c40d1142902fc1a226080fc588405a",
+      "scope": "SOURCE_PREPARATION_OR_STATIC_REVIEW_ONLY"
+    },
+    {
+      "kind": "sitemap-source-decode-observation-v2",
+      "sha256": "8ab5311abb96fd7983a6dec48fd464dc2041484a0dee0182a8e34850c8e742bb",
+      "scope": "SOURCE_PREPARATION_OR_STATIC_REVIEW_ONLY"
+    },
+    {
+      "kind": "sitemap-source-count-scan-v1",
+      "sha256": "b96072ce2614f6c8cc4f56400b5af2277587c7afce41774ea43b607d56cb2cd7",
+      "scope": "SOURCE_PREPARATION_OR_STATIC_REVIEW_ONLY"
+    }
+  ],
+  "independent_static_reviews": [
+    {
+      "kind": "s3-pure-independent-review-v2",
+      "sha256": "442094985cda7a1fd5a4299390c3420caf15398276688ca25a337fd9dcb35f17",
+      "scope": "SOURCE_PREPARATION_OR_STATIC_REVIEW_ONLY"
+    },
+    {
+      "kind": "s3-decode-independent-review-v1",
+      "sha256": "3163ca73c33b2296a44d6a2fd40b24ddfbe164cfd1e76cab84ca6d6a3fa566b9",
+      "scope": "SOURCE_PREPARATION_OR_STATIC_REVIEW_ONLY"
+    },
+    {
+      "kind": "sitemap-source-count-independent-review-v1",
+      "sha256": "6ec845781f54285c4df9f460dbabe5f9903a8e443f3464e50691f9a5d39d80c5",
+      "scope": "SOURCE_PREPARATION_OR_STATIC_REVIEW_ONLY"
+    },
+    {
+      "kind": "s3-combined-static-review-v1",
+      "sha256": "72966725c2b22c839158416c3e5d6165861aa4df68b1646d7fa81e49a04f3370",
+      "scope": "SOURCE_PREPARATION_OR_STATIC_REVIEW_ONLY"
+    }
+  ],
+  "staged_product_bindings": [
+    {
+      "path": "crates/core/src/lib.rs",
+      "bytes": 5028,
+      "sha256": "9d8a2d3af6ee152ee51fe62dd5e96f97c9a6d6dc69c1635968663c8d98fd3985"
+    },
+    {
+      "path": "crates/core/src/sitemap.rs",
+      "bytes": 2669,
+      "sha256": "c72d1dbb3bf3c0d44d255a058d199472ade673b704793256a08612fa20fd545c"
+    },
+    {
+      "path": "crates/core/src/sitemap/count-retained-golden.json",
+      "bytes": 1563,
+      "sha256": "67d8f13c2273067c3235f442256f409cc42f9b29060e57dcbf94021a962da435"
+    },
+    {
+      "path": "crates/core/src/sitemap/count-retained-golden.xml",
+      "bytes": 171,
+      "sha256": "8eae54341e335bdfd6ea3eb628aa3bf3d6008cea837e4f7f6d6f9ed9608c390d"
+    },
+    {
+      "path": "crates/core/src/sitemap/count_models.rs",
+      "bytes": 4672,
+      "sha256": "6bfb0408d228b63e6a57eed38a6c5ee8a6d52d98bc0085352973c18b2a724e2c"
+    },
+    {
+      "path": "crates/core/src/sitemap/count_tests.rs",
+      "bytes": 17109,
+      "sha256": "1a0e3b2749c0ac121804ca99159daa21bd346dac33926e47619c510eb47400b3"
+    },
+    {
+      "path": "crates/core/src/sitemap/entity.rs",
+      "bytes": 8721,
+      "sha256": "0f0bf7c2bfbef4e22ef75a1029ff430303c93900a4fd1c88169c9e44ff89c197"
+    },
+    {
+      "path": "crates/core/src/sitemap/entity_observation.rs",
+      "bytes": 2885,
+      "sha256": "17b4d1eb7c3a988820e5c8414a5ce56481b5bb26ceaa860bebad1685fdf62901"
+    },
+    {
+      "path": "crates/core/src/sitemap/entity_observation_tests.rs",
+      "bytes": 16689,
+      "sha256": "6a37fc3ed80cf82fad6b7f207c227b275bf2901afbc94469a587622dbe4f7ff2"
+    },
+    {
+      "path": "crates/core/src/sitemap/xml.rs",
+      "bytes": 47852,
+      "sha256": "e39d0178798e3d595dc987c1e7000080d0d21cbc038594ad0e2ed922624d60cb"
+    },
+    {
+      "path": "crates/core/src/sitemap_source_measurement.rs",
+      "bytes": 36835,
+      "sha256": "33ee0337c8a72566cba2ef2055b9585e5fa3eb75c999bbdd570738e605a07f5d"
+    },
+    {
+      "path": "crates/core/src/sitemap_source_measurement_tests.rs",
+      "bytes": 32047,
+      "sha256": "e6ae54fdba0687e62c2c94c86ffb5a451b1c6f080bd2935f288aca181aa9e6ba"
+    }
+  ],
+  "source_checkout_qualification": {
+    "newline_variants": [
+      {
+        "path": "assets/fonts/LICENSE.txt",
+        "prior_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+        "current_sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6",
+        "qualification": "Fresh Git worktree newline bytes, content equal after CRLF normalization; not a product edit or transferred acceptance"
+      },
+      {
+        "path": "crates/core/src/schema.sql",
+        "prior_sha256": "bb38607c2b5d0875d3d0c849dfc1be6d5d0d0b0b660114e182146ab78359df5e",
+        "current_sha256": "2f9e7ceb1bc93d07546dce5a26d8160c21e480d1fa0f3c0ea4f614b753805fe1",
+        "qualification": "Fresh Git worktree newline bytes, content equal after CRLF normalization; not a product edit or transferred acceptance"
+      },
+      {
+        "path": "crates/core/tests/fixtures/list-import/manifest.json",
+        "prior_sha256": "cfcfaa55891b0869083869c321d87e5c10c74152ae298e74c306bfd91bd7474b",
+        "current_sha256": "bca70bd7b11203ef2e787479dbcf03b7a61b5791275bb305d7043c60c306d124",
+        "qualification": "Fresh Git worktree newline bytes, content equal after CRLF normalization; not a product edit or transferred acceptance"
+      },
+      {
+        "path": "crates/core/tests/fixtures/list-import/regenerate.py",
+        "prior_sha256": "a6453bc9281a250a6f1329e31607995279970899b4c077cf587a7866a03850d0",
+        "current_sha256": "c3efb83c1bc05b6a8f5231acd5cc279d8df403df0d6003d911223d21da27aa41",
+        "qualification": "Fresh Git worktree newline bytes, content equal after CRLF normalization; not a product edit or transferred acceptance"
+      },
+      {
+        "path": "web/verification/ui-live-pages.csv",
+        "prior_sha256": "1a9dc8cfcf170920771172e59b5d4ede540cec62f1917087080a0253b9394a64",
+        "current_sha256": "f7e54b72be139a43099840e57797c45c900f604c9f435d87d7c6b033801bb112",
+        "qualification": "Fresh Git worktree newline bytes, content equal after CRLF normalization; not a product edit or transferred acceptance"
+      },
+      {
+        "path": "web/verification/ui-resource-ledger-smoke.cjs",
+        "prior_sha256": "0cb294e7bff549349c8f699a31c4f4767fe653dffc607ed4d41d4c793dbf9ddd",
+        "current_sha256": "b963b4cf7719c939a50356b003fac0089d1508b0f494c40afa6f97aeceb06f20",
+        "qualification": "Fresh Git worktree newline bytes, content equal after CRLF normalization; not a product edit or transferred acceptance"
+      },
+      {
+        "path": "web/verification/ui-smoke.cjs",
+        "prior_sha256": "7e489416e3eb28be23bfe02ecbb4b7525c4d0a418fbca20fca182bcaeb06def2",
+        "current_sha256": "36a4063f2fa7d798175ceefb9b3990c35ce73156d125c75f34ff83cb60137f16",
+        "qualification": "Fresh Git worktree newline bytes, content equal after CRLF normalization; not a product edit or transferred acceptance"
+      }
+    ],
+    "old_frozen218_manifest_sha256": "f3a70db226d143e34cba545941164162aab821628e3e07546da81c1712aed483",
+    "old_frozen_source_modified": false,
+    "acceptance_transferred": false
+  },
+  "future_runners": [
+    {
+      "name": "run-sitemap-source-protocol-suite-v1.mjs",
+      "sha256": "e6ad2a35a243f0dc45fe6368e20a7b0e4d16e8262acea622ee89c70551bdfe5f",
+      "node_syntax_exit": 0,
+      "execution": "NOT_RUN"
+    },
+    {
+      "name": "build-sitemap-source-protocol-v1.mjs",
+      "sha256": "02f0fc89cdeb953e3b3f4576315cb63df0df0f963b688ad446ebc96fc7c1b218",
+      "node_syntax_exit": 0,
+      "execution": "NOT_RUN"
+    }
+  ],
+  "remaining": [
+    "Actual fetch collection and received-versus-retained provenance",
+    "Versioned bounded storage with source task/generation/config guards and rollback semantics",
+    "Same-transaction report projection, historical unknowns and revision-bound cursor invalidation",
+    "Current combined compile/Clippy/workspace/native acceptance",
+    "Practical protocol-sized source processing and durable membership paging",
+    "Physical plain/gzip/index decoded-byte boundary matrix",
+    "Complete stored-source filters, exports and browser workflows",
+    "Per-criterion acceptance and reference parity"
+  ],
+  "qualification": "This is a source preparation record. Static independent reviews and format success do not establish compiled behavior. The 46 authored tests, future minimum892 and110 required names are execution requirements, not pass counts. Capability31/67/46 remains unchanged; the installed accepted runtime remains untouched."
+}

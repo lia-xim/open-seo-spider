@@ -1,14 +1,22 @@
 //! Bounded sitemap XML observations and gzip file-entity decoding.
 //! Pure bounded XML/entity inspection; no request, storage or source-authenticity claim.
+#[path = "sitemap/count_models.rs"]
+mod count_models;
 #[path = "sitemap/entity.rs"]
 mod entity;
+#[path = "sitemap/entity_observation.rs"]
+mod entity_observation;
+pub use count_models::*;
 #[path = "sitemap/models.rs"]
 mod models;
 #[path = "sitemap/xml.rs"]
 mod xml;
-pub use entity::decode_sitemap_entity;
+pub use entity::{
+    SitemapEntityDecodeOutcome, decode_sitemap_entity, decode_sitemap_entity_observed,
+};
+pub use entity_observation::*;
 pub use models::*;
-pub use xml::observe_sitemap_xml;
+pub use xml::{count_sitemap_xml, observe_sitemap_xml};
 
 #[derive(Debug, Clone, Default)]
 pub struct SitemapEntries {
@@ -63,3 +71,7 @@ mod tests {
         assert!(parse_sitemap("<urlset/>").is_ok());
     }
 }
+
+#[cfg(test)]
+#[path = "sitemap/count_tests.rs"]
+mod count_tests;
