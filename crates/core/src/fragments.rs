@@ -275,6 +275,7 @@ mod tests {
             resource_ledger: None,
             sitemap_catalog: None,
             sitemap_coverage_inventory: None,
+            sitemap_source_measurements: None,
             config: CrawlConfig {
                 validate_fragments: true,
                 ..Default::default()

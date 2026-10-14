@@ -1,0 +1,95 @@
+{
+  "schema": "sitemap-source-durable-runner-static-review-v1",
+  "result": "CONFIRMED_P2_PREPARED_V1_PATH_DEFECT_NO_PRODUCT_EXECUTION",
+  "recorded_at_utc": "2026-10-14T20:34:18.5456788Z",
+  "suite": {
+    "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/run-sitemap-source-durable-suite-v1.mjs",
+    "sha256": "6b0820326313e1262a1b128c290dca44eb9c92a7702c2bcb94c57dd6a89e0d63"
+  },
+  "builder": {
+    "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/build-sitemap-source-durable-v1.mjs",
+    "sha256": "b798af189287221bf7b9c44f107430fe6448f4c366cb1c575bc67688afaef09d"
+  },
+  "findings": [
+    {
+      "priority": 2,
+      "sources": [
+        {
+          "path": "work/run-sitemap-source-durable-suite-v1.mjs",
+          "line": 11
+        },
+        {
+          "path": "work/build-sitemap-source-durable-v1.mjs",
+          "line": 10
+        }
+      ],
+      "finding": "Unescaped Windows backslashes in JavaScript checkout string produce a drive-relative path",
+      "actual_literal_value": "E:CodexWorkopen-seo-spider-01a12ac3-20261013sitemap-source-protocol-integration-v1",
+      "required_value": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-protocol-integration-v1",
+      "effect": "verify() attempts the wrong checkout identity path and rejects before the intended product build/suite; v1 cannot supply the requested current-source acceptance route",
+      "scope": "Also inherited by the prior prepared protocol-v2 runners. No product execution/pass is inherited from those runners. Prior isolated ENOENT helper control remains separately scoped."
+    }
+  ],
+  "bindings": {
+    "source_manifest_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-durable-source-v1/manifest.json",
+    "source_manifest_sha256": "684ef01afb3f20ac9614296c21ac874262fde84596abbb1585b9623decebe34b",
+    "previous_manifest_sha256": "d3dd0959c1b3a86b58a1a560ba9930251502cbed2e68f9633ad5871ca62864ff",
+    "frozen_inputs": 234,
+    "physical_frozen_input_files_excluding_manifest": 234,
+    "checkout_inputs": 234,
+    "all_exact_byte_lengths_and_sha256": "MATCH",
+    "extra_files": [],
+    "removed_previous_inputs": [],
+    "previous_inputs": 226,
+    "new_inputs": [
+      "crates/app/src/sitemap_source_context_tests.rs",
+      "crates/core/src/crawler/sitemap_capture.rs",
+      "crates/core/src/crawler/sitemap_capture_tests.rs",
+      "crates/core/src/sitemap_source_schema.sql",
+      "crates/core/src/sitemap_source_store.rs",
+      "crates/core/src/sitemap_source_store_models.rs",
+      "crates/core/src/sitemap_source_store_tests.rs",
+      "crates/core/src/store-sitemap-source-tests.rs"
+    ],
+    "changed_previous_inputs": 28,
+    "unchanged_previous_inputs": 198,
+    "all_new_or_changed_in_declared_staged_bindings": true,
+    "preparation_path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/prepare-sitemap-source-durable-v1.json",
+    "preparation_sha256": "5dd071e2a25d5509bd84fcb14999b43f7d4a7ce08e7d52c73678e87c664e44bf",
+    "declared_raw_staged_bindings": 37,
+    "preparation_binding_array_exactly_matches_manifest": true,
+    "all_37_raw_checkout_bindings": "MATCH",
+    "git_index_inspection": "NOT_RUN; declared staged bindings verified against actual checkout bytes, no Git command",
+    "original_runtime_root": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/outputs/open-seo-spider",
+    "actual_runtime_renderer_file_hashes": 4,
+    "renderer_hashes": "MATCH",
+    "source_root": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-durable-source-v1",
+    "checkout_root": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-protocol-integration-v1",
+    "minimum_expected": 940,
+    "previous_minimum_expected": 892,
+    "required_names": 158,
+    "previous_required_names": 110,
+    "added_required_names": 48,
+    "old_required_names_preserved": true,
+    "duplicate_names": [],
+    "missing_declared_test_functions": [],
+    "non_test_annotated_names": [],
+    "authored_s3_names": 94,
+    "executed_s3_tests": 0,
+    "new_sql_and_test_registration": "Observed include_str schema binding plus Core lib module, Store/new Core test path hooks and App child-test hook in frozen source; not compiled"
+  },
+  "execution": {
+    "review_method": "Read-only PowerShell/.NET file reads, byte hashes and text comparisons; runner code never imported/evaluated/executed",
+    "product_execution": "NOT_RUN_COMPUTE_HOLD",
+    "cargo": "NOT_RUN",
+    "rust_compiler": "NOT_RUN",
+    "tests": "NOT_RUN",
+    "native_product": "NOT_RUN",
+    "browser": "NOT_RUN",
+    "sdk": "NOT_RUN",
+    "http_sql_fixtures": "NOT_RUN",
+    "child_process_controls": "NOT_RUN_THIS_REVIEW",
+    "mutations": "Only these new own E review receipts; no source/Root/Git/runtime changes"
+  },
+  "disposition": "Root accepted finding and created separate immutable durable v2 runners. V1 runners and this diagnosis are retained unchanged/NOT_RUN."
+}

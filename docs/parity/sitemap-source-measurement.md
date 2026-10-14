@@ -30,10 +30,31 @@ skipping serialization of the new private capture field. This is in-flight bindi
 not durable storage, membership admission or public feature acceptance. See the exact
 [fetch preparation](../verification/sitemap-source-fetch-preparation.json).
 
-The durable integration also needs to distinguish legitimate unavailable capture
-from SQL/integrity failures. The capture-only fallback is a historical preparation
-choice; the forthcoming stored path must propagate actual corrupted-snapshot errors.
-No missing measurement may become measured zero or complete source coverage.
+Durable source milestone: the actual capture now has a separately committed A
+observation and a fresh guarded B membership transaction. B links the exact A
+receipt only after the actual source append; a failed B cannot admit tasks or
+erase the prior A observation. Bounded storage records unavailable capture and
+storage-budget omission separately. SQL, configuration and integrity failures
+propagate instead of becoming an unavailable-capture fallback.
+
+The same transaction reads the validated source snapshot, report/checkpoint
+context and App cursor identity. Selected crawls validate the exact immutable
+parent bytes and require matching measurement presence and projection, including
+the absent-data case. A review found that parent `Some`/child `None` was otherwise
+accepted as unknown; the higher Store reader now rejects it before report or
+checkpoint publication. Terminal analysis also compares the full saved report
+projection with verified SQL evidence and withholds findings on checkpoint
+context mismatch. No missing measurement becomes measured zero or complete
+source coverage.
+
+The combined source is frozen as234 compiler/runtime inputs, including the new
+embedded SQL and directed test modules. There are94 authored S3 tests in total:
+28 pure,11 decode,7 count,11 capture,15 durable Core,15 Store,2 analysis and5 App.
+Together with the pending generation/target changes, future acceptance requires
+at least940 workspace passes and158 named regression functions. The workspace
+format check passes. Compilation, all new tests, native/SDK/browser execution,
+process-crash recovery and installation remain **NOT RUN**. See the exact
+[durable preparation](../verification/sitemap-source-durable-preparation.json).
 
 The count and decoded-byte ceilings follow the published
 [Sitemaps protocol](https://www.sitemaps.org/protocol.html). Protocol validity,

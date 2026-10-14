@@ -1,0 +1,102 @@
+{
+  "schema": "sitemap-source-store-integration-v2-independent-static-review-v1",
+  "status": "NO_CONFIRMED_FINDINGS_IN_BOUNDED_STATIC_FIXDELTA_REVIEW",
+  "recorded_at_utc": "2026-10-14T20:27:46.8640526Z",
+  "reviewer": "/root/s3_decode_review",
+  "ownership": "Read-only source review. Only this new receipt directory written; no Core/Root/Git/runtime/source mutation.",
+  "input_manifests": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-store-integration-v1/manifest.json",
+      "sha256": "ba3d0d6f770fafac19bc71e5a88964ff0ebb87ad2a22aabbf058fe50d2401e59"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-store-integration-v2/manifest.json",
+      "sha256": "6e7869d8981a4775dc11bd924527778cf6e8efb5cc6985094f9fb3084845e098"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-store-core-v1/manifest.json",
+      "sha256": "5ca6dbb6ad75d2ff21d52ab67555b3de0faad2076f30c53fd4bcc2fcf10b6a6e"
+    }
+  ],
+  "reviewed_payload": [
+    {
+      "path": "crates/core/src/store.rs",
+      "before_sha256": "b627a10adf5c3a8865925db795b2280b37cea8c64ce945ff271e6a7974ac0471",
+      "after_sha256": "371c45d2fb1e21856a6ee2c0df81e1505bd699587939ee229d142e6f554a2bf1",
+      "before_bytes": 145660,
+      "after_bytes": 147429,
+      "reviewed_delta_lines": [
+        "2067-2079",
+        "2484-2512"
+      ]
+    },
+    {
+      "path": "crates/core/src/store-sitemap-source-tests.rs",
+      "before_sha256": "5493cfb900797f141c80edf5b3d4d97c74acdd614b06b6ba8c90fb560722a567",
+      "after_sha256": "fd13dafb7c5ea9b76c073b71d08530f511a759e8d1a30ddc136888ba4a3e1d20",
+      "before_bytes": 29290,
+      "after_bytes": 36167,
+      "original_is_exact_byte_prefix": true,
+      "reviewed_delta_lines": [
+        "866-928 helper",
+        "931-999 selected Some/delete-all",
+        "1002-1046 historical None/exact BLOB tamper"
+      ]
+    }
+  ],
+  "findings": [],
+  "bounded_static_observations": [
+    {
+      "source": "store.rs",
+      "lines": "2477-2512, with existing 2575-2590/2609-2625 and recrawl.rs375-410",
+      "observation": "The actual saved RunPlan, operation marker, full actual config and bounded exact parent BLOB are validated; a rebuilt saved-plan equality binds the parent bytes/selection/config before Option presence is accepted. No inherited flag alone authorizes None."
+    },
+    {
+      "source": "store.rs",
+      "lines": "2494-2509",
+      "observation": "None/None remains historical unknown; Some/Some must equal actual project_inherited_snapshot of the original typed parent. Either mixed-presence case is rejected. Original records/links are not replaced with current-run captures."
+    },
+    {
+      "source": "store.rs",
+      "lines": "2047-2080",
+      "observation": "save_report retains bounded report serialization and portable validators, then verifies the current DB through the mandatory source reader and inserts/commits report metadata in the same caller-held SQLite transaction. Guard failure returns before report insertion; SQL failure rolls back. Existing older saved-report contract is retained."
+    },
+    {
+      "source": "store.rs",
+      "lines": "128-237,666-696,2128-2140,2184-2221,2338-2348",
+      "observation": "Existing inspection, snapshot, analysis snapshot, checkpoint and load_report paths reach the hardened mandatory reader in their existing read/write transaction. Public fields and signatures are unchanged by the v2 delta."
+    },
+    {
+      "source": "store-sitemap-source-tests.rs",
+      "lines": "866-1046",
+      "observation": "Two appended tests obtain source state through existing actual decoder/A/B/Store fixture paths, explicitly label SQL historical/deletion mutations, establish healthy selected states first, and then exercise real read/report/checkpoint/readonly failure and old-publication preservation. Historical None is positively readable, while changed exact parent bytes fail even with None."
+    },
+    {
+      "source": "store-sitemap-source-tests.rs",
+      "lines": "1-865",
+      "observation": "Read-only byte comparison confirms the entire v1 file is an exact prefix of v2. All 13 prior names/order remain; exactly two new test functions were appended. No authored test function was executed."
+    }
+  ],
+  "static_controls": {
+    "manifest_and_before_after_payload_hashes": "MATCH",
+    "comparison": "Read-only Node filesystem/text and exact byte-prefix comparison, plus source reads",
+    "old_test_count": 13,
+    "new_test_count": 15,
+    "new_test_names": [
+      "selected_deleted_measurement_rows_and_marker_fail_verified_read_report_and_checkpoint_paths",
+      "selected_historical_parent_none_remains_unknown_and_exact_parent_tamper_still_fails"
+    ]
+  },
+  "gates": {
+    "compiler": "NOT_RUN_COMPUTE_HOLD",
+    "cargo": "NOT_RUN_COMPUTE_HOLD",
+    "tests": "NOT_RUN_COMPUTE_HOLD",
+    "native_product": "NOT_RUN_COMPUTE_HOLD",
+    "http_sql_fixtures": "NOT_RUN",
+    "browser": "NOT_RUN",
+    "sdk": "NOT_RUN",
+    "crash_restart": "NOT_RUN",
+    "formatter": "Not independently re-run for this review; author manifest reports parser/format PASS"
+  },
+  "scope_limit": "Independent static delta review of the two changed v2 files against immutable v1, with only necessary actual parent/reader/callee context. No broad re-review or proof of combined compilation, runtime behavior, whole-feature parity or process memory performance."
+}

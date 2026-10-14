@@ -1,0 +1,59 @@
+{
+  "schema": "s3-store-integration-independent-review-receipt-v1",
+  "result": "ONE_CONFIRMED_STATIC_P2_FINDING",
+  "reviewed_integration_manifest_sha256": "ba3d0d6f770fafac19bc71e5a88964ff0ebb87ad2a22aabbf058fe50d2401e59",
+  "reviewed_core_manifest_sha256": "5ca6dbb6ad75d2ff21d52ab67555b3de0faad2076f30c53fd4bcc2fcf10b6a6e",
+  "findings": [
+    {
+      "id": "selected_parent_sidecar_presence_gap",
+      "priority": 2,
+      "file": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-store-integration-v1/crates/core/src/store.rs",
+      "lines": {
+        "start": 2471,
+        "end": 2478
+      },
+      "cause": "Directly returns context-free lowlevel Core None without comparing exact selected parent sidecar Option.",
+      "reproducer": "Actual selected child with parent Some; delete own two sidecar tables rows and metadata sitemap_source_store marker (retain schemas/legacy/parent/config/plan), then read during active selected invocation.",
+      "impact": "Silently loses known inherited captures and can publish None report/checkpoint against current None, despite unchanged immutable parent Some.",
+      "runtime_status": "NOT_EXECUTED",
+      "repair_owner": "Root/integrator v2, mandatory higher Store exact parent presence/projection guard even for None; Core v1 unchanged.",
+      "duplicate_qualification": "Same root cause independently reported elsewhere; count once."
+    }
+  ],
+  "scope": {
+    "payload_files_pinned": 8,
+    "store_test_bodies_read": 13,
+    "added_capture_test_bodies_read": 3,
+    "preserved_capture_groups_not_rerun": 8,
+    "api_type_review": "Bounded actual declarations/calls read; no additional confirmed static type/borrow/visibility bug, not compiler acceptance.",
+    "core_load_qualification": "Private lowlevel unbound storage None; higher Store selected-context validation mandatory.",
+    "out_of_scope": [
+      "Root lib/terminal membership analysis/other literals",
+      "Separate App cursor integration",
+      "Full baseline architecture audit"
+    ]
+  },
+  "verification": {
+    "compiler": "NOT_RUN_COMPUTE_HOLD",
+    "cargo": "NOT_RUN_COMPUTE_HOLD",
+    "tests": "NOT_RUN_COMPUTE_HOLD",
+    "native": "NOT_RUN_COMPUTE_HOLD",
+    "browser": "NOT_RUN_COMPUTE_HOLD",
+    "repo_git_runtime_mutations": "NONE",
+    "product_edits": "NONE"
+  },
+  "artifacts": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s3-store-integration-independent-review-v1/REVIEW.md",
+      "sha256": "2ac4c2ea8ec21b15a79db41695a1e6d83a558368ffdfe2822ff19d966d290ebe",
+      "bytes": 3764,
+      "line_count": 15
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s3-store-integration-independent-review-v1/SOURCE-PINS.json",
+      "sha256": "4c4dd2604016d7d3c406f7c2d2746244e936879752b8d6c6430d87fffa230cf8",
+      "bytes": 5496,
+      "line_count": 184
+    }
+  ]
+}

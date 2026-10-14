@@ -64,6 +64,7 @@ fn bundle_api_bytes(include: bool) -> Vec<u8> {
         resource_ledger: None,
         sitemap_catalog: None,
         sitemap_coverage_inventory: None,
+        sitemap_source_measurements: None,
     };
     let after = before.clone();
     let comparison =
@@ -248,6 +249,7 @@ fn mcp_bundle_native_f64_fact_preserves_original_bits_and_core_hash() {
         resource_ledger: None,
         sitemap_catalog: None,
         sitemap_coverage_inventory: None,
+        sitemap_source_measurements: None,
     };
     let after = before.clone();
     let typed_before_bytes = serde_json::to_vec(&before).unwrap();
@@ -318,6 +320,7 @@ fn mcp_bundle_wrappers_do_not_reject_an_accepted_standalone_report_depth() {
         resource_ledger: None,
         sitemap_catalog: None,
         sitemap_coverage_inventory: None,
+        sitemap_source_measurements: None,
     };
     let standalone = serde_json::to_vec(&before).unwrap();
     let accepted: CrawlReport = serde_json::from_slice(&standalone)
@@ -470,6 +473,7 @@ fn worker_regression_bundle_api_bytes(array_count: usize) -> (Vec<u8>, String) {
         resource_ledger: None,
         sitemap_catalog: None,
         sitemap_coverage_inventory: None,
+        sitemap_source_measurements: None,
     };
     let after = before.clone();
     let comparison =

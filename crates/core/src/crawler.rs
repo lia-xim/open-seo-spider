@@ -898,9 +898,27 @@ impl Crawler {
                 None => None,
             },
         };
+        let sitemap_source_measurements = match &sitemap_snapshot {
+            Some(snapshot) => snapshot.sitemap_source_measurements.clone(),
+            None => memory_base
+                .and_then(|prepared| {
+                    prepared
+                        .base_report
+                        .sitemap_source_measurements
+                        .as_ref()
+                        .map(|snapshot| {
+                            crate::sitemap_source_store::project_inherited_snapshot(
+                                snapshot,
+                                &prepared.plan.parent.snapshot_sha256,
+                            )
+                        })
+                })
+                .transpose()?,
+        };
         let report = CrawlReport {
             sitemap_catalog,
             sitemap_coverage_inventory,
+            sitemap_source_measurements,
             config: self.config.clone(),
             pages,
             issues,
@@ -920,6 +938,7 @@ impl Crawler {
                 .transpose()?
                 .flatten(),
         };
+        crate::recrawl::validate_portable_report_size(&report)?;
         let checkpoint = self
             .store
             .as_ref()
@@ -1578,6 +1597,58 @@ impl Crawler {
                 } => output?,
                 _ = control.cancelled() => break,
             };
+            // A is committed before any ordinary/policy finalizer or membership
+            // write. B failure must leave this immutable capture visible/unjoined.
+            let source_persistence = if observed_discovery && entry.kind == DiscoveryKind::Sitemap {
+                let capture = output
+                    .source_capture
+                    .as_ref()
+                    .context("Observed XML source lost actual capture")?;
+                let document = &output
+                    .sitemap_batch
+                    .as_ref()
+                    .context("Source capture lost original batch")?
+                    .document;
+                let store = self.store.as_ref().context("Capture A requires Store")?;
+                let generation = generation.context("Capture A requires stored generation")?;
+                match &capture.measurement {
+                    Ok(measurement) => {
+                        SourceCapturePersistence::Receipt(store.record_sitemap_source_capture(
+                            &entry,
+                            document,
+                            measurement,
+                            generation,
+                        )?)
+                    }
+                    Err(failure) => {
+                        let reason =
+                            capture_unavailable_reason(failure, document).with_context(|| {
+                                format!("Source capture cannot be durably bound: {failure:?}")
+                            })?;
+                        match &capture_basis {
+                            sitemap_capture::RunBasis::Verified { config_sha256, .. } => {
+                                SourceCapturePersistence::Receipt(
+                                    store.record_unavailable_sitemap_source_capture(
+                                        &entry,
+                                        document,
+                                        config_sha256,
+                                        generation,
+                                    )?,
+                                )
+                            }
+                            sitemap_capture::RunBasis::Unavailable(
+                                sitemap_capture::CaptureFailure::NoDurableContext
+                                | sitemap_capture::CaptureFailure::MissingCurrentConfig
+                                | sitemap_capture::CaptureFailure::DirectCallerUnverified,
+                            ) => SourceCapturePersistence::NoMeasurement(reason),
+                            _ => anyhow::bail!("Capture context failed a durable guard"),
+                        }
+                    }
+                }
+            } else {
+                SourceCapturePersistence::NotApplicable
+            };
+            let source_receipt = source_persistence.receipt();
             if self.policy.is_some()
                 && let Some(store) = &self.store
             {
@@ -1588,8 +1659,20 @@ impl Crawler {
                         .context("Observed policy source lost whole batch")?;
                     let revision = batch.document.source_revision.clone();
                     let complete = batch.document.complete();
-                    (output.pages, output.children) = store
-                        .complete_discovery_with_policy_observed(
+                    (output.pages, output.children) = if let Some(receipt) = source_receipt {
+                        store.complete_discovery_with_policy_measured(
+                            &entry,
+                            &mut output.policy_rows,
+                            (&revision, complete),
+                            &output.warnings,
+                            generation.context("Stored generation absent")?,
+                            &self.policy_limits,
+                            batch,
+                            receipt,
+                            finalize_protocol_policy_roots,
+                        )?
+                    } else {
+                        store.complete_discovery_with_policy_observed(
                             &entry,
                             &mut output.policy_rows,
                             (&revision, complete),
@@ -1598,7 +1681,8 @@ impl Crawler {
                             &self.policy_limits,
                             batch,
                             finalize_protocol_policy_roots,
-                        )?;
+                        )?
+                    };
                 } else {
                     let revision = output
                         .policy_revision
@@ -1633,10 +1717,22 @@ impl Crawler {
                     .sitemap_batch
                     .take()
                     .context("Observed ordinary source lost whole batch")?;
-                self.store
+                let store = self
+                    .store
                     .as_ref()
-                    .context("Observed source has no Store")?
-                    .complete_discovery_observed(
+                    .context("Observed source has no Store")?;
+                if let Some(receipt) = source_receipt {
+                    store.complete_discovery_measured(
+                        &entry,
+                        &output.pages,
+                        &output.children,
+                        &output.warnings,
+                        generation.context("Stored generation absent")?,
+                        batch,
+                        receipt,
+                    )?;
+                } else {
+                    store.complete_discovery_observed(
                         &entry,
                         &output.pages,
                         &output.children,
@@ -1644,6 +1740,7 @@ impl Crawler {
                         generation.context("Stored generation absent")?,
                         batch,
                     )?;
+                }
                 // No global dedupe state leaks from a rolled-back source transaction.
                 for page in &output.pages {
                     page_seen.insert(page.url.clone());
@@ -2388,6 +2485,61 @@ impl Crawler {
             }
         }
         Ok(output)
+    }
+}
+
+/// Optional measurement profiling must not convert honest bounded source
+/// failures into a different crawl admission rule. NoMeasurement has no receipt
+/// and creates no commit association; absence remains unknown to durable reads.
+enum SourceCapturePersistence {
+    NotApplicable,
+    NoMeasurement(SourceCaptureUnavailable),
+    Receipt(crate::sitemap_source_store::SourceMeasurementReceipt),
+}
+impl SourceCapturePersistence {
+    fn receipt(&self) -> Option<&crate::sitemap_source_store::SourceMeasurementReceipt> {
+        match self {
+            Self::Receipt(receipt) => Some(receipt),
+            _ => None,
+        }
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum SourceCaptureUnavailable {
+    Context,
+    IdentityBytes,
+    RecordBytes,
+    ReceiveCounter,
+}
+fn capture_unavailable_reason(
+    failure: &sitemap_capture::CaptureFailure,
+    document: &crate::SitemapSourceDocument,
+) -> Option<SourceCaptureUnavailable> {
+    use crate::SitemapSourceMeasurementFailureCode as F;
+    use sitemap_capture::CaptureFailure as C;
+    match failure {
+        C::NoDurableContext | C::MissingCurrentConfig | C::DirectCallerUnverified => {
+            Some(SourceCaptureUnavailable::Context)
+        }
+        C::ReceiveCounterUnavailable => Some(SourceCaptureUnavailable::ReceiveCounter),
+        C::Measurement(failure) if failure.code == F::JsonBytesLimit => {
+            Some(SourceCaptureUnavailable::RecordBytes)
+        }
+        C::Measurement(failure) if failure.code == F::InvalidIdentity => {
+            let cap = crate::SitemapSourceMeasurementLimits::default().max_identity_utf8_bytes;
+            let exceeds = document.task_url.len() > cap
+                || document.source_revision.len() > cap
+                || document.transport.as_ref().is_some_and(|transport| {
+                    [&transport.requested_url, &transport.final_url]
+                        .into_iter()
+                        .flatten()
+                        .any(|value| value.len() > cap)
+                });
+            exceeds.then_some(SourceCaptureUnavailable::IdentityBytes)
+        }
+        // Invalid bindings, identities without actual size excess, unknown
+        // helper profiles, config/generation mismatch and SQL errors are errors.
+        _ => None,
     }
 }
 
@@ -3737,3 +3889,35 @@ mod sitemap_capture;
 #[cfg(test)]
 #[path = "crawler/sitemap_capture_tests.rs"]
 mod sitemap_capture_tests;
+
+/// Stored-observation Store-test support, not a native HTTP assertion. Reuses
+/// the actual collector/decoder/scanner rather than a forged measurement DTO.
+#[cfg(test)]
+pub(crate) fn test_sitemap_measurement_from_stored_transport(
+    document: &crate::SitemapSourceDocument,
+    body: &[u8],
+    config_sha256: String,
+    body_limit_bytes: usize,
+) -> crate::SitemapSourceMeasurement {
+    let page = PageRecord {
+        url: document.task_url.clone(),
+        final_url: document.task_url.clone(),
+        status: Some(200),
+        final_status: Some(200),
+        ..Default::default()
+    };
+    let mut progress = sitemap_capture::ReceiveProgress::new(body_limit_bytes);
+    progress.begin_body();
+    progress.returned(body.len());
+    SitemapProtocolObservation::capture_with_progress(&page, true, body, progress)
+        .source_capture
+        .into_outcome(
+            document,
+            &sitemap_capture::RunBasis::Verified {
+                config_sha256,
+                generation: document.generation,
+            },
+        )
+        .measurement
+        .expect("actual helper/scanner stored-observation binding")
+}

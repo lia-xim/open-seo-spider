@@ -46,6 +46,17 @@ mod sitemap_membership_analysis;
 pub use sitemap_membership_analysis::*;
 mod sitemap_source_measurement;
 pub use sitemap_source_measurement::*;
+mod sitemap_source_store;
+pub use sitemap_source_store::{
+    MAX_SOURCE_RECORD_BYTES, MAX_SOURCE_STORE_BYTES, SITEMAP_SOURCE_STORE_ENGINE,
+    SITEMAP_SOURCE_STORE_HASH_PROFILE, SOURCE_COMMIT_RESERVE_BYTES,
+    SOURCE_METADATA_ALLOCATION_BYTES, SitemapSourceCommitAssociation,
+    SitemapSourceStoreInheritedBasis, SitemapSourceStoreLimits, SitemapSourceStoreOmission,
+    SitemapSourceStoreSnapshot, SitemapSourceStoreSummary, SitemapSourceStoredMeasurement,
+    snapshot_context as sitemap_source_measurement_snapshot_context,
+    validate_catalog_binding as validate_sitemap_source_measurement_catalog_binding,
+    validate_snapshot as validate_sitemap_source_measurement_snapshot,
+};
 mod srcset;
 mod store;
 mod text_metrics;

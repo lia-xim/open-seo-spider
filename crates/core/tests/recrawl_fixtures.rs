@@ -216,6 +216,7 @@ fn snapshot(config: CrawlConfig, pages: Vec<PageRecord>) -> Vec<u8> {
         resource_ledger: None,
         sitemap_catalog: None,
         sitemap_coverage_inventory: None,
+        sitemap_source_measurements: None,
     };
     let mut value = serde_json::to_value(report).unwrap();
     value["future_unknown_field"] = serde_json::json!({"preserve":"exact source bytes"});

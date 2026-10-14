@@ -771,6 +771,7 @@ mod tests {
             policy_ledger: None,
             resource_ledger: None,
             sitemap_ledger: None,
+            sitemap_source_measurements: None,
         };
         let text = serde_json::to_string(&checkpoint).unwrap();
         assert!(!text.contains("policy_ledger"));

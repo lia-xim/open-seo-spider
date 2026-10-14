@@ -1,0 +1,401 @@
+{
+  "schema": "open-seo-spider.s3-root-literal-integration-review.v1",
+  "created_at_utc": "2026-10-14T20:29:53Z",
+  "reviewer": "/root/finish_coverage",
+  "status": "bounded_static_review_no_confirmed_findings",
+  "source_root": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-protocol-integration-v1",
+  "source_pin_scope": "The file hashes below were retained from the completed read-only audit. This receipt does not claim a new hash or scan of the concurrently mutable Root checkout.",
+  "reviewed_integration": {
+    "store_v2_manifest": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-store-integration-v2/manifest.json",
+    "store_v2_manifest_sha256": "6e7869d8981a4775dc11bd924527778cf6e8efb5cc6985094f9fb3084845e098",
+    "required_fields": [
+      "sitemap_source_measurements",
+      "sitemap_source_measurement_context (SitemapReadSnapshot only)"
+    ]
+  },
+  "scan": {
+    "rust_files_scanned": 120,
+    "matching_constructor_count": 30,
+    "matching_counts_by_type": {
+      "CrawlReport": 26,
+      "CrawlCheckpoint": 2,
+      "CrawlStoreInspection": 1,
+      "SitemapReadSnapshot": 1
+    },
+    "files_with_matching_constructors_and_retained_sha256": 23,
+    "excluded_app_owner_paths": [
+      "crates/app/src/sitemap_membership.rs",
+      "crates/app/src/sitemap_membership_tests.rs"
+    ],
+    "method": "rg inventory and literal searches, bounded manual source reads, and a text-only PowerShell lexical constructor scan masking strings/comments and balancing braces; struct definitions and function-return bodies excluded.",
+    "result": "All 30 identified constructors contain the required source measurement field. The single SitemapReadSnapshot constructor also contains the source measurement context field. No additional concrete missing constructor, alias, or stale stored-checkpoint fixture was confirmed.",
+    "limitations": "This is a source-level literal audit, not a Rust parser/typecheck or proof of all dynamically constructed/deserialized values. Hashes were retained for the 23 matching files only; no per-file hashes were retained for the other scanned files."
+  },
+  "checked_constructor_files": [
+    {
+      "path": "crates/core/tests/recrawl_fixtures.rs",
+      "sha256": "49c8ce6ab6df505ed28681844f4950296446240beec8deb61d59d78ba46a9046",
+      "constructors": [
+        {
+          "type": "CrawlReport",
+          "line": 208,
+          "source_field_present": true
+        }
+      ]
+    },
+    {
+      "path": "crates/core/src/store.rs",
+      "sha256": "371c45d2fb1e21856a6ee2c0df81e1505bd699587939ee229d142e6f554a2bf1",
+      "constructors": [
+        {
+          "type": "CrawlStoreInspection",
+          "line": 238,
+          "source_field_present": true
+        },
+        {
+          "type": "CrawlCheckpoint",
+          "line": 2144,
+          "source_field_present": true
+        },
+        {
+          "type": "SitemapReadSnapshot",
+          "line": 2463,
+          "source_field_present": true,
+          "context_field_present": true
+        },
+        {
+          "type": "CrawlReport",
+          "line": 3014,
+          "source_field_present": true
+        }
+      ]
+    },
+    {
+      "path": "crates/core/src/store-sitemap-tests.rs",
+      "sha256": "610084371cca8b3edb19091d40e5d7be827e4b1ff7d9359661529499b3bf2af0",
+      "constructors": [
+        {
+          "type": "CrawlReport",
+          "line": 234,
+          "source_field_present": true
+        }
+      ]
+    },
+    {
+      "path": "crates/core/src/store-sitemap-source-tests.rs",
+      "sha256": "fd13dafb7c5ea9b76c073b71d08530f511a759e8d1a30ddc136888ba4a3e1d20",
+      "constructors": [
+        {
+          "type": "CrawlReport",
+          "line": 273,
+          "source_field_present": true
+        }
+      ]
+    },
+    {
+      "path": "crates/core/src/store-sitemap-coverage-tests.rs",
+      "sha256": "2572477caeb0bddf3a16995fb206e0d872889c123c8f97046a2505ab3a13adc5",
+      "constructors": [
+        {
+          "type": "CrawlReport",
+          "line": 42,
+          "source_field_present": true
+        }
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store_tests.rs",
+      "sha256": "6fa3e14f62670e27eb8be8647244e1b3cc914def024e6d50d99eebde41f12099",
+      "constructors": [
+        {
+          "type": "CrawlReport",
+          "line": 593,
+          "source_field_present": true
+        }
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_generation_tests.rs",
+      "sha256": "eaf0ab272b477c323f600e2c8f1ee5fccbdfe15d80a26d7f58169436a16d6a54",
+      "constructors": [
+        {
+          "type": "CrawlReport",
+          "line": 17,
+          "source_field_present": true
+        }
+      ]
+    },
+    {
+      "path": "crates/app/src/server/sitemap_generation_tests.rs",
+      "sha256": "33f973315433d9f3148584446c621cf1a558fae1382eb735473ceeb1fa332146",
+      "constructors": [
+        {
+          "type": "CrawlReport",
+          "line": 6,
+          "source_field_present": true
+        }
+      ]
+    },
+    {
+      "path": "crates/app/src/server/comparison_tests.rs",
+      "sha256": "6099014c69877fb2f2f83c74db9de20c0e9e47085b5db3cb032d36c319291468",
+      "constructors": [
+        {
+          "type": "CrawlReport",
+          "line": 4,
+          "source_field_present": true
+        }
+      ]
+    },
+    {
+      "path": "crates/app/src/mcp/saved_comparison_tests.rs",
+      "sha256": "7b0779704d80f8cb482c0cfe896307f012fc70aa3ce6dd5f14f056b193dd1785",
+      "constructors": [
+        {
+          "type": "CrawlReport",
+          "line": 56,
+          "source_field_present": true
+        },
+        {
+          "type": "CrawlReport",
+          "line": 223,
+          "source_field_present": true
+        },
+        {
+          "type": "CrawlReport",
+          "line": 304,
+          "source_field_present": true
+        },
+        {
+          "type": "CrawlReport",
+          "line": 457,
+          "source_field_present": true
+        }
+      ]
+    },
+    {
+      "path": "crates/app/src/mcp/generation_tests.rs",
+      "sha256": "b048c0ccbdd5165295d7199b65de2014270b1a30fd90709737f7e70b2a52eee4",
+      "constructors": [
+        {
+          "type": "CrawlReport",
+          "line": 38,
+          "source_field_present": true
+        }
+      ]
+    },
+    {
+      "path": "crates/app/src/generation_export_tests.rs",
+      "sha256": "6dbf30c1c6afa69b348d56c55fbe1a4392824bf2ed4f76d28747396bebfdb7fa",
+      "constructors": [
+        {
+          "type": "CrawlReport",
+          "line": 7,
+          "source_field_present": true
+        }
+      ]
+    },
+    {
+      "path": "crates/app/src/content_cohort.rs",
+      "sha256": "3cda44081d18f3885a0352fd6742833f725ee8536044ba85ec15b0b16570340d",
+      "constructors": [
+        {
+          "type": "CrawlReport",
+          "line": 375,
+          "source_field_present": true
+        }
+      ]
+    },
+    {
+      "path": "crates/app/src/comparison_app_tests.rs",
+      "sha256": "b88c399934d500e194bc5aac686b66518370cba30b77e98d6d46ebe68f9855ab",
+      "constructors": [
+        {
+          "type": "CrawlReport",
+          "line": 128,
+          "source_field_present": true
+        },
+        {
+          "type": "CrawlReport",
+          "line": 642,
+          "source_field_present": true
+        }
+      ]
+    },
+    {
+      "path": "crates/app/src/analysis.rs",
+      "sha256": "c6eb34a694b2f75ff040afe58a4895a4d223f187bccb4a4d2baef67bcad903b2",
+      "constructors": [
+        {
+          "type": "CrawlReport",
+          "line": 1277,
+          "source_field_present": true
+        }
+      ]
+    },
+    {
+      "path": "crates/core/src/recrawl.rs",
+      "sha256": "1da957236f7cd0a819410393137d17193ae826432acc7756fe0a3a92f296baca",
+      "constructors": [
+        {
+          "type": "CrawlReport",
+          "line": 465,
+          "source_field_present": true
+        }
+      ]
+    },
+    {
+      "path": "crates/core/src/policy_ledger.rs",
+      "sha256": "fcc4b7400236d4703522d4e15a63ff0c44e20e0a623b300ed58b26433a22694c",
+      "constructors": [
+        {
+          "type": "CrawlCheckpoint",
+          "line": 760,
+          "source_field_present": true
+        }
+      ]
+    },
+    {
+      "path": "crates/core/src/comparison_tests.rs",
+      "sha256": "d2b2a8db9116cccbd8db649b883605514718c99ad26292f0e24c432b4a288e1c",
+      "constructors": [
+        {
+          "type": "CrawlReport",
+          "line": 9,
+          "source_field_present": true
+        }
+      ]
+    },
+    {
+      "path": "crates/core/src/fragments.rs",
+      "sha256": "ac3521b39b0e544bbf76bf8ff00f1c8539812058d994b4cf0d85e1b631a9e0cf",
+      "constructors": [
+        {
+          "type": "CrawlReport",
+          "line": 272,
+          "source_field_present": true
+        }
+      ]
+    },
+    {
+      "path": "crates/core/src/export.rs",
+      "sha256": "dd0eadbe7c0c8ba1c1b312f266aea6d01752acfbbf65a01b0c9fb9524280a6be",
+      "constructors": [
+        {
+          "type": "CrawlReport",
+          "line": 847,
+          "source_field_present": true
+        }
+      ]
+    },
+    {
+      "path": "crates/core/src/explicit_sitemap_inputs_tests.rs",
+      "sha256": "016f9da33191cd0adb95be2f25b8860868a2027f0e0fddb58cfd832cffbd469a",
+      "constructors": [
+        {
+          "type": "CrawlReport",
+          "line": 61,
+          "source_field_present": true
+        }
+      ]
+    },
+    {
+      "path": "crates/core/src/response_observations.rs",
+      "sha256": "d81cee5d30e86be1c168e6df0c66804f6e20b48856ad7cd3005a1b648f64e2c1",
+      "constructors": [
+        {
+          "type": "CrawlReport",
+          "line": 112,
+          "source_field_present": true
+        }
+      ]
+    },
+    {
+      "path": "crates/core/src/crawler.rs",
+      "sha256": "b0dd37f367a6e375a2d30e4859a818e2f769165856b90f29c7578af6a5bf24a5",
+      "constructors": [
+        {
+          "type": "CrawlReport",
+          "line": 918,
+          "source_field_present": true
+        }
+      ]
+    }
+  ],
+  "fixture_review": {
+    "standalone_imported_or_historical_none_literals": "Reviewed within the matching source context; no concrete additional stale stored-checkpoint fixture was confirmed.",
+    "helpers": [
+      {
+        "path": "crates/core/src/store-sitemap-tests.rs",
+        "line": 234,
+        "evidence": "Report helper reuses actual same-read-transaction snapshot coverage_inventory and sitemap_source_measurements."
+      },
+      {
+        "path": "crates/core/src/store-sitemap-coverage-tests.rs",
+        "line": 42,
+        "evidence": "Report helper reuses actual snapshot catalog, coverage inventory, and source measurements."
+      }
+    ],
+    "direct_save_checkpoint_and_save_report_callers": "Reviewed for newly required field propagation within the bounded source audit."
+  },
+  "save_report_ordering": {
+    "path": "crates/core/src/store.rs",
+    "sha256": "371c45d2fb1e21856a6ee2c0df81e1505bd699587939ee229d142e6f554a2bf1",
+    "function_line": 2047,
+    "steps": [
+      {
+        "lines": [
+          2048,
+          2065
+        ],
+        "evidence": "Portable coverage, catalog, and source validation precedes database mutation."
+      },
+      {
+        "line": 2066,
+        "evidence": "Bounded report JSON is constructed before obtaining the connection lock."
+      },
+      {
+        "lines": [
+          2067,
+          2071
+        ],
+        "evidence": "Connection lock and transaction established."
+      },
+      {
+        "line": 2074,
+        "evidence": "load_sitemap_source_measurements_verified runs inside the transaction before the report metadata write."
+      },
+      {
+        "lines": [
+          2075,
+          2078
+        ],
+        "evidence": "Report metadata INSERT OR REPLACE follows the verified context guard."
+      },
+      {
+        "line": 2079,
+        "evidence": "Transaction commit follows the report write."
+      }
+    ],
+    "conclusion": "No report database mutation precedes the higher source-context guard in the checked implementation. Guard failure leaves the prior report unchanged by this transaction.",
+    "qualification": "save_report checks current database context integrity and intentionally permits an older portable report when that database is internally valid; terminal checkpoint validation is a separate contract."
+  },
+  "confirmed_findings": [],
+  "execution": {
+    "compiler": "NOT_RUN",
+    "cargo": "NOT_RUN",
+    "tests": "NOT_RUN",
+    "sql_fixtures": "NOT_RUN",
+    "native_app": "NOT_RUN",
+    "chrome": "NOT_RUN",
+    "sdk": "NOT_RUN",
+    "reason": "Coordinated compute hold; this receipt records only the completed source-only review."
+  },
+  "mutations": {
+    "root_repository": false,
+    "git": false,
+    "user_runtime": false,
+    "own_review_receipt_only": true
+  },
+  "acceptance_boundary": "No compiler PASS, test PASS, runtime validation, or broad combined integration approval is asserted."
+}

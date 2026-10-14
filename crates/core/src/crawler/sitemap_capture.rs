@@ -5,7 +5,6 @@ use crate::*;
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub(super) enum CaptureFailure {
     NoDurableContext,
-    SnapshotUnavailable,
     MissingCurrentConfig,
     GenerationMismatch,
     DirectCallerUnverified,
@@ -27,7 +26,8 @@ pub(super) enum RunBasis {
 }
 /// One existing read-TX binds ACTUAL saved config bytes/current generation/catalog.
 /// Initial catalog config SHA is historical and is deliberately never substituted.
-/// A capture-only snapshot failure must not change legacy crawl admission behavior.
+/// The durable writer must propagate snapshot SQL/integrity errors. This
+/// supersedes the former capture-only optional fallback; absent Store stays unknown.
 pub(super) fn discovery_basis(
     store: Option<&CrawlStore>,
     generation: Option<u64>,
@@ -38,29 +38,22 @@ pub(super) fn discovery_basis(
             RunBasis::Unavailable(CaptureFailure::NoDurableContext),
         ));
     };
-    match store.sitemap_read_snapshot() {
-        Ok(snapshot) => {
-            let basis = match (
-                snapshot.crawl_config_sha256,
-                snapshot.generation,
-                generation,
-            ) {
-                (Some(config_sha256), Some(observed), Some(expected)) if observed == expected => {
-                    RunBasis::Verified {
-                        config_sha256,
-                        generation: expected,
-                    }
-                }
-                (None, _, _) => RunBasis::Unavailable(CaptureFailure::MissingCurrentConfig),
-                _ => RunBasis::Unavailable(CaptureFailure::GenerationMismatch),
-            };
-            Ok((snapshot.catalog, basis))
+    let snapshot = store.sitemap_read_snapshot()?;
+    let basis = match (
+        snapshot.crawl_config_sha256,
+        snapshot.generation,
+        generation,
+    ) {
+        (Some(config_sha256), Some(observed), Some(expected)) if observed == expected => {
+            RunBasis::Verified {
+                config_sha256,
+                generation: expected,
+            }
         }
-        Err(_) => Ok((
-            store.sitemap_catalog()?,
-            RunBasis::Unavailable(CaptureFailure::SnapshotUnavailable),
-        )),
-    }
+        (None, _, _) => RunBasis::Unavailable(CaptureFailure::MissingCurrentConfig),
+        _ => RunBasis::Unavailable(CaptureFailure::GenerationMismatch),
+    };
+    Ok((snapshot.catalog, basis))
 }
 #[derive(Debug, Clone)]
 pub(super) struct ReceiveProgress {

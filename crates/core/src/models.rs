@@ -973,6 +973,10 @@ pub struct CrawlReport {
     /// Exact captured source/task/config context, retained for historical selected inheritance.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub sitemap_coverage_inventory: Option<crate::SitemapCoverageInventory>,
+    /// Immutable measured captures and exact durable membership commit links.
+    /// Absence remains unavailable, including legacy reports.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sitemap_source_measurements: Option<crate::SitemapSourceStoreSnapshot>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

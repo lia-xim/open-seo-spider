@@ -54,6 +54,8 @@ pub struct CrawlCheckpoint {
     pub resource_ledger: Option<crate::ResourceLedgerSummary>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub sitemap_ledger: Option<crate::SitemapLedgerSummary>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sitemap_source_measurements: Option<crate::SitemapSourceStoreSummary>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -76,6 +78,8 @@ pub struct CrawlStoreInspection {
     pub resource_ledger: Option<crate::ResourceLedgerSummary>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub sitemap_ledger: Option<crate::SitemapLedgerSummary>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sitemap_source_measurements: Option<crate::SitemapSourceStoreSummary>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

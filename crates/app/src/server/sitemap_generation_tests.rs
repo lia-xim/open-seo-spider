@@ -26,6 +26,7 @@ fn report() -> CrawlReport {
         resource_ledger: None,
         sitemap_catalog: None,
         sitemap_coverage_inventory: None,
+        sitemap_source_measurements: None,
     }
 }
 async fn fixture() -> (AppState, Uuid, PathBuf) {

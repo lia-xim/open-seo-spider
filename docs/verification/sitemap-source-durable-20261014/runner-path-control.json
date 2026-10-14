@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "result": "PREPARED_V2_AND_REAL_ISOLATED_LITERAL_CONTROL_PASS_PRODUCT_NOT_RUN",
+  "recorded_at": "2026-10-14T20:31:20.453Z",
+  "finding": "P2 inherited unescaped Windows backslashes produce drive-relative JavaScript repo path; also affects older source-protocol-v2 prepared runner",
+  "repair": "Explicit forward-slash absolute Windows repository literal; fresh v2 result paths; all v1 artifacts preserved",
+  "source_manifest_sha256": "684ef01afb3f20ac9614296c21ac874262fde84596abbb1585b9623decebe34b",
+  "files": [
+    {
+      "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\run-sitemap-source-durable-suite-v2.mjs",
+      "sha256": "f8ca2eb37fcd9737d5f2b442baf827736158005c34b5f767934c2864ae34b04f",
+      "node_syntax_exit": 0,
+      "old_literal_actual_value": "E:CodexWorkopen-seo-spider-01a12ac3-20261013sitemap-source-protocol-integration-v1",
+      "old_win32_absolute": false,
+      "repaired_literal_actual_value": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-protocol-integration-v1",
+      "repaired_win32_absolute": true,
+      "actual_source_directory_found": true,
+      "actual_new_sql_sha_verified": true,
+      "runner_executed": false
+    },
+    {
+      "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\build-sitemap-source-durable-v2.mjs",
+      "sha256": "9e884ee44cbfd7cf9e9be0e51ccba3c3f685ccf2c10c76fc307f863bfc5e3652",
+      "node_syntax_exit": 0,
+      "old_literal_actual_value": "E:CodexWorkopen-seo-spider-01a12ac3-20261013sitemap-source-protocol-integration-v1",
+      "old_win32_absolute": false,
+      "repaired_literal_actual_value": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-protocol-integration-v1",
+      "repaired_win32_absolute": true,
+      "actual_source_directory_found": true,
+      "actual_new_sql_sha_verified": true,
+      "runner_executed": false
+    }
+  ],
+  "qualification": "Only actual isolated local JS literal controls and node syntax checks ran. No runner import, HTTP, native, SQLite fixture, Cargo or browser. Coordinated compute HOLD unchanged."
+}

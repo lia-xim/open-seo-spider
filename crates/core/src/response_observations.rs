@@ -115,6 +115,7 @@ mod tests {
             resource_ledger: None,
             sitemap_catalog: None,
             sitemap_coverage_inventory: None,
+            sitemap_source_measurements: None,
             config: Default::default(),
             pages: vec![page],
             issues: vec![],

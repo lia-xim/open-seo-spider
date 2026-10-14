@@ -129,6 +129,145 @@ fn analyze(
         .sitemap_read_snapshot_with_membership_analysis(request)
         .unwrap()
 }
+
+#[tokio::test]
+async fn actual_terminal_analysis_requires_current_source_measurement_checkpoint_summary() {
+    let site = Site::start(false).await;
+    let (_dir, path, _result) = crawl(&site, site.config()).await;
+    let initial = analyze(&path, &request());
+    assert!(
+        initial
+            .membership_analysis
+            .as_ref()
+            .unwrap()
+            .context
+            .available
+    );
+    assert!(initial.sitemap_source_measurements.is_some());
+    let requests = site.count.load(Ordering::SeqCst);
+    let connection = rusqlite::Connection::open(&path).unwrap();
+    let original_report: String = connection
+        .query_row("SELECT value FROM metadata WHERE key='report'", [], |row| {
+            row.get(0)
+        })
+        .unwrap();
+    let checkpoint: String = connection
+        .query_row(
+            "SELECT value FROM metadata WHERE key='checkpoint'",
+            [],
+            |row| row.get(0),
+        )
+        .unwrap();
+    let mut checkpoint: serde_json::Value = serde_json::from_str(&checkpoint).unwrap();
+    let summary = checkpoint.get_mut("sitemap_source_measurements").unwrap();
+    let revision = summary["revision"].as_u64().unwrap();
+    summary["revision"] = (revision + 1).into();
+    connection
+        .execute(
+            "UPDATE metadata SET value=?1 WHERE key='checkpoint'",
+            [serde_json::to_string(&checkpoint).unwrap()],
+        )
+        .unwrap();
+    drop(connection);
+
+    let read = analyze(&path, &request());
+    assert_eq!(read.catalog, initial.catalog);
+    assert_eq!(
+        read.sitemap_source_measurements,
+        initial.sitemap_source_measurements
+    );
+    let analysis = read.membership_analysis.unwrap();
+    assert!(!analysis.context.available);
+    assert_eq!(
+        analysis.context.reason,
+        "saved_source_measurement_context_mismatch"
+    );
+    assert!(analysis.location_findings.is_none());
+    assert!(analysis.saved_pages.is_none());
+    let connection = rusqlite::Connection::open(&path).unwrap();
+    let unchanged: String = connection
+        .query_row("SELECT value FROM metadata WHERE key='report'", [], |row| {
+            row.get(0)
+        })
+        .unwrap();
+    assert_eq!(unchanged, original_report);
+    drop(connection);
+    site.finish(requests).await;
+}
+
+#[tokio::test]
+async fn actual_saved_source_projection_must_equal_sql_even_with_rehashed_report() {
+    let site = Site::start(false).await;
+    let (_dir, path, _result) = crawl(&site, site.config()).await;
+    let initial = analyze(&path, &request());
+    assert!(
+        initial
+            .membership_analysis
+            .as_ref()
+            .unwrap()
+            .context
+            .available
+    );
+    assert!(initial.sitemap_source_measurements.is_some());
+    let requests = site.count.load(Ordering::SeqCst);
+    let mut connection = rusqlite::Connection::open(&path).unwrap();
+    let transaction = connection.transaction().unwrap();
+    let original: String = transaction
+        .query_row("SELECT value FROM metadata WHERE key='report'", [], |row| {
+            row.get(0)
+        })
+        .unwrap();
+    let checkpoint: String = transaction
+        .query_row(
+            "SELECT value FROM metadata WHERE key='checkpoint'",
+            [],
+            |row| row.get(0),
+        )
+        .unwrap();
+    let mut report: serde_json::Value = serde_json::from_str(&original).unwrap();
+    let summary = &mut report["sitemap_source_measurements"]["summary"];
+    let revision = summary["revision"].as_u64().unwrap();
+    summary["revision"] = (revision + 1).into();
+    let modified = serde_json::to_string(&report).unwrap();
+    let mut checkpoint: serde_json::Value = serde_json::from_str(&checkpoint).unwrap();
+    checkpoint["report_sha256"] = crate::sitemap_ledger::digest(modified.as_bytes()).into();
+    transaction
+        .execute(
+            "UPDATE metadata SET value=?1 WHERE key='report'",
+            [&modified],
+        )
+        .unwrap();
+    transaction
+        .execute(
+            "UPDATE metadata SET value=?1 WHERE key='checkpoint'",
+            [serde_json::to_string(&checkpoint).unwrap()],
+        )
+        .unwrap();
+    transaction.commit().unwrap();
+    drop(connection);
+    let before = std::fs::read(&path).unwrap();
+    let error = CrawlStore::open_read_only(&path)
+        .unwrap()
+        .sitemap_read_snapshot_with_membership_analysis(&request())
+        .unwrap_err();
+    assert!(
+        format!("{error:#}")
+            .contains("saved source measurements differ from verified SQL snapshot"),
+        "{error:#}"
+    );
+    assert_eq!(std::fs::read(&path).unwrap(), before);
+    let read = CrawlStore::open_read_only(&path)
+        .unwrap()
+        .sitemap_read_snapshot()
+        .unwrap();
+    assert_eq!(read.catalog, initial.catalog);
+    assert_eq!(
+        read.sitemap_source_measurements,
+        initial.sitemap_source_measurements
+    );
+    site.finish(requests).await;
+}
+
 #[tokio::test]
 async fn real_crawler_original_redirect_404_noindex_robots_and_exact_observed_inlinks() {
     let site = Site::start(false).await;

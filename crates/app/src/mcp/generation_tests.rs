@@ -55,6 +55,7 @@ fn saved_bundle() -> open_seo_spider_core::SitemapGeneratedBundle {
         resource_ledger: None,
         sitemap_catalog: None,
         sitemap_coverage_inventory: None,
+        sitemap_source_measurements: None,
     };
     generate_sitemap_bundle(
         &report,

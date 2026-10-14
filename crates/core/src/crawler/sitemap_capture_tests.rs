@@ -901,3 +901,177 @@ fn pure_adapter_uses_actual_identity_budget_helper_without_inventing_xml_output(
     );
     assert_eq!(batch.document, before);
 }
+
+#[tokio::test]
+async fn actual_discovery_snapshot_corruption_is_error_while_no_store_is_unknown() {
+    let (catalog, basis) = sitemap_capture::discovery_basis(None, Some(1)).unwrap();
+    assert!(catalog.is_none());
+    assert!(matches!(
+        basis,
+        RunBasis::Unavailable(CaptureFailure::NoDurableContext)
+    ));
+    let fixture =
+        BinaryFixture::new(|origin, _| BinaryResponse::bytes(xml(origin), "application/xml")).await;
+    let (temp, crawler, generation, _entry) = setup(&fixture, "/never-requested.xml", |_| {});
+    let writer = rusqlite::Connection::open(temp.path().join("capture.sqlite")).unwrap();
+    writer
+        .execute(
+            "UPDATE discovery_frontier SET done=2 WHERE kind='sitemap'",
+            [],
+        )
+        .unwrap();
+    assert!(
+        crawler
+            .store
+            .as_ref()
+            .unwrap()
+            .sitemap_catalog()
+            .unwrap()
+            .is_some(),
+        "healthy legacy catalog alone cannot authorize a failed full snapshot"
+    );
+    assert!(
+        sitemap_capture::discovery_basis(crawler.store.as_deref(), Some(generation)).is_err(),
+        "real corrupt SQL context must not become optional unknown or legacy fallback"
+    );
+    writer.execute_batch("DROP TABLE metadata").unwrap();
+    assert!(
+        sitemap_capture::discovery_basis(crawler.store.as_deref(), Some(generation)).is_err(),
+        "missing required actual SQL table remains an explicit error"
+    );
+    drop(writer);
+    let requests = fixture.finish().await;
+    assert_requests(&requests, &[]);
+}
+
+#[tokio::test]
+async fn actual_long_task_context_remains_failed_source_with_unknown_measurement_not_crawl_error() {
+    let fixture =
+        BinaryFixture::new(|origin, _| BinaryResponse::bytes(xml(origin), "application/xml")).await;
+    let path = format!("/{}", "long-task".repeat(1024));
+    let (_temp, crawler, generation, entry) = setup(&fixture, &path, |_| {});
+    let output = collect(&crawler, generation, &entry).await;
+    let document = &output.sitemap_batch.as_ref().unwrap().document;
+    assert!(!document.complete());
+    assert!(document.transport.as_ref().unwrap().request_started);
+    let failure = output
+        .source_capture
+        .as_ref()
+        .unwrap()
+        .measurement
+        .as_ref()
+        .unwrap_err();
+    assert_eq!(
+        capture_unavailable_reason(failure, document),
+        Some(SourceCaptureUnavailable::IdentityBytes)
+    );
+    assert_eq!(
+        capture_unavailable_reason(&CaptureFailure::InconsistentHelperFacts, document),
+        None
+    );
+    assert_eq!(
+        capture_unavailable_reason(&CaptureFailure::GenerationMismatch, document),
+        None
+    );
+    let store = crawler.store.as_ref().unwrap();
+    let sha = store
+        .sitemap_read_snapshot()
+        .unwrap()
+        .crawl_config_sha256
+        .unwrap();
+    let receipt = store
+        .record_unavailable_sitemap_source_capture(&entry, document, &sha, generation)
+        .unwrap();
+    assert_eq!(
+        receipt.omission_reason(),
+        Some(crate::SitemapSourceStoreOmission::CaptureUnavailable)
+    );
+    store
+        .complete_discovery_measured(
+            &entry,
+            &[],
+            &[],
+            &output.warnings,
+            generation,
+            output.sitemap_batch.unwrap(),
+            &receipt,
+        )
+        .unwrap();
+    let snapshot = store
+        .sitemap_read_snapshot()
+        .unwrap()
+        .sitemap_source_measurements
+        .unwrap();
+    assert!(snapshot.records.is_empty() && snapshot.commits.is_empty());
+    assert_eq!(
+        snapshot.summary.omission,
+        Some(crate::SitemapSourceStoreOmission::CaptureUnavailable)
+    );
+    let requests = fixture.finish().await;
+    assert_requests(&requests, &[(path.as_str(), 1)]);
+}
+
+#[tokio::test]
+async fn actual_oversized_redirect_context_retains_known_transport_with_unknown_decode_and_count() {
+    let final_path = format!("/{}", "large-final-context".repeat(512));
+    let expected_path = final_path.clone();
+    let fixture = BinaryFixture::new(move |origin, path| {
+        if path == "/redirect.xml" {
+            BinaryResponse::redirect(&format!("{origin}{final_path}"))
+        } else {
+            BinaryResponse::bytes(xml(origin), "application/xml")
+        }
+    })
+    .await;
+    let (_temp, crawler, generation, entry) = setup(&fixture, "/redirect.xml", |_| {});
+    let output = collect(&crawler, generation, &entry).await;
+    let document = &output.sitemap_batch.as_ref().unwrap().document;
+    assert_eq!(document.task_url, entry.url);
+    assert_eq!(
+        document.failure_code.as_deref(),
+        Some("sitemap_transport_context_byte_budget")
+    );
+    let record = measured(&output);
+    assert!(record.payload.transport.final_url.is_none());
+    assert!(record.payload.transport.body_complete);
+    assert_eq!(
+        record.payload.decode.integrity,
+        crate::SitemapSourceDecodeIntegrity::NotObserved
+    );
+    assert_eq!(
+        assess(&output).entry_limit.verdict,
+        crate::SitemapSourceLimitVerdict::Unknown
+    );
+    assert_eq!(
+        assess(&output).decoded_xml_byte_limit.verdict,
+        crate::SitemapSourceLimitVerdict::Unknown
+    );
+    let store = crawler.store.as_ref().unwrap();
+    let receipt = store
+        .record_sitemap_source_capture(&entry, document, record, generation)
+        .unwrap();
+    store
+        .complete_discovery_measured(
+            &entry,
+            &[],
+            &[],
+            &output.warnings,
+            generation,
+            output.sitemap_batch.unwrap(),
+            &receipt,
+        )
+        .unwrap();
+    let saved = store
+        .sitemap_read_snapshot()
+        .unwrap()
+        .sitemap_source_measurements
+        .unwrap();
+    assert_eq!(saved.records.len(), 1);
+    assert_eq!(saved.commits.len(), 1);
+    assert!(saved.summary.omission.is_none());
+    let requests = fixture.finish().await;
+    assert_requests(
+        &requests,
+        &[("/redirect.xml", 1), (expected_path.as_str(), 1)],
+    );
+}

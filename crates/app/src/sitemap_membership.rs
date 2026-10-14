@@ -392,6 +392,12 @@ fn bound_catalog(
             &catalog.inherited,
             &read.coverage_inventory,
             &read.coverage,
+            // Core computed this fingerprint from the validated measurement
+            // sidecar and legacy catalog in the SAME read transaction. Its
+            // explicit historical-unknown context is not an empty measurement
+            // set. It binds capture content, links, typed omission markers and
+            // inherited parent basis without re-reading or re-hashing the store.
+            &read.sitemap_source_measurement_context,
             SITEMAP_LASTMOD_ENGINE,
             SITEMAP_MEMBERSHIP_ANALYSIS_ENGINE,
             read.membership_analysis

@@ -1,0 +1,141 @@
+{
+  "schema": "sitemap-source-durable-runner-static-fixdelta-review-v2",
+  "result": "NO_CONFIRMED_ADDITIONAL_FINDINGS_AFTER_V2_LITERAL_FIX_BOUNDED_STATIC_REVIEW",
+  "recorded_at_utc": "2026-10-14T20:34:18.6058480Z",
+  "v1_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s3-durable-runner-static-review-v1/receipt.json",
+    "sha256": "5756aa48019e42e0d846d17647fa41e5809a18c151e1ed8dce69eeace2e07663",
+    "status": "Confirmed path defect preserved; v1 source unchanged"
+  },
+  "suite": {
+    "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/run-sitemap-source-durable-suite-v2.mjs",
+    "sha256": "f8ca2eb37fcd9737d5f2b442baf827736158005c34b5f767934c2864ae34b04f"
+  },
+  "builder": {
+    "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/build-sitemap-source-durable-v2.mjs",
+    "sha256": "9e884ee44cbfd7cf9e9be0e51ccba3c3f685ccf2c10c76fc307f863bfc5e3652"
+  },
+  "fixed_finding": "V1 P2 checkout literal: both v2 scripts use explicit forward-slash absolute checkout path; source234 manifest unchanged",
+  "exact_v2_delta": [
+    "Suite line11 checkout literal and line20 fresh v2 result directory only",
+    "Builder line10 checkout literal, line26 matching v2 suite proof and line33 fresh v2 build result directories only"
+  ],
+  "findings": [],
+  "binding_scope": {
+    "source_manifest_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-durable-source-v1/manifest.json",
+    "source_manifest_sha256": "684ef01afb3f20ac9614296c21ac874262fde84596abbb1585b9623decebe34b",
+    "previous_manifest_sha256": "d3dd0959c1b3a86b58a1a560ba9930251502cbed2e68f9633ad5871ca62864ff",
+    "frozen_inputs": 234,
+    "physical_frozen_input_files_excluding_manifest": 234,
+    "checkout_inputs": 234,
+    "all_exact_byte_lengths_and_sha256": "MATCH",
+    "extra_files": [],
+    "removed_previous_inputs": [],
+    "previous_inputs": 226,
+    "new_inputs": [
+      "crates/app/src/sitemap_source_context_tests.rs",
+      "crates/core/src/crawler/sitemap_capture.rs",
+      "crates/core/src/crawler/sitemap_capture_tests.rs",
+      "crates/core/src/sitemap_source_schema.sql",
+      "crates/core/src/sitemap_source_store.rs",
+      "crates/core/src/sitemap_source_store_models.rs",
+      "crates/core/src/sitemap_source_store_tests.rs",
+      "crates/core/src/store-sitemap-source-tests.rs"
+    ],
+    "changed_previous_inputs": 28,
+    "unchanged_previous_inputs": 198,
+    "all_new_or_changed_in_declared_staged_bindings": true,
+    "preparation_path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/prepare-sitemap-source-durable-v1.json",
+    "preparation_sha256": "5dd071e2a25d5509bd84fcb14999b43f7d4a7ce08e7d52c73678e87c664e44bf",
+    "declared_raw_staged_bindings": 37,
+    "preparation_binding_array_exactly_matches_manifest": true,
+    "all_37_raw_checkout_bindings": "MATCH",
+    "git_index_inspection": "NOT_RUN; declared staged bindings verified against actual checkout bytes, no Git command",
+    "original_runtime_root": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/outputs/open-seo-spider",
+    "actual_runtime_renderer_file_hashes": 4,
+    "renderer_hashes": "MATCH",
+    "source_root": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-durable-source-v1",
+    "checkout_root": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-protocol-integration-v1",
+    "minimum_expected": 940,
+    "previous_minimum_expected": 892,
+    "required_names": 158,
+    "previous_required_names": 110,
+    "added_required_names": 48,
+    "old_required_names_preserved": true,
+    "duplicate_names": [],
+    "missing_declared_test_functions": [],
+    "non_test_annotated_names": [],
+    "authored_s3_names": 94,
+    "executed_s3_tests": 0,
+    "new_sql_and_test_registration": "Observed include_str schema binding plus Core lib module, Store/new Core test path hooks and App child-test hook in frozen source; not compiled"
+  },
+  "static_route_checks": [
+    {
+      "source": "suite-v2",
+      "lines": "9-28,49-67",
+      "result": "Source and checkout are separate from original C task outputs/open-seo-spider runtime. Cargo cwd is frozen source; renderer import is original runtime after all four renderer source hashes are checked. All 234 source and checkout hashes are rechecked before and after expected commands."
+    },
+    {
+      "source": "suite-v2",
+      "lines": "13,18-24,62-75",
+      "result": "Exact confirmed execution-window guard precedes directory creation/worker/child actions; exact234/158 declarations, serial workspace include-ignored execution, every required name green, minimum940/no ignored, fmt/clippy and owned closure are required before a PASS proof."
+    },
+    {
+      "source": "builder-v2",
+      "lines": "13-33,34-61",
+      "result": "Execution-window guard and verified same684 manifest; requires matching v2 suite PASS/source SHA/940+passed/zero ignored/158 names/closed worker. All 234 source and checkout lengths and hashes checked before build."
+    },
+    {
+      "source": "builder-v2",
+      "lines": "65-138",
+      "result": "Existing E cargo-target cached executable is copied with exact SHA before cargo build. Debug/release modes and output executable are source-bound; new result writes use wx and final source identity is rechecked. No installed runtime executable destination is used."
+    },
+    {
+      "source": "suite-v2 and builder-v2",
+      "lines": "Suite30-47 and Builder79-104",
+      "result": "Error event, actual close tuple, descriptor closure and persisted hashed command log/receipt before rejection remain unchanged. Suite function text is exactly the previously isolated-controlled body; builder has static analogous lifecycle only, no new dynamic control claim."
+    }
+  ],
+  "paths": {
+    "suite_result": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/sitemap-source-durable-suite-v2",
+    "builder_suite_proof": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/sitemap-source-durable-suite-v2/proof.json",
+    "debug_result": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/sitemap-source-durable-debug-build-v2",
+    "optimized_result": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/sitemap-source-durable-optimized-build-v2",
+    "all_v1_and_v2_suite_debug_optimized_result_directories": "ABSENT_AT_READ_ONLY_REVIEW",
+    "fresh_path_guards": "Observed; not executed"
+  },
+  "exact_prior_helper": {
+    "run_function_sha256": "c8f3fca10c5237cb30caf396b0de3ee637f6f196fb3aa82ed5b380ed2a4211c9",
+    "exact_match_prior_protocol_v2_and_durable_v1_and_v2": true,
+    "prior_protocol_suite_sha256": "6994b969fb65812c0bf3f424166a50c842a29626d8f9deafc8046aafe808bfea",
+    "prior_enoent_control_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s3-runner-static-review-v2/enoent-control-proof.json",
+    "prior_enoent_control_sha256": "bc474aef3aafc5ac14d5501a6e46ba1fdcec8bd4c91d359115d7014dacae35e8",
+    "prior_review_sha256": "083c700bbf8af58a04f505861283bf08a8d5ca969dceaf704a2916db53b114ec",
+    "qualification": "Previously executed isolated actual Node missing-executable child error/close/log-receipt path only. Not re-run. It proves no repository literal, Cargo, worker, compiler, test, native application, builder or whole-runner behavior."
+  },
+  "root_owned_literal_control": {
+    "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/prepare-sitemap-source-durable-runners-v2.json",
+    "sha256": "326ec4f0d1be8214ed347e010d3a77ace26bf6d882fb7f616b97a48baba898db",
+    "reported_result": "PREPARED_V2_AND_REAL_ISOLATED_LITERAL_CONTROL_PASS_PRODUCT_NOT_RUN",
+    "reported_scope": "Root reports isolated const-string evaluation only, absolute/existent current checkout and correct new SQL hash, plus node syntax0; no harness import or child/product run",
+    "reviewer_execution": "NOT_RUN; read and hash only"
+  },
+  "execution": {
+    "review_method": "Read-only PowerShell/.NET file reads, byte hashes and text comparisons; runner code never imported/evaluated/executed",
+    "product_execution": "NOT_RUN_COMPUTE_HOLD",
+    "cargo": "NOT_RUN",
+    "rust_compiler": "NOT_RUN",
+    "tests": "NOT_RUN",
+    "native_product": "NOT_RUN",
+    "browser": "NOT_RUN",
+    "sdk": "NOT_RUN",
+    "http_sql_fixtures": "NOT_RUN",
+    "child_process_controls": "NOT_RUN_THIS_REVIEW",
+    "mutations": "Only these new own E review receipts; no source/Root/Git/runtime changes"
+  },
+  "qualifications": [
+    "This is static preparation/closure review, not an executed940/158 acceptance proof. All94 authored S3 tests remain0executed.",
+    "V1 path finding corrects an inherited prepared-runner path defect; the earlier ENOENT control was intentionally isolated and never established full runner correctness.",
+    "No compiler, whole suite, renderer, process restart, native, browser, SDK, Linux/container or full feature-parity acceptance is claimed."
+  ]
+}

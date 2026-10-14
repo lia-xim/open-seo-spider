@@ -49,6 +49,7 @@ fn portable(store: &CrawlStore) -> CrawlReport {
         resource_ledger: None,
         sitemap_catalog: snapshot.catalog,
         sitemap_coverage_inventory: snapshot.coverage_inventory,
+        sitemap_source_measurements: snapshot.sitemap_source_measurements,
         summary: Default::default(),
     }
 }

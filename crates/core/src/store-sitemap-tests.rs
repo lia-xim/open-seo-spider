@@ -230,6 +230,7 @@ fn ordinary_commit(store: &CrawlStore, generation: u64) -> anyhow::Result<()> {
     )
 }
 fn report(store: &CrawlStore, catalog: Option<crate::SitemapCatalog>) -> CrawlReport {
+    let snapshot = store.sitemap_read_snapshot().unwrap();
     CrawlReport {
         config: store.config().unwrap().unwrap(),
         pages: store.pages().unwrap(),
@@ -239,7 +240,8 @@ fn report(store: &CrawlStore, catalog: Option<crate::SitemapCatalog>) -> CrawlRe
         policy_ledger: store.policy_ledger_summary().unwrap(),
         resource_ledger: store.resource_ledger_summary().unwrap(),
         sitemap_catalog: catalog,
-        sitemap_coverage_inventory: store.sitemap_read_snapshot().unwrap().coverage_inventory,
+        sitemap_coverage_inventory: snapshot.coverage_inventory,
+        sitemap_source_measurements: snapshot.sitemap_source_measurements,
         summary: crate::CrawlSummary {
             completed: store.pages().unwrap().len(),
             pending: store.pending_count().unwrap(),

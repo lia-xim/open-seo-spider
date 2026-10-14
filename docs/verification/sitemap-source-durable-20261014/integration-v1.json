@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "status": "IMMUTABLE_SOURCE_ONLY_COMPILE_TEST_NATIVE_NOT_RUN",
+  "baseline": {
+    "root_source": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-protocol-integration-v1",
+    "root_declared_base_commit": "533e94e18c6da4bfe3be113b50877b25afc51bfb",
+    "root_declared_capture_promotion": "15bf5a6",
+    "capture_v1_manifest_sha256": "c67a39c27662d0a6f9a9b118d412c0f9c37a4aea27b8a732725784c66040dbc8",
+    "git_verification": "NOT_RUN; Root declarations and actual source byte guards only"
+  },
+  "payload": [
+    {
+      "path": "crates/core/src/store.rs",
+      "before_sha256": "28791b13e03a940ea1a3ab92c4214b7074a8abab900af6b92bf9bb08a857188f",
+      "require_absent": false,
+      "after_sha256": "b627a10adf5c3a8865925db795b2280b37cea8c64ce945ff271e6a7974ac0471",
+      "bytes": 145660
+    },
+    {
+      "path": "crates/core/src/crawler.rs",
+      "before_sha256": "ddac3ee52dea42c16fb17b5f750914b1f4d24d6f237c18b4dd86862866cef6d7",
+      "require_absent": false,
+      "after_sha256": "b0dd37f367a6e375a2d30e4859a818e2f769165856b90f29c7578af6a5bf24a5",
+      "bytes": 160993
+    },
+    {
+      "path": "crates/core/src/models.rs",
+      "before_sha256": "5370802a53b59f045a0a71b93f510d383601ff0237bf4fa4898894f357fe0d09",
+      "require_absent": false,
+      "after_sha256": "bc4ac0222808887bcb5599447ba93c834417421403405170dc741b8714c100ce",
+      "bytes": 35095
+    },
+    {
+      "path": "crates/core/src/control.rs",
+      "before_sha256": "70fb5b038d32a0458620dcd5af852bd435ea0d9cdbe63efb4d799b69c10fbc8b",
+      "require_absent": false,
+      "after_sha256": "c486fb39eb2559d5d95a67acbcc7e2b0a18b98c16d89aaf4156565b186438abc",
+      "bytes": 8624
+    },
+    {
+      "path": "crates/core/src/recrawl.rs",
+      "before_sha256": "946099238a98b42ee1473bea0703580bada2eb760a7fe7e6b3ad197db408544a",
+      "require_absent": false,
+      "after_sha256": "1da957236f7cd0a819410393137d17193ae826432acc7756fe0a3a92f296baca",
+      "bytes": 21334
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_capture.rs",
+      "before_sha256": "d55c46b17c1a80fd2ed8d17a421fe876f7a07fac5c1dfd4e724f0a73a02fabdd",
+      "require_absent": false,
+      "after_sha256": "1c68762e749288e2d18670d0164c52eb26da0d10d5cbd4dfb8bb84c362d844a8",
+      "bytes": 17996
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_capture_tests.rs",
+      "before_sha256": "cbccc2cce8b8e377302ede9abc1fae82401c656dc851c95c4b686941daa5fa07",
+      "require_absent": false,
+      "after_sha256": "0f027b39c4679bc0fc02514c9e0102ddbda3b8c74eba8e704bae3016515174e7",
+      "bytes": 38096
+    },
+    {
+      "path": "crates/core/src/store-sitemap-source-tests.rs",
+      "before_sha256": null,
+      "require_absent": true,
+      "after_sha256": "5493cfb900797f141c80edf5b3d4d97c74acdd614b06b6ba8c90fb560722a567",
+      "bytes": 29290
+    }
+  ],
+  "dependencies": {
+    "core_contracts": [
+      {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-store-core-v1/CONTRACT.md",
+        "sha256": "404647902334c34b6aee33ea8218634d8716a1264f4763f2d1426d7e4579c71f"
+      },
+      {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-store-core-v1/CONTRACT-ADDENDUM-v2.md",
+        "sha256": "f043140ac143b403404d6943e1bdb7c1e673f576859659206b91dfb58c9ea256"
+      }
+    ],
+    "core_implementation": "Companion immutable durable-Core handoff required; this manifest pins final API contracts, not a compiled combined product",
+    "root_exports": "Root must register private sitemap_source_store module and export its public DTOs/types",
+    "root_owned_other_repairs": "Nonowned Report/Checkpoint literals and terminal membership-analysis guards are Root-owned; App cursor/response slice owned separately"
+  },
+  "documentation": [
+    {
+      "path": "README.md",
+      "sha256": "9b77a6f35be884a96ec7f52fa51a4a519417601781ce2fdcde49374d3d6b93f3"
+    }
+  ],
+  "test_inventory": [
+    {
+      "path": "crates/core/src/store-sitemap-source-tests.rs",
+      "count": 13,
+      "names": [
+        "real_store_a_survives_ordinary_membership_row_budget_rollback_and_readonly_reopen",
+        "real_store_policy_late_link_failure_rolls_back_grants_and_caller_rows_then_commits_exact_link",
+        "real_store_fresh_config_generation_guards_preserve_old_a_and_require_new_capture",
+        "real_wal_read_transaction_observes_atomic_a_and_link_state_without_mixed_context",
+        "actual_identity_and_gzip_captures_with_same_legacy_id_only_link_exact_b_receipt",
+        "real_capture_unavailable_marker_survives_b_rollback_without_becoming_budget_or_zero_measurement",
+        "legacy_readonly_has_no_measurement_catalog_and_does_not_create_or_migrate_files",
+        "actual_checkpoint_selected_parent_preserves_measurements_and_rejects_exact_blob_tamper",
+        "actual_checkpoint_rejects_measurement_only_change_and_failed_publication_preserves_old_report",
+        "real_storage_budget_marker_is_durable_across_membership_rollback_and_not_a_measured_zero",
+        "actual_a_record_and_marker_sql_failures_never_produce_receipts_or_admit_sources",
+        "portable_report_counter_applies_exact_utf8_json_byte_boundary_without_partial_publication",
+        "writable_open_does_not_silently_recreate_missing_empty_measurement_tables"
+      ]
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_capture_tests.rs",
+      "count": 11,
+      "names": [
+        "real_plain_file_gzip_and_http_gzip_capture_same_xml_without_extra_requests",
+        "real_received_prefix_budget_206_and_robots_denial_remain_explicit",
+        "real_gzip_crc_truncation_and_inflation_failure_keep_helper_progress_not_counts",
+        "real_50001_entries_are_counted_even_when_legacy_parser_stops_retaining",
+        "real_multiloc_utf8_and_dtd_diagnostics_do_not_replace_legacy_failure",
+        "actual_current_saved_config_is_not_the_historical_catalog_initial_hash",
+        "actual_capture_adapter_rejects_unverified_mismatch_and_counter_loss_without_mutating_batch",
+        "pure_adapter_uses_actual_identity_budget_helper_without_inventing_xml_output",
+        "actual_discovery_snapshot_corruption_is_error_while_no_store_is_unknown",
+        "actual_long_task_context_remains_failed_source_with_unknown_measurement_not_crawl_error",
+        "actual_oversized_redirect_context_retains_known_transport_with_unknown_decode_and_count"
+      ]
+    }
+  ],
+  "additive_test_functions": 16,
+  "preserved_capture_test_functions": 8,
+  "total_functions_in_two_payload_test_modules": 24,
+  "verification": {
+    "rustfmt": "PASS; edition2024 skip_children=true; eight owned Rust paths; parser/format only",
+    "static_api": "Actual companion declarations and frozen contract/addendum read; not compiled",
+    "compile": "NOT_RUN",
+    "rust_tests": "NOT_RUN",
+    "native": "NOT_RUN",
+    "browser_sdk": "NOT_RUN",
+    "repository_git_runtime_mutations": "NONE",
+    "reason": "Coordinated compute hold"
+  },
+  "semantics": {
+    "A": "Committed measurement or fixed typed omission before finalization/B; confirmed only after A commit",
+    "B": "Fresh config/gen/pending + exact A document/receipt; association atomic with existing admission/catalog writes",
+    "retention": "Private parser retention remains distinct from durable membership link",
+    "unknown": "Bounded profiling CaptureUnavailable distinct from StorageBudgetExceeded; true unverified context NoMeasurement has no association",
+    "snapshot": "Source snapshot and context fingerprint use same existing read-TX; initial catalog/current capture config remain separate",
+    "inheritance": "Exact parent bytes and typed plan; original records/links/config/gen retained",
+    "fallback_override": "Stored snapshot SQL/integrity errors now propagate; old capture-only fallback qualification superseded",
+    "budgets": "No protocol/transport/retention cap raises; portable report JSON bounded256MiB before publication/read"
+  },
+  "remaining_acceptance": "Root combined source integration, focused+workspace checks after compute release, actual crash/restart/native A/B rollback and source/binary receipts. FullS3/S4 feature surfaces/physical50MiB architecture remain open."
+}

@@ -12,6 +12,46 @@ const MAX_SELECTION_ROWS: usize = 50_000;
 const MAX_SELECTION_BYTES: usize = 8 * 1024 * 1024;
 const MAX_URL_BYTES: usize = 16 * 1024;
 
+/// Bound portable output before publishing a terminal report. The counting pass
+/// avoids allocating a partial 256 MiB JSON buffer solely to reject overflow.
+pub(crate) fn validate_portable_report_size(report: &CrawlReport) -> Result<()> {
+    validate_portable_report_size_with_limit(report, MAX_SNAPSHOT_BYTES)
+}
+pub(crate) fn validate_portable_report_size_with_limit(
+    report: &CrawlReport,
+    cap: usize,
+) -> Result<()> {
+    ensure!(
+        cap > 0 && cap <= MAX_SNAPSHOT_BYTES,
+        "Invalid portable report byte limit"
+    );
+    struct Counter {
+        count: usize,
+        cap: usize,
+    }
+    impl std::io::Write for Counter {
+        fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+            let next = self
+                .count
+                .checked_add(bytes.len())
+                .filter(|n| *n <= self.cap)
+                .ok_or_else(|| std::io::Error::other("Portable report exceeds 256 MiB"))?;
+            self.count = next;
+            Ok(bytes.len())
+        }
+        fn flush(&mut self) -> std::io::Result<()> {
+            Ok(())
+        }
+    }
+    serde_json::to_writer(Counter { count: 0, cap }, report)
+        .context("Portable report exceeds bounded output")
+}
+
+pub(crate) fn bounded_report_json(report: &CrawlReport) -> Result<String> {
+    validate_portable_report_size(report)?;
+    Ok(serde_json::to_string(report)?)
+}
+
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum RecrawlSourceKind {
@@ -177,6 +217,17 @@ pub fn prepare_selected_recrawl(
     );
     let base_report: CrawlReport =
         serde_json::from_slice(snapshot_bytes).context("Invalid parent crawl snapshot")?;
+
+    if let Some(snapshot) = &base_report.sitemap_source_measurements {
+        crate::sitemap_source_store::validate_snapshot(snapshot)?;
+        crate::sitemap_source_store::validate_catalog_binding(
+            snapshot,
+            base_report
+                .sitemap_catalog
+                .as_ref()
+                .context("Parent measurements lack source catalog")?,
+        )?;
+    }
 
     if let Some(catalog) = &base_report.sitemap_catalog {
         crate::sitemap_ledger::validate_catalog(catalog)?;
@@ -435,6 +486,7 @@ mod tests {
             resource_ledger: None,
             sitemap_catalog: None,
             sitemap_coverage_inventory: None,
+            sitemap_source_measurements: None,
         })
         .unwrap()
     }

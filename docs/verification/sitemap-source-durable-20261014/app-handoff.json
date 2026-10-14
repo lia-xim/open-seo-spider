@@ -1,0 +1,161 @@
+{
+  "schema": "sitemap-source-app-context-handoff-v1",
+  "status": "IMMUTABLE_GUARDED_SOURCE_ONLY_NOT_COMPILED_NOT_RUN",
+  "recorded_at_utc": "2026-10-14T20:25:30.2697328Z",
+  "baseline": {
+    "root_source": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-protocol-integration-v1",
+    "root_declared_head": "15bf5a6db1a1062a48cf7768039dbb0d0d74839c",
+    "git_inspection": "NOT_RUN; no Git command in this task; actual source byte guards verified",
+    "app_before_guards": "MATCH_AT_PUBLICATION",
+    "new_test_target": "ABSENT_AT_PUBLICATION"
+  },
+  "payload": [
+    {
+      "path": "crates/app/src/sitemap_membership.rs",
+      "before_sha256": "fa2d788ed8035cab6602c1981068f98644b9fef26469edbafd2d916ff076964d",
+      "require_absent": false,
+      "after_sha256": "9c1dd7bf1c1ff41b1ec479dad574abe6545580df7986c50429823fbcb84ce02e",
+      "bytes": 30020,
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-app-context-v1/product/crates/app/src/sitemap_membership.rs"
+    },
+    {
+      "path": "crates/app/src/sitemap_membership_tests.rs",
+      "before_sha256": "eaf65b8e2f2b0cce13294fcb888e8efccc71c9abace7e7c8e186a4e53ee98b16",
+      "require_absent": false,
+      "after_sha256": "a091bfb8167b34fbf34e501b799411810f06af3629fb434f26be48d48f92691d",
+      "bytes": 40549,
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-app-context-v1/product/crates/app/src/sitemap_membership_tests.rs"
+    },
+    {
+      "path": "crates/app/src/sitemap_source_context_tests.rs",
+      "before_sha256": null,
+      "require_absent": true,
+      "after_sha256": "7c6e5e947031a9ae16e7c17b260802d0000b4b0cef2956fef4253cd44fe90640",
+      "bytes": 25910,
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-app-context-v1/product/crates/app/src/sitemap_source_context_tests.rs"
+    }
+  ],
+  "documentation": [
+    {
+      "path": "README.md",
+      "sha256": "1e307ed6efe75c64aef7ebe6d8e3c658c516954057b4d34cb4ad8d482f8751c6",
+      "bytes": 5857
+    },
+    {
+      "path": "SOURCE-PINS.json",
+      "sha256": "c92803ce1e419480b7d0e3ab5a7286ad0cabd5213f5487a76d7580f2d63476a9",
+      "bytes": 4522
+    },
+    {
+      "path": "VERIFICATION.json",
+      "sha256": "74fd321b146c24d7ff6e43b862b4d074ed52226b3127177c552a58d6b8683344",
+      "bytes": 2285
+    }
+  ],
+  "dependencies": [
+    {
+      "role": "durable_core",
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-store-core-v1/manifest.json",
+      "sha256": "5ca6dbb6ad75d2ff21d52ab67555b3de0faad2076f30c53fd4bcc2fcf10b6a6e"
+    },
+    {
+      "role": "store_integration_v1_base_required_before_v2",
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-store-integration-v1/manifest.json",
+      "sha256": "ba3d0d6f770fafac19bc71e5a88964ff0ebb87ad2a22aabbf058fe50d2401e59"
+    },
+    {
+      "role": "store_integration_v2_required_hardened_successor",
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-store-integration-v2/manifest.json",
+      "sha256": "6e7869d8981a4775dc11bd924527778cf6e8efb5cc6985094f9fb3084845e098"
+    }
+  ],
+  "scope": {
+    "production": "One same-TX verified context member in existing catalog_state_sha256; no extra read/traversal",
+    "test_hook": "Three-line child module registration",
+    "tokens": [
+      "raw_json_continuation",
+      "saved_page_continuation",
+      "raw_csv_full_export_snapshot"
+    ],
+    "preserved": [
+      "Original catalog rows",
+      "Raw CSV columns/body",
+      "Response DTO shapes",
+      "Caps and source admission rules",
+      "Historical None identity"
+    ],
+    "ownership": "Owned E handoff files only; Root sole integrator. No Core/Root/Git/runtime writes by this task."
+  },
+  "required_root_exports": [
+    "SitemapReadSnapshot.sitemap_source_measurement_context: String from actual verified same-TX read",
+    "SitemapSourceStoreOmission and optional read/report/checkpoint sitemap_source_measurements public DTO fields",
+    "snapshot_context alias sitemap_source_measurement_snapshot_context; no public writer requested"
+  ],
+  "authored_test_count": 5,
+  "authored_test_names": [
+    "actual_source_a_only_restoration_stales_raw_page_and_csv_with_legacy_rows_unchanged",
+    "actual_source_association_only_restoration_stales_raw_page_and_csv_without_new_capture",
+    "actual_capture_unavailable_marker_restoration_stales_tokens_without_fake_empty_source",
+    "actual_historical_source_none_remains_explicit_stable_and_readonly",
+    "actual_selected_parent_source_context_keeps_records_links_and_historical_none_separate"
+  ],
+  "verification": {
+    "schema": "sitemap-source-app-context-verification-v1",
+    "status": "FORMAT_PARSER_ONLY_ALL_PRODUCT_EXECUTION_NOT_RUN",
+    "observed_at_utc": "2026-10-14T20:24:40.3865296Z",
+    "formatter": {
+      "executable": "C:/Users/matth/.cargo/bin/rustfmt.exe",
+      "arguments": [
+        "--check",
+        "--edition",
+        "2024",
+        "--config",
+        "skip_children=true"
+      ],
+      "paths": [
+        "product/crates/app/src/sitemap_membership.rs",
+        "product/crates/app/src/sitemap_membership_tests.rs",
+        "product/crates/app/src/sitemap_source_context_tests.rs"
+      ],
+      "exit_code": 0,
+      "qualification": "Formatter/parser only; no Rust type-check or module integration execution"
+    },
+    "static_source_delta": {
+      "status": "OBSERVED",
+      "production": "One context string added to existing bound_catalog hash tuple, with five comment lines",
+      "test_hook": "Child module registration only",
+      "method": "Read-only Node text comparison of original versus payload; no Git command",
+      "root_before_guards": "MATCH",
+      "new_target": "ABSENT"
+    },
+    "companion_payload_hash_validation": "PASS for every declared Core v1, Store integration v1 base and Store integration v2 delta product",
+    "authored_test_function_count": 5,
+    "authored_test_names": [
+      "actual_source_a_only_restoration_stales_raw_page_and_csv_with_legacy_rows_unchanged",
+      "actual_source_association_only_restoration_stales_raw_page_and_csv_without_new_capture",
+      "actual_capture_unavailable_marker_restoration_stales_tokens_without_fake_empty_source",
+      "actual_historical_source_none_remains_explicit_stable_and_readonly",
+      "actual_selected_parent_source_context_keeps_records_links_and_historical_none_separate"
+    ],
+    "tests_executed": 0,
+    "http_fixtures_executed": 0,
+    "sqlite_fixtures_executed": 0,
+    "compile": "NOT_RUN_COMPUTE_HOLD",
+    "cargo": "NOT_RUN_COMPUTE_HOLD",
+    "rust_tests": "NOT_RUN_COMPUTE_HOLD",
+    "native_product": "NOT_RUN_COMPUTE_HOLD",
+    "browser": "NOT_RUN_COMPUTE_HOLD",
+    "sdk": "NOT_RUN_COMPUTE_HOLD",
+    "app_router_http": "NOT_RUN",
+    "mcp": "NOT_RUN",
+    "crash_process_restart": "NOT_RUN",
+    "mutation_scope": "Owned E handoff payload/documents only. No Root/Core/Git/runtime mutation by this task."
+  },
+  "remaining_acceptance": [
+    "Root guarded v1/v2/Core/App promotion and module/export registration",
+    "Root-owned other DTO-literal repairs and terminal source/report analysis gate",
+    "Focused and combined Cargo type/test checks after compute release",
+    "Actual App-router/MCP/native/SDK/browser and crash/restart gates NOT_RUN"
+  ],
+  "proof_qualification": "Five authored tests obtain positive source states only through public actual Crawler when executed; terminal SQL restoration/historical optional-field stripping are explicit fixture mutations. No fixture or test has been executed. This handoff does not establish S3 completion or full feature parity."
+}

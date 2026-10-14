@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "status": "BOUNDED_STATIC_REVIEW_ONE_CONFIRMED_P2_NOT_EXECUTED",
+  "target_manifest": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-store-core-v1/manifest.json",
+  "target_manifest_sha256": "5ca6dbb6ad75d2ff21d52ab67555b3de0faad2076f30c53fd4bcc2fcf10b6a6e",
+  "product_pins": [
+    {
+      "path": "crates/core/src/sitemap_source_store.rs",
+      "sha256": "acfb8733563a969468ca9ea0ac26d83df6245efbbb56ce4d8453794424b35d13",
+      "bytes": 54705
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store_models.rs",
+      "sha256": "18d83efb0ee42547682b392780ef412718374b75f2ab668562be59880fbe5c57",
+      "bytes": 4522
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store_tests.rs",
+      "sha256": "6fa3e14f62670e27eb8be8647244e1b3cc914def024e6d50d99eebde41f12099",
+      "bytes": 31788
+    },
+    {
+      "path": "crates/core/src/sitemap_source_schema.sql",
+      "sha256": "f79d0d0f9a61336374833fbf43a9c58963da8cc5bb53dfe1dfa4b0c5dff65edc",
+      "bytes": 954
+    }
+  ],
+  "finding_count": 1,
+  "findings": [
+    {
+      "priority": 2,
+      "title": "Selected parent Some versus missing child sidecar is not checked",
+      "path": "crates/core/src/sitemap_source_store.rs",
+      "start_line": 760,
+      "end_line": 770,
+      "related_lines": [
+        "834-840",
+        "875-910"
+      ],
+      "recommended_owner": "Higher Store verified reader; leave lowlevel initialization load semantics intact",
+      "execution": "NOT_RUN"
+    }
+  ],
+  "review_document_sha256": "0586351a305500c5a0b74a458ea9d40af68ec0b2f017106a1c254effeec8fbb7",
+  "mutations": "Only this new review receipt directory",
+  "compile_tests_native": "NOT_RUN_COMPUTE_HOLD",
+  "scope": "Core source, models, SQL and bounded named test controls; no broad combined approval"
+}

@@ -327,6 +327,48 @@ fn report_hash(connection: &Connection) -> Result<Option<(String, u64)>> {
     Ok(Some((sha, u64::try_from(length)?)))
 }
 
+// Bound the serialized report projection before materializing it. This is a
+// separate read envelope; the durable Core validator retains its own smaller
+// record/logical-catalog budgets. Compare typed fields with the already verified
+// same-TX Store snapshot rather than trusting a report-only summary.
+fn validate_report_source_measurements(
+    connection: &Connection,
+    expected: Option<&crate::SitemapSourceStoreSnapshot>,
+) -> Result<()> {
+    let (kind, bytes): (Option<String>, Option<i64>) = connection.query_row(
+        "SELECT json_type(value,'$.sitemap_source_measurements'),CASE WHEN json_type(value,'$.sitemap_source_measurements')='object' THEN length(CAST(json_extract(value,'$.sitemap_source_measurements') AS BLOB)) END FROM metadata WHERE key='report'",
+        [],
+        |row| Ok((row.get(0)?, row.get(1)?)),
+    )?;
+    let Some(expected) = expected else {
+        ensure!(
+            kind.is_none() || kind.as_deref() == Some("null"),
+            "Sitemap analysis saved source measurements have no verified SQL basis"
+        );
+        return Ok(());
+    };
+    ensure!(
+        kind.as_deref() == Some("object") && bytes.is_some_and(|n| (1..=67_108_864).contains(&n)),
+        "Sitemap analysis saved source measurement envelope differs or exceeds read budget"
+    );
+    let raw: Vec<u8> = connection.query_row(
+        "SELECT CAST(json_extract(value,'$.sitemap_source_measurements') AS BLOB) FROM metadata WHERE key='report'",
+        [],
+        |row| row.get(0),
+    )?;
+    ensure!(
+        Some(i64::try_from(raw.len())?) == bytes,
+        "Sitemap analysis source measurement byte length differs"
+    );
+    let saved: crate::SitemapSourceStoreSnapshot = serde_json::from_slice(&raw)
+        .context("Sitemap analysis saved source measurement projection is invalid")?;
+    ensure!(
+        &saved == expected,
+        "Sitemap analysis saved source measurements differ from verified SQL snapshot"
+    );
+    Ok(())
+}
+
 pub(crate) fn project(
     connection: &Connection,
     read: &SitemapReadSnapshot,
@@ -389,6 +431,15 @@ pub(crate) fn project(
         out.context.reason = "saved_checkpoint_context_mismatch".into();
         return Ok(out);
     }
+    if checkpoint.sitemap_source_measurements.as_ref()
+        != read
+            .sitemap_source_measurements
+            .as_ref()
+            .map(|snapshot| &snapshot.summary)
+    {
+        out.context.reason = "saved_source_measurement_context_mismatch".into();
+        return Ok(out);
+    }
     ensure!(
         sha == checkpoint.report_sha256,
         "Sitemap analysis saved report SHA differs from checkpoint"
@@ -405,6 +456,7 @@ pub(crate) fn project(
             && summary_pending == Some(i64::try_from(pending)?),
         "Sitemap analysis saved report envelope differs"
     );
+    validate_report_source_measurements(connection, read.sitemap_source_measurements.as_ref())?;
     // A controlled writer has unique requested page identities. Refuse malformed
     // typed identity/anchor fields instead of silently dropping an unjoinable row.
     let (distinct,invalid,links): (i64,i64,i64) = connection.query_row(

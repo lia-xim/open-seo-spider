@@ -58,6 +58,9 @@ pub struct SitemapReadSnapshot {
     pub coverage_inventory: Option<crate::SitemapCoverageInventory>,
     pub coverage: crate::SitemapCoverage,
     pub membership_analysis: Option<crate::SitemapMembershipAnalysis>,
+    pub sitemap_source_measurements: Option<crate::SitemapSourceStoreSnapshot>,
+    /// Changes on A-only captures, commit links and durable omission markers.
+    pub sitemap_source_measurement_context: String,
 }
 
 /// SQLite WAL storage. A fetched page and its frontier state commit atomically.
@@ -86,6 +89,9 @@ impl CrawlStore {
         connection.execute_batch(crate::policy_ledger::SCHEMA)?;
         connection.execute_batch(crate::resource_ledger::SCHEMA)?;
         connection.execute_batch(crate::sitemap_ledger::SCHEMA)?;
+        // This validates pre-existing marker/table consistency before any DDL;
+        // CREATE must not conceal a dropped initialized empty sidecar table.
+        crate::sitemap_source_store::initialize_writable_schema(&connection)?;
         Ok(Self {
             connection: Mutex::new(connection),
         })
@@ -123,7 +129,7 @@ impl CrawlStore {
         let discovery_pending = discovery_pending_count(&transaction)?;
         let discovery_complete =
             metadata_text(&transaction, "discovery_complete")?.as_deref() == Some("true");
-        let report = metadata_text(&transaction, "report")?;
+        let report = bounded_saved_report_text(&transaction)?;
         let config_text = metadata_text(&transaction, "config")?;
         let checkpoint_valid = match (&run_state, &checkpoint, &report, &config_text) {
             (Some(run), Some(checkpoint), Some(report), Some(config)) => {
@@ -179,7 +185,12 @@ impl CrawlStore {
         {
             bail!("Terminal resource ledger differs from checkpoint binding");
         }
-        let sitemap_catalog = load_sitemap_catalog_verified(&transaction)?;
+        let sitemap_snapshot = load_sitemap_read_snapshot_verified(&transaction)?;
+        let sitemap_catalog = sitemap_snapshot.catalog.clone();
+        let sitemap_source_measurements = sitemap_snapshot
+            .sitemap_source_measurements
+            .as_ref()
+            .map(|snapshot| snapshot.summary.clone());
         let sitemap_ledger = sitemap_catalog
             .as_ref()
             .map(|catalog| catalog.summary.clone());
@@ -199,6 +210,16 @@ impl CrawlStore {
                 saved.sitemap_catalog == sitemap_catalog,
                 "Terminal sitemap catalog differs from checkpoint report"
             );
+            anyhow::ensure!(
+                checkpoint.as_ref().is_some_and(
+                    |value| value.sitemap_source_measurements == sitemap_source_measurements
+                ),
+                "Terminal source measurement summary differs from checkpoint binding"
+            );
+            anyhow::ensure!(
+                saved.sitemap_source_measurements == sitemap_snapshot.sitemap_source_measurements,
+                "Terminal source captures/commit links differ from checkpoint report"
+            );
             crate::validate_sitemap_coverage_inventory(
                 &saved.config,
                 saved.sitemap_catalog.as_ref(),
@@ -208,8 +229,7 @@ impl CrawlStore {
             // retain their exact task/config/generation context at the checkpoint.
             if saved.sitemap_coverage_inventory.is_some() {
                 anyhow::ensure!(
-                    saved.sitemap_coverage_inventory
-                        == load_sitemap_read_snapshot_verified(&transaction)?.coverage_inventory,
+                    saved.sitemap_coverage_inventory == sitemap_snapshot.coverage_inventory,
                     "Terminal sitemap coverage context differs from checkpoint report"
                 );
             }
@@ -228,6 +248,7 @@ impl CrawlStore {
             policy_ledger,
             resource_ledger,
             sitemap_ledger,
+            sitemap_source_measurements,
         })
     }
 
@@ -304,6 +325,7 @@ impl CrawlStore {
                 bail!("Selected recrawl requires a new empty database");
             }
         }
+        crate::sitemap_source_store::ensure_empty(&transaction)?;
         let selected = prepared.plan.targets_set();
         put_metadata(
             &transaction,
@@ -322,6 +344,13 @@ impl CrawlStore {
         )?;
         if let Some(parent) = &prepared.base_report.sitemap_catalog {
             crate::sitemap_ledger::inherit(
+                &transaction,
+                parent,
+                &prepared.plan.parent.snapshot_sha256,
+            )?;
+        }
+        if let Some(parent) = &prepared.base_report.sitemap_source_measurements {
+            crate::sitemap_source_store::inherit(
                 &transaction,
                 parent,
                 &prepared.plan.parent.snapshot_sha256,
@@ -1065,6 +1094,29 @@ impl CrawlStore {
             &mut Vec<crate::SitemapRootDeclaration>,
         ) -> anyhow::Result<()>,
     {
+        self.initialize_sitemap_discovery_with_measurement_limits(
+            entries,
+            generation,
+            init,
+            &crate::SitemapSourceStoreLimits::default(),
+            finalize_roots,
+        )
+    }
+
+    fn initialize_sitemap_discovery_with_measurement_limits<F>(
+        &self,
+        entries: &[DiscoveryEntry],
+        generation: u64,
+        init: &SitemapCatalogInit,
+        measurement_limits: &crate::SitemapSourceStoreLimits,
+        finalize_roots: F,
+    ) -> anyhow::Result<()>
+    where
+        F: FnOnce(
+            &rusqlite::Transaction<'_>,
+            &mut Vec<crate::SitemapRootDeclaration>,
+        ) -> anyhow::Result<()>,
+    {
         let mut connection = self
             .connection
             .lock()
@@ -1132,6 +1184,7 @@ impl CrawlStore {
                 put_metadata(&transaction, "discovery_complete", "true")?;
             }
         }
+        crate::sitemap_source_store::initialize(&transaction, generation, measurement_limits)?;
         transaction.commit()?;
         Ok(())
     }
@@ -1223,7 +1276,7 @@ impl CrawlStore {
         warnings: &[String],
         generation: u64,
     ) -> anyhow::Result<()> {
-        self.complete_discovery_impl(entry, pages, children, warnings, generation, None)
+        self.complete_discovery_impl(entry, pages, children, warnings, generation, None, None)
     }
 
     pub(crate) fn complete_discovery_observed(
@@ -1235,9 +1288,106 @@ impl CrawlStore {
         generation: u64,
         batch: crate::SitemapDiscoveryBatch,
     ) -> anyhow::Result<()> {
-        self.complete_discovery_impl(entry, pages, children, warnings, generation, Some(batch))
+        self.complete_discovery_impl(
+            entry,
+            pages,
+            children,
+            warnings,
+            generation,
+            Some(batch),
+            None,
+        )
     }
 
+    /// Transaction A: persist only the actual capture, never frontier admission.
+    /// The receipt becomes B-capable only after this transaction really commits.
+    pub(crate) fn record_sitemap_source_capture(
+        &self,
+        entry: &DiscoveryEntry,
+        document: &crate::SitemapSourceDocument,
+        measurement: &crate::SitemapSourceMeasurement,
+        generation: u64,
+    ) -> anyhow::Result<crate::sitemap_source_store::SourceMeasurementReceipt> {
+        anyhow::ensure!(
+            entry.kind == DiscoveryKind::Sitemap
+                && document.kind == crate::SitemapSourceKind::SitemapXml
+                && document.task_url == entry.url
+                && document.generation == generation,
+            "Capture A task/document identity differs"
+        );
+        let mut connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        require_generation(&transaction, generation)?;
+        anyhow::ensure!(
+            matches!(load_run_plan(&transaction)?, RunPlan::FullCrawl),
+            "Selected recrawl cannot record current sitemap captures"
+        );
+        let receipt = crate::sitemap_source_store::record_a(&transaction, document, measurement)?;
+        transaction.commit()?;
+        receipt.after_a_commit(&connection)
+    }
+
+    /// Honest bounded profiling omission. This writes a fixed CaptureUnavailable
+    /// marker, never a fabricated measurement or a storage-budget reason.
+    pub(crate) fn record_unavailable_sitemap_source_capture(
+        &self,
+        entry: &DiscoveryEntry,
+        document: &crate::SitemapSourceDocument,
+        capture_config_sha256: &str,
+        generation: u64,
+    ) -> anyhow::Result<crate::sitemap_source_store::SourceMeasurementReceipt> {
+        anyhow::ensure!(
+            entry.kind == DiscoveryKind::Sitemap
+                && document.kind == crate::SitemapSourceKind::SitemapXml
+                && document.task_url == entry.url
+                && document.generation == generation,
+            "Unavailable capture A task/document identity differs"
+        );
+        let mut connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        require_generation(&transaction, generation)?;
+        anyhow::ensure!(
+            matches!(load_run_plan(&transaction)?, RunPlan::FullCrawl),
+            "Selected recrawl cannot record current sitemap captures"
+        );
+        let receipt = crate::sitemap_source_store::record_unavailable_a(
+            &transaction,
+            document,
+            capture_config_sha256,
+        )?;
+        transaction.commit()?;
+        receipt.after_a_commit(&connection)
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    pub(crate) fn complete_discovery_measured(
+        &self,
+        entry: &DiscoveryEntry,
+        pages: &[QueueEntry],
+        children: &[DiscoveryEntry],
+        warnings: &[String],
+        generation: u64,
+        batch: crate::SitemapDiscoveryBatch,
+        receipt: &crate::sitemap_source_store::SourceMeasurementReceipt,
+    ) -> anyhow::Result<()> {
+        self.complete_discovery_impl(
+            entry,
+            pages,
+            children,
+            warnings,
+            generation,
+            Some(batch),
+            Some(receipt),
+        )
+    }
+
+    #[allow(clippy::too_many_arguments)]
     fn complete_discovery_impl(
         &self,
         entry: &DiscoveryEntry,
@@ -1246,6 +1396,7 @@ impl CrawlStore {
         warnings: &[String],
         generation: u64,
         batch: Option<crate::SitemapDiscoveryBatch>,
+        receipt: Option<&crate::sitemap_source_store::SourceMeasurementReceipt>,
     ) -> anyhow::Result<()> {
         let mut connection = self
             .connection
@@ -1254,12 +1405,23 @@ impl CrawlStore {
         let transaction = connection.transaction()?;
         let kind = sitemap_source_kind(&entry.kind);
         // First admission-sensitive operation: stale/repeated tasks cannot enqueue.
-        let token = crate::sitemap_ledger::guard_pending_source(
-            &transaction,
-            generation,
-            kind,
-            &entry.url,
-        )?;
+        let mut measurement_guard = receipt
+            .map(|receipt| {
+                crate::sitemap_source_store::verify_b_before_admission(
+                    &transaction,
+                    receipt,
+                    &batch
+                        .as_ref()
+                        .context("Measured B needs original source batch")?
+                        .document,
+                )
+            })
+            .transpose()?;
+        let token = if let Some(guard) = &mut measurement_guard {
+            guard.take_pending()?
+        } else {
+            crate::sitemap_ledger::guard_pending_source(&transaction, generation, kind, &entry.url)?
+        };
         if batch.is_none() {
             anyhow::ensure!(
                 crate::sitemap_ledger::load_catalog(&transaction)?.is_none(),
@@ -1297,6 +1459,9 @@ impl CrawlStore {
                 mark_discovery_done_once(&transaction, entry)?;
             }
         }
+        if let Some(guard) = measurement_guard {
+            crate::sitemap_source_store::link_b_after_append(&transaction, guard)?;
+        }
         if discovery_pending_count(&transaction)? == 0 {
             put_metadata(&transaction, "discovery_complete", "true")?;
         }
@@ -1322,6 +1487,7 @@ impl CrawlStore {
             warnings,
             generation,
             limits,
+            None,
             None,
             |_, _, _| Ok(()),
         )
@@ -1356,6 +1522,40 @@ impl CrawlStore {
             generation,
             limits,
             Some(batch),
+            None,
+            finalize,
+        )
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    pub(crate) fn complete_discovery_with_policy_measured<F>(
+        &self,
+        entry: &DiscoveryEntry,
+        rows: &mut [crate::PolicyOccurrence],
+        source: (&str, bool),
+        warnings: &[String],
+        generation: u64,
+        limits: &crate::LiveCrawlPolicyLimits,
+        batch: crate::SitemapDiscoveryBatch,
+        receipt: &crate::sitemap_source_store::SourceMeasurementReceipt,
+        finalize: F,
+    ) -> anyhow::Result<(Vec<QueueEntry>, Vec<DiscoveryEntry>)>
+    where
+        F: FnOnce(
+            &rusqlite::Transaction<'_>,
+            &mut crate::SitemapDiscoveryBatch,
+            &[crate::PolicyOccurrence],
+        ) -> anyhow::Result<()>,
+    {
+        self.complete_discovery_with_policy_impl(
+            entry,
+            rows,
+            source,
+            warnings,
+            generation,
+            limits,
+            Some(batch),
+            Some(receipt),
             finalize,
         )
     }
@@ -1370,6 +1570,7 @@ impl CrawlStore {
         generation: u64,
         limits: &crate::LiveCrawlPolicyLimits,
         mut batch: Option<crate::SitemapDiscoveryBatch>,
+        receipt: Option<&crate::sitemap_source_store::SourceMeasurementReceipt>,
         finalize: F,
     ) -> anyhow::Result<(Vec<QueueEntry>, Vec<DiscoveryEntry>)>
     where
@@ -1385,12 +1586,23 @@ impl CrawlStore {
             .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
         let transaction = connection.transaction()?;
         let kind = sitemap_source_kind(&entry.kind);
-        let token = crate::sitemap_ledger::guard_pending_source(
-            &transaction,
-            generation,
-            kind,
-            &entry.url,
-        )?;
+        let mut measurement_guard = receipt
+            .map(|receipt| {
+                crate::sitemap_source_store::verify_b_before_admission(
+                    &transaction,
+                    receipt,
+                    &batch
+                        .as_ref()
+                        .context("Measured policy B needs original source batch")?
+                        .document,
+                )
+            })
+            .transpose()?;
+        let token = if let Some(guard) = &mut measurement_guard {
+            guard.take_pending()?
+        } else {
+            crate::sitemap_ledger::guard_pending_source(&transaction, generation, kind, &entry.url)?
+        };
         if let Some(batch) = &batch {
             anyhow::ensure!(
                 batch.document.kind == kind
@@ -1481,6 +1693,9 @@ impl CrawlStore {
             None => {
                 mark_discovery_done_once(&transaction, entry)?;
             }
+        }
+        if let Some(guard) = measurement_guard {
+            crate::sitemap_source_store::link_b_after_append(&transaction, guard)?;
         }
         if discovery_pending_count(&transaction)? == 0 {
             put_metadata(&transaction, "discovery_complete", "true")?;
@@ -1838,13 +2053,30 @@ impl CrawlStore {
         if let Some(catalog) = &report.sitemap_catalog {
             crate::sitemap_ledger::validate_catalog(catalog)?;
         }
-        self.connection
-            .lock()
-            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?
-            .execute(
-                "INSERT OR REPLACE INTO metadata(key,value) VALUES('report',?1)",
-                [serde_json::to_string(report)?],
+        if let Some(snapshot) = &report.sitemap_source_measurements {
+            crate::sitemap_source_store::validate_snapshot(snapshot)?;
+            crate::sitemap_source_store::validate_catalog_binding(
+                snapshot,
+                report
+                    .sitemap_catalog
+                    .as_ref()
+                    .context("Report measurements lack source catalog")?,
             )?;
+        }
+        let report_text = crate::recrawl::bounded_report_json(report)?;
+        let mut connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        // A stored report may be older, but the current database cannot silently
+        // lose required immutable selected-parent history before any publication.
+        load_sitemap_source_measurements_verified(&transaction)?;
+        transaction.execute(
+            "INSERT OR REPLACE INTO metadata(key,value) VALUES('report',?1)",
+            [report_text],
+        )?;
+        transaction.commit()?;
         Ok(())
     }
 
@@ -1854,7 +2086,7 @@ impl CrawlStore {
         outcome: CrawlOutcome,
         generation: u64,
     ) -> anyhow::Result<CrawlCheckpoint> {
-        let report_text = serde_json::to_string(report)?;
+        let report_text = crate::recrawl::bounded_report_json(report)?;
         let mut connection = self
             .connection
             .lock()
@@ -1903,6 +2135,10 @@ impl CrawlStore {
             report.sitemap_coverage_inventory == coverage_snapshot.coverage_inventory,
             "Report sitemap coverage inventory differs from committed discovery context"
         );
+        anyhow::ensure!(
+            report.sitemap_source_measurements == coverage_snapshot.sitemap_source_measurements,
+            "Report sitemap source measurements differ from committed capture/link context"
+        );
         let config =
             metadata_text(&transaction, "config")?.context("Crawl has no saved configuration")?;
         let checkpoint = CrawlCheckpoint {
@@ -1920,6 +2156,9 @@ impl CrawlStore {
             policy_ledger: crate::policy_ledger::summary(&transaction)?,
             resource_ledger: crate::resource_ledger::summary(&transaction)?,
             sitemap_ledger: sitemap_catalog.map(|catalog| catalog.summary),
+            sitemap_source_measurements: coverage_snapshot
+                .sitemap_source_measurements
+                .map(|snapshot| snapshot.summary),
         };
         if report.policy_ledger != checkpoint.policy_ledger {
             bail!("Report policy ledger differs from committed evidence");
@@ -1949,7 +2188,8 @@ impl CrawlStore {
             .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
         let transaction = connection.transaction()?;
         load_sitemap_catalog_verified(&transaction)?;
-        let value = metadata_text(&transaction, "report")?;
+        load_sitemap_source_measurements_verified(&transaction)?;
+        let value = bounded_saved_report_text(&transaction)?;
         let report = value
             .map(|value| -> anyhow::Result<CrawlReport> {
                 let report: CrawlReport = serde_json::from_str(&value)?;
@@ -1964,6 +2204,16 @@ impl CrawlStore {
                 if let Some(catalog) = &report.sitemap_catalog {
                     crate::sitemap_ledger::validate_catalog(catalog)?;
                 }
+                if let Some(snapshot) = &report.sitemap_source_measurements {
+                    crate::sitemap_source_store::validate_snapshot(snapshot)?;
+                    crate::sitemap_source_store::validate_catalog_binding(
+                        snapshot,
+                        report
+                            .sitemap_catalog
+                            .as_ref()
+                            .context("Saved measurements lack source catalog")?,
+                    )?;
+                }
                 Ok(report)
             })
             .transpose()?;
@@ -1977,6 +2227,30 @@ fn sitemap_source_kind(kind: &DiscoveryKind) -> crate::SitemapSourceKind {
         DiscoveryKind::Robots => crate::SitemapSourceKind::RobotsDirectives,
         DiscoveryKind::Sitemap => crate::SitemapSourceKind::SitemapXml,
     }
+}
+
+fn bounded_saved_report_text(connection: &Connection) -> anyhow::Result<Option<String>> {
+    let length: Option<i64> = connection
+        .query_row(
+            "SELECT length(CAST(value AS BLOB)) FROM metadata WHERE key='report'",
+            [],
+            |row| row.get(0),
+        )
+        .optional()?;
+    anyhow::ensure!(
+        length.is_none_or(|n| (1..=268_435_456).contains(&n)),
+        "Saved portable report exceeds 256 MiB"
+    );
+    let text = metadata_text(connection, "report")?;
+    anyhow::ensure!(
+        match (&text, length) {
+            (None, None) => true,
+            (Some(value), Some(length)) => i64::try_from(value.len())? == length,
+            _ => false,
+        },
+        "Saved portable report byte extent differs"
+    );
+    Ok(text)
 }
 
 fn mark_discovery_done_once(
@@ -2065,6 +2339,9 @@ fn load_sitemap_read_snapshot_verified(
     connection: &Connection,
 ) -> anyhow::Result<SitemapReadSnapshot> {
     let catalog = load_sitemap_catalog_verified(connection)?;
+    let sitemap_source_measurements = load_sitemap_source_measurements_verified(connection)?;
+    let sitemap_source_measurement_context =
+        crate::sitemap_source_store::snapshot_context(sitemap_source_measurements.as_ref())?;
     let generation = metadata::<CrawlRunState>(connection, "run_state")?
         .map(|run| run.generation)
         .filter(|generation| *generation > 0);
@@ -2190,7 +2467,49 @@ fn load_sitemap_read_snapshot_verified(
         coverage_inventory,
         coverage,
         membership_analysis: None,
+        sitemap_source_measurements,
+        sitemap_source_measurement_context,
     })
+}
+
+/// Sidecar and exact parent validation use the caller's existing transaction.
+/// No report fallback, independently opened connection or read-time migration.
+fn load_sitemap_source_measurements_verified(
+    connection: &Connection,
+) -> anyhow::Result<Option<crate::SitemapSourceStoreSnapshot>> {
+    let plan = load_run_plan(connection)?;
+    if matches!(plan, RunPlan::SelectedRecrawl(_)) {
+        verify_recrawl_rows(connection, &plan)?;
+    }
+    let snapshot = crate::sitemap_source_store::load(connection)?;
+    if let RunPlan::SelectedRecrawl(selected) = &plan {
+        let bytes = parent_snapshot(connection)?
+            .context("Selected source history lacks exact parent bytes")?;
+        let config: CrawlConfig = metadata(connection, "config")?
+            .context("Selected source history lacks actual saved configuration")?;
+        // Full plan reconstruction validates the actual parent BLOB hash,
+        // selection/config and portable parent report before examining presence.
+        // Do not replace this with a metadata/inherited-flag-only check.
+        let prepared = crate::recrawl::validate_saved_plan(selected, &bytes, &config)?;
+        match (
+            prepared.base_report.sitemap_source_measurements.as_ref(),
+            snapshot.as_ref(),
+        ) {
+            (None, None) => {} // Historical absence stays unknown.
+            (Some(parent), Some(current)) => {
+                let expected = crate::sitemap_source_store::project_inherited_snapshot(
+                    parent,
+                    &selected.parent.snapshot_sha256,
+                )?;
+                anyhow::ensure!(
+                    &expected == current,
+                    "Selected source history differs from exact immutable parent projection"
+                );
+            }
+            _ => bail!("Selected source history presence differs from immutable parent"),
+        }
+    }
+    Ok(snapshot)
 }
 
 /// One bounded row at a time; the SQLite run state is an internal provenance
@@ -2698,6 +3017,7 @@ mod tests {
             resource_ledger: None,
             sitemap_catalog: None,
             sitemap_coverage_inventory: None,
+            sitemap_source_measurements: None,
             config,
             pages: Vec::new(),
             issues: Vec::new(),
@@ -3176,6 +3496,10 @@ mod sitemap_config_read_tests;
 #[cfg(test)]
 #[path = "store-sitemap-tests.rs"]
 mod sitemap_store_tests;
+
+#[cfg(test)]
+#[path = "store-sitemap-source-tests.rs"]
+mod sitemap_source_store_integration_tests;
 
 // Append as a sibling cfg(test) module in crates/core/src/store.rs.
 // AUTHORED ONLY; Root owns integration and test execution.

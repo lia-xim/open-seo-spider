@@ -78,6 +78,7 @@ fn selected_snapshot(original: Option<Vec<String>>) -> Vec<u8> {
         resource_ledger: None,
         sitemap_catalog: None,
         sitemap_coverage_inventory: None,
+        sitemap_source_measurements: None,
     })
     .unwrap()
 }
