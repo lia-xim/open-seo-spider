@@ -2,7 +2,7 @@
 use anyhow::{Context, bail};
 use reqwest::{Client, Url};
 use serde_json::{Value, json};
-use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
+use tokio::io::{AsyncBufReadExt, AsyncRead, AsyncReadExt, AsyncWrite, AsyncWriteExt, BufReader};
 pub const PROTOCOLS: &[&str] = &["2025-06-18", "2025-11-25"];
 mod generation;
 mod saved_comparison;
@@ -349,17 +349,34 @@ fn inventory() -> Vec<Value> {
     tools.push(saved_comparison::definition());
     tools
 }
+const MAX_STDIO_REQUEST_BYTES: usize = 8 * 1024 * 1024;
+
 pub async fn stdio(base: &str) -> anyhow::Result<()> {
     let bridge = Bridge::new(base)?;
-    let mut input = BufReader::new(tokio::io::stdin());
-    let mut output = tokio::io::stdout();
+    stdio_stream(&bridge, tokio::io::stdin(), tokio::io::stdout()).await
+}
+
+async fn stdio_stream<R, W>(bridge: &Bridge, input: R, mut output: W) -> anyhow::Result<()>
+where
+    R: AsyncRead + Unpin,
+    W: AsyncWrite + Unpin,
+{
+    let mut input = BufReader::new(input);
     let mut line = Vec::new();
     loop {
         line.clear();
-        if input.read_until(b'\n', &mut line).await? == 0 {
+        // Take supplies EOF at the sentinel even when a producer keeps stdin open.
+        // Never retain an unbounded line before enforcing the framing ceiling.
+        if (&mut input)
+            .take((MAX_STDIO_REQUEST_BYTES + 1) as u64)
+            .read_until(b'\n', &mut line)
+            .await?
+            == 0
+        {
             break;
         }
-        let response = if line.len() > 8 * 1024 * 1024 {
+        let oversized = line.len() > MAX_STDIO_REQUEST_BYTES;
+        let response = if oversized {
             Some(error(Value::Null, -32600, "Request exceeds 8 MiB"))
         } else {
             match serde_json::from_slice(&line) {
@@ -375,6 +392,11 @@ pub async fn stdio(base: &str) -> anyhow::Result<()> {
             output.write_all(&bytes).await?;
             output.write_all(b"\n").await?;
             output.flush().await?;
+        }
+        if oversized {
+            // Close after one bounded error: neither drain an unbounded suffix nor
+            // interpret a truncated prefix or remaining suffix as another request.
+            break;
         }
     }
     Ok(())
@@ -436,3 +458,7 @@ mod tests {
 #[cfg(test)]
 #[path = "mcp/sitemaps_tests.rs"]
 mod sitemap_argument_tests;
+
+#[cfg(test)]
+#[path = "mcp/stdio_tests.rs"]
+mod stdio_tests;

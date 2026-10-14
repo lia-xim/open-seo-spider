@@ -54,6 +54,14 @@ for this transport. Explicit values above 8,388,608 are refused before I/O. This
 differs deliberately from the API/CLI's larger default and is in tool metadata.
 Serialized effective options also have an 8 MiB body bound.
 
+The shared stdio transport accepts physical request frames up to 8,388,608
+bytes, including newline/CRLF bytes when present. It reads at most one additional
+sentinel byte before rejecting an oversized frame with the existing null-ID
+`-32600` error, flushing that response and closing the transport. It does not wait
+for an unbounded suffix or dispatch a truncated prefix. A final bounded JSON
+request without a newline remains accepted at EOF. This framing bound does not
+claim a total process-memory ceiling.
+
 Successful provider responses require `application/zip`, actual Content-Length,
 the exact generation-engine header, the expected fixed UUID attachment filename,
 valid SHA-256 headers and bounded generated/excluded counts. Both declared and
@@ -72,6 +80,6 @@ against 16 MiB, including the request ID. Oversized envelopes return a protocol
 error retaining the original request ID whenever that bounded error fits 16 MiB.
 Only a direct in-process ID too large even for the error falls back to a null ID.
 
-Inventory becomes 25 tools when this draft and its generation API dependency are
-promoted together. Existing script inventory assertions must change at that time,
-not before promotion.
+The candidate source and its script assertions advertise 25 tools. The installed
+accepted runtime still advertises 24 tools. Combined compilation, native
+acceptance and installation of this candidate remain pending.
