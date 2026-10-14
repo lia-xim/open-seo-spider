@@ -19,6 +19,22 @@ gzip, known Identity/no-output and the event-budget sentinel. Static closure is
 separate from executed acceptance. Fetch collection and durable/public projection
 have not been implemented in this milestone.
 
+Fetch milestone: actual chunk bytes are now counted before retained-body trimming;
+the observed decoder is called once and the count scanner borrows the same successful
+XML buffer independently of legacy retention. The current saved-config byte hash and
+generation come from one actual discovery snapshot rather than the historical catalog
+hash. Eight additional regression functions are authored, not run. The combined
+workspace format check passes; the future minimum before the durable slice is900
+with118 required names. A static `Serialize` trait contradiction was corrected by
+skipping serialization of the new private capture field. This is in-flight binding,
+not durable storage, membership admission or public feature acceptance. See the exact
+[fetch preparation](../verification/sitemap-source-fetch-preparation.json).
+
+The durable integration also needs to distinguish legitimate unavailable capture
+from SQL/integrity failures. The capture-only fallback is a historical preparation
+choice; the forthcoming stored path must propagate actual corrupted-snapshot errors.
+No missing measurement may become measured zero or complete source coverage.
+
 The count and decoded-byte ceilings follow the published
 [Sitemaps protocol](https://www.sitemaps.org/protocol.html). Protocol validity,
 captured measurements and retained membership completeness are separate axes.

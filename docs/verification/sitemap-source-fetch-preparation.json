@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "result": "SOURCE_ONLY_ACTUAL_FETCH_CAPTURE_BINDING_INTEGRATED_COMPILE_TESTS_NOT_RUN",
+  "recorded_at": "2026-10-14T19:59:12.032Z",
+  "baseline_commit": "533e94e18c6da4bfe3be113b50877b25afc51bfb",
+  "parent_frozen226_manifest_sha256": "d3dd0959c1b3a86b58a1a560ba9930251502cbed2e68f9633ad5871ca62864ff",
+  "current_full_source_closure": "NOT_FROZEN_PENDING_DURABLE_INTEGRATION",
+  "current_expected_source_inputs": 228,
+  "handoff_manifest_sha256": "c67a39c27662d0a6f9a9b118d412c0f9c37a4aea27b8a732725784c66040dbc8",
+  "independent_mapping_review_sha256": "f3a753a6efb5e5607510a3b5c4d21857b4bb6053c6aedb548628ee6a96a01a6c",
+  "static_trait_finding": {
+    "issue": "Private SourceCapture had no Serialize implementation while parent legacy envelope derives it",
+    "source_fix": "serde(skip_serializing) on the new private field; legacy serialization preserved",
+    "compiler_confirmation": "NOT_RUN"
+  },
+  "files": [
+    {
+      "path": "crates/core/src/crawler.rs",
+      "before_sha256": "a515ca536c2dd2b8f8045ee5d3c655bca58afd4d69caf991be2dbcd136879e7e",
+      "require_absent": false,
+      "after_sha256": "ddac3ee52dea42c16fb17b5f750914b1f4d24d6f237c18b4dd86862866cef6d7",
+      "bytes": 152760
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_capture.rs",
+      "before_sha256": null,
+      "require_absent": true,
+      "after_sha256": "d55c46b17c1a80fd2ed8d17a421fe876f7a07fac5c1dfd4e724f0a73a02fabdd",
+      "bytes": 18244
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_capture_tests.rs",
+      "before_sha256": null,
+      "require_absent": true,
+      "after_sha256": "cbccc2cce8b8e377302ede9abc1fae82401c656dc851c95c4b686941daa5fa07",
+      "bytes": 32046
+    }
+  ],
+  "authored_test_names": [
+    "real_plain_file_gzip_and_http_gzip_capture_same_xml_without_extra_requests",
+    "real_received_prefix_budget_206_and_robots_denial_remain_explicit",
+    "real_gzip_crc_truncation_and_inflation_failure_keep_helper_progress_not_counts",
+    "real_50001_entries_are_counted_even_when_legacy_parser_stops_retaining",
+    "real_multiloc_utf8_and_dtd_diagnostics_do_not_replace_legacy_failure",
+    "actual_current_saved_config_is_not_the_historical_catalog_initial_hash",
+    "actual_capture_adapter_rejects_unverified_mismatch_and_counter_loss_without_mutating_batch",
+    "pure_adapter_uses_actual_identity_budget_helper_without_inventing_xml_output"
+  ],
+  "authored_new_fetch_tests": 8,
+  "total_authored_s3_tests": 54,
+  "minimum_expected_workspace_passes_before_durable_slice": 900,
+  "required_named_rust_tests_before_durable_slice": 118,
+  "actual_new_fetch_tests_executed": 0,
+  "compile_clippy_workspace_native": "NOT_RUN_COORDINATED_COMPUTE_HOLD",
+  "installed_runtime_modified": false,
+  "scope": "Real post-HTTP returned chunks before retention; single observed decode; count of same successful XML buffer; actual once-per-discovery saved-config/generation binding. Private in-flight evidence only; no durable commit or public-feature acceptance.",
+  "remaining": [
+    "Guarded durable A and actual B commit association",
+    "Same-transaction read/report/checkpoint/selected inheritance/cursor binding",
+    "Public filters/API/UI",
+    "Actual combined compile/workspace/Clippy and native gates",
+    "S4 practical protocol-sized processing and S5 physical byte boundary matrix"
+  ],
+  "qualification": "The old frozen226 snapshot remains immutable but its prepared892 routes no longer match the advanced live source. A fresh full source closure will be required after integration; zero current candidate product tests have run. Capability31/67/46 remains unchanged.",
+  "actual_root_format": {
+    "command": "cargo fmt --all --check",
+    "exit_code": 0,
+    "scope": "Combined current worktree after exact three-file capture promotion; formatting only, no compile or tests"
+  },
+  "raw_staged_product_identity_verified": true
+}

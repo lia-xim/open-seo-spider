@@ -1484,12 +1484,10 @@ impl Crawler {
         let seeds = self.discovery_seeds()?;
         // Initial-root/bootstrap owner enables typed mode by committing an honest
         // catalog first. No catalog remains qualified legacy behavior, not empty proof.
-        let sitemap_catalog = self
-            .store
-            .as_ref()
-            .map(|store| store.sitemap_catalog())
-            .transpose()?
-            .flatten();
+        // Actual saved config bytes/current generation/catalog in one read-TX.
+        // Catalog.summary.config_sha256 remains the historical initial basis.
+        let (sitemap_catalog, capture_basis) =
+            sitemap_capture::discovery_basis(self.store.as_deref(), generation)?;
         let observed_discovery = sitemap_catalog.is_some();
         let mut progress = DiscoveryProgress::default();
         let (mut queue, mut discovered, mut completed_sitemaps) = if let Some(store) = &self.store {
@@ -1575,7 +1573,7 @@ impl Crawler {
             // existing abort behavior and leaves this unit pending in storage.
             let mut output = tokio::select! {
                 output = async {
-                    if observed_discovery { self.discover_unit_observed(&entry, &context).await }
+                    if observed_discovery { self.discover_unit_observed_bound(&entry, &context, &capture_basis).await }
                     else { self.discover_unit(&entry, &context).await }
                 } => output?,
                 _ = control.cancelled() => break,
@@ -1708,6 +1706,23 @@ impl Crawler {
         entry: &DiscoveryEntry,
         context: &FetchContext,
     ) -> anyhow::Result<DiscoveryOutput> {
+        // Compatibility/direct callers have no verified invocation config basis.
+        self.discover_unit_observed_bound(
+            entry,
+            context,
+            &sitemap_capture::RunBasis::Unavailable(
+                sitemap_capture::CaptureFailure::DirectCallerUnverified,
+            ),
+        )
+        .await
+    }
+
+    async fn discover_unit_observed_bound(
+        &self,
+        entry: &DiscoveryEntry,
+        context: &FetchContext,
+        capture_basis: &sitemap_capture::RunBasis,
+    ) -> anyhow::Result<DiscoveryOutput> {
         use crate::sitemap_ledger::{SitemapSourceKind as K, SitemapTransportFacts};
         let generation = context
             .generation
@@ -1775,10 +1790,18 @@ impl Crawler {
                     batch
                 }
             };
-            return Ok(discovery_from_batch(
-                batch,
-                vec![format!("{code}: {}", entry.url)],
-            ));
+            let capture = (batch.document.kind == K::SitemapXml).then(|| {
+                sitemap_capture::SourceCapture::not_invoked(
+                    sitemap_capture::ReceiveProgress::new(
+                        FetchPurpose::SitemapProtocol.body_limit(&context.config),
+                    ),
+                    crate::SitemapSourceMeasurementStop::RequestNotStarted,
+                )
+                .into_outcome(&batch.document, capture_basis)
+            });
+            let mut output = discovery_from_batch(batch, vec![format!("{code}: {}", entry.url)]);
+            output.source_capture = capture;
+            return Ok(output);
         }
         let parsed = parsed.expect("checked valid task");
         if entry.kind == DiscoveryKind::Robots {
@@ -1922,7 +1945,12 @@ impl Crawler {
                         .iter()
                         .all(|row| row.decision.folder_internal)
             });
+        let capture = protocol
+            .source_capture
+            .clone()
+            .into_outcome(&batch.document, capture_basis);
         let mut output = discovery_from_batch(batch, warnings);
+        output.source_capture = Some(capture);
         if let Some(observed) = &page.policy {
             anyhow::ensure!(
                 observed.redirect_decisions.iter().all(|row| row.task_role
@@ -2374,6 +2402,8 @@ struct DiscoveryOutput {
     // Work integration seam: full ledger must consume this whole unit atomically.
     protocol_observation: Option<SitemapProtocolObservation>,
     sitemap_batch: Option<crate::SitemapDiscoveryBatch>,
+    // In-flight captured evidence, never a persisted receipt or source admission.
+    source_capture: Option<sitemap_capture::CaptureOutcome>,
 }
 
 #[derive(Default)]
@@ -2540,10 +2570,31 @@ struct SitemapProtocolObservation {
     /// A late XML failure retains its typed bounded prefix and failure together.
     parser: Option<crate::SitemapParseObservation>,
     failure: Option<crate::SitemapFailure>,
+    // Compact private capture is not part of the existing legacy serialization.
+    #[serde(skip_serializing)]
+    source_capture: sitemap_capture::SourceCapture,
 }
 
 impl SitemapProtocolObservation {
     fn capture(page: &PageRecord, request_started: bool, body: &[u8]) -> Self {
+        // Compatibility supplied-slice caller. The actual fetch passes the
+        // independently counted response.chunk progress to capture_with_progress.
+        let mut progress = sitemap_capture::ReceiveProgress::new(
+            crate::SitemapParserLimits::default().max_entity_bytes,
+        );
+        if request_started {
+            progress.begin_body();
+            progress.returned(body.len());
+        }
+        Self::capture_with_progress(page, request_started, body, progress)
+    }
+
+    fn capture_with_progress(
+        page: &PageRecord,
+        request_started: bool,
+        body: &[u8],
+        progress: sitemap_capture::ReceiveProgress,
+    ) -> Self {
         let limits = crate::SitemapParserLimits::default();
         let body_complete = page.final_status.is_some()
             && !matches!(page.final_status, Some(301 | 302 | 303 | 307 | 308))
@@ -2567,7 +2618,19 @@ impl SitemapProtocolObservation {
             entity_decode: None,
             parser: None,
             failure: None,
+            source_capture: sitemap_capture::SourceCapture::not_invoked(
+                progress,
+                crate::SitemapSourceMeasurementStop::ContextUnavailable,
+            ),
         };
+        if request_started && observed.source_capture.received.received_bytes.is_some() {
+            observed.source_capture.retained_prefix_sha256 = Some(
+                observed
+                    .post_http_entity_sha256
+                    .clone()
+                    .unwrap_or_else(|| crate::resource_policy::digest(body)),
+            );
+        }
         if observed.requested_url.is_none() || observed.final_url.is_none() {
             observed.failure = Some(crate::SitemapFailure::new(
                 "sitemap_transport_context_byte_budget",
@@ -2577,6 +2640,20 @@ impl SitemapProtocolObservation {
             return observed;
         }
         if !body_complete || page.final_status != Some(200) {
+            use crate::SitemapSourceMeasurementStop as S;
+            let stop = if page.blocked_by_robots {
+                S::RobotsDenied
+            } else if !request_started {
+                S::RequestNotStarted
+            } else if page.truncated {
+                S::EntityByteLimit
+            } else if !body_complete {
+                S::TransportIncomplete
+            } else {
+                S::HttpStatusNot200
+            };
+            observed.source_capture.unobserved_stop = stop;
+            observed.source_capture.count = sitemap_capture::CountCapture::NotInvoked(stop);
             let (code, message) = if page.blocked_by_robots {
                 (
                     "sitemap_robots_denied",
@@ -2606,8 +2683,15 @@ impl SitemapProtocolObservation {
             observed.failure = Some(crate::SitemapFailure::new(code, message, None));
             return observed;
         }
-        match crate::decode_sitemap_entity(body, &limits) {
+        let outcome = crate::decode_sitemap_entity_observed(body, &limits);
+        observed.source_capture.decoder = Some(outcome.observation);
+        match outcome.result {
             Ok(entity) => {
+                // Same successful decoded Vec; independent of legacy retained
+                // parser outcome. Count failures never affect legacy failure/ID.
+                observed.source_capture.count = sitemap_capture::CountCapture::Observed(
+                    crate::count_sitemap_xml(&entity.xml, &observed.source_capture.count_limits()),
+                );
                 let context = crate::SitemapParserContext {
                     requested_document_url: Some(page.url.clone()),
                     final_document_url: Some(page.final_url.clone()),
@@ -2624,7 +2708,13 @@ impl SitemapProtocolObservation {
                 }
                 observed.entity_decode = Some(entity);
             }
-            Err(failure) => observed.failure = Some(failure),
+            Err(failure) => {
+                observed.source_capture.count = sitemap_capture::CountCapture::NotInvoked(
+                    sitemap_capture::decode_stop(&failure.code)
+                        .unwrap_or(crate::SitemapSourceMeasurementStop::ContextUnavailable),
+                );
+                observed.failure = Some(failure);
+            }
         }
         observed
     }
@@ -2665,7 +2755,14 @@ impl FetchContext {
             Some(FetchPayload::SitemapProtocol(observed)) => *observed,
             // Existing early returns precede any send(). Keep an explicit
             // failure envelope even when policy/resource/URL admission failed.
-            None => SitemapProtocolObservation::capture(&page, false, &[]),
+            None => SitemapProtocolObservation::capture_with_progress(
+                &page,
+                false,
+                &[],
+                sitemap_capture::ReceiveProgress::new(
+                    FetchPurpose::SitemapProtocol.body_limit(&self.config),
+                ),
+            ),
             Some(FetchPayload::PageText(_)) => unreachable!("private sitemap fetch purpose"),
         };
         (page, observed)
@@ -2789,6 +2886,7 @@ impl FetchContext {
         let mut body = Vec::new();
         let mut request_started = false;
         let body_limit = purpose.body_limit(&self.config);
+        let mut sitemap_received = sitemap_capture::ReceiveProgress::new(body_limit);
         let mut resource_redirects: Vec<crate::ResourceRedirectDecision> = Vec::new();
         loop {
             if self.config.obey_robots {
@@ -3058,9 +3156,15 @@ impl FetchContext {
                 continue;
             }
             crate::metadata::extract_http_metadata(&mut page);
+            if purpose == FetchPurpose::SitemapProtocol {
+                sitemap_received.begin_body();
+            }
             loop {
                 match response.chunk().await {
                     Ok(Some(chunk)) => {
+                        if purpose == FetchPurpose::SitemapProtocol {
+                            sitemap_received.returned(chunk.len());
+                        }
                         let remaining = body_limit - body.len();
                         body.extend_from_slice(&chunk[..chunk.len().min(remaining)]);
                         if chunk.len() > remaining {
@@ -3082,7 +3186,12 @@ impl FetchContext {
         if purpose == FetchPurpose::SitemapProtocol {
             // response.chunk() already performed reqwest HTTP Content-Decoding.
             // File-gzip magic is inspected exactly once here, before page sniffing.
-            let observed = SitemapProtocolObservation::capture(&page, request_started, &body);
+            let observed = SitemapProtocolObservation::capture_with_progress(
+                &page,
+                request_started,
+                &body,
+                sitemap_received,
+            );
             return (
                 page,
                 Some(FetchPayload::SitemapProtocol(Box::new(observed))),
@@ -3621,3 +3730,10 @@ mod discovery_ledger_tests;
 #[cfg(test)]
 #[path = "crawler/bootstrap_tests.rs"]
 mod bootstrap_ledger_tests;
+
+#[path = "crawler/sitemap_capture.rs"]
+mod sitemap_capture;
+
+#[cfg(test)]
+#[path = "crawler/sitemap_capture_tests.rs"]
+mod sitemap_capture_tests;
