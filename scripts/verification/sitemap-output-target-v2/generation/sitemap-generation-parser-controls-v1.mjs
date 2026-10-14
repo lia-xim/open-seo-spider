@@ -1,0 +1,19 @@
+// Small authored parser controls. These are not native generator/captured-source evidence.
+import assert from 'node:assert/strict';
+import {crc32 as nativeCrc} from 'node:zlib';
+import {createHash} from 'node:crypto';
+import {storedZip,xml,verifyBundle,crc32} from './sitemap-generation-zip-v1.mjs';
+const sha=b=>createHash('sha256').update(b).digest('hex');
+function zip(entries){let offset=0;const locals=[],central=[];for(const [name,body] of entries){const n=Buffer.from(name),b=Buffer.from(body),l=Buffer.alloc(30),c=Buffer.alloc(46),crc=nativeCrc(b);l.writeUInt32LE(0x04034b50);l.writeUInt16LE(20,4);l.writeUInt32LE(crc,14);l.writeUInt32LE(b.length,18);l.writeUInt32LE(b.length,22);l.writeUInt16LE(n.length,26);c.writeUInt32LE(0x02014b50);c.writeUInt16LE(20,4);c.writeUInt16LE(20,6);c.writeUInt32LE(crc,16);c.writeUInt32LE(b.length,20);c.writeUInt32LE(b.length,24);c.writeUInt16LE(n.length,28);c.writeUInt32LE(offset,42);locals.push(l,n,b);central.push(c,n);offset+=l.length+n.length+b.length;}const cd=Buffer.concat(central),end=Buffer.alloc(22);end.writeUInt32LE(0x06054b50);end.writeUInt16LE(entries.length,8);end.writeUInt16LE(entries.length,10);end.writeUInt32LE(cd.length,12);end.writeUInt32LE(offset,16);return Buffer.concat([...locals,cd,end]);}
+const declaration='<?xml version="1.0" encoding="UTF-8"?>\n',ns='http://www.sitemaps.org/schemas/sitemap/0.9',base='https://example.org/',url=base+'page?a=1&b=2';
+const segment=Buffer.from(declaration+`<urlset xmlns="${ns}" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml"><url><loc>${base}page?a=1&amp;b=2</loc><lastmod>2024-02-29</lastmod><image:image><image:loc>${base}image.png?a=1&amp;b=2</image:loc></image:image><xhtml:link rel="alternate" hreflang="en" href="${base}page?a=1&amp;b=2"/></url></urlset>`);
+const index=Buffer.from(declaration+`<sitemapindex xmlns="${ns}"><sitemap><loc>${base}sitemap-00001.xml</loc></sitemap></sitemapindex>`);
+const manifest={engine:'open-seo-spider/segmented-sitemap-generation-v1',negative_membership_claim:false,options:{public_base_url:base,max_urls_per_file:2,max_urlset_uncompressed_bytes:52428800,max_index_uncompressed_bytes:52428800,priority:null,changefreq:null},files:[['sitemap-00001.xml',segment,'urlset',base+'sitemap-00001.xml'],['sitemap-index.xml',index,'sitemapindex',base+'sitemap-index.xml']].map(([name,bytes,kind,public_url])=>({name,kind,public_url,url_count:1,uncompressed_bytes:bytes.length,sha256:sha(bytes)})),memberships:[{url,segment:'sitemap-00001.xml',images:[base+'image.png?a=1&b=2'],hreflang:[{language:'en',url}],lastmod:{value:'2024-02-29',source:{source:'provided',reference:'authored parser control'}}}],diagnostics:[]};
+const bytes=zip([['sitemap-00001.xml',segment],['sitemap-index.xml',index],['manifest.json',JSON.stringify(manifest)]]);let checks=0;
+assert.equal(crc32(Buffer.from('123456789')),0xcbf43926);assert.equal(crc32(segment),nativeCrc(segment));checks++;
+assert.equal(storedZip(bytes).size,3);const proof=verifyBundle(bytes,{base,eligible:[url],images:{[url]:[base+'image.png?a=1&b=2']},lastmods:{[url]:'2024-02-29'}});assert.equal(proof.sha256,sha(bytes));checks++;
+for(const value of ['<urlset><url></urlset>','<urlset>&bare;</urlset>','<!DOCTYPE x><urlset/>','<urlset>\u0001</urlset>','<urlset/><urlset/>','<urlset><url attr="unterminated></url></urlset>']){assert.throws(()=>xml(Buffer.from(declaration+value)));checks++;}
+assert.throws(()=>xml(Buffer.from([0xff,0xfe])));checks++;
+const corrupt=Buffer.from(bytes);corrupt[30+Buffer.byteLength('sitemap-00001.xml')+10]^=1;assert.throws(()=>storedZip(corrupt));checks++;
+assert.throws(()=>storedZip(zip([['../unsafe.xml','no']])));assert.throws(()=>storedZip(bytes,bytes.length-1));checks+=2;
+console.log(JSON.stringify({result:'PASS_AUTHORED_PARSER_CONTROLS_ONLY',checks,zip_bytes:bytes.length,zip_sha256:sha(bytes),native_generation_executed:false}));

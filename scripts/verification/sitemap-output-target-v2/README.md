@@ -1,0 +1,15 @@
+# Prepared sitemap generation and target acceptance
+
+Status: PREPARED / NATIVE NOT RUN. These own acceptance modules are tracked in the private development branch. Source preparation and previous exact-byte Node syntax checks are separate from real native execution. All three entrypoints require explicit absolute --binary, --binary-sha256, --source-root, --source-manifest, --source-manifest-sha256, --runtime-root and --out inputs. Optional --chrome selects the local browser executable. The executable must have a separate actual source-bound build receipt; matching served assets alone do not establish complete source provenance.
+
+- generation/sitemap-generation-native-v2.mjs: 10 planned main groups, including actual API/CLI/official MCP SDK and two actual-browser groups. The sibling ZIP/XML parser is independent of the product generator; its 12 existing small parser controls remain separate historical proof.
+- target/sitemap-target-native-v1.mjs: 15 planned main groups, including 16 actual-API browser cases, original versus rewrite/final targets, source-document identity, inlinks, historical/unknown scope, independent cursors and actual resumed-generation stale tokens.
+- renderer/sitemap-generation-renderer-native-v1.mjs: 8 planned configured-renderer groups. Uses actual product renderer launches and observes their process lifecycle. Covers direct200, same-document fragment, changed path/query/navigation, rejected rendered404, unsupported about:blank and raw truncation with missing rendering. Healthy complete unexplained missing evidence and status-null cases remain unexercised.
+
+The renderer directory is portable revision v2 of its existing v1-named entrypoint: its SHA-pinned ZIP parser is now a sibling module. Keep each directory's runtime siblings together. The caller-supplied runtime root supplies pinned Node package manifests/version checks and actual product renderer/SDK dependencies; this preparation does not hash-pin an entire npm tree or the operating system.
+
+User ports8787/8790 and user data are refused. Every run needs fresh owned output/data, loopback ephemeral ports, actual App/SDK/browser close events and clean fixture connection drain. Saved-read intervals preserve scoped data hashes and website request counts. No native process is started by this README or preparation receipt.
+
+Candidate source closure:218 inputs,64 specifically required test names, minimum846 expected workspace passes; actual candidate compile/tests/native results are not available. Accepted installed206-input source and its794-test/native13/physical JSON8MiB+CSV64MiB proofs remain a separate historical source scope. Source protocol50k/50MiB, row/catalog caps, fault injection, complete filter depth and remote/Linux/container acceptance remain open. See docs/verification/sitemap-output-target-preparation-v2.json and docs/parity/sitemap-filter-depth-plan.md.
+
+Execute only after the coordinated machine window has actually been released and the candidate workspace, format, Clippy and source-bound native executable have passed their required gates.

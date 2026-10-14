@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "result": "PREPARED_NATIVE_ACCEPTANCE_SOURCE_TRACKED_NOT_EXECUTED",
+  "recorded_at": "2026-10-14T18:52:13.946Z",
+  "candidate_commit": "c35b92994f0c2bb975fc30fcb0743c38402c758b",
+  "candidate_source_manifest_sha256": "f3a70db226d143e34cba545941164162aab821628e3e07546da81c1712aed483",
+  "candidate_source_inputs": 218,
+  "required_named_rust_tests": 64,
+  "minimum_expected_workspace_passes": 846,
+  "actual_candidate_workspace": "NOT_RUN",
+  "actual_native_main_groups": 0,
+  "actual_native_browser_cases": 0,
+  "actual_candidate_installation": "NOT_RUN",
+  "current_compute_gate": "HELD_COORDINATED_LOCAL_MACHINE_WINDOW",
+  "installed_accepted_binary_sha256": "ab1ac93c82905aa627d100d8622a50acf93dd7fe59c3f854eecdaac667110bcf",
+  "source_preparations": [
+    {
+      "kind": "generation_api_cli_sdk_browser",
+      "sha256": "d3ed61d420b495618f09d47f1d12659dc7097653606bec5f6f876c265a22442b",
+      "planned_main_groups": 10,
+      "planned_browser_groups": 2
+    },
+    {
+      "kind": "target_inlink_saved_source",
+      "sha256": "e153d27ad61b45b403811569b4913e5f5c2f420af58e8c72dd7ccb4fdc38dabf",
+      "planned_main_groups": 15,
+      "planned_browser_cases": 16
+    },
+    {
+      "kind": "configured_crawl_renderer_portable_v2",
+      "sha256": "44f438dd06853d82320f166b3d2fe2ed6aa5331726c2c4c270d6e9aa40739e8c",
+      "planned_main_groups": 8
+    }
+  ],
+  "files": [
+    {
+      "path": "scripts/verification/sitemap-output-target-v2/generation/sitemap-generation-native-v2.mjs",
+      "bytes": 39643,
+      "sha256": "a9c725c6091b26c75f0439eba66a489e8073c3ff2d21d2ed3a68bc157da5c954"
+    },
+    {
+      "path": "scripts/verification/sitemap-output-target-v2/generation/sitemap-generation-browser-v2.mjs",
+      "bytes": 20992,
+      "sha256": "b55ec51ca4aa34d08a4eebe150165128a66466207285dcf2d64305f6fa0cec41"
+    },
+    {
+      "path": "scripts/verification/sitemap-output-target-v2/generation/sitemap-generation-zip-v1.mjs",
+      "bytes": 9269,
+      "sha256": "f8336a6625c9c5fcf1db8232559b390a60d0230667d54b8b8bd5f923010636a0"
+    },
+    {
+      "path": "scripts/verification/sitemap-output-target-v2/generation/sitemap-generation-parser-controls-v1.mjs",
+      "bytes": 3936,
+      "sha256": "9d927f75ee98e14bc6605dc3284f4079aa4549c2c64bd5bc89a5ded123e56bc3"
+    },
+    {
+      "path": "scripts/verification/sitemap-output-target-v2/target/sitemap-target-native-v1.mjs",
+      "bytes": 61914,
+      "sha256": "712824aff165451ecb9f29eb2dd32d1251fa4ee3d188eb5e6fada4a2830f5504"
+    },
+    {
+      "path": "scripts/verification/sitemap-output-target-v2/target/sitemap-target-browser-v1.mjs",
+      "bytes": 35586,
+      "sha256": "8370054e8a30d2d894068ca7b14b39d6355823a1d438343d6d7fbc579008ea09"
+    },
+    {
+      "path": "scripts/verification/sitemap-output-target-v2/target/sitemap-target-assertions-v1.mjs",
+      "bytes": 8080,
+      "sha256": "c6ccced15356be59ea3a8bbdc301cb915b07ef2b15a377dbef3c272c26cb79c8"
+    },
+    {
+      "path": "scripts/verification/sitemap-output-target-v2/renderer/sitemap-generation-renderer-native-v1.mjs",
+      "bytes": 41751,
+      "sha256": "553bb3149deb4dc9255fc4808b8fdaf06effcb6539391ab4d97074dac36284ed"
+    },
+    {
+      "path": "scripts/verification/sitemap-output-target-v2/renderer/renderer-observer-worker.mjs",
+      "bytes": 8192,
+      "sha256": "fb92738d964fb6fcffc57f8b697c0d733cf208b67930e222792cf1e89f1636a8"
+    },
+    {
+      "path": "scripts/verification/sitemap-output-target-v2/renderer/sitemap-generation-zip-v1.mjs",
+      "bytes": 9269,
+      "sha256": "f8336a6625c9c5fcf1db8232559b390a60d0230667d54b8b8bd5f923010636a0"
+    }
+  ],
+  "readme": {
+    "path": "scripts/verification/sitemap-output-target-v2/README.md",
+    "sha256": "6f686a72f89e934cedd2476413414ad97d853f85acf53d14badf9e2e35536bfb"
+  },
+  "relative_module_targets_verified": [
+    {
+      "from": "scripts/verification/sitemap-output-target-v2/generation/sitemap-generation-native-v2.mjs",
+      "reference": "./sitemap-generation-zip-v1.mjs",
+      "target": "scripts/verification/sitemap-output-target-v2/generation/sitemap-generation-zip-v1.mjs"
+    },
+    {
+      "from": "scripts/verification/sitemap-output-target-v2/generation/sitemap-generation-native-v2.mjs",
+      "reference": "./sitemap-generation-browser-v2.mjs",
+      "target": "scripts/verification/sitemap-output-target-v2/generation/sitemap-generation-browser-v2.mjs"
+    },
+    {
+      "from": "scripts/verification/sitemap-output-target-v2/generation/sitemap-generation-native-v2.mjs",
+      "reference": "./sitemap-generation-browser-v2.mjs",
+      "target": "scripts/verification/sitemap-output-target-v2/generation/sitemap-generation-browser-v2.mjs"
+    },
+    {
+      "from": "scripts/verification/sitemap-output-target-v2/generation/sitemap-generation-native-v2.mjs",
+      "reference": "./sitemap-generation-zip-v1.mjs",
+      "target": "scripts/verification/sitemap-output-target-v2/generation/sitemap-generation-zip-v1.mjs"
+    },
+    {
+      "from": "scripts/verification/sitemap-output-target-v2/generation/sitemap-generation-native-v2.mjs",
+      "reference": "./sitemap-generation-zip-v1.mjs",
+      "target": "scripts/verification/sitemap-output-target-v2/generation/sitemap-generation-zip-v1.mjs"
+    },
+    {
+      "from": "scripts/verification/sitemap-output-target-v2/generation/sitemap-generation-native-v2.mjs",
+      "reference": "./sitemap-generation-browser-v2.mjs",
+      "target": "scripts/verification/sitemap-output-target-v2/generation/sitemap-generation-browser-v2.mjs"
+    },
+    {
+      "from": "scripts/verification/sitemap-output-target-v2/generation/sitemap-generation-browser-v2.mjs",
+      "reference": "./sitemap-generation-zip-v1.mjs",
+      "target": "scripts/verification/sitemap-output-target-v2/generation/sitemap-generation-zip-v1.mjs"
+    },
+    {
+      "from": "scripts/verification/sitemap-output-target-v2/generation/sitemap-generation-parser-controls-v1.mjs",
+      "reference": "./sitemap-generation-zip-v1.mjs",
+      "target": "scripts/verification/sitemap-output-target-v2/generation/sitemap-generation-zip-v1.mjs"
+    },
+    {
+      "from": "scripts/verification/sitemap-output-target-v2/target/sitemap-target-native-v1.mjs",
+      "reference": "./sitemap-target-browser-v1.mjs",
+      "target": "scripts/verification/sitemap-output-target-v2/target/sitemap-target-browser-v1.mjs"
+    },
+    {
+      "from": "scripts/verification/sitemap-output-target-v2/target/sitemap-target-native-v1.mjs",
+      "reference": "./sitemap-target-assertions-v1.mjs",
+      "target": "scripts/verification/sitemap-output-target-v2/target/sitemap-target-assertions-v1.mjs"
+    },
+    {
+      "from": "scripts/verification/sitemap-output-target-v2/target/sitemap-target-native-v1.mjs",
+      "reference": "./sitemap-target-browser-v1.mjs",
+      "target": "scripts/verification/sitemap-output-target-v2/target/sitemap-target-browser-v1.mjs"
+    },
+    {
+      "from": "scripts/verification/sitemap-output-target-v2/target/sitemap-target-native-v1.mjs",
+      "reference": "./sitemap-target-assertions-v1.mjs",
+      "target": "scripts/verification/sitemap-output-target-v2/target/sitemap-target-assertions-v1.mjs"
+    },
+    {
+      "from": "scripts/verification/sitemap-output-target-v2/target/sitemap-target-native-v1.mjs",
+      "reference": "./sitemap-target-browser-v1.mjs",
+      "target": "scripts/verification/sitemap-output-target-v2/target/sitemap-target-browser-v1.mjs"
+    },
+    {
+      "from": "scripts/verification/sitemap-output-target-v2/target/sitemap-target-native-v1.mjs",
+      "reference": "./sitemap-target-assertions-v1.mjs",
+      "target": "scripts/verification/sitemap-output-target-v2/target/sitemap-target-assertions-v1.mjs"
+    },
+    {
+      "from": "scripts/verification/sitemap-output-target-v2/target/sitemap-target-native-v1.mjs",
+      "reference": "./sitemap-target-browser-v1.mjs",
+      "target": "scripts/verification/sitemap-output-target-v2/target/sitemap-target-browser-v1.mjs"
+    },
+    {
+      "from": "scripts/verification/sitemap-output-target-v2/target/sitemap-target-native-v1.mjs",
+      "reference": "./sitemap-target-assertions-v1.mjs",
+      "target": "scripts/verification/sitemap-output-target-v2/target/sitemap-target-assertions-v1.mjs"
+    },
+    {
+      "from": "scripts/verification/sitemap-output-target-v2/renderer/sitemap-generation-renderer-native-v1.mjs",
+      "reference": "./sitemap-generation-zip-v1.mjs",
+      "target": "scripts/verification/sitemap-output-target-v2/renderer/sitemap-generation-zip-v1.mjs"
+    },
+    {
+      "from": "scripts/verification/sitemap-output-target-v2/renderer/sitemap-generation-renderer-native-v1.mjs",
+      "reference": "./renderer-observer-worker.mjs",
+      "target": "scripts/verification/sitemap-output-target-v2/renderer/renderer-observer-worker.mjs"
+    }
+  ],
+  "scope": "Actual exact-byte source tracking and static relative dependency resolution only; prior syntax receipts reused for identical bytes. No new App/SDK/Chrome/native execution. Capability31/67/46 and all reference parity remain unchanged."
+}
