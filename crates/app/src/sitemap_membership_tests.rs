@@ -1187,3 +1187,6 @@ async fn actual_stored_report_context_only_change_invalidates_raw_page_and_csv_t
 // Directed actual SQLite/HTTP context invalidation controls; authored only.
 #[path = "sitemap_source_context_tests.rs"]
 mod source_context;
+
+#[path = "sitemap_membership_rich_read_tests.rs"]
+mod rich_read_window_tests;

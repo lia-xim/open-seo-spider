@@ -10,6 +10,12 @@ use serde::{Deserialize, Serialize, de::DeserializeOwned};
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 
+mod window;
+use window::MembershipBasis;
+pub(crate) use window::{
+    AnalysisReadInput, VerifiedAnalysisRead, prepare_window_analysis, project_prepared_window,
+};
+
 pub const SITEMAP_MEMBERSHIP_ANALYSIS_ENGINE: &str =
     "open-seo-spider/sitemap-target-inlink-analysis-v1";
 const MAX_REPORT_BYTES: i64 = 268_435_456;
@@ -369,12 +375,95 @@ fn validate_report_source_measurements(
     Ok(())
 }
 
+enum SourceBasis<'a> {
+    Snapshot(Option<&'a crate::SitemapSourceStoreSnapshot>),
+    Verified(Option<&'a crate::sitemap_source_store::verified_read::VerifiedSourceRead<'a>>),
+}
+impl SourceBasis<'_> {
+    fn summary(&self) -> Option<&crate::SitemapSourceStoreSummary> {
+        match self {
+            Self::Snapshot(value) => value.map(|v| &v.summary),
+            Self::Verified(value) => value.map(|v| v.summary()),
+        }
+    }
+    fn verify_report(&self, connection: &Connection) -> Result<()> {
+        match self {
+            Self::Snapshot(value) => validate_report_source_measurements(connection, *value),
+            Self::Verified(value) => {
+                crate::sitemap_source_store::verified_report::verify_saved_report(
+                    connection, *value,
+                )
+            }
+        }
+    }
+}
+struct ContextInput<'a> {
+    generation: Option<u64>,
+    config_sha: Option<&'a str>,
+    coverage: &'a crate::SitemapCoverage,
+    summary: Option<&'a crate::SitemapLedgerSummary>,
+    source: SourceBasis<'a>,
+}
+struct PreparedContext {
+    base: SitemapMembershipAnalysis,
+    selected: bool,
+    generation: Option<u64>,
+}
+
+/// Historical materialized reader remains an oracle for membership counting.
+/// Target, report/checkpoint guards, renderer provenance and paging share code.
 pub(crate) fn project(
     connection: &Connection,
     read: &SitemapReadSnapshot,
     request: &SitemapMembershipAnalysisRequest,
 ) -> Result<SitemapMembershipAnalysis> {
     request.validate()?;
+    let catalog = read.catalog.as_ref().filter(|v| v.rows.is_some());
+    let rows = catalog.and_then(|v| v.rows.as_deref()).unwrap_or_default();
+    let visible = rows
+        .iter()
+        .filter(|r| request.matches(r))
+        .take(request.row_limit)
+        .filter_map(|r| match r {
+            SitemapLedgerRow::Location(loc)
+                if loc.observed.role == SitemapLocationRole::PageLocation =>
+            {
+                Some(loc.as_ref())
+            }
+            _ => None,
+        })
+        .collect();
+    let prepared = prepare_context(
+        connection,
+        ContextInput {
+            generation: read.generation,
+            config_sha: read.crawl_config_sha256.as_deref(),
+            coverage: &read.coverage,
+            summary: catalog.map(|v| &v.summary),
+            source: SourceBasis::Snapshot(read.sitemap_source_measurements.as_ref()),
+        },
+    )?;
+    project_rows(
+        connection,
+        &prepared,
+        &read.coverage,
+        visible,
+        MembershipBasis::Materialized(rows),
+        request,
+    )
+}
+
+fn prepare_context(connection: &Connection, input: ContextInput<'_>) -> Result<PreparedContext> {
+    let ContextInput {
+        generation,
+        config_sha,
+        coverage,
+        summary,
+        source,
+    } = input;
+    let mut selected = false;
+    let mut report_generation = generation;
+
     let run: Option<CrawlRunState> = meta(connection, "run_state")?;
     let checkpoint: Option<CrawlCheckpoint> = meta(connection, "checkpoint")?;
     let report = report_hash(connection)?;
@@ -383,14 +472,14 @@ pub(crate) fn project(
             engine: SITEMAP_MEMBERSHIP_ANALYSIS_ENGINE.into(),
             available: false,
             reason: "terminal_saved_report_unavailable".into(),
-            generation: read.generation,
+            generation,
             checkpoint_revision: checkpoint.as_ref().map(|v| v.revision),
             outcome: run.as_ref().and_then(|v| v.outcome),
             report_sha256: report.as_ref().map(|v| v.0.clone()),
             report_bytes: report.as_ref().map(|v| v.1),
             saved_page_count: None,
             pending_page_count: None,
-            source_scope: read.coverage.scope,
+            source_scope: coverage.scope,
             observation_scope: "unavailable".into(),
             website_wide_orphan_inference: false,
         },
@@ -400,16 +489,28 @@ pub(crate) fn project(
         last_saved_page_url: None,
         last_saved_page_ordinal: None,
     };
-    let Some(catalog) = read.catalog.as_ref().filter(|v| v.rows.is_some()) else {
+    let Some(summary) = summary else {
         out.context.reason = "validated_source_catalog_unavailable".into();
-        return Ok(out);
+        return Ok(PreparedContext {
+            base: out,
+            selected,
+            generation: report_generation,
+        });
     };
     let (Some(run), Some(checkpoint), Some((sha, _))) = (run, checkpoint, report) else {
-        return Ok(out);
+        return Ok(PreparedContext {
+            base: out,
+            selected,
+            generation: report_generation,
+        });
     };
     if run.outcome.is_none() || run.finished_at.is_none() {
         out.context.reason = "live_crawl_target_analysis_unavailable".into();
-        return Ok(out);
+        return Ok(PreparedContext {
+            base: out,
+            selected,
+            generation: report_generation,
+        });
     }
     let completed = count(connection, "SELECT count(*) FROM pages")?;
     let pending = count(connection, "SELECT count(*) FROM frontier WHERE done=0")?;
@@ -420,25 +521,29 @@ pub(crate) fn project(
     let discovery_complete =
         bounded_text(connection, "discovery_complete")?.as_deref() == Some("true");
     if run.generation != checkpoint.generation
+        || Some(run.generation) != generation
         || run.outcome != Some(checkpoint.outcome)
-        || Some(checkpoint.config_sha256.as_str()) != read.crawl_config_sha256.as_deref()
-        || checkpoint.sitemap_ledger.as_ref() != Some(&catalog.summary)
+        || Some(checkpoint.config_sha256.as_str()) != config_sha
+        || checkpoint.sitemap_ledger.as_ref() != Some(summary)
         || u64::try_from(checkpoint.completed)? != completed
         || u64::try_from(checkpoint.pending)? != pending
         || u64::try_from(checkpoint.discovery_pending)? != discovery_pending
         || checkpoint.discovery_complete != discovery_complete
     {
         out.context.reason = "saved_checkpoint_context_mismatch".into();
-        return Ok(out);
+        return Ok(PreparedContext {
+            base: out,
+            selected,
+            generation: report_generation,
+        });
     }
-    if checkpoint.sitemap_source_measurements.as_ref()
-        != read
-            .sitemap_source_measurements
-            .as_ref()
-            .map(|snapshot| &snapshot.summary)
-    {
+    if checkpoint.sitemap_source_measurements.as_ref() != source.summary() {
         out.context.reason = "saved_source_measurement_context_mismatch".into();
-        return Ok(out);
+        return Ok(PreparedContext {
+            base: out,
+            selected,
+            generation: report_generation,
+        });
     }
     ensure!(
         sha == checkpoint.report_sha256,
@@ -456,7 +561,7 @@ pub(crate) fn project(
             && summary_pending == Some(i64::try_from(pending)?),
         "Sitemap analysis saved report envelope differs"
     );
-    validate_report_source_measurements(connection, read.sitemap_source_measurements.as_ref())?;
+    source.verify_report(connection)?;
     // A controlled writer has unique requested page identities. Refuse malformed
     // typed identity/anchor fields instead of silently dropping an unjoinable row.
     let (distinct,invalid,links): (i64,i64,i64) = connection.query_row(
@@ -470,7 +575,7 @@ pub(crate) fn project(
         (0..=MAX_LINKS).contains(&links),
         "Sitemap analysis anchor input budget exceeded"
     );
-    let selected: bool = connection
+    selected = connection
         .query_row(
             "SELECT json_type(value,'$.operation')='object' FROM metadata WHERE key='report'",
             [],
@@ -489,25 +594,35 @@ pub(crate) fn project(
         "partial_terminal_saved_report_observations"
     }
     .into();
+    report_generation = Some(run.generation);
+    Ok(PreparedContext {
+        base: out,
+        selected,
+        generation: report_generation,
+    })
+}
+
+fn project_rows(
+    connection: &Connection,
+    prepared: &PreparedContext,
+    coverage: &crate::SitemapCoverage,
+    visible: Vec<&crate::StoredSitemapLocation>,
+    membership: MembershipBasis<'_>,
+    request: &SitemapMembershipAnalysisRequest,
+) -> Result<SitemapMembershipAnalysis> {
+    let mut out = prepared.base.clone();
+    if !out.context.available {
+        return Ok(out);
+    }
+    let selected = prepared.selected;
+    let generation = prepared
+        .generation
+        .context("Available analysis has no generation")?;
     if request.row_limit == 0 && request.page_limit == 0 {
         out.location_findings = Some(vec![]);
         out.saved_pages = Some(vec![]);
         return Ok(out);
     }
-    let rows = catalog.rows.as_ref().expect("checked");
-    let visible: Vec<_> = rows
-        .iter()
-        .filter(|r| request.matches(r))
-        .take(request.row_limit)
-        .filter_map(|r| match r {
-            SitemapLedgerRow::Location(v)
-                if v.observed.role == SitemapLocationRole::PageLocation =>
-            {
-                Some(v)
-            }
-            _ => None,
-        })
-        .collect();
     let mut wanted = BTreeSet::new();
     for loc in &visible {
         if loc.observed.validation_error.is_none()
@@ -520,13 +635,13 @@ pub(crate) fn project(
             wanted.insert(url.clone());
         }
     }
-    let mut page_window = read_page_window(connection, request, selected, run.generation)?;
+    let mut page_window = read_page_window(connection, request, selected, generation)?;
     out.saved_pages_have_more = page_window.len() > request.page_limit;
     page_window.truncate(request.page_limit);
     for page in &page_window {
         wanted.insert(page.requested_url.clone());
     }
-    let mut observations = read_target_pages(connection, &wanted, selected, run.generation)?;
+    let mut observations = read_target_pages(connection, &wanted, selected, generation)?;
     let inlinks = read_inlinks(connection, &wanted)?;
     let mut pending_urls = BTreeSet::new();
     for url in &wanted {
@@ -584,54 +699,7 @@ pub(crate) fn project(
             })
             .collect(),
     );
-    let documents: BTreeMap<_, _> = rows
-        .iter()
-        .filter_map(|row| match row {
-            SitemapLedgerRow::Document(value) => {
-                Some((value.observation_id.as_str(), value.as_ref()))
-            }
-            _ => None,
-        })
-        .collect();
-    let mut members: BTreeMap<String, MembershipCounts<'_>> = page_window
-        .iter()
-        .map(|v| (v.requested_url.clone(), MembershipCounts::default()))
-        .collect();
-    for row in rows {
-        if let SitemapLedgerRow::Location(loc) = row {
-            if loc.observed.role != SitemapLocationRole::PageLocation {
-                continue;
-            }
-            if loc.observed.validation_error.is_none()
-                && loc.observed.loc_ordinal.is_some()
-                && let Some(count) = loc
-                    .observed
-                    .normalized_fetch_url
-                    .as_ref()
-                    .and_then(|u| members.get_mut(u))
-            {
-                count.occurrences += 1;
-                let source = documents
-                    .get(loc.observation_id.as_str())
-                    .context("Original location source document missing")?;
-                ensure!(
-                    source.kind == crate::SitemapSourceKind::SitemapXml,
-                    "Original page location source is not XML"
-                );
-                count
-                    .sources
-                    .entry(source.task_url.as_str())
-                    .or_default()
-                    .insert(source.observation_id.as_str());
-            }
-            if let Some(alias) = &loc.admission.admitted_fetch_url
-                && Some(alias) != loc.observed.normalized_fetch_url.as_ref()
-                && let Some(count) = members.get_mut(alias)
-            {
-                count.aliases += 1;
-            }
-        }
-    }
+    let mut members = membership.counts(connection, &page_window)?;
     out.last_saved_page_url = page_window.last().map(|v| v.requested_url.clone());
     out.last_saved_page_ordinal = page_window.last().map(|v| v.report_page_ordinal);
     out.saved_pages = Some(
@@ -645,40 +713,17 @@ pub(crate) fn project(
                     .unwrap_or_default();
                 let membership = if counts.occurrences > 0 {
                     SitemapSavedPageMembership::ListedOriginal
-                } else if read
-                    .coverage
-                    .current_valid_original_location_negative_permitted
-                {
+                } else if coverage.current_valid_original_location_negative_permitted {
                     SitemapSavedPageMembership::NotListedCurrentDeclaredSources
-                } else if read
-                    .coverage
-                    .historical_valid_original_location_negative_permitted
-                {
+                } else if coverage.historical_valid_original_location_negative_permitted {
                     SitemapSavedPageMembership::NotListedHistoricalDeclaredSources
                 } else {
                     SitemapSavedPageMembership::Unknown
                 };
                 observations.remove(&page.requested_url);
-                let original_source_document_count = counts.sources.len() as u64;
-                let original_source_observation_count =
-                    counts.sources.values().map(|v| v.len() as u64).sum();
-                let original_source_document_samples: Vec<_> = counts
-                    .sources
-                    .iter()
-                    .take(SAMPLE_LIMIT)
-                    .map(|(task, ids)| {
-                        let id = *ids.first().expect("nonempty source observation set");
-                        let source = documents[id];
-                        SitemapSourceDocumentSample {
-                            observation_id: id.into(),
-                            task_url: (*task).into(),
-                            source_final_url: source
-                                .transport
-                                .as_ref()
-                                .and_then(|value| value.final_url.clone()),
-                        }
-                    })
-                    .collect();
+                let original_source_document_count = counts.document_count;
+                let original_source_observation_count = counts.observation_count;
+                let original_source_document_samples = counts.samples;
                 SitemapSavedPageFinding {
                     listed_without_observed_nonself_inlinks: counts.occurrences > 0
                         && observed_inlinks.nonself_anchor_occurrences == 0,

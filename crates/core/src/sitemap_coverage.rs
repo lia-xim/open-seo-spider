@@ -17,6 +17,9 @@ const MAX_INVENTORY_TASKS: usize = 1_000_000;
 const MAX_INVENTORY_TASK_BYTES: usize = 32 * 1024 * 1024;
 const MAX_SAVED_CONFIG_BYTES: usize = 64 * 1024 * 1024;
 
+#[path = "sitemap_coverage/verified_read.rs"]
+pub(crate) mod verified_read;
+
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(deny_unknown_fields)]
 pub struct SitemapCoverageTask {
@@ -425,15 +428,8 @@ fn reason(out: &mut SitemapCoverage, value: SitemapCoverageReason) {
     *out.reason_counts.entry(value).or_default() += 1;
 }
 
-/// Project only captured sources and admission edges; no target-page response/status joins.
-/// A positive page Loc membership remains independent of this completeness result.
-/// Invalid/corrupt catalogs are errors, not weaker partial results.
-pub fn project_sitemap_coverage(
-    catalog: Option<&SitemapCatalog>,
-    inventory: Option<&SitemapCoverageInventory>,
-) -> Result<SitemapCoverage> {
-    use SitemapCoverageReason as R;
-    let mut out = SitemapCoverage {
+fn empty_coverage() -> SitemapCoverage {
+    SitemapCoverage {
         engine: SITEMAP_COVERAGE_ENGINE.into(),
         scope: SitemapCoverageScope::Unavailable,
         completion: SitemapCohortCompletion::Unknown,
@@ -442,32 +438,64 @@ pub fn project_sitemap_coverage(
         reason_counts: BTreeMap::new(),
         counts: SitemapCoverageCounts::default(),
         basis: None,
-    };
-    let Some(catalog) = catalog else {
-        reason(&mut out, R::CatalogUnavailable);
-        return Ok(out);
-    };
-    out.scope = if catalog.inherited.is_some() {
+    }
+}
+
+fn bind_coverage_basis(
+    out: &mut SitemapCoverage,
+    summary: &crate::SitemapLedgerSummary,
+    inherited: Option<&crate::SitemapInheritedBasis>,
+) {
+    out.scope = if inherited.is_some() {
         SitemapCoverageScope::InheritedHistoricalDeclaredSources
     } else {
         SitemapCoverageScope::CurrentDeclaredSources
     };
     out.basis = Some(SitemapCoverageBasis {
-        initial_config_sha256: catalog.summary.config_sha256.clone(),
-        catalog_revision: catalog.summary.revision,
-        catalog_rolling_sha256: catalog.summary.rolling_sha256.clone(),
+        initial_config_sha256: summary.config_sha256.clone(),
+        catalog_revision: summary.revision,
+        catalog_rolling_sha256: summary.rolling_sha256.clone(),
         captured_inventory_sha256: None,
         inventory_saved_config_sha256: None,
         inventory_generation: None,
-        parent_snapshot_sha256: catalog
-            .inherited
-            .as_ref()
-            .map(|b| b.parent_snapshot_sha256.clone()),
-        parent_catalog_sha256: catalog
-            .inherited
-            .as_ref()
-            .map(|b| b.parent_catalog_sha256.clone()),
+        parent_snapshot_sha256: inherited.map(|b| b.parent_snapshot_sha256.clone()),
+        parent_catalog_sha256: inherited.map(|b| b.parent_catalog_sha256.clone()),
     });
+}
+
+fn finish_coverage(out: &mut SitemapCoverage) {
+    if out.reason_counts.is_empty() {
+        out.completion = if out.counts.root_declarations == 0 {
+            SitemapCohortCompletion::KnownEmpty
+        } else {
+            SitemapCohortCompletion::Complete
+        };
+        match out.scope {
+            SitemapCoverageScope::CurrentDeclaredSources => {
+                out.current_valid_original_location_negative_permitted = true
+            }
+            SitemapCoverageScope::InheritedHistoricalDeclaredSources => {
+                out.historical_valid_original_location_negative_permitted = true
+            }
+            SitemapCoverageScope::Unavailable => unreachable!("validated source basis"),
+        }
+    }
+}
+
+/// Project only captured sources and admission edges; no target-page response/status joins.
+/// A positive page Loc membership remains independent of this completeness result.
+/// Invalid/corrupt catalogs are errors, not weaker partial results.
+pub fn project_sitemap_coverage(
+    catalog: Option<&SitemapCatalog>,
+    inventory: Option<&SitemapCoverageInventory>,
+) -> Result<SitemapCoverage> {
+    use SitemapCoverageReason as R;
+    let mut out = empty_coverage();
+    let Some(catalog) = catalog else {
+        reason(&mut out, R::CatalogUnavailable);
+        return Ok(out);
+    };
+    bind_coverage_basis(&mut out, &catalog.summary, catalog.inherited.as_ref());
     // A deliberately unavailable report projection is unknown, not an initialized empty ledger.
     if !catalog.summary.rows_available || catalog.rows.is_none() {
         reason(&mut out, R::CatalogRowsUnavailable);
@@ -686,22 +714,7 @@ pub fn project_sitemap_coverage(
             reason(&mut out, R::SourceGraphUnboundTask);
         }
     }
-    if out.reason_counts.is_empty() {
-        out.completion = if out.counts.root_declarations == 0 {
-            SitemapCohortCompletion::KnownEmpty
-        } else {
-            SitemapCohortCompletion::Complete
-        };
-        match out.scope {
-            SitemapCoverageScope::CurrentDeclaredSources => {
-                out.current_valid_original_location_negative_permitted = true
-            }
-            SitemapCoverageScope::InheritedHistoricalDeclaredSources => {
-                out.historical_valid_original_location_negative_permitted = true
-            }
-            SitemapCoverageScope::Unavailable => unreachable!("validated source basis"),
-        }
-    }
+    finish_coverage(&mut out);
     Ok(out)
 }
 

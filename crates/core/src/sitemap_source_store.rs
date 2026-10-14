@@ -18,6 +18,7 @@ use std::{
 mod models;
 pub use models::*;
 pub(crate) mod verified_read;
+pub(crate) mod verified_report;
 pub(crate) const SCHEMA: &str = include_str!("sitemap_source_schema.sql");
 const KEY: &str = "sitemap_source_store";
 const TABLES: [&str; 2] = [

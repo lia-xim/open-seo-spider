@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "immutable": true,
+  "review": "s4-analysis-independent-review-v1",
+  "result": "ONE_CONFIRMED_P2_STATIC_RESOURCE_FINDING",
+  "recorded_at": "2026-10-14T21:46:02.1221086Z",
+  "handoff_manifest_sha256": "c702fb80a5abf5ad3e1f1b7afd8d513ee07baf07020b3d79501ab0e5da31e35c",
+  "source_pins_sha256": "2a1331d8e0768d6d1a9586a88cd85c4f95bd6c749382b5b4cc73e0f50b03684b",
+  "review_sha256": "e956d347cc1ab0d9d56b5fdc36f19fe2f91a76f49cb7debefc3d4168206389bd",
+  "findings": [
+    {
+      "priority": 2,
+      "id": "outer_report_key_guard_after_scratch_allocation",
+      "file": "crates/core/src/sitemap_source_store/verified_report.rs",
+      "lines": [
+        81,
+        92,
+        138
+      ],
+      "description": "Escaped outer report key can allocate roughly100MiB serde scratch before1024-byte visitor guard; source-only JSON1 preflight does not bound actual outer identifiers",
+      "acceptance_impact": "Input still rejected; resource protection before allocation is bypassed",
+      "runtime_reproduction": "NOT_RUN",
+      "root_notified": true,
+      "author_notified": true
+    }
+  ],
+  "other_confirmed_findings": 0,
+  "all_compiler_cargo_tests_sqlite_fixtures_http_native_browser": "NOT_RUN",
+  "product_handoff_root_git_runtime_writes": 0,
+  "qualification": "Bounded static/source proof only; no broad approval or compiler/runtime/RSS claim"
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "review": "s4-rich-facade-independent-review-v1",
+  "created_utc": "2026-10-14T21:49:02.9503307Z",
+  "result": "NO_CONFIRMED_FINDINGS_IN_BOUNDED_STATIC_SCOPE",
+  "confirmed_findings": [],
+  "source_root": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-rich-read-integration-v1",
+  "primary_pins_verified": true,
+  "source_pins_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s4-rich-facade-independent-review-v1\\source-pins.json",
+  "source_pins_sha256": "0bb9f5885e1e07fb8807e3957a8dd37be80c98de4aa059e1c5cafe844448364c",
+  "review_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s4-rich-facade-independent-review-v1\\REVIEW.md",
+  "review_sha256": "1b089522d027e617bc2725cda94bf70c16ad08c3237f0e5e3f6d9bb26f4bce07",
+  "evidence": [
+    {
+      "file": "crates/core/src/store/sitemap_read_window.rs",
+      "lines": "134-161,208-251",
+      "scope": "actual same transaction, saved-config shared guard, selected higher readers, verified raw/source and prepared analysis"
+    },
+    {
+      "file": "crates/core/src/store/sitemap_read_window.rs",
+      "lines": "35-46,83-92,252-299",
+      "scope": "shared full state, actual Expected comparison before continuation"
+    },
+    {
+      "file": "crates/core/src/sitemap_ledger/verified_read.rs",
+      "lines": "12-29,144-220",
+      "scope": "concrete typed raw size marker and exact filtered continuation"
+    },
+    {
+      "file": "crates/core/src/store/sitemap_read_window.rs",
+      "lines": "301-335",
+      "scope": "typed budget propagation, complete DTO count and proof-drop/commit order"
+    },
+    {
+      "file": "crates/core/src/store.rs",
+      "lines": "18-23,2498-2533,3521-3523",
+      "scope": "actual exports/module hooks and exact selected source presence/projection"
+    },
+    {
+      "file": "crates/core/src/lib.rs",
+      "lines": "134-139",
+      "scope": "public actual facade exports"
+    }
+  ],
+  "authored_tests_reviewed": 9,
+  "existing_raw_budget_assertion_reviewed": true,
+  "tests_executed": 0,
+  "gates": {
+    "cargo": "NOT_RUN",
+    "compiler": "NOT_RUN",
+    "tests": "NOT_RUN",
+    "sqlite_fixtures": "NOT_RUN",
+    "http": "NOT_RUN",
+    "browser": "NOT_RUN",
+    "native": "NOT_RUN",
+    "type_pass": "NOT_PROVEN",
+    "runtime_correctness": "NOT_PROVEN"
+  },
+  "writes": "Only this new own review directory",
+  "scope_limits": [
+    "Selected inherited path remains explicit materializing compatibility",
+    "No full Raw/Source/Coverage/Analysis algorithm re-audit",
+    "No measured memory or full feature parity claim"
+  ]
+}

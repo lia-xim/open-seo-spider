@@ -164,21 +164,18 @@ fn saved_config_sha(connection: &Connection) -> anyhow::Result<Option<String>> {
         "Saved raw-read config byte length differs"
     );
     let config: CrawlConfig = serde_json::from_slice(&bytes)?;
-    for input in &config.input_imports {
-        crate::validate_import_result(input)?;
-    }
-    if let Some(policy) = &config.crawl_policy {
-        crate::policy_ledger::verify(connection, &crate::CompiledCrawlPolicy::new(policy)?)?;
-    }
+    verify_sitemap_config_context(connection, &config)?;
     Ok(Some(crate::sitemap_ledger::digest(&bytes)))
 }
 
-fn preflight_context_metadata(connection: &Connection) -> anyhow::Result<()> {
+pub(super) fn preflight_context_metadata(connection: &Connection) -> anyhow::Result<()> {
     // Existing plan validators remain authoritative after this additive input
     // bound. In particular a small parent does not bound a mutable plan value.
     for (key, cap) in [
         ("run_state", 65_536_i64),
         ("operation_kind", 65_536_i64),
+        ("discovery_initialized", 65_536_i64),
+        ("discovery_complete", 65_536_i64),
         ("run_plan", 268_435_456_i64),
     ] {
         let length: Option<i64> = connection

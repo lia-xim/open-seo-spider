@@ -7,6 +7,31 @@ use super::*;
 use serde::ser::{Error as _, SerializeSeq, SerializeStruct};
 
 const WINDOW_BYTES: usize = 8 * 1024 * 1024;
+
+#[derive(Debug)]
+pub(crate) struct RawWindowByteBudget;
+impl std::fmt::Display for RawWindowByteBudget {
+    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        formatter.write_str("Sitemap raw window exceeds 8 MiB")
+    }
+}
+impl std::error::Error for RawWindowByteBudget {}
+
+struct WindowSize(usize);
+impl Write for WindowSize {
+    fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
+        let size = self
+            .0
+            .checked_add(bytes.len())
+            .filter(|size| *size <= WINDOW_BYTES)
+            .ok_or_else(|| io::Error::other(RawWindowByteBudget))?;
+        self.0 = size;
+        Ok(bytes.len())
+    }
+    fn flush(&mut self) -> io::Result<()> {
+        Ok(())
+    }
+}
 const ROWS_SQL: &str = "SELECT 'root' AS kind,sequence,row_id,observation_id,ordinal,NULL AS source_kind,NULL AS task_url,NULL AS generation,NULL AS revision_or_entry,data,data_sha256 FROM sitemap_roots
  UNION ALL SELECT 'document',sequence,row_id,NULL,NULL,source_kind,task_url,generation,source_revision,data,data_sha256 FROM sitemap_documents
  UNION ALL SELECT 'entry',sequence,row_id,observation_id,ordinal,NULL,NULL,NULL,NULL,data,data_sha256 FROM sitemap_entries
@@ -116,6 +141,26 @@ impl VerifiedRawRead<'_> {
         }
         Ok(())
     }
+    pub(crate) fn continuation_matches(
+        &self,
+        filter: &SitemapLedgerFilter,
+        after: u64,
+    ) -> Result<bool> {
+        filter.validate()?;
+        ensure!(
+            !self.connection.is_autocommit(),
+            "Verified raw read transaction ended"
+        );
+        if after == 0 || after > self.summary.last_sequence {
+            return Ok(false);
+        }
+        let mut found = false;
+        self.filtered(filter, after, Some(after), 1, |_| {
+            found = true;
+            Ok(())
+        })?;
+        Ok(found)
+    }
     pub(crate) fn window(
         &self,
         filter: &SitemapLedgerFilter,
@@ -129,16 +174,7 @@ impl VerifiedRawRead<'_> {
         filter.validate()?;
         if let Some(after) = after {
             ensure!(
-                after > 0 && after <= self.summary.last_sequence,
-                "Invalid raw continuation sequence"
-            );
-            let mut found = false;
-            self.filtered(filter, after, Some(after), 1, |_| {
-                found = true;
-                Ok(())
-            })?;
-            ensure!(
-                found,
+                self.continuation_matches(filter, after)?,
                 "Continuation sequence is not a matching retained row"
             );
         }
@@ -161,7 +197,9 @@ impl VerifiedRawRead<'_> {
                 bytes = bytes
                     .checked_add(row_data(&row, &self.summary.limits)?.len())
                     .context("Raw window size overflow")?;
-                ensure!(bytes <= WINDOW_BYTES, "Sitemap raw window exceeds 8 MiB");
+                if bytes > WINDOW_BYTES {
+                    return Err(RawWindowByteBudget.into());
+                }
                 rows.push(row);
                 Ok(())
             },
@@ -174,7 +212,13 @@ impl VerifiedRawRead<'_> {
             next_after_sequence: next,
             has_more,
         };
-        measured(&page, WINDOW_BYTES)?;
+        serde_json::to_writer(&mut WindowSize(0), &page).map_err(|error| -> anyhow::Error {
+            if error.is_io() {
+                RawWindowByteBudget.into()
+            } else {
+                error.into()
+            }
+        })?;
         Ok(page)
     }
 }

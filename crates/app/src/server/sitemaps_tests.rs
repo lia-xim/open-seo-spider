@@ -422,3 +422,6 @@ async fn full_csv_uses_same_snapshot_filter_safe_cells_and_exact_original_typed_
     assert_same_files(&dir.0, &before);
     fixture.finish(requests).await;
 }
+
+#[path = "sitemaps_rich_read_tests.rs"]
+mod rich_read_window_tests;

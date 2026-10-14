@@ -654,7 +654,8 @@ fn real_eight_mib_window_cap_refuses_large_page_and_smaller_window_recovers() {
         kind: SitemapLedgerRowKind::Entry,
         ..Default::default()
     };
-    assert!(read.window(&filter, None, 1000).is_err());
+    let budget = read.window(&filter, None, 1000).unwrap_err();
+    assert!(budget.is::<RawWindowByteBudget>());
     let small = read.window(&filter, None, 10).unwrap();
     assert_eq!(small.rows.len(), 10);
     assert!(small.has_more);

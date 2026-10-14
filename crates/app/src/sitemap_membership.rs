@@ -1,11 +1,13 @@
-//! Read-only sitemap projection after full Store validation.
+//! Read-only sitemap projection after full Store validation. Inventory consumes
+//! a bounded rich window; CSV retains the materializing compatibility reader.
 use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
 use open_seo_spider_core::{
-    SITEMAP_LASTMOD_ENGINE, SITEMAP_MEMBERSHIP_ANALYSIS_ENGINE, SitemapAnalysisRowKind,
-    SitemapCatalog, SitemapCoverage, SitemapInheritedBasis, SitemapLastmodEntryAssessment,
-    SitemapLastmodLimits, SitemapLedgerRow, SitemapLedgerSummary, SitemapMembershipAnalysis,
-    SitemapMembershipAnalysisRequest, SitemapReadSnapshot, assess_sitemap_lastmod_entry,
-    project_sitemap_coverage,
+    SITEMAP_LASTMOD_ENGINE, SITEMAP_READ_WINDOW_ENGINE, SitemapAnalysisRowKind, SitemapCatalog,
+    SitemapCoverage, SitemapInheritedBasis, SitemapLastmodEntryAssessment, SitemapLastmodLimits,
+    SitemapLedgerRow, SitemapLedgerSummary, SitemapMembershipAnalysis,
+    SitemapMembershipAnalysisRequest, SitemapReadSnapshot, SitemapReadState, SitemapReadWindow,
+    SitemapReadWindowExpectedContext, assess_sitemap_lastmod_entry, project_sitemap_coverage,
+    sitemap_read_state_sha256,
 };
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -232,6 +234,45 @@ impl ReadQuery {
                 .and_then(|v| v.payload.after_page_ordinal),
         })
     }
+
+    /// Parse canonical roles and bind caller/job/filter before opening Store.
+    /// Core compares the resulting expected context with its actual same-TX
+    /// state before selecting either raw rows or saved-page continuations.
+    pub fn expected_context(
+        &self,
+        job_id: Uuid,
+    ) -> Result<Option<SitemapReadWindowExpectedContext>> {
+        self.validate()?;
+        let filter_sha256 = digest(encode(&self.filter())?);
+        let mut expected: Option<Snapshot> = None;
+        for value in [self.cursor.as_deref(), self.page_cursor.as_deref()]
+            .into_iter()
+            .flatten()
+        {
+            let parsed = decode(value)?;
+            if parsed.payload.snapshot.job_id != job_id
+                || parsed.payload.filter_sha256 != filter_sha256
+                || expected
+                    .as_ref()
+                    .is_some_and(|snapshot| snapshot != &parsed.payload.snapshot)
+            {
+                return Err(Failure::new(
+                    "stale_sitemap_cursor",
+                    "Snapshot, job or filter changed; restart pagination",
+                ));
+            }
+            expected = Some(parsed.payload.snapshot);
+        }
+        Ok(expected.map(|snapshot| SitemapReadWindowExpectedContext {
+            generation: snapshot.crawl_generation,
+            crawl_config_sha256: snapshot.crawl_config_sha256,
+            catalog_config_sha256: snapshot.catalog_config_sha256,
+            catalog_revision: snapshot.catalog_revision,
+            catalog_rolling_sha256: snapshot.catalog_rolling_sha256,
+            catalog_state_sha256: snapshot.catalog_state_sha256,
+            inherited_basis: snapshot.inherited_basis,
+        }))
+    }
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -376,6 +417,23 @@ fn bound_catalog(
             "Validated catalog rows are unavailable",
         ));
     }
+    let inventory_sha256 = read
+        .coverage_inventory
+        .as_ref()
+        .map(|inventory| encode(inventory).map(digest))
+        .transpose()?;
+    let catalog_state_sha256 = sitemap_read_state_sha256(&SitemapReadState {
+        summary: &catalog.summary,
+        inherited: catalog.inherited.as_ref(),
+        coverage_inventory_sha256: inventory_sha256.as_deref(),
+        coverage: &read.coverage,
+        source_measurement_context: &read.sitemap_source_measurement_context,
+        analysis_context: read
+            .membership_analysis
+            .as_ref()
+            .map(|analysis| &analysis.context),
+    })
+    .map_err(|error| Failure::new("sitemap_read_failure", error))?;
     let snapshot = Snapshot {
         job_id,
         crawl_generation: generation,
@@ -383,27 +441,10 @@ fn bound_catalog(
         catalog_config_sha256: catalog.summary.config_sha256.clone(),
         catalog_revision: catalog.summary.revision,
         catalog_rolling_sha256: catalog.summary.rolling_sha256.clone(),
-        // Task completion/config/initialization context can change while the
-        // immutable source rows and revision stay identical. Bind the actual
-        // same-TX inventory and full derived projection, including its engine,
-        // alongside the assessment engine; never substitute an empty frontier.
-        catalog_state_sha256: digest(encode(&(
-            &catalog.summary,
-            &catalog.inherited,
-            &read.coverage_inventory,
-            &read.coverage,
-            // Core computed this fingerprint from the validated measurement
-            // sidecar and legacy catalog in the SAME read transaction. Its
-            // explicit historical-unknown context is not an empty measurement
-            // set. It binds capture content, links, typed omission markers and
-            // inherited parent basis without re-reading or re-hashing the store.
-            &read.sitemap_source_measurement_context,
-            SITEMAP_LASTMOD_ENGINE,
-            SITEMAP_MEMBERSHIP_ANALYSIS_ENGINE,
-            read.membership_analysis
-                .as_ref()
-                .map(|value| &value.context),
-        ))?),
+        // Same explicit rich-reader profile as compact JSON. The optional
+        // captured-inventory body hash preserves None and avoids token drift
+        // between JSON windows and this buffered CSV compatibility reader.
+        catalog_state_sha256,
         inherited_basis: catalog.inherited.clone(),
     };
     Ok(Some((catalog, snapshot)))
@@ -468,6 +509,7 @@ pub(crate) struct Inventory {
     pub membership_analysis: Option<SitemapMembershipAnalysis>,
     pub next_page_cursor: Option<String>,
 }
+#[cfg(test)]
 pub(crate) fn inventory(
     job_id: Uuid,
     generation: u64,
@@ -475,8 +517,7 @@ pub(crate) fn inventory(
     read: Option<SitemapReadSnapshot>,
     query: ReadQuery,
 ) -> Result<Inventory> {
-    let limit = query.validate()?;
-    let filter = query.filter();
+    query.validate()?;
     let sqlite_available = read.is_some();
     let analysis = read
         .as_ref()
@@ -487,7 +528,159 @@ pub(crate) fn inventory(
         project_sitemap_coverage(None, None)
             .map_err(|error| Failure::new("sitemap_read_failure", error))?
     };
-    let bound = bound_catalog(job_id, generation, config_sha, read)?;
+    let bound = bound_catalog(job_id, generation, config_sha, read)?.map(|(catalog, snapshot)| {
+        (
+            InventoryBasis {
+                summary: catalog.summary.clone(),
+                inherited: catalog.inherited.clone(),
+                snapshot,
+            },
+            InventoryRows::Materialized(catalog),
+        )
+    });
+    project_inventory(
+        job_id,
+        query,
+        sqlite_available,
+        analysis,
+        derived_coverage,
+        bound,
+    )
+}
+
+/// Actual HTTP inventory path. It consumes only Core's bounded selected rows;
+/// it never manufactures a truncated SitemapCatalog or source-store snapshot.
+pub(crate) fn inventory_window(
+    job_id: Uuid,
+    generation: u64,
+    config_sha: &str,
+    read: Option<SitemapReadWindow>,
+    query: ReadQuery,
+) -> Result<Inventory> {
+    let _ = query.expected_context(job_id)?;
+    let sqlite_available = read.is_some();
+    let derived_coverage = match &read {
+        Some(read) => read.coverage.clone(),
+        None => project_sitemap_coverage(None, None)
+            .map_err(|error| Failure::new("sitemap_read_failure", error))?,
+    };
+    let mut analysis = None;
+    let bound = if let Some(read) = read {
+        if read.reader_engine != SITEMAP_READ_WINDOW_ENGINE {
+            return Err(Failure::new(
+                "sitemap_read_failure",
+                "Unknown rich sitemap reader profile",
+            ));
+        }
+        if let Some(summary) = read.ledger {
+            if generation == 0
+                || read.generation != Some(generation)
+                || read.crawl_config_sha256.as_deref() != Some(config_sha)
+            {
+                return Err(Failure::new(
+                    "sitemap_job_snapshot_conflict",
+                    "Actual SQL generation/config differs from the App job",
+                ));
+            }
+            let state = sitemap_read_state_sha256(&SitemapReadState {
+                summary: &summary,
+                inherited: read.inherited.as_ref(),
+                coverage_inventory_sha256: read.coverage_inventory_sha256.as_deref(),
+                coverage: &read.coverage,
+                source_measurement_context: &read.sitemap_source_measurement_context,
+                analysis_context: read
+                    .membership_analysis
+                    .as_ref()
+                    .map(|value| &value.context),
+            })
+            .map_err(|error| Failure::new("sitemap_read_failure", error))?;
+            if read.catalog_state_sha256.as_deref() != Some(state.as_str()) {
+                return Err(Failure::new(
+                    "sitemap_read_failure",
+                    "Rich reader state binding differs",
+                ));
+            }
+            let snapshot = Snapshot {
+                job_id,
+                crawl_generation: generation,
+                crawl_config_sha256: config_sha.into(),
+                catalog_config_sha256: summary.config_sha256.clone(),
+                catalog_revision: summary.revision,
+                catalog_rolling_sha256: summary.rolling_sha256.clone(),
+                catalog_state_sha256: state,
+                inherited_basis: read.inherited.clone(),
+            };
+            let rows = read.rows.ok_or_else(|| {
+                Failure::new(
+                    "sitemap_read_failure",
+                    "Validated rich window rows are unavailable",
+                )
+            })?;
+            analysis = read.membership_analysis;
+            Some((
+                InventoryBasis {
+                    summary,
+                    inherited: read.inherited,
+                    snapshot,
+                },
+                InventoryRows::Window {
+                    rows,
+                    next: read.next_after_sequence,
+                    has_more: read.has_more,
+                },
+            ))
+        } else {
+            if read.rows.is_some()
+                || read.next_after_sequence.is_some()
+                || read.has_more
+                || read.catalog_state_sha256.is_some()
+            {
+                return Err(Failure::new(
+                    "sitemap_read_failure",
+                    "Unavailable rich catalog has retained window state",
+                ));
+            }
+            analysis = read.membership_analysis;
+            None
+        }
+    } else {
+        None
+    };
+    project_inventory(
+        job_id,
+        query,
+        sqlite_available,
+        analysis,
+        derived_coverage,
+        bound,
+    )
+}
+
+struct InventoryBasis {
+    summary: SitemapLedgerSummary,
+    inherited: Option<SitemapInheritedBasis>,
+    snapshot: Snapshot,
+}
+enum InventoryRows {
+    // Kept for the existing materializing oracle/tests; HTTP uses Window.
+    #[cfg(test)]
+    Materialized(SitemapCatalog),
+    Window {
+        rows: Vec<SitemapLedgerRow>,
+        next: Option<u64>,
+        has_more: bool,
+    },
+}
+fn project_inventory(
+    job_id: Uuid,
+    query: ReadQuery,
+    sqlite_available: bool,
+    analysis: Option<SitemapMembershipAnalysis>,
+    derived_coverage: SitemapCoverage,
+    bound: Option<(InventoryBasis, InventoryRows)>,
+) -> Result<Inventory> {
+    let limit = query.validate()?;
+    let filter = query.filter();
     let mut response = Inventory {
         schema_version: 1,
         job_id,
@@ -519,7 +712,8 @@ pub(crate) fn inventory(
         membership_analysis: analysis,
         next_page_cursor: None,
     };
-    if let Some((catalog, snapshot)) = bound {
+    if let Some((basis, selection)) = bound {
+        let snapshot = basis.snapshot;
         if let Some(value) = query.page_cursor.as_deref() {
             let parsed = decode(value)?;
             if parsed.payload.snapshot != snapshot
@@ -559,21 +753,47 @@ pub(crate) fn inventory(
             .map(|value| validate_token(value, &snapshot, &filter, true))
             .transpose()?
             .flatten();
-        let all = catalog.rows.as_ref().expect("validated rows");
-        if after.is_some_and(|after| {
-            !all.iter()
-                .any(|row| row.sequence() == after && filter.matches(row))
-        }) {
-            return Err(Failure::new(
-                "invalid_sitemap_cursor",
-                "Continuation sequence is not a matching retained row",
-            ));
-        }
-        let mut matching = all
-            .iter()
-            .filter(|row| filter.matches(row) && after.is_none_or(|after| row.sequence() > after));
-        let rows: Vec<_> = matching.by_ref().take(limit).cloned().collect();
-        let has_more = matching.next().is_some();
+        let (rows, next, has_more) = match selection {
+            #[cfg(test)]
+            InventoryRows::Materialized(catalog) => {
+                let all = catalog.rows.as_ref().expect("validated rows");
+                if after.is_some_and(|after| {
+                    !all.iter()
+                        .any(|row| row.sequence() == after && filter.matches(row))
+                }) {
+                    return Err(Failure::new(
+                        "invalid_sitemap_cursor",
+                        "Continuation sequence is not a matching retained row",
+                    ));
+                }
+                let mut matching = all.iter().filter(|row| {
+                    filter.matches(row) && after.is_none_or(|after| row.sequence() > after)
+                });
+                let rows: Vec<_> = matching.by_ref().take(limit).cloned().collect();
+                let has_more = matching.next().is_some();
+                let next = has_more.then(|| rows.last().expect("positive page size").sequence());
+                (rows, next, has_more)
+            }
+            InventoryRows::Window {
+                rows,
+                next,
+                has_more,
+            } => {
+                if rows.len() > limit
+                    || rows.iter().any(|row| {
+                        !filter.matches(row) || after.is_some_and(|after| row.sequence() <= after)
+                    })
+                    || has_more != next.is_some()
+                    || next.is_some_and(|next| rows.last().is_none_or(|row| row.sequence() != next))
+                {
+                    return Err(Failure::new(
+                        "sitemap_read_failure",
+                        "Core window differs from the requested bounded selection",
+                    ));
+                }
+                (rows, next, has_more)
+            }
+        };
         let limits = SitemapLastmodLimits::default();
         let assessments = rows
             .iter()
@@ -586,15 +806,9 @@ pub(crate) fn inventory(
                     .map_err(|error| Failure::new("sitemap_lastmod_assessment_budget", error))
             })
             .collect::<Result<Vec<_>>>()?;
-        response.next_cursor = if has_more {
-            Some(token(
-                &snapshot,
-                &filter,
-                Some(rows.last().expect("positive page size").sequence()),
-            )?)
-        } else {
-            None
-        };
+        response.next_cursor = next
+            .map(|next| token(&snapshot, &filter, Some(next)))
+            .transpose()?;
         response.snapshot_token = Some(token(&snapshot, &filter, None)?);
         if let Some(analysis) = &response.membership_analysis
             && analysis.saved_pages_have_more
@@ -609,9 +823,9 @@ pub(crate) fn inventory(
         }
         response.snapshot = Some(snapshot);
         response.coverage.declared_source_cohort_complete =
-            catalog.summary.declared_source_cohort_complete;
-        response.summary = Some(catalog.summary);
-        response.inherited = catalog.inherited;
+            basis.summary.declared_source_cohort_complete;
+        response.summary = Some(basis.summary);
+        response.inherited = basis.inherited;
         response.rows = Some(rows);
         response.lastmod_assessments = Some(assessments);
         response.has_more = has_more;

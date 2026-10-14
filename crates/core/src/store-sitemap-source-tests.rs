@@ -1117,3 +1117,190 @@ fn actual_raw_window_selected_parent_presence_guards_remain_materializing_compat
         }
     }
 }
+
+fn rich_expected_context(
+    read: &crate::SitemapReadWindow,
+) -> crate::SitemapReadWindowExpectedContext {
+    let summary = read.ledger.as_ref().unwrap();
+    crate::SitemapReadWindowExpectedContext {
+        generation: read.generation.unwrap(),
+        crawl_config_sha256: read.crawl_config_sha256.clone().unwrap(),
+        catalog_config_sha256: summary.config_sha256.clone(),
+        catalog_revision: summary.revision,
+        catalog_rolling_sha256: summary.rolling_sha256.clone(),
+        catalog_state_sha256: read.catalog_state_sha256.clone().unwrap(),
+        inherited_basis: read.inherited.clone(),
+    }
+}
+
+#[test]
+fn actual_rich_window_a_only_and_committed_measurements_bind_the_shared_read_state() {
+    let (_temp, store, generation) = fixture(false, Default::default());
+    let request = crate::SitemapMembershipAnalysisRequest {
+        row_limit: 200,
+        page_limit: 0,
+        ..Default::default()
+    };
+    let before = store
+        .sitemap_read_window_with_membership_analysis(&request, None)
+        .unwrap();
+    let value = batch(generation, &body(), true);
+    let receipt = a(&store, generation, &value, &body());
+    let staged = store
+        .sitemap_read_window_with_membership_analysis(&request, None)
+        .unwrap();
+    assert_eq!(staged.ledger, before.ledger);
+    assert_eq!(staged.rows, before.rows);
+    assert_ne!(staged.catalog_state_sha256, before.catalog_state_sha256);
+    assert_eq!(
+        staged
+            .sitemap_source_measurement_summary
+            .as_ref()
+            .unwrap()
+            .record_count,
+        1
+    );
+    assert_eq!(
+        staged
+            .sitemap_source_measurement_summary
+            .as_ref()
+            .unwrap()
+            .commit_count,
+        0
+    );
+    let stale = store
+        .sitemap_read_window_with_membership_analysis(
+            &request,
+            Some(&rich_expected_context(&before)),
+        )
+        .unwrap_err();
+    assert_eq!(
+        stale.downcast_ref::<crate::SitemapReadWindowError>(),
+        Some(&crate::SitemapReadWindowError::StaleContext)
+    );
+    b(&store, generation, value, &receipt).unwrap();
+    let committed = store
+        .sitemap_read_window_with_membership_analysis(&request, None)
+        .unwrap();
+    let old = store
+        .sitemap_read_snapshot_with_membership_analysis(&request)
+        .unwrap();
+    assert_eq!(committed.rows, old.catalog.unwrap().rows);
+    assert_eq!(committed.membership_analysis, old.membership_analysis);
+    assert_eq!(
+        committed
+            .sitemap_source_measurement_summary
+            .as_ref()
+            .unwrap()
+            .commit_count,
+        1
+    );
+    assert_ne!(committed.catalog_state_sha256, staged.catalog_state_sha256);
+}
+
+#[test]
+fn actual_rich_window_selected_raw_and_source_parent_presence_are_not_downgraded_to_unknown() {
+    for measurements in [false, true] {
+        let (_parent_dir, _parent, prepared) = prepared_parent_for_source_presence(measurements);
+        let child_dir = tempfile::tempdir().unwrap();
+        let child = CrawlStore::open(child_dir.path().join("rich-selected.sqlite")).unwrap();
+        child.initialize_selected_recrawl(&prepared).unwrap();
+        let request = crate::SitemapMembershipAnalysisRequest {
+            row_limit: 200,
+            ..Default::default()
+        };
+        let read = child
+            .sitemap_read_window_with_membership_analysis(&request, None)
+            .unwrap();
+        assert!(read.materializing_selected_compatibility);
+        assert!(read.ledger.is_some());
+        assert_eq!(
+            read.sitemap_source_measurement_summary.is_some(),
+            measurements
+        );
+        let mut connection = child.connection.lock().unwrap();
+        let tx = connection.transaction().unwrap();
+        if measurements {
+            tx.execute("DELETE FROM sitemap_source_measurement_commits", [])
+                .unwrap();
+            tx.execute("DELETE FROM sitemap_source_measurements", [])
+                .unwrap();
+            tx.execute("DELETE FROM metadata WHERE key='sitemap_source_store'", [])
+                .unwrap();
+        } else {
+            tx.execute_batch(
+                "DELETE FROM sitemap_locations; DELETE FROM sitemap_entries;
+                DELETE FROM sitemap_roots; DELETE FROM sitemap_documents;
+                DELETE FROM metadata WHERE key IN ('sitemap_ledger','sitemap_inherited_basis');",
+            )
+            .unwrap();
+        }
+        tx.commit().unwrap();
+        drop(connection);
+        assert!(
+            child
+                .sitemap_read_window_with_membership_analysis(&request, None)
+                .is_err()
+        );
+    }
+}
+
+#[test]
+fn actual_rich_window_selected_imported_legacy_none_is_unknown_with_exact_parent_guard() {
+    let (_parent_dir, _parent, modern) = prepared_parent_for_source_presence(false);
+    // Explicit portable historical-absence fixture, not an accepted modern
+    // writer deleting its saved evidence. The actual import reconstructs a plan.
+    let mut historical = modern.base_report;
+    historical.sitemap_catalog = None;
+    historical.sitemap_coverage_inventory = None;
+    historical.sitemap_source_measurements = None;
+    let bytes = crate::recrawl::bounded_report_json(&historical)
+        .unwrap()
+        .into_bytes();
+    let prepared = crate::prepare_selected_recrawl(
+        crate::SelectedRecrawlParent {
+            job_id: "imported-historical-none-fixture".into(),
+            checkpoint_revision: None,
+            source_kind: crate::RecrawlSourceKind::ImportedSnapshot,
+        },
+        &bytes,
+        &[PAGE.into()],
+        None,
+    )
+    .unwrap();
+    let child_dir = tempfile::tempdir().unwrap();
+    let child = CrawlStore::open(child_dir.path().join("rich-historical-none.sqlite")).unwrap();
+    child.initialize_selected_recrawl(&prepared).unwrap();
+    let request = crate::SitemapMembershipAnalysisRequest {
+        row_limit: 10,
+        ..Default::default()
+    };
+    let read = child
+        .sitemap_read_window_with_membership_analysis(&request, None)
+        .unwrap();
+    assert!(read.materializing_selected_compatibility);
+    assert!(read.ledger.is_none());
+    assert!(read.rows.is_none());
+    assert!(read.sitemap_source_measurement_summary.is_none());
+    assert_eq!(
+        read.coverage.scope,
+        crate::SitemapCoverageScope::Unavailable
+    );
+    assert_eq!(
+        read.coverage.completion,
+        crate::SitemapCohortCompletion::Unknown
+    );
+    let mut changed = prepared.base_snapshot_bytes;
+    changed.push(b' ');
+    child
+        .connection
+        .lock()
+        .unwrap()
+        .execute("UPDATE recrawl_base SET snapshot=?1 WHERE id=1", [changed])
+        .unwrap();
+    assert!(
+        child
+            .sitemap_read_window_with_membership_analysis(&request, None)
+            .is_err()
+    );
+}

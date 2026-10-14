@@ -1,0 +1,18 @@
+# Guarded outer-report-key resource postfix
+
+Baseline is immutable Analysis v1 manifest `c702fb80a5abf5ad3e1f1b7afd8d513ee07baf07020b3d79501ab0e5da31e35c`. Independent static review receipt `c48ff924603c8138066d5a574d130cf2bc870cf6e75032ba1e4450a0ed57605c` records the confirmed P2: an early escaped outer report key could cause a large serde_json scratch allocation before its1,024-byte decoded-name visitor rejected it. V1 is preserved unchanged.
+
+Two guarded payloads only:
+
+- `sitemap_source_store/verified_report.rs`: one borrowed lexical pass over actual bounded report bytes before the serde map is constructed, a constant shared decoded-name cap, and no changed source-envelope equality/admission code.
+- `sitemap_membership_analysis/window_tests.rs`: only two existing regression groups expanded; all ten existing test function names remain. No new test functions or workspace-count increment.
+
+The new pass enforces at most6,144 encoded JSON key-content bytes for each OUTER report identifier, excluding its opening/closing quotes. A1,024-byte decoded UTF-8 key can require at most6*1,024 bytes in JSON Unicode escapes. The existing visitor still enforces exactly1,024 decoded UTF-8 bytes. Thus a raw unescaped key between1,025 and6,144 bytes may reach serde and then fail the decoded guard, but its scratch allocation is bounded by this small raw cap. This pass is a preallocation guard, not a change to the accepted decoded key-size contract.
+
+Only scalar byte positions, depth and quote/escape flags are retained. The actual report remains borrowed from SQLite; no report/string/array Vec, recursive JSON value tree, key String or replacement report is allocated by this pass. It skips outer values lexically without imposing the outer-key cap on nested ignored keys or value strings. Large unrelated `IgnoredAny` values remain permitted under the unchanged report budget. Serde is still mandatory for full JSON syntax, UTF-8/type/duplicate source semantics, strict source row equality and final end validation. The existing JSON1 projection, source lexical preflight and source SQL comparisons remain unchanged.
+
+Cost: one additional O(actual report bytes) borrowed pass, O(1) Rust lexical working state, before the existing whole-report serde pass. No measured latency, allocator or physical RSS claim is made; existing SQLite JSON projection/cache memory and other serde scratch remain separate costs. No report256MiB/source-envelope64MiB/durable-record cap is raised. The pass also applies to historical SourceNone reports.
+
+Regression additions use the actual PublicCrawler-produced saved terminal report and actual same-TX compact analysis path. Two negative cases retain the source envelope and rehash the checkpoint: exact6,144+1 encoded key bytes, and one early escape followed by65,536 literal bytes. They assert the distinctive early `Saved report outer key encoded byte budget exceeded` error; a generic late serde error is insufficient. Positive controls retain the existing120,000-byte unrelated ignored value and add a small escaped known outer source key, small escaped unknown outer key, and an exact1,024-decoded/6,144-encoded unknown key. Both are expansions of existing actual-fixture groups, not fake measurement DTOs.
+
+Actual execution: rustfmt parser/format and check on both authored files exited0. No compiler/Cargo, fixture creation, SQLite, test, HTTP, native App, browser, data generator or benchmark was executed. All regression/compile/runtime gates remain NOT_RUN under compute HOLD. Root alone integrates; no repository/Git/runtime or immutable-v1 writes occurred.

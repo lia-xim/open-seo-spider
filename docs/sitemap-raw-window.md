@@ -88,9 +88,12 @@ Die bestehenden Prüfhelfer für originale Deklarationskoordinaten können
 Konfigurationsdaten weiterhin je Root erneut auswerten. Die praktische
 Latenzabnahme muss auch diese Kosten erfassen.
 
-Die bestehenden Browser-/API-/MCP-Inventare, deren Coverage und gespeicherte
-Seiten-/Inlink-Analysen nutzen weiterhin ihren bisherigen Leser. Der neue
-Rohleser ersetzt diese Aussagen nicht. Änderungen allein an noch offenen
+Im hier eingefrorenen 246-Dateien-Stand nutzen die bestehenden Browser-/API-/
+MCP-Inventare, deren Coverage und gespeicherte Seiten-/Inlink-Analysen ihren
+bisherigen Leser. Der darauf aufbauende
+[Rich-Window-Kandidat](sitemap-rich-window.md) stellt den Inventarhandler im
+Quellcode um; dessen Kompilierung und Laufzeitabnahme sind separat offen.
+Der reine Rohleser ersetzt diese Aussagen nicht. Änderungen allein an noch offenen
 Discovery-Aufgaben oder gespeicherten Berichtsanalysen sind daher keine
 zusätzlich zugesicherte Frischebedingung dieses Rohzustands. Vollständige
 CSV-Streams und die sieben Filter über alle gespeicherten Kandidaten bleiben

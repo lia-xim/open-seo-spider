@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "name": "s4-coverage-read-core-v1",
+  "immutable": true,
+  "created_utc": "2026-10-14T21:40:31.4487269Z",
+  "baseline_root": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-rich-read-integration-v1",
+  "baseline_head": "5091eb941c6740bfb2a6bf610388bc9ca6fb081b",
+  "payloads": [
+    {
+      "path": "crates/core/src/sitemap_coverage.rs",
+      "payload": "files/crates/core/src/sitemap_coverage.rs",
+      "before_sha256": "058b03f767b6c3b77ae945cf53c2b5dd9d0b4ebd6034b2cfbc82b2a2486dda0b",
+      "after_sha256": "b383924b5b69485ef213e16ce2cf385d2c377fefa7865c965f7d68c21477a4f1",
+      "bytes": 30223
+    },
+    {
+      "path": "crates/core/src/sitemap_coverage/verified_read_tests.rs",
+      "payload": "files/crates/core/src/sitemap_coverage/verified_read_tests.rs",
+      "before_sha256": "ABSENT",
+      "after_sha256": "d72875d917356b0b2d66bbb4f45e4ad0eba0fb759bacde405be0dcb0d4c91e27",
+      "bytes": 34947
+    },
+    {
+      "path": "crates/core/src/sitemap_coverage/verified_read.rs",
+      "payload": "files/crates/core/src/sitemap_coverage/verified_read.rs",
+      "before_sha256": "ABSENT",
+      "after_sha256": "b526090b47f6582be6bff9998aaf2b3f62da89c49b4ce0c653da263b61db5556",
+      "bytes": 25419
+    },
+    {
+      "path": "crates/core/src/sitemap_initial_roots.rs",
+      "payload": "files/crates/core/src/sitemap_initial_roots.rs",
+      "before_sha256": "69fd2f60c5c28c059317e3efcd9e8a5151a48e9bed8c1ce63d696fa2b6cec833",
+      "after_sha256": "67be8b81d052cd0a25b2044f09260d2c8ce2986f400d4dc36f0be3ee1ec56d17",
+      "bytes": 9299
+    }
+  ],
+  "source_pins": [
+    {
+      "path": "crates/core/src/sitemap_ledger/verified_read.rs",
+      "sha256": "4c85393345be9eaa20f999550260f2463cb1f0473fe0f05ee0505f5e54ec6181"
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger.rs",
+      "sha256": "8ef116f6ae538f78dea5f5267db5c1fd1bceac1fa0e507ea9a9833440d14848e"
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger_models.rs",
+      "sha256": "e5b06268d0a695837e9d151abe845f3a91f04f9d487c3bdd952cd77a0d43ce72"
+    },
+    {
+      "path": "crates/core/src/store.rs",
+      "sha256": "ff5e2d42d62177c83d10afce5b350c986d0f0db58dc461f38ba96d3339f294e8"
+    },
+    {
+      "path": "crates/core/src/policy_ledger.rs",
+      "sha256": "fcc4b7400236d4703522d4e15a63ff0c44e20e0a623b300ed58b26433a22694c"
+    },
+    {
+      "path": "crates/core/src/models.rs",
+      "sha256": "1b9e6b6d3330d6fd20d0e83feca2c891dd0b00cb9a6746b66b9254556f64e4ee"
+    },
+    {
+      "path": "crates/core/src/control.rs",
+      "sha256": "c486fb39eb2559d5d95a67acbcc7e2b0a18b98c16d89aaf4156565b186438abc"
+    },
+    {
+      "path": "crates/core/src/sitemap_coverage_tests.rs",
+      "sha256": "5e947271f8e1ab9579b07d8e65fe71f41341c42bb145569345dc48c8154f2467"
+    },
+    {
+      "path": "crates/core/src/sitemap_initial_roots_tests.rs",
+      "sha256": "e240f54d4fa4c6da0e09e1c64be75da4b96bccf97412adad63f31ea4f45b048d"
+    }
+  ],
+  "contract": {
+    "path": "CONTRACT.md",
+    "sha256": "8d95c7945377ed09312b18985d25a7a2ccc08f8d259802257096d045d3e4353b"
+  },
+  "authored_test_count": 15,
+  "authored_tests": [
+    "initialized_empty_pending_robots_and_legacy_unknown_match_exact_old_reasons",
+    "recursive_cycle_duplicate_roots_and_invalid_page_locations_match_full_oracle",
+    "denied_invalid_and_incomplete_child_sources_preserve_exact_reason_multiplicity",
+    "last_pending_task_beyond_page_size_changes_exact_inventory_hash_and_reasons",
+    "actual_config_bytes_generation_and_discovery_marker_are_checked_not_reserialized",
+    "same_transaction_wal_keeps_config_tasks_and_generation_together",
+    "task_sort_uses_rust_binary_identity_and_rejects_duplicates_or_bad_tail_flags",
+    "missing_context_remains_unknown_and_connection_proofs_cannot_be_substituted",
+    "real_policy_initial_page_admissions_determine_required_robots_origins",
+    "read_only_projection_preserves_saved_database_and_wal_bytes",
+    "inherited_actual_parent_inventory_keeps_historical_scope_and_legacy_none_unknown",
+    "root_visitor_preserves_portable_constructor_items_unknown_and_callback_failure",
+    "actual_empty_robots_completion_and_http_206_source_differ_from_pending_inventory",
+    "actual_uninitialized_store_and_corrupt_raw_tail_cannot_manufacture_a_complete_projection",
+    "graph_identity_budget_is_explicit_and_duplicate_reachability_never_charges_twice"
+  ],
+  "actual_checks": [
+    {
+      "command": "rustfmt --edition 2024 --config skip_children=true <four payload files>",
+      "exit_code": 0,
+      "result": "PASS_PARSER_FORMAT_ONLY"
+    },
+    {
+      "command": "rustfmt --check --edition 2024 --config skip_children=true <four payload files>",
+      "exit_code": 0,
+      "result": "PASS_PARSER_FORMAT_ONLY"
+    }
+  ],
+  "all_compile_tests_sqlite_fixtures_http_native_browser_sdk": "NOT_RUN_COMPUTE_HOLD",
+  "repository_git_runtime_writes": false,
+  "remaining_gates": [
+    "Independent static review",
+    "Root guarded integration",
+    "Combined compiler/clippy/tests after release",
+    "Full selected/report/catalog materializing compatibility remains",
+    "Existing global policy verifier + duplicate Root pass remain explicit costs",
+    "Physical latency/RSS and large source/protocol matrix remain unproven",
+    "Full S4 and CSV/public transport integration remain open"
+  ]
+}

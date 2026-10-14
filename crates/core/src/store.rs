@@ -15,6 +15,12 @@ pub use sitemap_raw_read::{
     SITEMAP_RAW_READ_ENGINE, SitemapRawReadContext, SitemapRawReadRequest, SitemapRawReadWindow,
     SitemapRawRowKind,
 };
+#[path = "store/sitemap_read_window.rs"]
+mod sitemap_read_window;
+pub use sitemap_read_window::{
+    SITEMAP_READ_WINDOW_ENGINE, SitemapReadState, SitemapReadWindow, SitemapReadWindowError,
+    SitemapReadWindowExpectedContext, sitemap_read_state_sha256,
+};
 
 /// Roots are original declarations; source/task aliases must already be finalized.
 /// config_sha256 binds the actual saved configuration bytes at FIRST initialization.
@@ -2299,12 +2305,7 @@ fn load_sitemap_catalog_verified(
 ) -> anyhow::Result<Option<crate::SitemapCatalog>> {
     if let Some(config_text) = metadata_text(connection, "config")? {
         let config: CrawlConfig = serde_json::from_str(&config_text)?;
-        for input in &config.input_imports {
-            crate::validate_import_result(input)?;
-        }
-        if let Some(policy) = &config.crawl_policy {
-            crate::policy_ledger::verify(connection, &crate::CompiledCrawlPolicy::new(policy)?)?;
-        }
+        verify_sitemap_config_context(connection, &config)?;
     }
     let plan = load_run_plan(connection)?;
     if matches!(plan, RunPlan::SelectedRecrawl(_)) {
@@ -2338,6 +2339,19 @@ fn load_sitemap_catalog_verified(
         }
     }
     Ok(catalog)
+}
+
+fn verify_sitemap_config_context(
+    connection: &Connection,
+    config: &CrawlConfig,
+) -> anyhow::Result<()> {
+    for input in &config.input_imports {
+        crate::validate_import_result(input)?;
+    }
+    if let Some(policy) = &config.crawl_policy {
+        crate::policy_ledger::verify(connection, &crate::CompiledCrawlPolicy::new(policy)?)?;
+    }
+    Ok(())
 }
 
 /// ALL context used by the coverage projection is captured in this caller-owned

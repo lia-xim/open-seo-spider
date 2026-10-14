@@ -18,9 +18,32 @@ pub(crate) fn initial_roots(
     saved_config_sha256: &str,
     policy_sha256: Option<&str>,
 ) -> Result<Option<Vec<InitialSitemapRoot>>> {
+    let mut roots = Vec::new();
+    let known = visit_initial_roots(
+        explicit_originals,
+        imports,
+        saved_config_sha256,
+        policy_sha256,
+        |item| {
+            roots.push(item);
+            Ok(())
+        },
+    )?;
+    Ok(known.then_some(roots))
+}
+
+/// Same original-coordinate constructor as the portable inventory, one item at
+/// a time. False preserves unknown legacy provenance, including no import scan.
+pub(crate) fn visit_initial_roots(
+    explicit_originals: Option<&[String]>,
+    imports: &[crate::ListImportResult],
+    saved_config_sha256: &str,
+    policy_sha256: Option<&str>,
+    mut visitor: impl FnMut(InitialSitemapRoot) -> Result<()>,
+) -> Result<bool> {
     // None is unknown legacy provenance. No reconstruction from merged URLs.
     let Some(explicit) = explicit_originals else {
-        return Ok(None);
+        return Ok(false);
     };
     ensure!(
         saved_config_sha256.len() == 64
@@ -38,10 +61,9 @@ pub(crate) fn initial_roots(
             "Initial roots require compiled policy SHA"
         );
     }
-    let mut roots = Vec::new();
     for (ordinal, raw) in explicit.iter().enumerate() {
         let normalized = crate::normalize_url(raw, None).map(|url| url.to_string());
-        roots.push(InitialSitemapRoot {
+        visitor(InitialSitemapRoot {
             root: declaration(
                 SitemapRootKind::ExplicitConfig,
                 saved_config_sha256,
@@ -52,7 +74,7 @@ pub(crate) fn initial_roots(
             policy_source_revision: policy_sha256
                 .map(|sha| format!("initial:{sha}:explicit:sitemap_document")),
             policy_source_ordinal: ordinal,
-        });
+        })?;
     }
     let mut flattened = 0usize;
     for (input_index, input) in imports.iter().enumerate() {
@@ -73,18 +95,18 @@ pub(crate) fn initial_roots(
             if row.error.is_some() {
                 root.admission.decision = D::InvalidLocation;
             }
-            roots.push(InitialSitemapRoot {
+            visitor(InitialSitemapRoot {
                 root,
                 policy_source_revision: policy_sha256
                     .map(|sha| format!("initial:{sha}:{input_index}:{}", input.input_sha256)),
                 policy_source_ordinal: row.source_index,
-            });
+            })?;
             flattened = flattened
                 .checked_add(1)
                 .ok_or_else(|| anyhow::anyhow!("Initial imported root ordinal exhausted"))?;
         }
     }
-    Ok(Some(roots))
+    Ok(true)
 }
 
 fn declaration(

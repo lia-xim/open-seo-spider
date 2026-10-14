@@ -6903,7 +6903,8 @@
         "GitHub-/Linux-/Container-CI nach Konto-Verfügbarkeit getrennt ausführen. Lokale794/0ausgespart, optimierter Release/native13 und datenbewahrende Installation sind bestanden; Remote-CI bleibt NOT_PROVEN.",
         "Originale Mitgliedschaften an tatsächliche Fetch-/Inlink-Zustände anbinden und konkrete Sitemap-Zielfehler ausgeben; vollständige Website-Abdeckung bleibt unbewiesen.",
         "Sitemap-Filter S1–S7 einzeln abnehmen: Quellen-/Ziel-/Inlink-/Mehrfachdokumente, tatsächliche 49.999/50.000/50.001 Einträge und 52.428.799/52.428.800/52.428.801 dekodierte XML-Bytes; aktuelle 8MiB-/Ledger-Ressourcenstopps ersetzen diese Protokollprüfung nicht. Generierte Segmentgrenzen sind keine Prüfung großer gefetchter Quellen.",
-        "Weiterer S4-Quellschritt: verifizierte Raw-/Source-SQL-Durchläufe, Same-TX-Store-Fenster und separater sitemap-rows-CLI-Leser integriert. 36 zusätzliche Regressionen geschrieben, 246 Eingabedateien und 211 erforderliche Namen eingefroren; künftig mindestens 993 Gesamttests. Workspace-Formatprüfung und begrenzte Quellreviews einschließlich zwei Quellkorrekturen bestehen. Kompilierung, alle neuen Tests und native Läufe NICHT AUSGEFÜHRT. Rich-Coverage-/Analyse-/Selected-Kontexte, echte Browser/API/MCP-Umstellung, CSV-Streaming, physische Größen/RAM/Latenz und vollständige sieben Filter bleiben offen. Keine S4-Vollabnahme oder Installation."
+        "Vorheriger S4-Raw-Quellstand (5091eb9): verifizierte Raw-/Source-SQL-Durchläufe, Same-TX-Store-Fenster und separater sitemap-rows-CLI-Leser integriert. 36 zusätzliche Regressionen geschrieben, 246 Eingabedateien und 211 erforderliche Namen eingefroren; künftig mindestens 993 Gesamttests. Workspace-Formatprüfung und begrenzte Quellreviews einschließlich zwei Quellkorrekturen bestehen. Kompilierung, alle neuen Tests und native Läufe NICHT AUSGEFÜHRT. Rich-Coverage-/Analyse-/Selected-Kontexte, echte Browser/API/MCP-Umstellung, CSV-Streaming, physische Größen/RAM/Latenz und vollständige sieben Filter bleiben offen. Keine S4-Vollabnahme oder Installation.",
+        "Aktueller S4-Rich-Quellschritt: vollständige Coverage-/Inventarhash-Projektion, gespeicherte Quellen-/Seitenanalyse und produktiven App-Inventarhandler mit kompaktem Same-TX-Fenster verbunden. Inventar und gepufferter CSV-Export teilen den neuen Zustandshash. 42 zusätzliche Regressionen geschrieben, 255 Eingabedateien und 253 erforderliche Namen eingefroren; künftig mindestens 1035 Gesamttests. Workspace-Formatprüfung und begrenzte Quellreviews einschließlich früher Feldnamen-Speichergrenze bestehen. Kompilierung, Tests und native/API-/MCP-/Browserabnahme NICHT AUSGEFÜHRT. Selected-Parent-Kompatibilität bleibt materialisierend; CSV-Streaming, tatsächliche Größen/RAM/Latenz, Recovery und sieben vollständige Filter bleiben offen. Keine S4-Vollabnahme oder Installation."
       ],
       "documentation": [
         "docs/parity/sitemap-b12-plan.md",
@@ -6930,7 +6931,10 @@
         "docs/parity/sitemap-filter-surfaces-plan.md",
         "docs/verification/sitemap-filter-surface-preparation.json",
         "docs/verification/sitemap-streaming-read-preparation.json",
-        "docs/sitemap-raw-window.md"
+        "docs/sitemap-raw-window.md",
+        "docs/sitemap-rich-window.md",
+        "docs/verification/sitemap-rich-read-preparation.json",
+        "docs/parity/sitemap-csv-streaming-plan.md"
       ],
       "gates": {
         "source_review": "PARSER_AND_FETCH_NO_CONCRETE_P1_P2",
@@ -6981,9 +6985,11 @@
         "source_protocol_s3_source": "WIP94_AUTHORED_FROZEN234_MIN940_NAMED158_DURABLE_REPORT_PARENT_CURSOR_FMT_PASS_COMPILE_TEST_NATIVE_NOT_RUN",
         "source_protocol_s3_completion": "SOURCE_INTEGRATED_RUNTIME_ACCEPTANCE_PUBLIC_FILTERS_PHYSICAL50M_CRASH_RESTART_STILL_OPEN",
         "source_large_processing_s4_source": "WIP17_AUTHORED_FROZEN238_MIN957_NAMED175_CFG64M_FETCH_STORE_FMT_PASS_COMPILE_TEST_NATIVE_NOT_RUN",
-        "source_large_processing_s4_completion": "RICH_CONTEXT_APP_API_MCP_CSV_STREAM_PHYSICAL_MATRIX_UI_MEMORY_PLATFORM_NOT_PROVEN",
+        "source_large_processing_s4_completion": "COMPACT_RICH_CONTEXT_APP_SOURCE_INTEGRATED_SELECTED_MATERIALIZING_CSV_STREAM_PHYSICAL_NATIVE_UI_MEMORY_PLATFORM_NOT_PROVEN",
         "source_filter_s6_surfaces": "PROPOSED_FULL_STORED_QUERY_EXPORT_PAGE_SOURCE_DOMAINS_NOT_IMPLEMENTED",
-        "source_large_processing_s4_streaming": "WIP36_AUTHORED_FROZEN246_MIN993_NAMED211_RAW_SOURCE_SQL_STORE_CLI_FMT_PASS_COMPILE_TEST_NATIVE_NOT_RUN"
+        "source_large_processing_s4_streaming": "WIP36_AUTHORED_FROZEN246_MIN993_NAMED211_RAW_SOURCE_SQL_STORE_CLI_FMT_PASS_COMPILE_TEST_NATIVE_NOT_RUN",
+        "source_large_processing_s4_rich_read": "WIP42_AUTHORED_FROZEN255_MIN1035_NAMED253_COVERAGE_ANALYSIS_STORE_APP_SHAREDCSVSTATE_FMT_STATICREVIEW_PASS_COMPILE_TEST_NATIVE_NOT_RUN",
+        "source_large_processing_s4_csv_transport": "DESIGN_ONLY_SAME_TX_TWO_PASS_BOUNDED_QUEUE_TAIL_JOIN_CANCEL_DRAIN_14_PLANNED_ZERO_AUTHORED_ZERO_RUN"
       },
       "reference_parity": "NOT_PROVEN",
       "proof_run_ids": [

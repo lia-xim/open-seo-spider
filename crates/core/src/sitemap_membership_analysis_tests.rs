@@ -737,3 +737,6 @@ async fn real_sibling_documents_distinguish_multiple_sitemaps_from_same_document
     assert!(!multiple.source_document_samples_have_more);
     site.finish(requests).await;
 }
+
+#[path = "sitemap_membership_analysis/window_tests.rs"]
+mod window_tests;

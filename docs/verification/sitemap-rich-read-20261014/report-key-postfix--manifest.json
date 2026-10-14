@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "immutable_handoff": "s4-analysis-report-key-postfix-v1",
+  "created_utc": "2026-10-14T21:49:40.1584117Z",
+  "baseline_analysis_manifest_sha256": "c702fb80a5abf5ad3e1f1b7afd8d513ee07baf07020b3d79501ab0e5da31e35c",
+  "independent_review_receipt_sha256": "c48ff924603c8138066d5a574d130cf2bc870cf6e75032ba1e4450a0ed57605c",
+  "entries": [
+    {
+      "path": "crates/core/src/sitemap_membership_analysis/window_tests.rs",
+      "payload": "product/crates/core/src/sitemap_membership_analysis/window_tests.rs",
+      "before_sha256": "8983197309c5d20ffb976e2d64ff83367632c077e5d09049093fb51fbefa34b1",
+      "sha256": "f3eb64b8cb40f8a0e78780a829705ced47153d8290b1ae23102fb10287108d00",
+      "bytes": 23681
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store/verified_report.rs",
+      "payload": "product/crates/core/src/sitemap_source_store/verified_report.rs",
+      "before_sha256": "31a8bbfd9f53508f01773061dac11fdb0bdc5aea99f5f29061cc79ec16dd4793",
+      "sha256": "454672bf19e7bf6b191652e48437456fb335b4d8005a18fa0575cd004c5c46ca",
+      "bytes": 20395
+    }
+  ],
+  "handoff_sha256": "68996c2b4d4092dca1318658e5249c9bca56ff909db9524bba88237f85bd90ee",
+  "new_test_functions": 0,
+  "preserved_test_names": [
+    "compact_actual_targets_inlinks_filters_and_independent_whole_membership_match_oracle",
+    "compact_prepared_context_is_reused_across_independent_saved_page_windows",
+    "compact_actual_policy_aliases_keep_original_membership_and_observed_inlinks",
+    "compact_rehashed_actual_report_source_changes_are_never_summary_only",
+    "compact_source_stream_rejects_duplicate_unknown_type_and_whole_envelope_faults",
+    "compact_stream_accepts_pretty_escaped_equivalent_source_and_ignores_unrelated_value",
+    "compact_actual_checkpoint_wrong_connection_source_and_ended_transaction_controls",
+    "compact_actual_selected_parent_keeps_historical_membership_and_mixed_age",
+    "compact_historical_absent_source_is_unknown_and_forbids_a_report_only_envelope",
+    "compact_actual_checkpoint_source_mismatch_stays_unavailable_before_any_rows"
+  ],
+  "expanded_test_groups": [
+    "compact_source_stream_rejects_duplicate_unknown_type_and_whole_envelope_faults",
+    "compact_stream_accepts_pretty_escaped_equivalent_source_and_ignores_unrelated_value"
+  ],
+  "key_profile": {
+    "decoded_utf8_bytes": 1024,
+    "encoded_json_content_bytes": 6144,
+    "quotes_excluded": true,
+    "borrowed_pass_extra_cost": "One O(report bytes) pass, scalar O(1) Rust state; no RSS proof"
+  },
+  "actual_checks": [
+    {
+      "command": "rustfmt --edition 2024 --config skip_children=true <two files>",
+      "exit_code": 0
+    },
+    {
+      "command": "rustfmt --check --edition 2024 --config skip_children=true <two files>",
+      "exit_code": 0
+    }
+  ],
+  "compiler_cargo_tests_sqlite_fixture_http_native_browser_benchmark": "NOT_RUN_COMPUTE_HOLD",
+  "product_repo_git_runtime_immutable_v1_writes": 0
+}
