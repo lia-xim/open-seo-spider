@@ -1,0 +1,64 @@
+{
+  "scope": "Own isolated rustc executable using readonly copied actual locked serde_json rlibs; counts reconstructed genuine native-envelope JSON, not emitted rejected server bytes",
+  "rustc": "C:/Users/matth/.cargo/bin/rustc.exe",
+  "arguments": [
+    "--edition=2024",
+    "--crate-name",
+    "native_envelope_serializer",
+    "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\native-budget-ui-agent-v1\\rust-serializer-v2\\main.rs",
+    "--extern",
+    "serde_json=E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\native-budget-ui-agent-v1\\rust-serializer-v1\\deps\\libserde_json-37cc17295d699669.rlib",
+    "-L",
+    "dependency=E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\native-budget-ui-agent-v1\\rust-serializer-v1\\deps",
+    "-C",
+    "lto=thin",
+    "-C",
+    "codegen-units=1",
+    "-C",
+    "embed-bitcode=yes",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "debuginfo=0",
+    "-o",
+    "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\native-budget-ui-agent-v1\\rust-serializer-v2\\native-envelope-serializer.exe"
+  ],
+  "exit_code": 0,
+  "error": null,
+  "source_sha256": "d76f2de393146ceaba90f93401b18976edd81744c890b2066a714104ca2fdece",
+  "dependencies": {
+    "libitoa-e0209efa76fa7b55.rlib": {
+      "bytes": 88172,
+      "sha256": "b3c390a1ed3196e52a95c4f9fcbae42f83a99314276926359e130bb0fe65994f"
+    },
+    "libmemchr-78aa501b098a3ed4.rlib": {
+      "bytes": 1459184,
+      "sha256": "546f745fb5035cc4fe863e41426d577e8554d9940866bf1cc1a58c6f677876b9"
+    },
+    "libryu-561bd888e2d849c9.rlib": {
+      "bytes": 80132,
+      "sha256": "7cd1479ecec2d13fc207e4630679bc0f1fd900ee16be98eb2477b291b5e75516"
+    },
+    "libserde-478a3c795f067e45.rlib": {
+      "bytes": 984046,
+      "sha256": "9d1c61821644277bbb387d315d0d25996978e2bf45d733ae06430a67066da584"
+    },
+    "libserde_core-325d70b3794f4ddb.rlib": {
+      "bytes": 5401048,
+      "sha256": "1028bea0a0385a6b6a4db75a60f4a5fa54df0225806a283af03b448ddae2d389"
+    },
+    "libserde_json-37cc17295d699669.rlib": {
+      "bytes": 2647996,
+      "sha256": "beb02de85d571201a8be96e2b1705703814dabdff77b3fa94fc9841fb20cee90"
+    },
+    "libzmij-acb972a7356a9678.rlib": {
+      "bytes": 446842,
+      "sha256": "ec1220b46bb4b44eb9f7869088814ae039a614bb8458bacff2fea06b053a142d"
+    }
+  },
+  "binary": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\native-budget-ui-agent-v1\\rust-serializer-v2\\native-envelope-serializer.exe",
+    "sha256": "600a5f1457a21b554bd08e4c09cf567a20e04f8d58923836e020086a5bbd9ffb"
+  },
+  "repair": "LTO bitcode rlibs require matching thin-LTO consumption, original failed MSVC link preserved"
+}

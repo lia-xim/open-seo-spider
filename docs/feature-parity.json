@@ -5956,6 +5956,15 @@
       "recorded_at": "2026-10-14T17:30:09.4173068Z",
       "scope": "Actual optimized source ea314045 / binary ab1ac93c installed on local8787 with renderer8790; seven job metadata records and19 durable file bytes unchanged; five embedded assets, MCP24 and historical unknowns checked. Original ports were stopped. Verified backup; rollback not exercised. Remote CI and vendor parity unproven.",
       "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "sitemap-physical-json-csv-local",
+      "artifact": "docs/verification/sitemap-physical-budgets-local.json",
+      "artifact_sha256": "c1dc20a21534ee750a419de99ea49110f056478f34d84848255d6e6841fb9d94",
+      "result": "PASS_CURRENT_NATIVE_SITEMAP_JSON8M_CSV64M_PHYSICAL_GATES",
+      "recorded_at": "2026-10-14T17:39:44.101Z",
+      "scope": "Actual optimized ab1/206-source native JSON8MiB and CSV64MiB exact200, atomic413 and unchanged same-snapshot recovery. Rejected JSON+1 is actual Rust-serde reconstruction from concrete native facts; CSV+1 uses measured genuine quote/ASCII increments. All source/SQL/read intervals and producer close/drain retained. Independent delivered body hashes reviewed.",
+      "reference_parity": "NOT_PROVEN"
     }
   ],
   "reference_workflows": [
@@ -6213,7 +6222,7 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-14T17:30:09.4173068Z",
+  "last_verified_at": "2026-10-14T17:39:44.101Z",
   "current_work": [
     {
       "id": "batch-b8-content-capture",
@@ -6875,11 +6884,10 @@
         "Nutzerfreigabe für lokalen Ersatz der GitHub-Actions-Sperre: optimierter Windows-Release tatsächlich gebaut und geprüft; Runtime-Rust/Lock/Assets entsprechen197 Compiler-Dateien, nur drei Integrationstest-Endpunkte wurden für eigenen Renderer anpassbar gemacht. GitHub/Linux/Container ausdrücklich NOT_PROVEN, keine Billing-Einstellungen geändert.",
         "Vier bisher ausgesparte Browser-Tests an eigenem aufgewärmtem dynamischem Renderer ausgeführt: vollständiger lokaler Workspace740 besteht ohne Fehler oder Ignorierung; Workspace-Alltargets-Clippy und Format bestehen. Separate echte Renderer17 bestehen. Nutzer-Renderer8790 blieb unangetastet.",
         "Derselbe optimierte Release besteht Ledger11/SQLite11, geroutete API-/CSV-/SDK-/Browser11 mit24Tools/320px, Transport16 und vorhandene Originalbericht-/CLI-Bundle-Grenzen. Erfolgreich auf8787 installiert: sieben vollständige Job-Metadaten und19 dauerhafte Dateien byteidentisch, fünf Git-Assets und24MCP-Tools geprüft; Legacy-Sitemap-Historie bleibt unbekannt. Backup aufE verifiziert, Rollback nicht benötigt/ausgeführt.",
-        "Aktueller Erweiterungsstand: 54 zusätzliche Rust-Tests, gesamter Workspace794/0Fehler/0ausgespart mit eigenem echtem Renderer, Clippy/Format bestanden. Derselbe optimierte Release ab1ac93c besteht13 native API-/CSV-/SDK-/Browsergruppen mit24Tools/320px, Gzip/Index-Zyklus, unvollständigem XML, aktuellen und geerbten qualifizierten Quellen-Kohorten sowie Lastmod-Profilen. Datenbewahrend auf8787 mit Renderer8790 installiert: sieben Job-Metadaten/19 dauerhafte Dateien unverändert, fünf eingebettete Assets und24Tools geprüft, historische Sitemap-Daten bleiben unbekannt; Backup verifiziert."
+        "Aktueller Erweiterungsstand: 54 zusätzliche Rust-Tests, gesamter Workspace794/0Fehler/0ausgespart mit eigenem echtem Renderer, Clippy/Format bestanden. Derselbe optimierte Release ab1ac93c besteht13 native API-/CSV-/SDK-/Browsergruppen mit24Tools/320px, Gzip/Index-Zyklus, unvollständigem XML, aktuellen und geerbten qualifizierten Quellen-Kohorten sowie Lastmod-Profilen. Datenbewahrend auf8787 mit Renderer8790 installiert: sieben Job-Metadaten/19 dauerhafte Dateien unverändert, fünf eingebettete Assets und24Tools geprüft, historische Sitemap-Daten bleiben unbekannt; Backup verifiziert.",
+        "Physische native JSON8MiB-/CSV64MiB-Exaktgrenzen am installierten Release ab1 bestanden: tatsächliche vollständige HTTP200-Körper, atomare413-Gegenproben, kleinere/anschließende Snapshot-Lesezugriffe unverändert, echte Original-Captures und SQLite-Rows geprüft, null Website-Anfragen bei Lesezugriffen und alle eigenen Produzenten geschlossen/Verbindungen geleert. Abgewiesene +1-Körper werden nicht ausgeliefert: JSON-Größe durch tatsächlichen Rust-serde-Fakten-Witness, CSV durch gemessene Original-Quote-/ASCII-Schritte belegt."
       ],
       "pending_acceptance_de": [
-        "Budget2: Native JSON-Seite exakt8MiB und ein Byte darüber; kleinere Seite muss am selben gespeicherten Snapshot tatsächlich funktionieren.",
-        "Budget3: Nativer CSV-Export exakt64MiB und ein Byte darüber mit echten ursprünglichen Sitemap-Deklarationen; Überlauf ohne Teil-Download oder Mutation.",
         "Budget4: Native einzelne Ledger-Zeile exakt256KiB und ein Byte darüber aus echter XML-Parserbeobachtung; neue Rows/Tasks müssen bei Überlauf gemeinsam zurückrollen.",
         "Budget5: Nativer vollständiger Katalog exakt32MiB und ein Byte darüber über zwei reale Quellen; zuvor committed Quelle erhalten, zweite Quelle atomar ablehnen.",
         "Budget6: Gezielte SQL-Fehler-Injektion ausschließlich offline in eigener bereits echt erzeugter Fixture-Datenbank; Ordinary/Policy-Rollback und Wiederaufnahme ohne erfundene Herkunft prüfen.",
@@ -6937,11 +6945,13 @@
         "durable_native_byte_budgets": "PENDING_FULL_SIZE_EXACT_PLUS1_JSON_CSV",
         "durable_native_generation_race": "PENDING_LIVE_ACTIVE_GENERATION",
         "durable_native_rollback_budget": "PENDING_FAILURE_INJECTION",
-        "durable_budget_plan": "TASK1_PASS_3_INCLUDED_IN_WORKSPACE794_PHYSICAL_GATES_SEPARATE",
+        "durable_budget_plan": "TASKS1_2_3_PASS_4_5_6_PENDING_PUBLICATION_PER_PASSED_GATE",
         "durable_live_renderer4": "PASS_OWNED_EPHEMERAL_CURRENT_SOURCE",
         "durable_optimized_release": "PASS_LOCAL_WINDOWS_THIN_LTO_AB1AC93C",
         "durable_lastmod": "PASS_22_CORE_4_REAL_STORE_APP_AND_NATIVE_BROWSER",
-        "durable_assessment_installation": "PASS_LOCAL_794_NATIVE13_INSTALLED_7JOBS_19FILES"
+        "durable_assessment_installation": "PASS_LOCAL_794_NATIVE13_INSTALLED_7JOBS_19FILES",
+        "durable_json_physical_budget": "PASS_NATIVE_HTTP200_8388608_413_PLUS1_RUST_SERDE_WITNESS_RECOVERY",
+        "durable_csv_physical_budget": "PASS_NATIVE_HTTP200_67108864_413_PLUS1_REAL_ORIGINAL_CAPTURE"
       },
       "reference_parity": "NOT_PROVEN",
       "proof_run_ids": [
@@ -6962,7 +6972,8 @@
         "sitemap-native-checkpoint",
         "sitemap-local-release-installed",
         "sitemap-derived-assessment-local",
-        "sitemap-derived-assessment-installed"
+        "sitemap-derived-assessment-installed",
+        "sitemap-physical-json-csv-local"
       ],
       "tracking_issue": "https://github.com/lia-xim/open-seo-spider/issues/11"
     }
