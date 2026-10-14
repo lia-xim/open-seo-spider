@@ -30,6 +30,7 @@ mod comparison;
 mod content;
 mod policy;
 pub(crate) mod resources;
+mod sitemap_generation;
 mod sitemaps;
 
 #[derive(Clone)]
@@ -281,6 +282,10 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
             get(export_extraction_csv),
         )
         .route("/api/crawls/{id}/sitemap.xml", get(export_xml))
+        .route(
+            "/api/crawls/{id}/sitemap-bundle",
+            post(sitemap_generation::bundle),
+        )
         .route("/api/crawls/{id}/project.json", get(export_project))
         .route("/api/compare", get(compare))
         .route(
@@ -381,7 +386,7 @@ async fn capabilities() -> Json<Value> {
             "redacted_cookie_observations":true,"screenshots":true,"accessibility_axe":true,
             "endpoint":"http://127.0.0.1:8790/render","enabled_by_default":false},
         "mcp":{"stdio":true,"streamable_http":"/mcp"},
-        "exports":["pages_csv","issues_csv","links_csv","extractions_csv","javascript_csv","cookies_csv","pdf_csv","image_resources_csv","responses_csv","fragments_csv","dom_csv","inputs_csv","sitemap_xml","project_json"],
+        "exports":["pages_csv","issues_csv","links_csv","extractions_csv","javascript_csv","cookies_csv","pdf_csv","image_resources_csv","responses_csv","fragments_csv","dom_csv","inputs_csv","sitemap_xml","sitemap_bundle_zip","project_json"],
         "unimplemented":["api_integrations","spelling_grammar","pdf_ocr_and_rendering","shared_authenticated_browser_sessions","embedding_semantic_search","scheduling","full_structured_data_validation"],
         "parity":"in progress; see docs/parity/granular-acceptance.json"
     }))

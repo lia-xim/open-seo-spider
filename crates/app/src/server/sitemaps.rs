@@ -12,6 +12,7 @@ fn fail(error: Failure) -> (StatusCode, Json<Failure>) {
 async fn read_context(
     state: &AppState,
     id: Uuid,
+    analysis_request: open_seo_spider_core::SitemapMembershipAnalysisRequest,
 ) -> SitemapApiResult<(
     u64,
     String,
@@ -38,11 +39,22 @@ async fn read_context(
     let snapshot = if exists {
         Some(
             tokio::task::spawn_blocking(move || {
-                CrawlStore::open_read_only(path)?.sitemap_read_snapshot()
+                CrawlStore::open_read_only(path)?
+                    .sitemap_read_snapshot_with_membership_analysis(&analysis_request)
             })
             .await
             .map_err(|error| fail(Failure::new("sitemap_read_failure", error)))?
-            .map_err(|error| fail(Failure::new("sitemap_read_failure", error)))?,
+            .map_err(|error| {
+                let message = error.to_string();
+                let code = if message.contains("budget exceeded")
+                    || message.contains("exceeds bounded input")
+                {
+                    "sitemap_analysis_input_budget"
+                } else {
+                    "sitemap_read_failure"
+                };
+                fail(Failure::new(code, error))
+            })?,
         )
     } else {
         None
@@ -56,8 +68,8 @@ pub(super) async fn inventory(
     query: Result<Query<ReadQuery>, QueryRejection>,
 ) -> SitemapApiResult<Json<membership::Inventory>> {
     let Query(query) = query.map_err(|error| fail(Failure::new("invalid_sitemap_query", error)))?;
-    query.validate().map_err(fail)?;
-    let (generation, config, read) = read_context(&state, id).await?;
+    let analysis_request = query.analysis_request().map_err(fail)?;
+    let (generation, config, read) = read_context(&state, id, analysis_request).await?;
     let response = tokio::task::spawn_blocking(move || {
         membership::inventory(id, generation, &config, read, query)
     })
@@ -73,7 +85,7 @@ pub(super) async fn export_csv(
 ) -> SitemapApiResult<Response> {
     let Query(query) = query.map_err(|error| fail(Failure::new("invalid_sitemap_query", error)))?;
     query.validate().map_err(fail)?;
-    let (generation, config, read) = read_context(&state, id).await?;
+    let (generation, config, read) = read_context(&state, id, Default::default()).await?;
     let (bytes, snapshot) =
         tokio::task::spawn_blocking(move || membership::csv(id, generation, &config, read, query))
             .await

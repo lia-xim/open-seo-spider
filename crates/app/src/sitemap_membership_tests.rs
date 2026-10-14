@@ -163,6 +163,66 @@ fn query_bounds_reject_without_clamping_or_alias_normalization() {
         .is_err()
     );
 }
+
+#[test]
+fn saved_page_cursor_has_a_distinct_bounded_role_and_ordinal_zero_is_valid() {
+    let current = snapshot();
+    let page = page_token(&current, &Filter::default(), 0).unwrap();
+    assert!(page.len() <= MAX_TOKEN_BYTES);
+    assert_eq!(decode(&page).unwrap().payload.after_page_ordinal, Some(0));
+    assert!(
+        ReadQuery {
+            page_cursor: Some(page.clone()),
+            ..Default::default()
+        }
+        .analysis_request()
+        .is_ok()
+    );
+    assert!(
+        ReadQuery {
+            cursor: Some(page.clone()),
+            ..Default::default()
+        }
+        .validate()
+        .is_err()
+    );
+    assert!(
+        CsvQuery {
+            kind: RowKind::All,
+            source_observation_id: None,
+            membership_url: None,
+            snapshot: page.clone()
+        }
+        .validate()
+        .is_err()
+    );
+    assert!(
+        ReadQuery {
+            page_cursor: Some(page),
+            page_limit: Some(0),
+            ..Default::default()
+        }
+        .validate()
+        .is_err()
+    );
+    assert!(
+        ReadQuery {
+            page_limit: Some(201),
+            ..Default::default()
+        }
+        .validate()
+        .is_err()
+    );
+    let raw = token(&current, &Filter::default(), Some(1)).unwrap();
+    assert!(
+        ReadQuery {
+            page_cursor: Some(raw),
+            ..Default::default()
+        }
+        .validate()
+        .is_err()
+    );
+}
 #[test]
 fn original_membership_filter_never_matches_policy_fetch_alias() {
     // Synthetic DTO filter control only; never passed as a validated SQL snapshot.
@@ -911,5 +971,215 @@ async fn actual_derived_json_byte_cap_fails_atomically_and_smaller_visible_page_
     assert!(encode(&recovered).unwrap().len() <= MAX_JSON_BYTES);
     assert_eq!(stored.read().catalog, captured.catalog);
     assert_eq!(stored.file_hashes(), before);
+    website.finish(requests).await;
+}
+
+fn actual_analysis_read(stored: &LastmodStored, query: &ReadQuery) -> SitemapReadSnapshot {
+    open_seo_spider_core::CrawlStore::open_read_only(&stored.db)
+        .unwrap()
+        .sitemap_read_snapshot_with_membership_analysis(&query.analysis_request().unwrap())
+        .unwrap()
+}
+fn actual_analysis_page(stored: &LastmodStored, query: ReadQuery) -> Inventory {
+    let read = actual_analysis_read(stored, &query);
+    inventory(
+        stored.job,
+        stored.generation,
+        &stored.config_sha,
+        Some(read),
+        query,
+    )
+    .unwrap()
+}
+#[tokio::test]
+async fn actual_saved_report_analysis_pages_are_independent_and_raw_csv_remains_exact() {
+    let website=LastmodWebsite::start("<urlset><url><loc>{origin}/a</loc></url><url><loc>{origin}/b</loc></url><url><loc>{origin}/c</loc></url></urlset>".into()).await;
+    let stored = LastmodStored::crawl(&website, true, false).await;
+    let requests = website.count();
+    let before = stored.file_hashes();
+    let mut query = ReadQuery {
+        kind: RowKind::Location,
+        limit: Some(1),
+        page_limit: Some(1),
+        ..Default::default()
+    };
+    let first = actual_analysis_page(&stored, query.clone());
+    let snapshot_token = first.snapshot_token.clone();
+    let raw_sequence = first.rows.as_ref().unwrap()[0].sequence();
+    let mut saved_urls = vec![];
+    let mut response = first;
+    loop {
+        assert_eq!(response.snapshot_token, snapshot_token);
+        assert_eq!(
+            response.rows.as_ref().unwrap()[0].sequence(),
+            raw_sequence,
+            "Saved-page pagination must not move original rows"
+        );
+        let analysis = response.membership_analysis.as_ref().unwrap();
+        assert!(analysis.context.available);
+        assert!(!analysis.context.website_wide_orphan_inference);
+        assert_eq!(
+            analysis.location_findings.as_ref().unwrap()[0].sequence,
+            raw_sequence
+        );
+        saved_urls.extend(
+            analysis
+                .saved_pages
+                .as_ref()
+                .unwrap()
+                .iter()
+                .map(|v| v.observation.requested_url.clone()),
+        );
+        let Some(cursor) = response.next_page_cursor.clone() else {
+            break;
+        };
+        query.page_cursor = Some(cursor);
+        response = actual_analysis_page(&stored, query.clone());
+    }
+    assert_eq!(saved_urls.len(), 4);
+    assert_eq!(
+        saved_urls
+            .iter()
+            .collect::<std::collections::BTreeSet<_>>()
+            .len(),
+        4
+    );
+    let captured = open_seo_spider_core::CrawlStore::open_read_only(&stored.db)
+        .unwrap()
+        .sitemap_read_snapshot_with_membership_analysis(&Default::default())
+        .unwrap();
+    let (actual, _) = csv(
+        stored.job,
+        stored.generation,
+        &stored.config_sha,
+        Some(captured),
+        CsvQuery {
+            kind: RowKind::Location,
+            source_observation_id: None,
+            membership_url: None,
+            snapshot: snapshot_token.unwrap(),
+        },
+    )
+    .unwrap();
+    let legacy = stored.page(ReadQuery {
+        kind: RowKind::Location,
+        ..Default::default()
+    });
+    let (original, _) = csv(
+        stored.job,
+        stored.generation,
+        &stored.config_sha,
+        Some(stored.read()),
+        CsvQuery {
+            kind: RowKind::Location,
+            source_observation_id: None,
+            membership_url: None,
+            snapshot: legacy.snapshot_token.unwrap(),
+        },
+    )
+    .unwrap();
+    assert_eq!(
+        actual, original,
+        "Raw original CSV must not acquire derived target facts"
+    );
+    assert_eq!(stored.file_hashes(), before);
+    website.finish(requests).await;
+}
+#[tokio::test]
+async fn actual_stored_report_context_only_change_invalidates_raw_page_and_csv_tokens() {
+    let website = LastmodWebsite::start(
+        "<urlset><url><loc>{origin}/a</loc></url><url><loc>{origin}/b</loc></url></urlset>".into(),
+    )
+    .await;
+    let stored = LastmodStored::crawl(&website, true, false).await;
+    let requests = website.count();
+    let base = ReadQuery {
+        kind: RowKind::Location,
+        limit: Some(1),
+        page_limit: Some(1),
+        ..Default::default()
+    };
+    let first = actual_analysis_page(&stored, base.clone());
+    let old_read = stored.read();
+    // Isolated fixture context-invalidation control, not a natural crawler
+    // lifecycle or a production-positive witness: retain exact typed report
+    // semantics but change actual stored bytes and matching checkpoint byte SHA.
+    let mut connection = rusqlite::Connection::open(&stored.db).unwrap();
+    let tx = connection.transaction().unwrap();
+    let report: String = tx
+        .query_row("SELECT value FROM metadata WHERE key='report'", [], |r| {
+            r.get(0)
+        })
+        .unwrap();
+    let changed = format!("{report}\n");
+    let checkpoint: String = tx
+        .query_row(
+            "SELECT value FROM metadata WHERE key='checkpoint'",
+            [],
+            |r| r.get(0),
+        )
+        .unwrap();
+    let mut checkpoint: open_seo_spider_core::CrawlCheckpoint =
+        serde_json::from_str(&checkpoint).unwrap();
+    checkpoint.report_sha256 = digest(changed.as_bytes());
+    tx.execute("UPDATE metadata SET value=?1 WHERE key='report'", [changed])
+        .unwrap();
+    tx.execute(
+        "UPDATE metadata SET value=?1 WHERE key='checkpoint'",
+        [serde_json::to_string(&checkpoint).unwrap()],
+    )
+    .unwrap();
+    tx.commit().unwrap();
+    drop(connection);
+    let next = actual_analysis_page(&stored, base.clone());
+    assert_eq!(old_read.catalog, stored.read().catalog);
+    assert_eq!(
+        old_read.coverage_inventory,
+        stored.read().coverage_inventory
+    );
+    assert_eq!(old_read.generation, stored.read().generation);
+    assert_ne!(
+        first.snapshot.as_ref().unwrap().catalog_state_sha256,
+        next.snapshot.as_ref().unwrap().catalog_state_sha256
+    );
+    for query in [
+        ReadQuery {
+            cursor: first.next_cursor.clone(),
+            ..base.clone()
+        },
+        ReadQuery {
+            page_cursor: first.next_page_cursor.clone(),
+            ..base
+        },
+    ] {
+        let read = actual_analysis_read(&stored, &query);
+        let error = inventory(
+            stored.job,
+            stored.generation,
+            &stored.config_sha,
+            Some(read),
+            query,
+        )
+        .unwrap_err();
+        assert_eq!(error.code, "stale_sitemap_cursor");
+    }
+    let read = open_seo_spider_core::CrawlStore::open_read_only(&stored.db)
+        .unwrap()
+        .sitemap_read_snapshot_with_membership_analysis(&Default::default())
+        .unwrap();
+    let failure = csv(
+        stored.job,
+        stored.generation,
+        &stored.config_sha,
+        Some(read),
+        CsvQuery {
+            kind: RowKind::Location,
+            source_observation_id: None,
+            membership_url: None,
+            snapshot: first.snapshot_token.unwrap(),
+        },
+    )
+    .unwrap_err();
+    assert_eq!(failure.code, "stale_sitemap_cursor");
     website.finish(requests).await;
 }

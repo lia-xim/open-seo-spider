@@ -4,6 +4,7 @@ use reqwest::{Client, Url};
 use serde_json::{Value, json};
 use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
 pub const PROTOCOLS: &[&str] = &["2025-06-18", "2025-11-25"];
+mod generation;
 mod saved_comparison;
 mod sitemaps;
 #[derive(Clone)]
@@ -13,17 +14,23 @@ pub struct Bridge {
 }
 impl Bridge {
     pub fn new(base: &str) -> anyhow::Result<Self> {
-        let mut base = Url::parse(base)?;
+        if base.len() > 2048 || base.chars().any(char::is_control) {
+            bail!("Invalid MCP API base URL");
+        }
+        let original_base = base;
+        let base = Url::parse(base)?;
         if base.scheme() != "http"
             || !matches!(base.host_str(), Some("localhost" | "127.0.0.1" | "[::1]"))
             || !base.username().is_empty()
             || base.password().is_some()
+            || base.path() != "/"
+            || base.query().is_some()
+            || base.fragment().is_some()
+            || (base.as_str() != original_base
+                && base.as_str().strip_suffix('/') != Some(original_base))
         {
             bail!("MCP requires an HTTP loopback API");
         }
-        base.set_path("/");
-        base.set_query(None);
-        base.set_fragment(None);
         Ok(Self {
             base,
             client: Client::builder()
@@ -83,6 +90,10 @@ impl Bridge {
                     })
                 {
                     return Some(error(id, -32602, "Unexpected or missing tool argument"));
+                }
+                if name == "spider_generate_sitemaps" {
+                    let result = generation::call(self, args).await;
+                    return Some(generation::complete_response(id, result).await);
                 }
                 if name == "spider_compare_saved" {
                     let include_original_reports = args
@@ -202,17 +213,8 @@ impl Bridge {
         let mut url = self.base.join(&route)?;
         if name == "spider_sitemaps" {
             let query = sitemaps::query(&args)?;
-            url.query_pairs_mut()
-                .append_pair("kind", query.kind.name())
-                .append_pair("limit", &query.limit.unwrap_or(100).to_string());
-            for (key, value) in [
-                ("source_observation_id", query.source_observation_id),
-                ("membership_url", query.membership_url),
-                ("cursor", query.cursor),
-            ] {
-                if let Some(value) = value {
-                    url.query_pairs_mut().append_pair(key, &value);
-                }
+            for (key, value) in sitemaps::query_pairs(query) {
+                url.query_pairs_mut().append_pair(&key, &value);
             }
         }
         if matches!(name, "spider_resources" | "spider_resource_transports") {
@@ -327,7 +329,7 @@ fn inventory() -> Vec<Value> {
         ("spider_issues","Read observed audit issues",json!({"id":uuid}),vec!["id"],true),
         ("spider_analysis","Read graph and relationship/security/JSON-LD observations",json!({"id":uuid}),vec!["id"],true),
         ("spider_policy","Read bounded native admission evidence; advance the returned sequence cursor",json!({"id":uuid,"after_sequence":{"type":"integer","minimum":0},"limit":{"type":"integer","minimum":1,"maximum":1000}}),vec!["id"],true),
-        ("spider_sitemaps","Read bounded validated original sitemap declarations/memberships without fetching websites; unavailable/negative results do not imply complete coverage",json!({"id":uuid,"kind":{"type":"string","enum":["all","root","document","entry","location"]},"source_observation_id":{"type":"string","pattern":"^[0-9a-f]{64}$"},"membership_url":{"type":"string","minLength":1,"maxLength":65536},"limit":{"type":"integer","minimum":1,"maximum":200},"cursor":{"type":"string","minLength":1,"maxLength":4096}}),vec!["id"],true),
+        ("spider_sitemaps","Read original sitemap rows and independently paged saved target/inlink findings without fetching websites; missing membership and zero observed inlinks are cohort/report-qualified",json!({"id":uuid,"kind":{"type":"string","enum":["all","root","document","entry","location"]},"source_observation_id":{"type":"string","pattern":"^[0-9a-f]{64}$"},"membership_url":{"type":"string","minLength":1,"maxLength":65536},"limit":{"type":"integer","minimum":1,"maximum":200},"cursor":{"type":"string","minLength":1,"maxLength":4096},"page_limit":{"type":"integer","minimum":0,"maximum":200},"page_cursor":{"type":"string","minLength":1,"maxLength":4096}}),vec!["id"],true),
         ("spider_resources","Read bounded native source occurrences and immutable resource grants without fetching websites",json!({"id":uuid,"after_sequence":{"type":"integer","minimum":0},"limit":{"type":"integer","minimum":1,"maximum":1000}}),vec!["id"],true),
         ("spider_resource_transports","Read bounded stored transport metadata, including checked responses excluded from report rows",json!({"id":uuid,"after_url":{"type":"string","minLength":1,"maxLength":65536},"limit":{"type":"integer","minimum":1,"maximum":1000}}),vec!["id"],true),
         ("spider_inspect_css","Inspect declared dependencies in supplied CSS with an explicit bounded parser profile; no website is fetched",json!({"input":{"type":"object"}}),vec!["input"],true),
@@ -343,6 +345,7 @@ fn inventory() -> Vec<Value> {
         ("spider_project","Read the original project snapshot; paginate large crawls via spider_pages",json!({"id":uuid}),vec!["id"],true),
         ("spider_compare","Compare two crawl snapshots",json!({"before":uuid,"after":uuid}),vec!["before","after"],true),
     ].into_iter().map(|(name,description,properties,required,read)|json!({"name":name,"description":description,"inputSchema":{"type":"object","properties":properties,"required":required,"additionalProperties":false},"annotations":{"readOnlyHint":read,"destructiveHint":false,"openWorldHint":name=="spider_start_crawl"||name=="spider_resume"||name=="spider_recrawl"}})).collect();
+    tools.push(generation::definition());
     tools.push(saved_comparison::definition());
     tools
 }
@@ -397,7 +400,7 @@ mod tests {
                 .await
                 .is_none()
         );
-        assert_eq!(inventory().len(), 24);
+        assert_eq!(inventory().len(), 25);
     }
     #[test]
     fn only_loopback_bridge() {

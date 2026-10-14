@@ -1,9 +1,11 @@
 //! Read-only sitemap projection after full Store validation.
 use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
 use open_seo_spider_core::{
-    SITEMAP_LASTMOD_ENGINE, SitemapCatalog, SitemapCoverage, SitemapInheritedBasis,
-    SitemapLastmodEntryAssessment, SitemapLastmodLimits, SitemapLedgerRow, SitemapLedgerSummary,
-    SitemapReadSnapshot, assess_sitemap_lastmod_entry, project_sitemap_coverage,
+    SITEMAP_LASTMOD_ENGINE, SITEMAP_MEMBERSHIP_ANALYSIS_ENGINE, SitemapAnalysisRowKind,
+    SitemapCatalog, SitemapCoverage, SitemapInheritedBasis, SitemapLastmodEntryAssessment,
+    SitemapLastmodLimits, SitemapLedgerRow, SitemapLedgerSummary, SitemapMembershipAnalysis,
+    SitemapMembershipAnalysisRequest, SitemapReadSnapshot, assess_sitemap_lastmod_entry,
+    project_sitemap_coverage,
 };
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -35,6 +37,7 @@ impl Failure {
             "sitemap_response_byte_budget"
             | "sitemap_csv_byte_budget"
             | "sitemap_lastmod_assessment_budget" => 413,
+            "sitemap_analysis_input_budget" => 413,
             "job_not_found" => 404,
             _ => 500,
         }
@@ -145,6 +148,8 @@ pub(crate) struct ReadQuery {
     pub membership_url: Option<String>,
     pub limit: Option<usize>,
     pub cursor: Option<String>,
+    pub page_limit: Option<usize>,
+    pub page_cursor: Option<String>,
 }
 impl ReadQuery {
     pub fn filter(&self) -> Filter {
@@ -165,14 +170,67 @@ impl ReadQuery {
         }
         if let Some(cursor) = &self.cursor {
             let parsed = decode(cursor)?;
-            if parsed.payload.after_sequence.is_none_or(|value| value == 0) {
+            if parsed.payload.schema_version != 1
+                || parsed.payload.after_sequence.is_none_or(|value| value == 0)
+            {
                 return Err(Failure::new(
                     "invalid_sitemap_cursor",
                     "Expected a nonzero continuation token",
                 ));
             }
         }
+        if self.page_limit.is_some_and(|value| value > 200) {
+            return Err(Failure::new(
+                "invalid_sitemap_query",
+                "page_limit must be 0..200",
+            ));
+        }
+        if let Some(cursor) = &self.page_cursor {
+            if self.page_limit == Some(0) {
+                return Err(Failure::new(
+                    "invalid_sitemap_query",
+                    "page_cursor requires a positive page_limit",
+                ));
+            }
+            let parsed = decode(cursor)?;
+            if parsed.payload.schema_version != 2 || parsed.payload.after_page_ordinal.is_none() {
+                return Err(Failure::new(
+                    "invalid_sitemap_cursor",
+                    "Expected a saved-page continuation token",
+                ));
+            }
+        }
         Ok(limit)
+    }
+    /// Parse both canonical token roles before the read-only Store is opened.
+    /// Snapshot equality is checked only after the actual same-TX capture.
+    pub fn analysis_request(&self) -> Result<SitemapMembershipAnalysisRequest> {
+        let limit = self.validate()?;
+        Ok(SitemapMembershipAnalysisRequest {
+            kind: match self.kind {
+                RowKind::All => SitemapAnalysisRowKind::All,
+                RowKind::Root => SitemapAnalysisRowKind::Root,
+                RowKind::Document => SitemapAnalysisRowKind::Document,
+                RowKind::Entry => SitemapAnalysisRowKind::Entry,
+                RowKind::Location => SitemapAnalysisRowKind::Location,
+            },
+            source_observation_id: self.source_observation_id.clone(),
+            membership_url: self.membership_url.clone(),
+            after_sequence: self
+                .cursor
+                .as_deref()
+                .map(decode)
+                .transpose()?
+                .and_then(|v| v.payload.after_sequence),
+            row_limit: limit,
+            page_limit: self.page_limit.unwrap_or(100),
+            after_page_ordinal: self
+                .page_cursor
+                .as_deref()
+                .map(decode)
+                .transpose()?
+                .and_then(|v| v.payload.after_page_ordinal),
+        })
     }
 }
 #[derive(Debug, Clone, Deserialize)]
@@ -192,7 +250,8 @@ impl CsvQuery {
             membership_url: self.membership_url.clone(),
         }
         .validate()?;
-        if decode(&self.snapshot)?.payload.after_sequence.is_some() {
+        let token = decode(&self.snapshot)?;
+        if token.payload.schema_version != 1 || token.payload.after_sequence.is_some() {
             return Err(Failure::new(
                 "invalid_sitemap_cursor",
                 "Expected a full-export snapshot token",
@@ -220,6 +279,8 @@ struct Payload {
     snapshot: Snapshot,
     filter_sha256: String,
     after_sequence: Option<u64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    after_page_ordinal: Option<u64>,
 }
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -233,6 +294,7 @@ fn token(snapshot: &Snapshot, filter: &Filter, after_sequence: Option<u64>) -> R
         snapshot: snapshot.clone(),
         filter_sha256: digest(encode(filter)?),
         after_sequence,
+        after_page_ordinal: None,
     };
     let checksum_sha256 = digest(encode(&payload)?);
     let bytes = encode(&Token {
@@ -260,7 +322,14 @@ fn decode(value: &str) -> Result<Token> {
         serde_json::from_slice(&bytes).map_err(|_| bad("Token shape/types are invalid"))?;
     let canonical = serde_json::to_vec(&parsed).map_err(|_| bad("Token cannot be serialized"))?;
     if URL_SAFE_NO_PAD.encode(canonical) != value
-        || parsed.payload.schema_version != 1
+        || !matches!(parsed.payload.schema_version, 1 | 2)
+        || (parsed.payload.schema_version == 1 && parsed.payload.after_page_ordinal.is_some())
+        || (parsed.payload.schema_version == 2
+            && (parsed.payload.after_sequence.is_some()
+                || parsed
+                    .payload
+                    .after_page_ordinal
+                    .is_none_or(|value| value >= 1_000_000)))
         || !is_hash(&parsed.checksum_sha256)
         || !is_hash(&parsed.payload.filter_sha256)
         || parsed.payload.snapshot.crawl_generation == 0
@@ -324,6 +393,10 @@ fn bound_catalog(
             &read.coverage_inventory,
             &read.coverage,
             SITEMAP_LASTMOD_ENGINE,
+            SITEMAP_MEMBERSHIP_ANALYSIS_ENGINE,
+            read.membership_analysis
+                .as_ref()
+                .map(|value| &value.context),
         ))?),
         inherited_basis: catalog.inherited.clone(),
     };
@@ -344,7 +417,8 @@ fn validate_token(
             "Snapshot or filter changed; restart pagination",
         ));
     }
-    if continuation != parsed.payload.after_sequence.is_some()
+    if parsed.payload.schema_version != 1
+        || continuation != parsed.payload.after_sequence.is_some()
         || parsed.payload.after_sequence == Some(0)
     {
         return Err(Failure::new(
@@ -385,6 +459,8 @@ pub(crate) struct Inventory {
     /// Only visible Entry rows are projected. None is unavailable history;
     /// an available page with no entries has Some([]), not missing evidence.
     pub lastmod_assessments: Option<Vec<SitemapLastmodEntryAssessment>>,
+    pub membership_analysis: Option<SitemapMembershipAnalysis>,
+    pub next_page_cursor: Option<String>,
 }
 pub(crate) fn inventory(
     job_id: Uuid,
@@ -396,6 +472,9 @@ pub(crate) fn inventory(
     let limit = query.validate()?;
     let filter = query.filter();
     let sqlite_available = read.is_some();
+    let analysis = read
+        .as_ref()
+        .and_then(|value| value.membership_analysis.clone());
     let derived_coverage = if let Some(read) = &read {
         read.coverage.clone()
     } else {
@@ -431,8 +510,43 @@ pub(crate) fn inventory(
         },
         lastmod_assessment_engine: SITEMAP_LASTMOD_ENGINE,
         lastmod_assessments: None,
+        membership_analysis: analysis,
+        next_page_cursor: None,
     };
     if let Some((catalog, snapshot)) = bound {
+        if let Some(value) = query.page_cursor.as_deref() {
+            let parsed = decode(value)?;
+            if parsed.payload.snapshot != snapshot
+                || parsed.payload.filter_sha256 != digest(encode(&filter)?)
+            {
+                return Err(Failure::new(
+                    "stale_sitemap_cursor",
+                    "Saved report context or filter changed; restart page pagination",
+                ));
+            }
+            if response
+                .membership_analysis
+                .as_ref()
+                .is_none_or(|value| !value.context.available)
+            {
+                return Err(Failure::new(
+                    "stale_sitemap_cursor",
+                    "Saved target analysis is unavailable",
+                ));
+            }
+            if parsed.payload.after_page_ordinal.is_some_and(|after| {
+                response
+                    .membership_analysis
+                    .as_ref()
+                    .and_then(|value| value.context.saved_page_count)
+                    .is_none_or(|count| after >= count)
+            }) {
+                return Err(Failure::new(
+                    "invalid_sitemap_cursor",
+                    "Saved-page continuation ordinal is not in the captured report",
+                ));
+            }
+        }
         let after = query
             .cursor
             .as_deref()
@@ -476,6 +590,17 @@ pub(crate) fn inventory(
             None
         };
         response.snapshot_token = Some(token(&snapshot, &filter, None)?);
+        if let Some(analysis) = &response.membership_analysis
+            && analysis.saved_pages_have_more
+        {
+            let after_page_ordinal = analysis.last_saved_page_ordinal.ok_or_else(|| {
+                Failure::new(
+                    "sitemap_read_failure",
+                    "Missing saved-page continuation identity",
+                )
+            })?;
+            response.next_page_cursor = Some(page_token(&snapshot, &filter, after_page_ordinal)?);
+        }
         response.snapshot = Some(snapshot);
         response.coverage.declared_source_cohort_complete =
             catalog.summary.declared_source_cohort_complete;
@@ -486,7 +611,7 @@ pub(crate) fn inventory(
         response.has_more = has_more;
         response.catalog_available = true;
         response.availability_reason = "saved_validated_sqlite_catalog";
-    } else if query.cursor.is_some() {
+    } else if query.cursor.is_some() || query.page_cursor.is_some() {
         return Err(Failure::new(
             "stale_sitemap_cursor",
             "Catalog is unavailable; no continuation exists",
@@ -510,6 +635,27 @@ pub(crate) fn inventory(
         }
     })?;
     Ok(response)
+}
+fn page_token(snapshot: &Snapshot, filter: &Filter, after_page_ordinal: u64) -> Result<String> {
+    let payload = Payload {
+        schema_version: 2,
+        snapshot: snapshot.clone(),
+        filter_sha256: digest(encode(filter)?),
+        after_sequence: None,
+        after_page_ordinal: Some(after_page_ordinal),
+    };
+    let checksum_sha256 = digest(encode(&payload)?);
+    let result = URL_SAFE_NO_PAD.encode(encode(&Token {
+        payload,
+        checksum_sha256,
+    })?);
+    if result.len() > MAX_TOKEN_BYTES {
+        return Err(Failure::new(
+            "sitemap_read_failure",
+            "Saved-page cursor profile exceeds its bound",
+        ));
+    }
+    Ok(result)
 }
 struct BoundedBytes {
     bytes: Vec<u8>,

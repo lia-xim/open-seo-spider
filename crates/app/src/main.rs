@@ -1,6 +1,7 @@
 mod analysis;
 mod comparison_app;
 mod content_cohort;
+mod generation_export;
 mod mcp;
 mod policy_export;
 mod resource_export;
@@ -32,6 +33,15 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Generate a segmented sitemap ZIP from saved report JSON; no website is fetched.
+    GenerateSitemaps {
+        snapshot: PathBuf,
+        #[arg(long)]
+        options: PathBuf,
+        /// New ZIP destination; existing files are refused atomically.
+        #[arg(long)]
+        output: PathBuf,
+    },
     /// Compare saved crawl JSON files locally with exact identities; no website is fetched.
     CompareSaved {
         before: PathBuf,
@@ -195,6 +205,14 @@ async fn main() -> anyhow::Result<()> {
     }) {
         Command::Serve { listen, data_dir } => Box::pin(server::serve(&listen, data_dir)).await?,
         Command::Mcp { server } => mcp::stdio(&server).await?,
+        Command::GenerateSitemaps {
+            snapshot,
+            options,
+            output,
+        } => {
+            let receipt = generation_export::run(snapshot, options, output).await?;
+            println!("{}", serde_json::to_string(&receipt)?);
+        }
         Command::CompareSaved {
             before,
             after,

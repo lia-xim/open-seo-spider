@@ -147,7 +147,7 @@ async function sdk(kind, before, after, config, expected, phase) {
   if (transport.stderr) transport.stderr.on('data', chunk => { stderrTail = (stderrTail + chunk).slice(-16000); });
   try {
     alive(); await client.connect(transport); const inventory = (await client.listTools()).tools;
-    assert.equal(inventory.length, 24); const tool = inventory.find(value => value.name === 'spider_compare_saved');
+    assert.equal(inventory.length, 25); const tool = inventory.find(value => value.name === 'spider_compare_saved');
     assert.equal(tool.inputSchema.properties.include_original_reports.type, 'boolean'); assert.equal(tool.annotations.readOnlyHint, true); assert.equal(tool.annotations.openWorldHint, false);
     const saved = await client.callTool({name: 'spider_compare_saved', arguments: body(before, after, config)});
     assert.equal(saved.isError, false); const text = mcpText(saved);
@@ -281,7 +281,7 @@ try {
     await sdk(kind, imported, imported, {}, importedBundle, 'websites_live_declared_import_u64_depth123');
   }
   assert.equal(hits(), baselineHits); await unchangedReports(inventory); assert.deepEqual(await readFile(jsonPath), cliBytes); assert.deepEqual(await readFile(csvPath), csvBytes);
-  checks.push('Both official SDK transports expose optional boolean on 24 tools, including the existing read-only comparison tool; MCP text retains all original values/exact u64 tokens, default omission and structured errors, while safe structured descriptors match API');
+  checks.push('Both official SDK transports expose optional boolean on 25 tools, including the existing read-only comparison tool; MCP text retains all original values/exact u64 tokens, default omission and structured errors, while safe structured descriptors match API');
   for (const owned of fixtures) {
     await closeServer(owned.server); const witness = {origin: owned.origin, attempts: [], server: undefined};
     witness.server = http.createServer((req, res) => { witness.attempts.push({method: req.method, path: req.url}); res.writeHead(410); res.end('Original website offline'); }); witnesses.push(witness); assert.equal(await listen(witness.server, Number(new URL(owned.origin).port)), owned.origin);

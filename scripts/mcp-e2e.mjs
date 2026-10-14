@@ -26,7 +26,7 @@ try{
     client=new Client({name:'open-seo-spider-acceptance',version:'0.1.0'});
     const transport=kind==='stdio'?new StdioClientTransport({command:binary,args:['mcp','--server',api],cwd:root,stderr:'pipe'}):new StreamableHTTPClientTransport(new URL(api+'/mcp'));
     await client.connect(transport);
-    const inventory=await client.listTools();assert.equal(inventory.tools.length,24);
+    const inventory=await client.listTools();assert.equal(inventory.tools.length,25);
     assert.ok(inventory.tools.some(tool=>tool.name==='spider_compare_saved'&&tool.annotations.readOnlyHint===true&&tool.annotations.openWorldHint===false));
     assert.ok(inventory.tools.some(tool=>tool.name==='spider_pause'&&tool.annotations.readOnlyHint===false));
     assert.ok(inventory.tools.some(tool=>tool.name==='spider_recrawl'&&tool.annotations.readOnlyHint===false&&tool.annotations.openWorldHint===true));
@@ -93,7 +93,7 @@ try{
     const secondResource=await call('spider_resources',{id:resourceJob.id,limit:1,after_sequence:firstResource.next_after_sequence});assert.equal(secondResource.observations.length,1);assert.equal(secondResource.has_more,false);assert.notEqual(secondResource.observations[0].sequence,firstResource.observations[0].sequence);
     const firstTransport=await call('spider_resource_transports',{id:resourceJob.id,limit:1});assert.equal(firstTransport.transports.length,1);assert.match(firstTransport.next_after_url,/\?owned=1&next=%23$/);
     const nextTransport=await call('spider_resource_transports',{id:resourceJob.id,limit:1,after_url:firstTransport.next_after_url});assert.equal(nextTransport.transports.length,1);assert.equal(nextTransport.has_more,false);assert.equal(websiteRequests,resourceBeforeRead);
-    checks.push(`${kind}: SDK initialize, 24 tools; bounded native resource occurrences and transport metadata with encoded URL cursor, zero-HTTP supplied CSS inspection and strict resource argument types; native saved-source inventory/document/cohort, supplied-text analysis, zero-HTTP policy preview, native policy cursor, disabled ledgers, crawl/read/analysis/compare, additional saved comparison with zero website requests, completed-pause conflict, derived selected recrawl preserving parent/unselected rows`);
+    checks.push(`${kind}: SDK initialize, 25 tools; bounded native resource occurrences and transport metadata with encoded URL cursor, zero-HTTP supplied CSS inspection and strict resource argument types; native saved-source inventory/document/cohort, supplied-text analysis, zero-HTTP policy preview, native policy cursor, disabled ledgers, crawl/read/analysis/compare, additional saved comparison with zero website requests, completed-pause conflict, derived selected recrawl preserving parent/unselected rows`);
     await client.close();client=null;
   }
   const evidence={tested_at:new Date().toISOString(),sdk:'@modelcontextprotocol/client 2.3.1',platform:process.platform,result:'PASS',checks};

@@ -57,6 +57,7 @@ pub struct SitemapReadSnapshot {
     pub catalog: Option<crate::SitemapCatalog>,
     pub coverage_inventory: Option<crate::SitemapCoverageInventory>,
     pub coverage: crate::SitemapCoverage,
+    pub membership_analysis: Option<crate::SitemapMembershipAnalysis>,
 }
 
 /// SQLite WAL storage. A fetched page and its frontier state commit atomically.
@@ -640,6 +641,28 @@ impl CrawlStore {
             .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
         let transaction = connection.transaction()?;
         let snapshot = load_sitemap_read_snapshot_verified(&transaction)?;
+        transaction.commit()?;
+        Ok(snapshot)
+    }
+
+    /// Target and observed-anchor facts from the actual terminal saved report,
+    /// pinned to the same transaction as the original source catalog/coverage.
+    pub fn sitemap_read_snapshot_with_membership_analysis(
+        &self,
+        request: &crate::SitemapMembershipAnalysisRequest,
+    ) -> anyhow::Result<SitemapReadSnapshot> {
+        request.validate()?;
+        let mut connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        let mut snapshot = load_sitemap_read_snapshot_verified(&transaction)?;
+        snapshot.membership_analysis = Some(crate::sitemap_membership_analysis::project(
+            &transaction,
+            &snapshot,
+            request,
+        )?);
         transaction.commit()?;
         Ok(snapshot)
     }
@@ -2059,25 +2082,18 @@ fn load_sitemap_read_snapshot_verified(
                 (1..=67_108_864).contains(&length),
                 "Saved coverage config exceeds bounded input"
             );
-            saved_config.reserve(usize::try_from(length)?);
-            let mut hasher = Sha256::new();
-            let mut offset = 0i64;
-            while offset < length {
-                let count = (length - offset).min(65536);
-                let chunk: Vec<u8> = connection.query_row(
-                    "SELECT substr(CAST(value AS BLOB),?1,?2) FROM metadata WHERE key='config'",
-                    params![offset + 1, count],
-                    |row| row.get(0),
-                )?;
-                anyhow::ensure!(
-                    i64::try_from(chunk.len())? == count,
-                    "Saved config chunk length differs"
-                );
-                hasher.update(&chunk);
-                saved_config.extend_from_slice(&chunk);
-                offset += count;
-            }
-            Ok(format!("{:x}", hasher.finalize()))
+            // One bounded exact byte read. Repeated substr(CAST(full TEXT AS
+            // BLOB)) can recast the entire value for every small chunk.
+            saved_config = connection.query_row(
+                "SELECT CAST(value AS BLOB) FROM metadata WHERE key='config'",
+                [],
+                |row| row.get(0),
+            )?;
+            anyhow::ensure!(
+                i64::try_from(saved_config.len())? == length,
+                "Saved config byte length differs"
+            );
+            Ok(format!("{:x}", Sha256::digest(&saved_config)))
         })
         .transpose()?;
     let coverage_inventory = match catalog.as_ref() {
@@ -2173,6 +2189,7 @@ fn load_sitemap_read_snapshot_verified(
         catalog,
         coverage_inventory,
         coverage,
+        membership_analysis: None,
     })
 }
 
@@ -3151,6 +3168,10 @@ mod tests {
 #[cfg(test)]
 #[path = "store-sitemap-coverage-tests.rs"]
 mod sitemap_coverage_store_tests;
+
+#[cfg(test)]
+#[path = "store-sitemap-config-read-tests.rs"]
+mod sitemap_config_read_tests;
 
 #[cfg(test)]
 #[path = "store-sitemap-tests.rs"]

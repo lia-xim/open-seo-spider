@@ -268,7 +268,7 @@
         } catch (error) { fragmentsError = 'Fragment-Inventar nicht verfügbar: ' + error.message; }
         if (!current()) return;
       }
-      if ((nextCrawl.generation ?? null) !== (state.crawl.generation ?? null)) { resetResourceLedger(); resetSitemapMembership(); }
+      if ((nextCrawl.generation ?? null) !== (state.crawl.generation ?? null)) { resetResourceLedger(); resetSitemapMembership(); resetSitemapBundle(); }
       state.crawl = nextCrawl;
       const pendingSelected = pendingRecrawlURLs(nextCrawl);
       state.pages = (from ? [...state.pages, ...pages] : pages).filter(page => !pendingSelected.has(page.url));
@@ -303,6 +303,7 @@
 
   async function selectCrawl(id) {
     invalidatePoll();
+    resetSitemapBundle();
     resetContent();
     invalidatePolicyPreview();
     resetPolicyLedger();
@@ -517,6 +518,7 @@
     $('inspector-recrawl-selection').hidden = !state.selected || !state.pageMap.has(state.selected.url) || Boolean(state.selectedResponse || state.selectedInput);
     $('inspector-recrawl-checkbox').checked = Boolean(state.selected && state.recrawlURLs.has(state.selected.url));
     $('inspector-recrawl-checkbox').disabled = Boolean(busy || active() || state.crawl?.recrawl_available === false);
+    renderSitemapBundleControls();
     $('settings-summary').textContent = `${state.settings.concurrency} parallele Requests · ${state.settings.obey_robots ? 'Robots.txt beachten' : 'Robots.txt ignorieren'}${state.settings.max_pages ? ` · Grenze ${number(state.settings.max_pages)}` : ''}${state.settings.javascript_rendering ? ' · JavaScript-Rendering' : ''}${state.settings.crawl_policy_enabled ? ' · Native URL-Policy' : ''}${state.settings.resource_discovery_enabled ? ' · Native Ressourcenregeln' : ''}`;
   }
 
@@ -1476,7 +1478,7 @@
   }
 
   // B12 draft: tagged stored facts. No target document status is inferred here.
-  const sitemapMembership = { result:null, token:null, revision:0, cursor:null, back:[], error:'', stale:false, selected:null, sort:0, direction:1 };
+  const sitemapMembership = { result:null, token:null, revision:0, cursor:null, back:[], pageCursor:null,pageBack:[],selectedPage:null,error:'', stale:false, selected:null, sort:0, direction:1 };
   const sitemapEngine = 'open-seo-spider/sitemap-membership-ledger-v1';
   const sitemapSection = () => state.section === 'sitemap-membership';
   const sitemapKind = () => $('sitemap-membership-kind').value;
@@ -1533,7 +1535,7 @@
   }
   function resetSitemapMembership() {
     invalidateSitemapRequest();
-    Object.assign(sitemapMembership,{result:null,cursor:null,back:[],error:'',stale:false,selected:null,sort:0,direction:1});
+    Object.assign(sitemapMembership,{result:null,cursor:null,back:[],pageCursor:null,pageBack:[],selectedPage:null,error:'',stale:false,selected:null,sort:0,direction:1});
     if ($('sitemap-membership-search')) { $('sitemap-membership-search').value=''; $('sitemap-membership-filter').value='all'; }
     if (sitemapSection()) renderSitemapMembership();
   }
@@ -1552,10 +1554,22 @@
     if(tagged.kind==='document')return {kind:row.kind==='robots_directives'?'robots.txt-Quelle':'XML-Sitemap-Quelle',original:row.task_url,membership:null,admitted:null,decision:null,ordinal:null,source:row.observation_id,diagnostic:row.failure_code || row.transport?.failure_code || row.parser?.failure?.code || null,complete:sitemapDocumentComplete(row)};
     return {kind:'XML-Eintrag',original:sitemapLastmod(row.observed.lastmod),membership:null,admitted:null,decision:null,ordinal:row.observed.ordinal,source:row.observation_id,diagnostic:row.observed.diagnostics.join(' | ') || null,complete:row.observed.complete};
   }
+  function sitemapEntryLocations(tagged) {
+    if(tagged.kind!=='entry')return null;
+    const row=tagged.row,expected=array(row.observed.loc_occurrence_ordinals),ordinals=new Set(expected);
+    const observed=array(sitemapMembership.result?.rows).filter(candidate=>candidate.kind==='location' && candidate.row.observation_id===row.observation_id && candidate.row.observed.entry_ordinal===row.observed.ordinal && ordinals.has(candidate.row.observed.ordinal)).sort((a,b)=>a.row.observed.ordinal-b.row.observed.ordinal);
+    const values=observed.map(candidate=>candidate.row.admission.membership_url??candidate.row.observed.decoded_value??'[Loc nicht deklariert]');
+    const scope=observed.length?`${number(observed.length)} von ${number(expected.length)} gespeicherten Loc-Vorkommen auf dieser geladenen Seite${row.observed.complete?'':' · XML-Eintrag unvollständig'}.`:expected.length?'Loc-Zuordnung nicht auf dieser geladenen Seite verfügbar.':row.observed.complete?'Kein zugeordnetes Loc-Vorkommen im gespeicherten XML-Eintrag.':'Kein zugeordnetes Loc-Vorkommen beobachtet; XML-Eintrag unvollständig.';
+    return {values,scope};
+  }
   const sitemapRawColumns = [
     ['Position',tagged=>tagged.row.sequence],['Vorkommen',tagged=>sitemapRowFacts(tagged).kind],['Originalwert',tagged=>sitemapRowFacts(tagged).original],['Ursprüngliche Mitgliedschaft',tagged=>sitemapRowFacts(tagged).membership],['Zugelassene Anfrage-URL',tagged=>sitemapRowFacts(tagged).admitted],['Zulassung / Quelle',tagged=>{const facts=sitemapRowFacts(tagged);return facts.decision?sitemapDecisionLabel(facts.decision):facts.complete===true?'Quelleinheit vollständig':facts.complete===false?'Quelleinheit unvollständig':'Nicht erfasst';}],['Quellordinal',tagged=>sitemapRowFacts(tagged).ordinal],['Quellenhinweis',tagged=>sitemapRowFacts(tagged).diagnostic]
   ];
-  const sitemapColumns = [...sitemapRawColumns,['lastmod-Vorkommen',tagged=>sitemapAssessment(tagged)?sitemapLastmodPresence(sitemapAssessment(tagged).presence):null],['lastmod · XSD-Union',tagged=>sitemapProfileSummary(sitemapAssessment(tagged),'xsd')],['lastmod · W3C-Profil',tagged=>sitemapProfileSummary(sitemapAssessment(tagged),'w3c_note')]];
+  const sitemapTargetLabels={blocked_by_robots:'Durch robots.txt blockiert',redirected:'Weiterleitung',non200:'Antwort ungleich 200',non_indexable:'Nicht indexierbar',fetch_failed:'Abruf fehlgeschlagen',incomplete_observation:'Beobachtung unvollständig',indexable:'Indexierbar',no_response:'Keine HTTP-Antwort erfasst',pending:'Im gespeicherten Stand ausstehend',no_stored_requested_observation:'Kein gespeicherter Abruf dieser Original-URL',invalid_or_missing_original_location:'Original-URL ungültig / fehlend',rendered_navigation_changed:'Browser zu anderer URL navigiert',rendered_non200:'Browserantwort ungleich 200'};
+  const sitemapRenderingLabels={not_configured:'Browserdarstellung nicht konfiguriert',not_applicable:'Browserdarstellung für diese Antwort nicht vorgesehen',required_but_unobserved:'Konfigurierte Browserdarstellung nicht beobachtet',failed:'Browserdarstellung fehlgeschlagen',url_unobserved:'Browser-End-URL nicht beobachtet',url_unusable:'Browser-End-URL nicht als HTTP-Identität auswertbar',response_unobserved:'Browserantwortstatus nicht beobachtet',non200:'Browserantwort ungleich 200',navigation_changed:'Browser zu anderer URL navigiert',observed_200:'Browserantwort 200 für dieselbe native End-URL beobachtet'};
+  const sitemapPageMembershipLabels={listed_original:'Als Original-URL gelistet',not_listed_current_declared_sources:'Nicht in erfassten deklarierten Quellen gelistet',not_listed_historical_declared_sources:'Nicht in historischen Elternquellen gelistet',unknown:'Mitgliedschaft unbekannt'};
+  function sitemapTargetFinding(tagged){return tagged.kind==='location'?sitemapMembership.result?.membership_analysis?.location_findings?.find(value=>value.sequence===tagged.row.sequence && value.occurrence_id===tagged.row.occurrence_id && value.observation_id===tagged.row.observation_id)??null:null;}
+  const sitemapColumns = [...sitemapRawColumns,['lastmod-Vorkommen',tagged=>sitemapAssessment(tagged)?sitemapLastmodPresence(sitemapAssessment(tagged).presence):null],['lastmod · XSD-Union',tagged=>sitemapProfileSummary(sitemapAssessment(tagged),'xsd')],['lastmod · W3C-Profil',tagged=>sitemapProfileSummary(sitemapAssessment(tagged),'w3c_note')],['Originale Locs · nur geladene Seite',tagged=>{const locations=sitemapEntryLocations(tagged);return locations?locations.values.length?locations.values.join(' | '):locations.scope:null;}],['Original-Ziel · gespeicherter Stand',tagged=>sitemapTargetLabels[sitemapTargetFinding(tagged)?.original_state]??null],['HTTP zuerst / zuletzt',tagged=>{const page=sitemapTargetFinding(tagged)?.original_observation;return page?`${page.status??'—'} / ${page.final_status??'—'}`:null;}],['Beobachtete Inlinks ohne Selbstlinks',tagged=>sitemapTargetFinding(tagged)?.observed_original_inlinks?.nonself_anchor_occurrences??null]];
   function sitemapUsable() { return Boolean(sitemapMembership.result?.catalog_available && !sitemapMembership.token && !sitemapMembership.error); }
   function sitemapVisibleRows() {
     if(!sitemapUsable())return [];
@@ -1566,6 +1580,8 @@
       if(filter==='denied' && !(facts.decision && !['scheduled','coalesced'].includes(facts.decision)))return false;
       if(filter==='invalid' && !['invalid_location','missing_location'].includes(facts.decision))return false;
       if(filter==='incomplete' && !(facts.complete===false || facts.decision==='incomplete_source'))return false;
+      if(filter.startsWith('target-') && sitemapTargetFinding(tagged)?.original_state!==filter.slice(7))return false;
+      if(filter==='listed-no-observed-inlinks' && sitemapTargetFinding(tagged)?.observed_original_inlinks?.nonself_anchor_occurrences!==0)return false;
       const assessment=sitemapAssessment(tagged);
       if(filter.startsWith('lastmod-')) {
         if(!assessment)return false;
@@ -1584,8 +1600,9 @@
     const current=sitemapMembership, result=current.result, summary=result?.summary, busy=Boolean(current.token), usable=sitemapUsable(), rows=sitemapVisibleRows();
     $('sitemap-membership-error').hidden=!current.error; $('sitemap-membership-error').textContent=current.error;
     $('sitemap-membership-summary').textContent=!state.crawl?'Einen gespeicherten Crawl auswählen.':busy?'Gespeicherte Sitemap-Seite wird geladen …':current.error?'Sitemap-Stand nicht verfügbar. Dies ist kein vollständiges leeres Ergebnis.':!result?'Noch kein gespeicherter Sitemap-Stand geladen.':!result.catalog_available?'Keine verfügbare ursprüngliche Sitemap-Aufzeichnung. Historische oder importierte Berichte werden nicht nachträglich als leer rekonstruiert.':`${number(summary.root_rows)} Deklarationen · ${number(summary.document_rows)} Quellen · ${number(summary.entry_rows)} XML-Einträge · ${number(summary.location_rows)} XML-URL-Vorkommen · ${number(summary.incomplete_documents)} unvollständige Quellen`;
-    $('sitemap-membership-scope').textContent=result?.catalog_available ? ['Gespeicherte Vorkommen verfügbar. Vollständige Website-Abdeckung nicht bestätigt.',summary.legacy_history_unknown?'Frühere Quellenhistorie unbekannt.':'',result.inherited?'Geerbter Stand des Elternlaufs; Sitemap-Ermittlung wurde in diesem Lauf nicht neu ausgeführt.':'',summary.incomplete_documents?`${number(summary.incomplete_documents)} Quelleinheiten sind unvollständig; ihre URLs beweisen keine vollständige Mitgliedschaft.`:'', 'Ziel-Antwortstatus wurde hier nicht verknüpft. Die abgeleitete Quellenprüfung bewertet ausschließlich den erfassten Verbund deklarierter Sitemap-Quellen.'].filter(Boolean).join(' '):'Diese Ansicht liest gespeicherte Beobachtungen und startet keine Website-Anfrage.';
+    $('sitemap-membership-scope').textContent=result?.catalog_available ? ['Gespeicherte Vorkommen verfügbar. Vollständige Website-Abdeckung nicht bestätigt.',summary.legacy_history_unknown?'Frühere Quellenhistorie unbekannt.':'',result.inherited?'Geerbter Stand des Elternlaufs; Sitemap-Ermittlung wurde in diesem Lauf nicht neu ausgeführt.':'',summary.incomplete_documents?`${number(summary.incomplete_documents)} Quelleinheiten sind unvollständig; ihre URLs beweisen keine vollständige Mitgliedschaft.`:'',result.membership_analysis?.context.available?'Zielstatus und Inlinks stammen aus dem gebundenen gespeicherten Bericht. Original-, Rewrite- und Redirect-Identitäten bleiben getrennt.':'Zielstatus und Inlinks sind für diesen Stand nicht verfügbar.'].filter(Boolean).join(' '):'Diese Ansicht liest gespeicherte Beobachtungen und startet keine Website-Anfrage.';
     renderSitemapDerivedCoverage(result,busy,current.error);
+    renderSitemapTargetAnalysis();
     const table=$('sitemap-membership-table');
     table.querySelector('thead').innerHTML=`<tr>${sitemapColumns.map(([label],index)=>`<th scope="col" aria-sort="${current.sort===index?current.direction===1?'ascending':'descending':'none'}"><button type="button" data-sitemap-sort="${index}">${escape(label)} ${current.sort===index?current.direction===1?'↑':'↓':'↕'}</button></th>`).join('')}</tr>`;
     const empty=busy?'Sitemap-Seite wird geladen …':current.error?'Gespeicherte Beobachtungen konnten nicht geladen werden.':!state.crawl?'Kein Crawl ausgewählt.':!result?.catalog_available?'Ursprüngliche Quellen nicht verfügbar; keine Aussage über leere Sitemaps.':!result.rows.length?'Dieser gespeicherte Stand enthält hier keine Vorkommen.':!rows.length?'Keine passenden Vorkommen auf dieser geladenen Seite. Weitere gespeicherte Seiten können andere Befunde enthalten.':'';
@@ -1602,6 +1619,29 @@
     $('sitemap-membership-checkpoint').textContent=JSON.stringify({catalog_available:result?.catalog_available??null,snapshot:result?.snapshot??null,summary:summary??null,inherited:result?.inherited??null,availability_reason:result?.availability_reason??null,coverage:result?.coverage??null,lastmod_assessment_engine:result?.lastmod_assessment_engine??null},null,2);
     renderSitemapInspector();
   }
+  function sitemapPageAgeLabel(value){return {captured_checkpoint_history:'Gespeicherte Checkpoint-Historie',selected_current_generation:'Ausgewählte URL in dieser Generation erfasst',selected_prior_generation:'Ausgewählte URL in früherer Generation erfasst',inherited_parent_observation:'Geerbte Elternbeobachtung'}[value]??'Alter nicht bestimmt';}
+  function renderSitemapTargetAnalysis(){
+    const current=sitemapMembership,analysis=current.result?.membership_analysis,context=analysis?.context,usable=sitemapUsable() && context?.available,rows=usable?analysis.saved_pages:[],search=$('sitemap-analysis-search').value.toLocaleLowerCase(),filter=$('sitemap-analysis-filter').value;
+    const matches=value=>{if(filter==='all')return true;if(filter==='multiple-documents')return value.original_source_document_count>1;if(filter==='listed-no-links')return value.listed_without_observed_nonself_inlinks;if(filter==='not-listed')return ['not_listed_current_declared_sources','not_listed_historical_declared_sources'].includes(value.membership);if(filter==='unknown')return value.membership==='unknown';return value.observation.state===filter;};
+    const visible=rows.filter(value=>(!search || [value.observation.requested_url,value.observation.final_url,...value.observation.indexability_reasons].some(v=>v.toLocaleLowerCase().includes(search))) && matches(value));
+    const reasons={terminal_saved_report_unavailable:'Kein gebundener abgeschlossener Bericht verfügbar.',validated_source_catalog_unavailable:'Ursprünglicher Quellenkatalog nicht verfügbar.',live_crawl_target_analysis_unavailable:'Der Crawl läuft. Zielstatus und Inlinks werden nach dem nächsten gespeicherten Abschluss verfügbar.',saved_checkpoint_context_mismatch:'Der Bericht passt nicht mehr zum gespeicherten Checkpoint. Keine Zielauswertung für diesen Stand.'};
+    $('sitemap-analysis-summary').textContent=current.token?'Gespeicherte Ziele werden geladen …':current.error?'Zielauswertung nicht verfügbar.':!context?'Für diesen API-Stand ist keine gespeicherte Zielauswertung verfügbar.':!context.available?reasons[context.reason]??'Zielauswertung für diesen Stand nicht verfügbar.':`${number(context.saved_page_count)} gespeicherte Seiten · ${number(context.pending_page_count)} ausstehende Seiten · ${context.observation_scope==='mixed_age_selected_saved_report'?'Ausgewählter Wiederholungslauf mit verschieden alten Beobachtungen':context.observation_scope==='partial_terminal_saved_report_observations'?'Unvollständiger gespeicherter Lauf':'Abgeschlossener gespeicherter Lauf'}`;
+    $('sitemap-analysis-scope').textContent=context?.available?[context.source_scope==='inherited_historical_declared_sources'?'Die Sitemap-Zuordnung stammt aus den historischen Quellen des Elternlaufs.':'Die Sitemap-Zuordnung bezieht sich auf die erfassten deklarierten Quellen.','„Nicht gelistet“ ist nur bei vollständig erfasstem Quellenverbund bestimmbar. Inlinks zählen gespeicherte Anchor-Vorkommen auf die exakte ursprüngliche Anfrage-URL; Selbstlinks sind gesondert gezählt.','Keine beobachteten Inlinks beweisen keine verwaiste Seite der gesamten Website. Geerbte Beobachtungen bestätigen keine heutige Aktualität. Suche und Filter gelten für diese geladene Seitenauswahl.'].join(' '):'Diese Auswertung liest ausschließlich gespeicherte Fakten und startet keine Website-Anfrage.';
+    $('sitemap-analysis-table').querySelector('tbody').innerHTML=visible.length?visible.map((value,index)=>{const page=value.observation;return `<tr data-sitemap-page="${index}" tabindex="0"><td>${escape(page.requested_url)}</td><td>${escape(sitemapPageMembershipLabels[value.membership])}</td><td>${number(value.original_membership_occurrences)}</td><td>${number(value.original_source_document_count)}</td><td>${escape(sitemapTargetLabels[page.state])}</td><td>${page.status??'—'} / ${page.final_status??'—'}</td><td>${escape(page.final_url||'Nicht erfasst')}</td><td>${number(value.observed_inlinks.nonself_anchor_occurrences)}</td><td>${escape(value.listed_without_observed_nonself_inlinks?'Keine im Bericht beobachtet':'—')}</td><td>${escape(sitemapPageAgeLabel(page.age_scope))}</td></tr>`;}).join(''):`<tr><td colspan="10" class="empty-cell">${escape(!usable?'Keine verfügbare gespeicherte Zielauswertung.':rows.length?'Keine passenden Seiten in dieser geladenen Auswahl.':'Keine gespeicherten Seiten in dieser Auswahl.')}</td></tr>`;
+    $('sitemap-analysis-table').querySelectorAll('[data-sitemap-page]').forEach(element=>{const open=()=>{current.selectedPage=visible[Number(element.dataset.sitemapPage)];renderSitemapSavedPageInspector();};element.addEventListener('click',open);element.addEventListener('keydown',event=>{if(['Enter',' '].includes(event.key)){event.preventDefault();open();}});});
+    $('sitemap-analysis-prev').disabled=!usable || !current.pageBack.length;
+    $('sitemap-analysis-next').disabled=!usable || !analysis.saved_pages_have_more;
+    $('sitemap-analysis-limit').disabled=Boolean(current.token) || !state.crawl;
+    $('sitemap-analysis-page-label').textContent=`${number(visible.length)} gefilterte von ${number(rows.length)} geladenen gespeicherten Seiten`;
+    renderSitemapSavedPageInspector();
+  }
+  function renderSitemapSavedPageInspector(){
+    const value=sitemapMembership.selectedPage,section=$('sitemap-analysis-inspector');section.hidden=!value || !sitemapUsable();if(section.hidden)return;
+    const page=value.observation,links=value.observed_inlinks;
+    $('sitemap-analysis-inspector-heading').textContent=page.requested_url;
+    $('sitemap-analysis-inspector-fields').innerHTML=[['Sitemap-Zuordnung',sitemapPageMembershipLabels[value.membership]],['Ursprüngliche Loc-Vorkommen',value.original_membership_occurrences],['Verschiedene erfasste Sitemap-Dokumente',value.original_source_document_count],['Getrennte Quellbeobachtungen',value.original_source_observation_count],['Sitemap-Quellbeispiele',value.original_source_document_samples.map(source=>source.task_url).join(' · ')],['Gesonderte zugelassene Alias-Verweise',value.admitted_alias_occurrences],['Gespeicherter Zielzustand',sitemapTargetLabels[page.state]],['Indexierbarkeitshinweise',page.indexability_reasons.join(' · ')],['Browserdarstellung',sitemapRenderingLabels[page.rendering_state]],['Gesonderte Browser-End-URL',page.rendered_url],['Gesonderter Browserstatus',page.rendered_status],['Beobachtete Anchor-Inlinks inkl. Selbstlinks',links.anchor_occurrences],['Beobachtete Inlinks ohne Selbstlinks',links.nonself_anchor_occurrences],['Davon interne Anchor-Vorkommen',links.internal_nonself_anchor_occurrences],['Verschiedene beobachtete Quellen ohne Selbstlinks',links.distinct_nonself_requested_sources],['Inlink-Beispiele',`${links.samples.length}${links.samples_have_more?' · weitere Vorkommen gezählt':''}`],['Zeitliche Herkunft',sitemapPageAgeLabel(page.age_scope)],['Gespeicherte Abrufzeit',page.fetched_at]].map(([label,content])=>`<dt>${escape(label)}</dt><dd>${escape(sitemapValue(content))}</dd>`).join('');
+    $('sitemap-analysis-inspector-data').textContent=JSON.stringify(value,null,2);
+  }
   function renderSitemapInspector() {
     const tagged=sitemapMembership.selected, inspector=$('sitemap-membership-inspector');
     inspector.hidden=!tagged || !sitemapUsable(); if(inspector.hidden)return;
@@ -1612,7 +1652,10 @@
     if(tagged.kind==='root')fields.push(['Originalzeile',row.raw_line],['Robots-Zeilen vollständig',row.robots_evidence?.line_complete],['Ursprüngliche Quellzeile',row.robots_evidence?.line_ordinal]);
     if(tagged.kind==='location')fields.push(['Originales XML-Element',row.observed.raw_element_xml],['Originaler XML-Inhalt',row.observed.raw_inner_xml],['XML-Eintragsordinal',row.observed.entry_ordinal],['Loc-Ordinal',row.observed.loc_ordinal],['Rolle',row.observed.role]);
     if(tagged.kind==='document')fields.push(['Anfrage begonnen',row.transport?.request_started],['Tatsächliche Anfrage-URL',row.transport?.requested_url],['Beobachtete finale URL',row.transport?.final_url],['Erster HTTP-Status',row.transport?.initial_status],['Finaler HTTP-Status',row.transport?.final_status],['Antwort vollständig',row.transport?.body_complete],['Parser vollständig',row.parser?.complete],['Quelleinheit vollständig',facts.complete]);
-    if(tagged.kind==='entry')fields.push(['XML-Eintrag vollständig',row.observed.complete],['lastmod-Deklarationen',sitemapLastmod(row.observed.lastmod)],['XML-Diagnosen',row.observed.diagnostics.join(' | ')]);
+    if(tagged.kind==='entry'){
+      const locations=sitemapEntryLocations(tagged);
+      fields.push(['XML-Eintrag vollständig',row.observed.complete],['lastmod-Deklarationen',sitemapLastmod(row.observed.lastmod)],['XML-Diagnosen',row.observed.diagnostics.join(' | ')],['Originale Locs · nur geladene Seite',locations.values.length?locations.values.join(' | '):'Nicht auf dieser geladenen Seite verfügbar'],['Loc-Zuordnung · nur geladene Seite',locations.scope]);
+    }
     const assessment=sitemapAssessment(tagged);
     if(assessment) {
       fields.push(['lastmod-Vorkommen',sitemapLastmodPresence(assessment.presence)],['Alle lastmod-Felder des Eintrags beobachtet',assessment.all_entry_fields_observed],['Schema-Prüfung','Sitemap 0.9 · XSD 1.0 date | dateTime'],['Separate Profilprüfung','W3C-Datumsprofil mit sechs Präzisionsstufen'],['lastmod · XSD-Union',sitemapProfileSummary(assessment,'xsd')],['lastmod · W3C-Profil',sitemapProfileSummary(assessment,'w3c_note')],['Aktualität geprüft',assessment.freshness_assessed],['Ziel-Antwortstatus geprüft',assessment.http_status_assessed]);
@@ -1620,6 +1663,10 @@
     }
     $('sitemap-membership-inspector-assessment-section').hidden=!assessment;
     $('sitemap-membership-inspector-assessment').textContent=assessment?JSON.stringify(assessment,null,2):'';
+    const target=sitemapTargetFinding(tagged);
+    $('sitemap-membership-inspector-target-section').hidden=!target;
+    $('sitemap-membership-inspector-target').textContent=target?JSON.stringify(target,null,2):'';
+    if(target)fields.push(['Original-Ziel · gespeicherter Zustand',sitemapTargetLabels[target.original_state]],['Beobachtete Original-Inlinks ohne Selbstlinks',target.observed_original_inlinks?.nonself_anchor_occurrences??null],['Original-Ziel nach Weiterleitung',target.original_observation?.final_url??null],['Gesonderter Browserbefund',sitemapRenderingLabels[target.original_observation?.rendering_state]??null],['Gesonderte Browser-End-URL',target.original_observation?.rendered_url??null],['Gesonderter Browserstatus',target.original_observation?.rendered_status??null],['Gesonderter zugelassener Alias-Abruf',target.admitted_alias_observation?.requested_url??(target.admitted_alias_pending?'Im gespeicherten Stand ausstehend':null)]);
     $('sitemap-membership-inspector-fields').innerHTML=fields.map(([label,value])=>`<dt>${escape(label)}</dt><dd>${escape(sitemapValue(value))}</dd>`).join('');
     $('sitemap-membership-inspector-data').textContent=JSON.stringify(tagged,null,2);
   }
@@ -1631,6 +1678,133 @@
     const data=[columns.map(([label])=>cell(label)).join(','),...rows.map(row=>columns.map(([,value])=>cell(value(row))).join(','))].join('\r\n');
     downloadBlob(new Blob(['\uFEFF',data],{type:'text/csv;charset=utf-8'}),`open-seo-spider-${state.crawl.id}-sitemaps-loaded-page.csv`);
     message(`${number(rows.length)} gefilterte Vorkommen der geladenen Sitemap-Seite exportiert.`);
+  }
+
+  const sitemapBundleEngine='open-seo-spider/segmented-sitemap-generation-v1';
+  const sitemapBundle={ownerId:null,token:null,error:'',status:'',result:null};
+  function resetSitemapBundle() {
+    sitemapBundle.token?.controller.abort();
+    Object.assign(sitemapBundle,{ownerId:null,token:null,error:'',status:'',result:null});
+    $('sitemap-bundle-form')?.reset();
+  }
+  function sitemapBundlePublicBase() {
+    const candidates=[...array(state.crawl?.config?.seed_urls),...array(state.crawl?.config?.sitemap_urls),...state.pages.map(page=>page.url)];
+    for(const candidate of candidates){try{const url=new URL(candidate);if(['http:','https:'].includes(url.protocol) && !url.username && !url.password)return url.origin+'/';}catch(_){}}
+    return '';
+  }
+  function renderSitemapBundleControls() {
+    if(!$('sitemap-bundle-form'))return;
+    if(sitemapBundle.ownerId!==state.crawl?.id){
+      $('sitemap-bundle-public-base').value=sitemapBundlePublicBase();
+      sitemapBundle.ownerId=state.crawl?.id??null;
+    }
+    const running=Boolean(sitemapBundle.token),ready=Boolean(state.crawl && !active() && !actionBusy());
+    $('sitemap-bundle-generate').disabled=!ready || running;
+    $('sitemap-bundle-cancel').hidden=!running;
+    $('sitemap-bundle-provided-fields').hidden=$('sitemap-bundle-lastmod-source').value!=='provided';
+    $('sitemap-bundle-external-images').disabled=!$('sitemap-bundle-images').checked || running;
+    $('sitemap-bundle-form').querySelectorAll('input,select,textarea').forEach(input=>{
+      if(input.id!=='sitemap-bundle-external-images')input.disabled=running;
+    });
+    $('sitemap-bundle-selected-crawl').textContent=state.crawl?`Ausgewählter Crawl: ${state.crawl.id}${active()?' · Erzeugung nach dem Anhalten oder Abschluss verfügbar.':''}`:'Einen gespeicherten Crawl auswählen.';
+    $('sitemap-bundle-error').hidden=!sitemapBundle.error;
+    $('sitemap-bundle-error').textContent=sitemapBundle.error;
+    $('sitemap-bundle-status').textContent=sitemapBundle.status || (ready?'Die Datei wird erst nach „Sitemap-ZIP erzeugen“ vorbereitet.':'Einen gespeicherten, angehaltenen oder abgeschlossenen Crawl auswählen.');
+    $('sitemap-bundle-result').hidden=!sitemapBundle.result;
+    if(sitemapBundle.result){
+      const result=sitemapBundle.result,mode={omit:'Ohne Änderungsdatum',captured_sitemap:'Gespeicherte Sitemap-Deklarationen',provided:'Eigene Datumswerte mit Quellenangabe'}[result.options.lastmod.source];
+      const fields=[['Gespeicherte URLs im Archiv',number(result.generated)],['Ausgeschlossene Seiten',number(result.excluded)],['Archivgröße',number(result.bytes)+' Bytes'],['Geplantes öffentliches Verzeichnis',result.options.public_base_url],['Änderungsdatum',mode],['Bilddeklarationen',result.options.include_images?(result.options.allow_external_images?'Auch andere Hosts':'Gleicher Host'):'Nicht aufgenommen'],['Sprachalternativen',result.options.include_hreflang?'Aufgenommen, soweit gespeicherte Deklarationen verwendbar sind':'Nicht aufgenommen'],['SHA-256 des Archivs',result.bundleSha],['SHA-256 des gespeicherten Berichts',result.reportSha]];
+      $('sitemap-bundle-result-fields').innerHTML=fields.map(([label,value])=>`<dt>${escape(label)}</dt><dd>${escape(value)}</dd>`).join('');
+    }else{$('sitemap-bundle-result-fields').replaceChildren();}
+  }
+  function sitemapBundleOptions() {
+    const integer=(id,label,max)=>{const input=$(id).value;if(!/^[1-9][0-9]*$/.test(input) || !Number.isSafeInteger(Number(input)) || Number(input)>max)throw new Error(`${label}: eine ganze Zahl zwischen 1 und ${number(max)} eingeben.`);return Number(input);};
+    const publicBase=$('sitemap-bundle-public-base').value;
+    let url;try{url=new URL(publicBase);}catch(_){throw new Error('Ein vollständiges öffentliches HTTP(S)-Verzeichnis eingeben.');}
+    if(!['http:','https:'].includes(url.protocol) || url.username || url.password || url.hash || url.search || !url.pathname.endsWith('/') || url.href!==publicBase)throw new Error('Das öffentliche Verzeichnis muss eine unveränderte vollständige HTTP(S)-URL ohne Zugangsdaten, Query oder Fragment sein und mit / enden.');
+    const source=$('sitemap-bundle-lastmod-source').value;
+    if(!['omit','captured_sitemap','provided'].includes(source))throw new Error('Eine unterstützte Quelle für das Änderungsdatum auswählen.');
+    const lastmod={source};
+    if(source==='provided'){
+      const raw=$('sitemap-bundle-provided-values').value;
+      if(!raw.trim())throw new Error('Eigene Datumswerte als drei Tab-getrennte Spalten eingeben: gespeicherte URL, Datum, Quelle.');
+      lastmod.values=raw.split(/\r\n|\n|\r/u).filter(line=>line!=='').map((line,index)=>{
+        const fields=line.split('\t');
+        if(fields.length!==3)throw new Error(`Datumszeile ${index+1}: genau drei Tab-getrennte Spalten verwenden.`);
+        const [page_url,value,reference]=fields;
+        let page;try{page=new URL(page_url);}catch(_){throw new Error(`Datumszeile ${index+1}: eine vollständige gespeicherte Seiten-URL eingeben.`);}
+        if(!['http:','https:'].includes(page.protocol) || page.username || page.password || page.hash || page.href!==page_url || !value.trim() || !reference.trim())throw new Error(`Datumszeile ${index+1}: eine unveränderte gespeicherte HTTP(S)-URL sowie Datum und Quellenangabe eingeben.`);
+        return {page_url,value,reference};
+      });
+      if(!lastmod.values.length)throw new Error('Mindestens eine eigene Datumszeile eingeben.');
+    }
+    const includeImages=$('sitemap-bundle-images').checked;
+    return {
+      public_base_url:publicBase,
+      max_urls_per_file:integer('sitemap-bundle-max-urls','URLs je Datei',50000),
+      max_urlset_uncompressed_bytes:integer('sitemap-bundle-max-file-bytes','URL-Sitemap-Größe',52428800),
+      max_index_uncompressed_bytes:integer('sitemap-bundle-max-index-bytes','Indexgröße',52428800),
+      max_total_output_bytes:integer('sitemap-bundle-max-total-bytes','Gesamte Ausgabe',268435456),
+      include_images:includeImages,
+      allow_external_images:includeImages && $('sitemap-bundle-external-images').checked,
+      include_hreflang:$('sitemap-bundle-hreflang').checked,
+      lastmod,
+      changefreq:$('sitemap-bundle-changefreq').value || null,
+      priority:$('sitemap-bundle-priority').value || null,
+    };
+  }
+  async function readSitemapBundleStream(response,limit,expectedLength=null) {
+    if(!response.body?.getReader)throw new Error('Dieser Browser unterstützt den begrenzten Datei-Download nicht.');
+    const reader=response.body.getReader(),chunks=[];let bytes=0;
+    try{
+      while(true){const part=await reader.read();if(part.done)break;bytes+=part.value.byteLength;if(bytes>limit || expectedLength!==null && bytes>expectedLength)throw new Error('Die Antwort überschreitet die bestätigte Dateigröße; es wird kein Download bereitgestellt.');chunks.push(part.value);}
+    }catch(error){await reader.cancel().catch(()=>{});throw error;}finally{reader.releaseLock();}
+    if(expectedLength!==null && bytes!==expectedLength)throw new Error('Das Archiv wurde nicht vollständig übertragen; es wird kein Download bereitgestellt.');
+    return {blob:new Blob(chunks),bytes};
+  }
+  async function generateSitemapBundle(event) {
+    event.preventDefault();
+    if(!state.crawl || active() || actionBusy() || sitemapBundle.token)return;
+    sitemapBundle.error='';sitemapBundle.result=null;
+    let options;try{options=sitemapBundleOptions();}catch(error){sitemapBundle.error=error.message;renderSitemapBundleControls();return;}
+    const token={id:state.crawl.id,generation:state.generation,serverGeneration:state.crawl.generation??null,controller:new AbortController()};
+    const owns=()=>sitemapBundle.token===token && state.crawl?.id===token.id && state.generation===token.generation && (state.crawl?.generation??null)===token.serverGeneration && !token.controller.signal.aborted;
+    sitemapBundle.token=token;sitemapBundle.status='Sitemap-Dateien werden aus dem gespeicherten Crawl vorbereitet …';renderSitemapBundleControls();
+    try{
+      const response=await fetch(`/api/crawls/${encodeURIComponent(token.id)}/sitemap-bundle`,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/zip'},body:JSON.stringify(options),signal:token.controller.signal});
+      if(!owns())return;
+      if(!response.ok){
+        const failure=await readSitemapBundleStream(response,65536),raw=await failure.blob.text();
+        let details;try{details=JSON.parse(raw);}catch(_){}
+        const message=typeof details?.message==='string'?details.message:typeof details?.error==='string'?details.error:`Sitemap-Dateien konnten nicht erzeugt werden (HTTP ${response.status}).`;
+        const reasonLabels={outside_public_base:'Außerhalb des öffentlichen Verzeichnisses',invalid_page_url:'Ungültige Seiten-URL',invalid_url:'Ungültige Seiten-URL',non_indexable:'Nicht indexierbare Seite',not_indexable:'Nicht indexierbare Seite',non_200:'Antwortstatus ungleich 200',non_200_status:'Antwortstatus ungleich 200',redirected:'Weitergeleitete Seite',duplicate_url:'Doppelte URL',incomplete_page:'Unvollständiger Seitenbefund'};
+        const diagnostic=details?.diagnostic_counts && typeof details.diagnostic_counts==='object' && !Array.isArray(details.diagnostic_counts)?Object.entries(details.diagnostic_counts).filter(([name,count])=>/^[a-z0-9_]+$/.test(name) && Number.isSafeInteger(count) && count>0).map(([name,count])=>`${reasonLabels[name] || 'Weitere Auslassung'}: ${number(count)}`).join(' · '):'';
+        throw new Error(message+(diagnostic?` Ausgelassene Befunde: ${diagnostic}.`:''));
+      }
+      const hash=name=>{const value=response.headers.get(name);if(!/^[a-f0-9]{64}$/.test(value??''))throw new Error('Dem Archiv fehlt eine unterstützte Prüfsumme; es wird kein Download bereitgestellt.');return value;};
+      const count=(name,positive=false)=>{const raw=response.headers.get(name);if(!/^(0|[1-9][0-9]*)$/.test(raw??'') || !Number.isSafeInteger(Number(raw)) || positive && Number(raw)<1)throw new Error('Die Archivantwort enthält keine unterstützte Dateigröße oder URL-Zählung.');return Number(raw);};
+      if(response.headers.get('content-type')?.split(';',1)[0].trim().toLowerCase()!=='application/zip' || response.headers.get('x-sitemap-generation-engine')!==sitemapBundleEngine)throw new Error('Der Server hat kein unterstütztes Sitemap-Archiv geliefert.');
+      const reportSha=hash('x-sitemap-report-sha256'),bundleSha=hash('x-sitemap-bundle-sha256'),generated=count('x-sitemap-generated-urls',true),excluded=count('x-sitemap-excluded-pages'),expected=count('content-length',true);
+      if(expected>options.max_total_output_bytes)throw new Error('Das Archiv überschreitet die angegebene Gesamtgröße; es wird kein Download bereitgestellt.');
+      const file=await readSitemapBundleStream(response,options.max_total_output_bytes,expected);
+      if(!owns())return;
+      const bytes=new Uint8Array(await file.blob.arrayBuffer());
+      if(bytes.length<4 || bytes[0]!==80 || bytes[1]!==75 || bytes[2]!==3 || bytes[3]!==4)throw new Error('Die Antwort hat keinen unterstützten ZIP-Dateikopf.');
+      if(!globalThis.crypto?.subtle)throw new Error('Dieser Browser kann die Archiv-Prüfsumme nicht verifizieren; es wird kein Download bereitgestellt.');
+      const actual=[...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(byte=>byte.toString(16).padStart(2,'0')).join('');
+      if(actual!==bundleSha)throw new Error('Die Archiv-Prüfsumme stimmt nicht überein; es wird kein Download bereitgestellt.');
+      if(!owns())return;
+      downloadBlob(new Blob([bytes],{type:'application/zip'}),`open-seo-spider-${token.id}-sitemap-bundle.zip`);
+      sitemapBundle.result={options,generated,excluded,bytes:file.bytes,reportSha,bundleSha};
+      sitemapBundle.status=`ZIP zum lokalen Download bereitgestellt: ${number(generated)} gespeicherte URLs, ${number(excluded)} ausgeschlossene Seiten. Die Dateien wurden nicht veröffentlicht.`;
+    }catch(error){if(owns()){sitemapBundle.error=error.message;sitemapBundle.status='Kein neues Archiv zum Download bereitgestellt.';}}
+    finally{if(sitemapBundle.token===token){sitemapBundle.token=null;renderSitemapBundleControls();}}
+  }
+  function bindSitemapBundleEvents() {
+    $('sitemap-bundle-form').addEventListener('submit',generateSitemapBundle);
+    $('sitemap-bundle-lastmod-source').addEventListener('change',renderSitemapBundleControls);
+    $('sitemap-bundle-images').addEventListener('change',()=>{if(!$('sitemap-bundle-images').checked)$('sitemap-bundle-external-images').checked=false;renderSitemapBundleControls();});
+    $('sitemap-bundle-cancel').addEventListener('click',()=>{if(!sitemapBundle.token)return;sitemapBundle.token.controller.abort();sitemapBundle.token=null;sitemapBundle.result=null;sitemapBundle.error='';sitemapBundle.status='Download abgebrochen. Kein neues Archiv bereitgestellt.';renderSitemapBundleControls();});
   }
 
   function validateSitemapDerived(result,reject) {
@@ -1666,6 +1840,33 @@
       }
     }
   }
+  function validateSitemapTargetAnalysis(result,token,reject){
+    const analysis=result.membership_analysis;
+    if(analysis==null){if(result.next_page_cursor!=null)reject('Seitencursor ohne gespeicherte Zielauswertung.');return;}
+    const object=v=>Boolean(v && typeof v==='object' && !Array.isArray(v)),integer=v=>Number.isSafeInteger(v) && v>=0,text=v=>typeof v==='string',hash=v=>text(v) && /^[a-f0-9]{64}$/.test(v),nullableText=v=>v===null || text(v),opaque=v=>text(v) && v.length>0 && v.length<=4096 && /^[A-Za-z0-9_-]+$/.test(v),url=v=>text(v) && v.length>0 && v.length<=65536 && !/[\u0000-\u001f\u007f]/.test(v);
+    const context=analysis.context;
+    if(!object(analysis) || !object(context) || context.engine!=='open-seo-spider/sitemap-target-inlink-analysis-v1' || typeof context.available!=='boolean' || !text(context.reason) || context.website_wide_orphan_inference!==false || !['current_declared_sources','inherited_historical_declared_sources','unavailable'].includes(context.source_scope) || context.source_scope!==result.coverage.derived?.scope || !nullableText(context.report_sha256) || context.report_sha256!==null && !hash(context.report_sha256) || context.report_bytes!==null && (!integer(context.report_bytes) || context.report_bytes>268435456) || typeof analysis.saved_pages_have_more!=='boolean')reject('Gespeicherte Zielauswertung hat keinen unterstützten gebundenen Kontext.');
+    if(!context.available){if(analysis.location_findings!==null || analysis.saved_pages!==null || analysis.saved_pages_have_more || analysis.last_saved_page_url!==null || analysis.last_saved_page_ordinal!==null || result.next_page_cursor!==null)reject('Nicht verfügbare Zielauswertung darf keine Befunde behaupten.');return;}
+    if(context.reason!=='validated_terminal_saved_report' || context.generation!==result.snapshot?.crawl_generation || !integer(context.checkpoint_revision) || context.checkpoint_revision<1 || !['completed','paused','cancelled','limited'].includes(context.outcome) || !hash(context.report_sha256) || !integer(context.saved_page_count) || !integer(context.pending_page_count) || !['completed_saved_report_observations','partial_terminal_saved_report_observations','mixed_age_selected_saved_report'].includes(context.observation_scope))reject('Zielauswertung passt nicht zu einem gespeicherten terminalen Bericht.');
+    const observation=(v,requested)=>object(v) && v.requested_url===requested && url(v.requested_url) && (v.final_url==='' || url(v.final_url)) && integer(v.report_page_ordinal) && v.report_page_ordinal<context.saved_page_count && [v.status,v.final_status,v.rendered_status].every(s=>s===null || integer(s) && s<=65535) && typeof v.indexable==='boolean' && Array.isArray(v.indexability_reasons) && v.indexability_reasons.every(text) && ['blocked_by_robots','truncated','redirect_chain_present','rendered','rendering_expected','rendered_navigation_changed'].every(k=>typeof v[k]==='boolean') && (v.rendered_url===null || url(v.rendered_url)) && (v.rendered_fetch_url===null || url(v.rendered_fetch_url)) && Object.hasOwn(sitemapRenderingLabels,v.rendering_state) && nullableText(v.error) && nullableText(v.renderer_error) && text(v.fetched_at) && Object.hasOwn(sitemapTargetLabels,v.state) && ['captured_checkpoint_history','selected_current_generation','selected_prior_generation','inherited_parent_observation'].includes(v.age_scope);
+    const inlinks=(v,target)=>object(v) && ['anchor_occurrences','nonself_anchor_occurrences','internal_nonself_anchor_occurrences','distinct_nonself_requested_sources'].every(k=>integer(v[k])) && v.nonself_anchor_occurrences<=v.anchor_occurrences && v.internal_nonself_anchor_occurrences<=v.nonself_anchor_occurrences && v.distinct_nonself_requested_sources<=v.nonself_anchor_occurrences && Array.isArray(v.samples) && v.samples.length===Math.min(v.anchor_occurrences,5) && v.samples_have_more===(v.anchor_occurrences>5) && v.samples.every(s=>object(s) && url(s.source_requested_url) && s.target_requested_url===target && integer(s.source_page_ordinal) && s.source_page_ordinal<context.saved_page_count && integer(s.link_ordinal) && text(s.text) && text(s.rel) && typeof s.internal==='boolean' && typeof s.nofollow==='boolean');
+    const originalRows=array(result.rows).filter(row=>row.kind==='location' && row.row.observed.role==='page_location');
+    if(!Array.isArray(analysis.location_findings) || analysis.location_findings.length!==originalRows.length || !Array.isArray(analysis.saved_pages) || analysis.saved_pages.length>(token.pageLimit??100))reject('Zielauswertung passt nicht zur begrenzten sichtbaren Auswahl.');
+    const seen=new Set();
+    for(const finding of analysis.location_findings){const row=originalRows.find(v=>v.row.sequence===finding.sequence)?.row;
+      if(!object(finding) || !row || seen.has(finding.sequence) || finding.observation_id!==row.observation_id || finding.occurrence_id!==row.occurrence_id || finding.entry_ordinal!==row.observed.entry_ordinal || finding.admitted_fetch_url!==row.admission.admitted_fetch_url || finding.admission_decision!==row.admission.decision || finding.original_membership_url!==(row.observed.validation_error===null && row.observed.loc_ordinal!==null?row.observed.normalized_fetch_url:null) || !Object.hasOwn(sitemapTargetLabels,finding.original_state) || typeof finding.admitted_alias_pending!=='boolean')reject('Originales Sitemap-Ziel wurde unzulässig umgebunden.');
+      seen.add(finding.sequence);
+      if(finding.original_observation!==null && (!observation(finding.original_observation,finding.original_membership_url) || finding.original_state!==finding.original_observation.state) || finding.admitted_alias_observation!==null && (finding.admitted_fetch_url===finding.original_membership_url || !observation(finding.admitted_alias_observation,finding.admitted_fetch_url)) || (finding.original_membership_url===null?finding.observed_original_inlinks!==null:!inlinks(finding.observed_original_inlinks,finding.original_membership_url)))reject('Original-, Alias- oder Inlink-Fakten passen nicht zusammen.');
+    }
+    let previous=-1;const pages=new Set();
+    const sourceEvidence=v=>integer(v.original_source_document_count) && integer(v.original_source_observation_count) && v.original_source_document_count<=v.original_source_observation_count && v.original_source_observation_count<=v.original_membership_occurrences && (v.original_source_document_count>0)===(v.original_membership_occurrences>0) && Array.isArray(v.original_source_document_samples) && v.original_source_document_samples.length===Math.min(v.original_source_document_count,5) && v.source_document_samples_have_more===(v.original_source_document_count>5) && new Set(v.original_source_document_samples.map(s=>s.task_url)).size===v.original_source_document_samples.length && v.original_source_document_samples.every(s=>object(s) && hash(s.observation_id) && url(s.task_url) && (s.source_final_url===null || url(s.source_final_url)));
+    for(const value of analysis.saved_pages){const page=value?.observation;
+      if(!object(value) || !observation(page,page?.requested_url) || page.report_page_ordinal<=previous || pages.has(page.requested_url) || !integer(value.original_membership_occurrences) || !sourceEvidence(value) || !integer(value.admitted_alias_occurrences) || !Object.hasOwn(sitemapPageMembershipLabels,value.membership) || !inlinks(value.observed_inlinks,page.requested_url) || value.listed_without_observed_nonself_inlinks!==(value.original_membership_occurrences>0 && value.observed_inlinks.nonself_anchor_occurrences===0) || (value.original_membership_occurrences>0)!==(value.membership==='listed_original') || value.membership==='not_listed_current_declared_sources' && result.coverage.derived.current_valid_original_location_negative_permitted!==true || value.membership==='not_listed_historical_declared_sources' && result.coverage.derived.historical_valid_original_location_negative_permitted!==true)reject('Gespeicherte Seitenzuordnung oder Inlink-Abdeckung ist nicht unterstützt.');
+      previous=page.report_page_ordinal;pages.add(page.requested_url);
+    }
+    const last=analysis.saved_pages.at(-1)?.observation;
+    if(analysis.last_saved_page_url!==(last?.requested_url??null) || analysis.last_saved_page_ordinal!==(last?.report_page_ordinal??null) || analysis.saved_pages_have_more && (!last || !opaque(result.next_page_cursor) || result.next_page_cursor===token.pageCursor) || !analysis.saved_pages_have_more && result.next_page_cursor!==null)reject('Gespeicherte Seitenauswahl hat keinen gültigen Fortsetzungscursor.');
+  }
   function validateSitemapEnvelope(result,token,expectedSnapshotToken) {
     const object=value=>Boolean(value && typeof value==='object' && !Array.isArray(value)),hash=value=>typeof value==='string' && /^[a-f0-9]{64}$/.test(value),integer=value=>Number.isSafeInteger(value) && value>=0,text=value=>typeof value==='string',nullableText=value=>value===null || text(value),opaque=value=>text(value) && value.length>0 && value.length<=4096 && /^[A-Za-z0-9_-]+$/.test(value);
     const reject=message=>{throw new Error(message);};
@@ -1674,6 +1875,7 @@
     if(!result.catalog_available){
       if(!['sitemap_catalog_unavailable','sqlite_history_unavailable'].includes(result.availability_reason) || result.rows!==null || result.summary!==null || result.snapshot!==null || result.snapshot_token!==null || result.inherited!==null || result.next_cursor!==null || result.has_more)reject('Nicht verfügbare Quellen dürfen keinen vollständigen leeren Stand behaupten.');
       validateSitemapDerived(result,reject);
+      validateSitemapTargetAnalysis(result,token,reject);
       return;
     }
     const summary=result.summary,snapshot=result.snapshot;
@@ -1696,6 +1898,7 @@
       if(tagged.kind==='entry' && (!object(row.observed) || !integer(row.observed.ordinal) || row.observed.ordinal<1 || typeof row.observed.complete!=='boolean' || !Array.isArray(row.observed.lastmod) || row.observed.lastmod.some(value=>!object(value) || !text(value.decoded_value)) || !Array.isArray(row.observed.diagnostics) || row.observed.diagnostics.some(value=>!text(value))))reject('XML-Eintragsbeobachtung ist beschädigt.');
     }
     validateSitemapDerived(result,reject);
+    validateSitemapTargetAnalysis(result,token,reject);
   }
   async function readSitemapPage(path,signal) {
     const response=await fetch(path,{signal,headers:{Accept:'application/json'}}),type=response.headers.get('content-type') || '';
@@ -1706,24 +1909,25 @@
     if(!response.ok){const error=new Error(typeof body.error==='string'?body.error:`HTTP ${response.status}`);error.code=body.code;error.status=response.status;throw error;}
     return body;
   }
-  async function loadSitemapPage(cursor=sitemapMembership.cursor,navigation=null) {
+  async function loadSitemapPage(cursor=sitemapMembership.cursor,navigation=null,pageCursor=sitemapMembership.pageCursor,pageNavigation=null) {
     if(!state.crawl || !sitemapSection() || sitemapMembership.token)return;
-    const current=sitemapMembership,token={id:state.crawl.id,generation:state.generation,serverGeneration:state.crawl.generation??null,revision:current.revision,kind:sitemapKind(),limit:sitemapLimit(),cursor,controller:new AbortController()};
-    const expectedSnapshotToken=navigation?current.result?.snapshot_token??null:null;
-    const owns=()=>current.token===token && token.id===state.crawl?.id && token.generation===state.generation && token.serverGeneration===(state.crawl?.generation??null) && token.revision===current.revision && token.kind===sitemapKind() && token.limit===sitemapLimit() && sitemapSection();
-    current.token=token;current.error='';current.stale=false;current.selected=null;renderSitemapMembership();
+    const current=sitemapMembership,token={id:state.crawl.id,generation:state.generation,serverGeneration:state.crawl.generation??null,revision:current.revision,kind:sitemapKind(),limit:sitemapLimit(),pageLimit:Number($('sitemap-analysis-limit').value),cursor,pageCursor,controller:new AbortController()};
+    const expectedSnapshotToken=navigation || pageNavigation?current.result?.snapshot_token??null:null;
+    const owns=()=>current.token===token && token.id===state.crawl?.id && token.generation===state.generation && token.serverGeneration===(state.crawl?.generation??null) && token.revision===current.revision && token.kind===sitemapKind() && token.limit===sitemapLimit() && token.pageLimit===Number($('sitemap-analysis-limit').value) && sitemapSection();
+    current.token=token;current.error='';current.stale=false;current.selected=null;current.selectedPage=null;renderSitemapMembership();
     try{
-      if(![200,100,50,10,1].includes(token.limit))throw new Error('Eine unterstützte Anzahl Zeilen je Seite auswählen.');
-      const query=new URLSearchParams({kind:token.kind,limit:String(token.limit)});if(cursor!==null)query.set('cursor',cursor);
+      if(![200,100,50,10,1].includes(token.limit) || ![200,100,50,10,1].includes(token.pageLimit))throw new Error('Eine unterstützte Anzahl Zeilen und gespeicherter Seiten auswählen.');
+      const query=new URLSearchParams({kind:token.kind,limit:String(token.limit),page_limit:String(token.pageLimit)});if(cursor!==null)query.set('cursor',cursor);if(pageCursor!==null)query.set('page_cursor',pageCursor);
       const result=await readSitemapPage(`/api/crawls/${encodeURIComponent(token.id)}/sitemaps?${query}`,token.controller.signal);
       if(!owns())return;
       validateSitemapEnvelope(result,token,expectedSnapshotToken);
       if(navigation==='next')current.back.push(current.cursor);else if(navigation==='back')current.back.pop();
-      current.cursor=cursor;current.result=result;
+      if(pageNavigation==='next')current.pageBack.push(current.pageCursor);else if(pageNavigation==='back')current.pageBack.pop();
+      current.cursor=cursor;current.pageCursor=pageCursor;current.result=result;
     }catch(error){
       if(owns()){
         current.stale=['stale_sitemap_cursor','invalid_sitemap_cursor','sitemap_job_snapshot_conflict'].includes(error.code);
-        if(current.stale){current.cursor=null;current.back=[];}
+        if(current.stale){current.cursor=null;current.back=[];current.pageCursor=null;current.pageBack=[];}
         current.error=error.status===413 && error.code==='sitemap_response_byte_budget'?'Diese Sitemap-Seite enthält zu umfangreiche Originaldaten. Unter „Zeilen je Seite“ weniger Zeilen wählen, um den gespeicherten Stand erneut zu laden. Es wurden keine Vorkommen abgeschnitten.':current.stale?'Der gespeicherte Sitemap-Stand wurde geändert oder der Cursor ist ungültig. „Aktuellen Stand laden“ lädt die erste Seite des aktuellen Stands.':`Sitemap-Beobachtungen nicht verfügbar: ${error.message}`;
       }
     }finally{
@@ -1738,6 +1942,12 @@
     message('CSV des gebundenen gespeicherten Sitemap-Stands angefordert. Dies bestätigt keine vollständige Quellenabdeckung.');
   }
   function bindSitemapEvents() {
+    $('sitemap-analysis-limit').addEventListener('change',()=>{sitemapMembership.pageCursor=null;sitemapMembership.pageBack=[];loadSitemapPage(sitemapMembership.cursor,null,null);});
+    $('sitemap-analysis-search').addEventListener('input',renderSitemapTargetAnalysis);
+    $('sitemap-analysis-filter').addEventListener('change',renderSitemapTargetAnalysis);
+    $('sitemap-analysis-next').addEventListener('click',()=>{if(sitemapUsable() && sitemapMembership.result?.membership_analysis?.saved_pages_have_more)loadSitemapPage(sitemapMembership.cursor,null,sitemapMembership.result.next_page_cursor,'next');});
+    $('sitemap-analysis-prev').addEventListener('click',()=>{if(sitemapUsable() && sitemapMembership.pageBack.length)loadSitemapPage(sitemapMembership.cursor,null,sitemapMembership.pageBack.at(-1),'back');});
+    $('sitemap-analysis-inspector-close').addEventListener('click',()=>{sitemapMembership.selectedPage=null;renderSitemapSavedPageInspector();});
     $('sitemap-membership-kind').addEventListener('change',()=>{resetSitemapMembership();renderSitemapMembership();loadSitemapPage();});
     $('sitemap-membership-limit').addEventListener('change',()=>{resetSitemapMembership();loadSitemapPage(null);});
     $('sitemap-membership-search').addEventListener('input',renderSitemapMembership);
@@ -2438,6 +2648,7 @@
     window.SavedComparisonUI?.bind({ downloadBlob, selectedJob: () => state.crawl?.id });
     bindResourceEvents();
     bindSitemapEvents();
+    bindSitemapBundleEvents();
     bindContentEvents();
     $('policy-settings').addEventListener('input', invalidatePolicyPreview);
     $('policy-settings').addEventListener('change', invalidatePolicyPreview);
