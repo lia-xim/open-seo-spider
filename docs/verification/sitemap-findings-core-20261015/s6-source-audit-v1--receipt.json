@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "audit": "s6-source-audit-v1",
+  "created_utc": "2026-10-14T22:47:36.201241+00:00",
+  "status": "READ_ONLY_SOURCE_DESIGN_NO_IMPLEMENTATION",
+  "root_head": "c8f539b (Root-declared, no Git command)",
+  "source_manifest_sha256": "a31936510381cca40901eb547f15090a77c833f617f84f51f67b057fe7a5714e",
+  "source_files": 265,
+  "documents": [
+    {
+      "path": "AUDIT.md",
+      "sha256": "2414c2b45b32aaae1fc5ab16311f5ec5ab9878a6d03e1113841d4642b5b503c6",
+      "bytes": 16419
+    },
+    {
+      "path": "source-pins.json",
+      "sha256": "c036da5625620a182c75ff6fda2ac62691a3cad667d8d1ad139b68391b3d7ba5"
+    }
+  ],
+  "verified_product_pins": 15,
+  "key_facts": [
+    "VerifiedSourceRead exposes summary/context/connection/selected scope only; no record/link visitor",
+    "Current same-TX preparation has actual source token but callback retains header summary/context only",
+    "Persisted measurements are XML-only and A-only measurements remain valid distinct evidence",
+    "Only exact B link associates measured capture to actual raw Document; expected ID/task equality insufficient",
+    "Global first omission marker has no per-source identity or omitted count",
+    "Current task inventory profile permits1M/32MiB aggregate; no universal8KiB task cap and RawNone early coverage does not validate tasks",
+    "Existing pure projector separates exact/lower-bound/unavailable counts/decoded bytes, namespace/integrity and membership retention",
+    "Selected historical capture binding and current config/generation must not be rewritten or conflated"
+  ],
+  "proposed_minimal_api": {
+    "root_common_hook": "PreparedSitemapRead.source: Option<&VerifiedSourceRead> borrowed from actual same-TX verify result",
+    "reader_method": "VerifiedSourceRead::visit_measurements(&self,&SitemapReadControl,impl for<row> FnMut(&SitemapSourceStoredMeasurement,Option<&SitemapSourceCommitAssociation>)->anyhow::Result<()>)->anyhow::Result<()>",
+    "composite_proposal": "visit_all_source_evidence(SourceEvidenceReadInput{connection,raw,source},&control,FnMut(SourceEvidenceRef))->Result<SourceEvidenceScope>",
+    "model_handshake_required": true,
+    "schema_migration_required": false,
+    "fake_measurement_or_none_to_zero_allowed": false
+  },
+  "cost_boundaries": [
+    "Ordinary bounded record/link/document/task+window with SQL join work; no fullSource/raw/task Vec required",
+    "Selected historical materialization remains unchanged separate gap",
+    "Global omitted history cannot be reconstructed from fixed marker",
+    "Large opaque task response/cursor budgets must be explicit, no truncation"
+  ],
+  "test_count_delta": 0,
+  "executed": [
+    "Bounded source/doc reads and symbol searches",
+    "15 actual product SHA/byte checks against frozen265 source",
+    "Own audit/source-pin/receipt writes only"
+  ],
+  "not_run": [
+    "Implementation",
+    "Git command/write",
+    "Cargo/compiler/tests",
+    "SQLite/fixtures",
+    "HTTP/native/browser",
+    "Runtime/services"
+  ],
+  "product_changes": false,
+  "remaining": "Root decides exact model/cursor/projection API and ownership before implementation; all runtime gates remain held"
+}

@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "status": "PASS_ISOLATED_GENERATOR_PREVIEW_CONTROLS_ONLY",
+  "publisher_sha256": "1b9a11de5034e651b5751cdd4b1639810911007880e1889947959cf9f5545704",
+  "generator_sha256": "4515a89bab506506659dfb460e43aa50d22aae6caf7a9c8a1babb324cef950a1",
+  "ledger_before_sha256": "829410f2a511f7934b33ae6c3759854f59255c48c320b0d0595ec9dca4d9de20",
+  "granular_sha256": "e85b205fd6d061c96043c05ea2e6ffa3dbbe6a0f390c07bb8f1ffaf22f316962",
+  "publisher_evaluated": false,
+  "children_spawned": false,
+  "root_fs_writes": 0,
+  "product_tests_executed": 0,
+  "results": [
+    {
+      "name": "actual_proposed_ledger_full_generator_render_and_check",
+      "matched_expected_result": true,
+      "error": null,
+      "memory_todo_writes": 1,
+      "root_fs_writes": 0,
+      "output_bytes": 267967,
+      "output_sha256": "54ff553fb7259d75b9fb7bdcfc3a41e2a16baf8a0e0a4fadc5575a7f0bbf9cd9",
+      "messages": [
+        "Written docs/FEATURE_TODO.md: 144 grouped capabilities, with exact catalog acceptance/evidence.",
+        "PASS: 144 unique grouped capabilities; 31/67/46; 416 filters; 32 workflows."
+      ]
+    },
+    {
+      "name": "wrong_granular_shape_fails_before_memory_todo_write",
+      "matched_expected_result": true,
+      "error": "Review granular inventory count changes explicitly.",
+      "memory_todo_writes": 0,
+      "root_fs_writes": 0,
+      "output_bytes": null,
+      "output_sha256": null,
+      "messages": []
+    },
+    {
+      "name": "unknown_run_reference_fails_before_memory_todo_write",
+      "matched_expected_result": true,
+      "error": "Unknown verification run __independent_missing_run__ on modes.spider",
+      "memory_todo_writes": 0,
+      "root_fs_writes": 0,
+      "output_bytes": null,
+      "output_sha256": null,
+      "messages": []
+    }
+  ]
+}

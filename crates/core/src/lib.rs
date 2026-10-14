@@ -35,6 +35,8 @@ mod robots_sitemap_source;
 mod serp;
 mod sitemap;
 mod sitemap_coverage;
+mod sitemap_findings;
+pub use sitemap_findings::*;
 mod sitemap_generation;
 pub use sitemap_generation::*;
 mod sitemap_ledger;
@@ -137,8 +139,8 @@ pub use store::{
     CrawlStore, SITEMAP_RAW_READ_ENGINE, SITEMAP_READ_WINDOW_ENGINE, SitemapRawReadContext,
     SitemapRawReadRequest, SitemapRawReadWindow, SitemapRawRowKind, SitemapReadSnapshot,
     SitemapReadState, SitemapReadWindow, SitemapReadWindowError, SitemapReadWindowExpectedContext,
-    SitemapStoredRowsFilter, SitemapVerifiedReadHeader, SitemapVerifiedStoredRows,
-    sitemap_read_state_sha256,
+    SitemapStoredRowsFilter, SitemapVerifiedFindings, SitemapVerifiedReadHeader,
+    SitemapVerifiedStoredRows, sitemap_read_state_sha256,
 };
 pub use urls::normalize_url;
 

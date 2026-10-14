@@ -740,3 +740,6 @@ async fn real_sibling_documents_distinguish_multiple_sitemaps_from_same_document
 
 #[path = "sitemap_membership_analysis/window_tests.rs"]
 mod window_tests;
+
+#[path = "sitemap_membership_analysis/findings_store_tests.rs"]
+mod findings_store_tests;

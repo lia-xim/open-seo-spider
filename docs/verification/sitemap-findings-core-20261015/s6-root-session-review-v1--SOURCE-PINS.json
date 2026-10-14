@@ -1,0 +1,136 @@
+{
+  "schema": 1,
+  "root_manifest_sha256": "952b832dbec985155b8aaf7189f97fad6cdd7032688d68a1bfba492cf31ac0a0",
+  "examined_payloads": [
+    {
+      "path": "crates/core/src/lib.rs",
+      "sha256": "bf52f615fd9d0aa971aa7342ff9d3fb2a29ede1e433eb7226b22b48e172c76c5",
+      "bytes": 6329,
+      "before_sha256": "fc3c27868fb7653aa0f5151bdf507caa74bf078fe6969a5945e3ed91ea18d270"
+    },
+    {
+      "path": "crates/core/src/store.rs",
+      "sha256": "bdf8838fa21adf58b360ae8473ac63b73cefe68e22ed611c769dae7c0918128e",
+      "bytes": 148465,
+      "before_sha256": "a576766c998e78106b2f819ab9599f9cf83d3bac0d5c35f12ba9d68aee74c8af"
+    },
+    {
+      "path": "crates/core/src/store/sitemap_read_context.rs",
+      "sha256": "8ec29a7dc2b1aec7ee3f8ee390d8fd8b4a149f84f7397dbd295705aed48a6757",
+      "bytes": 8655,
+      "before_sha256": "5eea771c4c4c89af020d4625165306c22fc3842485e8275b3451c6f8ba864f0e"
+    },
+    {
+      "path": "crates/core/src/sitemap_findings.rs",
+      "sha256": "723200ced8fafb9652a89f6a8f19fa416dffbee3a62ddd780093c5380e36d1ef",
+      "bytes": 15024,
+      "before_sha256": null
+    },
+    {
+      "path": "crates/core/src/store/sitemap_findings_read.rs",
+      "sha256": "bd26a8d7a467688462eb952b0b279029735afe11be1b74c0482db4ee19485cf7",
+      "bytes": 17332,
+      "before_sha256": null
+    },
+    {
+      "path": "crates/core/src/store/sitemap_findings_read_tests.rs",
+      "sha256": "a8d7f6eb43ae50b0abad715d94d9ef3e8a3cdebe9d0f232f78b54ff4f8ea965b",
+      "bytes": 15123,
+      "before_sha256": null
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis_tests.rs",
+      "sha256": "34b30c534cb54be245d43a1ad9597f860b80e3567b5210ed739e3d1419972a31",
+      "bytes": 28218,
+      "before_sha256": "cc16bce9457addf249918a8852cce96e57461b0419c45422a3f606edab3256ad"
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis/findings_store_tests.rs",
+      "sha256": "2479dfa15d551d853b28804a8f79ad7661442e9dd3a65b4772b533540786968d",
+      "bytes": 9341,
+      "before_sha256": null
+    }
+  ],
+  "interface_dependency_pins": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-predicate-core-v1/manifest.json",
+      "role": "pure predicate exact input signatures",
+      "sha256": "9ecf9b4b8dbd2989de904e609657a8e9cad74deaa5e8a743ceb689f6bc7e4749",
+      "bytes": 2556
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-source-reader-core-v1/manifest.json",
+      "role": "frozen Source reader interface and exhausted boolean",
+      "sha256": "53f224a96d6e54fec03a5d3057abcb5d7382f1c6cd4d4d0ea813a967878f669c",
+      "bytes": 3357
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-source-reader-core-v1/crates/core/src/sitemap_findings/source.rs",
+      "role": "actual Source lifetime/interface declarations examined",
+      "sha256": "5f164f53da8b2992d68788a638c0309e119eca05713e6593b79ca7793d03a481",
+      "bytes": 18170
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-page-reader-core-v1/manifest.json",
+      "role": "frozen Page traversal interface",
+      "sha256": "abe095c0e5eb6cd4666fec5ec41dbd4af95a6598978ad9aa0d1747120c12604d",
+      "bytes": 2755
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-page-reader-core-v1/crates/core/src/sitemap_membership_analysis/findings.rs",
+      "role": "actual Page owned candidate and exhausted interface",
+      "sha256": "889b1756f0df1be7fb913c98e27bfb69482c9286dfe3d863f8b6be28ef017052",
+      "bytes": 8015
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-page-reader-core-v1/crates/core/src/sitemap_membership_analysis.rs",
+      "role": "crate-private traversal reexport",
+      "sha256": "7f31e0afa148da04eb07c3b2d2fe4e198354c869839446b79bdc520dd69bbb1a",
+      "bytes": 45381
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-csv-streaming-source-v1/manifest.json",
+      "role": "immutable previous source basis",
+      "sha256": "a31936510381cca40901eb547f15090a77c833f617f84f51f67b057fe7a5714e",
+      "bytes": 86709
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-core-integration-v1/crates/core/src/sitemap_membership_analysis/window.rs",
+      "role": "existing Analysis proof lifetime shape",
+      "sha256": "3b64a5c18cb130a022a3b9416c321c5e1b30bd3cdf4dc8c26192348dbe6a5d6f",
+      "bytes": 14084
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-core-integration-v1/crates/core/src/models.rs",
+      "role": "actual fixture max_pages defaultNone",
+      "sha256": "1b9e6b6d3330d6fd20d0e83feca2c891dd0b00cb9a6746b66b9254556f64e4ee",
+      "bytes": 36613
+    }
+  ],
+  "source_named_tests": [
+    "findings_actual_legacy_tasks_are_unknown_not_fabricated_measurements_or_robots_xml",
+    "findings_sparse_zero_match_windows_progress_to_actual_match_after_four_hundred",
+    "findings_source_pages_one_ten_two_hundred_equal_same_tx_full_visitor_without_duplicates",
+    "findings_known_source_match_selection_does_not_turn_unmeasured_tasks_into_within_limit",
+    "findings_invalid_query_role_or_missing_expected_is_typed_preflight_without_writes",
+    "findings_changed_selector_stale_context_precedes_nonexistent_position_and_callback",
+    "findings_raw_none_actual_task_mutation_invalidates_context_before_cursor_lookup",
+    "findings_unavailable_saved_analysis_is_none_not_empty_and_full_visit_fails",
+    "findings_actual_readonly_same_tx_visits_survive_wal_task_writer_without_requests_or_writes",
+    "findings_pre_cancelled_control_prevents_user_callback_and_restores_typed_stop",
+    "findings_hash_sink_uses_exact_typed_serialization_and_inclusive_budget",
+    "findings_public_crawler_exact_original_seven_filters_use_actual_domains_and_qualified_results",
+    "findings_public_native_obstructions_orphans_and_alias_control_follow_original_identity",
+    "findings_actual_saved_cohort_beyond_four_hundred_sparse_windows_and_full_visitor_agree",
+    "findings_actual_report_integrity_and_changed_query_fail_before_output",
+    "findings_actual_live_resume_keeps_source_evidence_available_without_saved_page_join"
+  ],
+  "source_named_test_count": 16,
+  "executed_tests": 0,
+  "actual_checks": [
+    "hash/byte equality of all8 frozen payloads",
+    "new16 named tests exact match to frozen manifest",
+    "read-only old-source versus new-source diff of lib/store/read_context/test-parent",
+    "actual Source/Page private interface/lifetime declarations"
+  ]
+}

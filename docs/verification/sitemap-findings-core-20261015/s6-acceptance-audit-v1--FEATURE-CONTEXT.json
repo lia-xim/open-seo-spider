@@ -1,0 +1,100 @@
+{
+  "granular_acceptance": {
+    "artifact": "docs/parity/granular-acceptance.json",
+    "named_filters": 416,
+    "workflow_contracts": 32,
+    "parity_status": "NOT_PROVEN"
+  },
+  "related_features": [
+    {
+      "id": "sitemap.discovery",
+      "name": "Robots and explicit sitemaps",
+      "status": "implemented",
+      "phase": "P2",
+      "source_ids": [
+        "sitemaps"
+      ],
+      "acceptance_test": "Load a sitemap index, gzipped child sitemap and explicit input; handle loops/malformed XML safely.",
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "core-unit"
+          ],
+          "proves": "Robots/explicit sitemap inputs, nested sitemap indexes, multiple explicit origins, XML escaping, malformed-root rejection and bounded/seen discovery exist and are fixture-tested."
+        },
+        {
+          "verification_run_ids": [
+            "sitemap-derived-assessment-local"
+          ],
+          "proves": "Actual native explicit duplicate roots, recursive index/self-cycle, duplicate compressed child and malformed XML retain original occurrences, complete-source facts and bounded deduplication. Current workspace includes parser/transport/ledger cases. Independent discovery acceptance is met; vendor parity is unproven."
+        }
+      ],
+      "parity_evidence": [],
+      "group": "sitemap",
+      "remaining_acceptance": [],
+      "parity_status": "NOT_PROVEN"
+    },
+    {
+      "id": "sitemap.coverage",
+      "name": "Sitemap coverage and orphan checks",
+      "status": "partial",
+      "phase": "P2",
+      "source_ids": [
+        "sitemaps"
+      ],
+      "acceptance_test": "Compare fetched pages and sitemap locations; distinguish not listed, sitemap-only and incomplete crawl.",
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures",
+            "analysis"
+          ],
+          "proves": "Sitemap-only locations are fetched with discovery source; observed graph orphan candidates explicitly retain incomplete/limited coverage boundaries."
+        },
+        {
+          "verification_run_ids": [
+            "sitemap-derived-assessment-local"
+          ],
+          "proves": "Actual same-transaction inventory permits qualified Complete/KnownEmpty/Unknown for current or historical declared sources; missing/denied/incomplete sources remain unknown, invalid Page Locs separate. Target/inlink joins and full website coverage remain open."
+        }
+      ],
+      "parity_evidence": [],
+      "group": "sitemap",
+      "remaining_acceptance": [
+        "Join persisted original memberships to fetched page and inlink observations, distinguishing not-listed, sitemap-only, pending, unavailable and historical evidence without inventing whole-website completeness."
+      ],
+      "parity_status": "NOT_PROVEN"
+    },
+    {
+      "id": "sitemap.validity",
+      "name": "Sitemap URL validation",
+      "status": "partial",
+      "phase": "P2",
+      "source_ids": [
+        "sitemaps"
+      ],
+      "acceptance_test": "Find redirect/non-200/non-indexable URLs and invalid lastmod values in fixture XML.",
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "core-fixtures"
+          ],
+          "proves": "Discovered sitemap locations receive ordinary status/indexability observations and errors."
+        },
+        {
+          "verification_run_ids": [
+            "sitemap-derived-assessment-local"
+          ],
+          "proves": "Raw lastmod fields retained and assessed against named XSD1.0 date|dateTime and W3C precision profiles; actual API/SDK/browser handle calendar errors, duplicate elements, incomplete prefixes and undetermined leap seconds. Target redirect/non200/nonindexable findings remain open."
+        }
+      ],
+      "parity_evidence": [],
+      "group": "sitemap",
+      "remaining_acceptance": [
+        "Produce explicit sitemap target redirect/non200/nonindexable findings from actual page observations; preserve original membership beside rewritten fetch identities."
+      ],
+      "parity_status": "NOT_PROVEN"
+    }
+  ]
+}

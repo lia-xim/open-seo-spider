@@ -10,7 +10,9 @@ use rusqlite::{Connection, OptionalExtension, params};
 use serde::{Deserialize, Serialize, de::DeserializeOwned};
 use std::collections::{BTreeMap, BTreeSet};
 
+mod findings;
 mod window;
+pub(crate) use findings::{validate_saved_page_candidate_facts, visit_saved_page_candidates};
 use window::MembershipBasis;
 #[cfg(test)]
 pub(crate) use window::prepare_window_analysis;
@@ -770,50 +772,68 @@ fn project_rows_inner(
             })
             .collect::<Result<Vec<_>>>()?,
     );
-    let mut members = membership.counts(connection, &page_window, control)?;
+    let members = membership.counts(connection, &page_window, control)?;
     out.last_saved_page_url = page_window.last().map(|v| v.requested_url.clone());
     out.last_saved_page_ordinal = page_window.last().map(|v| v.report_page_ordinal);
-    out.saved_pages = Some(
-        page_window
-            .into_iter()
-            .map(|page| {
-                control.checkpoint()?;
-                let counts = members.remove(&page.requested_url).unwrap_or_default();
-                let observed_inlinks = inlinks
-                    .get(&page.requested_url)
-                    .cloned()
-                    .unwrap_or_default();
-                let membership = if counts.occurrences > 0 {
-                    SitemapSavedPageMembership::ListedOriginal
-                } else if coverage.current_valid_original_location_negative_permitted {
-                    SitemapSavedPageMembership::NotListedCurrentDeclaredSources
-                } else if coverage.historical_valid_original_location_negative_permitted {
-                    SitemapSavedPageMembership::NotListedHistoricalDeclaredSources
-                } else {
-                    SitemapSavedPageMembership::Unknown
-                };
-                observations.remove(&page.requested_url);
-                let original_source_document_count = counts.document_count;
-                let original_source_observation_count = counts.observation_count;
-                let original_source_document_samples = counts.samples;
-                Ok(SitemapSavedPageFinding {
-                    listed_without_observed_nonself_inlinks: counts.occurrences > 0
-                        && observed_inlinks.nonself_anchor_occurrences == 0,
-                    observation: page,
-                    membership,
-                    original_membership_occurrences: counts.occurrences,
-                    original_source_document_count,
-                    original_source_observation_count,
-                    source_document_samples_have_more: original_source_document_count
-                        > original_source_document_samples.len() as u64,
-                    original_source_document_samples,
-                    admitted_alias_occurrences: counts.aliases,
-                    observed_inlinks,
-                })
-            })
-            .collect::<Result<Vec<_>>>()?,
-    );
+    for page in &page_window {
+        observations.remove(&page.requested_url);
+    }
+    out.saved_pages = Some(build_saved_page_findings(
+        page_window,
+        members,
+        &inlinks,
+        coverage,
+        control,
+    )?);
     Ok(out)
+}
+
+// Shared by the unchanged inventory window and the private full traversal.
+// Callers supply actual same-transaction pages and whole-source/anchor counts.
+fn build_saved_page_findings(
+    pages: Vec<SitemapTargetObservation>,
+    mut members: BTreeMap<String, window::WindowCounts>,
+    inlinks: &BTreeMap<String, SitemapObservedInlinks>,
+    coverage: &crate::SitemapCoverage,
+    control: &SitemapReadControl,
+) -> Result<Vec<SitemapSavedPageFinding>> {
+    pages
+        .into_iter()
+        .map(|page| {
+            control.checkpoint()?;
+            let counts = members.remove(&page.requested_url).unwrap_or_default();
+            let observed_inlinks = inlinks
+                .get(&page.requested_url)
+                .cloned()
+                .unwrap_or_default();
+            let membership = if counts.occurrences > 0 {
+                SitemapSavedPageMembership::ListedOriginal
+            } else if coverage.current_valid_original_location_negative_permitted {
+                SitemapSavedPageMembership::NotListedCurrentDeclaredSources
+            } else if coverage.historical_valid_original_location_negative_permitted {
+                SitemapSavedPageMembership::NotListedHistoricalDeclaredSources
+            } else {
+                SitemapSavedPageMembership::Unknown
+            };
+            let original_source_document_count = counts.document_count;
+            let original_source_observation_count = counts.observation_count;
+            let original_source_document_samples = counts.samples;
+            Ok(SitemapSavedPageFinding {
+                listed_without_observed_nonself_inlinks: counts.occurrences > 0
+                    && observed_inlinks.nonself_anchor_occurrences == 0,
+                observation: page,
+                membership,
+                original_membership_occurrences: counts.occurrences,
+                original_source_document_count,
+                original_source_observation_count,
+                source_document_samples_have_more: original_source_document_count
+                    > original_source_document_samples.len() as u64,
+                original_source_document_samples,
+                admitted_alias_occurrences: counts.aliases,
+                observed_inlinks,
+            })
+        })
+        .collect()
 }
 
 const PAGE_COLUMNS: &str = "json_extract(p.value,'$.url'),json_extract(p.value,'$.final_url'),json_extract(p.value,'$.status'),json_extract(p.value,'$.final_status'),json_extract(p.value,'$.indexable'),json_extract(p.value,'$.indexability_reasons'),json_extract(p.value,'$.blocked_by_robots'),json_extract(p.value,'$.error'),json_extract(p.value,'$.truncated'),json_extract(p.value,'$.renderer_error'),coalesce(json_array_length(p.value,'$.redirect_chain'),0)>0,json_extract(p.value,'$.fetched_at'),json_extract(m.value,'$.operation.targets'),CAST(p.key AS INTEGER),json_extract(p.value,'$.rendered'),json_extract(p.value,'$.rendered_url'),json_extract(p.value,'$.rendered_status'),coalesce(json_type(m.value,'$.config.renderer')='object',0),json_extract(p.value,'$.content_type'),json_extract(p.value,'$.pdf') IS NULL,json_extract(p.value,'$.image_metadata') IS NULL";

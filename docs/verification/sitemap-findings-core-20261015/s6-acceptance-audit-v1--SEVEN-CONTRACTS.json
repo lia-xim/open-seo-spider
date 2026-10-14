@@ -1,0 +1,645 @@
+[
+  {
+    "id": "filter.sitemaps-urls-in-sitemap",
+    "reference_argument": "Sitemaps:URLs in Sitemap",
+    "tab": "Sitemaps",
+    "filter_name": "URLs in Sitemap",
+    "kind": "audit_or_analysis_view",
+    "priority": "R2",
+    "catalog_feature_ids": [
+      "sitemap.discovery",
+      "sitemap.coverage",
+      "sitemap.validity"
+    ],
+    "contract_status": "DRAFT_CONCRETE",
+    "positive_fixture": {
+      "setup": "Crawled /a listed in sitemap"
+    },
+    "negative_fixture": {
+      "setup": "Crawled /b absent from all loaded sitemaps"
+    },
+    "independent_expected": "Retain sitemap membership/provenance and every affected URL; large-format validation can be tested without fetching >500 reference URLs.",
+    "data_fields": [
+      "sitemap_documents",
+      "membership",
+      "uncompressed_bytes",
+      "loc_count",
+      "URL_status/indexability"
+    ],
+    "filter_parameters": [
+      "sitemap_sources",
+      "crawl_linked_sitemaps",
+      "max_documents"
+    ],
+    "edge_fixture_contracts": [
+      "Nested indexes/cycles, gzip, malformed XML, relative loc, duplicate entries, xhtml alternates.",
+      "Orphan detection limited to captured graph; no data from unconfigured sitemap is not absence proof."
+    ],
+    "acceptance_basis": "Independently authored test proposal from observed CLI argument identity and official product documentation. Exact reference predicate is not assumed.",
+    "reference_evidence": {
+      "availability": "OBSERVED_CLI_HELP",
+      "filter_membership": "NOT_PROVEN",
+      "column_observations": "docs/parity/reference-fixture/normalized-observations.json where corresponding fields exist"
+    },
+    "independent_evidence": {
+      "filter_status": "NOT_ASSESSED_INDIVIDUALLY",
+      "related_capability_slices": [
+        {
+          "id": "sitemap.discovery",
+          "status": "partial",
+          "implementation_evidence": [
+            {
+              "verification_run_ids": [
+                "core-fixtures",
+                "core-unit"
+              ],
+              "proves": "Robots/explicit sitemap inputs, nested sitemap indexes, multiple explicit origins, XML escaping, malformed-root rejection and bounded/seen discovery exist and are fixture-tested."
+            }
+          ]
+        },
+        {
+          "id": "sitemap.coverage",
+          "status": "partial",
+          "implementation_evidence": [
+            {
+              "verification_run_ids": [
+                "core-fixtures",
+                "analysis"
+              ],
+              "proves": "Sitemap-only locations are fetched with discovery source; observed graph orphan candidates explicitly retain incomplete/limited coverage boundaries."
+            }
+          ]
+        },
+        {
+          "id": "sitemap.validity",
+          "status": "partial",
+          "implementation_evidence": [
+            {
+              "verification_run_ids": [
+                "core-fixtures"
+              ],
+              "proves": "Discovered sitemap locations receive ordinary status/indexability observations and errors."
+            }
+          ]
+        }
+      ],
+      "policy": "Related capability evidence is context, not proof this filter or its edge cases are implemented. No automatic missing/planned assignment."
+    },
+    "source_urls": [
+      "https://www.screamingfrog.co.uk/seo-spider/user-guide/tabs/",
+      "https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/"
+    ],
+    "parity_status": "NOT_PROVEN"
+  },
+  {
+    "id": "filter.sitemaps-urls-not-in-sitemap",
+    "reference_argument": "Sitemaps:URLs not in Sitemap",
+    "tab": "Sitemaps",
+    "filter_name": "URLs not in Sitemap",
+    "kind": "audit_or_analysis_view",
+    "priority": "R2",
+    "catalog_feature_ids": [
+      "sitemap.discovery",
+      "sitemap.coverage",
+      "sitemap.validity"
+    ],
+    "contract_status": "DRAFT_CONCRETE",
+    "positive_fixture": {
+      "setup": "Crawled /b absent from configured sitemap set"
+    },
+    "negative_fixture": {
+      "setup": "Crawled /a listed"
+    },
+    "independent_expected": "Retain sitemap membership/provenance and every affected URL; large-format validation can be tested without fetching >500 reference URLs.",
+    "data_fields": [
+      "sitemap_documents",
+      "membership",
+      "uncompressed_bytes",
+      "loc_count",
+      "URL_status/indexability"
+    ],
+    "filter_parameters": [
+      "sitemap_sources",
+      "crawl_linked_sitemaps",
+      "max_documents"
+    ],
+    "edge_fixture_contracts": [
+      "Nested indexes/cycles, gzip, malformed XML, relative loc, duplicate entries, xhtml alternates.",
+      "Orphan detection limited to captured graph; no data from unconfigured sitemap is not absence proof."
+    ],
+    "acceptance_basis": "Independently authored test proposal from observed CLI argument identity and official product documentation. Exact reference predicate is not assumed.",
+    "reference_evidence": {
+      "availability": "OBSERVED_CLI_HELP",
+      "filter_membership": "NOT_PROVEN",
+      "column_observations": "docs/parity/reference-fixture/normalized-observations.json where corresponding fields exist"
+    },
+    "independent_evidence": {
+      "filter_status": "NOT_ASSESSED_INDIVIDUALLY",
+      "related_capability_slices": [
+        {
+          "id": "sitemap.discovery",
+          "status": "partial",
+          "implementation_evidence": [
+            {
+              "verification_run_ids": [
+                "core-fixtures",
+                "core-unit"
+              ],
+              "proves": "Robots/explicit sitemap inputs, nested sitemap indexes, multiple explicit origins, XML escaping, malformed-root rejection and bounded/seen discovery exist and are fixture-tested."
+            }
+          ]
+        },
+        {
+          "id": "sitemap.coverage",
+          "status": "partial",
+          "implementation_evidence": [
+            {
+              "verification_run_ids": [
+                "core-fixtures",
+                "analysis"
+              ],
+              "proves": "Sitemap-only locations are fetched with discovery source; observed graph orphan candidates explicitly retain incomplete/limited coverage boundaries."
+            }
+          ]
+        },
+        {
+          "id": "sitemap.validity",
+          "status": "partial",
+          "implementation_evidence": [
+            {
+              "verification_run_ids": [
+                "core-fixtures"
+              ],
+              "proves": "Discovered sitemap locations receive ordinary status/indexability observations and errors."
+            }
+          ]
+        }
+      ],
+      "policy": "Related capability evidence is context, not proof this filter or its edge cases are implemented. No automatic missing/planned assignment."
+    },
+    "source_urls": [
+      "https://www.screamingfrog.co.uk/seo-spider/user-guide/tabs/",
+      "https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/"
+    ],
+    "parity_status": "NOT_PROVEN"
+  },
+  {
+    "id": "filter.sitemaps-orphan-urls",
+    "reference_argument": "Sitemaps:Orphan URLs",
+    "tab": "Sitemaps",
+    "filter_name": "Orphan URLs",
+    "kind": "audit_or_analysis_view",
+    "priority": "R2",
+    "catalog_feature_ids": [
+      "sitemap.discovery",
+      "sitemap.coverage",
+      "sitemap.validity"
+    ],
+    "contract_status": "DRAFT_CONCRETE",
+    "positive_fixture": {
+      "setup": "/orphan listed only in sitemap and fetched through sitemap import"
+    },
+    "negative_fixture": {
+      "setup": "/linked listed and anchor-discovered"
+    },
+    "independent_expected": "Retain sitemap membership/provenance and every affected URL; large-format validation can be tested without fetching >500 reference URLs.",
+    "data_fields": [
+      "sitemap_documents",
+      "membership",
+      "uncompressed_bytes",
+      "loc_count",
+      "URL_status/indexability"
+    ],
+    "filter_parameters": [
+      "sitemap_sources",
+      "crawl_linked_sitemaps",
+      "max_documents"
+    ],
+    "edge_fixture_contracts": [
+      "Nested indexes/cycles, gzip, malformed XML, relative loc, duplicate entries, xhtml alternates.",
+      "Orphan detection limited to captured graph; no data from unconfigured sitemap is not absence proof."
+    ],
+    "acceptance_basis": "Independently authored test proposal from observed CLI argument identity and official product documentation. Exact reference predicate is not assumed.",
+    "reference_evidence": {
+      "availability": "OBSERVED_CLI_HELP",
+      "filter_membership": "NOT_PROVEN",
+      "column_observations": "docs/parity/reference-fixture/normalized-observations.json where corresponding fields exist"
+    },
+    "independent_evidence": {
+      "filter_status": "NOT_ASSESSED_INDIVIDUALLY",
+      "related_capability_slices": [
+        {
+          "id": "sitemap.discovery",
+          "status": "partial",
+          "implementation_evidence": [
+            {
+              "verification_run_ids": [
+                "core-fixtures",
+                "core-unit"
+              ],
+              "proves": "Robots/explicit sitemap inputs, nested sitemap indexes, multiple explicit origins, XML escaping, malformed-root rejection and bounded/seen discovery exist and are fixture-tested."
+            }
+          ]
+        },
+        {
+          "id": "sitemap.coverage",
+          "status": "partial",
+          "implementation_evidence": [
+            {
+              "verification_run_ids": [
+                "core-fixtures",
+                "analysis"
+              ],
+              "proves": "Sitemap-only locations are fetched with discovery source; observed graph orphan candidates explicitly retain incomplete/limited coverage boundaries."
+            }
+          ]
+        },
+        {
+          "id": "sitemap.validity",
+          "status": "partial",
+          "implementation_evidence": [
+            {
+              "verification_run_ids": [
+                "core-fixtures"
+              ],
+              "proves": "Discovered sitemap locations receive ordinary status/indexability observations and errors."
+            }
+          ]
+        }
+      ],
+      "policy": "Related capability evidence is context, not proof this filter or its edge cases are implemented. No automatic missing/planned assignment."
+    },
+    "source_urls": [
+      "https://www.screamingfrog.co.uk/seo-spider/user-guide/tabs/",
+      "https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/"
+    ],
+    "parity_status": "NOT_PROVEN"
+  },
+  {
+    "id": "filter.sitemaps-non-indexable-urls-in-sitemap",
+    "reference_argument": "Sitemaps:Non-Indexable URLs in Sitemap",
+    "tab": "Sitemaps",
+    "filter_name": "Non-Indexable URLs in Sitemap",
+    "kind": "audit_or_analysis_view",
+    "priority": "R2",
+    "catalog_feature_ids": [
+      "sitemap.discovery",
+      "sitemap.coverage",
+      "sitemap.validity"
+    ],
+    "contract_status": "DRAFT_CONCRETE",
+    "positive_fixture": {
+      "setup": "Sitemap URL404/301/noindex/canonicalized/blocked"
+    },
+    "negative_fixture": {
+      "setup": "Indexable direct200 sitemap URL"
+    },
+    "independent_expected": "Retain sitemap membership/provenance and every affected URL; large-format validation can be tested without fetching >500 reference URLs.",
+    "data_fields": [
+      "sitemap_documents",
+      "membership",
+      "uncompressed_bytes",
+      "loc_count",
+      "URL_status/indexability"
+    ],
+    "filter_parameters": [
+      "sitemap_sources",
+      "crawl_linked_sitemaps",
+      "max_documents"
+    ],
+    "edge_fixture_contracts": [
+      "Nested indexes/cycles, gzip, malformed XML, relative loc, duplicate entries, xhtml alternates.",
+      "Orphan detection limited to captured graph; no data from unconfigured sitemap is not absence proof."
+    ],
+    "acceptance_basis": "Independently authored test proposal from observed CLI argument identity and official product documentation. Exact reference predicate is not assumed.",
+    "reference_evidence": {
+      "availability": "OBSERVED_CLI_HELP",
+      "filter_membership": "NOT_PROVEN",
+      "column_observations": "docs/parity/reference-fixture/normalized-observations.json where corresponding fields exist"
+    },
+    "independent_evidence": {
+      "filter_status": "NOT_ASSESSED_INDIVIDUALLY",
+      "related_capability_slices": [
+        {
+          "id": "sitemap.discovery",
+          "status": "partial",
+          "implementation_evidence": [
+            {
+              "verification_run_ids": [
+                "core-fixtures",
+                "core-unit"
+              ],
+              "proves": "Robots/explicit sitemap inputs, nested sitemap indexes, multiple explicit origins, XML escaping, malformed-root rejection and bounded/seen discovery exist and are fixture-tested."
+            }
+          ]
+        },
+        {
+          "id": "sitemap.coverage",
+          "status": "partial",
+          "implementation_evidence": [
+            {
+              "verification_run_ids": [
+                "core-fixtures",
+                "analysis"
+              ],
+              "proves": "Sitemap-only locations are fetched with discovery source; observed graph orphan candidates explicitly retain incomplete/limited coverage boundaries."
+            }
+          ]
+        },
+        {
+          "id": "sitemap.validity",
+          "status": "partial",
+          "implementation_evidence": [
+            {
+              "verification_run_ids": [
+                "core-fixtures"
+              ],
+              "proves": "Discovered sitemap locations receive ordinary status/indexability observations and errors."
+            }
+          ]
+        }
+      ],
+      "policy": "Related capability evidence is context, not proof this filter or its edge cases are implemented. No automatic missing/planned assignment."
+    },
+    "source_urls": [
+      "https://www.screamingfrog.co.uk/seo-spider/user-guide/tabs/",
+      "https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/"
+    ],
+    "parity_status": "NOT_PROVEN"
+  },
+  {
+    "id": "filter.sitemaps-urls-in-multiple-sitemaps",
+    "reference_argument": "Sitemaps:URLs in Multiple Sitemaps",
+    "tab": "Sitemaps",
+    "filter_name": "URLs in Multiple Sitemaps",
+    "kind": "audit_or_analysis_view",
+    "priority": "R2",
+    "catalog_feature_ids": [
+      "sitemap.discovery",
+      "sitemap.coverage",
+      "sitemap.validity"
+    ],
+    "contract_status": "DRAFT_CONCRETE",
+    "positive_fixture": {
+      "setup": "Same /a occurs in two sibling sitemap documents"
+    },
+    "negative_fixture": {
+      "setup": "Only one sitemap contains /a"
+    },
+    "independent_expected": "Retain sitemap membership/provenance and every affected URL; large-format validation can be tested without fetching >500 reference URLs.",
+    "data_fields": [
+      "sitemap_documents",
+      "membership",
+      "uncompressed_bytes",
+      "loc_count",
+      "URL_status/indexability"
+    ],
+    "filter_parameters": [
+      "sitemap_sources",
+      "crawl_linked_sitemaps",
+      "max_documents"
+    ],
+    "edge_fixture_contracts": [
+      "Nested indexes/cycles, gzip, malformed XML, relative loc, duplicate entries, xhtml alternates.",
+      "Orphan detection limited to captured graph; no data from unconfigured sitemap is not absence proof."
+    ],
+    "acceptance_basis": "Independently authored test proposal from observed CLI argument identity and official product documentation. Exact reference predicate is not assumed.",
+    "reference_evidence": {
+      "availability": "OBSERVED_CLI_HELP",
+      "filter_membership": "NOT_PROVEN",
+      "column_observations": "docs/parity/reference-fixture/normalized-observations.json where corresponding fields exist"
+    },
+    "independent_evidence": {
+      "filter_status": "NOT_ASSESSED_INDIVIDUALLY",
+      "related_capability_slices": [
+        {
+          "id": "sitemap.discovery",
+          "status": "partial",
+          "implementation_evidence": [
+            {
+              "verification_run_ids": [
+                "core-fixtures",
+                "core-unit"
+              ],
+              "proves": "Robots/explicit sitemap inputs, nested sitemap indexes, multiple explicit origins, XML escaping, malformed-root rejection and bounded/seen discovery exist and are fixture-tested."
+            }
+          ]
+        },
+        {
+          "id": "sitemap.coverage",
+          "status": "partial",
+          "implementation_evidence": [
+            {
+              "verification_run_ids": [
+                "core-fixtures",
+                "analysis"
+              ],
+              "proves": "Sitemap-only locations are fetched with discovery source; observed graph orphan candidates explicitly retain incomplete/limited coverage boundaries."
+            }
+          ]
+        },
+        {
+          "id": "sitemap.validity",
+          "status": "partial",
+          "implementation_evidence": [
+            {
+              "verification_run_ids": [
+                "core-fixtures"
+              ],
+              "proves": "Discovered sitemap locations receive ordinary status/indexability observations and errors."
+            }
+          ]
+        }
+      ],
+      "policy": "Related capability evidence is context, not proof this filter or its edge cases are implemented. No automatic missing/planned assignment."
+    },
+    "source_urls": [
+      "https://www.screamingfrog.co.uk/seo-spider/user-guide/tabs/",
+      "https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/"
+    ],
+    "parity_status": "NOT_PROVEN"
+  },
+  {
+    "id": "filter.sitemaps-xml-sitemap-with-over-50k-urls",
+    "reference_argument": "Sitemaps:XML Sitemap with over 50k URLs",
+    "tab": "Sitemaps",
+    "filter_name": "XML Sitemap with over 50k URLs",
+    "kind": "audit_or_analysis_view",
+    "priority": "R2",
+    "catalog_feature_ids": [
+      "sitemap.discovery",
+      "sitemap.coverage",
+      "sitemap.validity"
+    ],
+    "contract_status": "DRAFT_CONCRETE",
+    "positive_fixture": {
+      "setup": "Documents with49999/50000/50001 loc elements"
+    },
+    "negative_fixture": {
+      "setup": "Small valid sitemap"
+    },
+    "independent_expected": "Retain sitemap membership/provenance and every affected URL; large-format validation can be tested without fetching >500 reference URLs.",
+    "data_fields": [
+      "sitemap_documents",
+      "membership",
+      "uncompressed_bytes",
+      "loc_count",
+      "URL_status/indexability"
+    ],
+    "filter_parameters": [
+      "sitemap_sources",
+      "crawl_linked_sitemaps",
+      "max_documents"
+    ],
+    "edge_fixture_contracts": [
+      "Nested indexes/cycles, gzip, malformed XML, relative loc, duplicate entries, xhtml alternates.",
+      "Orphan detection limited to captured graph; no data from unconfigured sitemap is not absence proof."
+    ],
+    "acceptance_basis": "Independently authored test proposal from observed CLI argument identity and official product documentation. Exact reference predicate is not assumed.",
+    "reference_evidence": {
+      "availability": "OBSERVED_CLI_HELP",
+      "filter_membership": "NOT_PROVEN",
+      "column_observations": "docs/parity/reference-fixture/normalized-observations.json where corresponding fields exist"
+    },
+    "independent_evidence": {
+      "filter_status": "NOT_ASSESSED_INDIVIDUALLY",
+      "related_capability_slices": [
+        {
+          "id": "sitemap.discovery",
+          "status": "partial",
+          "implementation_evidence": [
+            {
+              "verification_run_ids": [
+                "core-fixtures",
+                "core-unit"
+              ],
+              "proves": "Robots/explicit sitemap inputs, nested sitemap indexes, multiple explicit origins, XML escaping, malformed-root rejection and bounded/seen discovery exist and are fixture-tested."
+            }
+          ]
+        },
+        {
+          "id": "sitemap.coverage",
+          "status": "partial",
+          "implementation_evidence": [
+            {
+              "verification_run_ids": [
+                "core-fixtures",
+                "analysis"
+              ],
+              "proves": "Sitemap-only locations are fetched with discovery source; observed graph orphan candidates explicitly retain incomplete/limited coverage boundaries."
+            }
+          ]
+        },
+        {
+          "id": "sitemap.validity",
+          "status": "partial",
+          "implementation_evidence": [
+            {
+              "verification_run_ids": [
+                "core-fixtures"
+              ],
+              "proves": "Discovered sitemap locations receive ordinary status/indexability observations and errors."
+            }
+          ]
+        }
+      ],
+      "policy": "Related capability evidence is context, not proof this filter or its edge cases are implemented. No automatic missing/planned assignment."
+    },
+    "source_urls": [
+      "https://www.screamingfrog.co.uk/seo-spider/user-guide/tabs/",
+      "https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/"
+    ],
+    "parity_status": "NOT_PROVEN"
+  },
+  {
+    "id": "filter.sitemaps-xml-sitemap-over-50mb",
+    "reference_argument": "Sitemaps:XML Sitemap over 50MB",
+    "tab": "Sitemaps",
+    "filter_name": "XML Sitemap over 50MB",
+    "kind": "audit_or_analysis_view",
+    "priority": "R2",
+    "catalog_feature_ids": [
+      "sitemap.discovery",
+      "sitemap.coverage",
+      "sitemap.validity"
+    ],
+    "contract_status": "DRAFT_CONCRETE",
+    "positive_fixture": {
+      "setup": "Uncompressed XML bytes just below/equal/above50MiB"
+    },
+    "negative_fixture": {
+      "setup": "Small XML; compress large one separately"
+    },
+    "independent_expected": "Retain sitemap membership/provenance and every affected URL; large-format validation can be tested without fetching >500 reference URLs.",
+    "data_fields": [
+      "sitemap_documents",
+      "membership",
+      "uncompressed_bytes",
+      "loc_count",
+      "URL_status/indexability"
+    ],
+    "filter_parameters": [
+      "sitemap_sources",
+      "crawl_linked_sitemaps",
+      "max_documents"
+    ],
+    "edge_fixture_contracts": [
+      "Nested indexes/cycles, gzip, malformed XML, relative loc, duplicate entries, xhtml alternates.",
+      "Orphan detection limited to captured graph; no data from unconfigured sitemap is not absence proof."
+    ],
+    "acceptance_basis": "Independently authored test proposal from observed CLI argument identity and official product documentation. Exact reference predicate is not assumed.",
+    "reference_evidence": {
+      "availability": "OBSERVED_CLI_HELP",
+      "filter_membership": "NOT_PROVEN",
+      "column_observations": "docs/parity/reference-fixture/normalized-observations.json where corresponding fields exist"
+    },
+    "independent_evidence": {
+      "filter_status": "NOT_ASSESSED_INDIVIDUALLY",
+      "related_capability_slices": [
+        {
+          "id": "sitemap.discovery",
+          "status": "partial",
+          "implementation_evidence": [
+            {
+              "verification_run_ids": [
+                "core-fixtures",
+                "core-unit"
+              ],
+              "proves": "Robots/explicit sitemap inputs, nested sitemap indexes, multiple explicit origins, XML escaping, malformed-root rejection and bounded/seen discovery exist and are fixture-tested."
+            }
+          ]
+        },
+        {
+          "id": "sitemap.coverage",
+          "status": "partial",
+          "implementation_evidence": [
+            {
+              "verification_run_ids": [
+                "core-fixtures",
+                "analysis"
+              ],
+              "proves": "Sitemap-only locations are fetched with discovery source; observed graph orphan candidates explicitly retain incomplete/limited coverage boundaries."
+            }
+          ]
+        },
+        {
+          "id": "sitemap.validity",
+          "status": "partial",
+          "implementation_evidence": [
+            {
+              "verification_run_ids": [
+                "core-fixtures"
+              ],
+              "proves": "Discovered sitemap locations receive ordinary status/indexability observations and errors."
+            }
+          ]
+        }
+      ],
+      "policy": "Related capability evidence is context, not proof this filter or its edge cases are implemented. No automatic missing/planned assignment."
+    },
+    "source_urls": [
+      "https://www.screamingfrog.co.uk/seo-spider/issues/sitemaps/xml-sitemap-over-50mb/"
+    ],
+    "parity_status": "NOT_PROVEN"
+  }
+]

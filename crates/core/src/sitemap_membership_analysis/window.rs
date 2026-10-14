@@ -22,6 +22,18 @@ impl VerifiedAnalysisRead<'_, '_> {
     pub(crate) fn context(&self) -> &SitemapAnalysisContext {
         &self.prepared.base.context
     }
+    // Only the sibling findings traversal can reuse these actual borrowed
+    // proofs. No constructor, Connection or mutable field becomes public.
+    pub(super) fn findings_basis(
+        &self,
+    ) -> (
+        &Connection,
+        Option<&VerifiedRawRead<'_>>,
+        &crate::SitemapCoverage,
+        &PreparedContext,
+    ) {
+        (self.connection, self.raw, &self.coverage, &self.prepared)
+    }
 }
 #[cfg(test)]
 pub(crate) fn prepare_window_analysis<'a, 'conn>(

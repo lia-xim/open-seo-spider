@@ -6905,7 +6905,8 @@
         "Sitemap-Filter S1–S7 einzeln abnehmen: Quellen-/Ziel-/Inlink-/Mehrfachdokumente, tatsächliche 49.999/50.000/50.001 Einträge und 52.428.799/52.428.800/52.428.801 dekodierte XML-Bytes; aktuelle 8MiB-/Ledger-Ressourcenstopps ersetzen diese Protokollprüfung nicht. Generierte Segmentgrenzen sind keine Prüfung großer gefetchter Quellen.",
         "Vorheriger S4-Raw-Quellstand (5091eb9): verifizierte Raw-/Source-SQL-Durchläufe, Same-TX-Store-Fenster und separater sitemap-rows-CLI-Leser integriert. 36 zusätzliche Regressionen geschrieben, 246 Eingabedateien und 211 erforderliche Namen eingefroren; künftig mindestens 993 Gesamttests. Workspace-Formatprüfung und begrenzte Quellreviews einschließlich zwei Quellkorrekturen bestehen. Kompilierung, alle neuen Tests und native Läufe NICHT AUSGEFÜHRT. Rich-Coverage-/Analyse-/Selected-Kontexte, echte Browser/API/MCP-Umstellung, CSV-Streaming, physische Größen/RAM/Latenz und vollständige sieben Filter bleiben offen. Keine S4-Vollabnahme oder Installation.",
         "Vorheriger S4-Rich-Quellstand (d105fb8): vollständige Coverage-/Inventarhash-Projektion, gespeicherte Quellen-/Seitenanalyse und produktiven App-Inventarhandler mit kompaktem Same-TX-Fenster verbunden. Inventar und gepufferter CSV-Export teilen den neuen Zustandshash. 42 zusätzliche Regressionen geschrieben, 255 Eingabedateien und 253 erforderliche Namen eingefroren; künftig mindestens 1035 Gesamttests. Workspace-Formatprüfung und begrenzte Quellreviews einschließlich früher Feldnamen-Speichergrenze bestehen. Kompilierung, Tests und native/API-/MCP-/Browserabnahme NICHT AUSGEFÜHRT. Selected-Parent-Kompatibilität bleibt materialisierend; CSV-Streaming, tatsächliche Größen/RAM/Latenz, Recovery und sieben vollständige Filter bleiben offen. Keine S4-Vollabnahme oder Installation.",
-        "Aktueller S4-CSV-Quellschritt: gemeinsamer tatsächlicher Same-TX-Kontext, opake wiederholbare Allstored-Session, kontrollierte Reader und zwei Formatterdurchläufe mit begrenzter Queue4/64KiB sowie Endblock erst nach Core-Return und tatsächlichem Worker-Join integriert. Cancellation/Fristen/Drop/Shutdown-Drain als Quellcode vorhanden. 35 zusätzliche Testfunktionen geschrieben (9 Store/10 Control/3 Writer/13 App-Download); 265 Compiler-Eingaben und 288 Pflichtnamen eingefroren, künftig mindestens 1070 Gesamttests. Tatsächliche Workspace-Formatprüfung und begrenzte unabhängige Quellreviews bestehen; Compiler, Clippy, Tests und native/API-/CLI-/MCP-/Browserläufe NICHT AUSGEFÜHRT. Physische neue64MiB/+1-Grenze, Selected-Untervarianten, große Quellen/RAM/Latenz/Recovery und sieben vollständige Filter bleiben offen. Keine S4-Vollabnahme oder Installation."
+        "Vorheriger S4-CSV-Quellstand (c8f539b): gemeinsamer tatsächlicher Same-TX-Kontext, opake wiederholbare Allstored-Session, kontrollierte Reader und zwei Formatterdurchläufe mit begrenzter Queue4/64KiB sowie Endblock erst nach Core-Return und tatsächlichem Worker-Join integriert. Cancellation/Fristen/Drop/Shutdown-Drain als Quellcode vorhanden. 35 zusätzliche Testfunktionen geschrieben (9 Store/10 Control/3 Writer/13 App-Download); 265 Compiler-Eingaben und 288 Pflichtnamen eingefroren, künftig mindestens 1070 Gesamttests. Tatsächliche Workspace-Formatprüfung und begrenzte unabhängige Quellreviews bestehen; Compiler, Clippy, Tests und native/API-/CLI-/MCP-/Browserläufe NICHT AUSGEFÜHRT. Physische neue64MiB/+1-Grenze, Selected-Untervarianten, große Quellen/RAM/Latenz/Recovery und sieben vollständige Filter bleiben offen. Keine S4-Vollabnahme oder Installation.",
+        "Aktueller S6-Core-Quellschritt: sieben getrennte Finding-Prädikate auf vollständigen gespeicherten SavedPage-/SourceAttempt-Domänen, typisierte PDF-/Robots-Qualifikation, tatsächliche A-only/exakteB/Legacy-/Task-Nachweise, vollständiger Taskhash auch ohne Raw-Katalog, gemeinsame verifizierte Read-TX, wiederholbare Allstored-Session und kontextgebundene dünne Trefferfortsetzungen implementiert. Globale Zusatzfeldprüfung vor Callback schließt ausgeschlossene beschädigte Berichtsteile ein. 53 zusätzliche Testfunktionen geschrieben (18 Root/11 Source/6 Seitenleser/18 Modell); 275 Compiler-Eingaben und341 Pflichtnamen eingefroren, künftig mindestens1123 Gesamttests. Tatsächliche Formatprüfung und begrenzte unabhängige Quellreviews bestehen; Compiler, Clippy, Tests und native Läufe NICHT AUSGEFÜHRT. API-/CLI-/MCP-/UI-Anbindung und eigener vollständiger Finding-Export bleiben zu implementieren, Größen/RAM/Latenz/Recovery/Selected/Linux/Container abzunehmen. Keine S6-Vollabnahme, keine Herstellerparität und keine Installation."
       ],
       "documentation": [
         "docs/parity/sitemap-b12-plan.md",
@@ -6937,7 +6938,9 @@
         "docs/verification/sitemap-rich-read-preparation.json",
         "docs/parity/sitemap-csv-streaming-plan.md",
         "docs/sitemap-csv-streaming.md",
-        "docs/verification/sitemap-csv-streaming-preparation.json"
+        "docs/verification/sitemap-csv-streaming-preparation.json",
+        "docs/sitemap-findings-core.md",
+        "docs/verification/sitemap-findings-core-preparation.json"
       ],
       "gates": {
         "source_review": "PARSER_AND_FETCH_NO_CONCRETE_P1_P2",
@@ -6989,11 +6992,12 @@
         "source_protocol_s3_completion": "SOURCE_INTEGRATED_RUNTIME_ACCEPTANCE_PUBLIC_FILTERS_PHYSICAL50M_CRASH_RESTART_STILL_OPEN",
         "source_large_processing_s4_source": "WIP17_AUTHORED_FROZEN238_MIN957_NAMED175_CFG64M_FETCH_STORE_FMT_PASS_COMPILE_TEST_NATIVE_NOT_RUN",
         "source_large_processing_s4_completion": "COMPACT_RICH_CONTEXT_APP_CSV_TRANSPORT_SOURCE_INTEGRATED_SELECTED_MATERIALIZING_PHYSICAL_NATIVE_UI_MEMORY_PLATFORM_NOT_PROVEN",
-        "source_filter_s6_surfaces": "PROPOSED_FULL_STORED_QUERY_EXPORT_PAGE_SOURCE_DOMAINS_NOT_IMPLEMENTED",
+        "source_filter_s6_surfaces": "CORE_SOURCE_IMPLEMENTED_ADAPTERS_API_CLI_MCP_UI_AND_DISTINCT_FULL_EXPORT_NOT_IMPLEMENTED_RUNTIME_NOT_RUN",
         "source_large_processing_s4_streaming": "WIP36_AUTHORED_FROZEN246_MIN993_NAMED211_RAW_SOURCE_SQL_STORE_CLI_FMT_PASS_COMPILE_TEST_NATIVE_NOT_RUN",
         "source_large_processing_s4_rich_read": "WIP42_AUTHORED_FROZEN255_MIN1035_NAMED253_COVERAGE_ANALYSIS_STORE_APP_SHAREDCSVSTATE_FMT_STATICREVIEW_PASS_COMPILE_TEST_NATIVE_NOT_RUN",
         "source_large_processing_s4_csv_transport": "WIP35_AUTHORED_FROZEN265_MIN1070_NAMED288_SAME_TX_TWOPASS_QUEUE4_64K_POSITIVE_TAIL_CORE_RETURN_JOIN_CANCEL_DRAIN_FMT_STATIC_REVIEW_COMPILE_TEST_NATIVE_NOT_RUN",
-        "source_large_processing_s4_csv_physical": "OPEN_NEW_ROUTE_67108864_67108865_ACTUAL_PREVIOUS_AB1_PRODUCER_SEED_ONLY"
+        "source_large_processing_s4_csv_physical": "OPEN_NEW_ROUTE_67108864_67108865_ACTUAL_PREVIOUS_AB1_PRODUCER_SEED_ONLY",
+        "source_filter_s6_core": "WIP53_AUTHORED_FROZEN275_MIN1123_NAMED341_TYPED_PREDICATES_FULL_STORED_SAME_TX_SPARSE_CURSOR_GLOBAL_TAIL_PREFLIGHT_FMT_STATIC_REVIEW_COMPILE_TEST_NATIVE_NOT_RUN"
       },
       "reference_parity": "NOT_PROVEN",
       "proof_run_ids": [

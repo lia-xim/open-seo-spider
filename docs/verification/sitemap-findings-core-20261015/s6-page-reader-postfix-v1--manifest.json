@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "name": "s6-page-reader-postfix-v1",
+  "immutable": true,
+  "created_utc": "2026-10-14T23:08:15.4191031Z",
+  "status": "AUTHORED_GUARDED_POSTFIX_NOT_COMPILED_NOT_RUN",
+  "dependency_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-page-reader-core-v1\\manifest.json",
+    "sha256": "abe095c0e5eb6cd4666fec5ec41dbd4af95a6598978ad9aa0d1747120c12604d"
+  },
+  "entries": [
+    {
+      "path": "crates/core/src/sitemap_membership_analysis.rs",
+      "before_sha256": "7f31e0afa148da04eb07c3b2d2fe4e198354c869839446b79bdc520dd69bbb1a",
+      "after_sha256": "014d3feb8c2220214b912e0901670c867e7abf370307d90dd4f950c26759f26e",
+      "bytes": 45420
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis/findings.rs",
+      "before_sha256": "889b1756f0df1be7fb913c98e27bfb69482c9286dfe3d863f8b6be28ef017052",
+      "after_sha256": "37988de4ad4830df3b30ebda2e799226c10787869974eb3d0eda78a2d67afbf0",
+      "bytes": 10059
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis/findings_tests.rs",
+      "before_sha256": "ee259f2c6e7f4d92bc89d1ff93af7afec858f190f350ca3f45e5067740d033f2",
+      "after_sha256": "05615f075cdea3e57606f6e15da3dae2c3f75cee0ed773944fa2471ce23464a4",
+      "bytes": 27892
+    }
+  ],
+  "api": "validate_saved_page_candidate_facts(&VerifiedAnalysisRead,&SitemapReadControl)->anyhow::Result<()>",
+  "root_call_required": "Only available SavedPage domain; actual prepared callback before new context/user callback",
+  "new_authored_tests": 1,
+  "total_authored_page_tests": 6,
+  "executed_tests": 0,
+  "legacy_visitor_exact_unchanged": true,
+  "artifacts": [
+    {
+      "path": "HANDOFF.md",
+      "bytes": 3657,
+      "sha256": "c07c90e9a0da25596408f778080232e8467cfb63693227d296ccfd178d63ef84"
+    },
+    {
+      "path": "checks.json",
+      "bytes": 448,
+      "sha256": "4e79865fc23bf6e7e147503e2bc406723008107f1cc289bfc4432379ace053f2"
+    },
+    {
+      "path": "authored-tests.json",
+      "bytes": 773,
+      "sha256": "3ec26d8343a83d9970963a9afbe4c0123e6e70c2dbdf009f6148c90adec95499"
+    }
+  ],
+  "root_product_git_runtime_mutated": false
+}

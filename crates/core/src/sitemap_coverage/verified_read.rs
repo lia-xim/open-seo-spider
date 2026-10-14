@@ -96,11 +96,11 @@ fn validate_context(
     Ok(())
 }
 
-fn task_table(connection: &Connection) -> Result<bool> {
+pub(crate) fn task_table(connection: &Connection) -> Result<bool> {
     Ok(connection.query_row("SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE type='table' AND name='discovery_frontier')", [], |r| r.get(0))?)
 }
 
-fn visit_tasks(
+pub(crate) fn visit_tasks(
     connection: &Connection,
     exists: bool,
     control: &SitemapReadControl,

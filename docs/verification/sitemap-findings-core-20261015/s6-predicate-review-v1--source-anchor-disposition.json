@@ -1,0 +1,46 @@
+{
+  "kind": "author_source_anchor_disposition_not_independent_review",
+  "initial_concern": "Robots-only SourceMeasurement sequence accepted as XML candidate anchor",
+  "disposition": "Unreachable through required verified Source token; no postfix made",
+  "evidence": [
+    {
+      "path": "crates/core/src/sitemap_source_schema.sql",
+      "lines": "2-6",
+      "fact": "source_kind CHECK='sitemap'"
+    },
+    {
+      "path": "crates/core/src/sitemap_source_measurement.rs",
+      "lines": "351-357",
+      "fact": "Binding source_kind must equal SitemapXml; otherwise InvalidBinding"
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store.rs",
+      "lines": "828-854",
+      "fact": "Shared canonical read_record_row additionally requires SQL source_kind='sitemap'"
+    }
+  ],
+  "remaining_negative": "An actual robots legacy document cannot be a LegacySourceDocument cursor because legacy_exists SQL filters source_kind BINARY sitemap. No valid robots measurement was fabricated for a regression.",
+  "source_pins": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-findings-core-integration-v1\\crates\\core\\src\\sitemap_findings.rs",
+      "sha256": "723200ced8fafb9652a89f6a8f19fa416dffbee3a62ddd780093c5380e36d1ef"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-findings-core-integration-v1\\crates\\core\\src\\sitemap_membership_analysis.rs",
+      "sha256": "7f31e0afa148da04eb07c3b2d2fe4e198354c869839446b79bdc520dd69bbb1a"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-findings-core-integration-v1\\crates\\core\\src\\sitemap_source_measurement.rs",
+      "sha256": "33ee0337c8a72566cba2ef2055b9585e5fa3eb75c999bbdd570738e605a07f5d"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-findings-core-integration-v1\\crates\\core\\src\\sitemap_source_store.rs",
+      "sha256": "fe59417d12939e62e65c78ce894d7d34d55f2708ee792d1c21f3a04c438678ae"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-findings-core-integration-v1\\crates\\core\\src\\sitemap_source_schema.sql",
+      "sha256": "f79d0d0f9a61336374833fbf43a9c58963da8cc5bb53dfe1dfa4b0c5dff65edc"
+    }
+  ],
+  "execution": "NOT_RUN_COMPUTE_HOLD"
+}

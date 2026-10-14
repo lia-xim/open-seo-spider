@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "kind": "independent_bounded_s6_page_reader_static_review",
+  "status": "STATIC_REVIEW_ONLY_NOT_COMPILED_NOT_RUN",
+  "manifest_pins": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-page-reader-core-v1\\manifest.json",
+      "sha256": "abe095c0e5eb6cd4666fec5ec41dbd4af95a6598978ad9aa0d1747120c12604d"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-page-reader-postfix-v1\\manifest.json",
+      "sha256": "26a7b7a7da1ac0fb98329f4f05469f760ce81b3accd4825d1838fc85bba3296e"
+    }
+  ],
+  "payload_pins": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-page-reader-core-v1\\crates\\core\\src\\sitemap_membership_analysis.rs",
+      "sha256": "7f31e0afa148da04eb07c3b2d2fe4e198354c869839446b79bdc520dd69bbb1a",
+      "bytes": 45381
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-page-reader-core-v1\\crates\\core\\src\\sitemap_membership_analysis\\window.rs",
+      "sha256": "3b64a5c18cb130a022a3b9416c321c5e1b30bd3cdf4dc8c26192348dbe6a5d6f",
+      "bytes": 14084
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-page-reader-core-v1\\crates\\core\\src\\sitemap_membership_analysis\\findings.rs",
+      "sha256": "889b1756f0df1be7fb913c98e27bfb69482c9286dfe3d863f8b6be28ef017052",
+      "bytes": 8015
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-page-reader-core-v1\\crates\\core\\src\\sitemap_membership_analysis\\findings_tests.rs",
+      "sha256": "ee259f2c6e7f4d92bc89d1ff93af7afec858f190f350ca3f45e5067740d033f2",
+      "bytes": 25030
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-page-reader-postfix-v1\\crates\\core\\src\\sitemap_membership_analysis.rs",
+      "sha256": "014d3feb8c2220214b912e0901670c867e7abf370307d90dd4f950c26759f26e",
+      "bytes": 45420
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-page-reader-postfix-v1\\crates\\core\\src\\sitemap_membership_analysis\\findings.rs",
+      "sha256": "37988de4ad4830df3b30ebda2e799226c10787869974eb3d0eda78a2d67afbf0",
+      "bytes": 10059
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-page-reader-postfix-v1\\crates\\core\\src\\sitemap_membership_analysis\\findings_tests.rs",
+      "sha256": "05615f075cdea3e57606f6e15da3dae2c3f75cee0ed773944fa2471ce23464a4",
+      "bytes": 27892
+    }
+  ],
+  "baseline_analysis": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-csv-streaming-source-v1\\crates\\core\\src\\sitemap_membership_analysis.rs",
+    "sha256": "e3e407fefc99c0402424d45affceb69925bdc544551d0d166e02efd352811b18"
+  },
+  "actual_root_facade": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-findings-core-integration-v1\\crates\\core\\src\\store\\sitemap_findings_read.rs",
+    "sha256": "7838365c51c02b9aad7c2cc11a74609dda81b0c3e4a5dcace7fbf2811ccb3030",
+    "placement": "Available SavedPage branch calls validate_saved_page_candidate_facts before constructing findings context, Expected comparison, session, or invoking user callback"
+  },
+  "exact_legacy_text_checks": [
+    {
+      "start": "const PAGE_COLUMNS:",
+      "end_exclusive": "fn read_page_window(",
+      "exact_text_equal": true
+    },
+    {
+      "start": "fn prepare_context_inner(",
+      "end_exclusive": "fn project_rows(",
+      "exact_text_equal": true
+    },
+    {
+      "start": "fn read_inlinks(",
+      "end_exclusive": "#[cfg(test)]",
+      "exact_text_equal": true
+    }
+  ],
+  "postfix_original_visitor_unchanged": true,
+  "authored_tests_read": [
+    "actual_saved_page_domain_preflight_rejects_excluded_tail_and_before_after_without_callback",
+    "actual_saved_page_candidate_traversal_crosses_200_400_and_preserves_legacy_findings",
+    "actual_saved_page_candidates_retain_typed_pdf_complete_partial_error_and_encrypted",
+    "actual_saved_page_candidates_distinguish_robots_policy_failure_from_disallow",
+    "actual_saved_page_candidates_preserve_absent_null_and_reject_invalid_late_typed_fields",
+    "actual_saved_page_candidate_positions_and_mid_traversal_cancellation_remain_typed"
+  ],
+  "authored_count": 6,
+  "executed_count": 0,
+  "confirmed_findings": [],
+  "result": "No confirmed finding in the bounded static scope",
+  "scope": [
+    "actual private prepared-token/Connection/Raw pointer/coverage binding",
+    "global ALL-report typed target+extra facts validator with exact page count and contiguous ordinals",
+    "after/filter/work-break cannot hide invalid typed tail because Root preflight precedes callback",
+    "zero-based actual report ordinal anchor and explicit wrong/outside-domain rejection",
+    "one active ordered report cursor, <=200 candidate batches, visitor break false versus exhausted true",
+    "shared original requested identity, DISTINCT original XML task/observation and inlink projections",
+    "typed robots warning/PDF object/status presence versus absent/null/error",
+    "all six actual public-Crawler fixture bodies and explicit rehashed corruption controls",
+    "legacy shared parser/context/inlinks exact-text comparison"
+  ],
+  "source_line_pins": [
+    "postfix findings.rs:20-58 extra_facts",
+    "postfix findings.rs:65-113 all-report validation",
+    "postfix findings.rs:118-250 candidate traversal and batch EOF",
+    "postfix analysis.rs:793-837 shared saved-page builder",
+    "v1 window.rs:27-38 private findings_basis accessor",
+    "Root sitemap_findings_read.rs:149-158 actual global preflight placement",
+    "postfix findings_tests.rs:327-370 callback-zero late450 and pre-after0 corruptions",
+    "postfix findings_tests.rs:373-487 >200/>400 oracle and break/resume",
+    "postfix findings_tests.rs:490-690 PDF/robots/historical/anchor/cancel fixtures"
+  ],
+  "remaining_limits": [
+    "No Rust compiler/lifetime/trait validation executed",
+    "No Cargo/tests/SQLite/HTTP/PDF/native/browser run",
+    "SQL JSON/order/aggregate workspace and <=200 field batches are not a physical RSS or hard-latency bound",
+    "Membership/inlink full-cohort SQL aggregates still run per batch",
+    "Root selection/context/candidate-budget/transport acceptance has separate review/gates",
+    "Manufacturer parity/full S6 completion NOT_PROVEN"
+  ],
+  "product_git_runtime_mutations": false
+}

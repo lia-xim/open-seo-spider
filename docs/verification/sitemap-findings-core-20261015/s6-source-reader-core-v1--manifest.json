@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "kind": "s6_source_reader_core_handoff",
+  "status": "AUTHORED_NOT_COMPILED_NOT_RUN",
+  "baseline_commit": "c8f539be979ac5436dcc962c5ce7677aab9f3b0d",
+  "source_root": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-core-integration-v1",
+  "model_manifest_sha256": "d7d62bd04bb4fb5fcd9befec5623b93b8c4bdc6b90f0cdf697546ae02307079c",
+  "model_sha256": "723200ced8fafb9652a89f6a8f19fa416dffbee3a62ddd780093c5380e36d1ef",
+  "payloads": [
+    {
+      "path": "crates/core/src/sitemap_findings/source.rs",
+      "before_sha256": null,
+      "before_absent": true,
+      "after_sha256": "5f164f53da8b2992d68788a638c0309e119eca05713e6593b79ca7793d03a481",
+      "bytes": 18170
+    },
+    {
+      "path": "crates/core/src/sitemap_findings/source_tests.rs",
+      "before_sha256": null,
+      "before_absent": true,
+      "after_sha256": "ac1d72e6c50442b8ac8762dc9d2fb4bd178e90aab544701c8c184738fe9dfdd1",
+      "bytes": 19787
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store/verified_read.rs",
+      "before_sha256": "ff7a41dea8417491245c08e279044f61f789bddb823734f1ef2f2780e096eb46",
+      "before_absent": false,
+      "after_sha256": "fd1acd6ed446e21e2626159d358b77794146dcfd32796ff7a3d3e4c52aa1e07a",
+      "bytes": 14330
+    },
+    {
+      "path": "crates/core/src/sitemap_coverage/verified_read.rs",
+      "before_sha256": "38a4c60cc6362bcd21c9fbe15a86ddebdaf1aded6a9ab650b7ef11cf8ceadc4f",
+      "before_absent": false,
+      "after_sha256": "6b452d3f9e4f7ccb353b8d3967358250572ce3ba1da64da92eddc09809f94a3a",
+      "bytes": 28229
+    }
+  ],
+  "authored_test_count": 11,
+  "authored_test_names": [
+    "source_findings_actual_a_only_then_exact_b_and_shared_source_id_do_not_attach_other_capture",
+    "source_findings_legacy_document_is_unknown_and_not_a_fabricated_measurement_or_second_current_task",
+    "source_findings_old_generation_capture_does_not_hide_current_pending_task",
+    "source_findings_same_generation_old_config_capture_does_not_hide_current_pending_task",
+    "source_findings_raw_none_validates_all_tasks_and_hashes_pending_done_robots_and_long_identity",
+    "source_findings_binary_task_order_and_real_anchor_validation_precede_all_output",
+    "source_findings_actual_fixed_omission_marker_is_scope_only_not_a_synthetic_attempt",
+    "source_findings_known_empty_and_historical_absence_keep_distinct_scope",
+    "source_findings_actual_same_tx_wal_inventory_is_stable_and_later_read_observes_change",
+    "source_findings_rejects_actual_context_and_connection_mismatch_without_callback",
+    "source_findings_cancellation_and_deadline_stops_are_typed_before_prepare_or_visit"
+  ],
+  "actual_checks": [
+    "rustfmt --edition 2024 --config skip_children=true: exit0",
+    "rustfmt --check --edition 2024 --config skip_children=true: exit0",
+    "Root before payload SHA guards: matched"
+  ],
+  "not_run": [
+    "Rust compilation",
+    "Cargo/clippy",
+    "all tests and SQLite fixtures",
+    "HTTP/native/browser/SDK",
+    "physical RSS/query-plan/latency"
+  ],
+  "notes_sha256": "a2c7f65ca24ee412d475a4662ae1685310a3b4eefe1094952964b1dc0abe65af",
+  "source_pins_sha256": "2ccaac1d5ee5b020cca789ff3cb9b8066cb32a9b949366f8e7edcdfbe76bb8ff",
+  "parent_model_changed": false,
+  "root_product_mutated": false
+}

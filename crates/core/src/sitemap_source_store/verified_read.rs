@@ -31,6 +31,40 @@ impl VerifiedSourceRead<'_> {
     pub(crate) fn materializing_selected_compatibility(&self) -> bool {
         self.selected_compatibility
     }
+
+    /// Visit actual measured attempts with only their exact durable B link.
+    /// The complete source tail was verified before this capability existed.
+    /// A-only captures remain visible; shared legacy source IDs cannot attach a
+    /// second capture to a document committed by a different measurement ID.
+    pub(crate) fn visit_measurements_after(
+        &self,
+        after_sequence: u64,
+        control: &SitemapReadControl,
+        mut visitor: impl FnMut(
+            SitemapSourceStoredMeasurement,
+            Option<SitemapSourceCommitAssociation>,
+        ) -> Result<std::ops::ControlFlow<()>>,
+    ) -> Result<bool> {
+        let _binding = control.bind_connection(self.connection)?;
+        control.run(|| {
+            ensure!(!self.connection.is_autocommit(), "Verified source read transaction ended");
+            let mut statement = self.connection.prepare("SELECT m.sequence,m.measurement_id,m.source_kind,m.task_url,m.generation,m.source_revision,m.expected_document_id,m.capture_config_sha256,m.initial_catalog_config_sha256,m.data,m.data_sha256,c.document_id,c.measurement_id,c.document_sequence,c.data,c.data_sha256 FROM sitemap_source_measurements m LEFT JOIN sitemap_source_measurement_commits c ON c.measurement_id COLLATE BINARY=m.measurement_id COLLATE BINARY WHERE m.sequence>?1 ORDER BY m.sequence")?;
+            let mut rows = statement.query([i64::try_from(after_sequence)?])?;
+            while let Some(row) = rows.next()? {
+                control.checkpoint()?;
+                let (record, _) = read_record_row(row, 0, &self.summary.limits)?;
+                let association = if matches!(row.get_ref(11)?, rusqlite::types::ValueRef::Null) {
+                    None
+                } else {
+                    let (association, _) = read_commit_row(row, 11)?;
+                    validate_link_record(&association, &record, &self.summary.limits)?;
+                    Some(association)
+                };
+                if visitor(record, association)?.is_break() { return Ok(false); }
+            }
+            Ok(true)
+        })
+    }
 }
 
 /// This low-level validator does not replace Store's selected row/frontier and

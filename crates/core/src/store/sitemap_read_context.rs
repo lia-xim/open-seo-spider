@@ -7,7 +7,7 @@ use crate::sitemap_membership_analysis::{
     AnalysisReadInput, VerifiedAnalysisRead, prepare_window_analysis_with_control,
 };
 use crate::sitemap_read_control::SitemapReadControl;
-use crate::sitemap_source_store::verified_read::verify_source_with_control;
+use crate::sitemap_source_store::verified_read::{VerifiedSourceRead, verify_source_with_control};
 use anyhow::ensure;
 use serde::Serialize;
 
@@ -33,7 +33,9 @@ pub struct SitemapVerifiedReadHeader {
 // stored-row session exposes neither these proof fields nor SQL access.
 pub(super) struct PreparedSitemapRead<'read> {
     pub(super) header: SitemapVerifiedReadHeader,
+    pub(super) connection: &'read Connection,
     pub(super) raw: Option<&'read VerifiedRawRead<'read>>,
+    pub(super) source: Option<&'read VerifiedSourceRead<'read>>,
     pub(super) analysis: &'read VerifiedAnalysisRead<'read, 'read>,
     pub(super) coverage: &'read crate::SitemapCoverage,
 }
@@ -178,7 +180,9 @@ pub(super) fn with_prepared_sitemap_read<T>(
         };
         let value = action(PreparedSitemapRead {
             header,
+            connection: &transaction,
             raw: raw.as_ref(),
+            source: source.as_ref(),
             analysis: &analysis,
             coverage: &coverage.coverage,
         })?;

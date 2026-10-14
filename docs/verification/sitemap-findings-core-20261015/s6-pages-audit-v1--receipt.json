@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "name": "s6-pages-audit-v1",
+  "created_utc": "2026-10-14T22:45:09.5204065Z",
+  "status": "BOUNDED_READ_ONLY_AUDIT_DESIGN_NOT_IMPLEMENTED",
+  "reviewer": "/root/s3_decode_review",
+  "basis_declared_by_root": "c8f539b",
+  "read_root": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-csv-streaming-integration-v1",
+  "granular_page_filters": [
+    "urls-in-sitemap",
+    "urls-not-in-sitemap",
+    "orphan-urls",
+    "non-indexable-urls-in-sitemap",
+    "urls-in-multiple-sitemaps"
+  ],
+  "existing_symbols_reused": [
+    "with_prepared_sitemap_read",
+    "VerifiedAnalysisRead",
+    "prepare_window_analysis_with_control",
+    "project_prepared_window",
+    "page_columns",
+    "page_from_row",
+    "read_inlinks",
+    "MembershipBasis::Verified",
+    "sql_counts"
+  ],
+  "concrete_existing_cost": "read_page_window limits candidates before UI filter; json_each candidates and whole-cohort joins restart per200 chunk",
+  "proposal": "One private actual prepared proof; one ordered candidate cursor; <=200 projected pages; shared existing saved-page construction and joins; predicate before user limit+1",
+  "predicate_handshake_open": [
+    "Exact local verdicts for rendered navigation/non200",
+    "Exact tri-state conjunction controls and new typed reasons",
+    "Root final public models/work/output budgets"
+  ],
+  "executed_product_or_tests": 0,
+  "product_mutated": false,
+  "git_inspected": false,
+  "hold_preserved": true,
+  "artifacts": [
+    {
+      "sha256": "8e0613b75043227c61f0f338d2769b76d4c73166d18d2a84e4bb246862d7cf60",
+      "path": "AUDIT.md"
+    },
+    {
+      "sha256": "9c1b6fe7f48fae26d14315a9447eda402ac58306e4b8726d9ffb745dc5535970",
+      "path": "source-pins.json"
+    }
+  ]
+}
