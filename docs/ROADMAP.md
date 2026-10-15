@@ -1,6 +1,8 @@
-## Aktuell: zehn praktische Prüfbereiche bestanden (15.10.2026)
+## Aktuell: Source11 installiert, nächste Erweiterung für Volltests vorbereitet (15.10.2026)
 
-Source11 besteht **1384 Tests, Format/Clippy, optimierten Windows-Build und zehn frische praktische Prüfbereiche**. Exportabschluss, alle27 Browsergruppen und kalte Ngram-Wiederöffnung sind korrigiert und geprüft. Zusätzlich bestehen Physical12, Datei-SDK, Root-Junction, Originaldatei13 mit echten64MiB, Migration8 und reguläres EOF2. [Neue Rohbelege](verification/source11-native-ten-20261015/index.json), [erste vier Bereiche](verification/source11-native-four-20261015/index.json), [Suite und Build](verification/source11-suite-build-20261015/index.json). Der aktuelle50.000-Einträge-Sitemaplauf läuft noch; sichere Installation folgt erst nach vollständiger Abnahme. Installiert bleibt Source5 R3. Die aktuelle To-do-Arbeit steht oben,31 frühere Zwischenstände bleiben als Historie erhalten. Optionale Crawl-Grenzen, weitere Ngramkanäle und große Leseperformance werden parallel vorbereitet. Katalog unverändert31/69/44; vollständige Herstellerparität `NOT_PROVEN`.
+Source11 läuft lokal mit Renderer und allen acht gespeicherten Crawls. **1384 Tests, optimierter Build, elf praktische Prüfbereiche und sechs zusätzliche Sitemap-Generator-Gruppen bestehen.** [Installations- und Generatorbelege](verification/source11-installed-generator-20261015/index.json). Datenbytes und stabile Metadaten sind erhalten; die Änderungszeit-Ausnahme ist auf fünf genau inventarisierte SQLite-SHM-Dateien begrenzt.
+
+Die isolierte nächste Erweiterung ergänzt optionale Crawl-Grenzen, weitere Ngramkanäle/Wortwolke und einen begrenzten Abfrageindex. Finale Fixture-Korrekturen sind unabhängig geprüft; der strenge Compilerlauf besteht. Vollsuite, neuer optimierter Build, Native-Abnahme und Installation folgen. Katalog: **33 eigene Kriterien erfüllt /68 teilweise /43 geplant**. Diese Zahlen sind keine Hersteller-Abdeckungsquote; vollständige Screaming-Frog-Parität bleibt `NOT_PROVEN`.
 
 ## Aktuell: Ngram-Warmprüfung besteht, echter Antwort-Abschlussfehler entdeckt (15.10.2026)
 

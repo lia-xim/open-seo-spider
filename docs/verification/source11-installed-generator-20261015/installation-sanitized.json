@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "kind": "sanitized_actual_source11_local_installation",
+  "recorded_at": "2026-10-15T21:40:37.184Z",
+  "result": "PASS_SOURCE_V11_COLD_LOCAL_INSTALL_WITH_COPY_COMPATIBILITY",
+  "private_proof_sha256": "bc9da99a533930629bb71be7cdf4a0cf44a2b139749fb0b2b70c0de60e820455",
+  "private_proof_bytes": 60921,
+  "source_manifest_sha256": "8a55a0ba333742124b36a33fde8a889afcc594e052b09568910dccc3ea5e519c",
+  "source_commit": "61b0e3bca5386a17b449915b2915222e245084c5",
+  "binary_sha256": "2d46366500887caeee33c45a972639dd379c02e678a9e07595a506244f9265f7",
+  "binary_bytes": 43149824,
+  "accepted_installation": true,
+  "installed_services_left_running": true,
+  "completed_saved_crawls": 8,
+  "backup_created": true,
+  "user_data_restored": false,
+  "all_user_data_bytes_streams_and_stable_metadata_equal": true,
+  "all_recorded_metadata_equal": false,
+  "explicit_runtime_exception": {
+    "field": "modified",
+    "baseline_exact_sqlite_shm_leaf_count": 5,
+    "observed_deltas": 15,
+    "qualification": "Only LastWriteTime on the five exactly inventoried existing SQLite SHM leaves may differ. Every file byte, alternate stream and all other recorded metadata remain strict. No new/deleted data leaf is accepted."
+  },
+  "comparison_phases": [
+    {
+      "phase": "compat-old",
+      "rows": 41,
+      "all_bytes_streams_and_stable_metadata_exact": true
+    },
+    {
+      "phase": "compat-candidate",
+      "rows": 41,
+      "all_bytes_streams_and_stable_metadata_exact": true
+    },
+    {
+      "phase": "installed-original-live",
+      "rows": 41,
+      "all_bytes_streams_and_stable_metadata_exact": true
+    }
+  ],
+  "assets_verified": 24,
+  "mcp_tools_verified": 26,
+  "renderer_available": true,
+  "compatibility_copies": [
+    {
+      "role": "compat-old",
+      "actual_close_event": true,
+      "fds_closed": true,
+      "forced": true,
+      "signal": "SIGKILL"
+    },
+    {
+      "role": "compat-candidate",
+      "actual_close_event": true,
+      "fds_closed": true,
+      "forced": true,
+      "signal": "SIGKILL"
+    }
+  ],
+  "installed_services": [
+    {
+      "role": "installed-renderer",
+      "left_running": true,
+      "parent_log_fds_closed": true
+    },
+    {
+      "role": "installed-app",
+      "left_running": true,
+      "parent_log_fds_closed": true
+    }
+  ],
+  "installation_lock_released": true,
+  "graceful_windows_shutdown": "NOT_PROVEN",
+  "global_network_packet_trace": "NOT_RUN",
+  "website_boundary": "Only read-only local API operations were issued; persisted jobs were completed and source startup does not auto-resume. Per-sitemap read receipts report zero website IO. No global network packet trace was performed.",
+  "qualification": "Private proof, user project data, paths, identifiers, process identities, backups and executable bytes remain outside Git. Compatibility-copy closures used SIGKILL; this receipt makes no graceful-shutdown claim."
+}

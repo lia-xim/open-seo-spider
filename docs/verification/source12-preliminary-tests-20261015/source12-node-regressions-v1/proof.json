@@ -1,0 +1,144 @@
+{
+  "kind": "actual_source12_additional_node_source_regressions",
+  "recorded_at": "2026-10-15T21:06:54.696Z",
+  "status": "PASS_ALL_ADDITIONAL_NODE_SOURCE_CASES",
+  "preformat": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v12-draft-v1\\preformat.json",
+    "sha256": "d625468cce0f15e3c697ed1ddf92bce70653293936ad5122c8586fb13eff0fa8",
+    "bytes": 238295
+  },
+  "logical_cases": 8,
+  "runs": [
+    {
+      "role": "static_limits",
+      "source": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\crawl-static-limits-proposal-v1\\ui-static-limits-regression.mjs",
+        "sha256": "5b3627e17674179e8b73f14cfe2e54007ae6926d8c6d5f5d0b9560ee904b1fd5",
+        "bytes": 3118
+      },
+      "inputs": [
+        {
+          "relative": "web/app.js",
+          "proposed": {
+            "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\crawl-static-limits-proposal-v1\\source\\web\\app.js",
+            "sha256": "84a3882590b5422003127cc7594bbb0edf90d9f3e8526ab4957f8f0e71054816",
+            "bytes": 395712
+          },
+          "actual": {
+            "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v12-draft-v1\\source\\web\\app.js",
+            "sha256": "84a3882590b5422003127cc7594bbb0edf90d9f3e8526ab4957f8f0e71054816",
+            "bytes": 395712
+          }
+        },
+        {
+          "relative": "web/index.html",
+          "proposed": {
+            "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\crawl-static-limits-proposal-v1\\source\\web\\index.html",
+            "sha256": "5e16ad3fd2875362bd35527c2bca4e2eb7f326bd84d54949065ba06c4434bab8",
+            "bytes": 89949
+          },
+          "actual": {
+            "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v12-draft-v1\\source\\web\\index.html",
+            "sha256": "5e16ad3fd2875362bd35527c2bca4e2eb7f326bd84d54949065ba06c4434bab8",
+            "bytes": 89949
+          }
+        }
+      ],
+      "cases": [
+        "disabled_omits_payload",
+        "save_reopen_zero_bounds",
+        "invalid_and_renderer_refusal",
+        "disabled_fields_and_actual_wiring"
+      ],
+      "started_at": "2026-10-15T21:06:54.497Z",
+      "finished_at": "2026-10-15T21:06:54.565Z",
+      "command": {
+        "executable": "C:\\Program Files\\nodejs\\node.exe",
+        "args": [
+          "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\crawl-static-limits-proposal-v1\\ui-static-limits-regression.mjs"
+        ]
+      },
+      "process": {
+        "pid": 38288,
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "observation": "spawnSync returned after child and pipes completed"
+      },
+      "logs": {
+        "stdout": {
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-node-regressions-v1\\static_limits-stdout.log",
+          "sha256": "fcc0f01060f2a930c68ada7018210e4bb5999037b307f4e3d801f5f1023182fe",
+          "bytes": 208
+        },
+        "stderr": {
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-node-regressions-v1\\static_limits-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "result": "PASS_NODE_SOURCE_REGRESSION_ONLY"
+    },
+    {
+      "role": "ngram_html_channels",
+      "source": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/saved-ngram-html-channels-proposal-v2/tests/saved-ngram-channel-ui.test.mjs",
+        "sha256": "934895f64561ced9f9b234430c0c6f6c0df14a2b32d552403d8240924963d997",
+        "bytes": 4890
+      },
+      "inputs": [
+        {
+          "relative": "web/saved-ngrams.js",
+          "proposed": {
+            "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\saved-ngram-html-channels-proposal-v2\\source\\web\\saved-ngrams.js",
+            "sha256": "26da03de4288802eb3f7d8999f3210fa8351fae057f40ac346a2677c12098925",
+            "bytes": 14212
+          },
+          "actual": {
+            "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v12-draft-v1\\source\\web\\saved-ngrams.js",
+            "sha256": "26da03de4288802eb3f7d8999f3210fa8351fae057f40ac346a2677c12098925",
+            "bytes": 14212
+          }
+        }
+      ],
+      "cases": [
+        "topN occurrence sample preserves supplied tie order and never mutates the full filtered selection",
+        "cloud refuses other views, continuations, mixed n, invalid counts or duplicate token identities",
+        "malicious and long cloud words are text nodes with bounded numeric style and source action",
+        "Body request omits the new profile; explicit channel is versioned and reset/busy paths cover its control"
+      ],
+      "started_at": "2026-10-15T21:06:54.565Z",
+      "finished_at": "2026-10-15T21:06:54.696Z",
+      "command": {
+        "executable": "C:\\Program Files\\nodejs\\node.exe",
+        "args": [
+          "--test",
+          "E:/CodexWork/open-seo-spider-01a12ac3-20261013/saved-ngram-html-channels-proposal-v2/tests/saved-ngram-channel-ui.test.mjs"
+        ]
+      },
+      "process": {
+        "pid": 15244,
+        "status": 0,
+        "signal": null,
+        "error": null,
+        "observation": "spawnSync returned after child and pipes completed"
+      },
+      "logs": {
+        "stdout": {
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-node-regressions-v1\\ngram_html_channels-stdout.log",
+          "sha256": "513c887b4bf1542d8c87c13283b461c36a411f803b0fabd14e1ca5438194bdde",
+          "bytes": 562
+        },
+        "stderr": {
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-node-regressions-v1\\ngram_html_channels-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "result": "PASS_NODE_SOURCE_REGRESSION_ONLY"
+    }
+  ],
+  "cargo_tests": 0,
+  "browser_native": "NOT_RUN",
+  "root_repo_mutated": false
+}

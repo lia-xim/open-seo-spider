@@ -1,0 +1,55 @@
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 352 filtered out; finished in 0.00s
+
+
+running 31 tests
+test crawl_admission::tests::static_limits_config_is_durable_immutable_on_resume_and_renderer_is_refused_before_store ... ok
+test crawl_admission::tests::static_limits_fetch_byte_boundary_uses_normalized_idna_encoding_and_excludes_fragment ... ok
+test crawl_admission::tests::static_limits_literal_folder_boundaries_count_empty_segments_without_decoding_slashes ... ok
+test crawl_admission::tests::static_limits_none_null_config_and_legacy_page_report_bytes_and_hashes_match ... ok
+test crawl_admission::tests::static_limits_raw_query_tokens_preserve_duplicate_and_empty_tokens_and_encoded_delimiters ... ok
+test crawl_admission::tests::static_limits_versioned_object_rejects_shapes_unknowns_duplicates_and_bad_ranges ... ok
+test crawler::crawl_admission_tests::static_limits_actual_policy_fetch_alias_is_checked_without_rewriting_original_occurrence ... ok
+test crawler::crawl_admission_tests::static_limits_denied_initial_target_precedes_robots_rate_and_http ... ok
+test crawler::crawl_admission_tests::static_limits_disabled_native_crawl_really_fetches_and_saves_501_pages_with_none_and_legacy_zero ... ok
+test crawler::crawl_admission_tests::static_limits_real_fetch_url_byte_equal_and_plus_one_boundary ... ok
+test crawler::crawl_admission_tests::static_limits_real_redirect_preserves_observed_hop_and_initial_status_without_following ... ok
+test crawler::crawl_admission_tests::static_limits_real_resource_css_and_redirect_keep_authorizing_grants_and_transport_unknown ... ok
+test crawler::crawl_admission_tests::static_limits_real_seed_and_discovery_dispatch_keep_duplicate_occurrences_and_deny_no_get ... ok
+test crawler::crawl_admission_tests::static_limits_redirect_checks_actual_transport_target_not_a_different_policy_preview_alias ... FAILED
+test crawler::crawl_admission_tests::static_limits_selected_recrawl_inherits_limits_and_cannot_turn_denial_into_fetch ... ok
+test crawler::crawl_admission_tests::static_limits_sitemap_protocol_scope_remains_separate_while_discovered_document_is_denied ... ok
+test ngram_corpus::channels::tests::saved_body_corpus_json_keeps_exact_legacy_shape_without_channel_fields ... ok
+test ngram_corpus::channels::tests::saved_element_ngrams_extended_windows_and_stopwords_do_not_bridge_element_or_exclusion_boundaries ... ok
+test ngram_corpus::channels::tests::saved_element_ngrams_never_cross_elements_and_count_one_document_frequency_per_page ... ok
+test ngram_corpus::channels::tests::saved_element_ngrams_observed_empty_set_empty_element_and_legacy_unknown_are_distinct ... ok
+test ngram_corpus::channels::tests::saved_element_ngrams_text_token_identity_and_element_caps_fail_before_publishing_prefixes ... ok
+test ngram_corpus::channels::tests::saved_element_ngrams_utf8_exact_budget_and_position_sampling_keep_complete_counts ... ok
+test ngram_corpus::channels::tests::saved_element_ngrams_version_source_channel_and_element_order_have_distinct_revisions ... ok
+test ngram_corpus::channels::tests::saved_retained_metadata_counts_without_capture_and_preserves_element_and_unknown_identities ... ok
+test ngram_corpus::channels::tests::saved_retained_metadata_revision_separates_capture_attachment_and_binds_observation_context ... ok
+test sitemap_membership_analysis::request_index::tests::request_index_actual_sql_50000_members_and_59m_report_commits_once_and_preserves_selected_outputs ... ok
+test sitemap_membership_analysis::request_index::tests::request_index_cancel_and_transaction_identity_precede_optional_fallback ... ok
+test sitemap_membership_analysis::request_index::tests::request_index_duplicate_generation_types_sample_order_and_legacy_fallback_are_differential ... ok
+test sitemap_membership_analysis::request_index::tests::request_index_exact_logical_budget_full_page_limit_and_row_caps_are_counted_fallbacks ... ok
+test sitemap_membership_analysis::request_index::tests::request_index_indexed_key_batches_do_not_rescan_original_memberships_or_report ... ok
+test sitemap_membership_analysis::request_index::tests::request_index_tail_corruption_full_hash_utf8_and_original_cap_are_not_cached_away ... ok
+
+failures:
+
+---- crawler::crawl_admission_tests::static_limits_redirect_checks_actual_transport_target_not_a_different_policy_preview_alias stdout ----
+
+thread 'crawler::crawl_admission_tests::static_limits_redirect_checks_actual_transport_target_not_a_different_policy_preview_alias' (11660) panicked at crates\core\src\crawler\crawl_admission_tests.rs:419:5:
+assertion `left == right` failed
+  left: Some("http://127.0.0.1:59063/alias?drop=1&drop=2&keep=3")
+ right: Some("http://127.0.0.1:59063/alias?keep=3")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    crawler::crawl_admission_tests::static_limits_redirect_checks_actual_transport_target_not_a_different_policy_preview_alias
+
+test result: FAILED. 30 passed; 1 failed; 0 ignored; 0 measured; 927 filtered out; finished in 6.18s
+

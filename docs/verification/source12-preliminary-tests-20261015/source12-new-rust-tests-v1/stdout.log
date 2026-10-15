@@ -1,0 +1,30 @@
+
+running 13 tests
+test crawl_admission_cli_tests::static_limits_cli_accepts_zero_only_for_folder_query_and_exposes_explicit_units ... ok
+test mcp::crawl_admission_limits_tests::static_limits_mcp_bridge_posts_exact_config_and_propagates_validation_refusal ... ok
+test mcp::crawl_admission_limits_tests::static_limits_mcp_inventory_documents_version_units_zero_and_renderer_boundary ... ok
+test ngram_app::channel_tests::saved_html_channel_none_and_null_keep_old_request_snapshot_and_body_csv_bytes ... ok
+test ngram_app::channel_tests::saved_html_channel_request_rejects_unknown_versions_fields_and_non_object_profiles ... ok
+test ngram_app::channel_tests::saved_html_channel_snapshot_filters_full_csv_and_cli_reopen_bind_the_explicit_channel ... ok
+test ngram_app::channel_tests::saved_html_channels_legacy_incomplete_wrong_source_and_missing_raw_never_fall_back_or_count_zero ... ok
+test ngram_app::channel_tests::saved_html_channels_pending_selected_and_changed_metadata_invalidate_the_saved_channel_snapshot ... ok
+test ngram_app::channel_tests::saved_html_channels_real_raw_capture_and_renderer_stub_metadata_stay_separate_and_element_bounded ... FAILED
+test ngram_app::channel_tests::saved_retained_metadata_body_budget_only_foreign_capture_and_snapshot_never_change_authority ... ok
+test ngram_app::channel_tests::saved_retained_metadata_real_raw_and_render_stub_without_capture_reopen_with_complete_csv ... ok
+test server::crawl_admission_limits_tests::static_limits_api_dto_absent_null_and_legacy_zero_aliases_preserve_effective_bytes ... ok
+test server::crawl_admission_limits_tests::static_limits_api_dto_roundtrip_keeps_real_zero_bounds_and_rejects_before_launch ... ok
+
+failures:
+
+---- ngram_app::channel_tests::saved_html_channels_real_raw_capture_and_renderer_stub_metadata_stay_separate_and_element_bounded stdout ----
+
+thread 'ngram_app::channel_tests::saved_html_channels_real_raw_capture_and_renderer_stub_metadata_stay_separate_and_element_bounded' (20028) panicked at crates\app\src\ngram_app\channel_tests.rs:176:62:
+called `Option::unwrap()` on a `None` value
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    ngram_app::channel_tests::saved_html_channels_real_raw_capture_and_renderer_stub_metadata_stay_separate_and_element_bounded
+
+test result: FAILED. 12 passed; 1 failed; 0 ignored; 0 measured; 339 filtered out; finished in 0.17s
+

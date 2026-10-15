@@ -1,0 +1,3146 @@
+{
+  "config": {
+    "seed_urls": [
+      "http://127.0.0.1:50606/a?x=1&y=2",
+      "http://127.0.0.1:50606/b",
+      "http://127.0.0.1:50606/de",
+      "http://127.0.0.1:50606/noindex",
+      "http://127.0.0.1:50606/missing",
+      "http://127.0.0.1:50606/redirect"
+    ],
+    "input_imports": [
+      {
+        "engine": "open-seo-spider/offline-list-v1/calamine-0.36.1",
+        "input_sha256": "9a6b175dbf82beb59eda56d47760c317b253ea1b27fe8f368d9c14e422895a57",
+        "input_bytes": 177,
+        "options": {
+          "format": {
+            "kind": "txt"
+          },
+          "limits": {
+            "max_input_bytes": 8388608,
+            "max_rows": 50000,
+            "max_field_bytes": 8192,
+            "max_zip_entries": 1024,
+            "max_zip_entry_bytes": 8388608,
+            "max_zip_total_bytes": 33554432,
+            "max_xml_events": 500000,
+            "max_xml_depth": 64,
+            "max_shared_strings": 100000,
+            "max_sheet_cells": 200000,
+            "max_csv_fields": 200000,
+            "max_output_bytes": 8388608,
+            "max_sheets": 128
+          }
+        },
+        "selected_sheet": null,
+        "selected_column": null,
+        "rows": [
+          {
+            "source_index": 1,
+            "source_row": 1,
+            "source_line": 1,
+            "sheet": null,
+            "cell": null,
+            "raw_value": "http://127.0.0.1:50606/a?x=1&y=2",
+            "cell_type": "text",
+            "formula_metadata": null,
+            "candidate_kind": "page_url",
+            "normalized_url": "http://127.0.0.1:50606/a?x=1&y=2",
+            "fragment": null,
+            "error": null
+          },
+          {
+            "source_index": 2,
+            "source_row": 2,
+            "source_line": 2,
+            "sheet": null,
+            "cell": null,
+            "raw_value": "http://127.0.0.1:50606/b",
+            "cell_type": "text",
+            "formula_metadata": null,
+            "candidate_kind": "page_url",
+            "normalized_url": "http://127.0.0.1:50606/b",
+            "fragment": null,
+            "error": null
+          },
+          {
+            "source_index": 3,
+            "source_row": 3,
+            "source_line": 3,
+            "sheet": null,
+            "cell": null,
+            "raw_value": "http://127.0.0.1:50606/de",
+            "cell_type": "text",
+            "formula_metadata": null,
+            "candidate_kind": "page_url",
+            "normalized_url": "http://127.0.0.1:50606/de",
+            "fragment": null,
+            "error": null
+          },
+          {
+            "source_index": 4,
+            "source_row": 4,
+            "source_line": 4,
+            "sheet": null,
+            "cell": null,
+            "raw_value": "http://127.0.0.1:50606/noindex",
+            "cell_type": "text",
+            "formula_metadata": null,
+            "candidate_kind": "page_url",
+            "normalized_url": "http://127.0.0.1:50606/noindex",
+            "fragment": null,
+            "error": null
+          },
+          {
+            "source_index": 5,
+            "source_row": 5,
+            "source_line": 5,
+            "sheet": null,
+            "cell": null,
+            "raw_value": "http://127.0.0.1:50606/missing",
+            "cell_type": "text",
+            "formula_metadata": null,
+            "candidate_kind": "page_url",
+            "normalized_url": "http://127.0.0.1:50606/missing",
+            "fragment": null,
+            "error": null
+          },
+          {
+            "source_index": 6,
+            "source_row": 6,
+            "source_line": 6,
+            "sheet": null,
+            "cell": null,
+            "raw_value": "http://127.0.0.1:50606/redirect",
+            "cell_type": "text",
+            "formula_metadata": null,
+            "candidate_kind": "page_url",
+            "normalized_url": "http://127.0.0.1:50606/redirect",
+            "fragment": null,
+            "error": null
+          }
+        ],
+        "website_requests": 0,
+        "warnings": [],
+        "limitations": [
+          "Import does not start a crawl, follow links, evaluate formulas or fetch sitemap indexes.",
+          "Only absolute HTTP/HTTPS values are URL candidates; original values and duplicate rows are retained.",
+          "Independent import contract; complete original parser/filter parity is NOT_PROVEN."
+        ]
+      }
+    ],
+    "sitemap_urls": [
+      "http://127.0.0.1:50606/source.xml"
+    ],
+    "explicit_sitemap_inputs": [
+      "http://127.0.0.1:50606/source.xml"
+    ],
+    "discover_sitemaps": false,
+    "max_sitemap_documents": 1000,
+    "crawl_links": false,
+    "include_subdomains": false,
+    "concurrency": 2,
+    "request_timeout_secs": 30,
+    "max_pages": 20,
+    "max_depth": null,
+    "delay_ms": 0,
+    "obey_robots": false,
+    "check_external": false,
+    "max_body_bytes": 5242880,
+    "max_redirects": 10,
+    "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)",
+    "indexability_agent": "googlebot",
+    "custom_headers": {},
+    "renderer": null,
+    "custom_extractions": [],
+    "audit_thresholds": {
+      "min_title_chars": 30,
+      "max_title_chars": 60,
+      "min_description_chars": 70,
+      "max_description_chars": 155,
+      "max_h1_chars": 70,
+      "max_h2_chars": 70,
+      "max_alt_chars": 100,
+      "max_url_chars": 115,
+      "min_word_count": 200,
+      "max_internal_outlinks": 1000,
+      "max_external_outlinks": 10,
+      "min_title_pixels": 200,
+      "max_title_pixels": 561,
+      "min_description_pixels": 400,
+      "max_description_pixels": 985
+    },
+    "pdf_analysis": {
+      "enabled": true,
+      "max_pages": 1000,
+      "max_objects": 100000,
+      "max_decompressed_bytes": 8388608,
+      "max_text_bytes": 4194304,
+      "max_text_bytes_per_page": 1048576,
+      "max_annotations": 10000
+    },
+    "validate_fragments": false,
+    "link_position_rules": [],
+    "include_patterns": [],
+    "exclude_patterns": []
+  },
+  "pages": [
+    {
+      "url": "http://127.0.0.1:50606/a?x=1&y=2",
+      "final_url": "http://127.0.0.1:50606/a?x=1&y=2",
+      "depth": 0,
+      "discovered_from": null,
+      "internal": true,
+      "fetched_at": "2026-10-15T21:45:03.625983700+00:00",
+      "status": 200,
+      "final_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "response_ms": 1,
+      "size_bytes": 424,
+      "truncated": false,
+      "error": null,
+      "warnings": [],
+      "blocked_by_robots": false,
+      "robots_warning": null,
+      "redirect_chain": [],
+      "headers": {
+        "connection": "close",
+        "content-length": "424",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Thu, 15 Oct 2026 21:45:03 GMT",
+        "last-modified": "Wed, 01 Jan 2020 00:00:00 GMT"
+      },
+      "titles": [
+        "Owned /a?x=1&y=2"
+      ],
+      "meta_descriptions": [],
+      "title_pixel_widths": [
+        171
+      ],
+      "description_pixel_widths": [],
+      "text_metrics_engine": "roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic",
+      "h1": [
+        "Saved actual generator page"
+      ],
+      "h2": [],
+      "canonical": [],
+      "html_canonical": [],
+      "header_canonical": [],
+      "meta_robots": [],
+      "x_robots_tag": [],
+      "robots_directives": [],
+      "effective_robots": [],
+      "indexability_agent": "googlebot",
+      "header_link_values": [],
+      "hreflang": [
+        {
+          "language": "en",
+          "url": "http://127.0.0.1:50606/a?x=1&y=2"
+        },
+        {
+          "language": "fr",
+          "url": "http://127.0.0.1:50606/b"
+        },
+        {
+          "language": "de",
+          "url": "http://127.0.0.1:50606/de"
+        }
+      ],
+      "html_hreflang": [
+        {
+          "language": "en",
+          "url": "http://127.0.0.1:50606/a?x=1&y=2"
+        },
+        {
+          "language": "fr",
+          "url": "http://127.0.0.1:50606/b"
+        },
+        {
+          "language": "de",
+          "url": "http://127.0.0.1:50606/de"
+        }
+      ],
+      "header_hreflang": [],
+      "document_base_url": "http://127.0.0.1:50606/a?x=1&y=2",
+      "base_href": null,
+      "link_relationships": [
+        {
+          "url": "http://127.0.0.1:50606/a?x=1&y=2",
+          "rel": [
+            "alternate"
+          ],
+          "source": "html_link",
+          "context_url": "http://127.0.0.1:50606/a?x=1&y=2",
+          "applies_to_document": true,
+          "hreflang": [
+            "en"
+          ],
+          "media": null,
+          "type_hint": null,
+          "title": null,
+          "parameters": {}
+        },
+        {
+          "url": "http://127.0.0.1:50606/b",
+          "rel": [
+            "alternate"
+          ],
+          "source": "html_link",
+          "context_url": "http://127.0.0.1:50606/a?x=1&y=2",
+          "applies_to_document": true,
+          "hreflang": [
+            "fr"
+          ],
+          "media": null,
+          "type_hint": null,
+          "title": null,
+          "parameters": {}
+        },
+        {
+          "url": "http://127.0.0.1:50606/de",
+          "rel": [
+            "alternate"
+          ],
+          "source": "html_link",
+          "context_url": "http://127.0.0.1:50606/a?x=1&y=2",
+          "applies_to_document": true,
+          "hreflang": [
+            "de"
+          ],
+          "media": null,
+          "type_hint": null,
+          "title": null,
+          "parameters": {}
+        }
+      ],
+      "pagination_next": [],
+      "pagination_prev": [],
+      "amphtml": [],
+      "language": null,
+      "viewport": null,
+      "images": [
+        {
+          "url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "alt": "Stored image",
+          "width": null,
+          "height": null,
+          "loading": null
+        }
+      ],
+      "links": [
+        {
+          "url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "text": "",
+          "rel": "",
+          "internal": true,
+          "nofollow": false,
+          "kind": "image",
+          "raw_href": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "resolved_href": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "fragment": null,
+          "dom_location": {
+            "index": 9,
+            "path": "/html[1]/body[1]/img[1]",
+            "path_truncated": false,
+            "semantic_ancestors": [
+              "body"
+            ]
+          },
+          "position": "content"
+        },
+        {
+          "url": "http://127.0.0.1:50606/a?x=1&y=2",
+          "text": "",
+          "rel": "alternate",
+          "internal": true,
+          "nofollow": false,
+          "kind": "relationship",
+          "raw_href": null,
+          "resolved_href": null,
+          "fragment": null,
+          "dom_location": null,
+          "position": null
+        },
+        {
+          "url": "http://127.0.0.1:50606/b",
+          "text": "",
+          "rel": "alternate",
+          "internal": true,
+          "nofollow": false,
+          "kind": "relationship",
+          "raw_href": null,
+          "resolved_href": null,
+          "fragment": null,
+          "dom_location": null,
+          "position": null
+        },
+        {
+          "url": "http://127.0.0.1:50606/de",
+          "text": "",
+          "rel": "alternate",
+          "internal": true,
+          "nofollow": false,
+          "kind": "relationship",
+          "raw_href": null,
+          "resolved_href": null,
+          "fragment": null,
+          "dom_location": null,
+          "position": null
+        }
+      ],
+      "word_count": 4,
+      "content_hash": "77d9a84569252f483dcb8a89067226a888f721a4b461f3e01487e676fdb19a64",
+      "structured_data": [],
+      "invalid_structured_data": 0,
+      "script_count": 0,
+      "indexable": true,
+      "indexability_reasons": [],
+      "raw_metadata": null,
+      "rendered": false,
+      "renderer_error": null,
+      "rendered_url": null,
+      "rendered_status": null,
+      "rendered_headers": {},
+      "rendered_at": null,
+      "browser_version": null,
+      "rendered_viewport": null,
+      "render_wait_ms": null,
+      "network_events_dropped": 0,
+      "console_errors": [],
+      "network_requests": [],
+      "accessibility": null,
+      "screenshot_base64": null,
+      "custom_extractions": [],
+      "custom_javascript_results": [],
+      "browser_cookies": [],
+      "pdf": null,
+      "image_metadata": null,
+      "dom_metadata": {
+        "engine": "independent_html5_dom_v1",
+        "source": "raw_html",
+        "heading_text_engine": "independent_dom_text_with_inline_image_alt_v1",
+        "complete": true,
+        "limits_reached": [],
+        "headings": [
+          {
+            "tag_level": 1,
+            "text": "Saved actual generator page",
+            "raw_text": "Saved actual generator page",
+            "text_with_image_alt": "Saved actual generator page",
+            "image_alt": [],
+            "aria_level": null,
+            "heading_offset": null,
+            "hidden_attribute": false,
+            "dom_location": {
+              "index": 8,
+              "path": "/html[1]/body[1]/h1[1]",
+              "path_truncated": false,
+              "semantic_ancestors": [
+                "body"
+              ]
+            }
+          }
+        ],
+        "meta_keywords": [],
+        "fragment_targets": [],
+        "navigation_candidates": [],
+        "responsive_images": [
+          {
+            "src": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+            "srcset": null,
+            "sizes": null,
+            "alt": "Stored image",
+            "width": null,
+            "height": null,
+            "loading": null,
+            "candidates": [
+              {
+                "source": "img_src",
+                "raw_url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+                "url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+                "descriptors": [],
+                "width": null,
+                "density": null,
+                "height": null,
+                "media": null,
+                "type_hint": null,
+                "sizes": null,
+                "eligible": true,
+                "error": null,
+                "dom_location": {
+                  "index": 9,
+                  "path": "/html[1]/body[1]/img[1]",
+                  "path_truncated": false,
+                  "semantic_ancestors": [
+                    "body"
+                  ]
+                }
+              }
+            ],
+            "dom_location": {
+              "index": 9,
+              "path": "/html[1]/body[1]/img[1]",
+              "path_truncated": false,
+              "semantic_ancestors": [
+                "body"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "url": "http://127.0.0.1:50606/b",
+      "final_url": "http://127.0.0.1:50606/b",
+      "depth": 0,
+      "discovered_from": null,
+      "internal": true,
+      "fetched_at": "2026-10-15T21:45:03.626294800+00:00",
+      "status": 200,
+      "final_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "response_ms": 2,
+      "size_bytes": 412,
+      "truncated": false,
+      "error": null,
+      "warnings": [],
+      "blocked_by_robots": false,
+      "robots_warning": null,
+      "redirect_chain": [],
+      "headers": {
+        "connection": "close",
+        "content-length": "412",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Thu, 15 Oct 2026 21:45:03 GMT",
+        "last-modified": "Wed, 01 Jan 2020 00:00:00 GMT"
+      },
+      "titles": [
+        "Owned /b"
+      ],
+      "meta_descriptions": [],
+      "title_pixel_widths": [
+        87
+      ],
+      "description_pixel_widths": [],
+      "text_metrics_engine": "roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic",
+      "h1": [
+        "Saved actual generator page"
+      ],
+      "h2": [],
+      "canonical": [],
+      "html_canonical": [],
+      "header_canonical": [],
+      "meta_robots": [],
+      "x_robots_tag": [],
+      "robots_directives": [],
+      "effective_robots": [],
+      "indexability_agent": "googlebot",
+      "header_link_values": [],
+      "hreflang": [
+        {
+          "language": "en",
+          "url": "http://127.0.0.1:50606/a?x=1&y=2"
+        },
+        {
+          "language": "fr",
+          "url": "http://127.0.0.1:50606/b"
+        },
+        {
+          "language": "de",
+          "url": "http://127.0.0.1:50606/de"
+        }
+      ],
+      "html_hreflang": [
+        {
+          "language": "en",
+          "url": "http://127.0.0.1:50606/a?x=1&y=2"
+        },
+        {
+          "language": "fr",
+          "url": "http://127.0.0.1:50606/b"
+        },
+        {
+          "language": "de",
+          "url": "http://127.0.0.1:50606/de"
+        }
+      ],
+      "header_hreflang": [],
+      "document_base_url": "http://127.0.0.1:50606/b",
+      "base_href": null,
+      "link_relationships": [
+        {
+          "url": "http://127.0.0.1:50606/a?x=1&y=2",
+          "rel": [
+            "alternate"
+          ],
+          "source": "html_link",
+          "context_url": "http://127.0.0.1:50606/b",
+          "applies_to_document": true,
+          "hreflang": [
+            "en"
+          ],
+          "media": null,
+          "type_hint": null,
+          "title": null,
+          "parameters": {}
+        },
+        {
+          "url": "http://127.0.0.1:50606/b",
+          "rel": [
+            "alternate"
+          ],
+          "source": "html_link",
+          "context_url": "http://127.0.0.1:50606/b",
+          "applies_to_document": true,
+          "hreflang": [
+            "fr"
+          ],
+          "media": null,
+          "type_hint": null,
+          "title": null,
+          "parameters": {}
+        },
+        {
+          "url": "http://127.0.0.1:50606/de",
+          "rel": [
+            "alternate"
+          ],
+          "source": "html_link",
+          "context_url": "http://127.0.0.1:50606/b",
+          "applies_to_document": true,
+          "hreflang": [
+            "de"
+          ],
+          "media": null,
+          "type_hint": null,
+          "title": null,
+          "parameters": {}
+        }
+      ],
+      "pagination_next": [],
+      "pagination_prev": [],
+      "amphtml": [],
+      "language": null,
+      "viewport": null,
+      "images": [
+        {
+          "url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "alt": "Stored image",
+          "width": null,
+          "height": null,
+          "loading": null
+        }
+      ],
+      "links": [
+        {
+          "url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "text": "",
+          "rel": "",
+          "internal": true,
+          "nofollow": false,
+          "kind": "image",
+          "raw_href": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "resolved_href": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "fragment": null,
+          "dom_location": {
+            "index": 9,
+            "path": "/html[1]/body[1]/img[1]",
+            "path_truncated": false,
+            "semantic_ancestors": [
+              "body"
+            ]
+          },
+          "position": "content"
+        },
+        {
+          "url": "http://127.0.0.1:50606/a?x=1&y=2",
+          "text": "",
+          "rel": "alternate",
+          "internal": true,
+          "nofollow": false,
+          "kind": "relationship",
+          "raw_href": null,
+          "resolved_href": null,
+          "fragment": null,
+          "dom_location": null,
+          "position": null
+        },
+        {
+          "url": "http://127.0.0.1:50606/b",
+          "text": "",
+          "rel": "alternate",
+          "internal": true,
+          "nofollow": false,
+          "kind": "relationship",
+          "raw_href": null,
+          "resolved_href": null,
+          "fragment": null,
+          "dom_location": null,
+          "position": null
+        },
+        {
+          "url": "http://127.0.0.1:50606/de",
+          "text": "",
+          "rel": "alternate",
+          "internal": true,
+          "nofollow": false,
+          "kind": "relationship",
+          "raw_href": null,
+          "resolved_href": null,
+          "fragment": null,
+          "dom_location": null,
+          "position": null
+        }
+      ],
+      "word_count": 4,
+      "content_hash": "77d9a84569252f483dcb8a89067226a888f721a4b461f3e01487e676fdb19a64",
+      "structured_data": [],
+      "invalid_structured_data": 0,
+      "script_count": 0,
+      "indexable": true,
+      "indexability_reasons": [],
+      "raw_metadata": null,
+      "rendered": false,
+      "renderer_error": null,
+      "rendered_url": null,
+      "rendered_status": null,
+      "rendered_headers": {},
+      "rendered_at": null,
+      "browser_version": null,
+      "rendered_viewport": null,
+      "render_wait_ms": null,
+      "network_events_dropped": 0,
+      "console_errors": [],
+      "network_requests": [],
+      "accessibility": null,
+      "screenshot_base64": null,
+      "custom_extractions": [],
+      "custom_javascript_results": [],
+      "browser_cookies": [],
+      "pdf": null,
+      "image_metadata": null,
+      "dom_metadata": {
+        "engine": "independent_html5_dom_v1",
+        "source": "raw_html",
+        "heading_text_engine": "independent_dom_text_with_inline_image_alt_v1",
+        "complete": true,
+        "limits_reached": [],
+        "headings": [
+          {
+            "tag_level": 1,
+            "text": "Saved actual generator page",
+            "raw_text": "Saved actual generator page",
+            "text_with_image_alt": "Saved actual generator page",
+            "image_alt": [],
+            "aria_level": null,
+            "heading_offset": null,
+            "hidden_attribute": false,
+            "dom_location": {
+              "index": 8,
+              "path": "/html[1]/body[1]/h1[1]",
+              "path_truncated": false,
+              "semantic_ancestors": [
+                "body"
+              ]
+            }
+          }
+        ],
+        "meta_keywords": [],
+        "fragment_targets": [],
+        "navigation_candidates": [],
+        "responsive_images": [
+          {
+            "src": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+            "srcset": null,
+            "sizes": null,
+            "alt": "Stored image",
+            "width": null,
+            "height": null,
+            "loading": null,
+            "candidates": [
+              {
+                "source": "img_src",
+                "raw_url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+                "url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+                "descriptors": [],
+                "width": null,
+                "density": null,
+                "height": null,
+                "media": null,
+                "type_hint": null,
+                "sizes": null,
+                "eligible": true,
+                "error": null,
+                "dom_location": {
+                  "index": 9,
+                  "path": "/html[1]/body[1]/img[1]",
+                  "path_truncated": false,
+                  "semantic_ancestors": [
+                    "body"
+                  ]
+                }
+              }
+            ],
+            "dom_location": {
+              "index": 9,
+              "path": "/html[1]/body[1]/img[1]",
+              "path_truncated": false,
+              "semantic_ancestors": [
+                "body"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "url": "http://127.0.0.1:50606/noindex",
+      "final_url": "http://127.0.0.1:50606/noindex",
+      "depth": 0,
+      "discovered_from": null,
+      "internal": true,
+      "fetched_at": "2026-10-15T21:45:03.629399+00:00",
+      "status": 200,
+      "final_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "response_ms": 0,
+      "size_bytes": 456,
+      "truncated": false,
+      "error": null,
+      "warnings": [],
+      "blocked_by_robots": false,
+      "robots_warning": null,
+      "redirect_chain": [],
+      "headers": {
+        "connection": "close",
+        "content-length": "456",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Thu, 15 Oct 2026 21:45:03 GMT",
+        "last-modified": "Wed, 01 Jan 2020 00:00:00 GMT"
+      },
+      "titles": [
+        "Owned /noindex"
+      ],
+      "meta_descriptions": [],
+      "title_pixel_widths": [
+        146
+      ],
+      "description_pixel_widths": [],
+      "text_metrics_engine": "roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic",
+      "h1": [
+        "Saved actual generator page"
+      ],
+      "h2": [],
+      "canonical": [],
+      "html_canonical": [],
+      "header_canonical": [],
+      "meta_robots": [
+        "noindex"
+      ],
+      "x_robots_tag": [],
+      "robots_directives": [
+        {
+          "source": "html_meta",
+          "agent": null,
+          "raw": "noindex",
+          "directives": [
+            "noindex"
+          ]
+        }
+      ],
+      "effective_robots": [
+        "noindex"
+      ],
+      "indexability_agent": "googlebot",
+      "header_link_values": [],
+      "hreflang": [
+        {
+          "language": "en",
+          "url": "http://127.0.0.1:50606/a?x=1&y=2"
+        },
+        {
+          "language": "fr",
+          "url": "http://127.0.0.1:50606/b"
+        },
+        {
+          "language": "de",
+          "url": "http://127.0.0.1:50606/de"
+        }
+      ],
+      "html_hreflang": [
+        {
+          "language": "en",
+          "url": "http://127.0.0.1:50606/a?x=1&y=2"
+        },
+        {
+          "language": "fr",
+          "url": "http://127.0.0.1:50606/b"
+        },
+        {
+          "language": "de",
+          "url": "http://127.0.0.1:50606/de"
+        }
+      ],
+      "header_hreflang": [],
+      "document_base_url": "http://127.0.0.1:50606/noindex",
+      "base_href": null,
+      "link_relationships": [
+        {
+          "url": "http://127.0.0.1:50606/a?x=1&y=2",
+          "rel": [
+            "alternate"
+          ],
+          "source": "html_link",
+          "context_url": "http://127.0.0.1:50606/noindex",
+          "applies_to_document": true,
+          "hreflang": [
+            "en"
+          ],
+          "media": null,
+          "type_hint": null,
+          "title": null,
+          "parameters": {}
+        },
+        {
+          "url": "http://127.0.0.1:50606/b",
+          "rel": [
+            "alternate"
+          ],
+          "source": "html_link",
+          "context_url": "http://127.0.0.1:50606/noindex",
+          "applies_to_document": true,
+          "hreflang": [
+            "fr"
+          ],
+          "media": null,
+          "type_hint": null,
+          "title": null,
+          "parameters": {}
+        },
+        {
+          "url": "http://127.0.0.1:50606/de",
+          "rel": [
+            "alternate"
+          ],
+          "source": "html_link",
+          "context_url": "http://127.0.0.1:50606/noindex",
+          "applies_to_document": true,
+          "hreflang": [
+            "de"
+          ],
+          "media": null,
+          "type_hint": null,
+          "title": null,
+          "parameters": {}
+        }
+      ],
+      "pagination_next": [],
+      "pagination_prev": [],
+      "amphtml": [],
+      "language": null,
+      "viewport": null,
+      "images": [
+        {
+          "url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "alt": "Stored image",
+          "width": null,
+          "height": null,
+          "loading": null
+        }
+      ],
+      "links": [
+        {
+          "url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "text": "",
+          "rel": "",
+          "internal": true,
+          "nofollow": false,
+          "kind": "image",
+          "raw_href": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "resolved_href": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "fragment": null,
+          "dom_location": {
+            "index": 10,
+            "path": "/html[1]/body[1]/img[1]",
+            "path_truncated": false,
+            "semantic_ancestors": [
+              "body"
+            ]
+          },
+          "position": "content"
+        },
+        {
+          "url": "http://127.0.0.1:50606/a?x=1&y=2",
+          "text": "",
+          "rel": "alternate",
+          "internal": true,
+          "nofollow": false,
+          "kind": "relationship",
+          "raw_href": null,
+          "resolved_href": null,
+          "fragment": null,
+          "dom_location": null,
+          "position": null
+        },
+        {
+          "url": "http://127.0.0.1:50606/b",
+          "text": "",
+          "rel": "alternate",
+          "internal": true,
+          "nofollow": false,
+          "kind": "relationship",
+          "raw_href": null,
+          "resolved_href": null,
+          "fragment": null,
+          "dom_location": null,
+          "position": null
+        },
+        {
+          "url": "http://127.0.0.1:50606/de",
+          "text": "",
+          "rel": "alternate",
+          "internal": true,
+          "nofollow": false,
+          "kind": "relationship",
+          "raw_href": null,
+          "resolved_href": null,
+          "fragment": null,
+          "dom_location": null,
+          "position": null
+        }
+      ],
+      "word_count": 4,
+      "content_hash": "77d9a84569252f483dcb8a89067226a888f721a4b461f3e01487e676fdb19a64",
+      "structured_data": [],
+      "invalid_structured_data": 0,
+      "script_count": 0,
+      "indexable": false,
+      "indexability_reasons": [
+        "Noindex directive"
+      ],
+      "raw_metadata": null,
+      "rendered": false,
+      "renderer_error": null,
+      "rendered_url": null,
+      "rendered_status": null,
+      "rendered_headers": {},
+      "rendered_at": null,
+      "browser_version": null,
+      "rendered_viewport": null,
+      "render_wait_ms": null,
+      "network_events_dropped": 0,
+      "console_errors": [],
+      "network_requests": [],
+      "accessibility": null,
+      "screenshot_base64": null,
+      "custom_extractions": [],
+      "custom_javascript_results": [],
+      "browser_cookies": [],
+      "pdf": null,
+      "image_metadata": null,
+      "dom_metadata": {
+        "engine": "independent_html5_dom_v1",
+        "source": "raw_html",
+        "heading_text_engine": "independent_dom_text_with_inline_image_alt_v1",
+        "complete": true,
+        "limits_reached": [],
+        "headings": [
+          {
+            "tag_level": 1,
+            "text": "Saved actual generator page",
+            "raw_text": "Saved actual generator page",
+            "text_with_image_alt": "Saved actual generator page",
+            "image_alt": [],
+            "aria_level": null,
+            "heading_offset": null,
+            "hidden_attribute": false,
+            "dom_location": {
+              "index": 9,
+              "path": "/html[1]/body[1]/h1[1]",
+              "path_truncated": false,
+              "semantic_ancestors": [
+                "body"
+              ]
+            }
+          }
+        ],
+        "meta_keywords": [],
+        "fragment_targets": [],
+        "navigation_candidates": [],
+        "responsive_images": [
+          {
+            "src": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+            "srcset": null,
+            "sizes": null,
+            "alt": "Stored image",
+            "width": null,
+            "height": null,
+            "loading": null,
+            "candidates": [
+              {
+                "source": "img_src",
+                "raw_url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+                "url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+                "descriptors": [],
+                "width": null,
+                "density": null,
+                "height": null,
+                "media": null,
+                "type_hint": null,
+                "sizes": null,
+                "eligible": true,
+                "error": null,
+                "dom_location": {
+                  "index": 10,
+                  "path": "/html[1]/body[1]/img[1]",
+                  "path_truncated": false,
+                  "semantic_ancestors": [
+                    "body"
+                  ]
+                }
+              }
+            ],
+            "dom_location": {
+              "index": 10,
+              "path": "/html[1]/body[1]/img[1]",
+              "path_truncated": false,
+              "semantic_ancestors": [
+                "body"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "url": "http://127.0.0.1:50606/de",
+      "final_url": "http://127.0.0.1:50606/de",
+      "depth": 0,
+      "discovered_from": null,
+      "internal": true,
+      "fetched_at": "2026-10-15T21:45:03.628305100+00:00",
+      "status": 200,
+      "final_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "response_ms": 2,
+      "size_bytes": 413,
+      "truncated": false,
+      "error": null,
+      "warnings": [],
+      "blocked_by_robots": false,
+      "robots_warning": null,
+      "redirect_chain": [],
+      "headers": {
+        "connection": "close",
+        "content-length": "413",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Thu, 15 Oct 2026 21:45:03 GMT",
+        "last-modified": "Wed, 01 Jan 2020 00:00:00 GMT"
+      },
+      "titles": [
+        "Owned /de"
+      ],
+      "meta_descriptions": [],
+      "title_pixel_widths": [
+        97
+      ],
+      "description_pixel_widths": [],
+      "text_metrics_engine": "roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic",
+      "h1": [
+        "Saved actual generator page"
+      ],
+      "h2": [],
+      "canonical": [],
+      "html_canonical": [],
+      "header_canonical": [],
+      "meta_robots": [],
+      "x_robots_tag": [],
+      "robots_directives": [],
+      "effective_robots": [],
+      "indexability_agent": "googlebot",
+      "header_link_values": [],
+      "hreflang": [
+        {
+          "language": "en",
+          "url": "http://127.0.0.1:50606/a?x=1&y=2"
+        },
+        {
+          "language": "fr",
+          "url": "http://127.0.0.1:50606/b"
+        },
+        {
+          "language": "de",
+          "url": "http://127.0.0.1:50606/de"
+        }
+      ],
+      "html_hreflang": [
+        {
+          "language": "en",
+          "url": "http://127.0.0.1:50606/a?x=1&y=2"
+        },
+        {
+          "language": "fr",
+          "url": "http://127.0.0.1:50606/b"
+        },
+        {
+          "language": "de",
+          "url": "http://127.0.0.1:50606/de"
+        }
+      ],
+      "header_hreflang": [],
+      "document_base_url": "http://127.0.0.1:50606/de",
+      "base_href": null,
+      "link_relationships": [
+        {
+          "url": "http://127.0.0.1:50606/a?x=1&y=2",
+          "rel": [
+            "alternate"
+          ],
+          "source": "html_link",
+          "context_url": "http://127.0.0.1:50606/de",
+          "applies_to_document": true,
+          "hreflang": [
+            "en"
+          ],
+          "media": null,
+          "type_hint": null,
+          "title": null,
+          "parameters": {}
+        },
+        {
+          "url": "http://127.0.0.1:50606/b",
+          "rel": [
+            "alternate"
+          ],
+          "source": "html_link",
+          "context_url": "http://127.0.0.1:50606/de",
+          "applies_to_document": true,
+          "hreflang": [
+            "fr"
+          ],
+          "media": null,
+          "type_hint": null,
+          "title": null,
+          "parameters": {}
+        },
+        {
+          "url": "http://127.0.0.1:50606/de",
+          "rel": [
+            "alternate"
+          ],
+          "source": "html_link",
+          "context_url": "http://127.0.0.1:50606/de",
+          "applies_to_document": true,
+          "hreflang": [
+            "de"
+          ],
+          "media": null,
+          "type_hint": null,
+          "title": null,
+          "parameters": {}
+        }
+      ],
+      "pagination_next": [],
+      "pagination_prev": [],
+      "amphtml": [],
+      "language": null,
+      "viewport": null,
+      "images": [
+        {
+          "url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "alt": "Stored image",
+          "width": null,
+          "height": null,
+          "loading": null
+        }
+      ],
+      "links": [
+        {
+          "url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "text": "",
+          "rel": "",
+          "internal": true,
+          "nofollow": false,
+          "kind": "image",
+          "raw_href": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "resolved_href": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "fragment": null,
+          "dom_location": {
+            "index": 9,
+            "path": "/html[1]/body[1]/img[1]",
+            "path_truncated": false,
+            "semantic_ancestors": [
+              "body"
+            ]
+          },
+          "position": "content"
+        },
+        {
+          "url": "http://127.0.0.1:50606/a?x=1&y=2",
+          "text": "",
+          "rel": "alternate",
+          "internal": true,
+          "nofollow": false,
+          "kind": "relationship",
+          "raw_href": null,
+          "resolved_href": null,
+          "fragment": null,
+          "dom_location": null,
+          "position": null
+        },
+        {
+          "url": "http://127.0.0.1:50606/b",
+          "text": "",
+          "rel": "alternate",
+          "internal": true,
+          "nofollow": false,
+          "kind": "relationship",
+          "raw_href": null,
+          "resolved_href": null,
+          "fragment": null,
+          "dom_location": null,
+          "position": null
+        },
+        {
+          "url": "http://127.0.0.1:50606/de",
+          "text": "",
+          "rel": "alternate",
+          "internal": true,
+          "nofollow": false,
+          "kind": "relationship",
+          "raw_href": null,
+          "resolved_href": null,
+          "fragment": null,
+          "dom_location": null,
+          "position": null
+        }
+      ],
+      "word_count": 4,
+      "content_hash": "77d9a84569252f483dcb8a89067226a888f721a4b461f3e01487e676fdb19a64",
+      "structured_data": [],
+      "invalid_structured_data": 0,
+      "script_count": 0,
+      "indexable": true,
+      "indexability_reasons": [],
+      "raw_metadata": null,
+      "rendered": false,
+      "renderer_error": null,
+      "rendered_url": null,
+      "rendered_status": null,
+      "rendered_headers": {},
+      "rendered_at": null,
+      "browser_version": null,
+      "rendered_viewport": null,
+      "render_wait_ms": null,
+      "network_events_dropped": 0,
+      "console_errors": [],
+      "network_requests": [],
+      "accessibility": null,
+      "screenshot_base64": null,
+      "custom_extractions": [],
+      "custom_javascript_results": [],
+      "browser_cookies": [],
+      "pdf": null,
+      "image_metadata": null,
+      "dom_metadata": {
+        "engine": "independent_html5_dom_v1",
+        "source": "raw_html",
+        "heading_text_engine": "independent_dom_text_with_inline_image_alt_v1",
+        "complete": true,
+        "limits_reached": [],
+        "headings": [
+          {
+            "tag_level": 1,
+            "text": "Saved actual generator page",
+            "raw_text": "Saved actual generator page",
+            "text_with_image_alt": "Saved actual generator page",
+            "image_alt": [],
+            "aria_level": null,
+            "heading_offset": null,
+            "hidden_attribute": false,
+            "dom_location": {
+              "index": 8,
+              "path": "/html[1]/body[1]/h1[1]",
+              "path_truncated": false,
+              "semantic_ancestors": [
+                "body"
+              ]
+            }
+          }
+        ],
+        "meta_keywords": [],
+        "fragment_targets": [],
+        "navigation_candidates": [],
+        "responsive_images": [
+          {
+            "src": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+            "srcset": null,
+            "sizes": null,
+            "alt": "Stored image",
+            "width": null,
+            "height": null,
+            "loading": null,
+            "candidates": [
+              {
+                "source": "img_src",
+                "raw_url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+                "url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+                "descriptors": [],
+                "width": null,
+                "density": null,
+                "height": null,
+                "media": null,
+                "type_hint": null,
+                "sizes": null,
+                "eligible": true,
+                "error": null,
+                "dom_location": {
+                  "index": 9,
+                  "path": "/html[1]/body[1]/img[1]",
+                  "path_truncated": false,
+                  "semantic_ancestors": [
+                    "body"
+                  ]
+                }
+              }
+            ],
+            "dom_location": {
+              "index": 9,
+              "path": "/html[1]/body[1]/img[1]",
+              "path_truncated": false,
+              "semantic_ancestors": [
+                "body"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "url": "http://127.0.0.1:50606/missing",
+      "final_url": "http://127.0.0.1:50606/missing",
+      "depth": 0,
+      "discovered_from": null,
+      "internal": true,
+      "fetched_at": "2026-10-15T21:45:03.630955800+00:00",
+      "status": 404,
+      "final_status": 404,
+      "content_type": "text/html; charset=utf-8",
+      "response_ms": 2,
+      "size_bytes": 418,
+      "truncated": false,
+      "error": null,
+      "warnings": [],
+      "blocked_by_robots": false,
+      "robots_warning": null,
+      "redirect_chain": [],
+      "headers": {
+        "connection": "close",
+        "content-length": "418",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Thu, 15 Oct 2026 21:45:03 GMT",
+        "last-modified": "Wed, 01 Jan 2020 00:00:00 GMT"
+      },
+      "titles": [
+        "Owned /missing"
+      ],
+      "meta_descriptions": [],
+      "title_pixel_widths": [
+        145
+      ],
+      "description_pixel_widths": [],
+      "text_metrics_engine": "roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic",
+      "h1": [
+        "Saved actual generator page"
+      ],
+      "h2": [],
+      "canonical": [],
+      "html_canonical": [],
+      "header_canonical": [],
+      "meta_robots": [],
+      "x_robots_tag": [],
+      "robots_directives": [],
+      "effective_robots": [],
+      "indexability_agent": "googlebot",
+      "header_link_values": [],
+      "hreflang": [
+        {
+          "language": "en",
+          "url": "http://127.0.0.1:50606/a?x=1&y=2"
+        },
+        {
+          "language": "fr",
+          "url": "http://127.0.0.1:50606/b"
+        },
+        {
+          "language": "de",
+          "url": "http://127.0.0.1:50606/de"
+        }
+      ],
+      "html_hreflang": [
+        {
+          "language": "en",
+          "url": "http://127.0.0.1:50606/a?x=1&y=2"
+        },
+        {
+          "language": "fr",
+          "url": "http://127.0.0.1:50606/b"
+        },
+        {
+          "language": "de",
+          "url": "http://127.0.0.1:50606/de"
+        }
+      ],
+      "header_hreflang": [],
+      "document_base_url": "http://127.0.0.1:50606/missing",
+      "base_href": null,
+      "link_relationships": [
+        {
+          "url": "http://127.0.0.1:50606/a?x=1&y=2",
+          "rel": [
+            "alternate"
+          ],
+          "source": "html_link",
+          "context_url": "http://127.0.0.1:50606/missing",
+          "applies_to_document": true,
+          "hreflang": [
+            "en"
+          ],
+          "media": null,
+          "type_hint": null,
+          "title": null,
+          "parameters": {}
+        },
+        {
+          "url": "http://127.0.0.1:50606/b",
+          "rel": [
+            "alternate"
+          ],
+          "source": "html_link",
+          "context_url": "http://127.0.0.1:50606/missing",
+          "applies_to_document": true,
+          "hreflang": [
+            "fr"
+          ],
+          "media": null,
+          "type_hint": null,
+          "title": null,
+          "parameters": {}
+        },
+        {
+          "url": "http://127.0.0.1:50606/de",
+          "rel": [
+            "alternate"
+          ],
+          "source": "html_link",
+          "context_url": "http://127.0.0.1:50606/missing",
+          "applies_to_document": true,
+          "hreflang": [
+            "de"
+          ],
+          "media": null,
+          "type_hint": null,
+          "title": null,
+          "parameters": {}
+        }
+      ],
+      "pagination_next": [],
+      "pagination_prev": [],
+      "amphtml": [],
+      "language": null,
+      "viewport": null,
+      "images": [
+        {
+          "url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "alt": "Stored image",
+          "width": null,
+          "height": null,
+          "loading": null
+        }
+      ],
+      "links": [
+        {
+          "url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "text": "",
+          "rel": "",
+          "internal": true,
+          "nofollow": false,
+          "kind": "image",
+          "raw_href": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "resolved_href": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "fragment": null,
+          "dom_location": {
+            "index": 9,
+            "path": "/html[1]/body[1]/img[1]",
+            "path_truncated": false,
+            "semantic_ancestors": [
+              "body"
+            ]
+          },
+          "position": "content"
+        },
+        {
+          "url": "http://127.0.0.1:50606/a?x=1&y=2",
+          "text": "",
+          "rel": "alternate",
+          "internal": true,
+          "nofollow": false,
+          "kind": "relationship",
+          "raw_href": null,
+          "resolved_href": null,
+          "fragment": null,
+          "dom_location": null,
+          "position": null
+        },
+        {
+          "url": "http://127.0.0.1:50606/b",
+          "text": "",
+          "rel": "alternate",
+          "internal": true,
+          "nofollow": false,
+          "kind": "relationship",
+          "raw_href": null,
+          "resolved_href": null,
+          "fragment": null,
+          "dom_location": null,
+          "position": null
+        },
+        {
+          "url": "http://127.0.0.1:50606/de",
+          "text": "",
+          "rel": "alternate",
+          "internal": true,
+          "nofollow": false,
+          "kind": "relationship",
+          "raw_href": null,
+          "resolved_href": null,
+          "fragment": null,
+          "dom_location": null,
+          "position": null
+        }
+      ],
+      "word_count": 4,
+      "content_hash": "77d9a84569252f483dcb8a89067226a888f721a4b461f3e01487e676fdb19a64",
+      "structured_data": [],
+      "invalid_structured_data": 0,
+      "script_count": 0,
+      "indexable": false,
+      "indexability_reasons": [
+        "Requested URL does not return HTTP 200"
+      ],
+      "raw_metadata": null,
+      "rendered": false,
+      "renderer_error": null,
+      "rendered_url": null,
+      "rendered_status": null,
+      "rendered_headers": {},
+      "rendered_at": null,
+      "browser_version": null,
+      "rendered_viewport": null,
+      "render_wait_ms": null,
+      "network_events_dropped": 0,
+      "console_errors": [],
+      "network_requests": [],
+      "accessibility": null,
+      "screenshot_base64": null,
+      "custom_extractions": [],
+      "custom_javascript_results": [],
+      "browser_cookies": [],
+      "pdf": null,
+      "image_metadata": null,
+      "dom_metadata": {
+        "engine": "independent_html5_dom_v1",
+        "source": "raw_html",
+        "heading_text_engine": "independent_dom_text_with_inline_image_alt_v1",
+        "complete": true,
+        "limits_reached": [],
+        "headings": [
+          {
+            "tag_level": 1,
+            "text": "Saved actual generator page",
+            "raw_text": "Saved actual generator page",
+            "text_with_image_alt": "Saved actual generator page",
+            "image_alt": [],
+            "aria_level": null,
+            "heading_offset": null,
+            "hidden_attribute": false,
+            "dom_location": {
+              "index": 8,
+              "path": "/html[1]/body[1]/h1[1]",
+              "path_truncated": false,
+              "semantic_ancestors": [
+                "body"
+              ]
+            }
+          }
+        ],
+        "meta_keywords": [],
+        "fragment_targets": [],
+        "navigation_candidates": [],
+        "responsive_images": [
+          {
+            "src": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+            "srcset": null,
+            "sizes": null,
+            "alt": "Stored image",
+            "width": null,
+            "height": null,
+            "loading": null,
+            "candidates": [
+              {
+                "source": "img_src",
+                "raw_url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+                "url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+                "descriptors": [],
+                "width": null,
+                "density": null,
+                "height": null,
+                "media": null,
+                "type_hint": null,
+                "sizes": null,
+                "eligible": true,
+                "error": null,
+                "dom_location": {
+                  "index": 9,
+                  "path": "/html[1]/body[1]/img[1]",
+                  "path_truncated": false,
+                  "semantic_ancestors": [
+                    "body"
+                  ]
+                }
+              }
+            ],
+            "dom_location": {
+              "index": 9,
+              "path": "/html[1]/body[1]/img[1]",
+              "path_truncated": false,
+              "semantic_ancestors": [
+                "body"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "url": "http://127.0.0.1:50606/redirect",
+      "final_url": "http://127.0.0.1:50606/landing",
+      "depth": 0,
+      "discovered_from": null,
+      "internal": true,
+      "fetched_at": "2026-10-15T21:45:03.632037600+00:00",
+      "status": 302,
+      "final_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "response_ms": 1,
+      "size_bytes": 418,
+      "truncated": false,
+      "error": null,
+      "warnings": [],
+      "blocked_by_robots": false,
+      "robots_warning": null,
+      "redirect_chain": [
+        {
+          "url": "http://127.0.0.1:50606/redirect",
+          "status": 302,
+          "target": "http://127.0.0.1:50606/landing"
+        }
+      ],
+      "headers": {
+        "connection": "close",
+        "content-length": "418",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Thu, 15 Oct 2026 21:45:03 GMT",
+        "last-modified": "Wed, 01 Jan 2020 00:00:00 GMT"
+      },
+      "titles": [
+        "Owned /landing"
+      ],
+      "meta_descriptions": [],
+      "title_pixel_widths": [
+        141
+      ],
+      "description_pixel_widths": [],
+      "text_metrics_engine": "roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic",
+      "h1": [
+        "Saved actual generator page"
+      ],
+      "h2": [],
+      "canonical": [],
+      "html_canonical": [],
+      "header_canonical": [],
+      "meta_robots": [],
+      "x_robots_tag": [],
+      "robots_directives": [],
+      "effective_robots": [],
+      "indexability_agent": "googlebot",
+      "header_link_values": [],
+      "hreflang": [
+        {
+          "language": "en",
+          "url": "http://127.0.0.1:50606/a?x=1&y=2"
+        },
+        {
+          "language": "fr",
+          "url": "http://127.0.0.1:50606/b"
+        },
+        {
+          "language": "de",
+          "url": "http://127.0.0.1:50606/de"
+        }
+      ],
+      "html_hreflang": [
+        {
+          "language": "en",
+          "url": "http://127.0.0.1:50606/a?x=1&y=2"
+        },
+        {
+          "language": "fr",
+          "url": "http://127.0.0.1:50606/b"
+        },
+        {
+          "language": "de",
+          "url": "http://127.0.0.1:50606/de"
+        }
+      ],
+      "header_hreflang": [],
+      "document_base_url": "http://127.0.0.1:50606/landing",
+      "base_href": null,
+      "link_relationships": [
+        {
+          "url": "http://127.0.0.1:50606/a?x=1&y=2",
+          "rel": [
+            "alternate"
+          ],
+          "source": "html_link",
+          "context_url": "http://127.0.0.1:50606/landing",
+          "applies_to_document": true,
+          "hreflang": [
+            "en"
+          ],
+          "media": null,
+          "type_hint": null,
+          "title": null,
+          "parameters": {}
+        },
+        {
+          "url": "http://127.0.0.1:50606/b",
+          "rel": [
+            "alternate"
+          ],
+          "source": "html_link",
+          "context_url": "http://127.0.0.1:50606/landing",
+          "applies_to_document": true,
+          "hreflang": [
+            "fr"
+          ],
+          "media": null,
+          "type_hint": null,
+          "title": null,
+          "parameters": {}
+        },
+        {
+          "url": "http://127.0.0.1:50606/de",
+          "rel": [
+            "alternate"
+          ],
+          "source": "html_link",
+          "context_url": "http://127.0.0.1:50606/landing",
+          "applies_to_document": true,
+          "hreflang": [
+            "de"
+          ],
+          "media": null,
+          "type_hint": null,
+          "title": null,
+          "parameters": {}
+        }
+      ],
+      "pagination_next": [],
+      "pagination_prev": [],
+      "amphtml": [],
+      "language": null,
+      "viewport": null,
+      "images": [
+        {
+          "url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "alt": "Stored image",
+          "width": null,
+          "height": null,
+          "loading": null
+        }
+      ],
+      "links": [
+        {
+          "url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "text": "",
+          "rel": "",
+          "internal": true,
+          "nofollow": false,
+          "kind": "image",
+          "raw_href": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "resolved_href": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+          "fragment": null,
+          "dom_location": {
+            "index": 9,
+            "path": "/html[1]/body[1]/img[1]",
+            "path_truncated": false,
+            "semantic_ancestors": [
+              "body"
+            ]
+          },
+          "position": "content"
+        },
+        {
+          "url": "http://127.0.0.1:50606/a?x=1&y=2",
+          "text": "",
+          "rel": "alternate",
+          "internal": true,
+          "nofollow": false,
+          "kind": "relationship",
+          "raw_href": null,
+          "resolved_href": null,
+          "fragment": null,
+          "dom_location": null,
+          "position": null
+        },
+        {
+          "url": "http://127.0.0.1:50606/b",
+          "text": "",
+          "rel": "alternate",
+          "internal": true,
+          "nofollow": false,
+          "kind": "relationship",
+          "raw_href": null,
+          "resolved_href": null,
+          "fragment": null,
+          "dom_location": null,
+          "position": null
+        },
+        {
+          "url": "http://127.0.0.1:50606/de",
+          "text": "",
+          "rel": "alternate",
+          "internal": true,
+          "nofollow": false,
+          "kind": "relationship",
+          "raw_href": null,
+          "resolved_href": null,
+          "fragment": null,
+          "dom_location": null,
+          "position": null
+        }
+      ],
+      "word_count": 4,
+      "content_hash": "77d9a84569252f483dcb8a89067226a888f721a4b461f3e01487e676fdb19a64",
+      "structured_data": [],
+      "invalid_structured_data": 0,
+      "script_count": 0,
+      "indexable": false,
+      "indexability_reasons": [
+        "Requested URL does not return HTTP 200"
+      ],
+      "raw_metadata": null,
+      "rendered": false,
+      "renderer_error": null,
+      "rendered_url": null,
+      "rendered_status": null,
+      "rendered_headers": {},
+      "rendered_at": null,
+      "browser_version": null,
+      "rendered_viewport": null,
+      "render_wait_ms": null,
+      "network_events_dropped": 0,
+      "console_errors": [],
+      "network_requests": [],
+      "accessibility": null,
+      "screenshot_base64": null,
+      "custom_extractions": [],
+      "custom_javascript_results": [],
+      "browser_cookies": [],
+      "pdf": null,
+      "image_metadata": null,
+      "dom_metadata": {
+        "engine": "independent_html5_dom_v1",
+        "source": "raw_html",
+        "heading_text_engine": "independent_dom_text_with_inline_image_alt_v1",
+        "complete": true,
+        "limits_reached": [],
+        "headings": [
+          {
+            "tag_level": 1,
+            "text": "Saved actual generator page",
+            "raw_text": "Saved actual generator page",
+            "text_with_image_alt": "Saved actual generator page",
+            "image_alt": [],
+            "aria_level": null,
+            "heading_offset": null,
+            "hidden_attribute": false,
+            "dom_location": {
+              "index": 8,
+              "path": "/html[1]/body[1]/h1[1]",
+              "path_truncated": false,
+              "semantic_ancestors": [
+                "body"
+              ]
+            }
+          }
+        ],
+        "meta_keywords": [],
+        "fragment_targets": [],
+        "navigation_candidates": [],
+        "responsive_images": [
+          {
+            "src": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+            "srcset": null,
+            "sizes": null,
+            "alt": "Stored image",
+            "width": null,
+            "height": null,
+            "loading": null,
+            "candidates": [
+              {
+                "source": "img_src",
+                "raw_url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+                "url": "http://127.0.0.1:50606/image%20name.png?x=1&y=2",
+                "descriptors": [],
+                "width": null,
+                "density": null,
+                "height": null,
+                "media": null,
+                "type_hint": null,
+                "sizes": null,
+                "eligible": true,
+                "error": null,
+                "dom_location": {
+                  "index": 9,
+                  "path": "/html[1]/body[1]/img[1]",
+                  "path_truncated": false,
+                  "semantic_ancestors": [
+                    "body"
+                  ]
+                }
+              }
+            ],
+            "dom_location": {
+              "index": 9,
+              "path": "/html[1]/body[1]/img[1]",
+              "path_truncated": false,
+              "semantic_ancestors": [
+                "body"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "issues": [
+    {
+      "code": "url_parameters",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/a?x=1&y=2",
+      "message": "URL contains 2 parsed query parameter(s); parameters are not inherently a crawling or indexing problem",
+      "related_urls": []
+    },
+    {
+      "code": "title_short",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/a?x=1&y=2",
+      "message": "Primary title has 16 Unicode characters, below configured minimum 30; review content and search appearance",
+      "related_urls": []
+    },
+    {
+      "code": "title_pixels_short",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/a?x=1&y=2",
+      "message": "Primary title measured 171px below configured 200px minimum (profile roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic)",
+      "related_urls": []
+    },
+    {
+      "code": "h2_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/a?x=1&y=2",
+      "message": "No nonempty H2 heading was observed in the complete captured document; sections may not need H2 headings",
+      "related_urls": []
+    },
+    {
+      "code": "image_size_attributes_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/a?x=1&y=2",
+      "message": "1 image occurrence(s) have missing or empty width/height attributes; intrinsic and rendered dimensions are not inferred",
+      "related_urls": [
+        "http://127.0.0.1:50606/image%20name.png?x=1&y=2"
+      ]
+    },
+    {
+      "code": "content_low_word_count",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/a?x=1&y=2",
+      "message": "Captured normalized visible text has 4 words, below configured minimum 200; word count alone does not establish content quality",
+      "related_urls": []
+    },
+    {
+      "code": "internal_outlinks_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/a?x=1&y=2",
+      "message": "No internal anchor outlinks were observed in the complete captured document; this can be intentional",
+      "related_urls": []
+    },
+    {
+      "code": "http_url",
+      "severity": "warning",
+      "url": "http://127.0.0.1:50606/a?x=1&y=2",
+      "message": "HTML served over unencrypted HTTP",
+      "related_urls": []
+    },
+    {
+      "code": "description_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/a?x=1&y=2",
+      "message": "Meta description is missing or empty",
+      "related_urls": []
+    },
+    {
+      "code": "canonical_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/a?x=1&y=2",
+      "message": "No HTML canonical link",
+      "related_urls": []
+    },
+    {
+      "code": "language_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/a?x=1&y=2",
+      "message": "HTML language attribute is missing",
+      "related_urls": []
+    },
+    {
+      "code": "viewport_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/a?x=1&y=2",
+      "message": "No viewport meta tag",
+      "related_urls": []
+    },
+    {
+      "code": "title_short",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/b",
+      "message": "Primary title has 8 Unicode characters, below configured minimum 30; review content and search appearance",
+      "related_urls": []
+    },
+    {
+      "code": "title_pixels_short",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/b",
+      "message": "Primary title measured 87px below configured 200px minimum (profile roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic)",
+      "related_urls": []
+    },
+    {
+      "code": "h2_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/b",
+      "message": "No nonempty H2 heading was observed in the complete captured document; sections may not need H2 headings",
+      "related_urls": []
+    },
+    {
+      "code": "image_size_attributes_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/b",
+      "message": "1 image occurrence(s) have missing or empty width/height attributes; intrinsic and rendered dimensions are not inferred",
+      "related_urls": [
+        "http://127.0.0.1:50606/image%20name.png?x=1&y=2"
+      ]
+    },
+    {
+      "code": "content_low_word_count",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/b",
+      "message": "Captured normalized visible text has 4 words, below configured minimum 200; word count alone does not establish content quality",
+      "related_urls": []
+    },
+    {
+      "code": "internal_outlinks_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/b",
+      "message": "No internal anchor outlinks were observed in the complete captured document; this can be intentional",
+      "related_urls": []
+    },
+    {
+      "code": "http_url",
+      "severity": "warning",
+      "url": "http://127.0.0.1:50606/b",
+      "message": "HTML served over unencrypted HTTP",
+      "related_urls": []
+    },
+    {
+      "code": "description_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/b",
+      "message": "Meta description is missing or empty",
+      "related_urls": []
+    },
+    {
+      "code": "canonical_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/b",
+      "message": "No HTML canonical link",
+      "related_urls": []
+    },
+    {
+      "code": "language_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/b",
+      "message": "HTML language attribute is missing",
+      "related_urls": []
+    },
+    {
+      "code": "viewport_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/b",
+      "message": "No viewport meta tag",
+      "related_urls": []
+    },
+    {
+      "code": "title_short",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/noindex",
+      "message": "Primary title has 14 Unicode characters, below configured minimum 30; review content and search appearance",
+      "related_urls": []
+    },
+    {
+      "code": "title_pixels_short",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/noindex",
+      "message": "Primary title measured 146px below configured 200px minimum (profile roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic)",
+      "related_urls": []
+    },
+    {
+      "code": "h2_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/noindex",
+      "message": "No nonempty H2 heading was observed in the complete captured document; sections may not need H2 headings",
+      "related_urls": []
+    },
+    {
+      "code": "image_size_attributes_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/noindex",
+      "message": "1 image occurrence(s) have missing or empty width/height attributes; intrinsic and rendered dimensions are not inferred",
+      "related_urls": [
+        "http://127.0.0.1:50606/image%20name.png?x=1&y=2"
+      ]
+    },
+    {
+      "code": "content_low_word_count",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/noindex",
+      "message": "Captured normalized visible text has 4 words, below configured minimum 200; word count alone does not establish content quality",
+      "related_urls": []
+    },
+    {
+      "code": "internal_outlinks_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/noindex",
+      "message": "No internal anchor outlinks were observed in the complete captured document; this can be intentional",
+      "related_urls": []
+    },
+    {
+      "code": "http_url",
+      "severity": "warning",
+      "url": "http://127.0.0.1:50606/noindex",
+      "message": "HTML served over unencrypted HTTP",
+      "related_urls": []
+    },
+    {
+      "code": "description_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/noindex",
+      "message": "Meta description is missing or empty",
+      "related_urls": []
+    },
+    {
+      "code": "canonical_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/noindex",
+      "message": "No HTML canonical link",
+      "related_urls": []
+    },
+    {
+      "code": "nonindexable",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/noindex",
+      "message": "Noindex directive",
+      "related_urls": []
+    },
+    {
+      "code": "language_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/noindex",
+      "message": "HTML language attribute is missing",
+      "related_urls": []
+    },
+    {
+      "code": "viewport_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/noindex",
+      "message": "No viewport meta tag",
+      "related_urls": []
+    },
+    {
+      "code": "hreflang_return_missing",
+      "severity": "warning",
+      "url": "http://127.0.0.1:50606/noindex",
+      "message": "Checked alternate has no return hreflang link",
+      "related_urls": [
+        "http://127.0.0.1:50606/a?x=1&y=2"
+      ]
+    },
+    {
+      "code": "hreflang_return_missing",
+      "severity": "warning",
+      "url": "http://127.0.0.1:50606/noindex",
+      "message": "Checked alternate has no return hreflang link",
+      "related_urls": [
+        "http://127.0.0.1:50606/b"
+      ]
+    },
+    {
+      "code": "hreflang_return_missing",
+      "severity": "warning",
+      "url": "http://127.0.0.1:50606/noindex",
+      "message": "Checked alternate has no return hreflang link",
+      "related_urls": [
+        "http://127.0.0.1:50606/de"
+      ]
+    },
+    {
+      "code": "title_short",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/de",
+      "message": "Primary title has 9 Unicode characters, below configured minimum 30; review content and search appearance",
+      "related_urls": []
+    },
+    {
+      "code": "title_pixels_short",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/de",
+      "message": "Primary title measured 97px below configured 200px minimum (profile roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic)",
+      "related_urls": []
+    },
+    {
+      "code": "h2_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/de",
+      "message": "No nonempty H2 heading was observed in the complete captured document; sections may not need H2 headings",
+      "related_urls": []
+    },
+    {
+      "code": "image_size_attributes_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/de",
+      "message": "1 image occurrence(s) have missing or empty width/height attributes; intrinsic and rendered dimensions are not inferred",
+      "related_urls": [
+        "http://127.0.0.1:50606/image%20name.png?x=1&y=2"
+      ]
+    },
+    {
+      "code": "content_low_word_count",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/de",
+      "message": "Captured normalized visible text has 4 words, below configured minimum 200; word count alone does not establish content quality",
+      "related_urls": []
+    },
+    {
+      "code": "internal_outlinks_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/de",
+      "message": "No internal anchor outlinks were observed in the complete captured document; this can be intentional",
+      "related_urls": []
+    },
+    {
+      "code": "http_url",
+      "severity": "warning",
+      "url": "http://127.0.0.1:50606/de",
+      "message": "HTML served over unencrypted HTTP",
+      "related_urls": []
+    },
+    {
+      "code": "description_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/de",
+      "message": "Meta description is missing or empty",
+      "related_urls": []
+    },
+    {
+      "code": "canonical_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/de",
+      "message": "No HTML canonical link",
+      "related_urls": []
+    },
+    {
+      "code": "language_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/de",
+      "message": "HTML language attribute is missing",
+      "related_urls": []
+    },
+    {
+      "code": "viewport_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/de",
+      "message": "No viewport meta tag",
+      "related_urls": []
+    },
+    {
+      "code": "client_error",
+      "severity": "error",
+      "url": "http://127.0.0.1:50606/missing",
+      "message": "HTTP 404",
+      "related_urls": []
+    },
+    {
+      "code": "title_short",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/redirect",
+      "message": "Primary title has 14 Unicode characters, below configured minimum 30; review content and search appearance",
+      "related_urls": []
+    },
+    {
+      "code": "title_pixels_short",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/redirect",
+      "message": "Primary title measured 141px below configured 200px minimum (profile roboto-repo-tag-v2.138; glyph-quantization-150-percent-v2; title20px; description14px; latin-greek-cyrillic)",
+      "related_urls": []
+    },
+    {
+      "code": "h2_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/redirect",
+      "message": "No nonempty H2 heading was observed in the complete captured document; sections may not need H2 headings",
+      "related_urls": []
+    },
+    {
+      "code": "image_size_attributes_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/redirect",
+      "message": "1 image occurrence(s) have missing or empty width/height attributes; intrinsic and rendered dimensions are not inferred",
+      "related_urls": [
+        "http://127.0.0.1:50606/image%20name.png?x=1&y=2"
+      ]
+    },
+    {
+      "code": "content_low_word_count",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/redirect",
+      "message": "Captured normalized visible text has 4 words, below configured minimum 200; word count alone does not establish content quality",
+      "related_urls": []
+    },
+    {
+      "code": "internal_outlinks_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/redirect",
+      "message": "No internal anchor outlinks were observed in the complete captured document; this can be intentional",
+      "related_urls": []
+    },
+    {
+      "code": "redirect",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/redirect",
+      "message": "Redirects to http://127.0.0.1:50606/landing",
+      "related_urls": [
+        "http://127.0.0.1:50606/landing"
+      ]
+    },
+    {
+      "code": "http_url",
+      "severity": "warning",
+      "url": "http://127.0.0.1:50606/redirect",
+      "message": "HTML served over unencrypted HTTP",
+      "related_urls": []
+    },
+    {
+      "code": "description_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/redirect",
+      "message": "Meta description is missing or empty",
+      "related_urls": []
+    },
+    {
+      "code": "canonical_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/redirect",
+      "message": "No HTML canonical link",
+      "related_urls": []
+    },
+    {
+      "code": "nonindexable",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/redirect",
+      "message": "Requested URL does not return HTTP 200",
+      "related_urls": []
+    },
+    {
+      "code": "language_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/redirect",
+      "message": "HTML language attribute is missing",
+      "related_urls": []
+    },
+    {
+      "code": "viewport_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/redirect",
+      "message": "No viewport meta tag",
+      "related_urls": []
+    },
+    {
+      "code": "hreflang_return_missing",
+      "severity": "warning",
+      "url": "http://127.0.0.1:50606/redirect",
+      "message": "Checked alternate has no return hreflang link",
+      "related_urls": [
+        "http://127.0.0.1:50606/a?x=1&y=2"
+      ]
+    },
+    {
+      "code": "hreflang_return_missing",
+      "severity": "warning",
+      "url": "http://127.0.0.1:50606/redirect",
+      "message": "Checked alternate has no return hreflang link",
+      "related_urls": [
+        "http://127.0.0.1:50606/b"
+      ]
+    },
+    {
+      "code": "hreflang_return_missing",
+      "severity": "warning",
+      "url": "http://127.0.0.1:50606/redirect",
+      "message": "Checked alternate has no return hreflang link",
+      "related_urls": [
+        "http://127.0.0.1:50606/de"
+      ]
+    },
+    {
+      "code": "content_duplicate",
+      "severity": "warning",
+      "url": "http://127.0.0.1:50606/a?x=1&y=2",
+      "message": "Identical normalized visible text; this is an exact-content comparison",
+      "related_urls": [
+        "http://127.0.0.1:50606/b",
+        "http://127.0.0.1:50606/de"
+      ]
+    },
+    {
+      "code": "content_duplicate",
+      "severity": "warning",
+      "url": "http://127.0.0.1:50606/b",
+      "message": "Identical normalized visible text; this is an exact-content comparison",
+      "related_urls": [
+        "http://127.0.0.1:50606/a?x=1&y=2",
+        "http://127.0.0.1:50606/de"
+      ]
+    },
+    {
+      "code": "content_duplicate",
+      "severity": "warning",
+      "url": "http://127.0.0.1:50606/de",
+      "message": "Identical normalized visible text; this is an exact-content comparison",
+      "related_urls": [
+        "http://127.0.0.1:50606/a?x=1&y=2",
+        "http://127.0.0.1:50606/b"
+      ]
+    },
+    {
+      "code": "h1_duplicate",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/a?x=1&y=2",
+      "message": "Case-insensitive normalized H1 text \"saved actual generator page\" occurs on 3 captured indexable URLs; shared headings can be intentional",
+      "related_urls": [
+        "http://127.0.0.1:50606/b",
+        "http://127.0.0.1:50606/de"
+      ]
+    },
+    {
+      "code": "h1_duplicate",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/b",
+      "message": "Case-insensitive normalized H1 text \"saved actual generator page\" occurs on 3 captured indexable URLs; shared headings can be intentional",
+      "related_urls": [
+        "http://127.0.0.1:50606/a?x=1&y=2",
+        "http://127.0.0.1:50606/de"
+      ]
+    },
+    {
+      "code": "h1_duplicate",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/de",
+      "message": "Case-insensitive normalized H1 text \"saved actual generator page\" occurs on 3 captured indexable URLs; shared headings can be intentional",
+      "related_urls": [
+        "http://127.0.0.1:50606/a?x=1&y=2",
+        "http://127.0.0.1:50606/b"
+      ]
+    },
+    {
+      "code": "meta_keywords_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/a?x=1&y=2",
+      "message": "No meta keyword element was observed; keywords are metadata observations, not a recommended ranking input",
+      "related_urls": []
+    },
+    {
+      "code": "meta_keywords_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/b",
+      "message": "No meta keyword element was observed; keywords are metadata observations, not a recommended ranking input",
+      "related_urls": []
+    },
+    {
+      "code": "meta_keywords_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/de",
+      "message": "No meta keyword element was observed; keywords are metadata observations, not a recommended ranking input",
+      "related_urls": []
+    },
+    {
+      "code": "meta_keywords_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/noindex",
+      "message": "No meta keyword element was observed; keywords are metadata observations, not a recommended ranking input",
+      "related_urls": []
+    },
+    {
+      "code": "meta_keywords_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/redirect",
+      "message": "No meta keyword element was observed; keywords are metadata observations, not a recommended ranking input",
+      "related_urls": []
+    },
+    {
+      "code": "hreflang_x_default_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/a?x=1&y=2",
+      "message": "No x-default fallback was observed in this multilingual set; it is recommended, not required",
+      "related_urls": []
+    },
+    {
+      "code": "hreflang_x_default_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/b",
+      "message": "No x-default fallback was observed in this multilingual set; it is recommended, not required",
+      "related_urls": []
+    },
+    {
+      "code": "hreflang_x_default_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/de",
+      "message": "No x-default fallback was observed in this multilingual set; it is recommended, not required",
+      "related_urls": []
+    },
+    {
+      "code": "hreflang_self_missing",
+      "severity": "warning",
+      "url": "http://127.0.0.1:50606/noindex",
+      "message": "Observed hreflang declarations do not include this page itself",
+      "related_urls": []
+    },
+    {
+      "code": "hreflang_x_default_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/noindex",
+      "message": "No x-default fallback was observed in this multilingual set; it is recommended, not required",
+      "related_urls": []
+    },
+    {
+      "code": "hreflang_self_missing",
+      "severity": "warning",
+      "url": "http://127.0.0.1:50606/redirect",
+      "message": "Observed hreflang declarations do not include this page itself",
+      "related_urls": []
+    },
+    {
+      "code": "hreflang_x_default_missing",
+      "severity": "notice",
+      "url": "http://127.0.0.1:50606/redirect",
+      "message": "No x-default fallback was observed in this multilingual set; it is recommended, not required",
+      "related_urls": []
+    }
+  ],
+  "summary": {
+    "started_at": "2026-10-15T21:45:02.967560700+00:00",
+    "finished_at": "2026-10-15T21:45:03.635088800+00:00",
+    "elapsed_ms": 667,
+    "completed": 6,
+    "discovered": 6,
+    "pending": 0,
+    "html_pages": 6,
+    "indexable_pages": 3,
+    "errors": 1,
+    "warnings": 16,
+    "cancelled": false,
+    "limited": false,
+    "status_counts": {
+      "200": 4,
+      "302": 1,
+      "404": 1
+    }
+  },
+  "warnings": [],
+  "sitemap_catalog": {
+    "schema_version": 1,
+    "summary": {
+      "engine": "open-seo-spider/sitemap-membership-ledger-v1",
+      "hash_profile": "sha256-tagged-canonical-rust-serde-rows-v1",
+      "config_sha256": "785794443c12a8942865b09c7ac5cf3f8622098f56f3ad54f1a826ae1d711b8a",
+      "limits": {
+        "max_catalog_json_bytes": 33554432,
+        "max_row_json_bytes": 262144,
+        "max_rows": 1000000
+      },
+      "revision": 2,
+      "last_sequence": 8,
+      "root_rows": 1,
+      "document_rows": 1,
+      "entry_rows": 3,
+      "location_rows": 3,
+      "incomplete_documents": 0,
+      "catalog_json_bytes": 6967,
+      "rolling_sha256": "5a2ff1c72da12584290288bcea7c67b6e9cd1dfc48bf333824e7ab6babb11a56",
+      "rows_available": true,
+      "declared_source_cohort_complete": false,
+      "legacy_history_unknown": false
+    },
+    "inherited": null,
+    "rows": [
+      {
+        "kind": "root",
+        "row": {
+          "sequence": 1,
+          "declaration_id": "fb4567c8ed26f8e6bf18e2d30b6cdca5b9fed3aafbe855722f66daa35393c927",
+          "kind": "explicit_config",
+          "source_observation_id": null,
+          "source_ordinal": 0,
+          "raw_line": null,
+          "raw_value": "http://127.0.0.1:50606/source.xml",
+          "normalized_document_url": "http://127.0.0.1:50606/source.xml",
+          "robots_evidence": null,
+          "admission": {
+            "decision": "scheduled",
+            "membership_url": "http://127.0.0.1:50606/source.xml",
+            "admitted_fetch_url": "http://127.0.0.1:50606/source.xml",
+            "coalesced_policy_occurrence_id": null,
+            "policy_occurrence_id": null,
+            "policy_source_revision": null
+          }
+        }
+      },
+      {
+        "kind": "document",
+        "row": {
+          "sequence": 2,
+          "observation_id": "160fc49ea1f514461f6f61527169aa5ca4bc724963371efe97291332ee8d10a9",
+          "kind": "sitemap_xml",
+          "task_url": "http://127.0.0.1:50606/source.xml",
+          "generation": 1,
+          "source_revision": "3644c0d9c0646d34d58a70ef140e42bfff4e349a485b19720790faf42fa84dc3",
+          "transport": {
+            "request_started": true,
+            "requested_url": "http://127.0.0.1:50606/source.xml",
+            "final_url": "http://127.0.0.1:50606/source.xml",
+            "initial_status": 200,
+            "final_status": 200,
+            "blocked_by_robots": false,
+            "body_complete": true,
+            "post_http_decoding_bytes": 328,
+            "post_http_decoding_sha256": "88353c899e81d1da89d9ca0319587623030edbb0aca4b8f6dd07f461dfb63cc1",
+            "retained_post_http_prefix_sha256": "88353c899e81d1da89d9ca0319587623030edbb0aca4b8f6dd07f461dfb63cc1",
+            "failure_code": null
+          },
+          "entity_decode": {
+            "encoding": "identity",
+            "post_http_decode_entity_bytes": 328,
+            "decoded_xml_bytes": 328,
+            "decoded_xml_sha256": "88353c899e81d1da89d9ca0319587623030edbb0aca4b8f6dd07f461dfb63cc1"
+          },
+          "parser": {
+            "schema_version": 1,
+            "engine": "open-seo-spider/sitemap-xml-occurrences-v1",
+            "context_basis": "caller_declared_parser_context",
+            "context": {
+              "requested_document_url": "http://127.0.0.1:50606/source.xml",
+              "final_document_url": "http://127.0.0.1:50606/source.xml",
+              "originating_occurrence_id": null
+            },
+            "xml_bytes": 328,
+            "xml_sha256": "88353c899e81d1da89d9ca0319587623030edbb0aca4b8f6dd07f461dfb63cc1",
+            "xml_sha_profile": "decoded-sitemap-xml-bytes-v1",
+            "namespace_profile": "sitemap09",
+            "xml_name_profile": "ascii-qname-v1",
+            "kind": "url_set",
+            "events_observed": 30,
+            "retained_text_utf8_bytes": 578,
+            "entry_count": 3,
+            "location_count": 3,
+            "complete": true,
+            "failure": null
+          },
+          "declaration_scan_complete": false,
+          "declaration_utf8_lossy": null,
+          "declaration_count": null,
+          "retained_rows_complete": true,
+          "failure_code": null
+        }
+      },
+      {
+        "kind": "entry",
+        "row": {
+          "sequence": 3,
+          "observation_id": "160fc49ea1f514461f6f61527169aa5ca4bc724963371efe97291332ee8d10a9",
+          "entry_id": "af2675fc5fb83530045ea30688ebeefac9a30cdc7b814d89292fa2abc39d3e76",
+          "observed": {
+            "ordinal": 1,
+            "xml_byte_start": 81,
+            "xml_byte_end": 168,
+            "complete": true,
+            "loc_occurrence_ordinals": [
+              1
+            ],
+            "lastmod": [
+              {
+                "ordinal": 1,
+                "xml_byte_start": 133,
+                "xml_byte_end": 162,
+                "raw_element_xml": "<lastmod>2024-02-29</lastmod>",
+                "raw_inner_xml": "2024-02-29",
+                "decoded_value": "2024-02-29"
+              }
+            ],
+            "diagnostics": []
+          }
+        }
+      },
+      {
+        "kind": "entry",
+        "row": {
+          "sequence": 4,
+          "observation_id": "160fc49ea1f514461f6f61527169aa5ca4bc724963371efe97291332ee8d10a9",
+          "entry_id": "b2733023f20849849a2e1df9d714b7834f40febd5eb2ed05be96eb330b3c113e",
+          "observed": {
+            "ordinal": 2,
+            "xml_byte_start": 168,
+            "xml_byte_end": 243,
+            "complete": true,
+            "loc_occurrence_ordinals": [
+              2
+            ],
+            "lastmod": [
+              {
+                "ordinal": 1,
+                "xml_byte_start": 208,
+                "xml_byte_end": 237,
+                "raw_element_xml": "<lastmod>2024-02-29</lastmod>",
+                "raw_inner_xml": "2024-02-29",
+                "decoded_value": "2024-02-29"
+              }
+            ],
+            "diagnostics": []
+          }
+        }
+      },
+      {
+        "kind": "entry",
+        "row": {
+          "sequence": 5,
+          "observation_id": "160fc49ea1f514461f6f61527169aa5ca4bc724963371efe97291332ee8d10a9",
+          "entry_id": "89bd2f3d4d8e6b8f16e1bcd67131725819644072d30450a3b6b995159804c985",
+          "observed": {
+            "ordinal": 3,
+            "xml_byte_start": 243,
+            "xml_byte_end": 319,
+            "complete": true,
+            "loc_occurrence_ordinals": [
+              3
+            ],
+            "lastmod": [
+              {
+                "ordinal": 1,
+                "xml_byte_start": 284,
+                "xml_byte_end": 313,
+                "raw_element_xml": "<lastmod>2024-02-29</lastmod>",
+                "raw_inner_xml": "2024-02-29",
+                "decoded_value": "2024-02-29"
+              }
+            ],
+            "diagnostics": []
+          }
+        }
+      },
+      {
+        "kind": "location",
+        "row": {
+          "sequence": 6,
+          "observation_id": "160fc49ea1f514461f6f61527169aa5ca4bc724963371efe97291332ee8d10a9",
+          "occurrence_id": "1656505dfa3bc16749601286fb2ef8f5ea3512675a30220ec60f4209611faefd",
+          "observed": {
+            "ordinal": 1,
+            "entry_ordinal": 1,
+            "loc_ordinal": 1,
+            "role": "page_location",
+            "xml_byte_start": 86,
+            "xml_byte_end": 133,
+            "raw_element_xml": "<loc>http://127.0.0.1:50606/a?x=1&amp;y=2</loc>",
+            "raw_inner_xml": "http://127.0.0.1:50606/a?x=1&amp;y=2",
+            "decoded_value": "http://127.0.0.1:50606/a?x=1&y=2",
+            "normalized_fetch_url": "http://127.0.0.1:50606/a?x=1&y=2",
+            "validation_error": null
+          },
+          "admission": {
+            "decision": "coalesced",
+            "membership_url": "http://127.0.0.1:50606/a?x=1&y=2",
+            "admitted_fetch_url": "http://127.0.0.1:50606/a?x=1&y=2",
+            "coalesced_policy_occurrence_id": null,
+            "policy_occurrence_id": null,
+            "policy_source_revision": null
+          },
+          "referenced_sitemap_task": null
+        }
+      },
+      {
+        "kind": "location",
+        "row": {
+          "sequence": 7,
+          "observation_id": "160fc49ea1f514461f6f61527169aa5ca4bc724963371efe97291332ee8d10a9",
+          "occurrence_id": "68a3f16b066e2130e5c0ab56eeb9b91ab32e4bc12916fe76c683616b9944e97d",
+          "observed": {
+            "ordinal": 2,
+            "entry_ordinal": 2,
+            "loc_ordinal": 1,
+            "role": "page_location",
+            "xml_byte_start": 173,
+            "xml_byte_end": 208,
+            "raw_element_xml": "<loc>http://127.0.0.1:50606/b</loc>",
+            "raw_inner_xml": "http://127.0.0.1:50606/b",
+            "decoded_value": "http://127.0.0.1:50606/b",
+            "normalized_fetch_url": "http://127.0.0.1:50606/b",
+            "validation_error": null
+          },
+          "admission": {
+            "decision": "coalesced",
+            "membership_url": "http://127.0.0.1:50606/b",
+            "admitted_fetch_url": "http://127.0.0.1:50606/b",
+            "coalesced_policy_occurrence_id": null,
+            "policy_occurrence_id": null,
+            "policy_source_revision": null
+          },
+          "referenced_sitemap_task": null
+        }
+      },
+      {
+        "kind": "location",
+        "row": {
+          "sequence": 8,
+          "observation_id": "160fc49ea1f514461f6f61527169aa5ca4bc724963371efe97291332ee8d10a9",
+          "occurrence_id": "2a9d14d40d61250ca10f164ca968bab08a1bbefb3b87aeed6d251bdfc897137a",
+          "observed": {
+            "ordinal": 3,
+            "entry_ordinal": 3,
+            "loc_ordinal": 1,
+            "role": "page_location",
+            "xml_byte_start": 248,
+            "xml_byte_end": 284,
+            "raw_element_xml": "<loc>http://127.0.0.1:50606/de</loc>",
+            "raw_inner_xml": "http://127.0.0.1:50606/de",
+            "decoded_value": "http://127.0.0.1:50606/de",
+            "normalized_fetch_url": "http://127.0.0.1:50606/de",
+            "validation_error": null
+          },
+          "admission": {
+            "decision": "coalesced",
+            "membership_url": "http://127.0.0.1:50606/de",
+            "admitted_fetch_url": "http://127.0.0.1:50606/de",
+            "coalesced_policy_occurrence_id": null,
+            "policy_occurrence_id": null,
+            "policy_source_revision": null
+          },
+          "referenced_sitemap_task": null
+        }
+      }
+    ]
+  },
+  "sitemap_coverage_inventory": {
+    "basis": {
+      "kind": "current"
+    },
+    "saved_config_sha256": "785794443c12a8942865b09c7ac5cf3f8622098f56f3ad54f1a826ae1d711b8a",
+    "catalog_initial_config_sha256": "785794443c12a8942865b09c7ac5cf3f8622098f56f3ad54f1a826ae1d711b8a",
+    "generation": 1,
+    "discovery_initialized": true,
+    "expected_initial_roots": [
+      {
+        "sequence": 0,
+        "declaration_id": "fb4567c8ed26f8e6bf18e2d30b6cdca5b9fed3aafbe855722f66daa35393c927",
+        "kind": "explicit_config",
+        "source_observation_id": null,
+        "source_ordinal": 0,
+        "raw_line": null,
+        "raw_value": "http://127.0.0.1:50606/source.xml",
+        "normalized_document_url": "http://127.0.0.1:50606/source.xml",
+        "robots_evidence": null,
+        "admission": {
+          "decision": "unbound",
+          "membership_url": "http://127.0.0.1:50606/source.xml",
+          "admitted_fetch_url": null,
+          "coalesced_policy_occurrence_id": null,
+          "policy_occurrence_id": null,
+          "policy_source_revision": null
+        }
+      }
+    ],
+    "expected_robots_sources": [],
+    "tasks": [
+      {
+        "kind": "sitemap_xml",
+        "task_url": "http://127.0.0.1:50606/source.xml",
+        "done": true
+      }
+    ]
+  },
+  "sitemap_source_measurements": {
+    "schema_version": 1,
+    "summary": {
+      "engine": "open-seo-spider/sitemap-source-store-v1",
+      "hash_profile": "sha256-canonical-rust-serde-source-store-v1",
+      "initial_catalog_config_sha256": "785794443c12a8942865b09c7ac5cf3f8622098f56f3ad54f1a826ae1d711b8a",
+      "limits": {
+        "max_catalog_json_bytes": 33554432,
+        "max_record_json_bytes": 16384,
+        "max_records": 100000
+      },
+      "revision": 2,
+      "last_sequence": 1,
+      "record_count": 1,
+      "commit_count": 1,
+      "record_json_bytes": 2660,
+      "commit_json_bytes": 448,
+      "metadata_json_bytes": 782,
+      "logical_json_bytes": 3947,
+      "reserved_json_bytes": 3314,
+      "charged_json_bytes": 7261,
+      "content_sha256": "93fc6f8cf254ab4d2992ed8a49b4b283d7c78768ab5a53ccd10e0e4953f1fcfb",
+      "links_sha256": "6c690bb731fec7cd196e49be1fc4b954f5f026e0b24f3e7a35a702264aa58e9a",
+      "legacy_history_unknown": false,
+      "omission": null,
+      "omission_revision": null,
+      "inherited": null
+    },
+    "records": [
+      {
+        "schema_version": 1,
+        "engine": "open-seo-spider/sitemap-source-store-v1",
+        "sequence": 1,
+        "initial_catalog_config_sha256": "785794443c12a8942865b09c7ac5cf3f8622098f56f3ad54f1a826ae1d711b8a",
+        "staged_document_sha256": "c7f123520e12a9879a6d7431f26cfcca8f6890e9e6b68f9ffb02c785149c2d54",
+        "measurement": {
+          "measurement_id": "50c952febe43254f2b73d51d49ebb1b676a6590e60aba956e27b8ae1d5d34622",
+          "payload": {
+            "schema_version": 1,
+            "engine": "open-seo-spider/sitemap-source-measurement-v1",
+            "binding": {
+              "crawl_config_sha256": "785794443c12a8942865b09c7ac5cf3f8622098f56f3ad54f1a826ae1d711b8a",
+              "run_generation": 1,
+              "source_kind": "sitemap_xml",
+              "requested_task_url": "http://127.0.0.1:50606/source.xml",
+              "expected_source_observation_id": "160fc49ea1f514461f6f61527169aa5ca4bc724963371efe97291332ee8d10a9",
+              "source_revision": "3644c0d9c0646d34d58a70ef140e42bfff4e349a485b19720790faf42fa84dc3"
+            },
+            "transport": {
+              "http_decode_profile": "reqwest-post-content-decoding-v1",
+              "request_started": true,
+              "requested_url": "http://127.0.0.1:50606/source.xml",
+              "final_url": "http://127.0.0.1:50606/source.xml",
+              "initial_status": 200,
+              "final_status": 200,
+              "blocked_by_robots": false,
+              "body_complete": true,
+              "post_http_received_bytes": {
+                "value": 328,
+                "precision": "exact"
+              },
+              "retained_post_http_prefix_bytes": 328,
+              "retained_post_http_prefix_sha256": "88353c899e81d1da89d9ca0319587623030edbb0aca4b8f6dd07f461dfb63cc1",
+              "complete_post_http_entity_sha256": "88353c899e81d1da89d9ca0319587623030edbb0aca4b8f6dd07f461dfb63cc1"
+            },
+            "decode": {
+              "encoding": "identity",
+              "decoded_xml_bytes": {
+                "value": 328,
+                "precision": "exact"
+              },
+              "decoded_prefix_sha256": "88353c899e81d1da89d9ca0319587623030edbb0aca4b8f6dd07f461dfb63cc1",
+              "decoded_complete_sha256": "88353c899e81d1da89d9ca0319587623030edbb0aca4b8f6dd07f461dfb63cc1",
+              "integrity": "complete",
+              "stop_code": null
+            },
+            "scan": {
+              "xml_profile": "ascii-qname-xml10-no-dtd-v1",
+              "loc_lexical_profile": "absolute-http-xml-loc-v1",
+              "document_kind": "url_set",
+              "namespace_profile": "sitemap09",
+              "status": "complete_profile",
+              "stop_code": null,
+              "events_observed": {
+                "value": 30,
+                "precision": "exact"
+              },
+              "counts": {
+                "immediate_entry_starts": {
+                  "value": 3,
+                  "precision": "exact"
+                },
+                "completed_immediate_entries": {
+                  "value": 3,
+                  "precision": "exact"
+                },
+                "actual_document_namespace_loc_occurrences": {
+                  "value": 3,
+                  "precision": "exact"
+                },
+                "protocol_eligible_completed_entries": {
+                  "value": 3,
+                  "precision": "exact"
+                },
+                "missing_loc_entries": 0,
+                "multiple_loc_entries": 0,
+                "invalid_single_loc_entries": 0
+              }
+            },
+            "membership_retention": "complete",
+            "bounds": {
+              "max_retained_post_http_bytes": 5242880,
+              "max_retained_xml_bytes": 8388608,
+              "max_xml_events": 500000,
+              "max_xml_depth": 64,
+              "max_field_utf8_bytes": 8192,
+              "max_retained_entries": 50000,
+              "max_retained_location_occurrences": 100000,
+              "max_retained_text_utf8_bytes": 33554432
+            }
+          }
+        }
+      }
+    ],
+    "commits": [
+      {
+        "schema_version": 1,
+        "engine": "open-seo-spider/sitemap-source-store-v1",
+        "measurement_id": "50c952febe43254f2b73d51d49ebb1b676a6590e60aba956e27b8ae1d5d34622",
+        "measurement_envelope_sha256": "5514687df65606b2d3e2de09ef7b315985e0da6f4948c519770625d4aeb7062b",
+        "document_id": "160fc49ea1f514461f6f61527169aa5ca4bc724963371efe97291332ee8d10a9",
+        "document_sequence": 2,
+        "document_payload_sha256": "719264983b2f5698619ffa323b5d89be40bcfaabd0561a5a8f97899f5eb046cf"
+      }
+    ]
+  }
+}

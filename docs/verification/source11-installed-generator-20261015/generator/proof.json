@@ -1,0 +1,2773 @@
+{
+  "kind": "source11_sitemap_generation_native",
+  "result": "PASS_ACTUAL_SOURCE11_SITEMAP_GENERATION_SIX_PAGE_API_CLI_UI_COLD",
+  "source_manifest_sha256": "8a55a0ba333742124b36a33fde8a889afcc594e052b09568910dccc3ea5e519c",
+  "suite_proof_sha256": "9f19222aec9081ff361f3802523bd1d5a7f8a8da5a505442a2d7832aeb7946c0",
+  "build_proof_sha256": "1c421abd30f58ba5944c660a9776509e6c836cbc647d23ef03b474162bb35910",
+  "build_driver_sha256": "0f7c091addfd4d235db4497946c8d4cc97990e161c87ee3116f5f6a116592385",
+  "candidate_binary_sha256": "2d46366500887caeee33c45a972639dd379c02e678a9e07595a506244f9265f7",
+  "candidate_bytes": 43149824,
+  "release": {
+    "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/v11-sitemap-generator-release-v5.json",
+    "sha256": "ed090eaf8d4c190202baf9f7dc48469369e6af2c358afb3052dc09c0f00c5ca9"
+  },
+  "preparation_manifest_sha256": "35d2818101efb3337052fefdf3ad730b4e0e70c715325e85f63250461f87bec7",
+  "preparation_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-generation-native-independent-review-v5\\receipt.json",
+    "sha256": "b103716a9d4deed12f94d39e0bfaaeced19f123d7d2659300eb875bfffdcf220",
+    "bytes": 6823
+  },
+  "cases": [
+    {
+      "name": "genuine_six_saved_pages_and_captured_source",
+      "result": "PASS_ACTUAL",
+      "evidence": {
+        "job": "779f8208-6304-4a95-85dc-66b26e6131db",
+        "actual_requests": [
+          {
+            "method": "GET",
+            "target": "/source.xml"
+          },
+          {
+            "method": "GET",
+            "target": "/a?x=1&y=2"
+          },
+          {
+            "method": "GET",
+            "target": "/b"
+          },
+          {
+            "method": "GET",
+            "target": "/noindex"
+          },
+          {
+            "method": "GET",
+            "target": "/de"
+          },
+          {
+            "method": "GET",
+            "target": "/redirect"
+          },
+          {
+            "method": "GET",
+            "target": "/missing"
+          },
+          {
+            "method": "GET",
+            "target": "/landing"
+          }
+        ],
+        "report_file_sha256": "864216929364d84c75268a07c16b7bab556ab19064120249a0050dad449858e2",
+        "pages": 6
+      }
+    },
+    {
+      "name": "complete_independent_zip_xml_index_membership_and_api_repeat",
+      "result": "PASS_ACTUAL",
+      "evidence": {
+        "bundle_sha256": "5a3d5d8ab78cf61c9542a16277902d831c2bdec388c8c7bfe324662f162bf385",
+        "bundle_bytes": 6953,
+        "canonical_report_sha256": "ef00daf34acb20b5ef944e9944b2c5b31b4f65cd61e55b77b615366c5d0539f4",
+        "manifest": {
+          "schema_version": 1,
+          "engine": "open-seo-spider/segmented-sitemap-generation-v1",
+          "report_sha256": "ef00daf34acb20b5ef944e9944b2c5b31b4f65cd61e55b77b615366c5d0539f4",
+          "report_sha_profile": "typed-crawl-report-canonical-rust-serde-json-v1",
+          "options": {
+            "public_base_url": "http://127.0.0.1:50606/",
+            "max_urls_per_file": 2,
+            "max_urlset_uncompressed_bytes": 52428800,
+            "max_index_uncompressed_bytes": 52428800,
+            "max_total_output_bytes": 67108864,
+            "include_images": true,
+            "allow_external_images": false,
+            "include_hreflang": true,
+            "lastmod": {
+              "source": "captured_sitemap"
+            },
+            "changefreq": null,
+            "priority": null
+          },
+          "options_sha256": "b2ab95884e8ed8fbc25644c99d3a9e020221586fc243d36edf2babf93b3a54f9",
+          "files": [
+            {
+              "name": "sitemap-00001.xml",
+              "public_url": "http://127.0.0.1:50606/sitemap-00001.xml",
+              "kind": "urlset",
+              "url_count": 2,
+              "uncompressed_bytes": 1061,
+              "sha256": "f94e4aef16cad3a11358e8671f4a04046ff50e8db4a710ec92cbea58cf2db359"
+            },
+            {
+              "name": "sitemap-00002.xml",
+              "public_url": "http://127.0.0.1:50606/sitemap-00002.xml",
+              "kind": "urlset",
+              "url_count": 1,
+              "uncompressed_bytes": 633,
+              "sha256": "fca0dbe22bbe1c4307ffd99d390572b1b239358abce1f0e97412e29b915d33d6"
+            },
+            {
+              "name": "sitemap-index.xml",
+              "public_url": "http://127.0.0.1:50606/sitemap-index.xml",
+              "kind": "sitemapindex",
+              "url_count": 2,
+              "uncompressed_bytes": 268,
+              "sha256": "5ca456d516246a69e34f338bef22e43d772693851726864c0ea00d38b177d80c"
+            }
+          ],
+          "memberships": [
+            {
+              "url": "http://127.0.0.1:50606/a?x=1&y=2",
+              "page_ordinal": 0,
+              "segment": "sitemap-00001.xml",
+              "images": [
+                "http://127.0.0.1:50606/image%20name.png?x=1&y=2"
+              ],
+              "hreflang": [
+                {
+                  "language": "de",
+                  "url": "http://127.0.0.1:50606/de",
+                  "source_ordinals": [
+                    2
+                  ]
+                },
+                {
+                  "language": "en",
+                  "url": "http://127.0.0.1:50606/a?x=1&y=2",
+                  "source_ordinals": [
+                    0
+                  ]
+                },
+                {
+                  "language": "fr",
+                  "url": "http://127.0.0.1:50606/b",
+                  "source_ordinals": [
+                    1
+                  ]
+                }
+              ],
+              "lastmod": {
+                "value": "2024-02-29",
+                "source": {
+                  "source": "captured_sitemap",
+                  "observation_id": "160fc49ea1f514461f6f61527169aa5ca4bc724963371efe97291332ee8d10a9",
+                  "entry_id": "af2675fc5fb83530045ea30688ebeefac9a30cdc7b814d89292fa2abc39d3e76",
+                  "field_ordinal": 1,
+                  "original_value": "2024-02-29"
+                }
+              }
+            },
+            {
+              "url": "http://127.0.0.1:50606/b",
+              "page_ordinal": 1,
+              "segment": "sitemap-00001.xml",
+              "images": [
+                "http://127.0.0.1:50606/image%20name.png?x=1&y=2"
+              ],
+              "hreflang": [
+                {
+                  "language": "de",
+                  "url": "http://127.0.0.1:50606/de",
+                  "source_ordinals": [
+                    2
+                  ]
+                },
+                {
+                  "language": "en",
+                  "url": "http://127.0.0.1:50606/a?x=1&y=2",
+                  "source_ordinals": [
+                    0
+                  ]
+                },
+                {
+                  "language": "fr",
+                  "url": "http://127.0.0.1:50606/b",
+                  "source_ordinals": [
+                    1
+                  ]
+                }
+              ],
+              "lastmod": {
+                "value": "2024-02-29",
+                "source": {
+                  "source": "captured_sitemap",
+                  "observation_id": "160fc49ea1f514461f6f61527169aa5ca4bc724963371efe97291332ee8d10a9",
+                  "entry_id": "b2733023f20849849a2e1df9d714b7834f40febd5eb2ed05be96eb330b3c113e",
+                  "field_ordinal": 1,
+                  "original_value": "2024-02-29"
+                }
+              }
+            },
+            {
+              "url": "http://127.0.0.1:50606/de",
+              "page_ordinal": 3,
+              "segment": "sitemap-00002.xml",
+              "images": [
+                "http://127.0.0.1:50606/image%20name.png?x=1&y=2"
+              ],
+              "hreflang": [
+                {
+                  "language": "de",
+                  "url": "http://127.0.0.1:50606/de",
+                  "source_ordinals": [
+                    2
+                  ]
+                },
+                {
+                  "language": "en",
+                  "url": "http://127.0.0.1:50606/a?x=1&y=2",
+                  "source_ordinals": [
+                    0
+                  ]
+                },
+                {
+                  "language": "fr",
+                  "url": "http://127.0.0.1:50606/b",
+                  "source_ordinals": [
+                    1
+                  ]
+                }
+              ],
+              "lastmod": {
+                "value": "2024-02-29",
+                "source": {
+                  "source": "captured_sitemap",
+                  "observation_id": "160fc49ea1f514461f6f61527169aa5ca4bc724963371efe97291332ee8d10a9",
+                  "entry_id": "89bd2f3d4d8e6b8f16e1bcd67131725819644072d30450a3b6b995159804c985",
+                  "field_ordinal": 1,
+                  "original_value": "2024-02-29"
+                }
+              }
+            }
+          ],
+          "diagnostics": [
+            {
+              "code": "hreflang_reciprocity_not_proven",
+              "page_ordinal": 0,
+              "value": "http://127.0.0.1:50606/a?x=1&y=2"
+            },
+            {
+              "code": "hreflang_reciprocity_not_proven",
+              "page_ordinal": 1,
+              "value": "http://127.0.0.1:50606/b"
+            },
+            {
+              "code": "non_indexable",
+              "page_ordinal": 2,
+              "value": "http://127.0.0.1:50606/noindex"
+            },
+            {
+              "code": "hreflang_reciprocity_not_proven",
+              "page_ordinal": 3,
+              "value": "http://127.0.0.1:50606/de"
+            },
+            {
+              "code": "not_http200",
+              "page_ordinal": 4,
+              "value": "http://127.0.0.1:50606/missing"
+            },
+            {
+              "code": "non_indexable",
+              "page_ordinal": 4,
+              "value": "http://127.0.0.1:50606/missing"
+            },
+            {
+              "code": "not_http200",
+              "page_ordinal": 5,
+              "value": "http://127.0.0.1:50606/redirect"
+            },
+            {
+              "code": "redirected",
+              "page_ordinal": 5,
+              "value": "http://127.0.0.1:50606/redirect"
+            },
+            {
+              "code": "non_indexable",
+              "page_ordinal": 5,
+              "value": "http://127.0.0.1:50606/redirect"
+            }
+          ],
+          "excluded_pages": 3,
+          "input_pages": 6,
+          "source_scope": "captured_static_report_documents; no current freshness/full-site completeness inference",
+          "negative_membership_claim": false,
+          "hreflang_validation_profile": "HTTP(S) identity + language/script/region lexical grammar + captured self-link/conflict checks; ISO registry assignments and reciprocity are not attested",
+          "selected_recrawl": false
+        },
+        "files": [
+          {
+            "name": "sitemap-00001.xml",
+            "bytes": 1061,
+            "sha256": "f94e4aef16cad3a11358e8671f4a04046ff50e8db4a710ec92cbea58cf2db359"
+          },
+          {
+            "name": "sitemap-00002.xml",
+            "bytes": 633,
+            "sha256": "fca0dbe22bbe1c4307ffd99d390572b1b239358abce1f0e97412e29b915d33d6"
+          },
+          {
+            "name": "sitemap-index.xml",
+            "bytes": 268,
+            "sha256": "5ca456d516246a69e34f338bef22e43d772693851726864c0ea00d38b177d80c"
+          },
+          {
+            "name": "manifest.json",
+            "bytes": 4537,
+            "sha256": "fd23e12a22ee5cb2445a98f3a194c361b521a9ea2eacbc1a6c96fca199be1fc8"
+          }
+        ],
+        "actual_independent_xml_documents": 3
+      }
+    },
+    {
+      "name": "configured_entry_index_total_and_structured_refusals",
+      "result": "PASS_ACTUAL",
+      "evidence": {
+        "single_entry_bytes": 644,
+        "index_bytes": 268,
+        "qualification": "Small configured caps, not a physical52MiB native limit or50,001-page crawl."
+      }
+    },
+    {
+      "name": "five_cli_children_complete_api_bytes_refusals_and_atomic_race",
+      "result": "PASS_ACTUAL",
+      "evidence": {
+        "children": [
+          "cli-positive",
+          "cli-invalid-before-report",
+          "cli-race-a",
+          "cli-race-b"
+        ],
+        "race_codes": [
+          0,
+          1
+        ],
+        "export_files": [
+          "positive.zip",
+          "race.zip"
+        ]
+      }
+    },
+    {
+      "name": "actual_generator_ui_1440_320_and_stale_download_ownership",
+      "result": "PASS_ACTUAL",
+      "evidence": {
+        "result": "PASS_ACTUAL_UI_CONTROLS_AND_DOWNLOAD_OWNERSHIP",
+        "cold": false,
+        "widths": [
+          1440,
+          320
+        ],
+        "evidence": [
+          {
+            "width": 1440,
+            "layout": {
+              "width": 1440,
+              "measurements": {
+                "inner": 1440,
+                "client": 1425,
+                "document": 1425,
+                "body": 1425
+              },
+              "controls": [
+                {
+                  "id": "sitemap-bundle-public-base",
+                  "x": 281,
+                  "y": 111.640625,
+                  "width": 1091,
+                  "height": 36.5,
+                  "enabled": true
+                },
+                {
+                  "id": "sitemap-bundle-max-urls",
+                  "x": 281,
+                  "y": 204.140625,
+                  "width": 537.5,
+                  "height": 36.5,
+                  "enabled": true
+                },
+                {
+                  "id": "sitemap-bundle-max-file-bytes",
+                  "x": 834.5,
+                  "y": 204.140625,
+                  "width": 537.5,
+                  "height": 36.5,
+                  "enabled": true
+                },
+                {
+                  "id": "sitemap-bundle-lastmod-source",
+                  "x": 281,
+                  "y": 296.640625,
+                  "width": 1091,
+                  "height": 37,
+                  "enabled": true
+                },
+                {
+                  "id": "sitemap-bundle-images",
+                  "x": 285,
+                  "y": 369.140625,
+                  "width": 13,
+                  "height": 13,
+                  "enabled": true
+                },
+                {
+                  "id": "sitemap-bundle-external-images",
+                  "x": 285,
+                  "y": 418.140625,
+                  "width": 13,
+                  "height": 13,
+                  "enabled": true
+                },
+                {
+                  "id": "sitemap-bundle-hreflang",
+                  "x": 285,
+                  "y": 452.140625,
+                  "width": 13,
+                  "height": 13,
+                  "enabled": true
+                },
+                {
+                  "id": "sitemap-bundle-changefreq",
+                  "x": 281,
+                  "y": 548.140625,
+                  "width": 537.5,
+                  "height": 37,
+                  "enabled": true
+                },
+                {
+                  "id": "sitemap-bundle-priority",
+                  "x": 834.5,
+                  "y": 548.140625,
+                  "width": 537.5,
+                  "height": 36.5,
+                  "enabled": true
+                },
+                {
+                  "id": "sitemap-bundle-max-index-bytes",
+                  "x": 281,
+                  "y": 640.640625,
+                  "width": 1091,
+                  "height": 36.5,
+                  "enabled": true
+                },
+                {
+                  "id": "sitemap-bundle-max-total-bytes",
+                  "x": 281,
+                  "y": 733.140625,
+                  "width": 1091,
+                  "height": 36.5,
+                  "enabled": true
+                },
+                {
+                  "id": "sitemap-bundle-generate",
+                  "x": 281,
+                  "y": 845.640625,
+                  "width": 140.875,
+                  "height": 32,
+                  "enabled": true
+                }
+              ]
+            },
+            "archive": {
+              "sha256": "5a3d5d8ab78cf61c9542a16277902d831c2bdec388c8c7bfe324662f162bf385",
+              "bytes": 6953,
+              "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\downloads\\warm-ui-1440.zip"
+            },
+            "screenshot": {
+              "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\downloads\\warm-ui-1440.png",
+              "sha256": "4ac19e28b2cbab73041d94e4f2282adc0338ed2d6e554a07c14efdfc37a20f1d"
+            }
+          },
+          {
+            "width": 320,
+            "layout": {
+              "width": 320,
+              "measurements": {
+                "inner": 320,
+                "client": 305,
+                "document": 305,
+                "body": 305
+              },
+              "controls": [
+                {
+                  "id": "sitemap-bundle-public-base",
+                  "x": 24,
+                  "y": 482.25,
+                  "width": 257,
+                  "height": 35,
+                  "enabled": true
+                },
+                {
+                  "id": "sitemap-bundle-max-urls",
+                  "x": 24,
+                  "y": 622.75,
+                  "width": 257,
+                  "height": 35,
+                  "enabled": true
+                },
+                {
+                  "id": "sitemap-bundle-max-file-bytes",
+                  "x": 24,
+                  "y": 691.75,
+                  "width": 257,
+                  "height": 35,
+                  "enabled": true
+                },
+                {
+                  "id": "sitemap-bundle-lastmod-source",
+                  "x": 24,
+                  "y": 778.25,
+                  "width": 257,
+                  "height": 36,
+                  "enabled": true
+                },
+                {
+                  "id": "sitemap-bundle-images",
+                  "x": 28,
+                  "y": 863.25,
+                  "width": 13,
+                  "height": 13,
+                  "enabled": true
+                },
+                {
+                  "id": "sitemap-bundle-external-images",
+                  "x": 28,
+                  "y": 927.25,
+                  "width": 13,
+                  "height": 13,
+                  "enabled": true
+                },
+                {
+                  "id": "sitemap-bundle-hreflang",
+                  "x": 28,
+                  "y": 961.25,
+                  "width": 13,
+                  "height": 13,
+                  "enabled": true
+                },
+                {
+                  "id": "sitemap-bundle-changefreq",
+                  "x": 24,
+                  "y": 481.75,
+                  "width": 257,
+                  "height": 36,
+                  "enabled": true
+                },
+                {
+                  "id": "sitemap-bundle-priority",
+                  "x": 24,
+                  "y": 551.75,
+                  "width": 257,
+                  "height": 35,
+                  "enabled": true
+                },
+                {
+                  "id": "sitemap-bundle-max-index-bytes",
+                  "x": 24,
+                  "y": 651.75,
+                  "width": 257,
+                  "height": 35,
+                  "enabled": true
+                },
+                {
+                  "id": "sitemap-bundle-max-total-bytes",
+                  "x": 24,
+                  "y": 738.25,
+                  "width": 257,
+                  "height": 35,
+                  "enabled": true
+                },
+                {
+                  "id": "sitemap-bundle-generate",
+                  "x": 24,
+                  "y": 879.25,
+                  "width": 257,
+                  "height": 28,
+                  "enabled": true
+                }
+              ]
+            },
+            "archive": {
+              "sha256": "5a3d5d8ab78cf61c9542a16277902d831c2bdec388c8c7bfe324662f162bf385",
+              "bytes": 6953,
+              "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\downloads\\warm-ui-320.zip"
+            },
+            "screenshot": {
+              "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\downloads\\warm-ui-320.png",
+              "sha256": "e5fb9fc6d25ed5b7047ace4a7b10e3a723853f759ec84c266008967fb78bb397"
+            }
+          },
+          {
+            "action": "cancel",
+            "actual": {
+              "status": 200,
+              "bytes": 6953,
+              "sha256": "5a3d5d8ab78cf61c9542a16277902d831c2bdec388c8c7bfe324662f162bf385",
+              "held_real_response": true,
+              "delivery": "fulfilled_same_actual_response"
+            },
+            "no_download": true
+          },
+          {
+            "action": "crawl-switch",
+            "actual": {
+              "status": 200,
+              "bytes": 6953,
+              "sha256": "5a3d5d8ab78cf61c9542a16277902d831c2bdec388c8c7bfe324662f162bf385",
+              "held_real_response": true,
+              "delivery": "fulfilled_same_actual_response"
+            },
+            "no_download": true
+          }
+        ],
+        "invalid_downloads": 0,
+        "qualification": "Held real API delivery tests UI ownership, not early generator CPU cancellation."
+      }
+    },
+    {
+      "name": "cold_api_ui_zip_identity_zero_new_gets_and_actual_app_joins",
+      "result": "PASS_ACTUAL",
+      "evidence": {
+        "warm": {
+          "cause": "owned_stdin_eof",
+          "clean": true,
+          "incoming_transports": {
+            "accept_admitted": 1,
+            "accept_joined": 1,
+            "accept_retained": 0,
+            "accepted": 22,
+            "actual_io_dropped": 22,
+            "complete": 22,
+            "connection_admitted": 22,
+            "connection_joined": 22,
+            "connection_retained": 0,
+            "first_failure": null,
+            "grace_seconds": 5,
+            "incoming_protocol": "http1_plain_tcp_no_application_upgrades",
+            "listener_dropped": true,
+            "peer_errors": 0,
+            "registered": true,
+            "rejected": 0,
+            "retained": 0,
+            "shutdown_aborted": 0,
+            "tcp_write_pending": 0,
+            "whole_application_five_second_bound": false
+          },
+          "kind": "owned_application_shutdown_v1",
+          "owners": [
+            {
+              "admitted": 44,
+              "closing": true,
+              "first_failure": null,
+              "joined": 44,
+              "owner": "http_requests",
+              "retained": 0,
+              "started": 44
+            },
+            {
+              "admitted": 21,
+              "closing": true,
+              "first_failure": null,
+              "joined": 21,
+              "owner": "http_blocking",
+              "retained": 0,
+              "started": 21
+            },
+            {
+              "admitted": 1,
+              "closing": true,
+              "first_failure": null,
+              "joined": 1,
+              "owner": "crawl_operations",
+              "retained": 0,
+              "started": 1
+            }
+          ],
+          "qualification": "Local application task joins only; actual process/pipe EOF is an independent outside witness; no stateful MCP session or external renderer-process drain claim",
+          "response_streams": {
+            "aborted": 0,
+            "admitted": 0,
+            "complete": 0,
+            "enqueues": 0,
+            "failed": 0,
+            "first_failure": null,
+            "full_reservations": 0,
+            "joined": 0,
+            "max_chunk": 0,
+            "peak_queued": 0,
+            "response_supervisors_joined": 0,
+            "retained": 0,
+            "started": 0
+          },
+          "response_transport_owned": true,
+          "source_body_transports": {
+            "admitted": 0,
+            "first_failure": null,
+            "joined": 0,
+            "logical_spool_byte_limit": 134217728,
+            "owner": "source_body_transports",
+            "retained": 0,
+            "spool_leases": 0,
+            "started": 0,
+            "unresponsive_transport_shutdown": "not_proven"
+          }
+        },
+        "cold": {
+          "cause": "owned_stdin_eof",
+          "clean": true,
+          "incoming_transports": {
+            "accept_admitted": 1,
+            "accept_joined": 1,
+            "accept_retained": 0,
+            "accepted": 6,
+            "actual_io_dropped": 6,
+            "complete": 6,
+            "connection_admitted": 6,
+            "connection_joined": 6,
+            "connection_retained": 0,
+            "first_failure": null,
+            "grace_seconds": 5,
+            "incoming_protocol": "http1_plain_tcp_no_application_upgrades",
+            "listener_dropped": true,
+            "peer_errors": 0,
+            "registered": true,
+            "rejected": 0,
+            "retained": 0,
+            "shutdown_aborted": 0,
+            "tcp_write_pending": 0,
+            "whole_application_five_second_bound": false
+          },
+          "kind": "owned_application_shutdown_v1",
+          "owners": [
+            {
+              "admitted": 19,
+              "closing": true,
+              "first_failure": null,
+              "joined": 19,
+              "owner": "http_requests",
+              "retained": 0,
+              "started": 19
+            },
+            {
+              "admitted": 7,
+              "closing": true,
+              "first_failure": null,
+              "joined": 7,
+              "owner": "http_blocking",
+              "retained": 0,
+              "started": 7
+            },
+            {
+              "admitted": 0,
+              "closing": true,
+              "first_failure": null,
+              "joined": 0,
+              "owner": "crawl_operations",
+              "retained": 0,
+              "started": 0
+            }
+          ],
+          "qualification": "Local application task joins only; actual process/pipe EOF is an independent outside witness; no stateful MCP session or external renderer-process drain claim",
+          "response_streams": {
+            "aborted": 0,
+            "admitted": 0,
+            "complete": 0,
+            "enqueues": 0,
+            "failed": 0,
+            "first_failure": null,
+            "full_reservations": 0,
+            "joined": 0,
+            "max_chunk": 0,
+            "peak_queued": 0,
+            "response_supervisors_joined": 0,
+            "retained": 0,
+            "started": 0
+          },
+          "response_transport_owned": true,
+          "source_body_transports": {
+            "admitted": 0,
+            "first_failure": null,
+            "joined": 0,
+            "logical_spool_byte_limit": 134217728,
+            "owner": "source_body_transports",
+            "retained": 0,
+            "spool_leases": 0,
+            "started": 0,
+            "unresponsive_transport_shutdown": "not_proven"
+          }
+        },
+        "cold_ui": {
+          "result": "PASS_ACTUAL_UI_CONTROLS_AND_DOWNLOAD_OWNERSHIP",
+          "cold": true,
+          "widths": [
+            1440,
+            320
+          ],
+          "evidence": [
+            {
+              "width": 1440,
+              "layout": {
+                "width": 1440,
+                "measurements": {
+                  "inner": 1440,
+                  "client": 1425,
+                  "document": 1425,
+                  "body": 1425
+                },
+                "controls": [
+                  {
+                    "id": "sitemap-bundle-public-base",
+                    "x": 281,
+                    "y": 111.640625,
+                    "width": 1091,
+                    "height": 36.5,
+                    "enabled": true
+                  },
+                  {
+                    "id": "sitemap-bundle-max-urls",
+                    "x": 281,
+                    "y": 204.140625,
+                    "width": 537.5,
+                    "height": 36.5,
+                    "enabled": true
+                  },
+                  {
+                    "id": "sitemap-bundle-max-file-bytes",
+                    "x": 834.5,
+                    "y": 204.140625,
+                    "width": 537.5,
+                    "height": 36.5,
+                    "enabled": true
+                  },
+                  {
+                    "id": "sitemap-bundle-lastmod-source",
+                    "x": 281,
+                    "y": 296.640625,
+                    "width": 1091,
+                    "height": 37,
+                    "enabled": true
+                  },
+                  {
+                    "id": "sitemap-bundle-images",
+                    "x": 285,
+                    "y": 369.140625,
+                    "width": 13,
+                    "height": 13,
+                    "enabled": true
+                  },
+                  {
+                    "id": "sitemap-bundle-external-images",
+                    "x": 285,
+                    "y": 418.140625,
+                    "width": 13,
+                    "height": 13,
+                    "enabled": true
+                  },
+                  {
+                    "id": "sitemap-bundle-hreflang",
+                    "x": 285,
+                    "y": 452.140625,
+                    "width": 13,
+                    "height": 13,
+                    "enabled": true
+                  },
+                  {
+                    "id": "sitemap-bundle-changefreq",
+                    "x": 281,
+                    "y": 548.140625,
+                    "width": 537.5,
+                    "height": 37,
+                    "enabled": true
+                  },
+                  {
+                    "id": "sitemap-bundle-priority",
+                    "x": 834.5,
+                    "y": 548.140625,
+                    "width": 537.5,
+                    "height": 36.5,
+                    "enabled": true
+                  },
+                  {
+                    "id": "sitemap-bundle-max-index-bytes",
+                    "x": 281,
+                    "y": 640.640625,
+                    "width": 1091,
+                    "height": 36.5,
+                    "enabled": true
+                  },
+                  {
+                    "id": "sitemap-bundle-max-total-bytes",
+                    "x": 281,
+                    "y": 733.140625,
+                    "width": 1091,
+                    "height": 36.5,
+                    "enabled": true
+                  },
+                  {
+                    "id": "sitemap-bundle-generate",
+                    "x": 281,
+                    "y": 845.640625,
+                    "width": 140.875,
+                    "height": 32,
+                    "enabled": true
+                  }
+                ]
+              },
+              "archive": {
+                "sha256": "5a3d5d8ab78cf61c9542a16277902d831c2bdec388c8c7bfe324662f162bf385",
+                "bytes": 6953,
+                "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\downloads\\cold-ui-1440.zip"
+              },
+              "screenshot": {
+                "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\downloads\\cold-ui-1440.png",
+                "sha256": "4ac19e28b2cbab73041d94e4f2282adc0338ed2d6e554a07c14efdfc37a20f1d"
+              }
+            },
+            {
+              "width": 320,
+              "layout": {
+                "width": 320,
+                "measurements": {
+                  "inner": 320,
+                  "client": 305,
+                  "document": 305,
+                  "body": 305
+                },
+                "controls": [
+                  {
+                    "id": "sitemap-bundle-public-base",
+                    "x": 24,
+                    "y": 482.25,
+                    "width": 257,
+                    "height": 35,
+                    "enabled": true
+                  },
+                  {
+                    "id": "sitemap-bundle-max-urls",
+                    "x": 24,
+                    "y": 622.75,
+                    "width": 257,
+                    "height": 35,
+                    "enabled": true
+                  },
+                  {
+                    "id": "sitemap-bundle-max-file-bytes",
+                    "x": 24,
+                    "y": 691.75,
+                    "width": 257,
+                    "height": 35,
+                    "enabled": true
+                  },
+                  {
+                    "id": "sitemap-bundle-lastmod-source",
+                    "x": 24,
+                    "y": 778.25,
+                    "width": 257,
+                    "height": 36,
+                    "enabled": true
+                  },
+                  {
+                    "id": "sitemap-bundle-images",
+                    "x": 28,
+                    "y": 863.25,
+                    "width": 13,
+                    "height": 13,
+                    "enabled": true
+                  },
+                  {
+                    "id": "sitemap-bundle-external-images",
+                    "x": 28,
+                    "y": 927.25,
+                    "width": 13,
+                    "height": 13,
+                    "enabled": true
+                  },
+                  {
+                    "id": "sitemap-bundle-hreflang",
+                    "x": 28,
+                    "y": 961.25,
+                    "width": 13,
+                    "height": 13,
+                    "enabled": true
+                  },
+                  {
+                    "id": "sitemap-bundle-changefreq",
+                    "x": 24,
+                    "y": 481.75,
+                    "width": 257,
+                    "height": 36,
+                    "enabled": true
+                  },
+                  {
+                    "id": "sitemap-bundle-priority",
+                    "x": 24,
+                    "y": 551.75,
+                    "width": 257,
+                    "height": 35,
+                    "enabled": true
+                  },
+                  {
+                    "id": "sitemap-bundle-max-index-bytes",
+                    "x": 24,
+                    "y": 651.75,
+                    "width": 257,
+                    "height": 35,
+                    "enabled": true
+                  },
+                  {
+                    "id": "sitemap-bundle-max-total-bytes",
+                    "x": 24,
+                    "y": 738.25,
+                    "width": 257,
+                    "height": 35,
+                    "enabled": true
+                  },
+                  {
+                    "id": "sitemap-bundle-generate",
+                    "x": 24,
+                    "y": 879.25,
+                    "width": 257,
+                    "height": 28,
+                    "enabled": true
+                  }
+                ]
+              },
+              "archive": {
+                "sha256": "5a3d5d8ab78cf61c9542a16277902d831c2bdec388c8c7bfe324662f162bf385",
+                "bytes": 6953,
+                "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\downloads\\cold-ui-320.zip"
+              },
+              "screenshot": {
+                "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\downloads\\cold-ui-320.png",
+                "sha256": "e5fb9fc6d25ed5b7047ace4a7b10e3a723853f759ec84c266008967fb78bb397"
+              }
+            }
+          ],
+          "invalid_downloads": 0,
+          "qualification": "Held real API delivery tests UI ownership, not early generator CPU cancellation."
+        }
+      }
+    }
+  ],
+  "failures": [],
+  "cleanup_signals": [],
+  "qualification": "Six real saved pages and eight genuine website GETs. Official 50,001 and exact maximum/boundary tests remain the separately pinned 32 real Rust/API/CLI/MCP cases; no synthetic website count, manufacturer parity or early CPU-cancel claim.",
+  "chrome_endpoint_file_retries": {
+    "ENOENT": 6,
+    "EBUSY": 0,
+    "EACCES": 0
+  },
+  "sqlite_inventory_initialization": [
+    {
+      "phase": "warm-before-read-baseline",
+      "status": "PASS_INITIALIZATION_ONLY_NOT_READ_PHASE",
+      "before": [
+        {
+          "path": "779f8208-6304-4a95-85dc-66b26e6131db.job.json",
+          "sha256": "229c73cc4113a0e65066155b40f17343636ac915c140eae9af744cb68a6c5bbb",
+          "bytes": 5925
+        },
+        {
+          "path": "779f8208-6304-4a95-85dc-66b26e6131db.json",
+          "sha256": "ef00daf34acb20b5ef944e9944b2c5b31b4f65cd61e55b77b615366c5d0539f4",
+          "bytes": 66293
+        },
+        {
+          "path": "779f8208-6304-4a95-85dc-66b26e6131db.sqlite",
+          "sha256": "60b10f9599431f696c50cd00c1e4433a50c2ffa35c5a26d377c464f8ac17641c",
+          "bytes": 344064
+        },
+        {
+          "path": "snapshots\\779f8208-6304-4a95-85dc-66b26e6131db\\generation-1.json",
+          "sha256": "ef00daf34acb20b5ef944e9944b2c5b31b4f65cd61e55b77b615366c5d0539f4",
+          "bytes": 66293
+        }
+      ],
+      "after": [
+        {
+          "path": "779f8208-6304-4a95-85dc-66b26e6131db.job.json",
+          "sha256": "229c73cc4113a0e65066155b40f17343636ac915c140eae9af744cb68a6c5bbb",
+          "bytes": 5925
+        },
+        {
+          "path": "779f8208-6304-4a95-85dc-66b26e6131db.json",
+          "sha256": "ef00daf34acb20b5ef944e9944b2c5b31b4f65cd61e55b77b615366c5d0539f4",
+          "bytes": 66293
+        },
+        {
+          "path": "779f8208-6304-4a95-85dc-66b26e6131db.sqlite",
+          "sha256": "60b10f9599431f696c50cd00c1e4433a50c2ffa35c5a26d377c464f8ac17641c",
+          "bytes": 344064
+        },
+        {
+          "path": "779f8208-6304-4a95-85dc-66b26e6131db.sqlite-shm",
+          "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+          "bytes": 32768
+        },
+        {
+          "path": "779f8208-6304-4a95-85dc-66b26e6131db.sqlite-wal",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "snapshots\\779f8208-6304-4a95-85dc-66b26e6131db\\generation-1.json",
+          "sha256": "ef00daf34acb20b5ef944e9944b2c5b31b4f65cd61e55b77b615366c5d0539f4",
+          "bytes": 66293
+        }
+      ],
+      "added": [
+        {
+          "path": "779f8208-6304-4a95-85dc-66b26e6131db.sqlite-shm",
+          "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+          "bytes": 32768
+        },
+        {
+          "path": "779f8208-6304-4a95-85dc-66b26e6131db.sqlite-wal",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      ],
+      "qualification": "Explicit first stored sitemap-inventory GET before read-only byte baseline; not a universal shutdown/startup no-write claim.",
+      "http": {
+        "method": "GET",
+        "path": "/api/crawls/779f8208-6304-4a95-85dc-66b26e6131db/sitemaps",
+        "query_sha256": "aa013823da0bedce9c9f39640807248a1e76181fbc755585e79c572de4f9af8c",
+        "status": 200,
+        "headers": {
+          "content-type": "application/json",
+          "content-length": "5856",
+          "connection": "close",
+          "date": "Thu, 15 Oct 2026 21:45:06 GMT"
+        },
+        "response_end": true,
+        "response_closed": true,
+        "response_complete": true,
+        "response_aborted": false,
+        "request_closed": true,
+        "socket_closed": true,
+        "own_abort": false,
+        "bytes": 5856,
+        "error": null,
+        "started": {
+          "label": "http_started",
+          "monotonic_us": 48356914507
+        },
+        "headers_observed": {
+          "label": "http_headers",
+          "monotonic_us": 48356923545
+        },
+        "closed": {
+          "label": "http_resources_closed",
+          "monotonic_us": 48356924268
+        },
+        "sha256": "4572bdd4383f05beef65129728a3276ce46d1894e6c5448ff44c315fab71709f",
+        "tail_hex": "72636573222c226f62736572766174696f6e5f73636f7065223a22636f6d706c657465645f73617665645f7265706f72745f6f62736572766174696f6e73222c22776562736974655f776964655f6f727068616e5f696e666572656e6365223a66616c73657d2c226c6f636174696f6e5f66696e64696e6773223a5b5d2c2273617665645f7061676573223a5b5d2c2273617665645f70616765735f686176655f6d6f7265223a66616c73652c226c6173745f73617665645f706167655f75726c223a6e756c6c2c226c6173745f73617665645f706167655f6f7264696e616c223a6e756c6c7d2c226e6578745f706167655f637572736f72223a6e756c6c7d"
+      }
+    },
+    {
+      "phase": "cold-before-read-baseline",
+      "status": "PASS_INITIALIZATION_ONLY_NOT_READ_PHASE",
+      "before": [
+        {
+          "path": "779f8208-6304-4a95-85dc-66b26e6131db.job.json",
+          "sha256": "229c73cc4113a0e65066155b40f17343636ac915c140eae9af744cb68a6c5bbb",
+          "bytes": 5925
+        },
+        {
+          "path": "779f8208-6304-4a95-85dc-66b26e6131db.json",
+          "sha256": "ef00daf34acb20b5ef944e9944b2c5b31b4f65cd61e55b77b615366c5d0539f4",
+          "bytes": 66293
+        },
+        {
+          "path": "779f8208-6304-4a95-85dc-66b26e6131db.sqlite",
+          "sha256": "60b10f9599431f696c50cd00c1e4433a50c2ffa35c5a26d377c464f8ac17641c",
+          "bytes": 344064
+        },
+        {
+          "path": "779f8208-6304-4a95-85dc-66b26e6131db.sqlite-shm",
+          "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+          "bytes": 32768
+        },
+        {
+          "path": "779f8208-6304-4a95-85dc-66b26e6131db.sqlite-wal",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "snapshots\\779f8208-6304-4a95-85dc-66b26e6131db\\generation-1.json",
+          "sha256": "ef00daf34acb20b5ef944e9944b2c5b31b4f65cd61e55b77b615366c5d0539f4",
+          "bytes": 66293
+        }
+      ],
+      "after": [
+        {
+          "path": "779f8208-6304-4a95-85dc-66b26e6131db.job.json",
+          "sha256": "229c73cc4113a0e65066155b40f17343636ac915c140eae9af744cb68a6c5bbb",
+          "bytes": 5925
+        },
+        {
+          "path": "779f8208-6304-4a95-85dc-66b26e6131db.json",
+          "sha256": "ef00daf34acb20b5ef944e9944b2c5b31b4f65cd61e55b77b615366c5d0539f4",
+          "bytes": 66293
+        },
+        {
+          "path": "779f8208-6304-4a95-85dc-66b26e6131db.sqlite",
+          "sha256": "60b10f9599431f696c50cd00c1e4433a50c2ffa35c5a26d377c464f8ac17641c",
+          "bytes": 344064
+        },
+        {
+          "path": "779f8208-6304-4a95-85dc-66b26e6131db.sqlite-shm",
+          "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+          "bytes": 32768
+        },
+        {
+          "path": "779f8208-6304-4a95-85dc-66b26e6131db.sqlite-wal",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "snapshots\\779f8208-6304-4a95-85dc-66b26e6131db\\generation-1.json",
+          "sha256": "ef00daf34acb20b5ef944e9944b2c5b31b4f65cd61e55b77b615366c5d0539f4",
+          "bytes": 66293
+        }
+      ],
+      "added": [],
+      "qualification": "Explicit first stored sitemap-inventory GET before read-only byte baseline; not a universal shutdown/startup no-write claim.",
+      "http": {
+        "method": "GET",
+        "path": "/api/crawls/779f8208-6304-4a95-85dc-66b26e6131db/sitemaps",
+        "query_sha256": "aa013823da0bedce9c9f39640807248a1e76181fbc755585e79c572de4f9af8c",
+        "status": 200,
+        "headers": {
+          "content-type": "application/json",
+          "content-length": "5856",
+          "connection": "close",
+          "date": "Thu, 15 Oct 2026 21:45:34 GMT"
+        },
+        "response_end": true,
+        "response_closed": true,
+        "response_complete": true,
+        "response_aborted": false,
+        "request_closed": true,
+        "socket_closed": true,
+        "own_abort": false,
+        "bytes": 5856,
+        "error": null,
+        "started": {
+          "label": "http_started",
+          "monotonic_us": 48384657744
+        },
+        "headers_observed": {
+          "label": "http_headers",
+          "monotonic_us": 48384665817
+        },
+        "closed": {
+          "label": "http_resources_closed",
+          "monotonic_us": 48384666248
+        },
+        "sha256": "4572bdd4383f05beef65129728a3276ce46d1894e6c5448ff44c315fab71709f",
+        "tail_hex": "72636573222c226f62736572766174696f6e5f73636f7065223a22636f6d706c657465645f73617665645f7265706f72745f6f62736572766174696f6e73222c22776562736974655f776964655f6f727068616e5f696e666572656e6365223a66616c73657d2c226c6f636174696f6e5f66696e64696e6773223a5b5d2c2273617665645f7061676573223a5b5d2c2273617665645f70616765735f686176655f6d6f7265223a66616c73652c226c6173745f73617665645f706167655f75726c223a6e756c6c2c226c6173745f73617665645f706167655f6f7264696e616c223a6e756c6c7d2c226e6578745f706167655f637572736f72223a6e756c6c7d"
+      }
+    }
+  ],
+  "chrome_shutdown": {
+    "protocol_acknowledged": true,
+    "disconnected": true,
+    "natural_exit": {
+      "code": 0,
+      "signal": null
+    }
+  },
+  "actual_website_requests_during_all_reads": 0,
+  "all_eight_children_naturally_closed": true,
+  "fixture": {
+    "actual_close_callback": true,
+    "socket_opened": 8,
+    "socket_closed": 8,
+    "retained_sockets": 0,
+    "retained_responses": 0,
+    "errors": []
+  },
+  "apps": [
+    {
+      "label": "01-warm-app",
+      "data": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\data",
+      "logs": [
+        {
+          "name": "stdout",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\01-warm-app.stdout.log",
+          "fd_closed": true,
+          "bytes": 40,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null,
+          "sha256": "dec2bfe5ea2457021758170e51df7363a8dc6a1461edd960d44eb92ffa0449e3"
+        },
+        {
+          "name": "stderr",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\01-warm-app.stderr.log",
+          "fd_closed": true,
+          "bytes": 1574,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null,
+          "sha256": "8d262a3b421bdd8dfb261ef943a49e3b00c1c1b6acd30cef2a2bbf4f139e83de"
+        }
+      ],
+      "errors": [],
+      "receipts": [
+        {
+          "value": {
+            "cause": "owned_stdin_eof",
+            "clean": true,
+            "incoming_transports": {
+              "accept_admitted": 1,
+              "accept_joined": 1,
+              "accept_retained": 0,
+              "accepted": 22,
+              "actual_io_dropped": 22,
+              "complete": 22,
+              "connection_admitted": 22,
+              "connection_joined": 22,
+              "connection_retained": 0,
+              "first_failure": null,
+              "grace_seconds": 5,
+              "incoming_protocol": "http1_plain_tcp_no_application_upgrades",
+              "listener_dropped": true,
+              "peer_errors": 0,
+              "registered": true,
+              "rejected": 0,
+              "retained": 0,
+              "shutdown_aborted": 0,
+              "tcp_write_pending": 0,
+              "whole_application_five_second_bound": false
+            },
+            "kind": "owned_application_shutdown_v1",
+            "owners": [
+              {
+                "admitted": 44,
+                "closing": true,
+                "first_failure": null,
+                "joined": 44,
+                "owner": "http_requests",
+                "retained": 0,
+                "started": 44
+              },
+              {
+                "admitted": 21,
+                "closing": true,
+                "first_failure": null,
+                "joined": 21,
+                "owner": "http_blocking",
+                "retained": 0,
+                "started": 21
+              },
+              {
+                "admitted": 1,
+                "closing": true,
+                "first_failure": null,
+                "joined": 1,
+                "owner": "crawl_operations",
+                "retained": 0,
+                "started": 1
+              }
+            ],
+            "qualification": "Local application task joins only; actual process/pipe EOF is an independent outside witness; no stateful MCP session or external renderer-process drain claim",
+            "response_streams": {
+              "aborted": 0,
+              "admitted": 0,
+              "complete": 0,
+              "enqueues": 0,
+              "failed": 0,
+              "first_failure": null,
+              "full_reservations": 0,
+              "joined": 0,
+              "max_chunk": 0,
+              "peak_queued": 0,
+              "response_supervisors_joined": 0,
+              "retained": 0,
+              "started": 0
+            },
+            "response_transport_owned": true,
+            "source_body_transports": {
+              "admitted": 0,
+              "first_failure": null,
+              "joined": 0,
+              "logical_spool_byte_limit": 134217728,
+              "owner": "source_body_transports",
+              "retained": 0,
+              "spool_leases": 0,
+              "started": 0,
+              "unresponsive_transport_shutdown": "not_proven"
+            }
+          },
+          "witness": {
+            "label": "actual_shutdown_receipt",
+            "monotonic_us": 48381402617,
+            "child_closed": false,
+            "child_exited": false
+          }
+        }
+      ],
+      "spawned": true,
+      "exited": true,
+      "closed": true,
+      "spawn_error": null,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "stdin": {
+        "eof_sent": true,
+        "finished": true,
+        "closed": true,
+        "error": null
+      },
+      "events": [
+        {
+          "label": "actual_spawn",
+          "monotonic_us": 48351734946
+        },
+        {
+          "label": "owned_stdin_eof_sent",
+          "monotonic_us": 48381400386
+        },
+        {
+          "label": "actual_exit",
+          "monotonic_us": 48381406576
+        },
+        {
+          "label": "actual_child_close",
+          "monotonic_us": 48381406623
+        }
+      ],
+      "origin": "http://127.0.0.1:50607",
+      "pid": 34648
+    },
+    {
+      "label": "02-cold-app",
+      "data": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\data",
+      "logs": [
+        {
+          "name": "stdout",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\02-cold-app.stdout.log",
+          "fd_closed": true,
+          "bytes": 40,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null,
+          "sha256": "d20cd1eb8d140dcbf8a891ca7e4d65bada9aa0d4a55a0ba1023a565e824cc58a"
+        },
+        {
+          "name": "stderr",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\02-cold-app.stderr.log",
+          "fd_closed": true,
+          "bytes": 1566,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null,
+          "sha256": "4060eb50a6080dc00cd7d837f40d4ac87da5cf6208b1f2cdf11a529856670642"
+        }
+      ],
+      "errors": [],
+      "receipts": [
+        {
+          "value": {
+            "cause": "owned_stdin_eof",
+            "clean": true,
+            "incoming_transports": {
+              "accept_admitted": 1,
+              "accept_joined": 1,
+              "accept_retained": 0,
+              "accepted": 6,
+              "actual_io_dropped": 6,
+              "complete": 6,
+              "connection_admitted": 6,
+              "connection_joined": 6,
+              "connection_retained": 0,
+              "first_failure": null,
+              "grace_seconds": 5,
+              "incoming_protocol": "http1_plain_tcp_no_application_upgrades",
+              "listener_dropped": true,
+              "peer_errors": 0,
+              "registered": true,
+              "rejected": 0,
+              "retained": 0,
+              "shutdown_aborted": 0,
+              "tcp_write_pending": 0,
+              "whole_application_five_second_bound": false
+            },
+            "kind": "owned_application_shutdown_v1",
+            "owners": [
+              {
+                "admitted": 19,
+                "closing": true,
+                "first_failure": null,
+                "joined": 19,
+                "owner": "http_requests",
+                "retained": 0,
+                "started": 19
+              },
+              {
+                "admitted": 7,
+                "closing": true,
+                "first_failure": null,
+                "joined": 7,
+                "owner": "http_blocking",
+                "retained": 0,
+                "started": 7
+              },
+              {
+                "admitted": 0,
+                "closing": true,
+                "first_failure": null,
+                "joined": 0,
+                "owner": "crawl_operations",
+                "retained": 0,
+                "started": 0
+              }
+            ],
+            "qualification": "Local application task joins only; actual process/pipe EOF is an independent outside witness; no stateful MCP session or external renderer-process drain claim",
+            "response_streams": {
+              "aborted": 0,
+              "admitted": 0,
+              "complete": 0,
+              "enqueues": 0,
+              "failed": 0,
+              "first_failure": null,
+              "full_reservations": 0,
+              "joined": 0,
+              "max_chunk": 0,
+              "peak_queued": 0,
+              "response_supervisors_joined": 0,
+              "retained": 0,
+              "started": 0
+            },
+            "response_transport_owned": true,
+            "source_body_transports": {
+              "admitted": 0,
+              "first_failure": null,
+              "joined": 0,
+              "logical_spool_byte_limit": 134217728,
+              "owner": "source_body_transports",
+              "retained": 0,
+              "spool_leases": 0,
+              "started": 0,
+              "unresponsive_transport_shutdown": "not_proven"
+            }
+          },
+          "witness": {
+            "label": "actual_shutdown_receipt",
+            "monotonic_us": 48392267170,
+            "child_closed": false,
+            "child_exited": false
+          }
+        }
+      ],
+      "spawned": true,
+      "exited": true,
+      "closed": true,
+      "spawn_error": null,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "stdin": {
+        "eof_sent": true,
+        "finished": true,
+        "closed": true,
+        "error": null
+      },
+      "events": [
+        {
+          "label": "actual_spawn",
+          "monotonic_us": 48382708906
+        },
+        {
+          "label": "owned_stdin_eof_sent",
+          "monotonic_us": 48392264419
+        },
+        {
+          "label": "actual_exit",
+          "monotonic_us": 48392272600
+        },
+        {
+          "label": "actual_child_close",
+          "monotonic_us": 48392272685
+        }
+      ],
+      "origin": "http://127.0.0.1:54785",
+      "pid": 10908
+    }
+  ],
+  "other_children": [
+    {
+      "label": "owned-chrome",
+      "logs": [
+        {
+          "name": "stdout",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\owned-chrome.stdout.log",
+          "fd_closed": true,
+          "bytes": 0,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "stderr",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\owned-chrome.stderr.log",
+          "fd_closed": true,
+          "bytes": 1834,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "sha256": "a423371144347e94e8ff3f3c82b9fff11063c3e68b79450ce4bacae9e249325f"
+        }
+      ],
+      "errors": [],
+      "spawn_error": null,
+      "spawned": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "stdin": null,
+      "events": [
+        {
+          "sequence": 1,
+          "event": "spawn"
+        },
+        {
+          "sequence": 12,
+          "event": "actual_close"
+        }
+      ],
+      "pid": 10732
+    },
+    {
+      "label": "cli-positive",
+      "logs": [
+        {
+          "name": "stdout",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\cli-positive.stdout.log",
+          "fd_closed": true,
+          "bytes": 437,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "sha256": "d1f5823f2621186f74b9cfe2d837ba48686922714a8ea1f45a56e67009b45919"
+        },
+        {
+          "name": "stderr",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\cli-positive.stderr.log",
+          "fd_closed": true,
+          "bytes": 0,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "errors": [],
+      "spawn_error": null,
+      "spawned": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "stdin": null,
+      "events": [
+        {
+          "sequence": 2,
+          "event": "spawn"
+        },
+        {
+          "sequence": 3,
+          "event": "actual_close"
+        }
+      ],
+      "pid": 29180
+    },
+    {
+      "label": "cli-existing-output",
+      "logs": [
+        {
+          "name": "stdout",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\cli-existing-output.stdout.log",
+          "fd_closed": true,
+          "bytes": 0,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "stderr",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\cli-existing-output.stderr.log",
+          "fd_closed": true,
+          "bytes": 52,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "sha256": "d444bcd3c0a838c4beb2809cfe559e462e83195922b41b399277e7610e497e6b"
+        }
+      ],
+      "errors": [],
+      "spawn_error": null,
+      "spawned": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "exit": {
+        "code": 1,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 1,
+        "signal": null
+      },
+      "forced": false,
+      "stdin": null,
+      "events": [
+        {
+          "sequence": 4,
+          "event": "spawn"
+        },
+        {
+          "sequence": 5,
+          "event": "actual_close"
+        }
+      ],
+      "pid": 24876
+    },
+    {
+      "label": "cli-invalid-before-report",
+      "logs": [
+        {
+          "name": "stdout",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\cli-invalid-before-report.stdout.log",
+          "fd_closed": true,
+          "bytes": 0,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "stderr",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\cli-invalid-before-report.stderr.log",
+          "fd_closed": true,
+          "bytes": 87,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "sha256": "0799e4906d02536ee141f3ed23bfdf9295770dc099224827a12a9eb4837d5500"
+        }
+      ],
+      "errors": [],
+      "spawn_error": null,
+      "spawned": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "exit": {
+        "code": 1,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 1,
+        "signal": null
+      },
+      "forced": false,
+      "stdin": null,
+      "events": [
+        {
+          "sequence": 6,
+          "event": "spawn"
+        },
+        {
+          "sequence": 7,
+          "event": "actual_close"
+        }
+      ],
+      "pid": 30668
+    },
+    {
+      "label": "cli-race-a",
+      "logs": [
+        {
+          "name": "stdout",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\cli-race-a.stdout.log",
+          "fd_closed": true,
+          "bytes": 433,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "sha256": "5ff46d0141018e59dc1598cd1449da8f2c2b6b728d461de1cb3d307d2731d837"
+        },
+        {
+          "name": "stderr",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\cli-race-a.stderr.log",
+          "fd_closed": true,
+          "bytes": 0,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "errors": [],
+      "spawn_error": null,
+      "spawned": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "stdin": null,
+      "events": [
+        {
+          "sequence": 8,
+          "event": "spawn"
+        },
+        {
+          "sequence": 10,
+          "event": "actual_close"
+        }
+      ],
+      "pid": 3080
+    },
+    {
+      "label": "cli-race-b",
+      "logs": [
+        {
+          "name": "stdout",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\cli-race-b.stdout.log",
+          "fd_closed": true,
+          "bytes": 0,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "stderr",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\sitemap-generation-native-v11-r5\\cli-race-b.stderr.log",
+          "fd_closed": true,
+          "bytes": 189,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "sha256": "2298034dbe76fb7cb9e1e81bd5b7b682bdc8a582c53682c5e667e83dd955560e"
+        }
+      ],
+      "errors": [],
+      "spawn_error": null,
+      "spawned": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "exit": {
+        "code": 1,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 1,
+        "signal": null
+      },
+      "forced": false,
+      "stdin": null,
+      "events": [
+        {
+          "sequence": 9,
+          "event": "spawn"
+        },
+        {
+          "sequence": 11,
+          "event": "actual_close"
+        }
+      ],
+      "pid": 39976
+    }
+  ],
+  "http": [
+    {
+      "method": "GET",
+      "path": "/healthz",
+      "query_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "content-length": "54",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:02 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 54,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48352407569
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48352413607
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48352415375
+      },
+      "sha256": "58599c0752ab5171a3d754c07e2bcd66e5879a826c609c66df01bcf107e6efaa",
+      "tail_hex": "7b226e616d65223a224f70656e2053454f20537069646572222c226f6b223a747275652c2276657273696f6e223a22302e312e30227d"
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls",
+      "query_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "content-length": "64",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:02 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 64,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48353071124
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48353074289
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48353074735
+      },
+      "sha256": "3c5a141bcc23824989356386312308198536a718c4e866501002acf5edda6aba",
+      "tail_hex": "7b226964223a2237373966383230382d363330342d346139352d383564632d363662323665363133316462222c22737461747573223a2272756e6e696e67227d"
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/779f8208-6304-4a95-85dc-66b26e6131db",
+      "query_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "content-length": "4445",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:03 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 4445,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48353743633
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48353755625
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48353756427
+      },
+      "sha256": "a5c8083dc541b90a9686503870e18e9768db035c2cacc474bb7cd7119cc02a35",
+      "tail_hex": "616c73652c22736565645f75726c223a22687474703a2f2f3132372e302e302e313a35303630362f613f783d3126793d32222c22737461727465645f6174223a22323032362d31302d31355432313a34353a30322e3933383835363330302b30303a3030222c227374617473223a7b22646973636f7665726564223a372c22646973636f766572795f70656e64696e67223a302c226661696c6564223a302c2266657463686564223a302c22696e5f666c69676874223a312c22697373756573223a302c22717565756564223a367d2c22737461747573223a2272756e6e696e67222c2273756d6d617279223a6e756c6c2c227761726e696e6773223a5b5d7d"
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/779f8208-6304-4a95-85dc-66b26e6131db",
+      "query_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "content-length": "6558",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:04 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 6558,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48354443202
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48354444910
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48354445290
+      },
+      "sha256": "888ced7fb6c5b78eeb2fdf413139fc22d6372bc94cfa69d50f13fa5b534df958",
+      "tail_hex": "6d73223a3636372c226572726f7273223a312c2266696e69736865645f6174223a22323032362d31302d31355432313a34353a30332e3633353038383830302b30303a3030222c2268746d6c5f7061676573223a362c22696e64657861626c655f7061676573223a332c226c696d69746564223a66616c73652c2270656e64696e67223a302c22737461727465645f6174223a22323032362d31302d31355432313a34353a30322e3936373536303730302b30303a3030222c227374617475735f636f756e7473223a7b22323030223a342c22333032223a312c22343034223a317d2c227761726e696e6773223a31367d2c227761726e696e6773223a5b5d7d"
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/779f8208-6304-4a95-85dc-66b26e6131db/project.json",
+      "query_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "content-disposition": "attachment; filename=\"crawl.json\"",
+        "content-length": "99081",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:04 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 99081,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48355073371
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48355077291
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48355077952
+      },
+      "sha256": "864216929364d84c75268a07c16b7bab556ab19064120249a0050dad449858e2",
+      "tail_hex": "346165623730363262222c0a202020202020202022646f63756d656e745f6964223a202231363066633439656131663531343436316636663631353237313639616135636134626337323439363333373165666539373239313333326565386431306139222c0a202020202020202022646f63756d656e745f73657175656e6365223a20322c0a202020202020202022646f63756d656e745f7061796c6f61645f736861323536223a202237313932363439383362326635363938363139666661333233623564383962653430626366616162643035363161356138663937383939663565623034366366220a2020202020207d0a202020205d0a20207d0a7d"
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/779f8208-6304-4a95-85dc-66b26e6131db/sitemaps",
+      "query_sha256": "aa013823da0bedce9c9f39640807248a1e76181fbc755585e79c572de4f9af8c",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "content-length": "5856",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:06 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 5856,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48356914507
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48356923545
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48356924268
+      },
+      "sha256": "4572bdd4383f05beef65129728a3276ce46d1894e6c5448ff44c315fab71709f",
+      "tail_hex": "72636573222c226f62736572766174696f6e5f73636f7065223a22636f6d706c657465645f73617665645f7265706f72745f6f62736572766174696f6e73222c22776562736974655f776964655f6f727068616e5f696e666572656e6365223a66616c73657d2c226c6f636174696f6e5f66696e64696e6773223a5b5d2c2273617665645f7061676573223a5b5d2c2273617665645f70616765735f686176655f6d6f7265223a66616c73652c226c6173745f73617665645f706167655f75726c223a6e756c6c2c226c6173745f73617665645f706167655f6f7264696e616c223a6e756c6c7d2c226e6578745f706167655f637572736f72223a6e756c6c7d"
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls/779f8208-6304-4a95-85dc-66b26e6131db/sitemap-bundle",
+      "query_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": 200,
+      "headers": {
+        "content-type": "application/zip",
+        "content-length": "6953",
+        "content-disposition": "attachment; filename=\"779f8208-6304-4a95-85dc-66b26e6131db-sitemap-bundle.zip\"",
+        "x-sitemap-generation-engine": "open-seo-spider/segmented-sitemap-generation-v1",
+        "x-sitemap-report-sha256": "ef00daf34acb20b5ef944e9944b2c5b31b4f65cd61e55b77b615366c5d0539f4",
+        "x-sitemap-bundle-sha256": "5a3d5d8ab78cf61c9542a16277902d831c2bdec388c8c7bfe324662f162bf385",
+        "x-sitemap-generated-urls": "3",
+        "x-sitemap-excluded-pages": "3",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:08 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 6953,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48358349565
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48358353868
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48358354661
+      },
+      "sha256": "5a3d5d8ab78cf61c9542a16277902d831c2bdec388c8c7bfe324662f162bf385",
+      "tail_hex": "210080dc6b1b2504000025040000110000000000000000000000a48100000000736974656d61702d30303030312e786d6c504b01020a000a00000000000000210072e756517902000079020000110000000000000000000000a48154040000736974656d61702d30303030322e786d6c504b01020a000a000000000000002100834c98a60c0100000c010000110000000000000000000000a481fc060000736974656d61702d696e6465782e786d6c504b01020a000a00000000000000210086770557b9110000b91100000d0000000000000000000000a481370800006d616e69666573742e6a736f6e504b05060000000004000400f80000001b1a00000000"
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls/779f8208-6304-4a95-85dc-66b26e6131db/sitemap-bundle",
+      "query_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": 200,
+      "headers": {
+        "content-type": "application/zip",
+        "content-length": "6953",
+        "content-disposition": "attachment; filename=\"779f8208-6304-4a95-85dc-66b26e6131db-sitemap-bundle.zip\"",
+        "x-sitemap-generation-engine": "open-seo-spider/segmented-sitemap-generation-v1",
+        "x-sitemap-report-sha256": "ef00daf34acb20b5ef944e9944b2c5b31b4f65cd61e55b77b615366c5d0539f4",
+        "x-sitemap-bundle-sha256": "5a3d5d8ab78cf61c9542a16277902d831c2bdec388c8c7bfe324662f162bf385",
+        "x-sitemap-generated-urls": "3",
+        "x-sitemap-excluded-pages": "3",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:08 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 6953,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48359131488
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48359133507
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48359133757
+      },
+      "sha256": "5a3d5d8ab78cf61c9542a16277902d831c2bdec388c8c7bfe324662f162bf385",
+      "tail_hex": "210080dc6b1b2504000025040000110000000000000000000000a48100000000736974656d61702d30303030312e786d6c504b01020a000a00000000000000210072e756517902000079020000110000000000000000000000a48154040000736974656d61702d30303030322e786d6c504b01020a000a000000000000002100834c98a60c0100000c010000110000000000000000000000a481fc060000736974656d61702d696e6465782e786d6c504b01020a000a00000000000000210086770557b9110000b91100000d0000000000000000000000a481370800006d616e69666573742e6a736f6e504b05060000000004000400f80000001b1a00000000"
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls/779f8208-6304-4a95-85dc-66b26e6131db/sitemap-bundle",
+      "query_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": 200,
+      "headers": {
+        "content-type": "application/zip",
+        "content-length": "7566",
+        "content-disposition": "attachment; filename=\"779f8208-6304-4a95-85dc-66b26e6131db-sitemap-bundle.zip\"",
+        "x-sitemap-generation-engine": "open-seo-spider/segmented-sitemap-generation-v1",
+        "x-sitemap-report-sha256": "ef00daf34acb20b5ef944e9944b2c5b31b4f65cd61e55b77b615366c5d0539f4",
+        "x-sitemap-bundle-sha256": "da92996e0dabd2e3355da938e8cb42e35198f3f6a1bfb1672ca6f2ccb5fa96ab",
+        "x-sitemap-generated-urls": "3",
+        "x-sitemap-excluded-pages": "3",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:10 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 7566,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48360549741
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48360553428
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48360554088
+      },
+      "sha256": "da92996e0dabd2e3355da938e8cb42e35198f3f6a1bfb1672ca6f2ccb5fa96ab",
+      "tail_hex": "210064a0517c7802000078020000110000000000000000000000a481b3020000736974656d61702d30303030322e786d6c504b01020a000a00000000000000210072e756517902000079020000110000000000000000000000a4815a050000736974656d61702d30303030332e786d6c504b01020a000a000000000000002100956f0e575501000055010000110000000000000000000000a48102080000736974656d61702d696e6465782e786d6c504b01020a000a000000000000002100e9278b0890120000901200000d0000000000000000000000a481860900006d616e69666573742e6a736f6e504b0506000000000500050037010000411c00000000"
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls/779f8208-6304-4a95-85dc-66b26e6131db/sitemap-bundle",
+      "query_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": 200,
+      "headers": {
+        "content-type": "application/zip",
+        "content-length": "7565",
+        "content-disposition": "attachment; filename=\"779f8208-6304-4a95-85dc-66b26e6131db-sitemap-bundle.zip\"",
+        "x-sitemap-generation-engine": "open-seo-spider/segmented-sitemap-generation-v1",
+        "x-sitemap-report-sha256": "ef00daf34acb20b5ef944e9944b2c5b31b4f65cd61e55b77b615366c5d0539f4",
+        "x-sitemap-bundle-sha256": "55d5cb443c57f104db05ff433a8c35973c02620143975d8d8d20e0a0833cfded",
+        "x-sitemap-generated-urls": "3",
+        "x-sitemap-excluded-pages": "3",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:11 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 7565,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48361401775
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48361403957
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48361404294
+      },
+      "sha256": "55d5cb443c57f104db05ff433a8c35973c02620143975d8d8d20e0a0833cfded",
+      "tail_hex": "210064a0517c7802000078020000110000000000000000000000a481b3020000736974656d61702d30303030322e786d6c504b01020a000a00000000000000210072e756517902000079020000110000000000000000000000a4815a050000736974656d61702d30303030332e786d6c504b01020a000a000000000000002100956f0e575501000055010000110000000000000000000000a48102080000736974656d61702d696e6465782e786d6c504b01020a000a000000000000002100282ad3368f1200008f1200000d0000000000000000000000a481860900006d616e69666573742e6a736f6e504b0506000000000500050037010000401c00000000"
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls/779f8208-6304-4a95-85dc-66b26e6131db/sitemap-bundle",
+      "query_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": 413,
+      "headers": {
+        "content-type": "application/json",
+        "content-length": "100",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:12 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 100,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48362213998
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48362215967
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48362216202
+      },
+      "sha256": "bd0387c3bc40f6ddf9a4a371a96ebac66e545bf498351f6f74537190f78146b7",
+      "tail_hex": "7b22636f6465223a22656e7472795f627974655f6c696d6974222c226d657373616765223a224f6e652055524c207769746820657874656e73696f6e73206578636565647320756e636f6d707265737365642066696c652062797465206c696d6974227d"
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls/779f8208-6304-4a95-85dc-66b26e6131db/sitemap-bundle",
+      "query_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": 200,
+      "headers": {
+        "content-type": "application/zip",
+        "content-length": "6948",
+        "content-disposition": "attachment; filename=\"779f8208-6304-4a95-85dc-66b26e6131db-sitemap-bundle.zip\"",
+        "x-sitemap-generation-engine": "open-seo-spider/segmented-sitemap-generation-v1",
+        "x-sitemap-report-sha256": "ef00daf34acb20b5ef944e9944b2c5b31b4f65cd61e55b77b615366c5d0539f4",
+        "x-sitemap-bundle-sha256": "61301a9ee891d20ca54990b1432cd27808a61413159e68f434b78fadfa86449e",
+        "x-sitemap-generated-urls": "3",
+        "x-sitemap-excluded-pages": "3",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:12 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 6948,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48362875244
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48362877304
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48362877699
+      },
+      "sha256": "61301a9ee891d20ca54990b1432cd27808a61413159e68f434b78fadfa86449e",
+      "tail_hex": "210080dc6b1b2504000025040000110000000000000000000000a48100000000736974656d61702d30303030312e786d6c504b01020a000a00000000000000210072e756517902000079020000110000000000000000000000a48154040000736974656d61702d30303030322e786d6c504b01020a000a000000000000002100834c98a60c0100000c010000110000000000000000000000a481fc060000736974656d61702d696e6465782e786d6c504b01020a000a0000000000000021001335bd53b4110000b41100000d0000000000000000000000a481370800006d616e69666573742e6a736f6e504b05060000000004000400f8000000161a00000000"
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls/779f8208-6304-4a95-85dc-66b26e6131db/sitemap-bundle",
+      "query_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": 413,
+      "headers": {
+        "content-type": "application/json",
+        "content-length": "76",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:13 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 76,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48363633598
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48363635549
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48363635820
+      },
+      "sha256": "4d448d45f8f458bed3de5b409f8e67d2e984862ce139a2d91e1b922d71e3eae9",
+      "tail_hex": "7b22636f6465223a22696e6465785f6c696d6974222c226d657373616765223a22536974656d617020696e64657820657863656564732070726f746f636f6c2062797465206c696d6974227d"
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls/779f8208-6304-4a95-85dc-66b26e6131db/sitemap-bundle",
+      "query_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": 413,
+      "headers": {
+        "content-type": "application/json",
+        "content-length": "74",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:14 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 74,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48364267435
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48364269272
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48364269534
+      },
+      "sha256": "edc36538b29195bb275465b64400b4d37393a3d94212d699271e1362e94d300a",
+      "tail_hex": "7b22636f6465223a22746f74616c5f6f75747075745f627564676574222c226d657373616765223a22584d4c206f7574707574206578636565647320746f74616c20627564676574227d"
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls/779f8208-6304-4a95-85dc-66b26e6131db/sitemap-bundle",
+      "query_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": 400,
+      "headers": {
+        "content-type": "application/json",
+        "content-length": "220",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:14 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 220,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48364946413
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48364947872
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48364948168
+      },
+      "sha256": "b14812f7e082c69e629af1f4a4a9dda65d859995648af8499b15f401d3fcfe51",
+      "tail_hex": "7b22636f6465223a22696e76616c69645f6f7074696f6e73222c226d657373616765223a224661696c656420746f20646573657269616c697a6520746865204a534f4e20626f647920696e746f207468652074617267657420747970653a206c6173746d6f642e736f757263653a20756e6b6e6f776e2076617269616e7420606e6f745f615f736f75726365602c206578706563746564206f6e65206f6620606f6d6974602c206070726f7669646564602c206063617074757265645f736974656d617060206174206c696e65203120636f6c756d6e20323932227d"
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls/779f8208-6304-4a95-85dc-66b26e6131db/sitemap-bundle",
+      "query_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": 400,
+      "headers": {
+        "content-type": "application/json",
+        "content-length": "102",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:15 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 102,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48365625354
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48365626953
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48365627223
+      },
+      "sha256": "863ba6d5f3ddcca67345d09547224b3bd66083a651be31aaca168892043a4560",
+      "tail_hex": "7b22636f6465223a22696e76616c69645f6c6173746d6f64222c226d657373616765223a224c6173746d6f64206d75737420626520616e2061637475616c2076616c696420536974656d61702058534420646174652f6461746554696d652076616c7565227d"
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls/00000000-0000-4000-8000-000000000001/sitemap-bundle",
+      "query_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": 404,
+      "headers": {
+        "content-type": "application/json",
+        "content-length": "53",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:16 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 53,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48366270393
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48366271854
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48366272203
+      },
+      "sha256": "56f7b1d6efe1c6a32940d950cd9b3d90ff5ad6a7ac7aa08bc9e0810090c18160",
+      "tail_hex": "7b22636f6465223a22696e76616c69645f736f75726365222c226d657373616765223a22437261776c206e6f7420666f756e64227d"
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls/779f8208-6304-4a95-85dc-66b26e6131db/sitemap-bundle",
+      "query_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": 422,
+      "headers": {
+        "content-type": "application/json",
+        "content-length": "237",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:16 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 237,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48366886918
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48366888789
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48366889015
+      },
+      "sha256": "b7c073b568a70ca81a043bf37a70da6a02f793dbcc26a2e82473feff4f02ae53",
+      "tail_hex": "7b22636f6465223a226e6f5f656c696769626c655f75726c73222c226d657373616765223a224e6f20656c696769626c6520636170747572656420646f63756d656e742055524c73202836206578636c756465642070616765732c20313520646961676e6f737469637329222c22646961676e6f737469635f636f756e7473223a7b226f7574736964655f7075626c69635f626173655f70617468223a362c2272656469726563746564223a312c226e6f745f68747470323030223a322c226e6f6e5f696e64657861626c65223a332c2263617074757265645f6c6173746d6f645f756e75736564223a337d7d"
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/779f8208-6304-4a95-85dc-66b26e6131db/project.json",
+      "query_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "content-disposition": "attachment; filename=\"crawl.json\"",
+        "content-length": "99081",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:31 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 99081,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48381395343
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48381399514
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48381400172
+      },
+      "sha256": "864216929364d84c75268a07c16b7bab556ab19064120249a0050dad449858e2",
+      "tail_hex": "346165623730363262222c0a202020202020202022646f63756d656e745f6964223a202231363066633439656131663531343436316636663631353237313639616135636134626337323439363333373165666539373239313333326565386431306139222c0a202020202020202022646f63756d656e745f73657175656e6365223a20322c0a202020202020202022646f63756d656e745f7061796c6f61645f736861323536223a202237313932363439383362326635363938363139666661333233623564383962653430626366616162643035363161356138663937383939663565623034366366220a2020202020207d0a202020205d0a20207d0a7d"
+    },
+    {
+      "method": "GET",
+      "path": "/healthz",
+      "query_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "content-length": "54",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:33 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 54,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48383380869
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48383382822
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48383383114
+      },
+      "sha256": "58599c0752ab5171a3d754c07e2bcd66e5879a826c609c66df01bcf107e6efaa",
+      "tail_hex": "7b226e616d65223a224f70656e2053454f20537069646572222c226f6b223a747275652c2276657273696f6e223a22302e312e30227d"
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/779f8208-6304-4a95-85dc-66b26e6131db/sitemaps",
+      "query_sha256": "aa013823da0bedce9c9f39640807248a1e76181fbc755585e79c572de4f9af8c",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "content-length": "5856",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:34 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 5856,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48384657744
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48384665817
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48384666248
+      },
+      "sha256": "4572bdd4383f05beef65129728a3276ce46d1894e6c5448ff44c315fab71709f",
+      "tail_hex": "72636573222c226f62736572766174696f6e5f73636f7065223a22636f6d706c657465645f73617665645f7265706f72745f6f62736572766174696f6e73222c22776562736974655f776964655f6f727068616e5f696e666572656e6365223a66616c73657d2c226c6f636174696f6e5f66696e64696e6773223a5b5d2c2273617665645f7061676573223a5b5d2c2273617665645f70616765735f686176655f6d6f7265223a66616c73652c226c6173745f73617665645f706167655f75726c223a6e756c6c2c226c6173745f73617665645f706167655f6f7264696e616c223a6e756c6c7d2c226e6578745f706167655f637572736f72223a6e756c6c7d"
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/779f8208-6304-4a95-85dc-66b26e6131db/project.json",
+      "query_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "content-disposition": "attachment; filename=\"crawl.json\"",
+        "content-length": "99081",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:36 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 99081,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48386164367
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48386167894
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48386168662
+      },
+      "sha256": "864216929364d84c75268a07c16b7bab556ab19064120249a0050dad449858e2",
+      "tail_hex": "346165623730363262222c0a202020202020202022646f63756d656e745f6964223a202231363066633439656131663531343436316636663631353237313639616135636134626337323439363333373165666539373239313333326565386431306139222c0a202020202020202022646f63756d656e745f73657175656e6365223a20322c0a202020202020202022646f63756d656e745f7061796c6f61645f736861323536223a202237313932363439383362326635363938363139666661333233623564383962653430626366616162643035363161356138663937383939663565623034366366220a2020202020207d0a202020205d0a20207d0a7d"
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls/779f8208-6304-4a95-85dc-66b26e6131db/sitemap-bundle",
+      "query_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": 200,
+      "headers": {
+        "content-type": "application/zip",
+        "content-length": "6953",
+        "content-disposition": "attachment; filename=\"779f8208-6304-4a95-85dc-66b26e6131db-sitemap-bundle.zip\"",
+        "x-sitemap-generation-engine": "open-seo-spider/segmented-sitemap-generation-v1",
+        "x-sitemap-report-sha256": "ef00daf34acb20b5ef944e9944b2c5b31b4f65cd61e55b77b615366c5d0539f4",
+        "x-sitemap-bundle-sha256": "5a3d5d8ab78cf61c9542a16277902d831c2bdec388c8c7bfe324662f162bf385",
+        "x-sitemap-generated-urls": "3",
+        "x-sitemap-excluded-pages": "3",
+        "connection": "close",
+        "date": "Thu, 15 Oct 2026 21:45:36 GMT"
+      },
+      "response_end": true,
+      "response_closed": true,
+      "response_complete": true,
+      "response_aborted": false,
+      "request_closed": true,
+      "socket_closed": true,
+      "own_abort": false,
+      "bytes": 6953,
+      "error": null,
+      "started": {
+        "label": "http_started",
+        "monotonic_us": 48386862396
+      },
+      "headers_observed": {
+        "label": "http_headers",
+        "monotonic_us": 48386864512
+      },
+      "closed": {
+        "label": "http_resources_closed",
+        "monotonic_us": 48386864731
+      },
+      "sha256": "5a3d5d8ab78cf61c9542a16277902d831c2bdec388c8c7bfe324662f162bf385",
+      "tail_hex": "210080dc6b1b2504000025040000110000000000000000000000a48100000000736974656d61702d30303030312e786d6c504b01020a000a00000000000000210072e756517902000079020000110000000000000000000000a48154040000736974656d61702d30303030322e786d6c504b01020a000a000000000000002100834c98a60c0100000c010000110000000000000000000000a481fc060000736974656d61702d696e6465782e786d6c504b01020a000a00000000000000210086770557b9110000b91100000d0000000000000000000000a481370800006d616e69666573742e6a736f6e504b05060000000004000400f80000001b1a00000000"
+    }
+  ],
+  "lock_released": true,
+  "recorded_at": "2026-10-15T21:45:44.385Z"
+}

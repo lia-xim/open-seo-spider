@@ -3246,7 +3246,7 @@
     {
       "id": "sitemap.generate",
       "name": "XML sitemap generation",
-      "status": "partial",
+      "status": "implemented",
       "phase": "P2",
       "source_ids": [
         "sitemapgen"
@@ -3260,30 +3260,41 @@
             "ui-live"
           ],
           "proves": "Basic indexable-page loc XML export escapes URL text, passes core content assertions and downloads through API/live browser."
+        },
+        {
+          "verification_run_ids": [
+            "source11-installed-generator-20261015",
+            "source11-suite-build-20261015"
+          ],
+          "proves": "Actual independently parsed native XML/ZIP supports captured lastmod, images and hreflang; API, five CLI children, full UI and cold reopen agree. Separate32 actual full-suite functions cover additional option/boundary/error and MCP cases."
         }
       ],
       "parity_evidence": [],
       "group": "sitemap",
-      "remaining_acceptance": [
-        "Support optional lastmod/image/hreflang entries and independent-parser output validation."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
       "id": "sitemap.split",
       "name": "Split and segmented sitemaps",
-      "status": "planned",
+      "status": "implemented",
       "phase": "P2",
       "source_ids": [
         "sitemapgen"
       ],
       "acceptance_test": "Split at configured URL/byte bounds, create index and prove segment URL membership.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "source11-installed-generator-20261015",
+            "source11-suite-build-20261015"
+          ],
+          "proves": "Actual configured URL and byte splits produce independently parsed indexes with exact segment membership; exact/one-byte-under caps and structured refusals are checked. Separate actual full-suite50001-URL split case is preserved."
+        }
+      ],
       "parity_evidence": [],
       "group": "sitemap",
-      "remaining_acceptance": [
-        "Split at configured URL/byte bounds, create index and prove segment URL membership."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -6279,6 +6290,33 @@
       "recorded_at": "2026-10-15T20:38:11.905Z",
       "scope": "Current optimized Windows candidate only. Exactly ten scope acceptances are supported jointly by this and previous-four archives. Physical finding bodies use explicit controlled offline warning facts; BODY64MiB uses genuine public crawl/archive data. SDK Windows process termination is not a graceful in-flight HTTP drain. Private original user data, PE, fixture databases, runtime directories and profiles are excluded.",
       "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "source11-native-eleven-20261015",
+      "artifact": "docs/verification/source11-native-eleven-20261015/index.json",
+      "artifact_sha256": "6f34d917caecdde347e6de6cccfecfa03c9d579242984fdc855aaee1bc047f9e",
+      "result": "PASS_ELEVEN_REQUIRED_NATIVE_SCOPES_ONLY",
+      "recorded_at": "2026-10-15T21:38:43.798Z",
+      "scope": "Actual Source11/Windows optimized candidate only. No installation, vendor parity, full index matrix, full XML/XSD validity, source-body retention, 50k crawled website pages, platform portability, RSS, throughput or hard/graceful in-flight drain claim. Each public JSON response retains actual8MiB bound; count/decode facts, XML work64MiB, explicit membership catalog128MiB (default32MiB unchanged), retained text32MiB and CSV64MiB remain independent. Normal app cleanup requests owned stdin EOF only after all complete CSV reads. Actual clean Source11 receipt, exit0/null signal and drained pipes are required; fallback SIGKILL is failure-only. The sitemap CSV routes use state.exports, whose shutdown is one of nine actual source-pinned drain branches; their full normal EOF is separately observed, not counted as new policy/resource response_streams work. New registries must emit genuine zero work in these unchanged13 configs. No active-export/unpolled transport drain or hard shutdown deadline is asserted.",
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "source12-preliminary-tests-20261015",
+      "artifact": "docs/verification/source12-preliminary-tests-20261015/index.json",
+      "artifact_sha256": "a2dad28495afe9cccd665682612552133a0ab9c40dc1dd2ceff25ccab492e44e",
+      "result": "PASS_CLIPPY_AND_EIGHT_NODE_CASES_RUST_42_PASS_2_FAIL_NOT_FULL_SUITE",
+      "recorded_at": "2026-10-15T21:38:43.814Z",
+      "scope": "Actual isolated DraftV3 only. Two failing fixture assumptions are being corrected in separately reviewed proposals; these runs remain failed. Pure Node checks are8 logical cases, not Cargo test functions. No vendor parity claim.",
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "source11-installed-generator-20261015",
+      "artifact": "docs/verification/source11-installed-generator-20261015/index.json",
+      "sha256": "2b1fa0d0d1d822238c69f53dfe1180f6619ca7aaaac7c07a2afc706daf4c163a",
+      "result": "PASS_LOCAL_INSTALL_AND_SIX_GENERATOR_GROUPS",
+      "recorded_at": "2026-10-15T21:47:30.303Z",
+      "scope": "Own sitemap.generate and sitemap.split criteria only. Native scope uses six real saved pages/eight website GETs, independent browser XML parsing and ZIP CRC, full API/CLI byte identity, configured small byte bounds, race/refusal/UI/cold cases. Existing full-suite functions separately cover50001 splitting and exact configured boundary cases. Native run does not prove50001 real HTTP pages or a physical52MiB native output. SQLite inventory initialization is explicit before warm/cold strict read baselines; no universal startup/shutdown no-write claim.",
+      "reference_parity": "NOT_PROVEN"
     }
   ],
   "reference_workflows": [
@@ -6400,9 +6438,9 @@
   ],
   "status_summary": {
     "overall": {
-      "implemented": 31,
-      "partial": 69,
-      "planned": 44,
+      "implemented": 33,
+      "partial": 68,
+      "planned": 43,
       "total": 144
     },
     "phases": {
@@ -6413,9 +6451,9 @@
         "total": 45
       },
       "P2": {
-        "implemented": 10,
-        "partial": 30,
-        "planned": 5,
+        "implemented": 12,
+        "partial": 29,
+        "planned": 4,
         "total": 45
       },
       "P3": {
@@ -6493,9 +6531,9 @@
         "total": 10
       },
       "sitemap": {
-        "implemented": 1,
-        "partial": 3,
-        "planned": 1,
+        "implemented": 3,
+        "partial": 2,
+        "planned": 0,
         "total": 5
       },
       "integrations": {
@@ -6536,14 +6574,14 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-15T20:38:11.905Z",
+  "last_verified_at": "2026-10-15T21:47:30.309Z",
   "current_work": [
     {
       "id": "combined-source-v11-20261015",
       "priority": 0,
       "title_de": "Export-Abschlüsse und schmale Einstellungsdialoge korrigieren",
-      "status": "ACTUAL1384_SUITE_BUILD_AND_TEN_NATIVE_SCOPES_PASS_LARGE_RUNNING",
-      "summary_de": "Source11 besteht die vollständige1384-Test-Suite, Format/Clippy, optimierten Windows-Build und zehn frische praktische Prüfbereiche. Neu bestehen zwölf Größenfälle, MCP-Datei-SDK, Root-Junction, dreizehn Originaldateifälle mit echter64MiB-Quelle und kalter Wiederöffnung, acht Migrationsfälle sowie zwei reguläre EOF-Fälle. Nur der aktuelle große Sitemap-Lauf und anschließend die sichere Installation bleiben für diesen Build offen.",
+      "status": "ACTUAL1384_SUITE_BUILD_ELEVEN_NATIVE_AND_GENERATOR_PASS_LOCALLY_INSTALLED",
+      "summary_de": "Source11 ist lokal installiert und läuft mit Renderer und allen acht gespeicherten Crawls. Die vollständige1384-Test-Suite, optimierter Windows-Build, elf praktische Prüfbereiche und sechs zusätzliche Sitemap-Generator-Gruppen bestehen. Alle Nutzerdatenbytes und stabilen Metadaten blieben erhalten; ausschließlich Änderungszeiten der fünf exakt inventarisierten SQLite-SHM-Dateien durften sich ändern.",
       "completed_acceptance_de": [
         "Fünf bestehende Dateien aus zwei unabhängig geprüften Vorschlägen integriert; 364 weitere Quellinputs, Cargo-Konfiguration und Lockdatei unverändert.",
         "Tatsächlich 20 Exporttests bestanden: 16 bestehende und vier neue Namen, null Fehler und null ignorierte Fälle. Die Regressionen decken den letzten Frame ohne weitere EOF-Abfrage, echte HTTP-Antworten, leere/verkürzte/zu lange Ausgaben sowie späte Fehler, Panik und Abbruch ab.",
@@ -6554,14 +6592,15 @@
         "Frische native API/CLI-Gruppe und 13 UI-Mockgruppen bestehen; alle 27 echten Browsergruppen bestehen einschließlich 320px-Einstellungen und gespeicherter Originaldaten.",
         "Vollständiger Resource-/Directory-Ablauf mit allen acht bestehenden Fällen und sechs Ngramfällen besteht. Sieben Prozesse tatsächlich beendet; kalte Wiederöffnung benötigt null neue Website-Aufrufe. Registry zählt warm6/kalt2 vollständig, null Abbruch/Fehler/Rest.",
         "Alle zwölf tatsächlichen Größenfälle bestehen: CSV exakt64MiB und JSON exakt8MiB werden vollständig geladen; jeweils ein Byte darüber wird ohne erfolgreiche Teilausgabe abgelehnt. MCP-Datei-SDK und beide Root-Junction-Ablehnungen bestehen.",
-        "Alle dreizehn Originaldateifälle bestehen einschließlich echter64MiB-Crawl-/Archivquelle, vollständigerDownloads und kalter Wiederöffnung. Alle acht Migrationsfälle und beide regulären EOF-Fälle bestehen mit tatsächlichen Prozess-/Pipeabschlüssen und freigegebenen eigenen Locks."
+        "Alle dreizehn Originaldateifälle bestehen einschließlich echter64MiB-Crawl-/Archivquelle, vollständigerDownloads und kalter Wiederöffnung. Alle acht Migrationsfälle und beide regulären EOF-Fälle bestehen mit tatsächlichen Prozess-/Pipeabschlüssen und freigegebenen eigenen Locks.",
+        "Der vollständige 13-Fälle-Großquellenlauf besteht warm und nach Neustart: 50.000 echte XML-Mitgliedschaften, 250 Fenster à 200 und vollständige CSV pro Durchlauf; tatsächliche Prozess-/Pipeabschlüsse und unveränderte eigene Daten sind belegt.",
+        "Source11 tatsächlich lokal installiert; vollständige Sicherungen vorhanden, acht gespeicherte Crawls und24 Assets/26 MCP-Werkzeuge geprüft. Alle Datenbytes und stabilen Metadaten identisch; die15 beobachteten Änderungszeit-Abweichungen betreffen ausschließlich fünf vorher exakt inventarisierte SQLite-SHM-Dateien.",
+        "Sechs zusätzliche Sitemap-Generator-Gruppen bestanden: unabhängig geparste XML-/ZIP-Ausgabe mit lastmod/Bildern/hreflang, konfigurierte Aufteilung/Bytegrenzen, API/CLI-Bytegleichheit, atomarer Exportwettlauf, Browser1440/320 und kalte Wiederöffnung mit null neuen Website-Abrufen."
       ],
-      "pending_acceptance_de": [
-        "Den aktuellen13-Fälle-Großquellenlauf vollständig vor und nach Neustart bestehen:50.000 XML-Einträge, jeweils250 Fenster à200, vollständigeCSV und finale Guards.",
-        "Sicher mit erhaltenen Nutzerdaten installieren. Drei optionale Crawl-Aufnahmegrenzen für Verzeichnistiefe, Query-Tokens und effektive URL-Bytes als nächsten zusammenhängenden Teil umsetzen und prüfen.",
-        "Weitere Ngramkanäle/Wortwolke, große Leseperformance und übrige Kataloglücken weiter abarbeiten; vollständige Herstellerparität ist nicht belegt."
-      ],
+      "pending_acceptance_de": [],
       "documentation": [
+        "docs/verification/source11-installed-generator-20261015/index.json",
+        "docs/verification/source11-native-eleven-20261015/index.json",
         "docs/verification/source11-native-ten-20261015/index.json",
         "docs/verification/source11-native-four-20261015/index.json",
         "docs/verification/source11-suite-build-20261015/index.json",
@@ -6574,10 +6613,11 @@
         "preliminary_clippy": "PASS_PRELIMINARY_CLIPPY_ONLY",
         "full_suite": "PASS_COMBINED_WORKSPACE_V11_REAL_RENDERER_FMT_CLIPPY",
         "optimized_build": "PASS_COMBINED_OPTIMIZED_BUILD_V11",
-        "native": "TEN_ACTUAL_SCOPES_PASS_LARGE_RUNNING",
-        "installation": "UNCHANGED_SOURCE5_R3",
+        "native": "PASS_ALL_ELEVEN_REQUIRED_SOURCE11_NATIVE_SCOPES",
+        "installation": "PASS_SOURCE_V11_COLD_LOCAL_INSTALL_WITH_COPY_COMPATIBILITY",
         "manufacturer_parity": "NOT_PROVEN",
-        "native_first_four": "PASS_FOUR_CURRENT_NATIVE_SCOPES_SEVEN_PENDING"
+        "native_first_four": "PASS_FOUR_CURRENT_NATIVE_SCOPES_SEVEN_PENDING",
+        "sitemap_generator": "PASS_ACTUAL_SOURCE11_SITEMAP_GENERATION_SIX_PAGE_API_CLI_UI_COLD"
       }
     },
     {
@@ -8304,9 +8344,39 @@
         "manufacturer_parity": "NOT_PROVEN"
       },
       "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "combined-source-v12-20261015",
+      "priority": 1,
+      "title_de": "Crawl-Grenzen, weitere Ngramkanäle und große Sitemap-Daten ausbauen",
+      "status": "FINAL_FIXTURES_REVIEWED_FORMATTED_AND_CLIPPY_PASS_FULL_SUITE_PENDING",
+      "summary_de": "Die nächste isolierte Erweiterung umfasst drei optionale Crawl-Aufnahmegrenzen, Titel/Beschreibung/H1–H6-Ngramkanäle mit Wortwolke und einen begrenzten SQLite-Index pro gespeicherter Sitemap-Abfrage. Beide zuvor fehlerhaften Test-Fixtures sind korrigiert und unabhängig geprüft. Der finale strenge Compilerlauf besteht; die vollständige neue Suite und praktische Abnahme folgen. Die früheren42/44-Ergebnisse bleiben als fehlgeschlagene Teilprüfung erhalten.",
+      "completed_acceptance_de": [
+        "381 Eingaben aus drei unabhängig geprüften Rollen ohne Pfadüberschneidung komponiert und formatiert. Alle 606 bisherigen Vollnamen bleiben zusätzlich zu 44 neuen Funktionen erhalten.",
+        "Strenger Compilerlauf erfolgreich. Beide echten 501-URL-Kontrollcrawls, alle sechs Indexfälle einschließlich 50.000 Mitgliedschaften und 59-MiB-Bericht sowie die neuen Metadatenkanäle ohne Pflicht-Textcapture bestehen in den jeweiligen Funktionen.",
+        "Beide Fixture-Korrekturen in finaler Komposition unabhängig geprüft und formatiert; tatsächlicher finaler Clippy-Abschluss mit Code0. Gegen die vorherige Komposition sind379 von381 Eingaben bytegleich und ausschließlich zwei Testdateien geändert."
+      ],
+      "pending_acceptance_de": [
+        "Finale Quellen privat committen, vollständige mindestens 1428-Test-Suite einschließlich realem Renderer und optimierten Windows-Build ausführen.",
+        "Crawl-Grenzen und Ngramkanäle praktisch über API/CLI, Browser 1440/320 und kalte Wiederöffnung prüfen; betroffene bestehende Bereiche mit der neuen Programmdatei erneut prüfen.",
+        "Erst nach erfolgreicher Abnahme sicher lokal installieren und die verbleibenden Katalogkriterien weiter abarbeiten."
+      ],
+      "documentation": [
+        "docs/verification/source12-preliminary-tests-20261015/index.json"
+      ],
+      "gates": {
+        "preliminary_clippy": "PASS_ACTUAL_FINAL_DRAFT4_PRELIMINARY_CLIPPY",
+        "node": "PASS_EIGHT_LOGICAL_SOURCE_CASES",
+        "new_rust_tests": "42_PASS_2_FAILED_FIXTURES",
+        "full_suite": "NOT_RUN",
+        "optimized_build": "NOT_RUN",
+        "native": "NOT_RUN",
+        "installation": "NOT_RUN",
+        "manufacturer_parity": "NOT_PROVEN"
+      }
     }
   ],
   "active_work_ids": [
-    "combined-source-v11-20261015"
+    "combined-source-v12-20261015"
   ]
 }
