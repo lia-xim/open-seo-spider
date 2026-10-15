@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "kind": "source13_head_cdn_native_independent_review",
+  "recorded_at": "2026-10-15T23:16:38.587Z",
+  "reviewer": "Root independent of Install author",
+  "result": "FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "proposal_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source13-head-cdn-native-preparation-v1\\manifest.json",
+    "sha256": "0e37f7e8cfdadf4d64362ece08f8a67e5d8313d481fd993db2c747baa83eb09e",
+    "bytes": 4468
+  },
+  "harness": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source13-head-cdn-native-preparation-v1\\native-head-cdn-workflow.mjs",
+    "sha256": "f415fe1eb42b1e7b3be110fe0dc6a1c8fde358592ca9a90dd186c8e985acfeee",
+    "bytes": 19317
+  },
+  "findings": [
+    {
+      "id": "HEAD-CDN-NATIVE-01",
+      "priority": 1,
+      "path": "admission.mjs",
+      "title": "Truthful current harness review is unconditionally refused",
+      "body": "admit() asserts review.harness.path equals native-ngram-channels.mjs although the current harness and review contract require native-head-cdn-workflow.mjs. A truthful future direct review cannot be admitted. Correct the one basename; preserve the SHA and manifest checks."
+    },
+    {
+      "id": "HEAD-CDN-NATIVE-02",
+      "priority": 2,
+      "path": "browser-flow.mjs",
+      "title": "Intentional table scrolling is misclassified as page overflow",
+      "body": "bounds() tests every non-mainnav button against document.clientWidth using getClientRects(). D3 app.js renders real sort buttons inside .table-scroll{overflow:auto}; clipped table headers still have client rects and intentionally lie beyond the viewport at320. Verify real scroll reachability/restoration inside the exact table container separately rather than requiring all its columns simultaneously onscreen or broadly excluding ordinary controls."
+    },
+    {
+      "id": "HEAD-CDN-NATIVE-03",
+      "priority": 2,
+      "path": "browser-flow.mjs",
+      "title": "Cold screenshots overwrite warm evidence",
+      "body": "bounds() writes label-width.png for both warm and cold phases into the same downloads directory, including header, head-inspector, raw-dom-inspector, cdn-inspector and legacy-inspector. Use distinct warm/cold names and retain actual screenshot SHA/bytes at capture time; do not overwrite evidence."
+    }
+  ],
+  "observations": [
+    {
+      "id": "HEAD-CDN-OBS-01",
+      "status": "CAUSE_NOT_PROVEN_DIAGNOSTIC_PENDING",
+      "body": "bounds(cdn-settings,320) still performs fullPage screenshot before a real Save, matching the suspected influence in the separately reproduced Static diagnostic2162. V4 viewport-only/passive-hit diagnostic1977 review is ready but not yet executed. Resolve this evidence before native execution; no product or oracle weakening is justified yet."
+    },
+    {
+      "id": "HEAD-CDN-OBS-02",
+      "status": "CHECKED_NO_FINDING",
+      "body": "Binder path spellings and SHA/bytes are equal in actual Driver13V2 manifest and PINNED refs; no E:/ versus E:\\ deepEqual mismatch observed. The historical Source12 suite/build/current aliases are rejected; Source13 future values remain mandatory actual grant inputs."
+    }
+  ],
+  "whole_state_forward_and_inverse_operations": 5,
+  "whole_preserved_regions": 4,
+  "syntax_only_checks": 7,
+  "scope": "Full semantic read of complete new Admission, Main, workflow, Browser and literal oracle. Two complete ownership modules inherited only by exact byte verification. Compared actual D3 public API/MCP names, create lifecycle, UI history clearing, HTML Head source fields/reasons/issue formatting, CDN rules and real table/scroll CSS. Eleven groups,26 finite GETs and nine direct children remain authored expectations, not runtime results.",
+  "actual_source13_manifest": null,
+  "actual_suite": null,
+  "actual_build": null,
+  "actual_native": null,
+  "target_imports": 0,
+  "target_calls": 0,
+  "runtime": 0,
+  "product_root_writes": 0,
+  "git_actions": 0
+}

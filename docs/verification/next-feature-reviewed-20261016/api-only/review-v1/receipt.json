@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "kind": "api_only_enrichment_independent_review",
+  "recorded_at": "2026-10-15T23:19:07.260Z",
+  "result": "FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "proposal_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/api-only-enrichment-proposal-v1/manifest.json",
+    "sha256": "fbe3c3d75dc6131bdd2c4a82df0fdcc137b4de1f0ce0381c5d4980cb6309a5c4",
+    "bytes": 17366
+  },
+  "findings": [
+    {
+      "id": "API-ONLY-01",
+      "priority": 2,
+      "title": "Unused mutable reference binding prevents strict warning gate",
+      "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-enrichment-proposal-v1\\source\\crates\\app\\src\\server\\enrichment.rs",
+      "line": 16,
+      "evidence": "D3 Registry::start passes &mut ChannelWriter, &mut Ready<M>; no reference reassignment. Static warning inference, not compiler execution.",
+      "fix": "Remove only mut from channel binding; preserve exact-length body ownership."
+    },
+    {
+      "id": "API-ONLY-02",
+      "priority": 2,
+      "title": "Default CSV UI uses rejected zero-based column",
+      "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-enrichment-proposal-v1\\source\\web\\api-enrichment.js",
+      "line": 7,
+      "evidence": "Core ListColumnSelector::Index requires1..=16384; ordinary UI emits0.",
+      "fix": "Emit first-column1 and assert ordinary CSV consumer compatibility in authored regression."
+    },
+    {
+      "id": "API-ONLY-03",
+      "priority": 2,
+      "title": "Explicit Lighthouse runtimeError is classified as success",
+      "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-enrichment-proposal-v1\\source\\crates\\core\\src\\api_enrichment.rs",
+      "line": 100,
+      "evidence": "metrics ignores runtimeError and returns Some for any Lighthouse object; run maps Some to Success.",
+      "primary_source": "https://developers.google.com/speed/docs/insights/v5/reference/pagespeedapi/runpagespeed",
+      "fix": "Typed failed/unavailable outcome for explicit runtime error, no raw message persistence; add200/runtimeError and all-metrics-missing countercases."
+    },
+    {
+      "id": "API-ONLY-04",
+      "priority": 2,
+      "title": "Normalized URL cap is checked only inside already persisted job",
+      "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-enrichment-proposal-v1\\source\\crates\\core\\src\\api_enrichment.rs",
+      "line": 57,
+      "evidence": "Preparation lacks <=8192 normalized-byte guard; validate_plan runs after App creates plan/input and registers worker. Raw Unicode path can expand beyond normalized limit.",
+      "fix": "Common preflight before store/admission/provider; preserve worker revalidation and add Unicode exact/+1 and zero-call refusal fixture."
+    }
+  ],
+  "audit": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/api-only-enrichment-independent-review-v1/SOURCE-AUDIT.json",
+    "sha256": "3b6c53e7584d51c16ca1951e197c3074a69557103d70532cbc157d8d31c55847",
+    "bytes": 123626
+  },
+  "review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/api-only-enrichment-independent-review-v1/REVIEW.md",
+    "sha256": "c5138c41413bd7f76fac6f7a13bdd876fc16e6ca7a2b6a434add16cfe4c4d9b6",
+    "bytes": 6522
+  },
+  "checks": {
+    "mechanical_assertions": 1105,
+    "physical_e_references": 417,
+    "whole_forward_inverse_operations": 21,
+    "parent_files": 388,
+    "modified_inputs": 6,
+    "new_inputs": 12,
+    "projected_inputs": 400,
+    "unchanged_parent": 382,
+    "new_rust_bodies": 16,
+    "unchanged_old_test_bodies": 10,
+    "separate_authored_node_cases": 4,
+    "syntax_only_exits": 2
+  },
+  "qualification": [
+    "Complete new production/test/consumer/lifecycle read; concrete source findings only.",
+    "No target import, Rust/Node test execution, Cargo, provider/website HTTP, credential read, Root/Git mutation, native/browser or original C access.",
+    "No runtime PASS, supplier parity, secure-memory erasure, exact cancellation latency or RSS claim. Actual D3 is a tested preview basis, not a released Frozen13/14 identity."
+  ],
+  "actual_runtime": null,
+  "target_imports": 0,
+  "tests_executed": 0,
+  "root_changed": false
+}

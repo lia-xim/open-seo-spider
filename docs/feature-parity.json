@@ -510,7 +510,9 @@
       "parity_evidence": [],
       "group": "modes",
       "remaining_acceptance": [
-        "Enrich supplied URLs using a mock API; record zero website requests."
+        "Enrich supplied URLs using a mock API; record zero website requests.",
+        "Prove saved API-only jobs, complete CSV/JSON, pagination, explicit refresh/cancel and cold reopen across API/CLI/MCP/served UI with zero local website requests; qualify provider-initiated remote fetch separately.",
+        "Implement and verify API-only behavior across the remaining documented providers; one PageSpeed proposal and five UI helper tests do not complete provider breadth."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -6406,6 +6408,15 @@
       "recorded_at": "2026-10-15T23:05:21.542Z",
       "scope": "Independent audit verified actual saved proof/log/wire/DTO bytes for six bounded scopes. Shutdown qualifications remain individual; SIGTERM/SIGKILL is not evidence of graceful drain. No browser profiles, PE, stores, wire bodies or user data are committed.",
       "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "next-feature-reviewed-20261016",
+      "artifact": "docs/verification/next-feature-reviewed-20261016/index.json",
+      "artifact_sha256": "56fe21c8942380f2beb8cdedbb14dbeeed17a5603573a7c7e1e72552b400dcce",
+      "result": "API_ONLY_SOURCE_REVIEW_AND_FIVE_FRONTEND_HELPER_CASES_PASS_HEAD_CDN_NATIVE_SOURCE_REVIEW_ONLY",
+      "recorded_at": "2026-10-15T23:26:32.235Z",
+      "scope": "Reviewed inactive source proposals and five actual Node VM helper cases only; no Rust/provider/native or manufacturer parity acceptance.",
+      "reference_parity": "NOT_PROVEN"
     }
   ],
   "reference_workflows": [
@@ -8387,9 +8398,11 @@
         "Einzelne echte Requestzeiten und deterministische JSON-/Hash-/Decode-Arbeitszähler erheben.",
         "Zuerst pro bestehendem Read-TX die geprüfte Reportprojektion wiederverwenden; bisherige Fallbacks und Hash-/Stale-/Tail-/Unknown-/Größenprüfungen vollständig erhalten.",
         "Für Amortisierung über Fenster eine ausdrücklich begrenzte Read-Snapshot-Session mit Datei-/Connectionidentität und Mutations-/Idle-/Stop-/Join-Vertrag entwerfen; kein ungesicherter Hashcache auf veränderlicher Datenbank.",
-        "Identische50.000-Einträge-/CSV-/Tail-/Wiederöffnungsfälle tatsächlich vor/nach vergleichen; ohne Messung keinen Geschwindigkeitsgewinn behaupten."
+        "Identische50.000-Einträge-/CSV-/Tail-/Wiederöffnungsfälle tatsächlich vor/nach vergleichen; ohne Messung keinen Geschwindigkeitsgewinn behaupten.",
+        "Wiederholte vollständige Integritäts-/Report-/Katalogprüfung und :memory:-Indexerzeugung je öffentlicher200er-Seite instrumentieren. Eine explizite, begrenzte Lesesitzung mit eigenem Snapshot-/Invalidierungs-/Cancel-/EOF-Vertrag prüfen; Generation-only-Cache darf Tail-/Quellkorruption nicht verdecken."
       ],
       "documentation": [
+        "docs/verification/next-feature-reviewed-20261016/plans/source12-sitemap-pagination-performance-next-step-v1/PLAN.md",
         "docs/verification/sitemap-read-performance-20261015/index.json",
         "docs/verification/next-batch-source-proposals-20261015/index.json"
       ],
@@ -8502,6 +8515,34 @@
         "clippy": "PASS_ACTUAL_PRELIMINARY_CLIPPY",
         "full_suite": "NOT_RUN",
         "optimized_build": "NOT_RUN",
+        "native": "NOT_RUN",
+        "installation": "NOT_RUN",
+        "manufacturer_parity": "NOT_PROVEN"
+      }
+    },
+    {
+      "id": "api-only-enrichment-20261016",
+      "priority": 3,
+      "title_de": "Eigenständige API-Anreicherung ohne lokalen Websitecrawl",
+      "status": "SOURCE_REVIEWED_NODE5_PASS_RUST_AND_NATIVE_NOT_RUN",
+      "summary_de": "Erster PageSpeed-Entwurf mit eigenem Core-/App-/API-/CLI-/MCP-/UI-Ablauf liegt unabhängig geprüft vor.18 eigene Quellen/400 projizierte Inputs,20 Rustfunktionen authored und fünf UI-Hilfsfälle tatsächlich bestanden. Vier Quellbefunde eng korrigiert; weder Rustlauf noch Provider- oder Nativeabnahme behauptet. Aktiver Code bleibt Source12, installiert Source11.",
+      "completed_acceptance_de": [
+        "Unabhängiger Vollreview plus Closure von CSV-Spalte1, expliziten Lighthouse-Laufzeitfehlern/fehlenden Metriken, normalisierter8192B-URLgrenze vor Jobaufnahme und Warnungsgate.",
+        "Fünf Node-VM-Hilfsfälle tatsächlich mit exakten Namen und natürlichem Prozessabschluss bestanden; alle18 Vorschlags- und388 Elternquellen unverändert."
+      ],
+      "pending_acceptance_de": [
+        "Separaten400-Input-Entwurf vollständig komponieren, formatieren und die20 Rustfunktionen samt realer lokaler API-/Website-Trap-Prüfung ausführen.",
+        "Alle400 Quellen, komplette Suite, Releasekandidat sowie API-/CLI-/MCP-/Browser-/Cold-/Cancel-/EOF-Pfade prüfen; erst danach sichere Installation.",
+        "Übrige dokumentierte Anbieter und ihre eigene API-only-Semantik ergänzen; ein PageSpeed-Adapter ist keine vollständige Anbieterparität."
+      ],
+      "documentation": [
+        "docs/verification/next-feature-reviewed-20261016/index.json"
+      ],
+      "gates": {
+        "source_review": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+        "node": "PASS_FIVE_API_ONLY_FRONTEND_HELPER_CASES_ONLY",
+        "rust": "NOT_RUN",
+        "provider": "NOT_RUN",
         "native": "NOT_RUN",
         "installation": "NOT_RUN",
         "manufacturer_parity": "NOT_PROVEN"
