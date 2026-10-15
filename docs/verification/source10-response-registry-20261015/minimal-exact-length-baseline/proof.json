@@ -1,0 +1,105 @@
+{
+  "kind": "source10_known_length_registry_diagnostic",
+  "recorded_at": "2026-10-15T19:29:28.340Z",
+  "result": "REPRODUCED_COMPLETE205_ROW_EXACT_LENGTH_CSV_CLASSIFIED_ABORTED",
+  "source_manifest_sha256": "12b238c43bd504b71e4948a8e11d4622f34589a35290ca8ef923b833464206c7",
+  "candidate_binary_sha256": "a36757ef457b1c740ba4982d17ef78071799bc27bb59a859375d539633d2e76c",
+  "qualification": "One real HTTP Content-Length CSV over actual compiled Source10, copied206-page synthetic saved crawl. Full advertised bytes/SHA205rows consumed before own stdin EOF. Shutdown classification recorded separately. No complete native or installation attestation.",
+  "selected_job": "190668d6-ffb0-462b-9f69-7105d2eb92ec",
+  "client": {
+    "status": 200,
+    "content_length": 89768,
+    "actual_bytes": 89768,
+    "expected_sha256": "1b13c24016b726a722d171818a3e10e506df760f227e5cc493ba25b028011764",
+    "actual_sha256": "1b13c24016b726a722d171818a3e10e506df760f227e5cc493ba25b028011764",
+    "rows": 205
+  },
+  "app_actual_close": {
+    "code": 0,
+    "signal": null
+  },
+  "shutdown": {
+    "cause": "owned_stdin_eof",
+    "clean": true,
+    "incoming_transports": {
+      "accept_admitted": 1,
+      "accept_joined": 1,
+      "accept_retained": 0,
+      "accepted": 2,
+      "actual_io_dropped": 2,
+      "complete": 2,
+      "connection_admitted": 2,
+      "connection_joined": 2,
+      "connection_retained": 0,
+      "first_failure": null,
+      "grace_seconds": 5,
+      "incoming_protocol": "http1_plain_tcp_no_application_upgrades",
+      "listener_dropped": true,
+      "peer_errors": 0,
+      "registered": true,
+      "rejected": 0,
+      "retained": 0,
+      "shutdown_aborted": 0,
+      "tcp_write_pending": 0,
+      "whole_application_five_second_bound": false
+    },
+    "kind": "owned_application_shutdown_v1",
+    "owners": [
+      {
+        "admitted": 4,
+        "closing": true,
+        "first_failure": null,
+        "joined": 4,
+        "owner": "http_requests",
+        "retained": 0,
+        "started": 4
+      },
+      {
+        "admitted": 1,
+        "closing": true,
+        "first_failure": null,
+        "joined": 1,
+        "owner": "http_blocking",
+        "retained": 0,
+        "started": 1
+      },
+      {
+        "admitted": 0,
+        "closing": true,
+        "first_failure": null,
+        "joined": 0,
+        "owner": "crawl_operations",
+        "retained": 0,
+        "started": 0
+      }
+    ],
+    "qualification": "Local application task joins only; actual process/pipe EOF is an independent outside witness; no stateful MCP session or external renderer-process drain claim",
+    "response_streams": {
+      "aborted": 1,
+      "admitted": 1,
+      "complete": 0,
+      "enqueues": 2,
+      "failed": 0,
+      "first_failure": null,
+      "full_reservations": 0,
+      "joined": 1,
+      "max_chunk": 65536,
+      "peak_queued": 2,
+      "response_supervisors_joined": 1,
+      "retained": 0,
+      "started": 1
+    },
+    "response_transport_owned": true,
+    "source_body_transports": {
+      "admitted": 0,
+      "first_failure": null,
+      "joined": 0,
+      "logical_spool_byte_limit": 134217728,
+      "owner": "source_body_transports",
+      "retained": 0,
+      "spool_leases": 0,
+      "started": 0,
+      "unresponsive_transport_shutdown": "not_proven"
+    }
+  }
+}

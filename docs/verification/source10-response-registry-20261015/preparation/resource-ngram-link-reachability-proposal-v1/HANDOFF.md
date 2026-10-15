@@ -1,0 +1,7 @@
+# Actual Ngram export link reachability
+
+The Source10 Resource run failed after five old cases because the added selector looked for a nonexistent topbar link. The actual frozen HTML places the main link under .export-controls; the second /saved-ngrams link is in the content cohort and is not used as a fallback. This is a concrete test-source error, not a Source10 product error. Old failure and cleanup evidence remain immutable.
+
+One complete function-context hunk restores the four original header actions byteexact and adds a separate Ngram export-link reachability check. It requires exact count1, visible and positive bounds, real scrollIntoViewIfNeeded, whole viewport reachability and trial-click actionability with no route change. The actual ancestor/window scroll positions are captured, restored in finally and verified. No force, hidden acceptance, timeout extension or new overflow exception is present. Existing35 navigation controls and seven widths remain byteexact. Website counters use the existing unchanged responsive guard.
+
+Source10 product, Main, Ngram helper, cases, GET budgets, CLI counts and response producer expectations are unchanged. This is a helper proposal only; Root/Install must independently review and compose fresh R2 grant/gate/output/outer bindings before any rerun. No existing result or source is overwritten. Only node --check was executed; no target import, browser, HTTP, process, compiler, Git or Root operation.

@@ -1,0 +1,438 @@
+{
+  "kind": "source10_ngram_ui_diagnostic",
+  "recorded_at": "2026-10-15T19:15:24.288Z",
+  "result": "PASS_ACTUAL_CLASSIC_SCROLLBAR_SOURCE10_NGRAM_UI_1440_AND_320_DIAGNOSTIC",
+  "source_manifest_sha256": "12b238c43bd504b71e4948a8e11d4622f34589a35290ca8ef923b833464206c7",
+  "candidate_binary_sha256": "a36757ef457b1c740ba4982d17ef78071799bc27bb59a859375d539633d2e76c",
+  "qualification": "Classic visible scrollbar configuration, including doc/body against document.clientWidth. Compiled actual Source10 on copied genuine206-page synthetic saved crawl. Full Ngram UI pagination100+100+5,205-row CSV,5-row JSON,unknown DOM,all actual control bounds at1440/320. Separate exported helper copy changes only width oracle and adds layout metrics. No active original fixture/cold/registry/whole native or installation attestation.",
+  "diagnostic_helper_sha256": "64790b6cda63d5c8f47e00dca08a364c1bda697c41874c2208bec5d912273732",
+  "selected_job": "c9c2f616-7fe9-4319-a38b-27d97abc0cd4",
+  "ngram_ui": {
+    "widths": [
+      {
+        "width": 1440,
+        "pages": [
+          100,
+          100,
+          5
+        ],
+        "urls": 205,
+        "csv_sha256": "9dc637ce205cb7767a9a54d023273bbc9cc04045b3c75f372d9a3f186b6bebd2",
+        "json_after": 200,
+        "unknown_dom_sources_shown": 100
+      },
+      {
+        "width": 320,
+        "pages": [
+          100,
+          100,
+          5
+        ],
+        "urls": 205,
+        "csv_sha256": "9dc637ce205cb7767a9a54d023273bbc9cc04045b3c75f372d9a3f186b6bebd2",
+        "json_after": 200,
+        "unknown_dom_sources_shown": 100
+      }
+    ],
+    "page_errors": [],
+    "external_requests": [],
+    "actual_api_posts": [
+      {
+        "url": "http://127.0.0.1:54733/api/crawls/c9c2f616-7fe9-4319-a38b-27d97abc0cd4/ngrams/preview",
+        "body": {
+          "source_kind": "raw_http_html",
+          "options": {
+            "case_behavior": "unicode_lowercase",
+            "stopwords": [],
+            "max_n": 6
+          },
+          "view": "totals",
+          "n": 6,
+          "query": "a b c d e f",
+          "exact_tokens": null,
+          "limit": 100,
+          "after": null,
+          "expected_generation": null,
+          "expected_snapshot_token": null
+        }
+      },
+      {
+        "url": "http://127.0.0.1:54733/api/crawls/c9c2f616-7fe9-4319-a38b-27d97abc0cd4/ngrams/preview",
+        "body": {
+          "source_kind": "raw_http_html",
+          "options": {
+            "case_behavior": "unicode_lowercase",
+            "stopwords": [],
+            "max_n": 6
+          },
+          "view": "occurrences",
+          "n": 6,
+          "query": "a b c d e f",
+          "exact_tokens": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f"
+          ],
+          "limit": 100,
+          "after": null,
+          "expected_generation": null,
+          "expected_snapshot_token": null
+        }
+      },
+      {
+        "url": "http://127.0.0.1:54733/api/crawls/c9c2f616-7fe9-4319-a38b-27d97abc0cd4/ngrams/preview",
+        "body": {
+          "source_kind": "raw_http_html",
+          "options": {
+            "case_behavior": "unicode_lowercase",
+            "stopwords": [],
+            "max_n": 6
+          },
+          "view": "occurrences",
+          "n": 6,
+          "query": "a b c d e f",
+          "exact_tokens": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f"
+          ],
+          "limit": 100,
+          "after": 100,
+          "expected_generation": 1,
+          "expected_snapshot_token": "7ca41063da4978160d7e8e8a95a7607d5e9eb21d2aec117cf36d5e7b0ec9612c"
+        }
+      },
+      {
+        "url": "http://127.0.0.1:54733/api/crawls/c9c2f616-7fe9-4319-a38b-27d97abc0cd4/ngrams/preview",
+        "body": {
+          "source_kind": "raw_http_html",
+          "options": {
+            "case_behavior": "unicode_lowercase",
+            "stopwords": [],
+            "max_n": 6
+          },
+          "view": "occurrences",
+          "n": 6,
+          "query": "a b c d e f",
+          "exact_tokens": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f"
+          ],
+          "limit": 100,
+          "after": 200,
+          "expected_generation": 1,
+          "expected_snapshot_token": "7ca41063da4978160d7e8e8a95a7607d5e9eb21d2aec117cf36d5e7b0ec9612c"
+        }
+      },
+      {
+        "url": "http://127.0.0.1:54733/api/crawls/c9c2f616-7fe9-4319-a38b-27d97abc0cd4/ngrams/csv",
+        "body": {
+          "source_kind": "raw_http_html",
+          "options": {
+            "case_behavior": "unicode_lowercase",
+            "stopwords": [],
+            "max_n": 6
+          },
+          "view": "occurrences",
+          "n": 6,
+          "query": "a b c d e f",
+          "exact_tokens": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f"
+          ],
+          "limit": 100,
+          "after": null,
+          "expected_generation": 1,
+          "expected_snapshot_token": "7ca41063da4978160d7e8e8a95a7607d5e9eb21d2aec117cf36d5e7b0ec9612c"
+        }
+      },
+      {
+        "url": "http://127.0.0.1:54733/api/crawls/c9c2f616-7fe9-4319-a38b-27d97abc0cd4/ngrams/preview",
+        "body": {
+          "source_kind": "rendered_dom_html",
+          "options": {
+            "case_behavior": "unicode_lowercase",
+            "stopwords": [],
+            "max_n": 6
+          },
+          "view": "sources",
+          "n": 6,
+          "query": "a b c d e f",
+          "exact_tokens": null,
+          "limit": 100,
+          "after": null,
+          "expected_generation": null,
+          "expected_snapshot_token": null
+        }
+      },
+      {
+        "url": "http://127.0.0.1:54733/api/crawls/c9c2f616-7fe9-4319-a38b-27d97abc0cd4/ngrams/preview",
+        "body": {
+          "source_kind": "raw_http_html",
+          "options": {
+            "case_behavior": "unicode_lowercase",
+            "stopwords": [],
+            "max_n": 6
+          },
+          "view": "totals",
+          "n": 6,
+          "query": "a b c d e f",
+          "exact_tokens": null,
+          "limit": 100,
+          "after": null,
+          "expected_generation": null,
+          "expected_snapshot_token": null
+        }
+      },
+      {
+        "url": "http://127.0.0.1:54733/api/crawls/c9c2f616-7fe9-4319-a38b-27d97abc0cd4/ngrams/preview",
+        "body": {
+          "source_kind": "raw_http_html",
+          "options": {
+            "case_behavior": "unicode_lowercase",
+            "stopwords": [],
+            "max_n": 6
+          },
+          "view": "occurrences",
+          "n": 6,
+          "query": "a b c d e f",
+          "exact_tokens": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f"
+          ],
+          "limit": 100,
+          "after": null,
+          "expected_generation": null,
+          "expected_snapshot_token": null
+        }
+      },
+      {
+        "url": "http://127.0.0.1:54733/api/crawls/c9c2f616-7fe9-4319-a38b-27d97abc0cd4/ngrams/preview",
+        "body": {
+          "source_kind": "raw_http_html",
+          "options": {
+            "case_behavior": "unicode_lowercase",
+            "stopwords": [],
+            "max_n": 6
+          },
+          "view": "occurrences",
+          "n": 6,
+          "query": "a b c d e f",
+          "exact_tokens": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f"
+          ],
+          "limit": 100,
+          "after": 100,
+          "expected_generation": 1,
+          "expected_snapshot_token": "7ca41063da4978160d7e8e8a95a7607d5e9eb21d2aec117cf36d5e7b0ec9612c"
+        }
+      },
+      {
+        "url": "http://127.0.0.1:54733/api/crawls/c9c2f616-7fe9-4319-a38b-27d97abc0cd4/ngrams/preview",
+        "body": {
+          "source_kind": "raw_http_html",
+          "options": {
+            "case_behavior": "unicode_lowercase",
+            "stopwords": [],
+            "max_n": 6
+          },
+          "view": "occurrences",
+          "n": 6,
+          "query": "a b c d e f",
+          "exact_tokens": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f"
+          ],
+          "limit": 100,
+          "after": 200,
+          "expected_generation": 1,
+          "expected_snapshot_token": "7ca41063da4978160d7e8e8a95a7607d5e9eb21d2aec117cf36d5e7b0ec9612c"
+        }
+      },
+      {
+        "url": "http://127.0.0.1:54733/api/crawls/c9c2f616-7fe9-4319-a38b-27d97abc0cd4/ngrams/csv",
+        "body": {
+          "source_kind": "raw_http_html",
+          "options": {
+            "case_behavior": "unicode_lowercase",
+            "stopwords": [],
+            "max_n": 6
+          },
+          "view": "occurrences",
+          "n": 6,
+          "query": "a b c d e f",
+          "exact_tokens": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f"
+          ],
+          "limit": 100,
+          "after": null,
+          "expected_generation": 1,
+          "expected_snapshot_token": "7ca41063da4978160d7e8e8a95a7607d5e9eb21d2aec117cf36d5e7b0ec9612c"
+        }
+      },
+      {
+        "url": "http://127.0.0.1:54733/api/crawls/c9c2f616-7fe9-4319-a38b-27d97abc0cd4/ngrams/preview",
+        "body": {
+          "source_kind": "rendered_dom_html",
+          "options": {
+            "case_behavior": "unicode_lowercase",
+            "stopwords": [],
+            "max_n": 6
+          },
+          "view": "sources",
+          "n": 6,
+          "query": "a b c d e f",
+          "exact_tokens": null,
+          "limit": 100,
+          "after": null,
+          "expected_generation": null,
+          "expected_snapshot_token": null
+        }
+      }
+    ],
+    "crawl_start_posts": 0
+  },
+  "layouts": [
+    {
+      "width": 1440,
+      "doc": 1425,
+      "body": 1425,
+      "client": 1425,
+      "body_client": 1425,
+      "document_height": 1327,
+      "client_height": 1000,
+      "bad": []
+    },
+    {
+      "width": 1440,
+      "doc": 1425,
+      "body": 1425,
+      "client": 1425,
+      "body_client": 1425,
+      "document_height": 44486,
+      "client_height": 1000,
+      "bad": []
+    },
+    {
+      "width": 1440,
+      "doc": 1425,
+      "body": 1425,
+      "client": 1425,
+      "body_client": 1425,
+      "document_height": 44486,
+      "client_height": 1000,
+      "bad": []
+    },
+    {
+      "width": 1440,
+      "doc": 1425,
+      "body": 1425,
+      "client": 1425,
+      "body_client": 1425,
+      "document_height": 3232,
+      "client_height": 1000,
+      "bad": []
+    },
+    {
+      "width": 1440,
+      "doc": 1425,
+      "body": 1425,
+      "client": 1425,
+      "body_client": 1425,
+      "document_height": 44510,
+      "client_height": 1000,
+      "bad": []
+    },
+    {
+      "width": 320,
+      "doc": 305,
+      "body": 305,
+      "client": 305,
+      "body_client": 305,
+      "document_height": 2789,
+      "client_height": 1000,
+      "bad": []
+    },
+    {
+      "width": 320,
+      "doc": 305,
+      "body": 305,
+      "client": 305,
+      "body_client": 305,
+      "document_height": 93315,
+      "client_height": 1000,
+      "bad": []
+    },
+    {
+      "width": 320,
+      "doc": 305,
+      "body": 305,
+      "client": 305,
+      "body_client": 305,
+      "document_height": 93315,
+      "client_height": 1000,
+      "bad": []
+    },
+    {
+      "width": 320,
+      "doc": 305,
+      "body": 305,
+      "client": 305,
+      "body_client": 305,
+      "document_height": 7031,
+      "client_height": 1000,
+      "bad": []
+    },
+    {
+      "width": 320,
+      "doc": 305,
+      "body": 305,
+      "client": 305,
+      "body_client": 305,
+      "document_height": 81495,
+      "client_height": 1000,
+      "bad": []
+    }
+  ],
+  "phases": [
+    "Ngram UI actual saved views 1440",
+    "Ngram UI actual saved views 320"
+  ],
+  "browser_close_awaited": true,
+  "app_actual_close": {
+    "code": 0,
+    "signal": null
+  }
+}

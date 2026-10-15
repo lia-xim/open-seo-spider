@@ -1,0 +1,104 @@
+{
+  "kind": "response_exact_content_length_locked_source_trace",
+  "status": "CONFIRMED_SOURCE_PATH_RUNTIME_FIX_NOT_RUN",
+  "recorded_at": "2026-10-15T19:28:15.138Z",
+  "actual_parent_source": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v10\\manifest.json",
+    "sha256": "12b238c43bd504b71e4948a8e11d4622f34589a35290ca8ef923b833464206c7",
+    "bytes": 341108
+  },
+  "root_reported_actual_failure": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\resource-directory-workflow-native-v10-r3\\proof.json",
+    "sha256": "c71a56c2bc271f99987492c39b87a2389c81913d7910807008ccf11191828c0b",
+    "authority": "Root reported actual run; not executed by reviewer"
+  },
+  "sources": [
+    {
+      "role": "response_stream.rs",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v10\\crates\\app\\src\\server\\response_stream.rs",
+      "sha256": "ec2656dbbaa7be0dd51c1e03fbb691535e74c748c0c342b126a81e39afe91a48",
+      "bytes": 23482
+    },
+    {
+      "role": "resource_csv",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v10\\crates\\app\\src\\server\\resource_broken_sources.rs",
+      "sha256": "9c82f838606b5e98b27d768f88c49b4f8392590966a48e14142cc919222a04bf",
+      "bytes": 7768
+    },
+    {
+      "role": "ngram_csv",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v10\\crates\\app\\src\\server\\ngram_corpus.rs",
+      "sha256": "f4b1fa83ce1176f81fed7dc88c692cf0894a969bb4a5258f4d97c410483e57e0",
+      "bytes": 4492
+    },
+    {
+      "role": "response_tests",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v10\\crates\\app\\src\\server\\response_stream_tests.rs",
+      "sha256": "44fcf097d00e9e6b97d8618b91b36198dcb560fee868ce7ba712c356f6d69b6b",
+      "bytes": 32642
+    },
+    {
+      "role": "locked_versions",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v10\\Cargo.lock",
+      "sha256": "377211a39886ee9febbd1a4ddc6dee62ac78cef634f64c15cfeeac52550c84f2",
+      "bytes": 78563
+    },
+    {
+      "role": "hyper_dispatch",
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\hyper-1.12.0\\src\\proto\\h1\\dispatch.rs",
+      "sha256": "9cd6638c59ae4857ae43ee58857abf585cc6a52dfda616c3631e2e48c02eaba2",
+      "bytes": 33012
+    },
+    {
+      "role": "hyper_encoder",
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\hyper-1.12.0\\src\\proto\\h1\\encode.rs",
+      "sha256": "eec0acd88ff2a10b3d981417b2c6daf2aef7828a9197d1b16e632a21059bf136",
+      "bytes": 21963
+    },
+    {
+      "role": "hyper_connection",
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\hyper-1.12.0\\src\\proto\\h1\\conn.rs",
+      "sha256": "59a6db81bd098c126d7929e1996a3a6bf9d6e997da76b47d88178fd8206ad44a",
+      "bytes": 50812
+    },
+    {
+      "role": "axum_stream_adapter",
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\axum-core-0.5.6\\src\\body.rs",
+      "sha256": "a737b8441863a95a84fbd91a02c5711121d029ef24e7890f2fcbafc30c60a0f8",
+      "bytes": 5715
+    }
+  ],
+  "causal_chain": [
+    "Resource and Ngram CSV handlers attach explicit Content-Length after Ready metadata.",
+    "BodyStream yields each queued data frame immediately; actual worker+Core supervisor completion is only polled after a later receiver EOF poll. BodyStream::Drop labels any earlier drop Aborted.",
+    "The locked Hyper encoder subtracts written bytes from Content-Length. At zero, Conn::write_body leaves Writing::Body.",
+    "On the next Dispatcher poll, can_write_body=false clears and drops the user Body without another poll_frame. This is normal HTTP1 framing behavior, independent of peer disconnect.",
+    "Axum Body::from_stream forwards Stream::poll_next; its adapter adds no terminal producer-join operation.",
+    "Existing to_bytes positive tests poll through None, satisfying a condition the real known-length Hyper path does not promise."
+  ],
+  "regression_requirements": [
+    "Drive actual returned HTTP Body frames until their accumulated data bytes equal a declared positive Content-Length; drop immediately without a further EOF poll. Assert complete1/aborted0 and real worker/Core-supervisor/response-supervisor joins, slot and lease cleanup.",
+    "Hold the producer after all declared bytes have been enqueued but before final success. The last data frame must remain unavailable until actual joined success; release then require the exact bytes and terminal outcome.",
+    "In the held final phase return an export error, panic, or drop actual completion. No full declared-length positive response/normal EOF/Complete is allowed. Keep existing panic sticky failure and domain-error distinction.",
+    "Use a genuine owned Hyper HTTP1 connection with explicit Content-Length; exact response SHA and header length, keepalive/close variants, completed registry and later clean App shutdown. Client request completion alone is not joined-worker evidence.",
+    "Zero Content-Length is separate: Hyper may drop a body without even one poll. It requires a justified preheader joined-empty path or explicit supported contract; a zero count alone is not success.",
+    "Preserve existing eight enqueues/ninth pending, cancelled drain waiter, consumer drop, permanent ConnectionAborted, bounded partial Write and explicit cancellation tests."
+  ],
+  "fix_constraints": [
+    "Do not upgrade Drop to Complete based only on emitted length, queue closure, or producer result without actual ticket join.",
+    "A bounded one-frame lookahead can withhold the final frame until channel EOF plus actual worker/Core-supervisor success; cancellation, failure and missing completion must discard it and expose an error. The caller must not receive all Content-Length bytes before final verification.",
+    "Complete denotes a joined producer and terminal body handoff to HTTP, not remote TCP receipt; retain independent client-side full-byte/hash/normal-EOF assertions.",
+    "The generic producer metadata type has no declared length. A zero-length framing solution cannot be inferred from M; all new attachment/constructor callers need inventory if its API changes."
+  ],
+  "execution": {
+    "source_reads": true,
+    "target_imports": 0,
+    "compiler": 0,
+    "tests": 0,
+    "browser": 0,
+    "http": 0,
+    "native": 0,
+    "root_writes": 0,
+    "git": 0
+  }
+}

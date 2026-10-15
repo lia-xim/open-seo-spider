@@ -1,0 +1,7 @@
+# Source10 Resource + Ngram: frischer R3-Laufpfad
+
+Unmittelbarer Parent ist der unabhängig geprüfte R2-Port. Ausschließlich dessen R3-Namensräume und die vier tatsächlichen Ngram-V4-Bindungen (Pfad, SHA, Preparation, direkter Review) werden geändert. Der gesamte Main ab const proof bis EOF, die operativen Outer-/Preflightkörper und der vollständige Resource-Browserhelper ccd57 bleiben bytegleich. Alle acht Resource-Fälle und fünf warmen/ein kalter Ngram-Fall bleiben erhalten: 206 Seiten, 208 GETs, 414 Ledgerzeilen, 205 Fehler, 2 NoGrant, Directory 210/205, sieben natürliche Kinder und Response-Produzenten 6 warm/2 kalt.
+
+Der tatsächliche R2-FAIL 06a8e1… und Outer-FAIL 1f36e823… bleiben unverändert. Die klassische Scrollbar-Diagnose 072106… ist nur ein diagnostischer Beleg. Ngram V4 prüft tatsächliche document.clientWidth-Inhaltsgrenzen; der direkte Review 0f41b4… behauptet keinen Native-PASS.
+
+Frische Gate-/Grant-/Outputnamen enden in -r3. Erfolg bleibt PASS_ACTUAL_SOURCE10_RESOURCE_DIRECTORY_WORKFLOW. Nur der Rootouter erwirbt den unveränderten globalen V4-active.lock. Vor Ausführung sind aktuelle direkte Inner-/Outerreviews sowie ein frischer Resource-only-Rootgrant erforderlich. Source10 Browser27 bleibt wegen des separaten Einstellungsdialog-Produktfehlers FAIL; dieser Lauf kann keine gesamte Source10-Abnahme oder Installation ergeben. Hier wurden weder Grant noch Runtime erzeugt.

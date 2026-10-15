@@ -1,3 +1,7 @@
+## Aktuell: Ngram-Warmprüfung besteht, echter Antwort-Abschlussfehler entdeckt (15.10.2026)
+
+Source10 besteht1380Tests und optimiertenBuild. Sechs warmeResource-/Directory- und fünf neueNgramgruppen mit206gespeicherten Seiten,205Quellen/410Sechswortvorkommen,API/CLI/vollständigerCSV/UI1440/320 bestehen. Der Gesamtlauf bleibtFAIL: Die App zählt sechs vollständig gelesene Content-Length-Downloads beim regulären Beenden alsabgebrochen. Eine einzelne echteHTTP-Antwort reproduziert dies. [Rohbelege und Quellentrace](verification/source10-response-registry-20261015/index.json). Rust-Lebenszyklusfix mit Negativfällen und CSS-Umbruchfix werden gemeinsam neu geprüft; kalte Wiederöffnung und Installation bleiben offen. Die reineCSS-Source11-Vorbereitung ist unbenutzt und wird ersetzt. Katalog31/69/44; Herstellerparität NOT_PROVEN.
+
 ## Aktuell: Windows-Build bestanden, konkreter Browserfehler eingegrenzt (15.10.2026)
 
 Source10 besteht1380 Tests und den optimierten Windows-Build.26 praktische Browsergruppen bestehen; Originaldaten laden jetzt bei1440/320. Ein langes JSON-Beispiel verursacht danach im Einstellungsdialog320px-Überlauf. Eine einzelne CSS-Umbruchregel besteht die tatsächliche Vorschau; neu kompilierte Prüfung folgt. [Build, Fehler und Diagnose](verification/source10-native-first-20261015/index.json). Weitere native Abnahmen und Installation bleiben offen; installiert istSource5R3. Herstellerparität NOT_PROVEN.

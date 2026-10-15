@@ -1,0 +1,93 @@
+{
+  "kind": "source10_resource_directory_native_outer",
+  "result": "FAIL_OUTER_CHILD",
+  "recorded_at": "2026-10-15T19:12:00.705Z",
+  "gate": "resource-directory-workflow-v10-r2",
+  "lock_token": "ea3c3852830e281673aade8f74a1a6764bd17c71d5f7b093dbb44f952f8eeadb",
+  "lock_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v4\\active.lock",
+  "lock_bytes_sha256": "c8970699c8c608dee842defc43d9facf7cc4275e9458667a10f701724487dec3",
+  "source_manifest_sha256": "12b238c43bd504b71e4948a8e11d4622f34589a35290ca8ef923b833464206c7",
+  "driver_sha256": "30d6f894b0b9ac3b4dc8f0c934ea1234db88d2b67e9625c4d60fcee75f34354d",
+  "harness": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source10-resource-r2-preparation-v1/inner/native-resource-directory-workflow.mjs",
+    "sha256": "a6fe67b67a5195725582dd49ab495235698decac91e5021d3b93bb8097924e29",
+    "args": [
+      "--release",
+      "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/v10-resource-directory-native-r2-release.json",
+      "--release-sha256",
+      "c51c7df3c9e40bc34e0a3914ef8e5691a4b817e1a508faeba2fccfbd3d99e0ee",
+      "--source-manifest-sha",
+      "12b238c43bd504b71e4948a8e11d4622f34589a35290ca8ef923b833464206c7",
+      "--lock-token",
+      "ea3c3852830e281673aade8f74a1a6764bd17c71d5f7b093dbb44f952f8eeadb"
+    ]
+  },
+  "node": {
+    "executable": "C:\\Program Files\\nodejs\\node.exe",
+    "version": "24.15.0",
+    "no_preloads": true
+  },
+  "actual_build_proof": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-optimized-build-v10\\proof.json",
+    "sha256": "abfb7db3576ae51239fadc43c213a4027c698280ed5e6fd733806bebbb6c7c52"
+  },
+  "proof_inputs": {
+    "source_manifest_sha256": "12b238c43bd504b71e4948a8e11d4622f34589a35290ca8ef923b833464206c7",
+    "suite_proof_sha256": "3bb753190aaf64aea45367c3afa9507772fc765d19e31bbe93d7cba9c63440f5",
+    "build_proof_sha256": "abfb7db3576ae51239fadc43c213a4027c698280ed5e6fd733806bebbb6c7c52",
+    "candidate_binary_sha256": "a36757ef457b1c740ba4982d17ef78071799bc27bb59a859375d539633d2e76c",
+    "build_driver_sha256": "38e93a174d69dbce759bfd8eb0ff39068d928d69028cc82bb356db52ab208002"
+  },
+  "grant": {
+    "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/v10-resource-directory-native-r2-release.json",
+    "sha256": "c51c7df3c9e40bc34e0a3914ef8e5691a4b817e1a508faeba2fccfbd3d99e0ee"
+  },
+  "binary": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-optimized-build-v10\\candidate\\open-seo-spider.exe",
+    "sha256": "a36757ef457b1c740ba4982d17ef78071799bc27bb59a859375d539633d2e76c",
+    "bytes": 43135488
+  },
+  "pid": 39876,
+  "spawn_event": true,
+  "actual_exit_event": true,
+  "actual_close_event": true,
+  "spawn_error": null,
+  "exit": {
+    "code": 1,
+    "signal": null
+  },
+  "close_exit": {
+    "code": 1,
+    "signal": null
+  },
+  "stdout": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v4\\resource-directory-workflow-v10-r2\\stdout.log",
+    "end": true,
+    "closed": true,
+    "observed_bytes": 298,
+    "error": null,
+    "write_error": null,
+    "fd_closed": true,
+    "sha256": "8c6ea80e6722c7ddc5b789c867eee82c96440482ec39fa9010b9baeef7b6c8c5",
+    "bytes": 298,
+    "drained": true
+  },
+  "stderr": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v4\\resource-directory-workflow-v10-r2\\stderr.log",
+    "end": true,
+    "closed": true,
+    "observed_bytes": 0,
+    "error": null,
+    "write_error": null,
+    "fd_closed": true,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "drained": true
+  },
+  "signals": [],
+  "lock_released": true,
+  "failures": [
+    "Owned harness did not spawn, exit and actually close with exit 0/signal null"
+  ],
+  "qualification": "Only the direct harness process and captured pipes are observed here. Inner proofs independently determine acceptance, descendant cleanup and scope. No outer timeout, kill, retry, installation or source mutation."
+}
