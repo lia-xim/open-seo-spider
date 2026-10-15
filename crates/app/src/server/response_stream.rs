@@ -550,6 +550,58 @@ pub(super) struct Pending<M> {
     attached: bool,
 }
 impl<M> Pending<M> {
+    // Exact-length HTTP/1 bodies may be dropped by Hyper immediately after the
+    // declared final data frame. That frame must attest actual producer joins;
+    // a later EOF poll cannot be required for positive body completion.
+    pub(super) async fn ready_with_length<F>(mut self, length: F) -> Result<(M, Body), Failure>
+    where
+        F: FnOnce(&M) -> usize,
+    {
+        let result = self
+            .ready
+            .as_mut()
+            .expect("Pending readiness receiver exists")
+            .await
+            .map_err(|error| Failure {
+                message: error.to_string(),
+                readiness_lost: true,
+            })
+            .and_then(|r| r);
+        let metadata = match result {
+            Ok(value) => value,
+            Err(error) => {
+                self.control.finish_body(BodyOutcome::Failed);
+                return Err(error);
+            }
+        };
+        let remaining = length(&metadata);
+        let mut stream = ExactBodyStream {
+            receiver: self.receiver.take().expect("Pending body receiver exists"),
+            joined: self
+                .joined
+                .take()
+                .expect("Pending completion receiver exists"),
+            control: self.control.clone(),
+            remaining,
+            final_chunk: None,
+            finished: false,
+        };
+        if remaining == 0 {
+            // Hyper may never poll a Content-Length:0 Body. Poll the actual
+            // queue while awaiting the retained join BEFORE headers; an invalid
+            // producer's first byte is rejected and unblocks its bounded queue.
+            match futures::StreamExt::next(&mut stream).await {
+                None => {}
+                Some(Err(error)) => return Err(failure(error)),
+                Some(Ok(_)) => return Err(failure("Zero-length response yielded data")),
+            }
+            self.attached = true;
+            return Ok((metadata, Body::empty()));
+        }
+        self.attached = true;
+        Ok((metadata, Body::from_stream(stream)))
+    }
+
     pub(super) async fn ready(mut self) -> Result<(M, Body), Failure> {
         let result = self
             .ready
@@ -646,6 +698,100 @@ impl Stream for BodyStream {
     }
 }
 impl Drop for BodyStream {
+    fn drop(&mut self) {
+        if !self.finished {
+            self.control.cancel();
+            self.control.finish_body(BodyOutcome::Aborted);
+        }
+    }
+}
+
+// Only explicitly declared exact-length responses use this stream. Unknown
+// length policy/resource exports retain the original BodyStream unchanged.
+// At most one already bounded64KiB chunk is retained beyond the eight-slot
+// queue. No body-sized clone or speculative terminal result is introduced.
+struct ExactBodyStream {
+    receiver: mpsc::Receiver<Bytes>,
+    joined: oneshot::Receiver<WorkerResult>,
+    control: Arc<Control>,
+    remaining: usize,
+    final_chunk: Option<Bytes>,
+    finished: bool,
+}
+impl ExactBodyStream {
+    fn fail(&mut self, message: impl ToString) -> Poll<Option<Result<Bytes, io::Error>>> {
+        self.receiver.close();
+        self.final_chunk.take();
+        self.finished = true;
+        self.control.finish_body(BodyOutcome::Failed);
+        Poll::Ready(Some(Err(io::Error::other(message.to_string()))))
+    }
+}
+impl Stream for ExactBodyStream {
+    type Item = Result<Bytes, io::Error>;
+    fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
+        if self.finished {
+            return Poll::Ready(None);
+        }
+        self.control.body_waker.register(cx.waker());
+        if self.control.is_cancelled() {
+            self.receiver.close();
+            self.final_chunk.take();
+            self.finished = true;
+            self.control.finish_body(BodyOutcome::Aborted);
+            return Poll::Ready(Some(Err(io::Error::new(
+                io::ErrorKind::ConnectionAborted,
+                "Exact-length response aborted",
+            ))));
+        }
+        // A final held frame is not released until the receiver is closed AND
+        // empty. In particular, awaiting only joined here could deadlock an
+        // erroneous producer which writes beyond the declared byte length.
+        loop {
+            match self.receiver.poll_recv(cx) {
+                Poll::Pending => return Poll::Pending,
+                Poll::Ready(Some(bytes)) => {
+                    if bytes.is_empty() {
+                        continue;
+                    }
+                    if bytes.len() > self.remaining {
+                        return self.fail("Response producer exceeded declared Content-Length");
+                    }
+                    self.remaining -= bytes.len();
+                    if self.remaining != 0 {
+                        return Poll::Ready(Some(Ok(bytes)));
+                    }
+                    self.final_chunk = Some(bytes);
+                }
+                Poll::Ready(None) => break,
+            }
+        }
+        match Pin::new(&mut self.joined).poll(cx) {
+            Poll::Pending => Poll::Pending,
+            Poll::Ready(Ok(Ok(()))) => {
+                if self.remaining != 0 {
+                    return self.fail("Response producer ended before declared Content-Length");
+                }
+                self.finished = true;
+                if self.control.finish_body(BodyOutcome::Complete) != BodyOutcome::Complete {
+                    self.final_chunk.take();
+                    return Poll::Ready(Some(Err(io::Error::new(
+                        io::ErrorKind::ConnectionAborted,
+                        "Response cancelled before exact-length completion",
+                    ))));
+                }
+                // Commit the actual joined producer outcome before returning
+                // the last data frame. Hyper may now drop without another poll.
+                Poll::Ready(self.final_chunk.take().map(Ok))
+            }
+            Poll::Ready(Ok(Err(error))) => self.fail(error),
+            Poll::Ready(Err(error)) => {
+                self.fail(format!("Response lost actual joined completion: {error}"))
+            }
+        }
+    }
+}
+impl Drop for ExactBodyStream {
     fn drop(&mut self) {
         if !self.finished {
             self.control.cancel();

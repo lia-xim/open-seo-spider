@@ -175,7 +175,10 @@ pub(super) async fn csv(
         })
         .await
         .map_err(|e| api_error(StatusCode::SERVICE_UNAVAILABLE, e))?;
-    let ((snapshot, length, digest), body) = pending.ready().await.map_err(failure)?;
+    let ((snapshot, length, digest), body) = pending
+        .ready_with_length(|(_, length, _)| *length)
+        .await
+        .map_err(failure)?;
     drop(guard);
     Response::builder()
         .header(header::CONTENT_TYPE, "text/csv; charset=utf-8")

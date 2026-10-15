@@ -946,3 +946,356 @@ async fn response_http10_refusal_is_only_four_actual_routes_and_head_starts_no_e
         "Refused HTTP1.0 exports did not create any job or SQLite files"
     );
 }
+
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn response_exact_length_commits_joined_final_frame_without_a_following_eof_poll() {
+    for length in [
+        1,
+        CHUNK_BYTES - 1,
+        CHUNK_BYTES,
+        CHUNK_BYTES + 17,
+        CHUNK_BYTES * 2 + 3,
+    ] {
+        let registry = registry();
+        let expected: Vec<u8> = (0..length).map(|n| (n % 251) as u8).collect();
+        let source = expected.clone();
+        let pending = registry
+            .start(move |writer, ready| {
+                ready.send(length)?;
+                writer.write_all(&source)?;
+                writer.flush()?;
+                Ok(())
+            })
+            .await
+            .unwrap();
+        let (declared, body) = pending.ready_with_length(|length| *length).await.unwrap();
+        let mut body = body.into_data_stream();
+        assert_eq!(declared, length);
+        let mut actual = Vec::new();
+        while actual.len() < length {
+            let frame = timeout(Duration::from_secs(5), futures::StreamExt::next(&mut body))
+                .await
+                .unwrap()
+                .expect("A declared data frame is still required")
+                .unwrap();
+            let bytes = frame;
+            assert!(!bytes.is_empty());
+            assert!(bytes.len() <= CHUNK_BYTES);
+            actual.extend_from_slice(&bytes);
+        }
+        // Deliberately do NOT poll for None, matching Hyper Content-Length.
+        assert_eq!(actual, expected);
+        assert_eq!(
+            registry.stats().joined,
+            1,
+            "Last frame must wait for actual worker and Core supervisor joins"
+        );
+        assert_eq!(
+            (
+                registry.stats().complete,
+                registry.stats().aborted,
+                registry.stats().failed
+            ),
+            (1, 0, 0)
+        );
+        drop(body);
+        drain(&registry).await;
+        assert_eq!(
+            (
+                registry.stats().complete,
+                registry.stats().aborted,
+                registry.stats().retained
+            ),
+            (1, 0, 0)
+        );
+        assert_eq!(registry.stats().response_supervisors_joined, 1);
+    }
+}
+
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn response_exact_length_holds_only_final_frame_and_rejects_late_error_panic_and_cancel() {
+    for outcome in 0..4 {
+        let registry = registry();
+        let gate = Arc::new((Mutex::new(false), Condvar::new()));
+        let release = Release(gate.clone());
+        let (at_gate, held) = oneshot::channel();
+        let length = CHUNK_BYTES + 17;
+        let pending = registry
+            .start(move |writer, ready| {
+                ready.send(length)?;
+                writer.write_all(&vec![b'q'; length])?;
+                at_gate.send(()).unwrap();
+                let (flag, changed) = &*gate;
+                let mut open = lock(flag);
+                while !*open {
+                    open = changed.wait(open).unwrap();
+                }
+                if outcome == 1 {
+                    anyhow::bail!("Late final verification failed");
+                }
+                assert_ne!(outcome, 2, "Late producer panic after declared bytes");
+                Ok(())
+            })
+            .await
+            .unwrap();
+        let (_, body) = pending.ready_with_length(|length| *length).await.unwrap();
+        let mut body = body.into_data_stream();
+        timeout(Duration::from_secs(5), held)
+            .await
+            .unwrap()
+            .unwrap();
+        let first = timeout(Duration::from_secs(5), futures::StreamExt::next(&mut body))
+            .await
+            .unwrap()
+            .unwrap()
+            .unwrap();
+        assert_eq!(
+            first.len(),
+            CHUNK_BYTES,
+            "Non-final frames stay streaming before the real producer completes"
+        );
+        assert_eq!(registry.stats().joined, 0);
+        let mut final_frame = Box::pin(futures::StreamExt::next(&mut body));
+        std::future::poll_fn(|cx| {
+            assert!(
+                std::future::Future::poll(final_frame.as_mut(), cx).is_pending(),
+                "The actual held producer cannot release the final frame"
+            );
+            Poll::Ready(())
+        })
+        .await;
+        assert_eq!((registry.stats().complete, registry.stats().joined), (0, 0));
+        if outcome == 3 {
+            registry.cancel_all();
+            let frame = timeout(Duration::from_secs(5), final_frame).await.unwrap();
+            assert!(frame.unwrap().is_err());
+            assert_eq!(
+                (
+                    registry.stats().complete,
+                    registry.stats().aborted,
+                    registry.stats().joined
+                ),
+                (0, 1, 0)
+            );
+            drop(body);
+            release.release();
+        } else {
+            release.release();
+            let frame = timeout(Duration::from_secs(5), final_frame).await.unwrap();
+            if outcome == 0 {
+                assert_eq!(frame.unwrap().unwrap().as_ref(), &[b'q'; 17]);
+                assert_eq!((registry.stats().complete, registry.stats().joined), (1, 1));
+            } else {
+                assert!(
+                    frame.unwrap().is_err(),
+                    "Late failure/panic cannot expose the final declared frame"
+                );
+                assert_eq!(registry.stats().complete, 0);
+                assert_eq!(registry.stats().failed, 1);
+            }
+            drop(body);
+        }
+        let drained = timeout(Duration::from_secs(5), registry.shutdown_and_drain())
+            .await
+            .unwrap();
+        assert_eq!(
+            drained.is_err(),
+            outcome == 2,
+            "Actual worker panics remain sticky after real joins"
+        );
+        assert_eq!(registry.stats().joined, 1);
+        assert_eq!(registry.stats().response_supervisors_joined, 1);
+        assert_eq!(registry.stats().retained, 0);
+    }
+}
+
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn response_exact_length_zero_waits_before_headers_and_short_extra_producers_never_deadlock()
+{
+    {
+        let registry = registry();
+        let gate = Arc::new((Mutex::new(false), Condvar::new()));
+        let release = Release(gate.clone());
+        let (at_gate, held) = oneshot::channel();
+        let pending = registry
+            .start(move |_, ready| {
+                ready.send(0usize)?;
+                at_gate.send(()).unwrap();
+                let (flag, changed) = &*gate;
+                let mut open = lock(flag);
+                while !*open {
+                    open = changed.wait(open).unwrap();
+                }
+                Ok(())
+            })
+            .await
+            .unwrap();
+        let mut ready = Box::pin(pending.ready_with_length(|length| *length));
+        timeout(Duration::from_secs(5), held)
+            .await
+            .unwrap()
+            .unwrap();
+        std::future::poll_fn(|cx| {
+            assert!(
+                std::future::Future::poll(ready.as_mut(), cx).is_pending(),
+                "No Content-Length:0 body/headers before actual empty producer joins"
+            );
+            Poll::Ready(())
+        })
+        .await;
+        assert_eq!((registry.stats().joined, registry.stats().complete), (0, 0));
+        release.release();
+        let (length, body) = timeout(Duration::from_secs(5), ready)
+            .await
+            .unwrap()
+            .unwrap();
+        assert_eq!(length, 0);
+        assert_eq!((registry.stats().joined, registry.stats().complete), (1, 1));
+        drop(body); // Hyper is allowed to poll an empty exact body zero times.
+        drain(&registry).await;
+        assert_eq!(
+            (registry.stats().complete, registry.stats().aborted),
+            (1, 0)
+        );
+    }
+
+    for (declared, written, fail) in [
+        (0, CHUNK_BYTES * 12, false),
+        (0, 0, true),
+        (5, 4, false),
+        (4, 5, false),
+    ] {
+        let registry = registry();
+        let pending = registry
+            .start(move |writer, ready| {
+                ready.send(declared)?;
+                writer.write_all(&vec![b'x'; written])?;
+                if fail {
+                    anyhow::bail!("Empty producer failed its final verification");
+                }
+                Ok(())
+            })
+            .await
+            .unwrap();
+        let result = timeout(
+            Duration::from_secs(5),
+            pending.ready_with_length(|length| *length),
+        )
+        .await
+        .unwrap();
+        match result {
+            Err(_) => assert_eq!(declared, 0),
+            Ok((_, body)) => assert!(
+                timeout(Duration::from_secs(5), to_bytes(body, CHUNK_BYTES * 13))
+                    .await
+                    .unwrap()
+                    .is_err()
+            ),
+        }
+        drain(&registry).await;
+        assert_eq!(
+            (
+                registry.stats().complete,
+                registry.stats().failed,
+                registry.stats().joined,
+                registry.stats().retained
+            ),
+            (0, 1, 1, 0)
+        );
+        assert_eq!(registry.stats().response_supervisors_joined, 1);
+        assert!(registry.stats().peak_queued <= QUEUE_CHUNKS);
+    }
+}
+
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn response_exact_length_real_hyper_http1_commits_nonzero_and_unpolled_zero_bodies() {
+    for length in [0usize, 1, CHUNK_BYTES + 17] {
+        let registry = registry();
+        let response_owner = registry.clone();
+        let expected: Vec<u8> = (0..length).map(|n| (n % 251) as u8).collect();
+        let payload = expected.clone();
+        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let address = listener.local_addr().unwrap();
+        assert!(![8787, 8790].contains(&address.port()));
+        let server = tokio::spawn(async move {
+            let (stream, _) = listener.accept().await.unwrap();
+            drop(listener);
+            let router = axum::Router::new().route(
+                "/exact",
+                axum::routing::get(move || {
+                    let owner = response_owner.clone();
+                    let source = payload.clone();
+                    async move {
+                        let pending = owner
+                            .start(move |writer, ready| {
+                                ready.send(source.len())?;
+                                writer.write_all(&source)?;
+                                writer.flush()?;
+                                Ok(())
+                            })
+                            .await
+                            .unwrap();
+                        let (length, body) =
+                            pending.ready_with_length(|length| *length).await.unwrap();
+                        axum::response::Response::builder()
+                            .header(axum::http::header::CONTENT_LENGTH, length.to_string())
+                            .header(axum::http::header::CONNECTION, "close")
+                            .body(body)
+                            .unwrap()
+                    }
+                }),
+            );
+            let service = hyper_util::service::TowerToHyperService::new(router);
+            hyper_util::server::conn::auto::Builder::new(hyper_util::rt::TokioExecutor::new())
+                .http1_only()
+                .serve_connection(hyper_util::rt::TokioIo::new(stream), service)
+                .await
+                .unwrap();
+        });
+        let mut client = tokio::net::TcpStream::connect(address).await.unwrap();
+        client
+            .write_all(b"GET /exact HTTP/1.1\r\nHost: own.invalid\r\nConnection: close\r\n\r\n")
+            .await
+            .unwrap();
+        let mut bytes = Vec::new();
+        timeout(Duration::from_secs(5), client.read_to_end(&mut bytes))
+            .await
+            .unwrap()
+            .unwrap();
+        drop(client);
+        timeout(Duration::from_secs(5), server)
+            .await
+            .unwrap()
+            .unwrap();
+        let separator = bytes
+            .windows(4)
+            .position(|b| b == b"\r\n\r\n")
+            .expect("Actual HTTP headers");
+        let headers = std::str::from_utf8(&bytes[..separator])
+            .unwrap()
+            .to_ascii_lowercase();
+        assert!(headers.starts_with("http/1.1 200"));
+        assert!(
+            headers.contains(&format!("content-length: {length}\r\n"))
+                || headers.ends_with(&format!("content-length: {length}"))
+        );
+        assert_eq!(&bytes[separator + 4..], expected.as_slice());
+        drain(&registry).await;
+        let stats = registry.stats();
+        assert_eq!(
+            (
+                stats.admitted,
+                stats.started,
+                stats.joined,
+                stats.response_supervisors_joined,
+                stats.retained
+            ),
+            (1, 1, 1, 1, 0)
+        );
+        assert_eq!(
+            (stats.complete, stats.aborted, stats.failed),
+            (1, 0, 0),
+            "Real Hyper may drop at exact Content-Length, without a final Stream EOF poll"
+        );
+    }
+}
