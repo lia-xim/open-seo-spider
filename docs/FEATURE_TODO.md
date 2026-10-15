@@ -10,6 +10,15 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
 
 ## Aktuelle Arbeit und nächste Schritte
 
+- [ ] **SQL-Skalierung und explizite Sitemap-Kapazität gemeinsam prüfen** — REVIEWED_SOURCE_PROMOTED_FORMATTED_RUNTIME_NOT_RUN. 18 geprüfte Quelländerungen sind eingebaut und formatiert. Berichtweite SQL-Metadaten werden je SELECT materialisiert; die optionale Mitgliedschaftskapazität ist getrennt vom Quellenbudget bis128MiB konfigurierbar. Unveränderte Standardkonfiguration bleibt bei32MiB. Für diesen neuen Stand gibt es noch keine Compiler- oder Laufzeitabnahme.
+  - [x] Beide konkreten Quellvorschläge unabhängig geprüft; sechs Rust-Dateien durch cargo fmt formatiert, JavaScript-Syntaxprüfung bestanden.
+  - [x] 13 zusätzliche Testfunktionen vorbereitet, darunter echte50.000 Parser-/SQLite-Mitgliedschaften, Wiederöffnung, Rollback- und Konfigurationskontrollen. Noch nicht ausgeführt.
+  - [ ] Diesen konkreten Quellstand einfrieren und den vollständigen Workspace mit allen434 Pflichtnamen, mindestens1216 Tests, vier echten Chromium-Fällen, Format und Clippy prüfen.
+  - [ ] Optimierten Kandidaten aus demselben Stand bauen und alle nativen Bereiche einschließlich unveränderter zwölf physischer Größenfälle erneut prüfen.
+  - [ ] Große echte Sitemap-Quellen einschließlich50.000 vollständiger dauerhafter Einträge und50MiB tatsächlich prüfen; Roh-XML-Dauerhaftigkeit, weitere Sonderfälle, Plattformen und Installation bleiben offen.
+  - Verträge: [index.json](verification/combined-source-v4-draft-20261015/index.json), [index.json](verification/combined-optimized-native-v3-20261015/index.json).
+  - Gate-Stand: source_review: PASS_BOUNDED_SOURCE_ONLY; formatter: PASS_CARGO_FMT; javascript_syntax: PASS_NODE_CHECK; full_workspace: NOT_RUN_ON_V4; optimized_candidate: NOT_RUN_ON_V4; native: NOT_RUN_ON_V4; physical: NOT_RUN_ON_V4_PREVIOUS_V3_FAILED_EXTERNAL_ABORT; installation: NOT_RUN_INSTALLED_AB1_UNCHANGED; manufacturer_parity: NOT_PROVEN.
+
 - [ ] **Große Sitemap-Ausgaben korrigieren und denselben Kandidaten vollständig abnehmen** — FIVE_NATIVE_SCOPES_PASS_PHYSICAL_FAILED_INSTALLATION_OPEN. Der optimierte V3-Kandidat besteht fünf getrennte Laufzeitbereiche. Der große physische Test ist nicht bestanden: Nach etwa524 Sekunden waren140 von405 Zeilen gesammelt; Root hat nur die eigene Testinstanz beendet. Eine pro Seite erneut ausgeführte SQLite-JSON-Auswertung des ganzen Berichts ist quellseitig bestätigt. Originalinstallation und Nutzerdaten bleiben unverändert.
   - [x] Optimierter Build aus denselben301 Eingaben wie der vollständige1203/0/0-Lauf: tatsächliche Cargo-Abschlüsse, Candidate22f8c602 und endgültige Quell-/Suite-Hashes verifiziert.
   - [x] Native API-/CLI-/offizielle SDK-Prüfung mit kleiner echter Fixture besteht; Datei-SDK besteht175 Operationsprüfungen mit26/31 Inventaren, beiden Transporten und erwarteten Fehlerfällen.
@@ -5461,4 +5470,4 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `6990922d781a8ee66ba2754399de645edb6f11e0b52d495172fd7fdddbadd493`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T08:41:21.015Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `e8c5b49d78d35e55c7fde61168a00233f4439e1c82cb1a8c0fbb163200d0fa54`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T08:41:21.015Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

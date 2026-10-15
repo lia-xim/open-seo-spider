@@ -1,0 +1,343 @@
+{
+  "kind": "independent_sitemap_membership_capacity_source_review",
+  "result": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "recorded_at": "2026-10-15T09:03:59.589Z",
+  "proposal_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\manifest.json",
+    "sha256": "9da86f091f5bba9ba70eca5415542cfaf9fb43947c9f5bb1259c192b2d170a82"
+  },
+  "source_manifest_sha256": "01bfa8efcb6745c5521be5e533ae63f2f15679318b095a29eb3ab925fef95bdf",
+  "source_commit": "f3307413110a62dc4db00afac1b14862eee5ff3e",
+  "findings": [],
+  "resolved_findings": [
+    {
+      "id": "MCP_TYPED_SCHEMA",
+      "resolution": "Machine-readable object/null schema exposes bounds/defaults and nested unknown-field rejection; generic forwarding preserved."
+    },
+    {
+      "id": "DECLARED_CAPACITY_AUTHORITY",
+      "resolution": "Above-default SQL/init/raw/portable reads require exact configured limits; existing <=32MiB authority and age/unknown qualification remain unchanged."
+    },
+    {
+      "id": "LIMIT_OBJECT_COPY_BEFORE_SIZE",
+      "resolution": "SQL UTF8 BLOB size is checked before Rust String materialization; bounded refetch and byte equality preserve bound. SQLite JSON parser work itself is not an RSS claim."
+    },
+    {
+      "id": "OPTIONAL_BROWSER_CATALOG_ORACLE",
+      "resolution": "Authored browser helper now requires initialized actual catalog before effective capacity assertion."
+    }
+  ],
+  "files": 15,
+  "modified_files": 12,
+  "new_files": 3,
+  "literal_operations": 39,
+  "positional_ui_edits": 16,
+  "inverse": [
+    {
+      "path": "crates/core/src/sitemap_ledger_models.rs",
+      "operations": 3,
+      "forward_normalized_exact": true,
+      "inverse_normalized_exact": true,
+      "non_ui_byte_exact": true
+    },
+    {
+      "path": "crates/core/src/models.rs",
+      "operations": 4,
+      "forward_normalized_exact": true,
+      "inverse_normalized_exact": true,
+      "non_ui_byte_exact": true
+    },
+    {
+      "path": "crates/core/src/crawler.rs",
+      "operations": 3,
+      "forward_normalized_exact": true,
+      "inverse_normalized_exact": true,
+      "non_ui_byte_exact": true
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger_tests.rs",
+      "operations": 1,
+      "forward_normalized_exact": true,
+      "inverse_normalized_exact": true,
+      "non_ui_byte_exact": true
+    },
+    {
+      "path": "crates/app/src/server/sitemap_processing_config_tests.rs",
+      "operations": 1,
+      "forward_normalized_exact": true,
+      "inverse_normalized_exact": true,
+      "non_ui_byte_exact": true
+    },
+    {
+      "path": "crates/app/src/mcp.rs",
+      "operations": 3,
+      "forward_normalized_exact": true,
+      "inverse_normalized_exact": true,
+      "non_ui_byte_exact": true
+    },
+    {
+      "path": "crates/app/src/server.rs",
+      "operations": 1,
+      "forward_normalized_exact": true,
+      "inverse_normalized_exact": true,
+      "non_ui_byte_exact": true
+    },
+    {
+      "path": "web/index.html",
+      "operations": 5,
+      "forward_normalized_exact": true,
+      "inverse_normalized_exact": true,
+      "non_ui_byte_exact": false
+    },
+    {
+      "path": "web/app.js",
+      "operations": 11,
+      "forward_normalized_exact": true,
+      "inverse_normalized_exact": true,
+      "non_ui_byte_exact": false
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger.rs",
+      "operations": 5,
+      "forward_normalized_exact": true,
+      "inverse_normalized_exact": true,
+      "non_ui_byte_exact": true
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/verified_read.rs",
+      "operations": 1,
+      "forward_normalized_exact": true,
+      "inverse_normalized_exact": true,
+      "non_ui_byte_exact": true
+    },
+    {
+      "path": "crates/core/src/sitemap_coverage.rs",
+      "operations": 1,
+      "forward_normalized_exact": true,
+      "inverse_normalized_exact": true,
+      "non_ui_byte_exact": true
+    }
+  ],
+  "new_authored_tests": [
+    {
+      "path": "crates/app/src/server/sitemap_membership_config_tests.rs",
+      "name": "create_dto_preserves_explicit_membership_capacity_through_saved_config_and_mcp_dispatch_shape"
+    },
+    {
+      "path": "crates/app/src/server/sitemap_membership_config_tests.rs",
+      "name": "create_dto_membership_capacity_absent_null_and_source_profile_are_independent"
+    },
+    {
+      "path": "crates/app/src/server/sitemap_membership_config_tests.rs",
+      "name": "create_dto_rejects_invalid_membership_capacity_before_any_job_admission"
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_membership_limits_tests.rs",
+      "name": "membership_capacity_absence_null_and_source_work_keep_legacy_serialization"
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_membership_limits_tests.rs",
+      "name": "membership_capacity_strict_objects_reject_shapes_fields_and_hard_limit_violations"
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_membership_limits_tests.rs",
+      "name": "configured_membership_capacity_is_saved_bootstrapped_reopened_and_not_mutated_on_resume"
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/capacity_tests.rs",
+      "name": "complete_fifty_thousand_pairs_exceed_legacy_cap_but_commit_and_reopen_under_explicit_capacity"
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/capacity_tests.rs",
+      "name": "explicit_capacity_does_not_disable_row_count_caps_or_source_atomicity"
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/capacity_tests.rs",
+      "name": "above_default_capacity_requires_declared_config_on_sql_raw_portable_and_inherited_reads"
+    }
+  ],
+  "checks": [
+    {
+      "executable": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "--check",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\source\\web\\app.js"
+      ],
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": "",
+      "sha256": "93c52f32a41eea283082d8aeb87b6d89c41ac6fb90aa3e660a39c2eae3b59522"
+    },
+    {
+      "executable": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "--check",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\browser-membership-flow.mjs"
+      ],
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": "",
+      "sha256": "72f8adad00b32b3e058d01d7fecddfdd72aa04acee4dda3433430b1c07100e16"
+    }
+  ],
+  "pins": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\manifest.json",
+      "bytes": 7681,
+      "sha256": "9da86f091f5bba9ba70eca5415542cfaf9fb43947c9f5bb1259c192b2d170a82"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v3\\manifest.json",
+      "bytes": 104716,
+      "sha256": "01bfa8efcb6745c5521be5e533ae63f2f15679318b095a29eb3ab925fef95bdf"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\derivation.json",
+      "bytes": 24050,
+      "sha256": "112205c653767f85f62e1c7647f8ef7b13771f8a66690c6ea4b60eecafd44414"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\HANDOFF.md",
+      "bytes": 8548,
+      "sha256": "f30ac47748dabb51f893f57471291d0f8027bd1091cc0b27b3a6ac46735f35c0"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\browser-membership-flow.mjs",
+      "bytes": 7118,
+      "sha256": "72f8adad00b32b3e058d01d7fecddfdd72aa04acee4dda3433430b1c07100e16"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\ui-byte-edits.json",
+      "bytes": 6465,
+      "sha256": "29ef2c1affaa3e52685b3ba7eba106a07dbc6b8e256cc655a97a72a94ba79848"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\derive-v3.mjs",
+      "bytes": 6005,
+      "sha256": "4226d572f5ea554df4ff9fd1c8a8fe850f178698c258396ceb36e976f4abe044"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\source\\crates\\app\\src\\mcp.rs",
+      "bytes": 30915,
+      "sha256": "aef10f447881b330301e3d6c50730907a9299bdd2980a0c9c0fc706bca6d738d"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\source\\crates\\app\\src\\server.rs",
+      "bytes": 77462,
+      "sha256": "cb3015da3f5324a8340afc5e6d24ef4b664e8e40bee9f9f995515e847a0ca989"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\source\\crates\\app\\src\\server\\sitemap_membership_config_tests.rs",
+      "bytes": 3384,
+      "sha256": "ceca461f4b78018efbe0d5fd64a1f528774aeadbe391e8b6d32d8e1e0eaab452"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\source\\crates\\app\\src\\server\\sitemap_processing_config_tests.rs",
+      "bytes": 2866,
+      "sha256": "a118467656cf1d920acad0f2b6db8ba71027a582350f98ac73f35cbdf8e7f818"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\source\\crates\\core\\src\\crawler.rs",
+      "bytes": 162718,
+      "sha256": "3860be000c4a87fc6d0438b4976fa36daaf46368cbcd05ef19e1945766ade8a1"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\source\\crates\\core\\src\\crawler\\sitemap_membership_limits_tests.rs",
+      "bytes": 5595,
+      "sha256": "ed5326e2f2b8263591079f1945ff48dc8004c5e500d1efd2e611320e90285c88"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\source\\crates\\core\\src\\models.rs",
+      "bytes": 38847,
+      "sha256": "55f56be7ebbf9b92cbebe7b58ee12788f92df83259bc1e8cdd4bda676a8d4a14"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\source\\crates\\core\\src\\sitemap_coverage.rs",
+      "bytes": 30327,
+      "sha256": "03affb2284e95366a85ea6cd94ab4cfb556a463aade999664cba84062e49ece4"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\source\\crates\\core\\src\\sitemap_ledger.rs",
+      "bytes": 74210,
+      "sha256": "180d1f191f75cd20085f2ec9087d3482a57aa37c9690aa7dc79d5acc2b40f29e"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\source\\crates\\core\\src\\sitemap_ledger\\capacity_tests.rs",
+      "bytes": 8747,
+      "sha256": "56666bceed0ca18ee854659db6f52f3be53339c8b5153de4e426e77538ca19ee"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\source\\crates\\core\\src\\sitemap_ledger\\verified_read.rs",
+      "bytes": 33693,
+      "sha256": "bd3638c431fe3f6eee0f10bb34c2f90f249267aa54fbbb6014d7bc4d4d73abc0"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\source\\crates\\core\\src\\sitemap_ledger_models.rs",
+      "bytes": 20604,
+      "sha256": "c003da582b8d513586a9dc487a09b0517b5ccd0bb28b8fef356009cea6bb64cf"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\source\\crates\\core\\src\\sitemap_ledger_tests.rs",
+      "bytes": 73646,
+      "sha256": "962103cb535e3aabd068811f5916aa443a64bea12b23461f8c4fa89efe7cb5b1"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\source\\web\\app.js",
+      "bytes": 382036,
+      "sha256": "93c52f32a41eea283082d8aeb87b6d89c41ac6fb90aa3e660a39c2eae3b59522"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\source\\web\\index.html",
+      "bytes": 84618,
+      "sha256": "a6bee344838c266981e45fe8ae98fe6a8d7a58a774e794aeb04e9daea11c3ce9"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v3\\crates\\core\\src\\store.rs",
+      "bytes": 148465,
+      "sha256": "bdf8838fa21adf58b360ae8473ac63b73cefe68e22ed611c769dae7c0918128e"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v3\\crates\\core\\src\\recrawl.rs",
+      "bytes": 21334,
+      "sha256": "1da957236f7cd0a819410393137d17193ae826432acc7756fe0a3a92f296baca"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v3\\crates\\app\\src\\main.rs",
+      "bytes": 29991,
+      "sha256": "e214be70dddfdf67ed2e4374dddf6a523b540a15ba73c6ee0242c9c7381a91e7"
+    }
+  ],
+  "all_301_frozen_and_root_source_bytes_verified": true,
+  "scope": [
+    "None/null/empty-object/default serialization and map-only scalar/array/unknown/type/bound semantics",
+    "Fresh CrawlConfig capacity and independent source work limits; default32MiB/max128MiB; old row/count guards unchanged",
+    "API config_from_input, CLI --config, MCP whole-config forwarding and typed tools/list schema",
+    "UI independent checkbox, exact integer fields, save/reopen/localStorage/start payload stripping and authored browser probes",
+    "Initialization/materialized/raw/portable declaration binding including missing-inventory case and SQL size-before-copy",
+    "Existing SourceV3 row/sequence/hash/policy/savepoint and legacy/selected qualification bodies preserved by exact inverse",
+    "Authored genuine50k parser/disk-ledger positive, default-budget rollback, row/count controls, reopen/tail/stale cursor; not native HTTP evidence"
+  ],
+  "limitations": [
+    "No Rust formatting, compiler, Clippy, Rust test, SQLite, HTTP fixture, browser, native or product execution in this review.",
+    "New Rust functions are authored only; actual combined-source compilation and full suite remain required.",
+    "The inherited SQL test uses the existing parent-catalog-only anchor; public complete-parent config cloning remains source-traced, not new runtime proof.",
+    "HTTP Json<Value> has already coalesced duplicate JSON literals; raw-HTTP duplicate rejection is not asserted.",
+    "Compact50k retention does not prove every valid50k/50MiB source, original XML-body durability, full matrix/RSS/latency/platform/install/full manufacturer parity.",
+    "Root must merge overlapping ledger/raw edits with its separate SQL repair, format the exact combined result, approve final source hashes and freeze/build a fresh V4 before any runtime rebinding."
+  ],
+  "executed": {
+    "node_syntax_checks": 2,
+    "rust_formatter": 0,
+    "compiler": 0,
+    "rust_tests": 0,
+    "sqlite_queries": 0,
+    "fixture_generations": 0,
+    "native_runs": 0,
+    "harness_imports": 0,
+    "root_product_writes": 0,
+    "proposal_writes": 0,
+    "git_operations": 0
+  }
+}

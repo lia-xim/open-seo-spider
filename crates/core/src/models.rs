@@ -16,6 +16,13 @@ pub struct CrawlConfig {
     /// clamp and parser defaults; retained membership/catalog budgets are separate.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub sitemap_source_processing: Option<crate::SitemapSourceProcessingConfig>,
+    /// Explicit durable membership-catalog capacity, separate from source work and wire limits.
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "deserialize_sitemap_membership_limits"
+    )]
+    pub sitemap_membership_limits: Option<crate::SitemapLedgerLimits>,
     pub crawl_links: bool,
     pub include_subdomains: bool,
     pub concurrency: usize,
@@ -56,6 +63,47 @@ pub struct CrawlConfig {
     pub resource_discovery_limits: Option<crate::ResourceDiscoveryLimits>,
 }
 
+// Keep the new opt-in object strict in every Serde format; outer null remains absence.
+fn deserialize_sitemap_membership_limits<'de, D>(
+    deserializer: D,
+) -> Result<Option<crate::SitemapLedgerLimits>, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    struct OptionalLimits;
+    impl<'de> serde::de::Visitor<'de> for OptionalLimits {
+        type Value = Option<crate::SitemapLedgerLimits>;
+        fn expecting(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            f.write_str("an optional object containing sitemap membership limits")
+        }
+        fn visit_none<E: serde::de::Error>(self) -> Result<Self::Value, E> {
+            Ok(None)
+        }
+        fn visit_unit<E: serde::de::Error>(self) -> Result<Self::Value, E> {
+            Ok(None)
+        }
+        fn visit_some<T: serde::Deserializer<'de>>(self, d: T) -> Result<Self::Value, T::Error> {
+            struct ObjectLimits;
+            impl<'de> serde::de::Visitor<'de> for ObjectLimits {
+                type Value = crate::SitemapLedgerLimits;
+                fn expecting(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                    f.write_str("an object containing sitemap membership limits")
+                }
+                fn visit_map<A: serde::de::MapAccess<'de>>(
+                    self,
+                    map: A,
+                ) -> Result<Self::Value, A::Error> {
+                    crate::SitemapLedgerLimits::deserialize(
+                        serde::de::value::MapAccessDeserializer::new(map),
+                    )
+                }
+            }
+            d.deserialize_map(ObjectLimits).map(Some)
+        }
+    }
+    deserializer.deserialize_option(OptionalLimits)
+}
+
 impl Default for CrawlConfig {
     fn default() -> Self {
         Self {
@@ -66,6 +114,7 @@ impl Default for CrawlConfig {
             discover_sitemaps: true,
             max_sitemap_documents: 1000,
             sitemap_source_processing: None,
+            sitemap_membership_limits: None,
             crawl_links: true,
             include_subdomains: false,
             concurrency: 8,
@@ -98,6 +147,13 @@ impl Default for CrawlConfig {
 }
 
 impl CrawlConfig {
+    /// Fresh catalog capacity only. Resume/inherited discovery keeps its durable catalog limits.
+    pub fn sitemap_membership_ledger_limits(&self) -> anyhow::Result<crate::SitemapLedgerLimits> {
+        let limits = self.sitemap_membership_limits.clone().unwrap_or_default();
+        limits.validate()?;
+        Ok(limits)
+    }
+
     /// Effective XML/decode work bounds, validated without repairing supplied
     /// values. Retained entry/location/text limits keep their existing defaults.
     pub fn sitemap_source_parser_limits(&self) -> anyhow::Result<crate::SitemapParserLimits> {

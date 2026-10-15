@@ -758,6 +758,7 @@ fn verify_raw_inner<'conn>(
         }));
     }
     summary.limits.validate()?;
+    verify_declared_capacity(connection, &summary.limits)?;
     sha(&summary.config_sha256)?;
     sha(&summary.rolling_sha256)?;
     ensure!(

@@ -224,6 +224,7 @@ pub(crate) fn initialize(
     legacy_history_unknown: bool,
 ) -> Result<SitemapLedgerSummary> {
     limits.validate()?;
+    verify_declared_capacity(transaction, limits)?;
     sha(config_sha256)?;
     if let Some(catalog) = load_catalog(transaction)? {
         ensure!(
@@ -1423,6 +1424,39 @@ fn verify_row_policy_binding(
     }
     Ok(())
 }
+/// Project only the small declared limits object from possibly large saved configs.
+/// No new overall saved-config/wire cap or summary-only resource grant is introduced.
+fn verify_declared_capacity(connection: &Connection, limits: &SitemapLedgerLimits) -> Result<()> {
+    if limits.max_catalog_json_bytes <= DEFAULT_SITEMAP_CATALOG_BYTES {
+        return Ok(());
+    }
+    let declared_bytes: Option<i64> = connection.query_row(
+        "SELECT CASE WHEN json_type(value,'$.sitemap_membership_limits')='object' THEN length(CAST(json_extract(value,'$.sitemap_membership_limits') AS BLOB)) END FROM metadata WHERE key='config'",
+        [], |row| row.get(0)).optional()?.flatten();
+    let declared_bytes = declared_bytes
+        .context("Above-default sitemap capacity requires explicit saved configuration")?;
+    ensure!(
+        (1..=4096).contains(&declared_bytes),
+        "Oversized sitemap membership limits declaration"
+    );
+    // Repeat the actual SQL byte guard on the fetch as well. The production
+    // caller holds one read TX; this also stays bounded if a private caller does not.
+    let declared: String = connection.query_row(
+        "SELECT json_extract(value,'$.sitemap_membership_limits') FROM metadata WHERE key='config' AND json_type(value,'$.sitemap_membership_limits')='object' AND length(CAST(json_extract(value,'$.sitemap_membership_limits') AS BLOB)) BETWEEN 1 AND 4096",
+        [], |row| row.get(0))?;
+    ensure!(
+        i64::try_from(declared.len())? == declared_bytes,
+        "Sitemap membership limits declaration changed during read"
+    );
+    let declared: SitemapLedgerLimits = serde_json::from_str(&declared)?;
+    declared.validate()?;
+    ensure!(
+        declared == *limits,
+        "Sitemap capacity differs from explicit saved configuration"
+    );
+    Ok(())
+}
+
 pub(crate) fn load_catalog(connection: &Connection) -> Result<Option<SitemapCatalog>> {
     let state: Option<SitemapLedgerSummary> = metadata(connection, SUMMARY_KEY)?;
     let inherited: Option<SitemapInheritedBasis> = metadata(connection, INHERITED_KEY)?;
@@ -1438,6 +1472,7 @@ pub(crate) fn load_catalog(connection: &Connection) -> Result<Option<SitemapCata
         return Ok(None); // Tables created on old writable open do not prove an empty source history.
     };
     summary.limits.validate()?;
+    verify_declared_capacity(connection, &summary.limits)?;
     require_tables(connection)?;
     let mut total_bytes = 0u64;
     let mut total_rows = 0u64;
@@ -1665,7 +1700,7 @@ pub(crate) fn inherit(
     })
 }
 /// Caller uses one read transaction and passes BOTH identity fields for subsequent pages.
-/// This first bounded candidate verifies/materializes the <=32MiB catalog before slicing.
+/// This compatibility reader materializes the explicitly bounded catalog before slicing.
 pub(crate) fn page(
     connection: &Connection,
     after_sequence: u64,

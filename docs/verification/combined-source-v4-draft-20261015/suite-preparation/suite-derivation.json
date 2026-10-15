@@ -1,0 +1,154 @@
+{
+  "kind": "combined_v4_suite_literal_derivation_v1",
+  "original": {
+    "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/run-combined-suite-v3.mjs",
+    "sha256": "e6ccab255c9056f6791a02fde68672a8e91ccc98c9069d9538e7ebfbf1728d4d",
+    "bytes": 21080
+  },
+  "derived": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v4-source-suite-preparation-v2\\run-combined-suite-v4.mjs",
+    "sha256": "cabafce13e67f3fb2e6e9e114f6392d675b51a6cd0ca26de5aa91cda8d4a1cfa",
+    "bytes": 26789
+  },
+  "operations": [
+    {
+      "old_text": "const source = path.join(base, 'combined-source-v3');",
+      "new_text": "const source = path.join(base, 'combined-source-v4');",
+      "occurrences": 1
+    },
+    {
+      "old_text": "const out = path.join(base, 'results/combined-suite-v3');",
+      "new_text": "const out = path.join(base, 'results/combined-suite-v4');",
+      "occurrences": 1
+    },
+    {
+      "old_text": "path.resolve(task, 'work/run-combined-suite-v3.mjs')",
+      "new_text": "path.resolve(task, 'work/run-combined-suite-v4.mjs')",
+      "occurrences": 1
+    },
+    {
+      "old_text": "assert.equal(manifest.kind, 'combined_source_v3');",
+      "new_text": "assert.equal(manifest.kind, 'combined_source_v4');",
+      "occurrences": 1
+    },
+    {
+      "old_text": "67aebeb959ac6cfb9f8352162becf3ff98ef90918c825a674ea2e92a5df353d0",
+      "new_text": "01bfa8efcb6745c5521be5e533ae63f2f15679318b095a29eb3ab925fef95bdf",
+      "occurrences": 2
+    },
+    {
+      "old_text": "const baselinePath = path.join(base, 'combined-source-v1/manifest.json');",
+      "new_text": "const baselinePath = path.join(base, 'combined-source-v3/manifest.json');",
+      "occurrences": 1
+    },
+    {
+      "old_text": "assert.equal(baseline.files.length, 301); assert.equal(baseline.required_test_names, 419);",
+      "new_text": "assert.equal(baseline.kind, 'combined_source_v3');\nassert.equal(baseline.files.length, 301); assert.equal(baseline.required_test_names, 421);",
+      "occurrences": 1
+    },
+    {
+      "old_text": "assert.equal(baseline.minimum_expected_workspace_tests, 1201);",
+      "new_text": "assert.equal(baseline.minimum_expected_workspace_tests, 1203);",
+      "occurrences": 1
+    },
+    {
+      "old_text": "const previousAttemptPath = path.join(base, 'combined-source-v2/manifest.json');\nconst previousAttemptSha = '0bd2a7cc5e429e7d46a1d596e5941d62f5a2b2bd9dfb78199e85b7c5d4f9fd2a';\nassert.equal(manifest.previous_attempt_source_manifest_sha256, previousAttemptSha);\nconst previousAttemptRaw = fs.readFileSync(previousAttemptPath);\nassert.equal(sha(previousAttemptRaw), previousAttemptSha);\nconst previousAttempt = JSON.parse(previousAttemptRaw);\nassert.equal(previousAttempt.kind, 'combined_source_v2');\nassert.equal(previousAttempt.files.length, 301); assert.equal(previousAttempt.required_test_names, 421);\nassert.equal(previousAttempt.minimum_expected_workspace_tests, 1203);\nconst previousAttemptNames = previousAttempt.required_tests.flatMap(group => group.names);\nassert.equal(previousAttemptNames.length, 421); assert.equal(new Set(previousAttemptNames).size, 421);\n",
+      "new_text": "// Root's explicit final-byte approval binds authored handoffs and formatter-only changes.\nconst rootApprovalReference = manifest.root_approval;\nassert(rootApprovalReference && path.isAbsolute(rootApprovalReference.path));\nassert.match(rootApprovalReference.sha256, /^[a-f0-9]{64}$/);\nconst rootApprovalRaw = fs.readFileSync(rootApprovalReference.path);\nassert.equal(sha(rootApprovalRaw), rootApprovalReference.sha256);\nconst rootApproval = JSON.parse(rootApprovalRaw);\nassert.equal(rootApproval.kind, 'root_approved_combined_source_v4');\nassert.equal(rootApproval.status, 'REVIEWED_FORMATTED_COMMITTED_AND_PRIVATELY_PUSHED');\nassert.equal(rootApproval.source_commit, manifest.source_commit);\nassert.equal(rootApproval.source_branch, manifest.source_branch);\nassert.equal(path.resolve(rootApproval.source_worktree), path.resolve(repo));\nassert.equal(rootApproval.parent_source_manifest_sha256, baselineSha);\nassert.deepEqual(manifest.source_proposals, rootApproval.proposals);\nassert.deepEqual(manifest.new_authored_tests, rootApproval.new_authored_tests);\nassert(Array.isArray(rootApproval.files) && rootApproval.files.length > 0);\nassert(Array.isArray(manifest.references) && manifest.references.length > 0);\nconst pinnedReferences = new Map();\nfor (const reference of manifest.references) {\n  assert(path.isAbsolute(reference.path));\n  assert.match(reference.sha256, /^[a-f0-9]{64}$/);\n  assert(Number.isSafeInteger(reference.bytes) && reference.bytes >= 0);\n  assert(!pinnedReferences.has(path.resolve(reference.path).toLowerCase()), 'Duplicate immutable reference');\n  pinnedReferences.set(path.resolve(reference.path).toLowerCase(), reference);\n}\nfor (const proposal of manifest.source_proposals) {\n  for (const [referencePath, referenceSha] of [[proposal.path,proposal.sha256],[proposal.review_path,proposal.review_sha256]]) {\n    const reference = pinnedReferences.get(path.resolve(referencePath).toLowerCase());\n    assert(reference && reference.sha256 === referenceSha, 'Reviewed proposal must be an immutable final-guard reference');\n  }\n}\nassert.equal(manifest.source_proposals.length, 2);\nassert.deepEqual(manifest.source_proposals.map(proposal => proposal.role), ['sql','ledger']);\nassert.equal(manifest.source_proposals[0].sha256, 'b355222a8fe61353122a22b754b59936bab269a248cdce07d2a7d8b85da2dba3');\nassert.equal(manifest.source_proposals[0].review_sha256, '46d1166a7cceb5c8a1715034b96e76ddf54508bbc4f2fc24a4ccfe4e72b6d8e3');\nassert.equal(manifest.source_proposals[1].review_sha256, 'd9504ec7b44aa5d102cef7c6b270b0445412aa813f67978113edb6c53981f18b');\n",
+      "occurrences": 1
+    },
+    {
+      "old_text": "assert.equal(baselineNames.length, 419); assert.equal(new Set(baselineNames).size, 419);",
+      "new_text": "assert.equal(baselineNames.length, 421); assert.equal(new Set(baselineNames).size, 421);",
+      "occurrences": 1
+    },
+    {
+      "old_text": "for (const name of previousAttemptNames) assert(required.includes(name), 'Previous attempt required name was removed: ' + name);",
+      "new_text": "for (const previousGroup of baseline.required_tests) {\n  const currentGroup = manifest.required_tests.find(group => group.path === previousGroup.path);\n  assert(currentGroup, 'Predecessor required source group removed');\n  for (const name of previousGroup.names) assert(currentGroup.names.includes(name), 'Predecessor test moved out of its actual frozen source path: ' + name);\n}",
+      "occurrences": 1
+    },
+    {
+      "old_text": "assert.equal(manifest.minimum_expected_workspace_tests, 1201 + newRequiredNames.length,\n  'Minimum must retain1201 plus every new named Windows function');",
+      "new_text": "assert.equal(manifest.inherited_required_test_names, 421);\nassert.equal(manifest.new_authored_test_functions, newRequiredNames.length);\nconst declaredNewNames = manifest.new_authored_tests.flatMap(group => group.names);\nassert.deepEqual([...declaredNewNames].sort(), [...newRequiredNames].sort());\nassert.equal(new Set(declaredNewNames).size, declaredNewNames.length);\nfor (const group of manifest.new_authored_tests) {\n  relativeFile(group.path);\n  const actualGroup = manifest.required_tests.find(item => item.path === group.path);\n  assert(actualGroup);\n  for (const name of group.names) assert(actualGroup.names.includes(name));\n}\nassert.equal(manifest.minimum_expected_workspace_tests, 1203 + newRequiredNames.length,\n  'Minimum must retain1203 plus every actual newly authored function');",
+      "occurrences": 1
+    },
+    {
+      "old_text": "assert.equal(changedInputs + newInputs, bindings.size);",
+      "new_text": "assert.equal(changedInputs + newInputs, bindings.size);\nassert.equal(rootApproval.files.length, bindings.size);\nfor (const item of rootApproval.files) {\n  relativeFile(item.path);\n  const actual = bindings.get(item.path);\n  assert(actual, 'Root approval delta absent from exact current source');\n  assert.equal(actual.before_sha256,item.before_sha256);\n  assert.equal(actual.after_sha256,item.after_sha256);\n  assert.equal(actual.bytes,item.bytes);\n}\nassert.equal(manifest.changed_parent_inputs,changedInputs);\nassert.equal(manifest.unchanged_parent_inputs,unchangedInputs);\nassert.equal(manifest.new_input_files,newInputs);\nassert.equal(files.size,301+newInputs);",
+      "occurrences": 1
+    },
+    {
+      "old_text": "const lineage = Object.freeze({parent_source_manifest_sha256: baselineSha, previous_attempt_source_manifest_sha256: previousAttemptSha, parent_inputs: 301,\n  required_parent_names: 419,",
+      "new_text": "const lineage = Object.freeze({parent_source_manifest_sha256: baselineSha, root_approval_sha256: rootApprovalReference.sha256, parent_inputs: 301,\n  required_parent_names: 421,",
+      "occurrences": 1
+    },
+    {
+      "old_text": "  assert.equal(sha(fs.readFileSync(previousAttemptPath)), previousAttemptSha, 'Previous attempt manifest changed');",
+      "new_text": "  assert.equal(sha(fs.readFileSync(rootApprovalReference.path)), rootApprovalReference.sha256, 'Root final-byte approval changed');\n  for (const reference of pinnedReferences.values()) {\n    const bytes = fs.readFileSync(reference.path);\n    assert.equal(sha(bytes),reference.sha256,'Immutable reviewed source reference changed: '+reference.path);\n    assert.equal(bytes.length,reference.bytes);\n  }",
+      "occurrences": 1
+    },
+    {
+      "old_text": "const previousFiles = new Map(baseline.files.map(file => [file.path, file]));",
+      "new_text": "const expectedNewFullNames = manifest.new_authored_full_test_names;\nassert(Array.isArray(expectedNewFullNames));\nfor (const name of expectedNewFullNames) assert.match(name,/^[A-Za-z_][A-Za-z_0-9]*(?:::[A-Za-z_][A-Za-z_0-9]*)+$/);\nassert.equal(new Set(expectedNewFullNames).size,expectedNewFullNames.length);\nassert.deepEqual(expectedNewFullNames.map(name=>name.split('::').at(-1)).sort(),[...newRequiredNames].sort());\nconst declaredSqlProposal = JSON.parse(fs.readFileSync(manifest.source_proposals[0].path));\nconst declaredLedgerProposal = JSON.parse(fs.readFileSync(manifest.source_proposals[1].path));\nassert.notEqual(manifest.source_proposals[1].sha256,'ee7f4782991d40bbe50da48675cab501c96b4fef6d1f4346296be1be29396652','Known rejected capacity v1 cannot be admitted');\nassert.equal(manifest.source_proposals[1].sha256,'9da86f091f5bba9ba70eca5415542cfaf9fb43947c9f5bb1259c192b2d170a82','Only final actual capacity-v3 source is admitted');\nassert.deepEqual([...expectedNewFullNames].sort(),[\n  ...declaredSqlProposal.new_named_tests.map(name=>'sitemap_membership_analysis::tests::'+name),\n  ...declaredLedgerProposal.new_test_names,\n].sort());\nconst previousFiles = new Map(baseline.files.map(file => [file.path, file]));",
+      "occurrences": 1
+    },
+    {
+      "old_text": "  assert.equal(sha(fs.readFileSync(chrome)), chromeSha, 'Chrome changed');\n}",
+      "new_text": "  assert.equal(sha(fs.readFileSync(chrome)), chromeSha, 'Chrome changed');\n  // Supplemental full-module check uses the same actually closed workspace log.\n  // The original required-name/count parser and all owned-resource bodies stay exact.\n  if (fs.existsSync(path.join(out,'required-test-results.json'))) {\n    const text = fs.readFileSync(path.join(out,'workspace-live.log'),'utf8');\n    const actual = [...text.matchAll(/^test ([^\\r\\n]+?) \\.\\.\\. (ok|FAILED|ignored[^\\r\\n]*)\\r?$/gm)];\n    for (const expected of expectedNewFullNames) {\n      const rows = actual.filter(match=>match[1]===expected);\n      assert.equal(rows.length,1,'Missing or duplicate new actual full Cargo module name: '+expected);\n      assert.equal(rows[0][2],'ok','New actual full Cargo module case is not green: '+expected);\n    }\n  }\n}",
+      "occurrences": 1
+    },
+    {
+      "old_text": "'PASS_COMBINED_WORKSPACE_V3_REAL_RENDERER_FMT_CLIPPY' : 'FAIL_COMBINED_WORKSPACE_V3'",
+      "new_text": "'PASS_COMBINED_WORKSPACE_V4_REAL_RENDERER_FMT_CLIPPY' : 'FAIL_COMBINED_WORKSPACE_V4'",
+      "occurrences": 1
+    },
+    {
+      "old_text": "kind: 'combined_full_suite_v3'",
+      "new_text": "kind: 'combined_full_suite_v4'",
+      "occurrences": 1
+    },
+    {
+      "old_text": "    qualification: 'Only these fresh actual Cargo logs establish combined-v3 acceptance. Actual frozen/Root input bytes, explicit manifest, driver, Chrome and four runtime renderer input files are reverified after actual owned-resource closure. All301 parent paths and419 parent named cases are retained; current Root delta pins, every new required name and corresponding minimum are enforced. Requires four actual owned renderer gates and zero failed/ignored, fmt and Clippy -Dwarnings. Test profile requests opt-level1, debug assertions true, overflow checks true and debuginfo0; it does not switch to release semantics. Incremental Cargo cache is permitted; no clean rebuild, timing, native/browser/physical, install, full parity or RSS proof is claimed. Historical failed67a and0bd2 Clippy-failed v2 evidence is lineage only, never full acceptance.'});",
+      "new_text": "    qualification: 'Only these fresh actual Cargo logs establish combined-v4 acceptance. Actual frozen/Root input bytes, explicit manifest, driver, Chrome, all reviewed proposal/Root approval references and four runtime renderer input files are reverified after actual owned-resource closure. All301 parent paths and421 parent named cases are retained in their actual source paths; only exact reviewed SQL/ledger delta pins, every new required name and corresponding1203-plus-new-functions minimum are admitted. Every new authored test also has its exact full Cargo module name verified in the actual closed workspace raw log. Known rejected capacity v1 is explicitly barred. Requires four actual owned renderer gates and zero failed/ignored, fmt and Clippy -Dwarnings. Test profile requests opt-level1, debug assertions true, overflow checks true and debuginfo0; it does not switch to release semantics. Incremental Cargo cache is permitted; no clean rebuild, timing, native/browser/physical, install, full parity or RSS proof is claimed. Historical V3 source/full/native evidence remains lineage only and cannot establish any V4 runtime acceptance.'});",
+      "occurrences": 1
+    }
+  ],
+  "inverse_byte_exact": true,
+  "critical_regions": [
+    {
+      "name": "profile assertions",
+      "bytes": 843,
+      "sha256": "92c8190c90e8387befae5f3f3d203516288edf72e943974308fb3a0b4cbba0a9",
+      "retained_byte_exact": true
+    },
+    {
+      "name": "genuine renderer gates and input inventory",
+      "bytes": 717,
+      "sha256": "8d9c515b08bfd9784341fe47de080be4f0a6aeeb75955754f68729a3621a6de1",
+      "retained_byte_exact": true
+    },
+    {
+      "name": "actual Cargo child close and raw-log parser",
+      "bytes": 1647,
+      "sha256": "49d6252ae075c57ec728c30303d71c424d5f00d02a2736f632fb51025ac53523",
+      "retained_byte_exact": true
+    },
+    {
+      "name": "required names and minimum actual count parser",
+      "bytes": 1549,
+      "sha256": "c90c814a7cb794d6c1a5bda1eaaab226601913edae6631118a902a510ea6a9c7",
+      "retained_byte_exact": true
+    },
+    {
+      "name": "owned renderer/fixture execution and finally cleanup",
+      "bytes": 4056,
+      "sha256": "a59aa3a3b858d5d3afbcf3a3a257aa38a25b15c5c17c008bcd0a9c3546e65702",
+      "retained_byte_exact": true
+    }
+  ],
+  "execution": {
+    "compiler": 0,
+    "fixtures": 0,
+    "native": 0,
+    "root_writes": 0
+  }
+}

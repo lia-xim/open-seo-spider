@@ -836,6 +836,13 @@ fn build_saved_page_findings(
         .collect()
 }
 
+// Materialization is an optimization fence: report-wide metadata is decoded
+// once per page SELECT, within the caller's same verified read transaction.
+// json_quote preserves a scalar/string targets value as that JSON value;
+// passing raw json_extract text to json_each would reinterpret JSON-looking
+// strings as containers and change historical selected-generation behavior.
+const PAGE_CONTEXT_CTE: &str = "WITH sitemap_page_context AS MATERIALIZED (SELECT key,value,json_quote(json_extract(value,'$.operation.targets')) AS operation_targets_json,coalesce(json_type(value,'$.config.renderer')='object',0) AS configured_renderer FROM metadata WHERE key='report')";
+const PAGE_CONTEXT_FROM: &str = "FROM sitemap_page_context m,json_each(m.value,'$.pages') p";
 const PAGE_COLUMNS: &str = "json_extract(p.value,'$.url'),json_extract(p.value,'$.final_url'),json_extract(p.value,'$.status'),json_extract(p.value,'$.final_status'),json_extract(p.value,'$.indexable'),json_extract(p.value,'$.indexability_reasons'),json_extract(p.value,'$.blocked_by_robots'),json_extract(p.value,'$.error'),json_extract(p.value,'$.truncated'),json_extract(p.value,'$.renderer_error'),coalesce(json_array_length(p.value,'$.redirect_chain'),0)>0,json_extract(p.value,'$.fetched_at'),json_extract(m.value,'$.operation.targets'),CAST(p.key AS INTEGER),json_extract(p.value,'$.rendered'),json_extract(p.value,'$.rendered_url'),json_extract(p.value,'$.rendered_status'),coalesce(json_type(m.value,'$.config.renderer')='object',0),json_extract(p.value,'$.content_type'),json_extract(p.value,'$.pdf') IS NULL,json_extract(p.value,'$.image_metadata') IS NULL";
 fn page_from_row(
     row: &rusqlite::Row<'_>,
@@ -992,8 +999,15 @@ fn checked_bool(value: i64) -> Result<bool> {
     Ok(value == 1)
 }
 fn page_columns() -> String {
-    PAGE_COLUMNS.replace("json_extract(m.value,'$.operation.targets')",
-        "(SELECT json_extract(t.value,'$.committed_generation') FROM json_each(m.value,'$.operation.targets') t WHERE json_extract(t.value,'$.requested_url')=json_extract(p.value,'$.url'))")
+    PAGE_COLUMNS
+        .replace(
+            "json_extract(m.value,'$.operation.targets')",
+            "(SELECT json_extract(t.value,'$.committed_generation') FROM json_each(m.operation_targets_json) t WHERE json_extract(t.value,'$.requested_url')=json_extract(p.value,'$.url'))",
+        )
+        .replace(
+            "coalesce(json_type(m.value,'$.config.renderer')='object',0)",
+            "m.configured_renderer",
+        )
 }
 fn read_page_window(
     connection: &Connection,
@@ -1007,7 +1021,7 @@ fn read_page_window(
         return Ok(vec![]);
     }
     let sql = format!(
-        "SELECT {} FROM metadata m,json_each(m.value,'$.pages') p WHERE m.key='report' AND (?1 IS NULL OR CAST(p.key AS INTEGER)>?1) ORDER BY CAST(p.key AS INTEGER) LIMIT ?2",
+        "{PAGE_CONTEXT_CTE} SELECT {} {PAGE_CONTEXT_FROM} WHERE m.key='report' AND (?1 IS NULL OR CAST(p.key AS INTEGER)>?1) ORDER BY CAST(p.key AS INTEGER) LIMIT ?2",
         page_columns()
     );
     let mut statement = connection.prepare(&sql)?;
@@ -1051,7 +1065,7 @@ fn read_target_pages_with_control(
     }
     let keys = serde_json::to_string(wanted)?;
     let sql = format!(
-        "SELECT {} FROM metadata m,json_each(m.value,'$.pages') p WHERE m.key='report' AND json_extract(p.value,'$.url') IN (SELECT value FROM json_each(?1))",
+        "{PAGE_CONTEXT_CTE} SELECT {} {PAGE_CONTEXT_FROM} WHERE m.key='report' AND json_extract(p.value,'$.url') IN (SELECT value FROM json_each(?1))",
         page_columns()
     );
     let mut statement = connection.prepare(&sql)?;

@@ -743,3 +743,262 @@ mod window_tests;
 
 #[path = "sitemap_membership_analysis/findings_store_tests.rs"]
 mod findings_store_tests;
+
+// Directed real-SQLite projection controls only. These do not manufacture a
+// verified saved-read capability or claim a genuine browser/selected crawl.
+// Existing public-Crawler, selected-parent, integrity and full-domain tests
+// above and in findings_store_tests remain the end-to-end acceptance oracles.
+fn materialized_context_sql_fixture() -> (Connection, Vec<crate::PageRecord>) {
+    let connection = Connection::open_in_memory().unwrap();
+    connection
+        .execute_batch("CREATE TABLE metadata(key TEXT PRIMARY KEY,value TEXT NOT NULL)")
+        .unwrap();
+    let pages = ["current", "prior", "inherited"]
+        .into_iter()
+        .map(|name| crate::PageRecord {
+            url: format!("https://example.org/{name}"),
+            final_url: format!("https://example.org/{name}"),
+            status: Some(200),
+            final_status: Some(200),
+            content_type: "text/html".into(),
+            indexable: true,
+            fetched_at: "directed-stored-projection-control".into(),
+            ..Default::default()
+        })
+        .collect();
+    (connection, pages)
+}
+
+fn frozen_legacy_page_projection(
+    connection: &Connection,
+    wanted: &BTreeSet<String>,
+    selected: bool,
+    generation: u64,
+) -> Result<BTreeMap<String, SitemapTargetObservation>> {
+    // Frozen literal from accepted SourceV3, not page_columns() or the new CTE.
+    const ORIGINAL_COLUMNS: &str = "json_extract(p.value,'$.url'),json_extract(p.value,'$.final_url'),json_extract(p.value,'$.status'),json_extract(p.value,'$.final_status'),json_extract(p.value,'$.indexable'),json_extract(p.value,'$.indexability_reasons'),json_extract(p.value,'$.blocked_by_robots'),json_extract(p.value,'$.error'),json_extract(p.value,'$.truncated'),json_extract(p.value,'$.renderer_error'),coalesce(json_array_length(p.value,'$.redirect_chain'),0)>0,json_extract(p.value,'$.fetched_at'),(SELECT json_extract(t.value,'$.committed_generation') FROM json_each(m.value,'$.operation.targets') t WHERE json_extract(t.value,'$.requested_url')=json_extract(p.value,'$.url')),CAST(p.key AS INTEGER),json_extract(p.value,'$.rendered'),json_extract(p.value,'$.rendered_url'),json_extract(p.value,'$.rendered_status'),coalesce(json_type(m.value,'$.config.renderer')='object',0),json_extract(p.value,'$.content_type'),json_extract(p.value,'$.pdf') IS NULL,json_extract(p.value,'$.image_metadata') IS NULL";
+    let keys = serde_json::to_string(wanted)?;
+    let sql = format!(
+        "SELECT {ORIGINAL_COLUMNS} FROM metadata m,json_each(m.value,'$.pages') p WHERE m.key='report' AND json_extract(p.value,'$.url') IN (SELECT value FROM json_each(?1))"
+    );
+    let mut statement = connection.prepare(&sql)?;
+    let mut rows = statement.query([keys])?;
+    let mut observations = BTreeMap::new();
+    while let Some(row) = rows.next()? {
+        let page = page_from_row(row, selected, generation)?;
+        observations.insert(page.requested_url.clone(), page);
+    }
+    Ok(observations)
+}
+
+fn store_materialized_context_report(connection: &Connection, report: &serde_json::Value) {
+    connection
+        .execute(
+            "INSERT OR REPLACE INTO metadata VALUES('report',?1)",
+            [serde_json::to_string(report).unwrap()],
+        )
+        .unwrap();
+}
+
+#[test]
+fn materialized_report_page_context_preserves_selected_age_renderer_and_ordinals() {
+    let (connection, pages) = materialized_context_sql_fixture();
+    let wanted = pages.iter().map(|page| page.url.clone()).collect();
+    let targets = serde_json::json!([
+        {"requested_url":pages[0].url,"committed_generation":2},
+        {"requested_url":pages[0].url,"committed_generation":999},
+        {"requested_url":pages[1].url,"committed_generation":1}
+    ]);
+    for renderer in [
+        serde_json::Value::Null,
+        serde_json::json!({}),
+        serde_json::json!(false),
+        serde_json::json!([]),
+        serde_json::json!("{}"),
+    ] {
+        let renderer_is_object = renderer.is_object();
+        let report = serde_json::json!({
+            "config":{"renderer":renderer},
+            "operation":{"targets":targets},
+            "pages":pages
+        });
+        store_materialized_context_report(&connection, &report);
+        for selected in [false, true] {
+            let actual = read_target_pages(&connection, &wanted, selected, 2).unwrap();
+            let legacy = frozen_legacy_page_projection(&connection, &wanted, selected, 2).unwrap();
+            assert_eq!(actual, legacy);
+            assert_eq!(actual.len(), 3);
+            for (ordinal, page) in pages.iter().enumerate() {
+                let observed = &actual[&page.url];
+                assert_eq!(observed.report_page_ordinal, ordinal as u64);
+                assert_eq!(observed.requested_url, page.url);
+                assert_eq!(observed.final_url, page.final_url);
+                assert_eq!(observed.rendering_expected, renderer_is_object);
+                assert_eq!(
+                    observed.rendering_state,
+                    if renderer_is_object {
+                        "required_but_unobserved"
+                    } else {
+                        "not_configured"
+                    }
+                );
+                assert_eq!(
+                    observed.age_scope,
+                    if !selected {
+                        "captured_checkpoint_history"
+                    } else {
+                        [
+                            "selected_current_generation",
+                            "selected_prior_generation",
+                            "inherited_parent_observation",
+                        ][ordinal]
+                    }
+                );
+            }
+        }
+    }
+}
+
+#[test]
+fn materialized_report_page_context_keeps_target_json_strings_scalar_and_first_match() {
+    let (connection, pages) = materialized_context_sql_fixture();
+    let wanted = pages.iter().map(|page| page.url.clone()).collect();
+    let disguised = serde_json::json!([
+        {"requested_url":pages[0].url,"committed_generation":2}
+    ]);
+    let cases = [
+        (serde_json::Value::Null, false),
+        (serde_json::json!([]), false),
+        (serde_json::json!({}), false),
+        (serde_json::json!(7), false),
+        (serde_json::json!(true), false),
+        (serde_json::json!([null]), false),
+        (serde_json::json!([1]), false),
+        (
+            serde_json::json!(serde_json::to_string(&disguised).unwrap()),
+            false,
+        ),
+        (
+            serde_json::json!({"one":{"requested_url":pages[0].url,"committed_generation":2}}),
+            true,
+        ),
+    ];
+    for (targets, first_current) in cases {
+        let report = serde_json::json!({"pages":pages,"operation":{"targets":targets}});
+        store_materialized_context_report(&connection, &report);
+        let actual = read_target_pages(&connection, &wanted, true, 2).unwrap();
+        let legacy = frozen_legacy_page_projection(&connection, &wanted, true, 2).unwrap();
+        assert_eq!(actual, legacy);
+        assert_eq!(
+            actual[&pages[0].url].age_scope,
+            if first_current {
+                "selected_current_generation"
+            } else {
+                "inherited_parent_observation"
+            }
+        );
+    }
+    // Missing operation/config fields retain the historical null/default path.
+    store_materialized_context_report(&connection, &serde_json::json!({"pages":pages}));
+    let actual = read_target_pages(&connection, &wanted, true, 2).unwrap();
+    assert_eq!(
+        actual,
+        frozen_legacy_page_projection(&connection, &wanted, true, 2).unwrap()
+    );
+    assert!(actual.values().all(|page| {
+        page.age_scope == "inherited_parent_observation" && !page.rendering_expected
+    }));
+}
+
+#[test]
+fn materialized_report_page_context_keeps_malformed_target_and_page_fields_fail_closed() {
+    let (connection, pages) = materialized_context_sql_fixture();
+    let wanted = pages.iter().map(|page| page.url.clone()).collect();
+    for targets in [
+        serde_json::json!("not JSON"),
+        serde_json::json!(["not JSON"]),
+    ] {
+        store_materialized_context_report(
+            &connection,
+            &serde_json::json!({"pages":pages,"operation":{"targets":targets}}),
+        );
+        for selected in [false, true] {
+            assert!(frozen_legacy_page_projection(&connection, &wanted, selected, 2).is_err());
+            assert!(read_target_pages(&connection, &wanted, selected, 2).is_err());
+        }
+    }
+    // The old projector ignores a present but noninteger generation when the
+    // report is not selected; it rejects it when selected. Keep both outcomes.
+    let report = serde_json::json!({"pages":pages,"operation":{"targets":[
+        {"requested_url":pages[0].url,"committed_generation":"2"}
+    ]}});
+    store_materialized_context_report(&connection, &report);
+    assert_eq!(
+        read_target_pages(&connection, &wanted, false, 2).unwrap(),
+        frozen_legacy_page_projection(&connection, &wanted, false, 2).unwrap()
+    );
+    assert!(read_target_pages(&connection, &wanted, true, 2).is_err());
+    assert!(frozen_legacy_page_projection(&connection, &wanted, true, 2).is_err());
+    for (field, value) in [
+        ("blocked_by_robots", serde_json::json!(7)),
+        ("rendered", serde_json::json!("yes")),
+        (
+            "indexability_reasons",
+            serde_json::json!({"wrong":"object"}),
+        ),
+    ] {
+        let mut report = serde_json::json!({"pages":pages});
+        report["pages"][2][field] = value;
+        store_materialized_context_report(&connection, &report);
+        assert!(read_target_pages(&connection, &wanted, false, 2).is_err());
+        assert!(frozen_legacy_page_projection(&connection, &wanted, false, 2).is_err());
+    }
+}
+
+#[test]
+fn materialized_report_page_context_preserves_large_fields_and_legacy_page_windows() {
+    let (connection, mut pages) = materialized_context_sql_fixture();
+    for page in &mut pages {
+        page.robots_warning = Some("\"".repeat(MAX_FIELD_BYTES));
+    }
+    store_materialized_context_report(
+        &connection,
+        &serde_json::json!({"pages":pages,"config":{"renderer":{}}}),
+    );
+    let wanted = pages.iter().map(|page| page.url.clone()).collect();
+    let actual = read_target_pages(&connection, &wanted, false, 2).unwrap();
+    assert_eq!(
+        actual,
+        frozen_legacy_page_projection(&connection, &wanted, false, 2).unwrap()
+    );
+    let control = SitemapReadControl::default();
+    let first = read_page_window(
+        &connection,
+        &SitemapMembershipAnalysisRequest {
+            page_limit: 1,
+            ..Default::default()
+        },
+        false,
+        2,
+        &control,
+    )
+    .unwrap();
+    assert_eq!(first.len(), 2, "Visible row plus unchanged lookahead");
+    assert_eq!(first[0].report_page_ordinal, 0);
+    assert_eq!(first[1].report_page_ordinal, 1);
+    let second = read_page_window(
+        &connection,
+        &SitemapMembershipAnalysisRequest {
+            page_limit: 1,
+            after_page_ordinal: Some(0),
+            ..Default::default()
+        },
+        false,
+        2,
+        &control,
+    )
+    .unwrap();
+    assert_eq!(second.len(), 2);
+    assert_eq!(second[0].report_page_ordinal, 1);
+    assert_eq!(second[1].report_page_ordinal, 2);
+}

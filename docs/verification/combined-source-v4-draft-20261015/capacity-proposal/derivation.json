@@ -1,0 +1,258 @@
+{
+  "kind": "isolated_source_literal_transform",
+  "source_manifest_sha256": "01bfa8efcb6745c5521be5e533ae63f2f15679318b095a29eb3ab925fef95bdf",
+  "changes": [
+    {
+      "path": "crates/core/src/sitemap_ledger_models.rs",
+      "before_sha256": "e5b06268d0a695837e9d151abe845f3a91f04f9d487c3bdd952cd77a0d43ce72",
+      "after_sha256": "c003da582b8d513586a9dc487a09b0517b5ccd0bb28b8fef356009cea6bb64cf",
+      "bytes": 20604,
+      "operations": [
+        {
+          "before": "pub const MAX_SITEMAP_CATALOG_BYTES: usize = 32 * 1024 * 1024;",
+          "after": "/// Legacy/default retention remains unchanged; larger catalogs require explicit config.\npub const DEFAULT_SITEMAP_CATALOG_BYTES: usize = 32 * 1024 * 1024;\npub const MAX_SITEMAP_CATALOG_BYTES: usize = 128 * 1024 * 1024;"
+        },
+        {
+          "before": "max_catalog_json_bytes: MAX_SITEMAP_CATALOG_BYTES,",
+          "after": "max_catalog_json_bytes: DEFAULT_SITEMAP_CATALOG_BYTES,"
+        },
+        {
+          "before": "impl SitemapLedgerLimits {\n    pub fn validate(&self) -> Result<()> {",
+          "after": "impl SitemapLedgerLimits {\n    /// An above-legacy capacity requires the exact explicit config declaration.\n    /// Lower custom limits retain the existing imported/test catalog semantics.\n    pub fn validate_for_config(&self, config: &crate::CrawlConfig) -> Result<()> {\n        self.validate()?;\n        if self.max_catalog_json_bytes > DEFAULT_SITEMAP_CATALOG_BYTES {\n            ensure!(config.sitemap_membership_limits.as_ref() == Some(self),\n                \"Above-default sitemap capacity lacks matching explicit configuration\");\n        }\n        Ok(())\n    }\n\n    pub fn validate(&self) -> Result<()> {"
+        }
+      ]
+    },
+    {
+      "path": "crates/core/src/models.rs",
+      "before_sha256": "1b9e6b6d3330d6fd20d0e83feca2c891dd0b00cb9a6746b66b9254556f64e4ee",
+      "after_sha256": "55f56be7ebbf9b92cbebe7b58ee12788f92df83259bc1e8cdd4bda676a8d4a14",
+      "bytes": 38847,
+      "operations": [
+        {
+          "before": "    pub sitemap_source_processing: Option<crate::SitemapSourceProcessingConfig>,",
+          "after": "    pub sitemap_source_processing: Option<crate::SitemapSourceProcessingConfig>,\n    /// Explicit durable membership-catalog capacity, separate from source work and wire limits.\n    #[serde(default, skip_serializing_if = \"Option::is_none\", deserialize_with = \"deserialize_sitemap_membership_limits\")]\n    pub sitemap_membership_limits: Option<crate::SitemapLedgerLimits>,"
+        },
+        {
+          "before": "            sitemap_source_processing: None,",
+          "after": "            sitemap_source_processing: None,\n            sitemap_membership_limits: None,"
+        },
+        {
+          "before": "impl CrawlConfig {\n",
+          "after": "impl CrawlConfig {\n    /// Fresh catalog capacity only. Resume/inherited discovery keeps its durable catalog limits.\n    pub fn sitemap_membership_ledger_limits(&self) -> anyhow::Result<crate::SitemapLedgerLimits> {\n        let limits = self.sitemap_membership_limits.clone().unwrap_or_default();\n        limits.validate()?;\n        Ok(limits)\n    }\n\n"
+        },
+        {
+          "before": "impl Default for CrawlConfig {",
+          "after": "// Keep the new opt-in object strict in every Serde format; outer null remains absence.\nfn deserialize_sitemap_membership_limits<'de, D>(deserializer: D) -> Result<Option<crate::SitemapLedgerLimits>, D::Error>\nwhere\n    D: serde::Deserializer<'de>,\n{\n    struct OptionalLimits;\n    impl<'de> serde::de::Visitor<'de> for OptionalLimits {\n        type Value = Option<crate::SitemapLedgerLimits>;\n        fn expecting(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {\n            f.write_str(\"an optional object containing sitemap membership limits\")\n        }\n        fn visit_none<E: serde::de::Error>(self) -> Result<Self::Value, E> { Ok(None) }\n        fn visit_unit<E: serde::de::Error>(self) -> Result<Self::Value, E> { Ok(None) }\n        fn visit_some<T: serde::Deserializer<'de>>(self, d: T) -> Result<Self::Value, T::Error> {\n            struct ObjectLimits;\n            impl<'de> serde::de::Visitor<'de> for ObjectLimits {\n                type Value = crate::SitemapLedgerLimits;\n                fn expecting(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {\n                    f.write_str(\"an object containing sitemap membership limits\")\n                }\n                fn visit_map<A: serde::de::MapAccess<'de>>(self, map: A) -> Result<Self::Value, A::Error> {\n                    crate::SitemapLedgerLimits::deserialize(serde::de::value::MapAccessDeserializer::new(map))\n                }\n            }\n            d.deserialize_map(ObjectLimits).map(Some)\n        }\n    }\n    deserializer.deserialize_option(OptionalLimits)\n}\n\nimpl Default for CrawlConfig {"
+        }
+      ]
+    },
+    {
+      "path": "crates/core/src/crawler.rs",
+      "before_sha256": "96cd830711c0ab0fbfdd31f60baf828d89c269badc10320d9a816504c098ccd9",
+      "after_sha256": "3860be000c4a87fc6d0438b4976fa36daaf46368cbcd05ef19e1945766ade8a1",
+      "bytes": 162718,
+      "operations": [
+        {
+          "before": "        config.sitemap_source_body_limit()?;",
+          "after": "        config.sitemap_source_body_limit()?;\n        config.sitemap_membership_ledger_limits()?;"
+        },
+        {
+          "before": "            limits: crate::SitemapLedgerLimits::default(),",
+          "after": "            limits: self.config.sitemap_membership_ledger_limits()?,"
+        },
+        {
+          "before": "mod sitemap_capture_tests;",
+          "after": "mod sitemap_capture_tests;\n\n#[cfg(test)]\n#[path = \"crawler/sitemap_membership_limits_tests.rs\"]\nmod sitemap_membership_limits_tests;"
+        }
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger_tests.rs",
+      "before_sha256": "3b1447ec2d7d6067fc9b23511b9a4bd18d6b2a69b0821e75768aa261f94d56b0",
+      "after_sha256": "962103cb535e3aabd068811f5916aa443a64bea12b23461f8c4fa89efe7cb5b1",
+      "bytes": 73646,
+      "operations": [
+        {
+          "before": "//! Meaningful candidate tests. NOT RUN by this Work author; Root owns native execution.",
+          "after": "//! Meaningful candidate tests. NOT RUN by this Work author; Root owns native execution.\ninclude!(\"sitemap_ledger/capacity_tests.rs\");"
+        }
+      ]
+    },
+    {
+      "path": "crates/app/src/server/sitemap_processing_config_tests.rs",
+      "before_sha256": "312a8e388943e7027c82f2f8a95e214d65f1542f5ba75ec6c18c07ce5690f0a2",
+      "after_sha256": "a118467656cf1d920acad0f2b6db8ba71027a582350f98ac73f35cbdf8e7f818",
+      "bytes": 2866,
+      "operations": [
+        {
+          "before": "//! Actual create-config adapter controls; no request producer or website fetch.",
+          "after": "//! Actual create-config adapter controls; no request producer or website fetch.\ninclude!(\"sitemap_membership_config_tests.rs\");"
+        }
+      ]
+    },
+    {
+      "path": "crates/app/src/mcp.rs",
+      "before_sha256": "0d2101c963f6a3d849d6732e6da3500c16015a50e61644ccbcae9e76aca39d19",
+      "after_sha256": "aef10f447881b330301e3d6c50730907a9299bdd2980a0c9c0fc706bca6d738d",
+      "bytes": 30915,
+      "operations": [
+        {
+          "before": "optional renderer and sitemap_source_processing (max_post_http_entity_bytes, max_decoded_xml_bytes, max_xml_events); source work budgets do not widen page bodies or membership retention",
+          "after": "optional renderer and sitemap_source_processing (max_post_http_entity_bytes, max_decoded_xml_bytes, max_xml_events), plus independent optional sitemap_membership_limits (max_catalog_json_bytes:1..134217728, max_row_json_bytes:1..1048576 and no greater than catalog cap, max_rows:1..1000000); absent membership limits preserve32MiB catalog/256KiB row/1M rows, source work budgets do not widen page bodies or membership retention"
+        },
+        {
+          "before": "optional renderer and sitemap_source_processing (max_post_http_entity_bytes, max_decoded_xml_bytes, max_xml_events), plus independent optional sitemap_membership_limits (max_catalog_json_bytes:1..134217728, max_row_json_bytes:1..1048576 and no greater than catalog cap, max_rows:1..1000000); absent membership limits preserve32MiB catalog/256KiB row/1M rows, source work budgets do not widen page bodies or membership retention\"",
+          "after": "optional renderer and sitemap_source_processing (max_post_http_entity_bytes, max_decoded_xml_bytes, max_xml_events), plus independent optional sitemap_membership_limits (max_catalog_json_bytes:1..134217728, max_row_json_bytes:1..1048576 and no greater than catalog cap, max_rows:1..1000000); absent membership limits preserve32MiB catalog/256KiB row/1M rows, source work budgets do not widen page bodies or membership retention\",\"properties\":{\"sitemap_membership_limits\":{\"type\":[\"object\",\"null\"],\"additionalProperties\":false,\"description\":\"Independent explicit durable membership capacity; null/absence keeps legacy defaults. Row bytes cannot exceed catalog bytes; Rust validates this relation before crawl IO.\",\"properties\":{\"max_catalog_json_bytes\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":134217728,\"default\":33554432},\"max_row_json_bytes\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":1048576,\"default\":262144},\"max_rows\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":1000000,\"default\":1000000}}}}"
+        },
+        {
+          "before": "preserve32MiB catalog/256KiB row/1M rows",
+          "after": "preserve 32 MiB catalog/256 KiB row/1M rows"
+        }
+      ]
+    },
+    {
+      "path": "crates/app/src/server.rs",
+      "before_sha256": "c6266aa464e77f03e654d65c9c3d0cd97341dc7fa8b5b6d5830af0b6e2a17024",
+      "after_sha256": "cb3015da3f5324a8340afc5e6d24ef4b664e8e40bee9f9f995515e847a0ca989",
+      "bytes": 77462,
+      "operations": [
+        {
+          "before": "        \"offline_serp\":{\"path\":\"/serp\",",
+          "after": "        \"sitemap_membership_limits\":{\"opt_in\":true,\"config_field\":\"sitemap_membership_limits\",\"default_catalog_json_bytes\":open_seo_spider_core::DEFAULT_SITEMAP_CATALOG_BYTES,\"max_catalog_json_bytes\":open_seo_spider_core::MAX_SITEMAP_CATALOG_BYTES,\"source_work_independent\":true,\"raw_xml_body_retention\":false,\"wire_limits_unchanged\":true},\n        \"offline_serp\":{\"path\":\"/serp\","
+        }
+      ]
+    },
+    {
+      "path": "web/index.html",
+      "before_sha256": "ed8b3d0a624d02b428a3a7430845b417eca73a34bd3ecd6b0d5899d46bd15e77",
+      "after_sha256": "a6bee344838c266981e45fe8ae98fe6a8d7a58a774e794aeb04e9daea11c3ce9",
+      "bytes": 84618,
+      "operations": [
+        {
+          "before": "    <p class=\"detail-empty\">Die Antwortgröße für Seiten und die Speicherung von Sitemap-Mitgliedschaften haben eigene Grenzen. Erreichte Grenzen und unvollständige Messungen bleiben im Befund sichtbar.</p>",
+          "after": "    <p class=\"detail-empty\">Die Antwortgröße für Seiten und die Speicherung von Sitemap-Mitgliedschaften haben eigene Grenzen. Erreichte Grenzen und unvollständige Messungen bleiben im Befund sichtbar.</p>\n    <label class=\"checkbox-field\"><input name=\"sitemap_membership_limits_enabled\" type=\"checkbox\"><span>Eigene Speichergrenze für Sitemap-Mitgliedschaften<small>Separat von der XML-Verarbeitung. Ohne Aktivierung bleiben32MiB Katalogkapazität erhalten. Ein höheres XML-Limit erhöht diese Grenze nicht.</small></span></label>\n    <fieldset id=\"sitemap-membership-limits-fields\" class=\"settings-grid\" disabled hidden><legend>Dauerhafte Sitemap-Mitgliedschaften</legend>\n      <label>Max. Katalog-JSON (Bytes)<input name=\"sitemap_membership_max_catalog_json_bytes\" type=\"number\" min=\"1\" max=\"134217728\" step=\"1\" value=\"33554432\" required><small>Bis128MiB; für große Sitemaps ausdrücklich erhöhen. Dies begrenzt gespeicherte Katalogdaten, nicht den gesamten Arbeitsspeicher.</small></label>\n      <label>Max. Zeilen-JSON (Bytes)<input name=\"sitemap_membership_max_row_json_bytes\" type=\"number\" min=\"1\" max=\"1048576\" step=\"1\" value=\"262144\" required><small>Höchstens1MiB und nicht größer als die Kataloggrenze.</small></label>\n      <label>Max. Katalogzeilen<input name=\"sitemap_membership_max_rows\" type=\"number\" min=\"1\" max=\"1000000\" step=\"1\" value=\"1000000\" required><small>URLs und Loc-Vorkommen sind getrennte Zeilen. Die Parsergrenze von50.000 Einträgen bleibt bestehen.</small></label>\n    </fieldset>\n    <p class=\"detail-empty\">Diese Option speichert ursprüngliche XML-Antworten nicht als vollständige Datei. API- und Exportgrenzen bleiben unverändert. Bei zu kleinem Speicherbudget wird die Quelle vollständig zurückgerollt; ein fehlgeschlagener Commit wird nicht als vollständige Mitgliedschaft ausgegeben.</p>"
+        },
+        {
+          "before": "bleiben32MiB",
+          "after": "bleiben 32 MiB"
+        },
+        {
+          "before": "Bis128MiB",
+          "after": "Bis 128 MiB"
+        },
+        {
+          "before": "Höchstens1MiB",
+          "after": "Höchstens 1 MiB"
+        },
+        {
+          "before": "von50.000",
+          "after": "von 50.000"
+        }
+      ]
+    },
+    {
+      "path": "web/app.js",
+      "before_sha256": "b1ec57080fec11529e89b21ce07471ea3ddc2141d4f64ae79ffc236c9b5af3f0",
+      "after_sha256": "93c52f32a41eea283082d8aeb87b6d89c41ac6fb90aa3e660a39c2eae3b59522",
+      "bytes": 382036,
+      "operations": [
+        {
+          "before": "      sitemap_source_max_decoded_xml_bytes: '8388608', sitemap_source_max_xml_events: '500000',",
+          "after": "      sitemap_source_max_decoded_xml_bytes: '8388608', sitemap_source_max_xml_events: '500000',\n      sitemap_membership_limits_enabled:false, sitemap_membership_max_catalog_json_bytes:'33554432', sitemap_membership_max_row_json_bytes:'262144', sitemap_membership_max_rows:'1000000',"
+        },
+        {
+          "before": "      for (const key of ['sitemap_source_processing_enabled', ...sitemapSourceFields.map(field => field.setting)]) delete payload[key];",
+          "after": "      for (const key of ['sitemap_source_processing_enabled', ...sitemapSourceFields.map(field => field.setting), 'sitemap_membership_limits_enabled', ...sitemapMembershipFields.map(field => field.setting)]) delete payload[key];"
+        },
+        {
+          "before": "      if (form.elements.sitemap_source_processing_enabled.checked) $('sitemap-source-processing-settings').open = true;",
+          "after": "      if (form.elements.sitemap_source_processing_enabled.checked || form.elements.sitemap_membership_limits_enabled.checked) $('sitemap-source-processing-settings').open = true;"
+        },
+        {
+          "before": "        state.settings.sitemap_source_processing_enabled = saved.sitemap_source_processing_enabled === true;",
+          "after": "        state.settings.sitemap_source_processing_enabled = saved.sitemap_source_processing_enabled === true;\n        state.settings.sitemap_membership_limits_enabled = saved.sitemap_membership_limits_enabled === true;\n        for (const field of sitemapMembershipFields) state.settings[field.setting] = String(saved[field.setting] ?? field.initial);"
+        },
+        {
+          "before": "  function readSitemapSourceProcessingSettings(form) {",
+          "after": "  const sitemapMembershipFields = [\n    {setting:'sitemap_membership_max_catalog_json_bytes',native:'max_catalog_json_bytes',initial:33554432,maximum:134217728,label:'Sitemap-Katalog'},\n    {setting:'sitemap_membership_max_row_json_bytes',native:'max_row_json_bytes',initial:262144,maximum:1048576,label:'Sitemap-Zeile'},\n    {setting:'sitemap_membership_max_rows',native:'max_rows',initial:1000000,maximum:1000000,label:'Sitemap-Katalogzeilen'}\n  ];\n  function readSitemapSourceProcessingSettings(form) {"
+        },
+        {
+          "before": "    const result = { sitemap_source_processing_enabled:form.elements.sitemap_source_processing_enabled.checked };",
+          "after": "    const result = { sitemap_source_processing_enabled:form.elements.sitemap_source_processing_enabled.checked, sitemap_membership_limits_enabled:form.elements.sitemap_membership_limits_enabled.checked };\n    for (const field of sitemapMembershipFields) result[field.setting] = form.elements.namedItem(field.setting).value;"
+        },
+        {
+          "before": "    fields.hidden = !enabled;\n  }\n  function parseSitemapSourceProcessing(settings)",
+          "after": "    fields.hidden = !enabled;\n    const membershipEnabled = $('settings-form').elements.sitemap_membership_limits_enabled.checked;\n    const membershipFields = $('sitemap-membership-limits-fields');\n    membershipFields.disabled = !membershipEnabled; membershipFields.hidden = !membershipEnabled;\n  }\n  function parseSitemapSourceProcessing(settings)"
+        },
+        {
+          "before": "  function parseAdvanced(settings) {",
+          "after": "  function parseSitemapMembershipLimits(settings) {\n    if (settings.sitemap_membership_limits_enabled !== true) return {};\n    const limits = {};\n    for (const field of sitemapMembershipFields) {\n      const raw=settings[field.setting],value=Number(raw);\n      if (!(typeof raw==='number'||typeof raw==='string'&&/^[0-9]+$/.test(raw))||!Number.isSafeInteger(value)||value<1||value>field.maximum) throw new Error(field.label+': Eine ganze Zahl von1 bis '+field.maximum+' ist erforderlich.');\n      limits[field.native]=value;\n    }\n    if (limits.max_row_json_bytes>limits.max_catalog_json_bytes) throw new Error('Die Sitemap-Zeilengrenze darf die Kataloggrenze nicht überschreiten.');\n    return {sitemap_membership_limits:limits};\n  }\n\n  function parseAdvanced(settings) {"
+        },
+        {
+          "before": "...parseResourceDiscovery(settings), ...parseSitemapSourceProcessing(settings) };",
+          "after": "...parseResourceDiscovery(settings), ...parseSitemapSourceProcessing(settings), ...parseSitemapMembershipLimits(settings) };"
+        },
+        {
+          "before": "    $('settings-form').elements.sitemap_source_processing_enabled.addEventListener('change', syncSitemapSourceProcessingSettings);",
+          "after": "    $('settings-form').elements.sitemap_source_processing_enabled.addEventListener('change', syncSitemapSourceProcessingSettings);\n    $('settings-form').elements.sitemap_membership_limits_enabled.addEventListener('change', syncSitemapSourceProcessingSettings);"
+        },
+        {
+          "before": "throw new Error(field.label+': Eine ganze Zahl von1 bis '",
+          "after": "throw new Error(field.label+': Eine ganze Zahl von 1 bis '"
+        }
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger.rs",
+      "before_sha256": "8ef116f6ae538f78dea5f5267db5c1fd1bceac1fa0e507ea9a9833440d14848e",
+      "operations": [
+        {
+          "before": "pub(crate) fn load_catalog(connection: &Connection) -> Result<Option<SitemapCatalog>> {",
+          "after": "/// Project only the small declared limits object from possibly large saved configs.\n/// No new overall saved-config/wire cap or summary-only resource grant is introduced.\nfn verify_declared_capacity(connection: &Connection, limits: &SitemapLedgerLimits) -> Result<()> {\n    if limits.max_catalog_json_bytes <= DEFAULT_SITEMAP_CATALOG_BYTES { return Ok(()); }\n    let declared: Option<String> = connection.query_row(\n        \"SELECT CASE WHEN json_type(value,'$.sitemap_membership_limits')='object' THEN json_extract(value,'$.sitemap_membership_limits') END FROM metadata WHERE key='config'\",\n        [], |row| row.get(0)).optional()?.flatten();\n    let declared = declared.context(\"Above-default sitemap capacity requires explicit saved configuration\")?;\n    ensure!(declared.len() <= 4096, \"Oversized sitemap membership limits declaration\");\n    let declared: SitemapLedgerLimits = serde_json::from_str(&declared)?;\n    declared.validate()?;\n    ensure!(declared == *limits, \"Sitemap capacity differs from explicit saved configuration\");\n    Ok(())\n}\n\npub(crate) fn load_catalog(connection: &Connection) -> Result<Option<SitemapCatalog>> {"
+        },
+        {
+          "before": "    summary.limits.validate()?;\n    require_tables(connection)?;",
+          "after": "    summary.limits.validate()?;\n    verify_declared_capacity(connection, &summary.limits)?;\n    require_tables(connection)?;"
+        },
+        {
+          "before": "    limits.validate()?;\n    sha(config_sha256)?;",
+          "after": "    limits.validate()?;\n    verify_declared_capacity(transaction, limits)?;\n    sha(config_sha256)?;"
+        },
+        {
+          "before": "/// This first bounded candidate verifies/materializes the <=32MiB catalog before slicing.",
+          "after": "/// This compatibility reader materializes the explicitly bounded catalog before slicing."
+        },
+        {
+          "before": "    let declared: Option<String> = connection.query_row(\n        \"SELECT CASE WHEN json_type(value,'$.sitemap_membership_limits')='object' THEN json_extract(value,'$.sitemap_membership_limits') END FROM metadata WHERE key='config'\",\n        [], |row| row.get(0)).optional()?.flatten();\n    let declared = declared.context(\"Above-default sitemap capacity requires explicit saved configuration\")?;\n    ensure!(declared.len() <= 4096, \"Oversized sitemap membership limits declaration\");",
+          "after": "    let declared_bytes: Option<i64> = connection.query_row(\n        \"SELECT CASE WHEN json_type(value,'$.sitemap_membership_limits')='object' THEN length(CAST(json_extract(value,'$.sitemap_membership_limits') AS BLOB)) END FROM metadata WHERE key='config'\",\n        [], |row| row.get(0)).optional()?.flatten();\n    let declared_bytes = declared_bytes.context(\"Above-default sitemap capacity requires explicit saved configuration\")?;\n    ensure!((1..=4096).contains(&declared_bytes), \"Oversized sitemap membership limits declaration\");\n    // Repeat the actual SQL byte guard on the fetch as well. The production\n    // caller holds one read TX; this also stays bounded if a private caller does not.\n    let declared: String = connection.query_row(\n        \"SELECT json_extract(value,'$.sitemap_membership_limits') FROM metadata WHERE key='config' AND json_type(value,'$.sitemap_membership_limits')='object' AND length(CAST(json_extract(value,'$.sitemap_membership_limits') AS BLOB)) BETWEEN 1 AND 4096\",\n        [], |row| row.get(0))?;\n    ensure!(i64::try_from(declared.len())? == declared_bytes, \"Sitemap membership limits declaration changed during read\");"
+        }
+      ],
+      "after_sha256": "180d1f191f75cd20085f2ec9087d3482a57aa37c9690aa7dc79d5acc2b40f29e",
+      "bytes": 74210
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/verified_read.rs",
+      "before_sha256": "83a6cd87073949b5565a24234823f644162bf5131914896736cb0edfe54e8ffc",
+      "operations": [
+        {
+          "before": "    summary.limits.validate()?;\n    sha(&summary.config_sha256)?;",
+          "after": "    summary.limits.validate()?;\n    verify_declared_capacity(connection, &summary.limits)?;\n    sha(&summary.config_sha256)?;"
+        }
+      ],
+      "after_sha256": "bd3638c431fe3f6eee0f10bb34c2f90f249267aa54fbbb6014d7bc4d4d73abc0",
+      "bytes": 33693
+    },
+    {
+      "path": "crates/core/src/sitemap_coverage.rs",
+      "before_sha256": "b383924b5b69485ef213e16ce2cf385d2c377fefa7865c965f7d68c21477a4f1",
+      "operations": [
+        {
+          "before": ") -> Result<()> {\n    let Some(inventory) = inventory else {",
+          "after": ") -> Result<()> {\n    if let Some(catalog) = catalog {\n        catalog.summary.limits.validate_for_config(config)?;\n    }\n    let Some(inventory) = inventory else {"
+        }
+      ],
+      "after_sha256": "03affb2284e95366a85ea6cd94ab4cfb556a463aade999664cba84062e49ece4",
+      "bytes": 30327
+    }
+  ]
+}

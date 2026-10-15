@@ -274,6 +274,9 @@ pub fn validate_sitemap_coverage_inventory(
     catalog: Option<&SitemapCatalog>,
     inventory: Option<&SitemapCoverageInventory>,
 ) -> Result<()> {
+    if let Some(catalog) = catalog {
+        catalog.summary.limits.validate_for_config(config)?;
+    }
     let Some(inventory) = inventory else {
         return Ok(());
     };

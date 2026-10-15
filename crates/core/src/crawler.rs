@@ -132,6 +132,7 @@ impl Crawler {
         // Page response limits and retained membership budgets remain independent.
         config.sitemap_source_parser_limits()?;
         config.sitemap_source_body_limit()?;
+        config.sitemap_membership_ledger_limits()?;
         config.indexability_agent = config.indexability_agent.trim().to_ascii_lowercase();
         if config.indexability_agent.is_empty()
             || config.indexability_agent.len() > 128
@@ -1413,7 +1414,7 @@ impl Crawler {
         .context("Known initial sitemap provenance unexpectedly absent")?;
         let initial = crate::store::SitemapCatalogInit {
             config_sha256,
-            limits: crate::SitemapLedgerLimits::default(),
+            limits: self.config.sitemap_membership_ledger_limits()?,
             roots: original.iter().map(|item| item.root.clone()).collect(),
             legacy_history_unknown: false,
         };
@@ -3933,6 +3934,10 @@ mod sitemap_capture;
 #[cfg(test)]
 #[path = "crawler/sitemap_capture_tests.rs"]
 mod sitemap_capture_tests;
+
+#[cfg(test)]
+#[path = "crawler/sitemap_membership_limits_tests.rs"]
+mod sitemap_membership_limits_tests;
 
 /// Stored-observation Store-test support, not a native HTTP assertion. Reuses
 /// the actual collector/decoder/scanner rather than a forged measurement DTO.

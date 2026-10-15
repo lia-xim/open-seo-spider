@@ -4,7 +4,9 @@ use serde::{Deserialize, Serialize};
 
 pub const SITEMAP_LEDGER_ENGINE: &str = "open-seo-spider/sitemap-membership-ledger-v1";
 pub const SITEMAP_LEDGER_HASH_PROFILE: &str = "sha256-tagged-canonical-rust-serde-rows-v1";
-pub const MAX_SITEMAP_CATALOG_BYTES: usize = 32 * 1024 * 1024;
+/// Legacy/default retention remains unchanged; larger catalogs require explicit config.
+pub const DEFAULT_SITEMAP_CATALOG_BYTES: usize = 32 * 1024 * 1024;
+pub const MAX_SITEMAP_CATALOG_BYTES: usize = 128 * 1024 * 1024;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(default, deny_unknown_fields)]
@@ -16,13 +18,26 @@ pub struct SitemapLedgerLimits {
 impl Default for SitemapLedgerLimits {
     fn default() -> Self {
         Self {
-            max_catalog_json_bytes: MAX_SITEMAP_CATALOG_BYTES,
+            max_catalog_json_bytes: DEFAULT_SITEMAP_CATALOG_BYTES,
             max_row_json_bytes: 256 * 1024,
             max_rows: 1_000_000,
         }
     }
 }
 impl SitemapLedgerLimits {
+    /// An above-legacy capacity requires the exact explicit config declaration.
+    /// Lower custom limits retain the existing imported/test catalog semantics.
+    pub fn validate_for_config(&self, config: &crate::CrawlConfig) -> Result<()> {
+        self.validate()?;
+        if self.max_catalog_json_bytes > DEFAULT_SITEMAP_CATALOG_BYTES {
+            ensure!(
+                config.sitemap_membership_limits.as_ref() == Some(self),
+                "Above-default sitemap capacity lacks matching explicit configuration"
+            );
+        }
+        Ok(())
+    }
+
     pub fn validate(&self) -> Result<()> {
         ensure!(
             self.max_catalog_json_bytes > 0

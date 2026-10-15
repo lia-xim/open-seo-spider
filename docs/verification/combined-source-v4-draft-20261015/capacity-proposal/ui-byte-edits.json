@@ -1,0 +1,101 @@
+{
+  "kind": "minimal_raw_mixed_newline_preserving_edits",
+  "files": [
+    {
+      "path": "web/app.js",
+      "before_sha256": "b1ec57080fec11529e89b21ce07471ea3ddc2141d4f64ae79ffc236c9b5af3f0",
+      "after_sha256": "93c52f32a41eea283082d8aeb87b6d89c41ac6fb90aa3e660a39c2eae3b59522",
+      "edits": [
+        {
+          "start_utf16": 1707,
+          "before": "",
+          "after": "\r\n      sitemap_membership_limits_enabled:false, sitemap_membership_max_catalog_json_bytes:'33554432', sitemap_membership_max_row_json_bytes:'262144', sitemap_membership_max_rows:'1000000',"
+        },
+        {
+          "start_utf16": 29615,
+          "before": "",
+          "after": ", 'sitemap_membership_limits_enabled', ...sitemapMembershipFields.map(field => field.setting)"
+        },
+        {
+          "start_utf16": 129686,
+          "before": "",
+          "after": " || form.elements.sitemap_membership_limits_enabled.checked"
+        },
+        {
+          "start_utf16": 134535,
+          "before": "",
+          "after": "\r\n        state.settings.sitemap_membership_limits_enabled = saved.sitemap_membership_limits_enabled === true;\r\n        for (const field of sitemapMembershipFields) state.settings[field.setting] = String(saved[field.setting] ?? field.initial);"
+        },
+        {
+          "start_utf16": 135497,
+          "before": "",
+          "after": "const sitemapMembershipFields = [\r\n    {setting:'sitemap_membership_max_catalog_json_bytes',native:'max_catalog_json_bytes',initial:33554432,maximum:134217728,label:'Sitemap-Katalog'},\r\n    {setting:'sitemap_membership_max_row_json_bytes',native:'max_row_json_bytes',initial:262144,maximum:1048576,label:'Sitemap-Zeile'},\r\n    {setting:'sitemap_membership_max_rows',native:'max_rows',initial:1000000,maximum:1000000,label:'Sitemap-Katalogzeilen'}\r\n  ];\r\n  "
+        },
+        {
+          "start_utf16": 136117,
+          "before": " }",
+          "after": ", sitemap_membership_limits_enabled:form.elements.sitemap_membership_limits_enabled.checked };\r\n    for (const field of sitemapMembershipFields) result[field.setting] = form.elements.namedItem(field.setting).value"
+        },
+        {
+          "start_utf16": 136743,
+          "before": "",
+          "after": "  const membershipEnabled = $('settings-form').elements.sitemap_membership_limits_enabled.checked;\r\n    const membershipFields = $('sitemap-membership-limits-fields');\r\n    membershipFields.disabled = !membershipEnabled; membershipFields.hidden = !membershipEnabled;\r\n  "
+        },
+        {
+          "start_utf16": 137681,
+          "before": "",
+          "after": "SitemapMembershipLimits(settings) {\r\n    if (settings.sitemap_membership_limits_enabled !== true) return {};\r\n    const limits = {};\r\n    for (const field of sitemapMembershipFields) {\r\n      const raw=settings[field.setting],value=Number(raw);\r\n      if (!(typeof raw==='number'||typeof raw==='string'&&/^[0-9]+$/.test(raw))||!Number.isSafeInteger(value)||value<1||value>field.maximum) throw new Error(field.label+': Eine ganze Zahl von1 bis '+field.maximum+' ist erforderlich.');\r\n      limits[field.native]=value;\r\n    }\r\n    if (limits.max_row_json_bytes>limits.max_catalog_json_bytes) throw new Error('Die Sitemap-Zeilengrenze darf die Kataloggrenze nicht überschreiten.');\r\n    return {sitemap_membership_limits:limits};\r\n  }\r\n\r\n  function parse"
+        },
+        {
+          "start_utf16": 143727,
+          "before": "",
+          "after": ", ...parseSitemapMembershipLimits(settings)"
+        },
+        {
+          "start_utf16": 378637,
+          "before": "",
+          "after": "\r\n    $('settings-form').elements.sitemap_membership_limits_enabled.addEventListener('change', syncSitemapSourceProcessingSettings);"
+        },
+        {
+          "start_utf16": 138118,
+          "before": "",
+          "after": " "
+        }
+      ],
+      "raw_inverse_byte_exact": true
+    },
+    {
+      "path": "web/index.html",
+      "before_sha256": "ed8b3d0a624d02b428a3a7430845b417eca73a34bd3ecd6b0d5899d46bd15e77",
+      "after_sha256": "a6bee344838c266981e45fe8ae98fe6a8d7a58a774e794aeb04e9daea11c3ce9",
+      "edits": [
+        {
+          "start_utf16": 65841,
+          "before": "",
+          "after": "\r\n    <label class=\"checkbox-field\"><input name=\"sitemap_membership_limits_enabled\" type=\"checkbox\"><span>Eigene Speichergrenze für Sitemap-Mitgliedschaften<small>Separat von der XML-Verarbeitung. Ohne Aktivierung bleiben32MiB Katalogkapazität erhalten. Ein höheres XML-Limit erhöht diese Grenze nicht.</small></span></label>\r\n    <fieldset id=\"sitemap-membership-limits-fields\" class=\"settings-grid\" disabled hidden><legend>Dauerhafte Sitemap-Mitgliedschaften</legend>\r\n      <label>Max. Katalog-JSON (Bytes)<input name=\"sitemap_membership_max_catalog_json_bytes\" type=\"number\" min=\"1\" max=\"134217728\" step=\"1\" value=\"33554432\" required><small>Bis128MiB; für große Sitemaps ausdrücklich erhöhen. Dies begrenzt gespeicherte Katalogdaten, nicht den gesamten Arbeitsspeicher.</small></label>\r\n      <label>Max. Zeilen-JSON (Bytes)<input name=\"sitemap_membership_max_row_json_bytes\" type=\"number\" min=\"1\" max=\"1048576\" step=\"1\" value=\"262144\" required><small>Höchstens1MiB und nicht größer als die Kataloggrenze.</small></label>\r\n      <label>Max. Katalogzeilen<input name=\"sitemap_membership_max_rows\" type=\"number\" min=\"1\" max=\"1000000\" step=\"1\" value=\"1000000\" required><small>URLs und Loc-Vorkommen sind getrennte Zeilen. Die Parsergrenze von50.000 Einträgen bleibt bestehen.</small></label>\r\n    </fieldset>\r\n    <p class=\"detail-empty\">Diese Option speichert ursprüngliche XML-Antworten nicht als vollständige Datei. API- und Exportgrenzen bleiben unverändert. Bei zu kleinem Speicherbudget wird die Quelle vollständig zurückgerollt; ein fehlgeschlagener Commit wird nicht als vollständige Mitgliedschaft ausgegeben.</p>"
+        },
+        {
+          "start_utf16": 66062,
+          "before": "32",
+          "after": " 32 "
+        },
+        {
+          "start_utf16": 66491,
+          "before": "128",
+          "after": " 128 "
+        },
+        {
+          "start_utf16": 66810,
+          "before": "1",
+          "after": " 1 "
+        },
+        {
+          "start_utf16": 67090,
+          "before": "",
+          "after": " "
+        }
+      ],
+      "raw_inverse_byte_exact": true
+    }
+  ]
+}

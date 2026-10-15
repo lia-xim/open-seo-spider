@@ -1,0 +1,95 @@
+{
+  "kind": "sitemap_page_context_sql_source_only_proposal_v1",
+  "recorded_at": "2026-10-15T08:41:11.792Z",
+  "result": "AUTHORED_ONLY_NOT_COMPILED_NOT_RUN",
+  "source_manifest_sha256": "01bfa8efcb6745c5521be5e533ae63f2f15679318b095a29eb3ab925fef95bdf",
+  "source_commit": "f3307413110a62dc4db00afac1b14862eee5ff3e",
+  "source_root_unchanged": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1",
+  "files": [
+    {
+      "path": "crates/core/src/sitemap_membership_analysis.rs",
+      "before_sha256": "cc5bb330a58579ded13a912b6b4348a818f0517a5e419aa139e531ae8be32691",
+      "before_bytes": 45411,
+      "after_sha256": "c03074e0781ebd4bf5ec61183786d60a23464d7e3b852ab14806abde5f8dd39b",
+      "after_bytes": 46335
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis/findings.rs",
+      "before_sha256": "37988de4ad4830df3b30ebda2e799226c10787869974eb3d0eda78a2d67afbf0",
+      "before_bytes": 10059,
+      "after_sha256": "dd28b86556b7d0c08428dbeb77d020643d51d47ce7058317659166e1ef2bf07e",
+      "after_bytes": 10043
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis_tests.rs",
+      "before_sha256": "34b30c534cb54be245d43a1ad9597f860b80e3567b5210ed739e3d1419972a31",
+      "before_bytes": 28218,
+      "after_sha256": "ceb4d63864d57f93acfade2453bad5d4a401f44bfe96ef5ce8fd1a2a44ac5a95",
+      "after_bytes": 39252
+    }
+  ],
+  "derivation": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-page-context-sql-proposal-v1\\derivation.json",
+    "sha256": "59180b3bc3557c33053717ff020af61da725dfd24fb2da3a54b30dc9a3cf8758"
+  },
+  "new_named_tests": [
+    "materialized_report_page_context_preserves_selected_age_renderer_and_ordinals",
+    "materialized_report_page_context_keeps_target_json_strings_scalar_and_first_match",
+    "materialized_report_page_context_keeps_malformed_target_and_page_fields_fail_closed",
+    "materialized_report_page_context_preserves_large_fields_and_legacy_page_windows"
+  ],
+  "old_sql_oracle_columns_sha256": "b214fb044abe7d4e13933d0d3aa912f7bfdfb582da13d7a2bd85c1d64ee611c3",
+  "sqlite_bundled_source": {
+    "path": "C:/Users/matth/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libsqlite3-sys-0.37.0/sqlite3/sqlite3.c",
+    "sha256": "9512509b1bccb7461f79bea8aad6280ae4699e925fa4804381b71f59e7efb0c5",
+    "version": "3.51.3",
+    "locked_crate": "libsqlite3-sys0.37.0",
+    "json_each_filter_lines": "215527-215573",
+    "mechanism": "jsonEachFilter resets parse state, converts full TEXT input to JSONB before path lookup, without jsonParseFuncArg cache; correlated full-report targets therefore reparses perpage."
+  },
+  "critical_regions": [
+    {
+      "name": "fn page_from_row(",
+      "bytes": 5787,
+      "sha256": "cdbeab1ffb735770df182fc64e4e40bdbcc93fb7dd8a2f05ee84e38a09a8f829",
+      "retained_byte_exact": true
+    },
+    {
+      "name": "fn checked_bool(",
+      "bytes": 129,
+      "sha256": "ae551d6f4fa522731ec4319f2969689c6a76a3cbab1d22838bae05021f0b7936",
+      "retained_byte_exact": true
+    },
+    {
+      "name": "const BATCH_PAGES: usize = 200;",
+      "bytes": 32,
+      "sha256": "20a2d09709590ee03451553003a94dd48de271bdc3f142c74b2e3f66a2a2eb85",
+      "retained_byte_exact": true
+    },
+    {
+      "name": "const FINDING_TAIL_COLUMNS: &str =",
+      "bytes": 216,
+      "sha256": "35693ce9a20c0d96e2ab29cf2391229c48f4d87b89ad1e78c07eb66baaae565e",
+      "retained_byte_exact": true
+    },
+    {
+      "name": "fn extra_facts(",
+      "bytes": 1396,
+      "sha256": "e5d99eed06109655e4993ed940826620b1b787ae3862d0e8de8cb8de21b00aef",
+      "retained_byte_exact": true
+    }
+  ],
+  "scope": "Four page SELECT statements only; once-per-statement report metadata CTE inside existing same read TX; no public DTO/schema/hash/predicate/byte cap/control/deadline/guard changes.",
+  "performance": "Source-level removal of repeated full-report operation-targets parsing; no measured latency/RSS claim or runtime root-cause attribution.",
+  "semantic_note": "json_quote(json_extract(targets)) must remain immediate before CTE storage. It preserves JSON-looking strings as scalar strings; naive extracted SQL text would change selected-generation semantics.",
+  "retained_acceptance": "Original SourceV3 full suite and actual unchanged12-case physical64MiB/wholeApp8MiB gate must pass on new source; no old result transfer.",
+  "execution": {
+    "compiler": 0,
+    "sqlite_fixture": 0,
+    "native": 0,
+    "browser": 0,
+    "root_writes": 0,
+    "installation": 0
+  },
+  "manufacturer_parity": "NOT_PROVEN"
+}

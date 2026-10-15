@@ -1,0 +1,242 @@
+{
+  "kind": "combined_v4_source_suite_source_only_preparation_v2",
+  "recorded_at": "2026-10-15T09:04:44.862Z",
+  "result": "PREPARED_SOURCE_ONLY_FINAL_LEDGER_V3_BOUND_ROOT_APPROVAL_AND_FRESH_RUNTIME_GATES_REQUIRED",
+  "parent_source": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v3/manifest.json",
+    "sha256": "01bfa8efcb6745c5521be5e533ae63f2f15679318b095a29eb3ab925fef95bdf",
+    "inputs": 301,
+    "required_names": 421,
+    "minimum": 1203
+  },
+  "sql_proposal": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-page-context-sql-proposal-v1/manifest.json",
+    "sha256": "b355222a8fe61353122a22b754b59936bab269a248cdce07d2a7d8b85da2dba3",
+    "review_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-page-context-sql-independent-review-v1/receipt.json",
+    "review_sha256": "46d1166a7cceb5c8a1715034b96e76ddf54508bbc4f2fc24a4ccfe4e72b6d8e3"
+  },
+  "ledger_binding": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-membership-capacity-v3/manifest.json",
+    "sha256": "9da86f091f5bba9ba70eca5415542cfaf9fb43947c9f5bb1259c192b2d170a82",
+    "review_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-membership-capacity-review-v1/receipt.json",
+    "review_sha256": "d9504ec7b44aa5d102cef7c6b270b0445412aa813f67978113edb6c53981f18b",
+    "review_result": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+    "mode": "ONLY_ACTUAL_FINAL_CAPACITY_V3_WITH_EXPLICIT_CLI_VALUES_AND_ROOT_PINNED_REVIEW",
+    "supplied": true,
+    "rejected_historical_v1_sha256": "ee7f4782991d40bbe50da48675cab501c96b4fef6d1f4346296be1be29396652",
+    "qualification": "Final v3 manifest/schema, all15 authored source bytes and the actual independent no-findings review are bound. V1/v2 cannot be admitted. No V4 source commit, frozen source manifest, suite/runtime/build success or future acceptance has been invented."
+  },
+  "authored_source_expectations": {
+    "changed_or_new_paths": [
+      "crates/core/src/sitemap_membership_analysis.rs",
+      "crates/core/src/sitemap_membership_analysis/findings.rs",
+      "crates/core/src/sitemap_membership_analysis_tests.rs",
+      "crates/app/src/mcp.rs",
+      "crates/app/src/server.rs",
+      "crates/app/src/server/sitemap_membership_config_tests.rs",
+      "crates/app/src/server/sitemap_processing_config_tests.rs",
+      "crates/core/src/crawler.rs",
+      "crates/core/src/crawler/sitemap_membership_limits_tests.rs",
+      "crates/core/src/models.rs",
+      "crates/core/src/sitemap_coverage.rs",
+      "crates/core/src/sitemap_ledger.rs",
+      "crates/core/src/sitemap_ledger/capacity_tests.rs",
+      "crates/core/src/sitemap_ledger/verified_read.rs",
+      "crates/core/src/sitemap_ledger_models.rs",
+      "crates/core/src/sitemap_ledger_tests.rs",
+      "web/app.js",
+      "web/index.html"
+    ],
+    "new_input_files": 3,
+    "expected_inputs": 304,
+    "new_test_functions": [
+      {
+        "path": "crates/core/src/sitemap_membership_analysis_tests.rs",
+        "names": [
+          "materialized_report_page_context_preserves_selected_age_renderer_and_ordinals",
+          "materialized_report_page_context_keeps_target_json_strings_scalar_and_first_match",
+          "materialized_report_page_context_keeps_malformed_target_and_page_fields_fail_closed",
+          "materialized_report_page_context_preserves_large_fields_and_legacy_page_windows"
+        ]
+      },
+      {
+        "path": "crates/app/src/server/sitemap_membership_config_tests.rs",
+        "names": [
+          "create_dto_preserves_explicit_membership_capacity_through_saved_config_and_mcp_dispatch_shape",
+          "create_dto_membership_capacity_absent_null_and_source_profile_are_independent",
+          "create_dto_rejects_invalid_membership_capacity_before_any_job_admission"
+        ]
+      },
+      {
+        "path": "crates/core/src/crawler/sitemap_membership_limits_tests.rs",
+        "names": [
+          "membership_capacity_absence_null_and_source_work_keep_legacy_serialization",
+          "membership_capacity_strict_objects_reject_shapes_fields_and_hard_limit_violations",
+          "configured_membership_capacity_is_saved_bootstrapped_reopened_and_not_mutated_on_resume"
+        ]
+      },
+      {
+        "path": "crates/core/src/sitemap_ledger/capacity_tests.rs",
+        "names": [
+          "complete_fifty_thousand_pairs_exceed_legacy_cap_but_commit_and_reopen_under_explicit_capacity",
+          "explicit_capacity_does_not_disable_row_count_caps_or_source_atomicity",
+          "above_default_capacity_requires_declared_config_on_sql_raw_portable_and_inherited_reads"
+        ]
+      }
+    ],
+    "new_test_function_count": 13,
+    "expected_required_names": 434,
+    "expected_minimum": 1216,
+    "qualification": "These are derived source expectations from actual reviewed authored files only, not executed/frozen/compiled/tested V4 results. Root final formatter-only approval must retain all functions and exact allowed paths; freezer recomputes them from actual final bytes."
+  },
+  "root_approval_required": {
+    "kind": "root_approved_combined_source_v4",
+    "status": "REVIEWED_FORMATTED_COMMITTED_AND_PRIVATELY_PUSHED",
+    "explicit_source_commit": true,
+    "explicit_approval_sha256": true,
+    "exact_sql_plus_ledger_file_union": true,
+    "formatter_only_post_review_changes": true,
+    "all_actual_authored_new_test_declarations": true
+  },
+  "target_paths": {
+    "freezer": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\freeze-combined-source-v4.mjs",
+    "suite": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\run-combined-suite-v4.mjs",
+    "source": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v4",
+    "results": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-suite-v4"
+  },
+  "suite_gates": {
+    "full_locked_workspace": true,
+    "required_minimum": "1203 plus every new actual authored function",
+    "four_genuine_owned_chromium_gates": true,
+    "zero_failed_or_ignored": true,
+    "format_check": true,
+    "all_target_clippy_deny_warnings": true,
+    "actual_cargo_close_and_raw_logs": true,
+    "owned_worker_fixture_actual_closes": true,
+    "final_all_input_and_review_reference_guards": true,
+    "test_profile": {
+      "opt_level": 1,
+      "debug_assertions": true,
+      "overflow_checks": true,
+      "debug_info": 0
+    }
+  },
+  "derivation": {
+    "suite_literal_operations": 20,
+    "suite_inverse_byte_exact": true,
+    "critical_regions": [
+      {
+        "name": "profile assertions",
+        "bytes": 843,
+        "sha256": "92c8190c90e8387befae5f3f3d203516288edf72e943974308fb3a0b4cbba0a9",
+        "retained_byte_exact": true
+      },
+      {
+        "name": "genuine renderer gates and input inventory",
+        "bytes": 717,
+        "sha256": "8d9c515b08bfd9784341fe47de080be4f0a6aeeb75955754f68729a3621a6de1",
+        "retained_byte_exact": true
+      },
+      {
+        "name": "actual Cargo child close and raw-log parser",
+        "bytes": 1647,
+        "sha256": "49d6252ae075c57ec728c30303d71c424d5f00d02a2736f632fb51025ac53523",
+        "retained_byte_exact": true
+      },
+      {
+        "name": "required names and minimum actual count parser",
+        "bytes": 1549,
+        "sha256": "c90c814a7cb794d6c1a5bda1eaaab226601913edae6631118a902a510ea6a9c7",
+        "retained_byte_exact": true
+      },
+      {
+        "name": "owned renderer/fixture execution and finally cleanup",
+        "bytes": 4056,
+        "sha256": "a59aa3a3b858d5d3afbcf3a3a257aa38a25b15c5c17c008bcd0a9c3546e65702",
+        "retained_byte_exact": true
+      }
+    ],
+    "freezer_complete_replacement_recorded": true
+  },
+  "execution": {
+    "node_syntax_checks": 4,
+    "compiler": 0,
+    "sqlite": 0,
+    "fixtures": 0,
+    "native": 0,
+    "browser": 0,
+    "freezer": 0,
+    "suite": 0,
+    "root_writes": 0,
+    "installation": 0
+  },
+  "feature_counts_unchanged": {
+    "implemented": 30,
+    "partial": 68,
+    "planned": 46
+  },
+  "manufacturer_parity": "NOT_PROVEN",
+  "qualification": "Preparation only. Parent V3 PASS and its five successful native groups remain historical lineage, not V4 acceptance. Root must first promote reviewed exact source, format, commit and privately push, then explicitly approve real final bytes and invoke this fixed V4 freezer. New optimized build/native/browser/physical/platform/install must follow an actual fresh complete V4 suite PASS; the original physical twelve-case CSV64MiB/AppJSON8MiB oracles and full data remain unchanged and required. No timing, RSS or sole root-cause claim.",
+  "files": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v4-source-suite-preparation-v2\\freeze-combined-source-v4.mjs",
+      "sha256": "4af90de9b4fa0dc55ea9c6f195fd21f054626cfb723270f12b351b7cccb15cf7",
+      "bytes": 18798
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v4-source-suite-preparation-v2\\run-combined-suite-v4.mjs",
+      "sha256": "cabafce13e67f3fb2e6e9e114f6392d675b51a6cd0ca26de5aa91cda8d4a1cfa",
+      "bytes": 26789
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v4-source-suite-preparation-v2\\derive-suite.mjs",
+      "sha256": "c0650a199f8ed201615f365b446d101dbd8f17597d3eba83eaa96969f3265383",
+      "bytes": 13963
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v4-source-suite-preparation-v2\\suite-derivation.json",
+      "sha256": "b4bc5a15a255875e0fc86f9c07c31c984bb8abe56d81aaf26ac7dea81cc14cd5",
+      "bytes": 15643
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v4-source-suite-preparation-v2\\freezer-derivation.json",
+      "sha256": "671a69fff045c475dbe797f90affb320a54f428f63fc69080749bc5833a9fb88",
+      "bytes": 26161
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v4-source-suite-preparation-v2\\package-preparation.mjs",
+      "sha256": "d82e82ee31ee40e5f54a49cf25552663362b3d735f3baef164d5fdd7e7b007c9",
+      "bytes": 11327
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v4-source-suite-preparation-v2\\HANDOFF.md",
+      "sha256": "ed07fda4a63239fb28b6f3b644b5d660fffe2ce782a83d8e1062a98965fad212",
+      "bytes": 5703
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v4-source-suite-preparation-v2\\VERIFICATION.json",
+      "sha256": "c727f3bd6500521be2dbe4dd3f50903abb5f3becd085ac8a48f313a0029ec220",
+      "bytes": 3757
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v4-source-suite-preparation-v2\\node-syntax-0.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v4-source-suite-preparation-v2\\node-syntax-1.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v4-source-suite-preparation-v2\\node-syntax-2.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v4-source-suite-preparation-v2\\node-syntax-3.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  ]
+}

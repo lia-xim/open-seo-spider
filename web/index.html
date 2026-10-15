@@ -258,6 +258,13 @@
       <label>Max. XML-Ereignisse<input name="sitemap_source_max_xml_events" type="number" min="1" max="2000000" step="1" value="500000" required><small>Begrenzt die Parserarbeit; höchstens 2.000.000 Ereignisse einschließlich Dateiende.</small></label>
     </fieldset>
     <p class="detail-empty">Die Antwortgröße für Seiten und die Speicherung von Sitemap-Mitgliedschaften haben eigene Grenzen. Erreichte Grenzen und unvollständige Messungen bleiben im Befund sichtbar.</p>
+    <label class="checkbox-field"><input name="sitemap_membership_limits_enabled" type="checkbox"><span>Eigene Speichergrenze für Sitemap-Mitgliedschaften<small>Separat von der XML-Verarbeitung. Ohne Aktivierung bleiben 32 MiB Katalogkapazität erhalten. Ein höheres XML-Limit erhöht diese Grenze nicht.</small></span></label>
+    <fieldset id="sitemap-membership-limits-fields" class="settings-grid" disabled hidden><legend>Dauerhafte Sitemap-Mitgliedschaften</legend>
+      <label>Max. Katalog-JSON (Bytes)<input name="sitemap_membership_max_catalog_json_bytes" type="number" min="1" max="134217728" step="1" value="33554432" required><small>Bis 128 MiB; für große Sitemaps ausdrücklich erhöhen. Dies begrenzt gespeicherte Katalogdaten, nicht den gesamten Arbeitsspeicher.</small></label>
+      <label>Max. Zeilen-JSON (Bytes)<input name="sitemap_membership_max_row_json_bytes" type="number" min="1" max="1048576" step="1" value="262144" required><small>Höchstens 1 MiB und nicht größer als die Kataloggrenze.</small></label>
+      <label>Max. Katalogzeilen<input name="sitemap_membership_max_rows" type="number" min="1" max="1000000" step="1" value="1000000" required><small>URLs und Loc-Vorkommen sind getrennte Zeilen. Die Parsergrenze von 50.000 Einträgen bleibt bestehen.</small></label>
+    </fieldset>
+    <p class="detail-empty">Diese Option speichert ursprüngliche XML-Antworten nicht als vollständige Datei. API- und Exportgrenzen bleiben unverändert. Bei zu kleinem Speicherbudget wird die Quelle vollständig zurückgerollt; ein fehlgeschlagener Commit wird nicht als vollständige Mitgliedschaft ausgegeben.</p>
   </details></template>
   <template id="policy-settings-template"><details id="policy-settings" class="advanced-config"><summary>Native URL-Policy &amp; Offline-Probe</summary>
     <label class="checkbox-field"><input name="crawl_policy_enabled" type="checkbox"><span>Native URL-Policy für den nächsten Crawl verwenden<small>Explizite Origins und Pfade, Query-Regeln, Transformationen und Include/Exclude. Optional; JavaScript-Rendering und die bisherigen URL-Filter können damit nicht kombiniert werden.</small></span></label>

@@ -86,7 +86,7 @@ pub(crate) fn validate_saved_page_candidate_facts(
     let _binding = control.bind_connection(connection)?;
     context.control.run(|| control.run(|| {
         let sql = format!(
-            "SELECT {},{} FROM metadata m,json_each(m.value,'$.pages') p WHERE m.key='report' ORDER BY CAST(p.key AS INTEGER)",
+            "{PAGE_CONTEXT_CTE} SELECT {},{} {PAGE_CONTEXT_FROM} WHERE m.key='report' ORDER BY CAST(p.key AS INTEGER)",
             page_columns(), FINDING_TAIL_COLUMNS,
         );
         let mut statement = connection.prepare(&sql)?;
@@ -170,7 +170,7 @@ pub(crate) fn visit_saved_page_candidates(
         // One candidate statement survives all batches. Aggregate queries use
         // the same readonly Connection while this cursor remains positioned.
         let sql = format!(
-            "SELECT {},{} FROM metadata m,json_each(m.value,'$.pages') p WHERE m.key='report' AND (?1 IS NULL OR CAST(p.key AS INTEGER)>?1) ORDER BY CAST(p.key AS INTEGER)",
+            "{PAGE_CONTEXT_CTE} SELECT {},{} {PAGE_CONTEXT_FROM} WHERE m.key='report' AND (?1 IS NULL OR CAST(p.key AS INTEGER)>?1) ORDER BY CAST(p.key AS INTEGER)",
             page_columns(), FINDING_TAIL_COLUMNS,
         );
         let mut statement = connection.prepare(&sql)?;

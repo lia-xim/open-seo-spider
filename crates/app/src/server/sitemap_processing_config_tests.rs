@@ -1,4 +1,5 @@
 //! Actual create-config adapter controls; no request producer or website fetch.
+include!("sitemap_membership_config_tests.rs");
 use super::{config_from_input, json};
 
 #[test]

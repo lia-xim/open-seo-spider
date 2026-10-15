@@ -1,4 +1,5 @@
 //! Meaningful candidate tests. NOT RUN by this Work author; Root owns native execution.
+include!("sitemap_ledger/capacity_tests.rs");
 use super::*;
 
 const TASK: &str = "https://example.org/sitemap.xml";
