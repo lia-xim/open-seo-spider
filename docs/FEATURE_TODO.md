@@ -4,7 +4,7 @@
 
 Die Liste hält alle 144 gruppierten Fähigkeiten fest. Ein Haken bedeutet, dass das **eigene gespeicherte Abnahmekriterium** mit Beweisen erfüllt ist. Er bedeutet keine vollständige Gleichheit mit Screaming Frog. Diese Referenzparität bleibt für alle Einträge **NOT_PROVEN**.
 
-Aktueller Katalogstand: **33 eigene Abnahmen erfüllt**, **68 teilweise geprüft**, **43 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
+Aktueller Katalogstand: **33 eigene Abnahmen erfüllt**, **70 teilweise geprüft**, **41 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
 
 Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.json) bilden ein zusätzliches Register. Ihre positiven Fälle, Kontrollfälle, Parameter und Grenzfälle müssen jeweils geprüft werden. Ein implementierter Kern, ein leerer Export oder übereinstimmende CSV-Zellen ersetzen diese Einzelabnahme nicht.
 
@@ -23,6 +23,16 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - [ ] Erst nach erfolgreicher Abnahme sicher lokal installieren und die verbleibenden Katalogkriterien weiter abarbeiten.
   - Verträge: [index.json](verification/source12-build-native-20261016/index.json), [index.json](verification/source12-suite-20261016/index.json), [index.json](verification/source12-preliminary-tests-20261015/index.json).
   - Gate-Stand: preliminary_clippy: PASS_ACTUAL_FINAL_DRAFT4_PRELIMINARY_CLIPPY; node: PASS_EIGHT_LOGICAL_SOURCE_CASES; new_rust_tests: PASS_ALL44_WITHIN_ACTUAL1428_FULL_SUITE; full_suite: PASS_COMBINED_WORKSPACE_V12_REAL_RENDERER_FMT_CLIPPY; optimized_build: PASS_COMBINED_OPTIMIZED_BUILD_V12; native: IN_PROGRESS_NOT_ACCEPTED; installation: NOT_RUN; manufacturer_parity: NOT_PROVEN; generator: PASS_ACTUAL_SOURCE12_SITEMAP_GENERATION_SIX_PAGE_API_CLI_UI_COLD; ngram_metadata: FAIL_ACTUAL_SOURCE12_NGRAM_METADATA_CHANNELS; static_limits: FAIL_ACTUAL_RESPONSE_CAP_BELOW_GENUINE_501_PAGE_PROJECT_SIZE.
+
+- [ ] **Roh-HTML-Head-Diagnostik und explizite CDN-Klassifikation** — ACTUAL28_NEW_RUST_AND_SIX_NODE_PASS_PREVIEW_ONLY. 16 Head- und12 CDN-Rustfunktionen sowie sechs UI-Quellfälle bestehen im separat gespeicherten Entwurf.388 Quellen/21 eigene Pfade sind unabhängig komponiert, formatiert und streng kompiliert. Aktive Rootquellen bleiben Source12; die installierte Version bleibt Source11.
+  - [x] Fehlerhafte explizite Head-Inhalte mit Rohquellpositionen und getrennten unbekannten Alt-/Budgetzuständen in16 Rustfunktionen geprüft.
+  - [x] Exakte konfigurierte CDN-Origins mit Schema, IDNA-Host und effektivem Port in12 Rustfunktionen geprüft; Berichtsklassifikation erweitert weder Navigation noch Ressourcen-/Credentialfreigaben.
+  - [x] Alle28 neuen Rustfunktionen tatsächlich bestanden; sechs neue Node-Quellfälle, Format und Clippy bestanden. Drei alte Fixtureinitialisierungen eng korrigiert; alle35 ursprünglichen Testkörper bleiben bytegleich.
+  - [ ] Source12 praktisch vollständig abnehmen und sicher installieren; erst danach21 eigene Source13-Produktpfade in die aktive Codebasis übernehmen.
+  - [ ] Finalen privaten Source13-Codecommit, eingefrorenes Manifest und vollständige mindestens1456-Test-Suite mit vier echten Renderergates erzeugen.
+  - [ ] Optimierten Windows-Kandidaten bauen; neue Head-/CDN- und betroffene vorhandene API-/CLI-/MCP-/Browser-/Cold-Prüfungen durchführen, anschließend sicher installieren.
+  - Verträge: [index.json](verification/source13-tested-preview-20261016/index.json).
+  - Gate-Stand: new_rust: PASS_ALL28_ONLY; node: PASS_SIX_SOURCE_CASES_ONLY; clippy: PASS_ACTUAL_PRELIMINARY_CLIPPY; full_suite: NOT_RUN; optimized_build: NOT_RUN; native: NOT_RUN; installation: NOT_RUN; manufacturer_parity: NOT_PROVEN.
 
 Frühere Zwischenstände bleiben am Ende als eingeklappte Historie erhalten. Ihre damaligen offenen Schritte sind keine zusätzlichen aktuellen Aufgaben; maßgeblich sind die aktuelle Arbeit und die offenen Feature-Kriterien.
 
@@ -310,7 +320,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 ### Entdeckung, Scope und URL-Regeln
 
-14 Einträge: 3 eigene Abnahmen erfüllt, 9 teilweise geprüft, 2 offen.
+14 Einträge: 3 eigene Abnahmen erfüllt, 10 teilweise geprüft, 1 offen.
 
 #### Teilweise vorhanden – Restarbeiten
 
@@ -547,6 +557,63 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   </details>
 
+- [ ] **Ausgewählte CDN-Hosts intern behandeln** — Teilweise geprüft; `crawl.cdns`, P1.
+
+  Orientierung: Konfigurierte CDN-Grenzen ohne unbegrenzte externe Traversierung ergänzen.
+
+  Beweisregister: [resource-discovery-api-cli](verification/resource-discovery-e2e.json) (PASS), [ui-resource-discovery-live](../web/verification/ui-resource-discovery-live-results.json) (PASS), [resource-discovery-batch](verification/resource-discovery-batch.json) (PASS), [resource-contract-core](verification/resource-contract-core.json) (FOCUSED_CORE_PASS_FULL_MATRIX_PENDING), [resource-contract-api-cli-mcp](verification/resource-contract-e2e.json) (PASS), [resource-contract-ui](verification/resource-contract-ui.json) (PASS), [source13-tested-preview-20261016](verification/source13-tested-preview-20261016/index.json) (PASS_28_NEW_RUST_AND_SIX_NODE_PREVIEW_ONLY).
+
+  <details>
+  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
+
+  ```json
+  {
+    "id": "crawl.cdns",
+    "reference_name": "CDN classification",
+    "status": "partial",
+    "acceptance_test": "Classify configured CDN hosts as internal while preventing unrestricted external traversal.",
+    "remaining_acceptance": [
+      "Implement and prove the declared internal-CDN classification semantics while preventing unrestricted navigation; preserve the existing exact external-resource origin and credential boundaries."
+    ],
+    "implementation_evidence": [
+      {
+        "batch": "B9-resource-discovery",
+        "verification_run_ids": [
+          "resource-discovery-api-cli",
+          "ui-resource-discovery-live",
+          "resource-discovery-batch"
+        ],
+        "proves": "Exact configured external resource origin is fetched without external navigation or expanded credential origins; two-origin robots and allowed/blocked request controls passed.",
+        "limits": "This is an explicit external resource grant. Classifying CDN hosts as internal under the original grouped acceptance is not implemented or claimed.",
+        "source_debug_sha256_by_run": {
+          "resource-discovery-api-cli": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
+          "ui-resource-discovery-live": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724"
+        }
+      },
+      {
+        "batch": "B10-resource-contract-v2",
+        "verification_run_ids": [
+          "resource-contract-core",
+          "resource-contract-api-cli-mcp",
+          "resource-contract-ui"
+        ],
+        "proves": "Exact resource origins stay separate from navigation scope at each directed hop; unlisted third origin and navigation to resource-only origin denied with actual first-hop positive controls.",
+        "limits": "Bounded own native/local acceptance. Existing remaining acceptance and reference parity remain separately tracked; CI/release/installation pending."
+      },
+      {
+        "verification_run_ids": [
+          "source13-tested-preview-20261016"
+        ],
+        "proves": "Actual12 Rust functions prove strict optional exact-origin CDN reporting classification and retained original navigation/resource/credential boundaries. Three Node cases prove plain-text user configuration, exact declaration persistence and invalid origin refusal.",
+        "limits": "Immutable preview only: active main sources remain Source12 and installed services Source11. Final full suite, native API/CLI/MCP/browser/cold acceptance, safe installation and broader vendor semantics remain open."
+      }
+    ],
+    "parity_status": "NOT_PROVEN"
+  }
+  ```
+
+  </details>
+
 - [ ] **Vom Nutzer gewählte Crawl-Grenzen** — Teilweise geprüft; `crawl.limits`, P1.
 
   Orientierung: Grenzen für Tiefe, Ordner, Query, Subdomains, URL-Länge und Linkanzahl ergänzen und einzeln prüfen.
@@ -686,56 +753,6 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
   </details>
 
 #### Noch offen
-
-- [ ] **Ausgewählte CDN-Hosts intern behandeln** — Offen; `crawl.cdns`, P1.
-
-  Orientierung: Konfigurierte CDN-Grenzen ohne unbegrenzte externe Traversierung ergänzen.
-
-  Beweisregister: [resource-discovery-api-cli](verification/resource-discovery-e2e.json) (PASS), [ui-resource-discovery-live](../web/verification/ui-resource-discovery-live-results.json) (PASS), [resource-discovery-batch](verification/resource-discovery-batch.json) (PASS), [resource-contract-core](verification/resource-contract-core.json) (FOCUSED_CORE_PASS_FULL_MATRIX_PENDING), [resource-contract-api-cli-mcp](verification/resource-contract-e2e.json) (PASS), [resource-contract-ui](verification/resource-contract-ui.json) (PASS).
-
-  <details>
-  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
-
-  ```json
-  {
-    "id": "crawl.cdns",
-    "reference_name": "CDN classification",
-    "status": "planned",
-    "acceptance_test": "Classify configured CDN hosts as internal while preventing unrestricted external traversal.",
-    "remaining_acceptance": [
-      "Implement and prove the declared internal-CDN classification semantics while preventing unrestricted navigation; preserve the existing exact external-resource origin and credential boundaries."
-    ],
-    "implementation_evidence": [
-      {
-        "batch": "B9-resource-discovery",
-        "verification_run_ids": [
-          "resource-discovery-api-cli",
-          "ui-resource-discovery-live",
-          "resource-discovery-batch"
-        ],
-        "proves": "Exact configured external resource origin is fetched without external navigation or expanded credential origins; two-origin robots and allowed/blocked request controls passed.",
-        "limits": "This is an explicit external resource grant. Classifying CDN hosts as internal under the original grouped acceptance is not implemented or claimed.",
-        "source_debug_sha256_by_run": {
-          "resource-discovery-api-cli": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724",
-          "ui-resource-discovery-live": "142c0a1af3d420de5ccb1e182bdd04d701f8087a5dc72b3758464aa5e3d65724"
-        }
-      },
-      {
-        "batch": "B10-resource-contract-v2",
-        "verification_run_ids": [
-          "resource-contract-core",
-          "resource-contract-api-cli-mcp",
-          "resource-contract-ui"
-        ],
-        "proves": "Exact resource origins stay separate from navigation scope at each directed hop; unlisted third origin and navigation to resource-only origin denied with actual first-hop positive controls.",
-        "limits": "Bounded own native/local acceptance. Existing remaining acceptance and reference parity remain separately tracked; CI/release/installation pending."
-      }
-    ],
-    "parity_status": "NOT_PROVEN"
-  }
-  ```
-
-  </details>
 
 - [ ] **TLS und HSTS nachvollziehbar behandeln** — Offen; `crawl.tls`, P1.
 
@@ -3305,7 +3322,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 ### Validierung und Qualitätsprüfungen
 
-10 Einträge: 1 eigene Abnahmen erfüllt, 4 teilweise geprüft, 5 offen.
+10 Einträge: 1 eigene Abnahmen erfüllt, 5 teilweise geprüft, 4 offen.
 
 #### Teilweise vorhanden – Restarbeiten
 
@@ -3409,6 +3426,39 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   </details>
 
+- [ ] **Ungültige Head-Struktur erkennen** — Teilweise geprüft; `quality.html_head`, P3.
+
+  Orientierung: Ungültige Head-Kinder und Auswirkungen auf Metadaten mit Rohmarkup-Herkunft prüfen.
+
+  Beweisregister: [source13-tested-preview-20261016](verification/source13-tested-preview-20261016/index.json) (PASS_28_NEW_RUST_AND_SIX_NODE_PREVIEW_ONLY).
+
+  <details>
+  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
+
+  ```json
+  {
+    "id": "quality.html_head",
+    "reference_name": "Invalid head elements",
+    "status": "partial",
+    "acceptance_test": "Seed invalid head children that affect subsequent metadata; point to observed raw markup.",
+    "remaining_acceptance": [
+      "Seed invalid head children that affect subsequent metadata; point to observed raw markup."
+    ],
+    "implementation_evidence": [
+      {
+        "verification_run_ids": [
+          "source13-tested-preview-20261016"
+        ],
+        "proves": "Actual16 Rust functions prove bounded explicit raw-HTTP head diagnostics, source positions/excerpts, invalid children and following metadata observations; UI helpers preserve unknown legacy/incomplete state and render stored markup as text.",
+        "limits": "Immutable preview only: active main sources remain Source12 and installed services Source11. Final full suite, native API/CLI/MCP/browser/cold acceptance, safe installation and broader vendor semantics remain open."
+      }
+    ],
+    "parity_status": "NOT_PROVEN"
+  }
+  ```
+
+  </details>
+
 - [ ] **Transport- und Seiten-Sicherheitsprüfungen** — Teilweise geprüft; `quality.security`, P3.
 
   Orientierung: Unsichere Formulare, MIME-Abweichungen, Header-Regeln und Transportfälle vervollständigen.
@@ -3486,31 +3536,6 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
     "acceptance_test": "Validate required/recommended fields using versioned public rules; distinguish errors from warnings.",
     "remaining_acceptance": [
       "Validate required/recommended fields using versioned public rules; distinguish errors from warnings."
-    ],
-    "implementation_evidence": [],
-    "parity_status": "NOT_PROVEN"
-  }
-  ```
-
-  </details>
-
-- [ ] **Ungültige Head-Struktur erkennen** — Offen; `quality.html_head`, P3.
-
-  Orientierung: Ungültige Head-Kinder und Auswirkungen auf Metadaten mit Rohmarkup-Herkunft prüfen.
-
-  Beweisregister: keine zugeordnete ausgeführte Prüfung.
-
-  <details>
-  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
-
-  ```json
-  {
-    "id": "quality.html_head",
-    "reference_name": "Invalid head elements",
-    "status": "planned",
-    "acceptance_test": "Seed invalid head children that affect subsequent metadata; point to observed raw markup.",
-    "remaining_acceptance": [
-      "Seed invalid head children that affect subsequent metadata; point to observed raw markup."
     ],
     "implementation_evidence": [],
     "parity_status": "NOT_PROVEN"
@@ -5816,4 +5841,4 @@ Diese unveränderten Einträge dokumentieren den damaligen Stand. Aktuelle Resta
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `86eeb97856d591bf228d7fda9863acfda219d33fa48f7f1861be3b0095957add`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T22:30:12.127Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `df828fc9291f40487b57b8d4c18f48825fca3e215f140f08e7300296be572ffe`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T22:38:49.510Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

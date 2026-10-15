@@ -1,0 +1,255 @@
+{
+  "schema_version": 1,
+  "kind": "actual_source13_head_cdn_tested_preview",
+  "recorded_at": "2026-10-15T22:38:49.510Z",
+  "result": "PASS_28_NEW_RUST_AND_SIX_NODE_PREVIEW_ONLY",
+  "parent_source_commit": "5d50a10f3974c9afe79909b963427e67dd8fb001",
+  "source13_commit": null,
+  "source_inputs": 388,
+  "owned_paths": 21,
+  "changed_parent_inputs": 14,
+  "new_input_files": 7,
+  "unchanged_parent_inputs": 367,
+  "new_rust_passed": 28,
+  "new_rust_failed": 0,
+  "new_rust_ignored": 0,
+  "node_passed": 6,
+  "clippy": "PASS_ACTUAL_PRELIMINARY_CLIPPY",
+  "full_workspace_suite": "NOT_RUN",
+  "optimized_build": "NOT_RUN",
+  "native": "NOT_RUN",
+  "installed": "ACCEPTED_SOURCE11",
+  "root_source381_unchanged": true,
+  "manufacturer_parity": "NOT_PROVEN",
+  "qualification": "Individually tested immutable next-generation source preview. The21 final formatted product files are archived here for tracking and review; active Root sources remain Source12 until its native/install gates close. No full suite, executable, installation or vendor equivalence is inferred.",
+  "files": [
+    {
+      "path": "proposal/Cargo.lock",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/source/Cargo.lock",
+      "sha256": "143d264a0b1353f36ad0e586c1aef9b46c7d412b0926211ef890d50c951f5a54",
+      "bytes": 78577
+    },
+    {
+      "path": "proposal/crates/app/src/cdn_cli_tests.rs",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/source/crates/app/src/cdn_cli_tests.rs",
+      "sha256": "620fb062957cfcac88929d24bbd99009de70b92d25e32d3a5ea7494b2ca344b0",
+      "bytes": 1398
+    },
+    {
+      "path": "proposal/crates/app/src/main.rs",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/source/crates/app/src/main.rs",
+      "sha256": "94d7cc731fc44f160881084e017b19ba01f48fe327d23fe6a6cbc77a6a73f806",
+      "bytes": 34729
+    },
+    {
+      "path": "proposal/crates/app/src/mcp.rs",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/source/crates/app/src/mcp.rs",
+      "sha256": "8a09c5c9f654edab59615d9ee49a719bafe21603bf669227be3400e5bb9de549",
+      "bytes": 33700
+    },
+    {
+      "path": "proposal/crates/app/src/mcp/cdn_classification_tests.rs",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/source/crates/app/src/mcp/cdn_classification_tests.rs",
+      "sha256": "b6d2fa6f5eaf6613b29810618b98dbc0defd53d7af1becbcddd3d64a63163c0f",
+      "bytes": 2915
+    },
+    {
+      "path": "proposal/crates/app/src/server.rs",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/source/crates/app/src/server.rs",
+      "sha256": "15023515fe973bbb7e5ae628acf991eb83283b079fed56ad5389cb451f4ffef3",
+      "bytes": 90317
+    },
+    {
+      "path": "proposal/crates/app/src/server/cdn_classification_tests.rs",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/source/crates/app/src/server/cdn_classification_tests.rs",
+      "sha256": "e73be7b46129e9dff05c2eb304afd3d74bf14278f70a30ef6bcaf38a3b57546a",
+      "bytes": 2168
+    },
+    {
+      "path": "proposal/crates/core/Cargo.toml",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/source/crates/core/Cargo.toml",
+      "sha256": "fb5dbc77dfcfd2e911045481a639e7b4a64e7e396f74d12a50c654490deeaf6b",
+      "bytes": 1223
+    },
+    {
+      "path": "proposal/crates/core/src/audit.rs",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/source/crates/core/src/audit.rs",
+      "sha256": "e0c09824934a35e8024ba3953bae251d2631d706df32ab54eec02ba9c8ed5258",
+      "bytes": 27618
+    },
+    {
+      "path": "proposal/crates/core/src/cdn_classification_tests.rs",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/source/crates/core/src/cdn_classification_tests.rs",
+      "sha256": "da5ee86b1b0bf8b8717c017e46e9c1377f160505e63fe05c46b41ee820986e7c",
+      "bytes": 13587
+    },
+    {
+      "path": "proposal/crates/core/src/cdn_classification.rs",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/source/crates/core/src/cdn_classification.rs",
+      "sha256": "da26a8d97c1ab59d009245b05bed7d0d64e275e64adcfc7e91fb0a30d1835e23",
+      "bytes": 6798
+    },
+    {
+      "path": "proposal/crates/core/src/crawler.rs",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/source/crates/core/src/crawler.rs",
+      "sha256": "e2563aef2a99c379e2500d887aeace2e45b87031eb9102ddd9a34728a7de3652",
+      "bytes": 168945
+    },
+    {
+      "path": "proposal/crates/core/src/crawler/discovery_ledger_tests.rs",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/source/crates/core/src/crawler/discovery_ledger_tests.rs",
+      "sha256": "6c8c9d7a7c9272897e371560a4f17e46c39160a84f9a98d59a03f318f0463be1",
+      "bytes": 32415
+    },
+    {
+      "path": "proposal/crates/core/src/crawler/sitemap_capture_tests.rs",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/source/crates/core/src/crawler/sitemap_capture_tests.rs",
+      "sha256": "609fcbd20b29866b069db5c2a9cabad3e3fe86b0f82d06d13bf531a63c629285",
+      "bytes": 38447
+    },
+    {
+      "path": "proposal/crates/core/src/crawler/sitemap_protocol_tests.rs",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/source/crates/core/src/crawler/sitemap_protocol_tests.rs",
+      "sha256": "10eef7212f60a791155168e6bc8cb1578387f2be8a3d7f3e89dd3afcb07a33d0",
+      "bytes": 38546
+    },
+    {
+      "path": "proposal/crates/core/src/html_head_tests.rs",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/source/crates/core/src/html_head_tests.rs",
+      "sha256": "ee9b53b3e1be421f048b4922087536ee0e86ddad04f1dfaa0c4c1f6abc75dc47",
+      "bytes": 16918
+    },
+    {
+      "path": "proposal/crates/core/src/html_head.rs",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/source/crates/core/src/html_head.rs",
+      "sha256": "f160f00ddb55de11c2aa0d7632d698320a272e9d5ddd4f183dc1f017a48e9f62",
+      "bytes": 20048
+    },
+    {
+      "path": "proposal/crates/core/src/lib.rs",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/source/crates/core/src/lib.rs",
+      "sha256": "acac0de0e89a5d9855e7792e8bd05977c2daf54ddd0d697bef94b190a4900061",
+      "bytes": 7448
+    },
+    {
+      "path": "proposal/crates/core/src/models.rs",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/source/crates/core/src/models.rs",
+      "sha256": "274264139a4fd732f80ce4f294dfcd6ca1d90cd5529dac4b17dfb7b1e70587e7",
+      "bytes": 41256
+    },
+    {
+      "path": "proposal/web/app.js",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/source/web/app.js",
+      "sha256": "590bdd7d0362a4382dc53ae43c6153d00246af2493b9b1d3a0946665c20ce684",
+      "bytes": 400808
+    },
+    {
+      "path": "proposal/web/index.html",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/source/web/index.html",
+      "sha256": "a1df57b493a0768f8b3b2ef23936d1ea0ed47dffe46fc2fea37a28364a985301",
+      "bytes": 90687
+    },
+    {
+      "path": "preformat.json",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v13-draft-v3\\preformat.json",
+      "sha256": "13547987d8f394701cdd898f667f0f556f4fdf1b41895354df6cd1254ac2bfcf",
+      "bytes": 245980
+    },
+    {
+      "path": "composition-review.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source13-composition-independent-review-v3/receipt.json",
+      "sha256": "098a54f49c41681ae152287db511296e55f13d6b2813237ba494498468e87116",
+      "bytes": 5028
+    },
+    {
+      "path": "format-review.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source13-format-independent-review-v3/receipt.json",
+      "sha256": "dd529c2e3469814914bd21e1c4d6dbff77f0e198c8d784a5d2579e3ef7f3f373",
+      "bytes": 73652
+    },
+    {
+      "path": "actual-format.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source13-preliminary-format-v3/proof.json",
+      "sha256": "5fe1fd874de5ac4e561d6b800e1e98361c1601ef93a57ee01ce77934f1c27397",
+      "bytes": 119049
+    },
+    {
+      "path": "actual-clippy.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source13-preliminary-clippy-v3/proof.json",
+      "sha256": "e0c68a51118241c1f5f47c9254fba8dea335b3ebf10956d4585bef3933bc1ed4",
+      "bytes": 70801
+    },
+    {
+      "path": "actual-node-six.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source13-frontend-tests-v3/proof.json",
+      "sha256": "f7fe8e35b7d8bd0d2dd5a17f89b2e47e267c13320ac35ddc760f69e70764ec8a",
+      "bytes": 6162
+    },
+    {
+      "path": "new-rust/proof.json",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source13-new-rust-tests-v1\\proof.json",
+      "sha256": "cca1c30b50fe607eb90739a4aa9b86e02acd2ac16824da2260c7f957ed3bb405",
+      "bytes": 81418
+    },
+    {
+      "path": "new-rust/stdout.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source13-new-rust-tests-v1/stdout.log",
+      "sha256": "9bd2eb8a3e44e040a049131f4fed8e11d8a80240c79432ce4265cee3f597e114",
+      "bytes": 4714
+    },
+    {
+      "path": "new-rust/stderr.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source13-new-rust-tests-v1/stderr.log",
+      "sha256": "9c84190f3efd04780c7afccecde41b4cf983dfa41d05398b88e784f7f6a301a1",
+      "bytes": 2560
+    },
+    {
+      "path": "roles/raw_http_head-manifest.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/html-head-diagnostics-proposal-v3/manifest.json",
+      "sha256": "cb09004da70e0e7fd240029bb269d7c960a3567409c6e58783ab87901975c83c",
+      "bytes": 92171
+    },
+    {
+      "path": "roles/raw_http_head-review.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/html-head-diagnostics-independent-review-v3/receipt.json",
+      "sha256": "65d66a7fb013771c8c0d45338d59a376510ac9c4bd525fef64f2ba834e3a6373",
+      "bytes": 2925
+    },
+    {
+      "path": "roles/cdn_classification-manifest.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/cdn-classification-proposal-v2/manifest.json",
+      "sha256": "d95340c661c9e4c745abb7a7a7606c8b718aaae2fc3b6277c7054e53d9d12406",
+      "bytes": 91311
+    },
+    {
+      "path": "roles/cdn_classification-review.json",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\cdn-classification-independent-review-v2\\receipt.json",
+      "sha256": "8bf84119f6e0bb903253f0f814c018fce94d2067b9ad852d4da6eb430a1de171",
+      "bytes": 2109
+    },
+    {
+      "path": "roles/cdn_legacy_test_fixture_repair-manifest.json",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\cdn-fetch-context-test-fixtures-proposal-v1\\manifest.json",
+      "sha256": "671e60a75c1d60bb575f2e0b38955c573dc5cb0dbab50ac8ec8971a9acb90264",
+      "bytes": 2844
+    },
+    {
+      "path": "roles/cdn_legacy_test_fixture_repair-review.json",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\cdn-fetch-context-test-fixtures-independent-review-v1\\receipt.json",
+      "sha256": "b149a8899ad24c8593ad007505788ee012d3b3906e4611acfc0c594618c00506",
+      "bytes": 2132
+    },
+    {
+      "path": "node/html-head-ui-regressions.mjs",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v13-draft-v3\\html-head-ui-regressions.mjs",
+      "sha256": "c0968149489bd1366e84f9d31ec7d09fc9af38aee885450954b746d3d51ff313",
+      "bytes": 2467
+    },
+    {
+      "path": "node/cdn-ui-regressions.mjs",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v13-draft-v3\\cdn-ui-regressions.mjs",
+      "sha256": "f96f9c2cbe0cbd9822b2e3dad52cdf939e7d8304e324b8d486fe08ee9caab772",
+      "bytes": 3848
+    }
+  ]
+}

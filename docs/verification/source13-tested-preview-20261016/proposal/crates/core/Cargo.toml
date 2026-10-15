@@ -1,0 +1,40 @@
+[package]
+name = "open-seo-spider-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Independent, local-first SEO crawler and audit engine"
+
+[dependencies]
+anyhow = "1"
+cap-std = "=4.0.3"
+cap-fs-ext = "=4.0.3"
+calamine = { version = "=0.36.1", default-features = false }
+chrono = { version = "0.4", features = ["serde"] }
+csv = "1.4"
+cssparser = "=0.37.0"
+encoding_rs = "0.8"
+ego-tree = "0.11"
+flate2 = "1"
+futures = "0.3"
+html5ever = "=0.39.0"
+imagesize = "0.15.0"
+lopdf = { version = "0.45.0", default-features = false }
+quick-xml = "0.42"
+regex = "1"
+reqwest = { version = "0.12.28", default-features = false, features = ["rustls-tls", "gzip", "brotli", "deflate", "stream"] }
+robotstxt = "0.3"
+rusqlite = { version = "0.39", features = ["bundled"] }
+scraper = "0.27"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+sxd-document = "0.3.2"
+sxd-xpath = "0.4.2"
+ttf-parser = "0.25.1"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time", "net", "io-util"] }
+url = { version = "2", features = ["serde"] }
+zip = { version = "=8.6.0", default-features = false, features = ["deflate"] }
+
+[dev-dependencies]
+tempfile = "3"

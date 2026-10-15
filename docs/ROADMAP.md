@@ -2,7 +2,7 @@
 
 Optionale statische Crawl-Grenzen, Titel/Beschreibung/H1–H6-Ngramkanäle mit Wortwolke und der begrenzte Sitemap-Abfrageindex bestehen die **1428/0/0-Suite**, vier echte Renderergates und den optimierten Windows-Build. Die Sitemap-Erzeugung besteht sechs praktische Gruppen mit dem neuen Kandidaten. [Aktuelle Rohbelege einschließlich fehlgeschlagener Läufe](verification/source12-build-native-20261016/index.json). StaticLimits25 und die elf bisherigen praktischen Bereiche müssen noch abgeschlossen werden; sicher installiert und nutzbar bleibt Source11.
 
-Head-Diagnostik und konfigurierbare CDN-Klassifikation bestehen sechs Node-Quellfälle; drei ältere Test-Fixtures brauchen ein explizit deaktiviertes neues CDN-Feld, bevor Rusttests möglich sind. **33 eigene Kriterien erfüllt /68 teilweise /43 offen**; vollständige Screaming-Frog-Parität bleibt `NOT_PROVEN`.
+Der separate Head-/CDN-Entwurf besteht alle28 neuen Rustfunktionen, sechs Node-Quellfälle und Clippy. Drei alte Fixtureinitialisierungen sind eng korrigiert; [Quellen und tatsächliche Einzeltestbelege](verification/source13-tested-preview-20261016/index.json) sind privat archiviert. Die1456er-Vollsuite, optimierter Build, praktische Abnahme und Installation sind noch offen. **33 eigene Kriterien erfüllt /70 teilweise /41 offen**; vollständige Screaming-Frog-Parität bleibt `NOT_PROVEN`.
 
 ## Aktuell: Ngram-Warmprüfung besteht, echter Antwort-Abschlussfehler entdeckt (15.10.2026)
 

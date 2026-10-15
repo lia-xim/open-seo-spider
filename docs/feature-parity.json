@@ -886,7 +886,7 @@
     {
       "id": "crawl.cdns",
       "name": "CDN classification",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "config"
@@ -916,6 +916,13 @@
           ],
           "proves": "Exact resource origins stay separate from navigation scope at each directed hop; unlisted third origin and navigation to resource-only origin denied with actual first-hop positive controls.",
           "limits": "Bounded own native/local acceptance. Existing remaining acceptance and reference parity remain separately tracked; CI/release/installation pending."
+        },
+        {
+          "verification_run_ids": [
+            "source13-tested-preview-20261016"
+          ],
+          "proves": "Actual12 Rust functions prove strict optional exact-origin CDN reporting classification and retained original navigation/resource/credential boundaries. Three Node cases prove plain-text user configuration, exact declaration persistence and invalid origin refusal.",
+          "limits": "Immutable preview only: active main sources remain Source12 and installed services Source11. Final full suite, native API/CLI/MCP/browser/cold acceptance, safe installation and broader vendor semantics remain open."
         }
       ],
       "parity_evidence": [],
@@ -3077,13 +3084,21 @@
     {
       "id": "quality.html_head",
       "name": "Invalid head elements",
-      "status": "planned",
+      "status": "partial",
       "phase": "P3",
       "source_ids": [
         "head"
       ],
       "acceptance_test": "Seed invalid head children that affect subsequent metadata; point to observed raw markup.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "source13-tested-preview-20261016"
+          ],
+          "proves": "Actual16 Rust functions prove bounded explicit raw-HTTP head diagnostics, source positions/excerpts, invalid children and following metadata observations; UI helpers preserve unknown legacy/incomplete state and render stored markup as text.",
+          "limits": "Immutable preview only: active main sources remain Source12 and installed services Source11. Final full suite, native API/CLI/MCP/browser/cold acceptance, safe installation and broader vendor semantics remain open."
+        }
+      ],
       "parity_evidence": [],
       "group": "quality",
       "remaining_acceptance": [
@@ -6348,6 +6363,15 @@
       "recorded_at": "2026-10-15T22:30:12.127Z",
       "scope": "Actual optimized Windows build and separate native results. Failed runs remain failures. Compiler-only source13 preview does not prove Rust behavior or installed functionality. Original user data, PE bytes, profiles, fixture databases and generated project bodies are omitted.",
       "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "source13-tested-preview-20261016",
+      "artifact": "docs/verification/source13-tested-preview-20261016/index.json",
+      "artifact_sha256": "5118f45edbde51b32281574b0cef58a4e9e41382f8af1a512e431d5472ca7110",
+      "result": "PASS_28_NEW_RUST_AND_SIX_NODE_PREVIEW_ONLY",
+      "recorded_at": "2026-10-15T22:38:49.510Z",
+      "scope": "Individually tested immutable next-generation source preview. The21 final formatted product files are archived here for tracking and review; active Root sources remain Source12 until its native/install gates close. No full suite, executable, installation or vendor equivalence is inferred.",
+      "reference_parity": "NOT_PROVEN"
     }
   ],
   "reference_workflows": [
@@ -6470,15 +6494,15 @@
   "status_summary": {
     "overall": {
       "implemented": 33,
-      "partial": 68,
-      "planned": 43,
+      "partial": 70,
+      "planned": 41,
       "total": 144
     },
     "phases": {
       "P1": {
         "implemented": 14,
-        "partial": 26,
-        "planned": 5,
+        "partial": 27,
+        "planned": 4,
         "total": 45
       },
       "P2": {
@@ -6489,8 +6513,8 @@
       },
       "P3": {
         "implemented": 5,
-        "partial": 8,
-        "planned": 11,
+        "partial": 9,
+        "planned": 10,
         "total": 24
       },
       "P4": {
@@ -6509,8 +6533,8 @@
       },
       "crawl": {
         "implemented": 3,
-        "partial": 9,
-        "planned": 2,
+        "partial": 10,
+        "planned": 1,
         "total": 14
       },
       "robots": {
@@ -6557,8 +6581,8 @@
       },
       "quality": {
         "implemented": 1,
-        "partial": 4,
-        "planned": 5,
+        "partial": 5,
+        "planned": 4,
         "total": 10
       },
       "sitemap": {
@@ -6605,7 +6629,7 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-15T22:30:12.127Z",
+  "last_verified_at": "2026-10-15T22:38:49.510Z",
   "current_work": [
     {
       "id": "combined-source-v11-20261015",
@@ -8414,9 +8438,40 @@
         "ngram_metadata": "FAIL_ACTUAL_SOURCE12_NGRAM_METADATA_CHANNELS",
         "static_limits": "FAIL_ACTUAL_RESPONSE_CAP_BELOW_GENUINE_501_PAGE_PROJECT_SIZE"
       }
+    },
+    {
+      "id": "combined-source-v13-20261016",
+      "priority": 2,
+      "title_de": "Roh-HTML-Head-Diagnostik und explizite CDN-Klassifikation",
+      "status": "ACTUAL28_NEW_RUST_AND_SIX_NODE_PASS_PREVIEW_ONLY",
+      "summary_de": "16 Head- und12 CDN-Rustfunktionen sowie sechs UI-Quellfälle bestehen im separat gespeicherten Entwurf.388 Quellen/21 eigene Pfade sind unabhängig komponiert, formatiert und streng kompiliert. Aktive Rootquellen bleiben Source12; die installierte Version bleibt Source11.",
+      "completed_acceptance_de": [
+        "Fehlerhafte explizite Head-Inhalte mit Rohquellpositionen und getrennten unbekannten Alt-/Budgetzuständen in16 Rustfunktionen geprüft.",
+        "Exakte konfigurierte CDN-Origins mit Schema, IDNA-Host und effektivem Port in12 Rustfunktionen geprüft; Berichtsklassifikation erweitert weder Navigation noch Ressourcen-/Credentialfreigaben.",
+        "Alle28 neuen Rustfunktionen tatsächlich bestanden; sechs neue Node-Quellfälle, Format und Clippy bestanden. Drei alte Fixtureinitialisierungen eng korrigiert; alle35 ursprünglichen Testkörper bleiben bytegleich."
+      ],
+      "pending_acceptance_de": [
+        "Source12 praktisch vollständig abnehmen und sicher installieren; erst danach21 eigene Source13-Produktpfade in die aktive Codebasis übernehmen.",
+        "Finalen privaten Source13-Codecommit, eingefrorenes Manifest und vollständige mindestens1456-Test-Suite mit vier echten Renderergates erzeugen.",
+        "Optimierten Windows-Kandidaten bauen; neue Head-/CDN- und betroffene vorhandene API-/CLI-/MCP-/Browser-/Cold-Prüfungen durchführen, anschließend sicher installieren."
+      ],
+      "documentation": [
+        "docs/verification/source13-tested-preview-20261016/index.json"
+      ],
+      "gates": {
+        "new_rust": "PASS_ALL28_ONLY",
+        "node": "PASS_SIX_SOURCE_CASES_ONLY",
+        "clippy": "PASS_ACTUAL_PRELIMINARY_CLIPPY",
+        "full_suite": "NOT_RUN",
+        "optimized_build": "NOT_RUN",
+        "native": "NOT_RUN",
+        "installation": "NOT_RUN",
+        "manufacturer_parity": "NOT_PROVEN"
+      }
     }
   ],
   "active_work_ids": [
-    "combined-source-v12-20261015"
+    "combined-source-v12-20261015",
+    "combined-source-v13-20261016"
   ]
 }

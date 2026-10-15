@@ -1,0 +1,927 @@
+mod analysis;
+mod broken_sources;
+mod comparison_app;
+mod content_cohort;
+mod generation_export;
+mod mcp;
+mod migration_app;
+mod ngram_app;
+mod policy_export;
+mod resource_broken_sources_app;
+mod resource_export;
+mod server;
+mod sitemap_findings;
+mod sitemap_findings_cli;
+mod sitemap_membership;
+mod sitemap_raw_cli;
+
+use clap::{Parser, Subcommand};
+use open_seo_spider_core::{
+    CrawlConfig, Crawler, ListColumnSelector, ListCsvDelimiter, ListImportFormat, ListImportLimits,
+    ListImportOptions, RecrawlSourceKind, SelectedRecrawlParent, export_input_occurrences_csv,
+    export_pages_csv, export_sitemap_xml, export_url_list_csv, import_url_list, inspect_xlsx_list,
+    prepare_selected_recrawl,
+};
+use std::{
+    path::PathBuf,
+    sync::{Arc, atomic::AtomicBool},
+};
+
+#[derive(Parser)]
+#[command(
+    name = "open-seo-spider",
+    version,
+    about = "Independent local SEO crawler. No commercial URL cap."
+)]
+struct Cli {
+    #[command(subcommand)]
+    command: Option<Command>,
+}
+
+#[derive(Subcommand)]
+#[allow(
+    clippy::large_enum_variant,
+    reason = "The CLI parses one command; explicit optional fields avoid extra heap allocations."
+)]
+enum Command {
+    /// Read a local findings page and/or complete stored CSV without website requests.
+    SitemapFindings {
+        store: PathBuf,
+        #[arg(long)]
+        request: PathBuf,
+        #[arg(long, required_unless_present = "csv")]
+        output: Option<PathBuf>,
+        #[arg(long)]
+        csv: Option<PathBuf>,
+    },
+    /// Read a verified raw sitemap window from local SQLite; no website is fetched.
+    SitemapRows {
+        store: PathBuf,
+        /// Strict JSON request with exact filters, page size and optional raw-state continuation.
+        #[arg(long)]
+        request: Option<PathBuf>,
+        /// New compact JSON destination; omit to print the same envelope to stdout.
+        #[arg(long)]
+        output: Option<PathBuf>,
+    },
+    /// Generate a segmented sitemap ZIP from saved report JSON; no website is fetched.
+    GenerateSitemaps {
+        snapshot: PathBuf,
+        #[arg(long)]
+        options: PathBuf,
+        /// New ZIP destination; existing files are refused atomically.
+        #[arg(long)]
+        output: PathBuf,
+    },
+    /// Compare explicit mapping CSV against saved report JSON; zero website requests.
+    Migration {
+        #[arg(long)]
+        mapping: PathBuf,
+        #[arg(long)]
+        report: PathBuf,
+        #[arg(long)]
+        options: PathBuf,
+        /// New complete JSON destination; existing files are refused atomically.
+        #[arg(long)]
+        output: PathBuf,
+        /// Optional new complete formula-safe CSV destination.
+        #[arg(long)]
+        csv: Option<PathBuf>,
+    },
+    /// Compare saved crawl JSON files locally with exact identities; no website is fetched.
+    CompareSaved {
+        before: PathBuf,
+        after: PathBuf,
+        #[arg(long)]
+        config: Option<PathBuf>,
+        /// New JSON destination; omit to print the same envelope to stdout.
+        #[arg(long)]
+        output: Option<PathBuf>,
+        /// New CSV destination containing one row per compared field.
+        #[arg(long)]
+        csv: Option<PathBuf>,
+        /// Include complete loaded typed reports bound to the compared snapshots.
+        #[arg(long)]
+        include_original_reports: bool,
+    },
+    /// Inspect declared dependencies in supplied CSS locally; no website is fetched.
+    InspectCss {
+        input: PathBuf,
+        /// New output file; an existing destination is refused.
+        #[arg(long)]
+        output: Option<PathBuf>,
+    },
+    /// Read resource source/response joins from an explicit saved SQLite input, without crawling.
+    ResourceBrokenSources {
+        store: PathBuf,
+        /// Strict Core filter/paging/limits request JSON; no observation upload.
+        #[arg(long)]
+        request: Option<PathBuf>,
+        /// New destination for one bounded page including its snapshot.
+        #[arg(long)]
+        output: PathBuf,
+        /// New destination for the complete filtered CSV in the same preview snapshot.
+        #[arg(long)]
+        csv: Option<PathBuf>,
+    },
+    /// Read native resource decisions or export every decision in one read snapshot.
+    ResourceLedger {
+        store: PathBuf,
+        #[arg(long)]
+        after_sequence: Option<u64>,
+        #[arg(long, default_value_t = 200)]
+        limit: usize,
+        /// Read bounded extracted transport metadata instead of occurrence decisions.
+        #[arg(long)]
+        transports: bool,
+        #[arg(long)]
+        after_url: Option<String>,
+        /// New JSON destination for every occurrence; pagination does not apply.
+        #[arg(long)]
+        json: Option<PathBuf>,
+        /// New CSV destination for every occurrence; pagination does not apply.
+        #[arg(long)]
+        csv: Option<PathBuf>,
+    },
+    /// Aggregate own1..6-grams across every row of an explicit saved report; no website requests.
+    SavedNgrams {
+        report: PathBuf,
+        #[arg(long)]
+        options: Option<PathBuf>,
+        #[arg(long)]
+        output: PathBuf,
+        /// Complete selected report (totals, per-source occurrences or all source states).
+        #[arg(long)]
+        csv: Option<PathBuf>,
+    },
+    /// Analyze an explicit cohort of captures in a saved crawl; makes no website requests.
+    AnalyzeCrawlContent {
+        snapshot: PathBuf,
+        #[arg(long)]
+        selection: PathBuf,
+        #[arg(long)]
+        output: Option<PathBuf>,
+    },
+    /// Read native admission evidence locally or export every row in one read snapshot.
+    PolicyLedger {
+        store: PathBuf,
+        #[arg(long)]
+        after_sequence: Option<u64>,
+        #[arg(long, default_value_t = 200)]
+        limit: usize,
+        /// New JSON destination for the complete snapshot; pagination options do not apply.
+        #[arg(long)]
+        json: Option<PathBuf>,
+        /// New CSV destination for the complete snapshot; pagination options do not apply.
+        #[arg(long)]
+        csv: Option<PathBuf>,
+    },
+    /// Analyze supplied text locally; no website is fetched.
+    AnalyzeContent {
+        input: PathBuf,
+        /// New output file; an existing file is refused.
+        #[arg(long)]
+        output: Option<PathBuf>,
+    },
+    /// Parse an owned URL list locally; this command makes no website requests.
+    ImportList {
+        file: PathBuf,
+        #[arg(long)]
+        options: Option<PathBuf>,
+        /// Inspect XLSX sheet metadata before selecting a column.
+        #[arg(long)]
+        inspect: bool,
+        #[arg(long)]
+        output: Option<PathBuf>,
+        #[arg(long)]
+        csv: Option<PathBuf>,
+    },
+    /// Preview explicit scope, query and rewrite decisions locally; no crawl is started.
+    PreviewPolicy {
+        input: PathBuf,
+        #[arg(long)]
+        output: Option<PathBuf>,
+    },
+    /// Refresh selected exact requested URLs in a derived report; retain the source snapshot.
+    Recrawl {
+        snapshot: PathBuf,
+        #[arg(required = true)]
+        urls: Vec<String>,
+        #[arg(long)]
+        max_attempts: Option<usize>,
+        /// Optional new SQLite destination; an existing file is refused.
+        #[arg(long)]
+        store: Option<PathBuf>,
+        #[arg(long, default_value = "recrawl.json")]
+        output: PathBuf,
+        #[arg(long)]
+        csv: Option<PathBuf>,
+    },
+    /// Serve MCP tools over stdio against the running local application.
+    Mcp {
+        #[arg(long, default_value = "http://127.0.0.1:8787")]
+        server: String,
+        /// Explicit existing local directory for the five opt-in MCP file tools.
+        #[arg(long)]
+        mcp_files_dir: Option<PathBuf>,
+    },
+    /// Launch the local browser application.
+    Serve {
+        #[arg(long, default_value = "127.0.0.1:8787")]
+        listen: String,
+        #[arg(long, default_value = "data")]
+        data_dir: PathBuf,
+        /// Enable local MCP file tools; requires a loopback listen address.
+        #[arg(long)]
+        mcp_files_dir: Option<PathBuf>,
+        /// Owned process mode: hold a stdin pipe open and close it to request shutdown.
+        /// Ctrl-C also quiesces, but clean exit still waits for this pipe EOF.
+        #[arg(long)]
+        shutdown_on_stdin_eof: bool,
+    },
+    /// Crawl without the browser application and export the complete report.
+    Crawl {
+        urls: Vec<String>,
+        #[arg(long)]
+        sitemap: Vec<String>,
+        #[arg(long)]
+        list: bool,
+        #[arg(long)]
+        config: Option<PathBuf>,
+        /// Durable SQLite frontier, required when the optional native policy is enabled.
+        #[arg(long)]
+        store: Option<PathBuf>,
+        #[arg(long)]
+        list_file: Vec<PathBuf>,
+        #[arg(long)]
+        list_options: Option<PathBuf>,
+        #[arg(long)]
+        concurrency: Option<usize>,
+        #[arg(long)]
+        max_pages: Option<usize>,
+        /// Static native folder depth; 0 allows / and /file, but no completed folder.
+        #[arg(long)]
+        max_folder_depth: Option<usize>,
+        /// Static raw ampersand-separated tokens; 0 forbids even an empty query.
+        #[arg(long)]
+        max_query_tokens: Option<usize>,
+        /// Normalized effective fetch URL UTF-8 bytes (1..=1048576). No renderer.
+        #[arg(long)]
+        max_fetch_url_utf8_bytes: Option<usize>,
+        #[arg(long, default_value = "crawl.json")]
+        output: PathBuf,
+        #[arg(long)]
+        csv: Option<PathBuf>,
+        #[arg(long)]
+        input_csv: Option<PathBuf>,
+        #[arg(long)]
+        xml_sitemap: Option<PathBuf>,
+    },
+}
+
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    tracing_subscriber::fmt()
+        .with_writer(std::io::stderr)
+        .with_env_filter(
+            tracing_subscriber::EnvFilter::try_from_default_env()
+                .unwrap_or_else(|_| "open_seo_spider=info".into()),
+        )
+        .init();
+    match Cli::parse().command.unwrap_or(Command::Serve {
+        listen: "127.0.0.1:8787".into(),
+        data_dir: "data".into(),
+        mcp_files_dir: None,
+        shutdown_on_stdin_eof: false,
+    }) {
+        Command::Serve {
+            listen,
+            data_dir,
+            mcp_files_dir,
+            shutdown_on_stdin_eof,
+        } => {
+            if shutdown_on_stdin_eof {
+                Box::pin(server::serve_with_owned_stdin(
+                    &listen,
+                    data_dir,
+                    mcp_files_dir,
+                ))
+                .await?;
+            } else {
+                match mcp_files_dir {
+                    Some(directory) => {
+                        Box::pin(server::serve_with_mcp_files(
+                            &listen,
+                            data_dir,
+                            Some(directory),
+                        ))
+                        .await?
+                    }
+                    None => Box::pin(server::serve(&listen, data_dir)).await?,
+                }
+            }
+        }
+        Command::Mcp {
+            server,
+            mcp_files_dir,
+        } => match mcp_files_dir {
+            Some(directory) => mcp::stdio_with_file_tools(&server, Some(directory)).await?,
+            None => mcp::stdio(&server).await?,
+        },
+        Command::SitemapFindings {
+            store,
+            request,
+            output,
+            csv,
+        } => {
+            let receipt = sitemap_findings_cli::run(store, request, output, csv).await?;
+            println!("{}", serde_json::to_string(&receipt)?);
+        }
+        Command::SitemapRows {
+            store,
+            request,
+            output,
+        } => {
+            sitemap_raw_cli::run(store, request, output).await?;
+        }
+        Command::GenerateSitemaps {
+            snapshot,
+            options,
+            output,
+        } => {
+            let receipt = generation_export::run(snapshot, options, output).await?;
+            println!("{}", serde_json::to_string(&receipt)?);
+        }
+        Command::Migration {
+            mapping,
+            report,
+            options,
+            output,
+            csv,
+        } => {
+            if let Err(error) = migration_app::run_cli(mapping, report, options, output, csv).await
+            {
+                eprintln!("{}", serde_json::to_string(&error)?);
+                std::process::exit(2);
+            }
+            println!(
+                "{}",
+                serde_json::json!({"result":"migration_exported","website_requests":0})
+            );
+        }
+        Command::CompareSaved {
+            before,
+            after,
+            config,
+            output,
+            csv,
+            include_original_reports,
+        } => {
+            if let Err(error) = comparison_app::run_cli(
+                before,
+                after,
+                config,
+                output,
+                csv,
+                include_original_reports,
+            )
+            .await
+            {
+                eprintln!("{}", serde_json::to_string(&error)?);
+                std::process::exit(2);
+            }
+        }
+        Command::InspectCss { input, output } => {
+            let request: server::resources::CssInspectRequest =
+                serde_json::from_slice(&read_bounded(&input, 64 * 1024 * 1024).await?)?;
+            let result = open_seo_spider_core::discover_css(&request.source, &request.limits)?;
+            let bytes = serde_json::to_vec_pretty(&result)?;
+            if let Some(output) = output {
+                let mut file = tokio::fs::OpenOptions::new()
+                    .write(true)
+                    .create_new(true)
+                    .open(output)
+                    .await?;
+                tokio::io::AsyncWriteExt::write_all(&mut file, &bytes).await?;
+            } else {
+                println!("{}", String::from_utf8(bytes)?);
+            }
+        }
+        Command::ResourceBrokenSources {
+            store,
+            request,
+            output,
+            csv,
+        } => {
+            resource_broken_sources_app::run_cli(store, request, output, csv).await?;
+        }
+        Command::ResourceLedger {
+            store,
+            after_sequence,
+            limit,
+            transports,
+            after_url,
+            json,
+            csv,
+        } => {
+            anyhow::ensure!((1..=1000).contains(&limit), "limit must be 1..1000");
+            anyhow::ensure!(
+                after_sequence.is_none_or(|v| v <= i64::MAX as u64),
+                "after_sequence exceeds SQLite integer range"
+            );
+            anyhow::ensure!(
+                !transports || after_sequence.is_none(),
+                "--transports uses --after-url, not --after-sequence"
+            );
+            anyhow::ensure!(
+                transports || after_url.is_none(),
+                "--after-url requires --transports"
+            );
+            anyhow::ensure!(
+                after_url
+                    .as_ref()
+                    .is_none_or(|v| !v.is_empty() && v.len() <= 65536),
+                "Invalid after_url length"
+            );
+            let exporting = json.is_some() || csv.is_some();
+            anyhow::ensure!(
+                !exporting || (!transports && after_sequence.is_none() && after_url.is_none()),
+                "Complete occurrence exports cannot be combined with transport mode or cursors"
+            );
+            let source = tokio::fs::canonicalize(&store).await?;
+            let mut destinations = std::collections::HashSet::new();
+            for path in json.iter().chain(csv.iter()) {
+                let resolved = canonical_destination(path).await?;
+                anyhow::ensure!(
+                    resolved != source,
+                    "Resource export cannot overwrite its SQLite source"
+                );
+                anyhow::ensure!(
+                    destinations.insert(destination_identity(&resolved)),
+                    "Resource JSON and CSV destinations must differ"
+                );
+                anyhow::ensure!(
+                    !tokio::fs::try_exists(path).await?,
+                    "Resource export destinations must be new files"
+                );
+            }
+            tokio::task::spawn_blocking(move || -> anyhow::Result<()> {
+                let database = open_seo_spider_core::CrawlStore::open_read_only(store)?;
+                anyhow::ensure!(
+                    !exporting || database.resource_ledger_summary()?.is_some(),
+                    "This database has no native resource ledger"
+                );
+                for (path, format) in json
+                    .iter()
+                    .map(|p| (p, resource_export::Format::Json))
+                    .chain(csv.iter().map(|p| (p, resource_export::Format::Csv)))
+                {
+                    let file = std::fs::OpenOptions::new()
+                        .write(true)
+                        .create_new(true)
+                        .open(path)?;
+                    let mut writer = std::io::BufWriter::new(file);
+                    resource_export::write_snapshot(&database, format, &mut writer, |_, _| Ok(()))?;
+                }
+                if !exporting {
+                    let page = if transports {
+                        serde_json::to_value(
+                            database.resource_transports(after_url.as_deref(), limit)?,
+                        )?
+                    } else {
+                        serde_json::to_value(database.resource_occurrences(after_sequence, limit)?)?
+                    };
+                    println!("{}", serde_json::to_string_pretty(&page)?);
+                }
+                Ok(())
+            })
+            .await??;
+        }
+        Command::PolicyLedger {
+            store,
+            after_sequence,
+            limit,
+            json,
+            csv,
+        } => {
+            anyhow::ensure!((1..=1000).contains(&limit), "limit must be 1..1000");
+            anyhow::ensure!(
+                after_sequence.is_none() || (json.is_none() && csv.is_none()),
+                "Complete policy exports cannot be combined with after_sequence"
+            );
+            let source = tokio::fs::canonicalize(&store).await?;
+            let mut destinations = std::collections::HashSet::new();
+            for path in json.iter().chain(csv.iter()) {
+                let resolved = canonical_destination(path).await?;
+                anyhow::ensure!(
+                    resolved != source,
+                    "Policy export cannot overwrite its SQLite source"
+                );
+                anyhow::ensure!(
+                    destinations.insert(destination_identity(&resolved)),
+                    "Policy JSON and CSV destinations must differ"
+                );
+                anyhow::ensure!(
+                    !tokio::fs::try_exists(path).await?,
+                    "Policy export destinations must be new files"
+                );
+            }
+            let exporting = json.is_some() || csv.is_some();
+            tokio::task::spawn_blocking(move || -> anyhow::Result<()> {
+                let database = open_seo_spider_core::CrawlStore::open_read_only(store)?;
+                for (path, format) in json
+                    .iter()
+                    .map(|path| (path, policy_export::Format::Json))
+                    .chain(csv.iter().map(|path| (path, policy_export::Format::Csv)))
+                {
+                    let file = std::fs::OpenOptions::new()
+                        .write(true)
+                        .create_new(true)
+                        .open(path)?;
+                    let mut writer = std::io::BufWriter::new(file);
+                    policy_export::write_snapshot(&database, format, &mut writer, |_| Ok(()))?;
+                }
+                if !exporting {
+                    println!(
+                        "{}",
+                        serde_json::to_string_pretty(
+                            &database.policy_occurrences(after_sequence, limit)?
+                        )?
+                    );
+                }
+                Ok(())
+            })
+            .await??;
+        }
+        Command::SavedNgrams {
+            report,
+            options,
+            output,
+            csv,
+        } => {
+            ngram_app::run_cli(report, options, output, csv).await?;
+        }
+        Command::AnalyzeCrawlContent {
+            snapshot,
+            selection,
+            output,
+        } => {
+            let report: open_seo_spider_core::CrawlReport =
+                serde_json::from_slice(&read_bounded(&snapshot, 256 * 1024 * 1024).await?)?;
+            let request: content_cohort::SavedContentRequest =
+                serde_json::from_slice(&read_bounded(&selection, 128 * 1024).await?)?;
+            let context =
+                content_cohort::snapshot_context(&report, None, "declared_imported_report")?;
+            let (envelope, input) =
+                content_cohort::prepare_saved_analysis(&report, &context, &request)?;
+            let result = content_cohort::finish_saved_analysis(envelope, input)?;
+            let json = serde_json::to_vec_pretty(&result)?;
+            if let Some(output) = output {
+                let mut file = tokio::fs::OpenOptions::new()
+                    .write(true)
+                    .create_new(true)
+                    .open(output)
+                    .await?;
+                tokio::io::AsyncWriteExt::write_all(&mut file, &json).await?;
+            } else {
+                println!("{}", String::from_utf8(json)?);
+            }
+        }
+        Command::AnalyzeContent { input, output } => {
+            let request: open_seo_spider_core::ContentAnalysisInput =
+                serde_json::from_slice(&read_bounded(&input, 8 * 1024 * 1024).await?)?;
+            let result = open_seo_spider_core::analyze_content(&request)?;
+            let json = serde_json::to_vec_pretty(&result)?;
+            if let Some(output) = output {
+                let mut file = tokio::fs::OpenOptions::new()
+                    .write(true)
+                    .create_new(true)
+                    .open(output)
+                    .await?;
+                tokio::io::AsyncWriteExt::write_all(&mut file, &json).await?;
+            } else {
+                println!("{}", String::from_utf8(json)?);
+            }
+        }
+        Command::PreviewPolicy { input, output } => {
+            let request: open_seo_spider_core::CrawlPolicyPreviewInput =
+                serde_json::from_slice(&read_bounded(&input, 8 * 1024 * 1024).await?)?;
+            let preview = open_seo_spider_core::preview_crawl_policy(&request)?;
+            let json = serde_json::to_string_pretty(&preview)?;
+            if let Some(output) = output {
+                tokio::fs::write(output, json).await?;
+            } else {
+                println!("{json}");
+            }
+        }
+        Command::Recrawl {
+            snapshot,
+            urls,
+            max_attempts,
+            store,
+            output,
+            csv,
+        } => {
+            let source = tokio::fs::canonicalize(&snapshot).await?;
+            let mut destinations = std::collections::HashSet::new();
+            for destination in std::iter::once(&output)
+                .chain(csv.iter())
+                .chain(store.iter())
+            {
+                let resolved = canonical_destination(destination).await?;
+                anyhow::ensure!(
+                    resolved != source,
+                    "A selected recrawl destination cannot overwrite its parent snapshot"
+                );
+                anyhow::ensure!(
+                    destinations.insert(destination_identity(&resolved)),
+                    "Selected recrawl JSON, CSV and SQLite destinations must be distinct"
+                );
+                match tokio::fs::symlink_metadata(destination).await {
+                    Ok(_) => anyhow::bail!(
+                        "Selected recrawl destinations must be new files: {}",
+                        destination.display()
+                    ),
+                    Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+                    Err(error) => return Err(error.into()),
+                }
+            }
+            let bytes = read_bounded(&snapshot, 256 * 1024 * 1024).await?;
+            let prepared = prepare_selected_recrawl(
+                SelectedRecrawlParent {
+                    job_id: "cli-json".into(),
+                    checkpoint_revision: None,
+                    source_kind: RecrawlSourceKind::StoredJson,
+                },
+                &bytes,
+                &urls,
+                max_attempts,
+            )?;
+            let mut crawler = Crawler::from_saved_config(prepared.config.clone())?
+                .with_selected_recrawl(prepared)?;
+            if let Some(store) = store {
+                // Reserve only a new destination, preserving an unrelated existing store.
+                let reservation = tokio::fs::OpenOptions::new()
+                    .write(true)
+                    .create_new(true)
+                    .open(&store)
+                    .await?;
+                drop(reservation);
+                crawler = crawler.with_store(store)?;
+            }
+            let mut report = crawler.run(None, Arc::new(AtomicBool::new(false))).await?;
+            analysis::extend_report(&mut report);
+            write_new_report(&output, &serde_json::to_vec_pretty(&report)?).await?;
+            if let Some(csv) = csv {
+                write_new_report(&csv, export_pages_csv(&report)?.as_bytes()).await?;
+            }
+            println!(
+                "Refreshed {} selected targets; retained {} source observations; {} selected targets remain pending.",
+                report
+                    .operation
+                    .as_ref()
+                    .map_or(0, |operation| operation.refreshed_count),
+                report
+                    .operation
+                    .as_ref()
+                    .map_or(0, |operation| operation.retained_count),
+                report
+                    .operation
+                    .as_ref()
+                    .map_or(0, |operation| operation.pending_count)
+            );
+        }
+        Command::ImportList {
+            file,
+            options,
+            inspect,
+            output,
+            csv,
+        } => {
+            let bytes = read_bounded(&file, 8 * 1024 * 1024).await?;
+            let json = if inspect {
+                anyhow::ensure!(
+                    csv.is_none(),
+                    "Inspection has no occurrence CSV; import a selected column first"
+                );
+                let limits = if let Some(path) = options.as_ref() {
+                    serde_json::from_slice::<ListImportOptions>(&read_bounded(path, 65536).await?)?
+                        .limits
+                } else {
+                    ListImportLimits::default()
+                };
+                serde_json::to_vec_pretty(&inspect_xlsx_list(&bytes, &limits)?)?
+            } else {
+                let options = list_options_for(&file, options.as_ref()).await?;
+                let result = import_url_list(&bytes, &options)?;
+                if let Some(path) = csv {
+                    tokio::fs::write(path, export_url_list_csv(&result)?).await?;
+                }
+                serde_json::to_vec_pretty(&result)?
+            };
+            if let Some(path) = output {
+                tokio::fs::write(path, json).await?;
+            } else {
+                println!("{}", String::from_utf8(json)?);
+            }
+        }
+        Command::Crawl {
+            urls,
+            sitemap,
+            list,
+            config,
+            store,
+            list_file,
+            list_options,
+            concurrency,
+            max_pages,
+            max_folder_depth,
+            max_query_tokens,
+            max_fetch_url_utf8_bytes,
+            output,
+            csv,
+            input_csv,
+            xml_sitemap,
+        } => {
+            let mut config = if let Some(path) = config {
+                serde_json::from_slice::<CrawlConfig>(
+                    &read_bounded(&path, 32 * 1024 * 1024).await?,
+                )?
+            } else {
+                CrawlConfig::default()
+            };
+            if !config.seed_urls.is_empty() && config.input_imports.is_empty() {
+                // Retain the existing separate manual-seed import without merging
+                // sitemap imports before Crawler::new captures original declarations.
+                config.input_imports.push(import_url_list(
+                    config.seed_urls.join("\n").as_bytes(),
+                    &ListImportOptions {
+                        format: ListImportFormat::Txt,
+                        limits: ListImportLimits::default(),
+                    },
+                )?);
+            }
+            if !urls.is_empty() {
+                config.input_imports.push(import_url_list(
+                    urls.join("\n").as_bytes(),
+                    &ListImportOptions {
+                        format: ListImportFormat::Txt,
+                        limits: ListImportLimits::default(),
+                    },
+                )?);
+                config.seed_urls.extend(urls);
+            }
+            if let Some(original) = &mut config.explicit_sitemap_inputs {
+                original.extend(sitemap.iter().cloned());
+            }
+            config.sitemap_urls.extend(sitemap);
+            if list || !list_file.is_empty() {
+                config.crawl_links = false;
+            }
+            if let Some(value) = concurrency {
+                config.concurrency = value;
+            }
+            if let Some(value) = max_pages {
+                config.max_pages = (value > 0).then_some(value);
+            }
+            if max_folder_depth.is_some()
+                || max_query_tokens.is_some()
+                || max_fetch_url_utf8_bytes.is_some()
+            {
+                let mut limits = config.crawl_admission_limits.take().unwrap_or_default();
+                if let Some(value) = max_folder_depth {
+                    limits.max_folder_depth = Some(value);
+                }
+                if let Some(value) = max_query_tokens {
+                    limits.max_query_tokens = Some(value);
+                }
+                if let Some(value) = max_fetch_url_utf8_bytes {
+                    limits.max_fetch_url_utf8_bytes = Some(value);
+                }
+                config.crawl_admission_limits = Some(limits);
+            }
+            for path in list_file {
+                let options = list_options_for(&path, list_options.as_ref()).await?;
+                let bytes = read_bounded(&path, options.limits.max_input_bytes).await?;
+                config
+                    .input_imports
+                    .push(import_url_list(&bytes, &options)?);
+            }
+            // Crawler::new performs the first sitemap-import merge after capture.
+            let mut crawler = Crawler::new(config)?;
+            if let Some(store) = store {
+                crawler = crawler.with_store(store)?;
+            }
+            let mut report = crawler.run(None, Arc::new(AtomicBool::new(false))).await?;
+            analysis::extend_report(&mut report);
+            tokio::fs::write(&output, serde_json::to_vec_pretty(&report)?).await?;
+            if let Some(path) = csv {
+                tokio::fs::write(path, export_pages_csv(&report)?).await?;
+            }
+            if let Some(path) = input_csv {
+                tokio::fs::write(path, export_input_occurrences_csv(&report)?).await?;
+            }
+            if let Some(path) = xml_sitemap {
+                tokio::fs::write(path, export_sitemap_xml(&report)).await?;
+            }
+            println!(
+                "{} URLs, {} issues. Report: {}",
+                report.pages.len(),
+                report.issues.len(),
+                output.display()
+            );
+        }
+    }
+    Ok(())
+}
+
+async fn write_new_report(path: &std::path::Path, bytes: &[u8]) -> anyhow::Result<()> {
+    use tokio::io::AsyncWriteExt;
+    let mut file = tokio::fs::OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .open(path)
+        .await?;
+    file.write_all(bytes).await?;
+    file.flush().await?;
+    Ok(())
+}
+
+fn destination_identity(path: &std::path::Path) -> PathBuf {
+    #[cfg(windows)]
+    {
+        PathBuf::from(path.as_os_str().to_string_lossy().to_lowercase())
+    }
+    #[cfg(not(windows))]
+    {
+        path.to_path_buf()
+    }
+}
+
+async fn canonical_destination(path: &std::path::Path) -> anyhow::Result<PathBuf> {
+    if let Ok(existing) = tokio::fs::canonicalize(path).await {
+        return Ok(existing);
+    }
+    let parent = path
+        .parent()
+        .filter(|parent| !parent.as_os_str().is_empty())
+        .unwrap_or(std::path::Path::new("."));
+    let name = path
+        .file_name()
+        .ok_or_else(|| anyhow::anyhow!("Output destination needs a file name"))?;
+    Ok(tokio::fs::canonicalize(parent).await?.join(name))
+}
+
+async fn read_bounded(path: &std::path::Path, limit: usize) -> anyhow::Result<Vec<u8>> {
+    anyhow::ensure!(
+        tokio::fs::metadata(path).await?.len() <= limit as u64,
+        "{} exceeds input byte limit {limit}",
+        path.display()
+    );
+    let bytes = tokio::fs::read(path).await?;
+    anyhow::ensure!(
+        bytes.len() <= limit,
+        "Input changed beyond its byte limit during read"
+    );
+    Ok(bytes)
+}
+async fn list_options_for(
+    file: &std::path::Path,
+    options: Option<&PathBuf>,
+) -> anyhow::Result<ListImportOptions> {
+    if let Some(path) = options {
+        return Ok(serde_json::from_slice(&read_bounded(path, 65536).await?)?);
+    }
+    let format = match file
+        .extension()
+        .and_then(|x| x.to_str())
+        .map(str::to_ascii_lowercase)
+        .as_deref()
+    {
+        Some("txt") => ListImportFormat::Txt,
+        Some("csv") => ListImportFormat::Csv {
+            delimiter: ListCsvDelimiter::Comma,
+            column: ListColumnSelector::Index { value: 1 },
+            start_row: 1,
+        },
+        Some("xml") => ListImportFormat::Xml,
+        Some("xlsx") => anyhow::bail!(
+            "XLSX requires explicit sheet/column --options or --list-options; use import-list --inspect to inspect sheets"
+        ),
+        _ => anyhow::bail!(
+            "Specify --options or --list-options with an explicit supported input format"
+        ),
+    };
+    Ok(ListImportOptions {
+        format,
+        limits: ListImportLimits::default(),
+    })
+}
+
+#[cfg(test)]
+#[path = "crawl_admission_cli_tests.rs"]
+mod crawl_admission_cli_tests;
+
+#[cfg(test)]
+#[path = "cdn_cli_tests.rs"]
+mod cdn_cli_tests;
