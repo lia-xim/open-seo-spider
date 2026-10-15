@@ -1,10 +1,12 @@
 mod analysis;
+mod broken_sources;
 mod comparison_app;
 mod content_cohort;
 mod generation_export;
 mod mcp;
 mod migration_app;
 mod policy_export;
+mod resource_broken_sources_app;
 mod resource_export;
 mod server;
 mod sitemap_findings;
@@ -103,6 +105,19 @@ enum Command {
         /// New output file; an existing destination is refused.
         #[arg(long)]
         output: Option<PathBuf>,
+    },
+    /// Read resource source/response joins from an explicit saved SQLite input, without crawling.
+    ResourceBrokenSources {
+        store: PathBuf,
+        /// Strict Core filter/paging/limits request JSON; no observation upload.
+        #[arg(long)]
+        request: Option<PathBuf>,
+        /// New destination for one bounded page including its snapshot.
+        #[arg(long)]
+        output: PathBuf,
+        /// New destination for the complete filtered CSV in the same preview snapshot.
+        #[arg(long)]
+        csv: Option<PathBuf>,
     },
     /// Read native resource decisions or export every decision in one read snapshot.
     ResourceLedger {
@@ -366,6 +381,14 @@ async fn main() -> anyhow::Result<()> {
             } else {
                 println!("{}", String::from_utf8(bytes)?);
             }
+        }
+        Command::ResourceBrokenSources {
+            store,
+            request,
+            output,
+            csv,
+        } => {
+            resource_broken_sources_app::run_cli(store, request, output, csv).await?;
         }
         Command::ResourceLedger {
             store,

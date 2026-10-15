@@ -62,3 +62,11 @@
 #sitemap-source-bodies-list{min-width:0;max-width:100%;padding-inline-start:20px}
 #sitemap-source-bodies-list li,#sitemap-source-bodies-list p{min-width:0;overflow-wrap:anywhere}
 #sitemap-source-bodies .button{max-width:100%;white-space:normal;overflow-wrap:anywhere}
+
+/* Header actions keep their controls visible while wrapping at every width. */
+.topbar{height:auto;min-height:76px;flex-wrap:wrap;padding-block:12px}
+.topbar-right{min-width:0;max-width:100%;flex-wrap:wrap;justify-content:flex-end;margin-left:auto}
+.topbar-right .text-button{white-space:normal}
+.topbar-right .connection{min-width:0}
+@media(max-width:850px){.topbar{min-height:67px}}
+@media(max-width:560px){.topbar{min-height:64px}}

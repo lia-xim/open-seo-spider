@@ -756,6 +756,63 @@ impl CrawlStore {
             .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
         crate::resource_ledger::summary(&connection)
     }
+    /// Separate verified saved resource-occurrence scope. No caller paths or network.
+    pub fn resource_broken_sources(
+        &self,
+        request: &crate::ResourceBrokenSourcesRequest,
+    ) -> anyhow::Result<crate::ResourceBrokenSourcesPage> {
+        match self
+            .read_resource_broken_sources(request, crate::resource_broken_sources::Mode::Page)?
+        {
+            crate::resource_broken_sources::Output::Page(page) => Ok(page),
+            crate::resource_broken_sources::Output::Csv(_) => {
+                bail!("Unexpected resource projection mode")
+            }
+        }
+    }
+    /// Complete filtered CSV, never only a page. The buffer is returned only after
+    /// the same verified read transaction and all byte limits finish successfully.
+    pub fn export_resource_broken_sources_csv(
+        &self,
+        request: &crate::ResourceBrokenSourcesRequest,
+    ) -> anyhow::Result<crate::ResourceBrokenSourcesCsv> {
+        if request.expected_snapshot_token.is_none() || request.after_sequence.is_some() {
+            bail!("Complete resource CSV requires a preview snapshot token and no continuation");
+        }
+        match self
+            .read_resource_broken_sources(request, crate::resource_broken_sources::Mode::Csv)?
+        {
+            crate::resource_broken_sources::Output::Csv(csv) => Ok(csv),
+            crate::resource_broken_sources::Output::Page(_) => {
+                bail!("Unexpected resource projection mode")
+            }
+        }
+    }
+    fn read_resource_broken_sources(
+        &self,
+        request: &crate::ResourceBrokenSourcesRequest,
+        mode: crate::resource_broken_sources::Mode,
+    ) -> anyhow::Result<crate::resource_broken_sources::Output> {
+        request.validate()?;
+        let mut connection = self
+            .connection
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let transaction = connection.transaction()?;
+        let config = crate::resource_broken_sources::preflight(&transaction, request)?;
+        if let Some(config) = &config
+            && crate::resource_broken_sources::verification_required(&transaction, config)?
+        {
+            verify_resource_read_context(&transaction, config)?;
+        }
+        // This internal ordered join receives the same TX. It never reenters
+        // another public Store method while the connection mutex is held.
+        let output =
+            crate::resource_broken_sources::project(&transaction, config.as_ref(), request, mode)?;
+        transaction.commit()?;
+        Ok(output)
+    }
+
     pub fn resource_occurrences(
         &self,
         after: Option<u64>,

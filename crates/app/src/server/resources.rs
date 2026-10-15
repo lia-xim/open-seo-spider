@@ -43,7 +43,7 @@ fn validate_limit(limit: Option<usize>) -> ApiResult<usize> {
     }
     Ok(limit)
 }
-async fn context(state: &AppState, id: Uuid) -> ApiResult<(Value, Option<PathBuf>)> {
+pub(super) async fn context(state: &AppState, id: Uuid) -> ApiResult<(Value, Option<PathBuf>)> {
     let job = get_job(state, id).await?;
     let guard = job.read().await;
     let enabled = guard.config.resource_discovery.is_some();
@@ -88,7 +88,7 @@ fn unavailable(mut metadata: Value) -> Value {
     });
     metadata
 }
-fn validate_binding(
+pub(super) fn validate_binding(
     metadata: &Value,
     summary: &open_seo_spider_core::ResourceLedgerSummary,
 ) -> ApiResult<()> {
@@ -102,7 +102,7 @@ fn validate_binding(
     }
     Ok(())
 }
-fn validate_snapshot(
+pub(super) fn validate_snapshot(
     metadata: &Value,
     snapshot: Option<&open_seo_spider_core::ResourceReadSnapshot>,
 ) -> ApiResult<()> {

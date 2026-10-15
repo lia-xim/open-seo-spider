@@ -26,11 +26,14 @@ use serde_json::{Value, json};
 use std::{collections::HashMap, path::PathBuf, sync::Arc};
 use tokio::sync::RwLock;
 use uuid::Uuid;
+mod broken_sources;
 mod comparison;
 mod content;
+mod directory_tree;
 mod lifecycle;
 mod migration;
 mod policy;
+mod resource_broken_sources;
 pub(crate) mod resources;
 mod response_stream;
 mod sitemap_csv_stream;
@@ -387,6 +390,125 @@ async fn serve_with_mcp_files_ready_source(
             post(sitemap_generation::bundle),
         )
         .route("/api/crawls/{id}/project.json", get(export_project))
+        .route(
+            "/resource-broken-sources",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/html; charset=utf-8")],
+                    include_str!("../../../web/resource-broken-sources.html"),
+                )
+            }),
+        )
+        .route(
+            "/resource-broken-sources.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+                    include_str!("../../../web/resource-broken-sources.js"),
+                )
+            }),
+        )
+        .route(
+            "/resource-broken-sources.css",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/css; charset=utf-8")],
+                    include_str!("../../../web/resource-broken-sources.css"),
+                )
+            }),
+        )
+        .route(
+            "/api/crawls/{id}/resource-broken-sources/preview",
+            post(resource_broken_sources::preview).layer(axum::extract::DefaultBodyLimit::max(
+                crate::resource_broken_sources_app::REQUEST_BYTES,
+            )),
+        )
+        .route(
+            "/api/crawls/{id}/resource-broken-sources/csv",
+            post(resource_broken_sources::csv)
+                .layer(axum::extract::DefaultBodyLimit::max(
+                    crate::resource_broken_sources_app::REQUEST_BYTES,
+                ))
+                .layer(middleware::from_fn(response_stream::require_http11)),
+        )
+        .route(
+            "/broken-sources",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/html; charset=utf-8")],
+                    include_str!("../../../web/broken-sources.html"),
+                )
+            }),
+        )
+        .route(
+            "/broken-sources.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+                    include_str!("../../../web/broken-sources.js"),
+                )
+            }),
+        )
+        .route(
+            "/broken-sources.css",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/css; charset=utf-8")],
+                    include_str!("../../../web/broken-sources.css"),
+                )
+            }),
+        )
+        .route(
+            "/api/crawls/{id}/broken-sources/preview",
+            post(broken_sources::preview).layer(axum::extract::DefaultBodyLimit::max(
+                crate::broken_sources::REQUEST_BYTES,
+            )),
+        )
+        .route(
+            "/api/crawls/{id}/broken-sources/csv",
+            post(broken_sources::csv).layer(axum::extract::DefaultBodyLimit::max(
+                crate::broken_sources::REQUEST_BYTES,
+            )),
+        )
+        .route(
+            "/directory-tree",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/html; charset=utf-8")],
+                    include_str!("../../../web/directory-tree.html"),
+                )
+            }),
+        )
+        .route(
+            "/directory-tree.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+                    include_str!("../../../web/directory-tree.js"),
+                )
+            }),
+        )
+        .route(
+            "/directory-tree.css",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/css; charset=utf-8")],
+                    include_str!("../../../web/directory-tree.css"),
+                )
+            }),
+        )
+        .route(
+            "/api/crawls/{id}/directory-tree/preview",
+            post(directory_tree::preview).layer(axum::extract::DefaultBodyLimit::max(
+                directory_tree::REQUEST_BYTES,
+            )),
+        )
+        .route(
+            "/api/crawls/{id}/directory-tree/csv",
+            post(directory_tree::csv).layer(axum::extract::DefaultBodyLimit::max(
+                directory_tree::REQUEST_BYTES,
+            )),
+        )
         .route(
             "/migration",
             get(|| async {

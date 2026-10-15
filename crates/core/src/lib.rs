@@ -10,6 +10,7 @@ mod control;
 mod crawl_policy;
 mod crawler;
 mod css_discovery;
+mod directory_tree;
 mod dom_facts;
 mod export;
 mod extract;
@@ -25,6 +26,7 @@ mod pdf;
 mod policy_ledger;
 mod recrawl;
 mod renderer;
+mod resource_broken_sources;
 mod resource_capture;
 mod resource_html;
 mod resource_ledger;
@@ -93,6 +95,7 @@ pub use control::{
 pub use crawl_policy::*;
 pub use crawler::Crawler;
 pub use css_discovery::*;
+pub use directory_tree::*;
 pub use dom_facts::audit_dom_metadata;
 pub use export::{
     compare_crawls, csv_text, export_browser_cookies_csv, export_custom_extractions_csv,
@@ -125,6 +128,7 @@ pub use recrawl::{
     RecrawlTargetState, RunPlan, SELECTED_RECRAWL_COVERAGE, SELECTED_RECRAWL_ENGINE,
     SelectedRecrawlOperation, SelectedRecrawlParent, SelectedRecrawlPlan, prepare_selected_recrawl,
 };
+pub use resource_broken_sources::*;
 pub use resource_ledger::*;
 pub use resource_policy::*;
 pub use response_observations::{
