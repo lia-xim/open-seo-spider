@@ -1,8 +1,8 @@
-## Aktuell: Source11 installiert, nächste Erweiterung für Volltests vorbereitet (15.10.2026)
+## Aktuell: Erweiterung besteht1428 Tests, optimierter Build läuft (16.10.2026)
 
-Source11 läuft lokal mit Renderer und allen acht gespeicherten Crawls. **1384 Tests, optimierter Build, elf praktische Prüfbereiche und sechs zusätzliche Sitemap-Generator-Gruppen bestehen.** [Installations- und Generatorbelege](verification/source11-installed-generator-20261015/index.json). Datenbytes und stabile Metadaten sind erhalten; die Änderungszeit-Ausnahme ist auf fünf genau inventarisierte SQLite-SHM-Dateien begrenzt.
+Optionale statische Crawl-Grenzen, Titel/Beschreibung/H1–H6-Ngramkanäle mit Wortwolke und der begrenzte Sitemap-Abfrageindex bestehen die vollständige **1428/0/0-Suite**, vier echte Renderergates und Format/Clippy. [Aktuelle vollständige Rohbelege](verification/source12-suite-20261016/index.json). Der optimierte Windows-Build läuft. Elf bestehende und drei zusätzliche praktische Abnahmen sowie sichere Installation stehen noch aus; lokal bleibt die bereits akzeptierte Source11 mit allen acht gespeicherten Crawls nutzbar.
 
-Die isolierte nächste Erweiterung ergänzt optionale Crawl-Grenzen, weitere Ngramkanäle/Wortwolke und einen begrenzten Abfrageindex. Finale Fixture-Korrekturen sind unabhängig geprüft; der strenge Compilerlauf besteht. Vollsuite, neuer optimierter Build, Native-Abnahme und Installation folgen. Katalog: **33 eigene Kriterien erfüllt /68 teilweise /43 geplant**. Diese Zahlen sind keine Hersteller-Abdeckungsquote; vollständige Screaming-Frog-Parität bleibt `NOT_PROVEN`.
+Head-Diagnostik und konfigurierbare CDN-Klassifikation werden separat vorbereitet. Katalog **33 eigene Kriterien erfüllt /68 teilweise /43 offen**; keine Hersteller-Abdeckungsquote, vollständige Screaming-Frog-Parität bleibt `NOT_PROVEN`.
 
 ## Aktuell: Ngram-Warmprüfung besteht, echter Antwort-Abschlussfehler entdeckt (15.10.2026)
 

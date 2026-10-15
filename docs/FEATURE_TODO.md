@@ -10,15 +10,17 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
 
 ## Aktuelle Arbeit und nächste Schritte
 
-- [ ] **Crawl-Grenzen, weitere Ngramkanäle und große Sitemap-Daten ausbauen** — FINAL_FIXTURES_REVIEWED_FORMATTED_AND_CLIPPY_PASS_FULL_SUITE_PENDING. Die nächste isolierte Erweiterung umfasst drei optionale Crawl-Aufnahmegrenzen, Titel/Beschreibung/H1–H6-Ngramkanäle mit Wortwolke und einen begrenzten SQLite-Index pro gespeicherter Sitemap-Abfrage. Beide zuvor fehlerhaften Test-Fixtures sind korrigiert und unabhängig geprüft. Der finale strenge Compilerlauf besteht; die vollständige neue Suite und praktische Abnahme folgen. Die früheren42/44-Ergebnisse bleiben als fehlgeschlagene Teilprüfung erhalten.
+- [ ] **Crawl-Grenzen, weitere Ngramkanäle und große Sitemap-Daten ausbauen** — ACTUAL1428_FULL_SUITE_PASS_OPTIMIZED_BUILD_RUNNING. Die Erweiterung mit optionalen statischen Crawl-Grenzen, Titel/Beschreibung/H1–H6-Ngramkanälen samt Wortwolke und begrenztem Sitemap-Abfrageindex besteht die vollständige1428-Test-Suite, vier echte Renderergates sowie Format und Clippy. Alle44 neuen Rustfunktionen sind tatsächlich bestanden. Der optimierte Windows-Build läuft; praktische Abnahmen und sichere Installation folgen. Installiert und nutzbar bleibt Source11.
   - [x] 381 Eingaben aus drei unabhängig geprüften Rollen ohne Pfadüberschneidung komponiert und formatiert. Alle 606 bisherigen Vollnamen bleiben zusätzlich zu 44 neuen Funktionen erhalten.
   - [x] Strenger Compilerlauf erfolgreich. Beide echten 501-URL-Kontrollcrawls, alle sechs Indexfälle einschließlich 50.000 Mitgliedschaften und 59-MiB-Bericht sowie die neuen Metadatenkanäle ohne Pflicht-Textcapture bestehen in den jeweiligen Funktionen.
   - [x] Beide Fixture-Korrekturen in finaler Komposition unabhängig geprüft und formatiert; tatsächlicher finaler Clippy-Abschluss mit Code0. Gegen die vorherige Komposition sind379 von381 Eingaben bytegleich und ausschließlich zwei Testdateien geändert.
-  - [ ] Finale Quellen privat committen, vollständige mindestens 1428-Test-Suite einschließlich realem Renderer und optimierten Windows-Build ausführen.
+  - [x] Finale Quellen als5d50a10 privat veröffentlicht; alle381 Arbeits- und Git-Blob-Hashes geprüft. Beide vorherigen Fixturefehler bestehen jetzt in der vollständigen1428/0/0-Suite.
+  - [x] Vier tatsächliche Renderergates, alle650 Vollnamen/646 Pflichtnamen, Format/Clippy und reguläre eigene Worker-/Fixtureabschlüsse sind belegt. Alle381 Quellen bleiben am Ende identisch.
+  - [ ] Optimierten Windows-Kandidaten aus genau dem bestandenen Quellstand fertig bauen; anschließend alle bestehenden elf Prüfbereiche sowie neue StaticLimits-/Ngram-Metadaten- und Generatorabnahmen mit dieser Programmdatei ausführen.
   - [ ] Crawl-Grenzen und Ngramkanäle praktisch über API/CLI, Browser 1440/320 und kalte Wiederöffnung prüfen; betroffene bestehende Bereiche mit der neuen Programmdatei erneut prüfen.
   - [ ] Erst nach erfolgreicher Abnahme sicher lokal installieren und die verbleibenden Katalogkriterien weiter abarbeiten.
-  - Verträge: [index.json](verification/source12-preliminary-tests-20261015/index.json).
-  - Gate-Stand: preliminary_clippy: PASS_ACTUAL_FINAL_DRAFT4_PRELIMINARY_CLIPPY; node: PASS_EIGHT_LOGICAL_SOURCE_CASES; new_rust_tests: 42_PASS_2_FAILED_FIXTURES; full_suite: NOT_RUN; optimized_build: NOT_RUN; native: NOT_RUN; installation: NOT_RUN; manufacturer_parity: NOT_PROVEN.
+  - Verträge: [index.json](verification/source12-suite-20261016/index.json), [index.json](verification/source12-preliminary-tests-20261015/index.json).
+  - Gate-Stand: preliminary_clippy: PASS_ACTUAL_FINAL_DRAFT4_PRELIMINARY_CLIPPY; node: PASS_EIGHT_LOGICAL_SOURCE_CASES; new_rust_tests: PASS_ALL44_WITHIN_ACTUAL1428_FULL_SUITE; full_suite: PASS_COMBINED_WORKSPACE_V12_REAL_RENDERER_FMT_CLIPPY; optimized_build: RUNNING_NOT_ACCEPTED; native: NOT_RUN; installation: NOT_RUN; manufacturer_parity: NOT_PROVEN.
 
 Frühere Zwischenstände bleiben am Ende als eingeklappte Historie erhalten. Ihre damaligen offenen Schritte sind keine zusätzlichen aktuellen Aufgaben; maßgeblich sind die aktuelle Arbeit und die offenen Feature-Kriterien.
 
@@ -547,7 +549,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Grenzen für Tiefe, Ordner, Query, Subdomains, URL-Länge und Linkanzahl ergänzen und einzeln prüfen.
 
-  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [renderer](../renderer/tests/worker.test.mjs) (PASS).
+  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [renderer](../renderer/tests/worker.test.mjs) (PASS), [source12-suite-20261016](verification/source12-suite-20261016/index.json) (PASS_COMBINED_WORKSPACE_V12_REAL_RENDERER_FMT_CLIPPY).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -568,6 +570,12 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "renderer"
         ],
         "proves": "Optional total/depth, concurrency, HTTP body, redirect and sitemap-document limits exist; body truncation and cancellation are tested. Renderer contexts/queue/deadline/HTML are bounded."
+      },
+      {
+        "verification_run_ids": [
+          "source12-suite-20261016"
+        ],
+        "proves": "All21 new static-admission functions (16 core and5 CLI/API/MCP)  pass, including genuine501 controls, folder-depth/query-token/normalized-fetch-URL-byte boundaries, policy-vs-transport redirects and early denial. Native UI/CLI/API/Cold acceptance and other quota families remain open."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -1778,7 +1786,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Gespeicherte Crawl-Texte und Quellrevisionen sind angebunden; große Corpus-Aggregation und vollständige spezielle N-Gramm-Exporte weiter prüfen.
 
-  Beweisregister: [content-analysis-core](../crates/core/src/content_analysis.rs) (PASS), [content-analysis-api-cli](verification/content-analysis-e2e.json) (PASS), [native-policy-ci](verification/native-policy-ci.json) (PASS), [native-policy-installed](verification/native-policy-installed.json) (PASS), [content-capture-core](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-native-chrome](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-api-cli](verification/content-capture-e2e.json) (PASS), [ui-content-fixture](../web/verification/ui-content-fixture-results.json) (PASS), [ui-content-live](../web/verification/ui-content-live-results.json) (PASS), [content-capture-batch](verification/content-capture-batch.json) (PASS), [content-capture-ci](verification/content-capture-ci.json) (PASS), [content-capture-installed](verification/content-capture-installed.json) (PASS), [source10-directed-checkpoint-20261015](verification/source10-directed-checkpoint-20261015/index.json) (PASS_21_NEW_FEATURE_NAMES_ONLY), [combined-workspace-v10-20261015](verification/combined-workspace-v10-20261015/index.json) (PASS_COMBINED_WORKSPACE_V10_REAL_RENDERER_FMT_CLIPPY), [source10-response-registry-20261015](verification/source10-response-registry-20261015/index.json) (FAIL_ACTUAL_SOURCE10_RESOURCE_DIRECTORY_WORKFLOW), [source11-native-four-20261015](verification/source11-native-four-20261015/index.json) (PASS_FOUR_CURRENT_NATIVE_SCOPES_SEVEN_PENDING).
+  Beweisregister: [content-analysis-core](../crates/core/src/content_analysis.rs) (PASS), [content-analysis-api-cli](verification/content-analysis-e2e.json) (PASS), [native-policy-ci](verification/native-policy-ci.json) (PASS), [native-policy-installed](verification/native-policy-installed.json) (PASS), [content-capture-core](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-native-chrome](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-api-cli](verification/content-capture-e2e.json) (PASS), [ui-content-fixture](../web/verification/ui-content-fixture-results.json) (PASS), [ui-content-live](../web/verification/ui-content-live-results.json) (PASS), [content-capture-batch](verification/content-capture-batch.json) (PASS), [content-capture-ci](verification/content-capture-ci.json) (PASS), [content-capture-installed](verification/content-capture-installed.json) (PASS), [source10-directed-checkpoint-20261015](verification/source10-directed-checkpoint-20261015/index.json) (PASS_21_NEW_FEATURE_NAMES_ONLY), [combined-workspace-v10-20261015](verification/combined-workspace-v10-20261015/index.json) (PASS_COMBINED_WORKSPACE_V10_REAL_RENDERER_FMT_CLIPPY), [source10-response-registry-20261015](verification/source10-response-registry-20261015/index.json) (FAIL_ACTUAL_SOURCE10_RESOURCE_DIRECTORY_WORKFLOW), [source11-native-four-20261015](verification/source11-native-four-20261015/index.json) (PASS_FOUR_CURRENT_NATIVE_SCOPES_SEVEN_PENDING), [source11-installed-generator-20261015](verification/source11-installed-generator-20261015/index.json) (PASS_LOCAL_INSTALL_AND_SIX_GENERATOR_GROUPS), [source12-suite-20261016](verification/source12-suite-20261016/index.json) (PASS_COMBINED_WORKSPACE_V12_REAL_RENDERER_FMT_CLIPPY).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -1790,7 +1798,6 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
     "status": "partial",
     "acceptance_test": "Count overlapping one-, two- and three-word sequences with documented stopword and case policies.",
     "remaining_acceptance": [
-      "Safely install the current accepted saved-corpus implementation while preserving original user data; the fresh Source11 fullCSV/API/CLI/UI/cold-reopen fixture has passed.",
       "Add separately documented title, heading and inlink text channels; capture needed alt/anchor and unlinked text provenance rather than infer it from flattened saved text.",
       "Add bounded word-cloud and specialized report interactions; verify large-corpus CPU/cancellation/performance and documented capture limits."
     ],
@@ -1858,6 +1865,14 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
         "source_commit": "61b0e3bca5386a17b449915b2915222e245084c5",
         "proves": "Actual current optimized Source11 corpus API/CLI/fullCSV and compiled browser1440/320 pass on206genuine captured pages,205sources/410sixgram occurrences,independent complete1..6 totals,200+5API and100+100+5UI. Cold reopen preserves all sources/memberships/fullCSV with zero new website requests. Seven actual children close; response registry warm6/cold2 complete,0aborted/failed/retained.",
         "limits": "Safe Source11 installation is pending. Additional title, description, heading, inlink, alt and unlinked text channels, wordcloud and large-corpus performance are not covered by this runtime proof; full manufacturer parity NOT_PROVEN."
+      },
+      {
+        "verification_run_ids": [
+          "source11-installed-generator-20261015",
+          "source11-native-four-20261015",
+          "source12-suite-20261016"
+        ],
+        "proves": "Source11 saved-body corpus was safely installed with original user data preserved. Source12 adds tested title/description/H1-H6 metadata/capture channels and bounded wordcloud; all17 new channel Rustfunctions and existing corpus tests pass within1428. Source12 native/install and inlink/alt/unlinked-text channels remain open."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -5799,4 +5814,4 @@ Diese unveränderten Einträge dokumentieren den damaligen Stand. Aktuelle Resta
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `ede60d3ba26b487fd210369d1ac95979825accf0784f227fed7c4931c7b82708`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T21:47:30.309Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `9a9c4466f64fe6aec297e9376daaa5d5b10088e1cef7aa92109cf0a84254afaf`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T22:15:41.570Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

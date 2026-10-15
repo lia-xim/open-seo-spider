@@ -1,0 +1,102 @@
+{
+  "kind": "actual_source12_constructor_refusal_before_manifest",
+  "result": "FAIL_TEST_INVENTORY_ORDER_ONLY",
+  "recorded_at": "2026-10-15T21:49:58.539Z",
+  "approval": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v12-approval-v1\\root-approval.json",
+    "sha256": "f1eb40b8c3edb3ba8fba3986a7ae6e6a0d299a261e127c25d7ad16a19fb8f4e3",
+    "bytes": 83956
+  },
+  "validator": {
+    "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\validate-combined-source-v12.mjs",
+    "sha256": "8ec4c6819a611aa0fa3d545da7d7ac2a1a9a066af0a215b9da63f46cd3c00cf3",
+    "bytes": 38374
+  },
+  "source_inputs": 381,
+  "all_root_and_frozen_inputs_unchanged": true,
+  "required_names": 646,
+  "qualified_names": 650,
+  "identical_required_test_sets_verified": true,
+  "order_only_differences": [
+    {
+      "path": "crates/app/src/mcp/files_tests.rs",
+      "names": 15,
+      "reason": "Identical test-name set with different inherited order"
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "names": 14,
+      "reason": "Identical test-name set with different inherited order"
+    },
+    {
+      "path": "crates/app/src/migration_app_tests.rs",
+      "names": 4,
+      "reason": "Identical test-name set with different inherited order"
+    },
+    {
+      "path": "crates/app/src/server/migration_tests.rs",
+      "names": 2,
+      "reason": "Identical test-name set with different inherited order"
+    },
+    {
+      "path": "crates/app/src/server/sitemap_csv_stream_lifecycle_tests.rs",
+      "names": 2,
+      "reason": "Identical test-name set with different inherited order"
+    },
+    {
+      "path": "crates/app/src/server/sitemap_membership_config_tests.rs",
+      "names": 3,
+      "reason": "Identical test-name set with different inherited order"
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_membership_limits_tests.rs",
+      "names": 3,
+      "reason": "Identical test-name set with different inherited order"
+    },
+    {
+      "path": "crates/core/src/migration_tests.rs",
+      "names": 16,
+      "reason": "Identical test-name set with different inherited order"
+    },
+    {
+      "path": "crates/core/src/sitemap_coverage/verified_read_tests.rs",
+      "names": 16,
+      "reason": "Identical test-name set with different inherited order"
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/capacity_tests.rs",
+      "names": 3,
+      "reason": "Identical test-name set with different inherited order"
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/verified_read_tests.rs",
+      "names": 22,
+      "reason": "Identical test-name set with different inherited order"
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis_tests.rs",
+      "names": 14,
+      "reason": "Identical test-name set with different inherited order"
+    },
+    {
+      "path": "crates/core/src/sitemap_source_measurement_tests.rs",
+      "names": 30,
+      "reason": "Identical test-name set with different inherited order"
+    }
+  ],
+  "failure": {
+    "name": "AssertionError",
+    "code": "ERR_ASSERTION",
+    "operator": "deepStrictEqual",
+    "stack_frames": [
+      "    at loadApproval (file:///C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/validate-combined-source-v12.mjs:281:371)",
+      "    at createManifest (file:///C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/validate-combined-source-v12.mjs:298:133)",
+      "    at file:///C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/record-source12-constructor-refusal.mjs:1:1743"
+    ]
+  },
+  "source_manifest_created": false,
+  "suite_started": false,
+  "build_started": false,
+  "native_started": false,
+  "installed": "SOURCE11_ACCEPTED_SERVICES_RUNNING"
+}
