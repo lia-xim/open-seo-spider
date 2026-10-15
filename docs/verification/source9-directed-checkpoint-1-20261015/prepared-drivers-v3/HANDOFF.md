@@ -1,0 +1,17 @@
+# Source9: three source-only drivers
+
+Exactly three runtime modules: validator, full-suite runner and optimized builder. No freezer/binder/native/installer is provided. Targets were not imported or executed; only three Node syntax checks ran.
+
+Parent admission checks the actual Source8 manifest58ab, all335 frozen inputs, closed Suite7266 and its three raw logs/three individual close receipts,544 actual full test names, owned worker facts/profile/four renderer gates. All historical reads use immutable E Source8/result/producer paths. It never compares parent bytes to the now358-file live Root, mutable old task/work producers, or currently installed historical Chrome. Current Source9 renderer/Chrome checks remain unchanged.
+
+Current direct authority: existing V5 preformat92518/independent556fb; ResourceV2, HeaderV2, DirectoryV3 and their direct independent reviews; final FormatterV5 raw-to-final18 plus actual current one-file tuple; actual V5 fmt and successful all-target Clippy raw log; existing private code publication. No recursive historical composition chain. Feature-count snapshots are omitted.
+
+Root constructs actual approval using ROOT-APPROVAL-BLUEPRINT.json fields, then may call exported loadSource9Approval to derive requiredTests,addedTests,newFullNames,sourceFiles,deltaPins,references. This call is for Root only after reviewing/promoting the exact validator. The actual approval source_files must be the exact ordered actual Clippy files358. files30 are plain-JS-path-sorted; authored_sha256 is V5 preformat row SHA; format_only is true for the actual one-file V5 formatter difference.
+
+Root's own freezer can form the manifest from SOURCE-MANIFEST-BLUEPRINT.json: required_tests=context.requiredTests; new_authored_tests=context.addedTests; new_authored_full_test_names=context.newFullNames; approved_product_bindings=context.deltaPins values mapped to path/before_sha256/after_sha256/bytes; references=context.references values AFTER pinning promoted validator at its actual SHA. Frozen files live directly under combined-source-v9. Exclude template_only/admission keys when publishing. Null source/approval/result pins are never executable inputs.
+
+Promote exact three modules to task/work. Full suite CLI: node work/run-combined-suite-v9.mjs --manifest-sha ACTUAL64HEX. Builder: node work/build-combined-optimized-v9.mjs --manifest-sha ACTUAL64HEX --suite-proof-sha ACTUAL_SUCCESSFUL64HEX. Compute window env remains mandatory. Output dirs are fresh results/combined-suite-v9 and results/combined-optimized-build-v9. Full suite keeps fmt/test/clippy/profile/worker/fixture/parser/cleanup unchanged; min1359,577 required names plus four renderer gates, all544 prior full names plus37 new. Builder retains actual3 child closes, raw suite reparse, optimized locked build, PE validation, exclusive fsynced candidate, and every after/final guard.
+
+No full Source9 suite/build/native/manufacturer/RSS/performance/installation result is asserted here. These remain actual future Root gates.
+
+V3 corrects exactly the independently found SOURCE9-DRIVER-01 local task alias in the historical parent verifier. Only the validator→suite→builder and manifest-blueprint SHA dependencies consequently change. V2/FINDINGS remain immutable. Original33-operation derivation and all7 complete operational regions are retained; REVISION.json contains five full inverses. Three syntax checks only, no target imports.

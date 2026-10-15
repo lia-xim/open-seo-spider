@@ -1,0 +1,50 @@
+   Compiling open-seo-spider-core v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\combined-source-v9\crates\core)
+   Compiling open-seo-spider v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\combined-source-v9\crates\app)
+    Finished `test` profile [optimized] target(s) in 3m 22s
+     Running unittests src\main.rs (E:/CodexWork/open-seo-spider-01a12ac3-20261013/cargo-target\debug\deps\open_seo_spider-9a3df811be87d61e.exe)
+
+running 13 tests
+test broken_sources::tests::broken_sources_caps_reject_rows_and_ambiguous_selected_join_expansion_without_truncation ... ok
+test broken_sources::tests::broken_sources_csv_exports_every_filtered_occurrence_formula_safe_exact_utf8_and_refuses_overcap ... ok
+test broken_sources::tests::broken_sources_cursor_and_export_require_exact_snapshot_filter_generation_and_page_limit ... ok
+test broken_sources::tests::broken_sources_preserves_repeated_occurrences_dom_absence_and_exact_requested_redirect_identity ... ok
+test broken_sources::tests::broken_sources_selected_inherited_and_imported_age_cannot_turn_old_404_into_a_current_observed_failure ... ok
+test broken_sources::tests::broken_sources_unknowns_keep_ambiguous_robots_errors_proposed_locations_old_and_incoherent_observations ... ok
+test resource_broken_sources_app::tests::resource_sources_app_json_rejects_envelope_over_budget_and_retains_unknown_null ... ok
+test resource_broken_sources_app::tests::resource_sources_cli_cannot_overwrite_database_request_sidecars_or_existing_outputs ... ok
+test resource_broken_sources_app::tests::resource_sources_request_rejects_paths_observations_unknown_fields_and_wrong_job_generation ... ok
+test server::broken_sources::tests::broken_sources_api_full_csv_keeps_duplicate_sources_and_exact_length_sha_without_website_requests ... ok
+test server::broken_sources::tests::broken_sources_api_refuses_active_and_generation_changes_and_marks_imported_age_unknown ... ok
+test server::resource_broken_sources::tests::resource_sources_api_real_saved_css_over200_full_csv_stale_and_cli_reopen_do_no_new_website_io ... ok
+test server::resource_broken_sources::tests::resource_sources_api_unavailable_active_config_and_snapshot_generation_authority_are_explicit ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 315 filtered out; finished in 1.19s
+
+     Running unittests src\lib.rs (E:/CodexWork/open-seo-spider-01a12ac3-20261013/cargo-target\debug\deps\open_seo_spider_core-d86615f8d91edd0b.exe)
+
+running 7 tests
+test resource_broken_sources::tests::resource_broken_sources_complete_transport_set_stales_same_generation_even_for_unselected_healthy_target ... ok
+test resource_broken_sources::tests::resource_broken_sources_evaluation_revisions_do_not_inflate_physical_ids_or_upgrade_old_no_grant ... FAILED
+test resource_broken_sources::tests::resource_broken_sources_full_csv_over200_keeps_tail_formula_safe_and_exact_snapshot_filter ... ok
+test resource_broken_sources::tests::resource_broken_sources_missing_history_is_unavailable_and_caps_hash_config_generation_and_parent_corruption_refuse ... ok
+test resource_broken_sources::tests::resource_broken_sources_policy_fetch_alias_is_separate_from_original_resolved_value_and_status_chain ... ok
+test resource_broken_sources::tests::resource_broken_sources_real_css_duplicates_private_404_and_cold_read_only_reopen_preserve_source_units ... ok
+test resource_broken_sources::tests::resource_broken_sources_same_read_transaction_cannot_mix_transport_changes_and_new_continuation ... ok
+
+failures:
+
+---- resource_broken_sources::tests::resource_broken_sources_evaluation_revisions_do_not_inflate_physical_ids_or_upgrade_old_no_grant stdout ----
+
+thread 'resource_broken_sources::tests::resource_broken_sources_evaluation_revisions_do_not_inflate_physical_ids_or_upgrade_old_no_grant' (31776) panicked at crates\core\src\resource_broken_sources_tests.rs:311:5:
+assertion `left == right` failed
+  left: ObservedNonFailure
+ right: NoGrant
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    resource_broken_sources::tests::resource_broken_sources_evaluation_revisions_do_not_inflate_physical_ids_or_upgrade_old_no_grant
+
+test result: FAILED. 6 passed; 1 failed; 0 ignored; 0 measured; 906 filtered out; finished in 0.97s
+
+error: test failed, to rerun pass `-p open-seo-spider-core --lib`

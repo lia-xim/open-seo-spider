@@ -1,0 +1,94 @@
+{
+  "kind": "source9_three_driver_source_checks",
+  "result": "AUTHORED_NOT_RUN",
+  "node_syntax_checks": [
+    {
+      "file": "validate-combined-source-v9.mjs",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "file": "run-combined-suite-v9.mjs",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "file": "build-combined-optimized-v9.mjs",
+      "exit_code": 0,
+      "stderr": ""
+    }
+  ],
+  "literal_operation_count": 33,
+  "inverses_verified": true,
+  "critical_regions": [
+    {
+      "driver": "run-combined-suite-v9.mjs",
+      "name": "actual Cargo close/run",
+      "sha256": "ce37fa9e4776cffef1985969a8dfae21b4f03c9e9070d79c1df1e4844b8af111",
+      "bytes": 1648
+    },
+    {
+      "driver": "run-combined-suite-v9.mjs",
+      "name": "named/count parser",
+      "sha256": "6559298988ea1130f85347905243773061cda5453766cc451807158083a0cb8b",
+      "bytes": 1819
+    },
+    {
+      "driver": "run-combined-suite-v9.mjs",
+      "name": "owned renderer/fixture execute/close",
+      "sha256": "aa57184b29885162236fc4b39d629c5ef7e2ea263fbc7d2abee1b54e81e766ce",
+      "bytes": 4055
+    },
+    {
+      "driver": "build-combined-optimized-v9.mjs",
+      "name": "actual build child close",
+      "sha256": "6b3e017ac76f2728aaeaeca0df5d2e8371073de89e9743141e3463b76153ef11",
+      "bytes": 1056
+    },
+    {
+      "driver": "build-combined-optimized-v9.mjs",
+      "name": "exclusive fsynced capture",
+      "sha256": "7bdca7c3eb716c8e2a0c6255f3f8a3a34c00a8e5198f338a32e73d85bade925f",
+      "bytes": 396
+    },
+    {
+      "driver": "build-combined-optimized-v9.mjs",
+      "name": "optimized PE build/capture/final guards",
+      "sha256": "4b312f3c9887c0759641abdec6c4657725ba22c0a4de12399ecf7a44353bfb48",
+      "bytes": 2181
+    },
+    {
+      "driver": "build-combined-optimized-v9.mjs",
+      "name": "complete fresh-suite verifier (only kind/result9 substitutions)",
+      "sha256": "2949354eed0ec32f7fada8714ce423c6f6f84d9b98beed8edbaa2ceba9a9b38c",
+      "bytes": 7028,
+      "before_sha256": "95e2e42b8b9cbda3b77fba04e5df1cbb99c65279d624b19f62274008ecec7903"
+    }
+  ],
+  "parent_closed_artifact_count": 10,
+  "parent_full_names": 544,
+  "current_new_windows_functions": 37,
+  "expected_full_names": 581,
+  "actual_target_imports": 0,
+  "compiler_invocations": 0,
+  "test_invocations": 0,
+  "fixtures_started": 0,
+  "native_invocations": 0,
+  "root_mutations": 0,
+  "revision": {
+    "parent_preparation": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v9-driver-preparation-v2\\manifest.json",
+      "sha256": "1cb1072fd6bc390f9db68bdfcee33c3cdb9caa7e49df8fa58b0e2f760f7aad0f",
+      "bytes": 3601
+    },
+    "findings_review": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v9-driver-independent-review-v2\\receipt.json",
+      "sha256": "eb912154f38259b9f05132dfa53ac14150f00a7fa8c90ea33d3600088cc7d483",
+      "bytes": 3826
+    },
+    "closed_finding": "SOURCE9-DRIVER-01",
+    "operations": 5,
+    "all_full_inverses_verified": true,
+    "all_runtime_bytes_except_explicit_hunks_exact": true
+  }
+}

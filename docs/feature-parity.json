@@ -6095,6 +6095,24 @@
       "recorded_at": "2026-10-15T16:55:54.867Z",
       "scope": "Actual358-input Source9 all-target Clippy stops on one undeclared App-test csv crate reference. Exit101,0 executed tests, final sources unchanged; first failure and all30 actual compiled changed/new payloads retained. Not promoted, built or installed.",
       "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "sitemap-read-performance-20261015",
+      "artifact": "docs/verification/sitemap-read-performance-20261015/index.json",
+      "artifact_sha256": "97c36eca2be24cc4bde3071e4fcce9e1d10be343c4485ab932b2d9be10fc61b8",
+      "result": "EXISTING_RUNTIME_TIMESTAMPS_AND_SOURCE_WORKLOAD_CONFIRMED_NO_NEW_BENCHMARK",
+      "recorded_at": "2026-10-15T17:00:10.032Z",
+      "scope": "Eight Source7/8 read-path source files are byte-identical. Workload totals are source-derived, not measured CPU counters. No optimization implemented, no performance PASS.",
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "source9-directed-checkpoint-1-20261015",
+      "artifact": "docs/verification/source9-directed-checkpoint-1-20261015/index.json",
+      "artifact_sha256": "ab30a162380254240b6f8ac3e4927e8a1c26def543db7aee45320c953a5b801d",
+      "result": "CLIPPY_PASS_DIRECTORY17_PASS_BROKEN_SOURCES19_PASS_1_FAIL",
+      "recorded_at": "2026-10-15T17:18:40.970Z",
+      "scope": "Actual preliminary all-target compiler pass and37 directed tests:36 pass1 fixture selector fail. No full-suite, candidate, native or installed acceptance.",
+      "reference_parity": "NOT_PROVEN"
     }
   ],
   "reference_workflows": [
@@ -6352,32 +6370,41 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-15T16:41:43.998Z",
+  "last_verified_at": "2026-10-15T17:18:40.973Z",
   "current_work": [
     {
       "id": "combined-source-v9-20261015",
       "priority": 1,
-      "status": "ACTUAL_PRELIMINARY_COMPILE_FAIL_TEST_IMPORT_REPAIR_PENDING",
+      "status": "ACTUAL_CLIPPY_PASS_DIRECTORY17_PASS_BROKEN_SOURCES19_PASS_1_FAIL",
       "title_de": "Defekte Linkquellen, Ressourcen und Verzeichnisansicht ausbauen",
-      "summary_de": "Link-/Ressourcenquellen, Verzeichnisansicht und Headerumbruch sind auf358 Quellen mit37 neuen Testfunktionen zusammengeführt und unabhängig quellengeprüft. Tatsächliches Format besteht; der erste All-Targets-Clippy-Lauf endet nach32,9Sekunden mitExit101 an einem nicht verfügbaren CSV-Parser in einem neuen App-Test. Noch kein Test ausgeführt und keine Source9-Produktpromotion. Eine enge Testkorrektur folgt.",
+      "summary_de": "Der neue358-Dateien-Stand ist privat versioniert und besteht die vollständige Compilerprüfung mit Clippy ohne Warnungen. Alle17 gerichteten Verzeichnistests bestehen. Von20 Link-/Ressourcentests bestehen19; ein Test wählt die CSS-Startoccurrence statt des konkreten Bildvorkommens. Der enge Testselektor wird repariert, ohne die NoGrant-Assertion abzuschwächen. Gesamtsuite, optimierter Kandidat, native Abnahmen und Installation sind noch offen.",
       "completed_acceptance_de": [
         "Kopfzeilenfehler im tatsächlichen Source8-Browser gefunden; CSS-Umbruch unabhängig geprüft und als Browser-CSS-Vorschau bei1440/320 gemessen.",
         "ResourceWorkflow-Quellenreviewbefund und zwei Verzeichnis-Sonderfälle vor Integration geschlossen; vollständige30-Pfade-Komposition unabhängig quellengeprüft.",
-        "Header-CSS mit vollständig komponierten statischen Assets bei320/560/561/600/768/850/1440 im Browser ohneÜberlauf geprüft; ausdrücklich kein kompilierter Produktnachweis."
+        "Header-CSS mit vollständig komponierten statischen Assets bei320/560/561/600/768/850/1440 im Browser ohneÜberlauf geprüft; ausdrücklich kein kompilierter Produktnachweis.",
+        "Neuer Stand mit30 eigenen Quellpfaden einschließlich getrennter Link-/Ressourcenberichte, API/UI/CSV, Resource-CLI, Verzeichnisansicht und globalem Headerumbruch privat versioniert.",
+        "Tatsächliche Clippy-Compilerprüfung aller Workspace-Ziele ohne Warnungen bestanden; alle358 Eingaben nach Abschluss exakt geprüft.",
+        "Tatsächliche gerichtete Tests:17 Verzeichnisfälle bestanden,19 Link-/Ressourcenfälle bestanden und ein enger Fixtureselektor fehlgeschlagen. Vollständige Rohlogs bleiben erhalten."
       ],
       "pending_acceptance_de": [
-        "CSV-Testimport eng reparieren, alle37 Tests/Assertions erhalten, gemeinsamen Compiler- und anschließenden vollständigen Lauf ausführen.",
-        "Optimierten Kandidaten bauen und echte API-/CLI-/Browser-/Exportprüfungen einschließlich Headerlayout und neuem Verzeichnis-/Ressourcenworkflow durchführen.",
-        "Sichere Installation erst nach erforderlichen Prüfungen; vollständige Herstellerparität bleibt offen."
+        "Eindeutigen Bildoccurrence-/Revisionsselektor mit erhaltenen strengen Grant- und Historienprüfungen reparieren und unabhängig prüfen.",
+        "Gerichtete Regression wiederholen und vollständige Workspace-/Renderer-/Format-/Clippy-Suite am finalen Stand ausführen.",
+        "Optimierten Kandidaten bauen, neue native Resource-/Verzeichnisabläufe sowie alle erforderlichen bisherigen nativen Bereiche ausführen.",
+        "Sichere Installation mit erhaltenen Nutzerdaten nach allen erforderlichen Abnahmen; N-Gramm-Corpus und Sitemap-Leseperformance danach weiter bearbeiten."
       ],
       "documentation": [
+        "docs/verification/source9-directed-checkpoint-1-20261015/index.json",
         "docs/verification/source9-preliminary-failed-20261015/index.json",
         "docs/verification/source8-native-checkpoint-1-20261015/index.json"
       ],
       "gates": {
-        "implementation": "COMPOSED_FORMATTED_PRELIMINARY_CLIPPY_FAIL_101_ZERO_EXECUTED_TESTS",
-        "runtime": "NOT_RUN",
-        "installation": "NOT_RUN",
+        "implementation": "PRIVATELY_COMMITTED_30_SOURCE_PATHS",
+        "compile": "PASS_ALL_TARGET_CLIPPY_NO_WARNINGS",
+        "directed_tests": "CLIPPY_PASS_DIRECTORY17_PASS_BROKEN_SOURCES19_PASS_1_FAIL",
+        "full_suite": "NOT_RUN",
+        "optimized_build": "NOT_RUN",
+        "native": "NOT_RUN",
+        "installation": "UNCHANGED_SOURCE5_R3",
         "manufacturer_parity": "NOT_PROVEN"
       },
       "reference_parity": "NOT_PROVEN"
@@ -7967,6 +7994,32 @@
         "http_inflight_graceful_drain": "NOT_PROVEN"
       },
       "tracking_issue": "https://github.com/lia-xim/open-seo-spider/issues/15"
+    },
+    {
+      "id": "sitemap-stateless-read-performance-20261015",
+      "priority": 1,
+      "status": "READ_PATH_REPEATED_FULL_WORK_CONFIRMED_OPTIMIZATION_NOT_IMPLEMENTED",
+      "title_de": "Große Sitemap-Berichte beim Blättern beschleunigen",
+      "summary_de": "Vorhandener echter Lauf:50.000 Einträge in13,088Sekunden erfasst. Die500 warmen/kalten200erFenster wiederholen volle Katalog-/Reportprüfungen; der gespeicherte Bericht hat59,6MB. Arbeitsmengen sind aus Code und echten Zeilenzahlen abgeleitet, keine gemessenenCPUcounter oder einzelnen Requestlatenzen.",
+      "completed_acceptance_de": [
+        "Tatsächliche Laufzeitbelege und acht unveränderte Source7/8-Lesepfade geprüft; langsamer Read-only-Abschnitt von Erfassung, Netzwerk und Dateischreibphase getrennt."
+      ],
+      "pending_acceptance_de": [
+        "Einzelne echte Requestzeiten und deterministische JSON-/Hash-/Decode-Arbeitszähler erheben.",
+        "Zuerst pro bestehendem Read-TX die geprüfte Reportprojektion wiederverwenden; bisherige Fallbacks und Hash-/Stale-/Tail-/Unknown-/Größenprüfungen vollständig erhalten.",
+        "Für Amortisierung über Fenster eine ausdrücklich begrenzte Read-Snapshot-Session mit Datei-/Connectionidentität und Mutations-/Idle-/Stop-/Join-Vertrag entwerfen; kein ungesicherter Hashcache auf veränderlicher Datenbank.",
+        "Identische50.000-Einträge-/CSV-/Tail-/Wiederöffnungsfälle tatsächlich vor/nach vergleichen; ohne Messung keinen Geschwindigkeitsgewinn behaupten."
+      ],
+      "documentation": [
+        "docs/verification/sitemap-read-performance-20261015/index.json"
+      ],
+      "gates": {
+        "evidence": "ACTUAL_PRIOR_TIMESTAMPS_AND_CURRENT_BYTE_EQUAL_READ_SOURCE",
+        "implementation": "NOT_IMPLEMENTED",
+        "performance_gain": "NOT_PROVEN",
+        "manufacturer_parity": "NOT_PROVEN"
+      },
+      "reference_parity": "NOT_PROVEN"
     }
   ]
 }
