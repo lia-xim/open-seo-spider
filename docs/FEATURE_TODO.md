@@ -4437,7 +4437,9 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
     "status": "planned",
     "acceptance_test": "Use mock OpenAI-compatible/Gemini/Anthropic and a local Ollama endpoint; record model/provider errors separately.",
     "remaining_acceptance": [
-      "Use mock OpenAI-compatible/Gemini/Anthropic and a local Ollama endpoint; record model/provider errors separately."
+      "Use mock OpenAI-compatible/Gemini/Anthropic and a local Ollama endpoint; record model/provider errors separately.",
+      "Validate selected models against a live-model-list fixture, offer available models, and distinguish unavailable/retired models from provider failures.",
+      "Prove local Ollama image-generation and adjustable request-timeout behavior independently of text-generation coverage."
     ],
     "implementation_evidence": [],
     "parity_status": "NOT_PROVEN"
@@ -4462,7 +4464,8 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
     "status": "planned",
     "acceptance_test": "Run an authored prompt on selected page text/HTML/extraction; preview exact input and persist typed output.",
     "remaining_acceptance": [
-      "Run an authored prompt on selected page text/HTML/extraction; preview exact input and persist typed output."
+      "Run an authored prompt on selected page text/HTML/extraction; preview exact input and persist typed output.",
+      "Round-trip provider-wide system prompts and expose the exact combined system/user input in test preview."
     ],
     "implementation_evidence": [],
     "parity_status": "NOT_PROVEN"
@@ -4637,7 +4640,8 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
     "status": "planned",
     "acceptance_test": "Enforce explicit rate/spend bounds for an API fixture, record retries and distinguish local from paid providers.",
     "remaining_acceptance": [
-      "Enforce explicit rate/spend bounds for an API fixture, record retries and distinguish local from paid providers."
+      "Enforce explicit rate/spend bounds for an API fixture, record retries and distinguish local from paid providers.",
+      "Attribute actual provider token-usage fields to the connected account/model; retain absent usage as unknown."
     ],
     "implementation_evidence": [],
     "parity_status": "NOT_PROVEN"
@@ -5132,7 +5136,8 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
     "status": "partial",
     "acceptance_test": "Export filtered observations and all-occurrence evidence as CSV/XLSX; escape formulas and preserve Unicode/newlines.",
     "remaining_acceptance": [
-      "Add XLSX, filtered-export parity, formula-injection escaping and explicit Unicode/newline acceptance."
+      "Add XLSX, filtered-export parity, formula-injection escaping and explicit Unicode/newline acceptance.",
+      "Prove optional skip-empty behavior for selected multi-report/bulk exports, including mixed empty and nonempty reports."
     ],
     "implementation_evidence": [
       {
@@ -5243,7 +5248,8 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
     "remaining_acceptance": [
       "Expose and prove report, bulk-export, filter and data-field discovery with typed selected-field/format/segment/full-selection exports; existing snapshot and sitemap exports prove narrower contracts.",
       "Implement configured base-directory text read/write, directory discovery/list/create and explicit disabled-by-default Node script/npm capabilities. Prove exact target containment, unsupported paths, defaults, output/error/deadline/actual child drain and retained outputs with independent fixtures.",
-      "Prove stored URL content/image/screenshot outputs, stable selected-crawl workflow and same source/config/error behavior using real official SDK clients on both transports. The static26-tool registry and historical11-tool basic workflow are not full reference MCP coverage."
+      "Prove stored URL content/image/screenshot outputs, stable selected-crawl workflow and same source/config/error behavior using real official SDK clients on both transports. The static26-tool registry and historical11-tool basic workflow are not full reference MCP coverage.",
+      "Prove exported documentation of the actual offered API, explicit opt-in server autostart, all multi-file exports and API/analysis progress phases; a static registry is insufficient."
     ],
     "implementation_evidence": [
       {
@@ -5290,7 +5296,8 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
     "status": "partial",
     "acceptance_test": "Aggregate locally saved crawl counts/duration without sending telemetry by default.",
     "remaining_acceptance": [
-      "Add explicit aggregate usage statistics over multiple snapshots and demonstrate default no-telemetry behavior."
+      "Add explicit aggregate usage statistics over multiple snapshots and demonstrate default no-telemetry behavior.",
+      "Prove both cumulative and non-cumulative usage views from retained local measurements."
     ],
     "implementation_evidence": [
       {
@@ -5400,7 +5407,8 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
     "status": "planned",
     "acceptance_test": "Send only to an explicitly configured local test SMTP sink; verify summary, change table and attachment error handling.",
     "remaining_acceptance": [
-      "Send only to an explicitly configured local test SMTP sink; verify summary, change table and attachment error handling."
+      "Send only to an explicitly configured local test SMTP sink; verify summary, change table and attachment error handling.",
+      "Prove selected zipped export attachments, oversize/provider refusal, and skipped-empty reports through an explicitly configured local SMTP sink."
     ],
     "implementation_evidence": [],
     "parity_status": "NOT_PROVEN"
@@ -5712,4 +5720,4 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `459ef07cf6b6537a4103c943d5efaaf645f1fa19d67ad6b050ff2255835e1a2d`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T18:57:26.599Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `b83859cf9676215bef6aa774eb42dba330b50ef79bcb7f0814ba25759323c05e`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T18:57:26.599Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
