@@ -1,0 +1,24 @@
+{
+  "kind": "windows_root_handle_test_error_classification_repair",
+  "recorded_at": "2026-10-15T02:33:00.818Z",
+  "parent_commit": "ac7282c4ce314f1388b6231368c6da171d9c1cf8",
+  "actual_first_result": {
+    "passed": 14,
+    "failed": 1,
+    "ignored": 0,
+    "source_after_verified": true,
+    "log_sha256": "6aaf531c228fef420e5b055c575d7fdbf9a8e460843731db9f9e0d47aead7a42"
+  },
+  "path": "crates/app/src/mcp/files_tests.rs",
+  "before_sha256": "4427878b7d8fa11375d2e796c3b4405707b354aa31e447dbdc3c069ae39b14d0",
+  "after_sha256": "85f9c637074319b9e416d37c2634e5bf6bf777d962c67e6d03a3c06cfcc3d76e",
+  "new_test_names": 0,
+  "product_source_unchanged": true,
+  "reason": "Windows sharing violation32 is not ErrorKind::Other in Rust1.95. Accept only OS access5/sharing32 denial; preserve old root/path/data checks and additionally require the same rename and data to succeed after actual shutdown and dropping the grant.",
+  "after_fix_execution": "NOT_RUN",
+  "full_workspace": "NOT_RUN",
+  "official_sdk": "NOT_RUN",
+  "unix": "NOT_RUN",
+  "installed_runtime": "UNCHANGED_AB1",
+  "manufacturer_parity": "NOT_PROVEN"
+}

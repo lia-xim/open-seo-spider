@@ -1,9 +1,15 @@
 # Optional MCP file tools
 
-This is a new source implementation. Compilation, authored regressions, official
-MCP-client acceptance and installed-runtime acceptance are **NOT RUN** for this
-change. The installed application does not acquire these capabilities until a
-new candidate passes its gates and is installed.
+This is a new source implementation. The first actual Windows module run
+compiled and executed 15 tests: 14 passed and one failed because its Windows
+error classification was too narrow. That test now checks the concrete OS
+denial codes and requires the same rename to succeed after closing the grant;
+this correction has not yet been rerun. Transport regressions, official MCP
+clients, Unix cases, the full workspace and installed-runtime acceptance remain
+open. The installed application acquires these capabilities only after a new
+candidate passes its gates and is installed. The [first run and source
+bindings](verification/mcp-file-tools-source-20261015/focused-module-first/index.json)
+are recorded separately from the original source-only preparation.
 
 ## Configuration
 

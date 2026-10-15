@@ -1,0 +1,70 @@
+   Compiling windows-sys v0.61.2
+   Compiling windows_x86_64_msvc v0.52.6
+   Compiling io-lifetimes v2.0.4
+   Compiling io-lifetimes v3.0.1
+   Compiling io-extras v0.19.0
+   Compiling cap-primitives v4.0.3
+   Compiling cap-std v4.0.3
+   Compiling maybe-owned v0.3.4
+   Compiling ambient-authority v0.0.2
+   Compiling cap-fs-ext v4.0.3
+   Compiling windows-targets v0.52.6
+   Compiling windows-sys v0.52.0
+   Compiling winx v0.36.4
+   Compiling fs-set-times v0.20.3
+   Compiling mio v1.2.4
+   Compiling socket2 v0.6.5
+   Compiling anstyle-wincon v3.0.11
+   Compiling anstyle-query v1.1.5
+   Compiling nu-ansi-term v0.50.3
+   Compiling anstream v1.0.0
+   Compiling tracing-subscriber v0.3.23
+   Compiling clap_builder v4.6.7
+   Compiling tokio v1.53.2
+   Compiling clap v4.6.7
+   Compiling hyper v1.12.0
+   Compiling tower v0.5.3
+   Compiling tokio-util v0.7.20
+   Compiling async-compression v0.4.50
+   Compiling tokio-rustls v0.26.6
+   Compiling tower-http v0.6.11
+   Compiling hyper-util v0.1.21
+   Compiling hyper-rustls v0.27.10
+   Compiling axum v0.8.9
+   Compiling reqwest v0.12.28
+   Compiling open-seo-spider-core v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\crates\core)
+   Compiling open-seo-spider v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\crates\app)
+    Finished `test` profile [unoptimized] target(s) in 51.82s
+     Running unittests src\main.rs (E:\CodexWork\open-seo-spider-01a12ac3-20261013\cargo-target\debug\deps\open_seo_spider-aa803b48f5a93afb.exe)
+
+running 15 tests
+test mcp::files::tests::file_tools_atomic_replacement_keeps_hardlink_inode_and_cleans_own_stage ... ok
+test mcp::files::tests::file_tools_cancelled_drain_does_not_lose_join_handle ... ok
+test mcp::files::tests::file_tools_dropped_request_and_concurrent_drain_wait_actual_worker_return ... ok
+test mcp::files::tests::file_tools_existing_root_and_no_implicit_outside_creation ... ok
+test mcp::files::tests::file_tools_four_workers_bound_and_panics_are_joined_and_reported ... ok
+test mcp::files::tests::file_tools_listing_has_exact_sorted_pages_and_stale_instance_anchor_checks ... ok
+test mcp::files::tests::file_tools_listing_over_entry_budget_is_error_not_partial_page ... ok
+test mcp::files::tests::file_tools_native_unicode_and_platform_filename_boundaries ... ok
+test mcp::files::tests::file_tools_read_empty_invalid_utf8_and_sparse_overbudget_are_explicit ... ok
+test mcp::files::tests::file_tools_recursive_create_long_unicode_and_partial_effects ... ok
+test mcp::files::tests::file_tools_root_handle_cannot_be_rebound_by_replacing_configured_path ... FAILED
+test mcp::files::tests::file_tools_schema_and_native_path_preflight_are_strict ... ok
+test mcp::files::tests::file_tools_stage_guard_cleans_owned_failure_but_preserves_replaced_entry ... ok
+test mcp::files::tests::file_tools_supervisor_abort_and_caller_drop_recover_actual_join_slots ... ok
+test mcp::files::tests::file_tools_utf8_chunks_reconstruct_exact_bytes_and_detect_content_changes ... ok
+
+failures:
+
+---- mcp::files::tests::file_tools_root_handle_cannot_be_rebound_by_replacing_configured_path stdout ----
+
+thread 'mcp::files::tests::file_tools_root_handle_cannot_be_rebound_by_replacing_configured_path' (43700) panicked at crates\app\src\mcp\files_tests.rs:501:17:
+assertion failed: matches!(error.kind(), io::ErrorKind::PermissionDenied | io::ErrorKind::Other)
+
+
+failures:
+    mcp::files::tests::file_tools_root_handle_cannot_be_rebound_by_replacing_configured_path
+
+test result: FAILED. 14 passed; 1 failed; 0 ignored; 0 measured; 234 filtered out; finished in 3.31s
+
+error: test failed, to rerun pass `-p open-seo-spider --bin open-seo-spider`

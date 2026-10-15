@@ -497,12 +497,15 @@ async fn file_tools_root_handle_cannot_be_rebound_by_replacing_configured_path()
             return Err(error.into());
             #[cfg(windows)]
             {
-                // Windows cap directories can deny rename through FILE_SHARE_DELETE policy.
-                assert!(matches!(
-                    error.kind(),
-                    io::ErrorKind::PermissionDenied | io::ErrorKind::Other
-                ));
+                // Windows cap directories omit FILE_SHARE_DELETE. Error 32
+                // (sharing violation) maps to an uncategorized error in Rust
+                // 1.95, so check the actual OS denial rather than ErrorKind::Other.
+                assert!(
+                    matches!(error.raw_os_error(), Some(5 | 32)),
+                    "Expected access/sharing denial for held directory: {error:?}"
+                );
                 assert!(fixture.path.is_dir());
+                assert!(!moved.exists());
                 tools
                     .call(NAMES[4], json!({"path":"actual","text":"held capability"}))
                     .await?;
@@ -511,6 +514,13 @@ async fn file_tools_root_handle_cannot_be_rebound_by_replacing_configured_path()
                     b"held capability"
                 );
                 tools.shutdown_and_drain().await?;
+                drop(tools);
+                // An unrelated ACL denial must not satisfy the held-handle
+                // branch: the same rename must work after releasing this grant.
+                std::fs::rename(&fixture.path, &moved)?;
+                assert!(!fixture.path.exists());
+                assert_eq!(std::fs::read(moved.join("actual"))?, b"held capability");
+                std::fs::remove_dir_all(&moved)?;
             }
         }
     }

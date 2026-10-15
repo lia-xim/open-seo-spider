@@ -1,0 +1,58 @@
+{
+  "kind": "actual_mcp_file_module_focused_windows_v1",
+  "result": "FAIL_FOCUSED_WINDOWS_FILE_MODULE",
+  "recorded_at": "2026-10-15T02:23:49.504Z",
+  "source_commit": "ac7282c4ce314f1388b6231368c6da171d9c1cf8",
+  "source_inputs": 300,
+  "source_after_verified": true,
+  "args": [
+    "test",
+    "-p",
+    "open-seo-spider",
+    "--locked",
+    "mcp::files::tests",
+    "--",
+    "--test-threads=1"
+  ],
+  "pid": 44096,
+  "actual_cargo_close": {
+    "code": 101,
+    "signal": null
+  },
+  "spawn_error": null,
+  "failure": null,
+  "elapsed_ms": 56070,
+  "log_sha256": "6aaf531c228fef420e5b055c575d7fdbf9a8e460843731db9f9e0d47aead7a42",
+  "summaries": [
+    {
+      "state": "FAILED",
+      "passed": 14,
+      "failed": 1,
+      "ignored": 0
+    }
+  ],
+  "required_names_verified": false,
+  "required_names": [
+    "file_tools_schema_and_native_path_preflight_are_strict",
+    "file_tools_native_unicode_and_platform_filename_boundaries",
+    "file_tools_existing_root_and_no_implicit_outside_creation",
+    "file_tools_recursive_create_long_unicode_and_partial_effects",
+    "file_tools_listing_has_exact_sorted_pages_and_stale_instance_anchor_checks",
+    "file_tools_listing_over_entry_budget_is_error_not_partial_page",
+    "file_tools_utf8_chunks_reconstruct_exact_bytes_and_detect_content_changes",
+    "file_tools_read_empty_invalid_utf8_and_sparse_overbudget_are_explicit",
+    "file_tools_atomic_replacement_keeps_hardlink_inode_and_cleans_own_stage",
+    "file_tools_stage_guard_cleans_owned_failure_but_preserves_replaced_entry",
+    "file_tools_root_handle_cannot_be_rebound_by_replacing_configured_path",
+    "file_tools_dropped_request_and_concurrent_drain_wait_actual_worker_return",
+    "file_tools_cancelled_drain_does_not_lose_join_handle",
+    "file_tools_supervisor_abort_and_caller_drop_recover_actual_join_slots",
+    "file_tools_four_workers_bound_and_panics_are_joined_and_reported"
+  ],
+  "unix_tests_executed": 0,
+  "wiring_tests_executed": 0,
+  "official_sdk": "NOT_RUN",
+  "installed_runtime_modified": false,
+  "manufacturer_parity": "NOT_PROVEN",
+  "qualification": "Focused actual Windows module tests only. Full parent workspace already has recorded failing regressions; this does not replace full workspace/Clippy/native SDK/HTTP/STDIO/platform/install gates."
+}
