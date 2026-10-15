@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "result": "REFERENCE_SCOPE_GAP_CONFIRMED_NOT_IMPLEMENTED_NOT_RUNTIME_TESTED",
+  "checked_on": "2026-10-15",
+  "reference_advertised_version": "24.3",
+  "sources": [
+    {
+      "url": "https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/",
+      "scope": "MCP Server and API sections: catalog/selected outputs, configured file access and optional Node processing."
+    },
+    {
+      "url": "https://www.screamingfrog.co.uk/blog/seo-spider-24/",
+      "scope": "MCP workflow introduction and follow-up export/protocol updates."
+    }
+  ],
+  "current_source_manifest_sha256": "e9bbc54573247e028dcb47937f80eaa1c1918240a810d8e796874464bf5cc7f5",
+  "compiler_inputs_changed": 0,
+  "static_tool_count": 26,
+  "static_tool_names": [
+    "spider_capabilities",
+    "spider_list_crawls",
+    "spider_start_crawl",
+    "spider_status",
+    "spider_pages",
+    "spider_issues",
+    "spider_analysis",
+    "spider_policy",
+    "spider_sitemaps",
+    "spider_resources",
+    "spider_resource_transports",
+    "spider_inspect_css",
+    "spider_content",
+    "spider_content_document",
+    "spider_analyze_crawl_content",
+    "spider_analyze_content",
+    "spider_preview_policy",
+    "spider_cancel",
+    "spider_pause",
+    "spider_resume",
+    "spider_recrawl",
+    "spider_project",
+    "spider_compare",
+    "spider_generate_sitemaps",
+    "spider_compare_saved",
+    "spider_sitemap_findings"
+  ],
+  "source_files": [
+    {
+      "path": "crates/app/src/mcp.rs",
+      "bytes": 23326,
+      "sha256": "7940ecd4081f6bd6127644ffdd26fbd289e98498c6e3ff9c0f6ecb6f8a237f5e"
+    },
+    {
+      "path": "crates/app/src/mcp/generation.rs",
+      "bytes": 11139,
+      "sha256": "ba208f210716c7104e31702ba83d905cea6e9825e8beed57d0d43203d5cfea14"
+    },
+    {
+      "path": "crates/app/src/mcp/saved_comparison.rs",
+      "bytes": 10863,
+      "sha256": "67585fa1bbc88d1cf2f3ec030ee9525d4a20e8ea7f2fa8f30f536c274e41bab1"
+    },
+    {
+      "path": "crates/app/src/mcp/sitemap_findings.rs",
+      "bytes": 10718,
+      "sha256": "5007a8291bc1d85653276196090bbf1d48b6dc057f267fbae4e3dfc16a5943c9"
+    }
+  ],
+  "basic_historical_evidence_preserved": true,
+  "feature_id": "automation.mcp",
+  "status_before": "implemented",
+  "status_after": "partial",
+  "previous_acceptance_test": "Perform MCP initialize/list-tools/crawl/read/export using a local client; keep script execution an explicit capability.",
+  "expanded_acceptance_test": "Perform the basic official-client workflow and cover discoverable reports/bulk exports/field-filter projections, stored content outputs, configured base-directory file tools and explicitly enabled Node/npm processing across supported transports; track each sub-contract separately.",
+  "remaining_acceptance": [
+    "Expose and prove report, bulk-export, filter and data-field discovery with typed selected-field/format/segment/full-selection exports; existing snapshot and sitemap exports prove narrower contracts.",
+    "Implement configured base-directory text read/write, directory discovery/list/create and explicit disabled-by-default Node script/npm capabilities. Prove exact target containment, unsupported paths, defaults, output/error/deadline/actual child drain and retained outputs with independent fixtures.",
+    "Prove stored URL content/image/screenshot outputs, stable selected-crawl workflow and same source/config/error behavior using real official SDK clients on both transports. The static26-tool registry and historical11-tool basic workflow are not full reference MCP coverage."
+  ],
+  "overall_before": {
+    "implemented": 31,
+    "partial": 67,
+    "planned": 46,
+    "total": 144
+  },
+  "overall_after": {
+    "implemented": 30,
+    "partial": 68,
+    "planned": 46,
+    "total": 144
+  },
+  "granular_filters": 416,
+  "workflow_contracts": 32,
+  "new_features_implemented": 0,
+  "new_test_runs": 0,
+  "current_candidate_compiled": false,
+  "installed_runtime_modified": false,
+  "qualification": "Source inspection and public-reference scope audit only. Absence from the closed26-tool inventory proves these typed MCP entry points are not exposed here; it does not prove runtime behavior or vendor algorithm equivalence. Historical narrower successful workflows and immutable source/publication receipts remain valid within their recorded scope."
+}

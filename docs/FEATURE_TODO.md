@@ -4,7 +4,7 @@
 
 Die Liste hält alle 144 gruppierten Fähigkeiten fest. Ein Haken bedeutet, dass das **eigene gespeicherte Abnahmekriterium** mit Beweisen erfüllt ist. Er bedeutet keine vollständige Gleichheit mit Screaming Frog. Diese Referenzparität bleibt für alle Einträge **NOT_PROVEN**.
 
-Aktueller Katalogstand: **31 eigene Abnahmen erfüllt**, **67 teilweise geprüft**, **46 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
+Aktueller Katalogstand: **30 eigene Abnahmen erfüllt**, **68 teilweise geprüft**, **46 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
 
 Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.json) bilden ein zusätzliches Register. Ihre positiven Fälle, Kontrollfälle, Parameter und Grenzfälle müssen jeweils geprüft werden. Ein implementierter Kern, ein leerer Export oder übereinstimmende CSV-Zellen ersetzen diese Einzelabnahme nicht.
 
@@ -107,6 +107,14 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - [ ] Aktuelle native S6-Prüfvorbereitung: offizielle SDK-/API-/CLI-Prüfung und getrennte 13 Mock-Browsergruppen, 20 echte native Browsergruppen mit 405 gespeicherten Seiten sowie zwölf exakt/+1-Größenfälle für vollständiges App-JSON und Finding-CSV als Skripte vorbereitet. Bestätigte Prüfharness-Befunde in Quellkorrekturen geschlossen: feste Veröffentlichung, unveränderliche tatsächliche Prozessende-Frist, vollständiger API/CSV-Abgleich und gültige leere Formatlogs. Syntax-/Hash-/begrenzte unabhängige Quellreviews bestehen, sämtliche nativen Gruppen und physischen Fälle jedoch 0 ausgeführt. Größentests verwenden ausdrücklich synthetische Offline-Abzweige echter kleinerer Crawl-Baselines, keine angeblich beobachteten Website-Warnungen. Diese Prüfrouten gelten nur für den früheren 69492d0c…/f43efc1-Stand; die neue UIe9bbc545… braucht eigene Bindung und Ausführung. Kein Compiler-, Laufzeit-, Ressourcen-, Installations- oder Herstellerparitätsbeleg.
   - Verträge: [sitemap-b12-plan.md](parity/sitemap-b12-plan.md), [sitemap-parser.md](sitemap-parser.md), [sitemap-transport.md](sitemap-transport.md), [robots-sitemap-source.md](robots-sitemap-source.md), [sitemap-ledger.md](sitemap-ledger.md), [sitemap-membership.md](sitemap-membership.md), [sitemap-native-acceptance.md](sitemap-native-acceptance.md), [sitemap-budget-plan.md](parity/sitemap-budget-plan.md), [sitemap-budget-plan-source-pins.json](parity/sitemap-budget-plan-source-pins.json), [sitemap-assessment.md](sitemap-assessment.md), [sitemap-filter-depth-plan.md](parity/sitemap-filter-depth-plan.md), [sitemap-generation.md](sitemap-generation.md), [sitemap-generation-workflows.md](sitemap-generation-workflows.md), [sitemap-target-analysis.md](sitemap-target-analysis.md), [sitemap-output-target-preparation-v2.json](verification/sitemap-output-target-preparation-v2.json), [sitemap-source-measurement.md](parity/sitemap-source-measurement.md), [sitemap-source-protocol-preparation.json](verification/sitemap-source-protocol-preparation.json), [sitemap-source-fetch-preparation.json](verification/sitemap-source-fetch-preparation.json), [sitemap-source-durable-preparation.json](verification/sitemap-source-durable-preparation.json), [sitemap-source-processing.md](sitemap-source-processing.md), [sitemap-large-processing-preparation.json](verification/sitemap-large-processing-preparation.json), [sitemap-filter-surfaces-plan.md](parity/sitemap-filter-surfaces-plan.md), [sitemap-filter-surface-preparation.json](verification/sitemap-filter-surface-preparation.json), [sitemap-streaming-read-preparation.json](verification/sitemap-streaming-read-preparation.json), [sitemap-raw-window.md](sitemap-raw-window.md), [sitemap-rich-window.md](sitemap-rich-window.md), [sitemap-rich-read-preparation.json](verification/sitemap-rich-read-preparation.json), [sitemap-csv-streaming-plan.md](parity/sitemap-csv-streaming-plan.md), [sitemap-csv-streaming.md](sitemap-csv-streaming.md), [sitemap-csv-streaming-preparation.json](verification/sitemap-csv-streaming-preparation.json), [sitemap-findings-core.md](sitemap-findings-core.md), [sitemap-findings-core-preparation.json](verification/sitemap-findings-core-preparation.json), [sitemap-findings-surfaces.md](sitemap-findings-surfaces.md), [sitemap-findings-surfaces-preparation.json](verification/sitemap-findings-surfaces-preparation.json), [sitemap-source-processing-ui.md](sitemap-source-processing-ui.md), [sitemap-source-processing-ui-preparation.json](verification/sitemap-source-processing-ui-preparation.json), [sitemap-findings-native-verification.md](sitemap-findings-native-verification.md), [sitemap-findings-native-preparation.json](verification/sitemap-findings-native-preparation.json).
   - Gate-Stand: source_review: PARSER_AND_FETCH_NO_CONCRETE_P1_P2; implementation: MAIN_DURABLE_WRITER_AND_READONLY_API_CSV_MCP_UI; native_acceptance: PASS_LOCAL_TRANSPORT16_LEDGER11_MEMBERSHIP11_SEPARATE_SCOPES; work_parser: PASS_53_PLUS_EXISTING_NORMALIZER2; main_core_parser: PASS_54; main_core_clippy: PASS_ALL_TARGETS; main_standalone: PASS_56_SEPARATE; work_mutations: PASS_4_EXPECTED_RUNTIME_ASSERTION_FAILURES; exact_commit_ci: PASS_6597C9C_FOUR_JOBS_565_EACH; main_core_fetch_http: PASS_12; main_core_all_unit: PASS_CURRENT_CARGO_CORE510; main_portable_transport: PASS_16_FINAL_DRAIN; parser_exact_commit_ci: PASS_FOUR_JOBS_6171a32; optimized_transport_release: PASS_SAME_OPTIMIZED_EXE_16_NATIVE_SDK_BROWSER; installation: PASS_LOCAL_OPTIMIZED_EA314045_AB1AC93C_7JOBS_19FILES; robots_source_core: PASS_353_AND_ALLTARGETS_CLIPPY; transport_proof_validator: PASS_SYNTHETIC_1POSITIVE_24NEGATIVE_AND_ACTUAL_DEBUG_RELEASE_COMPANIONS; new_robots_validator_ci: PASS_6597C9C_FOUR_JOBS_FULL_RAW_ARCHIVE; durable_source_ledger: MAIN_PASS_NATIVE_LEDGER11_SQL11_DRAINED; durable_work_core: HISTORICAL_437_V4_GAP_FIXED_BY_V5; durable_original_binding: PASS_V4_17_EXPECTED_FAILURES_V5_ALL_21_CONTROLS; durable_full_crawler_bootstrap: PASS_8_INCLUDED_IN_CORE_508; durable_workspace_clippy: PASS_LOCAL_CARGO_ALLTARGETS_SAME_SOURCE; durable_source_cohort: PASS_25_CORE_AND_NATIVE13_QUALIFIED_DECLARED_SCOPE; durable_exact_commit_ci: NOT_PROVEN_GITHUB_ACCOUNT_UNAVAILABLE_LOCAL_SCOPE_SEPARATE; durable_api_csv_ui: PASS_ROUTED_NATIVE_API_CSV_SDK_BROWSER11; durable_installation: PASS_LOCAL_USER_AUTHORIZED_740_NATIVE_RELEASE_24TOOLS; durable_policy_invalid_locs: PASS_UNCHANGED_EXTERNAL_POLICY13_AND_CORE_DISCOVERY12; durable_account_gate: DEFERRED_REMOTE_CI_USER_AUTHORIZED_LOCAL_ROUTE_NO_SETTINGS_CHANGE; durable_workspace_tests: PASS_LOCAL794_0FAIL_0IGNORED_REAL_BROWSER; durable_actual_browser: PASS_NATIVE_CHROME_SAME_ASSETS_320PX; durable_official_mcp_sdk: PASS_BOTH_OFFICIAL_TRANSPORTS24_TOOLS; durable_native_matrix: PASS_WINDOWS_DEV11_SCENARIOS11_SQL_REQUEST_DRAIN; durable_native_byte_budgets: PASS_ACCEPTED_AB1_JSON8M_CSV64M_EXACT_PLUS1_ROW_CATALOG_STILL_PENDING; durable_native_generation_race: PENDING_LIVE_ACTIVE_GENERATION; durable_native_rollback_budget: PENDING_FAILURE_INJECTION; durable_budget_plan: TASKS1_2_3_AND_THEIR_PHYSICAL_PUBLICATION_PASS_4_5_6_PENDING; durable_live_renderer4: PASS_OWNED_EPHEMERAL_CURRENT_SOURCE; durable_optimized_release: PASS_LOCAL_WINDOWS_THIN_LTO_AB1AC93C; durable_lastmod: PASS_22_CORE_4_REAL_STORE_APP_AND_NATIVE_BROWSER; durable_assessment_installation: PASS_LOCAL_794_NATIVE13_INSTALLED_7JOBS_19FILES; durable_json_physical_budget: PASS_NATIVE_HTTP200_8388608_413_PLUS1_RUST_SERDE_WITNESS_RECOVERY; durable_csv_physical_budget: PASS_NATIVE_HTTP200_67108864_413_PLUS1_REAL_ORIGINAL_CAPTURE; generation_target_candidate: SOURCE_C35B929_FROZEN218_MIN846_AND64_NAMED_TESTS_AUTHORED_COMPILE_NATIVE_INSTALL_NOT_RUN; generation_target_native_preparation: TRACKED10_MODULES_GEN10_TARGET15_BROWSER16_RENDER8_PLANNED_ZERO_NATIVE_EXECUTIONS; source_protocol_s3_source: WIP94_AUTHORED_FROZEN234_MIN940_NAMED158_DURABLE_REPORT_PARENT_CURSOR_FMT_PASS_COMPILE_TEST_NATIVE_NOT_RUN; source_protocol_s3_completion: SOURCE_INTEGRATED_RUNTIME_ACCEPTANCE_PUBLIC_FILTERS_PHYSICAL50M_CRASH_RESTART_STILL_OPEN; source_large_processing_s4_source: WIP17_AUTHORED_FROZEN238_MIN957_NAMED175_CFG64M_FETCH_STORE_FMT_PASS_COMPILE_TEST_NATIVE_NOT_RUN; source_large_processing_s4_completion: COMPACT_RICH_CONTEXT_APP_CSV_TRANSPORT_SOURCE_INTEGRATED_SELECTED_MATERIALIZING_PHYSICAL_NATIVE_UI_MEMORY_PLATFORM_NOT_PROVEN; source_filter_s6_surfaces: WIP47_AUTHORED_FROZEN297_MIN1170_NAMED388_CORE_API_CLI_MCP_UI_FULL_CSV_FMT_SYNTAX_BOUNDED_REVIEWS_COMPILE_TEST_NATIVE_NOT_RUN; source_large_processing_s4_streaming: WIP36_AUTHORED_FROZEN246_MIN993_NAMED211_RAW_SOURCE_SQL_STORE_CLI_FMT_PASS_COMPILE_TEST_NATIVE_NOT_RUN; source_large_processing_s4_rich_read: WIP42_AUTHORED_FROZEN255_MIN1035_NAMED253_COVERAGE_ANALYSIS_STORE_APP_SHAREDCSVSTATE_FMT_STATICREVIEW_PASS_COMPILE_TEST_NATIVE_NOT_RUN; source_large_processing_s4_csv_transport: WIP35_AUTHORED_FROZEN265_MIN1070_NAMED288_SAME_TX_TWOPASS_QUEUE4_64K_POSITIVE_TAIL_CORE_RETURN_JOIN_CANCEL_DRAIN_FMT_STATIC_REVIEW_COMPILE_TEST_NATIVE_NOT_RUN; source_large_processing_s4_csv_physical: OPEN_NEW_ROUTE_67108864_67108865_ACTUAL_PREVIOUS_AB1_PRODUCER_SEED_ONLY; source_filter_s6_core: WIP53_AUTHORED_FROZEN275_MIN1123_NAMED341_TYPED_PREDICATES_FULL_STORED_SAME_TX_SPARSE_CURSOR_GLOBAL_TAIL_PREFLIGHT_FMT_STATIC_REVIEW_COMPILE_TEST_NATIVE_NOT_RUN; source_processing_ui: WIP_OPT_IN_PROFILE_FROZEN297_SUITE_BUILD_REBOUND_PREPARED_ZERO_EXECUTIONS_NATIVE_BROWSER_PROFILE_PENDING; findings_native_preparation: SOURCE_REVIEWED_NATIVE_SDK_CLI_API_UI13_MOCK_NATIVE_BROWSER20_PHYSICAL12_ZERO_EXECUTIONS_BASE694_ONLY.
+
+- [ ] **MCP um die weiteren dokumentierten Abläufe ergänzen** — REFERENCE_SCOPE_GAP_CONFIRMED_NOT_IMPLEMENTED. Der geprüfte Grundablauf bleibt erhalten. Für den vollständigen Umfang fehlen zusätzliche Katalog-/Export-, Datei- und optionale Node-Funktionen. Deshalb wurde automation.mcp von erfüllt auf teilweise geprüft präzisiert; keine Produktfunktion wurde entfernt.
+  - [x] Aktuelle offizielle Dokumentation mit dem tatsächlichen statischen26-Werkzeugregister und den erhaltenen historischen Basic-Belegen abgeglichen.
+  - [ ] Expose and prove report, bulk-export, filter and data-field discovery with typed selected-field/format/segment/full-selection exports; existing snapshot and sitemap exports prove narrower contracts.
+  - [ ] Implement configured base-directory text read/write, directory discovery/list/create and explicit disabled-by-default Node script/npm capabilities. Prove exact target containment, unsupported paths, defaults, output/error/deadline/actual child drain and retained outputs with independent fixtures.
+  - [ ] Prove stored URL content/image/screenshot outputs, stable selected-crawl workflow and same source/config/error behavior using real official SDK clients on both transports. The static26-tool registry and historical11-tool basic workflow are not full reference MCP coverage.
+  - Verträge: [mcp-reference-scope-audit-20261015.json](verification/mcp-reference-scope-audit-20261015.json), [feature-catalog.md](feature-catalog.md), [granular-acceptance.json](parity/granular-acceptance.json).
+  - Gate-Stand: reference_docs: CHECKED_PUBLIC_PRIMARY_20261015; current_tool_inventory: STATIC26_NOT_RUNTIME; expanded_workflow: NOT_IMPLEMENTED_NOT_EXECUTED; manufacturer_parity: NOT_PROVEN.
 
 - [x] **B8: optionale Textaufnahme und gespeicherte Inhaltsanalyse** — COMPLETED. Der begrenzte B8-Baustein für optionale Roh-/DOM-Textaufnahme und gespeicherte ausgewählte Inhaltsanalyse ist mit eigenen nativen/API/UI-Gates, exakter Commit-CI und unveränderlichem installiertem Release geprüft. Vollständige Website-Analyse und CSS-Neuauswahl ohne erhaltenes HTML/DOM bleiben zusätzliche offene Feature-Abnahmen.
   - [x] Pure CSS-/Unicode-Auswahl20 und Binding4 sowie16 echte native Fixtures geprüft; ungültige Konfiguration scheitert vor HTTP.
@@ -4747,7 +4755,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 ### Automation, Exporte und MCP
 
-11 Einträge: 3 eigene Abnahmen erfüllt, 4 teilweise geprüft, 4 offen.
+11 Einträge: 2 eigene Abnahmen erfüllt, 5 teilweise geprüft, 4 offen.
 
 #### Teilweise vorhanden – Restarbeiten
 
@@ -4852,6 +4860,47 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "api"
         ],
         "proves": "CrawlReport JSON carries headers, raw metadata and optional screenshot/accessibility/network observations."
+      }
+    ],
+    "parity_status": "NOT_PROVEN"
+  }
+  ```
+
+  </details>
+
+- [ ] **Lokale MCP-Werkzeuge** — Teilweise geprüft; `automation.mcp`, P4.
+
+  Orientierung: Der eigene MCP-Werkzeugvertrag ist gegen offizielle SDK-Clients geprüft.
+
+  Beweisregister: [mcp](verification/mcp-e2e.json) (PASS), [native-policy-ci](verification/native-policy-ci.json) (PASS), [native-policy-installed](verification/native-policy-installed.json) (PASS).
+
+  <details>
+  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
+
+  ```json
+  {
+    "id": "automation.mcp",
+    "reference_name": "MCP agent interface",
+    "status": "partial",
+    "acceptance_test": "Perform the basic official-client workflow and cover discoverable reports/bulk exports/field-filter projections, stored content outputs, configured base-directory file tools and explicitly enabled Node/npm processing across supported transports; track each sub-contract separately.",
+    "remaining_acceptance": [
+      "Expose and prove report, bulk-export, filter and data-field discovery with typed selected-field/format/segment/full-selection exports; existing snapshot and sitemap exports prove narrower contracts.",
+      "Implement configured base-directory text read/write, directory discovery/list/create and explicit disabled-by-default Node script/npm capabilities. Prove exact target containment, unsupported paths, defaults, output/error/deadline/actual child drain and retained outputs with independent fixtures.",
+      "Prove stored URL content/image/screenshot outputs, stable selected-crawl workflow and same source/config/error behavior using real official SDK clients on both transports. The static26-tool registry and historical11-tool basic workflow are not full reference MCP coverage."
+    ],
+    "implementation_evidence": [
+      {
+        "verification_run_ids": [
+          "mcp"
+        ],
+        "proves": "Official local MCP SDK clients initialize/list 11 tools, start a crawl, read status/pages/issues/analysis/project JSON, compare/list history and receive tool errors. Project JSON provides local snapshot export; arbitrary script execution is not exposed as an implicit tool."
+      },
+      {
+        "verification_run_ids": [
+          "native-policy-ci",
+          "native-policy-installed"
+        ],
+        "proves": "Exact B7 source915e175 has four successful Windows/Linux/Chromium/Linux Docker CI jobs and an installed native Windows immutable release. Existing seven jobs and eleven original JSON files remain byte-identical after restart; no user-data fixture requests. This confirms the already documented B7 slice only; ongoing B8 capture/corpus changes and full reference parity are not attested."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -5027,43 +5076,6 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "list-import-api-cli"
         ],
         "proves": "Actual CLI reads typed configuration, imports lists, crawls, analyzes and exports JSON/input CSV. Unset flags preserve saved settings. Explicit success/error exits are 0/1/2; invalid selection/config/scheme/options produce no requests or output."
-      },
-      {
-        "verification_run_ids": [
-          "native-policy-ci",
-          "native-policy-installed"
-        ],
-        "proves": "Exact B7 source915e175 has four successful Windows/Linux/Chromium/Linux Docker CI jobs and an installed native Windows immutable release. Existing seven jobs and eleven original JSON files remain byte-identical after restart; no user-data fixture requests. This confirms the already documented B7 slice only; ongoing B8 capture/corpus changes and full reference parity are not attested."
-      }
-    ],
-    "parity_status": "NOT_PROVEN"
-  }
-  ```
-
-  </details>
-
-- [x] **Lokale MCP-Werkzeuge** — Eigene Abnahme erfüllt; `automation.mcp`, P4.
-
-  Orientierung: Der eigene MCP-Werkzeugvertrag ist gegen offizielle SDK-Clients geprüft.
-
-  Beweisregister: [mcp](verification/mcp-e2e.json) (PASS), [native-policy-ci](verification/native-policy-ci.json) (PASS), [native-policy-installed](verification/native-policy-installed.json) (PASS).
-
-  <details>
-  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
-
-  ```json
-  {
-    "id": "automation.mcp",
-    "reference_name": "MCP agent interface",
-    "status": "implemented",
-    "acceptance_test": "Perform MCP initialize/list-tools/crawl/read/export using a local client; keep script execution an explicit capability.",
-    "remaining_acceptance": [],
-    "implementation_evidence": [
-      {
-        "verification_run_ids": [
-          "mcp"
-        ],
-        "proves": "Official local MCP SDK clients initialize/list 11 tools, start a crawl, read status/pages/issues/analysis/project JSON, compare/list history and receive tool errors. Project JSON provides local snapshot export; arbitrary script execution is not exposed as an implicit tool."
       },
       {
         "verification_run_ids": [
@@ -5335,4 +5347,4 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `41ee2c6b1482be25d9b6dd03ce03daba99160093ddb01cc4b4ad80a50061b091`. Letzter im Katalog erfasster Beweisstand: `2026-10-14T17:39:44.101Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `7cdb14cfa93ecb6d50bf8c5ea0da6af03c8551242009cc03b4dd0d92e7faf6c0`. Letzter im Katalog erfasster Beweisstand: `2026-10-14T17:39:44.101Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

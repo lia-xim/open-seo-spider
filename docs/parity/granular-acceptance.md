@@ -2,7 +2,7 @@
 
 Created 2026-10-12T07:47:33.321Z; reference24.3. Full vendor parity **NOT PROVEN**.
 
-416 installed named filters each have one stable tracker record; 32 additional workflow contracts cover behavior outside filters. Existing 144-capability statuses are untouched.
+416 installed named filters each have one stable tracker record; 32 additional workflow contracts cover behavior outside filters. The 144 capability IDs are unchanged. On 2026-10-15 the MCP workflow scope was expanded and its capability context updated to partial; historical basic-flow evidence is retained.
 
 A filter record separates observed argument availability, proposed positive/control inputs, data/parameters, edge cases, related implementation evidence and unmeasured vendor membership. Existing implemented/partial/planned capability slices are retained as context; they are not inherited as per-filter statuses.
 
@@ -88,7 +88,7 @@ Original named-filter membership: named_filters=78, csv_files=87, positive_contr
 - **ai.prompts-embeddings (R3)** — Prompt input containing untrusted page instructions; embedding vectors/missing model/quota/usage. Expected: Provider/key authorization, returned model/vector dimensions/version and usage; no silent external call from crawl default.
 - **ui.filter-details-export (R1)** — Select one URL/issue, AND/OR search across columns, stable sort/pagination, CSV/XLSX export with commas/newlines/formulas. Expected: View count matches exact serialized predicate; source/target lower rows reachable; export security and quoting tested.
 - **ui.graphs-segments (R2)** — Crawl/directory/content cluster layouts with selected segment and large partial graph. Expected: Topology versus layout separated; SVG/image/HTML export and segment membership explicit; drawing alone is not graph-algorithm proof.
-- **automation.cli-scheduler-mcp (R2)** — Headless CLI nonzero failure, overlapping schedules/timezones, MCP stdio/HTTP lifecycle and tool errors. Expected: Same config/data behavior across transports; schedule persists/restarts; actual SDK tests bound protocol claims.
+- **automation.cli-scheduler-mcp (R2)** — Headless CLI nonzero failure, overlapping schedules/timezones, MCP stdio/HTTP lifecycle and tool errors. Include discoverable report/export/field catalogs, complete selected-format outputs, configured base-directory file operations and disabled/enabled Node/npm lifecycle controls. Expected: Same config/data behavior across transports; schedule persists/restarts; actual SDK tests bound protocol claims. Keep the historical basic MCP slice separate from these missing capabilities; explicit unavailable/default/error paths and actual SDK/child-close evidence are required.
 - **automation.reports-assets (R2)** — Multiple export tabs, screenshot/source archive, empty report skip, folder timestamping, notification disabled. Expected: Owned deterministic artifacts and separate explicit authorization for any external message/cloud write.
 - **modes.list-sitemap-serp-api (R2)** — URL list dedupe, sitemap index import, SERP preview with selected device, integration-only URL cohort. Expected: Explicit traversal rules/mode provenance; preview is not measured Google search appearance.
 - **platform.native-wsl-container (R2)** — Native Windows release, Ubuntu CI, browser installation and Docker start/stop/data volume. Expected: Actual install/run/protocol evidence per platform; absent Docker/WSL run stays NOT_PROVEN.

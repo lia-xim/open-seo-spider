@@ -57,5 +57,6 @@ positive 50k/50MiB-Quellen, unvollständige und unbekannte Quellzustände,
 stale-Kontext-/Antwort-Races, Abbruch/Disconnect/späte Fehler/Join/Shutdown,
 Selected-Varianten, Recovery, gemessene RAM-/Latenzgrenzen, optimierter Release,
 datenbewahrende Installation und Linux/Container. Der installierte vorherige
-Release wurde nicht geändert. Die akzeptierten Feature-Zahlen bleiben bei
-31 erfüllt / 67 teilweise geprüft / 46 offen; Herstellerparität ist **NOT_PROVEN**.
+Release wurde nicht geändert. Dieser Vorbereitungsstand änderte keine Abnahme.
+Nach dem gesonderten MCP-Umfangsabgleich liegt der aktuelle Katalog bei
+30 erfüllt / 68 teilweise geprüft / 46 offen; Herstellerparität ist **NOT_PROVEN**.

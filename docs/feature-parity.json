@@ -4085,12 +4085,12 @@
     {
       "id": "automation.mcp",
       "name": "MCP agent interface",
-      "status": "implemented",
+      "status": "partial",
       "phase": "P4",
       "source_ids": [
         "release24"
       ],
-      "acceptance_test": "Perform MCP initialize/list-tools/crawl/read/export using a local client; keep script execution an explicit capability.",
+      "acceptance_test": "Perform the basic official-client workflow and cover discoverable reports/bulk exports/field-filter projections, stored content outputs, configured base-directory file tools and explicitly enabled Node/npm processing across supported transports; track each sub-contract separately.",
       "implementation_evidence": [
         {
           "verification_run_ids": [
@@ -4108,8 +4108,18 @@
       ],
       "parity_evidence": [],
       "group": "automation",
-      "remaining_acceptance": [],
-      "parity_status": "NOT_PROVEN"
+      "remaining_acceptance": [
+        "Expose and prove report, bulk-export, filter and data-field discovery with typed selected-field/format/segment/full-selection exports; existing snapshot and sitemap exports prove narrower contracts.",
+        "Implement configured base-directory text read/write, directory discovery/list/create and explicit disabled-by-default Node script/npm capabilities. Prove exact target containment, unsupported paths, defaults, output/error/deadline/actual child drain and retained outputs with independent fixtures.",
+        "Prove stored URL content/image/screenshot outputs, stable selected-crawl workflow and same source/config/error behavior using real official SDK clients on both transports. The static26-tool registry and historical11-tool basic workflow are not full reference MCP coverage."
+      ],
+      "parity_status": "NOT_PROVEN",
+      "acceptance_scope_revision": {
+        "date": "2026-10-15",
+        "previous_acceptance_test": "Perform MCP initialize/list-tools/crawl/read/export using a local client; keep script execution an explicit capability.",
+        "reason": "The full user-requested reference scope includes additional documented MCP capabilities; historical basic-flow evidence remains valid for its narrower slice.",
+        "audit": "docs/verification/mcp-reference-scope-audit-20261015.json"
+      }
     },
     {
       "id": "automation.mcp_transport",
@@ -6086,8 +6096,8 @@
   ],
   "status_summary": {
     "overall": {
-      "implemented": 31,
-      "partial": 67,
+      "implemented": 30,
+      "partial": 68,
       "planned": 46,
       "total": 144
     },
@@ -6111,8 +6121,8 @@
         "total": 24
       },
       "P4": {
-        "implemented": 3,
-        "partial": 4,
+        "implemented": 2,
+        "partial": 5,
         "planned": 23,
         "total": 30
       }
@@ -6203,8 +6213,8 @@
         "total": 10
       },
       "automation": {
-        "implemented": 3,
-        "partial": 4,
+        "implemented": 2,
+        "partial": 5,
         "planned": 4,
         "total": 11
       },
@@ -7033,6 +7043,32 @@
         "sitemap-physical-json-csv-local"
       ],
       "tracking_issue": "https://github.com/lia-xim/open-seo-spider/issues/11"
+    },
+    {
+      "id": "mcp-reference-scope-audit-20261015",
+      "status": "REFERENCE_SCOPE_GAP_CONFIRMED_NOT_IMPLEMENTED",
+      "priority": 4,
+      "title_de": "MCP um die weiteren dokumentierten Abläufe ergänzen",
+      "summary_de": "Der geprüfte Grundablauf bleibt erhalten. Für den vollständigen Umfang fehlen zusätzliche Katalog-/Export-, Datei- und optionale Node-Funktionen. Deshalb wurde automation.mcp von erfüllt auf teilweise geprüft präzisiert; keine Produktfunktion wurde entfernt.",
+      "completed_acceptance_de": [
+        "Aktuelle offizielle Dokumentation mit dem tatsächlichen statischen26-Werkzeugregister und den erhaltenen historischen Basic-Belegen abgeglichen."
+      ],
+      "pending_acceptance_de": [
+        "Expose and prove report, bulk-export, filter and data-field discovery with typed selected-field/format/segment/full-selection exports; existing snapshot and sitemap exports prove narrower contracts.",
+        "Implement configured base-directory text read/write, directory discovery/list/create and explicit disabled-by-default Node script/npm capabilities. Prove exact target containment, unsupported paths, defaults, output/error/deadline/actual child drain and retained outputs with independent fixtures.",
+        "Prove stored URL content/image/screenshot outputs, stable selected-crawl workflow and same source/config/error behavior using real official SDK clients on both transports. The static26-tool registry and historical11-tool basic workflow are not full reference MCP coverage."
+      ],
+      "documentation": [
+        "docs/verification/mcp-reference-scope-audit-20261015.json",
+        "docs/feature-catalog.md",
+        "docs/parity/granular-acceptance.json"
+      ],
+      "gates": {
+        "reference_docs": "CHECKED_PUBLIC_PRIMARY_20261015",
+        "current_tool_inventory": "STATIC26_NOT_RUNTIME",
+        "expanded_workflow": "NOT_IMPLEMENTED_NOT_EXECUTED",
+        "manufacturer_parity": "NOT_PROVEN"
+      }
     }
   ]
 }
