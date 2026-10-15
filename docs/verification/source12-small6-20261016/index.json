@@ -1,0 +1,297 @@
+{
+  "schema_version": 1,
+  "kind": "actual_source12_small6_native_checkpoint",
+  "recorded_at": "2026-10-15T23:05:21.542Z",
+  "source_manifest_sha256": "3b62e68b32b2d23e375977cac8d5d0dad313c8f144eb43b4ab2896fae7687b18",
+  "source_commit": "5d50a10f3974c9afe79909b963427e67dd8fb001",
+  "binary_sha256": "f7ce325cf73d16f1c4943ebf98dc8a2e888e93ee25c999bc7f2c10d1b1a1a65c",
+  "result": "SIX_SCOPED_NATIVE_ACCEPTANCES_PASS_INDEPENDENT_EVIDENCE_AUDIT_NO_FINDINGS",
+  "scopes": [
+    {
+      "scope": "native",
+      "result": "PASS_DIRECTED_NATIVE_SDK_API_CLI_ONLY",
+      "count": 3,
+      "shutdown_boundary": "SDK and CLI actual closes; retained App ownership trace records intentional SIGTERM. No HTTP graceful-drain proof."
+    },
+    {
+      "scope": "ui-mock",
+      "result": "PASS_13_UI_MOCK_GROUPS_ONLY",
+      "count": 13,
+      "shutdown_boundary": "Actual guardian child exit/close0; mock receipt has no descendant ownership-event list. Mocked API scope only."
+    },
+    {
+      "scope": "browser-native",
+      "result": "PASS_COMBINED_V12_ACTUAL_NATIVE_FINDINGS_BROWSER",
+      "count": 27,
+      "shutdown_boundary": "App and Chrome observed closed with requested SIGTERM, not natural stdin EOF. Website read intervals and three deliberate crawls are separate."
+    },
+    {
+      "scope": "physical-findings",
+      "result": "PASS_COMBINED_V12_NATIVE_CONTROLLED_FINDING_CSV64M_APPJSON8M_EXACT_PLUS1",
+      "count": 12,
+      "shutdown_boundary": "Fourteen App runs intentionally ended with SIGTERM and observed closes; not natural EOF. Genuine crawler baselines, synthetic offline warning facts explicitly segregated."
+    },
+    {
+      "scope": "file-sdk",
+      "result": "PASS_FILE_TOOL_ACCEPTANCE",
+      "count": 175,
+      "shutdown_boundary": "NOT PROVEN: no in-flight HTTP worker-drain proof; Windows owned force cleanup is not a drain result"
+    },
+    {
+      "scope": "root-junction",
+      "result": "PASS_NATIVE_ROOT_JUNCTION_CLI_REJECTION",
+      "count": 2,
+      "shutdown_boundary": "Two native CLI refusals exit1 and close naturally. Witness and junction identity snapshots retained; temporary directories already removed, not re-opened by this audit."
+    }
+  ],
+  "physical_boundaries": "CSV64MiB and AppJSON8MiB accepted exactly; one byte above rejected413. Synthetic controlled warning facts explicitly retained; no live-site or all-data parity claim.",
+  "static_limits": "FAILED_R3_AFTER20_GROUPS;UI_ONLY_R1_REPRODUCED_EARLIER_AT_NARROW_DISABLED_BASIC",
+  "diagnostic_boundary": "Actual narrow save left dialog open with valid fields, no displayed error and no captured filtered form click/submit events. Cause NOT_PROVEN; layout/screenshot hit-target hypothesis requires further passive diagnostics. This is not Static25 acceptance.",
+  "remaining_existing_native": "LARGE_BODY_MIGRATION_RESOURCE_EOF_PENDING",
+  "installation": "NOT_RUN",
+  "currently_installed": "ACCEPTED_SOURCE11",
+  "manufacturer_parity": "NOT_PROVEN",
+  "qualification": "Independent audit verified actual saved proof/log/wire/DTO bytes for six bounded scopes. Shutdown qualifications remain individual; SIGTERM/SIGKILL is not evidence of graceful drain. No browser profiles, PE, stores, wire bodies or user data are committed.",
+  "files": [
+    {
+      "path": "actual-results-audit.json",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source12-small6-actual-results-independent-audit-v1\\receipt.json",
+      "sha256": "bd6fdd589b1dc106d422909d337cc7e3df5182e9b1499889b41fab253a59ef52",
+      "bytes": 154285
+    },
+    {
+      "path": "actual-results-audit-manifest.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-small6-actual-results-independent-audit-v1/manifest.json",
+      "sha256": "0de8e0461916c40f47f6a6c559fcaa6bcb6430a7de7d2b27ac9ac39555e95538",
+      "bytes": 680
+    },
+    {
+      "path": "native/outer.json",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v12\\native\\proof.json",
+      "sha256": "d4e0b8ebf4735ddcfe17c3077759b100e2342271262b87b8d7f8979f8619cb74",
+      "bytes": 3043
+    },
+    {
+      "path": "native/inner.json",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-findings-native-optimized-acceptance-v12\\proof.json",
+      "sha256": "9775eb99deb470a148e0a3b2f89e6fc085da31f5eb84ab97489cedeaabf9c0b8",
+      "bytes": 13357
+    },
+    {
+      "path": "native/frame.json",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-findings-native-optimized-acceptance-v12\\native-receipt.json",
+      "sha256": "cd67c2f9e36bab190c2d43e26c5349a0718042677c1d61252ab1dbf7bbdb0a70",
+      "bytes": 1425
+    },
+    {
+      "path": "native/stderr.log",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v12\\native/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "native/stdout.log",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v12\\native/stdout.log",
+      "sha256": "0ad63dbf8dd711a0ba6b5aad520b13694129b39e87f10aec72e1bd1261376c11",
+      "bytes": 177
+    },
+    {
+      "path": "ui-mock/outer.json",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v12\\ui-mock\\proof.json",
+      "sha256": "b511b7a762e3813c21588e041a77264c670c96e52efa43de4af2e0d39c7b87f1",
+      "bytes": 3057
+    },
+    {
+      "path": "ui-mock/inner.json",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-findings-ui-mock-optimized-acceptance-v12\\proof.json",
+      "sha256": "55850f6b873a33ca651ed9237fa96d8d37181aff3fd9fedeba5b5060548faadc",
+      "bytes": 12794
+    },
+    {
+      "path": "ui-mock/frame.json",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-findings-ui-mock-optimized-acceptance-v12\\ui-mock-receipt.json",
+      "sha256": "930468a39206c6258934e8c5cc5bd90934dc7b68a5d9c889b29882dd5a095fc6",
+      "bytes": 162365
+    },
+    {
+      "path": "ui-mock/stderr.log",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v12\\ui-mock/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "ui-mock/stdout.log",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v12\\ui-mock/stdout.log",
+      "sha256": "d70b59d00f0909285f23893e53ce51c525fc8b2f25f81224ddd526a5c98e1afc",
+      "bytes": 179
+    },
+    {
+      "path": "browser-native/outer.json",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v12\\browser-native\\proof.json",
+      "sha256": "67e433327da571eabf2ffb5c6b64ed3ecf79eb3d19584b065d17bd1b2ffb9d22",
+      "bytes": 3104
+    },
+    {
+      "path": "browser-native/inner.json",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-findings-browser-native-optimized-v12\\proof.json",
+      "sha256": "c822623e7bffda6e290d457517c2d28e51d5e67987a9d9f7db0d1933e9c25b9d",
+      "bytes": 111614
+    },
+    {
+      "path": "browser-native/stderr.log",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v12\\browser-native/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "browser-native/stdout.log",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v12\\browser-native/stdout.log",
+      "sha256": "747ed7167620d51d3e264f4fa43902ab2581a16c6b7e7f0af9d6264141bddfe1",
+      "bytes": 871
+    },
+    {
+      "path": "physical-findings/outer.json",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v12\\physical-findings\\proof.json",
+      "sha256": "db7c9d99014eb2fb575f28d9dda43123658bf3e56954285a794b9fd21b920104",
+      "bytes": 4009
+    },
+    {
+      "path": "physical-findings/inner.json",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source12-native-small-preparation-v1\\physical\\runs\\optimized-v12-acceptance\\proof.json",
+      "sha256": "75e0a5225c9ccc23a2feba05bb0a12ea0de66c6d6c3582da6634942c08287ef0",
+      "bytes": 74235
+    },
+    {
+      "path": "physical-findings/stderr.log",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v12\\physical-findings/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "physical-findings/stdout.log",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v12\\physical-findings/stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "file-sdk/outer.json",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v12\\file-sdk\\proof.json",
+      "sha256": "286c25884a36fe76b684a4bee7dfcc3cff6b4225d5ad144e3dc6bd954bf75706",
+      "bytes": 2921
+    },
+    {
+      "path": "file-sdk/inner.json",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\mcp-file-tools-sdk-8tKUs0\\result.json",
+      "sha256": "d3acf574a675fbd0f9b86bd755e9634266053a3bfae16baf4608b70a2b417070",
+      "bytes": 176906
+    },
+    {
+      "path": "file-sdk/stderr.log",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v12\\file-sdk/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "file-sdk/stdout.log",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v12\\file-sdk/stdout.log",
+      "sha256": "9663a1b2c0a098f8d2cbd2cfbc70465b3caf7782aed17d62435ead4f1a37599d",
+      "bytes": 270
+    },
+    {
+      "path": "root-junction/outer.json",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v12\\root-junction\\proof.json",
+      "sha256": "57e55a27c9ec31cf434c407d39df0bf3ef7758e2c1e12b4797a50d7b6ca641c5",
+      "bytes": 2949
+    },
+    {
+      "path": "root-junction/inner.json",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\mcp-root-junction-xCxG9j\\result.json",
+      "sha256": "605537cbccb8c04e9a76bf3e64a2cfea2ba34bbd5a991c7a45fd7801d7a88aa5",
+      "bytes": 8228
+    },
+    {
+      "path": "root-junction/stderr.log",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v12\\root-junction/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "root-junction/stdout.log",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v12\\root-junction/stdout.log",
+      "sha256": "15a327bf2b3fb4fd756b586a086c89664bd502da8b9458eb9ffbb3fb33738f00",
+      "bytes": 161
+    },
+    {
+      "path": "static-ui-diagnostic/proof.json",
+      "source_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\static-limits-ui-diagnostic-v12-r1\\proof.json",
+      "sha256": "2162dc818e5871ef63212480f8affbc68eb224c350f0826ddcfb7da8357e0760",
+      "bytes": 33183
+    },
+    {
+      "path": "static-ui-diagnostic/snapshots/001-disabled-basic-before-save.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/static-limits-ui-diagnostic-v12-r1/snapshots/001-disabled-basic-before-save.json",
+      "sha256": "b76fb575a5c6a0dc9541c4b26588704b4e1b3dd20078421fcc7e296493478d13",
+      "bytes": 73939
+    },
+    {
+      "path": "static-ui-diagnostic/snapshots/002-disabled-basic-after-click.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/static-limits-ui-diagnostic-v12-r1/snapshots/002-disabled-basic-after-click.json",
+      "sha256": "180b13820ae61057fbccbe4bc8a33bba665005e93465145ce49dfb3f5220824c",
+      "bytes": 73356
+    },
+    {
+      "path": "static-ui-diagnostic/snapshots/003-disabled-basic-closed.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/static-limits-ui-diagnostic-v12-r1/snapshots/003-disabled-basic-closed.json",
+      "sha256": "5206da822fa053cc0dd23d5863b6804f9c1a383e885b29608a333cf1ccfbcc4c",
+      "bytes": 72060
+    },
+    {
+      "path": "static-ui-diagnostic/snapshots/028-disabled-basic-before-save.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/static-limits-ui-diagnostic-v12-r1/snapshots/028-disabled-basic-before-save.json",
+      "sha256": "9ed5aafe7a099a02e106bc149b5955048265a9e234b7ee461dc07c17b2f4ecf6",
+      "bytes": 73873
+    },
+    {
+      "path": "static-ui-diagnostic/snapshots/029-disabled-basic-after-click.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/static-limits-ui-diagnostic-v12-r1/snapshots/029-disabled-basic-after-click.json",
+      "sha256": "21d3e716f8438bf9d3b4e9b9e18718973726b3fcd7adce3f81950230d28e909c",
+      "bytes": 73920
+    },
+    {
+      "path": "static-ui-diagnostic/snapshots/030-disabled-basic-wait-error-before-cleanup.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/static-limits-ui-diagnostic-v12-r1/snapshots/030-disabled-basic-wait-error-before-cleanup.json",
+      "sha256": "e9c4193f8461ae4ecb57c978ef80314409b67a81a99ae4054d68eee14ebcaae8",
+      "bytes": 73856
+    },
+    {
+      "path": "static-ui-diagnostic/screenshots/028-disabled-basic-before-save-320.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/static-limits-ui-diagnostic-v12-r1/screenshots/028-disabled-basic-before-save-320.png",
+      "sha256": "65ae59bcd4a1541354711036d052a528f6835db470f1ba0f3d85db54d51538c6",
+      "bytes": 82899
+    },
+    {
+      "path": "static-ui-diagnostic/screenshots/029-disabled-basic-after-click-320.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/static-limits-ui-diagnostic-v12-r1/screenshots/029-disabled-basic-after-click-320.png",
+      "sha256": "efa112a11bf73b776b7e51d0d47ad97768ad9c921f5c5dc5dc34ab992a92d963",
+      "bytes": 81917
+    },
+    {
+      "path": "static-ui-diagnostic/screenshots/030-disabled-basic-wait-error-before-cleanup-320.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/static-limits-ui-diagnostic-v12-r1/screenshots/030-disabled-basic-wait-error-before-cleanup-320.png",
+      "sha256": "9b2d3377949b4743116f71a44fae50cfa4de2d3554b8d27ff4d3ab9362eb1250",
+      "bytes": 81964
+    },
+    {
+      "path": "static-ui-diagnostic/preparation.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/static-limits-ui-diagnostic-preparation-v3/manifest.json",
+      "sha256": "679fde4281522eeabe7a2e822422506d0996d2fd0f8c0c4f37f36c40e6bc0f3a",
+      "bytes": 4552
+    },
+    {
+      "path": "static-ui-diagnostic/review.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/static-limits-ui-diagnostic-independent-review-v3/receipt.json",
+      "sha256": "f0bf2b0aa962d973f94d0a6f5d5d6af9bc85ce526e7608ea3b1d5a3adc29e96c",
+      "bytes": 1661
+    }
+  ]
+}
