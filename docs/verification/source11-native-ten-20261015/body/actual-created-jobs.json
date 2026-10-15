@@ -1,0 +1,153 @@
+[
+  {
+    "label": "disabled",
+    "id": "89eb10f7-e8a6-4a96-9814-d7801b97f960",
+    "urls": [
+      "http://127.0.0.1:50146/disabled.xml"
+    ],
+    "routes": [
+      "/disabled.xml"
+    ],
+    "saved_config_sha256": "11270a9bc119a3cf0e249f1824bbadaed909352bd06ab83a99c5742bb98781af",
+    "large": false
+  },
+  {
+    "label": "tiny-both",
+    "id": "0c7ae9e2-5cc2-46b5-926a-e54f5be543e2",
+    "urls": [
+      "http://127.0.0.1:50146/tiny.xml"
+    ],
+    "routes": [
+      "/tiny.xml"
+    ],
+    "saved_config_sha256": "9303c4722a62239c45735da101ccf2c72aa18b2e292fb4969fb7445c7961c5e5",
+    "archive": {
+      "retain_post_http_entity": true,
+      "retain_decoded_xml": true,
+      "max_bytes_per_body": 67108864,
+      "max_total_body_bytes": 536870912,
+      "max_capture_records": 4096
+    },
+    "large": false
+  },
+  {
+    "label": "genuine64",
+    "id": "b2b358e4-1f78-43cb-93b2-aab90b319026",
+    "urls": [
+      "http://127.0.0.1:50146/full64.xml"
+    ],
+    "routes": [
+      "/full64.xml"
+    ],
+    "saved_config_sha256": "db830b97f8c7f66bba601647d859aaee492596e8d2d645be4aa6b130f77c068a",
+    "archive": {
+      "retain_post_http_entity": true,
+      "retain_decoded_xml": false,
+      "max_bytes_per_body": 67108864,
+      "max_total_body_bytes": 67108864,
+      "max_capture_records": 4096
+    },
+    "large": true
+  },
+  {
+    "label": "source-plus-one",
+    "id": "eb6bf2f7-5faf-4dfa-9bb1-05fab7953bf6",
+    "urls": [
+      "http://127.0.0.1:50146/plus-one.xml"
+    ],
+    "routes": [
+      "/plus-one.xml"
+    ],
+    "saved_config_sha256": "5b1c96f5222e419453eaa723de0d592dcd127c79024f5b72671cfff4be0b46e0",
+    "archive": {
+      "retain_post_http_entity": true,
+      "retain_decoded_xml": false,
+      "max_bytes_per_body": 67108864,
+      "max_total_body_bytes": 67108864,
+      "max_capture_records": 4096
+    },
+    "large": true
+  },
+  {
+    "label": "body-quota",
+    "id": "dfffb549-a9c5-4860-bf3f-ad1288f31f21",
+    "urls": [
+      "http://127.0.0.1:50146/body-quota.xml"
+    ],
+    "routes": [
+      "/body-quota.xml"
+    ],
+    "saved_config_sha256": "1a008f305a149e8dae23c899061e81b27e8e43fa99d754c1d5cec76de481c6e0",
+    "archive": {
+      "retain_post_http_entity": true,
+      "retain_decoded_xml": true,
+      "max_bytes_per_body": 1023,
+      "max_total_body_bytes": 536870912,
+      "max_capture_records": 4096
+    },
+    "large": false
+  },
+  {
+    "label": "total-quota",
+    "id": "3213f37f-f0dc-4a49-a0df-f45a02e9ff63",
+    "urls": [
+      "http://127.0.0.1:50146/total-quota.xml"
+    ],
+    "routes": [
+      "/total-quota.xml"
+    ],
+    "saved_config_sha256": "ccc2cb0d8eae04ad4368ad25942739ad3f13d49965050e4471c01939d076349d",
+    "archive": {
+      "retain_post_http_entity": true,
+      "retain_decoded_xml": true,
+      "max_bytes_per_body": 67108864,
+      "max_total_body_bytes": 2047,
+      "max_capture_records": 4096
+    },
+    "large": false
+  },
+  {
+    "label": "capture-quota",
+    "id": "53648424-2207-455a-aa11-d702e38038e7",
+    "urls": [
+      "http://127.0.0.1:50146/record-a.xml",
+      "http://127.0.0.1:50146/record-b.xml"
+    ],
+    "routes": [
+      "/record-a.xml",
+      "/record-b.xml"
+    ],
+    "saved_config_sha256": "594d8d80bedf361e4ad4dd4e92f13d0fc4b8fde2aa83d13533165ebc85c55270",
+    "archive": {
+      "retain_post_http_entity": true,
+      "retain_decoded_xml": true,
+      "max_bytes_per_body": 67108864,
+      "max_total_body_bytes": 536870912,
+      "max_capture_records": 1
+    },
+    "large": false
+  },
+  {
+    "label": "multi",
+    "id": "65bb06d6-943f-4f25-a4d9-ba88fcf827ab",
+    "urls": [
+      "http://127.0.0.1:50146/multi-a.xml",
+      "http://127.0.0.1:50146/multi-b.xml",
+      "http://127.0.0.1:50146/multi-c.xml"
+    ],
+    "routes": [
+      "/multi-a.xml",
+      "/multi-b.xml",
+      "/multi-c.xml"
+    ],
+    "saved_config_sha256": "c26cff8aced6810c75266b9e3ee7c408d90eb62a8136f99fea73b213b3e49fe3",
+    "archive": {
+      "retain_post_http_entity": true,
+      "retain_decoded_xml": true,
+      "max_bytes_per_body": 67108864,
+      "max_total_body_bytes": 536870912,
+      "max_capture_records": 4096
+    },
+    "large": false
+  }
+]

@@ -195,7 +195,11 @@ const lines = [
   'Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.json) bilden ein zusätzliches Register. Ihre positiven Fälle, Kontrollfälle, Parameter und Grenzfälle müssen jeweils geprüft werden. Ein implementierter Kern, ein leerer Export oder übereinstimmende CSV-Zellen ersetzen diese Einzelabnahme nicht.', '',
   '## Aktuelle Arbeit und nächste Schritte', '',
 ];
-for (const work of [...(catalog.current_work ?? [])].sort((a, b) => (a.priority ?? 100) - (b.priority ?? 100))) {
+const orderedWork = [...(catalog.current_work ?? [])].sort((a, b) => (a.priority ?? 100) - (b.priority ?? 100));
+const activeIds = catalog.active_work_ids ?? orderedWork.map(work => work.id);
+if (!Array.isArray(activeIds) || new Set(activeIds).size !== activeIds.length || activeIds.some(id => !orderedWork.some(work => work.id === id))) throw new Error('Invalid active work selection.');
+const historicalWork = orderedWork.filter(work => !activeIds.includes(work.id));
+function renderWork(work) {
   lines.push(`- [${work.status === 'COMPLETED' ? 'x' : ' '}] **${work.title_de}** — ${work.status}. ${work.summary_de}`);
   if (work.completed_acceptance_de?.length) lines.push(...work.completed_acceptance_de.map(item => `  - [x] ${item}`));
   if (work.pending_acceptance_de?.length) lines.push(...work.pending_acceptance_de.map(item => `  - [ ] ${item}`));
@@ -203,6 +207,8 @@ for (const work of [...(catalog.current_work ?? [])].sort((a, b) => (a.priority 
   if (work.gates) lines.push(`  - Gate-Stand: ${Object.entries(work.gates).map(([id, result]) => `${id}: ${result}`).join('; ')}.`);
   lines.push('');
 }
+for (const work of orderedWork.filter(work => activeIds.includes(work.id))) renderWork(work);
+if (historicalWork.length) lines.push('Frühere Zwischenstände bleiben am Ende als eingeklappte Historie erhalten. Ihre damaligen offenen Schritte sind keine zusätzlichen aktuellen Aufgaben; maßgeblich sind die aktuelle Arbeit und die offenen Feature-Kriterien.', '');
 lines.push(
   'Das nächste Häkchen entsteht erst nach nachvollziehbaren Tests der offenen Kriterien und einem passenden Beweis im Katalog. Änderungen an Status oder Abnahme erfolgen dort; diese Datei wird danach neu erzeugt.', '',
   '## Vollständige Liste nach Gruppen', '',
@@ -235,6 +241,11 @@ for (const group of catalog.groups) {
       lines.push(...JSON.stringify(proof, null, 2).split('\n').map(line => `  ${line}`), '  ```', '', '  </details>', '');
     }
   }
+}
+if (historicalWork.length) {
+  lines.push('## Frühere Arbeitsstände', '', '<details>', `<summary>${historicalWork.length} historische Zwischenstände mit ihren damaligen Ergebnissen und offenen Schritten</summary>`, '', 'Diese unveränderten Einträge dokumentieren den damaligen Stand. Aktuelle Restarbeiten stehen oben und in den jeweiligen Feature-Kriterien.', '');
+  for (const work of historicalWork) renderWork(work);
+  lines.push('</details>', '');
 }
 lines.push('## Pflege und Beweisgrenzen', '',
   '1. Die offene Abnahme im JSON als konkrete Fixture oder Runtime-Prüfung ausarbeiten.',

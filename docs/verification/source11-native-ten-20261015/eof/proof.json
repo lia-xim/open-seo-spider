@@ -1,0 +1,711 @@
+{
+  "kind": "source11_owned_http_eof_native",
+  "result": "PASS_SOURCE11_IDLE_AND_ACTUAL_INFLIGHT_CRAWL_EOF_ONLY",
+  "release": {
+    "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/v11-owned-http-eof-release.json",
+    "sha256": "6395981daa6ab9a1d1bd5697954f1a5c8528c635a6a975621c448a6bdf2ce0bf"
+  },
+  "binder": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v11-exact-length-driver-preparation-v2/combined-bindings.mjs",
+    "sha256": "2c18fffe7e991dc6ae3fbedf32875d255f12e876d29d12c8fb586b41520f16bc",
+    "manifest": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v11-exact-length-driver-preparation-v2/manifest.json",
+      "sha256": "f24fce6c565664bac372ab01aaeefb89f8880883b0967cab883fd72c1d4a055e",
+      "bytes": 5137
+    },
+    "independent_review": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v11-exact-length-driver-independent-review-v2/binder-receipt.json",
+      "sha256": "bb3e2fc886c3e54e83137b8db90a0c402b3f2ed1bfd936a699695189ed6f6f0e",
+      "bytes": 3560
+    }
+  },
+  "source_manifest_sha256": "8a55a0ba333742124b36a33fde8a889afcc594e052b09568910dccc3ea5e519c",
+  "suite_proof_sha256": "9f19222aec9081ff361f3802523bd1d5a7f8a8da5a505442a2d7832aeb7946c0",
+  "build_proof_sha256": "1c421abd30f58ba5944c660a9776509e6c836cbc647d23ef03b474162bb35910",
+  "candidate_binary_sha256": "2d46366500887caeee33c45a972639dd379c02e678a9e07595a506244f9265f7",
+  "harness_sha256": "813a30c5dc61ee313883f28b3e87a216645b52cfe2f602d24bc3c1f422675b34",
+  "scope": "idle_and_one_actual_inflight_crawl_only",
+  "cases": [
+    {
+      "label": "01-idle-eof",
+      "result": "PASS_IDLE_NATURAL_EOF",
+      "tool_names": [
+        "spider_capabilities",
+        "spider_list_crawls",
+        "spider_start_crawl",
+        "spider_status",
+        "spider_pages",
+        "spider_issues",
+        "spider_analysis",
+        "spider_policy",
+        "spider_sitemaps",
+        "spider_resources",
+        "spider_resource_transports",
+        "spider_inspect_css",
+        "spider_content",
+        "spider_content_document",
+        "spider_analyze_crawl_content",
+        "spider_analyze_content",
+        "spider_preview_policy",
+        "spider_cancel",
+        "spider_pause",
+        "spider_resume",
+        "spider_recrawl",
+        "spider_project",
+        "spider_compare",
+        "spider_generate_sitemaps",
+        "spider_compare_saved",
+        "spider_sitemap_findings"
+      ],
+      "child": "01-idle-eof",
+      "data_directory_remains_empty": true
+    },
+    {
+      "label": "02-inflight-crawl-eof",
+      "result": "PASS_ACTUAL_INFLIGHT_CRAWL_NATURAL_EOF",
+      "child": "02-inflight-crawl-eof",
+      "checkpoint": {
+        "generation": 1,
+        "revision": 1,
+        "outcome": "paused",
+        "created_at": "2026-10-15T20:33:33.940788200+00:00",
+        "report_sha256": "68be1f28e5e17d8fd14b4e5f0098562f0b4183b64ad804e8962d3ccd0caeed59",
+        "config_sha256": "07c1e18ae33862266c6ac5017265ffda6a29689611f6c8f863e8eb7de492e6fb",
+        "completed": 1,
+        "pending": 2,
+        "discovery_pending": 0,
+        "discovery_complete": true,
+        "sitemap_ledger": {
+          "engine": "open-seo-spider/sitemap-membership-ledger-v1",
+          "hash_profile": "sha256-tagged-canonical-rust-serde-rows-v1",
+          "config_sha256": "07c1e18ae33862266c6ac5017265ffda6a29689611f6c8f863e8eb7de492e6fb",
+          "limits": {
+            "max_catalog_json_bytes": 33554432,
+            "max_row_json_bytes": 262144,
+            "max_rows": 1000000
+          },
+          "revision": 0,
+          "last_sequence": 0,
+          "root_rows": 0,
+          "document_rows": 0,
+          "entry_rows": 0,
+          "location_rows": 0,
+          "incomplete_documents": 0,
+          "catalog_json_bytes": 673,
+          "rolling_sha256": "13bf3f3c19e30225bc79a783137bad79067f9ea774e449586bd1af5d65569f36",
+          "rows_available": true,
+          "declared_source_cohort_complete": false,
+          "legacy_history_unknown": false
+        },
+        "sitemap_source_measurements": {
+          "engine": "open-seo-spider/sitemap-source-store-v1",
+          "hash_profile": "sha256-canonical-rust-serde-source-store-v1",
+          "initial_catalog_config_sha256": "07c1e18ae33862266c6ac5017265ffda6a29689611f6c8f863e8eb7de492e6fb",
+          "limits": {
+            "max_catalog_json_bytes": 33554432,
+            "max_record_json_bytes": 16384,
+            "max_records": 100000
+          },
+          "revision": 0,
+          "last_sequence": 0,
+          "record_count": 0,
+          "commit_count": 0,
+          "record_json_bytes": 0,
+          "commit_json_bytes": 0,
+          "metadata_json_bytes": 776,
+          "logical_json_bytes": 833,
+          "reserved_json_bytes": 3320,
+          "charged_json_bytes": 4153,
+          "content_sha256": "6fc4911371e110051792981120819d0566494e6b5785d2ac483ba87b646e69c9",
+          "links_sha256": "6d67cf8f38a52279fc62c46abe94baa0b822885e35fe247e2ffe26d96d213377",
+          "legacy_history_unknown": false,
+          "omission": null,
+          "omission_revision": null,
+          "inherited": null
+        }
+      },
+      "persistence_before_close": {
+        "label": "02-inflight-crawl-eof.before-close",
+        "observed": {
+          "sequence": 15,
+          "monotonic_us": 44064089411,
+          "label": "persistence_readonly_verified"
+        },
+        "database": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v11\\02-inflight-crawl-eof.data\\25e7c9ac-80f9-462a-8859-d6c495c81095.sqlite",
+        "checkpoint": {
+          "generation": 1,
+          "revision": 1,
+          "outcome": "paused",
+          "created_at": "2026-10-15T20:33:33.940788200+00:00",
+          "report_sha256": "68be1f28e5e17d8fd14b4e5f0098562f0b4183b64ad804e8962d3ccd0caeed59",
+          "config_sha256": "07c1e18ae33862266c6ac5017265ffda6a29689611f6c8f863e8eb7de492e6fb",
+          "completed": 1,
+          "pending": 2,
+          "discovery_pending": 0,
+          "discovery_complete": true,
+          "sitemap_ledger": {
+            "engine": "open-seo-spider/sitemap-membership-ledger-v1",
+            "hash_profile": "sha256-tagged-canonical-rust-serde-rows-v1",
+            "config_sha256": "07c1e18ae33862266c6ac5017265ffda6a29689611f6c8f863e8eb7de492e6fb",
+            "limits": {
+              "max_catalog_json_bytes": 33554432,
+              "max_row_json_bytes": 262144,
+              "max_rows": 1000000
+            },
+            "revision": 0,
+            "last_sequence": 0,
+            "root_rows": 0,
+            "document_rows": 0,
+            "entry_rows": 0,
+            "location_rows": 0,
+            "incomplete_documents": 0,
+            "catalog_json_bytes": 673,
+            "rolling_sha256": "13bf3f3c19e30225bc79a783137bad79067f9ea774e449586bd1af5d65569f36",
+            "rows_available": true,
+            "declared_source_cohort_complete": false,
+            "legacy_history_unknown": false
+          },
+          "sitemap_source_measurements": {
+            "engine": "open-seo-spider/sitemap-source-store-v1",
+            "hash_profile": "sha256-canonical-rust-serde-source-store-v1",
+            "initial_catalog_config_sha256": "07c1e18ae33862266c6ac5017265ffda6a29689611f6c8f863e8eb7de492e6fb",
+            "limits": {
+              "max_catalog_json_bytes": 33554432,
+              "max_record_json_bytes": 16384,
+              "max_records": 100000
+            },
+            "revision": 0,
+            "last_sequence": 0,
+            "record_count": 0,
+            "commit_count": 0,
+            "record_json_bytes": 0,
+            "commit_json_bytes": 0,
+            "metadata_json_bytes": 776,
+            "logical_json_bytes": 833,
+            "reserved_json_bytes": 3320,
+            "charged_json_bytes": 4153,
+            "content_sha256": "6fc4911371e110051792981120819d0566494e6b5785d2ac483ba87b646e69c9",
+            "links_sha256": "6d67cf8f38a52279fc62c46abe94baa0b822885e35fe247e2ffe26d96d213377",
+            "legacy_history_unknown": false,
+            "omission": null,
+            "omission_revision": null,
+            "inherited": null
+          }
+        },
+        "run_state": {
+          "generation": 1,
+          "started_at": "2026-10-15T20:33:33.797414500+00:00",
+          "finished_at": "2026-10-15T20:33:33.940788200+00:00",
+          "outcome": "paused"
+        },
+        "frontier": [
+          {
+            "url": "http://127.0.0.1:57197/first",
+            "depth": 0,
+            "done": 1
+          },
+          {
+            "url": "http://127.0.0.1:57197/late-1",
+            "depth": 0,
+            "done": 0
+          },
+          {
+            "url": "http://127.0.0.1:57197/late-2",
+            "depth": 0,
+            "done": 0
+          }
+        ],
+        "complete_core_report_sha256": "68be1f28e5e17d8fd14b4e5f0098562f0b4183b64ad804e8962d3ccd0caeed59",
+        "complete_app_report_sha256": "68be1f28e5e17d8fd14b4e5f0098562f0b4183b64ad804e8962d3ccd0caeed59",
+        "complete_generation_sha256": "68be1f28e5e17d8fd14b4e5f0098562f0b4183b64ad804e8962d3ccd0caeed59",
+        "complete_job_manifest_sha256": "12e7ec91d83529698447424c2fc783ed308bcf07b2cda0b80a08a956b552f756",
+        "full_page_sha256": "4ffe5e1214b961909113b038a69545c074cfe339d038bc248acfe4609c4e2229",
+        "qualification": "Existing controlled SQLite checkpoint bindings plus complete persisted files, observed before the parent child-close callback when called from final receipt; no power-loss or arbitrary-database integrity proof"
+      },
+      "persistence_after_close": {
+        "label": "02-inflight-crawl-eof.after-close",
+        "observed": {
+          "sequence": 18,
+          "monotonic_us": 44064095492,
+          "label": "persistence_readonly_verified"
+        },
+        "database": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v11\\02-inflight-crawl-eof.data\\25e7c9ac-80f9-462a-8859-d6c495c81095.sqlite",
+        "checkpoint": {
+          "generation": 1,
+          "revision": 1,
+          "outcome": "paused",
+          "created_at": "2026-10-15T20:33:33.940788200+00:00",
+          "report_sha256": "68be1f28e5e17d8fd14b4e5f0098562f0b4183b64ad804e8962d3ccd0caeed59",
+          "config_sha256": "07c1e18ae33862266c6ac5017265ffda6a29689611f6c8f863e8eb7de492e6fb",
+          "completed": 1,
+          "pending": 2,
+          "discovery_pending": 0,
+          "discovery_complete": true,
+          "sitemap_ledger": {
+            "engine": "open-seo-spider/sitemap-membership-ledger-v1",
+            "hash_profile": "sha256-tagged-canonical-rust-serde-rows-v1",
+            "config_sha256": "07c1e18ae33862266c6ac5017265ffda6a29689611f6c8f863e8eb7de492e6fb",
+            "limits": {
+              "max_catalog_json_bytes": 33554432,
+              "max_row_json_bytes": 262144,
+              "max_rows": 1000000
+            },
+            "revision": 0,
+            "last_sequence": 0,
+            "root_rows": 0,
+            "document_rows": 0,
+            "entry_rows": 0,
+            "location_rows": 0,
+            "incomplete_documents": 0,
+            "catalog_json_bytes": 673,
+            "rolling_sha256": "13bf3f3c19e30225bc79a783137bad79067f9ea774e449586bd1af5d65569f36",
+            "rows_available": true,
+            "declared_source_cohort_complete": false,
+            "legacy_history_unknown": false
+          },
+          "sitemap_source_measurements": {
+            "engine": "open-seo-spider/sitemap-source-store-v1",
+            "hash_profile": "sha256-canonical-rust-serde-source-store-v1",
+            "initial_catalog_config_sha256": "07c1e18ae33862266c6ac5017265ffda6a29689611f6c8f863e8eb7de492e6fb",
+            "limits": {
+              "max_catalog_json_bytes": 33554432,
+              "max_record_json_bytes": 16384,
+              "max_records": 100000
+            },
+            "revision": 0,
+            "last_sequence": 0,
+            "record_count": 0,
+            "commit_count": 0,
+            "record_json_bytes": 0,
+            "commit_json_bytes": 0,
+            "metadata_json_bytes": 776,
+            "logical_json_bytes": 833,
+            "reserved_json_bytes": 3320,
+            "charged_json_bytes": 4153,
+            "content_sha256": "6fc4911371e110051792981120819d0566494e6b5785d2ac483ba87b646e69c9",
+            "links_sha256": "6d67cf8f38a52279fc62c46abe94baa0b822885e35fe247e2ffe26d96d213377",
+            "legacy_history_unknown": false,
+            "omission": null,
+            "omission_revision": null,
+            "inherited": null
+          }
+        },
+        "run_state": {
+          "generation": 1,
+          "started_at": "2026-10-15T20:33:33.797414500+00:00",
+          "finished_at": "2026-10-15T20:33:33.940788200+00:00",
+          "outcome": "paused"
+        },
+        "frontier": [
+          {
+            "url": "http://127.0.0.1:57197/first",
+            "depth": 0,
+            "done": 1
+          },
+          {
+            "url": "http://127.0.0.1:57197/late-1",
+            "depth": 0,
+            "done": 0
+          },
+          {
+            "url": "http://127.0.0.1:57197/late-2",
+            "depth": 0,
+            "done": 0
+          }
+        ],
+        "complete_core_report_sha256": "68be1f28e5e17d8fd14b4e5f0098562f0b4183b64ad804e8962d3ccd0caeed59",
+        "complete_app_report_sha256": "68be1f28e5e17d8fd14b4e5f0098562f0b4183b64ad804e8962d3ccd0caeed59",
+        "complete_generation_sha256": "68be1f28e5e17d8fd14b4e5f0098562f0b4183b64ad804e8962d3ccd0caeed59",
+        "complete_job_manifest_sha256": "12e7ec91d83529698447424c2fc783ed308bcf07b2cda0b80a08a956b552f756",
+        "full_page_sha256": "4ffe5e1214b961909113b038a69545c074cfe339d038bc248acfe4609c4e2229",
+        "qualification": "Existing controlled SQLite checkpoint bindings plus complete persisted files, observed before the parent child-close callback when called from final receipt; no power-loss or arbitrary-database integrity proof"
+      },
+      "fixture": {
+        "requests": [
+          {
+            "method": "GET",
+            "url": "/first",
+            "entered": {
+              "sequence": 9,
+              "monotonic_us": 44063941480,
+              "label": "website_request_entered"
+            }
+          }
+        ],
+        "errors": [],
+        "actual_close_callback": true,
+        "sockets_remaining": 0,
+        "responses_remaining": 0,
+        "body_released": {
+          "sequence": 13,
+          "monotonic_us": 44064071320,
+          "label": "owned_first_body_released"
+        }
+      }
+    }
+  ],
+  "failures": [],
+  "signals": [],
+  "qualification": "Two owned App processes only: idle and one actual in-flight HTML crawl. Actual Source11 three generic owner rows and both new zero-work registry receipts are mandatory; nine source-pinned drain branches are not eight generic rows. No nonzero registry producer proof is inferred. No stateful MCP session, HTTP notification cancellation, PDF panic, file/export slow-reader drain, renderer process, hard shutdown latency or power-loss proof.",
+  "final_actual_source_suite_build_candidate_guards_verified": true,
+  "children": [
+    {
+      "label": "01-idle-eof",
+      "data": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v11\\01-idle-eof.data",
+      "logs": [
+        {
+          "name": "stdout",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v11\\01-idle-eof.stdout.log",
+          "fd_closed": true,
+          "bytes": 40,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null,
+          "sha256": "e6d4b79388f9ffc26ebc5a28f6c4422c55d9441a315eb0f317def5fdc56b69f3"
+        },
+        {
+          "name": "stderr",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v11\\01-idle-eof.stderr.log",
+          "fd_closed": true,
+          "bytes": 1563,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null,
+          "sha256": "79c58dae0d0a09bc4224de01cdbc681c504338b7db62466ae4b9c00df73f5eb2"
+        }
+      ],
+      "errors": [],
+      "receipts": [
+        {
+          "value": {
+            "cause": "owned_stdin_eof",
+            "clean": true,
+            "incoming_transports": {
+              "accept_admitted": 1,
+              "accept_joined": 1,
+              "accept_retained": 0,
+              "accepted": 2,
+              "actual_io_dropped": 2,
+              "complete": 2,
+              "connection_admitted": 2,
+              "connection_joined": 2,
+              "connection_retained": 0,
+              "first_failure": null,
+              "grace_seconds": 5,
+              "incoming_protocol": "http1_plain_tcp_no_application_upgrades",
+              "listener_dropped": true,
+              "peer_errors": 0,
+              "registered": true,
+              "rejected": 0,
+              "retained": 0,
+              "shutdown_aborted": 0,
+              "tcp_write_pending": 0,
+              "whole_application_five_second_bound": false
+            },
+            "kind": "owned_application_shutdown_v1",
+            "owners": [
+              {
+                "admitted": 2,
+                "closing": true,
+                "first_failure": null,
+                "joined": 2,
+                "owner": "http_requests",
+                "retained": 0,
+                "started": 2
+              },
+              {
+                "admitted": 0,
+                "closing": true,
+                "first_failure": null,
+                "joined": 0,
+                "owner": "http_blocking",
+                "retained": 0,
+                "started": 0
+              },
+              {
+                "admitted": 0,
+                "closing": true,
+                "first_failure": null,
+                "joined": 0,
+                "owner": "crawl_operations",
+                "retained": 0,
+                "started": 0
+              }
+            ],
+            "qualification": "Local application task joins only; actual process/pipe EOF is an independent outside witness; no stateful MCP session or external renderer-process drain claim",
+            "response_streams": {
+              "aborted": 0,
+              "admitted": 0,
+              "complete": 0,
+              "enqueues": 0,
+              "failed": 0,
+              "first_failure": null,
+              "full_reservations": 0,
+              "joined": 0,
+              "max_chunk": 0,
+              "peak_queued": 0,
+              "response_supervisors_joined": 0,
+              "retained": 0,
+              "started": 0
+            },
+            "response_transport_owned": true,
+            "source_body_transports": {
+              "admitted": 0,
+              "first_failure": null,
+              "joined": 0,
+              "logical_spool_byte_limit": 134217728,
+              "owner": "source_body_transports",
+              "retained": 0,
+              "spool_leases": 0,
+              "started": 0,
+              "unresponsive_transport_shutdown": "not_proven"
+            }
+          },
+          "witness": {
+            "sequence": 4,
+            "monotonic_us": 44063848394,
+            "label": "final_owned_receipt",
+            "actual_close_already_observed": false,
+            "exit_already_observed": false
+          }
+        }
+      ],
+      "spawn_event": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "spawn_error": null,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "stdin": {
+        "eof_sent": true,
+        "finished": true,
+        "closed": true,
+        "error": null
+      },
+      "events": [
+        {
+          "sequence": 1,
+          "monotonic_us": 44063807659,
+          "label": "spawn"
+        },
+        {
+          "sequence": 2,
+          "monotonic_us": 44063841434,
+          "label": "ready_health"
+        },
+        {
+          "sequence": 3,
+          "monotonic_us": 44063845759,
+          "label": "owned_stdin_eof_requested"
+        },
+        {
+          "sequence": 5,
+          "monotonic_us": 44063850424,
+          "label": "exit"
+        },
+        {
+          "sequence": 6,
+          "monotonic_us": 44063850483,
+          "label": "actual_close"
+        }
+      ],
+      "origin": "http://127.0.0.1:57194",
+      "pid": 36108
+    },
+    {
+      "label": "02-inflight-crawl-eof",
+      "data": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v11\\02-inflight-crawl-eof.data",
+      "logs": [
+        {
+          "name": "stdout",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v11\\02-inflight-crawl-eof.stdout.log",
+          "fd_closed": true,
+          "bytes": 40,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null,
+          "sha256": "e220947d77f756b9d77dcafd9bf5f2a70c9d40a8fff4b10a80c18f8ba3706812"
+        },
+        {
+          "name": "stderr",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v11\\02-inflight-crawl-eof.stderr.log",
+          "fd_closed": true,
+          "bytes": 1563,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null,
+          "sha256": "02d2d1f0cfeebe4d1c0c3ade32223d89cb76ff0f865a3a5b226792a710246973"
+        }
+      ],
+      "errors": [],
+      "receipts": [
+        {
+          "value": {
+            "cause": "owned_stdin_eof",
+            "clean": true,
+            "incoming_transports": {
+              "accept_admitted": 1,
+              "accept_joined": 1,
+              "accept_retained": 0,
+              "accepted": 3,
+              "actual_io_dropped": 3,
+              "complete": 2,
+              "connection_admitted": 3,
+              "connection_joined": 3,
+              "connection_retained": 0,
+              "first_failure": null,
+              "grace_seconds": 5,
+              "incoming_protocol": "http1_plain_tcp_no_application_upgrades",
+              "listener_dropped": true,
+              "peer_errors": 1,
+              "registered": true,
+              "rejected": 0,
+              "retained": 0,
+              "shutdown_aborted": 0,
+              "tcp_write_pending": 0,
+              "whole_application_five_second_bound": false
+            },
+            "kind": "owned_application_shutdown_v1",
+            "owners": [
+              {
+                "admitted": 2,
+                "closing": true,
+                "first_failure": null,
+                "joined": 2,
+                "owner": "http_requests",
+                "retained": 0,
+                "started": 2
+              },
+              {
+                "admitted": 0,
+                "closing": true,
+                "first_failure": null,
+                "joined": 0,
+                "owner": "http_blocking",
+                "retained": 0,
+                "started": 0
+              },
+              {
+                "admitted": 1,
+                "closing": true,
+                "first_failure": null,
+                "joined": 1,
+                "owner": "crawl_operations",
+                "retained": 0,
+                "started": 1
+              }
+            ],
+            "qualification": "Local application task joins only; actual process/pipe EOF is an independent outside witness; no stateful MCP session or external renderer-process drain claim",
+            "response_streams": {
+              "aborted": 0,
+              "admitted": 0,
+              "complete": 0,
+              "enqueues": 0,
+              "failed": 0,
+              "first_failure": null,
+              "full_reservations": 0,
+              "joined": 0,
+              "max_chunk": 0,
+              "peak_queued": 0,
+              "response_supervisors_joined": 0,
+              "retained": 0,
+              "started": 0
+            },
+            "response_transport_owned": true,
+            "source_body_transports": {
+              "admitted": 0,
+              "first_failure": null,
+              "joined": 0,
+              "logical_spool_byte_limit": 134217728,
+              "owner": "source_body_transports",
+              "retained": 0,
+              "spool_leases": 0,
+              "started": 0,
+              "unresponsive_transport_shutdown": "not_proven"
+            }
+          },
+          "witness": {
+            "sequence": 14,
+            "monotonic_us": 44064082263,
+            "label": "final_owned_receipt",
+            "actual_close_already_observed": false,
+            "exit_already_observed": false
+          }
+        }
+      ],
+      "spawn_event": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "spawn_error": null,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "stdin": {
+        "eof_sent": true,
+        "finished": true,
+        "closed": true,
+        "error": null
+      },
+      "events": [
+        {
+          "sequence": 7,
+          "monotonic_us": 44063871300,
+          "label": "spawn"
+        },
+        {
+          "sequence": 8,
+          "monotonic_us": 44063903631,
+          "label": "ready_health"
+        },
+        {
+          "sequence": 10,
+          "monotonic_us": 44063945936,
+          "label": "owned_stdin_eof_requested"
+        },
+        {
+          "sequence": 11,
+          "monotonic_us": 44063947649,
+          "label": "fresh_connection_listener_probe_reset_retry",
+          "connected": true,
+          "code": "ECONNRESET"
+        },
+        {
+          "sequence": 12,
+          "monotonic_us": 44063971701,
+          "label": "fresh_connection_listener_refusal_before_body_release"
+        },
+        {
+          "sequence": 16,
+          "monotonic_us": 44064091107,
+          "label": "exit"
+        },
+        {
+          "sequence": 17,
+          "monotonic_us": 44064091151,
+          "label": "actual_close"
+        }
+      ],
+      "origin": "http://127.0.0.1:57198",
+      "pid": 38272
+    }
+  ],
+  "execution_lock_released": true,
+  "recorded_at": "2026-10-15T20:33:34.625Z"
+}
