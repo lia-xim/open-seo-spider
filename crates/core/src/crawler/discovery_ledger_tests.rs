@@ -281,6 +281,7 @@ fn context(crawler: &Crawler, generation: u64) -> FetchContext {
         robots: crawler.robots.clone(),
         rate: crawler.rate.clone(),
         pdf_slots: crawler.pdf_slots.clone(),
+        pdf_tasks: crate::TaskOwner::new("sitemap_fixture_pdf"),
         policy: crawler.policy.clone(),
         pdf_parse_hook: None,
     }
@@ -408,9 +409,22 @@ async fn run(
     generation: u64,
     seen: &mut HashSet<String>,
 ) -> anyhow::Result<DiscoveryProgress> {
-    crawler
-        .run_discovery(&CrawlControl::new(), &None, seen, (0, 0), Some(generation))
-        .await
+    let pdf_tasks = crate::TaskOwner::new("discovery_ledger_fixture_pdf");
+    let result = crawler
+        .run_discovery(
+            &CrawlControl::new(),
+            &None,
+            seen,
+            (0, 0),
+            Some(generation),
+            &pdf_tasks,
+        )
+        .await;
+    // Drain actual workers even if discovery itself returned an error.
+    let drained = pdf_tasks.shutdown_and_drain().await;
+    let result = result?;
+    drained?;
+    Ok(result)
 }
 
 #[tokio::test]
@@ -803,6 +817,7 @@ async fn cancelled_before_source_keeps_pending_task_and_zero_http() {
         setup(config(&fixture, false), Default::default(), false);
     let control = CrawlControl::new();
     assert!(control.request_cancel());
+    let pdf_tasks = crate::TaskOwner::new("cancelled_discovery_fixture_pdf");
     let result = crawler
         .run_discovery(
             &control,
@@ -810,9 +825,11 @@ async fn cancelled_before_source_keeps_pending_task_and_zero_http() {
             &mut HashSet::new(),
             (0, 0),
             Some(generation),
+            &pdf_tasks,
         )
-        .await
-        .unwrap();
+        .await;
+    pdf_tasks.shutdown_and_drain().await.unwrap();
+    let result = result.unwrap();
     assert_eq!(result.pending, 1);
     assert_eq!(
         crawler

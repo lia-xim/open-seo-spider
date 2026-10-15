@@ -292,6 +292,7 @@ fn context_from_crawler(crawler: &Crawler) -> FetchContext {
         robots: crawler.robots.clone(),
         rate: crawler.rate.clone(),
         pdf_slots: crawler.pdf_slots.clone(),
+        pdf_tasks: crate::TaskOwner::new("sitemap_fixture_pdf"),
         policy: crawler.policy.clone(),
         pdf_parse_hook: None,
     }

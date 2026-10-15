@@ -1,4 +1,5 @@
 use super::*;
+use lopdf::dictionary;
 use std::sync::{Condvar, Mutex};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 

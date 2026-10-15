@@ -264,7 +264,12 @@ async fn shutdown_before_job_insert_keeps_admitted_initialization_owned_and_late
         .await
         .unwrap()
         .unwrap()
-        .unwrap();
+        .unwrap_or_else(|(status, Json(error))| {
+            panic!(
+                "Admitted crawl initialization failed with {status}: {}",
+                error.error
+            )
+        });
     timeout(Duration::from_secs(5), drained)
         .await
         .unwrap()
