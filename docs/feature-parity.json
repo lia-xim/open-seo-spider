@@ -6349,6 +6349,36 @@
       "reference_parity": "NOT_PROVEN"
     },
     {
+      "id": "combined-source-v7-20261015",
+      "priority": 1,
+      "status": "ACTUAL_FULL_WORKSPACE_PASS_OPTIMIZED_BUILD_AND_NATIVE_PENDING",
+      "title_de": "Gemeinsame Originaldatei- und HTTP-Verbindungsfunktionen prüfen",
+      "summary_de": "Source7 unter e96d1d1 besteht tatsächlich 1297 Tests, 515 Pflichtnamen, 41 vollständige Modulnamen und vier echte Renderer-Fälle. Format und Clippy bestehen. Eingehende Verbindungen werden verwaltet, nach dem Schließen der globalen Annahme beendet und bis zu ihrem tatsächlichen Abschluss verfolgt. Optimierter Kandidat und frische Native-/BODY13-/Browser27-Abnahmen folgen; installiert bleibt R3.",
+      "completed_acceptance_de": [
+        "Neun geprüfte Transportdateien auf den tatsächlich erfolgreichen Source6R2-Stand übertragen; alle Abbruchkorrekturen und die gesamte Regression erhalten. Unabhängige Quellen-, Formatierungs- und Runnerprüfungen sowie Vorab-Clippy bestanden.",
+        "326 Eingaben privat committed, gepusht und eingefroren. Die tatsächliche vollständige Suite besteht mit 1297/0/0, 515 Pflichtnamen, 41 Modulnamen, 13 neuen Transportfällen, vier Renderern sowie Format und Clippy. Alle drei Cargo-Prozesse erfolgreich beendet; eigene Testserver und Renderer geschlossen und Quellen abschließend identisch."
+      ],
+      "pending_acceptance_de": [
+        "Optimierten Windows-Kandidaten am exakten Source7-Stand bauen.",
+        "Alle frischen Small6-, EOF2-, Large13-, BODY13- und Browser27-Abnahmen am selben Kandidaten bestehen.",
+        "Lokale Installation unter Erhalt der Nutzerdaten prüfen; danach Migrationsworkflow und Vertrag für teilweise angenommene Schreiboperationen integrieren.",
+        "Übrige 144 Fähigkeiten, 416 Filter und 32 Abläufe weiter abarbeiten; vollständige Herstellerparität bleibt NOT_PROVEN."
+      ],
+      "documentation": [
+        "docs/verification/combined-workspace-v7-20261015/index.json"
+      ],
+      "gates": {
+        "full_workspace": "PASS_COMBINED_WORKSPACE_V7_REAL_RENDERER_FMT_CLIPPY",
+        "required_named_cases": "PASS_515_AND_41_FULL_MODULE_NAMES",
+        "actual_renderer": "PASS_4",
+        "optimized_build": "NOT_ESTABLISHED_BY_SUITE",
+        "native": "NOT_RUN_ON_SOURCE7",
+        "installation": "NOT_RUN_ON_SOURCE7",
+        "manufacturer_parity": "NOT_PROVEN"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
       "id": "combined-source-v6-20261015",
       "priority": 1,
       "status": "ACTUAL_REPAIRED_FULL_WORKSPACE_PASS_SOURCE7_COMBINATION_PENDING",
@@ -6449,14 +6479,15 @@
     {
       "id": "http-response-body-drain-20261015",
       "priority": 2,
-      "status": "SOURCE6_OWNER_AND_SOURCE7_TEST_ORACLE_REPAIR_SOURCE_REVIEWS_PASS_NOT_EXECUTED",
+      "status": "ACTUAL_SOURCE7_FULL_WORKSPACE_PASS_NATIVE_PENDING",
       "title_de": "Blockierte Downloadantworten und Verbindungen vollständig beenden",
       "summary_de": "Response-Owner ist als Source6-Vorschlag unabhängig geprüft. Eigener Accept-/Connection-Besitz und gemeinsame Schonfrist sind als Source7 vorbereitet; alle drei konkreten Testorakel-Lücken der ersten Version sind in der zweiten Version eng korrigiert und unabhängig geprüft. Die acht übrigen Payloads sind unverändert. Integration in den endgültigen Source6-Stand sowie alle Compiler-/Rust-/TCP-Abnahmen fehlen.",
       "completed_acceptance_de": [
         "Tatsächlichen bestehenden HTTP/1-Stack und unbesessene Verbindungsaufgaben analysiert; fünf Sekunden Schonfrist für eingehende Verbindungen als Entwurfsentscheidung festgelegt.",
         "Source6-Response-Owner separat quellengeprüft: zwölf neue Windows-Tests verfasst, jedoch noch nicht ausgeführt.",
         "Source7-V1 unabhängig gelesen; dreiP2-Testorakel offen dokumentiert: tatsächlicher wartenderDrain, noch unvollständiger positiverDownload beiT0 und isolierterSocketDrop mit lebendemLease.",
-        "Source7-V2 quellengeprüft: tatsächlichesPending vorDrain-Waiter-Abbruch, beiT0 gehaltene positiveProducer/Originalübertragung und isolierterSocketDrop bei lebendemLease ohneGlobalcancel. 13Testfunktionen verfasst,0ausgeführt; alle bisherigenAssertions erhalten."
+        "Source7-V2 quellengeprüft: tatsächlichesPending vorDrain-Waiter-Abbruch, beiT0 gehaltene positiveProducer/Originalübertragung und isolierterSocketDrop bei lebendemLease ohneGlobalcancel. 13Testfunktionen verfasst,0ausgeführt; alle bisherigenAssertions erhalten.",
+        "Source6R2-Abbruchfix und 13 Source7-Verbindungsfälle im tatsächlichen Gesamtlauf mit 1297 Tests bestanden. Zusätzliche Native- und Originaldateiprüfungen bleiben offen."
       ],
       "pending_acceptance_de": [
         "Source6-Owner gemeinsam mit Originaldatei-API integrieren und vollständige Compiler-/Rust-/Export-Abnahmen tatsächlich bestehen.",
@@ -6464,6 +6495,7 @@
         "Echte TCP-Nichtleser, natürliche Prozess-/Pipe-Enden und vollständige positive Downloads prüfen; keine allgemeine Fünf-Sekunden-Shutdown-Garantie behaupten."
       ],
       "documentation": [
+        "docs/verification/combined-workspace-v7-20261015/index.json",
         "docs/verification/source6-7-reviewed-drafts-20261015/index.json",
         "docs/parity/http-response-body-drain-plan.md",
         "docs/parity/http-response-body-drain-tasks.md",

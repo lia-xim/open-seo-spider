@@ -1,0 +1,1099 @@
+{
+  "schema_version": 1,
+  "kind": "source7_actual_frozen_source6_r2_rebase_proposal_v2",
+  "status": "SOURCE_ONLY_NOT_FORMATTED_NOT_COMPILED_NOT_TESTED_NOT_PROMOTED",
+  "immutable": true,
+  "recorded_at": "2026-10-15T14:33:45.141Z",
+  "actual_source6_release_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-r2\\manifest.json",
+    "sha256": "4572dc39ee478b8b3d55d06b5983779d6a42416c307256780050dc5950c49b77",
+    "bytes": 195006
+  },
+  "actual_source6_commit": "3be3fec9c0b2b67cfe7c3eda21ab2151db6edbe7",
+  "actual_source6_root_approval": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v6-r2-draft/root-approval.json",
+    "sha256": "9c064b532d11fcd1515389b47363a3082a580ba9b9bc1e1db975a123f7693af4",
+    "bytes": 60254
+  },
+  "actual_source6_suite_proof": null,
+  "actual_source6_build_proof": null,
+  "actual_source7_commit": null,
+  "actual_source7_suite_proof": null,
+  "actual_candidate": null,
+  "previous_rebase": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-frozen-source6-rebase-v1\\manifest.json",
+    "sha256": "3e45482699887d07611e984bee61a4a68157a70da02f929d294dba1f79f41cde",
+    "bytes": 58291
+  },
+  "previous_rebase_independent_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-frozen-source6-independent-review-v1\\receipt.json",
+    "sha256": "c5525fd14e4c997b633fc35b5eb2e904700739cfb503997c269b11a2955231f8",
+    "bytes": 25154
+  },
+  "repair_proposal": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-terminal-cancellation-proposal-v2\\manifest.json",
+    "sha256": "a5450d19e2b1ecefea9a00cbcbb73fbb5c33f1a9b916567c25082d1f34256b9a",
+    "bytes": 5246
+  },
+  "repair_independent_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-terminal-cancellation-independent-review-v2\\receipt.json",
+    "sha256": "4027d45f3c6b393101731bbef86e5adb8f5e54e8c7a26cb15acebb34c94ad5ed",
+    "bytes": 10728
+  },
+  "parent_formatter_independent_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source6-r2-format-independent-review-v1\\receipt.json",
+    "sha256": "af5da275e508b1d5e57adb2cf94caa85f7981048b21d6d15000619f0602a4a48",
+    "bytes": 281662
+  },
+  "parent_source_inputs": 324,
+  "projected_source_inputs": 326,
+  "owned_modified_paths": 7,
+  "owned_new_paths": 2,
+  "operations": 27,
+  "files": [
+    {
+      "path": "Cargo.lock",
+      "before_sha256": "0f4038aaf5411912ea18b69a0a4095d0feb7834726a64a5d403f6e51b8de8916",
+      "before_bytes": 78548,
+      "after_sha256": "377211a39886ee9febbd1a4ddc6dee62ac78cef634f64c15cfeeac52550c84f2",
+      "after_bytes": 78563
+    },
+    {
+      "path": "crates/app/Cargo.toml",
+      "before_sha256": "893017f0f95c8fcc85aa1a417247bc473a44356b8f8e47849e0f33288011b1ea",
+      "before_bytes": 954,
+      "after_sha256": "3e020b4dbdc949435cf1dbbd8190db073eacff8d385996dacb5e9829eb7482b5",
+      "after_bytes": 1069
+    },
+    {
+      "path": "crates/app/src/server.rs",
+      "before_sha256": "8d32097d22c36e6a2b7d6614c0d485ac2b56f0d92b42d13f8a94ab5dfbf8f509",
+      "before_bytes": 81806,
+      "after_sha256": "95e69157872c234cf99c697db44b956f32bdca9bb8a85b481d28ba5e7db18925",
+      "after_bytes": 82392
+    },
+    {
+      "path": "crates/app/src/server/lifecycle.rs",
+      "before_sha256": "34818e2e7d975cfcedd9b5d3811486bea424bb282b316225e8e64d401b302c45",
+      "before_bytes": 8425,
+      "after_sha256": "2c79f5dcb37412ce93c13f42b790a9bef8ac2d4c59f526752332048dc4295e07",
+      "after_bytes": 8961
+    },
+    {
+      "path": "crates/app/src/server/response_stream.rs",
+      "before_sha256": "28faea704b3ff66e0bc21439a8dee081395b0f55c5257a58ab366c47591319e3",
+      "before_bytes": 23156,
+      "after_sha256": "5d6650224878435514940a53b3acff73bcb2e44a8ace0a42562580a0d8371285",
+      "after_bytes": 23465
+    },
+    {
+      "path": "crates/app/src/server/source_body_stream.rs",
+      "before_sha256": "b9151f28de47b42222c6a5b9c261785acd7acbca5a12d43367204cc23390b432",
+      "before_bytes": 18677,
+      "after_sha256": "980a569554e475af82477c32ebf26c52275f3c0ea95350bcd5ef5f6ca6d01486",
+      "after_bytes": 18897
+    },
+    {
+      "path": "crates/app/src/server/source_body_stream_tests.rs",
+      "before_sha256": "a2d50da2fcbd32b20320443d6de35226df861e0c595826383da074e5085e6fdf",
+      "before_bytes": 11480,
+      "after_sha256": "6663ab42d3ee34d30643063a8a4e9264bd5ba1992bf876e3948a5e34f6450c1f",
+      "after_bytes": 11497
+    },
+    {
+      "path": "crates/app/src/server/transport.rs",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "after_sha256": "3b48f6b6698e7db6792e50debd8840b4f85bf215a7fd3bad5c1afc608f460ae7",
+      "after_bytes": 16754
+    },
+    {
+      "path": "crates/app/src/server/transport_tests.rs",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "after_sha256": "07cb9ed49c76f7692fd16b9bcfacc4687b6e552e603334c501cb18c5ff9c0986",
+      "after_bytes": 30125
+    }
+  ],
+  "required_tests": [
+    {
+      "path": "crates/core/src/sitemap_generation_tests.rs",
+      "names": [
+        "captured_dates_count_all_original_locations_before_date_eligibility",
+        "complete_zip_including_headers_has_exact_total_budget",
+        "duplicate_candidates_extensions_and_conflicting_hreflang_are_explicit",
+        "exact_url_count_boundary_stable_flat_zip_and_hashes",
+        "exact_utf8_xml_bytes_split_and_single_entry_plus_one_failure",
+        "fifty_thousand_and_one_urls_split_at_official_boundary",
+        "genuine_crawler_saved_sitemap_lastmod_images_and_hreflang_generate_offline",
+        "images_hreflang_and_lastmod_escape_roundtrip_in_independent_dom",
+        "index_independent_exact_byte_cap_and_underflow_are_explicit",
+        "invalid_dates_references_and_provided_duplicate_identity_fail_atomically",
+        "malformed_percent_option_identities_fail_pure_preflight",
+        "malformed_percent_saved_records_are_omitted_and_diagnosed_without_rewriting",
+        "redirects_non200_nonindexable_nondocument_and_path_origin_are_diagnosed_not_admitted",
+        "rendered_failure_non200_and_javascript_navigation_are_not_apparently_indexable_raw200",
+        "stored_render_fragment_only_keeps_http_identity_and_raw_observations",
+        "stored_render_navigation_and_unsafe_urls_remain_excluded_with_fragment_fix",
+        "strict_url_character_and_control_boundary_never_normalizes_unsafe_originals",
+        "unsafe_base_limits_and_lexical_priority_are_validated_before_generation",
+        "valid_percent_escapes_preserve_page_image_hreflang_and_xml_ampersands"
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis_tests.rs",
+      "names": [
+        "actual_limited_checkpoint_exposes_pending_and_live_resume_exposes_no_saved_join",
+        "actual_saved_source_projection_must_equal_sql_even_with_rehashed_report",
+        "actual_terminal_analysis_requires_current_source_measurement_checkpoint_summary",
+        "directed_stored_render_field_projection_qualifies_navigation_status_and_missing_evidence",
+        "incomplete_source_prevents_negative_and_independent_page_pagination_has_no_gaps",
+        "real_crawler_original_redirect_404_noindex_robots_and_exact_observed_inlinks",
+        "real_policy_rewrite_preserves_original_and_exposes_separate_actual_alias",
+        "real_selected_recrawl_retains_historical_membership_and_mixed_page_age",
+        "real_sibling_documents_distinguish_multiple_sitemaps_from_same_document_duplicates",
+        "report_integrity_fails_atomically_before_findings",
+        "materialized_report_page_context_preserves_selected_age_renderer_and_ordinals",
+        "materialized_report_page_context_keeps_target_json_strings_scalar_and_first_match",
+        "materialized_report_page_context_keeps_malformed_target_and_page_fields_fail_closed",
+        "materialized_report_page_context_preserves_large_fields_and_legacy_page_windows"
+      ]
+    },
+    {
+      "path": "crates/core/src/store-sitemap-config-read-tests.rs",
+      "names": [
+        "exact_saved_config_byte_ceiling_is_accepted_and_plus_one_rejected",
+        "unicode_config_uses_actual_blob_bytes_and_repeated_reads_leave_sql_unchanged"
+      ]
+    },
+    {
+      "path": "crates/app/src/generation_export_tests.rs",
+      "names": [
+        "generation_atomic_concurrent_publication_has_one_whole_winner_and_cleans_links",
+        "generation_bounded_reader_rejects_exact_plus_one_and_nonregular_input",
+        "generation_cli_requires_all_explicit_paths_and_rejects_unknown_flags",
+        "generation_cli_saved_inputs_unchanged_complete_zip_and_no_overwrite",
+        "generation_invalid_options_precede_report_io_and_leave_no_output"
+      ]
+    },
+    {
+      "path": "crates/app/src/mcp/generation_tests.rs",
+      "names": [
+        "generation_mcp_actual_binary_roundtrip_is_single_encoded_hash_bound_and_readonly",
+        "generation_mcp_api_error_body_is_bounded_and_explicit",
+        "generation_mcp_corrupt_or_over_budget_responses_never_return_binary",
+        "generation_mcp_maximum_binary_single_encoding_fits_complete_transport_budget",
+        "generation_mcp_over_budget_result_preserves_ordinary_request_id",
+        "generation_mcp_strict_preflight_makes_zero_api_requests"
+      ]
+    },
+    {
+      "path": "crates/app/src/server/sitemap_generation_tests.rs",
+      "names": [
+        "actual_saved_import_export_is_stable_hash_bound_and_readonly",
+        "invalid_options_dates_empty_eligibility_and_bounds_have_exact_status_without_files"
+      ]
+    },
+    {
+      "path": "crates/app/src/sitemap_membership_tests.rs",
+      "names": [
+        "actual_context_only_task_change_stales_json_and_csv_tokens_without_rewriting_raw_catalog",
+        "actual_derived_json_byte_cap_fails_atomically_and_smaller_visible_page_recovers",
+        "actual_empty_legacy_and_incomplete_sources_keep_unknown_and_optional_cases_honest",
+        "actual_saved_report_analysis_pages_are_independent_and_raw_csv_remains_exact",
+        "actual_stored_lastmod_assessments_are_visible_entry_only_raw_preserving_and_read_only",
+        "actual_stored_report_context_only_change_invalidates_raw_page_and_csv_tokens",
+        "budget_calibration_json_and_csv_original_quote_amplification",
+        "canonical_cursor_rejects_malformed_tampered_unknown_and_noncanonical_bytes",
+        "csv_writer_is_exact_at_cap_rejects_plus_one_and_escapes_original_text",
+        "cursor_pins_job_generation_config_revision_rolling_inheritance_and_filter",
+        "export_and_continuation_roles_and_zero_sequence_are_not_interchangeable",
+        "original_membership_filter_never_matches_policy_fetch_alias",
+        "query_bounds_reject_without_clamping_or_alias_normalization",
+        "saved_page_cursor_has_a_distinct_bounded_role_and_ordinal_zero_is_valid"
+      ]
+    },
+    {
+      "path": "crates/app/src/mcp/sitemaps_tests.rs",
+      "names": [
+        "sitemap_tool_is_readonly_and_wrong_argument_types_fail_before_api_io",
+        "sitemap_tool_transports_both_cursor_roles_and_page_limit_in_actual_local_get",
+        "sitemap_tool_validates_separate_cursor_roles_before_api_io"
+      ]
+    },
+    {
+      "path": "crates/app/src/mcp/stdio_tests.rs",
+      "names": [
+        "stdio_empty_input_and_final_eof_notification_emit_no_response",
+        "stdio_exact_eight_mib_line_and_following_request_are_dispatched",
+        "stdio_fragmented_crlf_notification_invalid_json_and_final_eof_are_preserved",
+        "stdio_oversized_terminated_frame_never_dispatches_prefix_or_following_frame",
+        "stdio_plus_one_without_delimiter_rejects_with_open_producer_and_closes"
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_source_measurement_tests.rs",
+      "names": [
+        "binding_preserves_actual_legacy_percent_and_opaque_revision_lexemes",
+        "bounded_json_accepts_exact_limit_rejects_plus_one_and_unknown_fields",
+        "complete_206_response_is_not_a_complete_http200_source",
+        "constructor_enforces_serialized_budget_before_hashing_large_retained_strings",
+        "content_id_is_stable_and_binds_every_typed_payload_axis",
+        "entry_start_without_completed_loc_is_not_url_excess_or_count_within",
+        "exact_atleast_unavailable_shapes_and_cross_axis_contradictions_are_rejected",
+        "exact_count_ceiling_minus_equal_plus_for_urlsets_and_indexes",
+        "exact_decoded_byte_ceiling_minus_equal_plus_is_independent_of_xml_count",
+        "exact_full_bytes_can_be_within_when_xml_suffix_failed",
+        "gzip_crc_failure_preserves_byte_excess_lower_bound_without_integrity_success",
+        "helper_shaped_identity_xml_preflight_preserves_known_encoding_without_output",
+        "helper_shaped_unexpected_eof_keeps_incomplete_gzip_reason_with_complete_http_body",
+        "inconsistent_counter_categories_and_event_accounting_are_rejected",
+        "lower_bound_eligible_count_can_prove_excess_after_dtd_but_never_within",
+        "lower_byte_prefix_at_resource_cap_is_unknown_and_known_zero_is_not_missing",
+        "many_locs_in_ambiguous_entries_are_not_many_eligible_urls",
+        "partial_http200_capture_may_prove_excess_without_claiming_completion",
+        "scalar_range_checked_arithmetic_and_effective_bounds_are_not_coerced",
+        "scan_cannot_manufacture_counts_without_any_emitted_decode_bytes",
+        "source_observation_binding_checks_the_existing_exact_legacy_tuple",
+        "standard_and_legacy_namespace_have_separate_count_and_byte_outcomes",
+        "structural_excess_with_missing_or_invalid_entries_keeps_valid_url_excess_unknown",
+        "truly_empty_recognized_source_is_distinct_from_unavailable",
+        "unknown_enums_versions_profiles_and_oversized_identity_are_rejected",
+        "valid_plus_invalid_dual_loc_is_one_ineligible_entry",
+        "whole_scan_event_cap_is_exact_and_only_event_limit_failure_can_have_sentinel",
+        "zero_byte_hash_and_decode_stop_axes_must_match_the_recorded_extent",
+        "context_unavailable_final_url_preserves_known_transport_and_unknown_assessments",
+        "context_unavailable_final_url_rejects_unqualified_mismatches_and_invented_facts"
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap/entity_observation_tests.rs",
+      "names": [
+        "actual_crc_isize_and_truncated_footer_errors_preserve_only_returned_prefix",
+        "actual_gzip_eight_mib_exact_cap_validates_eof_and_plus_one_counts_real_sentinel",
+        "actual_truncated_deflate_progress_is_a_returned_prefix_not_full_source_size",
+        "complete_gzip_decode_does_not_claim_wellformed_xml_or_http_body_completeness",
+        "concatenated_members_validate_together_and_later_corruption_cannot_hide",
+        "garbage_and_nested_gzip_keep_failure_and_outer_member_evidence_separate",
+        "gzip_known_zero_is_distinct_from_predecode_unavailable",
+        "identity_actual_slice_and_output_have_separate_extent_without_http_claims",
+        "identity_xml_budget_keeps_supplied_extent_separate_from_unreturned_output",
+        "invalid_limits_and_entity_preflight_do_not_invent_encoding_or_decoded_zero",
+        "read_error_written_buffer_bytes_are_never_counted_or_hashed"
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap/count_tests.rs",
+      "names": [
+        "count_actual_49999_50000_50001_entries_and_unfinished_threshold_controls",
+        "count_namespaces_extensions_duplicates_and_legacy_are_separate",
+        "count_recoverable_loc_diagnostics_continue_with_disjoint_entry_classes",
+        "count_same_strict_reader_stops_preserve_only_actual_completed_prefix_counts",
+        "count_strict_loc_profile_has_independent_lexical_and_character_boundaries",
+        "count_work_bounds_remain_separate_from_unchanged_retention_caps",
+        "retained_xml_raw_spans_context_hashes_and_typed_json_match_independent_golden"
+      ]
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_capture_tests.rs",
+      "names": [
+        "actual_capture_adapter_rejects_unverified_mismatch_and_counter_loss_without_mutating_batch",
+        "actual_current_saved_config_is_not_the_historical_catalog_initial_hash",
+        "actual_discovery_snapshot_corruption_is_error_while_no_store_is_unknown",
+        "actual_long_task_context_remains_failed_source_with_unknown_measurement_not_crawl_error",
+        "actual_oversized_redirect_context_retains_known_transport_with_unknown_decode_and_count",
+        "pure_adapter_uses_actual_identity_budget_helper_without_inventing_xml_output",
+        "real_50001_entries_are_counted_even_when_legacy_parser_stops_retaining",
+        "real_gzip_crc_truncation_and_inflation_failure_keep_helper_progress_not_counts",
+        "real_multiloc_utf8_and_dtd_diagnostics_do_not_replace_legacy_failure",
+        "real_plain_file_gzip_and_http_gzip_capture_same_xml_without_extra_requests",
+        "real_received_prefix_budget_206_and_robots_denial_remain_explicit"
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store_tests.rs",
+      "names": [
+        "actual_a_survives_real_legacy_row_budget_rollback_and_cold_readonly",
+        "actual_b_needs_consumed_same_transaction_token_and_post_append_done",
+        "actual_capture_unknown_marker_and_a_sql_fault_do_not_invent_measurement_or_done",
+        "actual_config_resume_generation_and_payload_bounds_cannot_relabel_capture",
+        "actual_crash_window_resume_preserves_old_unjoined_capture_and_rechecks_generation",
+        "actual_dedupe_requires_fresh_pending_and_a_commit_confirmation",
+        "actual_distinct_gzip_captures_share_legacy_id_but_only_exact_a_gets_association",
+        "actual_load_rejects_sql_envelope_summary_and_portable_catalog_tampering",
+        "actual_missing_historical_schema_and_done_sources_remain_unknown",
+        "actual_record_and_total_exact_bytes_plus_one_omit_durably_without_replacement",
+        "actual_record_count_omission_and_marker_sql_failure_preserve_prior_bytes",
+        "actual_selected_parent_keeps_original_captures_and_exact_blob_anchor",
+        "actual_success_links_exact_document_and_late_link_fault_rolls_back_all_b",
+        "actual_wal_a_only_revision_stales_context_without_changing_legacy_snapshot",
+        "actual_writable_schema_never_repairs_missing_initialized_empty_tables"
+      ]
+    },
+    {
+      "path": "crates/core/src/store-sitemap-source-tests.rs",
+      "names": [
+        "actual_a_record_and_marker_sql_failures_never_produce_receipts_or_admit_sources",
+        "actual_checkpoint_rejects_measurement_only_change_and_failed_publication_preserves_old_report",
+        "actual_checkpoint_selected_parent_preserves_measurements_and_rejects_exact_blob_tamper",
+        "actual_identity_and_gzip_captures_with_same_legacy_id_only_link_exact_b_receipt",
+        "actual_raw_window_a_only_capture_changes_state_without_inventing_committed_raw_rows",
+        "actual_raw_window_selected_parent_presence_guards_remain_materializing_compatibility",
+        "actual_rich_window_a_only_and_committed_measurements_bind_the_shared_read_state",
+        "actual_rich_window_selected_imported_legacy_none_is_unknown_with_exact_parent_guard",
+        "actual_rich_window_selected_raw_and_source_parent_presence_are_not_downgraded_to_unknown",
+        "legacy_readonly_has_no_measurement_catalog_and_does_not_create_or_migrate_files",
+        "portable_report_counter_applies_exact_utf8_json_byte_boundary_without_partial_publication",
+        "real_capture_unavailable_marker_survives_b_rollback_without_becoming_budget_or_zero_measurement",
+        "real_storage_budget_marker_is_durable_across_membership_rollback_and_not_a_measured_zero",
+        "real_store_a_survives_ordinary_membership_row_budget_rollback_and_readonly_reopen",
+        "real_store_fresh_config_generation_guards_preserve_old_a_and_require_new_capture",
+        "real_store_policy_late_link_failure_rolls_back_grants_and_caller_rows_then_commits_exact_link",
+        "real_wal_read_transaction_observes_atomic_a_and_link_state_without_mixed_context",
+        "selected_deleted_measurement_rows_and_marker_fail_verified_read_report_and_checkpoint_paths",
+        "selected_historical_parent_none_remains_unknown_and_exact_parent_tamper_still_fails",
+        "writable_open_does_not_silently_recreate_missing_empty_measurement_tables"
+      ]
+    },
+    {
+      "path": "crates/app/src/sitemap_source_context_tests.rs",
+      "names": [
+        "actual_capture_unavailable_marker_restoration_stales_tokens_without_fake_empty_source",
+        "actual_historical_source_none_remains_explicit_stable_and_readonly",
+        "actual_selected_parent_source_context_keeps_records_links_and_historical_none_separate",
+        "actual_source_a_only_restoration_stales_raw_page_and_csv_with_legacy_rows_unchanged",
+        "actual_source_association_only_restoration_stales_raw_page_and_csv_without_new_capture"
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_source_processing_tests.rs",
+      "names": [
+        "actual_crawl_helpers_keep_none_clamp_and_explicit_source_page_independence",
+        "actual_small_xml_pipeline_honors_explicit_byte_and_event_boundaries",
+        "configured_protocol_byte_neighbors_are_valid_budgets_without_allocating_sources",
+        "count_work_limits_accept_large_profile_and_keep_its_own_default",
+        "crawl_body_helper_validates_other_profile_fields_before_returning_entity_limit",
+        "parser_work_caps_expand_but_all_other_default_caps_remain_enforced",
+        "separately_lowered_entity_and_xml_budgets_are_not_reordered_or_repaired",
+        "source_profile_all_three_exact_caps_and_zero_plus_one_are_explicit",
+        "source_profile_defaults_and_nested_crawl_serde_preserve_legacy_absence",
+        "source_profile_rejects_unknown_fields_and_non_integer_shapes"
+      ]
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_large_capture_tests.rs",
+      "names": [
+        "actual_nine_mib_plain_file_http_gzip_and_index_use_saved_optin_bounds",
+        "actual_optin_capture_uses_current_saved_sha_and_store_rejects_wrong_work_bounds",
+        "invalid_source_processing_profiles_fail_real_constructor_before_requests",
+        "real_missing_and_explicit_default_source_profiles_preserve_their_caps"
+      ]
+    },
+    {
+      "path": "crates/app/src/server/sitemap_processing_config_tests.rs",
+      "names": [
+        "create_dto_missing_or_null_source_profile_keeps_historical_configuration",
+        "create_dto_preserves_source_work_limits_without_widening_page_bodies",
+        "create_dto_rejects_invalid_or_unknown_source_profile_fields"
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/verified_read_tests.rs",
+      "names": [
+        "corrupt_tail_and_same_row_sql_projection_fail_before_any_window",
+        "duplicate_global_sequence_and_document_ordinal_reorder_are_rejected",
+        "entry_declared_loc_order_is_not_tightened_but_multiset_must_match",
+        "exact_full_serialized_envelope_size_is_verified_not_just_sql_data_sum",
+        "filter_validation_is_exact_and_visitor_errors_propagate",
+        "global_id_duplicates_are_rejected_even_without_imported_unique_constraints",
+        "imported_nocase_task_column_preserves_distinct_case_sensitive_source_urls",
+        "inherited_raw_anchor_uses_explicit_old_materializing_compatibility",
+        "missing_entry_and_actual_committed_policy_row_are_not_skipped",
+        "oversized_sql_projection_is_rejected_against_bounded_canonical_payload",
+        "partial_initialized_schema_is_rejected_without_repair",
+        "raw_window_and_visitor_agree_with_full_oracle_for_all_filter_roles",
+        "read_only_file_and_wal_snapshot_are_immutable_and_stable",
+        "real_eight_mib_window_cap_refuses_large_page_and_smaller_window_recovers",
+        "verified_raw_requires_transaction_and_preserves_unknown_and_initialized_empty",
+        "stateless_canonical_envelope_matches_unchanged_full_serializer_for_empty_unicode_and_incomplete_rows",
+        "stateless_fifty_thousand_pairs_have_one_primary_pass_one_merge_join_and_exact_reopen_oracle",
+        "stateless_single_canonical_serialization_rejects_rehashed_whitespace_and_equivalent_json_escaping",
+        "stateless_streaming_join_works_without_foreign_keys_or_indexes_and_rejects_tail_corruption",
+        "stateless_streaming_relation_keeps_orphan_span_prior_sequence_and_missing_loc_guards",
+        "stateless_utf16be_disk_catalog_and_read_only_reopen_match_old_serializer_and_preserve_blob_caps",
+        "stateless_utf16le_disk_catalog_and_read_only_reopen_match_old_serializer_and_preserve_blob_caps"
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store/verified_read_tests.rs",
+      "names": [
+        "verified_source_actual_capture_unknown_and_capacity_markers_keep_reserve_and_revision",
+        "verified_source_actual_empty_a_only_and_b_match_portable_accounting_and_v1_context",
+        "verified_source_checks_last_unjoined_record_and_whole_summary_not_only_first_link",
+        "verified_source_detects_duplicate_ids_even_if_sql_unique_constraint_was_removed",
+        "verified_source_historical_none_empty_schema_and_partial_schema_are_distinct",
+        "verified_source_needs_actual_transaction_and_same_connection_raw_proof",
+        "verified_source_resealed_link_and_record_still_need_actual_raw_document_seals",
+        "verified_source_selected_exact_parent_some_and_none_remain_explicit_compatibility",
+        "verified_source_selected_parent_some_current_none_delete_all_never_becomes_historical"
+      ]
+    },
+    {
+      "path": "crates/core/src/store/sitemap_raw_read_tests.rs",
+      "names": [
+        "actual_raw_window_bounds_context_metadata_even_when_raw_history_is_absent",
+        "actual_raw_window_config_change_stales_state_and_orphan_parent_marker_is_rejected",
+        "actual_raw_window_pagination_matches_original_catalog_and_binds_exact_filter",
+        "actual_raw_window_preserves_unknown_vs_known_empty_and_readonly_database",
+        "actual_raw_window_rejects_corrupt_tail_before_returning_the_requested_first_row",
+        "raw_window_request_rejects_unknown_types_bounds_and_unbound_continuations"
+      ]
+    },
+    {
+      "path": "crates/app/src/sitemap_raw_cli_tests.rs",
+      "names": [
+        "actual_raw_sitemap_cli_reads_unknown_history_and_refuses_existing_destination",
+        "actual_raw_sitemap_cli_rejects_invalid_request_before_database_or_output_creation",
+        "actual_raw_sitemap_cli_request_file_accepts_exact_cap_and_refuses_sentinel_byte",
+        "raw_sitemap_cli_parser_accepts_only_the_explicit_read_command_arguments"
+      ]
+    },
+    {
+      "path": "crates/app/src/server/sitemaps_rich_read_tests.rs",
+      "names": [
+        "actual_rich_handler_raw_and_saved_page_cursors_remain_independent_and_role_checked",
+        "actual_rich_inventory_handler_matches_full_oracle_and_fresh_token_exports_csv",
+        "rich_core_typed_errors_preserve_existing_http_codes_and_corruption_remains_failure"
+      ]
+    },
+    {
+      "path": "crates/app/src/sitemap_membership_rich_read_tests.rs",
+      "names": [
+        "actual_compact_lastmod_rows_and_context_match_full_oracle_and_csv_bytes",
+        "actual_expected_state_precedes_invalid_row_and_token_job_filter_context_prechecks",
+        "actual_old_profile_raw_page_and_export_tokens_parse_then_become_stale",
+        "actual_rich_unknown_empty_and_incomplete_match_full_optional_evidence",
+        "actual_rich_visible_lastmod_copy_hits_real_json_cap_and_smaller_page_recovers"
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_coverage/verified_read_tests.rs",
+      "names": [
+        "actual_config_bytes_generation_and_discovery_marker_are_checked_not_reserialized",
+        "actual_empty_robots_completion_and_http_206_source_differ_from_pending_inventory",
+        "actual_uninitialized_store_and_corrupt_raw_tail_cannot_manufacture_a_complete_projection",
+        "denied_invalid_and_incomplete_child_sources_preserve_exact_reason_multiplicity",
+        "graph_identity_budget_is_explicit_and_duplicate_reachability_never_charges_twice",
+        "inherited_actual_parent_inventory_keeps_historical_scope_and_legacy_none_unknown",
+        "initialized_empty_pending_robots_and_legacy_unknown_match_exact_old_reasons",
+        "last_pending_task_beyond_page_size_changes_exact_inventory_hash_and_reasons",
+        "missing_context_remains_unknown_and_connection_proofs_cannot_be_substituted",
+        "read_only_projection_preserves_saved_database_and_wal_bytes",
+        "real_policy_initial_page_admissions_determine_required_robots_origins",
+        "recursive_cycle_duplicate_roots_and_invalid_page_locations_match_full_oracle",
+        "root_visitor_preserves_portable_constructor_items_unknown_and_callback_failure",
+        "same_transaction_wal_keeps_config_tasks_and_generation_together",
+        "task_sort_uses_rust_binary_identity_and_rejects_duplicates_or_bad_tail_flags",
+        "stateless_row_coverage_reuses_verified_counts_without_another_raw_visit_and_matches_old_projection"
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis/window_tests.rs",
+      "names": [
+        "compact_actual_checkpoint_source_mismatch_stays_unavailable_before_any_rows",
+        "compact_actual_checkpoint_wrong_connection_source_and_ended_transaction_controls",
+        "compact_actual_policy_aliases_keep_original_membership_and_observed_inlinks",
+        "compact_actual_selected_parent_keeps_historical_membership_and_mixed_age",
+        "compact_actual_targets_inlinks_filters_and_independent_whole_membership_match_oracle",
+        "compact_historical_absent_source_is_unknown_and_forbids_a_report_only_envelope",
+        "compact_prepared_context_is_reused_across_independent_saved_page_windows",
+        "compact_rehashed_actual_report_source_changes_are_never_summary_only",
+        "compact_source_stream_rejects_duplicate_unknown_type_and_whole_envelope_faults",
+        "compact_stream_accepts_pretty_escaped_equivalent_source_and_ignores_unrelated_value"
+      ]
+    },
+    {
+      "path": "crates/core/src/store/sitemap_read_window_tests.rs",
+      "names": [
+        "actual_rich_window_agrees_with_full_snapshot_context_and_exact_inventory_hash",
+        "actual_rich_window_pending_task_only_change_invalidates_state_without_raw_revision_change",
+        "actual_rich_window_readonly_preserves_rows_and_bounds_unknown_history_metadata",
+        "actual_rich_window_stale_context_precedes_invalid_after_and_current_after_is_typed",
+        "actual_rich_window_tail_corruption_is_not_reclassified_as_a_stale_cursor",
+        "actual_rich_window_unknown_history_and_exact_member_continuation_remain_distinct"
+      ]
+    },
+    {
+      "path": "crates/app/src/server/sitemap_csv_stream_sink_tests.rs",
+      "names": [
+        "cancelled_sink_retains_typed_cause_despite_unchanged_formatter_budget_label",
+        "chunk_sink_keeps_positive_tail_for_exact_multiples_and_flush",
+        "counting_hash_sink_counts_actual_sixty_four_mib_and_refuses_next_byte",
+        "csv_first_count_pass_restores_actual_budget_cause_when_formatter_erases_io_source"
+      ]
+    },
+    {
+      "path": "crates/app/src/server/sitemaps_streaming_tests.rs",
+      "names": [
+        "actual_csv_stream_error_priority_preserves_existing_statuses_and_token_roles",
+        "actual_csv_stream_matches_buffered_oracle_all_stored_exact_filters",
+        "actual_csv_stream_pins_original_tx_while_later_writer_changes_generation",
+        "actual_csv_stream_rejects_full_tail_source_report_and_inventory_corruption_before_ready",
+        "actual_csv_stream_second_pass_failure_and_response_build_failure_drain",
+        "actual_csv_stream_selected_presence_and_exact_parent_guards",
+        "actual_csv_stream_shutdown_cancels_and_drains_active_exports",
+        "actual_csv_stream_stales_a_marker_pending_and_terminal_generation_context",
+        "actual_http_csv_client_disconnect_cancels_and_joins_producer",
+        "actual_http_csv_idle_and_absolute_deadline_close_body_and_drain",
+        "actual_http_csv_large_body_uses_bounded_chunks_and_backpressure",
+        "actual_http_csv_tail_is_withheld_until_worker_join_and_tx_close",
+        "actual_inventory_snapshot_token_opens_same_tx_two_pass_csv"
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_read_control_tests.rs",
+      "names": [
+        "control_chunk_hash_preserves_exact_bytes_and_stops_before_more_work",
+        "control_deadlines_are_shared_movable_clearable_and_typed",
+        "control_default_clones_and_first_observed_stop_are_sticky",
+        "control_maps_actual_sql_interrupt_but_preserves_unrelated_errors",
+        "control_owned_interrupt_guards_drop_only_their_attachment_and_outlive_connection",
+        "control_recovers_only_its_own_poisoned_state_lock",
+        "controlled_actual_root_visit_cancel_never_returns_a_successful_prefix",
+        "controlled_default_real_empty_store_matches_all_old_reader_results_without_mutation",
+        "controlled_prepared_analysis_and_raw_lookup_keep_the_shared_stop_after_prepare",
+        "controlled_readers_stop_before_sql_even_without_metadata_schema"
+      ]
+    },
+    {
+      "path": "crates/core/src/store/sitemap_stored_rows_tests.rs",
+      "names": [
+        "actual_stored_rows_cancel_deadline_and_callback_failure_release_real_transaction",
+        "actual_stored_rows_exact_original_filter_and_known_empty_matches_stored_oracle",
+        "actual_stored_rows_historical_none_and_known_empty_remain_distinct",
+        "actual_stored_rows_pre_cancel_expired_control_and_invalid_filter_never_enter_callback",
+        "actual_stored_rows_stale_state_and_full_tail_corruption_never_enter_callback",
+        "actual_stored_rows_two_full_visits_match_materialized_cohort_and_rich_state",
+        "actual_stored_rows_wal_keeps_two_passes_while_later_valid_writer_changes_generation"
+      ]
+    },
+    {
+      "path": "crates/core/src/store/sitemap_stored_source_tests.rs",
+      "names": [
+        "actual_stored_rows_a_only_and_committed_source_state_precede_user_output",
+        "actual_stored_rows_selected_presence_and_historical_none_keep_exact_parent_guards"
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_findings/predicate_tests.rs",
+      "names": [
+        "complete_metadata_decision_uses_saved_audit_and_never_reason_text_heuristics",
+        "exact_seven_granular_ids_and_domains_are_fixed",
+        "failed_decode_returned_lower_bound_above_limit_matches_but_below_stays_unknown",
+        "legacy_and_pending_or_done_unmeasured_sources_never_become_numeric_zero",
+        "multiple_sources_counts_original_distinct_tasks_not_occurrences_or_observations",
+        "native_redirect_and_non200_survive_later_render_pdf_and_robots_failures",
+        "negative_membership_requires_the_matching_actual_cohort_permission",
+        "nonindexable_known_false_conjunct_shortcircuits_uncertain_other_conjunct",
+        "original_membership_truth_table_preserves_unknown_and_alias_control",
+        "orphan_uses_all_nonself_anchors_and_known_false_conjuncts",
+        "pdf_complete_disabled_and_unobserved_partial_error_encrypted_are_distinct",
+        "rendered_same_url_complete_decision_is_separate_from_navigation_or_status",
+        "robots_requires_observed_warning_field_and_actual_disallow_qualification",
+        "source_eligible_lower_bound_and_structural_excess_remain_distinct",
+        "source_exact_entry_and_decoded_byte_thresholds_map_existing_projector",
+        "source_non200_and_large_received_entity_do_not_fabricate_decoded_extent",
+        "target_failure_pending_missing_and_incomplete_states_stay_unknown",
+        "wrong_domain_and_cross_measurement_protocol_are_errors_not_unknown"
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_findings/source_tests.rs",
+      "names": [
+        "source_findings_actual_a_only_then_exact_b_and_shared_source_id_do_not_attach_other_capture",
+        "source_findings_actual_fixed_omission_marker_is_scope_only_not_a_synthetic_attempt",
+        "source_findings_actual_same_tx_wal_inventory_is_stable_and_later_read_observes_change",
+        "source_findings_binary_task_order_and_real_anchor_validation_precede_all_output",
+        "source_findings_cancellation_and_deadline_stops_are_typed_before_prepare_or_visit",
+        "source_findings_known_empty_and_historical_absence_keep_distinct_scope",
+        "source_findings_legacy_document_is_unknown_and_not_a_fabricated_measurement_or_second_current_task",
+        "source_findings_old_generation_capture_does_not_hide_current_pending_task",
+        "source_findings_raw_none_validates_all_tasks_and_hashes_pending_done_robots_and_long_identity",
+        "source_findings_rejects_actual_context_and_connection_mismatch_without_callback",
+        "source_findings_same_generation_old_config_capture_does_not_hide_current_pending_task"
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis/findings_store_tests.rs",
+      "names": [
+        "findings_actual_live_resume_keeps_source_evidence_available_without_saved_page_join",
+        "findings_actual_rehashed_invalid_typed_facts_outside_selection_fail_before_any_public_callback",
+        "findings_actual_report_integrity_and_changed_query_fail_before_output",
+        "findings_actual_saved_cohort_beyond_four_hundred_sparse_windows_and_full_visitor_agree",
+        "findings_public_crawler_exact_original_seven_filters_use_actual_domains_and_qualified_results",
+        "findings_public_native_obstructions_orphans_and_alias_control_follow_original_identity"
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis/findings_tests.rs",
+      "names": [
+        "actual_saved_page_candidate_positions_and_mid_traversal_cancellation_remain_typed",
+        "actual_saved_page_candidate_traversal_crosses_200_400_and_preserves_legacy_findings",
+        "actual_saved_page_candidates_distinguish_robots_policy_failure_from_disallow",
+        "actual_saved_page_candidates_preserve_absent_null_and_reject_invalid_late_typed_fields",
+        "actual_saved_page_candidates_retain_typed_pdf_complete_partial_error_and_encrypted",
+        "actual_saved_page_domain_preflight_rejects_excluded_tail_and_before_after_without_callback"
+      ]
+    },
+    {
+      "path": "crates/core/src/store/sitemap_findings_read_tests.rs",
+      "names": [
+        "findings_actual_legacy_tasks_are_unknown_not_fabricated_measurements_or_robots_xml",
+        "findings_actual_readonly_same_tx_visits_survive_wal_task_writer_without_requests_or_writes",
+        "findings_changed_selector_stale_context_precedes_nonexistent_position_and_callback",
+        "findings_hash_sink_uses_exact_typed_serialization_and_inclusive_budget",
+        "findings_invalid_query_role_or_missing_expected_is_typed_preflight_without_writes",
+        "findings_known_source_match_selection_does_not_turn_unmeasured_tasks_into_within_limit",
+        "findings_pre_cancelled_control_prevents_user_callback_and_restores_typed_stop",
+        "findings_raw_none_actual_task_mutation_invalidates_context_before_cursor_lookup",
+        "findings_session_changed_query_or_stale_context_rejects_before_actual_after_lookup",
+        "findings_session_pages_and_export_keep_one_read_snapshot_across_actual_wal_commit",
+        "findings_session_pages_and_full_visits_share_the_same_actual_fixed_query_and_context",
+        "findings_source_pages_one_ten_two_hundred_equal_same_tx_full_visitor_without_duplicates",
+        "findings_sparse_zero_match_windows_progress_to_actual_match_after_four_hundred",
+        "findings_unavailable_saved_analysis_is_none_not_empty_and_full_visit_fails",
+        "findings_valid_large_legacy_task_reports_response_budget_without_narrowing_input_or_dropping_row"
+      ]
+    },
+    {
+      "path": "crates/app/src/mcp/sitemap_findings/postfix_tests.rs",
+      "names": [
+        "findings_postfix_actual_sixty_one_second_http_response_succeeds_while_legacy_times_out",
+        "findings_postfix_stdio_exact_utf8_rpc_id_and_plus_one_preserve_following_frame"
+      ]
+    },
+    {
+      "path": "crates/app/src/mcp/sitemap_findings/tests.rs",
+      "names": [
+        "findings_mcp_actual_http_body_inclusive_budget_and_bounded_error_status",
+        "findings_mcp_actual_stale_api_error_preserves_status_and_typed_error_once",
+        "findings_mcp_actual_store_http_page_export_descriptor_and_all_seven_filters",
+        "findings_mcp_entire_wire_wrapper_accepts_exact_eight_mib_and_rejects_plus_one",
+        "findings_mcp_strict_schema_types_domains_cursor_and_rpc_id_fail_before_io",
+        "findings_stdio_actual_active_oversize_open_producer_closes_without_suffix_dispatch",
+        "findings_stdio_cancel_after_pending_and_busy_still_drops_actual_http_future",
+        "findings_stdio_cancelled_frame_read_preserves_actual_prefix_and_remaining_sentinel_cap",
+        "findings_stdio_eof_cancels_actual_http_request_without_result_or_detached_worker",
+        "findings_stdio_partial_following_frame_survives_actual_response_and_replays_once"
+      ]
+    },
+    {
+      "path": "crates/app/src/server/sitemap_findings_reads_tests.rs",
+      "names": [
+        "owned_read_actual_operation_errors_keep_shared_typed_failure_instead_of_generic_timeout",
+        "owned_read_actual_worker_panic_is_joined_and_classified_without_leaking_active",
+        "owned_read_completed_supervisors_are_actually_reaped_before_later_admission",
+        "owned_read_concurrent_drain_closes_admission_and_cancelling_one_drain_does_not_detach_worker",
+        "owned_read_default_success_is_delivered_after_actual_worker_drop_and_drain_joins_supervisor",
+        "owned_read_past_completion_notify_and_repeated_concurrent_drains_do_not_lose_wakeup",
+        "owned_read_request_drop_cancels_actual_control_and_drain_waits_until_blocking_worker_join",
+        "owned_read_supervisor_deadline_actually_expires_control_but_never_returns_before_worker_join",
+        "owned_read_worker_and_timer_ready_together_cannot_skip_immutable_deadline"
+      ]
+    },
+    {
+      "path": "crates/app/src/server/sitemap_findings_tests.rs",
+      "names": [
+        "findings_actual_http_detached_report_is_explicitly_unavailable_without_fabricated_core_proof",
+        "findings_actual_http_get_post_cursor_and_full_csv_share_saved_context_without_site_requests",
+        "findings_actual_http_rejects_wrong_roles_changed_queries_unknown_fields_and_stale_app_generation"
+      ]
+    },
+    {
+      "path": "crates/app/src/sitemap_findings_cli_tests.rs",
+      "names": [
+        "findings_cli_actual_crawler_page_and_full_csv_are_same_context_beyond_two_hundred",
+        "findings_cli_actual_handle_request_exact_sixty_four_mib_and_sentinel",
+        "findings_cli_continuation_still_exports_full_selection_and_changed_context_refuses_all_outputs",
+        "findings_cli_invalid_query_precedes_database_and_preserves_existing_outputs",
+        "findings_cli_parser_requires_request_and_one_new_destination",
+        "findings_cli_second_publication_race_retains_complete_first_and_concurrent_winner",
+        "findings_cli_stage_cancel_and_json_budget_leave_no_final_or_temp_output",
+        "findings_cli_unknown_zero_source_keeps_context_and_unavailable_csv_publishes_nothing"
+      ]
+    },
+    {
+      "path": "crates/app/src/sitemap_findings_tests.rs",
+      "names": [
+        "finding_actual_csv_header_and_data_json_io_budget_words_keep_real_error_types",
+        "finding_actual_csv_preserves_typed_writer_causes_and_cancel_not_all_io_is_413",
+        "finding_actual_page_export_raw_roles_and_job_offline_target_are_distinct",
+        "finding_actual_shared_csv_two_pass_schema_full_payload_and_readonly_receipts_match",
+        "finding_actual_sparse_page_continuations_keep_query_hash_while_limits_change",
+        "finding_actual_stale_context_and_app_sql_mismatch_fail_without_writer_output",
+        "finding_actual_unavailable_core_omits_export_and_rejects_csv_before_header",
+        "finding_actual_unknown_history_zero_selected_rows_exports_one_scope_record_without_fake_finding",
+        "finding_csv_human_formula_prefix_does_not_rewrite_full_typed_machine_payload",
+        "finding_queries_strict_shape_domains_and_large_literal_selectors_preserve_core_contract",
+        "finding_streaming_json_and_csv_resource_boundaries_are_inclusive_without_materialized_rows"
+      ]
+    },
+    {
+      "path": "crates/app/src/mcp/files_tests.rs",
+      "names": [
+        "file_tools_schema_and_native_path_preflight_are_strict",
+        "file_tools_native_unicode_and_platform_filename_boundaries",
+        "file_tools_existing_root_and_no_implicit_outside_creation",
+        "file_tools_recursive_create_long_unicode_and_partial_effects",
+        "file_tools_listing_has_exact_sorted_pages_and_stale_instance_anchor_checks",
+        "file_tools_listing_over_entry_budget_is_error_not_partial_page",
+        "file_tools_utf8_chunks_reconstruct_exact_bytes_and_detect_content_changes",
+        "file_tools_read_empty_invalid_utf8_and_sparse_overbudget_are_explicit",
+        "file_tools_atomic_replacement_keeps_hardlink_inode_and_cleans_own_stage",
+        "file_tools_stage_guard_cleans_owned_failure_but_preserves_replaced_entry",
+        "file_tools_root_handle_cannot_be_rebound_by_replacing_configured_path",
+        "file_tools_dropped_request_and_concurrent_drain_wait_actual_worker_return",
+        "file_tools_cancelled_drain_does_not_lose_join_handle",
+        "file_tools_supervisor_abort_and_caller_drop_recover_actual_join_slots",
+        "file_tools_four_workers_bound_and_panics_are_joined_and_reported"
+      ]
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "names": [
+        "file_tools_cli_opt_in_is_shared_by_serve_and_mcp",
+        "file_tools_cli_requires_an_explicit_value_and_preserves_other_commands",
+        "file_tools_inventory_is_disabled_by_default_and_declares_exact_five_when_enabled",
+        "file_tools_disabled_requests_never_reach_the_api",
+        "file_tools_api_address_retains_exact_loopback_and_default_fallback",
+        "file_tools_all_five_execute_locally_with_no_api_calls",
+        "file_tools_rpc_id_is_bounded_before_version_errors_or_any_write",
+        "file_tools_invalid_shapes_and_oversized_text_never_mutate",
+        "file_tools_actual_text_response_is_single_copy_and_whole_wire_bounded",
+        "file_tools_wire_guard_accepts_exact_physical_frame_and_rejects_plus_one",
+        "file_tools_actual_stdio_frames_share_opt_in_and_drain_on_eof",
+        "file_tools_stdio_output_error_still_awaits_registry_drain",
+        "file_tools_server_rejects_bad_root_and_nonloopback_before_data_directory",
+        "file_tools_http_opt_in_capabilities_inventory_and_dispatch_share_module"
+      ]
+    },
+    {
+      "path": "crates/app/src/server/sitemap_csv_stream_lifecycle_tests.rs",
+      "names": [
+        "actual_csv_supervisor_abort_and_body_drop_recover_actual_join_slots",
+        "actual_csv_cancelled_and_concurrent_drains_observe_both_retained_joins"
+      ]
+    },
+    {
+      "path": "crates/app/src/server/sitemap_membership_config_tests.rs",
+      "names": [
+        "create_dto_preserves_explicit_membership_capacity_through_saved_config_and_mcp_dispatch_shape",
+        "create_dto_membership_capacity_absent_null_and_source_profile_are_independent",
+        "create_dto_rejects_invalid_membership_capacity_before_any_job_admission"
+      ]
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_membership_limits_tests.rs",
+      "names": [
+        "membership_capacity_absence_null_and_source_work_keep_legacy_serialization",
+        "membership_capacity_strict_objects_reject_shapes_fields_and_hard_limit_violations",
+        "configured_membership_capacity_is_saved_bootstrapped_reopened_and_not_mutated_on_resume"
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/capacity_tests.rs",
+      "names": [
+        "complete_fifty_thousand_pairs_exceed_legacy_cap_but_commit_and_reopen_under_explicit_capacity",
+        "explicit_capacity_does_not_disable_row_count_caps_or_source_atomicity",
+        "above_default_capacity_requires_declared_config_on_sql_raw_portable_and_inherited_reads"
+      ]
+    },
+    {
+      "path": "crates/app/src/server/lifecycle_tests.rs",
+      "names": [
+        "failed_shutdown_signal_is_returned_only_after_actual_crawl_checkpoint_and_job_write",
+        "one_global_lifecycle_admission_closes_request_blocking_and_crawl_registries",
+        "owned_eof_reader_does_not_finish_on_nonempty_input_and_closes_only_at_actual_eof",
+        "owned_shutdown_pauses_actual_crawl_and_waits_terminal_checkpoint_and_job_file",
+        "owned_shutdown_stops_actual_http_listener_after_exact_legacy_inventory",
+        "policy_and_resource_http_exports_start_eagerly_and_stream_beyond_channel_capacity",
+        "shutdown_before_job_insert_keeps_admitted_initialization_owned_and_late_launch_paused",
+        "typed_owned_core_failure_is_sticky_in_app_drain_but_domain_error_is_not"
+      ]
+    },
+    {
+      "path": "crates/core/src/crawler/owned_lifecycle_tests.rs",
+      "names": [
+        "actual_pdf_parser_panic_returns_typed_owned_failure_without_terminal_checkpoint",
+        "cancellation_then_pause_cannot_publish_checkpoint_before_started_pdf_worker_joins"
+      ]
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_body_candidate_tests.rs",
+      "names": [
+        "sitemap_body_candidate_keeps_crc_failed_input_without_complete_decoded_xml",
+        "sitemap_body_candidate_moves_existing_post_http_and_decoded_vecs_without_clone"
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_source_archive_tests.rs",
+      "names": [
+        "source_archive_binary_writer_preserves_actual_64mib_and_owned_lease",
+        "source_archive_optional_config_is_strict_omitted_and_independent",
+        "source_archive_sidecar_preserves_full_database_filename_and_separates_writers",
+        "source_archive_uncommitted_owned_files_cleanup_and_foreign_staging_refusal"
+      ]
+    },
+    {
+      "path": "crates/core/src/store-sitemap-body-tests.rs",
+      "names": [
+        "source_body_archive_absence_and_partial_schema_never_become_empty_success",
+        "source_body_archive_commits_actual_bytes_after_a_and_reopens_before_membership_b",
+        "source_body_archive_membership_b_rollback_preserves_a_and_body_commit",
+        "source_body_archive_pair_budget_is_all_or_none_and_does_not_change_measurement",
+        "source_body_archive_rejects_stale_generation_wrong_bytes_and_file_corruption",
+        "source_body_archive_reopen_rejects_oversized_or_wrong_type_sql_identity_columns_before_allocation",
+        "source_body_archive_sql_insert_failure_keeps_sealed_orphans_unadvertised_and_retryable",
+        "source_body_archive_utf16be_opt_in_and_existing_catalog_are_explicitly_refused_without_body_writes",
+        "source_body_archive_utf16le_opt_in_and_existing_catalog_are_explicitly_refused_without_body_writes",
+        "source_body_archive_utf8_non_ascii_original_bytes_and_quotas_survive_read_only_reopen",
+        "source_body_metadata_and_selected_copy_are_distinct_and_reopen_exact_non_ascii_bytes",
+        "source_body_new_read_preflights_actual_oversized_and_wrong_type_metadata_before_saved_authorities",
+        "source_body_selected_copy_rejects_stale_context_cancellation_and_unavailable_descriptor"
+      ]
+    },
+    {
+      "path": "crates/core/src/task_owner_tests.rs",
+      "names": [
+        "discarded_async_ticket_still_joins_complete_task_and_nested_worker",
+        "disconnected_caller_and_aborted_drain_retain_actual_worker_and_supervisor",
+        "explicit_reap_observes_discarded_completed_launch_tickets_without_growth",
+        "shared_admission_closes_all_owners_before_any_new_work_can_start",
+        "shared_gate_late_nested_work_is_rejected_but_admitted_parent_still_joins",
+        "worker_panic_is_sticky_after_actual_join_and_never_becomes_clean_drain"
+      ]
+    },
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "names": [
+        "response_actual_eight_enqueues_and_ninth_full_reservation_survive_cancelled_drain_until_body_drop",
+        "response_actual_sqlite_policy_resource_handlers_reach_eight_chunks_then_drop_and_recover_exact_full_exports",
+        "response_actual_worker_panic_before_ready_is_sticky_after_all_actual_joins",
+        "response_completed_slots_are_reaped_before_repeated_download_registration",
+        "response_explicit_cancel_wakes_full_reserve_but_unpolled_body_still_requires_actual_terminal",
+        "response_http10_refusal_is_only_four_actual_routes_and_head_starts_no_export",
+        "response_missing_metadata_or_joined_completion_is_failure_and_never_empty_success",
+        "response_pending_caller_drop_keeps_actual_preparation_owned_until_worker_and_supervisor_join",
+        "response_positive_eof_commit_is_not_rewritten_by_late_cancel_and_closed_admission_starts_nothing",
+        "response_post_ready_panic_or_error_after_valid_json_never_becomes_successful_eof",
+        "response_registry_uses_the_same_global_admission_before_any_worker_registration",
+        "response_single_large_write_preserves_all_bytes_in_bounded_chunks_and_joined_eof",
+        "response_actual_cancellation_is_terminal_to_standard_write_all_and_flush"
+      ]
+    },
+    {
+      "path": "crates/app/src/server/source_bodies_tests.rs",
+      "names": [
+        "source_body_api_config_absent_null_defaults_disable_and_strict_limits",
+        "source_body_cursor_embedded_source_filter_cannot_change_when_outer_cursor_and_query_agree",
+        "source_body_http_original_bytes_reopen_and_corruption_keep_descriptor_availability_separate",
+        "source_body_metadata_json_and_cursor_keep_independent_bounds_and_job_binding"
+      ]
+    },
+    {
+      "path": "crates/app/src/server/source_body_stream_tests.rs",
+      "names": [
+        "source_body_post_spool_snapshot_recheck_can_refuse_before_headers",
+        "source_body_preheader_caller_drop_keeps_actual_worker_until_cancelled_and_joined",
+        "source_body_private_spool_accepts_actual_64mib_and_rejects_one_extra_byte",
+        "source_body_shutdown_emits_error_instead_of_silent_truncated_success_eof",
+        "source_body_spool_ready_waits_full_verification_and_success_eof_waits_real_join",
+        "source_body_spool_worker_panic_is_joined_cleaned_and_sticky",
+        "source_body_spool_wrong_hash_fails_before_ready_and_releases_owned_files",
+        "source_body_unpolled_response_drop_cancels_full_queue_and_actual_drain_joins"
+      ]
+    },
+    {
+      "path": "crates/app/src/server/transport_tests.rs",
+      "names": [
+        "incoming_consuming_response_finishes_inside_shared_grace_with_complete_tail_and_eof",
+        "incoming_dropped_drain_waiter_retains_actual_coordinator_connection_and_producer_joins",
+        "incoming_http1_protocol_shapes_match_same_locked_axum_for_http10_http11_h2_upgrade_and_connect",
+        "incoming_idle_reaper_joins_completed_connections_without_next_accept_or_shutdown",
+        "incoming_live_private_control_observes_actual_socket_drop_without_global_abort_and_joins_owned_work",
+        "incoming_nonreader_reaches_real_full_queue_and_tcp_pending_then_self_aborts_and_joins",
+        "incoming_original_preheader_connection_drop_cancels_checkpoint_and_removes_unadvertised_spool",
+        "incoming_preheaders_io_drop_cancels_lease_but_still_awaits_actual_held_blocking_producer",
+        "incoming_private_task_scope_copies_binding_to_owned_work_and_lease_drop_prunes_keepalive",
+        "incoming_protocol_errors_and_post_quiesce_connect_do_not_admit_a_late_handler",
+        "incoming_two_nonreaders_share_one_absolute_grace_and_repeated_quiesce_cannot_extend_it",
+        "incoming_verified_original_consumes_exact_bom_nonascii_crlf_before_complete_positive_drain",
+        "incoming_verified_original_nonreader_drops_tcp_then_joins_spool_and_preserves_short_length_failure"
+      ]
+    }
+  ],
+  "required_names": 515,
+  "new_windows_functions": 13,
+  "new_unix_only_functions": 0,
+  "minimum_expected_workspace_tests": 1297,
+  "test_profile": {
+    "opt_level": 1,
+    "debug_assertions": true,
+    "overflow_checks": true,
+    "debug_info": 0
+  },
+  "artifacts": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-frozen-source6-rebase-v2\\parent-frozen-inventory.json",
+      "sha256": "fdf31536db3234d5cd44c956740fb15c77a8b42cf8e62be081a64d4a4cdf84cf",
+      "bytes": 58935
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-frozen-source6-rebase-v2\\test-inventory.json",
+      "sha256": "944752821b78e5a0af2cfc17d8afbbc7e08a3c55f8429ead914a2868821205e5",
+      "bytes": 107825
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-frozen-source6-rebase-v2\\projected-source-inventory.json",
+      "sha256": "68ad859d62c9d158aaef25c65f2e5ed3a95c36b3a596bb80d07d6cb52afbb55a",
+      "bytes": 58086
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-frozen-source6-rebase-v2\\rebase-derivation.json",
+      "sha256": "e571a54279ed919e7a2c1bc19d2cbf9b0ce8a634f44737591c92ce42d67c3573",
+      "bytes": 28027
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-frozen-source6-rebase-v2\\HANDOFF.md",
+      "sha256": "7725f3b6d7fcb2220374e977696ecd144f6386b670aed344d522e42517874a19",
+      "bytes": 1606
+    }
+  ],
+  "pins": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-r2\\manifest.json",
+      "sha256": "4572dc39ee478b8b3d55d06b5983779d6a42416c307256780050dc5950c49b77",
+      "bytes": 195006
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v6-r2-draft/root-approval.json",
+      "sha256": "9c064b532d11fcd1515389b47363a3082a580ba9b9bc1e1db975a123f7693af4",
+      "bytes": 60254
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-frozen-source6-rebase-v1\\manifest.json",
+      "sha256": "3e45482699887d07611e984bee61a4a68157a70da02f929d294dba1f79f41cde",
+      "bytes": 58291
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-frozen-source6-independent-review-v1\\receipt.json",
+      "sha256": "c5525fd14e4c997b633fc35b5eb2e904700739cfb503997c269b11a2955231f8",
+      "bytes": 25154
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-terminal-cancellation-proposal-v2\\manifest.json",
+      "sha256": "a5450d19e2b1ecefea9a00cbcbb73fbb5c33f1a9b916567c25082d1f34256b9a",
+      "bytes": 5246
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-terminal-cancellation-independent-review-v2\\receipt.json",
+      "sha256": "4027d45f3c6b393101731bbef86e5adb8f5e54e8c7a26cb15acebb34c94ad5ed",
+      "bytes": 10728
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-frozen-source6-rebase-v1\\parent-frozen-inventory.json",
+      "sha256": "6b2332aea2b72c38bb3924235406682d0fd08eafd5d655ae36f079bac9506d49",
+      "bytes": 58909
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-frozen-source6-rebase-v1\\rebase-derivation.json",
+      "sha256": "0d83af101315ab7d339d76ec39afc4ec1a5fdbc302d6efaf186cf4a8dcebf6c1",
+      "bytes": 32460
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-r2\\Cargo.lock",
+      "sha256": "0f4038aaf5411912ea18b69a0a4095d0feb7834726a64a5d403f6e51b8de8916",
+      "bytes": 78548
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-r2\\crates\\app\\Cargo.toml",
+      "sha256": "893017f0f95c8fcc85aa1a417247bc473a44356b8f8e47849e0f33288011b1ea",
+      "bytes": 954
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-r2\\crates\\app\\src\\server.rs",
+      "sha256": "8d32097d22c36e6a2b7d6614c0d485ac2b56f0d92b42d13f8a94ab5dfbf8f509",
+      "bytes": 81806
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-r2\\crates\\app\\src\\server\\lifecycle.rs",
+      "sha256": "34818e2e7d975cfcedd9b5d3811486bea424bb282b316225e8e64d401b302c45",
+      "bytes": 8425
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-r2\\crates\\app\\src\\server\\response_stream.rs",
+      "sha256": "28faea704b3ff66e0bc21439a8dee081395b0f55c5257a58ab366c47591319e3",
+      "bytes": 23156
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-r2\\crates\\app\\src\\server\\source_body_stream.rs",
+      "sha256": "b9151f28de47b42222c6a5b9c261785acd7acbca5a12d43367204cc23390b432",
+      "bytes": 18677
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-r2\\crates\\app\\src\\server\\source_body_stream_tests.rs",
+      "sha256": "a2d50da2fcbd32b20320443d6de35226df861e0c595826383da074e5085e6fdf",
+      "bytes": 11480
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-r2\\crates\\app\\src\\server\\response_stream_tests.rs",
+      "sha256": "1743a2e49e96717240a132ddb5a1159dfb8fa8c5807fe801d2c7b0e7e2d41655",
+      "bytes": 27717
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source6-r2-format-independent-review-v1\\receipt.json",
+      "sha256": "af5da275e508b1d5e57adb2cf94caa85f7981048b21d6d15000619f0602a4a48",
+      "bytes": 281662
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-frozen-source6-rebase-v1\\source\\crates\\app\\src\\server\\response_stream.rs",
+      "sha256": "fe2d8e45b6e3ebd0d980c8a42bb75a802220fa1f025a7fc9d538ab1c0de95c16",
+      "bytes": 23441
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-frozen-source6-rebase-v1\\source\\crates\\app\\src\\server\\transport.rs",
+      "sha256": "3b48f6b6698e7db6792e50debd8840b4f85bf215a7fd3bad5c1afc608f460ae7",
+      "bytes": 16754
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-frozen-source6-rebase-v1\\source\\crates\\app\\src\\server\\transport_tests.rs",
+      "sha256": "07cb9ed49c76f7692fd16b9bcfacc4687b6e552e603334c501cb18c5ff9c0986",
+      "bytes": 30125
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-frozen-source6-rebase-v1\\test-inventory.json",
+      "sha256": "fb7dc8ff22791006b41a5f19df32c9e4a7a64a10557bbbc6d065182f2918c0b3",
+      "bytes": 107624
+    }
+  ],
+  "own_syntax_check": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-frozen-source6-rebase-v2\\prepare-source.mjs",
+    "sha256": "04a5d9871bcbde5fafb7c9ca71e79a3fcfc9c07186da949b58f9b478f2ac3123",
+    "exitcode": 0,
+    "signal": null
+  },
+  "source_preparation_note": "Initial source-only guard stopped on comparing authored test bytes directly to Root-formatted frozen test bytes; no payload was written. Resumed one identical unmanifested parent inventory and bound the actual independent formatter tuple explicitly. Full inversion and final pin guards then passed.",
+  "pending": [
+    "Independent actual Source6R2 parent rebase review",
+    "Actual Source6R2 full-suite PASS proof",
+    "Root actual full composition/formatter/review/private publication/freeze",
+    "Actual Source7 full suite/build/native/TCP acceptance"
+  ],
+  "executions": {
+    "target_imports": 0,
+    "cargo_compiler_rustfmt_tests": 0,
+    "sqlite_http_tcp_native_browser": 0,
+    "root_product_git_writes": 0,
+    "whole_root_source_rescans": 0
+  }
+}

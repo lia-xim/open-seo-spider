@@ -1,0 +1,74 @@
+{
+  "kind": "actual_source7_r2_format_only",
+  "recorded_at": "2026-10-15T14:41:38.937Z",
+  "result": "PASS_FORMAT_COMMAND_ONLY",
+  "actual_close_event": true,
+  "exit": {
+    "code": 0,
+    "signal": null
+  },
+  "pid": 36768,
+  "error": null,
+  "io_errors": [],
+  "streams": {
+    "stdout": {
+      "end": true,
+      "close": true,
+      "bytes": 0
+    },
+    "stderr": {
+      "end": true,
+      "close": true,
+      "bytes": 0
+    }
+  },
+  "elapsed_ms": 3392.3979,
+  "preformat_sha256": "6dba59b488de7dc9f5df67bcf3258ced83755ff5d56debf1fd3333932ead91b9",
+  "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "source_inputs": 326,
+  "changed_files": [
+    {
+      "path": "crates/app/src/server.rs",
+      "before_sha256": "95e69157872c234cf99c697db44b956f32bdca9bb8a85b481d28ba5e7db18925",
+      "after_sha256": "f487003f5c1c48dc30299b011a581531a4b7758147d0d1add1e03817e129a726",
+      "bytes": 82435
+    },
+    {
+      "path": "crates/app/src/server/lifecycle.rs",
+      "before_sha256": "2c79f5dcb37412ce93c13f42b790a9bef8ac2d4c59f526752332048dc4295e07",
+      "after_sha256": "503a742cec791cc5596bc5b66ccd732e051838e5070e6b012296c7f35285a6d6",
+      "bytes": 9008
+    },
+    {
+      "path": "crates/app/src/server/response_stream.rs",
+      "before_sha256": "5d6650224878435514940a53b3acff73bcb2e44a8ace0a42562580a0d8371285",
+      "after_sha256": "d2615bd09a5eb10c8625245cfde512045ffa30e81028d048c8d8f700c2a5e151",
+      "bytes": 23571
+    },
+    {
+      "path": "crates/app/src/server/source_body_stream.rs",
+      "before_sha256": "980a569554e475af82477c32ebf26c52275f3c0ea95350bcd5ef5f6ca6d01486",
+      "after_sha256": "fe21d636b757ac14934b2c527a14602e3c1d6865d01084384781843ff67bfeeb",
+      "bytes": 19059
+    },
+    {
+      "path": "crates/app/src/server/source_body_stream_tests.rs",
+      "before_sha256": "6663ab42d3ee34d30643063a8a4e9264bd5ba1992bf876e3948a5e34f6450c1f",
+      "after_sha256": "86a34435912ec2355b827923ca4874a573d4a31d5d927650fdd03ccfcd5af7cf",
+      "bytes": 11507
+    },
+    {
+      "path": "crates/app/src/server/transport.rs",
+      "before_sha256": "3b48f6b6698e7db6792e50debd8840b4f85bf215a7fd3bad5c1afc608f460ae7",
+      "after_sha256": "8d5daa0fdea4079c8d015fd2253a1d421ccab85344ec91a3b7ed1990589ccf8c",
+      "bytes": 22551
+    },
+    {
+      "path": "crates/app/src/server/transport_tests.rs",
+      "before_sha256": "07cb9ed49c76f7692fd16b9bcfacc4687b6e552e603334c501cb18c5ff9c0986",
+      "after_sha256": "a398ceeaa74716fcbf4650e189dac73c723fccfb31807be93ae9ea5fd6130b3c",
+      "bytes": 39919
+    }
+  ],
+  "qualification": "Actual cargo fmt only on isolated E-only Source7 copy; no compiler/tests/native/Root source promotion. Independent formatter review required."
+}

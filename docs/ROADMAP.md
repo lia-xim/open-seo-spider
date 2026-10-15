@@ -1,3 +1,7 @@
+## Aktuell: Source7 besteht die vollständige Suite (15.10.2026)
+
+Der gemeinsame Stand unter `e96d1d1` besteht tatsächlich 1297 Tests ohne Fehler oder ignorierte Fälle, alle 515 Pflichtnamen und 41 vollständigen Modulnamen, vier echte Renderer-Prüfungen sowie Format und Clippy. [Rohbelege](verification/combined-workspace-v7-20261015/index.json). Der optimierte Kandidat und alle frischen Native-/BODY13-/Browser27-Abnahmen sind separate nächste Schritte. Lokal bleibt der geprüfte R3-Stand installiert. Vollständige Herstellerparität bleibt offen.
+
 ## Aktuell: Source5 R3 besteht die vollständige Suite (15.10.2026)
 
 Der private Commit `9fa103e` besteht tatsächlich 1256 Tests ohne Fehler oder ignorierte Fälle, alle 474 Pflichtnamen, alle 40 neuen Windows-Fälle und vier echte Renderer-Prüfungen. Format und Clippy sind ebenfalls grün; eigene Server sind geschlossen und Quellen unverändert. Rohbelege: [vollständige Suite](verification/combined-workspace-v5-r3-20261015/index.json).
