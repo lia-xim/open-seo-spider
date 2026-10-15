@@ -1,15 +1,15 @@
 # Optional MCP file tools
 
-This is a new source implementation. The first actual Windows module run
-compiled and executed 15 tests: 14 passed and one failed because its Windows
-error classification was too narrow. That test now checks the concrete OS
-denial codes and requires the same rename to succeed after closing the grant;
-this correction has not yet been rerun. Transport regressions, official MCP
-clients, Unix cases, the full workspace and installed-runtime acceptance remain
-open. The installed application acquires these capabilities only after a new
-candidate passes its gates and is installed. The [first run and source
-bindings](verification/mcp-file-tools-source-20261015/focused-module-first/index.json)
-are recorded separately from the original source-only preparation.
+This is a new source implementation. Actual focused Windows tests now pass:
+15 module groups and 14 CLI/Bridge/STDIO/HTTP groups. The HTTP group uses three
+owned server modes, including the enabled second loopback address. The
+[initial failures](verification/mcp-file-tools-source-20261015/focused-module-first/index.json)
+and [repaired module](verification/mcp-file-tools-source-20261015/focused-module-repaired/index.json) /
+[transport attempts](verification/mcp-file-tools-source-20261015/focused-wiring-repaired/index.json)
+retain their exact source bindings and logs. These results do not establish
+official SDK, Unix, combined full-workspace or installed-runtime acceptance.
+The installed application acquires these capabilities only after a new candidate
+passes its gates and is installed.
 
 ## Configuration
 

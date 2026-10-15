@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "kind": "two_test_source_repairs_independent_review_v1",
+  "immutable": true,
+  "recorded_at": "2026-10-15T02:34:36.6571812Z",
+  "result": "NO_CONFIRMED_FINDINGS_IN_BOUNDED_SOURCE_REVIEW",
+  "findings": [],
+  "cli": {
+    "before_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-compile-repair-source-v3\\crates\\app\\src\\sitemap_findings_cli_tests.rs",
+    "before_sha256": "f1f99965965abceab00a79e826edef8a7bc1851e3a7958e7b70ff587146fa15f",
+    "after_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-compile-repair-v1\\crates\\app\\src\\sitemap_findings_cli_tests.rs",
+    "after_sha256": "fc181427fefec665c3b5b784cde7f221ccd8321d112054fcc026df60dbc72f12",
+    "after_lines": "282-308",
+    "exact_inverse_guard": "PASS: replacement of only new nonempty cancellation block with old empty write assertion restores frozen before bytes",
+    "assessment": "Nonempty write reaches actual Measured::write, whose checkpoint precedes budget/IO. Exact Cancelled error plus unchanged byte count, SHA and temporary-file length establish no mutation. Existing budget refusal, writer/stage drops and no-final/no-temp assertion remain."
+  },
+  "windows_root_rename": {
+    "before_git_commit": "ac7282c4ce314f1388b6231368c6da171d9c1cf8",
+    "before_git_path": "crates/app/src/mcp/files_tests.rs",
+    "before_git_blob": "87482551cb5ef7affdc57f778f68b1dd9c3d5d0f",
+    "before_raw_sha256": "4427878b7d8fa11375d2e796c3b4405707b354aa31e447dbdc3c069ae39b14d0",
+    "before_raw_bytes": 27462,
+    "after_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\crates\\app\\src\\mcp\\files_tests.rs",
+    "after_sha256": "85f9c637074319b9e416d37c2634e5bf6bf777d962c67e6d03a3c06cfcc3d76e",
+    "after_lines": "479-527",
+    "assessment": "Windows denial branch accepts exactly raw OS codes 5 or 32, not arbitrary IO errors. Configured root must still exist and moved target must remain absent; capability writes and exact bytes remain checked. Actual shutdown/drain and FileTools drop precede a required successful same rename, exact moved file bytes and owned destination cleanup. Unix and successful-renamed-root branches retain their prior behavior."
+  },
+  "product_scope": "No product changes in either reviewed delta; CLI product equals frozen source-v3 c4bcb200 and file module remains 75c09473.",
+  "source_pins": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-compile-repair-source-v3\\crates\\app\\src\\sitemap_findings_cli_tests.rs",
+      "sha256": "f1f99965965abceab00a79e826edef8a7bc1851e3a7958e7b70ff587146fa15f",
+      "bytes": 9698
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-compile-repair-v1\\crates\\app\\src\\sitemap_findings_cli_tests.rs",
+      "sha256": "fc181427fefec665c3b5b784cde7f221ccd8321d112054fcc026df60dbc72f12",
+      "bytes": 10219
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\crates\\app\\src\\mcp\\files_tests.rs",
+      "sha256": "85f9c637074319b9e416d37c2634e5bf6bf777d962c67e6d03a3c06cfcc3d76e",
+      "bytes": 28108
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-compile-repair-v1\\crates\\app\\src\\sitemap_findings_cli.rs",
+      "sha256": "c4bcb200770327197ac0ab33dc8a7b35e8942dcddc1511662be36526494cf797",
+      "bytes": 11222
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-compile-repair-source-v3\\crates\\app\\src\\sitemap_findings_cli.rs",
+      "sha256": "c4bcb200770327197ac0ab33dc8a7b35e8942dcddc1511662be36526494cf797",
+      "bytes": 11222
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\crates\\app\\src\\mcp\\files.rs",
+      "sha256": "75c0947352dfd3bbc0174af66ea64f748246acf45a9c0021a8cd46c69064353a",
+      "bytes": 35672
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-compile-repair-v1\\crates\\core\\src\\sitemap_read_control.rs",
+      "sha256": "bccdcbe2e5e184cacfc025690c89c2020a27a4b4867453e4f01e894dd1eec6bf",
+      "bytes": 6212
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\app-regression-repairs-focus-v1\\proof.json",
+      "sha256": "183666567bc39fb33a447bc0466c462666ca05346b995448ee5ec6ed6697ef2f",
+      "bytes": 1862
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\app-regression-repairs-focus-v1\\test-2.log",
+      "sha256": "fb81eb6d0f08970813e3a64e4cbf6e07b679e2eded05dc2b6007f978506f5687",
+      "bytes": 433
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\mcp-file-module-focus-v1\\proof.json",
+      "sha256": "299a98706955610fd081bedf1b8229a588e71a31f4991667b51d06eb7b84ccbf",
+      "bytes": 2298
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\mcp-file-module-focus-v1\\test.log",
+      "sha256": "6aaf531c228fef420e5b055c575d7fdbf9a8e460843731db9f9e0d47aead7a42",
+      "bytes": 3668
+    }
+  ],
+  "observed_root_evidence": {
+    "cli": "Existing Root focused test-2 log is bound by exact SHA to proof.json and current CLI test input; reports 1 passed/0 failed, actual close0. This worker did not execute it.",
+    "windows": "Existing pre-fix Root module log reports 14 passed/1 failed at old ErrorKind assertion. No corrected module test execution is claimed by this review."
+  },
+  "validation": {
+    "source_read": "PERFORMED",
+    "hash_and_git_blob_read": "PERFORMED",
+    "source_or_product_mutations": 0,
+    "compiler": "NOT_RUN_BY_REVIEWER",
+    "tests": "NOT_RUN_BY_REVIEWER",
+    "browser": "NOT_RUN",
+    "runtime": "NOT_RUN_BY_REVIEWER"
+  },
+  "proof_boundary": "Limited to actual two test-source diffs and their called Write/control/capability lifecycle paths; not full workspace, platform, SDK, filesystem-security or manufacturer parity acceptance."
+}

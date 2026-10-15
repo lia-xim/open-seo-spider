@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "kind": "sitemap_compile_repair_full_suite_v1",
+  "driver_sha256": "df819f1b9d92ca60553f5c00ea5cb76ab4cc4ab23bf6a10aa20bfbb73e522308",
+  "result": "FAIL_LOCAL_COMPILE_REPAIR_WORKSPACE",
+  "recorded_at": "2026-10-15T02:18:59.534Z",
+  "source_manifest_sha256": "0ab151e4fd06f4603d8429bed4c784f7045e5c838bec378706d6c01bfaefb7bf",
+  "files": 297,
+  "source_authored_delta": 0,
+  "source_authored_total": 376,
+  "inherited_source_authored_delta": 47,
+  "inherited_approved_product_bindings": 38,
+  "repair_product_bindings": 8,
+  "inherited_ui_bindings": 2,
+  "source_lineage": {
+    "kind": "sitemap_compile_repair_lineage_v1",
+    "source_manifest_sha256": "0ab151e4fd06f4603d8429bed4c784f7045e5c838bec378706d6c01bfaefb7bf",
+    "parent_source_manifest_sha256": "e9bbc54573247e028dcb47937f80eaa1c1918240a810d8e796874464bf5cc7f5",
+    "parent_source_commit": "f4ed4b9bb7c760755ec7e448aac660cfb6063ade",
+    "metadata_predecessor_manifest_sha256": "d323d42143fb8754733fb4172ea760011a693b7ab67b593e5ecbccbe98d4f14b",
+    "repair_inputs": 297,
+    "unchanged_parent_inputs": 289,
+    "changed_repair_inputs": 8,
+    "repair_approved_bindings": 8,
+    "new_rust_tests": 0,
+    "inherited_ui_approved_bindings": 2,
+    "inherited_required_names": 388,
+    "inherited_source_authored_expectations": 376,
+    "minimum_expected_workspace_tests": 1170,
+    "repair_review_sha256": "61fc2c4b251e921e33c5d27f2be0d0c0447477c1c290289953142423eec6f35d",
+    "repair_review_scope": "Independent bounded review of five core repair files; remaining three remove actual compiler warnings",
+    "historical_ui_lineage": {
+      "base_source_manifest_sha256": "69492d0c0cc56bab5de86251045459a1707deb4c991d5871f9ad39015e897751",
+      "base_source_commit": "f43efc17d1393645a9eb8c8b8510743f3dfedb5c",
+      "base_publication_receipt_sha256": "b71188d145a8e720bd9d6c9aaf4720c03c20cced7f406839264e5432e85e84ff",
+      "ui_source_manifest_sha256": "e9bbc54573247e028dcb47937f80eaa1c1918240a810d8e796874464bf5cc7f5",
+      "ui_source_commit": "f4ed4b9bb7c760755ec7e448aac660cfb6063ade",
+      "ui_publication_receipt_sha256": "4316704b11e47d7f49bb541e9b1db9b1c31ac9c53d5b68dd2c47ab339b4bc24b",
+      "base_inputs": 297,
+      "unchanged_inputs": 295,
+      "changed_ui_inputs": 2,
+      "inherited_base_new_rust_tests": 47,
+      "inherited_base_approved_bindings": 38,
+      "new_ui_rust_tests": 0,
+      "approved_ui_bindings": 2,
+      "inherited_source_authored_expectations": 376,
+      "inherited_required_names": 388,
+      "minimum_expected_workspace_tests": 1170
+    }
+  },
+  "historical_ui_lineage": {
+    "base_source_manifest_sha256": "69492d0c0cc56bab5de86251045459a1707deb4c991d5871f9ad39015e897751",
+    "base_source_commit": "f43efc17d1393645a9eb8c8b8510743f3dfedb5c",
+    "base_publication_receipt_sha256": "b71188d145a8e720bd9d6c9aaf4720c03c20cced7f406839264e5432e85e84ff",
+    "ui_source_manifest_sha256": "e9bbc54573247e028dcb47937f80eaa1c1918240a810d8e796874464bf5cc7f5",
+    "ui_source_commit": "f4ed4b9bb7c760755ec7e448aac660cfb6063ade",
+    "ui_publication_receipt_sha256": "4316704b11e47d7f49bb541e9b1db9b1c31ac9c53d5b68dd2c47ab339b4bc24b",
+    "base_inputs": 297,
+    "unchanged_inputs": 295,
+    "changed_ui_inputs": 2,
+    "inherited_base_new_rust_tests": 47,
+    "inherited_base_approved_bindings": 38,
+    "new_ui_rust_tests": 0,
+    "approved_ui_bindings": 2,
+    "inherited_source_authored_expectations": 376,
+    "inherited_required_names": 388,
+    "minimum_expected_workspace_tests": 1170
+  },
+  "accepted_baseline": 794,
+  "passed": 217,
+  "failed": 3,
+  "ignored": 0,
+  "source_final_verified": true,
+  "minimum_expected": 1170,
+  "required_test_names": 388,
+  "runs": [
+    {
+      "name": "format",
+      "args": [
+        "fmt",
+        "--all",
+        "--check"
+      ],
+      "pid": 47336,
+      "actual_close_event": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "spawn_error": null,
+      "elapsed_ms": 1646,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "summaries": []
+    },
+    {
+      "name": "workspace-live",
+      "args": [
+        "test",
+        "--workspace",
+        "--locked",
+        "--",
+        "--include-ignored",
+        "--test-threads=1"
+      ],
+      "pid": 46308,
+      "actual_close_event": true,
+      "exit": {
+        "code": 101,
+        "signal": null
+      },
+      "spawn_error": null,
+      "elapsed_ms": 660888,
+      "log_sha256": "1125daa3b290557f7ce50c17753bf6fc4e501b3cc19ac1ad5784c92c4a1bd344",
+      "summaries": [
+        {
+          "state": "FAILED",
+          "passed": 217,
+          "failed": 3,
+          "ignored": 0
+        }
+      ]
+    }
+  ],
+  "owned_worker_port": 58513,
+  "owned_worker_closed": true,
+  "owned_renderer_gates": [
+    "live_browser_worker_executes_javascript_for_core_crawl",
+    "live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness",
+    "live_browser_worker_pause_drains_render_and_retains_rendered_discoveries",
+    "live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion"
+  ],
+  "owned_renderer_gate_count": 4,
+  "owned_renderer_gates_verified": false,
+  "user_renderer_contacted": false,
+  "failures": [
+    {
+      "message": "_raw_page_and_export_tokens_parse_then_become_stale ... ok\ntest sitemap_membership::tests::rich_read_window_tests::actual_rich_unknown_empty_and_incomplete_match_full_optional_evidence ... ok\ntest sitemap_membership::tests::rich_read_window_tests::actual_rich_visible_lastmod_copy_hits_real_json_cap_and_smaller_page_recovers ... ok\ntest sitemap_membership::tests::saved_page_cursor_has_a_distinct_bounded_role_and_ordinal_zero_is_valid ... ok\ntest sitemap_membership::tests::source_context::actual_capture_unavailable_marker_restoration_stales_tokens_without_fake_empty_source ... ok\ntest sitemap_membership::tests::source_context::actual_historical_source_none_remains_explicit_stable_and_readonly ... ok\ntest sitemap_membership::tests::source_context::actual_selected_parent_source_context_keeps_records_links_and_historical_none_separate ... ok\ntest sitemap_membership::tests::source_context::actual_source_a_only_restoration_stales_raw_page_and_csv_with_legacy_rows_unchanged ... ok\ntest sitemap_membership::tests::source_context::actual_source_association_only_restoration_stales_raw_page_and_csv_without_new_capture ... ok\ntest sitemap_raw_cli::tests::actual_raw_sitemap_cli_reads_unknown_history_and_refuses_existing_destination ... ok\ntest sitemap_raw_cli::tests::actual_raw_sitemap_cli_rejects_invalid_request_before_database_or_output_creation ... ok\ntest sitemap_raw_cli::tests::actual_raw_sitemap_cli_request_file_accepts_exact_cap_and_refuses_sentinel_byte ... ok\ntest sitemap_raw_cli::tests::raw_sitemap_cli_parser_accepts_only_the_explicit_read_command_arguments ... ok\n\nfailures:\n\n---- mcp::saved_comparison::tests::descriptor_is_read_only_strict_and_additional_to_existing_tools stdout ----\n\nthread 'mcp::saved_comparison::tests::descriptor_is_read_only_strict_and_additional_to_existing_tools' (22680) panicked at crates\\app\\src\\mcp\\saved_comparison_tests.rs:14:5:\nassertion `left == right` failed\n  left: 26\n right: 25\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n\n---- server::sitemaps::tests::streaming_tests::actual_csv_stream_rejects_full_tail_source_report_and_inventory_corruption_before_ready stdout ----\n\nthread 'server::sitemaps::tests::streaming_tests::actual_csv_stream_rejects_full_tail_source_report_and_inventory_corruption_before_ready' (47184) panicked at crates\\app\\src\\server\\sitemaps_tests.rs:217:5:\nassertion `left == right` failed\n  left: [\"9fd9c6c7-b397-4a45-adf8-fc098543bcc2.sqlite\", \"9fd9c6c7-b397-4a45-adf8-fc098543bcc2.sqlite-shm\", \"9fd9c6c7-b397-4a45-adf8-fc098543bcc2.sqlite-wal\"]\n right: [\"9fd9c6c7-b397-4a45-adf8-fc098543bcc2.sqlite\"]\n\n---- sitemap_findings_cli::tests::findings_cli_stage_cancel_and_json_budget_leave_no_final_or_temp_output stdout ----\n\nthread 'sitemap_findings_cli::tests::findings_cli_stage_cancel_and_json_budget_leave_no_final_or_temp_output' (44428) panicked at crates\\app\\src\\sitemap_findings_cli_tests.rs:295:5:\nassertion failed: writer.write_all(b\"\").is_err()\n\n\nfailures:\n    mcp::saved_comparison::tests::descriptor_is_read_only_strict_and_additional_to_existing_tools\n    server::sitemaps::tests::streaming_tests::actual_csv_stream_rejects_full_tail_source_report_and_inventory_corruption_before_ready\n    sitemap_findings_cli::tests::findings_cli_stage_cancel_and_json_budget_leave_no_final_or_temp_output\n\ntest result: FAILED. 217 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 609.42s\n\nerror: test failed, to rerun pass `-p open-seo-spider --bin open-seo-spider`\n\n\n101 !== 0\n",
+      "stack": "AssertionError [ERR_ASSERTION]: _raw_page_and_export_tokens_parse_then_become_stale ... ok\ntest sitemap_membership::tests::rich_read_window_tests::actual_rich_unknown_empty_and_incomplete_match_full_optional_evidence ... ok\ntest sitemap_membership::tests::rich_read_window_tests::actual_rich_visible_lastmod_copy_hits_real_json_cap_and_smaller_page_recovers ... ok\ntest sitemap_membership::tests::saved_page_cursor_has_a_distinct_bounded_role_and_ordinal_zero_is_valid ... ok\ntest sitemap_membership::tests::source_context::actual_capture_unavailable_marker_restoration_stales_tokens_without_fake_empty_source ... ok\ntest sitemap_membership::tests::source_context::actual_historical_source_none_remains_explicit_stable_and_readonly ... ok\ntest sitemap_membership::tests::source_context::actual_selected_parent_source_context_keeps_records_links_and_historical_none_separate ... ok\ntest sitemap_membership::tests::source_context::actual_source_a_only_restoration_stales_raw_page_and_csv_with_legacy_rows_unchanged ... ok\ntest sitemap_membership::tests::source_context::actual_source_association_only_restoration_stales_raw_page_and_csv_without_new_capture ... ok\ntest sitemap_raw_cli::tests::actual_raw_sitemap_cli_reads_unknown_history_and_refuses_existing_destination ... ok\ntest sitemap_raw_cli::tests::actual_raw_sitemap_cli_rejects_invalid_request_before_database_or_output_creation ... ok\ntest sitemap_raw_cli::tests::actual_raw_sitemap_cli_request_file_accepts_exact_cap_and_refuses_sentinel_byte ... ok\ntest sitemap_raw_cli::tests::raw_sitemap_cli_parser_accepts_only_the_explicit_read_command_arguments ... ok\n\nfailures:\n\n---- mcp::saved_comparison::tests::descriptor_is_read_only_strict_and_additional_to_existing_tools stdout ----\n\nthread 'mcp::saved_comparison::tests::descriptor_is_read_only_strict_and_additional_to_existing_tools' (22680) panicked at crates\\app\\src\\mcp\\saved_comparison_tests.rs:14:5:\nassertion `left == right` failed\n  left: 26\n right: 25\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n\n---- server::sitemaps::tests::streaming_tests::actual_csv_stream_rejects_full_tail_source_report_and_inventory_corruption_before_ready stdout ----\n\nthread 'server::sitemaps::tests::streaming_tests::actual_csv_stream_rejects_full_tail_source_report_and_inventory_corruption_before_ready' (47184) panicked at crates\\app\\src\\server\\sitemaps_tests.rs:217:5:\nassertion `left == right` failed\n  left: [\"9fd9c6c7-b397-4a45-adf8-fc098543bcc2.sqlite\", \"9fd9c6c7-b397-4a45-adf8-fc098543bcc2.sqlite-shm\", \"9fd9c6c7-b397-4a45-adf8-fc098543bcc2.sqlite-wal\"]\n right: [\"9fd9c6c7-b397-4a45-adf8-fc098543bcc2.sqlite\"]\n\n---- sitemap_findings_cli::tests::findings_cli_stage_cancel_and_json_budget_leave_no_final_or_temp_output stdout ----\n\nthread 'sitemap_findings_cli::tests::findings_cli_stage_cancel_and_json_budget_leave_no_final_or_temp_output' (44428) panicked at crates\\app\\src\\sitemap_findings_cli_tests.rs:295:5:\nassertion failed: writer.write_all(b\"\").is_err()\n\n\nfailures:\n    mcp::saved_comparison::tests::descriptor_is_read_only_strict_and_additional_to_existing_tools\n    server::sitemaps::tests::streaming_tests::actual_csv_stream_rejects_full_tail_source_report_and_inventory_corruption_before_ready\n    sitemap_findings_cli::tests::findings_cli_stage_cancel_and_json_budget_leave_no_final_or_temp_output\n\ntest result: FAILED. 217 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 609.42s\n\nerror: test failed, to rerun pass `-p open-seo-spider --bin open-seo-spider`\n\n\n101 !== 0\n\n    at run (file:///C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/run-sitemap-compile-repair-suite-v1.mjs:200:10)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async file:///C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/run-sitemap-compile-repair-suite-v1.mjs:218:3"
+    }
+  ],
+  "qualification": "Actual Windows full workspace over297 repair-v3 frozen inputs, exact289 unchanged e9 inputs plus8 compile/warning source repairs. Adds0 tests; preserves388 named cases/min1170 with4 real owned renderer gates included,0failed/0ignored required. Historical e9 UI2bindings and694 base47new functions/38bindings remain separate lineage. Only fresh actual full workspace/Clippy-Dwarnings/fmt logs here establish acceptance; no automatic rebinding of native/browser/SDK/physical drivers, installation, feature completion, RSS or latency proof. Compiler bytes and source manifests reverified after actual owned resource closure."
+}

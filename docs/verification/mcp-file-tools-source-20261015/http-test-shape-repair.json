@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "kind": "mcp_file_wiring_http_shape_fix_v1",
+  "immutable": true,
+  "recorded_at": "2026-10-15T02:36:49.9991506Z",
+  "integration_owner": "Root",
+  "scope": "ONE_TEST_FILE_ONLY",
+  "original_wiring_handoff_manifest_sha256": "1122dcc35796e78346bb4f5c969ecfc67e19478da69bfdcb2da47e536a2a459e",
+  "actual_failing_source_commit": "fc25bd8ae08360afb93964bc866d50d3c77acb91",
+  "files": [
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "before_sha256": "8c423dee0ebe525bfe6645f3b5d117289a73c4b5bff5ddfda4b93b7229753345",
+      "before_bytes": 26693,
+      "after_sha256": "f1b6dc0a9ecdd95c26700f4ecad836924355b8de8d030e3b2bd610ba5f68ae32",
+      "after_bytes": 26703,
+      "exact_inverse_guard": "PASS: remove only added crawls field index to recover exact current Root before bytes"
+    }
+  ],
+  "source_pins": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\crates\\app\\src\\mcp.rs",
+      "sha256": "0d2101c963f6a3d849d6732e6da3500c16015a50e61644ccbcae9e76aca39d19",
+      "bytes": 30109
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\crates\\app\\src\\server.rs",
+      "sha256": "c6266aa464e77f03e654d65c9c3d0cd97341dc7fa8b5b6d5830af0b6e2a17024",
+      "bytes": 77121
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-compile-repair-source-v3\\crates\\app\\src\\server.rs",
+      "sha256": "a00199a85f525db1a37b2a5f95d7b0567b552e53dfd5c3acacb57af5e201660e",
+      "bytes": 75030
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\mcp-file-wiring-focus-v1\\proof.json",
+      "sha256": "1eb9db68038e28af73ce13b96269fdfb567d21e8e35e77c33c438e8f00365a8f",
+      "bytes": 2225
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\mcp-file-wiring-focus-v1\\test.log",
+      "sha256": "f555c94fc12182b86bd80dd3b170c4f932a8346c66fb0fa724e09d574f9ac9c8",
+      "bytes": 2405
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-wiring-http-shape-fix-v1\\HANDOFF.md",
+      "sha256": "3907e3120b5caa66bbb6acb24b5a49bf6e1b6b340e06eaa35d5248c9aac4df93",
+      "bytes": 1927
+    }
+  ],
+  "confirmed_cause": {
+    "kind": "TEST_RESPONSE_SHAPE_MISMATCH",
+    "actual_failure": "actual legacy crawl list: as_array() used on structuredContent object",
+    "api_contract": "server.rs499-510 returns Json({crawls:results}); prior source-v3 server.rs444-455 same object",
+    "bridge_contract": "mcp.rs242 routes spider_list_crawls to api/crawls;404-420 returns unchanged deserialized Value;225-236 wraps it in structuredContent",
+    "repair": "Index existing crawls array, preserve its strict type and empty-list check"
+  },
+  "directed_regression": "mcp::file_wiring_tests::file_tools_http_opt_in_capabilities_inventory_and_dispatch_share_module",
+  "test_names": [
+    "file_tools_cli_opt_in_is_shared_by_serve_and_mcp",
+    "file_tools_cli_requires_an_explicit_value_and_preserves_other_commands",
+    "file_tools_inventory_is_disabled_by_default_and_declares_exact_five_when_enabled",
+    "file_tools_disabled_requests_never_reach_the_api",
+    "file_tools_api_address_retains_exact_loopback_and_default_fallback",
+    "file_tools_all_five_execute_locally_with_no_api_calls",
+    "file_tools_rpc_id_is_bounded_before_version_errors_or_any_write",
+    "file_tools_invalid_shapes_and_oversized_text_never_mutate",
+    "file_tools_actual_text_response_is_single_copy_and_whole_wire_bounded",
+    "file_tools_wire_guard_accepts_exact_physical_frame_and_rejects_plus_one",
+    "file_tools_actual_stdio_frames_share_opt_in_and_drain_on_eof",
+    "file_tools_stdio_output_error_still_awaits_registry_drain",
+    "file_tools_server_rejects_bad_root_and_nonloopback_before_data_directory",
+    "file_tools_http_opt_in_capabilities_inventory_and_dispatch_share_module"
+  ],
+  "test_count": 14,
+  "new_test_names": 0,
+  "preserved": "All other bytes exact by inverse guard, including isError false, tool counts, three modes, actual owned readiness/startup, capability/Host/RPC-ID/no-write checks, filesystem bytes/default behavior and actual server-task join",
+  "prior_actual_result": "13 passed,1 failed,0 ignored; exact logSHA verified against Root proof",
+  "validation": {
+    "rustfmt_exit_code": 0,
+    "rustfmt_check_exit_code": 0,
+    "exact_inverse_guard": "PASS",
+    "compiler": "NOT_RUN",
+    "tests": "NOT_RUN",
+    "http": "NOT_RUN",
+    "sqlite": "NOT_RUN",
+    "native_sdk": "NOT_RUN",
+    "root_mutations": 0,
+    "product_mutations": 0
+  },
+  "proof_boundary": "Corrected HTTP group and subsequent enabled modes remain runtime NOT_PROVEN. Original actual13/1 result is not post-fix acceptance; no product bug or full-suite/platform/manufacturer parity result is claimed."
+}

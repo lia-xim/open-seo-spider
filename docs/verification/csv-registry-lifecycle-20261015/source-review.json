@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "kind": "csv_registry_lifecycle_independent_review_v1",
+  "immutable": true,
+  "recorded_at": "2026-10-15T02:41:10.8568907Z",
+  "result": "NO_CONFIRMED_FINDINGS_IN_BOUNDED_STATIC_SCOPE",
+  "findings": [],
+  "reviewed_handoff_manifest_sha256": "54f6fcb7106b7a897939b5abed204a7a5af9d2a7f7e84dcda8645ac5de085ddd",
+  "reviewed_pins": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\csv-registry-lifecycle-repair-v1\\manifest.json",
+      "sha256": "54f6fcb7106b7a897939b5abed204a7a5af9d2a7f7e84dcda8645ac5de085ddd",
+      "bytes": 4436
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\csv-registry-lifecycle-repair-v1\\HANDOFF.md",
+      "sha256": "db6606656030a178e1ce0007ee8d500bdd451b57598aea9fb11408285eb5397a",
+      "bytes": 5920
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\csv-registry-lifecycle-repair-v1\\FINDING.md",
+      "sha256": "453d9b203315d24474023af13cb229a4b00a10c75180f767a39e60e27cc3b730",
+      "bytes": 2545
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\csv-registry-lifecycle-repair-v1\\PRESERVED-REGIONS.json",
+      "sha256": "bf41ad17e40e9b88e5aeff4eb93773d348d84889feb53b83dd774782fdff55e9",
+      "bytes": 1563
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\csv-registry-lifecycle-repair-v1\\crates\\app\\src\\server\\sitemap_csv_stream.rs",
+      "sha256": "32a0d81b02b166373cf58122758fb879a4e7095d2816216961ca10cbb3139f7b",
+      "bytes": 43970
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\csv-registry-lifecycle-repair-v1\\crates\\app\\src\\server\\sitemap_csv_stream_lifecycle_tests.rs",
+      "sha256": "bf59b071d560a8b57e742a31c4af78dd454894af9fc201b10ac2a29118e5474b",
+      "bytes": 16728
+    }
+  ],
+  "baseline_source_manifest_sha256": "0ab151e4fd06f4603d8429bed4c784f7045e5c838bec378706d6c01bfaefb7bf",
+  "baseline_source_pins_verified": true,
+  "root_transport_observed_sha256": "a5e0999945ed914a5ef528a930c063ff976b9e4ddcc08343b30a01d84754be6e",
+  "scope": [
+    {
+      "file": "sitemap_csv_stream.rs",
+      "lines": "129-243",
+      "conclusion": "Registry-owned Arc<Task> independently retains worker and supervisor slots. Worker handle awaited by mutable reference and only taken after actual await; terminal memo and joined/failed updates occur synchronously before another await."
+    },
+    {
+      "file": "sitemap_csv_stream.rs",
+      "lines": "279-359",
+      "conclusion": "Close/snapshot shares admission mutex; each task remains retained during canceled/concurrent drain. Supervisor result is actually awaited before taking handle; failures are sticky. Recovery joins worker then finishes active once. Drain attempts all snapshot tasks before returning errors and checks retained/accounting state."
+    },
+    {
+      "file": "sitemap_csv_stream.rs",
+      "lines": "417-546",
+      "conclusion": "Synchronous reaper polls only completed supervisor handle by reference, keeps incomplete workers registered, records failure before removal. Start barrier opens only after actual worker/supervisor/task publication under admission lock. Poison handling closes admission with explicit sticky error."
+    },
+    {
+      "file": "sitemap_csv_stream.rs",
+      "lines": "620-665",
+      "conclusion": "Normal supervision still requires joined plus BodyDone or stopped. Completion-channel loss cancels actual control. active/failed are guarded once; successful worker with dropped Body preserves prior failed=0 behavior."
+    },
+    {
+      "file": "sitemap_csv_stream_lifecycle_tests.rs",
+      "lines": "134-250,303-494",
+      "conclusion": "Two authored groups use real PublicCrawler SQLite state, actual inventory token and unchanged actual producer. Genuine CoreCompletion precedes a fixture-held actual worker return. Tests observe actual Pending/aborted requester and canceled/concurrent drains, then assert both retained Join slots observed, terminal memo, once-only counters, sticky error or success, unchanged saved data/context and actual website join."
+    }
+  ],
+  "primary_semantics": {
+    "path": "C:/Users/matth/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.53.2/src/runtime/task/join.rs",
+    "sha256": "e1c5c5730743d901ce375f0c46eb3050a9d69b5c28ebe275fb2a585a3e22debb",
+    "lines": "18-35",
+    "read_fact": "Pinned Tokio1.53.2 states dropped JoinHandle detaches but awaiting &mut JoinHandle is cancel safe; candidate uses the retained-reference pattern."
+  },
+  "independently_verified_preserved_regions": [
+    {
+      "label": "ProducerPorts and Ready/PendingExport",
+      "bytes": 2171,
+      "sha256": "98a1955082b4b1ff9404f90295044f62d21af611c8ab3a606d7291984343adb9",
+      "exact": true
+    },
+    {
+      "label": "receive_completion through original Body/CSV formatting/producer/hooks EOF",
+      "bytes": 20684,
+      "sha256": "1f7f5852162d934b7a704f49332e71327af31d42d9b3d162a86be73797976b64",
+      "exact": true
+    }
+  ],
+  "new_tests_authored": 2,
+  "new_tests_executed_by_reviewer": 0,
+  "child_manifest_verified": true,
+  "child_payload_copy_exact": true,
+  "checks": {
+    "source_and_diff_read": "PERFORMED",
+    "actual_manifest_payload_source_sha_checks": "PASS",
+    "critical_regions_exact": "PASS",
+    "compiler": "NOT_RUN",
+    "cargo": "NOT_RUN",
+    "tests": "NOT_RUN",
+    "sqlite_fixture": "NOT_RUN",
+    "http_browser_native": "NOT_RUN",
+    "root_or_product_mutations": 0
+  },
+  "proof_boundary": "Source-level ownership review only; not compiler/type/runtime PASS. Two authored regressions remain NOT_RUN. No finite join latency for blocked OS/SQLite calls, all concurrent interleavings, physical/RSS/whole-suite compatibility, renderer, Clippy or manufacturer parity is proven. Already delivered bytes cannot be retracted by later supervisor failure. No broader full-suite audit was performed."
+}

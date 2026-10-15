@@ -673,7 +673,7 @@ async fn http_mode(enabled: bool, listen_ip: &str) -> anyhow::Result<()> {
             .await?;
         ensure!(legacy["result"]["isError"] == false);
         ensure!(
-            legacy["result"]["structuredContent"]
+            legacy["result"]["structuredContent"]["crawls"]
                 .as_array()
                 .context("actual legacy crawl list")?
                 .is_empty()

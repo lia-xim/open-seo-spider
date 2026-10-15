@@ -15,7 +15,7 @@ use std::{
     path::PathBuf,
     sync::{
         Arc, Mutex,
-        atomic::{AtomicU64, AtomicUsize, Ordering},
+        atomic::{AtomicBool, AtomicU64, AtomicUsize, Ordering},
     },
     time::{Duration, Instant},
 };
@@ -128,12 +128,30 @@ pub(super) struct ExportStats {
 }
 struct Task {
     stop: Stop,
-    join: tokio::task::JoinHandle<()>,
+    worker: tokio::sync::Mutex<Worker>,
+    supervisor: Mutex<Option<Arc<Supervisor>>>,
+    supervisor_failure: Mutex<Option<String>>,
+    finished: AtomicBool,
+    failed: AtomicBool,
+}
+struct Worker {
+    join: Option<tokio::task::JoinHandle<Result<Completion, Failure>>>,
+    completion: Option<oneshot::Sender<Result<Completion, Failure>>>,
+    terminal: Option<WorkerObservation>,
+}
+#[derive(Clone, Copy)]
+struct WorkerObservation {
+    completion_lost: bool,
+}
+struct Supervisor {
+    join: tokio::sync::Mutex<Option<tokio::task::JoinHandle<Result<(), Failure>>>>,
 }
 #[derive(Default)]
 struct Tasks {
     closed: bool,
-    running: HashMap<u64, Task>,
+    poisoned: bool,
+    running: HashMap<u64, Arc<Task>>,
+    first_failure: Option<String>,
 }
 struct RegistryInner {
     tasks: Mutex<Tasks>,
@@ -157,7 +175,89 @@ impl Default for ExportRegistry {
         }))
     }
 }
+fn slot_lock<T>(slot: &Mutex<T>) -> std::sync::MutexGuard<'_, T> {
+    // These slots only protect handle publication/diagnostics, never source facts.
+    slot.lock()
+        .unwrap_or_else(std::sync::PoisonError::into_inner)
+}
+fn mark_failed(task: &Task, counters: &Counters) {
+    if !task.failed.swap(true, Ordering::SeqCst) {
+        counters.failed.fetch_add(1, Ordering::SeqCst);
+    }
+}
+fn finish_active(task: &Task, counters: &Counters) {
+    // Call only after the actual worker has been joined. Normal supervision also
+    // retains the existing BodyDone/stopped condition before calling this.
+    if !task.finished.swap(true, Ordering::SeqCst) {
+        counters.active.fetch_sub(1, Ordering::SeqCst);
+        counters.drained.notify_waiters();
+    }
+}
+fn record_supervisor_error(task: &Task, counters: &Counters, tasks: &mut Tasks, message: String) {
+    task.stop.cancel();
+    mark_failed(task, counters);
+    slot_lock(&task.supervisor_failure).get_or_insert_with(|| message.clone());
+    tasks.first_failure.get_or_insert(message);
+}
+async fn observe_worker(
+    task: &Task,
+    counters: &Counters,
+    forced_failure: Option<Failure>,
+) -> Result<WorkerObservation, Failure> {
+    let mut worker = task.worker.lock().await;
+    if let Some(observed) = worker.terminal {
+        return Ok(observed);
+    }
+    let handle = worker.join.as_mut().ok_or_else(|| {
+        Failure::new(
+            "sitemap_read_failure",
+            "CSV worker has neither retained join nor observation",
+        )
+    })?;
+    // Await by reference: cancellation of supervisor/drain releases the mutex,
+    // but the actual blocking handle remains in the shared record.
+    let result = handle.await;
+    worker.join.take();
+    counters.joined.fetch_add(1, Ordering::SeqCst);
+    let mut result = result.unwrap_or_else(|error| {
+        Err(Failure::new(
+            "sitemap_read_failure",
+            format!("CSV blocking producer failed: {error}"),
+        ))
+    });
+    if result.is_ok() {
+        if let Some(failure) = forced_failure {
+            result = Err(failure);
+        }
+    }
+    if result.is_err() {
+        mark_failed(task, counters);
+    }
+    let completion_lost = worker
+        .completion
+        .take()
+        .is_none_or(|sender| sender.send(result).is_err());
+    let observed = WorkerObservation { completion_lost };
+    worker.terminal = Some(observed);
+    Ok(observed)
+}
 impl ExportRegistry {
+    fn lock_tasks(&self) -> std::sync::MutexGuard<'_, Tasks> {
+        match self.0.tasks.lock() {
+            Ok(state) => state,
+            Err(poisoned) => {
+                // Ownership must remain drainable even after a bookkeeping
+                // panic. Close admission and retain an explicit sticky error.
+                let mut state = poisoned.into_inner();
+                state.closed = true;
+                state.poisoned = true;
+                state
+                    .first_failure
+                    .get_or_insert_with(|| "CSV registry lock poisoned".into());
+                state
+            }
+        }
+    }
     #[cfg(test)]
     pub(super) fn snapshot(&self) -> ExportStats {
         let s = &self.0.counters;
@@ -177,40 +277,85 @@ impl ExportRegistry {
         }
     }
     pub(super) async fn shutdown_and_drain(&self) -> anyhow::Result<()> {
-        // Stop admission and take every coordinator under one lock. Await no
-        // mutex guard; each coordinator retains/awaits its actual blocking worker.
+        // Snapshot shared ownership under admission lock. A canceled/concurrent
+        // drain can never take or detach either actual handle.
         let tasks = {
-            let mut state = self
-                .0
-                .tasks
-                .lock()
-                .map_err(|_| anyhow::anyhow!("CSV registry lock poisoned"))?;
+            let mut state = self.lock_tasks();
             state.closed = true;
             for task in state.running.values() {
                 task.stop.cancel();
             }
-            std::mem::take(&mut state.running)
+            state
+                .running
+                .iter()
+                .map(|(id, task)| (*id, task.clone()))
+                .collect::<Vec<_>>()
         };
         let mut failures = Vec::new();
-        for (_, task) in tasks {
-            if let Err(error) = task.join.await {
+        for (id, task) in tasks {
+            if let Err(error) = self.finish_task(id, &task).await {
                 failures.push(error.to_string());
             }
         }
-        // A concurrent caller may have taken the handles first. It must not
-        // make another drain report success while that caller is still joining.
-        loop {
-            let notified = self.0.counters.drained.notified();
-            if self.0.counters.active.load(Ordering::SeqCst) == 0 {
-                break;
-            }
-            notified.await;
+        let state = self.lock_tasks();
+        if let Some(message) = &state.first_failure {
+            failures.push(message.clone());
+        }
+        if !state.running.is_empty() {
+            failures.push("CSV drain retains an unobserved task".into());
+        }
+        if self.0.counters.active.load(Ordering::SeqCst) != 0
+            || self.0.counters.joined.load(Ordering::SeqCst)
+                != self.0.counters.started.load(Ordering::SeqCst)
+        {
+            failures.push("CSV drain worker accounting is incomplete".into());
         }
         anyhow::ensure!(
             failures.is_empty(),
             "CSV supervisor drain failed: {}",
             failures.join("; ")
         );
+        Ok(())
+    }
+    async fn finish_task(&self, id: u64, task: &Arc<Task>) -> anyhow::Result<()> {
+        let supervisor = slot_lock(&task.supervisor).clone();
+        if let Some(supervisor) = &supervisor {
+            let mut supervisor_join = supervisor.join.lock().await;
+            if let Some(handle) = supervisor_join.as_mut() {
+                let result = handle.await;
+                supervisor_join.take();
+                let message = match result {
+                    Ok(Ok(())) => None,
+                    Ok(Err(error)) => Some(format!("CSV supervisor failed: {error}")),
+                    Err(error) => Some(format!("CSV supervisor failed to join: {error}")),
+                };
+                if let Some(message) = message {
+                    let mut state = self.lock_tasks();
+                    record_supervisor_error(task, &self.0.counters, &mut state, message);
+                }
+            }
+        } else {
+            let mut state = self.lock_tasks();
+            record_supervisor_error(
+                task,
+                &self.0.counters,
+                &mut state,
+                "CSV registered task has no retained supervisor slot".into(),
+            );
+        }
+        // Do not hold the supervisor slot while waiting for a worker. Both
+        // shared slots remain recoverable if this drain is canceled here.
+        let forced_failure = slot_lock(&task.supervisor_failure)
+            .as_ref()
+            .map(|message| Failure::new("sitemap_read_failure", message));
+        observe_worker(task, &self.0.counters, forced_failure).await?;
+        finish_active(task, &self.0.counters);
+        anyhow::ensure!(
+            supervisor.is_some(),
+            "CSV supervisor observation is unavailable; worker joined but task retained"
+        );
+        // Both actual handles have been observed, including the aborted case.
+        self.lock_tasks().running.remove(&id);
         Ok(())
     }
     pub(super) fn response_build_fault(&self) -> bool {
@@ -273,30 +418,48 @@ impl ExportRegistry {
         &self,
         producer: impl FnOnce(ProducerPorts<C>) -> Result<Completion, Failure> + Send + 'static,
     ) -> Result<PendingExport<C>, Failure> {
-        let mut state = self
-            .0
-            .tasks
-            .lock()
-            .map_err(|_| Failure::new("sitemap_read_failure", "CSV registry lock poisoned"))?;
+        let mut state = self.lock_tasks();
+        if state.poisoned {
+            return Err(Failure::new(
+                "sitemap_read_failure",
+                "CSV registry lock poisoned",
+            ));
+        }
         if state.closed {
             return Err(Failure::new(
                 "sitemap_export_cancelled",
                 "CSV export service is shutting down",
             ));
         }
-        // Reap only already-completed coordinators; each has already joined its
-        // worker. This keeps completed request bookkeeping bounded between starts.
+        // Observe already-finished supervisor handles without taking pending
+        // handles. Normal completed jobs remain bounded between starts; failed
+        // supervisors with an unobserved worker stay owned for shutdown recovery.
         let completed: Vec<_> = state
             .running
             .iter()
-            .filter(|(_, task)| task.join.is_finished())
-            .map(|(id, _)| *id)
-            .collect();
-        for id in completed {
-            if let Some(task) = state.running.remove(&id) {
-                if let Some(Err(error)) = task.join.now_or_never() {
-                    tracing::error!(%error, "CSV completed supervisor failed");
+            .filter_map(|(id, task)| {
+                let supervisor = slot_lock(&task.supervisor).clone()?;
+                let mut joined = supervisor.join.try_lock().ok()?;
+                let handle = joined.as_mut()?;
+                if !handle.is_finished() {
+                    return None;
                 }
+                let result = (&mut *handle).now_or_never()?;
+                joined.take();
+                Some((*id, task.clone(), result))
+            })
+            .collect();
+        for (id, task, result) in completed {
+            let message = match result {
+                Ok(Ok(())) => None,
+                Ok(Err(error)) => Some(format!("CSV supervisor failed: {error}")),
+                Err(error) => Some(format!("CSV supervisor failed to join: {error}")),
+            };
+            if let Some(message) = message {
+                record_supervisor_error(&task, &self.0.counters, &mut state, message);
+            }
+            if task.finished.load(Ordering::SeqCst) {
+                state.running.remove(&id);
             }
         }
         let started_at = Instant::now();
@@ -317,7 +480,11 @@ impl ExportRegistry {
         let runtime = tokio::runtime::Handle::current();
         self.0.counters.started.fetch_add(1, Ordering::SeqCst);
         self.0.counters.active.fetch_add(1, Ordering::SeqCst);
+        let (start, started) = oneshot::channel::<()>();
         let worker = tokio::task::spawn_blocking(move || {
+            started.blocking_recv().map_err(|_| {
+                Failure::new("sitemap_read_failure", "CSV start admission canceled")
+            })?;
             producer(ProducerPorts {
                 registry,
                 stop: worker_stop,
@@ -328,29 +495,38 @@ impl ExportRegistry {
             })
         });
         let counters = self.0.counters.clone();
-        let coordinator_stop = stop.clone();
+        let task = Arc::new(Task {
+            stop: stop.clone(),
+            worker: tokio::sync::Mutex::new(Worker {
+                join: Some(worker),
+                completion: Some(completion),
+                terminal: None,
+            }),
+            supervisor: Mutex::new(None),
+            supervisor_failure: Mutex::new(None),
+            finished: AtomicBool::new(false),
+            failed: AtomicBool::new(false),
+        });
+        let supervised = task.clone();
         let limits = self.0.limits;
         let join = tokio::spawn(async move {
             supervise(
-                worker,
-                coordinator_stop,
+                supervised,
                 updates,
                 body_done_result,
-                completion,
                 counters,
                 limits,
                 started_at,
             )
-            .await;
+            .await
         });
+        *slot_lock(&task.supervisor) = Some(Arc::new(Supervisor {
+            join: tokio::sync::Mutex::new(Some(join)),
+        }));
         let id = self.0.next.fetch_add(1, Ordering::SeqCst);
-        state.running.insert(
-            id,
-            Task {
-                stop: stop.clone(),
-                join,
-            },
-        );
+        state.running.insert(id, task);
+        // All handles are now reachable under the same admission/closing lock.
+        let _ = start.send(());
         Ok(PendingExport {
             ready: ready_result,
             body: Some(BodyState {
@@ -442,16 +618,14 @@ impl<C> PendingExport<C> {
 }
 
 async fn supervise(
-    mut worker: tokio::task::JoinHandle<Result<Completion, Failure>>,
-    stop: Stop,
+    task: Arc<Task>,
     mut progress: watch::Receiver<Progress>,
     mut body_done: watch::Receiver<bool>,
-    completion: oneshot::Sender<Result<Completion, Failure>>,
     counters: Arc<Counters>,
     limits: Limits,
     started_at: Instant,
-) {
-    let mut completion = Some(completion);
+) -> Result<(), Failure> {
+    let stop = task.stop.clone();
     let mut stop_rx = stop.changed.subscribe();
     let mut joined = false;
     let mut stopped = *stop_rx.borrow();
@@ -470,14 +644,10 @@ async fn supervise(
         };
         tokio::select! {
             biased;
-            result = &mut worker, if !joined => {
+            observed = observe_worker(&task, &counters, None), if !joined => {
+                let observed = observed?;
                 joined = true;
-                counters.joined.fetch_add(1, Ordering::SeqCst);
-                let result = result.unwrap_or_else(|error| Err(Failure::new("sitemap_read_failure", format!("CSV blocking producer failed: {error}"))));
-                if result.is_err() { counters.failed.fetch_add(1, Ordering::SeqCst); }
-                if let Some(sender) = completion.take() {
-                    if sender.send(result).is_err() { stop.cancel(); stopped = true; }
-                }
+                if observed.completion_lost { stop.cancel(); stopped = true; }
             }
             change = body_done.changed(), if !body_finished => {
                 if change.is_err() || *body_done.borrow() {
@@ -491,8 +661,8 @@ async fn supervise(
         }
     }
     // Every path leaves only after the actual blocking worker has been joined.
-    counters.active.fetch_sub(1, Ordering::SeqCst);
-    counters.drained.notify_waiters();
+    finish_active(&task, &counters);
+    Ok(())
 }
 
 async fn receive_completion(
@@ -1138,3 +1308,7 @@ impl ExportRegistry {
 #[cfg(test)]
 #[path = "sitemap_csv_stream_sink_tests.rs"]
 mod sink_tests;
+
+#[cfg(test)]
+#[path = "sitemap_csv_stream_lifecycle_tests.rs"]
+mod lifecycle_tests;

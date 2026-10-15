@@ -1,0 +1,258 @@
+   Compiling open-seo-spider-core v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\sitemap-compile-repair-source-v3\crates\core)
+   Compiling open-seo-spider v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\sitemap-compile-repair-source-v3\crates\app)
+    Finished `test` profile [unoptimized] target(s) in 50.91s
+     Running unittests src\main.rs (E:\CodexWork\open-seo-spider-01a12ac3-20261013\cargo-target\debug\deps\open_seo_spider-c74846697356f597.exe)
+
+running 220 tests
+test analysis::tests::bookmark_findings_require_captured_target_absence_and_remain_deduplicated ... ok
+test analysis::tests::canonical_cycles_and_unobserved_targets_have_distinct_evidence ... ok
+test analysis::tests::canonical_language_review_requires_self_hreflang_facts_on_both_documents ... ok
+test analysis::tests::complete_reciprocal_pagination_with_anchors_has_no_pagination_diagnostics ... ok
+test analysis::tests::deduplication_preserves_additional_relationship_target_evidence ... ok
+test analysis::tests::disabled_legacy_and_incomplete_bookmark_targets_never_become_missing ... ok
+test analysis::tests::dom_review_issues_use_shared_core_rules_and_do_not_invent_legacy_absence ... ok
+test analysis::tests::existing_report_issues_are_not_emitted_twice_and_partial_scope_is_explicit ... ok
+test analysis::tests::graph_resolves_final_alias_prefers_direct_fetch_and_excludes_failed_sources ... ok
+test analysis::tests::graph_self_links_do_not_disqualify_crawl_bounded_orphan_candidates ... ok
+test analysis::tests::graph_separates_occurrences_resources_and_followable_rank ... ok
+test analysis::tests::header_relationships_on_pdf_documents_receive_target_and_return_checks ... ok
+test analysis::tests::hreflang_checks_conflicts_self_and_fetched_return_links ... ok
+test analysis::tests::hreflang_cluster_and_return_labels_compare_declarations_not_html_language ... ok
+test analysis::tests::hreflang_profile_accepts_registered_language_script_region_and_default ... ok
+test analysis::tests::html_and_http_conflicts_are_distinct_from_same_target_declarations ... ok
+test analysis::tests::incomplete_capture_never_proves_absent_return_or_anchor_declarations ... ok
+test analysis::tests::jsonld_reports_nested_type_facts_without_claiming_validation ... ok
+test analysis::tests::metadata_self_identity_uses_final_and_rendered_document_addresses ... ok
+test analysis::tests::pagerank_handles_empty_dangling_and_nofollow_graphs ... ok
+test analysis::tests::pagination_distinguishes_bad_captured_targets_from_unknown_targets ... ok
+test analysis::tests::pagination_self_canonicalization_anchor_and_reciprocity_have_clear_severities ... ok
+test analysis::tests::redirected_relationship_target_keeps_initial_and_failed_final_response_distinct ... ok
+test analysis::tests::relationship_targets_keep_initial_redirect_and_noindex_facts ... ok
+test analysis::tests::security_distinguishes_http_navigation_and_resources ... ok
+test analysis::tests::target_failed_blocked_and_status_unknown_are_separate_states ... ok
+test analysis::tests::target_scoped_robots_and_graph_nofollow_use_the_selected_agent ... ok
+test analysis::tests::unknown_rendered_response_never_proves_absent_return_declarations ... ok
+test analysis::tests::x_default_is_optional_and_conflicting_fallbacks_have_explicit_evidence ... ok
+test comparison_app::tests::bounded_reader_refuses_plus_one_without_unbounded_read ... ok
+test comparison_app::tests::bundle_wrapper_metadata_and_tampered_typed_report_are_validated ... ok
+test comparison_app::tests::cli_bundle_overflow_happens_before_either_destination_is_reserved ... ok
+test comparison_app::tests::cli_csv_budget_overflow_also_happens_before_json_or_csv_reservation ... ok
+test comparison_app::tests::cli_json_csv_roundtrip_retains_unknown_states_and_declared_file_origin ... ok
+test comparison_app::tests::cli_opt_in_exports_complete_typed_reports_and_compared_fact_csv ... ok
+test comparison_app::tests::cli_opt_in_refuses_existing_destination_without_changing_its_bytes ... ok
+test comparison_app::tests::csv_escapes_formulas_quotes_commas_newlines_and_preserves_original_values ... ok
+test comparison_app::tests::default_request_serialization_is_byte_identical_for_existing_mcp_normalization ... ok
+test comparison_app::tests::default_response_is_byte_identical_to_prior_two_field_contract ... ok
+test comparison_app::tests::exact_output_budget_allows_boundary_and_refuses_next_byte ... ok
+test comparison_app::tests::existing_destination_is_refused_and_original_bytes_survive ... ok
+test comparison_app::tests::explicit_zero_generation_and_optional_null_are_retained_without_invention ... ok
+test comparison_app::tests::imported_typed_report_is_not_promoted_to_raw_file_fidelity_or_known_capture ... ok
+test comparison_app::tests::incomplete_capture_is_retained_even_when_selected_text_projection_is_disabled ... ok
+test comparison_app::tests::mappings_preserve_original_report_urls_and_do_not_project_the_complete_bundle ... ok
+test comparison_app::tests::mutated_report_or_descriptor_cannot_be_bound_as_the_compared_original ... ok
+test comparison_app::tests::original_option_is_strict_boolean_and_default_stays_false ... ok
+test comparison_app::tests::oversized_structured_failure_becomes_explicit_budget_error_and_small_errors_keep_all_details ... ok
+test comparison_app::tests::strict_saved_request_rejects_unknown_and_invalid_nested_arguments ... ok
+test comparison_app::tests::structured_error_retains_every_collision_occurrence ... ok
+test comparison_app::tests::timestamp_only_does_not_change_compared_page_but_complete_report_hash_changes ... ok
+test comparison_app::tests::whole_envelope_fits_exact_boundary_and_refuses_one_byte_less_without_partial_success ... ok
+test comparison_app::tests::whole_reports_retain_all_loaded_fields_and_independent_hash_byte_binding ... ok
+test content_cohort::tests::exact_selection_identity_and_generation_are_not_silently_repaired ... ok
+test content_cohort::tests::filtering_all_rows_is_explicit_and_preserves_excluded_identities ... ok
+test content_cohort::tests::legacy_absence_remains_missing_with_unknown_pairs_and_metadata_only_inventory ... ok
+test content_cohort::tests::pending_selected_rows_never_supply_parent_capture_text ... ok
+test content_cohort::tests::request_unknown_fields_are_rejected_and_typed_snapshot_hash_is_stable ... ok
+test generation_export::tests::generation_atomic_concurrent_publication_has_one_whole_winner_and_cleans_links ... ok
+test generation_export::tests::generation_bounded_reader_rejects_exact_plus_one_and_nonregular_input ... ok
+test generation_export::tests::generation_cli_requires_all_explicit_paths_and_rejects_unknown_flags ... ok
+test generation_export::tests::generation_cli_saved_inputs_unchanged_complete_zip_and_no_overwrite ... ok
+test generation_export::tests::generation_invalid_options_precede_report_io_and_leave_no_output ... ok
+test mcp::generation::tests::generation_mcp_actual_binary_roundtrip_is_single_encoded_hash_bound_and_readonly ... ok
+test mcp::generation::tests::generation_mcp_api_error_body_is_bounded_and_explicit ... ok
+test mcp::generation::tests::generation_mcp_corrupt_or_over_budget_responses_never_return_binary ... ok
+test mcp::generation::tests::generation_mcp_maximum_binary_single_encoding_fits_complete_transport_budget ... ok
+test mcp::generation::tests::generation_mcp_over_budget_result_preserves_ordinary_request_id ... ok
+test mcp::generation::tests::generation_mcp_strict_preflight_makes_zero_api_requests ... ok
+test mcp::saved_comparison::tests::api_body_can_fit_while_opt_in_complete_rpc_is_refused_without_a_first_n_success ... ok
+test mcp::saved_comparison::tests::bundle_depth_preflight_ignores_container_glyphs_inside_quoted_values ... ok
+test mcp::saved_comparison::tests::bundle_depth_preflight_refuses_unclosed_strings_and_wrong_or_unclosed_containers ... ok
+test mcp::saved_comparison::tests::bundle_depth_preflight_tracks_escaped_quotes_and_backslashes ... ok
+test mcp::saved_comparison::tests::bundle_missing_unrequested_or_tampered_report_is_an_explicit_mcp_error ... ok
+test mcp::saved_comparison::tests::default_api_parser_retains_its_existing_recursion_limit ... ok
+test mcp::saved_comparison::tests::default_rpc_envelope_is_exactly_preserved_without_opt_in ... ok
+test mcp::saved_comparison::tests::descriptor_is_read_only_strict_and_additional_to_existing_tools ... FAILED
+test mcp::saved_comparison::tests::mcp_bundle_native_f64_fact_preserves_original_bits_and_core_hash ... ok
+test mcp::saved_comparison::tests::mcp_bundle_worker_pipeline_accepts_api_depth256_and_refuses257_on_small_caller_stack ... ok
+test mcp::saved_comparison::tests::mcp_bundle_wrappers_do_not_reject_an_accepted_standalone_report_depth ... ok
+test mcp::saved_comparison::tests::nonstructured_api_error_is_explicit_adapter_failure ... ok
+test mcp::saved_comparison::tests::opt_in_bundle_depth_256_fits_and_257_is_refused_before_deserialization ... ok
+test mcp::saved_comparison::tests::opt_in_mcp_returns_complete_validated_reports_and_retains_read_only_descriptor ... ok
+test mcp::saved_comparison::tests::opt_in_parser_still_validates_json_grammar_and_requires_document_end ... ok
+test mcp::saved_comparison::tests::opt_in_wrong_boolean_and_extra_argument_fail_before_loopback_io ... ok
+test mcp::saved_comparison::tests::structured_api_collision_failure_is_retained_in_mcp_result ... ok
+test mcp::saved_comparison::tests::unrepresentable_request_id_returns_bounded_null_id_protocol_failure ... ok
+test mcp::saved_comparison::tests::whole_rpc_budget_counts_actual_id_text_duplication_and_json_escaping ... ok
+test mcp::sitemap_argument_tests::sitemap_tool_is_readonly_and_wrong_argument_types_fail_before_api_io ... ok
+test mcp::sitemap_argument_tests::sitemap_tool_transports_both_cursor_roles_and_page_limit_in_actual_local_get ... ok
+test mcp::sitemap_argument_tests::sitemap_tool_validates_separate_cursor_roles_before_api_io ... ok
+test mcp::sitemap_findings::tests::findings_mcp_actual_http_body_inclusive_budget_and_bounded_error_status ... ok
+test mcp::sitemap_findings::tests::findings_mcp_actual_stale_api_error_preserves_status_and_typed_error_once ... ok
+test mcp::sitemap_findings::tests::findings_mcp_actual_store_http_page_export_descriptor_and_all_seven_filters ... ok
+test mcp::sitemap_findings::tests::findings_mcp_entire_wire_wrapper_accepts_exact_eight_mib_and_rejects_plus_one ... ok
+test mcp::sitemap_findings::tests::findings_mcp_strict_schema_types_domains_cursor_and_rpc_id_fail_before_io ... ok
+test mcp::sitemap_findings::tests::findings_stdio_actual_active_oversize_open_producer_closes_without_suffix_dispatch ... ok
+test mcp::sitemap_findings::tests::findings_stdio_cancel_after_pending_and_busy_still_drops_actual_http_future ... ok
+test mcp::sitemap_findings::tests::findings_stdio_cancelled_frame_read_preserves_actual_prefix_and_remaining_sentinel_cap ... ok
+test mcp::sitemap_findings::tests::findings_stdio_eof_cancels_actual_http_request_without_result_or_detached_worker ... ok
+test mcp::sitemap_findings::tests::findings_stdio_partial_following_frame_survives_actual_response_and_replays_once ... ok
+test mcp::sitemap_findings::tests::postfix_tests::findings_postfix_actual_sixty_one_second_http_response_succeeds_while_legacy_times_out ... ok
+test mcp::sitemap_findings::tests::postfix_tests::findings_postfix_stdio_exact_utf8_rpc_id_and_plus_one_preserve_following_frame ... ok
+test mcp::stdio_tests::stdio_empty_input_and_final_eof_notification_emit_no_response ... ok
+test mcp::stdio_tests::stdio_exact_eight_mib_line_and_following_request_are_dispatched ... ok
+test mcp::stdio_tests::stdio_fragmented_crlf_notification_invalid_json_and_final_eof_are_preserved ... ok
+test mcp::stdio_tests::stdio_oversized_terminated_frame_never_dispatches_prefix_or_following_frame ... ok
+test mcp::stdio_tests::stdio_plus_one_without_delimiter_rejects_with_open_producer_and_closes ... ok
+test mcp::tests::advertised_resource_argument_shapes_reject_before_api_io ... ok
+test mcp::tests::only_loopback_bridge ... ok
+test mcp::tests::protocol_negotiation_and_errors ... ok
+test resource_export::tests::csv_retains_quotes_newlines_unicode_and_empty_fields ... ok
+test resource_export::tests::observed_formula_text_is_protected_without_changing_original_json ... ok
+test server::comparison::tests::active_statuses_refuse_retained_report_with_structured_conflict ... ok
+test server::comparison::tests::bundle_flag_does_not_bypass_active_status_or_expected_generation_conflicts ... ok
+test server::comparison::tests::bundle_uses_same_stable_pair_after_both_sources_resume_and_change ... ok
+test server::comparison::tests::endpoint_default_omits_bundle_and_explicit_same_job_bundle_uses_one_revision ... ok
+test server::comparison::tests::imported_detached_bundle_retains_values_without_inventing_sql_or_generation_attestation ... ok
+test server::comparison::tests::imported_or_detached_report_is_declared_and_job_generation_not_sql_attested ... ok
+test server::comparison::tests::mismatched_generation_retains_expected_observed_and_side ... ok
+test server::comparison::tests::missing_report_is_conflict_and_not_empty_cohort ... ok
+test server::comparison::tests::same_job_pair_cannot_observe_two_different_expected_generations ... ok
+test server::comparison::tests::stable_native_and_imported_bindings_satisfy_actual_core_contract ... ok
+test server::comparison::tests::stable_partial_terminal_statuses_remain_comparable_saved_cohorts ... ok
+test server::explicit_sitemap_dto_regressions::create_dto_captures_original_explicit_duplicates_before_imported_sitemaps ... ok
+test server::explicit_sitemap_dto_regressions::create_import_only_dto_is_known_empty_while_saved_validation_remains_unknown ... ok
+test server::sitemap_csv_stream::sink_tests::cancelled_sink_retains_typed_cause_despite_unchanged_formatter_budget_label ... ok
+test server::sitemap_csv_stream::sink_tests::chunk_sink_keeps_positive_tail_for_exact_multiples_and_flush ... ok
+test server::sitemap_csv_stream::sink_tests::counting_hash_sink_counts_actual_sixty_four_mib_and_refuses_next_byte ... ok
+test server::sitemap_csv_stream::sink_tests::csv_first_count_pass_restores_actual_budget_cause_when_formatter_erases_io_source ... ok
+test server::sitemap_findings::tests::findings_actual_http_detached_report_is_explicitly_unavailable_without_fabricated_core_proof ... ok
+test server::sitemap_findings::tests::findings_actual_http_get_post_cursor_and_full_csv_share_saved_context_without_site_requests ... ok
+test server::sitemap_findings::tests::findings_actual_http_rejects_wrong_roles_changed_queries_unknown_fields_and_stale_app_generation ... ok
+test server::sitemap_findings_reads::tests::owned_read_actual_operation_errors_keep_shared_typed_failure_instead_of_generic_timeout ... ok
+test server::sitemap_findings_reads::tests::owned_read_actual_worker_panic_is_joined_and_classified_without_leaking_active ... ok
+test server::sitemap_findings_reads::tests::owned_read_completed_supervisors_are_actually_reaped_before_later_admission ... ok
+test server::sitemap_findings_reads::tests::owned_read_concurrent_drain_closes_admission_and_cancelling_one_drain_does_not_detach_worker ... ok
+test server::sitemap_findings_reads::tests::owned_read_default_success_is_delivered_after_actual_worker_drop_and_drain_joins_supervisor ... ok
+test server::sitemap_findings_reads::tests::owned_read_past_completion_notify_and_repeated_concurrent_drains_do_not_lose_wakeup ... ok
+test server::sitemap_findings_reads::tests::owned_read_request_drop_cancels_actual_control_and_drain_waits_until_blocking_worker_join ... ok
+test server::sitemap_findings_reads::tests::owned_read_supervisor_deadline_actually_expires_control_but_never_returns_before_worker_join ... ok
+test server::sitemap_findings_reads::tests::owned_read_worker_and_timer_ready_together_cannot_skip_immutable_deadline ... ok
+test server::sitemap_generation::tests::actual_saved_import_export_is_stable_hash_bound_and_readonly ... ok
+test server::sitemap_generation::tests::invalid_options_dates_empty_eligibility_and_bounds_have_exact_status_without_files ... ok
+test server::sitemap_processing_config_tests::create_dto_missing_or_null_source_profile_keeps_historical_configuration ... ok
+test server::sitemap_processing_config_tests::create_dto_preserves_source_work_limits_without_widening_page_bodies ... ok
+test server::sitemap_processing_config_tests::create_dto_rejects_invalid_or_unknown_source_profile_fields ... ok
+test server::sitemaps::tests::actual_legacy_and_detached_report_catalogs_remain_unavailable ... ok
+test server::sitemaps::tests::full_csv_uses_same_snapshot_filter_safe_cells_and_exact_original_typed_rows ... ok
+test server::sitemaps::tests::known_empty_is_available_without_claiming_complete_source_cohort ... ok
+test server::sitemaps::tests::matching_original_memberships_are_filtered_before_bounded_cursor_paging ... ok
+test server::sitemaps::tests::native_inventory_is_full_validated_readonly_original_source_data ... ok
+test server::sitemaps::tests::rich_read_window_tests::actual_rich_handler_raw_and_saved_page_cursors_remain_independent_and_role_checked ... ok
+test server::sitemaps::tests::rich_read_window_tests::actual_rich_inventory_handler_matches_full_oracle_and_fresh_token_exports_csv ... ok
+test server::sitemaps::tests::rich_read_window_tests::rich_core_typed_errors_preserve_existing_http_codes_and_corruption_remains_failure ... ok
+test server::sitemaps::tests::streaming_tests::actual_csv_stream_error_priority_preserves_existing_statuses_and_token_roles ... ok
+test server::sitemaps::tests::streaming_tests::actual_csv_stream_matches_buffered_oracle_all_stored_exact_filters ... ok
+test server::sitemaps::tests::streaming_tests::actual_csv_stream_pins_original_tx_while_later_writer_changes_generation ... ok
+test server::sitemaps::tests::streaming_tests::actual_csv_stream_rejects_full_tail_source_report_and_inventory_corruption_before_ready ... FAILED
+test server::sitemaps::tests::streaming_tests::actual_csv_stream_second_pass_failure_and_response_build_failure_drain ... ok
+test server::sitemaps::tests::streaming_tests::actual_csv_stream_selected_presence_and_exact_parent_guards ... ok
+test server::sitemaps::tests::streaming_tests::actual_csv_stream_shutdown_cancels_and_drains_active_exports ... ok
+test server::sitemaps::tests::streaming_tests::actual_csv_stream_stales_a_marker_pending_and_terminal_generation_context ... ok
+test server::sitemaps::tests::streaming_tests::actual_http_csv_client_disconnect_cancels_and_joins_producer ... ok
+test server::sitemaps::tests::streaming_tests::actual_http_csv_idle_and_absolute_deadline_close_body_and_drain ... ok
+test server::sitemaps::tests::streaming_tests::actual_http_csv_large_body_uses_bounded_chunks_and_backpressure ... ok
+test server::sitemaps::tests::streaming_tests::actual_http_csv_tail_is_withheld_until_worker_join_and_tx_close ... ok
+test server::sitemaps::tests::streaming_tests::actual_inventory_snapshot_token_opens_same_tx_two_pass_csv ... ok
+test server::tests::direct_seed_raw_controls_cannot_create_ambiguous_import_targets ... ok
+test server::tests::encoded_upload_limits_are_checked_before_decode ... ok
+test server::tests::ui_config_aliases_do_not_introduce_a_url_limit ... ok
+test server::tests::uploaded_list_config_retains_occurrences_and_rejects_forged_targets ... ok
+test server::tests::xml_index_entries_prepare_sitemap_discovery_without_page_seeds ... ok
+test sitemap_findings::tests::finding_actual_csv_header_and_data_json_io_budget_words_keep_real_error_types ... ok
+test sitemap_findings::tests::finding_actual_csv_preserves_typed_writer_causes_and_cancel_not_all_io_is_413 ... ok
+test sitemap_findings::tests::finding_actual_page_export_raw_roles_and_job_offline_target_are_distinct ... ok
+test sitemap_findings::tests::finding_actual_shared_csv_two_pass_schema_full_payload_and_readonly_receipts_match ... ok
+test sitemap_findings::tests::finding_actual_sparse_page_continuations_keep_query_hash_while_limits_change ... ok
+test sitemap_findings::tests::finding_actual_stale_context_and_app_sql_mismatch_fail_without_writer_output ... ok
+test sitemap_findings::tests::finding_actual_unavailable_core_omits_export_and_rejects_csv_before_header ... ok
+test sitemap_findings::tests::finding_actual_unknown_history_zero_selected_rows_exports_one_scope_record_without_fake_finding ... ok
+test sitemap_findings::tests::finding_csv_human_formula_prefix_does_not_rewrite_full_typed_machine_payload ... ok
+test sitemap_findings::tests::finding_queries_strict_shape_domains_and_large_literal_selectors_preserve_core_contract ... ok
+test sitemap_findings::tests::finding_streaming_json_and_csv_resource_boundaries_are_inclusive_without_materialized_rows ... ok
+test sitemap_findings_cli::tests::findings_cli_actual_crawler_page_and_full_csv_are_same_context_beyond_two_hundred ... ok
+test sitemap_findings_cli::tests::findings_cli_actual_handle_request_exact_sixty_four_mib_and_sentinel ... ok
+test sitemap_findings_cli::tests::findings_cli_continuation_still_exports_full_selection_and_changed_context_refuses_all_outputs ... ok
+test sitemap_findings_cli::tests::findings_cli_invalid_query_precedes_database_and_preserves_existing_outputs ... ok
+test sitemap_findings_cli::tests::findings_cli_parser_requires_request_and_one_new_destination ... ok
+test sitemap_findings_cli::tests::findings_cli_second_publication_race_retains_complete_first_and_concurrent_winner ... ok
+test sitemap_findings_cli::tests::findings_cli_stage_cancel_and_json_budget_leave_no_final_or_temp_output ... FAILED
+test sitemap_findings_cli::tests::findings_cli_unknown_zero_source_keeps_context_and_unavailable_csv_publishes_nothing ... ok
+test sitemap_membership::tests::actual_context_only_task_change_stales_json_and_csv_tokens_without_rewriting_raw_catalog ... ok
+test sitemap_membership::tests::actual_derived_json_byte_cap_fails_atomically_and_smaller_visible_page_recovers ... ok
+test sitemap_membership::tests::actual_empty_legacy_and_incomplete_sources_keep_unknown_and_optional_cases_honest ... ok
+test sitemap_membership::tests::actual_saved_report_analysis_pages_are_independent_and_raw_csv_remains_exact ... ok
+test sitemap_membership::tests::actual_stored_lastmod_assessments_are_visible_entry_only_raw_preserving_and_read_only ... ok
+test sitemap_membership::tests::actual_stored_report_context_only_change_invalidates_raw_page_and_csv_tokens ... ok
+test sitemap_membership::tests::budget_calibration_json_and_csv_original_quote_amplification ... ok
+test sitemap_membership::tests::canonical_cursor_rejects_malformed_tampered_unknown_and_noncanonical_bytes ... ok
+test sitemap_membership::tests::csv_writer_is_exact_at_cap_rejects_plus_one_and_escapes_original_text ... ok
+test sitemap_membership::tests::cursor_pins_job_generation_config_revision_rolling_inheritance_and_filter ... ok
+test sitemap_membership::tests::export_and_continuation_roles_and_zero_sequence_are_not_interchangeable ... ok
+test sitemap_membership::tests::original_membership_filter_never_matches_policy_fetch_alias ... ok
+test sitemap_membership::tests::query_bounds_reject_without_clamping_or_alias_normalization ... ok
+test sitemap_membership::tests::rich_read_window_tests::actual_compact_lastmod_rows_and_context_match_full_oracle_and_csv_bytes ... ok
+test sitemap_membership::tests::rich_read_window_tests::actual_expected_state_precedes_invalid_row_and_token_job_filter_context_prechecks ... ok
+test sitemap_membership::tests::rich_read_window_tests::actual_old_profile_raw_page_and_export_tokens_parse_then_become_stale ... ok
+test sitemap_membership::tests::rich_read_window_tests::actual_rich_unknown_empty_and_incomplete_match_full_optional_evidence ... ok
+test sitemap_membership::tests::rich_read_window_tests::actual_rich_visible_lastmod_copy_hits_real_json_cap_and_smaller_page_recovers ... ok
+test sitemap_membership::tests::saved_page_cursor_has_a_distinct_bounded_role_and_ordinal_zero_is_valid ... ok
+test sitemap_membership::tests::source_context::actual_capture_unavailable_marker_restoration_stales_tokens_without_fake_empty_source ... ok
+test sitemap_membership::tests::source_context::actual_historical_source_none_remains_explicit_stable_and_readonly ... ok
+test sitemap_membership::tests::source_context::actual_selected_parent_source_context_keeps_records_links_and_historical_none_separate ... ok
+test sitemap_membership::tests::source_context::actual_source_a_only_restoration_stales_raw_page_and_csv_with_legacy_rows_unchanged ... ok
+test sitemap_membership::tests::source_context::actual_source_association_only_restoration_stales_raw_page_and_csv_without_new_capture ... ok
+test sitemap_raw_cli::tests::actual_raw_sitemap_cli_reads_unknown_history_and_refuses_existing_destination ... ok
+test sitemap_raw_cli::tests::actual_raw_sitemap_cli_rejects_invalid_request_before_database_or_output_creation ... ok
+test sitemap_raw_cli::tests::actual_raw_sitemap_cli_request_file_accepts_exact_cap_and_refuses_sentinel_byte ... ok
+test sitemap_raw_cli::tests::raw_sitemap_cli_parser_accepts_only_the_explicit_read_command_arguments ... ok
+
+failures:
+
+---- mcp::saved_comparison::tests::descriptor_is_read_only_strict_and_additional_to_existing_tools stdout ----
+
+thread 'mcp::saved_comparison::tests::descriptor_is_read_only_strict_and_additional_to_existing_tools' (22680) panicked at crates\app\src\mcp\saved_comparison_tests.rs:14:5:
+assertion `left == right` failed
+  left: 26
+ right: 25
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- server::sitemaps::tests::streaming_tests::actual_csv_stream_rejects_full_tail_source_report_and_inventory_corruption_before_ready stdout ----
+
+thread 'server::sitemaps::tests::streaming_tests::actual_csv_stream_rejects_full_tail_source_report_and_inventory_corruption_before_ready' (47184) panicked at crates\app\src\server\sitemaps_tests.rs:217:5:
+assertion `left == right` failed
+  left: ["9fd9c6c7-b397-4a45-adf8-fc098543bcc2.sqlite", "9fd9c6c7-b397-4a45-adf8-fc098543bcc2.sqlite-shm", "9fd9c6c7-b397-4a45-adf8-fc098543bcc2.sqlite-wal"]
+ right: ["9fd9c6c7-b397-4a45-adf8-fc098543bcc2.sqlite"]
+
+---- sitemap_findings_cli::tests::findings_cli_stage_cancel_and_json_budget_leave_no_final_or_temp_output stdout ----
+
+thread 'sitemap_findings_cli::tests::findings_cli_stage_cancel_and_json_budget_leave_no_final_or_temp_output' (44428) panicked at crates\app\src\sitemap_findings_cli_tests.rs:295:5:
+assertion failed: writer.write_all(b"").is_err()
+
+
+failures:
+    mcp::saved_comparison::tests::descriptor_is_read_only_strict_and_additional_to_existing_tools
+    server::sitemaps::tests::streaming_tests::actual_csv_stream_rejects_full_tail_source_report_and_inventory_corruption_before_ready
+    sitemap_findings_cli::tests::findings_cli_stage_cancel_and_json_budget_leave_no_final_or_temp_output
+
+test result: FAILED. 217 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 609.42s
+
+error: test failed, to rerun pass `-p open-seo-spider --bin open-seo-spider`

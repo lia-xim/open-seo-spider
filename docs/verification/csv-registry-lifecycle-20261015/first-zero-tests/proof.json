@@ -1,0 +1,46 @@
+{
+  "kind": "actual_csv_registry_lifecycle_two_focused_regressions_v1",
+  "result": "FAIL_CSV_LIFECYCLE_REGRESSIONS",
+  "recorded_at": "2026-10-15T02:39:20.538Z",
+  "source_inputs": 301,
+  "source_after_verified": true,
+  "source_handoff_sha256": "54f6fcb7106b7a897939b5abed204a7a5af9d2a7f7e84dcda8645ac5de085ddd",
+  "names": [
+    "server::sitemap_csv_stream::lifecycle_tests::actual_csv_supervisor_abort_and_body_drop_recover_actual_join_slots",
+    "server::sitemap_csv_stream::lifecycle_tests::actual_csv_cancelled_and_concurrent_drains_observe_both_retained_joins"
+  ],
+  "args": [
+    "test",
+    "-p",
+    "open-seo-spider",
+    "--locked",
+    "server::sitemap_csv_stream::lifecycle_tests",
+    "--",
+    "--test-threads=1"
+  ],
+  "pid": 47852,
+  "actual_cargo_close": {
+    "code": 0,
+    "signal": null
+  },
+  "spawn_error": null,
+  "failure": null,
+  "elapsed_ms": 732,
+  "log_sha256": "f79948c1776cc56243df99e10f6d49e543bf924a10218cf14f5114946412a406",
+  "summaries": [
+    {
+      "state": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    }
+  ],
+  "required_names_verified": false,
+  "full_workspace": "NOT_RUN",
+  "four_renderer_gates": "NOT_RUN",
+  "clippy": "NOT_RUN",
+  "official_sdk": "NOT_RUN",
+  "installed_runtime": "UNCHANGED_AB1",
+  "manufacturer_parity": "NOT_PROVEN",
+  "qualification": "Only two actual CSV lifecycle groups over301 exact input bytes. Real Crawler/SQLite/producer plus manually held post-completion worker. No hard disk/OS join deadline or full transport/platform/workspace acceptance."
+}

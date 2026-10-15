@@ -1,0 +1,57 @@
+{
+  "kind": "actual_mcp_file_wiring_focused_windows_v1",
+  "result": "FAIL_FOCUSED_WINDOWS_FILE_WIRING",
+  "recorded_at": "2026-10-15T02:35:04.226Z",
+  "source_commit": "fc25bd8ae08360afb93964bc866d50d3c77acb91",
+  "source_inputs": 300,
+  "source_after_verified": true,
+  "args": [
+    "test",
+    "-p",
+    "open-seo-spider",
+    "--locked",
+    "mcp::file_wiring_tests",
+    "--",
+    "--test-threads=1"
+  ],
+  "pid": 44568,
+  "actual_cargo_close": {
+    "code": 101,
+    "signal": null
+  },
+  "spawn_error": null,
+  "failure": null,
+  "elapsed_ms": 2540,
+  "log_sha256": "f555c94fc12182b86bd80dd3b170c4f932a8346c66fb0fa724e09d574f9ac9c8",
+  "summaries": [
+    {
+      "state": "FAILED",
+      "passed": 13,
+      "failed": 1,
+      "ignored": 0
+    }
+  ],
+  "required_names_verified": false,
+  "required_names": [
+    "file_tools_cli_opt_in_is_shared_by_serve_and_mcp",
+    "file_tools_cli_requires_an_explicit_value_and_preserves_other_commands",
+    "file_tools_inventory_is_disabled_by_default_and_declares_exact_five_when_enabled",
+    "file_tools_disabled_requests_never_reach_the_api",
+    "file_tools_api_address_retains_exact_loopback_and_default_fallback",
+    "file_tools_all_five_execute_locally_with_no_api_calls",
+    "file_tools_rpc_id_is_bounded_before_version_errors_or_any_write",
+    "file_tools_invalid_shapes_and_oversized_text_never_mutate",
+    "file_tools_actual_text_response_is_single_copy_and_whole_wire_bounded",
+    "file_tools_wire_guard_accepts_exact_physical_frame_and_rejects_plus_one",
+    "file_tools_actual_stdio_frames_share_opt_in_and_drain_on_eof",
+    "file_tools_stdio_output_error_still_awaits_registry_drain",
+    "file_tools_server_rejects_bad_root_and_nonloopback_before_data_directory",
+    "file_tools_http_opt_in_capabilities_inventory_and_dispatch_share_module"
+  ],
+  "unix_tests_executed": 0,
+  "wiring_tests_executed": 14,
+  "official_sdk": "NOT_RUN",
+  "installed_runtime_modified": false,
+  "manufacturer_parity": "NOT_PROVEN",
+  "qualification": "Focused actual Windows CLI/Bridge/HTTP/STDIO wiring tests only. Full parent workspace already has recorded failing regressions; this does not replace full workspace/Clippy/native SDK/HTTP/STDIO/platform/install gates."
+}

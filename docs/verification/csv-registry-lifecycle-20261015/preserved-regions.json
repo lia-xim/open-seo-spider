@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "kind": "source_only_csv_lifecycle_critical_region_equality",
+  "baseline": {
+    "manifest_sha256": "0ab151e4fd06f4603d8429bed4c784f7045e5c838bec378706d6c01bfaefb7bf",
+    "path": "crates/app/src/server/sitemap_csv_stream.rs",
+    "sha256": "a5e0999945ed914a5ef528a930c063ff976b9e4ddcc08343b30a01d84754be6e"
+  },
+  "candidate_sha256": "32a0d81b02b166373cf58122758fb879a4e7095d2816216961ca10cbb3139f7b",
+  "regions": [
+    {
+      "label": "producer ports and Ready/PendingExport",
+      "begin": "struct ProducerPorts<C> {",
+      "end": "async fn supervise(",
+      "before_sha256": "98a1955082b4b1ff9404f90295044f62d21af611c8ab3a606d7291984343adb9",
+      "after_sha256": "98a1955082b4b1ff9404f90295044f62d21af611c8ab3a606d7291984343adb9",
+      "bytes": 2171,
+      "before_start_byte": 11889,
+      "after_start_byte": 19166,
+      "exact": true
+    },
+    {
+      "label": "entire original completion, Body, formatting, producer and hooks tail",
+      "begin": "async fn receive_completion(",
+      "end": "original EOF before added private hook",
+      "before_sha256": "1f7f5852162d934b7a704f49332e71327af31d42d9b3d162a86be73797976b64",
+      "after_sha256": "1f7f5852162d934b7a704f49332e71327af31d42d9b3d162a86be73797976b64",
+      "bytes": 20684,
+      "before_start_byte": 16397,
+      "after_start_byte": 23201,
+      "exact": true
+    }
+  ],
+  "added_hook": "\n#[cfg(test)]\n#[path = \"sitemap_csv_stream_lifecycle_tests.rs\"]\nmod lifecycle_tests;\n",
+  "scope": "Only exact region equality; not a compile/test/runtime proof."
+}

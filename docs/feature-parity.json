@@ -6235,6 +6235,35 @@
   "last_verified_at": "2026-10-14T17:39:44.101Z",
   "current_work": [
     {
+      "id": "csv-registry-lifecycle-20261015",
+      "status": "PASS_TWO_DIRECTED_REAL_CSV_REGRESSIONS_FULL_WORKSPACE_OPEN",
+      "priority": 0,
+      "title_de": "CSV-Worker bei abgebrochenen und parallelen Shutdowns vollständig halten",
+      "summary_de": "Eine quellseitig bestätigte Lücke konnte nach Supervisorabbruch den tatsächlichen Blocking-Join verlieren und die Abrechnung hängen lassen. Registry, Worker und Supervisor behalten jetzt gemeinsame Join-Slots; abgebrochene oder gleichzeitige Drains nehmen keine laufenden Handles heraus. Zwei echte Crawler-/SQLite-/CSV-Regressionen bestehen. Produzenten-, Body-, Formatierungs- und Budgetregionen bleiben byteidentisch; vollständige Abnahme steht aus.",
+      "completed_acceptance_de": [
+        "Unabhängiger begrenzter Source-Review ohne bestätigte Befunde; beide kritischen Originalregionen mit2171 und20684 Bytes unabhängig bytegleich geprüft.",
+        "Zwei tatsächliche neue Regressionen bestehen: Supervisorabbruch samt Body-/Callerabbruch und abgebrochene/gleichzeitige Drains. Reale Blocking-Rückkehr wird kontrolliert gehalten; vor Freigabe bleibt Drain nachweislich wartend, danach sind beide tatsächlichen Joins beobachtet, Registry leer und Abrechnung vollständig.",
+        "Ersten irreführenden Cargo-Exit0 mit null ausgewählten Tests durch Namens-/Anzahlguard als FAIL verworfen; ursprüngliche Protokolle erhalten. Bytegleicher Mtime-Refresh nach Windows-Copy erzwingt tatsächliche Kompilierung und grüne zweite Ausführung."
+      ],
+      "pending_acceptance_de": [
+        "Kombinierten vollständigen Workspace einschließlich aller bestehenden CSV- und Findings-Kompatibilitätsfälle, vier eigener Renderer-Gates, Format und Clippy bestehen.",
+        "Native API-/CLI-/SDK-/Browser-/physische und Plattformabnahmen auf den neuen Quellstand binden; installierte Version bleibt unverändert."
+      ],
+      "documentation": [
+        "docs/verification/csv-registry-lifecycle-20261015/source-handoff.json",
+        "docs/verification/csv-registry-lifecycle-20261015/source-review.json",
+        "docs/verification/csv-registry-lifecycle-20261015/focused-repaired/index.json"
+      ],
+      "gates": {
+        "source_review": "BOUNDED_SOURCE_NO_CONFIRMED_FINDINGS",
+        "directed_two_groups": "PASS_ACTUAL_2_0_0",
+        "critical_regions": "EXACT_2171_PLUS_20684_BYTES",
+        "full_workspace": "NOT_RUN",
+        "installed_runtime": "UNCHANGED_AB1",
+        "manufacturer_parity": "NOT_PROVEN"
+      }
+    },
+    {
       "id": "batch-b8-content-capture",
       "status": "COMPLETED",
       "title_de": "B8: optionale Textaufnahme und gespeicherte Inhaltsanalyse",
@@ -7112,18 +7141,19 @@
     },
     {
       "id": "mcp-file-tools-source-20261015",
-      "status": "COMPILES_FOCUSED_WINDOWS_MODULE_14_PASS_1_TEST_REPAIR_PENDING",
+      "status": "PASS_29_WINDOWS_MODULE_AND_TRANSPORT_GROUPS_FULL_ACCEPTANCE_OPEN",
       "priority": 4,
       "title_de": "Optionale lokale Dateifunktionen für MCP abnehmen",
-      "summary_de": "Die fünf optionalen MCP-Dateifunktionen sind als eigener Quellcode an STDIO und HTTP angeschlossen:26 Standard-Tools,31 bei ausdrücklicher Freigabe. Der tatsächliche Windows-Modullauf kompiliert und endet mit14 bestandenen und1 fehlgeschlagenen Tests. Die Windows-Fehlerkategorie des gehaltenen Ordners ist mit einer zusätzlichen Gegenprobe korrigiert; erneute Ausführung dieses geänderten Tests steht aus. Die14 Transportgruppen,2 Unix-Gruppen, SDK- und vollständige Abnahmen bleiben offen. automation.mcp bleibt teilweise geprüft.",
+      "summary_de": "Fünf optionale lokale MCP-Dateifunktionen sind als eigener Rust-Code implementiert:26 Standard-Tools,31 bei ausdrücklicher Freigabe. Tatsächlich bestehen15 Windows-Modulgruppen und14 CLI-/Bridge-/STDIO-/HTTP-Gruppen; der HTTP-Test startet drei eigene Servermodi. Die zwei Testannahmen zum Windows-Fehlercode und zum bestehenden Crawl-Listenobjekt sind ohne Produktänderung korrigiert. Unix, offizielle SDK-Clients, der kombinierte vollständige Workspace und native/Installationsabnahmen bleiben offen. automation.mcp bleibt teilweise geprüft.",
       "completed_acceptance_de": [
         "Eigenes capability-relatives Dateimodul sowie CLI-/Bridge-/HTTP-/STDIO-Anbindung geschrieben; Typen und Pfade werden vor Dateioperationen geprüft, globale Pfadfreigaben entstehen nicht.",
         "Quellreviews einschließlich Rootkorrekturen für Response-Workerbesitz, tatsächliche Loopbackadresse, eigenen HTTP-Startupkanal und beobachtete Drain-Wartezustände abgeschlossen. Das sind keine Laufzeitbeweise.",
-        "31 neue Testgruppen geschrieben:29 gemeinsame Windows-Fälle und2 Unix-Fälle. Der erste tatsächliche Windows-Modullauf kompiliert und führt15 Gruppen aus:14 bestanden,1 fehlgeschlagen,0 ignoriert; alle300 Eingaben danach exakt und Cargo vollständig geschlossen.",
-        "Fehlgeschlagenen Root-Handle-Test auf die tatsächlichen Windows-Fehlercodes5/32 eingegrenzt; dieselbe Umbenennung muss nach Shutdown und Schließen des Grants mit unveränderten Dateibytes funktionieren. Produktcode unverändert, noch keine grüne Wiederholung dieser Korrektur."
+        "31 neue Testgruppen geschrieben:29 gemeinsame Windows-Fälle und2 Unix-Fälle. Alle15 Windows-Modulgruppen bestehen nach der eng begrenzten Windows-Testkorrektur tatsächlich; alle300 Eingaben danach exakt und Cargo vollständig geschlossen.",
+        "Windows-Root-Handle-Test besteht mit OS5/32-Fehlerprüfung und zwingend erfolgreicher gleicher Umbenennung samt identischen Dateibytes nach tatsächlichem Drain und Schließen des Grants.",
+        "Alle14 Transportgruppen bestehen tatsächlich, darunter echte STDIO-Frames, EOF-/Outputfehler-Drain und eigenes HTTP-Bind/Startup für deaktiviert127.0.0.1 sowie aktiviert127.0.0.1 und127.0.0.2. Bestehender Crawl-Listenobjektvertrag ist erhalten; Testshape ausschließlich um das vorhandene crawls-Feld korrigiert."
       ],
       "pending_acceptance_de": [
-        "Korrigierte15 Windows-Modultests erneut ausführen,14 Transportgruppen sowie vollständigen Workspace, Format und Clippy tatsächlich bestehen.",
+        "Kombinierten vollständigen Quellstand mit allen passenden Regressionen, vier echten Browser-Gates, Format und Clippy bestehen.",
         "Offizielle MCP-SDK-Clients über STDIO und HTTP für deaktiviertes und aktiviertes Inventar sowie sämtliche fünf Dateioperationen mit Fehler-/Snapshot-/Cursor-/UTF8-/Wire-Grenzen prüfen.",
         "Tatsächliche Worker-/Supervisor-Joins nach Requestabbruch, Drainabbruch und kombiniertem Monitorabbruch prüfen; native Windows-Junction-/Symlink- und Unix-Spezialdateifälle getrennt abnehmen.",
         "Weitere Report-/Bulkexport-/Feld-/Filterkataloge, gespeicherte Inhaltsausgaben und ausdrücklich optionale Node/npm-Funktionen weiter implementieren und prüfen. Vollständige MCP- und Hersteller-Parität bleiben offen."
@@ -7132,18 +7162,20 @@
         "docs/mcp-file-tools.md",
         "docs/verification/mcp-file-tools-source-20261015/preparation.json",
         "docs/verification/mcp-file-tools-source-20261015/focused-module-first/index.json",
-        "docs/verification/mcp-file-tools-source-20261015/windows-root-test-repair.json"
+        "docs/verification/mcp-file-tools-source-20261015/windows-root-test-repair.json",
+        "docs/verification/mcp-file-tools-source-20261015/focused-module-repaired/index.json",
+        "docs/verification/mcp-file-tools-source-20261015/focused-wiring-repaired/index.json"
       ],
       "gates": {
         "source_review": "BOUNDED_SOURCE_ONLY_NO_CONFIRMED_FINDINGS",
-        "authored_tests": "31_WRITTEN_15_WINDOWS_MODULE_EXECUTED_14_PASS_1_FAIL",
+        "authored_tests": "31_WRITTEN_29_WINDOWS_EXECUTED_AND_PASSED_2_UNIX_NOT_RUN",
         "compile": "PASS_ACTUAL_TEST_PROFILE_51_82_SECONDS",
         "official_sdk": "NOT_RUN",
         "native_http_stdio": "NOT_RUN",
         "installed_runtime": "UNCHANGED_AB1",
         "manufacturer_parity": "NOT_PROVEN",
-        "windows_root_test_repair": "AUTHORED_PRODUCT_UNCHANGED_RERUN_PENDING",
-        "transport_tests": "14_AUTHORED_NOT_RUN",
+        "windows_root_test_repair": "PASS_ACTUAL_MODULE_GROUP",
+        "transport_tests": "PASS_14_ACTUAL_GROUPS_OWNED_HTTP_THREE_MODES",
         "unix_tests": "2_AUTHORED_NOT_RUN"
       },
       "tracking_issue": "https://github.com/lia-xim/open-seo-spider/issues/15"

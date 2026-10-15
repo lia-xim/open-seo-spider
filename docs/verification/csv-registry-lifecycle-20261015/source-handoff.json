@@ -1,0 +1,124 @@
+{
+  "version": 1,
+  "name": "csv-registry-lifecycle-repair-v1",
+  "owner": "/root/finish_coverage",
+  "source_root": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-compile-repair-source-v3",
+  "actual_root_guard": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-compile-repair-v1",
+  "result": "AUTHORED_PRIVATE_LIFECYCLE_REPAIR_TWO_REGRESSIONS_NOT_RUN",
+  "source_pins": [
+    {
+      "path": "manifest.json",
+      "sha256": "0ab151e4fd06f4603d8429bed4c784f7045e5c838bec378706d6c01bfaefb7bf",
+      "bytes": 96313
+    },
+    {
+      "path": "crates/app/src/server/sitemap_csv_stream.rs",
+      "sha256": "a5e0999945ed914a5ef528a930c063ff976b9e4ddcc08343b30a01d84754be6e",
+      "bytes": 37081
+    },
+    {
+      "path": "crates/app/src/sitemap_membership.rs",
+      "sha256": "19cf2875057d9023781dcd29c5d517acc79557fd942e05d7fc98061230da1b40",
+      "bytes": 42844
+    },
+    {
+      "path": "crates/core/src/store.rs",
+      "sha256": "bdf8838fa21adf58b360ae8473ac63b73cefe68e22ed611c769dae7c0918128e",
+      "bytes": 148465
+    },
+    {
+      "path": "crates/core/src/models.rs",
+      "sha256": "1b9e6b6d3330d6fd20d0e83feca2c891dd0b00cb9a6746b66b9254556f64e4ee",
+      "bytes": 36613
+    },
+    {
+      "path": "crates/core/src/crawler.rs",
+      "sha256": "ef99fff8bdba98ac09e9df494c1ae7eb20e86d229468b1e5bb94e27649091d68",
+      "bytes": 162506
+    },
+    {
+      "path": "crates/app/Cargo.toml",
+      "sha256": "0133738bed2750eab8a4912b92ffae01679e4a92057e24b9676a24d2b370e2d3",
+      "bytes": 898
+    }
+  ],
+  "child_provenance": {
+    "manifest": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\csv-registry-lifecycle-tests-v1\\manifest.json",
+    "sha256": "9cda783fb7e25ee6cebbc30751a40734e804a4b01b8adff35f913f749fef54f4",
+    "test_payload_sha256": "bf59b071d560a8b57e742a31c4af78dd454894af9fc201b10ac2a29118e5474b",
+    "copy_exact": true
+  },
+  "files": [
+    {
+      "path": "crates/app/src/server/sitemap_csv_stream.rs",
+      "before_sha256": "a5e0999945ed914a5ef528a930c063ff976b9e4ddcc08343b30a01d84754be6e",
+      "after_sha256": "32a0d81b02b166373cf58122758fb879a4e7095d2816216961ca10cbb3139f7b",
+      "bytes": 43970
+    },
+    {
+      "path": "crates/app/src/server/sitemap_csv_stream_lifecycle_tests.rs",
+      "before": "ABSENT",
+      "after_sha256": "bf59b071d560a8b57e742a31c4af78dd454894af9fc201b10ac2a29118e5474b",
+      "bytes": 16728
+    }
+  ],
+  "support_files": [
+    {
+      "path": "FINDING.md",
+      "sha256": "453d9b203315d24474023af13cb229a4b00a10c75180f767a39e60e27cc3b730",
+      "bytes": 2545
+    },
+    {
+      "path": "HANDOFF.md",
+      "sha256": "db6606656030a178e1ce0007ee8d500bdd451b57598aea9fb11408285eb5397a",
+      "bytes": 5920
+    },
+    {
+      "path": "PRESERVED-REGIONS.json",
+      "sha256": "bf41ad17e40e9b88e5aeff4eb93773d348d84889feb53b83dd774782fdff55e9",
+      "bytes": 1563
+    },
+    {
+      "path": "freeze-handoff.cjs",
+      "sha256": "05ce613dab4dd836bd3ebe943aeb2ac1d991e3e92c921434eae1b391da8314e2",
+      "bytes": 6059
+    }
+  ],
+  "test_names": [
+    "server::sitemap_csv_stream::lifecycle_tests::actual_csv_supervisor_abort_and_body_drop_recover_actual_join_slots",
+    "server::sitemap_csv_stream::lifecycle_tests::actual_csv_cancelled_and_concurrent_drains_observe_both_retained_joins"
+  ],
+  "checks": {
+    "rustfmt_exit": 0,
+    "rustfmt_check_exit": 0,
+    "critical_regions_exact": true,
+    "new_test_target_absent": true,
+    "child_payload_copy_exact": true,
+    "actual_root_product_still_baseline": true,
+    "compiler_runs": 0,
+    "test_runs": 0,
+    "fixture_runs": 0,
+    "native_browser_runtime_runs": 0
+  },
+  "wait_contract": {
+    "async_wait_seconds": 5,
+    "observed_pending_poll_milliseconds": 50,
+    "manual_worker_release": "fixture post-CoreCompletion channel; sender Drop also releases",
+    "whole_group_hard_deadline": false,
+    "blocked_system_call_finite_join_claim": false
+  },
+  "remaining": [
+    "Independent frozen-source review",
+    "Root guarded promotion",
+    "Compile and both directed tests",
+    "Existing CSV compatibility and full workspace/renderer/Clippy gates",
+    "Runtime validation if required by Root"
+  ],
+  "protected": [
+    "No Root/Git/installed/runtime changes",
+    "No rewritten original suite logs/frozen sources",
+    "No artificial active reset",
+    "No detached taken handles on canceled drain",
+    "No production budget/transaction/Body/formatter change"
+  ]
+}
