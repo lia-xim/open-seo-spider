@@ -6306,28 +6306,29 @@
     {
       "id": "combined-source-v5-r3-20261015",
       "priority": 0,
-      "status": "ACTUAL_PRELIMINARY_CLIPPY_PASS_FULL_SUITE_RUNNING",
+      "status": "ACTUAL_FULL_SUITE_PASS_OPTIMIZED_BUILD_RUNNING",
       "title_de": "Bereinigten gemeinsamen Stand vollständig abnehmen",
-      "summary_de": "Privater Commit 9fa103e korrigiert genau einen Testhelfer. Vorab besteht Clippy für Workspace und alle Ziele ohne Warnungen. Der tatsächliche vollständige neue Lauf auf 317 eingefrorenen Eingaben muss mindestens 1256 Tests, alle 474 Pflichtnamen und vier echte Renderer-Fälle erneut bestehen.",
+      "summary_de": "Privater Commit 9fa103e besteht die vollständige tatsächliche Suite: 1256 Tests ohne Fehler/ignorierte Fälle, alle 474 Pflichtnamen, alle 40 neuen Windows-Fälle und vier echte Renderer-Prüfungen. Format und Clippy bestehen; eigene Server sind geschlossen, Quellen unverändert. Der optimierte Build läuft; Native- und Installationsabnahmen fehlen noch.",
       "completed_acceptance_de": [
         "Alle bisherigen Assertions und Testfunktionen erhalten; eine tatsächliche Dateidifferenz gegenüber R2 unabhängig geprüft.",
         "Endgültige BODY4/Lifecycle4/Stateless2, drei Zusammenführungen, Formatänderungen und R3-Prüftreiber gebunden.",
-        "Tatsächliche vorgezogene Clippy-Prüfung ohne Warnungen bestanden."
+        "Tatsächliche vorgezogene Clippy-Prüfung ohne Warnungen bestanden.",
+        "Vollständige frische Suite tatsächlich bestanden; alle drei Cargo-Prozesse mit Exit0 geschlossen und Rohlogs/Renderer-/Quellenbelege archiviert."
       ],
       "pending_acceptance_de": [
-        "Neue vollständige Rust-/Renderer-/Format-/Clippy-Suite bestehen.",
         "Optimierten Kandidaten bauen und Native-/EOF-/Großquellenprüfungen auf diesem Kandidaten ausführen.",
         "Kaltinstallation nach allen erforderlichen Abnahmen; API-/Oberflächenzugriff auf Originaldateien und übrige Featureliste weiterführen."
       ],
       "documentation": [
+        "docs/verification/combined-workspace-v5-r3-20261015/index.json",
         "docs/verification/combined-source-v5-r3-source-20261015/index.json",
         "docs/verification/combined-source-v5-r2-clippy-failed-20261015/index.json"
       ],
       "gates": {
         "source_review": "PASS_BOUNDED_SOURCE_ONLY",
         "preliminary_clippy": "PASS_ACTUAL_29_59_SECONDS",
-        "full_workspace": "RUNNING_SOURCE5_R3",
-        "optimized_candidate": "NOT_RUN",
+        "full_workspace": "PASS_ACTUAL_1256_ALL_474_ALL_40_NEW_FOUR_REAL_RENDERERS_FMT_CLIPPY",
+        "optimized_candidate": "RUNNING_ACTUAL_SOURCE5_R3_BUILD",
         "native": "NOT_RUN_ON_SOURCE5_R3",
         "installation": "NOT_RUN_INSTALLED_AB1_UNCHANGED",
         "manufacturer_parity": "NOT_PROVEN"
@@ -6477,7 +6478,7 @@
     {
       "id": "sitemap-original-body-foundation-20261015",
       "priority": 1,
-      "status": "ACTUAL_R2_TESTS_PASS_FRESH_R3_FULL_SUITE_RUNNING",
+      "status": "ACTUAL_R3_RUST_TESTS_PASS_NATIVE_PENDING",
       "title_de": "Ursprüngliche Sitemap-Dateien dauerhaft speichern",
       "summary_de": "Die optionale Core-/Store-Grundlage ist in Source5 zusammengeführt und formatiert. Originalbytes, getrennte Budgets, unveränderliche Dateien und Wiederöffnungsprüfungen sind implementiert; 16 neue Windows-Tests sind wegen der Compilerfehler noch nicht ausgeführt. Archivierung unterstützt ausdrücklich UTF-8-SQLite-Speicherung. API, Oberfläche und Download werden anschließend ergänzt.",
       "completed_acceptance_de": [
@@ -6492,6 +6493,7 @@
         "MCP-Fenster, eigene Kopien für abgeleitete Crawls, portable Bundles, Wiederherstellung und kontrollierte Bereinigung bleiben getrennte offene Schritte."
       ],
       "documentation": [
+        "docs/verification/combined-workspace-v5-r3-20261015/index.json",
         "docs/verification/combined-source-v5-r3-source-20261015/index.json",
         "docs/verification/combined-source-v5-r2-clippy-failed-20261015/index.json",
         "docs/verification/combined-source-v5-r2-source-20261015/index.json",
@@ -6500,7 +6502,7 @@
       ],
       "gates": {
         "source_review": "PASS_BOUNDED_SOURCE_ONLY_V3_AND_FORMAT_MERGE",
-        "rust_tests": "ALL_40_NEW_TESTS_PASS_R2_OVERALL_CLIPPY_FAIL_R3_RUNNING",
+        "rust_tests": "PASS_ALL_NEW_CASES_ON_ACTUAL_R3_FULL_1256_SUITE",
         "public_api_ui": "NOT_IMPLEMENTED",
         "native_body_recovery": "NOT_RUN",
         "installation": "NOT_RUN"
@@ -6510,7 +6512,7 @@
     {
       "id": "http-mcp-lifecycle-ownership-20261015",
       "priority": 2,
-      "status": "ACTUAL_R2_TESTS_PASS_FRESH_R3_FULL_SUITE_RUNNING",
+      "status": "ACTUAL_R3_RUST_TESTS_PASS_NATIVE_PENDING",
       "title_de": "Laufende HTTP- und MCP-Arbeiten sauber beenden",
       "summary_de": "Gehaltene Request-, Blocking-, Crawl- und PDF-Aufgaben sowie frühes Schließen der Arbeitszulassung sind in Source5 umgesetzt. Ein optionaler lokaler STDIN-EOF-Schalter ermöglicht einen eigenen natürlichen Prozessendetest. 16 neue Tests sind noch nicht ausgeführt; native EOF-Abnahme, langsam lesende HTTP-Clients und vollständige MCP-Sessions bleiben offen.",
       "completed_acceptance_de": [
@@ -6525,6 +6527,7 @@
         "Response-Body-/Connection-Besitz und Transportabbruch für nicht lesende Clients separat implementieren und mit echtem TCP prüfen; Source5 beweist keine begrenzte Shutdown-Latenz hierfür."
       ],
       "documentation": [
+        "docs/verification/combined-workspace-v5-r3-20261015/index.json",
         "docs/verification/combined-source-v5-r3-source-20261015/index.json",
         "docs/verification/combined-source-v5-r2-clippy-failed-20261015/index.json",
         "docs/verification/combined-source-v5-r2-source-20261015/index.json",
@@ -6532,7 +6535,7 @@
       ],
       "gates": {
         "source_review": "PASS_BOUNDED_SOURCE_ONLY_V2_AND_FORMAT_MERGE",
-        "rust_tests": "ALL_40_NEW_TESTS_PASS_R2_OVERALL_CLIPPY_FAIL_R3_RUNNING",
+        "rust_tests": "PASS_ALL_NEW_CASES_ON_ACTUAL_R3_FULL_1256_SUITE",
         "native_eof_inflight": "NOT_RUN",
         "installation": "NOT_RUN"
       },
@@ -6541,7 +6544,7 @@
     {
       "id": "sitemap-location-pagination-work-20261015",
       "priority": 3,
-      "status": "ACTUAL_R2_TESTS_PASS_FRESH_R3_FULL_SUITE_RUNNING",
+      "status": "ACTUAL_R3_RUST_TESTS_PASS_NATIVE_PENDING",
       "title_de": "Große Sitemap-Kataloge effizient durchblättern",
       "summary_de": "Source5 entfernt SQL-Einzelabfragen pro Eintrag und erneutes vollständiges Serialisieren, während Integritäts-, Quellen-, Reihenfolge-, Cursor- und Größenprüfungen erhalten bleiben. Acht neue Tests prüfen die exakte bisherige Serialisierung und gültige UTF-16-Ledger. Der tatsächliche Laufzeitgewinn und die vollständige 50.000-Zeilen-Wiederöffnung sind noch offen.",
       "completed_acceptance_de": [
@@ -6554,6 +6557,7 @@
         "Echte50.000 Zeilen vollständig paginieren, exportieren und nach Neustart prüfen; konkrete Arbeitszähler, Zeit und Speicher getrennt messen."
       ],
       "documentation": [
+        "docs/verification/combined-workspace-v5-r3-20261015/index.json",
         "docs/verification/combined-source-v5-r3-source-20261015/index.json",
         "docs/verification/combined-source-v5-r2-clippy-failed-20261015/index.json",
         "docs/verification/combined-source-v5-r2-source-20261015/index.json",
@@ -6562,7 +6566,7 @@
       "gates": {
         "source_analysis": "COMPLETE_BOUNDED_SOURCE_ONLY",
         "implementation": "IN_PROGRESS",
-        "rust_tests": "ALL_40_NEW_TESTS_PASS_R2_OVERALL_CLIPPY_FAIL_R3_RUNNING",
+        "rust_tests": "PASS_ALL_NEW_CASES_ON_ACTUAL_R3_FULL_1256_SUITE",
         "native_large_sources": "NOT_RUN_ON_NEW_SOURCE",
         "source_review": "PASS_BOUNDED_SOURCE_ONLY_V2_AND_FORMAT_MERGE",
         "actual_50000_reopen": "NOT_RUN_ON_SOURCE5",

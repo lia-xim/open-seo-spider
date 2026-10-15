@@ -1,8 +1,8 @@
-## Aktuell: Source5 R3 vollständig prüfen (15.10.2026)
+## Aktuell: Source5 R3 besteht die vollständige Suite (15.10.2026)
 
-Der private Commit `9fa103e` korrigiert einen Testhelfer und besteht die vorgezogene Clippy-Prüfung ohne Warnungen. Die neue vollständige Suite läuft mit mindestens 1256 Tests, 474 Pflichtnamen und vier echten Renderer-Fällen. Erst nach deren vollständigem Bestehen folgen optimierter Build und echte Native-Abnahmen.
+Der private Commit `9fa103e` besteht tatsächlich 1256 Tests ohne Fehler oder ignorierte Fälle, alle 474 Pflichtnamen, alle 40 neuen Windows-Fälle und vier echte Renderer-Prüfungen. Format und Clippy sind ebenfalls grün; eigene Server sind geschlossen und Quellen unverändert. Rohbelege: [vollständige Suite](verification/combined-workspace-v5-r3-20261015/index.json).
 
-Der vorherige R2-Lauf besteht tatsächlich alle 1256 Tests und vier Renderer-Fälle, scheitert aber anschließend an einer Clippy-Warnung. Das vollständige unveränderte Fehlerergebnis ist archiviert; es begründet keinen Build oder Installations-PASS. Die 50.000-URL-Wiederöffnung und vollständige Herstellerparität bleiben offen.
+Der optimierte Windows-Build läuft. Anschließend bleiben echtes Herunterfahren bei EOF, sechs Native-Scopes sowie alle 13 Großquellenfälle einschließlich vollständiger 50.000-Zeilen-Wiederöffnung erforderlich. Installation und vollständige Herstellerparität sind noch nicht nachgewiesen. Der vorherige R2-Testpass mit Clippy-Fehlschlag bleibt unverändert archiviert.
 
 ## Historisch: Source5 gemeinsam prüfen (15.10.2026)
 
