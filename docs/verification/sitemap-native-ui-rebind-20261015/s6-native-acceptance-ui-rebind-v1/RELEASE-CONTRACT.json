@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "status": "DESCRIPTIVE_CONTRACT_NOT_OPERATIVE_RELEASE",
+  "kind": "root_released_sitemap_findings_ui_source_acceptance_v1",
+  "required_top_level_fields": [
+    "kind",
+    "gate",
+    "build_mode",
+    "source_manifest_sha256",
+    "driver_sha256",
+    "build_proof_sha256",
+    "candidate_binary_sha256",
+    "output",
+    "expires_at"
+  ],
+  "gate_values": [
+    "native",
+    "ui-mock"
+  ],
+  "build_mode_values": [
+    "debug",
+    "optimized"
+  ],
+  "source_manifest_sha256": "e9bbc54573247e028dcb47937f80eaa1c1918240a810d8e796874464bf5cc7f5",
+  "driver_sha256": "930e5fd8178ded834360e36721c28af53ddafb916ef111c09ce0b688a1243150",
+  "ui_only_additional_fields": [
+    "chrome_executable",
+    "chrome_sha256"
+  ],
+  "environment": {
+    "OPEN_SEO_COORDINATED_EXECUTION_WINDOW": "confirmed"
+  },
+  "child_mock_release_kind": "root_released_sitemap_findings_ui_e9_fixture_v1",
+  "child_release_is_derived_only_after_parent_admission": true,
+  "current_producer_fields_required": [
+    "suite.source_lineage",
+    "build.source_lineage"
+  ],
+  "no_new_fictitious_suite_build_fields": true,
+  "executed": 0,
+  "qualification": "Requires actual future suite/build/binary SHA and unexpired Root authorization; never a release or PASS artifact"
+}

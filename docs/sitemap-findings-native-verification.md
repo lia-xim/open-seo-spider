@@ -1,5 +1,16 @@
 # Native Prüfung der gespeicherten Sitemap-Befunde
 
+Aktuelle Ergänzung: Die ausgewählten Prüfrouten sind inzwischen ausdrücklich an
+UI-Quelle `e9bbc545…`, Suite `b4c0ee42…` und Builder `1c72e8b6…` gebunden.
+25 native Browsergruppen enthalten fünf neue Formulargruppen: aus/ein, genaue
+Startanfrage, Speichern/Neuladen und gespeicherte Konfiguration. Zwei kleine
+UI-Crawls folgen erst nach dem unabhängigen 405/403-Leseintervall. **Alle Läufe
+bleiben NOT_RUN.** Die große XML-Wirkung ist weiterhin offen. Der genaue neue
+Beleg liegt in [sitemap-native-ui-rebind-preparation.json](verification/sitemap-native-ui-rebind-preparation.json).
+
+Die folgende ursprüngliche Vorbereitung für `69492d0c…` bleibt als Herkunft
+erhalten. Sie ist kein übertragener Laufzeitbeleg für die geänderte UI.
+
 Stand: **Prüfskripte geschrieben und im begrenzten Quellumfang geprüft;
 NOT_RUN / NOT_COMPILED / NOT_INSTALLED.** Es liegt kein neuer nativer Test-Pass vor.
 

@@ -1,0 +1,27 @@
+// Historical preparation publication only. This is separate from the exact
+// source_lineage object returned by the current UI suite and builder.
+function verifyPreparationPublication() {
+  const raw = regular(PREPARATIONS_PUBLICATION, 1024 * 1024);
+  assert.equal(sha(raw), PREPARATIONS_PUBLICATION_SHA);
+  const record = JSON.parse(raw);
+  assert.equal(record.result, 'PUSHED_PRIVATE_SOURCE_PREPARATIONS_ONLY_GOAL_ACTIVE');
+  assert.equal(record.commit, '70f2f45f92a896a12d81b3a46558c2b50f0e8db7');
+  assert.equal(record.repository.isPrivate, true);
+  assert.equal(record.current_ui_source_commit, COMMIT); assert.equal(record.current_ui_source_manifest_sha256, SOURCE_SHA);
+  assert.equal(record.source_inputs, 297); assert.equal(record.unchanged_base_inputs, 295); assert.equal(record.new_ui_bindings, 2); assert.equal(record.new_ui_rust_tests, 0);
+  assert.equal(record.native_basis_source_commit, 'f43efc17d1393645a9eb8c8b8510743f3dfedb5c');
+  assert.equal(record.native_basis_source_manifest_sha256, '69492d0c0cc56bab5de86251045459a1707deb4c991d5871f9ad39015e897751');
+  assert.equal(record.native_acceptance_transferred_to_changed_ui, false); assert.equal(record.native_runs, 0);
+  assert.equal(record.physical_cases_authored, 12); assert.equal(record.physical_cases_executed, 0);
+  assert.equal(record.required_test_names, 388); assert.equal(record.minimum_expected_workspace_tests, 1170);
+  const previous = record.selected.physical, ui = record.selected.separate_ui_suite_builder;
+  assert.equal(previous.sha256, '95c014077ff72565eb48e243aa48e31da79efec1e82b662812108179a48f1f67');
+  assert.equal(previous.selected_manifest_sha256, '50f070b0342d90cc378d360b888e1e5862929ab942762a27709f7567245806b5');
+  assert.equal(previous.closure_sha256, 'c48bd77696ea8ebd760d66649145523edae38bc442b17057f06469ba10c1368d'); assert.equal(previous.execution, 0);
+  assert.equal(ui.suite_sha256, SUITE_DRIVER_SHA); assert.equal(ui.builder_sha256, BUILD_DRIVER_SHA);
+  assert.equal(ui.selected_manifest_sha256, '7f956d0ade7ed0d70ced3ec92766df5d390c0da9abe674e0665a37d49dd6c2aa');
+  assert.equal(ui.closure_sha256, 'ee0e25b61b2795b85cbf7ed5abe2dc73c09860bf9b2aa9c73db813db22c8d0a6');
+  assert.equal(ui.source_manifest_sha256, SOURCE_SHA); assert.equal(ui.execution, 0); assert.equal(ui.native_acceptance_transferred, false);
+  return {metadata_publication_sha256: PREPARATIONS_PUBLICATION_SHA, historical_metadata_commit: record.commit, current_ui_source_commit_at_publication: record.current_ui_source_commit, historical_physical_template_sha256: previous.sha256, historical_physical_manifest_sha256: previous.selected_manifest_sha256, historical_physical_closure_sha256: previous.closure_sha256, ui_suite_driver_sha256: ui.suite_sha256, ui_builder_driver_sha256: ui.builder_sha256, ui_suite_builder_manifest_sha256: ui.selected_manifest_sha256, ui_suite_builder_closure_sha256: ui.closure_sha256, native_acceptance_transferred_at_publication: false, native_runs_at_publication: 0};
+}
+const preparationsPublicationLineage = verifyPreparationPublication();

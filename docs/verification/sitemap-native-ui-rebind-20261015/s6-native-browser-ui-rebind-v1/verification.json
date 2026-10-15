@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "status": "SOURCE_ONLY_NOT_RUN",
+  "derivation_operations": 20,
+  "payload_checks": [
+    {
+      "path": "preflight.mjs",
+      "before_sha256": "82516eb345b14e24314946d3f0f33319aa736a58d5fb931a6eb4534486ad2a52",
+      "sha256": "927ba5627677e8225bd95676c398c1c11d68eed7c81d63715aa8ae22cbf0c606",
+      "bytes": 18244,
+      "literal_forward_inverse": "PASS_EXACT"
+    },
+    {
+      "path": "browser-flow.mjs",
+      "before_sha256": "894010bcce948989b9dcb79d5a75cb86ec3ea8f0d12324c2b2625f6bbb1f4ec5",
+      "sha256": "894010bcce948989b9dcb79d5a75cb86ec3ea8f0d12324c2b2625f6bbb1f4ec5",
+      "bytes": 19048,
+      "literal_forward_inverse": "PASS_EXACT"
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "before_sha256": "581ec6ad181d22b48772f034931c37cf87d91bd7deb7bbb8a24090995532a5dc",
+      "sha256": "69b7d737bc0952714bd972a3a22421f3d048e507061af10ce3620b8cacd4185f",
+      "bytes": 22762,
+      "literal_forward_inverse": "PASS_EXACT"
+    }
+  ],
+  "new_profile_module": {
+    "sha256": "fd5a3ca83af234afdb719c021f02fa51c75b6297e6d8444552c6649af2826d4b",
+    "bytes": 10003
+  },
+  "copied_helper_exact": true,
+  "source_identity": {
+    "base_frozen": 297,
+    "ui_frozen": 297,
+    "current_compiler": 297,
+    "unchanged": 295,
+    "changed_ui": 2
+  },
+  "syntax_checks": [
+    {
+      "file": "preflight.mjs",
+      "command": "node --check preflight.mjs",
+      "exit_code": 0
+    },
+    {
+      "file": "browser-flow.mjs",
+      "command": "node --check browser-flow.mjs",
+      "exit_code": 0
+    },
+    {
+      "file": "run-sitemap-findings-browser-native-v1.mjs",
+      "command": "node --check run-sitemap-findings-browser-native-v1.mjs",
+      "exit_code": 0
+    },
+    {
+      "file": "profile-form-flow.mjs",
+      "command": "node --check profile-form-flow.mjs",
+      "exit_code": 0
+    }
+  ],
+  "native_groups": {
+    "inherited_authored": 20,
+    "new_authored": 5,
+    "total_authored": 25,
+    "executed": 0
+  },
+  "rust_tests_executed": 0,
+  "harness_imports_or_eval": 0,
+  "sqlite_fixture_http_browser_runs": 0,
+  "runtime_proof": "NOT_RUN_COORDINATED_COMPUTE_HOLD"
+}

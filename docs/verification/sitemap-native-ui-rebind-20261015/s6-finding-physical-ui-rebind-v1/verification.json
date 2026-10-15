@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-10-15T01:22:58.9667232Z",
+  "result": "PASS_BOUNDED_SOURCE_STRING_HASH_AND_NODE_SYNTAX_ONLY",
+  "driver_sha256": "9b2743ab803cfa949d1c222e9421901da9b3994a88858a145b88abc16e04bc0e",
+  "literal_operations": 22,
+  "forward_replay": "EXACT",
+  "inverse_reconstruction": "EXACT_95C_ORIGINAL_BYTES",
+  "forward_inverse_expected_occurrences_per_operation": 1,
+  "operational_body": "BYTE_IDENTICAL_FROM_const_appRuns_TO_BEFORE_FINAL_PROOF_WRITE",
+  "reviewed_guard_adaptation": [
+    {
+      "before": "path.join(root,",
+      "kind": "literal",
+      "actual_occurrences": 2,
+      "after": "path.join(ROOT,"
+    },
+    {
+      "before": "path.join(task,",
+      "kind": "literal",
+      "actual_occurrences": 2,
+      "after": "path.join(TASK,"
+    },
+    {
+      "before": "path.join(source,",
+      "kind": "literal",
+      "actual_occurrences": 1,
+      "after": "path.join(SOURCE,"
+    },
+    {
+      "before": "path.resolve(repo)",
+      "kind": "literal",
+      "actual_occurrences": 1,
+      "after": "path.resolve(REPO)"
+    },
+    {
+      "before": "verifyFile(source,",
+      "kind": "literal",
+      "actual_occurrences": 1,
+      "after": "verifyFile(SOURCE,"
+    },
+    {
+      "before": "verifyFile(repo,",
+      "kind": "literal",
+      "actual_occurrences": 1,
+      "after": "verifyFile(REPO,"
+    },
+    {
+      "before": "(?<!')\\bmanifest\\.",
+      "kind": "identifier_regex",
+      "actual_occurrences": 13,
+      "after": "source."
+    }
+  ],
+  "guard_adaptation": "EXACT_WITH_SINGLE_QUOTED_MANIFEST_FILENAMES_UNCHANGED",
+  "guard_manifest_filename_count": 2,
+  "source_lineage": "EXACT_ACTUAL_UI_SUITE_AND_BUILDER_RETURN_OBJECT",
+  "preparation_publication": "SEPARATE_HISTORICAL_METADATA_NOT_IN_source_lineage",
+  "pinned_file_hash_checks": 16,
+  "compiler_file_length_and_sha_checks": 891,
+  "source_paths": 297,
+  "unchanged": 295,
+  "exact_ui_changes": 2,
+  "new_rust_tests": 0,
+  "inherited_required_names": 388,
+  "renderer_gates": 4,
+  "minimum_expected_workspace_tests": 1170,
+  "actual_node_check_exit": 0,
+  "native_cases_authored": 12,
+  "native_cases_executed": 0,
+  "compiler_or_test_execution": 0,
+  "sqlite_fixtures_or_http": 0,
+  "driver_import_eval_or_vm": 0,
+  "root_task_git_runtime_mutations": 0,
+  "known_mutable_pre_freeze_correction": "Two source.json filename literals corrected to actual manifest.json; final guard exact identifier-only adaptation; no immutable artifact or execution affected",
+  "compute_hold": "ACTIVE_NO_EXECUTION_RELEASE",
+  "runtime": "NOT_RUN"
+}

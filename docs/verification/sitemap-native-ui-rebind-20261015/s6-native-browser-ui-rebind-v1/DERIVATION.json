@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "basis_manifest_sha256": "eddbf80f1e8f95dfe51e562e1ba94aa9d1389930003009c73e808a8d8f303792",
+  "source_ui_manifest_sha256": "e9bbc54573247e028dcb47937f80eaa1c1918240a810d8e796874464bf5cc7f5",
+  "operations": [
+    {
+      "path": "preflight.mjs",
+      "before": "export const SOURCE=path.join(BASE,'sitemap-findings-surfaces-source-v1');",
+      "after": "export const SOURCE=path.join(BASE,'sitemap-source-processing-ui-source-v1');",
+      "expected_occurrences": 1
+    },
+    {
+      "path": "preflight.mjs",
+      "before": "export const SOURCE_SHA='69492d0c0cc56bab5de86251045459a1707deb4c991d5871f9ad39015e897751';",
+      "after": "export const SOURCE_SHA='e9bbc54573247e028dcb47937f80eaa1c1918240a810d8e796874464bf5cc7f5';",
+      "expected_occurrences": 1
+    },
+    {
+      "path": "preflight.mjs",
+      "before": "release.kind,'root_released_sitemap_findings_browser_native_v1'",
+      "after": "release.kind,'root_released_sitemap_findings_browser_ui_native_v1'",
+      "expected_occurrences": 1
+    },
+    {
+      "path": "preflight.mjs",
+      "before": "assert.equal(manifest.new_authored_test_functions,47);",
+      "after": "assert.equal(manifest.new_authored_test_functions,0);assert.equal(manifest.approved_product_bindings.length,2);",
+      "expected_occurrences": 1
+    },
+    {
+      "path": "preflight.mjs",
+      "before": "  // Historical private source publication; not current GitHEAD or installed runtime acceptance.\n  const publicationPath=path.join(TASK,'work/sitemap-findings-surfaces-published-v1.json');\n  const publicationSha='b71188d145a8e720bd9d6c9aaf4720c03c20cced7f406839264e5432e85e84ff';\n  const publicationRaw=hash(publicationPath,publicationSha,1024*1024),publication=JSON.parse(publicationRaw);\n  assert.equal(publication.result,'PUSHED_PRIVATE_SOURCE_ONLY_GOAL_ACTIVE');assert.equal(publication.commit,'f43efc17d1393645a9eb8c8b8510743f3dfedb5c');assert.equal(publication.source_manifest_sha256,SOURCE_SHA);\n  assert.equal(publication.repository.isPrivate,true);assert.equal(publication.repository.nameWithOwner,'lia-xim/open-seo-spider');assert.equal(publication.frozen_inputs,297);assert.equal(publication.approved_product_bindings,38);assert.equal(publication.new_authored_rust_tests,47);assert.equal(publication.executed_new_rust_tests,0);assert.equal(publication.ui_mock_groups_authored,13);assert.equal(publication.executed_ui_groups,0);assert.equal(publication.compiler_clippy_native_browser_build,'NOT_RUN_COORDINATED_COMPUTE_HOLD');\n  const publicationLineage=Object.freeze({path:publicationPath,sha256:publicationSha,commit:publication.commit,source_manifest_sha256:SOURCE_SHA,repository_private:true,checkpoint_result:publication.result,checkpoint_execution:publication.compiler_clippy_native_browser_build});\n",
+      "after": "  // Exact lineage logic copied from selected UI Builder1c72, not old694 admission.\n  const root=BASE,task=TASK,repo=path.join(BASE,'sitemap-source-processing-ui-v1'),source=SOURCE;\nfunction verifyUiLineage() {\n  const baseSha = '69492d0c0cc56bab5de86251045459a1707deb4c991d5871f9ad39015e897751';\n  const uiSha = 'e9bbc54573247e028dcb47937f80eaa1c1918240a810d8e796874464bf5cc7f5';\n  const baseCommit = 'f43efc17d1393645a9eb8c8b8510743f3dfedb5c';\n  const uiCommit = 'f4ed4b9bb7c760755ec7e448aac660cfb6063ade';\n  const basePublicationSha = 'b71188d145a8e720bd9d6c9aaf4720c03c20cced7f406839264e5432e85e84ff';\n  const uiPublicationSha = '4316704b11e47d7f49bb541e9b1db9b1c31ac9c53d5b68dd2c47ab339b4bc24b';\n  const baseDirectory = path.join(root, 'sitemap-findings-surfaces-source-v1');\n  const baseRaw = fs.readFileSync(path.join(baseDirectory, 'manifest.json'));\n  assert.equal(sha(baseRaw), baseSha, 'Genuine base694 manifest required');\n  assert.equal(sha(fs.readFileSync(path.join(source, 'manifest.json'))), uiSha, 'Current UI frozen manifest');\n  const base = JSON.parse(baseRaw);\n  const basePublicationRaw = fs.readFileSync(path.join(task, 'work/sitemap-findings-surfaces-published-v1.json'));\n  const uiPublicationRaw = fs.readFileSync(path.join(task, 'work/sitemap-source-processing-ui-published-v1.json'));\n  assert.equal(sha(basePublicationRaw), basePublicationSha, 'Fixed base publication receipt');\n  assert.equal(sha(uiPublicationRaw), uiPublicationSha, 'Fixed UI publication receipt');\n  const basePublication = JSON.parse(basePublicationRaw), uiPublication = JSON.parse(uiPublicationRaw);\n  assert.equal(basePublication.commit, baseCommit); assert.equal(basePublication.source_manifest_sha256, baseSha); assert.equal(basePublication.repository.isPrivate, true);\n  assert.equal(uiPublication.commit, uiCommit); assert.equal(uiPublication.source_manifest_sha256, uiSha); assert.equal(uiPublication.repository.isPrivate, true);\n  assert.equal(uiPublication.base_source_commit, baseCommit); assert.equal(uiPublication.base_source_manifest_sha256, baseSha);\n  assert.equal(uiPublication.source_inputs, 297); assert.equal(uiPublication.unchanged_base_inputs, 295); assert.equal(uiPublication.changed_ui_inputs, 2);\n  assert.equal(uiPublication.new_authored_rust_tests, 0); assert.equal(uiPublication.inherited_source_authored_test_expectations, 376);\n  assert.equal(uiPublication.required_test_names, 388); assert.equal(uiPublication.minimum_expected_workspace_tests, 1170);\n  assert.equal(uiPublication.source_preparation_proof_sha256, 'b71c0b855945f41958a68bf168f7a2a00fd51cb15d17b5c7157045fcefe2f458');\n  assert.equal(base.files.length, 297); assert.equal(base.new_authored_test_functions, 47); assert.equal(base.approved_product_bindings.length, 38);\n  assert.equal(base.required_test_names, 388); assert.equal(base.minimum_expected_workspace_tests, 1170);\n  assert.equal(manifest.base_source_commit, baseCommit); assert.equal(manifest.base_source_manifest_sha256, baseSha);\n  assert.equal(manifest.base_inputs, 297); assert.equal(manifest.source_inputs, 297); assert.equal(manifest.unchanged_inputs, 295);\n  assert.equal(manifest.new_authored_test_functions, 0); assert.equal(manifest.inherited_source_authored_test_expectations, 376);\n  assert.equal(path.resolve(manifest.source_worktree), path.resolve(repo));\n  assert.deepEqual(manifest.required_tests, base.required_tests, 'All inherited grouped names/order remain exact');\n  assert.equal(manifest.review.sha256, '3e67b838a3f90a0381b274b85d9fd51cc41fcc435b71f15377b5e53d40fbbb5f');\n  assert.equal(sha(fs.readFileSync(path.join(root, 's4-source-processing-ui-review-v1/receipt.json'))), manifest.review.sha256);\n  const expectedUI = [\n    {path: 'web/app.js', before_sha256: '84df9b724802d86d69262d98dcee10e22d465c7a6583fc034b438df452bb0bb9', after_sha256: 'b1ec57080fec11529e89b21ce07471ea3ddc2141d4f64ae79ffc236c9b5af3f0', bytes: 379587},\n    {path: 'web/index.html', before_sha256: 'f5f494781f91029f1b64ace3c0f1ddcba742014690e0d4ee0dbbef53ebf79cff', after_sha256: 'ed8b3d0a624d02b428a3a7430845b417eca73a34bd3ecd6b0d5899d46bd15e77', bytes: 82970},\n  ];\n  assert.deepEqual(manifest.approved_product_bindings, expectedUI, 'Only the exact two reviewed UI payloads');\n  const baseFiles = new Map(base.files.map(file => [file.path, file]));\n  const uiFiles = new Map(manifest.files.map(file => [file.path, file]));\n  assert.equal(baseFiles.size, 297); assert.equal(uiFiles.size, 297);\n  assert.deepEqual([...baseFiles.keys()].sort(), [...uiFiles.keys()].sort(), 'Identical297 input path set');\n  let unchanged = 0, changed = 0;\n  const verifyFile = (directory, file) => {\n    const current = fs.readFileSync(path.join(directory, file.path));\n    assert.equal(current.length, file.bytes, file.path + ' exact bytes');\n    assert.equal(sha(current), file.sha256, file.path + ' exact SHA');\n  };\n  for (const [filePath, previous] of baseFiles) {\n    const current = uiFiles.get(filePath), binding = expectedUI.find(item => item.path === filePath);\n    if (binding) {\n      assert.equal(previous.sha256, binding.before_sha256); assert.equal(current.sha256, binding.after_sha256); assert.equal(current.bytes, binding.bytes);\n      assert.notEqual(current.sha256, previous.sha256); changed++;\n    } else { assert.deepEqual(current, previous, filePath + ' inherited input unchanged'); unchanged++; }\n    verifyFile(baseDirectory, previous); verifyFile(source, current); verifyFile(repo, current);\n  }\n  assert.equal(unchanged, 295); assert.equal(changed, 2);\n  return {base_source_manifest_sha256: baseSha, base_source_commit: baseCommit, base_publication_receipt_sha256: basePublicationSha, ui_source_manifest_sha256: uiSha, ui_source_commit: uiCommit, ui_publication_receipt_sha256: uiPublicationSha, base_inputs: 297, unchanged_inputs: unchanged, changed_ui_inputs: changed, inherited_base_new_rust_tests: 47, inherited_base_approved_bindings: 38, new_ui_rust_tests: 0, approved_ui_bindings: 2, inherited_source_authored_expectations: 376, inherited_required_names: 388, minimum_expected_workspace_tests: 1170};\n}\n  const sourceUILineage=verifyUiLineage();\n  hash(path.join(TASK,'work/run-sitemap-source-ui-suite-v1.mjs'),'b4c0ee42c03b6ade2f34f603bd501862568ed07960579d99cec4c14c1a07d43e',512*1024);\n  hash(path.join(TASK,'work/build-sitemap-source-ui-v2.mjs'),'1c72e8b67ef818665b081d91689d91c737a9c95f69f9fde954b72a8323f0bded',512*1024);\n  const publicationPath=path.join(TASK,'work/sitemap-source-processing-ui-published-v1.json'),publicationSha='4316704b11e47d7f49bb541e9b1db9b1c31ac9c53d5b68dd2c47ab339b4bc24b';\n  const publication=JSON.parse(hash(publicationPath,publicationSha,1024*1024));\n  assert.equal(publication.result,'PUSHED_PRIVATE_UI_SOURCE_ONLY_GOAL_ACTIVE');assert.equal(publication.new_rust_tests_executed,0);assert.equal(publication.browser_dom_payload_large_source,'NOT_RUN');assert.equal(publication.compiler_tests_clippy_native_installation,'NOT_RUN_COORDINATED_COMPUTE_HOLD');\n  const metadataPublicationPath=path.join(TASK,'work/sitemap-native-preparations-published-v1.json'),metadataPublicationSha='ab9c37420bee6861f1317632dd8fbe90cd16dcf69f662d80cd00d76566c0b795';\n  const metadata=JSON.parse(hash(metadataPublicationPath,metadataPublicationSha,1024*1024));\n  assert.equal(metadata.result,'PUSHED_PRIVATE_SOURCE_PREPARATIONS_ONLY_GOAL_ACTIVE');assert.equal(metadata.commit,'70f2f45f92a896a12d81b3a46558c2b50f0e8db7');assert.equal(metadata.repository.isPrivate,true);\n  assert.equal(metadata.current_ui_source_commit,'f4ed4b9bb7c760755ec7e448aac660cfb6063ade');assert.equal(metadata.current_ui_source_manifest_sha256,SOURCE_SHA);assert.equal(metadata.source_inputs,297);assert.equal(metadata.unchanged_base_inputs,295);assert.equal(metadata.new_ui_bindings,2);assert.equal(metadata.new_ui_rust_tests,0);assert.equal(metadata.native_acceptance_transferred_to_changed_ui,false);assert.equal(metadata.native_runs,0);assert.equal(metadata.compiler_clippy_tests_native_browser_build,'NOT_RUN_COORDINATED_COMPUTE_HOLD');\n  const selected=metadata.selected.separate_ui_suite_builder;\n  assert.equal(path.resolve(selected.suite_path),path.resolve(TASK,'work/run-sitemap-source-ui-suite-v1.mjs'));assert.equal(selected.suite_sha256,'b4c0ee42c03b6ade2f34f603bd501862568ed07960579d99cec4c14c1a07d43e');\n  assert.equal(path.resolve(selected.builder_path),path.resolve(TASK,'work/build-sitemap-source-ui-v2.mjs'));assert.equal(selected.builder_sha256,'1c72e8b67ef818665b081d91689d91c737a9c95f69f9fde954b72a8323f0bded');assert.equal(selected.source_manifest_sha256,SOURCE_SHA);assert.equal(selected.execution,0);assert.equal(selected.native_acceptance_transferred,false);\n  assert.equal(metadata.selected.browser_native.sha256,'581ec6ad181d22b48772f034931c37cf87d91bd7deb7bbb8a24090995532a5dc');assert.equal(metadata.selected.browser_native.selected_manifest_sha256,'eddbf80f1e8f95dfe51e562e1ba94aa9d1389930003009c73e808a8d8f303792');assert.equal(metadata.selected.browser_native.execution,0);\n  const publicationLineage=Object.freeze({source_ui_lineage:sourceUILineage,ui_publication_path:publicationPath,ui_publication_sha256:publicationSha,ui_checkpoint_result:publication.result,ui_checkpoint_execution:publication.compiler_tests_clippy_native_installation,metadata_publication_path:metadataPublicationPath,metadata_publication_sha256:metadataPublicationSha,metadata_commit:metadata.commit,old_native_acceptance_transferred:false});\n",
+      "expected_occurrences": 1
+    },
+    {
+      "path": "preflight.mjs",
+      "before": "results/sitemap-findings-surfaces-suite-v1/proof.json",
+      "after": "results/sitemap-source-ui-suite-v1/proof.json",
+      "expected_occurrences": 1
+    },
+    {
+      "path": "preflight.mjs",
+      "before": "assert.equal(suite.result,'PASS_LOCAL_CURRENT_WORKSPACE_REAL_RENDERER_CLIPPY_FMT');",
+      "after": "assert.deepEqual(suite.source_lineage,sourceUILineage);assert.equal(suite.source_authored_delta,0);assert.equal(suite.source_authored_total,376);assert.equal(suite.inherited_source_authored_delta,47);assert.equal(suite.inherited_approved_product_bindings,38);assert.equal(suite.source_ui_bindings,2);assert.equal(suite.result,'PASS_LOCAL_CURRENT_WORKSPACE_REAL_RENDERER_CLIPPY_FMT');",
+      "expected_occurrences": 1
+    },
+    {
+      "path": "preflight.mjs",
+      "before": "results/sitemap-findings-surfaces-${mode}-build-v2",
+      "after": "results/sitemap-source-ui-${mode}-build-v2",
+      "expected_occurrences": 1
+    },
+    {
+      "path": "preflight.mjs",
+      "before": "assert.equal(build.result,`PASS_LOCAL_CURRENT_${mode.toUpperCase()}_BUILD`);",
+      "after": "assert.deepEqual(build.source_lineage,sourceUILineage);assert.equal(build.result,`PASS_LOCAL_CURRENT_${mode.toUpperCase()}_BUILD`);",
+      "expected_occurrences": 1
+    },
+    {
+      "path": "preflight.mjs",
+      "before": "results/sitemap-findings-browser-native-${mode}-v1",
+      "after": "results/sitemap-findings-browser-ui-native-${mode}-v1",
+      "expected_occurrences": 1
+    },
+    {
+      "path": "preflight.mjs",
+      "before": "return {publicationPath,publicationSha,publicationLineage,mode,",
+      "after": "return {publicationPath,publicationSha,publicationLineage,metadataPublicationPath,metadataPublicationSha,sourceUILineage,verifyUiLineage,compilerRoot:repo,mode,",
+      "expected_occurrences": 1
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "before": "const {runNativeFindingsBrowser}=await import('./browser-flow.mjs');",
+      "after": "const {runNativeFindingsBrowser}=await import('./browser-flow.mjs');\nconst {runSitemapSourceProfileForm}=await import('./profile-form-flow.mjs');",
+      "expected_occurrences": 1
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "before": "sqliteEvidence,complete=false,siteClosed=false,completionClock=null;",
+      "after": "sqliteEvidence,profileResult,complete=false,siteClosed=false,completionClock=null;",
+      "expected_occurrences": 1
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "before": "record('actual_readonly_interval',{website_requests_before:siteBefore,website_requests_after:siteRequests.length,new_website_requests:0,durable_files:baseline.length,durable_bytes:baseline.reduce((n,x)=>n+x.bytes,0),excluded_volatile_coordination:['*.sqlite-shm'],durable_file_sha256_unchanged:true});complete=true;",
+      "after": "record('actual_readonly_interval',{website_requests_before:siteBefore,website_requests_after:siteRequests.length,new_website_requests:0,durable_files:baseline.length,durable_bytes:baseline.reduce((n,x)=>n+x.bytes,0),excluded_volatile_coordination:['*.sqlite-shm'],durable_file_sha256_unchanged:true});\n  // Deliberate UI-started probe crawls occur AFTER the unchanged-read witness.\n  const profileWebsiteBefore=siteRequests.length;\n  const verifySavedConfig=async(id,profile)=>{\n    const sql=new DatabaseSync(path.join(output,'data',id+'.sqlite'),{readOnly:true});try{\n      const raw=sql.prepare(\"SELECT value FROM metadata WHERE key='config'\").get().value,actual=JSON.parse(raw),run=JSON.parse(sql.prepare(\"SELECT value FROM metadata WHERE key='run_state'\").get().value);\n      assert.equal(actual.max_body_bytes,2097152);assert.deepEqual(actual.seed_urls,[siteOrigin+'/p404']);assert.equal(run.generation,1);\n      if(profile===null)assert.equal(Object.hasOwn(actual,'sitemap_source_processing'),false,'Disabled optional native profile stays absent in saved serde config');else assert.deepEqual(actual.sitemap_source_processing,profile);\n      return {id,readonly:true,saved_config_sha256:sha(Buffer.from(raw)),page_max_body_bytes:actual.max_body_bytes,sitemap_source_processing:actual.sitemap_source_processing??null,source_profile_field_present:Object.hasOwn(actual,'sitemap_source_processing'),generation:run.generation};\n    }finally{sql.close();}\n  };\n  profileResult=await runSitemapSourceProfileForm({browser,api,siteOrigin,output,read:httpRead,checkpoint,quiet:env.quiet,record,verifySavedConfig});\n  profileResult.intentional_website_requests=siteRequests.slice(profileWebsiteBefore);assert(siteRequests.length>profileWebsiteBefore,'Actual UI probes performed their own tiny crawl requests');\n  complete=true;",
+      "expected_occurrences": 1
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "before": "try{assert.equal(sha(await fs.readFile(admission.publicationPath)),admission.publicationSha);assert.equal(sha(await fs.readFile(admission.binary)),admission.binarySha);assert.equal(sha(await fs.readFile(admission.chrome)),admission.chromeSha);for(const item of admission.sourceManifest.files){const data=await fs.readFile(path.join(admission.sourceRoot,item.path));assert.equal(data.length,item.bytes);assert.equal(sha(data),item.sha256);}}",
+      "after": "try{assert.deepEqual(admission.verifyUiLineage(),admission.sourceUILineage);assert.equal(sha(await fs.readFile(admission.metadataPublicationPath)),admission.metadataPublicationSha);assert.equal(sha(await fs.readFile(admission.publicationPath)),admission.publicationSha);assert.equal(sha(await fs.readFile(admission.binary)),admission.binarySha);assert.equal(sha(await fs.readFile(admission.chrome)),admission.chromeSha);for(const item of admission.sourceManifest.files)for(const base of [admission.sourceRoot,admission.compilerRoot]){const data=await fs.readFile(path.join(base,item.path));assert.equal(data.length,item.bytes);assert.equal(sha(data),item.sha256);}}",
+      "expected_occurrences": 1
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "before": "execution_adapter:'separate_actual_browser_405_saved_pages_v1'",
+      "after": "execution_adapter:'separate_actual_browser_ui_profile_405_saved_pages_v1'",
+      "expected_occurrences": 1
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "before": "browser:browserResult,groups:records,failures,qualifications:",
+      "after": "browser:browserResult,source_profile_form:profileResult,groups:records,failures,qualifications:",
+      "expected_occurrences": 1
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "before": "'13 mocked UI groups are separate and are not replaced by this gate'",
+      "after": "'13 mocked UI groups are separate and are not replaced by this gate','Profile form probes and two tiny actual UI-started crawls happen after the frozen readonly findings interval; large XML fetch/profile-limit effectiveness remains OPEN'",
+      "expected_occurrences": 1
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "before": "// Only this bounded website is crawled, and only before the read-only browser interval.",
+      "after": "// Only this owned bounded website is crawled: baseline before, two explicit profile probes after the readonly interval.",
+      "expected_occurrences": 1
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "before": "profileResult.intentional_website_requests=siteRequests.slice(profileWebsiteBefore);assert(siteRequests.length>profileWebsiteBefore,'Actual UI probes performed their own tiny crawl requests');",
+      "after": "assert.equal(profileResult.context_closed,true);assert.equal(profileResult.authored_native_groups,5);assert.equal(profileResult.actual_profile_crawls,2);assert.equal(records.length,25);\n  profileResult.intentional_website_requests=siteRequests.slice(profileWebsiteBefore);assert(siteRequests.length>profileWebsiteBefore,'Actual UI probes performed their own tiny crawl requests');",
+      "expected_occurrences": 1
+    }
+  ],
+  "copied_ui_lineage_helper": {
+    "source": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/build-sitemap-source-ui-v2.mjs",
+    "source_sha256": "1c72e8b67ef818665b081d91689d91c737a9c95f69f9fde954b72a8323f0bded",
+    "snippet_sha256": "4e894cde9832a3218fbd6cfcacb80cae7b67721b77d131b3fae2dad8721ce755"
+  },
+  "new_module": "profile-form-flow.mjs",
+  "qualification": "Source-only rebind and actual DOM/tiny-crawl profile checks; no execution or large source acceptance."
+}

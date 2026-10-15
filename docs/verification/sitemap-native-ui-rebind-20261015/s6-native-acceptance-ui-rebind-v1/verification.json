@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "result": "EXACT_SOURCE_REPLAY_SYNTAX_ONLY",
+  "recorded_at_utc": "2026-10-15T01:19:34.1581023Z",
+  "guardian_operations": 20,
+  "mock_adapter_operations": 4,
+  "forward_replay": "EXACT_NEW_BYTES",
+  "inverse_reconstruction": "EXACT_ORIGINAL_BYTES",
+  "actual_close_ipc_monotonic_block": "BYTE_IDENTICAL_TO2d727",
+  "native_adapter": "BYTE_IDENTICAL30381",
+  "mock13_test_bodies_lifecycle_tail": "BYTE_IDENTICAL_TOdd514",
+  "ui_suite_lineage_returned_guard": "BYTE_IDENTICAL_TO7f956_LINEAGE_GUARD",
+  "ui_asset_inventory": 6,
+  "ui_asset_after_sha_changes": [
+    "web/app.js",
+    "web/index.html"
+  ],
+  "ui_asset_unchanged": 4,
+  "node_checks": [
+    {
+      "command": "node --check run-sitemap-findings-ui-source-acceptance-v1.mjs",
+      "exit_code": 0
+    },
+    {
+      "command": "node --check findings-ui-mock-e9-owned-adapter.cjs",
+      "exit_code": 0
+    }
+  ],
+  "source_authoring_only": "Python literal transform plus independent read-only PowerShell24-op replay/inverse and byte/hash/unchanged-span checks",
+  "target_absent": true,
+  "all_four_new_outputs_absent": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/sitemap-findings-ui-source-native-debug-acceptance-v1",
+      "absent": true
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/sitemap-findings-ui-source-native-optimized-acceptance-v1",
+      "absent": true
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/sitemap-findings-ui-source-ui-mock-debug-acceptance-v1",
+      "absent": true
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/sitemap-findings-ui-source-ui-mock-optimized-acceptance-v1",
+      "absent": true
+    }
+  ],
+  "not_run": [
+    "Any .mjs/.cjs import/eval/VM or guardian/adapter execution",
+    "UI suite/build/Cargo/compiler/tests",
+    "Native SDK/CLI/API/HTTP/SQLite/browser/fixtures",
+    "Stale asset/publication/log/deadline negative runtime controls"
+  ],
+  "actual_runtime_runs": 0,
+  "product_git_runtime_writes": false,
+  "own_source_writes_only": true
+}
