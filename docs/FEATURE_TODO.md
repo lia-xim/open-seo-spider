@@ -10,6 +10,16 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
 
 ## Aktuelle Arbeit und nächste Schritte
 
+- [ ] **Kombinierten Quellstand vollständig prüfen und als Kandidaten abnehmen** — FULL_WORKSPACE_GATE_FAILED. Alle1.203 tatsächlichen Rust-Tests bestehen mit0 Fehlern und0 ignorierten Fällen, darunter alle421 benannten Pflichtfälle und vier echte Chromium-Renderer-Gates. Anschließendes Clippy endet mit Exit101 und16 Core-Diagnosen; deshalb ist der Gesamtstand noch nicht buildberechtigt. Vollständige Protokolle und alle tatsächlichen Prozess-/Serverabschlüsse sind archiviert.
+  - [x] Alle301 Snapshot-/Checkout-Eingaben sind nach tatsächlichem Schließen der eigenen Server bytegleich; Rohprotokolle und Child-Close-Belege sind archiviert.
+  - [x] Alle1.203 Rust-Tests,421 Pflichtnamen und vier tatsächlichen Renderer-Gates bestehen; anschließend16 Core-Clippy-Diagnosen konkret archiviert.
+  - [ ] Fehlgeschlagenes Gate gezielt reparieren und den neuen Quellstand erneut passend prüfen.
+  - [ ] Optimierten Kandidaten aus demselben Quellstand bauen; native API-/CLI-/offizielle MCP-SDK-/echte Browser-/physische Grenzprüfungen ausführen.
+  - [ ] Linux-/Container-Prüfung nach Reparatur der lokal nicht registrierten WSL-Installation ergänzen; Docker ist im Windows-Pfad nicht verfügbar.
+  - [ ] Daten erhaltende Installation und bestehende Nutzer-Crawls getrennt prüfen; Hersteller-Parität bleibt offen.
+  - Verträge: [index.json](verification/combined-workspace-v2-20261015/index.json), [proof.json](verification/combined-workspace-v2-20261015/actual-suite/proof.json).
+  - Gate-Stand: full_workspace: FAIL_COMBINED_WORKSPACE_V2; required_named_cases: PASS_421; actual_renderer: PASS_4; optimized_candidate: NOT_RUN; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN; rust_workspace: PASS_ACTUAL_1203_0_0; clippy: FAIL_101_16_CORE_DIAGNOSTICS.
+
 - [ ] **Vier Fehler aus dem kombinierten Gesamtlauf beheben** — PASS_EIGHTEEN_DIRECTED_TESTS_FULL_WORKSPACE_OPEN. Der tatsächliche kombinierte Lauf endete mit1.079 bestandenen,4 fehlgeschlagenen und0 ignorierten Tests. Alle vier Fehler sind gezielt korrigiert;18 gerichtete Testfunktionen bestehen. Ein neuer vollständiger Workspace mit den vier echten Renderer-Gates, Format und Clippy steht aus.
   - [x] Vollständigen fehlgeschlagenen kombinierten Lauf archiviert: App251/0/0 und Core828/4/0, tatsächlicher Cargo-Exit101, beide eigenen Server geschlossen und alle301 Eingaben danach bytegleich.
   - [x] Bekannten HTTP-Status nach einer zu langen finalen Redirect-Adresse erhalten; XML-Decoding, Zählung und daraus abgeleitete Aussagen bleiben ausdrücklich unbekannt. Echte Redirect-Regression und zwei neue positive/negative Typed-Kontrollgruppen bestehen.
@@ -5396,4 +5406,4 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `047e09937d85cc02deb4f9c808897b14b8ac18bce5404c8a71b647ef92c4be58`. Letzter im Katalog erfasster Beweisstand: `2026-10-14T17:39:44.101Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `d5b7fca240f0ac65f35bb22bd1dead5d967247e0a46261409b60d5b391520097`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T03:44:55.696Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

@@ -5984,6 +5984,15 @@
       "recorded_at": "2026-10-15T03:30:00.026Z",
       "scope": "Actual failed combined1079/4 and18 subsequent directed functions bound to their own captured301-input sets. Not full-workspace, renderer, Clippy, native release or manufacturer parity proof.",
       "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "combined-workspace-v2-20261015",
+      "artifact": "docs/verification/combined-workspace-v2-20261015/index.json",
+      "artifact_sha256": "29c380687403f703a60bbe4f47f38fe4942e7fa93071e0ea60f9858769d4cd11",
+      "result": "FAIL_COMBINED_WORKSPACE_V2",
+      "recorded_at": "2026-10-15T03:44:55.696Z",
+      "scope": "Actual same-source Windows full Rust workspace, required names, four owned Chromium gates, format and Clippy. Native optimized binary/SDK/browser/physical/Linux/container/install and full vendor parity remain separate.",
+      "reference_parity": "NOT_PROVEN"
     }
   ],
   "reference_workflows": [
@@ -6241,8 +6250,40 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-14T17:39:44.101Z",
+  "last_verified_at": "2026-10-15T03:44:55.696Z",
   "current_work": [
+    {
+      "id": "combined-workspace-v2-20261015",
+      "status": "FULL_WORKSPACE_GATE_FAILED",
+      "priority": 0,
+      "title_de": "Kombinierten Quellstand vollständig prüfen und als Kandidaten abnehmen",
+      "summary_de": "Alle1.203 tatsächlichen Rust-Tests bestehen mit0 Fehlern und0 ignorierten Fällen, darunter alle421 benannten Pflichtfälle und vier echte Chromium-Renderer-Gates. Anschließendes Clippy endet mit Exit101 und16 Core-Diagnosen; deshalb ist der Gesamtstand noch nicht buildberechtigt. Vollständige Protokolle und alle tatsächlichen Prozess-/Serverabschlüsse sind archiviert.",
+      "completed_acceptance_de": [
+        "Alle301 Snapshot-/Checkout-Eingaben sind nach tatsächlichem Schließen der eigenen Server bytegleich; Rohprotokolle und Child-Close-Belege sind archiviert.",
+        "Alle1.203 Rust-Tests,421 Pflichtnamen und vier tatsächlichen Renderer-Gates bestehen; anschließend16 Core-Clippy-Diagnosen konkret archiviert."
+      ],
+      "pending_acceptance_de": [
+        "Fehlgeschlagenes Gate gezielt reparieren und den neuen Quellstand erneut passend prüfen.",
+        "Optimierten Kandidaten aus demselben Quellstand bauen; native API-/CLI-/offizielle MCP-SDK-/echte Browser-/physische Grenzprüfungen ausführen.",
+        "Linux-/Container-Prüfung nach Reparatur der lokal nicht registrierten WSL-Installation ergänzen; Docker ist im Windows-Pfad nicht verfügbar.",
+        "Daten erhaltende Installation und bestehende Nutzer-Crawls getrennt prüfen; Hersteller-Parität bleibt offen."
+      ],
+      "documentation": [
+        "docs/verification/combined-workspace-v2-20261015/index.json",
+        "docs/verification/combined-workspace-v2-20261015/actual-suite/proof.json"
+      ],
+      "gates": {
+        "full_workspace": "FAIL_COMBINED_WORKSPACE_V2",
+        "required_named_cases": "PASS_421",
+        "actual_renderer": "PASS_4",
+        "optimized_candidate": "NOT_RUN",
+        "installed_runtime": "UNCHANGED_AB1",
+        "manufacturer_parity": "NOT_PROVEN",
+        "rust_workspace": "PASS_ACTUAL_1203_0_0",
+        "clippy": "FAIL_101_16_CORE_DIAGNOSTICS"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
     {
       "id": "combined-core-repairs-20261015",
       "status": "PASS_EIGHTEEN_DIRECTED_TESTS_FULL_WORKSPACE_OPEN",

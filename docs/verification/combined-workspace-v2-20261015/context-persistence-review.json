@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "kind": "bounded_readonly_persistence_source_check",
+  "conclusion": "No further contradictory URL/status presence invariant found in the reviewed source-store/load/checkpoint path.",
+  "sourceRoot": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v1",
+  "sourceManifestSha256": "67aebeb959ac6cfb9f8352162becf3ff98ef90918c825a674ea2e92a5df353d0",
+  "promotedValidator": {
+    "path": "crates/core/src/sitemap_source_measurement.rs",
+    "sha256": "b70ced5d81c5a2708529e014ca61a24dea2458011277aa227530808db2bd2dca"
+  },
+  "unchangedSourcePins": [
+    {
+      "path": "crates/core/src/store.rs",
+      "sha256": "bdf8838fa21adf58b360ae8473ac63b73cefe68e22ed611c769dae7c0918128e",
+      "rootCopyMatches": true
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store.rs",
+      "sha256": "fe59417d12939e62e65c78ce894d7d34d55f2708ee792d1c21f3a04c438678ae",
+      "rootCopyMatches": true
+    },
+    {
+      "path": "crates/core/src/sitemap_discovery.rs",
+      "sha256": "62ba13bbcd809c111e954484d557724d9303d53e75e8a29f83519d555ed30b22",
+      "rootCopyMatches": true
+    },
+    {
+      "path": "crates/core/src/crawler.rs",
+      "sha256": "ef99fff8bdba98ac09e9df494c1ae7eb20e86d229468b1e5bb94e27649091d68",
+      "rootCopyMatches": true
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_capture_tests.rs",
+      "sha256": "182f08a5cfb8209bd800462d42406f9613082f8e824d229952c3a431e4b760b0",
+      "rootCopyMatches": true
+    }
+  ],
+  "conditions": [
+    "crawler.rs2799-2802 omits the oversized exact final URL before document construction; crawler.rs2005-2008 preserves that None plus the observed final status.",
+    "sitemap_discovery.rs19-38 stores the already-bounded transport facts. The durable SourceDocument does not contain the original9.7KiB final URLSome.",
+    "sitemap_source_store.rs657-691 binds measurement/document exact final_url, status and body facts. Both final URLs are None; no second presence-pair guard is imposed.",
+    "record_a1215-1217, validate_catalog_binding559 and load916-919 use the same updated measurement validator and exact document binding.",
+    "store.rs2162-2164 save_checkpoint compares the report against its validated committed source snapshot; no additional finalURL/status pairing rule found.",
+    "source_store.project_inherited_snapshot927-940 validates the same portable snapshot before/after projection; it does not reconstruct an overlong final URL."
+  ],
+  "existingActualTest": {
+    "path": "crates/core/src/crawler/sitemap_capture_tests.rs",
+    "name": "actual_oversized_redirect_context_retains_known_transport_with_unknown_decode_and_count",
+    "lines": [
+      1050,
+      1054,
+      1065,
+      1069,
+      1070,
+      1071
+    ],
+    "coverage": "Actual CaptureA SQLite commit, measured completion/link, validated snapshot reload, one record, one commit, no omission",
+    "runtimeEvidence": "Root reports directed95861 CLOSED0 PASS5 including this unchanged actual regression; not executed by reviewer"
+  },
+  "boundary": "Explicit save_checkpoint, restart, HTTP/UI projection for this exact edge case was not independently executed here. Source consistency is established; no additional runtime acceptance claim.",
+  "reviewerActivity": {
+    "sourceReadsOnly": true,
+    "compiler": 0,
+    "tests": 0,
+    "runtime": 0,
+    "rootSourceWrites": 0,
+    "frozenSourceWrites": 0
+  }
+}

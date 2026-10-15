@@ -1,0 +1,284 @@
+    Checking windows-sys v0.61.2
+    Checking ambient-authority v0.0.2
+    Checking maybe-owned v0.3.4
+    Checking windows_x86_64_msvc v0.52.6
+    Checking io-lifetimes v3.0.1
+    Checking io-lifetimes v2.0.4
+    Checking windows-targets v0.52.6
+    Checking windows-sys v0.52.0
+    Checking winx v0.36.4
+    Checking fs-set-times v0.20.3
+    Checking io-extras v0.19.0
+    Checking socket2 v0.6.5
+    Checking mio v1.2.4
+    Checking tempfile v3.27.0
+    Checking anstyle-query v1.1.5
+    Checking anstyle-wincon v3.0.11
+    Checking cap-primitives v4.0.3
+    Checking nu-ansi-term v0.50.3
+    Checking anstream v1.0.0
+    Checking tracing-subscriber v0.3.23
+    Checking clap_builder v4.6.7
+    Checking tokio v1.53.2
+    Checking cap-std v4.0.3
+    Checking cap-fs-ext v4.0.3
+    Checking clap v4.6.7
+    Checking hyper v1.12.0
+    Checking tower v0.5.3
+    Checking tokio-util v0.7.20
+    Checking tokio-rustls v0.26.6
+    Checking async-compression v0.4.50
+    Checking tower-http v0.6.11
+    Checking hyper-util v0.1.21
+    Checking hyper-rustls v0.27.10
+    Checking axum v0.8.9
+    Checking reqwest v0.12.28
+    Checking open-seo-spider-core v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\combined-source-v2\crates\core)
+error: large size difference between variants
+    --> crates\core\src\crawler.rs:2503:1
+     |
+2503 | / enum SourceCapturePersistence {
+2504 | |     NotApplicable,
+2505 | |     NoMeasurement(SourceCaptureUnavailable),
+     | |     --------------------------------------- the second-largest variant contains at least 1 bytes
+2506 | |     Receipt(crate::sitemap_source_store::SourceMeasurementReceipt),
+     | |     -------------------------------------------------------------- the largest variant contains at least 264 bytes
+2507 | | }
+     | |_^ the entire enum is at least 264 bytes
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#large_enum_variant
+     = note: `-D clippy::large-enum-variant` implied by `-D warnings`
+     = help: to override `-D warnings` add `#[allow(clippy::large_enum_variant)]`
+help: consider boxing the large fields or introducing indirection in some other way to reduce the total size of the enum
+     |
+2506 -     Receipt(crate::sitemap_source_store::SourceMeasurementReceipt),
+2506 +     Receipt(Box<crate::sitemap_source_store::SourceMeasurementReceipt>),
+     |
+
+error: large size difference between variants
+  --> crates\core\src\crawler\sitemap_capture.rs:84:1
+   |
+84 | / pub(super) enum CountCapture {
+85 | |     NotInvoked(SitemapSourceMeasurementStop),
+   | |     ---------------------------------------- the second-largest variant contains at least 1 bytes
+86 | |     Observed(Result<SitemapCountObservation, SitemapFailure>),
+   | |     --------------------------------------------------------- the largest variant contains at least 432 bytes
+87 | | }
+   | |_^ the entire enum is at least 432 bytes
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#large_enum_variant
+help: consider boxing the large fields or introducing indirection in some other way to reduce the total size of the enum
+   |
+86 -     Observed(Result<SitemapCountObservation, SitemapFailure>),
+86 +     Observed(Box<Result<SitemapCountObservation, SitemapFailure>>),
+   |
+
+error: this `if` statement can be collapsed
+   --> crates\core\src\sitemap_findings\source.rs:375:13
+    |
+375 | /             if after.is_none_or(|p| matches!(p, Position::SourceMeasurement { .. })) {
+376 | |                 if let (Some(source), Some(raw)) = (self.source, self.raw) {
+377 | |                     let lower = match after {
+378 | |                         Some(Position::SourceMeasurement { sequence }) => *sequence,
+...   |
+418 | |             }
+    | |_____________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#collapsible_if
+    = note: `-D clippy::collapsible-if` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::collapsible_if)]`
+help: collapse nested if block
+    |
+375 ~             if after.is_none_or(|p| matches!(p, Position::SourceMeasurement { .. }))
+376 ~                 && let (Some(source), Some(raw)) = (self.source, self.raw) {
+377 |                     let lower = match after {
+...
+416 |                     }
+417 ~                 }
+    |
+
+error: this `if` statement can be collapsed
+   --> crates\core\src\sitemap_findings\source.rs:419:13
+    |
+419 | /             if !matches!(after, Some(Position::UnmeasuredSourceTask { .. })) {
+420 | |                 if let Some(raw) = self.raw {
+421 | |                     let lower = match after {
+422 | |                         Some(Position::LegacySourceDocument { sequence }) => *sequence,
+...   |
+451 | |             }
+    | |_____________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#collapsible_if
+help: collapse nested if block
+    |
+419 ~             if !matches!(after, Some(Position::UnmeasuredSourceTask { .. }))
+420 ~                 && let Some(raw) = self.raw {
+421 |                     let lower = match after {
+...
+449 |                     }
+450 ~                 }
+    |
+
+error: large size difference between variants
+   --> crates\core\src\sitemap_findings.rs:238:1
+    |
+238 | /   pub enum SitemapSourceFindingEvidence {
+239 | | /     Measured {
+240 | | |         record: Box<SitemapSourceStoredMeasurement>,
+241 | | |         protocol: SitemapSourceProtocolAssessment,
+242 | | |         association: Option<SitemapSourceCommitAssociation>,
+243 | | |         committed_document: Option<Box<SitemapSourceDocument>>,
+244 | | |     },
+    | | |_____- the largest variant contains at least 288 bytes
+...   |
+248 | | /     UnmeasuredTask {
+249 | | |         task: SitemapCoverageTask,
+250 | | |     },
+    | | |_____- the second-largest variant contains at least 32 bytes
+251 | |   }
+    | |___^ the entire enum is at least 288 bytes
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#large_enum_variant
+help: consider boxing the large fields or introducing indirection in some other way to reduce the total size of the enum
+    |
+242 -         association: Option<SitemapSourceCommitAssociation>,
+242 +         association: Box<Option<SitemapSourceCommitAssociation>>,
+    |
+
+error: derefed type is same as origin
+   --> crates\core\src\sitemap_ledger\verified_read.rs:298:20
+    |
+298 |                 && source_kind.as_deref() == Some(row.kind.frontier_kind())
+    |                    ^^^^^^^^^^^^^^^^^^^^^^ help: try: `source_kind`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#needless_option_as_deref
+    = note: `-D clippy::needless-option-as-deref` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::needless_option_as_deref)]`
+
+error: derefed type is same as origin
+   --> crates\core\src\sitemap_ledger\verified_read.rs:299:20
+    |
+299 |                 && task_url.as_deref() == Some(row.task_url.as_str())
+    |                    ^^^^^^^^^^^^^^^^^^^ help: try: `task_url`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#needless_option_as_deref
+
+error: derefed type is same as origin
+   --> crates\core\src\sitemap_ledger\verified_read.rs:301:20
+    |
+301 |                 && revision_or_entry.as_deref() == Some(row.source_revision.as_str()),
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: try: `revision_or_entry`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#needless_option_as_deref
+
+error: derefed type is same as origin
+   --> crates\core\src\sitemap_ledger\verified_read.rs:306:20
+    |
+306 |                 && observation.as_deref() == Some(row.observation_id.as_str())
+    |                    ^^^^^^^^^^^^^^^^^^^^^^ help: try: `observation`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#needless_option_as_deref
+
+error: derefed type is same as origin
+   --> crates\core\src\sitemap_ledger\verified_read.rs:312:20
+    |
+312 |                 && observation.as_deref() == Some(row.observation_id.as_str())
+    |                    ^^^^^^^^^^^^^^^^^^^^^^ help: try: `observation`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#needless_option_as_deref
+
+error: this `if` statement can be collapsed
+   --> crates\core\src\sitemap_source_measurement.rs:606:5
+    |
+606 | /     if d.encoding == Some(SitemapEntityEncoding::Identity) {
+607 | |         if let (Some(xml), Some(entity)) = (
+608 | |             d.decoded_xml_bytes.value,
+609 | |             p.transport.post_http_received_bytes.value,
+...   |
+616 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#collapsible_if
+help: collapse nested if block
+    |
+606 ~     if d.encoding == Some(SitemapEntityEncoding::Identity)
+607 ~         && let (Some(xml), Some(entity)) = (
+608 |             d.decoded_xml_bytes.value,
+...
+614 |             }
+615 ~         }
+    |
+
+error: all variants have the same prefix: `Max`
+  --> crates\core\src\sitemap_source_processing.rs:48:9
+   |
+48 | /         enum Field {
+49 | |             MaxPostHttpEntityBytes,
+50 | |             MaxDecodedXmlBytes,
+51 | |             MaxXmlEvents,
+52 | |         }
+   | |_________^
+   |
+   = help: remove the prefixes and use full paths to the variants instead of glob imports
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#enum_variant_names
+   = note: `-D clippy::enum-variant-names` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::enum_variant_names)]`
+
+error: could not compile `open-seo-spider-core` (lib) due to 12 previous errors
+warning: build failed, waiting for other jobs to finish...
+error: called `.err().expect()` on a `Result` value
+   --> crates\core\src\crawler\sitemap_large_capture_tests.rs:395:14
+    |
+395 |               .err()
+    |  ______________^
+396 | |             .expect("wrong bounds must not commit A");
+    | |___________________^ help: try: `expect_err`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#err_expect
+    = note: `-D clippy::err-expect` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::err_expect)]`
+
+error: called `.err().expect()` on a `Result` value
+   --> crates\core\src\sitemap_membership_analysis\window_tests.rs:386:14
+    |
+386 |               .err()
+    |  ______________^
+387 | |             .expect("overbudget escaped report key");
+    | |___________________^ help: try: `expect_err`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#err_expect
+
+error: used `assert_eq!` with a literal bool
+   --> crates\core\src\sitemap_source_store_tests.rs:654:5
+    |
+654 | /     assert_eq!(
+655 | |         inherited
+656 | |             .summary
+657 | |             .inherited
+...   |
+661 | |         false
+662 | |     );
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#bool_assert_comparison
+    = note: `-D clippy::bool-assert-comparison` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::bool_assert_comparison)]`
+help: replace it with `assert!(..)`
+    |
+654 ~     assert!(
+655 ~         !inherited
+656 |             .summary
+...
+659 |             .unwrap()
+660 ~             .current_discovery_executed
+    |
+
+error: called `.err().expect()` on a `Result` value
+   --> crates\core\src\sitemap_source_store\verified_read_tests.rs:242:33
+    |
+242 |     let old_error = load(&read).err().expect("portable duplicate must fail");
+    |                                 ^^^^^^^^^^^^ help: try: `expect_err`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#err_expect
+
+error: could not compile `open-seo-spider-core` (lib test) due to 16 previous errors
