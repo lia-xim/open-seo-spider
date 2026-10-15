@@ -1,0 +1,53 @@
+{
+  "kind": "actual_three_app_regression_repairs_focused_v1",
+  "result": "PASS_THREE_DIRECTED_APP_REGRESSIONS",
+  "recorded_at": "2026-10-15T02:28:15.805Z",
+  "source_inputs": 297,
+  "changed_from_v3": 4,
+  "new_test_names": 0,
+  "source_after_verified": true,
+  "runs": [
+    {
+      "name": "mcp::saved_comparison::tests::descriptor_is_read_only_strict_and_additional_to_existing_tools",
+      "pid": 24104,
+      "actual_cargo_close": {
+        "code": 0,
+        "signal": null
+      },
+      "spawn_error": null,
+      "elapsed_ms": 19691,
+      "log_sha256": "d36e918e329c2e17731a2d40ff4c3857342bbcd911579e6ae714dae5be265504",
+      "passed": true
+    },
+    {
+      "name": "sitemap_findings_cli::tests::findings_cli_stage_cancel_and_json_budget_leave_no_final_or_temp_output",
+      "pid": 31116,
+      "actual_cargo_close": {
+        "code": 0,
+        "signal": null
+      },
+      "spawn_error": null,
+      "elapsed_ms": 752,
+      "log_sha256": "fb81eb6d0f08970813e3a64e4cbf6e07b679e2eded05dc2b6007f978506f5687",
+      "passed": true
+    },
+    {
+      "name": "server::sitemaps::tests::streaming_tests::actual_csv_stream_rejects_full_tail_source_report_and_inventory_corruption_before_ready",
+      "pid": 45580,
+      "actual_cargo_close": {
+        "code": 0,
+        "signal": null
+      },
+      "spawn_error": null,
+      "elapsed_ms": 1483,
+      "log_sha256": "57bae225d42467a8e0de6fc11b1f32fb77bbb343c1f9ea5d7841e650412d8c05",
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "core_tests": "NOT_RUN",
+  "four_real_renderer_gates": "NOT_RUN",
+  "clippy": "NOT_RUN",
+  "manufacturer_parity": "NOT_PROVEN",
+  "qualification": "Only the three actually failed App tests, against four test-source repairs over v3. All corruption statements, error/byte/cleanup checks and legacy protocol contract retained; not a full workspace acceptance."
+}

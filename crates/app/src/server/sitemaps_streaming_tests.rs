@@ -230,6 +230,7 @@ async fn actual_csv_stream_rejects_full_tail_source_report_and_inventory_corrupt
         } else {
             sql(&dir, id, fault);
         }
+        warm_corrupt_store_bookkeeping(&dir, id);
         let before = files(&dir.0);
         let http = Http::start(&state).await;
         failure(http.get(id, &q).await, 500, "sitemap_read_failure").await;

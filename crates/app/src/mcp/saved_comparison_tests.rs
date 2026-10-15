@@ -7,14 +7,59 @@ fn descriptor_is_read_only_strict_and_additional_to_existing_tools() {
     assert_eq!(definition["annotations"]["readOnlyHint"], true);
     assert_eq!(definition["annotations"]["openWorldHint"], false);
     assert_eq!(definition["inputSchema"]["additionalProperties"], false);
-    let names: Vec<_> = inventory()
+    let tools = inventory();
+    let names: Vec<_> = tools
         .iter()
         .map(|tool| tool["name"].as_str().unwrap().to_owned())
         .collect();
-    assert_eq!(names.len(), 25);
+    assert_eq!(names.len(), 26);
+    let legacy_prefix: Vec<_> = [
+        "spider_capabilities",
+        "spider_list_crawls",
+        "spider_start_crawl",
+        "spider_status",
+        "spider_pages",
+        "spider_issues",
+        "spider_analysis",
+        "spider_policy",
+        "spider_sitemaps",
+        "spider_resources",
+        "spider_resource_transports",
+        "spider_inspect_css",
+        "spider_content",
+        "spider_content_document",
+        "spider_analyze_crawl_content",
+        "spider_analyze_content",
+        "spider_preview_policy",
+        "spider_cancel",
+        "spider_pause",
+        "spider_resume",
+        "spider_recrawl",
+        "spider_project",
+        "spider_compare",
+        "spider_generate_sitemaps",
+        "spider_compare_saved",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect();
+    assert_eq!(&names[..legacy_prefix.len()], legacy_prefix.as_slice());
+    assert_eq!(
+        names
+            .iter()
+            .collect::<std::collections::BTreeSet<_>>()
+            .len(),
+        26
+    );
     assert!(names.contains(&"spider_sitemaps".into()));
     assert!(names.contains(&"spider_compare".into()));
-    assert_eq!(names.last().unwrap(), "spider_compare_saved");
+    assert!(names.contains(&"spider_sitemap_findings".into()));
+    let saved_comparison: Vec<_> = tools
+        .iter()
+        .filter(|tool| tool["name"] == "spider_compare_saved")
+        .collect();
+    assert_eq!(saved_comparison.len(), 1);
+    assert_eq!(saved_comparison[0], &definition);
 }
 #[test]
 fn structured_api_collision_failure_is_retained_in_mcp_result() {

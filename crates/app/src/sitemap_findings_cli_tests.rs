@@ -292,7 +292,17 @@ fn findings_cli_stage_cancel_and_json_budget_leave_no_final_or_temp_output() {
     }
     assert!(writer.write_all(b"+").is_err());
     control.cancel();
-    assert!(writer.write_all(b"").is_err());
+    let before_digest = writer.digest();
+    // Write::write_all skips Write::write for empty input. A real nonempty
+    // write must observe cancellation before either the budget or filesystem.
+    let error = writer.write_all(b"cancelled write").unwrap_err();
+    assert_eq!(
+        error.to_string(),
+        open_seo_spider_core::SitemapReadControlError::Cancelled.to_string()
+    );
+    assert_eq!(writer.bytes, MAX_JSON_BYTES as u64);
+    assert_eq!(writer.digest(), before_digest);
+    assert_eq!(fs::metadata(&temp).unwrap().len(), MAX_JSON_BYTES as u64);
     drop(writer);
     drop(stage);
     assert!(!temp.exists() && !output.exists());

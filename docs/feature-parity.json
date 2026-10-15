@@ -7074,35 +7074,40 @@
     },
     {
       "id": "sitemap-compile-repair-20261015",
-      "status": "ACTUAL_FULL_WORKSPACE_RUNNING_AFTER_CLEAN_COMPILER_CHECK",
+      "status": "THREE_DIRECTED_REGRESSIONS_PASS_FULL_WORKSPACE_OPEN",
       "priority": 0,
       "title_de": "Sitemap-Compilerfehler beheben und den vollständigen Stand erneut prüfen",
-      "summary_de": "Das koordinierte Build-Fenster ist freigegeben. Der tatsächliche e9-Lauf bestand Format, scheiterte jedoch mit vier Bibliotheks-Typfehlern und einer Test-Importmehrdeutigkeit; null Rust-Tests liefen. Fünf Reparaturdateien bestehen cargo check über alle Workspace-/Testziele mit drei anschließenden App-Warnungen. Der endgültige Stand behebt auch diese Warnungen und ist über297 Eingaben mit genau289 unveränderten und8 geänderten Dateien eingefroren. Vollständige Tests und Clippy bleiben erforderlich.",
+      "summary_de": "Der reparierte v3-Stand kompiliert ohne Warnungen. Sein vollständiger Lauf endete mit217 bestandenen und3 fehlgeschlagenen App-Tests; Core, die vier echten Renderer-Gates und Clippy wurden danach nicht ausgeführt. Die drei Fehler sind durch genau4 Testdatei-Korrekturen behoben und alle3 gerichteten Wiederholungen bestehen tatsächlich. Der neue gesamte Quellstand muss weiterhin vollständig geprüft werden.",
       "completed_acceptance_de": [
         "Tatsächlichen fehlgeschlagenen e9-Lauf mit vollständigem Compilerlog, Exit101 und geschlossenem eigenen Browser-Worker archiviert; installierter Release bleibt unverändert.",
         "Vier Typfehler und die mehrdeutigen Testimporte korrigiert, ohne Testfunktionen oder Assertions zu entfernen. Unabhängiger Review bestätigt die erhaltenen SQL-/SHA-/Größen-/Gleichheitsprüfungen.",
         "Tatsächliches cargo check --workspace --all-targets --locked des fünfdateiligen Zwischenstands besteht; drei gemeldete App-Warnungen danach gezielt bereinigt.",
         "Unabhängiger Review entdeckte eine fehlerhafte Entfernung eines geteilten Fixturefelds vor Ausführung; Feld und bestehende MCP-Assertion sind erhalten, gemeinsamer Fehlertext nutzt die Herkunft. Korrigierter v3-Quellabzug ersetzt den nicht ausgeführten v2-Abzug.",
-        "Korrigierter endgültiger v3-Stand besteht tatsächlich cargo check --workspace --all-targets --locked in23,26 Sekunden ohne Warnungen; alle297 Snapshot-/Checkout-Eingaben danach bytegleich geprüft."
+        "Korrigierter endgültiger v3-Stand besteht tatsächlich cargo check --workspace --all-targets --locked in23,26 Sekunden ohne Warnungen; alle297 Snapshot-/Checkout-Eingaben danach bytegleich geprüft.",
+        "Vollständigen v3-Lauf mit217 bestandenen,3 fehlgeschlagenen und0 ignorierten App-Tests samt vollständigem Log und geschlossenem eigenen Browser-Worker archiviert. Core-/Renderer-/Clippy-Abnahme wurde dadurch nicht erreicht.",
+        "Genau4 Testdateien repariert: eindeutiges26er-MCP-Inventar, echte nichtleere Abbruchschreibprobe und wohldefinierter SQLite-Read-only-Start vor den6 unveränderten Korruptionsfällen. Alle3 gezielten Testwiederholungen bestehen mit jeweils1 bestanden,0 fehlgeschlagen,0 ignoriert; alle297 Eingaben danach bytegleich."
       ],
       "pending_acceptance_de": [
-        "Eingefrorenen endgültigen Acht-Dateien-Stand mit vollständigem Workspace, allen388 benannten Fällen und vier tatsächlichen Browser-Gates prüfen: mindestens1170 bestanden, null fehlgeschlagen, null ignoriert.",
+        "Neuen reparierten Gesamtstand einfrieren und vollständigen Workspace samt allen benannten Fällen und vier tatsächlichen Browser-Gates erfolgreich ausführen; der frühere v3-Lauf ist fehlgeschlagen.",
         "Clippy für alle Ziele mit -D warnings und vollständige Workspace-Formatprüfung bestehen.",
         "Optimierten Kandidaten bauen und native API-/CLI-/SDK-/Browser-/physische Abnahmen ausdrücklich auf den reparierten Quellstand binden; alte e9-Treiber bestätigen diese geänderten Bytes nicht.",
         "Plattform- und installierte Laufzeitabnahmen getrennt abschließen; keine vollständige Hersteller-Parität behaupten."
       ],
       "documentation": [
         "docs/verification/sitemap-source-ui-suite-failed-20261015/index.json",
-        "docs/verification/sitemap-compile-repair-20261015/check.json"
+        "docs/verification/sitemap-compile-repair-20261015/check.json",
+        "docs/verification/sitemap-compile-repair-20261015/focused-app-regressions/index.json"
       ],
       "gates": {
         "historical_e9_full_suite": "ACTUAL_COMPILE_FAIL_101_ZERO_TESTS_WORKER_CLOSED",
         "intermediate_five_file_check": "PASS_WITH_THREE_APP_WARNINGS",
-        "final_eight_file_full_suite": "RUNNING_FMT_PASS_ACTUAL_SESSION_2201",
+        "final_eight_file_full_suite": "FAIL_APP_217_PASS_3_FAIL_0_IGNORE_CORE_RENDERER_CLIPPY_NOT_RUN",
         "final_source_manifest_sha256": "0ab151e4fd06f4603d8429bed4c784f7045e5c838bec378706d6c01bfaefb7bf",
         "installed_runtime": "UNCHANGED_AB1",
         "manufacturer_parity": "NOT_PROVEN",
-        "final_eight_file_check": "PASS_NO_WARNINGS_23_26_SECONDS"
+        "final_eight_file_check": "PASS_NO_WARNINGS_23_26_SECONDS",
+        "directed_three_regressions": "PASS_3_ACTUAL_TESTS_4_TEST_SOURCE_REPAIRS",
+        "new_full_workspace": "NOT_RUN_AFTER_TEST_REPAIRS"
       }
     }
   ]

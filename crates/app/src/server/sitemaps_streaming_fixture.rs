@@ -152,6 +152,36 @@ pub(super) fn warm(dir: &OwnedDirectory, id: Uuid) {
     let reader = CrawlStore::open_read_only(db(dir, id)).unwrap();
     reader.sitemap_read_snapshot().unwrap();
 }
+pub(super) fn warm_corrupt_store_bookkeeping(dir: &OwnedDirectory, id: Uuid) {
+    // A controlled corruption writer can remove WAL/SHM when it is the last
+    // writer to close. Establish the same explicit READ_ONLY startup boundary
+    // as setup(), without running a verifier that must reject the corruption.
+    let before = files(&dir.0);
+    let reader = rusqlite::Connection::open_with_flags(
+        db(dir, id),
+        rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
+    )
+    .unwrap();
+    let schema_rows: i64 = reader
+        .query_row("SELECT count(*) FROM sqlite_master", [], |row| row.get(0))
+        .unwrap();
+    assert!(schema_rows > 0);
+    drop(reader);
+    let after = files(&dir.0);
+    for (name, bytes) in &before {
+        assert!(after.get(name) == Some(bytes), "Startup changed {name}");
+    }
+    for (name, bytes) in &after {
+        if !before.contains_key(name) {
+            if name == &format!("{id}.sqlite-wal") {
+                assert!(bytes.is_empty(), "Read startup added WAL frames");
+            } else {
+                assert_eq!(name, &format!("{id}.sqlite-shm"));
+                assert_eq!(bytes.len(), 32768);
+            }
+        }
+    }
+}
 pub(super) fn state_from_result(
     dir: &OwnedDirectory,
     id: Uuid,
