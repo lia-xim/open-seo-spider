@@ -122,16 +122,41 @@ fn api_error(code: StatusCode, message: impl ToString) -> (StatusCode, Json<ApiE
 }
 
 pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
-    let listener = tokio::net::TcpListener::bind(listen).await?;
-    let address = listener.local_addr()?;
-    let mcp_host = if address.is_ipv6() {
-        "[::1]"
+    serve_with_mcp_files(listen, data_dir, None).await
+}
+
+pub async fn serve_with_mcp_files(
+    listen: &str,
+    data_dir: PathBuf,
+    mcp_files_dir: Option<PathBuf>,
+) -> anyhow::Result<()> {
+    serve_with_mcp_files_ready(listen, data_dir, mcp_files_dir, None).await
+}
+
+pub(crate) async fn serve_with_mcp_files_ready(
+    listen: &str,
+    data_dir: PathBuf,
+    mcp_files_dir: Option<PathBuf>,
+    ready: Option<tokio::sync::oneshot::Sender<std::net::SocketAddr>>,
+) -> anyhow::Result<()> {
+    // Validate and retain the directory capability before either listening or
+    // creating the application data directory. Port zero is replaced in place.
+    let mut mcp = crate::mcp::Bridge::new_with_file_tools("http://127.0.0.1:0", mcp_files_dir)?;
+    let listener = if mcp.file_tools_enabled() {
+        let addresses: Vec<_> = tokio::net::lookup_host(listen).await?.collect();
+        anyhow::ensure!(
+            !addresses.is_empty() && addresses.iter().all(|address| address.ip().is_loopback()),
+            "MCP file tools require an exclusively loopback listen address"
+        );
+        tokio::net::TcpListener::bind(addresses.as_slice()).await?
     } else {
-        "127.0.0.1"
+        tokio::net::TcpListener::bind(listen).await?
     };
+    let address = listener.local_addr()?;
+    mcp.set_local_api_address(address)?;
     tokio::fs::create_dir_all(&data_dir).await?;
     let state = AppState {
-        mcp: crate::mcp::Bridge::new(&format!("http://{mcp_host}:{}", address.port()))?,
+        mcp,
         jobs: Arc::new(RwLock::new(HashMap::new())),
         data_dir: Arc::new(data_dir),
         exports: Default::default(),
@@ -142,6 +167,8 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
     let shutdown_exports = exports.clone();
     let finding_reads = state.finding_reads.clone();
     let shutdown_finding_reads = finding_reads.clone();
+    let file_tools = state.mcp.clone();
+    let shutdown_file_tools = file_tools.clone();
     let router = Router::new()
         .route(
             "/",
@@ -187,7 +214,7 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
                 )
             }),
         )
-        .route("/api/capabilities", get(capabilities))
+        .route("/api/capabilities", get(capabilities_with_mcp_files))
         .route(
             "/list-import.js",
             get(|| async {
@@ -314,12 +341,16 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
         .layer(middleware::from_fn(local_origin))
         .with_state(state);
     println!("Open SEO Spider: http://{}", listener.local_addr()?);
+    if let Some(ready) = ready {
+        let _ = ready.send(address);
+    }
     let serving = axum::serve(listener, router)
         .with_graceful_shutdown(async move {
             let _ = tokio::signal::ctrl_c().await;
-            let (csv_drain, finding_drain) = tokio::join!(
+            let (csv_drain, finding_drain, file_drain) = tokio::join!(
                 shutdown_exports.shutdown_and_drain(),
                 shutdown_finding_reads.shutdown_and_drain(),
+                shutdown_file_tools.shutdown_file_tools(),
             );
             if let Err(error) = csv_drain {
                 tracing::error!(%error, "CSV export shutdown drain failed");
@@ -327,15 +358,20 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
             if let Err(error) = finding_drain {
                 tracing::error!(%error, "Findings read shutdown drain failed");
             }
+            if let Err(error) = file_drain {
+                tracing::error!(%error, "MCP file-tool shutdown drain failed");
+            }
         })
         .await;
-    let (drain, read_drain) = tokio::join!(
+    let (drain, read_drain, file_drain) = tokio::join!(
         exports.shutdown_and_drain(),
         finding_reads.shutdown_and_drain(),
+        file_tools.shutdown_file_tools(),
     );
     serving?;
     drain?;
     read_drain?;
+    file_drain?;
     Ok(())
 }
 async fn mcp_http(
@@ -366,7 +402,17 @@ async fn local_origin(request: Request, next: Next) -> Response {
     let local = host
         .parse::<axum::http::uri::Authority>()
         .ok()
-        .is_some_and(|authority| matches!(authority.host(), "localhost" | "127.0.0.1" | "[::1]"));
+        .is_some_and(|authority| {
+            let host = authority.host();
+            let address = host
+                .strip_prefix('[')
+                .and_then(|value| value.strip_suffix(']'))
+                .unwrap_or(host);
+            host == "localhost"
+                || address
+                    .parse::<std::net::IpAddr>()
+                    .is_ok_and(|address| address.is_loopback())
+        });
     if !local {
         return api_error(StatusCode::FORBIDDEN, "Use a loopback hostname").into_response();
     }
@@ -423,6 +469,15 @@ async fn capabilities() -> Json<Value> {
         "parity":"in progress; see docs/parity/granular-acceptance.json"
     }))
 }
+
+async fn capabilities_with_mcp_files(State(state): State<AppState>) -> Json<Value> {
+    let Json(mut value) = capabilities().await;
+    if let Some(capability) = state.mcp.file_tools_capability() {
+        value["mcp"]["file_tools"] = capability;
+    }
+    Json(value)
+}
+
 async fn content_analysis(
     Json(input): Json<ContentAnalysisInput>,
 ) -> ApiResult<Json<ContentAnalysisResult>> {

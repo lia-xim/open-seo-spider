@@ -2,10 +2,12 @@
 use anyhow::{Context, bail};
 use reqwest::{Client, Url};
 use serde_json::{Value, json};
-#[cfg(test)]
-use tokio::io::{AsyncBufReadExt, AsyncReadExt, AsyncWriteExt, BufReader};
+use std::{io::Write, net::SocketAddr, path::PathBuf};
 use tokio::io::{AsyncRead, AsyncWrite};
+#[cfg(test)]
+use tokio::io::{AsyncReadExt, AsyncWriteExt, BufReader};
 pub const PROTOCOLS: &[&str] = &["2025-06-18", "2025-11-25"];
+mod files;
 mod generation;
 mod saved_comparison;
 mod sitemap_findings;
@@ -14,6 +16,7 @@ mod sitemaps;
 pub struct Bridge {
     client: Client,
     base: Url,
+    files: Option<files::FileTools>,
 }
 impl Bridge {
     pub fn new(base: &str) -> anyhow::Result<Self> {
@@ -41,8 +44,73 @@ impl Bridge {
                 .timeout(std::time::Duration::from_secs(60))
                 .redirect(reqwest::redirect::Policy::none())
                 .build()?,
+            files: None,
         })
     }
+
+    pub fn new_with_file_tools(base: &str, directory: Option<PathBuf>) -> anyhow::Result<Self> {
+        let mut bridge = Self::new(base)?;
+        bridge.files = directory
+            .as_deref()
+            .map(files::FileTools::open)
+            .transpose()?;
+        Ok(bridge)
+    }
+
+    pub(crate) fn file_tools_enabled(&self) -> bool {
+        self.files.is_some()
+    }
+
+    pub(crate) fn file_tools_capability(&self) -> Option<Value> {
+        self.files.as_ref().map(|_| {
+            json!({
+                "enabled":true,"opt_in":true,"scope":"explicit_local_directory",
+                "website_requests":0,"tools":files::FileTools::definitions().iter().map(|tool| tool["name"].clone()).collect::<Vec<_>>(),
+                "limits":{
+                    "write_text_utf8_bytes":files::WRITE_TEXT_MAX_BYTES,
+                    "read_chunk_utf8_bytes":files::READ_CHUNK_MAX_BYTES,
+                    "read_file_utf8_bytes":files::READ_FILE_MAX_BYTES,
+                    "directory_entries":files::DIRECTORY_MAX_ENTRIES,
+                    "directory_name_utf8_bytes":files::DIRECTORY_NAME_MAX_BYTES,
+                    "concurrent_operations":files::MAX_CONCURRENT_FILE_OPS,
+                    "result_json_bytes":files::MAX_RESULT_JSON_BYTES,
+                    "mcp_wire_bytes":MAX_FILE_WIRE_BYTES,"rpc_id_utf8_bytes":1024
+                }
+            })
+        })
+    }
+
+    pub(crate) async fn shutdown_file_tools(&self) -> anyhow::Result<()> {
+        match &self.files {
+            Some(files) => files.shutdown_and_drain().await,
+            None => Ok(()),
+        }
+    }
+
+    // Retain the already opened directory capability when a port-zero listener
+    // obtains its actual local address. Never reopen a pathname after binding.
+    pub(crate) fn set_local_api_address(&mut self, address: SocketAddr) -> anyhow::Result<()> {
+        if address.ip().is_loopback() {
+            self.base = Url::parse(&format!("http://{address}"))?;
+            return Ok(());
+        }
+        let host = if address.is_ipv6() {
+            "[::1]"
+        } else {
+            "127.0.0.1"
+        };
+        self.base = Url::parse(&format!("http://{host}:{}", address.port()))?;
+        Ok(())
+    }
+
+    fn inventory(&self) -> Vec<Value> {
+        let mut tools = inventory();
+        if self.files.is_some() {
+            tools.extend(files::FileTools::definitions());
+        }
+        tools
+    }
+
     pub async fn dispatch(&self, request: Value) -> Option<Value> {
         if !request.is_object() {
             return Some(error(
@@ -52,6 +120,18 @@ impl Bridge {
             ));
         }
         let id_ref = request.get("id")?;
+        if request["method"] == "tools/call"
+            && request["params"]["name"]
+                .as_str()
+                .is_some_and(files::FileTools::is_tool)
+            && !sitemap_findings::valid_rpc_id(id_ref)
+        {
+            return Some(error(
+                Value::Null,
+                -32600,
+                "File RPC id must be an integer or at most 1024 UTF-8 bytes",
+            ));
+        }
         if request["method"] == "tools/call"
             && request["params"]["name"] == sitemap_findings::NAME
             && !sitemap_findings::valid_rpc_id(id_ref)
@@ -77,7 +157,7 @@ impl Bridge {
                 json!({"protocolVersion":version,"serverInfo":{"name":"open-seo-spider","version":env!("CARGO_PKG_VERSION")},"capabilities":{"tools":{"listChanged":false}},"instructions":"Use the local crawler only for user-requested targets. A completed crawl does not imply full feature parity."})
             }
             "ping" => json!({}),
-            "tools/list" => json!({"tools":inventory()}),
+            "tools/list" => json!({"tools":self.inventory()}),
             "tools/call" => {
                 let Some(name) = request["params"]["name"].as_str() else {
                     return Some(error(id, -32602, "Tool name required"));
@@ -86,7 +166,7 @@ impl Bridge {
                     .get("arguments")
                     .cloned()
                     .unwrap_or(json!({}));
-                let definitions = inventory();
+                let definitions = self.inventory();
                 let definition = definitions
                     .iter()
                     .find(|tool| tool["name"].as_str() == Some(name));
@@ -104,6 +184,20 @@ impl Bridge {
                     })
                 {
                     return Some(error(id, -32602, "Unexpected or missing tool argument"));
+                }
+                if files::FileTools::is_tool(name) {
+                    let Some(files) = &self.files else {
+                        return Some(error(id, -32602, "File tools are disabled"));
+                    };
+                    if !file_wire_capacity(&id) {
+                        return Some(error(
+                            id,
+                            -32603,
+                            "File result budget cannot fit MCP wire limit",
+                        ));
+                    }
+                    let result = files.call(name, args).await;
+                    return Some(file_result(id, result));
                 }
                 if name == sitemap_findings::NAME {
                     let result = sitemap_findings::call(self, args).await;
@@ -336,6 +430,79 @@ fn id(args: &Value, key: &str) -> anyhow::Result<uuid::Uuid> {
 fn error(id: Value, code: i64, message: &str) -> Value {
     json!({"jsonrpc":"2.0","id":id,"error":{"code":code,"message":message}})
 }
+
+const MAX_FILE_WIRE_BYTES: usize = 8 * 1024 * 1024;
+
+struct FileWireCounter(usize);
+impl Write for FileWireCounter {
+    fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+        let next = self.0.checked_add(bytes.len()).filter(|next| {
+            // The shared stdio writer appends one physical newline.
+            *next < MAX_FILE_WIRE_BYTES
+        });
+        let Some(next) = next else {
+            return Err(std::io::Error::other(
+                "File response exceeds MCP wire limit",
+            ));
+        };
+        self.0 = next;
+        Ok(bytes.len())
+    }
+
+    fn flush(&mut self) -> std::io::Result<()> {
+        Ok(())
+    }
+}
+
+fn file_envelope(id: Value, value: Value, failed: bool) -> Value {
+    let text = if failed {
+        "Local file operation failed; see structuredContent."
+    } else {
+        "Local file operation completed; see structuredContent."
+    };
+    json!({"jsonrpc":"2.0","id":id,"result":{"content":[{"type":"text","text":text}],"structuredContent":value,"isError":failed}})
+}
+
+fn file_wire_capacity(id: &Value) -> bool {
+    // This runs BEFORE FileTools::call and therefore before any write. Its
+    // declared maximum is actual encoded result JSON, not raw file/text bytes.
+    // Keep the conservative null-placeholder overhead rather than subtracting it.
+    let mut count = FileWireCounter(0);
+    serde_json::to_writer(&mut count, &file_envelope(id.clone(), Value::Null, false)).is_ok()
+        && count
+            .0
+            .checked_add(files::MAX_RESULT_JSON_BYTES)
+            .is_some_and(|maximum| maximum < MAX_FILE_WIRE_BYTES)
+}
+
+fn file_result(id: Value, result: anyhow::Result<Value>) -> Value {
+    let (value, failed) = match result {
+        Ok(value) => (value, false),
+        Err(failure) => {
+            let mut message = failure.to_string();
+            if message.len() > 4096 {
+                let mut end = 4096;
+                while !message.is_char_boundary(end) {
+                    end -= 1;
+                }
+                message.truncate(end);
+            }
+            (json!({"code":"file_tool_failed","error":message}), true)
+        }
+    };
+    let response = file_envelope(id, value, failed);
+    if serde_json::to_writer(&mut FileWireCounter(0), &response).is_err() {
+        // All framing is still private. Emit one complete small error instead of
+        // a successful prefix, retaining only the already validated small ID.
+        return error(
+            response["id"].clone(),
+            -32603,
+            "File response exceeds 8 MiB MCP wire limit; request a smaller result",
+        );
+    }
+    response
+}
+
 fn inventory() -> Vec<Value> {
     let uuid = json!({"type":"string","format":"uuid"});
     let mut tools: Vec<Value> = vec![
@@ -371,8 +538,23 @@ fn inventory() -> Vec<Value> {
 const MAX_STDIO_REQUEST_BYTES: usize = 8 * 1024 * 1024;
 
 pub async fn stdio(base: &str) -> anyhow::Result<()> {
-    let bridge = Bridge::new(base)?;
-    stdio_stream(&bridge, tokio::io::stdin(), tokio::io::stdout()).await
+    stdio_with_file_tools(base, None).await
+}
+
+pub async fn stdio_with_file_tools(base: &str, directory: Option<PathBuf>) -> anyhow::Result<()> {
+    let bridge = Bridge::new_with_file_tools(base, directory)?;
+    stdio_and_drain(&bridge, tokio::io::stdin(), tokio::io::stdout()).await
+}
+
+async fn stdio_and_drain<R, W>(bridge: &Bridge, input: R, output: W) -> anyhow::Result<()>
+where
+    R: AsyncRead + Unpin,
+    W: AsyncWrite + Unpin,
+{
+    let serving = stdio_stream(bridge, input, output).await;
+    let drain = bridge.shutdown_file_tools().await;
+    serving?;
+    drain
 }
 
 async fn stdio_stream<R, W>(bridge: &Bridge, input: R, output: W) -> anyhow::Result<()>
@@ -443,3 +625,7 @@ mod sitemap_argument_tests;
 #[cfg(test)]
 #[path = "mcp/stdio_tests.rs"]
 mod stdio_tests;
+
+#[cfg(test)]
+#[path = "mcp/wiring_tests.rs"]
+mod file_wiring_tests;

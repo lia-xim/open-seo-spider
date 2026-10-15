@@ -140,7 +140,7 @@ automation.cli|Lokale Kommandozeile|Der eigene CLI-Vertrag mit Offline- und Craw
 automation.scheduler|Wiederkehrende lokale Crawls|Gespeicherte Aufgaben, Überlappung, Historie und Fehler mit Testuhr prüfen.
 automation.auto_compare|Nach Crawls automatisch vergleichen|Zwei abgeschlossene Projekt-Snapshots nach gespeicherten Regeln automatisch vergleichen.
 automation.notifications|Benachrichtigungen an konfigurierte Ziele|Eigene lokale SMTP-Testsenke samt Zusammenfassung, Deltas und Attachment-Fehlern prüfen.
-automation.mcp|Lokale MCP-Werkzeuge|Der eigene MCP-Werkzeugvertrag ist gegen offizielle SDK-Clients geprüft.
+automation.mcp|Lokale MCP-Werkzeuge|Historischer Grundablauf geprüft; neue Dateifunktionen noch abnehmen und Katalog-/Export-/Node-Funktionen ergänzen.
 automation.mcp_transport|MCP über stdio und HTTP|Beide eigenen Transportarten sind gegen offizielle SDK-Clients geprüft.
 automation.stats|Nutzung über mehrere Crawls auswerten|Aggregate und standardmäßig abgeschaltete Telemetrie ausdrücklich prüfen.
 ui.realtime|Live-Fortschritt und Steuerung|Verzögerte Updates, Pause und Konfigurationseinsicht im Browser vollständig prüfen.

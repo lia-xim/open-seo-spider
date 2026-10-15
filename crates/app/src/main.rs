@@ -174,6 +174,9 @@ enum Command {
     Mcp {
         #[arg(long, default_value = "http://127.0.0.1:8787")]
         server: String,
+        /// Explicit existing local directory for the five opt-in MCP file tools.
+        #[arg(long)]
+        mcp_files_dir: Option<PathBuf>,
     },
     /// Launch the local browser application.
     Serve {
@@ -181,6 +184,9 @@ enum Command {
         listen: String,
         #[arg(long, default_value = "data")]
         data_dir: PathBuf,
+        /// Enable local MCP file tools; requires a loopback listen address.
+        #[arg(long)]
+        mcp_files_dir: Option<PathBuf>,
     },
     /// Crawl without the browser application and export the complete report.
     Crawl {
@@ -225,9 +231,30 @@ async fn main() -> anyhow::Result<()> {
     match Cli::parse().command.unwrap_or(Command::Serve {
         listen: "127.0.0.1:8787".into(),
         data_dir: "data".into(),
+        mcp_files_dir: None,
     }) {
-        Command::Serve { listen, data_dir } => Box::pin(server::serve(&listen, data_dir)).await?,
-        Command::Mcp { server } => mcp::stdio(&server).await?,
+        Command::Serve {
+            listen,
+            data_dir,
+            mcp_files_dir,
+        } => match mcp_files_dir {
+            Some(directory) => {
+                Box::pin(server::serve_with_mcp_files(
+                    &listen,
+                    data_dir,
+                    Some(directory),
+                ))
+                .await?
+            }
+            None => Box::pin(server::serve(&listen, data_dir)).await?,
+        },
+        Command::Mcp {
+            server,
+            mcp_files_dir,
+        } => match mcp_files_dir {
+            Some(directory) => mcp::stdio_with_file_tools(&server, Some(directory)).await?,
+            None => mcp::stdio(&server).await?,
+        },
         Command::SitemapFindings {
             store,
             request,

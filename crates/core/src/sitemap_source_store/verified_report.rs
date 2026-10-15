@@ -393,7 +393,7 @@ impl<'de> Visitor<'de> for ArraySeed<'_, '_> {
                 .checkpoint()
                 .map_err(<A::Error as de::Error>::custom)?;
             if self.records {
-                let expected = read_record_row(row, 0, &self.expected.summary().limits)
+                let (expected, _) = read_record_row(row, 0, &self.expected.summary().limits)
                     .map_err(<A::Error as de::Error>::custom)?;
                 let saved = seq
                     .next_element::<SitemapSourceStoredMeasurement>()?
@@ -406,7 +406,8 @@ impl<'de> Visitor<'de> for ArraySeed<'_, '_> {
                     ));
                 }
             } else {
-                let expected = read_commit_row(row, 0).map_err(<A::Error as de::Error>::custom)?;
+                let (expected, _) =
+                    read_commit_row(row, 0).map_err(<A::Error as de::Error>::custom)?;
                 let saved = seq
                     .next_element::<SitemapSourceCommitAssociation>()?
                     .ok_or_else(|| {

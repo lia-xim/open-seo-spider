@@ -185,9 +185,12 @@ The running application exposes stateless Streamable HTTP MCP at
 open-seo-spider mcp --server http://127.0.0.1:8787
 ```
 
-Thirteen tools cover crawl start/status/list/pause/cancel/resume/selected recrawl, bounded pages, issues,
-analysis, snapshot retrieval and comparison. The browser application must be
-running. JSON API routes and acceptance limits are documented in
+The current source registers 26 tools for crawl control, saved analysis,
+comparison, resource and sitemap workflows. Five optional
+[local file tools](docs/mcp-file-tools.md) can be enabled for an explicitly
+configured base directory; that new source implementation is not yet compiled
+or accepted on the installed runtime. Crawl tools require the local HTTP
+application to be running. JSON API routes and acceptance limits are documented in
 [architecture](docs/architecture.md). MCP implementation follows the
 [official transport specification](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports).
 

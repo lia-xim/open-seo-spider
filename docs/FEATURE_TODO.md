@@ -10,6 +10,19 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
 
 ## Aktuelle Arbeit und nächste Schritte
 
+- [ ] **Sitemap-Compilerfehler beheben und den vollständigen Stand erneut prüfen** — ACTUAL_FULL_WORKSPACE_RUNNING_AFTER_CLEAN_COMPILER_CHECK. Das koordinierte Build-Fenster ist freigegeben. Der tatsächliche e9-Lauf bestand Format, scheiterte jedoch mit vier Bibliotheks-Typfehlern und einer Test-Importmehrdeutigkeit; null Rust-Tests liefen. Fünf Reparaturdateien bestehen cargo check über alle Workspace-/Testziele mit drei anschließenden App-Warnungen. Der endgültige Stand behebt auch diese Warnungen und ist über297 Eingaben mit genau289 unveränderten und8 geänderten Dateien eingefroren. Vollständige Tests und Clippy bleiben erforderlich.
+  - [x] Tatsächlichen fehlgeschlagenen e9-Lauf mit vollständigem Compilerlog, Exit101 und geschlossenem eigenen Browser-Worker archiviert; installierter Release bleibt unverändert.
+  - [x] Vier Typfehler und die mehrdeutigen Testimporte korrigiert, ohne Testfunktionen oder Assertions zu entfernen. Unabhängiger Review bestätigt die erhaltenen SQL-/SHA-/Größen-/Gleichheitsprüfungen.
+  - [x] Tatsächliches cargo check --workspace --all-targets --locked des fünfdateiligen Zwischenstands besteht; drei gemeldete App-Warnungen danach gezielt bereinigt.
+  - [x] Unabhängiger Review entdeckte eine fehlerhafte Entfernung eines geteilten Fixturefelds vor Ausführung; Feld und bestehende MCP-Assertion sind erhalten, gemeinsamer Fehlertext nutzt die Herkunft. Korrigierter v3-Quellabzug ersetzt den nicht ausgeführten v2-Abzug.
+  - [x] Korrigierter endgültiger v3-Stand besteht tatsächlich cargo check --workspace --all-targets --locked in23,26 Sekunden ohne Warnungen; alle297 Snapshot-/Checkout-Eingaben danach bytegleich geprüft.
+  - [ ] Eingefrorenen endgültigen Acht-Dateien-Stand mit vollständigem Workspace, allen388 benannten Fällen und vier tatsächlichen Browser-Gates prüfen: mindestens1170 bestanden, null fehlgeschlagen, null ignoriert.
+  - [ ] Clippy für alle Ziele mit -D warnings und vollständige Workspace-Formatprüfung bestehen.
+  - [ ] Optimierten Kandidaten bauen und native API-/CLI-/SDK-/Browser-/physische Abnahmen ausdrücklich auf den reparierten Quellstand binden; alte e9-Treiber bestätigen diese geänderten Bytes nicht.
+  - [ ] Plattform- und installierte Laufzeitabnahmen getrennt abschließen; keine vollständige Hersteller-Parität behaupten.
+  - Verträge: [index.json](verification/sitemap-source-ui-suite-failed-20261015/index.json), [check.json](verification/sitemap-compile-repair-20261015/check.json).
+  - Gate-Stand: historical_e9_full_suite: ACTUAL_COMPILE_FAIL_101_ZERO_TESTS_WORKER_CLOSED; intermediate_five_file_check: PASS_WITH_THREE_APP_WARNINGS; final_eight_file_full_suite: RUNNING_FMT_PASS_ACTUAL_SESSION_2201; final_source_manifest_sha256: 0ab151e4fd06f4603d8429bed4c784f7045e5c838bec378706d6c01bfaefb7bf; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN; final_eight_file_check: PASS_NO_WARNINGS_23_26_SECONDS.
+
 - [ ] **Aktuelle Arbeit – B10: vollständige Ressourcenmatrix und gerichtete Sonderfälle** — IN_PROGRESS. Der ausdrücklich wählbare V2-Vertrag ist an Commit 8fab997 mit vier grünen CI-Jobs geprüft und lokal auf Port 8787 installiert. Eigene native Matrix: 216 Schalter-, 44 Antwort- und 200 Redirect-/Boundary-Ausführungen; API/CLI/MCP13 und echte UI10. Der optimierte Release besteht separat API13, Legacy-Ressourcen9, Capture-/Neustart8, beide SDK22-Transporte und UI10. Sieben vorhandene Jobs und elf JSON-Dateien bleiben byteidentisch. Weitere Encoding-/Browser-/Budget-/Master-Schalter-/TLS-Abnahmen bleiben offen; vollständige Hersteller-Parität ist NOT_PROVEN. GitHub: [B10-Issue #17](https://github.com/lia-xim/open-seo-spider/issues/17).
   - [x] Ausdrückliche V2-Auswahl mit getrennten internen/externen nofollow-/ugc-/sponsored-/Dokument-Schaltern, unveränderlichen Rollen und Scope-Witnesses implementiert; 22 fokussierte Contract-Tests und historische B9-JSON-/Hash-Pins bestehen.
   - [x] Exakte 108 Schalterfälle in V1 und V2: 216 Ausführungen bestehen, darunter 40 ungültige Konfigurationen vor jedem HTTP-Request. Beobachtung, Reportaufnahme, Fetch, Expansion, MIME und Grants sind getrennt geprüft.
@@ -116,6 +129,17 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - [ ] Prove stored URL content/image/screenshot outputs, stable selected-crawl workflow and same source/config/error behavior using real official SDK clients on both transports. The static26-tool registry and historical11-tool basic workflow are not full reference MCP coverage.
   - Verträge: [mcp-reference-scope-audit-20261015.json](verification/mcp-reference-scope-audit-20261015.json), [feature-catalog.md](feature-catalog.md), [granular-acceptance.json](parity/granular-acceptance.json).
   - Gate-Stand: reference_docs: CHECKED_PUBLIC_PRIMARY_20261015; current_tool_inventory: STATIC26_NOT_RUNTIME; expanded_workflow: NOT_IMPLEMENTED_NOT_EXECUTED; manufacturer_parity: NOT_PROVEN.
+
+- [ ] **Optionale lokale Dateifunktionen für MCP abnehmen** — SOURCE_IMPLEMENTED_31_AUTHORED_TESTS_COMPILE_AND_RUNTIME_NOT_RUN. Fünf eigene Dateifunktionen mit ausdrücklich konfiguriertem Basisordner sind als Quellcode an STDIO und HTTP angeschlossen. Standardmäßig bleiben sie aus:26 Tools, aktiviert31. UTF-8-Lesen mit Snapshot und Folgeseiten, Schreiben per Dateiersetzung, Ordnerlisten und Ordneranlage sind umgesetzt.31 Testgruppen sind geschrieben, null davon ausgeführt; Compiler- und native Abnahme dieses Kandidaten stehen aus. automation.mcp bleibt teilweise geprüft.
+  - [x] Eigenes capability-relatives Dateimodul sowie CLI-/Bridge-/HTTP-/STDIO-Anbindung geschrieben; Typen und Pfade werden vor Dateioperationen geprüft, globale Pfadfreigaben entstehen nicht.
+  - [x] Quellreviews einschließlich Rootkorrekturen für Response-Workerbesitz, tatsächliche Loopbackadresse, eigenen HTTP-Startupkanal und beobachtete Drain-Wartezustände abgeschlossen. Das sind keine Laufzeitbeweise.
+  - [x] 31 neue Testgruppen geschrieben:29 gemeinsame Windows-Fälle und2 Unix-Fälle. Formatprüfung der Quellübergaben erfolgreich; keine Kompilierung oder Testausführung für die neuen Dateifunktionen.
+  - [ ] Neuen vollständigen Quellstand kompilieren und alle passenden Regressionen tatsächlich ausführen; der separate reparierte Sitemap-Compilerstand beweist dieses neue Modul nicht.
+  - [ ] Offizielle MCP-SDK-Clients über STDIO und HTTP für deaktiviertes und aktiviertes Inventar sowie sämtliche fünf Dateioperationen mit Fehler-/Snapshot-/Cursor-/UTF8-/Wire-Grenzen prüfen.
+  - [ ] Tatsächliche Worker-/Supervisor-Joins nach Requestabbruch, Drainabbruch und kombiniertem Monitorabbruch prüfen; native Windows-Junction-/Symlink- und Unix-Spezialdateifälle getrennt abnehmen.
+  - [ ] Weitere Report-/Bulkexport-/Feld-/Filterkataloge, gespeicherte Inhaltsausgaben und ausdrücklich optionale Node/npm-Funktionen weiter implementieren und prüfen. Vollständige MCP- und Hersteller-Parität bleiben offen.
+  - Verträge: [mcp-file-tools.md](mcp-file-tools.md), [preparation.json](verification/mcp-file-tools-source-20261015/preparation.json).
+  - Gate-Stand: source_review: BOUNDED_SOURCE_ONLY_NO_CONFIRMED_FINDINGS; authored_tests: 31_WRITTEN_0_EXECUTED; compile: NOT_RUN_FOR_THIS_NEW_SOURCE; official_sdk: NOT_RUN; native_http_stdio: NOT_RUN; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN.
 
 - [x] **B8: optionale Textaufnahme und gespeicherte Inhaltsanalyse** — COMPLETED. Der begrenzte B8-Baustein für optionale Roh-/DOM-Textaufnahme und gespeicherte ausgewählte Inhaltsanalyse ist mit eigenen nativen/API/UI-Gates, exakter Commit-CI und unveränderlichem installiertem Release geprüft. Vollständige Website-Analyse und CSS-Neuauswahl ohne erhaltenes HTML/DOM bleiben zusätzliche offene Feature-Abnahmen.
   - [x] Pure CSS-/Unicode-Auswahl20 und Binding4 sowie16 echte native Fixtures geprüft; ungültige Konfiguration scheitert vor HTTP.
@@ -4871,7 +4895,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 - [ ] **Lokale MCP-Werkzeuge** — Teilweise geprüft; `automation.mcp`, P4.
 
-  Orientierung: Der eigene MCP-Werkzeugvertrag ist gegen offizielle SDK-Clients geprüft.
+  Orientierung: Historischer Grundablauf geprüft; neue Dateifunktionen noch abnehmen und Katalog-/Export-/Node-Funktionen ergänzen.
 
   Beweisregister: [mcp](verification/mcp-e2e.json) (PASS), [native-policy-ci](verification/native-policy-ci.json) (PASS), [native-policy-installed](verification/native-policy-installed.json) (PASS).
 
@@ -5348,4 +5372,4 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `4a887011b9ee95112c68a39b824903081222e89ace9a8cdc0a6ad1e1c625b8f0`. Letzter im Katalog erfasster Beweisstand: `2026-10-14T17:39:44.101Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `ada2748e296c5ce47768e340b629a794bfb272bc5928b71886d5ab2b336b0e27`. Letzter im Katalog erfasster Beweisstand: `2026-10-14T17:39:44.101Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

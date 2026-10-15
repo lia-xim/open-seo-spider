@@ -117,7 +117,8 @@ impl Fixture {
         assert_eq!(
             self.hits.load(Ordering::SeqCst),
             self.requests,
-            "Reads fetched website"
+            "Reads fetched website {}",
+            self.origin,
         );
         let _ = self.stop.send(());
         tokio::time::timeout(Duration::from_secs(10), self.task)

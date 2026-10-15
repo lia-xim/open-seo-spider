@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "immutable": true,
+  "recorded_at_utc": "2026-10-15T02:04:03.547425+00:00",
+  "scope": "Independent bounded additional App-warning repair review; prior five-file receipt preserved",
+  "source_manifest_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-compile-repair-source-v2/manifest.json",
+  "source_manifest_sha256": "cd6f1136c58c35d9f8cf7644f68af408e3515b81c919153ca0aeb93f09ed984f",
+  "prior_review_receipt_sha256": "61fc2c4b251e921e33c5d27f2be0d0c0447477c1c290289953142423eec6f35d",
+  "prior_five_files_unchanged": true,
+  "examined_app_files": [
+    {
+      "path": "crates/app/src/mcp.rs",
+      "before_e9_sha256": "7940ecd4081f6bd6127644ffdd26fbd289e98498c6e3ff9c0f6ecb6f8a237f5e",
+      "examined_frozen_sha256": "050ac85e322ec8b0af9bc4a4dc9e7acc4ad206502c161a4ff3f23db3ca6504ef",
+      "bytes": 23309
+    },
+    {
+      "path": "crates/app/src/sitemap_membership.rs",
+      "before_e9_sha256": "2151dc243d9b06a411a29c0cd883a51acae49de744139649a8fe982a8de764ed",
+      "examined_frozen_sha256": "19cf2875057d9023781dcd29c5d517acc79557fd942e05d7fc98061230da1b40",
+      "bytes": 42844
+    },
+    {
+      "path": "crates/app/src/sitemap_findings_fixture.rs",
+      "before_e9_sha256": "0d8dbfa174b4d95f2a2f6436505f31ec94f1f3d1cba2af3e3724ac709305148d",
+      "examined_frozen_sha256": "1b70806f2537e3742eff3377919df6f419da3c464d1fa8793fcf628c6e36b1d5",
+      "bytes": 4982
+    }
+  ],
+  "additional_dependency": {
+    "path": "crates/app/src/mcp/sitemap_findings/tests.rs",
+    "sha256": "77902f8602c6ec21a8a988262a320f55478af8c55ef4bd039f9f1d62fa9ce74b",
+    "bytes": 24150,
+    "lines": "tests.rs:20-22,114-115"
+  },
+  "findings": [
+    {
+      "priority": "P1",
+      "title": "Removed shared fixture origin field is still read by an actual MCP test",
+      "file": "crates/app/src/sitemap_findings_fixture.rs",
+      "lines": "38-46,105-115",
+      "consumer": "crates/app/src/mcp/sitemap_findings/tests.rs:20-22,114-115",
+      "trigger": "Compile App tests: findings_mcp_actual_store_http_page_export_descriptor_and_all_seven_filters constructs this shared Fixture then reads f.origin. The field was removed, although the constructor local variable remains.",
+      "effect": "Source produces a missing-field compile error (expected E0609) before this acceptance test can execute. Local origin variable cannot satisfy an object field access.",
+      "minimal_repair": "Restore fixture field and initializer; scope the unused-field warning to the separate CLI fixture compilation, or deliberately adapt the consumer to verified actual captured origin without removing its assertion."
+    }
+  ],
+  "no_confirmed_findings_in_other_two_changes": [
+    "AsyncBufReadExt is removed only from parent test import; read_until users own their trait imports in stdio.rs/tests.rs; dispatch/framing unchanged.",
+    "SitemapCatalog/SitemapReadSnapshot move to cfg(test); actual type uses are guarded test-only oracle helpers/enum variant/match arm. Production bodies/CSV/cursor/query code unchanged."
+  ],
+  "proof_boundary": {
+    "compiler_tests_builds": "NOT_RUN_BY_REVIEWER",
+    "no_parallel_execution": true,
+    "no_root_git_runtime_edits": true,
+    "qualification": "Static confirmed field/consumer mismatch; compiler diagnostic not newly executed. Root owns repair and next sequential compile."
+  }
+}

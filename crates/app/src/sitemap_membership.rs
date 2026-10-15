@@ -2,13 +2,15 @@
 //! a bounded rich window; CSV visits all stored rows in the same verified TX.
 use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
 use open_seo_spider_core::{
-    SITEMAP_LASTMOD_ENGINE, SITEMAP_READ_WINDOW_ENGINE, SitemapAnalysisRowKind, SitemapCatalog,
-    SitemapCoverage, SitemapInheritedBasis, SitemapLastmodEntryAssessment, SitemapLastmodLimits,
-    SitemapLedgerRow, SitemapLedgerSummary, SitemapMembershipAnalysis,
-    SitemapMembershipAnalysisRequest, SitemapReadSnapshot, SitemapReadState, SitemapReadWindow,
-    SitemapReadWindowExpectedContext, SitemapStoredRowsFilter, SitemapVerifiedReadHeader,
-    assess_sitemap_lastmod_entry, project_sitemap_coverage, sitemap_read_state_sha256,
+    SITEMAP_LASTMOD_ENGINE, SITEMAP_READ_WINDOW_ENGINE, SitemapAnalysisRowKind, SitemapCoverage,
+    SitemapInheritedBasis, SitemapLastmodEntryAssessment, SitemapLastmodLimits, SitemapLedgerRow,
+    SitemapLedgerSummary, SitemapMembershipAnalysis, SitemapMembershipAnalysisRequest,
+    SitemapReadState, SitemapReadWindow, SitemapReadWindowExpectedContext, SitemapStoredRowsFilter,
+    SitemapVerifiedReadHeader, assess_sitemap_lastmod_entry, project_sitemap_coverage,
+    sitemap_read_state_sha256,
 };
+#[cfg(test)]
+use open_seo_spider_core::{SitemapCatalog, SitemapReadSnapshot};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::io::{self, Write};

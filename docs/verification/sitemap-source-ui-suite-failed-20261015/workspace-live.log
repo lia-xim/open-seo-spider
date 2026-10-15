@@ -1,0 +1,625 @@
+   Compiling open-seo-spider-core v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\sitemap-source-processing-ui-source-v1\crates\core)
+error[E0659]: `inherit` is ambiguous
+   --> crates\core\src\sitemap_source_store_tests.rs:632:5
+    |
+632 |     inherit(&tx, &parent, &digest(&bytes)).unwrap();
+    |     ^^^^^^^ ambiguous name
+    |
+    = note: ambiguous because of multiple glob imports of a name in the same module
+note: `inherit` could refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:4:5
+    |
+  4 | use super::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `inherit` to disambiguate
+note: `inherit` could also refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:5:5
+    |
+  5 | use crate::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `inherit` to disambiguate
+
+warning: `initialize` is ambiguous
+   --> crates\core\src\sitemap_findings\source_tests.rs:26:12
+    |
+ 26 | fn fixture(initialize: bool) -> Fixture {
+    |            ^^^^^^^^^^ ambiguous name
+    |
+    = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+    = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+    = note: ambiguous because of multiple glob imports of a name in the same module
+note: `initialize` could refer to the function imported here
+   --> crates\core\src\lib.rs:44:9
+    |
+ 44 | pub use sitemap_ledger::*;
+    |         ^^^^^^^^^^^^^^^^^
+    = help: consider adding an explicit import of `initialize` to disambiguate
+note: `initialize` could also refer to the function imported here
+   --> crates\core\src\lib.rs:117:9
+    |
+117 | pub use resource_ledger::*;
+    |         ^^^^^^^^^^^^^^^^^^
+    = help: consider adding an explicit import of `initialize` to disambiguate
+    = note: `#[warn(ambiguous_glob_imports)]` (part of `#[warn(future_incompatible)]`) on by default
+
+warning: `summary` is ambiguous
+   --> crates\core\src\sitemap_source_store_tests.rs:216:9
+    |
+216 |     let summary = link_b_after_append(&tx, guard)?;
+    |         ^^^^^^^ ambiguous name
+    |
+    = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+    = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+    = note: ambiguous because of multiple glob imports of a name in the same module
+note: `summary` could refer to the function imported here
+   --> crates\core\src\lib.rs:44:9
+    |
+ 44 | pub use sitemap_ledger::*;
+    |         ^^^^^^^^^^^^^^^^^
+    = help: consider adding an explicit import of `summary` to disambiguate
+note: `summary` could also refer to the function imported here
+   --> crates\core\src\lib.rs:117:9
+    |
+117 | pub use resource_ledger::*;
+    |         ^^^^^^^^^^^^^^^^^^
+    = help: consider adding an explicit import of `summary` to disambiguate
+
+warning: `SCHEMA` is ambiguous
+  --> crates\core\src\sitemap_source_store_tests.rs:32:30
+   |
+32 |     connection.execute_batch(SCHEMA).unwrap();
+   |                              ^^^^^^ ambiguous name
+   |
+   = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+   = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+   = note: ambiguous because of multiple glob imports of a name in the same module
+note: `SCHEMA` could refer to the constant imported here
+  --> crates\core\src\sitemap_source_store_tests.rs:4:5
+   |
+ 4 | use super::*;
+   |     ^^^^^^^^
+   = help: consider adding an explicit import of `SCHEMA` to disambiguate
+note: `SCHEMA` could also refer to the constant imported here
+  --> crates\core\src\sitemap_source_store_tests.rs:5:5
+   |
+ 5 | use crate::*;
+   |     ^^^^^^^^
+   = help: consider adding an explicit import of `SCHEMA` to disambiguate
+
+warning: `initialize` is ambiguous
+  --> crates\core\src\sitemap_source_store_tests.rs:44:5
+   |
+44 |     initialize(&tx, generation, &limits).unwrap();
+   |     ^^^^^^^^^^ ambiguous name
+   |
+   = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+   = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+   = note: ambiguous because of multiple glob imports of a name in the same module
+note: `initialize` could refer to the function imported here
+  --> crates\core\src\sitemap_source_store_tests.rs:4:5
+   |
+ 4 | use super::*;
+   |     ^^^^^^^^
+   = help: consider adding an explicit import of `initialize` to disambiguate
+note: `initialize` could also refer to the function imported here
+  --> crates\core\src\sitemap_source_store_tests.rs:5:5
+   |
+ 5 | use crate::*;
+   |     ^^^^^^^^
+   = help: consider adding an explicit import of `initialize` to disambiguate
+
+warning: `digest` is ambiguous
+  --> crates\core\src\sitemap_source_store_tests.rs:81:20
+   |
+81 |     let revision = digest(
+   |                    ^^^^^^ ambiguous name
+   |
+   = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+   = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+   = note: ambiguous because of multiple glob imports of a name in the same module
+note: `digest` could refer to the function imported here
+  --> crates\core\src\sitemap_source_store_tests.rs:4:5
+   |
+ 4 | use super::*;
+   |     ^^^^^^^^
+   = help: consider adding an explicit import of `digest` to disambiguate
+note: `digest` could also refer to the function imported here
+  --> crates\core\src\sitemap_source_store_tests.rs:5:5
+   |
+ 5 | use crate::*;
+   |     ^^^^^^^^
+   = help: consider adding an explicit import of `digest` to disambiguate
+
+warning: `digest` is ambiguous
+  --> crates\core\src\sitemap_source_store_tests.rs:98:41
+   |
+98 |         post_http_decoding_sha256: Some(digest(body)),
+   |                                         ^^^^^^ ambiguous name
+   |
+   = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+   = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+   = note: ambiguous because of multiple glob imports of a name in the same module
+note: `digest` could refer to the function imported here
+  --> crates\core\src\sitemap_source_store_tests.rs:4:5
+   |
+ 4 | use super::*;
+   |     ^^^^^^^^
+   = help: consider adding an explicit import of `digest` to disambiguate
+note: `digest` could also refer to the function imported here
+  --> crates\core\src\sitemap_source_store_tests.rs:5:5
+   |
+ 5 | use crate::*;
+   |     ^^^^^^^^
+   = help: consider adding an explicit import of `digest` to disambiguate
+
+warning: `digest` is ambiguous
+  --> crates\core\src\sitemap_source_store_tests.rs:99:48
+   |
+99 |         retained_post_http_prefix_sha256: Some(digest(body)),
+   |                                                ^^^^^^ ambiguous name
+   |
+   = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+   = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+   = note: ambiguous because of multiple glob imports of a name in the same module
+note: `digest` could refer to the function imported here
+  --> crates\core\src\sitemap_source_store_tests.rs:4:5
+   |
+ 4 | use super::*;
+   |     ^^^^^^^^
+   = help: consider adding an explicit import of `digest` to disambiguate
+note: `digest` could also refer to the function imported here
+  --> crates\core\src\sitemap_source_store_tests.rs:5:5
+   |
+ 5 | use crate::*;
+   |     ^^^^^^^^
+   = help: consider adding an explicit import of `digest` to disambiguate
+
+warning: `digest` is ambiguous
+   --> crates\core\src\sitemap_source_store_tests.rs:137:56
+    |
+137 |                 retained_post_http_prefix_sha256: Some(digest(body)),
+    |                                                        ^^^^^^ ambiguous name
+    |
+    = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+    = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+    = note: ambiguous because of multiple glob imports of a name in the same module
+note: `digest` could refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:4:5
+    |
+  4 | use super::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+note: `digest` could also refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:5:5
+    |
+  5 | use crate::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+
+warning: `digest` is ambiguous
+   --> crates\core\src\sitemap_source_store_tests.rs:138:56
+    |
+138 |                 complete_post_http_entity_sha256: Some(digest(body)),
+    |                                                        ^^^^^^ ambiguous name
+    |
+    = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+    = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+    = note: ambiguous because of multiple glob imports of a name in the same module
+note: `digest` could refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:4:5
+    |
+  4 | use super::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+note: `digest` could also refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:5:5
+    |
+  5 | use crate::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+
+warning: `digest` is ambiguous
+   --> crates\core\src\sitemap_source_store_tests.rs:545:37
+    |
+545 |     catalog.summary.config_sha256 = digest(b"unrelated initial config");
+    |                                     ^^^^^^ ambiguous name
+    |
+    = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+    = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+    = note: ambiguous because of multiple glob imports of a name in the same module
+note: `digest` could refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:4:5
+    |
+  4 | use super::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+note: `digest` could also refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:5:5
+    |
+  5 | use crate::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+
+warning: `SCHEMA` is ambiguous
+   --> crates\core\src\sitemap_source_store_tests.rs:568:32
+    |
+568 |     f.connection.execute_batch(SCHEMA).unwrap();
+    |                                ^^^^^^ ambiguous name
+    |
+    = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+    = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+    = note: ambiguous because of multiple glob imports of a name in the same module
+note: `SCHEMA` could refer to the constant imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:4:5
+    |
+  4 | use super::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `SCHEMA` to disambiguate
+note: `SCHEMA` could also refer to the constant imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:5:5
+    |
+  5 | use crate::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `SCHEMA` to disambiguate
+
+warning: `initialize` is ambiguous
+   --> crates\core\src\sitemap_source_store_tests.rs:574:13
+    |
+574 |     let s = initialize(&tx, f.generation, &Default::default()).unwrap();
+    |             ^^^^^^^^^^ ambiguous name
+    |
+    = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+    = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+    = note: ambiguous because of multiple glob imports of a name in the same module
+note: `initialize` could refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:4:5
+    |
+  4 | use super::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `initialize` to disambiguate
+note: `initialize` could also refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:5:5
+    |
+  5 | use crate::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `initialize` to disambiguate
+
+warning: `SCHEMA` is ambiguous
+   --> crates\core\src\sitemap_source_store_tests.rs:627:24
+    |
+627 |     conn.execute_batch(SCHEMA).unwrap();
+    |                        ^^^^^^ ambiguous name
+    |
+    = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+    = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+    = note: ambiguous because of multiple glob imports of a name in the same module
+note: `SCHEMA` could refer to the constant imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:4:5
+    |
+  4 | use super::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `SCHEMA` to disambiguate
+note: `SCHEMA` could also refer to the constant imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:5:5
+    |
+  5 | use crate::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `SCHEMA` to disambiguate
+
+warning: `digest` is ambiguous
+   --> crates\core\src\sitemap_source_store_tests.rs:632:28
+    |
+632 |     inherit(&tx, &parent, &digest(&bytes)).unwrap();
+    |                            ^^^^^^ ambiguous name
+    |
+    = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+    = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+    = note: ambiguous because of multiple glob imports of a name in the same module
+note: `digest` could refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:4:5
+    |
+  4 | use super::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+note: `digest` could also refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:5:5
+    |
+  5 | use crate::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+
+warning: `digest` is ambiguous
+  --> crates\core\src\sitemap_source_store\verified_read_tests.rs:25:17
+   |
+25 |                 digest(
+   |                 ^^^^^^ ambiguous name
+   |
+   = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+   = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+   = note: ambiguous because of multiple glob imports of a name in the same module
+note: `digest` could refer to the function imported here
+  --> crates\core\src\sitemap_source_store_tests.rs:4:5
+   |
+ 4 | use super::*;
+   |     ^^^^^^^^
+   = help: consider adding an explicit import of `digest` to disambiguate
+note: `digest` could also refer to the function imported here
+  --> crates\core\src\sitemap_source_store_tests.rs:5:5
+   |
+ 5 | use crate::*;
+   |     ^^^^^^^^
+   = help: consider adding an explicit import of `digest` to disambiguate
+
+warning: `digest` is ambiguous
+   --> crates\core\src\sitemap_source_store\verified_read_tests.rs:139:35
+    |
+139 |     tail.staged_document_sha256 = digest(b"resealed-unjoined-tail");
+    |                                   ^^^^^^ ambiguous name
+    |
+    = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+    = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+    = note: ambiguous because of multiple glob imports of a name in the same module
+note: `digest` could refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:4:5
+    |
+  4 | use super::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+note: `digest` could also refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:5:5
+    |
+  5 | use crate::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+
+warning: `digest` is ambiguous
+   --> crates\core\src\sitemap_source_store\verified_read_tests.rs:145:32
+    |
+145 |             params![tail_data, digest(&tail_data)],
+    |                                ^^^^^^ ambiguous name
+    |
+    = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+    = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+    = note: ambiguous because of multiple glob imports of a name in the same module
+note: `digest` could refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:4:5
+    |
+  4 | use super::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+note: `digest` could also refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:5:5
+    |
+  5 | use crate::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+
+warning: `digest` is ambiguous
+   --> crates\core\src\sitemap_source_store\verified_read_tests.rs:178:62
+    |
+178 |                 changed.commits[0].document_payload_sha256 = digest(b"wrong-document")
+    |                                                              ^^^^^^ ambiguous name
+    |
+    = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+    = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+    = note: ambiguous because of multiple glob imports of a name in the same module
+note: `digest` could refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:4:5
+    |
+  4 | use super::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+note: `digest` could also refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:5:5
+    |
+  5 | use crate::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+
+warning: `digest` is ambiguous
+   --> crates\core\src\sitemap_source_store\verified_read_tests.rs:181:61
+    |
+181 |                 changed.records[0].staged_document_sha256 = digest(b"wrong-stage");
+    |                                                             ^^^^^^ ambiguous name
+    |
+    = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+    = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+    = note: ambiguous because of multiple glob imports of a name in the same module
+note: `digest` could refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:4:5
+    |
+  4 | use super::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+note: `digest` could also refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:5:5
+    |
+  5 | use crate::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+
+warning: `digest` is ambiguous
+   --> crates\core\src\sitemap_source_store\verified_read_tests.rs:183:21
+    |
+183 |                     digest(record_json(&changed.records[0], &changed.summary.limits).unwrap());
+    |                     ^^^^^^ ambiguous name
+    |
+    = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+    = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+    = note: ambiguous because of multiple glob imports of a name in the same module
+note: `digest` could refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:4:5
+    |
+  4 | use super::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+note: `digest` could also refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:5:5
+    |
+  5 | use crate::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+
+warning: `digest` is ambiguous
+   --> crates\core\src\sitemap_source_store\verified_read_tests.rs:185:54
+    |
+185 |             _ => changed.commits[0].measurement_id = digest(b"absent-measurement"),
+    |                                                      ^^^^^^ ambiguous name
+    |
+    = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+    = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+    = note: ambiguous because of multiple glob imports of a name in the same module
+note: `digest` could refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:4:5
+    |
+  4 | use super::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+note: `digest` could also refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:5:5
+    |
+  5 | use crate::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+
+warning: `digest` is ambiguous
+   --> crates\core\src\sitemap_source_store\verified_read_tests.rs:201:29
+    |
+201 |             params![record, digest(&record)],
+    |                             ^^^^^^ ambiguous name
+    |
+    = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+    = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+    = note: ambiguous because of multiple glob imports of a name in the same module
+note: `digest` could refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:4:5
+    |
+  4 | use super::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+note: `digest` could also refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:5:5
+    |
+  5 | use crate::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+
+warning: `digest` is ambiguous
+   --> crates\core\src\sitemap_source_store\verified_read_tests.rs:205:62
+    |
+205 |             params![changed.commits[0].measurement_id, link, digest(&link)]).unwrap();
+    |                                                              ^^^^^^ ambiguous name
+    |
+    = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+    = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+    = note: ambiguous because of multiple glob imports of a name in the same module
+note: `digest` could refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:4:5
+    |
+  4 | use super::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+note: `digest` could also refer to the function imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:5:5
+    |
+  5 | use crate::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `digest` to disambiguate
+
+warning: `SCHEMA` is ambiguous
+   --> crates\core\src\sitemap_source_store\verified_read_tests.rs:283:32
+    |
+283 |     f.connection.execute_batch(SCHEMA).unwrap();
+    |                                ^^^^^^ ambiguous name
+    |
+    = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+    = note: for more information, see issue #114095 <https://github.com/rust-lang/rust/issues/114095>
+    = note: ambiguous because of multiple glob imports of a name in the same module
+note: `SCHEMA` could refer to the constant imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:4:5
+    |
+  4 | use super::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `SCHEMA` to disambiguate
+note: `SCHEMA` could also refer to the constant imported here
+   --> crates\core\src\sitemap_source_store_tests.rs:5:5
+    |
+  5 | use crate::*;
+    |     ^^^^^^^^
+    = help: consider adding an explicit import of `SCHEMA` to disambiguate
+
+error[E0599]: the method `as_ref` exists for reference `&sitemap_ledger::models::StoredSitemapLocation`, but its trait bounds were not satisfied
+   --> crates\core\src\sitemap_membership_analysis\window.rs:151:26
+    |
+151 |                 Some(loc.as_ref())
+    |                          ^^^^^^ method cannot be called on `&sitemap_ledger::models::StoredSitemapLocation` due to unsatisfied trait bounds
+    |
+   ::: crates\core\src\sitemap_ledger_models.rs:352:1
+    |
+352 | pub struct StoredSitemapLocation {
+    | -------------------------------- doesn't satisfy `_: AsRef<_>`
+    |
+    = note: the following trait bounds were not satisfied:
+            `sitemap_ledger::models::StoredSitemapLocation: AsRef<_>`
+            which is required by `&sitemap_ledger::models::StoredSitemapLocation: AsRef<_>`
+note: the trait `AsRef` must be implemented
+   --> C:\Users\matth\.rustup\toolchains\1.95.0-x86_64-pc-windows-msvc\lib/rustlib/src/rust\library\core\src\convert\mod.rs:220:1
+    |
+220 | pub const trait AsRef<T: PointeeSized>: PointeeSized {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: items from traits can only be used if the trait is implemented and in scope
+    = note: the following trait defines an item `as_ref`, perhaps you need to implement it:
+            candidate #1: `AsRef`
+
+error[E0599]: the method `as_ref` exists for reference `&sitemap_ledger::models::StoredSitemapLocation`, but its trait bounds were not satisfied
+   --> crates\core\src\sitemap_membership_analysis.rs:460:26
+    |
+460 |                 Some(loc.as_ref())
+    |                          ^^^^^^ method cannot be called on `&sitemap_ledger::models::StoredSitemapLocation` due to unsatisfied trait bounds
+    |
+   ::: crates\core\src\sitemap_ledger_models.rs:352:1
+    |
+352 | pub struct StoredSitemapLocation {
+    | -------------------------------- doesn't satisfy `_: AsRef<_>`
+    |
+    = note: the following trait bounds were not satisfied:
+            `sitemap_ledger::models::StoredSitemapLocation: AsRef<_>`
+            which is required by `&sitemap_ledger::models::StoredSitemapLocation: AsRef<_>`
+note: the trait `AsRef` must be implemented
+   --> C:\Users\matth\.rustup\toolchains\1.95.0-x86_64-pc-windows-msvc\lib/rustlib/src/rust\library\core\src\convert\mod.rs:220:1
+    |
+220 | pub const trait AsRef<T: PointeeSized>: PointeeSized {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: items from traits can only be used if the trait is implemented and in scope
+    = note: the following trait defines an item `as_ref`, perhaps you need to implement it:
+            candidate #1: `AsRef`
+
+error[E0308]: mismatched types
+   --> crates\core\src\sitemap_source_store\verified_report.rs:403:29
+    |
+403 |                 if saved != expected {
+    |                    -----    ^^^^^^^^ expected `SitemapSourceStoredMeasurement`, found `(SitemapSourceStoredMeasurement, String)`
+    |                    |
+    |                    expected because this is `sitemap_source_store::models::SitemapSourceStoredMeasurement`
+    |
+    = note: expected struct `sitemap_source_store::models::SitemapSourceStoredMeasurement`
+                found tuple `(sitemap_source_store::models::SitemapSourceStoredMeasurement, std::string::String)`
+
+error[E0308]: mismatched types
+   --> crates\core\src\sitemap_source_store\verified_report.rs:415:29
+    |
+415 |                 if saved != expected {
+    |                    -----    ^^^^^^^^ expected `SitemapSourceCommitAssociation`, found `(SitemapSourceCommitAssociation, String)`
+    |                    |
+    |                    expected because this is `sitemap_source_store::models::SitemapSourceCommitAssociation`
+    |
+    = note: expected struct `sitemap_source_store::models::SitemapSourceCommitAssociation`
+                found tuple `(sitemap_source_store::models::SitemapSourceCommitAssociation, std::string::String)`
+
+Some errors have detailed explanations: E0308, E0599.
+For more information about an error, try `rustc --explain E0308`.
+error: could not compile `open-seo-spider-core` (lib) due to 4 previous errors
+warning: build failed, waiting for other jobs to finish...
+Some errors have detailed explanations: E0308, E0599, E0659.
+warning: `open-seo-spider-core` (lib test) generated 24 warnings
+error: could not compile `open-seo-spider-core` (lib test) due to 5 previous errors; 48 warnings emitted

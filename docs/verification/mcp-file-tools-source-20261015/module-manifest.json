@@ -1,0 +1,80 @@
+{
+  "kind": "mcp_file_tools_module_source_handoff_v1",
+  "baseline_checkout": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/mcp-file-tools-v1",
+  "baseline_commit": "a5445cdf",
+  "immutable": true,
+  "entries": [
+    {
+      "path": "crates/app/src/mcp/files.rs",
+      "payload": "crates/app/src/mcp/files.rs",
+      "before": "ABSENT",
+      "after_sha256": "75c0947352dfd3bbc0174af66ea64f748246acf45a9c0021a8cd46c69064353a",
+      "bytes": 35672
+    },
+    {
+      "path": "crates/app/src/mcp/files_tests.rs",
+      "payload": "crates/app/src/mcp/files_tests.rs",
+      "before": "ABSENT",
+      "after_sha256": "7d34fc7558ef188091afc211f01ff63df053abf603345b3740f09f251d312a4a",
+      "bytes": 21580
+    }
+  ],
+  "support_files": [
+    {
+      "path": "HANDOFF.md",
+      "sha256": "9407203249604f3ef833a7783d18d1fe180ae21aea3fbb34fcdf3eda9d33d5d7",
+      "bytes": 7594
+    },
+    {
+      "path": "SOURCE-PINS.json",
+      "sha256": "1ddf4137891272667cc096f153a3b13e11674a09ba063eb94c7f082c245f2020",
+      "bytes": 2065
+    }
+  ],
+  "test_names": [
+    "file_tools_schema_and_native_path_preflight_are_strict",
+    "file_tools_native_unicode_and_platform_filename_boundaries",
+    "file_tools_existing_root_and_no_implicit_outside_creation",
+    "file_tools_recursive_create_long_unicode_and_partial_effects",
+    "file_tools_listing_has_exact_sorted_pages_and_stale_instance_anchor_checks",
+    "file_tools_listing_over_entry_budget_is_error_not_partial_page",
+    "file_tools_utf8_chunks_reconstruct_exact_bytes_and_detect_content_changes",
+    "file_tools_read_empty_invalid_utf8_and_sparse_overbudget_are_explicit",
+    "file_tools_atomic_replacement_keeps_hardlink_inode_and_cleans_own_stage",
+    "file_tools_stage_guard_cleans_owned_failure_but_preserves_replaced_entry",
+    "file_tools_symlink_intermediate_final_and_root_are_never_followed",
+    "file_tools_unix_fifo_is_rejected_before_read_and_invalid_names_are_lossless_errors",
+    "file_tools_root_handle_cannot_be_rebound_by_replacing_configured_path",
+    "file_tools_dropped_request_and_concurrent_drain_wait_actual_worker_return",
+    "file_tools_cancelled_drain_does_not_lose_join_handle",
+    "file_tools_four_workers_bound_and_panics_are_joined_and_reported"
+  ],
+  "authored_test_groups": 16,
+  "common_test_groups": 14,
+  "unix_only_test_groups": 2,
+  "actual_checks": [
+    {
+      "command": "rustfmt --edition 2024 --check files.rs files_tests.rs",
+      "exit_code": 0,
+      "scope": "parser_and_format_only"
+    }
+  ],
+  "execution": {
+    "compile": "NOT_RUN",
+    "cargo": "NOT_RUN",
+    "tests": "NOT_RUN",
+    "filesystem_fixtures": "NOT_RUN",
+    "native": "NOT_RUN",
+    "http": "NOT_RUN",
+    "browser": "NOT_RUN",
+    "sdk": "NOT_RUN"
+  },
+  "remaining_gates": [
+    "Root guarded integration and actual compiler/test gates",
+    "Windows junction/symlink native fixtures",
+    "Unix containment/FIFO tests and mkfifo availability",
+    "Official MCP STDIO/HTTP actual opt-in and disabled inventories",
+    "Actual disconnect/shutdown worker lifecycle acceptance",
+    "No hard stalled filesystem latency or ReFS identity acceptance claim"
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "immutable": true,
+  "scope": "Independent bounded read-only source review of five compiler repairs against actual failed e9 run",
+  "recorded_at_utc": "2026-10-15T01:56:54.941492+00:00",
+  "root": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-compile-repair-v1",
+  "basis_head": "a5445cdfaa3a8d753f49962a7904d72f7f21bbef",
+  "source_manifest_sha256": "e9bbc54573247e028dcb47937f80eaa1c1918240a810d8e796874464bf5cc7f5",
+  "examined_product_files": [
+    {
+      "path": "crates/core/src/sitemap_membership_analysis.rs",
+      "before_git_head_sha256": "014d3feb8c2220214b912e0901670c867e7abf370307d90dd4f950c26759f26e",
+      "before_frozen_e9_sha256": "014d3feb8c2220214b912e0901670c867e7abf370307d90dd4f950c26759f26e",
+      "examined_sha256": "cc5bb330a58579ded13a912b6b4348a818f0517a5e419aa139e531ae8be32691",
+      "bytes": 45411,
+      "scope_verified": "Exact intended source replacement; tests only import declarations"
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis/window.rs",
+      "before_git_head_sha256": "3b64a5c18cb130a022a3b9416c321c5e1b30bd3cdf4dc8c26192348dbe6a5d6f",
+      "before_frozen_e9_sha256": "3b64a5c18cb130a022a3b9416c321c5e1b30bd3cdf4dc8c26192348dbe6a5d6f",
+      "examined_sha256": "5fa798312512014af44be44f58beb95f87e72e464a6f60ea1066a6d2e1b871c7",
+      "bytes": 14075,
+      "scope_verified": "Exact intended source replacement; tests only import declarations"
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store/verified_report.rs",
+      "before_git_head_sha256": "49764ffffe19dd06dc3b3be328aaecb4f8083aab0248dcb03ffbe7be0141da14",
+      "before_frozen_e9_sha256": "49764ffffe19dd06dc3b3be328aaecb4f8083aab0248dcb03ffbe7be0141da14",
+      "examined_sha256": "0a278d6462cd21e065cdd1367038e87ae22c8eda34a89e9142635018b1e2a8b8",
+      "bytes": 22939,
+      "scope_verified": "Exact intended source replacement; tests only import declarations"
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store_tests.rs",
+      "before_git_head_sha256": "f745be9102866d24273f0d192e49e971814dbf5d0dd4768785b9b22456d580a4",
+      "before_frozen_e9_sha256": "f745be9102866d24273f0d192e49e971814dbf5d0dd4768785b9b22456d580a4",
+      "examined_sha256": "0dfb537fc2be097215a31772896d278029c89f97fe2cf7162ecf2a1773461196",
+      "bytes": 32518,
+      "scope_verified": "Exact intended source replacement; tests only import declarations"
+    },
+    {
+      "path": "crates/core/src/sitemap_findings/source_tests.rs",
+      "before_git_head_sha256": "ac1d72e6c50442b8ac8762dc9d2fb4bd178e90aab544701c8c184738fe9dfdd1",
+      "before_frozen_e9_sha256": "ac1d72e6c50442b8ac8762dc9d2fb4bd178e90aab544701c8c184738fe9dfdd1",
+      "examined_sha256": "d0741314a25adbda441b325084c5b2897556ec94293e283515243e1768c1b092",
+      "bytes": 20036,
+      "scope_verified": "Exact intended source replacement; tests only import declarations"
+    }
+  ],
+  "unchanged_helper_pins": [
+    {
+      "path": "crates/core/src/sitemap_source_store.rs",
+      "examined_sha256": "fe59417d12939e62e65c78ce894d7d34d55f2708ee792d1c21f3a04c438678ae",
+      "bytes": 57437,
+      "unchanged_from_e9_lf_normalized": true
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store/verified_read.rs",
+      "examined_sha256": "fd1acd6ed446e21e2626159d358b77794146dcfd32796ff7a3d3e4c52aa1e07a",
+      "bytes": 14330,
+      "unchanged_from_e9_lf_normalized": true
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger_models.rs",
+      "examined_sha256": "e5b06268d0a695837e9d151abe845f3a91f04f9d487c3bdd952cd77a0d43ce72",
+      "bytes": 19901,
+      "unchanged_from_e9_lf_normalized": true
+    },
+    {
+      "path": "crates/core/src/sitemap_findings/source.rs",
+      "examined_sha256": "5f164f53da8b2992d68788a638c0309e119eca05713e6593b79ca7793d03a481",
+      "bytes": 18170,
+      "unchanged_from_e9_lf_normalized": true
+    },
+    {
+      "path": "crates/core/src/lib.rs",
+      "examined_sha256": "bf52f615fd9d0aa971aa7342ff9d3fb2a29ede1e433eb7226b22b48e172c76c5",
+      "bytes": 6329,
+      "unchanged_from_e9_lf_normalized": true
+    }
+  ],
+  "actual_failed_evidence": {
+    "proof_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/sitemap-source-ui-suite-v1/proof.json",
+    "proof_sha256": "e5a39d2ae615d992e1dde2f3880675146389152857e12e02d0669193ef39950b",
+    "workspace_log_sha256": "dfa1941ec45e8c4fa10abea1a71f374f182eb10d074ec7b89c79a2825f8a582b",
+    "format_exit": 0,
+    "workspace_exit": 101,
+    "actual_workspace_close": true,
+    "owned_renderer_worker_closed": true,
+    "new_tests_executed_before_failure": 0
+  },
+  "findings": [],
+  "conclusions": [
+    {
+      "lines": "sitemap_membership_analysis.rs:450-481; window.rs:147-167; sitemap_ledger_models.rs:352-367; analysis.rs:659-676",
+      "fact": "Location variant stores StoredSitemapLocation directly, matching &row yields &StoredSitemapLocation; Some(loc) is the project_rows expected borrowed type. Role, filter/order/limits and context proofs unchanged."
+    },
+    {
+      "lines": "verified_report.rs:393-427; sitemap_source_store.rs:828-875; verified_read.rs:261-298",
+      "fact": "Only tuple LHS destructuring changes. Helpers still unconditionally check encoded length, actual data SHA, canonical JSON, every selected SQL projection, then yield the same typed row. Returned canonical String is discarded after validation, not used to bypass it. Saved typed equality, missing/extra rows, ordered SQL and cancellation checkpoints remain unchanged."
+    },
+    {
+      "lines": "sitemap_source_store_tests.rs:4-18; sitemap_findings/source_tests.rs:4-12; source_store.rs:22,31,725,1012",
+      "fact": "Only crate glob imports become explicit type/constant imports. super::* remains for intended source-store/source helper scope, so inherit/initialize/digest/SCHEMA no longer compete with public unrelated glob reexports. No assertions, fixtures, limits or expected results changed."
+    }
+  ],
+  "proof_boundary": {
+    "new_compilation": "NOT_RUN_BY_REVIEWER",
+    "new_tests": "NOT_RUN_BY_REVIEWER",
+    "clippy": "NOT_RUN_BY_REVIEWER",
+    "no_parallel_build_or_test": true,
+    "no_root_git_runtime_mutations": true,
+    "all_runtime_type_clippy_acceptance": "ROOT_NEXT_SERIAL_GATE_REQUIRED",
+    "qualification": "No confirmed semantic or validation weakening in this bounded diff; static review is not compiler/test PASS"
+  }
+}

@@ -7071,6 +7071,71 @@
         "expanded_workflow": "NOT_IMPLEMENTED_NOT_EXECUTED",
         "manufacturer_parity": "NOT_PROVEN"
       }
+    },
+    {
+      "id": "sitemap-compile-repair-20261015",
+      "status": "ACTUAL_FULL_WORKSPACE_RUNNING_AFTER_CLEAN_COMPILER_CHECK",
+      "priority": 0,
+      "title_de": "Sitemap-Compilerfehler beheben und den vollständigen Stand erneut prüfen",
+      "summary_de": "Das koordinierte Build-Fenster ist freigegeben. Der tatsächliche e9-Lauf bestand Format, scheiterte jedoch mit vier Bibliotheks-Typfehlern und einer Test-Importmehrdeutigkeit; null Rust-Tests liefen. Fünf Reparaturdateien bestehen cargo check über alle Workspace-/Testziele mit drei anschließenden App-Warnungen. Der endgültige Stand behebt auch diese Warnungen und ist über297 Eingaben mit genau289 unveränderten und8 geänderten Dateien eingefroren. Vollständige Tests und Clippy bleiben erforderlich.",
+      "completed_acceptance_de": [
+        "Tatsächlichen fehlgeschlagenen e9-Lauf mit vollständigem Compilerlog, Exit101 und geschlossenem eigenen Browser-Worker archiviert; installierter Release bleibt unverändert.",
+        "Vier Typfehler und die mehrdeutigen Testimporte korrigiert, ohne Testfunktionen oder Assertions zu entfernen. Unabhängiger Review bestätigt die erhaltenen SQL-/SHA-/Größen-/Gleichheitsprüfungen.",
+        "Tatsächliches cargo check --workspace --all-targets --locked des fünfdateiligen Zwischenstands besteht; drei gemeldete App-Warnungen danach gezielt bereinigt.",
+        "Unabhängiger Review entdeckte eine fehlerhafte Entfernung eines geteilten Fixturefelds vor Ausführung; Feld und bestehende MCP-Assertion sind erhalten, gemeinsamer Fehlertext nutzt die Herkunft. Korrigierter v3-Quellabzug ersetzt den nicht ausgeführten v2-Abzug.",
+        "Korrigierter endgültiger v3-Stand besteht tatsächlich cargo check --workspace --all-targets --locked in23,26 Sekunden ohne Warnungen; alle297 Snapshot-/Checkout-Eingaben danach bytegleich geprüft."
+      ],
+      "pending_acceptance_de": [
+        "Eingefrorenen endgültigen Acht-Dateien-Stand mit vollständigem Workspace, allen388 benannten Fällen und vier tatsächlichen Browser-Gates prüfen: mindestens1170 bestanden, null fehlgeschlagen, null ignoriert.",
+        "Clippy für alle Ziele mit -D warnings und vollständige Workspace-Formatprüfung bestehen.",
+        "Optimierten Kandidaten bauen und native API-/CLI-/SDK-/Browser-/physische Abnahmen ausdrücklich auf den reparierten Quellstand binden; alte e9-Treiber bestätigen diese geänderten Bytes nicht.",
+        "Plattform- und installierte Laufzeitabnahmen getrennt abschließen; keine vollständige Hersteller-Parität behaupten."
+      ],
+      "documentation": [
+        "docs/verification/sitemap-source-ui-suite-failed-20261015/index.json",
+        "docs/verification/sitemap-compile-repair-20261015/check.json"
+      ],
+      "gates": {
+        "historical_e9_full_suite": "ACTUAL_COMPILE_FAIL_101_ZERO_TESTS_WORKER_CLOSED",
+        "intermediate_five_file_check": "PASS_WITH_THREE_APP_WARNINGS",
+        "final_eight_file_full_suite": "RUNNING_FMT_PASS_ACTUAL_SESSION_2201",
+        "final_source_manifest_sha256": "0ab151e4fd06f4603d8429bed4c784f7045e5c838bec378706d6c01bfaefb7bf",
+        "installed_runtime": "UNCHANGED_AB1",
+        "manufacturer_parity": "NOT_PROVEN",
+        "final_eight_file_check": "PASS_NO_WARNINGS_23_26_SECONDS"
+      }
+    },
+    {
+      "id": "mcp-file-tools-source-20261015",
+      "status": "SOURCE_IMPLEMENTED_31_AUTHORED_TESTS_COMPILE_AND_RUNTIME_NOT_RUN",
+      "priority": 4,
+      "title_de": "Optionale lokale Dateifunktionen für MCP abnehmen",
+      "summary_de": "Fünf eigene Dateifunktionen mit ausdrücklich konfiguriertem Basisordner sind als Quellcode an STDIO und HTTP angeschlossen. Standardmäßig bleiben sie aus:26 Tools, aktiviert31. UTF-8-Lesen mit Snapshot und Folgeseiten, Schreiben per Dateiersetzung, Ordnerlisten und Ordneranlage sind umgesetzt.31 Testgruppen sind geschrieben, null davon ausgeführt; Compiler- und native Abnahme dieses Kandidaten stehen aus. automation.mcp bleibt teilweise geprüft.",
+      "completed_acceptance_de": [
+        "Eigenes capability-relatives Dateimodul sowie CLI-/Bridge-/HTTP-/STDIO-Anbindung geschrieben; Typen und Pfade werden vor Dateioperationen geprüft, globale Pfadfreigaben entstehen nicht.",
+        "Quellreviews einschließlich Rootkorrekturen für Response-Workerbesitz, tatsächliche Loopbackadresse, eigenen HTTP-Startupkanal und beobachtete Drain-Wartezustände abgeschlossen. Das sind keine Laufzeitbeweise.",
+        "31 neue Testgruppen geschrieben:29 gemeinsame Windows-Fälle und2 Unix-Fälle. Formatprüfung der Quellübergaben erfolgreich; keine Kompilierung oder Testausführung für die neuen Dateifunktionen."
+      ],
+      "pending_acceptance_de": [
+        "Neuen vollständigen Quellstand kompilieren und alle passenden Regressionen tatsächlich ausführen; der separate reparierte Sitemap-Compilerstand beweist dieses neue Modul nicht.",
+        "Offizielle MCP-SDK-Clients über STDIO und HTTP für deaktiviertes und aktiviertes Inventar sowie sämtliche fünf Dateioperationen mit Fehler-/Snapshot-/Cursor-/UTF8-/Wire-Grenzen prüfen.",
+        "Tatsächliche Worker-/Supervisor-Joins nach Requestabbruch, Drainabbruch und kombiniertem Monitorabbruch prüfen; native Windows-Junction-/Symlink- und Unix-Spezialdateifälle getrennt abnehmen.",
+        "Weitere Report-/Bulkexport-/Feld-/Filterkataloge, gespeicherte Inhaltsausgaben und ausdrücklich optionale Node/npm-Funktionen weiter implementieren und prüfen. Vollständige MCP- und Hersteller-Parität bleiben offen."
+      ],
+      "documentation": [
+        "docs/mcp-file-tools.md",
+        "docs/verification/mcp-file-tools-source-20261015/preparation.json"
+      ],
+      "gates": {
+        "source_review": "BOUNDED_SOURCE_ONLY_NO_CONFIRMED_FINDINGS",
+        "authored_tests": "31_WRITTEN_0_EXECUTED",
+        "compile": "NOT_RUN_FOR_THIS_NEW_SOURCE",
+        "official_sdk": "NOT_RUN",
+        "native_http_stdio": "NOT_RUN",
+        "installed_runtime": "UNCHANGED_AB1",
+        "manufacturer_parity": "NOT_PROVEN"
+      },
+      "tracking_issue": "https://github.com/lia-xim/open-seo-spider/issues/15"
     }
   ]
 }

@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "immutable": true,
+  "name": "mcp-file-tools-wiring-v1",
+  "status": "SOURCE_IMPLEMENTED_FORMAT_ONLY_COMPILE_AND_TESTS_NOT_RUN",
+  "recorded_at_utc": "2026-10-15T01:54:25.048699+00:00",
+  "basis_root": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/mcp-file-tools-v1",
+  "basis_head": "a5445cdfaa3a8d753f49962a7904d72f7f21bbef",
+  "entries": [
+    {
+      "path": "crates/app/src/main.rs",
+      "before_sha256": "67e1ad4cdb795d7829e840a4b99b8ae42d576106353ea6526e7fc7ef787eb9db",
+      "before_bytes": 29134,
+      "sha256": "e214be70dddfdf67ed2e4374dddf6a523b540a15ba73c6ee0242c9c7381a91e7",
+      "bytes": 29991
+    },
+    {
+      "path": "crates/app/src/server.rs",
+      "before_sha256": "a00199a85f525db1a37b2a5f95d7b0567b552e53dfd5c3acacb57af5e201660e",
+      "before_bytes": 75030,
+      "sha256": "c6266aa464e77f03e654d65c9c3d0cd97341dc7fa8b5b6d5830af0b6e2a17024",
+      "bytes": 77121
+    },
+    {
+      "path": "crates/app/src/mcp.rs",
+      "before_sha256": "7940ecd4081f6bd6127644ffdd26fbd289e98498c6e3ff9c0f6ecb6f8a237f5e",
+      "before_bytes": 23326,
+      "sha256": "6e858dd48cb9b7ea81b72944b95ae928d969f180c33e6f636542436a3124744c",
+      "bytes": 30126
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "before": "ABSENT",
+      "sha256": "8c423dee0ebe525bfe6645f3b5d117289a73c4b5bff5ddfda4b93b7229753345",
+      "bytes": 26693
+    }
+  ],
+  "support_files": [
+    {
+      "path": "BEFORE.json",
+      "sha256": "5cd6aeedac18e6e9b59f9a6601c14595f6711be702958ef976697b23cdae3fa4",
+      "bytes": 651
+    },
+    {
+      "path": "SOURCE-PINS.json",
+      "sha256": "ec2fb42d70f7ba39b24466926e0a0be88261ebab9d2ab369caa431f00a90d1a4",
+      "bytes": 1321
+    },
+    {
+      "path": "HANDOFF.md",
+      "sha256": "af34b8522e6b4d1d9236746be12918930f0cc489429833cbd3a77959ea233c51",
+      "bytes": 8302
+    },
+    {
+      "path": "verification.json",
+      "sha256": "bf791c74ac5096e06a39b3dace88965e6a4011e1282f4253f57a673d267bc7f3",
+      "bytes": 2465
+    }
+  ],
+  "files": [
+    {
+      "path": "crates/app/src/main.rs",
+      "before_sha256": "67e1ad4cdb795d7829e840a4b99b8ae42d576106353ea6526e7fc7ef787eb9db",
+      "before_bytes": 29134,
+      "sha256": "e214be70dddfdf67ed2e4374dddf6a523b540a15ba73c6ee0242c9c7381a91e7",
+      "bytes": 29991
+    },
+    {
+      "path": "crates/app/src/server.rs",
+      "before_sha256": "a00199a85f525db1a37b2a5f95d7b0567b552e53dfd5c3acacb57af5e201660e",
+      "before_bytes": 75030,
+      "sha256": "c6266aa464e77f03e654d65c9c3d0cd97341dc7fa8b5b6d5830af0b6e2a17024",
+      "bytes": 77121
+    },
+    {
+      "path": "crates/app/src/mcp.rs",
+      "before_sha256": "7940ecd4081f6bd6127644ffdd26fbd289e98498c6e3ff9c0f6ecb6f8a237f5e",
+      "before_bytes": 23326,
+      "sha256": "6e858dd48cb9b7ea81b72944b95ae928d969f180c33e6f636542436a3124744c",
+      "bytes": 30126
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "before": "ABSENT",
+      "sha256": "8c423dee0ebe525bfe6645f3b5d117289a73c4b5bff5ddfda4b93b7229753345",
+      "bytes": 26693
+    },
+    {
+      "path": "BEFORE.json",
+      "sha256": "5cd6aeedac18e6e9b59f9a6601c14595f6711be702958ef976697b23cdae3fa4",
+      "bytes": 651
+    },
+    {
+      "path": "SOURCE-PINS.json",
+      "sha256": "ec2fb42d70f7ba39b24466926e0a0be88261ebab9d2ab369caa431f00a90d1a4",
+      "bytes": 1321
+    },
+    {
+      "path": "HANDOFF.md",
+      "sha256": "af34b8522e6b4d1d9236746be12918930f0cc489429833cbd3a77959ea233c51",
+      "bytes": 8302
+    },
+    {
+      "path": "verification.json",
+      "sha256": "bf791c74ac5096e06a39b3dace88965e6a4011e1282f4253f57a673d267bc7f3",
+      "bytes": 2465
+    }
+  ],
+  "module_api_assumptions": {
+    "qualification": "Sibling-author-confirmed contract; frozen implementation NOT_READ here; Root must bind exact module manifest separately",
+    "type": "mcp::files::FileTools: Clone",
+    "associated_methods": [
+      "open(&std::path::Path)->anyhow::Result<Self>",
+      "definitions()->Vec<serde_json::Value>",
+      "is_tool(&str)->bool"
+    ],
+    "async_methods": [
+      "call(&self,&str,serde_json::Value)->anyhow::Result<serde_json::Value>",
+      "shutdown_and_drain(&self)->anyhow::Result<()>"
+    ],
+    "constants": {
+      "WRITE_TEXT_MAX_BYTES": 1048576,
+      "READ_CHUNK_MAX_BYTES": 262144,
+      "READ_FILE_MAX_BYTES": 33554432,
+      "DIRECTORY_MAX_ENTRIES": 10000,
+      "DIRECTORY_NAME_MAX_BYTES": 2097152,
+      "MAX_CONCURRENT_FILE_OPS": 4,
+      "MAX_RESULT_JSON_BYTES": 2097152
+    },
+    "constant_visibility": "pub(super) from files module into parent mcp",
+    "argument_validation_before_io": "FileTools::call owns strict types/keys/domain/UTF8 bounds before FS/spawn",
+    "worker_lifecycle": "Module registry owns actual worker JoinHandles; canceled awaiters never become sole handle owners"
+  },
+  "default_tools": 26,
+  "opt_in_tools": 31,
+  "response_whole_wire_max_bytes": 8388608,
+  "rpc_id_max_utf8_bytes": 1024,
+  "new_test_names": [
+    "file_tools_cli_opt_in_is_shared_by_serve_and_mcp",
+    "file_tools_cli_requires_an_explicit_value_and_preserves_other_commands",
+    "file_tools_inventory_is_disabled_by_default_and_declares_exact_five_when_enabled",
+    "file_tools_disabled_requests_never_reach_the_api",
+    "file_tools_api_address_retains_exact_loopback_and_default_fallback",
+    "file_tools_all_five_execute_locally_with_no_api_calls",
+    "file_tools_rpc_id_is_bounded_before_version_errors_or_any_write",
+    "file_tools_invalid_shapes_and_oversized_text_never_mutate",
+    "file_tools_actual_text_response_is_single_copy_and_whole_wire_bounded",
+    "file_tools_wire_guard_accepts_exact_physical_frame_and_rejects_plus_one",
+    "file_tools_actual_stdio_frames_share_opt_in_and_drain_on_eof",
+    "file_tools_stdio_output_error_still_awaits_registry_drain",
+    "file_tools_server_rejects_bad_root_and_nonloopback_before_data_directory",
+    "file_tools_http_opt_in_capabilities_inventory_and_dispatch_share_module"
+  ],
+  "new_authored_test_functions": 14,
+  "new_executed_test_functions": 0,
+  "rustfmt_parse_and_check": {
+    "files": 4,
+    "exit_code": 0,
+    "config": "edition2024 skip_children=true"
+  },
+  "cargo_builds": 0,
+  "compiler_clippy_tests": 0,
+  "http_fs_stdio_browser_sdk_fixture_runs": 0,
+  "peer_or_root_source_mutations": 0,
+  "git_runtime_installation_mutations": 0,
+  "coordinator_execution_release": "Root owns serial execution; no second compiler/test process started by this worker",
+  "pending_gates": [
+    "Root final static review",
+    "Exact frozen FileTools module/API/constant binding",
+    "Root combined compile/type/clippy/workspace tests",
+    "Actual STDIO/HTTP/file race/platform/native acceptance as selected by Root"
+  ],
+  "review_corrections_applied": [
+    "No unregistered serialization worker; bounded synchronous count",
+    "Exact loopback listener API address plus parsed-loopback Host check",
+    "Actual owned startup readiness channel replaces port reservation and foreign health probes"
+  ]
+}
