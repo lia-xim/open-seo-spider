@@ -224,7 +224,7 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - Verträge: [resource-matrix-plan.md](parity/resource-matrix-plan.md), [resource-matrix-plan.json](parity/resource-matrix-plan.json), [resource-discovery.md](resource-discovery.md), [resource-contract-v2.md](resource-contract-v2.md), [ROADMAP.md](ROADMAP.md).
   - Gate-Stand: contract_regressions: PASS_V2_WITH_PRESERVED_V1_COMPATIBILITY; resource_products_28: PASS_BOTH_PROFILES; navigation_products_80: PASS_BOTH_PROFILES; response_controls_21: PASS_44_EXECUTIONS; native_request_logs: PASS_BOUNDED_SLICE; api_cli_mcp: PASS_13_GROUPS; redirect_controls_88: PASS_176_PROFILE_EXECUTIONS; workspace_tests_clippy: PASS; exact_commit_ci: PASS; immutable_release: PASS; installed_runtime: PASS_B10; full_feature_acceptance: PARTIAL; actual_browser_ui: PASS_10_NATIVE_CHECKS; ui_mock: PASS_11_SEPARATE_FIXTURES; additional_redirect_boundaries: PASS_24_PROFILE_EXECUTIONS.
 
-- [ ] **Große Sitemap-Berichte beim Blättern beschleunigen** — TX_LOCAL_PROJECTION_INTEGRATED_ACTUAL6_RUST_TESTS_PASS_SPEED_NOT_PROVEN. Optionale2MiB-TX-lokale Reportprojektion besteht6 echte SQLite-Tests inklusive exakter Budgetgrenze, ungültiger UTF8-Rückfall, Hash-/Stale-Semantik und Cancel. Original256MiB-Reportgrenze und vollständige Integritätsprüfungen bleiben erhalten. Konstante Verbesserung ohne gemessenen Leistungsnachweis; amortisierte große Lesesitzungen bleiben offen.
+- [ ] **Große Sitemap-Berichte beim Blättern beschleunigen** — TX_LOCAL_PROJECTION_ACTUAL1380_WORKSPACE_PASS_SPEED_NOT_PROVEN. Optionale2MiB-TX-lokale Reportprojektion besteht6 echte SQLite-Tests inklusive exakter Budgetgrenze, ungültiger UTF8-Rückfall, Hash-/Stale-Semantik und Cancel. Original256MiB-Reportgrenze und vollständige Integritätsprüfungen bleiben erhalten. Konstante Verbesserung ohne gemessenen Leistungsnachweis; amortisierte große Lesesitzungen bleiben offen.
   - [x] Tatsächliche Laufzeitbelege und acht unveränderte Source7/8-Lesepfade geprüft; langsamer Read-only-Abschnitt von Erfassung, Netzwerk und Dateischreibphase getrennt.
   - [x] Enger3-Dateien-Entwurf mit optionaler2MiB-TX-Projektion für zwei interne JSON-Prüfungen unabhängig quellengeprüft. UTF8-Unsupported fällt auf alte SQL-Pfade zurück; sechs echte SQLite-Testquellen sind geschrieben.
   - [ ] Einzelne echte Requestzeiten und deterministische JSON-/Hash-/Decode-Arbeitszähler erheben.
@@ -234,7 +234,7 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - Verträge: [index.json](verification/sitemap-read-performance-20261015/index.json), [index.json](verification/next-batch-source-proposals-20261015/index.json).
   - Gate-Stand: evidence: ACTUAL_PRIOR_TIMESTAMPS_AND_CURRENT_BYTE_EQUAL_READ_SOURCE; implementation: SOURCE_ONLY_REVIEWED_NOT_COMPILED; performance_gain: NOT_PROVEN; manufacturer_parity: NOT_PROVEN.
 
-- [ ] **N-Gramm-Corpus mit vollständigen Quellen und Exporten ausbauen** — SOURCE10_INTEGRATED_ACTUAL15_NEW_RUST_TESTS_PASS_NATIVE_PENDING. Gespeicherter1–6-Gramm-Corpus ist in Source10 integriert und besteht15 neue Rust-Fälle mit Häufigkeiten, vollständigen Quellenmitgliedschaften, begrenzten Positionsbeispielen, expliziten fehlenden Quellen, Snapshot-/Filterbindung, API/CLI und vollständiger CSV. Vollständige Suite, echter UI-/205Quellseiten-/Cold-Nachweis und Installation folgen; weitere Kanäle/Wortwolke bleiben offen.
+- [ ] **N-Gramm-Corpus mit vollständigen Quellen und Exporten ausbauen** — SOURCE10_ACTUAL1380_WORKSPACE_PASS_NATIVE_PENDING. Gespeicherter1–6-Gramm-Corpus ist in Source10 integriert und besteht15 neue Rust-Fälle mit Häufigkeiten, vollständigen Quellenmitgliedschaften, begrenzten Positionsbeispielen, expliziten fehlenden Quellen, Snapshot-/Filterbindung, API/CLI und vollständiger CSV. Vollständige Suite, echter UI-/205Quellseiten-/Cold-Nachweis und Installation folgen; weitere Kanäle/Wortwolke bleiben offen.
   - [x] Entwurf und Quellenreview ohne offene Befunde abgeschlossen; Quellen-/Filter-/Snapshotbindung und vollständige versus begrenzte Positionsdaten sind getrennt.
   - [x] Offizielle N-Gramm-Anleitung gegen tatsächlich gespeicherte Text-, Titel-, Überschriften-, Link- und Bilddaten abgeglichen; fehlende Kanalbeweise einzeln erfasst.
   - [ ] Auf endgültigen Source9-Parent rebasen, alle neun neuen Fälle kompilieren/ausführen und vollständige native Export-/Crawl-/Wiederöffnungsabnahme durchführen.
@@ -243,7 +243,7 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - [ ] Unverlinkten Körpertext erst mit belegter Segmentzugehörigkeit oder aufbewahrtem HTML/DOM rekonstruieren; flache Textnachbarschaften sind kein Beweis.
   - [ ] Begrenzte nachvollziehbare Wortwolke mit Listen-/Tastaturalternative sowie320/1440-Browserkontrollen ergänzen.
   - [ ] Große Corpora mit tatsächlichen Arbeitszählern prüfen; vollständige Neuaggregation je Fenster und ausgewählteIdentität O(S*T) gezielt reduzieren.
-  - Verträge: [index.json](verification/source10-directed-checkpoint-20261015/index.json), [index.json](verification/next-batch-source-proposals-20261015/index.json), [ADDENDUM.md](verification/next-batch-source-proposals-20261015/ngram/gap/ADDENDUM.md).
+  - Verträge: [index.json](verification/combined-workspace-v10-20261015/index.json), [index.json](verification/source10-directed-checkpoint-20261015/index.json), [index.json](verification/next-batch-source-proposals-20261015/index.json), [ADDENDUM.md](verification/next-batch-source-proposals-20261015/ngram/gap/ADDENDUM.md).
   - Gate-Stand: source_review: NO_FINDINGS_BOUNDED_SOURCE_REVIEW; rust_tests: 9_AUTHORED_NOT_RUN; native: NOT_RUN; manufacturer_parity: NOT_PROVEN.
 
 - [ ] **Teilweise geschriebene Downloadblöcke korrekt melden** — ACTUAL_SOURCE8_WORKSPACE_AND_BODY_TRANSPORT_NATIVE_PASS. Source8 korrigiert den Write-Vertrag: Eine erfolgreiche Schreiboperation meldet die tatsächlich angenommene Präfixlänge; spätere Fehler werden nicht als Nullfortschritt ausgegeben. Drei neue Regressionen und alle bisherigen HTTP-/Abbruchtests bestehen im tatsächlichen Gesamtlauf. Frische native Abnahmen folgen.
@@ -396,15 +396,16 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - Verträge: [mcp-file-tools.md](mcp-file-tools.md), [preparation.json](verification/mcp-file-tools-source-20261015/preparation.json), [index.json](verification/mcp-file-tools-source-20261015/focused-module-first/index.json), [windows-root-test-repair.json](verification/mcp-file-tools-source-20261015/windows-root-test-repair.json), [index.json](verification/mcp-file-tools-source-20261015/focused-module-repaired/index.json), [index.json](verification/mcp-file-tools-source-20261015/focused-wiring-repaired/index.json), [index.json](verification/combined-workspace-v3-20261015/index.json), [index.json](verification/combined-optimized-native-v3-20261015/index.json).
   - Gate-Stand: source_review: BOUNDED_SOURCE_ONLY_NO_CONFIRMED_FINDINGS; authored_tests: 31_WRITTEN_29_WINDOWS_EXECUTED_AND_PASSED_2_UNIX_NOT_RUN; compile: PASS_ACTUAL_TEST_PROFILE_51_82_SECONDS; official_sdk: PASS_175_ACTUAL_OPERATION_ASSERTIONS; native_http_stdio: PASS_BOTH_OFFICIAL_SDK_TRANSPORTS; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN; windows_root_test_repair: PASS_ACTUAL_MODULE_GROUP; transport_tests: PASS_14_ACTUAL_GROUPS_OWNED_HTTP_THREE_MODES; unix_tests: 2_AUTHORED_NOT_RUN; combined_v3_workspace: PASS_1203_INCLUDING_4_RENDERER_FMT_CLIPPY; windows_junction: PASS_INNER_AND_ROOT_CONTROLS; http_inflight_graceful_drain: NOT_PROVEN.
 
-- [ ] **undefined** — ACTUAL21_NEW_RUST_NAMES_AND_PRELIMINARY_CLIPPY_PASS_FULL_SUITE_PENDING. Source10 integriert gespeicherten1–6-Gramm-Corpus über alle gespeicherten Seitenzeilen, optional TX-lokale Sitemap-Reportprojektion und Originaldaten-Auswahlfix. Alle21 neuen Rust-Testnamen bestehen; insgesamt22 gefilterte Fälle inklusive eines alten. Format und Clippy bestehen. Drei separate Node-Regressionsfälle bestehen nach bestätigtem alten1pass/2fail. Quellen im privaten Commitc6bd9c5 gesichert; vollständige Suite/Build/native/Installation stehen aus.
+- [ ] **undefined** — ACTUAL1380_FULL_SUITE_PASS_OPTIMIZED_BUILD_RUNNING_NATIVE_PENDING. Source10 besteht tatsächlich1380 Tests ohne Fehler oder ignorierte Fälle, alle598 Pflichtnamen/602qualifizierten Namen, vier echte Renderer-Gates, Format und Clippy. Alle369 Inputs sind abschließend identisch; eigene Renderer/Testserver und alle drei Cargo-Prozesse sind geschlossen. Ngram-Corpus1–6, TX-lokale Projektion und Originaldaten-Auswahlfix sind integriert. Optimierter Build läuft; frische native Prüfung und Installation bleiben offen.
   - [x] 369 Inputs zusammengesetzt,18eigene Pfade (7geänderte/11neue),351 unverändert; unabhängige Kompositions- und Formatprüfung.
   - [x] 21 neue Rustnamen tatsächlich ausgeführt:15Ngramfälle inklusive echter Capture->API/CLI/CSV und6SQLite-Projektionsfälle.
   - [x] Ursprünglicher Clippy-Stilfehler mit Code101 erhalten und eng korrigiert; neuer Clippyprozess schließt tatsächlich0.
-  - [ ] Vollständige1380er-Prognosesuite mit598Pflichtnamen/602Fullnames und vier echten Renderergates ausführen.
-  - [ ] Optimierten Kandidaten erstellen und alle erforderlichen nativen Bereiche frisch prüfen, einschließlich Ngram-Fundstellen über205 echte Quellseiten und kalter Wiederöffnung.
-  - [ ] Sicher mit erhaltenen Nutzerdaten installieren; weitere Ngram-Textkanäle/Wortwolke und amortisierte große Sitemap-Abfragen bleiben offen.
-  - Verträge: [index.json](verification/source10-directed-checkpoint-20261015/index.json).
-  - Gate-Stand: directed_new_names: PASS_21_NEW_FEATURE_NAMES_ONLY; preliminary_clippy: PASS_PRELIMINARY_CLIPPY_ONLY; full_suite: NOT_RUN; optimized_build: NOT_RUN; native: NOT_RUN; installation: UNCHANGED_SOURCE5_R3.
+  - [x] Vollständige tatsächliche1380/0/0-Workspace-Abnahme mit vier echten Renderergates,598Pflichtnamen/602qualifizierten Namen, drei erfolgreichen Cargoabschlüssen, geschlossenen eigenen Diensten und abschließenden369Quellhashes.
+  - [ ] Optimierten Windows-Kandidaten abschließen und alle elf bisherigen nativen Bereiche am aktuellen Kandidaten prüfen.
+  - [ ] Im echten Resource-/Directory-Crawl zusätzlich sechs Ngramfälle mit205Quellseiten/410Sechswortvorkommen,API200+5/UI100+100+5, vollständiger CSV/CLI,1440/320Pixel und kalter Wiederöffnung ohne neue Websiteanfragen prüfen.
+  - [ ] Sicher mit erhaltenen Nutzerdaten installieren; zusätzliche Textkanäle/Wortwolke, amortisierte große Sitemap-Abfragen und neue nachvollziehbare Crawl-Aufnahmegrenzen danach abarbeiten.
+  - Verträge: [index.json](verification/combined-workspace-v10-20261015/index.json), [saved-ngram-reports.md](saved-ngram-reports.md), [index.json](verification/source10-directed-checkpoint-20261015/index.json).
+  - Gate-Stand: directed_new_names: PASS_21_NEW_FEATURE_NAMES_ONLY; preliminary_clippy: PASS_PRELIMINARY_CLIPPY_ONLY; full_suite: PASS_COMBINED_WORKSPACE_V10_REAL_RENDERER_FMT_CLIPPY; optimized_build: RUNNING; native: NOT_RUN; installation: UNCHANGED_SOURCE5_R3.
 
 - [x] **B8: optionale Textaufnahme und gespeicherte Inhaltsanalyse** — COMPLETED. Der begrenzte B8-Baustein für optionale Roh-/DOM-Textaufnahme und gespeicherte ausgewählte Inhaltsanalyse ist mit eigenen nativen/API/UI-Gates, exakter Commit-CI und unveränderlichem installiertem Release geprüft. Vollständige Website-Analyse und CSS-Neuauswahl ohne erhaltenes HTML/DOM bleiben zusätzliche offene Feature-Abnahmen.
   - [x] Pure CSS-/Unicode-Auswahl20 und Binding4 sowie16 echte native Fixtures geprüft; ungültige Konfiguration scheitert vor HTTP.
@@ -2167,7 +2168,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Gespeicherte Crawl-Texte und Quellrevisionen sind angebunden; große Corpus-Aggregation und vollständige spezielle N-Gramm-Exporte weiter prüfen.
 
-  Beweisregister: [content-analysis-core](../crates/core/src/content_analysis.rs) (PASS), [content-analysis-api-cli](verification/content-analysis-e2e.json) (PASS), [native-policy-ci](verification/native-policy-ci.json) (PASS), [native-policy-installed](verification/native-policy-installed.json) (PASS), [content-capture-core](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-native-chrome](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-api-cli](verification/content-capture-e2e.json) (PASS), [ui-content-fixture](../web/verification/ui-content-fixture-results.json) (PASS), [ui-content-live](../web/verification/ui-content-live-results.json) (PASS), [content-capture-batch](verification/content-capture-batch.json) (PASS), [content-capture-ci](verification/content-capture-ci.json) (PASS), [content-capture-installed](verification/content-capture-installed.json) (PASS), [source10-directed-checkpoint-20261015](verification/source10-directed-checkpoint-20261015/index.json) (PASS_21_NEW_FEATURE_NAMES_ONLY).
+  Beweisregister: [content-analysis-core](../crates/core/src/content_analysis.rs) (PASS), [content-analysis-api-cli](verification/content-analysis-e2e.json) (PASS), [native-policy-ci](verification/native-policy-ci.json) (PASS), [native-policy-installed](verification/native-policy-installed.json) (PASS), [content-capture-core](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-native-chrome](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-api-cli](verification/content-capture-e2e.json) (PASS), [ui-content-fixture](../web/verification/ui-content-fixture-results.json) (PASS), [ui-content-live](../web/verification/ui-content-live-results.json) (PASS), [content-capture-batch](verification/content-capture-batch.json) (PASS), [content-capture-ci](verification/content-capture-ci.json) (PASS), [content-capture-installed](verification/content-capture-installed.json) (PASS), [source10-directed-checkpoint-20261015](verification/source10-directed-checkpoint-20261015/index.json) (PASS_21_NEW_FEATURE_NAMES_ONLY), [combined-workspace-v10-20261015](verification/combined-workspace-v10-20261015/index.json) (PASS_COMBINED_WORKSPACE_V10_REAL_RENDERER_FMT_CLIPPY).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -2179,7 +2180,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
     "status": "partial",
     "acceptance_test": "Count overlapping one-, two- and three-word sequences with documented stopword and case policies.",
     "remaining_acceptance": [
-      "Run fresh Source10 complete workspace, compiled1..6 corpus API/CLI/fullCSV/UI with205genuine captured source pages,1440/320 widths and cold reopen without website requests.",
+      "Run fresh compiled Source10 corpus API/CLI/fullCSV/UI with205genuine captured source pages,1440/320 widths and cold reopen without website requests.",
       "Add separately documented title, heading and inlink text channels; capture needed alt/anchor and unlinked text provenance rather than infer it from flattened saved text.",
       "Add bounded word-cloud and specialized report interactions; verify large-corpus CPU/cancellation/performance and documented capture limits."
     ],
@@ -2222,6 +2223,14 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
         ],
         "proves": "Fifteen actual new Rust tests verify saved-row corpus1..6gram totals, complete source memberships, overlapping bounded position samples, Unicode/case/stopword boundaries, strict budgets/options/snapshots, genuine captured six-word and over200-row API paging/fullCSV and explicit CLI input/output protection.",
         "limits": "Source10 complete workspace/build/nativeUI/205genuine-source/cold/install gates pending. Saved selected raw/DOM text only; no whole-current-site assertion, separate title/heading/inlink/alt/unlinked channels or word cloud.",
+        "source_commit": "c6bd9c50a0dfcfb434a7747a2052aab961d00ef7"
+      },
+      {
+        "verification_run_ids": [
+          "combined-workspace-v10-20261015"
+        ],
+        "proves": "Exact Source10 corpus implementation participates in actual1380/0/0 Windows workspace,15newNgramcases,all598required/602qualified names,4realRenderer gates,fmt/Clippy,actual closed worker/fixture and final369-source hash checks.",
+        "limits": "Fresh compiled Ngram UI/205genuine sources/cold/install acceptance and complete manufacturer parity remain pending.",
         "source_commit": "c6bd9c50a0dfcfb434a7747a2052aab961d00ef7"
       }
     ],
@@ -5703,4 +5712,4 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `e9fd930cae0f457e610ee332cf7281c12e9fc87ff7738f3baa47ea81a152f621`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T18:19:54.559Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `3a4076f4628077d3e70c9439930b2b2a4cd941e0502f9f208babfc5a47850857`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T18:37:01.597Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

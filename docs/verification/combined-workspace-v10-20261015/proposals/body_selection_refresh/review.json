@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "kind": "source_body_selection_refresh_independent_review",
+  "result": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "findings": [],
+  "proposal_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source-body-selection-refresh-proposal-v1/manifest.json",
+    "sha256": "f8181168e2c67aaab053eb1257fa27d119a79760d0c4c11ecd7adeb7bfc93606",
+    "bytes": 2590
+  },
+  "parent_source": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v9\\manifest.json",
+    "sha256": "4e22e195cb918f3fcc820135da9f9c858c0a531e59bb502e15bf0eb8711bb3a9",
+    "bytes": 335390
+  },
+  "actual_diagnostic": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source9-original-body-selection-diagnostic-v1/proof.json",
+    "sha256": "8e542d0570df9024e868bc0e6a3d96d6256906eb8eb160d83d9401d5c72e1714",
+    "bytes": 5027
+  },
+  "review_scope": "One actual production insertion and three authored source regressions. Not a runtime/browser/test acceptance.",
+  "files": [
+    {
+      "path": "web/app.js",
+      "before_sha256": "3e47a33969a250e12293dc58caf7aa66ea3a4de4706345e530a1fb8623187c49",
+      "after_sha256": "5ef1320192958cf01b5e9bd60acf91580ff1cbdc41ed50e5177185f51c5442bb",
+      "after_bytes": 392652
+    }
+  ],
+  "derivation": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-selection-refresh-proposal-v1\\DERIVATION.json",
+    "sha256": "61a915192c5842ec0e3101ccb16c2d3f95266633618e938ffce6a27ced9e4364",
+    "bytes": 1391
+  },
+  "checks": {
+    "full_forward_inverse_verified": true,
+    "only_added_renderSourceBodies_after_actual_selected_state_assignment": true,
+    "early_abort_reset_and_generation_order_exact": true,
+    "old_result_cleared_before_new_identity_controls_render": true,
+    "all_request_sequence_download_guards_exact": true,
+    "network_io_not_added": true,
+    "three_actual_body_extraction_cases_source_reviewed_not_run": true
+  },
+  "preserved_full_regions": [
+    {
+      "name": "invalidatePoll",
+      "bytes": 453,
+      "sha256": "2606a5258c0b976ba5b5d163746d3363cf7f17e6e362536fb9cc9d293018151e"
+    },
+    {
+      "name": "source_body_reset_render_load_download",
+      "bytes": 6493,
+      "sha256": "60730f1d933cf8907f4e1d6ff8a2299f985f4f0d8d1f378634b0728cec29b5fc"
+    },
+    {
+      "name": "resetSitemapMembership",
+      "bytes": 459,
+      "sha256": "12a3b169fb745fc8724c49243ac31ee4215c21b04d28e5d8f6baa478837b70be"
+    },
+    {
+      "name": "renderSitemapInspector",
+      "bytes": 5394,
+      "sha256": "6f5b82c074871a174b444866a6f1ce7a7259cb5889eedb50a77bb1ba7b104651"
+    }
+  ],
+  "authored_test_names": [
+    "source_body_selection_null_to_first_archive_enables_refresh_without_document_change",
+    "source_body_selection_clear_disables_refresh_and_discards_old_page",
+    "source_body_selection_other_crawl_aborts_old_owner_before_new_controls_render"
+  ],
+  "pins": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source-body-selection-refresh-proposal-v1/manifest.json",
+      "sha256": "f8181168e2c67aaab053eb1257fa27d119a79760d0c4c11ecd7adeb7bfc93606",
+      "bytes": 2590
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v9\\manifest.json",
+      "sha256": "4e22e195cb918f3fcc820135da9f9c858c0a531e59bb502e15bf0eb8711bb3a9",
+      "bytes": 335390
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v9/web/app.js",
+      "sha256": "3e47a33969a250e12293dc58caf7aa66ea3a4de4706345e530a1fb8623187c49",
+      "bytes": 392625
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-selection-refresh-proposal-v1\\source\\web\\app.js",
+      "sha256": "5ef1320192958cf01b5e9bd60acf91580ff1cbdc41ed50e5177185f51c5442bb",
+      "bytes": 392652
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-selection-refresh-proposal-v1\\DERIVATION.json",
+      "sha256": "61a915192c5842ec0e3101ccb16c2d3f95266633618e938ffce6a27ced9e4364",
+      "bytes": 1391
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-selection-refresh-proposal-v1\\tests\\source-body-selection-regression.cjs",
+      "sha256": "8dbed369242990b6064545bd8862cb4ae5a0368930f1625fb364f73287c0403a",
+      "bytes": 5509
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-selection-refresh-proposal-v1\\HANDOFF.md",
+      "sha256": "7346aed651caba5e37822e2bdf0a44f34078bdfe39af3681a642f7f8eed138c9",
+      "bytes": 1832
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source9-original-body-selection-diagnostic-v1/proof.json",
+      "sha256": "8e542d0570df9024e868bc0e6a3d96d6256906eb8eb160d83d9401d5c72e1714",
+      "bytes": 5027
+    }
+  ],
+  "syntax": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-selection-refresh-proposal-v1\\source\\web\\app.js",
+      "exit_code": 0
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-selection-refresh-proposal-v1\\tests\\source-body-selection-regression.cjs",
+      "exit_code": 0
+    }
+  ],
+  "execution": {
+    "target_imports": 0,
+    "node_tests": 0,
+    "compiler": 0,
+    "sqlite": 0,
+    "http": 0,
+    "browser": 0,
+    "native": 0,
+    "root_writes": 0,
+    "git": 0
+  },
+  "limitations": [
+    "The actual compiled Source9 diagnostic is historical Root evidence; the proposed new source was not compiled or run by this reviewer.",
+    "The three VM regressions were read and syntax-checked only. They do not replace the unchanged genuine Browser27 flow on a later candidate.",
+    "The source change refreshes selected-crawl controls; it does not add archive storage, change metadata authority or alter retained download availability."
+  ]
+}

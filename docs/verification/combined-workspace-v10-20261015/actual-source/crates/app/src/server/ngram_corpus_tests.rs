@@ -1,0 +1,388 @@
+use super::*;
+use axum::body::to_bytes;
+use std::sync::atomic::{AtomicUsize, Ordering};
+fn state(id: Uuid, report: CrawlReport) -> AppState {
+    let job = Job {
+        id,
+        config: report.config.clone(),
+        status: "completed".into(),
+        started_at: String::new(),
+        finished_at: None,
+        pages: vec![],
+        issues: vec![],
+        queued: 0,
+        discovery_pending: 0,
+        in_flight: 0,
+        warnings: vec![],
+        error: None,
+        report: Some(report),
+        control: CrawlControl::new(),
+        generation: 7,
+        checkpoint: None,
+        frontier_available: false,
+        operation: None,
+        recrawl_override: Default::default(),
+        policy_ledger: None,
+        resource_ledger: None,
+    };
+    AppState {
+        mcp: crate::mcp::Bridge::new("http://127.0.0.1:1").unwrap(),
+        jobs: Arc::new(RwLock::new(HashMap::from([(
+            id,
+            Arc::new(RwLock::new(job)),
+        )]))),
+        data_dir: Arc::new(PathBuf::from("unused-offline-ngram-fixture")),
+        exports: Default::default(),
+        finding_reads: Default::default(),
+        lifecycle: Default::default(),
+    }
+}
+fn response(value: ApiResult<Response>) -> Response {
+    value.unwrap_or_else(|(s, Json(e))| panic!("{s}: {}", e.error))
+}
+async fn value(response: Response) -> Value {
+    serde_json::from_slice(
+        &to_bytes(response.into_body(), projection::JSON_BYTES)
+            .await
+            .unwrap(),
+    )
+    .unwrap()
+}
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn saved_ngram_api_actual_saved_capture_over200_pages_full_csv_stale_and_zero_read_website_requests()
+ {
+    let count = Arc::new(AtomicUsize::new(0));
+    let seen = count.clone();
+    let words = (0..205)
+        .map(|n| format!("word{n}"))
+        .collect::<Vec<_>>()
+        .join(" ");
+    let html = format!("<html><body>{words} {words}</body></html>");
+    let site = Router::new().route(
+        "/",
+        get(move || {
+            let count = seen.clone();
+            let html = html.clone();
+            async move {
+                count.fetch_add(1, Ordering::SeqCst);
+                ([(header::CONTENT_TYPE, "text/html; charset=utf-8")], html)
+            }
+        }),
+    );
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+    let url = format!("http://{}/", listener.local_addr().unwrap());
+    let (stop, stopped) = tokio::sync::oneshot::channel::<()>();
+    let website = tokio::spawn(async move {
+        axum::serve(listener, site)
+            .with_graceful_shutdown(async {
+                let _ = stopped.await;
+            })
+            .await
+            .unwrap();
+    });
+    let crawler = Crawler::new(CrawlConfig {
+        seed_urls: vec![url],
+        content_capture: Some(Default::default()),
+        crawl_links: false,
+        obey_robots: false,
+        discover_sitemaps: false,
+        request_timeout_secs: 5,
+        ..Default::default()
+    })
+    .unwrap();
+    let report = tokio::time::timeout(
+        std::time::Duration::from_secs(15),
+        crawler.run_controlled(None, CrawlControl::new()),
+    )
+    .await
+    .unwrap()
+    .unwrap()
+    .report;
+    drop(crawler);
+    assert_eq!(count.load(Ordering::SeqCst), 1);
+    let id = Uuid::new_v4();
+    let state = state(id, report);
+    let mut request = Request {
+        n: Some(1),
+        limit: 200,
+        expected_generation: Some(7),
+        ..Default::default()
+    };
+    let first = value(response(
+        preview(State(state.clone()), Path(id), Ok(Json(request.clone()))).await,
+    ))
+    .await;
+    assert_eq!(first["total_rows"], 205);
+    assert_eq!(first["rows"].as_array().unwrap().len(), 200);
+    assert_eq!(first["rows"][0]["occurrences"], 2);
+    assert_eq!(first["rows"][0]["document_frequency"], 1);
+    assert_eq!(first["source_states"]["complete"], 1);
+    let token = first["snapshot"]["snapshot_token"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    request.expected_snapshot_token = Some(token);
+    request.after = first["next_after"].as_u64().map(|n| n as usize);
+    let second = value(response(
+        preview(State(state.clone()), Path(id), Ok(Json(request.clone()))).await,
+    ))
+    .await;
+    assert_eq!(second["rows"].as_array().unwrap().len(), 5);
+    assert_eq!(second["has_more"], false);
+    request.after = None;
+    let download = response(csv(State(state.clone()), Path(id), Ok(Json(request.clone()))).await);
+    let len = download.headers()[header::CONTENT_LENGTH]
+        .to_str()
+        .unwrap()
+        .parse::<usize>()
+        .unwrap();
+    let hash = download.headers()["x-content-sha256"]
+        .to_str()
+        .unwrap()
+        .to_owned();
+    let bytes = to_bytes(download.into_body(), projection::CSV_BYTES)
+        .await
+        .unwrap();
+    assert_eq!(bytes.len(), len);
+    assert_eq!(projection::sha(&bytes), hash);
+    assert_eq!(std::str::from_utf8(&bytes).unwrap().lines().count(), 206);
+    assert!(std::str::from_utf8(&bytes).unwrap().contains("word204"));
+    let job = get_job(&state, id)
+        .await
+        .unwrap_or_else(|(s, Json(e))| panic!("{s}: {}", e.error));
+    job.write()
+        .await
+        .report
+        .as_mut()
+        .unwrap()
+        .warnings
+        .push("saved snapshot mutated, no HTTP".into());
+    assert_eq!(
+        csv(State(state.clone()), Path(id), Ok(Json(request)))
+            .await
+            .err()
+            .unwrap()
+            .0,
+        StatusCode::CONFLICT
+    );
+    assert_eq!(count.load(Ordering::SeqCst), 1);
+    state.lifecycle.blocking.shutdown_and_drain().await.unwrap();
+    state
+        .lifecycle
+        .response_streams
+        .shutdown_and_drain()
+        .await
+        .unwrap();
+    stop.send(()).unwrap();
+    website.await.unwrap();
+}
+#[tokio::test]
+async fn saved_ngram_api_active_unknown_generation_and_owner_close_refuse_without_crawl() {
+    let report = CrawlReport {
+        config: Default::default(),
+        pages: vec![],
+        issues: vec![],
+        summary: Default::default(),
+        warnings: vec![],
+        operation: None,
+        policy_ledger: None,
+        resource_ledger: None,
+        sitemap_catalog: None,
+        sitemap_coverage_inventory: None,
+        sitemap_source_measurements: None,
+    };
+    let id = Uuid::new_v4();
+    let state = state(id, report);
+    let job = get_job(&state, id)
+        .await
+        .unwrap_or_else(|(s, Json(e))| panic!("{s}: {}", e.error));
+    job.write().await.status = "running".into();
+    assert_eq!(
+        preview(State(state.clone()), Path(id), Ok(Json(Request::default())))
+            .await
+            .err()
+            .unwrap()
+            .0,
+        StatusCode::CONFLICT
+    );
+    job.write().await.status = "completed".into();
+    let r = Request {
+        expected_generation: Some(9),
+        ..Default::default()
+    };
+    assert_eq!(
+        preview(State(state.clone()), Path(id), Ok(Json(r)))
+            .await
+            .err()
+            .unwrap()
+            .0,
+        StatusCode::CONFLICT
+    );
+    state.lifecycle.blocking.close_admission();
+    assert_eq!(
+        preview(State(state.clone()), Path(id), Ok(Json(Request::default())))
+            .await
+            .err()
+            .unwrap()
+            .0,
+        StatusCode::SERVICE_UNAVAILABLE
+    );
+    state.lifecycle.blocking.shutdown_and_drain().await.unwrap();
+}
+
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn saved_ngram_api_genuine_six_word_capture_csv_and_option_staleness_without_read_requests() {
+    let count = Arc::new(AtomicUsize::new(0));
+    let seen = count.clone();
+    let site = Router::new().route(
+        "/",
+        get(move || {
+            let seen = seen.clone();
+            async move {
+                seen.fetch_add(1, Ordering::SeqCst);
+                (
+                    [(header::CONTENT_TYPE, "text/html; charset=utf-8")],
+                    "<html><body>a b c d e f a b c d e f</body></html>",
+                )
+            }
+        }),
+    );
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+    let url = format!("http://{}/", listener.local_addr().unwrap());
+    let (stop, stopped) = tokio::sync::oneshot::channel::<()>();
+    let website = tokio::spawn(async move {
+        axum::serve(listener, site)
+            .with_graceful_shutdown(async {
+                let _ = stopped.await;
+            })
+            .await
+            .unwrap();
+    });
+    let crawler = Crawler::new(CrawlConfig {
+        seed_urls: vec![url],
+        content_capture: Some(Default::default()),
+        crawl_links: false,
+        obey_robots: false,
+        discover_sitemaps: false,
+        request_timeout_secs: 5,
+        ..Default::default()
+    })
+    .unwrap();
+    let report = tokio::time::timeout(
+        std::time::Duration::from_secs(15),
+        crawler.run_controlled(None, CrawlControl::new()),
+    )
+    .await
+    .unwrap()
+    .unwrap()
+    .report;
+    drop(crawler);
+    assert_eq!(count.load(Ordering::SeqCst), 1);
+    let dir = tempfile::tempdir().unwrap();
+    let input = dir.path().join("report.json");
+    let options_path = dir.path().join("options.json");
+    let output = dir.path().join("six.json");
+    let full_csv = dir.path().join("six.csv");
+    let original = serde_json::to_vec(&report).unwrap();
+    tokio::fs::write(&input, &original).await.unwrap();
+    tokio::fs::write(
+        &options_path,
+        br#"{"options":{"max_n":6},"n":6,"exact_tokens":["a","b","c","d","e","f"]}"#,
+    )
+    .await
+    .unwrap();
+    crate::ngram_app::run_cli(
+        input.clone(),
+        Some(options_path),
+        output.clone(),
+        Some(full_csv.clone()),
+    )
+    .await
+    .unwrap();
+    let cli: Value = serde_json::from_slice(&tokio::fs::read(output).await.unwrap()).unwrap();
+    assert_eq!(cli["max_n"], 6);
+    assert_eq!(cli["rows"][0]["occurrences"], 2);
+    assert_eq!(cli["total_rows"], 1);
+    assert_eq!(
+        std::str::from_utf8(&tokio::fs::read(full_csv).await.unwrap())
+            .unwrap()
+            .lines()
+            .count(),
+        2
+    );
+    assert_eq!(tokio::fs::read(input).await.unwrap(), original);
+    let id = Uuid::new_v4();
+    let state = state(id, report);
+    let options = open_seo_spider_core::NgramCorpusOptions {
+        max_n: 6,
+        ..Default::default()
+    };
+    let mut request = Request {
+        options,
+        n: Some(6),
+        exact_tokens: Some(["a", "b", "c", "d", "e", "f"].map(str::to_owned).to_vec()),
+        expected_generation: Some(7),
+        ..Default::default()
+    };
+    let first = value(response(
+        preview(State(state.clone()), Path(id), Ok(Json(request.clone()))).await,
+    ))
+    .await;
+    assert_eq!(first["max_n"], 6);
+    assert_eq!(first["total_rows"], 1);
+    assert_eq!(first["rows"][0]["occurrences"], 2);
+    assert_eq!(first["rows"][0]["document_frequency"], 1);
+    assert_eq!(first["source_states"]["complete"], 1);
+    assert_eq!(first["extended_windows"][2]["candidate_windows"], 7);
+    assert_eq!(first["website_requests"], 0);
+    request.expected_snapshot_token = Some(
+        first["snapshot"]["snapshot_token"]
+            .as_str()
+            .unwrap()
+            .to_owned(),
+    );
+    let download = response(csv(State(state.clone()), Path(id), Ok(Json(request.clone()))).await);
+    let length = download.headers()[header::CONTENT_LENGTH]
+        .to_str()
+        .unwrap()
+        .parse::<usize>()
+        .unwrap();
+    let hash = download.headers()["x-content-sha256"]
+        .to_str()
+        .unwrap()
+        .to_owned();
+    let raw = to_bytes(download.into_body(), projection::CSV_BYTES)
+        .await
+        .unwrap();
+    assert_eq!(raw.len(), length);
+    assert_eq!(projection::sha(&raw), hash);
+    assert_eq!(std::str::from_utf8(&raw).unwrap().lines().count(), 2);
+    let mut changed = request.clone();
+    changed.options.max_n = 5;
+    changed.n = Some(5);
+    changed.exact_tokens = None;
+    assert_eq!(
+        preview(State(state.clone()), Path(id), Ok(Json(changed)))
+            .await
+            .err()
+            .unwrap()
+            .0,
+        StatusCode::CONFLICT
+    );
+    request.n = Some(7);
+    assert!(
+        preview(State(state.clone()), Path(id), Ok(Json(request)))
+            .await
+            .is_err()
+    );
+    assert_eq!(count.load(Ordering::SeqCst), 1);
+    state.lifecycle.blocking.shutdown_and_drain().await.unwrap();
+    state
+        .lifecycle
+        .response_streams
+        .shutdown_and_drain()
+        .await
+        .unwrap();
+    stop.send(()).unwrap();
+    website.await.unwrap();
+}

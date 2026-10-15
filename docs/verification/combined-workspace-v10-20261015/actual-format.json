@@ -1,0 +1,98 @@
+{
+  "kind": "actual_source10_v2_format_only",
+  "recorded_at": "2026-10-15T18:11:39.813Z",
+  "result": "PASS_FORMAT_COMMAND_ONLY",
+  "actual_close_event": true,
+  "exit": {
+    "code": 0,
+    "signal": null
+  },
+  "pid": 30296,
+  "error": null,
+  "io_errors": [],
+  "streams": {
+    "stdout": {
+      "end": true,
+      "close": true,
+      "bytes": 0
+    },
+    "stderr": {
+      "end": true,
+      "close": true,
+      "bytes": 0
+    }
+  },
+  "elapsed_ms": 3280.4548,
+  "preformat_sha256": "27425d98d26bf51b518fd3048a265c497d525c1204ea77442d9f07d9a84c7a24",
+  "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "source_inputs": 369,
+  "changed_files": [
+    {
+      "path": "crates/app/src/main.rs",
+      "before_sha256": "7796c3957d989df98b36414a7db7ed7cbef0d71c64dc1985936e8fde77f941eb",
+      "after_sha256": "423393f446ea415b975b08ede03ea26dff2e5516bf0e2138e0979c997866b0c9",
+      "bytes": 33157
+    },
+    {
+      "path": "crates/app/src/ngram_app.rs",
+      "before_sha256": "360e1c7d774d4ee0992218e9c3e69c22e7f068d8c15899d3197ebf79e909b373",
+      "after_sha256": "64a524095e370fc172658cb7216d5fa35c8b10d5e8430c2ede26801cf936af54",
+      "bytes": 17720
+    },
+    {
+      "path": "crates/app/src/ngram_app_tests.rs",
+      "before_sha256": "029995b61761d673e03a9a3a457eb943a5ab3f37a567b9ef4caee2cdbdce8f11",
+      "after_sha256": "8453031f4295a6669a5c104cea485962e6c648f2ceda7d8ba0d9608212f0d2ac",
+      "bytes": 8502
+    },
+    {
+      "path": "crates/app/src/server.rs",
+      "before_sha256": "da2781b605e78b4e09e7fe8bbd439d04d94f6a44d58bc0f543383b8a0382124c",
+      "after_sha256": "909c4a1e5473b17b695e4856c0ba4401611814184fff5a86ac0c570febdbe042",
+      "bytes": 89544
+    },
+    {
+      "path": "crates/app/src/server/ngram_corpus.rs",
+      "before_sha256": "cf3fe7bae45a3d5bccfe90dff0b974c7b721e4bf7b9909cdbc5b52e57e59f5cf",
+      "after_sha256": "f4b1fa83ce1176f81fed7dc88c692cf0894a969bb4a5258f4d97c410483e57e0",
+      "bytes": 4492
+    },
+    {
+      "path": "crates/app/src/server/ngram_corpus_tests.rs",
+      "before_sha256": "257bf6b6eef1338732d22c9feddc2205e54e471965f35be267a58031f2fe0cef",
+      "after_sha256": "04624ff50e88e91c5f989826b5b22e154244b082adbddc76181eb72ff8204d24",
+      "bytes": 12639
+    },
+    {
+      "path": "crates/core/src/lib.rs",
+      "before_sha256": "717481967345570a4195ddda0ca79952988e245ed98e5fc9b84e750d7543c535",
+      "after_sha256": "70b675ae4d08a1ea76320ac051019bfd6c16cb921b7a2f99b97481b5026688fd",
+      "bytes": 7125
+    },
+    {
+      "path": "crates/core/src/ngram_corpus.rs",
+      "before_sha256": "cb0180b15b9828cba4a63415abd11d375642c468fcd32fa751bd806776627c42",
+      "after_sha256": "ad4a66d8211be16a21a4d588b0fb74da6df4cdca7a52f7bd4a648bfff548f6c1",
+      "bytes": 22892
+    },
+    {
+      "path": "crates/core/src/ngram_corpus_tests.rs",
+      "before_sha256": "795c439ff525553f76b71378e198ff55b5b1aca06bee6a9271f1b0cdaa91311f",
+      "after_sha256": "e1bace405c916b074bb8045dbc7fb8a9b85c252d145a2e46f0c2e1b2709b0fd6",
+      "bytes": 13924
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis/report_projection.rs",
+      "before_sha256": "17445fbc3b03be619af08831fad3281e4ba46373359471d0f7e922d6b2435cc4",
+      "after_sha256": "48925039cf54c4ad48c371e4ec9c279cb19ca67515548b727bbf181350619327",
+      "bytes": 5454
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis/report_projection_tests.rs",
+      "before_sha256": "71781e32c1fd0f579956847275515d943348b64c4a9c34c9577284ce34a30216",
+      "after_sha256": "88d08fd949a608c873d4e7056b06d3c86c61291b5daa6552dc50c0d27a528585",
+      "bytes": 11051
+    }
+  ],
+  "qualification": "Actual cargo fmt only on isolated E-only Source10 copy; no compiler/tests/native/Root source promotion. Independent formatter review required."
+}

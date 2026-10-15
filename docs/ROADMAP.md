@@ -1,3 +1,7 @@
+## Aktuell: vollständige Source10-Suite bestanden (15.10.2026)
+
+Source10 besteht tatsächlich1380 Tests,598Pflichtnamen/602qualifizierte Namen, vier echte Renderer-Gates sowie Format und Clippy. Alle drei Cargo-Prozesse und die eigenen Dienste sind geschlossen, alle369 Quellinputs abschließend exakt. [Rohbelege](verification/combined-workspace-v10-20261015/index.json), [Ngram-Bedienung](saved-ngram-reports.md). Der optimierte Build läuft; frische native Abnahmen und sichere Installation folgen. Katalog unverändert31 umgesetzt/69teilweise/44geplant. Weitere Ngramkanäle/Wortwolke, große Leseperformance, nachvollziehbare Aufnahmegrenzen und Herstellerparität bleiben offen.
+
 ## Aktuell: N-Gramm-Corpus integriert, neue Tests bestanden (15.10.2026)
 
 Source10 besteht alle21 neuen Rustfälle (15Ngram/6SQLite-Projektion), Format und Clippy. Der Originaldaten-Auswahlfix besteht zusätzlich3 separate Node-Regressionen. Der private Quellcommit istc6bd9c5. [Rohbelege inklusive erstem Compilerfehler](verification/source10-directed-checkpoint-20261015/index.json). Vollständige Suite, optimierter Build, frische praktische Prüfungen und sichere Installation folgen. Katalog unverändert31 umgesetzt/69teilweise/44geplant; zusätzliche Ngramkanäle/Wortwolke, große Leseperformance und Herstellerparität bleiben offen.
