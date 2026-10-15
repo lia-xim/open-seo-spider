@@ -1,0 +1,259 @@
+{
+  "schema_version": 1,
+  "kind": "combined_source6_runner_independent_source_review_v3",
+  "result": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "findings": [],
+  "proposal_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v6-runner-preparation-v3\\manifest.json",
+    "sha256": "f2a12c1e0f8fee278cf9b557fa2bfe42282252ba4382b17c393c7d75e4dc9351"
+  },
+  "prior_independent_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v6-runner-independent-review-v2\\receipt.json",
+    "sha256": "c42bc2fddae83c096757b77d565955c9ee13f6fba97f4437720594d43d61e557",
+    "bytes": 11579
+  },
+  "checked": {
+    "literal_operations": 11,
+    "files": [
+      {
+        "file": "validate-combined-source-v6.mjs",
+        "operations": 4,
+        "forward_inverse_exact": true
+      },
+      {
+        "file": "freeze-combined-source-v6.mjs",
+        "operations": 2,
+        "forward_inverse_exact": true
+      },
+      {
+        "file": "run-combined-suite-v6.mjs",
+        "operations": 2,
+        "forward_inverse_exact": true
+      },
+      {
+        "file": "build-combined-optimized-v6.mjs",
+        "operations": 3,
+        "forward_inverse_exact": true
+      }
+    ],
+    "critical_regions": [
+      {
+        "label": "same Source6 validator result/lineage final guards",
+        "start": "export function validateSource6Manifest",
+        "end": "\n}",
+        "sha256": "a71a5475dd503d29439d3a0b8acb111b065e367a80a81afb104a5043c6aad4f5",
+        "bytes": 4224,
+        "byte_exact": true,
+        "independently_byte_exact": true
+      },
+      {
+        "label": "whole inherited freezer operational body",
+        "start": "const context=loadSource6Approval",
+        "end": "const manifest=",
+        "sha256": "449a5f384b2049d6870e7dda992884547eff4a787b284f5b86ee118a45f80302",
+        "bytes": 4403,
+        "byte_exact": true,
+        "independently_byte_exact": true
+      },
+      {
+        "label": "whole inherited suite actual process/worker/fixture/name parser and close body",
+        "start": "fs.mkdirSync(out);",
+        "end": "  const result = accepted",
+        "sha256": "196a66cd5a53918ece6cfd401bb8ef49084e56e2e2f001ef08531746160d5e7e",
+        "bytes": 7929,
+        "byte_exact": true,
+        "independently_byte_exact": true
+      },
+      {
+        "label": "whole inherited optimized builder suite verifier",
+        "start": "function verifySuite()",
+        "end": "function verifySource()",
+        "sha256": "2887866ca83355380e84099fd7ee6b78b4ffabfbc0e633b080be813a75951692",
+        "bytes": 7028,
+        "byte_exact": true,
+        "independently_byte_exact": true
+      },
+      {
+        "label": "whole inherited optimized build/source/PE/fsync/process/final guards",
+        "start": "function verifySource()",
+        "end": "  const result = accepted",
+        "sha256": "83eea530a9b81f16282a70cfa6c53eaeddae8787d2d5e55530b4a8811bfcae16",
+        "bytes": 5275,
+        "byte_exact": true,
+        "independently_byte_exact": true
+      }
+    ],
+    "node_syntax_checks": [
+      {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v6-runner-preparation-v3\\validate-combined-source-v6.mjs",
+        "exitcode": 0,
+        "signal": null,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v6-runner-preparation-v3\\freeze-combined-source-v6.mjs",
+        "exitcode": 0,
+        "signal": null,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v6-runner-preparation-v3\\run-combined-suite-v6.mjs",
+        "exitcode": 0,
+        "signal": null,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v6-runner-preparation-v3\\build-combined-optimized-v6.mjs",
+        "exitcode": 0,
+        "signal": null,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v6-runner-preparation-v3\\derive-preparation.mjs",
+        "exitcode": 0,
+        "signal": null,
+        "stdout": "",
+        "stderr": ""
+      }
+    ],
+    "all_schema_source_paths_cases_names_minimums_oracles_and_real_closures_unchanged": true,
+    "exact_current_body": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-app-proposal-v4\\manifest.json",
+      "sha256": "64a56e0149b353374e6fa58ceebaffeb8a65787645495c5c0fbf2998122062a9",
+      "bytes": 12417
+    },
+    "exact_current_body_review": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-app-independent-root-review-v4\\receipt.json",
+      "sha256": "62b516a13a170d77337b3b00bb3074d86f050869320c5a1283d77d84831502a5",
+      "bytes": 6329
+    },
+    "exact_current_composition": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-composition-v3\\manifest.json",
+      "sha256": "5975dea9444da10c66b8effca22beb1d7b94a57747bc00ead7d3679cfc1d9f62",
+      "bytes": 166728
+    },
+    "exact_current_composition_review": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-composition-independent-review-v3\\receipt.json",
+      "sha256": "9a4a09c5717452cb10cc1bc0c9ebbe4a1cdccc05315c28c74001d511a27301e0",
+      "bytes": 25230
+    }
+  },
+  "reasoning": [
+    "All eleven literal edits were manually read and independently applied forward and reversed to the actual reviewed Source6PrepV2 bytes. Four validator edits replace only the exact BODY-AppV4 pin/kind and corrected compositionV3 path/SHA. Freezer/suite/builder edits replace only derived validator/suite hashes and BODY version prose. No schema, planned execution path, test name/minimum, resource ownership/close or acceptance oracle changed.",
+    "The actual Root BODY-AppV4 review62b5 and independent compositionV3 review9a4a bind the exact current manifests64a5/5975. The validator still requires actual future Root approval, full324 approved inputs/17delta/two shared reviews/formatter tuples,501 actual required names and minimum1283, with no Source5 runtime success transfer. Five complete operational/verifier bodies are byte exact."
+  ],
+  "pins": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v6-runner-preparation-v3\\manifest.json",
+      "sha256": "f2a12c1e0f8fee278cf9b557fa2bfe42282252ba4382b17c393c7d75e4dc9351",
+      "bytes": 8517
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v6-runner-preparation-v3\\derivation.json",
+      "sha256": "3714e79bf311e9632b04172111fec8f5f61133ee82fb62ea38bd22dba09e140d",
+      "bytes": 13303
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v6-runner-preparation-v2\\validate-combined-source-v6.mjs",
+      "sha256": "54a6e2da3ca12a9d02b4503e42b7199af54a87389e50a02684b7f12873a39b92",
+      "bytes": 18219
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v6-runner-preparation-v3\\validate-combined-source-v6.mjs",
+      "sha256": "7930574a21bf2c6140b6d1955e22d5e365bd7e8d3999ada1b1ba9e92e2d7c759",
+      "bytes": 18219
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v6-runner-preparation-v2\\freeze-combined-source-v6.mjs",
+      "sha256": "ce69c00e54c955ca7294418a88a23ca4b3f54609f731afe28b6acd9b5c4cc9cb",
+      "bytes": 8667
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v6-runner-preparation-v3\\freeze-combined-source-v6.mjs",
+      "sha256": "2eb3d6817c4588fea053ffe171f433a5c1750ee68ba2feae4b226856999194a7",
+      "bytes": 8667
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v6-runner-preparation-v2\\run-combined-suite-v6.mjs",
+      "sha256": "f1afa0f6c42f42220122d0ed78dd411ca71c41f656607e9594cfc2579873d5de",
+      "bytes": 16936
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v6-runner-preparation-v3\\run-combined-suite-v6.mjs",
+      "sha256": "24a55233413475555acfb55ebb1a3f0f396dbe07d1d0c63ac51040eabce661f0",
+      "bytes": 16936
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v6-runner-preparation-v2\\build-combined-optimized-v6.mjs",
+      "sha256": "342e8448ce02ec08c150b7bf09339229ddf9dac884af4c6ec54c203dc4161e10",
+      "bytes": 19703
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v6-runner-preparation-v3\\build-combined-optimized-v6.mjs",
+      "sha256": "3530ec71a1cedb30c76d4f3e6d0f1780d82dabee2e4020fabfc56b597e4d2f38",
+      "bytes": 19703
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v6-runner-preparation-v2\\manifest.json",
+      "sha256": "d01ec1c6354cc040e8dc42e1f30a64a9d76eb928bbd273e287ab4de5465559e7",
+      "bytes": 8517
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v6-runner-independent-review-v2\\receipt.json",
+      "sha256": "c42bc2fddae83c096757b77d565955c9ee13f6fba97f4437720594d43d61e557",
+      "bytes": 11579
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-app-proposal-v4\\manifest.json",
+      "sha256": "64a56e0149b353374e6fa58ceebaffeb8a65787645495c5c0fbf2998122062a9",
+      "bytes": 12417
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-app-independent-root-review-v4\\receipt.json",
+      "sha256": "62b516a13a170d77337b3b00bb3074d86f050869320c5a1283d77d84831502a5",
+      "bytes": 6329
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-composition-v3\\manifest.json",
+      "sha256": "5975dea9444da10c66b8effca22beb1d7b94a57747bc00ead7d3679cfc1d9f62",
+      "bytes": 166728
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-composition-independent-review-v3\\receipt.json",
+      "sha256": "9a4a09c5717452cb10cc1bc0c9ebbe4a1cdccc05315c28c74001d511a27301e0",
+      "bytes": 25230
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v5-r3\\manifest.json",
+      "sha256": "27a8b74c4cd0c394906f3fe3c0a6a0327569294b25056cf6c6f0aabcffc42788",
+      "bytes": 220311
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v6-runner-preparation-v3\\ROOT-APPROVAL-CONTRACT.md",
+      "sha256": "9a468b405d6627d2263f17835c49caeb0f73a9f92f09e563bb82bd9aa4a67464",
+      "bytes": 5169
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v6-runner-preparation-v3\\HANDOFF.md",
+      "sha256": "c4f4e46bdc1226cfc5d9f45e989b66180f6feabfab918bafecb8d9d33dc99d12",
+      "bytes": 1134
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v6-runner-preparation-v3\\derive-preparation.mjs",
+      "sha256": "f6e811eea095196a544f7a877330949c2653fa0e02b2f4b4cd4d9bb8f37dfee9",
+      "bytes": 10315
+    }
+  ],
+  "excluded_executions": {
+    "target_imports": 0,
+    "compiler_rustfmt_tests": 0,
+    "sqlite_fixture_native_browser_git": 0,
+    "root_mutations": 0,
+    "whole_source_rescans": 0
+  },
+  "qualification": "Bounded independent source-only revision review. Prior full validator83-op review and subsequent Prep2 review remain provenance, not current runtime acceptance. Future Source6 freeze/suite/build/candidate proofs remain unavailable explicit requirements."
+}

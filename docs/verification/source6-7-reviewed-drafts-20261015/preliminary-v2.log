@@ -1,0 +1,90 @@
+    Checking open-seo-spider-core v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\combined-source-v6-draft-v2\source\crates\core)
+    Checking open-seo-spider v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\combined-source-v6-draft-v2\source\crates\app)
+error: this `if` statement can be collapsed
+   --> crates\app\src\server\source_bodies.rs:154:5
+    |
+154 | /     if let Some(id) = query.document_id.as_ref() {
+155 | |         if id.len() != 64
+156 | |             || !id
+157 | |                 .bytes()
+...   |
+166 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#collapsible_if
+    = note: `-D clippy::collapsible-if` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::collapsible_if)]`
+help: collapse nested if block
+    |
+154 ~     if let Some(id) = query.document_id.as_ref()
+155 ~         && (id.len() != 64
+156 |             || !id
+157 |                 .bytes()
+158 ~                 .all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b)))
+159 |         {
+...
+164 |             ));
+165 ~         }
+    |
+
+error: this `if` statement can be collapsed
+   --> crates\app\src\server\source_bodies.rs:212:5
+    |
+212 | /     if let Some(ctx) = window.as_ref().and_then(|w| w.context.as_ref()) {
+213 | |         if ctx.generation != generation || ctx.config_sha256 != config_sha256 {
+214 | |             return Err(error(
+215 | |                 StatusCode::CONFLICT,
+...   |
+220 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#collapsible_if
+help: collapse nested if block
+    |
+212 ~     if let Some(ctx) = window.as_ref().and_then(|w| w.context.as_ref())
+213 ~         && (ctx.generation != generation || ctx.config_sha256 != config_sha256) {
+214 |             return Err(error(
+...
+218 |             ));
+219 ~         }
+    |
+
+error[E0277]: `server::ApiError` doesn't implement `std::fmt::Debug`
+    --> crates\app\src\server\source_bodies_tests.rs:141:49
+     |
+ 141 |             let job = get_job(&first, id).await.unwrap();
+     |                                                 ^^^^^^ the trait `std::fmt::Debug` is not implemented for `server::ApiError`
+     |
+     = note: add `#[derive(Debug)]` to `server::ApiError` or manually `impl std::fmt::Debug for server::ApiError`
+     = help: the following other types implement trait `std::fmt::Debug`:
+               ()
+               (A, Z, Y, X, W, V, U, T)
+               (B, A, Z, Y, X, W, V, U, T)
+               (C, B, A, Z, Y, X, W, V, U, T)
+               (D, C, B, A, Z, Y, X, W, V, U, T)
+               (E, D, C, B, A, Z, Y, X, W, V, U, T)
+               (T,)
+               (U, T)
+             and 5 others
+     = note: required for `axum::Json<server::ApiError>` to implement `std::fmt::Debug`
+     = note: 1 redundant requirement hidden
+     = note: required for `(reqwest::StatusCode, axum::Json<server::ApiError>)` to implement `std::fmt::Debug`
+note: required by a bound in `std::result::Result::<T, E>::unwrap`
+    --> C:\Users\matth\.rustup\toolchains\1.95.0-x86_64-pc-windows-msvc\lib/rustlib/src/rust\library\core\src\result.rs:1229:12
+     |
+1227 |     pub fn unwrap(self) -> T
+     |            ------ required by a bound in this associated function
+1228 |     where
+1229 |         E: fmt::Debug,
+     |            ^^^^^^^^^^ required by this bound in `Result::<T, E>::unwrap`
+help: consider annotating `server::ApiError` with `#[derive(Debug)]`
+    -->  crates\app\src\server.rs:117:1
+     |
+ 117 + #[derive(Debug)]
+ 118 | struct ApiError {
+     |
+
+error: could not compile `open-seo-spider` (bin "open-seo-spider") due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `open-seo-spider` (bin "open-seo-spider" test) due to 1 previous error

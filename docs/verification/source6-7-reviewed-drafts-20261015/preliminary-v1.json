@@ -1,0 +1,43 @@
+{
+  "kind": "actual_source6_draft_preliminary_clippy_only",
+  "recorded_at": "2026-10-15T12:04:52.464Z",
+  "result": "FAIL_PRELIMINARY_CLIPPY_ONLY",
+  "args": [
+    "clippy",
+    "--workspace",
+    "--all-targets",
+    "--locked",
+    "--",
+    "-D",
+    "warnings"
+  ],
+  "pid": 37108,
+  "actual_close_event": true,
+  "exit": {
+    "code": 101,
+    "signal": null
+  },
+  "spawn_error": null,
+  "elapsed_ms": 26652.666699999998,
+  "streams": {
+    "stdout": {
+      "end": true,
+      "close": true,
+      "bytes": 0
+    },
+    "stderr": {
+      "end": true,
+      "close": true,
+      "bytes": 1221
+    }
+  },
+  "log_sha256": "41bbea994ca3baa9c6829fd196104756e23d90fb1d6f50ab40d21c1a9a5ee493",
+  "log_bytes": 1221,
+  "source_inputs": 324,
+  "preformat_sha256": "4025d7d159b8459f33a6847156f000d20fe77bab14dfd11c518e2a81bda1d26a",
+  "formatter_review_sha256": "24bc19bf38c94bc91764238fdac7632875f8d42ea111efa32ede08a04f04c844",
+  "source_final_verified": true,
+  "io_errors": [],
+  "executed_tests": 0,
+  "qualification": "Only an all-target preliminary compiler/lint check on E-only reviewed/formatted Source6 draft. No source promotion, full suite, optimized Source6 candidate, native or installation acceptance. Prior R3 optimized build fully closed before this compiler starts."
+}

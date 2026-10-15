@@ -6343,26 +6343,64 @@
       "reference_parity": "NOT_PROVEN"
     },
     {
-      "id": "http-response-body-drain-20261015",
-      "priority": 2,
-      "status": "DESIGN_REVIEWED_SOURCE_IMPLEMENTATION_IN_PROGRESS",
-      "title_de": "Blockierte Downloadantworten und Verbindungen vollständig beenden",
-      "summary_de": "Die konkrete Lücke bei nicht lesenden HTTP-Clients ist dokumentiert. Ein eigener Entwurf umfasst Producer-, Response-Body- und Verbindungsbesitz, echte Queue-Backpressure und Abbruch ohne falsches Erfolgs-EOF. Der erste Quell-Slice wird isoliert umgesetzt; Compiler- und Laufzeitabnahme fehlen.",
+      "id": "combined-source-v6-20261015",
+      "priority": 1,
+      "status": "REVIEWED_DRAFT_V3_FORMATTED_TWO_PRIOR_PRELIMINARY_COMPILE_FAILURES_NOT_PROMOTED",
+      "title_de": "Originaldatei-API und Response-Owner gemeinsam integrieren",
+      "summary_de": "17 getrennt zugeordnete Änderungen mit324 Compiler-Eingaben sind als isolierter Entwurf zusammengeführt; beide gemeinsamen Dateien unabhängig geprüft. Zwei tatsächliche vorgezogene Clippy-Läufe scheiterten vor Testausführung. Die eine Core- und drei App-Diagnosen sind inzwischen eng korrigiert und unabhängig nachgeprüft. Der dritte Entwurf ist tatsächlich formatiert; sein Compilerlauf steht noch aus.",
       "completed_acceptance_de": [
-        "Tatsächlichen bestehenden HTTP/1-Stack und unbesessene Verbindungsaufgaben analysiert; fünf Sekunden Schonfrist für eingehende Verbindungen als Entwurfsentscheidung festgelegt."
+        "Body-App4 und Response-Owner2 mit17 Änderungsdateien zusammengeführt;322 unveränderte Eingabedateien und beide unveränderten gemeinsamen Zusammenführungen gegenüberV2 exakt geprüft.",
+        "Fehlgeschlagene vorgezogene Compilerläufe samt Rohlogs erhalten: zuerst eine Core-Clippy-Meldung, danach zwei App-Clippy-Meldungen und ein testlokaler ApiError-Diagnosefehler. Keine Tests ausgeführt und keine Produktfreigabe daraus abgeleitet.",
+        "Drei neue Diagnosekorrekturen geprüft; alleAssertions und27 neuen Windows-Testnamen plus einUnix-Fall erhalten. Isolierten drittenEntwurf mit tatsächlichemFormat-Exit0 erstellt."
       ],
       "pending_acceptance_de": [
-        "Response-Owner, begrenzte Chunks und deterministische Abbruch-/Queue-/Panic-Tests umsetzen und ausführen.",
-        "Eigenen Accept-/Connection-Besitz integrieren; HTTP/1.0-Ablehnung auf genau vier gestreamte Downloads begrenzen.",
-        "Echte TCP-Nichtleser, natürliche Prozess-/Pipe-Enden sowie vollständige positive Downloads prüfen; keine allgemeine Fünf-Sekunden-Shutdown-Garantie behaupten."
+        "Tatsächlichen vorgezogenen Compilerlauf bestehen; laufenden großenR3-Nativtest und Kaltinstallation davor vollständig schließen lassen.",
+        "NachR3-Abnahmen und Kaltinstallation: genau17 eigene Dateien übernehmen, privat versionieren und Quellen einmal endgültig einfrieren.",
+        "Vollständige Suite mit künftig mindestens1283 Tests/501 Pflichtnamen/vier echtenRenderer-Fällen, Format und Clippy ausführen; optimierten Kandidaten und alle passenden nativen API-/Download-/Browserfälle frisch abnehmen.",
+        "Große Originaldateien, Quoten, korrupte Archive, Cursor-/Snapshotbindung und private Spool-Bereinigung tatsächlich prüfen."
       ],
       "documentation": [
+        "docs/verification/source6-7-reviewed-drafts-20261015/index.json",
+        "docs/parity/sitemap-source-archive-plan.md",
+        "docs/parity/http-response-body-drain-plan.md"
+      ],
+      "gates": {
+        "source_review": "PASS_BOUNDED_COMPOSITION_V3_BODY_APP4_RESPONSE_OWNER2",
+        "format": "PASS_ACTUAL_FORMAT_CLOSE0_AND_BOUNDED_INDEPENDENT_REVIEW_V3",
+        "preliminary_clippy": "TWO_ACTUAL_FAILED_PRIOR_DRAFTS_V3_NOT_RUN",
+        "full_workspace": "NOT_RUN_EXPECTED_MIN1283_REQUIRED501",
+        "source_promotion": "NOT_RUN",
+        "native": "NOT_RUN",
+        "installation": "NOT_RUN",
+        "manufacturer_parity": "NOT_PROVEN"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "http-response-body-drain-20261015",
+      "priority": 2,
+      "status": "SOURCE6_OWNER_AND_SOURCE7_TEST_ORACLE_REPAIR_SOURCE_REVIEWS_PASS_NOT_EXECUTED",
+      "title_de": "Blockierte Downloadantworten und Verbindungen vollständig beenden",
+      "summary_de": "Response-Owner ist als Source6-Vorschlag unabhängig geprüft. Eigener Accept-/Connection-Besitz und gemeinsame Schonfrist sind als Source7 vorbereitet; alle drei konkreten Testorakel-Lücken der ersten Version sind in der zweiten Version eng korrigiert und unabhängig geprüft. Die acht übrigen Payloads sind unverändert. Integration in den endgültigen Source6-Stand sowie alle Compiler-/Rust-/TCP-Abnahmen fehlen.",
+      "completed_acceptance_de": [
+        "Tatsächlichen bestehenden HTTP/1-Stack und unbesessene Verbindungsaufgaben analysiert; fünf Sekunden Schonfrist für eingehende Verbindungen als Entwurfsentscheidung festgelegt.",
+        "Source6-Response-Owner separat quellengeprüft: zwölf neue Windows-Tests verfasst, jedoch noch nicht ausgeführt.",
+        "Source7-V1 unabhängig gelesen; dreiP2-Testorakel offen dokumentiert: tatsächlicher wartenderDrain, noch unvollständiger positiverDownload beiT0 und isolierterSocketDrop mit lebendemLease.",
+        "Source7-V2 quellengeprüft: tatsächlichesPending vorDrain-Waiter-Abbruch, beiT0 gehaltene positiveProducer/Originalübertragung und isolierterSocketDrop bei lebendemLease ohneGlobalcancel. 13Testfunktionen verfasst,0ausgeführt; alle bisherigenAssertions erhalten."
+      ],
+      "pending_acceptance_de": [
+        "Source6-Owner gemeinsam mit Originaldatei-API integrieren und vollständige Compiler-/Rust-/Export-Abnahmen tatsächlich bestehen.",
+        "Source7-V2 an tatsächlichen endgültigenSource6-Stand anpassen, Zusammenführung unabhängig prüfen und Compiler-/Rust-Abnahmen ausführen.",
+        "Echte TCP-Nichtleser, natürliche Prozess-/Pipe-Enden und vollständige positive Downloads prüfen; keine allgemeine Fünf-Sekunden-Shutdown-Garantie behaupten."
+      ],
+      "documentation": [
+        "docs/verification/source6-7-reviewed-drafts-20261015/index.json",
         "docs/parity/http-response-body-drain-plan.md",
         "docs/parity/http-response-body-drain-tasks.md",
         "docs/parity/http-response-transport-plan.md"
       ],
       "gates": {
-        "source_review": "DESIGN_ONLY_IMPLEMENTATION_OPEN",
+        "source_review": "PASS_BOUNDED_RESPONSE_OWNER_AND_TRANSPORT_V2_THREE_ORACLE_SOURCE_CLOSURES",
         "rust_tests": "NOT_RUN",
         "native_tcp_nonreader": "NOT_RUN"
       },
@@ -6487,19 +6525,21 @@
       "priority": 1,
       "status": "ACTUAL_R3_RUST_TESTS_PASS_NATIVE_PENDING",
       "title_de": "Ursprüngliche Sitemap-Dateien dauerhaft speichern",
-      "summary_de": "Die optionale Core-/Store-Grundlage ist in Source5 zusammengeführt und formatiert. Originalbytes, getrennte Budgets, unveränderliche Dateien und Wiederöffnungsprüfungen sind implementiert; 16 neue Windows-Tests sind wegen der Compilerfehler noch nicht ausgeführt. Archivierung unterstützt ausdrücklich UTF-8-SQLite-Speicherung. API, Oberfläche und Download werden anschließend ergänzt.",
+      "summary_de": "Die optionale Core-/Store-Grundlage ist im tatsächlich vollständig geprüften Source5-R3-Kandidaten enthalten: alle16 neuen Windows-Fälle bestehen in der1256-Test-Suite. Originalbytes, getrennte Budgets, unveränderliche Dateien und Wiederöffnungsprüfungen sind umgesetzt. Echte große Archiv-/Recovery-Fälle fehlen. API, Oberfläche und verifizierter Download sind als Source6-Quellvorschlag vorbereitet und noch nicht im Kandidaten integriert.",
       "completed_acceptance_de": [
         "BODY01–04: getrennte Konfiguration und Budgets, eigene unveränderliche Dateien, SQLite-Zuordnung zur tatsächlich gespeicherten Quellenmessung und Wiederöffnungsprüfung als Quellcode vorbereitet.",
         "Beide konkreten Erstbefunde korrigiert: eindeutiger Archivpfad je Datenbankdateiname und SQL-Feldgrenzen vor Allokation. V2-Review 702d4337 ohne weitere Befunde im begrenzten Umfang.",
         "14 neue Testfunktionen geschrieben, davon13 für Windows; noch nicht ausgeführt.",
-        "Finale V3 mit früher ausdrücklicher UTF-16-Ablehnung und drei weiteren Tests unabhängig geprüft; insgesamt 17 verfasste Tests, davon 16 unter Windows. 35 tatsächliche Formatänderungen separat geprüft."
+        "Finale V3 mit früher ausdrücklicher UTF-16-Ablehnung und drei weiteren Tests unabhängig geprüft; insgesamt 17 verfasste Tests, davon 16 unter Windows. 35 tatsächliche Formatänderungen separat geprüft.",
+        "Aktuell: alle16 neuen Windows-Fälle tatsächlich aufR3 bestanden; frühere Angaben zu nicht ausgeführten Entwürfen sind historische Entwicklungsstände."
       ],
       "pending_acceptance_de": [
-        "Die vollständige Source5-Suite sowie echte Dateierhalt-, Wiederöffnungs-, Quota- und Korruptionsfälle bestehen.",
-        "BODY05–08: API-/UI-Konfiguration, verifizierten Originaldownload und Browser-Wiederöffnung umsetzen und tatsächlich gegen die Bytequellen prüfen.",
+        "Echte Dateierhalt-, Wiederöffnungs-, Quota- und Korruptionsfälle einschließlich großer Originaldateien nativ bestehen; die vollständige1256-Test-Suite besteht bereits.",
+        "BODY05–08: vorbereitete API-/UI-Konfiguration und verifizierten Originaldownload integrieren, vollständig kompilieren und im echten Browser gegen die Bytequellen prüfen.",
         "MCP-Fenster, eigene Kopien für abgeleitete Crawls, portable Bundles, Wiederherstellung und kontrollierte Bereinigung bleiben getrennte offene Schritte."
       ],
       "documentation": [
+        "docs/verification/source6-7-reviewed-drafts-20261015/index.json",
         "docs/verification/combined-workspace-v5-r3-20261015/index.json",
         "docs/verification/combined-source-v5-r3-source-20261015/index.json",
         "docs/verification/combined-source-v5-r2-clippy-failed-20261015/index.json",
@@ -6510,7 +6550,7 @@
       "gates": {
         "source_review": "PASS_BOUNDED_SOURCE_ONLY_V3_AND_FORMAT_MERGE",
         "rust_tests": "PASS_ALL_NEW_CASES_ON_ACTUAL_R3_FULL_1256_SUITE",
-        "public_api_ui": "NOT_IMPLEMENTED",
+        "public_api_ui": "SOURCE6_REVIEWED_PROPOSAL_ONLY_NOT_PROMOTED_OR_EXECUTED",
         "native_body_recovery": "NOT_RUN",
         "installation": "NOT_RUN"
       },
@@ -6519,21 +6559,21 @@
     {
       "id": "http-mcp-lifecycle-ownership-20261015",
       "priority": 2,
-      "status": "ACTUAL_R3_RUST_TESTS_PASS_NATIVE_PENDING",
+      "status": "ACTUAL_R3_RUST_TESTS_AND_TWO_NATIVE_EOF_PASS_REMAINING_TRANSPORT_OPEN",
       "title_de": "Laufende HTTP- und MCP-Arbeiten sauber beenden",
-      "summary_de": "Gehaltene Request-, Blocking-, Crawl- und PDF-Aufgaben sowie frühes Schließen der Arbeitszulassung sind in Source5 umgesetzt. Ein optionaler lokaler STDIN-EOF-Schalter ermöglicht einen eigenen natürlichen Prozessendetest. 16 neue Tests sind noch nicht ausgeführt; native EOF-Abnahme, langsam lesende HTTP-Clients und vollständige MCP-Sessions bleiben offen.",
+      "summary_de": "Gehaltene Request-, Blocking-, Crawl- und PDF-Aufgaben und frühes Schließen der Arbeitszulassung bestehen mit allen16 neuen Fällen in der tatsächlichen Source5-R3-Suite. Beide frischen eigenen EOF-Fälle schließen natürlich mitExit0; der aktive Fall belegt Listener-Ablehnung vor Freigabe der gehaltenen Antwort sowie dauerhaft1abgeschlossen/2offen. Langsam lesende HTTP-Clients, vollständige MCP-Sessions und Rendererbesitz bleiben offen.",
       "completed_acceptance_de": [
         "Tatsächliche Starts von Request-, Blocking-, Crawl- und PDF-Arbeiten im vorhandenen Code erfasst; konkrete Shutdown-Reihenfolge dokumentiert.",
         "Regressionen für getrennten Client, abgebrochenen Drain-Waiter, Start vor Jobinsert, bestehendes Cancel während PDF-Arbeit und Signalfehler nach Persistenz geschrieben; noch nicht ausgeführt.",
-        "Zwei konkrete Erstbefunde korrigiert und V2 unabhängig geprüft: Export-Worker starten tatsächlich; Core-Joinfehler bleiben als Lifecycle-Fehler erkennbar."
+        "Zwei konkrete Erstbefunde korrigiert und V2 unabhängig geprüft: Export-Worker starten tatsächlich; Core-Joinfehler bleiben als Lifecycle-Fehler erkennbar.",
+        "Aktuell: alle16 neuen Windows-Tests und beide frischen nativen EOF-Fälle tatsächlich bestanden; vollständige Logs, natürliche Prozess-/Pipe-Enden und Persistenz vor/nach tatsächlichem Ende geprüft."
       ],
       "pending_acceptance_de": [
-        "Vollständige Source5-Suite und danach den tatsächlichen nativen EOF-Test mit aktiver Arbeit und dauerhaftem Checkpoint bestehen.",
-        "Tatsächliche Rust-/HTTP-Tests und einen eigenen nativen EOF-Lauf mit gestarteter Arbeit, sauberem Exit0, vollständigen Pipes und dauerhaftem Checkpoint ausführen.",
         "Stateful MCP-Sessions, requests/cancelled und die Lebensdauer externer Rendererprozesse bleiben zusätzliche offene Verträge.",
         "Response-Body-/Connection-Besitz und Transportabbruch für nicht lesende Clients separat implementieren und mit echtem TCP prüfen; Source5 beweist keine begrenzte Shutdown-Latenz hierfür."
       ],
       "documentation": [
+        "docs/verification/combined-native-v5-r3-eof-r2-pass-20261015/index.json",
         "docs/verification/combined-workspace-v5-r3-20261015/index.json",
         "docs/verification/combined-source-v5-r3-source-20261015/index.json",
         "docs/verification/combined-source-v5-r2-clippy-failed-20261015/index.json",
@@ -6543,7 +6583,7 @@
       "gates": {
         "source_review": "PASS_BOUNDED_SOURCE_ONLY_V2_AND_FORMAT_MERGE",
         "rust_tests": "PASS_ALL_NEW_CASES_ON_ACTUAL_R3_FULL_1256_SUITE",
-        "native_eof_inflight": "NOT_RUN",
+        "native_eof_inflight": "PASS_TWO_FRESH_NATURAL_CLOSE0_IDLE_AND_ONE_ACTUAL_INFLIGHT_CRAWL_ONLY",
         "installation": "NOT_RUN"
       },
       "reference_parity": "NOT_PROVEN"

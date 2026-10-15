@@ -1,0 +1,25 @@
+    Checking open-seo-spider-core v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\combined-source-v6-draft\source\crates\core)
+error: this `if` statement can be collapsed
+   --> crates\core\src\store\sitemap_source_body_read.rs:220:9
+    |
+220 | /         if let Some(expected) = expected {
+221 | |             if ctx.as_ref() != Some(expected) {
+222 | |                 return Err(SitemapBodyReadError::StaleContext.into());
+223 | |             }
+224 | |         }
+    | |_________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#collapsible_if
+    = note: `-D clippy::collapsible-if` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::collapsible_if)]`
+help: collapse nested if block
+    |
+220 ~         if let Some(expected) = expected
+221 ~             && ctx.as_ref() != Some(expected) {
+222 |                 return Err(SitemapBodyReadError::StaleContext.into());
+223 ~             }
+    |
+
+error: could not compile `open-seo-spider-core` (lib) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `open-seo-spider-core` (lib test) due to 1 previous error

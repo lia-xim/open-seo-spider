@@ -1,0 +1,326 @@
+{
+  "kind": "owned_incoming_http1_transport_new_modules_independent_source_review_v2",
+  "result": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "findings": [],
+  "proposal_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v2/manifest.json",
+    "sha256": "e3c5a2d0e8510aab4a1c5d0139ecb685f07bff7f23777ad180a43bebade52258"
+  },
+  "parent_findings": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-new-modules-independent-review-v1\\receipt.json",
+    "sha256": "3cfcbde654d06d0aeefc4112ea22f00f24ca03997df16dae8214168ea000dfd6"
+  },
+  "parent_integration_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-integration-independent-review-v1\\receipt.json",
+    "sha256": "8e04b73703043ede0c7099ff57f73541175bf90711f00eea9d91a30f168af863"
+  },
+  "scope": "Independent narrow review of all seven literal test-only changes against three concrete P2 findings. The prior full transport/test source review and separate full integration review are reused only where actual bytes remain exact.",
+  "resolved_findings": [
+    {
+      "id": "TRANSPORT-01",
+      "resolution": "CLOSED_IN_SOURCE_NOT_EXECUTED",
+      "path": "crates/app/src/server/transport_tests.rs",
+      "lines": "54-59",
+      "evidence": "The actual shutdown_and_drain future is pinned and manually polled. The oneshot barrier is sent only after that poll returns Pending. Before aborting the test caller, assertions require it still unfinished, the actual coordinator JoinSlot ticket mutex held and the real connection unjoined. Later full drain still requires all actual coordinator/connection/producer joins. No production ticket or worker is aborted."
+    },
+    {
+      "id": "TRANSPORT-02",
+      "resolution": "CLOSED_IN_SOURCE_NOT_EXECUTED",
+      "path": "crates/app/src/server/transport_tests.rs",
+      "lines": "39-44,87-100,122-125",
+      "evidence": "The response producer sends only its first64KiB then blocks on an explicit release channel; actual unfinished/joined0 state is checked before and at T0. The verified original spool still completes verification before headers, then a fixture-only Body adapter permits one actual source chunk and blocks before another, with waiting=true, release=false, joined0 and one charged spool lease at T0. Its unchanged2MiB tail exceeds the unchanged four-chunk spool queue. Both controlled responses are released after T0 and retain exact bytes/hash/tail/normalEOF/noabort/cleanup assertions. All negative fixtures use the None/no-wrapper path."
+    },
+    {
+      "id": "TRANSPORT-03",
+      "resolution": "CLOSED_IN_SOURCE_NOT_EXECUTED",
+      "path": "crates/app/src/server/transport_tests.rs",
+      "lines": "156-166",
+      "evidence": "A real accepted TcpStream is owned by IncomingIo. An actual response producer control is bound inside retained request scope and remains active, alongside a live ordering-probe lease. No global abort/quiesce/cancel_all runs before the oracle. Only drop(io) sets io_dropped and invokes active callbacks; the probe checks that ordering, the peer observes actual TCP EOF, and pending.ready must fail from cancellation before any shutdown/drain can mask it. Actual worker and response supervisor joins, retained0/complete0 and binding pruning are then asserted. Immediate detection of unpolled remote FIN is not claimed."
+    }
+  ],
+  "checked": {
+    "literal_operations": 7,
+    "forward_inverse_exact": true,
+    "unchanged_other_payloads": [
+      {
+        "path": "Cargo.lock",
+        "sha256": "377211a39886ee9febbd1a4ddc6dee62ac78cef634f64c15cfeeac52550c84f2",
+        "bytes": 78563
+      },
+      {
+        "path": "crates/app/Cargo.toml",
+        "sha256": "3e020b4dbdc949435cf1dbbd8190db073eacff8d385996dacb5e9829eb7482b5",
+        "bytes": 1069
+      },
+      {
+        "path": "crates/app/src/server.rs",
+        "sha256": "892bd47b8e370cd64a31bc2bc03688bc68d1fc2bc960700b2c7bf9bdd02c0dc0",
+        "bytes": 82215
+      },
+      {
+        "path": "crates/app/src/server/lifecycle.rs",
+        "sha256": "2c79f5dcb37412ce93c13f42b790a9bef8ac2d4c59f526752332048dc4295e07",
+        "bytes": 8961
+      },
+      {
+        "path": "crates/app/src/server/response_stream.rs",
+        "sha256": "5203c33098a79dad017d678c2f61a628f2b50d53939df695cde8ed40d374f3f5",
+        "bytes": 19018
+      },
+      {
+        "path": "crates/app/src/server/source_body_stream.rs",
+        "sha256": "88d6046625a0f592b764433210c1921cc5d04fc9b9d3d2fa7c9cfd46d0910df7",
+        "bytes": 13543
+      },
+      {
+        "path": "crates/app/src/server/source_body_stream_tests.rs",
+        "sha256": "6252226646631bf2a8a8ded2d701df4bc8fd55846801fbc572e484968335825c",
+        "bytes": 8938
+      },
+      {
+        "path": "crates/app/src/server/transport.rs",
+        "sha256": "3b48f6b6698e7db6792e50debd8840b4f85bf215a7fd3bad5c1afc608f460ae7",
+        "bytes": 16754
+      }
+    ],
+    "unchanged_integration_operations": 27,
+    "integration_derivation_byte_exact": true,
+    "old_critical_regions_metadata_exact": 11,
+    "old_test_checks": [
+      {
+        "name": "incoming_nonreader_reaches_real_full_queue_and_tcp_pending_then_self_aborts_and_joins",
+        "unchanged_body": true,
+        "old_assertions_exact": 10
+      },
+      {
+        "name": "incoming_consuming_response_finishes_inside_shared_grace_with_complete_tail_and_eof",
+        "unchanged_body": false,
+        "old_assertions_exact": 8
+      },
+      {
+        "name": "incoming_preheaders_io_drop_cancels_lease_but_still_awaits_actual_held_blocking_producer",
+        "unchanged_body": true,
+        "old_assertions_exact": 6
+      },
+      {
+        "name": "incoming_dropped_drain_waiter_retains_actual_coordinator_connection_and_producer_joins",
+        "unchanged_body": false,
+        "old_assertions_exact": 6
+      },
+      {
+        "name": "incoming_idle_reaper_joins_completed_connections_without_next_accept_or_shutdown",
+        "unchanged_body": true,
+        "old_assertions_exact": 4
+      },
+      {
+        "name": "incoming_protocol_errors_and_post_quiesce_connect_do_not_admit_a_late_handler",
+        "unchanged_body": true,
+        "old_assertions_exact": 4
+      },
+      {
+        "name": "incoming_private_task_scope_copies_binding_to_owned_work_and_lease_drop_prunes_keepalive",
+        "unchanged_body": true,
+        "old_assertions_exact": 4
+      },
+      {
+        "name": "incoming_two_nonreaders_share_one_absolute_grace_and_repeated_quiesce_cannot_extend_it",
+        "unchanged_body": true,
+        "old_assertions_exact": 7
+      },
+      {
+        "name": "incoming_verified_original_nonreader_drops_tcp_then_joins_spool_and_preserves_short_length_failure",
+        "unchanged_body": true,
+        "old_assertions_exact": 6
+      },
+      {
+        "name": "incoming_verified_original_consumes_exact_bom_nonascii_crlf_before_complete_positive_drain",
+        "unchanged_body": false,
+        "old_assertions_exact": 5
+      },
+      {
+        "name": "incoming_original_preheader_connection_drop_cancels_checkpoint_and_removes_unadvertised_spool",
+        "unchanged_body": true,
+        "old_assertions_exact": 4
+      },
+      {
+        "name": "incoming_http1_protocol_shapes_match_same_locked_axum_for_http10_http11_h2_upgrade_and_connect",
+        "unchanged_body": true,
+        "old_assertions_exact": 6
+      }
+    ],
+    "total_authored_tests": 13,
+    "old_unmodified_test_bodies_exact": 9,
+    "author_script_syntax": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v2/derive-v2.mjs",
+      "exitcode": 0,
+      "signal": null
+    }
+  },
+  "reasoning": [
+    "The sole changed payload is the test module; eight other payloads, including transport.rs and all seven integration paths, are byte-for-byte V1. The previously reviewed cached API/implementation and independent integration conclusions therefore need no fabricated new runtime proof or repeat whole-tree scan.",
+    "All three reported test gaps now have distinct source-level state barriers and retained real-work/EOF/join assertions. A test-only transfer gate neither relaxes production cancellation nor increases queue/spool/body/grace budgets. The three strengthened old test functions retain every old assertion macro exactly; nine other old test bodies remain exact, and one isolated actual-socket test is new.",
+    "No additional concrete source finding was identified in this bounded revision. This is not a claim that authored tests compile, pass, close native processes, meet actual timing or prove platform transport behavior."
+  ],
+  "pins": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v2/manifest.json",
+      "sha256": "e3c5a2d0e8510aab4a1c5d0139ecb685f07bff7f23777ad180a43bebade52258",
+      "bytes": 18457
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v1/manifest.json",
+      "sha256": "00d6caebcb992d591c2a99536555e10367112d08a83aa0a13f8858a64d53d3b5",
+      "bytes": 15458
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v2/REVISION-DERIVATION.json",
+      "sha256": "717c04d572c06b5914b9b1498f49e06d03efb1a8b9e5c04a47b85812d0a4c299",
+      "bytes": 26439
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-new-modules-independent-review-v1\\receipt.json",
+      "sha256": "3cfcbde654d06d0aeefc4112ea22f00f24ca03997df16dae8214168ea000dfd6",
+      "bytes": 16916
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-integration-independent-review-v1\\receipt.json",
+      "sha256": "8e04b73703043ede0c7099ff57f73541175bf90711f00eea9d91a30f168af863",
+      "bytes": 21053
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v1/source/Cargo.lock",
+      "sha256": "377211a39886ee9febbd1a4ddc6dee62ac78cef634f64c15cfeeac52550c84f2",
+      "bytes": 78563
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v2/source/Cargo.lock",
+      "sha256": "377211a39886ee9febbd1a4ddc6dee62ac78cef634f64c15cfeeac52550c84f2",
+      "bytes": 78563
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v1/source/crates/app/Cargo.toml",
+      "sha256": "3e020b4dbdc949435cf1dbbd8190db073eacff8d385996dacb5e9829eb7482b5",
+      "bytes": 1069
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v2/source/crates/app/Cargo.toml",
+      "sha256": "3e020b4dbdc949435cf1dbbd8190db073eacff8d385996dacb5e9829eb7482b5",
+      "bytes": 1069
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v1/source/crates/app/src/server.rs",
+      "sha256": "892bd47b8e370cd64a31bc2bc03688bc68d1fc2bc960700b2c7bf9bdd02c0dc0",
+      "bytes": 82215
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v2/source/crates/app/src/server.rs",
+      "sha256": "892bd47b8e370cd64a31bc2bc03688bc68d1fc2bc960700b2c7bf9bdd02c0dc0",
+      "bytes": 82215
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v1/source/crates/app/src/server/lifecycle.rs",
+      "sha256": "2c79f5dcb37412ce93c13f42b790a9bef8ac2d4c59f526752332048dc4295e07",
+      "bytes": 8961
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v2/source/crates/app/src/server/lifecycle.rs",
+      "sha256": "2c79f5dcb37412ce93c13f42b790a9bef8ac2d4c59f526752332048dc4295e07",
+      "bytes": 8961
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v1/source/crates/app/src/server/response_stream.rs",
+      "sha256": "5203c33098a79dad017d678c2f61a628f2b50d53939df695cde8ed40d374f3f5",
+      "bytes": 19018
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v2/source/crates/app/src/server/response_stream.rs",
+      "sha256": "5203c33098a79dad017d678c2f61a628f2b50d53939df695cde8ed40d374f3f5",
+      "bytes": 19018
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v1/source/crates/app/src/server/source_body_stream.rs",
+      "sha256": "88d6046625a0f592b764433210c1921cc5d04fc9b9d3d2fa7c9cfd46d0910df7",
+      "bytes": 13543
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v2/source/crates/app/src/server/source_body_stream.rs",
+      "sha256": "88d6046625a0f592b764433210c1921cc5d04fc9b9d3d2fa7c9cfd46d0910df7",
+      "bytes": 13543
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v1/source/crates/app/src/server/source_body_stream_tests.rs",
+      "sha256": "6252226646631bf2a8a8ded2d701df4bc8fd55846801fbc572e484968335825c",
+      "bytes": 8938
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v2/source/crates/app/src/server/source_body_stream_tests.rs",
+      "sha256": "6252226646631bf2a8a8ded2d701df4bc8fd55846801fbc572e484968335825c",
+      "bytes": 8938
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v1/source/crates/app/src/server/transport.rs",
+      "sha256": "3b48f6b6698e7db6792e50debd8840b4f85bf215a7fd3bad5c1afc608f460ae7",
+      "bytes": 16754
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v2/source/crates/app/src/server/transport.rs",
+      "sha256": "3b48f6b6698e7db6792e50debd8840b4f85bf215a7fd3bad5c1afc608f460ae7",
+      "bytes": 16754
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v1/source/crates/app/src/server/transport_tests.rs",
+      "sha256": "f2864e85fa6b62bb2736dcda42c394f161e1c7104be613a9f080429124698638",
+      "bytes": 24215
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v2/source/crates/app/src/server/transport_tests.rs",
+      "sha256": "07cb9ed49c76f7692fd16b9bcfacc4687b6e552e603334c501cb18c5ff9c0986",
+      "bytes": 30125
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v1/integration-derivation.json",
+      "sha256": "27139be0a8089aadc5d4a386d26d2de50eae75667c83146f2e90faffa471b38a",
+      "bytes": 106338
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v2/integration-derivation.json",
+      "sha256": "27139be0a8089aadc5d4a386d26d2de50eae75667c83146f2e90faffa471b38a",
+      "bytes": 106338
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v2/derive-v2.mjs",
+      "sha256": "928d7f78fd1ed212a79931e1dabd802a878e88ccb9cb89d490680a94f4453c42",
+      "bytes": 13684
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v2/primary-source-pins.json",
+      "sha256": "9463c55f8b8beb0ccba8c33c00ffc14f04e4c44d9a5c8d51ccd0f541900f1fd7",
+      "bytes": 2058
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v2/HANDOFF.md",
+      "sha256": "cf389cf0742a27ce2323ad8e78821a1ab63947bc71709ee62a0ae1a49ec21a21",
+      "bytes": 2898
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v2/source-checks.json",
+      "sha256": "b2e773c97c0d32e3eff827b13b45bd5214aae0d79e0089d2dc7790e6595d22c1",
+      "bytes": 12151
+    }
+  ],
+  "not_proven": [
+    "All13 Rust tests remain AUTHORED_NOT_RUN",
+    "Actual Cargo feature graph, formatter, compiler/Clippy/full suite",
+    "Actual native child/socket/pipe closure and platform TCP timing",
+    "Final exact rebase/merge onto actual corrected/formatted/frozen Source6",
+    "Source7 promotion/release/install or feature parity"
+  ],
+  "excluded_executions": {
+    "target_imports": 0,
+    "compiler_formatter_rust_tests": 0,
+    "sqlite_tcp_http_native_browser_fixtures": 0,
+    "root_product_git_mutations": 0,
+    "whole_source_rescans": 0
+  },
+  "qualification": "Source-only P2 closure review. V1 remains immutable historical FINDINGS; this receipt applies only to the exact V2 manifest and does not transfer any runtime PASS."
+}

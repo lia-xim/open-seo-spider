@@ -1,0 +1,377 @@
+{
+  "schema_version": 1,
+  "kind": "source7_incoming_transport_integration_independent_source_review",
+  "result": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "findings": [],
+  "recorded_at": "2026-10-15T12:27:41.070Z",
+  "proposal_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-proposal-v1\\manifest.json",
+    "sha256": "00d6caebcb992d591c2a99536555e10367112d08a83aa0a13f8858a64d53d3b5"
+  },
+  "authoring_parent_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-composition-v1\\manifest.json",
+    "sha256": "bc573ac9eadf2d49eaeb5f138a56f31db1d93a9b9750f985cc833c6ae8d470c1",
+    "bytes": 164808
+  },
+  "scope": {
+    "reviewed": "All27 exact integration operations in7 existing App/Cargo paths,11 unchanged old regions, caller/lease/admission/drain/feature interfaces",
+    "separately_reviewed_by_other_agent": "Entire new transport.rs implementation and transport_tests.rs TCP/lease/deadline oracles; this receipt alone is not their independent approval"
+  },
+  "checked": {
+    "all27_forward_inverse_exact": true,
+    "all7_modified_parent_bytes_and9_proposed_hashes_pinned": true,
+    "all11_critical_old_regions_exact": true,
+    "old_test_assertion_body_exact_except_one_explicit_cancel_call": true,
+    "locked_package_versions_and_set_exact": true,
+    "h2_package_absent": true,
+    "hyper_util_requested_features_http1_only": true,
+    "all8_old_drains_plus9th_transport_and_error_collection_present": true,
+    "constructor_initializer_inventory_checked": true,
+    "actual_source6_release_not_invented": true,
+    "source7_rebase_to_corrected_formatted_source6_still_required": true
+  },
+  "critical_regions": [
+    {
+      "path": "crates/app/src/server.rs",
+      "start": "    let router = Router::new()",
+      "end": "    println!(\"Open SEO Spider: http://{}\", listener.local_addr()?);",
+      "bytes": 7390,
+      "sha256": "4ef16a319922c9e73e6d8b964f31d096082428b583de54e4d699b139b9bd8b84",
+      "exact": true,
+      "independently_checked": true,
+      "method": "Old explicit anchors extract the complete old region; that exact full byte string occurs exactly once in the new file. The replaced following anchor itself is not asserted unchanged."
+    },
+    {
+      "path": "crates/app/src/server.rs",
+      "start": "pub async fn serve(",
+      "end": "    let (shutdown_signal, stdin_monitor)",
+      "bytes": 2642,
+      "sha256": "69b2d16e9d8b2e19f98ec3b909fffe01063134e624d335100389be665fa27a29",
+      "exact": true,
+      "independently_checked": true,
+      "method": "Old explicit anchors extract the complete old region; that exact full byte string occurs exactly once in the new file. The replaced following anchor itself is not asserted unchanged."
+    },
+    {
+      "path": "crates/app/src/server.rs",
+      "start": "    // Owned stdin uses a runtime blocking read.",
+      "end": "    let mut failures = Vec::new();",
+      "bytes": 311,
+      "sha256": "6878f668f47b0f908b9a05144ff324b20fd9330da7ebe4936c10fe6058cee45a",
+      "exact": true,
+      "independently_checked": true,
+      "method": "Old explicit anchors extract the complete old region; that exact full byte string occurs exactly once in the new file. The replaced following anchor itself is not asserted unchanged."
+    },
+    {
+      "path": "crates/app/src/server/lifecycle.rs",
+      "start": "pub(super) type PreparedLaunch",
+      "end": "pub(super) fn close_admission",
+      "bytes": 2181,
+      "sha256": "45ab1940a877329c6263ba5cda7c1e09b94fc74b55396ca61aae90b3056436b1",
+      "exact": true,
+      "independently_checked": true,
+      "method": "Old explicit anchors extract the complete old region; that exact full byte string occurs exactly once in the new file. The replaced following anchor itself is not asserted unchanged."
+    },
+    {
+      "path": "crates/app/src/server/lifecycle.rs",
+      "start": "pub(super) fn shutdown_source",
+      "end": "pub(super) async fn request",
+      "bytes": 1296,
+      "sha256": "fe6462315bc62e16a3c8a1b897e32ff03b031a7f7c2b5cf1cb951bed23b122de",
+      "exact": true,
+      "independently_checked": true,
+      "method": "Old explicit anchors extract the complete old region; that exact full byte string occurs exactly once in the new file. The replaced following anchor itself is not asserted unchanged."
+    },
+    {
+      "path": "crates/app/src/server/lifecycle.rs",
+      "start": "pub(super) async fn pause_active",
+      "end": "pub(super) async fn drain",
+      "bytes": 358,
+      "sha256": "b03a504558b0fb7eacb74040a55b4e8891b85d754ba826851fe7d643336f8daa",
+      "exact": true,
+      "independently_checked": true,
+      "method": "Old explicit anchors extract the complete old region; that exact full byte string occurs exactly once in the new file. The replaced following anchor itself is not asserted unchanged."
+    },
+    {
+      "path": "crates/app/src/server/response_stream.rs",
+      "start": "pub(super) struct Ready",
+      "end": "pub(super) struct Pending",
+      "bytes": 2538,
+      "sha256": "238937580214f59b2e2b7e5684b36b63830752eee8b9d091f2d0572ae6875ea0",
+      "exact": true,
+      "independently_checked": true,
+      "method": "Old explicit anchors extract the complete old region; that exact full byte string occurs exactly once in the new file. The replaced following anchor itself is not asserted unchanged."
+    },
+    {
+      "path": "crates/app/src/server/response_stream.rs",
+      "start": "struct BodyStream",
+      "end": "// Deliberately local",
+      "bytes": 1869,
+      "sha256": "04263ccd1659608bafd8dcf291f33b30eac2890544382f6325bd3a0349134fca",
+      "exact": true,
+      "independently_checked": true,
+      "method": "Old explicit anchors extract the complete old region; that exact full byte string occurs exactly once in the new file. The replaced following anchor itself is not asserted unchanged."
+    },
+    {
+      "path": "crates/app/src/server/response_stream.rs",
+      "start": "// Deliberately local",
+      "end": "#[cfg(test)]",
+      "bytes": 866,
+      "sha256": "35eb9ddf94dab90bba439d5ef26fe385379ab9eb7fabfa4b80bc15036173f3aa",
+      "exact": true,
+      "independently_checked": true,
+      "method": "Old explicit anchors extract the complete old region; that exact full byte string occurs exactly once in the new file. The replaced following anchor itself is not asserted unchanged."
+    },
+    {
+      "path": "crates/app/src/server/source_body_stream.rs",
+      "start": "fn root(data:",
+      "end": "#[cfg(test)]",
+      "bytes": 5554,
+      "sha256": "d2d6df3dc4c7a6d2363eaffd7881188554904913f25c91e17fac603dea48eeb1",
+      "exact": true,
+      "independently_checked": true,
+      "method": "Old explicit anchors extract the complete old region; that exact full byte string occurs exactly once in the new file. The replaced following anchor itself is not asserted unchanged."
+    },
+    {
+      "path": "crates/app/src/server/source_body_stream.rs",
+      "start": "    pub(super) async fn shutdown_and_drain",
+      "end": "    #[cfg(test)]",
+      "bytes": 541,
+      "sha256": "31b0c2ffe988b0d06488a218e34060b07ae9b59f6835d49e2e9607a549662ac2",
+      "exact": true,
+      "independently_checked": true,
+      "method": "Old explicit anchors extract the complete old region; that exact full byte string occurs exactly once in the new file. The replaced following anchor itself is not asserted unchanged."
+    }
+  ],
+  "constructor_inventory": [
+    {
+      "path": "crates/app/src/server/lifecycle.rs",
+      "spelling": "Lifecycle {",
+      "line": 8
+    },
+    {
+      "path": "crates/app/src/server/lifecycle.rs",
+      "spelling": "Lifecycle {",
+      "line": 16
+    },
+    {
+      "path": "crates/app/src/server/response_stream.rs",
+      "spelling": "Control {",
+      "line": 24
+    },
+    {
+      "path": "crates/app/src/server/response_stream.rs",
+      "spelling": "Control {",
+      "line": 31
+    },
+    {
+      "path": "crates/app/src/server/source_body_stream.rs",
+      "spelling": "Slot{",
+      "line": 15
+    },
+    {
+      "path": "crates/app/src/server/source_body_stream.rs",
+      "spelling": "Slot{",
+      "line": 51
+    },
+    {
+      "path": "crates/app/src/server/source_body_stream.rs",
+      "spelling": "Slot{",
+      "line": 75
+    }
+  ],
+  "manual_review": [
+    {
+      "area": "Private request scope and early binding",
+      "conclusion": "The Connection extension is cloned before the request is moved, and task-local scope wraps next.run INSIDE the future retained by requests.run_async. Response.start and BODY.prepare_checked bind their weak-self cancellation callback before actual producer/spool I/O, then retain Lease in their existing owned Control/Slot. This does not require task-local propagation into spawn_blocking. No handler signature or DTO changes are introduced."
+    },
+    {
+      "area": "Lease ownership and callback locking",
+      "conclusion": "Registry worker/supervisor/body ownership remains original. Each Lease owns its callback; callback captures only Weak Control/Slot and connection map holds Weak callback, avoiding a strong cycle. Response finish_body removes its lease after terminal state publication; BODY slot holds its lease through existing slot/body lifetime. The referenced Connection API releases its binding mutex before callbacks, so the added terminal Lease drop does not create an observed mutex cycle. The callback API implementation itself is under the other reviewer."
+    },
+    {
+      "area": "Gate and cancellation separation",
+      "conclusion": "BODY close_admission becomes gate-only, matching response close. Both explicit cancel_all operations only publish their original cancellation signals and leave actual joins to existing owners. The server passes both into the new transport deadline callback. The old BODY cancellation test explicitly requests abort after gate close and otherwise retains its entire original assertions. This is the authorized behavior change needed for positive responses during inbound grace, not a claim that all standalone registry drains self-timeout."
+    },
+    {
+      "area": "T0 and all drains",
+      "conclusion": "close_admission records T0 once per call, synchronously closes global admission and response admission, invokes transports.quiesce_at(t0), then closes BODY/CSV/read/file admissions before awaiting pause/drain. The transport contract preserves the earliest phase deadline; repeating close may not extend it. All eight previous drains plus transport drain are awaited concurrently and all errors collected. The coordinator/deadline remains independently owned while pause_active or any held outbound/verified worker waits. No whole-application five-second bound follows."
+    },
+    {
+      "area": "Serve success/failure and monitor",
+      "conclusion": "Transport registration precedes readiness. Success joins serving and lifecycle drain concurrently; transport sticky failure is a shutdown trigger, then serving/drain/owned-stdin-monitor errors are all collected before receipt. Startup refusal drops readiness, closes admission and runs every old drain before the same retained monitor/final error path. New transport actual-handle internals remain the other reviewer's slice. Whole serve-future abandonment remains explicitly outside this proposal's complete-drain claim."
+    },
+    {
+      "area": "Protocol/dependency and inherited behavior",
+      "conclusion": "Only the already locked hyper-util0.1.21 becomes a direct dependency with default features false and server/http1/service/tokio. Exact inverse proves Cargo.lock changes solely its App dependency edge; package versions/set remain exact and h2 absent. Cached primary-source gates support the planned interface but actual Cargo feature/type compilation is NOT_RUN. Router/host-origin layers, four local HTTP1.0 refusals, policy/resource formats, Store/64MiB/8MiB/spool limits, MCP/Core/crawl/PDF/outbound/renderer and public schemas stay outside the modified logic or exact critical regions."
+    },
+    {
+      "area": "Actual baseline and proof limits",
+      "conclusion": "Parent is the immutable UNFORMATTED Source6 compositionbc573, not an accepted Source6 release. The separate Core guard correction ef8ce9 is outside these seven paths. Actual corrected/formatted/frozen Source6 rebase plus independent merge/formatter review, compiler/Clippy/full inherited suite and genuine native process/pipe/TCP/body acceptance are still mandatory. No old Source5/6 PASS or authored TCP test is counted as execution."
+    }
+  ],
+  "pins": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-proposal-v1\\manifest.json",
+      "sha256": "00d6caebcb992d591c2a99536555e10367112d08a83aa0a13f8858a64d53d3b5",
+      "bytes": 15458
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-composition-v1\\manifest.json",
+      "sha256": "bc573ac9eadf2d49eaeb5f138a56f31db1d93a9b9750f985cc833c6ae8d470c1",
+      "bytes": 164808
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-proposal-v1\\source\\Cargo.lock",
+      "sha256": "377211a39886ee9febbd1a4ddc6dee62ac78cef634f64c15cfeeac52550c84f2",
+      "bytes": 78563
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-composition-v1\\source\\Cargo.lock",
+      "sha256": "0f4038aaf5411912ea18b69a0a4095d0feb7834726a64a5d403f6e51b8de8916",
+      "bytes": 78548
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-proposal-v1\\source\\crates\\app\\Cargo.toml",
+      "sha256": "3e020b4dbdc949435cf1dbbd8190db073eacff8d385996dacb5e9829eb7482b5",
+      "bytes": 1069
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-composition-v1\\source\\crates\\app\\Cargo.toml",
+      "sha256": "893017f0f95c8fcc85aa1a417247bc473a44356b8f8e47849e0f33288011b1ea",
+      "bytes": 954
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-proposal-v1\\source\\crates\\app\\src\\server.rs",
+      "sha256": "892bd47b8e370cd64a31bc2bc03688bc68d1fc2bc960700b2c7bf9bdd02c0dc0",
+      "bytes": 82215
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-composition-v1\\source\\crates\\app\\src\\server.rs",
+      "sha256": "90daf3318c9188cb588eaaf428e026deb2288e66d8c62d3ed78e69f0a83eb9ed",
+      "bytes": 81629
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-proposal-v1\\source\\crates\\app\\src\\server\\lifecycle.rs",
+      "sha256": "2c79f5dcb37412ce93c13f42b790a9bef8ac2d4c59f526752332048dc4295e07",
+      "bytes": 8961
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-composition-v1\\source\\crates\\app\\src\\server\\lifecycle.rs",
+      "sha256": "34818e2e7d975cfcedd9b5d3811486bea424bb282b316225e8e64d401b302c45",
+      "bytes": 8425
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-proposal-v1\\source\\crates\\app\\src\\server\\response_stream.rs",
+      "sha256": "5203c33098a79dad017d678c2f61a628f2b50d53939df695cde8ed40d374f3f5",
+      "bytes": 19018
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-composition-v1\\source\\crates\\app\\src\\server\\response_stream.rs",
+      "sha256": "9bb4e8b0c3406fdba8545445d1b7c00141c57db9f37e6113b52fe225ef0cc13c",
+      "bytes": 18686
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-proposal-v1\\source\\crates\\app\\src\\server\\source_body_stream.rs",
+      "sha256": "88d6046625a0f592b764433210c1921cc5d04fc9b9d3d2fa7c9cfd46d0910df7",
+      "bytes": 13543
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-composition-v1\\source\\crates\\app\\src\\server\\source_body_stream.rs",
+      "sha256": "b7558a3eb18c9db8a8addce788887c71e98e18afb28ad7bc3c15abc7ead98493",
+      "bytes": 13248
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-proposal-v1\\source\\crates\\app\\src\\server\\source_body_stream_tests.rs",
+      "sha256": "6252226646631bf2a8a8ded2d701df4bc8fd55846801fbc572e484968335825c",
+      "bytes": 8938
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-composition-v1\\source\\crates\\app\\src\\server\\source_body_stream_tests.rs",
+      "sha256": "05add9fc011a5f280a23dfd64cf6f7af5ee835bc7d2c45cd343f8a8f233cbc0e",
+      "bytes": 8916
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-proposal-v1\\source\\crates\\app\\src\\server\\transport.rs",
+      "sha256": "3b48f6b6698e7db6792e50debd8840b4f85bf215a7fd3bad5c1afc608f460ae7",
+      "bytes": 16754
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-proposal-v1\\source\\crates\\app\\src\\server\\transport_tests.rs",
+      "sha256": "f2864e85fa6b62bb2736dcda42c394f161e1c7104be613a9f080429124698638",
+      "bytes": 24215
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-proposal-v1\\integration-derivation.json",
+      "sha256": "27139be0a8089aadc5d4a386d26d2de50eae75667c83146f2e90faffa471b38a",
+      "bytes": 106338
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\axum-0.8.9\\Cargo.toml",
+      "sha256": "ed35dc0f840f27c8b953d9789fff678c0f5b2f10229c8f50d70a1a5857bdd83f",
+      "bytes": 8126
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\axum-0.8.9\\src\\serve\\listener.rs",
+      "sha256": "ebb73d7994afc802adc5ad6bd187abb3e0d64b8bca59c237852c8610254c524e",
+      "bytes": 4683
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\axum-0.8.9\\src\\serve\\mod.rs",
+      "sha256": "063ccc352890e97c82d497b32888cf261921bb99687240120643d1d85c59324a",
+      "bytes": 22086
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\axum-0.8.9\\src\\routing\\mod.rs",
+      "sha256": "1c6c4dd9d2b9085ebd1873a7753860779f35b6a162c9fb6a9365e02c19374a8a",
+      "bytes": 26016
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\hyper-util-0.1.21\\Cargo.toml",
+      "sha256": "be68258b960525839b23a699362c550c7c5e73934cabd9dfe1b2a3fdebb37a2e",
+      "bytes": 5059
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\hyper-util-0.1.21\\src\\server\\conn\\mod.rs",
+      "sha256": "f192ca3fb030351ad22dba11f58edf02503598e3f9c18652a445f3973d16b723",
+      "bytes": 91
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\hyper-util-0.1.21\\src\\server\\conn\\auto\\mod.rs",
+      "sha256": "0f28859d1e7f2b6dd9bb255a07cd6e11d5acc0caf87159ea9217ae5e1b3d67d0",
+      "bytes": 45854
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\hyper-util-0.1.21\\src\\service\\glue.rs",
+      "sha256": "e79b4226013d4b3eaaadaa72b2dc7dc264cd8f5b2267d907a19f4f0e1c1538f0",
+      "bytes": 1936
+    }
+  ],
+  "syntax_checks": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-proposal-v1\\derive-integration.mjs",
+      "sha256": "1cc886a11997317c6bf11bb2f84a4bbeb62f5242642ea9bf620d791696f7e03f",
+      "exitcode": 0,
+      "signal": null
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-proposal-v1\\revise-integration.mjs",
+      "sha256": "7aa2e429eac835eea11499bd8f89f11d23b3944188322b0151ffd20c8ca80817",
+      "exitcode": 0,
+      "signal": null
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-integration-independent-review-v1\\review.mjs",
+      "sha256": "815bc10bfc523d7414436bebffd79b2ab2dddf22106ce322b214ed94a919d505",
+      "exitcode": 0,
+      "signal": null
+    }
+  ],
+  "executions": {
+    "target_imports": 0,
+    "cargo_compiler_rustfmt_tests": 0,
+    "sqlite_http_tcp_native_browser_sdk_fixtures": 0,
+    "root_parent_product_git_writes": 0,
+    "whole_old_700_pin_reference_sweep": 0
+  },
+  "qualification": "Independent bounded integration-only source review. The new transport and twelve TCP/lease test source bodies require their separate assigned independent review. No Rust parser/compiler/feature graph, actual network/clock/FD/process closure, speed/RSS/installation or manufacturer parity proof. Five seconds is the planned shared inbound grace; real retained worker/outbound joins can take longer. No universal remote-FIN or arbitrary upgraded-I/O lifetime claim."
+}

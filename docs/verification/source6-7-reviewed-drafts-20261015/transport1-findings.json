@@ -1,0 +1,267 @@
+{
+  "kind": "owned_incoming_http1_transport_new_modules_independent_source_review_v1",
+  "result": "FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "status": "V1_NOT_APPROVED_FRESH_REVISION_REQUIRED_NO_RUNTIME_ACCEPTANCE",
+  "proposal_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v1/manifest.json",
+    "sha256": "00d6caebcb992d591c2a99536555e10367112d08a83aa0a13f8858a64d53d3b5",
+    "bytes": 15458
+  },
+  "reviewed_full_new_files": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v1/source/crates/app/src/server/transport.rs",
+      "sha256": "3b48f6b6698e7db6792e50debd8840b4f85bf215a7fd3bad5c1afc608f460ae7",
+      "bytes": 16754
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v1/source/crates/app/src/server/transport_tests.rs",
+      "sha256": "f2864e85fa6b62bb2736dcda42c394f161e1c7104be613a9f080429124698638",
+      "bytes": 24215
+    }
+  ],
+  "authoring_parent": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-composition-v1\\manifest.json",
+    "sha256": "bc573ac9eadf2d49eaeb5f138a56f31db1d93a9b9750f985cc833c6ae8d470c1"
+  },
+  "findings": [
+    {
+      "id": "TRANSPORT-01",
+      "priority": 2,
+      "category": "test_oracle",
+      "path": "crates/app/src/server/transport_tests.rs",
+      "line_start": 51,
+      "line_end": 55,
+      "title": "Observe a suspended actual drain before cancelling its test waiter",
+      "explanation": "The test calls tokio::spawn and then immediately caller.abort(), without waiting for shutdown_and_drain or JoinSlot::join to be polled. A valid schedule cancels this task before its first poll. The later independent f.drain can therefore succeed without ever testing cancellation of a waiter holding an in-progress join. The production JoinSlot source retains the ticket across its mutable-reference await; this finding is a missing deterministic regression oracle, not a demonstrated production handle loss.",
+      "required_change": "In a fresh immutable revision, establish a deterministic barrier proving that the test caller has entered and suspended inside the actual drain/join while the real work remains pending, then cancel only that caller and prove all real coordinator, connection and producer/supervisor joins are retained and later completed."
+    },
+    {
+      "id": "TRANSPORT-02",
+      "priority": 2,
+      "category": "test_oracle",
+      "path": "crates/app/src/server/transport_tests.rs",
+      "line_start": 38,
+      "line_end": 41,
+      "additional_locations": [
+        {
+          "path": "crates/app/src/server/transport_tests.rs",
+          "line_start": 110,
+          "line_end": 113
+        }
+      ],
+      "title": "Keep the positive response genuinely unfinished at shutdown T0",
+      "explanation": "Both positive tests await reqwest::get only through headers and then call quiesce. Their approximately 2MiB producers are unrestricted and no state proves that response production or TCP transmission is still incomplete at T0. The full body can already have completed and entered transport/client buffers before quiesce. Such a run proves exact normal body bytes and EOF but cannot distinguish graceful completion of admitted work during the interval from shutdown after an already completed response. The original-body fixture intentionally completes verified spool preparation before headers, so its positive oracle must hold actual transmission rather than claim preheaders production is still active.",
+      "required_change": "Add a deterministic controlled barrier for admitted, genuinely unfinished positive response work or transmission at T0, then release/consume it within the unchanged common grace and require the existing full tail/hash/EOF, no cancellation and actual joins. Retain all budgets and negative nonreader controls."
+    },
+    {
+      "id": "TRANSPORT-03",
+      "priority": 2,
+      "category": "test_oracle",
+      "path": "crates/app/src/server/transport_tests.rs",
+      "line_start": 44,
+      "line_end": 48,
+      "additional_locations": [
+        {
+          "path": "crates/app/src/server/transport_tests.rs",
+          "line_start": 68,
+          "line_end": 70
+        },
+        {
+          "path": "crates/app/src/server/transport_tests.rs",
+          "line_start": 117,
+          "line_end": 119
+        },
+        {
+          "path": "crates/app/src/server/transport_tests.rs",
+          "line_start": 16,
+          "line_end": 16
+        },
+        {
+          "path": "crates/app/src/server/transport_tests.rs",
+          "line_start": 88,
+          "line_end": 88
+        }
+      ],
+      "title": "Isolate active private lease cancellation from the global deadline callback",
+      "explanation": "The preheaders tests quiesce and let the deadline callback invoke responses.cancel_all or bodies.cancel_all. Thus their eventual cancellation/cleanup can pass even if active per-connection lease callbacks never run. The task-scope test drops its live lease before terminate and then checks only a late binding to an already closed Connection. None of these isolates a still-live private callback being invoked because actual IncomingIo::Drop first dropped its TcpStream. This is an important oracle for the new connection-to-retained-worker seam; it is not evidence that the current callback implementation is broken, and does not require immediate remote-FIN detection while Hyper is not polling reads.",
+      "required_change": "In a fresh revision retain a genuine active lease/control and actual IncomingIo owning a TCP stream, drop the actual wrapper without calling global abort/cancel, verify callback observation only after io_dropped/actual socket drop, and then verify the affected actual retained worker/supervisor joins and cleanup. Preserve the separate deadline tests."
+    }
+  ],
+  "bounded_source_observations": [
+    "The complete transport.rs and all twelve transport test bodies were manually source-read. No additional concrete production ownership, lock-cycle or cached public-API incompatibility was identified in this bounded review. This is not compilation or runtime proof.",
+    "JoinSlot retains its sole OwnedTask in the shared AsyncMutex slot while awaiting a mutable reference, publishing observed completion only after the awaited ticket returns. Cancelled caller futures need not own or drop the worker/supervisor handles.",
+    "IncomingIo::Drop explicitly drops the actual stream before setting io_dropped and calling Connection::terminate; active callbacks are collected/upgraded under the binding mutex and invoked after that lock is released. The deadline global cancel callback is a separate path and must not serve as the isolated lease oracle.",
+    "One quiesce phase stores one T0+5s Instant, repeated quiesce does not reset it, the accept coordinator drops the listener, and per-connection Hyper futures remain lexically owned until completion or abort. The code does not promise five-second whole-application completion or recognition of every unpolled remote FIN.",
+    "The checked cached Axum Listener::accept retains retry/backoff; Axum Router<()> implements generic Request<B> service and maps to Body. Hyper-util auto Builder, TokioIo, TowerToHyperService and UpgradeableConnection::graceful_shutdown are the same public seams used by cached Axum serve. Requested server/http1/service/tokio features do not require server-auto, which would additionally enable http2. No actual Cargo feature graph or type check was run.",
+    "Existing genuine nonreader tests wait for actual AsyncWrite Pending plus full producer reservation, keep the client unread until autonomous drain, and distinguish incomplete chunking or short Content-Length from normal EOF. Their authored assertions were read, not executed.",
+    "The protocol test compares HTTP/1.0, HTTP/1.1, h2-prior preface, unsupported Upgrade and CONNECT wire shapes to the same locked stock Axum; it adds no HTTP2/WS/CONNECT capability and remains unrun."
+  ],
+  "cached_primary_api_refs": [
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\axum-0.8.9\\src\\serve\\listener.rs",
+      "lines": "9-41,140-170",
+      "point": "Public Listener trait and TcpListener accept retry/backoff"
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\axum-0.8.9\\src\\serve\\mod.rs",
+      "lines": "367-409",
+      "point": "Stock Axum adapter, Builder, actual connection polling and graceful shutdown"
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\axum-0.8.9\\src\\routing\\mod.rs",
+      "lines": "569-587",
+      "point": "Generic Router Request<B> service maps to Axum Body"
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\hyper-util-0.1.21\\Cargo.toml",
+      "lines": "97-118",
+      "point": "Actual feature definitions; server-auto also enables http2"
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\hyper-util-0.1.21\\src\\server\\conn\\mod.rs",
+      "lines": "1-4",
+      "point": "Auto module is gated by http1 or http2"
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\hyper-util-0.1.21\\src\\server\\conn\\auto\\mod.rs",
+      "lines": "264-289,613-629,672-711",
+      "point": "Upgradeable connection public bounds, graceful method and polling"
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\hyper-util-0.1.21\\src\\service\\glue.rs",
+      "lines": "21-78",
+      "point": "TowerToHyperService clones through an actual Oneshot service future"
+    }
+  ],
+  "task_owner_source": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v6-composition-v1/source/crates/core/src/task_owner.rs",
+    "sha256": "c34cee572edf60a687d2d41fb9127e6c3dbf60897dc9f266cf65cfb238112e63",
+    "bytes": 10004
+  },
+  "authored_tests": {
+    "count": 12,
+    "names": [
+      "incoming_nonreader_reaches_real_full_queue_and_tcp_pending_then_self_aborts_and_joins",
+      "incoming_consuming_response_finishes_inside_shared_grace_with_complete_tail_and_eof",
+      "incoming_preheaders_io_drop_cancels_lease_but_still_awaits_actual_held_blocking_producer",
+      "incoming_dropped_drain_waiter_retains_actual_coordinator_connection_and_producer_joins",
+      "incoming_idle_reaper_joins_completed_connections_without_next_accept_or_shutdown",
+      "incoming_protocol_errors_and_post_quiesce_connect_do_not_admit_a_late_handler",
+      "incoming_private_task_scope_copies_binding_to_owned_work_and_lease_drop_prunes_keepalive",
+      "incoming_two_nonreaders_share_one_absolute_grace_and_repeated_quiesce_cannot_extend_it",
+      "incoming_verified_original_nonreader_drops_tcp_then_joins_spool_and_preserves_short_length_failure",
+      "incoming_verified_original_consumes_exact_bom_nonascii_crlf_before_complete_positive_drain",
+      "incoming_original_preheader_connection_drop_cancels_checkpoint_and_removes_unadvertised_spool",
+      "incoming_http1_protocol_shapes_match_same_locked_axum_for_http10_http11_h2_upgrade_and_connect"
+    ],
+    "status": "AUTHORED_NOT_RUN"
+  },
+  "separate_integration_review": {
+    "receipt": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-integration-independent-review-v1/receipt.json",
+      "sha256": "8e04b73703043ede0c7099ff57f73541175bf90711f00eea9d91a30f168af863",
+      "bytes": 21053
+    },
+    "scope": "Seven existing App/Cargo paths, twenty-seven integration inverses and eleven old regions belong to the independent peer reviewer. Its no-findings integration receipt does not approve these new modules or supersede the three findings here."
+  },
+  "reviewed_pins": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v1/manifest.json",
+      "sha256": "00d6caebcb992d591c2a99536555e10367112d08a83aa0a13f8858a64d53d3b5",
+      "bytes": 15458
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v1/source/crates/app/src/server/transport.rs",
+      "sha256": "3b48f6b6698e7db6792e50debd8840b4f85bf215a7fd3bad5c1afc608f460ae7",
+      "bytes": 16754
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v1/source/crates/app/src/server/transport_tests.rs",
+      "sha256": "f2864e85fa6b62bb2736dcda42c394f161e1c7104be613a9f080429124698638",
+      "bytes": 24215
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v1/WORKING-CONTRACT.md",
+      "sha256": "a49856e57794b10c9500116980df21257ccbfbbb9d97d6630ea86ec1076374f4",
+      "bytes": 5445
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v1/HANDOFF.md",
+      "sha256": "7e3abb0d19056b7420eca27796ada977b9c69d38b17102701054192469dd4fac",
+      "bytes": 6545
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-proposal-v1/primary-source-pins.json",
+      "sha256": "9463c55f8b8beb0ccba8c33c00ffc14f04e4c44d9a5c8d51ccd0f541900f1fd7",
+      "bytes": 2058
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\axum-0.8.9\\Cargo.toml",
+      "sha256": "ed35dc0f840f27c8b953d9789fff678c0f5b2f10229c8f50d70a1a5857bdd83f",
+      "bytes": 8126
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\axum-0.8.9\\src\\serve\\listener.rs",
+      "sha256": "ebb73d7994afc802adc5ad6bd187abb3e0d64b8bca59c237852c8610254c524e",
+      "bytes": 4683
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\axum-0.8.9\\src\\serve\\mod.rs",
+      "sha256": "063ccc352890e97c82d497b32888cf261921bb99687240120643d1d85c59324a",
+      "bytes": 22086
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\axum-0.8.9\\src\\routing\\mod.rs",
+      "sha256": "1c6c4dd9d2b9085ebd1873a7753860779f35b6a162c9fb6a9365e02c19374a8a",
+      "bytes": 26016
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\hyper-util-0.1.21\\Cargo.toml",
+      "sha256": "be68258b960525839b23a699362c550c7c5e73934cabd9dfe1b2a3fdebb37a2e",
+      "bytes": 5059
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\hyper-util-0.1.21\\src\\server\\conn\\mod.rs",
+      "sha256": "f192ca3fb030351ad22dba11f58edf02503598e3f9c18652a445f3973d16b723",
+      "bytes": 91
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\hyper-util-0.1.21\\src\\server\\conn\\auto\\mod.rs",
+      "sha256": "0f28859d1e7f2b6dd9bb255a07cd6e11d5acc0caf87159ea9217ae5e1b3d67d0",
+      "bytes": 45854
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\hyper-util-0.1.21\\src\\service\\glue.rs",
+      "sha256": "e79b4226013d4b3eaaadaa72b2dc7dc264cd8f5b2267d907a19f4f0e1c1538f0",
+      "bytes": 1936
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v6-composition-v1/source/crates/core/src/task_owner.rs",
+      "sha256": "c34cee572edf60a687d2d41fb9127e6c3dbf60897dc9f266cf65cfb238112e63",
+      "bytes": 10004
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-integration-independent-review-v1/receipt.json",
+      "sha256": "8e04b73703043ede0c7099ff57f73541175bf90711f00eea9d91a30f168af863",
+      "bytes": 21053
+    }
+  ],
+  "boundaries": {
+    "source7_rebase": "Mandatory future exact rebase and independent merge review onto actual corrected/formatted/frozen Source6; the current unformatted composition-v1 is only authoring provenance.",
+    "target_imports": 0,
+    "compiler_formatter_tests": 0,
+    "sqlite_tcp_http_browser_native_fixture_runtime": 0,
+    "root_product_git_mutations": 0,
+    "no_claims": [
+      "runtime pass",
+      "actual socket/pipe/process acceptance",
+      "whole-application five-second bound",
+      "benchmark or speed regression",
+      "RSS bound",
+      "full feature parity",
+      "Source7 release/install approval"
+    ],
+    "source_checks_only": "This author script reads bytes, verifies hashes and writes this fresh E-only receipt. It imports only Node builtins; no target module is imported or called."
+  },
+  "author_response": "The proposal author acknowledged all three oracle gaps, agreed to preserve V1 unchanged and prepare a fresh revision. No V1 release approval is given."
+}
