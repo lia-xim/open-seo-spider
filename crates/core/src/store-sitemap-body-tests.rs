@@ -429,12 +429,8 @@ fn assert_source_body_archive_utf16_refusal_without_archive_side_effects(encodin
         let mut s = c
             .prepare("SELECT key,value FROM metadata ORDER BY key COLLATE BINARY")
             .unwrap();
-        let values = s
-            .query_map([], |r| Ok((r.get(0)?, r.get(1)?)))
-            .unwrap()
-            .collect::<rusqlite::Result<Vec<_>>>()
-            .unwrap();
-        values
+        let rows = s.query_map([], |r| Ok((r.get(0)?, r.get(1)?))).unwrap();
+        rows.collect::<rusqlite::Result<Vec<_>>>().unwrap()
     };
     let before = metadata_rows(&store);
     let sidecar = crate::sitemap_source_archive::files::archive_path(&path).unwrap();
