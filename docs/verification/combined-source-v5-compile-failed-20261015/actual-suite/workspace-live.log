@@ -1,0 +1,98 @@
+   Compiling open-seo-spider-core v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\combined-source-v5\crates\core)
+error: cannot find macro `dictionary` in this scope
+   --> crates\core\src\crawler\owned_lifecycle_tests.rs:121:31
+    |
+121 |       let page = pdf.add_object(lopdf::dictionary! {
+    |  _______________________________^
+122 | |         "Type" => "Page", "Parent" => pages,
+123 | |         "MediaBox" => vec![0.into(),0.into(),612.into(),792.into()],
+124 | |         "Resources" => lopdf::dictionary! {},
+125 | |     });
+    | |_____^
+    |
+    = note: this error originates in the macro `lopdf::dictionary` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: cannot find macro `dictionary` in this scope
+  --> crates\core\src\crawler\owned_lifecycle_tests.rs:23:31
+   |
+23 |       let page = pdf.add_object(lopdf::dictionary! {
+   |  _______________________________^
+24 | |         "Type" => "Page", "Parent" => pages,
+25 | |         "MediaBox" => vec![0.into(),0.into(),612.into(),792.into()],
+26 | |         "Resources" => lopdf::dictionary! {},
+27 | |     });
+   | |_____^
+   |
+   = note: this error originates in the macro `lopdf::dictionary` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0061]: this method takes 6 arguments but 5 arguments were supplied
+    --> crates\core\src\crawler\discovery_ledger_tests.rs:412:10
+     |
+ 412 |         .run_discovery(&CrawlControl::new(), &None, seen, (0, 0), Some(generation))
+     |          ^^^^^^^^^^^^^------------------------------------------------------------- argument #6 of type `&task_owner::TaskOwner` is missing
+     |
+note: method defined here
+    --> crates\core\src\crawler.rs:1526:14
+     |
+1526 |     async fn run_discovery(
+     |              ^^^^^^^^^^^^^
+...
+1533 |         pdf_tasks: &crate::TaskOwner,
+     |         ----------------------------
+help: provide the argument
+     |
+ 412 |         .run_discovery(&CrawlControl::new(), &None, seen, (0, 0), Some(generation), /* &task_owner::TaskOwner */)
+     |                                                                                   ++++++++++++++++++++++++++++++
+
+error[E0063]: missing field `pdf_tasks` in initializer of `crawler::FetchContext`
+   --> crates\core\src\crawler\sitemap_protocol_tests.rs:284:5
+    |
+284 |     FetchContext {
+    |     ^^^^^^^^^^^^ missing `pdf_tasks`
+
+error[E0063]: missing field `pdf_tasks` in initializer of `crawler::FetchContext`
+   --> crates\core\src\crawler\discovery_ledger_tests.rs:273:5
+    |
+273 |     FetchContext {
+    |     ^^^^^^^^^^^^ missing `pdf_tasks`
+
+error[E0061]: this method takes 6 arguments but 5 arguments were supplied
+    --> crates\core\src\crawler\discovery_ledger_tests.rs:807:10
+     |
+ 807 |           .run_discovery(
+     |  __________^^^^^^^^^^^^^-
+ 808 | |             &control,
+ 809 | |             &None,
+ 810 | |             &mut HashSet::new(),
+ 811 | |             (0, 0),
+ 812 | |             Some(generation),
+ 813 | |         )
+     | |_________- argument #6 of type `&task_owner::TaskOwner` is missing
+     |
+note: method defined here
+    --> crates\core\src\crawler.rs:1526:14
+     |
+1526 |     async fn run_discovery(
+     |              ^^^^^^^^^^^^^
+...
+1533 |         pdf_tasks: &crate::TaskOwner,
+     |         ----------------------------
+help: provide the argument
+     |
+ 807 |         .run_discovery(
+ ...
+ 812 |             Some(generation),
+ 813 ~             /* &task_owner::TaskOwner */,
+ 814 ~         )
+     |
+
+error[E0063]: missing field `pdf_tasks` in initializer of `crawler::FetchContext`
+   --> crates\core\src\crawler\sitemap_capture_tests.rs:256:5
+    |
+256 |     FetchContext {
+    |     ^^^^^^^^^^^^ missing `pdf_tasks`
+
+Some errors have detailed explanations: E0061, E0063.
+For more information about an error, try `rustc --explain E0061`.
+error: could not compile `open-seo-spider-core` (lib test) due to 7 previous errors
+warning: build failed, waiting for other jobs to finish...
