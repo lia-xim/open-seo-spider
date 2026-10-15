@@ -81,6 +81,69 @@ async fn response_single_large_write_preserves_all_bytes_in_bounded_chunks_and_j
     assert!(stats.peak_queued <= QUEUE_CHUNKS);
 }
 
+#[tokio::test(flavor = "current_thread")]
+async fn response_actual_cancellation_is_terminal_to_standard_write_all_and_flush() {
+    let counters = Arc::new(Counters::default());
+    let control = Arc::new(Control::new(counters.clone()));
+    control.cancel();
+    let (sender, mut receiver) = mpsc::channel(QUEUE_CHUNKS);
+    let mut writer = ChannelWriter {
+        sender,
+        control,
+        runtime: Handle::current(),
+        counters: counters.clone(),
+    };
+    // Fail before any blocking worker starts if permanent cancellation is retryable.
+    assert_eq!(
+        writer.write(b"x").unwrap_err().kind(),
+        io::ErrorKind::ConnectionAborted
+    );
+    // Exercise the actual default std::Write::write_all retry loop, but retain a
+    // finite escape even if a future regression accidentally returns Interrupted.
+    struct BoundedWrite<'a> {
+        inner: &'a mut ChannelWriter,
+        calls: usize,
+    }
+    impl io::Write for BoundedWrite<'_> {
+        fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
+            self.calls += 1;
+            if self.calls > 4 {
+                return Err(io::Error::new(
+                    io::ErrorKind::TimedOut,
+                    "Terminal cancellation unexpectedly retried",
+                ));
+            }
+            self.inner.write(bytes)
+        }
+        fn flush(&mut self) -> io::Result<()> {
+            self.inner.flush()
+        }
+    }
+    {
+        let mut bounded = BoundedWrite {
+            inner: &mut writer,
+            calls: 0,
+        };
+        assert_eq!(
+            bounded.write_all(b"x").unwrap_err().kind(),
+            io::ErrorKind::ConnectionAborted
+        );
+        assert_eq!(
+            bounded.calls, 1,
+            "Permanent cancellation must not be retried"
+        );
+        assert_eq!(
+            bounded.flush().unwrap_err().kind(),
+            io::ErrorKind::ConnectionAborted
+        );
+    }
+    assert_eq!(counters.enqueues.load(Ordering::SeqCst), 0);
+    assert!(matches!(
+        receiver.try_recv(),
+        Err(mpsc::error::TryRecvError::Empty)
+    ));
+}
+
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
 async fn response_actual_eight_enqueues_and_ninth_full_reservation_survive_cancelled_drain_until_body_drop()
  {

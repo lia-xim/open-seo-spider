@@ -91,7 +91,7 @@ impl Control {
     fn check(&self) -> io::Result<()> {
         if self.is_cancelled() {
             Err(io::Error::new(
-                io::ErrorKind::Interrupted,
+                io::ErrorKind::ConnectionAborted,
                 "Response export cancelled",
             ))
         } else {
@@ -506,7 +506,7 @@ impl Write for ChannelWriter {
                             self.control.check()?;
                             tokio::select! {
                                 biased;
-                                result=cancelled.changed()=>{if result.is_err(){return Err(io::Error::new(io::ErrorKind::Interrupted,"Response cancellation source closed"));}},
+                                result=cancelled.changed()=>{if result.is_err(){return Err(io::Error::new(io::ErrorKind::ConnectionAborted,"Response cancellation source closed"));}},
                                 result=self.sender.reserve()=>return result.map_err(|_|io::Error::new(io::ErrorKind::BrokenPipe,"Response consumer disconnected")),
                             }
                         }
@@ -596,7 +596,7 @@ impl Stream for BodyStream {
             self.finished = true;
             self.control.finish_body(BodyOutcome::Aborted);
             return Poll::Ready(Some(Err(io::Error::new(
-                io::ErrorKind::Interrupted,
+                io::ErrorKind::ConnectionAborted,
                 "Response stream aborted",
             ))));
         }
@@ -615,7 +615,7 @@ impl Stream for BodyStream {
                             Poll::Ready(None)
                         }
                         Ok(Ok(())) => Poll::Ready(Some(Err(io::Error::new(
-                            io::ErrorKind::Interrupted,
+                            io::ErrorKind::ConnectionAborted,
                             "Response cancelled before complete EOF",
                         )))),
                         Ok(Err(error)) => {
