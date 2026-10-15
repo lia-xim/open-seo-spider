@@ -1,0 +1,11 @@
+# Single Migration Root outer, revision 2
+
+AUTHORED_NOT_RUN. This is the same one-child Migration outer and fixed-scope preflight, not a generic framework or a Source9 runner.
+
+V1 remains immutable and blocked by independent finding 399b753ff5b156ff4beb2d3a5e139dec708eb01d64ef44a0501d08a5186628c0. Its transitive Binder required the obsolete Source8 freezer. The corrected runner is now actual source-only proposal d4adece778ec4a2b3ef713be7319840457bbf5119b48809fe07493af65ca1c80, Binder c58f1984c6b6593d384915157afdcdae206acd1bb8af72279a9ee82702e1b7e7, independently reviewed at 3b6240aca4bec56afb058d83b8552ef1c36b28ba465169a31052c5df0e28ae78. Its complete six-source pin audit verified the actual current freezer, validator, suite and builder dependencies. No actual Source8 freeze, suite, build or candidate is fabricated.
+
+This revision has exactly nine complete positional inverses: two outer metadata references and seven preflight metadata/kind references. All bytes outside those edits are exact V1. The original exclusive lock creation290 bytes, retained child/process/pipe/fsync/exit body3623 bytes and identity-checked lock release707 bytes remain byte-identical to V1 and its reviewed Source7 BODY operative parent. The Root-issued hex-token seam, eight explicit Root CLI pairs, exact four child CLI pairs, deadlines, outputs, final deep guards and all eight inner groups are unchanged.
+
+Read both complete runtime sources, RELEASE-CONTRACT.md and DERIVATION.json. The direct independent receipt must use kind http_migration_native_outer_independent_review, NO_FINDINGS_BOUNDED_SOURCE_REVIEW/findings[], and current proposal_manifest plus outer {path,sha256}. The Root grant must then reference this revision's actual manifest/outer/review, not the blocked V1. Only the outer is later promoted to Task/work; the preflight and harness remain in their exact E bundles.
+
+All actual Source8 manifest/suite/build/candidate hashes and the fresh Root token remain explicit mandatory future arguments and null in this preparation. One outer owns the existing global lock and the harness only reads it. There is no outer timeout, successful kill, automatic retry, real grant, lease, native, compiler, product or Root mutation. Source-only authoring and Node syntax checks do not constitute runtime acceptance.

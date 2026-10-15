@@ -4,7 +4,7 @@
 
 Die Liste hält alle 144 gruppierten Fähigkeiten fest. Ein Haken bedeutet, dass das **eigene gespeicherte Abnahmekriterium** mit Beweisen erfüllt ist. Er bedeutet keine vollständige Gleichheit mit Screaming Frog. Diese Referenzparität bleibt für alle Einträge **NOT_PROVEN**.
 
-Aktueller Katalogstand: **30 eigene Abnahmen erfüllt**, **69 teilweise geprüft**, **45 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
+Aktueller Katalogstand: **31 eigene Abnahmen erfüllt**, **68 teilweise geprüft**, **45 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
 
 Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.json) bilden ein zusätzliches Register. Ihre positiven Fälle, Kontrollfälle, Parameter und Grenzfälle müssen jeweils geprüft werden. Ein implementierter Kern, ein leerer Export oder übereinstimmende CSV-Zellen ersetzen diese Einzelabnahme nicht.
 
@@ -138,16 +138,27 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - Verträge: [index.json](verification/sitemap-source-ui-suite-failed-20261015/index.json), [check.json](verification/sitemap-compile-repair-20261015/check.json), [index.json](verification/sitemap-compile-repair-20261015/focused-app-regressions/index.json), [index.json](verification/combined-workspace-v3-20261015/index.json).
   - Gate-Stand: historical_e9_full_suite: ACTUAL_COMPILE_FAIL_101_ZERO_TESTS_WORKER_CLOSED; intermediate_five_file_check: PASS_WITH_THREE_APP_WARNINGS; final_eight_file_full_suite: FAIL_APP_217_PASS_3_FAIL_0_IGNORE_CORE_RENDERER_CLIPPY_NOT_RUN; final_source_manifest_sha256: 0ab151e4fd06f4603d8429bed4c784f7045e5c838bec378706d6c01bfaefb7bf; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN; final_eight_file_check: PASS_NO_WARNINGS_23_26_SECONDS; directed_three_regressions: PASS_3_ACTUAL_TESTS_4_TEST_SOURCE_REPAIRS; new_full_workspace: NOT_RUN_AFTER_TEST_REPAIRS; combined_v3_workspace: PASS_1203_INCLUDING_4_RENDERER_FMT_CLIPPY.
 
-- [ ] **Migrationsprüfung, Schreibvertrag und responsive Originaldateien prüfen** — ACTUAL_FULL_WORKSPACE_PASS_OPTIMIZED_BUILD_RUNNING_NATIVE_PENDING. Der neue private Stand e6b1fa2 besteht tatsächlich 1322 Tests ohne Fehler oder ignorierte Fälle, alle 540 Pflichtnamen und 66 vollständigen Modulnamen, vier echte Renderer-Prüfungen sowie Format und Clippy. Die 17 integrierten Dateien enthalten einen vollständigen separaten Migrations-CSV-Workflow für gespeicherte Crawls, die Korrektur teilweise angenommener Schreiboperationen und den Umbruch im Originaldatei-Panel. Der optimierte Kandidat und sämtliche frischen nativen Prüfungen folgen. Installiert bleibt R3.
+- [ ] **Defekte Linkquellen, Ressourcen und Verzeichnisansicht ausbauen** — SOURCE_PROPOSALS_REVIEW_AND_COMPOSITION_PENDING_NOT_COMPILED. Nächster gemeinsamer Stand: getrennte Berichte für gespeicherte Seitenlinks und verifizierte Resource-Ledger-Fundstellen, API/UI/CLI/CSV sowie eine Verzeichnisansicht. Der enge Kopfzeilenfix verhindert den tatsächlichen320Pixel-Überlauf. Quellenentwürfe sind noch keine ausgeführten Funktionen.
+  - [x] Kopfzeilenfehler im tatsächlichen Source8-Browser gefunden; CSS-Umbruch unabhängig geprüft und als Browser-CSS-Vorschau bei1440/320 gemessen.
+  - [ ] Resource-Workflow-Reviewbefund unused_mut in frischem Vorschlag schließen; vollständige Quellenkomposition auf tatsächlichem58ab-Parent unabhängig prüfen.
+  - [ ] Verzeichnis-Core/API/UI/Export mit Grenzfällen fertigstellen und prüfen.
+  - [ ] Gemeinsamen tatsächlichen Compiler-/Testlauf, optimierten Build und native Funktionsprüfungen ausführen; keine ältere Abnahme auf neue Quellen übertragen.
+  - Verträge: [index.json](verification/source8-native-checkpoint-1-20261015/index.json).
+  - Gate-Stand: implementation: SOURCE_ONLY_NOT_COMPILED; runtime: NOT_RUN; installation: NOT_RUN; manufacturer_parity: NOT_PROVEN.
+
+- [ ] **Migrationsprüfung, Schreibvertrag und responsive Originaldateien prüfen** — SUITE_BUILD_FIVE_NATIVE_SCOPES_PASS_UI_LAYOUT_FAIL_NOT_INSTALLABLE. Source8 besteht die vollständige1322-Test-Suite und den optimierten Build. Fünf native Bereiche bestehen: API/CLI/SDK-Grundablauf,175 Dateioperationen, acht Migrationsgruppen, zwei EOF-Fälle und13 Originaldatei-Gruppen mit echten64MiB. Der neue Migrationslink verbreitert jedoch die Kopfzeile bei320Pixeln; Browser und Mock scheitern daran. Der Junction-Harness bricht vor der Funktion an einer veralteten Quellenanzahl ab. Source8 wird nicht installiert. Ein eng geprüfter Headerumbruch und neue Link-/Ressourcenberichte werden als Source9 vorbereitet.
   - [x] 335 aktuelle Quellen privat committed, gepusht und eingefroren; drei Produktanteile und alle Formatänderungen unabhängig geprüft.
   - [x] 25 neue Testfunktionen sowie alle bisherigen 1297 Tests im tatsächlichen gemeinsamen Lauf bestanden; alle drei Cargo-Prozesse erfolgreich beendet, eigene Testserver und Renderer geschlossen und Quellen abschließend identisch.
-  - [ ] Optimierten Windows-Kandidaten bauen und zuerst die echte Oberfläche bei 320 und 1440 Pixeln sowie den neuen Migrationsablauf prüfen.
-  - [ ] Alle neun bisherigen nativen Bereiche und den zusätzlichen Migrationsworkflow am selben Kandidaten frisch ausführen.
-  - [ ] Reparierten Originaldatei-Testserver tatsächlich prüfen; der frühere Source7-Gesamtlauf bleibt ein Fehlerbeleg.
-  - [ ] Sichere Installation unter Erhalt aller Nutzerdaten; danach getrennte Linkquellen- und Ressourcenberichte weiter integrieren.
-  - [ ] Weitere 144 Fähigkeiten, 416 Filter und 32 Abläufe abarbeiten; vollständige Herstellerparität bleibt NOT_PROVEN.
-  - Verträge: [index.json](verification/combined-workspace-v8-20261015/index.json).
-  - Gate-Stand: full_workspace: PASS_COMBINED_WORKSPACE_V8_REAL_RENDERER_FMT_CLIPPY; optimized_build: RUNNING_NOT_ESTABLISHED_BY_SUITE; native: NOT_RUN_ON_SOURCE8; installation: NOT_RUN_ON_SOURCE8; manufacturer_parity: NOT_PROVEN.
+  - [x] Tatsächlicher optimierter Build mit41.269.248Bytes, unveränderten335Quellen und final erneut bestätigter vollständiger Suite bestanden.
+  - [x] Migrationsworkflow: echte Redirect-Crawls,207 CSV-Zeilen, vollständige API-/CLI-/Browser-Exporte, gehaltene Datei-/Antwortregressionen,1440/320Pixel, fünf natürliche Kindprozessabschlüsse und Wiederöffnung mit null zusätzlichen Websiteabrufen bestanden.
+  - [x] Originaldateien: alle13Gruppen einschließlich vollständiger64MiB-EOF-/Hashprüfungen, beschädigter/fehlender Dateien, Quoten, Clientabbruch und kalter Wiederöffnung bestanden. Reparierter Testserver hat elf abgeschlossene Transfers, keine Fehler und einen erfolgreichen Abschluss.
+  - [ ] Kopfzeile umbrechen und Browser27 sowie Mock13 am nächsten optimierten Kandidaten erneut vollständig prüfen. Die CSS-Vorschau passt tatsächlich bei1440/320, ist aber kein Produkt-Browser-PASS.
+  - [ ] Junction-Harness an die tatsächliche Quellenanzahl binden; der fehlgeschlagene Vorcheck hat keine Junctionfunktion ausgeführt.
+  - [ ] Physische Grenzfälle abschließen; vollständigen50.000-Einträge-Lauf und alle übrigen Abnahmen auf dem endgültigen korrigierten Kandidaten ausführen.
+  - [ ] Getrennte Seitenlink-/Ressourcenquellen-Berichte und Verzeichnisansicht in Source9 integrieren, vollständig kompilieren und praktisch prüfen.
+  - [ ] Sichere Installation unter Erhalt aller Nutzerdaten erst nach allen erforderlichen Abnahmen. Übrige Fähigkeiten, Filter und Abläufe weiter abarbeiten.
+  - Verträge: [index.json](verification/source8-native-checkpoint-1-20261015/index.json), [index.json](verification/combined-workspace-v8-20261015/index.json).
+  - Gate-Stand: full_workspace: PASS_COMBINED_WORKSPACE_V8_REAL_RENDERER_FMT_CLIPPY; optimized_build: PASS_COMBINED_OPTIMIZED_BUILD_V8; native: FIVE_SCOPES_PASS_BROWSER_AND_MOCK_LAYOUT_FAIL_JUNCTION_PRECHECK_NOT_RUN_PHYSICAL_RUNNING_LARGE_DEFERRED; installation: NOT_INSTALLED_ACTUAL_HEADER_LAYOUT_DEFECT; manufacturer_parity: NOT_PROVEN.
 
 - [ ] **Gemeinsame Originaldatei- und HTTP-Verbindungsfunktionen prüfen** — SEVEN_NATIVE_SCOPES_PASS_BROWSER_AND_BODY_OVERALL_FAIL_NOT_INSTALLED_SUPERSEDED_BY_SOURCE8. Source7 besteht 1297 Tests und den optimierten Build. Sieben native Bereiche bestehen, einschließlich aller 50000 Sitemap-Einträge vor und nach kalter Wiederöffnung sowie des korrigierten Mocks. Browser27 scheitert am Originaldatei-Panel bei 320 Pixeln. BODY13 besteht die Funktionsgruppen und zwei natürliche App-Abschlüsse, scheitert insgesamt jedoch am Testserver-Abschluss. Beide Fehler bleiben erhalten; Source7 wurde nicht installiert. Der korrigierte Source8-Stand ist jetzt integriert und vollständig getestet.
   - [x] Neun geprüfte Transportdateien auf den tatsächlich erfolgreichen Source6R2-Stand übertragen; alle Abbruchkorrekturen und die gesamte Regression erhalten. Unabhängige Quellen-, Formatierungs- und Runnerprüfungen sowie Vorab-Clippy bestanden.
@@ -206,12 +217,11 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - Verträge: [resource-matrix-plan.md](parity/resource-matrix-plan.md), [resource-matrix-plan.json](parity/resource-matrix-plan.json), [resource-discovery.md](resource-discovery.md), [resource-contract-v2.md](resource-contract-v2.md), [ROADMAP.md](ROADMAP.md).
   - Gate-Stand: contract_regressions: PASS_V2_WITH_PRESERVED_V1_COMPATIBILITY; resource_products_28: PASS_BOTH_PROFILES; navigation_products_80: PASS_BOTH_PROFILES; response_controls_21: PASS_44_EXECUTIONS; native_request_logs: PASS_BOUNDED_SLICE; api_cli_mcp: PASS_13_GROUPS; redirect_controls_88: PASS_176_PROFILE_EXECUTIONS; workspace_tests_clippy: PASS; exact_commit_ci: PASS; immutable_release: PASS; installed_runtime: PASS_B10; full_feature_acceptance: PARTIAL; actual_browser_ui: PASS_10_NATIVE_CHECKS; ui_mock: PASS_11_SEPARATE_FIXTURES; additional_redirect_boundaries: PASS_24_PROFILE_EXECUTIONS.
 
-- [ ] **Teilweise geschriebene Downloadblöcke korrekt melden** — ACTUAL_SOURCE8_WORKSPACE_PASS_NATIVE_PENDING. Source8 korrigiert den Write-Vertrag: Eine erfolgreiche Schreiboperation meldet die tatsächlich angenommene Präfixlänge; spätere Fehler werden nicht als Nullfortschritt ausgegeben. Drei neue Regressionen und alle bisherigen HTTP-/Abbruchtests bestehen im tatsächlichen Gesamtlauf. Frische native Abnahmen folgen.
+- [ ] **Teilweise geschriebene Downloadblöcke korrekt melden** — ACTUAL_SOURCE8_WORKSPACE_AND_BODY_TRANSPORT_NATIVE_PASS. Source8 korrigiert den Write-Vertrag: Eine erfolgreiche Schreiboperation meldet die tatsächlich angenommene Präfixlänge; spätere Fehler werden nicht als Nullfortschritt ausgegeben. Drei neue Regressionen und alle bisherigen HTTP-/Abbruchtests bestehen im tatsächlichen Gesamtlauf. Frische native Abnahmen folgen.
   - [x] Produktionscode und tatsächliche vier privaten Exportaufrufer gegen Rusts Write-Vertrag unabhängig gelesen; Bewertung bleibt vom belegten Interrupted-Endlosfehler getrennt.
-  - [ ] ErfolgreichesPräfix als Ok(n) melden und terminalenFehler beimfolgendenwrite erhalten, oder proWrite einenbegrenzt erfolgreichenBlock zurückgeben.
-  - [ ] Gezielte Tests fürpartielleWrite-Länge, Abbruchnach Präfix, wiederholtenCaller undnormalesvollständigesExportende ausführen.
-  - Verträge: [index.json](verification/combined-workspace-v8-20261015/index.json), [partial-write-contract-assessment.json](verification/source6-r2-reviewed-repair-20261015/partial-write-contract-assessment.json), [index.json](verification/combined-workspace-v6-cancel-hang-failed-20261015/index.json).
-  - Gate-Stand: source_assessment: CONFIRMED_TRAIT_CONTRACT_GAP_CURRENT_SUCCESSFUL_CORRUPTION_NOT_PROVEN; implementation: NOT_RUN; rust_tests: NOT_RUN.
+  - [ ] Physische CSV-/JSON-Grenzfälle am aktuellen Kandidaten abschließen und bei künftigen Produktänderungen vollständige Exportregression erhalten.
+  - Verträge: [index.json](verification/source8-native-checkpoint-1-20261015/index.json), [index.json](verification/combined-workspace-v8-20261015/index.json), [partial-write-contract-assessment.json](verification/source6-r2-reviewed-repair-20261015/partial-write-contract-assessment.json), [index.json](verification/combined-workspace-v6-cancel-hang-failed-20261015/index.json).
+  - Gate-Stand: source_assessment: CONFIRMED_TRAIT_CONTRACT_GAP_CURRENT_SUCCESSFUL_CORRUPTION_NOT_PROVEN; implementation: INTEGRATED_SOURCE8; rust_tests: PASS_ACTUAL_THREE_NEW_REGRESSIONS_AND1322_WORKSPACE; native: BODY13_AND_EOF2_ACTUAL_PASS_PHYSICAL_RUNNING.
 
 - [ ] **Blockierte Downloadantworten und Verbindungen vollständig beenden** — ACTUAL_SOURCE7_FULL_WORKSPACE_PASS_NATIVE_PENDING. Response-Owner ist als Source6-Vorschlag unabhängig geprüft. Eigener Accept-/Connection-Besitz und gemeinsame Schonfrist sind als Source7 vorbereitet; alle drei konkreten Testorakel-Lücken der ersten Version sind in der zweiten Version eng korrigiert und unabhängig geprüft. Die acht übrigen Payloads sind unverändert. Integration in den endgültigen Source6-Stand sowie alle Compiler-/Rust-/TCP-Abnahmen fehlen.
   - [x] Tatsächlichen bestehenden HTTP/1-Stack und unbesessene Verbindungsaufgaben analysiert; fünf Sekunden Schonfrist für eingehende Verbindungen als Entwurfsentscheidung festgelegt.
@@ -267,13 +277,12 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - Verträge: [FEATURE_TODO.md](FEATURE_TODO.md), [ROADMAP.md](ROADMAP.md), [saved-comparison.md](saved-comparison.md).
   - Gate-Stand: core_contract: PASS_34; api_cli_mcp: PASS_NATIVE_9_AND_SDK23; actual_browser_ui: PASS_NATIVE_8_WITH_SERVED_ASSETS_AND_MUTATION_CONTROL; snapshot_and_mapping_integrity: PASS_NATIVE_10_TWO_ORIGINS_BOTH_COLLISION_SIDES; offline_restart_zero_requests: PASS_FINAL_DRAINED_HTTP_WITNESSES_0; work_draft_core: PASS_34_ISOLATED_WORK_ONLY; workspace_tests: PASS_FINAL_SOURCE_CI_476_EACH_PLATFORM_4_IGNORED_SEPARATE_RENDERER; workspace_clippy: PASS_ALL_TARGETS; combined_full_original_bundle: PASS_SAME_OPTIMIZED_EXE_NATIVE_SDK_CLI_BROWSER; exact_commit_ci: PASS_2A81036_ALL4; immutable_release: PASS_NATIVE11_SDK12_CLI_BUDGET4_UI13; installed_runtime: PASS_B11_7JOBS_19DURABLE_FILES; ui_contract: PASS_28; ui_browser_fixture: PASS_34; mapping_oracle_controls: PASS; final_app_tests: PASS_98; worker_maximum_depth: PASS_256_PLUS1_REFUSED_ON_1MIB_CALLER; cli_bundle_fixed_ceiling: PASS_NATIVE_64MIB_EXACT_PLUS1; baseline_exact_commit_ci: PASS_B8D6908_ALL4.
 
-- [ ] **Erwartete und tatsächliche Migrationsziele prüfen** — ACTUAL_SOURCE8_WORKSPACE_PASS_NATIVE_PENDING. Migrations-Core, API, explizite CLI und separate Oberfläche sind im privaten Source8 integriert. Die tatsächliche Gesamtsuite besteht mit 1322 Tests einschließlich aller 16 Core-Migrationsfälle und sechs zusätzlichen API-/CLI-Servicefällen. Frische öffentliche Crawl-, Browser- und Wiederöffnungsprüfungen bleiben offen.
+- [ ] **Erwartete und tatsächliche Migrationsziele prüfen** — ACTUAL_WORKSPACE_BUILD_AND_EIGHT_NATIVE_WORKFLOW_GROUPS_PASS. CSV-Zuordnungen gegen gespeicherte HTTP-Redirects sind vollständig im eigenen Workflow integriert und praktisch geprüft:16Core-Fälle, API/CLI-Servicefälle und alleacht nativen Gruppen bestehen. Browser bei1440/320, vollständige Exporte, Held-Datei-/Antwortregressionen und Wiederöffnung bestanden ohne weitere Websiteabrufe. Herstellerparität bleibt separat offen.
   - [x] NeuerCore-Code undalle16Testquellen unabhängig gelesen; zweiLib-Einfügehunks undzweiTestkorrekturen exaktzurückgeführt.
-  - [ ] ZweiLib-Hunksauf tatsächlichenletztenParentübertragen undCore/CSV/Redirecttests tatsächlichausführen.
-  - [ ] Verbindliche gespeicherteSnapshot-Auswahl, begrenztenAPI-Upload/Pagination/CSV, CLI undresponsiveUI1440/320 integrieren.
-  - [ ] EchteeigeneHTTP-Crawls undanschließendeMigrationsauswertung mitnullzusätzlichenWebsiteanfragen prüfen.
-  - Verträge: [index.json](verification/combined-workspace-v8-20261015/index.json), [migration-INTEGRATION-TODO.md](verification/source6-r2-reviewed-repair-20261015/migration-INTEGRATION-TODO.md), [migration-core-review.json](verification/source6-r2-reviewed-repair-20261015/migration-core-review.json).
-  - Gate-Stand: source_review: NO_FINDINGS_BOUNDED_OFFLINE_CORE_ONLY; rust_tests: NOT_RUN; api_cli_ui: NOT_IMPLEMENTED; manufacturer_parity: NOT_PROVEN.
+  - [x] Migrationsworkflow: echte Redirect-Crawls,207 CSV-Zeilen, vollständige API-/CLI-/Browser-Exporte, gehaltene Datei-/Antwortregressionen,1440/320Pixel, fünf natürliche Kindprozessabschlüsse und Wiederöffnung mit null zusätzlichen Websiteabrufen bestanden.
+  - [ ] Beim nächsten gemeinsamen Kandidaten den unveränderten Migrationsworkflow erneut mitführen; sichere Installation bleibt vom separaten Hauptseiten-Layoutfehler und den übrigen Abnahmen abhängig.
+  - Verträge: [index.json](verification/source8-native-checkpoint-1-20261015/index.json), [index.json](verification/combined-workspace-v8-20261015/index.json), [migration-INTEGRATION-TODO.md](verification/source6-r2-reviewed-repair-20261015/migration-INTEGRATION-TODO.md), [migration-core-review.json](verification/source6-r2-reviewed-repair-20261015/migration-core-review.json).
+  - Gate-Stand: source_review: NO_FINDINGS_BOUNDED_WORKFLOW; rust_tests: PASS_ACTUAL1322_WORKSPACE_ALL22_MIGRATION_CASES; api_cli_ui: PASS_ACTUAL_EIGHT_GROUPS_OPTIMIZED_1440_320_COLD_REOPEN; installed_runtime: NOT_INSTALLED_SOURCE8_MAIN_HEADER_DEFECT; manufacturer_parity: NOT_PROVEN.
 
 - [ ] **Große Sitemap-Kataloge effizient durchblättern** — ACTUAL_R3_RUST_AND_FULL_50000_NATIVE_INITIAL_REOPEN_PASS. Source5 entfernt SQL-Einzelabfragen pro Eintrag und erneutes vollständiges Serialisieren, während Integritäts-, Quellen-, Reihenfolge-, Cursor- und Größenprüfungen erhalten bleiben. Acht neue Tests prüfen die exakte bisherige Serialisierung und gültige UTF-16-Ledger. Der tatsächliche Laufzeitgewinn und die vollständige 50.000-Zeilen-Wiederöffnung sind noch offen.
   - [x] Konkrete Codepfade und die wiederholten vollständigen Durchläufe anhand des eingefrorenen V4-Quellstands bestätigt.
@@ -1501,7 +1510,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 ### HTTP, Fehler und Weiterleitungen
 
-6 Einträge: 0 eigene Abnahmen erfüllt, 6 teilweise geprüft, 0 offen.
+6 Einträge: 1 eigene Abnahmen erfüllt, 5 teilweise geprüft, 0 offen.
 
 #### Teilweise vorhanden – Restarbeiten
 
@@ -1656,40 +1665,6 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   </details>
 
-- [ ] **Migrationsziele überprüfen** — Teilweise geprüft; `http.migration`, P1.
-
-  Orientierung: Alte und erwartete neue URLs aus CSV mit tatsächlichen Endzielen vergleichen.
-
-  Beweisregister: [combined-workspace-v8-20261015](verification/combined-workspace-v8-20261015/index.json) (PASS_COMBINED_WORKSPACE_V8_REAL_RENDERER_FMT_CLIPPY).
-
-  <details>
-  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
-
-  ```json
-  {
-    "id": "http.migration",
-    "reference_name": "Migration destination validation",
-    "status": "partial",
-    "acceptance_test": "Check a CSV of old/new URL expectations and identify mismatched final destinations.",
-    "remaining_acceptance": [
-      "Run the real saved-crawl migration workflow across API, CLI and browser at 1440/320, including held file/response regressions, complete exports, stale snapshots, zero read-phase website requests and cold reopen."
-    ],
-    "implementation_evidence": [
-      {
-        "verification_run_ids": [
-          "combined-workspace-v8-20261015"
-        ],
-        "proves": "Actual private Source8 commit and complete1322-test run verify offline CSV mapping, duplicates, ambiguous/missing observations, actual HTTP redirect/failure semantics, strict snapshot/cursor/limit handling and explicit new CLI output semantics. API/CLI/UI workflow code is integrated.",
-        "limits": "Fresh public-crawl/API/CLI/browser workflow, held file/response regressions, cold reopen and installed same-candidate acceptance remain pending. Unit fixtures are not new website observations.",
-        "source_commit": "e6b1fa2f87d0b39ac7f83aba6cdecc2110de5a50"
-      }
-    ],
-    "parity_status": "NOT_PROVEN"
-  }
-  ```
-
-  </details>
-
 - [ ] **Quellen defekter Links exportieren** — Teilweise geprüft; `http.broken_sources`, P1.
 
   Orientierung: Alle Quellvorkommen mit Dokumentposition und Pfad exportieren.
@@ -1716,6 +1691,48 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "ui-live"
         ],
         "proves": "Broken-outlink findings identify source pages; all-occurrence links CSV contains source, target, anchor, kind and rel. API/browser exports are tested."
+      }
+    ],
+    "parity_status": "NOT_PROVEN"
+  }
+  ```
+
+  </details>
+
+#### Geprüfter eigener Kern
+
+- [x] **Migrationsziele überprüfen** — Eigene Abnahme erfüllt; `http.migration`, P1.
+
+  Orientierung: Alte und erwartete neue URLs aus CSV mit tatsächlichen Endzielen vergleichen.
+
+  Beweisregister: [combined-workspace-v8-20261015](verification/combined-workspace-v8-20261015/index.json) (PASS_COMBINED_WORKSPACE_V8_REAL_RENDERER_FMT_CLIPPY), [source8-native-checkpoint-1-20261015](verification/source8-native-checkpoint-1-20261015/index.json) (FIVE_SCOPES_PASS_BROWSER_AND_MOCK_LAYOUT_FAIL_JUNCTION_PRECHECK_NOT_RUN_PHYSICAL_RUNNING_LARGE_DEFERRED).
+
+  <details>
+  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
+
+  ```json
+  {
+    "id": "http.migration",
+    "reference_name": "Migration destination validation",
+    "status": "implemented",
+    "acceptance_test": "Check a CSV of old/new URL expectations and identify mismatched final destinations.",
+    "remaining_acceptance": [],
+    "implementation_evidence": [
+      {
+        "verification_run_ids": [
+          "combined-workspace-v8-20261015"
+        ],
+        "proves": "Actual private Source8 commit and complete1322-test run verify offline CSV mapping, duplicates, ambiguous/missing observations, actual HTTP redirect/failure semantics, strict snapshot/cursor/limit handling and explicit new CLI output semantics. API/CLI/UI workflow code is integrated.",
+        "limits": "Fresh public-crawl/API/CLI/browser workflow, held file/response regressions, cold reopen and installed same-candidate acceptance remain pending. Unit fixtures are not new website observations.",
+        "source_commit": "e6b1fa2f87d0b39ac7f83aba6cdecc2110de5a50"
+      },
+      {
+        "verification_run_ids": [
+          "source8-native-checkpoint-1-20261015"
+        ],
+        "proves": "Actual same-source optimized migration workflow passes all8 groups: genuine redirect crawls,207 mapping rows, strict API pagination/filters/stale handling, complete JSON/CSV, explicit CLI header/index mappings, held real file/response UI races,1440/320 controls and cold reopen. All5 children close naturally; no website reads after crawl.",
+        "limits": "Independent bounded migration implementation; no manufacturer internal logic or exhaustive vendor parity. Source8 main-page header layout remains a separate installation blocker.",
+        "source_commit": "e6b1fa2f87d0b39ac7f83aba6cdecc2110de5a50"
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -5620,4 +5637,4 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `089d0fe279e977596edb5f887bc3f3f1d9bb6fd9233354a2d0013a432672250f`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T08:41:21.015Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `afcb06254bae8d8deeba387e538066c885124d2c59d709d02e4b4b5b392994b7`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T16:41:43.998Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

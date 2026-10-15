@@ -1,3 +1,7 @@
+## Aktuell: Migration praktisch abgenommen, nächste Funktionslücken in Arbeit (15.10.2026)
+
+Source8 besteht1322 Tests und den optimierten Build. Fünf native Bereiche bestehen, darunter der vollständige achtteilige Migrationsworkflow und Originaldateien bis64MiB. Ein echter320Pixel-Überlauf der Hauptkopfzeile verhindert die Installation; der eng geprüfte Umbruch kommt in den nächsten gemeinsamen Stand. Link-/Ressourcenquellen und die Verzeichnisansicht werden parallel vorbereitet. [Rohbelege einschließlich Fehlern](verification/source8-native-checkpoint-1-20261015/index.json). Katalog:31 umgesetzt,68 teilweise,45 geplant; Herstellerparität offen.
+
 ## Aktuell: Migrationsworkflow integriert, 1322 Tests bestanden (15.10.2026)
 
 Der private Source8-Stand unter `e6b1fa2` besteht tatsächlich die vollständige Suite mit 1322 Tests, allen 540 Pflichtnamen und 66 Modulnamen, vier echten Renderern sowie Format und Clippy. [Rohbelege und unveränderte Fehlerhistorie](verification/combined-workspace-v8-20261015/index.json). Der optimierte Build läuft; frische native Browser-, Migrations-, Originaldatei- und Großprüfungen sowie sichere Installation folgen. Migrationsvalidierung ist jetzt teilweise belegt. Katalog: 30 umgesetzt, 69 teilweise, 45 geplant. Herstellerparität bleibt offen.

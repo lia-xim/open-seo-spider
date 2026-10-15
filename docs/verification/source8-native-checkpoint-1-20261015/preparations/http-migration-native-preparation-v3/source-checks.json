@@ -1,0 +1,28 @@
+{
+  "kind": "http_migration_native_admission_rebase_source_checks",
+  "operations": 2,
+  "whole_inverse": true,
+  "whole_runtime_exact": true,
+  "unchanged_browser_helper": true,
+  "syntax": [
+    {
+      "path": "native-migration-workflow.mjs",
+      "command": "node --check",
+      "exit": 0
+    },
+    {
+      "path": "migration-browser-flow.mjs",
+      "command": "node --check",
+      "exit": 0
+    },
+    {
+      "path": "author-migration-native-v3.mjs",
+      "command": "node --check",
+      "exit": 0
+    }
+  ],
+  "actual_target_imports": 0,
+  "native_runs": 0,
+  "compiler_runs": 0,
+  "root_writes": 0
+}

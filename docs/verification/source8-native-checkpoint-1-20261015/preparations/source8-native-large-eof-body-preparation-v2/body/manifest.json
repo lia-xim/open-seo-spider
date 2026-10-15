@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "kind": "source8_body_native_preparation",
+  "version": 2,
+  "status": "AUTHORED_NOT_RUN_INDEPENDENT_REVIEW_REQUIRED",
+  "scope": "actual_crawl_archive_public_original_bytes_v8",
+  "harness": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source8-native-large-eof-body-preparation-v2/body/native-source-body-v8.mjs",
+    "sha256": "091125a172e03a10f8adcf82534975c7aedda0ee7555468180dc5b2c48a1997f",
+    "bytes": 32442
+  },
+  "required_cases": 13,
+  "source_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v8/manifest.json",
+    "sha256": "58ab1ff000b9ec5ffa005eeab573a0cde3f4af4bb7c9c132b4d85251ea4de720",
+    "source_commit": "e6b1fa2f87d0b39ac7f83aba6cdecc2110de5a50",
+    "inputs": 335,
+    "required_names": 540,
+    "minimum_workspace_tests": 1322,
+    "delta": {
+      "owned": 17,
+      "modified": 8,
+      "new": 9,
+      "unchanged": 318
+    },
+    "status": "ACTUAL_FROZEN_SOURCE_ACTUAL_SUITE_BUILD_CANDIDATE_STILL_REQUIRED"
+  },
+  "parent_preparation": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source8-native-large-eof-body-preparation-v1/body/manifest.json",
+    "sha256": "1f489cf4b1b0bb85676868ddb6984f28a8c04cdd7d36ad8c4b5b9ef58573cc3f",
+    "bytes": 4253
+  },
+  "source_only_lineage_not_runtime_acceptance": true,
+  "payloads": [
+    {
+      "path": "admission.mjs",
+      "sha256": "e01cf8af83c00d5f99676f4dbf4fc6c2d9edcf2d5a437d1c103d70415eb8c5f4",
+      "bytes": 7673
+    },
+    {
+      "path": "owned-runtime.mjs",
+      "sha256": "191fd1977c07b5ac2bc07ae3bc91153c842209c6be4c842c4a0cbbf7d454f6de",
+      "bytes": 16410
+    },
+    {
+      "path": "native-source-body-v8.mjs",
+      "sha256": "091125a172e03a10f8adcf82534975c7aedda0ee7555468180dc5b2c48a1997f",
+      "bytes": 32442
+    },
+    {
+      "path": "CASES.json",
+      "sha256": "e282b9b651090250ec51cceef6798e9d01e2df10e8ebc6037f2421cd809de773",
+      "bytes": 4093
+    },
+    {
+      "path": "RELEASE-CONTRACT.json",
+      "sha256": "3c69d67acd072ee1925a7638752aa1938104371096aa9d6fe67ad288345b93ad",
+      "bytes": 4108
+    }
+  ],
+  "fixture_repair_lineage": {
+    "preparation": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source7-body-fixture-repair-preparation-v1-r3/manifest.json",
+      "sha256": "fda3929f20c7bcfc23b168d50afc84696aae6bde99600aaa3db17f1f6732817a",
+      "bytes": 4421
+    },
+    "review": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source7-body-fixture-independent-review-v1-r3/receipt.json",
+      "sha256": "baf5ee1988509db9d9cd03cde1afd4e5393a1262dc6b245ce859327e3a965185",
+      "bytes": 2661
+    },
+    "body_review": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source7-body-fixture-independent-review-v1-r3/body-receipt.json",
+      "sha256": "b569ef3150600e84a7ecb4b07937c88732b93202b1876b73ceb7f0b072fc6d54",
+      "bytes": 2405
+    },
+    "outer_review": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source7-body-fixture-independent-review-v1-r3/outer-receipt.json",
+      "sha256": "f4b4110a4c44f367440b2efde0dd6a92ab40d53a60a6da7de858b733355e944b",
+      "bytes": 2434
+    }
+  },
+  "failed_actual_previous_run": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source-body-native-v7\\proof.json",
+    "sha256": "be36bde36643eed05d7644573bad1203e8efb3231f92b933e84544d056fd2e90",
+    "bytes": 335234
+  },
+  "failed_actual_previous_outer": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v4\\source-body-v7\\proof.json",
+    "sha256": "67f8ea0800356e7b5de5ead84e6c0c4e9140866fc1b4767ecf3cf2b24397c2c4",
+    "bytes": 3743
+  },
+  "diagnostic_not_reproduced": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\body-fixture-eof-diagnostic-v1\\proof.json",
+    "sha256": "65e96a1e9908f65dca65191a49abf4d0ff887b3fdb6872b128a5d16cfd4b614b",
+    "bytes": 11500
+  },
+  "qualification": "Source-only retarget of reviewed fixture R3. Old Source7 BODY run is FAIL and its same-process diagnostic DID_NOT_REPRODUCE. No prior PASS transfers; only a genuine fresh Source8 candidate run can establish fixture success.",
+  "actual_runtime": null,
+  "actual_release": null,
+  "source_only_revision": {
+    "finding": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source8-native-large-eof-body-independent-review-v1/receipt.json",
+      "sha256": "1bf810bf51fed952b110b520224b6248eccf13cd51f66d57903f331bed85fa58",
+      "bytes": 4559
+    },
+    "closed_id": "SOURCE8-BODY-CONTRACT-01",
+    "actual_runtime": null,
+    "only_document_result_and_consequent_manifest_references_changed": true
+  }
+}

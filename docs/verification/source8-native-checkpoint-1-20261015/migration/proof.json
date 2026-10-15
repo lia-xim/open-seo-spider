@@ -1,0 +1,736 @@
+{
+  "kind": "http_migration_native_v8",
+  "result": "PASS_ACTUAL_SOURCE8_MIGRATION_WORKFLOW",
+  "source_manifest_sha256": "58ab1ff000b9ec5ffa005eeab573a0cde3f4af4bb7c9c132b4d85251ea4de720",
+  "suite_proof_sha256": "7266c3087ca3b3998116f18d6ba05515c88bcf25f86daa5537ec3206201468f1",
+  "build_proof_sha256": "d203ddf54e1d8643b1df193ab2c9bfd5926569a8039ab093a9c1fd782ab2d1cd",
+  "candidate_binary_sha256": "d6aa709bf149bdf1200724b2694189eab09d0b6e05d7213b2e8219dd0aff86e4",
+  "preparation_manifest_sha256": "52f828b753b2316b34cd9f0f5e3ca79dc246028e730e2529e27af95ff6210a95",
+  "preparation_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-migration-native-independent-review-v3/receipt.json",
+    "sha256": "3ffbd29e36d3d68eed2ed4e78e9e660f2a53f75f19880f0241602c981f67b79a"
+  },
+  "source_provenance": {
+    "workflow": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-migration-workflow-proposal-v2\\manifest.json",
+      "sha256": "0d9b22ca5098d61dc3625574f949eef91aceaf2373b4437412e8079f6dbb341b",
+      "bytes": 19826
+    },
+    "actual_parent": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v7\\manifest.json",
+      "sha256": "fd587ba252595d971e7557e5cca7f5ab90219ecda200a3f07fcd5c10c13b6397",
+      "bytes": 207394
+    },
+    "actual_parent_suite": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-suite-v7\\proof.json",
+      "sha256": "8c8cf67de2a2849ea2443f0a060f4812235a9c148f9e14e644fc64690d6fc9ea",
+      "bytes": 110971
+    },
+    "historical_workflow_review": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source8-workflow-independent-review-v2\\receipt.json",
+      "sha256": "5fa56f9a232d45eafecfecd51c35e899cc2446fefdab35d05c7a02643a7cd718",
+      "bytes": 6951
+    },
+    "historical_composition": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v8-draft-v2\\preformat.json",
+      "sha256": "9572a5c1616ed2d282967f8234f14dcdcc740ee1c8eb54cc3e2a57e6cfe15db4",
+      "bytes": 136779
+    },
+    "composition": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v8-draft-v3\\preformat.json",
+      "sha256": "248231ea19203b85bb0b5a3af5d81037b17da710cfdda187b57524a72c734d25",
+      "bytes": 137799
+    },
+    "composition_review": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source8-composition-independent-review-v3\\receipt.json",
+      "sha256": "af51dbf6ab42ceae6261c7eaeccb8035061c529647e2e1af6e52f12579925620",
+      "bytes": 3865
+    },
+    "css_review": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-original-panel-responsive-independent-review-v1\\receipt.json",
+      "sha256": "06500bb5ae984ec6e2161aa6232624fdcfe2ddde66d636881dde8ede65d528f5",
+      "bytes": 4667
+    }
+  },
+  "binder": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v8-runner-preparation-v4/combined-bindings-v8.mjs",
+    "sha256": "c58f1984c6b6593d384915157afdcdae206acd1bb8af72279a9ee82702e1b7e7",
+    "manifest": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v8-runner-preparation-v4/manifest.json",
+      "sha256": "d4adece778ec4a2b3ef713be7319840457bbf5119b48809fe07493af65ca1c80"
+    },
+    "independent_review": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v8-runner-independent-review-v4/receipt.json",
+      "sha256": "3b6240aca4bec56afb058d83b8552ef1c36b28ba465169a31052c5df0e28ae78"
+    }
+  },
+  "release": {
+    "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\v8-migration-native-release.json",
+    "sha256": "6064841c5993eda4e37d64e3df3a9a948f6db18bed0eba7d2b3b4c30f199fe5e"
+  },
+  "cases": [
+    {
+      "name": "genuine_public_crawl_redirect_match_mismatch_404_and_quoted_url",
+      "result": "PASS_ACTUAL",
+      "evidence": {
+        "job_id": "116dc9a6-fef7-4301-b2d6-d714627616f0",
+        "seeds": [
+          "http://127.0.0.1:53817/old-match",
+          "http://127.0.0.1:53817/old-mismatch",
+          "http://127.0.0.1:53817/old-404",
+          "http://127.0.0.1:53817/old,a"
+        ],
+        "website_requests": [
+          {
+            "method": "GET",
+            "path": "/old-match"
+          },
+          {
+            "method": "GET",
+            "path": "/middle"
+          },
+          {
+            "method": "GET",
+            "path": "/new"
+          },
+          {
+            "method": "GET",
+            "path": "/old-mismatch"
+          },
+          {
+            "method": "GET",
+            "path": "/other"
+          },
+          {
+            "method": "GET",
+            "path": "/old-404"
+          },
+          {
+            "method": "GET",
+            "path": "/gone"
+          },
+          {
+            "method": "GET",
+            "path": "/old,a"
+          },
+          {
+            "method": "GET",
+            "path": "/new,a"
+          }
+        ]
+      }
+    },
+    {
+      "name": "actual_api_pagination_filters_stale_and_complete_exports",
+      "result": "PASS_ACTUAL",
+      "evidence": {
+        "rows": 207,
+        "snapshot_token": "4746eee70782c1393e755a89b377f7520cc3c2bf8f68df2862621ebaf59e918f",
+        "json_sha256": "24dc07676c39e3f1cf80e829691fc2ab23f2d383dca2405f2dae36f7437f5535",
+        "csv_sha256": "d7781c3371c7f0771b641c0a9ef6e4d5e1a70206c997d334eee0fe23fee05377"
+      }
+    },
+    {
+      "name": "actual_cli_header_mismatch_is_success_new_files",
+      "result": "PASS_ACTUAL",
+      "evidence": {
+        "child": "cli-header",
+        "json_sha256": "2eadf30f8d21a0e8afef1c1343f4dcb6e6a378726fdb4a22412f946b454dd5b5",
+        "csv_sha256": "e611bc43d968b5862eac994740080eda58a10cc5f786e84cd958ae677a40a972"
+      }
+    },
+    {
+      "name": "actual_cli_index_mismatch_is_success_new_files",
+      "result": "PASS_ACTUAL",
+      "evidence": {
+        "child": "cli-index",
+        "json_sha256": "225d05d98b1b30a1bd28a9d5243f013169ff74b9113c1104559ad09ee296bc4f",
+        "csv_sha256": "22a0273d46d95232af42ffec3973161a8e4bd7a8a1639be5a620109f433042a2"
+      }
+    },
+    {
+      "name": "synthetic_import_duplicate_observation_separate",
+      "result": "PASS_ACTUAL",
+      "evidence": {
+        "kind": "SYNTHETIC_DECLARED_IMPORTED_OBSERVATION_NEGATIVE_CONTROL",
+        "job_id": "fc5af442-211e-43ab-8b26-48c28366cbf6",
+        "verdict": "ambiguous_observation",
+        "not_genuine_crawl": true
+      }
+    },
+    {
+      "name": "actual_browser_1440_320_header_index_busy_file_filter_download",
+      "result": "PASS_ACTUAL",
+      "evidence": {
+        "status": "PASS_ACTUAL_BROWSER_MIGRATION",
+        "details": [
+          {
+            "name": "actual_file_result_survives_option_changes_and_actual_response_busy_is_real",
+            "csv_sha256": "9894ee6f330285005553361f02829793df7b7d141f9adea35e249006bd9813a4",
+            "total_rows": 207,
+            "actual_http_status": 200,
+            "held_actual_response": {
+              "bytes": 107195,
+              "sha256": "456724f60358d3858b8193d9109d949ead13b62de3a6a5afb497502dc1cd450b"
+            },
+            "busy_submit_preview_requests": 1,
+            "header_options": {
+              "kind": "header",
+              "name": "Old \"URL\"",
+              "row": 1
+            }
+          },
+          {
+            "name": "actual_filter_and_visible_rows_agree",
+            "outcome": "missing_observation",
+            "count": 1
+          },
+          {
+            "name": "actual_index_preview_and_cursor_page",
+            "total_rows": 207,
+            "shown_across_pages": 200,
+            "summary": {
+              "missing_observation": 1,
+              "final_http_failure": 1,
+              "destination_mismatch": 1,
+              "destination_match": 204
+            }
+          },
+          {
+            "name": "actual_browser_complete_download_files",
+            "files": [
+              {
+                "format": "json",
+                "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\migration-workflow-native-v8\\downloads\\browser-migration.json",
+                "bytes": 220566,
+                "sha256": "4146f45e70fe5188221dd66075b3246c515a1c31cc5660ee41fbbdc0d52abf8f"
+              },
+              {
+                "format": "csv",
+                "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\migration-workflow-native-v8\\downloads\\browser-migration.csv",
+                "bytes": 147430,
+                "sha256": "714fcfc97cb46549a26c1bf8491f559ab13caf5527b5aba4dc6faa3fb0c8b515"
+              }
+            ]
+          },
+          {
+            "name": "actual_responsive_controls_and_screenshot",
+            "width": 1440,
+            "viewport": 1440,
+            "document": 1425,
+            "body": 1425,
+            "screenshot": {
+              "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\migration-workflow-native-v8\\downloads\\migration-1440.png",
+              "bytes": 1898595,
+              "sha256": "d26200ffde5213ffd11006e7e4217da4a7029d754feeb94b10c6df0d54e7bd35"
+            }
+          },
+          {
+            "name": "actual_responsive_controls_and_screenshot",
+            "width": 320,
+            "viewport": 320,
+            "document": 305,
+            "body": 305,
+            "screenshot": {
+              "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\migration-workflow-native-v8\\downloads\\migration-320.png",
+              "bytes": 1932756,
+              "sha256": "f810e14a0ea3dc943be94abba497cc0ea1b803e2a6d271cce54192812e06322c"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "first_app_natural_eof_all_actual_joins",
+      "result": "PASS_ACTUAL",
+      "evidence": {
+        "cause": "owned_stdin_eof",
+        "clean": true,
+        "incoming_transports": {
+          "accept_admitted": 1,
+          "accept_joined": 1,
+          "accept_retained": 0,
+          "accepted": 5,
+          "actual_io_dropped": 5,
+          "complete": 5,
+          "connection_admitted": 5,
+          "connection_joined": 5,
+          "connection_retained": 0,
+          "first_failure": null,
+          "grace_seconds": 5,
+          "incoming_protocol": "http1_plain_tcp_no_application_upgrades",
+          "listener_dropped": true,
+          "peer_errors": 0,
+          "registered": true,
+          "rejected": 0,
+          "retained": 0,
+          "shutdown_aborted": 0,
+          "tcp_write_pending": 0,
+          "whole_application_five_second_bound": false
+        },
+        "kind": "owned_application_shutdown_v1",
+        "owners": [
+          {
+            "admitted": 232,
+            "closing": true,
+            "first_failure": null,
+            "joined": 232,
+            "owner": "http_requests",
+            "retained": 0,
+            "started": 232
+          },
+          {
+            "admitted": 224,
+            "closing": true,
+            "first_failure": null,
+            "joined": 224,
+            "owner": "http_blocking",
+            "retained": 0,
+            "started": 224
+          },
+          {
+            "admitted": 1,
+            "closing": true,
+            "first_failure": null,
+            "joined": 1,
+            "owner": "crawl_operations",
+            "retained": 0,
+            "started": 1
+          }
+        ],
+        "qualification": "Local application task joins only; actual process/pipe EOF is an independent outside witness; no stateful MCP session or external renderer-process drain claim",
+        "response_streams": {
+          "aborted": 0,
+          "admitted": 0,
+          "complete": 0,
+          "enqueues": 0,
+          "failed": 0,
+          "first_failure": null,
+          "full_reservations": 0,
+          "joined": 0,
+          "max_chunk": 0,
+          "peak_queued": 0,
+          "response_supervisors_joined": 0,
+          "retained": 0,
+          "started": 0
+        },
+        "response_transport_owned": true,
+        "source_body_transports": {
+          "admitted": 0,
+          "first_failure": null,
+          "joined": 0,
+          "logical_spool_byte_limit": 134217728,
+          "owner": "source_body_transports",
+          "retained": 0,
+          "spool_leases": 0,
+          "started": 0,
+          "unresponsive_transport_shutdown": "not_proven"
+        }
+      }
+    },
+    {
+      "name": "actual_cold_reopen_keeps_complete_migration_and_zero_website_requests",
+      "result": "PASS_ACTUAL",
+      "evidence": {
+        "snapshot": {
+          "job_id": "116dc9a6-fef7-4301-b2d6-d714627616f0",
+          "app_generation": 1,
+          "status": "completed",
+          "typed_report_sha256": "eecf5a80425c5e9202d5975651fbc5a57a1d3c00d4aaec824f34c356093bc64c",
+          "typed_report_bytes": 23286,
+          "job_config_sha256": "1e9568d8b53c676340e38fcb1ff771aff10f61506a0963af925ecc46366b7440",
+          "report_config_sha256": "1e9568d8b53c676340e38fcb1ff771aff10f61506a0963af925ecc46366b7440",
+          "hash_profile": "app_migration_typed_crawl_report_compact_serde_json_v1",
+          "caller_binding": {
+            "job_id": "116dc9a6-fef7-4301-b2d6-d714627616f0",
+            "snapshot_sha256": null,
+            "sha_profile": null,
+            "generation": 1,
+            "origin": "app_declared_job_report_with_cached_checkpoint",
+            "basis": "{\"checkpoint_generation\":1,\"checkpoint_revision\":1,\"declaration\":\"app_declared\",\"frontier\":true,\"report_generation_attested\":false,\"source\":\"job_readlock\",\"sql_attested\":false,\"status\":\"completed\"}",
+            "active_checkpoint": false
+          },
+          "sql_attested": false,
+          "complete_website_asserted": false
+        },
+        "report_sha256": "f7e308e3a06363e0e7107a14a8cf9b4f76cb097e1d97f6bb157f95f7cda3c6ba",
+        "receipt": {
+          "cause": "owned_stdin_eof",
+          "clean": true,
+          "incoming_transports": {
+            "accept_admitted": 1,
+            "accept_joined": 1,
+            "accept_retained": 0,
+            "accepted": 2,
+            "actual_io_dropped": 2,
+            "complete": 2,
+            "connection_admitted": 2,
+            "connection_joined": 2,
+            "connection_retained": 0,
+            "first_failure": null,
+            "grace_seconds": 5,
+            "incoming_protocol": "http1_plain_tcp_no_application_upgrades",
+            "listener_dropped": true,
+            "peer_errors": 0,
+            "registered": true,
+            "rejected": 0,
+            "retained": 0,
+            "shutdown_aborted": 0,
+            "tcp_write_pending": 0,
+            "whole_application_five_second_bound": false
+          },
+          "kind": "owned_application_shutdown_v1",
+          "owners": [
+            {
+              "admitted": 3,
+              "closing": true,
+              "first_failure": null,
+              "joined": 3,
+              "owner": "http_requests",
+              "retained": 0,
+              "started": 3
+            },
+            {
+              "admitted": 3,
+              "closing": true,
+              "first_failure": null,
+              "joined": 3,
+              "owner": "http_blocking",
+              "retained": 0,
+              "started": 3
+            },
+            {
+              "admitted": 0,
+              "closing": true,
+              "first_failure": null,
+              "joined": 0,
+              "owner": "crawl_operations",
+              "retained": 0,
+              "started": 0
+            }
+          ],
+          "qualification": "Local application task joins only; actual process/pipe EOF is an independent outside witness; no stateful MCP session or external renderer-process drain claim",
+          "response_streams": {
+            "aborted": 0,
+            "admitted": 0,
+            "complete": 0,
+            "enqueues": 0,
+            "failed": 0,
+            "first_failure": null,
+            "full_reservations": 0,
+            "joined": 0,
+            "max_chunk": 0,
+            "peak_queued": 0,
+            "response_supervisors_joined": 0,
+            "retained": 0,
+            "started": 0
+          },
+          "response_transport_owned": true,
+          "source_body_transports": {
+            "admitted": 0,
+            "first_failure": null,
+            "joined": 0,
+            "logical_spool_byte_limit": 134217728,
+            "owner": "source_body_transports",
+            "retained": 0,
+            "spool_leases": 0,
+            "started": 0,
+            "unresponsive_transport_shutdown": "not_proven"
+          }
+        }
+      }
+    }
+  ],
+  "failures": [],
+  "cleanup_signals": [],
+  "actual_children": [
+    {
+      "label": "01-genuine-app",
+      "logs": [
+        {
+          "name": "stdout",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\migration-workflow-native-v8\\01-genuine-app.stdout.log",
+          "fd_closed": true,
+          "bytes": 40,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "sha256": "b5f6299d58552b0d6fbbfb517ba007145e5c6e6eea834b5f270b63d53f95f9e1"
+        },
+        {
+          "name": "stderr",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\migration-workflow-native-v8\\01-genuine-app.stderr.log",
+          "fd_closed": true,
+          "bytes": 1575,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "sha256": "7ae18eae098be9d3290eb62a2c492ca27b87c0ccb328ee69f437535572d196ed"
+        }
+      ],
+      "errors": [],
+      "spawn_error": null,
+      "spawned": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "stdin": {
+        "eof_sent": true,
+        "finished": true,
+        "closed": true,
+        "error": null
+      },
+      "events": [
+        {
+          "sequence": 1,
+          "event": "spawn"
+        },
+        {
+          "sequence": 8,
+          "event": "actual_close"
+        }
+      ],
+      "pid": 5236
+    },
+    {
+      "label": "cli-header",
+      "logs": [
+        {
+          "name": "stdout",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\migration-workflow-native-v8\\cli-header.stdout.log",
+          "fd_closed": true,
+          "bytes": 53,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "sha256": "c54b33052424379833e8509dcb03e3b84b21a5d9e877685f5d7be3cffc3fb939"
+        },
+        {
+          "name": "stderr",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\migration-workflow-native-v8\\cli-header.stderr.log",
+          "fd_closed": true,
+          "bytes": 0,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "errors": [],
+      "spawn_error": null,
+      "spawned": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "stdin": null,
+      "events": [
+        {
+          "sequence": 2,
+          "event": "spawn"
+        },
+        {
+          "sequence": 3,
+          "event": "actual_close"
+        }
+      ],
+      "pid": 33500
+    },
+    {
+      "label": "cli-index",
+      "logs": [
+        {
+          "name": "stdout",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\migration-workflow-native-v8\\cli-index.stdout.log",
+          "fd_closed": true,
+          "bytes": 53,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "sha256": "c54b33052424379833e8509dcb03e3b84b21a5d9e877685f5d7be3cffc3fb939"
+        },
+        {
+          "name": "stderr",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\migration-workflow-native-v8\\cli-index.stderr.log",
+          "fd_closed": true,
+          "bytes": 0,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "errors": [],
+      "spawn_error": null,
+      "spawned": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "stdin": null,
+      "events": [
+        {
+          "sequence": 4,
+          "event": "spawn"
+        },
+        {
+          "sequence": 5,
+          "event": "actual_close"
+        }
+      ],
+      "pid": 27992
+    },
+    {
+      "label": "owned-chrome",
+      "logs": [
+        {
+          "name": "stdout",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\migration-workflow-native-v8\\owned-chrome.stdout.log",
+          "fd_closed": true,
+          "bytes": 0,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "stderr",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\migration-workflow-native-v8\\owned-chrome.stderr.log",
+          "fd_closed": true,
+          "bytes": 545,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "sha256": "446784c8871976161a16cad4b0bbb111617272eddb49778153f8c1cbe09e8b6a"
+        }
+      ],
+      "errors": [],
+      "spawn_error": null,
+      "spawned": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "stdin": null,
+      "events": [
+        {
+          "sequence": 6,
+          "event": "spawn"
+        },
+        {
+          "sequence": 7,
+          "event": "actual_close"
+        }
+      ],
+      "pid": 13664
+    },
+    {
+      "label": "02-cold-app",
+      "logs": [
+        {
+          "name": "stdout",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\migration-workflow-native-v8\\02-cold-app.stdout.log",
+          "fd_closed": true,
+          "bytes": 40,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "sha256": "618effa675bf91f32cca1731b795a4960880bfd87039d730d2f06dfa882a0385"
+        },
+        {
+          "name": "stderr",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\migration-workflow-native-v8\\02-cold-app.stderr.log",
+          "fd_closed": true,
+          "bytes": 1563,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "sha256": "b93e905702255eaaa47260a4865645d17c0283d8d0e4eeda5430b1604f88ceb4"
+        }
+      ],
+      "errors": [],
+      "spawn_error": null,
+      "spawned": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "stdin": {
+        "eof_sent": true,
+        "finished": true,
+        "closed": true,
+        "error": null
+      },
+      "events": [
+        {
+          "sequence": 9,
+          "event": "spawn"
+        },
+        {
+          "sequence": 10,
+          "event": "actual_close"
+        }
+      ],
+      "pid": 22940
+    }
+  ],
+  "qualification": "Genuine HTTP crawls are separate from explicitly synthetic imported duplicate observations. All later read/preview/filter/download/CLI/browser/cold phases must leave the actual website request list unchanged. No manufacturer parity, SQL attestation, installer proof or generic memory/speed claim.",
+  "chrome_protocol_shutdown": {
+    "method": "Browser.close",
+    "acknowledged": true,
+    "actual_disconnected_event": true,
+    "actual_child_close": true,
+    "exit": {
+      "code": 0,
+      "signal": null
+    },
+    "forced": false
+  },
+  "actual_website_gets_during_read_cli_browser_cold": 0,
+  "complete_genuine_requests_before_after_equal": true,
+  "fixture_actual_closed": true,
+  "final_source_suite_build_candidate_verified": true,
+  "fixture_socket_closes": {
+    "opened": 9,
+    "closed": 9,
+    "retained": 0,
+    "errors": []
+  },
+  "recorded_at": "2026-10-15T16:33:03.191Z"
+}

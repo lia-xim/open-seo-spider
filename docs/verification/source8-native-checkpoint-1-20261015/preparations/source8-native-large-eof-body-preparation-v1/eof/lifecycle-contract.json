@@ -1,0 +1,55 @@
+{
+  "kind": "source8_eof_two_case_actual_lifecycle_contract",
+  "status": "SOURCE_ONLY_RUNTIME_STATS_STILL_REQUIRED",
+  "source_files": [
+    {
+      "path": "crates/app/src/server.rs",
+      "sha256": "73ee66bd6b511956b4a8d62d40ae6cca39542db4913c5c58203380f393f40e03",
+      "bytes": 83933
+    },
+    {
+      "path": "crates/app/src/server/lifecycle.rs",
+      "sha256": "503a742cec791cc5596bc5b66ccd732e051838e5070e6b012296c7f35285a6d6",
+      "bytes": 9008
+    },
+    {
+      "path": "crates/app/src/server/source_body_stream.rs",
+      "sha256": "fe21d636b757ac14934b2c527a14602e3c1d6865d01084384781843ff67bfeeb",
+      "bytes": 19059
+    },
+    {
+      "path": "crates/app/src/server/response_stream.rs",
+      "sha256": "ec2656dbbaa7be0dd51c1e03fbb691535e74c748c0c342b126a81e39afe91a48",
+      "bytes": 23482
+    },
+    {
+      "path": "crates/app/src/server/transport.rs",
+      "sha256": "8d5daa0fdea4079c8d015fd2253a1d421ccab85344ec91a3b7ed1990589ccf8c",
+      "bytes": 22551
+    }
+  ],
+  "actual_concurrent_drain_branches": [
+    "state.lifecycle.requests.shutdown_and_drain()",
+    "state.lifecycle.blocking.shutdown_and_drain()",
+    "state.lifecycle.crawls.shutdown_and_drain()",
+    "state.exports.shutdown_and_drain()",
+    "state.finding_reads.shutdown_and_drain()",
+    "state.mcp.shutdown_file_tools()",
+    "state.lifecycle.source_bodies.shutdown_and_drain()",
+    "state.lifecycle.response_streams.shutdown_and_drain()",
+    "state.lifecycle.transports.shutdown_and_drain()"
+  ],
+  "generic_owner_receipt_rows": [
+    "http_requests",
+    "http_blocking",
+    "crawl_operations"
+  ],
+  "additional_receipt_registries": [
+    "source_body_transports",
+    "response_streams",
+    "incoming_transports"
+  ],
+  "source_body_expected_case_work": 0,
+  "response_stream_expected_case_work": 0,
+  "qualification": "In the preserved idle and held-HTML cases neither original-body GET nor policy/resource export is invoked. Both new registry receipts must actually exist and report exact zero work/no retained tasks/leases/failure. This is not nonzero producer, BODY13 or unpolled transport acceptance. Source7 incoming transport accounting is terminal and relational; exact TCP/keepalive connection counts and global shutdown latency are not inferred."
+}
