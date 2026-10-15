@@ -1,0 +1,302 @@
+{
+  "schema_version": 1,
+  "kind": "genuine_large_sitemap_native_preparation_v7",
+  "status": "AUTHORED_NOT_RUN",
+  "source_manifest_sha256": "fd587ba252595d971e7557e5cca7f5ab90219ecda200a3f07fcd5c10c13b6397",
+  "source_commit": "e96d1d17575896e351141fa51d296fede9908c2f",
+  "source_inputs": 326,
+  "required_names": 515,
+  "minimum_workspace_passes": 1297,
+  "cases": [
+    {
+      "label": "01-count-49999",
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "label": "02-count-50000-required-positive",
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "label": "03-count-50001-exceeded",
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "label": "04-bytes-plain-exact",
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "label": "05-bytes-plain-plus-one",
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "label": "06-bytes-file-gzip-exact",
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "label": "07-bytes-file-gzip-plus-one",
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "label": "08-bytes-http-gzip-exact",
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "label": "09-bytes-http-gzip-plus-one",
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "label": "10-legacy-cap-unknown",
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "label": "11-file-gzip-crc-failed-unknown",
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "label": "12-empty-known-zero",
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "label": "13-http503-unknown",
+      "status": "AUTHORED_NOT_RUN"
+    }
+  ],
+  "binding_requirements": {
+    "actual_binder_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v7-runner-preparation-v2\\combined-bindings-v7.mjs",
+    "actual_binder_sha256": "c2bf39d4e6c177374a1f9331f1bcb06b04993bb1000777dff80319532b5e9978",
+    "actual_binder_preparation_manifest": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v7-runner-preparation-v2\\manifest.json",
+      "sha256": "7bdbf4bce7cc47bb2744a2d38b8cf173d202a6ed04b371fd3b61a6309696cc05",
+      "bytes": 5113
+    },
+    "actual_binder_independent_review": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v7-runner-independent-review-v2\\receipt.json",
+      "sha256": "3edc970c19808fe008d4fd46e74cc72be25a7dfbd718977c79419166dcb26048",
+      "bytes": 21640
+    },
+    "actual_suite_producer": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v7-runner-preparation-v2\\run-combined-suite-v7.mjs",
+      "sha256": "576bc7a91d44281593c4f61a48d72714c7aead0279bfe50202afcf673f82029c",
+      "bytes": 17024
+    },
+    "actual_build_driver": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v7-runner-preparation-v2\\build-combined-optimized-v7.mjs",
+      "sha256": "1704796d260e46bb7f9bedd28e2f951a0d4bda0c1d70bef655cf4cf58042dee6",
+      "bytes": 19285
+    }
+  },
+  "source_contract_files": [
+    {
+      "path": "crates/app/src/server.rs",
+      "sha256": "f487003f5c1c48dc30299b011a581531a4b7758147d0d1add1e03817e129a726",
+      "bytes": 82435
+    },
+    {
+      "path": "crates/app/src/server/lifecycle.rs",
+      "sha256": "503a742cec791cc5596bc5b66ccd732e051838e5070e6b012296c7f35285a6d6",
+      "bytes": 9008
+    },
+    {
+      "path": "crates/app/src/server/policy.rs",
+      "sha256": "7457402cf736a110b59ad622d4d0b16cc70b221584f976c2b6c7f892e7b93d6d",
+      "bytes": 5132
+    },
+    {
+      "path": "crates/app/src/server/resources.rs",
+      "sha256": "f48a3d0e4e189eb0bad40d3a7fece0e959125f62b2c9a8eabae861796d6e31ec",
+      "bytes": 11657
+    },
+    {
+      "path": "crates/app/src/server/response_stream.rs",
+      "sha256": "d2615bd09a5eb10c8625245cfde512045ffa30e81028d048c8d8f700c2a5e151",
+      "bytes": 23571
+    },
+    {
+      "path": "crates/app/src/server/sitemap_csv_stream.rs",
+      "sha256": "3ac2c81d8aceb5120a78de4e06fdbaa4777022b2f532bac2991c962e8ad8d71b",
+      "bytes": 44042
+    },
+    {
+      "path": "crates/app/src/server/sitemap_findings.rs",
+      "sha256": "1f276462ef65dc0ba32c4bd80bef7a6e6d52a05b8f03d0f4106d81e7d2d4ad48",
+      "bytes": 8461
+    },
+    {
+      "path": "crates/app/src/server/sitemaps.rs",
+      "sha256": "ced37dff602ee6d1960dd100670b784f2780d80a71a77e0a52f966b9bb0bb107",
+      "bytes": 7035
+    },
+    {
+      "path": "crates/app/src/server/source_body_stream.rs",
+      "sha256": "fe21d636b757ac14934b2c527a14602e3c1d6865d01084384781843ff67bfeeb",
+      "bytes": 19059
+    },
+    {
+      "path": "crates/app/src/sitemap_findings.rs",
+      "sha256": "a4a1215b51a52f8a42acfc5fcdc2a4c4fa8fa706b319a03230dc67a3560ccbaf",
+      "bytes": 30760
+    },
+    {
+      "path": "crates/app/src/sitemap_membership.rs",
+      "sha256": "e0f9d057ece6e6cdb0882eb4621f51f6636691d9d1a3318d8e3d136aaf79b849",
+      "bytes": 42859
+    },
+    {
+      "path": "crates/core/src/crawler.rs",
+      "sha256": "7989b449a5cc6b591ffe0de480bda0ca3e0ddac6f724c19c92d15f68e45619fe",
+      "bytes": 166400
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_capture.rs",
+      "sha256": "865f1d4588a7419666aeb4eb423b6554c7ff382b6ec23e8e09c1db8ea283da25",
+      "bytes": 18302
+    },
+    {
+      "path": "crates/core/src/models.rs",
+      "sha256": "f3d71380bcf5374c183c30792759167317b0ebc9c68fd2f54c4bb4618525f998",
+      "bytes": 39298
+    },
+    {
+      "path": "crates/core/src/sitemap/count_models.rs",
+      "sha256": "2c6390285ca7a8da46c1e7cb3f29eae9d70edd64759492a65cd11ece44252b73",
+      "bytes": 4743
+    },
+    {
+      "path": "crates/core/src/sitemap/models.rs",
+      "sha256": "816190a74403fdf3e31a379a9814d7a17cf2ac75d83485299ac269fd4d6c5e59",
+      "bytes": 7875
+    },
+    {
+      "path": "crates/core/src/sitemap_coverage.rs",
+      "sha256": "03affb2284e95366a85ea6cd94ab4cfb556a463aade999664cba84062e49ece4",
+      "bytes": 30327
+    },
+    {
+      "path": "crates/core/src/sitemap_coverage/verified_read.rs",
+      "sha256": "2d68efb211771ee8ba78ab501f7bf5ed7fe0d1db7b39170818bb8c4c3da6571b",
+      "bytes": 29945
+    },
+    {
+      "path": "crates/core/src/sitemap_discovery.rs",
+      "sha256": "62ba13bbcd809c111e954484d557724d9303d53e75e8a29f83519d555ed30b22",
+      "bytes": 10674
+    },
+    {
+      "path": "crates/core/src/sitemap_findings.rs",
+      "sha256": "632a5522d6e836c1e599e1c420afc3903eaad087902ab20e9c5c1323d3cc940f",
+      "bytes": 15029
+    },
+    {
+      "path": "crates/core/src/sitemap_findings/source.rs",
+      "sha256": "77494f7da50c58526949142326d36a2fc4170a6f019edf4f978c31dfe1392e53",
+      "bytes": 17826
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger.rs",
+      "sha256": "f459cae0436c722fcc7f784aa68be3af1a4a9f1f94f70328862ec44a4df94299",
+      "bytes": 74297
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/capacity_tests.rs",
+      "sha256": "56666bceed0ca18ee854659db6f52f3be53339c8b5153de4e426e77538ca19ee",
+      "bytes": 8747
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/verified_read.rs",
+      "sha256": "27ba03d27dde3006b5674fb3d7fe44d71d565000d0aa3500c1d88edbf06edf67",
+      "bytes": 42344
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/verified_read_tests.rs",
+      "sha256": "7a3f66b2f0d1a5e5e14164a020f77fffd179ae3aacf11f3d1aa0544d24be2584",
+      "bytes": 42649
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger_models.rs",
+      "sha256": "66472b408bb39e848448ffc41b7e00a6a420f3a4d8ece4b586401aa1bfa3ab8a",
+      "bytes": 20634
+    },
+    {
+      "path": "crates/core/src/sitemap_source_measurement.rs",
+      "sha256": "96852974d7464e8520323cad57ac02ff9fde98a62d4f9822924fabb3ef8ddc3a",
+      "bytes": 37918
+    },
+    {
+      "path": "crates/core/src/sitemap_source_processing.rs",
+      "sha256": "23eb28172fa40e9f4166c2aab74b2d52232ad38e2db071bd0b8c2987dd2e52b0",
+      "bytes": 6116
+    },
+    {
+      "path": "crates/core/src/sitemap_source_schema.sql",
+      "sha256": "f79d0d0f9a61336374833fbf43a9c58963da8cc5bb53dfe1dfa4b0c5dff65edc",
+      "bytes": 954
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store.rs",
+      "sha256": "fe59417d12939e62e65c78ce894d7d34d55f2708ee792d1c21f3a04c438678ae",
+      "bytes": 57437
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store_models.rs",
+      "sha256": "18d83efb0ee42547682b392780ef412718374b75f2ab668562be59880fbe5c57",
+      "bytes": 4522
+    },
+    {
+      "path": "crates/core/src/store.rs",
+      "sha256": "57813bee864f511b218a5c33f837f5df9aac2fd843865b3e85fc7def9f535620",
+      "bytes": 149784
+    },
+    {
+      "path": "crates/core/src/store/sitemap_raw_read.rs",
+      "sha256": "5bfa19765b6921e1889b146b7acbc1fdf43e11a8e817fd45d84278c83e9d8734",
+      "bytes": 11405
+    },
+    {
+      "path": "crates/core/src/urls.rs",
+      "sha256": "d4bb14a54e3770362c51aeef7072c8fee1c72c2e5e35a24a58ffcabaa6c95155",
+      "bytes": 3602
+    },
+    {
+      "path": "crates/app/src/server/transport.rs",
+      "sha256": "8d5daa0fdea4079c8d015fd2253a1d421ccab85344ec91a3b7ed1990589ccf8c",
+      "bytes": 22551
+    }
+  ],
+  "source_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v7\\manifest.json",
+    "sha256": "fd587ba252595d971e7557e5cca7f5ab90219ecda200a3f07fcd5c10c13b6397",
+    "source_commit": "e96d1d17575896e351141fa51d296fede9908c2f",
+    "inputs": 326,
+    "required_names": 515,
+    "minimum_workspace_tests": 1297,
+    "status": "ACTUAL_FROZEN_SOURCE_SUITE_BUILD_CANDIDATE_STILL_REQUIRED"
+  },
+  "parent_preparation": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\large-sitemap-native-preparation-v6-v1\\manifest.json",
+    "sha256": "aa18bf91bb7457aa43c3b025e3a1316e5d616e18ac25ef58c47018916616caee",
+    "bytes": 10511
+  },
+  "source_only_lineage_not_runtime_acceptance": true,
+  "files": [
+    {
+      "path": "native-large-sitemaps-v7.mjs",
+      "sha256": "9cd0610d6d1ce896cc230b82551e34713c7fa3fc08cdc71ec2c843303b5f2dc2",
+      "bytes": 60565
+    },
+    {
+      "path": "schema-accounting.json",
+      "sha256": "622657cea0e01d4dd262ee2e22e2f8812bebc21bc05270f80f33f76dbfc1ab36",
+      "bytes": 942
+    },
+    {
+      "path": "source-pins.json",
+      "sha256": "94b18a89a369c0a080bf691ffda8c7ace2f138f6f7fe61297858f194c3ef2094",
+      "bytes": 6052
+    },
+    {
+      "path": "lifecycle-contract.json",
+      "sha256": "ac0aa6baa3023e7743fda9051bd2906137ba205dc3ad3170370460e3071d8dff",
+      "bytes": 7623
+    }
+  ]
+}

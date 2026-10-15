@@ -1,3 +1,7 @@
+## Aktuell: Build bestanden, Browserfehler gefunden (15.10.2026)
+
+Source7 besteht die vollständige Suite mit 1297 Tests und den optimierten Build. Fünf native Bereiche bestehen. Die echte Browserprüfung findet nach 26 Gruppen einen Überlauf des Originaldatei-Panels bei 320 Pixeln; eine separate Mockprüfung scheitert vorher an veralteten Manifestverweisen im Testadapter. Beide [Fehlbelege und Erfolge](verification/source7-native-checkpoint-1-20261015/index.json) bleiben erhalten. Der Kandidat wird mit diesem bekannten UI-Fehler nicht installiert; R3 bleibt verfügbar. Der nächste gemeinsame Stand enthält die Produktkorrektur, den Migrationsworkflow und den Teil-Schreibvertrag. Große Sitemaps und Originaldateien werden separat weiter geprüft.
+
 ## Aktuell: Source7 besteht die vollständige Suite (15.10.2026)
 
 Der gemeinsame Stand unter `e96d1d1` besteht tatsächlich 1297 Tests ohne Fehler oder ignorierte Fälle, alle 515 Pflichtnamen und 41 vollständigen Modulnamen, vier echte Renderer-Prüfungen sowie Format und Clippy. [Rohbelege](verification/combined-workspace-v7-20261015/index.json). Der optimierte Kandidat und alle frischen Native-/BODY13-/Browser27-Abnahmen sind separate nächste Schritte. Lokal bleibt der geprüfte R3-Stand installiert. Vollständige Herstellerparität bleibt offen.

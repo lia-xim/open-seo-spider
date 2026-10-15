@@ -6351,29 +6351,32 @@
     {
       "id": "combined-source-v7-20261015",
       "priority": 1,
-      "status": "ACTUAL_FULL_WORKSPACE_PASS_OPTIMIZED_BUILD_AND_NATIVE_PENDING",
+      "status": "ACTUAL_BUILD_PASS_FIVE_NATIVE_SCOPES_PASS_BROWSER_320_DEFECT_INSTALL_HELD",
       "title_de": "Gemeinsame Originaldatei- und HTTP-Verbindungsfunktionen prüfen",
-      "summary_de": "Source7 unter e96d1d1 besteht tatsächlich 1297 Tests, 515 Pflichtnamen, 41 vollständige Modulnamen und vier echte Renderer-Fälle. Format und Clippy bestehen. Eingehende Verbindungen werden verwaltet, nach dem Schließen der globalen Annahme beendet und bis zu ihrem tatsächlichen Abschluss verfolgt. Optimierter Kandidat und frische Native-/BODY13-/Browser27-Abnahmen folgen; installiert bleibt R3.",
+      "summary_de": "Source7 besteht die vollständige Suite mit 1297 Tests und den optimierten Windows-Build. Fünf native Bereiche bestehen tatsächlich: SDK/API/CLI, 175 Dateioperationen, zwei Junction-Fälle, zwölf physische CSV-/JSON-Grenzfälle und zwei natürliche EOF-Abschlüsse. Die echte Browserprüfung scheitert nach 26 Gruppen am überlaufenden Originaldatei-Panel bei 320 Pixeln. Ein separater Mockadapter scheitert an veralteten Manifestverweisen. Beide Fehlversuche bleiben erhalten; die Installation ist bis zur Produktkorrektur ausgesetzt. Installiert bleibt R3.",
       "completed_acceptance_de": [
         "Neun geprüfte Transportdateien auf den tatsächlich erfolgreichen Source6R2-Stand übertragen; alle Abbruchkorrekturen und die gesamte Regression erhalten. Unabhängige Quellen-, Formatierungs- und Runnerprüfungen sowie Vorab-Clippy bestanden.",
-        "326 Eingaben privat committed, gepusht und eingefroren. Die tatsächliche vollständige Suite besteht mit 1297/0/0, 515 Pflichtnamen, 41 Modulnamen, 13 neuen Transportfällen, vier Renderern sowie Format und Clippy. Alle drei Cargo-Prozesse erfolgreich beendet; eigene Testserver und Renderer geschlossen und Quellen abschließend identisch."
+        "326 Eingaben privat committed, gepusht und eingefroren. Die tatsächliche vollständige Suite besteht mit 1297/0/0, 515 Pflichtnamen, 41 Modulnamen, 13 neuen Transportfällen, vier Renderern sowie Format und Clippy. Alle drei Cargo-Prozesse erfolgreich beendet; eigene Testserver und Renderer geschlossen und Quellen abschließend identisch.",
+        "Optimierter Kandidat mit 40.585.216 Bytes und SHA 5e7c8fbb bestanden; Build und Quellen abschließend identisch. Fünf getrennte native Bereiche bestehen, darunter CSV genau 64 MiB und JSON genau 8 MiB sowie jeweils eine korrekt abgewiesene Überschreitung um ein Byte."
       ],
       "pending_acceptance_de": [
-        "Optimierten Windows-Kandidaten am exakten Source7-Stand bauen.",
-        "Alle frischen Small6-, EOF2-, Large13-, BODY13- und Browser27-Abnahmen am selben Kandidaten bestehen.",
-        "Lokale Installation unter Erhalt der Nutzerdaten prüfen; danach Migrationsworkflow und Vertrag für teilweise angenommene Schreiboperationen integrieren.",
+        "Originaldatei-Panel bei 320 Pixeln korrigieren und echte Browser27-Abnahme am korrigierten gemeinsamen Kandidaten bestehen.",
+        "Veraltete Mockadapter-Verweise eng korrigieren und Mock13 erneut in frischen Ausgaben ausführen.",
+        "Große Sitemaps und Originaldateien nativ prüfen; sämtliche erforderlichen Prüfungen am endgültigen Kandidaten wiederholen.",
+        "Migration und Teil-Schreibvertrag im nächsten gemeinsamen Stand integrieren; danach sichere Installation unter Erhalt aller Nutzerdaten.",
         "Übrige 144 Fähigkeiten, 416 Filter und 32 Abläufe weiter abarbeiten; vollständige Herstellerparität bleibt NOT_PROVEN."
       ],
       "documentation": [
+        "docs/verification/source7-native-checkpoint-1-20261015/index.json",
         "docs/verification/combined-workspace-v7-20261015/index.json"
       ],
       "gates": {
         "full_workspace": "PASS_COMBINED_WORKSPACE_V7_REAL_RENDERER_FMT_CLIPPY",
         "required_named_cases": "PASS_515_AND_41_FULL_MODULE_NAMES",
         "actual_renderer": "PASS_4",
-        "optimized_build": "NOT_ESTABLISHED_BY_SUITE",
-        "native": "NOT_RUN_ON_SOURCE7",
-        "installation": "NOT_RUN_ON_SOURCE7",
+        "optimized_build": "PASS_COMBINED_OPTIMIZED_BUILD_V7",
+        "native": "FIVE_SCOPES_PASS_TWO_FAILED_ATTEMPTS_LARGE_BODY_PENDING",
+        "installation": "HELD_ACTUAL_BROWSER_320_DEFECT",
         "manufacturer_parity": "NOT_PROVEN"
       },
       "reference_parity": "NOT_PROVEN"

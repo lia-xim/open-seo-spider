@@ -1,0 +1,49 @@
+{
+  "version": 7,
+  "scope": "Native Windows configured root-junction CLI rejection only; ordinary directory positive and protocol acceptance remain SDKv5R2",
+  "sourceInputs": 326,
+  "sourceManifestSha256": "fd587ba252595d971e7557e5cca7f5ab90219ecda200a3f07fcd5c10c13b6397",
+  "criticalSources": [
+    {
+      "path": "crates/app/src/mcp/files.rs",
+      "sha256": "10b4227a8fed631f8c1383d6d55749e979304399dce18a38bab26b44884cc1c7",
+      "bytes": 35808
+    },
+    {
+      "path": "crates/app/src/mcp.rs",
+      "sha256": "6ec0e93b8682fd857b84a8e5caae9add0df74a0effa29b922fccb4f6d8074600",
+      "bytes": 31758
+    },
+    {
+      "path": "crates/app/src/main.rs",
+      "sha256": "8e7e73506a1dd4da2f6b34eabce7b1cef65af737c9fa52a2ceb279206802b879",
+      "bytes": 30667
+    },
+    {
+      "path": "crates/app/src/server.rs",
+      "sha256": "f487003f5c1c48dc30299b011a581531a4b7758147d0d1add1e03817e129a726",
+      "bytes": 82435
+    }
+  ],
+  "expectedErrorContext": "Configured base directory must already exist without symlink traversal",
+  "cases": [
+    "serve rejects root junction with actual nonzero nonsignal close before advertised socket/data creation",
+    "mcp rejects root junction with actual nonzero nonsignal close before stdin processing/API calls",
+    "actual native E: junction and own target witness preserved across both commands",
+    "all observed ancestors ordinary, not another known junction",
+    "unlink only own reparse entry then preserve outside witness"
+  ],
+  "bounds": [
+    "Own E: mkdtemp fixture only",
+    "Keep expected-rejection child stdin open; no EOF-based false positive",
+    "20-second actual child close bound; forced cleanup is FAIL, never rejection PASS",
+    "No HTTP.sys/fixed port/foreign health/PID kill",
+    "No raw socket-absence claim from stdout; order is source-pinned and runtime asserts no advertisement",
+    "Bigint dev/inode identities are observed metadata, not universal full-width ReFS identity"
+  ],
+  "primaryDocs": [
+    "https://nodejs.org/api/fs.html#fssymlinksynctarget-path-type",
+    "https://nodejs.org/api/fs.html#fspromisesunlinkpath"
+  ],
+  "sourceBinding": "REQUIRE_ACTUAL_ROOT_OUTER_AND_ISSUED_BINDING_sourceManifestSha256"
+}

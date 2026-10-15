@@ -1,0 +1,266 @@
+{
+  "status": "PASS_NATIVE_ROOT_JUNCTION_CLI_REJECTION",
+  "run": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\mcp-root-junction-rL7Knh",
+  "platform": "win32",
+  "node": "v24.15.0",
+  "preparationManifestSha256": "0e2047bec610fb3dec8c5769cbac8cc7506703d377b4769a2bda26ebf530ec79",
+  "binary": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-optimized-build-v7\\candidate\\open-seo-spider.exe",
+    "sha256": "5e7c8fbb8fda87087ebc5abde12416ed52a69d9f924e4f4a5321e6e14963907e"
+  },
+  "source": {
+    "root": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1",
+    "manifest": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v7\\manifest.json",
+      "sha256": "fd587ba252595d971e7557e5cca7f5ab90219ecda200a3f07fcd5c10c13b6397"
+    },
+    "inputs": 326,
+    "provenance": "Explicit Root-supplied build/source identity; reproducible build provenance is a separate gate"
+  },
+  "cases": [
+    {
+      "name": "serve: root-junction rejected before data creation/advertisement",
+      "status": "PASS",
+      "args": [
+        "serve",
+        "--listen",
+        "127.0.0.1:0",
+        "--data-dir",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\mcp-root-junction-rL7Knh\\serve-data",
+        "--mcp-files-dir",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\mcp-root-junction-rL7Knh\\grant-junction"
+      ],
+      "dataDirectoryAbsent": true,
+      "cwdEntries": [],
+      "outsideAfter": {
+        "directoryIdentity": {
+          "dev": "75787924",
+          "ino": "3096224744139124",
+          "directory": true,
+          "symbolicLink": false
+        },
+        "fileIdentity": {
+          "dev": "75787924",
+          "ino": "3096224744139125",
+          "directory": false,
+          "symbolicLink": false
+        },
+        "entries": [
+          {
+            "name": "witness.txt",
+            "directory": false,
+            "symbolicLink": false
+          }
+        ],
+        "byteLength": 37,
+        "bytesHex": "6e617469766520726f6f742d6a756e6374696f6e206f757473696465207769746e6573730a",
+        "sha256": "b37643ac19c73b27d3a982653301b3688d150585a01c11a1fe81fdcc8816c8bf"
+      },
+      "junctionAfter": {
+        "native": {
+          "dev": "75787924",
+          "ino": "3659174697560439",
+          "directory": false,
+          "symbolicLink": true
+        },
+        "target": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\mcp-root-junction-rL7Knh\\outside",
+        "realpath": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\mcp-root-junction-rL7Knh\\outside"
+      }
+    },
+    {
+      "name": "mcp: root-junction rejected before data creation/advertisement",
+      "status": "PASS",
+      "args": [
+        "mcp",
+        "--server",
+        "http://127.0.0.1:53012",
+        "--mcp-files-dir",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\mcp-root-junction-rL7Knh\\grant-junction"
+      ],
+      "dataDirectoryAbsent": true,
+      "cwdEntries": [],
+      "outsideAfter": {
+        "directoryIdentity": {
+          "dev": "75787924",
+          "ino": "3096224744139124",
+          "directory": true,
+          "symbolicLink": false
+        },
+        "fileIdentity": {
+          "dev": "75787924",
+          "ino": "3096224744139125",
+          "directory": false,
+          "symbolicLink": false
+        },
+        "entries": [
+          {
+            "name": "witness.txt",
+            "directory": false,
+            "symbolicLink": false
+          }
+        ],
+        "byteLength": 37,
+        "bytesHex": "6e617469766520726f6f742d6a756e6374696f6e206f757473696465207769746e6573730a",
+        "sha256": "b37643ac19c73b27d3a982653301b3688d150585a01c11a1fe81fdcc8816c8bf"
+      },
+      "junctionAfter": {
+        "native": {
+          "dev": "75787924",
+          "ino": "3659174697560439",
+          "directory": false,
+          "symbolicLink": true
+        },
+        "target": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\mcp-root-junction-rL7Knh\\outside",
+        "realpath": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\mcp-root-junction-rL7Knh\\outside"
+      }
+    }
+  ],
+  "processes": [
+    {
+      "label": "serve",
+      "pid": 7000,
+      "killSignals": [],
+      "closed": true,
+      "stdoutEnd": true,
+      "stderrEnd": true,
+      "code": 1,
+      "signal": null
+    },
+    {
+      "label": "mcp",
+      "pid": 7576,
+      "killSignals": [],
+      "closed": true,
+      "stdoutEnd": true,
+      "stderrEnd": true,
+      "code": 1,
+      "signal": null
+    }
+  ],
+  "errors": [],
+  "websiteRequests": 0,
+  "boundary": "Root-junction CLI rejection only; no ordinary-directory or MCP protocol acceptance, no global socket audit or HTTP shutdown-drain claim",
+  "ancestorIdentities": [
+    {
+      "path": "E:\\CodexWork",
+      "native": {
+        "dev": "75787924",
+        "ino": "28991922601356912",
+        "directory": true,
+        "symbolicLink": false
+      }
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013",
+      "native": {
+        "dev": "75787924",
+        "ino": "1688849860423281",
+        "directory": true,
+        "symbolicLink": false
+      }
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results",
+      "native": {
+        "dev": "75787924",
+        "ino": "1688849860423509",
+        "directory": true,
+        "symbolicLink": false
+      }
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\mcp-root-junction-rL7Knh",
+      "native": {
+        "dev": "75787924",
+        "ino": "2814749767428466",
+        "directory": true,
+        "symbolicLink": false
+      }
+    }
+  ],
+  "outsideBefore": {
+    "directoryIdentity": {
+      "dev": "75787924",
+      "ino": "3096224744139124",
+      "directory": true,
+      "symbolicLink": false
+    },
+    "fileIdentity": {
+      "dev": "75787924",
+      "ino": "3096224744139125",
+      "directory": false,
+      "symbolicLink": false
+    },
+    "entries": [
+      {
+        "name": "witness.txt",
+        "directory": false,
+        "symbolicLink": false
+      }
+    ],
+    "byteLength": 37,
+    "bytesHex": "6e617469766520726f6f742d6a756e6374696f6e206f757473696465207769746e6573730a",
+    "sha256": "b37643ac19c73b27d3a982653301b3688d150585a01c11a1fe81fdcc8816c8bf"
+  },
+  "junctionBefore": {
+    "native": {
+      "dev": "75787924",
+      "ino": "3659174697560439",
+      "directory": false,
+      "symbolicLink": true
+    },
+    "target": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\mcp-root-junction-rL7Knh\\outside",
+    "realpath": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\mcp-root-junction-rL7Knh\\outside"
+  },
+  "junctionRemoved": true,
+  "outsideAfterUnlink": {
+    "directoryIdentity": {
+      "dev": "75787924",
+      "ino": "3096224744139124",
+      "directory": true,
+      "symbolicLink": false
+    },
+    "fileIdentity": {
+      "dev": "75787924",
+      "ino": "3096224744139125",
+      "directory": false,
+      "symbolicLink": false
+    },
+    "entries": [
+      {
+        "name": "witness.txt",
+        "directory": false,
+        "symbolicLink": false
+      }
+    ],
+    "byteLength": 37,
+    "bytesHex": "6e617469766520726f6f742d6a756e6374696f6e206f757473696465207769746e6573730a",
+    "sha256": "b37643ac19c73b27d3a982653301b3688d150585a01c11a1fe81fdcc8816c8bf"
+  },
+  "websiteTrapClosed": true,
+  "outsideAtCleanup": {
+    "directoryIdentity": {
+      "dev": "75787924",
+      "ino": "3096224744139124",
+      "directory": true,
+      "symbolicLink": false
+    },
+    "fileIdentity": {
+      "dev": "75787924",
+      "ino": "3096224744139125",
+      "directory": false,
+      "symbolicLink": false
+    },
+    "entries": [
+      {
+        "name": "witness.txt",
+        "directory": false,
+        "symbolicLink": false
+      }
+    ],
+    "byteLength": 37,
+    "bytesHex": "6e617469766520726f6f742d6a756e6374696f6e206f757473696465207769746e6573730a",
+    "sha256": "b37643ac19c73b27d3a982653301b3688d150585a01c11a1fe81fdcc8816c8bf"
+  },
+  "fixtureCleanup": "own directories removed only after actual child close and own link removal"
+}
