@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "source": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-source-v1/web/verification/ui-sitemap-findings-smoke.cjs",
+  "source_sha256": "889275f564d254512348a0196ee04b84317d39a45b7d0a2d4ffb3c5067eba8be",
+  "output": "findings-ui-mock-owned-adapter.cjs",
+  "output_sha256": "dd51478d6be132a29d2c7a19317a9ffa02e207094c3afa10b82e273bf97f4a4d",
+  "ui_manifest_sha256": "c9e4cb2821182d8a357ce8f8082668a6892d96cf7929e959187e31321c0ee707",
+  "compiler_manifest_sha256": "69492d0c0cc56bab5de86251045459a1707deb4c991d5871f9ad39015e897751",
+  "operations": [
+    {
+      "before": "const origin=`http://127.0.0.1:${server.address().port}`;",
+      "after": "assert(![8787,8790].includes(server.address().port),'Owned UI fixture port must avoid shared8787/8790');const origin=`http://127.0.0.1:${server.address().port}`;",
+      "expected_occurrences": 1
+    }
+  ],
+  "scope": "Only reserved port assertion inside existing try after actual listen, before browser; existing finally closes listener on rejection. Original six asset checks retained.",
+  "normalization": "UTF8 CRLF to LF before ordered replacements; source has 0 CRLF"
+}

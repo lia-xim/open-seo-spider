@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "immutable": true,
+  "status": "BOUNDED_STATIC_REVIEW_ONE_CONFIRMED_P2",
+  "recorded_at_utc": "2026-10-15T00:54:12.382575+00:00",
+  "reviewer": "/root/generation_postfix_review",
+  "examined_pins": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-finding-physical-preparation-v1/manifest.json",
+      "sha256": "78c3d01a5837964dcd1dde7fb11c8172994192c4d6fc3c57096c57afb2d2a10e",
+      "bytes": 1876
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-finding-physical-preparation-v1/native-finding-physical-v1.mjs",
+      "sha256": "b76683dddc46ffb65ef094fd1d1650c04ddc82f737d9ddb3f60ec45ec5e58ea6",
+      "bytes": 43334
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-finding-physical-preparation-v1/HANDOFF.md",
+      "sha256": "d11cbe1bb6cc37a544344719e078f18bb16e09844c5f19a7fa4163350e1435e1",
+      "bytes": 8726
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-finding-physical-preparation-v1/SOURCE-PINS.json",
+      "sha256": "952d952974916eefbdcb7a5776319a8e68db67c3c1b90ca7b540ba1c83142546",
+      "bytes": 5421
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-finding-physical-preparation-v1/verification.json",
+      "sha256": "3907ba1ea98fb08cbc8512abac38a80ae82aba8122f069400730f0993c99f333",
+      "bytes": 3131
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-integration-v1/crates/app/src/sitemap_findings.rs",
+      "sha256": "2ac269bf6e6aa6cda002afafc06e1f80aa06940c282985c1cfe9dd5234ac4e0d",
+      "bytes": 30850
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-integration-v1/crates/core/src/store/sitemap_findings_read.rs",
+      "sha256": "5f4ae2bd1c51e6b825ad190c5bbb6e58549fb323fdccd05dde9c4215d539a267",
+      "bytes": 18759
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-integration-v1/crates/core/src/sitemap_membership_analysis.rs",
+      "sha256": "014d3feb8c2220214b912e0901670c867e7abf370307d90dd4f950c26759f26e",
+      "bytes": 45420
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-integration-v1/crates/core/src/sitemap_membership_analysis/findings.rs",
+      "sha256": "37988de4ad4830df3b30ebda2e799226c10787869974eb3d0eda78a2d67afbf0",
+      "bytes": 10059
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-integration-v1/crates/core/src/store.rs",
+      "sha256": "bdf8838fa21adf58b360ae8473ac63b73cefe68e22ed611c769dae7c0918128e",
+      "bytes": 148465
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-integration-v1/crates/app/src/server/sitemap_findings.rs",
+      "sha256": "1f276462ef65dc0ba32c4bd80bef7a6e6d52a05b8f03d0f4106d81e7d2d4ad48",
+      "bytes": 8461
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-integration-v1/crates/app/src/server.rs",
+      "sha256": "a00199a85f525db1a37b2a5f95d7b0567b552e53dfd5c3acacb57af5e201660e",
+      "bytes": 75030
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-integration-v1/crates/core/src/sitemap_findings.rs",
+      "sha256": "723200ced8fafb9652a89f6a8f19fa416dffbee3a62ddd780093c5380e36d1ef",
+      "bytes": 15024
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-surfaces-runners-v1/run-sitemap-findings-surfaces-suite-v1.mjs",
+      "sha256": "5de37908b795947c8db1cab459f1a45a2edda823499747b162d13a6bef3fcc66",
+      "bytes": 8797
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-surfaces-runners-postfix-v1/build-sitemap-findings-surfaces-v2.mjs",
+      "sha256": "5478157ccc2e3511285a175e0b559168dc66f268bc79f45c631f98609be137d6",
+      "bytes": 12236
+    }
+  ],
+  "findings": [
+    {
+      "priority": 2,
+      "title": "Allow empty successful format logs in producer evidence admission",
+      "file": "native-finding-physical-v1.mjs",
+      "lines": [
+        34,
+        78
+      ],
+      "issue": "regular() requires s.size>0 and line78 applies it to every actual suite log, including format.log. The pinned suite producer can validly emit a zero-byte format.log after successful cargo fmt --all --check, and reviewed builder-v2 explicitly accepts its empty SHA and empty summaries. This driver therefore rejects a legitimate accepted current-suite proof before any physical case.",
+      "static_reproducer": {
+        "suite_run": {
+          "name": "format",
+          "args": [
+            "fmt",
+            "--all",
+            "--check"
+          ],
+          "actual_close_event": true,
+          "spawn_error": null,
+          "exit": {
+            "code": 0,
+            "signal": null
+          },
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "summaries": []
+        },
+        "actual_format_log_bytes": 0,
+        "behavior": "suite producer and builder-v2 admit; regular(format.log,64MiB) rejects bounded regular file"
+      },
+      "effect": "Valid native physical acceptance run cannot start when fmt emitted no output; this is not a product or physical response failure.",
+      "minimal_fix": "Separate bounded regular evidence-log read allowing0 from nonempty manifest/release/binary reads; keep actual SHA/run/close/summaries checks. Author a static/source or future directed empty-log control; no execution required under HOLD.",
+      "runtime_reproduction": "NOT_RUN_COMPUTE_HOLD",
+      "root_notified_before_receipt": true
+    }
+  ],
+  "reviewed_contracts": [
+    {
+      "scope": "Preflight/source/candidate",
+      "lines": "48-103",
+      "assessment": "Fixed694/f43/b711 private publication; actual three suite log/receipt and build-v2 close/log/candidate SHA; all297 before sqlite import/mkdir; same later hashes. No other confirmed issue in bounded static read."
+    },
+    {
+      "scope": "Real baseline/synthetic fork",
+      "lines": "151-206,243-248,286-304",
+      "assessment": "405/160 current public Crawler cohorts; actual App close awaited before normal fork/SQL progression; only robots_warning null fragments and exact64hex checkpoint reportSHA cell replaced; raw original inverse, other SQL schema/tables/rows fingerprint and config/gen controls. Synthetic warning provenance explicit, no native-warning-writer claim."
+    },
+    {
+      "scope": "Current real bounds",
+      "lines": "23,165-185,234-241",
+      "assessment": "65536 warning value cap and256MiB saved report input match actual current readers; JSON uses160 rows within200 and reconstructed Core page strictly below8MiB. No cap raise or hidden Core-only size claim."
+    },
+    {
+      "scope": "Independent oracles",
+      "lines": "209-242",
+      "assessment": "Actual small API pages/ordinals/membership/source provenance, native ASCII JSON canonical check,10-column CSV/context metadata/typed row escaping and complete App wrapper includingscan/continuation/tokens. Canonical loopbackHTTP identities avoid formula prefixes; arbitrary original/formula identity acceptance remains explicitly outside this physical fixture."
+    },
+    {
+      "scope": "Wire assertions/calibration",
+      "lines": "243-283",
+      "assessment": "Prospective independent exact/+1 lengths followed by actual200 ContentLength/full body SHA/EOF or typed413 JSON body; recovery/primed saved bytes/no website attempts. New measured3/2/1 derivatives, not historical RawCSV recipe; actual viability/serialization/physical cases unrun."
+    },
+    {
+      "scope": "Ownership/proof boundary",
+      "lines": "121-138,301-307",
+      "assessment": "Held child actual close and forced-close failure flags, ephemeral ports excluding8787/8790, retained own output/baselines, no shared writes. Internal workerjoin/TX chronology, native latefault/latency/RSS/raw/source50k50MiB remain explicitly open."
+    }
+  ],
+  "independent_node_check": {
+    "command": [
+      "node",
+      "--check",
+      "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-finding-physical-preparation-v1/native-finding-physical-v1.mjs"
+    ],
+    "exit_code": 0
+  },
+  "not_run": [
+    "driver import/eval/VM",
+    "SQLite/fixture/data generation",
+    "native process/API/HTTP",
+    "all12 physical cases",
+    "Cargo/compiler/tests/browser"
+  ],
+  "proof_boundary": "This is a bounded source review plus syntax parse, not native execution or physical acceptance. No actual suite/build/physical responses were manufactured or replayed. One confirmed preflight feasibility defect is open; remaining authored paths need actual runtime gates.",
+  "mutations": "Only this new own E review directory; no Root, source handoff, SDK, Git or runtime edits."
+}

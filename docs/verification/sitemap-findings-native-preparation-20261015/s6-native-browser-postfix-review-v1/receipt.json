@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "immutable": true,
+  "status": "THREE_REVIEWED_SOURCE_FINDINGS_CLOSED_STATIC_ONLY_NOT_RUN",
+  "recorded_at_utc": "2026-10-15T01:08:53.579901+00:00",
+  "reviewer": "/root/generation_postfix_review",
+  "basis_original_manifest_sha256": "71ed85b6baf20f9bb5f0c1103a4351d06cc44bd3cae49fe94db489bcf71e6e51",
+  "original_review_receipt_sha256": "b8189980c0c49cf495924cb81f3216a99a6702ea7f3b0fbcccba388a56318fb8",
+  "reviewed_postfix_manifest_sha256": "eddbf80f1e8f95dfe51e562e1ba94aa9d1389930003009c73e808a8d8f303792",
+  "pins": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-native-browser-postfix-v1/manifest.json",
+      "sha256": "eddbf80f1e8f95dfe51e562e1ba94aa9d1389930003009c73e808a8d8f303792",
+      "bytes": 5304
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-native-browser-postfix-v1/preflight.mjs",
+      "sha256": "82516eb345b14e24314946d3f0f33319aa736a58d5fb931a6eb4534486ad2a52",
+      "bytes": 9753
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-native-browser-postfix-v1/browser-flow.mjs",
+      "sha256": "894010bcce948989b9dcb79d5a75cb86ec3ea8f0d12324c2b2625f6bbb1f4ec5",
+      "bytes": 19048
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-native-browser-postfix-v1/run-sitemap-findings-browser-native-v1.mjs",
+      "sha256": "581ec6ad181d22b48772f034931c37cf87d91bd7deb7bbb8a24090995532a5dc",
+      "bytes": 20505
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-native-browser-postfix-v1/DERIVATION.json",
+      "sha256": "013227fa44a568f0c143f5827bfa3a4d185c8d92124122e8fe4109db03187855",
+      "bytes": 15221
+    }
+  ],
+  "exact_19op_forward_replay": true,
+  "exact_19op_inverse_original_bytes": true,
+  "original_package_all_hashes_unchanged": true,
+  "closure": [
+    {
+      "finding": "NATIVE-BROWSER-PUBLICATION-001",
+      "status": "CLOSED_IN_SOURCE",
+      "evidence": "preflight admits fixed b711/f43/private694/297/38/47authored0run/13UI0run/NOTRUN checkpoint before dynamic flow/SQLite/Playwright imports and writes. Historical lineage returned and saved in final proof; raw publication rehashed after cleanup. No current installed runtime or laterGitHEAD assertion."
+    },
+    {
+      "finding": "NATIVE-BROWSER-DEADLINE-002",
+      "status": "CLOSED_IN_SOURCE",
+      "evidence": "hrtime begins before runtime imports/resource setup; actual held process close and both writer close events each retain monotonic timestamp. After both children drained and fixture closed, Object.freeze completion snapshot requires exactly2 held children/allpipes+strict latestclose<600s and all-drains-observed<600s; timer cleared only afterward. FinalPASS independently requires within_deadline. Held handles/cooperative abort retained, no stale PIDkill or hard latency claim."
+    },
+    {
+      "finding": "NATIVE-BROWSER-FULL-SELECTION-003",
+      "status": "CLOSED_IN_SOURCE",
+      "evidence": "All405 original seed URLs unique/exact set, contiguous saved ordinals, stable identity-per-ordinal across filters; exact2XML identity/unique sourceposition. Independent actualmatch API403 traversal equals all-assessment true matches; complete typed row/order and allCSVcols0..9 plus engine/selection/fullactualcontext metadata checked; browser download remains byteequal to completeAPIbody/headerSHA/EOF."
+    }
+  ],
+  "new_confirmed_findings": [],
+  "independent_node_checks": [
+    {
+      "command": [
+        "node",
+        "--check",
+        "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-native-browser-postfix-v1/preflight.mjs"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "node",
+        "--check",
+        "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-native-browser-postfix-v1/browser-flow.mjs"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "node",
+        "--check",
+        "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-native-browser-postfix-v1/run-sitemap-findings-browser-native-v1.mjs"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "planned_native_groups": 20,
+  "executed_native_groups": 0,
+  "separate_mock_groups": 13,
+  "not_run": [
+    "publication negative runtime control",
+    "600s delayed-timer/process/pipe-close control",
+    "duplicate/missing API/CSV inventory control",
+    "any driver/module import/eval/VM",
+    "fixture/SQLite/HTTP/nativeChrome/DOM",
+    "Cargo/compiler/tests"
+  ],
+  "unchanged_proof_boundaries": [
+    "Native stale-context/late-response race and case/space matrix not established here",
+    "Source positives50k/50MiB/Unknown remain separate",
+    "Physical sizes/RSS/latency/recovery/selected/platform/install open",
+    "Source694/f43 only; new UIe9 not accepted or rebound",
+    "Syntax/static closure is not actual native acceptance or manufacturer/fullS6 parity"
+  ],
+  "mutations": "Only new own E receipt; no Root/postfix/original/source/Git/runtime edits.",
+  "compute_hold": "ACTIVE_NO_RELEASE"
+}

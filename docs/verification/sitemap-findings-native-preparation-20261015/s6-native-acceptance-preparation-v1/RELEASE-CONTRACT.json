@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "status": "SCHEMA_ONLY_NOT_AN_OPERATIONAL_RELEASE",
+  "command": [
+    "node",
+    "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/run-sitemap-findings-native-acceptance-v1.mjs",
+    "--gate",
+    "native|ui-mock",
+    "--build-mode",
+    "debug|optimized",
+    "--release",
+    "ABS_ROOT_RELEASE_JSON"
+  ],
+  "required_environment": {
+    "OPEN_SEO_COORDINATED_EXECUTION_WINDOW": "confirmed"
+  },
+  "root_release": {
+    "kind": "root_released_sitemap_findings_acceptance_driver_v1",
+    "gate": "native OR ui-mock, exactly one",
+    "build_mode": "debug OR optimized",
+    "source_manifest_sha256": "69492d0c0cc56bab5de86251045459a1707deb4c991d5871f9ad39015e897751",
+    "driver_sha256": "7fc1a3af7a208492137b7befe5e4cb157ac6200ae86d1a158e464814603b67dd",
+    "build_proof_sha256": "Root supplies actual future accepted v2 build proof SHA",
+    "candidate_binary_sha256": "Root supplies actual same v2 candidate binary SHA",
+    "output": "Exact fixed Ebase/results/sitemap-findings-{gate}-{mode}-acceptance-v1",
+    "expires_at": "Root supplies real future ISO timestamp only after operational release",
+    "chrome_executable": "ui-mock only: explicit absolute browser executable",
+    "chrome_sha256": "ui-mock only: actual browser executable SHA"
+  },
+  "ui_subreceipt": "Exact original c9 manifest and six assets matched to6949. Separate ui-mock release, never native permission reuse.",
+  "deadlines": "600s requests cooperative native cancellation and disqualifies PASS, then waits actual harness close; no stale nestedPID kills or hard drain-latency guarantee. All data retained."
+}

@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "immutable": true,
+  "reviewer": "/root/finish_coverage",
+  "recorded_at_utc": "2026-10-15T00:58:56.1010171Z",
+  "result": "BOUNDED_STATIC_TWO_FINDING_SOURCE_CLOSURE_NO_NEW_FINDING",
+  "examined_pins": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-native-acceptance-postfix-v1/manifest.json",
+      "bytes": 2804,
+      "sha256": "cf40c019009836617b0ea24a6a237acc19818265c0bd08df864c63f597820770"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-native-acceptance-preparation-v1\\manifest.json",
+      "bytes": 3073,
+      "sha256": "18b306748cd301054d79a36cbc1f464691617bbda05ab3db3685644959306155"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-native-acceptance-preparation-v1\\run-sitemap-findings-native-acceptance-v1.mjs",
+      "bytes": 25916,
+      "sha256": "7fc1a3af7a208492137b7befe5e4cb157ac6200ae86d1a158e464814603b67dd"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-native-acceptance-review-v1\\receipt.json",
+      "bytes": 7945,
+      "sha256": "c2a18a01a306e487335390e211572e7a5617256d2cce744c00d731033a43f1a6"
+    },
+    {
+      "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/sitemap-findings-surfaces-published-v1.json",
+      "bytes": 2787,
+      "sha256": "b71188d145a8e720bd9d6c9aaf4720c03c20cced7f406839264e5432e85e84ff"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-native-acceptance-postfix-v1\\run-sitemap-findings-native-acceptance-v1.mjs",
+      "bytes": 28788,
+      "sha256": "2d72764ee4c27817e2eba6125f19850c4c0b498c9db966eb3ff74b1d8b95bc32"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-native-acceptance-postfix-v1\\DERIVATION.json",
+      "bytes": 6335,
+      "sha256": "c8c4236a086014ed799a5c6d2348d34eae89e14292d3c3fc0b6c4e8a3cae1c58"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-native-acceptance-postfix-v1\\SOURCE-PINS.json",
+      "bytes": 1961,
+      "sha256": "5b25d59d6c6a8e0adaf686bfde8c7245a9106af702e95784632b9ff14ed242b0"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-native-acceptance-postfix-v1\\RELEASE-CONTRACT.json",
+      "bytes": 2320,
+      "sha256": "d8a9928dfd800decd1d922d812c04f154928dad2bc7c226f523306965a7cfd7b"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-native-acceptance-postfix-v1\\verification.json",
+      "bytes": 1739,
+      "sha256": "2ead3088a089a2318cd676ca9b33a903def592b4a212b246172ff88356cdaa01"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-native-acceptance-postfix-v1\\HANDOFF.md",
+      "bytes": 2279,
+      "sha256": "a0f027b705821f1eec9a660634753d2371695bf539a743eadc61800613e411cc"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-native-acceptance-preparation-v1/findings-native-owned-adapter.mjs",
+      "bytes": 15752,
+      "sha256": "30381b2d523fac41ab4a41f5e2517628c5f8c7a43c115c92b5ed28da441bff5c"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-native-acceptance-preparation-v1/findings-ui-mock-owned-adapter.cjs",
+      "bytes": 27324,
+      "sha256": "dd51478d6be132a29d2c7a19317a9ffa02e207094c3afa10b82e273bf97f4a4d"
+    }
+  ],
+  "derivation": {
+    "inverse_reconstruction": "EXACT_ORIGINAL7fc_BYTES",
+    "exact_ordered_operations": 9,
+    "forward_replay": "EXACT_NEW_DRIVER_BYTES",
+    "original18b_and_adapters_unchanged": true
+  },
+  "closures": [
+    {
+      "trigger": "Missing/changed historical b711/f43 publication while frozen694/source/suite/build remain",
+      "id": "S6-NATIVE-ADMISSION-PUBLICATION-001",
+      "priority": 2,
+      "file": "run-sitemap-findings-native-acceptance-v1.mjs",
+      "assessment": "Exact publication rawSHA checked before parse and before first output/optional runtime import/child; actual private repo, f43 commit, frozen694/297/38/47/0/13/0 source-only facts required. Actual pinned2787-byte receipt read independently and matches every checked field. Same raw publication rehashed in verifySource before output/before child/finally. Exact lineage recorded in prerequisites/final proof. It deliberately does not equate current live GitHEAD or installed binary with historical publication.",
+      "lines": "49-70,182,219-224,326-328",
+      "status": "CLOSED_IN_SOURCE_RUNTIME_NOT_RUN"
+    },
+    {
+      "trigger": "Child actual close after600s arrives before due timer callback, then clearTimeout removes sole flag",
+      "id": "S6-NATIVE-ADMISSION-DEADLINE-002",
+      "priority": 2,
+      "file": "run-sitemap-findings-native-acceptance-v1.mjs",
+      "assessment": "Immediately pre-spawn process.hrtime.bigint start and actual close callback compute immutable elapsed nanoseconds. Frozen completionClock independently compares elapsed<600000000000ns; elapsed equal or above threshold fails even when timer never set deadlineExceeded. Run receipt combines monotonic overrun with cooperative timer flag, and successful result path requires within_deadline===true plus no cancellation. Final proof records clock. clearTimeout cannot mutate frozen snapshot. Timer remains cooperative and no hard worker drain deadline is claimed.",
+      "lines": "247-248,262-295,328",
+      "status": "CLOSED_IN_SOURCE_RUNTIME_NOT_RUN"
+    }
+  ],
+  "unchanged_guards": [
+    "Only native and ui-mock gates remain; new UI-processing candidate not granted source694 proof",
+    "Actual suite/build/binary/source and dependency hash gates preserved by exact inverse reconstruction",
+    "Actual child close, IPC ownership associations, retained data, no stale PID killing and installed binary checks unchanged",
+    "No extra adapter/source/product/runtime edits in postfix"
+  ],
+  "actual_checks": [
+    {
+      "exit_code": 0,
+      "scope": "SYNTAX_ONLY_NO_IMPORT_OR_DRIVER_EXECUTION",
+      "command": "node --check run-sitemap-findings-native-acceptance-v1.mjs"
+    },
+    {
+      "result": "PASS",
+      "scope": "NO_NATIVE_DEADLINE_OR_PUBLICATION_FAILURE_RUNTIME_CONTROLS",
+      "command": "SHA/bytes plus exact9 ordered source substitutions and inverse read-only comparison"
+    }
+  ],
+  "confirmed_new_findings": [],
+  "execution_counts": {
+    "sdk": 0,
+    "http": 0,
+    "sqlite": 0,
+    "native": 0,
+    "tests": 0,
+    "browser": 0,
+    "compiler": 0
+  },
+  "qualifications": [
+    "Narrow independent closure of c2a18 two triggers only; not an entire native harness or product approval",
+    "Missing/changed publication controls and over600s actual-close timer race remain NOT_RUN under compute HOLD",
+    "No result transferred from historical694 source to later UI-processing candidate or current installed runtime",
+    "No Root/Git/product/runtime write; only this new immutable review receipt"
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "immutable": true,
+  "recorded_at_utc": "2026-10-15T00:57:45.0956275Z",
+  "reviewer": "/root/finish_coverage",
+  "result": "BOUNDED_SOURCE_CLOSURE_CONFIRMED_NO_NEW_FINDING",
+  "examined_pins": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-finding-physical-postfix-v1\\manifest.json",
+      "bytes": 1703,
+      "sha256": "50f070b0342d90cc378d360b888e1e5862929ab942762a27709f7567245806b5"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-finding-physical-postfix-v1\\native-finding-physical-v2.mjs",
+      "bytes": 43382,
+      "sha256": "95c014077ff72565eb48e243aa48e31da79efec1e82b662812108179a48f1f67"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-finding-physical-postfix-v1\\DERIVATION.json",
+      "bytes": 2608,
+      "sha256": "db9402f2ef9783430e2afbc908177bab3739cb8c62dc75c2dffda0f1be0ec981"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-finding-physical-postfix-v1\\HANDOFF.md",
+      "bytes": 2821,
+      "sha256": "8a0571f0f66469615b53ce993645e827d047502511c885b1afffc0968524bd4e"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-finding-physical-postfix-v1\\verification.json",
+      "bytes": 1048,
+      "sha256": "ee4f17ce7981563daf08420dfef853552712d659c8bca5aae5bbc5fe40ae3427"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-finding-physical-preparation-v1\\native-finding-physical-v1.mjs",
+      "bytes": 43334,
+      "sha256": "b76683dddc46ffb65ef094fd1d1650c04ddc82f737d9ddb3f60ec45ec5e58ea6"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-finding-physical-preparation-v1\\manifest.json",
+      "bytes": 1876,
+      "sha256": "78c3d01a5837964dcd1dde7fb11c8172994192c4d6fc3c57096c57afb2d2a10e"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-finding-physical-review-v1\\receipt.json",
+      "bytes": 8912,
+      "sha256": "b511badee8535063caf9097d086e99e09483378f13b111a69888a8a18db75bfa"
+    }
+  ],
+  "original_finding": {
+    "priority": 2,
+    "trigger": "Successful actual fmt suite may have zero-byte format.log with empty SHA and summaries[], old regular() rejected all0-byte files",
+    "status": "CLOSED_IN_SOURCE_NOT_RUNTIME_PROVEN",
+    "review_sha256": "b511badee8535063caf9097d086e99e09483378f13b111a69888a8a18db75bfa"
+  },
+  "delta": {
+    "operations": "regular gains optional allowEmpty=false + minimum0 only when explicit true; actual suite-log and actual build-log readers alone pass true; fixed OWN target changes to fresh immutable postfix directory",
+    "all_other_driver_bytes_unchanged": true,
+    "exact_inverse_original_bytes": true,
+    "operation_count": 4,
+    "exact_forward_replay": true
+  },
+  "line_findings": [
+    {
+      "path": "native-finding-physical-v2.mjs",
+      "assessment": "Allow0 only for actual successful evidence logs; SHA/run/close/exit/spawn/summaries equality remain. Workspace still requires nonempty parsed summaries and1170+, all388+4 actual names.",
+      "lines": "34,78-81,92"
+    },
+    {
+      "path": "native-finding-physical-v2.mjs",
+      "assessment": "Publication/release/manifests/runner sources/candidate PE/error body retain nonempty default and same upper limits; no bypass for missing, symlink, oversized or SHA-mismatched files.",
+      "lines": "52-69,83,98-99,109,261"
+    }
+  ],
+  "actual_checks": [
+    {
+      "exit_code": 0,
+      "scope": "SYNTAX_ONLY_NO_IMPORT_OR_SCRIPT_EXECUTION",
+      "command": "node --check native-finding-physical-v2.mjs"
+    },
+    {
+      "result": "PASS",
+      "scope": "SOURCE_ONLY_NO_EMPTY_LOG_FIXTURE",
+      "command": "Read-only exact DERIVATION operations and inverse string/byte comparison plus SHA/length verification"
+    }
+  ],
+  "confirmed_new_findings": [],
+  "execution_counts": {
+    "sqlite": 0,
+    "physical": 0,
+    "compiler": 0,
+    "native": 0,
+    "browser": 0,
+    "http": 0,
+    "tests": 0
+  },
+  "qualifications": [
+    "Bounded review of four exact substitutions only, not a fresh full physical-harness approval",
+    "Original immutable78c3/b766/b511 remain unchanged",
+    "Empty-format-log runtime controls and twelve physical cases remain NOT_RUN under compute HOLD",
+    "No Root/Git/product/installed/runtime writes; only this fresh review receipt"
+  ]
+}

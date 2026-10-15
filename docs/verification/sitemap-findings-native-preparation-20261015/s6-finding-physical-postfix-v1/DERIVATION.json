@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "source": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-finding-physical-preparation-v1\\native-finding-physical-v1.mjs",
+    "sha256": "b76683dddc46ffb65ef094fd1d1650c04ddc82f737d9ddb3f60ec45ec5e58ea6",
+    "bytes": 43334
+  },
+  "basis_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-finding-physical-preparation-v1\\manifest.json",
+    "sha256": "78c3d01a5837964dcd1dde7fb11c8172994192c4d6fc3c57096c57afb2d2a10e",
+    "bytes": 1876
+  },
+  "independent_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-finding-physical-review-v1\\receipt.json",
+    "sha256": "b511badee8535063caf9097d086e99e09483378f13b111a69888a8a18db75bfa",
+    "bytes": 8912
+  },
+  "output": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-finding-physical-postfix-v1\\native-finding-physical-v2.mjs",
+    "sha256": "95c014077ff72565eb48e243aa48e31da79efec1e82b662812108179a48f1f67",
+    "bytes": 43382
+  },
+  "normalization": "NONE; exact original UTF8 bytes with LF retained",
+  "operations": [
+    {
+      "before": "function regular(file, maximum) { const s = fs.lstatSync(file); assert(s.isFile() && !s.isSymbolicLink() && s.size > 0 && s.size <= maximum, 'bounded regular file: ' + file); return fs.readFileSync(file); }",
+      "after": "function regular(file, maximum, allowEmpty = false) { const s = fs.lstatSync(file); assert(s.isFile() && !s.isSymbolicLink() && s.size >= (allowEmpty ? 0 : 1) && s.size <= maximum, 'bounded regular file: ' + file); return fs.readFileSync(file); }",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "regular(path.join(path.dirname(a['suite-proof']), name + '.log'), 64 * 1024 * 1024)",
+      "after": "regular(path.join(path.dirname(a['suite-proof']), name + '.log'), 64 * 1024 * 1024, true)",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "regular(path.join(path.dirname(a['build-proof']), name + '.log'), 64 * 1024 * 1024)",
+      "after": "regular(path.join(path.dirname(a['build-proof']), name + '.log'), 64 * 1024 * 1024, true)",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "path.join(ROOT, 's6-finding-physical-preparation-v1')",
+      "after": "path.join(ROOT, 's6-finding-physical-postfix-v1')",
+      "expected_occurrences": 1
+    }
+  ],
+  "forward_replay": "EXACT",
+  "inverse_reconstruction": "EXACT_ORIGINAL_BYTES",
+  "scope": "Default nonempty retained; only actual suite/build log readers allow0; own immutable execution root moved to fresh postfix directory",
+  "other_code_logic_and_bytes": "UNCHANGED"
+}

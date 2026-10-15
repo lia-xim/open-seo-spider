@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "status": "SCHEMA_ONLY_NOT_AN_OPERATIONAL_RELEASE",
+  "command": [
+    "node",
+    "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/run-sitemap-findings-native-acceptance-v1.mjs",
+    "--gate",
+    "native|ui-mock",
+    "--build-mode",
+    "debug|optimized",
+    "--release",
+    "ABS_ROOT_RELEASE_JSON"
+  ],
+  "required_environment": {
+    "OPEN_SEO_COORDINATED_EXECUTION_WINDOW": "confirmed"
+  },
+  "root_release": {
+    "kind": "root_released_sitemap_findings_acceptance_driver_v1",
+    "gate": "native OR ui-mock, exactly one",
+    "build_mode": "debug OR optimized",
+    "source_manifest_sha256": "69492d0c0cc56bab5de86251045459a1707deb4c991d5871f9ad39015e897751",
+    "driver_sha256": "2d72764ee4c27817e2eba6125f19850c4c0b498c9db966eb3ff74b1d8b95bc32",
+    "build_proof_sha256": "Root supplies actual future accepted v2 build proof SHA",
+    "candidate_binary_sha256": "Root supplies actual same v2 candidate binary SHA",
+    "output": "Exact fixed Ebase/results/sitemap-findings-{gate}-{mode}-acceptance-v1",
+    "expires_at": "Root supplies real future ISO timestamp only after operational release",
+    "chrome_executable": "ui-mock only: explicit absolute browser executable",
+    "chrome_sha256": "ui-mock only: actual browser executable SHA"
+  },
+  "ui_subreceipt": "Exact original c9 manifest and six assets matched to6949. Separate ui-mock release, never native permission reuse.",
+  "deadlines": "600s requests cooperative native cancellation and disqualifies PASS, then waits actual harness close; no stale nestedPID kills or hard drain-latency guarantee. All data retained.",
+  "fixed_publication_admission": {
+    "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/sitemap-findings-surfaces-published-v1.json",
+    "sha256": "b71188d145a8e720bd9d6c9aaf4720c03c20cced7f406839264e5432e85e84ff",
+    "commit": "f43efc17d1393645a9eb8c8b8510743f3dfedb5c",
+    "qualification": "Historical private source-only NOT_RUN checkpoint, independent of future accepted suite/build evidence."
+  },
+  "actual_close_deadline": "Immutable monotonic hrtime snapshot at actual close event, must be strictly less than600000ms; timer flag remains cancellation mechanism only. Wait actual drain and never stale-PID kill."
+}

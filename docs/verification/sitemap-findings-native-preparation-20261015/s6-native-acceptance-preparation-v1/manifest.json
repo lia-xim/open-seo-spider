@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "immutable": true,
+  "name": "s6-native-acceptance-preparation-v1",
+  "status": "PREPARED_SOURCE_ONLY_NOT_RUN",
+  "recorded_at_utc": "2026-10-15T00:48:37.418638+00:00",
+  "basis_root_head": "f43efc17d1393645a9eb8c8b8510743f3dfedb5c",
+  "source_manifest_sha256": "69492d0c0cc56bab5de86251045459a1707deb4c991d5871f9ad39015e897751",
+  "source_inputs": 297,
+  "entries": [
+    {
+      "path": "run-sitemap-findings-native-acceptance-v1.mjs",
+      "sha256": "7fc1a3af7a208492137b7befe5e4cb157ac6200ae86d1a158e464814603b67dd",
+      "bytes": 25916,
+      "role": "Root Task/work promotion"
+    },
+    {
+      "path": "findings-native-owned-adapter.mjs",
+      "sha256": "30381b2d523fac41ab4a41f5e2517628c5f8c7a43c115c92b5ed28da441bff5c",
+      "bytes": 15752,
+      "role": "Immutable execution-only companion copied into new output"
+    },
+    {
+      "path": "findings-ui-mock-owned-adapter.cjs",
+      "sha256": "dd51478d6be132a29d2c7a19317a9ffa02e207094c3afa10b82e273bf97f4a4d",
+      "bytes": 27324,
+      "role": "Immutable execution-only companion copied into new output"
+    }
+  ],
+  "intended_task_promotion": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/run-sitemap-findings-native-acceptance-v1.mjs",
+  "required_before": "ABSENT",
+  "suite_version": "sitemap-findings-surfaces-suite-v1",
+  "build_version": "sitemap-findings-surfaces-{debug|optimized}-build-v2",
+  "separate_gates": [
+    "native",
+    "ui-mock"
+  ],
+  "future_real_browser_gate": "NOT_IMPLEMENTED_BY_THIS_HANDOFF",
+  "support_files": [
+    {
+      "path": "SOURCE-PINS.json",
+      "sha256": "aa4eb3e13cec5a6abeddfab5562d0877f211a7035816483cb2adde6067e2e97d",
+      "bytes": 3536
+    },
+    {
+      "path": "AUDIT.json",
+      "sha256": "52fe16b903169d8b21eeb91ae5cc98e88cc71452aac6b4cae3379f24e0203ced",
+      "bytes": 2645
+    },
+    {
+      "path": "DEPENDENCY-IDENTITY.json",
+      "sha256": "be47bbe7dff1297916487613beedd44ac1666fe22d8ceaf89eb350b950506b73",
+      "bytes": 229710
+    },
+    {
+      "path": "NATIVE-ADAPTER-DERIVATION.json",
+      "sha256": "46dbfe79940a81c0c48ea222a578e6253b4c22c66fa137cd32aa10e547943a60",
+      "bytes": 9225
+    },
+    {
+      "path": "UI-ADAPTER-DERIVATION.json",
+      "sha256": "7b1339fef5e6633fd84051e628d93ef6b2546360f8617533e8232a99f97b7667",
+      "bytes": 1177
+    },
+    {
+      "path": "RELEASE-CONTRACT.json",
+      "sha256": "8d7668992dad95518672f76b348cd7dc676a8a5d8825d800ea72d370d82386e5",
+      "bytes": 1655
+    },
+    {
+      "path": "verification.json",
+      "sha256": "38d79ca4d3753736556afc6692ec4d94ccec52ecb9a1b33623a8e91c43e8f2ee",
+      "bytes": 1987
+    },
+    {
+      "path": "HANDOFF.md",
+      "sha256": "743b7354a9eb340f81ec429c38908db069e3cc971b233f77d49f03740e74be51",
+      "bytes": 4457
+    }
+  ],
+  "runtime_runs": 0,
+  "node_syntax_exit_codes": [
+    0,
+    0,
+    0
+  ],
+  "root_promotion_owner": "Root",
+  "qualification": "Prepared guardian+isolated harness copies, source/hash/syntax only; no native/UI acceptance or feature/manufacturer parity."
+}

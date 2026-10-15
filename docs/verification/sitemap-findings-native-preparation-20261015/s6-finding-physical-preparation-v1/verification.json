@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "status": "SOURCE_AUTHORING_AND_SYNTAX_ONLY",
+  "driver": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-finding-physical-preparation-v1\\native-finding-physical-v1.mjs",
+    "sha256": "b76683dddc46ffb65ef094fd1d1650c04ddc82f737d9ddb3f60ec45ec5e58ea6",
+    "bytes": 43334
+  },
+  "node_check": {
+    "actual_exit_code": 0,
+    "command": "node --check E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-finding-physical-preparation-v1\\native-finding-physical-v1.mjs",
+    "module_evaluated": false
+  },
+  "source_semantic_pins_against_frozen_manifest": "12_MATCH",
+  "metadata_check": "Actual manifest44groups/388names/388unique names",
+  "static_preflight_order": {
+    "hold_before_runtime_mutations": true,
+    "fixed_source_297": true,
+    "fixed_publication_f43": true,
+    "fixed_future_suite_and_builder_v2": true,
+    "future_actual_suite_logs_3_reparsed_min1170_388_and4": true,
+    "future_actual_binary_SHA_and_build_v2": true,
+    "active_expiring_Root_release_exact_harness_SHA": true,
+    "all_before_sqlite_import_and_first_mkdir": true
+  },
+  "planned_physical_cases": [
+    "csv-01-base",
+    "csv-02-quote-probe",
+    "csv-03-ascii-probe",
+    "csv-04-coarse",
+    "csv-05-exact",
+    "csv-06-plus-one",
+    "json-01-base",
+    "json-02-quote-probe",
+    "json-03-ascii-probe",
+    "json-04-coarse",
+    "json-05-exact",
+    "json-06-plus-one"
+  ],
+  "planned_real_baselines": {
+    "csv_pages": 405,
+    "json_pages": 160,
+    "expected_actual_website_requests": 567
+  },
+  "planned_oracles": {
+    "csv": "New10columns plus full context metadata and all actual typed rows, uncapped rowwise count/SHA",
+    "json": "Whole App wrapper+actual Context/Tokens/Rows; Core page strictly below8MiB",
+    "calibration": "Own actual quote/ASCII probes and actual coarse remeasurement; expected3/2/1 only admitted after observation",
+    "report_rebind": "Exact byte-fragment inverse and exact checkpoint SHA-cell inverse; no full document JSON roundtrip",
+    "sql_retention": "All SQL rows except two changed metadata cells fingerprinted; raw/A/B/config/gen retained"
+  },
+  "execution": {
+    "driver_import_eval_vm": "NOT_RUN",
+    "guards_negative_controls": "NOT_RUN",
+    "fixture_allocation_or_SQLite": "NOT_RUN",
+    "HTTP_or_native_child": "NOT_RUN",
+    "calibration_or_physical_cases": "NOT_RUN",
+    "Cargo_or_tests_or_browser": "NOT_RUN",
+    "release": "NONE_CREATED_OR_OBSERVED",
+    "compute_hold": "ACTIVE"
+  },
+  "open_limits": [
+    "Runtime viability and exact calibration unproven",
+    "Actual external JSON serialization profile equality unproven",
+    "Product120s prepare/300s stream/30s stall limits unchanged",
+    "Synthetic offline warnings are not genuine website/native-warning-writer evidence",
+    "HTTP EOF is not an internal Join/TX chronology witness",
+    "Native deterministic latefault/cancel/RSS remains separate",
+    "RawCSV and source50k/50MiB A-only/exactB/Unknown matrix remain separate"
+  ],
+  "root_git_runtime_mutations": 0,
+  "feature_counts_unchanged": {
+    "implemented": 31,
+    "partial": 67,
+    "planned": 46
+  }
+}

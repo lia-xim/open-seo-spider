@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "result": "SOURCE_REPLAY_AND_SYNTAX_ONLY",
+  "operation_count": 19,
+  "per_file": [
+    {
+      "operations": 2,
+      "path": "preflight.mjs"
+    },
+    {
+      "operations": 5,
+      "path": "browser-flow.mjs"
+    },
+    {
+      "operations": 12,
+      "path": "run-sitemap-findings-browser-native-v1.mjs"
+    }
+  ],
+  "forward": "EXACT_NEW_BYTES",
+  "inverse": "EXACT_ORIGINAL_BYTES",
+  "actual_commands": [
+    {
+      "exit_code": 0,
+      "command": "node --check preflight.mjs"
+    },
+    {
+      "exit_code": 0,
+      "command": "node --check browser-flow.mjs"
+    },
+    {
+      "exit_code": 0,
+      "command": "node --check run-sitemap-findings-browser-native-v1.mjs"
+    },
+    {
+      "result": "PASS_SOURCE_ONLY",
+      "command": "Python literal authoring derivation followed by independent read-only PowerShell19-op replay/inverse and hash comparisons"
+    }
+  ],
+  "reviewed_findings": 3,
+  "runtime_controls_executed": 0,
+  "not_run": [
+    "Missing/changed publication negative runtime control",
+    "600s actual-close/delayed log-drain timer-race control",
+    "Duplicate/missing matrix/CSV corruption control",
+    "Any native/HTTP/SQLite/browser/SDK/Cargo/build/test"
+  ],
+  "compiler_inputs_changed": 0,
+  "originals_unchanged": true
+}

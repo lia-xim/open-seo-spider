@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "basis_manifest_sha256": "71ed85b6baf20f9bb5f0c1103a4351d06cc44bd3cae49fe94db489bcf71e6e51",
+  "review_receipt_sha256": "b8189980c0c49cf495924cb81f3216a99a6702ea7f3b0fbcccba388a56318fb8",
+  "operations": [
+    {
+      "path": "preflight.mjs",
+      "expected_occurrences": 1,
+      "before": "  const suitePath=path.join(BASE,'results/sitemap-findings-surfaces-suite-v1/proof.json')",
+      "after": "  // Historical private source publication; not current GitHEAD or installed runtime acceptance.\n  const publicationPath=path.join(TASK,'work/sitemap-findings-surfaces-published-v1.json');\n  const publicationSha='b71188d145a8e720bd9d6c9aaf4720c03c20cced7f406839264e5432e85e84ff';\n  const publicationRaw=hash(publicationPath,publicationSha,1024*1024),publication=JSON.parse(publicationRaw);\n  assert.equal(publication.result,'PUSHED_PRIVATE_SOURCE_ONLY_GOAL_ACTIVE');assert.equal(publication.commit,'f43efc17d1393645a9eb8c8b8510743f3dfedb5c');assert.equal(publication.source_manifest_sha256,SOURCE_SHA);\n  assert.equal(publication.repository.isPrivate,true);assert.equal(publication.repository.nameWithOwner,'lia-xim/open-seo-spider');assert.equal(publication.frozen_inputs,297);assert.equal(publication.approved_product_bindings,38);assert.equal(publication.new_authored_rust_tests,47);assert.equal(publication.executed_new_rust_tests,0);assert.equal(publication.ui_mock_groups_authored,13);assert.equal(publication.executed_ui_groups,0);assert.equal(publication.compiler_clippy_native_browser_build,'NOT_RUN_COORDINATED_COMPUTE_HOLD');\n  const publicationLineage=Object.freeze({path:publicationPath,sha256:publicationSha,commit:publication.commit,source_manifest_sha256:SOURCE_SHA,repository_private:true,checkpoint_result:publication.result,checkpoint_execution:publication.compiler_clippy_native_browser_build});\n  const suitePath=path.join(BASE,'results/sitemap-findings-surfaces-suite-v1/proof.json')"
+    },
+    {
+      "path": "preflight.mjs",
+      "expected_occurrences": 1,
+      "before": "return {mode,output,binary,",
+      "after": "return {publicationPath,publicationSha,publicationLineage,mode,output,binary,"
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "expected_occurrences": 1,
+      "before": "// All active imports, output creation, listening, SQLite access and process spawn are below verified admission.",
+      "after": "// All active imports, output creation, listening, SQLite access and process spawn are below verified admission.\r\nconst executionStartedNs=process.hrtime.bigint(),EXECUTION_DEADLINE_MS=600000,EXECUTION_DEADLINE_NS=BigInt(EXECUTION_DEADLINE_MS)*1000000n;\r\nconst closeElapsed=()=>String(process.hrtime.bigint()-executionStartedNs);"
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "expected_occurrences": 1,
+      "before": "complete=false,siteClosed=false;",
+      "after": "complete=false,siteClosed=false,completionClock=null;"
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "expected_occurrences": 1,
+      "before": "const deadline=setTimeout(()=>abort('Native browser driver 600s cooperative deadline'),600000);",
+      "after": "const deadline=setTimeout(()=>abort('Native browser driver 600s cooperative deadline'),EXECUTION_DEADLINE_MS);"
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "expected_occurrences": 1,
+      "before": "item.stdout_closed=true;resolve();",
+      "after": "item.stdout_closed=true;item.stdout_close_elapsed_nanoseconds=closeElapsed();resolve();"
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "expected_occurrences": 1,
+      "before": "item.stderr_closed=true;resolve();",
+      "after": "item.stderr_closed=true;item.stderr_close_elapsed_nanoseconds=closeElapsed();resolve();"
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "expected_occurrences": 1,
+      "before": "Object.assign(item,{actual_close_event:true,code,signal});",
+      "after": "Object.assign(item,{actual_close_event:true,code,signal,process_close_elapsed_nanoseconds:closeElapsed()});"
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "expected_occurrences": 1,
+      "before": "  clearTimeout(deadline);let browserCloseError;",
+      "after": "  let browserCloseError;"
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "expected_occurrences": 1,
+      "before": "  process.off('message',onMessage);process.off('SIGINT',onSigint);process.off('SIGTERM',onSigterm);",
+      "after": "  // Freeze completion after held process closes AND actual writer-pipe drain.\r\n  // A due-but-undelivered timer cannot make a >=600s completion pass.\r\n  const closedClocks=owned.flatMap(item=>[item.process_close_elapsed_nanoseconds,item.stdout_close_elapsed_nanoseconds,item.stderr_close_elapsed_nanoseconds]);\r\n  const allExpectedDrained=owned.length===2&&owned.every(item=>item.actual_close_event&&item.stdout_closed&&item.stderr_closed)&&closedClocks.every(value=>typeof value==='string');\r\n  const lastActualCloseNs=closedClocks.filter(value=>typeof value==='string').reduce((latest,value)=>BigInt(value)>latest?BigInt(value):latest,0n),drainObservedNs=process.hrtime.bigint()-executionStartedNs;\r\n  completionClock=Object.freeze({profile:'monotonic_actual_process_and_writer_drain_v1',deadline_nanoseconds:String(EXECUTION_DEADLINE_NS),last_actual_process_or_pipe_close_elapsed_nanoseconds:String(lastActualCloseNs),all_drains_observed_elapsed_nanoseconds:String(drainObservedNs),all_expected_processes_and_pipes_closed:allExpectedDrained,fixture_closed:siteClosed,within_deadline:allExpectedDrained&&siteClosed&&lastActualCloseNs<EXECUTION_DEADLINE_NS&&drainObservedNs<EXECUTION_DEADLINE_NS});\r\n  clearTimeout(deadline);\r\n  if(!completionClock.within_deadline)failures.push({phase:'monotonic_completion_deadline',message:'Actual process/writer drain incomplete or observed at/after600s',clock:completionClock});\r\n  process.off('message',onMessage);process.off('SIGINT',onSigint);process.off('SIGTERM',onSigterm);"
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "expected_occurrences": 1,
+      "before": "try{assert.equal(sha(await fs.readFile(admission.binary)),admission.binarySha);",
+      "after": "try{assert.equal(sha(await fs.readFile(admission.publicationPath)),admission.publicationSha);assert.equal(sha(await fs.readFile(admission.binary)),admission.binarySha);"
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "expected_occurrences": 1,
+      "before": "result:complete&&allClosed&&siteClosed&&failures.length===0?",
+      "after": "result:complete&&allClosed&&siteClosed&&completionClock?.within_deadline===true&&failures.length===0?"
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "expected_occurrences": 1,
+      "before": "source_manifest_sha256:admission.sourceSha,preparation_manifest_sha256:",
+      "after": "source_publication:admission.publicationLineage,actual_close_clock:completionClock,source_manifest_sha256:admission.sourceSha,preparation_manifest_sha256:"
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "expected_occurrences": 1,
+      "before": "expectedAssets,configSha:sqliteEvidence.actual_saved_config_sha256",
+      "after": "expectedAssets,configSha:sqliteEvidence.actual_saved_config_sha256,expectedSeedUrls:config.seed_urls"
+    },
+    {
+      "path": "browser-flow.mjs",
+      "expected_occurrences": 1,
+      "before": "quiet,expectedAssets,configSha}=env;",
+      "after": "quiet,expectedAssets,configSha,expectedSeedUrls}=env;"
+    },
+    {
+      "path": "browser-flow.mjs",
+      "expected_occurrences": 1,
+      "before": "    async function collect(query){let cursor=null,context=null,rows=[],steps=0;do{const response=(await post(findingPath,{...query,limit:200,candidate_limit:5000,...(cursor?{cursor}:{})})).json;assert(response.findings&&Array.isArray(response.findings.rows));const current=response.findings.context.context_sha256;if(context)assert.equal(current,context);context=current;rows.push(...response.findings.rows);cursor=response.next_cursor;assert(++steps<=10);}while(cursor);return rows;}",
+      "after": "    const collectedContexts=new Map();\n    async function collect(query){let cursor=null,context=null,rows=[],steps=0;const cursors=new Set();do{const response=(await post(findingPath,{...query,limit:200,candidate_limit:5000,...(cursor?{cursor}:{})})).json;assert.equal(response.access_target.job_id,job.id);assert.equal(response.access_target.generation,job.generation);assert.equal(response.access_target.config_sha256,configSha);assert.equal(response.website_requests,0);assert(response.findings&&Array.isArray(response.findings.rows));if(context)assert.deepEqual(response.findings.context,context);context=response.findings.context;rows.push(...response.findings.rows);cursor=response.next_cursor;if(cursor){assert(!cursors.has(cursor),'Repeated API continuation');cursors.add(cursor);}else{assert.equal(response.findings.scan.exhausted,true);assert.equal(response.findings.scan.stop,'exhausted');}assert(++steps<=10);}while(cursor);collectedContexts.set(JSON.stringify(query),context);return rows;}\n    assert.equal(expectedSeedUrls.length,405);assert.equal(new Set(expectedSeedUrls).size,405);\n    function assertCompleteMatrix(filter,rows){\n      const source=filter.startsWith('xml-'),expected=source?[siteOrigin+'/a.xml',siteOrigin+'/b.xml']:expectedSeedUrls;\n      assert.equal(rows.length,expected.length);assert.equal(new Set(rows.map(identity)).size,expected.length,'Every original occurs once in actual API matrix');assert.deepEqual(rows.map(identity).slice().sort(),expected.slice().sort(),'Exact actual fixture original inventory');\n      assert.equal(new Set(rows.map(row=>JSON.stringify(row.position))).size,expected.length,'Every candidate position unique');\n      if(!source){for(const [ordinal,row] of rows.entries()){assert.equal(row.evidence.domain,'saved_page');assert.deepEqual(row.position,{kind:'saved_page',ordinal});}if(matrix['urls-in-sitemap'])assert.deepEqual(rows.map(identity),matrix['urls-in-sitemap'].map(identity),'Same report ordinal identifies same original across filters');}\n      else for(const row of rows){assert.equal(row.evidence.domain,'source_attempt');assert.equal(row.position.kind,'source_measurement');assert(Number.isSafeInteger(row.position.sequence)&&row.position.sequence>0);}\n    }"
+    },
+    {
+      "path": "browser-flow.mjs",
+      "expected_occurrences": 1,
+      "before": "const query=selection(filter),all=await collect(query);assert.equal(all.length,filter.startsWith('xml-')?2:405);",
+      "after": "const query=selection(filter),all=await collect(query);assertCompleteMatrix(filter,all);"
+    },
+    {
+      "path": "browser-flow.mjs",
+      "expected_occurrences": 1,
+      "before": "    const csvSelection=selection('urls-not-in-sitemap','match'),shown=await configure(csvSelection);assert.equal(shown.body.findings.rows.length,1);const exportRequest={...csvSelection,snapshot:shown.body.export_token};",
+      "after": "    const csvSelection=selection('urls-not-in-sitemap','match'),matchingApi=await collect(csvSelection);assert.deepEqual(matchingApi,matrix['urls-not-in-sitemap'].filter(row=>row.assessment.verdict==='match'),'Actual match API traversal equals complete all-assessment matrix');assert.equal(matchingApi.length,403);assert.equal(new Set(matchingApi.map(identity)).size,403);assert.equal(new Set(matchingApi.map(row=>JSON.stringify(row.position))).size,403);\n    const shown=await configure(csvSelection);assert.equal(shown.body.findings.rows.length,1);assert.deepEqual(shown.body.findings.context,collectedContexts.get(JSON.stringify(csvSelection)));const exportRequest={...csvSelection,snapshot:shown.body.export_token};"
+    },
+    {
+      "path": "browser-flow.mjs",
+      "expected_occurrences": 1,
+      "before": "const csvMetadata=JSON.parse(parsed[1][9]);assert.equal(csvMetadata.context.basis.crawl_config_sha256,configSha);assert.equal(csvMetadata.context.context_sha256,shown.body.findings.context.context_sha256);assert.deepEqual(csvMetadata.selection,csvSelection);const data=parsed.slice(2);assert.equal(data.length,403);assert(data.every(row=>row.length===10&&row[0]==='finding'));for(const row of data){const finding=JSON.parse(row[8]);assert.equal(finding.assessment.verdict,'match');assert.equal(finding.evidence.domain,'saved_page');assert.deepEqual(JSON.parse(row[6]),finding.position);}assert(data.some(row=>identity(JSON.parse(row[8]))===farUrl));",
+      "after": "const csvMetadata=JSON.parse(parsed[1][9]);assert.equal(parsed[1].length,10);assert.deepEqual(parsed[1].slice(0,9),['context','1','saved_page',csvSelection.filter,'match','','','','']);assert.deepEqual(csvMetadata,{engine:'open-seo-spider/app-sitemap-findings-v1',selection:csvSelection,context:shown.body.findings.context},'Full actual CSV metadata/context with no missing/extra facts');const data=parsed.slice(2);assert.equal(data.length,matchingApi.length);for(const [index,row] of data.entries()){const expected=matchingApi[index];assert.equal(row.length,10);assert.deepEqual(row.slice(0,6),['finding','1','saved_page',csvSelection.filter,'match',identity(expected)],'Every human cell and exact original in real API order');assert.deepEqual(JSON.parse(row[6]),expected.position);assert.deepEqual(JSON.parse(row[7]),expected.assessment.reasons);assert.deepEqual(JSON.parse(row[8]),expected,'Every full typed CSV row equals corresponding genuine API row');assert.equal(row[9],'','No repeated context on data rows');}assert(data.some(row=>identity(JSON.parse(row[8]))===farUrl));"
+    }
+  ],
+  "payload_guards": [
+    {
+      "path": "preflight.mjs",
+      "before_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-native-browser-preparation-v1\\preflight.mjs",
+      "before_sha256": "c4eb13621d1a1391357922a2c1edfab0c29016dc8aed8ea49371efb8fc30a219",
+      "after_sha256": "82516eb345b14e24314946d3f0f33319aa736a58d5fb931a6eb4534486ad2a52",
+      "after_bytes": 9753
+    },
+    {
+      "path": "browser-flow.mjs",
+      "before_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-native-browser-preparation-v1\\browser-flow.mjs",
+      "before_sha256": "78dc66ece8fa869d2ec870beddfd191ffed2187413e7b45196224e76e809fb8f",
+      "after_sha256": "894010bcce948989b9dcb79d5a75cb86ec3ea8f0d12324c2b2625f6bbb1f4ec5",
+      "after_bytes": 19048
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "before_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-native-browser-preparation-v1\\run-sitemap-findings-browser-native-v1.mjs",
+      "before_sha256": "02b1f6129de28cec5e8c8a86084f192f4d5c5c347946845e5e1ce0c9a6e645b3",
+      "after_sha256": "581ec6ad181d22b48772f034931c37cf87d91bd7deb7bbb8a24090995532a5dc",
+      "after_bytes": 20505
+    }
+  ],
+  "forward_replay": "EXACT",
+  "inverse_reconstruction": "EXACT_ORIGINAL_BYTES",
+  "scope": "Three reviewed browser-source issues only; original694/f43; no UIe9 or runtime acceptance"
+}

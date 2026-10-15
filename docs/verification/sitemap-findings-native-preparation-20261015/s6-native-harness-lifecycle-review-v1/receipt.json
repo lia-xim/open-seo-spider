@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "immutable": true,
+  "status": "ONE_CONFIRMED_NATIVE_HARNESS_LIFECYCLE_P2_SOURCE_ONLY",
+  "reviewer": "/root/finish_coverage",
+  "pins": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-source-v1/scripts/sitemap-findings-mcp-e2e.mjs",
+      "sha256": "7e7dc7c973eba232f4f8c9a3f6f4ebe34904d6d85d04b81cabefe8b1946b4d3b",
+      "bytes": 12066
+    },
+    {
+      "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/outputs/open-seo-spider/scripts/node_modules/@modelcontextprotocol/client/package.json",
+      "sha256": "4a886cbee0d611f822618e4ee94ae4589655c282fa0dbafc17e80da9697f2d91",
+      "bytes": 4591
+    },
+    {
+      "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/outputs/open-seo-spider/scripts/node_modules/@modelcontextprotocol/client/dist/stdio.mjs",
+      "sha256": "af887c8972a37b8c3fcc78192d8f1d56c099bf8ca365f4843ec51ced6f5650da",
+      "bytes": 6153
+    },
+    {
+      "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/outputs/open-seo-spider/scripts/node_modules/@modelcontextprotocol/client/dist/index.mjs",
+      "sha256": "8b370b8009c7b64834cc91bf5e6ab28e524d7c2ce952dfe57d943a6926f8d54b",
+      "bytes": 259338
+    },
+    {
+      "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/outputs/open-seo-spider/scripts/node_modules/@modelcontextprotocol/client/dist/src-WCy6ifGf.mjs",
+      "sha256": "689dad5b2e36e44b937841f8ffdf3e402efeac43ce4d398aa5a87731a64eb36d",
+      "bytes": 309661
+    }
+  ],
+  "frozen_compiler_source_manifest_sha256": "69492d0c0cc56bab5de86251045459a1707deb4c991d5871f9ad39015e897751",
+  "finding": {
+    "id": "S6-NATIVE-SDK-LIFECYCLE-001",
+    "priority": "P2",
+    "scope": "New dedicated native harness SDK child cleanup; original narrow CLI/App child fixes remain separately valid",
+    "harness_lines": "98-108,138-139,152-167",
+    "sdk_lines": "stdio.mjs71-115,133-134,181-205;index.mjs3130-3135,3371-3373;src-WCy6ifGf.mjs5830-5854,6065-6067",
+    "trigger": "Actual SDK stdio child starts, then initialize/handshake fails or outer connect timeout occurs. SDK automatic close may already be in flight when harness finally invokes close again.",
+    "confirmed_source": "SDK close clears its process reference before waiting; after two bounded waits it may SIGKILL and return without final close await. LegacyHandshake catch invokes this.close unawaited. A second close can return immediately because SDK process field is already cleared. Harness ignores finally close errors and allClosed covers only CLI/App, so it can remove owned data while SDK child/first close is still live or unobserved.",
+    "happy_path_boundary": "Transport onclose observer is actual child close in pinned stdio implementation, but current marker is lexical/happy-only and ownership is cleared before its assertion. It cannot protect failure cleanup.",
+    "runtime": "NOT_RUN"
+  },
+  "confirmed_findings": 1,
+  "primary_sdk_facts": [
+    "Version2.3.1 verified from actual package.json",
+    "start resolves spawn and rejects error; only child close invokes stdio transport onclose",
+    "Public pid is getter of current process reference and becomes null when close clears it",
+    "Client.close delegates to transport close and resets client state; it does not add actual process-close await",
+    "Public stdio close is not internal _dispose; _dispose uses process exit and is not a supported public lifecycle replacement",
+    "Default versionNegotiation is legacy at index2559-2567, matching current harness Client call"
+  ],
+  "fix_plan": "FIXPLAN.md",
+  "actual_checks": [
+    "Read-only actual frozen harness and installed SDK source/package SHA reads",
+    "Bounded source trace of spawn/error/close, Client connect/automatic close/base Protocol callback chaining and close delegation"
+  ],
+  "not_run": [
+    "SDK imports or Node/native harness execution",
+    "ChildProcess/HTTP/SQLite/fixture/browser/test/build execution",
+    "Any allocation/process latency or actual leftover measurement"
+  ],
+  "root_writes": 0,
+  "product_writes": 0,
+  "installed_sdk_writes": 0,
+  "qualification": "Static concrete failure path, not an observed leaked process. Existing source reviews retain their original scoped meaning; new runtime-safe driver must not rewrite frozen297 inputs.",
+  "fix_plan_sha256": "8bfbca4d30fadea7e18a75693c5d3cabd81b572d70810e2bab7cf42d2637a94c"
+}

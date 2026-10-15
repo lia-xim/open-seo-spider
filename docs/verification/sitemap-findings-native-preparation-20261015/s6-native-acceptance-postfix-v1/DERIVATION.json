@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "source": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-native-acceptance-preparation-v1/run-sitemap-findings-native-acceptance-v1.mjs",
+  "source_sha256": "7fc1a3af7a208492137b7befe5e4cb157ac6200ae86d1a158e464814603b67dd",
+  "basis_manifest_sha256": "18b306748cd301054d79a36cbc1f464691617bbda05ab3db3685644959306155",
+  "review_receipt": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-native-acceptance-review-v1/receipt.json",
+  "review_receipt_sha256": "c2a18a01a306e487335390e211572e7a5617256d2cce744c00d731033a43f1a6",
+  "output": "run-sitemap-findings-native-acceptance-v1.mjs",
+  "output_sha256": "2d72764ee4c27817e2eba6125f19850c4c0b498c9db966eb3ff74b1d8b95bc32",
+  "operations": [
+    {
+      "before": "const ownedRendererGates =",
+      "after": "// This is a fixed historical source publication checkpoint, not a current\n// runtime-Git-HEAD or runtime acceptance claim. Current297 bytes are verified\n// separately; documentation commits may advance without changing those inputs.\nconst publicationPath = path.join(task,'work/sitemap-findings-surfaces-published-v1.json');\nconst expectedPublicationSHA = 'b71188d145a8e720bd9d6c9aaf4720c03c20cced7f406839264e5432e85e84ff';\nconst expectedSourceCommit = 'f43efc17d1393645a9eb8c8b8510743f3dfedb5c';\nconst publicationRaw = fs.readFileSync(publicationPath);\nassert.equal(sha(publicationRaw),expectedPublicationSHA,'Fixed private source publication receipt');\nconst publication = JSON.parse(publicationRaw);\nassert.equal(publication.result,'PUSHED_PRIVATE_SOURCE_ONLY_GOAL_ACTIVE');\nassert.equal(publication.commit,expectedSourceCommit);\nassert.equal(publication.source_manifest_sha256,expectedSourceSha);\nassert.equal(publication.repository.isPrivate,true);\nassert.equal(publication.repository.nameWithOwner,'lia-xim/open-seo-spider');\nassert.equal(publication.frozen_inputs,297);\nassert.equal(publication.approved_product_bindings,38);\nassert.equal(publication.new_authored_rust_tests,47);\nassert.equal(publication.executed_new_rust_tests,0);\nassert.equal(publication.ui_mock_groups_authored,13);\nassert.equal(publication.executed_ui_groups,0);\nassert.equal(publication.compiler_clippy_native_browser_build,'NOT_RUN_COORDINATED_COMPUTE_HOLD');\nconst publicationLineage = Object.freeze({path:publicationPath,sha256:expectedPublicationSHA,commit:expectedSourceCommit,source_manifest_sha256:expectedSourceSha,frozen_inputs:297,repository_private:true,checkpoint_result:publication.result,checkpoint_execution:publication.compiler_clippy_native_browser_build});\nconst ownedRendererGates =",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "  assert.equal(sha(fs.readFileSync(path.join(source,'manifest.json'))),expectedSourceSha);",
+      "after": "  assert.equal(sha(fs.readFileSync(publicationPath)),expectedPublicationSHA,'Fixed publication receipt changed');\n  assert.equal(sha(fs.readFileSync(path.join(source,'manifest.json'))),expectedSourceSha);",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "write('prerequisites.json',{source_manifest_sha256:expectedSourceSha,",
+      "after": "write('prerequisites.json',{source_publication:publicationLineage,source_manifest_sha256:expectedSourceSha,",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "let child,actualClose=false,spawnError=null,deadlineExceeded=false,externalCancellation=false;",
+      "after": "const HARNESS_DEADLINE_MS=600000, HARNESS_DEADLINE_NS=BigInt(HARNESS_DEADLINE_MS)*1000000n;\nlet child,actualClose=false,spawnError=null,deadlineExceeded=false,externalCancellation=false,completionClock=null;",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "    child=spawn(process.execPath,commandArgs,",
+      "after": "    const childStartedNs=process.hrtime.bigint();\n    child=spawn(process.execPath,commandArgs,",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "    timer=setTimeout(()=>cooperativeAbort('deadline'),600000);timer.unref();\n    exit=await new Promise(resolve=>child.once('close',(code,signal)=>{actualClose=true;resolve({code,signal});}));",
+      "after": "    timer=setTimeout(()=>cooperativeAbort('deadline'),HARNESS_DEADLINE_MS);timer.unref();\n    const closed=await new Promise(resolve=>child.once('close',(code,signal)=>{\n      actualClose=true;\n      resolve(Object.freeze({code,signal,elapsed_nanoseconds:(process.hrtime.bigint()-childStartedNs).toString()}));\n    }));\n    exit={code:closed.code,signal:closed.signal};\n    // Immutable monotonic actual-close observation: a due timer may not have\n    // run yet, and clearing it cannot turn an over600s completion into PASS.\n    completionClock=Object.freeze({elapsed_nanoseconds:closed.elapsed_nanoseconds,deadline_nanoseconds:HARNESS_DEADLINE_NS.toString(),within_deadline:BigInt(closed.elapsed_nanoseconds)<HARNESS_DEADLINE_NS});",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "deadline_exceeded:deadlineExceeded,external_cancellation:externalCancellation});",
+      "after": "deadline_exceeded:deadlineExceeded||completionClock?.within_deadline===false,actual_close_clock:completionClock,external_cancellation:externalCancellation});",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "  assert(!deadlineExceeded&&!externalCancellation,'Cancelled/over-deadline run cannot PASS');",
+      "after": "  assert(completionClock?.within_deadline===true,'Actual close observation exceeded monotonic600s deadline');\n  assert(!deadlineExceeded&&!externalCancellation,'Cancelled/over-deadline run cannot PASS');",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "recorded_at:new Date().toISOString(),gate,mode,source_manifest_sha256:expectedSourceSha,",
+      "after": "recorded_at:new Date().toISOString(),gate,mode,source_publication:publicationLineage,actual_close_clock:completionClock,source_manifest_sha256:expectedSourceSha,",
+      "expected_occurrences": 1
+    }
+  ],
+  "scope": "Exactly2 source fixes: historical private publication admission and independent monotonic600s close snapshot. Original adapters, dataset, source694 and UIc9 remain unchanged.",
+  "intended_promotion": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/run-sitemap-findings-native-acceptance-v1.mjs",
+  "required_current_task_state": "ABSENT"
+}

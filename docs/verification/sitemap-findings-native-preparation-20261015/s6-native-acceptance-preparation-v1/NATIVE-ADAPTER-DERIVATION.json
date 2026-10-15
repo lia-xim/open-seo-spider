@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "source": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-source-v1/scripts/sitemap-findings-mcp-e2e.mjs",
+  "source_sha256": "7e7dc7c973eba232f4f8c9a3f6f4ebe34904d6d85d04b81cabefe8b1946b4d3b",
+  "output": "findings-native-owned-adapter.mjs",
+  "output_sha256": "30381b2d523fac41ab4a41f5e2517628c5f8c7a43c115c92b5ed28da441bff5c",
+  "normalization": "UTF8 CRLF to LF before ordered replacements; source has 172 CRLF",
+  "operations": [
+    {
+      "before": "import { mkdtemp, readFile, writeFile, rm } from 'node:fs/promises';",
+      "after": "import { mkdtemp, readFile, writeFile } from 'node:fs/promises';",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "let app, cli, activeClient;",
+      "after": "let app, cli, activeClient;\nconst ownedSDK = [];\nlet shutdownRequested = false;\nfunction journal(event) {\n  if (process.connected) process.send({kind: 'findings_native_ownership_v1', ...event});\n}\njournal({event: 'directory', path: directory});\nfunction trackSDK(transport, client) {\n  const owned = {role: `sdk-stdio-${ownedSDK.length}`, transport, client, pid: null, actualClose: false, startAttempted: false};\n  let resolveClose;\n  owned.closed = new Promise(resolve => { resolveClose = resolve; });\n  const previous = transport.onclose;\n  transport.onclose = () => {\n    owned.actualClose = true;\n    journal({event: 'close', role: owned.role, pid: owned.pid, actual_close_event: true});\n    resolveClose();\n    previous?.();\n  };\n  const capturePID = () => {\n    const pid = transport.pid;\n    if (Number.isInteger(pid) && pid > 0 && owned.pid === null) {\n      owned.pid = pid;\n      journal({event: 'spawn', role: owned.role, pid});\n    }\n  };\n  const start = transport.start.bind(transport);\n  transport.start = (...args) => {\n    owned.startAttempted = true;\n    let pending;\n    try { pending = start(...args); capturePID(); }\n    catch (error) { capturePID(); throw error; }\n    return Promise.resolve(pending).finally(capturePID);\n  };\n  ownedSDK.push(owned);\n  return owned;\n}\nasync function closeSDK(owned) {\n  let error;\n  try { await bounded(owned.client.close(), 15000); } catch (failure) { error = failure; }\n  // SDK close() may resolve after SIGKILL before its actual close event.\n  // Its public pid can already be null, so retain the original observer/PID.\n  try { await bounded(owned.closed, 15000); } catch (failure) { error ??= failure; }\n  assert(owned.actualClose, `SDK actual close not observed; data retained at ${directory}`);\n  if (error) throw error;\n}",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "const websiteOrigin = `http://127.0.0.1:${website.address().port}`;",
+      "after": "assert(![8787, 8790].includes(website.address().port), 'Owned website port must avoid shared8787/8790');\nconst websiteOrigin = `http://127.0.0.1:${website.address().port}`;",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "const port = reserve.address().port;",
+      "after": "const port = reserve.address().port;\nassert(![8787, 8790].includes(port), 'Owned API port must avoid shared8787/8790');",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "function child(args) {",
+      "after": "function child(args, role) {",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "  const owned = { process, closed: null, actualClose: false, spawnError: null };",
+      "after": "  const owned = { process, role, closed: null, actualClose: false, spawnError: null };\n  journal({event: 'spawn', role, pid: process.pid ?? null});",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "      owned.actualClose = true;\n      resolve({ code, signal, stdout, stderr });",
+      "after": "      owned.actualClose = true;\n      journal({event: 'close', role, pid: process.pid ?? null, actual_close_event: true, code, signal});\n      resolve({ code, signal, stdout, stderr });",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "const checks = [];",
+      "after": "// Outer supervision requests cooperative drain and keeps this harness alive\n// until its actual close events arrive; it never infers close from PID absence.\nprocess.on('message', message => {\n  if (message?.kind !== 'findings_native_abort_v1') return;\n  shutdownRequested = true;\n  for (const owned of ownedSDK) owned.client.close().catch(error => journal({event: 'close_error', role: owned.role, message: String(error.message).slice(0, 512)}));\n  for (const owned of [cli, app]) if (owned && !owned.actualClose && Number.isInteger(owned.process.pid) && owned.process.exitCode === null && owned.process.signalCode === null) owned.process.kill('SIGTERM');\n  website.closeAllConnections();\n});\nconst checks = [];",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "app = child(['serve', '--listen', `127.0.0.1:${port}`, '--data-dir', directory]);",
+      "after": "app = child(['serve', '--listen', `127.0.0.1:${port}`, '--data-dir', directory], 'app');",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "    let actualClose = false;\n    if (kind === 'stdio') {\n      const start = transport.start.bind(transport);\n      transport.start = async (...args) => { const previous = transport.onclose; transport.onclose = () => { actualClose = true; previous?.(); }; return start(...args); };\n    }",
+      "after": "    const ownedStdio = kind === 'stdio' ? trackSDK(transport, activeClient) : null;",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "    await bounded(activeClient.close()); activeClient = null;\n    if (kind === 'stdio') assert(actualClose, 'Actual stdio child close event required');",
+      "after": "    if (ownedStdio) await closeSDK(ownedStdio); else await bounded(activeClient.close());\n    activeClient = null;",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "cli = child(['sitemap-findings', path.join(directory, job.id + '.sqlite'), '--request', request, '--output', output, '--csv', csv]);",
+      "after": "cli = child(['sitemap-findings', path.join(directory, job.id + '.sqlite'), '--request', request, '--output', output, '--csv', csv], 'cli');",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "  if (activeClient) await activeClient.close().catch(() => {});\n  let closeError;",
+      "after": "  let closeError;\n  for (const owned of ownedSDK) { try { await closeSDK(owned); } catch (error) { closeError ??= error; } }\n  if (activeClient && !ownedSDK.some(owned => owned.client === activeClient)) { try { await bounded(activeClient.close(), 15000); } catch (error) { closeError ??= error; } }",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "  const allClosed = [cli, app].every(owned => !owned || owned.actualClose);",
+      "after": "  const allClosed = [cli, app].every(owned => !owned || owned.actualClose) && ownedSDK.every(owned => owned.actualClose);",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "  await new Promise(resolve => website.close(resolve));\n  await rm(directory, { recursive: true, force: true });\n  if (closeError) throw closeError;",
+      "after": "  website.closeAllConnections();\n  await bounded(new Promise(resolve => website.close(resolve)), 15000);\n  // Retain all private fixture files as local evidence, including failures.\n  journal({event: 'directory_retained', path: directory});\n  if (closeError) throw closeError;\n  assert(!shutdownRequested, 'Outer native deadline requested cancellation; no PASS');",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "assert(evidence);\nconsole.log(JSON.stringify(evidence, null, 2));",
+      "after": "assert(evidence);\nevidence.execution_adapter = 'isolated_findings_native_ownership_v1';\nevidence.fixture_directory_retained = directory;\nevidence.owned_ports = {api: port, website: website.address()?.port ?? Number(new URL(websiteOrigin).port)};\nevidence.owned_processes = [...ownedSDK.map(owned => ({role: owned.role, pid: owned.pid, actual_close_event: owned.actualClose})), ...[app, cli].filter(Boolean).map(owned => ({role: owned.role, pid: owned.process.pid ?? null, actual_close_event: owned.actualClose}))];\nconsole.log(JSON.stringify(evidence, null, 2));\nif (process.connected) process.disconnect();",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "// A positive receipt follows actual App/SDK/fixture shutdown and own cleanup.",
+      "after": "// A positive receipt follows actual App/SDK/fixture shutdown; private data is retained.",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "    assert.equal(definition.inputSchema.additionalProperties, false);",
+      "after": "    assert.equal(definition.inputSchema.additionalProperties, false);\n    assert.deepEqual(definition.inputSchema.properties.filter.enum, ['urls-in-sitemap','urls-not-in-sitemap','orphan-urls','non-indexable-urls-in-sitemap','urls-in-multiple-sitemaps','xml-sitemap-with-over-50k-urls','xml-sitemap-over-50mb']);",
+      "expected_occurrences": 1
+    }
+  ],
+  "scope": "Execution-only harness copy, no frozen297/Root/SDK changes; original native assertions retained except strengthened ownership/cleanup."
+}

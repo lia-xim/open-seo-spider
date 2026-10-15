@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "result": "AUTHORED_ACTUAL_NATIVE_BROWSER_HARNESS_NOT_RUN",
+  "recorded_at": "2026-10-15T00:52:55.2268182Z",
+  "source_manifest_sha256": "69492d0c0cc56bab5de86251045459a1707deb4c991d5871f9ad39015e897751",
+  "compiler_inputs_modified": 0,
+  "new_rust_test_expectations": 0,
+  "planned_native_groups": 20,
+  "executed_native_groups": 0,
+  "mocked_ui_groups_separate": 13,
+  "files": [
+    {
+      "path": "preflight.mjs",
+      "before": "ABSENT_NEW_OWN_HANDOFF_ONLY",
+      "bytes": 8287,
+      "sha256": "c4eb13621d1a1391357922a2c1edfab0c29016dc8aed8ea49371efb8fc30a219"
+    },
+    {
+      "path": "browser-flow.mjs",
+      "before": "ABSENT_NEW_OWN_HANDOFF_ONLY",
+      "bytes": 16370,
+      "sha256": "78dc66ece8fa869d2ec870beddfd191ffed2187413e7b45196224e76e809fb8f"
+    },
+    {
+      "path": "run-sitemap-findings-browser-native-v1.mjs",
+      "before": "ABSENT_NEW_OWN_HANDOFF_ONLY",
+      "bytes": 18453,
+      "sha256": "02b1f6129de28cec5e8c8a86084f192f4d5c5c347946845e5e1ce0c9a6e645b3"
+    },
+    {
+      "path": "HANDOFF.md",
+      "before": "ABSENT_NEW_OWN_HANDOFF_ONLY",
+      "bytes": 9419,
+      "sha256": "23e558e9dcd5eab9bfd61810c10aa8a8ff0771aa12b460a995648f649988b610"
+    },
+    {
+      "path": "SOURCE-PINS.json",
+      "before": "ABSENT_NEW_OWN_HANDOFF_ONLY",
+      "bytes": 6687,
+      "sha256": "c9810135b12eeac183a64b312f9c661c56d176a90a62adbb806dac39cda7bceb"
+    }
+  ],
+  "actual_checks": [
+    {
+      "exit_code": 0,
+      "command": "node --check preflight.mjs",
+      "scope": "SYNTAX_ONLY_NO_IMPORT"
+    },
+    {
+      "exit_code": 0,
+      "command": "node --check browser-flow.mjs",
+      "scope": "SYNTAX_ONLY_NO_IMPORT"
+    },
+    {
+      "exit_code": 0,
+      "command": "node --check run-sitemap-findings-browser-native-v1.mjs",
+      "scope": "SYNTAX_ONLY_NO_IMPORT"
+    }
+  ],
+  "not_run": [
+    "Cargo/compiler/build/tests",
+    "SQLite or fixture generation",
+    "HTTP/SDK/native/browser imports or execution",
+    "Physical source positive/Unknown matrix",
+    "Physical64MiB CSV/+1",
+    "Generic outer guardian browser-native registration",
+    "Other platforms/optimized installation"
+  ],
+  "product_git_runtime_writes": false,
+  "own_handoff_source_writes_only": true,
+  "fresh_output_required": true,
+  "data_deletion_implemented": false,
+  "release_kind": "root_released_sitemap_findings_browser_native_v1"
+}
