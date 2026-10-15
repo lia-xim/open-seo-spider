@@ -6353,6 +6353,87 @@
       "reference_parity": "NOT_PROVEN"
     },
     {
+      "id": "sitemap-original-body-foundation-20261015",
+      "priority": 1,
+      "status": "SOURCE_PROPOSAL_V2_REVIEWED_NOT_COMPILED_NOT_PROMOTED",
+      "title_de": "Ursprüngliche Sitemap-Dateien dauerhaft speichern",
+      "summary_de": "Die opt-in Grundlage für Originalbytes nach HTTP-Decoding und separat dekodiertes XML ist als eigener Quellvorschlag umgesetzt und zweimal geprüft. Zwei gefundene Fehler sind korrigiert. Keine Format-, Compiler-, Laufzeit- oder Installationsabnahme; der aktuelle V4-Kandidat enthält diese Änderung noch nicht.",
+      "completed_acceptance_de": [
+        "BODY01–04: getrennte Konfiguration und Budgets, eigene unveränderliche Dateien, SQLite-Zuordnung zur tatsächlich gespeicherten Quellenmessung und Wiederöffnungsprüfung als Quellcode vorbereitet.",
+        "Beide konkreten Erstbefunde korrigiert: eindeutiger Archivpfad je Datenbankdateiname und SQL-Feldgrenzen vor Allokation. V2-Review 702d4337 ohne weitere Befunde im begrenzten Umfang.",
+        "14 neue Testfunktionen geschrieben, davon13 für Windows; noch nicht ausgeführt."
+      ],
+      "pending_acceptance_de": [
+        "Quellvorschlag gemeinsam prüfen, formatieren, kompilieren und die tatsächlichen Positiv-/Rollback-/Quota-/Corruption-Fälle ausführen.",
+        "BODY05–08: API-/UI-Konfiguration, verifizierten Originaldownload und Browser-Wiederöffnung umsetzen und tatsächlich gegen die Bytequellen prüfen.",
+        "MCP-Fenster, eigene Kopien für abgeleitete Crawls, portable Bundles, Wiederherstellung und kontrollierte Bereinigung bleiben getrennte offene Schritte."
+      ],
+      "documentation": [
+        "docs/parity/sitemap-source-archive-plan.md",
+        "docs/parity/sitemap-source-archive-tasks.json"
+      ],
+      "gates": {
+        "source_review": "PASS_BOUNDED_SOURCE_ONLY_V2",
+        "rust_tests": "NOT_RUN",
+        "public_api_ui": "NOT_IMPLEMENTED",
+        "native_body_recovery": "NOT_RUN",
+        "installation": "NOT_RUN"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "http-mcp-lifecycle-ownership-20261015",
+      "priority": 2,
+      "status": "SOURCE_IMPLEMENTATION_IN_PROGRESS_NOT_COMPILED_NOT_PROMOTED",
+      "title_de": "Laufende HTTP- und MCP-Arbeiten sauber beenden",
+      "summary_de": "Gemeinsame Arbeitszulassung und gehaltene Worker-/Supervisor-Aufgaben sind als neuer Quellcode vorbereitet. Ein lokaler EOF-Schalter soll ein tatsächlich beobachtbares sauberes Prozessende ermöglichen. Die bestehende SIGTERM-Bereinigung beweist dieses Verhalten bislang nicht.",
+      "completed_acceptance_de": [
+        "Tatsächliche Starts von Request-, Blocking-, Crawl- und PDF-Arbeiten im vorhandenen Code erfasst; konkrete Shutdown-Reihenfolge dokumentiert.",
+        "Regressionen für getrennten Client, abgebrochenen Drain-Waiter, Start vor Jobinsert, bestehendes Cancel während PDF-Arbeit und Signalfehler nach Persistenz geschrieben; noch nicht ausgeführt."
+      ],
+      "pending_acceptance_de": [
+        "Vollständigen Quellvorschlag unabhängig prüfen und mit den anderen Änderungen zusammenführen.",
+        "Tatsächliche Rust-/HTTP-Tests und einen eigenen nativen EOF-Lauf mit gestarteter Arbeit, sauberem Exit0, vollständigen Pipes und dauerhaftem Checkpoint ausführen.",
+        "Stateful MCP-Sessions, requests/cancelled und die Lebensdauer externer Rendererprozesse bleiben zusätzliche offene Verträge."
+      ],
+      "documentation": [
+        "docs/parity/http-lifecycle-plan.md"
+      ],
+      "gates": {
+        "source_review": "IN_PROGRESS",
+        "rust_tests": "NOT_RUN",
+        "native_eof_inflight": "NOT_RUN",
+        "installation": "NOT_RUN"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "sitemap-location-pagination-work-20261015",
+      "priority": 3,
+      "status": "SOURCE_ANALYSIS_COMPLETE_STATELESS_OPTIMIZATION_IN_PROGRESS",
+      "title_de": "Große Sitemap-Kataloge effizient durchblättern",
+      "summary_de": "Der aktuelle Leser wiederholt vollständige Integritäts- und Kontextprüfungen für jede Ergebnisseite. Die erste Optimierung erhält die bestehenden Cursor und Prüfungen und soll überflüssige SQL-Einzelabfragen, Dekodierung und Serialisierung entfernen. Laufzeitgewinn und Speicherbedarf sind noch nicht gemessen.",
+      "completed_acceptance_de": [
+        "Konkrete Codepfade und die wiederholten vollständigen Durchläufe anhand des eingefrorenen V4-Quellstands bestätigt.",
+        "Festgehaltene Sitzungen als mögliche spätere Architektur dokumentiert; Dateiidentität und Abbruch-/Shutdown-Verhalten bleiben dafür ausdrücklich offene Voraussetzungen."
+      ],
+      "pending_acceptance_de": [
+        "Den ersten zustandslosen Slice implementieren: Relation-, Hash-, Reihenfolge-, Tail-, Budget-, Quell- und Reportprüfungen vollständig beibehalten.",
+        "Exakte kanonische Bytezählung gegen den unveränderten Serializer und alle bisherigen Cursor-/Mutation-/Corruption-Orakel prüfen.",
+        "Echte50.000 Zeilen vollständig paginieren, exportieren und nach Neustart prüfen; konkrete Arbeitszähler, Zeit und Speicher getrennt messen."
+      ],
+      "documentation": [
+        "docs/parity/sitemap-location-paging-plan.md"
+      ],
+      "gates": {
+        "source_analysis": "COMPLETE_BOUNDED_SOURCE_ONLY",
+        "implementation": "IN_PROGRESS",
+        "rust_tests": "NOT_RUN",
+        "native_large_sources": "NOT_RUN_ON_NEW_SOURCE"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
       "id": "combined-optimized-native-v3-20261015",
       "priority": 0,
       "status": "FIVE_NATIVE_SCOPES_PASS_PHYSICAL_FAILED_INSTALLATION_OPEN",
