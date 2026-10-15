@@ -10,6 +10,7 @@
     search: '', filter: 'all', sort: 'url', direction: 1, page: 0, pageSize: 50,
     selected: null, selectedResponse: null, selectedInput: null, responses: null, responsesError: '', fragments: null, fragmentsError: '', inspectorTab: 'details', polling: false, starting: false,
     generation: 0, pollToken: null, pollTimer: null, control: null, operationSequence: 0, startOperation: null, historySequence: 0, issueMap: new Map(), pageMap: new Map(), cache: {}, analysis: null, analysisError: '', settings: {
+      crawl_admission_limits_enabled:false,crawl_max_folder_depth:"",crawl_max_query_tokens:"",crawl_max_fetch_url_utf8_bytes:"",
       concurrency: 8, timeout_seconds: 20, max_pages: 0, max_depth: 0,
       user_agent: 'Open SEO Spider/0.1', indexability_agent: 'googlebot', obey_robots: true, follow_subdomains: false,
       delay_ms: 100, max_body_mb: 5, check_external: false,
@@ -382,7 +383,7 @@
       if (!current()) return;
       const payload = { ...state.settings, ...advanced, mode, seed_url: mode === 'sitemap' ? '' : urls[0] || '', urls: mode === 'sitemap' ? [] : urls, seed_urls: mode === 'sitemap' ? [] : urls, sitemap_urls: mode === 'sitemap' ? urls : sitemapUrls, input_imports: inputImports, crawl_links: mode !== 'list', include_subdomains: state.settings.follow_subdomains, request_timeout_secs: state.settings.timeout_seconds, max_body_bytes: state.settings.max_body_mb * 1024 * 1024 };
       for (const key of ['crawl_policy_enabled', 'crawl_policy_json', 'live_policy_limits_json', 'content_capture_enabled', 'content_capture_json','resource_discovery_enabled','resource_discovery_json','resource_discovery_limits_json']) delete payload[key];
-      for (const key of [...sitemapArchiveSettingKeys, 'sitemap_source_processing_enabled', ...sitemapSourceFields.map(field => field.setting), 'sitemap_membership_limits_enabled', ...sitemapMembershipFields.map(field => field.setting)]) delete payload[key];
+      for (const key of [...crawlAdmissionSettingKeys, ...sitemapArchiveSettingKeys, 'sitemap_source_processing_enabled', ...sitemapSourceFields.map(field => field.setting), 'sitemap_membership_limits_enabled', ...sitemapMembershipFields.map(field => field.setting)]) delete payload[key];
       payload.renderer = state.settings.javascript_rendering ? { endpoint: state.settings.renderer_endpoint, wait_ms: state.settings.renderer_wait_ms, accessibility: state.settings.renderer_accessibility, screenshot: state.settings.renderer_screenshot, collect_cookies: state.settings.renderer_collect_cookies, custom_javascript: parseCustomJavascript(state.settings.custom_javascript_json) } : null;
       const result = await request('/api/crawls', { method: 'POST', body: JSON.stringify(payload) });
       const crawl = result.crawl || result;
@@ -1033,7 +1034,7 @@
         ['Strukturierte Daten', `${array(page.structured_data).length} JSON-LD-Blöcke · ${page.invalid_structured_data ?? 0} ungültig`],
         ['Weiterleitungen', page.redirect_chain.map((entry) => `${entry.status} ${entry.url} → ${entry.target}`).join('\n') || '—'],
         ['Robots.txt', page.blocked_by_robots ? 'Abruf ausgeschlossen' : page.robots_warning || 'Kein gemeldeter Ausschluss'],
-        ['Abruffehler', page.error || '—'], ['Entdeckt auf', page.discovered_from || '—'],
+        ['Abruffehler', page.error || '—'], ['Statische URL-Zulassung', page.crawl_admission ? (page.crawl_admission.last.denied ? 'Verweigert: '+page.crawl_admission.last.denied : 'Geprüft') : 'Nicht aktiviert / Altbestand'], ['URL-Grenzen (Tiefe / Query / Bytes)', page.crawl_admission ? [page.crawl_admission.last.folder_depth,page.crawl_admission.last.query_tokens,page.crawl_admission.last.fetch_url_utf8_bytes].join(' / ') : '—'], ['Entdeckt auf', page.discovered_from || '—'],
         ['Renderstatus', page.rendered ? 'JavaScript-DOM erfasst' : page.renderer_error ? 'Rendering fehlgeschlagen' : 'Kein Rendering erfasst'],
         ['Browser-Version', page.browser_version || '—'],
         ['Render-Viewport', page.rendered_viewport ? JSON.stringify(page.rendered_viewport) : '—'],
@@ -1267,6 +1268,7 @@
     syncResourceContractSettings();
     syncSitemapSourceProcessingSettings();
     syncSitemapSourceArchiveSettings();
+    syncCrawlAdmissionSettings();
     $('settings-error').hidden = true;
     $('settings-dialog').showModal();
   }
@@ -1274,10 +1276,11 @@
   function saveSettings(event) {
     event.preventDefault();
     const form = $('settings-form');
-    const advancedText = { ...readSitemapSourceProcessingSettings(form), ...readSitemapSourceArchiveSettings(form), include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value, link_position_rules_json: form.elements.link_position_rules_json.value, validate_fragments: form.elements.validate_fragments.checked, crawl_policy_enabled: form.elements.crawl_policy_enabled.checked, crawl_policy_json: form.elements.crawl_policy_json.value, live_policy_limits_json: form.elements.live_policy_limits_json.value, javascript_rendering: form.elements.javascript_rendering.checked, content_capture_enabled:form.elements.content_capture_enabled.checked, content_capture_json:form.elements.content_capture_json.value,resource_discovery_enabled:form.elements.resource_discovery_enabled.checked,resource_discovery_json:form.elements.resource_discovery_json.value,resource_discovery_limits_json:form.elements.resource_discovery_limits_json.value };
+    const advancedText = { ...readCrawlAdmissionSettings(form), ...readSitemapSourceProcessingSettings(form), ...readSitemapSourceArchiveSettings(form), include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value, link_position_rules_json: form.elements.link_position_rules_json.value, validate_fragments: form.elements.validate_fragments.checked, crawl_policy_enabled: form.elements.crawl_policy_enabled.checked, crawl_policy_json: form.elements.crawl_policy_json.value, live_policy_limits_json: form.elements.live_policy_limits_json.value, javascript_rendering: form.elements.javascript_rendering.checked, content_capture_enabled:form.elements.content_capture_enabled.checked, content_capture_json:form.elements.content_capture_json.value,resource_discovery_enabled:form.elements.resource_discovery_enabled.checked,resource_discovery_json:form.elements.resource_discovery_json.value,resource_discovery_limits_json:form.elements.resource_discovery_limits_json.value };
     try { parseAdvanced(advancedText); validateRendererSettings({ javascript_rendering: form.elements.javascript_rendering.checked, renderer_endpoint: form.elements.renderer_endpoint.value.trim(), renderer_wait_ms: Number(form.elements.renderer_wait_ms.value), timeout_seconds: Number(form.elements.timeout_seconds.value) }); }
     catch (error) {
       if (form.elements.sitemap_source_processing_enabled.checked || form.elements.sitemap_membership_limits_enabled.checked) $('sitemap-source-processing-settings').open = true;
+      if (form.elements.crawl_admission_limits_enabled.checked) $('crawl-admission-settings').open = true;
       if (form.elements.sitemap_source_archive_enabled.checked) $('sitemap-source-archive-settings').open = true;
       $('settings-error').textContent = error.message;
       $('settings-error').hidden = false;
@@ -1306,6 +1309,8 @@
         Object.assign(state.settings, { crawl_policy_enabled: saved.crawl_policy_enabled === true, crawl_policy_json: String(saved.crawl_policy_json || '{"scope":{"roots":[{"origin":"https://example.test","folders":["/"]}]}}'), live_policy_limits_json: String(saved.live_policy_limits_json || '{}') });
         Object.assign(state.settings, { content_capture_enabled:saved.content_capture_enabled === true, content_capture_json:String(saved.content_capture_json || '{"sources":["raw_http_html"],"include_selectors":["body"],"exclude_selectors":["script","style","template","noscript","nav","footer"]}') });
         Object.assign(state.settings,{resource_discovery_enabled:saved.resource_discovery_enabled===true,resource_discovery_json:String(saved.resource_discovery_json || '{}'),resource_discovery_limits_json:String(saved.resource_discovery_limits_json || '{}')});
+        state.settings.crawl_admission_limits_enabled = saved.crawl_admission_limits_enabled === true;
+        for(const field of crawlAdmissionFields)state.settings[field.setting]=String(saved[field.setting]??'');
         state.settings.sitemap_source_archive_enabled = saved.sitemap_source_archive_enabled === true;
         state.settings.sitemap_source_archive_post_http = saved.sitemap_source_archive_post_http !== false;
         state.settings.sitemap_source_archive_decoded_xml = saved.sitemap_source_archive_decoded_xml !== false;
@@ -1316,6 +1321,23 @@
         for (const field of sitemapSourceFields) state.settings[field.setting] = String(saved[field.setting] ?? field.initial);
       }
     } catch (_) { /* Invalid saved settings fall back to safe defaults. */ }
+  }
+
+  const crawlAdmissionFields = [
+    {setting:'crawl_max_folder_depth',native:'max_folder_depth',minimum:0,maximum:65535,label:'Ordnertiefe'},
+    {setting:'crawl_max_query_tokens',native:'max_query_tokens',minimum:0,maximum:65535,label:'Query-Tokens'},
+    {setting:'crawl_max_fetch_url_utf8_bytes',native:'max_fetch_url_utf8_bytes',minimum:1,maximum:1048576,label:'Abruf-URL in UTF-8-Bytes'}
+  ];
+  const crawlAdmissionSettingKeys=['crawl_admission_limits_enabled',...crawlAdmissionFields.map(field=>field.setting)];
+  function readCrawlAdmissionSettings(form){const values={crawl_admission_limits_enabled:form.elements.crawl_admission_limits_enabled.checked};for(const field of crawlAdmissionFields)values[field.setting]=form.elements[field.setting].value;return values;}
+  function syncCrawlAdmissionSettings(){const fields=$('crawl-admission-fields');fields.disabled=!$('settings-form').elements.crawl_admission_limits_enabled.checked;fields.hidden=fields.disabled;}
+  function parseCrawlAdmissionLimits(settings){
+    if(settings.crawl_admission_limits_enabled!==true)return {};
+    if(settings.javascript_rendering===true)throw new Error('Statische URL-Grenzen unterstützen derzeit keinen JavaScript-Renderer.');
+    const limits={version:1};let count=0;
+    for(const field of crawlAdmissionFields){const raw=settings[field.setting];if(raw==null||raw==='')continue;const value=Number(raw);if(!(typeof raw==='number'||typeof raw==='string'&&/^[0-9]+$/.test(raw))||!Number.isSafeInteger(value)||value<field.minimum||value>field.maximum)throw new Error(field.label+': Eine ganze Zahl von '+field.minimum+' bis '+field.maximum+' ist erforderlich.');limits[field.native]=value;count++;}
+    if(count===0)throw new Error('Mindestens eine statische URL-Grenze eingeben oder die Funktion ausschalten.');
+    return {crawl_admission_limits:limits};
   }
 
   const sitemapSourceFields = [
@@ -1457,7 +1479,7 @@
       return { name, selector, attribute: definition.attribute == null ? null : definition.attribute.trim(), method, output, max_results, regex_group, regex_flags, namespaces };
     });
     const lines = (value) => [...new Set(String(value || '').split(/\r?\n/).map((line) => line.trim()).filter(Boolean))];
-    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), pdf_analysis: parsePdfAnalysis(settings.pdf_analysis_json), link_position_rules: parsePositionRules(settings.link_position_rules_json), validate_fragments: settings.validate_fragments === true, include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text), ...parseNativePolicy(settings), ...parseContentCapture(settings),...parseResourceDiscovery(settings), ...parseSitemapSourceProcessing(settings), ...parseSitemapMembershipLimits(settings), ...parseSitemapSourceArchive(settings) };
+    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), pdf_analysis: parsePdfAnalysis(settings.pdf_analysis_json), link_position_rules: parsePositionRules(settings.link_position_rules_json), validate_fragments: settings.validate_fragments === true, include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text), ...parseNativePolicy(settings), ...parseContentCapture(settings),...parseResourceDiscovery(settings), ...parseSitemapSourceProcessing(settings), ...parseSitemapMembershipLimits(settings), ...parseSitemapSourceArchive(settings), ...parseCrawlAdmissionLimits(settings) };
   }
 
   function policyObject(value, allowed, label) {
@@ -3073,6 +3095,7 @@
     $('settings-close').addEventListener('click', () => $('settings-dialog').close());
     $('settings-form').addEventListener('submit', saveSettings);
     $('settings-form').elements.javascript_rendering.addEventListener('change', (event) => toggleRendererSettings(event.target.checked));
+    $('settings-form').elements.crawl_admission_limits_enabled.addEventListener('change', syncCrawlAdmissionSettings);
     $('settings-form').elements.sitemap_source_archive_enabled.addEventListener('change', syncSitemapSourceArchiveSettings);
     $('settings-form').elements.sitemap_source_processing_enabled.addEventListener('change', syncSitemapSourceProcessingSettings);
     $('settings-form').elements.sitemap_membership_limits_enabled.addEventListener('change', syncSitemapSourceProcessingSettings);
@@ -3086,6 +3109,7 @@
   }
 
   async function initialize() {
+    $('advanced-config').append($('crawl-admission-settings-template').content.cloneNode(true));
     $('advanced-config').append($('sitemap-source-archive-settings-template').content.cloneNode(true));
     $('advanced-config').append($('sitemap-source-processing-settings-template').content.cloneNode(true));
     $('advanced-config').append($('policy-settings-template').content.cloneNode(true));

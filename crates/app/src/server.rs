@@ -765,6 +765,7 @@ async fn capabilities() -> Json<Value> {
         "native_content_capture":{"opt_in":true,"sources":["raw_http_html","rendered_dom_html"],"body_retention":false,"source_binding":"persisted_consistency","full_reference_parity":false},
         "native_resource_discovery":{"opt_in":true,"engine":open_seo_spider_core::RESOURCE_DISCOVERY_ENGINE,"semantic_contracts":[open_seo_spider_core::RESOURCE_DISCOVERY_ENGINE,open_seo_spider_core::RESOURCE_CONTRACT_ENGINE],"contract_selection":"explicit_optional_config","qualified_directives":["nofollow","ugc","sponsored"],"qualified_link_scope":"target_internal_external_including_document_nofollow","durable_original_reference_roles":true,"durable_sqlite_ledger":true,"paged_occurrences":true,"paged_transport_metadata":true,"streamed_snapshot_exports":true,"entity_body_retention":false,"renderer_supported":false,"full_reference_parity":false},
         "stored_sitemap_source_bodies":{"opt_in":true,"config_field":"sitemap_source_archive","storage":"utf8_sqlite_own_archive","metadata_byte_availability":"not_checked","download":"verified_private_spool_before_headers","max_binary_bytes":67108864,"json_page_limits_unchanged":true,"wire_bytes":false,"portable_bundle":false,"inherited_body_copy":false,"unresponsive_transport_drain":"not_proven"},
+        "crawl_admission_limits":{"opt_in":true,"config_field":"crawl_admission_limits","version":1,"static_only":true,"folder_depth_zero_allowed":true,"query_tokens_zero_allowed":true,"fetch_url_bytes_min":1,"fetch_url_bytes_max":1048576,"page_document_and_redirects":true,"renderer_supported":false,"dynamic_quotas":false},
         "sitemap_membership_limits":{"opt_in":true,"config_field":"sitemap_membership_limits","default_catalog_json_bytes":open_seo_spider_core::DEFAULT_SITEMAP_CATALOG_BYTES,"max_catalog_json_bytes":open_seo_spider_core::MAX_SITEMAP_CATALOG_BYTES,"source_work_independent":true,"raw_xml_body_retention":false,"wire_limits_unchanged":true},
         "offline_serp":{"path":"/serp","website_requests":0,"csv_import":true,"row_limit":10000},
         "offline_robots":{"path":"/robots","website_requests":0,"engine":"crawler_policy","remote_rules_fetch":false},
@@ -828,6 +829,10 @@ async fn list_crawls(State(state): State<AppState>) -> Json<Value> {
     });
     Json(json!({"crawls":results}))
 }
+#[cfg(test)]
+#[path = "server/crawl_admission_limits_tests.rs"]
+mod crawl_admission_limits_tests;
+
 fn config_from_input(mut value: Value) -> anyhow::Result<CrawlConfig> {
     let object = value
         .as_object_mut()

@@ -130,6 +130,7 @@ impl Crawler {
         }
         // Validate the saved source-only work profile before any client/store I/O.
         // Page response limits and retained membership budgets remain independent.
+        config.validate_crawl_admission_limits()?;
         config.sitemap_source_parser_limits()?;
         config.sitemap_source_body_limit()?;
         config.sitemap_membership_ledger_limits()?;
@@ -3163,6 +3164,28 @@ impl FetchContext {
         let mut sitemap_received = sitemap_capture::ReceiveProgress::new(body_limit);
         let mut resource_redirects: Vec<crate::ResourceRedirectDecision> = Vec::new();
         loop {
+            // This is the common dispatch seam for seeds, normal discoveries,
+            // policy aliases, resource-frontier tasks and selected recrawls.
+            // Protocol sitemap and auxiliary robots requests are separate scopes.
+            if purpose == FetchPurpose::PageDocument
+                && let Some(limits) = &self.config.crawl_admission_limits
+            {
+                let phase = if page.redirect_chain.is_empty() {
+                    crate::CrawlAdmissionPhase::Initial
+                } else {
+                    crate::CrawlAdmissionPhase::Redirect
+                };
+                let assessment = limits.assess(&current, phase);
+                let denied = assessment.denied;
+                crate::CrawlAdmissionObservation::record(&mut page.crawl_admission, assessment);
+                if let Some(reason) = denied {
+                    page.error = Some(format!(
+                        "Static crawl admission denied ({reason:?}); no HTTP request was made to this target"
+                    ));
+                    page.final_status = None;
+                    break;
+                }
+            }
             if self.config.obey_robots {
                 let policy = self.robots.get(&current).await;
                 let allowed = policy.allowed(&self.config.user_agent, current.as_str());
@@ -3765,6 +3788,10 @@ impl FetchContext {
         (page, text.map(FetchPayload::PageText))
     }
 }
+
+#[cfg(test)]
+#[path = "crawler/crawl_admission_tests.rs"]
+mod crawl_admission_tests;
 
 #[cfg(test)]
 mod tests {

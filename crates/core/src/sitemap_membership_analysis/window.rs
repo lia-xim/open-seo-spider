@@ -17,10 +17,14 @@ pub(crate) struct VerifiedAnalysisRead<'a, 'conn> {
     raw: Option<&'a VerifiedRawRead<'conn>>,
     coverage: crate::SitemapCoverage,
     prepared: PreparedContext,
+    query_index: Option<request_index::RequestIndex>,
 }
 impl VerifiedAnalysisRead<'_, '_> {
     pub(crate) fn context(&self) -> &SitemapAnalysisContext {
         &self.prepared.base.context
+    }
+    pub(super) fn query_index(&self) -> Option<&request_index::RequestIndex> {
+        self.query_index.as_ref()
     }
     // Only the sibling findings traversal can reuse these actual borrowed
     // proofs. No constructor, Connection or mutable field becomes public.
@@ -94,11 +98,18 @@ fn prepare_window_analysis_inner<'a, 'conn>(
         },
         control,
     )?;
+    let query_index = match input.raw {
+        Some(raw) if prepared.base.context.available => {
+            request_index::RequestIndex::prepare(connection, raw, control)?
+        }
+        _ => None,
+    };
     Ok(VerifiedAnalysisRead {
         connection,
         raw: input.raw,
         coverage: input.coverage.clone(),
         prepared,
+        query_index,
     })
 }
 
@@ -160,6 +171,7 @@ pub(crate) fn project_prepared_window(
         visible,
         MembershipBasis::Verified(raw),
         request,
+        prepared.query_index.as_ref(),
     )
 }
 
@@ -181,6 +193,7 @@ impl MembershipBasis<'_> {
         connection: &Connection,
         pages: &[SitemapTargetObservation],
         control: &SitemapReadControl,
+        query_index: Option<&request_index::RequestIndex>,
     ) -> Result<BTreeMap<String, WindowCounts>> {
         match self {
             Self::Materialized(rows) => legacy_counts(rows, pages, control),
@@ -189,6 +202,7 @@ impl MembershipBasis<'_> {
                 raw.context("Saved page membership has no verified raw basis")?,
                 pages,
                 control,
+                query_index,
             ),
         }
     }
@@ -283,6 +297,7 @@ fn sql_counts(
     raw: &VerifiedRawRead<'_>,
     pages: &[SitemapTargetObservation],
     control: &SitemapReadControl,
+    query_index: Option<&request_index::RequestIndex>,
 ) -> Result<BTreeMap<String, WindowCounts>> {
     let mut out: BTreeMap<_, WindowCounts> = pages
         .iter()
@@ -295,11 +310,21 @@ fn sql_counts(
         out.len() <= 200 && std::ptr::eq(connection, raw.connection()),
         "Invalid membership query basis"
     );
+    let source_connection = connection;
+    let connection = match query_index {
+        Some(index) => index.connection(source_connection)?,
+        None => source_connection,
+    };
+    let _binding = control.bind_connection(connection)?;
     let keys = serde_json::to_string(&out.keys().collect::<Vec<_>>())?;
     // Constant-number whole-cohort SQL scans for the <=200 wanted page URLs;
     // grouping/distinct/window workspace belongs to SQLite, not a Rust source
     // set or an E-times-P Rust scan. All input rows were verified by `raw`.
-    let originals = "WITH matches AS (SELECT json_extract(l.data,'$.row.observed.normalized_fetch_url') url,d.task_url task,d.row_id observation FROM sitemap_locations l JOIN sitemap_documents d ON d.row_id=l.observation_id WHERE json_extract(l.data,'$.row.observed.role')='page_location' AND json_extract(l.data,'$.row.observed.validation_error') IS NULL AND json_type(l.data,'$.row.observed.loc_ordinal')='integer' AND json_extract(l.data,'$.row.observed.normalized_fetch_url') IN (SELECT value FROM json_each(?1)))";
+    let originals = if query_index.is_some() {
+        "WITH matches AS (SELECT original_url url,task,observation FROM members WHERE original_url COLLATE BINARY IN (SELECT value FROM json_each(?1)))"
+    } else {
+        "WITH matches AS (SELECT json_extract(l.data,'$.row.observed.normalized_fetch_url') url,d.task_url task,d.row_id observation FROM sitemap_locations l JOIN sitemap_documents d ON d.row_id=l.observation_id WHERE json_extract(l.data,'$.row.observed.role')='page_location' AND json_extract(l.data,'$.row.observed.validation_error') IS NULL AND json_type(l.data,'$.row.observed.loc_ordinal')='integer' AND json_extract(l.data,'$.row.observed.normalized_fetch_url') IN (SELECT value FROM json_each(?1)))"
+    };
     let sql = format!(
         "{originals} SELECT url,count(*),count(DISTINCT task COLLATE BINARY),count(DISTINCT observation COLLATE BINARY) FROM matches GROUP BY url"
     );
@@ -315,7 +340,11 @@ fn sql_counts(
         counts.document_count = u64::try_from(row.get::<_, i64>(2)?)?;
         counts.observation_count = u64::try_from(row.get::<_, i64>(3)?)?;
     }
-    let sql = "SELECT json_extract(data,'$.row.admission.admitted_fetch_url'),count(*) FROM sitemap_locations WHERE json_extract(data,'$.row.observed.role')='page_location' AND json_extract(data,'$.row.admission.admitted_fetch_url') IS NOT json_extract(data,'$.row.observed.normalized_fetch_url') AND json_extract(data,'$.row.admission.admitted_fetch_url') IN (SELECT value FROM json_each(?1)) GROUP BY json_extract(data,'$.row.admission.admitted_fetch_url')";
+    let sql = if query_index.is_some() {
+        "SELECT alias_url,count(*) FROM members WHERE alias_url IS NOT normalized_url AND alias_url COLLATE BINARY IN (SELECT value FROM json_each(?1)) GROUP BY alias_url"
+    } else {
+        "SELECT json_extract(data,'$.row.admission.admitted_fetch_url'),count(*) FROM sitemap_locations WHERE json_extract(data,'$.row.observed.role')='page_location' AND json_extract(data,'$.row.admission.admitted_fetch_url') IS NOT json_extract(data,'$.row.observed.normalized_fetch_url') AND json_extract(data,'$.row.admission.admitted_fetch_url') IN (SELECT value FROM json_each(?1)) GROUP BY json_extract(data,'$.row.admission.admitted_fetch_url')"
+    };
     let mut statement = connection.prepare(sql)?;
     let mut rows = statement.query([&keys])?;
     while let Some(row) = rows.next()? {

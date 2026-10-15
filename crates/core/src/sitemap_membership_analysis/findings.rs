@@ -120,6 +120,7 @@ pub(crate) fn visit_saved_page_candidates(
     ) -> Result<ControlFlow<()>>,
 ) -> Result<bool> {
     let (connection, actual_raw, actual_coverage, context) = prepared.findings_basis();
+    let query_index = prepared.query_index();
     control.checkpoint()?;
     context.control.checkpoint()?;
     ensure!(
@@ -169,11 +170,13 @@ pub(crate) fn visit_saved_page_candidates(
         }
         // One candidate statement survives all batches. Aggregate queries use
         // the same readonly Connection while this cursor remains positioned.
-        let sql = format!(
-            "{PAGE_CONTEXT_CTE} SELECT {},{} {PAGE_CONTEXT_FROM} WHERE m.key='report' AND (?1 IS NULL OR CAST(p.key AS INTEGER)>?1) ORDER BY CAST(p.key AS INTEGER)",
-            page_columns(), FINDING_TAIL_COLUMNS,
-        );
-        let mut statement = connection.prepare(&sql)?;
+        let sql = match query_index {
+            Some(index) => index.candidate_sql(FINDING_TAIL_COLUMNS),
+            None => format!("{PAGE_CONTEXT_CTE} SELECT {},{} {PAGE_CONTEXT_FROM} WHERE m.key='report' AND (?1 IS NULL OR CAST(p.key AS INTEGER)>?1) ORDER BY CAST(p.key AS INTEGER)", page_columns(), FINDING_TAIL_COLUMNS),
+        };
+        let query_connection = match query_index { Some(index) => index.connection(connection)?, None => connection };
+        let _index_binding = control.bind_connection(query_connection)?;
+        let mut statement = query_connection.prepare(&sql)?;
         let mut rows = statement.query([after])?;
         let mut previous = after;
         loop {
@@ -203,8 +206,11 @@ pub(crate) fn visit_saved_page_candidates(
             }
             let (pages, extras): (Vec<_>, Vec<_>) = batch.into_iter().unzip();
             let wanted = pages.iter().map(|page| page.requested_url.clone()).collect();
-            let inlinks = read_inlinks(connection, &wanted, control)?;
-            let members = MembershipBasis::Verified(Some(raw)).counts(connection, &pages, control)?;
+            let inlinks = match query_index {
+                Some(index) => index.inlinks(connection, &wanted, control)?,
+                None => read_inlinks(connection, &wanted, control)?,
+            };
+            let members = MembershipBasis::Verified(Some(raw)).counts(connection, &pages, control, query_index)?;
             let findings = build_saved_page_findings(pages, members, &inlinks, coverage, control)?;
             ensure!(findings.len() == extras.len(), "Saved finding batch differs");
             for (finding, facts) in findings.into_iter().zip(extras) {

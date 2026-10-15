@@ -26,6 +26,9 @@ pub struct CrawlConfig {
     /// Opt-in local original source bytes, independent of XML work/member/wire limits.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub sitemap_source_archive: Option<crate::SitemapSourceArchiveConfig>,
+    /// Optional static native PageDocument URL limits; None preserves legacy bytes.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub crawl_admission_limits: Option<crate::CrawlAdmissionLimits>,
     pub crawl_links: bool,
     pub include_subdomains: bool,
     pub concurrency: usize,
@@ -119,6 +122,7 @@ impl Default for CrawlConfig {
             sitemap_source_processing: None,
             sitemap_membership_limits: None,
             sitemap_source_archive: None,
+            crawl_admission_limits: None,
             crawl_links: true,
             include_subdomains: false,
             concurrency: 8,
@@ -151,6 +155,19 @@ impl Default for CrawlConfig {
 }
 
 impl CrawlConfig {
+    /// Validate before creating a store or sending website requests. Browser
+    /// navigation/subrequests have no interception contract in this native slice.
+    pub fn validate_crawl_admission_limits(&self) -> anyhow::Result<()> {
+        if let Some(limits) = &self.crawl_admission_limits {
+            limits.validate()?;
+            anyhow::ensure!(
+                self.renderer.is_none(),
+                "crawl_admission_limits cannot be combined with a renderer; browser request limits are not implemented"
+            );
+        }
+        Ok(())
+    }
+
     /// Fresh catalog capacity only. Resume/inherited discovery keeps its durable catalog limits.
     pub fn sitemap_membership_ledger_limits(&self) -> anyhow::Result<crate::SitemapLedgerLimits> {
         let limits = self.sitemap_membership_limits.clone().unwrap_or_default();
@@ -891,6 +908,9 @@ pub struct PageRecord {
     /// None is unobserved/legacy; configured sources have explicit result/error observations.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub content_captures: Option<Vec<crate::PageContentCapture>>,
+    /// Native static dispatch evidence; absent on legacy/unconfigured pages.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub crawl_admission: Option<crate::CrawlAdmissionObservation>,
     /// Status of the initially requested URL; final_status belongs to final_url.
     pub status: Option<u16>,
     pub final_status: Option<u16>,

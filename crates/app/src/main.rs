@@ -39,6 +39,10 @@ struct Cli {
 }
 
 #[derive(Subcommand)]
+#[allow(
+    clippy::large_enum_variant,
+    reason = "The CLI parses one command; explicit optional fields avoid extra heap allocations."
+)]
 enum Command {
     /// Read a local findings page and/or complete stored CSV without website requests.
     SitemapFindings {
@@ -255,6 +259,15 @@ enum Command {
         concurrency: Option<usize>,
         #[arg(long)]
         max_pages: Option<usize>,
+        /// Static native folder depth; 0 allows / and /file, but no completed folder.
+        #[arg(long)]
+        max_folder_depth: Option<usize>,
+        /// Static raw ampersand-separated tokens; 0 forbids even an empty query.
+        #[arg(long)]
+        max_query_tokens: Option<usize>,
+        /// Normalized effective fetch URL UTF-8 bytes (1..=1048576). No renderer.
+        #[arg(long)]
+        max_fetch_url_utf8_bytes: Option<usize>,
         #[arg(long, default_value = "crawl.json")]
         output: PathBuf,
         #[arg(long)]
@@ -722,6 +735,9 @@ async fn main() -> anyhow::Result<()> {
             list_options,
             concurrency,
             max_pages,
+            max_folder_depth,
+            max_query_tokens,
+            max_fetch_url_utf8_bytes,
             output,
             csv,
             input_csv,
@@ -767,6 +783,22 @@ async fn main() -> anyhow::Result<()> {
             }
             if let Some(value) = max_pages {
                 config.max_pages = (value > 0).then_some(value);
+            }
+            if max_folder_depth.is_some()
+                || max_query_tokens.is_some()
+                || max_fetch_url_utf8_bytes.is_some()
+            {
+                let mut limits = config.crawl_admission_limits.take().unwrap_or_default();
+                if let Some(value) = max_folder_depth {
+                    limits.max_folder_depth = Some(value);
+                }
+                if let Some(value) = max_query_tokens {
+                    limits.max_query_tokens = Some(value);
+                }
+                if let Some(value) = max_fetch_url_utf8_bytes {
+                    limits.max_fetch_url_utf8_bytes = Some(value);
+                }
+                config.crawl_admission_limits = Some(limits);
             }
             for path in list_file {
                 let options = list_options_for(&path, list_options.as_ref()).await?;
@@ -885,3 +917,7 @@ async fn list_options_for(
         limits: ListImportLimits::default(),
     })
 }
+
+#[cfg(test)]
+#[path = "crawl_admission_cli_tests.rs"]
+mod crawl_admission_cli_tests;

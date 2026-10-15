@@ -12,6 +12,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 mod findings;
 mod report_projection;
+mod request_index;
 mod window;
 pub(crate) use findings::{validate_saved_page_candidate_facts, visit_saved_page_candidates};
 use window::MembershipBasis;
@@ -482,6 +483,7 @@ pub(crate) fn project(
         visible,
         MembershipBasis::Materialized(rows),
         request,
+        None,
     )
 }
 
@@ -662,11 +664,20 @@ fn project_rows(
     visible: Vec<&crate::StoredSitemapLocation>,
     membership: MembershipBasis<'_>,
     request: &SitemapMembershipAnalysisRequest,
+    query_index: Option<&request_index::RequestIndex>,
 ) -> Result<SitemapMembershipAnalysis> {
     let _binding = prepared.control.bind_connection(connection)?;
-    prepared
-        .control
-        .run(|| project_rows_inner(connection, prepared, coverage, visible, membership, request))
+    prepared.control.run(|| {
+        project_rows_inner(
+            connection,
+            prepared,
+            coverage,
+            visible,
+            membership,
+            request,
+            query_index,
+        )
+    })
 }
 fn project_rows_inner(
     connection: &Connection,
@@ -675,6 +686,7 @@ fn project_rows_inner(
     visible: Vec<&crate::StoredSitemapLocation>,
     membership: MembershipBasis<'_>,
     request: &SitemapMembershipAnalysisRequest,
+    query_index: Option<&request_index::RequestIndex>,
 ) -> Result<SitemapMembershipAnalysis> {
     let control = &prepared.control;
     let mut out = prepared.base.clone();
@@ -703,16 +715,24 @@ fn project_rows_inner(
             wanted.insert(url.clone());
         }
     }
-    let mut page_window = read_page_window(connection, request, selected, generation, control)?;
+    let mut page_window = match query_index {
+        Some(index) => index.window(connection, request, selected, generation, control)?,
+        None => read_page_window(connection, request, selected, generation, control)?,
+    };
     out.saved_pages_have_more = page_window.len() > request.page_limit;
     page_window.truncate(request.page_limit);
     for page in &page_window {
         control.checkpoint()?;
         wanted.insert(page.requested_url.clone());
     }
-    let mut observations =
-        read_target_pages_with_control(connection, &wanted, selected, generation, control)?;
-    let inlinks = read_inlinks(connection, &wanted, control)?;
+    let mut observations = match query_index {
+        Some(index) => index.targets(connection, &wanted, selected, generation, control)?,
+        None => read_target_pages_with_control(connection, &wanted, selected, generation, control)?,
+    };
+    let inlinks = match query_index {
+        Some(index) => index.inlinks(connection, &wanted, control)?,
+        None => read_inlinks(connection, &wanted, control)?,
+    };
     let mut pending_urls = BTreeSet::new();
     for url in &wanted {
         control.checkpoint()?;
@@ -771,7 +791,7 @@ fn project_rows_inner(
             })
             .collect::<Result<Vec<_>>>()?,
     );
-    let members = membership.counts(connection, &page_window, control)?;
+    let members = membership.counts(connection, &page_window, control, query_index)?;
     out.last_saved_page_url = page_window.last().map(|v| v.requested_url.clone());
     out.last_saved_page_ordinal = page_window.last().map(|v| v.report_page_ordinal);
     for page in &page_window {
@@ -1081,13 +1101,25 @@ fn read_inlinks(
     wanted: &BTreeSet<String>,
     control: &SitemapReadControl,
 ) -> Result<BTreeMap<String, SitemapObservedInlinks>> {
+    read_inlinks_from(
+        connection,
+        wanted,
+        control,
+        "FROM metadata m,json_each(m.value,'$.pages') p,json_each(p.value,'$.links') l WHERE m.key='report' AND json_extract(l.value,'$.kind')='anchor' AND json_extract(l.value,'$.url') IN (SELECT value FROM json_each(?1))",
+    )
+}
+fn read_inlinks_from(
+    connection: &Connection,
+    wanted: &BTreeSet<String>,
+    control: &SitemapReadControl,
+    from: &str,
+) -> Result<BTreeMap<String, SitemapObservedInlinks>> {
     control.checkpoint()?;
     let mut out = BTreeMap::new();
     if wanted.is_empty() {
         return Ok(out);
     }
     let keys = serde_json::to_string(wanted)?;
-    let from = "FROM metadata m,json_each(m.value,'$.pages') p,json_each(p.value,'$.links') l WHERE m.key='report' AND json_extract(l.value,'$.kind')='anchor' AND json_extract(l.value,'$.url') IN (SELECT value FROM json_each(?1))";
     let sql = format!(
         "SELECT json_extract(l.value,'$.url'),count(*),sum(json_extract(p.value,'$.url')<>json_extract(l.value,'$.url')),sum(json_extract(p.value,'$.url')<>json_extract(l.value,'$.url') AND json_extract(l.value,'$.internal')=1),count(DISTINCT CASE WHEN json_extract(p.value,'$.url')<>json_extract(l.value,'$.url') THEN json_extract(p.value,'$.url') END) {from} GROUP BY json_extract(l.value,'$.url')"
     );

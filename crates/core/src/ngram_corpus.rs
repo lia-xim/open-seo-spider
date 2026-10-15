@@ -106,6 +106,8 @@ pub struct NgramCorpusDocument<'a> {
 }
 #[derive(Debug, Clone, Serialize)]
 pub struct NgramCorpusSource {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel: Option<NgramChannelSource>,
     pub ordinal: usize,
     pub requested_url: String,
     pub source_revision: Option<String>,
@@ -135,6 +137,10 @@ pub struct NgramCorpusRow {
 }
 #[derive(Debug, Serialize)]
 pub struct NgramCorpusReport {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retained_metadata_profile: Option<NgramRetainedMetadataProfile>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_profile: Option<NgramHtmlTextProfile>,
     pub engine: &'static str,
     pub token_profile: &'static str,
     pub lowercase_unicode_version: (u8, u8, u8),
@@ -251,6 +257,8 @@ pub fn aggregate_saved_ngrams(
         }
     }
     let mut report = NgramCorpusReport {
+        channel_profile: None,
+        retained_metadata_profile: None,
         engine: NGRAM_CORPUS_ENGINE,
         token_profile: CONTENT_TOKEN_PROFILE,
         lowercase_unicode_version: char::UNICODE_VERSION,
@@ -301,6 +309,7 @@ pub fn aggregate_saved_ngrams(
         *report.source_states.entry(state).or_default() += 1;
         report.all_supplied_sources_complete &= document.complete;
         let mut source = NgramCorpusSource {
+            channel: None,
             ordinal,
             requested_url: document.requested_url.into(),
             source_revision: document.source_revision.map(str::to_owned),
@@ -610,6 +619,10 @@ impl Write for ByteBudget {
         Ok(())
     }
 }
+
+#[path = "ngram_corpus/channels.rs"]
+mod channels;
+pub use channels::*;
 
 #[cfg(test)]
 #[path = "ngram_corpus_tests.rs"]

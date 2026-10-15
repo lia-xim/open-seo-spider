@@ -34,6 +34,10 @@ fn default_limit() -> usize {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(default, deny_unknown_fields)]
 pub(crate) struct Request {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retained_metadata_channel: Option<open_seo_spider_core::NgramRetainedMetadataProfile>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub html_text_channel: Option<open_seo_spider_core::NgramHtmlTextProfile>,
     pub source_kind: ContentCaptureSourceKind,
     pub options: NgramCorpusOptions,
     pub view: View,
@@ -48,6 +52,8 @@ pub(crate) struct Request {
 impl Default for Request {
     fn default() -> Self {
         Self {
+            html_text_channel: None,
+            retained_metadata_channel: None,
             source_kind: default_source(),
             options: Default::default(),
             view: Default::default(),
@@ -68,6 +74,16 @@ impl Request {
             "Ngram page limit must be1..=200"
         );
         self.options.validate()?;
+        if let Some(profile) = self.html_text_channel {
+            profile.validate()?;
+        }
+        if let Some(profile) = self.retained_metadata_channel {
+            profile.validate()?;
+        }
+        ensure!(
+            self.html_text_channel.is_none() || self.retained_metadata_channel.is_none(),
+            "Choose exactly one retained-metadata or capture-bound HTML channel profile"
+        );
         ensure!(
             self.n.is_none_or(|n| (1..=self.options.max_n).contains(&n)),
             "Selected ngram size must be1..=options.max_n (at most6)"
@@ -160,14 +176,24 @@ pub(crate) fn context(
 }
 #[derive(Clone, Serialize)]
 pub(crate) struct Snapshot {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retained_metadata_channel: Option<open_seo_spider_core::NgramRetainedMetadataProfile>,
     pub caller: Context,
     pub source_kind: ContentCaptureSourceKind,
     pub options_sha256: String,
     pub aggregate_sha256: String,
     pub snapshot_token: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub html_text_channel: Option<open_seo_spider_core::NgramHtmlTextProfile>,
 }
 pub(crate) fn aggregate(report: &CrawlReport, request: &Request) -> Result<NgramCorpusReport> {
     request.validate()?;
+    if let Some(profile) = request.retained_metadata_channel {
+        return channels::aggregate_metadata(report, request, profile);
+    }
+    if let Some(profile) = request.html_text_channel {
+        return channels::aggregate(report, request, profile);
+    }
     ensure!(
         report.pages.len() <= request.options.limits.max_documents,
         "Saved document count exceeds requested limit"
@@ -197,15 +223,44 @@ pub(crate) fn aggregate(report: &CrawlReport, request: &Request) -> Result<Ngram
 }
 fn snapshot(context: Context, request: &Request, report: &NgramCorpusReport) -> Result<Snapshot> {
     ensure!(
+        report.retained_metadata_profile == request.retained_metadata_channel,
+        "Saved aggregate belongs to another retained metadata channel"
+    );
+    ensure!(
+        report.channel_profile == request.html_text_channel,
+        "Saved aggregate belongs to another HTML text channel"
+    );
+    if request.html_text_channel.is_some() || request.retained_metadata_channel.is_some() {
+        ensure!(
+            report.sources.iter().all(|s| s
+                .channel
+                .as_ref()
+                .is_some_and(|c| c.source_kind == request.source_kind)),
+            "Saved aggregate belongs to another raw/DOM source"
+        );
+    }
+    ensure!(
         request
             .expected_generation
             .is_none_or(|g| context.generation == Some(g)),
         "Saved generation changed or is unknown"
     );
-    let options_sha256 = bounded_hash(
-        &json!({"source_kind":request.source_kind,"options":request.options,"view":request.view,"n":request.n,"query":request.query,"exact_tokens":request.exact_tokens,"limit":request.limit}),
-        REQUEST_BYTES,
-    )?;
+    let options_sha256 = if let Some(profile) = request.retained_metadata_channel {
+        bounded_hash(
+            &json!({"retained_metadata_channel":profile,"source_kind":request.source_kind,"options":request.options,"view":request.view,"n":request.n,"query":request.query,"exact_tokens":request.exact_tokens,"limit":request.limit}),
+            REQUEST_BYTES,
+        )?
+    } else if let Some(profile) = request.html_text_channel {
+        bounded_hash(
+            &json!({"html_text_channel":profile,"source_kind":request.source_kind,"options":request.options,"view":request.view,"n":request.n,"query":request.query,"exact_tokens":request.exact_tokens,"limit":request.limit}),
+            REQUEST_BYTES,
+        )?
+    } else {
+        bounded_hash(
+            &json!({"source_kind":request.source_kind,"options":request.options,"view":request.view,"n":request.n,"query":request.query,"exact_tokens":request.exact_tokens,"limit":request.limit}),
+            REQUEST_BYTES,
+        )?
+    };
     let aggregate_sha256 = bounded_hash(report, CSV_BYTES)?;
     let snapshot_token = bounded_hash(
         &(&context, &options_sha256, &aggregate_sha256),
@@ -224,6 +279,8 @@ fn snapshot(context: Context, request: &Request, report: &NgramCorpusReport) -> 
         options_sha256,
         aggregate_sha256,
         snapshot_token,
+        html_text_channel: request.html_text_channel,
+        retained_metadata_channel: request.retained_metadata_channel,
     })
 }
 fn includes(row: &open_seo_spider_core::NgramCorpusRow, request: &Request) -> bool {
@@ -319,7 +376,15 @@ pub(crate) fn preview(
     })?;
     ensure!(after <= total, "Ngram continuation exceeds filtered rows");
     let end = after + rows.len();
-    let value = json!({"engine":report.engine,"scope":"all_saved_requested_page_rows_selected_text","snapshot":snapshot,"source_kind":request.source_kind,"view":request.view,"rows":rows,"total_rows":total,"after":after,"next_after":(end<total).then_some(end),"has_more":end<total,"saved_documents":report.sources.len(),"source_states":report.source_states,"all_supplied_sources_complete":report.all_supplied_sources_complete,"candidate_windows":report.candidate_windows,"excluded_stopword_windows":report.excluded_stopword_windows,"included_windows":report.included_windows,"extended_windows":report.extended_windows,"max_n":report.options.max_n,"total_tokens":report.total_tokens,"total_text_bytes":report.total_text_bytes,"token_profile":report.token_profile,"lowercase_unicode_version":report.lowercase_unicode_version,"position_samples_per_source":request.options.limits.position_samples,"limitations":report.limitations,"website_requests":0,"whole_website_coverage_attested":false});
+    let mut value = json!({"engine":report.engine,"scope":"all_saved_requested_page_rows_selected_text","snapshot":snapshot,"source_kind":request.source_kind,"view":request.view,"rows":rows,"total_rows":total,"after":after,"next_after":(end<total).then_some(end),"has_more":end<total,"saved_documents":report.sources.len(),"source_states":report.source_states,"all_supplied_sources_complete":report.all_supplied_sources_complete,"candidate_windows":report.candidate_windows,"excluded_stopword_windows":report.excluded_stopword_windows,"included_windows":report.included_windows,"extended_windows":report.extended_windows,"max_n":report.options.max_n,"total_tokens":report.total_tokens,"total_text_bytes":report.total_text_bytes,"token_profile":report.token_profile,"lowercase_unicode_version":report.lowercase_unicode_version,"position_samples_per_source":request.options.limits.position_samples,"limitations":report.limitations,"website_requests":0,"whole_website_coverage_attested":false});
+    if let Some(profile) = request.html_text_channel {
+        value["scope"] = json!("all_saved_requested_page_rows_retained_html_elements_v1");
+        value["html_text_channel"] = json!(profile);
+    }
+    if let Some(profile) = request.retained_metadata_channel {
+        value["scope"] = json!("all_saved_requested_page_rows_retained_metadata_elements_v1");
+        value["retained_metadata_channel"] = json!(profile);
+    }
     Ok((bytes(&value, JSON_BYTES)?, snapshot))
 }
 fn csv_row(out: &mut impl Write, cells: &[String]) -> Result<()> {
@@ -352,6 +417,12 @@ pub(crate) fn csv(
         "Complete CSV requires the preview snapshot token and no continuation"
     );
     let snapshot = snapshot(context, request, report)?;
+    if request.retained_metadata_channel.is_some() {
+        return channels::csv_metadata(report, request, snapshot);
+    }
+    if request.html_text_channel.is_some() {
+        return channels::csv(report, request, snapshot);
+    }
     let mut out = Bytes {
         data: vec![],
         cap: CSV_BYTES,
@@ -497,6 +568,12 @@ pub(crate) async fn run_cli(
     }
     Ok(())
 }
+#[cfg(test)]
+#[path = "ngram_app/channel_tests.rs"]
+mod channel_tests;
+#[path = "ngram_app/channels.rs"]
+mod channels;
+
 #[cfg(test)]
 #[path = "ngram_app_tests.rs"]
 mod tests;

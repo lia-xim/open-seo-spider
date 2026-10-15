@@ -7,6 +7,7 @@ mod content_analysis;
 mod content_binding;
 mod content_capture;
 mod control;
+mod crawl_admission;
 mod crawl_policy;
 mod crawler;
 mod css_discovery;
@@ -93,6 +94,7 @@ pub use control::{
     ControlledCrawlResult, CrawlCheckpoint, CrawlControl, CrawlOutcome, CrawlRequest,
     CrawlRunState, CrawlStoreInspection,
 };
+pub use crawl_admission::*;
 pub use crawl_policy::*;
 pub use crawler::Crawler;
 pub use css_discovery::*;
