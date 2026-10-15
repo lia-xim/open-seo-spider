@@ -21,6 +21,7 @@ mod list_import;
 mod metadata;
 mod migration;
 mod models;
+mod ngram_corpus;
 mod onpage;
 mod pdf;
 mod policy_ledger;
@@ -116,6 +117,7 @@ pub use list_import::{
 pub use metadata::{applicable_robot_directives, parse_link_header, parse_x_robots_tag};
 pub use migration::*;
 pub use models::*;
+pub use ngram_corpus::*;
 pub use policy_ledger::{
     InheritedPolicyHistory, LIVE_CRAWL_POLICY_ENGINE, LiveCrawlPolicyLimits, PagePolicyObservation,
     PolicyAdmission, PolicyInputBasis, PolicyLedgerSummary, PolicyObservationBasis,

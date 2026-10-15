@@ -113,7 +113,7 @@ fn observation_basis(
     }
 }
 
-fn captured_source<'a>(
+pub(crate) fn captured_source<'a>(
     report: &CrawlReport,
     page: &'a PageRecord,
     source: ContentCaptureSourceKind,

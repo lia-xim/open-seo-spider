@@ -331,6 +331,7 @@
     state.fragmentsError = '';
     state.page = 0;
     state.crawl = id ? state.crawls.find((crawl) => crawl.id === id) || { id, status: 'running' } : null;
+    renderSourceBodies();
     state.issueMap = new Map();
     state.pageMap = new Map();
     state.cache = {};

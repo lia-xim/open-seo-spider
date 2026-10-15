@@ -5,6 +5,7 @@ mod content_cohort;
 mod generation_export;
 mod mcp;
 mod migration_app;
+mod ngram_app;
 mod policy_export;
 mod resource_broken_sources_app;
 mod resource_export;
@@ -135,6 +136,17 @@ enum Command {
         #[arg(long)]
         json: Option<PathBuf>,
         /// New CSV destination for every occurrence; pagination does not apply.
+        #[arg(long)]
+        csv: Option<PathBuf>,
+    },
+    /// Aggregate own1..6-grams across every row of an explicit saved report; no website requests.
+    SavedNgrams {
+        report: PathBuf,
+        #[arg(long)]
+        options: Option<PathBuf>,
+        #[arg(long)]
+        output: PathBuf,
+        /// Complete selected report (totals, per-source occurrences or all source states).
         #[arg(long)]
         csv: Option<PathBuf>,
     },
@@ -527,6 +539,14 @@ async fn main() -> anyhow::Result<()> {
                 Ok(())
             })
             .await??;
+        }
+        Command::SavedNgrams {
+            report,
+            options,
+            output,
+            csv,
+        } => {
+            ngram_app::run_cli(report, options, output, csv).await?;
         }
         Command::AnalyzeCrawlContent {
             snapshot,

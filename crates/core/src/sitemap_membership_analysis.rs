@@ -11,6 +11,7 @@ use serde::{Deserialize, Serialize, de::DeserializeOwned};
 use std::collections::{BTreeMap, BTreeSet};
 
 mod findings;
+mod report_projection;
 mod window;
 pub(crate) use findings::{validate_saved_page_candidate_facts, visit_saved_page_candidates};
 use window::MembershipBasis;
@@ -335,6 +336,8 @@ fn report_hash(
     let row = rows.next()?.context("Saved report disappeared")?;
     let bytes = row.get_ref(0)?.as_bytes()?;
     let sha = control.sha256(bytes)?;
+    #[cfg(test)]
+    report_projection::record_original_hash(bytes.len());
     let actual = bytes.len();
     ensure!(
         i64::try_from(actual)? == length,
@@ -617,9 +620,11 @@ fn prepare_context_inner(
     // A controlled writer has unique requested page identities. Refuse malformed
     // typed identity/anchor fields instead of silently dropping an unjoinable row.
     control.checkpoint()?;
-    let (distinct,invalid,links): (i64,i64,i64) = connection.query_row(
-        "SELECT count(DISTINCT json_extract(p.value,'$.url')),coalesce(sum(CASE WHEN json_type(p.value,'$.url')='text' AND json_type(p.value,'$.links')='array' THEN 0 ELSE 1 END),0),coalesce(sum(json_array_length(p.value,'$.links')),0) FROM metadata m,json_each(m.value,'$.pages') p WHERE m.key='report'",[],
-        |r|Ok((r.get(0)?,r.get(1)?,r.get(2)?)))?;
+    // Optional local projection is used only by these two guards, inside this
+    // invocation/TX. Every original authenticity/shape guard above still ran.
+    let compact_report = report_projection::compact_report(connection, control)?;
+    let (distinct, invalid, links) =
+        report_projection::identity_counts(connection, compact_report.as_deref())?;
     ensure!(
         Some(distinct) == pages && invalid == 0,
         "Sitemap analysis requested page identities differ"
@@ -628,13 +633,7 @@ fn prepare_context_inner(
         (0..=MAX_LINKS).contains(&links),
         "Sitemap analysis anchor input budget exceeded"
     );
-    selected = connection
-        .query_row(
-            "SELECT json_type(value,'$.operation')='object' FROM metadata WHERE key='report'",
-            [],
-            |r| r.get::<_, Option<bool>>(0),
-        )?
-        .unwrap_or(false);
+    selected = report_projection::selected(connection, compact_report.as_deref())?;
     out.context.available = true;
     out.context.reason = "validated_terminal_saved_report".into();
     out.context.saved_page_count = Some(completed);

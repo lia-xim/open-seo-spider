@@ -32,6 +32,7 @@ mod content;
 mod directory_tree;
 mod lifecycle;
 mod migration;
+mod ngram_corpus;
 mod policy;
 mod resource_broken_sources;
 pub(crate) mod resources;
@@ -508,6 +509,47 @@ async fn serve_with_mcp_files_ready_source(
             post(directory_tree::csv).layer(axum::extract::DefaultBodyLimit::max(
                 directory_tree::REQUEST_BYTES,
             )),
+        )
+        .route(
+            "/saved-ngrams",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/html; charset=utf-8")],
+                    include_str!("../../../web/saved-ngrams.html"),
+                )
+            }),
+        )
+        .route(
+            "/saved-ngrams.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+                    include_str!("../../../web/saved-ngrams.js"),
+                )
+            }),
+        )
+        .route(
+            "/saved-ngrams.css",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/css; charset=utf-8")],
+                    include_str!("../../../web/saved-ngrams.css"),
+                )
+            }),
+        )
+        .route(
+            "/api/crawls/{id}/ngrams/preview",
+            post(ngram_corpus::preview).layer(axum::extract::DefaultBodyLimit::max(
+                crate::ngram_app::REQUEST_BYTES,
+            )),
+        )
+        .route(
+            "/api/crawls/{id}/ngrams/csv",
+            post(ngram_corpus::csv)
+                .layer(axum::extract::DefaultBodyLimit::max(
+                    crate::ngram_app::REQUEST_BYTES,
+                ))
+                .layer(middleware::from_fn(response_stream::require_http11)),
         )
         .route(
             "/migration",
