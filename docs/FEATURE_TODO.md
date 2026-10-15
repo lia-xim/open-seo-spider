@@ -575,7 +575,9 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
     "status": "partial",
     "acceptance_test": "Classify configured CDN hosts as internal while preventing unrestricted external traversal.",
     "remaining_acceptance": [
-      "Implement and prove the declared internal-CDN classification semantics while preventing unrestricted navigation; preserve the existing exact external-resource origin and credential boundaries."
+      "Implement and prove the declared internal-CDN classification semantics while preventing unrestricted navigation; preserve the existing exact external-resource origin and credential boundaries.",
+      "Implement and compare domain-plus-subfolder CDN rules, including descendant and sibling/encoded-path boundaries; the current exact-origin preview rejects paths and does not cover this documented vendor option.",
+      "Determine and prove the additional extraction and crawl behavior for CDN-classified URLs against the reference. Reporting classification alone does not establish traversal or extraction parity; keep navigation, resource and credential grants explicit."
     ],
     "implementation_evidence": [
       {
@@ -5850,4 +5852,4 @@ Diese unveränderten Einträge dokumentieren den damaligen Stand. Aktuelle Resta
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `3e8929eec132e7888d7c10e20b0a30bb4c9a8153385bf83c35a5881ad1ebb52e`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T23:05:21.542Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `3ddb634375a2edc75983bd43d0bb77adfc20642c58a584081f6be6b89e547a80`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T23:05:21.542Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

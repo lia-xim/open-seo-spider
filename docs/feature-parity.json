@@ -928,9 +928,18 @@
       "parity_evidence": [],
       "group": "crawl",
       "remaining_acceptance": [
-        "Implement and prove the declared internal-CDN classification semantics while preventing unrestricted navigation; preserve the existing exact external-resource origin and credential boundaries."
+        "Implement and prove the declared internal-CDN classification semantics while preventing unrestricted navigation; preserve the existing exact external-resource origin and credential boundaries.",
+        "Implement and compare domain-plus-subfolder CDN rules, including descendant and sibling/encoded-path boundaries; the current exact-origin preview rejects paths and does not cover this documented vendor option.",
+        "Determine and prove the additional extraction and crawl behavior for CDN-classified URLs against the reference. Reporting classification alone does not establish traversal or extraction parity; keep navigation, resource and credential grants explicit."
       ],
-      "parity_status": "NOT_PROVEN"
+      "parity_status": "NOT_PROVEN",
+      "reference_scope": {
+        "source_url": "https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/#cdns",
+        "observed_at": "2026-10-15T23:10:44.217Z",
+        "evidence_kind": "OFFICIAL_DOCUMENTATION_ONLY_NOT_VENDOR_RUNTIME_COMPARISON",
+        "summary": "The official CDN configuration describes both domain and domain-plus-subfolder rules. A selected subfolder includes its descendants; matches appear in internal results with additional extracted details. The Source13 preview implements a narrower exact-origin reporting profile.",
+        "runtime_equivalence": "NOT_PROVEN"
+      }
     },
     {
       "id": "crawl.nofollow",
