@@ -1,7 +1,5 @@
 use super::*;
 use crate::policy_export::{self, Format};
-use axum::body::{Body, Bytes};
-use std::io::{self, Write};
 
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -81,24 +79,6 @@ pub(super) async fn export_csv(
     export(state, id, Format::Csv).await
 }
 
-struct ChannelWriter(tokio::sync::mpsc::Sender<Result<Bytes, io::Error>>);
-impl Write for ChannelWriter {
-    fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
-        self.0
-            .blocking_send(Ok(Bytes::copy_from_slice(bytes)))
-            .map_err(|_| {
-                io::Error::new(
-                    io::ErrorKind::BrokenPipe,
-                    "Policy export consumer disconnected",
-                )
-            })?;
-        Ok(bytes.len())
-    }
-    fn flush(&mut self) -> io::Result<()> {
-        Ok(())
-    }
-}
-
 async fn export(state: AppState, id: Uuid, format: Format) -> ApiResult<Response> {
     let job = get_job(&state, id).await?;
     if job.read().await.config.crawl_policy.is_none() {
@@ -117,46 +97,23 @@ async fn export(state: AppState, id: Uuid, format: Format) -> ApiResult<Response
             "Native policy SQLite rows are not available",
         ));
     }
-    let (sender, receiver) = tokio::sync::mpsc::channel(8);
-    let (ready, ready_result) = tokio::sync::oneshot::channel();
-    state.lifecycle.blocking.reap_completed().await;
-    let ticket = state
+    let pending = state
         .lifecycle
-        .blocking
-        .spawn_blocking(move || {
-            let mut ready = Some(ready);
-            let result = (|| {
-                let store = CrawlStore::open_read_only(path)?;
-                let mut writer =
-                    std::io::BufWriter::with_capacity(65536, ChannelWriter(sender.clone()));
-                policy_export::write_snapshot(&store, format, &mut writer, |summary| {
-                    if let Some(ready) = ready.take() {
-                        ready
-                            .send(Ok(summary.clone()))
-                            .map_err(|_| anyhow::anyhow!("Policy export request disconnected"))?;
-                    }
-                    Ok(())
-                })
-            })();
-            if let Err(error) = result {
-                if let Some(ready) = ready.take() {
-                    let _ = ready.send(Err(error.to_string()));
-                } else {
-                    let _ = sender.blocking_send(Err(io::Error::other(error.to_string())));
-                }
-            }
+        .response_streams
+        .start(move |channel, ready| {
+            let store = CrawlStore::open_read_only(path)?;
+            let mut writer = std::io::BufWriter::with_capacity(65536, channel);
+            policy_export::write_snapshot(&store, format, &mut writer, |summary| {
+                ready.send(summary.clone())
+            })?;
+            Ok(())
         })
-        .map_err(|error| api_error(StatusCode::SERVICE_UNAVAILABLE, error))?;
-    // Eager registration starts the bounded producer now. Its actual handles
-    // remain owned after this ticket drops and after the Response is returned.
-    drop(ticket);
-    let summary = ready_result
         .await
-        .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?
-        .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?;
-    let stream = futures::stream::unfold(receiver, |mut receiver| async move {
-        receiver.recv().await.map(|item| (item, receiver))
-    });
+        .map_err(|error| api_error(StatusCode::SERVICE_UNAVAILABLE, error))?;
+    let (summary, body) = pending
+        .ready()
+        .await
+        .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?;
     let (content_type, extension) = match format {
         Format::Json => ("application/json; charset=utf-8", "json"),
         Format::Csv => ("text/csv; charset=utf-8", "csv"),
@@ -175,6 +132,6 @@ async fn export(state: AppState, id: Uuid, format: Format) -> ApiResult<Response
         .header("x-policy-sha256", summary.policy_sha256)
         .header("x-policy-ledger-sha256", summary.rolling_sha256)
         .header("x-policy-ledger-complete", summary.complete.to_string())
-        .body(Body::from_stream(stream))
+        .body(body)
         .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))
 }

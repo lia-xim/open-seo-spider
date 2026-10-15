@@ -1,8 +1,6 @@
 use super::*;
 use crate::resource_export::{self, Format};
-use axum::body::{Body, Bytes};
 use sha2::{Digest, Sha256};
-use std::io::{self, Write};
 
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -230,25 +228,6 @@ pub(super) async fn export_csv(
     export(state, id, Format::Csv).await
 }
 
-struct ChannelWriter(tokio::sync::mpsc::Sender<Result<Bytes, io::Error>>);
-impl Write for ChannelWriter {
-    fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
-        for chunk in bytes.chunks(65536) {
-            self.0
-                .blocking_send(Ok(Bytes::copy_from_slice(chunk)))
-                .map_err(|_| {
-                    io::Error::new(
-                        io::ErrorKind::BrokenPipe,
-                        "Resource export consumer disconnected",
-                    )
-                })?;
-        }
-        Ok(bytes.len())
-    }
-    fn flush(&mut self) -> io::Result<()> {
-        Ok(())
-    }
-}
 async fn export(state: AppState, id: Uuid, format: Format) -> ApiResult<Response> {
     let (metadata, path) = context(&state, id).await?;
     let Some(path) = path else {
@@ -257,56 +236,36 @@ async fn export(state: AppState, id: Uuid, format: Format) -> ApiResult<Response
             "Native resource SQLite rows are not available",
         ));
     };
-    let (sender, receiver) = tokio::sync::mpsc::channel(8);
-    let (ready, ready_result) = tokio::sync::oneshot::channel();
-    state.lifecycle.blocking.reap_completed().await;
-    let ticket = state
+    let pending = state
         .lifecycle
-        .blocking
-        .spawn_blocking(move || {
-            let mut ready = Some(ready);
-            let result = (|| {
-                let store = CrawlStore::open_read_only(path)?;
-                // Check availability before starting the stream. The visitor then pins
-                // and validates its own complete read snapshot.
-                anyhow::ensure!(
-                    store.resource_ledger_summary()?.is_some(),
-                    "Native resource ledger is not available"
-                );
-                let mut writer =
-                    std::io::BufWriter::with_capacity(65536, ChannelWriter(sender.clone()));
-                resource_export::write_snapshot(&store, format, &mut writer, |summary, snapshot| {
-                    validate_binding(&metadata, summary)
-                        .map_err(|(_, Json(error))| anyhow::anyhow!(error.error))?;
-                    validate_snapshot(&metadata, Some(snapshot))
-                        .map_err(|(_, Json(error))| anyhow::anyhow!(error.error))?;
-                    if let Some(ready) = ready.take() {
-                        ready
-                            .send(Ok((summary.clone(), snapshot.clone())))
-                            .map_err(|_| anyhow::anyhow!("Resource export request disconnected"))?;
-                    }
-                    Ok(())
-                })
-            })();
-            if let Err(error) = result {
-                if let Some(ready) = ready.take() {
-                    let _ = ready.send(Err(error.to_string()));
-                } else {
-                    let _ = sender.blocking_send(Err(io::Error::other(error.to_string())));
-                }
-            }
+        .response_streams
+        .start(move |channel, ready| {
+            let store = CrawlStore::open_read_only(path)?;
+            // Keep the old availability and full snapshot/config/generation checks.
+            anyhow::ensure!(
+                store.resource_ledger_summary()?.is_some(),
+                "Native resource ledger is not available"
+            );
+            let mut writer = std::io::BufWriter::with_capacity(65536, channel);
+            resource_export::write_snapshot(&store, format, &mut writer, |summary, snapshot| {
+                validate_binding(&metadata, summary)
+                    .map_err(|(_, Json(error))| anyhow::anyhow!(error.error))?;
+                validate_snapshot(&metadata, Some(snapshot))
+                    .map_err(|(_, Json(error))| anyhow::anyhow!(error.error))?;
+                ready.send((summary.clone(), snapshot.clone()))
+            })?;
+            Ok(())
         })
-        .map_err(|error| api_error(StatusCode::SERVICE_UNAVAILABLE, error))?;
-    // Eager registration starts the bounded producer now. Its actual handles
-    // remain owned after this ticket drops and after the Response is returned.
-    drop(ticket);
-    let (summary, snapshot) = ready_result
         .await
-        .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?
-        .map_err(|e| api_error(StatusCode::CONFLICT, e))?;
-    let stream = futures::stream::unfold(receiver, |mut receiver| async move {
-        receiver.recv().await.map(|item| (item, receiver))
-    });
+        .map_err(|error| api_error(StatusCode::SERVICE_UNAVAILABLE, error))?;
+    let ((summary, snapshot), body) = pending.ready().await.map_err(|error| {
+        let status = if error.readiness_lost() {
+            StatusCode::INTERNAL_SERVER_ERROR
+        } else {
+            StatusCode::CONFLICT
+        };
+        api_error(status, error)
+    })?;
     let (kind, extension) = match format {
         Format::Json => ("application/json; charset=utf-8", "json"),
         Format::Csv => ("text/csv; charset=utf-8", "csv"),
@@ -340,6 +299,6 @@ async fn export(state: AppState, id: Uuid, format: Format) -> ApiResult<Response
             "x-resource-discovery-complete",
             summary.complete.to_string(),
         )
-        .body(Body::from_stream(stream))
+        .body(body)
         .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))
 }

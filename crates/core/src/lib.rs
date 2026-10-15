@@ -145,11 +145,12 @@ pub use sitemap::{
     observe_sitemap_xml, parse_sitemap,
 };
 pub use store::{
-    CrawlStore, SITEMAP_RAW_READ_ENGINE, SITEMAP_READ_WINDOW_ENGINE, SitemapRawReadContext,
+    CrawlStore, SITEMAP_RAW_READ_ENGINE, SITEMAP_READ_WINDOW_ENGINE, SitemapBodyCatalogState,
+    SitemapBodyReadContext, SitemapBodyReadError, SitemapBodyWindow, SitemapRawReadContext,
     SitemapRawReadRequest, SitemapRawReadWindow, SitemapRawRowKind, SitemapReadSnapshot,
     SitemapReadState, SitemapReadWindow, SitemapReadWindowError, SitemapReadWindowExpectedContext,
-    SitemapStoredRowsFilter, SitemapVerifiedFindings, SitemapVerifiedReadHeader,
-    SitemapVerifiedStoredRows, sitemap_read_state_sha256,
+    SitemapStoredRowsFilter, SitemapVerifiedBodyCopy, SitemapVerifiedFindings,
+    SitemapVerifiedReadHeader, SitemapVerifiedStoredRows, sitemap_read_state_sha256,
 };
 pub use urls::normalize_url;
 

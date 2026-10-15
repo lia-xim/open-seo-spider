@@ -20,6 +20,12 @@ mod sitemap_read_context;
 #[path = "store/sitemap_read_window.rs"]
 mod sitemap_read_window;
 pub use sitemap_read_context::SitemapVerifiedReadHeader;
+#[path = "store/sitemap_source_body_read.rs"]
+mod sitemap_source_body_read;
+pub use sitemap_source_body_read::{
+    SitemapBodyCatalogState, SitemapBodyReadContext, SitemapBodyReadError, SitemapBodyWindow,
+    SitemapVerifiedBodyCopy,
+};
 #[path = "store/sitemap_findings_read.rs"]
 mod sitemap_findings_read;
 #[path = "store/sitemap_stored_rows.rs"]

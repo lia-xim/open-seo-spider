@@ -394,3 +394,54 @@ pub(crate) fn verify_snapshot(path: &Path, snapshot: &SitemapSourceArchiveSnapsh
     }
     Ok(())
 }
+
+/// Selected immutable object -> unadvertised private sink. No path escapes.
+pub(crate) fn copy_verified(
+    path: &Path,
+    expected: &SitemapArchivedBody,
+    sink: &mut (impl Write + ?Sized),
+    checkpoint: &mut impl FnMut() -> Result<()>,
+) -> Result<()> {
+    valid_sha(&expected.body_id)?;
+    valid_sha(&expected.sha256)?;
+    ensure!(
+        expected.bytes <= MAX_SITEMAP_ARCHIVE_BODY_BYTES,
+        "Source body exceeds independent64MiB cap"
+    );
+    let dir = ordinary_root(path, false)?;
+    let mut file = regular(&dir, &format!("{}.bin", expected.body_id))?;
+    let before = identity(&file)?;
+    ensure!(
+        file.metadata()?.len() == expected.bytes,
+        "Source body object length differs"
+    );
+    let mut hash = Sha256::new();
+    let mut count = 0u64;
+    let mut buffer = [0u8; 65_536];
+    loop {
+        checkpoint()?;
+        let n = file.read(&mut buffer)?;
+        if n == 0 {
+            break;
+        }
+        count = count
+            .checked_add(n as u64)
+            .context("Source body copy length overflow")?;
+        ensure!(
+            count <= expected.bytes && count <= MAX_SITEMAP_ARCHIVE_BODY_BYTES,
+            "Source body grew beyond declared cap"
+        );
+        hash.update(&buffer[..n]);
+        sink.write_all(&buffer[..n])?;
+    }
+    ensure!(
+        count == expected.bytes && format!("{:x}", hash.finalize()) == expected.sha256,
+        "Source body content/EOF differs"
+    );
+    ensure!(
+        before == identity(&file)? && file.metadata()?.len() == count,
+        "Source body identity changed while copying"
+    );
+    checkpoint()?;
+    Ok(())
+}

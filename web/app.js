@@ -13,6 +13,7 @@
       concurrency: 8, timeout_seconds: 20, max_pages: 0, max_depth: 0,
       user_agent: 'Open SEO Spider/0.1', indexability_agent: 'googlebot', obey_robots: true, follow_subdomains: false,
       delay_ms: 100, max_body_mb: 5, check_external: false,
+      sitemap_source_archive_enabled:false, sitemap_source_archive_post_http:true, sitemap_source_archive_decoded_xml:true, sitemap_source_archive_max_body_bytes:'67108864', sitemap_source_archive_max_total_bytes:'536870912', sitemap_source_archive_max_records:'4096',
       sitemap_source_processing_enabled: false, sitemap_source_max_post_http_entity_bytes: '8388608',
       sitemap_source_max_decoded_xml_bytes: '8388608', sitemap_source_max_xml_events: '500000',
       sitemap_membership_limits_enabled:false, sitemap_membership_max_catalog_json_bytes:'33554432', sitemap_membership_max_row_json_bytes:'262144', sitemap_membership_max_rows:'1000000',
@@ -380,7 +381,7 @@
       if (!current()) return;
       const payload = { ...state.settings, ...advanced, mode, seed_url: mode === 'sitemap' ? '' : urls[0] || '', urls: mode === 'sitemap' ? [] : urls, seed_urls: mode === 'sitemap' ? [] : urls, sitemap_urls: mode === 'sitemap' ? urls : sitemapUrls, input_imports: inputImports, crawl_links: mode !== 'list', include_subdomains: state.settings.follow_subdomains, request_timeout_secs: state.settings.timeout_seconds, max_body_bytes: state.settings.max_body_mb * 1024 * 1024 };
       for (const key of ['crawl_policy_enabled', 'crawl_policy_json', 'live_policy_limits_json', 'content_capture_enabled', 'content_capture_json','resource_discovery_enabled','resource_discovery_json','resource_discovery_limits_json']) delete payload[key];
-      for (const key of ['sitemap_source_processing_enabled', ...sitemapSourceFields.map(field => field.setting), 'sitemap_membership_limits_enabled', ...sitemapMembershipFields.map(field => field.setting)]) delete payload[key];
+      for (const key of [...sitemapArchiveSettingKeys, 'sitemap_source_processing_enabled', ...sitemapSourceFields.map(field => field.setting), 'sitemap_membership_limits_enabled', ...sitemapMembershipFields.map(field => field.setting)]) delete payload[key];
       payload.renderer = state.settings.javascript_rendering ? { endpoint: state.settings.renderer_endpoint, wait_ms: state.settings.renderer_wait_ms, accessibility: state.settings.renderer_accessibility, screenshot: state.settings.renderer_screenshot, collect_cookies: state.settings.renderer_collect_cookies, custom_javascript: parseCustomJavascript(state.settings.custom_javascript_json) } : null;
       const result = await request('/api/crawls', { method: 'POST', body: JSON.stringify(payload) });
       const crawl = result.crawl || result;
@@ -1264,6 +1265,7 @@
     toggleRendererSettings(state.settings.javascript_rendering);
     syncResourceContractSettings();
     syncSitemapSourceProcessingSettings();
+    syncSitemapSourceArchiveSettings();
     $('settings-error').hidden = true;
     $('settings-dialog').showModal();
   }
@@ -1271,10 +1273,11 @@
   function saveSettings(event) {
     event.preventDefault();
     const form = $('settings-form');
-    const advancedText = { ...readSitemapSourceProcessingSettings(form), include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value, link_position_rules_json: form.elements.link_position_rules_json.value, validate_fragments: form.elements.validate_fragments.checked, crawl_policy_enabled: form.elements.crawl_policy_enabled.checked, crawl_policy_json: form.elements.crawl_policy_json.value, live_policy_limits_json: form.elements.live_policy_limits_json.value, javascript_rendering: form.elements.javascript_rendering.checked, content_capture_enabled:form.elements.content_capture_enabled.checked, content_capture_json:form.elements.content_capture_json.value,resource_discovery_enabled:form.elements.resource_discovery_enabled.checked,resource_discovery_json:form.elements.resource_discovery_json.value,resource_discovery_limits_json:form.elements.resource_discovery_limits_json.value };
+    const advancedText = { ...readSitemapSourceProcessingSettings(form), ...readSitemapSourceArchiveSettings(form), include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value, link_position_rules_json: form.elements.link_position_rules_json.value, validate_fragments: form.elements.validate_fragments.checked, crawl_policy_enabled: form.elements.crawl_policy_enabled.checked, crawl_policy_json: form.elements.crawl_policy_json.value, live_policy_limits_json: form.elements.live_policy_limits_json.value, javascript_rendering: form.elements.javascript_rendering.checked, content_capture_enabled:form.elements.content_capture_enabled.checked, content_capture_json:form.elements.content_capture_json.value,resource_discovery_enabled:form.elements.resource_discovery_enabled.checked,resource_discovery_json:form.elements.resource_discovery_json.value,resource_discovery_limits_json:form.elements.resource_discovery_limits_json.value };
     try { parseAdvanced(advancedText); validateRendererSettings({ javascript_rendering: form.elements.javascript_rendering.checked, renderer_endpoint: form.elements.renderer_endpoint.value.trim(), renderer_wait_ms: Number(form.elements.renderer_wait_ms.value), timeout_seconds: Number(form.elements.timeout_seconds.value) }); }
     catch (error) {
       if (form.elements.sitemap_source_processing_enabled.checked || form.elements.sitemap_membership_limits_enabled.checked) $('sitemap-source-processing-settings').open = true;
+      if (form.elements.sitemap_source_archive_enabled.checked) $('sitemap-source-archive-settings').open = true;
       $('settings-error').textContent = error.message;
       $('settings-error').hidden = false;
       $('advanced-config').open = true;
@@ -1302,6 +1305,10 @@
         Object.assign(state.settings, { crawl_policy_enabled: saved.crawl_policy_enabled === true, crawl_policy_json: String(saved.crawl_policy_json || '{"scope":{"roots":[{"origin":"https://example.test","folders":["/"]}]}}'), live_policy_limits_json: String(saved.live_policy_limits_json || '{}') });
         Object.assign(state.settings, { content_capture_enabled:saved.content_capture_enabled === true, content_capture_json:String(saved.content_capture_json || '{"sources":["raw_http_html"],"include_selectors":["body"],"exclude_selectors":["script","style","template","noscript","nav","footer"]}') });
         Object.assign(state.settings,{resource_discovery_enabled:saved.resource_discovery_enabled===true,resource_discovery_json:String(saved.resource_discovery_json || '{}'),resource_discovery_limits_json:String(saved.resource_discovery_limits_json || '{}')});
+        state.settings.sitemap_source_archive_enabled = saved.sitemap_source_archive_enabled === true;
+        state.settings.sitemap_source_archive_post_http = saved.sitemap_source_archive_post_http !== false;
+        state.settings.sitemap_source_archive_decoded_xml = saved.sitemap_source_archive_decoded_xml !== false;
+        for(const field of sitemapArchiveFields)state.settings[field.setting]=String(saved[field.setting]??field.initial);
         state.settings.sitemap_source_processing_enabled = saved.sitemap_source_processing_enabled === true;
         state.settings.sitemap_membership_limits_enabled = saved.sitemap_membership_limits_enabled === true;
         for (const field of sitemapMembershipFields) state.settings[field.setting] = String(saved[field.setting] ?? field.initial);
@@ -1360,6 +1367,56 @@
     return {sitemap_membership_limits:limits};
   }
 
+  const sitemapArchiveFields = [
+    {setting:'sitemap_source_archive_max_body_bytes',native:'max_bytes_per_body',initial:67108864,maximum:67108864,label:'Dateigröße der Sitemap-Quelle'},
+    {setting:'sitemap_source_archive_max_total_bytes',native:'max_total_body_bytes',initial:536870912,maximum:8589934592,label:'Originaldaten je Crawl'},
+    {setting:'sitemap_source_archive_max_records',native:'max_capture_records',initial:4096,maximum:100000,label:'Quellenaufzeichnungen'}
+  ];
+  const sitemapArchiveSettingKeys = ['sitemap_source_archive_enabled','sitemap_source_archive_post_http','sitemap_source_archive_decoded_xml',...sitemapArchiveFields.map(field=>field.setting)];
+  function readSitemapSourceArchiveSettings(form) {
+    const result={sitemap_source_archive_enabled:form.elements.sitemap_source_archive_enabled.checked,sitemap_source_archive_post_http:form.elements.sitemap_source_archive_post_http.checked,sitemap_source_archive_decoded_xml:form.elements.sitemap_source_archive_decoded_xml.checked};
+    for(const field of sitemapArchiveFields)result[field.setting]=form.elements.namedItem(field.setting).value;
+    return result;
+  }
+  function syncSitemapSourceArchiveSettings(){const enabled=$('settings-form').elements.sitemap_source_archive_enabled.checked,fields=$('sitemap-source-archive-fields');fields.disabled=!enabled;fields.hidden=!enabled;}
+  function parseSitemapSourceArchive(settings){
+    if(settings.sitemap_source_archive_enabled!==true)return {};
+    const profile={retain_post_http_entity:settings.sitemap_source_archive_post_http===true,retain_decoded_xml:settings.sitemap_source_archive_decoded_xml===true};
+    if(!profile.retain_post_http_entity&&!profile.retain_decoded_xml)throw new Error('Für Originaldaten mindestens eine Darstellung auswählen.');
+    for(const field of sitemapArchiveFields){const raw=settings[field.setting],value=Number(raw);if(!(typeof raw==='number'||typeof raw==='string'&&/^[0-9]+$/.test(raw))||!Number.isSafeInteger(value)||value<1||value>field.maximum)throw new Error(field.label+': Eine ganze Zahl von 1 bis '+field.maximum+' ist erforderlich.');profile[field.native]=value;}
+    return {sitemap_source_archive:profile};
+  }
+  const sourceBodies={sequence:0,controller:null,result:null,cursor:null,back:[],busy:false,error:'',bodies:[],documentId:null};
+  function selectedSourceBodyDocument(){const row=sitemapMembership.selected?.row;return typeof row?.observation_id==='string'&&/^[a-f0-9]{64}$/.test(row.observation_id)?row.observation_id:null;}
+  function resetSourceBodies(){sourceBodies.sequence++;sourceBodies.controller?.abort();Object.assign(sourceBodies,{controller:null,result:null,cursor:null,back:[],busy:false,error:'',bodies:[],documentId:selectedSourceBodyDocument()});renderSourceBodies();}
+  function renderSourceBodies(){
+    if(!$('sitemap-source-bodies-status'))return;
+    const window=sourceBodies.result?.window;
+    $('sitemap-source-bodies-status').textContent=sourceBodies.busy?'Originaldaten werden geprüft …':window?.state==='recorded_metadata'?`${number(window.summary?.captures||0)} gespeicherte Quellenaufzeichnungen · Dateiverfügbarkeit noch nicht geprüft`:window?.state==='inherited_archive_not_copied'?'Geerbter Crawl: keine eigene verifizierte Dateikopie.':sourceBodies.result?'Originaldaten nicht aufbewahrt oder historische Verfügbarkeit unbekannt.':'Originaldaten wurden noch nicht geladen.';
+    $('sitemap-source-bodies-error').hidden=!sourceBodies.error;$('sitemap-source-bodies-error').textContent=sourceBodies.error;
+    const bodies=[];const rows=[];
+    for(const capture of window?.captures||[]){if(capture.omission)rows.push('<li>Quelle '+escape(capture.measurement_id)+' · Nicht aufbewahrt: '+escape(capture.omission)+'</li>');for(const body of capture.bodies||[]){const index=bodies.push(body)-1;const representation=body.representation==='decoded_xml'?'Dekodierte XML':'Entity nach HTTP-Dekodierung',extent=body.extent==='complete'?'vollständig beobachtet':'beobachteter Präfix';rows.push('<li><p>'+escape(representation)+' · '+escape(extent)+' · '+escape(number(body.bytes))+' Bytes</p><p class="detail-empty">SHA-256: '+escape(body.sha256)+'</p><button type="button" class="button small" data-source-body="'+index+'"'+(sourceBodies.busy?' disabled':'')+'>Prüfen und herunterladen</button></li>');}}
+    sourceBodies.bodies=bodies;$('sitemap-source-bodies-list').innerHTML=rows.join('');$('sitemap-source-bodies-list').querySelectorAll('[data-source-body]').forEach(button=>button.addEventListener('click',()=>downloadSourceBody(Number(button.dataset.sourceBody))));
+    $('sitemap-source-bodies-refresh').disabled=sourceBodies.busy||!state.crawl?.id;$('sitemap-source-bodies-prev').disabled=sourceBodies.busy||!sourceBodies.back.length;$('sitemap-source-bodies-next').disabled=sourceBodies.busy||!sourceBodies.result?.cursor;
+  }
+  async function loadSourceBodies(cursor=null,navigation=null){
+    const id=state.crawl?.id;if(!id)return;const documentId=selectedSourceBodyDocument();sourceBodies.documentId=documentId;sourceBodies.controller?.abort();const controller=new AbortController(),sequence=++sourceBodies.sequence,generation=state.generation;sourceBodies.controller=controller;sourceBodies.busy=true;sourceBodies.error='';renderSourceBodies();
+    const current=()=>sequence===sourceBodies.sequence&&generation===state.generation&&state.crawl?.id===id;
+    try{const result=await request(`/api/crawls/${encodeURIComponent(id)}/sitemaps/source-bodies?limit=50${documentId?'&document_id='+documentId:''}${cursor?'&cursor='+encodeURIComponent(cursor):''}`,{signal:controller.signal});if(!current())return;if(result.job!==id||result.byte_availability!=='not_checked'||result.download_available!==null)throw new Error('Unerwartete Originaldaten-Metadaten.');if(navigation==='next')sourceBodies.back.push(sourceBodies.cursor);else if(navigation==='prev')sourceBodies.back.pop();else sourceBodies.back=[];sourceBodies.cursor=cursor;sourceBodies.result=result;}
+    catch(error){if(current()&&error.name!=='AbortError')sourceBodies.error=error.message;}finally{if(current()){sourceBodies.busy=false;sourceBodies.controller=null;renderSourceBodies();}}
+  }
+  async function downloadSourceBody(index){
+    const body=sourceBodies.bodies[index],snapshot=sourceBodies.result?.snapshot,id=state.crawl?.id;if(!body||!snapshot||!id||sourceBodies.busy)return;
+    if(sourceBodies.documentId!==selectedSourceBodyDocument()){resetSourceBodies();sourceBodies.error='Andere Sitemap-Quelle ausgewählt. Originaldaten erneut laden.';renderSourceBodies();return;}
+    if(!/^[a-f0-9]{64}$/.test(body.body_id)||!Number.isSafeInteger(body.bytes)||body.bytes<0||body.bytes>67108864){sourceBodies.error='Ungültige Dateibeschreibung.';renderSourceBodies();return;}
+    const sequence=++sourceBodies.sequence,generation=state.generation,controller=new AbortController();sourceBodies.controller=controller;sourceBodies.busy=true;sourceBodies.error='';renderSourceBodies();const current=()=>sequence===sourceBodies.sequence&&generation===state.generation&&state.crawl?.id===id;let reader;
+    try{const response=await fetch(`/api/crawls/${encodeURIComponent(id)}/sitemaps/source-bodies/${body.body_id}?snapshot=${encodeURIComponent(snapshot)}`,{signal:controller.signal});if(!response.ok){const failure=await response.json().catch(()=>({}));throw new Error(failure.message||failure.error||`HTTP ${response.status}`);}if(response.headers.get('content-type')!=='application/octet-stream'||!/^(0|[1-9][0-9]*)$/.test(response.headers.get('content-length')||'')||Number(response.headers.get('content-length'))!==body.bytes||response.headers.get('etag')!==`"sha256:${body.sha256}"`)throw new Error('Die geprüfte Dateibeschreibung hat sich geändert. Originaldaten erneut laden.');if(!response.body)throw new Error('Kein binärer Download-Stream verfügbar.');reader=response.body.getReader();const chunks=[];let count=0;for(;;){const item=await reader.read();if(item.done)break;count+=item.value.byteLength;if(count>body.bytes||count>67108864)throw new Error('Der Download überschreitet die Dateigrenze.');chunks.push(item.value);}if(count!==body.bytes)throw new Error('Der Download wurde vorzeitig beendet.');if(!current())return;const blob=new Blob(chunks,{type:'application/octet-stream'}),url=URL.createObjectURL(blob),anchor=document.createElement('a');anchor.href=url;anchor.download=`sitemap-${body.body_id}-${body.representation}-${body.extent}.bin`;document.body.append(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+    catch(error){if(current()&&error.name!=='AbortError')sourceBodies.error=error.message;}finally{if(reader)await reader.cancel().catch(()=>{});if(current()){sourceBodies.busy=false;sourceBodies.controller=null;renderSourceBodies();}}
+  }
+  function bindSourceBodyEvents(){
+    $('sitemap-source-bodies-refresh').addEventListener('click',()=>loadSourceBodies());$('sitemap-source-bodies-next').addEventListener('click',()=>{if(sourceBodies.result?.cursor)loadSourceBodies(sourceBodies.result.cursor,'next');});$('sitemap-source-bodies-prev').addEventListener('click',()=>{if(sourceBodies.back.length)loadSourceBodies(sourceBodies.back.at(-1),'prev');});
+  }
+
   function parseAdvanced(settings) {
     parseCustomJavascript(settings.custom_javascript_json);
     let definitions;
@@ -1399,7 +1456,7 @@
       return { name, selector, attribute: definition.attribute == null ? null : definition.attribute.trim(), method, output, max_results, regex_group, regex_flags, namespaces };
     });
     const lines = (value) => [...new Set(String(value || '').split(/\r?\n/).map((line) => line.trim()).filter(Boolean))];
-    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), pdf_analysis: parsePdfAnalysis(settings.pdf_analysis_json), link_position_rules: parsePositionRules(settings.link_position_rules_json), validate_fragments: settings.validate_fragments === true, include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text), ...parseNativePolicy(settings), ...parseContentCapture(settings),...parseResourceDiscovery(settings), ...parseSitemapSourceProcessing(settings), ...parseSitemapMembershipLimits(settings) };
+    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), pdf_analysis: parsePdfAnalysis(settings.pdf_analysis_json), link_position_rules: parsePositionRules(settings.link_position_rules_json), validate_fragments: settings.validate_fragments === true, include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text), ...parseNativePolicy(settings), ...parseContentCapture(settings),...parseResourceDiscovery(settings), ...parseSitemapSourceProcessing(settings), ...parseSitemapMembershipLimits(settings), ...parseSitemapSourceArchive(settings) };
   }
 
   function policyObject(value, allowed, label) {
@@ -1818,6 +1875,7 @@
     sitemapMembership.token = null;
   }
   function resetSitemapMembership() {
+    resetSourceBodies();
     invalidateSitemapRequest();
     Object.assign(sitemapMembership,{result:null,cursor:null,back:[],pageCursor:null,pageBack:[],selectedPage:null,error:'',stale:false,selected:null,sort:0,direction:1});
     if ($('sitemap-membership-search')) { $('sitemap-membership-search').value=''; $('sitemap-membership-filter').value='all'; }
@@ -1927,6 +1985,7 @@
     $('sitemap-analysis-inspector-data').textContent=JSON.stringify(value,null,2);
   }
   function renderSitemapInspector() {
+    if(sourceBodies.documentId!==selectedSourceBodyDocument())resetSourceBodies();
     const tagged=sitemapMembership.selected, inspector=$('sitemap-membership-inspector');
     inspector.hidden=!tagged || !sitemapUsable(); if(inspector.hidden)return;
     const row=tagged.row, facts=sitemapRowFacts(tagged);
@@ -2932,6 +2991,7 @@
     window.SavedComparisonUI?.bind({ downloadBlob, selectedJob: () => state.crawl?.id });
     bindResourceEvents();
     bindSitemapEvents();
+    bindSourceBodyEvents();
     bindSitemapFindingsEvents();
     bindSitemapBundleEvents();
     bindContentEvents();
@@ -3012,6 +3072,7 @@
     $('settings-close').addEventListener('click', () => $('settings-dialog').close());
     $('settings-form').addEventListener('submit', saveSettings);
     $('settings-form').elements.javascript_rendering.addEventListener('change', (event) => toggleRendererSettings(event.target.checked));
+    $('settings-form').elements.sitemap_source_archive_enabled.addEventListener('change', syncSitemapSourceArchiveSettings);
     $('settings-form').elements.sitemap_source_processing_enabled.addEventListener('change', syncSitemapSourceProcessingSettings);
     $('settings-form').elements.sitemap_membership_limits_enabled.addEventListener('change', syncSitemapSourceProcessingSettings);
     $('export-csv').addEventListener('click', exportCSV);
@@ -3024,6 +3085,7 @@
   }
 
   async function initialize() {
+    $('advanced-config').append($('sitemap-source-archive-settings-template').content.cloneNode(true));
     $('advanced-config').append($('sitemap-source-processing-settings-template').content.cloneNode(true));
     $('advanced-config').append($('policy-settings-template').content.cloneNode(true));
     $('advanced-config').append($('content-settings-template').content.cloneNode(true));

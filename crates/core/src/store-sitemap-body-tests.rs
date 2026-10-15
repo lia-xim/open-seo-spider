@@ -589,3 +589,257 @@ fn source_body_archive_utf8_non_ascii_original_bytes_and_quotas_survive_read_onl
         assert_eq!(measurements(&reopened), before);
     }
 }
+
+#[test]
+fn source_body_metadata_and_selected_copy_are_distinct_and_reopen_exact_non_ascii_bytes() {
+    let (temp, store, generation) = fixture(Some(Default::default()));
+    let body = "\u{feff}<urlset><!-- é 💡 &amp; -->\r\n</urlset>"
+        .as_bytes()
+        .to_vec();
+    let unit = batch(generation, &body);
+    let receipt = a(&store, generation, &unit, &body);
+    store
+        .record_sitemap_source_bodies(
+            &unit.document,
+            &receipt,
+            candidate(body.clone()),
+            generation,
+        )
+        .unwrap();
+    let window = store.sitemap_source_body_window(0, 1, None).unwrap();
+    assert_eq!(
+        window.state,
+        crate::SitemapBodyCatalogState::RecordedMetadata
+    );
+    assert_eq!(window.byte_availability, "not_checked");
+    assert_eq!(window.download_available, None);
+    let ctx = window.context.clone().unwrap();
+    let id = window.captures[0].bodies[0].body_id.clone();
+    let scoped = store
+        .sitemap_source_body_window_for_source(
+            0,
+            50,
+            Some(&ctx),
+            Some(&unit.document.observation_id),
+        )
+        .unwrap();
+    assert_eq!(scoped.captures.len(), 1);
+    assert_eq!(
+        scoped.source_document_id.as_ref(),
+        Some(&unit.document.observation_id)
+    );
+    assert!(
+        store
+            .sitemap_source_body_window_for_source(0, 50, Some(&ctx), Some(&"0".repeat(64)))
+            .unwrap()
+            .captures
+            .is_empty()
+    );
+    assert!(
+        store
+            .sitemap_source_body_window(999, 50, Some(&ctx))
+            .is_err()
+    );
+    let mut denied = Vec::new();
+    assert!(
+        store
+            .copy_sitemap_source_body_for_source(
+                &id,
+                &ctx,
+                Some(&"0".repeat(64)),
+                &mut denied,
+                || Ok(())
+            )
+            .is_err()
+    );
+    assert!(denied.is_empty());
+    let mut bytes = Vec::new();
+    let copied = store
+        .copy_sitemap_source_body(&id, &ctx, &mut bytes, || Ok(()))
+        .unwrap();
+    assert_eq!(bytes, body);
+    assert_eq!(
+        copied.body.sha256,
+        crate::sitemap_source_archive::digest(&body)
+    );
+    drop(store);
+    let reopened = CrawlStore::open_read_only(temp.path().join("body.sqlite")).unwrap();
+    let mut cold = Vec::new();
+    reopened
+        .copy_sitemap_source_body(&id, &ctx, &mut cold, || Ok(()))
+        .unwrap();
+    assert_eq!(cold, body);
+    let path = temp
+        .path()
+        .join("body.sqlite.sitemap-bodies")
+        .join(format!("{id}.bin"));
+    std::fs::write(&path, b"corruption").unwrap();
+    assert_eq!(
+        reopened
+            .sitemap_source_body_window(0, 1, Some(&ctx))
+            .unwrap()
+            .captures[0]
+            .bodies[0]
+            .body_id,
+        id,
+        "listing validates descriptors without pretending to check body files"
+    );
+    assert!(
+        reopened
+            .copy_sitemap_source_body(&id, &ctx, &mut Vec::new(), || Ok(()))
+            .is_err()
+    );
+}
+
+#[test]
+fn source_body_selected_copy_rejects_stale_context_cancellation_and_unavailable_descriptor() {
+    let (_temp, store, generation) = fixture(Some(Default::default()));
+    let body = xml();
+    let unit = batch(generation, &body);
+    let receipt = a(&store, generation, &unit, &body);
+    store
+        .record_sitemap_source_bodies(&unit.document, &receipt, candidate(body), generation)
+        .unwrap();
+    let window = store.sitemap_source_body_window(0, 50, None).unwrap();
+    let context = window.context.unwrap();
+    let id = &window.captures[0].bodies[0].body_id;
+    let mut stale = context.clone();
+    stale.generation += 1;
+    let mut sink = Vec::new();
+    let error = store
+        .copy_sitemap_source_body(id, &stale, &mut sink, || Ok(()))
+        .unwrap_err();
+    assert!(
+        error.downcast_ref::<crate::SitemapBodyReadError>()
+            == Some(&crate::SitemapBodyReadError::StaleContext)
+    );
+    assert!(sink.is_empty());
+    assert!(
+        store
+            .copy_sitemap_source_body(id, &context, &mut sink, || anyhow::bail!(
+                "controlled copy cancel"
+            ))
+            .is_err()
+    );
+    assert!(sink.is_empty());
+    assert!(
+        store
+            .copy_sitemap_source_body(&"0".repeat(64), &context, &mut sink, || Ok(()))
+            .is_err()
+    );
+    assert!(store.sitemap_source_body_window(1, 50, None).is_err());
+    assert!(store.sitemap_source_body_window(0, 201, None).is_err());
+}
+
+#[test]
+fn source_body_new_read_preflights_actual_oversized_and_wrong_type_metadata_before_saved_authorities()
+ {
+    let (temp, store, generation) = fixture(Some(Default::default()));
+    let body = xml();
+    let unit = batch(generation, &body);
+    let receipt = a(&store, generation, &unit, &body);
+    store
+        .record_sitemap_source_bodies(
+            &unit.document,
+            &receipt,
+            candidate(body.clone()),
+            generation,
+        )
+        .unwrap();
+    let path = temp.path().join("body.sqlite");
+    let original_run = metadata_text(&store.connection.lock().unwrap(), "run_state")
+        .unwrap()
+        .unwrap();
+    let original_plan = metadata_text(&store.connection.lock().unwrap(), "run_plan").unwrap();
+    let original_config = metadata_text(&store.connection.lock().unwrap(), "config")
+        .unwrap()
+        .unwrap();
+    let before = store.sitemap_source_body_window(0, 50, None).unwrap();
+    let context = before.context.clone().unwrap();
+    let body_id = before.captures[0].bodies[0].body_id.clone();
+    drop(store);
+    let assert_refused = |sql: &str, fragment: &str| {
+        {
+            let c = Connection::open(&path).unwrap();
+            c.execute_batch(sql).unwrap();
+        }
+        let reopened = CrawlStore::open_read_only(&path).unwrap();
+        let error = reopened
+            .sitemap_source_body_window(0, 50, None)
+            .unwrap_err();
+        assert!(
+            error.to_string().contains(fragment),
+            "{fragment}: {error:#}"
+        );
+        let mut sink = Vec::new();
+        let error = reopened
+            .copy_sitemap_source_body(&body_id, &context, &mut sink, || Ok(()))
+            .unwrap_err();
+        assert!(
+            error.to_string().contains(fragment),
+            "{fragment}: {error:#}"
+        );
+        assert!(sink.is_empty(), "metadata refusal precedes source bytes");
+        drop(reopened);
+        let c = Connection::open(&path).unwrap();
+        for (key, value) in [("run_state", &original_run), ("config", &original_config)] {
+            c.execute(
+                "UPDATE metadata SET value=?2 WHERE key=?1",
+                params![key, value],
+            )
+            .unwrap();
+        }
+        if let Some(plan) = &original_plan {
+            put_metadata(&c, "run_plan", plan).unwrap();
+        } else {
+            c.execute("DELETE FROM metadata WHERE key='run_plan'", [])
+                .unwrap();
+        }
+        c.execute("DELETE FROM metadata WHERE key='operation_kind'", [])
+            .unwrap();
+        c.execute("DELETE FROM recrawl_base", []).unwrap();
+    };
+    // Actual SQLite values exceed each production limit; no smaller substitute.
+    assert_refused(
+        "UPDATE metadata SET value=json_set(value,'$.ignored',printf('%.*c',65537,'x')) WHERE key='run_state'",
+        "run_state metadata type/byte budget",
+    );
+    assert_refused(
+        "INSERT INTO metadata(key,value) VALUES('run_plan',json_object('kind','full_crawl','ignored',printf('%.*c',67108865,'x'))) ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+        "run_plan metadata type/byte budget",
+    );
+    assert_refused(
+        "UPDATE metadata SET value=json_set(value,'$.ignored',printf('%.*c',67108865,'x')) WHERE key='config'",
+        "config metadata type/byte budget",
+    );
+    for key in ["run_state", "run_plan", "config"] {
+        assert_refused(
+            &format!(
+                "INSERT INTO metadata(key,value) VALUES('{key}',x'7b7d') ON CONFLICT(key) DO UPDATE SET value=excluded.value"
+            ),
+            &format!("{key} metadata type/byte budget"),
+        );
+    }
+    assert_refused(
+        "INSERT INTO metadata(key,value) VALUES('operation_kind',zeroblob(1))",
+        "operation_kind metadata type/byte budget",
+    );
+    assert_refused(
+        "INSERT INTO recrawl_base(id,snapshot) VALUES(1,zeroblob(268435457))",
+        "selected parent type/byte budget",
+    );
+    assert_refused(
+        "INSERT INTO recrawl_base(id,snapshot) VALUES(1,'{}')",
+        "selected parent type/byte budget",
+    );
+    let reopened = CrawlStore::open_read_only(&path).unwrap();
+    let after = reopened
+        .sitemap_source_body_window(0, 50, Some(&context))
+        .unwrap();
+    assert_eq!(after.context, before.context);
+    let mut bytes = Vec::new();
+    reopened
+        .copy_sitemap_source_body(&body_id, &context, &mut bytes, || Ok(()))
+        .unwrap();
+    assert_eq!(bytes, body);
+}

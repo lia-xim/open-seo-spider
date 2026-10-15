@@ -32,11 +32,14 @@ mod content;
 mod lifecycle;
 mod policy;
 pub(crate) mod resources;
+mod response_stream;
 mod sitemap_csv_stream;
 mod sitemap_findings;
 mod sitemap_findings_reads;
 mod sitemap_generation;
 mod sitemaps;
+mod source_bodies;
+mod source_body_stream;
 
 #[cfg(test)]
 #[path = "server/sitemap_processing_config_tests.rs"]
@@ -320,9 +323,23 @@ async fn serve_with_mcp_files_ready_source(
         .route("/api/crawls/{id}/issues", get(issues))
         .route("/api/crawls/{id}/analysis", get(advanced_analysis))
         .route("/api/crawls/{id}/policy", get(policy::inventory))
-        .route("/api/crawls/{id}/policy.json", get(policy::export_json))
-        .route("/api/crawls/{id}/policy.csv", get(policy::export_csv))
+        .route(
+            "/api/crawls/{id}/policy.json",
+            get(policy::export_json).layer(middleware::from_fn(response_stream::require_http11)),
+        )
+        .route(
+            "/api/crawls/{id}/policy.csv",
+            get(policy::export_csv).layer(middleware::from_fn(response_stream::require_http11)),
+        )
         .route("/api/crawls/{id}/sitemaps", get(sitemaps::inventory))
+        .route(
+            "/api/crawls/{id}/sitemaps/source-bodies",
+            get(source_bodies::inventory),
+        )
+        .route(
+            "/api/crawls/{id}/sitemaps/source-bodies/{body_id}",
+            get(source_bodies::download).head(source_bodies::unsupported_head),
+        )
         .merge(sitemap_findings::routes())
         .route(
             "/api/crawls/{id}/sitemaps/export.csv",
@@ -335,9 +352,12 @@ async fn serve_with_mcp_files_ready_source(
         )
         .route(
             "/api/crawls/{id}/resources.json",
-            get(resources::export_json),
+            get(resources::export_json).layer(middleware::from_fn(response_stream::require_http11)),
         )
-        .route("/api/crawls/{id}/resources.csv", get(resources::export_csv))
+        .route(
+            "/api/crawls/{id}/resources.csv",
+            get(resources::export_csv).layer(middleware::from_fn(response_stream::require_http11)),
+        )
         .route("/api/crawls/{id}/responses", get(response_inventory))
         .route("/api/crawls/{id}/responses.csv", get(export_responses))
         .route("/api/crawls/{id}/fragments", get(fragment_inventory))
@@ -518,6 +538,7 @@ async fn capabilities() -> Json<Value> {
         "saved_comparison":{"endpoint":"/api/compare/saved","engine":open_seo_spider_core::SAVED_COMPARISON_ENGINE,"website_requests":0,"exact_requested_identity":true,"explicit_mapping":true,"unknown_facts_preserved":true,"full_original_report_bundle":false,"sql_attested":false,"full_reference_parity":false},
         "native_content_capture":{"opt_in":true,"sources":["raw_http_html","rendered_dom_html"],"body_retention":false,"source_binding":"persisted_consistency","full_reference_parity":false},
         "native_resource_discovery":{"opt_in":true,"engine":open_seo_spider_core::RESOURCE_DISCOVERY_ENGINE,"semantic_contracts":[open_seo_spider_core::RESOURCE_DISCOVERY_ENGINE,open_seo_spider_core::RESOURCE_CONTRACT_ENGINE],"contract_selection":"explicit_optional_config","qualified_directives":["nofollow","ugc","sponsored"],"qualified_link_scope":"target_internal_external_including_document_nofollow","durable_original_reference_roles":true,"durable_sqlite_ledger":true,"paged_occurrences":true,"paged_transport_metadata":true,"streamed_snapshot_exports":true,"entity_body_retention":false,"renderer_supported":false,"full_reference_parity":false},
+        "stored_sitemap_source_bodies":{"opt_in":true,"config_field":"sitemap_source_archive","storage":"utf8_sqlite_own_archive","metadata_byte_availability":"not_checked","download":"verified_private_spool_before_headers","max_binary_bytes":67108864,"json_page_limits_unchanged":true,"wire_bytes":false,"portable_bundle":false,"inherited_body_copy":false,"unresponsive_transport_drain":"not_proven"},
         "sitemap_membership_limits":{"opt_in":true,"config_field":"sitemap_membership_limits","default_catalog_json_bytes":open_seo_spider_core::DEFAULT_SITEMAP_CATALOG_BYTES,"max_catalog_json_bytes":open_seo_spider_core::MAX_SITEMAP_CATALOG_BYTES,"source_work_independent":true,"raw_xml_body_retention":false,"wire_limits_unchanged":true},
         "offline_serp":{"path":"/serp","website_requests":0,"csv_import":true,"row_limit":10000},
         "offline_robots":{"path":"/robots","website_requests":0,"engine":"crawler_policy","remote_rules_fetch":false},
