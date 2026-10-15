@@ -1,0 +1,394 @@
+{
+  "kind": "source5_r3_freeze_suite_build_source_preparation",
+  "status": "SOURCE_ONLY_NOT_PROMOTED_NOT_RUN",
+  "recorded_at": "2026-10-15T11:36:08.563Z",
+  "source_schema": "combined_source_v5",
+  "validator": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v5-source-suite-preparation-v1/validate-combined-source-v5.mjs",
+    "sha256": "76388c0b8a0a97b855ac3fc70e54996a953d7b2c0d6df049edfb5b09fc883927",
+    "bytes": 16534
+  },
+  "parent_preparation": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r2-runner-preparation-v1\\manifest.json",
+    "sha256": "162a5dc07fe1c76b40e9105c1c1528f02c05617a08f9beea56de2b39308345a7",
+    "bytes": 5858
+  },
+  "parent_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r2-runner-independent-review-v1\\receipt.json",
+    "sha256": "af1d31733dffbdbe27b389ea62e59f771842e5c97555ff59e381152dbf1538d6",
+    "bytes": 15376
+  },
+  "files": [
+    {
+      "path": "freeze-combined-source-v5-r3.mjs",
+      "sha256": "cbbca95285c717bd395201604869a6ef630fed2667a6a3fb1d9d7095e0bd132e",
+      "bytes": 8563
+    },
+    {
+      "path": "run-combined-suite-v5-r3.mjs",
+      "sha256": "bfbfee609c1911e432a1005b200005fc3a42dadcb9b0c108aead0db60abde241",
+      "bytes": 16899
+    },
+    {
+      "path": "build-combined-optimized-v5-r3.mjs",
+      "sha256": "3789801fca07630384d6237c9c6a7f746e69d8c5194f59b1cbf4a53c770cd845",
+      "bytes": 19698
+    }
+  ],
+  "derivations": [
+    {
+      "old_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r2-runner-preparation-v1\\freeze-combined-source-v5-r2.mjs",
+      "old_sha256": "7a81c37279bc253a049160a3420ecb897889a1a37a83b8088bb5883ea5b79c3e",
+      "path": "freeze-combined-source-v5-r3.mjs",
+      "sha256": "cbbca95285c717bd395201604869a6ef630fed2667a6a3fb1d9d7095e0bd132e",
+      "bytes": 8563,
+      "operations": [
+        {
+          "at": 501,
+          "before": "OUT=path.join(BASE,'combined-source-v5-r2')",
+          "after": "OUT=path.join(BASE,'combined-source-v5-r3')",
+          "before_sha256": "7a81c37279bc253a049160a3420ecb897889a1a37a83b8088bb5883ea5b79c3e",
+          "after_sha256": "1b3559ae7d764fd6d3795258bb523664fcae9d5c4f40ff7fdc771e739aa7a385"
+        },
+        {
+          "at": 691,
+          "before": "'work/freeze-combined-source-v5-r2.mjs'",
+          "after": "'work/freeze-combined-source-v5-r3.mjs'",
+          "before_sha256": "1b3559ae7d764fd6d3795258bb523664fcae9d5c4f40ff7fdc771e739aa7a385",
+          "after_sha256": "cbbca95285c717bd395201604869a6ef630fed2667a6a3fb1d9d7095e0bd132e"
+        }
+      ],
+      "exact_reverse": true
+    },
+    {
+      "old_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r2-runner-preparation-v1\\run-combined-suite-v5-r2.mjs",
+      "old_sha256": "b9e7a4fda5195159ff2e738744416838aa34e61d3d1738aff4667069500bd0f3",
+      "path": "run-combined-suite-v5-r3.mjs",
+      "sha256": "bfbfee609c1911e432a1005b200005fc3a42dadcb9b0c108aead0db60abde241",
+      "bytes": 16899,
+      "operations": [
+        {
+          "at": 772,
+          "before": "'combined-source-v5-r2'",
+          "after": "'combined-source-v5-r3'",
+          "before_sha256": "b9e7a4fda5195159ff2e738744416838aa34e61d3d1738aff4667069500bd0f3",
+          "after_sha256": "455e8a50998f76167122f34223335f44c5e7defa84bd829edb84ea6895e8e34c"
+        },
+        {
+          "at": 941,
+          "before": "'results/combined-suite-v5-r2'",
+          "after": "'results/combined-suite-v5-r3'",
+          "before_sha256": "455e8a50998f76167122f34223335f44c5e7defa84bd829edb84ea6895e8e34c",
+          "after_sha256": "e86856098aff4eb7360e0e6cc64de4e95110f4cee9fdbbf65b7d0e4ac4571b8b"
+        },
+        {
+          "at": 1467,
+          "before": "'work/run-combined-suite-v5-r2.mjs'",
+          "after": "'work/run-combined-suite-v5-r3.mjs'",
+          "before_sha256": "e86856098aff4eb7360e0e6cc64de4e95110f4cee9fdbbf65b7d0e4ac4571b8b",
+          "after_sha256": "c2bc07914cecef49dfe6e2b77c6d5675c8d03721f8db79321fbc5ffed3b373cd"
+        },
+        {
+          "at": 14555,
+          "before": "'PASS_COMBINED_WORKSPACE_V5_R2_REAL_RENDERER_FMT_CLIPPY'",
+          "after": "'PASS_COMBINED_WORKSPACE_V5_R3_REAL_RENDERER_FMT_CLIPPY'",
+          "before_sha256": "c2bc07914cecef49dfe6e2b77c6d5675c8d03721f8db79321fbc5ffed3b373cd",
+          "after_sha256": "ee1f986d1ba28274ea7677c6040b63063c04a067c5cb45860693b529c6daf675"
+        },
+        {
+          "at": 14614,
+          "before": "'FAIL_COMBINED_WORKSPACE_V5_R2'",
+          "after": "'FAIL_COMBINED_WORKSPACE_V5_R3'",
+          "before_sha256": "ee1f986d1ba28274ea7677c6040b63063c04a067c5cb45860693b529c6daf675",
+          "after_sha256": "16b2e5adb669c9c9eafe170a02e7479a2d4ed789f40cde6aecc2a51eb1e1395c"
+        },
+        {
+          "at": 14695,
+          "before": "'combined_full_suite_v5_r2'",
+          "after": "'combined_full_suite_v5_r3'",
+          "before_sha256": "16b2e5adb669c9c9eafe170a02e7479a2d4ed789f40cde6aecc2a51eb1e1395c",
+          "after_sha256": "bfbfee609c1911e432a1005b200005fc3a42dadcb9b0c108aead0db60abde241"
+        }
+      ],
+      "exact_reverse": true
+    },
+    {
+      "old_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r2-runner-preparation-v1\\build-combined-optimized-v5-r2.mjs",
+      "old_sha256": "6ba8262cfba7db388449bdc9a2c3ecb1c6e8335683bc81ec45aad0bc94d6bd41",
+      "path": "build-combined-optimized-v5-r3.mjs",
+      "sha256": "3789801fca07630384d6237c9c6a7f746e69d8c5194f59b1cbf4a53c770cd845",
+      "bytes": 19698,
+      "operations": [
+        {
+          "at": 764,
+          "before": "const suiteDriverSha = 'b9e7a4fda5195159ff2e738744416838aa34e61d3d1738aff4667069500bd0f3'",
+          "after": "const suiteDriverSha = 'bfbfee609c1911e432a1005b200005fc3a42dadcb9b0c108aead0db60abde241'",
+          "before_sha256": "6ba8262cfba7db388449bdc9a2c3ecb1c6e8335683bc81ec45aad0bc94d6bd41",
+          "after_sha256": "d5e345632279dc7522e95bebe9b2995e371d75304872f2bd93eb421a453e64c3"
+        },
+        {
+          "at": 1042,
+          "before": "'combined-source-v5-r2'",
+          "after": "'combined-source-v5-r3'",
+          "before_sha256": "d5e345632279dc7522e95bebe9b2995e371d75304872f2bd93eb421a453e64c3",
+          "after_sha256": "b74c13e45cae494d99d4571d6e1e12855328d8ba8f65543f7d57209a4d182413"
+        },
+        {
+          "at": 1153,
+          "before": "'results/combined-suite-v5-r2'",
+          "after": "'results/combined-suite-v5-r3'",
+          "before_sha256": "b74c13e45cae494d99d4571d6e1e12855328d8ba8f65543f7d57209a4d182413",
+          "after_sha256": "3ca12c6f0709ae7ed4dc2d5b17a85c4690b519b3ebb8866435a1e6d0c3fdf085"
+        },
+        {
+          "at": 1214,
+          "before": "'results/combined-optimized-build-v5-r2'",
+          "after": "'results/combined-optimized-build-v5-r3'",
+          "before_sha256": "3ca12c6f0709ae7ed4dc2d5b17a85c4690b519b3ebb8866435a1e6d0c3fdf085",
+          "after_sha256": "b8c5809b4731fdeaad4b4712f65370c96e7c9507e24fee3e06c48a1b6248a8fa"
+        },
+        {
+          "at": 1634,
+          "before": "'work/run-combined-suite-v5-r2.mjs'",
+          "after": "'work/run-combined-suite-v5-r3.mjs'",
+          "before_sha256": "b8c5809b4731fdeaad4b4712f65370c96e7c9507e24fee3e06c48a1b6248a8fa",
+          "after_sha256": "7dfe29f6245e9b3e2cb2843e61fa3bb49bf1f6786cf816f068a2d8607b89dcbf"
+        },
+        {
+          "at": 1853,
+          "before": "'work/build-combined-optimized-v5-r2.mjs'",
+          "after": "'work/build-combined-optimized-v5-r3.mjs'",
+          "before_sha256": "7dfe29f6245e9b3e2cb2843e61fa3bb49bf1f6786cf816f068a2d8607b89dcbf",
+          "after_sha256": "a10279193c2a0f57eefba1627885ab600673ae57a0e10469990754b6c4417c81"
+        },
+        {
+          "at": 5555,
+          "before": "'combined_full_suite_v5_r2'",
+          "after": "'combined_full_suite_v5_r3'",
+          "before_sha256": "a10279193c2a0f57eefba1627885ab600673ae57a0e10469990754b6c4417c81",
+          "after_sha256": "cb017a0c2f21e2c9ad212a63f12dca842faae1af9eb878d7e583aa0f831e7a82"
+        },
+        {
+          "at": 5614,
+          "before": "'PASS_COMBINED_WORKSPACE_V5_R2_REAL_RENDERER_FMT_CLIPPY'",
+          "after": "'PASS_COMBINED_WORKSPACE_V5_R3_REAL_RENDERER_FMT_CLIPPY'",
+          "before_sha256": "cb017a0c2f21e2c9ad212a63f12dca842faae1af9eb878d7e583aa0f831e7a82",
+          "after_sha256": "864dd96453516afb30f5544547b22baf474453f671e408d6455d4c9d9b60da66"
+        },
+        {
+          "at": 17506,
+          "before": "'PASS_COMBINED_OPTIMIZED_BUILD_V5_R2'",
+          "after": "'PASS_COMBINED_OPTIMIZED_BUILD_V5_R3'",
+          "before_sha256": "864dd96453516afb30f5544547b22baf474453f671e408d6455d4c9d9b60da66",
+          "after_sha256": "c35bb012c1775ed7f0985b7fc6f07cadd40172760e4b544bbeee7bf12c9280e1"
+        },
+        {
+          "at": 17546,
+          "before": "'FAIL_COMBINED_OPTIMIZED_BUILD_V5_R2'",
+          "after": "'FAIL_COMBINED_OPTIMIZED_BUILD_V5_R3'",
+          "before_sha256": "c35bb012c1775ed7f0985b7fc6f07cadd40172760e4b544bbeee7bf12c9280e1",
+          "after_sha256": "1896440054ba53f7f7d89f55d146848db16e70eae4b627c300e69a774eb2c2fa"
+        },
+        {
+          "at": 17633,
+          "before": "'combined_optimized_build_v5_r2'",
+          "after": "'combined_optimized_build_v5_r3'",
+          "before_sha256": "1896440054ba53f7f7d89f55d146848db16e70eae4b627c300e69a774eb2c2fa",
+          "after_sha256": "3789801fca07630384d6237c9c6a7f746e69d8c5194f59b1cbf4a53c770cd845"
+        }
+      ],
+      "exact_reverse": true
+    }
+  ],
+  "critical_regions": [
+    {
+      "path": "freeze-combined-source-v5-r3.mjs",
+      "label": "complete freezer CLI/validator/actual clean private Root publication/source-input union/final hash/copy/manifest authority",
+      "start": "const argv=",
+      "end": null,
+      "bytes": 7699,
+      "sha256": "3d072d2b125be553e193fa5afc1f9ed7a06713dc457b7393d2364dc299670700",
+      "exact": true
+    },
+    {
+      "path": "run-combined-suite-v5-r3.mjs",
+      "label": "opt1/assertions+overflowtrue/debug0 and external override refusal",
+      "start": "const enforcedProfileEnv = Object.freeze({",
+      "end": "const driverSha =",
+      "bytes": 1004,
+      "sha256": "c6245cbfa1ca9eb32d28a69ac9dece305ec63e583e4493f38c96495f147f92c4",
+      "exact": true
+    },
+    {
+      "path": "run-combined-suite-v5-r3.mjs",
+      "label": "full source/name/actual child-close/log parser/required results/4 owned Chromium gates/independent cleanup/final-source acceptance body",
+      "start": "function verifyFile(",
+      "end": "const result = accepted",
+      "bytes": 10241,
+      "sha256": "568505dfc905ee8ae2cdd338b2025cf2439c55bc8da7426ed35a60a4d8d9685b",
+      "exact": true
+    },
+    {
+      "path": "build-combined-optimized-v5-r3.mjs",
+      "label": "unchanged profile/all required functions/4renderers/actual commands/bounded reader/raw parser",
+      "start": "const expectedTestProfile = Object.freeze({",
+      "end": "function verifySuite() {",
+      "bytes": 1777,
+      "sha256": "01986dc7fbc4ac3890d50b78ff5c6748e069ee2cea34ccc3dfeeab5ffa903f3e",
+      "exact": true
+    },
+    {
+      "path": "build-combined-optimized-v5-r3.mjs",
+      "label": "entire actual suite verifier preserved except R3 kind/result labels",
+      "bytes": 7034,
+      "sha256": "6d6d235be535b811f004f36a4d64c367a9234fcad7c3d074496d111056f36041",
+      "normalization": "Only combined_full_suite_v5_r2 and PASS_COMBINED_WORKSPACE_V5_R2_REAL_RENDERER_FMT_CLIPPY → R3",
+      "exact_except_two_labels": true
+    },
+    {
+      "path": "build-combined-optimized-v5-r3.mjs",
+      "label": "current full source/Root/approval/reference/suite-producer final authority",
+      "start": "function verifySource() {",
+      "end": "const admittedSuite =",
+      "bytes": 1078,
+      "sha256": "91d8e0f0119d8458d095cad5831be3320a5ab65d317439a2d174c810b4e855b4",
+      "exact": true
+    },
+    {
+      "path": "build-combined-optimized-v5-r3.mjs",
+      "label": "actual3 compiler closes/log/individual receipts, exclusive fsync reread/PE capture and full final source/suite/candidate guards",
+      "start": "async function command(",
+      "end": "const result = accepted",
+      "bytes": 3635,
+      "sha256": "5b83be7e128314af6e1ff14b2424233906e7c2942c2f01894e0fb4dfd28bf6ac",
+      "exact": true
+    }
+  ],
+  "final_authored_proposals": [
+    {
+      "role": "body",
+      "proposal": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v4\\manifest.json",
+        "sha256": "0aadae88e4df70e93c71177bf2305a2758b18c86772d6bf355088b18a80f547d",
+        "bytes": 9710
+      },
+      "review": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-independent-review-v4\\receipt.json",
+        "sha256": "6cac7121bbff23fefdd398ed0c7501285c30a6bb256076b455971e8fa134eb70",
+        "bytes": 12248
+      }
+    },
+    {
+      "role": "lifecycle",
+      "proposal": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-http-lifecycle-proposal-v4\\manifest.json",
+        "sha256": "5d5be90f080b27dacbcfdecaf0eabc5886b95e34951822264a69237c93dc2034",
+        "bytes": 24757
+      },
+      "review": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\lifecycle-independent-review-v4\\receipt.json",
+        "sha256": "268447471be4a270809381bc760a43406aedaae678228f211291a168fcb99a96",
+        "bytes": 21415
+      }
+    },
+    {
+      "role": "stateless",
+      "proposal": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-stateless-read-proposal-v2\\manifest.json",
+        "sha256": "f872dbd00dbb00fcab06ee6a7dbe8b775da7be579409934171089cec405660ad",
+        "bytes": 11116
+      },
+      "review": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-stateless-read-independent-review-v3\\receipt.json",
+        "sha256": "76be898c99febf451463bcd1f4933d4a656caaa4d16dbb675274c83afeb733dd",
+        "bytes": 164148
+      }
+    }
+  ],
+  "actual_failed_r2_suite": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-suite-v5-r2\\proof.json",
+    "sha256": "84890f18cc8768f3bbc687c9771b760e561e5077cebe8d167ba81ed66462371d",
+    "bytes": 136130
+  },
+  "future_r3_evidence": {
+    "root_approval": null,
+    "source_manifest": null,
+    "source_commit": null,
+    "suite_proof": null,
+    "build_proof": null,
+    "candidate_binary": null,
+    "status": "ACTUAL_FUTURE_ROOT_ARTIFACTS_REQUIRED_NOT_INVENTED"
+  },
+  "source_only_derived_requirements": {
+    "parent_inputs": 304,
+    "inherited_required_windows_names": 434,
+    "parent_minimum": 1216,
+    "final_authored_windows_functions": {
+      "body_windows": 16,
+      "lifecycle": 16,
+      "stateless": 8
+    },
+    "total_new_windows_functions": 40,
+    "computed_minimum": 1256,
+    "qualification": "Derived requirements only. Actual final source union, names and minimum are rederived by unchanged validator/freezer from actual reviewed Root approval."
+  },
+  "syntax_checks": [
+    {
+      "file": "prepare-r3.mjs",
+      "command": "node --check",
+      "exit_code": 0
+    },
+    {
+      "file": "freeze-combined-source-v5-r3.mjs",
+      "command": "node --check",
+      "exit_code": 0
+    },
+    {
+      "file": "run-combined-suite-v5-r3.mjs",
+      "command": "node --check",
+      "exit_code": 0
+    },
+    {
+      "file": "build-combined-optimized-v5-r3.mjs",
+      "command": "node --check",
+      "exit_code": 0
+    }
+  ],
+  "artifacts": [
+    {
+      "file": "prepare-r3.mjs",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r3-runner-preparation-v1\\prepare-r3.mjs",
+      "sha256": "bc0ec622cc52cc50c9c166b25f2323e2d302308c9289a7fa638aae486d155c14",
+      "bytes": 11863
+    },
+    {
+      "file": "HANDOFF.md",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r3-runner-preparation-v1\\HANDOFF.md",
+      "sha256": "a5904e49ebdbdee825ef81151562cd6a531edad47171e43f6f4f8ee2ce214e9c",
+      "bytes": 1987
+    },
+    {
+      "file": "derivation.json",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r3-runner-preparation-v1\\derivation.json",
+      "sha256": "a120a3612ae8c5385bd1e65bf1d605d1cb21f5d14ae0306275c4b48bb38dd9b4",
+      "bytes": 11568
+    },
+    {
+      "file": "source-validation.json",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r3-runner-preparation-v1\\source-validation.json",
+      "sha256": "031ebd5b15b7b45b5403b0e98e67f73f66a227339b4b537706b9def6b25292db",
+      "bytes": 3852
+    }
+  ],
+  "excluded_executions": {
+    "target_imports": 0,
+    "compiler": 0,
+    "rust_tests": 0,
+    "fixtures": 0,
+    "sqlite": 0,
+    "native": 0,
+    "git": 0,
+    "root_writes": 0
+  },
+  "qualification": "Fresh R3 source/suite/build paths and exact producers preserve all failed older artifacts. Same schema/validator and actual approvals admit final BODY4/Life4/Stateless2 dynamically. No future Source/Root/suite/build/candidate success pin or result exists in this proposal."
+}

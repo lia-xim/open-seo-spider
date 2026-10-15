@@ -6304,6 +6304,37 @@
   "last_verified_at": "2026-10-15T08:41:21.015Z",
   "current_work": [
     {
+      "id": "combined-source-v5-r3-20261015",
+      "priority": 0,
+      "status": "ACTUAL_PRELIMINARY_CLIPPY_PASS_FULL_SUITE_RUNNING",
+      "title_de": "Bereinigten gemeinsamen Stand vollständig abnehmen",
+      "summary_de": "Privater Commit 9fa103e korrigiert genau einen Testhelfer. Vorab besteht Clippy für Workspace und alle Ziele ohne Warnungen. Der tatsächliche vollständige neue Lauf auf 317 eingefrorenen Eingaben muss mindestens 1256 Tests, alle 474 Pflichtnamen und vier echte Renderer-Fälle erneut bestehen.",
+      "completed_acceptance_de": [
+        "Alle bisherigen Assertions und Testfunktionen erhalten; eine tatsächliche Dateidifferenz gegenüber R2 unabhängig geprüft.",
+        "Endgültige BODY4/Lifecycle4/Stateless2, drei Zusammenführungen, Formatänderungen und R3-Prüftreiber gebunden.",
+        "Tatsächliche vorgezogene Clippy-Prüfung ohne Warnungen bestanden."
+      ],
+      "pending_acceptance_de": [
+        "Neue vollständige Rust-/Renderer-/Format-/Clippy-Suite bestehen.",
+        "Optimierten Kandidaten bauen und Native-/EOF-/Großquellenprüfungen auf diesem Kandidaten ausführen.",
+        "Kaltinstallation nach allen erforderlichen Abnahmen; API-/Oberflächenzugriff auf Originaldateien und übrige Featureliste weiterführen."
+      ],
+      "documentation": [
+        "docs/verification/combined-source-v5-r3-source-20261015/index.json",
+        "docs/verification/combined-source-v5-r2-clippy-failed-20261015/index.json"
+      ],
+      "gates": {
+        "source_review": "PASS_BOUNDED_SOURCE_ONLY",
+        "preliminary_clippy": "PASS_ACTUAL_29_59_SECONDS",
+        "full_workspace": "RUNNING_SOURCE5_R3",
+        "optimized_candidate": "NOT_RUN",
+        "native": "NOT_RUN_ON_SOURCE5_R3",
+        "installation": "NOT_RUN_INSTALLED_AB1_UNCHANGED",
+        "manufacturer_parity": "NOT_PROVEN"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
       "id": "http-response-body-drain-20261015",
       "priority": 2,
       "status": "DESIGN_REVIEWED_SOURCE_IMPLEMENTATION_IN_PROGRESS",
@@ -6332,27 +6363,28 @@
     {
       "id": "combined-source-v5-r2-20261015",
       "priority": 0,
-      "status": "ACTUAL_ALL_TARGET_CHECK_PASS_FULL_SUITE_RUNNING",
+      "status": "ACTUAL_1256_TESTS_PASS_CLIPPY_FAIL",
       "title_de": "Korrigierten gemeinsamen Stand vollständig ausführen",
-      "summary_de": "Fünf Testdateien sind nach den tatsächlichen Compilerfehlern korrigiert. Der private Commit 22e1e21 besteht cargo check für Workspace und alle Build-Ziele in 20,44 Sekunden ohne Warnungen. 317 Eingaben sind neu eingefroren; die tatsächliche vollständige Suite läuft mit mindestens 1256 Tests, 474 Pflichtnamen und vier echten Renderer-Fällen.",
+      "summary_de": "Der tatsächliche vollständige Testlauf besteht 1256 Tests ohne Fehler oder ignorierte Fälle, einschließlich aller 40 neuen Fälle und vier echter Renderer-Prüfungen. Clippy scheitert an einer einzelnen redundanten Bindung im Testhelfer. Daher ist die gesamte R2-Abnahme fehlgeschlagen; für diesen Stand gibt es keinen Build und keine Installation.",
       "completed_acceptance_de": [
         "Endgültige Vorschläge BODY3, Lifecycle4 und zustandslose Leser V2 unabhängig geprüft; alle 48 Vorschlagspfade und die drei Zusammenführungen exakt gebunden.",
         "36 Formatdifferenzen separat geprüft; gegenüber dem fehlgeschlagenen Source5 sind genau fünf Testdateien geändert, alle bisherigen Assertions und Testfunktionen erhalten.",
         "Tatsächlicher vollständiger All-Target-Compilercheck besteht; beide früheren Compilerfehlerstände bleiben erhalten."
       ],
       "pending_acceptance_de": [
-        "Tatsächliche vollständige Rust-/Renderer-/Format-/Clippy-Suite bestehen.",
+        "Einzelnen Testhelfer korrigieren und frische vollständige Suite auf R3 bestehen.",
         "Danach optimierten Kandidaten bauen und echte Native-/EOF-/Großquellenprüfungen ausführen.",
         "Originaldateien über API/Oberfläche freigeben, blockierte Downloads sauber abbrechen und übrige Featureliste abarbeiten."
       ],
       "documentation": [
+        "docs/verification/combined-source-v5-r2-clippy-failed-20261015/index.json",
         "docs/verification/combined-source-v5-r2-source-20261015/index.json",
         "docs/verification/combined-source-v5-compile-failed-20261015/index.json"
       ],
       "gates": {
         "source_review": "PASS_BOUNDED_SOURCE_ONLY",
         "all_target_check": "PASS_ACTUAL_20_44_SECONDS_NO_WARNINGS",
-        "full_workspace": "RUNNING_SOURCE5_R2",
+        "full_workspace": "TESTS_PASS_1256_CLIPPY_FAIL_OVERALL_FAIL",
         "optimized_candidate": "NOT_RUN",
         "native": "NOT_RUN_ON_SOURCE5_R2",
         "installation": "NOT_RUN_INSTALLED_AB1_UNCHANGED",
@@ -6445,7 +6477,7 @@
     {
       "id": "sitemap-original-body-foundation-20261015",
       "priority": 1,
-      "status": "REVIEWED_SOURCE5_R2_FULL_SUITE_RUNNING",
+      "status": "ACTUAL_R2_TESTS_PASS_FRESH_R3_FULL_SUITE_RUNNING",
       "title_de": "Ursprüngliche Sitemap-Dateien dauerhaft speichern",
       "summary_de": "Die optionale Core-/Store-Grundlage ist in Source5 zusammengeführt und formatiert. Originalbytes, getrennte Budgets, unveränderliche Dateien und Wiederöffnungsprüfungen sind implementiert; 16 neue Windows-Tests sind wegen der Compilerfehler noch nicht ausgeführt. Archivierung unterstützt ausdrücklich UTF-8-SQLite-Speicherung. API, Oberfläche und Download werden anschließend ergänzt.",
       "completed_acceptance_de": [
@@ -6460,13 +6492,15 @@
         "MCP-Fenster, eigene Kopien für abgeleitete Crawls, portable Bundles, Wiederherstellung und kontrollierte Bereinigung bleiben getrennte offene Schritte."
       ],
       "documentation": [
+        "docs/verification/combined-source-v5-r3-source-20261015/index.json",
+        "docs/verification/combined-source-v5-r2-clippy-failed-20261015/index.json",
         "docs/verification/combined-source-v5-r2-source-20261015/index.json",
         "docs/parity/sitemap-source-archive-plan.md",
         "docs/parity/sitemap-source-archive-tasks.json"
       ],
       "gates": {
         "source_review": "PASS_BOUNDED_SOURCE_ONLY_V3_AND_FORMAT_MERGE",
-        "rust_tests": "RUNNING_ON_SOURCE5_R2",
+        "rust_tests": "ALL_40_NEW_TESTS_PASS_R2_OVERALL_CLIPPY_FAIL_R3_RUNNING",
         "public_api_ui": "NOT_IMPLEMENTED",
         "native_body_recovery": "NOT_RUN",
         "installation": "NOT_RUN"
@@ -6476,7 +6510,7 @@
     {
       "id": "http-mcp-lifecycle-ownership-20261015",
       "priority": 2,
-      "status": "REVIEWED_SOURCE5_R2_FULL_SUITE_RUNNING",
+      "status": "ACTUAL_R2_TESTS_PASS_FRESH_R3_FULL_SUITE_RUNNING",
       "title_de": "Laufende HTTP- und MCP-Arbeiten sauber beenden",
       "summary_de": "Gehaltene Request-, Blocking-, Crawl- und PDF-Aufgaben sowie frühes Schließen der Arbeitszulassung sind in Source5 umgesetzt. Ein optionaler lokaler STDIN-EOF-Schalter ermöglicht einen eigenen natürlichen Prozessendetest. 16 neue Tests sind noch nicht ausgeführt; native EOF-Abnahme, langsam lesende HTTP-Clients und vollständige MCP-Sessions bleiben offen.",
       "completed_acceptance_de": [
@@ -6491,12 +6525,14 @@
         "Response-Body-/Connection-Besitz und Transportabbruch für nicht lesende Clients separat implementieren und mit echtem TCP prüfen; Source5 beweist keine begrenzte Shutdown-Latenz hierfür."
       ],
       "documentation": [
+        "docs/verification/combined-source-v5-r3-source-20261015/index.json",
+        "docs/verification/combined-source-v5-r2-clippy-failed-20261015/index.json",
         "docs/verification/combined-source-v5-r2-source-20261015/index.json",
         "docs/parity/http-lifecycle-plan.md"
       ],
       "gates": {
         "source_review": "PASS_BOUNDED_SOURCE_ONLY_V2_AND_FORMAT_MERGE",
-        "rust_tests": "RUNNING_ON_SOURCE5_R2",
+        "rust_tests": "ALL_40_NEW_TESTS_PASS_R2_OVERALL_CLIPPY_FAIL_R3_RUNNING",
         "native_eof_inflight": "NOT_RUN",
         "installation": "NOT_RUN"
       },
@@ -6505,7 +6541,7 @@
     {
       "id": "sitemap-location-pagination-work-20261015",
       "priority": 3,
-      "status": "REVIEWED_SOURCE5_R2_FULL_SUITE_RUNNING",
+      "status": "ACTUAL_R2_TESTS_PASS_FRESH_R3_FULL_SUITE_RUNNING",
       "title_de": "Große Sitemap-Kataloge effizient durchblättern",
       "summary_de": "Source5 entfernt SQL-Einzelabfragen pro Eintrag und erneutes vollständiges Serialisieren, während Integritäts-, Quellen-, Reihenfolge-, Cursor- und Größenprüfungen erhalten bleiben. Acht neue Tests prüfen die exakte bisherige Serialisierung und gültige UTF-16-Ledger. Der tatsächliche Laufzeitgewinn und die vollständige 50.000-Zeilen-Wiederöffnung sind noch offen.",
       "completed_acceptance_de": [
@@ -6518,13 +6554,15 @@
         "Echte50.000 Zeilen vollständig paginieren, exportieren und nach Neustart prüfen; konkrete Arbeitszähler, Zeit und Speicher getrennt messen."
       ],
       "documentation": [
+        "docs/verification/combined-source-v5-r3-source-20261015/index.json",
+        "docs/verification/combined-source-v5-r2-clippy-failed-20261015/index.json",
         "docs/verification/combined-source-v5-r2-source-20261015/index.json",
         "docs/parity/sitemap-location-paging-plan.md"
       ],
       "gates": {
         "source_analysis": "COMPLETE_BOUNDED_SOURCE_ONLY",
         "implementation": "IN_PROGRESS",
-        "rust_tests": "RUNNING_ON_SOURCE5_R2",
+        "rust_tests": "ALL_40_NEW_TESTS_PASS_R2_OVERALL_CLIPPY_FAIL_R3_RUNNING",
         "native_large_sources": "NOT_RUN_ON_NEW_SOURCE",
         "source_review": "PASS_BOUNDED_SOURCE_ONLY_V2_AND_FORMAT_MERGE",
         "actual_50000_reopen": "NOT_RUN_ON_SOURCE5",

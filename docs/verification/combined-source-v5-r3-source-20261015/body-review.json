@@ -1,0 +1,255 @@
+{
+  "schema_version": 1,
+  "kind": "source_body_core_independent_review_v4",
+  "result": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "findings": [],
+  "recorded_at": "2026-10-15T11:34:09.015Z",
+  "proposal_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v4\\manifest.json",
+    "sha256": "0aadae88e4df70e93c71177bf2305a2758b18c86772d6bf355088b18a80f547d",
+    "bytes": 9710
+  },
+  "parent_proposal_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v3\\manifest.json",
+    "sha256": "52e8845c68bea19b8173c4d04d2738d5d7cffc10437dd19c6a2a239151f9c418",
+    "bytes": 14549
+  },
+  "parent_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-independent-review-v3\\receipt.json",
+    "sha256": "5ff5a544d14e6bf0f2f71684e658316f323e0ca355ba24472779692ba455bd33",
+    "bytes": 170517
+  },
+  "source_manifest_sha256": "45a07ef277cf1ffef5ff8d577fe05dc48ee1d84548ada2d8453aaf859a5d26b3",
+  "changed_paths": [
+    "crates/core/src/store-sitemap-body-tests.rs"
+  ],
+  "inverse_operations": 1,
+  "forward_inverse_exact": true,
+  "unchanged_payloads": 13,
+  "production_and_shared_merge_inputs_byte_exact": true,
+  "assertions_and_test_declarations_unchanged": true,
+  "new_tests_total": 17,
+  "new_tests_windows": 16,
+  "new_tests_unix": 1,
+  "actual_failed_r2_suite": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-suite-v5-r2\\proof.json",
+    "sha256": "84890f18cc8768f3bbc687c9771b760e561e5077cebe8d167ba81ed66462371d",
+    "bytes": 136130
+  },
+  "actual_clippy_diagnostic": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-suite-v5-r2\\clippy.log",
+    "sha256": "9b32d4deca2d89995528a65d3c3a26dd9b156684bbc107f2fffca9d17ded444a",
+    "bytes": 1355
+  },
+  "actual_workspace_log": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-suite-v5-r2\\workspace-live.log",
+    "sha256": "b0240b751a6beac46afc6567c239e1597889282000d0885827b63d4f0930411c",
+    "bytes": 140966
+  },
+  "actual_prior_workspace_counts": {
+    "passed": 1256,
+    "failed": 0,
+    "ignored": 0,
+    "qualification": "Historical Source5 R2 workspace success only; entire R2 suite failed final Clippy and cannot establish R3/build/native admission"
+  },
+  "source_reasoning": "MappedRows stays locally bound while the same Statement and Connection outlive its consuming collect. Only the unnecessary final Vec let-and-return is removed; SQL/unwrap/row conversion/assertions unchanged.",
+  "pins": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v4\\manifest.json",
+      "sha256": "0aadae88e4df70e93c71177bf2305a2758b18c86772d6bf355088b18a80f547d",
+      "bytes": 9710
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v3\\manifest.json",
+      "sha256": "52e8845c68bea19b8173c4d04d2738d5d7cffc10437dd19c6a2a239151f9c418",
+      "bytes": 14549
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-independent-review-v3\\receipt.json",
+      "sha256": "5ff5a544d14e6bf0f2f71684e658316f323e0ca355ba24472779692ba455bd33",
+      "bytes": 170517
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v4\\v4-derivation.json",
+      "sha256": "43436a95785a5339a15d247622417f414e2008a14d850c3c3c629d24310bb526",
+      "bytes": 11844
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v4\\HANDOFF.md",
+      "sha256": "076b514a71f9573cb176b34b66ac15f415f4bee5123ebe538ada0968b400b085",
+      "bytes": 1383
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v4\\source-checks.json",
+      "sha256": "94e1b9302101313287348314cb284135848eb459c42654a22ec28a991029f33a",
+      "bytes": 4532
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v3\\source\\Cargo.lock",
+      "sha256": "ee2387b861277345becc696478ba6ab9555d6b4b4cf20c22832b09fc7b08dd1c",
+      "bytes": 78535
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v4\\source\\Cargo.lock",
+      "sha256": "ee2387b861277345becc696478ba6ab9555d6b4b4cf20c22832b09fc7b08dd1c",
+      "bytes": 78535
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v3\\source\\crates\\core\\Cargo.toml",
+      "sha256": "1c0a8d44d1ece1dfebad98614a4dfdb6fbcba79745cdd5e6d16e701fdeff8ff2",
+      "bytes": 1201
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v4\\source\\crates\\core\\Cargo.toml",
+      "sha256": "1c0a8d44d1ece1dfebad98614a4dfdb6fbcba79745cdd5e6d16e701fdeff8ff2",
+      "bytes": 1201
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v3\\source\\crates\\core\\src\\crawler.rs",
+      "sha256": "9e6fda90d87f83ef92f6d813ca874ad43bc254f2c6f5e6f29fdf24c5f7c658c5",
+      "bytes": 164718
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v4\\source\\crates\\core\\src\\crawler.rs",
+      "sha256": "9e6fda90d87f83ef92f6d813ca874ad43bc254f2c6f5e6f29fdf24c5f7c658c5",
+      "bytes": 164718
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v3\\source\\crates\\core\\src\\crawler\\sitemap_body_candidate_tests.rs",
+      "sha256": "9acae4eb51194f90b08b5861252d393f8ace2ac457985754b9b042ab5944e860",
+      "bytes": 2277
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v4\\source\\crates\\core\\src\\crawler\\sitemap_body_candidate_tests.rs",
+      "sha256": "9acae4eb51194f90b08b5861252d393f8ace2ac457985754b9b042ab5944e860",
+      "bytes": 2277
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v3\\source\\crates\\core\\src\\lib.rs",
+      "sha256": "f4f45bed3690f6cfaeaab01e9a37ab6ce0d039347bec6757ec848d04132e08dd",
+      "bytes": 6693
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v4\\source\\crates\\core\\src\\lib.rs",
+      "sha256": "f4f45bed3690f6cfaeaab01e9a37ab6ce0d039347bec6757ec848d04132e08dd",
+      "bytes": 6693
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v3\\source\\crates\\core\\src\\models.rs",
+      "sha256": "f3d71380bcf5374c183c30792759167317b0ebc9c68fd2f54c4bb4618525f998",
+      "bytes": 39298
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v4\\source\\crates\\core\\src\\models.rs",
+      "sha256": "f3d71380bcf5374c183c30792759167317b0ebc9c68fd2f54c4bb4618525f998",
+      "bytes": 39298
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v3\\source\\crates\\core\\src\\sitemap_source_archive_fs.rs",
+      "sha256": "9ee1d707bbbfd9ccd76d1b7a2be4c25e53cee1ab034585305ac87bf3d61f8b30",
+      "bytes": 9840
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v4\\source\\crates\\core\\src\\sitemap_source_archive_fs.rs",
+      "sha256": "9ee1d707bbbfd9ccd76d1b7a2be4c25e53cee1ab034585305ac87bf3d61f8b30",
+      "bytes": 9840
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v3\\source\\crates\\core\\src\\sitemap_source_archive_models.rs",
+      "sha256": "b49f6ecae5e483077040140fa8f06b4b818393bd361026e4ce779712194f792d",
+      "bytes": 6147
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v4\\source\\crates\\core\\src\\sitemap_source_archive_models.rs",
+      "sha256": "b49f6ecae5e483077040140fa8f06b4b818393bd361026e4ce779712194f792d",
+      "bytes": 6147
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v3\\source\\crates\\core\\src\\sitemap_source_archive_schema.sql",
+      "sha256": "f9e103d757a5bcadd96b9650ce15c0e4bca9ca086e65b2da78e0a7445694f86c",
+      "bytes": 526
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v4\\source\\crates\\core\\src\\sitemap_source_archive_schema.sql",
+      "sha256": "f9e103d757a5bcadd96b9650ce15c0e4bca9ca086e65b2da78e0a7445694f86c",
+      "bytes": 526
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v3\\source\\crates\\core\\src\\sitemap_source_archive_tests.rs",
+      "sha256": "5d8e44d4068063f7267776d9f73a3a9388488f2528cab715ddcc8d2d7abb4292",
+      "bytes": 6135
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v4\\source\\crates\\core\\src\\sitemap_source_archive_tests.rs",
+      "sha256": "5d8e44d4068063f7267776d9f73a3a9388488f2528cab715ddcc8d2d7abb4292",
+      "bytes": 6135
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v3\\source\\crates\\core\\src\\sitemap_source_archive.rs",
+      "sha256": "4fe36fa0ef8fe5de79aaf61bcbd91792618714587f40d1828f15fb320a0e7cf9",
+      "bytes": 20145
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v4\\source\\crates\\core\\src\\sitemap_source_archive.rs",
+      "sha256": "4fe36fa0ef8fe5de79aaf61bcbd91792618714587f40d1828f15fb320a0e7cf9",
+      "bytes": 20145
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v3\\source\\crates\\core\\src\\store-sitemap-body-tests.rs",
+      "sha256": "51f02d06a517752db7615cff462e6ff0e252e9f68e9b4823b62f84e6b3cb2ea3",
+      "bytes": 17152
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v4\\source\\crates\\core\\src\\store-sitemap-body-tests.rs",
+      "sha256": "5f7317f7f9820aae49685dbd110b6bb262d34eb3905adf49881db05b56f63722",
+      "bytes": 17148
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v3\\source\\crates\\core\\src\\store.rs",
+      "sha256": "4a161d628dc77b0a9c8f0cd1dfcb88a32a65f69019cdd3beb3caf384a0036ecd",
+      "bytes": 149509
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v4\\source\\crates\\core\\src\\store.rs",
+      "sha256": "4a161d628dc77b0a9c8f0cd1dfcb88a32a65f69019cdd3beb3caf384a0036ecd",
+      "bytes": 149509
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v3\\source\\crates\\core\\src\\store\\sitemap_source_archive.rs",
+      "sha256": "6c82688b2350e05e3f41e27831609154892fe03c94a68d929c2c553b37438dd8",
+      "bytes": 4202
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v4\\source\\crates\\core\\src\\store\\sitemap_source_archive.rs",
+      "sha256": "6c82688b2350e05e3f41e27831609154892fe03c94a68d929c2c553b37438dd8",
+      "bytes": 4202
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-suite-v5-r2\\proof.json",
+      "sha256": "84890f18cc8768f3bbc687c9771b760e561e5077cebe8d167ba81ed66462371d",
+      "bytes": 136130
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-suite-v5-r2\\clippy.log",
+      "sha256": "9b32d4deca2d89995528a65d3c3a26dd9b156684bbc107f2fffca9d17ded444a",
+      "bytes": 1355
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-suite-v5-r2\\workspace-live.log",
+      "sha256": "b0240b751a6beac46afc6567c239e1597889282000d0885827b63d4f0930411c",
+      "bytes": 140966
+    }
+  ],
+  "excluded_executions": {
+    "product_imports": 0,
+    "compiler": 0,
+    "rustfmt": 0,
+    "rust_tests": 0,
+    "sqlite": 0,
+    "fixtures": 0,
+    "native": 0,
+    "browser": 0,
+    "git": 0,
+    "root_writes": 0
+  }
+}
