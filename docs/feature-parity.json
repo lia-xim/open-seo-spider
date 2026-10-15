@@ -6306,20 +6306,23 @@
     {
       "id": "combined-source-v5-r3-20261015",
       "priority": 0,
-      "status": "ACTUAL_FULL_SUITE_PASS_OPTIMIZED_BUILD_RUNNING",
+      "status": "ACTUAL_FULL_SUITE_AND_OPTIMIZED_BUILD_PASS_NATIVE_RUNNING",
       "title_de": "Bereinigten gemeinsamen Stand vollständig abnehmen",
-      "summary_de": "Privater Commit 9fa103e besteht die vollständige tatsächliche Suite: 1256 Tests ohne Fehler/ignorierte Fälle, alle 474 Pflichtnamen, alle 40 neuen Windows-Fälle und vier echte Renderer-Prüfungen. Format und Clippy bestehen; eigene Server sind geschlossen, Quellen unverändert. Der optimierte Build läuft; Native- und Installationsabnahmen fehlen noch.",
+      "summary_de": "1256 Tests, alle 474 Pflichtnamen, vier echte Renderer-Fälle, Format und Clippy bestehen. Der tatsächliche optimierte Windows-Build besteht ebenfalls; der neue 39906816-Byte-Kandidat ist separat gesichert. API/CLI-, MCP-Datei- und Junction-Prüfungen bestehen bereits; Exportgrenzen, Browser, vollständige EOF- und Großquellenabnahmen bleiben offen.",
       "completed_acceptance_de": [
         "Alle bisherigen Assertions und Testfunktionen erhalten; eine tatsächliche Dateidifferenz gegenüber R2 unabhängig geprüft.",
         "Endgültige BODY4/Lifecycle4/Stateless2, drei Zusammenführungen, Formatänderungen und R3-Prüftreiber gebunden.",
         "Tatsächliche vorgezogene Clippy-Prüfung ohne Warnungen bestanden.",
-        "Vollständige frische Suite tatsächlich bestanden; alle drei Cargo-Prozesse mit Exit0 geschlossen und Rohlogs/Renderer-/Quellenbelege archiviert."
+        "Vollständige frische Suite tatsächlich bestanden; alle drei Cargo-Prozesse mit Exit0 geschlossen und Rohlogs/Renderer-/Quellenbelege archiviert.",
+        "Tatsächlichen optimierten Build mit Exit0, exklusiver PE-Kandidatenkopie und erneuter vollständiger Quellen-/Suite-Prüfung abgeschlossen."
       ],
       "pending_acceptance_de": [
-        "Optimierten Kandidaten bauen und Native-/EOF-/Großquellenprüfungen auf diesem Kandidaten ausführen.",
+        "Alle Native-/EOF-/Großquellenprüfungen auf dem tatsächlichen neuen Kandidaten vollständig bestehen.",
         "Kaltinstallation nach allen erforderlichen Abnahmen; API-/Oberflächenzugriff auf Originaldateien und übrige Featureliste weiterführen."
       ],
       "documentation": [
+        "docs/verification/combined-optimized-v5-r3-20261015/index.json",
+        "docs/verification/combined-native-v5-r3-eof-failed-20261015/index.json",
         "docs/verification/combined-workspace-v5-r3-20261015/index.json",
         "docs/verification/combined-source-v5-r3-source-20261015/index.json",
         "docs/verification/combined-source-v5-r2-clippy-failed-20261015/index.json"
@@ -6328,8 +6331,8 @@
         "source_review": "PASS_BOUNDED_SOURCE_ONLY",
         "preliminary_clippy": "PASS_ACTUAL_29_59_SECONDS",
         "full_workspace": "PASS_ACTUAL_1256_ALL_474_ALL_40_NEW_FOUR_REAL_RENDERERS_FMT_CLIPPY",
-        "optimized_candidate": "RUNNING_ACTUAL_SOURCE5_R3_BUILD",
-        "native": "NOT_RUN_ON_SOURCE5_R3",
+        "optimized_candidate": "PASS_ACTUAL_OPTIMIZED_WINDOWS_9BED_39906816_BYTES",
+        "native": "IN_PROGRESS_THREE_DIRECT_SCOPES_PASS_FIRST_EOF_ATTEMPT_FAIL_REPAIR_REVIEWED",
         "installation": "NOT_RUN_INSTALLED_AB1_UNCHANGED",
         "manufacturer_parity": "NOT_PROVEN"
       },

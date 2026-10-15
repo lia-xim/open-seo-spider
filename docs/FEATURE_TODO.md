@@ -10,15 +10,16 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
 
 ## Aktuelle Arbeit und nächste Schritte
 
-- [ ] **Bereinigten gemeinsamen Stand vollständig abnehmen** — ACTUAL_FULL_SUITE_PASS_OPTIMIZED_BUILD_RUNNING. Privater Commit 9fa103e besteht die vollständige tatsächliche Suite: 1256 Tests ohne Fehler/ignorierte Fälle, alle 474 Pflichtnamen, alle 40 neuen Windows-Fälle und vier echte Renderer-Prüfungen. Format und Clippy bestehen; eigene Server sind geschlossen, Quellen unverändert. Der optimierte Build läuft; Native- und Installationsabnahmen fehlen noch.
+- [ ] **Bereinigten gemeinsamen Stand vollständig abnehmen** — ACTUAL_FULL_SUITE_AND_OPTIMIZED_BUILD_PASS_NATIVE_RUNNING. 1256 Tests, alle 474 Pflichtnamen, vier echte Renderer-Fälle, Format und Clippy bestehen. Der tatsächliche optimierte Windows-Build besteht ebenfalls; der neue 39906816-Byte-Kandidat ist separat gesichert. API/CLI-, MCP-Datei- und Junction-Prüfungen bestehen bereits; Exportgrenzen, Browser, vollständige EOF- und Großquellenabnahmen bleiben offen.
   - [x] Alle bisherigen Assertions und Testfunktionen erhalten; eine tatsächliche Dateidifferenz gegenüber R2 unabhängig geprüft.
   - [x] Endgültige BODY4/Lifecycle4/Stateless2, drei Zusammenführungen, Formatänderungen und R3-Prüftreiber gebunden.
   - [x] Tatsächliche vorgezogene Clippy-Prüfung ohne Warnungen bestanden.
   - [x] Vollständige frische Suite tatsächlich bestanden; alle drei Cargo-Prozesse mit Exit0 geschlossen und Rohlogs/Renderer-/Quellenbelege archiviert.
-  - [ ] Optimierten Kandidaten bauen und Native-/EOF-/Großquellenprüfungen auf diesem Kandidaten ausführen.
+  - [x] Tatsächlichen optimierten Build mit Exit0, exklusiver PE-Kandidatenkopie und erneuter vollständiger Quellen-/Suite-Prüfung abgeschlossen.
+  - [ ] Alle Native-/EOF-/Großquellenprüfungen auf dem tatsächlichen neuen Kandidaten vollständig bestehen.
   - [ ] Kaltinstallation nach allen erforderlichen Abnahmen; API-/Oberflächenzugriff auf Originaldateien und übrige Featureliste weiterführen.
-  - Verträge: [index.json](verification/combined-workspace-v5-r3-20261015/index.json), [index.json](verification/combined-source-v5-r3-source-20261015/index.json), [index.json](verification/combined-source-v5-r2-clippy-failed-20261015/index.json).
-  - Gate-Stand: source_review: PASS_BOUNDED_SOURCE_ONLY; preliminary_clippy: PASS_ACTUAL_29_59_SECONDS; full_workspace: PASS_ACTUAL_1256_ALL_474_ALL_40_NEW_FOUR_REAL_RENDERERS_FMT_CLIPPY; optimized_candidate: RUNNING_ACTUAL_SOURCE5_R3_BUILD; native: NOT_RUN_ON_SOURCE5_R3; installation: NOT_RUN_INSTALLED_AB1_UNCHANGED; manufacturer_parity: NOT_PROVEN.
+  - Verträge: [index.json](verification/combined-optimized-v5-r3-20261015/index.json), [index.json](verification/combined-native-v5-r3-eof-failed-20261015/index.json), [index.json](verification/combined-workspace-v5-r3-20261015/index.json), [index.json](verification/combined-source-v5-r3-source-20261015/index.json), [index.json](verification/combined-source-v5-r2-clippy-failed-20261015/index.json).
+  - Gate-Stand: source_review: PASS_BOUNDED_SOURCE_ONLY; preliminary_clippy: PASS_ACTUAL_29_59_SECONDS; full_workspace: PASS_ACTUAL_1256_ALL_474_ALL_40_NEW_FOUR_REAL_RENDERERS_FMT_CLIPPY; optimized_candidate: PASS_ACTUAL_OPTIMIZED_WINDOWS_9BED_39906816_BYTES; native: IN_PROGRESS_THREE_DIRECT_SCOPES_PASS_FIRST_EOF_ATTEMPT_FAIL_REPAIR_REVIEWED; installation: NOT_RUN_INSTALLED_AB1_UNCHANGED; manufacturer_parity: NOT_PROVEN.
 
 - [ ] **Korrigierten gemeinsamen Stand vollständig ausführen** — ACTUAL_1256_TESTS_PASS_CLIPPY_FAIL. Der tatsächliche vollständige Testlauf besteht 1256 Tests ohne Fehler oder ignorierte Fälle, einschließlich aller 40 neuen Fälle und vier echter Renderer-Prüfungen. Clippy scheitert an einer einzelnen redundanten Bindung im Testhelfer. Daher ist die gesamte R2-Abnahme fehlgeschlagen; für diesen Stand gibt es keinen Build und keine Installation.
   - [x] Endgültige Vorschläge BODY3, Lifecycle4 und zustandslose Leser V2 unabhängig geprüft; alle 48 Vorschlagspfade und die drei Zusammenführungen exakt gebunden.
@@ -5546,4 +5547,4 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `cf507d5de024a1abcee5caeadb8f315c3d75ae5bc86d6256f7d6932ecae3e177`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T08:41:21.015Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `8587b449de78b1730fafdb031c3a32255230eca2a5e4772f10121b0ea340f7a9`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T08:41:21.015Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

@@ -2,7 +2,7 @@
 
 Der private Commit `9fa103e` besteht tatsächlich 1256 Tests ohne Fehler oder ignorierte Fälle, alle 474 Pflichtnamen, alle 40 neuen Windows-Fälle und vier echte Renderer-Prüfungen. Format und Clippy sind ebenfalls grün; eigene Server sind geschlossen und Quellen unverändert. Rohbelege: [vollständige Suite](verification/combined-workspace-v5-r3-20261015/index.json).
 
-Der optimierte Windows-Build läuft. Anschließend bleiben echtes Herunterfahren bei EOF, sechs Native-Scopes sowie alle 13 Großquellenfälle einschließlich vollständiger 50.000-Zeilen-Wiederöffnung erforderlich. Installation und vollständige Herstellerparität sind noch nicht nachgewiesen. Der vorherige R2-Testpass mit Clippy-Fehlschlag bleibt unverändert archiviert.
+Der tatsächliche optimierte Windows-Build besteht (Kandidat `9bed8a6`, 39906816 Bytes). API/CLI, MCP-Dateien und Junction-Prüfungen bestehen. Exportgrenzen, Browser, vollständiges natürliches Herunterfahren und alle 13 Großquellenfälle einschließlich 50.000-Zeilen-Wiederöffnung bleiben erforderlich. Der erste EOF-Versuch scheitert am TCP-Reset während des Listenerübergangs; dieser Fehllauf bleibt archiviert und eine eng korrigierte Teststeuerung muss beide Fälle frisch bestehen. Installation und vollständige Herstellerparität sind noch nicht nachgewiesen. Der vorherige R2-Testpass mit Clippy-Fehlschlag bleibt unverändert archiviert.
 
 ## Historisch: Source5 gemeinsam prüfen (15.10.2026)
 

@@ -1,0 +1,38 @@
+{
+  "recorded_at": "2026-10-15T12:12:31.818Z",
+  "kind": "actual_source5_r3_first_eof_failure_archive",
+  "result": "FAIL_SOURCE5_OWNED_HTTP_EOF_NATIVE",
+  "qualification": "Actual idle case passes natural0 with clean receipt/no data writes. Inflight listener transition produces ECONNRESET, which original strict probe treated as fatal; no inflight persistence acceptance completed. Failure cleanup terminates only retained second child; actual two child closes and lock release observed. Overall FAIL remains immutable. New source-only one-operation probe revision records/retries resets but still requires actual ECONNREFUSED before held body release under same10s budget; both fresh native cases still required. No native overall pass or installation.",
+  "files": [
+    {
+      "path": "proof.json",
+      "sha256": "afaa5402cfa53d0c00a0e5113ada314c293d47a383d84090737424ea069ca526",
+      "bytes": 8527
+    },
+    {
+      "path": "01-idle-eof.stdout.log",
+      "sha256": "278065c7b6e0f136f553e2158c7d0e75efd18648b8f036aa81c22da00ece4181",
+      "bytes": 40
+    },
+    {
+      "path": "01-idle-eof.stderr.log",
+      "sha256": "7639932df3daa4af81b730f537b59826e22fe484c7d1e12e1d2856cb5fb14329",
+      "bytes": 604
+    },
+    {
+      "path": "02-inflight-crawl-eof.stdout.log",
+      "sha256": "3be1e4c0caa22d0b5bcc754b4df51b7b9a4ef2ad7a5d2aa33a043418fd90a40d",
+      "bytes": 40
+    },
+    {
+      "path": "02-inflight-crawl-eof.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "root-release.json",
+      "sha256": "9fc3625381e1669815b9b6adf339b64c1e8caa21b6936add91480ebe7f25995c",
+      "bytes": 1888
+    }
+  ]
+}

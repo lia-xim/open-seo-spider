@@ -1,0 +1,272 @@
+{
+  "kind": "source5_owned_http_eof_native",
+  "result": "FAIL_SOURCE5_OWNED_HTTP_EOF_NATIVE",
+  "release": {
+    "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/source5-r3-native-eof-release.json",
+    "sha256": "9fc3625381e1669815b9b6adf339b64c1e8caa21b6936add91480ebe7f25995c"
+  },
+  "binder": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/native-combined-rebind-v5-r3-v2/combined-bindings.mjs",
+    "sha256": "6888c45c5cca4c1463f8d44fe2afea6ad9a02416980647b3ee30810a5a34d46f",
+    "independent_review": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source5-r3-binder-root-review-v1/receipt.json",
+      "sha256": "a8bf883d22b1809157c991f635a812e88445db31f3fc4ace3b2c93a029c792f7"
+    }
+  },
+  "source_manifest_sha256": "27a8b74c4cd0c394906f3fe3c0a6a0327569294b25056cf6c6f0aabcffc42788",
+  "suite_proof_sha256": "f0d930348768fb3f033b978f223b62839f671c9da8148d08b995be3d24577bdb",
+  "build_proof_sha256": "d0e222bbf4feaad5e5ab4850fd33af2d106ef0c5076b9f31cebdebf694c34cb6",
+  "candidate_binary_sha256": "9bed8a6f49fff732feff885767987c5d0eb03e012b27382e222bfc0dfc489a11",
+  "harness_sha256": "0df6dea30e06e3d5cca73820c66be7a03953f4ad251a49170baddd70a17d6dd0",
+  "scope": "idle_and_one_actual_inflight_crawl_only",
+  "cases": [
+    {
+      "label": "01-idle-eof",
+      "result": "PASS_IDLE_NATURAL_EOF",
+      "tool_names": [
+        "spider_capabilities",
+        "spider_list_crawls",
+        "spider_start_crawl",
+        "spider_status",
+        "spider_pages",
+        "spider_issues",
+        "spider_analysis",
+        "spider_policy",
+        "spider_sitemaps",
+        "spider_resources",
+        "spider_resource_transports",
+        "spider_inspect_css",
+        "spider_content",
+        "spider_content_document",
+        "spider_analyze_crawl_content",
+        "spider_analyze_content",
+        "spider_preview_policy",
+        "spider_cancel",
+        "spider_pause",
+        "spider_resume",
+        "spider_recrawl",
+        "spider_project",
+        "spider_compare",
+        "spider_generate_sitemaps",
+        "spider_compare_saved",
+        "spider_sitemap_findings"
+      ],
+      "child": "01-idle-eof",
+      "data_directory_remains_empty": true
+    }
+  ],
+  "failures": [
+    "Error: read ECONNRESET\n    at TCP.onStreamRead (node:internal/stream_base_commons:216:20)"
+  ],
+  "signals": [
+    {
+      "child": "02-inflight-crawl-eof",
+      "signal": "SIGKILL",
+      "reason": "FAIL_CLEANUP_ONLY"
+    }
+  ],
+  "qualification": "Two owned App processes only: idle and one actual in-flight HTML crawl. No stateful MCP session, HTTP notification cancellation, PDF panic, file/export slow-reader drain, renderer process, hard shutdown latency or power-loss proof.",
+  "children": [
+    {
+      "label": "01-idle-eof",
+      "data": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v5-r3\\01-idle-eof.data",
+      "logs": [
+        {
+          "name": "stdout",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v5-r3\\01-idle-eof.stdout.log",
+          "fd_closed": true,
+          "bytes": 40,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null,
+          "sha256": "278065c7b6e0f136f553e2158c7d0e75efd18648b8f036aa81c22da00ece4181"
+        },
+        {
+          "name": "stderr",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v5-r3\\01-idle-eof.stderr.log",
+          "fd_closed": true,
+          "bytes": 604,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null,
+          "sha256": "7639932df3daa4af81b730f537b59826e22fe484c7d1e12e1d2856cb5fb14329"
+        }
+      ],
+      "errors": [],
+      "receipts": [
+        {
+          "value": {
+            "cause": "owned_stdin_eof",
+            "clean": true,
+            "kind": "owned_application_shutdown_v1",
+            "owners": [
+              {
+                "admitted": 2,
+                "closing": true,
+                "first_failure": null,
+                "joined": 2,
+                "owner": "http_requests",
+                "retained": 0,
+                "started": 2
+              },
+              {
+                "admitted": 0,
+                "closing": true,
+                "first_failure": null,
+                "joined": 0,
+                "owner": "http_blocking",
+                "retained": 0,
+                "started": 0
+              },
+              {
+                "admitted": 0,
+                "closing": true,
+                "first_failure": null,
+                "joined": 0,
+                "owner": "crawl_operations",
+                "retained": 0,
+                "started": 0
+              }
+            ],
+            "qualification": "Local application task joins only; actual process/pipe EOF is an independent outside witness; no stateful MCP session or external renderer-process drain claim"
+          },
+          "witness": {
+            "sequence": 4,
+            "monotonic_us": 13452947448,
+            "label": "final_owned_receipt",
+            "actual_close_already_observed": false,
+            "exit_already_observed": false
+          }
+        }
+      ],
+      "spawn_event": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "spawn_error": null,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "stdin": {
+        "eof_sent": true,
+        "finished": true,
+        "closed": true,
+        "error": null
+      },
+      "events": [
+        {
+          "sequence": 1,
+          "monotonic_us": 13452903464,
+          "label": "spawn"
+        },
+        {
+          "sequence": 2,
+          "monotonic_us": 13452940103,
+          "label": "ready_health"
+        },
+        {
+          "sequence": 3,
+          "monotonic_us": 13452944576,
+          "label": "owned_stdin_eof_requested"
+        },
+        {
+          "sequence": 5,
+          "monotonic_us": 13452948524,
+          "label": "exit"
+        },
+        {
+          "sequence": 6,
+          "monotonic_us": 13452948581,
+          "label": "actual_close"
+        }
+      ],
+      "origin": "http://127.0.0.1:63169",
+      "pid": 32664
+    },
+    {
+      "label": "02-inflight-crawl-eof",
+      "data": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v5-r3\\02-inflight-crawl-eof.data",
+      "logs": [
+        {
+          "name": "stdout",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v5-r3\\02-inflight-crawl-eof.stdout.log",
+          "fd_closed": true,
+          "bytes": 40,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null
+        },
+        {
+          "name": "stderr",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v5-r3\\02-inflight-crawl-eof.stderr.log",
+          "fd_closed": true,
+          "bytes": 0,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null
+        }
+      ],
+      "errors": [],
+      "receipts": [],
+      "spawn_event": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "spawn_error": null,
+      "exit": {
+        "code": null,
+        "signal": "SIGKILL"
+      },
+      "close_exit": {
+        "code": null,
+        "signal": "SIGKILL"
+      },
+      "forced": true,
+      "stdin": {
+        "eof_sent": true,
+        "finished": true,
+        "closed": true,
+        "error": null
+      },
+      "events": [
+        {
+          "sequence": 7,
+          "monotonic_us": 13452968093,
+          "label": "spawn"
+        },
+        {
+          "sequence": 8,
+          "monotonic_us": 13452991680,
+          "label": "ready_health"
+        },
+        {
+          "sequence": 10,
+          "monotonic_us": 13453035511,
+          "label": "owned_stdin_eof_requested"
+        },
+        {
+          "sequence": 11,
+          "monotonic_us": 13453039725,
+          "label": "exit"
+        },
+        {
+          "sequence": 12,
+          "monotonic_us": 13453039735,
+          "label": "actual_close"
+        }
+      ],
+      "origin": "http://127.0.0.1:63173",
+      "pid": 12360
+    }
+  ],
+  "execution_lock_released": true,
+  "recorded_at": "2026-10-15T12:03:22.906Z"
+}
