@@ -294,7 +294,10 @@ fn assess(output: &DiscoveryOutput) -> crate::SitemapSourceProtocolAssessment {
 }
 fn count(output: &DiscoveryOutput) -> &crate::SitemapCountObservation {
     match &output.source_capture.as_ref().unwrap().captured.count {
-        CountCapture::Observed(Ok(count)) => count,
+        CountCapture::Observed(result) => match result.as_ref() {
+            Ok(count) => count,
+            other => panic!("expected actual scanner observation, got {other:?}"),
+        },
         other => panic!("expected actual scanner observation, got {other:?}"),
     }
 }
@@ -779,7 +782,9 @@ async fn actual_capture_adapter_rejects_unverified_mismatch_and_counter_loss_wit
     let (_, basis) =
         sitemap_capture::discovery_basis(crawler.store.as_deref(), Some(generation)).unwrap();
     let mut bad = original.clone();
-    if let CountCapture::Observed(Ok(count)) = &mut bad.count {
+    if let CountCapture::Observed(result) = &mut bad.count
+        && let Ok(count) = result.as_mut()
+    {
         count.input_xml_sha256 = "0".repeat(64);
     }
     assert_eq!(

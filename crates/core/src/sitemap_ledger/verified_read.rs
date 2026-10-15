@@ -295,21 +295,21 @@ fn decode_row(sql: &rusqlite::Row<'_>, limits: &SitemapLedgerLimits) -> Result<S
         ),
         SitemapLedgerRow::Document(row) => ensure!(
             id == row.observation_id
-                && source_kind.as_deref() == Some(row.kind.frontier_kind())
-                && task_url.as_deref() == Some(row.task_url.as_str())
+                && source_kind == Some(row.kind.frontier_kind())
+                && task_url == Some(row.task_url.as_str())
                 && generation == Some(i64::try_from(row.generation)?)
-                && revision_or_entry.as_deref() == Some(row.source_revision.as_str()),
+                && revision_or_entry == Some(row.source_revision.as_str()),
             "Document SQL indexes differ from payload"
         ),
         SitemapLedgerRow::Entry(row) => ensure!(
             id == row.entry_id
-                && observation.as_deref() == Some(row.observation_id.as_str())
+                && observation == Some(row.observation_id.as_str())
                 && ordinal == Some(i64::try_from(row.observed.ordinal)?),
             "Entry SQL indexes differ from payload"
         ),
         SitemapLedgerRow::Location(row) => ensure!(
             id == row.occurrence_id
-                && observation.as_deref() == Some(row.observation_id.as_str())
+                && observation == Some(row.observation_id.as_str())
                 && ordinal == Some(i64::try_from(row.observed.ordinal)?)
                 && revision_or_entry
                     == Some(

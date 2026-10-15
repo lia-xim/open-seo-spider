@@ -3,7 +3,7 @@ use super::*;
 use clap::Parser;
 use serde_json::{Value, json};
 #[path = "sitemap_findings_fixture.rs"]
-mod fixture;
+pub(crate) mod fixture;
 use fixture::{Fixture, OwnedDirectory};
 
 #[test]

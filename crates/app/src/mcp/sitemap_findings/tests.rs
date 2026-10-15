@@ -2,6 +2,7 @@
 //! The local oracle handler below is not the production App job-lock handler;
 //! that actual route is a separate official-SDK native acceptance gate.
 use super::*;
+use crate::sitemap_findings_cli::tests::fixture::Fixture;
 use axum::{Router, body::Body, extract::State, response::Response, routing::post};
 use open_seo_spider_core::{CrawlStore, SitemapReadControl};
 use std::{
@@ -17,9 +18,6 @@ use tokio::{
     net::TcpListener,
     sync::{Notify, oneshot},
 };
-#[path = "../../sitemap_findings_fixture.rs"]
-mod fixture;
-use fixture::Fixture;
 const WAIT: Duration = Duration::from_secs(15);
 
 #[derive(Clone)]

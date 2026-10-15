@@ -5993,6 +5993,15 @@
       "recorded_at": "2026-10-15T03:44:55.696Z",
       "scope": "Actual same-source Windows full Rust workspace, required names, four owned Chromium gates, format and Clippy. Native optimized binary/SDK/browser/physical/Linux/container/install and full vendor parity remain separate.",
       "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "clippy-corrections-draft-20261015",
+      "artifact": "docs/verification/clippy-corrections-20261015/index.json",
+      "artifact_sha256": "d5bb2e59d4d15042dc29401b2506e682b8e407bee164bdd5d03dac065f990dae",
+      "result": "PASS_DRAFT_SOURCE_FMT_CLIPPY_FULL_SUITE_OPEN",
+      "recorded_at": "2026-10-15T03:59:11.601Z",
+      "scope": "Actual corrected301-input draft format/all-target Clippy with actual successful child closes;33 prior diagnostics and both raw correction attempts preserved. No tests executed on corrected source yet; full same-source suite and release acceptance remain open.",
+      "reference_parity": "NOT_PROVEN"
     }
   ],
   "reference_workflows": [
@@ -6250,8 +6259,37 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-15T03:44:55.696Z",
+  "last_verified_at": "2026-10-15T03:59:11.601Z",
   "current_work": [
+    {
+      "id": "clippy-corrections-20261015",
+      "status": "DRAFT_FMT_CLIPPY_PASS_FULL_SUITE_OPEN",
+      "priority": 0,
+      "title_de": "33 Clippy-Meldungen ohne Test- oder Prüfungsabbau korrigieren",
+      "summary_de": "16 Core- und17 App-Diagnosen sind in23 Dateien korrigiert. Tatsächliches Format und Workspace-Alltargets-Clippy mit-Dwarnings bestehen; alle301 Eingaben danach bytegleich. Der neue vollständige Lauf mit421 Pflichtnamen und mindestens1.203 Tests steht aus.",
+      "completed_acceptance_de": [
+        "Core-Korrektur unabhängig geprüft: geänderte Enum-Payloads, transparente Serde-Boxen, identische externe Profilnamen und erhaltene Fehler-/SQL-/Manipulationsprüfungen.",
+        "Ersten tatsächlichen Wiederholungslauf archiviert: Core-Meldungen behoben,17 App-Meldungen konkret sichtbar; Format0/Clippy101, tatsächliche Closes und301 Eingaben danach exakt.",
+        "App-Korrektur unabhängig geprüft: gemeinsame Testhilfe ohne verlorene Testfunktionen, explizites Ende der Mutex-Sperre vor Benachrichtigung, erhaltene CSV-Prefix-/Hash-/Join-/Fehlerprüfungen.",
+        "Zweite tatsächliche Ausführung besteht Format0 und vollständiges Clippy-Dwarnings0; keine Warnungsunterdrückung oder Testentfernung, beide ursprünglichen Diagnoseprotokolle bleiben erhalten."
+      ],
+      "pending_acceptance_de": [
+        "Endgültigen neuen Quellstand einfrieren und mindestens1.203 tatsächliche Tests, alle421 Pflichtnamen und vier echte Renderer-Gates samt Format/Clippy auf genau diesen Bytes bestehen.",
+        "Optimierten Kandidaten bauen und separate native API-/CLI-/SDK-/Browser-/physische sowie Plattform- und Installationsprüfungen ausführen."
+      ],
+      "documentation": [
+        "docs/verification/clippy-corrections-20261015/index.json",
+        "docs/verification/clippy-corrections-20261015/app-clippy-correction-check-v1/proof.json"
+      ],
+      "gates": {
+        "source_reviews": "NO_CONFIRMED_FINDINGS_BOUNDED",
+        "draft_fmt_clippy": "PASS_ACTUAL",
+        "full_new_source_suite": "NOT_RUN",
+        "installed_runtime": "UNCHANGED_AB1",
+        "manufacturer_parity": "NOT_PROVEN"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
     {
       "id": "combined-workspace-v2-20261015",
       "status": "FULL_WORKSPACE_GATE_FAILED",

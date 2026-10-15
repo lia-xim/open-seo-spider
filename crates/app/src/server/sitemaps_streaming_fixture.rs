@@ -14,7 +14,7 @@ pub(super) struct Website {
 }
 impl Website {
     pub async fn start(entries: usize, quote_padding: usize) -> Self {
-        assert!(entries >= 4 && entries % 2 == 0);
+        assert!(entries >= 4 && entries.is_multiple_of(2));
         let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
         let origin = format!("http://{}", listener.local_addr().unwrap());
         let index = format!(

@@ -13,7 +13,7 @@ use tokio::{
     net::TcpListener,
 };
 
-pub(super) struct OwnedDirectory(pub PathBuf);
+pub(crate) struct OwnedDirectory(pub PathBuf);
 impl OwnedDirectory {
     pub fn new() -> Self {
         let base = std::fs::canonicalize(std::env::temp_dir()).unwrap();
@@ -35,7 +35,7 @@ impl Drop for OwnedDirectory {
         }
     }
 }
-pub(super) struct Fixture {
+pub(crate) struct Fixture {
     pub dir: OwnedDirectory,
     pub path: PathBuf,
     pub origin: String,

@@ -546,7 +546,7 @@ pub(crate) fn inventory(
                 inherited: catalog.inherited.clone(),
                 snapshot,
             },
-            InventoryRows::Materialized(catalog),
+            InventoryRows::Materialized(Box::new(catalog)),
         )
     });
     project_inventory(
@@ -675,7 +675,7 @@ struct InventoryBasis {
 enum InventoryRows {
     // Kept for the existing materializing oracle/tests; HTTP uses Window.
     #[cfg(test)]
-    Materialized(SitemapCatalog),
+    Materialized(Box<SitemapCatalog>),
     Window {
         rows: Vec<SitemapLedgerRow>,
         next: Option<u64>,

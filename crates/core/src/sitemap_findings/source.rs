@@ -372,80 +372,78 @@ impl PreparedSourceFindings<'_, '_> {
                 "Source findings read transaction ended"
             );
             self.validate_after(after)?;
-            if after.is_none_or(|p| matches!(p, Position::SourceMeasurement { .. })) {
-                if let (Some(source), Some(raw)) = (self.source, self.raw) {
-                    let lower = match after {
-                        Some(Position::SourceMeasurement { sequence }) => *sequence,
-                        _ => 0,
-                    };
-                    let exhausted = source.visit_measurements_after(
-                        lower,
-                        &self.control,
-                        |record, association| {
-                            let position = Position::SourceMeasurement {
-                                sequence: record.sequence,
-                            };
-                            let committed_document = association
-                                .as_ref()
-                                .map(|a| {
-                                    raw.document_by_id(&a.document_id).and_then(|d| {
-                                        d.context(
-                                            "Verified source association document disappeared",
-                                        )
-                                    })
+            if after.is_none_or(|p| matches!(p, Position::SourceMeasurement { .. }))
+                && let (Some(source), Some(raw)) = (self.source, self.raw)
+            {
+                let lower = match after {
+                    Some(Position::SourceMeasurement { sequence }) => *sequence,
+                    _ => 0,
+                };
+                let exhausted = source.visit_measurements_after(
+                    lower,
+                    &self.control,
+                    |record, association| {
+                        let position = Position::SourceMeasurement {
+                            sequence: record.sequence,
+                        };
+                        let committed_document = association
+                            .as_ref()
+                            .map(|a| {
+                                raw.document_by_id(&a.document_id).and_then(|d| {
+                                    d.context("Verified source association document disappeared")
                                 })
-                                .transpose()?
-                                .map(Box::new);
-                            let protocol = crate::assess_sitemap_source_protocol_limits(
-                                &record.measurement,
-                                &Default::default(),
-                            )?;
-                            visitor(
-                                position,
-                                SourceEvidence::Measured {
-                                    record: Box::new(record),
-                                    protocol,
-                                    association,
-                                    committed_document,
-                                },
-                            )
-                        },
-                    )?;
-                    if !exhausted {
-                        return Ok(false);
-                    }
+                            })
+                            .transpose()?
+                            .map(Box::new);
+                        let protocol = crate::assess_sitemap_source_protocol_limits(
+                            &record.measurement,
+                            &Default::default(),
+                        )?;
+                        visitor(
+                            position,
+                            SourceEvidence::Measured {
+                                record: Box::new(record),
+                                protocol,
+                                association: association.map(Box::new),
+                                committed_document,
+                            },
+                        )
+                    },
+                )?;
+                if !exhausted {
+                    return Ok(false);
                 }
             }
-            if !matches!(after, Some(Position::UnmeasuredSourceTask { .. })) {
-                if let Some(raw) = self.raw {
-                    let lower = match after {
-                        Some(Position::LegacySourceDocument { sequence }) => *sequence,
-                        _ => 0,
-                    };
-                    let mut statement = self.connection.prepare(&self.legacy_sql(false))?;
-                    let mut rows = statement.query([i64::try_from(lower)?])?;
-                    while let Some(row) = rows.next()? {
-                        self.control.checkpoint()?;
-                        let sequence = u64::try_from(row.get::<_, i64>(0)?)?;
-                        let id = row.get_ref(1)?.as_str()?;
-                        let document = raw
-                            .document_by_id(id)?
-                            .context("Verified legacy XML source disappeared")?;
-                        ensure!(
-                            document.sequence == sequence
-                                && document.kind == SitemapSourceKind::SitemapXml,
-                            "Legacy XML candidate projection differs"
-                        );
-                        if visitor(
-                            Position::LegacySourceDocument { sequence },
-                            SourceEvidence::LegacyDocument {
-                                document: Box::new(document),
-                            },
-                        )?
-                        .is_break()
-                        {
-                            return Ok(false);
-                        }
+            if !matches!(after, Some(Position::UnmeasuredSourceTask { .. }))
+                && let Some(raw) = self.raw
+            {
+                let lower = match after {
+                    Some(Position::LegacySourceDocument { sequence }) => *sequence,
+                    _ => 0,
+                };
+                let mut statement = self.connection.prepare(&self.legacy_sql(false))?;
+                let mut rows = statement.query([i64::try_from(lower)?])?;
+                while let Some(row) = rows.next()? {
+                    self.control.checkpoint()?;
+                    let sequence = u64::try_from(row.get::<_, i64>(0)?)?;
+                    let id = row.get_ref(1)?.as_str()?;
+                    let document = raw
+                        .document_by_id(id)?
+                        .context("Verified legacy XML source disappeared")?;
+                    ensure!(
+                        document.sequence == sequence
+                            && document.kind == SitemapSourceKind::SitemapXml,
+                        "Legacy XML candidate projection differs"
+                    );
+                    if visitor(
+                        Position::LegacySourceDocument { sequence },
+                        SourceEvidence::LegacyDocument {
+                            document: Box::new(document),
+                        },
+                    )?
+                    .is_break()
+                    {
+                        return Ok(false);
                     }
                 }
             }

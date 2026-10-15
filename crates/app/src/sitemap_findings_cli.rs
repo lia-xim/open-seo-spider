@@ -16,7 +16,7 @@ use std::{
 
 #[cfg(test)]
 #[path = "sitemap_findings_cli_tests.rs"]
-mod tests;
+pub(crate) mod tests;
 
 #[derive(Debug, Serialize)]
 pub(crate) struct ArtifactReceipt {

@@ -1,0 +1,290 @@
+{
+  "schema_version": 1,
+  "kind": "independent_bounded_app_clippy_source_review",
+  "reviewer": "/root/finish_coverage/file_tools_api_review",
+  "immutable": true,
+  "status": "NO_CONFIRMED_FINDINGS_IN_FROZEN_ELEVEN_FILE_APP_DELTA_RUNTIME_NOT_RUN",
+  "candidate_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\app-clippy-correction-v1\\manifest.json",
+    "sha256": "93bf89f67b676186b8de78377c3670594dd141be2b9cb05b0f69e99f4ecb880c"
+  },
+  "baseline_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v2\\manifest.json",
+    "sha256": "0bd2a7cc5e429e7d46a1d596e5941d62f5a2b2bd9dfb78199e85b7c5d4f9fd2a",
+    "bytes": 98450
+  },
+  "core_delta_context": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\core-clippy-correction-v1\\manifest.json",
+    "sha256": "ad09f9bfecdfffdffe9e78e324a00e23b03dc5ae43e29f95097afeab870be4d5"
+  },
+  "actual_diagnostics": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\core-clippy-correction-check-v1\\clippy.log",
+    "sha256": "fa5e97a5dbbc51f858cc5d9d41d0499a20b25a00159554084eab19f9b36f5fe2",
+    "bytes": 12479,
+    "production": 7,
+    "test": 10
+  },
+  "actual_file_pins": 36,
+  "guarded_payloads": [
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "before_sha256": "f1b6dc0a9ecdd95c26700f4ecad836924355b8de8d030e3b2bd610ba5f68ae32",
+      "after_sha256": "e4716d605b2f0bf1dc9ddd7d5598e0411749cd95cc154d6f123162ca3967ad5a",
+      "bytes": 26693,
+      "before_bytes": 26703
+    },
+    {
+      "path": "crates/app/src/sitemap_findings_cli.rs",
+      "before_sha256": "c4bcb200770327197ac0ab33dc8a7b35e8942dcddc1511662be36526494cf797",
+      "after_sha256": "608eb50d9357967dd89c36434c6e4a61330989c15fc7675629d1a4030e49fa3b",
+      "bytes": 11233,
+      "before_bytes": 11222
+    },
+    {
+      "path": "crates/app/src/sitemap_findings_cli_tests.rs",
+      "before_sha256": "fc181427fefec665c3b5b784cde7f221ccd8321d112054fcc026df60dbc72f12",
+      "after_sha256": "60a608de6211a0157016d08a85833d4d4053a96eab7c4e86b45b9bd704b24f93",
+      "bytes": 10230,
+      "before_bytes": 10219
+    },
+    {
+      "path": "crates/app/src/sitemap_findings_fixture.rs",
+      "before_sha256": "9ccc63a0fdbe9f00ae62e091785b399898de5ab1b0f3d6281c7a1ebc183a5949",
+      "after_sha256": "cf2b4d15313116f0cd873c1172b1baba9499b3d8db7fe00342c230e6dcc2e662",
+      "bytes": 5055,
+      "before_bytes": 5055
+    },
+    {
+      "path": "crates/app/src/mcp/sitemap_findings/tests.rs",
+      "before_sha256": "77902f8602c6ec21a8a988262a320f55478af8c55ef4bd039f9f1d62fa9ce74b",
+      "after_sha256": "2eba82272f6b2385302f358a27ae2b0678fd3514806ceea163ff3c5ac6fc95fe",
+      "bytes": 24127,
+      "before_bytes": 24150
+    },
+    {
+      "path": "crates/app/src/server/sitemap_csv_stream.rs",
+      "before_sha256": "32a0d81b02b166373cf58122758fb879a4e7095d2816216961ca10cbb3139f7b",
+      "after_sha256": "f91b8c33c8aa57b0aa57f9c84c308f4c077da042b27946144c1bbd47ad4408d3",
+      "bytes": 43834,
+      "before_bytes": 43970
+    },
+    {
+      "path": "crates/app/src/server/sitemap_csv_stream_lifecycle_tests.rs",
+      "before_sha256": "bf59b071d560a8b57e742a31c4af78dd454894af9fc201b10ac2a29118e5474b",
+      "after_sha256": "daf6f11d87b324cea7e3f2645a19495baa644b185f30128f4b352bc2f39610e2",
+      "bytes": 16876,
+      "before_bytes": 16728
+    },
+    {
+      "path": "crates/app/src/server/sitemaps_streaming_fixture.rs",
+      "before_sha256": "562ab25a84a439d5f5fef87c4711390e106b27f321fa156f04cfae7f4760909d",
+      "after_sha256": "67d022c0cbf42b590df93d71c8a0852b5d3756d8798c44d53b193cbdcf28b0ce",
+      "bytes": 21854,
+      "before_bytes": 21845
+    },
+    {
+      "path": "crates/app/src/sitemap_findings.rs",
+      "before_sha256": "2ac269bf6e6aa6cda002afafc06e1f80aa06940c282985c1cfe9dd5234ac4e0d",
+      "after_sha256": "a4a1215b51a52f8a42acfc5fcdc2a4c4fa8fa706b319a03230dc67a3560ccbaf",
+      "bytes": 30760,
+      "before_bytes": 30850
+    },
+    {
+      "path": "crates/app/src/sitemap_membership.rs",
+      "before_sha256": "19cf2875057d9023781dcd29c5d517acc79557fd942e05d7fc98061230da1b40",
+      "after_sha256": "e0f9d057ece6e6cdb0882eb4621f51f6636691d9d1a3318d8e3d136aaf79b849",
+      "bytes": 42859,
+      "before_bytes": 42844
+    },
+    {
+      "path": "crates/app/src/sitemap_raw_cli_tests.rs",
+      "before_sha256": "443fd3c62c3b9ebb839f7cd93298a4d0d72bcad3f96d5808c68363a72069016d",
+      "after_sha256": "f6e80b60b9ab0ce6ed5c65433d36b8d698e7b4ac786b05ca6358b27efde508b6",
+      "bytes": 3998,
+      "before_bytes": 3981
+    }
+  ],
+  "support_pins": [
+    {
+      "path": "HANDOFF.md",
+      "sha256": "39885def7ca94122883ec9d9a8c8a0d25c23c92af9f8225dc1e1330862cfa424",
+      "bytes": 5355
+    },
+    {
+      "path": "DERIVATION.json",
+      "sha256": "c0bdeda74ee2acce677f46e300c284290773a0b0c377894639f4945bccc12301",
+      "bytes": 12755
+    },
+    {
+      "path": "derive.cjs",
+      "sha256": "4286f49c0068248a395b373e74f50a4c5d52c28064c5266e3698873b54564354",
+      "bytes": 8874
+    },
+    {
+      "path": "revise-fixture.cjs",
+      "sha256": "8f4d76176ee6ff969f6e31834121349fd82b5e11f65eb0c4bfed417dfe4e26f4",
+      "bytes": 2384
+    },
+    {
+      "path": "AUDIT.json",
+      "sha256": "86b9bf5cf293f43c17907d45f10599c1b3f2c41f9168344f9b96bcc4aa051411",
+      "bytes": 15834
+    },
+    {
+      "path": "audit.cjs",
+      "sha256": "bae3a67cf70511c2c07eea45eeb01659eaad0747a864de2c4bfa6d738f9e348a",
+      "bytes": 5755
+    },
+    {
+      "path": "freeze.cjs",
+      "sha256": "3acb4b72266129e265479aecc04a27ac713cc4c665b63af55c9d44ef4bf8dfab",
+      "bytes": 3025
+    }
+  ],
+  "extra_context_pins": [
+    {
+      "path": "crates/app/src/main.rs",
+      "sha256": "e214be70dddfdf67ed2e4374dddf6a523b540a15ba73c6ee0242c9c7381a91e7"
+    },
+    {
+      "path": "crates/app/src/mcp.rs",
+      "sha256": "0d2101c963f6a3d849d6732e6da3500c16015a50e61644ccbcae9e76aca39d19"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "8d17e5114b789ff45b8efd1281d9f2815c67b707413f5b593e38fa24fd23e737"
+    }
+  ],
+  "findings": [],
+  "independent_checks": {
+    "all_eleven_complete_unified_diffs_read": true,
+    "all_seventeen_actual_diagnostics_read": true,
+    "before_after_payload_pins": 22,
+    "support_pins": 7,
+    "context_pins": 3,
+    "manifest_pins": 1,
+    "extra_context_pins": 3,
+    "literal_operations": 24,
+    "independent_forward_unformatted_sha_reconstruction_files": 11,
+    "independent_positional_inverse_exact_files": 11,
+    "all_ordered_function_declarations_identical": 254,
+    "assertion_macros_before": 257,
+    "assertion_macros_after": 257,
+    "new_named_functions": 0,
+    "critical_regions_independently_byte_exact": [
+      {
+        "path": "crates/app/src/server/sitemap_csv_stream.rs",
+        "begin": "async fn supervise(",
+        "end": "async fn receive_completion(",
+        "bytes": 1864,
+        "before_sha256": "01b56f87e9a6497beb5e0c6af4088baf02e28b056574e039a416183df2323d37",
+        "after_sha256": "01b56f87e9a6497beb5e0c6af4088baf02e28b056574e039a416183df2323d37",
+        "byte_exact": true
+      },
+      {
+        "path": "crates/app/src/server/sitemap_csv_stream.rs",
+        "begin": "struct CountHash {",
+        "end": "struct ChunkTailWriter {",
+        "bytes": 1283,
+        "before_sha256": "358b52b4a6a77c5fba2c51863c96e7c4a2ee8c676076cfac579a11bac189b6b6",
+        "after_sha256": "358b52b4a6a77c5fba2c51863c96e7c4a2ee8c676076cfac579a11bac189b6b6",
+        "byte_exact": true
+      },
+      {
+        "path": "crates/app/src/server/sitemap_csv_stream.rs",
+        "begin": "fn produce_session<C>(",
+        "end": "fn after_core(",
+        "bytes": 3476,
+        "before_sha256": "8ca1098a8f9f78bea69654533a5b964d4a392e551c578ba524c679ac742c7981",
+        "after_sha256": "8ca1098a8f9f78bea69654533a5b964d4a392e551c578ba524c679ac742c7981",
+        "byte_exact": true
+      },
+      {
+        "path": "crates/app/src/server/sitemap_csv_stream.rs",
+        "begin": "fn after_core(",
+        "end": "#[allow(clippy::too_many_arguments)]\nfn produce(",
+        "bytes": 608,
+        "before_sha256": "8b3032f1dc08cb721df0e73b4ac762c12484c8ce477165c8cac0da477fd52c87",
+        "after_sha256": "8b3032f1dc08cb721df0e73b4ac762c12484c8ce477165c8cac0da477fd52c87",
+        "byte_exact": true
+      },
+      {
+        "path": "crates/app/src/sitemap_findings_fixture.rs",
+        "begin": "impl Fixture {",
+        "end": null,
+        "bytes": 3713,
+        "before_sha256": "7b92e2d1522dc3b2b04143739d756560cef3f02a768edf37cc8b217e4f5e9633",
+        "after_sha256": "7b92e2d1522dc3b2b04143739d756560cef3f02a768edf37cc8b217e4f5e9633",
+        "byte_exact": true
+      }
+    ]
+  },
+  "observations": [
+    {
+      "topic": "Actual cfg-test fixture path and visibility",
+      "locations": [
+        "sitemap_findings_cli.rs:17-19",
+        "sitemap_findings_cli_tests.rs:5-7",
+        "sitemap_findings_fixture.rs:16-44",
+        "mcp/sitemap_findings/tests.rs:5",
+        "unchanged main.rs:9-10"
+      ],
+      "observation": "Existing CLI tests are nested in sitemap_findings_cli::tests, now crate-visible only under cfg(test). Nested fixture and both types are crate-visible; public fields/methods needed by MCP consumers remain accessible. MCP imports exact nested Fixture instead of loading fixture source twice. No test function or singleton state exists in fixture; actual per-instance Crawler/SQLite/HTTP/counters/shutdown methods remain byte-identical. No main/mcp module registration or production visibility changed."
+    },
+    {
+      "topic": "CSV conditional and producer outcomes",
+      "locations": [
+        "server/sitemap_csv_stream.rs:228-233",
+        "server/sitemap_csv_stream.rs:708-727",
+        "server/sitemap_csv_stream.rs:1137-1147",
+        "server/sitemap_csv_stream.rs:1186-1196"
+      ],
+      "observation": "Forced failure still replaces only successful actual worker result. Joined tail is taken only after prefix_closed; same expected receipt, nonempty tail and exact checked total validation precede BodyDone/final tail. Both producer failure Ready sends still occur only on Err and only if sender remains. Supervisor, CountHash, two-pass produce_session and after_core unchanged exact; actual join, stop, counters and output receipts not weakened."
+    },
+    {
+      "topic": "Explicit lifecycle Mutex lifetime",
+      "locations": [
+        "server/sitemap_csv_stream_lifecycle_tests.rs:267-278",
+        "server/sitemap_csv_stream_lifecycle_tests.rs:330-340"
+      ],
+      "observation": "Completed bool assignment with semicolon ends tasks MutexGuard before waiting.take/send. Short circuit still avoids lock when result is Ready; latch still signals only an actually Pending drain with closed admissions. Body requester pending latch remains conditional. Existing worker-release, real join slots, caller/supervisor cancellation and persisted witness assertions unchanged."
+    },
+    {
+      "topic": "Error ownership and binding validation",
+      "locations": [
+        "sitemap_findings.rs:38-47",
+        "sitemap_findings.rs:149-184",
+        "sitemap_findings.rs:528-543"
+      ],
+      "observation": "Job hash and generation/config checks retain identical rejection predicates/messages. let-chain downcast consumes the same actual owned io error and inner error in the same order; JSON/io recursion, depth bound, typed budget distinctions and fallback remain. No conversion from error text or altered external Failure code added."
+    },
+    {
+      "topic": "Cfg-test Box and remaining test lints",
+      "locations": [
+        "sitemap_membership.rs:523-550",
+        "sitemap_membership.rs:675-684",
+        "sitemap_membership.rs:767-787",
+        "server/sitemap_csv_stream.rs:361-370",
+        "server/sitemaps_streaming_fixture.rs:17",
+        "sitemap_raw_cli_tests.rs:37",
+        "mcp/wiring_tests.rs:288,418"
+      ],
+      "observation": "Only cfg-test Materialized catalog is boxed by its sole constructor; consumer borrows catalog.rows and clones the same selected rows, production Window unchanged and enum not serialized. cfg-test response_build_fault tail expression has matching non-test false branch. is_multiple_of(2) preserves even-entry requirement under selected Rust1.95; no lower declared rust-version observed. Borrowed Path comparison preserves destination check. len<MAX retains exact one-newline wire allowance of len+1<=MAX without possible usize addition overflow. Assertions and wire bound constant unchanged."
+    }
+  ],
+  "boundaries": [
+    "Read-only independent source/hash/text review. Author formatting checks were read and hash-bound, not repeated by reviewer.",
+    "No actual compile/Clippy/test/HTTP/SQLite/SDK/native/fixture run by reviewer. Source review cannot mark the actual17 warnings resolved; Root owns that run.",
+    "A crate-visible test-only fixture sharing change and a private cfg-test Box field change are present as documented; no new runtime wire schema or serialized wrapper.",
+    "Root guarded promotion may already have happened during review; beforeimages here are immutable0bd source, not a claim that current Root still has old bytes.",
+    "Earlier1203 green tests with failed Clippy do not transfer acceptance. New exact-source Clippy/full-suite/build/native gates remain separate."
+  ],
+  "reviewer_execution": {
+    "compiler_clippy_tests": 0,
+    "rustfmt": 0,
+    "node_or_sdk_imports": 0,
+    "candidate_native_browser_http_sqlite": 0,
+    "root_task_product_frozen_edits": 0,
+    "own_new_receipt_only": true
+  }
+}

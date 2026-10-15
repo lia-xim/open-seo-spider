@@ -10,6 +10,16 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
 
 ## Aktuelle Arbeit und nächste Schritte
 
+- [ ] **33 Clippy-Meldungen ohne Test- oder Prüfungsabbau korrigieren** — DRAFT_FMT_CLIPPY_PASS_FULL_SUITE_OPEN. 16 Core- und17 App-Diagnosen sind in23 Dateien korrigiert. Tatsächliches Format und Workspace-Alltargets-Clippy mit-Dwarnings bestehen; alle301 Eingaben danach bytegleich. Der neue vollständige Lauf mit421 Pflichtnamen und mindestens1.203 Tests steht aus.
+  - [x] Core-Korrektur unabhängig geprüft: geänderte Enum-Payloads, transparente Serde-Boxen, identische externe Profilnamen und erhaltene Fehler-/SQL-/Manipulationsprüfungen.
+  - [x] Ersten tatsächlichen Wiederholungslauf archiviert: Core-Meldungen behoben,17 App-Meldungen konkret sichtbar; Format0/Clippy101, tatsächliche Closes und301 Eingaben danach exakt.
+  - [x] App-Korrektur unabhängig geprüft: gemeinsame Testhilfe ohne verlorene Testfunktionen, explizites Ende der Mutex-Sperre vor Benachrichtigung, erhaltene CSV-Prefix-/Hash-/Join-/Fehlerprüfungen.
+  - [x] Zweite tatsächliche Ausführung besteht Format0 und vollständiges Clippy-Dwarnings0; keine Warnungsunterdrückung oder Testentfernung, beide ursprünglichen Diagnoseprotokolle bleiben erhalten.
+  - [ ] Endgültigen neuen Quellstand einfrieren und mindestens1.203 tatsächliche Tests, alle421 Pflichtnamen und vier echte Renderer-Gates samt Format/Clippy auf genau diesen Bytes bestehen.
+  - [ ] Optimierten Kandidaten bauen und separate native API-/CLI-/SDK-/Browser-/physische sowie Plattform- und Installationsprüfungen ausführen.
+  - Verträge: [index.json](verification/clippy-corrections-20261015/index.json), [proof.json](verification/clippy-corrections-20261015/app-clippy-correction-check-v1/proof.json).
+  - Gate-Stand: source_reviews: NO_CONFIRMED_FINDINGS_BOUNDED; draft_fmt_clippy: PASS_ACTUAL; full_new_source_suite: NOT_RUN; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN.
+
 - [ ] **Kombinierten Quellstand vollständig prüfen und als Kandidaten abnehmen** — FULL_WORKSPACE_GATE_FAILED. Alle1.203 tatsächlichen Rust-Tests bestehen mit0 Fehlern und0 ignorierten Fällen, darunter alle421 benannten Pflichtfälle und vier echte Chromium-Renderer-Gates. Anschließendes Clippy endet mit Exit101 und16 Core-Diagnosen; deshalb ist der Gesamtstand noch nicht buildberechtigt. Vollständige Protokolle und alle tatsächlichen Prozess-/Serverabschlüsse sind archiviert.
   - [x] Alle301 Snapshot-/Checkout-Eingaben sind nach tatsächlichem Schließen der eigenen Server bytegleich; Rohprotokolle und Child-Close-Belege sind archiviert.
   - [x] Alle1.203 Rust-Tests,421 Pflichtnamen und vier tatsächlichen Renderer-Gates bestehen; anschließend16 Core-Clippy-Diagnosen konkret archiviert.
@@ -5406,4 +5416,4 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `d5b7fca240f0ac65f35bb22bd1dead5d967247e0a46261409b60d5b391520097`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T03:44:55.696Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `d54bb8d14fc1fa51671488a62a8d63fe041c82a460165fdb6db024220fb1f577`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T03:59:11.601Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

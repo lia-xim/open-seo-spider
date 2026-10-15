@@ -267,10 +267,11 @@ fn observed_drain(
         let mut waiting = Some(waiting);
         std::future::poll_fn(|cx| {
             let result = drain.as_mut().poll(cx);
-            if result.is_pending() && registry.0.tasks.lock().unwrap().closed {
-                if let Some(waiting) = waiting.take() {
-                    let _ = waiting.send(());
-                }
+            // End the condition's MutexGuard lifetime before taking/sending
+            // the latch, as in the original nested-if condition.
+            let pending_and_closed = result.is_pending() && registry.0.tasks.lock().unwrap().closed;
+            if pending_and_closed && let Some(waiting) = waiting.take() {
+                let _ = waiting.send(());
             }
             result
         })
@@ -329,10 +330,10 @@ async fn actual_csv_supervisor_abort_and_body_drop_recover_actual_join_slots() {
         let mut waiting = Some(waiting);
         std::future::poll_fn(|cx| {
             let result = next.as_mut().poll(cx);
-            if result.is_pending() {
-                if let Some(waiting) = waiting.take() {
-                    let _ = waiting.send(());
-                }
+            if result.is_pending()
+                && let Some(waiting) = waiting.take()
+            {
+                let _ = waiting.send(());
             }
             result
         })

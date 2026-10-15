@@ -239,7 +239,7 @@ fn verified_source_detects_duplicate_ids_even_if_sql_unique_constraint_was_remov
         .unwrap();
     check_schema(&f.connection).unwrap();
     let read = f.connection.unchecked_transaction().unwrap();
-    let old_error = load(&read).err().expect("portable duplicate must fail");
+    let old_error = load(&read).expect_err("portable duplicate must fail");
     assert!(
         old_error
             .to_string()

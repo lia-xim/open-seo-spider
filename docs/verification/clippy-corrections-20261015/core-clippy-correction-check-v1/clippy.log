@@ -1,0 +1,298 @@
+    Checking open-seo-spider-core v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\crates\core)
+    Checking open-seo-spider v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\crates\app)
+error: unnecessary `>= y + 1` or `x - 1 >=`
+   --> crates\app\src\mcp\wiring_tests.rs:288:17
+    |
+288 |         assert!(serde_json::to_vec(&response).unwrap().len() + 1 <= MAX_FILE_WIRE_BYTES);
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: change it to: `serde_json::to_vec(&response).unwrap().len() < MAX_FILE_WIRE_BYTES`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#int_plus_one
+    = note: `-D clippy::int-plus-one` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::int_plus_one)]`
+
+error: unnecessary `>= y + 1` or `x - 1 >=`
+   --> crates\app\src\mcp\wiring_tests.rs:418:13
+    |
+418 |     assert!(bytes.len() + 1 <= MAX_FILE_WIRE_BYTES);
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: change it to: `bytes.len() < MAX_FILE_WIRE_BYTES`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#int_plus_one
+
+error: file is loaded as a module multiple times: `crates\app\src\mcp\sitemap_findings\..\..\sitemap_findings_fixture.rs`
+  |
+  = help: replace all but one `mod` item with `use` items
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#duplicate_mod
+  = note: `-D clippy::duplicate-mod` implied by `-D warnings`
+  = help: to override `-D warnings` add `#[allow(clippy::duplicate_mod)]`
+
+error: this `if` statement can be collapsed
+   --> crates\app\src\server\sitemap_csv_stream.rs:228:5
+    |
+228 | /     if result.is_ok() {
+229 | |         if let Some(failure) = forced_failure {
+230 | |             result = Err(failure);
+231 | |         }
+232 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#collapsible_if
+    = note: `-D clippy::collapsible-if` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::collapsible_if)]`
+help: collapse nested if block
+    |
+228 ~     if result.is_ok()
+229 ~         && let Some(failure) = forced_failure {
+230 |             result = Err(failure);
+231 ~         }
+    |
+
+error: this `if` statement can be collapsed
+   --> crates\app\src\server\sitemap_csv_stream.rs:708:13
+    |
+708 | /             if self.prefix_closed {
+709 | |                 if let Some(done) = self.joined.take() {
+710 | |                     let valid = self.expected.as_ref().is_some_and(|expected| {
+711 | |                         expected == &done.receipt
+...   |
+726 | |             }
+    | |_____________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#collapsible_if
+help: collapse nested if block
+    |
+708 ~             if self.prefix_closed
+709 ~                 && let Some(done) = self.joined.take() {
+710 |                     let valid = self.expected.as_ref().is_some_and(|expected| {
+...
+724 |                     return Some(Ok(done.tail));
+725 ~                 }
+    |
+
+error: this `if` statement can be collapsed
+    --> crates\app\src\server\sitemap_csv_stream.rs:1140:5
+     |
+1140 | /     if let Err(failure) = &result {
+1141 | |         if let Some(ready) = ready.take() {
+1142 | |             let _ = ready.send(Err(failure.clone()));
+1143 | |         }
+1144 | |     }
+     | |_____^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#collapsible_if
+help: collapse nested if block
+     |
+1140 ~     if let Err(failure) = &result
+1141 ~         && let Some(ready) = ready.take() {
+1142 |             let _ = ready.send(Err(failure.clone()));
+1143 ~         }
+     |
+
+error: this `if` statement can be collapsed
+    --> crates\app\src\server\sitemap_csv_stream.rs:1189:5
+     |
+1189 | /     if let Err(failure) = &result {
+1190 | |         if let Some(ready) = ready.take() {
+1191 | |             let _ = ready.send(Err(failure.clone()));
+1192 | |         }
+1193 | |     }
+     | |_____^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#collapsible_if
+help: collapse nested if block
+     |
+1189 ~     if let Err(failure) = &result
+1190 ~         && let Some(ready) = ready.take() {
+1191 |             let _ = ready.send(Err(failure.clone()));
+1192 ~         }
+     |
+
+error: this `if` statement can be collapsed
+  --> crates\app\src\sitemap_findings.rs:40:9
+   |
+40 | /         if let Self::Job { config_sha256, .. } = self {
+41 | |             if !is_hash(config_sha256) {
+42 | |                 return Err(invalid_query("Invalid App config SHA"));
+43 | |             }
+44 | |         }
+   | |_________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#collapsible_if
+help: collapse nested if block
+   |
+40 ~         if let Self::Job { config_sha256, .. } = self
+41 ~             && !is_hash(config_sha256) {
+42 |                 return Err(invalid_query("Invalid App config SHA"));
+43 ~             }
+   |
+
+error: this `if` statement can be collapsed
+   --> crates\app\src\sitemap_findings.rs:168:9
+    |
+168 | /         if let Ok(io) = error.downcast::<io::Error>() {
+169 | |             if let Some(inner) = io.into_inner() {
+170 | |                 let inner = match inner.downcast::<serde_json::Error>() {
+171 | |                     Ok(json) => {
+...   |
+180 | |         }
+    | |_________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#collapsible_if
+help: collapse nested if block
+    |
+168 ~         if let Ok(io) = error.downcast::<io::Error>()
+169 ~             && let Some(inner) = io.into_inner() {
+170 |                 let inner = match inner.downcast::<serde_json::Error>() {
+...
+178 |                 }
+179 ~             }
+    |
+
+error: this `if` statement can be collapsed
+   --> crates\app\src\sitemap_findings.rs:531:5
+    |
+531 | /     if let AccessTarget::Job {
+532 | |         generation,
+533 | |         config_sha256,
+534 | |         ..
+...   |
+545 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#collapsible_if
+help: collapse nested if block
+    |
+535 ~     } = target
+536 ~         && (context.basis.generation != ((*generation > 0).then_some(*generation))
+537 ~             || context.basis.crawl_config_sha256.as_deref() != Some(config_sha256.as_str()))
+538 |         {
+...
+542 |             ));
+543 ~         }
+    |
+
+error: could not compile `open-seo-spider` (bin "open-seo-spider") due to 7 previous errors
+warning: build failed, waiting for other jobs to finish...
+error: unneeded `return` statement
+   --> crates\app\src\server\sitemap_csv_stream.rs:364:13
+    |
+364 |             return matches!(self.0.hooks.fault, ExportTestFault::ResponseBuildAfterReady);
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#needless_return
+    = note: `-D clippy::needless-return` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::needless_return)]`
+help: remove `return`
+    |
+364 -             return matches!(self.0.hooks.fault, ExportTestFault::ResponseBuildAfterReady);
+364 +             matches!(self.0.hooks.fault, ExportTestFault::ResponseBuildAfterReady)
+    |
+
+error: this `if` statement can be collapsed
+   --> crates\app\src\server\sitemap_csv_stream.rs:885:9
+    |
+885 | /         if let ExportTestFault::SecondPassAfterBytes(limit) = self.fault {
+886 | |             if next > limit {
+887 | |                 return Err(self.failure(Failure::new(
+888 | |                     "sitemap_read_failure",
+...   |
+892 | |         }
+    | |_________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#collapsible_if
+help: collapse nested if block
+    |
+885 ~         if let ExportTestFault::SecondPassAfterBytes(limit) = self.fault
+886 ~             && next > limit {
+887 |                 return Err(self.failure(Failure::new(
+...
+890 |                 )));
+891 ~             }
+    |
+
+error: this `if` statement can be collapsed
+   --> crates\app\src\server\sitemap_csv_stream_lifecycle_tests.rs:270:13
+    |
+270 | /             if result.is_pending() && registry.0.tasks.lock().unwrap().closed {
+271 | |                 if let Some(waiting) = waiting.take() {
+272 | |                     let _ = waiting.send(());
+273 | |                 }
+274 | |             }
+    | |_____________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#collapsible_if
+help: collapse nested if block
+    |
+270 ~             if result.is_pending() && registry.0.tasks.lock().unwrap().closed
+271 ~                 && let Some(waiting) = waiting.take() {
+272 |                     let _ = waiting.send(());
+273 ~                 }
+    |
+
+error: this `if` statement can be collapsed
+   --> crates\app\src\server\sitemap_csv_stream_lifecycle_tests.rs:332:13
+    |
+332 | /             if result.is_pending() {
+333 | |                 if let Some(waiting) = waiting.take() {
+334 | |                     let _ = waiting.send(());
+335 | |                 }
+336 | |             }
+    | |_____________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#collapsible_if
+help: collapse nested if block
+    |
+332 ~             if result.is_pending()
+333 ~                 && let Some(waiting) = waiting.take() {
+334 |                     let _ = waiting.send(());
+335 ~                 }
+    |
+
+error: manual implementation of `.is_multiple_of()`
+  --> crates\app\src\server\sitemaps_streaming_fixture.rs:17:33
+   |
+17 |         assert!(entries >= 4 && entries % 2 == 0);
+   |                                 ^^^^^^^^^^^^^^^^ help: replace with: `entries.is_multiple_of(2)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#manual_is_multiple_of
+   = note: `-D clippy::manual-is-multiple-of` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::manual_is_multiple_of)]`
+
+error: large size difference between variants
+   --> crates\app\src\sitemap_membership.rs:675:1
+    |
+675 | /  enum InventoryRows {
+676 | |      // Kept for the existing materializing oracle/tests; HTTP uses Window.
+677 | |      #[cfg(test)]
+678 | |      Materialized(SitemapCatalog),
+    | |      ---------------------------- the largest variant contains at least 280 bytes
+679 | |/     Window {
+680 | ||         rows: Vec<SitemapLedgerRow>,
+681 | ||         next: Option<u64>,
+682 | ||         has_more: bool,
+683 | ||     },
+    | ||_____- the second-largest variant contains at least 41 bytes
+684 | |  }
+    | |__^ the entire enum is at least 280 bytes
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#large_enum_variant
+    = note: `-D clippy::large-enum-variant` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::large_enum_variant)]`
+help: consider boxing the large fields or introducing indirection in some other way to reduce the total size of the enum
+    |
+678 -     Materialized(SitemapCatalog),
+678 +     Materialized(Box<SitemapCatalog>),
+    |
+
+error: this creates an owned instance just for comparison
+  --> crates\app\src\sitemap_raw_cli_tests.rs:37:125
+   |
+37 | ...(_), output: Some(_) }) if store == PathBuf::from("crawl.sqlite"))
+   |                               ---------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |                               |
+   |                               help: try: `store == "crawl.sqlite"`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#cmp_owned
+   = note: `-D clippy::cmp-owned` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::cmp_owned)]`
+
+error: could not compile `open-seo-spider` (bin "open-seo-spider" test) due to 17 previous errors

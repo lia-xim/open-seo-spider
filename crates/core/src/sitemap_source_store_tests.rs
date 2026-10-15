@@ -651,14 +651,13 @@ fn actual_selected_parent_keeps_original_captures_and_exact_blob_anchor() {
     tx.commit().unwrap();
     assert_eq!(inherited.records, parent.records);
     assert_eq!(inherited.commits, parent.commits);
-    assert_eq!(
-        inherited
+    assert!(
+        !inherited
             .summary
             .inherited
             .as_ref()
             .unwrap()
-            .current_discovery_executed,
-        false
+            .current_discovery_executed
     );
     let child_generation = child.begin_run("selected-refresh").unwrap();
     let mut attempted = report

@@ -1,0 +1,65 @@
+{
+  "kind": "actual_draft_source_fmt_clippy_check",
+  "recorded_at": "2026-10-15T03:59:11.601Z",
+  "result": "PASS_DRAFT_SOURCE_FMT_CLIPPY",
+  "input_manifest_sha256": "bbba414f66a99c2886c8c7348a1a5041a67bc7622cf6fe99d6dda1740b62dfea",
+  "parent_manifest_sha256": "0bd2a7cc5e429e7d46a1d596e5941d62f5a2b2bd9dfb78199e85b7c5d4f9fd2a",
+  "source_inputs": 301,
+  "changed_inputs": 23,
+  "source_after_verified": true,
+  "profile": {
+    "CARGO_PROFILE_TEST_OPT_LEVEL": "1",
+    "CARGO_PROFILE_TEST_DEBUG_ASSERTIONS": "true",
+    "CARGO_PROFILE_TEST_OVERFLOW_CHECKS": "true",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_PROFILE_DEV_DEBUG": "0"
+  },
+  "runs": [
+    {
+      "name": "format",
+      "args": [
+        "fmt",
+        "--all",
+        "--check"
+      ],
+      "pid": 47016,
+      "actual_close_event": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "spawn_error": null,
+      "elapsed_ms": 1582,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_bytes": 0
+    },
+    {
+      "name": "clippy",
+      "args": [
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "pid": 28772,
+      "actual_close_event": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "spawn_error": null,
+      "elapsed_ms": 8167,
+      "log_sha256": "9262fff7137e14ec783241a84ce5e16a8943f6f87f68a640318b40fadaebde8a",
+      "log_bytes": 174
+    }
+  ],
+  "failures": [],
+  "actual_test_functions": 0,
+  "full_workspace_after_corrections": "NOT_RUN",
+  "optimized_build": "NOT_RUN",
+  "installed_runtime": "UNCHANGED_AB1",
+  "manufacturer_parity": "NOT_PROVEN"
+}

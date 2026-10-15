@@ -1,0 +1,276 @@
+{
+  "schema_version": 1,
+  "kind": "independent_bounded_core_clippy_source_review",
+  "reviewer": "/root/finish_coverage/file_tools_api_review",
+  "status": "NO_CONFIRMED_FINDINGS_IN_REVIEWED_SOURCE_DELTA_RUNTIME_NOT_RUN",
+  "immutable": true,
+  "candidate_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\core-clippy-correction-v1\\manifest.json",
+    "sha256": "ad09f9bfecdfffdffe9e78e324a00e23b03dc5ae43e29f95097afeab870be4d5"
+  },
+  "baseline_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v2\\manifest.json",
+    "sha256": "0bd2a7cc5e429e7d46a1d596e5941d62f5a2b2bd9dfb78199e85b7c5d4f9fd2a",
+    "bytes": 98450
+  },
+  "diagnostic_log": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-suite-v2/clippy.log",
+    "sha256": "58e682d03e8349aeda9369e21716efaa20ef6af44d3abc1e609c05dd9dc43b64",
+    "bytes": 12394,
+    "production": 12,
+    "test": 4
+  },
+  "actual_pins_checked": 43,
+  "guarded_payloads": [
+    {
+      "path": "crates/core/src/crawler.rs",
+      "before_sha256": "ef99fff8bdba98ac09e9df494c1ae7eb20e86d229468b1e5bb94e27649091d68",
+      "after_sha256": "96cd830711c0ab0fbfdd31f60baf828d89c269badc10320d9a816504c098ccd9",
+      "bytes": 162550,
+      "before_bytes": 162506
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_capture.rs",
+      "before_sha256": "741276e08981e852bcef6a67d36c9ceebbeb152599abcae3a3a77e7f74e5504a",
+      "after_sha256": "865f1d4588a7419666aeb4eb423b6554c7ff382b6ec23e8e09c1db8ea283da25",
+      "bytes": 18302,
+      "before_bytes": 18284
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_capture_tests.rs",
+      "before_sha256": "182f08a5cfb8209bd800462d42406f9613082f8e824d229952c3a431e4b760b0",
+      "after_sha256": "e1b0770a0465354befc3b5a5646e7638242b6883a311249d0ab1d09eb781652a",
+      "bytes": 38348,
+      "before_bytes": 38164
+    },
+    {
+      "path": "crates/core/src/sitemap_findings.rs",
+      "before_sha256": "723200ced8fafb9652a89f6a8f19fa416dffbee3a62ddd780093c5380e36d1ef",
+      "after_sha256": "632a5522d6e836c1e599e1c420afc3903eaad087902ab20e9c5c1323d3cc940f",
+      "bytes": 15029,
+      "before_bytes": 15024
+    },
+    {
+      "path": "crates/core/src/sitemap_findings/source.rs",
+      "before_sha256": "5f164f53da8b2992d68788a638c0309e119eca05713e6593b79ca7793d03a481",
+      "after_sha256": "77494f7da50c58526949142326d36a2fc4170a6f019edf4f978c31dfe1392e53",
+      "bytes": 17826,
+      "before_bytes": 18170
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/verified_read.rs",
+      "before_sha256": "aac658b8af3eac7b50fa056d4370ce901ec76c7960d83dd7c67bff8e2de8a0d5",
+      "after_sha256": "83a6cd87073949b5565a24234823f644162bf5131914896736cb0edfe54e8ffc",
+      "bytes": 33633,
+      "before_bytes": 33688
+    },
+    {
+      "path": "crates/core/src/sitemap_source_measurement.rs",
+      "before_sha256": "b70ced5d81c5a2708529e014ca61a24dea2458011277aa227530808db2bd2dca",
+      "after_sha256": "96852974d7464e8520323cad57ac02ff9fde98a62d4f9822924fabb3ef8ddc3a",
+      "bytes": 37918,
+      "before_bytes": 37942
+    },
+    {
+      "path": "crates/core/src/sitemap_source_processing.rs",
+      "before_sha256": "f5ceba0574e4878675a990ca9b8ce0bc3bfd657ad89664fe3cf19e89e05f3a0a",
+      "after_sha256": "23eb28172fa40e9f4166c2aab74b2d52232ad38e2db071bd0b8c2987dd2e52b0",
+      "bytes": 6116,
+      "before_bytes": 5998
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_large_capture_tests.rs",
+      "before_sha256": "41bf2cf0d433a9a99a79ca9b6cd0c2c75579d19483b767add748196c91e2d586",
+      "after_sha256": "32f98f294751d826dd064651589b24e5eef18dc5805e0ae4ab291e46d69e5fa5",
+      "bytes": 15787,
+      "before_bytes": 15802
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis/window_tests.rs",
+      "before_sha256": "f3eb64b8cb40f8a0e78780a829705ced47153d8290b1ae23102fb10287108d00",
+      "after_sha256": "ff14364bdf0203348e7d00943980aba07fe7876fd14019ba29491bf7f437de44",
+      "bytes": 23653,
+      "before_bytes": 23681
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store/verified_read_tests.rs",
+      "before_sha256": "e2b38f5b35c6289fa623e1935def92646e7836a2cc6a70050971cf5c1c43b99c",
+      "after_sha256": "df2b1469594781962fd7e3119aa742247964c3115d0a6186803f21f7bbedaf82",
+      "bytes": 15532,
+      "before_bytes": 15534
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store_tests.rs",
+      "before_sha256": "074abf3a397e3a5b75d45c4f5cce83b0ee6b592b94dc2fe19b9a433ab7ef7b6b",
+      "after_sha256": "5faab684f969f9e1b5e755bbee5a0fc15953a474abe364a1d953d47ffaf123f9",
+      "bytes": 32805,
+      "before_bytes": 32822
+    }
+  ],
+  "support_pins": [
+    {
+      "path": "HANDOFF.md",
+      "sha256": "93a62f31322dd1bb5ec5eec817b2335f7b01a9b017bdfd231c89db5446bee496",
+      "bytes": 5382
+    },
+    {
+      "path": "DERIVATION.json",
+      "sha256": "f58c021435b3e568dade0a15be95d623015cf34b2f2f8a15594315b58c630319",
+      "bytes": 14717
+    },
+    {
+      "path": "derive.cjs",
+      "sha256": "93156af8fa11ce8ec1d05e23ea7de0cfd0867694ede2e728a50a770c0dfb3da3",
+      "bytes": 9532
+    },
+    {
+      "path": "AUDIT.json",
+      "sha256": "f31c1ee2bacdaa30eb1774afbb12243b66343508d68f543510ddd33328320bdc",
+      "bytes": 21495
+    },
+    {
+      "path": "audit.cjs",
+      "sha256": "9e73ea3c226d852cd9cdb70c6cce183dc9a756b1facc5de14d4222a1a4aaf598",
+      "bytes": 4260
+    },
+    {
+      "path": "freeze.cjs",
+      "sha256": "9a5ababf5d98a05d0a18cdc87983da2702cf0b71cee684df7e0364fc1faee445",
+      "bytes": 3116
+    }
+  ],
+  "extra_context_pins": [
+    {
+      "path": "crates/core/src/sitemap_source_store.rs",
+      "sha256": "fe59417d12939e62e65c78ce894d7d34d55f2708ee792d1c21f3a04c438678ae"
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store_models.rs",
+      "sha256": "18d83efb0ee42547682b392780ef412718374b75f2ab668562be59880fbe5c57"
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis.rs",
+      "sha256": "cc5bb330a58579ded13a912b6b4348a818f0517a5e419aa139e531ae8be32691"
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis/window.rs",
+      "sha256": "5fa798312512014af44be44f58beb95f87e72e464a6f60ea1066a6d2e1b871c7"
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store/verified_read.rs",
+      "sha256": "fd1acd6ed446e21e2626159d358b77794146dcfd32796ff7a3d3e4c52aa1e07a"
+    },
+    {
+      "path": "crates/core/src/sitemap_findings/source_tests.rs",
+      "sha256": "d0741314a25adbda441b325084c5b2897556ec94293e283515243e1768c1b092"
+    },
+    {
+      "path": "crates/core/src/sitemap_findings/predicate.rs",
+      "sha256": "928b463aac8b7b2d15f651b7500a5c164a5c7d2b1679c91a5f5e35e5c005677c"
+    },
+    {
+      "path": "crates/core/src/sitemap_source_processing_tests.rs",
+      "sha256": "5689b23a7fd2883b0c5bba1aaddbb745f6ddc3455c3cc8a4b1819e1715f9dc1f"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "58319c673e028d93e9f7b99a0c163116cc53d395e202d03b003855b3321f031f"
+    }
+  ],
+  "serde_evidence": {
+    "path": "C:/Users/matth/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_core-1.0.229/src/ser/impls.rs",
+    "sha256": "5ee7efc439345e8665da0bd79bc06c02a0506e5fd0f3a4cf11af0c7197eaa643",
+    "bytes": 29535,
+    "locked_version": "1.0.229",
+    "lines": "99-112 (Option),460-475 (deref macro),486-490 (Box)",
+    "observation": "Box Serialize delegates (**self).serialize; Option Some/None serialize_some/serialize_none unchanged. This is static dependency-source evidence, not executed byte-roundtrip testing."
+  },
+  "findings": [],
+  "checks": {
+    "all_twelve_complete_unified_diffs_read": true,
+    "all_twenty_four_before_after_payload_pins_actual": true,
+    "all_six_support_pins_actual": true,
+    "source_manifest_diagnostic_and_serde_pins_actual": true,
+    "independent_literal_reconstruction_and_byte_inverse_files": 12,
+    "literal_operations": 29,
+    "independent_ordered_function_names_identical": 231,
+    "assertion_macros_before": 356,
+    "assertion_macros_after": 356,
+    "all_changed_assertion_semantics_manually_reviewed": true,
+    "new_named_functions": 0,
+    "new_skips_ignored_cfg_or_lint_suppression": 0
+  },
+  "conclusions": [
+    {
+      "topic": "Receipt ownership",
+      "locations": [
+        "crawler.rs:1619-1641",
+        "crawler.rs:2503-2513"
+      ],
+      "observation": "Both real constructors box the same completed receipt after the unchanged fallible store call. Borrowed accessor still returns Option<&SourceMeasurementReceipt>; no cloning, proof forging, A/B ordering or lifetime extension."
+    },
+    {
+      "topic": "Count result ownership",
+      "locations": [
+        "crawler/sitemap_capture.rs:84-87",
+        "crawler/sitemap_capture.rs:308-314",
+        "crawler.rs:2886-2888",
+        "crawler/sitemap_capture_tests.rs:295-302",
+        "crawler/sitemap_capture_tests.rs:785-790"
+      ],
+      "observation": "Observed stores Box<Result<...>>. The actual scanner result is computed once and boxed once; success and failure reads use borrowed as_ref, deliberate hash-tamper uses as_mut. Deep Clone semantics remain; no XML clone or admission/legacy failure change."
+    },
+    {
+      "topic": "Finding association JSON",
+      "locations": [
+        "sitemap_findings.rs:236-250",
+        "sitemap_findings/source.rs:388-410"
+      ],
+      "observation": "Option<Box<Association>> retains Some/None cases. Producer preserves document/protocol validation before association.map(Box::new). Public Rust field type changes as documented; existing repository consumers remain compatible. Locked serde_core 1.0.229 Option dispatch and Box (**self).serialize delegation support unchanged null/object fields/order; no executed byte-serialization proof claimed."
+    },
+    {
+      "topic": "Short circuit and validation",
+      "locations": [
+        "sitemap_findings/source.rs:375-450",
+        "sitemap_source_measurement.rs:606-616",
+        "sitemap_ledger/verified_read.rs:295-315"
+      ],
+      "observation": "Collapsed let chains retain left-to-right condition evaluation, branch bodies, visitor order and errors. Removed as_deref receivers are Option<&str>; equalities and converted comparison values are unchanged."
+    },
+    {
+      "topic": "Strict profile external keys",
+      "locations": [
+        "sitemap_source_processing.rs:46-102",
+        "unchanged sitemap_source_processing_tests.rs:10-153"
+      ],
+      "observation": "Private variants are renamed with explicit original max_post_http_entity_bytes/max_decoded_xml_bytes/max_xml_events serde names in original order. Defaults, map-only visitor, duplicate/unknown rejection, limits and public Serialize fields unchanged. Existing exact JSON-string, null-profile byte equality, integer/map/sequence/duplicate controls retained byte-for-byte."
+    },
+    {
+      "topic": "Test assertion strength",
+      "locations": [
+        "crawler/sitemap_large_capture_tests.rs:392-407",
+        "sitemap_membership_analysis/window_tests.rs:383-390",
+        "sitemap_source_store/verified_read_tests.rs:242-255",
+        "sitemap_source_store_tests.rs:654-661"
+      ],
+      "observation": "Three reported err-expect calls become expect_err with the same expressions/messages and subsequent error/SQL assertions. All success types already derive Debug. Transaction-bound non-Debug proofs remain unchanged. assert_eq(expr,false) becomes assert!(!expr) on the same boolean expression. Actual capture mismatch and corruption controls retain their values/assertions."
+    }
+  ],
+  "boundaries": [
+    "Source-only review; author-reported rustfmt reconstruction was read and hash-bound, not rerun by reviewer.",
+    "No new whole-workspace/Clippy/build/native/SDK acceptance inferred from source review or earlier 1203-test result. Root owns all actual compiler/runtime runs.",
+    "Three Box changes add heap allocation at existing receipt/scanner/Some-association construction points; no measured size/performance/OOM guarantee.",
+    "Root promotion may have occurred after baseline review. Baseline guards in this receipt refer to immutable combined-source-v2, not subsequently mutated Root beforeimages."
+  ],
+  "reviewer_execution": {
+    "compiler": 0,
+    "clippy": 0,
+    "tests": 0,
+    "rustfmt": 0,
+    "node_or_sdk_imports": 0,
+    "candidate_native_starts": 0,
+    "http_or_sqlite_fixtures": 0,
+    "product_root_or_frozen_edits": 0,
+    "own_new_receipt_only": true
+  }
+}

@@ -83,7 +83,7 @@ impl ReceiveProgress {
 #[derive(Debug, Clone)]
 pub(super) enum CountCapture {
     NotInvoked(SitemapSourceMeasurementStop),
-    Observed(Result<SitemapCountObservation, SitemapFailure>),
+    Observed(Box<Result<SitemapCountObservation, SitemapFailure>>),
 }
 #[derive(Debug, Clone)]
 pub(super) struct SourceCapture {
@@ -307,10 +307,10 @@ impl SourceCapture {
         };
         let count = match &self.count {
             CountCapture::NotInvoked(stop) => return Ok(unavailable(*stop)),
-            CountCapture::Observed(Err(failure)) => {
-                return Ok(unavailable(scan_stop(&failure.code)?));
-            }
-            CountCapture::Observed(Ok(count)) => count,
+            CountCapture::Observed(result) => match result.as_ref() {
+                Err(failure) => return Ok(unavailable(scan_stop(&failure.code)?)),
+                Ok(count) => count,
+            },
         };
         if count.schema_version != 1
             || count.engine != SITEMAP_COUNT_XML_ENGINE

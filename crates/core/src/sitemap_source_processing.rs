@@ -44,11 +44,14 @@ impl<'de> Deserialize<'de> for SitemapSourceProcessingConfig {
         D: Deserializer<'de>,
     {
         #[derive(Deserialize)]
-        #[serde(field_identifier, rename_all = "snake_case")]
+        #[serde(field_identifier)]
         enum Field {
-            MaxPostHttpEntityBytes,
-            MaxDecodedXmlBytes,
-            MaxXmlEvents,
+            #[serde(rename = "max_post_http_entity_bytes")]
+            PostHttpEntityBytes,
+            #[serde(rename = "max_decoded_xml_bytes")]
+            DecodedXmlBytes,
+            #[serde(rename = "max_xml_events")]
+            XmlEvents,
         }
 
         struct ProfileVisitor;
@@ -67,7 +70,7 @@ impl<'de> Deserialize<'de> for SitemapSourceProcessingConfig {
                 let mut seen = [false; 3];
                 while let Some(field) = map.next_key::<Field>()? {
                     match field {
-                        Field::MaxPostHttpEntityBytes => {
+                        Field::PostHttpEntityBytes => {
                             if seen[0] {
                                 return Err(de::Error::duplicate_field(
                                     "max_post_http_entity_bytes",
@@ -76,14 +79,14 @@ impl<'de> Deserialize<'de> for SitemapSourceProcessingConfig {
                             seen[0] = true;
                             profile.max_post_http_entity_bytes = map.next_value()?;
                         }
-                        Field::MaxDecodedXmlBytes => {
+                        Field::DecodedXmlBytes => {
                             if seen[1] {
                                 return Err(de::Error::duplicate_field("max_decoded_xml_bytes"));
                             }
                             seen[1] = true;
                             profile.max_decoded_xml_bytes = map.next_value()?;
                         }
-                        Field::MaxXmlEvents => {
+                        Field::XmlEvents => {
                             if seen[2] {
                                 return Err(de::Error::duplicate_field("max_xml_events"));
                             }

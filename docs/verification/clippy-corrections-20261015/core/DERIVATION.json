@@ -1,0 +1,331 @@
+{
+  "kind": "literal_core_clippy_corrections",
+  "baseline_manifest_sha256": "0bd2a7cc5e429e7d46a1d596e5941d62f5a2b2bd9dfb78199e85b7c5d4f9fd2a",
+  "operations": [
+    {
+      "path": "crates/core/src/crawler.rs",
+      "before": "Receipt(crate::sitemap_source_store::SourceMeasurementReceipt),",
+      "after": "Receipt(Box<crate::sitemap_source_store::SourceMeasurementReceipt>),",
+      "count": 1,
+      "offsets": [
+        103314
+      ]
+    },
+    {
+      "path": "crates/core/src/crawler.rs",
+      "before": "Self::Receipt(receipt) => Some(receipt),",
+      "after": "Self::Receipt(receipt) => Some(receipt.as_ref()),",
+      "count": 1,
+      "offsets": [
+        103540
+      ]
+    },
+    {
+      "path": "crates/core/src/crawler.rs",
+      "before": "SourceCapturePersistence::Receipt(store.record_sitemap_source_capture(\n                            &entry,\n                            document,\n                            measurement,\n                            generation,\n                        )?)",
+      "after": "SourceCapturePersistence::Receipt(Box::new(store.record_sitemap_source_capture(\n                            &entry,\n                            document,\n                            measurement,\n                            generation,\n                        )?))",
+      "count": 1,
+      "offsets": [
+        66064
+      ]
+    },
+    {
+      "path": "crates/core/src/crawler.rs",
+      "before": "SourceCapturePersistence::Receipt(\n                                    store.record_unavailable_sitemap_source_capture(",
+      "after": "SourceCapturePersistence::Receipt(Box::new(\n                                    store.record_unavailable_sitemap_source_capture(",
+      "count": 1,
+      "offsets": [
+        66815
+      ]
+    },
+    {
+      "path": "crates/core/src/crawler.rs",
+      "before": "                                        generation,\n                                    )?,\n                                )",
+      "after": "                                        generation,\n                                    )?,\n                                ))",
+      "count": 1,
+      "offsets": [
+        67097
+      ]
+    },
+    {
+      "path": "crates/core/src/crawler.rs",
+      "before": "observed.source_capture.count = sitemap_capture::CountCapture::Observed(\n                    crate::count_sitemap_xml(&entity.xml, &observed.source_capture.count_limits()),\n                );",
+      "after": "observed.source_capture.count = sitemap_capture::CountCapture::Observed(Box::new(\n                    crate::count_sitemap_xml(&entity.xml, &observed.source_capture.count_limits()),\n                ));",
+      "count": 1,
+      "offsets": [
+        117481
+      ]
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_capture.rs",
+      "before": "Observed(Result<SitemapCountObservation, SitemapFailure>),",
+      "after": "Observed(Box<Result<SitemapCountObservation, SitemapFailure>>),",
+      "count": 1,
+      "offsets": [
+        2912
+      ]
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_capture.rs",
+      "before": "            CountCapture::Observed(Err(failure)) => {\n                return Ok(unavailable(scan_stop(&failure.code)?));\n            }\n            CountCapture::Observed(Ok(count)) => count,",
+      "after": "            CountCapture::Observed(result) => match result.as_ref() {\n                Err(failure) => return Ok(unavailable(scan_stop(&failure.code)?)),\n                Ok(count) => count,\n            },",
+      "count": 1,
+      "offsets": [
+        13263
+      ]
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_capture_tests.rs",
+      "before": "        CountCapture::Observed(Ok(count)) => count,",
+      "after": "        CountCapture::Observed(result) => match result.as_ref() {\n            Ok(count) => count,\n            other => panic!(\"expected actual scanner observation, got {other:?}\"),\n        },",
+      "count": 1,
+      "offsets": [
+        10712
+      ]
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_capture_tests.rs",
+      "before": "    if let CountCapture::Observed(Ok(count)) = &mut bad.count {",
+      "after": "    if let CountCapture::Observed(result) = &mut bad.count\n        && let Ok(count) = result.as_mut()\n    {",
+      "count": 1,
+      "offsets": [
+        27683
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_findings.rs",
+      "before": "association: Option<SitemapSourceCommitAssociation>,",
+      "after": "association: Option<Box<SitemapSourceCommitAssociation>>,",
+      "count": 1,
+      "offsets": [
+        9187
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_findings/source.rs",
+      "before": "                                    association,\n                                    committed_document,",
+      "after": "                                    association: association.map(Box::new),\n                                    committed_document,",
+      "count": 1,
+      "offsets": [
+        15882
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_findings/source.rs",
+      "before": "            if after.is_none_or(|p| matches!(p, Position::SourceMeasurement { .. })) {\n                if let (Some(source), Some(raw)) = (self.source, self.raw) {",
+      "after": "            if after.is_none_or(|p| matches!(p, Position::SourceMeasurement { .. }))\n                && let (Some(source), Some(raw)) = (self.source, self.raw)\n            {",
+      "count": 1,
+      "offsets": [
+        14116
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_findings/source.rs",
+      "before": "                    if !exhausted {\n                        return Ok(false);\n                    }\n                }\n            }\n            if !matches!(after, Some(Position::UnmeasuredSourceTask { .. })) {\n                if let Some(raw) = self.raw {",
+      "after": "                    if !exhausted {\n                        return Ok(false);\n                    }\n            }\n            if !matches!(after, Some(Position::UnmeasuredSourceTask { .. }))\n                && let Some(raw) = self.raw\n            {",
+      "count": 1,
+      "offsets": [
+        16140
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_findings/source.rs",
+      "before": "                    }\n                }\n            }\n            let lower = match after {",
+      "after": "                    }\n            }\n            let lower = match after {",
+      "count": 1,
+      "offsets": [
+        17862
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/verified_read.rs",
+      "before": "source_kind.as_deref() == Some(",
+      "after": "source_kind == Some(",
+      "count": 1,
+      "offsets": [
+        10847
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/verified_read.rs",
+      "before": "task_url.as_deref() == Some(",
+      "after": "task_url == Some(",
+      "count": 1,
+      "offsets": [
+        10912
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/verified_read.rs",
+      "before": "revision_or_entry.as_deref() == Some(",
+      "after": "revision_or_entry == Some(",
+      "count": 1,
+      "offsets": [
+        11041
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/verified_read.rs",
+      "before": "observation.as_deref() == Some(row.observation_id.as_str())",
+      "after": "observation == Some(row.observation_id.as_str())",
+      "count": 2,
+      "offsets": [
+        11263,
+        11556
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_source_measurement.rs",
+      "before": "    if d.encoding == Some(SitemapEntityEncoding::Identity) {\n        if let (Some(xml), Some(entity)) = (\n            d.decoded_xml_bytes.value,\n            p.transport.post_http_received_bytes.value,\n        ) {",
+      "after": "    if d.encoding == Some(SitemapEntityEncoding::Identity)\n        && let (Some(xml), Some(entity)) = (\n            d.decoded_xml_bytes.value,\n            p.transport.post_http_received_bytes.value,\n        )\n    {",
+      "count": 1,
+      "offsets": [
+        23269
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_source_measurement.rs",
+      "before": "            if d.integrity == I::Complete {\n                require(xml == entity, F::InvalidDecode)?;\n            }\n        }\n    }",
+      "after": "            if d.integrity == I::Complete {\n                require(xml == entity, F::InvalidDecode)?;\n            }\n    }",
+      "count": 1,
+      "offsets": [
+        23539
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_source_processing.rs",
+      "before": "        #[serde(field_identifier, rename_all = \"snake_case\")]\n        enum Field {\n            MaxPostHttpEntityBytes,\n            MaxDecodedXmlBytes,\n            MaxXmlEvents,\n        }",
+      "after": "        #[serde(field_identifier)]\n        enum Field {\n            #[serde(rename = \"max_post_http_entity_bytes\")]\n            PostHttpEntityBytes,\n            #[serde(rename = \"max_decoded_xml_bytes\")]\n            DecodedXmlBytes,\n            #[serde(rename = \"max_xml_events\")]\n            XmlEvents,\n        }",
+      "count": 1,
+      "offsets": [
+        1926
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_source_processing.rs",
+      "before": "Field::MaxPostHttpEntityBytes",
+      "after": "Field::PostHttpEntityBytes",
+      "count": 1,
+      "offsets": [
+        2983
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_source_processing.rs",
+      "before": "Field::MaxDecodedXmlBytes",
+      "after": "Field::DecodedXmlBytes",
+      "count": 1,
+      "offsets": [
+        3437
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_source_processing.rs",
+      "before": "Field::MaxXmlEvents",
+      "after": "Field::XmlEvents",
+      "count": 1,
+      "offsets": [
+        3806
+      ]
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_large_capture_tests.rs",
+      "before": "            .err()\n            .expect(\"wrong bounds must not commit A\");",
+      "after": "            .expect_err(\"wrong bounds must not commit A\");",
+      "count": 1,
+      "offsets": [
+        14779
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis/window_tests.rs",
+      "before": "            .err()\n            .expect(\"overbudget escaped report key\");",
+      "after": "            .expect_err(\"overbudget escaped report key\");",
+      "count": 1,
+      "offsets": [
+        14021
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store/verified_read_tests.rs",
+      "before": "load(&read).err().expect(\"portable duplicate must fail\")",
+      "after": "load(&read).expect_err(\"portable duplicate must fail\")",
+      "count": 1,
+      "offsets": [
+        10475
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store_tests.rs",
+      "before": "    assert_eq!(\n        inherited\n            .summary\n            .inherited\n            .as_ref()\n            .unwrap()\n            .current_discovery_executed,\n        false\n    );",
+      "after": "    assert!(\n        !inherited\n            .summary\n            .inherited\n            .as_ref()\n            .unwrap()\n            .current_discovery_executed\n    );",
+      "count": 1,
+      "offsets": [
+        26795
+      ]
+    }
+  ],
+  "inverse_exact": true,
+  "files": [
+    {
+      "path": "crates/core/src/crawler.rs",
+      "before_sha256": "ef99fff8bdba98ac09e9df494c1ae7eb20e86d229468b1e5bb94e27649091d68",
+      "unformatted_after_sha256": "f41d7357a07eed25243e5e012435fa26097c54ae2bf5588b2ce81d3506286d9a"
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_capture.rs",
+      "before_sha256": "741276e08981e852bcef6a67d36c9ceebbeb152599abcae3a3a77e7f74e5504a",
+      "unformatted_after_sha256": "865f1d4588a7419666aeb4eb423b6554c7ff382b6ec23e8e09c1db8ea283da25"
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_capture_tests.rs",
+      "before_sha256": "182f08a5cfb8209bd800462d42406f9613082f8e824d229952c3a431e4b760b0",
+      "unformatted_after_sha256": "e1b0770a0465354befc3b5a5646e7638242b6883a311249d0ab1d09eb781652a"
+    },
+    {
+      "path": "crates/core/src/sitemap_findings.rs",
+      "before_sha256": "723200ced8fafb9652a89f6a8f19fa416dffbee3a62ddd780093c5380e36d1ef",
+      "unformatted_after_sha256": "632a5522d6e836c1e599e1c420afc3903eaad087902ab20e9c5c1323d3cc940f"
+    },
+    {
+      "path": "crates/core/src/sitemap_findings/source.rs",
+      "before_sha256": "5f164f53da8b2992d68788a638c0309e119eca05713e6593b79ca7793d03a481",
+      "unformatted_after_sha256": "6f35183cebfff4c4ccbef7919156cd7069ed69a51fd0ee21e9dce7e62ace4a32"
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/verified_read.rs",
+      "before_sha256": "aac658b8af3eac7b50fa056d4370ce901ec76c7960d83dd7c67bff8e2de8a0d5",
+      "unformatted_after_sha256": "83a6cd87073949b5565a24234823f644162bf5131914896736cb0edfe54e8ffc"
+    },
+    {
+      "path": "crates/core/src/sitemap_source_measurement.rs",
+      "before_sha256": "b70ced5d81c5a2708529e014ca61a24dea2458011277aa227530808db2bd2dca",
+      "unformatted_after_sha256": "87a0e5fda9af1ca73b07de71f50f4475b5771f820cd15651783bb09d41e7cfed"
+    },
+    {
+      "path": "crates/core/src/sitemap_source_processing.rs",
+      "before_sha256": "f5ceba0574e4878675a990ca9b8ce0bc3bfd657ad89664fe3cf19e89e05f3a0a",
+      "unformatted_after_sha256": "23eb28172fa40e9f4166c2aab74b2d52232ad38e2db071bd0b8c2987dd2e52b0"
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_large_capture_tests.rs",
+      "before_sha256": "41bf2cf0d433a9a99a79ca9b6cd0c2c75579d19483b767add748196c91e2d586",
+      "unformatted_after_sha256": "32f98f294751d826dd064651589b24e5eef18dc5805e0ae4ab291e46d69e5fa5"
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis/window_tests.rs",
+      "before_sha256": "f3eb64b8cb40f8a0e78780a829705ced47153d8290b1ae23102fb10287108d00",
+      "unformatted_after_sha256": "836e7d2190b9ae7aeab4706bde0603d2dc65bf462ed273b671438049a37ba4b0"
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store/verified_read_tests.rs",
+      "before_sha256": "e2b38f5b35c6289fa623e1935def92646e7836a2cc6a70050971cf5c1c43b99c",
+      "unformatted_after_sha256": "df2b1469594781962fd7e3119aa742247964c3115d0a6186803f21f7bbedaf82"
+    },
+    {
+      "path": "crates/core/src/sitemap_source_store_tests.rs",
+      "before_sha256": "074abf3a397e3a5b75d45c4f5cce83b0ee6b592b94dc2fe19b9a433ab7ef7b6b",
+      "unformatted_after_sha256": "5faab684f969f9e1b5e755bbee5a0fc15953a474abe364a1d953d47ffaf123f9"
+    }
+  ]
+}

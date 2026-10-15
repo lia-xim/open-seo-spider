@@ -1,0 +1,26 @@
+# App Clippy corrections after actual Core correction check
+
+Source-only fix for the seventeen App diagnostics (seven production, ten test) in Root's actual `results/core-clippy-correction-check-v1/clippy.log`, SHA `fa5e97a5dbbc51f858cc5d9d41d0499a20b25a00159554084eab19f9b36f5fe2`. Root reported all sixteen Core diagnostics resolved in that real check. This candidate is **not** a Clippy/compiler/test PASS.
+
+Every App before byte still matches frozen `combined-source-v2/manifest.json` SHA `0bd2a7cc5e429e7d46a1d596e5941d62f5a2b2bd9dfb78199e85b7c5d4f9fd2a` and actual current Root `mcp-file-tools-v1`. Root already applied independent Core handoff `ad09f9bfecdfffdffe9e78e324a00e23b03dc5ae43e29f95097afeab870be4d5`; that is pinned context only, not duplicated or overwritten here. No main.rs/mcp.rs/server.rs parent registration, deps, wire schema, limits or production fixture were changed.
+
+## Seventeen diagnostics
+
+* Seven production collapsed-if diagnostics: four CSV cases (`result.is_ok` forced failure, prefix-closed joined-tail readiness, both producer failure Ready sends) and three shared findings cases (Job config SHA, actual owned IO recovery, App generation/config binding). Let chains preserve left-to-right short-circuit checks, the same input ownership and error/prefix/join/positive-tail requirements. No condition or branch was removed.
+* Test bool-length comparisons use `length < MAX_FILE_WIRE_BYTES`, equivalent to the same original JSON-length-plus-one newline limit. Both original assertions remain. The unrelated `ensure!` guard is unchanged.
+* The duplicate real fixture is loaded once through the **actual existing** `sitemap_findings_cli::tests` module. Its cfg(test) declaration and the nested fixture module become pub(crate), and the Fixture/OwnedDirectory types become pub(crate). MCP findings tests import `crate::sitemap_findings_cli::tests::fixture::Fixture`. Existing test module paths and all test function names remain; the fixture has no test functions or global singleton state. This adds one narrow `sitemap_findings_cli.rs` parent visibility payload; the CLI runtime implementation is byte-identical. No main.rs or mcp.rs critical entrypoint edit is needed.
+* Remove the unneeded return/semicolon only in the cfg(test) bool-expression block; the separate cfg(not(test)) false expression remains.
+* Collapse the injected test sink-failure condition and both lifecycle latch conditions. **Mutex lifetime is explicit:** `pending_and_closed = result.is_pending() && registry.0.tasks.lock().unwrap().closed;` is a completed bool statement before `waiting.take()`/send. This retains the original short circuit and drops the condition's MutexGuard before entering the latch body, avoiding guard lifetime extension from a mechanical let-chain rewrite. The second latch has no lock and keeps the same pending-only take.
+* The fixture's exact even-entry condition uses `entries.is_multiple_of(2)` with the same `entries >= 4` precondition and assertion. The actual selected compiler is Rust1.95.
+* The test-only `InventoryRows::Materialized` becomes Box<SitemapCatalog>, and its single test/oracle constructor boxes the same catalog. Existing borrowed catalog fields/rows use normal Box dereference. This private enum is not serialized and the production Window path is unchanged.
+* The raw CLI test compares `store.as_path()` with borrowed `Path::new("crawl.sqlite")`; no temporary owned PathBuf, same asserted destination.
+
+## Preservation and checks
+
+Eleven payloads, twenty-four literal operations, exact pre-format inverses. `AUDIT.json` reconstructs all operations from frozen inputs and compares actual rustfmt stdout with every candidate. All 254 ordered named-function declarations and all 257 assertion macros remain, with no new named test functions. All 421 prior required names/minimum1,203 remain mandatory; no count increase or previous acceptance is inferred.
+
+Five critical regions are **byte-identical**: supervisor completion handling; CountHash byte/SHA limits; entire two-pass produce_session; after_core completion/stop handling; actual shared Fixture methods including public Crawler, HTTP, shutdown and witness behavior. Narrow surrounding let-chain changes are recorded separately and require real directed execution after promotion. The previous typed IO/budget classifications, full stored CSV output/positive tail rules, raw compatibility and all BodyDone/semaphore/active counter lifetimes are retained.
+
+During pre-freeze self-review the actual CLI test module nesting was traced and the proposed import corrected before any compile/run. `revise-fixture.cjs` records this mutable authoring correction; final DERIVATION/recipe both produce the correct nested path and guarded cfg(test) visibility. No earlier immutable payload was modified.
+
+Actual actions: source hashes/consumer and visibility reads, own source-authoring recipe and inverse verification, rustfmt and --check on all eleven own files (exit0), eleven independent rustfmt-stdout reconstruction comparisons and critical-region SHA equality. No Cargo/Clippy/compiler/test, SQLite/HTTP/SDK/Chrome/native execution, Root/Git/product writes or installation. Root must review and promote exact before SHAs, run the actual same-draft workspace Clippy, then freeze a new Source-v3 and execute its independent full-suite/build gates.

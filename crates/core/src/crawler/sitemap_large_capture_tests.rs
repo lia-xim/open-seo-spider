@@ -392,8 +392,7 @@ async fn actual_optin_capture_uses_current_saved_sha_and_store_rejects_wrong_wor
         let wrong = crate::SitemapSourceMeasurement::new(payload, &Default::default()).unwrap();
         let error = store
             .record_sitemap_source_capture(&entry, document, &wrong, generation)
-            .err()
-            .expect("wrong bounds must not commit A");
+            .expect_err("wrong bounds must not commit A");
         assert!(
             error.to_string().contains("source processing profile"),
             "{error:#}"

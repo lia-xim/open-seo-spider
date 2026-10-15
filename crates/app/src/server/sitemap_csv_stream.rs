@@ -225,10 +225,10 @@ async fn observe_worker(
             format!("CSV blocking producer failed: {error}"),
         ))
     });
-    if result.is_ok() {
-        if let Some(failure) = forced_failure {
-            result = Err(failure);
-        }
+    if result.is_ok()
+        && let Some(failure) = forced_failure
+    {
+        result = Err(failure);
     }
     if result.is_err() {
         mark_failed(task, counters);
@@ -361,7 +361,7 @@ impl ExportRegistry {
     pub(super) fn response_build_fault(&self) -> bool {
         #[cfg(test)]
         {
-            return matches!(self.0.hooks.fault, ExportTestFault::ResponseBuildAfterReady);
+            matches!(self.0.hooks.fault, ExportTestFault::ResponseBuildAfterReady)
         }
         #[cfg(not(test))]
         {
@@ -705,24 +705,24 @@ impl BodyState {
             if stopped {
                 return self.fail(self.stop.failure());
             }
-            if self.prefix_closed {
-                if let Some(done) = self.joined.take() {
-                    let valid = self.expected.as_ref().is_some_and(|expected| {
-                        expected == &done.receipt
-                            && !done.tail.is_empty()
-                            && self.delivered.checked_add(done.tail.len() as u64)
-                                == Some(expected.length)
-                    });
-                    if !valid {
-                        return self.fail(Failure::new(
-                            "sitemap_read_failure",
-                            "CSV joined completion receipt differs",
-                        ));
-                    }
-                    self.finished = true;
-                    self.body_done.send_replace(true);
-                    return Some(Ok(done.tail));
+            if self.prefix_closed
+                && let Some(done) = self.joined.take()
+            {
+                let valid = self.expected.as_ref().is_some_and(|expected| {
+                    expected == &done.receipt
+                        && !done.tail.is_empty()
+                        && self.delivered.checked_add(done.tail.len() as u64)
+                            == Some(expected.length)
+                });
+                if !valid {
+                    return self.fail(Failure::new(
+                        "sitemap_read_failure",
+                        "CSV joined completion receipt differs",
+                    ));
                 }
+                self.finished = true;
+                self.body_done.send_replace(true);
+                return Some(Ok(done.tail));
             }
             tokio::select! {
                 biased;
@@ -882,13 +882,13 @@ impl Write for ChunkTailWriter {
             .map_err(|error| self.failure(classify(error)))?;
         let next = self.count.check(bytes.len())?;
         #[cfg(test)]
-        if let ExportTestFault::SecondPassAfterBytes(limit) = self.fault {
-            if next > limit {
-                return Err(self.failure(Failure::new(
-                    "sitemap_read_failure",
-                    "Injected second-pass sink failure",
-                )));
-            }
+        if let ExportTestFault::SecondPassAfterBytes(limit) = self.fault
+            && next > limit
+        {
+            return Err(self.failure(Failure::new(
+                "sitemap_read_failure",
+                "Injected second-pass sink failure",
+            )));
         }
         let mut remaining = bytes;
         while !remaining.is_empty() {
@@ -1137,10 +1137,10 @@ fn produce(
         after_core(registry, &stop, completion)
     })()
     .map_err(classify);
-    if let Err(failure) = &result {
-        if let Some(ready) = ready.take() {
-            let _ = ready.send(Err(failure.clone()));
-        }
+    if let Err(failure) = &result
+        && let Some(ready) = ready.take()
+    {
+        let _ = ready.send(Err(failure.clone()));
     }
     result
 }
@@ -1186,10 +1186,10 @@ fn produce_findings(
         after_core(registry, &stop, completion)
     })()
     .map_err(findings::typed_failure);
-    if let Err(failure) = &result {
-        if let Some(ready) = ready.take() {
-            let _ = ready.send(Err(failure.clone()));
-        }
+    if let Err(failure) = &result
+        && let Some(ready) = ready.take()
+    {
+        let _ = ready.send(Err(failure.clone()));
     }
     result
 }

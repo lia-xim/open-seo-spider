@@ -34,7 +34,7 @@ fn raw_sitemap_cli_parser_accepts_only_the_explicit_read_command_arguments() {
     ])
     .unwrap();
     assert!(
-        matches!(parsed.command, Some(crate::Command::SitemapRows { store, request: Some(_), output: Some(_) }) if store == PathBuf::from("crawl.sqlite"))
+        matches!(parsed.command, Some(crate::Command::SitemapRows { store, request: Some(_), output: Some(_) }) if store.as_path() == std::path::Path::new("crawl.sqlite"))
     );
     assert!(
         crate::Cli::try_parse_from([

@@ -1,0 +1,281 @@
+{
+  "kind": "literal_app_clippy_corrections",
+  "baseline_manifest_sha256": "0bd2a7cc5e429e7d46a1d596e5941d62f5a2b2bd9dfb78199e85b7c5d4f9fd2a",
+  "operations": [
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "before": "serde_json::to_vec(&response).unwrap().len() + 1 <= MAX_FILE_WIRE_BYTES",
+      "after": "serde_json::to_vec(&response).unwrap().len() < MAX_FILE_WIRE_BYTES",
+      "count": 1,
+      "offsets": [
+        9318
+      ]
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "before": "assert!(bytes.len() + 1 <= MAX_FILE_WIRE_BYTES);",
+      "after": "assert!(bytes.len() < MAX_FILE_WIRE_BYTES);",
+      "count": 1,
+      "offsets": [
+        14001
+      ]
+    },
+    {
+      "path": "crates/app/src/sitemap_findings_cli.rs",
+      "before": "#[path = \"sitemap_findings_cli_tests.rs\"]\nmod tests;",
+      "after": "#[path = \"sitemap_findings_cli_tests.rs\"]\npub(crate) mod tests;",
+      "count": 1,
+      "offsets": [
+        573
+      ]
+    },
+    {
+      "path": "crates/app/src/sitemap_findings_cli_tests.rs",
+      "before": "#[path = \"sitemap_findings_fixture.rs\"]\nmod fixture;",
+      "after": "#[path = \"sitemap_findings_fixture.rs\"]\npub(crate) mod fixture;",
+      "count": 1,
+      "offsets": [
+        113
+      ]
+    },
+    {
+      "path": "crates/app/src/sitemap_findings_fixture.rs",
+      "before": "pub(super) struct OwnedDirectory(pub PathBuf);",
+      "after": "pub(crate) struct OwnedDirectory(pub PathBuf);",
+      "count": 1,
+      "offsets": [
+        372
+      ]
+    },
+    {
+      "path": "crates/app/src/sitemap_findings_fixture.rs",
+      "before": "pub(super) struct Fixture {",
+      "after": "pub(crate) struct Fixture {",
+      "count": 1,
+      "offsets": [
+        1104
+      ]
+    },
+    {
+      "path": "crates/app/src/mcp/sitemap_findings/tests.rs",
+      "before": "#[path = \"../../sitemap_findings_fixture.rs\"]\nmod fixture;\nuse fixture::Fixture;",
+      "after": "use crate::sitemap_findings_cli::tests::fixture::Fixture;",
+      "count": 1,
+      "offsets": [
+        649
+      ]
+    },
+    {
+      "path": "crates/app/src/server/sitemap_csv_stream.rs",
+      "before": "    if result.is_ok() {\n        if let Some(failure) = forced_failure {\n            result = Err(failure);\n        }\n    }",
+      "after": "    if result.is_ok()\n        && let Some(failure) = forced_failure\n    {\n        result = Err(failure);\n    }",
+      "count": 1,
+      "offsets": [
+        7132
+      ]
+    },
+    {
+      "path": "crates/app/src/server/sitemap_csv_stream.rs",
+      "before": "            return matches!(self.0.hooks.fault, ExportTestFault::ResponseBuildAfterReady);",
+      "after": "            matches!(self.0.hooks.fault, ExportTestFault::ResponseBuildAfterReady)",
+      "count": 1,
+      "offsets": [
+        12686
+      ]
+    },
+    {
+      "path": "crates/app/src/server/sitemap_csv_stream.rs",
+      "before": "            if self.prefix_closed {\n                if let Some(done) = self.joined.take() {",
+      "after": "            if self.prefix_closed\n                && let Some(done) = self.joined.take()\n            {",
+      "count": 1,
+      "offsets": [
+        24496
+      ]
+    },
+    {
+      "path": "crates/app/src/server/sitemap_csv_stream.rs",
+      "before": "                    return Some(Ok(done.tail));\n                }\n            }\n            tokio::select! {",
+      "after": "                    return Some(Ok(done.tail));\n            }\n            tokio::select! {",
+      "count": 1,
+      "offsets": [
+        25300
+      ]
+    },
+    {
+      "path": "crates/app/src/server/sitemap_csv_stream.rs",
+      "before": "        if let ExportTestFault::SecondPassAfterBytes(limit) = self.fault {\n            if next > limit {\n                return Err(self.failure(Failure::new(\n                    \"sitemap_read_failure\",\n                    \"Injected second-pass sink failure\",\n                )));\n            }\n        }",
+      "after": "        if let ExportTestFault::SecondPassAfterBytes(limit) = self.fault\n            && next > limit\n        {\n            return Err(self.failure(Failure::new(\n                \"sitemap_read_failure\",\n                \"Injected second-pass sink failure\",\n            )));\n        }",
+      "count": 1,
+      "offsets": [
+        31116
+      ]
+    },
+    {
+      "path": "crates/app/src/server/sitemap_csv_stream.rs",
+      "before": "    if let Err(failure) = &result {\n        if let Some(ready) = ready.take() {\n            let _ = ready.send(Err(failure.clone()));\n        }\n    }",
+      "after": "    if let Err(failure) = &result\n        && let Some(ready) = ready.take()\n    {\n        let _ = ready.send(Err(failure.clone()));\n    }",
+      "count": 2,
+      "offsets": [
+        38855,
+        40407
+      ]
+    },
+    {
+      "path": "crates/app/src/server/sitemap_csv_stream_lifecycle_tests.rs",
+      "before": "            if result.is_pending() && registry.0.tasks.lock().unwrap().closed {\n                if let Some(waiting) = waiting.take() {\n                    let _ = waiting.send(());\n                }\n            }",
+      "after": "            // End the condition's MutexGuard lifetime before taking/sending\n            // the latch, as in the original nested-if condition.\n            let pending_and_closed =\n                result.is_pending() && registry.0.tasks.lock().unwrap().closed;\n            if pending_and_closed\n                && let Some(waiting) = waiting.take()\n            {\n                let _ = waiting.send(());\n            }",
+      "count": 1,
+      "offsets": [
+        9153
+      ]
+    },
+    {
+      "path": "crates/app/src/server/sitemap_csv_stream_lifecycle_tests.rs",
+      "before": "            if result.is_pending() {\n                if let Some(waiting) = waiting.take() {\n                    let _ = waiting.send(());\n                }\n            }",
+      "after": "            if result.is_pending()\n                && let Some(waiting) = waiting.take()\n            {\n                let _ = waiting.send(());\n            }",
+      "count": 1,
+      "offsets": [
+        11599
+      ]
+    },
+    {
+      "path": "crates/app/src/server/sitemaps_streaming_fixture.rs",
+      "before": "entries >= 4 && entries % 2 == 0",
+      "after": "entries >= 4 && entries.is_multiple_of(2)",
+      "count": 1,
+      "offsets": [
+        564
+      ]
+    },
+    {
+      "path": "crates/app/src/sitemap_findings.rs",
+      "before": "        if let Self::Job { config_sha256, .. } = self {\n            if !is_hash(config_sha256) {\n                return Err(invalid_query(\"Invalid App config SHA\"));\n            }\n        }",
+      "after": "        if let Self::Job { config_sha256, .. } = self\n            && !is_hash(config_sha256)\n        {\n            return Err(invalid_query(\"Invalid App config SHA\"));\n        }",
+      "count": 1,
+      "offsets": [
+        1558
+      ]
+    },
+    {
+      "path": "crates/app/src/sitemap_findings.rs",
+      "before": "        if let Ok(io) = error.downcast::<io::Error>() {\n            if let Some(inner) = io.into_inner() {",
+      "after": "        if let Ok(io) = error.downcast::<io::Error>()\n            && let Some(inner) = io.into_inner()\n        {",
+      "count": 1,
+      "offsets": [
+        6501
+      ]
+    },
+    {
+      "path": "crates/app/src/sitemap_findings.rs",
+      "before": "                if let Ok(io) = inner.downcast::<io::Error>() {\n                    return typed_failure_inner((*io).into(), message, depth + 1);\n                }\n            }\n        }\n        return Failure::new(\"sitemap_findings_read_failure\", message);",
+      "after": "                if let Ok(io) = inner.downcast::<io::Error>() {\n                    return typed_failure_inner((*io).into(), message, depth + 1);\n                }\n        }\n        return Failure::new(\"sitemap_findings_read_failure\", message);",
+      "count": 1,
+      "offsets": [
+        6892
+      ]
+    },
+    {
+      "path": "crates/app/src/sitemap_findings.rs",
+      "before": "    } = target\n    {\n        if context.basis.generation != ((*generation > 0).then_some(*generation))\n            || context.basis.crawl_config_sha256.as_deref() != Some(config_sha256.as_str())\n        {",
+      "after": "    } = target\n        && (context.basis.generation != ((*generation > 0).then_some(*generation))\n            || context.basis.crawl_config_sha256.as_deref() != Some(config_sha256.as_str()))\n    {",
+      "count": 1,
+      "offsets": [
+        18766
+      ]
+    },
+    {
+      "path": "crates/app/src/sitemap_findings.rs",
+      "before": "                \"Actual SQL generation/config differs from App job\",\n            ));\n        }\n    }\n    Ok(FindingsExportSnapshot {",
+      "after": "                \"Actual SQL generation/config differs from App job\",\n            ));\n    }\n    Ok(FindingsExportSnapshot {",
+      "count": 1,
+      "offsets": [
+        19058
+      ]
+    },
+    {
+      "path": "crates/app/src/sitemap_membership.rs",
+      "before": "Materialized(SitemapCatalog),",
+      "after": "Materialized(Box<SitemapCatalog>),",
+      "count": 1,
+      "offsets": [
+        24848
+      ]
+    },
+    {
+      "path": "crates/app/src/sitemap_membership.rs",
+      "before": "InventoryRows::Materialized(catalog),",
+      "after": "InventoryRows::Materialized(Box::new(catalog)),",
+      "count": 1,
+      "offsets": [
+        20378
+      ]
+    },
+    {
+      "path": "crates/app/src/sitemap_raw_cli_tests.rs",
+      "before": "store == PathBuf::from(\"crawl.sqlite\")",
+      "after": "store.as_path() == std::path::Path::new(\"crawl.sqlite\")",
+      "count": 1,
+      "offsets": [
+        1121
+      ]
+    }
+  ],
+  "inverse_exact": true,
+  "files": [
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "before_sha256": "f1b6dc0a9ecdd95c26700f4ecad836924355b8de8d030e3b2bd610ba5f68ae32",
+      "unformatted_after_sha256": "e4716d605b2f0bf1dc9ddd7d5598e0411749cd95cc154d6f123162ca3967ad5a"
+    },
+    {
+      "path": "crates/app/src/sitemap_findings_cli.rs",
+      "before_sha256": "c4bcb200770327197ac0ab33dc8a7b35e8942dcddc1511662be36526494cf797",
+      "unformatted_after_sha256": "608eb50d9357967dd89c36434c6e4a61330989c15fc7675629d1a4030e49fa3b"
+    },
+    {
+      "path": "crates/app/src/sitemap_findings_cli_tests.rs",
+      "before_sha256": "fc181427fefec665c3b5b784cde7f221ccd8321d112054fcc026df60dbc72f12",
+      "unformatted_after_sha256": "60a608de6211a0157016d08a85833d4d4053a96eab7c4e86b45b9bd704b24f93"
+    },
+    {
+      "path": "crates/app/src/sitemap_findings_fixture.rs",
+      "before_sha256": "9ccc63a0fdbe9f00ae62e091785b399898de5ab1b0f3d6281c7a1ebc183a5949",
+      "unformatted_after_sha256": "cf2b4d15313116f0cd873c1172b1baba9499b3d8db7fe00342c230e6dcc2e662"
+    },
+    {
+      "path": "crates/app/src/mcp/sitemap_findings/tests.rs",
+      "before_sha256": "77902f8602c6ec21a8a988262a320f55478af8c55ef4bd039f9f1d62fa9ce74b",
+      "unformatted_after_sha256": "116581325c0e1362d7fb724cd01f67ca3f560c5f2febddd1976463e89bf64546"
+    },
+    {
+      "path": "crates/app/src/server/sitemap_csv_stream.rs",
+      "before_sha256": "32a0d81b02b166373cf58122758fb879a4e7095d2816216961ca10cbb3139f7b",
+      "unformatted_after_sha256": "b8688bd0fc8479b3957234bcb4d6f37bd2158653bf649b9a5c6fb5ee046d6cbd"
+    },
+    {
+      "path": "crates/app/src/server/sitemap_csv_stream_lifecycle_tests.rs",
+      "before_sha256": "bf59b071d560a8b57e742a31c4af78dd454894af9fc201b10ac2a29118e5474b",
+      "unformatted_after_sha256": "e50b8e23576b73a07bf941ad47e57ef0063c6da80aeb32dc867e75cf3e46f414"
+    },
+    {
+      "path": "crates/app/src/server/sitemaps_streaming_fixture.rs",
+      "before_sha256": "562ab25a84a439d5f5fef87c4711390e106b27f321fa156f04cfae7f4760909d",
+      "unformatted_after_sha256": "67d022c0cbf42b590df93d71c8a0852b5d3756d8798c44d53b193cbdcf28b0ce"
+    },
+    {
+      "path": "crates/app/src/sitemap_findings.rs",
+      "before_sha256": "2ac269bf6e6aa6cda002afafc06e1f80aa06940c282985c1cfe9dd5234ac4e0d",
+      "unformatted_after_sha256": "59de9d245078ca0a3f9bbcd884e0d9e74cf8dbb618d57ebe90458c982e8d4902"
+    },
+    {
+      "path": "crates/app/src/sitemap_membership.rs",
+      "before_sha256": "19cf2875057d9023781dcd29c5d517acc79557fd942e05d7fc98061230da1b40",
+      "unformatted_after_sha256": "e0f9d057ece6e6cdb0882eb4621f51f6636691d9d1a3318d8e3d136aaf79b849"
+    },
+    {
+      "path": "crates/app/src/sitemap_raw_cli_tests.rs",
+      "before_sha256": "443fd3c62c3b9ebb839f7cd93298a4d0d72bcad3f96d5808c68363a72069016d",
+      "unformatted_after_sha256": "f6e80b60b9ab0ce6ed5c65433d36b8d698e7b4ac786b05ca6358b27efde508b6"
+    }
+  ]
+}

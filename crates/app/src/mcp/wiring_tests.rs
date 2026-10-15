@@ -285,7 +285,7 @@ async fn file_tools_all_five_execute_locally_with_no_api_calls() {
         assert_eq!(response["result"]["isError"], false, "{response}");
         assert!(response["result"]["structuredContent"].is_object());
         assert_eq!(response["result"]["content"].as_array().unwrap().len(), 1);
-        assert!(serde_json::to_vec(&response).unwrap().len() + 1 <= MAX_FILE_WIRE_BYTES);
+        assert!(serde_json::to_vec(&response).unwrap().len() < MAX_FILE_WIRE_BYTES);
     }
 }
 
@@ -415,7 +415,7 @@ async fn file_tools_actual_text_response_is_single_copy_and_whole_wire_bounded()
     bridge.shutdown_file_tools().await.unwrap();
     let bytes = serde_json::to_vec(&response).unwrap();
     assert_eq!(response["result"]["isError"], false, "{response}");
-    assert!(bytes.len() + 1 <= MAX_FILE_WIRE_BYTES);
+    assert!(bytes.len() < MAX_FILE_WIRE_BYTES);
     assert!(
         response["result"]["content"][0]["text"]
             .as_str()

@@ -603,15 +603,15 @@ fn validate_decode(p: &SitemapSourceMeasurementPayload) -> Result<()> {
         require(d.decoded_prefix_sha256.is_none(), F::InvalidDecode)?;
     }
     // Identity cannot produce more XML bytes than actually delivered entity bytes.
-    if d.encoding == Some(SitemapEntityEncoding::Identity) {
-        if let (Some(xml), Some(entity)) = (
+    if d.encoding == Some(SitemapEntityEncoding::Identity)
+        && let (Some(xml), Some(entity)) = (
             d.decoded_xml_bytes.value,
             p.transport.post_http_received_bytes.value,
-        ) {
-            require(xml <= entity, F::InvalidDecode)?;
-            if d.integrity == I::Complete {
-                require(xml == entity, F::InvalidDecode)?;
-            }
+        )
+    {
+        require(xml <= entity, F::InvalidDecode)?;
+        if d.integrity == I::Complete {
+            require(xml == entity, F::InvalidDecode)?;
         }
     }
     Ok(())

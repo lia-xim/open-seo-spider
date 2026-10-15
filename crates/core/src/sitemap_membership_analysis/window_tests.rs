@@ -382,9 +382,7 @@ async fn compact_source_stream_rejects_duplicate_unknown_type_and_whole_envelope
     ] {
         let bad = format!("{},\"{key}\":0}}", original.strip_suffix('}').unwrap());
         rehash_report(&path, &bad);
-        let error = compact(&path, &read, &request())
-            .err()
-            .expect("overbudget escaped report key");
+        let error = compact(&path, &read, &request()).expect_err("overbudget escaped report key");
         assert!(
             format!("{error:#}").contains("Saved report outer key encoded byte budget exceeded"),
             "{error:#}"

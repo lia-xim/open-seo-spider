@@ -37,10 +37,10 @@ pub(crate) enum AccessTarget {
 }
 impl AccessTarget {
     fn validate(&self) -> Result<()> {
-        if let Self::Job { config_sha256, .. } = self {
-            if !is_hash(config_sha256) {
-                return Err(invalid_query("Invalid App config SHA"));
-            }
+        if let Self::Job { config_sha256, .. } = self
+            && !is_hash(config_sha256)
+        {
+            return Err(invalid_query("Invalid App config SHA"));
         }
         Ok(())
     }
@@ -165,17 +165,17 @@ fn typed_failure_inner(error: anyhow::Error, message: &str, depth: usize) -> Fai
         };
     }
     if error.is::<io::Error>() {
-        if let Ok(io) = error.downcast::<io::Error>() {
-            if let Some(inner) = io.into_inner() {
-                let inner = match inner.downcast::<serde_json::Error>() {
-                    Ok(json) => {
-                        return typed_failure_inner((*json).into(), message, depth + 1);
-                    }
-                    Err(inner) => inner,
-                };
-                if let Ok(io) = inner.downcast::<io::Error>() {
-                    return typed_failure_inner((*io).into(), message, depth + 1);
+        if let Ok(io) = error.downcast::<io::Error>()
+            && let Some(inner) = io.into_inner()
+        {
+            let inner = match inner.downcast::<serde_json::Error>() {
+                Ok(json) => {
+                    return typed_failure_inner((*json).into(), message, depth + 1);
                 }
+                Err(inner) => inner,
+            };
+            if let Ok(io) = inner.downcast::<io::Error>() {
+                return typed_failure_inner((*io).into(), message, depth + 1);
             }
         }
         return Failure::new("sitemap_findings_read_failure", message);
@@ -533,15 +533,13 @@ fn bind_context(
         config_sha256,
         ..
     } = target
+        && (context.basis.generation != ((*generation > 0).then_some(*generation))
+            || context.basis.crawl_config_sha256.as_deref() != Some(config_sha256.as_str()))
     {
-        if context.basis.generation != ((*generation > 0).then_some(*generation))
-            || context.basis.crawl_config_sha256.as_deref() != Some(config_sha256.as_str())
-        {
-            return Err(Failure::new(
-                "sitemap_findings_job_snapshot_conflict",
-                "Actual SQL generation/config differs from App job",
-            ));
-        }
+        return Err(Failure::new(
+            "sitemap_findings_job_snapshot_conflict",
+            "Actual SQL generation/config differs from App job",
+        ));
     }
     Ok(FindingsExportSnapshot {
         adapter_engine: ENGINE.into(),

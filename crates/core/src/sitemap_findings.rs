@@ -239,7 +239,7 @@ pub enum SitemapSourceFindingEvidence {
     Measured {
         record: Box<SitemapSourceStoredMeasurement>,
         protocol: SitemapSourceProtocolAssessment,
-        association: Option<SitemapSourceCommitAssociation>,
+        association: Option<Box<SitemapSourceCommitAssociation>>,
         committed_document: Option<Box<SitemapSourceDocument>>,
     },
     LegacyDocument {

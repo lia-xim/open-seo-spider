@@ -1616,14 +1616,14 @@ impl Crawler {
                 let store = self.store.as_ref().context("Capture A requires Store")?;
                 let generation = generation.context("Capture A requires stored generation")?;
                 match &capture.measurement {
-                    Ok(measurement) => {
-                        SourceCapturePersistence::Receipt(store.record_sitemap_source_capture(
+                    Ok(measurement) => SourceCapturePersistence::Receipt(Box::new(
+                        store.record_sitemap_source_capture(
                             &entry,
                             document,
                             measurement,
                             generation,
-                        )?)
-                    }
+                        )?,
+                    )),
                     Err(failure) => {
                         let reason =
                             capture_unavailable_reason(failure, document).with_context(|| {
@@ -1631,14 +1631,14 @@ impl Crawler {
                             })?;
                         match &capture_basis {
                             sitemap_capture::RunBasis::Verified { config_sha256, .. } => {
-                                SourceCapturePersistence::Receipt(
+                                SourceCapturePersistence::Receipt(Box::new(
                                     store.record_unavailable_sitemap_source_capture(
                                         &entry,
                                         document,
                                         config_sha256,
                                         generation,
                                     )?,
-                                )
+                                ))
                             }
                             sitemap_capture::RunBasis::Unavailable(
                                 sitemap_capture::CaptureFailure::NoDurableContext
@@ -2503,12 +2503,12 @@ impl Crawler {
 enum SourceCapturePersistence {
     NotApplicable,
     NoMeasurement(SourceCaptureUnavailable),
-    Receipt(crate::sitemap_source_store::SourceMeasurementReceipt),
+    Receipt(Box<crate::sitemap_source_store::SourceMeasurementReceipt>),
 }
 impl SourceCapturePersistence {
     fn receipt(&self) -> Option<&crate::sitemap_source_store::SourceMeasurementReceipt> {
         match self {
-            Self::Receipt(receipt) => Some(receipt),
+            Self::Receipt(receipt) => Some(receipt.as_ref()),
             _ => None,
         }
     }
@@ -2883,9 +2883,9 @@ impl SitemapProtocolObservation {
             Ok(entity) => {
                 // Same successful decoded Vec; independent of legacy retained
                 // parser outcome. Count failures never affect legacy failure/ID.
-                observed.source_capture.count = sitemap_capture::CountCapture::Observed(
+                observed.source_capture.count = sitemap_capture::CountCapture::Observed(Box::new(
                     crate::count_sitemap_xml(&entity.xml, &observed.source_capture.count_limits()),
-                );
+                ));
                 let context = crate::SitemapParserContext {
                     requested_document_url: Some(page.url.clone()),
                     final_document_url: Some(page.final_url.clone()),
