@@ -1,0 +1,75 @@
+{
+  "kind": "json",
+  "label": "json-02-quote-probe",
+  "target": null,
+  "expected": {
+    "length": 7465439,
+    "sha256": "5b1b980df60c2de98c982e8b47fd7491d5611128ed5f5302ff85bd9f8ac38293",
+    "core_page_bytes": 7464222,
+    "core_page_sha256": "dc3eae727777ba90a21d98cfad02858a0926e64f87ed660540956e7a71598a36",
+    "wrapper_bytes": 1217,
+    "rows": 160,
+    "next_cursor": null,
+    "export_token_bytes": 891,
+    "complete_envelope_including_tokens": true,
+    "oracle": "Whole actual App serialization shape plus actual native context/token/rows, all stored candidates exhausted, streamed independently; exact native200 is required to validate construction"
+  },
+  "physical": {
+    "status": 200,
+    "headers": {
+      "content-length": "7465439",
+      "content-type": "application/json",
+      "date": "Thu, 15 Oct 2026 16:47:23 GMT"
+    },
+    "length": 7465439,
+    "sha256": "5b1b980df60c2de98c982e8b47fd7491d5611128ed5f5302ff85bd9f8ac38293",
+    "normal_eof": true
+  },
+  "mutation": {
+    "qualification": "SYNTHETIC_OFFLINE_WARNING_FACTS_NOT_WEBSITE_OBSERVATIONS",
+    "parameters": {
+      "base_quotes": 0,
+      "base_ascii": 45000,
+      "last_quotes": 1,
+      "last_ascii": 0
+    },
+    "original_report_sha256": "47a16527ca1c8df8093fc779ad5f26f5390d92e5a0351e43f247a3f626e824ea",
+    "report_sha256": "5dd21ecb7102b698afc120020943a0b8a6af22843b01007279f0226ee8ff5b8d",
+    "report_bytes": 9931157,
+    "original_checkpoint_sha256": "5924ebf9a0223bc39198ad915b0ce24c6c70a28c58bb0e385bfba5ce32d10416",
+    "checkpoint_sha256": "f2347bf4347a976c9f7ad346e844467e2ba21a93e9272bbe2a4b24b7724851b2",
+    "changed_sql_rows": [
+      "metadata.report",
+      "metadata.checkpoint"
+    ],
+    "changed_warning_values": 160,
+    "changed_warning_ordinals": {
+      "first": 0,
+      "last": 159,
+      "count": 160
+    },
+    "warning_fragment_inverse_exact": true,
+    "checkpoint_fragment_inverse_exact": true,
+    "unchanged_sql_fingerprint": {
+      "rows": 652,
+      "sha256": "4aadacac353793605c678783ec16bf5ae73a27cd69795df5e5769c743a923cd3",
+      "exclusions": [
+        "metadata.report",
+        "metadata.checkpoint"
+      ]
+    },
+    "warning_field_bytes_max": 45001,
+    "raw_source_config_generation_retained": true
+  },
+  "native_rows": {
+    "count": 160,
+    "requests": 16,
+    "bytes": 7460377,
+    "sha256": "7c06522f49c9602e1a975b944b6cb1ddc83ab0777ce75179296c945b2093ab2a"
+  },
+  "native_context_sha256": "5feff23fd3a36262995c70f547156bccbfddbbf3a1623ea36d3ca1c0ed9b2d96",
+  "zero_website_requests": true,
+  "saved_bytes_unchanged_in_primed_read_interval": true,
+  "public_baseline_id": "63107257-4abc-49a8-b917-a8ce74500ad7",
+  "controlled_offline_test_facts": true
+}

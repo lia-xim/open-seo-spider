@@ -6077,6 +6077,24 @@
       "recorded_at": "2026-10-15T16:40:52.452Z",
       "scope": "Actual Source8 optimized candidate: native3, file SDK175, migration8, EOF2 and BODY13 PASS. Browser and mock layout fail at320; junction harness aborts on stale source count before function. Physical running and Large deferred. Header correction only source-reviewed/browser CSS preview, no installation or vendor parity.",
       "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "source8-physical-pass-20261015",
+      "artifact": "docs/verification/source8-physical-pass-20261015/index.json",
+      "artifact_sha256": "fb4d12ceaae243fe82ccc86ecf30cdbbb03ff0315d9100d519c235942b2ea229",
+      "result": "PASS_COMBINED_V8_NATIVE_CONTROLLED_FINDING_CSV64M_APPJSON8M_EXACT_PLUS1",
+      "recorded_at": "2026-10-15T16:53:34.400Z",
+      "scope": "Actual12 physical boundary cases: fullCSV64MiB and AppJSON8MiB exact accepted with normalEOF; plus-one refused. All14 owned App children actually closed and fixture drained. Forced owned SIGTERM cleanup is not general graceful shutdown. Separate Source9 static header preview at7 widths, not compiled product acceptance.",
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "source9-preliminary-failed-20261015",
+      "artifact": "docs/verification/source9-preliminary-failed-20261015/index.json",
+      "artifact_sha256": "634f36b5eba59d2d096ef75b6fb1b5173fef218bc7ac480ff5e5d08f89f9ae92",
+      "result": "FAIL_PRELIMINARY_CLIPPY",
+      "recorded_at": "2026-10-15T16:55:54.867Z",
+      "scope": "Actual358-input Source9 all-target Clippy stops on one undeclared App-test csv crate reference. Exit101,0 executed tests, final sources unchanged; first failure and all30 actual compiled changed/new payloads retained. Not promoted, built or installed.",
+      "reference_parity": "NOT_PROVEN"
     }
   ],
   "reference_workflows": [
@@ -6339,22 +6357,25 @@
     {
       "id": "combined-source-v9-20261015",
       "priority": 1,
-      "status": "SOURCE_PROPOSALS_REVIEW_AND_COMPOSITION_PENDING_NOT_COMPILED",
+      "status": "ACTUAL_PRELIMINARY_COMPILE_FAIL_TEST_IMPORT_REPAIR_PENDING",
       "title_de": "Defekte Linkquellen, Ressourcen und Verzeichnisansicht ausbauen",
-      "summary_de": "Nächster gemeinsamer Stand: getrennte Berichte für gespeicherte Seitenlinks und verifizierte Resource-Ledger-Fundstellen, API/UI/CLI/CSV sowie eine Verzeichnisansicht. Der enge Kopfzeilenfix verhindert den tatsächlichen320Pixel-Überlauf. Quellenentwürfe sind noch keine ausgeführten Funktionen.",
+      "summary_de": "Link-/Ressourcenquellen, Verzeichnisansicht und Headerumbruch sind auf358 Quellen mit37 neuen Testfunktionen zusammengeführt und unabhängig quellengeprüft. Tatsächliches Format besteht; der erste All-Targets-Clippy-Lauf endet nach32,9Sekunden mitExit101 an einem nicht verfügbaren CSV-Parser in einem neuen App-Test. Noch kein Test ausgeführt und keine Source9-Produktpromotion. Eine enge Testkorrektur folgt.",
       "completed_acceptance_de": [
-        "Kopfzeilenfehler im tatsächlichen Source8-Browser gefunden; CSS-Umbruch unabhängig geprüft und als Browser-CSS-Vorschau bei1440/320 gemessen."
+        "Kopfzeilenfehler im tatsächlichen Source8-Browser gefunden; CSS-Umbruch unabhängig geprüft und als Browser-CSS-Vorschau bei1440/320 gemessen.",
+        "ResourceWorkflow-Quellenreviewbefund und zwei Verzeichnis-Sonderfälle vor Integration geschlossen; vollständige30-Pfade-Komposition unabhängig quellengeprüft.",
+        "Header-CSS mit vollständig komponierten statischen Assets bei320/560/561/600/768/850/1440 im Browser ohneÜberlauf geprüft; ausdrücklich kein kompilierter Produktnachweis."
       ],
       "pending_acceptance_de": [
-        "Resource-Workflow-Reviewbefund unused_mut in frischem Vorschlag schließen; vollständige Quellenkomposition auf tatsächlichem58ab-Parent unabhängig prüfen.",
-        "Verzeichnis-Core/API/UI/Export mit Grenzfällen fertigstellen und prüfen.",
-        "Gemeinsamen tatsächlichen Compiler-/Testlauf, optimierten Build und native Funktionsprüfungen ausführen; keine ältere Abnahme auf neue Quellen übertragen."
+        "CSV-Testimport eng reparieren, alle37 Tests/Assertions erhalten, gemeinsamen Compiler- und anschließenden vollständigen Lauf ausführen.",
+        "Optimierten Kandidaten bauen und echte API-/CLI-/Browser-/Exportprüfungen einschließlich Headerlayout und neuem Verzeichnis-/Ressourcenworkflow durchführen.",
+        "Sichere Installation erst nach erforderlichen Prüfungen; vollständige Herstellerparität bleibt offen."
       ],
       "documentation": [
+        "docs/verification/source9-preliminary-failed-20261015/index.json",
         "docs/verification/source8-native-checkpoint-1-20261015/index.json"
       ],
       "gates": {
-        "implementation": "SOURCE_ONLY_NOT_COMPILED",
+        "implementation": "COMPOSED_FORMATTED_PRELIMINARY_CLIPPY_FAIL_101_ZERO_EXECUTED_TESTS",
         "runtime": "NOT_RUN",
         "installation": "NOT_RUN",
         "manufacturer_parity": "NOT_PROVEN"
@@ -6364,31 +6385,33 @@
     {
       "id": "combined-source-v8-20261015",
       "priority": 1,
-      "status": "SUITE_BUILD_FIVE_NATIVE_SCOPES_PASS_UI_LAYOUT_FAIL_NOT_INSTALLABLE",
+      "status": "SUITE_BUILD_SIX_NATIVE_SCOPES_PASS_UI_LAYOUT_FAIL_NOT_INSTALLABLE",
       "title_de": "Migrationsprüfung, Schreibvertrag und responsive Originaldateien prüfen",
-      "summary_de": "Source8 besteht die vollständige1322-Test-Suite und den optimierten Build. Fünf native Bereiche bestehen: API/CLI/SDK-Grundablauf,175 Dateioperationen, acht Migrationsgruppen, zwei EOF-Fälle und13 Originaldatei-Gruppen mit echten64MiB. Der neue Migrationslink verbreitert jedoch die Kopfzeile bei320Pixeln; Browser und Mock scheitern daran. Der Junction-Harness bricht vor der Funktion an einer veralteten Quellenanzahl ab. Source8 wird nicht installiert. Ein eng geprüfter Headerumbruch und neue Link-/Ressourcenberichte werden als Source9 vorbereitet.",
+      "summary_de": "Source8 besteht die vollständige1322-Test-Suite und den optimierten Build. Sechs native Bereiche bestehen: API/CLI/SDK-Grundablauf,175 Dateioperationen, acht Migrationsgruppen, zwei EOF-Fälle, zwölf physische CSV-/JSON-Grenzfälle und13 Originaldatei-Gruppen mit echten64MiB. Der neue Migrationslink verbreitert jedoch die Kopfzeile bei320Pixeln; Browser und Mock scheitern daran. Der Junction-Harness bricht vor der Funktion an einer veralteten Quellenanzahl ab. Source8 wird nicht installiert. Ein eng geprüfter Headerumbruch und neue Link-/Ressourcenberichte werden als Source9 vorbereitet.",
       "completed_acceptance_de": [
         "335 aktuelle Quellen privat committed, gepusht und eingefroren; drei Produktanteile und alle Formatänderungen unabhängig geprüft.",
         "25 neue Testfunktionen sowie alle bisherigen 1297 Tests im tatsächlichen gemeinsamen Lauf bestanden; alle drei Cargo-Prozesse erfolgreich beendet, eigene Testserver und Renderer geschlossen und Quellen abschließend identisch.",
         "Tatsächlicher optimierter Build mit41.269.248Bytes, unveränderten335Quellen und final erneut bestätigter vollständiger Suite bestanden.",
         "Migrationsworkflow: echte Redirect-Crawls,207 CSV-Zeilen, vollständige API-/CLI-/Browser-Exporte, gehaltene Datei-/Antwortregressionen,1440/320Pixel, fünf natürliche Kindprozessabschlüsse und Wiederöffnung mit null zusätzlichen Websiteabrufen bestanden.",
-        "Originaldateien: alle13Gruppen einschließlich vollständiger64MiB-EOF-/Hashprüfungen, beschädigter/fehlender Dateien, Quoten, Clientabbruch und kalter Wiederöffnung bestanden. Reparierter Testserver hat elf abgeschlossene Transfers, keine Fehler und einen erfolgreichen Abschluss."
+        "Originaldateien: alle13Gruppen einschließlich vollständiger64MiB-EOF-/Hashprüfungen, beschädigter/fehlender Dateien, Quoten, Clientabbruch und kalter Wiederöffnung bestanden. Reparierter Testserver hat elf abgeschlossene Transfers, keine Fehler und einen erfolgreichen Abschluss.",
+        "Zwölf physische CSV-/JSON-Grenzfälle tatsächlich bestanden:64MiB beziehungsweise8MiB vollständig mit normalem EOF, je einByte darüber abgewiesen; alle14 eigenen App-Kindprozesse geschlossen und Testserver beendet."
       ],
       "pending_acceptance_de": [
         "Kopfzeile umbrechen und Browser27 sowie Mock13 am nächsten optimierten Kandidaten erneut vollständig prüfen. Die CSS-Vorschau passt tatsächlich bei1440/320, ist aber kein Produkt-Browser-PASS.",
         "Junction-Harness an die tatsächliche Quellenanzahl binden; der fehlgeschlagene Vorcheck hat keine Junctionfunktion ausgeführt.",
-        "Physische Grenzfälle abschließen; vollständigen50.000-Einträge-Lauf und alle übrigen Abnahmen auf dem endgültigen korrigierten Kandidaten ausführen.",
+        "Vollständigen50.000-Einträge-Lauf und alle erforderlichen nativen Bereiche am endgültigen korrigierten Kandidaten ausführen.",
         "Getrennte Seitenlink-/Ressourcenquellen-Berichte und Verzeichnisansicht in Source9 integrieren, vollständig kompilieren und praktisch prüfen.",
         "Sichere Installation unter Erhalt aller Nutzerdaten erst nach allen erforderlichen Abnahmen. Übrige Fähigkeiten, Filter und Abläufe weiter abarbeiten."
       ],
       "documentation": [
+        "docs/verification/source8-physical-pass-20261015/index.json",
         "docs/verification/source8-native-checkpoint-1-20261015/index.json",
         "docs/verification/combined-workspace-v8-20261015/index.json"
       ],
       "gates": {
         "full_workspace": "PASS_COMBINED_WORKSPACE_V8_REAL_RENDERER_FMT_CLIPPY",
         "optimized_build": "PASS_COMBINED_OPTIMIZED_BUILD_V8",
-        "native": "FIVE_SCOPES_PASS_BROWSER_AND_MOCK_LAYOUT_FAIL_JUNCTION_PRECHECK_NOT_RUN_PHYSICAL_RUNNING_LARGE_DEFERRED",
+        "native": "SIX_SCOPES_PASS_BROWSER_MOCK_LAYOUT_FAIL_JUNCTION_PRECHECK_NOT_RUN_LARGE_DEFERRED",
         "installation": "NOT_INSTALLED_ACTUAL_HEADER_LAYOUT_DEFECT",
         "manufacturer_parity": "NOT_PROVEN"
       },
@@ -6531,9 +6554,10 @@
         "Produktionscode und tatsächliche vier privaten Exportaufrufer gegen Rusts Write-Vertrag unabhängig gelesen; Bewertung bleibt vom belegten Interrupted-Endlosfehler getrennt."
       ],
       "pending_acceptance_de": [
-        "Physische CSV-/JSON-Grenzfälle am aktuellen Kandidaten abschließen und bei künftigen Produktänderungen vollständige Exportregression erhalten."
+        "Künftige Produktänderungen mit vollständiger Exportregression am jeweiligen Kandidaten prüfen."
       ],
       "documentation": [
+        "docs/verification/source8-physical-pass-20261015/index.json",
         "docs/verification/source8-native-checkpoint-1-20261015/index.json",
         "docs/verification/combined-workspace-v8-20261015/index.json",
         "docs/verification/source6-r2-reviewed-repair-20261015/partial-write-contract-assessment.json",
@@ -6543,7 +6567,7 @@
         "source_assessment": "CONFIRMED_TRAIT_CONTRACT_GAP_CURRENT_SUCCESSFUL_CORRUPTION_NOT_PROVEN",
         "implementation": "INTEGRATED_SOURCE8",
         "rust_tests": "PASS_ACTUAL_THREE_NEW_REGRESSIONS_AND1322_WORKSPACE",
-        "native": "BODY13_AND_EOF2_ACTUAL_PASS_PHYSICAL_RUNNING"
+        "native": "BODY13_EOF2_PHYSICAL12_ACTUAL_PASS"
       },
       "reference_parity": "NOT_PROVEN"
     },

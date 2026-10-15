@@ -1,0 +1,16 @@
+    Checking open-seo-spider-core v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\combined-source-v9-draft-v4\source\crates\core)
+    Checking open-seo-spider v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\combined-source-v9-draft-v4\source\crates\app)
+error[E0433]: cannot find module or crate `csv` in this scope
+   --> crates\app\src\server\directory_tree_tests.rs:203:16
+    |
+203 |     let rows = csv::Reader::from_reader(bytes.as_ref())
+    |                ^^^ function `csv` is not a crate or module
+    |
+note: type alias `crate::mcp::stdio_tests::Reader` exists but is inaccessible
+   --> crates\app\src\mcp\stdio_tests.rs:10:1
+    |
+ 10 | type Reader = BufReader<ReadHalf<DuplexStream>>;
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not accessible
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `open-seo-spider` (bin "open-seo-spider" test) due to 1 previous error
