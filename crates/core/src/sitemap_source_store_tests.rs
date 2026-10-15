@@ -2,7 +2,16 @@
 //! Real temp SQLite + actual CrawlStore bootstrap, decoder, XML scanner/parser,
 //! legacy ledger append/validation. No substitute persistence implementation.
 use super::*;
-use crate::*;
+use crate::{
+    CrawlConfig, CrawlReport, CrawlStore, PageRecord, RecrawlSourceKind,
+    SITEMAP_SOURCE_HTTP_PROFILE, SITEMAP_SOURCE_MEASUREMENT_ENGINE, SelectedRecrawlParent,
+    SitemapCountLimits, SitemapDiscoveryBatch, SitemapLedgerLimits, SitemapMeasuredValue,
+    SitemapMembershipRetention, SitemapParserContext, SitemapParserLimits,
+    SitemapSourceCaptureBounds, SitemapSourceDecodeIntegrity, SitemapSourceDecodeMeasurement,
+    SitemapSourceEntryMeasurements, SitemapSourceMeasurementBinding,
+    SitemapSourceMeasurementPayload, SitemapSourceScanMeasurement, SitemapSourceScanStatus,
+    SitemapSourceTransportMeasurement, SitemapTransportFacts,
+};
 use flate2::{Compression, GzBuilder};
 
 const TASK: &str = "https://source-store.example/sitemap.xml";

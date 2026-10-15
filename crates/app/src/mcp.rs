@@ -2,9 +2,9 @@
 use anyhow::{Context, bail};
 use reqwest::{Client, Url};
 use serde_json::{Value, json};
-#[cfg(test)]
-use tokio::io::{AsyncBufReadExt, AsyncReadExt, AsyncWriteExt, BufReader};
 use tokio::io::{AsyncRead, AsyncWrite};
+#[cfg(test)]
+use tokio::io::{AsyncReadExt, AsyncWriteExt, BufReader};
 pub const PROTOCOLS: &[&str] = &["2025-06-18", "2025-11-25"];
 mod generation;
 mod saved_comparison;

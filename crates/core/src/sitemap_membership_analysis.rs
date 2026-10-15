@@ -457,7 +457,7 @@ pub(crate) fn project(
             SitemapLedgerRow::Location(loc)
                 if loc.observed.role == SitemapLocationRole::PageLocation =>
             {
-                Some(loc.as_ref())
+                Some(loc)
             }
             _ => None,
         })

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "immutable": true,
+  "recorded_at_utc": "2026-10-15T02:07:02.255414+00:00",
+  "scope": "Narrow closure of removed shared fixture field defect only",
+  "superseded_known_bad_source_manifest_sha256": "cd6f1136c58c35d9f8cf7644f68af408e3515b81c919153ca0aeb93f09ed984f",
+  "original_finding_receipt_sha256": "bfb10640018abba40c7a81dcafbc084b33c55a95d38ba4c46f010ce949efd912",
+  "fixture_path": "crates/app/src/sitemap_findings_fixture.rs",
+  "fixture_examined_sha256": "9ccc63a0fdbe9f00ae62e091785b399898de5ab1b0f3d6281c7a1ebc183a5949",
+  "fixture_before_e9_sha256": "0d8dbfa174b4d95f2a2f6436505f31ec94f1f3d1cba2af3e3724ac709305148d",
+  "consumer_path": "crates/app/src/mcp/sitemap_findings/tests.rs",
+  "consumer_sha256": "77902f8602c6ec21a8a988262a320f55478af8c55ef4bd039f9f1d62fa9ce74b",
+  "closure": "Restores original field and initializer and keeps original MCP f.origin assertion. Only change from original e9 fixture is assertion failure diagnostic plus self.origin format argument. Existing hit-count equality condition, expected count, local crawl origin and stop/join flow unchanged. Field is read in both shared fixture instantiations.",
+  "findings_remaining_in_this_narrow_fix": [],
+  "proof_boundary": {
+    "new_compile_tests": "NOT_RUN_BY_REVIEWER",
+    "new_source_v3_manifest": "Root must separately freeze/bind this actual fixture hash",
+    "no_product_git_runtime_mutation": true
+  }
+}

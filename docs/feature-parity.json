@@ -7071,6 +7071,39 @@
         "expanded_workflow": "NOT_IMPLEMENTED_NOT_EXECUTED",
         "manufacturer_parity": "NOT_PROVEN"
       }
+    },
+    {
+      "id": "sitemap-compile-repair-20261015",
+      "status": "ACTUAL_FULL_WORKSPACE_RUNNING_AFTER_CLEAN_COMPILER_CHECK",
+      "priority": 0,
+      "title_de": "Sitemap-Compilerfehler beheben und den vollständigen Stand erneut prüfen",
+      "summary_de": "Das koordinierte Build-Fenster ist freigegeben. Der tatsächliche e9-Lauf bestand Format, scheiterte jedoch mit vier Bibliotheks-Typfehlern und einer Test-Importmehrdeutigkeit; null Rust-Tests liefen. Fünf Reparaturdateien bestehen cargo check über alle Workspace-/Testziele mit drei anschließenden App-Warnungen. Der endgültige Stand behebt auch diese Warnungen und ist über297 Eingaben mit genau289 unveränderten und8 geänderten Dateien eingefroren. Vollständige Tests und Clippy bleiben erforderlich.",
+      "completed_acceptance_de": [
+        "Tatsächlichen fehlgeschlagenen e9-Lauf mit vollständigem Compilerlog, Exit101 und geschlossenem eigenen Browser-Worker archiviert; installierter Release bleibt unverändert.",
+        "Vier Typfehler und die mehrdeutigen Testimporte korrigiert, ohne Testfunktionen oder Assertions zu entfernen. Unabhängiger Review bestätigt die erhaltenen SQL-/SHA-/Größen-/Gleichheitsprüfungen.",
+        "Tatsächliches cargo check --workspace --all-targets --locked des fünfdateiligen Zwischenstands besteht; drei gemeldete App-Warnungen danach gezielt bereinigt.",
+        "Unabhängiger Review entdeckte eine fehlerhafte Entfernung eines geteilten Fixturefelds vor Ausführung; Feld und bestehende MCP-Assertion sind erhalten, gemeinsamer Fehlertext nutzt die Herkunft. Korrigierter v3-Quellabzug ersetzt den nicht ausgeführten v2-Abzug.",
+        "Korrigierter endgültiger v3-Stand besteht tatsächlich cargo check --workspace --all-targets --locked in23,26 Sekunden ohne Warnungen; alle297 Snapshot-/Checkout-Eingaben danach bytegleich geprüft."
+      ],
+      "pending_acceptance_de": [
+        "Eingefrorenen endgültigen Acht-Dateien-Stand mit vollständigem Workspace, allen388 benannten Fällen und vier tatsächlichen Browser-Gates prüfen: mindestens1170 bestanden, null fehlgeschlagen, null ignoriert.",
+        "Clippy für alle Ziele mit -D warnings und vollständige Workspace-Formatprüfung bestehen.",
+        "Optimierten Kandidaten bauen und native API-/CLI-/SDK-/Browser-/physische Abnahmen ausdrücklich auf den reparierten Quellstand binden; alte e9-Treiber bestätigen diese geänderten Bytes nicht.",
+        "Plattform- und installierte Laufzeitabnahmen getrennt abschließen; keine vollständige Hersteller-Parität behaupten."
+      ],
+      "documentation": [
+        "docs/verification/sitemap-source-ui-suite-failed-20261015/index.json",
+        "docs/verification/sitemap-compile-repair-20261015/check.json"
+      ],
+      "gates": {
+        "historical_e9_full_suite": "ACTUAL_COMPILE_FAIL_101_ZERO_TESTS_WORKER_CLOSED",
+        "intermediate_five_file_check": "PASS_WITH_THREE_APP_WARNINGS",
+        "final_eight_file_full_suite": "RUNNING_FMT_PASS_ACTUAL_SESSION_2201",
+        "final_source_manifest_sha256": "0ab151e4fd06f4603d8429bed4c784f7045e5c838bec378706d6c01bfaefb7bf",
+        "installed_runtime": "UNCHANGED_AB1",
+        "manufacturer_parity": "NOT_PROVEN",
+        "final_eight_file_check": "PASS_NO_WARNINGS_23_26_SECONDS"
+      }
     }
   ]
 }
