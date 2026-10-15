@@ -1,0 +1,230 @@
+{
+  "kind": "combined_v8_runner_independent_review",
+  "result": "FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "findings": [
+    {
+      "id": "SOURCE8-RUNNER-02",
+      "priority": 1,
+      "file": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v8-runner-preparation-v3/combined-bindings-v8.mjs",
+      "line": 51,
+      "title": "Binder requires obsolete freezer SHA and cannot admit a genuine V3 freeze",
+      "description": "The current freezer computes its actual own source SHA and stores it as manifest.freezer_sha256. Its prepared producer is b86e687e8b12050fdf772ac996e95a9e7103a6b17f068083a716861901d9945a, while the Binder positively requires obsolete2124d862... from the earlier V2 freezer. Therefore a correctly frozen V3 manifest necessarily fails Binder line51; using the old2124 producer instead also conflicts with the current prepared producer and the immediately following Task/work file-hash check. This is a transitive producer mismatch, not harmless lineage.",
+      "expected_current_freezer_sha256": "b86e687e8b12050fdf772ac996e95a9e7103a6b17f068083a716861901d9945a",
+      "actual_required_sha256": "2124d86290957b2a7cc1b1bdeb3b2c1e6427b4b91e2c623aa4bdadcee73fdce8",
+      "required_fix": "Fresh narrow RunnerV4 must update this affirmative freezer equality to the exact current freezer producer and preserve the Task/work and actual manifest linkage. Its newly changed Binder/preparation/review must then be explicitly retargeted in the dependent new MigrationOuter; do not mutate existing V3/OuterV1 or transfer their previous no-findings result."
+    }
+  ],
+  "proposal_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v8-runner-preparation-v3/manifest.json",
+    "sha256": "3314d945bc2513c27808413b586f07bf4305b950be91a3af6661473d83960546",
+    "bytes": 6558
+  },
+  "binder": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v8-runner-preparation-v3\\combined-bindings-v8.mjs",
+    "sha256": "2eff7bcd89be0f43808b733bfb46fb52d377bc2f2dbf6ff0ad9455d2d619ca3d",
+    "bytes": 19872
+  },
+  "previous_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v8-runner-independent-review-v3/receipt.json",
+    "sha256": "d1322eb9e95061101e1c57f2760d2d3e918696edf1a06cb6ee730ae98c3f3af6"
+  },
+  "dependent_outer_findings": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-migration-native-outer-independent-review-v1/receipt.json",
+    "sha256": "399b753ff5b156ff4beb2d3a5e139dec708eb01d64ef44a0501d08a5186628c0"
+  },
+  "semantic_pin_audit": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v8-runner-pin-audit-v3/audit.json",
+    "sha256": "f6081115ed3d84c0a3457e59c39abe25ff8e1e32a6d4f194ae29fdc62e61446b"
+  },
+  "scope": {
+    "runtime_sources": 6,
+    "total_embedded64Hex_occurrences": 25,
+    "unique_values": 19,
+    "concrete_mismatches": 1
+  },
+  "observations": [
+    "The earlier d1322 no-findings review was incomplete for this transitive producer equality; it remains immutable historical evidence and must not be used as current RunnerV3 admission. This fresh Findings receipt is controlling for the identified mismatch.",
+    "No other embedded64hex producer/artifact mismatch was found within the complete six-source literal audit. Matching metadata and old operational-region byte equality do not substitute for this semantic check or actual future runtime acceptance.",
+    "Source8 current source/suite/build/candidate are explicitly unavailable. Root has not frozen or invoked this broken Binder. No false runtime result is inferred from the source contradiction."
+  ],
+  "pins": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v8-runner-preparation-v3/manifest.json",
+      "sha256": "3314d945bc2513c27808413b586f07bf4305b950be91a3af6661473d83960546",
+      "bytes": 6558
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v7/manifest.json",
+      "sha256": "fd587ba252595d971e7557e5cca7f5ab90219ecda200a3f07fcd5c10c13b6397",
+      "bytes": 207394
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v7-runner-preparation-v2/run-combined-suite-v7.mjs",
+      "sha256": "576bc7a91d44281593c4f61a48d72714c7aead0279bfe50202afcf673f82029c",
+      "bytes": 17024
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v6/manifest.json",
+      "sha256": "1210c227ac90c1936008d7667c877fb6e18d661a2925be5d4cf36d0e447d194e",
+      "bytes": 212895
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v6-r2/manifest.json",
+      "sha256": "4572dc39ee478b8b3d55d06b5983779d6a42416c307256780050dc5950c49b77",
+      "bytes": 195006
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v8-draft-v3/preformat.json",
+      "sha256": "248231ea19203b85bb0b5a3af5d81037b17da710cfdda187b57524a72c734d25",
+      "bytes": 137799
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source8-composition-independent-review-v3/receipt.json",
+      "sha256": "af51dbf6ab42ceae6261c7eaeccb8035061c529647e2e1af6e52f12579925620",
+      "bytes": 3865
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v8-runner-preparation-v3/verify-parent-source7-suite.mjs",
+      "sha256": "d0d70442d3a631c9d87ce014a7a0964e87ab9e7ee85c3e5f7aa11e875df0255a",
+      "bytes": 11728
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-suite-v7/proof.json",
+      "sha256": "8c8cf67de2a2849ea2443f0a060f4812235a9c148f9e14e644fc64690d6fc9ea",
+      "bytes": 110971
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-migration-workflow-proposal-v2/manifest.json",
+      "sha256": "0d9b22ca5098d61dc3625574f949eef91aceaf2373b4437412e8079f6dbb341b",
+      "bytes": 19826
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-response-partial-write-proposal-v1/manifest.json",
+      "sha256": "44ea8ee8c8071306818b73b6431559d18200a42267c87c8963a69665faf24a96",
+      "bytes": 6170
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source-original-panel-responsive-proposal-v1/manifest.json",
+      "sha256": "1dfc89174155ce11127d5e1cce38dc2359c711efc3098c12c1e0364ad59109ad",
+      "bytes": 2062
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source-original-panel-responsive-independent-review-v1/receipt.json",
+      "sha256": "06500bb5ae984ec6e2161aa6232624fdcfe2ddde66d636881dde8ede65d528f5",
+      "bytes": 4667
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v7/proof.json",
+      "sha256": "82aaec30bf426c65482a307aa021963bd90f7b52431aa483acd21f19f7e6a0a9",
+      "bytes": 77786
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v8-runner-preparation-v3/validate-combined-source-v8.mjs",
+      "sha256": "a6ac87b82d367e269f6d021ff0570d50a793d4243511e550f294a471fd3b344f",
+      "bytes": 18229
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v5-r3/manifest.json",
+      "sha256": "27a8b74c4cd0c394906f3fe3c0a6a0327569294b25056cf6c6f0aabcffc42788",
+      "bytes": 220311
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v8-runner-preparation-v3/run-combined-suite-v8.mjs",
+      "sha256": "921a8023a3354c42ef28583888734bbe6c4784794161ec5e5f5c8f53dd39f62b",
+      "bytes": 16733
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v8-runner-preparation-v3/build-combined-optimized-v8.mjs",
+      "sha256": "e48e2cadc361a100eecbbed5465bf4436d28f7fa19068682550932f320e1c547",
+      "bytes": 18902
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-optimized-build-v4/proof.json",
+      "sha256": "cedb0aae13636a22b240c0333b01775a055f57c520f6a788f430bda9bd265df0",
+      "bytes": 11826
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v8-runner-preparation-v3/freeze-combined-source-v8.mjs",
+      "sha256": "b86e687e8b12050fdf772ac996e95a9e7103a6b17f068083a716861901d9945a",
+      "bytes": 8606
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v8-runner-preparation-v3\\verify-parent-source7-suite.mjs",
+      "sha256": "d0d70442d3a631c9d87ce014a7a0964e87ab9e7ee85c3e5f7aa11e875df0255a",
+      "bytes": 11728
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v8-runner-preparation-v3\\validate-combined-source-v8.mjs",
+      "sha256": "a6ac87b82d367e269f6d021ff0570d50a793d4243511e550f294a471fd3b344f",
+      "bytes": 18229
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v8-runner-preparation-v3\\freeze-combined-source-v8.mjs",
+      "sha256": "b86e687e8b12050fdf772ac996e95a9e7103a6b17f068083a716861901d9945a",
+      "bytes": 8606
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v8-runner-preparation-v3\\run-combined-suite-v8.mjs",
+      "sha256": "921a8023a3354c42ef28583888734bbe6c4784794161ec5e5f5c8f53dd39f62b",
+      "bytes": 16733
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v8-runner-preparation-v3\\build-combined-optimized-v8.mjs",
+      "sha256": "e48e2cadc361a100eecbbed5465bf4436d28f7fa19068682550932f320e1c547",
+      "bytes": 18902
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v8-runner-preparation-v3\\combined-bindings-v8.mjs",
+      "sha256": "2eff7bcd89be0f43808b733bfb46fb52d377bc2f2dbf6ff0ad9455d2d619ca3d",
+      "bytes": 19872
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v8-runner-preparation-v2/freeze-combined-source-v8.mjs",
+      "sha256": "2124d86290957b2a7cc1b1bdeb3b2c1e6427b4b91e2c623aa4bdadcee73fdce8",
+      "bytes": 8579
+    },
+    {
+      "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\verify-parent-source7-suite.mjs",
+      "sha256": "d0d70442d3a631c9d87ce014a7a0964e87ab9e7ee85c3e5f7aa11e875df0255a",
+      "bytes": 11728
+    },
+    {
+      "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\validate-combined-source-v8.mjs",
+      "sha256": "a6ac87b82d367e269f6d021ff0570d50a793d4243511e550f294a471fd3b344f",
+      "bytes": 18229
+    },
+    {
+      "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\freeze-combined-source-v8.mjs",
+      "sha256": "b86e687e8b12050fdf772ac996e95a9e7103a6b17f068083a716861901d9945a",
+      "bytes": 8606
+    },
+    {
+      "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\run-combined-suite-v8.mjs",
+      "sha256": "921a8023a3354c42ef28583888734bbe6c4784794161ec5e5f5c8f53dd39f62b",
+      "bytes": 16733
+    },
+    {
+      "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\build-combined-optimized-v8.mjs",
+      "sha256": "e48e2cadc361a100eecbbed5465bf4436d28f7fa19068682550932f320e1c547",
+      "bytes": 18902
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v8-runner-independent-review-v3/receipt.json",
+      "sha256": "d1322eb9e95061101e1c57f2760d2d3e918696edf1a06cb6ee730ae98c3f3af6",
+      "bytes": 3519
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-migration-native-outer-independent-review-v1/receipt.json",
+      "sha256": "399b753ff5b156ff4beb2d3a5e139dec708eb01d64ef44a0501d08a5186628c0",
+      "bytes": 5138
+    }
+  ],
+  "executions": {
+    "target_imports": 0,
+    "target_calls": 0,
+    "syntax_compiler_formatter_tests": 0,
+    "sql_http_tcp_browser_native": 0,
+    "git_root_product_writes": 0
+  },
+  "proof_boundary": "Read-only current-source and small immutable metadata audit. Only own fresh E audit/receipt written. A later independently reviewed fresh revision and actual Root freeze/suite/build/native remain mandatory."
+}

@@ -1,0 +1,92 @@
+{
+  "kind": "actual_source8_v3_format_only",
+  "recorded_at": "2026-10-15T15:42:13.826Z",
+  "result": "PASS_FORMAT_COMMAND_ONLY",
+  "actual_close_event": true,
+  "exit": {
+    "code": 0,
+    "signal": null
+  },
+  "pid": 26484,
+  "error": null,
+  "io_errors": [],
+  "streams": {
+    "stdout": {
+      "end": true,
+      "close": true,
+      "bytes": 0
+    },
+    "stderr": {
+      "end": true,
+      "close": true,
+      "bytes": 0
+    }
+  },
+  "elapsed_ms": 3485.4423,
+  "preformat_sha256": "248231ea19203b85bb0b5a3af5d81037b17da710cfdda187b57524a72c734d25",
+  "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "source_inputs": 335,
+  "changed_files": [
+    {
+      "path": "crates/app/src/main.rs",
+      "before_sha256": "992ac4c9fede870a08097620a9bc67c63089c9aa6812a9bec8b2c4f22d97949a",
+      "after_sha256": "b1e4c5457e668c2f61c3602bead4f0b2a742926013f87881eca874a439f7ba93",
+      "bytes": 31711
+    },
+    {
+      "path": "crates/app/src/migration_app.rs",
+      "before_sha256": "832d7992aa40b79e437c9a8009974f3fc6b05cb04eb81a6b8de745cea4d3c92e",
+      "after_sha256": "7f57457556f8633d6410059bcc554f73075dc180f12692960e16d08c6e533c59",
+      "bytes": 19062
+    },
+    {
+      "path": "crates/app/src/migration_app_tests.rs",
+      "before_sha256": "94928704269d407819a73c374c0b5acaf769a82efe3ebd0306fe103c9370e850",
+      "after_sha256": "ccb309fc60f5cdd8330dbe4e82e7f655bef4b36da626ce646bbbf9f49a48a18d",
+      "bytes": 7553
+    },
+    {
+      "path": "crates/app/src/server.rs",
+      "before_sha256": "df4485674b98c057474757506f73316b725022817906ac5580d8500110de6f32",
+      "after_sha256": "73ee66bd6b511956b4a8d62d40ae6cca39542db4913c5c58203380f393f40e03",
+      "bytes": 83933
+    },
+    {
+      "path": "crates/app/src/server/migration.rs",
+      "before_sha256": "88fdddf40b5a40b6d6146123318ba491f057e1d4048543c2413fb912859f4a93",
+      "after_sha256": "920cad6cdcbe6de6480867547ed0e27e92481f420c0c640fc44d16b8592c3aa4",
+      "bytes": 6543
+    },
+    {
+      "path": "crates/app/src/server/migration_tests.rs",
+      "before_sha256": "f068867bddc76ed93e260a599d49167c38a2ddf2f228e5ffd925aa3b0add5df6",
+      "after_sha256": "9ec96829897b5b507ec10177b20d7290693ed0ada84185eebbe086cadfdfe6e6",
+      "bytes": 6673
+    },
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "before_sha256": "3059e98553e2e59d52c0889581fa2e11f5b6dda5de6e2805fbc69d62a5b383cf",
+      "after_sha256": "44fcf097d00e9e6b97d8618b91b36198dcb560fee868ce7ba712c356f6d69b6b",
+      "bytes": 32642
+    },
+    {
+      "path": "crates/core/src/lib.rs",
+      "before_sha256": "f6378dd553610a0062c62e8b6aafe4807d674d5801fb342689894ba63a5a4de3",
+      "after_sha256": "f900ed53acbe9c041a0da066e41e5363554d66a2830614accd3ec68f0bfbb54e",
+      "bytes": 6970
+    },
+    {
+      "path": "crates/core/src/migration.rs",
+      "before_sha256": "65543597f95f37575e4ffb7c7560140f1be464b383c2f3e1e1becf57568ea5d0",
+      "after_sha256": "586977e1f636646119f801a171aaa521321826989ccb722bc3d3d58b7a2b9ed4",
+      "bytes": 18478
+    },
+    {
+      "path": "crates/core/src/migration_tests.rs",
+      "before_sha256": "b13800ca0fe4015f1eb804aa3077d99c597ff9c8e7b400166e79a4e14ddd4551",
+      "after_sha256": "182cd5e95420cd8b37890b37dde732a140ea8ac27f56c08eacce682bc45b0f1d",
+      "bytes": 18817
+    }
+  ],
+  "qualification": "Actual cargo fmt only on isolated E-only Source8 copy; no compiler/tests/native/Root source promotion. Independent formatter review required."
+}

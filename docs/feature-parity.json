@@ -1406,17 +1406,26 @@
     {
       "id": "http.migration",
       "name": "Migration destination validation",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "redirects"
       ],
       "acceptance_test": "Check a CSV of old/new URL expectations and identify mismatched final destinations.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "combined-workspace-v8-20261015"
+          ],
+          "proves": "Actual private Source8 commit and complete1322-test run verify offline CSV mapping, duplicates, ambiguous/missing observations, actual HTTP redirect/failure semantics, strict snapshot/cursor/limit handling and explicit new CLI output semantics. API/CLI/UI workflow code is integrated.",
+          "limits": "Fresh public-crawl/API/CLI/browser workflow, held file/response regressions, cold reopen and installed same-candidate acceptance remain pending. Unit fixtures are not new website observations.",
+          "source_commit": "e6b1fa2f87d0b39ac7f83aba6cdecc2110de5a50"
+        }
+      ],
       "parity_evidence": [],
       "group": "http",
       "remaining_acceptance": [
-        "Check a CSV of old/new URL expectations and identify mismatched final destinations."
+        "Run the real saved-crawl migration workflow across API, CLI and browser at 1440/320, including held file/response regressions, complete exports, stale snapshots, zero read-phase website requests and cold reopen."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -6044,6 +6053,15 @@
       "recorded_at": "2026-10-15T08:41:21.015Z",
       "scope": "Actual same301-input optimized candidate: native API/CLI/SDK small fixture,175 optional-file SDK operation assertions,two native root-junction rejections,13 mocked UI groups and25 real browser groups PASS. Physical suite did not complete any of12 cases; Root explicitly aborted its owned slow test after about524seconds with140/405rows preserved. Source-confirmed quadratic SQL JSON path remains to repair. No natural timeout, graceful HTTP drain, installation or full parity claim.",
       "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "combined-workspace-v8-20261015",
+      "artifact": "docs/verification/combined-workspace-v8-20261015/index.json",
+      "artifact_sha256": "310070b9bd679fc9ddd7479f34bab874d4e5296b6ba4f90a1960c49ba19c926b",
+      "result": "PASS_COMBINED_WORKSPACE_V8_REAL_RENDERER_FMT_CLIPPY",
+      "recorded_at": "2026-10-15T16:23:54.443Z",
+      "scope": "Actual335-input Windows full workspace:1322/0/0,540 required names,66 full modules,25 new cases,4 owned real renderers,format+Clippy and three actual Cargo closes. Separate optimized/native/install acceptance pending; Source7 failed browser/BODY retained.",
+      "reference_parity": "NOT_PROVEN"
     }
   ],
   "reference_workflows": [
@@ -6166,15 +6184,15 @@
   "status_summary": {
     "overall": {
       "implemented": 30,
-      "partial": 68,
-      "planned": 46,
+      "partial": 69,
+      "planned": 45,
       "total": 144
     },
     "phases": {
       "P1": {
         "implemented": 13,
-        "partial": 26,
-        "planned": 6,
+        "partial": 27,
+        "planned": 5,
         "total": 45
       },
       "P2": {
@@ -6217,8 +6235,8 @@
       },
       "http": {
         "implemented": 0,
-        "partial": 5,
-        "planned": 1,
+        "partial": 6,
+        "planned": 0,
         "total": 6
       },
       "metadata": {
@@ -6304,6 +6322,35 @@
   "last_verified_at": "2026-10-15T08:41:21.015Z",
   "current_work": [
     {
+      "id": "combined-source-v8-20261015",
+      "priority": 1,
+      "status": "ACTUAL_FULL_WORKSPACE_PASS_OPTIMIZED_BUILD_RUNNING_NATIVE_PENDING",
+      "title_de": "Migrationsprüfung, Schreibvertrag und responsive Originaldateien prüfen",
+      "summary_de": "Der neue private Stand e6b1fa2 besteht tatsächlich 1322 Tests ohne Fehler oder ignorierte Fälle, alle 540 Pflichtnamen und 66 vollständigen Modulnamen, vier echte Renderer-Prüfungen sowie Format und Clippy. Die 17 integrierten Dateien enthalten einen vollständigen separaten Migrations-CSV-Workflow für gespeicherte Crawls, die Korrektur teilweise angenommener Schreiboperationen und den Umbruch im Originaldatei-Panel. Der optimierte Kandidat und sämtliche frischen nativen Prüfungen folgen. Installiert bleibt R3.",
+      "completed_acceptance_de": [
+        "335 aktuelle Quellen privat committed, gepusht und eingefroren; drei Produktanteile und alle Formatänderungen unabhängig geprüft.",
+        "25 neue Testfunktionen sowie alle bisherigen 1297 Tests im tatsächlichen gemeinsamen Lauf bestanden; alle drei Cargo-Prozesse erfolgreich beendet, eigene Testserver und Renderer geschlossen und Quellen abschließend identisch."
+      ],
+      "pending_acceptance_de": [
+        "Optimierten Windows-Kandidaten bauen und zuerst die echte Oberfläche bei 320 und 1440 Pixeln sowie den neuen Migrationsablauf prüfen.",
+        "Alle neun bisherigen nativen Bereiche und den zusätzlichen Migrationsworkflow am selben Kandidaten frisch ausführen.",
+        "Reparierten Originaldatei-Testserver tatsächlich prüfen; der frühere Source7-Gesamtlauf bleibt ein Fehlerbeleg.",
+        "Sichere Installation unter Erhalt aller Nutzerdaten; danach getrennte Linkquellen- und Ressourcenberichte weiter integrieren.",
+        "Weitere 144 Fähigkeiten, 416 Filter und 32 Abläufe abarbeiten; vollständige Herstellerparität bleibt NOT_PROVEN."
+      ],
+      "documentation": [
+        "docs/verification/combined-workspace-v8-20261015/index.json"
+      ],
+      "gates": {
+        "full_workspace": "PASS_COMBINED_WORKSPACE_V8_REAL_RENDERER_FMT_CLIPPY",
+        "optimized_build": "RUNNING_NOT_ESTABLISHED_BY_SUITE",
+        "native": "NOT_RUN_ON_SOURCE8",
+        "installation": "NOT_RUN_ON_SOURCE8",
+        "manufacturer_parity": "NOT_PROVEN"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
       "id": "combined-source-v5-r3-20261015",
       "priority": 0,
       "status": "ACTUAL_1256_FULL_SUITE_EIGHT_NATIVE_SCOPES_AND_LOCAL_INSTALLATION_PASS",
@@ -6351,9 +6398,9 @@
     {
       "id": "combined-source-v7-20261015",
       "priority": 1,
-      "status": "ACTUAL_BUILD_PASS_FIVE_NATIVE_SCOPES_PASS_BROWSER_320_DEFECT_INSTALL_HELD",
+      "status": "SEVEN_NATIVE_SCOPES_PASS_BROWSER_AND_BODY_OVERALL_FAIL_NOT_INSTALLED_SUPERSEDED_BY_SOURCE8",
       "title_de": "Gemeinsame Originaldatei- und HTTP-Verbindungsfunktionen prüfen",
-      "summary_de": "Source7 besteht die vollständige Suite mit 1297 Tests und den optimierten Windows-Build. Fünf native Bereiche bestehen tatsächlich: SDK/API/CLI, 175 Dateioperationen, zwei Junction-Fälle, zwölf physische CSV-/JSON-Grenzfälle und zwei natürliche EOF-Abschlüsse. Die echte Browserprüfung scheitert nach 26 Gruppen am überlaufenden Originaldatei-Panel bei 320 Pixeln. Ein separater Mockadapter scheitert an veralteten Manifestverweisen. Beide Fehlversuche bleiben erhalten; die Installation ist bis zur Produktkorrektur ausgesetzt. Installiert bleibt R3.",
+      "summary_de": "Source7 besteht 1297 Tests und den optimierten Build. Sieben native Bereiche bestehen, einschließlich aller 50000 Sitemap-Einträge vor und nach kalter Wiederöffnung sowie des korrigierten Mocks. Browser27 scheitert am Originaldatei-Panel bei 320 Pixeln. BODY13 besteht die Funktionsgruppen und zwei natürliche App-Abschlüsse, scheitert insgesamt jedoch am Testserver-Abschluss. Beide Fehler bleiben erhalten; Source7 wurde nicht installiert. Der korrigierte Source8-Stand ist jetzt integriert und vollständig getestet.",
       "completed_acceptance_de": [
         "Neun geprüfte Transportdateien auf den tatsächlich erfolgreichen Source6R2-Stand übertragen; alle Abbruchkorrekturen und die gesamte Regression erhalten. Unabhängige Quellen-, Formatierungs- und Runnerprüfungen sowie Vorab-Clippy bestanden.",
         "326 Eingaben privat committed, gepusht und eingefroren. Die tatsächliche vollständige Suite besteht mit 1297/0/0, 515 Pflichtnamen, 41 Modulnamen, 13 neuen Transportfällen, vier Renderern sowie Format und Clippy. Alle drei Cargo-Prozesse erfolgreich beendet; eigene Testserver und Renderer geschlossen und Quellen abschließend identisch.",
@@ -6367,6 +6414,7 @@
         "Übrige 144 Fähigkeiten, 416 Filter und 32 Abläufe weiter abarbeiten; vollständige Herstellerparität bleibt NOT_PROVEN."
       ],
       "documentation": [
+        "docs/verification/combined-workspace-v8-20261015/index.json",
         "docs/verification/source7-native-checkpoint-1-20261015/index.json",
         "docs/verification/combined-workspace-v7-20261015/index.json"
       ],
@@ -6375,8 +6423,8 @@
         "required_named_cases": "PASS_515_AND_41_FULL_MODULE_NAMES",
         "actual_renderer": "PASS_4",
         "optimized_build": "PASS_COMBINED_OPTIMIZED_BUILD_V7",
-        "native": "FIVE_SCOPES_PASS_TWO_FAILED_ATTEMPTS_LARGE_BODY_PENDING",
-        "installation": "HELD_ACTUAL_BROWSER_320_DEFECT",
+        "native": "SEVEN_SCOPES_PASS_BROWSER_AND_BODY_OVERALL_FAIL",
+        "installation": "NOT_INSTALLED_SUPERSEDED_BY_SOURCE8",
         "manufacturer_parity": "NOT_PROVEN"
       },
       "reference_parity": "NOT_PROVEN"
@@ -6432,9 +6480,9 @@
     {
       "id": "response-stream-partial-write-contract-20261015",
       "priority": 2,
-      "status": "CONFIRMED_SOURCE_CONTRACT_GAP_NOT_IMPLEMENTED",
+      "status": "ACTUAL_SOURCE8_WORKSPACE_PASS_NATIVE_PENDING",
       "title_de": "Teilweise geschriebene Downloadblöcke korrekt melden",
-      "summary_de": "Separater Quellenbefund: ChannelWriter::write kann mehrere Blöcke erfolgreich weitergeben und bei einem späteren Fehler Err melden, ohne die schon geschriebene Präfixlänge zurückzugeben. Nach dem terminalenAbbruchfix propagieren die aktuellen privaten Aufrufer den Fehler; kein erfolgreicher korrumpierter Export ist nachgewiesen. Der Write-Vertragspunkt bleibt separat zu beheben.",
+      "summary_de": "Source8 korrigiert den Write-Vertrag: Eine erfolgreiche Schreiboperation meldet die tatsächlich angenommene Präfixlänge; spätere Fehler werden nicht als Nullfortschritt ausgegeben. Drei neue Regressionen und alle bisherigen HTTP-/Abbruchtests bestehen im tatsächlichen Gesamtlauf. Frische native Abnahmen folgen.",
       "completed_acceptance_de": [
         "Produktionscode und tatsächliche vier privaten Exportaufrufer gegen Rusts Write-Vertrag unabhängig gelesen; Bewertung bleibt vom belegten Interrupted-Endlosfehler getrennt."
       ],
@@ -6443,6 +6491,7 @@
         "Gezielte Tests fürpartielleWrite-Länge, Abbruchnach Präfix, wiederholtenCaller undnormalesvollständigesExportende ausführen."
       ],
       "documentation": [
+        "docs/verification/combined-workspace-v8-20261015/index.json",
         "docs/verification/source6-r2-reviewed-repair-20261015/partial-write-contract-assessment.json",
         "docs/verification/combined-workspace-v6-cancel-hang-failed-20261015/index.json"
       ],
@@ -6456,9 +6505,9 @@
     {
       "id": "migration-destination-validation-20261015",
       "priority": 3,
-      "status": "OFFLINE_CORE_SOURCE_REVIEWED_16_TESTS_AUTHORED_NOT_EXECUTED",
+      "status": "ACTUAL_SOURCE8_WORKSPACE_PASS_NATIVE_PENDING",
       "title_de": "Erwartete und tatsächliche Migrationsziele prüfen",
-      "summary_de": "Ein isolierterRust-Core liestCSV-Alt-/Zielzuordnungen überdenbestehendenImporter undvergleichtbereitsgeliefertePageRecords. Zeilenherkunft,Duplikate,mehrdeutigeBeobachtungen,Redirectketten,Fehler undZielabweichungen werdenunterschieden. KeinNetzwerk/Snapshotauth/API/CLI/UI undkeinFeatureabschluss;16Tests sindnurverfasst.",
+      "summary_de": "Migrations-Core, API, explizite CLI und separate Oberfläche sind im privaten Source8 integriert. Die tatsächliche Gesamtsuite besteht mit 1322 Tests einschließlich aller 16 Core-Migrationsfälle und sechs zusätzlichen API-/CLI-Servicefällen. Frische öffentliche Crawl-, Browser- und Wiederöffnungsprüfungen bleiben offen.",
       "completed_acceptance_de": [
         "NeuerCore-Code undalle16Testquellen unabhängig gelesen; zweiLib-Einfügehunks undzweiTestkorrekturen exaktzurückgeführt."
       ],
@@ -6468,6 +6517,7 @@
         "EchteeigeneHTTP-Crawls undanschließendeMigrationsauswertung mitnullzusätzlichenWebsiteanfragen prüfen."
       ],
       "documentation": [
+        "docs/verification/combined-workspace-v8-20261015/index.json",
         "docs/verification/source6-r2-reviewed-repair-20261015/migration-INTEGRATION-TODO.md",
         "docs/verification/source6-r2-reviewed-repair-20261015/migration-core-review.json"
       ],

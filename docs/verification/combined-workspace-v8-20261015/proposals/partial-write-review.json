@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "kind": "http_response_partial_write_independent_source_review_v1",
+  "result": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "findings": [],
+  "proposal_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-response-partial-write-proposal-v1/manifest.json",
+    "sha256": "44ea8ee8c8071306818b73b6431559d18200a42267c87c8963a69665faf24a96"
+  },
+  "parent_preview": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v7-r2-draft/preformat.json",
+    "sha256": "6dba59b488de7dc9f5df67bcf3258ced83755ff5d56debf1fd3333932ead91b9",
+    "bytes": 121213
+  },
+  "parent_actual_source6_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-r2\\manifest.json",
+    "sha256": "4572dc39ee478b8b3d55d06b5983779d6a42416c307256780050dc5950c49b77",
+    "bytes": 195006
+  },
+  "parent_actual_source6_commit": "3be3fec9c0b2b67cfe7c3eda21ab2151db6edbe7",
+  "parent_source7_proposal": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-frozen-source6-rebase-v2\\manifest.json",
+    "sha256": "b935bcb78cdae164054ef3ee5a58c0433930896da53f0d3937033400b83c2a6a",
+    "bytes": 64001
+  },
+  "parent_source7_independent_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-frozen-source6-independent-review-v2/receipt.json",
+    "sha256": "ad96cf4979bb05ea3a99ac8646ee74daa1568163acb768437cd7a1b2c824bb41",
+    "bytes": 25653
+  },
+  "prior_open_contract_assessment": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-terminal-cancellation-independent-review-v2\\partial-write-contract-assessment.json",
+    "sha256": "a633167385b2ea3e53d1896fd74a4aa84d827de79f37a1010ba2fac37e69c7e2",
+    "bytes": 3107
+  },
+  "checked": {
+    "one_write_method_replacement_and_one_three_test_insertion": true,
+    "whole_two_file_forward_inverse_operations": 2,
+    "whole_previous27717_test_bytes_exact": true,
+    "all_four_ConnectionAborted_sites_retained": true,
+    "all_other_transport_and_ownership_bytes_exact": true,
+    "actual_nonempty_write_consumes_at_most_one64KiB_chunk": true,
+    "success_returns_exact_accepted_length": true,
+    "no_fallible_io_after_enqueue": true,
+    "empty_write_Ok0_and_no_enqueue_preserved": true,
+    "full_reservation_wait_and_cancel_logic_only_unindented": true,
+    "new_authored_tests": [
+      {
+        "path": "crates/app/src/server/response_stream_tests.rs",
+        "name": "response_channel_write_returns_exact_one_chunk_prefix_and_leaves_tail_unaccepted",
+        "full_name": "server::response_stream::tests::response_channel_write_returns_exact_one_chunk_prefix_and_leaves_tail_unaccepted",
+        "windows": true,
+        "unix": true
+      },
+      {
+        "path": "crates/app/src/server/response_stream_tests.rs",
+        "name": "response_channel_default_write_all_preserves_exact_bytes_and_empty_writes_enqueue_nothing",
+        "full_name": "server::response_stream::tests::response_channel_default_write_all_preserves_exact_bytes_and_empty_writes_enqueue_nothing",
+        "windows": true,
+        "unix": true
+      },
+      {
+        "path": "crates/app/src/server/response_stream_tests.rs",
+        "name": "response_channel_cancel_and_closed_before_enqueue_return_zero_progress_errors",
+        "full_name": "server::response_stream::tests::response_channel_cancel_and_closed_before_enqueue_return_zero_progress_errors",
+        "windows": true,
+        "unix": true
+      }
+    ],
+    "old_module_tests": 13,
+    "new_module_tests": 16,
+    "required_names_forecast": 518,
+    "minimum_workspace_tests_forecast": 1300,
+    "parent_is_isolated_unformatted_preview_not_actual_Source7_release": true,
+    "actual_final_source7_rebase_pending": true,
+    "syntax": [
+      {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-response-partial-write-proposal-v1/prepare-source.mjs",
+        "exitcode": 0,
+        "signal": null
+      },
+      {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-response-partial-write-independent-review-v1/review-source.mjs",
+        "exitcode": 0,
+        "signal": null
+      }
+    ]
+  },
+  "reasoning": [
+    "The complete new Write method and all three behavior tests were manually read. An empty slice still returns Ok(0) without reservation, including after sticky cancellation/queue closure. A nonempty write takes at most the first65536B, retains the exact existing reservation/full-queue/cancellation logic, rechecks cancellation before the sole permit.send, then only updates infallible counters and returns Ok(actual chunk length). No later IO error can deny an already enqueued prefix in that same call.",
+    "The old reserve/wait/close behavior is exactly the original body with one indentation level removed. All four terminal ConnectionAborted fixes, existing BrokenPipe branches, consumer/body terminal bookkeeping, task/transport lease ownership, queue capacity, flush behavior and every byte outside this single method remain unchanged. This is a separate Write-contract proposal, not a timeout/cap/owner redesign or an integration into current Source7.",
+    "The first current_thread test directly writes a real multi-chunk source but requires only the first64KiB accepted and present in the actual channel, then explicitly supplies the unaccepted suffixes to reconstruct exact bytes. It would fail immediately with the prior all-at-once implementation. The second uses the actual standard default write_all for four chunks fitting the real8-slot queue and proves exact bytes/empty writes/no enqueue. The third checks sticky cancellation and closed receiver as zero-progress fatal errors plus preserved empty/flush semantics. No test starts blocking work or relies on timing. All13 old test bodies, including the fast default-write_all cancellation guard and actual full eight/ninth/drop/join tests, remain entirely byteexact.",
+    "Both exact literal operations fully reverse to the isolated Source7 preformat preview6dba, not to the new actual Source7 release. Parent source7 fields intentionally remain null and no actual release is fabricated. Actual fd587 integration requires an explicitly authorized future narrow rebase/format/review/freeze and actual tests. The logical source correction addresses the recorded partial-write concern but does not make an executed/runtime or installed-product claim."
+  ],
+  "pins": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-response-partial-write-proposal-v1/manifest.json",
+      "sha256": "44ea8ee8c8071306818b73b6431559d18200a42267c87c8963a69665faf24a96",
+      "bytes": 6170
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-response-partial-write-proposal-v1/derivation.json",
+      "sha256": "7084f926c0aa034f4e987c7f58c28b774ce88da342f98db96520a38668ff89a2",
+      "bytes": 12813
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v7-r2-draft/preformat.json",
+      "sha256": "6dba59b488de7dc9f5df67bcf3258ced83755ff5d56debf1fd3333932ead91b9",
+      "bytes": 121213
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-r2\\manifest.json",
+      "sha256": "4572dc39ee478b8b3d55d06b5983779d6a42416c307256780050dc5950c49b77",
+      "bytes": 195006
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-frozen-source6-rebase-v2\\manifest.json",
+      "sha256": "b935bcb78cdae164054ef3ee5a58c0433930896da53f0d3937033400b83c2a6a",
+      "bytes": 64001
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-frozen-source6-independent-review-v2/receipt.json",
+      "sha256": "ad96cf4979bb05ea3a99ac8646ee74daa1568163acb768437cd7a1b2c824bb41",
+      "bytes": 25653
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-terminal-cancellation-independent-review-v2\\partial-write-contract-assessment.json",
+      "sha256": "a633167385b2ea3e53d1896fd74a4aa84d827de79f37a1010ba2fac37e69c7e2",
+      "bytes": 3107
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v7-r2-draft\\preformat\\crates\\app\\src\\server\\response_stream.rs",
+      "sha256": "5d6650224878435514940a53b3acff73bcb2e44a8ace0a42562580a0d8371285",
+      "bytes": 23465
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-partial-write-proposal-v1\\source\\crates\\app\\src\\server\\response_stream.rs",
+      "sha256": "39933d8505b757623037b83350b110934b8ce763b6f82376118e072822af9854",
+      "bytes": 23376
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v7-r2-draft\\preformat\\crates\\app\\src\\server\\response_stream_tests.rs",
+      "sha256": "1743a2e49e96717240a132ddb5a1159dfb8fa8c5807fe801d2c7b0e7e2d41655",
+      "bytes": 27717
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-partial-write-proposal-v1\\source\\crates\\app\\src\\server\\response_stream_tests.rs",
+      "sha256": "3059e98553e2e59d52c0889581fa2e11f5b6dda5de6e2805fbc69d62a5b383cf",
+      "bytes": 32278
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-partial-write-proposal-v1\\derivation.json",
+      "sha256": "7084f926c0aa034f4e987c7f58c28b774ce88da342f98db96520a38668ff89a2",
+      "bytes": 12813
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-partial-write-proposal-v1\\HANDOFF.md",
+      "sha256": "30cb35d3693761e56369adec703bcea5d831f6ae4efdccb853d6bbbf2d7d1576",
+      "bytes": 1640
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-partial-write-proposal-v1\\prepare-source.mjs",
+      "sha256": "292e045161d8db1753f4248f3b82ccacb1f3d3b6bcf8a6b3cfbe94a10d221f05",
+      "bytes": 14569
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-response-partial-write-proposal-v1/prepare-source.mjs",
+      "sha256": "292e045161d8db1753f4248f3b82ccacb1f3d3b6bcf8a6b3cfbe94a10d221f05",
+      "bytes": 14569
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-response-partial-write-independent-review-v1/review-source.mjs",
+      "sha256": "30b3ee7c309e83a81f920c1eecde7d80f3c7286402c341ef212a8e036fae05af",
+      "bytes": 11309
+    }
+  ],
+  "excluded_executions": {
+    "target_imports": 0,
+    "rust_formatter_compiler_clippy_tests": 0,
+    "sqlite_http_tcp_native_browser_fixtures": 0,
+    "git_root_product_mutations": 0,
+    "actual_Source7_rebase_or_pipeline_change": 0
+  },
+  "qualification": "Bounded source-only review of a separate proposal on an immutable unformatted preview. Three tests are authored NOT_RUN;518/min1300 are forecast only. Current Source7 release/fullsuite/candidate/install state is unchanged by this work and no full feature/vendor parity/performance/RSS/global deadline claim is made."
+}

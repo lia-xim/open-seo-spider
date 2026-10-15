@@ -1,3 +1,7 @@
+## Aktuell: Migrationsworkflow integriert, 1322 Tests bestanden (15.10.2026)
+
+Der private Source8-Stand unter `e6b1fa2` besteht tatsächlich die vollständige Suite mit 1322 Tests, allen 540 Pflichtnamen und 66 Modulnamen, vier echten Renderern sowie Format und Clippy. [Rohbelege und unveränderte Fehlerhistorie](verification/combined-workspace-v8-20261015/index.json). Der optimierte Build läuft; frische native Browser-, Migrations-, Originaldatei- und Großprüfungen sowie sichere Installation folgen. Migrationsvalidierung ist jetzt teilweise belegt. Katalog: 30 umgesetzt, 69 teilweise, 45 geplant. Herstellerparität bleibt offen.
+
 ## Aktuell: Build bestanden, Browserfehler gefunden (15.10.2026)
 
 Source7 besteht die vollständige Suite mit 1297 Tests und den optimierten Build. Fünf native Bereiche bestehen. Die echte Browserprüfung findet nach 26 Gruppen einen Überlauf des Originaldatei-Panels bei 320 Pixeln; eine separate Mockprüfung scheitert vorher an veralteten Manifestverweisen im Testadapter. Beide [Fehlbelege und Erfolge](verification/source7-native-checkpoint-1-20261015/index.json) bleiben erhalten. Der Kandidat wird mit diesem bekannten UI-Fehler nicht installiert; R3 bleibt verfügbar. Der nächste gemeinsame Stand enthält die Produktkorrektur, den Migrationsworkflow und den Teil-Schreibvertrag. Große Sitemaps und Originaldateien werden separat weiter geprüft.

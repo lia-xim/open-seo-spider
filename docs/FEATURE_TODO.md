@@ -4,7 +4,7 @@
 
 Die Liste hält alle 144 gruppierten Fähigkeiten fest. Ein Haken bedeutet, dass das **eigene gespeicherte Abnahmekriterium** mit Beweisen erfüllt ist. Er bedeutet keine vollständige Gleichheit mit Screaming Frog. Diese Referenzparität bleibt für alle Einträge **NOT_PROVEN**.
 
-Aktueller Katalogstand: **30 eigene Abnahmen erfüllt**, **68 teilweise geprüft**, **46 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
+Aktueller Katalogstand: **30 eigene Abnahmen erfüllt**, **69 teilweise geprüft**, **45 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
 
 Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.json) bilden ein zusätzliches Register. Ihre positiven Fälle, Kontrollfälle, Parameter und Grenzfälle müssen jeweils geprüft werden. Ein implementierter Kern, ein leerer Export oder übereinstimmende CSV-Zellen ersetzen diese Einzelabnahme nicht.
 
@@ -138,7 +138,18 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - Verträge: [index.json](verification/sitemap-source-ui-suite-failed-20261015/index.json), [check.json](verification/sitemap-compile-repair-20261015/check.json), [index.json](verification/sitemap-compile-repair-20261015/focused-app-regressions/index.json), [index.json](verification/combined-workspace-v3-20261015/index.json).
   - Gate-Stand: historical_e9_full_suite: ACTUAL_COMPILE_FAIL_101_ZERO_TESTS_WORKER_CLOSED; intermediate_five_file_check: PASS_WITH_THREE_APP_WARNINGS; final_eight_file_full_suite: FAIL_APP_217_PASS_3_FAIL_0_IGNORE_CORE_RENDERER_CLIPPY_NOT_RUN; final_source_manifest_sha256: 0ab151e4fd06f4603d8429bed4c784f7045e5c838bec378706d6c01bfaefb7bf; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN; final_eight_file_check: PASS_NO_WARNINGS_23_26_SECONDS; directed_three_regressions: PASS_3_ACTUAL_TESTS_4_TEST_SOURCE_REPAIRS; new_full_workspace: NOT_RUN_AFTER_TEST_REPAIRS; combined_v3_workspace: PASS_1203_INCLUDING_4_RENDERER_FMT_CLIPPY.
 
-- [ ] **Gemeinsame Originaldatei- und HTTP-Verbindungsfunktionen prüfen** — ACTUAL_BUILD_PASS_FIVE_NATIVE_SCOPES_PASS_BROWSER_320_DEFECT_INSTALL_HELD. Source7 besteht die vollständige Suite mit 1297 Tests und den optimierten Windows-Build. Fünf native Bereiche bestehen tatsächlich: SDK/API/CLI, 175 Dateioperationen, zwei Junction-Fälle, zwölf physische CSV-/JSON-Grenzfälle und zwei natürliche EOF-Abschlüsse. Die echte Browserprüfung scheitert nach 26 Gruppen am überlaufenden Originaldatei-Panel bei 320 Pixeln. Ein separater Mockadapter scheitert an veralteten Manifestverweisen. Beide Fehlversuche bleiben erhalten; die Installation ist bis zur Produktkorrektur ausgesetzt. Installiert bleibt R3.
+- [ ] **Migrationsprüfung, Schreibvertrag und responsive Originaldateien prüfen** — ACTUAL_FULL_WORKSPACE_PASS_OPTIMIZED_BUILD_RUNNING_NATIVE_PENDING. Der neue private Stand e6b1fa2 besteht tatsächlich 1322 Tests ohne Fehler oder ignorierte Fälle, alle 540 Pflichtnamen und 66 vollständigen Modulnamen, vier echte Renderer-Prüfungen sowie Format und Clippy. Die 17 integrierten Dateien enthalten einen vollständigen separaten Migrations-CSV-Workflow für gespeicherte Crawls, die Korrektur teilweise angenommener Schreiboperationen und den Umbruch im Originaldatei-Panel. Der optimierte Kandidat und sämtliche frischen nativen Prüfungen folgen. Installiert bleibt R3.
+  - [x] 335 aktuelle Quellen privat committed, gepusht und eingefroren; drei Produktanteile und alle Formatänderungen unabhängig geprüft.
+  - [x] 25 neue Testfunktionen sowie alle bisherigen 1297 Tests im tatsächlichen gemeinsamen Lauf bestanden; alle drei Cargo-Prozesse erfolgreich beendet, eigene Testserver und Renderer geschlossen und Quellen abschließend identisch.
+  - [ ] Optimierten Windows-Kandidaten bauen und zuerst die echte Oberfläche bei 320 und 1440 Pixeln sowie den neuen Migrationsablauf prüfen.
+  - [ ] Alle neun bisherigen nativen Bereiche und den zusätzlichen Migrationsworkflow am selben Kandidaten frisch ausführen.
+  - [ ] Reparierten Originaldatei-Testserver tatsächlich prüfen; der frühere Source7-Gesamtlauf bleibt ein Fehlerbeleg.
+  - [ ] Sichere Installation unter Erhalt aller Nutzerdaten; danach getrennte Linkquellen- und Ressourcenberichte weiter integrieren.
+  - [ ] Weitere 144 Fähigkeiten, 416 Filter und 32 Abläufe abarbeiten; vollständige Herstellerparität bleibt NOT_PROVEN.
+  - Verträge: [index.json](verification/combined-workspace-v8-20261015/index.json).
+  - Gate-Stand: full_workspace: PASS_COMBINED_WORKSPACE_V8_REAL_RENDERER_FMT_CLIPPY; optimized_build: RUNNING_NOT_ESTABLISHED_BY_SUITE; native: NOT_RUN_ON_SOURCE8; installation: NOT_RUN_ON_SOURCE8; manufacturer_parity: NOT_PROVEN.
+
+- [ ] **Gemeinsame Originaldatei- und HTTP-Verbindungsfunktionen prüfen** — SEVEN_NATIVE_SCOPES_PASS_BROWSER_AND_BODY_OVERALL_FAIL_NOT_INSTALLED_SUPERSEDED_BY_SOURCE8. Source7 besteht 1297 Tests und den optimierten Build. Sieben native Bereiche bestehen, einschließlich aller 50000 Sitemap-Einträge vor und nach kalter Wiederöffnung sowie des korrigierten Mocks. Browser27 scheitert am Originaldatei-Panel bei 320 Pixeln. BODY13 besteht die Funktionsgruppen und zwei natürliche App-Abschlüsse, scheitert insgesamt jedoch am Testserver-Abschluss. Beide Fehler bleiben erhalten; Source7 wurde nicht installiert. Der korrigierte Source8-Stand ist jetzt integriert und vollständig getestet.
   - [x] Neun geprüfte Transportdateien auf den tatsächlich erfolgreichen Source6R2-Stand übertragen; alle Abbruchkorrekturen und die gesamte Regression erhalten. Unabhängige Quellen-, Formatierungs- und Runnerprüfungen sowie Vorab-Clippy bestanden.
   - [x] 326 Eingaben privat committed, gepusht und eingefroren. Die tatsächliche vollständige Suite besteht mit 1297/0/0, 515 Pflichtnamen, 41 Modulnamen, 13 neuen Transportfällen, vier Renderern sowie Format und Clippy. Alle drei Cargo-Prozesse erfolgreich beendet; eigene Testserver und Renderer geschlossen und Quellen abschließend identisch.
   - [x] Optimierter Kandidat mit 40.585.216 Bytes und SHA 5e7c8fbb bestanden; Build und Quellen abschließend identisch. Fünf getrennte native Bereiche bestehen, darunter CSV genau 64 MiB und JSON genau 8 MiB sowie jeweils eine korrekt abgewiesene Überschreitung um ein Byte.
@@ -147,8 +158,8 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - [ ] Große Sitemaps und Originaldateien nativ prüfen; sämtliche erforderlichen Prüfungen am endgültigen Kandidaten wiederholen.
   - [ ] Migration und Teil-Schreibvertrag im nächsten gemeinsamen Stand integrieren; danach sichere Installation unter Erhalt aller Nutzerdaten.
   - [ ] Übrige 144 Fähigkeiten, 416 Filter und 32 Abläufe weiter abarbeiten; vollständige Herstellerparität bleibt NOT_PROVEN.
-  - Verträge: [index.json](verification/source7-native-checkpoint-1-20261015/index.json), [index.json](verification/combined-workspace-v7-20261015/index.json).
-  - Gate-Stand: full_workspace: PASS_COMBINED_WORKSPACE_V7_REAL_RENDERER_FMT_CLIPPY; required_named_cases: PASS_515_AND_41_FULL_MODULE_NAMES; actual_renderer: PASS_4; optimized_build: PASS_COMBINED_OPTIMIZED_BUILD_V7; native: FIVE_SCOPES_PASS_TWO_FAILED_ATTEMPTS_LARGE_BODY_PENDING; installation: HELD_ACTUAL_BROWSER_320_DEFECT; manufacturer_parity: NOT_PROVEN.
+  - Verträge: [index.json](verification/combined-workspace-v8-20261015/index.json), [index.json](verification/source7-native-checkpoint-1-20261015/index.json), [index.json](verification/combined-workspace-v7-20261015/index.json).
+  - Gate-Stand: full_workspace: PASS_COMBINED_WORKSPACE_V7_REAL_RENDERER_FMT_CLIPPY; required_named_cases: PASS_515_AND_41_FULL_MODULE_NAMES; actual_renderer: PASS_4; optimized_build: PASS_COMBINED_OPTIMIZED_BUILD_V7; native: SEVEN_SCOPES_PASS_BROWSER_AND_BODY_OVERALL_FAIL; installation: NOT_INSTALLED_SUPERSEDED_BY_SOURCE8; manufacturer_parity: NOT_PROVEN.
 
 - [ ] **Originaldatei-API und Response-Owner gemeinsam integrieren** — ACTUAL_REPAIRED_FULL_WORKSPACE_PASS_SOURCE7_COMBINATION_PENDING. Der frische reparierte Source6R2-Stand besteht tatsächlich1284 Tests,502 Pflichtnamen,28 vollständige neue Modulnamen, vier echte Renderer-Fälle sowie Format und Clippy. Der frühere Source6-Hänger bleibt als Fehlbeleg erhalten. Zwei Reparaturdateien sind privat unter3be3fec integriert; der gemeinsame Source7-Kandidat und seine vollständige native Abnahme folgen.
   - [x] Body-App4 und Response-Owner2 mit17 Änderungsdateien zusammengeführt;322 unveränderte Eingabedateien und beide unveränderten gemeinsamen Zusammenführungen gegenüberV2 exakt geprüft.
@@ -195,11 +206,11 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - Verträge: [resource-matrix-plan.md](parity/resource-matrix-plan.md), [resource-matrix-plan.json](parity/resource-matrix-plan.json), [resource-discovery.md](resource-discovery.md), [resource-contract-v2.md](resource-contract-v2.md), [ROADMAP.md](ROADMAP.md).
   - Gate-Stand: contract_regressions: PASS_V2_WITH_PRESERVED_V1_COMPATIBILITY; resource_products_28: PASS_BOTH_PROFILES; navigation_products_80: PASS_BOTH_PROFILES; response_controls_21: PASS_44_EXECUTIONS; native_request_logs: PASS_BOUNDED_SLICE; api_cli_mcp: PASS_13_GROUPS; redirect_controls_88: PASS_176_PROFILE_EXECUTIONS; workspace_tests_clippy: PASS; exact_commit_ci: PASS; immutable_release: PASS; installed_runtime: PASS_B10; full_feature_acceptance: PARTIAL; actual_browser_ui: PASS_10_NATIVE_CHECKS; ui_mock: PASS_11_SEPARATE_FIXTURES; additional_redirect_boundaries: PASS_24_PROFILE_EXECUTIONS.
 
-- [ ] **Teilweise geschriebene Downloadblöcke korrekt melden** — CONFIRMED_SOURCE_CONTRACT_GAP_NOT_IMPLEMENTED. Separater Quellenbefund: ChannelWriter::write kann mehrere Blöcke erfolgreich weitergeben und bei einem späteren Fehler Err melden, ohne die schon geschriebene Präfixlänge zurückzugeben. Nach dem terminalenAbbruchfix propagieren die aktuellen privaten Aufrufer den Fehler; kein erfolgreicher korrumpierter Export ist nachgewiesen. Der Write-Vertragspunkt bleibt separat zu beheben.
+- [ ] **Teilweise geschriebene Downloadblöcke korrekt melden** — ACTUAL_SOURCE8_WORKSPACE_PASS_NATIVE_PENDING. Source8 korrigiert den Write-Vertrag: Eine erfolgreiche Schreiboperation meldet die tatsächlich angenommene Präfixlänge; spätere Fehler werden nicht als Nullfortschritt ausgegeben. Drei neue Regressionen und alle bisherigen HTTP-/Abbruchtests bestehen im tatsächlichen Gesamtlauf. Frische native Abnahmen folgen.
   - [x] Produktionscode und tatsächliche vier privaten Exportaufrufer gegen Rusts Write-Vertrag unabhängig gelesen; Bewertung bleibt vom belegten Interrupted-Endlosfehler getrennt.
   - [ ] ErfolgreichesPräfix als Ok(n) melden und terminalenFehler beimfolgendenwrite erhalten, oder proWrite einenbegrenzt erfolgreichenBlock zurückgeben.
   - [ ] Gezielte Tests fürpartielleWrite-Länge, Abbruchnach Präfix, wiederholtenCaller undnormalesvollständigesExportende ausführen.
-  - Verträge: [partial-write-contract-assessment.json](verification/source6-r2-reviewed-repair-20261015/partial-write-contract-assessment.json), [index.json](verification/combined-workspace-v6-cancel-hang-failed-20261015/index.json).
+  - Verträge: [index.json](verification/combined-workspace-v8-20261015/index.json), [partial-write-contract-assessment.json](verification/source6-r2-reviewed-repair-20261015/partial-write-contract-assessment.json), [index.json](verification/combined-workspace-v6-cancel-hang-failed-20261015/index.json).
   - Gate-Stand: source_assessment: CONFIRMED_TRAIT_CONTRACT_GAP_CURRENT_SUCCESSFUL_CORRUPTION_NOT_PROVEN; implementation: NOT_RUN; rust_tests: NOT_RUN.
 
 - [ ] **Blockierte Downloadantworten und Verbindungen vollständig beenden** — ACTUAL_SOURCE7_FULL_WORKSPACE_PASS_NATIVE_PENDING. Response-Owner ist als Source6-Vorschlag unabhängig geprüft. Eigener Accept-/Connection-Besitz und gemeinsame Schonfrist sind als Source7 vorbereitet; alle drei konkreten Testorakel-Lücken der ersten Version sind in der zweiten Version eng korrigiert und unabhängig geprüft. Die acht übrigen Payloads sind unverändert. Integration in den endgültigen Source6-Stand sowie alle Compiler-/Rust-/TCP-Abnahmen fehlen.
@@ -256,12 +267,12 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - Verträge: [FEATURE_TODO.md](FEATURE_TODO.md), [ROADMAP.md](ROADMAP.md), [saved-comparison.md](saved-comparison.md).
   - Gate-Stand: core_contract: PASS_34; api_cli_mcp: PASS_NATIVE_9_AND_SDK23; actual_browser_ui: PASS_NATIVE_8_WITH_SERVED_ASSETS_AND_MUTATION_CONTROL; snapshot_and_mapping_integrity: PASS_NATIVE_10_TWO_ORIGINS_BOTH_COLLISION_SIDES; offline_restart_zero_requests: PASS_FINAL_DRAINED_HTTP_WITNESSES_0; work_draft_core: PASS_34_ISOLATED_WORK_ONLY; workspace_tests: PASS_FINAL_SOURCE_CI_476_EACH_PLATFORM_4_IGNORED_SEPARATE_RENDERER; workspace_clippy: PASS_ALL_TARGETS; combined_full_original_bundle: PASS_SAME_OPTIMIZED_EXE_NATIVE_SDK_CLI_BROWSER; exact_commit_ci: PASS_2A81036_ALL4; immutable_release: PASS_NATIVE11_SDK12_CLI_BUDGET4_UI13; installed_runtime: PASS_B11_7JOBS_19DURABLE_FILES; ui_contract: PASS_28; ui_browser_fixture: PASS_34; mapping_oracle_controls: PASS; final_app_tests: PASS_98; worker_maximum_depth: PASS_256_PLUS1_REFUSED_ON_1MIB_CALLER; cli_bundle_fixed_ceiling: PASS_NATIVE_64MIB_EXACT_PLUS1; baseline_exact_commit_ci: PASS_B8D6908_ALL4.
 
-- [ ] **Erwartete und tatsächliche Migrationsziele prüfen** — OFFLINE_CORE_SOURCE_REVIEWED_16_TESTS_AUTHORED_NOT_EXECUTED. Ein isolierterRust-Core liestCSV-Alt-/Zielzuordnungen überdenbestehendenImporter undvergleichtbereitsgeliefertePageRecords. Zeilenherkunft,Duplikate,mehrdeutigeBeobachtungen,Redirectketten,Fehler undZielabweichungen werdenunterschieden. KeinNetzwerk/Snapshotauth/API/CLI/UI undkeinFeatureabschluss;16Tests sindnurverfasst.
+- [ ] **Erwartete und tatsächliche Migrationsziele prüfen** — ACTUAL_SOURCE8_WORKSPACE_PASS_NATIVE_PENDING. Migrations-Core, API, explizite CLI und separate Oberfläche sind im privaten Source8 integriert. Die tatsächliche Gesamtsuite besteht mit 1322 Tests einschließlich aller 16 Core-Migrationsfälle und sechs zusätzlichen API-/CLI-Servicefällen. Frische öffentliche Crawl-, Browser- und Wiederöffnungsprüfungen bleiben offen.
   - [x] NeuerCore-Code undalle16Testquellen unabhängig gelesen; zweiLib-Einfügehunks undzweiTestkorrekturen exaktzurückgeführt.
   - [ ] ZweiLib-Hunksauf tatsächlichenletztenParentübertragen undCore/CSV/Redirecttests tatsächlichausführen.
   - [ ] Verbindliche gespeicherteSnapshot-Auswahl, begrenztenAPI-Upload/Pagination/CSV, CLI undresponsiveUI1440/320 integrieren.
   - [ ] EchteeigeneHTTP-Crawls undanschließendeMigrationsauswertung mitnullzusätzlichenWebsiteanfragen prüfen.
-  - Verträge: [migration-INTEGRATION-TODO.md](verification/source6-r2-reviewed-repair-20261015/migration-INTEGRATION-TODO.md), [migration-core-review.json](verification/source6-r2-reviewed-repair-20261015/migration-core-review.json).
+  - Verträge: [index.json](verification/combined-workspace-v8-20261015/index.json), [migration-INTEGRATION-TODO.md](verification/source6-r2-reviewed-repair-20261015/migration-INTEGRATION-TODO.md), [migration-core-review.json](verification/source6-r2-reviewed-repair-20261015/migration-core-review.json).
   - Gate-Stand: source_review: NO_FINDINGS_BOUNDED_OFFLINE_CORE_ONLY; rust_tests: NOT_RUN; api_cli_ui: NOT_IMPLEMENTED; manufacturer_parity: NOT_PROVEN.
 
 - [ ] **Große Sitemap-Kataloge effizient durchblättern** — ACTUAL_R3_RUST_AND_FULL_50000_NATIVE_INITIAL_REOPEN_PASS. Source5 entfernt SQL-Einzelabfragen pro Eintrag und erneutes vollständiges Serialisieren, während Integritäts-, Quellen-, Reihenfolge-, Cursor- und Größenprüfungen erhalten bleiben. Acht neue Tests prüfen die exakte bisherige Serialisierung und gültige UTF-16-Ledger. Der tatsächliche Laufzeitgewinn und die vollständige 50.000-Zeilen-Wiederöffnung sind noch offen.
@@ -1490,7 +1501,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 ### HTTP, Fehler und Weiterleitungen
 
-6 Einträge: 0 eigene Abnahmen erfüllt, 5 teilweise geprüft, 1 offen.
+6 Einträge: 0 eigene Abnahmen erfüllt, 6 teilweise geprüft, 0 offen.
 
 #### Teilweise vorhanden – Restarbeiten
 
@@ -1645,6 +1656,40 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   </details>
 
+- [ ] **Migrationsziele überprüfen** — Teilweise geprüft; `http.migration`, P1.
+
+  Orientierung: Alte und erwartete neue URLs aus CSV mit tatsächlichen Endzielen vergleichen.
+
+  Beweisregister: [combined-workspace-v8-20261015](verification/combined-workspace-v8-20261015/index.json) (PASS_COMBINED_WORKSPACE_V8_REAL_RENDERER_FMT_CLIPPY).
+
+  <details>
+  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
+
+  ```json
+  {
+    "id": "http.migration",
+    "reference_name": "Migration destination validation",
+    "status": "partial",
+    "acceptance_test": "Check a CSV of old/new URL expectations and identify mismatched final destinations.",
+    "remaining_acceptance": [
+      "Run the real saved-crawl migration workflow across API, CLI and browser at 1440/320, including held file/response regressions, complete exports, stale snapshots, zero read-phase website requests and cold reopen."
+    ],
+    "implementation_evidence": [
+      {
+        "verification_run_ids": [
+          "combined-workspace-v8-20261015"
+        ],
+        "proves": "Actual private Source8 commit and complete1322-test run verify offline CSV mapping, duplicates, ambiguous/missing observations, actual HTTP redirect/failure semantics, strict snapshot/cursor/limit handling and explicit new CLI output semantics. API/CLI/UI workflow code is integrated.",
+        "limits": "Fresh public-crawl/API/CLI/browser workflow, held file/response regressions, cold reopen and installed same-candidate acceptance remain pending. Unit fixtures are not new website observations.",
+        "source_commit": "e6b1fa2f87d0b39ac7f83aba6cdecc2110de5a50"
+      }
+    ],
+    "parity_status": "NOT_PROVEN"
+  }
+  ```
+
+  </details>
+
 - [ ] **Quellen defekter Links exportieren** — Teilweise geprüft; `http.broken_sources`, P1.
 
   Orientierung: Alle Quellvorkommen mit Dokumentposition und Pfad exportieren.
@@ -1673,33 +1718,6 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
         "proves": "Broken-outlink findings identify source pages; all-occurrence links CSV contains source, target, anchor, kind and rel. API/browser exports are tested."
       }
     ],
-    "parity_status": "NOT_PROVEN"
-  }
-  ```
-
-  </details>
-
-#### Noch offen
-
-- [ ] **Migrationsziele überprüfen** — Offen; `http.migration`, P1.
-
-  Orientierung: Alte und erwartete neue URLs aus CSV mit tatsächlichen Endzielen vergleichen.
-
-  Beweisregister: keine zugeordnete ausgeführte Prüfung.
-
-  <details>
-  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
-
-  ```json
-  {
-    "id": "http.migration",
-    "reference_name": "Migration destination validation",
-    "status": "planned",
-    "acceptance_test": "Check a CSV of old/new URL expectations and identify mismatched final destinations.",
-    "remaining_acceptance": [
-      "Check a CSV of old/new URL expectations and identify mismatched final destinations."
-    ],
-    "implementation_evidence": [],
     "parity_status": "NOT_PROVEN"
   }
   ```
@@ -5602,4 +5620,4 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `4261430c847d5da53adcfad920261a61a591b851dec4028f1daa893df591c484`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T08:41:21.015Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `089d0fe279e977596edb5f887bc3f3f1d9bb6fd9233354a2d0013a432672250f`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T08:41:21.015Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

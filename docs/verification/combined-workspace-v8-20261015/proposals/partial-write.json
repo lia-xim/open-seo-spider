@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "kind": "http_response_partial_write_source_proposal_v1",
+  "status": "SOURCE_ONLY_SEPARATE_FOLLOWUP_ON_ISOLATED_PREVIEW_NOT_ACTUAL_SOURCE7_RELEASE",
+  "immutable": true,
+  "parent_preview": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v7-r2-draft/preformat.json",
+    "sha256": "6dba59b488de7dc9f5df67bcf3258ced83755ff5d56debf1fd3333932ead91b9",
+    "bytes": 121213
+  },
+  "parent_actual_source6_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-r2\\manifest.json",
+    "sha256": "4572dc39ee478b8b3d55d06b5983779d6a42416c307256780050dc5950c49b77",
+    "bytes": 195006
+  },
+  "parent_actual_source6_commit": "3be3fec9c0b2b67cfe7c3eda21ab2151db6edbe7",
+  "parent_source7_proposal": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-inbound-transport-frozen-source6-rebase-v2\\manifest.json",
+    "sha256": "b935bcb78cdae164054ef3ee5a58c0433930896da53f0d3937033400b83c2a6a",
+    "bytes": 64001
+  },
+  "parent_source7_independent_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-inbound-transport-frozen-source6-independent-review-v2/receipt.json",
+    "sha256": "ad96cf4979bb05ea3a99ac8646ee74daa1568163acb768437cd7a1b2c824bb41",
+    "bytes": 25653
+  },
+  "source_payload_directory": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-partial-write-proposal-v1\\source",
+  "files": [
+    {
+      "path": "crates/app/src/server/response_stream.rs",
+      "before_sha256": "5d6650224878435514940a53b3acff73bcb2e44a8ace0a42562580a0d8371285",
+      "before_bytes": 23465,
+      "after_sha256": "39933d8505b757623037b83350b110934b8ce763b6f82376118e072822af9854",
+      "after_bytes": 23376
+    },
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "before_sha256": "1743a2e49e96717240a132ddb5a1159dfb8fa8c5807fe801d2c7b0e7e2d41655",
+      "before_bytes": 27717,
+      "after_sha256": "3059e98553e2e59d52c0889581fa2e11f5b6dda5de6e2805fbc69d62a5b383cf",
+      "after_bytes": 32278
+    }
+  ],
+  "operations": 2,
+  "new_named_tests": 3,
+  "new_authored_test_functions": [
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "name": "response_channel_write_returns_exact_one_chunk_prefix_and_leaves_tail_unaccepted",
+      "full_name": "server::response_stream::tests::response_channel_write_returns_exact_one_chunk_prefix_and_leaves_tail_unaccepted",
+      "windows": true,
+      "unix": true
+    },
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "name": "response_channel_default_write_all_preserves_exact_bytes_and_empty_writes_enqueue_nothing",
+      "full_name": "server::response_stream::tests::response_channel_default_write_all_preserves_exact_bytes_and_empty_writes_enqueue_nothing",
+      "windows": true,
+      "unix": true
+    },
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "name": "response_channel_cancel_and_closed_before_enqueue_return_zero_progress_errors",
+      "full_name": "server::response_stream::tests::response_channel_cancel_and_closed_before_enqueue_return_zero_progress_errors",
+      "windows": true,
+      "unix": true
+    }
+  ],
+  "new_test_names": [
+    "server::response_stream::tests::response_channel_write_returns_exact_one_chunk_prefix_and_leaves_tail_unaccepted",
+    "server::response_stream::tests::response_channel_default_write_all_preserves_exact_bytes_and_empty_writes_enqueue_nothing",
+    "server::response_stream::tests::response_channel_cancel_and_closed_before_enqueue_return_zero_progress_errors"
+  ],
+  "inherited_required_names": 515,
+  "required_names_forecast": 518,
+  "minimum_expected_workspace_tests_forecast": 1300,
+  "source_inputs": 326,
+  "all_old_test_bytes_exact": true,
+  "all_four_terminal_errors_and_transport_hunks_retained": true,
+  "assessment": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-terminal-cancellation-independent-review-v2\\partial-write-contract-assessment.json",
+    "sha256": "a633167385b2ea3e53d1896fd74a4aa84d827de79f37a1010ba2fac37e69c7e2",
+    "bytes": 3107
+  },
+  "artifacts": [
+    {
+      "path": "derivation.json",
+      "sha256": "7084f926c0aa034f4e987c7f58c28b774ce88da342f98db96520a38668ff89a2",
+      "bytes": 12813
+    },
+    {
+      "path": "HANDOFF.md",
+      "sha256": "30cb35d3693761e56369adec703bcea5d831f6ae4efdccb853d6bbbf2d7d1576",
+      "bytes": 1640
+    },
+    {
+      "path": "prepare-source.mjs",
+      "sha256": "292e045161d8db1753f4248f3b82ccacb1f3d3b6bcf8a6b3cfbe94a10d221f05",
+      "bytes": 14569
+    }
+  ],
+  "pins": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v7-r2-draft/preformat.json",
+      "sha256": "6dba59b488de7dc9f5df67bcf3258ced83755ff5d56debf1fd3333932ead91b9",
+      "bytes": 121213
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-terminal-cancellation-independent-review-v2\\partial-write-contract-assessment.json",
+      "sha256": "a633167385b2ea3e53d1896fd74a4aa84d827de79f37a1010ba2fac37e69c7e2",
+      "bytes": 3107
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v7-r2-draft\\preformat\\crates\\app\\src\\server\\response_stream.rs",
+      "sha256": "5d6650224878435514940a53b3acff73bcb2e44a8ace0a42562580a0d8371285",
+      "bytes": 23465
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v7-r2-draft\\preformat\\crates\\app\\src\\server\\response_stream_tests.rs",
+      "sha256": "1743a2e49e96717240a132ddb5a1159dfb8fa8c5807fe801d2c7b0e7e2d41655",
+      "bytes": 27717
+    }
+  ],
+  "actual_source7_release": null,
+  "actual_suite_proof": null,
+  "actual_build_proof": null,
+  "actual_candidate": null,
+  "executions": {
+    "target_imports": 0,
+    "cargo_formatter_compiler_tests": 0,
+    "sqlite_http_tcp_native": 0,
+    "root_product_git_writes": 0
+  },
+  "qualification": "Minimal separate Write trait contract correction; actual Source7 final-parent rebase and independent/runtime acceptance remain pending. No current S7 proposal or draft is changed."
+}

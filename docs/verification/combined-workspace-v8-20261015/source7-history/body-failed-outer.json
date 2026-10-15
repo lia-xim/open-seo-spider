@@ -1,0 +1,90 @@
+{
+  "kind": "source7_body_native_outer",
+  "result": "FAIL_OUTER_CHILD",
+  "recorded_at": "2026-10-15T15:59:33.913Z",
+  "gate": "source-body-v7",
+  "source_manifest_sha256": "fd587ba252595d971e7557e5cca7f5ab90219ecda200a3f07fcd5c10c13b6397",
+  "driver_sha256": "fd93571951780f18da0be3e5b769219c4974293babe16f2e6713c9cee408373c",
+  "harness": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source7-native-preparation-v2\\body\\native-source-body-v7.mjs",
+    "sha256": "03b14b3cfcb4190c8975d45011d5ce1e8b3ea8bb1608b1bccf641062895e3046",
+    "args": [
+      "--release",
+      "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\v7-source-body-release.json",
+      "--release-sha256",
+      "bfdd348cbeb10f3ba01ceb949d5b83300fa0e1ee51511c89c08dc2e4785d7df6",
+      "--source-manifest-sha",
+      "fd587ba252595d971e7557e5cca7f5ab90219ecda200a3f07fcd5c10c13b6397",
+      "--lock-token",
+      "9a5f4ac5-55b5-497a-b143-61934f1c15a1"
+    ]
+  },
+  "node": {
+    "executable": "C:\\Program Files\\nodejs\\node.exe",
+    "version": "24.15.0",
+    "no_preloads": true
+  },
+  "actual_build_proof": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-optimized-build-v7\\proof.json",
+    "sha256": "83335388935e1681ed658d35c96697589f6b2ad6d9985f6b42892f1f5e140507"
+  },
+  "proof_inputs": {
+    "source_manifest_sha256": "fd587ba252595d971e7557e5cca7f5ab90219ecda200a3f07fcd5c10c13b6397",
+    "suite_proof_sha256": "8c8cf67de2a2849ea2443f0a060f4812235a9c148f9e14e644fc64690d6fc9ea",
+    "build_proof_sha256": "83335388935e1681ed658d35c96697589f6b2ad6d9985f6b42892f1f5e140507",
+    "build_driver_sha256": "1704796d260e46bb7f9bedd28e2f951a0d4bda0c1d70bef655cf4cf58042dee6",
+    "candidate_binary_sha256": "5e7c8fbb8fda87087ebc5abde12416ed52a69d9f924e4f4a5321e6e14963907e"
+  },
+  "grant": {
+    "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\v7-source-body-release.json",
+    "sha256": "bfdd348cbeb10f3ba01ceb949d5b83300fa0e1ee51511c89c08dc2e4785d7df6"
+  },
+  "binary": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-optimized-build-v7\\candidate\\open-seo-spider.exe",
+    "sha256": "5e7c8fbb8fda87087ebc5abde12416ed52a69d9f924e4f4a5321e6e14963907e",
+    "bytes": 40585216
+  },
+  "pid": 37892,
+  "spawn_event": true,
+  "actual_exit_event": true,
+  "actual_close_event": true,
+  "spawn_error": null,
+  "exit": {
+    "code": 1,
+    "signal": null
+  },
+  "close_exit": {
+    "code": 1,
+    "signal": null
+  },
+  "stdout": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v4\\source-body-v7\\stdout.log",
+    "end": true,
+    "closed": true,
+    "observed_bytes": 1867,
+    "error": null,
+    "write_error": null,
+    "fd_closed": true,
+    "sha256": "0f1a2c1f54e13eee2f2bd122672a347d3f128bbe5596a337522bb1dea349feac",
+    "bytes": 1867,
+    "drained": true
+  },
+  "stderr": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v4\\source-body-v7\\stderr.log",
+    "end": true,
+    "closed": true,
+    "observed_bytes": 0,
+    "error": null,
+    "write_error": null,
+    "fd_closed": true,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "drained": true
+  },
+  "signals": [],
+  "lock_released": true,
+  "failures": [
+    "Owned harness did not spawn, exit and actually close with exit 0/signal null"
+  ],
+  "qualification": "Only the direct harness process and captured pipes are observed here. Inner proofs independently determine acceptance, descendant cleanup and scope. No outer timeout, kill, retry, installation or source mutation."
+}
