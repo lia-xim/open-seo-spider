@@ -1,0 +1,74 @@
+{
+  "origin": "http://127.0.0.1:59485",
+  "fixture_origin": "http://127.0.0.1:59486",
+  "health": {
+    "status": "ok",
+    "worker": "open-seo-spider-renderer",
+    "active": 0,
+    "queued": 0,
+    "max_concurrency": 4,
+    "browser": {
+      "available": true,
+      "executable": "C:/Program Files/Google/Chrome/Application/chrome.exe"
+    }
+  },
+  "warmup": {
+    "html": "<html><head><title>Owned ready</title></head><body><script>document.title=\"Owned ready\";</script></body></html>",
+    "final_url": "http://127.0.0.1:59486/",
+    "status": 200,
+    "headers": {
+      "connection": "keep-alive",
+      "content-length": "106",
+      "date": "Thu, 15 Oct 2026 19:52:35 GMT",
+      "keep-alive": "timeout=5",
+      "content-type": "text/html"
+    },
+    "title": "Owned ready",
+    "console_errors": [],
+    "network_requests": [
+      {
+        "url": "http://127.0.0.1:59486/",
+        "method": "GET",
+        "resource_type": "document",
+        "status": 200,
+        "error": null
+      }
+    ],
+    "network_events_dropped": 0,
+    "rendered_at": "2026-10-15T19:52:35.648Z",
+    "browser_version": "155.0.8059.41",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "render_wait_ms": 20,
+    "custom_javascript_results": [],
+    "browser_cookies": []
+  },
+  "renderer_runtime_root": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\outputs\\open-seo-spider",
+  "renderer_input_hashes": [
+    {
+      "path": "renderer/package-lock.json",
+      "sha256": "931a8719184b70ef76b49ddcc43421f4adf02491dbacafe75f0a121687172184",
+      "bytes": 1148
+    },
+    {
+      "path": "renderer/package.json",
+      "sha256": "141208207c717118e20c35305c77edf35fe8fc9c1c6cdcf4a4e2666b59a78bc7",
+      "bytes": 428
+    },
+    {
+      "path": "renderer/server.mjs",
+      "sha256": "779699ebcf533cd88e0877eaf80edc7db28f0c4935a2e3a50f16d1fed45b7175",
+      "bytes": 26030
+    },
+    {
+      "path": "renderer/tests/worker.test.mjs",
+      "sha256": "365a31344da4a3c50d49d4c70657efde646fb1fa15965c817843932b55363e51",
+      "bytes": 17462
+    }
+  ],
+  "chrome_path": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "chrome_sha256": "9ca2beaa7a9fd1109f01e562788c22e045a01cec0f6015ade689325af7f8a521",
+  "user_renderer_contacted": false
+}
