@@ -1,0 +1,9 @@
+# Source-body selection: refresh controls after selecting a crawl
+
+The first actual Source9 Browser27 run passed26 prior groups, then failed because the original-body refresh remained disabled after an archive-enabled crawl selection. In actual app.js, selectCrawl calls invalidatePoll -> resetSitemapMembership -> resetSourceBodies before assigning the next state.crawl. renderSourceBodies therefore uses the old/null crawl. Later renderSitemapInspector calls resetSourceBodies only if the selected observation ID changes; null to null never updates the controls.
+
+One production operation calls renderSourceBodies immediately after the new state.crawl assignment. Existing early abort/reset/generation ordering, observation identity, owner tokens, busy handling, HTTP/download bounds and all browser helpers remain byte-exact. Selecting a crawl, clearing it, and switching from a busy older crawl all now derive the controls from the new identity. This performs no network IO.
+
+Three authored Node regression cases execute the actual caller-hash-pinned product function bodies in a bounded VM; only unrelated UI/saved-backend seams are stubbed. The old first-selection case deterministically leaves refresh disabled and the clear-selection case leaves it enabled, so the tests detect the pre-fix behavior without a waiting timeout. They are NOT_RUN. Root may later execute: node tests/source-body-selection-regression.cjs --app ABS_ACTUAL_APP_JS --sha256 ACTUAL_SHA. This source test does not replace a genuine unchanged Browser27 rerun against a later compiled candidate. No helper timeout, forced click or API bypass is changed.
+
+Actual Source9 source/build/suite remain historical parent evidence; this proposal has no future compiled Source10/PASS identity. No Root, compiler, browser, HTTP, Git or runtime actions by author.

@@ -1,3 +1,7 @@
+## Aktuell: Browsertest findet Auswahlfehler; nächster Batch in Integration (15.10.2026)
+
+Source9 besteht1359 Tests und optimierten Build. Der echte Browserlauf besteht26 Gruppen und findet danach einen deaktivierten Ladebutton für gespeicherte Originaldateien. Die enge Korrektur besteht3 separate Regressionen, während der alte Stand1pass/2fail zeigt. Der Resource-/Directory-Lauf besteht5 Gruppen; seine Sidebar-Prüfung wird nach separatem Nachweis aller35 erreichbaren Navigationen korrigiert. [Rohbelege und offene Grenzen](verification/source9-native-checkpoint-20261015/index.json). Source9 wird nicht installiert. Source10 integriert UI-Fix,1–6-Gramm-Corpus und eine kleine Sitemap-Abfrageverbesserung; vollständige neue Prüfungen folgen. Katalog unverändert31 umgesetzt,69 teilweise,44 geplant; Herstellerparität offen.
+
 ## Aktuell: Quellenberichte und Verzeichnisansicht vollständig im Workspace geprüft (15.10.2026)
 
 Source9 besteht tatsächlich1359 Tests, alle577 Pflichtnamen/581 vollständigen Namen, vier echte Renderer-Gates sowie Format und Clippy. [Rohbelege](verification/combined-workspace-v9-20261015/index.json) und [Bedienung](saved-source-reports.md). Der optimierte Build läuft; praktische native Abnahmen und Installation folgen. Verzeichnishierarchie ist jetzt teilweise belegt. Katalog:31 umgesetzt,69 teilweise,44 geplant. N-Gramm-Corpus und Leseoptimierung sind quellengeprüft für den nächsten Batch; Herstellerparität bleibt offen.
