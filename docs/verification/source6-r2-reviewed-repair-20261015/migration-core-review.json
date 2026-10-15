@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "kind": "http_migration_core_independent_source_review_v2",
+  "result": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "findings": [],
+  "proposal_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-migration-core-proposal-v2/manifest.json",
+    "sha256": "0a88d4c47e2ffe615803b261f048986593391f732b45d346dc6d6ae2c05b1932"
+  },
+  "parent_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v5-r3\\manifest.json",
+    "sha256": "27a8b74c4cd0c394906f3fe3c0a6a0327569294b25056cf6c6f0aabcffc42788",
+    "bytes": 220311
+  },
+  "parent_source_commit": "9fa103ebc0be41f1adf55111e7875cf9f133d65a",
+  "parent_proposal_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-migration-core-proposal-v1\\manifest.json",
+    "sha256": "c94a7397df68d70de3f39decedac8cca0aa7f06a59b4403a2b4d1eca15598b61",
+    "bytes": 4617
+  },
+  "checked": {
+    "new_production_module": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-migration-core-proposal-v2\\source\\crates\\core\\src\\migration.rs",
+      "sha256": "65543597f95f37575e4ffb7c7560140f1be464b383c2f3e1e1becf57568ea5d0",
+      "bytes": 16978,
+      "full_manual_source_read": true
+    },
+    "new_test_module": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-migration-core-proposal-v2\\source\\crates\\core\\src\\migration_tests.rs",
+      "sha256": "b13800ca0fe4015f1eb804aa3077d99c597ff9c8e7b400166e79a4e14ddd4551",
+      "bytes": 16411,
+      "full_manual_source_read": true
+    },
+    "two_full_lib_wiring_forward_inverse_exact": true,
+    "two_v2_test_borrowing_forward_inverse_exact": true,
+    "production_modules_exact_v1": true,
+    "assertion_inventory_unchanged_v1": true,
+    "source_references_checked": [
+      {
+        "path": "crates/core/src/lib.rs",
+        "sha256": "09e18dd6e6da38b09dfda3eeda6ca7282580f11d3e3ebfd487708a3a18b912bc",
+        "bytes": 6814
+      },
+      {
+        "path": "crates/core/src/list_import.rs",
+        "sha256": "3c6181438375dcbe9c52d423eaf01c1e78dc06091a4fc5da5d7d5d6a3daf5655",
+        "bytes": 99082
+      },
+      {
+        "path": "crates/core/src/urls.rs",
+        "sha256": "d4bb14a54e3770362c51aeef7072c8fee1c72c2e5e35a24a58ffcabaa6c95155",
+        "bytes": 3602
+      },
+      {
+        "path": "crates/core/src/models.rs",
+        "sha256": "f3d71380bcf5374c183c30792759167317b0ebc9c68fd2f54c4bb4618525f998",
+        "bytes": 39298
+      },
+      {
+        "path": "crates/core/src/crawler.rs",
+        "sha256": "7989b449a5cc6b591ffe0de480bda0ca3e0ddac6f724c19c92d15f68e45619fe",
+        "bytes": 166400
+      },
+      {
+        "path": "crates/core/Cargo.toml",
+        "sha256": "1c0a8d44d1ece1dfebad98614a4dfdb6fbcba79745cdd5e6d16e701fdeff8ff2",
+        "bytes": 1201
+      }
+    ],
+    "authored_test_names": [
+      "migration_bom_quoted_csv_headers_non_ascii_and_input_hash_use_existing_importer",
+      "migration_csv_order_duplicates_and_conflicting_expectations_are_preserved",
+      "migration_missing_and_duplicate_observations_are_unknown_without_latest_selection",
+      "migration_blocked_error_and_unfetched_proposed_redirect_target_never_pass",
+      "migration_matching_error_http_status_and_fetch_error_remain_failures",
+      "migration_multihop_chain_and_non_200_success_compare_actual_http_not_renderer",
+      "migration_incoherent_chain_status_continuity_tail_and_loop_are_not_success",
+      "migration_query_order_case_slash_scheme_and_encoded_spelling_remain_distinct",
+      "migration_fragments_are_retained_but_http_comparison_does_not_claim_anchor_navigation",
+      "migration_invalid_mapping_fields_and_blank_records_keep_source_provenance",
+      "migration_malformed_utf8_quoting_same_columns_and_unknown_options_are_rejected",
+      "migration_semicolon_tab_and_header_aliases_follow_existing_list_semantics",
+      "migration_supplied_invalid_status_url_and_unexplained_final_url_are_explicit",
+      "migration_import_row_field_input_and_observation_caps_fail_before_result_retention",
+      "migration_exact_serialized_output_bound_and_repeated_projection_are_independent",
+      "migration_csv_mapping_remains_byte_bound_and_evaluation_has_no_crawl_side_effect"
+    ],
+    "authored_full_test_names": [
+      "migration::tests::migration_bom_quoted_csv_headers_non_ascii_and_input_hash_use_existing_importer",
+      "migration::tests::migration_csv_order_duplicates_and_conflicting_expectations_are_preserved",
+      "migration::tests::migration_missing_and_duplicate_observations_are_unknown_without_latest_selection",
+      "migration::tests::migration_blocked_error_and_unfetched_proposed_redirect_target_never_pass",
+      "migration::tests::migration_matching_error_http_status_and_fetch_error_remain_failures",
+      "migration::tests::migration_multihop_chain_and_non_200_success_compare_actual_http_not_renderer",
+      "migration::tests::migration_incoherent_chain_status_continuity_tail_and_loop_are_not_success",
+      "migration::tests::migration_query_order_case_slash_scheme_and_encoded_spelling_remain_distinct",
+      "migration::tests::migration_fragments_are_retained_but_http_comparison_does_not_claim_anchor_navigation",
+      "migration::tests::migration_invalid_mapping_fields_and_blank_records_keep_source_provenance",
+      "migration::tests::migration_malformed_utf8_quoting_same_columns_and_unknown_options_are_rejected",
+      "migration::tests::migration_semicolon_tab_and_header_aliases_follow_existing_list_semantics",
+      "migration::tests::migration_supplied_invalid_status_url_and_unexplained_final_url_are_explicit",
+      "migration::tests::migration_import_row_field_input_and_observation_caps_fail_before_result_retention",
+      "migration::tests::migration_exact_serialized_output_bound_and_repeated_projection_are_independent",
+      "migration::tests::migration_csv_mapping_remains_byte_bound_and_evaluation_has_no_crawl_side_effect"
+    ],
+    "authored_windows_tests": 16,
+    "executed_tests": 0,
+    "dependency_changes": 0,
+    "import_text_and_output_budgets_are_independent": true,
+    "no_page_record_whole_cloning": true,
+    "snapshot_authentication": "NOT_IMPLEMENTED_NOT_CLAIMED",
+    "api_cli_ui": "NOT_IMPLEMENTED_NOT_CLAIMED",
+    "syntax": [
+      {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-migration-core-proposal-v2/prepare-handoff.mjs",
+        "exitcode": 0,
+        "signal": null
+      },
+      {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-migration-core-independent-review-v2/review-source.mjs",
+        "exitcode": 0,
+        "signal": null
+      }
+    ]
+  },
+  "reasoning": [
+    "The entire new production module and all16 test functions were manually read. Both columns delegate to the same unchanged strict UTF8/BOM/quoted CSV importer with actual input SHA, independent importer caps and identical row/source-line checks. Order, duplicate pairs, conflicts, raw inputs, field errors and fragments are preserved; imports do not start network work.",
+    "The observation preflight bounds actual relevant text bytes/pages/redirect count before normalized indexing or observation cloning. Duplicate requested identities remain ambiguous without timestamp selection. The copied projection excludes unrelated saved page/HTML fields. Status, proposed-but-unfetched final targets, robots and fetch errors are distinguished; matching404/304/errors cannot produce DestinationMatch. Redirect chain statuses/continuity/first-status/tail/repeats follow the existing crawler fields and only301/302/303/307/308 hops, while rendering and fragment navigation are explicitly excluded.",
+    "The capped serializer counts actual escaped compact JSON bytes, rows are charged before Vec retention, and a final exact serialization guard remains. The conservative1024B summary reserve is explicitly documented and can refuse reduced-cap exact-fit reports; no exact-fit acceptance or whole-process RSS guarantee is claimed. Counts are bounded by imported rows/pages; output limits do not silently truncate success.",
+    "All new source declarations and test inventories agree.2 original lib insertions and2 V2 test-only single-element borrowing changes reverse to their complete immutable parents. Current integration must transplant the two lib hunks onto the actual future Source7/Core lib; replacing that lib with this historical Source5R3-derived full payload would discard newer work and is explicitly forbidden in the handoff.",
+    "This pure offline Core evaluator accepts caller-supplied PageRecords, including possible synthetic records. It does not authenticate a saved job/generation/config/report snapshot. Actual snapshot adapter, public bounded API/CLI/UI, cursor/export workflow, actual crawler/browser/cold-reopen proof and feature catalogue/parity acceptance remain open and are itemized in INTEGRATION-TODO. No executed Rust result follows from16 authored tests."
+  ],
+  "pins": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-migration-core-proposal-v2/manifest.json",
+      "sha256": "0a88d4c47e2ffe615803b261f048986593391f732b45d346dc6d6ae2c05b1932",
+      "bytes": 5283
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-migration-core-proposal-v2\\DERIVATION.json",
+      "sha256": "3402148e3ce7df7cafafa757dd37f2742fd622249fd5b26c980a897a885b8dd1",
+      "bytes": 1091
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-migration-core-proposal-v2\\TESTS.json",
+      "sha256": "9da4c7261c8ca6ce04f6c00a3d8eb02cedf9bd8524e596a3e4b5449914bc56b5",
+      "bytes": 3186
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v5-r3\\manifest.json",
+      "sha256": "27a8b74c4cd0c394906f3fe3c0a6a0327569294b25056cf6c6f0aabcffc42788",
+      "bytes": 220311
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-migration-core-proposal-v1\\manifest.json",
+      "sha256": "c94a7397df68d70de3f39decedac8cca0aa7f06a59b4403a2b4d1eca15598b61",
+      "bytes": 4617
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-migration-core-proposal-v1\\DERIVATION.json",
+      "sha256": "3ccc44e0fcd13b1aafb86d073b45ee86ecc3abcfe8edc4336072bd6e3f414b16",
+      "bytes": 2164
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-migration-core-proposal-v2\\source\\crates\\core\\src\\lib.rs",
+      "sha256": "7db06dd98fdfec6b6a8740e2883d44cffd8cef7f207da499ea38d52fc4581c2a",
+      "bytes": 7047
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-migration-core-proposal-v2\\source\\crates\\core\\src\\migration.rs",
+      "sha256": "65543597f95f37575e4ffb7c7560140f1be464b383c2f3e1e1becf57568ea5d0",
+      "bytes": 16978
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-migration-core-proposal-v2\\source\\crates\\core\\src\\migration_tests.rs",
+      "sha256": "b13800ca0fe4015f1eb804aa3077d99c597ff9c8e7b400166e79a4e14ddd4551",
+      "bytes": 16411
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v5-r3\\crates\\core\\src\\lib.rs",
+      "sha256": "09e18dd6e6da38b09dfda3eeda6ca7282580f11d3e3ebfd487708a3a18b912bc",
+      "bytes": 6814
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v5-r3\\crates\\core\\src\\list_import.rs",
+      "sha256": "3c6181438375dcbe9c52d423eaf01c1e78dc06091a4fc5da5d7d5d6a3daf5655",
+      "bytes": 99082
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v5-r3\\crates\\core\\src\\urls.rs",
+      "sha256": "d4bb14a54e3770362c51aeef7072c8fee1c72c2e5e35a24a58ffcabaa6c95155",
+      "bytes": 3602
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v5-r3\\crates\\core\\src\\models.rs",
+      "sha256": "f3d71380bcf5374c183c30792759167317b0ebc9c68fd2f54c4bb4618525f998",
+      "bytes": 39298
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v5-r3\\crates\\core\\src\\crawler.rs",
+      "sha256": "7989b449a5cc6b591ffe0de480bda0ca3e0ddac6f724c19c92d15f68e45619fe",
+      "bytes": 166400
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v5-r3\\crates\\core\\Cargo.toml",
+      "sha256": "1c0a8d44d1ece1dfebad98614a4dfdb6fbcba79745cdd5e6d16e701fdeff8ff2",
+      "bytes": 1201
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-migration-core-proposal-v1\\source\\crates\\core\\src\\migration_tests.rs",
+      "sha256": "1602570ce71c5afce6530514e7c36c0258a7c3021304ac4c8f00e3d84ed42c71",
+      "bytes": 16387
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-migration-core-proposal-v1\\source\\crates\\core\\src\\migration.rs",
+      "sha256": "65543597f95f37575e4ffb7c7560140f1be464b383c2f3e1e1becf57568ea5d0",
+      "bytes": 16978
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-migration-core-proposal-v1\\source\\crates\\core\\src\\lib.rs",
+      "sha256": "7db06dd98fdfec6b6a8740e2883d44cffd8cef7f207da499ea38d52fc4581c2a",
+      "bytes": 7047
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-migration-core-proposal-v2\\INTEGRATION-TODO.md",
+      "sha256": "263ecf53db28a08aa38e1dd6fd98908fb675767b57e14e84ac68c2e2ec945c29",
+      "bytes": 7166
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-migration-core-proposal-v2/prepare-handoff.mjs",
+      "sha256": "8a4c2cd7273c7bac509b97306c3684c3504a63a925d39f70754f7b4c0e0c026e",
+      "bytes": 3373
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-migration-core-independent-review-v2/review-source.mjs",
+      "sha256": "c0b10880de46453df8ed22e3e70cbb1ce5c683b70eec1f5edce5854c1d26f93b",
+      "bytes": 10649
+    }
+  ],
+  "excluded_executions": {
+    "target_imports": 0,
+    "rust_compiler_formatter_clippy_tests": 0,
+    "sqlite_http_tcp_browser_native_fixtures": 0,
+    "root_product_git_mutations": 0
+  },
+  "qualification": "Independent bounded source-only review of the proposed pure Core slice, not completion of http.migration or any vendor parity claim. Root formatting/compilation/test execution and actual future integration remain mandatory; parent is immutable Source5R3, not a new Source6/7 runtime release."
+}

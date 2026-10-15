@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "kind": "http_response_terminal_cancellation_source_proposal_v2",
+  "status": "SOURCE_ONLY_NOT_COMPILED_NOT_TESTED_INDEPENDENT_REVIEW_REQUIRED",
+  "immutable": true,
+  "parent_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6\\manifest.json",
+    "sha256": "1210c227ac90c1936008d7667c877fb6e18d661a2925be5d4cf36d0e447d194e",
+    "bytes": 212895
+  },
+  "parent_source_commit": "15cb4243a9997d9c9dfb974b7f0574248e8dbeea",
+  "actual_failed_suite": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-suite-v6\\proof.json",
+    "sha256": "208fc362444a1b4613c89cd55c1cba2a1af3d82c5183527c4db304d089de8c14",
+    "bytes": 125121
+  },
+  "source_payload_directory": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-terminal-cancellation-proposal-v2\\source",
+  "files": [
+    {
+      "path": "crates/app/src/server/response_stream.rs",
+      "before_sha256": "b671599eb620c25d21dacc33f6ed87b4522bad7a35beab546128d8bf385d3915",
+      "before_bytes": 23132,
+      "after_sha256": "28faea704b3ff66e0bc21439a8dee081395b0f55c5257a58ab366c47591319e3",
+      "after_bytes": 23156
+    },
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "before_sha256": "dab862c50b1f75f4925d6286dfedbe61fe1aa2b07b1f95bd0f5148b77ac8f64e",
+      "before_bytes": 25627,
+      "after_sha256": "4d11ca0da38ed4c64ca2fe4c885164bd6e2a7a7c07099a4bd6d9630a740f1dc3",
+      "after_bytes": 27628
+    }
+  ],
+  "operations": 5,
+  "new_named_tests": 1,
+  "new_test_names": [
+    "server::response_stream::tests::response_actual_cancellation_is_terminal_to_standard_write_all_and_flush"
+  ],
+  "new_authored_test_functions": [
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "name": "response_actual_cancellation_is_terminal_to_standard_write_all_and_flush",
+      "full_name": "server::response_stream::tests::response_actual_cancellation_is_terminal_to_standard_write_all_and_flush",
+      "windows": true,
+      "unix": true
+    }
+  ],
+  "inherited_required_names": 501,
+  "required_test_names": 502,
+  "source_inputs": 324,
+  "minimum_expected_workspace_tests": 1284,
+  "inherited_existing_test_bytes_exact": true,
+  "retained_regions": [
+    {
+      "label": "Retained actual worker and response-supervisor ownership",
+      "start": "    pub(super) async fn start<",
+      "end": "pub(super) struct Ready<",
+      "sha256": "32940b372fdb760c75e788874bbf419ca88cf2bfe3166af735959c46302bde88",
+      "bytes": 7316,
+      "byte_exact": true
+    },
+    {
+      "label": "Permanent cancel and terminal bookkeeping",
+      "start": "    fn cancel(&self)",
+      "end": "#[derive(Default)]\nstruct Counters",
+      "sha256": "cc2d24576aae5d64ef9185299820be45e22e17c90085b185a90b7b8c371d3442",
+      "bytes": 1816,
+      "byte_exact": true
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "derivation.json",
+      "sha256": "b82e567aa65025a60d6f1d820c94a2a68c606944c952bf3dfdb6cbc5896c8333",
+      "bytes": 6843
+    },
+    {
+      "path": "HANDOFF.md",
+      "sha256": "c8e0b77822869c3a33b9790dae8341391731d64ec46806ab6568bfc2c1931938",
+      "bytes": 1928
+    },
+    {
+      "path": "prepare-source.mjs",
+      "sha256": "553eac4d59d03c4ca406004f3912c6c163e8d1ac6ef2b9c094b97049d51dbe1a",
+      "bytes": 12468
+    }
+  ],
+  "pins": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6\\manifest.json",
+      "sha256": "1210c227ac90c1936008d7667c877fb6e18d661a2925be5d4cf36d0e447d194e",
+      "bytes": 212895
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-suite-v6\\proof.json",
+      "sha256": "208fc362444a1b4613c89cd55c1cba2a1af3d82c5183527c4db304d089de8c14",
+      "bytes": 125121
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-suite-v6\\workspace-live.log",
+      "sha256": "facbabaecbbb0e5adad3566648ddef9196ae1c6d3028cfb1af9699d87aae03b1",
+      "bytes": 17946
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6\\crates\\app\\src\\server\\response_stream.rs",
+      "sha256": "b671599eb620c25d21dacc33f6ed87b4522bad7a35beab546128d8bf385d3915",
+      "bytes": 23132
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6\\crates\\app\\src\\server\\response_stream_tests.rs",
+      "sha256": "dab862c50b1f75f4925d6286dfedbe61fe1aa2b07b1f95bd0f5148b77ac8f64e",
+      "bytes": 25627
+    }
+  ],
+  "actual_completed_repaired_suite": null,
+  "actual_candidate": null,
+  "source_preparation_note": "Initial source-only author attempt refused the CRLF-specific insertion anchor before writing any payload; inspected actual LF source and corrected only the author anchor/new test line endings, then full inverses and pin guards ran.",
+  "excluded_executions": {
+    "target_imports": 0,
+    "cargo_formatter_compiler_tests": 0,
+    "native_fixture_cpu_process_actions": 0,
+    "root_product_git_writes": 0
+  },
+  "qualification": "Five exact source operations; four terminal cancellation error kinds and one bounded standalone regression. Actual Root execution and independent review still required."
+}

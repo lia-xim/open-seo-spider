@@ -1,0 +1,67 @@
+{
+  "kind": "actual_source6_full_workspace_failed_permanent_cancel_retry_hang",
+  "recorded_at": "2026-10-15T14:17:29.613Z",
+  "result": "FAIL_TEST_HANG_ROOT_OWNED_TEST_ONLY_TERMINATION_NO_COMPLETED_WORKSPACE",
+  "source_commit": "15cb4243a9997d9c9dfb974b7f0574248e8dbeea",
+  "source_inputs": 324,
+  "minimum_expected": 1283,
+  "required_names": 501,
+  "actual_format_close": 0,
+  "actual_workspace_close": 4294967295,
+  "completed_test_summaries": 0,
+  "observed_completed_individual_ok_lines": 163,
+  "stalled_test": "server::response_stream::tests::response_actual_eight_enqueues_and_ninth_full_reservation_survive_cancelled_drain_until_body_drop",
+  "root_verified_owned_test_only_termination": true,
+  "user_app_and_renderer_signalled": false,
+  "own_fixture_and_worker_closed": true,
+  "all_final_source_guards_true": true,
+  "primary_contract_source": "https://doc.rust-lang.org/std/io/trait.Write.html#method.write_all",
+  "qualification": "Actual compilation and partial App tests occurred, so zero completed summaries is NOT zero executed tests. Permanent cancellation ErrorKind::Interrupted is retried by standard write_all, keeping actual blocking worker alive after body drop. Only verified own test executable was terminated; Cargo/Suite failure closed and logs/final guards retained. No1283PASS, fresh Clippy, Source6 optimized/native/install or manufacturer parity. Installed acceptedR3ninebed remains live.",
+  "files": [
+    {
+      "path": "source-manifest.json",
+      "sha256": "1210c227ac90c1936008d7667c877fb6e18d661a2925be5d4cf36d0e447d194e",
+      "bytes": 212895
+    },
+    {
+      "path": "root-approval.json",
+      "sha256": "90d736f823c3a268fed142329a4145148c8e11aeae12fd335f5c017c8416128c",
+      "bytes": 74564
+    },
+    {
+      "path": "proof.json",
+      "sha256": "208fc362444a1b4613c89cd55c1cba2a1af3d82c5183527c4db304d089de8c14",
+      "bytes": 125121
+    },
+    {
+      "path": "owned-hang-test-termination.json",
+      "sha256": "566868fc8d0ca1c310af7768463c29fd023104bb5daa2834947c7ba9d7ca0ed2",
+      "bytes": 781
+    },
+    {
+      "path": "format.json",
+      "sha256": "5e978a1922e8344106e569b81928a104677dac2c7122b89c0043b971463c3f17",
+      "bytes": 380
+    },
+    {
+      "path": "format.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "workspace-live.json",
+      "sha256": "b480645eed5e86d6cee1909e8e3901d2679497b481f6a24eef3d55d42027b2c3",
+      "bytes": 732
+    },
+    {
+      "path": "workspace-live.log",
+      "sha256": "facbabaecbbb0e5adad3566648ddef9196ae1c6d3028cfb1af9699d87aae03b1",
+      "bytes": 17946
+    },
+    {
+      "path": "owned-worker.json",
+      "sha256": "a79801056e9d137d63378f0cc104da84158d27afbcba4d5d44693b2dfc9a0a81",
+      "bytes": 2299
+    }
+  ]
+}

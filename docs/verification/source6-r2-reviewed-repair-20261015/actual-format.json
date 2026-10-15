@@ -1,0 +1,38 @@
+{
+  "kind": "actual_source6_r2_format_only",
+  "recorded_at": "2026-10-15T14:20:41.773Z",
+  "result": "PASS_FORMAT_COMMAND_ONLY",
+  "actual_close_event": true,
+  "exit": {
+    "code": 0,
+    "signal": null
+  },
+  "pid": 32224,
+  "error": null,
+  "io_errors": [],
+  "streams": {
+    "stdout": {
+      "end": true,
+      "close": true,
+      "bytes": 0
+    },
+    "stderr": {
+      "end": true,
+      "close": true,
+      "bytes": 0
+    }
+  },
+  "elapsed_ms": 3481.8360000000002,
+  "preformat_sha256": "e3e5f5952b751b1a0ae15ce13fd73354ff92bc73dbb9c7c07a7222c2a7b02e14",
+  "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "source_inputs": 324,
+  "changed_files": [
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "before_sha256": "4d11ca0da38ed4c64ca2fe4c885164bd6e2a7a7c07099a4bd6d9630a740f1dc3",
+      "after_sha256": "1743a2e49e96717240a132ddb5a1159dfb8fa8c5807fe801d2c7b0e7e2d41655",
+      "bytes": 27717
+    }
+  ],
+  "qualification": "Actual cargo fmt only on isolated E-only Source6R2 copy; no compiler/tests/native/Root source promotion. Independent formatter review required."
+}

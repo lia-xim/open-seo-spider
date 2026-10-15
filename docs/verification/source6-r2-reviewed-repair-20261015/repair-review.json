@@ -1,0 +1,190 @@
+{
+  "schema_version": 1,
+  "kind": "http_response_terminal_cancellation_independent_source_review_v2",
+  "result": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "findings": [],
+  "proposal_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-response-terminal-cancellation-proposal-v2/manifest.json",
+    "sha256": "a5450d19e2b1ecefea9a00cbcbb73fbb5c33f1a9b916567c25082d1f34256b9a"
+  },
+  "parent_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6\\manifest.json",
+    "sha256": "1210c227ac90c1936008d7667c877fb6e18d661a2925be5d4cf36d0e447d194e",
+    "bytes": 212895
+  },
+  "parent_source_commit": "15cb4243a9997d9c9dfb974b7f0574248e8dbeea",
+  "actual_failed_suite": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-suite-v6\\proof.json",
+    "sha256": "208fc362444a1b4613c89cd55c1cba2a1af3d82c5183527c4db304d089de8c14",
+    "bytes": 125121
+  },
+  "checked": {
+    "exact_operations": 5,
+    "terminal_error_kind_changes": 4,
+    "one_new_test": "response_actual_cancellation_is_terminal_to_standard_write_all_and_flush",
+    "whole_two_file_forward_inverse_exact": true,
+    "all25627_existing_test_bytes_exact": true,
+    "old12_test_names_and_oracles_preserved": true,
+    "preserved_whole_regions": [
+      {
+        "label": "Retained actual worker and response-supervisor ownership",
+        "start": "    pub(super) async fn start<",
+        "end": "pub(super) struct Ready<",
+        "sha256": "32940b372fdb760c75e788874bbf419ca88cf2bfe3166af735959c46302bde88",
+        "bytes": 7316,
+        "byte_exact": true
+      },
+      {
+        "label": "Permanent cancel and terminal bookkeeping",
+        "start": "    fn cancel(&self)",
+        "end": "#[derive(Default)]\nstruct Counters",
+        "sha256": "cc2d24576aae5d64ef9185299820be45e22e17c90085b185a90b7b8c371d3442",
+        "bytes": 1816,
+        "byte_exact": true
+      }
+    ],
+    "new_default_std_write_all_test_bounded": true,
+    "new_test_direct_write_guard": true,
+    "new_test_flush_terminal": true,
+    "new_test_max_actual_delegated_write_calls": 4,
+    "new_test_expected_calls": 1,
+    "new_test_enqueues": 0,
+    "new_test_receiver_expected": "Empty_with_sender_still_owned",
+    "inherited_required_names": 501,
+    "required_names_forecast": 502,
+    "minimum_workspace_tests_forecast": 1284,
+    "source_inputs": 324,
+    "syntax": [
+      {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-response-terminal-cancellation-proposal-v2/prepare-source.mjs",
+        "exitcode": 0,
+        "signal": null
+      },
+      {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-response-terminal-cancellation-independent-review-v2/review-source.mjs",
+        "exitcode": 0,
+        "signal": null
+      }
+    ]
+  },
+  "reasoning": [
+    "Every permanent cancellation-only Interrupted occurrence in the current response stream module becomes ConnectionAborted; closed queue errors remain BrokenPipe. The Control check at entry and after reservation now terminates default std Write::write_all instead of requesting a transient retry. Stream cancellation errors also remain explicit terminal errors rather than positive EOF. No limits, timeout, channel capacity, admission, handle retention, worker/supervisor joining, body outcome bookkeeping or old test is changed.",
+    "The new current_thread regression first calls the actual canceled ChannelWriter.write and checks the terminal kind, before any blocking worker can start. Its adapter overrides only write and flush, so write_all is the actual standard trait default; at most4 calls reach the real writer and a fifth adapter call returns TimedOut to bound a future Interrupted regression. The positive assertion requires precisely1 call/ConnectionAborted, flush ConnectionAborted, zero enqueues and Empty with the sender still owned. This is an authored test, not a passing executed result.",
+    "All four literal token replacements and one test insertion were manually reviewed and completely reversed to both actual frozen Source6 parent files. All25,627 old test bytes remain exact, including genuine eight queue chunks/ninth full, cancellation/aborted drain, SQLite full positive exports and real joins. Two whole ownership/cancellation state regions remain byteidentical.",
+    "The actual Source6 suite proof is explicitly FAIL with abnormal workspace exit; renderer worker/fixture and source-final guards are closed/true, not runtime acceptance. The repaired502/min1284 inventory is only a forecast. Fresh Root formatting/full suite and actual new candidate/native gates remain mandatory.",
+    "The separately requested partial-write trait contract concern is recorded as an OPEN quality gap in the linked assessment. It is not silently considered fixed by this fatal-kind patch, and current successful output corruption after the fix is not established. Root owns any decision to implement that additional bounded change."
+  ],
+  "separate_open_contract_assessment": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-response-terminal-cancellation-independent-review-v2/partial-write-contract-assessment.json",
+    "sha256": "a633167385b2ea3e53d1896fd74a4aa84d827de79f37a1010ba2fac37e69c7e2"
+  },
+  "pins": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-response-terminal-cancellation-proposal-v2/manifest.json",
+      "sha256": "a5450d19e2b1ecefea9a00cbcbb73fbb5c33f1a9b916567c25082d1f34256b9a",
+      "bytes": 5246
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-response-terminal-cancellation-proposal-v2/derivation.json",
+      "sha256": "b82e567aa65025a60d6f1d820c94a2a68c606944c952bf3dfdb6cbc5896c8333",
+      "bytes": 6843
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6\\manifest.json",
+      "sha256": "1210c227ac90c1936008d7667c877fb6e18d661a2925be5d4cf36d0e447d194e",
+      "bytes": 212895
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-suite-v6\\proof.json",
+      "sha256": "208fc362444a1b4613c89cd55c1cba2a1af3d82c5183527c4db304d089de8c14",
+      "bytes": 125121
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6\\crates\\app\\src\\server\\response_stream.rs",
+      "sha256": "b671599eb620c25d21dacc33f6ed87b4522bad7a35beab546128d8bf385d3915",
+      "bytes": 23132
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\crates\\app\\src\\server\\response_stream.rs",
+      "sha256": "b671599eb620c25d21dacc33f6ed87b4522bad7a35beab546128d8bf385d3915",
+      "bytes": 23132
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-terminal-cancellation-proposal-v2\\source\\crates\\app\\src\\server\\response_stream.rs",
+      "sha256": "28faea704b3ff66e0bc21439a8dee081395b0f55c5257a58ab366c47591319e3",
+      "bytes": 23156
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6\\crates\\app\\src\\server\\response_stream_tests.rs",
+      "sha256": "dab862c50b1f75f4925d6286dfedbe61fe1aa2b07b1f95bd0f5148b77ac8f64e",
+      "bytes": 25627
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\crates\\app\\src\\server\\response_stream_tests.rs",
+      "sha256": "dab862c50b1f75f4925d6286dfedbe61fe1aa2b07b1f95bd0f5148b77ac8f64e",
+      "bytes": 25627
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-terminal-cancellation-proposal-v2\\source\\crates\\app\\src\\server\\response_stream_tests.rs",
+      "sha256": "4d11ca0da38ed4c64ca2fe4c885164bd6e2a7a7c07099a4bd6d9630a740f1dc3",
+      "bytes": 27628
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-suite-v6\\workspace-live.log",
+      "sha256": "facbabaecbbb0e5adad3566648ddef9196ae1c6d3028cfb1af9699d87aae03b1",
+      "bytes": 17946
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-terminal-cancellation-proposal-v2\\derivation.json",
+      "sha256": "b82e567aa65025a60d6f1d820c94a2a68c606944c952bf3dfdb6cbc5896c8333",
+      "bytes": 6843
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-terminal-cancellation-proposal-v2\\HANDOFF.md",
+      "sha256": "c8e0b77822869c3a33b9790dae8341391731d64ec46806ab6568bfc2c1931938",
+      "bytes": 1928
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-terminal-cancellation-proposal-v2\\prepare-source.mjs",
+      "sha256": "553eac4d59d03c4ca406004f3912c6c163e8d1ac6ef2b9c094b97049d51dbe1a",
+      "bytes": 12468
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-response-terminal-cancellation-proposal-v2/prepare-source.mjs",
+      "sha256": "553eac4d59d03c4ca406004f3912c6c163e8d1ac6ef2b9c094b97049d51dbe1a",
+      "bytes": 12468
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-response-terminal-cancellation-independent-review-v2/review-source.mjs",
+      "sha256": "72f0149f3a5b25ff8940c27792ae8783cb3cf151ac2009a2b831c1bef4ec87f6",
+      "bytes": 12836
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6\\crates\\app\\src\\server\\policy.rs",
+      "sha256": "7457402cf736a110b59ad622d4d0b16cc70b221584f976c2b6c7f892e7b93d6d",
+      "bytes": 5132
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6\\crates\\app\\src\\server\\resources.rs",
+      "sha256": "f48a3d0e4e189eb0bad40d3a7fece0e959125f62b2c9a8eabae861796d6e31ec",
+      "bytes": 11657
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6\\crates\\app\\src\\policy_export.rs",
+      "sha256": "6c1b411d67ece2f56f6e7d02f23654bd7e3a92fe3f680087a98d3eb7ce56b4b9",
+      "bytes": 3024
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6\\crates\\app\\src\\resource_export.rs",
+      "sha256": "f266d47e77b44af10a8dacda9b572b8fef8a1f934aec4a1139a645fd45cfdc82",
+      "bytes": 8314
+    }
+  ],
+  "excluded_executions": {
+    "target_imports": 0,
+    "rust_formatter_compiler_clippy_tests": 0,
+    "sqlite_http_tcp_native_browser_fixtures": 0,
+    "root_product_git_mutations": 0
+  },
+  "qualification": "Bounded source-only approval of the exact terminal cancellation repair and added regression source, not actual test PASS, final Source6r2 freeze, optimized/native acceptance, finite whole-application deadline, performance or feature parity."
+}

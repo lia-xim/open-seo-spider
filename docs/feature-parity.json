@@ -6351,22 +6351,28 @@
     {
       "id": "combined-source-v6-20261015",
       "priority": 1,
-      "status": "ACTUAL_DRAFT4_PRELIMINARY_CLIPPY_PASS_ZERO_TESTS_NOT_PROMOTED",
+      "status": "ACTUAL_FULL_WORKSPACE_HANG_FAILURE_TERMINAL_CANCELLATION_REPAIR_IN_PROGRESS",
       "title_de": "Originaldatei-API und Response-Owner gemeinsam integrieren",
-      "summary_de": "Der vierte isolierte Entwurf mit 17 Änderungen und 324 Compiler-Eingaben besteht die tatsächliche Formatierung und den vorgezogenen All-Targets-Clippy-Lauf mit Exit 0 nach 29 Sekunden. Dabei wurden keine Tests ausgeführt. Die drei früheren fehlgeschlagenen Läufe und ihre Rohlogs bleiben erhalten. Vollständige Suite, optimierter Kandidat und sämtliche Source6-Nativprüfungen stehen aus.",
+      "summary_de": "Die17 Änderungen sind privat unter15cb424 übernommen und324 Quellen eingefroren. Die tatsächliche vollständigeSuite kompiliert und führtApp-Tests aus, hängt aber beim ersten neuen echtenVollqueue-/Bodydrop-Fall: permanenterAbbruch alsInterrupted wird vonstd::Write::write_all endloswiederholt. Root beendet ausschließlich denidentifizierten eigenenTest; Cargo/Suite schließenfehlgeschlagen, eigeneFixture/Renderer sindgeschlossen undQuellen unverändert. Die laufendeR3-Installation bleibt nutzbar. EngerProduktfix undzusätzlicherRegressionsfall folgen; kein1283-Testpass.",
       "completed_acceptance_de": [
         "Body-App4 und Response-Owner2 mit17 Änderungsdateien zusammengeführt;322 unveränderte Eingabedateien und beide unveränderten gemeinsamen Zusammenführungen gegenüberV2 exakt geprüft.",
         "Fehlgeschlagene vorgezogene Compilerläufe samt Rohlogs erhalten: zuerst eine Core-Clippy-Meldung, danach zwei App-Clippy-Meldungen und ein testlokaler ApiError-Diagnosefehler. Keine Tests ausgeführt und keine Produktfreigabe daraus abgeleitet.",
         "Drei neue Diagnosekorrekturen geprüft; alleAssertions und27 neuen Windows-Testnamen plus einUnix-Fall erhalten. Isolierten drittenEntwurf mit tatsächlichemFormat-Exit0 erstellt.",
         "DrittenVorab-Clippy mit31Sekunden/Exit101/0Tests unverändert erhalten. Genau drei .err().expect()-Testauswertungen durch exhaustiveMatches mitgleichemPaniktext ersetzt; alleAssertions/Timeouts/Testnamen erhalten. Beide Vorschläge undKomposition4 separat unabhängig geprüft.",
-        "Body5, Response4, Komposition4, Format4 sowie Ausführungstreiber4 und Binder2 unabhängig geprüft. Tatsächlicher Vorab-Clippy-Lauf beendet mit Exit0, geschlossenen Streams und final bestätigten324 Eingaben; 0 Tests ausgeführt."
+        "Body5, Response4, Komposition4, Format4 sowie Ausführungstreiber4 und Binder2 unabhängig geprüft. Tatsächlicher Vorab-Clippy-Lauf beendet mit Exit0, geschlossenen Streams und final bestätigten324 Eingaben; 0 Tests ausgeführt.",
+        "17eigeneDateien privat committed/pushed15cb424,324 Eingaben endgültig eingefroren. VollständigeSuite tatsächlich bis zum echtenQueue-/Abbruchtest ausgeführt; Rohlog,506Sekunden undabnormalerExit0xffffffff erhalten. Es existierenkeinevollständigenTestsummaries, aber163 einzelneok-Zeilen.",
+        "Ursache gegen tatsächlichenCode/Standardbibliotheksvertrag belegt: permanenterInterrupted-Abbruch hältwrite_all inWiederholung. Nur eigenerTestprozess nachPfad/Startzeit/Elternkette beendet; ursprünglicheApp/Renderer nichtsignalisiert. AlleQuellen finalidentisch undeigeneTestserver geschlossen.",
+        "ReparaturV2: genauvierpermanenteErrorKinds undein zusätzlicher begrenzterWriteAll-/Flush-Regressionsfall unabhängig geprüft. AllealtenTestbytes erhalten; tatsächlicherFormatlauf undvorgezogenerAll-Targets-Clippy schließen0,0Tests ausgeführt."
       ],
       "pending_acceptance_de": [
-        "Nach tatsächlich bestandenerR3-Installation genau17 eigeneDateien übernehmen, privat versionieren und Quellen endgültig einfrieren; danachvollständigeSource6Suite ausführen.",
-        "Vollständige Suite mit künftig mindestens1283 Tests/501 Pflichtnamen/vier echtenRenderer-Fällen, Format und Clippy ausführen; optimierten Kandidaten und alle passenden nativen API-/Download-/Browserfälle frisch abnehmen.",
-        "Große Originaldateien, Quoten, korrupte Archive, Cursor-/Snapshotbindung und private Spool-Bereinigung tatsächlich prüfen."
+        "Vier permanenteAbbruchfehler terminalklassifizieren undseparaten begrenztenWriteAll-/Flush-Regressionsfall unabhängig prüfen.",
+        "Genauzwei eigeneReparaturdateien integrieren/formatieren/privatpublizieren/einfrieren undvollständigenfrischenR2-Lauf bestehen (Vorgabe1284Tests/502Namen nachtatsächlichemneuemFall).",
+        "Source7 gegen dannerfolgreichenSource6R2 anpassen, anschließend gemeinsamenoptimiertenKandidaten/alleneuen nativenOriginaldatei-/Browser-/Transportfälle tatsächlich bestehen.",
+        "Migrations-CSV undübrigeFeature-/Filter-/Ablaufliste weiterimplementieren; vollständigeHerstellerparität bleibtNOT_PROVEN."
       ],
       "documentation": [
+        "docs/verification/source6-r2-reviewed-repair-20261015/index.json",
+        "docs/verification/combined-workspace-v6-cancel-hang-failed-20261015/index.json",
         "docs/verification/source6-draft4-preliminary-pass-20261015/index.json",
         "docs/verification/source6-7-reviewed-drafts-20261015/index.json",
         "docs/parity/sitemap-source-archive-plan.md",
@@ -6376,10 +6382,62 @@
         "source_review": "PASS_BOUNDED_COMPOSITION4_BODY5_RESPONSE4",
         "format": "ACTUAL_DRAFT4_FORMAT_CLOSE0_INDEPENDENT_REVIEW_PASS",
         "preliminary_clippy": "ACTUAL_DRAFT4_ALL_TARGETS_CLOSE0_ZERO_EXECUTED_TESTS",
-        "full_workspace": "NOT_RUN_EXPECTED_MIN1283_REQUIRED501",
-        "source_promotion": "NOT_RUN",
-        "native": "NOT_RUN",
+        "full_workspace": "ACTUAL_FAIL_HANG_AFTER_PARTIAL_APP_TESTS_FORCED_OWN_TEST_TERMINATION",
+        "source_promotion": "ACTUAL_17_FILES_PRIVATELY_PUSHED_15CB424",
+        "native": "NOT_RUN_ON_SOURCE6_COMBINED_SOURCE7_CANDIDATE_PLANNED",
         "installation": "NOT_RUN",
+        "manufacturer_parity": "NOT_PROVEN",
+        "optimized_build": "NOT_RUN_ON_SOURCE6",
+        "terminal_cancellation_repair": "REVIEWED_FORMAT_AND_PRELIMINARY_CLIPPY_PASS_ZERO_TESTS_NOT_PROMOTED"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "response-stream-partial-write-contract-20261015",
+      "priority": 2,
+      "status": "CONFIRMED_SOURCE_CONTRACT_GAP_NOT_IMPLEMENTED",
+      "title_de": "Teilweise geschriebene Downloadblöcke korrekt melden",
+      "summary_de": "Separater Quellenbefund: ChannelWriter::write kann mehrere Blöcke erfolgreich weitergeben und bei einem späteren Fehler Err melden, ohne die schon geschriebene Präfixlänge zurückzugeben. Nach dem terminalenAbbruchfix propagieren die aktuellen privaten Aufrufer den Fehler; kein erfolgreicher korrumpierter Export ist nachgewiesen. Der Write-Vertragspunkt bleibt separat zu beheben.",
+      "completed_acceptance_de": [
+        "Produktionscode und tatsächliche vier privaten Exportaufrufer gegen Rusts Write-Vertrag unabhängig gelesen; Bewertung bleibt vom belegten Interrupted-Endlosfehler getrennt."
+      ],
+      "pending_acceptance_de": [
+        "ErfolgreichesPräfix als Ok(n) melden und terminalenFehler beimfolgendenwrite erhalten, oder proWrite einenbegrenzt erfolgreichenBlock zurückgeben.",
+        "Gezielte Tests fürpartielleWrite-Länge, Abbruchnach Präfix, wiederholtenCaller undnormalesvollständigesExportende ausführen."
+      ],
+      "documentation": [
+        "docs/verification/source6-r2-reviewed-repair-20261015/partial-write-contract-assessment.json",
+        "docs/verification/combined-workspace-v6-cancel-hang-failed-20261015/index.json"
+      ],
+      "gates": {
+        "source_assessment": "CONFIRMED_TRAIT_CONTRACT_GAP_CURRENT_SUCCESSFUL_CORRUPTION_NOT_PROVEN",
+        "implementation": "NOT_RUN",
+        "rust_tests": "NOT_RUN"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "migration-destination-validation-20261015",
+      "priority": 3,
+      "status": "OFFLINE_CORE_SOURCE_REVIEWED_16_TESTS_AUTHORED_NOT_EXECUTED",
+      "title_de": "Erwartete und tatsächliche Migrationsziele prüfen",
+      "summary_de": "Ein isolierterRust-Core liestCSV-Alt-/Zielzuordnungen überdenbestehendenImporter undvergleichtbereitsgeliefertePageRecords. Zeilenherkunft,Duplikate,mehrdeutigeBeobachtungen,Redirectketten,Fehler undZielabweichungen werdenunterschieden. KeinNetzwerk/Snapshotauth/API/CLI/UI undkeinFeatureabschluss;16Tests sindnurverfasst.",
+      "completed_acceptance_de": [
+        "NeuerCore-Code undalle16Testquellen unabhängig gelesen; zweiLib-Einfügehunks undzweiTestkorrekturen exaktzurückgeführt."
+      ],
+      "pending_acceptance_de": [
+        "ZweiLib-Hunksauf tatsächlichenletztenParentübertragen undCore/CSV/Redirecttests tatsächlichausführen.",
+        "Verbindliche gespeicherteSnapshot-Auswahl, begrenztenAPI-Upload/Pagination/CSV, CLI undresponsiveUI1440/320 integrieren.",
+        "EchteeigeneHTTP-Crawls undanschließendeMigrationsauswertung mitnullzusätzlichenWebsiteanfragen prüfen."
+      ],
+      "documentation": [
+        "docs/verification/source6-r2-reviewed-repair-20261015/migration-INTEGRATION-TODO.md",
+        "docs/verification/source6-r2-reviewed-repair-20261015/migration-core-review.json"
+      ],
+      "gates": {
+        "source_review": "NO_FINDINGS_BOUNDED_OFFLINE_CORE_ONLY",
+        "rust_tests": "NOT_RUN",
+        "api_cli_ui": "NOT_IMPLEMENTED",
         "manufacturer_parity": "NOT_PROVEN"
       },
       "reference_parity": "NOT_PROVEN"

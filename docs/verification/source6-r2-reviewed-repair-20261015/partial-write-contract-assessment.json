@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "kind": "response_channel_writer_partial_write_contract_assessment_v1",
+  "status": "SOURCE_ONLY_OPEN_CONTRACT_GAP_NO_PRODUCT_PATCH",
+  "related_repair": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-response-terminal-cancellation-proposal-v2/manifest.json",
+    "sha256": "a5450d19e2b1ecefea9a00cbcbb73fbb5c33f1a9b916567c25082d1f34256b9a"
+  },
+  "parent_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6\\manifest.json",
+    "sha256": "1210c227ac90c1936008d7667c877fb6e18d661a2925be5d4cf36d0e447d194e",
+    "bytes": 212895
+  },
+  "scope": "Separate Root-requested partial-write trait contract assessment; does not expand terminal cancellation repair or claim current successful workflow corruption",
+  "observation": {
+    "file": "crates/app/src/server/response_stream.rs",
+    "lines_before_repair": "485-527",
+    "source_sha256": "28faea704b3ff66e0bc21439a8dee081395b0f55c5257a58ab366c47591319e3",
+    "claim": "ChannelWriter::write can enqueue one or more chunks and then return Err from a later control.check or reserve branch without returning the prior accepted byte count. The fatal-kind-only repair intentionally does not change this structure.",
+    "write_contract_basis": "Root-provided std::io::Write contract: an Err reports no bytes written by that call. No standard-library source/doc fetch or runtime validation was performed by this agent.",
+    "current_private_callers": [
+      "crates/app/src/server/policy.rs",
+      "crates/app/src/server/resources.rs",
+      "crates/app/src/policy_export.rs",
+      "crates/app/src/resource_export.rs"
+    ],
+    "actual_workflow_assessment": "Current production routes wrap ChannelWriter in BufWriter; export write_all/serde/flush propagate fatal errors. Sticky cancellation/closed queue prevents a productive later retry, and worker/body terminal paths report abort/failure rather than complete EOF. No successful corruption, duplicated-positive-output or automatic retry workflow after ConnectionAborted is established by this source audit.",
+    "existing_positive_oracles": "Old full-body successful EOF tests remain byteexact and still require actual future execution."
+  },
+  "open_followup": {
+    "owner": "Root decision before separate implementation",
+    "possible_narrow_direction": "Return Ok(accepted_prefix_bytes) when a later chunk fails after positive progress, preserving sticky terminal state so a subsequent write/flush reports the fatal error; keep zero-progress failures as Err. This is only an implementation direction, not an authored/approved fix.",
+    "required_validation": [
+      "Actual controlled positive prefix enqueue then later cancellation/consumer close",
+      "write returns the actual nonzero accepted prefix, next write/flush fails terminally",
+      "No duplicated prefix under direct write retry or BufWriter behavior",
+      "Existing complete EOF/hash, 8queue/9thfull, actual worker/supervisor joins, body-drop and cancellation oracles unchanged"
+    ]
+  },
+  "runtime_executions": 0,
+  "root_writes": 0
+}
