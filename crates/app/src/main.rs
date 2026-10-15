@@ -3,6 +3,7 @@ mod comparison_app;
 mod content_cohort;
 mod generation_export;
 mod mcp;
+mod migration_app;
 mod policy_export;
 mod resource_export;
 mod server;
@@ -64,6 +65,21 @@ enum Command {
         /// New ZIP destination; existing files are refused atomically.
         #[arg(long)]
         output: PathBuf,
+    },
+    /// Compare explicit mapping CSV against saved report JSON; zero website requests.
+    Migration {
+        #[arg(long)]
+        mapping: PathBuf,
+        #[arg(long)]
+        report: PathBuf,
+        #[arg(long)]
+        options: PathBuf,
+        /// New complete JSON destination; existing files are refused atomically.
+        #[arg(long)]
+        output: PathBuf,
+        /// Optional new complete formula-safe CSV destination.
+        #[arg(long)]
+        csv: Option<PathBuf>,
     },
     /// Compare saved crawl JSON files locally with exact identities; no website is fetched.
     CompareSaved {
@@ -295,6 +311,23 @@ async fn main() -> anyhow::Result<()> {
         } => {
             let receipt = generation_export::run(snapshot, options, output).await?;
             println!("{}", serde_json::to_string(&receipt)?);
+        }
+        Command::Migration {
+            mapping,
+            report,
+            options,
+            output,
+            csv,
+        } => {
+            if let Err(error) = migration_app::run_cli(mapping, report, options, output, csv).await
+            {
+                eprintln!("{}", serde_json::to_string(&error)?);
+                std::process::exit(2);
+            }
+            println!(
+                "{}",
+                serde_json::json!({"result":"migration_exported","website_requests":0})
+            );
         }
         Command::CompareSaved {
             before,

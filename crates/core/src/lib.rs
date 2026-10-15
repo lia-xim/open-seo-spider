@@ -18,6 +18,7 @@ mod fragments;
 mod image_metadata;
 mod list_import;
 mod metadata;
+mod migration;
 mod models;
 mod onpage;
 mod pdf;
@@ -110,6 +111,7 @@ pub use list_import::{
     validate_import_result,
 };
 pub use metadata::{applicable_robot_directives, parse_link_header, parse_x_robots_tag};
+pub use migration::*;
 pub use models::*;
 pub use policy_ledger::{
     InheritedPolicyHistory, LIVE_CRAWL_POLICY_ENGINE, LiveCrawlPolicyLimits, PagePolicyObservation,

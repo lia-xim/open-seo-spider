@@ -492,48 +492,50 @@ pub(super) struct ChannelWriter {
 }
 impl Write for ChannelWriter {
     fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
-        for chunk in bytes.chunks(CHUNK_BYTES) {
-            self.control.check()?;
-            let permit = match self.sender.try_reserve() {
-                Ok(permit) => permit,
-                Err(mpsc::error::TrySendError::Closed(_)) => {
-                    return Err(io::Error::new(
-                        io::ErrorKind::BrokenPipe,
-                        "Response consumer disconnected",
-                    ));
-                }
-                Err(mpsc::error::TrySendError::Full(_)) => {
-                    // A real failed reservation, not a byte-size/timing guess.
-                    self.counters
-                        .full_reservations
-                        .fetch_add(1, Ordering::SeqCst);
-                    self.counters.changed.notify_waiters();
-                    let mut cancelled = self.control.cancelled.subscribe();
-                    let runtime = self.runtime.clone();
-                    runtime.block_on(async {
-                        loop {
-                            self.control.check()?;
-                            tokio::select! {
-                                biased;
-                                result=cancelled.changed()=>{if result.is_err(){return Err(io::Error::new(io::ErrorKind::ConnectionAborted,"Response cancellation source closed"));}},
-                                result=self.sender.reserve()=>return result.map_err(|_|io::Error::new(io::ErrorKind::BrokenPipe,"Response consumer disconnected")),
-                            }
-                        }
-                    })?
-                }
-            };
-            self.control.check()?;
-            permit.send(Bytes::copy_from_slice(chunk));
-            self.counters.enqueues.fetch_add(1, Ordering::SeqCst);
-            self.counters
-                .max_chunk
-                .fetch_max(chunk.len(), Ordering::SeqCst);
-            self.counters
-                .peak_queued
-                .fetch_max(QUEUE_CHUNKS - self.sender.capacity(), Ordering::SeqCst);
-            self.counters.changed.notify_waiters();
+        if bytes.is_empty() {
+            return Ok(0);
         }
-        Ok(bytes.len())
+        let chunk = &bytes[..bytes.len().min(CHUNK_BYTES)];
+        self.control.check()?;
+        let permit = match self.sender.try_reserve() {
+            Ok(permit) => permit,
+            Err(mpsc::error::TrySendError::Closed(_)) => {
+                return Err(io::Error::new(
+                    io::ErrorKind::BrokenPipe,
+                    "Response consumer disconnected",
+                ));
+            }
+            Err(mpsc::error::TrySendError::Full(_)) => {
+                // A real failed reservation, not a byte-size/timing guess.
+                self.counters
+                    .full_reservations
+                    .fetch_add(1, Ordering::SeqCst);
+                self.counters.changed.notify_waiters();
+                let mut cancelled = self.control.cancelled.subscribe();
+                let runtime = self.runtime.clone();
+                runtime.block_on(async {
+                    loop {
+                        self.control.check()?;
+                        tokio::select! {
+                            biased;
+                            result=cancelled.changed()=>{if result.is_err(){return Err(io::Error::new(io::ErrorKind::ConnectionAborted,"Response cancellation source closed"));}},
+                            result=self.sender.reserve()=>return result.map_err(|_|io::Error::new(io::ErrorKind::BrokenPipe,"Response consumer disconnected")),
+                        }
+                    }
+                })?
+            }
+        };
+        self.control.check()?;
+        permit.send(Bytes::copy_from_slice(chunk));
+        self.counters.enqueues.fetch_add(1, Ordering::SeqCst);
+        self.counters
+            .max_chunk
+            .fetch_max(chunk.len(), Ordering::SeqCst);
+        self.counters
+            .peak_queued
+            .fetch_max(QUEUE_CHUNKS - self.sender.capacity(), Ordering::SeqCst);
+        self.counters.changed.notify_waiters();
+        Ok(chunk.len())
     }
     fn flush(&mut self) -> io::Result<()> {
         self.control.check()

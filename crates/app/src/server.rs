@@ -29,6 +29,7 @@ use uuid::Uuid;
 mod comparison;
 mod content;
 mod lifecycle;
+mod migration;
 mod policy;
 pub(crate) mod resources;
 mod response_stream;
@@ -386,6 +387,51 @@ async fn serve_with_mcp_files_ready_source(
             post(sitemap_generation::bundle),
         )
         .route("/api/crawls/{id}/project.json", get(export_project))
+        .route(
+            "/migration",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/html; charset=utf-8")],
+                    include_str!("../../../web/migration.html"),
+                )
+            }),
+        )
+        .route(
+            "/migration.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+                    include_str!("../../../web/migration.js"),
+                )
+            }),
+        )
+        .route(
+            "/migration.css",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/css; charset=utf-8")],
+                    include_str!("../../../web/migration.css"),
+                )
+            }),
+        )
+        .route(
+            "/api/crawls/{id}/migration/preview",
+            post(migration::preview).layer(axum::extract::DefaultBodyLimit::max(
+                crate::migration_app::REQUEST_BYTES,
+            )),
+        )
+        .route(
+            "/api/crawls/{id}/migration/json",
+            post(migration::json).layer(axum::extract::DefaultBodyLimit::max(
+                crate::migration_app::REQUEST_BYTES,
+            )),
+        )
+        .route(
+            "/api/crawls/{id}/migration/csv",
+            post(migration::csv).layer(axum::extract::DefaultBodyLimit::max(
+                crate::migration_app::REQUEST_BYTES,
+            )),
+        )
         .route("/api/compare", get(compare))
         .route(
             "/api/compare/saved",

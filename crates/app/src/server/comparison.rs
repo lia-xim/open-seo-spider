@@ -11,9 +11,9 @@ use open_seo_spider_core::{
 
 type ComparisonApiResult<T> = Result<T, (StatusCode, Json<SavedComparisonFailure>)>;
 
-struct StableSavedReport {
-    report: CrawlReport,
-    binding: ComparisonCallerBinding,
+pub(super) struct StableSavedReport {
+    pub(super) report: CrawlReport,
+    pub(super) binding: ComparisonCallerBinding,
 }
 fn conflict(
     job: &Job,
@@ -32,7 +32,7 @@ fn conflict(
     }));
     (StatusCode::CONFLICT, Json(error))
 }
-fn stable_saved_report(
+pub(super) fn stable_saved_report(
     job: &Job,
     side: ComparisonSide,
     expected: Option<u64>,

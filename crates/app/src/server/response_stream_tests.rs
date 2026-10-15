@@ -82,6 +82,136 @@ async fn response_single_large_write_preserves_all_bytes_in_bounded_chunks_and_j
 }
 
 #[tokio::test(flavor = "current_thread")]
+async fn response_channel_write_returns_exact_one_chunk_prefix_and_leaves_tail_unaccepted() {
+    let counters = Arc::new(Counters::default());
+    let control = Arc::new(Control::new(counters.clone()));
+    let (sender, mut receiver) = mpsc::channel(QUEUE_CHUNKS);
+    let mut writer = ChannelWriter {
+        sender,
+        control,
+        runtime: Handle::current(),
+        counters: counters.clone(),
+    };
+    let source: Vec<u8> = (0..CHUNK_BYTES * 2 + 17).map(|n| (n % 251) as u8).collect();
+    assert_eq!(writer.write(&source).unwrap(), CHUNK_BYTES);
+    let first = receiver.try_recv().unwrap();
+    assert_eq!(first.as_ref(), &source[..CHUNK_BYTES]);
+    assert!(matches!(
+        receiver.try_recv(),
+        Err(mpsc::error::TryRecvError::Empty)
+    ));
+    assert_eq!(counters.enqueues.load(Ordering::SeqCst), 1);
+    let mut observed = first.to_vec();
+    assert_eq!(writer.write(&source[CHUNK_BYTES..]).unwrap(), CHUNK_BYTES);
+    observed.extend_from_slice(&receiver.try_recv().unwrap());
+    assert_eq!(writer.write(&source[CHUNK_BYTES * 2..]).unwrap(), 17);
+    observed.extend_from_slice(&receiver.try_recv().unwrap());
+    assert_eq!(observed, source);
+    assert_eq!(counters.enqueues.load(Ordering::SeqCst), 3);
+    assert_eq!(counters.max_chunk.load(Ordering::SeqCst), CHUNK_BYTES);
+    assert!(matches!(
+        receiver.try_recv(),
+        Err(mpsc::error::TryRecvError::Empty)
+    ));
+}
+
+#[tokio::test(flavor = "current_thread")]
+async fn response_channel_default_write_all_preserves_exact_bytes_and_empty_writes_enqueue_nothing()
+{
+    let counters = Arc::new(Counters::default());
+    let control = Arc::new(Control::new(counters.clone()));
+    let (sender, mut receiver) = mpsc::channel(QUEUE_CHUNKS);
+    let mut writer = ChannelWriter {
+        sender,
+        control,
+        runtime: Handle::current(),
+        counters: counters.clone(),
+    };
+    assert_eq!(writer.write(b"").unwrap(), 0);
+    writer.write_all(b"").unwrap();
+    assert_eq!(counters.enqueues.load(Ordering::SeqCst), 0);
+    assert!(matches!(
+        receiver.try_recv(),
+        Err(mpsc::error::TryRecvError::Empty)
+    ));
+    let source: Vec<u8> = (0..CHUNK_BYTES * 3 + 23)
+        .map(|n| ((n * 7) % 251) as u8)
+        .collect();
+    // Four chunks fit the real queue: this calls the actual default write_all
+    // without starting a blocking worker or relying on a timing-based receiver.
+    writer.write_all(&source).unwrap();
+    writer.flush().unwrap();
+    let mut observed = Vec::new();
+    for expected in source.chunks(CHUNK_BYTES) {
+        let chunk = receiver.try_recv().unwrap();
+        assert_eq!(chunk.as_ref(), expected);
+        assert!(chunk.len() <= CHUNK_BYTES);
+        observed.extend_from_slice(&chunk);
+    }
+    assert_eq!(observed, source);
+    assert_eq!(counters.enqueues.load(Ordering::SeqCst), 4);
+    assert_eq!(writer.write(b"").unwrap(), 0);
+    assert_eq!(counters.enqueues.load(Ordering::SeqCst), 4);
+    assert!(matches!(
+        receiver.try_recv(),
+        Err(mpsc::error::TryRecvError::Empty)
+    ));
+}
+
+#[tokio::test(flavor = "current_thread")]
+async fn response_channel_cancel_and_closed_before_enqueue_return_zero_progress_errors() {
+    let counters = Arc::new(Counters::default());
+    let control = Arc::new(Control::new(counters.clone()));
+    let (sender, mut receiver) = mpsc::channel(QUEUE_CHUNKS);
+    let mut writer = ChannelWriter {
+        sender,
+        control: control.clone(),
+        runtime: Handle::current(),
+        counters: counters.clone(),
+    };
+    control.cancel();
+    assert_eq!(
+        writer.write(b"not accepted").unwrap_err().kind(),
+        io::ErrorKind::ConnectionAborted
+    );
+    assert_eq!(
+        writer.flush().unwrap_err().kind(),
+        io::ErrorKind::ConnectionAborted
+    );
+    assert_eq!(writer.write(b"").unwrap(), 0);
+    assert_eq!(counters.enqueues.load(Ordering::SeqCst), 0);
+    assert!(matches!(
+        receiver.try_recv(),
+        Err(mpsc::error::TryRecvError::Empty)
+    ));
+
+    let counters = Arc::new(Counters::default());
+    let control = Arc::new(Control::new(counters.clone()));
+    let (sender, receiver) = mpsc::channel(QUEUE_CHUNKS);
+    let mut writer = ChannelWriter {
+        sender,
+        control: control.clone(),
+        runtime: Handle::current(),
+        counters: counters.clone(),
+    };
+    drop(receiver);
+    assert_eq!(
+        writer.write(b"not accepted").unwrap_err().kind(),
+        io::ErrorKind::BrokenPipe
+    );
+    assert_eq!(writer.write(b"").unwrap(), 0);
+    assert_eq!(counters.enqueues.load(Ordering::SeqCst), 0);
+    // The pre-existing flush contract checks cancellation, not receiver presence.
+    writer.flush().unwrap();
+    control.cancel();
+    assert_eq!(
+        writer.flush().unwrap_err().kind(),
+        io::ErrorKind::ConnectionAborted
+    );
+    assert_eq!(counters.enqueues.load(Ordering::SeqCst), 0);
+}
+
+#[tokio::test(flavor = "current_thread")]
 async fn response_actual_cancellation_is_terminal_to_standard_write_all_and_flush() {
     let counters = Arc::new(Counters::default());
     let control = Arc::new(Control::new(counters.clone()));
