@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "immutable": true,
+  "status": "BOUNDED_STATIC_REVIEW_NO_CONFIRMED_FINDINGS",
+  "recorded_at_utc": "2026-10-15T00:49:50.346157+00:00",
+  "reviewer": "/root/generation_postfix_review",
+  "basis": "Root separate UI WIP from f43; not part of frozen694 native candidate",
+  "examined_pins": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-processing-ui-v1/web/app.js",
+      "sha256": "b1ec57080fec11529e89b21ce07471ea3ddc2141d4f64ae79ffc236c9b5af3f0",
+      "bytes": 379587
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-processing-ui-v1/web/index.html",
+      "sha256": "ed8b3d0a624d02b428a3a7430845b417eca73a34bd3ecd6b0d5899d46bd15e77",
+      "bytes": 82970
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-processing-ui-v1/crates/core/src/sitemap_source_processing.rs",
+      "sha256": "e8f760e139fd9949ed0ed8f9c6b293a728474f81cfef66298640eb9e63fd3a3f",
+      "bytes": 3387
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-source-processing-ui-v1/crates/core/src/models.rs",
+      "sha256": "1b9e6b6d3330d6fd20d0e83feca2c891dd0b00cb9a6746b66b9254556f64e4ee",
+      "bytes": 36613
+    }
+  ],
+  "reviewed_paths_and_lines": [
+    {
+      "path": "web/app.js",
+      "lines": "14-18,350-384",
+      "finding": "Defaults disabled; parseAdvanced before request builds optional exact native profile; UI-only four keys removed; independent max_body_bytes remains max_body_mb*MiB."
+    },
+    {
+      "path": "web/app.js",
+      "lines": "1254-1336,1378",
+      "finding": "Settings open/restore/save preserve exact strings, explicit boolean opt-in, strict digit/safe integer1..67108864 or1..2000000; native field names match Rust; disabled+hidden fieldset toggled on open/change; parseAdvanced validates before POST."
+    },
+    {
+      "path": "web/app.js",
+      "lines": "2987-3015",
+      "finding": "Template appended inside form before restore/bind; const field list initialized before initialize; unique static template/fields present."
+    },
+    {
+      "path": "web/index.html",
+      "lines": "253-261",
+      "finding": "Opt-in checkbox outside disabled fieldset; required numeric fields same1..64MiB/2M bounds and8MiB/500k defaults; each explicit native dimension independent."
+    },
+    {
+      "path": "crates/core/src/sitemap_source_processing.rs",
+      "lines": "9-25,30-79",
+      "finding": "Actual64MiB/2M maxima, defaults and positive limits match UI; file hash equal frozen694."
+    },
+    {
+      "path": "crates/core/src/models.rs",
+      "lines": "15-18,100-123",
+      "finding": "None legacy source/page-body semantics and Some explicit source limits remain unchanged; UI omission does not manufacture default Some."
+    }
+  ],
+  "confirmed_findings": [],
+  "tested_or_executed": {
+    "browser": false,
+    "dom_or_payload_test": false,
+    "compiler_or_cargo": false,
+    "native": false,
+    "independent_node_check": false,
+    "node_syntax_root_reported_exit0": true
+  },
+  "proof_boundary": "Static source only: no rendered form behavior, required-field browser validation, responsive layout, localStorage roundtrip or actual HTTP config serialization executed. This is not runtime/feature parity acceptance. Separate source WIP must gain new source/binary/UI gates, never inherit694 proofs.",
+  "mutations": "Only new own E review receipt; no Root/Git/product changes."
+}
