@@ -1,0 +1,46 @@
+TAP version 13
+# Subtest: disabled config is absent and explicit save/reopen preserves exact declared strings
+ok 1 - disabled config is absent and explicit save/reopen preserves exact declared strings
+  ---
+  duration_ms: 1.5556
+  type: 'test'
+  ...
+# Subtest: invalid exact origin shapes duplicates paths and wildcard rules are refused
+ok 2 - invalid exact origin shapes duplicates paths and wildcard rules are refused
+  ---
+  duration_ms: 1.1885
+  type: 'test'
+  ...
+# Subtest: IDNA and explicit ports validate without expanding grant objects
+ok 3 - IDNA and explicit ports validate without expanding grant objects
+  ---
+  duration_ms: 0.6513
+  type: 'test'
+  ...
+# Subtest: legacy or foreign raw observations stay unknown instead of using DOM metadata
+ok 4 - legacy or foreign raw observations stay unknown instead of using DOM metadata
+  ---
+  duration_ms: 0.726
+  type: 'test'
+  ...
+# Subtest: stored source positions and potentially executable markup remain plain field text
+ok 5 - stored source positions and potentially executable markup remain plain field text
+  ---
+  duration_ms: 0.2267
+  type: 'test'
+  ...
+# Subtest: budget or incomplete observations remain unknown even with a retained positive excerpt
+ok 6 - budget or incomplete observations remain unknown even with a retained positive excerpt
+  ---
+  duration_ms: 0.6812
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 81.1008

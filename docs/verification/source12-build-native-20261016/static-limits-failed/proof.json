@@ -1,0 +1,148 @@
+{
+  "kind": "static_limits_native_v12",
+  "result": "FAIL_ACTUAL_SOURCE12_STATIC_LIMITS_WORKFLOW",
+  "source_manifest_sha256": "3b62e68b32b2d23e375977cac8d5d0dad313c8f144eb43b4ab2896fae7687b18",
+  "suite_proof_sha256": "8bba7750a13d0e7ec1de843d7599b0aab48e9ac5cffdf24eff6f0e26618d27d6",
+  "build_proof_sha256": "7512cfdc9e4f09d5c847c6ac89fa92face47172d5a8c673df0a2bbd67f6b46f4",
+  "candidate_binary_sha256": "f7ce325cf73d16f1c4943ebf98dc8a2e888e93ee25c999bc7f2c10d1b1a1a65c",
+  "preparation_manifest_sha256": "4c3aadc23ef339e721b915116def7fcfcf87b04f88f784d72f8845f457ff2ec5",
+  "preparation_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source12-static-limits-native-independent-review-v2\\inner-receipt.json",
+    "sha256": "03d79071f31da609f949c84ef039fb0dea13c7c5d4a2238771396ca58718eb62",
+    "bytes": 2431
+  },
+  "binder": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v12-driver-preparation-v6\\combined-bindings.mjs",
+    "sha256": "19fb95a81ca76ffb22dfeec87d2d6e50f76ab9cd82f331c009a273838748f55f",
+    "bytes": 20702,
+    "independent_review": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v12-driver-independent-review-v6\\binder-receipt.json",
+      "sha256": "f4d9a02ed0063f4715e73db38001ce37290bdbdabb7aa9597f4f1e74ab18bee5",
+      "bytes": 1523
+    }
+  },
+  "release": {
+    "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/v12-static-limits-native-release.json",
+    "sha256": "2b95b3dc65abd0e5699217fdd46e0a470e265448e8b9c3f274c51c4373619a6b"
+  },
+  "cases": [
+    {
+      "name": "api_invalid_version_types_ranges_and_owned_renderer_refused_before_website_io",
+      "result": "PASS_ACTUAL",
+      "evidence": {
+        "invalid_profiles": [
+          [],
+          {
+            "max_folder_depth": 1
+          },
+          {
+            "version": 2,
+            "max_folder_depth": 1
+          },
+          {
+            "version": 1
+          },
+          {
+            "version": 1,
+            "max_query_tokens": -1
+          },
+          {
+            "version": 1,
+            "max_query_tokens": 65536
+          },
+          {
+            "version": 1,
+            "max_folder_depth": 65536
+          },
+          {
+            "version": 1,
+            "max_fetch_url_utf8_bytes": 0
+          },
+          {
+            "version": 1,
+            "max_fetch_url_utf8_bytes": 1048577
+          },
+          {
+            "version": 1,
+            "max_query_tokens": 1,
+            "quota": 10
+          }
+        ],
+        "renderer_refusal": {
+          "error": "crawl_admission_limits cannot be combined with a renderer; browser request limits are not implemented"
+        },
+        "actual_website_requests": []
+      }
+    }
+  ],
+  "failures": [
+    "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(length<=max)\n\n    at request (file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-static-limits-native-preparation-v2/inner/native-static-limits-workflow.mjs:37:512)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async crawl (file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-static-limits-native-preparation-v2/inner/static-limits-api.mjs:15:52)\n    at async runStaticLimitsApi (file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-static-limits-native-preparation-v2/inner/static-limits-api.mjs:24:18)\n    at async file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-static-limits-native-preparation-v2/inner/native-static-limits-workflow.mjs:45:47"
+  ],
+  "cleanup_signals": [],
+  "actual_children": [
+    {
+      "label": "01-limits-app",
+      "logs": [
+        {
+          "name": "stdout",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\static-limits-workflow-native-v12\\01-limits-app.stdout.log",
+          "fd_closed": true,
+          "bytes": 40,
+          "end": true,
+          "closed": true,
+          "error": null
+        },
+        {
+          "name": "stderr",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\static-limits-workflow-native-v12\\01-limits-app.stderr.log",
+          "fd_closed": true,
+          "bytes": 1569,
+          "end": true,
+          "closed": true,
+          "error": null
+        }
+      ],
+      "errors": [],
+      "spawn_error": null,
+      "spawned": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "stdin": {
+        "eof_sent": true,
+        "finished": true,
+        "closed": true,
+        "error": null
+      },
+      "events": [
+        {
+          "sequence": 1,
+          "event": "spawn"
+        },
+        {
+          "sequence": 2,
+          "event": "actual_close"
+        }
+      ],
+      "pid": 4276
+    }
+  ],
+  "qualification": "Genuine public native PageDocument crawls with explicit static shape limits.501 baseline is actual pages/GETs, not sitemap entries/resources/performance. Original observations/grants remain separate from denial metadata. No uploaded pages/manual SQL/original installed application/user data accessed.",
+  "fixture": {
+    "actual_closed": true,
+    "sockets_opened": 501,
+    "sockets_closed": 501,
+    "retained": 0,
+    "errors": []
+  },
+  "fixture_actual_closed": true,
+  "recorded_at": "2026-10-15T22:25:18.048Z"
+}

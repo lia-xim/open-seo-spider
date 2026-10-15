@@ -10,17 +10,19 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
 
 ## Aktuelle Arbeit und nächste Schritte
 
-- [ ] **Crawl-Grenzen, weitere Ngramkanäle und große Sitemap-Daten ausbauen** — ACTUAL1428_FULL_SUITE_PASS_OPTIMIZED_BUILD_RUNNING. Die Erweiterung mit optionalen statischen Crawl-Grenzen, Titel/Beschreibung/H1–H6-Ngramkanälen samt Wortwolke und begrenztem Sitemap-Abfrageindex besteht die vollständige1428-Test-Suite, vier echte Renderergates sowie Format und Clippy. Alle44 neuen Rustfunktionen sind tatsächlich bestanden. Der optimierte Windows-Build läuft; praktische Abnahmen und sichere Installation folgen. Installiert und nutzbar bleibt Source11.
+- [ ] **Crawl-Grenzen, weitere Ngramkanäle und große Sitemap-Daten ausbauen** — ACTUAL1428_SUITE_AND_OPTIMIZED_BUILD_PASS_NATIVE_ACCEPTANCE_IN_PROGRESS. Die vollständige1428/0/0-Suite und der optimierte Windows-Build sind bestanden. Die Sitemap-Erzeugung besteht sechs neue praktische Gruppen mit genau dieser Programmdatei. Metadaten-Ngrams: FAIL_ACTUAL_SOURCE12_NGRAM_METADATA_CHANNELS. Der echte501-Seiten-Crawl lieferte einen22014590-Byte-Bericht; der StaticLimits-Testtreiber verweigerte korrekt an seiner zu engen8-MiB-Antwortgrenze und wird separat korrigiert. Die elf bisherigen Bereiche müssen mit Source12 erneut bestanden werden; installiert bleibt Source11.
   - [x] 381 Eingaben aus drei unabhängig geprüften Rollen ohne Pfadüberschneidung komponiert und formatiert. Alle 606 bisherigen Vollnamen bleiben zusätzlich zu 44 neuen Funktionen erhalten.
   - [x] Strenger Compilerlauf erfolgreich. Beide echten 501-URL-Kontrollcrawls, alle sechs Indexfälle einschließlich 50.000 Mitgliedschaften und 59-MiB-Bericht sowie die neuen Metadatenkanäle ohne Pflicht-Textcapture bestehen in den jeweiligen Funktionen.
   - [x] Beide Fixture-Korrekturen in finaler Komposition unabhängig geprüft und formatiert; tatsächlicher finaler Clippy-Abschluss mit Code0. Gegen die vorherige Komposition sind379 von381 Eingaben bytegleich und ausschließlich zwei Testdateien geändert.
   - [x] Finale Quellen als5d50a10 privat veröffentlicht; alle381 Arbeits- und Git-Blob-Hashes geprüft. Beide vorherigen Fixturefehler bestehen jetzt in der vollständigen1428/0/0-Suite.
   - [x] Vier tatsächliche Renderergates, alle650 Vollnamen/646 Pflichtnamen, Format/Clippy und reguläre eigene Worker-/Fixtureabschlüsse sind belegt. Alle381 Quellen bleiben am Ende identisch.
-  - [ ] Optimierten Windows-Kandidaten aus genau dem bestandenen Quellstand fertig bauen; anschließend alle bestehenden elf Prüfbereiche sowie neue StaticLimits-/Ngram-Metadaten- und Generatorabnahmen mit dieser Programmdatei ausführen.
+  - [x] Optimierter Windows-Build tatsächlich bestanden: AMD64 PE43650560Bytes, SHA256f7ce325cf73d16f1c4943ebf98dc8a2e888e93ee25c999bc7f2c10d1b1a1a65c.
+  - [x] Sitemap-Erzeugung: sechs tatsächliche API-/CLI-/Browser1440/320-/Cold-Gruppen bestanden; alle acht direkten Kinder natürlich geschlossen, eigener Lock freigegeben.
+  - [ ] StaticLimits-API-Testtreiber mit ausreichend großer, weiterhin begrenzter Antwortkapazität korrigieren und alle25 Gruppen neu ausführen; alte Fehlbelege erhalten.
   - [ ] Crawl-Grenzen und Ngramkanäle praktisch über API/CLI, Browser 1440/320 und kalte Wiederöffnung prüfen; betroffene bestehende Bereiche mit der neuen Programmdatei erneut prüfen.
   - [ ] Erst nach erfolgreicher Abnahme sicher lokal installieren und die verbleibenden Katalogkriterien weiter abarbeiten.
-  - Verträge: [index.json](verification/source12-suite-20261016/index.json), [index.json](verification/source12-preliminary-tests-20261015/index.json).
-  - Gate-Stand: preliminary_clippy: PASS_ACTUAL_FINAL_DRAFT4_PRELIMINARY_CLIPPY; node: PASS_EIGHT_LOGICAL_SOURCE_CASES; new_rust_tests: PASS_ALL44_WITHIN_ACTUAL1428_FULL_SUITE; full_suite: PASS_COMBINED_WORKSPACE_V12_REAL_RENDERER_FMT_CLIPPY; optimized_build: RUNNING_NOT_ACCEPTED; native: NOT_RUN; installation: NOT_RUN; manufacturer_parity: NOT_PROVEN.
+  - Verträge: [index.json](verification/source12-build-native-20261016/index.json), [index.json](verification/source12-suite-20261016/index.json), [index.json](verification/source12-preliminary-tests-20261015/index.json).
+  - Gate-Stand: preliminary_clippy: PASS_ACTUAL_FINAL_DRAFT4_PRELIMINARY_CLIPPY; node: PASS_EIGHT_LOGICAL_SOURCE_CASES; new_rust_tests: PASS_ALL44_WITHIN_ACTUAL1428_FULL_SUITE; full_suite: PASS_COMBINED_WORKSPACE_V12_REAL_RENDERER_FMT_CLIPPY; optimized_build: PASS_COMBINED_OPTIMIZED_BUILD_V12; native: IN_PROGRESS_NOT_ACCEPTED; installation: NOT_RUN; manufacturer_parity: NOT_PROVEN; generator: PASS_ACTUAL_SOURCE12_SITEMAP_GENERATION_SIX_PAGE_API_CLI_UI_COLD; ngram_metadata: FAIL_ACTUAL_SOURCE12_NGRAM_METADATA_CHANNELS; static_limits: FAIL_ACTUAL_RESPONSE_CAP_BELOW_GENUINE_501_PAGE_PROJECT_SIZE.
 
 Frühere Zwischenstände bleiben am Ende als eingeklappte Historie erhalten. Ihre damaligen offenen Schritte sind keine zusätzlichen aktuellen Aufgaben; maßgeblich sind die aktuelle Arbeit und die offenen Feature-Kriterien.
 
@@ -5814,4 +5816,4 @@ Diese unveränderten Einträge dokumentieren den damaligen Stand. Aktuelle Resta
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `9a9c4466f64fe6aec297e9376daaa5d5b10088e1cef7aa92109cf0a84254afaf`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T22:15:41.570Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `86eeb97856d591bf228d7fda9863acfda219d33fa48f7f1861be3b0095957add`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T22:30:12.127Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

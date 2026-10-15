@@ -1,8 +1,8 @@
-## Aktuell: Erweiterung besteht1428 Tests, optimierter Build läuft (16.10.2026)
+## Aktuell:1428 Tests und Windows-Build bestanden, praktische Abnahme läuft (16.10.2026)
 
-Optionale statische Crawl-Grenzen, Titel/Beschreibung/H1–H6-Ngramkanäle mit Wortwolke und der begrenzte Sitemap-Abfrageindex bestehen die vollständige **1428/0/0-Suite**, vier echte Renderergates und Format/Clippy. [Aktuelle vollständige Rohbelege](verification/source12-suite-20261016/index.json). Der optimierte Windows-Build läuft. Elf bestehende und drei zusätzliche praktische Abnahmen sowie sichere Installation stehen noch aus; lokal bleibt die bereits akzeptierte Source11 mit allen acht gespeicherten Crawls nutzbar.
+Optionale statische Crawl-Grenzen, Titel/Beschreibung/H1–H6-Ngramkanäle mit Wortwolke und der begrenzte Sitemap-Abfrageindex bestehen die **1428/0/0-Suite**, vier echte Renderergates und den optimierten Windows-Build. Die Sitemap-Erzeugung besteht sechs praktische Gruppen mit dem neuen Kandidaten. [Aktuelle Rohbelege einschließlich fehlgeschlagener Läufe](verification/source12-build-native-20261016/index.json). StaticLimits25 und die elf bisherigen praktischen Bereiche müssen noch abgeschlossen werden; sicher installiert und nutzbar bleibt Source11.
 
-Head-Diagnostik und konfigurierbare CDN-Klassifikation werden separat vorbereitet. Katalog **33 eigene Kriterien erfüllt /68 teilweise /43 offen**; keine Hersteller-Abdeckungsquote, vollständige Screaming-Frog-Parität bleibt `NOT_PROVEN`.
+Head-Diagnostik und konfigurierbare CDN-Klassifikation bestehen sechs Node-Quellfälle; drei ältere Test-Fixtures brauchen ein explizit deaktiviertes neues CDN-Feld, bevor Rusttests möglich sind. **33 eigene Kriterien erfüllt /68 teilweise /43 offen**; vollständige Screaming-Frog-Parität bleibt `NOT_PROVEN`.
 
 ## Aktuell: Ngram-Warmprüfung besteht, echter Antwort-Abschlussfehler entdeckt (15.10.2026)
 
