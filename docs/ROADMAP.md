@@ -1,3 +1,7 @@
+## Aktuell: N-Gramm-Corpus integriert, neue Tests bestanden (15.10.2026)
+
+Source10 besteht alle21 neuen Rustfälle (15Ngram/6SQLite-Projektion), Format und Clippy. Der Originaldaten-Auswahlfix besteht zusätzlich3 separate Node-Regressionen. Der private Quellcommit istc6bd9c5. [Rohbelege inklusive erstem Compilerfehler](verification/source10-directed-checkpoint-20261015/index.json). Vollständige Suite, optimierter Build, frische praktische Prüfungen und sichere Installation folgen. Katalog unverändert31 umgesetzt/69teilweise/44geplant; zusätzliche Ngramkanäle/Wortwolke, große Leseperformance und Herstellerparität bleiben offen.
+
 ## Aktuell: Browsertest findet Auswahlfehler; nächster Batch in Integration (15.10.2026)
 
 Source9 besteht1359 Tests und optimierten Build. Der echte Browserlauf besteht26 Gruppen und findet danach einen deaktivierten Ladebutton für gespeicherte Originaldateien. Die enge Korrektur besteht3 separate Regressionen, während der alte Stand1pass/2fail zeigt. Der Resource-/Directory-Lauf besteht5 Gruppen; seine Sidebar-Prüfung wird nach separatem Nachweis aller35 erreichbaren Navigationen korrigiert. [Rohbelege und offene Grenzen](verification/source9-native-checkpoint-20261015/index.json). Source9 wird nicht installiert. Source10 integriert UI-Fix,1–6-Gramm-Corpus und eine kleine Sitemap-Abfrageverbesserung; vollständige neue Prüfungen folgen. Katalog unverändert31 umgesetzt,69 teilweise,44 geplant; Herstellerparität offen.

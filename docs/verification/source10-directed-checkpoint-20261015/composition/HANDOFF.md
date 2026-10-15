@@ -1,0 +1,21 @@
+# Source10: isolierte Zusammensetzung auf dem tatsächlichen Source9
+
+AUTHORED_NOT_RUN. Dies ist ein vollständiger E-only Vorher-/Nachherentwurf, kein Release, keine Promotion und kein Compiler- oder Nativeergebnis. Basis ist ausschließlich der eingefrorene Source9 4e22e195cb918f3fcc820135da9f9c858c0a531e59bb502e15bf0eb8711bb3a9, Code 374229117c6fcc98d942976aa55444517d40524a, 358 Eingaben. Sein tatsächlich abgeschlossener Gesamtlauf dd4accbd9edfcf523264c9f70f255bff14270427fbb4d118a2f51c06290ad280 hat 1359/0/0, 577 Pflichtnamen, 581 vollständige Cargo-Namen inklusive vier Rendererfällen. Diese Elternbelege werden nicht als Source10-Erfolg übertragen.
+
+## Drei unveränderte geprüfte Vorschläge
+
+NgramV3 961025/Review 4fa91 liefert den vollständigen gespeicherten Korpus für eigene 1..6-Wortfolgen, Standard weiterhin max_n3, UI explizit6. Das bisherige Similarity-/Readability-Profil und die Textquellenautorität bleiben erhalten. ProjectionV2 8a813/Review 3a30 liefert allein die optionale TX-lokale 2-MiB-Projektion für zwei Reportguardabfragen, mit unverändertem Original-SHA/Tail/Stale/Unknown und Legacy-Fallback einschließlich unsupported UTF8. Keine Session, kein Cross-Request-Cache und keine Tempo-/RSS-Behauptung. BODY-Auswahl f818/Review 73a2 fügt genau renderSourceBodies() nach der tatsächlichen Crawl-Zuweisung ein. Die drei fachlichen Vorschläge sind nicht neu implementiert oder semantisch erweitert.
+
+## Exakte Zusammensetzung statt alter Ganzdateien
+
+Alle 15 vorhandenen Hunks passen jeweils bytegenau und eindeutig in die aktuellen sieben Source9-Dateien: zehn Ngram-Integrationen, vier Projection-Integrationen und ein BODY-Hunk. Für die auf Source8 verfassten gemeinsamen lib/main/server/index-Dateien wird niemals die historische Ganzdatei übernommen. source/preformat erhalten somit sämtliche bereits vorhandenen Resource-, Directory-, Header-, Grant- und Testreparaturen außerhalb dieser kleinen Hunks. Inverse Anwendung aller Hunks gibt die sieben vollständigen Source9-Dateien exakt zurück. Elf neue Dateien werden bytegenau aus den geprüften Vorschlägen übernommen; 351 andere Source9-Dateien bleiben unverändert. Ein Rollback ist als reine E-Draft-Beschreibung mit finalen SHA-Voraussetzungen enthalten und wurde nicht auf Dateien ausgeführt.
+
+Tatsächliche Inventare: 369 Produktpfade, 18 owned = 7 geändert + 11 neu, 351 unverändert. Beide vollständigen Verzeichnisse source und preformat enthalten dieselben 369 Bytesätze. composition-derivation.json nennt jede konkrete Original-/Ersetzungsfolge, aktuelle Offsets und Zwischenhashes; files/approved_product_bindings im preformat.json nennen alle alten und neuen Hashpaare. Kein Formatheuristik- oder Tokenvergleich war für die Übernahme nötig.
+
+## Testinventar und Prüfgrenze
+
+Die tatsächlichen neuen Rustdeklarationen ergeben 15 Ngram- und 6 Projection-Funktionen in vier neuen Testmodulen. Alle 21 sind platformübergreifend verfasst; die Windows-Forecastzahlen sind 598 Pflichtnamen, 602 vollständige Namen inklusive der vier alten Rendererfälle und mindestens 1380 Tests. Bestehende 577 Pflichtnamen und die 581 vollständigen tatsächlich grünen Elternnamen werden aus dem unveränderten Parentinventar beziehungsweise dessen an den Rohlog gebundenen Ergebniszeilen behalten. Neue vollständige Module werden explizit aus den aktuellen mod/path-Verbindungen geprüft. Es gibt noch keinen neuen Cargo-Lauf.
+
+Die drei BODY-Nodefälle liegen getrennt unter verification. Der echte Rootbeleg 6de71d0da80b7626546b3e026f13cb0e55270489fff29c7adc14325d5252f590 zeigt Source9 vorher 1/2 und den geprüften Fix 3/0 bei bytegenau demselben vorgeschlagenen app.js. Dieser lokale UI-Harness zählt weder zu den 369 Produkteingaben noch zu den 21 neuen Cargo-Funktionen. Der Kompositionsautor hat lediglich drei Node-Syntaxprüfungen ausgeführt, keinen Harness importiert oder ausgeführt.
+
+Offen sind unabhängiger Kompositionsreview, Rootformatierung und deren gesonderter Review, Clippy/Compiler, private Veröffentlichung/Approval, tatsächlicher Source10-Freeze, Gesamtlauf, Build, native Abnahmen und Installation. Ein Source10-Binder oder Runner wurde hier nicht erstellt. Kein Rootcode, Git, Original-C-Daten, Compiler, Rusttest, SQL, HTTP/TCP, Browser oder Nativeprozess wurde vom Autor berührt.

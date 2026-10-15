@@ -1,0 +1,19 @@
+    Checking open-seo-spider-core v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\combined-source-v10-draft-v1\source\crates\core)
+    Checking open-seo-spider v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\combined-source-v10-draft-v1\source\crates\app)
+error: used `assert_eq!` with a literal bool
+  --> crates\core\src\ngram_corpus_tests.rs:76:5
+   |
+76 |     assert_eq!(r.sources[1].counted, false);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#bool_assert_comparison
+   = note: `-D clippy::bool-assert-comparison` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::bool_assert_comparison)]`
+help: replace it with `assert!(..)`
+   |
+76 -     assert_eq!(r.sources[1].counted, false);
+76 +     assert!(!r.sources[1].counted);
+   |
+
+error: could not compile `open-seo-spider-core` (lib test) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
