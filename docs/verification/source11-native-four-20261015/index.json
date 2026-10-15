@@ -1,0 +1,798 @@
+{
+  "schema_version": 1,
+  "kind": "actual_source11_first_four_native_scopes",
+  "recorded_at": "2026-10-15T20:27:04.461Z",
+  "result": "PASS_FOUR_CURRENT_NATIVE_SCOPES_SEVEN_PENDING",
+  "source_commit": "61b0e3bca5386a17b449915b2915222e245084c5",
+  "source_manifest_sha256": "8a55a0ba333742124b36a33fde8a889afcc594e052b09568910dccc3ea5e519c",
+  "candidate_binary_sha256": "2d46366500887caeee33c45a972639dd379c02e678a9e07595a506244f9265f7",
+  "scopes": [
+    {
+      "scope": "resource-ngram",
+      "result": "PASS_ACTUAL_SOURCE11_RESOURCE_DIRECTORY_WORKFLOW",
+      "inner_sha256": "e6de5bec81782422c1679d4e3c3c5fb1fc8344338304fb777e8ca9d76018b217",
+      "outer_sha256": "f9128c72e6948777d41d795651b0918bf89e01c38cc191526a6cc9a0f4d825b7"
+    },
+    {
+      "scope": "browser",
+      "result": "PASS_COMBINED_V11_ACTUAL_NATIVE_FINDINGS_BROWSER",
+      "inner_sha256": "7f0b3c388d9c4210f7fd49ad9730f761c0c5d7b24125dbd5341e4d60f32f6fde",
+      "outer_sha256": "c35cb480026b5aa17ba7a0e69daef319b29d51b23e9a216e857114cbc7c20f2f"
+    },
+    {
+      "scope": "native",
+      "result": "PASS_DIRECTED_NATIVE_SDK_API_CLI_ONLY",
+      "inner_sha256": "aad2ebd2bd207447c8976d678c8a507e0e53bc2693c6e9f4518460b4bf02e45c",
+      "outer_sha256": "a0b82648df4095c885993007b66f1ddf73e07f0a6fcd212eedf79bbfdd2614eb"
+    },
+    {
+      "scope": "ui-mock",
+      "result": "PASS_13_UI_MOCK_GROUPS_ONLY",
+      "inner_sha256": "0a4b0249a1123fc71d3059c079913ea4915a80a0fcd8d19cf35b87295d86d32a",
+      "outer_sha256": "4cbe6b28d727324e91367d65e75eda620a4525e2a91cb0f953f5c90df6d0eb37"
+    }
+  ],
+  "resource_registry": {
+    "warm_complete": 6,
+    "cold_complete": 2,
+    "aborted": 0,
+    "failed": 0,
+    "retained": 0
+  },
+  "resource_cases": "Eight existing cases: six warm functional cases, first-app natural EOF, cold reopen",
+  "ngram_cases": "Five warm cases and one cold case; seven actual children closed, including two expected protected-input CLI exits with code1",
+  "browser_groups": 27,
+  "ui_mock_groups": 13,
+  "directed_native_cases": 3,
+  "remaining_native": [
+    "physical-findings",
+    "file-sdk",
+    "root-junction",
+    "large-source-v11",
+    "source-body-v11",
+    "migration-workflow-v11",
+    "eof"
+  ],
+  "installed": "UNCHANGED_SOURCE5_R3",
+  "manufacturer_parity": "NOT_PROVEN",
+  "omissions": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/browser-resource-200-1440.png",
+      "bytes": 10356760,
+      "reason": "Generated evidence exceeds the explicit 4MiB per-blob archive bound; retained on E"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/browser-resource-200-320.png",
+      "bytes": 10057594,
+      "reason": "Generated evidence exceeds the explicit 4MiB per-blob archive bound; retained on E"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/chrome-profile",
+      "reason": "Private-named evidence, database/runtime/profile directory or unselected binary; retained only on E"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/data",
+      "reason": "Private-named evidence, database/runtime/profile directory or unselected binary; retained only on E"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/genuine-project.json",
+      "bytes": 6404436,
+      "reason": "Generated evidence exceeds the explicit 4MiB per-blob archive bound; retained on E"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/temporary",
+      "reason": "Private-named evidence, database/runtime/profile directory or unselected binary; retained only on E"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/chrome-profile",
+      "reason": "Private-named evidence, database/runtime/profile directory or unselected binary; retained only on E"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/data",
+      "reason": "Private-named evidence, database/runtime/profile directory or unselected binary; retained only on E"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/membership-absent-default-private.json",
+      "reason": "Private-named evidence, database/runtime/profile directory or unselected binary; retained only on E"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/membership-disabled-again-private.json",
+      "reason": "Private-named evidence, database/runtime/profile directory or unselected binary; retained only on E"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/membership-explicit-128-private.json",
+      "reason": "Private-named evidence, database/runtime/profile directory or unselected binary; retained only on E"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/original-body-ui-private.json",
+      "reason": "Private-named evidence, database/runtime/profile directory or unselected binary; retained only on E"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/original-source-private.bin",
+      "reason": "Private-named evidence, database/runtime/profile directory or unselected binary; retained only on E"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/temporary",
+      "reason": "Private-named evidence, database/runtime/profile directory or unselected binary; retained only on E"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-native-optimized-acceptance-v11/native-root",
+      "reason": "Private-named evidence, database/runtime/profile directory or unselected binary; retained only on E"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-native-optimized-acceptance-v11/temporary",
+      "reason": "Private-named evidence, database/runtime/profile directory or unselected binary; retained only on E"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-ui-mock-optimized-acceptance-v11/temporary",
+      "reason": "Private-named evidence, database/runtime/profile directory or unselected binary; retained only on E"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-ui-mock-optimized-acceptance-v11/ui-mock",
+      "reason": "Private-named evidence, database/runtime/profile directory or unselected binary; retained only on E"
+    }
+  ],
+  "qualification": "Actual optimized Windows candidate and selected generated fixture evidence only. Outer process closure and inner acceptance are checked separately. Raw private-named files, crawl databases, profiles and PE are excluded. Earlier actual failures remain in their original archives.",
+  "files": [
+    {
+      "path": "resource-ngram/proof.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/proof.json",
+      "sha256": "e6de5bec81782422c1679d4e3c3c5fb1fc8344338304fb777e8ca9d76018b217",
+      "bytes": 1041643
+    },
+    {
+      "path": "resource-ngram/outer/proof.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-native-outer-v4/resource-directory-workflow-v11/proof.json",
+      "sha256": "f9128c72e6948777d41d795651b0918bf89e01c38cc191526a6cc9a0f4d825b7",
+      "bytes": 4103
+    },
+    {
+      "path": "resource-ngram/outer/stdout.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-native-outer-v4/resource-directory-workflow-v11/stdout.log",
+      "sha256": "29762fdd09b61c038d6e7dd3b49e11f32774b5ec282c3a5cd846bc3c47225e29",
+      "bytes": 295
+    },
+    {
+      "path": "resource-ngram/outer/stderr.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-native-outer-v4/resource-directory-workflow-v11/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "resource-ngram/01-genuine-app.stderr.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/01-genuine-app.stderr.log",
+      "sha256": "724b9ae331e438bebe043974b6deed8de38d0c22702cfeac3d1abc1587561012",
+      "bytes": 1582
+    },
+    {
+      "path": "resource-ngram/01-genuine-app.stdout.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/01-genuine-app.stdout.log",
+      "sha256": "ba155d73e9d313a0a4b3cd507601d630503acc34ea207050b99730adce974b37",
+      "bytes": 40
+    },
+    {
+      "path": "resource-ngram/02-cold-app.stderr.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/02-cold-app.stderr.log",
+      "sha256": "8db5326018e9857eb2902aed1bcf7c1a84ec151b747192d0b7e14617adfe67af",
+      "bytes": 1574
+    },
+    {
+      "path": "resource-ngram/02-cold-app.stdout.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/02-cold-app.stdout.log",
+      "sha256": "6937a25adaaaa0d2600886150f1c80bc2f2e5649e57446f3cfed3b9b09eb3a4b",
+      "bytes": 40
+    },
+    {
+      "path": "resource-ngram/browser-compiled-header-1440.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/browser-compiled-header-1440.png",
+      "sha256": "2bf86c29ab26f280c00779600ea8d459c3a2708eaec672067184cd6105d7ff63",
+      "bytes": 147114
+    },
+    {
+      "path": "resource-ngram/browser-compiled-header-320.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/browser-compiled-header-320.png",
+      "sha256": "ece098f5b36a1e998da3ba3dd432ed56c29ff9ce179bb0856dd471cb7532b2e0",
+      "bytes": 76130
+    },
+    {
+      "path": "resource-ngram/browser-compiled-header-560.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/browser-compiled-header-560.png",
+      "sha256": "8b3512b72a4499e4fa84ee75dcdc9a1f8156458bb74aebe6f944bec76c4dec5e",
+      "bytes": 77923
+    },
+    {
+      "path": "resource-ngram/browser-compiled-header-561.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/browser-compiled-header-561.png",
+      "sha256": "8be489ff2a520f304aa6ce55607901ca05f7a1f6c4481b7304c634901c7a2a26",
+      "bytes": 77335
+    },
+    {
+      "path": "resource-ngram/browser-compiled-header-600.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/browser-compiled-header-600.png",
+      "sha256": "84fc285797d978e7bd154a4620424a1d323319603301e0778e8b2f16911b3666",
+      "bytes": 79291
+    },
+    {
+      "path": "resource-ngram/browser-compiled-header-768.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/browser-compiled-header-768.png",
+      "sha256": "e3112928c9a8446b571c13a352612350e3b059bd0c99cb6e3b5fcc0c26277135",
+      "bytes": 81627
+    },
+    {
+      "path": "resource-ngram/browser-compiled-header-850.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/browser-compiled-header-850.png",
+      "sha256": "1aa93f6e11513ad3996f95d4a0e9439059b1b213b8d066a6be9ebe0ab8c6dc70",
+      "bytes": 82683
+    },
+    {
+      "path": "resource-ngram/browser-directory-100-1440.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/browser-directory-100-1440.png",
+      "sha256": "26fe7ece3293424cd2df7e767c393c5428c56326ec6654f8d915814bc9390eac",
+      "bytes": 1038326
+    },
+    {
+      "path": "resource-ngram/browser-directory-100-320.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/browser-directory-100-320.png",
+      "sha256": "48b8a5bfabe91f0edaf49c444db206948c728b6217dbbfd166573cc0962b575e",
+      "bytes": 1382142
+    },
+    {
+      "path": "resource-ngram/browser-directory-200-1440.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/browser-directory-200-1440.png",
+      "sha256": "806d95be594dc1ca78d5bff4e0c65d511b1ac0bf07f0b99a3d4e5541448de239",
+      "bytes": 1028835
+    },
+    {
+      "path": "resource-ngram/browser-directory-200-320.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/browser-directory-200-320.png",
+      "sha256": "14b028022e676fad71e5454069349a57dc0e697641ff769d62fe3ff391b2cc68",
+      "bytes": 1370666
+    },
+    {
+      "path": "resource-ngram/browser-directory-205-1440.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/browser-directory-205-1440.png",
+      "sha256": "6c4d6eaf2fda948d2b770ff047e89f916a19af2328d9643df3f06d4472ea8f30",
+      "bytes": 123743
+    },
+    {
+      "path": "resource-ngram/browser-directory-205-320.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/browser-directory-205-320.png",
+      "sha256": "b38940c2bc9bab89216dff4b35a0534e618ecd53ea0da9ce993cb66122b4839b",
+      "bytes": 132650
+    },
+    {
+      "path": "resource-ngram/browser-resource-tail5-1440.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/browser-resource-tail5-1440.png",
+      "sha256": "46b342a554785a759a024d9c9c8efd0962fedea3616222633a7e1e3d5d527df0",
+      "bytes": 337742
+    },
+    {
+      "path": "resource-ngram/browser-resource-tail5-320.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/browser-resource-tail5-320.png",
+      "sha256": "022774103fb152fdba308da9d34129c3a6b40167f8df5e2bc761903d0c04545d",
+      "bytes": 332944
+    },
+    {
+      "path": "resource-ngram/browser-resource-unknown2-1440.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/browser-resource-unknown2-1440.png",
+      "sha256": "173eefcbeba186e48ea2d79c77d16813fb4718efc1700610379d16f02f5fe8ac",
+      "bytes": 180801
+    },
+    {
+      "path": "resource-ngram/browser-resource-unknown2-320.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/browser-resource-unknown2-320.png",
+      "sha256": "59e4228d96f87595c1a95d4b876ad07f77aabad6dd8eb4fdbdeea5bbf3ba4b08",
+      "bytes": 179814
+    },
+    {
+      "path": "resource-ngram/browser-retained-page-links-1440.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/browser-retained-page-links-1440.png",
+      "sha256": "3f24d05f49d3fc5e037629af230ed9ea0bd8f41a96b619c085ba5dd64ac0d98d",
+      "bytes": 145739
+    },
+    {
+      "path": "resource-ngram/browser-retained-page-links-320.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/browser-retained-page-links-320.png",
+      "sha256": "8a4549b0ad1ef130825c5c51f1881e8f643b0af1f41b13fc4cde1a216cfe0fa1",
+      "bytes": 132425
+    },
+    {
+      "path": "resource-ngram/cli-ngram-protected.stderr.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/cli-ngram-protected.stderr.log",
+      "sha256": "b2dbcdfda06289e5db098650d6d4218306bd03b5af71c88e858d4adcaaf40fd9",
+      "bytes": 53
+    },
+    {
+      "path": "resource-ngram/cli-ngram-protected.stdout.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/cli-ngram-protected.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "resource-ngram/cli-ngram.stderr.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/cli-ngram.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "resource-ngram/cli-ngram.stdout.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/cli-ngram.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "resource-ngram/cli-protected.stderr.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/cli-protected.stderr.log",
+      "sha256": "7aa547a51c2eb3ea63dcf88499aaaaf272542adf3c7052db42c4bbd9659f64e3",
+      "bytes": 47
+    },
+    {
+      "path": "resource-ngram/cli-protected.stdout.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/cli-protected.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "resource-ngram/cli-resource.stderr.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/cli-resource.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "resource-ngram/cli-resource.stdout.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/cli-resource.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "resource-ngram/directory-api-full.csv",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/directory-api-full.csv",
+      "sha256": "7b0c8425543398b5ff83134d9ad9b62311e1fd6c071c7c5e875de9a58c7704ac",
+      "bytes": 46192
+    },
+    {
+      "path": "resource-ngram/downloads/directory-1440.csv",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/downloads/directory-1440.csv",
+      "sha256": "7b0c8425543398b5ff83134d9ad9b62311e1fd6c071c7c5e875de9a58c7704ac",
+      "bytes": 46192
+    },
+    {
+      "path": "resource-ngram/downloads/directory-320.csv",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/downloads/directory-320.csv",
+      "sha256": "7b0c8425543398b5ff83134d9ad9b62311e1fd6c071c7c5e875de9a58c7704ac",
+      "bytes": 46192
+    },
+    {
+      "path": "resource-ngram/downloads/page-links-1440.csv",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/downloads/page-links-1440.csv",
+      "sha256": "4a156b0097e4b4f21494085ce9446a7234da90800c44d4e91ac7490e1aa8aa2c",
+      "bytes": 3723
+    },
+    {
+      "path": "resource-ngram/downloads/page-links-320.csv",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/downloads/page-links-320.csv",
+      "sha256": "4a156b0097e4b4f21494085ce9446a7234da90800c44d4e91ac7490e1aa8aa2c",
+      "bytes": 3723
+    },
+    {
+      "path": "resource-ngram/downloads/resource-1440.csv",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/downloads/resource-1440.csv",
+      "sha256": "9ec25f0178f0c1561ed71f1f2e1a70fd0cbf929e12de17b4bea71851362660dd",
+      "bytes": 970964
+    },
+    {
+      "path": "resource-ngram/downloads/resource-320.csv",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/downloads/resource-320.csv",
+      "sha256": "9ec25f0178f0c1561ed71f1f2e1a70fd0cbf929e12de17b4bea71851362660dd",
+      "bytes": 970964
+    },
+    {
+      "path": "resource-ngram/fixture-bytes.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/fixture-bytes.json",
+      "sha256": "6048a6b1a182ff588a96d15ef81283c1bbb8cdf68c065a4abdfd5b18ee1fe119",
+      "bytes": 42966
+    },
+    {
+      "path": "resource-ngram/ngram-api-full.csv",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/ngram-api-full.csv",
+      "sha256": "4992fac7875c5a2974c065af62a81a31a2c7e8251fd85037396c02106c4aa64a",
+      "bytes": 89768
+    },
+    {
+      "path": "resource-ngram/ngram-cli-full.csv",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/ngram-cli-full.csv",
+      "sha256": "de65cad153e8ad7bdff14ac5c9e7c3d4b04eb80afaa778fb6f21d1a0a53f7098",
+      "bytes": 89768
+    },
+    {
+      "path": "resource-ngram/ngram-cli-page.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/ngram-cli-page.json",
+      "sha256": "6635ebc716b1230a3e383ec7d3e4b61a8357ccbcbea117f5862420edea125f05",
+      "bytes": 117648
+    },
+    {
+      "path": "resource-ngram/ngram-cli-request.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/ngram-cli-request.json",
+      "sha256": "3249742c97d9b1ef54b18e7308eba9f682556f0adf641cff5ef07b33a29ca770",
+      "bytes": 201
+    },
+    {
+      "path": "resource-ngram/ngram-cold-full.csv",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/ngram-cold-full.csv",
+      "sha256": "4992fac7875c5a2974c065af62a81a31a2c7e8251fd85037396c02106c4aa64a",
+      "bytes": 89768
+    },
+    {
+      "path": "resource-ngram/ngram-ui-1440.csv",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/ngram-ui-1440.csv",
+      "sha256": "5d2da1d6ed00114b4763881a0775c0aa5780d3e594f23336c3393c3b04ec4720",
+      "bytes": 89768
+    },
+    {
+      "path": "resource-ngram/ngram-ui-1440.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/ngram-ui-1440.json",
+      "sha256": "177ea57f8ce2930ca66ce6799c9ceb8d08b96cbf5302633d64927bdb9a81e54a",
+      "bytes": 5285
+    },
+    {
+      "path": "resource-ngram/ngram-ui-320.csv",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/ngram-ui-320.csv",
+      "sha256": "5d2da1d6ed00114b4763881a0775c0aa5780d3e594f23336c3393c3b04ec4720",
+      "bytes": 89768
+    },
+    {
+      "path": "resource-ngram/ngram-ui-320.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/ngram-ui-320.json",
+      "sha256": "177ea57f8ce2930ca66ce6799c9ceb8d08b96cbf5302633d64927bdb9a81e54a",
+      "bytes": 5285
+    },
+    {
+      "path": "resource-ngram/ngram-unknown-1440.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/ngram-unknown-1440.png",
+      "sha256": "74e952e1bfecd7d44608ba7fd84a6f5b3c2432d4e124a7f7e01325b9418ba31b",
+      "bytes": 90201
+    },
+    {
+      "path": "resource-ngram/ngram-unknown-320.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/ngram-unknown-320.png",
+      "sha256": "1d4b34c96b9f633d22c5725891cb6c16e1e7dbf6557da132542a80544a11a391",
+      "bytes": 33081
+    },
+    {
+      "path": "resource-ngram/owned-chrome.stderr.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/owned-chrome.stderr.log",
+      "sha256": "3a61fcab98616c6ba6bc97f3360580f3e4de35ac2206d642cbae6f8a81cbc669",
+      "bytes": 2213
+    },
+    {
+      "path": "resource-ngram/owned-chrome.stdout.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/owned-chrome.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "resource-ngram/page-links-api-full.csv",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/page-links-api-full.csv",
+      "sha256": "4a156b0097e4b4f21494085ce9446a7234da90800c44d4e91ac7490e1aa8aa2c",
+      "bytes": 3723
+    },
+    {
+      "path": "resource-ngram/resource-api-full.csv",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/resource-api-full.csv",
+      "sha256": "9ec25f0178f0c1561ed71f1f2e1a70fd0cbf929e12de17b4bea71851362660dd",
+      "bytes": 970964
+    },
+    {
+      "path": "resource-ngram/resource-cli-full.csv",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/resource-cli-full.csv",
+      "sha256": "9ec25f0178f0c1561ed71f1f2e1a70fd0cbf929e12de17b4bea71851362660dd",
+      "bytes": 970964
+    },
+    {
+      "path": "resource-ngram/resource-cli-page.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/resource-cli-page.json",
+      "sha256": "c6eb5df164da96d4106708abc368022b48e483cd53ca1f520328f9e9bd48dea2",
+      "bytes": 763411
+    },
+    {
+      "path": "resource-ngram/resource-cli-request.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/resource-cli-request.json",
+      "sha256": "b2f7eb2bfe59b1bc960e015b71383a7c4a77f01ee0085c542dd1609b2f0cfb81",
+      "bytes": 43
+    },
+    {
+      "path": "resource-ngram/website-requests-before-read.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v11/website-requests-before-read.json",
+      "sha256": "e525eda9c13a5b1100f65cea5d5e1e5ae1fa80a4f5172b7fc476ab2317400cfb",
+      "bytes": 14764
+    },
+    {
+      "path": "browser/proof.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/proof.json",
+      "sha256": "7f0b3c388d9c4210f7fd49ad9730f761c0c5d7b24125dbd5341e4d60f32f6fde",
+      "bytes": 105070
+    },
+    {
+      "path": "browser/outer/proof.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-native-outer-v11/browser-native/proof.json",
+      "sha256": "c35cb480026b5aa17ba7a0e69daef319b29d51b23e9a216e857114cbc7c20f2f",
+      "bytes": 3106
+    },
+    {
+      "path": "browser/outer/stdout.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-native-outer-v11/browser-native/stdout.log",
+      "sha256": "ef245aa5f90c6f3d108d533729361489f1e4d6305bc3d1c7fb57a583c23ecd60",
+      "bytes": 872
+    },
+    {
+      "path": "browser/outer/stderr.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-native-outer-v11/browser-native/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "browser/app.stderr.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/app.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "browser/app.stdout.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/app.stdout.log",
+      "sha256": "b4580fbab406c5f273c3c30435300bef1c366facc2c000851f2a529965b89d65",
+      "bytes": 40
+    },
+    {
+      "path": "browser/body-disabled-history-reset-1440.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/body-disabled-history-reset-1440.png",
+      "sha256": "bc20c64fa7f0997b2d43c031667518764793ea0c69332d5a9f2651d23d250a2f",
+      "bytes": 251056
+    },
+    {
+      "path": "browser/body-disabled-history-reset-320.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/body-disabled-history-reset-320.png",
+      "sha256": "5a1dc2f10cf3a6776f38c9b438abfa0a0dfffa2aa69afe00044c4ec83f19b683",
+      "bytes": 162420
+    },
+    {
+      "path": "browser/body-enabled-settings-1440.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/body-enabled-settings-1440.png",
+      "sha256": "713a8ea754fd6529eae4525405150992a86d7b0d9463025a2b1ccecd208336d8",
+      "bytes": 199996
+    },
+    {
+      "path": "browser/body-enabled-settings-320.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/body-enabled-settings-320.png",
+      "sha256": "2627ae31003a2b08ca0401834108ddd77b529585fff145fe5a22a4b598885dad",
+      "bytes": 81959
+    },
+    {
+      "path": "browser/body-invalid-representations-1440.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/body-invalid-representations-1440.png",
+      "sha256": "be42a228a6f5cb9a0533007f71148db7996e9e87e961892d8e591c24795e9457",
+      "bytes": 339473
+    },
+    {
+      "path": "browser/body-invalid-representations-320.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/body-invalid-representations-320.png",
+      "sha256": "1571f5e74c04c9f7c0d3381a42b3a60fe6946d9e569d0afe43750470056ff2bb",
+      "bytes": 189465
+    },
+    {
+      "path": "browser/body-original-panel-1440.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/body-original-panel-1440.png",
+      "sha256": "ceb977ae28f49ec52324d57f081e9e04c6e2fceb6fda206b1d58c93facc8ec9e",
+      "bytes": 282832
+    },
+    {
+      "path": "browser/body-original-panel-320.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/body-original-panel-320.png",
+      "sha256": "1b8b06284cce3df687cb785d84e53fb42e53a1c42a37535c6d54be6c9b5320b1",
+      "bytes": 191532
+    },
+    {
+      "path": "browser/body-reopened-original-panel-1440.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/body-reopened-original-panel-1440.png",
+      "sha256": "943758a3d9532a018717de143b23a8721c3c8c7e577f224ec973dafec246e74c",
+      "bytes": 281361
+    },
+    {
+      "path": "browser/body-reopened-original-panel-320.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/body-reopened-original-panel-320.png",
+      "sha256": "70b12cc9cd1317c73468f7fd49e8c859f9769f2d06b8f5304926640c5d957ee5",
+      "bytes": 190809
+    },
+    {
+      "path": "browser/browser-1440-bottom.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/browser-1440-bottom.png",
+      "sha256": "93bc09a4adb19b5a523086b4912e0107b7dde1bac0109d6ea48b9c2bbd08879e",
+      "bytes": 187464
+    },
+    {
+      "path": "browser/browser-320-bottom.png",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/browser-320-bottom.png",
+      "sha256": "2302096300e805863baca29c0ff5e8e81813b6c7bb6d8b25838fd09c4bff81c7",
+      "bytes": 112143
+    },
+    {
+      "path": "browser/browser-requests.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/browser-requests.json",
+      "sha256": "0efb4b4c5887a8cd1543c2d102f278928d709f2fb89d71d3307fa17594f63692",
+      "bytes": 4861
+    },
+    {
+      "path": "browser/chrome.stderr.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/chrome.stderr.log",
+      "sha256": "fb3558cc1cc05e18a9dd7427cb71617ad476ad0e3bc17cb9b6958e4c3453c9e6",
+      "bytes": 1711
+    },
+    {
+      "path": "browser/chrome.stdout.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/chrome.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "browser/completed-job.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/completed-job.json",
+      "sha256": "b4cdbac0ec95af5a7a0f604f07cdc1d804f3cd7a2741ba73d0a4d5cc04171187",
+      "bytes": 206928
+    },
+    {
+      "path": "browser/crawl-config.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/crawl-config.json",
+      "sha256": "9ab0aed8e04d90f033a998aa810e09ccda823e645eacccbdc3e1ebfbcd150a5f",
+      "bytes": 14438
+    },
+    {
+      "path": "browser/durable-after.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/durable-after.json",
+      "sha256": "ea189201cac112784e19267f407c90763e5b68aa75d3e6df1a5043978b3e1f1a",
+      "bytes": 876
+    },
+    {
+      "path": "browser/durable-before.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/durable-before.json",
+      "sha256": "ea189201cac112784e19267f407c90763e5b68aa75d3e6df1a5043978b3e1f1a",
+      "bytes": 876
+    },
+    {
+      "path": "browser/profile-off-actual-request.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/profile-off-actual-request.json",
+      "sha256": "f25587f6d69bfcb02d07248b7418af448af2971ef9c301fba24b2d5d75ff3e7a",
+      "bytes": 1821
+    },
+    {
+      "path": "browser/profile-on-actual-request.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/profile-on-actual-request.json",
+      "sha256": "744c3cec1bec7766cbe93331ecca718d7a600336f7f50917424a1da8b7217281",
+      "bytes": 2102
+    },
+    {
+      "path": "browser/site-requests.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/site-requests.json",
+      "sha256": "707c0b61ea34c62f066a637247c6d9c6df524e4dd2cf861b8e938cb96e886ad1",
+      "bytes": 20699
+    },
+    {
+      "path": "browser/ui-full-findings.csv",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v11/ui-full-findings.csv",
+      "sha256": "4315d7b3ec6b9a89af6eb0671dd8cf40efab32cbecbe2e1d55d9e99e0808ecb1",
+      "bytes": 727831
+    },
+    {
+      "path": "native/proof.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-native-optimized-acceptance-v11/proof.json",
+      "sha256": "aad2ebd2bd207447c8976d678c8a507e0e53bc2693c6e9f4518460b4bf02e45c",
+      "bytes": 6806
+    },
+    {
+      "path": "native/outer/proof.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-native-outer-v11/native/proof.json",
+      "sha256": "a0b82648df4095c885993007b66f1ddf73e07f0a6fcd212eedf79bbfdd2614eb",
+      "bytes": 3043
+    },
+    {
+      "path": "native/outer/stdout.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-native-outer-v11/native/stdout.log",
+      "sha256": "9a029a9a035f807f09c8ec10639d91ae4acba8099dfcc129e1e3fa185f9dc30d",
+      "bytes": 177
+    },
+    {
+      "path": "native/outer/stderr.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-native-outer-v11/native/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "native/harness.stderr.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-native-optimized-acceptance-v11/harness.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "native/harness.stdout.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-native-optimized-acceptance-v11/harness.stdout.log",
+      "sha256": "a7bc0be3d90ee499b834a9840d05b38e503e8584c164067c02478eea1eafcc35",
+      "bytes": 1425
+    },
+    {
+      "path": "native/native-receipt.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-native-optimized-acceptance-v11/native-receipt.json",
+      "sha256": "a7bc0be3d90ee499b834a9840d05b38e503e8584c164067c02478eea1eafcc35",
+      "bytes": 1425
+    },
+    {
+      "path": "native/ownership.ndjson",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-native-optimized-acceptance-v11/ownership.ndjson",
+      "sha256": "e2c57188c1c123c08ddd433d73f6396061957f277a5be1c65de44fb19bf46072",
+      "bytes": 1077
+    },
+    {
+      "path": "native/prerequisites.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-native-optimized-acceptance-v11/prerequisites.json",
+      "sha256": "226e8deb73370ebda97eea1ba105e933e0112f60dd6b2dd6d79e9da7647f7c38",
+      "bytes": 2469
+    },
+    {
+      "path": "ui-mock/proof.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-ui-mock-optimized-acceptance-v11/proof.json",
+      "sha256": "0a4b0249a1123fc71d3059c079913ea4915a80a0fcd8d19cf35b87295d86d32a",
+      "bytes": 6247
+    },
+    {
+      "path": "ui-mock/outer/proof.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-native-outer-v11/ui-mock/proof.json",
+      "sha256": "4cbe6b28d727324e91367d65e75eda620a4525e2a91cb0f953f5c90df6d0eb37",
+      "bytes": 3057
+    },
+    {
+      "path": "ui-mock/outer/stdout.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-native-outer-v11/ui-mock/stdout.log",
+      "sha256": "b15cf39e3e9e47e3e7dd2dcec3230db54537965200d05141c151094642e7b213",
+      "bytes": 179
+    },
+    {
+      "path": "ui-mock/outer/stderr.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-native-outer-v11/ui-mock/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "ui-mock/harness.stderr.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-ui-mock-optimized-acceptance-v11/harness.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "ui-mock/harness.stdout.log",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-ui-mock-optimized-acceptance-v11/harness.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "ui-mock/prerequisites.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-ui-mock-optimized-acceptance-v11/prerequisites.json",
+      "sha256": "89549bd9929a3618ad178d2a0a0a2c43f72a6cd102b038c3a1cfcc427569d2aa",
+      "bytes": 2469
+    },
+    {
+      "path": "ui-mock/ui-execution-adapter.cjs",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-ui-mock-optimized-acceptance-v11/ui-execution-adapter.cjs",
+      "sha256": "3a8284ad97aa34c940dde83ef3afb74ca444e34511bb67b74b730bf7a4a90e31",
+      "bytes": 28842
+    },
+    {
+      "path": "ui-mock/ui-mock-receipt.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-ui-mock-optimized-acceptance-v11/ui-mock-receipt.json",
+      "sha256": "caa3b6dd14e786b20839ee5e91b703d3a8eeb6a3a6a213e47ac7d35fefb4c1b4",
+      "bytes": 162365
+    },
+    {
+      "path": "ui-mock/ui-release.json",
+      "source_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-ui-mock-optimized-acceptance-v11/ui-release.json",
+      "sha256": "0ed1a9435253bc2c3f7fb21314c1008e7afb3c570820845db564c5f76dde323e",
+      "bytes": 510
+    }
+  ]
+}

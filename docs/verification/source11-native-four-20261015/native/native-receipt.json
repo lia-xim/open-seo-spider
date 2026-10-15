@@ -1,0 +1,36 @@
+{
+  "result": "PASS",
+  "tested_at": "2026-10-15T20:19:24.277Z",
+  "binary_sha256": "2d46366500887caeee33c45a972639dd379c02e678a9e07595a506244f9265f7",
+  "sdk": "@modelcontextprotocol/client2.3.1",
+  "checks": [
+    "stdio: official SDK, actual App route, seven filters, independent page cursor, pinned full CSV descriptor, strict domain failure, actual close",
+    "streamable_http: official SDK, actual App route, seven filters, independent page cursor, pinned full CSV descriptor, strict domain failure, actual close",
+    "actual CLI new files: one-page JSON versus full4-row CSV, same actual Core CSV bytes as API, offline access role"
+  ],
+  "website_requests_during_read": 0,
+  "scope": "Only this directed candidate run; physical64MiB/large-RSS/cancellation-latency/full-feature parity remain separate gates",
+  "execution_adapter": "isolated_findings_native_ownership_v1",
+  "fixture_directory_retained": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-findings-native-optimized-acceptance-v11\\temporary\\oss-findings-native-a0lmx7",
+  "owned_ports": {
+    "api": 58353,
+    "website": 58352
+  },
+  "owned_processes": [
+    {
+      "role": "sdk-stdio-0",
+      "pid": 27600,
+      "actual_close_event": true
+    },
+    {
+      "role": "app",
+      "pid": 28404,
+      "actual_close_event": true
+    },
+    {
+      "role": "cli",
+      "pid": 26060,
+      "actual_close_event": true
+    }
+  ]
+}
