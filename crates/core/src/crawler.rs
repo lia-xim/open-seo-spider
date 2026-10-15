@@ -133,6 +133,9 @@ impl Crawler {
         config.sitemap_source_parser_limits()?;
         config.sitemap_source_body_limit()?;
         config.sitemap_membership_ledger_limits()?;
+        if let Some(archive) = &config.sitemap_source_archive {
+            archive.validate()?;
+        }
         config.indexability_agent = config.indexability_agent.trim().to_ascii_lowercase();
         if config.indexability_agent.is_empty()
             || config.indexability_agent.len() > 128
@@ -306,6 +309,24 @@ impl Crawler {
         &self,
         events: Option<UnboundedSender<CrawlEvent>>,
         control: CrawlControl,
+    ) -> anyhow::Result<ControlledCrawlResult> {
+        let pdf_tasks = crate::TaskOwner::new("crawler_pdf");
+        let result = self
+            .run_controlled_owned(events, control, pdf_tasks.clone())
+            .await;
+        // Also join on every early error. Caller cancellation is handled by the
+        // retained application launch owner, not by dropping this whole run.
+        let drained = pdf_tasks.shutdown_and_drain().await;
+        let result = result?;
+        drained?;
+        Ok(result)
+    }
+
+    async fn run_controlled_owned(
+        &self,
+        events: Option<UnboundedSender<CrawlEvent>>,
+        control: CrawlControl,
+        pdf_tasks: crate::TaskOwner,
     ) -> anyhow::Result<ControlledCrawlResult> {
         self.config.validate_input_provenance_budget()?;
         if control.is_finished() {
@@ -516,6 +537,7 @@ impl Crawler {
                 &mut seen,
                 (pages.len(), queue.len()),
                 generation,
+                &pdf_tasks,
             )
             .await?
         };
@@ -548,6 +570,7 @@ impl Crawler {
             robots: self.robots.clone(),
             rate: self.rate.clone(),
             pdf_slots: self.pdf_slots.clone(),
+            pdf_tasks: pdf_tasks.clone(),
             policy: self.policy.clone(),
             #[cfg(test)]
             pdf_parse_hook: self.pdf_parse_hook.clone(),
@@ -777,6 +800,9 @@ impl Crawler {
         }
         let pending = queue.len() + tasks.len();
         drop(tasks); // In-flight requests remain pending in SQLite and can be resumed.
+        // Cancel can drop the Page future; the actual already-started parser
+        // must still join before any terminal checkpoint can be published.
+        pdf_tasks.shutdown_and_drain().await?;
         if self.config.resource_discovery.is_some()
             && let Some(store) = &self.store
         {
@@ -1504,7 +1530,11 @@ impl Crawler {
         page_seen: &mut HashSet<String>,
         initial: (usize, usize),
         generation: Option<u64>,
+        pdf_tasks: &crate::TaskOwner,
     ) -> anyhow::Result<DiscoveryProgress> {
+        if self.config.sitemap_source_archive.is_some() && self.store.is_none() {
+            anyhow::bail!("Opt-in sitemap source archive requires durable Store");
+        }
         let seeds = self.discovery_seeds()?;
         // Initial-root/bootstrap owner enables typed mode by committing an honest
         // catalog first. No catalog remains qualified legacy behavior, not empty proof.
@@ -1560,6 +1590,7 @@ impl Crawler {
             robots: self.robots.clone(),
             rate: self.rate.clone(),
             pdf_slots: self.pdf_slots.clone(),
+            pdf_tasks: pdf_tasks.clone(),
             policy: self.policy.clone(),
             #[cfg(test)]
             pdf_parse_hook: self.pdf_parse_hook.clone(),
@@ -1654,6 +1685,27 @@ impl Crawler {
                 SourceCapturePersistence::NotApplicable
             };
             let source_receipt = source_persistence.receipt();
+            if let Some(candidate) = output.source_bodies.take() {
+                let store = self
+                    .store
+                    .as_ref()
+                    .context("Source body archive requires Store")?;
+                let receipt =
+                    source_receipt.context("Source body archive requires committed A receipt")?;
+                let document = &output
+                    .sitemap_batch
+                    .as_ref()
+                    .context("Source body archive lost original document")?
+                    .document;
+                // Bounded synchronous foundation: no new detached blocking job.
+                // Runtime latency and future TaskOwner integration remain open.
+                store.record_sitemap_source_bodies(
+                    document,
+                    receipt,
+                    candidate,
+                    generation.context("Archive generation absent")?,
+                )?;
+            }
             if self.policy.is_some()
                 && let Some(store) = &self.store
             {
@@ -2058,6 +2110,7 @@ impl Crawler {
             .into_outcome(&batch.document, capture_basis);
         let mut output = discovery_from_batch(batch, warnings);
         output.source_capture = Some(capture);
+        output.source_bodies = protocol.source_bodies.take();
         if let Some(observed) = &page.policy {
             anyhow::ensure!(
                 observed.redirect_decisions.iter().all(|row| row.task_role
@@ -2566,6 +2619,7 @@ struct DiscoveryOutput {
     sitemap_batch: Option<crate::SitemapDiscoveryBatch>,
     // In-flight captured evidence, never a persisted receipt or source admission.
     source_capture: Option<sitemap_capture::CaptureOutcome>,
+    source_bodies: Option<crate::sitemap_source_archive::SourceBodyCandidate>,
 }
 
 #[derive(Default)]
@@ -2735,9 +2789,31 @@ struct SitemapProtocolObservation {
     // Compact private capture is not part of the existing legacy serialization.
     #[serde(skip_serializing)]
     source_capture: sitemap_capture::SourceCapture,
+    #[serde(skip_serializing)]
+    source_bodies: Option<crate::sitemap_source_archive::SourceBodyCandidate>,
 }
 
 impl SitemapProtocolObservation {
+    fn retain_source_bodies(&mut self, body: Vec<u8>, config: &CrawlConfig) {
+        let Some(archive) = &config.sitemap_source_archive else {
+            return;
+        };
+        let decoded_xml = if archive.retain_decoded_xml {
+            self.entity_decode
+                .as_mut()
+                .map(|v| std::mem::take(&mut v.xml))
+        } else {
+            None
+        };
+        let post_http_entity = (archive.retain_post_http_entity
+            && self.request_started
+            && self.source_capture.retained_prefix_sha256.is_some())
+        .then_some(body);
+        self.source_bodies = Some(crate::sitemap_source_archive::SourceBodyCandidate {
+            post_http_entity,
+            decoded_xml,
+        });
+    }
     fn capture(page: &PageRecord, request_started: bool, body: &[u8]) -> Self {
         // Compatibility supplied-slice caller. The actual fetch passes the
         // independently counted response.chunk progress to the configured capture.
@@ -2810,6 +2886,7 @@ impl SitemapProtocolObservation {
             retained_post_http_entity_bytes: body.len(),
             post_http_entity_sha256: body_complete.then(|| crate::resource_policy::digest(body)),
             entity_decode: None,
+            source_bodies: None,
             parser: None,
             failure: None,
             source_capture: sitemap_capture::SourceCapture::not_invoked(
@@ -2926,6 +3003,7 @@ struct FetchContext {
     robots: Arc<RobotsCache>,
     rate: Arc<RateLimiter>,
     pdf_slots: Arc<Semaphore>,
+    pdf_tasks: crate::TaskOwner,
     policy: Option<Arc<crate::CompiledCrawlPolicy>>,
     #[cfg(test)]
     pdf_parse_hook: Option<PdfParseHook>,
@@ -3382,13 +3460,14 @@ impl FetchContext {
         if purpose == FetchPurpose::SitemapProtocol {
             // response.chunk() already performed reqwest HTTP Content-Decoding.
             // File-gzip magic is inspected exactly once here, before page sniffing.
-            let observed = SitemapProtocolObservation::capture_for_config(
+            let mut observed = SitemapProtocolObservation::capture_for_config(
                 &page,
                 request_started,
                 &body,
                 sitemap_received,
                 &self.config,
             );
+            observed.retain_source_bodies(body, &self.config);
             return (
                 page,
                 Some(FetchPayload::SitemapProtocol(Box::new(observed))),
@@ -3442,15 +3521,17 @@ impl FetchContext {
                     .expect("PDF semaphore is never closed");
                 #[cfg(test)]
                 let parse_hook = self.pdf_parse_hook.clone();
-                match tokio::task::spawn_blocking(move || {
-                    let _permit = permit;
-                    #[cfg(test)]
-                    if let Some(hook) = parse_hook {
-                        hook();
-                    }
-                    crate::pdf::analyze(&pdf_body, &url, &config)
-                })
-                .await
+                match self
+                    .pdf_tasks
+                    .run_blocking(move || {
+                        let _permit = permit;
+                        #[cfg(test)]
+                        if let Some(hook) = parse_hook {
+                            hook();
+                        }
+                        crate::pdf::analyze(&pdf_body, &url, &config)
+                    })
+                    .await
                 {
                     Ok(record) => record,
                     Err(error) => {
@@ -3936,6 +4017,9 @@ mod sitemap_capture;
 mod sitemap_capture_tests;
 
 #[cfg(test)]
+#[path = "crawler/sitemap_body_candidate_tests.rs"]
+mod sitemap_body_candidate_tests;
+#[cfg(test)]
 #[path = "crawler/sitemap_membership_limits_tests.rs"]
 mod sitemap_membership_limits_tests;
 
@@ -3970,3 +4054,7 @@ pub(crate) fn test_sitemap_measurement_from_stored_transport(
         .measurement
         .expect("actual helper/scanner stored-observation binding")
 }
+
+#[cfg(test)]
+#[path = "crawler/owned_lifecycle_tests.rs"]
+mod owned_lifecycle_tests;

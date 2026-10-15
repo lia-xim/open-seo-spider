@@ -23,6 +23,9 @@ pub struct CrawlConfig {
         deserialize_with = "deserialize_sitemap_membership_limits"
     )]
     pub sitemap_membership_limits: Option<crate::SitemapLedgerLimits>,
+    /// Opt-in local original source bytes, independent of XML work/member/wire limits.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sitemap_source_archive: Option<crate::SitemapSourceArchiveConfig>,
     pub crawl_links: bool,
     pub include_subdomains: bool,
     pub concurrency: usize,
@@ -115,6 +118,7 @@ impl Default for CrawlConfig {
             max_sitemap_documents: 1000,
             sitemap_source_processing: None,
             sitemap_membership_limits: None,
+            sitemap_source_archive: None,
             crawl_links: true,
             include_subdomains: false,
             concurrency: 8,

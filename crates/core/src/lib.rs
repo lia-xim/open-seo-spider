@@ -48,6 +48,13 @@ mod sitemap_membership_analysis;
 pub use sitemap_membership_analysis::*;
 mod sitemap_source_measurement;
 pub use sitemap_source_measurement::*;
+mod sitemap_source_archive;
+pub use sitemap_source_archive::{
+    MAX_SITEMAP_ARCHIVE_BODY_BYTES, SITEMAP_SOURCE_ARCHIVE_ENGINE, SitemapArchiveOmission,
+    SitemapArchivedBody, SitemapArchivedCapture, SitemapBodyExtent, SitemapBodyRepresentation,
+    SitemapSourceArchiveConfig, SitemapSourceArchiveInspection, SitemapSourceArchiveSnapshot,
+    SitemapSourceArchiveSummary,
+};
 mod sitemap_source_processing;
 pub use sitemap_source_processing::*;
 mod sitemap_read_control;
@@ -65,6 +72,8 @@ pub use sitemap_source_store::{
 };
 mod srcset;
 mod store;
+mod task_owner;
+pub use task_owner::{OwnedTask, OwnedTaskError, OwnedTaskStats, TaskAdmission, TaskOwner};
 mod text_metrics;
 mod urls;
 

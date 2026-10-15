@@ -139,6 +139,7 @@ fn decode(status: reqwest::StatusCode, bytes: &[u8], include_original_reports: b
 pub(super) fn complete_response(id: Value, result: Value, include_original_reports: bool) -> Value {
     complete_response_with_limit(id, result, include_original_reports, MAX_RESPONSE_BYTES)
 }
+#[cfg(test)]
 pub(super) async fn complete_response_on_worker(
     id: Value,
     result: Value,
@@ -148,6 +149,25 @@ pub(super) async fn complete_response_on_worker(
         return complete_response(id, result, false);
     }
     match tokio::task::spawn_blocking(move || complete_response(id, result, true)).await {
+        Ok(response) => response,
+        Err(error) => json!({"jsonrpc":"2.0","id":null,"error":{
+            "code":-32603,"message":format!("comparison_response_task_failed: {error}")}}),
+    }
+}
+
+pub(super) async fn complete_response_on_worker_owned(
+    owner: &open_seo_spider_core::TaskOwner,
+    id: Value,
+    result: Value,
+    include_original_reports: bool,
+) -> Value {
+    if !include_original_reports {
+        return complete_response(id, result, false);
+    }
+    match owner
+        .run_blocking(move || complete_response(id, result, true))
+        .await
+    {
         Ok(response) => response,
         Err(error) => json!({"jsonrpc":"2.0","id":null,"error":{
             "code":-32603,"message":format!("comparison_response_task_failed: {error}")}}),
@@ -251,7 +271,10 @@ pub(super) async fn call(bridge: &Bridge, arguments: Value) -> Value {
                 // require more stack under response wrappers. Keep recursive
                 // parsing, hash validation and Value construction off the small
                 // Windows stdio main stack and off asynchronous HTTP workers.
-                return match tokio::task::spawn_blocking(move || decode(status, &bytes, true)).await
+                return match bridge
+                    .workers
+                    .run_blocking(move || decode(status, &bytes, true))
+                    .await
                 {
                     Ok(result) => result,
                     Err(error) => {

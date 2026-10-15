@@ -51,12 +51,15 @@ pub(super) async fn inventory(
             "checkpoint":imported_summary,"observations":[],"next_after_sequence":null,"has_more":false,
             "ledger_available":false,"reason":if enabled {"initializing_or_imported_history_without_sqlite_rows"}else{"native_policy_disabled"}})));
     }
-    let page = tokio::task::spawn_blocking(move || {
-        CrawlStore::open_read_only(path)?.policy_occurrences(query.after_sequence, limit)
-    })
-    .await
-    .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?
-    .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?;
+    let page = state
+        .lifecycle
+        .blocking
+        .run_blocking(move || {
+            CrawlStore::open_read_only(path)?.policy_occurrences(query.after_sequence, limit)
+        })
+        .await
+        .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?
+        .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?;
     Ok(Json(
         json!({"enabled":true,"engine":metadata["engine"],"scope":metadata["scope"],
         "policy_sha256":page.ledger.as_ref().map(|ledger|&ledger.policy_sha256),
@@ -116,29 +119,37 @@ async fn export(state: AppState, id: Uuid, format: Format) -> ApiResult<Response
     }
     let (sender, receiver) = tokio::sync::mpsc::channel(8);
     let (ready, ready_result) = tokio::sync::oneshot::channel();
-    tokio::task::spawn_blocking(move || {
-        let mut ready = Some(ready);
-        let result = (|| {
-            let store = CrawlStore::open_read_only(path)?;
-            let mut writer =
-                std::io::BufWriter::with_capacity(65536, ChannelWriter(sender.clone()));
-            policy_export::write_snapshot(&store, format, &mut writer, |summary| {
+    state.lifecycle.blocking.reap_completed().await;
+    let ticket = state
+        .lifecycle
+        .blocking
+        .spawn_blocking(move || {
+            let mut ready = Some(ready);
+            let result = (|| {
+                let store = CrawlStore::open_read_only(path)?;
+                let mut writer =
+                    std::io::BufWriter::with_capacity(65536, ChannelWriter(sender.clone()));
+                policy_export::write_snapshot(&store, format, &mut writer, |summary| {
+                    if let Some(ready) = ready.take() {
+                        ready
+                            .send(Ok(summary.clone()))
+                            .map_err(|_| anyhow::anyhow!("Policy export request disconnected"))?;
+                    }
+                    Ok(())
+                })
+            })();
+            if let Err(error) = result {
                 if let Some(ready) = ready.take() {
-                    ready
-                        .send(Ok(summary.clone()))
-                        .map_err(|_| anyhow::anyhow!("Policy export request disconnected"))?;
+                    let _ = ready.send(Err(error.to_string()));
+                } else {
+                    let _ = sender.blocking_send(Err(io::Error::other(error.to_string())));
                 }
-                Ok(())
-            })
-        })();
-        if let Err(error) = result {
-            if let Some(ready) = ready.take() {
-                let _ = ready.send(Err(error.to_string()));
-            } else {
-                let _ = sender.blocking_send(Err(io::Error::other(error.to_string())));
             }
-        }
-    });
+        })
+        .map_err(|error| api_error(StatusCode::SERVICE_UNAVAILABLE, error))?;
+    // Eager registration starts the bounded producer now. Its actual handles
+    // remain owned after this ticket drops and after the Response is returned.
+    drop(ticket);
     let summary = ready_result
         .await
         .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?

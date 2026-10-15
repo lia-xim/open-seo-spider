@@ -1005,3 +1005,67 @@ fn graph_identity_budget_is_explicit_and_duplicate_reachability_never_charges_tw
     assert_eq!(reached.len(), 1);
     assert_eq!(queue.len(), 1);
 }
+
+// SOURCE-ONLY STATELESS OPTIMIZATION REGRESSIONS. NOT_COMPILED / NOT_RUN.
+#[test]
+fn stateless_row_coverage_reuses_verified_counts_without_another_raw_visit_and_matches_old_projection()
+ {
+    for legacy in [false, true] {
+        let f = Fixture::new(
+            if legacy {
+                None
+            } else {
+                Some(vec![ROOT.into()])
+            },
+            false,
+        );
+        if !legacy {
+            f.xml(
+                ROOT,
+                &format!("<sitemapindex><sitemap><loc>{CHILD}</loc></sitemap></sitemapindex>"),
+                &[CHILD],
+            );
+            f.xml(CHILD, "<urlset><url/><url><loc>relative</loc></url><url><loc>https://example.org/p</loc></url></urlset>", &[]);
+        }
+        let mut connection = f.connection();
+        let tx = connection.transaction().unwrap();
+        let raw = verify_raw(&tx).unwrap().unwrap();
+        let work = raw.verification_work();
+        let mut counted = empty_coverage();
+        count_rows(&raw, &mut counted, &SitemapReadControl::default()).unwrap();
+        assert_eq!(
+            raw.verification_work(),
+            work,
+            "coverage count reuse must not execute another raw traversal"
+        );
+        let (bytes, sha, generation, initialized) = context_values(&tx);
+        let result = project_read(
+            &tx,
+            Some(&raw),
+            CoverageReadContext {
+                saved_config_bytes: bytes.as_deref(),
+                saved_config_sha256: sha.as_deref(),
+                generation,
+                discovery_initialized: initialized,
+            },
+        )
+        .unwrap();
+        let (old, inventory) = oracle(&tx);
+        assert_eq!(result.coverage, old);
+        assert_eq!(
+            result.inventory_sha256,
+            inventory
+                .as_ref()
+                .map(|value| crate::sitemap_ledger::digest(serde_json::to_vec(value).unwrap()))
+        );
+        assert_eq!(counted.counts.root_declarations, raw.summary().root_rows);
+        assert_eq!(
+            counted.counts.observed_documents,
+            raw.summary().document_rows
+        );
+        if !legacy {
+            assert_eq!(counted.counts.child_declarations, 1);
+            assert_eq!(counted.counts.invalid_or_missing_page_locations, 2);
+        }
+    }
+}

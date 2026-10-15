@@ -23,11 +23,13 @@ use open_seo_spider_core::{
 };
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
+use std::future::IntoFuture;
 use std::{collections::HashMap, path::PathBuf, sync::Arc};
 use tokio::sync::RwLock;
 use uuid::Uuid;
 mod comparison;
 mod content;
+mod lifecycle;
 mod policy;
 pub(crate) mod resources;
 mod sitemap_csv_stream;
@@ -47,6 +49,7 @@ struct AppState {
     data_dir: Arc<PathBuf>,
     exports: sitemap_csv_stream::ExportRegistry,
     finding_reads: sitemap_findings_reads::ReadRegistry,
+    lifecycle: lifecycle::Lifecycle,
 }
 struct Job {
     id: Uuid,
@@ -139,6 +142,38 @@ pub(crate) async fn serve_with_mcp_files_ready(
     mcp_files_dir: Option<PathBuf>,
     ready: Option<tokio::sync::oneshot::Sender<std::net::SocketAddr>>,
 ) -> anyhow::Result<()> {
+    serve_with_mcp_files_ready_source(
+        listen,
+        data_dir,
+        mcp_files_dir,
+        ready,
+        lifecycle::ShutdownSource::CtrlC,
+    )
+    .await
+}
+
+pub async fn serve_with_owned_stdin(
+    listen: &str,
+    data_dir: PathBuf,
+    mcp_files_dir: Option<PathBuf>,
+) -> anyhow::Result<()> {
+    serve_with_mcp_files_ready_source(
+        listen,
+        data_dir,
+        mcp_files_dir,
+        None,
+        lifecycle::ShutdownSource::OwnedStdin,
+    )
+    .await
+}
+
+async fn serve_with_mcp_files_ready_source(
+    listen: &str,
+    data_dir: PathBuf,
+    mcp_files_dir: Option<PathBuf>,
+    ready: Option<tokio::sync::oneshot::Sender<std::net::SocketAddr>>,
+    source: lifecycle::ShutdownSource,
+) -> anyhow::Result<()> {
     // Validate and retain the directory capability before either listening or
     // creating the application data directory. Port zero is replaced in place.
     let mut mcp = crate::mcp::Bridge::new_with_file_tools("http://127.0.0.1:0", mcp_files_dir)?;
@@ -155,20 +190,22 @@ pub(crate) async fn serve_with_mcp_files_ready(
     let address = listener.local_addr()?;
     mcp.set_local_api_address(address)?;
     tokio::fs::create_dir_all(&data_dir).await?;
+    let lifecycle = lifecycle::Lifecycle::default();
+    mcp.set_task_owner(lifecycle.blocking.clone());
     let state = AppState {
         mcp,
         jobs: Arc::new(RwLock::new(HashMap::new())),
         data_dir: Arc::new(data_dir),
         exports: Default::default(),
         finding_reads: Default::default(),
+        lifecycle,
     };
     load_reports(&state).await?;
-    let exports = state.exports.clone();
-    let shutdown_exports = exports.clone();
-    let finding_reads = state.finding_reads.clone();
-    let shutdown_finding_reads = finding_reads.clone();
-    let file_tools = state.mcp.clone();
-    let shutdown_file_tools = file_tools.clone();
+    // Signal monitoring starts only after capability validation and recovery.
+    let (shutdown_signal, stdin_monitor) = lifecycle::shutdown_source(source);
+    let shutdown_state = state.clone();
+    let drain_state = state.clone();
+    let (shutdown_started, shutdown_observed) = tokio::sync::oneshot::channel();
     let router = Router::new()
         .route(
             "/",
@@ -338,40 +375,64 @@ pub(crate) async fn serve_with_mcp_files_ready(
             )),
         )
         .layer(axum::extract::DefaultBodyLimit::max(64 * 1024 * 1024))
+        .layer(middleware::from_fn_with_state(
+            state.clone(),
+            lifecycle::request,
+        ))
         .layer(middleware::from_fn(local_origin))
-        .with_state(state);
+        .with_state(state.clone());
     println!("Open SEO Spider: http://{}", listener.local_addr()?);
     if let Some(ready) = ready {
         let _ = ready.send(address);
     }
     let serving = axum::serve(listener, router)
         .with_graceful_shutdown(async move {
-            let _ = tokio::signal::ctrl_c().await;
-            let (csv_drain, finding_drain, file_drain) = tokio::join!(
-                shutdown_exports.shutdown_and_drain(),
-                shutdown_finding_reads.shutdown_and_drain(),
-                shutdown_file_tools.shutdown_file_tools(),
-            );
-            if let Err(error) = csv_drain {
-                tracing::error!(%error, "CSV export shutdown drain failed");
-            }
-            if let Err(error) = finding_drain {
-                tracing::error!(%error, "Findings read shutdown drain failed");
-            }
-            if let Err(error) = file_drain {
-                tracing::error!(%error, "MCP file-tool shutdown drain failed");
-            }
+            let reason = shutdown_signal.await;
+            // Synchronous admission close precedes actual listener shutdown.
+            lifecycle::close_admission(&shutdown_state);
+            let _ = shutdown_started.send(reason);
         })
-        .await;
-    let (drain, read_drain, file_drain) = tokio::join!(
-        exports.shutdown_and_drain(),
-        finding_reads.shutdown_and_drain(),
-        file_tools.shutdown_file_tools(),
+        .into_future();
+    let draining = async move {
+        let reason = shutdown_observed
+            .await
+            .map_err(|error| anyhow::anyhow!("Shutdown signal supervisor: {error}"));
+        // Drain even if the signal itself failed. Keep that error for return.
+        let drained = lifecycle::drain(&drain_state).await;
+        (reason, drained)
+    };
+    let (serving, (reason, drained)) = tokio::join!(serving, draining);
+    // Owned stdin uses a runtime blocking read. Ctrl-C must not discard it.
+    let monitor = match stdin_monitor {
+        Some(monitor) => monitor
+            .await
+            .map_err(anyhow::Error::from)
+            .and_then(|result| result.map_err(anyhow::Error::from)),
+        None => Ok(()),
+    };
+    let mut failures = Vec::new();
+    if let Err(error) = serving {
+        failures.push(error.to_string());
+    }
+    if let Err(error) = drained {
+        failures.push(error.to_string());
+    }
+    if let Err(error) = monitor {
+        failures.push(error.to_string());
+    }
+    let cause = match reason {
+        Ok(Ok(cause)) => cause,
+        Ok(Err(error)) | Err(error) => {
+            failures.push(error.to_string());
+            "signal_failure"
+        }
+    };
+    lifecycle::receipt(&state, cause, failures.is_empty());
+    anyhow::ensure!(
+        failures.is_empty(),
+        "Owned server shutdown failed: {}",
+        failures.join("; ")
     );
-    serving?;
-    drain?;
-    read_drain?;
-    file_drain?;
     Ok(())
 }
 async fn mcp_http(
@@ -480,16 +541,26 @@ async fn capabilities_with_mcp_files(State(state): State<AppState>) -> Json<Valu
 }
 
 async fn content_analysis(
+    State(state): State<AppState>,
     Json(input): Json<ContentAnalysisInput>,
 ) -> ApiResult<Json<ContentAnalysisResult>> {
-    tokio::task::spawn_blocking(move || analyze_content(&input))
+    state
+        .lifecycle
+        .blocking
+        .run_blocking(move || analyze_content(&input))
         .await
         .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?
         .map(Json)
         .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))
 }
-async fn policy_preview(Json(input): Json<CrawlPolicyPreviewInput>) -> ApiResult<Json<Value>> {
-    let preview = tokio::task::spawn_blocking(move || preview_crawl_policy(&input))
+async fn policy_preview(
+    State(state): State<AppState>,
+    Json(input): Json<CrawlPolicyPreviewInput>,
+) -> ApiResult<Json<Value>> {
+    let preview = state
+        .lifecycle
+        .blocking
+        .run_blocking(move || preview_crawl_policy(&input))
         .await
         .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?
         .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))?;
@@ -559,6 +630,12 @@ async fn create_crawl(
     State(state): State<AppState>,
     Json(value): Json<Value>,
 ) -> ApiResult<Json<Value>> {
+    lifecycle::start_operation(state.clone(), create_crawl_prepared(state, value)).await
+}
+async fn create_crawl_prepared(
+    state: AppState,
+    value: Value,
+) -> ApiResult<lifecycle::PreparedLaunch> {
     let config =
         config_from_input(value).map_err(|error| api_error(StatusCode::BAD_REQUEST, error))?;
     let id = Uuid::new_v4();
@@ -589,8 +666,7 @@ async fn create_crawl(
         .await
         .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?;
     state.jobs.write().await.insert(id, job.clone());
-    launch(state, job).await;
-    Ok(Json(json!({"id":id,"status":"running"})))
+    Ok((Json(json!({"id":id,"status":"running"})), job))
 }
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -604,6 +680,13 @@ async fn recrawl(
     Path(parent_id): Path<Uuid>,
     Json(request): Json<RecrawlRequest>,
 ) -> ApiResult<Json<Value>> {
+    lifecycle::start_operation(state.clone(), recrawl_prepared(state, parent_id, request)).await
+}
+async fn recrawl_prepared(
+    state: AppState,
+    parent_id: Uuid,
+    request: RecrawlRequest,
+) -> ApiResult<lifecycle::PreparedLaunch> {
     let parent = get_job(&state, parent_id).await?;
     let guard = parent.read().await;
     if matches!(guard.status.as_str(), "running" | "pausing" | "cancelling") {
@@ -657,12 +740,15 @@ async fn recrawl(
         current
     };
     drop(guard);
-    let prepared = tokio::task::spawn_blocking(move || {
-        prepare_selected_recrawl(reference, &bytes, &request.urls, request.max_attempts)
-    })
-    .await
-    .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?
-    .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))?;
+    let prepared = state
+        .lifecycle
+        .blocking
+        .run_blocking(move || {
+            prepare_selected_recrawl(reference, &bytes, &request.urls, request.max_attempts)
+        })
+        .await
+        .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?
+        .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))?;
     let id = Uuid::new_v4();
     let database = state.data_dir.join(format!("{id}.sqlite"));
     // Reserve this exact new UUID before any initialization/cleanup can touch it.
@@ -674,14 +760,17 @@ async fn recrawl(
         .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?;
     drop(reservation);
     let config = prepared.config.clone();
-    let initialization = tokio::task::spawn_blocking(move || -> anyhow::Result<_> {
-        let store = CrawlStore::open(&database)?;
-        store.initialize_selected_recrawl(&prepared)?;
-        Ok((store.pages()?, store.recrawl_operation()?))
-    })
-    .await
-    .map_err(|error| anyhow::anyhow!(error))
-    .and_then(|result| result);
+    let initialization = state
+        .lifecycle
+        .blocking
+        .run_blocking(move || -> anyhow::Result<_> {
+            let store = CrawlStore::open(&database)?;
+            store.initialize_selected_recrawl(&prepared)?;
+            Ok((store.pages()?, store.recrawl_operation()?))
+        })
+        .await
+        .map_err(|error| anyhow::anyhow!(error))
+        .and_then(|result| result);
     let (pages, operation) = match initialization {
         Ok(value) => value,
         Err(error) => {
@@ -704,9 +793,9 @@ async fn recrawl(
         return Err(api_error(StatusCode::INTERNAL_SERVER_ERROR, error));
     }
     state.jobs.write().await.insert(id, job.clone());
-    launch(state, job).await;
-    Ok(Json(
-        json!({"id":id,"status":"running","parent_id":parent_id}),
+    Ok((
+        Json(json!({"id":id,"status":"running","parent_id":parent_id})),
+        job,
     ))
 }
 async fn remove_reserved_job_files(state: &AppState, id: Uuid) {
@@ -731,18 +820,21 @@ async fn export_recrawl_parent(
 ) -> ApiResult<Response> {
     get_job(&state, id).await?;
     let database = state.data_dir.join(format!("{id}.sqlite"));
-    let bytes = tokio::task::spawn_blocking(move || -> anyhow::Result<Vec<u8>> {
-        let store = CrawlStore::open_read_only(database)?;
-        if !matches!(store.run_plan()?, RunPlan::SelectedRecrawl(_)) {
-            anyhow::bail!("This job has no immutable selected-recrawl parent snapshot");
-        }
-        store
-            .parent_snapshot_bytes()?
-            .ok_or_else(|| anyhow::anyhow!("Saved immutable parent snapshot is unavailable"))
-    })
-    .await
-    .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?
-    .map_err(|error| api_error(StatusCode::CONFLICT, error))?;
+    let bytes = state
+        .lifecycle
+        .blocking
+        .run_blocking(move || -> anyhow::Result<Vec<u8>> {
+            let store = CrawlStore::open_read_only(database)?;
+            if !matches!(store.run_plan()?, RunPlan::SelectedRecrawl(_)) {
+                anyhow::bail!("This job has no immutable selected-recrawl parent snapshot");
+            }
+            store
+                .parent_snapshot_bytes()?
+                .ok_or_else(|| anyhow::anyhow!("Saved immutable parent snapshot is unavailable"))
+        })
+        .await
+        .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?
+        .map_err(|error| api_error(StatusCode::CONFLICT, error))?;
     Ok((
         [
             (header::CONTENT_TYPE, "application/json; charset=utf-8"),
@@ -887,6 +979,13 @@ async fn resume_crawl(
     options: Option<Json<ResumeOptions>>,
 ) -> ApiResult<Json<Value>> {
     let options = options.map(|Json(options)| options).unwrap_or_default();
+    lifecycle::start_operation(state.clone(), resume_crawl_prepared(state, id, options)).await
+}
+async fn resume_crawl_prepared(
+    state: AppState,
+    id: Uuid,
+    options: ResumeOptions,
+) -> ApiResult<lifecycle::PreparedLaunch> {
     let job = get_job(&state, id).await?;
     let database = state.data_dir.join(format!("{id}.sqlite"));
     if !database.exists() {
@@ -977,176 +1076,191 @@ async fn resume_crawl(
             max_attempts: options.max_attempts,
         };
     }
-    launch(state, job).await;
-    Ok(Json(json!({"id":id,"status":"running"})))
+    Ok((Json(json!({"id":id,"status":"running"})), job))
 }
 async fn launch(state: AppState, job: Arc<RwLock<Job>>) {
-    tokio::spawn(async move {
-        let (config, id, control, generation, recrawl_override) = {
-            let guard = job.read().await;
-            (
-                guard.config.clone(),
-                guard.id,
-                guard.control.clone(),
-                guard.generation,
-                guard.recrawl_override.clone(),
-            )
-        };
-        let (sender, mut receiver) = tokio::sync::mpsc::unbounded_channel();
-        let event_job = job.clone();
-        let event_task = tokio::spawn(async move {
-            let mut page_indices: HashMap<String, usize> = event_job
-                .read()
-                .await
-                .pages
-                .iter()
-                .enumerate()
-                .map(|(index, page)| (page.url.clone(), index))
-                .collect();
-            let mut target_indices: HashMap<String, usize> = event_job
-                .read()
-                .await
-                .operation
-                .as_ref()
-                .map(|operation| {
-                    operation
+    let (config, id, control, generation, recrawl_override) = {
+        let guard = job.read().await;
+        (
+            guard.config.clone(),
+            guard.id,
+            guard.control.clone(),
+            guard.generation,
+            guard.recrawl_override.clone(),
+        )
+    };
+    let (sender, mut receiver) = tokio::sync::mpsc::unbounded_channel();
+    let event_job = job.clone();
+    let event_task = tokio::spawn(async move {
+        let mut page_indices: HashMap<String, usize> = event_job
+            .read()
+            .await
+            .pages
+            .iter()
+            .enumerate()
+            .map(|(index, page)| (page.url.clone(), index))
+            .collect();
+        let mut target_indices: HashMap<String, usize> = event_job
+            .read()
+            .await
+            .operation
+            .as_ref()
+            .map(|operation| {
+                operation
+                    .targets
+                    .iter()
+                    .enumerate()
+                    .map(|(index, target)| (target.requested_url.clone(), index))
+                    .collect()
+            })
+            .unwrap_or_default();
+        while let Some(event) = receiver.recv().await {
+            let mut guard = event_job.write().await;
+            if guard.generation != generation {
+                continue;
+            }
+            match event {
+                CrawlEvent::Page { page } => {
+                    if let Some(index) = page_indices.get(&page.url) {
+                        guard.pages[*index] = *page;
+                    } else {
+                        page_indices.insert(page.url.clone(), guard.pages.len());
+                        guard.pages.push(*page);
+                    }
+                }
+                CrawlEvent::Progress {
+                    queued, in_flight, ..
+                } => {
+                    guard.queued = queued;
+                    guard.in_flight = in_flight;
+                }
+                CrawlEvent::Warning { message } => guard.warnings.push(message),
+                CrawlEvent::PolicyProgress { ledger } => guard.policy_ledger = Some(*ledger),
+                CrawlEvent::ResourceProgress { ledger } => guard.resource_ledger = Some(*ledger),
+                CrawlEvent::Operation { operation } => {
+                    target_indices = operation
                         .targets
                         .iter()
                         .enumerate()
                         .map(|(index, target)| (target.requested_url.clone(), index))
-                        .collect()
-                })
-                .unwrap_or_default();
-            while let Some(event) = receiver.recv().await {
-                let mut guard = event_job.write().await;
-                if guard.generation != generation {
-                    continue;
+                        .collect();
+                    guard.operation = Some(*operation);
                 }
-                match event {
-                    CrawlEvent::Page { page } => {
-                        if let Some(index) = page_indices.get(&page.url) {
-                            guard.pages[*index] = *page;
-                        } else {
-                            page_indices.insert(page.url.clone(), guard.pages.len());
-                            guard.pages.push(*page);
+                CrawlEvent::RecrawlProgress {
+                    target,
+                    admitted_this_run,
+                    committed_this_run,
+                    refreshed_count,
+                    pending_count,
+                } => {
+                    if let Some(operation) = &mut guard.operation {
+                        if let Some(index) = target_indices.get(&target.requested_url) {
+                            operation.targets[*index] = *target;
                         }
+                        operation.admitted_this_run = admitted_this_run;
+                        operation.committed_this_run = committed_this_run;
+                        operation.refreshed_count = refreshed_count;
+                        operation.pending_count = pending_count;
                     }
-                    CrawlEvent::Progress {
-                        queued, in_flight, ..
-                    } => {
-                        guard.queued = queued;
-                        guard.in_flight = in_flight;
-                    }
-                    CrawlEvent::Warning { message } => guard.warnings.push(message),
-                    CrawlEvent::PolicyProgress { ledger } => guard.policy_ledger = Some(*ledger),
-                    CrawlEvent::ResourceProgress { ledger } => {
-                        guard.resource_ledger = Some(*ledger)
-                    }
-                    CrawlEvent::Operation { operation } => {
-                        target_indices = operation
-                            .targets
-                            .iter()
-                            .enumerate()
-                            .map(|(index, target)| (target.requested_url.clone(), index))
-                            .collect();
-                        guard.operation = Some(*operation);
-                    }
-                    CrawlEvent::RecrawlProgress {
-                        target,
-                        admitted_this_run,
-                        committed_this_run,
-                        refreshed_count,
-                        pending_count,
-                    } => {
-                        if let Some(operation) = &mut guard.operation {
-                            if let Some(index) = target_indices.get(&target.requested_url) {
-                                operation.targets[*index] = *target;
-                            }
-                            operation.admitted_this_run = admitted_this_run;
-                            operation.committed_this_run = committed_this_run;
-                            operation.refreshed_count = refreshed_count;
-                            operation.pending_count = pending_count;
-                        }
-                    }
-                    CrawlEvent::Finished { .. } => {}
                 }
+                CrawlEvent::Finished { .. } => {}
             }
-        });
-        let result = match Crawler::from_saved_config(config) {
-            Ok(crawler) => match crawler.with_store(state.data_dir.join(format!("{id}.sqlite"))) {
-                Ok(crawler) => {
-                    crawler
-                        .with_recrawl_resume_override(recrawl_override)
-                        .run_controlled(Some(sender.clone()), control)
-                        .await
-                }
-                Err(error) => Err(error),
-            },
-            Err(error) => Err(error),
-        };
-        drop(sender);
-        let _ = event_task.await;
-        let mut guard = job.write().await;
-        if guard.generation != generation {
-            return;
-        }
-        guard.queued = 0;
-        guard.in_flight = 0;
-        guard.finished_at = Some(chrono::Utc::now().to_rfc3339());
-        match result {
-            Ok(result) => {
-                guard.frontier_available = true;
-                let mut report = result.report;
-                crate::analysis::extend_report(&mut report);
-                guard.status = outcome_status(result.outcome).into();
-                guard.queued = result
-                    .checkpoint
-                    .as_ref()
-                    .map_or(0, |checkpoint| checkpoint.pending);
-                guard.discovery_pending = result.discovery_pending;
-                guard.checkpoint = result.checkpoint;
-                guard.pages = report.pages.clone();
-                guard.issues = report.issues.clone();
-                guard.warnings = report.warnings.clone();
-                guard.operation = report.operation.clone();
-                guard.policy_ledger = report.policy_ledger.clone();
-                guard.resource_ledger = report.resource_ledger.clone();
-                guard.report = Some(report.clone());
-                let path = state.data_dir.join(format!("{id}.json"));
-                if let Err(error) = write_json(path, &report).await {
-                    guard.status = "failed".into();
-                    guard.error = Some(format!("Could not save report: {error}"));
-                }
-                if let Err(error) = save_revision(&state, id, generation, &report).await {
-                    guard.status = "failed".into();
-                    guard.error =
-                        Some(format!("Could not save immutable report revision: {error}"));
-                }
-            }
-            Err(error) => {
-                guard.status = "failed".into();
-                guard.error = Some(error.to_string());
-                guard.frontier_available =
-                    CrawlStore::inspect(state.data_dir.join(format!("{id}.sqlite")))
-                        .is_ok_and(|inspection| inspection.config.is_some());
-            }
-        }
-        // Keep the write lock until the terminal checkpoint write is complete. A status
-        // reader or immediate resume must not race this write to the same file.
-        let manifest = guard.manifest();
-        if let Err(error) =
-            write_json(state.data_dir.join(format!("{id}.job.json")), &manifest).await
-        {
-            tracing::error!(%id,%error,"Could not save job state");
-            let message = format!("Could not save job state: {error}");
-            guard.status = "failed".into();
-            guard.warnings.push(message.clone());
-            guard.error = Some(match guard.error.take() {
-                Some(previous) => format!("{previous}; {message}"),
-                None => message,
-            });
         }
     });
+    let result = match Crawler::from_saved_config(config) {
+        Ok(crawler) => match crawler.with_store(state.data_dir.join(format!("{id}.sqlite"))) {
+            Ok(crawler) => {
+                crawler
+                    .with_recrawl_resume_override(recrawl_override)
+                    .run_controlled(Some(sender.clone()), control)
+                    .await
+            }
+            Err(error) => Err(error),
+        },
+        Err(error) => Err(error),
+    };
+    drop(sender);
+    let event_failure = event_task
+        .await
+        .err()
+        .map(|error| format!("Crawl event supervisor failed to join: {error}"));
+    if let Some(message) = &event_failure {
+        state.lifecycle.crawls.record_failure(message);
+    }
+    let mut guard = job.write().await;
+    if guard.generation != generation {
+        return;
+    }
+    guard.queued = 0;
+    guard.in_flight = 0;
+    guard.finished_at = Some(chrono::Utc::now().to_rfc3339());
+    match result {
+        Ok(result) => {
+            guard.frontier_available = true;
+            let mut report = result.report;
+            crate::analysis::extend_report(&mut report);
+            guard.status = outcome_status(result.outcome).into();
+            guard.queued = result
+                .checkpoint
+                .as_ref()
+                .map_or(0, |checkpoint| checkpoint.pending);
+            guard.discovery_pending = result.discovery_pending;
+            guard.checkpoint = result.checkpoint;
+            guard.pages = report.pages.clone();
+            guard.issues = report.issues.clone();
+            guard.warnings = report.warnings.clone();
+            guard.operation = report.operation.clone();
+            guard.policy_ledger = report.policy_ledger.clone();
+            guard.resource_ledger = report.resource_ledger.clone();
+            guard.report = Some(report.clone());
+            let path = state.data_dir.join(format!("{id}.json"));
+            if let Err(error) = write_json(path, &report).await {
+                guard.status = "failed".into();
+                guard.error = Some(format!("Could not save report: {error}"));
+                state
+                    .lifecycle
+                    .crawls
+                    .record_failure(format!("Crawl {id} terminal persistence: {error}"));
+            }
+            if let Err(error) = save_revision(&state, id, generation, &report).await {
+                guard.status = "failed".into();
+                guard.error = Some(format!("Could not save immutable report revision: {error}"));
+                state
+                    .lifecycle
+                    .crawls
+                    .record_failure(format!("Crawl {id} terminal persistence: {error}"));
+            }
+        }
+        Err(error) => {
+            lifecycle::record_owned_crawl_failure(&state, &error);
+            guard.status = "failed".into();
+            guard.error = Some(error.to_string());
+            guard.frontier_available =
+                CrawlStore::inspect(state.data_dir.join(format!("{id}.sqlite")))
+                    .is_ok_and(|inspection| inspection.config.is_some());
+        }
+    }
+    if let Some(message) = event_failure {
+        guard.status = "failed".into();
+        guard.error = Some(message);
+    }
+    // Keep the write lock until the terminal checkpoint write is complete. A status
+    // reader or immediate resume must not race this write to the same file.
+    let manifest = guard.manifest();
+    if let Err(error) = write_json(state.data_dir.join(format!("{id}.job.json")), &manifest).await {
+        tracing::error!(%id,%error,"Could not save job state");
+        state
+            .lifecycle
+            .crawls
+            .record_failure(format!("Crawl {id} terminal persistence: {error}"));
+        let message = format!("Could not save job state: {error}");
+        guard.status = "failed".into();
+        guard.warnings.push(message.clone());
+        guard.error = Some(match guard.error.take() {
+            Some(previous) => format!("{previous}; {message}"),
+            None => message,
+        });
+    }
 }
 fn outcome_status(outcome: CrawlOutcome) -> &'static str {
     match outcome {
@@ -1222,24 +1336,36 @@ fn decode_list_input(encoded: &str, limits: &ListImportLimits) -> anyhow::Result
     );
     Ok(bytes)
 }
-async fn list_inspect(Json(input): Json<ListInspectRequest>) -> ApiResult<Json<Value>> {
-    let result = tokio::task::spawn_blocking(move || {
-        let bytes = decode_list_input(&input.content_base64, &input.limits)?;
-        inspect_xlsx_list(&bytes, &input.limits)
-    })
-    .await
-    .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?
-    .map_err(|e| api_error(StatusCode::BAD_REQUEST, e))?;
+async fn list_inspect(
+    State(state): State<AppState>,
+    Json(input): Json<ListInspectRequest>,
+) -> ApiResult<Json<Value>> {
+    let result = state
+        .lifecycle
+        .blocking
+        .run_blocking(move || {
+            let bytes = decode_list_input(&input.content_base64, &input.limits)?;
+            inspect_xlsx_list(&bytes, &input.limits)
+        })
+        .await
+        .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?
+        .map_err(|e| api_error(StatusCode::BAD_REQUEST, e))?;
     Ok(Json(json!(result)))
 }
-async fn list_import(Json(input): Json<ListImportRequest>) -> ApiResult<Json<Value>> {
-    let result = tokio::task::spawn_blocking(move || {
-        let bytes = decode_list_input(&input.content_base64, &input.options.limits)?;
-        import_url_list(&bytes, &input.options)
-    })
-    .await
-    .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?
-    .map_err(|e| api_error(StatusCode::BAD_REQUEST, e))?;
+async fn list_import(
+    State(state): State<AppState>,
+    Json(input): Json<ListImportRequest>,
+) -> ApiResult<Json<Value>> {
+    let result = state
+        .lifecycle
+        .blocking
+        .run_blocking(move || {
+            let bytes = decode_list_input(&input.content_base64, &input.options.limits)?;
+            import_url_list(&bytes, &input.options)
+        })
+        .await
+        .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?
+        .map_err(|e| api_error(StatusCode::BAD_REQUEST, e))?;
     Ok(Json(json!(result)))
 }
 async fn export_inputs(State(state): State<AppState>, Path(id): Path<Uuid>) -> ApiResult<Response> {
@@ -1286,16 +1412,26 @@ async fn serp_export(Json(input): Json<SerpRowsRequest>) -> ApiResult<Response> 
     ))
 }
 async fn robots_simulate(
+    State(state): State<AppState>,
     Json(input): Json<RobotsSimulationInput>,
 ) -> ApiResult<Json<open_seo_spider_core::RobotsSimulation>> {
-    tokio::task::spawn_blocking(move || simulate_robots(&input))
+    state
+        .lifecycle
+        .blocking
+        .run_blocking(move || simulate_robots(&input))
         .await
         .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?
         .map(Json)
         .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))
 }
-async fn robots_export(Json(input): Json<RobotsSimulationInput>) -> ApiResult<Response> {
-    let csv = tokio::task::spawn_blocking(move || export_robots_simulation_csv(&input))
+async fn robots_export(
+    State(state): State<AppState>,
+    Json(input): Json<RobotsSimulationInput>,
+) -> ApiResult<Response> {
+    let csv = state
+        .lifecycle
+        .blocking
+        .run_blocking(move || export_robots_simulation_csv(&input))
         .await
         .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?
         .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))?;

@@ -4,8 +4,10 @@
 //! The caller owns a read transaction and must not write through its Connection
 //! while the token is alive. This is a crate-private provenance boundary.
 use super::*;
+use crate::sitemap_coverage::verified_read::SourceRowCoverage;
 use crate::sitemap_read_control::SitemapReadControl;
 
+#[cfg(test)]
 use serde::ser::{Error as _, SerializeSeq, SerializeStruct};
 
 const WINDOW_BYTES: usize = 8 * 1024 * 1024;
@@ -85,10 +87,134 @@ impl SitemapLedgerFilter {
         Ok(())
     }
 }
+/// One SQL payload after exact canonical Serde, hash and index validation.
+/// Neither the borrowed bytes nor this private carrier outlive the current row.
+struct CanonicalRow<'row> {
+    row: SitemapLedgerRow,
+    data: &'row str,
+}
+
+/// Compare actual canonical Serde output without a second counting pass or a
+/// temporary String. The already-bounded SQL bytes remain the exact oracle.
+struct CanonicalRowWriter<'row> {
+    expected: &'row [u8],
+    position: usize,
+}
+impl Write for CanonicalRowWriter<'_> {
+    fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
+        let end = self
+            .position
+            .checked_add(bytes.len())
+            .ok_or_else(|| io::Error::other("Canonical sitemap row length overflow"))?;
+        if self.expected.get(self.position..end) != Some(bytes) {
+            return Err(io::Error::other("Noncanonical sitemap row"));
+        }
+        self.position = end;
+        Ok(bytes.len())
+    }
+    fn flush(&mut self) -> io::Result<()> {
+        Ok(())
+    }
+}
+
+/// Deterministic counters are private, test-build-only observations at actual
+/// traversal/Serde/query sites. No counters or new DTO fields ship publicly.
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
+pub(crate) struct RawVerificationWork {
+    #[cfg(test)]
+    pub(crate) primary_scans: u64,
+    #[cfg(test)]
+    pub(crate) primary_rows_verified: u64,
+    #[cfg(test)]
+    pub(crate) primary_canonical_serializations: u64,
+    #[cfg(test)]
+    pub(crate) entry_loc_join_scans: u64,
+    #[cfg(test)]
+    pub(crate) relation_entry_statements: u64,
+    #[cfg(test)]
+    pub(crate) relation_location_statements: u64,
+    #[cfg(test)]
+    pub(crate) relation_entries_decoded: u64,
+    #[cfg(test)]
+    pub(crate) relation_locations_decoded: u64,
+    #[cfg(test)]
+    pub(crate) filtered_rows_decoded: u64,
+}
+
+/// Same account semantics as the unchanged writer/materialized oracle, using
+/// only the exact bytes returned by decode_canonical_row in this traversal.
+fn account_canonical(
+    summary: &mut SitemapLedgerSummary,
+    canonical: &CanonicalRow<'_>,
+) -> Result<()> {
+    let row = &canonical.row;
+    ensure!(
+        row.sequence()
+            == summary
+                .last_sequence
+                .checked_add(1)
+                .context("Sitemap sequence overflow")?,
+        "Sitemap global row sequence gap/duplicate"
+    );
+    summary.rolling_sha256 = roll(&summary.rolling_sha256, row.kind(), canonical.data);
+    summary.last_sequence = row.sequence();
+    match row {
+        SitemapLedgerRow::Root(_) => increment(&mut summary.root_rows)?,
+        SitemapLedgerRow::Document(row) => {
+            increment(&mut summary.document_rows)?;
+            if !row.complete() {
+                increment(&mut summary.incomplete_documents)?;
+            }
+        }
+        SitemapLedgerRow::Entry(_) => increment(&mut summary.entry_rows)?,
+        SitemapLedgerRow::Location(_) => increment(&mut summary.location_rows)?,
+    }
+    Ok(())
+}
+
+/// Serde supplies the original four-field envelope and every Summary field,
+/// including catalog_json_bytes itself. Only the verified row payloads and
+/// their inter-row commas replace the empty array's contents.
+#[derive(serde::Serialize)]
+struct EmptyCatalogEnvelope<'a> {
+    schema_version: u32,
+    summary: &'a SitemapLedgerSummary,
+    inherited: &'a Option<SitemapInheritedBasis>,
+    rows: [SitemapLedgerRow; 0],
+}
+fn canonical_envelope_bytes(
+    summary: &SitemapLedgerSummary,
+    inherited: &Option<SitemapInheritedBasis>,
+    row_bytes: u64,
+    rows: u64,
+) -> Result<u64> {
+    let skeleton = measured(
+        &EmptyCatalogEnvelope {
+            schema_version: 1,
+            summary,
+            inherited,
+            rows: [],
+        },
+        summary.limits.max_catalog_json_bytes,
+    )?;
+    let size = skeleton
+        .checked_add(row_bytes)
+        .and_then(|n| n.checked_add(rows.saturating_sub(1)))
+        .context("Raw full serialized envelope byte count overflow")?;
+    ensure!(
+        size <= summary.limits.max_catalog_json_bytes as u64,
+        "Raw full serialized envelope byte count exceeds budget"
+    );
+    Ok(size)
+}
+
 pub(crate) struct VerifiedRawRead<'conn> {
     connection: &'conn Connection,
     summary: SitemapLedgerSummary,
     inherited: Option<SitemapInheritedBasis>,
+    source_row_coverage: Option<SourceRowCoverage>,
+    #[cfg(test)]
+    work: std::cell::Cell<RawVerificationWork>,
     control: SitemapReadControl,
 }
 impl VerifiedRawRead<'_> {
@@ -97,6 +223,19 @@ impl VerifiedRawRead<'_> {
     }
     pub(crate) fn inherited(&self) -> Option<&SitemapInheritedBasis> {
         self.inherited.as_ref()
+    }
+    pub(crate) fn source_row_coverage(&self) -> Option<&SourceRowCoverage> {
+        self.source_row_coverage.as_ref()
+    }
+    #[cfg(test)]
+    pub(crate) fn verification_work(&self) -> RawVerificationWork {
+        self.work.get()
+    }
+    #[cfg(test)]
+    fn record_work(&self, action: impl FnOnce(&mut RawVerificationWork)) {
+        let mut work = self.work.get();
+        action(&mut work);
+        self.work.set(work);
     }
     pub(crate) fn connection(&self) -> &Connection {
         self.connection
@@ -157,7 +296,10 @@ impl VerifiedRawRead<'_> {
         ])?;
         while let Some(row) = cursor.next()? {
             self.control.checkpoint()?;
-            visitor(decode_row(row, &self.summary.limits)?)?;
+            let decoded = decode_row(row, &self.summary.limits)?;
+            #[cfg(test)]
+            self.record_work(|work| work.filtered_rows_decoded += 1);
+            visitor(decoded)?;
         }
         Ok(())
     }
@@ -258,6 +400,12 @@ fn optional_text<'a>(row: &'a rusqlite::Row<'_>, index: usize) -> Result<Option<
     }
 }
 fn decode_row(sql: &rusqlite::Row<'_>, limits: &SitemapLedgerLimits) -> Result<SitemapLedgerRow> {
+    Ok(decode_canonical_row(sql, limits)?.row)
+}
+fn decode_canonical_row<'row>(
+    sql: &'row rusqlite::Row<'_>,
+    limits: &SitemapLedgerLimits,
+) -> Result<CanonicalRow<'row>> {
     // Borrow projection strings: a tampered SQL index column must not allocate
     // a huge Rust String before its equality to the bounded payload is checked.
     let kind = sql.get_ref(0)?.as_str()?;
@@ -281,9 +429,16 @@ fn decode_row(sql: &rusqlite::Row<'_>, limits: &SitemapLedgerLimits) -> Result<S
     );
     let typed: SitemapLedgerRow = serde_json::from_str(data)?;
     ensure!(
-        typed.kind() == kind
-            && typed.sequence() == u64::try_from(sequence)?
-            && row_data(&typed, limits)? == data,
+        typed.kind() == kind && typed.sequence() == u64::try_from(sequence)?,
+        "Noncanonical sitemap row/type/sequence"
+    );
+    let mut canonical = CanonicalRowWriter {
+        expected: data.as_bytes(),
+        position: 0,
+    };
+    let serialized = serde_json::to_writer(&mut canonical, &typed);
+    ensure!(
+        serialized.is_ok() && canonical.position == data.len(),
         "Noncanonical sitemap row/type/sequence"
     );
     match &typed {
@@ -323,19 +478,30 @@ fn decode_row(sql: &rusqlite::Row<'_>, limits: &SitemapLedgerLimits) -> Result<S
             "Loc SQL indexes differ from payload"
         ),
     }
-    Ok(typed)
+    Ok(CanonicalRow { row: typed, data })
 }
 fn visit_all(
     connection: &Connection,
     limits: &SitemapLedgerLimits,
     control: &SitemapReadControl,
-    mut visitor: impl FnMut(&SitemapLedgerRow) -> Result<()>,
+    _work: &mut RawVerificationWork,
+    mut visitor: impl FnMut(&CanonicalRow<'_>) -> Result<()>,
 ) -> Result<()> {
+    #[cfg(test)]
+    {
+        _work.primary_scans += 1;
+    }
     let mut statement = connection.prepare(&format!("{ROWS_SQL} ORDER BY 2"))?;
     let mut cursor = statement.query([])?;
     while let Some(row) = cursor.next()? {
         control.checkpoint()?;
-        visitor(&decode_row(row, limits)?)?;
+        let canonical = decode_canonical_row(row, limits)?;
+        #[cfg(test)]
+        {
+            _work.primary_rows_verified += 1;
+            _work.primary_canonical_serializations += 1;
+        }
+        visitor(&canonical)?;
     }
     Ok(())
 }
@@ -354,20 +520,6 @@ fn document(
     };
     ensure!(rows.next()?.is_none(), "Duplicate document ID");
     Ok(Some(*value))
-}
-fn entry(
-    connection: &Connection,
-    limits: &SitemapLedgerLimits,
-    id: &str,
-) -> Result<StoredSitemapEntry> {
-    let mut query = connection.prepare("SELECT 'entry',sequence,row_id,observation_id,ordinal,NULL,NULL,NULL,NULL,data,data_sha256 FROM sitemap_entries WHERE row_id=?1")?;
-    let mut rows = query.query([id])?;
-    let row = rows.next()?.context("Loc precedes/misses entry")?;
-    let SitemapLedgerRow::Entry(value) = decode_row(row, limits)? else {
-        unreachable!()
-    };
-    ensure!(rows.next()?.is_none(), "Duplicate entry ID");
-    Ok(value)
 }
 struct DocumentCounters {
     entries: usize,
@@ -539,16 +691,6 @@ fn relation_row(
         }
         SitemapLedgerRow::Location(value) => {
             let doc = doc.as_ref().context("Loc without document")?;
-            let related = entry(
-                connection,
-                &summary.limits,
-                &identity(
-                    "entry",
-                    &value.observation_id,
-                    u64::try_from(value.observed.entry_ordinal)?,
-                ),
-            )?;
-            ensure!(related.sequence < value.sequence, "Loc precedes entry");
             ensure!(
                 value.occurrence_id
                     == identity(
@@ -568,26 +710,11 @@ fn relation_row(
                 "Parser Loc ordinal gap/reorder"
             );
             ensure!(
-                value.observed.xml_byte_start >= related.observed.xml_byte_start
-                    && value.observed.xml_byte_end <= related.observed.xml_byte_end
-                    && value.observed.xml_byte_start <= value.observed.xml_byte_end,
-                "Loc span outside entry"
-            );
-            ensure!(
                 value.admission.membership_url == value.observed.normalized_fetch_url,
                 "Original membership changed"
             );
             check_binding(&value.admission, doc.complete())?;
             if value.observed.loc_ordinal.is_none() {
-                ensure!(
-                    related.observed.complete
-                        && value.observed.raw_element_xml.is_none()
-                        && value.observed.raw_inner_xml.is_none()
-                        && value.observed.decoded_value.is_none()
-                        && value.observed.normalized_fetch_url.is_none()
-                        && value.observed.validation_error.as_deref() == Some("missing_location"),
-                    "Invalid synthetic missing-Loc row"
-                );
                 ensure!(
                     matches!(
                         value.admission.decision,
@@ -641,52 +768,149 @@ fn relation_row(
 
 /// One ordered relation pass, never a full locations scan per entry. Declared
 /// lists are sorted exactly as the old validator; input order is not tightened.
-fn verify_entry_locations(connection: &Connection, control: &SitemapReadControl) -> Result<()> {
+fn verify_entry_locations(
+    connection: &Connection,
+    summary: &SitemapLedgerSummary,
+    control: &SitemapReadControl,
+    _work: &mut RawVerificationWork,
+) -> Result<()> {
     control.checkpoint()?;
-    let mut query = connection.prepare(
-        "SELECT e.row_id,e.data,l.data
-      FROM sitemap_entries e LEFT JOIN sitemap_locations l ON l.entry_id=e.row_id
-      ORDER BY e.row_id COLLATE BINARY,l.ordinal,l.sequence",
-    )?;
-    let mut cursor = query.query([])?;
-    let mut current: Option<String> = None;
-    let mut declared = Vec::new();
-    let mut seen = 0usize;
-    while let Some(row) = cursor.next()? {
+    #[cfg(test)]
+    {
+        _work.entry_loc_join_scans += 1;
+    }
+    // All row payloads, SQL indexes and globally unique IDs were validated by
+    // the primary traversal in this same TX. No imported DDL/index is trusted.
+    // Two sorted cursors avoid repeating an Entry payload for every related
+    // Loc in SQLite join/sort workspace. Rust retains one Entry and one Loc.
+    // SQLite sort/cache memory remains outside a measured-RSS guarantee.
+    #[cfg(test)]
+    {
+        _work.relation_entry_statements += 1;
+    }
+    let mut entry_query = connection
+        .prepare("SELECT row_id,data FROM sitemap_entries ORDER BY row_id COLLATE BINARY")?;
+    #[cfg(test)]
+    {
+        _work.relation_location_statements += 1;
+    }
+    let mut location_query = connection.prepare(
+        "SELECT entry_id,data FROM sitemap_locations ORDER BY entry_id COLLATE BINARY,ordinal,sequence")?;
+    let mut entries = entry_query.query([])?;
+    let mut locations = location_query.query([])?;
+    fn next_location(
+        locations: &mut rusqlite::Rows<'_>,
+        control: &SitemapReadControl,
+        _work: &mut RawVerificationWork,
+    ) -> Result<Option<(String, StoredSitemapLocation)>> {
         control.checkpoint()?;
-        let id: String = row.get(0)?;
-        if current.as_ref() != Some(&id) {
-            ensure!(seen == declared.len(), "Entry Loc references differ");
-            let SitemapLedgerRow::Entry(entry) = serde_json::from_str(row.get_ref(1)?.as_str()?)?
-            else {
-                bail!("Expected typed entry relation row");
-            };
-            declared = entry.observed.loc_occurrence_ordinals;
-            declared.sort_unstable();
-            seen = 0;
-            current = Some(id);
+        let Some(row) = locations.next()? else {
+            return Ok(None);
+        };
+        let SitemapLedgerRow::Location(loc) = serde_json::from_str(row.get_ref(1)?.as_str()?)?
+        else {
+            bail!("Expected typed location relation row");
+        };
+        #[cfg(test)]
+        {
+            _work.relation_locations_decoded += 1;
         }
-        let raw = row.get_ref(2)?;
-        if !matches!(raw, rusqlite::types::ValueRef::Null) {
-            let SitemapLedgerRow::Location(loc) = serde_json::from_str(raw.as_str()?)? else {
-                bail!("Expected typed location relation row");
-            };
-            if loc.observed.loc_ordinal.is_some() {
+        let entry_id = identity(
+            "entry",
+            &loc.observation_id,
+            u64::try_from(loc.observed.entry_ordinal)?,
+        );
+        ensure!(
+            row.get_ref(0)?.as_str()? == entry_id.as_str(),
+            "Loc relation SQL identity differs"
+        );
+        Ok(Some((entry_id, loc)))
+    }
+    let mut next = next_location(&mut locations, control, _work)?;
+    let mut entry_count = 0u64;
+    let mut location_count = 0u64;
+    while let Some(row) = entries.next()? {
+        control.checkpoint()?;
+        let id = row.get_ref(0)?.as_str()?;
+        let SitemapLedgerRow::Entry(mut related) = serde_json::from_str(row.get_ref(1)?.as_str()?)?
+        else {
+            bail!("Expected typed entry relation row");
+        };
+        #[cfg(test)]
+        {
+            _work.relation_entries_decoded += 1;
+        }
+        ensure!(
+            related.entry_id == id,
+            "Entry relation SQL identity differs"
+        );
+        related.observed.loc_occurrence_ordinals.sort_unstable();
+        entry_count = entry_count
+            .checked_add(1)
+            .context("Entry relation count overflow")?;
+        ensure!(
+            next.as_ref()
+                .is_none_or(|(entry_id, _)| entry_id.as_str() >= id),
+            "Loc precedes/misses entry"
+        );
+        let mut seen = 0usize;
+        while next
+            .as_ref()
+            .is_some_and(|(entry_id, _)| entry_id.as_str() == id)
+        {
+            let (_, loc) = next.take().context("Pending Loc disappeared")?;
+            ensure!(related.sequence < loc.sequence, "Loc precedes entry");
+            ensure!(
+                loc.observed.xml_byte_start >= related.observed.xml_byte_start
+                    && loc.observed.xml_byte_end <= related.observed.xml_byte_end
+                    && loc.observed.xml_byte_start <= loc.observed.xml_byte_end,
+                "Loc span outside entry"
+            );
+            if loc.observed.loc_ordinal.is_none() {
                 ensure!(
-                    declared.get(seen) == Some(&loc.observed.ordinal),
+                    related.observed.complete
+                        && loc.observed.raw_element_xml.is_none()
+                        && loc.observed.raw_inner_xml.is_none()
+                        && loc.observed.decoded_value.is_none()
+                        && loc.observed.normalized_fetch_url.is_none()
+                        && loc.observed.validation_error.as_deref() == Some("missing_location"),
+                    "Invalid synthetic missing-Loc row"
+                );
+            } else {
+                ensure!(
+                    related.observed.loc_occurrence_ordinals.get(seen)
+                        == Some(&loc.observed.ordinal),
                     "Entry Loc references differ"
                 );
                 seen = seen.checked_add(1).context("Entry Loc count overflow")?;
             }
+            location_count = location_count
+                .checked_add(1)
+                .context("Loc relation count overflow")?;
+            drop(loc);
+            next = next_location(&mut locations, control, _work)?;
         }
+        ensure!(
+            seen == related.observed.loc_occurrence_ordinals.len(),
+            "Entry Loc references differ"
+        );
     }
-    ensure!(seen == declared.len(), "Entry Loc references differ");
+    // The merge must cover EVERY verified Loc. This rejects missing-entry
+    // orphans even when imported schemas lack foreign keys or indexes.
+    ensure!(
+        next.is_none()
+            && entry_count == summary.entry_rows
+            && location_count == summary.location_rows,
+        "Entry/Loc relation rows missing or duplicated"
+    );
     Ok(())
 }
 
+#[cfg(test)]
 struct StreamRows<'a, 'conn> {
     read: &'a VerifiedRawRead<'conn>,
 }
+#[cfg(test)]
 impl Serialize for StreamRows<'_, '_> {
     fn serialize<S: serde::Serializer>(
         &self,
@@ -702,9 +926,11 @@ impl Serialize for StreamRows<'_, '_> {
         seq.end()
     }
 }
+#[cfg(test)]
 struct CatalogEnvelope<'a, 'conn> {
     read: &'a VerifiedRawRead<'conn>,
 }
+#[cfg(test)]
 impl Serialize for CatalogEnvelope<'_, '_> {
     fn serialize<S: serde::Serializer>(
         &self,
@@ -754,6 +980,9 @@ fn verify_raw_inner<'conn>(
             connection,
             summary: catalog.summary,
             inherited: catalog.inherited,
+            source_row_coverage: None,
+            #[cfg(test)]
+            work: std::cell::Cell::new(RawVerificationWork::default()),
             control: control.clone(),
         }));
     }
@@ -821,10 +1050,34 @@ fn verify_raw_inner<'conn>(
     computed.rolling_sha256 = seed_hash();
     let mut counters = BTreeMap::new();
     let mut last_document = None;
-    visit_all(connection, &summary.limits, control, |row| {
-        account(&mut computed, row)?;
-        relation_row(connection, &summary, &mut counters, &mut last_document, row)
-    })?;
+    let mut source_row_coverage = SourceRowCoverage::new();
+    let mut canonical_row_bytes = 0u64;
+    let mut work = RawVerificationWork::default();
+    visit_all(
+        connection,
+        &summary.limits,
+        control,
+        &mut work,
+        |canonical| {
+            account_canonical(&mut computed, canonical)?;
+            relation_row(
+                connection,
+                &summary,
+                &mut counters,
+                &mut last_document,
+                &canonical.row,
+            )?;
+            source_row_coverage.observe(&canonical.row);
+            canonical_row_bytes = canonical_row_bytes
+                .checked_add(u64::try_from(canonical.data.len())?)
+                .context("Raw canonical row byte sum overflow")?;
+            Ok(())
+        },
+    )?;
+    // SQL CAST(data AS BLOB) measures the database TEXT encoding (possibly
+    // UTF16); rusqlite returns canonical JSON as UTF8. Keep the independent
+    // conservative SQL preflight caps above. Only these validated UTF8 bytes
+    // contribute to the exact canonical JSON envelope below.
     for (id, stats) in counters {
         control.checkpoint()?;
         let doc =
@@ -851,21 +1104,21 @@ fn verify_raw_inner<'conn>(
         computed == summary,
         "Raw counts/rolling SHA/global sequence differ"
     );
-    verify_entry_locations(connection, control)?;
-    let read = VerifiedRawRead {
+    verify_entry_locations(connection, &summary, control, &mut work)?;
+    ensure!(
+        canonical_envelope_bytes(&summary, &inherited, canonical_row_bytes, total_rows)?
+            == summary.catalog_json_bytes,
+        "Raw full serialized envelope byte count differs"
+    );
+    Ok(Some(VerifiedRawRead {
         connection,
         summary,
         inherited,
+        source_row_coverage: Some(source_row_coverage),
+        #[cfg(test)]
+        work: std::cell::Cell::new(work),
         control: control.clone(),
-    };
-    ensure!(
-        measured(
-            &CatalogEnvelope { read: &read },
-            read.summary.limits.max_catalog_json_bytes
-        )? == read.summary.catalog_json_bytes,
-        "Raw full serialized envelope byte count differs"
-    );
-    Ok(Some(read))
+    }))
 }
 
 #[cfg(test)]

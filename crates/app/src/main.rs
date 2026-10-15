@@ -187,6 +187,10 @@ enum Command {
         /// Enable local MCP file tools; requires a loopback listen address.
         #[arg(long)]
         mcp_files_dir: Option<PathBuf>,
+        /// Owned process mode: hold a stdin pipe open and close it to request shutdown.
+        /// Ctrl-C also quiesces, but clean exit still waits for this pipe EOF.
+        #[arg(long)]
+        shutdown_on_stdin_eof: bool,
     },
     /// Crawl without the browser application and export the complete report.
     Crawl {
@@ -232,22 +236,35 @@ async fn main() -> anyhow::Result<()> {
         listen: "127.0.0.1:8787".into(),
         data_dir: "data".into(),
         mcp_files_dir: None,
+        shutdown_on_stdin_eof: false,
     }) {
         Command::Serve {
             listen,
             data_dir,
             mcp_files_dir,
-        } => match mcp_files_dir {
-            Some(directory) => {
-                Box::pin(server::serve_with_mcp_files(
+            shutdown_on_stdin_eof,
+        } => {
+            if shutdown_on_stdin_eof {
+                Box::pin(server::serve_with_owned_stdin(
                     &listen,
                     data_dir,
-                    Some(directory),
+                    mcp_files_dir,
                 ))
-                .await?
+                .await?;
+            } else {
+                match mcp_files_dir {
+                    Some(directory) => {
+                        Box::pin(server::serve_with_mcp_files(
+                            &listen,
+                            data_dir,
+                            Some(directory),
+                        ))
+                        .await?
+                    }
+                    None => Box::pin(server::serve(&listen, data_dir)).await?,
+                }
             }
-            None => Box::pin(server::serve(&listen, data_dir)).await?,
-        },
+        }
         Command::Mcp {
             server,
             mcp_files_dir,

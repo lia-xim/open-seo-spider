@@ -125,7 +125,9 @@ async fn bounded_body(response: reqwest::Response, limit: usize) -> Result<Vec<u
 }
 
 pub(super) async fn call(bridge: &Bridge, args: Value) -> Result<Value, Failure> {
-    let (id, options) = tokio::task::spawn_blocking(move || arguments(args))
+    let (id, options) = bridge
+        .workers
+        .run_blocking(move || arguments(args))
         .await
         .map_err(|e| failure("worker_error", e.to_string()))??;
     let url = bridge
@@ -224,9 +226,27 @@ fn bounded_protocol_error(id: Value, message: &str) -> Value {
         )
     }
 }
+#[cfg(test)]
 pub(super) async fn complete_response(id: Value, result: Result<Value, Failure>) -> Value {
     let join_error_id = id.clone();
     tokio::task::spawn_blocking(move || {
+        let budget_error_id = id.clone();
+        let response = match result {
+            Ok(value) => json!({"jsonrpc":"2.0","id":id,"result":{"content":[{"type":"text","text":format!("Sitemap ZIP received: {} bytes, SHA-256 {}. Binary is in structuredContent.data_base64; no artifact was stored.",value["bytes"],value["sha256"])}],"structuredContent":value,"isError":false}}),
+            Err(e) => json!({"jsonrpc":"2.0","id":id,"result":{"content":[{"type":"text","text":e.message}],"structuredContent":{"code":e.code,"message":e.message},"isError":true}}),
+        };
+        if serde_json::to_vec(&response).is_ok_and(|v| v.len() <= MAX_RESPONSE_BYTES) { response }
+        else { bounded_protocol_error(budget_error_id,"Sitemap response exceeds 16 MiB JSON-RPC output budget") }
+    }).await.unwrap_or_else(|_| bounded_protocol_error(join_error_id,"Sitemap response worker failed"))
+}
+
+pub(super) async fn complete_response_owned(
+    owner: &open_seo_spider_core::TaskOwner,
+    id: Value,
+    result: Result<Value, Failure>,
+) -> Value {
+    let join_error_id = id.clone();
+    owner.run_blocking(move || {
         let budget_error_id = id.clone();
         let response = match result {
             Ok(value) => json!({"jsonrpc":"2.0","id":id,"result":{"content":[{"type":"text","text":format!("Sitemap ZIP received: {} bytes, SHA-256 {}. Binary is in structuredContent.data_base64; no artifact was stored.",value["bytes"],value["sha256"])}],"structuredContent":value,"isError":false}}),

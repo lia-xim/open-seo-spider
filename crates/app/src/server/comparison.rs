@@ -225,30 +225,33 @@ pub(super) async fn compare_saved(
             })?;
     let config = request.config.unwrap_or_default();
     // All locks are released. Core alone computes and validates report hashes.
-    tokio::task::spawn_blocking(move || {
-        compare_stable_reports(before, after, config, include_original_reports)
-    })
-    .await
-    .map_err(|error| {
-        (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(failure("comparison_task_failed", error.to_string())),
-        )
-    })?
-    .map(Json)
-    .map_err(|error| {
-        let error = if include_original_reports {
-            bounded_bundle_failure(error)
-        } else {
-            error
-        };
-        let status = if error.error.code == "original_report_binding_mismatch" {
-            StatusCode::INTERNAL_SERVER_ERROR
-        } else {
-            StatusCode::BAD_REQUEST
-        };
-        (status, Json(error))
-    })
+    state
+        .lifecycle
+        .blocking
+        .run_blocking(move || {
+            compare_stable_reports(before, after, config, include_original_reports)
+        })
+        .await
+        .map_err(|error| {
+            (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Json(failure("comparison_task_failed", error.to_string())),
+            )
+        })?
+        .map(Json)
+        .map_err(|error| {
+            let error = if include_original_reports {
+                bounded_bundle_failure(error)
+            } else {
+                error
+            };
+            let status = if error.error.code == "original_report_binding_mismatch" {
+                StatusCode::INTERNAL_SERVER_ERROR
+            } else {
+                StatusCode::BAD_REQUEST
+            };
+            (status, Json(error))
+        })
 }
 
 #[cfg(test)]

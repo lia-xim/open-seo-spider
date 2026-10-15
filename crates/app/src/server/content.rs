@@ -99,11 +99,12 @@ pub(super) async fn analyze(
         content_cohort::prepare_saved_analysis(report, &context, &request)
             .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))?
     };
-    tokio::task::spawn_blocking(move || {
-        content_cohort::finish_saved_analysis(prepared.0, prepared.1)
-    })
-    .await
-    .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?
-    .map(Json)
-    .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))
+    state
+        .lifecycle
+        .blocking
+        .run_blocking(move || content_cohort::finish_saved_analysis(prepared.0, prepared.1))
+        .await
+        .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?
+        .map(Json)
+        .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))
 }

@@ -89,6 +89,9 @@ pub struct SitemapReadSnapshot {
 /// Interrupted in-flight requests remain pending and are fetched on resume.
 pub struct CrawlStore {
     connection: Mutex<Connection>,
+    source_archive_path: std::path::PathBuf,
+    source_archive_read_only: bool,
+    source_archive_writer: Mutex<()>,
 }
 
 impl CrawlStore {
@@ -116,16 +119,23 @@ impl CrawlStore {
         crate::sitemap_source_store::initialize_writable_schema(&connection)?;
         Ok(Self {
             connection: Mutex::new(connection),
+            source_archive_path: crate::sitemap_source_archive::files::archive_path(path)?,
+            source_archive_read_only: false,
+            source_archive_writer: Mutex::new(()),
         })
     }
 
     /// Opens existing storage without creating files, running migrations or
     /// changing journal configuration. Suitable for cold-process recovery.
     pub fn open_read_only(path: impl AsRef<Path>) -> anyhow::Result<Self> {
+        let path = path.as_ref();
         let connection = Connection::open_with_flags(path, OpenFlags::SQLITE_OPEN_READ_ONLY)?;
         connection.busy_timeout(std::time::Duration::from_secs(5))?;
         Ok(Self {
             connection: Mutex::new(connection),
+            source_archive_path: crate::sitemap_source_archive::files::archive_path(path)?,
+            source_archive_read_only: true,
+            source_archive_writer: Mutex::new(()),
         })
     }
 
@@ -1206,7 +1216,12 @@ impl CrawlStore {
                 put_metadata(&transaction, "discovery_complete", "true")?;
             }
         }
+        let saved = metadata_text(&transaction, "config")?
+            .context("Archive initialization needs saved config")?;
+        let archive_config: CrawlConfig = serde_json::from_str(&saved)?;
+        crate::sitemap_source_archive::require_storage_for_config(&transaction, &archive_config)?;
         crate::sitemap_source_store::initialize(&transaction, generation, measurement_limits)?;
+        crate::sitemap_source_archive::initialize(&transaction, &archive_config, &sha256(&saved))?;
         transaction.commit()?;
         Ok(())
     }
@@ -3526,6 +3541,12 @@ mod sitemap_config_read_tests;
 #[cfg(test)]
 #[path = "store-sitemap-tests.rs"]
 mod sitemap_store_tests;
+
+#[path = "store/sitemap_source_archive.rs"]
+mod source_body_archive;
+#[cfg(test)]
+#[path = "store-sitemap-body-tests.rs"]
+mod source_body_archive_tests;
 
 #[cfg(test)]
 #[path = "store-sitemap-source-tests.rs"]

@@ -202,6 +202,13 @@ impl ReadRegistry {
         result
     }
 
+    pub(super) fn close_admission(&self) {
+        let mut state = self.0.tasks();
+        state.closed = true;
+        for task in state.running.values() {
+            task.control.cancel();
+        }
+    }
     pub(super) async fn shutdown_and_drain(&self) -> anyhow::Result<()> {
         {
             let mut state = self.0.tasks();

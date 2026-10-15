@@ -17,6 +17,7 @@ pub struct Bridge {
     client: Client,
     base: Url,
     files: Option<files::FileTools>,
+    workers: open_seo_spider_core::TaskOwner,
 }
 impl Bridge {
     pub fn new(base: &str) -> anyhow::Result<Self> {
@@ -45,6 +46,7 @@ impl Bridge {
                 .redirect(reqwest::redirect::Policy::none())
                 .build()?,
             files: None,
+            workers: open_seo_spider_core::TaskOwner::new("mcp_blocking"),
         })
     }
 
@@ -80,6 +82,23 @@ impl Bridge {
         })
     }
 
+    pub(crate) fn set_task_owner(&mut self, workers: open_seo_spider_core::TaskOwner) {
+        self.workers = workers;
+    }
+    pub(crate) fn close_file_tools_admission(&self) {
+        if let Some(files) = &self.files {
+            files.close_admission();
+        }
+    }
+    async fn shutdown_owned_work(&self) -> anyhow::Result<()> {
+        let (files, workers) = tokio::join!(
+            self.shutdown_file_tools(),
+            self.workers.shutdown_and_drain()
+        );
+        files?;
+        workers?;
+        Ok(())
+    }
     pub(crate) async fn shutdown_file_tools(&self) -> anyhow::Result<()> {
         match &self.files {
             Some(files) => files.shutdown_and_drain().await,
@@ -201,11 +220,15 @@ impl Bridge {
                 }
                 if name == sitemap_findings::NAME {
                     let result = sitemap_findings::call(self, args).await;
-                    return Some(sitemap_findings::complete_response(id, result).await);
+                    return Some(
+                        sitemap_findings::complete_response_owned(&self.workers, id, result).await,
+                    );
                 }
                 if name == "spider_generate_sitemaps" {
                     let result = generation::call(self, args).await;
-                    return Some(generation::complete_response(id, result).await);
+                    return Some(
+                        generation::complete_response_owned(&self.workers, id, result).await,
+                    );
                 }
                 if name == "spider_compare_saved" {
                     let include_original_reports = args
@@ -214,7 +237,8 @@ impl Bridge {
                         .unwrap_or(false);
                     let result = saved_comparison::call(self, args).await;
                     return Some(
-                        saved_comparison::complete_response_on_worker(
+                        saved_comparison::complete_response_on_worker_owned(
+                            &self.workers,
                             id,
                             result,
                             include_original_reports,
@@ -552,7 +576,7 @@ where
     W: AsyncWrite + Unpin,
 {
     let serving = stdio_stream(bridge, input, output).await;
-    let drain = bridge.shutdown_file_tools().await;
+    let drain = bridge.shutdown_owned_work().await;
     serving?;
     drain
 }

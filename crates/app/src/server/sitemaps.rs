@@ -55,12 +55,13 @@ async fn read_context<T: Send + 'static, P: Send + 'static>(
         .map_err(|error| fail(Failure::new("sitemap_read_failure", error)))?;
     let snapshot = if exists {
         Some(
-            tokio::task::spawn_blocking(move || {
-                read_store(CrawlStore::open_read_only(path)?, prepared)
-            })
-            .await
-            .map_err(|error| fail(Failure::new("sitemap_read_failure", error)))?
-            .map_err(read_failure)?,
+            state
+                .lifecycle
+                .blocking
+                .run_blocking(move || read_store(CrawlStore::open_read_only(path)?, prepared))
+                .await
+                .map_err(|error| fail(Failure::new("sitemap_read_failure", error)))?
+                .map_err(read_failure)?,
         )
     } else {
         None
@@ -85,12 +86,13 @@ pub(super) async fn inventory(
         },
     )
     .await?;
-    let response = tokio::task::spawn_blocking(move || {
-        membership::inventory_window(id, generation, &config, read, query)
-    })
-    .await
-    .map_err(|error| fail(Failure::new("sitemap_read_failure", error)))?
-    .map_err(fail)?;
+    let response = state
+        .lifecycle
+        .blocking
+        .run_blocking(move || membership::inventory_window(id, generation, &config, read, query))
+        .await
+        .map_err(|error| fail(Failure::new("sitemap_read_failure", error)))?
+        .map_err(fail)?;
     Ok(Json(response))
 }
 pub(super) async fn export_csv(

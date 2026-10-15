@@ -276,6 +276,13 @@ impl ExportRegistry {
             second_pass_rows: s.second_pass_rows.load(Ordering::SeqCst),
         }
     }
+    pub(super) fn close_admission(&self) {
+        let mut state = self.lock_tasks();
+        state.closed = true;
+        for task in state.running.values() {
+            task.stop.cancel();
+        }
+    }
     pub(super) async fn shutdown_and_drain(&self) -> anyhow::Result<()> {
         // Snapshot shared ownership under admission lock. A canceled/concurrent
         // drain can never take or detach either actual handle.

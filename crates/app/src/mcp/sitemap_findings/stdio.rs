@@ -30,10 +30,14 @@ pub(super) async fn read_frame<R: AsyncRead + Unpin>(
     Ok(Frame::Complete(std::mem::take(partial)))
 }
 async fn write_response<W: AsyncWrite + Unpin>(
+    bridge: &Bridge,
     output: &mut W,
     response: Value,
 ) -> anyhow::Result<()> {
-    let bytes = tokio::task::spawn_blocking(move || serde_json::to_vec(&response)).await??;
+    let bytes = bridge
+        .workers
+        .run_blocking(move || serde_json::to_vec(&response))
+        .await??;
     output.write_all(&bytes).await?;
     output.write_all(b"\n").await?;
     output.flush().await?;
@@ -71,6 +75,7 @@ where
                 Frame::Eof => break,
                 Frame::Oversized => {
                     write_response(
+                        bridge,
                         &mut output,
                         error(Value::Null, -32600, "Request exceeds 8 MiB"),
                     )
@@ -83,20 +88,26 @@ where
         let request: Value = match serde_json::from_slice(&bytes) {
             Ok(value) => value,
             Err(_) => {
-                write_response(&mut output, error(Value::Null, -32700, "Invalid JSON")).await?;
+                write_response(
+                    bridge,
+                    &mut output,
+                    error(Value::Null, -32700, "Invalid JSON"),
+                )
+                .await?;
                 continue;
             }
         };
         drop(bytes);
         if !findings_request(&request) {
             if let Some(response) = bridge.dispatch(request).await {
-                write_response(&mut output, response).await?;
+                write_response(bridge, &mut output, response).await?;
             }
             continue;
         }
         let active_id = request.get("id").expect("findings request has id");
         if !valid_rpc_id(active_id) {
             write_response(
+                bridge,
                 &mut output,
                 error(
                     Value::Null,
@@ -118,11 +129,11 @@ where
                 frame = read_frame(&mut input,&mut partial) => {
                     match frame? {
                         Frame::Eof => return Ok(()),
-                        Frame::Oversized => { write_response(&mut output,error(Value::Null,-32600,"Request exceeds 8 MiB")).await?; return Ok(()); }
+                        Frame::Oversized => { write_response(bridge, &mut output,error(Value::Null,-32600,"Request exceeds 8 MiB")).await?; return Ok(()); }
                         Frame::Complete(bytes) => {
                             let value: Value = match serde_json::from_slice(&bytes) {
                                 Ok(value) => value,
-                                Err(_) => { write_response(&mut output,error(Value::Null,-32700,"Invalid JSON")).await?; continue; }
+                                Err(_) => { write_response(bridge, &mut output,error(Value::Null,-32700,"Invalid JSON")).await?; continue; }
                             };
                             if matching_cancel(&value,&active_id) {
                                 break Some(error(active_id.clone(),-32800,"Request cancelled"));
@@ -130,7 +141,7 @@ where
                             if pending.is_none() { pending=Some(bytes); }
                             else if let Some(id)=value.get("id") {
                                 let id=if valid_rpc_id(id) { id.clone() } else { Value::Null };
-                                write_response(&mut output,error(id,-32000,"One request is already pending while findings are active")).await?;
+                                write_response(bridge, &mut output,error(id,-32000,"One request is already pending while findings are active")).await?;
                             }
                             // A full pending slot never prevents reading a matching
                             // cancel. Additional notifications are not queued.
@@ -141,7 +152,7 @@ where
         };
         drop(active);
         if let Some(response) = response {
-            write_response(&mut output, response).await?;
+            write_response(bridge, &mut output, response).await?;
         }
     }
     Ok(())

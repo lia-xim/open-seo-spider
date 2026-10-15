@@ -670,3 +670,431 @@ fn real_eight_mib_window_cap_refuses_large_page_and_smaller_window_recovers() {
         "full visitor is not truncated to the failed page"
     );
 }
+
+// SOURCE-ONLY STATELESS OPTIMIZATION REGRESSIONS. NOT_COMPILED / NOT_RUN.
+#[test]
+fn stateless_canonical_envelope_matches_unchanged_full_serializer_for_empty_unicode_and_incomplete_rows()
+ {
+    let variants = [
+        None,
+        Some("<urlset/>"),
+        Some(
+            "<urlset><url><loc>https://example.org/p?a=1&amp;b=2</loc><lastmod><![CDATA[välué 💡 \" \\]]></lastmod></url></urlset>",
+        ),
+        Some(
+            "<urlset><url><loc>https://example.org/a</loc><loc>https://example.org/b</loc></url><url/></urlset>",
+        ),
+        Some("<urlset><url><loc>https://example.org/incomplete</loc>"),
+    ];
+    for xml in variants {
+        let mut connection = Connection::open_in_memory().unwrap();
+        empty(&connection);
+        let tx = connection.transaction().unwrap();
+        initialize(&tx, &"a".repeat(64), &Default::default(), false).unwrap();
+        if let Some(xml) = xml {
+            append(&tx, source_rows(xml)).unwrap();
+        }
+        let original = load_catalog(&tx).unwrap().unwrap();
+        let raw = verify_raw(&tx).unwrap().unwrap();
+        assert_eq!(raw.summary(), &original.summary);
+        let work = raw.verification_work();
+        assert_eq!(work.primary_scans, 1);
+        assert_eq!(work.primary_rows_verified, original.summary.last_sequence);
+        assert_eq!(
+            work.primary_canonical_serializations,
+            original.summary.last_sequence
+        );
+        assert_eq!(
+            work.filtered_rows_decoded, 0,
+            "production size verification must not revisit rows"
+        );
+        // This is the old serializer implementation, unchanged from SourceV4.
+        let oracle = measured(
+            &CatalogEnvelope { read: &raw },
+            original.summary.limits.max_catalog_json_bytes,
+        )
+        .unwrap();
+        assert_eq!(oracle, original.summary.catalog_json_bytes);
+        assert_eq!(serde_json::to_vec(&original).unwrap().len() as u64, oracle);
+        assert_eq!(
+            raw.verification_work().filtered_rows_decoded,
+            original.summary.last_sequence,
+            "the unchanged oracle must actually traverse every retained row"
+        );
+    }
+}
+
+#[test]
+fn stateless_fifty_thousand_pairs_have_one_primary_pass_one_merge_join_and_exact_reopen_oracle() {
+    let mut xml = String::from("<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>");
+    for ordinal in 0..50_000 {
+        xml.push_str(&format!("<url><loc>http://a/{ordinal:05}</loc></url>"));
+    }
+    xml.push_str("</urlset>");
+    let temp = tempfile::tempdir().unwrap();
+    let file = temp.path().join("actual-50000-stateless.sqlite");
+    let mut connection = Connection::open(&file).unwrap();
+    empty(&connection);
+    let limits = SitemapLedgerLimits {
+        max_catalog_json_bytes: 128 * 1024 * 1024,
+        ..Default::default()
+    };
+    let config = crate::CrawlConfig {
+        sitemap_membership_limits: Some(limits.clone()),
+        ..Default::default()
+    };
+    save(&connection, "config", &config).unwrap();
+    {
+        let tx = connection.transaction().unwrap();
+        initialize(
+            &tx,
+            &digest(serde_json::to_vec(&config).unwrap()),
+            &limits,
+            false,
+        )
+        .unwrap();
+        append(&tx, source_rows(&xml)).unwrap();
+        tx.commit().unwrap();
+    }
+    for cold in [false, true] {
+        let mut read_only;
+        let actual = if cold {
+            read_only =
+                Connection::open_with_flags(&file, rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY)
+                    .unwrap();
+            &mut read_only
+        } else {
+            &mut connection
+        };
+        let tx = actual.transaction().unwrap();
+        let raw = verify_raw(&tx).unwrap().unwrap();
+        assert_eq!(raw.summary().entry_rows, 50_000);
+        assert_eq!(raw.summary().location_rows, 50_000);
+        assert_eq!(raw.summary().last_sequence, 100_001);
+        assert!(raw.summary().catalog_json_bytes > 32 * 1024 * 1024);
+        let work = raw.verification_work();
+        assert_eq!(work.primary_scans, 1);
+        assert_eq!(work.primary_rows_verified, 100_001);
+        assert_eq!(work.primary_canonical_serializations, 100_001);
+        assert_eq!(work.entry_loc_join_scans, 1);
+        assert_eq!(work.relation_entry_statements, 1);
+        assert_eq!(work.relation_location_statements, 1);
+        assert_eq!(work.relation_entries_decoded, 50_000);
+        assert_eq!(work.relation_locations_decoded, 50_000);
+        assert_eq!(work.filtered_rows_decoded, 0);
+        assert_eq!(
+            measured(
+                &CatalogEnvelope { read: &raw },
+                limits.max_catalog_json_bytes
+            )
+            .unwrap(),
+            raw.summary().catalog_json_bytes
+        );
+        assert_eq!(raw.verification_work().filtered_rows_decoded, 100_001);
+        let tail = raw
+            .window(
+                &SitemapLedgerFilter {
+                    kind: SitemapLedgerRowKind::Location,
+                    ..Default::default()
+                },
+                Some(100_000),
+                200,
+            )
+            .unwrap();
+        assert_eq!(tail.rows.len(), 1);
+        assert!(!tail.has_more);
+        assert!(matches!(&tail.rows[0], SitemapLedgerRow::Location(loc)
+            if loc.observed.decoded_value.as_deref() == Some("http://a/49999")));
+        drop(raw);
+        tx.commit().unwrap();
+    }
+}
+
+#[test]
+fn stateless_streaming_relation_keeps_orphan_span_prior_sequence_and_missing_loc_guards() {
+    for mutation in [
+        "orphan",
+        "span",
+        "prior_sequence",
+        "incomplete_missing",
+        "declared_multiset",
+    ] {
+        let xml = if mutation == "incomplete_missing" {
+            "<urlset><url/></urlset>"
+        } else {
+            "<urlset><url><loc>https://example.org/p</loc></url></urlset>"
+        };
+        let mut connection = Connection::open_in_memory().unwrap();
+        empty(&connection);
+        {
+            let tx = connection.transaction().unwrap();
+            initialize(&tx, &"a".repeat(64), &Default::default(), false).unwrap();
+            append(&tx, source_rows(xml)).unwrap();
+            tx.commit().unwrap();
+        }
+        let mut catalog = load_catalog(&connection).unwrap().unwrap();
+        let rows = catalog.rows.as_mut().unwrap();
+        match mutation {
+            "orphan" => {
+                for row in rows.iter_mut() {
+                    match row {
+                        SitemapLedgerRow::Entry(entry) => {
+                            entry.observed.loc_occurrence_ordinals.clear()
+                        }
+                        SitemapLedgerRow::Location(loc) => loc.observed.entry_ordinal = 999,
+                        _ => {}
+                    }
+                }
+            }
+            "span" => {
+                for row in rows.iter_mut() {
+                    if let SitemapLedgerRow::Location(loc) = row {
+                        loc.observed.xml_byte_start = 0;
+                    }
+                }
+            }
+            "prior_sequence" => {
+                rows.swap(1, 2);
+                for (index, row) in rows.iter_mut().enumerate() {
+                    row.set_sequence(index as u64 + 1);
+                }
+            }
+            "incomplete_missing" => {
+                for row in rows.iter_mut() {
+                    if let SitemapLedgerRow::Entry(entry) = row {
+                        entry.observed.complete = false;
+                    }
+                }
+            }
+            "declared_multiset" => {
+                for row in rows.iter_mut() {
+                    if let SitemapLedgerRow::Entry(entry) = row {
+                        entry.observed.loc_occurrence_ordinals = vec![999];
+                    }
+                }
+            }
+            _ => unreachable!(),
+        }
+        connection
+            .execute_batch("PRAGMA foreign_keys=OFF;")
+            .unwrap();
+        // Re-seal actual canonical row/hash/summary bytes. Mere hash checking
+        // cannot reject these controls; semantic relations must still do so.
+        install_unchecked(&connection, catalog);
+        let tx = connection.transaction().unwrap();
+        assert!(
+            load_catalog(&tx).is_err(),
+            "old materialized oracle: {mutation}"
+        );
+        assert!(
+            verify_raw(&tx).is_err(),
+            "complete streaming relation: {mutation}"
+        );
+    }
+}
+
+#[test]
+fn stateless_streaming_join_works_without_foreign_keys_or_indexes_and_rejects_tail_corruption() {
+    let mut connection = memory();
+    let original = load_catalog(&connection).unwrap().unwrap();
+    connection.execute_batch("PRAGMA foreign_keys=OFF;PRAGMA automatic_index=OFF;
+        CREATE TABLE stateless_entries AS SELECT * FROM sitemap_entries;
+        CREATE TABLE stateless_locations AS SELECT * FROM sitemap_locations;
+        DROP TABLE sitemap_locations;DROP TABLE sitemap_entries;
+        CREATE TABLE sitemap_entries(sequence INTEGER,row_id TEXT COLLATE NOCASE,observation_id TEXT,ordinal INTEGER,data TEXT,data_sha256 TEXT);
+        CREATE TABLE sitemap_locations(sequence INTEGER,row_id TEXT,observation_id TEXT,entry_id TEXT COLLATE NOCASE,ordinal INTEGER,data TEXT,data_sha256 TEXT);
+        INSERT INTO sitemap_entries SELECT * FROM stateless_entries;
+        INSERT INTO sitemap_locations SELECT * FROM stateless_locations;
+        DROP TABLE stateless_entries;DROP TABLE stateless_locations;").unwrap();
+    {
+        let tx = connection.transaction().unwrap();
+        let raw = verify_raw(&tx).unwrap().unwrap();
+        assert_eq!(raw.summary(), &original.summary);
+        assert_eq!(
+            raw.window(&Default::default(), None, 1000).unwrap().rows,
+            original.rows.unwrap()
+        );
+        assert_eq!(raw.verification_work().entry_loc_join_scans, 1);
+    }
+    connection.execute("UPDATE sitemap_locations SET entry_id=upper(entry_id) WHERE sequence=(SELECT max(sequence) FROM sitemap_locations)", []).unwrap();
+    let tx = connection.transaction().unwrap();
+    assert!(load_catalog(&tx).is_err());
+    assert!(
+        verify_raw(&tx).is_err(),
+        "NOCASE join cannot conceal a bad exact tail SQL index"
+    );
+}
+
+#[test]
+fn stateless_single_canonical_serialization_rejects_rehashed_whitespace_and_equivalent_json_escaping()
+ {
+    for escaped in [false, true] {
+        let mut connection = memory();
+        let (sequence, data): (i64, String) = connection
+            .query_row(
+                "SELECT sequence,data FROM sitemap_locations ORDER BY sequence LIMIT 1",
+                [],
+                |row| Ok((row.get(0)?, row.get(1)?)),
+            )
+            .unwrap();
+        let altered = if escaped {
+            data.replacen("https", r#"h\u0074tps"#, 1)
+        } else {
+            format!("{data} ")
+        };
+        assert_ne!(altered, data);
+        assert_eq!(
+            serde_json::from_str::<SitemapLedgerRow>(&altered).unwrap(),
+            serde_json::from_str::<SitemapLedgerRow>(&data).unwrap()
+        );
+        connection
+            .execute(
+                "UPDATE sitemap_locations SET data=?1,data_sha256=?2 WHERE sequence=?3",
+                params![altered, digest(&altered), sequence],
+            )
+            .unwrap();
+        let tx = connection.transaction().unwrap();
+        assert!(load_catalog(&tx).is_err());
+        let error = verify_raw(&tx)
+            .err()
+            .expect("rehashed noncanonical bytes refused");
+        assert!(error.to_string().contains("Noncanonical"), "{error:#}");
+    }
+}
+
+// Database TEXT encoding and canonical JSON UTF8 bytes are distinct measures.
+// These disk/reopen regressions are authored only; NOT_COMPILED / NOT_RUN.
+fn assert_stateless_utf16_disk_catalog_and_read_only_reopen(encoding: &str) {
+    let temp = tempfile::tempdir().unwrap();
+    let file = temp.path().join(format!("canonical-{encoding}.sqlite"));
+    let mut connection = Connection::open(&file).unwrap();
+    connection
+        .execute_batch(match encoding {
+            "UTF-16le" => "PRAGMA encoding='UTF-16le';",
+            "UTF-16be" => "PRAGMA encoding='UTF-16be';",
+            _ => unreachable!(),
+        })
+        .unwrap();
+    // Encoding must be selected before the first table is created.
+    empty(&connection);
+    {
+        let tx = connection.transaction().unwrap();
+        initialize(&tx, &"a".repeat(64), &Default::default(), false).unwrap();
+        append(&tx, source_rows("<urlset><url><loc>https://example.org/über?x=é&amp;y=💡</loc><lastmod><![CDATA[välué 💡]]></lastmod></url><url/></urlset>")).unwrap();
+        tx.commit().unwrap();
+    }
+    let original = load_catalog(&connection).unwrap().unwrap();
+    let canonical_utf8_bytes: u64 = original
+        .rows
+        .as_ref()
+        .unwrap()
+        .iter()
+        .map(|row| serde_json::to_vec(row).unwrap().len() as u64)
+        .sum();
+    let largest_canonical_utf8_row = original
+        .rows
+        .as_ref()
+        .unwrap()
+        .iter()
+        .map(|row| serde_json::to_vec(row).unwrap().len())
+        .max()
+        .unwrap();
+    let check = |connection: &mut Connection| {
+        let tx = connection.transaction().unwrap();
+        let actual_encoding: String = tx
+            .query_row("PRAGMA encoding", [], |row| row.get(0))
+            .unwrap();
+        assert_eq!(
+            actual_encoding, encoding,
+            "real disk database must retain its UTF16 encoding"
+        );
+        let mut sql_blob_bytes = 0u64;
+        let mut largest_sql_blob = 0u64;
+        for table in TABLES {
+            let (bytes, max): (i64, i64) = tx.query_row(&format!(
+                "SELECT coalesce(sum(length(CAST(data AS BLOB))),0),coalesce(max(length(CAST(data AS BLOB))),0) FROM {table}"), [],
+                |row| Ok((row.get(0)?, row.get(1)?))).unwrap();
+            sql_blob_bytes += u64::try_from(bytes).unwrap();
+            largest_sql_blob = largest_sql_blob.max(u64::try_from(max).unwrap());
+        }
+        assert_ne!(
+            sql_blob_bytes, canonical_utf8_bytes,
+            "SQL BLOB bytes are database-encoded, not the canonical Rust UTF8 row sum"
+        );
+        assert!(sql_blob_bytes <= original.summary.limits.max_catalog_json_bytes as u64);
+        assert!(largest_sql_blob <= original.summary.limits.max_row_json_bytes as u64);
+        assert!(
+            largest_sql_blob > largest_canonical_utf8_row as u64,
+            "later negative control must isolate the unchanged SQL BLOB row cap"
+        );
+        let old = load_catalog(&tx).unwrap().unwrap();
+        assert_eq!(old, original);
+        let raw = verify_raw(&tx).unwrap().unwrap();
+        assert_eq!(raw.summary(), &original.summary);
+        assert_eq!(
+            raw.verification_work().primary_canonical_serializations,
+            original.summary.last_sequence
+        );
+        assert_eq!(raw.verification_work().filtered_rows_decoded, 0);
+        let oracle = measured(
+            &CatalogEnvelope { read: &raw },
+            original.summary.limits.max_catalog_json_bytes,
+        )
+        .unwrap();
+        assert_eq!(oracle, original.summary.catalog_json_bytes);
+        assert_eq!(oracle, serde_json::to_vec(&old).unwrap().len() as u64);
+        assert_eq!(
+            raw.verification_work().filtered_rows_decoded,
+            original.summary.last_sequence,
+            "unchanged full serializer must really traverse all rows"
+        );
+        let window = raw.window(&Default::default(), None, 1000).unwrap();
+        assert_eq!(&window.rows, original.rows.as_ref().unwrap());
+        assert!(!window.has_more);
+        drop(raw);
+        tx.commit().unwrap();
+    };
+    check(&mut connection);
+    drop(connection);
+    // The writer Connection is actually dropped before this read-only reopen.
+    let mut read_only =
+        Connection::open_with_flags(&file, rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY).unwrap();
+    check(&mut read_only);
+    drop(read_only);
+
+    // Re-seal a catalog whose canonical UTF8 rows fit a smaller row budget,
+    // while its legal UTF16 SQL BLOB rows exceed that same declared budget.
+    // Both old and new readers must retain the conservative SQL preflight cap.
+    let connection = Connection::open(&file).unwrap();
+    let mut narrow = original.clone();
+    narrow.summary.limits.max_row_json_bytes = largest_canonical_utf8_row;
+    refresh_size(&mut narrow).unwrap();
+    save(&connection, SUMMARY_KEY, &narrow.summary).unwrap();
+    drop(connection);
+    let mut read_only =
+        Connection::open_with_flags(&file, rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY).unwrap();
+    let tx = read_only.transaction().unwrap();
+    assert!(
+        load_catalog(&tx).is_err(),
+        "old materialized reader retains SQL BLOB cap: {encoding}"
+    );
+    let error = verify_raw(&tx)
+        .err()
+        .expect("UTF16 SQL BLOB row cap must remain enforced");
+    assert!(
+        error.to_string().contains("Oversized raw row"),
+        "{encoding}: {error:#}"
+    );
+}
+
+#[test]
+fn stateless_utf16le_disk_catalog_and_read_only_reopen_match_old_serializer_and_preserve_blob_caps()
+{
+    assert_stateless_utf16_disk_catalog_and_read_only_reopen("UTF-16le");
+}
+
+#[test]
+fn stateless_utf16be_disk_catalog_and_read_only_reopen_match_old_serializer_and_preserve_blob_caps()
+{
+    assert_stateless_utf16_disk_catalog_and_read_only_reopen("UTF-16be");
+}

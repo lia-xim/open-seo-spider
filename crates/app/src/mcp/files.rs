@@ -216,6 +216,10 @@ impl FileTools {
             .await
             .context("Filesystem worker result unavailable")?
     }
+    pub(super) fn close_admission(&self) {
+        lock(&self.inner.registry).closing = true;
+        self.inner.permits.close();
+    }
     pub(super) async fn shutdown_and_drain(&self) -> Result<()> {
         let jobs: Vec<_> = {
             let mut registry = lock(&self.inner.registry);

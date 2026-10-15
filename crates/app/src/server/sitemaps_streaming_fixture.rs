@@ -220,6 +220,7 @@ pub(super) fn state_from_result(
         data_dir: Arc::new(dir.0.clone()),
         exports: ExportRegistry::default(),
         finding_reads: Default::default(),
+        lifecycle: Default::default(),
     }
 }
 pub(super) struct Http {

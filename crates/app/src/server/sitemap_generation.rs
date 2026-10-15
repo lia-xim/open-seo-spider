@@ -35,7 +35,10 @@ pub(super) async fn bundle(
         .map_err(|(status, Json(err))| (status, Json(error(F::InvalidSource, err.error))))?;
     // A captured immutable report can predate a running invocation. Neither its
     // pages nor source dates are projected as current freshness/full-site proof.
-    let generated = tokio::task::spawn_blocking(move || generate_sitemap_bundle(&report, &options))
+    let generated = state
+        .lifecycle
+        .blocking
+        .run_blocking(move || generate_sitemap_bundle(&report, &options))
         .await
         .map_err(|err| failure(error(F::ZipFailure, err.to_string())))?
         .map_err(failure)?;

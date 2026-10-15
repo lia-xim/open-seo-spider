@@ -168,6 +168,7 @@ async fn setup(fixture: &Fixture, mode: Mode) -> (OwnedDirectory, AppState, Uuid
         data_dir: Arc::new(dir.0.clone()),
         exports: Default::default(),
         finding_reads: Default::default(),
+        lifecycle: Default::default(),
     };
     drop(crawler);
     fixture.offline.store(true, Ordering::SeqCst);

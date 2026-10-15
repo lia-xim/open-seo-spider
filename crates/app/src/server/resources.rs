@@ -11,13 +11,17 @@ pub(crate) struct CssInspectRequest {
     #[serde(default)]
     pub(crate) limits: open_seo_spider_core::CssInventoryLimits,
 }
-pub(super) async fn inspect_css(Json(input): Json<CssInspectRequest>) -> ApiResult<Json<Value>> {
-    let result = tokio::task::spawn_blocking(move || {
-        open_seo_spider_core::discover_css(&input.source, &input.limits)
-    })
-    .await
-    .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?
-    .map_err(|e| api_error(StatusCode::BAD_REQUEST, e))?;
+pub(super) async fn inspect_css(
+    State(state): State<AppState>,
+    Json(input): Json<CssInspectRequest>,
+) -> ApiResult<Json<Value>> {
+    let result = state
+        .lifecycle
+        .blocking
+        .run_blocking(move || open_seo_spider_core::discover_css(&input.source, &input.limits))
+        .await
+        .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?
+        .map_err(|e| api_error(StatusCode::BAD_REQUEST, e))?;
     Ok(Json(json!(result)))
 }
 
@@ -141,12 +145,15 @@ pub(super) async fn inventory(
         metadata["has_more"] = json!(false);
         return Ok(Json(metadata));
     };
-    let page = tokio::task::spawn_blocking(move || {
-        CrawlStore::open_read_only(path)?.resource_occurrences(query.after_sequence, limit)
-    })
-    .await
-    .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?
-    .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?;
+    let page = state
+        .lifecycle
+        .blocking
+        .run_blocking(move || {
+            CrawlStore::open_read_only(path)?.resource_occurrences(query.after_sequence, limit)
+        })
+        .await
+        .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?
+        .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?;
     if let Some(ledger) = page.ledger.as_ref() {
         validate_binding(&metadata, ledger)?;
         validate_snapshot(&metadata, page.snapshot.as_ref())?;
@@ -186,12 +193,15 @@ pub(super) async fn transports(
         metadata["has_more"] = json!(false);
         return Ok(Json(metadata));
     };
-    let page = tokio::task::spawn_blocking(move || {
-        CrawlStore::open_read_only(path)?.resource_transports(query.after_url.as_deref(), limit)
-    })
-    .await
-    .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?
-    .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?;
+    let page = state
+        .lifecycle
+        .blocking
+        .run_blocking(move || {
+            CrawlStore::open_read_only(path)?.resource_transports(query.after_url.as_deref(), limit)
+        })
+        .await
+        .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?
+        .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?;
     if let Some(ledger) = page.ledger.as_ref() {
         validate_binding(&metadata, ledger)?;
         validate_snapshot(&metadata, page.snapshot.as_ref())?;
@@ -249,39 +259,47 @@ async fn export(state: AppState, id: Uuid, format: Format) -> ApiResult<Response
     };
     let (sender, receiver) = tokio::sync::mpsc::channel(8);
     let (ready, ready_result) = tokio::sync::oneshot::channel();
-    tokio::task::spawn_blocking(move || {
-        let mut ready = Some(ready);
-        let result = (|| {
-            let store = CrawlStore::open_read_only(path)?;
-            // Check availability before starting the stream. The visitor then pins
-            // and validates its own complete read snapshot.
-            anyhow::ensure!(
-                store.resource_ledger_summary()?.is_some(),
-                "Native resource ledger is not available"
-            );
-            let mut writer =
-                std::io::BufWriter::with_capacity(65536, ChannelWriter(sender.clone()));
-            resource_export::write_snapshot(&store, format, &mut writer, |summary, snapshot| {
-                validate_binding(&metadata, summary)
-                    .map_err(|(_, Json(error))| anyhow::anyhow!(error.error))?;
-                validate_snapshot(&metadata, Some(snapshot))
-                    .map_err(|(_, Json(error))| anyhow::anyhow!(error.error))?;
+    state.lifecycle.blocking.reap_completed().await;
+    let ticket = state
+        .lifecycle
+        .blocking
+        .spawn_blocking(move || {
+            let mut ready = Some(ready);
+            let result = (|| {
+                let store = CrawlStore::open_read_only(path)?;
+                // Check availability before starting the stream. The visitor then pins
+                // and validates its own complete read snapshot.
+                anyhow::ensure!(
+                    store.resource_ledger_summary()?.is_some(),
+                    "Native resource ledger is not available"
+                );
+                let mut writer =
+                    std::io::BufWriter::with_capacity(65536, ChannelWriter(sender.clone()));
+                resource_export::write_snapshot(&store, format, &mut writer, |summary, snapshot| {
+                    validate_binding(&metadata, summary)
+                        .map_err(|(_, Json(error))| anyhow::anyhow!(error.error))?;
+                    validate_snapshot(&metadata, Some(snapshot))
+                        .map_err(|(_, Json(error))| anyhow::anyhow!(error.error))?;
+                    if let Some(ready) = ready.take() {
+                        ready
+                            .send(Ok((summary.clone(), snapshot.clone())))
+                            .map_err(|_| anyhow::anyhow!("Resource export request disconnected"))?;
+                    }
+                    Ok(())
+                })
+            })();
+            if let Err(error) = result {
                 if let Some(ready) = ready.take() {
-                    ready
-                        .send(Ok((summary.clone(), snapshot.clone())))
-                        .map_err(|_| anyhow::anyhow!("Resource export request disconnected"))?;
+                    let _ = ready.send(Err(error.to_string()));
+                } else {
+                    let _ = sender.blocking_send(Err(io::Error::other(error.to_string())));
                 }
-                Ok(())
-            })
-        })();
-        if let Err(error) = result {
-            if let Some(ready) = ready.take() {
-                let _ = ready.send(Err(error.to_string()));
-            } else {
-                let _ = sender.blocking_send(Err(io::Error::other(error.to_string())));
             }
-        }
-    });
+        })
+        .map_err(|error| api_error(StatusCode::SERVICE_UNAVAILABLE, error))?;
+    // Eager registration starts the bounded producer now. Its actual handles
+    // remain owned after this ticket drops and after the Response is returned.
+    drop(ticket);
     let (summary, snapshot) = ready_result
         .await
         .map_err(|e| api_error(StatusCode::INTERNAL_SERVER_ERROR, e))?

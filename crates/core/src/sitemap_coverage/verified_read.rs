@@ -357,13 +357,20 @@ impl Write for InventoryHash<'_> {
     }
 }
 
-fn count_rows(
-    raw: &VerifiedRawRead<'_>,
-    out: &mut SitemapCoverage,
-    control: &SitemapReadControl,
-) -> Result<()> {
-    raw.visit_filtered(&SitemapLedgerFilter::default(), |row| {
-        control.checkpoint()?;
+/// Compact row-only projection accumulated during actual raw verification.
+/// No catalog/header DTO can construct a verified raw token. Source inventory,
+/// graph, policy, generation and inherited coverage still run independently.
+pub(crate) struct SourceRowCoverage {
+    projection: SitemapCoverage,
+}
+impl SourceRowCoverage {
+    pub(crate) fn new() -> Self {
+        Self {
+            projection: empty_coverage(),
+        }
+    }
+    pub(crate) fn observe(&mut self, row: &SitemapLedgerRow) {
+        let out = &mut self.projection;
         match row {
             SitemapLedgerRow::Document(document) => {
                 out.counts.observed_documents += 1;
@@ -388,8 +395,50 @@ fn count_rows(
             }
             _ => {}
         }
+    }
+    fn apply(&self, out: &mut SitemapCoverage) -> Result<()> {
+        fn add(target: &mut u64, value: u64) -> Result<()> {
+            *target = target
+                .checked_add(value)
+                .context("Coverage row count overflow")?;
+            Ok(())
+        }
+        add(
+            &mut out.counts.root_declarations,
+            self.projection.counts.root_declarations,
+        )?;
+        add(
+            &mut out.counts.child_declarations,
+            self.projection.counts.child_declarations,
+        )?;
+        add(
+            &mut out.counts.observed_documents,
+            self.projection.counts.observed_documents,
+        )?;
+        add(
+            &mut out.counts.complete_documents,
+            self.projection.counts.complete_documents,
+        )?;
+        add(
+            &mut out.counts.invalid_or_missing_page_locations,
+            self.projection.counts.invalid_or_missing_page_locations,
+        )?;
+        for (reason, count) in &self.projection.reason_counts {
+            add(out.reason_counts.entry(*reason).or_default(), *count)?;
+        }
         Ok(())
-    })
+    }
+}
+fn count_rows(
+    raw: &VerifiedRawRead<'_>,
+    out: &mut SitemapCoverage,
+    control: &SitemapReadControl,
+) -> Result<()> {
+    control.checkpoint()?;
+    raw.source_row_coverage()
+        .context("Current raw proof lacks verified row coverage")?
+        .apply(out)?;
+    control.checkpoint()
 }
 
 fn compare_initial_roots(

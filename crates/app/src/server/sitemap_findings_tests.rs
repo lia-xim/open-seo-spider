@@ -144,6 +144,7 @@ impl Fixture {
             data_dir: Arc::new(dir.0.clone()),
             exports: Default::default(),
             finding_reads: Default::default(),
+            lifecycle: Default::default(),
         };
         drop(crawler);
         // Establish SQLite read-only WAL-index startup before byte invariance.

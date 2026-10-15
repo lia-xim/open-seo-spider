@@ -146,7 +146,7 @@ pub(super) async fn call(bridge: &Bridge, args: Value) -> ToolResult {
         }
         // Parse off the Windows async stack; successful response wrapping and
         // recursive destruction run in complete_response's worker below.
-        let mut value: Value = tokio::task::spawn_blocking(move || serde_json::from_slice(&bytes)).await??;
+        let mut value: Value = bridge.workers.run_blocking(move || serde_json::from_slice(&bytes)).await??;
         if !status.is_success() {
             return Ok(ToolResult::failure("sitemap_findings_api_error", "Local findings API rejected the request", Some(status.as_u16()), Some(value)));
         }
@@ -215,6 +215,7 @@ impl Write for BoundedSize {
     }
 }
 
+#[cfg(test)]
 pub(super) async fn complete_response(id: Value, result: ToolResult) -> Value {
     // The entire response (id, JSON-RPC wrapper, structured data and text) is capped.
     let fallback_id = if valid_rpc_id(&id) {
@@ -223,6 +224,33 @@ pub(super) async fn complete_response(id: Value, result: ToolResult) -> Value {
         Value::Null
     };
     tokio::task::spawn_blocking(move || {
+        if !valid_rpc_id(&id) {
+            return error(Value::Null, -32600, "Finding RPC id must be an integer or at most 1024 UTF-8 bytes");
+        }
+        let ToolResult {value,failed}=result;
+        let mut inner=json!({"content":[{"type":"text","text":if failed { "Local sitemap findings request failed; inspect structuredContent." } else { "Local sitemap findings page; evidence and export descriptor are in structuredContent." }}],"isError":failed});
+        inner.as_object_mut().expect("object").insert("structuredContent".into(),value);
+        let mut response=json!({"jsonrpc":"2.0","id":id});
+        response.as_object_mut().expect("object").insert("result".into(),inner);
+        if serde_json::to_writer(&mut BoundedSize(0), &response).is_err() {
+            return error(response["id"].clone(), -32603, "Finding response exceeds 8 MiB including MCP framing; reduce limit or selector size");
+        }
+        response
+    }).await.unwrap_or_else(|_| error(fallback_id, -32603, "Finding response worker failed"))
+}
+
+pub(super) async fn complete_response_owned(
+    owner: &open_seo_spider_core::TaskOwner,
+    id: Value,
+    result: ToolResult,
+) -> Value {
+    // The entire response (id, JSON-RPC wrapper, structured data and text) is capped.
+    let fallback_id = if valid_rpc_id(&id) {
+        id.clone()
+    } else {
+        Value::Null
+    };
+    owner.run_blocking(move || {
         if !valid_rpc_id(&id) {
             return error(Value::Null, -32600, "Finding RPC id must be an integer or at most 1024 UTF-8 bytes");
         }
