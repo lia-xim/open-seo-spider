@@ -1,0 +1,97 @@
+{
+  "kind": "combined_large_native_outer_v4",
+  "result": "FAIL_OUTER_CHILD",
+  "recorded_at": "2026-10-15T10:50:29.226Z",
+  "gate": "large-source",
+  "source_manifest_sha256": "45a07ef277cf1ffef5ff8d577fe05dc48ee1d84548ada2d8453aaf859a5d26b3",
+  "driver_sha256": "d73947702914983c6b69623f27583c2480e2fe8e70ca23a78ce9c7dabfa55583",
+  "harness": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\large-sitemap-native-preparation-v4\\native-large-sitemaps-v4.mjs",
+    "sha256": "9ac9780dfb9aced8a55d94a391756b2ea1c35062d5c2cd37f5fafb92ee0a829f",
+    "args": [
+      "--release",
+      "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\v4-large-sitemap-release.json",
+      "--release-sha",
+      "786554444bcc221f65e3f3650fd448c1e0d894a9dd50b42b71e89f421906f784",
+      "--preparation-sha",
+      "822ca3c63eaff00a8551e7a336aa98854897a2c288fa53b287135273fac60fa6",
+      "--manifest-sha",
+      "45a07ef277cf1ffef5ff8d577fe05dc48ee1d84548ada2d8453aaf859a5d26b3",
+      "--bindings",
+      "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\native-combined-rebind-v4\\combined-bindings.mjs",
+      "--bindings-sha",
+      "5436fa543bafdab8e22cc80a5a2484b184ed594a91fcb966538baf925f56d2b2",
+      "--suite-proof-sha",
+      "9cabcaaf5b28d47ebf5ff08fc457b0cdffaf3d3c667fc6df0d716521419c2a28",
+      "--build-proof-sha",
+      "cedb0aae13636a22b240c0333b01775a055f57c520f6a788f430bda9bd265df0",
+      "--build-driver-sha",
+      "2066cfb8fac0df49559a22be16058ebeb273ebeed5c7cc11e6236064cd4f2454",
+      "--candidate-binary-sha",
+      "c38f5743685353ab54331e074d2a20ac38543dfc4750c6896157218821b65348",
+      "--out",
+      "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\large-sitemap-native-preparation-v4\\runs\\optimized-v4-acceptance"
+    ]
+  },
+  "node": {
+    "executable": "C:\\Program Files\\nodejs\\node.exe",
+    "version": "24.15.0",
+    "no_preloads": true
+  },
+  "root_ready_guard": {
+    "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/v4-large-root-ready.json",
+    "sha256": "75a298d24fe9ca060d5eb30c599a92fafdfe0a4bef8e1a1cf6745fc2e19fa1f0"
+  },
+  "grant": {
+    "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\v4-large-sitemap-release.json",
+    "sha256": "786554444bcc221f65e3f3650fd448c1e0d894a9dd50b42b71e89f421906f784"
+  },
+  "binary": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-optimized-build-v4\\candidate\\open-seo-spider.exe",
+    "sha256": "c38f5743685353ab54331e074d2a20ac38543dfc4750c6896157218821b65348",
+    "bytes": 38117376
+  },
+  "pid": 24800,
+  "spawn_event": true,
+  "actual_exit_event": true,
+  "actual_close_event": true,
+  "spawn_error": null,
+  "exit": {
+    "code": 1,
+    "signal": null
+  },
+  "close_exit": {
+    "code": 1,
+    "signal": null
+  },
+  "stdout": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v4\\large-source\\stdout.log",
+    "end": true,
+    "closed": true,
+    "observed_bytes": 328,
+    "error": null,
+    "write_error": null,
+    "fd_closed": true,
+    "sha256": "ab60a544564af7e908dddd112238f02c4743a2f092d672dbb4b47c0d972e0b04",
+    "bytes": 328,
+    "drained": true
+  },
+  "stderr": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v4\\large-source\\stderr.log",
+    "end": true,
+    "closed": true,
+    "observed_bytes": 0,
+    "error": null,
+    "write_error": null,
+    "fd_closed": true,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "drained": true
+  },
+  "signals": [],
+  "lock_released": true,
+  "failures": [
+    "Owned harness did not spawn, exit and actually close with exit 0/signal null"
+  ],
+  "qualification": "Only the direct harness process and captured pipes are observed here. Inner proofs independently determine acceptance, descendant cleanup and scope. No outer timeout, kill, retry, installation or source mutation."
+}

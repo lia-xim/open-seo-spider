@@ -1,3 +1,11 @@
+## Aktuell: Source5 gemeinsam prüfen (15.10.2026)
+
+Source5 ist als privater Commit `95cc8ee` mit 317 eingefrorenen Eingaben veröffentlicht. Der tatsächliche vollständige Lauf scheitert mit sieben Compilerfehlern in Testhilfen; noch kein Test ist ausgeführt. Die Reparatur muss anschließend mindestens 1256 Tests, 474 Pflichtnamen und vier echte Renderer-Fälle bestehen. Optimierter Build, Native-Abnahmen und Installation stehen für diesen Stand noch aus.
+
+Der große V4-Lauf ist nach dem tatsächlichen 45-Minuten-Limit fehlgeschlagen. Alle 13 Initialfälle und der vollständige 50.000-Zeilen-Export bestehen; die vollständige Wiederöffnungsprüfung fehlt. Das unveränderte Ergebnis ist unter `verification/combined-native-v4-large-failed-20261015` archiviert. Die neue Leseoptimierung muss denselben Test erneut bestehen.
+
+Nächste Schritte: Original-Sitemap-Dateien über API und Oberfläche zugänglich machen, sauberes Prozessende nativ prüfen, Response-/Connection-Besitz für nicht lesende Clients vervollständigen und danach die übrige Featureliste weiter abarbeiten. Vollständige Herstellerparität ist nicht nachgewiesen.
+
 # Open SEO Spider – Roadmap zur vollständigen Funktionstiefe
 
 Diese Roadmap ordnet die nächsten Arbeitsschritte. Der vollständige laufende Status aller 144 Fähigkeiten steht in [FEATURE_TODO.md](FEATURE_TODO.md); die exakten Abnahmen und Belege stehen in [feature-parity.json](feature-parity.json).

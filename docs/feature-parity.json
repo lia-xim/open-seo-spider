@@ -6304,11 +6304,42 @@
   "last_verified_at": "2026-10-15T08:41:21.015Z",
   "current_work": [
     {
+      "id": "combined-source-v5-20261015",
+      "priority": 0,
+      "status": "ACTUAL_CORE_TEST_COMPILE_FAILURE_REPAIR_IN_PROGRESS",
+      "title_de": "Originaldateien, Aufgabenbesitz und effizientere Sitemap-Leser gemeinsam prüfen",
+      "summary_de": "Source5 ist privat gespeichert und eingefroren. Der tatsächliche vollständige Lauf endet nach 65 Sekunden Compilerarbeit mit sieben Fehlern in Testhilfen; kein Test wurde ausgeführt. Eigene Renderer-/Fixture-Server sind geschlossen und alle Quellen unverändert. Die eng begrenzte Reparatur erhält sämtliche bisherigen Assertions und erfordert einen neuen vollständigen Lauf.",
+      "completed_acceptance_de": [
+        "45 eigene geänderte/neue Dateien exakt übernommen, privat committed und gepusht; alle 304 bisherigen Eingabepfade und 434 bisherigen Pflichtnamen erhalten.",
+        "40 neue Windows-Testfunktionen aus den tatsächlichen endgültigen Vorschlägen abgeleitet.",
+        "Tatsächlichen fehlgeschlagenen Compilerlauf einschließlich sieben konkreter Fehler, Exit101, geschlossenen eigenen Servern und finalen Quellenprüfungen unverändert archiviert."
+      ],
+      "pending_acceptance_de": [
+        "Tatsächliche vollständige Rust-/Renderer-/Format-/Clippy-Suite bestehen.",
+        "Danach optimierten Kandidaten bauen und echte Native-/EOF-/Großquellenprüfungen auf genau diesen Kandidaten ausführen.",
+        "Öffentliche Archiv-API und Oberfläche vervollständigen; Installation, weitere Funktionslücken und vollständige Herstellerparität bleiben offen."
+      ],
+      "documentation": [
+        "docs/verification/combined-source-v5-compile-failed-20261015/index.json",
+        "docs/verification/combined-native-v4-large-failed-20261015/index.json",
+        "docs/FEATURE_TODO.md"
+      ],
+      "gates": {
+        "source_review": "PASS_BOUNDED_SOURCE_ONLY",
+        "full_workspace": "FAIL_CORE_TEST_COMPILE_101_ZERO_TESTS",
+        "optimized_candidate": "NOT_RUN_AFTER_COMPILE_FAILURE",
+        "native": "NOT_RUN_ON_SOURCE5",
+        "installation": "NOT_RUN_INSTALLED_AB1_UNCHANGED",
+        "manufacturer_parity": "NOT_PROVEN"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
       "id": "combined-source-v4-20261015",
       "priority": 0,
-      "status": "SIX_NATIVE_SCOPES_PASS_LARGE_SOURCE_RUNNING_INSTALLATION_OPEN",
+      "status": "SIX_NATIVE_SCOPES_PASS_LARGE_SOURCE_FAILED_DEADLINE_NOT_INSTALLED",
       "title_de": "SQL-Skalierung und explizite Sitemap-Kapazität gemeinsam prüfen",
-      "summary_de": "V4 besteht1216 Rust-Tests, Format/Clippy, den optimierten Build und alle sechs bisherigen Laufzeitbereiche. Der korrigierte echte Browserlauf besteht26 Gruppen einschließlich der drei UI-Kapazitätsproben; der frühere Testfehler bleibt dokumentiert. Der große Lauf mit13 echten Sitemap-Quellenfällen ist gestartet. Installation und weitere Funktionslücken bleiben offen.",
+      "summary_de": "V4 besteht 1216 Rust-Tests, Format/Clippy, den optimierten Build und sechs begrenzte Laufzeitbereiche. Alle 13 großen Quellenfälle bestehen initial; 50.000 URLs wurden über 250 Seiten gelesen und vollständig exportiert. Die vollständige Prüfung nach Neustart scheitert am tatsächlichen 45-Minuten-Budget. Diese Fassung ist nicht installiert.",
       "completed_acceptance_de": [
         "Beide konkreten Quellvorschläge unabhängig geprüft; sechs Rust-Dateien durch cargo fmt formatiert, JavaScript-Syntaxprüfung bestanden.",
         "Alle13 zusätzlichen Testfunktionen bestehen im tatsächlichen vollständigen1216-Test-Lauf, darunter50.000 Parser-/SQLite-Mitgliedschaften, Wiederöffnung, Rollback und Konfigurationskontrollen.",
@@ -6317,14 +6348,16 @@
         "Optimierter tatsächlicher V4-Build bestanden; Candidate c38f5743,38.117.376 Bytes, alle drei Cargo-/Compiler-Abschlüsse sowie Quellen-/Suite-Endprüfungen exakt.",
         "Native API/CLI/SDK,175 Datei-SDK-Operationsprüfungen, zwei Root-Junction-Ablehnungen und13 ausdrücklich gemockte UI-Gruppen bestehen.",
         "Alle zwölf physischen Größenfälle bestehen: CSV exakt67.108.864 Bytes und JSON exakt8.388.608 Bytes vollständig; jeweils+1 atomar mit413 abgelehnt.14 eigene Apps und Fixture tatsächlich geschlossen.",
-        "Echter Browser-R2 besteht26 Gruppen: alle25 bisherigen sowie Standardkapazität, ausdrücklich128MiB und erneutes Deaktivieren. Request-Schalter und gespeichertes renderer:null getrennt geprüft; Quellstand und Kandidat unverändert."
+        "Echter Browser-R2 besteht26 Gruppen: alle25 bisherigen sowie Standardkapazität, ausdrücklich128MiB und erneutes Deaktivieren. Request-Schalter und gespeichertes renderer:null getrennt geprüft; Quellstand und Kandidat unverändert.",
+        "Großer echter Quellenlauf: alle 13 Initialfälle, 50.000 Entry-/Loc-Zeilen, 59.613.930 kanonische Katalogbytes, 250 Ergebnisseiten und vollständiges 57.574.930-Byte-CSV tatsächlich geprüft."
       ],
       "pending_acceptance_de": [
-        "Alle13 großen echten Quellenfälle einschließlich vollständiger50.000 dauerhafter Mitgliedschaften,50MiB, Wiederöffnung und vollständigem Export tatsächlich abnehmen.",
+        "Nach der Leseoptimierung dieselben 13 Fälle einschließlich aller Ergebnisseiten und vollständigem Export nach Neustart erfolgreich wiederholen; initialer Erfolg ersetzt diese Abnahme nicht.",
         "Dauerhafte Original-Sitemap-Dateien BODY01–04 und HTTP-/MCP-Lifecycle-Ownership werden als getrennte Quellvorschläge umgesetzt; weitere öffentliche Schnittstellen und Abnahmen bleiben offen.",
         "Windows-Installation aus verifiziertem Backup und Datenkopien separat prüfen; Linux/Container und vollständige Herstellerparität sind weiterhin nicht bewiesen."
       ],
       "documentation": [
+        "docs/verification/combined-native-v4-large-failed-20261015/index.json",
         "docs/verification/combined-native-v4-browser-r2-20261015/index.json",
         "docs/verification/combined-native-v4-checkpoint-1-20261015/index.json",
         "docs/verification/combined-workspace-v4-20261015/index.json",
@@ -6343,7 +6376,7 @@
         "manufacturer_parity": "NOT_PROVEN",
         "required_named_cases": "PASS_434",
         "actual_renderer": "PASS_4",
-        "large_source_native": "RUNNING_13_GENUINE_SOURCE_CASES_ON_V4",
+        "large_source_native": "FAIL_ACTUAL_45_MINUTE_DEADLINE_REOPEN_PAGING",
         "native_api_cli_sdk": "PASS_SMALL_DIRECTED_FIXTURE",
         "file_sdk": "PASS_175_OPERATION_ASSERTIONS",
         "windows_root_junction": "PASS_2_NATURAL_REJECTIONS",
@@ -6355,16 +6388,17 @@
     {
       "id": "sitemap-original-body-foundation-20261015",
       "priority": 1,
-      "status": "SOURCE_PROPOSAL_V2_REVIEWED_NOT_COMPILED_NOT_PROMOTED",
+      "status": "MERGED_SOURCE5_TEST_COMPILE_REPAIR_PENDING",
       "title_de": "Ursprüngliche Sitemap-Dateien dauerhaft speichern",
-      "summary_de": "Die opt-in Grundlage für Originalbytes nach HTTP-Decoding und separat dekodiertes XML ist als eigener Quellvorschlag umgesetzt und zweimal geprüft. Zwei gefundene Fehler sind korrigiert. Keine Format-, Compiler-, Laufzeit- oder Installationsabnahme; der aktuelle V4-Kandidat enthält diese Änderung noch nicht.",
+      "summary_de": "Die optionale Core-/Store-Grundlage ist in Source5 zusammengeführt und formatiert. Originalbytes, getrennte Budgets, unveränderliche Dateien und Wiederöffnungsprüfungen sind implementiert; 16 neue Windows-Tests sind wegen der Compilerfehler noch nicht ausgeführt. Archivierung unterstützt ausdrücklich UTF-8-SQLite-Speicherung. API, Oberfläche und Download werden anschließend ergänzt.",
       "completed_acceptance_de": [
         "BODY01–04: getrennte Konfiguration und Budgets, eigene unveränderliche Dateien, SQLite-Zuordnung zur tatsächlich gespeicherten Quellenmessung und Wiederöffnungsprüfung als Quellcode vorbereitet.",
         "Beide konkreten Erstbefunde korrigiert: eindeutiger Archivpfad je Datenbankdateiname und SQL-Feldgrenzen vor Allokation. V2-Review 702d4337 ohne weitere Befunde im begrenzten Umfang.",
-        "14 neue Testfunktionen geschrieben, davon13 für Windows; noch nicht ausgeführt."
+        "14 neue Testfunktionen geschrieben, davon13 für Windows; noch nicht ausgeführt.",
+        "Finale V3 mit früher ausdrücklicher UTF-16-Ablehnung und drei weiteren Tests unabhängig geprüft; insgesamt 17 verfasste Tests, davon 16 unter Windows. 35 tatsächliche Formatänderungen separat geprüft."
       ],
       "pending_acceptance_de": [
-        "Quellvorschlag gemeinsam prüfen, formatieren, kompilieren und die tatsächlichen Positiv-/Rollback-/Quota-/Corruption-Fälle ausführen.",
+        "Die vollständige Source5-Suite sowie echte Dateierhalt-, Wiederöffnungs-, Quota- und Korruptionsfälle bestehen.",
         "BODY05–08: API-/UI-Konfiguration, verifizierten Originaldownload und Browser-Wiederöffnung umsetzen und tatsächlich gegen die Bytequellen prüfen.",
         "MCP-Fenster, eigene Kopien für abgeleitete Crawls, portable Bundles, Wiederherstellung und kontrollierte Bereinigung bleiben getrennte offene Schritte."
       ],
@@ -6373,8 +6407,8 @@
         "docs/parity/sitemap-source-archive-tasks.json"
       ],
       "gates": {
-        "source_review": "PASS_BOUNDED_SOURCE_ONLY_V2",
-        "rust_tests": "NOT_RUN",
+        "source_review": "PASS_BOUNDED_SOURCE_ONLY_V3_AND_FORMAT_MERGE",
+        "rust_tests": "NOT_EXECUTED_SOURCE5_TEST_COMPILE_FAILED",
         "public_api_ui": "NOT_IMPLEMENTED",
         "native_body_recovery": "NOT_RUN",
         "installation": "NOT_RUN"
@@ -6384,24 +6418,26 @@
     {
       "id": "http-mcp-lifecycle-ownership-20261015",
       "priority": 2,
-      "status": "SOURCE_IMPLEMENTATION_IN_PROGRESS_NOT_COMPILED_NOT_PROMOTED",
+      "status": "MERGED_SOURCE5_TEST_COMPILE_REPAIR_PENDING",
       "title_de": "Laufende HTTP- und MCP-Arbeiten sauber beenden",
-      "summary_de": "Gemeinsame Arbeitszulassung und gehaltene Worker-/Supervisor-Aufgaben sind als neuer Quellcode vorbereitet. Ein lokaler EOF-Schalter soll ein tatsächlich beobachtbares sauberes Prozessende ermöglichen. Die bestehende SIGTERM-Bereinigung beweist dieses Verhalten bislang nicht.",
+      "summary_de": "Gehaltene Request-, Blocking-, Crawl- und PDF-Aufgaben sowie frühes Schließen der Arbeitszulassung sind in Source5 umgesetzt. Ein optionaler lokaler STDIN-EOF-Schalter ermöglicht einen eigenen natürlichen Prozessendetest. 16 neue Tests sind noch nicht ausgeführt; native EOF-Abnahme, langsam lesende HTTP-Clients und vollständige MCP-Sessions bleiben offen.",
       "completed_acceptance_de": [
         "Tatsächliche Starts von Request-, Blocking-, Crawl- und PDF-Arbeiten im vorhandenen Code erfasst; konkrete Shutdown-Reihenfolge dokumentiert.",
-        "Regressionen für getrennten Client, abgebrochenen Drain-Waiter, Start vor Jobinsert, bestehendes Cancel während PDF-Arbeit und Signalfehler nach Persistenz geschrieben; noch nicht ausgeführt."
+        "Regressionen für getrennten Client, abgebrochenen Drain-Waiter, Start vor Jobinsert, bestehendes Cancel während PDF-Arbeit und Signalfehler nach Persistenz geschrieben; noch nicht ausgeführt.",
+        "Zwei konkrete Erstbefunde korrigiert und V2 unabhängig geprüft: Export-Worker starten tatsächlich; Core-Joinfehler bleiben als Lifecycle-Fehler erkennbar."
       ],
       "pending_acceptance_de": [
-        "Vollständigen Quellvorschlag unabhängig prüfen und mit den anderen Änderungen zusammenführen.",
+        "Vollständige Source5-Suite und danach den tatsächlichen nativen EOF-Test mit aktiver Arbeit und dauerhaftem Checkpoint bestehen.",
         "Tatsächliche Rust-/HTTP-Tests und einen eigenen nativen EOF-Lauf mit gestarteter Arbeit, sauberem Exit0, vollständigen Pipes und dauerhaftem Checkpoint ausführen.",
-        "Stateful MCP-Sessions, requests/cancelled und die Lebensdauer externer Rendererprozesse bleiben zusätzliche offene Verträge."
+        "Stateful MCP-Sessions, requests/cancelled und die Lebensdauer externer Rendererprozesse bleiben zusätzliche offene Verträge.",
+        "Response-Body-/Connection-Besitz und Transportabbruch für nicht lesende Clients separat implementieren und mit echtem TCP prüfen; Source5 beweist keine begrenzte Shutdown-Latenz hierfür."
       ],
       "documentation": [
         "docs/parity/http-lifecycle-plan.md"
       ],
       "gates": {
-        "source_review": "IN_PROGRESS",
-        "rust_tests": "NOT_RUN",
+        "source_review": "PASS_BOUNDED_SOURCE_ONLY_V2_AND_FORMAT_MERGE",
+        "rust_tests": "NOT_EXECUTED_SOURCE5_TEST_COMPILE_FAILED",
         "native_eof_inflight": "NOT_RUN",
         "installation": "NOT_RUN"
       },
@@ -6410,15 +6446,15 @@
     {
       "id": "sitemap-location-pagination-work-20261015",
       "priority": 3,
-      "status": "SOURCE_ANALYSIS_COMPLETE_STATELESS_OPTIMIZATION_IN_PROGRESS",
+      "status": "MERGED_SOURCE5_TEST_COMPILE_REPAIR_PENDING",
       "title_de": "Große Sitemap-Kataloge effizient durchblättern",
-      "summary_de": "Der aktuelle Leser wiederholt vollständige Integritäts- und Kontextprüfungen für jede Ergebnisseite. Die erste Optimierung erhält die bestehenden Cursor und Prüfungen und soll überflüssige SQL-Einzelabfragen, Dekodierung und Serialisierung entfernen. Laufzeitgewinn und Speicherbedarf sind noch nicht gemessen.",
+      "summary_de": "Source5 entfernt SQL-Einzelabfragen pro Eintrag und erneutes vollständiges Serialisieren, während Integritäts-, Quellen-, Reihenfolge-, Cursor- und Größenprüfungen erhalten bleiben. Acht neue Tests prüfen die exakte bisherige Serialisierung und gültige UTF-16-Ledger. Der tatsächliche Laufzeitgewinn und die vollständige 50.000-Zeilen-Wiederöffnung sind noch offen.",
       "completed_acceptance_de": [
         "Konkrete Codepfade und die wiederholten vollständigen Durchläufe anhand des eingefrorenen V4-Quellstands bestätigt.",
         "Festgehaltene Sitzungen als mögliche spätere Architektur dokumentiert; Dateiidentität und Abbruch-/Shutdown-Verhalten bleiben dafür ausdrücklich offene Voraussetzungen."
       ],
       "pending_acceptance_de": [
-        "Den ersten zustandslosen Slice implementieren: Relation-, Hash-, Reihenfolge-, Tail-, Budget-, Quell- und Reportprüfungen vollständig beibehalten.",
+        "Vollständige Source5-Suite einschließlich aller bisherigen und acht neuen Ledger-/Coverage-Orakel bestehen.",
         "Exakte kanonische Bytezählung gegen den unveränderten Serializer und alle bisherigen Cursor-/Mutation-/Corruption-Orakel prüfen.",
         "Echte50.000 Zeilen vollständig paginieren, exportieren und nach Neustart prüfen; konkrete Arbeitszähler, Zeit und Speicher getrennt messen."
       ],
@@ -6428,8 +6464,11 @@
       "gates": {
         "source_analysis": "COMPLETE_BOUNDED_SOURCE_ONLY",
         "implementation": "IN_PROGRESS",
-        "rust_tests": "NOT_RUN",
-        "native_large_sources": "NOT_RUN_ON_NEW_SOURCE"
+        "rust_tests": "NOT_EXECUTED_SOURCE5_TEST_COMPILE_FAILED",
+        "native_large_sources": "NOT_RUN_ON_NEW_SOURCE",
+        "source_review": "PASS_BOUNDED_SOURCE_ONLY_V2_AND_FORMAT_MERGE",
+        "actual_50000_reopen": "NOT_RUN_ON_SOURCE5",
+        "performance": "NOT_MEASURED"
       },
       "reference_parity": "NOT_PROVEN"
     },

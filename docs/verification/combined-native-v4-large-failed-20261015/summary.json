@@ -1,0 +1,494 @@
+{
+  "kind": "v4_large_native_actual_failure_summary",
+  "result": "FAIL_PARTIAL_POSITIVES_NOT_FULL_ACCEPTANCE",
+  "inner_proof": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\large-sitemap-native-preparation-v4\\runs\\optimized-v4-acceptance\\proof.json",
+    "sha256": "79c4a8c005a5c7dce427b5bf81980b06e4e93d0d66696b657e59b2687a40d7ef",
+    "result": "FAIL_REQUIRED_LARGE_SOURCE_ACCEPTANCE"
+  },
+  "outer_proof": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v4\\large-source\\proof.json",
+    "sha256": "8e90d1bc1519d73bfb50e3a5d8fd7d1a2563ac2538e14ba5324e5f2f37744c7d",
+    "result": "FAIL_OUTER_CHILD"
+  },
+  "candidate": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-optimized-build-v4\\candidate\\open-seo-spider.exe",
+    "bytes": 38117376,
+    "sha256": "c38f5743685353ab54331e074d2a20ac38543dfc4750c6896157218821b65348"
+  },
+  "source_manifest_sha256": "45a07ef277cf1ffef5ff8d577fe05dc48ee1d84548ada2d8453aaf859a5d26b3",
+  "actual_cases": 13,
+  "failures": [
+    {
+      "phase": "02-count-50000-required-positive reopen",
+      "message": "Harness 45-minute observation budget exceeded",
+      "actual_stack_retained_in_inner_proof": true
+    },
+    {
+      "phase": "03-count-50001-exceeded reopen",
+      "message": "Harness 45-minute observation budget exceeded",
+      "actual_stack_retained_in_inner_proof": true
+    },
+    {
+      "phase": "04-bytes-plain-exact reopen",
+      "message": "Harness 45-minute observation budget exceeded",
+      "actual_stack_retained_in_inner_proof": true
+    },
+    {
+      "phase": "05-bytes-plain-plus-one reopen",
+      "message": "Harness 45-minute observation budget exceeded",
+      "actual_stack_retained_in_inner_proof": true
+    },
+    {
+      "phase": "06-bytes-file-gzip-exact reopen",
+      "message": "Harness 45-minute observation budget exceeded",
+      "actual_stack_retained_in_inner_proof": true
+    },
+    {
+      "phase": "07-bytes-file-gzip-plus-one reopen",
+      "message": "Harness 45-minute observation budget exceeded",
+      "actual_stack_retained_in_inner_proof": true
+    },
+    {
+      "phase": "08-bytes-http-gzip-exact reopen",
+      "message": "Harness 45-minute observation budget exceeded",
+      "actual_stack_retained_in_inner_proof": true
+    },
+    {
+      "phase": "09-bytes-http-gzip-plus-one reopen",
+      "message": "Harness 45-minute observation budget exceeded",
+      "actual_stack_retained_in_inner_proof": true
+    },
+    {
+      "phase": "10-legacy-cap-unknown reopen",
+      "message": "Harness 45-minute observation budget exceeded",
+      "actual_stack_retained_in_inner_proof": true
+    },
+    {
+      "phase": "11-file-gzip-crc-failed-unknown reopen",
+      "message": "Harness 45-minute observation budget exceeded",
+      "actual_stack_retained_in_inner_proof": true
+    },
+    {
+      "phase": "12-empty-known-zero reopen",
+      "message": "Harness 45-minute observation budget exceeded",
+      "actual_stack_retained_in_inner_proof": true
+    },
+    {
+      "phase": "13-http503-unknown reopen",
+      "message": "Harness 45-minute observation budget exceeded",
+      "actual_stack_retained_in_inner_proof": true
+    }
+  ],
+  "positive_50000": {
+    "label": "02-count-50000-required-positive",
+    "terminal": "completed",
+    "entries": 50000,
+    "locations": 50000,
+    "actual_canonical_catalog_bytes": 59613930,
+    "initial_entry_verdict": "not_matched",
+    "initial_byte_verdict": "not_matched",
+    "initial_paging": {
+      "pages": 250,
+      "total": 50000,
+      "last": "http://127.0.0.1:64041/p/49999",
+      "normal_eof": true,
+      "tail_beyond_200": true,
+      "coverage": "complete",
+      "csv": {
+        "kind": "location",
+        "bytes": 57574930,
+        "sha256": "b756f77d424069315bd127096e16cfb8d8a5c295e46346e2f3a7da276a1aa3b7",
+        "rows": 50000
+      },
+      "multiset_sha256": "6c9d0b7e81b4c529a5fabfa0670383444e849e5fdd58942d6a90957fbba14c12"
+    },
+    "reopened_both_findings_complete": true,
+    "reopened_paging_complete": false,
+    "reopen_case_completed": false
+  },
+  "cases": [
+    {
+      "label": "01-count-49999",
+      "terminal": "completed",
+      "entries": 49999,
+      "locations": 49999,
+      "actual_canonical_catalog_bytes": 59612571,
+      "initial_entry_verdict": "not_matched",
+      "initial_byte_verdict": "not_matched",
+      "initial_paging": null,
+      "reopened_both_findings_complete": true,
+      "reopened_paging_complete": false,
+      "reopen_case_completed": true
+    },
+    {
+      "label": "02-count-50000-required-positive",
+      "terminal": "completed",
+      "entries": 50000,
+      "locations": 50000,
+      "actual_canonical_catalog_bytes": 59613930,
+      "initial_entry_verdict": "not_matched",
+      "initial_byte_verdict": "not_matched",
+      "initial_paging": {
+        "pages": 250,
+        "total": 50000,
+        "last": "http://127.0.0.1:64041/p/49999",
+        "normal_eof": true,
+        "tail_beyond_200": true,
+        "coverage": "complete",
+        "csv": {
+          "kind": "location",
+          "bytes": 57574930,
+          "sha256": "b756f77d424069315bd127096e16cfb8d8a5c295e46346e2f3a7da276a1aa3b7",
+          "rows": 50000
+        },
+        "multiset_sha256": "6c9d0b7e81b4c529a5fabfa0670383444e849e5fdd58942d6a90957fbba14c12"
+      },
+      "reopened_both_findings_complete": true,
+      "reopened_paging_complete": false,
+      "reopen_case_completed": false
+    },
+    {
+      "label": "03-count-50001-exceeded",
+      "terminal": "completed",
+      "entries": 50000,
+      "locations": 50000,
+      "actual_canonical_catalog_bytes": 59813978,
+      "initial_entry_verdict": "match",
+      "initial_byte_verdict": "not_matched",
+      "initial_paging": null,
+      "reopened_both_findings_complete": false,
+      "reopened_paging_complete": false,
+      "reopen_case_completed": false
+    },
+    {
+      "label": "04-bytes-plain-exact",
+      "terminal": "completed",
+      "entries": 257,
+      "locations": 257,
+      "actual_canonical_catalog_bytes": 307681,
+      "initial_entry_verdict": "not_matched",
+      "initial_byte_verdict": "not_matched",
+      "initial_paging": {
+        "pages": 2,
+        "total": 257,
+        "last": "http://127.0.0.1:64041/p/00256",
+        "normal_eof": true,
+        "tail_beyond_200": true,
+        "coverage": "complete",
+        "csv": {
+          "kind": "location",
+          "bytes": 294098,
+          "sha256": "68db7df3e5d222b53de53ae2a3857d3be071713b9f8d2d12f5b70897cea89c75",
+          "rows": 257
+        },
+        "multiset_sha256": "59b582814f8d1f6a16e75a72ddcf191d1cd1ce7729a35be91ef0b720a4cb57af"
+      },
+      "reopened_both_findings_complete": false,
+      "reopened_paging_complete": false,
+      "reopen_case_completed": false
+    },
+    {
+      "label": "05-bytes-plain-plus-one",
+      "terminal": "completed",
+      "entries": 257,
+      "locations": 257,
+      "actual_canonical_catalog_bytes": 307708,
+      "initial_entry_verdict": "not_matched",
+      "initial_byte_verdict": "match",
+      "initial_paging": {
+        "pages": 2,
+        "total": 257,
+        "last": "http://127.0.0.1:64041/p/00256",
+        "normal_eof": true,
+        "tail_beyond_200": true,
+        "coverage": "complete",
+        "csv": {
+          "kind": "location",
+          "bytes": 294098,
+          "sha256": "26cb70f8584936f7fb9891ab80baae9254edd26ddef5bed66e651a88438240d1",
+          "rows": 257
+        },
+        "multiset_sha256": "59b582814f8d1f6a16e75a72ddcf191d1cd1ce7729a35be91ef0b720a4cb57af"
+      },
+      "reopened_both_findings_complete": false,
+      "reopened_paging_complete": false,
+      "reopen_case_completed": false
+    },
+    {
+      "label": "06-bytes-file-gzip-exact",
+      "terminal": "completed",
+      "entries": 257,
+      "locations": 257,
+      "actual_canonical_catalog_bytes": 307748,
+      "initial_entry_verdict": "not_matched",
+      "initial_byte_verdict": "not_matched",
+      "initial_paging": {
+        "pages": 2,
+        "total": 257,
+        "last": "http://127.0.0.1:64041/p/00256",
+        "normal_eof": true,
+        "tail_beyond_200": true,
+        "coverage": "complete",
+        "csv": {
+          "kind": "location",
+          "bytes": 294098,
+          "sha256": "6c8befb0e982dbde305ccbcc73d34157dc1b0a8b2cd84a224eda6cf596707fa0",
+          "rows": 257
+        },
+        "multiset_sha256": "59b582814f8d1f6a16e75a72ddcf191d1cd1ce7729a35be91ef0b720a4cb57af"
+      },
+      "reopened_both_findings_complete": false,
+      "reopened_paging_complete": false,
+      "reopen_case_completed": false
+    },
+    {
+      "label": "07-bytes-file-gzip-plus-one",
+      "terminal": "completed",
+      "entries": 257,
+      "locations": 257,
+      "actual_canonical_catalog_bytes": 307775,
+      "initial_entry_verdict": "not_matched",
+      "initial_byte_verdict": "match",
+      "initial_paging": {
+        "pages": 2,
+        "total": 257,
+        "last": "http://127.0.0.1:64041/p/00256",
+        "normal_eof": true,
+        "tail_beyond_200": true,
+        "coverage": "complete",
+        "csv": {
+          "kind": "location",
+          "bytes": 294098,
+          "sha256": "1ae154606e50e5189698431e0816c8860c58da4e3498f083cec56a737efa5b91",
+          "rows": 257
+        },
+        "multiset_sha256": "59b582814f8d1f6a16e75a72ddcf191d1cd1ce7729a35be91ef0b720a4cb57af"
+      },
+      "reopened_both_findings_complete": false,
+      "reopened_paging_complete": false,
+      "reopen_case_completed": false
+    },
+    {
+      "label": "08-bytes-http-gzip-exact",
+      "terminal": "completed",
+      "entries": 257,
+      "locations": 257,
+      "actual_canonical_catalog_bytes": 307717,
+      "initial_entry_verdict": "not_matched",
+      "initial_byte_verdict": "not_matched",
+      "initial_paging": {
+        "pages": 2,
+        "total": 257,
+        "last": "http://127.0.0.1:64041/p/00256",
+        "normal_eof": true,
+        "tail_beyond_200": true,
+        "coverage": "complete",
+        "csv": {
+          "kind": "location",
+          "bytes": 294098,
+          "sha256": "2c3b407d820539fcb99a9cc8d5039bdf79579fcabc0f757c0fbb2324386801b2",
+          "rows": 257
+        },
+        "multiset_sha256": "59b582814f8d1f6a16e75a72ddcf191d1cd1ce7729a35be91ef0b720a4cb57af"
+      },
+      "reopened_both_findings_complete": false,
+      "reopened_paging_complete": false,
+      "reopen_case_completed": false
+    },
+    {
+      "label": "09-bytes-http-gzip-plus-one",
+      "terminal": "completed",
+      "entries": 257,
+      "locations": 257,
+      "actual_canonical_catalog_bytes": 307744,
+      "initial_entry_verdict": "not_matched",
+      "initial_byte_verdict": "match",
+      "initial_paging": {
+        "pages": 2,
+        "total": 257,
+        "last": "http://127.0.0.1:64041/p/00256",
+        "normal_eof": true,
+        "tail_beyond_200": true,
+        "coverage": "complete",
+        "csv": {
+          "kind": "location",
+          "bytes": 294098,
+          "sha256": "816e892b72855ff6f9a347b2a37282291adc2ec40e868c8f8ca5e2a7ae32accd",
+          "rows": 257
+        },
+        "multiset_sha256": "59b582814f8d1f6a16e75a72ddcf191d1cd1ce7729a35be91ef0b720a4cb57af"
+      },
+      "reopened_both_findings_complete": false,
+      "reopened_paging_complete": false,
+      "reopen_case_completed": false
+    },
+    {
+      "label": "10-legacy-cap-unknown",
+      "terminal": "completed",
+      "entries": 0,
+      "locations": 0,
+      "actual_canonical_catalog_bytes": 2249,
+      "initial_entry_verdict": "unknown",
+      "initial_byte_verdict": "unknown",
+      "initial_paging": {
+        "pages": 1,
+        "total": 0,
+        "last": null,
+        "normal_eof": true,
+        "tail_beyond_200": false,
+        "coverage": "unknown",
+        "csv": {
+          "kind": "location",
+          "bytes": 157,
+          "sha256": "3cddedc45b542235a9f1b9357214dbb1879774ff7167491d04369d69590e535c",
+          "rows": 0
+        },
+        "multiset_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reopened_both_findings_complete": false,
+      "reopened_paging_complete": false,
+      "reopen_case_completed": false
+    },
+    {
+      "label": "11-file-gzip-crc-failed-unknown",
+      "terminal": "completed",
+      "entries": 0,
+      "locations": 0,
+      "actual_canonical_catalog_bytes": 2448,
+      "initial_entry_verdict": "unknown",
+      "initial_byte_verdict": "unknown",
+      "initial_paging": {
+        "pages": 1,
+        "total": 0,
+        "last": null,
+        "normal_eof": true,
+        "tail_beyond_200": false,
+        "coverage": "unknown",
+        "csv": {
+          "kind": "location",
+          "bytes": 157,
+          "sha256": "3cddedc45b542235a9f1b9357214dbb1879774ff7167491d04369d69590e535c",
+          "rows": 0
+        },
+        "multiset_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reopened_both_findings_complete": false,
+      "reopened_paging_complete": false,
+      "reopen_case_completed": false
+    },
+    {
+      "label": "12-empty-known-zero",
+      "terminal": "completed",
+      "entries": 0,
+      "locations": 0,
+      "actual_canonical_catalog_bytes": 3107,
+      "initial_entry_verdict": "not_matched",
+      "initial_byte_verdict": "not_matched",
+      "initial_paging": {
+        "pages": 1,
+        "total": 0,
+        "last": null,
+        "normal_eof": true,
+        "tail_beyond_200": false,
+        "coverage": "complete",
+        "csv": {
+          "kind": "location",
+          "bytes": 157,
+          "sha256": "3cddedc45b542235a9f1b9357214dbb1879774ff7167491d04369d69590e535c",
+          "rows": 0
+        },
+        "multiset_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reopened_both_findings_complete": false,
+      "reopened_paging_complete": false,
+      "reopen_case_completed": false
+    },
+    {
+      "label": "13-http503-unknown",
+      "terminal": "completed",
+      "entries": 0,
+      "locations": 0,
+      "actual_canonical_catalog_bytes": 2316,
+      "initial_entry_verdict": "unknown",
+      "initial_byte_verdict": "unknown",
+      "initial_paging": {
+        "pages": 1,
+        "total": 0,
+        "last": null,
+        "normal_eof": true,
+        "tail_beyond_200": false,
+        "coverage": "unknown",
+        "csv": {
+          "kind": "location",
+          "bytes": 157,
+          "sha256": "3cddedc45b542235a9f1b9357214dbb1879774ff7167491d04369d69590e535c",
+          "rows": 0
+        },
+        "multiset_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reopened_both_findings_complete": false,
+      "reopened_paging_complete": false,
+      "reopen_case_completed": false
+    }
+  ],
+  "closures": {
+    "outer": {
+      "pid": 24800,
+      "exit": {
+        "code": 1,
+        "signal": null
+      },
+      "actual_exit_event": true,
+      "actual_close_event": true,
+      "pipes_drained": true,
+      "signals": [],
+      "global_lock_released": true
+    },
+    "apps": [
+      {
+        "label": "capture-app",
+        "pid": 25412,
+        "exit": {
+          "code": null,
+          "signal": "SIGTERM"
+        },
+        "actual_exit_event": true,
+        "actual_close_event": true,
+        "pipes_drained": true,
+        "termination_requested": [
+          "SIGTERM"
+        ],
+        "forced_escalation": false
+      },
+      {
+        "label": "reopen-app",
+        "pid": 22940,
+        "exit": {
+          "code": null,
+          "signal": "SIGTERM"
+        },
+        "actual_exit_event": true,
+        "actual_close_event": true,
+        "pipes_drained": true,
+        "termination_requested": [
+          "SIGTERM"
+        ],
+        "forced_escalation": false
+      }
+    ],
+    "fixture_actual_close_callback": true,
+    "fixture_sockets_remaining": 0,
+    "fixture_requests_remaining": 0,
+    "fixture_file_stream_tasks_remaining": 0,
+    "global_lock_present_at_read": false
+  },
+  "product_data_bytes_unchanged_across_reopen": true,
+  "final_actual_source_suite_build_binary_guards_verified": true,
+  "required_full_50000_gate": false,
+  "known_source_gaps": {
+    "original_xml_body_durable_recovery": "NOT_IMPLEMENTED_IN_SOURCE_V4; SitemapEntityDecode.xml is #[serde(skip)] and source schema stores measurements/association only. Harness fixture files are not product persistence.",
+    "genuine_50000_membership_capacity": "Public explicit128MiB capacity is declared independently of64MiB source work. Actual serialized footprint is counted from real SQLite canonical rows/envelope in this run; the symbolic51,700,000-byte entry/Loc floor is historical schema reasoning only. Missing complete50000 rows remains a failing positive, never a passing Unknown substitute."
+  },
+  "qualification": "All13 initial terminal/source/SQL/findings controls completed. Initial real50000 full paging/CSV/coverage passed. Reopen case01 completed; case02 both findings passed but full paging/CSV/tail reopen acceptance is absent due observation-budget exhaustion; case03–13 reopen requests were not completed. FAIL is preserved. Outer harness ended naturally code1 with no outer signal; both App processes were actually SIGTERM-terminated after reads, never claimed natural0/EOF. Unchanged product-data hashes are not substitute for incomplete reopened API/CSV or missing durable original XML body. No new runtime/SQL action or speed/RSS/parity claim."
+}
