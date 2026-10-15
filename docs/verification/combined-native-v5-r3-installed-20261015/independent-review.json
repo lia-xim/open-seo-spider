@@ -1,0 +1,373 @@
+{
+  "schema_version": 1,
+  "kind": "source_v5_r3_cold_installer_independent_review",
+  "result": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "status": "SOURCE_ONLY_PRECISE_RUNTIME_SHM_MODIFIED_CONTRACT_V2_NOT_EXECUTED",
+  "proposal_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/manifest.json",
+    "sha256": "570ae5cf09a698105a409eeab80d34572d4d39545cfb92fde60b427765c6f925"
+  },
+  "installer": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/install-cold-v5-r3.mjs",
+    "sha256": "e38fd1ae52ad182c06b1d815f625428b098ffbf02689933984ec8f05b3672907",
+    "bytes": 36969
+  },
+  "tree_helper": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/tree-ops.ps1",
+    "sha256": "1e61db4b540c3f62868fa0d87a01c0a01301f622b0c115abf3e35051e68143fc"
+  },
+  "findings": [],
+  "parent_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\install-cold-v5-r3-independent-review-v4-r3\\receipt.json",
+    "sha256": "f3adf6b251df8a77edd9b35f224644283cafaad0cf7fbd4aadcafd89af3d9a8d",
+    "bytes": 15672
+  },
+  "user_data_integrity_contract": {
+    "version": 2,
+    "kind": "baseline_sqlite_shm_last_write_only",
+    "allowed_field": "modified",
+    "allowed_baseline_leaf_suffix": ".sqlite-shm",
+    "all_other_fields_and_arrays_exact": true
+  },
+  "checked_scope": {
+    "all9_literal_operations_source_read": true,
+    "full_new_comparator_source_read": true,
+    "whole_forward_inverse_exact": true,
+    "unchanged_parent_payloads": [
+      "gate-producers.json",
+      "tree-ops.ps1",
+      "inventory-private.json",
+      "installer-derivation.json",
+      "admission-negative-cases.json",
+      "verify-current-acceptance.mjs",
+      "RELEASE-SCHEMA.md",
+      "derive-v2.mjs",
+      "v2-derivation.json",
+      "STATIC-CHECKS-V2.json",
+      "inventory-order-derivation.json",
+      "DATA-COPY-CONTRACT.md",
+      "AUTHOR-ATTEMPTS.json",
+      "same-parent-data-derivation.json",
+      "prepare-v4.mjs",
+      "git-ignore-directory-derivation.json"
+    ],
+    "whole_old_critical_regions": [
+      {
+        "label": "all actual Source5/native8/binder acceptance",
+        "start": "const binderPath=",
+        "end": "const OUTPUT=",
+        "bytes": 3416,
+        "sha256": "4d54118021f9bedb97aa93bcbd3dee28153d3f9d5e0957e871a10ded8c970759",
+        "byte_exact": true
+      },
+      {
+        "label": "all process/log/lock/callback/request/history ownership",
+        "start": "function releaseLock()",
+        "end": "function verifyMutationAuthority()",
+        "bytes": 7845,
+        "sha256": "4766b0ce0d9cd3c3cadfeeb1196ea5d7537a1e2c6d335cc3a5eaaed4ea4745fa",
+        "byte_exact": true
+      },
+      {
+        "label": "full unchanged strict original-data mutation authority",
+        "start": "function verifyMutationAuthority()",
+        "end": "function stageFile(",
+        "bytes": 1623,
+        "sha256": "dd5bf59f18e82173889eeaa61be0b780e6d74f817ab7f12baa6b2da0ec521a76",
+        "byte_exact": true
+      },
+      {
+        "label": "full strict three original copies before runtime",
+        "start": "  copied(DATA,DATA_BACKUP",
+        "end": "  const old=launch(",
+        "bytes": 316,
+        "sha256": "b2fc205972540e072cff05f27fc52b1de005a9922beb0913874c208956e045bc",
+        "byte_exact": true
+      },
+      {
+        "label": "pre-replacement exact original and EXE guards",
+        "start": "  verify(R.ready_guard.path,R.ready_guard.sha256);verify(large.inner.path",
+        "end": "  newApp=launch(",
+        "bytes": 2044,
+        "sha256": "d38cd7734ae197201c836c456f4d8f47d786fab4ef15d503d4011d99e6999f83",
+        "byte_exact": true
+      }
+    ],
+    "rollback_parent_bytes": 827,
+    "rollback_exact_after_one_recorded_inverse": true,
+    "full_finalization_parent_bytes": 2015,
+    "full_finalization_exact_after_one_recorded_inverse": true,
+    "authored_regression_requirements": 26,
+    "comparator_regression_execution": 0,
+    "node_syntax_only": [
+      {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/install-cold-v5-r3.mjs",
+        "exitcode": 0,
+        "signal": null
+      },
+      {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/verify-current-acceptance.mjs",
+        "exitcode": 0,
+        "signal": null
+      },
+      {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/prepare-source.mjs",
+        "exitcode": 0,
+        "signal": null
+      }
+    ]
+  },
+  "bounded_source_observations": [
+    "The finite four-file map is derived only after full original bytes/ADS/attributes/creation/modified/completeSDDL inventory equality. Only existing ordinary direct lowercase .sqlite-shm file leaves qualify; their complete rows are retained as structured clones. Later allowed baselines must equal those exact retained rows.",
+    "Runtime comparison preserves array length/order, row path and complete keysets and compares every nested stable value/array through the unchanged canonical comparator. Only modified of one of those four files can differ; both timestamps must use exact seven-fraction UTC format with calendar validation. Exact phase/path/baseline/observed deltas are kept privately. No byte/hash/WAL/DB/SHM/stream/SDDL/creation/othermtime or key/pathset exclusion, sorting/drop or timestamp restoration is added.",
+    "The narrow comparator is used only after old/candidate compatibility app runs, after installed original app observation, and after rollback only if the original-data newApp actual spawn was observed. All original pre-live/backup/pre-replacement/final-mutation-boundary guards and full initial three-copy equality remain strict; helper1e61 and sixteen other parent payloads are byte-identical.",
+    "Five whole unrelated source/native8/process/log/lock/copy/mutation/replacement regions remain exact. Complete EXE rollback and finalization regions recover exactly after their one explicit comparator/flag inverse. Old all-recorded-metadata flag remains false; stable flag is true only for actual accepted final PASS. No data restore or new logical SQL is introduced.",
+    "Twenty-six comparator regression requirements are only authored source cases, not executed tests; source review does not manufacture their outcomes. Historical failed Cold4 and current-helper copy control are not installation success. A fresh actual Root release/output/compatibility/install proof is still required."
+  ],
+  "promoter_contract_review": {
+    "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/promote-reviewed-source-v6-v5.mjs",
+    "sha256": "dffa9c8aa7c69c4afe4b82b1fbbc45742ff8feb99f259834f5eb201291552157",
+    "derivation_path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/source6-promoter-integrity-v2-derivation.json",
+    "one_full_inverse_exact": true,
+    "exact_same_five_field_contract": true
+  },
+  "pins": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/manifest.json",
+      "sha256": "570ae5cf09a698105a409eeab80d34572d4d39545cfb92fde60b427765c6f925",
+      "bytes": 21678
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/runtime-metadata-derivation.json",
+      "sha256": "0a78deeb2fe7b113824812f16957b33ff5cf1af8dce2b89c926a4c980c7f24b9",
+      "bytes": 12321
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v4-r3/manifest.json",
+      "sha256": "2c36ebf7ae820265f637ad04978c2b7ca3d53c7c98cbb61a5d877a36e2ed02be",
+      "bytes": 17709
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-independent-review-v4-r3/receipt.json",
+      "sha256": "f3adf6b251df8a77edd9b35f224644283cafaad0cf7fbd4aadcafd89af3d9a8d",
+      "bytes": 15672
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/install-cold-v5-r3.mjs",
+      "sha256": "e38fd1ae52ad182c06b1d815f625428b098ffbf02689933984ec8f05b3672907",
+      "bytes": 36969
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/gate-producers.json",
+      "sha256": "e338ff83df798033d5a70f2b7c49b697d172852a953f4b8d0b5faeada33a86aa",
+      "bytes": 2914
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/tree-ops.ps1",
+      "sha256": "1e61db4b540c3f62868fa0d87a01c0a01301f622b0c115abf3e35051e68143fc",
+      "bytes": 5908
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/inventory-private.json",
+      "sha256": "ccdbf8d0b326a3d928a3fc89aa0e25b58d6b645e0be234a89aebd5c93ec970b7",
+      "bytes": 167538
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/installer-derivation.json",
+      "sha256": "f8c3c0081f1598c16ee8a240b14dfffdb9ca619c108666473d735582c3adc72c",
+      "bytes": 23600
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/admission-negative-cases.json",
+      "sha256": "d08c1b6a366f85078d295e6cfad2599f21d4c343ba3e83b02b32efc471807bf9",
+      "bytes": 2003
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/verify-current-acceptance.mjs",
+      "sha256": "85192f01c34ec17f20bfe96cb9293d26ac21b94476cc2e6a391027ca787badaf",
+      "bytes": 16155
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/RELEASE-SCHEMA.md",
+      "sha256": "a4cc062ca5a65a4179aeb7d5ca11cb8fc0d82a318ceded5ca91d963888a63913",
+      "bytes": 8656
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/derive-v2.mjs",
+      "sha256": "b3e8489f309cbe3871d2df194b09bdc7b9b42106ffa5f60436880add9885ed38",
+      "bytes": 9143
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/v2-derivation.json",
+      "sha256": "1927d0711c99a380ddeae4b9be187e39a27f927ccfae53479ddf452f020eafe8",
+      "bytes": 6221
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/STATIC-CHECKS-V2.json",
+      "sha256": "4d10cebed889a3726dcb942fdf060d1de50bf3dfbca6d75fc753c21156041e77",
+      "bytes": 2377
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/inventory-order-derivation.json",
+      "sha256": "a455c0c328ab3dfd8d0362225a382283fa384f198577184344fc2a73f7bc34be",
+      "bytes": 2383
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/DATA-COPY-CONTRACT.md",
+      "sha256": "813ee1c7772bf564897b6d566d4db9077cd52a753a45670a4d891f2bfe12f66b",
+      "bytes": 4435
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/AUTHOR-ATTEMPTS.json",
+      "sha256": "0fe8837ebd55a3f2e30af23c2b15d2c41458a4731b2d8d6b24918b6c7f4093c5",
+      "bytes": 812
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/same-parent-data-derivation.json",
+      "sha256": "231e01707e40df4045641f009d8761c5c343f56c1bffec646fd175151e26394d",
+      "bytes": 14300
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/prepare-v4.mjs",
+      "sha256": "71646fb6fc060a4cc0a464879fb0bf9c592d620e7aa9856664821d6dfc4a0844",
+      "bytes": 22169
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/git-ignore-directory-derivation.json",
+      "sha256": "9614e33368076a1d50818fb394ba28c6d27ba9f5ac3cc01fe0858b200459189b",
+      "bytes": 1490
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/RUNTIME-METADATA-CASES.json",
+      "sha256": "ddd42353c0982a3761283695605cb2e9d23427d3c9de5ca868e366bc7e001da8",
+      "bytes": 2088
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/RUNTIME-INTEGRITY-CONTRACT.md",
+      "sha256": "9d19684d0b359545439b2315c34c8d610b0aa928ac852e499edcc5a05f1287c3",
+      "bytes": 3236
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/runtime-metadata-derivation.json",
+      "sha256": "0a78deeb2fe7b113824812f16957b33ff5cf1af8dce2b89c926a4c980c7f24b9",
+      "bytes": 12321
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v5/prepare-source.mjs",
+      "sha256": "409d56fd8e7cc478f8de4f74cea9ac695e26e30e1a869585861c4f01967c6bdc",
+      "bytes": 21655
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v4-r3/install-cold-v5-r3.mjs",
+      "sha256": "e477d423e784ae282896f5571b423ade0cb9f4ba4c1c50b5f9b11e7af756963f",
+      "bytes": 32975
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v4-r3/install-cold-v5-r3.mjs",
+      "sha256": "e477d423e784ae282896f5571b423ade0cb9f4ba4c1c50b5f9b11e7af756963f",
+      "bytes": 32975
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v4-r3/gate-producers.json",
+      "sha256": "e338ff83df798033d5a70f2b7c49b697d172852a953f4b8d0b5faeada33a86aa",
+      "bytes": 2914
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v4-r3/tree-ops.ps1",
+      "sha256": "1e61db4b540c3f62868fa0d87a01c0a01301f622b0c115abf3e35051e68143fc",
+      "bytes": 5908
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v4-r3/inventory-private.json",
+      "sha256": "ccdbf8d0b326a3d928a3fc89aa0e25b58d6b645e0be234a89aebd5c93ec970b7",
+      "bytes": 167538
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v4-r3/installer-derivation.json",
+      "sha256": "f8c3c0081f1598c16ee8a240b14dfffdb9ca619c108666473d735582c3adc72c",
+      "bytes": 23600
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v4-r3/admission-negative-cases.json",
+      "sha256": "d08c1b6a366f85078d295e6cfad2599f21d4c343ba3e83b02b32efc471807bf9",
+      "bytes": 2003
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v4-r3/verify-current-acceptance.mjs",
+      "sha256": "85192f01c34ec17f20bfe96cb9293d26ac21b94476cc2e6a391027ca787badaf",
+      "bytes": 16155
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v4-r3/RELEASE-SCHEMA.md",
+      "sha256": "a4cc062ca5a65a4179aeb7d5ca11cb8fc0d82a318ceded5ca91d963888a63913",
+      "bytes": 8656
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v4-r3/derive-v2.mjs",
+      "sha256": "b3e8489f309cbe3871d2df194b09bdc7b9b42106ffa5f60436880add9885ed38",
+      "bytes": 9143
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v4-r3/v2-derivation.json",
+      "sha256": "1927d0711c99a380ddeae4b9be187e39a27f927ccfae53479ddf452f020eafe8",
+      "bytes": 6221
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v4-r3/STATIC-CHECKS-V2.json",
+      "sha256": "4d10cebed889a3726dcb942fdf060d1de50bf3dfbca6d75fc753c21156041e77",
+      "bytes": 2377
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v4-r3/inventory-order-derivation.json",
+      "sha256": "a455c0c328ab3dfd8d0362225a382283fa384f198577184344fc2a73f7bc34be",
+      "bytes": 2383
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v4-r3/DATA-COPY-CONTRACT.md",
+      "sha256": "813ee1c7772bf564897b6d566d4db9077cd52a753a45670a4d891f2bfe12f66b",
+      "bytes": 4435
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v4-r3/AUTHOR-ATTEMPTS.json",
+      "sha256": "0fe8837ebd55a3f2e30af23c2b15d2c41458a4731b2d8d6b24918b6c7f4093c5",
+      "bytes": 812
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v4-r3/same-parent-data-derivation.json",
+      "sha256": "231e01707e40df4045641f009d8761c5c343f56c1bffec646fd175151e26394d",
+      "bytes": 14300
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v4-r3/prepare-v4.mjs",
+      "sha256": "71646fb6fc060a4cc0a464879fb0bf9c592d620e7aa9856664821d6dfc4a0844",
+      "bytes": 22169
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-cold-v5-r3-preparation-v4-r3/git-ignore-directory-derivation.json",
+      "sha256": "9614e33368076a1d50818fb394ba28c6d27ba9f5ac3cc01fe0858b200459189b",
+      "bytes": 1490
+    },
+    {
+      "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/promote-reviewed-source-v6-v5.mjs",
+      "sha256": "dffa9c8aa7c69c4afe4b82b1fbbc45742ff8feb99f259834f5eb201291552157",
+      "bytes": 8995
+    },
+    {
+      "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/source6-promoter-integrity-v2-derivation.json",
+      "sha256": "d4aa70722479ddc2bfadf199a1a5f95ba6f9292e913d40aa996d4ac5194177f3",
+      "bytes": 1331
+    },
+    {
+      "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/promote-reviewed-source-v6-v4.mjs",
+      "sha256": "3e7d09bafb448fe9217bd7ebd49d1edbde7e81edab3397dda3696d6aad0535eb",
+      "bytes": 8644
+    }
+  ],
+  "excluded_executions": {
+    "target_import_or_comparator_execution": 0,
+    "powershell_helper_git_native_fixture_sql_http_browser": 0,
+    "backup_copy_replace_rollback_install_or_promotion": 0,
+    "root_product_private_data_writes": 0
+  },
+  "qualification": "Independent bounded SOURCE-ONLY review of nine runtime metadata comparator changes. Actual new copy compatibility/install and accepted stable-data proof remain future Root work; full LastWriteTime identity is explicitly not claimed."
+}

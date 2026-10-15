@@ -2,7 +2,9 @@
 
 Der private Commit `9fa103e` besteht tatsächlich 1256 Tests ohne Fehler oder ignorierte Fälle, alle 474 Pflichtnamen, alle 40 neuen Windows-Fälle und vier echte Renderer-Prüfungen. Format und Clippy sind ebenfalls grün; eigene Server sind geschlossen und Quellen unverändert. Rohbelege: [vollständige Suite](verification/combined-workspace-v5-r3-20261015/index.json).
 
-Der tatsächliche optimierte Windows-Build besteht (Kandidat `9bed8a6`, 39906816 Bytes). Alle sechs getrennten Native-Prüfbereiche bestehen, einschließlich echter Browseransicht und zwölf physischer Exportgrößenfälle. Beide frischen EOF-Fälle bestehen mit natürlichem Exit0; der erste Fehllauf bleibt archiviert. Der vollständige13-Fälle-Großquellenlauf einschließlich aller50.000 Einträge/250Fenster/vollständigemCSV besteht vor und nachWiederöffnung. BeideApps/Pipes/Fixture sind geschlossen; Daten unverändert. Die ersteKaltinstallation stoppt vorMutation an unterschiedlicherInventarreihenfolge; alle32Dateien samtMetadaten sind dateiweiseidentisch. Eine eng korrigierte frischeInstallation folgt. Installation und vollständige Herstellerparität sind noch nicht nachgewiesen. Der vorherige R2-Testpass mit Clippy-Fehlschlag bleibt unverändert archiviert.
+Der optimierte Windows-Kandidat `9bed8a6` besteht alle acht nativen Prüfbereiche, einschließlich vollständiger 50.000 Einträge vor/nach Wiederöffnung, und ist jetzt lokal installiert. App8787 und Renderer8790 laufen; gespeicherte Historie, neun Assets und26 MCP-Tools sind geprüft. Alle32 Dateiinhalte, ADS, Rechte und stabilen Metadaten bleiben exakt; nur die Schreibzeitpunkte von vier bestehenden SQLite-SHM-Dateien ändern sich durch das Lesen. Vollständige Metadatenidentität und allgemeines sanftes Windows-Prozessende werden nicht behauptet. [Installationsbelege](verification/combined-native-v5-r3-installed-20261015/index.json).
+
+Source6 ist als vierter isolierter Entwurf compilerbereinigt (tatsächlicherAll-Targets-ClippyExit0, keineTestausführung). Seine17 Änderungen/324 Eingaben werden als Nächstes integriert und vollständig mit mindestens1283 Tests/501 Pflichtnamen, vier echtenRenderer-Fällen sowie neuenOriginaldatei-/Download-/Browserprüfungen abgenommen. Vollständige Herstellerparität bleibt offen.
 
 ## Historisch: Source5 gemeinsam prüfen (15.10.2026)
 
@@ -18,7 +20,7 @@ Diese Roadmap ordnet die nächsten Arbeitsschritte. Der vollständige laufende S
 
 Aktuell: **30 eigene Abnahmen erfüllt, 68 teilweise geprüft, 46 offen**. Zusätzlich bleiben [416 benannte Filter und 32 Ablaufverträge](parity/granular-acceptance.json) getrennt zu prüfen. Alle Hersteller-Parität bleibt **NOT_PROVEN**. Es wird kein Fertigstellungsprozentsatz berechnet.
 
-## Aktueller nächster Baustein
+## Frühere Bausteine und offene Folgearbeiten
 
 **V4-Gesamtlauf bestanden:** [Tatsächlicher vollständiger Workspace](verification/combined-workspace-v4-20261015/index.json):1216/0/0,434 Pflichtnamen, vier echte Renderer-Fälle, Format und Clippy. Der optimierte Build und alle sechs bisherigen nativen Prüfbereiche bestehen, einschließlich zwölf physischer Größenfälle und [26 tatsächlicher Browsergruppen im korrigierten R2](verification/combined-native-v4-browser-r2-20261015/index.json). Der erste Browser-Testfehler bleibt als eigener historischer Beleg erhalten. Die13 großen echten Quellenfälle laufen separat; Installation und weitere Funktionslücken bleiben offen. Die Standardkapazität bleibt32MiB; höhere Mitgliedschaftskapazität bis128MiB muss ausdrücklich konfiguriert werden.
 

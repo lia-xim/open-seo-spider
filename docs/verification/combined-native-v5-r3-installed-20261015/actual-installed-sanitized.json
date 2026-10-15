@@ -1,0 +1,78 @@
+{
+  "kind": "sanitized_actual_source5_r3_local_installation_aggregate",
+  "result": "PASS_SOURCE_V5_R3_COLD_LOCAL_INSTALL_WITH_COPY_COMPATIBILITY",
+  "recorded_at": "2026-10-15T13:58:00.465Z",
+  "private_proof_sha256": "4c2deceed38ad7b6c48961ec763c4e606f3c0a40145d8a718876f93382d56726",
+  "private_proof_not_uploaded": true,
+  "source_manifest_sha256": "27a8b74c4cd0c394906f3fe3c0a6a0327569294b25056cf6c6f0aabcffc42788",
+  "candidate": {
+    "sha256": "9bed8a6f49fff732feff885767987c5d0eb03e012b27382e222bfc0dfc489a11",
+    "bytes": 39906816
+  },
+  "accepted_installation": true,
+  "installed_services_left_running": true,
+  "assets_verified": 9,
+  "mcp_tool_names_verified": 26,
+  "data_entries": 33,
+  "data_files": 32,
+  "data_bytes": 1017381,
+  "complete_backup_and_two_compatibility_copies_full_bytes_ads_ntfs_sddl_equal": true,
+  "all_runtime_file_bytes_and_stable_metadata_equal": true,
+  "all_runtime_recorded_metadata_equal": false,
+  "integrity_contract": {
+    "version": 2,
+    "kind": "baseline_sqlite_shm_last_write_only",
+    "allowed_field": "modified",
+    "allowed_baseline_leaf_suffix": ".sqlite-shm",
+    "all_other_fields_and_arrays_exact": true
+  },
+  "actual_runtime_comparisons": [
+    {
+      "phase": "compat-old",
+      "rows": 33,
+      "allowed_last_write_deltas": 4,
+      "all_bytes_streams_and_stable_metadata_exact": true
+    },
+    {
+      "phase": "compat-candidate",
+      "rows": 33,
+      "allowed_last_write_deltas": 4,
+      "all_bytes_streams_and_stable_metadata_exact": true
+    },
+    {
+      "phase": "installed-original-live",
+      "rows": 33,
+      "allowed_last_write_deltas": 4,
+      "all_bytes_streams_and_stable_metadata_exact": true
+    }
+  ],
+  "volatile_timestamp_deltas": 12,
+  "volatile_baseline_file_count": 4,
+  "compatibility_processes_actually_closed": 2,
+  "compatibility_stops_forced": true,
+  "graceful_windows_app_shutdown": "NOT_PROVEN",
+  "execution_lock_released": true,
+  "data_automatically_restored": false,
+  "global_network_packet_trace": "NOT_RUN",
+  "all_eight_native_scopes": "PREVIOUSLY_CLOSED_ACCEPTED_AND_REVERIFIED_BEFORE_MUTATION",
+  "previous_failures": [
+    {
+      "scope": "cold1",
+      "sha256": "b7714362f5c36d14d395522059eeceb4a7a2999c8db96c29ed18094313e1754d",
+      "result": "FAIL_BEFORE_MUTATION_INVENTORY_ORDER"
+    },
+    {
+      "scope": "cold2",
+      "sha256": "dac5c6c927414b3e0704f3afb90d804af919ad70964bf62d69991c8a817da499",
+      "result": "FAIL_BEFORE_MUTATION_CROSS_VOLUME_DACL"
+    },
+    {
+      "scope": "cold3",
+      "sha256": "2577b6a06ad4844dd25cfa2cf1a06c9793baeba359a7d9d13a608cad26e33172",
+      "result": "FAIL_BEFORE_MUTATION_FOUR_SQLITE_SHM_LAST_WRITE_TIMES_ONLY"
+    }
+  ],
+  "actual_current_helper_three_copy_refusal_control_sha256": "6c06a03b1cd1041a0c541aa7d6c4e9436d58b420b31eb98ae7ddaf63db1a8fde",
+  "failed_unborn_directory_git_query_control_sha256": "1228201e2cef3425fbf8488cce4dc5ecb8d5654eba4e44ade33fe881204f22ce",
+  "qualification": "Only localSource5R3installation accepted. Existing32filecontents/ADS/allstableNTFSmetadata/fullSDDL byte-exact; only modified timestamps of4approvedordinarybaselineSQLiteSHMfiles differ after actualreads (4old+4candidate+4installed deltas). No all-recorded-metadata identity or gracefulWindowsAppshutdown is claimed. Originalprivateinventory/IDs/SQL/paths/SDDL/snapshots/backups/release/rawprivateproof are NOTuploaded. Source6/7runtime and manufacturer parity remainopen."
+}

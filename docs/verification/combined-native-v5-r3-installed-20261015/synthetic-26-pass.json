@@ -1,0 +1,192 @@
+{
+  "kind": "root_actual_pure_cold5_runtime_metadata_guard_tests",
+  "result": "PASS_26_SYNTHETIC_ACCEPT_REFUSAL_AND_NO_INPUT_MUTATION_CASES_ONLY",
+  "recorded_at": "2026-10-15T13:56:09.743Z",
+  "installer_sha256": "e38fd1ae52ad182c06b1d815f625428b098ffbf02689933984ec8f05b3672907",
+  "extracted_guard_sha256": "baf84770c7850fba556694f9642dd2273eef9916a855e14a3961a687c813c55d",
+  "tests": [
+    {
+      "name": "identical all fields",
+      "result": "PASS",
+      "expected": "accept",
+      "actual_accepted": true,
+      "allowed_deltas": 0
+    },
+    {
+      "name": "one approved SHM modified only",
+      "result": "PASS",
+      "expected": "accept",
+      "actual_accepted": true,
+      "allowed_deltas": 1
+    },
+    {
+      "name": "approved phase compat-candidate",
+      "result": "PASS",
+      "expected": "accept",
+      "actual_accepted": true,
+      "allowed_deltas": 4
+    },
+    {
+      "name": "approved phase installed-original-live",
+      "result": "PASS",
+      "expected": "accept",
+      "actual_accepted": true,
+      "allowed_deltas": 4
+    },
+    {
+      "name": "approved phase rollback-original-after-live",
+      "result": "PASS",
+      "expected": "accept",
+      "actual_accepted": true,
+      "allowed_deltas": 4
+    },
+    {
+      "name": "invalid phase",
+      "result": "PASS",
+      "expected": "reject",
+      "actual_accepted": false,
+      "allowed_deltas": 0
+    },
+    {
+      "name": "row count",
+      "result": "PASS",
+      "expected": "reject",
+      "actual_accepted": false,
+      "allowed_deltas": 0
+    },
+    {
+      "name": "array order",
+      "result": "PASS",
+      "expected": "reject",
+      "actual_accepted": false,
+      "allowed_deltas": 0
+    },
+    {
+      "name": "extra row field",
+      "result": "PASS",
+      "expected": "reject",
+      "actual_accepted": false,
+      "allowed_deltas": 0
+    },
+    {
+      "name": "missing row field",
+      "result": "PASS",
+      "expected": "reject",
+      "actual_accepted": false,
+      "allowed_deltas": 0
+    },
+    {
+      "name": "changed path",
+      "result": "PASS",
+      "expected": "reject",
+      "actual_accepted": false,
+      "allowed_deltas": 0
+    },
+    {
+      "name": "stable bytes",
+      "result": "PASS",
+      "expected": "reject",
+      "actual_accepted": false,
+      "allowed_deltas": 0
+    },
+    {
+      "name": "stable sha256",
+      "result": "PASS",
+      "expected": "reject",
+      "actual_accepted": false,
+      "allowed_deltas": 0
+    },
+    {
+      "name": "stable sddl",
+      "result": "PASS",
+      "expected": "reject",
+      "actual_accepted": false,
+      "allowed_deltas": 0
+    },
+    {
+      "name": "stable created",
+      "result": "PASS",
+      "expected": "reject",
+      "actual_accepted": false,
+      "allowed_deltas": 0
+    },
+    {
+      "name": "stable attributes",
+      "result": "PASS",
+      "expected": "reject",
+      "actual_accepted": false,
+      "allowed_deltas": 0
+    },
+    {
+      "name": "stable kind",
+      "result": "PASS",
+      "expected": "reject",
+      "actual_accepted": false,
+      "allowed_deltas": 0
+    },
+    {
+      "name": "ADS byte hash",
+      "result": "PASS",
+      "expected": "reject",
+      "actual_accepted": false,
+      "allowed_deltas": 0
+    },
+    {
+      "name": "ADS array order",
+      "result": "PASS",
+      "expected": "reject",
+      "actual_accepted": false,
+      "allowed_deltas": 0
+    },
+    {
+      "name": "ordinary file modified",
+      "result": "PASS",
+      "expected": "reject",
+      "actual_accepted": false,
+      "allowed_deltas": 0
+    },
+    {
+      "name": "invalid calendar",
+      "result": "PASS",
+      "expected": "reject",
+      "actual_accepted": false,
+      "allowed_deltas": 0
+    },
+    {
+      "name": "wrong fraction precision",
+      "result": "PASS",
+      "expected": "reject",
+      "actual_accepted": false,
+      "allowed_deltas": 0
+    },
+    {
+      "name": "non UTC timezone",
+      "result": "PASS",
+      "expected": "reject",
+      "actual_accepted": false,
+      "allowed_deltas": 0
+    },
+    {
+      "name": "only three approvals",
+      "result": "PASS",
+      "expected": "reject",
+      "actual_accepted": false,
+      "allowed_deltas": 0
+    },
+    {
+      "name": "caller changes approved baseline",
+      "result": "PASS",
+      "expected": "reject",
+      "actual_accepted": false,
+      "allowed_deltas": 0
+    },
+    {
+      "name": "nonbaseline SHM leaf",
+      "result": "PASS",
+      "expected": "reject",
+      "actual_accepted": false,
+      "allowed_deltas": 0
+    }
+  ],
+  "qualification": "ActualNode execution of exactsourceextractedpureguard. Syntheticdataonly, noinstallerimport/PS/SQLite/Git/backup/originaldata/native/executable changes. This is not installation acceptance or Rust workspace test evidence."
+}
