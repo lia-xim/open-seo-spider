@@ -10,25 +10,36 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
 
 ## Aktuelle Arbeit und nächste Schritte
 
-- [ ] **Kombinierten Quellstand vollständig prüfen und als Kandidaten abnehmen** — FULL_WINDOWS_WORKSPACE_PASS_NATIVE_ACCEPTANCE_OPEN. Der tatsächliche neue Windows-Gesamtlauf besteht mit 1203 bestandenen,0 fehlgeschlagenen und0 ignorierten Tests. Alle421 benannten Pflichtfälle, vier echte Chromium-Renderer-Gates, Format und Clippy-Dwarnings bestehen. Optimierter Build, native und Plattformabnahmen sowie Installation stehen separat aus.
+- [ ] **Große Sitemap-Ausgaben korrigieren und denselben Kandidaten vollständig abnehmen** — FIVE_NATIVE_SCOPES_PASS_PHYSICAL_FAILED_INSTALLATION_OPEN. Der optimierte V3-Kandidat besteht fünf getrennte Laufzeitbereiche. Der große physische Test ist nicht bestanden: Nach etwa524 Sekunden waren140 von405 Zeilen gesammelt; Root hat nur die eigene Testinstanz beendet. Eine pro Seite erneut ausgeführte SQLite-JSON-Auswertung des ganzen Berichts ist quellseitig bestätigt. Originalinstallation und Nutzerdaten bleiben unverändert.
+  - [x] Optimierter Build aus denselben301 Eingaben wie der vollständige1203/0/0-Lauf: tatsächliche Cargo-Abschlüsse, Candidate22f8c602 und endgültige Quell-/Suite-Hashes verifiziert.
+  - [x] Native API-/CLI-/offizielle SDK-Prüfung mit kleiner echter Fixture besteht; Datei-SDK besteht175 Operationsprüfungen mit26/31 Inventaren, beiden Transporten und erwarteten Fehlerfällen.
+  - [x] Zwei native Root-Junction-Ablehnungen,13 ausdrücklich gemockte UI-Gruppen und25 echte Browsergruppen mit405 gespeicherten Seiten und vollständigem403-Zeilen-CSV bestehen.
+  - [x] Fehlgeschlagenen physischen Lauf samt externer Root-Abbruchquittung archiviert. Beide eigenen Apps, der Fixture-Server und der äußere Prozess sind tatsächlich geschlossen; Teilzeilen bleiben lokal erhalten.
+  - [ ] Quadratische pro-Seite-Auswertung des gesamten JSON-Berichts reparieren; Originalauswahl, Aktualität, SQL-Fakten und alle Größenorakel erhalten. Neuen Quellstand passend vollständig prüfen und bauen.
+  - [ ] Alle zwölf physischen CSV64MiB-/AppJSON8MiB-Fälle einschließlich exakter Grenze und+1 mit dem neuen akzeptierten Kandidaten ausführen. Keine kleineren Ersatz-Fixtures.
+  - [ ] 50.000 vollständige dauerhafte Sitemap-Mitgliedschaften und50MiB-Quellen tatsächlich positiv prüfen. Das derzeitige32MiB-Ledger reicht für das serialisierte50.000er-Format nicht aus.
+  - [ ] HTTP-In-flight-Drain, Unix/Linux/Container, weitere Ressourcen-/Recovery-/Unknown-Matrizen und Daten erhaltende Installation bleiben separat offen.
+  - Verträge: [index.json](verification/combined-optimized-native-v3-20261015/index.json), [index.json](verification/combined-workspace-v3-20261015/index.json).
+  - Gate-Stand: optimized_candidate: PASS_SOURCE_V3_22F8C602; native_api_cli_sdk: PASS_SMALL_DIRECTED_FIXTURE; file_sdk: PASS_175_OPERATION_ASSERTIONS; windows_root_junction: PASS_2_NATURAL_REJECTIONS; ui_mock: PASS_13_MOCKED_GROUPS; native_browser: PASS_25_REAL_GROUPS; physical: NOT_PASSED_ROOT_ABORT_140_OF_405_ROWS_0_OF_12_CASES; installation: NOT_RUN_CANDIDATE_NOT_RELEASE_ELIGIBLE; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN.
+
+- [ ] **Kombinierten Quellstand vollständig prüfen und als Kandidaten abnehmen** — FULL_WINDOWS_WORKSPACE_PASS_OPTIMIZED_NATIVE_PHYSICAL_FAILED. Der tatsächliche vollständige V3-Lauf besteht mit1203/0/0,421 Pflichtnamen, vier echten Chromium-Gates, Format und Clippy. Der spätere optimierte Build und fünf Laufzeitbereiche bestehen; die physische Größenprüfung ist nicht bestanden und verhindert die Installation.
   - [x] Alle301 Snapshot-/Checkout-Eingaben sind nach tatsächlichem Schließen der eigenen Server bytegleich; Rohprotokolle und Child-Close-Belege sind archiviert.
   - [x] Alle bisherigen419 Pflichtnamen plus zwei neue Typed-Kontrollen tatsächlich ausgeführt; mindestens1.203 Gesamtprüfungen mit null Fehlern und null ignorierten Fällen.
   - [x] Alle vier echten Chromium-Renderer-Fälle und anschließendes Clippy für alle Workspace-Ziele mit-Dwarnings bestehen.
-  - [ ] Optimierten Kandidaten aus demselben Quellstand bauen; native API-/CLI-/offizielle MCP-SDK-/echte Browser-/physische Grenzprüfungen ausführen.
-  - [ ] Linux-/Container-Prüfung nach Reparatur der lokal nicht registrierten WSL-Installation ergänzen; Docker ist im Windows-Pfad nicht verfügbar.
-  - [ ] Daten erhaltende Installation und bestehende Nutzer-Crawls getrennt prüfen; Hersteller-Parität bleibt offen.
-  - Verträge: [index.json](verification/combined-workspace-v3-20261015/index.json), [proof.json](verification/combined-workspace-v3-20261015/actual-suite/proof.json).
-  - Gate-Stand: full_workspace: PASS_COMBINED_WORKSPACE_V3_REAL_RENDERER_FMT_CLIPPY; required_named_cases: PASS_421; actual_renderer: PASS_4; optimized_candidate: NOT_RUN; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN.
+  - [ ] SQL-Skalierungsfehler korrigieren und neuen Quellstand passend vollständig abnehmen; den großen physischen Test unverändert wiederholen.
+  - [ ] Linux/Container und Daten erhaltende Installation bleiben getrennt offen.
+  - Verträge: [index.json](verification/combined-workspace-v3-20261015/index.json), [proof.json](verification/combined-workspace-v3-20261015/actual-suite/proof.json), [index.json](verification/combined-optimized-native-v3-20261015/index.json).
+  - Gate-Stand: full_workspace: PASS_COMBINED_WORKSPACE_V3_REAL_RENDERER_FMT_CLIPPY; required_named_cases: PASS_421; actual_renderer: PASS_4; optimized_candidate: PASS_SOURCE_V3_22F8C602; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN; native_physical: NOT_PASSED_EXTERNAL_ROOT_ABORT.
 
-- [ ] **33 Clippy-Meldungen ohne Test- oder Prüfungsabbau korrigieren** — FULL_COMBINED_WORKSPACE_PASS_NATIVE_ACCEPTANCE_OPEN. 16 Core- und17 App-Diagnosen sind in23 Dateien korrigiert. Tatsächliches Format und Workspace-Alltargets-Clippy mit-Dwarnings bestehen; alle301 Eingaben danach bytegleich. Der neue vollständige Lauf mit421 Pflichtnamen und mindestens1.203 Tests steht aus.
+- [ ] **33 Clippy-Meldungen ohne Test- oder Prüfungsabbau korrigieren** — FULL_COMBINED_WORKSPACE_PASS_NATIVE_ACCEPTANCE_OPEN. 16 Core- und17 App-Diagnosen sind in23 Dateien korrigiert. Der nachfolgende tatsächliche V3-Gesamtlauf besteht mit1203/0/0, allen421 Pflichtnamen, vier echten Renderer-Gates, Format und Clippy-Dwarnings. Native Größenabnahme und Installation bleiben offen.
   - [x] Core-Korrektur unabhängig geprüft: geänderte Enum-Payloads, transparente Serde-Boxen, identische externe Profilnamen und erhaltene Fehler-/SQL-/Manipulationsprüfungen.
   - [x] Ersten tatsächlichen Wiederholungslauf archiviert: Core-Meldungen behoben,17 App-Meldungen konkret sichtbar; Format0/Clippy101, tatsächliche Closes und301 Eingaben danach exakt.
   - [x] App-Korrektur unabhängig geprüft: gemeinsame Testhilfe ohne verlorene Testfunktionen, explizites Ende der Mutex-Sperre vor Benachrichtigung, erhaltene CSV-Prefix-/Hash-/Join-/Fehlerprüfungen.
   - [x] Zweite tatsächliche Ausführung besteht Format0 und vollständiges Clippy-Dwarnings0; keine Warnungsunterdrückung oder Testentfernung, beide ursprünglichen Diagnoseprotokolle bleiben erhalten.
-  - [x] Nachfolgender tatsächlicher kombinierter V3-Lauf besteht mit 1203/0/0, allen421 Pflichtnamen, vier echten Renderer-Gates, Format und Clippy; siehe separaten V2-Beleg.
+  - [x] Nachfolgender tatsächlicher kombinierter V3-Lauf besteht mit 1203/0/0, allen421 Pflichtnamen, vier echten Renderer-Gates, Format und Clippy; siehe separaten V3-Beleg.
   - [ ] Optimierten Kandidaten bauen und separate native API-/CLI-/SDK-/Browser-/physische sowie Plattform- und Installationsprüfungen ausführen.
   - Verträge: [index.json](verification/clippy-corrections-20261015/index.json), [proof.json](verification/clippy-corrections-20261015/app-clippy-correction-check-v1/proof.json), [index.json](verification/combined-workspace-v3-20261015/index.json).
-  - Gate-Stand: source_reviews: NO_CONFIRMED_FINDINGS_BOUNDED; draft_fmt_clippy: PASS_ACTUAL; full_new_source_suite: NOT_RUN; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN; combined_v3_workspace: PASS_1203_INCLUDING_4_RENDERER_FMT_CLIPPY.
+  - Gate-Stand: source_reviews: NO_CONFIRMED_FINDINGS_BOUNDED; draft_fmt_clippy: PASS_ACTUAL; full_new_source_suite: PASS_COMBINED_V3_1203_0_0; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN; combined_v3_workspace: PASS_1203_INCLUDING_4_RENDERER_FMT_CLIPPY.
 
 - [ ] **Kombinierten Quellstand vollständig prüfen und als Kandidaten abnehmen** — FULL_WORKSPACE_GATE_FAILED. Alle1.203 tatsächlichen Rust-Tests bestehen mit0 Fehlern und0 ignorierten Fällen, darunter alle421 benannten Pflichtfälle und vier echte Chromium-Renderer-Gates. Anschließendes Clippy endet mit Exit101 und16 Core-Diagnosen; deshalb ist der Gesamtstand noch nicht buildberechtigt. Vollständige Protokolle und alle tatsächlichen Prozess-/Serverabschlüsse sind archiviert.
   - [x] Alle301 Snapshot-/Checkout-Eingaben sind nach tatsächlichem Schließen der eigenen Server bytegleich; Rohprotokolle und Child-Close-Belege sind archiviert.
@@ -40,25 +51,25 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - Verträge: [index.json](verification/combined-workspace-v2-20261015/index.json), [proof.json](verification/combined-workspace-v2-20261015/actual-suite/proof.json).
   - Gate-Stand: full_workspace: FAIL_COMBINED_WORKSPACE_V2; required_named_cases: PASS_421; actual_renderer: PASS_4; optimized_candidate: NOT_RUN; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN; rust_workspace: PASS_ACTUAL_1203_0_0; clippy: FAIL_101_16_CORE_DIAGNOSTICS.
 
-- [ ] **Vier Fehler aus dem kombinierten Gesamtlauf beheben** — FULL_COMBINED_WORKSPACE_PASS_NATIVE_ACCEPTANCE_OPEN. Der tatsächliche kombinierte Lauf endete mit1.079 bestandenen,4 fehlgeschlagenen und0 ignorierten Tests. Alle vier Fehler sind gezielt korrigiert;18 gerichtete Testfunktionen bestehen. Ein neuer vollständiger Workspace mit den vier echten Renderer-Gates, Format und Clippy steht aus.
+- [ ] **Vier Fehler aus dem kombinierten Gesamtlauf beheben** — FULL_COMBINED_WORKSPACE_PASS_NATIVE_ACCEPTANCE_OPEN. Die vier Fehler aus dem historischen1079/4/0-Lauf sind korrigiert;18 gerichtete Funktionen und der spätere vollständige V3-Lauf1203/0/0 einschließlich Renderer/Format/Clippy bestehen. Historische Fehlerbelege bleiben erhalten; native Größenabnahme und Installation sind offen.
   - [x] Vollständigen fehlgeschlagenen kombinierten Lauf archiviert: App251/0/0 und Core828/4/0, tatsächlicher Cargo-Exit101, beide eigenen Server geschlossen und alle301 Eingaben danach bytegleich.
   - [x] Bekannten HTTP-Status nach einer zu langen finalen Redirect-Adresse erhalten; XML-Decoding, Zählung und daraus abgeleitete Aussagen bleiben ausdrücklich unbekannt. Echte Redirect-Regression und zwei neue positive/negative Typed-Kontrollgruppen bestehen.
   - [x] Konfigurationsprofil verlangt ein Objekt. Standardwerte, Teilkonfigurationen, äußeres null, Serialisierung und vorhandene Budgets bleiben erhalten; zehn Core-Profiltests und drei App-DTO-Gruppen bestehen.
   - [x] Zwei vorhandene Tests präzisiert: tatsächliche XML-Reader-Fehlerklasse für numerische Null und gültige Record-/Gesamtkap-Konfiguration vor exakten Bytegrenzen. Alle ursprünglichen Fehler-/Persistenz-/Cleanup-Prüfungen bleiben erhalten.
-  - [x] Nachfolgender tatsächlicher kombinierter V3-Lauf besteht mit 1203/0/0, allen421 Pflichtnamen, vier echten Renderer-Gates, Format und Clippy; siehe separaten V2-Beleg.
+  - [x] Nachfolgender tatsächlicher kombinierter V3-Lauf besteht mit 1203/0/0, allen421 Pflichtnamen, vier echten Renderer-Gates, Format und Clippy; siehe separaten V3-Beleg.
   - [ ] Optimierten Kandidaten aus demselben Quellstand bauen und native API-/CLI-/SDK-/Browser-/physische sowie Plattformabnahmen ausführen.
   - [ ] Daten erhaltende Installation separat prüfen; die aktuell laufende ab1-Version bleibt unverändert.
   - Verträge: [index.json](verification/combined-core-repairs-20261015/index.json), [proof.json](verification/combined-core-repairs-20261015/failed-full-suite/proof.json), [proof.json](verification/combined-core-repairs-20261015/focused-three-repairs/proof.json), [proof.json](verification/combined-core-repairs-20261015/focused-profile/proof.json), [index.json](verification/combined-workspace-v3-20261015/index.json).
-  - Gate-Stand: historical_full_workspace: FAIL_1079_PASS_4_FAIL_0_IGNORE; directed_core_and_app: PASS_18_ACTUAL_FUNCTIONS; full_workspace_after_repairs: NOT_RUN; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN; combined_v3_workspace: PASS_1203_INCLUDING_4_RENDERER_FMT_CLIPPY.
+  - Gate-Stand: historical_full_workspace: FAIL_1079_PASS_4_FAIL_0_IGNORE; directed_core_and_app: PASS_18_ACTUAL_FUNCTIONS; full_workspace_after_repairs: PASS_COMBINED_V3_1203_0_0; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN; combined_v3_workspace: PASS_1203_INCLUDING_4_RENDERER_FMT_CLIPPY.
 
-- [ ] **CSV-Worker bei abgebrochenen und parallelen Shutdowns vollständig halten** — FULL_COMBINED_WORKSPACE_PASS_NATIVE_ACCEPTANCE_OPEN. Eine quellseitig bestätigte Lücke konnte nach Supervisorabbruch den tatsächlichen Blocking-Join verlieren und die Abrechnung hängen lassen. Registry, Worker und Supervisor behalten jetzt gemeinsame Join-Slots; abgebrochene oder gleichzeitige Drains nehmen keine laufenden Handles heraus. Zwei echte Crawler-/SQLite-/CSV-Regressionen bestehen. Produzenten-, Body-, Formatierungs- und Budgetregionen bleiben byteidentisch; vollständige Abnahme steht aus.
+- [ ] **CSV-Worker bei abgebrochenen und parallelen Shutdowns vollständig halten** — FULL_COMBINED_WORKSPACE_PASS_NATIVE_ACCEPTANCE_OPEN. Registry, Worker und Supervisor behalten gemeinsame Join-Slots auch bei abgebrochenen oder gleichzeitigen Drains. Zwei echte Crawler-/SQLite-/CSV-Regressionen und der spätere vollständige V3-Lauf bestehen. Die gesonderte große physische Ausgabe und Installation sind noch nicht abgenommen.
   - [x] Unabhängiger begrenzter Source-Review ohne bestätigte Befunde; beide kritischen Originalregionen mit2171 und20684 Bytes unabhängig bytegleich geprüft.
   - [x] Zwei tatsächliche neue Regressionen bestehen: Supervisorabbruch samt Body-/Callerabbruch und abgebrochene/gleichzeitige Drains. Reale Blocking-Rückkehr wird kontrolliert gehalten; vor Freigabe bleibt Drain nachweislich wartend, danach sind beide tatsächlichen Joins beobachtet, Registry leer und Abrechnung vollständig.
   - [x] Ersten irreführenden Cargo-Exit0 mit null ausgewählten Tests durch Namens-/Anzahlguard als FAIL verworfen; ursprüngliche Protokolle erhalten. Bytegleicher Mtime-Refresh nach Windows-Copy erzwingt tatsächliche Kompilierung und grüne zweite Ausführung.
-  - [x] Nachfolgender tatsächlicher kombinierter V3-Lauf besteht mit 1203/0/0, allen421 Pflichtnamen, vier echten Renderer-Gates, Format und Clippy; siehe separaten V2-Beleg.
+  - [x] Nachfolgender tatsächlicher kombinierter V3-Lauf besteht mit 1203/0/0, allen421 Pflichtnamen, vier echten Renderer-Gates, Format und Clippy; siehe separaten V3-Beleg.
   - [ ] Native API-/CLI-/SDK-/Browser-/physische und Plattformabnahmen auf den neuen Quellstand binden; installierte Version bleibt unverändert.
   - Verträge: [source-handoff.json](verification/csv-registry-lifecycle-20261015/source-handoff.json), [source-review.json](verification/csv-registry-lifecycle-20261015/source-review.json), [index.json](verification/csv-registry-lifecycle-20261015/focused-repaired/index.json), [index.json](verification/combined-workspace-v3-20261015/index.json).
-  - Gate-Stand: source_review: BOUNDED_SOURCE_NO_CONFIRMED_FINDINGS; directed_two_groups: PASS_ACTUAL_2_0_0; critical_regions: EXACT_2171_PLUS_20684_BYTES; full_workspace: NOT_RUN; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN; combined_v3_workspace: PASS_1203_INCLUDING_4_RENDERER_FMT_CLIPPY.
+  - Gate-Stand: source_review: BOUNDED_SOURCE_NO_CONFIRMED_FINDINGS; directed_two_groups: PASS_ACTUAL_2_0_0; critical_regions: EXACT_2171_PLUS_20684_BYTES; full_workspace: PASS_COMBINED_V3_1203_0_0; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN; combined_v3_workspace: PASS_1203_INCLUDING_4_RENDERER_FMT_CLIPPY.
 
 - [ ] **Sitemap-Compilerfehler beheben und den vollständigen Stand erneut prüfen** — FULL_COMBINED_WORKSPACE_PASS_NATIVE_ACCEPTANCE_OPEN. Der reparierte v3-Stand kompiliert ohne Warnungen. Sein vollständiger Lauf endete mit217 bestandenen und3 fehlgeschlagenen App-Tests; Core, die vier echten Renderer-Gates und Clippy wurden danach nicht ausgeführt. Die drei Fehler sind durch genau4 Testdatei-Korrekturen behoben und alle3 gerichteten Wiederholungen bestehen tatsächlich. Der neue gesamte Quellstand muss weiterhin vollständig geprüft werden.
   - [x] Tatsächlichen fehlgeschlagenen e9-Lauf mit vollständigem Compilerlog, Exit101 und geschlossenem eigenen Browser-Worker archiviert; installierter Release bleibt unverändert.
@@ -68,7 +79,7 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - [x] Korrigierter endgültiger v3-Stand besteht tatsächlich cargo check --workspace --all-targets --locked in23,26 Sekunden ohne Warnungen; alle297 Snapshot-/Checkout-Eingaben danach bytegleich geprüft.
   - [x] Vollständigen v3-Lauf mit217 bestandenen,3 fehlgeschlagenen und0 ignorierten App-Tests samt vollständigem Log und geschlossenem eigenen Browser-Worker archiviert. Core-/Renderer-/Clippy-Abnahme wurde dadurch nicht erreicht.
   - [x] Genau4 Testdateien repariert: eindeutiges26er-MCP-Inventar, echte nichtleere Abbruchschreibprobe und wohldefinierter SQLite-Read-only-Start vor den6 unveränderten Korruptionsfällen. Alle3 gezielten Testwiederholungen bestehen mit jeweils1 bestanden,0 fehlgeschlagen,0 ignoriert; alle297 Eingaben danach bytegleich.
-  - [x] Nachfolgender tatsächlicher kombinierter V3-Lauf besteht mit 1203/0/0, allen421 Pflichtnamen, vier echten Renderer-Gates, Format und Clippy; siehe separaten V2-Beleg.
+  - [x] Nachfolgender tatsächlicher kombinierter V3-Lauf besteht mit 1203/0/0, allen421 Pflichtnamen, vier echten Renderer-Gates, Format und Clippy; siehe separaten V3-Beleg.
   - [ ] Optimierten Kandidaten bauen und native API-/CLI-/SDK-/Browser-/physische Abnahmen ausdrücklich auf den reparierten Quellstand binden; alte e9-Treiber bestätigen diese geänderten Bytes nicht.
   - [ ] Plattform- und installierte Laufzeitabnahmen getrennt abschließen; keine vollständige Hersteller-Parität behaupten.
   - Verträge: [index.json](verification/sitemap-source-ui-suite-failed-20261015/index.json), [check.json](verification/sitemap-compile-repair-20261015/check.json), [index.json](verification/sitemap-compile-repair-20261015/focused-app-regressions/index.json), [index.json](verification/combined-workspace-v3-20261015/index.json).
@@ -181,19 +192,19 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - Verträge: [mcp-reference-scope-audit-20261015.json](verification/mcp-reference-scope-audit-20261015.json), [feature-catalog.md](feature-catalog.md), [granular-acceptance.json](parity/granular-acceptance.json).
   - Gate-Stand: reference_docs: CHECKED_PUBLIC_PRIMARY_20261015; current_tool_inventory: STATIC26_NOT_RUNTIME; expanded_workflow: NOT_IMPLEMENTED_NOT_EXECUTED; manufacturer_parity: NOT_PROVEN.
 
-- [ ] **Optionale lokale Dateifunktionen für MCP abnehmen** — FULL_COMBINED_WORKSPACE_PASS_NATIVE_ACCEPTANCE_OPEN. Fünf optionale lokale MCP-Dateifunktionen sind als eigener Rust-Code implementiert:26 Standard-Tools,31 bei ausdrücklicher Freigabe. Tatsächlich bestehen15 Windows-Modulgruppen und14 CLI-/Bridge-/STDIO-/HTTP-Gruppen; der HTTP-Test startet drei eigene Servermodi. Die zwei Testannahmen zum Windows-Fehlercode und zum bestehenden Crawl-Listenobjekt sind ohne Produktänderung korrigiert. Unix, offizielle SDK-Clients, der kombinierte vollständige Workspace und native/Installationsabnahmen bleiben offen. automation.mcp bleibt teilweise geprüft.
+- [ ] **Optionale lokale Dateifunktionen für MCP abnehmen** — WINDOWS_MODULE_TRANSPORT_AND_OFFICIAL_SDK_PASS_REMAINING_SCOPE_OPEN. Fünf optionale lokale Dateifunktionen bestehen29 Windows-Modul-/Transportgruppen, den vollständigen V3-Workspace und175 tatsächliche offizielle SDK-Operationsprüfungen auf STDIO und HTTP.26 Standard-Tools und31 aktivierte Tools sind tatsächlich geprüft. Windows-Junctions werden abgewiesen. HTTP-In-flight-Drain, Unix, weitere MCP-Funktionen und Installation bleiben offen; automation.mcp bleibt partial.
   - [x] Eigenes capability-relatives Dateimodul sowie CLI-/Bridge-/HTTP-/STDIO-Anbindung geschrieben; Typen und Pfade werden vor Dateioperationen geprüft, globale Pfadfreigaben entstehen nicht.
   - [x] Quellreviews einschließlich Rootkorrekturen für Response-Workerbesitz, tatsächliche Loopbackadresse, eigenen HTTP-Startupkanal und beobachtete Drain-Wartezustände abgeschlossen. Das sind keine Laufzeitbeweise.
   - [x] 31 neue Testgruppen geschrieben:29 gemeinsame Windows-Fälle und2 Unix-Fälle. Alle15 Windows-Modulgruppen bestehen nach der eng begrenzten Windows-Testkorrektur tatsächlich; alle300 Eingaben danach exakt und Cargo vollständig geschlossen.
   - [x] Windows-Root-Handle-Test besteht mit OS5/32-Fehlerprüfung und zwingend erfolgreicher gleicher Umbenennung samt identischen Dateibytes nach tatsächlichem Drain und Schließen des Grants.
   - [x] Alle14 Transportgruppen bestehen tatsächlich, darunter echte STDIO-Frames, EOF-/Outputfehler-Drain und eigenes HTTP-Bind/Startup für deaktiviert127.0.0.1 sowie aktiviert127.0.0.1 und127.0.0.2. Bestehender Crawl-Listenobjektvertrag ist erhalten; Testshape ausschließlich um das vorhandene crawls-Feld korrigiert.
-  - [x] Nachfolgender tatsächlicher kombinierter V3-Lauf besteht mit 1203/0/0, allen421 Pflichtnamen, vier echten Renderer-Gates, Format und Clippy; siehe separaten V2-Beleg.
-  - [ ] Kombinierten vollständigen Quellstand mit allen passenden Regressionen, vier echten Browser-Gates, Format und Clippy bestehen.
-  - [ ] Offizielle MCP-SDK-Clients über STDIO und HTTP für deaktiviertes und aktiviertes Inventar sowie sämtliche fünf Dateioperationen mit Fehler-/Snapshot-/Cursor-/UTF8-/Wire-Grenzen prüfen.
-  - [ ] Tatsächliche Worker-/Supervisor-Joins nach Requestabbruch, Drainabbruch und kombiniertem Monitorabbruch prüfen; native Windows-Junction-/Symlink- und Unix-Spezialdateifälle getrennt abnehmen.
-  - [ ] Weitere Report-/Bulkexport-/Feld-/Filterkataloge, gespeicherte Inhaltsausgaben und ausdrücklich optionale Node/npm-Funktionen weiter implementieren und prüfen. Vollständige MCP- und Hersteller-Parität bleiben offen.
-  - Verträge: [mcp-file-tools.md](mcp-file-tools.md), [preparation.json](verification/mcp-file-tools-source-20261015/preparation.json), [index.json](verification/mcp-file-tools-source-20261015/focused-module-first/index.json), [windows-root-test-repair.json](verification/mcp-file-tools-source-20261015/windows-root-test-repair.json), [index.json](verification/mcp-file-tools-source-20261015/focused-module-repaired/index.json), [index.json](verification/mcp-file-tools-source-20261015/focused-wiring-repaired/index.json), [index.json](verification/combined-workspace-v3-20261015/index.json).
-  - Gate-Stand: source_review: BOUNDED_SOURCE_ONLY_NO_CONFIRMED_FINDINGS; authored_tests: 31_WRITTEN_29_WINDOWS_EXECUTED_AND_PASSED_2_UNIX_NOT_RUN; compile: PASS_ACTUAL_TEST_PROFILE_51_82_SECONDS; official_sdk: NOT_RUN; native_http_stdio: NOT_RUN; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN; windows_root_test_repair: PASS_ACTUAL_MODULE_GROUP; transport_tests: PASS_14_ACTUAL_GROUPS_OWNED_HTTP_THREE_MODES; unix_tests: 2_AUTHORED_NOT_RUN; combined_v3_workspace: PASS_1203_INCLUDING_4_RENDERER_FMT_CLIPPY.
+  - [x] Nachfolgender tatsächlicher kombinierter V3-Lauf besteht mit 1203/0/0, allen421 Pflichtnamen, vier echten Renderer-Gates, Format und Clippy; siehe separaten V3-Beleg.
+  - [x] Offizielle Clients bestehen175 Operationsprüfungen:60 erfolgreiche Operationen und115 erwartete Ablehnungen; beide aktivierten Transporte weisen je fünf innere Junction-Zugriffe mit unveränderten Außendaten ab. Beide Root-Junction-CLI-Starts werden natürlich mit Exit1 abgewiesen.
+  - [ ] Tatsächliches kontrolliertes Leeren laufender HTTP-Dateiarbeit separat prüfen. Die erzwungene Windows-Testbereinigung ist dafür kein Beleg.
+  - [ ] Zwei Unix-Gruppen, weitere Symlink-/Spezialdateifälle und passende Plattformabnahme ausführen.
+  - [ ] Report-/Bulkexport-/Feld-/Filterkataloge, gespeicherte Inhaltsausgaben und ausdrücklich optionale Node/npm-Funktionen vervollständigen; Installation separat prüfen.
+  - Verträge: [mcp-file-tools.md](mcp-file-tools.md), [preparation.json](verification/mcp-file-tools-source-20261015/preparation.json), [index.json](verification/mcp-file-tools-source-20261015/focused-module-first/index.json), [windows-root-test-repair.json](verification/mcp-file-tools-source-20261015/windows-root-test-repair.json), [index.json](verification/mcp-file-tools-source-20261015/focused-module-repaired/index.json), [index.json](verification/mcp-file-tools-source-20261015/focused-wiring-repaired/index.json), [index.json](verification/combined-workspace-v3-20261015/index.json), [index.json](verification/combined-optimized-native-v3-20261015/index.json).
+  - Gate-Stand: source_review: BOUNDED_SOURCE_ONLY_NO_CONFIRMED_FINDINGS; authored_tests: 31_WRITTEN_29_WINDOWS_EXECUTED_AND_PASSED_2_UNIX_NOT_RUN; compile: PASS_ACTUAL_TEST_PROFILE_51_82_SECONDS; official_sdk: PASS_175_ACTUAL_OPERATION_ASSERTIONS; native_http_stdio: PASS_BOTH_OFFICIAL_SDK_TRANSPORTS; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN; windows_root_test_repair: PASS_ACTUAL_MODULE_GROUP; transport_tests: PASS_14_ACTUAL_GROUPS_OWNED_HTTP_THREE_MODES; unix_tests: 2_AUTHORED_NOT_RUN; combined_v3_workspace: PASS_1203_INCLUDING_4_RENDERER_FMT_CLIPPY; windows_junction: PASS_INNER_AND_ROOT_CONTROLS; http_inflight_graceful_drain: NOT_PROVEN.
 
 - [x] **B8: optionale Textaufnahme und gespeicherte Inhaltsanalyse** — COMPLETED. Der begrenzte B8-Baustein für optionale Roh-/DOM-Textaufnahme und gespeicherte ausgewählte Inhaltsanalyse ist mit eigenen nativen/API/UI-Gates, exakter Commit-CI und unveränderlichem installiertem Release geprüft. Vollständige Website-Analyse und CSS-Neuauswahl ohne erhaltenes HTML/DOM bleiben zusätzliche offene Feature-Abnahmen.
   - [x] Pure CSS-/Unicode-Auswahl20 und Binding4 sowie16 echte native Fixtures geprüft; ungültige Konfiguration scheitert vor HTTP.
@@ -3708,7 +3719,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Vollständige Mitgliedschaft speichern und Sitemap-only sowie nicht gelistete Crawl-URLs getrennt prüfen.
 
-  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [analysis](analysis-acceptance.md) (PASS), [sitemap-derived-assessment-local](verification/sitemap-assessment-local.json) (PASS_LOCAL_WINDOWS).
+  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [analysis](analysis-acceptance.md) (PASS), [sitemap-derived-assessment-local](verification/sitemap-assessment-local.json) (PASS_LOCAL_WINDOWS), [combined-optimized-native-v3-20261015](verification/combined-optimized-native-v3-20261015/index.json) (FIVE_NATIVE_SCOPES_PASS_PHYSICAL_FAILED_EXTERNAL_ROOT_ABORT_NOT_INSTALL_ELIGIBLE).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -3735,6 +3746,14 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "sitemap-derived-assessment-local"
         ],
         "proves": "Actual same-transaction inventory permits qualified Complete/KnownEmpty/Unknown for current or historical declared sources; missing/denied/incomplete sources remain unknown, invalid Page Locs separate. Target/inlink joins and full website coverage remain open."
+      },
+      {
+        "scope": "Actual same-source small native and405-page browser findings/complete CSV scope; physical export limits and50000URL/50MiB positives remain open.",
+        "verification_run_ids": [
+          "combined-optimized-native-v3-20261015"
+        ],
+        "artifact": "docs/verification/combined-optimized-native-v3-20261015/index.json",
+        "reference_parity": "NOT_PROVEN"
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -3747,7 +3766,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Lastmod erhalten/prüfen und Redirect-, Non-200- sowie nicht indexierbare Ziele getrennt melden.
 
-  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [sitemap-derived-assessment-local](verification/sitemap-assessment-local.json) (PASS_LOCAL_WINDOWS).
+  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [sitemap-derived-assessment-local](verification/sitemap-assessment-local.json) (PASS_LOCAL_WINDOWS), [combined-optimized-native-v3-20261015](verification/combined-optimized-native-v3-20261015/index.json) (FIVE_NATIVE_SCOPES_PASS_PHYSICAL_FAILED_EXTERNAL_ROOT_ABORT_NOT_INSTALL_ELIGIBLE).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -3773,6 +3792,14 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "sitemap-derived-assessment-local"
         ],
         "proves": "Raw lastmod fields retained and assessed against named XSD1.0 date|dateTime and W3C precision profiles; actual API/SDK/browser handle calendar errors, duplicate elements, incomplete prefixes and undetermined leap seconds. Target redirect/non200/nonindexable findings remain open."
+      },
+      {
+        "scope": "Actual same-source small native and405-page browser findings/complete CSV scope; physical export limits and50000URL/50MiB positives remain open.",
+        "verification_run_ids": [
+          "combined-optimized-native-v3-20261015"
+        ],
+        "artifact": "docs/verification/combined-optimized-native-v3-20261015/index.json",
+        "reference_parity": "NOT_PROVEN"
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -4951,7 +4978,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Historischer Grundablauf geprüft; neue Dateifunktionen noch abnehmen und Katalog-/Export-/Node-Funktionen ergänzen.
 
-  Beweisregister: [mcp](verification/mcp-e2e.json) (PASS), [native-policy-ci](verification/native-policy-ci.json) (PASS), [native-policy-installed](verification/native-policy-installed.json) (PASS).
+  Beweisregister: [mcp](verification/mcp-e2e.json) (PASS), [native-policy-ci](verification/native-policy-ci.json) (PASS), [native-policy-installed](verification/native-policy-installed.json) (PASS), [combined-optimized-native-v3-20261015](verification/combined-optimized-native-v3-20261015/index.json) (FIVE_NATIVE_SCOPES_PASS_PHYSICAL_FAILED_EXTERNAL_ROOT_ABORT_NOT_INSTALL_ELIGIBLE).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -4980,6 +5007,14 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "native-policy-installed"
         ],
         "proves": "Exact B7 source915e175 has four successful Windows/Linux/Chromium/Linux Docker CI jobs and an installed native Windows immutable release. Existing seven jobs and eleven original JSON files remain byte-identical after restart; no user-data fixture requests. This confirms the already documented B7 slice only; ongoing B8 capture/corpus changes and full reference parity are not attested."
+      },
+      {
+        "scope": "Actual optional file-tool SDK and Windows rejection scope; additional MCP catalog/export/Node workflows remain open.",
+        "verification_run_ids": [
+          "combined-optimized-native-v3-20261015"
+        ],
+        "artifact": "docs/verification/combined-optimized-native-v3-20261015/index.json",
+        "reference_parity": "NOT_PROVEN"
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -5426,4 +5461,4 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `b0a04960844962b11a048fe855477e37067822438677b254745b7d7f9ad56d6b`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T04:16:14.440Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `6990922d781a8ee66ba2754399de645edb6f11e0b52d495172fd7fdddbadd493`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T08:41:21.015Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

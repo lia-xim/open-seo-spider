@@ -1,0 +1,40 @@
+{
+  "kind": "root_literal_operational_binding_renewal_r2_derivation",
+  "recorded_at": "2026-10-15T08:24:18.340Z",
+  "before_sha256": "d05f0510cb5a3ea91f23e4ac1676b57e8ba205640e78c4ff8702d3e63399292f",
+  "target": "work/prepare-v3-native-bindings-r2.mjs",
+  "after_sha256": "fbb83bfc0754cca9840976ed99a9156114fa32c16656b1c272a149295ab3e5be",
+  "edits": [
+    [
+      "'v3-'+gate+'-release.json'",
+      "'v3-r2-'+gate+'-release.json'"
+    ],
+    [
+      "'v3-browser-native-release.json'",
+      "'v3-r2-browser-native-release.json'"
+    ],
+    [
+      "'v3-physical-release.json'",
+      "'v3-r2-physical-release.json'"
+    ],
+    [
+      "'v3-mcp-file-sdk-binding.json'",
+      "'v3-r2-mcp-file-sdk-binding.json'"
+    ],
+    [
+      "'v3-mcp-root-junction-binding.json'",
+      "'v3-r2-mcp-root-junction-binding.json'"
+    ],
+    [
+      "'work/v3-native-bindings-issued.json'",
+      "'work/v3-r2-native-bindings-issued.json'"
+    ],
+    [
+      "const receipt={kind:",
+      "const receipt={operational_renewal_of:'work/v3-native-bindings-issued.json',renewal_reason:'Prior two-hour operational release expired before any native spawn; actual inputs revalidated through unchanged binder',kind:"
+    ]
+  ],
+  "source_oracle_gate_changes": 0,
+  "native_execution": "NOT_RUN",
+  "installation": "UNCHANGED_AB1"
+}

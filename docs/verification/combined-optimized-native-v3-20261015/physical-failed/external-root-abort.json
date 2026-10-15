@@ -1,0 +1,26 @@
+{
+  "kind": "root_requested_abort_of_owned_physical_v3_test",
+  "recorded_at": "2026-10-15T08:38:04.3622212Z",
+  "pid": 2500,
+  "parent_pid": 33976,
+  "creation_time_utc": "2026-10-15T08:29:19.7645690Z",
+  "executable": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-optimized-build-v3\\candidate\\open-seo-spider.exe",
+  "data": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\physical-combined-rebind-v3\\runs\\optimized-v3-acceptance\\runtime\\csv-01-base",
+  "candidate_sha256": "22f8c602f0203c1be946882c3f83cee370dc3f354f5bf678cbfff4c40ecd7abd",
+  "reason": "Large finding collection still running after about524seconds, with140of405rows actually preserved. Confirmed per-page whole-report SQL JSON parsing requires source repair and unchanged size-oracle rerun; only owned test App was terminated.",
+  "graceful_shutdown": "NOT_PROVEN",
+  "physical_acceptance": "NOT_PASSED_ROOT_ABORTED",
+  "original_user_runtime": "NOT_TOUCHED",
+  "observed_process_exit": true,
+  "observed_exit_code": null,
+  "closed_at": "2026-10-15T08:38:04.4354271Z",
+  "timing_basis": "08:29:20 row-file creation to08:38:04 Root abort, about524seconds; individual request timeout failure is not asserted",
+  "corrected_observation": {
+    "prior_directory_entry_length": 0,
+    "actual_closed_file_bytes": 14787238,
+    "actual_complete_rows": 140,
+    "expected_rows": 405,
+    "actual_sha256": "a8ce72cb050808e53a4c789d57802c4704cebf3428ba9f07739c49f4dae115d1",
+    "correction": "Open-writer NTFS directory metadata was stale. The earlier no-first-output inference is withdrawn; actual preserved file proves partial progress."
+  }
+}

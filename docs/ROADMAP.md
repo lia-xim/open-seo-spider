@@ -2,7 +2,7 @@
 
 Diese Roadmap ordnet die nächsten Arbeitsschritte. Der vollständige laufende Status aller 144 Fähigkeiten steht in [FEATURE_TODO.md](FEATURE_TODO.md); die exakten Abnahmen und Belege stehen in [feature-parity.json](feature-parity.json).
 
-Aktuell: **31 eigene Abnahmen erfüllt, 67 teilweise geprüft, 46 offen**. Zusätzlich bleiben [416 benannte Filter und 32 Ablaufverträge](parity/granular-acceptance.json) getrennt zu prüfen. Alle Hersteller-Parität bleibt **NOT_PROVEN**. Es wird kein Fertigstellungsprozentsatz berechnet.
+Aktuell: **30 eigene Abnahmen erfüllt, 68 teilweise geprüft, 46 offen**. Zusätzlich bleiben [416 benannte Filter und 32 Ablaufverträge](parity/granular-acceptance.json) getrennt zu prüfen. Alle Hersteller-Parität bleibt **NOT_PROVEN**. Es wird kein Fertigstellungsprozentsatz berechnet.
 
 ## Aktueller nächster Baustein
 
@@ -13,6 +13,8 @@ Aktuell: **31 eigene Abnahmen erfüllt, 67 teilweise geprüft, 46 offen**. Zusä
 **Abgeschlossen und installiert: B11.** [Issue18](https://github.com/lia-xim/open-seo-spider/issues/18) verfolgt den eigenen Vergleich gespeicherter Crawls mit konkreten Vorher/Nachher-Werten, vollständigem optionalem Originalbericht-JSON und explizitem URL-Mapping. [Alle vier exakten CI-Jobs an Quellcommit2a81036](verification/saved-comparison-ci.json) sind grün; Windows und Linux bestehen jeweils476 Standard-Rust-Tests. Der [optimierte Windows-Release](verification/saved-comparison-release.json) besteht mit demselben Executable native11/SDK12, vier CLI-Grenzgruppen und13 lokale Browsergruppen. Die [Installation auf localhost8787](verification/saved-comparison-installed.json) erhält sieben Jobs und19 dauerhafte Dateien byteidentisch, fünf Git-Blob-Assets und23 read-only Inventar-Tools. Fehlende Quellen bleiben unbekannt; Hersteller-Parität bleibt NOT_PROVEN.
 
 **In Arbeit: B12 – Sitemaps.** Die [neue Quellen-/Lastmod-Prüfung](sitemap-assessment.md) besteht den gesamten lokalen Workspace794/0 Fehler/0 ausgespart, Format/Clippy und13 tatsächliche API-/CSV-/SDK-/Browsergruppen am optimierten Windows-Release. [Belege](verification/sitemap-assessment-local.json) halten206 Quellinputs,24 MCP-Tools und320px fest; [Lokal auf8787 installiert](verification/sitemap-assessment-installed.json): sieben bestehende Jobs und19 dauerhafte Dateien unverändert, Renderer8790 verfügbar und Backup verifiziert. Rekursive Quellen-Kohorten sind qualifiziert vollständig/leer/unbekannt; Lastmod behält Originale und getrennte XSD-/W3C-Profile. Ziel-/Inlink-Projektionen, weitere physische Budget-Gates und Sitemap-ZIP-Erzeugung bleiben in Arbeit. Der Nutzer erlaubt die lokale Alternative zur GitHub-Actions-Sperre; Remote-/Linux-/Container-CI und vollständige Herstellerparität bleiben NOT_PROVEN.
+
+**Neuer V3-Kandidat noch nicht installiert:** [Optimierter Build und fünf begrenzte native Bereiche](verification/combined-optimized-native-v3-20261015/index.json) bestehen zusätzlich zum vollständigen1203-Test-Lauf. Die große physische Prüfung ist nicht bestanden; nach etwa524 Sekunden wurden140/405 Zeilen erhalten und die eigene Testinstanz ausdrücklich beendet. Die quadratische SQLite-JSON-Projektion wird korrigiert.50.000 dauerhafte Mitgliedschaften,50MiB-Quellen und die restlichen Abnahmen bleiben offen. Die bisherige ab1-Installation und sämtliche Nutzerdaten sind unverändert.
 
 ## Was bereits als Grundlage dient
 
