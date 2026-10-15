@@ -6,6 +6,8 @@ mod mcp;
 mod policy_export;
 mod resource_export;
 mod server;
+mod sitemap_findings;
+mod sitemap_findings_cli;
 mod sitemap_membership;
 mod sitemap_raw_cli;
 
@@ -34,6 +36,16 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Read a local findings page and/or complete stored CSV without website requests.
+    SitemapFindings {
+        store: PathBuf,
+        #[arg(long)]
+        request: PathBuf,
+        #[arg(long, required_unless_present = "csv")]
+        output: Option<PathBuf>,
+        #[arg(long)]
+        csv: Option<PathBuf>,
+    },
     /// Read a verified raw sitemap window from local SQLite; no website is fetched.
     SitemapRows {
         store: PathBuf,
@@ -216,6 +228,15 @@ async fn main() -> anyhow::Result<()> {
     }) {
         Command::Serve { listen, data_dir } => Box::pin(server::serve(&listen, data_dir)).await?,
         Command::Mcp { server } => mcp::stdio(&server).await?,
+        Command::SitemapFindings {
+            store,
+            request,
+            output,
+            csv,
+        } => {
+            let receipt = sitemap_findings_cli::run(store, request, output, csv).await?;
+            println!("{}", serde_json::to_string(&receipt)?);
+        }
         Command::SitemapRows {
             store,
             request,

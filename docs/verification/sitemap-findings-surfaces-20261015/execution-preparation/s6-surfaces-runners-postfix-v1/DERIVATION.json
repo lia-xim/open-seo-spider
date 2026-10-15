@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "basis_manifest": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-surfaces-runners-v1\\manifest.json",
+  "basis_manifest_sha256": "30a85f13c756792b43c284f6789e7207042c0719f64a077d5517580bb518a13e",
+  "template": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-surfaces-runners-v1\\build-sitemap-findings-surfaces-v1.mjs",
+  "template_sha256": "dcf4e74c70658bd7090ab7b90b2d595bc95747cf315c165409028447a66b989c",
+  "normalization": "UTF8 CRLF to LF; template contains no CRLF",
+  "output": "build-sitemap-findings-surfaces-v2.mjs",
+  "output_sha256": "5478157ccc2e3511285a175e0b559168dc66f268bc79f45c631f98609be137d6",
+  "bytes": 12236,
+  "intended_promotion": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/build-sitemap-findings-surfaces-v2.mjs",
+  "required_before": "ABSENT",
+  "operations": [
+    {
+      "before": "const out = path.join(root, 'results/sitemap-findings-surfaces-' + mode + '-build-v1');",
+      "after": "// Verify the actual three producer runs and captured logs, not a summary-only\n// PASS string. All admission checks finish before any output/backup/child write.\nassert(Array.isArray(suite.failures) && suite.failures.length === 0, 'Workspace proof must have no failures');\nconst expectedSuiteRuns = [\n  {name: 'format', args: ['fmt', '--all', '--check']},\n  {name: 'workspace-live', args: ['test', '--workspace', '--locked', '--', '--include-ignored', '--test-threads=1']},\n  {name: 'clippy', args: ['clippy', '--workspace', '--all-targets', '--locked', '--', '-D', 'warnings']},\n];\nassert(Array.isArray(suite.runs), 'Actual workspace run records required');\nassert.deepEqual(suite.runs.map(run => run.name), expectedSuiteRuns.map(run => run.name), 'Exactly format/workspace-live/clippy in producer order required');\nconst verifiedSuiteRuns = [];\nlet actualWorkspace = null;\nfor (const [index, expected] of expectedSuiteRuns.entries()) {\n  const run = suite.runs[index];\n  assert.deepEqual(run.args, expected.args, expected.name + ' exact command');\n  assert.equal(run.actual_close_event, true, expected.name + ' actual child close');\n  assert.equal(run.spawn_error, null, expected.name + ' spawn error');\n  assert.deepEqual(run.exit, {code: 0, signal: null}, expected.name + ' successful close');\n  assert.equal(typeof run.log_sha256, 'string', expected.name + ' log SHA type');\n  assert.match(run.log_sha256, /^[0-9a-f]{64}$/, expected.name + ' log SHA profile');\n  // Fixed names from the expected command set, never untrusted path components.\n  const logPath = path.join(path.dirname(suitePath), expected.name + '.log');\n  const logBytes = fs.readFileSync(logPath);\n  assert.equal(sha(logBytes), run.log_sha256, expected.name + ' actual log SHA');\n  const logText = logBytes.toString('utf8');\n  const summaries = [...logText.matchAll(/test result: (ok|FAILED)\\. (\\d+) passed; (\\d+) failed; (\\d+) ignored;/g)]\n    .map(match => ({state: match[1], passed: +match[2], failed: +match[3], ignored: +match[4]}));\n  assert(Array.isArray(run.summaries), expected.name + ' actual summary rows required');\n  assert.deepEqual(run.summaries, summaries, expected.name + ' summary rows must match its actual log');\n  for (const summary of summaries) {\n    assert.equal(summary.state, 'ok', expected.name + ' summary state');\n    for (const key of ['passed', 'failed', 'ignored']) assert(Number.isSafeInteger(summary[key]) && summary[key] >= 0, expected.name + ' bounded summary count');\n    assert.equal(summary.failed, 0, expected.name + ' failed tests');\n    assert.equal(summary.ignored, 0, expected.name + ' ignored tests');\n  }\n  if (expected.name === 'workspace-live') {\n    assert(summaries.length > 0, 'Actual workspace test summaries required');\n    const total = summaries.reduce((sum, row) => ({passed: sum.passed + row.passed, failed: sum.failed + row.failed, ignored: sum.ignored + row.ignored}), {passed: 0, failed: 0, ignored: 0});\n    for (const value of Object.values(total)) assert(Number.isSafeInteger(value), 'Actual workspace aggregate must be exact');\n    assert(total.passed >= 1170 && total.failed === 0 && total.ignored === 0, 'Actual workspace minimum/failed/ignored');\n    assert.equal(suite.passed, total.passed, 'Proof passed total must equal actual workspace log');\n    assert.equal(suite.ignored, total.ignored, 'Proof ignored total must equal actual workspace log');\n    for (const group of manifest.required_tests) for (const name of group.names) assert(logText.includes('::' + name + ' ... ok'), 'Required actual source case not green: ' + group.path + '::' + name);\n    for (const name of ownedRendererGates) assert(logText.includes('test ' + name + ' ... ok'), 'Required actual owned browser gate not green: ' + name);\n    actualWorkspace = {...total, summary_rows: summaries.length, required_source_names: 388, required_renderer_gates: 4};\n  }\n  verifiedSuiteRuns.push({name: expected.name, args: expected.args, log_path: logPath, log_sha256: sha(logBytes), actual_close_event: run.actual_close_event, spawn_error: run.spawn_error, exit: run.exit, summaries});\n}\nassert(actualWorkspace !== null, 'Actual workspace run not verified');\nconst out = path.join(root, 'results/sitemap-findings-surfaces-' + mode + '-build-v2');",
+      "expected_occurrences": 1
+    },
+    {
+      "before": "required_test_names: suite.required_test_names, owned_renderer_gate_count: suite.owned_renderer_gate_count, owned_renderer_gates_verified: suite.owned_renderer_gates_verified",
+      "after": "required_test_names: suite.required_test_names, owned_renderer_gate_count: suite.owned_renderer_gate_count, owned_renderer_gates_verified: suite.owned_renderer_gates_verified, verified_runs: verifiedSuiteRuns, actual_workspace: actualWorkspace",
+      "expected_occurrences": 1
+    }
+  ],
+  "preserved_actual_build_backup_try_exact": true,
+  "preserved_child_helper_exact": true,
+  "preserved_source_verify_helper_exact": true,
+  "source_manifest_sha256": "69492d0c0cc56bab5de86251045459a1707deb4c991d5871f9ad39015e897751",
+  "source_and_suite_versions_unchanged": true,
+  "new_result_roots": [
+    "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/sitemap-findings-surfaces-debug-build-v2",
+    "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/sitemap-findings-surfaces-optimized-build-v2"
+  ],
+  "guard_order_static_only": {
+    "hold": 716,
+    "suite_run_validation": 3204,
+    "actual_workspace_verified": 7021,
+    "output_mkdir": 7570,
+    "first_actual_child_call": 9315
+  }
+}

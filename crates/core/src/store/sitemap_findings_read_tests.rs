@@ -472,3 +472,122 @@ fn findings_valid_large_legacy_task_reports_response_budget_without_narrowing_in
         .unwrap();
     assert_eq!(actual, 1);
 }
+
+#[test]
+fn findings_session_pages_and_full_visits_share_the_same_actual_fixed_query_and_context() {
+    let (_dir, store) = fixture(451);
+    let query = source_query();
+    store
+        .with_verified_sitemap_findings(&query.selection, None, &Default::default(), |session| {
+            assert_eq!(session.selection(), &query.selection);
+            let mut request = SitemapFindingsRequest {
+                limit: 10,
+                candidate_limit: 17,
+                ..query.clone()
+            };
+            let mut paged = Vec::new();
+            loop {
+                let page = session.page(&request)?;
+                assert_eq!(
+                    page.context.context_sha256,
+                    session.context().context_sha256
+                );
+                paged.extend(page.rows.as_ref().unwrap().iter().cloned());
+                let Some(next) = page.continuation else {
+                    assert!(page.scan.exhausted);
+                    break;
+                };
+                request.after = Some(next.after);
+                request.expected_context_sha256 = Some(next.context_sha256);
+                assert!(paged.len() <= 451);
+            }
+            let mut full = Vec::new();
+            session.visit_all(|row| {
+                full.push(row.clone());
+                Ok(())
+            })?;
+            assert_eq!(paged, full);
+            assert_eq!(full.len(), 451);
+            Ok(())
+        })
+        .unwrap();
+}
+
+#[test]
+fn findings_session_changed_query_or_stale_context_rejects_before_actual_after_lookup() {
+    let (_dir, store) = fixture(3);
+    let original = source_query();
+    store
+        .with_verified_sitemap_findings(&original.selection, None, &Default::default(), |session| {
+            let mut changed = original.clone();
+            changed.selection.search = Some("other".into());
+            assert!(matches!(
+                session
+                    .page(&changed)
+                    .unwrap_err()
+                    .downcast_ref::<SitemapFindingsError>(),
+                Some(SitemapFindingsError::InvalidSelection(_))
+            ));
+            let mut stale = original.clone();
+            stale.after = Some(SitemapFindingPosition::UnmeasuredSourceTask { ordinal: 999_999 });
+            stale.expected_context_sha256 = Some("0".repeat(64));
+            assert_eq!(
+                session
+                    .page(&stale)
+                    .unwrap_err()
+                    .downcast_ref::<SitemapFindingsError>(),
+                Some(&SitemapFindingsError::StaleContext)
+            );
+            stale.expected_context_sha256 = Some(session.context().context_sha256.clone());
+            assert_eq!(
+                session
+                    .page(&stale)
+                    .unwrap_err()
+                    .downcast_ref::<SitemapFindingsError>(),
+                Some(&SitemapFindingsError::InvalidContinuation)
+            );
+            Ok(())
+        })
+        .unwrap();
+}
+
+#[test]
+fn findings_session_pages_and_export_keep_one_read_snapshot_across_actual_wal_commit() {
+    let (dir, original) = fixture(3);
+    let path = dir.path().join("findings.sqlite");
+    drop(original);
+    let readonly = CrawlStore::open_read_only(&path).unwrap();
+    let query = source_query();
+    let context = readonly
+        .with_verified_sitemap_findings(&query.selection, None, &Default::default(), |session| {
+            let before = session.page(&query)?;
+            let writer = Connection::open(&path).unwrap();
+            assert_eq!(
+                writer
+                    .execute(
+                        "UPDATE discovery_frontier SET done=1 WHERE kind='sitemap'",
+                        []
+                    )
+                    .unwrap(),
+                3
+            );
+            let after = session.page(&query)?;
+            assert_eq!(before.rows, after.rows);
+            let mut full = Vec::new();
+            session.visit_all(|row| {
+                full.push(row.clone());
+                Ok(())
+            })?;
+            assert_eq!(before.rows.unwrap(), full);
+            Ok(session.context().context_sha256.clone())
+        })
+        .unwrap();
+    assert_ne!(
+        readonly
+            .sitemap_findings_page(&query, &Default::default())
+            .unwrap()
+            .context
+            .context_sha256,
+        context
+    );
+}

@@ -1,0 +1,262 @@
+{
+  "schema_version": 1,
+  "source_manifest_sha256": "69492d0c0cc56bab5de86251045459a1707deb4c991d5871f9ad39015e897751",
+  "source_files297_sha_match_frozen_and_root": true,
+  "source_manifest_counts": {
+    "files": 297,
+    "required_names": 388,
+    "minimum_tests": 1170,
+    "new_authored": 47,
+    "prior_authored": 329,
+    "total_authored": 376,
+    "accepted_baseline": 794,
+    "approved_bindings": 38
+  },
+  "expected_absolute_paths": {
+    "repo": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-integration-v1",
+    "task": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https",
+    "runtime_root": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/outputs/open-seo-spider",
+    "source": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-source-v1",
+    "suite_result": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/sitemap-findings-surfaces-suite-v1",
+    "debug_result": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/sitemap-findings-surfaces-debug-build-v1",
+    "optimized_result": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/sitemap-findings-surfaces-optimized-build-v1"
+  },
+  "recipes": [
+    {
+      "template": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\run-sitemap-findings-core-suite-v1.mjs",
+      "template_sha256": "195840786b083e9a66828af4ed36104a52d0ade6f1c0963aa87f566739eda130",
+      "normalized_utf8_lf_sha256": "195840786b083e9a66828af4ed36104a52d0ade6f1c0963aa87f566739eda130",
+      "output": "run-sitemap-findings-surfaces-suite-v1.mjs",
+      "intended_promotion": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\run-sitemap-findings-surfaces-suite-v1.mjs",
+      "output_sha256": "5de37908b795947c8db1cab459f1a45a2edda823499747b162d13a6bef3fcc66",
+      "bytes": 8797,
+      "operations": [
+        {
+          "before": "sitemap-findings-core",
+          "after": "sitemap-findings-surfaces",
+          "expected_occurrences": 3
+        },
+        {
+          "before": "72dd26c3108c3e3432932e5bfb02d7f75eb8aeed9e7d71b24629511e81289f8d",
+          "after": "69492d0c0cc56bab5de86251045459a1707deb4c991d5871f9ad39015e897751",
+          "expected_occurrences": 1
+        },
+        {
+          "before": "const repo = \"E:\\\\CodexWork\\\\open-seo-spider-01a12ac3-20261013\\\\sitemap-findings-surfaces-integration-v1\";",
+          "after": "const repo = \"E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-integration-v1\";",
+          "expected_occurrences": 1
+        },
+        {
+          "before": "const task=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');",
+          "after": "const task = \"C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https\";",
+          "expected_occurrences": 1
+        },
+        {
+          "before": "assert.equal(process.env.OPEN_SEO_COORDINATED_EXECUTION_WINDOW,'confirmed','New large runs remain held until the coordinated execution window is released');",
+          "after": "assert.equal(process.env.OPEN_SEO_COORDINATED_EXECUTION_WINDOW,'confirmed','New large runs remain held until the coordinated execution window is released');\nassert.equal(path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),path.resolve(task),'Promote this guarded driver into the pinned task/work directory before execution');",
+          "expected_occurrences": 1
+        },
+        {
+          "before": "275",
+          "after": "297",
+          "expected_occurrences": 2
+        },
+        {
+          "before": "341",
+          "after": "388",
+          "expected_occurrences": 2
+        },
+        {
+          "before": "1123",
+          "after": "1170",
+          "expected_occurrences": 3
+        },
+        {
+          "before": "assert.equal(manifest.files.length,297);",
+          "after": "assert.equal(manifest.files.length,297);\nassert.equal(manifest.required_test_names,388);\nassert.equal(manifest.minimum_expected_workspace_tests,1170);\nassert.equal(manifest.new_authored_test_functions,47);\nassert.equal(manifest.approved_product_bindings.length,38);\nconst ownedRendererGates=[\"live_browser_worker_executes_javascript_for_core_crawl\",\"live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness\",\"live_browser_worker_pause_drains_render_and_retains_rendered_discoveries\",\"live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion\"];",
+          "expected_occurrences": 1
+        },
+        {
+          "before": "let worker,fixture,workerAddress,fixtureAddress,closed=false;",
+          "after": "let worker,fixture,workerAddress,fixtureAddress,closed=false,rendererGatesVerified=false;",
+          "expected_occurrences": 1
+        },
+        {
+          "before": "  const workspaceText=fs.readFileSync(path.join(out,'workspace-live.log'),'utf8');",
+          "after": "  const workspaceText=fs.readFileSync(path.join(out,'workspace-live.log'),'utf8');\n  for(const name of ownedRendererGates)assert(workspaceText.includes('test '+name+' ... ok'),'Required actual owned browser gate not green: '+name);\n  rendererGatesVerified=true;",
+          "expected_occurrences": 1
+        },
+        {
+          "before": "failures.length===0&&closed&&passed>=1170&&ignored===0",
+          "after": "failures.length===0&&closed&&rendererGatesVerified&&passed>=1170&&ignored===0",
+          "expected_occurrences": 1
+        },
+        {
+          "before": "files:manifest.files.length,passed,ignored",
+          "after": "files:manifest.files.length,source_authored_delta:47,source_authored_total:376,accepted_baseline:794,passed,ignored",
+          "expected_occurrences": 1
+        },
+        {
+          "before": "owned_worker_closed:closed,user_renderer_contacted:false",
+          "after": "owned_worker_closed:closed,owned_renderer_gates:ownedRendererGates,owned_renderer_gate_count:ownedRendererGates.length,owned_renderer_gates_verified:rendererGatesVerified,user_renderer_contacted:false",
+          "expected_occurrences": 1
+        },
+        {
+          "before": "qualification:'Actual combined297-source Windows workspace, all388 named source cases required, including four real browser gates on an owned warmed ephemeral renderer. Authored source delta adds329 tests to accepted794; minimum1170. S3/S4 profiles and ordinary verified raw/source windows plus raw CLI are included. Rich inventory, controlled same-TX allstored raw/CSV and seven findings Core predicates/readers/session are authored source. Complete finding API/CLI/MCP/UI/export adapters, selected materialization, physical CSV64MiB/+1, source matrix, RSS/latency, recovery and native/platform acceptance remain open. GitHub/Linux/container gates separate and unclaimed.'",
+          "after": "qualification:\"Actual Windows workspace with 297 frozen source inputs, all 388 named source cases required, and four separately checked real browser gates on an owned warmed ephemeral renderer. Source-authored expectations add 376 (329 prior + 47 new) over the accepted baseline of 794; the minimum of 1170 includes the same four browser gates. S3/S4 profiles, verified raw/source/rich readers, controlled same-TX full stored raw/CSV, seven findings predicates/readers/session and complete S6 HTTP API, CLI, MCP, UI and export adapters are AUTHORED in this frozen source. This workspace result does not replace native SDK acceptance or the 13 UI browser cases. Physical CSV 64 MiB/+1, source matrix, RSS/latency, recovery, selected materialization, platform/container/GitHub acceptance and optimized installation remain OPEN separate gates.\"",
+          "expected_occurrences": 1
+        }
+      ],
+      "guard_positions": {
+        "compute_hold": 583,
+        "first_mkdir": 2262,
+        "child_spawn_definition": 3373,
+        "dynamic_renderer_import": 4478
+      },
+      "preserved_cargo_child_helper_exact": true,
+      "preserved_renderer_bootstrap_exact": true,
+      "preserved_build_try_and_old_binary_backup_exact": false,
+      "static_repo_literal": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-integration-v1",
+      "static_task_literal": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https"
+    },
+    {
+      "template": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\build-sitemap-findings-core-v1.mjs",
+      "template_sha256": "ec661d9c722b931255a73d8e97859074016b7f4780115e1d496a7f28fb116956",
+      "normalized_utf8_lf_sha256": "ec661d9c722b931255a73d8e97859074016b7f4780115e1d496a7f28fb116956",
+      "output": "build-sitemap-findings-surfaces-v1.mjs",
+      "intended_promotion": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\build-sitemap-findings-surfaces-v1.mjs",
+      "output_sha256": "dcf4e74c70658bd7090ab7b90b2d595bc95747cf315c165409028447a66b989c",
+      "bytes": 8007,
+      "operations": [
+        {
+          "before": "sitemap-findings-core",
+          "after": "sitemap-findings-surfaces",
+          "expected_occurrences": 4
+        },
+        {
+          "before": "72dd26c3108c3e3432932e5bfb02d7f75eb8aeed9e7d71b24629511e81289f8d",
+          "after": "69492d0c0cc56bab5de86251045459a1707deb4c991d5871f9ad39015e897751",
+          "expected_occurrences": 1
+        },
+        {
+          "before": "const repo = \"E:\\\\CodexWork\\\\open-seo-spider-01a12ac3-20261013\\\\sitemap-findings-surfaces-integration-v1\";",
+          "after": "const repo = \"E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-integration-v1\";",
+          "expected_occurrences": 1
+        },
+        {
+          "before": "const task = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');",
+          "after": "const task = \"C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https\";",
+          "expected_occurrences": 1
+        },
+        {
+          "before": "assert.equal(process.env.OPEN_SEO_COORDINATED_EXECUTION_WINDOW, 'confirmed', 'Compute hold must be released before invoking this build');",
+          "after": "assert.equal(process.env.OPEN_SEO_COORDINATED_EXECUTION_WINDOW, 'confirmed', 'Compute hold must be released before invoking this build');\nassert.equal(path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),path.resolve(task),'Promote this guarded driver into the pinned task/work directory before execution');",
+          "expected_occurrences": 1
+        },
+        {
+          "before": "275",
+          "after": "297",
+          "expected_occurrences": 1
+        },
+        {
+          "before": "341",
+          "after": "388",
+          "expected_occurrences": 1
+        },
+        {
+          "before": "1123",
+          "after": "1170",
+          "expected_occurrences": 1
+        },
+        {
+          "before": "assert.equal(manifest.files.length, 297);",
+          "after": "assert.equal(manifest.files.length, 297);\nassert.equal(manifest.required_test_names, 388);\nassert.equal(manifest.required_tests.reduce((n,x)=>n+x.names.length,0), 388);\nassert.equal(manifest.minimum_expected_workspace_tests, 1170);\nassert.equal(manifest.new_authored_test_functions, 47);\nassert.equal(manifest.approved_product_bindings.length, 38);\nconst ownedRendererGates = [\"live_browser_worker_executes_javascript_for_core_crawl\",\"live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness\",\"live_browser_worker_pause_drains_render_and_retains_rendered_discoveries\",\"live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion\"];",
+          "expected_occurrences": 1
+        },
+        {
+          "before": "assert.equal(suite.owned_worker_closed, true);",
+          "after": "assert.equal(suite.owned_worker_closed, true);\nassert.equal(suite.files, 297);\nassert.equal(suite.owned_renderer_gate_count, 4);\nassert.equal(suite.owned_renderer_gates_verified, true);\nassert.deepEqual(suite.owned_renderer_gates, ownedRendererGates);",
+          "expected_occurrences": 1
+        },
+        {
+          "before": "path: suitePath, sha256: sha(suiteRaw), passed: suite.passed, ignored: suite.ignored",
+          "after": "path: suitePath, sha256: sha(suiteRaw), passed: suite.passed, ignored: suite.ignored, required_test_names: suite.required_test_names, owned_renderer_gate_count: suite.owned_renderer_gate_count, owned_renderer_gates_verified: suite.owned_renderer_gates_verified",
+          "expected_occurrences": 1
+        },
+        {
+          "before": "qualification: 'Actual local source-bound Windows build only. Native API/CLI/SDK/browser acceptance, optimized installation and other platforms remain separate. The installed user executable and shared runtimes are never touched by this builder.'",
+          "after": "qualification: \"Actual local Windows build bound to 297 source inputs only. All S6 Core, HTTP API, CLI, MCP, UI and export surfaces are AUTHORED in source; 47 new plus 329 prior source-authored expectations extend the accepted baseline of 794. Native SDK acceptance and the 13 UI browser cases, physical/source matrix, RSS/latency, recovery, selected materialization, optimized installation and other platforms remain OPEN separate gates. The installed user executable and shared runtimes are never touched by this builder.\"",
+          "expected_occurrences": 1
+        }
+      ],
+      "guard_positions": {
+        "compute_hold": 716,
+        "first_mkdir": 3410,
+        "child_spawn_definition": 4331,
+        "dynamic_renderer_import": null
+      },
+      "preserved_cargo_child_helper_exact": true,
+      "preserved_renderer_bootstrap_exact": false,
+      "preserved_build_try_and_old_binary_backup_exact": true,
+      "static_repo_literal": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-integration-v1",
+      "static_task_literal": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https"
+    }
+  ],
+  "four_actual_browser_source_pins": [
+    {
+      "path": "crates/core/tests/crawl_fixtures.rs",
+      "name": "live_browser_worker_executes_javascript_for_core_crawl",
+      "sha256": "4126c441cceef82154d84bab4ac0ea05108e83cc7f4b88bf6d470bb70816647c",
+      "line": 1037,
+      "ignored_source_gate": true,
+      "separate_from388_manifest_names": true
+    },
+    {
+      "path": "crates/core/tests/content_capture_fixtures.rs",
+      "name": "live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness",
+      "sha256": "738c2187dcdabf4c74f1fb047db4cdc8edc4e74422d6307eb0914cd7cf315471",
+      "line": 934,
+      "ignored_source_gate": true,
+      "separate_from388_manifest_names": true
+    },
+    {
+      "path": "crates/core/tests/control_fixtures.rs",
+      "name": "live_browser_worker_pause_drains_render_and_retains_rendered_discoveries",
+      "sha256": "9a90d82446f55ef348e3c3dec42aa4d606a871ef812196851c4d1e1c7d45a0ac",
+      "line": 457,
+      "ignored_source_gate": true,
+      "separate_from388_manifest_names": true
+    },
+    {
+      "path": "crates/core/tests/recrawl_fixtures.rs",
+      "name": "live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion",
+      "sha256": "49c8ce6ab6df505ed28681844f4950296446240beec8deb61d59d78ba46a9046",
+      "line": 700,
+      "ignored_source_gate": true,
+      "separate_from388_manifest_names": true
+    }
+  ],
+  "runtime_renderer_identity_read_only": [
+    {
+      "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\outputs\\open-seo-spider\\renderer\\package-lock.json",
+      "bytes": 1148,
+      "sha256": "931a8719184b70ef76b49ddcc43421f4adf02491dbacafe75f0a121687172184"
+    },
+    {
+      "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\outputs\\open-seo-spider\\renderer\\package.json",
+      "bytes": 428,
+      "sha256": "141208207c717118e20c35305c77edf35fe8fc9c1c6cdcf4a4e2666b59a78bc7"
+    },
+    {
+      "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\outputs\\open-seo-spider\\renderer\\server.mjs",
+      "bytes": 26030,
+      "sha256": "779699ebcf533cd88e0877eaf80edc7db28f0c4935a2e3a50f16d1fed45b7175"
+    },
+    {
+      "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\outputs\\open-seo-spider\\renderer\\tests\\worker.test.mjs",
+      "bytes": 17462,
+      "sha256": "365a31344da4a3c50d49d4c70657efde646fb1fa15965c817843932b55363e51"
+    }
+  ],
+  "executed": "No driver/import/eval/browser/renderer/Cargo/test/build execution; source transformation only"
+}

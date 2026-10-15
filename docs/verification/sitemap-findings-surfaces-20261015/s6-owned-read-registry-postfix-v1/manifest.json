@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "name": "s6-owned-read-registry-postfix-v1",
+  "immutable": true,
+  "status": "AUTHORED_RUSTFMT_ONLY_NOT_COMPILED_NOT_RUN",
+  "basis_manifest_sha256": "3f449bb7f11455ed34dacbe127b2c995248d5d76e5fcc1a24e847a547ab6676a",
+  "review_receipt_sha256": "1722f67ee953d1d3355d18b19a659c7aa95af0135ee73a2f0176d5a4a22ba78d",
+  "entries": [
+    {
+      "after_sha256": "afbcc420265ea5d9037a3f5dcd7b6dbd530bd85d250a5e76ee8a7a188696146c",
+      "path": "crates/app/src/server/sitemap_findings_reads.rs",
+      "before_sha256": "ec02f993e93474dce615da119f06be4e559a505b4bdd33314b0c93450d0b0c44",
+      "bytes": 10500
+    },
+    {
+      "after_sha256": "10e08d1f3043e7b0820b74fa59de361bed07f1530c99bee76009817e6cbe8779",
+      "path": "crates/app/src/server/sitemap_findings_reads_tests.rs",
+      "before_sha256": "c49511e1bacd972abe5fbb623391d02ddc5ca054fc7716332e21aa5bf398abf9",
+      "bytes": 13983
+    }
+  ],
+  "handoff_sha256": "e0bf0b2822c95dfb5cb0ed0a9a4adca581ce51293a3ba381e2b2a2af42568e33",
+  "new_authored_tests": [
+    "owned_read_worker_and_timer_ready_together_cannot_skip_immutable_deadline"
+  ],
+  "new_test_count": 1,
+  "total_registry_authored_tests": 9,
+  "executed_tests": 0,
+  "checks": {
+    "native": "NOT_RUN",
+    "compiler": "NOT_RUN",
+    "sqlite": "NOT_RUN",
+    "rustfmt_check": "PASS",
+    "original8tests_exact_prefix": true,
+    "tests": "NOT_RUN",
+    "http": "NOT_RUN",
+    "worker_and_timer_execution": "NOT_RUN",
+    "rustfmt": "PASS"
+  },
+  "scope": "Post-join immutable deadline expiry plus test-only actual worker AbortHandle.is_finished witness, no production API/drain change",
+  "root_git_runtime_mutations": false,
+  "original_v1_mutations": false
+}

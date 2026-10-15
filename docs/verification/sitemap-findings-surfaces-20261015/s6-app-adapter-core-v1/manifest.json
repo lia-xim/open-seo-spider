@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "name": "s6-app-adapter-core-v1",
+  "immutable": true,
+  "status": "AUTHORED_RUSTFMT_ONLY_NOT_COMPILED_NOT_RUN",
+  "baseline_declared": "898c404b596cdb812fd76c19a0a38de5d155371c",
+  "source_root": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-integration-v1",
+  "dependency_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-session-page-core-v1/manifest.json",
+    "sha256": "8ca736921c66be73a0624294df3bdee9b30e0cddc13a2688c4eec66e1766d5e5"
+  },
+  "entries": [
+    {
+      "path": "crates/app/src/sitemap_findings.rs",
+      "before_sha256": null,
+      "require_target_absent": true,
+      "after_sha256": "e6728e4e9e1558732d51c5c10e1fb24834ab97abb7d33d25574c6c98e448b31d",
+      "bytes": 28078
+    },
+    {
+      "path": "crates/app/src/sitemap_findings_tests.rs",
+      "before_sha256": null,
+      "require_target_absent": true,
+      "after_sha256": "4bf3b44b6b7f55f1939fb863bddbb7b84ac683e3ee8bf22532f03a9bee57c1d9",
+      "bytes": 26119
+    }
+  ],
+  "source_pins_sha256": "5ba73d73c19bab3dbee15e8e6c358cda8890e78ad3a7846af1d3740d2989991f",
+  "handoff_sha256": "7146faf85d477fdce89996bcbae717694a045b32091ac3bdc95f71d611e4c02a",
+  "authored_tests": [
+    "finding_queries_strict_shape_domains_and_large_literal_selectors_preserve_core_contract",
+    "finding_actual_sparse_page_continuations_keep_query_hash_while_limits_change",
+    "finding_actual_page_export_raw_roles_and_job_offline_target_are_distinct",
+    "finding_actual_shared_csv_two_pass_schema_full_payload_and_readonly_receipts_match",
+    "finding_actual_unknown_history_zero_selected_rows_exports_one_scope_record_without_fake_finding",
+    "finding_actual_unavailable_core_omits_export_and_rejects_csv_before_header",
+    "finding_actual_stale_context_and_app_sql_mismatch_fail_without_writer_output",
+    "finding_actual_csv_preserves_typed_writer_causes_and_cancel_not_all_io_is_413",
+    "finding_csv_human_formula_prefix_does_not_rewrite_full_typed_machine_payload",
+    "finding_streaming_json_and_csv_resource_boundaries_are_inclusive_without_materialized_rows"
+  ],
+  "new_authored_test_count": 10,
+  "new_actual_crawler_groups": 7,
+  "new_executed_test_count": 0,
+  "actual_checks": [
+    "rustfmt --edition2024 skip_children=true exit0",
+    "rustfmt --check --edition2024 skip_children=true exit0",
+    "dependency manifest and actual Core5f4ae2 SHA read/pinned",
+    "new product target absence guards"
+  ],
+  "not_run": [
+    "compiler/Cargo/clippy",
+    "all tests/SQLite/HTTP/fixtures",
+    "native/CLI/SDK/browser",
+    "physical8MiB/64MiB/source threshold producers"
+  ],
+  "root_product_git_runtime_mutations": false,
+  "dependency_changes": false
+}

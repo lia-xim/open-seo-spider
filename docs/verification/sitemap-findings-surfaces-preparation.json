@@ -1,0 +1,1168 @@
+{
+  "schema_version": 1,
+  "result": "SOURCE_PREPARED_NOT_COMPILED_NOT_RUN_NOT_INSTALLED",
+  "recorded_at": "2026-10-15T00:24:23.210Z",
+  "baseline_commit": "898c404b596cdb812fd76c19a0a38de5d155371c",
+  "source_manifest_sha256": "69492d0c0cc56bab5de86251045459a1707deb4c991d5871f9ad39015e897751",
+  "source_inputs": 297,
+  "approved_product_bindings": 38,
+  "new_authored_rust_tests": 47,
+  "new_rust_tests_executed": 0,
+  "minimum_expected_workspace_tests": 1170,
+  "required_test_names": 388,
+  "ui_mock_groups_authored": 13,
+  "ui_mock_groups_executed": 0,
+  "current_source_mcp_tools": 26,
+  "historical_installed_tools": 24,
+  "actual_checks": [
+    "Current integrated changed Rust files rustfmt --check --edition2024 skip_children=true exit0",
+    "Actual UI and native SDK script Node syntax checks exit0; no import/evaluation",
+    "All eleven exact source handoff lineages and297 actual source hashes verified before freeze",
+    "All341 old required names union-preserved;47 after-minus-baseline functions added",
+    "Full actual TODO generator preview+check performed in memory before publication"
+  ],
+  "static_reviews": [
+    {
+      "name": "s6-session-app-review-v1",
+      "sha256": "e3e9c689f2e0378ff75b232a7c8cdbe23e2bdef9342cb621208ddb97040e7fde",
+      "qualification": "BOUNDED_SOURCE_ONLY_NOT_COMPILER_OR_RUNTIME_PROOF"
+    },
+    {
+      "name": "s6-app-adapter-postfix-review-v1",
+      "sha256": "b52acb92e16627ad905c7716d5536c317f9953ea6e4c36154086a42a86955ef9",
+      "qualification": "BOUNDED_SOURCE_ONLY_NOT_COMPILER_OR_RUNTIME_PROOF"
+    },
+    {
+      "name": "s6-server-surfaces-review-v1",
+      "sha256": "17d1590ae13e454859b900d4123866605514bc8fb178599deb160b8c14560b1f",
+      "qualification": "BOUNDED_SOURCE_ONLY_NOT_COMPILER_OR_RUNTIME_PROOF"
+    },
+    {
+      "name": "s6-owned-read-registry-review-v1",
+      "sha256": "1722f67ee953d1d3355d18b19a659c7aa95af0135ee73a2f0176d5a4a22ba78d",
+      "qualification": "BOUNDED_SOURCE_ONLY_NOT_COMPILER_OR_RUNTIME_PROOF"
+    },
+    {
+      "name": "s6-ui-surface-review-v1",
+      "sha256": "534e2415ae836817ecaf474a3320a05b0081fcd440993c5fb6389de09789f2b5",
+      "qualification": "BOUNDED_SOURCE_ONLY_NOT_COMPILER_OR_RUNTIME_PROOF"
+    },
+    {
+      "name": "s6-cli-mcp-review-v1",
+      "sha256": "3559a41a8649722addacca75b1dc9ba489cbceedd3fa62e739ac44d7f8d6218d",
+      "qualification": "BOUNDED_SOURCE_ONLY_NOT_COMPILER_OR_RUNTIME_PROOF"
+    },
+    {
+      "name": "s6-cli-mcp-postfix-review-v1",
+      "sha256": "f4b98a23dc14f6b75bf6c3b9a2c735bce9e6fa0b084d4c3893eb0ffe0b4ab29f",
+      "qualification": "BOUNDED_SOURCE_ONLY_NOT_COMPILER_OR_RUNTIME_PROOF"
+    },
+    {
+      "name": "s6-surfaces-preparer-review-v1",
+      "sha256": "476ef2e9afc0aa0f47cdf0435db3ef8e52d062a8e86d974900f945a8526e74b3",
+      "qualification": "BOUNDED_SOURCE_ONLY_NOT_COMPILER_OR_RUNTIME_PROOF"
+    },
+    {
+      "name": "s6-surfaces-preparer-postfix-review-v1",
+      "sha256": "e86db9fa8d10a8bae8c1bbab24a0eed59bf8d810d64a3802c3f693cde8387bd3",
+      "qualification": "BOUNDED_SOURCE_ONLY_NOT_COMPILER_OR_RUNTIME_PROOF"
+    },
+    {
+      "name": "s6-surfaces-preparer-union-review-v1",
+      "sha256": "b41f1ea9c8474f7604213c2deabde4d01c5f992280f5e8c83d564ac1249fa828",
+      "qualification": "BOUNDED_SOURCE_ONLY_NOT_COMPILER_OR_RUNTIME_PROOF"
+    },
+    {
+      "name": "s6-physical-rebind-audit-v1",
+      "sha256": "9d25de98e0295c5b2d0389c96614f8e8853456b0732205cecfacbdf1a1dc51af",
+      "qualification": "BOUNDED_SOURCE_ONLY_NOT_COMPILER_OR_RUNTIME_PROOF"
+    }
+  ],
+  "source_findings": "Seven product/harness defects have separate source fixes; original reports retain their original findings. The post-join registry deadline fix is also read by Root. Source-preparer defects are independently closed; v2 validation caught the group union issue before any source output.",
+  "compiler": "NOT_RUN_COORDINATED_COMPUTE_HOLD",
+  "clippy": "NOT_RUN",
+  "workspace_tests": "NOT_RUN",
+  "native_cli_api_csv_sdk_browser": "NOT_RUN",
+  "physical_gates": "NOT_RUN_REBIND_PLAN_ONLY",
+  "future_drivers": "Separate source-bound runner/build preparation; no execution is implied by this source publication.",
+  "open_gates": [
+    "Actual entire frozen workspace>=1170/all388 names+four real browser worker tests; Clippy/fmt",
+    "Directed same-candidate API/CLI/MCP/actual browser13+native full stored filters and exports beyond200/400",
+    "Actual WholeApp8MiB/FindingCSV64MiB exact/+1; source50k/50MiB and raw route regression",
+    "Cancellation/deadline/disconnect/late-fault/Core-return/worker-join/shutdown physical proofs",
+    "Selected-context variants, recovery/restart/rollback, measured RSS/SQL workspace/latency",
+    "Optimized release and data-preserving installation; remote CI/Linux/container separate"
+  ],
+  "accepted_catalog_counts_unchanged": {
+    "implemented": 31,
+    "partial": 67,
+    "planned": 46
+  },
+  "granular_unchanged_sha256": "e85b205fd6d061c96043c05ea2e6ffa3dbbe6a0f390c07bb8f1ffaf22f316962",
+  "installed_binary_observed": {
+    "sha256": "ab1ac93c82905aa627d100d8622a50acf93dd7fe59c3f854eecdaac667110bcf",
+    "bytes": 33010688
+  },
+  "installed_runtime_modified": false,
+  "manufacturer_parity": "NOT_PROVEN",
+  "declared_lineage_payload_checks": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-session-page-core-v1\\crates\\core\\src\\store\\sitemap_findings_read.rs",
+      "bytes": 18759,
+      "sha256": "5f4ae2bd1c51e6b825ad190c5bbb6e58549fb323fdccd05dde9c4215d539a267"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-session-page-core-v1\\crates\\core\\src\\store\\sitemap_findings_read_tests.rs",
+      "bytes": 20722,
+      "sha256": "a91efc1f82b2fea098ccc3bffc0fcf5a52b85e13d4ff7fd28f835b085a5eb4e5"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-app-adapter-core-v1\\crates\\app\\src\\sitemap_findings.rs",
+      "bytes": 28078,
+      "sha256": "e6728e4e9e1558732d51c5c10e1fb24834ab97abb7d33d25574c6c98e448b31d"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-app-adapter-core-v1\\crates\\app\\src\\sitemap_findings_tests.rs",
+      "bytes": 26119,
+      "sha256": "4bf3b44b6b7f55f1939fb863bddbb7b84ac683e3ee8bf22532f03a9bee57c1d9"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-app-adapter-core-v1\\SOURCE-PINS.json",
+      "bytes": 971,
+      "sha256": "5ba73d73c19bab3dbee15e8e6c358cda8890e78ad3a7846af1d3740d2989991f"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-app-adapter-core-v1\\HANDOFF.md",
+      "bytes": 8341,
+      "sha256": "7146faf85d477fdce89996bcbae717694a045b32091ac3bdc95f71d611e4c02a"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-app-adapter-postfix-v1\\crates\\app\\src\\sitemap_findings.rs",
+      "bytes": 30850,
+      "sha256": "2ac269bf6e6aa6cda002afafc06e1f80aa06940c282985c1cfe9dd5234ac4e0d"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-app-adapter-postfix-v1\\crates\\app\\src\\sitemap_findings_tests.rs",
+      "bytes": 29640,
+      "sha256": "38f5d8e34fbe53279110dcc166453347bb76197c2e1a93449b0c25435bac6bc2"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-app-adapter-postfix-v1\\HANDOFF.md",
+      "bytes": 2620,
+      "sha256": "f9124134538f1b921143534119e0f8910d709c5224e0d878ba76502e5c5b9236"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-core-v1\\crates\\app\\src\\server.rs",
+      "bytes": 75030,
+      "sha256": "a00199a85f525db1a37b2a5f95d7b0567b552e53dfd5c3acacb57af5e201660e"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-core-v1\\crates\\app\\src\\server\\comparison_tests.rs",
+      "bytes": 11612,
+      "sha256": "c475e21655e3d3cf8e6f4eab9710840aa65b92c0788af4f824d2de2c7d285bdd"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-core-v1\\crates\\app\\src\\server\\sitemap_csv_stream.rs",
+      "bytes": 37081,
+      "sha256": "a5e0999945ed914a5ef528a930c063ff976b9e4ddcc08343b30a01d84754be6e"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-core-v1\\crates\\app\\src\\server\\sitemap_csv_stream_sink_tests.rs",
+      "bytes": 6148,
+      "sha256": "d200fdbbe3ba40f90142d30bc70f64e104ed9cf6c75fcd335ab5e68b9936c51b"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-core-v1\\crates\\app\\src\\server\\sitemap_generation_tests.rs",
+      "bytes": 5213,
+      "sha256": "6211f22598e0f5329b0f2c51c7eb2e94d660d683c0a5174f76ee27108a445957"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-core-v1\\crates\\app\\src\\server\\sitemaps_streaming_fixture.rs",
+      "bytes": 20655,
+      "sha256": "0eeb791eb977ff647a65b63193e02033a541d4d12a36d61ed4a6f40c9474b449"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-core-v1\\crates\\app\\src\\server\\sitemaps_tests.rs",
+      "bytes": 16104,
+      "sha256": "c8cee34e44ffa28ac995a4cded70d49f00d3b56401d315248645b67124e57354"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-core-v1\\crates\\app\\src\\server\\sitemap_findings.rs",
+      "bytes": 8122,
+      "sha256": "17fbb37e9ff9cb59aef126fbda718dd891aeb7635be91c7da605ad16d423db32"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-core-v1\\crates\\app\\src\\server\\sitemap_findings_tests.rs",
+      "bytes": 12376,
+      "sha256": "8dd2da3fe67fe267fa108fe978cd8683fc9cbd9a19f1b1d3088bcbb33369055d"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-postfix-v1\\crates\\app\\src\\server\\sitemap_findings.rs",
+      "bytes": 8461,
+      "sha256": "1f276462ef65dc0ba32c4bd80bef7a6e6d52a05b8f03d0f4106d81e7d2d4ad48"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-postfix-v1\\crates\\app\\src\\server\\sitemap_findings_tests.rs",
+      "bytes": 13288,
+      "sha256": "680ef6f5dcae3c9a9db42682ffd9bf38f3370dfbde7aa60f8e95e6d0bfe419de"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-owned-read-registry-v1\\crates\\app\\src\\server\\sitemap_findings_reads.rs",
+      "bytes": 9976,
+      "sha256": "ec02f993e93474dce615da119f06be4e559a505b4bdd33314b0c93450d0b0c44"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-owned-read-registry-v1\\crates\\app\\src\\server\\sitemap_findings_reads_tests.rs",
+      "bytes": 11260,
+      "sha256": "c49511e1bacd972abe5fbb623391d02ddc5ca054fc7716332e21aa5bf398abf9"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-owned-read-registry-v1\\SOURCE-PINS.json",
+      "bytes": 828,
+      "sha256": "34132098fc01a0faec3a54fb5224480c63eb2523845c6a67451cbe2fbcc2342f"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-owned-read-registry-v1\\HANDOFF.md",
+      "bytes": 5905,
+      "sha256": "e4bd3a9c308bb81479e1536b38c0151aef8781ca43ccd45f8f6e9eb80e4f6e5e"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-owned-read-registry-postfix-v1\\crates\\app\\src\\server\\sitemap_findings_reads.rs",
+      "bytes": 10500,
+      "sha256": "afbcc420265ea5d9037a3f5dcd7b6dbd530bd85d250a5e76ee8a7a188696146c"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-owned-read-registry-postfix-v1\\crates\\app\\src\\server\\sitemap_findings_reads_tests.rs",
+      "bytes": 13983,
+      "sha256": "10e08d1f3043e7b0820b74fa59de361bed07f1530c99bee76009817e6cbe8779"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-owned-read-registry-postfix-v1\\HANDOFF.md",
+      "bytes": 2820,
+      "sha256": "e0bf0b2822c95dfb5cb0ed0a9a4adca581ce51293a3ba381e2b2a2af42568e33"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\web\\app.js",
+      "bytes": 376705,
+      "sha256": "84df9b724802d86d69262d98dcee10e22d465c7a6583fc034b438df452bb0bb9"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\web\\index.html",
+      "bytes": 81330,
+      "sha256": "f5f494781f91029f1b64ace3c0f1ddcba742014690e0d4ee0dbbef53ebf79cff"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\web\\styles.css",
+      "bytes": 41399,
+      "sha256": "c5687d92286fa5fe8285dc78ce215bfc10e68a5778e605f4bee8f48fecfa92d8"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\web\\list-import.js",
+      "bytes": 8829,
+      "sha256": "cd8702fd31122eccfefaf5ed7404bb47cc65223efa5394d3e687f329cfbf47ba"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\web\\saved-comparison.js",
+      "bytes": 31289,
+      "sha256": "8f8c08b92bab53d6303aa436564eee3b5a2a3efa70f14845fd642f1783dd898c"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\web\\verification\\ui-sitemap-findings-smoke.cjs",
+      "bytes": 27220,
+      "sha256": "889275f564d254512348a0196ee04b84317d39a45b7d0a2d4ffb3c5067eba8be"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\HANDOFF.md",
+      "bytes": 7926,
+      "sha256": "90408c17a991b81b49da95f265fe2abac33c6e38bba5824ffcdba9e39a63ec93"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\syntax-checks.json",
+      "bytes": 396,
+      "sha256": "a9f6374ed7e965ec341fa1f72bb2573930e96dc6e9f55a2ff3d3e0026037f8d9"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\findings-view.js",
+      "bytes": 27289,
+      "sha256": "1e71bfefb40cdf8615154cf6baa526a74dc4f2b55b5eabdce71603ecac76923d"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\findings-view.html",
+      "bytes": 4672,
+      "sha256": "41f01074fa6012faa703ad5e50330c5947b8493cfe0d3d3cd7649a7f7f578e66"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\findings-view.css",
+      "bytes": 2924,
+      "sha256": "9db3d6de3c6df88c989eb72ffd8ecf03052409fce4942645c0bdb086f2cf5854"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\prepare-payloads.ps1",
+      "bytes": 3936,
+      "sha256": "4c8858a5309a26a8bb5021249766dda725048ac2f8794e434e020580d41c8064"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\freeze-manifest.ps1",
+      "bytes": 3025,
+      "sha256": "60ddff596d522d06fcd9e740d92f7027d7b0f300eb310a9ab0418a519a6362ff"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\crates\\app\\src\\sitemap_findings_cli.rs",
+      "bytes": 11222,
+      "sha256": "c4bcb200770327197ac0ab33dc8a7b35e8942dcddc1511662be36526494cf797"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\crates\\app\\src\\sitemap_findings_cli_tests.rs",
+      "bytes": 9698,
+      "sha256": "f1f99965965abceab00a79e826edef8a7bc1851e3a7958e7b70ff587146fa15f"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\crates\\app\\src\\sitemap_findings_fixture.rs",
+      "bytes": 5026,
+      "sha256": "0d8dbfa174b4d95f2a2f6436505f31ec94f1f3d1cba2af3e3724ac709305148d"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\crates\\app\\src\\mcp\\sitemap_findings.rs",
+      "bytes": 10440,
+      "sha256": "4c3cd411e2ae2fba6933f557f77f5ca8ddba65cb1bb806ed8a2766ae77f3e1ef"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\crates\\app\\src\\mcp\\sitemap_findings\\stdio.rs",
+      "bytes": 5566,
+      "sha256": "9887c2ce19daf420ad9039ef35afdddd695e1db66eae572062cc3c21ce836615"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\crates\\app\\src\\mcp\\sitemap_findings\\tests.rs",
+      "bytes": 24101,
+      "sha256": "8af979e0091699a881ad1f9797ba482a4cc44176d6d5c90d8299e0a909deb23b"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\scripts\\sitemap-findings-mcp-e2e.mjs",
+      "bytes": 10444,
+      "sha256": "604963fce6798cf03309738b9235a438ae325809e63a66a6b5af04f466a07dfe"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\crates\\app\\src\\mcp\\sitemaps_tests.rs",
+      "bytes": 7248,
+      "sha256": "bdfe3f0afaaa3b99c123224675c5709f7d02961a27e06cefefc0c74dd62fb749"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\crates\\app\\src\\mcp\\saved_comparison_tests.rs",
+      "bytes": 27007,
+      "sha256": "4b00da501b984d5dd8437f41275456e3f6be13dd61b5d0542a5d2fae929237f9"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\scripts\\mcp-e2e.mjs",
+      "bytes": 13428,
+      "sha256": "7d07523855a3b23651759ad453c0a537361a63de9dec204d80c00f8815422f9f"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\scripts\\container-e2e.mjs",
+      "bytes": 7985,
+      "sha256": "f5cdbd8a8d967b237b28e1552023a6890d3fcc768a78310b149049efb5ef98ec"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\scripts\\resource-contract-e2e.mjs",
+      "bytes": 25830,
+      "sha256": "429159077622c5bff111434b651702f3077aff2b65c94907e30c3610d561606e"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\scripts\\saved-comparison-e2e.mjs",
+      "bytes": 18284,
+      "sha256": "87a0a63f76adc4b1171c06b77fdd7cc13db20182140f23853088cf7eae4866a8"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\scripts\\saved-comparison-bundle-e2e.mjs",
+      "bytes": 40334,
+      "sha256": "bc3e698cd01edc4108034fa851407b433006f096c77245ba9603070e96aeaec7"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\scripts\\sitemap-membership-e2e.mjs",
+      "bytes": 51843,
+      "sha256": "fa2f9c72f7f70bbd05ea2db2b14fe757640ce5127afa1307ce332b544e54f865"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\scripts\\sitemap-assessment-e2e.mjs",
+      "bytes": 58240,
+      "sha256": "d6d8121565e08d27c4fdcb87b3ea087c3fc427f5f45f301b4cff18fdbaa30463"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\HANDOFF.md",
+      "bytes": 10607,
+      "sha256": "bb9bf9f649ff2e72ca1adc7918d34e18d0887587735042dff27efe119fb081f9"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\PARENT-HOOKS.md",
+      "bytes": 5196,
+      "sha256": "21fd8d6ee9ca133689aeb906463a2d653870c4438df05fdd55f4d090d7131aa8"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\PARENT-HOOKS.json",
+      "bytes": 5990,
+      "sha256": "03df1291492464dc83cd02ef67c06010b81d211be42231a791e9b9fc27a21ef2"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\COUNTER-BINDINGS.json",
+      "bytes": 4604,
+      "sha256": "0f002c3b4072370fee12eeed72010bac5ab7af704d2f2f106f4634ad66eb4973"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\SOURCE-PINS.json",
+      "bytes": 4710,
+      "sha256": "04a1f6af67845a786ce83494c4f8b90bf0b70561f3ba4672dc0d54336264ce7b"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\TEST-NAMES.json",
+      "bytes": 4184,
+      "sha256": "1eed3974b9a87506b0b203b028dd25def960257303a20672d0d6f7edb9c95836"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\verification.json",
+      "bytes": 2736,
+      "sha256": "6a764b70681ef1d51dcf8ccf9ba67d9476192d0f87c61785d9a949fa17ff89c5"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-parent-hooks-integration-v1\\crates\\app\\src\\main.rs",
+      "bytes": 29134,
+      "sha256": "67e1ad4cdb795d7829e840a4b99b8ae42d576106353ea6526e7fc7ef787eb9db"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-parent-hooks-integration-v1\\crates\\app\\src\\mcp.rs",
+      "bytes": 23326,
+      "sha256": "7940ecd4081f6bd6127644ffdd26fbd289e98498c6e3ff9c0f6ecb6f8a237f5e"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-postfix-v1\\crates\\app\\src\\mcp\\sitemap_findings.rs",
+      "bytes": 10718,
+      "sha256": "5007a8291bc1d85653276196090bbf1d48b6dc057f267fbae4e3dfc16a5943c9"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-postfix-v1\\crates\\app\\src\\mcp\\sitemap_findings\\stdio.rs",
+      "bytes": 5717,
+      "sha256": "058c9978a72749c743e09db6f4b82889ff07b3c94df70549f700d349c5b6d5c6"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-postfix-v1\\crates\\app\\src\\mcp\\sitemap_findings\\tests.rs",
+      "bytes": 24150,
+      "sha256": "77902f8602c6ec21a8a988262a320f55478af8c55ef4bd039f9f1d62fa9ce74b"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-postfix-v1\\crates\\app\\src\\mcp\\sitemap_findings\\postfix_tests.rs",
+      "bytes": 4144,
+      "sha256": "34a1cc05e540ef7d36e7a4285f99f68b83246e58ee0240af63187dbbdbb2d877"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-postfix-v1\\scripts\\sitemap-findings-mcp-e2e.mjs",
+      "bytes": 12066,
+      "sha256": "7e7dc7c973eba232f4f8c9a3f6f4ebe34904d6d85d04b81cabefe8b1946b4d3b"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-postfix-v1\\HANDOFF.md",
+      "bytes": 4763,
+      "sha256": "6aad4a5802dc0317df564757fd87a3682b20b76e0800c9a6398176fa6ac74e54"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-postfix-v1\\SOURCE-PINS.json",
+      "bytes": 1696,
+      "sha256": "526192596edd8788f9913a5e5c698ecda95bb4fa76d754d29788159d4cdb4384"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-postfix-v1\\verification.json",
+      "bytes": 345,
+      "sha256": "ad16c3287504f9d1916ebb58c92a96df3259c8b3d1b1591f7729832a8909e978"
+    }
+  ],
+  "archive_note": "Declared local source handoff payloads/support bytes rechecked against each pinned manifest before archive. Additional raw companions captured with their own SHA; external historical references are not replayed. Exact source-only authoring/review bytes, including superseded inputs. Host-bound preparation files are raw evidence, not portable executable launchers. Authored counts are expectations, never executed results.",
+  "companions": [
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-session-page-core-v1/crates/core/src/store/sitemap_findings_read.rs",
+      "bytes": 18759,
+      "sha256": "5f4ae2bd1c51e6b825ad190c5bbb6e58549fb323fdccd05dde9c4215d539a267",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-session-page-core-v1\\crates\\core\\src\\store\\sitemap_findings_read.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-session-page-core-v1/crates/core/src/store/sitemap_findings_read_tests.rs",
+      "bytes": 20722,
+      "sha256": "a91efc1f82b2fea098ccc3bffc0fcf5a52b85e13d4ff7fd28f835b085a5eb4e5",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-session-page-core-v1\\crates\\core\\src\\store\\sitemap_findings_read_tests.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-session-page-core-v1/manifest.json",
+      "bytes": 1597,
+      "sha256": "8ca736921c66be73a0624294df3bdee9b30e0cddc13a2688c4eec66e1766d5e5",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-session-page-core-v1\\manifest.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-app-adapter-core-v1/crates/app/src/sitemap_findings.rs",
+      "bytes": 28078,
+      "sha256": "e6728e4e9e1558732d51c5c10e1fb24834ab97abb7d33d25574c6c98e448b31d",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-app-adapter-core-v1\\crates\\app\\src\\sitemap_findings.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-app-adapter-core-v1/crates/app/src/sitemap_findings_tests.rs",
+      "bytes": 26119,
+      "sha256": "4bf3b44b6b7f55f1939fb863bddbb7b84ac683e3ee8bf22532f03a9bee57c1d9",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-app-adapter-core-v1\\crates\\app\\src\\sitemap_findings_tests.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-app-adapter-core-v1/HANDOFF.md",
+      "bytes": 8341,
+      "sha256": "7146faf85d477fdce89996bcbae717694a045b32091ac3bdc95f71d611e4c02a",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-app-adapter-core-v1\\HANDOFF.md"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-app-adapter-core-v1/manifest.json",
+      "bytes": 2779,
+      "sha256": "5a0a2e7c22b345b689339deb0bd18a7ecb4292c127bf0c9e69b0f389f99101bb",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-app-adapter-core-v1\\manifest.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-app-adapter-core-v1/SOURCE-PINS.json",
+      "bytes": 971,
+      "sha256": "5ba73d73c19bab3dbee15e8e6c358cda8890e78ad3a7846af1d3740d2989991f",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-app-adapter-core-v1\\SOURCE-PINS.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-app-adapter-postfix-v1/crates/app/src/sitemap_findings.rs",
+      "bytes": 30850,
+      "sha256": "2ac269bf6e6aa6cda002afafc06e1f80aa06940c282985c1cfe9dd5234ac4e0d",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-app-adapter-postfix-v1\\crates\\app\\src\\sitemap_findings.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-app-adapter-postfix-v1/crates/app/src/sitemap_findings_tests.rs",
+      "bytes": 29640,
+      "sha256": "38f5d8e34fbe53279110dcc166453347bb76197c2e1a93449b0c25435bac6bc2",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-app-adapter-postfix-v1\\crates\\app\\src\\sitemap_findings_tests.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-app-adapter-postfix-v1/HANDOFF.md",
+      "bytes": 2620,
+      "sha256": "f9124134538f1b921143534119e0f8910d709c5224e0d878ba76502e5c5b9236",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-app-adapter-postfix-v1\\HANDOFF.md"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-app-adapter-postfix-v1/manifest.json",
+      "bytes": 1749,
+      "sha256": "4cdc827ff07ea9a39019ff377a8be06b36e045e72f184450e0c40a4356a692dd",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-app-adapter-postfix-v1\\manifest.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-server-surfaces-core-v1/crates/app/src/server/comparison_tests.rs",
+      "bytes": 11612,
+      "sha256": "c475e21655e3d3cf8e6f4eab9710840aa65b92c0788af4f824d2de2c7d285bdd",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-core-v1\\crates\\app\\src\\server\\comparison_tests.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-server-surfaces-core-v1/crates/app/src/server/sitemaps_streaming_fixture.rs",
+      "bytes": 20655,
+      "sha256": "0eeb791eb977ff647a65b63193e02033a541d4d12a36d61ed4a6f40c9474b449",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-core-v1\\crates\\app\\src\\server\\sitemaps_streaming_fixture.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-server-surfaces-core-v1/crates/app/src/server/sitemaps_tests.rs",
+      "bytes": 16104,
+      "sha256": "c8cee34e44ffa28ac995a4cded70d49f00d3b56401d315248645b67124e57354",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-core-v1\\crates\\app\\src\\server\\sitemaps_tests.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-server-surfaces-core-v1/crates/app/src/server/sitemap_csv_stream.rs",
+      "bytes": 37081,
+      "sha256": "a5e0999945ed914a5ef528a930c063ff976b9e4ddcc08343b30a01d84754be6e",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-core-v1\\crates\\app\\src\\server\\sitemap_csv_stream.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-server-surfaces-core-v1/crates/app/src/server/sitemap_csv_stream_sink_tests.rs",
+      "bytes": 6148,
+      "sha256": "d200fdbbe3ba40f90142d30bc70f64e104ed9cf6c75fcd335ab5e68b9936c51b",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-core-v1\\crates\\app\\src\\server\\sitemap_csv_stream_sink_tests.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-server-surfaces-core-v1/crates/app/src/server/sitemap_findings.rs",
+      "bytes": 8122,
+      "sha256": "17fbb37e9ff9cb59aef126fbda718dd891aeb7635be91c7da605ad16d423db32",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-core-v1\\crates\\app\\src\\server\\sitemap_findings.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-server-surfaces-core-v1/crates/app/src/server/sitemap_findings_tests.rs",
+      "bytes": 12376,
+      "sha256": "8dd2da3fe67fe267fa108fe978cd8683fc9cbd9a19f1b1d3088bcbb33369055d",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-core-v1\\crates\\app\\src\\server\\sitemap_findings_tests.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-server-surfaces-core-v1/crates/app/src/server/sitemap_generation_tests.rs",
+      "bytes": 5213,
+      "sha256": "6211f22598e0f5329b0f2c51c7eb2e94d660d683c0a5174f76ee27108a445957",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-core-v1\\crates\\app\\src\\server\\sitemap_generation_tests.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-server-surfaces-core-v1/crates/app/src/server.rs",
+      "bytes": 75030,
+      "sha256": "a00199a85f525db1a37b2a5f95d7b0567b552e53dfd5c3acacb57af5e201660e",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-core-v1\\crates\\app\\src\\server.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-server-surfaces-core-v1/manifest.json",
+      "bytes": 4417,
+      "sha256": "72fea685224b77ed175344a244cbf69f9531aaf4626de0fd3298fc03a4bc6a32",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-core-v1\\manifest.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-server-surfaces-postfix-v1/crates/app/src/server/sitemap_findings.rs",
+      "bytes": 8461,
+      "sha256": "1f276462ef65dc0ba32c4bd80bef7a6e6d52a05b8f03d0f4106d81e7d2d4ad48",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-postfix-v1\\crates\\app\\src\\server\\sitemap_findings.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-server-surfaces-postfix-v1/crates/app/src/server/sitemap_findings_tests.rs",
+      "bytes": 13288,
+      "sha256": "680ef6f5dcae3c9a9db42682ffd9bf38f3370dfbde7aa60f8e95e6d0bfe419de",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-postfix-v1\\crates\\app\\src\\server\\sitemap_findings_tests.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-server-surfaces-postfix-v1/manifest.json",
+      "bytes": 1291,
+      "sha256": "286425d05d43812dda0e0382c9cc13b2ea6325f15a07f7d975b2d3d36c8eb257",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-postfix-v1\\manifest.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-owned-read-registry-v1/crates/app/src/server/sitemap_findings_reads.rs",
+      "bytes": 9976,
+      "sha256": "ec02f993e93474dce615da119f06be4e559a505b4bdd33314b0c93450d0b0c44",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-owned-read-registry-v1\\crates\\app\\src\\server\\sitemap_findings_reads.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-owned-read-registry-v1/crates/app/src/server/sitemap_findings_reads_tests.rs",
+      "bytes": 11260,
+      "sha256": "c49511e1bacd972abe5fbb623391d02ddc5ca054fc7716332e21aa5bf398abf9",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-owned-read-registry-v1\\crates\\app\\src\\server\\sitemap_findings_reads_tests.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-owned-read-registry-v1/HANDOFF.md",
+      "bytes": 5905,
+      "sha256": "e4bd3a9c308bb81479e1536b38c0151aef8781ca43ccd45f8f6e9eb80e4f6e5e",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-owned-read-registry-v1\\HANDOFF.md"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-owned-read-registry-v1/manifest.json",
+      "bytes": 2583,
+      "sha256": "3f449bb7f11455ed34dacbe127b2c995248d5d76e5fcc1a24e847a547ab6676a",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-owned-read-registry-v1\\manifest.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-owned-read-registry-v1/SOURCE-PINS.json",
+      "bytes": 828,
+      "sha256": "34132098fc01a0faec3a54fb5224480c63eb2523845c6a67451cbe2fbcc2342f",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-owned-read-registry-v1\\SOURCE-PINS.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-owned-read-registry-postfix-v1/crates/app/src/server/sitemap_findings_reads.rs",
+      "bytes": 10500,
+      "sha256": "afbcc420265ea5d9037a3f5dcd7b6dbd530bd85d250a5e76ee8a7a188696146c",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-owned-read-registry-postfix-v1\\crates\\app\\src\\server\\sitemap_findings_reads.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-owned-read-registry-postfix-v1/crates/app/src/server/sitemap_findings_reads_tests.rs",
+      "bytes": 13983,
+      "sha256": "10e08d1f3043e7b0820b74fa59de361bed07f1530c99bee76009817e6cbe8779",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-owned-read-registry-postfix-v1\\crates\\app\\src\\server\\sitemap_findings_reads_tests.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-owned-read-registry-postfix-v1/HANDOFF.md",
+      "bytes": 2820,
+      "sha256": "e0bf0b2822c95dfb5cb0ed0a9a4adca581ce51293a3ba381e2b2a2af42568e33",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-owned-read-registry-postfix-v1\\HANDOFF.md"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-owned-read-registry-postfix-v1/manifest.json",
+      "bytes": 1749,
+      "sha256": "fa7f67a0e93cfe7fdd00e60f45fbd57946e4a669cb22929fd602a5a8833b8fb6",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-owned-read-registry-postfix-v1\\manifest.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-ui-surface-core-v1/findings-view.css",
+      "bytes": 2924,
+      "sha256": "9db3d6de3c6df88c989eb72ffd8ecf03052409fce4942645c0bdb086f2cf5854",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\findings-view.css"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-ui-surface-core-v1/findings-view.html",
+      "bytes": 4672,
+      "sha256": "41f01074fa6012faa703ad5e50330c5947b8493cfe0d3d3cd7649a7f7f578e66",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\findings-view.html"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-ui-surface-core-v1/findings-view.js",
+      "bytes": 27289,
+      "sha256": "1e71bfefb40cdf8615154cf6baa526a74dc4f2b55b5eabdce71603ecac76923d",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\findings-view.js"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-ui-surface-core-v1/freeze-manifest.ps1",
+      "bytes": 3025,
+      "sha256": "60ddff596d522d06fcd9e740d92f7027d7b0f300eb310a9ab0418a519a6362ff",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\freeze-manifest.ps1"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-ui-surface-core-v1/HANDOFF.md",
+      "bytes": 7926,
+      "sha256": "90408c17a991b81b49da95f265fe2abac33c6e38bba5824ffcdba9e39a63ec93",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\HANDOFF.md"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-ui-surface-core-v1/manifest.json",
+      "bytes": 5474,
+      "sha256": "c9e4cb2821182d8a357ce8f8082668a6892d96cf7929e959187e31321c0ee707",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\manifest.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-ui-surface-core-v1/prepare-payloads.ps1",
+      "bytes": 3936,
+      "sha256": "4c8858a5309a26a8bb5021249766dda725048ac2f8794e434e020580d41c8064",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\prepare-payloads.ps1"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-ui-surface-core-v1/syntax-checks.json",
+      "bytes": 396,
+      "sha256": "a9f6374ed7e965ec341fa1f72bb2573930e96dc6e9f55a2ff3d3e0026037f8d9",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\syntax-checks.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-ui-surface-core-v1/web/app.js",
+      "bytes": 376705,
+      "sha256": "84df9b724802d86d69262d98dcee10e22d465c7a6583fc034b438df452bb0bb9",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\web\\app.js"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-ui-surface-core-v1/web/index.html",
+      "bytes": 81330,
+      "sha256": "f5f494781f91029f1b64ace3c0f1ddcba742014690e0d4ee0dbbef53ebf79cff",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\web\\index.html"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-ui-surface-core-v1/web/list-import.js",
+      "bytes": 8829,
+      "sha256": "cd8702fd31122eccfefaf5ed7404bb47cc65223efa5394d3e687f329cfbf47ba",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\web\\list-import.js"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-ui-surface-core-v1/web/saved-comparison.js",
+      "bytes": 31289,
+      "sha256": "8f8c08b92bab53d6303aa436564eee3b5a2a3efa70f14845fd642f1783dd898c",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\web\\saved-comparison.js"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-ui-surface-core-v1/web/styles.css",
+      "bytes": 41399,
+      "sha256": "c5687d92286fa5fe8285dc78ce215bfc10e68a5778e605f4bee8f48fecfa92d8",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\web\\styles.css"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-ui-surface-core-v1/web/verification/ui-sitemap-findings-smoke.cjs",
+      "bytes": 27220,
+      "sha256": "889275f564d254512348a0196ee04b84317d39a45b7d0a2d4ffb3c5067eba8be",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-core-v1\\web\\verification\\ui-sitemap-findings-smoke.cjs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/COUNTER-BINDINGS.json",
+      "bytes": 4604,
+      "sha256": "0f002c3b4072370fee12eeed72010bac5ab7af704d2f2f106f4634ad66eb4973",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\COUNTER-BINDINGS.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/crates/app/src/mcp/saved_comparison_tests.rs",
+      "bytes": 27007,
+      "sha256": "4b00da501b984d5dd8437f41275456e3f6be13dd61b5d0542a5d2fae929237f9",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\crates\\app\\src\\mcp\\saved_comparison_tests.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/crates/app/src/mcp/sitemaps_tests.rs",
+      "bytes": 7248,
+      "sha256": "bdfe3f0afaaa3b99c123224675c5709f7d02961a27e06cefefc0c74dd62fb749",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\crates\\app\\src\\mcp\\sitemaps_tests.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/crates/app/src/mcp/sitemap_findings/stdio.rs",
+      "bytes": 5566,
+      "sha256": "9887c2ce19daf420ad9039ef35afdddd695e1db66eae572062cc3c21ce836615",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\crates\\app\\src\\mcp\\sitemap_findings\\stdio.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/crates/app/src/mcp/sitemap_findings/tests.rs",
+      "bytes": 24101,
+      "sha256": "8af979e0091699a881ad1f9797ba482a4cc44176d6d5c90d8299e0a909deb23b",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\crates\\app\\src\\mcp\\sitemap_findings\\tests.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/crates/app/src/mcp/sitemap_findings.rs",
+      "bytes": 10440,
+      "sha256": "4c3cd411e2ae2fba6933f557f77f5ca8ddba65cb1bb806ed8a2766ae77f3e1ef",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\crates\\app\\src\\mcp\\sitemap_findings.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/crates/app/src/sitemap_findings_cli.rs",
+      "bytes": 11222,
+      "sha256": "c4bcb200770327197ac0ab33dc8a7b35e8942dcddc1511662be36526494cf797",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\crates\\app\\src\\sitemap_findings_cli.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/crates/app/src/sitemap_findings_cli_tests.rs",
+      "bytes": 9698,
+      "sha256": "f1f99965965abceab00a79e826edef8a7bc1851e3a7958e7b70ff587146fa15f",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\crates\\app\\src\\sitemap_findings_cli_tests.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/crates/app/src/sitemap_findings_fixture.rs",
+      "bytes": 5026,
+      "sha256": "0d8dbfa174b4d95f2a2f6436505f31ec94f1f3d1cba2af3e3724ac709305148d",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\crates\\app\\src\\sitemap_findings_fixture.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/HANDOFF.md",
+      "bytes": 10607,
+      "sha256": "bb9bf9f649ff2e72ca1adc7918d34e18d0887587735042dff27efe119fb081f9",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\HANDOFF.md"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/manifest.json",
+      "bytes": 12762,
+      "sha256": "ebaebf161dbdc7defbd3e96ff7c24af9cadf6535d801d28714961558783492cf",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\manifest.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/PARENT-HOOKS.json",
+      "bytes": 5990,
+      "sha256": "03df1291492464dc83cd02ef67c06010b81d211be42231a791e9b9fc27a21ef2",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\PARENT-HOOKS.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/PARENT-HOOKS.md",
+      "bytes": 5196,
+      "sha256": "21fd8d6ee9ca133689aeb906463a2d653870c4438df05fdd55f4d090d7131aa8",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\PARENT-HOOKS.md"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/scripts/container-e2e.mjs",
+      "bytes": 7985,
+      "sha256": "f5cdbd8a8d967b237b28e1552023a6890d3fcc768a78310b149049efb5ef98ec",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\scripts\\container-e2e.mjs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/scripts/mcp-e2e.mjs",
+      "bytes": 13428,
+      "sha256": "7d07523855a3b23651759ad453c0a537361a63de9dec204d80c00f8815422f9f",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\scripts\\mcp-e2e.mjs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/scripts/resource-contract-e2e.mjs",
+      "bytes": 25830,
+      "sha256": "429159077622c5bff111434b651702f3077aff2b65c94907e30c3610d561606e",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\scripts\\resource-contract-e2e.mjs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/scripts/saved-comparison-bundle-e2e.mjs",
+      "bytes": 40334,
+      "sha256": "bc3e698cd01edc4108034fa851407b433006f096c77245ba9603070e96aeaec7",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\scripts\\saved-comparison-bundle-e2e.mjs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/scripts/saved-comparison-e2e.mjs",
+      "bytes": 18284,
+      "sha256": "87a0a63f76adc4b1171c06b77fdd7cc13db20182140f23853088cf7eae4866a8",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\scripts\\saved-comparison-e2e.mjs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/scripts/sitemap-assessment-e2e.mjs",
+      "bytes": 58240,
+      "sha256": "d6d8121565e08d27c4fdcb87b3ea087c3fc427f5f45f301b4cff18fdbaa30463",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\scripts\\sitemap-assessment-e2e.mjs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/scripts/sitemap-findings-mcp-e2e.mjs",
+      "bytes": 10444,
+      "sha256": "604963fce6798cf03309738b9235a438ae325809e63a66a6b5af04f466a07dfe",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\scripts\\sitemap-findings-mcp-e2e.mjs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/scripts/sitemap-membership-e2e.mjs",
+      "bytes": 51843,
+      "sha256": "fa2f9c72f7f70bbd05ea2db2b14fe757640ce5127afa1307ce332b544e54f865",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\scripts\\sitemap-membership-e2e.mjs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/SOURCE-PINS.json",
+      "bytes": 4710,
+      "sha256": "04a1f6af67845a786ce83494c4f8b90bf0b70561f3ba4672dc0d54336264ce7b",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\SOURCE-PINS.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/TEST-NAMES.json",
+      "bytes": 4184,
+      "sha256": "1eed3974b9a87506b0b203b028dd25def960257303a20672d0d6f7edb9c95836",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\TEST-NAMES.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-core-v1/verification.json",
+      "bytes": 2736,
+      "sha256": "6a764b70681ef1d51dcf8ccf9ba67d9476192d0f87c61785d9a949fa17ff89c5",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-core-v1\\verification.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-parent-hooks-integration-v1/crates/app/src/main.rs",
+      "bytes": 29134,
+      "sha256": "67e1ad4cdb795d7829e840a4b99b8ae42d576106353ea6526e7fc7ef787eb9db",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-parent-hooks-integration-v1\\crates\\app\\src\\main.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-parent-hooks-integration-v1/crates/app/src/mcp.rs",
+      "bytes": 23326,
+      "sha256": "7940ecd4081f6bd6127644ffdd26fbd289e98498c6e3ff9c0f6ecb6f8a237f5e",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-parent-hooks-integration-v1\\crates\\app\\src\\mcp.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-parent-hooks-integration-v1/manifest.json",
+      "bytes": 1928,
+      "sha256": "a74484cf3b4028fe98b218e58d02da0495f9ad7470cdf6cf5911142dfcf9f0d8",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-parent-hooks-integration-v1\\manifest.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-postfix-v1/crates/app/src/mcp/sitemap_findings/postfix_tests.rs",
+      "bytes": 4144,
+      "sha256": "34a1cc05e540ef7d36e7a4285f99f68b83246e58ee0240af63187dbbdbb2d877",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-postfix-v1\\crates\\app\\src\\mcp\\sitemap_findings\\postfix_tests.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-postfix-v1/crates/app/src/mcp/sitemap_findings/stdio.rs",
+      "bytes": 5717,
+      "sha256": "058c9978a72749c743e09db6f4b82889ff07b3c94df70549f700d349c5b6d5c6",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-postfix-v1\\crates\\app\\src\\mcp\\sitemap_findings\\stdio.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-postfix-v1/crates/app/src/mcp/sitemap_findings/tests.rs",
+      "bytes": 24150,
+      "sha256": "77902f8602c6ec21a8a988262a320f55478af8c55ef4bd039f9f1d62fa9ce74b",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-postfix-v1\\crates\\app\\src\\mcp\\sitemap_findings\\tests.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-postfix-v1/crates/app/src/mcp/sitemap_findings.rs",
+      "bytes": 10718,
+      "sha256": "5007a8291bc1d85653276196090bbf1d48b6dc057f267fbae4e3dfc16a5943c9",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-postfix-v1\\crates\\app\\src\\mcp\\sitemap_findings.rs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-postfix-v1/HANDOFF.md",
+      "bytes": 4763,
+      "sha256": "6aad4a5802dc0317df564757fd87a3682b20b76e0800c9a6398176fa6ac74e54",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-postfix-v1\\HANDOFF.md"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-postfix-v1/manifest.json",
+      "bytes": 3436,
+      "sha256": "ca05854c67af70e45b2c0bc92bf0fda0c6379656c20bbcea1b26eaae828b825c",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-postfix-v1\\manifest.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-postfix-v1/scripts/sitemap-findings-mcp-e2e.mjs",
+      "bytes": 12066,
+      "sha256": "7e7dc7c973eba232f4f8c9a3f6f4ebe34904d6d85d04b81cabefe8b1946b4d3b",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-postfix-v1\\scripts\\sitemap-findings-mcp-e2e.mjs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-postfix-v1/SOURCE-PINS.json",
+      "bytes": 1696,
+      "sha256": "526192596edd8788f9913a5e5c698ecda95bb4fa76d754d29788159d4cdb4384",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-postfix-v1\\SOURCE-PINS.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-postfix-v1/verification.json",
+      "bytes": 345,
+      "sha256": "ad16c3287504f9d1916ebb58c92a96df3259c8b3d1b1591f7729832a8909e978",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-postfix-v1\\verification.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-session-app-review-v1/receipt.json",
+      "bytes": 3684,
+      "sha256": "e3e9c689f2e0378ff75b232a7c8cdbe23e2bdef9342cb621208ddb97040e7fde",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-session-app-review-v1\\receipt.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-session-app-review-v1/REVIEW.md",
+      "bytes": 5456,
+      "sha256": "4a340711b238e74dc659c6ead158e1200531a0eb1af9a771f9b2b97961438e64",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-session-app-review-v1\\REVIEW.md"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-app-adapter-postfix-review-v1/receipt.json",
+      "bytes": 6110,
+      "sha256": "b52acb92e16627ad905c7716d5536c317f9953ea6e4c36154086a42a86955ef9",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-app-adapter-postfix-review-v1\\receipt.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-server-surfaces-review-v1/receipt.json",
+      "bytes": 8691,
+      "sha256": "17d1590ae13e454859b900d4123866605514bc8fb178599deb160b8c14560b1f",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-server-surfaces-review-v1\\receipt.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-owned-read-registry-review-v1/receipt.json",
+      "bytes": 2328,
+      "sha256": "1722f67ee953d1d3355d18b19a659c7aa95af0135ee73a2f0176d5a4a22ba78d",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-owned-read-registry-review-v1\\receipt.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-owned-read-registry-review-v1/REVIEW.md",
+      "bytes": 4890,
+      "sha256": "7ab0cef93b1d2b3642aaebae9a7d5834bf2ac0658bf04b9ba939ad2472491c46",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-owned-read-registry-review-v1\\REVIEW.md"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-ui-surface-review-v1/receipt.json",
+      "bytes": 9342,
+      "sha256": "534e2415ae836817ecaf474a3320a05b0081fcd440993c5fb6389de09789f2b5",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-ui-surface-review-v1\\receipt.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-review-v1/receipt.json",
+      "bytes": 14445,
+      "sha256": "3559a41a8649722addacca75b1dc9ba489cbceedd3fa62e739ac44d7f8d6218d",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-review-v1\\receipt.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-cli-mcp-postfix-review-v1/receipt.json",
+      "bytes": 9079,
+      "sha256": "f4b98a23dc14f6b75bf6c3b9a2c735bce9e6fa0b084d4c3893eb0ffe0b4ab29f",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-cli-mcp-postfix-review-v1\\receipt.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-surfaces-preparer-review-v1/prepare-sitemap-findings-surfaces-v1.original.cjs",
+      "bytes": 8191,
+      "sha256": "a6f69c237ab6d62ec5cc3d348e710004b1422975ee264b630ca6dd75a4c8c634",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-surfaces-preparer-review-v1\\prepare-sitemap-findings-surfaces-v1.original.cjs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-surfaces-preparer-review-v1/receipt.json",
+      "bytes": 1508,
+      "sha256": "476ef2e9afc0aa0f47cdf0435db3ef8e52d062a8e86d974900f945a8526e74b3",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-surfaces-preparer-review-v1\\receipt.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-surfaces-preparer-review-v1/REVIEW.md",
+      "bytes": 4484,
+      "sha256": "7a95e256167947fd2cff36dce292764b192fd30f51a22edeaeb49e404199d45d",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-surfaces-preparer-review-v1\\REVIEW.md"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-surfaces-preparer-postfix-review-v1/prepare-sitemap-findings-surfaces-v2.reviewed.cjs",
+      "bytes": 8755,
+      "sha256": "9458d8f5c2afb92b02a4c94c1e6f4082d2bace53c8fbbcb2fe83d96495c4f1b0",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-surfaces-preparer-postfix-review-v1\\prepare-sitemap-findings-surfaces-v2.reviewed.cjs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-surfaces-preparer-postfix-review-v1/receipt.json",
+      "bytes": 2472,
+      "sha256": "e86db9fa8d10a8bae8c1bbab24a0eed59bf8d810d64a3802c3f693cde8387bd3",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-surfaces-preparer-postfix-review-v1\\receipt.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-surfaces-preparer-postfix-review-v1/REVIEW.md",
+      "bytes": 2917,
+      "sha256": "3cc13c0d63487a0242b504c3cad185007746e27ffec99876142719edd8b8d70a",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-surfaces-preparer-postfix-review-v1\\REVIEW.md"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-surfaces-preparer-union-review-v1/prepare-sitemap-findings-surfaces-v3.reviewed.cjs",
+      "bytes": 8866,
+      "sha256": "01955968f1481e2ef93b3cb1845c4b02bb4bdbb54741cd173044fc09b4778e78",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-surfaces-preparer-union-review-v1\\prepare-sitemap-findings-surfaces-v3.reviewed.cjs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-surfaces-preparer-union-review-v1/receipt.json",
+      "bytes": 2089,
+      "sha256": "b41f1ea9c8474f7604213c2deabde4d01c5f992280f5e8c83d564ac1249fa828",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-surfaces-preparer-union-review-v1\\receipt.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-surfaces-preparer-union-review-v1/REVIEW.md",
+      "bytes": 2177,
+      "sha256": "39ca665f03f84a37df55bfce558288feaf813fbd0137cb875069639c5ed500a3",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-surfaces-preparer-union-review-v1\\REVIEW.md"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-physical-rebind-audit-v1/CHECKLIST.md",
+      "bytes": 6524,
+      "sha256": "151822f495344bbe2d448f4869f1c3814c31a01c77e5e17e5bd1e824be6aa482",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-physical-rebind-audit-v1\\CHECKLIST.md"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/s6-physical-rebind-audit-v1/receipt.json",
+      "bytes": 1356,
+      "sha256": "9d25de98e0295c5b2d0389c96614f8e8853456b0732205cecfacbdf1a1dc51af",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-physical-rebind-audit-v1\\receipt.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/compiler-source-manifest.json",
+      "bytes": 105511,
+      "sha256": "69492d0c0cc56bab5de86251045459a1707deb4c991d5871f9ad39015e897751",
+      "origin": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-findings-surfaces-source-v1\\manifest.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/root-authoring/prepare-sitemap-findings-surfaces-v1.cjs",
+      "bytes": 8191,
+      "sha256": "a6f69c237ab6d62ec5cc3d348e710004b1422975ee264b630ca6dd75a4c8c634",
+      "origin": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\prepare-sitemap-findings-surfaces-v1.cjs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/root-authoring/prepare-sitemap-findings-surfaces-v2.cjs",
+      "bytes": 8755,
+      "sha256": "9458d8f5c2afb92b02a4c94c1e6f4082d2bace53c8fbbcb2fe83d96495c4f1b0",
+      "origin": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\prepare-sitemap-findings-surfaces-v2.cjs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/root-authoring/prepare-sitemap-findings-surfaces-v3.cjs",
+      "bytes": 8866,
+      "sha256": "01955968f1481e2ef93b3cb1845c4b02bb4bdbb54741cd173044fc09b4778e78",
+      "origin": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\prepare-sitemap-findings-surfaces-v3.cjs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/root-authoring/prepare-sitemap-findings-surfaces-v3.json",
+      "bytes": 2319,
+      "sha256": "26a100d8736f41219597bbee72d1ea49d8af4713048e10c835bfd1c248c0fe2b",
+      "origin": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\prepare-sitemap-findings-surfaces-v3.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/root-authoring/derive-s6-surfaces-preparer-v2.cjs",
+      "bytes": 2685,
+      "sha256": "00d17b8692ed4f45f9fad0de482e4112e890f6275138749030c934f85219ee33",
+      "origin": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\derive-s6-surfaces-preparer-v2.cjs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/root-authoring/derive-s6-surfaces-preparer-v2.json",
+      "bytes": 646,
+      "sha256": "e18e00f5bdbbe61817514e6d6e6d6ab1f6dedaf5e3f3f9f43d9f18702027f632",
+      "origin": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\derive-s6-surfaces-preparer-v2.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/root-authoring/derive-s6-surfaces-preparer-v3.cjs",
+      "bytes": 1993,
+      "sha256": "c753f6fbf0962d6b82d9a5e3d37cc9e0d8a1d8524fa54df34fe21db01d9e7c0c",
+      "origin": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\derive-s6-surfaces-preparer-v3.cjs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/root-authoring/derive-s6-surfaces-preparer-v3.json",
+      "bytes": 803,
+      "sha256": "4b10386e9869065623c6d8055a5be5074d5cf41dff20df2581912bc9cf257aa5",
+      "origin": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\derive-s6-surfaces-preparer-v3.json"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/root-authoring/update-s6-integration-todo-v1.cjs",
+      "bytes": 5773,
+      "sha256": "c293aa871390f7ed556ff8d65d6bd739f3a99d5c7b729f19151dae65fd81cfb9",
+      "origin": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\update-s6-integration-todo-v1.cjs"
+    },
+    {
+      "path": "docs/verification/sitemap-findings-surfaces-20261015/root-authoring/update-s6-integration-todo-v1.json",
+      "bytes": 1195,
+      "sha256": "48c188b4c7ed286b9a5327abc5d9cf5dfb71cf97acf69f02a4b50a62cbd83d4b",
+      "origin": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\update-s6-integration-todo-v1.json"
+    }
+  ]
+}

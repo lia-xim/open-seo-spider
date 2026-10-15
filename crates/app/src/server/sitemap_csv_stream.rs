@@ -1,11 +1,12 @@
 //! Verified two-pass CSV transport. AUTHORED ONLY under compute HOLD.
 //! The final positive chunk cannot escape before Core TX return and worker join.
+use crate::sitemap_findings::{self as findings, FindingsExportSnapshot, PreparedCsv};
 use crate::sitemap_membership::{self as membership, CsvQuery, Failure, Snapshot};
 use axum::body::{Body, Bytes};
 use futures::FutureExt;
 use open_seo_spider_core::{
     CrawlStore, SitemapReadControl, SitemapReadControlError, SitemapReadWindowError,
-    SitemapVerifiedStoredRows,
+    SitemapVerifiedFindings, SitemapVerifiedStoredRows,
 };
 use sha2::{Digest, Sha256};
 use std::{
@@ -231,6 +232,47 @@ impl ExportRegistry {
         query: CsvQuery,
     ) -> Result<PendingExport, Failure> {
         let expected = query.expected_context(job_id)?;
+        self.start_with(move |ports| {
+            produce(
+                &ports.registry,
+                path,
+                job_id,
+                generation,
+                config,
+                query,
+                expected,
+                ports.stop,
+                ports.sender,
+                ports.progress,
+                ports.ready,
+                ports.runtime,
+            )
+        })
+    }
+
+    pub(super) fn start_findings(
+        &self,
+        path: PathBuf,
+        query: PreparedCsv,
+    ) -> Result<PendingExport<FindingsExportSnapshot>, Failure> {
+        self.start_with(move |ports| {
+            produce_findings(
+                &ports.registry,
+                path,
+                query,
+                ports.stop,
+                ports.sender,
+                ports.progress,
+                ports.ready,
+                ports.runtime,
+            )
+        })
+    }
+
+    fn start_with<C: Send + 'static>(
+        &self,
+        producer: impl FnOnce(ProducerPorts<C>) -> Result<Completion, Failure> + Send + 'static,
+    ) -> Result<PendingExport<C>, Failure> {
         let mut state = self
             .0
             .tasks
@@ -276,20 +318,14 @@ impl ExportRegistry {
         self.0.counters.started.fetch_add(1, Ordering::SeqCst);
         self.0.counters.active.fetch_add(1, Ordering::SeqCst);
         let worker = tokio::task::spawn_blocking(move || {
-            produce(
-                &registry,
-                path,
-                job_id,
-                generation,
-                config,
-                query,
-                expected,
-                worker_stop,
+            producer(ProducerPorts {
+                registry,
+                stop: worker_stop,
                 sender,
                 progress,
                 ready,
                 runtime,
-            )
+            })
         });
         let counters = self.0.counters.clone();
         let coordinator_stop = stop.clone();
@@ -334,6 +370,15 @@ impl ExportRegistry {
     }
 }
 
+struct ProducerPorts<C> {
+    registry: ExportRegistry,
+    stop: Stop,
+    sender: mpsc::Sender<Bytes>,
+    progress: watch::Sender<Progress>,
+    ready: oneshot::Sender<Result<Ready<C>, Failure>>,
+    runtime: tokio::runtime::Handle,
+}
+
 #[derive(Clone, Copy)]
 struct Progress {
     ready_at: Option<Instant>,
@@ -346,8 +391,8 @@ struct Receipt {
     rows: u64,
 }
 #[derive(Debug, Clone)]
-pub(super) struct Ready {
-    pub snapshot: Snapshot,
+pub(super) struct Ready<C = Snapshot> {
+    pub snapshot: C,
     pub length: u64,
     pub sha256: String,
     receipt: Receipt,
@@ -356,12 +401,12 @@ struct Completion {
     receipt: Receipt,
     tail: Bytes,
 }
-pub(super) struct PendingExport {
-    ready: oneshot::Receiver<Result<Ready, Failure>>,
+pub(super) struct PendingExport<C = Snapshot> {
+    ready: oneshot::Receiver<Result<Ready<C>, Failure>>,
     body: Option<BodyState>,
 }
-impl PendingExport {
-    pub(super) async fn ready(&mut self) -> Result<Ready, Failure> {
+impl<C> PendingExport<C> {
+    pub(super) async fn ready(&mut self) -> Result<Ready<C>, Failure> {
         let body = self
             .body
             .as_mut()
@@ -713,6 +758,168 @@ fn format_pass(
     Ok(rows)
 }
 
+trait CsvFormatter {
+    fn pass<W: Write>(&self, writer: &mut W, on_row: &mut dyn FnMut()) -> anyhow::Result<u64>;
+}
+struct RawFormatter<'s, 'read>(&'s SitemapVerifiedStoredRows<'read>);
+impl CsvFormatter for RawFormatter<'_, '_> {
+    fn pass<W: Write>(&self, writer: &mut W, on_row: &mut dyn FnMut()) -> anyhow::Result<u64> {
+        format_pass(self.0, writer, on_row)
+    }
+}
+struct FindingsFormatter<'s, 'read>(&'s SitemapVerifiedFindings<'read>);
+impl CsvFormatter for FindingsFormatter<'_, '_> {
+    fn pass<W: Write>(&self, writer: &mut W, on_row: &mut dyn FnMut()) -> anyhow::Result<u64> {
+        findings::write_findings_csv_session_observed(self.0, writer, on_row)
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn produce_session<C>(
+    registry: &ExportRegistry,
+    stop: &Stop,
+    sender: mpsc::Sender<Bytes>,
+    progress: watch::Sender<Progress>,
+    ready: &mut Option<oneshot::Sender<Result<Ready<C>, Failure>>>,
+    runtime: tokio::runtime::Handle,
+    snapshot: C,
+    formatter: impl CsvFormatter,
+) -> anyhow::Result<Completion> {
+    let mut count = CountHash::new();
+    let first = formatter.pass(&mut count, &mut || {
+        registry
+            .0
+            .counters
+            .first_pass_rows
+            .fetch_add(1, Ordering::SeqCst);
+    });
+    count.rows = match first {
+        Ok(rows) => rows,
+        Err(error) => {
+            return Err(count
+                .failure
+                .take()
+                .map(anyhow::Error::new)
+                .unwrap_or(error));
+        }
+    };
+    registry
+        .0
+        .counters
+        .completed_passes
+        .fetch_add(1, Ordering::SeqCst);
+    let receipt = count.receipt();
+    stop.control.checkpoint()?;
+    #[cfg(test)]
+    wait_gate(registry.0.hooks.before_ready.as_ref(), &stop.control)?;
+    let now = Instant::now();
+    stop.control
+        .set_deadline(Some(now + registry.0.limits.stream_timeout));
+    progress.send_replace(Progress {
+        ready_at: Some(now),
+        last_sent: now,
+    });
+    let metadata = Ready {
+        snapshot,
+        length: receipt.length,
+        sha256: receipt.sha256.clone(),
+        receipt: receipt.clone(),
+    };
+    ready
+        .take()
+        .ok_or_else(|| anyhow::anyhow!("CSV preparation sent twice"))?
+        .send(Ok(metadata))
+        .map_err(|_| {
+            stop.cancel();
+            anyhow::Error::new(stop.failure())
+        })?;
+    #[cfg(test)]
+    wait_gate(registry.0.hooks.after_preflight.as_ref(), &stop.control)?;
+    let mut writer = ChunkTailWriter {
+        count: CountHash::new(),
+        tail: Vec::with_capacity(CHUNK_BYTES),
+        sender,
+        stop: stop.clone(),
+        runtime,
+        progress,
+        counters: registry.0.counters.clone(),
+        limits: registry.0.limits,
+        #[cfg(test)]
+        fault: registry.0.hooks.fault,
+    };
+    let pass = formatter.pass(&mut writer, &mut || {
+        registry
+            .0
+            .counters
+            .second_pass_rows
+            .fetch_add(1, Ordering::SeqCst);
+    });
+    writer.count.rows = match pass {
+        Ok(rows) => rows,
+        Err(error) => {
+            return Err(writer
+                .count
+                .failure
+                .take()
+                .map(anyhow::Error::new)
+                .unwrap_or(error));
+        }
+    };
+    registry
+        .0
+        .counters
+        .completed_passes
+        .fetch_add(1, Ordering::SeqCst);
+    let actual = writer.count.receipt();
+    #[cfg(test)]
+    if matches!(
+        registry.0.hooks.fault,
+        ExportTestFault::SecondPassDigestMismatch
+    ) {
+        anyhow::bail!("Injected second-pass digest mismatch");
+    }
+    anyhow::ensure!(
+        actual == receipt && !writer.tail.is_empty(),
+        "CSV second-pass byte/hash/count differs"
+    );
+    stop.control.checkpoint()?;
+    #[cfg(test)]
+    {
+        wait_gate(registry.0.hooks.before_core_return.as_ref(), &stop.control)?;
+        if matches!(registry.0.hooks.fault, ExportTestFault::BeforeCoreReturn) {
+            anyhow::bail!("Injected failure before Core transaction return");
+        }
+    }
+    Ok(Completion {
+        receipt: actual,
+        tail: Bytes::from(writer.tail),
+    })
+}
+
+fn after_core(
+    registry: &ExportRegistry,
+    stop: &Stop,
+    completion: Completion,
+) -> anyhow::Result<Completion> {
+    registry
+        .0
+        .counters
+        .core_completed
+        .fetch_add(1, Ordering::SeqCst);
+    #[cfg(test)]
+    {
+        wait_gate(registry.0.hooks.after_core_return.as_ref(), &stop.control)?;
+        if matches!(
+            registry.0.hooks.fault,
+            ExportTestFault::AfterCoreReturnPanic
+        ) {
+            panic!("Injected producer panic after actual Core transaction return");
+        }
+    }
+    stop.control.checkpoint()?;
+    Ok(completion)
+}
+
 #[allow(clippy::too_many_arguments)]
 fn produce(
     registry: &ExportRegistry,
@@ -745,126 +952,70 @@ fn produce(
                     .fetch_add(1, Ordering::SeqCst);
                 let snapshot =
                     query.bind_verified_header(job_id, generation, &config, session.header())?;
-                let mut count = CountHash::new();
-                count.rows = format_pass(session, &mut count, || {
-                    registry
-                        .0
-                        .counters
-                        .first_pass_rows
-                        .fetch_add(1, Ordering::SeqCst);
-                })?;
-                registry
-                    .0
-                    .counters
-                    .completed_passes
-                    .fetch_add(1, Ordering::SeqCst);
-                let receipt = count.receipt();
-                stop.control.checkpoint()?;
-                #[cfg(test)]
-                wait_gate(registry.0.hooks.before_ready.as_ref(), &stop.control)?;
-                let now = Instant::now();
-                stop.control
-                    .set_deadline(Some(now + registry.0.limits.stream_timeout));
-                progress.send_replace(Progress {
-                    ready_at: Some(now),
-                    last_sent: now,
-                });
-                let metadata = Ready {
-                    snapshot,
-                    length: receipt.length,
-                    sha256: receipt.sha256.clone(),
-                    receipt: receipt.clone(),
-                };
-                ready
-                    .take()
-                    .ok_or_else(|| anyhow::anyhow!("CSV preparation sent twice"))?
-                    .send(Ok(metadata))
-                    .map_err(|_| {
-                        stop.cancel();
-                        anyhow::Error::new(stop.failure())
-                    })?;
-                #[cfg(test)]
-                wait_gate(registry.0.hooks.after_preflight.as_ref(), &stop.control)?;
-                let mut writer = ChunkTailWriter {
-                    count: CountHash::new(),
-                    tail: Vec::with_capacity(CHUNK_BYTES),
+                produce_session(
+                    registry,
+                    &stop,
                     sender,
-                    stop: stop.clone(),
-                    runtime,
                     progress,
-                    counters: registry.0.counters.clone(),
-                    limits: registry.0.limits,
-                    #[cfg(test)]
-                    fault: registry.0.hooks.fault,
-                };
-                let pass = format_pass(session, &mut writer, || {
-                    registry
-                        .0
-                        .counters
-                        .second_pass_rows
-                        .fetch_add(1, Ordering::SeqCst);
-                });
-                writer.count.rows = match pass {
-                    Ok(rows) => rows,
-                    Err(error) => {
-                        return Err(writer
-                            .count
-                            .failure
-                            .take()
-                            .map(anyhow::Error::new)
-                            .unwrap_or(error));
-                    }
-                };
-                registry
-                    .0
-                    .counters
-                    .completed_passes
-                    .fetch_add(1, Ordering::SeqCst);
-                let actual = writer.count.receipt();
-                #[cfg(test)]
-                if matches!(
-                    registry.0.hooks.fault,
-                    ExportTestFault::SecondPassDigestMismatch
-                ) {
-                    anyhow::bail!("Injected second-pass digest mismatch");
-                }
-                anyhow::ensure!(
-                    actual == receipt && !writer.tail.is_empty(),
-                    "CSV second-pass byte/hash/count differs"
-                );
-                stop.control.checkpoint()?;
-                #[cfg(test)]
-                {
-                    wait_gate(registry.0.hooks.before_core_return.as_ref(), &stop.control)?;
-                    if matches!(registry.0.hooks.fault, ExportTestFault::BeforeCoreReturn) {
-                        anyhow::bail!("Injected failure before Core transaction return");
-                    }
-                }
-                Ok(Completion {
-                    receipt: actual,
-                    tail: Bytes::from(writer.tail),
-                })
+                    &mut ready,
+                    runtime,
+                    snapshot,
+                    RawFormatter(session),
+                )
             },
         )?;
-        registry
-            .0
-            .counters
-            .core_completed
-            .fetch_add(1, Ordering::SeqCst);
-        #[cfg(test)]
-        {
-            wait_gate(registry.0.hooks.after_core_return.as_ref(), &stop.control)?;
-            if matches!(
-                registry.0.hooks.fault,
-                ExportTestFault::AfterCoreReturnPanic
-            ) {
-                panic!("Injected producer panic after actual Core transaction return");
-            }
-        }
-        stop.control.checkpoint()?;
-        Ok(completion)
+        after_core(registry, &stop, completion)
     })()
     .map_err(classify);
+    if let Err(failure) = &result {
+        if let Some(ready) = ready.take() {
+            let _ = ready.send(Err(failure.clone()));
+        }
+    }
+    result
+}
+
+#[allow(clippy::too_many_arguments)]
+fn produce_findings(
+    registry: &ExportRegistry,
+    path: PathBuf,
+    query: PreparedCsv,
+    stop: Stop,
+    sender: mpsc::Sender<Bytes>,
+    progress: watch::Sender<Progress>,
+    ready: oneshot::Sender<Result<Ready<FindingsExportSnapshot>, Failure>>,
+    runtime: tokio::runtime::Handle,
+) -> Result<Completion, Failure> {
+    let mut ready = Some(ready);
+    let result = (|| -> anyhow::Result<Completion> {
+        stop.control.checkpoint()?;
+        let store = CrawlStore::open_read_only(path)?;
+        let completion = store.with_verified_sitemap_findings(
+            query.selection(),
+            Some(query.expected_context_sha256()),
+            &stop.control,
+            |session| {
+                registry
+                    .0
+                    .counters
+                    .prepared_sessions
+                    .fetch_add(1, Ordering::SeqCst);
+                let snapshot = query.bind_session(session)?;
+                produce_session(
+                    registry,
+                    &stop,
+                    sender,
+                    progress,
+                    &mut ready,
+                    runtime,
+                    snapshot,
+                    FindingsFormatter(session),
+                )
+            },
+        )?;
+        after_core(registry, &stop, completion)
+    })()
+    .map_err(findings::typed_failure);
     if let Err(failure) = &result {
         if let Some(ready) = ready.take() {
             let _ = ready.send(Err(failure.clone()));

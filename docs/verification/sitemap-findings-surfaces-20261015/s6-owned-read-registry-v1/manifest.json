@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "name": "s6-owned-read-registry-v1",
+  "immutable": true,
+  "status": "AUTHORED_RUSTFMT_ONLY_NOT_COMPILED_NOT_RUN",
+  "source_root": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-integration-v1",
+  "entries": [
+    {
+      "path": "crates/app/src/server/sitemap_findings_reads.rs",
+      "before_sha256": null,
+      "require_target_absent": true,
+      "after_sha256": "ec02f993e93474dce615da119f06be4e559a505b4bdd33314b0c93450d0b0c44",
+      "bytes": 9976
+    },
+    {
+      "path": "crates/app/src/server/sitemap_findings_reads_tests.rs",
+      "before_sha256": null,
+      "require_target_absent": true,
+      "after_sha256": "c49511e1bacd972abe5fbb623391d02ddc5ca054fc7716332e21aa5bf398abf9",
+      "bytes": 11260
+    }
+  ],
+  "source_pins_sha256": "34132098fc01a0faec3a54fb5224480c63eb2523845c6a67451cbe2fbcc2342f",
+  "handoff_sha256": "e4bd3a9c308bb81479e1536b38c0151aef8781ca43ccd45f8f6e9eb80e4f6e5e",
+  "actual_api": [
+    "ReadRegistry Clone+Default",
+    "async read<T:Send+static>(FnOnce(SitemapReadControl)->anyhow::Result<T>+Send+static)->Result<T, membership::Failure>",
+    "async shutdown_and_drain()->anyhow::Result<()>",
+    "cfg(test) snapshot()->ReadStats"
+  ],
+  "production_timeout_seconds": 120,
+  "authored_tests": [
+    "owned_read_default_success_is_delivered_after_actual_worker_drop_and_drain_joins_supervisor",
+    "owned_read_request_drop_cancels_actual_control_and_drain_waits_until_blocking_worker_join",
+    "owned_read_supervisor_deadline_actually_expires_control_but_never_returns_before_worker_join",
+    "owned_read_concurrent_drain_closes_admission_and_cancelling_one_drain_does_not_detach_worker",
+    "owned_read_actual_worker_panic_is_joined_and_classified_without_leaking_active",
+    "owned_read_actual_operation_errors_keep_shared_typed_failure_instead_of_generic_timeout",
+    "owned_read_completed_supervisors_are_actually_reaped_before_later_admission",
+    "owned_read_past_completion_notify_and_repeated_concurrent_drains_do_not_lose_wakeup"
+  ],
+  "new_authored_test_count": 8,
+  "new_executed_test_count": 0,
+  "checks": [
+    "rustfmt parser/format exit0",
+    "rustfmt --check exit0",
+    "new target ABSENT and actual dependency SHA pins"
+  ],
+  "not_run": [
+    "compiler/Cargo/clippy",
+    "all tests/blocking workers/timers",
+    "SQLite interrupt/native disconnect/HTTP/browser",
+    "forced runtime shutdown/resource benchmarks"
+  ],
+  "root_product_git_runtime_mutations": false,
+  "dependency_changes": false
+}

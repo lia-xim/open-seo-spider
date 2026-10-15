@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "name": "s6-cli-mcp-postfix-v1",
+  "immutable": true,
+  "status": "SOURCE_ONLY_FMT_SYNTAX_NOT_COMPILED_NOT_RUN",
+  "created_at_utc": "2026-10-15T00:01:38.567475+00:00",
+  "basis_manifest_sha256": "ebaebf161dbdc7defbd3e96ff7c24af9cadf6535d801d28714961558783492cf",
+  "confirmed_fixes": [
+    "stdio borrowed id check before clone",
+    "actual findings POST per-request150s override; legacy60s unchanged",
+    "native harness outer CLI ownership/actual-close-before-cleanup"
+  ],
+  "entries": [
+    {
+      "path": "crates/app/src/mcp/sitemap_findings.rs",
+      "before_sha256": "4c3cd411e2ae2fba6933f557f77f5ca8ddba65cb1bb806ed8a2766ae77f3e1ef",
+      "required_before": "Exact immutable v1 after SHA",
+      "after_sha256": "5007a8291bc1d85653276196090bbf1d48b6dc057f267fbae4e3dfc16a5943c9",
+      "bytes": 10718
+    },
+    {
+      "path": "crates/app/src/mcp/sitemap_findings/stdio.rs",
+      "before_sha256": "9887c2ce19daf420ad9039ef35afdddd695e1db66eae572062cc3c21ce836615",
+      "required_before": "Exact immutable v1 after SHA",
+      "after_sha256": "058c9978a72749c743e09db6f4b82889ff07b3c94df70549f700d349c5b6d5c6",
+      "bytes": 5717
+    },
+    {
+      "path": "crates/app/src/mcp/sitemap_findings/tests.rs",
+      "before_sha256": "8af979e0091699a881ad1f9797ba482a4cc44176d6d5c90d8299e0a909deb23b",
+      "required_before": "Exact immutable v1 after SHA",
+      "after_sha256": "77902f8602c6ec21a8a988262a320f55478af8c55ef4bd039f9f1d62fa9ce74b",
+      "bytes": 24150
+    },
+    {
+      "path": "crates/app/src/mcp/sitemap_findings/postfix_tests.rs",
+      "before_sha256": null,
+      "required_before": "ABSENT",
+      "after_sha256": "34a1cc05e540ef7d36e7a4285f99f68b83246e58ee0240af63187dbbdbb2d877",
+      "bytes": 4144
+    },
+    {
+      "path": "scripts/sitemap-findings-mcp-e2e.mjs",
+      "before_sha256": "604963fce6798cf03309738b9235a438ae325809e63a66a6b5af04f466a07dfe",
+      "required_before": "Exact immutable v1 after SHA",
+      "after_sha256": "7e7dc7c973eba232f4f8c9a3f6f4ebe34904d6d85d04b81cabefe8b1946b4d3b",
+      "bytes": 12066
+    }
+  ],
+  "new_authored_tests": [
+    "findings_postfix_stdio_exact_utf8_rpc_id_and_plus_one_preserve_following_frame",
+    "findings_postfix_actual_sixty_one_second_http_response_succeeds_while_legacy_times_out"
+  ],
+  "new_authored_test_count": 2,
+  "original_v1_tests": 18,
+  "combined_cli_mcp_authored_tests": 20,
+  "executed_test_count": 0,
+  "existing_tests_hook_append_bytes": "\n#[path = \"postfix_tests.rs\"]\nmod postfix_tests;\n",
+  "original_v1_changed": false,
+  "checks": {
+    "rustfmt_format_exit": 0,
+    "rustfmt_check4rust_exit": 0,
+    "node_syntax_exit": 0,
+    "compiler": "NOT_RUN",
+    "cargo": "NOT_RUN",
+    "tests": "NOT_RUN",
+    "actual_61s_wait": "NOT_RUN",
+    "native_harness": "NOT_RUN",
+    "http_stdio_sqlite": "NOT_RUN",
+    "allocation_or_hard_join_latency": "NOT_PROVEN",
+    "root_mutations": false
+  },
+  "support_files": [
+    {
+      "path": "HANDOFF.md",
+      "sha256": "6aad4a5802dc0317df564757fd87a3682b20b76e0800c9a6398176fa6ac74e54"
+    },
+    {
+      "path": "SOURCE-PINS.json",
+      "sha256": "526192596edd8788f9913a5e5c698ecda95bb4fa76d754d29788159d4cdb4384"
+    },
+    {
+      "path": "verification.json",
+      "sha256": "ad16c3287504f9d1916ebb58c92a96df3259c8b3d1b1591f7729832a8909e978"
+    }
+  ]
+}

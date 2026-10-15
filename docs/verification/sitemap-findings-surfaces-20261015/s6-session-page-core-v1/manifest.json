@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "result": "OPAQUE_SESSION_PAGE_AND_SELECTION_SOURCE_ONLY",
+  "recorded_at": "2026-10-14T23:25:24.772Z",
+  "baseline_commit": "898c404b596cdb812fd76c19a0a38de5d155371c",
+  "previous_manifest_sha256": "72dd26c3108c3e3432932e5bfb02d7f75eb8aeed9e7d71b24629511e81289f8d",
+  "entries": [
+    {
+      "path": "crates/core/src/store/sitemap_findings_read.rs",
+      "payload": "crates/core/src/store/sitemap_findings_read.rs",
+      "before_sha256": "7838365c51c02b9aad7c2cc11a74609dda81b0c3e4a5dcace7fbf2811ccb3030",
+      "after_sha256": "5f4ae2bd1c51e6b825ad190c5bbb6e58549fb323fdccd05dde9c4215d539a267",
+      "bytes": 18759
+    },
+    {
+      "path": "crates/core/src/store/sitemap_findings_read_tests.rs",
+      "payload": "crates/core/src/store/sitemap_findings_read_tests.rs",
+      "before_sha256": "77a63e95a8ffa4fab6fcd04a34ccc00c2399419ca8cd356130edba511fdda7c2",
+      "after_sha256": "a91efc1f82b2fea098ccc3bffc0fcf5a52b85e13d4ff7fd28f835b085a5eb4e5",
+      "bytes": 20722
+    }
+  ],
+  "new_authored_tests": 3,
+  "new_tests_executed": 0,
+  "checks": "rustfmt parser/format only; not compiler or SQLite execution",
+  "api": [
+    "SitemapVerifiedFindings::selection()->&SitemapFindingSelection",
+    "SitemapVerifiedFindings::page(&SitemapFindingsRequest)->Result<SitemapFindingsPage>"
+  ],
+  "scope": "Exact prior collector moved into the existing sealed session, with fixed selection and expected-context checks before cursor lookup. Store::sitemap_findings_page delegates in one actual same-TX preparation. No proof constructor or engine/hash-profile change."
+}

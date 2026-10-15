@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "review_name": "s6-surfaces-runners-postfix-review-v1",
+  "created_at_utc": "2026-10-15T00:28:53.1517898Z",
+  "status": "STATIC_CLOSURE_NO_ADDITIONAL_CONFIRMED_FINDINGS",
+  "scope": "Builder-v2 fix delta only; no new broad review",
+  "original_finding_receipt_sha256": "440aee9fdfe1a9fb7a66a5ff285ec1eeaaf5c572180744d9251340742d2027c8",
+  "original_v1_finding_preserved": true,
+  "finding_closure": {
+    "priority": "P2",
+    "summary": "Summary-only workspace admission replaced by exact producer records and actual fixed-log verification before writes",
+    "source_lines": "46-92",
+    "first_output_mkdir_line": 105,
+    "first_actual_child_call_line": 151,
+    "closed_in_source": true
+  },
+  "confirmed_additional_findings": [],
+  "inputs": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-surfaces-runners-postfix-v1\\manifest.json",
+      "sha256": "48bad77b751beab0e096467f826b939b990b45fb3ecf90c9eed3d6892d5d3d3a",
+      "bytes": 2800
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-surfaces-runners-postfix-v1\\build-sitemap-findings-surfaces-v2.mjs",
+      "sha256": "5478157ccc2e3511285a175e0b559168dc66f268bc79f45c631f98609be137d6",
+      "bytes": 12236
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-surfaces-runners-postfix-v1\\DERIVATION.json",
+      "sha256": "eeb571026d5efa952e3059f1c55a04473b1ce0e78e3d0a9622436bc258692914",
+      "bytes": 6556
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-surfaces-runners-v1\\build-sitemap-findings-surfaces-v1.mjs",
+      "sha256": "dcf4e74c70658bd7090ab7b90b2d595bc95747cf315c165409028447a66b989c",
+      "bytes": 8007
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-surfaces-runners-review-v1\\receipt.json",
+      "sha256": "440aee9fdfe1a9fb7a66a5ff285ec1eeaaf5c572180744d9251340742d2027c8",
+      "bytes": 2845
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-surfaces-runners-v1\\manifest.json",
+      "sha256": "30a85f13c756792b43c284f6789e7207042c0719f64a077d5517580bb518a13e",
+      "bytes": 6843
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-surfaces-runners-v1\\run-sitemap-findings-surfaces-suite-v1.mjs",
+      "sha256": "5de37908b795947c8db1cab459f1a45a2edda823499747b162d13a6bef3fcc66",
+      "bytes": 8797
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-findings-surfaces-source-v1\\manifest.json",
+      "sha256": "69492d0c0cc56bab5de86251045459a1707deb4c991d5871f9ad39015e897751",
+      "bytes": 105511
+    }
+  ],
+  "checks": {
+    "all_postfix_payload_and_support_hashes_and_bytes": "MATCH",
+    "literal_derivation_operations": 2,
+    "each_expected_occurrence": 1,
+    "forward_replay": "EXACT_BYTES",
+    "inverse_reconstruction": "EXACT_ORIGINAL_BYTES",
+    "legacy_child_build_backup_source_verify_helpers": "UNCHANGED_BY_EXACT_INVERSE",
+    "suite_summary_regex": "SAME_AS_PINNED_PRODUCER",
+    "suite_runs": "EXACT_THREE_ORDERED_ARGS_CLOSE_SPAWN_EXIT",
+    "log_paths": "FIXED_THREE_SIBLINGS",
+    "minimum_workspace": 1170,
+    "required_source_names": 388,
+    "separate_renderer_gates": 4,
+    "source_inputs": 297,
+    "node_check": {
+      "command": "node --check E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-surfaces-runners-postfix-v1/build-sitemap-findings-surfaces-v2.mjs",
+      "actual_exit_code": 0,
+      "module_evaluated": false
+    }
+  },
+  "execution": {
+    "driver_import_or_eval_or_vm": "NOT_RUN",
+    "negative_controls": "NOT_RUN",
+    "cargo_or_compiler": "NOT_RUN",
+    "product_tests": "NOT_RUN",
+    "renderer_native_http_sqlite": "NOT_RUN",
+    "compute_hold": "ACTIVE_NO_EXECUTION_RELEASE_CLAIMED"
+  },
+  "mutations": "Only this fresh review directory; no Root/Git/source/install/runtime changes",
+  "qualification": "Static closure and Node syntax only; no process-origin attestation, suite/build/runtime or full-feature acceptance",
+  "review_document": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-surfaces-runners-postfix-review-v1\\REVIEW.md",
+    "sha256": "6ddd7bc1fb26d1a5a09ea27ed6ff417fa8cb5f7d1b62292c727b26ad8af24098",
+    "bytes": 3058
+  }
+}

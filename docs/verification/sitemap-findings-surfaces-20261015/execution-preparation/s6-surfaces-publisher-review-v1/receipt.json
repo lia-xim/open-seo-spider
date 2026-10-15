@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "immutable": true,
+  "status": "BOUNDED_STATIC_REVIEW_ONE_CONFIRMED_OPEN_P2",
+  "reviewer": "/root/finish_coverage",
+  "script": {
+    "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/publish-s6-surfaces-source-docs-v1.cjs",
+    "sha256": "90e65dbf6610f595fa6ca7be4243691df49e13ecc42088c7b614999a0698c8e9",
+    "bytes": 14127,
+    "snapshot": "reviewed-publisher-v1.cjs"
+  },
+  "read_input_pins": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-source-v1/manifest.json",
+      "sha256": "69492d0c0cc56bab5de86251045459a1707deb4c991d5871f9ad39015e897751"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-integration-v1/docs/feature-parity.json",
+      "sha256": "a49677227693e148bc919703ca912e8009da900c4845bba4211527216e5c4832"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-integration-v1/docs/FEATURE_TODO.md",
+      "sha256": "f649804cd77be778dcceec0878c2fe87f91546facb8460295abc53eca37a4db5"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-integration-v1/docs/parity/granular-acceptance.json",
+      "sha256": "e85b205fd6d061c96043c05ea2e6ffa3dbbe6a0f390c07bb8f1ffaf22f316962"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-integration-v1/scripts/update-feature-todo.mjs",
+      "sha256": "4515a89bab506506659dfb460e43aa50d22aae6caf7a9c8a1babb324cef950a1"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-integration-v1/.gitattributes",
+      "sha256": "07dca640bb09af0a6816c2f37bc188109392ee6a7d4bf0f0cc84d695a4b6cec0"
+    }
+  ],
+  "findings": [
+    {
+      "id": "S6-PUBLISHER-001",
+      "priority": "P2",
+      "status": "OPEN_V1_ROOT_ACCEPTED_SEPARATE_V2_REQUIRED",
+      "file": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/publish-s6-surfaces-source-docs-v1.cjs",
+      "lines": "29-30",
+      "trigger": "An archived superseded handoff payload changes while its pinned manifest remains byte-identical; e.g. original s6-cli-mcp-core-v1/crates/app/src/mcp/sitemap_findings.rs, with final297Rootsources unchanged.",
+      "observed_source": "Only manifest/receipt anchor SHA is checked. walk() hashes whatever descendant bytes exist now and archives them without comparison to that manifest own payload SHA/size.",
+      "impact": "Archive can contain a modified source under original reviewed/frozen lineage while proof41 says all eleven exact source handoff lineages / exact source-only authoring-review bytes. Recording a new companion SHA does not bind it to the original manifest.",
+      "minimal_fix": "Before walk/writes validate each pinned lineage manifest own declared local entries/files/support_files/authoring_companions and explicit own source-pins/HANDOFF hashes; leave external historical dependency/Root reference pins as references. Additional raw companions can stay explicitly labelled current raw capture.",
+      "execution": "NOT_RUN"
+    }
+  ],
+  "confirmed_finding_count": 1,
+  "other_confirmed_findings": 0,
+  "checked_static_boundaries": [
+    "Fixed baselineHEAD/index and297 actual compiler-input SHA/length guards precede filesystem writes",
+    "Fixed catalog/TODO/granular/generator SHA guards and later freshness reads precede write phase",
+    "Actual source manifest metadata297/11lineages/38bindings/47new/min1170/named388 match claimed values",
+    "Actual feature catalog remains31implemented/67partial/46planned; script preserves features/status_summary and granular and only changes current work documentation/WIPgate",
+    "Actual TODO generator imports/pinned source and fs facade inspected; preview+check are memory-only in intended publisher path before writes; publisher itself was not run",
+    "Archive rejects symlink descendants/unexpected extensions, per-file2MiB and aggregate8MiB, duplicate targets, pre-existing destinations; anchors fixed but payload gap above",
+    "Writes scoped to new docs archive/proof, attrs rule, current-work catalog, generated TODO, own task receipt; installedbinary read/hash-only, no installation/build/website operation",
+    "All proof/status text preserves47authored0run/13mock0run, compiler/native/physical/installation/parity open; historical ab1 acceptance not transferred"
+  ],
+  "intended_mutations": [
+    "docs/verification/sitemap-findings-surfaces-20261015/** new source-evidence archive",
+    "docs/verification/sitemap-findings-surfaces-preparation.json new proof",
+    ".gitattributes new archive -text rule",
+    "docs/feature-parity.json current work pending note/WIPgate/documentation only",
+    "docs/FEATURE_TODO.md exact generated preview",
+    "task/work/publish-s6-surfaces-source-docs-v1.json new own receipt"
+  ],
+  "actual_checks": [
+    "Bounded source/metadata/hash reads",
+    "node --check exact publisher source exit0, module not evaluated"
+  ],
+  "not_run": [
+    "Publisher/VM generator preview or write phase",
+    "Git modification or publication",
+    "Build/compiler/tests/SQLite/HTTP/native/browser/SDK"
+  ],
+  "root_writes": 0,
+  "runtime_writes": 0,
+  "scope_limitations": [
+    "Source-only syntax/control-flow review cannot prove future IO success or an atomic multi-file publication",
+    "Original source findings are static; no tampered-fixture execution performed",
+    "Root independently noted active native script CRLF attrs preservation requirement; this receipt only confirms archive provenance P2"
+  ]
+}

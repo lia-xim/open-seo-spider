@@ -1,6 +1,62 @@
 //! AUTHORED / NOT COMPILED / NOT RUN. Sink controls only, not stored-route proof.
 use super::*;
 
+#[tokio::test]
+async fn csv_first_count_pass_restores_actual_budget_cause_when_formatter_erases_io_source() {
+    // A sink regression, not proof of a stored route or a real Core session.
+    struct ErasingFormatter;
+    impl CsvFormatter for ErasingFormatter {
+        fn pass<W: Write>(&self, writer: &mut W, _: &mut dyn FnMut()) -> anyhow::Result<u64> {
+            let block = [b'q'; CHUNK_BYTES];
+            for _ in 0..membership::MAX_CSV_BYTES / CHUNK_BYTES {
+                writer.write_all(&block)?;
+            }
+            writer
+                .write_all(b"+")
+                .map_err(|_| anyhow::anyhow!("formatter discarded IO cause"))?;
+            Ok(0)
+        }
+    }
+    let registry = ExportRegistry::default();
+    let (changed, _) = watch::channel(false);
+    let stop = Stop {
+        control: Default::default(),
+        changed,
+    };
+    let (sender, _receiver) = mpsc::channel(QUEUE_CHUNKS);
+    let (progress, updates) = watch::channel(Progress {
+        ready_at: None,
+        last_sent: Instant::now(),
+    });
+    let (ready_sender, mut ready_receiver) = oneshot::channel::<Result<Ready<()>, Failure>>();
+    let mut ready = Some(ready_sender);
+    let result = produce_session(
+        &registry,
+        &stop,
+        sender,
+        progress,
+        &mut ready,
+        tokio::runtime::Handle::current(),
+        (),
+        ErasingFormatter,
+    );
+    let error = match result {
+        Err(error) => error,
+        Ok(_) => panic!("first pass must fail"),
+    };
+    assert_eq!(
+        error.downcast_ref::<Failure>().unwrap().code,
+        "sitemap_csv_byte_budget"
+    );
+    assert!(matches!(
+        ready_receiver.try_recv(),
+        Err(oneshot::error::TryRecvError::Empty)
+    ));
+    assert!(updates.borrow().ready_at.is_none());
+    assert_eq!(registry.snapshot().completed_passes, 0);
+    assert_eq!(registry.snapshot().prefix_bytes, 0);
+}
+
 #[test]
 fn counting_hash_sink_counts_actual_sixty_four_mib_and_refuses_next_byte() {
     let block = vec![b'q'; CHUNK_BYTES];

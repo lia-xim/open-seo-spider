@@ -1,0 +1,93 @@
+{
+  "rustfmt_format": {
+    "exit_code": 0,
+    "scope": [
+      "crates/app/src/sitemap_findings_cli.rs",
+      "crates/app/src/sitemap_findings_cli_tests.rs",
+      "crates/app/src/sitemap_findings_fixture.rs",
+      "crates/app/src/mcp/sitemap_findings.rs",
+      "crates/app/src/mcp/sitemap_findings/stdio.rs",
+      "crates/app/src/mcp/sitemap_findings/tests.rs"
+    ],
+    "compiler_or_test_execution": false
+  },
+  "rustfmt_check": {
+    "exit_code": 0,
+    "flags": [
+      "--edition",
+      "2024",
+      "--check",
+      "--config",
+      "skip_children=true"
+    ],
+    "scope": [
+      "crates/app/src/sitemap_findings_cli.rs",
+      "crates/app/src/sitemap_findings_cli_tests.rs",
+      "crates/app/src/sitemap_findings_fixture.rs",
+      "crates/app/src/mcp/sitemap_findings.rs",
+      "crates/app/src/mcp/sitemap_findings/stdio.rs",
+      "crates/app/src/mcp/sitemap_findings/tests.rs"
+    ]
+  },
+  "node_syntax_checks": [
+    {
+      "path": "scripts/sitemap-findings-mcp-e2e.mjs",
+      "exit_code": 0,
+      "command": "node --check FILE",
+      "script_executed_or_imported": false
+    },
+    {
+      "path": "scripts/mcp-e2e.mjs",
+      "exit_code": 0,
+      "command": "node --check FILE",
+      "script_executed_or_imported": false
+    },
+    {
+      "path": "scripts/container-e2e.mjs",
+      "exit_code": 0,
+      "command": "node --check FILE",
+      "script_executed_or_imported": false
+    },
+    {
+      "path": "scripts/resource-contract-e2e.mjs",
+      "exit_code": 0,
+      "command": "node --check FILE",
+      "script_executed_or_imported": false
+    },
+    {
+      "path": "scripts/saved-comparison-e2e.mjs",
+      "exit_code": 0,
+      "command": "node --check FILE",
+      "script_executed_or_imported": false
+    },
+    {
+      "path": "scripts/saved-comparison-bundle-e2e.mjs",
+      "exit_code": 0,
+      "command": "node --check FILE",
+      "script_executed_or_imported": false
+    },
+    {
+      "path": "scripts/sitemap-membership-e2e.mjs",
+      "exit_code": 0,
+      "command": "node --check FILE",
+      "script_executed_or_imported": false
+    },
+    {
+      "path": "scripts/sitemap-assessment-e2e.mjs",
+      "exit_code": 0,
+      "command": "node --check FILE",
+      "script_executed_or_imported": false
+    }
+  ],
+  "source_guards": "PASS actual current 9 counter inputs +2 parents; exact absence7new payloads",
+  "cargo": "NOT_RUN",
+  "compiler": "NOT_RUN",
+  "rust_tests": "NOT_RUN",
+  "sqlite": "NOT_RUN",
+  "http_or_stdio_fixtures": "NOT_RUN",
+  "sdk": "NOT_RUN",
+  "native_binary": "NOT_RUN",
+  "browser": "NOT_RUN",
+  "physical_gate": "NOT_PROVEN",
+  "feature_parity": "NOT_PROVEN"
+}

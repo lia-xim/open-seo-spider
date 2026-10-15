@@ -31,6 +31,8 @@ mod content;
 mod policy;
 pub(crate) mod resources;
 mod sitemap_csv_stream;
+mod sitemap_findings;
+mod sitemap_findings_reads;
 mod sitemap_generation;
 mod sitemaps;
 
@@ -44,6 +46,7 @@ struct AppState {
     jobs: Arc<RwLock<HashMap<Uuid, Arc<RwLock<Job>>>>>,
     data_dir: Arc<PathBuf>,
     exports: sitemap_csv_stream::ExportRegistry,
+    finding_reads: sitemap_findings_reads::ReadRegistry,
 }
 struct Job {
     id: Uuid,
@@ -132,10 +135,13 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
         jobs: Arc::new(RwLock::new(HashMap::new())),
         data_dir: Arc::new(data_dir),
         exports: Default::default(),
+        finding_reads: Default::default(),
     };
     load_reports(&state).await?;
     let exports = state.exports.clone();
     let shutdown_exports = exports.clone();
+    let finding_reads = state.finding_reads.clone();
+    let shutdown_finding_reads = finding_reads.clone();
     let router = Router::new()
         .route(
             "/",
@@ -253,6 +259,7 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
         .route("/api/crawls/{id}/policy.json", get(policy::export_json))
         .route("/api/crawls/{id}/policy.csv", get(policy::export_csv))
         .route("/api/crawls/{id}/sitemaps", get(sitemaps::inventory))
+        .merge(sitemap_findings::routes())
         .route(
             "/api/crawls/{id}/sitemaps/export.csv",
             get(sitemaps::export_csv),
@@ -310,14 +317,25 @@ pub async fn serve(listen: &str, data_dir: PathBuf) -> anyhow::Result<()> {
     let serving = axum::serve(listener, router)
         .with_graceful_shutdown(async move {
             let _ = tokio::signal::ctrl_c().await;
-            if let Err(error) = shutdown_exports.shutdown_and_drain().await {
+            let (csv_drain, finding_drain) = tokio::join!(
+                shutdown_exports.shutdown_and_drain(),
+                shutdown_finding_reads.shutdown_and_drain(),
+            );
+            if let Err(error) = csv_drain {
                 tracing::error!(%error, "CSV export shutdown drain failed");
+            }
+            if let Err(error) = finding_drain {
+                tracing::error!(%error, "Findings read shutdown drain failed");
             }
         })
         .await;
-    let drain = exports.shutdown_and_drain().await;
+    let (drain, read_drain) = tokio::join!(
+        exports.shutdown_and_drain(),
+        finding_reads.shutdown_and_drain(),
+    );
     serving?;
     drain?;
+    read_drain?;
     Ok(())
 }
 async fn mcp_http(

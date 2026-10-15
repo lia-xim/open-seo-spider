@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "immutable": true,
+  "status": "SOURCE_AUTHORED_RUSTFMT_ONLY_NOT_COMPILED_NOT_RUN",
+  "root": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-findings-surfaces-integration-v1",
+  "baseline": "898c404b596cdb812fd76c19a0a38de5d155371c",
+  "dependencies": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-session-page-core-v1\\manifest.json",
+      "sha256": "8ca736921c66be73a0624294df3bdee9b30e0cddc13a2688c4eec66e1766d5e5"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-app-adapter-core-v1\\manifest.json",
+      "sha256": "5a0a2e7c22b345b689339deb0bd18a7ecb4292c127bf0c9e69b0f389f99101bb"
+    }
+  ],
+  "entries": [
+    {
+      "path": "crates/app/src/server.rs",
+      "before_sha256": "014d9ba4346cc2900903e15855690a4d3617a2d94960de5e9a40fdcd39bd335f",
+      "require_target_absent": false,
+      "after_sha256": "a00199a85f525db1a37b2a5f95d7b0567b552e53dfd5c3acacb57af5e201660e",
+      "bytes": 75030
+    },
+    {
+      "path": "crates/app/src/server/comparison_tests.rs",
+      "before_sha256": "3f84f63acbf5416ce3a4bae6d026c4832d770877803432b9f69b4d05c3b2ac66",
+      "require_target_absent": false,
+      "after_sha256": "c475e21655e3d3cf8e6f4eab9710840aa65b92c0788af4f824d2de2c7d285bdd",
+      "bytes": 11612
+    },
+    {
+      "path": "crates/app/src/server/sitemap_csv_stream.rs",
+      "before_sha256": "a1ff346402e5bd1afc65930029c3cab1432aeb2ac43b5eeae8b344e606a81fea",
+      "require_target_absent": false,
+      "after_sha256": "a5e0999945ed914a5ef528a930c063ff976b9e4ddcc08343b30a01d84754be6e",
+      "bytes": 37081
+    },
+    {
+      "path": "crates/app/src/server/sitemap_csv_stream_sink_tests.rs",
+      "before_sha256": "035249c1e837853ccbd0408b5a544d33d1e700cb0c2f84c4a7d159810284a5df",
+      "require_target_absent": false,
+      "after_sha256": "d200fdbbe3ba40f90142d30bc70f64e104ed9cf6c75fcd335ab5e68b9936c51b",
+      "bytes": 6148
+    },
+    {
+      "path": "crates/app/src/server/sitemap_generation_tests.rs",
+      "before_sha256": "a1612af9bfaa8035d764a58f02908bc936f62fa8e65dabebaf91b004ab2c6f97",
+      "require_target_absent": false,
+      "after_sha256": "6211f22598e0f5329b0f2c51c7eb2e94d660d683c0a5174f76ee27108a445957",
+      "bytes": 5213
+    },
+    {
+      "path": "crates/app/src/server/sitemaps_streaming_fixture.rs",
+      "before_sha256": "84f3b285b71339f04a5af09773dc33223400f4d1ea10ad64161abfa63ce1f71b",
+      "require_target_absent": false,
+      "after_sha256": "0eeb791eb977ff647a65b63193e02033a541d4d12a36d61ed4a6f40c9474b449",
+      "bytes": 20655
+    },
+    {
+      "path": "crates/app/src/server/sitemaps_tests.rs",
+      "before_sha256": "11312bc2eeefc209317088341df995207ee41e578599e4efd372d9854f2eff39",
+      "require_target_absent": false,
+      "after_sha256": "c8cee34e44ffa28ac995a4cded70d49f00d3b56401d315248645b67124e57354",
+      "bytes": 16104
+    },
+    {
+      "path": "crates/app/src/server/sitemap_findings.rs",
+      "before_sha256": null,
+      "require_target_absent": true,
+      "after_sha256": "17fbb37e9ff9cb59aef126fbda718dd891aeb7635be91c7da605ad16d423db32",
+      "bytes": 8122
+    },
+    {
+      "path": "crates/app/src/server/sitemap_findings_tests.rs",
+      "before_sha256": null,
+      "require_target_absent": true,
+      "after_sha256": "8dd2da3fe67fe267fa108fe978cd8683fc9cbd9a19f1b1d3088bcbb33369055d",
+      "bytes": 12376
+    }
+  ],
+  "authored_test_names": [
+    "csv_first_count_pass_restores_actual_budget_cause_when_formatter_erases_io_source",
+    "findings_actual_http_get_post_cursor_and_full_csv_share_saved_context_without_site_requests",
+    "findings_actual_http_rejects_wrong_roles_changed_queries_unknown_fields_and_stale_app_generation",
+    "findings_actual_http_detached_report_is_explicitly_unavailable_without_fabricated_core_proof"
+  ],
+  "actual_test_runs": 0,
+  "not_run": [
+    "Cargo/compiler/Clippy",
+    "SQLite/HTTP/test fixtures",
+    "native/SDK/browser/physical source or wire resource thresholds"
+  ],
+  "notes": [
+    "ReadRegistry module payload pending separately; parent wiring is authored only.",
+    "Existing raw CSV transport factored with generic Ready metadata; first count pass restores typed sink cause.",
+    "AppState constructors updated without modifying existing fixture behavior.",
+    "Shutdown drains both registries concurrently; actual completion unproven until execution."
+  ]
+}

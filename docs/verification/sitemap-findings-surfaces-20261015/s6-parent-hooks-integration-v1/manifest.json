@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "immutable": true,
+  "status": "ROOT_EXACT_HOOKS_PLUS_SHARED_REGISTRATION_RUSTFMT_ONLY_NOT_COMPILED_NOT_RUN",
+  "basis_manifest_sha256": "ebaebf161dbdc7defbd3e96ff7c24af9cadf6535d801d28714961558783492cf",
+  "parent_hook_plan_sha256": "03df1291492464dc83cd02ef67c06010b81d211be42231a791e9b9fc27a21ef2",
+  "promotion_receipt_sha256": "91d10b0682cbeb67832830347b80cf209b7c33b1b82778e95f22b61a52f0ff2d",
+  "entries": [
+    {
+      "path": "crates/app/src/main.rs",
+      "before_sha256": "dc86c227a229e00001c194f74d3e1c15101cda9f4381a0adc9dfc9644841016d",
+      "after_exact_hooks_only_sha256": "be71e8b9fb5055a1c2570e622befce53573463968a490e9693b3568095c0d51e",
+      "after_sha256": "67e1ad4cdb795d7829e840a4b99b8ae42d576106353ea6526e7fc7ef787eb9db",
+      "root_extra": "Register actual shared sitemap_findings module once",
+      "bytes": 29134,
+      "after_promote_before_format_sha256": "1225e27e66e249e9e7755d40ff2b9809b6250d6cfdc431267f3a04737df634d1"
+    },
+    {
+      "path": "crates/app/src/mcp.rs",
+      "before_sha256": "887e342dff02a9c7d71673576726e0f1d7c208c1b01a12a67cc312f83cb9c36e",
+      "after_exact_hooks_only_sha256": "3354bc562fc1193568363afd2d48c3792732af9c2a13e0338886784f9ce25911",
+      "after_sha256": "7940ecd4081f6bd6127644ffdd26fbd289e98498c6e3ff9c0f6ecb6f8a237f5e",
+      "root_extra": null,
+      "bytes": 23326,
+      "after_promote_before_format_sha256": "3354bc562fc1193568363afd2d48c3792732af9c2a13e0338886784f9ce25911"
+    }
+  ],
+  "actual_checks": [
+    "Exact before images and machine hook derivations checked before promotion",
+    "Root shared module registration exactly once",
+    "rustfmt --edition2024 --config skip_children=true on main/mcp exit0"
+  ],
+  "actual_tests_executed": 0,
+  "root_owned_addition": "Only shared sitemap_findings module registration in addition to exact agent CLI/MCP hook plan; subsequent rustfmt formatting/module ordering."
+}

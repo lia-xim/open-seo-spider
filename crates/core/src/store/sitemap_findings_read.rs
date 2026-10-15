@@ -35,6 +35,125 @@ impl SitemapVerifiedFindings<'_> {
         self.context
     }
 
+    /// The fixed typed query for this capability, including exact selectors.
+    /// This ordinary borrowed DTO cannot construct a session or alter its query.
+    pub fn selection(&self) -> &SitemapFindingSelection {
+        self.selection
+    }
+
+    /// Evaluate a bounded page without preparing a second snapshot/transaction.
+    /// Only limits and progress may vary; the capability's selection is fixed.
+    pub fn page(&self, request: &SitemapFindingsRequest) -> Result<SitemapFindingsPage> {
+        request.validate()?;
+        if &request.selection != self.selection {
+            return Err(SitemapFindingsError::InvalidSelection(
+                "selection differs from fixed session",
+            )
+            .into());
+        }
+        if request
+            .expected_context_sha256
+            .as_deref()
+            .is_some_and(|expected| expected != self.context.context_sha256)
+        {
+            return Err(SitemapFindingsError::StaleContext.into());
+        }
+        let session = self;
+        let control = self.control;
+        let context = session.context().clone();
+        if context.availability == SitemapFindingsAvailability::Unavailable {
+            if request.after.is_some() {
+                return Err(SitemapFindingsError::InvalidContinuation.into());
+            }
+            let page = SitemapFindingsPage {
+                context,
+                rows: None,
+                scan: SitemapFindingsScan {
+                    evaluated_candidates: 0,
+                    exhausted: false,
+                    stop: SitemapFindingsStop::Unavailable,
+                    more_matches: None,
+                },
+                continuation: None,
+            };
+            bounded_page(&page, control)?;
+            return Ok(page);
+        }
+        let mut rows = Vec::with_capacity(request.limit);
+        let mut row_bytes = 2usize; // JSON array delimiters.
+        let mut evaluated_candidates = 0u64;
+        let mut last_evaluated = None;
+        let mut last_returned = None;
+        let mut stop = None;
+        let exhausted = session.visit_candidates(request.after.as_ref(), |candidate| {
+            if evaluated_candidates >= u64::try_from(request.candidate_limit)? {
+                stop = Some(SitemapFindingsStop::CandidateBudget);
+                return Ok(ControlFlow::Break(()));
+            }
+            evaluated_candidates += 1;
+            last_evaluated = Some(candidate.position.clone());
+            let row = session.assess(candidate)?;
+            if session.accepts(&row) {
+                if rows.len() == request.limit {
+                    // This is the first selected lookahead, not a row
+                    // the caller has received. Resume after its actual
+                    // last returned match, never after this lookahead.
+                    stop = Some(SitemapFindingsStop::MoreMatches);
+                    return Ok(ControlFlow::Break(()));
+                }
+                let bytes = bounded_json_bytes(
+                    &row,
+                    MAX_SITEMAP_FINDINGS_PAGE_BYTES,
+                    SitemapFindingsError::ResponseByteBudget,
+                    control,
+                )?;
+                row_bytes = row_bytes
+                    .checked_add(bytes)
+                    .and_then(|v| v.checked_add(usize::from(!rows.is_empty())))
+                    .filter(|v| *v <= MAX_SITEMAP_FINDINGS_PAGE_BYTES)
+                    .ok_or(SitemapFindingsError::ResponseByteBudget)?;
+                last_returned = Some(row.position.clone());
+                rows.push(row);
+            }
+            Ok(ControlFlow::Continue(()))
+        })?;
+        let stop = if exhausted {
+            SitemapFindingsStop::Exhausted
+        } else {
+            stop.ok_or_else(|| {
+                anyhow::anyhow!("Findings traversal stopped without progress reason")
+            })?
+        };
+        let continuation_position = match stop {
+            SitemapFindingsStop::MoreMatches => last_returned,
+            SitemapFindingsStop::CandidateBudget => last_evaluated,
+            _ => None,
+        };
+        let continuation = continuation_position.map(|after| SitemapFindingsContinuation {
+            context_sha256: context.context_sha256.clone(),
+            after,
+            reason: stop,
+        });
+        let more_matches = match stop {
+            SitemapFindingsStop::Exhausted => Some(false),
+            SitemapFindingsStop::MoreMatches => Some(true),
+            _ => None,
+        };
+        let page = SitemapFindingsPage {
+            context,
+            rows: Some(rows),
+            scan: SitemapFindingsScan {
+                evaluated_candidates,
+                exhausted,
+                stop,
+                more_matches,
+            },
+            continuation,
+        };
+        bounded_page(&page, control)?;
+        Ok(page)
+    }
+
     /// Visit every selected stored result. This method has no page work-window
     /// limit. Controls and the already verified dataset bounds still apply.
     /// Repeated visits retain the same query, facts, context and transaction.
@@ -191,8 +310,8 @@ impl CrawlStore {
         })
     }
 
-    /// Predicates and exact original-identity selection precede visible limits.
-    /// A work-window stop carries actual candidate progress even with zero rows.
+    /// Read one bounded findings page in a verified session. Use the session's
+    /// page method when several reads/exports must share the same actual TX.
     pub fn sitemap_findings_page(
         &self,
         request: &SitemapFindingsRequest,
@@ -203,100 +322,7 @@ impl CrawlStore {
             &request.selection,
             request.expected_context_sha256.as_deref(),
             control,
-            |session| {
-                let context = session.context().clone();
-                if context.availability == SitemapFindingsAvailability::Unavailable {
-                    if request.after.is_some() {
-                        return Err(SitemapFindingsError::InvalidContinuation.into());
-                    }
-                    let page = SitemapFindingsPage {
-                        context,
-                        rows: None,
-                        scan: SitemapFindingsScan {
-                            evaluated_candidates: 0,
-                            exhausted: false,
-                            stop: SitemapFindingsStop::Unavailable,
-                            more_matches: None,
-                        },
-                        continuation: None,
-                    };
-                    bounded_page(&page, control)?;
-                    return Ok(page);
-                }
-                let mut rows = Vec::with_capacity(request.limit);
-                let mut row_bytes = 2usize; // JSON array delimiters.
-                let mut evaluated_candidates = 0u64;
-                let mut last_evaluated = None;
-                let mut last_returned = None;
-                let mut stop = None;
-                let exhausted = session.visit_candidates(request.after.as_ref(), |candidate| {
-                    if evaluated_candidates >= u64::try_from(request.candidate_limit)? {
-                        stop = Some(SitemapFindingsStop::CandidateBudget);
-                        return Ok(ControlFlow::Break(()));
-                    }
-                    evaluated_candidates += 1;
-                    last_evaluated = Some(candidate.position.clone());
-                    let row = session.assess(candidate)?;
-                    if session.accepts(&row) {
-                        if rows.len() == request.limit {
-                            // This is the first selected lookahead, not a row
-                            // the caller has received. Resume after its actual
-                            // last returned match, never after this lookahead.
-                            stop = Some(SitemapFindingsStop::MoreMatches);
-                            return Ok(ControlFlow::Break(()));
-                        }
-                        let bytes = bounded_json_bytes(
-                            &row,
-                            MAX_SITEMAP_FINDINGS_PAGE_BYTES,
-                            SitemapFindingsError::ResponseByteBudget,
-                            control,
-                        )?;
-                        row_bytes = row_bytes
-                            .checked_add(bytes)
-                            .and_then(|v| v.checked_add(usize::from(!rows.is_empty())))
-                            .filter(|v| *v <= MAX_SITEMAP_FINDINGS_PAGE_BYTES)
-                            .ok_or(SitemapFindingsError::ResponseByteBudget)?;
-                        last_returned = Some(row.position.clone());
-                        rows.push(row);
-                    }
-                    Ok(ControlFlow::Continue(()))
-                })?;
-                let stop = if exhausted {
-                    SitemapFindingsStop::Exhausted
-                } else {
-                    stop.ok_or_else(|| {
-                        anyhow::anyhow!("Findings traversal stopped without progress reason")
-                    })?
-                };
-                let continuation_position = match stop {
-                    SitemapFindingsStop::MoreMatches => last_returned,
-                    SitemapFindingsStop::CandidateBudget => last_evaluated,
-                    _ => None,
-                };
-                let continuation = continuation_position.map(|after| SitemapFindingsContinuation {
-                    context_sha256: context.context_sha256.clone(),
-                    after,
-                    reason: stop,
-                });
-                let more_matches = match stop {
-                    SitemapFindingsStop::Exhausted => Some(false),
-                    SitemapFindingsStop::MoreMatches => Some(true),
-                    _ => None,
-                };
-                let page = SitemapFindingsPage {
-                    context,
-                    rows: Some(rows),
-                    scan: SitemapFindingsScan {
-                        evaluated_candidates,
-                        exhausted,
-                        stop,
-                        more_matches,
-                    },
-                    continuation,
-                };
-                bounded_page(&page, control)?;
-                Ok(page)
-            },
+            |session| session.page(request),
         )
     }
 }

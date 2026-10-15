@@ -5,9 +5,11 @@ independent local predicate contract. Manufacturer equivalence remains
 **NOT_PROVEN**. The installed application still uses the previously accepted
 Windows release; this document does not grant acceptance to the new source.
 
-The work implements the Core portion of S6. API, CLI, MCP, browser presentation
-and the distinct full finding export remain required follow-up work. Existing
-raw inventory routes and raw CSV are separate interfaces.
+This document records the Core portion of S6. The subsequent
+[surface integration](sitemap-findings-surfaces.md) adds API, CLI, MCP, browser
+presentation and a distinct full finding export in a separate source step.
+Their compilation and runtime acceptance remain open. Existing raw inventory
+routes and raw CSV are separate interfaces.
 
 ## Selection domains
 

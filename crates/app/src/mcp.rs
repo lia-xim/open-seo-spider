@@ -2,10 +2,13 @@
 use anyhow::{Context, bail};
 use reqwest::{Client, Url};
 use serde_json::{Value, json};
-use tokio::io::{AsyncBufReadExt, AsyncRead, AsyncReadExt, AsyncWrite, AsyncWriteExt, BufReader};
+#[cfg(test)]
+use tokio::io::{AsyncBufReadExt, AsyncReadExt, AsyncWriteExt, BufReader};
+use tokio::io::{AsyncRead, AsyncWrite};
 pub const PROTOCOLS: &[&str] = &["2025-06-18", "2025-11-25"];
 mod generation;
 mod saved_comparison;
+mod sitemap_findings;
 mod sitemaps;
 #[derive(Clone)]
 pub struct Bridge {
@@ -48,7 +51,18 @@ impl Bridge {
                 "A single JSON-RPC object is required",
             ));
         }
-        let id = request.get("id")?.clone();
+        let id_ref = request.get("id")?;
+        if request["method"] == "tools/call"
+            && request["params"]["name"] == sitemap_findings::NAME
+            && !sitemap_findings::valid_rpc_id(id_ref)
+        {
+            return Some(error(
+                Value::Null,
+                -32600,
+                "Finding RPC id must be an integer or at most 1024 UTF-8 bytes",
+            ));
+        }
+        let id = id_ref.clone();
         if request["jsonrpc"].as_str() != Some("2.0") {
             return Some(error(id, -32600, "Invalid JSON-RPC request"));
         }
@@ -90,6 +104,10 @@ impl Bridge {
                     })
                 {
                     return Some(error(id, -32602, "Unexpected or missing tool argument"));
+                }
+                if name == sitemap_findings::NAME {
+                    let result = sitemap_findings::call(self, args).await;
+                    return Some(sitemap_findings::complete_response(id, result).await);
                 }
                 if name == "spider_generate_sitemaps" {
                     let result = generation::call(self, args).await;
@@ -347,6 +365,7 @@ fn inventory() -> Vec<Value> {
     ].into_iter().map(|(name,description,properties,required,read)|json!({"name":name,"description":description,"inputSchema":{"type":"object","properties":properties,"required":required,"additionalProperties":false},"annotations":{"readOnlyHint":read,"destructiveHint":false,"openWorldHint":name=="spider_start_crawl"||name=="spider_resume"||name=="spider_recrawl"}})).collect();
     tools.push(generation::definition());
     tools.push(saved_comparison::definition());
+    tools.push(sitemap_findings::definition());
     tools
 }
 const MAX_STDIO_REQUEST_BYTES: usize = 8 * 1024 * 1024;
@@ -356,50 +375,12 @@ pub async fn stdio(base: &str) -> anyhow::Result<()> {
     stdio_stream(&bridge, tokio::io::stdin(), tokio::io::stdout()).await
 }
 
-async fn stdio_stream<R, W>(bridge: &Bridge, input: R, mut output: W) -> anyhow::Result<()>
+async fn stdio_stream<R, W>(bridge: &Bridge, input: R, output: W) -> anyhow::Result<()>
 where
     R: AsyncRead + Unpin,
     W: AsyncWrite + Unpin,
 {
-    let mut input = BufReader::new(input);
-    let mut line = Vec::new();
-    loop {
-        line.clear();
-        // Take supplies EOF at the sentinel even when a producer keeps stdin open.
-        // Never retain an unbounded line before enforcing the framing ceiling.
-        if (&mut input)
-            .take((MAX_STDIO_REQUEST_BYTES + 1) as u64)
-            .read_until(b'\n', &mut line)
-            .await?
-            == 0
-        {
-            break;
-        }
-        let oversized = line.len() > MAX_STDIO_REQUEST_BYTES;
-        let response = if oversized {
-            Some(error(Value::Null, -32600, "Request exceeds 8 MiB"))
-        } else {
-            match serde_json::from_slice(&line) {
-                Ok(request) => bridge.dispatch(request).await,
-                Err(_) => Some(error(Value::Null, -32700, "Invalid JSON")),
-            }
-        };
-        if let Some(response) = response {
-            // Serialize and drop recursive response values on a blocking
-            // worker; the Windows stdio main stack only handles flat bytes.
-            let bytes =
-                tokio::task::spawn_blocking(move || serde_json::to_vec(&response)).await??;
-            output.write_all(&bytes).await?;
-            output.write_all(b"\n").await?;
-            output.flush().await?;
-        }
-        if oversized {
-            // Close after one bounded error: neither drain an unbounded suffix nor
-            // interpret a truncated prefix or remaining suffix as another request.
-            break;
-        }
-    }
-    Ok(())
+    sitemap_findings::stdio_stream(bridge, input, output).await
 }
 #[cfg(test)]
 mod tests {
@@ -422,7 +403,7 @@ mod tests {
                 .await
                 .is_none()
         );
-        assert_eq!(inventory().len(), 25);
+        assert_eq!(inventory().len(), 26);
     }
     #[test]
     fn only_loopback_bridge() {

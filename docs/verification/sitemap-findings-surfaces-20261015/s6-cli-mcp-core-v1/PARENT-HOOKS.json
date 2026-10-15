@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "mode": "PLAN_ONLY_NOT_APPLIED",
+  "plans": [
+    {
+      "path": "crates/app/src/main.rs",
+      "before_sha256": "dc86c227a229e00001c194f74d3e1c15101cda9f4381a0adc9dfc9644841016d",
+      "after_exact_hooks_only_sha256": "be71e8b9fb5055a1c2570e622befce53573463968a490e9693b3568095c0d51e",
+      "operations": [
+        {
+          "before": "mod sitemap_raw_cli;",
+          "after": "mod sitemap_raw_cli;\nmod sitemap_findings_cli;",
+          "occurrences": 1
+        },
+        {
+          "before": "enum Command {",
+          "after": "enum Command {\n    /// Read a local findings page and/or complete stored CSV without website requests.\n    SitemapFindings {\n        store: PathBuf,\n        #[arg(long)]\n        request: PathBuf,\n        #[arg(long, required_unless_present = \"csv\")]\n        output: Option<PathBuf>,\n        #[arg(long)]\n        csv: Option<PathBuf>,\n    },",
+          "occurrences": 1
+        },
+        {
+          "before": "        Command::SitemapRows {",
+          "after": "        Command::SitemapFindings { store, request, output, csv } => {\n            let receipt = sitemap_findings_cli::run(store, request, output, csv).await?;\n            println!(\"{}\", serde_json::to_string(&receipt)?);\n        }\n        Command::SitemapRows {",
+          "occurrences": 1
+        }
+      ],
+      "guard": "Root sole writer; apply sequentially only to exact before bytes; other Root-owned edits require explicit additive merge and fresh combined source freeze"
+    },
+    {
+      "path": "crates/app/src/mcp.rs",
+      "before_sha256": "887e342dff02a9c7d71673576726e0f1d7c208c1b01a12a67cc312f83cb9c36e",
+      "after_exact_hooks_only_sha256": "3354bc562fc1193568363afd2d48c3792732af9c2a13e0338886784f9ce25911",
+      "operations": [
+        {
+          "before": "use tokio::io::{AsyncBufReadExt, AsyncRead, AsyncReadExt, AsyncWrite, AsyncWriteExt, BufReader};",
+          "after": "use tokio::io::{AsyncRead, AsyncWrite};\n#[cfg(test)]\nuse tokio::io::{AsyncBufReadExt, AsyncReadExt, AsyncWriteExt, BufReader};",
+          "occurrences": 1
+        },
+        {
+          "before": "mod sitemaps;",
+          "after": "mod sitemaps;\nmod sitemap_findings;",
+          "occurrences": 1
+        },
+        {
+          "before": "        let id = request.get(\"id\")?.clone();",
+          "after": "        let id_ref = request.get(\"id\")?;\n        if request[\"method\"] == \"tools/call\"\n            && request[\"params\"][\"name\"] == sitemap_findings::NAME\n            && !sitemap_findings::valid_rpc_id(id_ref)\n        {\n            return Some(error(Value::Null, -32600, \"Finding RPC id must be an integer or at most 1024 UTF-8 bytes\"));\n        }\n        let id = id_ref.clone();",
+          "occurrences": 1
+        },
+        {
+          "before": "                if name == \"spider_generate_sitemaps\" {",
+          "after": "                if name == sitemap_findings::NAME {\n                    let result = sitemap_findings::call(self, args).await;\n                    return Some(sitemap_findings::complete_response(id, result).await);\n                }\n                if name == \"spider_generate_sitemaps\" {",
+          "occurrences": 1
+        },
+        {
+          "before": "    tools.push(saved_comparison::definition());",
+          "after": "    tools.push(saved_comparison::definition());\n    tools.push(sitemap_findings::definition());",
+          "occurrences": 1
+        },
+        {
+          "before": "async fn stdio_stream<R, W>(bridge: &Bridge, input: R, mut output: W) -> anyhow::Result<()>\nwhere\n    R: AsyncRead + Unpin,\n    W: AsyncWrite + Unpin,\n{\n    let mut input = BufReader::new(input);\n    let mut line = Vec::new();\n    loop {\n        line.clear();\n        // Take supplies EOF at the sentinel even when a producer keeps stdin open.\n        // Never retain an unbounded line before enforcing the framing ceiling.\n        if (&mut input)\n            .take((MAX_STDIO_REQUEST_BYTES + 1) as u64)\n            .read_until(b'\\n', &mut line)\n            .await?\n            == 0\n        {\n            break;\n        }\n        let oversized = line.len() > MAX_STDIO_REQUEST_BYTES;\n        let response = if oversized {\n            Some(error(Value::Null, -32600, \"Request exceeds 8 MiB\"))\n        } else {\n            match serde_json::from_slice(&line) {\n                Ok(request) => bridge.dispatch(request).await,\n                Err(_) => Some(error(Value::Null, -32700, \"Invalid JSON\")),\n            }\n        };\n        if let Some(response) = response {\n            // Serialize and drop recursive response values on a blocking\n            // worker; the Windows stdio main stack only handles flat bytes.\n            let bytes =\n                tokio::task::spawn_blocking(move || serde_json::to_vec(&response)).await??;\n            output.write_all(&bytes).await?;\n            output.write_all(b\"\\n\").await?;\n            output.flush().await?;\n        }\n        if oversized {\n            // Close after one bounded error: neither drain an unbounded suffix nor\n            // interpret a truncated prefix or remaining suffix as another request.\n            break;\n        }\n    }\n    Ok(())\n}\n",
+          "after": "async fn stdio_stream<R, W>(bridge: &Bridge, input: R, output: W) -> anyhow::Result<()>\nwhere\n    R: AsyncRead + Unpin,\n    W: AsyncWrite + Unpin,\n{\n    sitemap_findings::stdio_stream(bridge, input, output).await\n}\n",
+          "occurrences": 1
+        },
+        {
+          "before": "assert_eq!(inventory().len(), 25);",
+          "after": "assert_eq!(inventory().len(), 26);",
+          "occurrences": 1
+        }
+      ],
+      "guard": "Root sole writer; apply sequentially only to exact before bytes; other Root-owned edits require explicit additive merge and fresh combined source freeze"
+    }
+  ]
+}

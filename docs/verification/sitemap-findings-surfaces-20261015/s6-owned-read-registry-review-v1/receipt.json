@@ -1,0 +1,49 @@
+{
+  "status": "INDEPENDENT_STATIC_REVIEW_ONE_CONFIRMED_P2",
+  "finding": "Immutable deadline can be skipped by biased worker-first branch when cooperative deadline is removed and both futures ready",
+  "original_finding_open": true,
+  "additional_confirmed_findings": 0,
+  "inputs": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-owned-read-registry-v1\\manifest.json",
+      "sha256": "3f449bb7f11455ed34dacbe127b2c995248d5d76e5fcc1a24e847a547ab6676a"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-owned-read-registry-v1\\crates\\app\\src\\server\\sitemap_findings_reads.rs",
+      "sha256": "ec02f993e93474dce615da119f06be4e559a505b4bdd33314b0c93450d0b0c44"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-owned-read-registry-v1\\crates\\app\\src\\server\\sitemap_findings_reads_tests.rs",
+      "sha256": "c49511e1bacd972abe5fbb623391d02ddc5ca054fc7716332e21aa5bf398abf9"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-findings-surfaces-integration-v1\\crates\\core\\src\\sitemap_read_control.rs",
+      "sha256": "bccdcbe2e5e184cacfc025690c89c2020a27a4b4867453e4f01e894dd1eec6bf"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-findings-surfaces-integration-v1\\Cargo.lock",
+      "sha256": "45f37e39253339198f58291c82ba6d586be39c7600cbee6273d4c9996d76633a"
+    },
+    {
+      "path": "C:/Users/matth/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.53.2/src/runtime/task/join.rs",
+      "sha256": "e1c5c5730743d901ce375f0c46eb3050a9d69b5c28ebe275fb2a585a3e22debb"
+    },
+    {
+      "path": "C:/Users/matth/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-1.53.2/src/sync/notify.rs",
+      "sha256": "7903a5d0e9b266cbb31e9e0b7386956e248831a30ea92ca1656a3682e4de6dbe"
+    }
+  ],
+  "review_sha256": "7ab0cef93b1d2b3642aaebae9a7d5834bf2ac0658bf04b9ba939ad2472491c46",
+  "checks": {
+    "http": "NOT_RUN",
+    "native": "NOT_RUN",
+    "tests": "NOT_RUN",
+    "timers": "NOT_RUN",
+    "sqlite": "NOT_RUN",
+    "compiler": "NOT_RUN",
+    "blocking_workers": "NOT_RUN"
+  },
+  "root_product_mutations": 0,
+  "original_payload_mutations": 0,
+  "root_authorized_separate_postfix": true
+}

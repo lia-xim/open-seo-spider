@@ -88,7 +88,7 @@ try {
     const transport=kind==='stdio'?new StdioClientTransport({command:binary,args:['mcp','--server',api],cwd:root,stderr:'pipe'}):new StreamableHTTPClientTransport(new URL(api+'/mcp'));
     try{
       alive();await client.connect(transport);alive();
-      const tools=(await client.listTools()).tools;assert.equal(tools.length,25);assert.ok(tools.some(t=>t.name==='spider_compare_saved'&&t.annotations.readOnlyHint===true&&t.annotations.openWorldHint===false));
+      const tools=(await client.listTools()).tools;assert.equal(tools.length,26);assert.ok(tools.some(t=>t.name==='spider_compare_saved'&&t.annotations.readOnlyHint===true&&t.annotations.openWorldHint===false));
       const saved=await client.callTool({name:'spider_compare_saved',arguments:{before:before.id,after:after.id,config}});assert.equal(saved.isError,false,JSON.stringify(saved));assert.deepEqual(saved.structuredContent,result);
       const conflict=await client.callTool({name:'spider_compare_saved',arguments:{before:before.id,after:after.id,expected_after_generation:0}});assert.equal(conflict.isError,true);assert.equal(conflict.structuredContent.error.code,'generation_conflict');assert.equal(conflict.structuredContent.context.observed_generation,after.generation);assert.equal(conflict.structuredContent.website_requests,0);alive();assert.equal(hits.length,baseHits);
     }finally{await client.close();}

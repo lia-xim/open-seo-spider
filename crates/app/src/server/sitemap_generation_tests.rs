@@ -37,6 +37,7 @@ async fn fixture() -> (AppState, Uuid, PathBuf) {
         jobs: Arc::new(RwLock::new(HashMap::new())),
         data_dir: Arc::new(directory.clone()),
         exports: Default::default(),
+        finding_reads: Default::default(),
     };
     let id = Uuid::new_v4();
     persist_import(&state, id, report())

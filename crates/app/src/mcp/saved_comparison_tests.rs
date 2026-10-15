@@ -89,7 +89,7 @@ fn opt_in_mcp_returns_complete_validated_reports_and_retains_read_only_descripto
         definition()["inputSchema"]["properties"]["include_original_reports"]["type"],
         "boolean"
     );
-    assert_eq!(inventory().len(), 25);
+    assert_eq!(inventory().len(), 26);
 }
 #[test]
 fn bundle_missing_unrequested_or_tampered_report_is_an_explicit_mcp_error() {

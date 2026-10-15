@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "immutable": true,
+  "status": "TWO_ORIGINAL_P2_CLOSED_IN_SOURCE_NOT_EXECUTED",
+  "reviewer": "/root/finish_coverage",
+  "independence": "Original App v1 authored by this reviewer; independently authored peer postfix only reviewed here. Original v1 payload/review preserved.",
+  "postfix_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-app-adapter-postfix-v1/manifest.json",
+    "sha256": "4cdc827ff07ea9a39019ff377a8be06b36e045e72f184450e0c40a4356a692dd"
+  },
+  "original_review_sha256": "e3e9c689f2e0378ff75b232a7c8cdbe23e2bdef9342cb621208ddb97040e7fde",
+  "payloads": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-app-adapter-postfix-v1\\crates\\app\\src\\sitemap_findings.rs",
+      "before_sha256": "e6728e4e9e1558732d51c5c10e1fb24834ab97abb7d33d25574c6c98e448b31d",
+      "after_sha256": "2ac269bf6e6aa6cda002afafc06e1f80aa06940c282985c1cfe9dd5234ac4e0d",
+      "bytes": 30850,
+      "verified": true
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\s6-app-adapter-postfix-v1\\crates\\app\\src\\sitemap_findings_tests.rs",
+      "before_sha256": "4bf3b44b6b7f55f1939fb863bddbb7b84ac683e3ee8bf22532f03a9bee57c1d9",
+      "after_sha256": "38f5d8e34fbe53279110dcc166453347bb76197c2e1a93449b0c25435bac6bc2",
+      "bytes": 29640,
+      "verified": true
+    }
+  ],
+  "primary_source_pins": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-session-app-review-v1/receipt.json",
+      "sha256": "e3e9c689f2e0378ff75b232a7c8cdbe23e2bdef9342cb621208ddb97040e7fde"
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-session-app-review-v1/REVIEW.md",
+      "sha256": "4a340711b238e74dc659c6ead158e1200531a0eb1af9a771f9b2b97961438e64"
+    },
+    {
+      "path": "C:/Users/matth/.rustup/toolchains/1.95.0-x86_64-pc-windows-msvc/lib/rustlib/src/rust/library/std/src/io/error.rs",
+      "sha256": "2b819a8de1ded4b90133bb8d72e3187b849513fad324ed800e32d1eb831b3c82"
+    },
+    {
+      "path": "C:/Users/matth/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_json-1.0.152/src/error.rs",
+      "sha256": "a13add05a63adf53d89e37effa03221d897a60486cfe360a5a958c0dd2a7e90d"
+    }
+  ],
+  "closures": [
+    {
+      "original_finding": 1,
+      "priority": "P2",
+      "trigger": "Ordinary PermissionDenied IO with text disk quota budget exceeded from actual CSV writer",
+      "source_fix_lines": "sitemap_findings.rs127-146,186-196",
+      "basis": "Borrowed mapper records actual IO or serde-IO presence before text fallback; ordinary IO cannot become input budget solely from message words. Owned IO path similarly returns read_failure if no typed cause. Non-IO legacy input-validator text mapping preserved.",
+      "regression_lines": "sitemap_findings_tests.rs740-823",
+      "expected": "Actual first-header IO and actual data JSON serde-IO both retain ordinary read_failure500",
+      "status": "CLOSED_IN_SOURCE_NOT_RUN"
+    },
+    {
+      "original_finding": 2,
+      "priority": "P2",
+      "trigger": "Direct inner typed Failure inside io::Error, including actual data JSON serde IO wrapper",
+      "source_fix_lines": "sitemap_findings.rs90-147,149-184",
+      "basis": "io.get_ref inspects the skipped inner object; typed Failure/Control/Core/CsvByteBudget precede fallback. Owned serde_json::Error conversion to io::Error returns actual writer error per locked1.0.152 primary source217-219. Nested owned IO/serde wrappers can then be peeled without reconstructing error types from text.",
+      "existing_control_lines": "sitemap_findings_tests.rs678-682",
+      "new_control_lines": "sitemap_findings_tests.rs751-758,796-812",
+      "expected": "Typed CSV budget remains413; cancelled/deadline/shared Core codes retain their typed mapping",
+      "status": "CLOSED_IN_SOURCE_NOT_RUN"
+    }
+  ],
+  "additional_confirmed_findings": 0,
+  "boundedness": {
+    "borrowed_traversal_max_steps": 32,
+    "owned_recovery_max_depth": 32,
+    "qualification": "These are separate per-phase limits, not a total32-source-call bound. Exhaustion yields ordinary read_failure and never an invented size claim.",
+    "retained_message": "Original outer Display string captured once before owned conversion"
+  },
+  "regression_source": {
+    "new_test_name": "finding_actual_csv_header_and_data_json_io_budget_words_keep_real_error_types",
+    "new_test_functions": 1,
+    "total_adapter_test_functions": 11,
+    "executed": 0,
+    "actual_fixture": "Existing Fixture::actual public Crawler→Store, actual with_verified_sitemap_findings session; only downstream writers are injected",
+    "cases": [
+      "Ordinary IO at first actual CSV header write→500",
+      "Ordinary IO on first actual data-row position JSON after two complete lines→500",
+      "Typed inner Failure on same actual serde JSON write→413"
+    ],
+    "partial_row_progress": "on_row stays0 for each failure; data-json controls require actual serde_json::Error::is_io and exactly2 complete lines"
+  },
+  "actual_source_checks": [
+    "Both payload before/after SHA guards and lengths verified against immutable v1/postfix",
+    "Original10 tests exact byte-string prefix remains intact",
+    "All production source from ReadQuery through token/envelope/CSV tail compares exact to v1",
+    "Read locked serde_json source is_io/source/From conversion and local std IO get_ref/into_inner/source",
+    "Read actual CsvEscaped/json_field/write_findings_csv_session_observed path and appended real-session writer controls"
+  ],
+  "not_run": [
+    "Compiler/Cargo/Clippy/tests",
+    "SQLite/HTTP/public Fixture execution",
+    "Browser/SDK/native/physical output resource thresholds"
+  ],
+  "root_writes": 0,
+  "original_immutable_writes": 0,
+  "notes": [
+    "Source closure only; existing two original review findings are not retroactively relabeled executed",
+    "No new wire/token/formatter/selector contract or arbitrary-source-wrapper recovery guarantee introduced"
+  ]
+}

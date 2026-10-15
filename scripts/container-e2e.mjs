@@ -48,14 +48,14 @@ try {
   await until(async()=>{const status=await(await fetch(`${app}/api/crawls/${v2Job.id}`)).json();if(status.status==='failed')throw Error(JSON.stringify(status));return status.status==='completed'&&status;},'explicit V2 native resource self-crawl');
   const v2Before=await(await fetch(`${app}/api/crawls/${v2Job.id}/resources.json`)).json();assert.equal(v2Before.snapshot.resource_contract_engine,engine);assert.equal(v2Before.export.all_snapshot_rows_exported,true);assert.ok(v2Before.observations.some(row=>row.decision.grant?.reference_kind==='css'));
   const v2TransportsBefore=await(await fetch(`${app}/api/crawls/${v2Job.id}/resources/transports`)).json();assert.equal(v2TransportsBefore.semantic_contract_binding,'validated_full_config_and_generation');assert.ok(v2TransportsBefore.transports.some(row=>row.requested_url.endsWith('/styles.css')&&row.projection.resource_response.contract_engine===engine));
-  const toolsResponse=await fetch(app+'/mcp',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:1,method:'tools/list',params:{}})});assert.equal((await toolsResponse.json()).result.tools.length,25);
+  const toolsResponse=await fetch(app+'/mcp',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:1,method:'tools/list',params:{}})});assert.equal((await toolsResponse.json()).result.tools.length,26);
   docker(['stop', '--time', '10', name]); docker(['start', name]); app = address(); await ready(app);
   const after = await (await fetch(`${app}/api/crawls/${job.id}/project.json`)).json();
   assert.deepEqual(after, before);
   const resourceAfter=await(await fetch(`${app}/api/crawls/${resourceJob.id}/resources.json`)).json();assert.deepEqual(resourceAfter,resourceBefore);
   const resourceTransportsAfter=await(await fetch(`${app}/api/crawls/${resourceJob.id}/resources/transports`)).json();assert.deepEqual(resourceTransportsAfter,resourceTransportsBefore);
   const v2After=await(await fetch(`${app}/api/crawls/${v2Job.id}/resources.json`)).json();assert.deepEqual(v2After,v2Before);const v2TransportsAfter=await(await fetch(`${app}/api/crawls/${v2Job.id}/resources/transports`)).json();assert.deepEqual(v2TransportsAfter,v2TransportsBefore);
-  console.log(JSON.stringify({ tested_at: new Date().toISOString(), result: 'PASS', scope: 'Linux Docker build, UID10001, loopback publication, no privileges/capabilities, bundled font offline API, local legacy/resource V1/explicit V2 self-crawls, 25 MCP tools, exact validated occurrence/transport SQLite snapshots after container restart', resource_contract_v2:engine, external_website_requests: 0, browser_worker: 'not included', local_windows_docker_installation: 'not proven' }));
+  console.log(JSON.stringify({ tested_at: new Date().toISOString(), result: 'PASS', scope: 'Linux Docker build, UID10001, loopback publication, no privileges/capabilities, bundled font offline API, local legacy/resource V1/explicit V2 self-crawls, 26 MCP tools, exact validated occurrence/transport SQLite snapshots after container restart', resource_contract_v2:engine, external_website_requests: 0, browser_worker: 'not included', local_windows_docker_installation: 'not proven' }));
 } catch (error) {
   if (containerCreated) { try { process.stderr.write(docker(['logs', name])); } catch {} }
   throw error;

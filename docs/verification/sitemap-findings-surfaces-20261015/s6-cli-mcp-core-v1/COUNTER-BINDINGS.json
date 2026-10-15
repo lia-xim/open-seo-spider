@@ -1,0 +1,142 @@
+{
+  "description": "3 Rust count controls: mcp.rs Root-owned hook plus these2;7 current active native harnesses; historical receipts/scripts preserved",
+  "root_owned_mcp_assertion": {
+    "from": "assert_eq!(inventory().len(), 25);",
+    "to": "assert_eq!(inventory().len(), 26);"
+  },
+  "payloads": [
+    {
+      "path": "crates/app/src/mcp/sitemaps_tests.rs",
+      "before_sha256": "a6d5908991c15a2e4fe2bd601a828eabbcecee3fe9323450baebadba9c19f1a8",
+      "after_sha256": "bdfe3f0afaaa3b99c123224675c5709f7d02961a27e06cefefc0c74dd62fb749",
+      "edits": [
+        {
+          "from": "inventory().len(), 25",
+          "to": "inventory().len(), 26",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "path": "crates/app/src/mcp/saved_comparison_tests.rs",
+      "before_sha256": "7b0779704d80f8cb482c0cfe896307f012fc70aa3ce6dd5f14f056b193dd1785",
+      "after_sha256": "4b00da501b984d5dd8437f41275456e3f6be13dd61b5d0542a5d2fae929237f9",
+      "edits": [
+        {
+          "from": "inventory().len(), 25",
+          "to": "inventory().len(), 26",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "path": "scripts/mcp-e2e.mjs",
+      "before_sha256": "e78f20f2ae24dd6ba2fa2eeed1f2af2f61d1055579406a21c44d4d17a04153c3",
+      "after_sha256": "7d07523855a3b23651759ad453c0a537361a63de9dec204d80c00f8815422f9f",
+      "edits": [
+        {
+          "from": "inventory.tools.length,25",
+          "to": "inventory.tools.length,26",
+          "occurrences": 1
+        },
+        {
+          "from": "initialize, 25 tools",
+          "to": "initialize, 26 tools",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "path": "scripts/container-e2e.mjs",
+      "before_sha256": "6ecb4c3213e2ec8a4a5ea82aaf7917aad462c9751c4e104ca1b1c777990f0209",
+      "after_sha256": "f5cdbd8a8d967b237b28e1552023a6890d3fcc768a78310b149049efb5ef98ec",
+      "edits": [
+        {
+          "from": "result.tools.length,25",
+          "to": "result.tools.length,26",
+          "occurrences": 1
+        },
+        {
+          "from": "25 MCP tools",
+          "to": "26 MCP tools",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "path": "scripts/resource-contract-e2e.mjs",
+      "before_sha256": "f4e35b0e27e4c2f618db6a3076be3ae4beb7d75026ee02065fc6213ba7e251d9",
+      "after_sha256": "429159077622c5bff111434b651702f3077aff2b65c94907e30c3610d561606e",
+      "edits": [
+        {
+          "from": "tools.length,24",
+          "to": "tools.length,26",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "path": "scripts/saved-comparison-e2e.mjs",
+      "before_sha256": "8abc030d3fc6f1a0522906316d8ed5f35195eb9a23fb88263711562708abf6f3",
+      "after_sha256": "87a0a63f76adc4b1171c06b77fdd7cc13db20182140f23853088cf7eae4866a8",
+      "edits": [
+        {
+          "from": "tools.length,25",
+          "to": "tools.length,26",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "path": "scripts/saved-comparison-bundle-e2e.mjs",
+      "before_sha256": "1a824758765649a6fb9895ab954fd7a0e534395b8a29b4ec94463e1e62c5ef8f",
+      "after_sha256": "bc3e698cd01edc4108034fa851407b433006f096c77245ba9603070e96aeaec7",
+      "edits": [
+        {
+          "from": "inventory.length, 25",
+          "to": "inventory.length, 26",
+          "occurrences": 1
+        },
+        {
+          "from": "25 tools",
+          "to": "26 tools",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "path": "scripts/sitemap-membership-e2e.mjs",
+      "before_sha256": "635a3ae43374b9a06a66995e28be93cce2da7b5b191f85322e1897e14d9f28cc",
+      "after_sha256": "fa2f9c72f7f70bbd05ea2db2b14fe757640ce5127afa1307ce332b544e54f865",
+      "edits": [
+        {
+          "from": "tools.length,25",
+          "to": "tools.length,26",
+          "occurrences": 1
+        },
+        {
+          "from": "expose24 tools",
+          "to": "expose26 tools",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "path": "scripts/sitemap-assessment-e2e.mjs",
+      "before_sha256": "8ab9316cece9d12b6b7e4ca72d58b839eb5fbb4ac11c7c5c21c44dfdef20574f",
+      "after_sha256": "d6d8121565e08d27c4fdcb87b3ea087c3fc427f5f45f301b4cff18fdbaa30463",
+      "edits": [
+        {
+          "from": "tools.length,25",
+          "to": "tools.length,26",
+          "occurrences": 1
+        },
+        {
+          "from": "expose24 tools",
+          "to": "expose26 tools",
+          "occurrences": 1
+        }
+      ]
+    }
+  ]
+}

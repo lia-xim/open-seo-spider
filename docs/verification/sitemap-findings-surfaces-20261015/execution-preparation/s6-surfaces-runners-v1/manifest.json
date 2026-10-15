@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "name": "s6-surfaces-runners-v1",
+  "immutable": true,
+  "status": "PREPARED_SOURCE_ONLY_NOT_EXECUTED",
+  "created_at_utc": "2026-10-15T00:18:57.222041+00:00",
+  "source_manifest": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-source-v1/manifest.json",
+  "source_manifest_sha256": "69492d0c0cc56bab5de86251045459a1707deb4c991d5871f9ad39015e897751",
+  "source_input_files": 297,
+  "minimum_workspace_tests": 1170,
+  "required_source_test_names": 388,
+  "source_new_authored_tests": 47,
+  "source_prior_authored_tests": 329,
+  "source_total_authored_expectations": 376,
+  "accepted_baseline_tests": 794,
+  "source_approved_product_bindings": 38,
+  "entries": [
+    {
+      "path": "run-sitemap-findings-surfaces-suite-v1.mjs",
+      "bytes": 8797,
+      "sha256": "5de37908b795947c8db1cab459f1a45a2edda823499747b162d13a6bef3fcc66",
+      "intended_promotion": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/run-sitemap-findings-surfaces-suite-v1.mjs",
+      "required_before": "ABSENT",
+      "node_check_exit_code": 0
+    },
+    {
+      "path": "build-sitemap-findings-surfaces-v1.mjs",
+      "bytes": 8007,
+      "sha256": "dcf4e74c70658bd7090ab7b90b2d595bc95747cf315c165409028447a66b989c",
+      "intended_promotion": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/build-sitemap-findings-surfaces-v1.mjs",
+      "required_before": "ABSENT",
+      "node_check_exit_code": 0
+    }
+  ],
+  "templates": [
+    {
+      "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\run-sitemap-findings-core-suite-v1.mjs",
+      "sha256": "195840786b083e9a66828af4ed36104a52d0ade6f1c0963aa87f566739eda130"
+    },
+    {
+      "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\build-sitemap-findings-core-v1.mjs",
+      "sha256": "ec661d9c722b931255a73d8e97859074016b7f4780115e1d496a7f28fb116956"
+    }
+  ],
+  "four_owned_renderer_gates": [
+    {
+      "path": "crates/core/tests/crawl_fixtures.rs",
+      "name": "live_browser_worker_executes_javascript_for_core_crawl",
+      "sha256": "4126c441cceef82154d84bab4ac0ea05108e83cc7f4b88bf6d470bb70816647c",
+      "line": 1037,
+      "ignored_source_gate": true,
+      "separate_from388_manifest_names": true
+    },
+    {
+      "path": "crates/core/tests/content_capture_fixtures.rs",
+      "name": "live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness",
+      "sha256": "738c2187dcdabf4c74f1fb047db4cdc8edc4e74422d6307eb0914cd7cf315471",
+      "line": 934,
+      "ignored_source_gate": true,
+      "separate_from388_manifest_names": true
+    },
+    {
+      "path": "crates/core/tests/control_fixtures.rs",
+      "name": "live_browser_worker_pause_drains_render_and_retains_rendered_discoveries",
+      "sha256": "9a90d82446f55ef348e3c3dec42aa4d606a871ef812196851c4d1e1c7d45a0ac",
+      "line": 457,
+      "ignored_source_gate": true,
+      "separate_from388_manifest_names": true
+    },
+    {
+      "path": "crates/core/tests/recrawl_fixtures.rs",
+      "name": "live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion",
+      "sha256": "49c8ce6ab6df505ed28681844f4950296446240beec8deb61d59d78ba46a9046",
+      "line": 700,
+      "ignored_source_gate": true,
+      "separate_from388_manifest_names": true
+    }
+  ],
+  "expected_paths": {
+    "repo": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-integration-v1",
+    "task": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https",
+    "runtime_root": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/outputs/open-seo-spider",
+    "source": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/sitemap-findings-surfaces-source-v1",
+    "suite_result": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/sitemap-findings-surfaces-suite-v1",
+    "debug_result": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/sitemap-findings-surfaces-debug-build-v1",
+    "optimized_result": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/sitemap-findings-surfaces-optimized-build-v1"
+  },
+  "checks": {
+    "status": "STATIC_DERIVATION_AND_NODE_SYNTAX_ONLY_NOT_RUNTIME_ACCEPTANCE",
+    "node_checks": [
+      {
+        "command": [
+          "node",
+          "--check",
+          "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-surfaces-runners-v1/run-sitemap-findings-surfaces-suite-v1.mjs"
+        ],
+        "exit_code": 0,
+        "driver_executed_or_imported_or_evaluated": false
+      },
+      {
+        "command": [
+          "node",
+          "--check",
+          "E:/CodexWork/open-seo-spider-01a12ac3-20261013/s6-surfaces-runners-v1/build-sitemap-findings-surfaces-v1.mjs"
+        ],
+        "exit_code": 0,
+        "driver_executed_or_imported_or_evaluated": false
+      }
+    ],
+    "recipe_exact_replay": true,
+    "guard_before_write_child_dynamic_import_static_order": true,
+    "absolute_literals_statically_json_decoded_no_js_eval": true,
+    "actual297_frozen_and_root_files_sha_byte_match": true,
+    "old_core275_source_files_sha_match": true,
+    "old_core_source_manifest_sha256": "72dd26c3108c3e3432932e5bfb02d7f75eb8aeed9e7d71b24629511e81289f8d",
+    "old_template_sha_unchanged": true,
+    "actual4_browser_gate_names_pinned_separate_from388": true,
+    "runtime_renderer4_files_hash_match_read_only": true,
+    "new_task_work_destinations_absent": true,
+    "workspace_runs": 0,
+    "build_runs": 0,
+    "driver_imports": 0,
+    "driver_eval_or_vm": 0,
+    "renderer_runs": 0,
+    "browser_runs": 0,
+    "cargo_or_compiler_runs": 0,
+    "tests_or_native_runs": 0,
+    "root_or_git_or_runtime_mutations": false,
+    "coordinated_compute_hold": "ACTIVE_NOT_RELEASED_ROOT_REPORTED"
+  },
+  "support_files": [
+    {
+      "path": "HANDOFF.md",
+      "sha256": "248c60f6162a40922b85f6ff800fe57c505cebf6ffa2236e4fdbba7137740336",
+      "bytes": 7191
+    },
+    {
+      "path": "DERIVATION.json",
+      "sha256": "aaae938eb3a0d55bd940f52a431a15f988c005a38b5d8ce4b59119f14023997a",
+      "bytes": 16767
+    },
+    {
+      "path": "SOURCE-IDENTITY.json",
+      "sha256": "70d590c0d03a83fb72c9b2c8fcd204d7f21b4c61014340973d15a4aa7a12b09e",
+      "bytes": 52770
+    },
+    {
+      "path": "verification.json",
+      "sha256": "348aa091fc75a0fd733e0dc44f30ec8baae68b2857035247f4fa2471f0adedfe",
+      "bytes": 1528
+    }
+  ],
+  "root_promotion_owner": "Root; this worker wrote only own E handoff",
+  "qualification": "All S6 surfaces are AUTHORED source. Syntax/hash preparation is not a workspace/build/runtime PASS. Native SDK/13 UI browser cases, physical/source matrix, RSS/latency, recovery, selected materialization, platforms/container/GitHub and installation remain OPEN."
+}

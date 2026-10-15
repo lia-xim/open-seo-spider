@@ -164,5 +164,5 @@ async fn sitemap_tool_transports_both_cursor_roles_and_page_limit_in_actual_loca
         tool["inputSchema"]["properties"]["page_limit"]["maximum"],
         200
     );
-    assert_eq!(inventory().len(), 25);
+    assert_eq!(inventory().len(), 26);
 }

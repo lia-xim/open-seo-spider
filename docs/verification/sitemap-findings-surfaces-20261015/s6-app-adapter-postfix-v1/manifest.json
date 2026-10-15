@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "name": "s6-app-adapter-postfix-v1",
+  "immutable": true,
+  "status": "RUSTFMT_ONLY_NOT_COMPILED_NOT_RUN",
+  "basis_manifest_sha256": "5a0a2e7c22b345b689339deb0bd18a7ecb4292c127bf0c9e69b0f389f99101bb",
+  "review_receipt_sha256": "e3e9c689f2e0378ff75b232a7c8cdbe23e2bdef9342cb621208ddb97040e7fde",
+  "entries": [
+    {
+      "path": "crates/app/src/sitemap_findings.rs",
+      "before_sha256": "e6728e4e9e1558732d51c5c10e1fb24834ab97abb7d33d25574c6c98e448b31d",
+      "bytes": 30850,
+      "after_sha256": "2ac269bf6e6aa6cda002afafc06e1f80aa06940c282985c1cfe9dd5234ac4e0d"
+    },
+    {
+      "path": "crates/app/src/sitemap_findings_tests.rs",
+      "before_sha256": "4bf3b44b6b7f55f1939fb863bddbb7b84ac683e3ee8bf22532f03a9bee57c1d9",
+      "bytes": 29640,
+      "after_sha256": "38f5d8e34fbe53279110dcc166453347bb76197c2e1a93449b0c25435bac6bc2"
+    }
+  ],
+  "handoff_sha256": "f9124134538f1b921143534119e0f8910d709c5224e0d878ba76502e5c5b9236",
+  "new_authored_tests": [
+    "finding_actual_csv_header_and_data_json_io_budget_words_keep_real_error_types"
+  ],
+  "new_test_count": 1,
+  "total_authored_adapter_tests": 11,
+  "executed_tests": 0,
+  "original_v1_changed": false,
+  "root_runtime_git_changed": false,
+  "checks": {
+    "http": "NOT_RUN",
+    "original10tests_unchanged_prefix": true,
+    "compiler": "NOT_RUN",
+    "native": "NOT_RUN",
+    "rustfmt_check": "PASS",
+    "sqlite": "NOT_RUN",
+    "unchanged_product_ReadQuery_tokens_csv_tail": true,
+    "tests": "NOT_RUN",
+    "rustfmt": "PASS"
+  },
+  "scope": "Only bounded error-inner inspection/owned serde-IO recovery and ordinary-IO exclusion from untyped text heuristic; all wire/token/CSV formatting unchanged"
+}
