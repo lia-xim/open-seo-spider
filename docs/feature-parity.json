@@ -6193,6 +6193,15 @@
       "recorded_at": "2026-10-15T18:37:01.597Z",
       "scope": "Actual369-input Windows workspace1380/0/0,598required/602qualified names,21newRust names,4real renderer gates,fmt+Clippy+3actual closes and final source hashes. Optimized/native/install separately pending.",
       "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "source10-native-first-20261015",
+      "artifact": "docs/verification/source10-native-first-20261015/index.json",
+      "artifact_sha256": "5b6a876a49d02685e17eb5f6f26c604b0302b76a6d2c360ddde5755d4c534a08",
+      "result": "BUILD_PASS_BROWSER_FAIL_320_CSS_PREVIEW_PASS",
+      "recorded_at": "2026-10-15T18:57:26.599Z",
+      "scope": "Actual optimized build;26 completed native browser groups, actual settings320 overflow and narrow CSS preview at1440/320. Complete native acceptance and installation remain pending.",
+      "reference_parity": "NOT_PROVEN"
     }
   ],
   "reference_workflows": [
@@ -6450,12 +6459,12 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-15T18:37:01.597Z",
+  "last_verified_at": "2026-10-15T18:57:26.599Z",
   "current_work": [
     {
       "id": "combined-source-v10-20261015",
-      "status": "ACTUAL1380_FULL_SUITE_PASS_OPTIMIZED_BUILD_RUNNING_NATIVE_PENDING",
-      "summary_de": "Source10 besteht tatsächlich1380 Tests ohne Fehler oder ignorierte Fälle, alle598 Pflichtnamen/602qualifizierten Namen, vier echte Renderer-Gates, Format und Clippy. Alle369 Inputs sind abschließend identisch; eigene Renderer/Testserver und alle drei Cargo-Prozesse sind geschlossen. Ngram-Corpus1–6, TX-lokale Projektion und Originaldaten-Auswahlfix sind integriert. Optimierter Build läuft; frische native Prüfung und Installation bleiben offen.",
+      "status": "ACTUAL_BUILD_PASS_BROWSER_26_PASS_SETTINGS_320_OVERFLOW_NEW_CSS_PREVIEW_PASS",
+      "summary_de": "Source10 besteht1380/0/0 Rusttests und den optimierten Windows-Build. Im echten Browser bestehen26 bisherige Gruppen; Originaldaten laden und öffnen bei1440/320. Danach entdeckt das unveränderte Orakel einen320px-Überlauf eines langen JSON-Beispiels im Einstellungsdialog. Die gezielte Umbruchregel besteht die echte CSS-Vorschau; neu kompilierte Korrektur, übrige native Bereiche und Installation bleiben offen.",
       "completed_acceptance_de": [
         "369 Inputs zusammengesetzt,18eigene Pfade (7geänderte/11neue),351 unverändert; unabhängige Kompositions- und Formatprüfung.",
         "21 neue Rustnamen tatsächlich ausgeführt:15Ngramfälle inklusive echter Capture->API/CLI/CSV und6SQLite-Projektionsfälle.",
@@ -6463,11 +6472,12 @@
         "Vollständige tatsächliche1380/0/0-Workspace-Abnahme mit vier echten Renderergates,598Pflichtnamen/602qualifizierten Namen, drei erfolgreichen Cargoabschlüssen, geschlossenen eigenen Diensten und abschließenden369Quellhashes."
       ],
       "pending_acceptance_de": [
-        "Optimierten Windows-Kandidaten abschließen und alle elf bisherigen nativen Bereiche am aktuellen Kandidaten prüfen.",
-        "Im echten Resource-/Directory-Crawl zusätzlich sechs Ngramfälle mit205Quellseiten/410Sechswortvorkommen,API200+5/UI100+100+5, vollständiger CSV/CLI,1440/320Pixel und kalter Wiederöffnung ohne neue Websiteanfragen prüfen.",
-        "Sicher mit erhaltenen Nutzerdaten installieren; zusätzliche Textkanäle/Wortwolke, amortisierte große Sitemap-Abfragen und neue nachvollziehbare Crawl-Aufnahmegrenzen danach abarbeiten."
+        "Neuen Resource-/Directory-/Ngramablauf zunächst am echten Source10-Kandidaten prüfen, um weitere konkrete Fehler vor dem nächsten Build zu sammeln.",
+        "Eng begrenzten Einstellungs-Umbruchfix neu kompilieren und dieselbe Browserprüfung unverändert bestehen; alle übrigen nativen Bereiche frisch am finalen Kandidaten prüfen.",
+        "Sicher mit erhaltenen Nutzerdaten installieren; weitere Textkanäle/Wortwolke, große Sitemap-Abfragen und neue nachvollziehbare Crawl-Aufnahmegrenzen weiter abarbeiten."
       ],
       "documentation": [
+        "docs/verification/source10-native-first-20261015/index.json",
         "docs/verification/combined-workspace-v10-20261015/index.json",
         "docs/saved-ngram-reports.md",
         "docs/verification/source10-directed-checkpoint-20261015/index.json"
@@ -6476,9 +6486,10 @@
         "directed_new_names": "PASS_21_NEW_FEATURE_NAMES_ONLY",
         "preliminary_clippy": "PASS_PRELIMINARY_CLIPPY_ONLY",
         "full_suite": "PASS_COMBINED_WORKSPACE_V10_REAL_RENDERER_FMT_CLIPPY",
-        "optimized_build": "RUNNING",
+        "optimized_build": "PASS_COMBINED_OPTIMIZED_BUILD_V10",
         "native": "NOT_RUN",
-        "installation": "UNCHANGED_SOURCE5_R3"
+        "installation": "UNCHANGED_SOURCE5_R3",
+        "browser": "FAIL_INVALID_REPRESENTATIONS_SETTINGS_OVERFLOW_320"
       }
     },
     {

@@ -1,3 +1,7 @@
+## Aktuell: Windows-Build bestanden, konkreter Browserfehler eingegrenzt (15.10.2026)
+
+Source10 besteht1380 Tests und den optimierten Windows-Build.26 praktische Browsergruppen bestehen; Originaldaten laden jetzt bei1440/320. Ein langes JSON-Beispiel verursacht danach im Einstellungsdialog320px-Überlauf. Eine einzelne CSS-Umbruchregel besteht die tatsächliche Vorschau; neu kompilierte Prüfung folgt. [Build, Fehler und Diagnose](verification/source10-native-first-20261015/index.json). Weitere native Abnahmen und Installation bleiben offen; installiert istSource5R3. Herstellerparität NOT_PROVEN.
+
 ## Aktuell: vollständige Source10-Suite bestanden (15.10.2026)
 
 Source10 besteht tatsächlich1380 Tests,598Pflichtnamen/602qualifizierte Namen, vier echte Renderer-Gates sowie Format und Clippy. Alle drei Cargo-Prozesse und die eigenen Dienste sind geschlossen, alle369 Quellinputs abschließend exakt. [Rohbelege](verification/combined-workspace-v10-20261015/index.json), [Ngram-Bedienung](saved-ngram-reports.md). Der optimierte Build läuft; frische native Abnahmen und sichere Installation folgen. Katalog unverändert31 umgesetzt/69teilweise/44geplant. Weitere Ngramkanäle/Wortwolke, große Leseperformance, nachvollziehbare Aufnahmegrenzen und Herstellerparität bleiben offen.
