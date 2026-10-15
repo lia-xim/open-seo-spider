@@ -297,15 +297,29 @@ fn resource_broken_sources_evaluation_revisions_do_not_inflate_physical_ids_or_u
         .as_ref()
         .unwrap()
         .distinct_stored_occurrence_ids;
+    let source = &f.sources[0];
+    let dependency = source
+        .resource_source
+        .as_ref()
+        .unwrap()
+        .occurrences
+        .first()
+        .unwrap();
+    assert_eq!(dependency.source_ordinal, 0);
+    assert_eq!(
+        dependency.reference_kind,
+        crate::ResourceReferenceKind::Image
+    );
+    assert_eq!(
+        dependency.resolved_url.as_deref(),
+        Some("https://fixture.test/bad.png")
+    );
     let old = first
         .rows
         .iter()
         .find(|r| {
-            r.observation
-                .occurrence
-                .requested_source_url
-                .ends_with("/a.css")
-                && r.observation.occurrence.source_ordinal == 0
+            r.observation.occurrence.occurrence_id == dependency.occurrence_id
+                && r.observation.evaluation_revision == crate::resource_policy::digest("initial0")
         })
         .unwrap();
     assert_eq!(old.state, ResourceBrokenSourcesState::NoGrant);
@@ -313,8 +327,56 @@ fn resource_broken_sources_evaluation_revisions_do_not_inflate_physical_ids_or_u
         old.target_transport.is_none(),
         "An independent request must not upgrade a no-grant evaluation"
     );
+    assert_eq!(old.observation.decision.reason, "source_check_only");
+    assert!(old.observation.decision.grant.is_none());
     let id = old.observation.occurrence.occurrence_id.clone();
-    let source = &f.sources[0];
+    let initial_input = first
+        .rows
+        .iter()
+        .find(|r| {
+            r.observation.occurrence.requested_source_url == source.url
+                && r.observation.occurrence.reference_kind
+                    == crate::ResourceReferenceKind::InitialInput
+        })
+        .unwrap();
+    assert_eq!(initial_input.observation.occurrence.source_ordinal, 0);
+    assert_ne!(initial_input.observation.occurrence.occurrence_id, id);
+    assert_eq!(
+        initial_input.state,
+        ResourceBrokenSourcesState::ObservedNonFailure
+    );
+    assert_eq!(
+        initial_input.observation.decision.reason,
+        "initial_admitted"
+    );
+    assert_eq!(
+        initial_input
+            .observation
+            .decision
+            .grant
+            .as_ref()
+            .unwrap()
+            .fetch_url,
+        source.url
+    );
+    assert_eq!(
+        initial_input
+            .target_transport
+            .as_ref()
+            .unwrap()
+            .final_status,
+        Some(200)
+    );
+    assert!(first.rows.iter().any(|r| {
+        r.observation.occurrence.occurrence_id != id
+            && r.observation
+                .decision
+                .grant
+                .as_ref()
+                .is_some_and(|g| g.fetch_url == "https://fixture.test/bad.png")
+            && r.state == ResourceBrokenSourcesState::ObservedHttpFailure
+            && r.target_transport.as_ref().unwrap().final_status == Some(404)
+    }));
     let mut new = rows(
         &f.cfg,
         source.resource_source.as_ref().unwrap(),
