@@ -1,0 +1,222 @@
+{
+  "checkpoint": {
+    "completed": 1,
+    "config_sha256": "99f90ec6a0e03ab6d4a98f629f4436d61e4e0bf9d2c65fc1294485937c736f9e",
+    "created_at": "2026-10-15T12:35:14.036317300+00:00",
+    "discovery_complete": true,
+    "discovery_pending": 0,
+    "generation": 1,
+    "outcome": "completed",
+    "pending": 0,
+    "report_sha256": "f6635d3cc29eaa626571cb0b14b3663e4f40b608c037432bd68d6432f74b89bd",
+    "revision": 1,
+    "sitemap_ledger": {
+      "catalog_json_bytes": 2249,
+      "config_sha256": "99f90ec6a0e03ab6d4a98f629f4436d61e4e0bf9d2c65fc1294485937c736f9e",
+      "declared_source_cohort_complete": false,
+      "document_rows": 1,
+      "engine": "open-seo-spider/sitemap-membership-ledger-v1",
+      "entry_rows": 0,
+      "hash_profile": "sha256-tagged-canonical-rust-serde-rows-v1",
+      "incomplete_documents": 1,
+      "last_sequence": 2,
+      "legacy_history_unknown": false,
+      "limits": {
+        "max_catalog_json_bytes": 134217728,
+        "max_row_json_bytes": 262144,
+        "max_rows": 1000000
+      },
+      "location_rows": 0,
+      "revision": 2,
+      "rolling_sha256": "9f92f6ae42b2aca3b069a09cb2e09acdd2f43f6aca6522cf178df5ff7e9a7a90",
+      "root_rows": 1,
+      "rows_available": true
+    },
+    "sitemap_source_measurements": {
+      "charged_json_bytes": 7197,
+      "commit_count": 1,
+      "commit_json_bytes": 448,
+      "content_sha256": "7a49b5c829308d7fe0babdda662452d3d30f8e2544a4bcf2dc8f1902c5595cc9",
+      "engine": "open-seo-spider/sitemap-source-store-v1",
+      "hash_profile": "sha256-canonical-rust-serde-source-store-v1",
+      "inherited": null,
+      "initial_catalog_config_sha256": "99f90ec6a0e03ab6d4a98f629f4436d61e4e0bf9d2c65fc1294485937c736f9e",
+      "last_sequence": 1,
+      "legacy_history_unknown": false,
+      "limits": {
+        "max_catalog_json_bytes": 33554432,
+        "max_record_json_bytes": 16384,
+        "max_records": 100000
+      },
+      "links_sha256": "1e7ef56f666b34bb9106c258292b38a8db63a3590664bc0d0f69cc43c3cd9508",
+      "logical_json_bytes": 3883,
+      "metadata_json_bytes": 782,
+      "omission": null,
+      "omission_revision": null,
+      "record_count": 1,
+      "record_json_bytes": 2596,
+      "reserved_json_bytes": 3314,
+      "revision": 2
+    }
+  },
+  "config": {
+    "audit_thresholds": {
+      "max_alt_chars": 100,
+      "max_description_chars": 155,
+      "max_description_pixels": 985,
+      "max_external_outlinks": 10,
+      "max_h1_chars": 70,
+      "max_h2_chars": 70,
+      "max_internal_outlinks": 1000,
+      "max_title_chars": 60,
+      "max_title_pixels": 561,
+      "max_url_chars": 115,
+      "min_description_chars": 70,
+      "min_description_pixels": 400,
+      "min_title_chars": 30,
+      "min_title_pixels": 200,
+      "min_word_count": 200
+    },
+    "check_external": false,
+    "concurrency": 1,
+    "crawl_links": false,
+    "custom_extractions": [],
+    "custom_headers": {},
+    "delay_ms": 0,
+    "discover_sitemaps": false,
+    "exclude_patterns": [
+      "^http://127[.]0[.]0[.]1:60725/p/[0-9]{5}$"
+    ],
+    "explicit_sitemap_inputs": [
+      "http://127.0.0.1:60725/10-legacy-cap-unknown.xml"
+    ],
+    "include_patterns": [],
+    "include_subdomains": false,
+    "indexability_agent": "googlebot",
+    "input_imports": [
+      {
+        "engine": "open-seo-spider/offline-list-v1/calamine-0.36.1",
+        "input_bytes": 27,
+        "input_sha256": "b94fd56b8163592b07b6a611686ed20919f730ce66e0fab1093f12d9e7555fdd",
+        "limitations": [
+          "Import does not start a crawl, follow links, evaluate formulas or fetch sitemap indexes.",
+          "Only absolute HTTP/HTTPS values are URL candidates; original values and duplicate rows are retained.",
+          "Independent import contract; complete original parser/filter parity is NOT_PROVEN."
+        ],
+        "options": {
+          "format": {
+            "kind": "txt"
+          },
+          "limits": {
+            "max_csv_fields": 200000,
+            "max_field_bytes": 8192,
+            "max_input_bytes": 8388608,
+            "max_output_bytes": 8388608,
+            "max_rows": 50000,
+            "max_shared_strings": 100000,
+            "max_sheet_cells": 200000,
+            "max_sheets": 128,
+            "max_xml_depth": 64,
+            "max_xml_events": 500000,
+            "max_zip_entries": 1024,
+            "max_zip_entry_bytes": 8388608,
+            "max_zip_total_bytes": 33554432
+          }
+        },
+        "rows": [
+          {
+            "candidate_kind": "page_url",
+            "cell": null,
+            "cell_type": "text",
+            "error": null,
+            "formula_metadata": null,
+            "fragment": null,
+            "normalized_url": "http://127.0.0.1:60725/seed",
+            "raw_value": "http://127.0.0.1:60725/seed",
+            "sheet": null,
+            "source_index": 1,
+            "source_line": 1,
+            "source_row": 1
+          }
+        ],
+        "selected_column": null,
+        "selected_sheet": null,
+        "warnings": [],
+        "website_requests": 0
+      }
+    ],
+    "link_position_rules": [],
+    "max_body_bytes": 67108864,
+    "max_depth": null,
+    "max_pages": 1,
+    "max_redirects": 10,
+    "max_sitemap_documents": 1,
+    "obey_robots": false,
+    "pdf_analysis": {
+      "enabled": true,
+      "max_annotations": 10000,
+      "max_decompressed_bytes": 8388608,
+      "max_objects": 100000,
+      "max_pages": 1000,
+      "max_text_bytes": 4194304,
+      "max_text_bytes_per_page": 1048576
+    },
+    "renderer": null,
+    "request_timeout_secs": 180,
+    "seed_urls": [
+      "http://127.0.0.1:60725/seed"
+    ],
+    "sitemap_membership_limits": {
+      "max_catalog_json_bytes": 134217728,
+      "max_row_json_bytes": 262144,
+      "max_rows": 1000000
+    },
+    "sitemap_urls": [
+      "http://127.0.0.1:60725/10-legacy-cap-unknown.xml"
+    ],
+    "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)",
+    "validate_fragments": false
+  },
+  "error": null,
+  "finished_at": "2026-10-15T12:35:14.039777300+00:00",
+  "generation": 1,
+  "id": "57fd8df1-9d81-4c03-b4e7-117a3499f9d8",
+  "operation": null,
+  "parent_snapshot_available": false,
+  "policy_ledger": null,
+  "recrawl_available": true,
+  "resource_ledger": null,
+  "resume_available": true,
+  "seed_url": "http://127.0.0.1:60725/seed",
+  "started_at": "2026-10-15T12:35:13.978613200+00:00",
+  "stats": {
+    "discovered": 1,
+    "discovery_pending": 0,
+    "failed": 0,
+    "fetched": 1,
+    "in_flight": 0,
+    "issues": 11,
+    "queued": 0
+  },
+  "status": "completed",
+  "summary": {
+    "cancelled": false,
+    "completed": 1,
+    "discovered": 1,
+    "elapsed_ms": 30,
+    "errors": 0,
+    "finished_at": "2026-10-15T12:35:14.034332500+00:00",
+    "html_pages": 1,
+    "indexable_pages": 1,
+    "limited": false,
+    "pending": 0,
+    "started_at": "2026-10-15T12:35:14.003661400+00:00",
+    "status_counts": {
+      "200": 1
+    },
+    "warnings": 2
+  },
+  "warnings": [
+    "Sitemap could not be read completely: http://127.0.0.1:60725/10-legacy-cap-unknown.xml: sitemap_transport_body_byte_budget"
+  ]
+}

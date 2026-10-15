@@ -1,0 +1,225 @@
+{
+  "checkpoint": {
+    "completed": 1,
+    "config_sha256": "a336b4ab7f41cac7fd67a639af1cbbcbcdda8281766fefa0419009bb8d9589af",
+    "created_at": "2026-10-15T12:35:12.376075+00:00",
+    "discovery_complete": true,
+    "discovery_pending": 0,
+    "generation": 1,
+    "outcome": "completed",
+    "pending": 0,
+    "report_sha256": "65d6ad29aace680593e37765753b2702a1d066f4056fe35063f910a5ec6e551a",
+    "revision": 1,
+    "sitemap_ledger": {
+      "catalog_json_bytes": 307775,
+      "config_sha256": "a336b4ab7f41cac7fd67a639af1cbbcbcdda8281766fefa0419009bb8d9589af",
+      "declared_source_cohort_complete": false,
+      "document_rows": 1,
+      "engine": "open-seo-spider/sitemap-membership-ledger-v1",
+      "entry_rows": 257,
+      "hash_profile": "sha256-tagged-canonical-rust-serde-rows-v1",
+      "incomplete_documents": 0,
+      "last_sequence": 516,
+      "legacy_history_unknown": false,
+      "limits": {
+        "max_catalog_json_bytes": 134217728,
+        "max_row_json_bytes": 262144,
+        "max_rows": 1000000
+      },
+      "location_rows": 257,
+      "revision": 2,
+      "rolling_sha256": "d860607019976f4e0d847dfb2a19d0b528db812ec717b91bcf726e739fdbf4b9",
+      "root_rows": 1,
+      "rows_available": true
+    },
+    "sitemap_source_measurements": {
+      "charged_json_bytes": 7365,
+      "commit_count": 1,
+      "commit_json_bytes": 448,
+      "content_sha256": "c24dbd8459100c218e967b1f851c1d7fcdcf7fa5704b6628e60276461b628dfa",
+      "engine": "open-seo-spider/sitemap-source-store-v1",
+      "hash_profile": "sha256-canonical-rust-serde-source-store-v1",
+      "inherited": null,
+      "initial_catalog_config_sha256": "a336b4ab7f41cac7fd67a639af1cbbcbcdda8281766fefa0419009bb8d9589af",
+      "last_sequence": 1,
+      "legacy_history_unknown": false,
+      "limits": {
+        "max_catalog_json_bytes": 33554432,
+        "max_record_json_bytes": 16384,
+        "max_records": 100000
+      },
+      "links_sha256": "ed4df392f88eab0dfb7299bbcaaba4148a721659339dfa18042dd383bad42981",
+      "logical_json_bytes": 4051,
+      "metadata_json_bytes": 782,
+      "omission": null,
+      "omission_revision": null,
+      "record_count": 1,
+      "record_json_bytes": 2764,
+      "reserved_json_bytes": 3314,
+      "revision": 2
+    }
+  },
+  "config": {
+    "audit_thresholds": {
+      "max_alt_chars": 100,
+      "max_description_chars": 155,
+      "max_description_pixels": 985,
+      "max_external_outlinks": 10,
+      "max_h1_chars": 70,
+      "max_h2_chars": 70,
+      "max_internal_outlinks": 1000,
+      "max_title_chars": 60,
+      "max_title_pixels": 561,
+      "max_url_chars": 115,
+      "min_description_chars": 70,
+      "min_description_pixels": 400,
+      "min_title_chars": 30,
+      "min_title_pixels": 200,
+      "min_word_count": 200
+    },
+    "check_external": false,
+    "concurrency": 1,
+    "crawl_links": false,
+    "custom_extractions": [],
+    "custom_headers": {},
+    "delay_ms": 0,
+    "discover_sitemaps": false,
+    "exclude_patterns": [
+      "^http://127[.]0[.]0[.]1:60725/p/[0-9]{5}$"
+    ],
+    "explicit_sitemap_inputs": [
+      "http://127.0.0.1:60725/07-bytes-file-gzip-plus-one.xml.gz"
+    ],
+    "include_patterns": [],
+    "include_subdomains": false,
+    "indexability_agent": "googlebot",
+    "input_imports": [
+      {
+        "engine": "open-seo-spider/offline-list-v1/calamine-0.36.1",
+        "input_bytes": 27,
+        "input_sha256": "b94fd56b8163592b07b6a611686ed20919f730ce66e0fab1093f12d9e7555fdd",
+        "limitations": [
+          "Import does not start a crawl, follow links, evaluate formulas or fetch sitemap indexes.",
+          "Only absolute HTTP/HTTPS values are URL candidates; original values and duplicate rows are retained.",
+          "Independent import contract; complete original parser/filter parity is NOT_PROVEN."
+        ],
+        "options": {
+          "format": {
+            "kind": "txt"
+          },
+          "limits": {
+            "max_csv_fields": 200000,
+            "max_field_bytes": 8192,
+            "max_input_bytes": 8388608,
+            "max_output_bytes": 8388608,
+            "max_rows": 50000,
+            "max_shared_strings": 100000,
+            "max_sheet_cells": 200000,
+            "max_sheets": 128,
+            "max_xml_depth": 64,
+            "max_xml_events": 500000,
+            "max_zip_entries": 1024,
+            "max_zip_entry_bytes": 8388608,
+            "max_zip_total_bytes": 33554432
+          }
+        },
+        "rows": [
+          {
+            "candidate_kind": "page_url",
+            "cell": null,
+            "cell_type": "text",
+            "error": null,
+            "formula_metadata": null,
+            "fragment": null,
+            "normalized_url": "http://127.0.0.1:60725/seed",
+            "raw_value": "http://127.0.0.1:60725/seed",
+            "sheet": null,
+            "source_index": 1,
+            "source_line": 1,
+            "source_row": 1
+          }
+        ],
+        "selected_column": null,
+        "selected_sheet": null,
+        "warnings": [],
+        "website_requests": 0
+      }
+    ],
+    "link_position_rules": [],
+    "max_body_bytes": 1024,
+    "max_depth": null,
+    "max_pages": 1,
+    "max_redirects": 10,
+    "max_sitemap_documents": 1,
+    "obey_robots": false,
+    "pdf_analysis": {
+      "enabled": true,
+      "max_annotations": 10000,
+      "max_decompressed_bytes": 8388608,
+      "max_objects": 100000,
+      "max_pages": 1000,
+      "max_text_bytes": 4194304,
+      "max_text_bytes_per_page": 1048576
+    },
+    "renderer": null,
+    "request_timeout_secs": 180,
+    "seed_urls": [
+      "http://127.0.0.1:60725/seed"
+    ],
+    "sitemap_membership_limits": {
+      "max_catalog_json_bytes": 134217728,
+      "max_row_json_bytes": 262144,
+      "max_rows": 1000000
+    },
+    "sitemap_source_processing": {
+      "max_decoded_xml_bytes": 67108864,
+      "max_post_http_entity_bytes": 67108864,
+      "max_xml_events": 2000000
+    },
+    "sitemap_urls": [
+      "http://127.0.0.1:60725/07-bytes-file-gzip-plus-one.xml.gz"
+    ],
+    "user_agent": "OpenSEOSpider/0.1 (+local SEO audit)",
+    "validate_fragments": false
+  },
+  "error": null,
+  "finished_at": "2026-10-15T12:35:12.385433900+00:00",
+  "generation": 1,
+  "id": "75ae0bd4-7c96-4ca4-8e14-15683123887c",
+  "operation": null,
+  "parent_snapshot_available": false,
+  "policy_ledger": null,
+  "recrawl_available": true,
+  "resource_ledger": null,
+  "resume_available": true,
+  "seed_url": "http://127.0.0.1:60725/seed",
+  "started_at": "2026-10-15T12:35:12.095452800+00:00",
+  "stats": {
+    "discovered": 1,
+    "discovery_pending": 0,
+    "failed": 0,
+    "fetched": 1,
+    "in_flight": 0,
+    "issues": 11,
+    "queued": 0
+  },
+  "status": "completed",
+  "summary": {
+    "cancelled": false,
+    "completed": 1,
+    "discovered": 1,
+    "elapsed_ms": 228,
+    "errors": 0,
+    "finished_at": "2026-10-15T12:35:12.348829500+00:00",
+    "html_pages": 1,
+    "indexable_pages": 1,
+    "limited": false,
+    "pending": 0,
+    "started_at": "2026-10-15T12:35:12.120123900+00:00",
+    "status_counts": {
+      "200": 1
+    },
+    "warnings": 2
+  },
+  "warnings": []
+}
