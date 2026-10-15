@@ -1,0 +1,84 @@
+{
+  "kind": "combined_native_outer_v4",
+  "result": "PASS_OUTER_CHILD_EXIT_NOT_INNER_ACCEPTANCE",
+  "recorded_at": "2026-10-15T09:58:47.198Z",
+  "gate": "browser-native-r2",
+  "source_manifest_sha256": "45a07ef277cf1ffef5ff8d577fe05dc48ee1d84548ada2d8453aaf859a5d26b3",
+  "driver_sha256": "86afd93ef26550c06ad8f257d1c425dc9d7cec43543d29f998782842db9d8634",
+  "browser_r2_outer_preparation": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\browser-r2-outer-preparation-v4\\manifest.json",
+    "sha256": "d01b7da166c2e2352e58ac4435fc880a8f3f72bca2cb542bd84afa403ceac3d5"
+  },
+  "five_gate_pins_sha256": "8898f8cae51e7b8960b6e90a65814b090f24b112f27bac38cade9244f8845a16",
+  "harness": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\browser-combined-rebind-v4-r2\\run-sitemap-findings-browser-combined-v4-r2.mjs",
+    "sha256": "3f1dc52ea6d7c71dfd345bffcdf3e351c0998f9a187f266fd1dec129dd021a37",
+    "args": [
+      "--build-mode",
+      "optimized",
+      "--release",
+      "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\v4-browser-native-release-r2.json",
+      "--manifest-sha",
+      "45a07ef277cf1ffef5ff8d577fe05dc48ee1d84548ada2d8453aaf859a5d26b3"
+    ]
+  },
+  "node": {
+    "executable": "C:\\Program Files\\nodejs\\node.exe",
+    "version": "24.15.0",
+    "no_preloads": true
+  },
+  "binding_receipt": {
+    "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\v4-browser-r2-bindings-issued.json",
+    "sha256": "c420cf176f722c487a6fc68a050b70fad68ea01e5a2542290f0132105e8acbf8"
+  },
+  "grant": {
+    "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\v4-browser-native-release-r2.json",
+    "sha256": "bd67ef18aab373a7016666bfe95fabf368c19baf6860cf39cfaaf2ec4d17850c"
+  },
+  "binary": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-optimized-build-v4\\candidate\\open-seo-spider.exe",
+    "sha256": "c38f5743685353ab54331e074d2a20ac38543dfc4750c6896157218821b65348",
+    "bytes": 38117376
+  },
+  "pid": 24928,
+  "spawn_event": true,
+  "actual_exit_event": true,
+  "actual_close_event": true,
+  "spawn_error": null,
+  "exit": {
+    "code": 0,
+    "signal": null
+  },
+  "close_exit": {
+    "code": 0,
+    "signal": null
+  },
+  "stdout": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v4\\browser-native-r2\\stdout.log",
+    "end": true,
+    "closed": true,
+    "observed_bytes": 873,
+    "error": null,
+    "write_error": null,
+    "fd_closed": true,
+    "sha256": "abb5a9191fcadbb372c39b48a7e73a1c546408538bc9f8c7248edb109d530443",
+    "bytes": 873,
+    "drained": true
+  },
+  "stderr": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-native-outer-v4\\browser-native-r2\\stderr.log",
+    "end": true,
+    "closed": true,
+    "observed_bytes": 0,
+    "error": null,
+    "write_error": null,
+    "fd_closed": true,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "drained": true
+  },
+  "signals": [],
+  "lock_released": true,
+  "failures": [],
+  "qualification": "Only the direct harness process and captured pipes are observed here. Inner proofs independently determine acceptance, descendant cleanup and scope. No outer timeout, kill, retry, installation or source mutation."
+}

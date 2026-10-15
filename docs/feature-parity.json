@@ -6306,24 +6306,26 @@
     {
       "id": "combined-source-v4-20261015",
       "priority": 0,
-      "status": "OPTIMIZED_BUILD_AND_FIVE_NATIVE_SCOPES_PASS_BROWSER_R1_HARNESS_ORACLE_FAILED_R2_NOT_RUN",
+      "status": "SIX_NATIVE_SCOPES_PASS_LARGE_SOURCE_RUNNING_INSTALLATION_OPEN",
       "title_de": "SQL-Skalierung und explizite Sitemap-Kapazität gemeinsam prüfen",
-      "summary_de": "V4 besteht1216/0/0, Format/Clippy, optimierten Build und fünf getrennte Laufzeitbereiche einschließlich aller zwölf physischen CSV64MiB-/AppJSON8MiB-Fälle. Der erste echte Browserlauf besteht25 alte Gruppen und scheitert an einem neuen falschen Testschlüssel. Frischer R2 prüft stattdessen renderer:null; Quellstand und Kandidat bleiben unverändert. Große Quellen und Installation sind offen.",
+      "summary_de": "V4 besteht1216 Rust-Tests, Format/Clippy, den optimierten Build und alle sechs bisherigen Laufzeitbereiche. Der korrigierte echte Browserlauf besteht26 Gruppen einschließlich der drei UI-Kapazitätsproben; der frühere Testfehler bleibt dokumentiert. Der große Lauf mit13 echten Sitemap-Quellenfällen ist gestartet. Installation und weitere Funktionslücken bleiben offen.",
       "completed_acceptance_de": [
         "Beide konkreten Quellvorschläge unabhängig geprüft; sechs Rust-Dateien durch cargo fmt formatiert, JavaScript-Syntaxprüfung bestanden.",
-        "13 zusätzliche Testfunktionen vorbereitet, darunter echte50.000 Parser-/SQLite-Mitgliedschaften, Wiederöffnung, Rollback- und Konfigurationskontrollen. Noch nicht ausgeführt.",
+        "Alle13 zusätzlichen Testfunktionen bestehen im tatsächlichen vollständigen1216-Test-Lauf, darunter50.000 Parser-/SQLite-Mitgliedschaften, Wiederöffnung, Rollback und Konfigurationskontrollen.",
         "Vollständiger tatsächlicher V4-Lauf:254 App-,844 Core- und118 Integrationstests bestanden,434 Pflichtnamen und vier echte Renderer-Fälle ausgeführt; Format und Clippy-Dwarnings0.",
         "Eigene Renderer-/Fixture-Server tatsächlich geschlossen; alle304 Eingaben und unveränderlichen Review-/Freigabebelege anschließend erneut exakt.",
         "Optimierter tatsächlicher V4-Build bestanden; Candidate c38f5743,38.117.376 Bytes, alle drei Cargo-/Compiler-Abschlüsse sowie Quellen-/Suite-Endprüfungen exakt.",
         "Native API/CLI/SDK,175 Datei-SDK-Operationsprüfungen, zwei Root-Junction-Ablehnungen und13 ausdrücklich gemockte UI-Gruppen bestehen.",
-        "Alle zwölf physischen Größenfälle bestehen: CSV exakt67.108.864 Bytes und JSON exakt8.388.608 Bytes vollständig; jeweils+1 atomar mit413 abgelehnt.14 eigene Apps und Fixture tatsächlich geschlossen."
+        "Alle zwölf physischen Größenfälle bestehen: CSV exakt67.108.864 Bytes und JSON exakt8.388.608 Bytes vollständig; jeweils+1 atomar mit413 abgelehnt.14 eigene Apps und Fixture tatsächlich geschlossen.",
+        "Echter Browser-R2 besteht26 Gruppen: alle25 bisherigen sowie Standardkapazität, ausdrücklich128MiB und erneutes Deaktivieren. Request-Schalter und gespeichertes renderer:null getrennt geprüft; Quellstand und Kandidat unverändert."
       ],
       "pending_acceptance_de": [
-        "Frischen Browser-R2 mit allen25 bisherigen Gruppen und zusätzlicher Kapazitätsgruppe26 tatsächlich ausführen.",
-        "Alle13 großen echten Quellenfälle einschließlich vollständiger50.000 dauerhafter Mitgliedschaften und50MiB tatsächlich abnehmen.",
-        "HTTP-Lifecycle-Ownership und dauerhafte Original-XML-Dateien sind weitere ausdrückliche Ausbaulücken; Plattformen, Sonderfälle und Installation bleiben offen."
+        "Alle13 großen echten Quellenfälle einschließlich vollständiger50.000 dauerhafter Mitgliedschaften,50MiB, Wiederöffnung und vollständigem Export tatsächlich abnehmen.",
+        "Dauerhafte Original-Sitemap-Dateien BODY01–04 und HTTP-/MCP-Lifecycle-Ownership werden als getrennte Quellvorschläge umgesetzt; weitere öffentliche Schnittstellen und Abnahmen bleiben offen.",
+        "Windows-Installation aus verifiziertem Backup und Datenkopien separat prüfen; Linux/Container und vollständige Herstellerparität sind weiterhin nicht bewiesen."
       ],
       "documentation": [
+        "docs/verification/combined-native-v4-browser-r2-20261015/index.json",
         "docs/verification/combined-native-v4-checkpoint-1-20261015/index.json",
         "docs/verification/combined-workspace-v4-20261015/index.json",
         "docs/verification/combined-source-v4-draft-20261015/index.json",
@@ -6335,18 +6337,18 @@
         "javascript_syntax": "PASS_NODE_CHECK",
         "full_workspace": "PASS_COMBINED_WORKSPACE_V4_REAL_RENDERER_FMT_CLIPPY",
         "optimized_candidate": "PASS_COMBINED_OPTIMIZED_BUILD_V4_C38F5743",
-        "native": "NOT_RUN_ON_V4",
+        "native": "SIX_BOUNDED_NATIVE_SCOPES_PASS",
         "physical": "PASS_COMBINED_V4_NATIVE_CONTROLLED_FINDING_CSV64M_APPJSON8M_EXACT_PLUS1",
         "installation": "NOT_RUN_INSTALLED_AB1_UNCHANGED",
         "manufacturer_parity": "NOT_PROVEN",
         "required_named_cases": "PASS_434",
         "actual_renderer": "PASS_4",
-        "large_source_native": "NOT_RUN_ON_V4",
+        "large_source_native": "RUNNING_13_GENUINE_SOURCE_CASES_ON_V4",
         "native_api_cli_sdk": "PASS_SMALL_DIRECTED_FIXTURE",
         "file_sdk": "PASS_175_OPERATION_ASSERTIONS",
         "windows_root_junction": "PASS_2_NATURAL_REJECTIONS",
         "ui_mock": "PASS_13_MOCKED_GROUPS",
-        "native_browser": "R1_FAILED_NEW_HARNESS_SAVED_RENDERER_ORACLE_R2_PENDING"
+        "native_browser": "PASS_R2_26_REAL_GROUPS_ORIGINAL_R1_FAILURE_PRESERVED"
       },
       "reference_parity": "NOT_PROVEN"
     },
