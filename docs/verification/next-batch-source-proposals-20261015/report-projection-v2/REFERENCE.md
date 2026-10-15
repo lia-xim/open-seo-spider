@@ -1,0 +1,5 @@
+# Quellen und Beleggrenze
+
+Eigener tatsächlicher Parent: combined-source-v8/manifest.json 58ab1ff000b9ec5ffa005eeab573a0cde3f4af4bb7c9c132b4d85251ea4de720. Die untersuchten Reader sind zum tatsächlichen Source7-Largelauf bytegleich. Vorhandene read-only Untersuchung: large-read-performance-investigation-v1/evidence.json SHA0f944af00490ba62509eb791bbb617878814b830141351ad72e7d8444f2dee39. Keine neue Leistungsmessung.
+
+Die aktuelle [primäre SQLite-Dokumentation für json_remove](https://www.sqlite.org/json1.html#the_json_remove_function) beschreibt das Entfernen ausdrücklich benannter Pfade; andere Bestandteile bleiben Bestandteil des zurückgegebenen JSON. Die neue private Kopie entfernt nur $.sitemap_catalog. Dieselbe Dokumentation erläutert, dass JSON-Verarbeitung von Text Parserarbeit benötigt und SQLite-JSONB im Allgemeinen ebenfalls keine O(1)-Suche verspricht. Hier wird kein JSONB-Speicherformat, keine Tabelle, kein Index und kein Cross-Request-Cache eingeführt. Die konkreten Äquivalenztests müssen gegen die tatsächlich gelockte bundled SQLite ausgeführt werden; die Dokumentation ersetzt diesen Lauf nicht.

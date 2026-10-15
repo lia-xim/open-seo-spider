@@ -4,7 +4,7 @@
 
 Die Liste hält alle 144 gruppierten Fähigkeiten fest. Ein Haken bedeutet, dass das **eigene gespeicherte Abnahmekriterium** mit Beweisen erfüllt ist. Er bedeutet keine vollständige Gleichheit mit Screaming Frog. Diese Referenzparität bleibt für alle Einträge **NOT_PROVEN**.
 
-Aktueller Katalogstand: **31 eigene Abnahmen erfüllt**, **68 teilweise geprüft**, **45 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
+Aktueller Katalogstand: **31 eigene Abnahmen erfüllt**, **69 teilweise geprüft**, **44 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
 
 Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.json) bilden ein zusätzliches Register. Ihre positiven Fälle, Kontrollfälle, Parameter und Grenzfälle müssen jeweils geprüft werden. Ein implementierter Kern, ein leerer Export oder übereinstimmende CSV-Zellen ersetzen diese Einzelabnahme nicht.
 
@@ -138,19 +138,19 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - Verträge: [index.json](verification/sitemap-source-ui-suite-failed-20261015/index.json), [check.json](verification/sitemap-compile-repair-20261015/check.json), [index.json](verification/sitemap-compile-repair-20261015/focused-app-regressions/index.json), [index.json](verification/combined-workspace-v3-20261015/index.json).
   - Gate-Stand: historical_e9_full_suite: ACTUAL_COMPILE_FAIL_101_ZERO_TESTS_WORKER_CLOSED; intermediate_five_file_check: PASS_WITH_THREE_APP_WARNINGS; final_eight_file_full_suite: FAIL_APP_217_PASS_3_FAIL_0_IGNORE_CORE_RENDERER_CLIPPY_NOT_RUN; final_source_manifest_sha256: 0ab151e4fd06f4603d8429bed4c784f7045e5c838bec378706d6c01bfaefb7bf; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN; final_eight_file_check: PASS_NO_WARNINGS_23_26_SECONDS; directed_three_regressions: PASS_3_ACTUAL_TESTS_4_TEST_SOURCE_REPAIRS; new_full_workspace: NOT_RUN_AFTER_TEST_REPAIRS; combined_v3_workspace: PASS_1203_INCLUDING_4_RENDERER_FMT_CLIPPY.
 
-- [ ] **Defekte Linkquellen, Ressourcen und Verzeichnisansicht ausbauen** — ACTUAL_CLIPPY_PASS_DIRECTORY17_PASS_BROKEN_SOURCES19_PASS_1_FAIL. Der neue358-Dateien-Stand ist privat versioniert und besteht die vollständige Compilerprüfung mit Clippy ohne Warnungen. Alle17 gerichteten Verzeichnistests bestehen. Von20 Link-/Ressourcentests bestehen19; ein Test wählt die CSS-Startoccurrence statt des konkreten Bildvorkommens. Der enge Testselektor wird repariert, ohne die NoGrant-Assertion abzuschwächen. Gesamtsuite, optimierter Kandidat, native Abnahmen und Installation sind noch offen.
+- [ ] **Defekte Linkquellen, Ressourcen und Verzeichnisansicht ausbauen** — ACTUAL1359_WORKSPACE_PASS_OPTIMIZED_BUILD_RUNNING_NATIVE_PENDING. Source9 besteht tatsächlich1359 Tests ohne Fehler oder ignorierte Fälle, alle577 Pflichtnamen und581 vollständigen Namen sowie vier echte Renderer-Gates, Format und Clippy. Die37 neuen Link-/Ressourcen-/Verzeichnisfälle bestehen; der frühere falsche Occurrence-Selektor wurde eng repariert, ohne Produktlogik zu ändern. Der optimierte Build läuft. Native Funktionsprüfung, sichere Installation und Herstellerparität bleiben offen.
   - [x] Kopfzeilenfehler im tatsächlichen Source8-Browser gefunden; CSS-Umbruch unabhängig geprüft und als Browser-CSS-Vorschau bei1440/320 gemessen.
   - [x] ResourceWorkflow-Quellenreviewbefund und zwei Verzeichnis-Sonderfälle vor Integration geschlossen; vollständige30-Pfade-Komposition unabhängig quellengeprüft.
   - [x] Header-CSS mit vollständig komponierten statischen Assets bei320/560/561/600/768/850/1440 im Browser ohneÜberlauf geprüft; ausdrücklich kein kompilierter Produktnachweis.
   - [x] Neuer Stand mit30 eigenen Quellpfaden einschließlich getrennter Link-/Ressourcenberichte, API/UI/CSV, Resource-CLI, Verzeichnisansicht und globalem Headerumbruch privat versioniert.
   - [x] Tatsächliche Clippy-Compilerprüfung aller Workspace-Ziele ohne Warnungen bestanden; alle358 Eingaben nach Abschluss exakt geprüft.
   - [x] Tatsächliche gerichtete Tests:17 Verzeichnisfälle bestanden,19 Link-/Ressourcenfälle bestanden und ein enger Fixtureselektor fehlgeschlagen. Vollständige Rohlogs bleiben erhalten.
-  - [ ] Eindeutigen Bildoccurrence-/Revisionsselektor mit erhaltenen strengen Grant- und Historienprüfungen reparieren und unabhängig prüfen.
-  - [ ] Gerichtete Regression wiederholen und vollständige Workspace-/Renderer-/Format-/Clippy-Suite am finalen Stand ausführen.
-  - [ ] Optimierten Kandidaten bauen, neue native Resource-/Verzeichnisabläufe sowie alle erforderlichen bisherigen nativen Bereiche ausführen.
-  - [ ] Sichere Installation mit erhaltenen Nutzerdaten nach allen erforderlichen Abnahmen; N-Gramm-Corpus und Sitemap-Leseperformance danach weiter bearbeiten.
-  - Verträge: [index.json](verification/source9-directed-checkpoint-1-20261015/index.json), [index.json](verification/source9-preliminary-failed-20261015/index.json), [index.json](verification/source8-native-checkpoint-1-20261015/index.json).
-  - Gate-Stand: implementation: PRIVATELY_COMMITTED_30_SOURCE_PATHS; compile: PASS_ALL_TARGET_CLIPPY_NO_WARNINGS; directed_tests: CLIPPY_PASS_DIRECTORY17_PASS_BROKEN_SOURCES19_PASS_1_FAIL; full_suite: NOT_RUN; optimized_build: NOT_RUN; native: NOT_RUN; installation: UNCHANGED_SOURCE5_R3; manufacturer_parity: NOT_PROVEN.
+  - [x] Tatsächliche vollständige1359/0/0-Abnahme des finalen358-Dateienstands mit allen577 Pflichtnamen,581 vollständigen Namen, vier echten Renderer-Gates, drei erfolgreichen Cargo-Abschlüssen, geschlossenem eigenen Renderer/Testserver und abschließend identischen Quellen.
+  - [ ] Optimierten Windows-Kandidaten abschließen; alle neun bisherigen nativen Bereiche und den Migrationsworkflow am aktuellen Kandidaten prüfen.
+  - [ ] Neuen achtteiligen nativen Resource-/Directory-Workflow mit echten208Websiteabrufen,414Entscheidungen, getrennten Seitenlinks, Voll-CSV/CLI, Browser/Paging und kalter Wiederöffnung ausführen.
+  - [ ] Sichere Installation mit erhaltenen Nutzerdaten erst nach erforderlichen praktischen Abnahmen; N-Gramm-Corpus und Sitemap-Leseperformance anschließend integrieren.
+  - Verträge: [index.json](verification/combined-workspace-v9-20261015/index.json), [index.json](verification/source9-directed-checkpoint-1-20261015/index.json), [index.json](verification/source9-preliminary-failed-20261015/index.json), [index.json](verification/source8-native-checkpoint-1-20261015/index.json).
+  - Gate-Stand: implementation: PRIVATELY_COMMITTED_30_SOURCE_PATHS; compile: PASS_ALL_TARGET_CLIPPY_NO_WARNINGS; directed_tests: PASS37_AFTER_EXACT_TEST_IDENTITY_REPAIR; full_suite: PASS_COMBINED_WORKSPACE_V9_REAL_RENDERER_FMT_CLIPPY; optimized_build: RUNNING_NOT_ESTABLISHED_BY_SUITE; native: NOT_RUN; installation: UNCHANGED_SOURCE5_R3; manufacturer_parity: NOT_PROVEN.
 
 - [ ] **Migrationsprüfung, Schreibvertrag und responsive Originaldateien prüfen** — SUITE_BUILD_SIX_NATIVE_SCOPES_PASS_UI_LAYOUT_FAIL_NOT_INSTALLABLE. Source8 besteht die vollständige1322-Test-Suite und den optimierten Build. Sechs native Bereiche bestehen: API/CLI/SDK-Grundablauf,175 Dateioperationen, acht Migrationsgruppen, zwei EOF-Fälle, zwölf physische CSV-/JSON-Grenzfälle und13 Originaldatei-Gruppen mit echten64MiB. Der neue Migrationslink verbreitert jedoch die Kopfzeile bei320Pixeln; Browser und Mock scheitern daran. Der Junction-Harness bricht vor der Funktion an einer veralteten Quellenanzahl ab. Source8 wird nicht installiert. Ein eng geprüfter Headerumbruch und neue Link-/Ressourcenberichte werden als Source9 vorbereitet.
   - [x] 335 aktuelle Quellen privat committed, gepusht und eingefroren; drei Produktanteile und alle Formatänderungen unabhängig geprüft.
@@ -224,14 +224,27 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - Verträge: [resource-matrix-plan.md](parity/resource-matrix-plan.md), [resource-matrix-plan.json](parity/resource-matrix-plan.json), [resource-discovery.md](resource-discovery.md), [resource-contract-v2.md](resource-contract-v2.md), [ROADMAP.md](ROADMAP.md).
   - Gate-Stand: contract_regressions: PASS_V2_WITH_PRESERVED_V1_COMPATIBILITY; resource_products_28: PASS_BOTH_PROFILES; navigation_products_80: PASS_BOTH_PROFILES; response_controls_21: PASS_44_EXECUTIONS; native_request_logs: PASS_BOUNDED_SLICE; api_cli_mcp: PASS_13_GROUPS; redirect_controls_88: PASS_176_PROFILE_EXECUTIONS; workspace_tests_clippy: PASS; exact_commit_ci: PASS; immutable_release: PASS; installed_runtime: PASS_B10; full_feature_acceptance: PARTIAL; actual_browser_ui: PASS_10_NATIVE_CHECKS; ui_mock: PASS_11_SEPARATE_FIXTURES; additional_redirect_boundaries: PASS_24_PROFILE_EXECUTIONS.
 
-- [ ] **Große Sitemap-Berichte beim Blättern beschleunigen** — READ_PATH_REPEATED_FULL_WORK_CONFIRMED_OPTIMIZATION_NOT_IMPLEMENTED. Vorhandener echter Lauf:50.000 Einträge in13,088Sekunden erfasst. Die500 warmen/kalten200erFenster wiederholen volle Katalog-/Reportprüfungen; der gespeicherte Bericht hat59,6MB. Arbeitsmengen sind aus Code und echten Zeilenzahlen abgeleitet, keine gemessenenCPUcounter oder einzelnen Requestlatenzen.
+- [ ] **Große Sitemap-Berichte beim Blättern beschleunigen** — FIRST_TX_LOCAL_PROJECTION_SOURCE_REVIEWED_NOT_EXECUTED. Vorhandener echter Lauf:50.000 Einträge in13,088Sekunden erfasst. Die500 warmen/kalten200erFenster wiederholen volle Katalog-/Reportprüfungen; der gespeicherte Bericht hat59,6MB. Arbeitsmengen sind aus Code und echten Zeilenzahlen abgeleitet, keine gemessenenCPUcounter oder einzelnen Requestlatenzen.
   - [x] Tatsächliche Laufzeitbelege und acht unveränderte Source7/8-Lesepfade geprüft; langsamer Read-only-Abschnitt von Erfassung, Netzwerk und Dateischreibphase getrennt.
+  - [x] Enger3-Dateien-Entwurf mit optionaler2MiB-TX-Projektion für zwei interne JSON-Prüfungen unabhängig quellengeprüft. UTF8-Unsupported fällt auf alte SQL-Pfade zurück; sechs echte SQLite-Testquellen sind geschrieben.
   - [ ] Einzelne echte Requestzeiten und deterministische JSON-/Hash-/Decode-Arbeitszähler erheben.
   - [ ] Zuerst pro bestehendem Read-TX die geprüfte Reportprojektion wiederverwenden; bisherige Fallbacks und Hash-/Stale-/Tail-/Unknown-/Größenprüfungen vollständig erhalten.
   - [ ] Für Amortisierung über Fenster eine ausdrücklich begrenzte Read-Snapshot-Session mit Datei-/Connectionidentität und Mutations-/Idle-/Stop-/Join-Vertrag entwerfen; kein ungesicherter Hashcache auf veränderlicher Datenbank.
   - [ ] Identische50.000-Einträge-/CSV-/Tail-/Wiederöffnungsfälle tatsächlich vor/nach vergleichen; ohne Messung keinen Geschwindigkeitsgewinn behaupten.
-  - Verträge: [index.json](verification/sitemap-read-performance-20261015/index.json).
-  - Gate-Stand: evidence: ACTUAL_PRIOR_TIMESTAMPS_AND_CURRENT_BYTE_EQUAL_READ_SOURCE; implementation: NOT_IMPLEMENTED; performance_gain: NOT_PROVEN; manufacturer_parity: NOT_PROVEN.
+  - Verträge: [index.json](verification/sitemap-read-performance-20261015/index.json), [index.json](verification/next-batch-source-proposals-20261015/index.json).
+  - Gate-Stand: evidence: ACTUAL_PRIOR_TIMESTAMPS_AND_CURRENT_BYTE_EQUAL_READ_SOURCE; implementation: SOURCE_ONLY_REVIEWED_NOT_COMPILED; performance_gain: NOT_PROVEN; manufacturer_parity: NOT_PROVEN.
+
+- [ ] **N-Gramm-Corpus mit vollständigen Quellen und Exporten ausbauen** — SOURCE_ONLY_REVIEWED_NOT_IN_CURRENT_CANDIDATE. Erster Entwurf für gespeicherte1/2/3-Gramme mit globalen Häufigkeiten, Dokumentfrequenz, vollständiger Quellenzuordnung, begrenzten Positionsproben, API/UI/CLI/CSV ist unabhängig quellengeprüft. Neun Tests sind geschrieben, nicht ausgeführt. 4–6-Gramme, weitere Textkanäle und Wortwolke bleiben ausdrücklich offen.
+  - [x] Entwurf und Quellenreview ohne offene Befunde abgeschlossen; Quellen-/Filter-/Snapshotbindung und vollständige versus begrenzte Positionsdaten sind getrennt.
+  - [x] Offizielle N-Gramm-Anleitung gegen tatsächlich gespeicherte Text-, Titel-, Überschriften-, Link- und Bilddaten abgeglichen; fehlende Kanalbeweise einzeln erfasst.
+  - [ ] Auf endgültigen Source9-Parent rebasen, alle neun neuen Fälle kompilieren/ausführen und vollständige native Export-/Crawl-/Wiederöffnungsabnahme durchführen.
+  - [ ] 4-,5-,6-Gramme mit getrennter Fensterkonfiguration und Überlappungs-/Stopwort-/Sprach-/Budgetregressionen ergänzen, bestehende Similarity-Konfiguration erhalten.
+  - [ ] Titel-, Heading- und eingehende Ankerkanäle mit eigener Quellen-/Mehrdeutigkeits-/Vollständigkeitspolitik ergänzen. Zielgebundene Bildlink-Altbeobachtungen brauchen zusätzliche Erfassung.
+  - [ ] Unverlinkten Körpertext erst mit belegter Segmentzugehörigkeit oder aufbewahrtem HTML/DOM rekonstruieren; flache Textnachbarschaften sind kein Beweis.
+  - [ ] Begrenzte nachvollziehbare Wortwolke mit Listen-/Tastaturalternative sowie320/1440-Browserkontrollen ergänzen.
+  - [ ] Große Corpora mit tatsächlichen Arbeitszählern prüfen; vollständige Neuaggregation je Fenster und ausgewählteIdentität O(S*T) gezielt reduzieren.
+  - Verträge: [index.json](verification/next-batch-source-proposals-20261015/index.json), [ADDENDUM.md](verification/next-batch-source-proposals-20261015/ngram/gap/ADDENDUM.md).
+  - Gate-Stand: source_review: NO_FINDINGS_BOUNDED_SOURCE_REVIEW; rust_tests: 9_AUTHORED_NOT_RUN; native: NOT_RUN; manufacturer_parity: NOT_PROVEN.
 
 - [ ] **Teilweise geschriebene Downloadblöcke korrekt melden** — ACTUAL_SOURCE8_WORKSPACE_AND_BODY_TRANSPORT_NATIVE_PASS. Source8 korrigiert den Write-Vertrag: Eine erfolgreiche Schreiboperation meldet die tatsächlich angenommene Präfixlänge; spätere Fehler werden nicht als Nullfortschritt ausgegeben. Drei neue Regressionen und alle bisherigen HTTP-/Abbruchtests bestehen im tatsächlichen Gesamtlauf. Frische native Abnahmen folgen.
   - [x] Produktionscode und tatsächliche vier privaten Exportaufrufer gegen Rusts Write-Vertrag unabhängig gelesen; Bewertung bleibt vom belegten Interrupted-Endlosfehler getrennt.
@@ -1685,7 +1698,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Alle Quellvorkommen mit Dokumentposition und Pfad exportieren.
 
-  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [api](verification/api-e2e.json) (PASS), [ui-live](../web/verification/ui-live-results.json) (PASS).
+  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [api](verification/api-e2e.json) (PASS), [ui-live](../web/verification/ui-live-results.json) (PASS), [combined-workspace-v9-20261015](verification/combined-workspace-v9-20261015/index.json) (PASS_COMBINED_WORKSPACE_V9_REAL_RENDERER_FMT_CLIPPY).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -1697,7 +1710,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
     "status": "partial",
     "acceptance_test": "Export every source occurrence for a broken destination with anchor, rel and location.",
     "remaining_acceptance": [
-      "Add an explicit broken-destination source export including per-occurrence document location/path."
+      "Run actual native saved-crawl separated PageLinks/ResourceLedger API/UI/fullCSV/CLI, real CSS404 sources, unknown/no-grant decisions, stale and cold reopen with zero read-phase website requests."
     ],
     "implementation_evidence": [
       {
@@ -1707,6 +1720,14 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "ui-live"
         ],
         "proves": "Broken-outlink findings identify source pages; all-occurrence links CSV contains source, target, anchor, kind and rel. API/browser exports are tested."
+      },
+      {
+        "verification_run_ids": [
+          "combined-workspace-v9-20261015"
+        ],
+        "proves": "Twenty actual PageLinks/ResourceLedger tests verify per-occurrence sources/positions, separated target scopes, grant revisions, complete transport-set snapshot, same-TX stale checks and full CSV; API/UI and explicit resource CLI are integrated.",
+        "limits": "Actual optimized native public crawl/API/CLI/Browser/cold validation remains pending. Retained page links and private resource decisions have separate scopes; this is not complete vendor provenance parity.",
+        "source_commit": "374229117c6fcc98d942976aa55444517d40524a"
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -2297,7 +2318,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 ### Links und Website-Architektur
 
-11 Einträge: 3 eigene Abnahmen erfüllt, 5 teilweise geprüft, 3 offen.
+11 Einträge: 3 eigene Abnahmen erfüllt, 6 teilweise geprüft, 2 offen.
 
 #### Teilweise vorhanden – Restarbeiten
 
@@ -2465,13 +2486,11 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   </details>
 
-#### Noch offen
-
-- [ ] **Verzeichnis-Hierarchie anzeigen** — Offen; `links.directory_graph`, P2.
+- [ ] **Verzeichnis-Hierarchie anzeigen** — Teilweise geprüft; `links.directory_graph`, P2.
 
   Orientierung: Künstliche Gruppierungspfade von tatsächlich abgerufenen URLs unterscheiden.
 
-  Beweisregister: keine zugeordnete ausgeführte Prüfung.
+  Beweisregister: [combined-workspace-v9-20261015](verification/combined-workspace-v9-20261015/index.json) (PASS_COMBINED_WORKSPACE_V9_REAL_RENDERER_FMT_CLIPPY).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -2480,17 +2499,28 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
   {
     "id": "links.directory_graph",
     "reference_name": "Directory architecture views",
-    "status": "planned",
+    "status": "partial",
     "acceptance_test": "Build directory hierarchy including synthetic grouping paths and label paths that are not fetched URLs.",
     "remaining_acceptance": [
-      "Build directory hierarchy including synthetic grouping paths and label paths that are not fetched URLs."
+      "Run actual compiled directory API/UI/CSV with over200 real saved children, synthetic-group separation, strict stale/cursor handling, multiple widths and cold reopen without new website requests."
     ],
-    "implementation_evidence": [],
+    "implementation_evidence": [
+      {
+        "verification_run_ids": [
+          "combined-workspace-v9-20261015"
+        ],
+        "proves": "Actual11 Core+6 App directory tests verify synthetic groups versus saved requested URLs, path/scheme/origin boundaries, status and renderer-unknown semantics, strict snapshot/cursor/filters and complete CSV. API and UI code is integrated.",
+        "limits": "Fresh same-candidate native UI, complete over200 paging, Website-IO and cold reopen acceptance remain pending.",
+        "source_commit": "374229117c6fcc98d942976aa55444517d40524a"
+      }
+    ],
     "parity_status": "NOT_PROVEN"
   }
   ```
 
   </details>
+
+#### Noch offen
 
 - [ ] **Große Graphen räumlich anzeigen** — Offen; `links.graphs_3d`, P2.
 
@@ -5653,4 +5683,4 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `084486b2784f20869223b654fd82cd73652d88fce9b79ece996fb2f951c39a4f`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T17:18:40.973Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `461c68d86bc238be210fa611feaa4c04240eebdaf9a8f23077060ea1b795b350`. Letzter im Katalog erfasster Beweisstand: `2026-10-15T17:35:46.804Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

@@ -1,0 +1,38 @@
+{
+  "kind": "actual_source9_v6_format_only",
+  "recorded_at": "2026-10-15T17:21:52.502Z",
+  "result": "PASS_FORMAT_COMMAND_ONLY",
+  "actual_close_event": true,
+  "exit": {
+    "code": 0,
+    "signal": null
+  },
+  "pid": 7036,
+  "error": null,
+  "io_errors": [],
+  "streams": {
+    "stdout": {
+      "end": true,
+      "close": true,
+      "bytes": 0
+    },
+    "stderr": {
+      "end": true,
+      "close": true,
+      "bytes": 0
+    }
+  },
+  "elapsed_ms": 3416.2844,
+  "preformat_sha256": "ade29eed3c3be14028e0b099e33e38b9020de394c0b3b6986485a5a4f1d77367",
+  "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "source_inputs": 358,
+  "changed_files": [
+    {
+      "path": "crates/core/src/resource_broken_sources_tests.rs",
+      "before_sha256": "6a311fca2e50589339575ec6c53bdd225eab48a7a74f10c6d0a46b22b05244ec",
+      "after_sha256": "4b183f06a5cb024ead09be24e012c3adec38ee5ee5be6c0d91858acae1d98e11",
+      "bytes": 23915
+    }
+  ],
+  "qualification": "Actual cargo fmt only on isolated E-only Source9 copy; no compiler/tests/native/Root source promotion. Independent formatter review required."
+}

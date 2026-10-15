@@ -1,3 +1,7 @@
+## Aktuell: Quellenberichte und Verzeichnisansicht vollständig im Workspace geprüft (15.10.2026)
+
+Source9 besteht tatsächlich1359 Tests, alle577 Pflichtnamen/581 vollständigen Namen, vier echte Renderer-Gates sowie Format und Clippy. [Rohbelege](verification/combined-workspace-v9-20261015/index.json) und [Bedienung](saved-source-reports.md). Der optimierte Build läuft; praktische native Abnahmen und Installation folgen. Verzeichnishierarchie ist jetzt teilweise belegt. Katalog:31 umgesetzt,69 teilweise,44 geplant. N-Gramm-Corpus und Leseoptimierung sind quellengeprüft für den nächsten Batch; Herstellerparität bleibt offen.
+
 ## Aktuell: Migration praktisch abgenommen, nächste Funktionslücken in Arbeit (15.10.2026)
 
 Source8 besteht1322 Tests und den optimierten Build. Fünf native Bereiche bestehen, darunter der vollständige achtteilige Migrationsworkflow und Originaldateien bis64MiB. Ein echter320Pixel-Überlauf der Hauptkopfzeile verhindert die Installation; der eng geprüfte Umbruch kommt in den nächsten gemeinsamen Stand. Link-/Ressourcenquellen und die Verzeichnisansicht werden parallel vorbereitet. [Rohbelege einschließlich Fehlern](verification/source8-native-checkpoint-1-20261015/index.json). Katalog:31 umgesetzt,68 teilweise,45 geplant; Herstellerparität offen.

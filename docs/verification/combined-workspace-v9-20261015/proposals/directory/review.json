@@ -1,0 +1,251 @@
+{
+  "schema_version": 1,
+  "kind": "directory_architecture_independent_review",
+  "result": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "findings": [],
+  "proposal_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/directory-architecture-proposal-v3/manifest.json",
+    "sha256": "758da9f86d9b98604d0e76ecfc1cd171d78fce14aa90f7441610d711a78e1818",
+    "bytes": 11979
+  },
+  "previous_proposal": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v2\\manifest.json",
+    "sha256": "18b6fa58581b543d517149b946805bbbdc665afaea11582d427277e1e744e3ac",
+    "bytes": 11018
+  },
+  "previous_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-independent-review-v2\\receipt.json",
+    "sha256": "02c378127061ca0a0d2092e9dea6289adf488851be0ee471fc4213e857d117c3",
+    "bytes": 10969
+  },
+  "parent_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v8/manifest.json",
+    "sha256": "58ab1ff000b9ec5ffa005eeab573a0cde3f4af4bb7c9c132b4d85251ea4de720",
+    "bytes": 218312
+  },
+  "parent_source_commit": "e6b1fa2f87d0b39ac7f83aba6cdecc2110de5a50",
+  "revision_derivation": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v3\\REVISION.json",
+    "sha256": "a16717a2d522b3dea1915129946c1af8586f6cb0fb22d9bc4b2c6778332bfce0",
+    "bytes": 5051
+  },
+  "actual_failed_preliminary_compiler": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v9-draft-v4\\actual-preliminary-clippy.json",
+    "sha256": "cb00947e1542fed5e3a7aa1220f407fc01af5f7ad6212e00f0a41d32207c9c96",
+    "bytes": 63770
+  },
+  "files": [
+    {
+      "path": "crates/app/src/server.rs",
+      "change": "modified",
+      "before_sha256": "73ee66bd6b511956b4a8d62d40ae6cca39542db4913c5c58203380f393f40e03",
+      "sha256": "af2072955071f524690449ed148bb0e600c8deb49e2933c40e0a222db58a361a",
+      "bytes": 84762
+    },
+    {
+      "path": "crates/app/src/server/directory_tree.rs",
+      "change": "new",
+      "sha256": "535c996bd1cf8ca6a4fe985b60879498be9ce4ad44a513ae9ed17ae7edde9969",
+      "bytes": 9493
+    },
+    {
+      "path": "crates/app/src/server/directory_tree_tests.rs",
+      "change": "new",
+      "sha256": "2d5ceb512d8c432187d5846b43016a2b73c61e8c234ca7fecbcfa918d1ab26f7",
+      "bytes": 9399
+    },
+    {
+      "path": "crates/core/src/directory_tree.rs",
+      "change": "new",
+      "sha256": "f0792baadbfc0099a2ce3cf2d51593b0f22d0374c96e727326ff6baffcddd938",
+      "bytes": 13256
+    },
+    {
+      "path": "crates/core/src/directory_tree_tests.rs",
+      "change": "new",
+      "sha256": "75c2e3f548539362e267852ebe4c4a36c48f577243a485a05fea31bdf68ebb1a",
+      "bytes": 10611
+    },
+    {
+      "path": "crates/core/src/lib.rs",
+      "change": "modified",
+      "before_sha256": "f900ed53acbe9c041a0da066e41e5363554d66a2830614accd3ec68f0bfbb54e",
+      "sha256": "a54e123386658276b4869914839cef8c2418069bde0aa686f03865e87e4801fb",
+      "bytes": 7019
+    },
+    {
+      "path": "web/directory-tree.css",
+      "change": "new",
+      "sha256": "cbfb771cb87713800a0c8377ea93f4bd73f0e0f58758c06c74f71d62e2a1d676",
+      "bytes": 2209
+    },
+    {
+      "path": "web/directory-tree.html",
+      "change": "new",
+      "sha256": "654be5b6212564ba38b522a4207458256813873e96d9baaa8cc624f527ee9398",
+      "bytes": 2198
+    },
+    {
+      "path": "web/directory-tree.js",
+      "change": "new",
+      "sha256": "660d27a769baeb22fff6c1a7fb074fc1be14fb1462492a74e1fda5df59cbb9bd",
+      "bytes": 8296
+    },
+    {
+      "path": "web/index.html",
+      "change": "modified",
+      "before_sha256": "5d8eb360218f8dc2272118b1959d87631375b1a71077a087ea4fffe4c64e001a",
+      "sha256": "efeb6fc5dd4e4c69e1362ee906fc2e1490d7d1c0decbce2c4d61b8b9bf2d96f9",
+      "bytes": 87762
+    }
+  ],
+  "checks": {
+    "full_forward_inverse_operations": 2,
+    "changed_app_test_paths": 1,
+    "other_payloads_byte_exact": 9,
+    "all_production_byte_exact": true,
+    "authored_test_function_names_unchanged": 17,
+    "existing_csv_helper_byte_exact_sha256": "06398dbe1543be2f663e6d083c20ca99d20f46f63df696f057217f7a8a79ab0c",
+    "no_cargo_dependency_change": true,
+    "old_length_sha_eof_website_trap_full_row_and_leaf_assertions_preserved": true,
+    "new_control_cases": "Quoted comma, doubled quote, embedded CRLF and empty fields; explicit23-column header."
+  },
+  "source_pins": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/directory-architecture-proposal-v3/manifest.json",
+      "sha256": "758da9f86d9b98604d0e76ecfc1cd171d78fce14aa90f7441610d711a78e1818",
+      "bytes": 11979
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v3\\REVISION.json",
+      "sha256": "a16717a2d522b3dea1915129946c1af8586f6cb0fb22d9bc4b2c6778332bfce0",
+      "bytes": 5051
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v2\\manifest.json",
+      "sha256": "18b6fa58581b543d517149b946805bbbdc665afaea11582d427277e1e744e3ac",
+      "bytes": 11018
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-independent-review-v2\\receipt.json",
+      "sha256": "02c378127061ca0a0d2092e9dea6289adf488851be0ee471fc4213e857d117c3",
+      "bytes": 10969
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v9-draft-v4\\actual-preliminary-clippy.json",
+      "sha256": "cb00947e1542fed5e3a7aa1220f407fc01af5f7ad6212e00f0a41d32207c9c96",
+      "bytes": 63770
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v9-draft-v4\\actual-preliminary-clippy.log",
+      "sha256": "9ebb34d7a752c7f748cbcbc40750eb66117c85a2ea94cc9ae5795aca955ec669",
+      "bytes": 949
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v2\\source\\crates\\app\\src\\server.rs",
+      "sha256": "af2072955071f524690449ed148bb0e600c8deb49e2933c40e0a222db58a361a",
+      "bytes": 84762
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v3\\source\\crates\\app\\src\\server.rs",
+      "sha256": "af2072955071f524690449ed148bb0e600c8deb49e2933c40e0a222db58a361a",
+      "bytes": 84762
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v2\\source\\crates\\app\\src\\server\\directory_tree.rs",
+      "sha256": "535c996bd1cf8ca6a4fe985b60879498be9ce4ad44a513ae9ed17ae7edde9969",
+      "bytes": 9493
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v3\\source\\crates\\app\\src\\server\\directory_tree.rs",
+      "sha256": "535c996bd1cf8ca6a4fe985b60879498be9ce4ad44a513ae9ed17ae7edde9969",
+      "bytes": 9493
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v2\\source\\crates\\app\\src\\server\\directory_tree_tests.rs",
+      "sha256": "46e418a632c7d8a81c7e001055656b3b0b03e41591ba4ec7caa0231b8a6b4fe1",
+      "bytes": 8087
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v3\\source\\crates\\app\\src\\server\\directory_tree_tests.rs",
+      "sha256": "2d5ceb512d8c432187d5846b43016a2b73c61e8c234ca7fecbcfa918d1ab26f7",
+      "bytes": 9399
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v2\\source\\crates\\core\\src\\directory_tree.rs",
+      "sha256": "f0792baadbfc0099a2ce3cf2d51593b0f22d0374c96e727326ff6baffcddd938",
+      "bytes": 13256
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v3\\source\\crates\\core\\src\\directory_tree.rs",
+      "sha256": "f0792baadbfc0099a2ce3cf2d51593b0f22d0374c96e727326ff6baffcddd938",
+      "bytes": 13256
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v2\\source\\crates\\core\\src\\directory_tree_tests.rs",
+      "sha256": "75c2e3f548539362e267852ebe4c4a36c48f577243a485a05fea31bdf68ebb1a",
+      "bytes": 10611
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v3\\source\\crates\\core\\src\\directory_tree_tests.rs",
+      "sha256": "75c2e3f548539362e267852ebe4c4a36c48f577243a485a05fea31bdf68ebb1a",
+      "bytes": 10611
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v2\\source\\crates\\core\\src\\lib.rs",
+      "sha256": "a54e123386658276b4869914839cef8c2418069bde0aa686f03865e87e4801fb",
+      "bytes": 7019
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v3\\source\\crates\\core\\src\\lib.rs",
+      "sha256": "a54e123386658276b4869914839cef8c2418069bde0aa686f03865e87e4801fb",
+      "bytes": 7019
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v2\\source\\web\\directory-tree.css",
+      "sha256": "cbfb771cb87713800a0c8377ea93f4bd73f0e0f58758c06c74f71d62e2a1d676",
+      "bytes": 2209
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v3\\source\\web\\directory-tree.css",
+      "sha256": "cbfb771cb87713800a0c8377ea93f4bd73f0e0f58758c06c74f71d62e2a1d676",
+      "bytes": 2209
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v2\\source\\web\\directory-tree.html",
+      "sha256": "654be5b6212564ba38b522a4207458256813873e96d9baaa8cc624f527ee9398",
+      "bytes": 2198
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v3\\source\\web\\directory-tree.html",
+      "sha256": "654be5b6212564ba38b522a4207458256813873e96d9baaa8cc624f527ee9398",
+      "bytes": 2198
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v2\\source\\web\\directory-tree.js",
+      "sha256": "660d27a769baeb22fff6c1a7fb074fc1be14fb1462492a74e1fda5df59cbb9bd",
+      "bytes": 8296
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v3\\source\\web\\directory-tree.js",
+      "sha256": "660d27a769baeb22fff6c1a7fb074fc1be14fb1462492a74e1fda5df59cbb9bd",
+      "bytes": 8296
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v2\\source\\web\\index.html",
+      "sha256": "efeb6fc5dd4e4c69e1362ee906fc2e1490d7d1c0decbce2c4d61b8b9bf2d96f9",
+      "bytes": 87762
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\directory-architecture-proposal-v3\\source\\web\\index.html",
+      "sha256": "efeb6fc5dd4e4c69e1362ee906fc2e1490d7d1c0decbce2c4d61b8b9bf2d96f9",
+      "bytes": 87762
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v8\\crates\\app\\src\\server\\sitemaps_tests.rs",
+      "sha256": "1f147b924be41e2529e61a337f6ed049d6e63554b0c831639b7b79b6c1b98724",
+      "bytes": 16143
+    }
+  ],
+  "qualification": "Enger Quellenreview der durch den tatsächlichen PrelimClippyFAIL ausgelösten App-Testreparatur. Der vorhandene unabhängige Testdecoder ersetzt ausschließlich die im App-Crate nicht verfügbare csv::Reader-Nutzung; keine Produktfunktion oder Assertion wird entfernt. Der frühere vollständige Quellenreview hatte diese fehlende Direktdependency nicht erkannt. FAILcb009 und frühere Belege bleiben erhalten. Kein Compiler-/Formatter-/Rusttest-/HTTP-/Browser-/Native-/Root-/Git-Lauf durch Reviewer; erneute Root-Kompilierung weiterhin erforderlich."
+}

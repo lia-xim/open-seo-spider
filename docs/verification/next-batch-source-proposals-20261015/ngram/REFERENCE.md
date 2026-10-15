@@ -1,0 +1,3 @@
+# Official requirement boundary
+
+Checked2026-10-15: [Screaming Frog: How To Use N-Grams](https://www.screamingfrog.co.uk/seo-spider/tutorials/how-to-use-n-grams/). The current official page describes aggregating selected pages,1–6-word filters, frequency/context columns, URL membership and separate bulk exports. This own slice addresses grouped saved-text counts and URL exports with the already shipped1/2/3-word token engine. It does not implement full stored HTML reselection,4–6-grams, headings/title/unlinked/inlink/alt channels, word cloud, regex queries or reference tokenization. Feature metadata.ngrams remains partial until actual own acceptance and separately tracked remaining requirements.

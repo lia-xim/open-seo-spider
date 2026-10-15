@@ -1,0 +1,44 @@
+{
+  "kind": "source9_header_actions_wrap_proposal",
+  "status": "SOURCE_ONLY_ALL_WIDTHS_WRAP_PENDING_REVIEW_AND_BROWSER",
+  "parent_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v8/manifest.json",
+    "sha256": "58ab1ff000b9ec5ffa005eeab573a0cde3f4af4bb7c9c132b4d85251ea4de720"
+  },
+  "previous_proposal": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source9-header-wrap-proposal-v1/manifest.json",
+    "sha256": "5aee611c20b85a1fc6c85147c04da10d28f0f06a58d2860a4b9849a5d3945885"
+  },
+  "previous_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source9-header-wrap-independent-review-v1/receipt.json",
+    "sha256": "17634d567f0fc25066e23154eaaa65cb3ff92eafe0cc349c64dd92307a9005c5"
+  },
+  "reason": "Directory adds another header action. Restricting wrap to560 does not protect intermediate widths. Use normal flex wrapping at every width and retain existing76/67/64px minimum heights; no clipping or hidden controls.",
+  "files": [
+    {
+      "path": "web/styles.css",
+      "before_sha256": "227db0a9628569b41c5707fdb93f383d31f5e1d5b862d581184f4ae92464e34b",
+      "after_sha256": "72cb03daecb5754d295e801be78c328a37f5e2d856aabde62f606975035859f5",
+      "after_bytes": 42268
+    }
+  ],
+  "operation": {
+    "kind": "append",
+    "parent_bytes": 41831,
+    "added_base64": "Ci8qIEhlYWRlciBhY3Rpb25zIGtlZXAgdGhlaXIgY29udHJvbHMgdmlzaWJsZSB3aGlsZSB3cmFwcGluZyBhdCBldmVyeSB3aWR0aC4gKi8KLnRvcGJhcntoZWlnaHQ6YXV0bzttaW4taGVpZ2h0Ojc2cHg7ZmxleC13cmFwOndyYXA7cGFkZGluZy1ibG9jazoxMnB4fQoudG9wYmFyLXJpZ2h0e21pbi13aWR0aDowO21heC13aWR0aDoxMDAlO2ZsZXgtd3JhcDp3cmFwO2p1c3RpZnktY29udGVudDpmbGV4LWVuZDttYXJnaW4tbGVmdDphdXRvfQoudG9wYmFyLXJpZ2h0IC50ZXh0LWJ1dHRvbnt3aGl0ZS1zcGFjZTpub3JtYWx9Ci50b3BiYXItcmlnaHQgLmNvbm5lY3Rpb257bWluLXdpZHRoOjB9CkBtZWRpYShtYXgtd2lkdGg6ODUwcHgpey50b3BiYXJ7bWluLWhlaWdodDo2N3B4fX0KQG1lZGlhKG1heC13aWR0aDo1NjBweCl7LnRvcGJhcnttaW4taGVpZ2h0OjY0cHh9fQo="
+  },
+  "actual_failure": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-findings-browser-native-optimized-v8/proof.json",
+    "sha256": "2126a5ade87149da156be1c2ed0b3213a182de8610f114245a6dd1afbbb5046a"
+  },
+  "historical_diagnostic": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source8-findings-overflow-diagnostic-v2/proof.json",
+    "sha256": "0a82e424d1808e4c893de73337fd4f9fb055db1df916d7a4706a6c3d82a6fa09"
+  },
+  "historical_560_only_css_preview": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source8-findings-overflow-diagnostic-v3-css-preview/proof.json",
+    "sha256": "97bbe9e12bfcd06655e7db512bc0d05dbd20514c00c5de3baa032dc3f389037b"
+  },
+  "actual_all_widths_browser": null,
+  "qualification": "No product/native/installation acceptance; actual browser must test composed Directory+Resource links at320,560,561,600,768,850,1440 widths."
+}
