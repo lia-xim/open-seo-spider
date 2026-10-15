@@ -1,0 +1,56 @@
+{
+  "kind": "actual_source11_format_only",
+  "recorded_at": "2026-10-15T19:43:33.365Z",
+  "result": "PASS_FORMAT_COMMAND_ONLY",
+  "actual_close_event": true,
+  "exit": {
+    "code": 0,
+    "signal": null
+  },
+  "pid": 21416,
+  "error": null,
+  "io_errors": [],
+  "streams": {
+    "stdout": {
+      "end": true,
+      "close": true,
+      "bytes": 0
+    },
+    "stderr": {
+      "end": true,
+      "close": true,
+      "bytes": 0
+    }
+  },
+  "elapsed_ms": 3474.5403,
+  "preformat_sha256": "bc644f498902eb1c274738a1b0cc92db0552726dbfdb4c2502686fc736af7767",
+  "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "source_inputs": 369,
+  "changed_files": [
+    {
+      "path": "crates/app/src/server/ngram_corpus.rs",
+      "before_sha256": "b57cd4676ab6c1524319f46a82debbf0217bceb4796237df31b92fc790bf2578",
+      "after_sha256": "7ca28a3e0ebbcff0097a857bca9ff0a9df08d61f4f2516cb7aaca6386c64e2cd",
+      "bytes": 4555
+    },
+    {
+      "path": "crates/app/src/server/resource_broken_sources.rs",
+      "before_sha256": "8a44a01b17cf31b7f7ec038e3a560372bfc578ad5135e8875ac3a25f79c6ba62",
+      "after_sha256": "cb9c89db987734ee61b496fff1f6a3bac79c7f21bcd2abf84b47d4ddb7b3cba2",
+      "bytes": 7831
+    },
+    {
+      "path": "crates/app/src/server/response_stream.rs",
+      "before_sha256": "8776e0b48d90d54dafa1ab4f58a5d86df3d340771db99f7b1d3d9f525e00988e",
+      "after_sha256": "4f0d2f02d95a9c6c5139e1a46a65b809086540c49c493ea674a6acb8a7659960",
+      "bytes": 29430
+    },
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "before_sha256": "28115c1955032c858e7773bad4379f1695d49e4c35edf1689c504277162e71f1",
+      "after_sha256": "8951fadc8822df8cbc2ad86ac3b28df0d8dba07949fb651420f11071ea4bdfa3",
+      "bytes": 45856
+    }
+  ],
+  "qualification": "Actual cargo fmt only on isolated E-only Source11 copy; no compiler/tests/native/Root source promotion. Independent formatter review required."
+}

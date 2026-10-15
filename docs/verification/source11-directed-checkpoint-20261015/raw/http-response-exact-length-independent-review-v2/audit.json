@@ -1,0 +1,120 @@
+{
+  "proposal_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-exact-length-proposal-v2\\manifest.json",
+    "sha256": "1406b897e3b45deb8d0575215b882345de1a66a8d7657556b7ba191c0003c08e",
+    "bytes": 4781
+  },
+  "whole_forward_inverse_operations": 5,
+  "files": [
+    {
+      "path": "crates/app/src/server/ngram_corpus.rs",
+      "operations": 1,
+      "before": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v10\\crates\\app\\src\\server\\ngram_corpus.rs",
+        "sha256": "f4b1fa83ce1176f81fed7dc88c692cf0894a969bb4a5258f4d97c410483e57e0",
+        "bytes": 4492
+      },
+      "after": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-exact-length-proposal-v2\\source\\crates\\app\\src\\server\\ngram_corpus.rs",
+        "sha256": "b57cd4676ab6c1524319f46a82debbf0217bceb4796237df31b92fc790bf2578",
+        "bytes": 4528
+      }
+    },
+    {
+      "path": "crates/app/src/server/resource_broken_sources.rs",
+      "operations": 1,
+      "before": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v10\\crates\\app\\src\\server\\resource_broken_sources.rs",
+        "sha256": "9c82f838606b5e98b27d768f88c49b4f8392590966a48e14142cc919222a04bf",
+        "bytes": 7768
+      },
+      "after": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-exact-length-proposal-v2\\source\\crates\\app\\src\\server\\resource_broken_sources.rs",
+        "sha256": "8a44a01b17cf31b7f7ec038e3a560372bfc578ad5135e8875ac3a25f79c6ba62",
+        "bytes": 7804
+      }
+    },
+    {
+      "path": "crates/app/src/server/response_stream.rs",
+      "operations": 2,
+      "before": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v10\\crates\\app\\src\\server\\response_stream.rs",
+        "sha256": "ec2656dbbaa7be0dd51c1e03fbb691535e74c748c0c342b126a81e39afe91a48",
+        "bytes": 23482
+      },
+      "after": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-exact-length-proposal-v2\\source\\crates\\app\\src\\server\\response_stream.rs",
+        "sha256": "8776e0b48d90d54dafa1ab4f58a5d86df3d340771db99f7b1d3d9f525e00988e",
+        "bytes": 29429
+      }
+    },
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "operations": 1,
+      "before": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v10\\crates\\app\\src\\server\\response_stream_tests.rs",
+        "sha256": "44fcf097d00e9e6b97d8618b91b36198dcb560fee868ce7ba712c356f6d69b6b",
+        "bytes": 32642
+      },
+      "after": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-exact-length-proposal-v2\\source\\crates\\app\\src\\server\\response_stream_tests.rs",
+        "sha256": "47b5e70b9b25fd8e5c2ccf6394caa1a9ecda3a1ec5cfa36599b799c0fd8b054e",
+        "bytes": 43361
+      }
+    }
+  ],
+  "unchanged_unknown_length_regions": [
+    {
+      "label": "unknown ready",
+      "bytes": 1023,
+      "sha256": "755351c744c535909a632e63777d59dfb7ae9bb3291b725bf2015f67b431d0de",
+      "exact": true
+    },
+    {
+      "label": "unknown BodyStream + Drop",
+      "bytes": 2535,
+      "sha256": "434e3b2596c1042f635312344724cf690ad401dd4f5c032f2aaf8b48e7b5c74c",
+      "exact": true
+    }
+  ],
+  "unchanged_old_test_bytes": 32642,
+  "unchanged_old_test_functions": 16,
+  "new_tests": [
+    "response_exact_length_commits_joined_final_frame_without_a_following_eof_poll",
+    "response_exact_length_holds_only_final_frame_and_rejects_late_error_panic_and_cancel",
+    "response_exact_length_zero_waits_before_headers_and_short_extra_producers_never_deadlock",
+    "response_exact_length_real_hyper_http1_commits_nonzero_and_unpolled_zero_bodies"
+  ],
+  "absolute_reference_occurrences": 13,
+  "unique_reference_files": 11,
+  "all_reference_hashes_and_lengths_exact": true,
+  "app_cargo": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v10\\crates\\app\\Cargo.toml",
+    "sha256": "3e020b4dbdc949435cf1dbbd8190db073eacff8d385996dacb5e9829eb7482b5",
+    "bytes": 1069
+  },
+  "production_source_reviewed": [
+    "ready_with_length metadata/error/drop ownership and nonzero attachment",
+    "Known zero actively rejects first extra byte before headers, waits closed empty receiver and actual joined success",
+    "Only final positive bounded chunk held; unknown ready and BodyStream unchanged",
+    "Short/extra/late error/panic/missing completion/cancel error paths never release a complete declared-length body",
+    "Complete commit atomic under Control state before last chunk handoff; Response supervisor ownership unchanged"
+  ],
+  "test_source_reviewed": [
+    "Exact-length stop without EOF poll over five positive lengths",
+    "Held producer late success/domainerror/panic/cancel and non-final progress",
+    "Held known-zero plus bad zero >8 chunks, empty-error, short and extra",
+    "Actual TCP Hyper HTTP1 0/1/65553 intended positive; unavailable crate paths require source correction"
+  ],
+  "test_qualification": "The held final-frame and zero-ready negative checks use spawned futures plus a 30ms timeout rather than an explicit first-Pending-poll marker. Their worker gate is real. A direct poll/entry marker would make that narrow suspension assertion deterministic; this is recorded as a review recommendation, not an additional production finding.",
+  "execution": {
+    "target_imports": 0,
+    "compiler": 0,
+    "rust_tests": 0,
+    "fixtures": 0,
+    "http": 0,
+    "native": 0,
+    "root_writes": 0,
+    "git": 0
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "actual_parent": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v10/manifest.json",
+    "sha256": "12b238c43bd504b71e4948a8e11d4622f34589a35290ca8ef923b833464206c7",
+    "bytes": 341108
+  },
+  "actual_minimal_failure": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source10-known-length-registry-diagnostic-v1/proof.json",
+    "sha256": "ae2719aca8fd29ce12d520cf1945bf09a0d130812cd306b2b2486b30f10b91bd",
+    "bytes": 3313
+  },
+  "actual_resource_r3_failure": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/resource-directory-workflow-native-v10-r3/proof.json",
+    "sha256": "c71a56c2bc271f99987492c39b87a2389c81913d7910807008ccf11191828c0b",
+    "bytes": 1009295
+  },
+  "independent_trace": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/response-exact-length-source-trace-v1/evidence.json",
+    "sha256": "6e938b4889416d59b35ee002ff842f7b9104d2d0e89a6443c8256d24b7098231",
+    "bytes": 6541
+  },
+  "primary_locked_dependency_files": [
+    {
+      "path": "C:/Users/matth/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/hyper-1.12.0/src/proto/h1/dispatch.rs",
+      "sha256": "9cd6638c59ae4857ae43ee58857abf585cc6a52dfda616c3631e2e48c02eaba2",
+      "bytes": 33012
+    },
+    {
+      "path": "C:/Users/matth/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/hyper-1.12.0/src/proto/h1/conn.rs",
+      "sha256": "59a6db81bd098c126d7929e1996a3a6bf9d6e997da76b47d88178fd8206ad44a",
+      "bytes": 50812
+    },
+    {
+      "path": "C:/Users/matth/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/hyper-1.12.0/src/proto/h1/encode.rs",
+      "sha256": "eec0acd88ff2a10b3d981417b2c6daf2aef7828a9197d1b16e632a21059bf136",
+      "bytes": 21963
+    },
+    {
+      "path": "C:/Users/matth/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/axum-core-0.5.6/src/body.rs",
+      "sha256": "a737b8441863a95a84fbd91a02c5711121d029ef24e7890f2fcbafc30c60a0f8",
+      "bytes": 5715
+    }
+  ],
+  "cause": "Hyper exact Content-Length reaches encoder0 and drops its body without another poll; original BodyStream committed Complete only on next receiverNone+joined poll. Last data frame therefore needs actual joined producer success before release.",
+  "control": "A complete client CSV/SHA is not by itself a registry worker/supervisor success; no Drop-to-Complete or remaining0 shortcut is used."
+}

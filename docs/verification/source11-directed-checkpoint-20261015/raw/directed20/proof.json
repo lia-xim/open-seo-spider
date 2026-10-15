@@ -1,0 +1,47 @@
+{
+  "kind": "source11_actual_response_stream_tests_only",
+  "recorded_at": "2026-10-15T19:46:56.579Z",
+  "result": "PASS_20_RESPONSE_STREAM_TEST_NAMES_ONLY",
+  "source_directory": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v11-draft-v1/source",
+  "source_inputs": 369,
+  "preformat_sha256": "bc644f498902eb1c274738a1b0cc92db0552726dbfdb4c2502686fc736af7767",
+  "preliminary_clippy_sha256": "6e5aff5e6fe01c6fdb25bacbcd1a48fd908820132cf4d80eb0b359f7a584c26c",
+  "runs": [
+    {
+      "filter": "server::response_stream::tests",
+      "args": [
+        "test",
+        "-p",
+        "open-seo-spider",
+        "--locked",
+        "server::response_stream::tests",
+        "--",
+        "--include-ignored",
+        "--test-threads=1"
+      ],
+      "pid": 23284,
+      "actual_close_event": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "spawn_error": null,
+      "elapsed_ms": 156241.5207,
+      "log_sha256": "59a7def3a7ba6a1d8b70b54d1d60bf0a142ff6ffef870c797a968d617fdb949e",
+      "log_bytes": 3165,
+      "summaries": [
+        {
+          "state": "ok",
+          "passed": 20,
+          "failed": 0,
+          "ignored": 0
+        }
+      ]
+    }
+  ],
+  "old_names_verified": 16,
+  "new_names_verified": 4,
+  "failures": [],
+  "source_final_verified": true,
+  "qualification": "Directed isolated old and new response lifecycle tests with genuine local HTTP. No full workspace/renderer, product publication, optimized build, native browser or installation proof."
+}

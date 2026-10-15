@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "kind": "http_response_exact_length_independent_review",
+  "result": "FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "recorded_at": "2026-10-15T19:38:40.614Z",
+  "proposal_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-exact-length-proposal-v2\\manifest.json",
+    "sha256": "1406b897e3b45deb8d0575215b882345de1a66a8d7657556b7ba191c0003c08e",
+    "bytes": 4781
+  },
+  "findings": [
+    {
+      "id": "RESPONSE-EXACT-LENGTH-01",
+      "priority": 1,
+      "title": "New App tests name two undeclared direct crates",
+      "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-exact-length-proposal-v2\\source\\crates\\app\\src\\server\\response_stream_tests.rs",
+      "line": 966,
+      "description": "The four new tests directly name http_body_util and hyper, but actual immutable App/Cargo.toml declares neither crate. Only hyper-util is a direct App dependency. Cargo.lock/transitive dependency presence does not introduce those extern-crate names into this target, so the requested all-target compilation cannot resolve these new paths.",
+      "required_change": "Use direct existing Axum Body::into_data_stream plus futures::StreamExt for exact data-item consumption, and existing hyper_util connection Builder/TowerToHyperService with an Axum Router for genuine HTTP1; preserve all four named behaviors and old test prefix. A fresh revision is required; do not edit V2."
+    }
+  ],
+  "audit": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-exact-length-independent-review-v2\\audit.json",
+    "sha256": "ff46c463f034149ebbd78d676ac41a0b4270fee7e9084fe489395ff76e049a54",
+    "bytes": 5658
+  },
+  "scope": "Full new production and authored four-test review plus exact independent parent Source10 lineage; unknown stream and all old tests retained byte-exact.",
+  "source_conclusion": "No additional concrete production defect found in the new exact-length state machine. Current V2 is not approved because the newly authored App test crate paths cannot resolve under the actual manifest.",
+  "qualification": "Source-only. Actual Root minimal ae2719 and Native R3 c71a remain pre-fix failure evidence, not a test run of this new API. No target imports, Cargo, Rust tests, network/browser/native, Root or Git action.",
+  "execution": {
+    "target_imports": 0,
+    "compiler": 0,
+    "rust_tests": 0,
+    "fixtures": 0,
+    "http": 0,
+    "native": 0,
+    "root_writes": 0,
+    "git": 0
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "kind": "actual_source11_suite_preflight_path_failure",
+  "recorded_at": "2026-10-15T19:52:18.114Z",
+  "result": "FAILED_BEFORE_SUITE_DIRECTORY_IMPORT_FIXTURE_OR_CARGO",
+  "actual_suite_process_exit": 1,
+  "old_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v11/manifest.json",
+    "sha256": "57636a7c8ea3279cc451c2b28920654706be829aae18369bb31d7bcd06ef7645",
+    "bytes": 505224
+  },
+  "message": "Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    all_required_full_test_names: [\n      'broken_sources::tests::broken_sources_caps_reject_rows_and_ambiguous_selected_join_expansion_without_truncation',\n      'broken_sources::tests::broken_sources_csv_exports_every_filtered_occurrence_formula_safe_exact_utf8_and_refuses_overcap',\n      'broken_sources::tests::broken_sources_cursor_and_export_require_exact_snapshot_filter_generation_and_page_limit',\n...\n    ],\n+   source_worktree: 'E:/CodexWork/open-seo-spider-01a12ac3-20261013/mcp-file-tools-v1',\n-   source_worktree: 'E:\\\\CodexWork\\\\open-seo-spider-01a12ac3-20261013\\\\mcp-file-tools-v1',\n    test_profile: {\n      debug_assertions: true,\n      debug_info: 0,\n      environment: {\n        CARGO_PROFILE_DEV_DEBUG: '0',\n",
+  "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    all_required_full_test_names: [\n      'broken_sources::tests::broken_sources_caps_reject_rows_and_ambiguous_selected_join_expansion_without_truncation',\n      'broken_sources::tests::broken_sources_csv_exports_every_filtered_occurrence_formula_safe_exact_utf8_and_refuses_overcap',\n      'broken_sources::tests::broken_sources_cursor_and_export_require_exact_snapshot_filter_generation_and_page_limit',\n...\n    ],\n+   source_worktree: 'E:/CodexWork/open-seo-spider-01a12ac3-20261013/mcp-file-tools-v1',\n-   source_worktree: 'E:\\\\CodexWork\\\\open-seo-spider-01a12ac3-20261013\\\\mcp-file-tools-v1',\n    test_profile: {\n      debug_assertions: true,\n      debug_info: 0,\n      environment: {\n        CARGO_PROFILE_DEV_DEBUG: '0',\n\n    at validateSource11Manifest (file:///C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/validate-combined-source-v11-r2.mjs:309:52)\n    at file:///C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/refreeze-source11-native-path-v2.mjs:7:22",
+  "actual_source_worktree": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/mcp-file-tools-v1",
+  "expected_source_worktree": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1",
+  "only_manifest_difference": "source_worktree",
+  "source_inputs": 369,
+  "actual_tests": 0,
+  "actual_compiler": 0,
+  "original_installed_runtime_contacted": false
+}

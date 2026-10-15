@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "kind": "http_response_exact_length_source_proposal_v3",
+  "status": "AUTHORED_NOT_RUN_REQUIRES_INDEPENDENT_REVIEW",
+  "parent_source_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v10/manifest.json",
+    "sha256": "12b238c43bd504b71e4948a8e11d4622f34589a35290ca8ef923b833464206c7",
+    "bytes": 341108
+  },
+  "parent_source_commit": "c6bd9c50a0dfcfb434a7747a2052aab961d00ef7",
+  "source_payload_directory": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-response-exact-length-proposal-v3/source",
+  "files": [
+    {
+      "path": "crates/app/src/server/ngram_corpus.rs",
+      "before_sha256": "f4b1fa83ce1176f81fed7dc88c692cf0894a969bb4a5258f4d97c410483e57e0",
+      "before_bytes": 4492,
+      "after_sha256": "b57cd4676ab6c1524319f46a82debbf0217bceb4796237df31b92fc790bf2578",
+      "bytes": 4528
+    },
+    {
+      "path": "crates/app/src/server/resource_broken_sources.rs",
+      "before_sha256": "9c82f838606b5e98b27d768f88c49b4f8392590966a48e14142cc919222a04bf",
+      "before_bytes": 7768,
+      "after_sha256": "8a44a01b17cf31b7f7ec038e3a560372bfc578ad5135e8875ac3a25f79c6ba62",
+      "bytes": 7804
+    },
+    {
+      "path": "crates/app/src/server/response_stream.rs",
+      "before_sha256": "ec2656dbbaa7be0dd51c1e03fbb691535e74c748c0c342b126a81e39afe91a48",
+      "before_bytes": 23482,
+      "after_sha256": "8776e0b48d90d54dafa1ab4f58a5d86df3d340771db99f7b1d3d9f525e00988e",
+      "bytes": 29429
+    },
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "before_sha256": "44fcf097d00e9e6b97d8618b91b36198dcb560fee868ce7ba712c356f6d69b6b",
+      "before_bytes": 32642,
+      "after_sha256": "28115c1955032c858e7773bad4379f1695d49e4c35edf1689c504277162e71f1",
+      "bytes": 43448
+    }
+  ],
+  "owned_paths": [
+    "crates/app/src/server/ngram_corpus.rs",
+    "crates/app/src/server/resource_broken_sources.rs",
+    "crates/app/src/server/response_stream.rs",
+    "crates/app/src/server/response_stream_tests.rs"
+  ],
+  "new_input_files": 0,
+  "derivation": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-response-exact-length-proposal-v3/DERIVATION.json",
+    "sha256": "cbd16a83bb7b517a31b841a3c54693ab919e0d29759a57a4c92059e2e6e89601",
+    "bytes": 27558
+  },
+  "evidence": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-response-exact-length-proposal-v3/SOURCE-EVIDENCE.json",
+    "sha256": "7b3951b818762188df2a47699e93413dae50e22f51a46c881cdc38c15bbc7ff2",
+    "bytes": 2392
+  },
+  "handoff": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/http-response-exact-length-proposal-v3/HANDOFF.md",
+    "sha256": "83203f43fc5059b945d79bc7160f8ad8f2807f0c450843d62830232775b19b93",
+    "bytes": 3717
+  },
+  "new_authored_tests": [
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "names": [
+        "response_exact_length_commits_joined_final_frame_without_a_following_eof_poll",
+        "response_exact_length_holds_only_final_frame_and_rejects_late_error_panic_and_cancel",
+        "response_exact_length_zero_waits_before_headers_and_short_extra_producers_never_deadlock",
+        "response_exact_length_real_hyper_http1_commits_nonzero_and_unpolled_zero_bodies"
+      ]
+    }
+  ],
+  "new_authored_full_test_names": [
+    "server::response_stream::tests::response_exact_length_commits_joined_final_frame_without_a_following_eof_poll",
+    "server::response_stream::tests::response_exact_length_holds_only_final_frame_and_rejects_late_error_panic_and_cancel",
+    "server::response_stream::tests::response_exact_length_zero_waits_before_headers_and_short_extra_producers_never_deadlock",
+    "server::response_stream::tests::response_exact_length_real_hyper_http1_commits_nonzero_and_unpolled_zero_bodies"
+  ],
+  "new_windows_test_count": 4,
+  "all_old_test_bytes_exact": true,
+  "unchanged_unknown_length_regions": [
+    {
+      "path": "crates/app/src/server/response_stream.rs",
+      "label": "original unknown ready",
+      "bytes": 1026,
+      "sha256": "25fba88fac77ce8e5b70b26f22bf08a9eb8c093fefff17d03823d05e452eabc6",
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/server/response_stream.rs",
+      "label": "original unknown Stream+Drop",
+      "bytes": 2535,
+      "sha256": "434e3b2596c1042f635312344724cf690ad401dd4f5c032f2aaf8b48e7b5c74c",
+      "exact": true
+    }
+  ],
+  "forecast_with_css": {
+    "source_inputs": 369,
+    "changed_parent_inputs": 5,
+    "unchanged_parent_inputs": 364,
+    "new_input_files": 0,
+    "new_rust_names": 4,
+    "required_names": 602,
+    "all_full_names": 606,
+    "minimum_workspace_tests": 1384
+  },
+  "actual_tests": null,
+  "actual_compiler": null,
+  "actual_native": null,
+  "compiler_runtime_root_git_actions": 0
+}

@@ -6485,8 +6485,41 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-15T19:32:13.447Z",
+  "last_verified_at": "2026-10-15T19:59:23.800Z",
   "current_work": [
+    {
+      "id": "combined-source-v11-20261015",
+      "priority": 0,
+      "title_de": "Export-Abschlüsse und schmale Einstellungsdialoge korrigieren",
+      "status": "PASS20_DIRECTED_FULL_SUITE_RUNNING",
+      "summary_de": "Source11 korrigiert den in Source10 tatsächlich gefundenen Content-Length-Abschlussfehler und den überlaufenden Einstellungsdialog. Alle 16 bisherigen und vier neuen Exporttests bestehen, einschließlich echter HTTP-Antworten. Komposition, Format und Clippy sind geprüft; fünf Dateien sind unter 61b0e3b privat versioniert. Die vollständige Suite läuft am neuen 369-Dateien-Stand. Optimierter Build, praktische Abnahmen, kalte Wiederöffnung und Installation sind noch offen.",
+      "completed_acceptance_de": [
+        "Fünf bestehende Dateien aus zwei unabhängig geprüften Vorschlägen integriert; 364 weitere Quellinputs, Cargo-Konfiguration und Lockdatei unverändert.",
+        "Tatsächlich 20 Exporttests bestanden: 16 bestehende und vier neue Namen, null Fehler und null ignorierte Fälle. Die Regressionen decken den letzten Frame ohne weitere EOF-Abfrage, echte HTTP-Antworten, leere/verkürzte/zu lange Ausgaben sowie späte Fehler, Panik und Abbruch ab.",
+        "Tatsächlicher All-Targets-Clippy-Abschluss mit Code 0 und abschließend unveränderten 369 Quellhashes. Unabhängige Kompositions- und Formatprüfung ohne offene Befunde.",
+        "Private Veröffentlichung mit exakten 369 Git-Blob- und Arbeitsdatei-Hashes. Erster Startfehler wegen Windows-Pfadschreibweise ist vor der Suite erhalten und im neuen Freeze ohne Produktänderung korrigiert."
+      ],
+      "pending_acceptance_de": [
+        "Vollständige Suite mit mindestens 1384 Fällen, 602 Pflichtnamen und 606 vollständigen Namen samt vier echten Renderergates bestehen.",
+        "Optimierten Windows-Build erstellen und die frischen Browser-, Ressourcen-/Ngram-, Prozess-, Datei-, Migrations- und großen Sitemap-Abläufe prüfen.",
+        "Sicher mit erhaltenen Nutzerdaten installieren. Drei optionale Crawl-Aufnahmegrenzen für Verzeichnistiefe, Query-Tokens und effektive URL-Bytes als nächsten zusammenhängenden Teil umsetzen und prüfen.",
+        "Weitere Ngramkanäle/Wortwolke, große Leseperformance und übrige Kataloglücken weiter abarbeiten; vollständige Herstellerparität ist nicht belegt."
+      ],
+      "documentation": [
+        "docs/verification/source11-directed-checkpoint-20261015/index.json",
+        "docs/verification/source10-response-registry-20261015/index.json"
+      ],
+      "gates": {
+        "source": "PRIVATELY_COMMITTED_61B0E3B_FIVE_PATHS",
+        "directed": "PASS_20_RESPONSE_STREAM_TEST_NAMES_ONLY",
+        "preliminary_clippy": "PASS_PRELIMINARY_CLIPPY_ONLY",
+        "full_suite": "RUNNING_NOT_PROVEN",
+        "optimized_build": "NOT_RUN",
+        "native": "NOT_RUN",
+        "installation": "UNCHANGED_SOURCE5_R3",
+        "manufacturer_parity": "NOT_PROVEN"
+      }
+    },
     {
       "id": "combined-source-v10-20261015",
       "status": "ACTUAL_WARM_RESOURCE6_NGRAM5_PASS_EXACT_LENGTH_LIFECYCLE_BUG",
@@ -6519,7 +6552,9 @@
         "browser": "FAIL_INVALID_REPRESENTATIONS_SETTINGS_OVERFLOW_320",
         "resource_directory": "FAIL_EXACT_LENGTH_COMPLETE_BYTES_COUNTED_ABORTED",
         "ngram": "FIVE_ACTUAL_WARM_CASES_PASS_COLD_NOT_RUN"
-      }
+      },
+      "title_de": "N-Gramm-Corpus, Quellenberichte und Verzeichnisansicht prüfen",
+      "priority": 1
     },
     {
       "id": "combined-source-v9-20261015",

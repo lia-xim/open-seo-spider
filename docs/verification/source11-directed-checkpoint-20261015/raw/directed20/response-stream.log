@@ -1,0 +1,29 @@
+   Compiling open-seo-spider-core v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\combined-source-v11-draft-v1\source\crates\core)
+   Compiling open-seo-spider v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\combined-source-v11-draft-v1\source\crates\app)
+    Finished `test` profile [optimized] target(s) in 2m 35s
+     Running unittests src\main.rs (E:/CodexWork/open-seo-spider-01a12ac3-20261013/cargo-target\debug\deps\open_seo_spider-9a3df811be87d61e.exe)
+
+running 20 tests
+test server::response_stream::tests::response_actual_cancellation_is_terminal_to_standard_write_all_and_flush ... ok
+test server::response_stream::tests::response_actual_eight_enqueues_and_ninth_full_reservation_survive_cancelled_drain_until_body_drop ... ok
+test server::response_stream::tests::response_actual_sqlite_policy_resource_handlers_reach_eight_chunks_then_drop_and_recover_exact_full_exports ... ok
+test server::response_stream::tests::response_actual_worker_panic_before_ready_is_sticky_after_all_actual_joins ... ok
+test server::response_stream::tests::response_channel_cancel_and_closed_before_enqueue_return_zero_progress_errors ... ok
+test server::response_stream::tests::response_channel_default_write_all_preserves_exact_bytes_and_empty_writes_enqueue_nothing ... ok
+test server::response_stream::tests::response_channel_write_returns_exact_one_chunk_prefix_and_leaves_tail_unaccepted ... ok
+test server::response_stream::tests::response_completed_slots_are_reaped_before_repeated_download_registration ... ok
+test server::response_stream::tests::response_exact_length_commits_joined_final_frame_without_a_following_eof_poll ... ok
+test server::response_stream::tests::response_exact_length_holds_only_final_frame_and_rejects_late_error_panic_and_cancel ... ok
+test server::response_stream::tests::response_exact_length_real_hyper_http1_commits_nonzero_and_unpolled_zero_bodies ... ok
+test server::response_stream::tests::response_exact_length_zero_waits_before_headers_and_short_extra_producers_never_deadlock ... ok
+test server::response_stream::tests::response_explicit_cancel_wakes_full_reserve_but_unpolled_body_still_requires_actual_terminal ... ok
+test server::response_stream::tests::response_http10_refusal_is_only_four_actual_routes_and_head_starts_no_export ... ok
+test server::response_stream::tests::response_missing_metadata_or_joined_completion_is_failure_and_never_empty_success ... ok
+test server::response_stream::tests::response_pending_caller_drop_keeps_actual_preparation_owned_until_worker_and_supervisor_join ... ok
+test server::response_stream::tests::response_positive_eof_commit_is_not_rewritten_by_late_cancel_and_closed_admission_starts_nothing ... ok
+test server::response_stream::tests::response_post_ready_panic_or_error_after_valid_json_never_becomes_successful_eof ... ok
+test server::response_stream::tests::response_registry_uses_the_same_global_admission_before_any_worker_registration ... ok
+test server::response_stream::tests::response_single_large_write_preserves_all_bytes_in_bounded_chunks_and_joined_eof ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 319 filtered out; finished in 0.73s
+

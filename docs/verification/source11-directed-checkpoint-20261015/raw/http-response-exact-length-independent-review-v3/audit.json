@@ -1,0 +1,107 @@
+{
+  "proposal_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-exact-length-proposal-v3\\manifest.json",
+    "sha256": "9f8048eadf8ff548892b2d634f6245280fee718e88d25317ba8ac7527d504d27",
+    "bytes": 4781
+  },
+  "reviewed_ancestor": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-exact-length-independent-review-v2\\receipt.json",
+    "sha256": "25639e4dbab78ac983a8dcc89ddffd5b521b2a97994334ffc060e1ff79478902",
+    "bytes": 2508
+  },
+  "whole_forward_inverse_operations": 5,
+  "files": [
+    {
+      "path": "crates/app/src/server/ngram_corpus.rs",
+      "operations": 1,
+      "parent_sha256": "f4b1fa83ce1176f81fed7dc88c692cf0894a969bb4a5258f4d97c410483e57e0",
+      "current_sha256": "b57cd4676ab6c1524319f46a82debbf0217bceb4796237df31b92fc790bf2578"
+    },
+    {
+      "path": "crates/app/src/server/resource_broken_sources.rs",
+      "operations": 1,
+      "parent_sha256": "9c82f838606b5e98b27d768f88c49b4f8392590966a48e14142cc919222a04bf",
+      "current_sha256": "8a44a01b17cf31b7f7ec038e3a560372bfc578ad5135e8875ac3a25f79c6ba62"
+    },
+    {
+      "path": "crates/app/src/server/response_stream.rs",
+      "operations": 2,
+      "parent_sha256": "ec2656dbbaa7be0dd51c1e03fbb691535e74c748c0c342b126a81e39afe91a48",
+      "current_sha256": "8776e0b48d90d54dafa1ab4f58a5d86df3d340771db99f7b1d3d9f525e00988e"
+    },
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "operations": 1,
+      "parent_sha256": "44fcf097d00e9e6b97d8618b91b36198dcb560fee868ce7ba712c356f6d69b6b",
+      "current_sha256": "28115c1955032c858e7773bad4379f1695d49e4c35edf1689c504277162e71f1"
+    }
+  ],
+  "unchanged_production_payloads_from_v2": [
+    {
+      "path": "crates/app/src/server/ngram_corpus.rs",
+      "sha256": "b57cd4676ab6c1524319f46a82debbf0217bceb4796237df31b92fc790bf2578",
+      "bytes": 4528
+    },
+    {
+      "path": "crates/app/src/server/resource_broken_sources.rs",
+      "sha256": "8a44a01b17cf31b7f7ec038e3a560372bfc578ad5135e8875ac3a25f79c6ba62",
+      "bytes": 7804
+    },
+    {
+      "path": "crates/app/src/server/response_stream.rs",
+      "sha256": "8776e0b48d90d54dafa1ab4f58a5d86df3d340771db99f7b1d3d9f525e00988e",
+      "bytes": 29429
+    }
+  ],
+  "all_old_test_bytes_exact": 32642,
+  "old_test_functions": 16,
+  "new_test_functions": [
+    "response_exact_length_commits_joined_final_frame_without_a_following_eof_poll",
+    "response_exact_length_holds_only_final_frame_and_rejects_late_error_panic_and_cancel",
+    "response_exact_length_zero_waits_before_headers_and_short_extra_producers_never_deadlock",
+    "response_exact_length_real_hyper_http1_commits_nonzero_and_unpolled_zero_bodies"
+  ],
+  "absolute_reference_occurrences": 13,
+  "unique_reference_files": 11,
+  "all_reference_hashes_and_lengths_exact": true,
+  "app_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v10\\crates\\app\\Cargo.toml",
+    "sha256": "3e020b4dbdc949435cf1dbbd8190db073eacff8d385996dacb5e9829eb7482b5",
+    "bytes": 1069
+  },
+  "cached_primary_api_sources": [
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\axum-core-0.5.6\\src\\body.rs",
+      "sha256": "a737b8441863a95a84fbd91a02c5711121d029ef24e7890f2fcbafc30c60a0f8",
+      "bytes": 5715
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\hyper-util-0.1.21\\src\\server\\conn\\auto\\mod.rs",
+      "sha256": "0f28859d1e7f2b6dd9bb255a07cd6e11d5acc0caf87159ea9217ae5e1b3d67d0",
+      "bytes": 45854
+    },
+    {
+      "path": "C:\\Users\\matth\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\hyper-util-0.1.21\\src\\service\\glue.rs",
+      "sha256": "e79b4226013d4b3eaaadaa72b2dc7dc264cd8f5b2267d907a19f4f0e1c1538f0",
+      "bytes": 1936
+    }
+  ],
+  "closure_checks": [
+    "No new dependency or Cargo source change; direct declared Axum/Futures/hyper_util APIs replace unresolved names.",
+    "Actual Axum BodyDataStream keeps stop-at-declared-length-without-None consumption and final Drop oracle.",
+    "Held final-frame and zero-readiness checks directly poll each future to Pending while the producer is actually gated.",
+    "Real loopback TCP uses Hyper implementation via current hyper_util HTTP1-only builder and Axum router; all0/1/65553 bytes, socketEOF, server task and registry joins remain.",
+    "All late domainerror/panic/cancel, short/extra/zero>8chunk, worker/Core-supervisor/response-supervisor and cleanup assertions retained."
+  ],
+  "execution": {
+    "target_imports": 0,
+    "compiler": 0,
+    "rust_tests": 0,
+    "fixtures": 0,
+    "http": 0,
+    "browser": 0,
+    "native": 0,
+    "root_writes": 0,
+    "git": 0
+  }
+}
