@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "kind": "http_response_owner_source_proposal_v4",
+  "result": "AUTHORED_SOURCE_ONLY_NOT_COMPILED_NOT_RUN",
+  "recorded_at": "2026-10-15T11:49:50.808Z",
+  "source_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v5-r3\\manifest.json",
+    "sha256": "27a8b74c4cd0c394906f3fe3c0a6a0327569294b25056cf6c6f0aabcffc42788",
+    "bytes": 220311
+  },
+  "source_manifest_sha256": "27a8b74c4cd0c394906f3fe3c0a6a0327569294b25056cf6c6f0aabcffc42788",
+  "source_commit": "9fa103ebc0be41f1adf55111e7875cf9f133d65a",
+  "source_payload_directory": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-owner-proposal-v4\\source",
+  "design_manifests": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-body-drain-design-v1\\manifest.json",
+      "sha256": "af52dc34a63cae18aa414c8a46baedb82c49a9583349c14c9bfe98d03c2cb848",
+      "bytes": 7252
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-transport-integration-design-v1\\manifest.json",
+      "sha256": "ea526be1dba3d2726a53c01d075b5db3824032ca5214266e9eea6093188f0ce9",
+      "bytes": 8181
+    }
+  ],
+  "files": [
+    {
+      "path": "crates/app/src/server.rs",
+      "before_sha256": "d8a3c16eeeb7d8b08de594555b8055021eb50e5e60970a26548979321f3c4969",
+      "after_sha256": "ad5733da52be0f9ede608173b6c98c4b73b8b041c3dcbfc3156544a294af86e9",
+      "after_bytes": 80960,
+      "derivation": "derivation.json",
+      "forward_inverse_exact": true
+    },
+    {
+      "path": "crates/app/src/server/lifecycle.rs",
+      "before_sha256": "220dca8a4807d8a91061bec40c5cb281ad5f4cbbdd4833b09e9b6780849e1849",
+      "after_sha256": "bd1d7090e1797cbc2cc680153c78928e30718ecf3ecc0862a77928dae5d9921a",
+      "after_bytes": 8084,
+      "derivation": "derivation.json",
+      "forward_inverse_exact": true
+    },
+    {
+      "path": "crates/app/src/server/policy.rs",
+      "before_sha256": "c96366ce016e61e55f4becff9114cd14dc9f3025a244209e3fc32ffaff3e549f",
+      "after_sha256": "e85c46a64d9013d4676b5134c6eb9a35e56f2ea356eb3bdb51887f35dbe527b1",
+      "after_bytes": 5041,
+      "derivation": "derivation.json",
+      "forward_inverse_exact": true
+    },
+    {
+      "path": "crates/app/src/server/resources.rs",
+      "before_sha256": "7f1aef34302054d735178948a87ee4c91dbacc84b8d28d1d65a411e291102750",
+      "after_sha256": "7942a0375b315820e8aaa05da8fdfc568da32d3f55087901e2e05a6fb6c7f619",
+      "after_bytes": 11474,
+      "derivation": "derivation.json",
+      "forward_inverse_exact": true
+    },
+    {
+      "path": "crates/app/src/server/response_stream.rs",
+      "before_sha256": "ABSENT",
+      "after_sha256": "9bb4e8b0c3406fdba8545445d1b7c00141c57db9f37e6113b52fe225ef0cc13c",
+      "after_bytes": 18686
+    },
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "before_sha256": "ABSENT",
+      "after_sha256": "894e20bcea3833d8b59a0a050e225bf822707db6a3a4e49710df87e6dc3e7b81",
+      "after_bytes": 19466
+    }
+  ],
+  "modified_inputs": 4,
+  "new_inputs": 2,
+  "literal_operations": 23,
+  "new_test_names": [
+    "server::response_stream::tests::response_single_large_write_preserves_all_bytes_in_bounded_chunks_and_joined_eof",
+    "server::response_stream::tests::response_actual_eight_enqueues_and_ninth_full_reservation_survive_cancelled_drain_until_body_drop",
+    "server::response_stream::tests::response_explicit_cancel_wakes_full_reserve_but_unpolled_body_still_requires_actual_terminal",
+    "server::response_stream::tests::response_pending_caller_drop_keeps_actual_preparation_owned_until_worker_and_supervisor_join",
+    "server::response_stream::tests::response_actual_worker_panic_before_ready_is_sticky_after_all_actual_joins",
+    "server::response_stream::tests::response_registry_uses_the_same_global_admission_before_any_worker_registration",
+    "server::response_stream::tests::response_post_ready_panic_or_error_after_valid_json_never_becomes_successful_eof",
+    "server::response_stream::tests::response_missing_metadata_or_joined_completion_is_failure_and_never_empty_success",
+    "server::response_stream::tests::response_positive_eof_commit_is_not_rewritten_by_late_cancel_and_closed_admission_starts_nothing",
+    "server::response_stream::tests::response_completed_slots_are_reaped_before_repeated_download_registration",
+    "server::response_stream::tests::response_actual_sqlite_policy_resource_handlers_reach_eight_chunks_then_drop_and_recover_exact_full_exports",
+    "server::response_stream::tests::response_http10_refusal_is_only_four_actual_routes_and_head_starts_no_export"
+  ],
+  "new_tests": [
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "name": "response_single_large_write_preserves_all_bytes_in_bounded_chunks_and_joined_eof",
+      "full_name": "server::response_stream::tests::response_single_large_write_preserves_all_bytes_in_bounded_chunks_and_joined_eof",
+      "platform": "all",
+      "runtime": "NOT_RUN"
+    },
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "name": "response_actual_eight_enqueues_and_ninth_full_reservation_survive_cancelled_drain_until_body_drop",
+      "full_name": "server::response_stream::tests::response_actual_eight_enqueues_and_ninth_full_reservation_survive_cancelled_drain_until_body_drop",
+      "platform": "all",
+      "runtime": "NOT_RUN"
+    },
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "name": "response_explicit_cancel_wakes_full_reserve_but_unpolled_body_still_requires_actual_terminal",
+      "full_name": "server::response_stream::tests::response_explicit_cancel_wakes_full_reserve_but_unpolled_body_still_requires_actual_terminal",
+      "platform": "all",
+      "runtime": "NOT_RUN"
+    },
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "name": "response_pending_caller_drop_keeps_actual_preparation_owned_until_worker_and_supervisor_join",
+      "full_name": "server::response_stream::tests::response_pending_caller_drop_keeps_actual_preparation_owned_until_worker_and_supervisor_join",
+      "platform": "all",
+      "runtime": "NOT_RUN"
+    },
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "name": "response_actual_worker_panic_before_ready_is_sticky_after_all_actual_joins",
+      "full_name": "server::response_stream::tests::response_actual_worker_panic_before_ready_is_sticky_after_all_actual_joins",
+      "platform": "all",
+      "runtime": "NOT_RUN"
+    },
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "name": "response_registry_uses_the_same_global_admission_before_any_worker_registration",
+      "full_name": "server::response_stream::tests::response_registry_uses_the_same_global_admission_before_any_worker_registration",
+      "platform": "all",
+      "runtime": "NOT_RUN"
+    },
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "name": "response_post_ready_panic_or_error_after_valid_json_never_becomes_successful_eof",
+      "full_name": "server::response_stream::tests::response_post_ready_panic_or_error_after_valid_json_never_becomes_successful_eof",
+      "platform": "all",
+      "runtime": "NOT_RUN"
+    },
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "name": "response_missing_metadata_or_joined_completion_is_failure_and_never_empty_success",
+      "full_name": "server::response_stream::tests::response_missing_metadata_or_joined_completion_is_failure_and_never_empty_success",
+      "platform": "all",
+      "runtime": "NOT_RUN"
+    },
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "name": "response_positive_eof_commit_is_not_rewritten_by_late_cancel_and_closed_admission_starts_nothing",
+      "full_name": "server::response_stream::tests::response_positive_eof_commit_is_not_rewritten_by_late_cancel_and_closed_admission_starts_nothing",
+      "platform": "all",
+      "runtime": "NOT_RUN"
+    },
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "name": "response_completed_slots_are_reaped_before_repeated_download_registration",
+      "full_name": "server::response_stream::tests::response_completed_slots_are_reaped_before_repeated_download_registration",
+      "platform": "all",
+      "runtime": "NOT_RUN"
+    },
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "name": "response_actual_sqlite_policy_resource_handlers_reach_eight_chunks_then_drop_and_recover_exact_full_exports",
+      "full_name": "server::response_stream::tests::response_actual_sqlite_policy_resource_handlers_reach_eight_chunks_then_drop_and_recover_exact_full_exports",
+      "platform": "all",
+      "runtime": "NOT_RUN"
+    },
+    {
+      "path": "crates/app/src/server/response_stream_tests.rs",
+      "name": "response_http10_refusal_is_only_four_actual_routes_and_head_starts_no_export",
+      "full_name": "server::response_stream::tests::response_http10_refusal_is_only_four_actual_routes_and_head_starts_no_export",
+      "platform": "all",
+      "runtime": "NOT_RUN"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-owner-proposal-v2\\HANDOFF.md",
+      "sha256": "41d61b34151142fff7d3fe97eeeaa0b9f3d22ec01036ef8144f2444d8857535f",
+      "bytes": 1166
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-owner-proposal-v2\\derivation.json",
+      "sha256": "d5cd2227181af2a8fb3fe17b8fb85dac6a616663936a0150760e9fe98322e22f",
+      "bytes": 19245
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-owner-proposal-v2\\rebase-validation.json",
+      "sha256": "add63b1ef63acc54f7d9f0cf9154c89c021720a958640bb5f90290a84c734f9b",
+      "bytes": 86353
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-owner-proposal-v2\\rebase-source.mjs",
+      "sha256": "870d497614eb73081e650853ffcd4e52bd6513f3c6d0ff63db07e72d308e0027",
+      "bytes": 8107
+    }
+  ],
+  "excluded_executions": {
+    "product_imports": 0,
+    "compiler": 0,
+    "rustfmt": 0,
+    "rust_tests": 0,
+    "sqlite_execution": 0,
+    "fixtures": 0,
+    "native": 0,
+    "browser": 0,
+    "git": 0,
+    "root_mutations": 0
+  },
+  "proof_boundaries": [
+    "No compiler/formatter/test/native success claimed",
+    "No transport loop, per-connection token or5s abort implemented",
+    "Unpolled TCP Body and uninterruptible verification remain finite-drain gaps",
+    "No Body spool/quota/fs authority or other author files merged",
+    "Core producer+Core supervisor and response supervisor remain separately retained/joined",
+    "Old AppState definition/signatures/fixtures and old CSV64MiB/AppJSON8MiB authorities preserved",
+    "Only four unknownlengthHTTP1.0 export GET/HEAD MethodRouters deliberately return505",
+    "No dependencies/protocol features/MCP inventory/SDK types changed"
+  ],
+  "pending": [
+    "Independent bounded rebase/composition review",
+    "Explicit reviewed merge with separate BODY Lifecycle and server hunks",
+    "Actual formatting/compiler/full locked suite with all inherited names and all12 new functions",
+    "Separate owned transport/protocol/TCP slice before autonomous nonreader shutdown claim",
+    "Exact-source optimized candidate and native/installation acceptance"
+  ],
+  "parent_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-owner-proposal-v2\\manifest.json",
+    "sha256": "8b8b5fcacf8a9b2f96b2d0bc5c29eae63ba09d0b795621eb3d6f33c70083edbd"
+  },
+  "prior_independent_source_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-owner-independent-review-v1\\receipt.json",
+    "sha256": "607341b8a07c7230de5d91e824572d2ff8a745d658eb339cd83ae8a30afcda05"
+  },
+  "actual_failed_diagnostic": {
+    "receipt": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-draft-v3\\actual-preliminary-clippy.json",
+      "sha256": "22b5696f881b20840f65e08a695cd45bfd7ad4d294474bb77817dc981961fe16"
+    },
+    "log": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v6-draft-v3\\actual-preliminary-clippy.log",
+      "sha256": "443d231b948cb1dc0c57906153fd92db267f729cc75e88605a5c527d308f8a95"
+    },
+    "result": "FAIL_PRELIMINARY_CLIPPY_ONLY",
+    "executed_tests": 0
+  },
+  "root_test_revision": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-owner-proposal-v3\\root-test-revision.json",
+    "sha256": "f8b4cc2000d597bc1dbe0a0ea3db819bf79d6ae531558a389ca3fe2838890217"
+  },
+  "parent_literal_operations": 22,
+  "revision_literal_operations": 1,
+  "payload_path_metadata_revision": {
+    "parent_manifest": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-owner-proposal-v3\\manifest.json",
+      "sha256": "c64b723a902034febc555695689550c873d3de0ccc9571cf8012750683eaacd8"
+    },
+    "previous_declared_directory": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\http-response-owner-proposal-v2\\source",
+    "correction": "Declared source directory now points to the actual new immutable payload set; all6 bytesets remain exactlyV3. No product/test code changes in this metadata revision."
+  }
+}

@@ -1,0 +1,35 @@
+    Checking open-seo-spider-core v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\combined-source-v6-draft-v3\source\crates\core)
+    Checking open-seo-spider v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\combined-source-v6-draft-v3\source\crates\app)
+error: called `.err().expect()` on a `Result` value
+   --> crates\app\src\server\response_stream_tests.rs:258:10
+    |
+258 |           .err()
+    |  __________^
+259 | |         .expect("Actual panic cannot become metadata success");
+    | |_______________^ help: try: `expect_err`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#err_expect
+    = note: `-D clippy::err-expect` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::err_expect)]`
+
+error: called `.err().expect()` on a `Result` value
+  --> crates\app\src\server\source_body_stream_tests.rs:86:10
+   |
+86 |           .err()
+   |  __________^
+87 | |         .expect("full private SHA verification must fail before response");
+   | |_______________^ help: try: `expect_err`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#err_expect
+
+error: called `.err().expect()` on a `Result` value
+   --> crates\app\src\server\source_body_stream_tests.rs:181:10
+    |
+181 |           .err()
+    |  __________^
+182 | |         .expect("64MiB+1 must be rejected before a ready response");
+    | |_______________^ help: try: `expect_err`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#err_expect
+
+error: could not compile `open-seo-spider` (bin "open-seo-spider" test) due to 3 previous errors
