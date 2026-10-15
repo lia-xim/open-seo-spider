@@ -34,6 +34,7 @@ struct Slot {
     changed: Notify,
     wait: Condvar,
     wait_lock: Mutex<()>,
+    connection: Mutex<Option<super::transport::Lease>>,
     entry: Mutex<Option<Entry>>,
     ticket: tokio::sync::Mutex<Option<Ticket>>,
     published: tokio::sync::watch::Sender<bool>,
@@ -62,6 +63,8 @@ impl Registry {
     }
     pub(super) fn close_admission(&self) {
         self.0.tasks.close_admission();
+    }
+    pub(super) fn cancel_all(&self) {
         for slot in lock(&self.0.slots).values() {
             slot.cancel();
         }
@@ -173,11 +176,18 @@ impl Registry {
             changed: Notify::new(),
             wait: Condvar::new(),
             wait_lock: Mutex::new(()),
+            connection: Mutex::new(None),
             entry: Mutex::new(None),
             ticket: tokio::sync::Mutex::new(None),
             published: tokio::sync::watch::channel(false).0,
             joined: Mutex::new(None),
         });
+        let disconnected = Arc::downgrade(&slot);
+        *lock(&slot.connection) = super::transport::bind_current(move || {
+            if let Some(slot) = disconnected.upgrade() {
+                slot.cancel();
+            }
+        })?;
         let guard = Consumer { slot: slot.clone() };
         let (ready, waiting) = oneshot::channel();
         let (sender, receiver) = mpsc::channel::<io::Result<Bytes>>(4);

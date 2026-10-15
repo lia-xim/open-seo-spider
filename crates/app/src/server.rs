@@ -23,7 +23,6 @@ use open_seo_spider_core::{
 };
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
-use std::future::IntoFuture;
 use std::{collections::HashMap, path::PathBuf, sync::Arc};
 use tokio::sync::RwLock;
 use uuid::Uuid;
@@ -40,6 +39,7 @@ mod sitemap_generation;
 mod sitemaps;
 mod source_bodies;
 mod source_body_stream;
+mod transport;
 
 #[cfg(test)]
 #[path = "server/sitemap_processing_config_tests.rs"]
@@ -208,7 +208,6 @@ async fn serve_with_mcp_files_ready_source(
     let (shutdown_signal, stdin_monitor) = lifecycle::shutdown_source(source);
     let shutdown_state = state.clone();
     let drain_state = state.clone();
-    let (shutdown_started, shutdown_observed) = tokio::sync::oneshot::channel();
     let router = Router::new()
         .route(
             "/",
@@ -401,27 +400,44 @@ async fn serve_with_mcp_files_ready_source(
         ))
         .layer(middleware::from_fn(local_origin))
         .with_state(state.clone());
-    println!("Open SEO Spider: http://{}", listener.local_addr()?);
-    if let Some(ready) = ready {
-        let _ = ready.send(address);
-    }
-    let serving = axum::serve(listener, router)
-        .with_graceful_shutdown(async move {
-            let reason = shutdown_signal.await;
-            // Synchronous admission close precedes actual listener shutdown.
-            lifecycle::close_admission(&shutdown_state);
-            let _ = shutdown_started.send(reason);
-        })
-        .into_future();
-    let draining = async move {
-        let reason = shutdown_observed
-            .await
-            .map_err(|error| anyhow::anyhow!("Shutdown signal supervisor: {error}"));
-        // Drain even if the signal itself failed. Keep that error for return.
-        let drained = lifecycle::drain(&drain_state).await;
-        (reason, drained)
+    let response_cancel = state.lifecycle.response_streams.clone();
+    let body_cancel = state.lifecycle.source_bodies.clone();
+    // Registration owns the listener before readiness. Even startup refusal
+    // still reaches every existing drain and the retained stdin monitor below.
+    let (serving, reason, drained) = match state.lifecycle.transports.start(
+        listener,
+        router,
+        Arc::new(move || {
+            response_cancel.cancel_all();
+            body_cancel.cancel_all();
+        }),
+    ) {
+        Ok(running) => {
+            println!("Open SEO Spider: http://{}", address);
+            if let Some(ready) = ready {
+                let _ = ready.send(address);
+            }
+            let serving = running.wait();
+            let draining = async move {
+                let reason = tokio::select! {
+                    reason = shutdown_signal => reason,
+                    _ = shutdown_state.lifecycle.transports.wait_failure() => Err(anyhow::anyhow!("Owned incoming transport failed")),
+                };
+                // T0 closes every admission synchronously, including on error.
+                lifecycle::close_admission(&shutdown_state);
+                let drained = lifecycle::drain(&drain_state).await;
+                (reason, drained)
+            };
+            let (serving, (reason, drained)) = tokio::join!(serving, draining);
+            (serving, reason, drained)
+        }
+        Err(error) => {
+            drop(ready);
+            lifecycle::close_admission(&state);
+            let drained = lifecycle::drain(&state).await;
+            (Err(error), Ok("incoming_start_failure"), drained)
+        }
     };
-    let (serving, (reason, drained)) = tokio::join!(serving, draining);
     // Owned stdin uses a runtime blocking read. Ctrl-C must not discard it.
     let monitor = match stdin_monitor {
         Some(monitor) => monitor
@@ -441,8 +457,8 @@ async fn serve_with_mcp_files_ready_source(
         failures.push(error.to_string());
     }
     let cause = match reason {
-        Ok(Ok(cause)) => cause,
-        Ok(Err(error)) | Err(error) => {
+        Ok(cause) => cause,
+        Err(error) => {
             failures.push(error.to_string());
             "signal_failure"
         }

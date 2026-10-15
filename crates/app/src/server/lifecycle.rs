@@ -12,6 +12,7 @@ pub(super) struct Lifecycle {
     pub(super) crawls: TaskOwner,
     pub(super) source_bodies: source_body_stream::Registry,
     pub(super) response_streams: super::response_stream::Registry,
+    pub(super) transports: super::transport::Registry,
 }
 impl Default for Lifecycle {
     fn default() -> Self {
@@ -21,6 +22,7 @@ impl Default for Lifecycle {
             blocking: TaskOwner::with_admission("http_blocking", admission.clone()),
             crawls: TaskOwner::with_admission("crawl_operations", admission.clone()),
             response_streams: super::response_stream::Registry::new(admission.clone()),
+            transports: super::transport::Registry::new(admission.clone()),
             source_bodies: source_body_stream::Registry::new(admission.clone()),
             admission,
         }
@@ -84,10 +86,16 @@ pub(super) async fn request(
     request: Request,
     next: Next,
 ) -> Response {
+    let connection = request
+        .extensions()
+        .get::<super::transport::Connection>()
+        .cloned();
     match state
         .lifecycle
         .requests
-        .run_async(async move { next.run(request).await })
+        .run_async(super::transport::scope(connection, async move {
+            next.run(request).await
+        }))
         .await
     {
         Ok(response) => response,
@@ -148,8 +156,10 @@ pub(super) fn record_owned_crawl_failure(state: &AppState, error: &anyhow::Error
 }
 
 pub(super) fn close_admission(state: &AppState) {
+    let t0 = tokio::time::Instant::now();
     state.lifecycle.admission.close();
     state.lifecycle.response_streams.close_admission();
+    state.lifecycle.transports.quiesce_at(t0);
     state.lifecycle.source_bodies.close_admission();
     state.exports.close_admission();
     state.finding_reads.close_admission();
@@ -168,7 +178,7 @@ pub(super) async fn drain(state: &AppState) -> anyhow::Result<()> {
     pause_active(state).await;
     // All ownership/admission was closed BEFORE the Axum signal resolved.
     // Await all results even after an error; no early ? can drop another drain.
-    let (requests, blocking, crawls, csv, reads, files, bodies, responses) = tokio::join!(
+    let (requests, blocking, crawls, csv, reads, files, bodies, responses, transports) = tokio::join!(
         state.lifecycle.requests.shutdown_and_drain(),
         state.lifecycle.blocking.shutdown_and_drain(),
         state.lifecycle.crawls.shutdown_and_drain(),
@@ -177,6 +187,7 @@ pub(super) async fn drain(state: &AppState) -> anyhow::Result<()> {
         state.mcp.shutdown_file_tools(),
         state.lifecycle.source_bodies.shutdown_and_drain(),
         state.lifecycle.response_streams.shutdown_and_drain(),
+        state.lifecycle.transports.shutdown_and_drain(),
     );
     let mut errors = Vec::new();
     for result in [
@@ -188,6 +199,7 @@ pub(super) async fn drain(state: &AppState) -> anyhow::Result<()> {
         files,
         bodies,
         responses,
+        transports,
     ] {
         if let Err(error) = result {
             errors.push(error.to_string());
@@ -207,7 +219,7 @@ pub(super) fn receipt(state: &AppState, cause: &str, clean: bool) {
     });
     eprintln!(
         "{}",
-        json!({"kind":"owned_application_shutdown_v1","cause":cause,"clean":clean,"owners":stats,"source_body_transports":state.lifecycle.source_bodies.stats(),"response_streams":state.lifecycle.response_streams.stats(),"response_transport_owned":false,"qualification":"Local application task joins only; actual process/pipe EOF is an independent outside witness; no stateful MCP session or external renderer-process drain claim"})
+        json!({"kind":"owned_application_shutdown_v1","cause":cause,"clean":clean,"owners":stats,"source_body_transports":state.lifecycle.source_bodies.stats(),"response_streams":state.lifecycle.response_streams.stats(),"incoming_transports":state.lifecycle.transports.stats(),"response_transport_owned":state.lifecycle.transports.stats()["registered"],"qualification":"Local application task joins only; actual process/pipe EOF is an independent outside witness; no stateful MCP session or external renderer-process drain claim"})
     );
 }
 

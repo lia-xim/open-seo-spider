@@ -124,6 +124,7 @@ async fn source_body_shutdown_emits_error_instead_of_silent_truncated_success_eo
         .await
         .unwrap();
     registry.close_admission();
+    registry.cancel_all();
     assert!(axum::body::to_bytes(body, 67_108_864).await.is_err());
     tokio::time::timeout(Duration::from_secs(10), registry.shutdown_and_drain())
         .await

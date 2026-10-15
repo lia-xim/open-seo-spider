@@ -74,6 +74,7 @@ struct Control {
     body_done: watch::Sender<bool>,
     body_waker: AtomicWaker,
     counters: Arc<Counters>,
+    connection: Mutex<Option<super::transport::Lease>>,
 }
 impl Control {
     fn new(counters: Arc<Counters>) -> Self {
@@ -83,6 +84,7 @@ impl Control {
             body_done: watch::channel(false).0,
             body_waker: AtomicWaker::new(),
             counters,
+            connection: Mutex::new(None),
         }
     }
     fn is_cancelled(&self) -> bool {
@@ -139,6 +141,7 @@ impl Control {
             self.cancelled.send_replace(true);
         }
         self.body_done.send_replace(true);
+        drop(lock(&self.connection).take());
         self.body_waker.wake();
         self.counters.changed.notify_waiters();
         outcome
@@ -238,8 +241,7 @@ impl Registry {
     }
     // Future owned-transport deadline calls this explicitly. Merely closing
     // admission or starting a graceful drain does not shorten a live response.
-    #[cfg(test)]
-    fn cancel_all(&self) {
+    pub(super) fn cancel_all(&self) {
         let tasks: Vec<_> = self.tasks().running.values().cloned().collect();
         for task in tasks {
             task.control.cancel();
@@ -282,6 +284,13 @@ impl Registry {
             .ok_or_else(|| failure("Response export identifier exhausted"))?;
         let counters = self.0.counters.clone();
         let control = Arc::new(Control::new(counters.clone()));
+        let disconnected = Arc::downgrade(&control);
+        *lock(&control.connection) = super::transport::bind_current(move || {
+            if let Some(control) = disconnected.upgrade() {
+                control.cancel();
+            }
+        })
+        .map_err(failure)?;
         let (sender, receiver) = mpsc::channel(QUEUE_CHUNKS);
         let (ready, ready_result) = oneshot::channel();
         let (completed, joined) = oneshot::channel();
