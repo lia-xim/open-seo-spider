@@ -1,0 +1,158 @@
+{
+  "kind": "source_only_builder_v3_to_v4_literal_derivation",
+  "parent": {
+    "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\build-combined-optimized-v3.mjs",
+    "sha256": "878c981a1645205f2ba958775ca318b95abbde62b6dda226ff55dcf2de82f983"
+  },
+  "suite": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v4-source-suite-preparation-v2\\run-combined-suite-v4.mjs",
+    "sha256": "cabafce13e67f3fb2e6e9e114f6392d675b51a6cd0ca26de5aa91cda8d4a1cfa"
+  },
+  "literal_operations": [
+    {
+      "before": "assert.equal(argv.length, 2, 'Required: --manifest-sha <exact64hex>');\nassert.equal(argv[0], '--manifest-sha');\nassert.match(argv[1], /^[a-f0-9]{64}$/);\nconst expectedManifestSha = argv[1];",
+      "after": "assert.equal(argv.length, 4, 'Required: --manifest-sha <exact64hex> --suite-proof-sha <actual64hex>');\nassert.equal(argv[0], '--manifest-sha');\nassert.match(argv[1], /^[a-f0-9]{64}$/);\nassert.equal(argv[2], '--suite-proof-sha');\nassert.match(argv[3], /^[a-f0-9]{64}$/);\nconst expectedManifestSha = argv[1];\nconst expectedSuiteProofSha = argv[3];\nassert(!process.env.NODE_OPTIONS, 'Node preloads are not accepted');\nassert.deepEqual(process.execArgv, [], 'Node runtime flags are not accepted');"
+    },
+    {
+      "before": "const suiteDriverSha = 'e6ccab255c9056f6791a02fde68672a8e91ccc98c9069d9538e7ebfbf1728d4d';",
+      "after": "const suiteDriverSha = 'cabafce13e67f3fb2e6e9e114f6392d675b51a6cd0ca26de5aa91cda8d4a1cfa';"
+    },
+    {
+      "before": "combined-source-v3",
+      "after": "combined-source-v4"
+    },
+    {
+      "before": "results/combined-suite-v3",
+      "after": "results/combined-suite-v4"
+    },
+    {
+      "before": "results/combined-optimized-build-v3",
+      "after": "results/combined-optimized-build-v4"
+    },
+    {
+      "before": "work/run-combined-suite-v3.mjs",
+      "after": "work/run-combined-suite-v4.mjs"
+    },
+    {
+      "before": "work/build-combined-optimized-v3.mjs",
+      "after": "work/build-combined-optimized-v4.mjs"
+    },
+    {
+      "before": "assert.equal(manifest.kind, 'combined_source_v3');",
+      "after": "assert.equal(manifest.kind, 'combined_source_v4');"
+    },
+    {
+      "before": "assert.equal(manifest.parent_source_manifest_sha256, '67aebeb959ac6cfb9f8352162becf3ff98ef90918c825a674ea2e92a5df353d0');",
+      "after": "assert.equal(manifest.parent_source_manifest_sha256, '01bfa8efcb6745c5521be5e533ae63f2f15679318b095a29eb3ab925fef95bdf');"
+    },
+    {
+      "before": "assert(Array.isArray(manifest.files) && manifest.files.length >= 301);",
+      "after": "assert(Array.isArray(manifest.files) && manifest.files.length === 304);"
+    },
+    {
+      "before": "const baselinePath = path.join(base, 'combined-source-v1/manifest.json');\nconst baselineRaw = fs.readFileSync(baselinePath);\nconst baselineSha = '67aebeb959ac6cfb9f8352162becf3ff98ef90918c825a674ea2e92a5df353d0';\nassert.equal(sha(baselineRaw), baselineSha);\nconst baseline = JSON.parse(baselineRaw);\nassert.equal(baseline.files.length, 301); assert.equal(baseline.required_test_names, 419);\nassert.equal(baseline.minimum_expected_workspace_tests, 1201);\nconst previousAttemptPath = path.join(base, 'combined-source-v2/manifest.json');\nconst previousAttemptSha = '0bd2a7cc5e429e7d46a1d596e5941d62f5a2b2bd9dfb78199e85b7c5d4f9fd2a';\nassert.equal(manifest.previous_attempt_source_manifest_sha256, previousAttemptSha);\nconst previousAttemptRaw = fs.readFileSync(previousAttemptPath);\nassert.equal(sha(previousAttemptRaw), previousAttemptSha);\nconst previousAttempt = JSON.parse(previousAttemptRaw);\nassert.equal(previousAttempt.kind, 'combined_source_v2');\nassert.equal(previousAttempt.files.length, 301); assert.equal(previousAttempt.required_test_names, 421);\nassert.equal(previousAttempt.minimum_expected_workspace_tests, 1203);\nconst previousAttemptNames = previousAttempt.required_tests.flatMap(group => group.names);\nassert.equal(previousAttemptNames.length, 421); assert.equal(new Set(previousAttemptNames).size, 421);\n\nfunction relativeFile(value) {\n  assert.equal(typeof value, 'string');\n  assert(value.length > 0 && !value.includes('\\\\') && !value.includes(':'));\n  assert(!path.posix.isAbsolute(value));\n  assert(value.split('/').every(part => part.length > 0 && part !== '.' && part !== '..'));\n  return value;\n}\nconst files = new Map();\nfor (const file of manifest.files) {\n  relativeFile(file.path);\n  assert(!files.has(file.path), 'Duplicate manifest path: ' + file.path);\n  assert.match(file.sha256, /^[a-f0-9]{64}$/);\n  assert(Number.isSafeInteger(file.bytes) && file.bytes >= 0);\n  files.set(file.path, file);\n}\nassert.equal(new Set([...files.keys()].map(p => p.toLowerCase())).size, files.size,\n  'Windows path aliases are not separate inputs');\nconst required = [];\nconst requiredPaths = new Set();\nfor (const group of manifest.required_tests) {\n  relativeFile(group.path);\n  assert(files.has(group.path), 'Required test source not frozen: ' + group.path);\n  assert(!requiredPaths.has(group.path), 'Duplicate required-test group');\n  requiredPaths.add(group.path);\n  assert(Array.isArray(group.names) && group.names.length > 0);\n  for (const name of group.names) {\n    assert.match(name, /^[A-Za-z_][A-Za-z_0-9]*$/);\n    required.push(name);\n  }\n}\nassert.equal(required.length, manifest.required_test_names);\nassert.equal(new Set(required).size, required.length, 'Required names must be unambiguous');\nconst baselineNames = baseline.required_tests.flatMap(group => group.names);\nassert.equal(baselineNames.length, 419); assert.equal(new Set(baselineNames).size, 419);\nfor (const name of baselineNames) assert(required.includes(name), 'Predecessor required name was removed: ' + name);\nfor (const name of previousAttemptNames) assert(required.includes(name), 'Previous attempt required name was removed: ' + name);\nconst newRequiredNames = required.filter(name => !baselineNames.includes(name));\nassert.equal(manifest.minimum_expected_workspace_tests, 1201 + newRequiredNames.length,\n  'Minimum must retain1201 plus every new named Windows function');\nconst previousFiles = new Map(baseline.files.map(file => [file.path, file]));\nfor (const filePath of previousFiles.keys()) assert(files.has(filePath), 'Predecessor input path removed: ' + filePath);\nconst bindings = new Map();\nfor (const item of manifest.approved_product_bindings) {\n  relativeFile(item.path); assert(!bindings.has(item.path), 'Duplicate delta binding');\n  assert(files.has(item.path), 'Delta path not in current input set');\n  assert.match(item.after_sha256, /^[a-f0-9]{64}$/);\n  assert(item.before_sha256 === 'ABSENT' || /^[a-f0-9]{64}$/.test(item.before_sha256));\n  assert(Number.isSafeInteger(item.bytes) && item.bytes >= 0);\n  bindings.set(item.path, item);\n}\nlet changedInputs = 0, newInputs = 0, unchangedInputs = 0;\nfor (const [filePath, current] of files) {\n  const before = previousFiles.get(filePath), delta = bindings.get(filePath);\n  if (before && before.sha256 === current.sha256 && before.bytes === current.bytes) {\n    assert(!delta, 'Unchanged input cannot be claimed as a delta: ' + filePath); unchangedInputs++;\n  } else {\n    assert(delta, 'Changed/new input lacks explicit Root delta pin: ' + filePath);\n    assert.equal(delta.before_sha256, before ? before.sha256 : 'ABSENT');\n    assert.equal(delta.after_sha256, current.sha256); assert.equal(delta.bytes, current.bytes);\n    if (before) { assert.notEqual(before.sha256, current.sha256); changedInputs++; } else newInputs++;\n  }\n}\nassert.equal(changedInputs + newInputs, bindings.size);\nassert.equal(unchangedInputs + changedInputs, 301);\nconst lineage = Object.freeze({parent_source_manifest_sha256: baselineSha, previous_attempt_source_manifest_sha256: previousAttemptSha, parent_inputs: 301,\n  required_parent_names: 419, unchanged_parent_inputs: unchangedInputs, changed_parent_inputs: changedInputs,\n  new_input_files: newInputs, delta_bindings: bindings.size, new_named_windows_functions: newRequiredNames,\n  actual_required_names: required.length, actual_source_inputs: files.size,\n  minimum_expected_workspace_tests: manifest.minimum_expected_workspace_tests});\n",
+      "after": "const baselinePath = path.join(base, 'combined-source-v3/manifest.json');\nconst baselineRaw = fs.readFileSync(baselinePath);\nconst baselineSha = '01bfa8efcb6745c5521be5e533ae63f2f15679318b095a29eb3ab925fef95bdf';\nassert.equal(sha(baselineRaw), baselineSha);\nconst baseline = JSON.parse(baselineRaw);\nassert.equal(baseline.kind, 'combined_source_v3');\nassert.equal(baseline.files.length, 301); assert.equal(baseline.required_test_names, 421);\nassert.equal(baseline.minimum_expected_workspace_tests, 1203);\n// Root's explicit final-byte approval binds authored handoffs and formatter-only changes.\nconst rootApprovalReference = manifest.root_approval;\nassert(rootApprovalReference && path.isAbsolute(rootApprovalReference.path));\nassert.match(rootApprovalReference.sha256, /^[a-f0-9]{64}$/);\nconst rootApprovalRaw = fs.readFileSync(rootApprovalReference.path);\nassert.equal(sha(rootApprovalRaw), rootApprovalReference.sha256);\nconst rootApproval = JSON.parse(rootApprovalRaw);\nassert.equal(rootApproval.kind, 'root_approved_combined_source_v4');\nassert.equal(rootApproval.status, 'REVIEWED_FORMATTED_COMMITTED_AND_PRIVATELY_PUSHED');\nassert.equal(rootApproval.source_commit, manifest.source_commit);\nassert.equal(rootApproval.source_branch, manifest.source_branch);\nassert.equal(path.resolve(rootApproval.source_worktree), path.resolve(repo));\nassert.equal(rootApproval.parent_source_manifest_sha256, baselineSha);\nassert.deepEqual(manifest.source_proposals, rootApproval.proposals);\nassert.deepEqual(manifest.new_authored_tests, rootApproval.new_authored_tests);\nassert(Array.isArray(rootApproval.files) && rootApproval.files.length > 0);\nassert(Array.isArray(manifest.references) && manifest.references.length > 0);\nconst pinnedReferences = new Map();\nfor (const reference of manifest.references) {\n  assert(path.isAbsolute(reference.path));\n  assert.match(reference.sha256, /^[a-f0-9]{64}$/);\n  assert(Number.isSafeInteger(reference.bytes) && reference.bytes >= 0);\n  assert(!pinnedReferences.has(path.resolve(reference.path).toLowerCase()), 'Duplicate immutable reference');\n  pinnedReferences.set(path.resolve(reference.path).toLowerCase(), reference);\n}\nfor (const proposal of manifest.source_proposals) {\n  for (const [referencePath, referenceSha] of [[proposal.path,proposal.sha256],[proposal.review_path,proposal.review_sha256]]) {\n    const reference = pinnedReferences.get(path.resolve(referencePath).toLowerCase());\n    assert(reference && reference.sha256 === referenceSha, 'Reviewed proposal must be an immutable final-guard reference');\n  }\n}\nassert.equal(manifest.source_proposals.length, 2);\nassert.deepEqual(manifest.source_proposals.map(proposal => proposal.role), ['sql','ledger']);\nassert.equal(manifest.source_proposals[0].sha256, 'b355222a8fe61353122a22b754b59936bab269a248cdce07d2a7d8b85da2dba3');\nassert.equal(manifest.source_proposals[0].review_sha256, '46d1166a7cceb5c8a1715034b96e76ddf54508bbc4f2fc24a4ccfe4e72b6d8e3');\nassert.equal(manifest.source_proposals[1].review_sha256, 'd9504ec7b44aa5d102cef7c6b270b0445412aa813f67978113edb6c53981f18b');\n\nfunction relativeFile(value) {\n  assert.equal(typeof value, 'string');\n  assert(value.length > 0 && !value.includes('\\\\') && !value.includes(':'));\n  assert(!path.posix.isAbsolute(value));\n  assert(value.split('/').every(part => part.length > 0 && part !== '.' && part !== '..'));\n  return value;\n}\nconst files = new Map();\nfor (const file of manifest.files) {\n  relativeFile(file.path);\n  assert(!files.has(file.path), 'Duplicate manifest path: ' + file.path);\n  assert.match(file.sha256, /^[a-f0-9]{64}$/);\n  assert(Number.isSafeInteger(file.bytes) && file.bytes >= 0);\n  files.set(file.path, file);\n}\nassert.equal(new Set([...files.keys()].map(p => p.toLowerCase())).size, files.size,\n  'Windows path aliases are not separate inputs');\nconst required = [];\nconst requiredPaths = new Set();\nfor (const group of manifest.required_tests) {\n  relativeFile(group.path);\n  assert(files.has(group.path), 'Required test source not frozen: ' + group.path);\n  assert(!requiredPaths.has(group.path), 'Duplicate required-test group');\n  requiredPaths.add(group.path);\n  assert(Array.isArray(group.names) && group.names.length > 0);\n  for (const name of group.names) {\n    assert.match(name, /^[A-Za-z_][A-Za-z_0-9]*$/);\n    required.push(name);\n  }\n}\nassert.equal(required.length, manifest.required_test_names);\nassert.equal(new Set(required).size, required.length, 'Required names must be unambiguous');\nconst baselineNames = baseline.required_tests.flatMap(group => group.names);\nassert.equal(baselineNames.length, 421); assert.equal(new Set(baselineNames).size, 421);\nfor (const name of baselineNames) assert(required.includes(name), 'Predecessor required name was removed: ' + name);\nfor (const previousGroup of baseline.required_tests) {\n  const currentGroup = manifest.required_tests.find(group => group.path === previousGroup.path);\n  assert(currentGroup, 'Predecessor required source group removed');\n  for (const name of previousGroup.names) assert(currentGroup.names.includes(name), 'Predecessor test moved out of its actual frozen source path: ' + name);\n}\nconst newRequiredNames = required.filter(name => !baselineNames.includes(name));\nassert.equal(manifest.inherited_required_test_names, 421);\nassert.equal(manifest.new_authored_test_functions, newRequiredNames.length);\nconst declaredNewNames = manifest.new_authored_tests.flatMap(group => group.names);\nassert.deepEqual([...declaredNewNames].sort(), [...newRequiredNames].sort());\nassert.equal(new Set(declaredNewNames).size, declaredNewNames.length);\nfor (const group of manifest.new_authored_tests) {\n  relativeFile(group.path);\n  const actualGroup = manifest.required_tests.find(item => item.path === group.path);\n  assert(actualGroup);\n  for (const name of group.names) assert(actualGroup.names.includes(name));\n}\nassert.equal(manifest.minimum_expected_workspace_tests, 1203 + newRequiredNames.length,\n  'Minimum must retain1203 plus every actual newly authored function');\nconst expectedNewFullNames = manifest.new_authored_full_test_names;\nassert(Array.isArray(expectedNewFullNames));\nfor (const name of expectedNewFullNames) assert.match(name,/^[A-Za-z_][A-Za-z_0-9]*(?:::[A-Za-z_][A-Za-z_0-9]*)+$/);\nassert.equal(new Set(expectedNewFullNames).size,expectedNewFullNames.length);\nassert.deepEqual(expectedNewFullNames.map(name=>name.split('::').at(-1)).sort(),[...newRequiredNames].sort());\nconst declaredSqlProposal = JSON.parse(fs.readFileSync(manifest.source_proposals[0].path));\nconst declaredLedgerProposal = JSON.parse(fs.readFileSync(manifest.source_proposals[1].path));\nassert.notEqual(manifest.source_proposals[1].sha256,'ee7f4782991d40bbe50da48675cab501c96b4fef6d1f4346296be1be29396652','Known rejected capacity v1 cannot be admitted');\nassert.equal(manifest.source_proposals[1].sha256,'9da86f091f5bba9ba70eca5415542cfaf9fb43947c9f5bb1259c192b2d170a82','Only final actual capacity-v3 source is admitted');\nassert.deepEqual([...expectedNewFullNames].sort(),[\n  ...declaredSqlProposal.new_named_tests.map(name=>'sitemap_membership_analysis::tests::'+name),\n  ...declaredLedgerProposal.new_test_names,\n].sort());\nconst previousFiles = new Map(baseline.files.map(file => [file.path, file]));\nfor (const filePath of previousFiles.keys()) assert(files.has(filePath), 'Predecessor input path removed: ' + filePath);\nconst bindings = new Map();\nfor (const item of manifest.approved_product_bindings) {\n  relativeFile(item.path); assert(!bindings.has(item.path), 'Duplicate delta binding');\n  assert(files.has(item.path), 'Delta path not in current input set');\n  assert.match(item.after_sha256, /^[a-f0-9]{64}$/);\n  assert(item.before_sha256 === 'ABSENT' || /^[a-f0-9]{64}$/.test(item.before_sha256));\n  assert(Number.isSafeInteger(item.bytes) && item.bytes >= 0);\n  bindings.set(item.path, item);\n}\nlet changedInputs = 0, newInputs = 0, unchangedInputs = 0;\nfor (const [filePath, current] of files) {\n  const before = previousFiles.get(filePath), delta = bindings.get(filePath);\n  if (before && before.sha256 === current.sha256 && before.bytes === current.bytes) {\n    assert(!delta, 'Unchanged input cannot be claimed as a delta: ' + filePath); unchangedInputs++;\n  } else {\n    assert(delta, 'Changed/new input lacks explicit Root delta pin: ' + filePath);\n    assert.equal(delta.before_sha256, before ? before.sha256 : 'ABSENT');\n    assert.equal(delta.after_sha256, current.sha256); assert.equal(delta.bytes, current.bytes);\n    if (before) { assert.notEqual(before.sha256, current.sha256); changedInputs++; } else newInputs++;\n  }\n}\nassert.equal(changedInputs + newInputs, bindings.size);\nassert.equal(rootApproval.files.length, bindings.size);\nfor (const item of rootApproval.files) {\n  relativeFile(item.path);\n  const actual = bindings.get(item.path);\n  assert(actual, 'Root approval delta absent from exact current source');\n  assert.equal(actual.before_sha256,item.before_sha256);\n  assert.equal(actual.after_sha256,item.after_sha256);\n  assert.equal(actual.bytes,item.bytes);\n}\nassert.equal(manifest.changed_parent_inputs,changedInputs);\nassert.equal(manifest.unchanged_parent_inputs,unchangedInputs);\nassert.equal(manifest.new_input_files,newInputs);\nassert.equal(files.size,301+newInputs);\nassert.equal(unchangedInputs + changedInputs, 301);\nconst lineage = Object.freeze({parent_source_manifest_sha256: baselineSha, root_approval_sha256: rootApprovalReference.sha256, parent_inputs: 301,\n  required_parent_names: 421, unchanged_parent_inputs: unchangedInputs, changed_parent_inputs: changedInputs,\n  new_input_files: newInputs, delta_bindings: bindings.size, new_named_windows_functions: newRequiredNames,\n  actual_required_names: required.length, actual_source_inputs: files.size,\n  minimum_expected_workspace_tests: manifest.minimum_expected_workspace_tests});\n"
+    },
+    {
+      "before": "const minimumExpected = manifest.minimum_expected_workspace_tests;",
+      "after": "const minimumExpected = manifest.minimum_expected_workspace_tests;\nassert.equal(files.size, 304);\nassert.equal(bindings.size, 18);\nassert.equal(newInputs, 3);\nassert.equal(required.length, 434);\nassert.equal(newRequiredNames.length, 13);\nassert.equal(minimumExpected, 1216);"
+    },
+    {
+      "before": "  const proof = JSON.parse(proofBytes);\n  assert.equal(proof.kind, 'combined_full_suite_v3');\n  assert.equal(proof.result, 'PASS_COMBINED_WORKSPACE_V3_REAL_RENDERER_FMT_CLIPPY');",
+      "after": "  assert.equal(sha(proofBytes), expectedSuiteProofSha, 'Explicit actual suite proof hash required');\n  const proof = JSON.parse(proofBytes);\n  assert.equal(proof.kind, 'combined_full_suite_v4');\n  assert.equal(proof.result, 'PASS_COMBINED_WORKSPACE_V4_REAL_RENDERER_FMT_CLIPPY');"
+    },
+    {
+      "before": "  const nameBytes = boundedRead(path.join(suiteRoot, 'required-test-results.json'), 8 * 1024 * 1024);",
+      "after": "  for (const expected of expectedNewFullNames) {\n    const found = seen.get(expected.split('::').at(-1)) ?? [];\n    assert.equal(found.length, 1, 'New authored full-module result missing/duplicate: ' + expected);\n    assert.equal(found[0].full, expected, 'New authored function executed in wrong Cargo module');\n    assert.equal(found[0].status, 'ok');\n  }\n  const nameBytes = boundedRead(path.join(suiteRoot, 'required-test-results.json'), 8 * 1024 * 1024);"
+    },
+    {
+      "before": "  assert.equal(worker.user_renderer_contacted, false);\n  assert.deepEqual(worker.renderer_input_hashes, manifest.files.filter(file => file.path.startsWith('renderer/')));",
+      "after": "  assert.equal(worker.user_renderer_contacted, false);\n  assert.equal(path.resolve(worker.renderer_runtime_root), path.resolve(task, 'outputs/open-seo-spider'));\n  assert.deepEqual(worker.renderer_input_hashes, manifest.files.filter(file => file.path.startsWith('renderer/')));\n  assert.equal(worker.renderer_input_hashes.length, 4);\n  for (const file of worker.renderer_input_hashes) {\n    const bytes = boundedRead(path.join(worker.renderer_runtime_root, file.path), 64 * 1024 * 1024);\n    assert.equal(bytes.length, file.bytes); assert.equal(sha(bytes), file.sha256);\n  }\n  assert.equal(path.resolve(worker.chrome_path), path.resolve('C:/Program Files/Google/Chrome/Application/chrome.exe'));\n  assert.match(worker.chrome_sha256, /^[a-f0-9]{64}$/);\n  assert.equal(sha(boundedRead(worker.chrome_path, 256 * 1024 * 1024)), worker.chrome_sha256);"
+    },
+    {
+      "before": "    renderer_gates: 4, actual_three_closes: true, owned_resources_closed: true,",
+      "after": "    renderer_gates: 4, actual_three_closes: true, owned_resources_closed: true,\n    new_authored_full_names: expectedNewFullNames, new_authored_full_names_verified: true,"
+    },
+    {
+      "before": "  assert.equal(sha(fs.readFileSync(previousAttemptPath)), previousAttemptSha, 'Previous attempt manifest changed');",
+      "after": "  assert.equal(sha(fs.readFileSync(rootApprovalReference.path)), rootApprovalReference.sha256, 'Root final-byte approval changed');\n  for (const reference of pinnedReferences.values()) {\n    const bytes = fs.readFileSync(reference.path);\n    assert.equal(bytes.length, reference.bytes); assert.equal(sha(bytes), reference.sha256, 'Reviewed immutable reference changed');\n  }"
+    },
+    {
+      "before": "  const result = accepted ? 'PASS_COMBINED_OPTIMIZED_BUILD_V3' : 'FAIL_COMBINED_OPTIMIZED_BUILD_V3';\n  write('proof.json', {schema_version: 1, kind: 'combined_optimized_build_v3', result,",
+      "after": "  const result = accepted ? 'PASS_COMBINED_OPTIMIZED_BUILD_V4' : 'FAIL_COMBINED_OPTIMIZED_BUILD_V4';\n  write('proof.json', {schema_version: 1, kind: 'combined_optimized_build_v4', result,"
+    },
+    {
+      "before": "    source_manifest_sha256: expectedManifestSha, source_commit: manifest.source_commit,",
+      "after": "    source_manifest_sha256: expectedManifestSha, explicit_suite_proof_sha256: expectedSuiteProofSha, source_commit: manifest.source_commit,"
+    },
+    {
+      "before": "same-v3-source PASS suite",
+      "after": "same-v4-source PASS suite"
+    },
+    {
+      "before": "All${manifest.files.length} frozen/Root bytes, parent67a manifest lineage, suite evidence and final candidate rehashed after actual build child close. Neither parent67a nor previous0bd2 Clippy-failed v2 is accepted.",
+      "after": "All${manifest.files.length} frozen/Root bytes, parent01bfa V3 manifest lineage, actual Root formatter/source approval and all reviewed SQL/final-capacity-v3 references, explicit full-suite proof hash, all13 new full Cargo module names, suite evidence and final candidate rehashed after actual build child close. No predecessor/source/proof label is accepted as a fresh V4 run."
+    }
+  ],
+  "inverse_byte_exact_after_normalized_newlines": true,
+  "source_validator": {
+    "bytes": 9816,
+    "sha256": "2b22fa721ea873305931b80a93b5d6a6f2b206f5f5866db015707f3e9f683fce",
+    "byte_exact_with_actual_v4_suite": true
+  },
+  "critical_regions": [
+    {
+      "name": "test profile assertions",
+      "bytes": 340,
+      "sha256": "697e67424be3f79370ccb0227c72acad2b6e48dd291462c5dad25b15e8126d40",
+      "retained_byte_exact": true
+    },
+    {
+      "name": "four genuine renderer names and exact suite commands",
+      "bytes": 612,
+      "sha256": "8ca850de23b3055a3b76a1573ab9effa50b7225c35a13f854cf60d88be6c1c26",
+      "retained_byte_exact": true
+    },
+    {
+      "name": "raw Cargo result summary parser",
+      "bytes": 221,
+      "sha256": "c84e865047c5473b4bea827688f15bbae7ce94817ec724ee1509068443e2935c",
+      "retained_byte_exact": true
+    },
+    {
+      "name": "actual three child-close receipts and raw logs",
+      "bytes": 1172,
+      "sha256": "9a96def208f51c090ef7518c91d9633f6ddf4409fc661edb31878a94d8d6662f",
+      "retained_byte_exact": true
+    },
+    {
+      "name": "actual workspace count and required-name parser",
+      "bytes": 1205,
+      "sha256": "a7edc83d1d4b4ff90223298fb252dc0980f2ddeadd2ae583266a5bb87199a2ab",
+      "retained_byte_exact": true
+    },
+    {
+      "name": "owned build process and actual close handler",
+      "bytes": 1056,
+      "sha256": "6b3e017ac76f2728aaeaeca0df5d2e8371073de89e9743141e3463b76153ef11",
+      "retained_byte_exact": true
+    },
+    {
+      "name": "exclusive file/fsync capture and actual optimized build/PE guard",
+      "bytes": 1599,
+      "sha256": "3b31d60cd073e78107cca491059a5c9df3e9ba89fac205f37fb4fa250e896e2c",
+      "retained_byte_exact": true
+    },
+    {
+      "name": "final guarded actual successful three-closes acceptance",
+      "bytes": 262,
+      "sha256": "5e4119d77a6df299e8f4f2331f1d61842541574ce3275aeaa14f2587da168f3b",
+      "retained_byte_exact": true
+    }
+  ],
+  "output": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-build-preparation-v4\\build-combined-optimized-v4.mjs",
+    "sha256": "2066cfb8fac0df49559a22be16058ebeb273ebeed5c7cc11e6236064cd4f2454",
+    "bytes": 29464
+  }
+}

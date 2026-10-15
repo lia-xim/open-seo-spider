@@ -6306,19 +6306,21 @@
     {
       "id": "combined-source-v4-20261015",
       "priority": 0,
-      "status": "REVIEWED_SOURCE_PROMOTED_FORMATTED_RUNTIME_NOT_RUN",
+      "status": "FULL_WINDOWS_WORKSPACE_V4_PASS_OPTIMIZED_BUILD_RUNNING",
       "title_de": "SQL-Skalierung und explizite Sitemap-Kapazität gemeinsam prüfen",
-      "summary_de": "18 geprüfte Quelländerungen sind eingebaut und formatiert. Berichtweite SQL-Metadaten werden je SELECT materialisiert; die optionale Mitgliedschaftskapazität ist getrennt vom Quellenbudget bis128MiB konfigurierbar. Unveränderte Standardkonfiguration bleibt bei32MiB. Für diesen neuen Stand gibt es noch keine Compiler- oder Laufzeitabnahme.",
+      "summary_de": "Der tatsächliche vollständige V4-Lauf besteht mit1216/0/0, allen434 Pflichtnamen,13 neuen Tests, vier echten Chromium-Fällen, Format und Clippy. Vollständige50.000 Parser-/SQLite-Mitgliedschaften samt Wiederöffnung sind geprüft. Der optimierte Build läuft; native Größen- und Quellenabnahmen sowie Installation bleiben separat offen.",
       "completed_acceptance_de": [
         "Beide konkreten Quellvorschläge unabhängig geprüft; sechs Rust-Dateien durch cargo fmt formatiert, JavaScript-Syntaxprüfung bestanden.",
-        "13 zusätzliche Testfunktionen vorbereitet, darunter echte50.000 Parser-/SQLite-Mitgliedschaften, Wiederöffnung, Rollback- und Konfigurationskontrollen. Noch nicht ausgeführt."
+        "13 zusätzliche Testfunktionen vorbereitet, darunter echte50.000 Parser-/SQLite-Mitgliedschaften, Wiederöffnung, Rollback- und Konfigurationskontrollen. Noch nicht ausgeführt.",
+        "Vollständiger tatsächlicher V4-Lauf:254 App-,844 Core- und118 Integrationstests bestanden,434 Pflichtnamen und vier echte Renderer-Fälle ausgeführt; Format und Clippy-Dwarnings0.",
+        "Eigene Renderer-/Fixture-Server tatsächlich geschlossen; alle304 Eingaben und unveränderlichen Review-/Freigabebelege anschließend erneut exakt."
       ],
       "pending_acceptance_de": [
-        "Diesen konkreten Quellstand einfrieren und den vollständigen Workspace mit allen434 Pflichtnamen, mindestens1216 Tests, vier echten Chromium-Fällen, Format und Clippy prüfen.",
         "Optimierten Kandidaten aus demselben Stand bauen und alle nativen Bereiche einschließlich unveränderter zwölf physischer Größenfälle erneut prüfen.",
         "Große echte Sitemap-Quellen einschließlich50.000 vollständiger dauerhafter Einträge und50MiB tatsächlich prüfen; Roh-XML-Dauerhaftigkeit, weitere Sonderfälle, Plattformen und Installation bleiben offen."
       ],
       "documentation": [
+        "docs/verification/combined-workspace-v4-20261015/index.json",
         "docs/verification/combined-source-v4-draft-20261015/index.json",
         "docs/verification/combined-optimized-native-v3-20261015/index.json"
       ],
@@ -6326,12 +6328,15 @@
         "source_review": "PASS_BOUNDED_SOURCE_ONLY",
         "formatter": "PASS_CARGO_FMT",
         "javascript_syntax": "PASS_NODE_CHECK",
-        "full_workspace": "NOT_RUN_ON_V4",
-        "optimized_candidate": "NOT_RUN_ON_V4",
+        "full_workspace": "PASS_COMBINED_WORKSPACE_V4_REAL_RENDERER_FMT_CLIPPY",
+        "optimized_candidate": "RUNNING_NOT_ACCEPTED",
         "native": "NOT_RUN_ON_V4",
         "physical": "NOT_RUN_ON_V4_PREVIOUS_V3_FAILED_EXTERNAL_ABORT",
         "installation": "NOT_RUN_INSTALLED_AB1_UNCHANGED",
-        "manufacturer_parity": "NOT_PROVEN"
+        "manufacturer_parity": "NOT_PROVEN",
+        "required_named_cases": "PASS_434",
+        "actual_renderer": "PASS_4",
+        "large_source_native": "NOT_RUN_ON_V4"
       },
       "reference_parity": "NOT_PROVEN"
     },

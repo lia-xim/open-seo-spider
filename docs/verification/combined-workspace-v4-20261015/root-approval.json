@@ -1,0 +1,229 @@
+{
+  "kind": "root_approved_combined_source_v4",
+  "status": "REVIEWED_FORMATTED_COMMITTED_AND_PRIVATELY_PUSHED",
+  "recorded_at": "2026-10-15T09:10:04.533Z",
+  "parent_source_manifest_sha256": "01bfa8efcb6745c5521be5e533ae63f2f15679318b095a29eb3ab925fef95bdf",
+  "source_commit": "f828ad133e0d5f8d32ee4fcf90bdb4611bd35924",
+  "source_branch": "codex/mcp-file-tools-20261015",
+  "source_worktree": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1",
+  "proposals": [
+    {
+      "role": "sql",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-page-context-sql-proposal-v1\\manifest.json",
+      "sha256": "b355222a8fe61353122a22b754b59936bab269a248cdce07d2a7d8b85da2dba3",
+      "review_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-page-context-sql-independent-review-v1\\receipt.json",
+      "review_sha256": "46d1166a7cceb5c8a1715034b96e76ddf54508bbc4f2fc24a4ccfe4e72b6d8e3"
+    },
+    {
+      "role": "ledger",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-v3\\manifest.json",
+      "sha256": "9da86f091f5bba9ba70eca5415542cfaf9fb43947c9f5bb1259c192b2d170a82",
+      "review_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-membership-capacity-review-v1\\receipt.json",
+      "review_sha256": "d9504ec7b44aa5d102cef7c6b270b0445412aa813f67978113edb6c53981f18b"
+    }
+  ],
+  "files": [
+    {
+      "path": "crates/core/src/sitemap_membership_analysis.rs",
+      "role": "sql",
+      "before_sha256": "cc5bb330a58579ded13a912b6b4348a818f0517a5e419aa139e531ae8be32691",
+      "proposal_sha256": "c03074e0781ebd4bf5ec61183786d60a23464d7e3b852ab14806abde5f8dd39b",
+      "after_sha256": "79d2355956a791a4e357ed1e726048b419fc76f0b092618f768dd492285973e3",
+      "bytes": 46331,
+      "format_only": true
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis/findings.rs",
+      "role": "sql",
+      "before_sha256": "37988de4ad4830df3b30ebda2e799226c10787869974eb3d0eda78a2d67afbf0",
+      "proposal_sha256": "dd28b86556b7d0c08428dbeb77d020643d51d47ce7058317659166e1ef2bf07e",
+      "after_sha256": "dd28b86556b7d0c08428dbeb77d020643d51d47ce7058317659166e1ef2bf07e",
+      "bytes": 10043,
+      "format_only": false
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis_tests.rs",
+      "role": "sql",
+      "before_sha256": "34b30c534cb54be245d43a1ad9597f860b80e3567b5210ed739e3d1419972a31",
+      "proposal_sha256": "ceb4d63864d57f93acfade2453bad5d4a401f44bfe96ef5ce8fd1a2a44ac5a95",
+      "after_sha256": "f493c3ff9f505975a77ac040b39459ac1a126806fb281d74a94830abcd382286",
+      "bytes": 39519,
+      "format_only": true
+    },
+    {
+      "path": "crates/app/src/mcp.rs",
+      "role": "ledger",
+      "before_sha256": "0d2101c963f6a3d849d6732e6da3500c16015a50e61644ccbcae9e76aca39d19",
+      "proposal_sha256": "aef10f447881b330301e3d6c50730907a9299bdd2980a0c9c0fc706bca6d738d",
+      "after_sha256": "aef10f447881b330301e3d6c50730907a9299bdd2980a0c9c0fc706bca6d738d",
+      "bytes": 30915,
+      "format_only": false
+    },
+    {
+      "path": "crates/app/src/server.rs",
+      "role": "ledger",
+      "before_sha256": "c6266aa464e77f03e654d65c9c3d0cd97341dc7fa8b5b6d5830af0b6e2a17024",
+      "proposal_sha256": "cb3015da3f5324a8340afc5e6d24ef4b664e8e40bee9f9f995515e847a0ca989",
+      "after_sha256": "cb3015da3f5324a8340afc5e6d24ef4b664e8e40bee9f9f995515e847a0ca989",
+      "bytes": 77462,
+      "format_only": false
+    },
+    {
+      "path": "crates/app/src/server/sitemap_membership_config_tests.rs",
+      "role": "ledger",
+      "before_sha256": "ABSENT",
+      "proposal_sha256": "ceca461f4b78018efbe0d5fd64a1f528774aeadbe391e8b6d32d8e1e0eaab452",
+      "after_sha256": "ceca461f4b78018efbe0d5fd64a1f528774aeadbe391e8b6d32d8e1e0eaab452",
+      "bytes": 3384,
+      "format_only": false
+    },
+    {
+      "path": "crates/app/src/server/sitemap_processing_config_tests.rs",
+      "role": "ledger",
+      "before_sha256": "312a8e388943e7027c82f2f8a95e214d65f1542f5ba75ec6c18c07ce5690f0a2",
+      "proposal_sha256": "a118467656cf1d920acad0f2b6db8ba71027a582350f98ac73f35cbdf8e7f818",
+      "after_sha256": "a118467656cf1d920acad0f2b6db8ba71027a582350f98ac73f35cbdf8e7f818",
+      "bytes": 2866,
+      "format_only": false
+    },
+    {
+      "path": "crates/core/src/crawler.rs",
+      "role": "ledger",
+      "before_sha256": "96cd830711c0ab0fbfdd31f60baf828d89c269badc10320d9a816504c098ccd9",
+      "proposal_sha256": "3860be000c4a87fc6d0438b4976fa36daaf46368cbcd05ef19e1945766ade8a1",
+      "after_sha256": "3860be000c4a87fc6d0438b4976fa36daaf46368cbcd05ef19e1945766ade8a1",
+      "bytes": 162718,
+      "format_only": false
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_membership_limits_tests.rs",
+      "role": "ledger",
+      "before_sha256": "ABSENT",
+      "proposal_sha256": "ed5326e2f2b8263591079f1945ff48dc8004c5e500d1efd2e611320e90285c88",
+      "after_sha256": "5bd5a9ae512aa76c0e4c8323656142f8b79c8564b30425a678865e058d5d8082",
+      "bytes": 6420,
+      "format_only": true
+    },
+    {
+      "path": "crates/core/src/models.rs",
+      "role": "ledger",
+      "before_sha256": "1b9e6b6d3330d6fd20d0e83feca2c891dd0b00cb9a6746b66b9254556f64e4ee",
+      "proposal_sha256": "55f56be7ebbf9b92cbebe7b58ee12788f92df83259bc1e8cdd4bda676a8d4a14",
+      "after_sha256": "73de1723d9e9698ac8cf2c69acbdbc6f23af647e96ebc72731a08e52c707c46a",
+      "bytes": 39030,
+      "format_only": true
+    },
+    {
+      "path": "crates/core/src/sitemap_coverage.rs",
+      "role": "ledger",
+      "before_sha256": "b383924b5b69485ef213e16ce2cf385d2c377fefa7865c965f7d68c21477a4f1",
+      "proposal_sha256": "03affb2284e95366a85ea6cd94ab4cfb556a463aade999664cba84062e49ece4",
+      "after_sha256": "03affb2284e95366a85ea6cd94ab4cfb556a463aade999664cba84062e49ece4",
+      "bytes": 30327,
+      "format_only": false
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger.rs",
+      "role": "ledger",
+      "before_sha256": "8ef116f6ae538f78dea5f5267db5c1fd1bceac1fa0e507ea9a9833440d14848e",
+      "proposal_sha256": "180d1f191f75cd20085f2ec9087d3482a57aa37c9690aa7dc79d5acc2b40f29e",
+      "after_sha256": "f459cae0436c722fcc7f784aa68be3af1a4a9f1f94f70328862ec44a4df94299",
+      "bytes": 74297,
+      "format_only": true
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/capacity_tests.rs",
+      "role": "ledger",
+      "before_sha256": "ABSENT",
+      "proposal_sha256": "56666bceed0ca18ee854659db6f52f3be53339c8b5153de4e426e77538ca19ee",
+      "after_sha256": "56666bceed0ca18ee854659db6f52f3be53339c8b5153de4e426e77538ca19ee",
+      "bytes": 8747,
+      "format_only": false
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/verified_read.rs",
+      "role": "ledger",
+      "before_sha256": "83a6cd87073949b5565a24234823f644162bf5131914896736cb0edfe54e8ffc",
+      "proposal_sha256": "bd3638c431fe3f6eee0f10bb34c2f90f249267aa54fbbb6014d7bc4d4d73abc0",
+      "after_sha256": "bd3638c431fe3f6eee0f10bb34c2f90f249267aa54fbbb6014d7bc4d4d73abc0",
+      "bytes": 33693,
+      "format_only": false
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger_models.rs",
+      "role": "ledger",
+      "before_sha256": "e5b06268d0a695837e9d151abe845f3a91f04f9d487c3bdd952cd77a0d43ce72",
+      "proposal_sha256": "c003da582b8d513586a9dc487a09b0517b5ccd0bb28b8fef356009cea6bb64cf",
+      "after_sha256": "66472b408bb39e848448ffc41b7e00a6a420f3a4d8ece4b586401aa1bfa3ab8a",
+      "bytes": 20634,
+      "format_only": true
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger_tests.rs",
+      "role": "ledger",
+      "before_sha256": "3b1447ec2d7d6067fc9b23511b9a4bd18d6b2a69b0821e75768aa261f94d56b0",
+      "proposal_sha256": "962103cb535e3aabd068811f5916aa443a64bea12b23461f8c4fa89efe7cb5b1",
+      "after_sha256": "962103cb535e3aabd068811f5916aa443a64bea12b23461f8c4fa89efe7cb5b1",
+      "bytes": 73646,
+      "format_only": false
+    },
+    {
+      "path": "web/app.js",
+      "role": "ledger",
+      "before_sha256": "b1ec57080fec11529e89b21ce07471ea3ddc2141d4f64ae79ffc236c9b5af3f0",
+      "proposal_sha256": "93c52f32a41eea283082d8aeb87b6d89c41ac6fb90aa3e660a39c2eae3b59522",
+      "after_sha256": "93c52f32a41eea283082d8aeb87b6d89c41ac6fb90aa3e660a39c2eae3b59522",
+      "bytes": 382036,
+      "format_only": false
+    },
+    {
+      "path": "web/index.html",
+      "role": "ledger",
+      "before_sha256": "ed8b3d0a624d02b428a3a7430845b417eca73a34bd3ecd6b0d5899d46bd15e77",
+      "proposal_sha256": "a6bee344838c266981e45fe8ae98fe6a8d7a58a774e794aeb04e9daea11c3ce9",
+      "after_sha256": "a6bee344838c266981e45fe8ae98fe6a8d7a58a774e794aeb04e9daea11c3ce9",
+      "bytes": 84618,
+      "format_only": false
+    }
+  ],
+  "new_authored_tests": [
+    {
+      "path": "crates/app/src/server/sitemap_membership_config_tests.rs",
+      "names": [
+        "create_dto_preserves_explicit_membership_capacity_through_saved_config_and_mcp_dispatch_shape",
+        "create_dto_membership_capacity_absent_null_and_source_profile_are_independent",
+        "create_dto_rejects_invalid_membership_capacity_before_any_job_admission"
+      ]
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_membership_limits_tests.rs",
+      "names": [
+        "membership_capacity_absence_null_and_source_work_keep_legacy_serialization",
+        "membership_capacity_strict_objects_reject_shapes_fields_and_hard_limit_violations",
+        "configured_membership_capacity_is_saved_bootstrapped_reopened_and_not_mutated_on_resume"
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/capacity_tests.rs",
+      "names": [
+        "complete_fifty_thousand_pairs_exceed_legacy_cap_but_commit_and_reopen_under_explicit_capacity",
+        "explicit_capacity_does_not_disable_row_count_caps_or_source_atomicity",
+        "above_default_capacity_requires_declared_config_on_sql_raw_portable_and_inherited_reads"
+      ]
+    },
+    {
+      "path": "crates/core/src/sitemap_membership_analysis_tests.rs",
+      "names": [
+        "materialized_report_page_context_preserves_selected_age_renderer_and_ordinals",
+        "materialized_report_page_context_keeps_target_json_strings_scalar_and_first_match",
+        "materialized_report_page_context_keeps_malformed_target_and_page_fields_fail_closed",
+        "materialized_report_page_context_preserves_large_fields_and_legacy_page_windows"
+      ]
+    }
+  ],
+  "actual_private_publication": {
+    "isPrivate": true,
+    "nameWithOwner": "lia-xim/open-seo-spider"
+  },
+  "qualification": "Root reviewed independent no-findings receipts and exact promotion; actual cargo fmt changes are layout/trailing commas only. Compiler and runtime not yet run for V4. No V3 PASS transfer."
+}
