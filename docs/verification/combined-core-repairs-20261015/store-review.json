@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "kind": "independent_store_byte_boundary_test_fix_review_v1",
+  "reviewer": "/root/finish_coverage",
+  "result": "NO_CONFIRMED_FINDINGS_IN_BOUNDED_STATIC_SCOPE",
+  "source_pins": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\store-byte-limit-test-proposal-v1\\manifest.json",
+      "sha256": "8386938a11e0e6f89424787d291dfe3268324a096f37e02bd667a0c0025228bc"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v1\\crates\\core\\src\\sitemap_source_store_tests.rs",
+      "sha256": "0dfb537fc2be097215a31772896d278029c89f97fe2cf7162ecf2a1773461196"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\store-byte-limit-test-proposal-v1\\crates\\core\\src\\sitemap_source_store_tests.rs",
+      "sha256": "074abf3a397e3a5b75d45c4f5cce83b0ee6b592b94dc2fe19b9a433ab7ef7b6b"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v1\\crates\\core\\src\\sitemap_source_store_models.rs",
+      "sha256": "18d83efb0ee42547682b392780ef412718374b75f2ab668562be59880fbe5c57"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v1\\crates\\core\\src\\sitemap_source_store.rs",
+      "sha256": "fe59417d12939e62e65c78ce894d7d34d55f2708ee792d1c21f3a04c438678ae"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-suite-v1\\workspace-live.log",
+      "sha256": "a1b1c5b53cdb49601bfebf6ded5dad0053911e10d6e7e4692de0d8f2c4306feb"
+    }
+  ],
+  "test_name": "actual_record_and_total_exact_bytes_plus_one_omit_durably_without_replacement",
+  "changed_function": {
+    "start_line": 436,
+    "end_line": 504
+  },
+  "checks": [
+    {
+      "claim": "Envelope<=catalog validation is existing production contract",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v1\\crates\\core\\src\\sitemap_source_store_models.rs",
+      "lines": [
+        29,
+        45
+      ]
+    },
+    {
+      "claim": "Charged allocation uses fixed4096metadata and unjoined-link reserve, not serialized metadata digit width",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v1\\crates\\core\\src\\sitemap_source_store.rs",
+      "lines": [
+        314,
+        358
+      ]
+    },
+    {
+      "claim": "Original actual panic is invalid envelope cap at fixture initialization",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-suite-v1\\workspace-live.log",
+      "lines": [
+        1118,
+        1121
+      ]
+    },
+    {
+      "claim": "New total tuples retain charged/exact-minus-one and use physical record cap; every case validates before fixture",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\store-byte-limit-test-proposal-v1\\crates\\core\\src\\sitemap_source_store_tests.rs",
+      "lines": [
+        452,
+        474
+      ]
+    }
+  ],
+  "preserved_regions": [
+    {
+      "label": "entire file before changed single function",
+      "bytes": 17701,
+      "before_sha256": "f6b83dff9acdca456dabb4bca03667c84052fc52e803aa9460edb8c8b3794060",
+      "after_sha256": "f6b83dff9acdca456dabb4bca03667c84052fc52e803aa9460edb8c8b3794060",
+      "exact": true
+    },
+    {
+      "label": "entire file after changed single function",
+      "bytes": 12349,
+      "before_sha256": "1fa964e41bf21581a5affe15a210adca5f5796d6982d19104c4364d875e00114",
+      "after_sha256": "1fa964e41bf21581a5affe15a210adca5f5796d6982d19104c4364d875e00114",
+      "exact": true
+    },
+    {
+      "label": "all actual persist/omit/retry/admission and Unicode exact-size assertions",
+      "bytes": 1212,
+      "before_sha256": "d2d6c56aeab21b0073e10bc20168b95ff13003cdbe6506a7bf8f894b616b34f7",
+      "after_sha256": "d2d6c56aeab21b0073e10bc20168b95ff13003cdbe6506a7bf8f894b616b34f7",
+      "exact": true
+    }
+  ],
+  "new_test_names": 0,
+  "product_changes": 0,
+  "validation": {
+    "source_reads_and_hashes": true,
+    "compiler_runs": 0,
+    "test_runs": 0,
+    "sqlite_fixture_runs": 0,
+    "root_git_runtime_mutations": 0
+  },
+  "limitations": [
+    "No compiler/type execution or repaired-test PASS claim",
+    "No broader Store or measurement validation audit",
+    "Actual directed/full-suite validation remains Root-owned"
+  ],
+  "support": [
+    {
+      "path": "REVIEW.md",
+      "sha256": "d29ff51b6b717b11eaf4d5d1f4343946aa4e2f10d4c4d2a34f7a6416e0e4b36b"
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "kind": "source_processing_object_profile_fix_v1",
+  "immutable": true,
+  "recorded_at": "2026-10-15T03:19:41.2169276Z",
+  "result": "AUTHORED_STRICT_MAP_PROFILE_FIX_NOT_RUN",
+  "basis": {
+    "source_root": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v1",
+    "manifest_sha256": "67aebeb959ac6cfb9f8352162becf3ff98ef90918c825a674ea2e92a5df353d0",
+    "source_commit": "e7d6d4ad082185fceff21b3687bc5279a82eabcd",
+    "source_inputs": 301,
+    "failed_candidate_not_build_eligible": true
+  },
+  "actual_trigger": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-suite-v1/workspace-live.log",
+    "sha256": "a1b1c5b53cdb49601bfebf6ded5dad0053911e10d6e7e4692de0d8f2c4306feb",
+    "lines": "1113-1116",
+    "test": "sitemap_source_processing::tests::source_profile_rejects_unknown_fields_and_non_integer_shapes",
+    "panic": "sitemap_source_processing_tests.rs:66:9 input []",
+    "suite_proof_sha256": "6d81568b4dbdb243bef2cc5a2e70f648da7c58f5550a9d1bfcf39b8a8fff6418",
+    "old_candidate_result": "FAIL_COMBINED_WORKSPACE",
+    "old_candidate_passed": 1079,
+    "old_candidate_failed": 4,
+    "old_candidate_ignored": 0,
+    "postfix_acceptance": false
+  },
+  "files": [
+    {
+      "path": "crates/core/src/sitemap_source_processing.rs",
+      "before_sha256": "e8f760e139fd9949ed0ed8f9c6b293a728474f81cfef66298640eb9e63fd3a3f",
+      "after_sha256": "f5ceba0574e4878675a990ca9b8ce0bc3bfd657ad89664fe3cf19e89e05f3a0a",
+      "bytes": 5998
+    },
+    {
+      "path": "crates/core/src/sitemap_source_processing_tests.rs",
+      "before_sha256": "690ba426d293ab95206fff0ed8f790628262ccdfa9d5c0fe2fe2d322932d3120",
+      "after_sha256": "5689b23a7fd2883b0c5bba1aaddbb745f6ddc3455c3cc8a4b1819e1715f9dc1f",
+      "bytes": 15241
+    }
+  ],
+  "source_context_pins": [
+    {
+      "path": "crates/core/src/models.rs",
+      "sha256": "1b9e6b6d3330d6fd20d0e83feca2c891dd0b00cb9a6746b66b9254556f64e4ee",
+      "lines": "4-18, 68, 104-125, 215-217, 346-348, 437-439",
+      "note": "Actual optional profile, unchanged helpers and other legacy config profiles"
+    },
+    {
+      "path": "crates/app/src/server.rs",
+      "sha256": "c6266aa464e77f03e654d65c9c3d0cd97341dc7fa8b5b6d5830af0b6e2a17024",
+      "lines": "512-562",
+      "note": "Actual outer object and typed CrawlConfig API boundary"
+    },
+    {
+      "path": "crates/app/src/main.rs",
+      "sha256": "e214be70dddfdf67ed2e4374dddf6a523b540a15ba73c6ee0242c9c7381a91e7",
+      "lines": "637-640",
+      "note": "Typed CLI configuration read"
+    },
+    {
+      "path": "crates/app/src/mcp.rs",
+      "sha256": "0d2101c963f6a3d849d6732e6da3500c16015a50e61644ccbcae9e76aca39d19",
+      "lines": "255-260",
+      "note": "Existing MCP forwards typed config to API"
+    },
+    {
+      "path": "crates/core/src/store.rs",
+      "sha256": "bdf8838fa21adf58b360ae8473ac63b73cefe68e22ed611c769dae7c0918128e",
+      "lines": "584, 1809, 2316, 2466, 2518, 2647",
+      "note": "Existing typed saved config/report/recrawl readers"
+    },
+    {
+      "path": "crates/core/src/content_capture.rs",
+      "sha256": "e4911917fb156e5f2812e60b242d8bc3960c04b1c7d00f42d559bff9b57c7454",
+      "lines": "30-32",
+      "note": "Unchanged independent profile"
+    },
+    {
+      "path": "crates/core/src/crawl_policy.rs",
+      "sha256": "ea379e32d381e9e5075950f4ec5fbe99b47f776732b1fa216a2647bc56c00725",
+      "lines": "158-160",
+      "note": "Unchanged independent profile"
+    },
+    {
+      "path": "crates/core/src/policy_ledger.rs",
+      "sha256": "fcc4b7400236d4703522d4e15a63ff0c44e20e0a623b300ed58b26433a22694c",
+      "lines": "13-15",
+      "note": "Unchanged independent profile"
+    },
+    {
+      "path": "crates/core/src/resource_policy.rs",
+      "sha256": "492ad0217934b7a772e7eb544aa96f9d4855bdf2054e3e69c32cb49c6691026e",
+      "lines": "176-178, 189-191",
+      "note": "Unchanged independent profiles"
+    }
+  ],
+  "preserved": {
+    "default_byte_exact": true,
+    "default_region_sha256": "84b87c751ac4c213e4868b4cdb7c139b79768700760a6b97f2de61c12f76a2c0",
+    "validate_parser_and_test_module_tail_byte_exact": true,
+    "validation_tail_sha256": "4317e3a4364fe9808feb5b61aadaa133c9cb90435e98f8622077a995759dee6a",
+    "other_eight_tests_byte_exact": true,
+    "other_tests_region_sha256": "d2555846c754a845d524d4e1d78b3d1167afc6a2bd3a368ce44a4f717bf20084",
+    "all_original_test_lines_preserved_in_order": true,
+    "test_function_names_byte_equal": true,
+    "existing_test_names": [
+      "source_profile_defaults_and_nested_crawl_serde_preserve_legacy_absence",
+      "source_profile_rejects_unknown_fields_and_non_integer_shapes",
+      "source_profile_all_three_exact_caps_and_zero_plus_one_are_explicit",
+      "configured_protocol_byte_neighbors_are_valid_budgets_without_allocating_sources",
+      "actual_crawl_helpers_keep_none_clamp_and_explicit_source_page_independence",
+      "crawl_body_helper_validates_other_profile_fields_before_returning_entity_limit",
+      "parser_work_caps_expand_but_all_other_default_caps_remain_enforced",
+      "count_work_limits_accept_large_profile_and_keep_its_own_default",
+      "actual_small_xml_pipeline_honors_explicit_byte_and_event_boundaries",
+      "separately_lowered_entity_and_xml_budgets_are_not_reordered_or_repaired"
+    ],
+    "new_test_names": 0,
+    "expanded_existing_groups": 2,
+    "other_configuration_profiles_unchanged": true,
+    "no_new_dependency": true
+  },
+  "source_validation": {
+    "rustfmt_exit_code": 0,
+    "rustfmt_check_exit_code": 0,
+    "static_hash_and_region_checks": "PASS",
+    "compiler": "NOT_RUN",
+    "tests": "NOT_RUN",
+    "runtime": "NOT_RUN",
+    "sqlite": "NOT_RUN",
+    "http": "NOT_RUN",
+    "root_mutations": 0,
+    "frozen_mutations": 0,
+    "git_mutations": 0
+  },
+  "integration": {
+    "root_sole_integrator": true,
+    "apply_only_if_both_beforeimages_match": true,
+    "required_next_gates": [
+      "Independent source review",
+      "Root focused actual profile/Core config tests",
+      "Existing actual App config boundary tests",
+      "New candidate full workspace and all four renderer gates before build/native proof"
+    ],
+    "physical_combined_rebind": "PLAN_ONLY until corrected frozen source/suite/builder identities"
+  },
+  "companion": {
+    "path": "HANDOFF.md",
+    "sha256": "4ddb676bb501701e2c5b4415b2696da3455bfb2bc5f6470ed218f1a4b8302f51",
+    "bytes": 3370
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "kind": "actual_core_three_repairs_five_focused_tests_v1",
+  "recorded_at": "2026-10-15T03:21:00.360Z",
+  "result": "PASS_THREE_REPAIRS_AND_TWO_NEW_TYPED_CONTROLS",
+  "source_inputs": 301,
+  "changed_inputs": 4,
+  "source_after_verified": true,
+  "profile": {
+    "CARGO_PROFILE_TEST_OPT_LEVEL": "1",
+    "CARGO_PROFILE_TEST_DEBUG_ASSERTIONS": "true",
+    "CARGO_PROFILE_TEST_OVERFLOW_CHECKS": "true",
+    "CARGO_PROFILE_TEST_DEBUG": "0"
+  },
+  "runs": [
+    {
+      "names": [
+        "crawler::sitemap_capture_tests::actual_oversized_redirect_context_retains_known_transport_with_unknown_decode_and_count"
+      ],
+      "args": [
+        "test",
+        "-p",
+        "open-seo-spider-core",
+        "--lib",
+        "--locked",
+        "crawler::sitemap_capture_tests::actual_oversized_redirect_context_retains_known_transport_with_unknown_decode_and_count",
+        "--",
+        "--exact",
+        "--test-threads=1"
+      ],
+      "pid": 48364,
+      "actual_cargo_close": {
+        "code": 0,
+        "signal": null
+      },
+      "spawn_error": null,
+      "elapsed_ms": 134098,
+      "log_sha256": "04a9f844edbc8d246bc0df2770aecf050f4e00423e276f8fa727fcf8e3f6c4d3",
+      "summaries": [
+        {
+          "state": "ok",
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "names": [
+        "sitemap::count_tests::count_same_strict_reader_stops_preserve_only_actual_completed_prefix_counts"
+      ],
+      "args": [
+        "test",
+        "-p",
+        "open-seo-spider-core",
+        "--lib",
+        "--locked",
+        "sitemap::count_tests::count_same_strict_reader_stops_preserve_only_actual_completed_prefix_counts",
+        "--",
+        "--exact",
+        "--test-threads=1"
+      ],
+      "pid": 32376,
+      "actual_cargo_close": {
+        "code": 0,
+        "signal": null
+      },
+      "spawn_error": null,
+      "elapsed_ms": 576,
+      "log_sha256": "2b675f427e0977504d4dc119a9384e112312ec8dd31beaf66121404122ba8175",
+      "summaries": [
+        {
+          "state": "ok",
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "names": [
+        "sitemap_source_store::tests::actual_record_and_total_exact_bytes_plus_one_omit_durably_without_replacement"
+      ],
+      "args": [
+        "test",
+        "-p",
+        "open-seo-spider-core",
+        "--lib",
+        "--locked",
+        "sitemap_source_store::tests::actual_record_and_total_exact_bytes_plus_one_omit_durably_without_replacement",
+        "--",
+        "--exact",
+        "--test-threads=1"
+      ],
+      "pid": 46164,
+      "actual_cargo_close": {
+        "code": 0,
+        "signal": null
+      },
+      "spawn_error": null,
+      "elapsed_ms": 804,
+      "log_sha256": "29a5b4becc7f6c323ee88f171ba1966537dc3625f5d001380faadfaa3dda7a4c",
+      "summaries": [
+        {
+          "state": "ok",
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "names": [
+        "sitemap_source_measurement::tests::context_unavailable_final_url_preserves_known_transport_and_unknown_assessments",
+        "sitemap_source_measurement::tests::context_unavailable_final_url_rejects_unqualified_mismatches_and_invented_facts"
+      ],
+      "args": [
+        "test",
+        "-p",
+        "open-seo-spider-core",
+        "--lib",
+        "--locked",
+        "context_unavailable_final_url_",
+        "--",
+        "--test-threads=1"
+      ],
+      "pid": 31124,
+      "actual_cargo_close": {
+        "code": 0,
+        "signal": null
+      },
+      "spawn_error": null,
+      "elapsed_ms": 540,
+      "log_sha256": "773331f883c9065212ab1812bda3b02695b8132b117366137c7de5e0c0fa5a48",
+      "summaries": [
+        {
+          "state": "ok",
+          "passed": 2,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "known_profile_array_failure": "NOT_FIXED_NOT_RUN_BY_THIS_GATE",
+  "full_workspace": "NOT_RUN_AFTER_REPAIRS",
+  "clippy": "NOT_RUN",
+  "four_real_renderer_gates": "NOT_RUN",
+  "installed_runtime": "UNCHANGED_AB1",
+  "manufacturer_parity": "NOT_PROVEN"
+}

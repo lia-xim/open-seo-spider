@@ -1,0 +1,33 @@
+{
+  "kind": "source_store_exact_byte_budget_test_fixture_repair_v1",
+  "recorded_at": "2026-10-15T03:13:28.766Z",
+  "status": "ACTUAL_PANIC_CONFIRMED_PROPOSED_NOT_EXECUTED",
+  "files": [
+    {
+      "path": "crates/core/src/sitemap_source_store_tests.rs",
+      "before_sha256": "0dfb537fc2be097215a31772896d278029c89f97fe2cf7162ecf2a1773461196",
+      "after_sha256": "074abf3a397e3a5b75d45c4f5cce83b0ee6b592b94dc2fe19b9a433ab7ef7b6b",
+      "bytes": 32822
+    }
+  ],
+  "new_test_names": 0,
+  "product_changes": 0,
+  "diagnosis": "The total-budget branch configured max_record_json_bytes16384 above its smaller exact catalog budget. validate() correctly rejects record cap > catalog cap before any storage decision. Set record cap to the already measured physical envelope in both total-boundary cases; retain actual whole-catalog exact/plus-one budgets and durable omission/retry/admission assertions. Explicitly require every case to have a valid configuration.",
+  "preserved_outside_single_test": true,
+  "original_fail_log_sha256": "a1b1c5b53cdb49601bfebf6ded5dad0053911e10d6e7e4692de0d8f2c4306feb",
+  "model_path": "crates/core/src/sitemap_source_store_models.rs",
+  "model_sha256": "18d83efb0ee42547682b392780ef412718374b75f2ab668562be59880fbe5c57",
+  "guards": [
+    "physical >0 and <=hard record cap",
+    "charged >=metadata allocation",
+    "physical <charged, so physical <=charged-1",
+    "validate() succeeds for every case before genuine fixture initialization"
+  ],
+  "validation": {
+    "rustfmt": 0,
+    "rustfmt_check": 0,
+    "compiler": "NOT_RUN",
+    "tests": "NOT_RUN",
+    "root_source_mutations": 0
+  }
+}

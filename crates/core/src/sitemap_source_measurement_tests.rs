@@ -767,3 +767,225 @@ fn whole_scan_event_cap_is_exact_and_only_event_limit_failure_can_have_sentinel(
     failed_at_sentinel.bounds.max_xml_events = 8;
     reject(failed_at_sentinel, F::InvalidScan); // EventLimit cannot occur before cap+1
 }
+
+// Synthetic typed contract evidence only. The unchanged actual loopback
+// oversized-redirect capture test remains the separate HTTP/Store regression.
+fn final_url_context_unavailable() -> SitemapSourceMeasurementPayload {
+    let mut p = complete(1, 100);
+    p.transport.initial_status = Some(302);
+    p.transport.final_url = None;
+    p.decode = SitemapSourceDecodeMeasurement {
+        encoding: None,
+        decoded_xml_bytes: SitemapMeasuredValue::unavailable(),
+        decoded_prefix_sha256: None,
+        decoded_complete_sha256: None,
+        integrity: SitemapSourceDecodeIntegrity::NotObserved,
+        stop_code: Some(SitemapSourceMeasurementStop::ContextUnavailable),
+    };
+    no_scan(&mut p, SitemapSourceMeasurementStop::ContextUnavailable);
+    p.membership_retention = SitemapMembershipRetention::Unobserved;
+    p
+}
+
+#[test]
+fn context_unavailable_final_url_preserves_known_transport_and_unknown_assessments() {
+    for status in [200, 206, 404] {
+        for body_complete in [true, false] {
+            let mut p = final_url_context_unavailable();
+            p.transport.final_status = Some(status);
+            p.transport.body_complete = body_complete;
+            if !body_complete {
+                p.transport.post_http_received_bytes = SitemapMeasuredValue::at_least(100);
+                p.transport.complete_post_http_entity_sha256 = None;
+            }
+            let before = p.clone();
+            let record = SitemapSourceMeasurement::new(p, &limits()).unwrap();
+            assert_eq!(
+                record.payload, before,
+                "status/completeness must not be discarded"
+            );
+            assert_eq!(record.payload.transport.initial_status, Some(302));
+            assert_eq!(record.payload.transport.final_status, Some(status));
+            assert!(record.payload.transport.final_url.is_none());
+            assert_eq!(record.payload.transport.body_complete, body_complete);
+            assert!(!http_source_observed(&record.payload.transport));
+            let json = serde_json::to_vec(&record).unwrap();
+            assert_eq!(
+                parse_sitemap_source_measurement_json(&json, &limits()).unwrap(),
+                record
+            );
+            let assessment = assess_sitemap_source_protocol_limits(&record, &limits()).unwrap();
+            assert_eq!(assessment.entry_limit.verdict, V::Unknown);
+            assert_eq!(assessment.decoded_xml_byte_limit.verdict, V::Unknown);
+            assert_eq!(
+                assessment.entry_limit.proof_quantity,
+                SitemapMeasuredValue::unavailable()
+            );
+            assert_eq!(
+                assessment.decoded_xml_byte_limit.proof_quantity,
+                SitemapMeasuredValue::unavailable()
+            );
+            assert_eq!(
+                assessment.decode_integrity,
+                SitemapSourceDecodeIntegrity::NotObserved
+            );
+            assert_eq!(
+                assessment.xml_scan_status,
+                SitemapSourceScanStatus::NotObserved
+            );
+            assert_eq!(
+                assessment.membership_retention,
+                SitemapMembershipRetention::Unobserved
+            );
+        }
+    }
+}
+
+#[test]
+fn context_unavailable_final_url_rejects_unqualified_mismatches_and_invented_facts() {
+    let mut ordinary_complete = complete(1, 100);
+    ordinary_complete.transport.final_url = None;
+    reject(ordinary_complete, F::InvalidTransport);
+
+    type Mutation = fn(&mut SitemapSourceMeasurementPayload);
+    let cases: &[(&str, Mutation, F)] = &[
+        (
+            "URL without response status",
+            |p| {
+                p.transport.final_url = Some("https://unit.example/final.xml".into());
+                p.transport.final_status = None;
+            },
+            F::InvalidTransport,
+        ),
+        (
+            "no bound requested URL",
+            |p| p.transport.requested_url = None,
+            F::InvalidTransport,
+        ),
+        (
+            "unstarted request",
+            |p| p.transport.request_started = false,
+            F::InvalidTransport,
+        ),
+        (
+            "no initial response",
+            |p| p.transport.initial_status = None,
+            F::InvalidTransport,
+        ),
+        (
+            "robots denied",
+            |p| p.transport.blocked_by_robots = true,
+            F::InvalidTransport,
+        ),
+        (
+            "invalid final status",
+            |p| p.transport.final_status = Some(99),
+            F::InvalidTransport,
+        ),
+        (
+            "invalid initial status",
+            |p| p.transport.initial_status = Some(600),
+            F::InvalidTransport,
+        ),
+        (
+            "wrong requested identity",
+            |p| p.transport.requested_url = Some("https://unit.example/other.xml".into()),
+            F::InvalidBinding,
+        ),
+        (
+            "decode claims completeness",
+            |p| p.decode.integrity = SitemapSourceDecodeIntegrity::Complete,
+            F::InvalidTransport,
+        ),
+        (
+            "decode has another stop",
+            |p| p.decode.stop_code = Some(SitemapSourceMeasurementStop::TransportIncomplete),
+            F::InvalidTransport,
+        ),
+        (
+            "decode stop absent",
+            |p| p.decode.stop_code = None,
+            F::InvalidTransport,
+        ),
+        (
+            "scan claims failure",
+            |p| p.scan.status = SitemapSourceScanStatus::Failed,
+            F::InvalidTransport,
+        ),
+        (
+            "scan has another stop",
+            |p| p.scan.stop_code = Some(SitemapSourceMeasurementStop::TransportIncomplete),
+            F::InvalidTransport,
+        ),
+        (
+            "scan stop absent",
+            |p| p.scan.stop_code = None,
+            F::InvalidTransport,
+        ),
+        (
+            "membership claims retention",
+            |p| p.membership_retention = SitemapMembershipRetention::Incomplete,
+            F::InvalidTransport,
+        ),
+        (
+            "invented encoding",
+            |p| p.decode.encoding = Some(SitemapEntityEncoding::Identity),
+            F::InvalidDecode,
+        ),
+        (
+            "invented decoded quantity",
+            |p| p.decode.decoded_xml_bytes = SitemapMeasuredValue::exact(1),
+            F::InvalidDecode,
+        ),
+        (
+            "invented decoded hash",
+            |p| p.decode.decoded_prefix_sha256 = Some(digest(b"invented")),
+            F::InvalidDecode,
+        ),
+        (
+            "invented root",
+            |p| p.scan.document_kind = Some(SitemapDocumentKind::UrlSet),
+            F::InvalidScan,
+        ),
+        (
+            "invented event quantity",
+            |p| p.scan.events_observed = SitemapMeasuredValue::exact(0),
+            F::InvalidScan,
+        ),
+        (
+            "invented eligible count",
+            |p| p.scan.counts.protocol_eligible_completed_entries = SitemapMeasuredValue::exact(1),
+            F::InvalidScan,
+        ),
+        (
+            "complete body without exact extent",
+            |p| p.transport.post_http_received_bytes = SitemapMeasuredValue::at_least(100),
+            F::InvalidTransport,
+        ),
+        (
+            "complete body without complete hash",
+            |p| p.transport.complete_post_http_entity_sha256 = None,
+            F::InvalidTransport,
+        ),
+    ];
+    for (name, mutation, expected) in cases {
+        let mut p = final_url_context_unavailable();
+        mutation(&mut p);
+        assert_eq!(
+            SitemapSourceMeasurement::new(p, &limits())
+                .unwrap_err()
+                .code,
+            *expected,
+            "{name}"
+        );
+    }
+
+    // An overlong initial task cannot bind a measurement at all. Its existing
+    // real capture still takes the explicit IdentityBytes omission path.
+    let mut oversized_initial = final_url_context_unavailable();
+    oversized_initial.binding.requested_task_url =
+        format!("https://unit.example/{}", "x".repeat(8193));
+    oversized_initial.transport.requested_url = None;
+    bind(&mut oversized_initial);
+    reject(oversized_initial, F::InvalidIdentity);
+}

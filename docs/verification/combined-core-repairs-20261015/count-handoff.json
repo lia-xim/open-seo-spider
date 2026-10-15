@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "kind": "count_reader_taxonomy_test_proposal_v1",
+  "immutable": true,
+  "recorded_at": "2026-10-15T03:10:49.5071964Z",
+  "status": "PROPOSED_PENDING_ACTUAL_PANIC_CONFIRMATION",
+  "integration_owner": "Root",
+  "source_manifest_sha256": "67aebeb959ac6cfb9f8352162becf3ff98ef90918c825a674ea2e92a5df353d0",
+  "source_commit": "e7d6d4ad082185fceff21b3687bc5279a82eabcd",
+  "files": [
+    {
+      "path": "crates/core/src/sitemap/count_tests.rs",
+      "before_sha256": "c1ec9f784a4a834116f9de756491731a4ed9581bb08b1818206a8a1a9ffb3e97",
+      "before_bytes": 17110,
+      "after_sha256": "decc7bd19a236535ab63d42cf00a1be32f5be444d165a9a663152618d4d82b84",
+      "after_bytes": 19058,
+      "only_changed_function": "count_same_strict_reader_stops_preserve_only_actual_completed_prefix_counts",
+      "all_other_function_and_file_bytes_exact": true
+    }
+  ],
+  "source_pins": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v1\\manifest.json",
+      "sha256": "67aebeb959ac6cfb9f8352162becf3ff98ef90918c825a674ea2e92a5df353d0",
+      "bytes": 103034
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v1\\crates\\core\\src\\sitemap\\xml.rs",
+      "sha256": "e39d0178798e3d595dc987c1e7000080d0d21cbc038594ad0e2ed922624d60cb",
+      "bytes": 47852
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v1\\crates\\core\\src\\sitemap\\tests.rs",
+      "sha256": "959cc909ebef1b6073fa2ce2da76a26a3da973ed51f041180005320e30707ddf",
+      "bytes": 31460
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-source-protocol-source-v1\\crates\\core\\src\\sitemap\\xml.rs",
+      "sha256": "e39d0178798e3d595dc987c1e7000080d0d21cbc038594ad0e2ed922624d60cb",
+      "bytes": 47852
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\docs\\sitemap-parser.md",
+      "sha256": "6cce1551093543e0df0f54bedf2d64dd4658ebb6d1c27d4186daf33af7317a49",
+      "bytes": 5553
+    },
+    {
+      "path": "C:/Users/matth/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quick-xml-0.42.0/src/events/mod.rs",
+      "sha256": "1269a8a6237380195542a50086b2cf830f84269cc7988a0a2a3f67188e436b6e",
+      "bytes": 66348
+    },
+    {
+      "path": "C:/Users/matth/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/quick-xml-0.42.0/src/escape.rs",
+      "sha256": "6a40232b8b3abd4e33ef3e9168e0532238aca6233c058be04468f60ede5e8cb3",
+      "bytes": 120899
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\count-reader-taxonomy-test-proposal-v1\\HANDOFF.md",
+      "sha256": "3f52c33f0681a94603c740df75feb477dc30bf35a44646b56382de9f9cc1ae2b",
+      "bytes": 3296
+    }
+  ],
+  "required_promotion_guard": "Actual original count-test panic must confirm numeric0 literal expected sitemap_illegal_xml_character versus actual sitemap_invalid_entity before Root integration; otherwise keep held.",
+  "actual_observation": "Combined full suite reported count test FAILED; captured panic cause not yet emitted at authoring. No runtime-cause or post-fix PASS claimed.",
+  "test_changes": {
+    "prefix_cases_before": 6,
+    "prefix_cases_after": 7,
+    "numeric_zero": "Retained original input with stable shared invalid_entity classification",
+    "decoded_control": "Additional numeric1 requires illegal_xml_character with one actual completed eligible prefix",
+    "retained_binding": "Same failure reason, retained complete-entry and closed-loc facts, zero admission, incomplete-entry distinction",
+    "raw_preflight": "Original UTF8/rawNUL and additional valid-prefix/rawNUL all require zero counts/events and exact full-input length/SHA plus actual retained error",
+    "new_test_names": 0,
+    "test_names": [
+      "count_namespaces_extensions_duplicates_and_legacy_are_separate",
+      "count_recoverable_loc_diagnostics_continue_with_disjoint_entry_classes",
+      "count_strict_loc_profile_has_independent_lexical_and_character_boundaries",
+      "count_same_strict_reader_stops_preserve_only_actual_completed_prefix_counts",
+      "count_work_bounds_remain_separate_from_unchanged_retention_caps",
+      "count_actual_49999_50000_50001_entries_and_unfinished_threshold_controls",
+      "retained_xml_raw_spans_context_hashes_and_typed_json_match_independent_golden"
+    ]
+  },
+  "checks": {
+    "rustfmt_exit": 0,
+    "rustfmt_check_exit": 0,
+    "single_function_boundary_guard": "PASS",
+    "compiler": 0,
+    "cargo": 0,
+    "tests": 0,
+    "sqlite_http_fixture_runtime": 0,
+    "product_root_frozen_changes": 0
+  },
+  "proof_boundary": "Proposed source-only test correction, pending actual panic match and later Root focused execution. No product change, assertion removal, failed-source builder/native/physical authorization or full acceptance."
+}

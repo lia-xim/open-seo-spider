@@ -10,6 +10,17 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
 
 ## Aktuelle Arbeit und nächste Schritte
 
+- [ ] **Vier Fehler aus dem kombinierten Gesamtlauf beheben** — PASS_EIGHTEEN_DIRECTED_TESTS_FULL_WORKSPACE_OPEN. Der tatsächliche kombinierte Lauf endete mit1.079 bestandenen,4 fehlgeschlagenen und0 ignorierten Tests. Alle vier Fehler sind gezielt korrigiert;18 gerichtete Testfunktionen bestehen. Ein neuer vollständiger Workspace mit den vier echten Renderer-Gates, Format und Clippy steht aus.
+  - [x] Vollständigen fehlgeschlagenen kombinierten Lauf archiviert: App251/0/0 und Core828/4/0, tatsächlicher Cargo-Exit101, beide eigenen Server geschlossen und alle301 Eingaben danach bytegleich.
+  - [x] Bekannten HTTP-Status nach einer zu langen finalen Redirect-Adresse erhalten; XML-Decoding, Zählung und daraus abgeleitete Aussagen bleiben ausdrücklich unbekannt. Echte Redirect-Regression und zwei neue positive/negative Typed-Kontrollgruppen bestehen.
+  - [x] Konfigurationsprofil verlangt ein Objekt. Standardwerte, Teilkonfigurationen, äußeres null, Serialisierung und vorhandene Budgets bleiben erhalten; zehn Core-Profiltests und drei App-DTO-Gruppen bestehen.
+  - [x] Zwei vorhandene Tests präzisiert: tatsächliche XML-Reader-Fehlerklasse für numerische Null und gültige Record-/Gesamtkap-Konfiguration vor exakten Bytegrenzen. Alle ursprünglichen Fehler-/Persistenz-/Cleanup-Prüfungen bleiben erhalten.
+  - [ ] Neuen exakten Quellstand einfrieren und vollständigen Workspace einschließlich aller bisherigen Fälle, vier tatsächlicher Renderer-Gates, Format und Clippy bestehen.
+  - [ ] Optimierten Kandidaten aus demselben Quellstand bauen und native API-/CLI-/SDK-/Browser-/physische sowie Plattformabnahmen ausführen.
+  - [ ] Daten erhaltende Installation separat prüfen; die aktuell laufende ab1-Version bleibt unverändert.
+  - Verträge: [index.json](verification/combined-core-repairs-20261015/index.json), [proof.json](verification/combined-core-repairs-20261015/failed-full-suite/proof.json), [proof.json](verification/combined-core-repairs-20261015/focused-three-repairs/proof.json), [proof.json](verification/combined-core-repairs-20261015/focused-profile/proof.json).
+  - Gate-Stand: historical_full_workspace: FAIL_1079_PASS_4_FAIL_0_IGNORE; directed_core_and_app: PASS_18_ACTUAL_FUNCTIONS; full_workspace_after_repairs: NOT_RUN; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN.
+
 - [ ] **CSV-Worker bei abgebrochenen und parallelen Shutdowns vollständig halten** — PASS_TWO_DIRECTED_REAL_CSV_REGRESSIONS_FULL_WORKSPACE_OPEN. Eine quellseitig bestätigte Lücke konnte nach Supervisorabbruch den tatsächlichen Blocking-Join verlieren und die Abrechnung hängen lassen. Registry, Worker und Supervisor behalten jetzt gemeinsame Join-Slots; abgebrochene oder gleichzeitige Drains nehmen keine laufenden Handles heraus. Zwei echte Crawler-/SQLite-/CSV-Regressionen bestehen. Produzenten-, Body-, Formatierungs- und Budgetregionen bleiben byteidentisch; vollständige Abnahme steht aus.
   - [x] Unabhängiger begrenzter Source-Review ohne bestätigte Befunde; beide kritischen Originalregionen mit2171 und20684 Bytes unabhängig bytegleich geprüft.
   - [x] Zwei tatsächliche neue Regressionen bestehen: Supervisorabbruch samt Body-/Callerabbruch und abgebrochene/gleichzeitige Drains. Reale Blocking-Rückkehr wird kontrolliert gehalten; vor Freigabe bleibt Drain nachweislich wartend, danach sind beide tatsächlichen Joins beobachtet, Registry leer und Abrechnung vollständig.
@@ -5385,4 +5396,4 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `b2808d084e2bd5ec55d3ef544cb090a0c037801780aaf23b9c3386c0a43dad71`. Letzter im Katalog erfasster Beweisstand: `2026-10-14T17:39:44.101Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `047e09937d85cc02deb4f9c808897b14b8ac18bce5404c8a71b647ef92c4be58`. Letzter im Katalog erfasster Beweisstand: `2026-10-14T17:39:44.101Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

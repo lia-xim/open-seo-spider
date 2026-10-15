@@ -449,20 +449,26 @@ fn actual_record_and_total_exact_bytes_plus_one_omit_durably_without_replacement
     projected.records.push(record);
     refresh(&mut projected).unwrap();
     let charged = projected.summary.charged_json_bytes as usize;
+    assert!(physical > 0 && physical <= MAX_SOURCE_RECORD_BYTES);
+    assert!(charged >= SOURCE_METADATA_ALLOCATION_BYTES as usize);
+    assert!(
+        physical < charged,
+        "record fits both total-boundary configurations"
+    );
     for (record_cap, total_cap, persisted) in [
         (physical, MAX_SOURCE_STORE_BYTES, true),
         (physical - 1, MAX_SOURCE_STORE_BYTES, false),
-        (MAX_SOURCE_RECORD_BYTES, charged, true),
-        (MAX_SOURCE_RECORD_BYTES, charged - 1, false),
+        (physical, charged, true),
+        (physical, charged - 1, false),
     ] {
-        let mut f = fixture(
-            SitemapSourceStoreLimits {
-                max_record_json_bytes: record_cap,
-                max_catalog_json_bytes: total_cap,
-                ..Default::default()
-            },
-            Default::default(),
-        );
+        let limits = SitemapSourceStoreLimits {
+            max_record_json_bytes: record_cap,
+            max_catalog_json_bytes: total_cap,
+            ..Default::default()
+        };
+        // These cases reach storage-budget decisions, not invalid configuration.
+        limits.validate().unwrap();
+        let mut f = fixture(limits, Default::default());
         let (batch, m) = source(&f, EMPTY);
         let r = persist(&mut f, &batch.document, &m);
         assert_eq!(r.is_persisted(), persisted);

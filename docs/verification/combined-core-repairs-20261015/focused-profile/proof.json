@@ -1,0 +1,98 @@
+{
+  "kind": "actual_strict_object_profile_and_app_config_focus_v1",
+  "recorded_at": "2026-10-15T03:29:12.213Z",
+  "result": "PASS_TEN_PROFILE_AND_THREE_APP_CONFIG_GROUPS",
+  "source_inputs": 301,
+  "source_after_verified": true,
+  "profile": {
+    "CARGO_PROFILE_TEST_OPT_LEVEL": "1",
+    "CARGO_PROFILE_TEST_DEBUG_ASSERTIONS": "true",
+    "CARGO_PROFILE_TEST_OVERFLOW_CHECKS": "true",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_PROFILE_DEV_DEBUG": "0"
+  },
+  "runs": [
+    {
+      "args": [
+        "test",
+        "-p",
+        "open-seo-spider-core",
+        "--lib",
+        "--locked",
+        "sitemap_source_processing::tests::",
+        "--",
+        "--test-threads=1"
+      ],
+      "names": [
+        "sitemap_source_processing::tests::source_profile_defaults_and_nested_crawl_serde_preserve_legacy_absence",
+        "sitemap_source_processing::tests::source_profile_rejects_unknown_fields_and_non_integer_shapes",
+        "sitemap_source_processing::tests::source_profile_all_three_exact_caps_and_zero_plus_one_are_explicit",
+        "sitemap_source_processing::tests::configured_protocol_byte_neighbors_are_valid_budgets_without_allocating_sources",
+        "sitemap_source_processing::tests::actual_crawl_helpers_keep_none_clamp_and_explicit_source_page_independence",
+        "sitemap_source_processing::tests::crawl_body_helper_validates_other_profile_fields_before_returning_entity_limit",
+        "sitemap_source_processing::tests::parser_work_caps_expand_but_all_other_default_caps_remain_enforced",
+        "sitemap_source_processing::tests::count_work_limits_accept_large_profile_and_keep_its_own_default",
+        "sitemap_source_processing::tests::actual_small_xml_pipeline_honors_explicit_byte_and_event_boundaries",
+        "sitemap_source_processing::tests::separately_lowered_entity_and_xml_budgets_are_not_reordered_or_repaired"
+      ],
+      "pid": 17032,
+      "actual_close": {
+        "code": 0,
+        "signal": null
+      },
+      "spawn_error": null,
+      "elapsed_ms": 85084,
+      "log_sha256": "73e8ed3fa72e8c42e3a160f386262ae4a8537470335516afef309d6f07542ddf",
+      "summaries": [
+        {
+          "state": "ok",
+          "passed": 10,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "args": [
+        "test",
+        "-p",
+        "open-seo-spider",
+        "--bin",
+        "open-seo-spider",
+        "--locked",
+        "server::sitemap_processing_config_tests::",
+        "--",
+        "--test-threads=1"
+      ],
+      "names": [
+        "server::sitemap_processing_config_tests::create_dto_preserves_source_work_limits_without_widening_page_bodies",
+        "server::sitemap_processing_config_tests::create_dto_missing_or_null_source_profile_keeps_historical_configuration",
+        "server::sitemap_processing_config_tests::create_dto_rejects_invalid_or_unknown_source_profile_fields"
+      ],
+      "pid": 39240,
+      "actual_close": {
+        "code": 0,
+        "signal": null
+      },
+      "spawn_error": null,
+      "elapsed_ms": 137045,
+      "log_sha256": "b1e1b185169a9aaf717e30d544e5b769f1d00223cf794679ed9fec0d80e5b3c5",
+      "summaries": [
+        {
+          "state": "ok",
+          "passed": 3,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "full_workspace": "NOT_RUN_AFTER_REPAIRS",
+  "clippy": "NOT_RUN",
+  "four_renderer_gates": "NOT_RUN",
+  "runtime_installation": "UNCHANGED_AB1",
+  "manufacturer_parity": "NOT_PROVEN"
+}

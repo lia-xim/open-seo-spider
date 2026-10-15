@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "kind": "independent_source_processing_object_profile_review_v1",
+  "reviewer": "/root/finish_coverage",
+  "result": "NO_CONFIRMED_FINDINGS_IN_BOUNDED_STATIC_SCOPE",
+  "source_pins": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-processing-object-profile-fix-v1\\manifest.json",
+      "sha256": "fffb84f1ffb412b8b5df3a815fbc5591b37d86c4a839d2ec39017a1dbd5f066b",
+      "bytes": 6580
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v1\\crates\\core\\src\\sitemap_source_processing.rs",
+      "sha256": "e8f760e139fd9949ed0ed8f9c6b293a728474f81cfef66298640eb9e63fd3a3f",
+      "bytes": 3387
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-processing-object-profile-fix-v1\\crates\\core\\src\\sitemap_source_processing.rs",
+      "sha256": "f5ceba0574e4878675a990ca9b8ce0bc3bfd657ad89664fe3cf19e89e05f3a0a",
+      "bytes": 5998
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v1\\crates\\core\\src\\sitemap_source_processing_tests.rs",
+      "sha256": "690ba426d293ab95206fff0ed8f790628262ccdfa9d5c0fe2fe2d322932d3120",
+      "bytes": 12599
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-processing-object-profile-fix-v1\\crates\\core\\src\\sitemap_source_processing_tests.rs",
+      "sha256": "5689b23a7fd2883b0c5bba1aaddbb745f6ddc3455c3cc8a4b1819e1715f9dc1f",
+      "bytes": 15241
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v1\\crates\\core\\src\\models.rs",
+      "sha256": "1b9e6b6d3330d6fd20d0e83feca2c891dd0b00cb9a6746b66b9254556f64e4ee",
+      "bytes": 36613
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v1\\crates\\app\\src\\server.rs",
+      "sha256": "c6266aa464e77f03e654d65c9c3d0cd97341dc7fa8b5b6d5830af0b6e2a17024",
+      "bytes": 77121
+    }
+  ],
+  "findings": [],
+  "checks": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-processing-object-profile-fix-v1\\crates\\core\\src\\sitemap_source_processing.rs",
+      "lines": [
+        40,
+        101
+      ],
+      "topic": "generic Deserialize map entrypoint, map-only Visitor, unchanged default start, strict identifiers, duplicate flags and usize types"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-processing-object-profile-fix-v1\\crates\\core\\src\\sitemap_source_processing_tests.rs",
+      "lines": [
+        9,
+        94
+      ],
+      "topic": "stable serialization/partial/generic map positive and nested optional null/absence"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-processing-object-profile-fix-v1\\crates\\core\\src\\sitemap_source_processing_tests.rs",
+      "lines": [
+        97,
+        154
+      ],
+      "topic": "original negatives plus arrays/scalars/null/generic sequence and raw duplicates/floats/exponents, standalone and nested"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v1\\crates\\core\\src\\models.rs",
+      "lines": [
+        1,
+        18,
+        68,
+        104,
+        125
+      ],
+      "topic": "actual Option profile and unchanged limits helpers"
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v1\\crates\\app\\src\\server.rs",
+      "lines": [
+        512,
+        562
+      ],
+      "topic": "actual API outer object and Value-to-CrawlConfig boundary; raw duplicates already deduplicated at Value parse"
+    }
+  ],
+  "preserved_regions": [
+    {
+      "label": "unchanged Default implementation",
+      "bytes": 335,
+      "before_sha256": "84b87c751ac4c213e4868b4cdb7c139b79768700760a6b97f2de61c12f76a2c0",
+      "after_sha256": "84b87c751ac4c213e4868b4cdb7c139b79768700760a6b97f2de61c12f76a2c0",
+      "exact": true
+    },
+    {
+      "label": "unchanged validate/parser_limits and original module tail",
+      "bytes": 1671,
+      "before_sha256": "4317e3a4364fe9808feb5b61aadaa133c9cb90435e98f8622077a995759dee6a",
+      "after_sha256": "4317e3a4364fe9808feb5b61aadaa133c9cb90435e98f8622077a995759dee6a",
+      "exact": true
+    },
+    {
+      "label": "unchanged other eight test groups",
+      "bytes": 9727,
+      "before_sha256": "d2555846c754a845d524d4e1d78b3d1167afc6a2bd3a368ce44a4f717bf20084",
+      "after_sha256": "d2555846c754a845d524d4e1d78b3d1167afc6a2bd3a368ce44a4f717bf20084",
+      "exact": true
+    }
+  ],
+  "test_names": [
+    "source_profile_defaults_and_nested_crawl_serde_preserve_legacy_absence",
+    "source_profile_rejects_unknown_fields_and_non_integer_shapes",
+    "source_profile_all_three_exact_caps_and_zero_plus_one_are_explicit",
+    "configured_protocol_byte_neighbors_are_valid_budgets_without_allocating_sources",
+    "actual_crawl_helpers_keep_none_clamp_and_explicit_source_page_independence",
+    "crawl_body_helper_validates_other_profile_fields_before_returning_entity_limit",
+    "parser_work_caps_expand_but_all_other_default_caps_remain_enforced",
+    "count_work_limits_accept_large_profile_and_keep_its_own_default",
+    "actual_small_xml_pipeline_honors_explicit_byte_and_event_boundaries",
+    "separately_lowered_entity_and_xml_budgets_are_not_reordered_or_repaired"
+  ],
+  "all_original_test_lines_preserved_in_order": true,
+  "new_test_functions": 0,
+  "scope_limits": [
+    "Raw HTTP duplicate-key handling unchanged and not proven by Core from_str cases",
+    "Other configuration profiles/binary-format roundtrips not audited",
+    "No historical invalid-array repair",
+    "Root reported focused PASS separately; reviewer execution remains zero"
+  ],
+  "actual_validation": {
+    "source_hash_and_diff_reads": true,
+    "compiler_runs": 0,
+    "test_runs": 0,
+    "fixture_sqlite_http_browser_sdk_runtime_runs": 0,
+    "product_root_git_mutations": 0
+  },
+  "support": [
+    {
+      "path": "REVIEW.md",
+      "sha256": "b62782fae953088781c827403f4c87de6e5409f4154e763c93bfdd3782e388f8"
+    }
+  ]
+}

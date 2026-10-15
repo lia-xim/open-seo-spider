@@ -1,0 +1,24 @@
+{
+  "kind": "root_context_unavailable_transport_scoped_source_review_v1",
+  "recorded_at": "2026-10-15T03:14:25.374Z",
+  "handoff_sha256": "7a0b28830c86b57ca50edbc566479267978f4865beb1c6787e5875f99bb38268",
+  "result": "NO_CONFIRMED_FINDINGS_IN_BOUNDED_SOURCE_REVIEW",
+  "product_diff": "Only bounded final URL comment and qualifying ContextUnavailable presence exception. Known statuses/body facts remain unchanged; all existing decode/scan/hash/count checks and normal mismatch rejection retained.",
+  "required_qualifiers": [
+    "request_started",
+    "bound requested_url present",
+    "observed initial_status present",
+    "final_url absent and valid final_status present",
+    "not robots blocked",
+    "decode and scan explicitly NotObserved ContextUnavailable",
+    "membership Unobserved"
+  ],
+  "old_typed_test_bytes_exact_prefix": true,
+  "old_real_capture_source_unchanged": true,
+  "new_groups": 2,
+  "positive_variants": 6,
+  "negative_mutations": 23,
+  "actual_panic_matched": true,
+  "compiler": "NOT_RUN",
+  "runtime": "NOT_RUN"
+}

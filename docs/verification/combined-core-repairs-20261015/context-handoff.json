@@ -1,0 +1,94 @@
+{
+  "version": 1,
+  "name": "sitemap-context-measurement-proposal-v1",
+  "owner": "/root/finish_coverage/file_tools_api_review",
+  "status": "PROPOSED_ACTUAL_PANIC_MATCHED_NOT_EXECUTED",
+  "sourceRoot": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v1",
+  "sourcePins": [
+    {
+      "path": "manifest.json",
+      "sha256": "67aebeb959ac6cfb9f8352162becf3ff98ef90918c825a674ea2e92a5df353d0"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "58319c673e028d93e9f7b99a0c163116cc53d395e202d03b003855b3321f031f"
+    },
+    {
+      "path": "crates/core/Cargo.toml",
+      "sha256": "9f788f04b4e3ca15e946ec55333739bfbe290c27c04d175a378cc8f446fa996e"
+    },
+    {
+      "path": "crates/core/src/crawler.rs",
+      "sha256": "ef99fff8bdba98ac09e9df494c1ae7eb20e86d229468b1e5bb94e27649091d68"
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_capture.rs",
+      "sha256": "741276e08981e852bcef6a67d36c9ceebbeb152599abcae3a3a77e7f74e5504a"
+    },
+    {
+      "path": "crates/core/src/crawler/sitemap_capture_tests.rs",
+      "sha256": "182f08a5cfb8209bd800462d42406f9613082f8e824d229952c3a431e4b760b0"
+    }
+  ],
+  "actualFailure": {
+    "log": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-suite-v1\\workspace-live.log",
+    "sha256AtCapture": "a1b1c5b53cdb49601bfebf6ded5dad0053911e10d6e7e4692de0d8f2c4306feb",
+    "lines": [
+      1102,
+      1103
+    ],
+    "sourceLine": 290,
+    "actual": "strict measurement binding: Measurement(SitemapSourceMeasurementFailure { code: InvalidTransport })",
+    "appPassed": 251,
+    "appFailed": 0,
+    "corePassed": 828,
+    "coreFailed": 4,
+    "coreIgnored": 0,
+    "coreDurationSeconds": 691.97
+  },
+  "payloads": [
+    {
+      "path": "crates/core/src/sitemap_source_measurement.rs",
+      "before": "33ee0337c8a72566cba2ef2055b9585e5fa3eb75c999bbdd570738e605a07f5d",
+      "after": "b70ced5d81c5a2708529e014ca61a24dea2458011277aa227530808db2bd2dca",
+      "bytes": 37942
+    },
+    {
+      "path": "crates/core/src/sitemap_source_measurement_tests.rs",
+      "before": "e6ae54fdba0687e62c2c94c86ffb5a451b1c6f080bd2935f288aca181aa9e6ba",
+      "after": "5ae47c3571ad3e8a64f86c0a991a8ffd377440ac76d9d893004e6e9f3ed8cdac",
+      "bytes": 40196
+    }
+  ],
+  "support": [
+    {
+      "path": "HANDOFF.md",
+      "sha256": "9b66c515b5cba715fa487cd61c76d64e3c02ec92d741e34dfd776cb749116fe2"
+    },
+    {
+      "path": "PANIC.txt",
+      "sha256": "9a4fa318051578a46750087c5a37b5d91ca34a52b349e93c8ad0cd427369b82e"
+    }
+  ],
+  "guards": {
+    "oldTypedFileExactPrefix": true,
+    "oldTypedGroupNamesExactOnce": 28,
+    "newTypedGroups": 30,
+    "productOnlyDocAndPresenceGuardChanged": true,
+    "actualCaptureTestSourceUnchanged": true,
+    "rootAndFrozenSourceWrites": 0
+  },
+  "addedTestNames": [
+    "context_unavailable_final_url_preserves_known_transport_and_unknown_assessments",
+    "context_unavailable_final_url_rejects_unqualified_mismatches_and_invented_facts"
+  ],
+  "validation": {
+    "authoredOnly": true,
+    "compilerRuns": 0,
+    "testRuns": 0,
+    "fixtureRuns": 0,
+    "standaloneRustfmtExit": 0,
+    "standaloneRustfmtCheckExit": 0,
+    "status": "NOT PROVEN; Root must independently review, promote and execute sequentially"
+  }
+}

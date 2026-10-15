@@ -153,6 +153,8 @@ pub struct SitemapSourceTransportMeasurement {
     pub http_decode_profile: String,
     pub request_started: bool,
     pub requested_url: Option<String>,
+    /// Exact bounded context. A lost final URL may retain observed status only
+    /// with explicit unobserved ContextUnavailable decode/scan facts.
     pub final_url: Option<String>,
     pub initial_status: Option<u16>,
     pub final_status: Option<u16>,
@@ -413,8 +415,23 @@ fn validate_transport(
     for status in [t.initial_status, t.final_status].into_iter().flatten() {
         require((100..=599).contains(&status), F::InvalidTransport)?;
     }
+    // A received response can have a final URL beyond the capture's field
+    // budget. Preserve its known status without inventing decoded XML or a
+    // known HTTP200 source. The later decode/scan validators still require
+    // unavailable quantities and absent hashes, encoding and scanner context.
+    let final_context_unavailable = t.request_started
+        && t.requested_url.is_some()
+        && t.initial_status.is_some()
+        && t.final_url.is_none()
+        && t.final_status.is_some()
+        && !t.blocked_by_robots
+        && p.decode.integrity == SitemapSourceDecodeIntegrity::NotObserved
+        && p.decode.stop_code == Some(SitemapSourceMeasurementStop::ContextUnavailable)
+        && p.scan.status == SitemapSourceScanStatus::NotObserved
+        && p.scan.stop_code == Some(SitemapSourceMeasurementStop::ContextUnavailable)
+        && p.membership_retention == SitemapMembershipRetention::Unobserved;
     require(
-        t.final_url.is_some() == t.final_status.is_some(),
+        t.final_url.is_some() == t.final_status.is_some() || final_context_unavailable,
         F::InvalidTransport,
     )?;
     optional_hash(&t.retained_post_http_prefix_sha256)?;

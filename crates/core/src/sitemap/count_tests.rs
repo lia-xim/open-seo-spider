@@ -178,8 +178,9 @@ fn count_same_strict_reader_stops_preserve_only_actual_completed_prefix_counts()
             2,
             2,
         ),
+        ("<url><loc>&#0;</loc></url>", "sitemap_invalid_entity", 2, 2),
         (
-            "<url><loc>&#0;</loc></url>",
+            "<url><loc>&#1;</loc></url>",
             "sitemap_illegal_xml_character",
             2,
             2,
@@ -202,18 +203,64 @@ fn count_same_strict_reader_stops_preserve_only_actual_completed_prefix_counts()
         let result = scan(&source);
         assert!(!result.xml_scan_complete, "{suffix}");
         assert_eq!(result.failure.unwrap().code, expected_code);
+        let retained = observe_sitemap_xml(
+            source.as_bytes(),
+            SitemapParserContext::default(),
+            &SitemapParserLimits::default(),
+        )
+        .unwrap();
+        assert!(!retained.complete, "{suffix}");
+        assert_eq!(retained.failure.as_ref().unwrap().code, expected_code);
+        assert_eq!(retained.entries.len() as u64, starts, "{suffix}");
+        assert_eq!(
+            retained
+                .entries
+                .iter()
+                .filter(|entry| entry.complete)
+                .count(),
+            1,
+            "{suffix}"
+        );
+        assert_eq!(retained.locations.len(), 1, "{suffix}");
+        assert_eq!(retained.admission_locations().count(), 0, "{suffix}");
         assert_eq!(result.counts.immediate_entry_starts, starts);
         assert_eq!(result.counts.started_document_namespace_loc_elements, locs);
+        assert_eq!(result.counts.actual_document_namespace_loc_occurrences, 1);
         assert_eq!(result.counts.completed_immediate_entries, 1);
         assert_eq!(result.counts.protocol_eligible_completed_entries, 1);
         assert_eq!(result.counts.missing_location_entries, 0);
+        assert_eq!(result.counts.multiple_location_entries, 0);
+        assert_eq!(result.counts.invalid_single_location_entries, 0);
     }
-    for bytes in [
-        b"<urlset>\xff</urlset>".as_slice(),
-        b"<urlset>\0</urlset>".as_slice(),
+    // Numeric zero fails the shared entity resolver; nonzero U+0001 reaches
+    // decoded XML-character validation. Raw controls are rejected before any
+    // events, including when a syntactically valid entry precedes the control.
+    let raw_control_after_prefix =
+        format!("<urlset xmlns='{NS}'>{first}<url><loc>\0</loc></url></urlset>");
+    for (bytes, expected_code) in [
+        (b"<urlset>\xff</urlset>".as_slice(), "sitemap_invalid_utf8"),
+        (
+            b"<urlset>\0</urlset>".as_slice(),
+            "sitemap_illegal_xml_character",
+        ),
+        (
+            raw_control_after_prefix.as_bytes(),
+            "sitemap_illegal_xml_character",
+        ),
     ] {
         let result = count_sitemap_xml(bytes, &SitemapCountLimits::default()).unwrap();
         assert!(!result.xml_scan_complete);
+        assert_eq!(result.failure.as_ref().unwrap().code, expected_code);
+        assert_eq!(
+            observe_sitemap_xml(
+                bytes,
+                SitemapParserContext::default(),
+                &SitemapParserLimits::default()
+            )
+            .unwrap_err()
+            .code,
+            expected_code
+        );
         assert_eq!(result.events_observed, 0);
         assert_eq!(result.counts, SitemapXmlCountFacts::default());
         assert_eq!(result.input_xml_bytes, bytes.len());

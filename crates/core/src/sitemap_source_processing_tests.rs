@@ -14,6 +14,10 @@ fn source_profile_defaults_and_nested_crawl_serde_preserve_legacy_absence() {
     assert_eq!(profile.max_decoded_xml_bytes, 8 * 1024 * 1024);
     assert_eq!(profile.max_xml_events, 500_000);
     assert_eq!(
+        serde_json::to_string(&profile).unwrap(),
+        r#"{"max_post_http_entity_bytes":8388608,"max_decoded_xml_bytes":8388608,"max_xml_events":500000}"#
+    );
+    assert_eq!(
         profile.parser_limits().unwrap(),
         SitemapParserLimits::default()
     );
@@ -31,6 +35,14 @@ fn source_profile_defaults_and_nested_crawl_serde_preserve_legacy_absence() {
             .unwrap()
             .get("sitemap_source_processing")
             .is_none()
+    );
+    let null_profile: CrawlConfig =
+        serde_json::from_str(r#"{"sitemap_source_processing":null}"#).unwrap();
+    assert!(null_profile.sitemap_source_processing.is_none());
+    assert_eq!(
+        serde_json::to_vec(&null_profile).unwrap(),
+        serde_json::to_vec(&config).unwrap(),
+        "explicit outer null preserves the absent-profile configuration bytes"
     );
 
     let configured: CrawlConfig = serde_json::from_value(json!({
@@ -50,6 +62,38 @@ fn source_profile_defaults_and_nested_crawl_serde_preserve_legacy_absence() {
             .sitemap_source_processing,
         configured.sitemap_source_processing
     );
+    let partial: SitemapSourceProcessingConfig =
+        serde_json::from_str(r#"{"max_xml_events":1}"#).unwrap();
+    assert_eq!(
+        partial,
+        SitemapSourceProcessingConfig {
+            max_xml_events: 1,
+            ..Default::default()
+        }
+    );
+    assert_eq!(
+        serde_json::from_str::<SitemapSourceProcessingConfig>(
+            &serde_json::to_string(&partial).unwrap()
+        )
+        .unwrap(),
+        partial
+    );
+    let map = serde::de::value::MapDeserializer::<_, serde::de::value::Error>::new(
+        [
+            ("max_post_http_entity_bytes", 1usize),
+            ("max_decoded_xml_bytes", 2),
+            ("max_xml_events", 3),
+        ]
+        .into_iter(),
+    );
+    assert_eq!(
+        SitemapSourceProcessingConfig::deserialize(map).unwrap(),
+        SitemapSourceProcessingConfig {
+            max_post_http_entity_bytes: 1,
+            max_decoded_xml_bytes: 2,
+            max_xml_events: 3,
+        }
+    );
 }
 
 #[test]
@@ -62,6 +106,14 @@ fn source_profile_rejects_unknown_fields_and_non_integer_shapes() {
         json!({"max_xml_events": "500000"}),
         json!({"max_decoded_xml_bytes": null}),
         json!([]),
+        json!([1]),
+        json!([1, 2, 3]),
+        json!([1, 2, 3, 4]),
+        json!([[]]),
+        json!(true),
+        json!(false),
+        json!(0),
+        json!("profile"),
     ] {
         assert!(
             serde_json::from_value::<SitemapSourceProcessingConfig>(value.clone()).is_err(),
@@ -70,6 +122,27 @@ fn source_profile_rejects_unknown_fields_and_non_integer_shapes() {
         assert!(
             serde_json::from_value::<CrawlConfig>(json!({"sitemap_source_processing": value}))
                 .is_err()
+        );
+    }
+    assert!(serde_json::from_value::<SitemapSourceProcessingConfig>(Value::Null).is_err());
+    let empty = std::iter::empty::<usize>();
+    let sequence = serde::de::value::SeqDeserializer::<_, serde::de::value::Error>::new(empty);
+    assert!(SitemapSourceProcessingConfig::deserialize(sequence).is_err());
+    for raw in [
+        r#"{"max_xml_events":1.0}"#,
+        r#"{"max_xml_events":1e0}"#,
+        r#"{"max_post_http_entity_bytes":1,"max_post_http_entity_bytes":2}"#,
+        r#"{"max_decoded_xml_bytes":1,"max_decoded_xml_bytes":2}"#,
+        r#"{"max_xml_events":1,"max_xml_events":2}"#,
+    ] {
+        assert!(
+            serde_json::from_str::<SitemapSourceProcessingConfig>(raw).is_err(),
+            "{raw}"
+        );
+        let nested = format!(r#"{{"sitemap_source_processing":{raw}}}"#);
+        assert!(
+            serde_json::from_str::<CrawlConfig>(&nested).is_err(),
+            "{raw}"
         );
     }
     // Type overflow is rejected by serde before validation, on either 32/64-bit usize.

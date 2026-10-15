@@ -5975,6 +5975,15 @@
       "recorded_at": "2026-10-14T17:39:44.101Z",
       "scope": "Actual optimized ab1/206-source native JSON8MiB and CSV64MiB exact200, atomic413 and unchanged same-snapshot recovery. Rejected JSON+1 is actual Rust-serde reconstruction from concrete native facts; CSV+1 uses measured genuine quote/ASCII increments. All source/SQL/read intervals and producer close/drain retained. Independent delivered body hashes reviewed.",
       "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "combined-core-repairs-directed-20261015",
+      "artifact": "docs/verification/combined-core-repairs-20261015/index.json",
+      "artifact_sha256": "b24f426164890e79758d58f8cd0c37577deff2266f569d36057f2140a62abd17",
+      "result": "PASS_EIGHTEEN_DIRECTED_TESTS_FULL_WORKSPACE_OPEN",
+      "recorded_at": "2026-10-15T03:30:00.026Z",
+      "scope": "Actual failed combined1079/4 and18 subsequent directed functions bound to their own captured301-input sets. Not full-workspace, renderer, Clippy, native release or manufacturer parity proof.",
+      "reference_parity": "NOT_PROVEN"
     }
   ],
   "reference_workflows": [
@@ -6234,6 +6243,38 @@
   },
   "last_verified_at": "2026-10-14T17:39:44.101Z",
   "current_work": [
+    {
+      "id": "combined-core-repairs-20261015",
+      "status": "PASS_EIGHTEEN_DIRECTED_TESTS_FULL_WORKSPACE_OPEN",
+      "priority": 0,
+      "title_de": "Vier Fehler aus dem kombinierten Gesamtlauf beheben",
+      "summary_de": "Der tatsächliche kombinierte Lauf endete mit1.079 bestandenen,4 fehlgeschlagenen und0 ignorierten Tests. Alle vier Fehler sind gezielt korrigiert;18 gerichtete Testfunktionen bestehen. Ein neuer vollständiger Workspace mit den vier echten Renderer-Gates, Format und Clippy steht aus.",
+      "completed_acceptance_de": [
+        "Vollständigen fehlgeschlagenen kombinierten Lauf archiviert: App251/0/0 und Core828/4/0, tatsächlicher Cargo-Exit101, beide eigenen Server geschlossen und alle301 Eingaben danach bytegleich.",
+        "Bekannten HTTP-Status nach einer zu langen finalen Redirect-Adresse erhalten; XML-Decoding, Zählung und daraus abgeleitete Aussagen bleiben ausdrücklich unbekannt. Echte Redirect-Regression und zwei neue positive/negative Typed-Kontrollgruppen bestehen.",
+        "Konfigurationsprofil verlangt ein Objekt. Standardwerte, Teilkonfigurationen, äußeres null, Serialisierung und vorhandene Budgets bleiben erhalten; zehn Core-Profiltests und drei App-DTO-Gruppen bestehen.",
+        "Zwei vorhandene Tests präzisiert: tatsächliche XML-Reader-Fehlerklasse für numerische Null und gültige Record-/Gesamtkap-Konfiguration vor exakten Bytegrenzen. Alle ursprünglichen Fehler-/Persistenz-/Cleanup-Prüfungen bleiben erhalten."
+      ],
+      "pending_acceptance_de": [
+        "Neuen exakten Quellstand einfrieren und vollständigen Workspace einschließlich aller bisherigen Fälle, vier tatsächlicher Renderer-Gates, Format und Clippy bestehen.",
+        "Optimierten Kandidaten aus demselben Quellstand bauen und native API-/CLI-/SDK-/Browser-/physische sowie Plattformabnahmen ausführen.",
+        "Daten erhaltende Installation separat prüfen; die aktuell laufende ab1-Version bleibt unverändert."
+      ],
+      "documentation": [
+        "docs/verification/combined-core-repairs-20261015/index.json",
+        "docs/verification/combined-core-repairs-20261015/failed-full-suite/proof.json",
+        "docs/verification/combined-core-repairs-20261015/focused-three-repairs/proof.json",
+        "docs/verification/combined-core-repairs-20261015/focused-profile/proof.json"
+      ],
+      "gates": {
+        "historical_full_workspace": "FAIL_1079_PASS_4_FAIL_0_IGNORE",
+        "directed_core_and_app": "PASS_18_ACTUAL_FUNCTIONS",
+        "full_workspace_after_repairs": "NOT_RUN",
+        "installed_runtime": "UNCHANGED_AB1",
+        "manufacturer_parity": "NOT_PROVEN"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
     {
       "id": "csv-registry-lifecycle-20261015",
       "status": "PASS_TWO_DIRECTED_REAL_CSV_REGRESSIONS_FULL_WORKSPACE_OPEN",
