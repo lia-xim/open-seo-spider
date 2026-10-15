@@ -1,0 +1,76 @@
+{
+  "kind": "csv",
+  "label": "csv-05-exact",
+  "target": 67108864,
+  "expected": {
+    "length": 67108864,
+    "sha256": "39a9ab2f6933aba3f8bd2f51be2ff857aa5706a4d1ff909f8e831079931adc7c",
+    "finding_rows": 405,
+    "context_rows": 1,
+    "header_rows": 1,
+    "columns": 10,
+    "independence": "Independent uncapped CSV quoting/count/SHA over actual bounded native Finding DTOs and actual metadata context, rowwise; predicate truth and native-warning-writer provenance are not invented"
+  },
+  "physical": {
+    "status": 200,
+    "headers": {
+      "content-disposition": "attachment; filename=\"648da2e8-9008-40de-b224-e5e1552069ea-sitemap-findings.csv\"",
+      "content-length": "67108864",
+      "content-type": "text/csv; charset=utf-8",
+      "date": "Thu, 15 Oct 2026 12:14:51 GMT",
+      "x-sitemap-csv-sha256": "39a9ab2f6933aba3f8bd2f51be2ff857aa5706a4d1ff909f8e831079931adc7c",
+      "x-sitemap-findings-context-sha256": "3a0ba3bc970a9bb3c0da59b0d7cd1dde74b20b6224791ae17bea0e3db4ebab78",
+      "x-sitemap-findings-selection-sha256": "866ad1192b874b497fe729c481e5dfe187094cc88cb53c7143eddf7a8a8b1042"
+    },
+    "length": 67108864,
+    "sha256": "39a9ab2f6933aba3f8bd2f51be2ff857aa5706a4d1ff909f8e831079931adc7c",
+    "normal_eof": true
+  },
+  "mutation": {
+    "qualification": "SYNTHETIC_OFFLINE_WARNING_FACTS_NOT_WEBSITE_OBSERVATIONS",
+    "parameters": {
+      "base_quotes": 54586,
+      "base_ascii": 0,
+      "last_quotes": 0,
+      "last_ascii": 473
+    },
+    "original_report_sha256": "6d20ce2b278da83e9decf2632900d7d6b53739a89c2ea8389b6b97b7bc9b6e03",
+    "report_sha256": "7367e92a73abc3468da2b617fdfb1963e4ae691a30dcf774480df3b27e6b7cd8",
+    "report_bytes": 57723319,
+    "original_checkpoint_sha256": "7fc0856382570db0dbc31920f51bffb050eb3596b219a780ac122e9625d7ed46",
+    "checkpoint_sha256": "197c42a922268e620447a02b44764db28d78132495c29039bcc66183946c9476",
+    "changed_sql_rows": [
+      "metadata.report",
+      "metadata.checkpoint"
+    ],
+    "changed_warning_values": 405,
+    "changed_warning_ordinals": {
+      "first": 0,
+      "last": 404,
+      "count": 405
+    },
+    "warning_fragment_inverse_exact": true,
+    "checkpoint_fragment_inverse_exact": true,
+    "unchanged_sql_fingerprint": {
+      "rows": 1632,
+      "sha256": "347e33384f13ce2e7954fe9dcaa5315a35e89e5a89c1e9eab15c0ef0a83ebe01",
+      "exclusions": [
+        "metadata.report",
+        "metadata.checkpoint"
+      ]
+    },
+    "warning_field_bytes_max": 55059,
+    "raw_source_config_generation_retained": true
+  },
+  "native_rows": {
+    "count": 405,
+    "requests": 41,
+    "bytes": 44872921,
+    "sha256": "e0609f03e92c613a6921c972b9e9718f5dcd96068129ab4707aeaa14c6a6ca34"
+  },
+  "native_context_sha256": "3a0ba3bc970a9bb3c0da59b0d7cd1dde74b20b6224791ae17bea0e3db4ebab78",
+  "zero_website_requests": true,
+  "saved_bytes_unchanged_in_primed_read_interval": true,
+  "public_baseline_id": "648da2e8-9008-40de-b224-e5e1552069ea",
+  "controlled_offline_test_facts": true
+}

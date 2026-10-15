@@ -1,0 +1,58 @@
+{
+  "recorded_at": "2026-10-15T12:33:49.897Z",
+  "kind": "actual_r3_fresh_idle_and_inflight_eof_pass",
+  "result": "PASS_SOURCE5_IDLE_AND_ACTUAL_INFLIGHT_CRAWL_EOF_ONLY",
+  "qualification": "Both fresh own children naturally close0 without signal/forced cleanup. Idle tools/no-write case and actual held in-flight crawl with listener refusal before body release, paused one-completed/two-pending persistence, no late GETs and before/after actual close receipts all pass. Exact V2 changes retry observed ECONNRESET only; actual ECONNREFUSED remains required under unchanged10s budget. First failed attempt remains archived separately. Not a general transport/slow-reader/hard shutdown latency proof.",
+  "files": [
+    {
+      "path": "01-idle-eof.stderr.log",
+      "sha256": "7639932df3daa4af81b730f537b59826e22fe484c7d1e12e1d2856cb5fb14329",
+      "bytes": 604
+    },
+    {
+      "path": "01-idle-eof.stdout.log",
+      "sha256": "22e5af8ffee7771b065f409a4d4ca15c9ddb43a9d9561e7001921db7ad920beb",
+      "bytes": 40
+    },
+    {
+      "path": "02-inflight-crawl-eof.after-close.persistence.json",
+      "sha256": "7ef5f265aeef18a784980f7c0f3153b4df0710e80946ab8c08b1e0c493c736b0",
+      "bytes": 3793
+    },
+    {
+      "path": "02-inflight-crawl-eof.before-close.persistence.json",
+      "sha256": "26f7e1adf95ac0d85edd0bdd856cf48506a4a3d321d69b938644b3e5c6ecfeb3",
+      "bytes": 3794
+    },
+    {
+      "path": "02-inflight-crawl-eof.stderr.log",
+      "sha256": "b3f262e9237b460930551360784a08ba89e39476ca0e4b0239533f4fcdace471",
+      "bytes": 604
+    },
+    {
+      "path": "02-inflight-crawl-eof.stdout.log",
+      "sha256": "71d831ebc2a4768f3aea183f71b0aaff721e6e64c94fdba95e30d9665c9d4706",
+      "bytes": 40
+    },
+    {
+      "path": "proof.json",
+      "sha256": "fbf816a90ccd8f7e513adc73db51e4ee7e5ee57e56b1152c812676e1e23b959b",
+      "bytes": 22225
+    },
+    {
+      "path": "root-release.json",
+      "sha256": "19a7728cf289d4bb34ecf45ca602b114ebec09aa8e1dabf6f89ffe9af0d83ad9",
+      "bytes": 1891
+    },
+    {
+      "path": "preparation-manifest.json",
+      "sha256": "cc467376c9ef31939e37dc22d16d82eccd81952c91f6c14b569b3ced19fe625f",
+      "bytes": 6092
+    },
+    {
+      "path": "independent-root-review.json",
+      "sha256": "3250d5e0d1703959ea630ca7e6cca187765539a292615f31373125c4f8a92df8",
+      "bytes": 5800
+    }
+  ]
+}

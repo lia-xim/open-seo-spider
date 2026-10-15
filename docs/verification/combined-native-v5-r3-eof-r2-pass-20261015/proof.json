@@ -1,0 +1,600 @@
+{
+  "kind": "source5_owned_http_eof_native",
+  "result": "PASS_SOURCE5_IDLE_AND_ACTUAL_INFLIGHT_CRAWL_EOF_ONLY",
+  "release": {
+    "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/source5-r3-native-eof-r2-release.json",
+    "sha256": "19a7728cf289d4bb34ecf45ca602b114ebec09aa8e1dabf6f89ffe9af0d83ad9"
+  },
+  "binder": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/native-combined-rebind-v5-r3-v2/combined-bindings.mjs",
+    "sha256": "6888c45c5cca4c1463f8d44fe2afea6ad9a02416980647b3ee30810a5a34d46f",
+    "independent_review": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source5-r3-binder-root-review-v1/receipt.json",
+      "sha256": "a8bf883d22b1809157c991f635a812e88445db31f3fc4ace3b2c93a029c792f7"
+    }
+  },
+  "source_manifest_sha256": "27a8b74c4cd0c394906f3fe3c0a6a0327569294b25056cf6c6f0aabcffc42788",
+  "suite_proof_sha256": "f0d930348768fb3f033b978f223b62839f671c9da8148d08b995be3d24577bdb",
+  "build_proof_sha256": "d0e222bbf4feaad5e5ab4850fd33af2d106ef0c5076b9f31cebdebf694c34cb6",
+  "candidate_binary_sha256": "9bed8a6f49fff732feff885767987c5d0eb03e012b27382e222bfc0dfc489a11",
+  "harness_sha256": "4e5c2e994b24b5fe1b0ac937a37346f9d4eadec8c772e1c9337d37198e736b28",
+  "scope": "idle_and_one_actual_inflight_crawl_only",
+  "cases": [
+    {
+      "label": "01-idle-eof",
+      "result": "PASS_IDLE_NATURAL_EOF",
+      "tool_names": [
+        "spider_capabilities",
+        "spider_list_crawls",
+        "spider_start_crawl",
+        "spider_status",
+        "spider_pages",
+        "spider_issues",
+        "spider_analysis",
+        "spider_policy",
+        "spider_sitemaps",
+        "spider_resources",
+        "spider_resource_transports",
+        "spider_inspect_css",
+        "spider_content",
+        "spider_content_document",
+        "spider_analyze_crawl_content",
+        "spider_analyze_content",
+        "spider_preview_policy",
+        "spider_cancel",
+        "spider_pause",
+        "spider_resume",
+        "spider_recrawl",
+        "spider_project",
+        "spider_compare",
+        "spider_generate_sitemaps",
+        "spider_compare_saved",
+        "spider_sitemap_findings"
+      ],
+      "child": "01-idle-eof",
+      "data_directory_remains_empty": true
+    },
+    {
+      "label": "02-inflight-crawl-eof",
+      "result": "PASS_ACTUAL_INFLIGHT_CRAWL_NATURAL_EOF",
+      "child": "02-inflight-crawl-eof",
+      "checkpoint": {
+        "generation": 1,
+        "revision": 1,
+        "outcome": "paused",
+        "created_at": "2026-10-15T12:18:25.931042+00:00",
+        "report_sha256": "915b9c7189f0c0c71c87ddd4aaed0f0d958805bbc9932c1280cef8bbb1155419",
+        "config_sha256": "23a94dccab3488bfeccdde90a516d86fc927965ffc08a24beed932376c15679d",
+        "completed": 1,
+        "pending": 2,
+        "discovery_pending": 0,
+        "discovery_complete": true,
+        "sitemap_ledger": {
+          "engine": "open-seo-spider/sitemap-membership-ledger-v1",
+          "hash_profile": "sha256-tagged-canonical-rust-serde-rows-v1",
+          "config_sha256": "23a94dccab3488bfeccdde90a516d86fc927965ffc08a24beed932376c15679d",
+          "limits": {
+            "max_catalog_json_bytes": 33554432,
+            "max_row_json_bytes": 262144,
+            "max_rows": 1000000
+          },
+          "revision": 0,
+          "last_sequence": 0,
+          "root_rows": 0,
+          "document_rows": 0,
+          "entry_rows": 0,
+          "location_rows": 0,
+          "incomplete_documents": 0,
+          "catalog_json_bytes": 673,
+          "rolling_sha256": "13bf3f3c19e30225bc79a783137bad79067f9ea774e449586bd1af5d65569f36",
+          "rows_available": true,
+          "declared_source_cohort_complete": false,
+          "legacy_history_unknown": false
+        },
+        "sitemap_source_measurements": {
+          "engine": "open-seo-spider/sitemap-source-store-v1",
+          "hash_profile": "sha256-canonical-rust-serde-source-store-v1",
+          "initial_catalog_config_sha256": "23a94dccab3488bfeccdde90a516d86fc927965ffc08a24beed932376c15679d",
+          "limits": {
+            "max_catalog_json_bytes": 33554432,
+            "max_record_json_bytes": 16384,
+            "max_records": 100000
+          },
+          "revision": 0,
+          "last_sequence": 0,
+          "record_count": 0,
+          "commit_count": 0,
+          "record_json_bytes": 0,
+          "commit_json_bytes": 0,
+          "metadata_json_bytes": 776,
+          "logical_json_bytes": 833,
+          "reserved_json_bytes": 3320,
+          "charged_json_bytes": 4153,
+          "content_sha256": "6fc4911371e110051792981120819d0566494e6b5785d2ac483ba87b646e69c9",
+          "links_sha256": "6d67cf8f38a52279fc62c46abe94baa0b822885e35fe247e2ffe26d96d213377",
+          "legacy_history_unknown": false,
+          "omission": null,
+          "omission_revision": null,
+          "inherited": null
+        }
+      },
+      "persistence_before_close": {
+        "label": "02-inflight-crawl-eof.before-close",
+        "observed": {
+          "sequence": 14,
+          "monotonic_us": 14356081717,
+          "label": "persistence_readonly_verified"
+        },
+        "database": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v5-r3-r2\\02-inflight-crawl-eof.data\\4128dfa7-7a48-4618-a135-c5a0558ce43e.sqlite",
+        "checkpoint": {
+          "generation": 1,
+          "revision": 1,
+          "outcome": "paused",
+          "created_at": "2026-10-15T12:18:25.931042+00:00",
+          "report_sha256": "915b9c7189f0c0c71c87ddd4aaed0f0d958805bbc9932c1280cef8bbb1155419",
+          "config_sha256": "23a94dccab3488bfeccdde90a516d86fc927965ffc08a24beed932376c15679d",
+          "completed": 1,
+          "pending": 2,
+          "discovery_pending": 0,
+          "discovery_complete": true,
+          "sitemap_ledger": {
+            "engine": "open-seo-spider/sitemap-membership-ledger-v1",
+            "hash_profile": "sha256-tagged-canonical-rust-serde-rows-v1",
+            "config_sha256": "23a94dccab3488bfeccdde90a516d86fc927965ffc08a24beed932376c15679d",
+            "limits": {
+              "max_catalog_json_bytes": 33554432,
+              "max_row_json_bytes": 262144,
+              "max_rows": 1000000
+            },
+            "revision": 0,
+            "last_sequence": 0,
+            "root_rows": 0,
+            "document_rows": 0,
+            "entry_rows": 0,
+            "location_rows": 0,
+            "incomplete_documents": 0,
+            "catalog_json_bytes": 673,
+            "rolling_sha256": "13bf3f3c19e30225bc79a783137bad79067f9ea774e449586bd1af5d65569f36",
+            "rows_available": true,
+            "declared_source_cohort_complete": false,
+            "legacy_history_unknown": false
+          },
+          "sitemap_source_measurements": {
+            "engine": "open-seo-spider/sitemap-source-store-v1",
+            "hash_profile": "sha256-canonical-rust-serde-source-store-v1",
+            "initial_catalog_config_sha256": "23a94dccab3488bfeccdde90a516d86fc927965ffc08a24beed932376c15679d",
+            "limits": {
+              "max_catalog_json_bytes": 33554432,
+              "max_record_json_bytes": 16384,
+              "max_records": 100000
+            },
+            "revision": 0,
+            "last_sequence": 0,
+            "record_count": 0,
+            "commit_count": 0,
+            "record_json_bytes": 0,
+            "commit_json_bytes": 0,
+            "metadata_json_bytes": 776,
+            "logical_json_bytes": 833,
+            "reserved_json_bytes": 3320,
+            "charged_json_bytes": 4153,
+            "content_sha256": "6fc4911371e110051792981120819d0566494e6b5785d2ac483ba87b646e69c9",
+            "links_sha256": "6d67cf8f38a52279fc62c46abe94baa0b822885e35fe247e2ffe26d96d213377",
+            "legacy_history_unknown": false,
+            "omission": null,
+            "omission_revision": null,
+            "inherited": null
+          }
+        },
+        "run_state": {
+          "generation": 1,
+          "started_at": "2026-10-15T12:18:25.786945200+00:00",
+          "finished_at": "2026-10-15T12:18:25.931042+00:00",
+          "outcome": "paused"
+        },
+        "frontier": [
+          {
+            "url": "http://127.0.0.1:62265/first",
+            "depth": 0,
+            "done": 1
+          },
+          {
+            "url": "http://127.0.0.1:62265/late-1",
+            "depth": 0,
+            "done": 0
+          },
+          {
+            "url": "http://127.0.0.1:62265/late-2",
+            "depth": 0,
+            "done": 0
+          }
+        ],
+        "complete_core_report_sha256": "915b9c7189f0c0c71c87ddd4aaed0f0d958805bbc9932c1280cef8bbb1155419",
+        "complete_app_report_sha256": "915b9c7189f0c0c71c87ddd4aaed0f0d958805bbc9932c1280cef8bbb1155419",
+        "complete_generation_sha256": "915b9c7189f0c0c71c87ddd4aaed0f0d958805bbc9932c1280cef8bbb1155419",
+        "complete_job_manifest_sha256": "bf0bad743f1afe0ffc796ff857b3f6639ae885194c894064927392124fb37b68",
+        "full_page_sha256": "49b03ef10a1565e3df8a44623b0c32066d25799cde968f4ff282ec3c4a67f217",
+        "qualification": "Existing controlled SQLite checkpoint bindings plus complete persisted files, observed before the parent child-close callback when called from final receipt; no power-loss or arbitrary-database integrity proof"
+      },
+      "persistence_after_close": {
+        "label": "02-inflight-crawl-eof.after-close",
+        "observed": {
+          "sequence": 17,
+          "monotonic_us": 14356088420,
+          "label": "persistence_readonly_verified"
+        },
+        "database": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v5-r3-r2\\02-inflight-crawl-eof.data\\4128dfa7-7a48-4618-a135-c5a0558ce43e.sqlite",
+        "checkpoint": {
+          "generation": 1,
+          "revision": 1,
+          "outcome": "paused",
+          "created_at": "2026-10-15T12:18:25.931042+00:00",
+          "report_sha256": "915b9c7189f0c0c71c87ddd4aaed0f0d958805bbc9932c1280cef8bbb1155419",
+          "config_sha256": "23a94dccab3488bfeccdde90a516d86fc927965ffc08a24beed932376c15679d",
+          "completed": 1,
+          "pending": 2,
+          "discovery_pending": 0,
+          "discovery_complete": true,
+          "sitemap_ledger": {
+            "engine": "open-seo-spider/sitemap-membership-ledger-v1",
+            "hash_profile": "sha256-tagged-canonical-rust-serde-rows-v1",
+            "config_sha256": "23a94dccab3488bfeccdde90a516d86fc927965ffc08a24beed932376c15679d",
+            "limits": {
+              "max_catalog_json_bytes": 33554432,
+              "max_row_json_bytes": 262144,
+              "max_rows": 1000000
+            },
+            "revision": 0,
+            "last_sequence": 0,
+            "root_rows": 0,
+            "document_rows": 0,
+            "entry_rows": 0,
+            "location_rows": 0,
+            "incomplete_documents": 0,
+            "catalog_json_bytes": 673,
+            "rolling_sha256": "13bf3f3c19e30225bc79a783137bad79067f9ea774e449586bd1af5d65569f36",
+            "rows_available": true,
+            "declared_source_cohort_complete": false,
+            "legacy_history_unknown": false
+          },
+          "sitemap_source_measurements": {
+            "engine": "open-seo-spider/sitemap-source-store-v1",
+            "hash_profile": "sha256-canonical-rust-serde-source-store-v1",
+            "initial_catalog_config_sha256": "23a94dccab3488bfeccdde90a516d86fc927965ffc08a24beed932376c15679d",
+            "limits": {
+              "max_catalog_json_bytes": 33554432,
+              "max_record_json_bytes": 16384,
+              "max_records": 100000
+            },
+            "revision": 0,
+            "last_sequence": 0,
+            "record_count": 0,
+            "commit_count": 0,
+            "record_json_bytes": 0,
+            "commit_json_bytes": 0,
+            "metadata_json_bytes": 776,
+            "logical_json_bytes": 833,
+            "reserved_json_bytes": 3320,
+            "charged_json_bytes": 4153,
+            "content_sha256": "6fc4911371e110051792981120819d0566494e6b5785d2ac483ba87b646e69c9",
+            "links_sha256": "6d67cf8f38a52279fc62c46abe94baa0b822885e35fe247e2ffe26d96d213377",
+            "legacy_history_unknown": false,
+            "omission": null,
+            "omission_revision": null,
+            "inherited": null
+          }
+        },
+        "run_state": {
+          "generation": 1,
+          "started_at": "2026-10-15T12:18:25.786945200+00:00",
+          "finished_at": "2026-10-15T12:18:25.931042+00:00",
+          "outcome": "paused"
+        },
+        "frontier": [
+          {
+            "url": "http://127.0.0.1:62265/first",
+            "depth": 0,
+            "done": 1
+          },
+          {
+            "url": "http://127.0.0.1:62265/late-1",
+            "depth": 0,
+            "done": 0
+          },
+          {
+            "url": "http://127.0.0.1:62265/late-2",
+            "depth": 0,
+            "done": 0
+          }
+        ],
+        "complete_core_report_sha256": "915b9c7189f0c0c71c87ddd4aaed0f0d958805bbc9932c1280cef8bbb1155419",
+        "complete_app_report_sha256": "915b9c7189f0c0c71c87ddd4aaed0f0d958805bbc9932c1280cef8bbb1155419",
+        "complete_generation_sha256": "915b9c7189f0c0c71c87ddd4aaed0f0d958805bbc9932c1280cef8bbb1155419",
+        "complete_job_manifest_sha256": "bf0bad743f1afe0ffc796ff857b3f6639ae885194c894064927392124fb37b68",
+        "full_page_sha256": "49b03ef10a1565e3df8a44623b0c32066d25799cde968f4ff282ec3c4a67f217",
+        "qualification": "Existing controlled SQLite checkpoint bindings plus complete persisted files, observed before the parent child-close callback when called from final receipt; no power-loss or arbitrary-database integrity proof"
+      },
+      "fixture": {
+        "requests": [
+          {
+            "method": "GET",
+            "url": "/first",
+            "entered": {
+              "sequence": 9,
+              "monotonic_us": 14355931882,
+              "label": "website_request_entered"
+            }
+          }
+        ],
+        "errors": [],
+        "actual_close_callback": true,
+        "sockets_remaining": 0,
+        "responses_remaining": 0,
+        "body_released": {
+          "sequence": 12,
+          "monotonic_us": 14356060736,
+          "label": "owned_first_body_released"
+        }
+      }
+    }
+  ],
+  "failures": [],
+  "signals": [],
+  "qualification": "Two owned App processes only: idle and one actual in-flight HTML crawl. No stateful MCP session, HTTP notification cancellation, PDF panic, file/export slow-reader drain, renderer process, hard shutdown latency or power-loss proof.",
+  "final_actual_source_suite_build_candidate_guards_verified": true,
+  "children": [
+    {
+      "label": "01-idle-eof",
+      "data": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v5-r3-r2\\01-idle-eof.data",
+      "logs": [
+        {
+          "name": "stdout",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v5-r3-r2\\01-idle-eof.stdout.log",
+          "fd_closed": true,
+          "bytes": 40,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null,
+          "sha256": "22e5af8ffee7771b065f409a4d4ca15c9ddb43a9d9561e7001921db7ad920beb"
+        },
+        {
+          "name": "stderr",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v5-r3-r2\\01-idle-eof.stderr.log",
+          "fd_closed": true,
+          "bytes": 604,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null,
+          "sha256": "7639932df3daa4af81b730f537b59826e22fe484c7d1e12e1d2856cb5fb14329"
+        }
+      ],
+      "errors": [],
+      "receipts": [
+        {
+          "value": {
+            "cause": "owned_stdin_eof",
+            "clean": true,
+            "kind": "owned_application_shutdown_v1",
+            "owners": [
+              {
+                "admitted": 2,
+                "closing": true,
+                "first_failure": null,
+                "joined": 2,
+                "owner": "http_requests",
+                "retained": 0,
+                "started": 2
+              },
+              {
+                "admitted": 0,
+                "closing": true,
+                "first_failure": null,
+                "joined": 0,
+                "owner": "http_blocking",
+                "retained": 0,
+                "started": 0
+              },
+              {
+                "admitted": 0,
+                "closing": true,
+                "first_failure": null,
+                "joined": 0,
+                "owner": "crawl_operations",
+                "retained": 0,
+                "started": 0
+              }
+            ],
+            "qualification": "Local application task joins only; actual process/pipe EOF is an independent outside witness; no stateful MCP session or external renderer-process drain claim"
+          },
+          "witness": {
+            "sequence": 4,
+            "monotonic_us": 14355833048,
+            "label": "final_owned_receipt",
+            "actual_close_already_observed": false,
+            "exit_already_observed": false
+          }
+        }
+      ],
+      "spawn_event": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "spawn_error": null,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "stdin": {
+        "eof_sent": true,
+        "finished": true,
+        "closed": true,
+        "error": null
+      },
+      "events": [
+        {
+          "sequence": 1,
+          "monotonic_us": 14355770627,
+          "label": "spawn"
+        },
+        {
+          "sequence": 2,
+          "monotonic_us": 14355825977,
+          "label": "ready_health"
+        },
+        {
+          "sequence": 3,
+          "monotonic_us": 14355830250,
+          "label": "owned_stdin_eof_requested"
+        },
+        {
+          "sequence": 5,
+          "monotonic_us": 14355834012,
+          "label": "exit"
+        },
+        {
+          "sequence": 6,
+          "monotonic_us": 14355834058,
+          "label": "actual_close"
+        }
+      ],
+      "origin": "http://127.0.0.1:62262",
+      "pid": 37740
+    },
+    {
+      "label": "02-inflight-crawl-eof",
+      "data": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v5-r3-r2\\02-inflight-crawl-eof.data",
+      "logs": [
+        {
+          "name": "stdout",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v5-r3-r2\\02-inflight-crawl-eof.stdout.log",
+          "fd_closed": true,
+          "bytes": 40,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null,
+          "sha256": "71d831ebc2a4768f3aea183f71b0aaff721e6e64c94fdba95e30d9665c9d4706"
+        },
+        {
+          "name": "stderr",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v5-r3-r2\\02-inflight-crawl-eof.stderr.log",
+          "fd_closed": true,
+          "bytes": 604,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null,
+          "sha256": "b3f262e9237b460930551360784a08ba89e39476ca0e4b0239533f4fcdace471"
+        }
+      ],
+      "errors": [],
+      "receipts": [
+        {
+          "value": {
+            "cause": "owned_stdin_eof",
+            "clean": true,
+            "kind": "owned_application_shutdown_v1",
+            "owners": [
+              {
+                "admitted": 2,
+                "closing": true,
+                "first_failure": null,
+                "joined": 2,
+                "owner": "http_requests",
+                "retained": 0,
+                "started": 2
+              },
+              {
+                "admitted": 0,
+                "closing": true,
+                "first_failure": null,
+                "joined": 0,
+                "owner": "http_blocking",
+                "retained": 0,
+                "started": 0
+              },
+              {
+                "admitted": 1,
+                "closing": true,
+                "first_failure": null,
+                "joined": 1,
+                "owner": "crawl_operations",
+                "retained": 0,
+                "started": 1
+              }
+            ],
+            "qualification": "Local application task joins only; actual process/pipe EOF is an independent outside witness; no stateful MCP session or external renderer-process drain claim"
+          },
+          "witness": {
+            "sequence": 13,
+            "monotonic_us": 14356073706,
+            "label": "final_owned_receipt",
+            "actual_close_already_observed": false,
+            "exit_already_observed": false
+          }
+        }
+      ],
+      "spawn_event": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "spawn_error": null,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "stdin": {
+        "eof_sent": true,
+        "finished": true,
+        "closed": true,
+        "error": null
+      },
+      "events": [
+        {
+          "sequence": 7,
+          "monotonic_us": 14355854606,
+          "label": "spawn"
+        },
+        {
+          "sequence": 8,
+          "monotonic_us": 14355891266,
+          "label": "ready_health"
+        },
+        {
+          "sequence": 10,
+          "monotonic_us": 14355936064,
+          "label": "owned_stdin_eof_requested"
+        },
+        {
+          "sequence": 11,
+          "monotonic_us": 14355952926,
+          "label": "fresh_connection_listener_refusal_before_body_release"
+        },
+        {
+          "sequence": 15,
+          "monotonic_us": 14356083579,
+          "label": "exit"
+        },
+        {
+          "sequence": 16,
+          "monotonic_us": 14356083626,
+          "label": "actual_close"
+        }
+      ],
+      "origin": "http://127.0.0.1:62266",
+      "pid": 404
+    }
+  ],
+  "execution_lock_released": true,
+  "recorded_at": "2026-10-15T12:18:26.417Z"
+}

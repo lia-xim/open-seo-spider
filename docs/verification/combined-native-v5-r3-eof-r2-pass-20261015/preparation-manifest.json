@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "kind": "source5_owned_http_eof_native_preparation",
+  "revision": 2,
+  "status": "AUTHORED_NOT_RUN_ONE_PROBE_REPAIR_ACTUAL_R3_ADMISSION_KNOWN",
+  "immutable": true,
+  "recorded_at": "2026-10-15T12:06:17.285Z",
+  "parent_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source5-native-http-eof-preparation-v1\\manifest.json",
+    "sha256": "9856319ebe8388445b0228e2bf1e244e03cbd75d9db3fcc920d9874e11e5ec72",
+    "bytes": 3995
+  },
+  "parent_independent_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source5-native-http-eof-independent-review-v1\\receipt.json",
+    "sha256": "e923c614bb6da736e5671a73a87e9338fe45d823d38ffa33541bcbcb787c2a17",
+    "bytes": 160432
+  },
+  "actual_failed_v1_attempt": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v5-r3\\proof.json",
+    "sha256": "afaa5402cfa53d0c00a0e5113ada314c293d47a383d84090737424ea069ca526",
+    "bytes": 8527
+  },
+  "source_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v5-r3\\manifest.json",
+    "sha256": "27a8b74c4cd0c394906f3fe3c0a6a0327569294b25056cf6c6f0aabcffc42788",
+    "bytes": 220311
+  },
+  "source_manifest_sha256": "27a8b74c4cd0c394906f3fe3c0a6a0327569294b25056cf6c6f0aabcffc42788",
+  "source_commit": "9fa103ebc0be41f1adf55111e7875cf9f133d65a",
+  "suite_proof": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-suite-v5-r3\\proof.json",
+    "sha256": "f0d930348768fb3f033b978f223b62839f671c9da8148d08b995be3d24577bdb",
+    "bytes": 132848
+  },
+  "build_proof": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-optimized-build-v5-r3\\proof.json",
+    "sha256": "d0e222bbf4feaad5e5ab4850fd33af2d106ef0c5076b9f31cebdebf694c34cb6",
+    "bytes": 20054
+  },
+  "candidate": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-optimized-build-v5-r3\\candidate\\open-seo-spider.exe",
+    "sha256": "9bed8a6f49fff732feff885767987c5d0eb03e012b27382e222bfc0dfc489a11",
+    "bytes": 39906816
+  },
+  "source5_binding": {
+    "status": "ACTUAL_REVIEWED_BINDER_AND_PROOFS_AVAILABLE",
+    "module_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\native-combined-rebind-v5-r3-v2\\combined-bindings.mjs",
+    "module_sha256": "6888c45c5cca4c1463f8d44fe2afea6ad9a02416980647b3ee30810a5a34d46f",
+    "independent_review": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source5-r3-binder-root-review-v1\\receipt.json",
+      "sha256": "a8bf883d22b1809157c991f635a812e88445db31f3fc4ace3b2c93a029c792f7",
+      "bytes": 7084
+    },
+    "source_manifest_sha256": "27a8b74c4cd0c394906f3fe3c0a6a0327569294b25056cf6c6f0aabcffc42788",
+    "suite_proof_sha256": "f0d930348768fb3f033b978f223b62839f671c9da8148d08b995be3d24577bdb",
+    "build_proof_sha256": "d0e222bbf4feaad5e5ab4850fd33af2d106ef0c5076b9f31cebdebf694c34cb6",
+    "candidate_binary_sha256": "9bed8a6f49fff732feff885767987c5d0eb03e012b27382e222bfc0dfc489a11",
+    "build_driver_sha256": "3789801fca07630384d6237c9c6a7f746e69d8c5194f59b1cbf4a53c770cd845",
+    "interface": "bindCombined(release,sourceSHA) -> binary:string,binarySHA,manifest,suiteRaw,buildRaw,suite,build,verify()"
+  },
+  "required_cases": [
+    {
+      "label": "01-idle-eof",
+      "oracle": "actual health + exact26 MCP tools + owned stdin EOF + natural0 + all pipe closes + exactly1 clean final local receipt + no data writes"
+    },
+    {
+      "label": "02-inflight-crawl-eof",
+      "oracle": "actual held first body with pages0/pending3/no checkpoint; EOF closes admission before own body release; natural0; paused1/2 full persisted SQLite/report/generation/job bindings observed on receipt before close callback and unchanged after close; no2 late website requests"
+    }
+  ],
+  "mandatory_cases": 2,
+  "mandatory_app_children": 2,
+  "pass_cleanup_kills": 0,
+  "literal_operations": 1,
+  "reset_is_retry_only": true,
+  "payloads": [
+    {
+      "path": "native-http-eof-v2.mjs",
+      "sha256": "4e5c2e994b24b5fe1b0ac937a37346f9d4eadec8c772e1c9337d37198e736b28",
+      "bytes": 25317
+    },
+    {
+      "path": "RELEASE-CONTRACT.md",
+      "sha256": "079ea04bb4435daff1eae7903a38e32843101f6e331109f68667deeb1771b318",
+      "bytes": 2125
+    },
+    {
+      "path": "legacy-tools.json",
+      "sha256": "7612117e74f3303afdfe882d511f155cdeaedc3c157502e853579b1b22535391",
+      "bytes": 610
+    },
+    {
+      "path": "probe-derivation.json",
+      "sha256": "9eb2a9303626c9366f0d148263e2b58c743eacf3bbc76f2d16767ce3bf4b5df8",
+      "bytes": 4495
+    },
+    {
+      "path": "derive-probe.mjs",
+      "sha256": "70dedee89b9aa2d0ba807b6839827f07cf34ecbfa1454823466d26c521e1b59b",
+      "bytes": 9559
+    }
+  ],
+  "source_checks": {
+    "exact_one_forward_inverse": true,
+    "entire_other_harness_bytes_unchanged": true,
+    "syntax_checks": [
+      {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source5-native-http-eof-preparation-v2\\native-http-eof-v2.mjs",
+        "sha256": "4e5c2e994b24b5fe1b0ac937a37346f9d4eadec8c772e1c9337d37198e736b28",
+        "exitcode": 0,
+        "signal": null
+      },
+      {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source5-native-http-eof-preparation-v2\\derive-probe.mjs",
+        "sha256": "70dedee89b9aa2d0ba807b6839827f07cf34ecbfa1454823466d26c521e1b59b",
+        "exitcode": 0,
+        "signal": null
+      }
+    ],
+    "whole_old_sources_rescanned": 0
+  },
+  "actual_v2_release": null,
+  "actual_v2_independent_review": null,
+  "actual_v2_native_proof": null,
+  "not_run": {
+    "target_imports": 0,
+    "compiler": 0,
+    "rustfmt_tests": 0,
+    "sqlite": 0,
+    "fixtures": 0,
+    "native": 0,
+    "child_processes": 0,
+    "lock_acquisition": 0,
+    "root_git_product_writes": 0
+  },
+  "qualification": "One source-only transition-observation repair. No weakened listener-refusal oracle, raised cap/deadline or runtime success. Separate actual Root review/release and both fresh V2 native cases are still mandatory."
+}

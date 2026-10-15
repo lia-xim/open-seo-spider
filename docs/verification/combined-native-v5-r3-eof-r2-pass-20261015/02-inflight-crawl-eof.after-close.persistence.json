@@ -1,0 +1,98 @@
+{
+  "label": "02-inflight-crawl-eof.after-close",
+  "observed": {
+    "sequence": 17,
+    "monotonic_us": 14356088420,
+    "label": "persistence_readonly_verified"
+  },
+  "database": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-http-eof-native-v5-r3-r2\\02-inflight-crawl-eof.data\\4128dfa7-7a48-4618-a135-c5a0558ce43e.sqlite",
+  "checkpoint": {
+    "generation": 1,
+    "revision": 1,
+    "outcome": "paused",
+    "created_at": "2026-10-15T12:18:25.931042+00:00",
+    "report_sha256": "915b9c7189f0c0c71c87ddd4aaed0f0d958805bbc9932c1280cef8bbb1155419",
+    "config_sha256": "23a94dccab3488bfeccdde90a516d86fc927965ffc08a24beed932376c15679d",
+    "completed": 1,
+    "pending": 2,
+    "discovery_pending": 0,
+    "discovery_complete": true,
+    "sitemap_ledger": {
+      "engine": "open-seo-spider/sitemap-membership-ledger-v1",
+      "hash_profile": "sha256-tagged-canonical-rust-serde-rows-v1",
+      "config_sha256": "23a94dccab3488bfeccdde90a516d86fc927965ffc08a24beed932376c15679d",
+      "limits": {
+        "max_catalog_json_bytes": 33554432,
+        "max_row_json_bytes": 262144,
+        "max_rows": 1000000
+      },
+      "revision": 0,
+      "last_sequence": 0,
+      "root_rows": 0,
+      "document_rows": 0,
+      "entry_rows": 0,
+      "location_rows": 0,
+      "incomplete_documents": 0,
+      "catalog_json_bytes": 673,
+      "rolling_sha256": "13bf3f3c19e30225bc79a783137bad79067f9ea774e449586bd1af5d65569f36",
+      "rows_available": true,
+      "declared_source_cohort_complete": false,
+      "legacy_history_unknown": false
+    },
+    "sitemap_source_measurements": {
+      "engine": "open-seo-spider/sitemap-source-store-v1",
+      "hash_profile": "sha256-canonical-rust-serde-source-store-v1",
+      "initial_catalog_config_sha256": "23a94dccab3488bfeccdde90a516d86fc927965ffc08a24beed932376c15679d",
+      "limits": {
+        "max_catalog_json_bytes": 33554432,
+        "max_record_json_bytes": 16384,
+        "max_records": 100000
+      },
+      "revision": 0,
+      "last_sequence": 0,
+      "record_count": 0,
+      "commit_count": 0,
+      "record_json_bytes": 0,
+      "commit_json_bytes": 0,
+      "metadata_json_bytes": 776,
+      "logical_json_bytes": 833,
+      "reserved_json_bytes": 3320,
+      "charged_json_bytes": 4153,
+      "content_sha256": "6fc4911371e110051792981120819d0566494e6b5785d2ac483ba87b646e69c9",
+      "links_sha256": "6d67cf8f38a52279fc62c46abe94baa0b822885e35fe247e2ffe26d96d213377",
+      "legacy_history_unknown": false,
+      "omission": null,
+      "omission_revision": null,
+      "inherited": null
+    }
+  },
+  "run_state": {
+    "generation": 1,
+    "started_at": "2026-10-15T12:18:25.786945200+00:00",
+    "finished_at": "2026-10-15T12:18:25.931042+00:00",
+    "outcome": "paused"
+  },
+  "frontier": [
+    {
+      "url": "http://127.0.0.1:62265/first",
+      "depth": 0,
+      "done": 1
+    },
+    {
+      "url": "http://127.0.0.1:62265/late-1",
+      "depth": 0,
+      "done": 0
+    },
+    {
+      "url": "http://127.0.0.1:62265/late-2",
+      "depth": 0,
+      "done": 0
+    }
+  ],
+  "complete_core_report_sha256": "915b9c7189f0c0c71c87ddd4aaed0f0d958805bbc9932c1280cef8bbb1155419",
+  "complete_app_report_sha256": "915b9c7189f0c0c71c87ddd4aaed0f0d958805bbc9932c1280cef8bbb1155419",
+  "complete_generation_sha256": "915b9c7189f0c0c71c87ddd4aaed0f0d958805bbc9932c1280cef8bbb1155419",
+  "complete_job_manifest_sha256": "bf0bad743f1afe0ffc796ff857b3f6639ae885194c894064927392124fb37b68",
+  "full_page_sha256": "49b03ef10a1565e3df8a44623b0c32066d25799cde968f4ff282ec3c4a67f217",
+  "qualification": "Existing controlled SQLite checkpoint bindings plus complete persisted files, observed before the parent child-close callback when called from final receipt; no power-loss or arbitrary-database integrity proof"
+}
