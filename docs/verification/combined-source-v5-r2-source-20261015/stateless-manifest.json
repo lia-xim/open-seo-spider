@@ -1,0 +1,272 @@
+{
+  "kind": "sitemap_stateless_verified_read_source_proposal_v2",
+  "status": "AUTHORED_NOT_FORMATTED_NOT_COMPILED_NOT_TESTED_NOT_PROMOTED",
+  "immutable": true,
+  "source_manifest_sha256": "45a07ef277cf1ffef5ff8d577fe05dc48ee1d84548ada2d8453aaf859a5d26b3",
+  "source_commit": "f828ad133e0d5f8d32ee4fcf90bdb4611bd35924",
+  "parent_proposal_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-stateless-read-proposal-v1\\manifest.json",
+    "sha256": "90cef7987eb5f4acb11d47044188fc480f8fe0bf036dfbb909b9323de196d566"
+  },
+  "addressed_finding_receipt": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-stateless-read-independent-review-v2\\receipt.json",
+    "sha256": "6d3ccfe84edc5cbe5eed2e69252dfbeed30310ceb92530f519db13db4d1a9f17",
+    "finding_id": "STATELESS-01",
+    "status": "SOURCE_CORRECTED_INDEPENDENT_REVIEW_PENDING_RUNTIME_NOT_RUN"
+  },
+  "files": [
+    {
+      "path": "crates/core/src/sitemap_coverage/verified_read.rs",
+      "before_sha256": "6b452d3f9e4f7ccb353b8d3967358250572ce3ba1da64da92eddc09809f94a3a",
+      "before_bytes": 28229,
+      "after_sha256": "1eedbe965fdcaef97211481f90e059268473ed6948c1587163996757405360f2",
+      "after_bytes": 29697
+    },
+    {
+      "path": "crates/core/src/sitemap_coverage/verified_read_tests.rs",
+      "before_sha256": "d72875d917356b0b2d66bbb4f45e4ad0eba0fb759bacde405be0dcb0d4c91e27",
+      "before_bytes": 34947,
+      "after_sha256": "f1a6d5c5f76351b05d17daa6bb5c5c0b2eaaad34392689922a1115428951030f",
+      "after_bytes": 36870
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/verified_read.rs",
+      "before_sha256": "bd3638c431fe3f6eee0f10bb34c2f90f249267aa54fbbb6014d7bc4d4d73abc0",
+      "before_bytes": 33693,
+      "after_sha256": "c4d702f2445ab4ab24854867877b4abfa3c8af7dcfc4d45b343f259bb4bf1449",
+      "after_bytes": 41084
+    },
+    {
+      "path": "crates/core/src/sitemap_ledger/verified_read_tests.rs",
+      "before_sha256": "57e88ea3008eec21f90cf26cd54624b42ee65ee2bb9efe1d8f57015d7276418e",
+      "before_bytes": 25233,
+      "after_sha256": "2c611b6179694416729dfd90e86d8fc73292a5ee96292e5a9b2cd8f3004cb8ad",
+      "after_bytes": 41052
+    }
+  ],
+  "support_files": [
+    {
+      "path": "revise-proposal.mjs",
+      "sha256": "dc64325a49da8be09a87df645d34f902007629fce598e8ef9272185398f125cc",
+      "bytes": 5594
+    },
+    {
+      "path": "freeze-proposal.mjs",
+      "sha256": "b3b81e6acf3135d5cf3abcaf436e1b39a35df8ac15093bd9b7e30d949e069212",
+      "bytes": 8614
+    },
+    {
+      "path": "literal-derivation.json",
+      "sha256": "08b65333a44deb4ec127a9c3f84baf6f86036d904f79f621a312046435a2f55e",
+      "bytes": 174717
+    },
+    {
+      "path": "revision-derivation.json",
+      "sha256": "618fa7c90e3d29138e13e516cfdc660f0ad6583a11bb94e579d57df3b3fd7206",
+      "bytes": 80609
+    },
+    {
+      "path": "source-checks.json",
+      "sha256": "f9f52059581880e3735f30207e235ecc8978ce308f2d9c98ce274e568f058d16",
+      "bytes": 7071
+    },
+    {
+      "path": "HANDOFF.md",
+      "sha256": "6cdb32a84a144b7fbc2d75955b108c61374ea82a73bfa04914d9323b415d77fb",
+      "bytes": 7912
+    },
+    {
+      "path": "fragments/utf16-regressions.rs.txt",
+      "sha256": "07aecb1a8e44260c76a91d2d97ad7bfccc3d20fc4bd7a97196d664b625a02a6b",
+      "bytes": 5396
+    }
+  ],
+  "source_only_checks": {
+    "kind": "stateless_sitemap_read_v2_source_only_checks",
+    "original_literal_operations": 23,
+    "revision_literal_operations": 2,
+    "literal_operations": 25,
+    "all_forward_and_inverse_exact": true,
+    "current_root_and_frozen_inputs_exact": 304,
+    "changed_paths": 4,
+    "new_paths": 0,
+    "critical_regions": [
+      {
+        "path": "crates/core/src/sitemap_ledger/verified_read.rs",
+        "label": "unchanged bounded document lookup",
+        "sha256": "d358684528e9f055b7a57d60a630481aa50e037380b2cff42157db1868043d4e",
+        "bytes": 629,
+        "exact": true
+      },
+      {
+        "path": "crates/core/src/sitemap_ledger/verified_read.rs",
+        "label": "unchanged original StreamRows serializer body",
+        "sha256": "2e4aa8c9f9b42f93a19d1f2fe5d14d543239d225393e3810e6acf334325c82d1",
+        "bytes": 498,
+        "exact": true
+      },
+      {
+        "path": "crates/core/src/sitemap_ledger/verified_read.rs",
+        "label": "unchanged original whole CatalogEnvelope serializer body",
+        "sha256": "574959c7716bc4a1c721f451dd30de31262e5d7b899ac8004ce80fcc69322a2f",
+        "bytes": 535,
+        "exact": true
+      },
+      {
+        "path": "crates/core/src/sitemap_ledger/verified_read.rs",
+        "label": "unchanged complete raw preflight BLOB byte/cap/count/duplicate/summary guards",
+        "sha256": "da3d217fd8d8b192af14ea0286b5b8ad476fa0c60c55a15a1da56565ec83b32d",
+        "bytes": 2584,
+        "exact": true
+      },
+      {
+        "path": "crates/core/src/sitemap_coverage/verified_read.rs",
+        "label": "unchanged coverage inventory roots source graph selected and context projection",
+        "sha256": "a5bd56227e899730bb62f06822d59f16fbd8cb338331f6b2f7bc20ccd4cf8d72",
+        "bytes": 12153,
+        "exact": true
+      }
+    ],
+    "unchanged_source_pins": [
+      {
+        "path": "crates/core/src/sitemap_ledger.rs",
+        "sha256": "f459cae0436c722fcc7f784aa68be3af1a4a9f1f94f70328862ec44a4df94299",
+        "bytes": 74297,
+        "not_modified": true
+      },
+      {
+        "path": "crates/core/src/sitemap_ledger_models.rs",
+        "sha256": "66472b408bb39e848448ffc41b7e00a6a420f3a4d8ece4b586401aa1bfa3ab8a",
+        "bytes": 20634,
+        "not_modified": true
+      },
+      {
+        "path": "crates/core/src/sitemap_coverage.rs",
+        "sha256": "03affb2284e95366a85ea6cd94ab4cfb556a463aade999664cba84062e49ece4",
+        "bytes": 30327,
+        "not_modified": true
+      },
+      {
+        "path": "crates/core/src/store/sitemap_read_context.rs",
+        "sha256": "8ec29a7dc2b1aec7ee3f8ee390d8fd8b4a149f84f7397dbd295705aed48a6757",
+        "bytes": 8655,
+        "not_modified": true
+      },
+      {
+        "path": "crates/core/src/store/sitemap_read_window.rs",
+        "sha256": "424d8581b5bca41243bf2e2466de23bb997b75ab8187995710333c46509963ad",
+        "bytes": 10248,
+        "not_modified": true
+      },
+      {
+        "path": "crates/core/src/sitemap_source_store/verified_read.rs",
+        "sha256": "fd1acd6ed446e21e2626159d358b77794146dcfd32796ff7a3d3e4c52aa1e07a",
+        "bytes": 14330,
+        "not_modified": true
+      },
+      {
+        "path": "crates/core/src/sitemap_source_store/verified_report.rs",
+        "sha256": "0a278d6462cd21e065cdd1367038e87ae22c8eda34a89e9142635018b1e2a8b8",
+        "bytes": 22939,
+        "not_modified": true
+      },
+      {
+        "path": "crates/app/src/server/sitemaps.rs",
+        "sha256": "c7083057b9586e1b553c1908207fc0a7d77b9bf3f36a7c4363d0c210ae6e0cf6",
+        "bytes": 6961,
+        "not_modified": true
+      },
+      {
+        "path": "crates/app/src/sitemap_membership.rs",
+        "sha256": "e0f9d057ece6e6cdb0882eb4621f51f6636691d9d1a3318d8e3d136aaf79b849",
+        "bytes": 42859,
+        "not_modified": true
+      },
+      {
+        "path": "crates/core/src/schema.sql",
+        "sha256": "2f9e7ceb1bc93d07546dce5a26d8160c21e480d1fa0f3c0ea4f614b753805fe1",
+        "bytes": 1781,
+        "not_modified": true
+      }
+    ],
+    "old_v4_and_v1_test_bodies_exact_prefixes": true,
+    "new_authored_test_function_count": 8,
+    "ledger_new_test_functions": 7,
+    "coverage_new_test_functions": 1,
+    "real_utf16_encoding_variants_authored": 2,
+    "new_authored_tests": [
+      {
+        "path": "crates/core/src/sitemap_coverage/verified_read_tests.rs",
+        "name": "stateless_row_coverage_reuses_verified_counts_without_another_raw_visit_and_matches_old_projection",
+        "status": "AUTHORED_NOT_RUN"
+      },
+      {
+        "path": "crates/core/src/sitemap_ledger/verified_read_tests.rs",
+        "name": "stateless_canonical_envelope_matches_unchanged_full_serializer_for_empty_unicode_and_incomplete_rows",
+        "status": "AUTHORED_NOT_RUN"
+      },
+      {
+        "path": "crates/core/src/sitemap_ledger/verified_read_tests.rs",
+        "name": "stateless_fifty_thousand_pairs_have_one_primary_pass_one_merge_join_and_exact_reopen_oracle",
+        "status": "AUTHORED_NOT_RUN"
+      },
+      {
+        "path": "crates/core/src/sitemap_ledger/verified_read_tests.rs",
+        "name": "stateless_streaming_relation_keeps_orphan_span_prior_sequence_and_missing_loc_guards",
+        "status": "AUTHORED_NOT_RUN"
+      },
+      {
+        "path": "crates/core/src/sitemap_ledger/verified_read_tests.rs",
+        "name": "stateless_streaming_join_works_without_foreign_keys_or_indexes_and_rejects_tail_corruption",
+        "status": "AUTHORED_NOT_RUN"
+      },
+      {
+        "path": "crates/core/src/sitemap_ledger/verified_read_tests.rs",
+        "name": "stateless_single_canonical_serialization_rejects_rehashed_whitespace_and_equivalent_json_escaping",
+        "status": "AUTHORED_NOT_RUN"
+      },
+      {
+        "path": "crates/core/src/sitemap_ledger/verified_read_tests.rs",
+        "name": "stateless_utf16le_disk_catalog_and_read_only_reopen_match_old_serializer_and_preserve_blob_caps",
+        "status": "AUTHORED_NOT_RUN"
+      },
+      {
+        "path": "crates/core/src/sitemap_ledger/verified_read_tests.rs",
+        "name": "stateless_utf16be_disk_catalog_and_read_only_reopen_match_old_serializer_and_preserve_blob_caps",
+        "status": "AUTHORED_NOT_RUN"
+      }
+    ],
+    "node_syntax_checks": [
+      {
+        "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-stateless-read-proposal-v2\\revise-proposal.mjs",
+        "sha256": "dc64325a49da8be09a87df645d34f902007629fce598e8ef9272185398f125cc",
+        "command": [
+          "C:\\Program Files\\nodejs\\node.exe",
+          "--check",
+          "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-stateless-read-proposal-v2\\revise-proposal.mjs"
+        ],
+        "exit_code": 0,
+        "signal": null,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-stateless-read-proposal-v2\\freeze-proposal.mjs",
+        "sha256": "b3b81e6acf3135d5cf3abcaf436e1b39a35df8ac15093bd9b7e30d949e069212",
+        "command": [
+          "C:\\Program Files\\nodejs\\node.exe",
+          "--check",
+          "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\sitemap-stateless-read-proposal-v2\\freeze-proposal.mjs"
+        ],
+        "exit_code": 0,
+        "signal": null,
+        "stdout": "",
+        "stderr": ""
+      }
+    ],
+    "actual_rust_format_compile_tests": 0,
+    "target_imports_fixture_sqlite_native_browser_sdk": 0,
+    "root_product_frozen_git_mutations": 0
+  },
+  "scope": "Same first stateless Source5 read slice; retain independent database-encoded SQL BLOB caps and exact canonical UTF8 envelope bytes. Same current-TX full integrity/tokens/DTO/caps/Unknown/mutation semantics. No sessions/schema/index trust/cache/runtime/performance acceptance. Full pagination remains Omega(P*R)."
+}

@@ -1,0 +1,39 @@
+    Checking open-seo-spider-core v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\combined-source-v5-r2-draft\source\crates\core)
+    Checking open-seo-spider v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\combined-source-v5-r2-draft\source\crates\app)
+error[E0277]: `ApiError` doesn't implement `Debug`
+    --> crates\app\src\server\lifecycle_tests.rs:267:10
+     |
+ 267 |         .unwrap();
+     |          ^^^^^^ the trait `Debug` is not implemented for `ApiError`
+     |
+     = note: add `#[derive(Debug)]` to `ApiError` or manually `impl Debug for ApiError`
+     = help: the following other types implement trait `Debug`:
+               ()
+               (A, Z, Y, X, W, V, U, T)
+               (B, A, Z, Y, X, W, V, U, T)
+               (C, B, A, Z, Y, X, W, V, U, T)
+               (D, C, B, A, Z, Y, X, W, V, U, T)
+               (E, D, C, B, A, Z, Y, X, W, V, U, T)
+               (T,)
+               (U, T)
+             and 5 others
+     = note: required for `axum::Json<ApiError>` to implement `Debug`
+     = note: 1 redundant requirement hidden
+     = note: required for `(reqwest::StatusCode, axum::Json<ApiError>)` to implement `Debug`
+note: required by a bound in `std::result::Result::<T, E>::unwrap`
+    --> C:\Users\matth\.rustup\toolchains\1.95.0-x86_64-pc-windows-msvc\lib/rustlib/src/rust\library\core\src\result.rs:1229:12
+     |
+1227 |     pub fn unwrap(self) -> T
+     |            ------ required by a bound in this associated function
+1228 |     where
+1229 |         E: fmt::Debug,
+     |            ^^^^^^^^^^ required by this bound in `Result::<T, E>::unwrap`
+help: consider annotating `ApiError` with `#[derive(Debug)]`
+    -->  crates\app\src\server.rs:114:1
+     |
+ 114 + #[derive(Debug)]
+ 115 | struct ApiError {
+     |
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `open-seo-spider` (bin "open-seo-spider" test) due to 1 previous error

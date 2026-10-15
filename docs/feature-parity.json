@@ -6304,6 +6304,63 @@
   "last_verified_at": "2026-10-15T08:41:21.015Z",
   "current_work": [
     {
+      "id": "http-response-body-drain-20261015",
+      "priority": 2,
+      "status": "DESIGN_REVIEWED_SOURCE_IMPLEMENTATION_IN_PROGRESS",
+      "title_de": "Blockierte Downloadantworten und Verbindungen vollständig beenden",
+      "summary_de": "Die konkrete Lücke bei nicht lesenden HTTP-Clients ist dokumentiert. Ein eigener Entwurf umfasst Producer-, Response-Body- und Verbindungsbesitz, echte Queue-Backpressure und Abbruch ohne falsches Erfolgs-EOF. Der erste Quell-Slice wird isoliert umgesetzt; Compiler- und Laufzeitabnahme fehlen.",
+      "completed_acceptance_de": [
+        "Tatsächlichen bestehenden HTTP/1-Stack und unbesessene Verbindungsaufgaben analysiert; fünf Sekunden Schonfrist für eingehende Verbindungen als Entwurfsentscheidung festgelegt."
+      ],
+      "pending_acceptance_de": [
+        "Response-Owner, begrenzte Chunks und deterministische Abbruch-/Queue-/Panic-Tests umsetzen und ausführen.",
+        "Eigenen Accept-/Connection-Besitz integrieren; HTTP/1.0-Ablehnung auf genau vier gestreamte Downloads begrenzen.",
+        "Echte TCP-Nichtleser, natürliche Prozess-/Pipe-Enden sowie vollständige positive Downloads prüfen; keine allgemeine Fünf-Sekunden-Shutdown-Garantie behaupten."
+      ],
+      "documentation": [
+        "docs/parity/http-response-body-drain-plan.md",
+        "docs/parity/http-response-body-drain-tasks.md",
+        "docs/parity/http-response-transport-plan.md"
+      ],
+      "gates": {
+        "source_review": "DESIGN_ONLY_IMPLEMENTATION_OPEN",
+        "rust_tests": "NOT_RUN",
+        "native_tcp_nonreader": "NOT_RUN"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "combined-source-v5-r2-20261015",
+      "priority": 0,
+      "status": "ACTUAL_ALL_TARGET_CHECK_PASS_FULL_SUITE_RUNNING",
+      "title_de": "Korrigierten gemeinsamen Stand vollständig ausführen",
+      "summary_de": "Fünf Testdateien sind nach den tatsächlichen Compilerfehlern korrigiert. Der private Commit 22e1e21 besteht cargo check für Workspace und alle Build-Ziele in 20,44 Sekunden ohne Warnungen. 317 Eingaben sind neu eingefroren; die tatsächliche vollständige Suite läuft mit mindestens 1256 Tests, 474 Pflichtnamen und vier echten Renderer-Fällen.",
+      "completed_acceptance_de": [
+        "Endgültige Vorschläge BODY3, Lifecycle4 und zustandslose Leser V2 unabhängig geprüft; alle 48 Vorschlagspfade und die drei Zusammenführungen exakt gebunden.",
+        "36 Formatdifferenzen separat geprüft; gegenüber dem fehlgeschlagenen Source5 sind genau fünf Testdateien geändert, alle bisherigen Assertions und Testfunktionen erhalten.",
+        "Tatsächlicher vollständiger All-Target-Compilercheck besteht; beide früheren Compilerfehlerstände bleiben erhalten."
+      ],
+      "pending_acceptance_de": [
+        "Tatsächliche vollständige Rust-/Renderer-/Format-/Clippy-Suite bestehen.",
+        "Danach optimierten Kandidaten bauen und echte Native-/EOF-/Großquellenprüfungen ausführen.",
+        "Originaldateien über API/Oberfläche freigeben, blockierte Downloads sauber abbrechen und übrige Featureliste abarbeiten."
+      ],
+      "documentation": [
+        "docs/verification/combined-source-v5-r2-source-20261015/index.json",
+        "docs/verification/combined-source-v5-compile-failed-20261015/index.json"
+      ],
+      "gates": {
+        "source_review": "PASS_BOUNDED_SOURCE_ONLY",
+        "all_target_check": "PASS_ACTUAL_20_44_SECONDS_NO_WARNINGS",
+        "full_workspace": "RUNNING_SOURCE5_R2",
+        "optimized_candidate": "NOT_RUN",
+        "native": "NOT_RUN_ON_SOURCE5_R2",
+        "installation": "NOT_RUN_INSTALLED_AB1_UNCHANGED",
+        "manufacturer_parity": "NOT_PROVEN"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
       "id": "combined-source-v5-20261015",
       "priority": 0,
       "status": "ACTUAL_CORE_TEST_COMPILE_FAILURE_REPAIR_IN_PROGRESS",
@@ -6388,7 +6445,7 @@
     {
       "id": "sitemap-original-body-foundation-20261015",
       "priority": 1,
-      "status": "MERGED_SOURCE5_TEST_COMPILE_REPAIR_PENDING",
+      "status": "REVIEWED_SOURCE5_R2_FULL_SUITE_RUNNING",
       "title_de": "Ursprüngliche Sitemap-Dateien dauerhaft speichern",
       "summary_de": "Die optionale Core-/Store-Grundlage ist in Source5 zusammengeführt und formatiert. Originalbytes, getrennte Budgets, unveränderliche Dateien und Wiederöffnungsprüfungen sind implementiert; 16 neue Windows-Tests sind wegen der Compilerfehler noch nicht ausgeführt. Archivierung unterstützt ausdrücklich UTF-8-SQLite-Speicherung. API, Oberfläche und Download werden anschließend ergänzt.",
       "completed_acceptance_de": [
@@ -6403,12 +6460,13 @@
         "MCP-Fenster, eigene Kopien für abgeleitete Crawls, portable Bundles, Wiederherstellung und kontrollierte Bereinigung bleiben getrennte offene Schritte."
       ],
       "documentation": [
+        "docs/verification/combined-source-v5-r2-source-20261015/index.json",
         "docs/parity/sitemap-source-archive-plan.md",
         "docs/parity/sitemap-source-archive-tasks.json"
       ],
       "gates": {
         "source_review": "PASS_BOUNDED_SOURCE_ONLY_V3_AND_FORMAT_MERGE",
-        "rust_tests": "NOT_EXECUTED_SOURCE5_TEST_COMPILE_FAILED",
+        "rust_tests": "RUNNING_ON_SOURCE5_R2",
         "public_api_ui": "NOT_IMPLEMENTED",
         "native_body_recovery": "NOT_RUN",
         "installation": "NOT_RUN"
@@ -6418,7 +6476,7 @@
     {
       "id": "http-mcp-lifecycle-ownership-20261015",
       "priority": 2,
-      "status": "MERGED_SOURCE5_TEST_COMPILE_REPAIR_PENDING",
+      "status": "REVIEWED_SOURCE5_R2_FULL_SUITE_RUNNING",
       "title_de": "Laufende HTTP- und MCP-Arbeiten sauber beenden",
       "summary_de": "Gehaltene Request-, Blocking-, Crawl- und PDF-Aufgaben sowie frühes Schließen der Arbeitszulassung sind in Source5 umgesetzt. Ein optionaler lokaler STDIN-EOF-Schalter ermöglicht einen eigenen natürlichen Prozessendetest. 16 neue Tests sind noch nicht ausgeführt; native EOF-Abnahme, langsam lesende HTTP-Clients und vollständige MCP-Sessions bleiben offen.",
       "completed_acceptance_de": [
@@ -6433,11 +6491,12 @@
         "Response-Body-/Connection-Besitz und Transportabbruch für nicht lesende Clients separat implementieren und mit echtem TCP prüfen; Source5 beweist keine begrenzte Shutdown-Latenz hierfür."
       ],
       "documentation": [
+        "docs/verification/combined-source-v5-r2-source-20261015/index.json",
         "docs/parity/http-lifecycle-plan.md"
       ],
       "gates": {
         "source_review": "PASS_BOUNDED_SOURCE_ONLY_V2_AND_FORMAT_MERGE",
-        "rust_tests": "NOT_EXECUTED_SOURCE5_TEST_COMPILE_FAILED",
+        "rust_tests": "RUNNING_ON_SOURCE5_R2",
         "native_eof_inflight": "NOT_RUN",
         "installation": "NOT_RUN"
       },
@@ -6446,7 +6505,7 @@
     {
       "id": "sitemap-location-pagination-work-20261015",
       "priority": 3,
-      "status": "MERGED_SOURCE5_TEST_COMPILE_REPAIR_PENDING",
+      "status": "REVIEWED_SOURCE5_R2_FULL_SUITE_RUNNING",
       "title_de": "Große Sitemap-Kataloge effizient durchblättern",
       "summary_de": "Source5 entfernt SQL-Einzelabfragen pro Eintrag und erneutes vollständiges Serialisieren, während Integritäts-, Quellen-, Reihenfolge-, Cursor- und Größenprüfungen erhalten bleiben. Acht neue Tests prüfen die exakte bisherige Serialisierung und gültige UTF-16-Ledger. Der tatsächliche Laufzeitgewinn und die vollständige 50.000-Zeilen-Wiederöffnung sind noch offen.",
       "completed_acceptance_de": [
@@ -6459,12 +6518,13 @@
         "Echte50.000 Zeilen vollständig paginieren, exportieren und nach Neustart prüfen; konkrete Arbeitszähler, Zeit und Speicher getrennt messen."
       ],
       "documentation": [
+        "docs/verification/combined-source-v5-r2-source-20261015/index.json",
         "docs/parity/sitemap-location-paging-plan.md"
       ],
       "gates": {
         "source_analysis": "COMPLETE_BOUNDED_SOURCE_ONLY",
         "implementation": "IN_PROGRESS",
-        "rust_tests": "NOT_EXECUTED_SOURCE5_TEST_COMPILE_FAILED",
+        "rust_tests": "RUNNING_ON_SOURCE5_R2",
         "native_large_sources": "NOT_RUN_ON_NEW_SOURCE",
         "source_review": "PASS_BOUNDED_SOURCE_ONLY_V2_AND_FORMAT_MERGE",
         "actual_50000_reopen": "NOT_RUN_ON_SOURCE5",

@@ -1,0 +1,340 @@
+{
+  "schema_version": 1,
+  "kind": "source5_r2_runners_independent_source_review",
+  "result": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "findings": [],
+  "preparation_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r2-runner-preparation-v1\\manifest.json",
+    "sha256": "162a5dc07fe1c76b40e9105c1c1528f02c05617a08f9beea56de2b39308345a7",
+    "bytes": 5858
+  },
+  "validator": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v5-source-suite-preparation-v1/validate-combined-source-v5.mjs",
+    "sha256": "76388c0b8a0a97b855ac3fc70e54996a953d7b2c0d6df049edfb5b09fc883927"
+  },
+  "files": [
+    {
+      "path": "freeze-combined-source-v5-r2.mjs",
+      "sha256": "7a81c37279bc253a049160a3420ecb897889a1a37a83b8088bb5883ea5b79c3e",
+      "bytes": 8563
+    },
+    {
+      "path": "run-combined-suite-v5-r2.mjs",
+      "sha256": "b9e7a4fda5195159ff2e738744416838aa34e61d3d1738aff4667069500bd0f3",
+      "bytes": 16899
+    },
+    {
+      "path": "build-combined-optimized-v5-r2.mjs",
+      "sha256": "6ba8262cfba7db388449bdc9a2c3ecb1c6e8335683bc81ec45aad0bc94d6bd41",
+      "bytes": 19698
+    }
+  ],
+  "verification": {
+    "total_literal_operations": 19,
+    "operations_by_runner": [
+      2,
+      6,
+      11
+    ],
+    "all_forward_inverse_exact": true,
+    "all_other_bytes_exact": true,
+    "checked": [
+      {
+        "path": "freeze-combined-source-v5-r2.mjs",
+        "old_source": {
+          "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v5-source-suite-preparation-v1/freeze-combined-source-v5.mjs",
+          "sha256": "69e22d27a84f8f66166bf447f4a2693e81e036eb7a3624b6533cab0dfd60954a",
+          "bytes": 8557
+        },
+        "final_source": {
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r2-runner-preparation-v1\\freeze-combined-source-v5-r2.mjs",
+          "sha256": "7a81c37279bc253a049160a3420ecb897889a1a37a83b8088bb5883ea5b79c3e",
+          "bytes": 8563
+        },
+        "operations": 2,
+        "all_forward_inverse_exact": true,
+        "all_other_bytes_exact": true
+      },
+      {
+        "path": "run-combined-suite-v5-r2.mjs",
+        "old_source": {
+          "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v5-source-suite-preparation-v1/run-combined-suite-v5.mjs",
+          "sha256": "1eda97219b04d1877ebd8cd064a194830f4cbf653c81164fddb38f38c4fdeb63",
+          "bytes": 16881
+        },
+        "final_source": {
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r2-runner-preparation-v1\\run-combined-suite-v5-r2.mjs",
+          "sha256": "b9e7a4fda5195159ff2e738744416838aa34e61d3d1738aff4667069500bd0f3",
+          "bytes": 16899
+        },
+        "operations": 6,
+        "all_forward_inverse_exact": true,
+        "all_other_bytes_exact": true
+      },
+      {
+        "path": "build-combined-optimized-v5-r2.mjs",
+        "old_source": {
+          "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-build-preparation-v5/build-combined-optimized-v5.mjs",
+          "sha256": "5e37e22306a2f1c93bed9f6cfa8bd02c7e9cb542d95082b0b7853f713690f09a",
+          "bytes": 19668
+        },
+        "final_source": {
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r2-runner-preparation-v1\\build-combined-optimized-v5-r2.mjs",
+          "sha256": "6ba8262cfba7db388449bdc9a2c3ecb1c6e8335683bc81ec45aad0bc94d6bd41",
+          "bytes": 19698
+        },
+        "operations": 11,
+        "all_forward_inverse_exact": true,
+        "all_other_bytes_exact": true
+      }
+    ],
+    "major_helper_regions": [
+      {
+        "path": "freeze-combined-source-v5-r2.mjs",
+        "label": "actual approval/validator import and dynamic final-source proposal admission",
+        "start": "const validatorPath=",
+        "end": "const freezerSHA=",
+        "bytes": 698,
+        "sha256": "6bc7eb37b2f5cb9486ed6a3713ee4b7cad7520f8d5ba4134bcb8bfcbb1bed713",
+        "exact": true
+      },
+      {
+        "path": "freeze-combined-source-v5-r2.mjs",
+        "label": "private Git source/commit/remote/input/test guards before source output",
+        "start": "const freezerSHA=",
+        "end": "verifyCurrent();assert(!fs.existsSync(OUT)",
+        "bytes": 3474,
+        "sha256": "f0e903b6eb25dc0f2333aca5e7946462e4630673e30106437c99050f6010aac4",
+        "exact": true
+      },
+      {
+        "path": "freeze-combined-source-v5-r2.mjs",
+        "label": "actual fresh copy/final guards/dynamic same Source5 manifest schema and NOT_RUN metadata",
+        "start": "verifyCurrent();assert(!fs.existsSync(OUT)",
+        "end": "const raw=Buffer.from",
+        "bytes": 2654,
+        "sha256": "5e90f0e3d9283fc6ae5e41d860b17b56942fed97ef62e26931d1398a4f02a6de",
+        "exact": true
+      },
+      {
+        "path": "run-combined-suite-v5-r2.mjs",
+        "label": "complete source/Root/validator/reference/renderer/full new Cargo name guards",
+        "start": "function verifyAllInputs() {",
+        "end": "verifyAllInputs();\nfor (const group of manifest.required_tests)",
+        "bytes": 1710,
+        "sha256": "ed080442a3b3e734bf177fae18f31840d8f3d0651ab36d29831c2316333c1b46",
+        "exact": true
+      },
+      {
+        "path": "run-combined-suite-v5-r2.mjs",
+        "label": "actual Cargo child closes/raw logs/individual receipts",
+        "start": "async function run(",
+        "end": "function verifyWorkspace(",
+        "bytes": 1648,
+        "sha256": "ce37fa9e4776cffef1985969a8dfae21b4f03c9e9070d79c1df1e4844b8af111",
+        "exact": true
+      },
+      {
+        "path": "run-combined-suite-v5-r2.mjs",
+        "label": "all required names/4renderer/count/0failed0ignored parser",
+        "start": "function verifyWorkspace(",
+        "end": "try {\n  verifyAllInputs();",
+        "bytes": 1550,
+        "sha256": "a27b221215a838280dec7289653d1967b216f902f5171fa54834c76396d43df7",
+        "exact": true
+      },
+      {
+        "path": "run-combined-suite-v5-r2.mjs",
+        "label": "actual owned renderer/HTML warmup body",
+        "start": "try {\n  verifyAllInputs();",
+        "end": "  await run('format'",
+        "bytes": 1946,
+        "sha256": "5c40f6743a909ce996845fd6c49f80c0a0e6c90080aca07b87cdbe58cc25b005",
+        "exact": true
+      },
+      {
+        "path": "run-combined-suite-v5-r2.mjs",
+        "label": "actual independent renderer/fixture close and final source guard",
+        "start": "} finally {\n  // Attempt both independent closes",
+        "end": "  const tests = runs.find",
+        "bytes": 916,
+        "sha256": "ca2d67aec61d0cfa0f6156b1b636831a276734e9cec2bfc768b2f5e53ce63991",
+        "exact": true
+      },
+      {
+        "path": "build-combined-optimized-v5-r2.mjs",
+        "label": "all actual suite evidence/logs/full names/renderer/Chrome verified after R2 kind-result check",
+        "start": "  assert.equal(proof.driver_sha256, suiteDriverSha);",
+        "end": "function verifySource() {",
+        "bytes": 6530,
+        "sha256": "184b517eae719f574115a684b3c6c28734246291cb5d8e1b19aa99264d7db99d",
+        "exact": true
+      },
+      {
+        "path": "build-combined-optimized-v5-r2.mjs",
+        "label": "complete source/Root/approval/reference guards",
+        "start": "function verifySource() {",
+        "end": "// A missing/running/failed suite stops here",
+        "bytes": 983,
+        "sha256": "cd014a1777aa3d0dfbf0e2dc612a817bbd8d83132305518595f4fe2cba53c53c",
+        "exact": true
+      },
+      {
+        "path": "build-combined-optimized-v5-r2.mjs",
+        "label": "actual compiler close/log receipts and exclusive fsynced capture",
+        "start": "async function command(",
+        "end": "try {\n  await command('cargo-version'",
+        "bytes": 1452,
+        "sha256": "e194d0218d64dba6959f00fc663a1d42ea4285e91bfe32dc5e85fb7d3c38330e",
+        "exact": true
+      },
+      {
+        "path": "build-combined-optimized-v5-r2.mjs",
+        "label": "actual optimized build/target equality/candidate PE checks",
+        "start": "try {\n  await command('cargo-version'",
+        "end": "} catch (error) {\n  failures.push({phase: 'build'",
+        "bytes": 1203,
+        "sha256": "d4fb9fde2cb4a70f9986d2c562986b7b5f0a3eb1617c5c0e3dfdfab5c2effd01",
+        "exact": true
+      },
+      {
+        "path": "build-combined-optimized-v5-r2.mjs",
+        "label": "all final source/suite/candidate/3close acceptance guards",
+        "start": "} finally {\n  try { verifySource(); sourceFinal = true; }",
+        "end": "  const result = accepted ?",
+        "bytes": 857,
+        "sha256": "8a6d2516329e3928a3f23eeca13af2370e3f2d9af70aa829c8c41a1c652a9a63",
+        "exact": true
+      }
+    ],
+    "actual_source_schema_unchanged": "combined_source_v5",
+    "same_dynamic_life3_test_source_admission": true,
+    "no_whole_source_tree_reread": true
+  },
+  "prior_source_suite_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-source-suite-independent-review-v1\\receipt.json",
+    "sha256": "a8198b07d177ddebcfbdd287713f9081b080876630d8aed9dfad14911550c408",
+    "bytes": 177596
+  },
+  "final_lifecycle3_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\lifecycle-independent-review-v3\\receipt.json",
+    "sha256": "2abd4bfe0b4d1108fcf92138454e4805e3f56c709290df4cca9965b761afcb88",
+    "bytes": 33600
+  },
+  "conclusions": [
+    "Exactly19 source edits change fresh output/source/producer self paths, actual new R2 suite producer hash and R2 runtime proof kinds/results. All other bytes invert exactly to reviewed V5 source preparations.",
+    "Dynamic actual final proposals/reviews/three shared merge/formatter/approval/source declarations remain under exact validator76388c. Source schema stays combined_source_v5 and allows final reviewed Life3; no failed V5 proof supplies R2 acceptance.",
+    "All required inherited/new names/full module names,4real Chromium gates, assertions/overflow opt1 profile, actual raw Cargo logs/individual compiler closes/independent renderer and fixture closes/final source guards remain. Builder admits only actual R2 suite kinds/hash/raw evidence and captures the exact actual optimized PE after actual closes.",
+    "All new outputs are fresh R2 directories; failed V5 paths/proofs are not overwritten. Actual Source5-R2 manifest/suite/build/candidate hashes remain future required inputs, with no fabricated PASS."
+  ],
+  "qualifications": [
+    "Root must finish actual final assembly/formatter/private publication/approval/freeze and fresh full suite/build before native binding. This receipt supplies no runtime result.",
+    "No prepared module imported/called; no Git/compiler/Rust test/SQLite/fixture/native/Root/product writes. Only own source/byte verifier and three Node syntax-check children ran."
+  ],
+  "pins": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r2-runner-preparation-v1\\manifest.json",
+      "sha256": "162a5dc07fe1c76b40e9105c1c1528f02c05617a08f9beea56de2b39308345a7",
+      "bytes": 5858
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v5-source-suite-preparation-v1/validate-combined-source-v5.mjs",
+      "sha256": "76388c0b8a0a97b855ac3fc70e54996a953d7b2c0d6df049edfb5b09fc883927",
+      "bytes": 16534
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\lifecycle-independent-review-v3\\receipt.json",
+      "sha256": "2abd4bfe0b4d1108fcf92138454e4805e3f56c709290df4cca9965b761afcb88",
+      "bytes": 33600
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-source-suite-independent-review-v1\\receipt.json",
+      "sha256": "a8198b07d177ddebcfbdd287713f9081b080876630d8aed9dfad14911550c408",
+      "bytes": 177596
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-build-preparation-v5\\manifest.json",
+      "sha256": "5c31edbbb55f454bb69c440b12a36d9d6a7a4532cddf1dda3327970e106abc6d",
+      "bytes": 6351
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v5-source-suite-preparation-v1/freeze-combined-source-v5.mjs",
+      "sha256": "69e22d27a84f8f66166bf447f4a2693e81e036eb7a3624b6533cab0dfd60954a",
+      "bytes": 8557
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r2-runner-preparation-v1\\freeze-combined-source-v5-r2.mjs",
+      "sha256": "7a81c37279bc253a049160a3420ecb897889a1a37a83b8088bb5883ea5b79c3e",
+      "bytes": 8563
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v5-source-suite-preparation-v1/run-combined-suite-v5.mjs",
+      "sha256": "1eda97219b04d1877ebd8cd064a194830f4cbf653c81164fddb38f38c4fdeb63",
+      "bytes": 16881
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r2-runner-preparation-v1\\run-combined-suite-v5-r2.mjs",
+      "sha256": "b9e7a4fda5195159ff2e738744416838aa34e61d3d1738aff4667069500bd0f3",
+      "bytes": 16899
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-build-preparation-v5/build-combined-optimized-v5.mjs",
+      "sha256": "5e37e22306a2f1c93bed9f6cfa8bd02c7e9cb542d95082b0b7853f713690f09a",
+      "bytes": 19668
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r2-runner-preparation-v1\\build-combined-optimized-v5-r2.mjs",
+      "sha256": "6ba8262cfba7db388449bdc9a2c3ecb1c6e8335683bc81ec45aad0bc94d6bd41",
+      "bytes": 19698
+    }
+  ],
+  "node_syntax_checks": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r2-runner-preparation-v1\\freeze-combined-source-v5-r2.mjs",
+      "sha256": "7a81c37279bc253a049160a3420ecb897889a1a37a83b8088bb5883ea5b79c3e",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "--check",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r2-runner-preparation-v1\\freeze-combined-source-v5-r2.mjs"
+      ],
+      "exit_code": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r2-runner-preparation-v1\\run-combined-suite-v5-r2.mjs",
+      "sha256": "b9e7a4fda5195159ff2e738744416838aa34e61d3d1738aff4667069500bd0f3",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "--check",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r2-runner-preparation-v1\\run-combined-suite-v5-r2.mjs"
+      ],
+      "exit_code": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r2-runner-preparation-v1\\build-combined-optimized-v5-r2.mjs",
+      "sha256": "6ba8262cfba7db388449bdc9a2c3ecb1c6e8335683bc81ec45aad0bc94d6bd41",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "--check",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v5-r2-runner-preparation-v1\\build-combined-optimized-v5-r2.mjs"
+      ],
+      "exit_code": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "executions": {
+    "prepared_imports": 0,
+    "compiler": 0,
+    "rust_tests": 0,
+    "git": 0,
+    "sqlite_fixtures_native": 0,
+    "root_mutations": 0
+  }
+}

@@ -1,0 +1,86 @@
+# Source6 response-body drain: design only
+
+DESIGN_ONLY_NOT_IMPLEMENTED_NOT_RUN. This plan does not establish a finite shutdown deadline, client delivery, production readiness, or Screaming Frog parity. The current actual Source5 run stopped during test compilation and executed zero tests. Its immutable failure is separate from the pending Lifecycle V3 fixture repair and later Source5 R2 acceptance.
+
+## Existing mechanism and concrete remaining boundary
+
+Lifecycle V3 preserves V2 production bytes. The shared admission closes requests, blocking work and crawls before the application shutdown signal is released. Actual TaskOwner worker and supervisor handles remain retained across caller/drain cancellation, and active crawls receive pause without lowering an existing cancel. The application then joins request, blocking, crawl, sitemap CSV, findings-read and FileTools owners. The generic request owner ends when `next.run` returns a Response, before the later response Body is consumed.
+
+The policy and resource export handlers eagerly register real blocking producers in `lifecycle.blocking`, wait for metadata readiness, and return bounded mpsc-backed Bodies. Their `blocking_send` calls have no cancellation wakeup while the exact receiver remains live and unpolled. Application drain retains and honestly waits for the producer. Axum graceful shutdown waits for that existing connection. With a non-reading client, producer and server completion can therefore both remain pending. A correct join is not a proof of finite drain latency.
+
+The resource writer splits writes into chunks of at most 65,536 bytes; the policy writer copies each Write input into a single channel item. A 64KiB BufWriter does not bound large direct writes. The Source5 full-download regression checks actual exports beyond 8×65,536 bytes, but does not prove a full eight-item channel or a blocked ninth send. Source6 must use actual chunk/enqueue observations for that claim.
+
+The cached, locked Axum 0.8.9 implementation spawns its graceful-signal monitor and connection futures internally. Its close watch waits for connection-task drop, while connection JoinHandles and task failure results are not retained by the application. A Body cancellation signal alone is insufficient if Hyper is already blocked in socket writing and never polls that Body again. This design therefore requires a separate owned transport boundary for autonomous non-reader shutdown. Merely adding a timeout around the existing application drain, dropping an Axum serving future, or closing the channel as normal EOF would not meet the contract.
+
+## Scope and invariants
+
+The first implementation slice should cover policy/resource JSON and CSV download producers, their Bodies, and inbound HTTP connections. It must preserve their existing verified Store reads, record order, bytes and format semantics. Keep the already enforced 64MiB sitemap CSV and 8MiB App JSON boundaries, cursor/read-only authority and existing positive-tail checks. Do not silently introduce those limits into other export surfaces whose current contract differs. Do not change MCP inventories (26 legacy /31 file tools), SDK inventories/types, filesystem roots, outbound website requests, renderer process ownership, or permission checks.
+
+An accepted operation has exactly one owner for its actual producer worker and supervisor. Moving the export from generic blocking ownership to a response registry must be explicit; do not register one worker ambiguously in two registries. Publish the response registry entry and actual retained handles before releasing its start barrier. The registry entry survives a dropped request, pending response, Body, ticket or shutdown waiter. A generic TaskOwner remains suitable for unrelated blocking operations.
+
+Local completion is distinct from remote receipt of bytes. A successful Body EOF establishes verified local production plus local stream completion. It cannot prove that a peer application received or persisted all bytes. A connection close likewise does not prove peer delivery. Receipts must state these boundaries.
+
+## Shared owned-body contract for future BODY original downloads
+
+Proposed states are PREPARING → READY_UNATTACHED → STREAMING → SUCCESS_EOF, or ABORT_REQUESTED → JOINING → CLOSED. These are a design vocabulary, not a committed Rust API. Keep independent facts for actual producer joined, supervisor joined, Body terminal/drop, response pump closed, spool reader closed, private temp removed and permit released. Do not compress them into one optimistic `done` flag. Producer success and Body success are separate outcomes.
+
+Admission and a small count/byte permit precede preparation IO. The actual worker, supervisor and lease are retained before copying starts. An unattached ready result remains owned: request cancellation signals it, and the retained supervisor joins the actual worker before removing its spool or releasing its permit. Drop only publishes cancellation/receiver closure synchronously; no detached asynchronous Drop cleanup is permitted. A dropped drain waiter may be resumed by another waiter without losing the only handle.
+
+After headers, the Body owns the same lease/permit and prepared reader through terminal EOF, error or Drop and the actual response-pump join. Positive completion requires the producer to have joined successfully, the verified expected amount to have been emitted, and the queue to be exhausted. Missing completion, worker panic, verification error, shutdown cancellation and channel disappearance produce an error/aborted outcome. They must never become an early successful `None` or a synthetic complete marker. An already delivered successful EOF cannot be retroactively cancelled; the outcome commit point must be explicit and race-tested.
+
+For BODY05–08, the separate author is preparing full length/SHA/EOF verification and fsync of a private bounded spool before headers, plus a read handle and exact Content-Length. Its own count/byte limits, Store capability, private path and cleanup authority remain independent from policy/resource exports. HEAD uses metadata without creating a spool; initial unsupported Range behavior remains its explicit API decision. Cancel checks during blocking preparation should occur between bounded chunks without losing the actual worker join. Ordinary request-header ownership cannot replace this resource lifetime.
+
+For a naturally completed keep-alive response, its permit need not wait for unrelated future requests or the whole connection to close once the Body/pump has actually finished and no reader/spool reference remains. For an aborted, unpolled response, an actual transport abort/drop must make the Body terminal before cleanup is declared complete. Any Bytes already copied into transport buffers are transport-owned and cannot retain a spool file reference. This distinction avoids tying all future keep-alive traffic to one completed download permit.
+
+## Producer and Body cancellation
+
+Both policy and resource writers should emit byte-identical chunks of at most 65,536 bytes to the existing eight-item queue. Chunking bounds queue items; it is not a new maximum export size. Introduce an owned cancellation control whose sticky state is checked before preparation, between eligible verified loops, before reserve/send, and before positive completion. A blocking producer must wait for either a bounded channel reservation or that control. One candidate is the already entered Tokio runtime Handle driving a select between `sender.reserve()` and a watch cancellation signal inside the owned blocking worker; this needs actual runtime/type validation. Do not create an extra detached pump merely to avoid `blocking_send`.
+
+Readiness and producer-completion channels remain different. The handler can return its Response after preparation metadata is ready while the real producer continues; awaiting the entire producer before returning a bounded-channel Body can deadlock at queue capacity. Conversely, returning a Body must not discard the producer handle. A custom Body must treat upstream closure without a joined positive completion as an error. Its positive EOF/tail is released only after successful completion evidence is available. On cancellation it closes the exact receiver, wakes producer waits and emits a stream error when polled. Error queuing must itself be cancellation-aware; an error send must not block forever behind a full queue.
+
+The current policy/resource Store verification and relation scans do not uniformly accept a cancellation/SQLite interrupt control. Cancellation-aware sends alone cannot bound their pre-write verification latency. A later change may reuse the transport-neutral `SitemapReadControl` pattern, but must add checkpoints/interrupt attachment to the actual synchronous SQL and Rust loops without weakening hash, relation, snapshot or read-only validation. Until that work and actual tests exist, a universal preparation/shutdown deadline is NOT PROVEN. No worker may be detached to manufacture a deadline.
+
+## Inbound transport ownership and shutdown order
+
+Prefer a narrow, separate accept/connection owner which reuses the existing Axum Router, middleware and locked Hyper stack, but retains the actual accept coordinator and per-connection future handles. Each connection is admitted/registered before its task can run. Every connection has an owned cancellation route that can drop its actual inbound IO/connection future when graceful progress is impossible; the surrounding connection task then joins normally and records the aborted outcome. Keep the distinction between deliberately aborting a transport and aborting/dropping the task handle. Do not kill processes or alter outbound crawler connections.
+
+A custom Listener/IO wrapper that can wake blocked read/write polls could be a smaller alternative, but it would not by itself recover Axum's discarded per-connection JoinHandle failures. If chosen, its receipt must explicitly qualify that limit rather than claim equivalent actual task ownership. The accept-loop replacement needs a separate small source proposal and independent review; do not combine it into the earlier compiler fixture repair or BODY archive foundation.
+
+Shutdown ordering must publish all cancellation decisions before waiting on dependent work:
+
+1. Atomically close shared application, response-resource and transport admission; stop accepting new inbound connections. Already admitted initialization stays owned and may publish a paused late crawl.
+2. Preserve existing active-crawl pause/cancel semantics. Publish response abort requests and wake blocked producer reservations. Request graceful connection shutdown and publish the bounded transport-abort policy without waiting for producer completion.
+3. Drive retained request/crawl/response/producer/transport/CSV/read/file drains concurrently. Do not hold a registry mutex across another registry's join. A connection which cannot progress must be actually closed by its owned transport cancellation path, allowing its Body Drop and producer wakeup.
+4. Observe all actual joins and per-response terminal facts, close spool handles, remove only owned temps, then release permits. Continue collecting failures even after one drain fails. Do not return PASS when a log, cleanup or join failed.
+5. Emit the final local application receipt only after all applicable owners close. A deliberately aborted response can coexist with a clean ownership shutdown when its abort is explicit and every join/close succeeds; its download result remains ABORTED, never SUCCESS_EOF. Process/stdout/stderr EOF remains an outside witness.
+
+The exact grace interval and supported HTTP protocol policy are product decisions to be fixed before implementation/native acceptance, not inferred from this plan. A finite interval may trigger local transport abort but does not permit detaching a still-running verifier. Scope any finite-latency result to the demonstrated preparation and protocol paths.
+
+## Protocol and compatibility gate
+
+Inventory the actual enabled locked Hyper/Axum features without changing them accidentally. The cached default Axum feature set includes HTTP/1, while HTTP/2 availability depends on the resolved application feature graph. Preserve actual application routing, request limits, headers, keep-alive behavior and middleware; verify protocol-specific behavior rather than infer it from a new accept loop.
+
+For HTTP/1.1 chunked responses, incomplete cancellation must omit normal terminal framing and be observed as an error/aborted body. For exact Content-Length BODY spools, fewer bytes plus connection close must be observed as incomplete. Unknown-length HTTP/1.0 close-delimited responses can make early close indistinguishable from normal EOF. Before claiming that every truncation is detectable, explicitly choose and test a compatible known-length preparation strategy or a narrowly reviewed refusal for unsupported HTTP/1.0 streaming. HTTP/2 requires actual reset/error tests, including whether cancellation is per stream or connection; do not claim untested multiplexed-session parity. Upgrade/CONNECT paths need explicit inventory and scope. There is no new unauthenticated shutdown/admin endpoint.
+
+## Required regression evidence before acceptance
+
+| Case | Actual trigger and independent oracle |
+| --- | --- |
+| Both writers | Real Write input larger than 64KiB; byte-for-byte output preserved, each observed enqueue ≤65,536 bytes; no new total-byte cap. |
+| Deterministic full queue | Hold the exact real handler Body unpolled; wait for eight actual successful enqueues and a ninth reserve-entered/full marker. Channel capacity, not a sleep or total source size, establishes backpressure. |
+| Body Drop | Drop that held Body; actual producer and supervisor join, sticky stats close, no later writes, no lost ready/lease/permit. |
+| Shutdown without Body polling | Use an actual owned connection future with a controlled AsyncWrite permanently Pending after a real write-entered marker; publish shutdown, require actual IO drop, Body terminal, worker/supervisor/connection joins. An unpolled Body must not be the only escape. |
+| Caller/drain cancellation | Cancel at start barrier, during prepare, ready-before-attach and blocked send; cancel the first drain waiter. A subsequent drain observes the same actual handles and closes all permits/resources exactly once. |
+| Failure classification | Worker panic, verification error, missing completion, full-queue error, reader/spool close failure and cleanup failure never produce a clean positive Body EOF or successful download receipt. |
+| Positive control | Consume each real policy/resource JSON/CSV export; preserve full independent counts, bytes/order/tails and actual EOF. Run old sitemap CSV 64MiB exact/+1 and App JSON 8MiB exact/+1 acceptance unchanged when those paths are touched. |
+| Real TCP non-reader | Real App + disk crawl ledgers from public API. Raw client reads headers then stops, with actual producer/full-queue and transport-write-pending observations. Request owned stdin EOF, do not release the client first, require natural App closure after owned transport abort and complete joins. Parse HTTP truncation/error, never accept a normal short success. |
+| Real TCP positive | Consuming client independently verifies full bytes/format; natural keep-alive response completion releases its permit without waiting for unrelated later requests. |
+| Crawl independence | Hold an actual outbound crawl HTTP body while inbound non-reader response is aborted; preserve checkpoint pause/cancel and await the existing owned outbound completion. The inbound abort must not kill the fixture or foreign process. |
+| Future BODY integration | Actual full pre-header spool length/SHA/fsync proof; ready unattached cancel; mid-body drop/shutdown; exact Content-Length/error; corrupt/truncated source produces no200 headers; temp/lease/permit removal only after actual worker/pump closure. |
+| Protocol matrix | Actual HTTP/1.1 truncation framing, chosen HTTP/1.0 behavior, enabled HTTP/2 reset/multiplexing and any upgrade scope; no protocol support guessed from features. |
+
+Test-only markers must be attached to the real reserve/enqueue/write/close operations. Choose in-process real TCP regression tests for deterministic hooks before inventing production telemetry. A separate optimized-binary native harness requires a reviewed way to observe the same actual boundary; a diagnostic-only binary cannot silently stand in for the accepted candidate. Native cleanup may close only owned clients/fixtures. Any necessary child kill is recorded as FAIL; no PASS-by-timeout or inherited Source5/V4 proof.
+
+## Delivery boundary
+
+Implement and review in small source slices only after final actual Source5 R2 admission: response owner/writer/body tests, then actual transport ownership/protocol tests, then BODY original-download integration through the common resource-lifetime contract. A source-only review, compiler success, full suite, optimized build, exact-binary native witness and installed release are separate gates. This plan changes no product input, test oracle, acceptance limit or installed binary.

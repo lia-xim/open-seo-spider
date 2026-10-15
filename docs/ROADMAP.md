@@ -1,3 +1,9 @@
+## Aktuell: Source5 R2 wird vollständig ausgeführt (15.10.2026)
+
+Der korrigierte private Commit `22e1e21` besteht den tatsächlichen All-Target-Compilercheck ohne Warnungen. Die neue vollständige Suite läuft auf 317 eingefrorenen Eingaben und muss mindestens 1256 Tests, 474 Pflichtnamen und vier echte Renderer-Fälle bestehen. Optimierter Build, Native-Abnahmen und Installation folgen separat.
+
+Die Originaldatei-Oberfläche und das zuverlässige Beenden blockierter Downloads entstehen als getrennte isolierte Vorschläge. Vollständige Herstellerparität ist weiterhin nicht nachgewiesen.
+
 ## Aktuell: Source5 gemeinsam prüfen (15.10.2026)
 
 Source5 ist als privater Commit `95cc8ee` mit 317 eingefrorenen Eingaben veröffentlicht. Der tatsächliche vollständige Lauf scheitert mit sieben Compilerfehlern in Testhilfen; noch kein Test ist ausgeführt. Die Reparatur muss anschließend mindestens 1256 Tests, 474 Pflichtnamen und vier echte Renderer-Fälle bestehen. Optimierter Build, Native-Abnahmen und Installation stehen für diesen Stand noch aus.

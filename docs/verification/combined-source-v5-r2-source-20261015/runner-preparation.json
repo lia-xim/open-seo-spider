@@ -1,0 +1,155 @@
+{
+  "kind": "source5_r2_freeze_suite_build_source_preparation",
+  "status": "SOURCE_ONLY_NOT_PROMOTED_NOT_RUN",
+  "recorded_at": "2026-10-15T11:04:19.055Z",
+  "source_schema": "combined_source_v5",
+  "validator": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v5-source-suite-preparation-v1/validate-combined-source-v5.mjs",
+    "sha256": "76388c0b8a0a97b855ac3fc70e54996a953d7b2c0d6df049edfb5b09fc883927"
+  },
+  "files": [
+    {
+      "path": "freeze-combined-source-v5-r2.mjs",
+      "sha256": "7a81c37279bc253a049160a3420ecb897889a1a37a83b8088bb5883ea5b79c3e",
+      "bytes": 8563
+    },
+    {
+      "path": "run-combined-suite-v5-r2.mjs",
+      "sha256": "b9e7a4fda5195159ff2e738744416838aa34e61d3d1738aff4667069500bd0f3",
+      "bytes": 16899
+    },
+    {
+      "path": "build-combined-optimized-v5-r2.mjs",
+      "sha256": "6ba8262cfba7db388449bdc9a2c3ecb1c6e8335683bc81ec45aad0bc94d6bd41",
+      "bytes": 19698
+    }
+  ],
+  "derivations": [
+    {
+      "old_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v5-source-suite-preparation-v1/freeze-combined-source-v5.mjs",
+      "old_sha256": "69e22d27a84f8f66166bf447f4a2693e81e036eb7a3624b6533cab0dfd60954a",
+      "path": "freeze-combined-source-v5-r2.mjs",
+      "sha256": "7a81c37279bc253a049160a3420ecb897889a1a37a83b8088bb5883ea5b79c3e",
+      "bytes": 8563,
+      "operations": [
+        {
+          "at": 501,
+          "before": "OUT=path.join(BASE,'combined-source-v5')",
+          "after": "OUT=path.join(BASE,'combined-source-v5-r2')"
+        },
+        {
+          "at": 691,
+          "before": "'work/freeze-combined-source-v5.mjs'",
+          "after": "'work/freeze-combined-source-v5-r2.mjs'"
+        }
+      ],
+      "exact_reverse": true
+    },
+    {
+      "old_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v5-source-suite-preparation-v1/run-combined-suite-v5.mjs",
+      "old_sha256": "1eda97219b04d1877ebd8cd064a194830f4cbf653c81164fddb38f38c4fdeb63",
+      "path": "run-combined-suite-v5-r2.mjs",
+      "sha256": "b9e7a4fda5195159ff2e738744416838aa34e61d3d1738aff4667069500bd0f3",
+      "bytes": 16899,
+      "operations": [
+        {
+          "at": 772,
+          "before": "'combined-source-v5'",
+          "after": "'combined-source-v5-r2'"
+        },
+        {
+          "at": 941,
+          "before": "'results/combined-suite-v5'",
+          "after": "'results/combined-suite-v5-r2'"
+        },
+        {
+          "at": 1467,
+          "before": "'work/run-combined-suite-v5.mjs'",
+          "after": "'work/run-combined-suite-v5-r2.mjs'"
+        },
+        {
+          "at": 14555,
+          "before": "'PASS_COMBINED_WORKSPACE_V5_REAL_RENDERER_FMT_CLIPPY'",
+          "after": "'PASS_COMBINED_WORKSPACE_V5_R2_REAL_RENDERER_FMT_CLIPPY'"
+        },
+        {
+          "at": 14614,
+          "before": "'FAIL_COMBINED_WORKSPACE_V5'",
+          "after": "'FAIL_COMBINED_WORKSPACE_V5_R2'"
+        },
+        {
+          "at": 14695,
+          "before": "'combined_full_suite_v5'",
+          "after": "'combined_full_suite_v5_r2'"
+        }
+      ],
+      "exact_reverse": true
+    },
+    {
+      "old_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-build-preparation-v5/build-combined-optimized-v5.mjs",
+      "old_sha256": "5e37e22306a2f1c93bed9f6cfa8bd02c7e9cb542d95082b0b7853f713690f09a",
+      "path": "build-combined-optimized-v5-r2.mjs",
+      "sha256": "6ba8262cfba7db388449bdc9a2c3ecb1c6e8335683bc81ec45aad0bc94d6bd41",
+      "bytes": 19698,
+      "operations": [
+        {
+          "at": 764,
+          "before": "const suiteDriverSha = '1eda97219b04d1877ebd8cd064a194830f4cbf653c81164fddb38f38c4fdeb63'",
+          "after": "const suiteDriverSha = 'b9e7a4fda5195159ff2e738744416838aa34e61d3d1738aff4667069500bd0f3'"
+        },
+        {
+          "at": 1042,
+          "before": "'combined-source-v5'",
+          "after": "'combined-source-v5-r2'"
+        },
+        {
+          "at": 1153,
+          "before": "'results/combined-suite-v5'",
+          "after": "'results/combined-suite-v5-r2'"
+        },
+        {
+          "at": 1214,
+          "before": "'results/combined-optimized-build-v5'",
+          "after": "'results/combined-optimized-build-v5-r2'"
+        },
+        {
+          "at": 1634,
+          "before": "'work/run-combined-suite-v5.mjs'",
+          "after": "'work/run-combined-suite-v5-r2.mjs'"
+        },
+        {
+          "at": 1853,
+          "before": "'work/build-combined-optimized-v5.mjs'",
+          "after": "'work/build-combined-optimized-v5-r2.mjs'"
+        },
+        {
+          "at": 5555,
+          "before": "'combined_full_suite_v5'",
+          "after": "'combined_full_suite_v5_r2'"
+        },
+        {
+          "at": 5614,
+          "before": "'PASS_COMBINED_WORKSPACE_V5_REAL_RENDERER_FMT_CLIPPY'",
+          "after": "'PASS_COMBINED_WORKSPACE_V5_R2_REAL_RENDERER_FMT_CLIPPY'"
+        },
+        {
+          "at": 17506,
+          "before": "'PASS_COMBINED_OPTIMIZED_BUILD_V5'",
+          "after": "'PASS_COMBINED_OPTIMIZED_BUILD_V5_R2'"
+        },
+        {
+          "at": 17546,
+          "before": "'FAIL_COMBINED_OPTIMIZED_BUILD_V5'",
+          "after": "'FAIL_COMBINED_OPTIMIZED_BUILD_V5_R2'"
+        },
+        {
+          "at": 17633,
+          "before": "'combined_optimized_build_v5'",
+          "after": "'combined_optimized_build_v5_r2'"
+        }
+      ],
+      "exact_reverse": true
+    }
+  ],
+  "qualification": "Fresh R2 directories, actual producers and result kinds preserve the failed V5 artifacts. Existing Source5 schema and reviewed validator accept final actual LifeV3 repair dynamically. Source/future suite/build/candidate hashes remain actual required CLI inputs; no future success is invented. Root must still bind real final proposal/merge/format/source approvals and independent review before promotion/execution."
+}

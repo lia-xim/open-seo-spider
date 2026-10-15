@@ -1,0 +1,219 @@
+{
+  "schema_version": 1,
+  "kind": "source5_final_body3_lifecycle4_shared_merges_review_wrapper",
+  "result": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "findings": [],
+  "proposal_manifests": [
+    {
+      "role": "body",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v3\\manifest.json",
+      "sha256": "52e8845c68bea19b8173c4d04d2738d5d7cffc10437dd19c6a2a239151f9c418"
+    },
+    {
+      "role": "lifecycle",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-http-lifecycle-proposal-v4\\manifest.json",
+      "sha256": "5d5be90f080b27dacbcfdecaf0eabc5886b95e34951822264a69237c93dc2034"
+    }
+  ],
+  "merged_files": [
+    {
+      "path": "Cargo.lock",
+      "sha256": "0f4038aaf5411912ea18b69a0a4095d0feb7834726a64a5d403f6e51b8de8916",
+      "bytes": 78548
+    },
+    {
+      "path": "crates/core/src/crawler.rs",
+      "sha256": "e4f08ae67866f78777d5decf983217a79bf9c2ad744092b283522dfc4534bc0a",
+      "bytes": 165853
+    },
+    {
+      "path": "crates/core/src/lib.rs",
+      "sha256": "c3a27640f47a4428223adb80926d334068851c80b28e654f7e40830d32439ae6",
+      "bytes": 6800
+    }
+  ],
+  "proposal_reviews": [
+    {
+      "role": "body",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-independent-review-v3\\receipt.json",
+      "sha256": "5ff5a544d14e6bf0f2f71684e658316f323e0ca355ba24472779692ba455bd33"
+    },
+    {
+      "role": "lifecycle",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\lifecycle-independent-review-v4\\receipt.json",
+      "sha256": "268447471be4a270809381bc760a43406aedaae678228f211291a168fcb99a96"
+    }
+  ],
+  "previous_standard_merge_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source5-shared-merges-final-review-v2\\receipt.json",
+    "sha256": "e4a87e2d8b704eee434b16448276c93f8f757959947ca00ef9cd7bb36b62fbe1",
+    "bytes": 9365
+  },
+  "original_full_composition_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source5-body-lifecycle-merge-independent-review-v1\\receipt.json",
+    "sha256": "5dc1de5d210b19e889c08ceebc40ba510d1b34f025fbeda53a236f6a79a1ae7d",
+    "bytes": 186258
+  },
+  "author_inputs_by_path": [
+    {
+      "path": "Cargo.lock",
+      "author_inputs": [
+        {
+          "role": "body",
+          "sha256": "ee2387b861277345becc696478ba6ab9555d6b4b4cf20c22832b09fc7b08dd1c"
+        },
+        {
+          "role": "lifecycle",
+          "sha256": "f2a96d41148fa42987de297234b01eaf7005a9a459bb65fde7364e8245782bd7"
+        }
+      ],
+      "life4_exact_life3": true,
+      "merged_preformat_exact_prior_review": true
+    },
+    {
+      "path": "crates/core/src/crawler.rs",
+      "author_inputs": [
+        {
+          "role": "body",
+          "sha256": "9e6fda90d87f83ef92f6d813ca874ad43bc254f2c6f5e6f29fdf24c5f7c658c5"
+        },
+        {
+          "role": "lifecycle",
+          "sha256": "028aee2df0f4f5dfc27e9a9a651ce7ed60e892b2743234b53daefdff6f3168e5"
+        }
+      ],
+      "life4_exact_life3": true,
+      "merged_preformat_exact_prior_review": true
+    },
+    {
+      "path": "crates/core/src/lib.rs",
+      "author_inputs": [
+        {
+          "role": "body",
+          "sha256": "f4f45bed3690f6cfaeaab01e9a37ab6ce0d039347bec6757ec848d04132e08dd"
+        },
+        {
+          "role": "lifecycle",
+          "sha256": "799598d33ad3fbe6b4e50cc1d896d784fbb321d4f6d3b71272173377d0fa77e7"
+        }
+      ],
+      "life4_exact_life3": true,
+      "merged_preformat_exact_prior_review": true
+    }
+  ],
+  "scope": "Exactly three checked pre-format merged files, final BODY3 and Life4. All three actual Life4 shared inputs independently reread as byte-identical to Life3; BODY3 and merged outputs remain exact prior standard review and original5dc1 two-order inverse proof. No new merge semantics or unnecessary whole-tree reread.",
+  "qualifications": [
+    "The single Life4 ApiResult test-diagnostic compile repair is separately covered by268447 and touches none of these shared inputs. This wrapper does not claim compilation/runtime or formatter approval.",
+    "Root must use exact merged_files and final proposal_manifests in actual R2 approval and separate formatter-only before/after evidence. No future source/suite/build proof is invented."
+  ],
+  "pins": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source5-shared-merges-final-review-v2\\receipt.json",
+      "sha256": "e4a87e2d8b704eee434b16448276c93f8f757959947ca00ef9cd7bb36b62fbe1",
+      "bytes": 9365
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-http-lifecycle-proposal-v3\\manifest.json",
+      "sha256": "164398a750217dbfcb94f9eb63d97a141933cfa732de999f22ee4f4a2a610ce1",
+      "bytes": 23812
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-http-lifecycle-proposal-v4\\manifest.json",
+      "sha256": "5d5be90f080b27dacbcfdecaf0eabc5886b95e34951822264a69237c93dc2034",
+      "bytes": 24757
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\lifecycle-independent-review-v4\\receipt.json",
+      "sha256": "268447471be4a270809381bc760a43406aedaae678228f211291a168fcb99a96",
+      "bytes": 21415
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v3\\manifest.json",
+      "sha256": "52e8845c68bea19b8173c4d04d2738d5d7cffc10437dd19c6a2a239151f9c418",
+      "bytes": 14549
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-independent-review-v3\\receipt.json",
+      "sha256": "5ff5a544d14e6bf0f2f71684e658316f323e0ca355ba24472779692ba455bd33",
+      "bytes": 170517
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source5-body-lifecycle-merge-independent-review-v1\\receipt.json",
+      "sha256": "5dc1de5d210b19e889c08ceebc40ba510d1b34f025fbeda53a236f6a79a1ae7d",
+      "bytes": 186258
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v5-draft\\lifecycle-v2-merge-preview\\preview.json",
+      "sha256": "6ed64900da0df0d9eded9c41cc5b4fcff8bb3c4b38e2e8f985e64d096e21b2fb",
+      "bytes": 10604
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-http-lifecycle-proposal-v4\\source\\Cargo.lock",
+      "sha256": "f2a96d41148fa42987de297234b01eaf7005a9a459bb65fde7364e8245782bd7",
+      "bytes": 78521
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-http-lifecycle-proposal-v3\\source\\Cargo.lock",
+      "sha256": "f2a96d41148fa42987de297234b01eaf7005a9a459bb65fde7364e8245782bd7",
+      "bytes": 78521
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v3\\source\\Cargo.lock",
+      "sha256": "ee2387b861277345becc696478ba6ab9555d6b4b4cf20c22832b09fc7b08dd1c",
+      "bytes": 78535
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v5-draft\\lifecycle-v2-merge-preview\\Cargo.lock",
+      "sha256": "0f4038aaf5411912ea18b69a0a4095d0feb7834726a64a5d403f6e51b8de8916",
+      "bytes": 78548
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-http-lifecycle-proposal-v4\\source\\crates\\core\\src\\crawler.rs",
+      "sha256": "028aee2df0f4f5dfc27e9a9a651ce7ed60e892b2743234b53daefdff6f3168e5",
+      "bytes": 163853
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-http-lifecycle-proposal-v3\\source\\crates\\core\\src\\crawler.rs",
+      "sha256": "028aee2df0f4f5dfc27e9a9a651ce7ed60e892b2743234b53daefdff6f3168e5",
+      "bytes": 163853
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v3\\source\\crates\\core\\src\\crawler.rs",
+      "sha256": "9e6fda90d87f83ef92f6d813ca874ad43bc254f2c6f5e6f29fdf24c5f7c658c5",
+      "bytes": 164718
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v5-draft\\lifecycle-v2-merge-preview\\crates\\core\\src\\crawler.rs",
+      "sha256": "e4f08ae67866f78777d5decf983217a79bf9c2ad744092b283522dfc4534bc0a",
+      "bytes": 165853
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-http-lifecycle-proposal-v4\\source\\crates\\core\\src\\lib.rs",
+      "sha256": "799598d33ad3fbe6b4e50cc1d896d784fbb321d4f6d3b71272173377d0fa77e7",
+      "bytes": 6436
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-http-lifecycle-proposal-v3\\source\\crates\\core\\src\\lib.rs",
+      "sha256": "799598d33ad3fbe6b4e50cc1d896d784fbb321d4f6d3b71272173377d0fa77e7",
+      "bytes": 6436
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source-body-core-proposal-v3\\source\\crates\\core\\src\\lib.rs",
+      "sha256": "f4f45bed3690f6cfaeaab01e9a37ab6ce0d039347bec6757ec848d04132e08dd",
+      "bytes": 6693
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v5-draft\\lifecycle-v2-merge-preview\\crates\\core\\src\\lib.rs",
+      "sha256": "c3a27640f47a4428223adb80926d334068851c80b28e654f7e40830d32439ae6",
+      "bytes": 6800
+    }
+  ],
+  "executions": {
+    "target_imports": 0,
+    "whole_tree_rereads": 0,
+    "git_merge": 0,
+    "compiler_tests": 0,
+    "sqlite_fixture_native": 0,
+    "root_product_writes": 0
+  }
+}
