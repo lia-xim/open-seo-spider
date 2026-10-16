@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "kind": "crawl_resume_cli_independent_source_review",
+  "recorded_at": "2026-10-16T06:09:41.186Z",
+  "result": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "findings": [],
+  "reviewer": "/root/native_v4_review",
+  "independent_from_author": true,
+  "proposal_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\crawl-resume-cli-proposal-v2\\manifest.json",
+    "sha256": "49bf626d430418f02a01e5f475fba5d9c83a221bd012b60b02a9a7a047e53a95",
+    "bytes": 5777
+  },
+  "previous_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-resume-cli-independent-review-v1/receipt.json",
+    "sha256": "cebcebbc4fb00546e98b98b7ab36c26ad887409d293f2adc7feb6057c11137d9",
+    "bytes": 4917
+  },
+  "parent_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v15/manifest.json",
+    "sha256": "9c7ff394a3db1a2e024e685433f0335dbe18b1155330095787d53bb727ba0106",
+    "bytes": 874152
+  },
+  "reviewed_files": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-resume-cli-proposal-v2/source/crates/app/src/main.rs",
+      "sha256": "5ca0c7d57fbc71898d363ca36dbdcc52cc50fcff2fc600c61609388d33689d75",
+      "bytes": 37477
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-resume-cli-proposal-v2/source/crates/app/src/server.rs",
+      "sha256": "4774402be4250fcabd618d4ede3e348b0e074f41d7cba5f4f057c2e5dce0a99d",
+      "bytes": 97127
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-resume-cli-proposal-v2/source/crates/app/src/crawl_resume.rs",
+      "sha256": "79899cac1e883865ac6cff3f340a61c44c5a55c3e3cb2c548a4a457bde24ba75",
+      "bytes": 5924
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-resume-cli-proposal-v2/source/crates/app/src/crawl_resume_tests.rs",
+      "sha256": "63fef70db21346fdfe8e4186afebb1d7ab8750f48ab0468ee53f269ca4b51fe0",
+      "bytes": 14830
+    }
+  ],
+  "derivation": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-resume-cli-proposal-v2/DERIVATION.json",
+    "sha256": "17c54132178b8024b5f3d847d420a5e71df743ef6b7f516e34059a5867afdaa2",
+    "bytes": 421891
+  },
+  "revision": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-resume-cli-proposal-v2/REVISION.json",
+    "sha256": "e38702fe083dd04ea55a59052570e604bc9115462624b86181566e4b658c43cf",
+    "bytes": 423532
+  },
+  "test_inventory": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-resume-cli-proposal-v2/TEST-INVENTORY.json",
+    "sha256": "dbc00993db7d68774fdecf0f511186682532c0802349a10ae4419c1673f6b8a4",
+    "bytes": 5027
+  },
+  "reqwest_source_capture": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/reqwest-0.12.28-retry-source-root-capture-v1/capture.json",
+    "sha256": "e1f9f6edaf7e7bd99f5f2ead5b5b7de9f67c7e2c9c3c1a3a52eaaf6979d80a73",
+    "bytes": 1367
+  },
+  "report": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\crawl-resume-cli-independent-review-v2\\REPORT.md",
+    "sha256": "9c963beb793c62d55c38e6a54ffd3f5ac5605095c80a96758d1cb583d62692ed",
+    "bytes": 2755
+  },
+  "audit": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\crawl-resume-cli-independent-review-v2\\AUDIT.json",
+    "sha256": "9d0816cff58362adbb606116e09b6776cf2c1bbb32d154300e6493d917975680",
+    "bytes": 12354
+  },
+  "audit_method": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\crawl-resume-cli-independent-review-v2\\audit.mjs",
+    "sha256": "bab08ac5f455f12f19e3521043de9e2dde8bbd5b54ebac4ec809deeb3e9724b8",
+    "bytes": 8899
+  },
+  "scope": {
+    "full_payloads": 4,
+    "historical_parent_whole_pairs": 4,
+    "historical_parent_operations": 6,
+    "v1_successor_whole_pairs": 4,
+    "v1_successor_operations": 5,
+    "unchanged_main_server": 2,
+    "old_ten_test_prefix_bytes": 11338,
+    "regression_test_functions_source_read": 11,
+    "pinned_evidence_references": 31
+  },
+  "resolved_source_findings": [
+    {
+      "id": "P2-OPTIONS-UNBOUNDED-READ",
+      "previous_review": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-resume-cli-independent-review-v1/receipt.json",
+        "sha256": "cebcebbc4fb00546e98b98b7ab36c26ad887409d293f2adc7feb6057c11137d9",
+        "bytes": 4917
+      },
+      "status": "RESOLVED_IN_SOURCE_ONLY",
+      "mechanism": "One opened file handle, production AsyncRead::take(65537), refusal above65536 before parse/HTTP",
+      "actual_tests_executed": 0
+    }
+  ],
+  "NoRetry_scope": {
+    "captured_reqwest_version": "0.12.28",
+    "capture": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/reqwest-0.12.28-retry-source-root-capture-v1/capture.json",
+      "sha256": "e1f9f6edaf7e7bd99f5f2ead5b5b7de9f67c7e2c9c3c1a3a52eaaf6979d80a73",
+      "bytes": 1367
+    },
+    "explicit_policy": "ClientBuilder.retry(reqwest::retry::never()) disables reqwest retry classifier, including default ProtocolNacks",
+    "application": "one send, fresh client, no application retry loop and no redirects",
+    "scope": "Logical application/reqwest-policy requests; no packet-level/OS retransmission or global transport trace claim",
+    "historical_duplicate_POST": "NOT_PROVEN_NOT_ASSERTED"
+  },
+  "parent_basis": {
+    "basis": "Immutable historical Frozen15r1 source preimages only",
+    "historical_fullsuite": "FAIL",
+    "historical_failed_cases": 3,
+    "future_retry2_parent_manifest": null,
+    "accepted_runtime_parent_claim": false
+  },
+  "compiler_test_native_integration": "NOT_RUN",
+  "Source15_CLI_resume": "ABSENT_UNCHANGED",
+  "target_imports": 0,
+  "target_calls": 0,
+  "compiler_tests_native": 0,
+  "qualification": "Bounded independent successor source review closes the V1 P2 only in source. No actual green tests, runtime acceptance, accepted Retry2 parent, future integration or vendor parity is claimed."
+}

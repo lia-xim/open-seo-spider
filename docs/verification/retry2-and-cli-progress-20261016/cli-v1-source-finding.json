@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "kind": "crawl_resume_cli_independent_source_review",
+  "recorded_at": "2026-10-16T06:03:06.658Z",
+  "result": "FINDINGS",
+  "findings": [
+    {
+      "id": "P2-OPTIONS-UNBOUNDED-READ",
+      "priority": 2,
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\crawl-resume-cli-proposal-v1\\source\\crates\\app\\src\\crawl_resume.rs",
+      "line": 102,
+      "related_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\crawl-resume-cli-proposal-v1\\source\\crates\\app\\src\\main.rs",
+      "related_lines": [
+        947,
+        953,
+        958
+      ],
+      "title": "Read at most 64KiB plus one byte before parsing resume options",
+      "mechanism": "The new relay calls the unchanged metadata-then-tokio::fs::read helper. A file growing or replaced after the metadata observation is read/allocated in full before the second size check. Accepted input remains capped, but the claimed bounded input read is not enforced during IO.",
+      "impact": "A concurrent large-file growth/replacement can cause unbounded IO/allocation before the local API request, despite the advertised64KiB options boundary.",
+      "minimal_correction": "Use a dedicated bounded read of an opened options file via AsyncReadExt::take(65537), then refuse a resulting length above65536 before constructing/sending the HTTP request. Preserve the shared strict DTO and all existing Parent helpers/API/Core bodies.",
+      "needed_regression": "A meaningful options oversize refusal before connection, plus a controlled bounded-reader/growing-source seam if the IO-bound guarantee is asserted. No runtime result is claimed."
+    }
+  ],
+  "reviewer": "/root/native_v4_review",
+  "independent_from_author": true,
+  "proposal_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\crawl-resume-cli-proposal-v1\\manifest.json",
+    "sha256": "dff2a9cf04f304f02fc942597029a43f48d225f8fc462ef326ddb8a1030c22f2",
+    "bytes": 4099
+  },
+  "parent_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v15/manifest.json",
+    "sha256": "9c7ff394a3db1a2e024e685433f0335dbe18b1155330095787d53bb727ba0106",
+    "bytes": 874152
+  },
+  "reviewed_files": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-resume-cli-proposal-v1/source/crates/app/src/main.rs",
+      "sha256": "5ca0c7d57fbc71898d363ca36dbdcc52cc50fcff2fc600c61609388d33689d75",
+      "bytes": 37477
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-resume-cli-proposal-v1/source/crates/app/src/server.rs",
+      "sha256": "4774402be4250fcabd618d4ede3e348b0e074f41d7cba5f4f057c2e5dce0a99d",
+      "bytes": 97127
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-resume-cli-proposal-v1/source/crates/app/src/crawl_resume.rs",
+      "sha256": "8b82a32cd5ffc7bbda95001a73752e477a12adf90c05ed3d995a9f2d3f9844fb",
+      "bytes": 5100
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-resume-cli-proposal-v1/source/crates/app/src/crawl_resume_tests.rs",
+      "sha256": "a714415a4e92b305be9743b86c7b4b283f28cf74ceaf31a8d2479b1b52a1854f",
+      "bytes": 11338
+    }
+  ],
+  "derivation": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-resume-cli-proposal-v1/DERIVATION.json",
+    "sha256": "edabe317f29b588f2919cac7f5bcb6054befa6ed4a6c8c81abbc8aab1a54c38e",
+    "bytes": 409073
+  },
+  "test_inventory": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-resume-cli-proposal-v1/TEST-INVENTORY.json",
+    "sha256": "d77293662f4413e8b561b31fc5ee321611faf0c7eac829c801aa67b40fa5d1a1",
+    "bytes": 3776
+  },
+  "report": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\crawl-resume-cli-independent-review-v1\\REPORT.md",
+    "sha256": "89505cbd36707df928affe11369b74eeb20131be7e716b63f82313fbdbca9244",
+    "bytes": 2970
+  },
+  "audit": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\crawl-resume-cli-independent-review-v1\\AUDIT.json",
+    "sha256": "fcf11b39e3d6d663c519e725c03240eef68aeca2beff24a69d619c67046518c3",
+    "bytes": 11459
+  },
+  "audit_method": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\crawl-resume-cli-independent-review-v1\\audit.mjs",
+    "sha256": "7bfb6acc6c7b69e23dba4afbedae993cd364101988b7108d72554e126e641fed",
+    "bytes": 9824
+  },
+  "scope": {
+    "whole_pairs": 4,
+    "whole_inverse_operations": 6,
+    "modified_paths": 2,
+    "new_paths": 2,
+    "tests_source_read": 10,
+    "shared_Deserialize_fields": 6,
+    "evidence_files": 24
+  },
+  "target_imports": 0,
+  "target_calls": 0,
+  "compiler_tests_native": 0,
+  "Source15_CLI_resume": "ABSENT_UNCHANGED",
+  "qualification": "Source-only independent review. One concrete bounded-input IO/allocation defect; no runtime incident, actual integration, green tests, acceptance or vendor parity claimed."
+}
