@@ -68,6 +68,235 @@ fn parse_loc_values(bytes: &[u8]) -> Vec<String> {
         _ => panic!("nodeset"),
     }
 }
+fn reporting_profile(mask: u8) -> crate::DirectiveReportingConfig {
+    crate::DirectiveReportingConfig {
+        version: 1,
+        respect_noindex: mask & 1 != 0,
+        respect_canonical: mask & 2 != 0,
+        respect_next_prev: mask & 4 != 0,
+    }
+}
+// Declarative saved facts isolate the reporting switches from the existing
+// basic eligibility bool; this is not a fresh native indexability assertion.
+fn reporting_report() -> CrawlReport {
+    let mut pages = Vec::new();
+    for name in ["plain", "noindex", "canonical", "prev", "next-only"] {
+        let mut p = page(&format!("https://example.org/{name}"));
+        match name {
+            "noindex" => p.meta_robots = vec!["noindex".into()],
+            "canonical" => p.canonical = vec!["https://example.org/plain".into()],
+            "prev" => p.pagination_prev = vec!["https://example.org/plain".into()],
+            "next-only" => p.pagination_next = vec!["https://example.org/plain".into()],
+            _ => {}
+        }
+        pages.push(p);
+    }
+    report(pages)
+}
+#[test]
+fn sitemap_bundle_reporting_eight_profiles_filter_before_xml_preserve_raw_ordinals_hash_and_complete_input()
+ {
+    for mask in 0..8 {
+        let mut r = reporting_report();
+        r.config.directive_reporting = Some(reporting_profile(mask));
+        let before = serde_json::to_vec(&r).unwrap();
+        let b = generate_sitemap_bundle(&r, &options()).unwrap();
+        let expected = (0..5)
+            .filter(|n| match n {
+                1 => mask & 1 == 0,
+                2 => mask & 2 == 0,
+                3 => mask & 4 == 0,
+                _ => true,
+            })
+            .collect::<Vec<_>>();
+        let actual = b
+            .manifest
+            .memberships
+            .iter()
+            .map(|m| m.page_ordinal)
+            .collect::<BTreeSet<_>>();
+        assert_eq!(actual, expected.iter().copied().collect());
+        let urls = xml_files(&b)
+            .iter()
+            .flat_map(|f| parse_loc_values(&f.bytes))
+            .collect::<BTreeSet<_>>();
+        assert_eq!(
+            urls,
+            expected.iter().map(|n| r.pages[*n].url.clone()).collect()
+        );
+        assert_eq!(b.manifest.report_sha256, sha(&before));
+        assert_eq!(b.manifest.input_pages, 5);
+        assert_eq!(b.manifest.excluded_pages, 5 - expected.len());
+        assert_eq!(serde_json::to_vec(&r).unwrap(), before);
+        if mask == 0 {
+            assert!(b.manifest.reporting.is_none());
+        } else {
+            let v = b.manifest.reporting.as_ref().unwrap();
+            assert_eq!(v.eligible_page_observations, expected.len());
+            assert_eq!(v.generated_pages, expected.len());
+            assert_eq!(v.captured_page_observations, 5);
+            assert_eq!(
+                v.eligible_raw_page_ordinals_sha256,
+                sha(serde_json::to_vec(&expected).unwrap())
+            );
+            let hidden = b
+                .manifest
+                .diagnostics
+                .iter()
+                .filter(|d| d.code == SitemapGenerationDiagnosticCode::ExcludedReporting)
+                .map(|d| d.page_ordinal.unwrap())
+                .collect::<BTreeSet<_>>();
+            assert_eq!(hidden, (0..5).filter(|n| !expected.contains(n)).collect());
+        }
+    }
+}
+#[test]
+fn sitemap_bundle_reporting_inactive_none_null_allfalse_keep_options_manifest_and_zip_legacy_bytes()
+{
+    let mut r = reporting_report();
+    let o = options();
+    let baseline = generate_sitemap_bundle(&r, &o).unwrap();
+    let wire = serde_json::to_value(&o).unwrap();
+    assert!(wire.get("reporting_mode").is_none());
+    assert!(
+        serde_json::to_value(&baseline.manifest)
+            .unwrap()
+            .get("reporting")
+            .is_none()
+    );
+    let mut null = wire;
+    null["reporting_mode"] = serde_json::Value::Null;
+    let parsed: SitemapGenerationOptions = serde_json::from_value(null).unwrap();
+    assert_eq!(
+        serde_json::to_vec(&parsed).unwrap(),
+        serde_json::to_vec(&o).unwrap()
+    );
+    r.config.directive_reporting = Some(reporting_profile(0));
+    let inactive = generate_sitemap_bundle(&r, &parsed).unwrap();
+    assert_eq!(inactive.zip_bytes, baseline.zip_bytes);
+    assert_eq!(inactive.zip_sha256, baseline.zip_sha256);
+    assert_eq!(inactive.manifest, baseline.manifest);
+    for invalid in [
+        serde_json::json!("auto"),
+        serde_json::json!(true),
+        serde_json::json!("RAW"),
+    ] {
+        assert!(serde_json::from_value::<SitemapGenerationOptions>(serde_json::json!({"public_base_url":"https://example.org/","reporting_mode":invalid})).is_err());
+    }
+}
+#[test]
+fn sitemap_bundle_reporting_equalcount_modes_have_distinct_metadata_options_and_zip_without_changing_xml()
+ {
+    let mut r = report(vec![page("https://example.org/plain")]);
+    r.config.directive_reporting = Some(reporting_profile(4));
+    let mut raw = options();
+    raw.reporting_mode = Some(crate::ReportingMode::Raw);
+    let mut reported = options();
+    reported.reporting_mode = Some(crate::ReportingMode::Reported);
+    let a = generate_sitemap_bundle(&r, &raw).unwrap();
+    let b = generate_sitemap_bundle(&r, &reported).unwrap();
+    assert_eq!(a.manifest.report_sha256, b.manifest.report_sha256);
+    assert_eq!(a.manifest.memberships, b.manifest.memberships);
+    assert_eq!(xml_files(&a)[0].bytes, xml_files(&b)[0].bytes);
+    assert_ne!(a.manifest.options_sha256, b.manifest.options_sha256);
+    assert_ne!(
+        a.manifest.reporting.as_ref().unwrap().identity_sha256,
+        b.manifest.reporting.as_ref().unwrap().identity_sha256
+    );
+    assert_ne!(a.zip_sha256, b.zip_sha256);
+}
+#[test]
+fn sitemap_bundle_reporting_all_hidden_error_retains_counts_and_ordinal_diagnostics_without_fabricated_xml()
+ {
+    let mut r = report(vec![page("https://example.org/hidden")]);
+    r.pages[0].pagination_prev = vec!["https://example.org/other".into()];
+    r.config.directive_reporting = Some(reporting_profile(4));
+    let e = generate_sitemap_bundle(&r, &options()).unwrap_err();
+    assert_eq!(e.code, SitemapGenerationFailureCode::NoEligibleUrls);
+    assert_eq!(
+        e.diagnostic_counts[&SitemapGenerationDiagnosticCode::ExcludedReporting],
+        1
+    );
+    let v = e.reporting.unwrap();
+    assert_eq!(v.captured_page_observations, 1);
+    assert_eq!(v.eligible_page_observations, 0);
+    assert_eq!(v.generated_pages, 0);
+    assert_eq!(v.excluded_reporting_page_observations, 1);
+    let mut raw = options();
+    raw.reporting_mode = Some(crate::ReportingMode::Raw);
+    assert_eq!(
+        generate_sitemap_bundle(&r, &raw)
+            .unwrap()
+            .manifest
+            .memberships
+            .len(),
+        1
+    );
+}
+#[test]
+fn sitemap_bundle_reporting_retains_hidden_relationship_targets_dates_raw_duplicates_and_basic_eligibility()
+ {
+    let mut r = report(vec![
+        page("https://example.org/plain"),
+        page("https://example.org/hidden"),
+    ]);
+    r.config.directive_reporting = Some(reporting_profile(4));
+    r.pages[1].pagination_prev = vec![r.pages[0].url.clone()];
+    r.pages[0].hreflang = vec![
+        HreflangRecord {
+            language: "en".into(),
+            url: r.pages[0].url.clone(),
+        },
+        HreflangRecord {
+            language: "de".into(),
+            url: r.pages[1].url.clone(),
+        },
+    ];
+    let mut o = options();
+    o.include_hreflang = true;
+    o.lastmod = SitemapGenerationLastmod::Provided {
+        values: vec![SitemapProvidedLastmod {
+            page_url: r.pages[1].url.clone(),
+            value: "2026-10-14".into(),
+            reference: "own CMS revision".into(),
+        }],
+    };
+    let b = generate_sitemap_bundle(&r, &o).unwrap();
+    assert_eq!(b.manifest.memberships.len(), 1);
+    assert_eq!(b.manifest.memberships[0].hreflang.len(), 2);
+    assert!(
+        b.manifest.memberships[0]
+            .hreflang
+            .iter()
+            .any(|a| a.url == r.pages[1].url)
+    );
+    assert!(b.manifest.diagnostics.iter().any(|d| d.code
+        == SitemapGenerationDiagnosticCode::ProvidedLastmodUnused
+        && d.value.as_deref() == Some(r.pages[1].url.as_str())));
+    let mut invalid = o;
+    let SitemapGenerationLastmod::Provided { values } = &mut invalid.lastmod else {
+        panic!()
+    };
+    values[0].value = "2026-02-30".into();
+    assert_eq!(
+        generate_sitemap_bundle(&r, &invalid).unwrap_err().code,
+        SitemapGenerationFailureCode::InvalidLastmod
+    );
+    let mut duplicate = r.pages[1].clone();
+    duplicate.pagination_prev.clear();
+    r.pages.push(duplicate);
+    let b = generate_sitemap_bundle(&r, &options()).unwrap();
+    assert_eq!(b.manifest.memberships.len(), 1);
+    assert!(b.manifest.diagnostics.iter().any(|d| d.code
+        == SitemapGenerationDiagnosticCode::DuplicateRequestedUrl
+        && d.page_ordinal == Some(2)));
+    r.pages[0].indexable = false;
+    assert_eq!(
+        generate_sitemap_bundle(&r, &options()).unwrap_err().code,
+        SitemapGenerationFailureCode::NoEligibleUrls
+    );
+}
+
 #[test]
 fn exact_url_count_boundary_stable_flat_zip_and_hashes() {
     let r = report(
@@ -1147,4 +1376,43 @@ fn malformed_percent_saved_records_are_omitted_and_diagnosed_without_rewriting()
     }
     assert_eq!(bundle.manifest.report_sha256, sha(&before));
     assert_eq!(serde_json::to_vec(&captured).unwrap(), before);
+}
+
+#[test]
+fn sitemap_generation_failure_is_bounded_and_preserves_unboxed_wire_shape() {
+    assert!(std::mem::size_of::<SitemapGenerationFailure>() <= 128);
+    #[derive(Serialize)]
+    struct PriorInlineFailure {
+        code: SitemapGenerationFailureCode,
+        message: String,
+        #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+        diagnostic_counts: BTreeMap<SitemapGenerationDiagnosticCode, u64>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        reporting: Option<SitemapGenerationReporting>,
+    }
+    let mut hidden = report(vec![page("https://example.org/hidden")]);
+    hidden.pages[0].pagination_prev = vec!["https://example.org/other".into()];
+    hidden.config.directive_reporting = Some(reporting_profile(4));
+    let populated = generate_sitemap_bundle(&hidden, &options()).unwrap_err();
+    assert!(populated.reporting.is_some());
+    for error in [
+        fail(
+            SitemapGenerationFailureCode::InvalidOptions,
+            "Invalid options",
+        ),
+        populated,
+    ] {
+        let prior = PriorInlineFailure {
+            code: error.code,
+            message: error.message.clone(),
+            diagnostic_counts: error.diagnostic_counts.clone(),
+            reporting: error.reporting.as_deref().cloned(),
+        };
+        let wire = serde_json::to_vec(&error).unwrap();
+        assert_eq!(wire, serde_json::to_vec(&prior).unwrap());
+        assert_eq!(
+            serde_json::from_slice::<SitemapGenerationFailure>(&wire).unwrap(),
+            error
+        );
+    }
 }

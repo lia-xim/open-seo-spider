@@ -14,6 +14,9 @@ use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use uuid::Uuid;
 mod original_reports;
 use original_reports::OriginalReportsBundle;
+pub(crate) mod reporting;
+use open_seo_spider_core::ReportingMode;
+use reporting::ComparisonReporting;
 
 pub(crate) const MAX_REQUEST_BYTES: usize = 1024 * 1024;
 pub(crate) const MAX_RESPONSE_BYTES: usize = 64 * 1024 * 1024;
@@ -32,6 +35,12 @@ pub(crate) struct SavedComparisonRequest {
     pub expected_after_generation: Option<u64>,
     #[serde(default, skip_serializing_if = "bool_is_false")]
     pub include_original_reports: bool,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub reporting_mode: Option<ReportingMode>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub expected_reporting_identity: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub expected_reporting_view: Option<String>,
 }
 fn bool_is_false(value: &bool) -> bool {
     !value
@@ -44,6 +53,8 @@ pub(crate) struct SavedComparisonResponse {
     pub website_requests: usize,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub original_reports: Option<OriginalReportsBundle>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub reporting: Option<ComparisonReporting>,
 }
 impl SavedComparisonResponse {
     pub fn new(comparison: SavedComparisonResult) -> Result<Self, SavedComparisonFailure> {
@@ -51,6 +62,7 @@ impl SavedComparisonResponse {
             comparison,
             website_requests: 0,
             original_reports: None,
+            reporting: None,
         };
         response.check_response_budget(MAX_RESPONSE_BYTES)?;
         Ok(response)
@@ -73,6 +85,7 @@ impl SavedComparisonResponse {
             comparison,
             website_requests: 0,
             original_reports: Some(bundle),
+            reporting: None,
         };
         response.check_response_budget(maximum)?;
         Ok(response)
@@ -85,7 +98,19 @@ impl SavedComparisonResponse {
         };
         check_serialized_budget(self, maximum.min(MAX_RESPONSE_BYTES), code)
     }
+    pub(crate) fn with_reporting(
+        mut self,
+        reporting: Option<ComparisonReporting>,
+    ) -> Result<Self, SavedComparisonFailure> {
+        self.reporting = reporting;
+        self.validate_original_reports()?;
+        self.check_response_budget(MAX_RESPONSE_BYTES)?;
+        Ok(self)
+    }
     pub(crate) fn validate_original_reports(&self) -> Result<(), SavedComparisonFailure> {
+        if let Some(view) = &self.reporting {
+            view.validate(&self.comparison)?;
+        }
         if let Some(bundle) = &self.original_reports {
             bundle.validate(&self.comparison)?;
         }
@@ -192,7 +217,10 @@ pub(crate) fn request_schema() -> Value {
         "before":{"type":"string","format":"uuid"},"after":{"type":"string","format":"uuid"},
         "config":{"anyOf":[config,{"type":"null"}]},
         "expected_before_generation":generation,"expected_after_generation":generation,
-        "include_original_reports":{"type":"boolean","default":false}
+        "include_original_reports":{"type":"boolean","default":false},
+        "reporting_mode":{"anyOf":[{"type":"string","enum":["raw","reported"]},{"type":"null"}]},
+        "expected_reporting_identity":{"anyOf":[{"type":"string","pattern":"^[a-f0-9]{64}$"},{"type":"null"}]},
+        "expected_reporting_view":{"anyOf":[{"type":"string","pattern":"^[a-f0-9]{64}$"},{"type":"null"}]}
     }})
 }
 
@@ -266,77 +294,101 @@ fn write_csv_with_limit(
     writer: &mut impl Write,
     maximum: usize,
 ) -> Result<(), SavedComparisonFailure> {
+    write_csv_projection_with_limit(result, None, writer, maximum)
+}
+fn write_csv_projection_with_limit(
+    result: &SavedComparisonResult,
+    reporting: Option<&ComparisonReporting>,
+    writer: &mut impl Write,
+    maximum: usize,
+) -> Result<(), SavedComparisonFailure> {
+    if let Some(view) = reporting {
+        view.validate(result)?;
+    }
     let mut bounded = ByteBudget {
         writer,
         remaining: maximum.min(MAX_CSV_BYTES),
     };
-    csv_record(
-        &mut bounded,
-        &[
-            "page_kind",
-            "comparison_key",
-            "before_requested_url",
-            "after_requested_url",
-            "before_ordinal",
-            "after_ordinal",
-            "field",
-            "outcome",
-            "before_state",
-            "after_state",
-            "before_value_json",
-            "after_value_json",
-            "availability_changed",
-            "comparable_complete_values",
-            "reason",
-            "before_profile",
-            "after_profile",
-            "before_provenance_json",
-            "after_provenance_json",
-            "before_snapshot_sha256",
-            "after_snapshot_sha256",
-        ]
-        .map(String::from),
-    )?;
-    for page in &result.pages {
+    let mut header = vec![
+        "page_kind",
+        "comparison_key",
+        "before_requested_url",
+        "after_requested_url",
+        "before_ordinal",
+        "after_ordinal",
+        "field",
+        "outcome",
+        "before_state",
+        "after_state",
+        "before_value_json",
+        "after_value_json",
+        "availability_changed",
+        "comparable_complete_values",
+        "reason",
+        "before_profile",
+        "after_profile",
+        "before_provenance_json",
+        "after_provenance_json",
+        "before_snapshot_sha256",
+        "after_snapshot_sha256",
+    ]
+    .into_iter()
+    .map(String::from)
+    .collect::<Vec<_>>();
+    if reporting.is_some() {
+        header.extend(["reporting_json", "row_visibility_json"].map(String::from));
+    }
+    csv_record(&mut bounded, &header)?;
+    if let Some(view) = reporting {
+        let mut metadata = vec![String::new(); 21];
+        metadata.extend([json_cell(&view.csv_metadata()?)?, String::new()]);
+        csv_record(&mut bounded, &metadata)?;
+    }
+    for (index, page) in result.pages.iter().enumerate() {
+        let view_row = reporting.map(|view| &view.rows[index]);
+        if view_row.is_some_and(|row| !row.included) {
+            continue;
+        }
         for field in &page.fields {
-            csv_record(
-                &mut bounded,
-                &[
-                    enum_value(&page.kind)?,
-                    page.comparison_key.clone(),
-                    page.before
-                        .as_ref()
-                        .map(|value| value.original_requested_url.clone())
-                        .unwrap_or_default(),
-                    page.after
-                        .as_ref()
-                        .map(|value| value.original_requested_url.clone())
-                        .unwrap_or_default(),
-                    page.before
-                        .as_ref()
-                        .map(|value| value.ordinal.to_string())
-                        .unwrap_or_default(),
-                    page.after
-                        .as_ref()
-                        .map(|value| value.ordinal.to_string())
-                        .unwrap_or_default(),
-                    field.field.clone(),
-                    enum_value(&field.outcome)?,
-                    enum_value(&field.before.state)?,
-                    enum_value(&field.after.state)?,
-                    json_cell(&field.before.value)?,
-                    json_cell(&field.after.value)?,
-                    field.availability_changed.to_string(),
-                    field.comparable_complete_values.to_string(),
-                    field.reason.clone().unwrap_or_default(),
-                    field.before.profile.clone().unwrap_or_default(),
-                    field.after.profile.clone().unwrap_or_default(),
-                    json_cell(&field.before.provenance)?,
-                    json_cell(&field.after.provenance)?,
-                    result.before_snapshot.typed_report_sha256.clone(),
-                    result.after_snapshot.typed_report_sha256.clone(),
-                ],
-            )?;
+            let mut cells = vec![
+                enum_value(&page.kind)?,
+                page.comparison_key.clone(),
+                page.before
+                    .as_ref()
+                    .map(|value| value.original_requested_url.clone())
+                    .unwrap_or_default(),
+                page.after
+                    .as_ref()
+                    .map(|value| value.original_requested_url.clone())
+                    .unwrap_or_default(),
+                page.before
+                    .as_ref()
+                    .map(|value| value.ordinal.to_string())
+                    .unwrap_or_default(),
+                page.after
+                    .as_ref()
+                    .map(|value| value.ordinal.to_string())
+                    .unwrap_or_default(),
+                field.field.clone(),
+                enum_value(&field.outcome)?,
+                enum_value(&field.before.state)?,
+                enum_value(&field.after.state)?,
+                json_cell(&field.before.value)?,
+                json_cell(&field.after.value)?,
+                field.availability_changed.to_string(),
+                field.comparable_complete_values.to_string(),
+                field.reason.clone().unwrap_or_default(),
+                field.before.profile.clone().unwrap_or_default(),
+                field.after.profile.clone().unwrap_or_default(),
+                json_cell(&field.before.provenance)?,
+                json_cell(&field.after.provenance)?,
+                result.before_snapshot.typed_report_sha256.clone(),
+                result.after_snapshot.typed_report_sha256.clone(),
+            ];
+            if let Some(row) = view_row {
+                cells.extend([String::new(), json_cell(row)?]);
+            }
+            csv_record(&mut bounded, &cells)?;
         }
     }
     bounded.flush().map_err(csv_io)
@@ -415,6 +467,26 @@ pub(crate) async fn run_cli(
     csv: Option<PathBuf>,
     include_original_reports: bool,
 ) -> Result<(), SavedComparisonFailure> {
+    run_cli_reporting(
+        before,
+        after,
+        config_file,
+        output,
+        csv,
+        include_original_reports,
+        None,
+    )
+    .await
+}
+pub(crate) async fn run_cli_reporting(
+    before: PathBuf,
+    after: PathBuf,
+    config_file: Option<PathBuf>,
+    output: Option<PathBuf>,
+    csv: Option<PathBuf>,
+    include_original_reports: bool,
+    reporting_mode: Option<ReportingMode>,
+) -> Result<(), SavedComparisonFailure> {
     let result = run_cli_with_options(
         before,
         after,
@@ -424,6 +496,7 @@ pub(crate) async fn run_cli(
         SavedCliOptions {
             include_original_reports,
             response_maximum: MAX_RESPONSE_BYTES,
+            reporting_mode,
             csv_maximum: MAX_CSV_BYTES,
         },
     )
@@ -440,6 +513,7 @@ pub(crate) async fn run_cli(
 struct SavedCliOptions {
     include_original_reports: bool,
     response_maximum: usize,
+    reporting_mode: Option<ReportingMode>,
     csv_maximum: usize,
 }
 async fn run_cli_with_options(
@@ -481,7 +555,15 @@ async fn run_cli_with_options(
             Some(&binding),
         )
         .map_err(SavedComparisonFailure::from)?;
-        if options.include_original_reports {
+        let reporting = reporting::build(
+            &result,
+            &before_report,
+            &after_report,
+            options.reporting_mode,
+            None,
+            None,
+        )?;
+        let response = if options.include_original_reports {
             SavedComparisonResponse::with_original_reports_limit(
                 result,
                 before_report,
@@ -492,7 +574,10 @@ async fn run_cli_with_options(
             let response = SavedComparisonResponse::new(result)?;
             response.check_response_budget(options.response_maximum)?;
             Ok(response)
-        }
+        }?;
+        let response = response.with_reporting(reporting)?;
+        response.check_response_budget(options.response_maximum)?;
+        Ok::<_, SavedComparisonFailure>(response)
     })
     .await
     .map_err(|error| failure("comparison_task_failed", error.to_string()))??;
@@ -503,8 +588,9 @@ async fn run_cli_with_options(
     if csv.is_some() {
         // Count CSV with the same serializer before reserving JSON or CSV.
         // Genuine filesystem write failures can still occur after reservation.
-        write_csv_with_limit(
+        write_csv_projection_with_limit(
             &response.comparison,
+            response.reporting.as_ref(),
             &mut std::io::sink(),
             options.csv_maximum,
         )
@@ -550,7 +636,16 @@ async fn run_cli_with_options(
         let file = csv_file.into_std().await;
         tokio::task::spawn_blocking(move || {
             let mut writer = std::io::BufWriter::new(file);
-            write_csv(&response.comparison, &mut writer)?;
+            if response.reporting.is_none() {
+                write_csv(&response.comparison, &mut writer)?;
+            } else {
+                write_csv_projection_with_limit(
+                    &response.comparison,
+                    response.reporting.as_ref(),
+                    &mut writer,
+                    MAX_CSV_BYTES,
+                )?;
+            }
             writer.flush().map_err(csv_io)?;
             writer.get_ref().sync_all().map_err(csv_io)?;
             Ok::<_, SavedComparisonFailure>(())
@@ -586,3 +681,7 @@ async fn run_cli_with_options(
 #[cfg(test)]
 #[path = "comparison_app_tests.rs"]
 mod tests;
+
+#[cfg(test)]
+#[path = "comparison_app/reporting_tests.rs"]
+mod reporting_tests;

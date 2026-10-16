@@ -13,6 +13,7 @@ pub(super) struct Lifecycle {
     pub(super) source_bodies: source_body_stream::Registry,
     pub(super) response_streams: super::response_stream::Registry,
     pub(super) transports: super::transport::Registry,
+    pub(super) spelling_gate: Arc<tokio::sync::Mutex<()>>,
     enrichments: Arc<std::sync::OnceLock<crate::enrichment_app::Service>>,
 }
 impl Default for Lifecycle {
@@ -25,6 +26,7 @@ impl Default for Lifecycle {
             response_streams: super::response_stream::Registry::new(admission.clone()),
             transports: super::transport::Registry::new(admission.clone()),
             source_bodies: source_body_stream::Registry::new(admission.clone()),
+            spelling_gate: Default::default(),
             enrichments: Default::default(),
             admission,
         }

@@ -1,3 +1,4 @@
+import {assertDefaultMcpInventory} from './mcp-inventory-contract.mjs';
 // AUTHORED / NOT_RUN. Explicit compute release is mandatory before any fixture/process.
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
@@ -106,7 +107,7 @@ try {
       transport.start = async (...args) => { const previous = transport.onclose; transport.onclose = () => { actualClose = true; previous?.(); }; return start(...args); };
     }
     await bounded(activeClient.connect(transport));
-    const inventory = await bounded(activeClient.listTools()); assert.equal(inventory.tools.length, 26);
+    const inventory = await bounded(activeClient.listTools()); assertDefaultMcpInventory(inventory.tools);
     const definition = inventory.tools.find(tool => tool.name === 'spider_sitemap_findings');
     assert(definition && definition.annotations.readOnlyHint && !definition.annotations.openWorldHint);
     assert.equal(definition.inputSchema.additionalProperties, false);

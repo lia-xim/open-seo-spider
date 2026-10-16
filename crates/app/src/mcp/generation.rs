@@ -18,8 +18,9 @@ pub(super) fn definition() -> Value {
         {"type":"object","additionalProperties":false,"required":["source"],"properties":{"source":{"const":"captured_sitemap"}}},
         {"type":"object","additionalProperties":false,"required":["source","values"],"properties":{"source":{"const":"provided"},"values":{"type":"array","maxItems":1000000,"items":{"type":"object","additionalProperties":false,"required":["page_url","value","reference"],"properties":{"page_url":{"type":"string","minLength":1,"maxLength":2047},"value":{"type":"string","maxLength":4096},"reference":{"type":"string","minLength":1,"maxLength":1024}}}}}}
     ]});
-    json!({"name":"spider_generate_sitemaps","description":"Generate a deterministic segmented sitemap ZIP from a saved crawl. No website requests or artifact storage. Returns base64 once, actual SHA-256, filename and byte count. MCP ZIP limit 8 MiB; omitted total budget defaults to 8 MiB. Public base directory constrains origin/path. Dates need explicit captured/provided sources; no freshness claim. UTF-8 byte bounds are enforced by the server in addition to these character bounds.","inputSchema":{"type":"object","additionalProperties":false,"required":["id","options"],"properties":{"id":{"type":"string","format":"uuid"},"options":{"type":"object","required":["public_base_url"],"additionalProperties":false,"properties":{
+    json!({"name":"spider_generate_sitemaps","description":"Generate a deterministic segmented sitemap ZIP from a saved crawl. No website requests or artifact storage. Returns base64 once, actual SHA-256, filename and byte count. MCP ZIP limit 8 MiB; omitted total budget defaults to 8 MiB. Public base directory constrains origin/path. options.reporting_mode raw/reported or omitted/null Auto applies the saved active reporting profile before XML membership; full raw report SHA and raw lastmod/duplicate/relationship facts remain unchanged. Optional reporting metadata distinguishes captured/profile-visible/eligible/generated counts and equal-count mode identities. No preview/pagination token is introduced. Dates need explicit captured/provided sources; no freshness claim. UTF-8 byte bounds are enforced by the server in addition to these character bounds.","inputSchema":{"type":"object","additionalProperties":false,"required":["id","options"],"properties":{"id":{"type":"string","format":"uuid"},"options":{"type":"object","required":["public_base_url"],"additionalProperties":false,"properties":{
         "public_base_url":{"type":"string","minLength":1,"maxLength":2047},
+        "reporting_mode":{"type":["string","null"],"enum":["raw","reported",null]},
         "max_urls_per_file":{"type":"integer","minimum":1,"maximum":50000},
         "max_urlset_uncompressed_bytes":{"type":"integer","minimum":1,"maximum":52428800},
         "max_index_uncompressed_bytes":{"type":"integer","minimum":1,"maximum":52428800},
@@ -97,6 +98,75 @@ fn hash(value: &str) -> bool {
         && value
             .bytes()
             .all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b))
+}
+fn reporting_header(
+    headers: &reqwest::header::HeaderMap,
+    mode: Option<open_seo_spider_core::ReportingMode>,
+    generated: u64,
+    excluded: u64,
+) -> Result<Option<open_seo_spider_core::SitemapGenerationReporting>, Failure> {
+    let mut values = headers.get_all("x-sitemap-reporting").iter();
+    let Some(raw) = values.next() else {
+        if mode.is_some() {
+            return Err(failure(
+                "invalid_response",
+                "Explicit sitemap reporting metadata missing",
+            ));
+        }
+        return Ok(None);
+    };
+    if values.next().is_some() || raw.as_bytes().len() > 8192 {
+        return Err(failure(
+            "invalid_response",
+            "Invalid bounded sitemap reporting header",
+        ));
+    }
+    let value: open_seo_spider_core::SitemapGenerationReporting =
+        serde_json::from_slice(raw.as_bytes())
+            .map_err(|_| failure("invalid_response", "Invalid sitemap reporting JSON"))?;
+    let profile_valid = value
+        .identity
+        .directive_reporting
+        .as_ref()
+        .is_none_or(|p| p.validate().is_ok() && p.active());
+    let computed = serde_json::to_vec(&value.identity)
+        .map_err(|_| failure("invalid_response", "Invalid sitemap identity"))?;
+    let counts = [
+        value.captured_page_observations,
+        value.profile_visible_page_observations,
+        value.profile_excluded_page_observations,
+        value.eligible_page_observations,
+        value.excluded_reporting_page_observations,
+        value.generated_pages,
+    ];
+    if value.identity.engine != "open-seo-spider/sitemap-generation-reporting-v1"
+        || !profile_valid
+        || mode.is_some_and(|mode| mode != value.identity.mode)
+        || counts.iter().any(|n| *n > 1_000_000)
+        || value.captured_page_observations as u64 != generated + excluded
+        || value.profile_visible_page_observations + value.profile_excluded_page_observations
+            != value.captured_page_observations
+        || value.eligible_page_observations
+            != if value.identity.mode == open_seo_spider_core::ReportingMode::Raw {
+                value.captured_page_observations
+            } else {
+                value.profile_visible_page_observations
+            }
+        || value.excluded_reporting_page_observations + value.eligible_page_observations
+            != value.captured_page_observations
+        || value.generated_pages as u64 != generated
+        || value.generated_pages > value.eligible_page_observations
+        || !hash(&value.identity_sha256)
+        || !hash(&value.eligible_raw_page_ordinals_sha256)
+        || !hash(&value.generated_raw_page_ordinals_sha256)
+        || format!("{:x}", Sha256::digest(&computed)) != value.identity_sha256
+    {
+        return Err(failure(
+            "invalid_response",
+            "Sitemap reporting counts/mode/profile/identity differ",
+        ));
+    }
+    Ok(Some(value))
 }
 async fn bounded_body(response: reqwest::Response, limit: usize) -> Result<Vec<u8>, Failure> {
     if response.content_length().is_some_and(|n| n > limit as u64) {
@@ -194,6 +264,7 @@ pub(super) async fn call(bridge: &Bridge, args: Value) -> Result<Value, Failure>
             "Invalid generated/excluded counts",
         ));
     }
+    let reporting = reporting_header(headers, options.reporting_mode, generated, excluded)?;
     let length = response
         .content_length()
         .ok_or_else(|| failure("invalid_response", "ZIP response requires content-length"))?;
@@ -207,9 +278,12 @@ pub(super) async fn call(bridge: &Bridge, args: Value) -> Result<Value, Failure>
             "ZIP byte length, signature or actual SHA-256 differs",
         ));
     }
-    Ok(
-        json!({"mime_type":"application/zip","filename":filename,"bytes":bytes.len(),"sha256":sha,"report_sha256":report_sha,"engine":SITEMAP_GENERATION_ENGINE,"generated_urls":generated,"excluded_pages":excluded,"encoding":"base64","data_base64":STANDARD.encode(bytes),"artifact_stored":false,"scope":"Captured saved report; no website request, publication or freshness assertion"}),
-    )
+    let mut value = json!({"mime_type":"application/zip","filename":filename,"bytes":bytes.len(),"sha256":sha,"report_sha256":report_sha,"engine":SITEMAP_GENERATION_ENGINE,"generated_urls":generated,"excluded_pages":excluded,"encoding":"base64","data_base64":STANDARD.encode(bytes),"artifact_stored":false,"scope":"Captured saved report; no website request, publication or freshness assertion"});
+    if let Some(reporting) = reporting {
+        value["reporting"] = serde_json::to_value(reporting)
+            .map_err(|e| failure("invalid_response", e.to_string()))?;
+    }
+    Ok(value)
 }
 
 fn bounded_protocol_error(id: Value, message: &str) -> Value {

@@ -783,6 +783,7 @@ async fn cli_bundle_overflow_happens_before_either_destination_is_reserved() {
         Some(output.clone()),
         Some(csv.clone()),
         SavedCliOptions {
+            reporting_mode: None,
             include_original_reports: true,
             response_maximum: exact - 1,
             csv_maximum: MAX_CSV_BYTES,
@@ -825,6 +826,7 @@ async fn cli_csv_budget_overflow_also_happens_before_json_or_csv_reservation() {
         Some(output.clone()),
         Some(csv.clone()),
         SavedCliOptions {
+            reporting_mode: None,
             include_original_reports: true,
             response_maximum: MAX_RESPONSE_BYTES,
             csv_maximum: csv_bytes.len() - 1,

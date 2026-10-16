@@ -1,5 +1,7 @@
 //! Offline URL-path hierarchy. Grouping nodes are never response observations.
-use crate::{PageRecord, normalize_url};
+use crate::{
+    CrawlConfig, DirectiveReportingConfig, PageRecord, directive_page_visible, normalize_url,
+};
 use anyhow::{Result, ensure};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -105,6 +107,128 @@ pub struct DirectoryTree {
     pub nodes: Vec<DirectoryNode>,
     pub website_requests: usize,
 }
+/// This view affects presentation only, never the saved report or crawl inputs.
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub enum DirectoryTreeMode {
+    Raw,
+    Reported,
+}
+impl DirectoryTreeMode {
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Self::Raw => "raw",
+            Self::Reported => "reported",
+        }
+    }
+}
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct DirectoryTreeViewIdentity {
+    pub engine: String,
+    pub mode: DirectoryTreeMode,
+    pub directive_reporting: Option<DirectiveReportingConfig>,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct DirectoryTreeReporting {
+    pub identity: DirectoryTreeViewIdentity,
+    pub identity_sha256: String,
+    /// All counts below count page observations, not distinct URLs or requests.
+    pub captured_page_observations: usize,
+    pub profile_visible_page_observations: usize,
+    pub profile_excluded_page_observations: usize,
+    pub selected_page_observations: usize,
+    pub excluded_from_view_page_observations: usize,
+    /// Selected observations whose requested URL is represented in the hierarchy.
+    pub hierarchy_page_observations: usize,
+    /// Selected invalid, unsupported-scheme or credential-bearing URL observations.
+    pub unrepresented_page_observations: usize,
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct DirectoryTreeView {
+    pub tree: DirectoryTree,
+    /// Absent for the legacy default when no reporting switch is active.
+    pub reporting: Option<DirectoryTreeReporting>,
+}
+/// Select individual saved page observations before hierarchy aggregation.
+/// A visible duplicate is retained independently of hidden observations at that URL.
+/// Relationship targets are never turned into synthetic fetched observations.
+pub fn build_directory_tree_view(
+    config: &CrawlConfig,
+    pages: &[PageRecord],
+    requested_mode: Option<DirectoryTreeMode>,
+    limits: &DirectoryTreeLimits,
+) -> Result<DirectoryTreeView> {
+    limits.validate()?;
+    ensure!(
+        pages.len() <= limits.max_pages,
+        "Directory-tree page budget exceeded"
+    );
+    if let Some(profile) = &config.directive_reporting {
+        profile.validate()?;
+    }
+    let active = !DirectiveReportingConfig::is_inactive(&config.directive_reporting);
+    let mode = requested_mode.unwrap_or(if active {
+        DirectoryTreeMode::Reported
+    } else {
+        DirectoryTreeMode::Raw
+    });
+    let visible = pages
+        .iter()
+        .filter(|page| directive_page_visible(config, page))
+        .count();
+    let selected = if mode == DirectoryTreeMode::Raw {
+        pages.len()
+    } else {
+        visible
+    };
+    let tree = build_directory_tree_observations(
+        selected,
+        pages
+            .iter()
+            .filter(|page| mode == DirectoryTreeMode::Raw || directive_page_visible(config, page)),
+        limits,
+    )?;
+    let reporting = if active || requested_mode.is_some() {
+        let identity = DirectoryTreeViewIdentity {
+            engine: "open-seo-spider/directory-tree-reporting-v1".into(),
+            mode,
+            directive_reporting: config
+                .directive_reporting
+                .clone()
+                .filter(DirectiveReportingConfig::active),
+        };
+        let identity_sha256 = format!("{:x}", Sha256::digest(serde_json::to_vec(&identity)?));
+        let hierarchy = tree
+            .nodes
+            .iter()
+            .find(|node| node.id == tree.root_id)
+            .expect("Directory tree always has a root")
+            .counts
+            .observations;
+        let unrepresented = tree.invalid_url_observations
+            + tree.unsupported_url_observations
+            + tree.credential_url_observations;
+        ensure!(
+            selected == hierarchy + unrepresented,
+            "Directory observation accounting mismatch"
+        );
+        Some(DirectoryTreeReporting {
+            identity,
+            identity_sha256,
+            captured_page_observations: pages.len(),
+            profile_visible_page_observations: visible,
+            profile_excluded_page_observations: pages.len() - visible,
+            selected_page_observations: selected,
+            excluded_from_view_page_observations: pages.len() - selected,
+            hierarchy_page_observations: hierarchy,
+            unrepresented_page_observations: unrepresented,
+        })
+    } else {
+        None
+    };
+    Ok(DirectoryTreeView { tree, reporting })
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 struct Observation {
     status: Option<u16>,
@@ -239,9 +363,16 @@ pub fn build_directory_tree(
     pages: &[PageRecord],
     limits: &DirectoryTreeLimits,
 ) -> Result<DirectoryTree> {
+    build_directory_tree_observations(pages.len(), pages.iter(), limits)
+}
+fn build_directory_tree_observations<'a>(
+    input_observations: usize,
+    pages: impl IntoIterator<Item = &'a PageRecord>,
+    limits: &DirectoryTreeLimits,
+) -> Result<DirectoryTree> {
     limits.validate()?;
     ensure!(
-        pages.len() <= limits.max_pages,
+        input_observations <= limits.max_pages,
         "Directory-tree page budget exceeded"
     );
     let mut nodes = BTreeMap::new();
@@ -400,7 +531,7 @@ pub fn build_directory_tree(
     Ok(DirectoryTree {
         engine: DIRECTORY_TREE_ENGINE.into(),
         root_id,
-        input_observations: pages.len(),
+        input_observations,
         invalid_url_observations: invalid,
         unsupported_url_observations: unsupported,
         credential_url_observations: credentials,
@@ -453,6 +584,14 @@ fn safe_csv(value: &str) -> String {
 }
 /// Every synthetic and observed node, with explicit row role and parent ID.
 pub fn directory_tree_csv(tree: &DirectoryTree, max: usize) -> Result<Vec<u8>> {
+    directory_tree_csv_for_view(tree, None, max)
+}
+/// Legacy bytes are unchanged when the optional reporting envelope is absent.
+pub fn directory_tree_csv_for_view(
+    tree: &DirectoryTree,
+    reporting: Option<&DirectoryTreeReporting>,
+    max: usize,
+) -> Result<Vec<u8>> {
     ensure!(
         max > 0 && max <= DIRECTORY_TREE_CSV_BYTES,
         "Invalid directory CSV byte limit"
@@ -465,7 +604,7 @@ pub fn directory_tree_csv(tree: &DirectoryTree, max: usize) -> Result<Vec<u8>> {
         let mut w = csv::WriterBuilder::new()
             .terminator(csv::Terminator::CRLF)
             .from_writer(&mut out);
-        w.write_record([
+        let mut headers = vec![
             "kind",
             "synthetic_group",
             "id",
@@ -489,10 +628,25 @@ pub fn directory_tree_csv(tree: &DirectoryTree, max: usize) -> Result<Vec<u8>> {
             "robots_blocked",
             "internal",
             "external",
-        ])?;
+        ];
+        if reporting.is_some() {
+            headers.extend([
+                "view_mode",
+                "view_identity_sha256",
+                "directive_reporting",
+                "captured_page_observations",
+                "profile_visible_page_observations",
+                "profile_excluded_page_observations",
+                "selected_page_observations",
+                "excluded_from_view_page_observations",
+                "hierarchy_page_observations",
+                "unrepresented_page_observations",
+            ]);
+        }
+        w.write_record(headers)?;
         for n in &tree.nodes {
             let c = &n.counts;
-            w.write_record([
+            let mut row = vec![
                 format!("{:?}", n.kind),
                 n.synthetic_group.to_string(),
                 n.id.clone(),
@@ -516,7 +670,22 @@ pub fn directory_tree_csv(tree: &DirectoryTree, max: usize) -> Result<Vec<u8>> {
                 c.robots_blocked.to_string(),
                 c.internal.to_string(),
                 c.external.to_string(),
-            ])?;
+            ];
+            if let Some(view) = reporting {
+                row.extend([
+                    view.identity.mode.as_str().to_owned(),
+                    view.identity_sha256.clone(),
+                    serde_json::to_string(&view.identity.directive_reporting)?,
+                    view.captured_page_observations.to_string(),
+                    view.profile_visible_page_observations.to_string(),
+                    view.profile_excluded_page_observations.to_string(),
+                    view.selected_page_observations.to_string(),
+                    view.excluded_from_view_page_observations.to_string(),
+                    view.hierarchy_page_observations.to_string(),
+                    view.unrepresented_page_observations.to_string(),
+                ]);
+            }
+            w.write_record(row)?;
         }
         w.flush()?;
     }

@@ -29,6 +29,13 @@ pub struct SavedContentRequest {
     pub complete_only: bool,
     #[serde(default)]
     pub expected_generation: Option<u64>,
+    /// Absence/null is Auto: active saved profile => Reported, otherwise legacy Raw.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub reporting_mode: Option<ReportingMode>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub expected_snapshot_sha256: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub expected_reporting_identity: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -37,6 +44,145 @@ pub struct SnapshotContext {
     pub sha_profile: &'static str,
     pub generation: Option<u64>,
     pub origin: String,
+}
+
+/// Presentation mode only; raw report/capture provenance is never projected or mutated.
+#[derive(Debug, Clone, Copy, Deserialize, Serialize, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub enum ReportingMode {
+    Raw,
+    Reported,
+}
+
+#[derive(Debug, Clone, Default)]
+pub struct ReportingOptions {
+    pub mode: Option<ReportingMode>,
+    pub expected_generation: Option<u64>,
+    pub expected_snapshot_sha256: Option<String>,
+    pub expected_reporting_identity: Option<String>,
+}
+impl SavedContentRequest {
+    fn reporting_options(&self) -> ReportingOptions {
+        ReportingOptions {
+            mode: self.reporting_mode,
+            expected_generation: self.expected_generation,
+            expected_snapshot_sha256: self.expected_snapshot_sha256.clone(),
+            expected_reporting_identity: self.expected_reporting_identity.clone(),
+        }
+    }
+}
+#[derive(Debug, Clone, Serialize)]
+struct ReportingView {
+    identity: Value,
+    identity_sha256: String,
+    eligible_raw_page_ordinals_sha256: String,
+    captured_page_observations: usize,
+    profile_visible_page_observations: usize,
+    profile_excluded_page_observations: usize,
+    eligible_page_observations: usize,
+    #[serde(skip)]
+    mode: ReportingMode,
+}
+fn digest(value: &impl Serialize) -> Result<String> {
+    Ok(format!("{:x}", Sha256::digest(serde_json::to_vec(value)?)))
+}
+fn reporting_view(
+    report: &CrawlReport,
+    context: &SnapshotContext,
+    options: &ReportingOptions,
+) -> Result<Option<ReportingView>> {
+    if let Some(expected) = options.expected_generation {
+        ensure!(
+            context.generation == Some(expected),
+            "Saved snapshot generation changed or is unknown"
+        );
+    }
+    if let Some(expected) = &options.expected_snapshot_sha256 {
+        ensure!(
+            expected == &context.sha256,
+            "Saved raw snapshot identity changed"
+        );
+    }
+    if let Some(profile) = &report.config.directive_reporting {
+        profile.validate()?;
+    }
+    let active = !open_seo_spider_core::DirectiveReportingConfig::is_inactive(
+        &report.config.directive_reporting,
+    );
+    if !active && options.mode.is_none() {
+        ensure!(
+            options.expected_reporting_identity.is_none(),
+            "Saved reporting identity changed or is absent"
+        );
+        return Ok(None);
+    }
+    let mode = options.mode.unwrap_or(if active {
+        ReportingMode::Reported
+    } else {
+        ReportingMode::Raw
+    });
+    let identity = json!({"engine":"open-seo-spider/saved-content-reporting-v1","mode":mode,
+        "directive_reporting":if active { report.config.directive_reporting.as_ref() } else { None }});
+    let identity_sha256 = digest(&identity)?;
+    if let Some(expected) = &options.expected_reporting_identity {
+        ensure!(
+            expected == &identity_sha256,
+            "Saved reporting mode/profile identity changed"
+        );
+    }
+    let profile_visible_page_observations = report
+        .pages
+        .iter()
+        .filter(|page| open_seo_spider_core::directive_page_visible(&report.config, page))
+        .count();
+    let ordinals = report
+        .pages
+        .iter()
+        .enumerate()
+        .filter(|(_, page)| {
+            mode == ReportingMode::Raw
+                || open_seo_spider_core::directive_page_visible(&report.config, page)
+        })
+        .map(|(n, _)| n)
+        .collect::<Vec<_>>();
+    Ok(Some(ReportingView {
+        identity,
+        identity_sha256,
+        eligible_raw_page_ordinals_sha256: digest(&ordinals)?,
+        captured_page_observations: report.pages.len(),
+        profile_visible_page_observations,
+        profile_excluded_page_observations: report.pages.len() - profile_visible_page_observations,
+        eligible_page_observations: ordinals.len(),
+        mode,
+    }))
+}
+fn reporting_visible(
+    report: &CrawlReport,
+    page: &PageRecord,
+    view: &Option<ReportingView>,
+) -> bool {
+    view.as_ref().is_none_or(|view| {
+        view.mode == ReportingMode::Raw
+            || open_seo_spider_core::directive_page_visible(&report.config, page)
+    })
+}
+fn attach_reporting(value: &mut Value, view: &Option<ReportingView>) -> Result<()> {
+    if let Some(view) = view {
+        value["reporting"] = serde_json::to_value(view)?;
+    }
+    Ok(())
+}
+fn excluded_reporting_row(
+    report: &CrawlReport,
+    ordinal: usize,
+    source: ContentCaptureSourceKind,
+) -> Result<Value> {
+    // Preserve validated capture hashes/status as provenance, never the hidden text/result.
+    let mut row = document_summary(report, ordinal, source)?;
+    row["capture_status"] = row["status"].clone();
+    row["status"] = json!("excluded_reporting");
+    row["reason"] = json!("excluded_reporting");
+    Ok(row)
 }
 
 pub fn default_source() -> ContentCaptureSourceKind {
@@ -189,6 +335,7 @@ pub fn document_summary(
     }))
 }
 
+#[cfg(test)]
 pub fn inventory(
     report: &CrawlReport,
     context: &SnapshotContext,
@@ -196,6 +343,24 @@ pub fn inventory(
     after: usize,
     limit: usize,
 ) -> Result<Value> {
+    inventory_with_reporting(
+        report,
+        context,
+        source,
+        after,
+        limit,
+        &ReportingOptions::default(),
+    )
+}
+pub fn inventory_with_reporting(
+    report: &CrawlReport,
+    context: &SnapshotContext,
+    source: ContentCaptureSourceKind,
+    after: usize,
+    limit: usize,
+    options: &ReportingOptions,
+) -> Result<Value> {
+    let view = reporting_view(report, context, options)?;
     ensure!((1..=200).contains(&limit), "limit must be 1..200");
     ensure!(
         after <= report.pages.len(),
@@ -203,21 +368,33 @@ pub fn inventory(
     );
     let end = after.saturating_add(limit).min(report.pages.len());
     let rows = (after..end)
+        .filter(|ordinal| reporting_visible(report, &report.pages[*ordinal], &view))
         .map(|ordinal| document_summary(report, ordinal, source))
         .collect::<Result<Vec<_>>>()?;
-    Ok(
-        json!({"engine":SAVED_CONTENT_ENGINE,"snapshot":context,"source_kind":source,"after_ordinal":after,"limit":limit,
+    let mut value = json!({"engine":SAVED_CONTENT_ENGINE,"snapshot":context,"source_kind":source,"after_ordinal":after,"limit":limit,
         "total_saved_pages":report.pages.len(),"rows":rows,"next_after_ordinal":(end<report.pages.len()).then_some(end),
-        "has_more":end<report.pages.len(),"text_included":false,"website_requests":0,"site_wide_coverage":false}),
-    )
+        "has_more":end<report.pages.len(),"text_included":false,"website_requests":0,"site_wide_coverage":false});
+    attach_reporting(&mut value, &view)?;
+    Ok(value)
 }
 
+#[cfg(test)]
 pub fn saved_document(
     report: &CrawlReport,
     context: &SnapshotContext,
     source: ContentCaptureSourceKind,
     url: &str,
 ) -> Result<Value> {
+    saved_document_with_reporting(report, context, source, url, &ReportingOptions::default())
+}
+pub fn saved_document_with_reporting(
+    report: &CrawlReport,
+    context: &SnapshotContext,
+    source: ContentCaptureSourceKind,
+    url: &str,
+    options: &ReportingOptions,
+) -> Result<Value> {
+    let view = reporting_view(report, context, options)?;
     let mut pages = report
         .pages
         .iter()
@@ -230,11 +407,17 @@ pub fn saved_document(
         pages.next().is_none(),
         "Saved report has duplicate requested identities"
     );
-    let (_, capture) = captured_source(report, page, source)?;
-    Ok(
+    let mut value = if !reporting_visible(report, page, &view) {
+        json!({"engine":SAVED_CONTENT_ENGINE,"snapshot":context,"source_kind":source,
+            "status":"excluded_reporting","excluded_reporting_count":1,"row":excluded_reporting_row(report,ordinal,source)?,
+            "capture":null,"website_requests":0,"site_wide_coverage":false})
+    } else {
+        let (_, capture) = captured_source(report, page, source)?;
         json!({"engine":SAVED_CONTENT_ENGINE,"snapshot":context,"source_kind":source,"row":document_summary(report,ordinal,source)?,
-        "capture":capture,"website_requests":0,"site_wide_coverage":false}),
-    )
+            "capture":capture,"website_requests":0,"site_wide_coverage":false})
+    };
+    attach_reporting(&mut value, &view)?;
+    Ok(value)
 }
 
 pub fn prepare_saved_analysis(
@@ -242,6 +425,7 @@ pub fn prepare_saved_analysis(
     context: &SnapshotContext,
     request: &SavedContentRequest,
 ) -> Result<(Value, Option<ContentAnalysisInput>)> {
+    let view = reporting_view(report, context, &request.reporting_options())?;
     request.config.limits.validate()?;
     // Validate the complete declared profile even when explicit filters exclude every row.
     analyze_content(&ContentAnalysisInput {
@@ -283,6 +467,12 @@ pub fn prepare_saved_analysis(
             "Saved report has duplicate requested identities"
         );
     }
+    for url in &request.urls {
+        ensure!(
+            index.contains_key(url),
+            "Exact requested URL is not in the saved report: {url}"
+        );
+    }
     let mut documents = Vec::new();
     let mut provenance = Vec::new();
     let mut excluded = Vec::new();
@@ -292,6 +482,10 @@ pub fn prepare_saved_analysis(
             anyhow::anyhow!("Exact requested URL is not in the saved report: {url}")
         })?;
         let page = &report.pages[ordinal];
+        if !reporting_visible(report, page, &view) {
+            excluded.push(json!({"row":excluded_reporting_row(report,ordinal,request.source_kind)?,"reason":"excluded_reporting"}));
+            continue;
+        }
         let row = document_summary(report, ordinal, request.source_kind)?;
         let (basis, capture) = captured_source(report, page, request.source_kind)?;
         let result = capture.and_then(|capture| capture.result.as_ref());
@@ -345,11 +539,36 @@ pub fn prepare_saved_analysis(
         });
         provenance.push(json!({"analysis_document_id":id,"row":row}));
     }
-    let input=(!documents.is_empty()).then(||ContentAnalysisInput{corpus_id:context.sha256.clone(),corpus_scope:"explicit selected saved requested URLs, one source per URL; website coverage is not inferred".into(),corpus_complete:true,config:request.config.clone(),documents});
-    let envelope = json!({"engine":SAVED_CONTENT_ENGINE,"snapshot":context,"source_kind":request.source_kind,"requested_urls":request.urls,
+    let corpus_id = if let Some(view) = &view {
+        digest(&(
+            &context.sha256,
+            &view.identity_sha256,
+            &view.eligible_raw_page_ordinals_sha256,
+        ))?
+    } else {
+        context.sha256.clone()
+    };
+    let input=(!documents.is_empty()).then(||ContentAnalysisInput{corpus_id,corpus_scope:"explicit selected saved requested URLs, one source per URL; website coverage is not inferred".into(),corpus_complete:true,config:request.config.clone(),documents});
+    let mut envelope = json!({"engine":SAVED_CONTENT_ENGINE,"snapshot":context,"source_kind":request.source_kind,"requested_urls":request.urls,
         "indexable_only":request.indexable_only,"complete_only":request.complete_only,"selected_count":request.urls.len(),
         "included_count":provenance.len(),"excluded":excluded,"documents":provenance,"website_requests":0,"site_wide_coverage":false,
         "limitations":["Source bindings are persisted consistency evidence; arbitrary imported JSON is declarative.","No stored HTML selection replay or fresh website observation is inferred.","Finite explicit cohort only; no site-wide duplicate coverage or vendor-equivalence claim."]});
+    attach_reporting(&mut envelope, &view)?;
+    if view.is_some() {
+        envelope["excluded_reporting_count"] = json!(
+            excluded
+                .iter()
+                .filter(|entry| entry["reason"] == "excluded_reporting")
+                .count()
+        );
+        envelope["selection_sha256"] = json!(digest(&(
+            &request.urls,
+            request.source_kind,
+            &request.config,
+            request.indexable_only,
+            request.complete_only
+        ))?);
+    }
     Ok((envelope, input))
 }
 
@@ -366,6 +585,10 @@ pub fn finish_saved_analysis(
     }
     Ok(envelope)
 }
+
+#[cfg(test)]
+#[path = "content_cohort_reporting_tests.rs"]
+mod reporting_tests;
 
 #[cfg(test)]
 mod tests {

@@ -1,3 +1,4 @@
+import {assertDefaultMcpInventory} from './mcp-inventory-contract.mjs';
 // Linux Docker image + unprivileged runtime + SQLite volume acceptance.
 // Names are freshly generated; cleanup only removes this script's own objects.
 import { execFileSync } from 'node:child_process';
@@ -48,7 +49,7 @@ try {
   await until(async()=>{const status=await(await fetch(`${app}/api/crawls/${v2Job.id}`)).json();if(status.status==='failed')throw Error(JSON.stringify(status));return status.status==='completed'&&status;},'explicit V2 native resource self-crawl');
   const v2Before=await(await fetch(`${app}/api/crawls/${v2Job.id}/resources.json`)).json();assert.equal(v2Before.snapshot.resource_contract_engine,engine);assert.equal(v2Before.export.all_snapshot_rows_exported,true);assert.ok(v2Before.observations.some(row=>row.decision.grant?.reference_kind==='css'));
   const v2TransportsBefore=await(await fetch(`${app}/api/crawls/${v2Job.id}/resources/transports`)).json();assert.equal(v2TransportsBefore.semantic_contract_binding,'validated_full_config_and_generation');assert.ok(v2TransportsBefore.transports.some(row=>row.requested_url.endsWith('/styles.css')&&row.projection.resource_response.contract_engine===engine));
-  const toolsResponse=await fetch(app+'/mcp',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:1,method:'tools/list',params:{}})});assert.equal((await toolsResponse.json()).result.tools.length,26);
+  const toolsResponse=await fetch(app+'/mcp',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:1,method:'tools/list',params:{}})});assertDefaultMcpInventory((await toolsResponse.json()).result.tools);
   docker(['stop', '--time', '10', name]); docker(['start', name]); app = address(); await ready(app);
   const after = await (await fetch(`${app}/api/crawls/${job.id}/project.json`)).json();
   assert.deepEqual(after, before);

@@ -97,8 +97,17 @@ pub fn export_input_occurrences_csv(report: &CrawlReport) -> anyhow::Result<Stri
 }
 
 pub fn export_pages_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let raw_report = report;
+    let visible_report = crate::reported_report(report);
+    let report = visible_report.as_ref();
     let mut writer = csv::Writer::from_writer(Vec::new());
-    writer.write_record([
+    let tls_columns = raw_report
+        .config
+        .tls
+        .as_ref()
+        .is_some_and(|tls| !tls.is_inactive())
+        || raw_report.pages.iter().any(|page| page.tls.is_some());
+    let mut headers = vec![
         "URL",
         "Final URL",
         "Status",
@@ -141,7 +150,11 @@ pub fn export_pages_csv(report: &CrawlReport) -> anyhow::Result<String> {
         "Selected State",
         "Parent Snapshot SHA256",
         "Fetched At",
-    ])?;
+    ];
+    if tls_columns {
+        headers.extend(["Local Transport Upgrade", "HSTS Upgrade Evidence"]);
+    }
+    writer.write_record(headers)?;
     let known_operation = report
         .operation
         .as_ref()
@@ -170,7 +183,7 @@ pub fn export_pages_csv(report: &CrawlReport) -> anyhow::Result<String> {
             (Some(_), Some(_), "pending") => "selected_pending_not_refreshed",
             (Some(_), Some(_), _) => "inherited_from_parent",
         };
-        writer.write_record([
+        let mut row = vec![
             csv_text(&page.url),
             csv_text(&page.final_url),
             page.status
@@ -253,12 +266,36 @@ pub fn export_pages_csv(report: &CrawlReport) -> anyhow::Result<String> {
                     .map_or("", |operation| operation.parent.snapshot_sha256.as_str()),
             ),
             csv_text(&page.fetched_at),
-        ])?;
+        ];
+        if tls_columns {
+            row.push(
+                if page
+                    .tls
+                    .as_ref()
+                    .is_some_and(|tls| !tls.hsts_upgrades.is_empty())
+                {
+                    "HSTS Policy 307".into()
+                } else {
+                    String::new()
+                },
+            );
+            row.push(
+                page.tls
+                    .as_ref()
+                    .map(serde_json::to_string)
+                    .transpose()?
+                    .unwrap_or_default(),
+            );
+        }
+        writer.write_record(row)?;
     }
-    Ok(String::from_utf8(writer.into_inner()?)?)
+    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
 }
 
 pub fn export_issues_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let raw_report = report;
+    let visible_report = crate::reported_report(report);
+    let report = visible_report.as_ref();
     let mut writer = csv::Writer::from_writer(Vec::new());
     writer.write_record(["Severity", "Code", "URL", "Message", "Related URLs"])?;
     for issue in &report.issues {
@@ -270,10 +307,13 @@ pub fn export_issues_csv(report: &CrawlReport) -> anyhow::Result<String> {
             csv_text(&issue.related_urls.join(" | ")),
         ])?;
     }
-    Ok(String::from_utf8(writer.into_inner()?)?)
+    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
 }
 
 pub fn export_links_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let raw_report = report;
+    let visible_report = crate::reported_report(report);
+    let report = visible_report.as_ref();
     let mut writer = csv::Writer::from_writer(Vec::new());
     writer.write_record([
         "Source",
@@ -338,7 +378,7 @@ pub fn export_links_csv(report: &CrawlReport) -> anyhow::Result<String> {
             ])?;
         }
     }
-    Ok(String::from_utf8(writer.into_inner()?)?)
+    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
 }
 
 pub fn export_fragments_csv(report: &CrawlReport) -> anyhow::Result<String> {
@@ -357,7 +397,7 @@ pub fn export_fragments_csv(report: &CrawlReport) -> anyhow::Result<String> {
         "Source DOM JSON",
         "Matched Target JSON",
     ])?;
-    for row in crate::validate_fragments(report) {
+    for row in crate::reported_fragments(report) {
         let status = serde_json::to_value(row.status)?;
         writer.write_record([
             csv_text(&row.source_url),
@@ -382,11 +422,14 @@ pub fn export_fragments_csv(report: &CrawlReport) -> anyhow::Result<String> {
                 .unwrap_or_default(),
         ])?;
     }
-    Ok(String::from_utf8(writer.into_inner()?)?)
+    crate::reporting_csv(report, String::from_utf8(writer.into_inner()?)?)
 }
 
 /// Original typed facts, with explicit legacy/availability records per snapshot.
 pub fn export_dom_observations_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let raw_report = report;
+    let visible_report = crate::reported_report(report);
+    let report = visible_report.as_ref();
     let mut writer = csv::Writer::from_writer(Vec::new());
     writer.write_record([
         "URL",
@@ -477,11 +520,14 @@ pub fn export_dom_observations_csv(report: &CrawlReport) -> anyhow::Result<Strin
             }
         }
     }
-    Ok(String::from_utf8(writer.into_inner()?)?)
+    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
 }
 
 /// One result per row preserves values containing commas, quotes or delimiters.
 pub fn export_custom_extractions_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let raw_report = report;
+    let visible_report = crate::reported_report(report);
+    let report = visible_report.as_ref();
     let mut writer = csv::Writer::from_writer(Vec::new());
     writer.write_record([
         "URL",
@@ -552,12 +598,15 @@ pub fn export_custom_extractions_csv(report: &CrawlReport) -> anyhow::Result<Str
             }
         }
     }
-    Ok(String::from_utf8(writer.into_inner()?)?)
+    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
 }
 
 /// One row per executed script. JSON preserves the difference between a missing
 /// result, null, a string and structured data, including embedded CSV delimiters.
 pub fn export_custom_javascript_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let raw_report = report;
+    let visible_report = crate::reported_report(report);
+    let report = visible_report.as_ref();
     let mut writer = csv::Writer::from_writer(Vec::new());
     writer.write_record([
         "URL",
@@ -583,12 +632,15 @@ pub fn export_custom_javascript_csv(report: &CrawlReport) -> anyhow::Result<Stri
             ])?;
         }
     }
-    Ok(String::from_utf8(writer.into_inner()?)?)
+    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
 }
 
 /// Captured cookie attributes only. An allowlist deliberately omits cookie
 /// values and all unknown fields, including in imported legacy reports.
 pub fn export_browser_cookies_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let raw_report = report;
+    let visible_report = crate::reported_report(report);
+    let report = visible_report.as_ref();
     let mut writer = csv::Writer::from_writer(Vec::new());
     writer.write_record([
         "URL",
@@ -620,12 +672,15 @@ pub fn export_browser_cookies_csv(report: &CrawlReport) -> anyhow::Result<String
             ])?;
         }
     }
-    Ok(String::from_utf8(writer.into_inner()?)?)
+    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
 }
 
 /// Native PDF observations. Unknown numbers remain empty cells, while parse
 /// errors, unsupported extraction and exhausted limits stay explicit.
 pub fn export_pdf_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let raw_report = report;
+    let visible_report = crate::reported_report(report);
+    let report = visible_report.as_ref();
     let mut writer = csv::Writer::from_writer(Vec::new());
     writer.write_record([
         "URL",
@@ -682,11 +737,14 @@ pub fn export_pdf_csv(report: &CrawlReport) -> anyhow::Result<String> {
             serde_json::to_string(&pdf.limits_reached)?,
         ])?;
     }
-    Ok(String::from_utf8(writer.into_inner()?)?)
+    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
 }
 
 /// Fetched image resource metadata, separate from declared img width/height/alt.
 pub fn export_image_resources_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let raw_report = report;
+    let visible_report = crate::reported_report(report);
+    let report = visible_report.as_ref();
     let mut writer = csv::Writer::from_writer(Vec::new());
     writer.write_record([
         "URL",
@@ -725,7 +783,7 @@ pub fn export_image_resources_csv(report: &CrawlReport) -> anyhow::Result<String
             csv_text(image.parse_error.as_deref().unwrap_or_default()),
         ])?;
     }
-    Ok(String::from_utf8(writer.into_inner()?)?)
+    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
 }
 
 fn resource_status(status: crate::ResourceAnalysisStatus) -> String {
@@ -764,9 +822,18 @@ pub fn csv_text(value: &str) -> String {
 }
 
 pub fn export_sitemap_xml(report: &CrawlReport) -> String {
+    let counts = crate::reporting_visibility(&report.config, &report.pages, &report.issues);
+    let visible_report = crate::reported_report(report);
+    let report = visible_report.as_ref();
     let mut xml = String::from(
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n",
     );
+    if let Some(counts) = counts {
+        xml.push_str(&format!(
+            "<!-- Captured Pages: {}; Visible Pages: {}; Hidden Pages: {} -->\n",
+            counts.captured_pages, counts.visible_pages, counts.hidden_pages
+        ));
+    }
     for page in report
         .pages
         .iter()

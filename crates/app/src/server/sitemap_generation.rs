@@ -22,6 +22,7 @@ fn error(code: F, message: impl Into<String>) -> SitemapGenerationFailure {
         code,
         message: message.into(),
         diagnostic_counts: Default::default(),
+        reporting: None,
     }
 }
 pub(super) async fn bundle(
@@ -42,7 +43,14 @@ pub(super) async fn bundle(
         .await
         .map_err(|err| failure(error(F::ZipFailure, err.to_string())))?
         .map_err(failure)?;
-    Response::builder()
+    let reporting = generated
+        .manifest
+        .reporting
+        .as_ref()
+        .map(serde_json::to_string)
+        .transpose()
+        .map_err(|e| failure(error(F::ZipFailure, e.to_string())))?;
+    let mut response = Response::builder()
         .header(header::CONTENT_TYPE, "application/zip")
         .header(
             header::CONTENT_LENGTH,
@@ -62,7 +70,11 @@ pub(super) async fn bundle(
         .header(
             "x-sitemap-excluded-pages",
             generated.manifest.excluded_pages.to_string(),
-        )
+        );
+    if let Some(reporting) = reporting {
+        response = response.header("x-sitemap-reporting", reporting);
+    }
+    response
         .body(Body::from(generated.zip_bytes))
         .map_err(|err| failure(error(F::ZipFailure, err.to_string())))
 }

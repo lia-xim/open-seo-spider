@@ -387,3 +387,187 @@ async fn saved_ngram_api_genuine_six_word_capture_csv_and_option_staleness_witho
     stop.send(()).unwrap();
     website.await.unwrap();
 }
+
+fn reporting_report() -> CrawlReport {
+    let pages = (0..3)
+        .map(|i| PageRecord {
+            url: format!("https://x.test/{i}"),
+            final_url: format!("https://x.test/{i}"),
+            meta_robots: if i == 0 {
+                vec!["noindex".into()]
+            } else {
+                vec![]
+            },
+            ..Default::default()
+        })
+        .collect();
+    CrawlReport {
+        config: CrawlConfig {
+            directive_reporting: Some(open_seo_spider_core::DirectiveReportingConfig {
+                respect_noindex: true,
+                ..Default::default()
+            }),
+            ..Default::default()
+        },
+        pages,
+        issues: vec![],
+        summary: Default::default(),
+        warnings: vec![],
+        operation: None,
+        policy_ledger: None,
+        resource_ledger: None,
+        sitemap_catalog: None,
+        sitemap_coverage_inventory: None,
+        sitemap_source_measurements: None,
+    }
+}
+#[tokio::test]
+async fn saved_ngram_reporting_http_preview_continuation_csv_share_profile_and_raw_snapshot() {
+    let report = reporting_report();
+    let raw = serde_json::to_vec(&report).unwrap();
+    let id = Uuid::new_v4();
+    let state = state(id, report);
+    let q = Request {
+        view: projection::View::Sources,
+        limit: 1,
+        ..Default::default()
+    };
+    let first = value(response(
+        preview(State(state.clone()), Path(id), Ok(Json(q.clone()))).await,
+    ))
+    .await;
+    assert_eq!(first["saved_documents"], 2);
+    assert_eq!(first["rows"][0]["source"]["raw_page_ordinal"], 1);
+    assert_eq!(first["reporting"]["captured_page_observations"], 3);
+    let token = first["snapshot"]["snapshot_token"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let bound = Request {
+        expected_snapshot_token: Some(token.clone()),
+        ..q.clone()
+    };
+    let next = value(response(
+        preview(
+            State(state.clone()),
+            Path(id),
+            Ok(Json(Request {
+                after: Some(1),
+                ..bound.clone()
+            })),
+        )
+        .await,
+    ))
+    .await;
+    assert_eq!(next["rows"][0]["source"]["ordinal"], 1);
+    assert_eq!(next["rows"][0]["source"]["raw_page_ordinal"], 2);
+    let out = response(csv(State(state.clone()), Path(id), Ok(Json(bound.clone()))).await);
+    assert_eq!(out.headers()["x-ngram-snapshot"], token);
+    let digest = out.headers()["x-content-sha256"]
+        .to_str()
+        .unwrap()
+        .to_owned();
+    let body = to_bytes(out.into_body(), projection::CSV_BYTES)
+        .await
+        .unwrap();
+    assert_eq!(projection::sha(&body), digest);
+    assert_eq!(std::str::from_utf8(&body).unwrap().lines().count(), 4);
+    let crossed = Request {
+        reporting_mode: Some(projection::ReportingMode::Raw),
+        ..bound
+    };
+    match preview(State(state.clone()), Path(id), Ok(Json(crossed.clone()))).await {
+        Err((s, _)) => assert_eq!(s, StatusCode::CONFLICT),
+        Ok(_) => panic!("Cross-mode preview accepted"),
+    }
+    match csv(State(state.clone()), Path(id), Ok(Json(crossed))).await {
+        Err((s, _)) => assert_eq!(s, StatusCode::CONFLICT),
+        Ok(_) => panic!("Cross-mode CSV accepted"),
+    }
+    let raw_view = value(response(
+        preview(
+            State(state.clone()),
+            Path(id),
+            Ok(Json(Request {
+                reporting_mode: Some(projection::ReportingMode::Raw),
+                ..q
+            })),
+        )
+        .await,
+    ))
+    .await;
+    assert_eq!(raw_view["saved_documents"], 3);
+    assert_eq!(
+        raw_view["snapshot"]["caller"]["typed_report_sha256"],
+        first["snapshot"]["caller"]["typed_report_sha256"]
+    );
+    let job = get_job(&state, id)
+        .await
+        .unwrap_or_else(|_| panic!("Expected saved N-gram fixture job"));
+    assert_eq!(
+        serde_json::to_vec(job.read().await.report.as_ref().unwrap()).unwrap(),
+        raw
+    );
+    state.lifecycle.blocking.shutdown_and_drain().await.unwrap();
+    state
+        .lifecycle
+        .response_streams
+        .shutdown_and_drain()
+        .await
+        .unwrap();
+}
+#[tokio::test]
+async fn saved_ngram_reporting_http_same_job_equal_visible_count_profile_change_refuses_old_token()
+{
+    let id = Uuid::new_v4();
+    let state = state(id, reporting_report());
+    let q = Request {
+        view: projection::View::Sources,
+        ..Default::default()
+    };
+    let first = value(response(
+        preview(State(state.clone()), Path(id), Ok(Json(q.clone()))).await,
+    ))
+    .await;
+    let bound = Request {
+        expected_snapshot_token: Some(first["snapshot"]["snapshot_token"].as_str().unwrap().into()),
+        ..q.clone()
+    };
+    let job = get_job(&state, id)
+        .await
+        .unwrap_or_else(|_| panic!("Expected saved N-gram fixture job"));
+    job.write()
+        .await
+        .report
+        .as_mut()
+        .unwrap()
+        .config
+        .directive_reporting
+        .as_mut()
+        .unwrap()
+        .respect_canonical = true;
+    match preview(State(state.clone()), Path(id), Ok(Json(bound.clone()))).await {
+        Err((s, _)) => assert_eq!(s, StatusCode::CONFLICT),
+        Ok(_) => panic!("Old profile token accepted"),
+    }
+    match csv(State(state.clone()), Path(id), Ok(Json(bound))).await {
+        Err((s, _)) => assert_eq!(s, StatusCode::CONFLICT),
+        Ok(_) => panic!("Old profile export accepted"),
+    }
+    let after = value(response(
+        preview(State(state.clone()), Path(id), Ok(Json(q))).await,
+    ))
+    .await;
+    assert_eq!(after["saved_documents"], first["saved_documents"]);
+    assert_ne!(
+        after["snapshot"]["snapshot_token"],
+        first["snapshot"]["snapshot_token"]
+    );
+    state.lifecycle.blocking.shutdown_and_drain().await.unwrap();
+    state
+        .lifecycle
+        .response_streams
+        .shutdown_and_drain()
+        .await
+        .unwrap();
+}

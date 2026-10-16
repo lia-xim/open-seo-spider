@@ -36,6 +36,8 @@ pub(crate) struct Request {
     pub cursor: Option<Cursor>,
     pub expected_snapshot_token: Option<String>,
     pub expected_generation: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reporting_mode: Option<segments::ReportingMode>,
 }
 impl Default for Request {
     fn default() -> Self {
@@ -47,6 +49,7 @@ impl Default for Request {
             cursor: None,
             expected_snapshot_token: None,
             expected_generation: None,
+            reporting_mode: None,
         }
     }
 }
@@ -91,6 +94,8 @@ pub(crate) struct Context {
     pub origin: String,
     pub typed_report_sha256: String,
     pub rules_sha256: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reporting_view: Option<segments::ReportingIdentity>,
     pub snapshot_token: String,
     pub sql_attested: bool,
     pub report_generation_attested: bool,
@@ -148,24 +153,49 @@ pub(crate) fn evaluate(
     );
     let typed_report_sha256 = report_hash(report)?;
     let rules_sha256 = sha(&segments::json_bytes(&request.rules)?);
-    // Selection and both authority digests bind cursors/exports. View is separately bound in Cursor.
-    let token = sha(&segments::json_bytes(&(
-        segments::ENGINE,
-        &job,
-        generation,
-        origin,
-        &typed_report_sha256,
-        &rules_sha256,
-        &request.selection,
-    ))?);
+    let reporting_view = segments::reporting_identity(&report.config, request.reporting_mode)?;
+    // Raw snapshot authority is unchanged; separate reporting identity binds every cursor/export.
+    // Page/issue view remains separately checked by Cursor.
+    let token = if let Some(identity) = &reporting_view {
+        sha(&segments::json_bytes(&(
+            segments::ENGINE,
+            &job,
+            generation,
+            origin,
+            &typed_report_sha256,
+            &rules_sha256,
+            &request.selection,
+            identity,
+        ))?)
+    } else {
+        // Exact legacy token formula for inactive default requests.
+        sha(&segments::json_bytes(&(
+            segments::ENGINE,
+            &job,
+            generation,
+            origin,
+            &typed_report_sha256,
+            &rules_sha256,
+            &request.selection,
+        ))?)
+    };
     ensure!(
         request
             .expected_snapshot_token
             .as_ref()
             .is_none_or(|t| *t == token),
-        "Snapshot/rules/selection changed; preview again"
+        "Snapshot/rules/selection/reporting view changed; preview again"
     );
-    let projection = segments::project(report, &request.rules, &request.selection)?;
+    let projection = segments::project_with_reporting(
+        report,
+        &request.rules,
+        &request.selection,
+        request.reporting_mode,
+    )?;
+    ensure!(
+        projection.reporting.as_ref().map(|value| &value.identity) == reporting_view.as_ref(),
+        "Reporting identity mismatch"
+    );
     Ok(Evaluation {
         context: Context {
             engine: segments::ENGINE,
@@ -174,6 +204,7 @@ pub(crate) fn evaluate(
             origin: origin.into(),
             typed_report_sha256,
             rules_sha256,
+            reporting_view,
             snapshot_token: token,
             sql_attested: false,
             report_generation_attested: false,
@@ -198,9 +229,11 @@ pub(crate) fn page(e: &Evaluation, request: &Request) -> Result<Vec<u8>> {
         view: request.view,
         snapshot_token: e.context.snapshot_token.clone(),
     });
-    segments::json_bytes(
-        &serde_json::json!({"context":e.context,"depth_policy":e.projection.depth_policy,"counts":e.projection.counts,"charts":e.projection.charts,"summary":{"total_pages":e.projection.total_pages,"selected_pages":e.projection.selected_pages,"selected_issues":e.projection.issues.len(),"multiple_matches":e.projection.multiple_matches,"unassigned_pages":e.projection.unassigned_pages,"unknown_pages":e.projection.unknown_pages,"orphan_issues":e.projection.orphan_issues},"view":request.view,"total":total,"rows":rows,"next":next}),
-    )
+    let mut output = serde_json::json!({"context":e.context,"depth_policy":e.projection.depth_policy,"counts":e.projection.counts,"charts":e.projection.charts,"summary":{"total_pages":e.projection.total_pages,"selected_pages":e.projection.selected_pages,"selected_issues":e.projection.issues.len(),"multiple_matches":e.projection.multiple_matches,"unassigned_pages":e.projection.unassigned_pages,"unknown_pages":e.projection.unknown_pages,"orphan_issues":e.projection.orphan_issues},"view":request.view,"total":total,"rows":rows,"next":next});
+    if let Some(reporting) = &e.projection.reporting {
+        output["reporting"] = serde_json::to_value(reporting)?;
+    }
+    segments::json_bytes(&output)
 }
 pub(crate) fn full_json(e: &Evaluation) -> Result<Vec<u8>> {
     segments::json_bytes(&serde_json::json!({"context":e.context,"projection":e.projection}))

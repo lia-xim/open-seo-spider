@@ -68,6 +68,7 @@ fn unavailable(metadata: Value) -> ResourceBrokenSourcesPage {
         snapshot: None,
         rows: vec![],
         selected_evaluation_rows: 0,
+        reporting_counts: None,
         selected_distinct_occurrence_ids: 0,
         counts: Default::default(),
         next_sequence: None,

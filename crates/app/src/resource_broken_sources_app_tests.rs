@@ -1,6 +1,29 @@
 use super::*;
 
 #[test]
+fn resource_source_reporting_request_http_core_mode_serialization_is_strict_without_uploading_visibility()
+ {
+    let id = Uuid::nil();
+    for mode in [None, Some("raw"), Some("reported")] {
+        let value = serde_json::json!({"reporting_mode":mode});
+        let request: Request = serde_json::from_value(value).unwrap();
+        assert_eq!(
+            serde_json::to_value(request.core(id, 7).unwrap())
+                .unwrap()
+                .get("reporting_mode")
+                .and_then(|v| v.as_str()),
+            mode
+        );
+    }
+    for bad in [
+        serde_json::json!({"reporting_mode":"auto"}),
+        serde_json::json!({"hidden_owners":["https://fixture.test/"]}),
+        serde_json::json!({"raw_report":{}}),
+    ] {
+        assert!(serde_json::from_value::<Request>(bad).is_err());
+    }
+}
+#[test]
 fn resource_sources_request_rejects_paths_observations_unknown_fields_and_wrong_job_generation() {
     for input in [
         r#"{"path":"other.sqlite"}"#,
@@ -51,6 +74,7 @@ fn resource_sources_app_json_rejects_envelope_over_budget_and_retains_unknown_nu
         rows: vec![],
         selected_evaluation_rows: 0,
         selected_distinct_occurrence_ids: 0,
+        reporting_counts: None,
         counts: Default::default(),
         next_sequence: None,
         has_more: false,

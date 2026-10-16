@@ -1,118 +1,43 @@
 # Open SEO Spider
 
-Independent local SEO crawler in Rust. The objective is broad functional parity
-with desktop SEO crawlers without a commercial URL cap. This repository is
-currently private and under active development.
+An independent local SEO crawler written in Rust. **Alpha software:** useful workflows exist, but complete Screaming Frog feature parity and production readiness are not claimed. This project is not affiliated with Screaming Frog.
 
-**Full Screaming Frog feature parity is not achieved or claimed.** The acceptance
-ledger tracks 144 grouped requirements across 16 product areas and now 416 named
-filters observed in the installed original CLI. Granular acceptance contracts
-and actual comparisons on an independently authored local website are retained
-in [reference evidence](docs/parity/reference-comparison.md) and the
-[rule backlog](docs/parity/granular-acceptance.md). Matching exported cells are
-not a measure of complete feature coverage. See [feature catalog](docs/feature-catalog.md),
-[parity ledger](docs/feature-parity.json), and
-[observed installed architecture](docs/research/installed-architecture.md).
+There is no fixed commercial URL allowance. Your configured crawl budgets, storage, memory, network and hardware still limit a crawl.
 
-Die fortlaufende [deutsche Feature-To-do-Liste](docs/FEATURE_TODO.md) führt alle
-144 Fähigkeiten mit offenen Abnahmekriterien und Nachweisen. Haken stehen für
-erfüllte eigene Abnahmen. Sie bestätigen keine vollständige Hersteller-Parität.
-`node scripts/update-feature-todo.mjs` hält die Übersicht mit dem Katalog synchron;
-`node scripts/update-feature-todo.mjs --check` prüft auf Abweichungen.
+## What is available
 
-Opt-in [saved source capture and cohort analysis](docs/content-cohort.md) keeps
-raw/DOM text and language separate. The CLI `analyze-crawl-content`, saved-content
-API and MCP analyze explicit persisted samples without fetching websites again.
+- Native HTTP crawling, robots rules, redirects, internal links, canonical/hreflang observations and configurable SEO checks.
+- URL-list imports, CSS/XPath/regex extraction, PDF/image observations and JSON/CSV exports.
+- SQLite-backed crawl state, pause/resume, selected recrawl and saved snapshot comparison.
+- Sitemap discovery, parsing, findings, saved-source reporting and sitemap generation.
+- Opt-in saved raw/rendered HTML text, content cohorts, segments and n-gram reports, without refetching websites for saved analysis.
+- Native TLS/custom-CA and opt-in HSTS controls. Combining these active controls with browser rendering is currently refused.
+- An optional Chromium worker for JavaScript rendering, screenshots, accessibility observations and custom JavaScript.
+- A local API and **32 MCP tools**, plus **five optional file tools** restricted to an explicitly configured directory.
 
-## Local run
+See the [feature catalog](docs/feature-catalog.md), [crawl control](docs/crawl-control.md), [saved comparison](docs/saved-comparison.md), [sitemap generation](docs/sitemap-generation.md) and [MCP file-tool contract](docs/mcp-file-tools.md).
 
-Requires Rust with a native compiler toolchain. Windows is supported with MSVC
-Build Tools; Docker is optional.
+Saved-HTML spelling/grammar analysis is a bounded slice. It requires explicit acknowledgement and an independently installed local LanguageTool service. The service is off by default; the application does not bundle an engine/JRE, launch it automatically, or fall back to a cloud provider. Failed or incomplete checks remain unknown. This does not establish complete spelling/grammar support, PDF or title/meta checking, or broad language-quality parity.
+
+## Run from source
+
+Development baseline: **Rust 1.95, edition 2024**, with a native compiler/linker. Windows development uses MSVC Build Tools. Docker is optional.
 
 ```sh
-cargo run -p open-seo-spider -- serve
+cargo run -p open-seo-spider -- serve --listen 127.0.0.1:8787
 ```
 
-On Windows, double-click **Open SEO Spider.cmd**. The launcher uses the compiled
-release binary and starts the optional browser worker when its dependencies are
-installed. Alternatively, run `scripts/start.ps1`; `scripts/stop.ps1` stops the
-recorded application and browser worker processes.
-If the optional browser worker cannot start, the launcher warns and still starts
-the HTTP application; JavaScript rendering remains unavailable until the worker
-is running.
-
-Open `http://127.0.0.1:8787`. Crawl state stays in the ignored `data/` directory.
-Completed snapshots, cancelled crawls and interrupted SQLite frontiers survive
-a restart. Imported snapshots are readable but do not contain a resumable frontier.
+Open <http://127.0.0.1:8787>. The default local store is `data/`; keep it out of version control. For a CLI crawl:
 
 ```sh
 cargo run -p open-seo-spider -- crawl https://example.com --output crawl.json --csv pages.csv
-cargo run -p open-seo-spider -- crawl --sitemap https://example.com/sitemap.xml
 ```
 
-List mode accepts explicit URL arguments and local TXT/CSV/XML/XLSX files, with
-original rows, duplicates and invalid values retained separately from network work.
-Use the upload preview in the UI, or the byte-only `import-list` command. XLSX
-requires explicit sheet/column options; formulas default to rejection.
+Use `cargo run -p open-seo-spider -- --help` for command options. Check scope and request limits before starting a large crawl.
 
-```sh
-open-seo-spider import-list urls.txt --output input.json --csv input.csv
-open-seo-spider import-list urls.xlsx --inspect
-open-seo-spider crawl --list-file urls.txt --config crawl-config.json --output crawl.json --input-csv inputs.csv
-```
+### Optional browser worker
 
-`--config` loads native JSON settings; unset flags keep their configured values.
-`--list-file` selects list mode, and `--list-options` supplies a native JSON import
-selection for CSV/XLSX. Importing makes no website request; crawl start is explicit.
-See [list import contracts and resource limits](docs/list-imports.md).
-`max_pages` is
-optional; the default has no product-imposed page limit. Crawls obey robots.txt
-by default and pace requests by origin. Optional include/exclude regular
-expressions filter discovered URLs. Named CSS, XPath1.0 and Rust-regex
-extractions retain text, attributes, inner/outer HTML and supported XPath scalar
-values with their source, result type, observed count,
-capture bound and errors. XPath uses the repaired HTML DOM and explicit foreign
-namespace bindings; id(), lang(), variables and extension functions are not
-supported. Regex does not support lookaround or backreferences.
-The default HTTP path does not run JavaScript.
-
-HTML and HTTP Link-header canonical/hreflang declarations remain distinguishable,
-including PDF/non-HTML response relationships, base-URL resolution and alternate
-anchor contexts. Page-level indexing directives are evaluated for a configured
-bot separately from the request User-Agent. Configurable onpage/URL/link
-thresholds can be disabled individually. Title/description pixel widths use an
-openly licensed Roboto profile; complex shaping and missing glyphs remain unknown.
-The fixed 150% measurement profile is calibrated against the retained Windows
-reference fixture; other display settings and universal font equivalence remain
-unproven. See [pixel calibration](docs/research/text-width-calibration.md).
-
-Native PDF observations include Info metadata, bounded page text and HTTP(S)
-annotation-link discovery. Encryption, malformed content and extraction limits
-remain explicit rather than turning into empty successful text. Fetched image
-dimensions are separate from declared HTML image attributes. Dedicated PDF,
-image-resource and intermediate-response views and CSV endpoints preserve that
-evidence. See [resource contract](docs/resource-analysis.md).
-
-The [offline SERP editor](http://127.0.0.1:8787/serp) imports CSV metadata,
-preserves duplicate URL rows and ordering, supports editing and local drafts,
-and exports approximate measurements without requesting the entered websites.
-
-Captured DOM observations retain heading order, image alt text, meta keywords,
-link locations, explicit CSS position rules, responsive image candidates and
-nonstandard navigation attributes. Declared image candidates do not imply the
-browser selected or fetched them. Optional fragment validation checks only
-captured, complete HTML targets; unavailable targets remain unknown. These
-observations are available in the URL inspector, dedicated tables and CSV.
-See [DOM contracts and unknown states](docs/dom-observations.md).
-
-The [offline robots.txt tester](http://127.0.0.1:8787/robots) evaluates supplied
-rules and URLs with the crawler's own matcher. It makes no website requests;
-invalid rows and unsupported directives remain explicit. See
-[matcher scope and limits](docs/robots-simulation.md).
-
-## JavaScript rendering
-
-Install the optional worker dependencies once and use an installed Chrome/Edge:
+Use Node.js 24 and an existing Chrome, Edge or Chromium installation:
 
 ```sh
 cd renderer
@@ -120,108 +45,32 @@ npm ci --ignore-scripts
 npm start
 ```
 
-Enable JavaScript rendering in the application's settings. The worker runs at
-`http://127.0.0.1:8790/render`. Raw HTTP evidence and rendered DOM observations
-remain separate. Optional PNG screenshots and axe accessibility findings appear
-in the URL inspector and project JSON. See [worker contract](renderer/README.md).
+The worker defaults to `127.0.0.1:8790`; enable rendering in the app. It does not download a browser. See the [renderer contract](renderer/README.md) for configuration, isolation and limits. Browser jobs do not share an authenticated session.
 
-Optional custom async JavaScript evaluates named function bodies after the render
-wait. Per-script results/errors and redacted cookie attributes have dedicated
-UI tables and CSV exports. Cookies remain isolated per URL; this does not provide
-a shared authenticated browser session.
+### MCP
 
-CSV exports prefix potentially active spreadsheet formulas with an apostrophe.
-Typed numeric fields remain numeric; exact captured strings remain in project
-JSON.
-
-## MCP and local API
-
-The app supports graceful pause: stop admitting URLs, finish active native/browser
-work, save a checkpoint, then resume the remaining frontier. Page and sitemap
-discovery queues are stored separately. SQLite-only recovery and immutable report
-revisions are described in [crawl control](docs/crawl-control.md). An exhausted
-operator limit can be explicitly changed when resuming; it is not a commercial
-URL allowance. The MCP tool `spider_pause` exposes the same lifecycle.
-
-Selected recrawl creates a new child job from a stable source snapshot. Select
-exact recorded requested URLs in the page table, or use
-`open-seo-spider recrawl parent.json https://example.com/page --output child.json`.
-Only selected targets are admitted; source seeds, sitemaps and new outward links
-are not traversed. The parent and unselected observations are retained, pending
-selected old rows are excluded, and JSON/CSV disclose mixed-age coverage. Its
-optional `max_attempts` budget is separate from the source page-count limit.
-See [selected recrawl](docs/selected-recrawl.md) for identity, recovery and export
-contracts. `spider_recrawl` exposes the same derived-job operation over MCP.
-
-`open-seo-spider preview-policy policy.json --output decisions.json` and
-`POST /api/policy/preview` evaluate explicit scope/query/rewrite rules without
-network requests. [Policy preview](docs/crawl-policy.md) is a separate pure engine.
-An explicit `crawl_policy` also enables the [native SQLite-backed integration](docs/native-crawl-policy.md).
-It retains observed URLs separately from fetch aliases and records decisions for
-admitted, coalesced and denied occurrences. The [advanced policy UI](docs/crawl-policy-ui.md)
-offers offline preview, bounded evidence pages and full streamed snapshot exports.
-This native slice rejects browser rendering and legacy top-level URL filters when
-combined with the new policy, before making website requests.
+The running app exposes Streamable HTTP MCP at <http://127.0.0.1:8787/mcp>. For stdio, run:
 
 ```sh
-open-seo-spider crawl --config native-policy.json --store crawl.sqlite --output crawl.json
-open-seo-spider policy-ledger crawl.sqlite --limit 200
-open-seo-spider policy-ledger crawl.sqlite --json decisions.json --csv decisions.csv
+cargo run -p open-seo-spider -- mcp --server http://127.0.0.1:8787
 ```
 
-`POST /api/content/analyze`, `open-seo-spider analyze-content input.json` and the
-MCP tool `spider_analyze_content` analyze explicitly supplied text locally. The
-[content engine](docs/content-analysis.md) provides Unicode token and n-gram
-evidence, exact shingle-set similarity and an explicit English/German readability
-heuristic. Missing or incomplete text remains unknown. This bounded supplied-text
-engine does not yet retain full crawl text or establish whole-site content parity.
-The [original content observations](docs/reference-content-analysis.md) record the
-measured differences and unavailable comparisons.
+The local HTTP app must already be running. File tools require the explicit `--mcp-files-dir` option; grant only a directory you intend the client to access.
 
-The running application exposes stateless Streamable HTTP MCP at
-`http://127.0.0.1:8787/mcp`. For stdio, configure a client to execute:
+## Current limits and verification
 
-```sh
-open-seo-spider mcp --server http://127.0.0.1:8787
-```
+The [feature ledger](docs/feature-parity.json) tracks 144 grouped requirements: **36 independently accepted, 69 partial and 39 open**. These are project acceptance states, not a percentage of another product's functionality. The [ongoing to-do list](docs/FEATURE_TODO.md) records the remaining work.
 
-The current source registers 26 tools for crawl control, saved analysis,
-comparison, resource and sitemap workflows. Five optional
-[local file tools](docs/mcp-file-tools.md) can be enabled for an explicitly
-configured base directory; that new source implementation is not yet compiled
-or accepted on the installed runtime. Crawl tools require the local HTTP
-application to be running. JSON API routes and acceptance limits are documented in
-[architecture](docs/architecture.md). MCP implementation follows the
-[official transport specification](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports).
+The saved-spelling slice has focused evidence for 34 default Rust tests, 40 extracted UI VM groups across related workflows, and two real app-consumer LanguageTool tests using English/German fixtures. Those bounded checks do not prove every UI path, language or external integration. A VM fixture is not a real browser workflow.
 
-## Docker
+The final Windows-local source run passed **1,722 workspace tests, with zero failures and zero ignored tests**, including four real-renderer integration tests. Strict Clippy passed for all targets and all features. The seven updated legacy CI scripts have source review but await their full CI executions. See the [selected verification records](docs/verification/source28-open-source-alpha-20261016/README.md). Public CI remains pending; these local checks do not establish universal coverage. Windows has a verified native pilot; fresh Source27/28 native front-door checks, Linux CI, Docker runtime and wider platform checks remain pending. The existing installed Windows pilot is Source16; repository Source28 source does not update that installation.
 
-```sh
-docker compose up --build -d
-```
+Complete authenticated browser sessions, OCR, scheduling and comprehensive external-provider workflows remain incomplete or open. Provider features require your own authorized credentials and remain subject to provider quotas. Proprietary crawl-file compatibility and performance equivalence are not claimed.
 
-The service publishes only to loopback and stores crawls in a named volume.
-This image packages the Rust HTTP application. A Chromium worker needs its own
-runtime in the same local network namespace. Linux CI verifies the image build,
-unprivileged runtime, offline font measurements and a persistent crawl snapshot
-after a container restart. Docker installation and runtime remain **NOT PROVEN**
-on this Windows machine; the native Windows application is the tested local path.
+A [Docker Compose recipe](compose.yaml) is included, but a recipe is not current container-runtime proof. Raw HTTP and rendered evidence remain separate; missing observations must not be read as successful zero findings.
 
-## Validation
+The API is intended for local use and has no built-in user authentication. Read [SECURITY.md](SECURITY.md) before changing listen addresses or accepting untrusted crawl requests.
 
-```sh
-cargo fmt --all --check
-cargo test --workspace --locked
-cargo clippy --workspace --all-targets --locked -- -D warnings
-node scripts/api-e2e.mjs
-cd scripts && npm ci --ignore-scripts && node mcp-e2e.mjs
-cd ../renderer && npm ci --ignore-scripts && npm test
-```
+## Contributing and license
 
-The implementation is original. No vendor binaries, proprietary source/assets,
-license bypass, credentials or private crawl data belong in this repository.
-External service integrations will require the user's legitimate credentials
-and remain subject to those services' availability and quotas.
-
-License: MIT for the original project code. Third-party dependencies retain
-their own licenses.
+Read [CONTRIBUTING.md](CONTRIBUTING.md) and the [changelog](CHANGELOG.md). Original project code is [MIT licensed](LICENSE). Bundled fonts and dependencies retain their licenses; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

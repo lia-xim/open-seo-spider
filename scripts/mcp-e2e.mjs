@@ -1,3 +1,4 @@
+import {assertDefaultMcpInventory} from './mcp-inventory-contract.mjs';
 import { Client, StreamableHTTPClientTransport } from '@modelcontextprotocol/client';
 import { StdioClientTransport } from '@modelcontextprotocol/client/stdio';
 import { spawn } from 'node:child_process';
@@ -26,7 +27,7 @@ try{
     client=new Client({name:'open-seo-spider-acceptance',version:'0.1.0'});
     const transport=kind==='stdio'?new StdioClientTransport({command:binary,args:['mcp','--server',api],cwd:root,stderr:'pipe'}):new StreamableHTTPClientTransport(new URL(api+'/mcp'));
     await client.connect(transport);
-    const inventory=await client.listTools();assert.equal(inventory.tools.length,26);
+    const inventory=await client.listTools();assertDefaultMcpInventory(inventory.tools);
     assert.ok(inventory.tools.some(tool=>tool.name==='spider_compare_saved'&&tool.annotations.readOnlyHint===true&&tool.annotations.openWorldHint===false));
     assert.ok(inventory.tools.some(tool=>tool.name==='spider_pause'&&tool.annotations.readOnlyHint===false));
     assert.ok(inventory.tools.some(tool=>tool.name==='spider_recrawl'&&tool.annotations.readOnlyHint===false&&tool.annotations.openWorldHint===true));

@@ -396,3 +396,283 @@ fn directory_tree_saved_nonstandard_http_codes_are_known_other_not_unobserved() 
         assert_eq!((c.status_other, c.status_unobserved), (0, 1));
     }
 }
+
+fn reporting_config(mask: u8) -> CrawlConfig {
+    CrawlConfig {
+        directive_reporting: Some(DirectiveReportingConfig {
+            version: 1,
+            respect_noindex: mask & 1 != 0,
+            respect_canonical: mask & 2 != 0,
+            respect_next_prev: mask & 4 != 0,
+        }),
+        ..Default::default()
+    }
+}
+fn reporting_pages() -> Vec<PageRecord> {
+    let plain = page("https://x.test/a/plain", Some(200));
+    let mut noindex = page("https://x.test/hidden/noindex", Some(200));
+    noindex.meta_robots = vec!["noindex".into()];
+    let mut canonical = page("https://x.test/hidden/canonical", Some(200));
+    canonical.canonical = vec![plain.url.clone()];
+    let mut prev = page("https://x.test/hidden/prev", Some(200));
+    prev.pagination_prev = vec![plain.url.clone()];
+    let mut self_canonical_next = page("https://x.test/a/next", Some(200));
+    self_canonical_next.canonical = vec![self_canonical_next.url.clone()];
+    self_canonical_next.pagination_next = vec!["https://x.test/target-only".into()];
+    self_canonical_next.links = vec![crate::LinkRecord {
+        url: "https://x.test/target-only".into(),
+        ..Default::default()
+    }];
+    vec![plain, noindex, canonical, prev, self_canonical_next]
+}
+#[test]
+fn directory_reporting_eight_masks_filter_individual_observations_before_aggregation() {
+    let pages = reporting_pages();
+    let captured = serde_json::to_vec(&pages).unwrap();
+    for mask in 0u8..8 {
+        let view =
+            build_directory_tree_view(&reporting_config(mask), &pages, None, &Default::default())
+                .unwrap();
+        let expected = 5 - mask.count_ones() as usize;
+        assert_eq!(root(&view.tree).counts.observations, expected);
+        assert_eq!(root(&view.tree).counts.unique_urls, expected);
+        assert_eq!(view.tree.input_observations, expected);
+        for (index, bit) in [(1, 1), (2, 2), (3, 4)] {
+            assert_eq!(
+                view.tree
+                    .nodes
+                    .iter()
+                    .any(|n| n.kind == DirectoryNodeKind::ObservedUrl
+                        && n.address == pages[index].url),
+                mask & bit == 0
+            );
+        }
+        assert!(
+            !view
+                .tree
+                .nodes
+                .iter()
+                .any(|n| n.address == "https://x.test/target-only")
+        );
+        if mask != 0 {
+            let counts = view.reporting.as_ref().unwrap();
+            assert_eq!(counts.identity.mode, DirectoryTreeMode::Reported);
+            assert_eq!(counts.captured_page_observations, 5);
+            assert_eq!(counts.profile_visible_page_observations, expected);
+            assert_eq!(
+                counts.profile_excluded_page_observations,
+                mask.count_ones() as usize
+            );
+        } else {
+            assert!(view.reporting.is_none());
+        }
+        assert_eq!(serde_json::to_vec(&pages).unwrap(), captured);
+    }
+}
+#[test]
+fn directory_reporting_visible_duplicate_keeps_its_url_without_hidden_status_counts() {
+    let mut hidden = page("https://x.test/a/item", Some(404));
+    hidden.meta_robots = vec!["noindex".into()];
+    let visible = page("https://x.test/a/item", Some(200));
+    let pages = vec![hidden, visible.clone(), visible];
+    let view =
+        build_directory_tree_view(&reporting_config(1), &pages, None, &Default::default()).unwrap();
+    let counts = &node(
+        &view.tree,
+        DirectoryNodeKind::Directory,
+        "https://x.test/a/",
+    )
+    .counts;
+    assert_eq!(
+        (
+            counts.observations,
+            counts.unique_urls,
+            counts.duplicate_observations,
+            counts.conflicting_urls
+        ),
+        (2, 1, 1, 0)
+    );
+    assert_eq!((counts.status_2xx, counts.status_4xx), (2, 0));
+    assert_eq!(root(&view.tree).counts, *counts);
+    assert_eq!(
+        view.reporting.unwrap().excluded_from_view_page_observations,
+        1
+    );
+}
+#[test]
+fn directory_reporting_raw_mode_retains_all_observations_and_qualifies_profile_denominator() {
+    let pages = reporting_pages();
+    let config = reporting_config(7);
+    let raw = build_directory_tree_view(
+        &config,
+        &pages,
+        Some(DirectoryTreeMode::Raw),
+        &Default::default(),
+    )
+    .unwrap();
+    assert_eq!(raw.tree, tree(&pages));
+    let counts = raw.reporting.unwrap();
+    assert_eq!(counts.identity.mode, DirectoryTreeMode::Raw);
+    assert_eq!(
+        (
+            counts.captured_page_observations,
+            counts.profile_visible_page_observations,
+            counts.profile_excluded_page_observations
+        ),
+        (5, 2, 3)
+    );
+    assert_eq!(
+        (
+            counts.selected_page_observations,
+            counts.excluded_from_view_page_observations
+        ),
+        (5, 0)
+    );
+    assert_eq!(counts.hierarchy_page_observations, 5);
+}
+#[test]
+fn directory_reporting_invalid_selected_urls_and_all_hidden_rows_have_truthful_root_counts() {
+    let mut pages = reporting_pages();
+    pages.extend([
+        page("invalid", None),
+        page("mailto:a@x.test", None),
+        page("https://user:secret@x.test/a", None),
+    ]);
+    let view =
+        build_directory_tree_view(&reporting_config(7), &pages, None, &Default::default()).unwrap();
+    let counts = view.reporting.as_ref().unwrap();
+    assert_eq!(
+        (
+            counts.captured_page_observations,
+            counts.profile_visible_page_observations,
+            counts.profile_excluded_page_observations
+        ),
+        (8, 5, 3)
+    );
+    assert_eq!(
+        (
+            counts.selected_page_observations,
+            counts.hierarchy_page_observations,
+            counts.unrepresented_page_observations
+        ),
+        (5, 2, 3)
+    );
+    assert_eq!(root(&view.tree).counts.observations, 2);
+    let mut hidden = page("https://x.test/hidden/only", Some(200));
+    hidden.meta_robots = vec!["noindex".into()];
+    let empty =
+        build_directory_tree_view(&reporting_config(1), &[hidden], None, &Default::default())
+            .unwrap();
+    assert_eq!(empty.tree.nodes.len(), 1);
+    assert_eq!(root(&empty.tree).counts.observations, 0);
+    assert_eq!(
+        empty
+            .reporting
+            .unwrap()
+            .excluded_from_view_page_observations,
+        1
+    );
+}
+#[test]
+fn directory_reporting_legacy_none_null_all_false_keep_tree_json_and_csv_bytes() {
+    let pages = reporting_pages();
+    let legacy = tree(&pages);
+    let csv = directory_tree_csv(&legacy, DIRECTORY_TREE_CSV_BYTES).unwrap();
+    let json = serde_json::to_vec(&legacy).unwrap();
+    let original = serde_json::to_value(CrawlConfig::default()).unwrap();
+    for profile in [
+        None,
+        Some(serde_json::Value::Null),
+        Some(serde_json::to_value(DirectiveReportingConfig::default()).unwrap()),
+    ] {
+        let mut wire = original.clone();
+        if let Some(profile) = profile {
+            wire["directive_reporting"] = profile;
+        }
+        let config: CrawlConfig = serde_json::from_value(wire).unwrap();
+        assert_eq!(serde_json::to_value(&config).unwrap(), original);
+        let view = build_directory_tree_view(&config, &pages, None, &Default::default()).unwrap();
+        assert!(view.reporting.is_none());
+        assert_eq!(serde_json::to_vec(&view.tree).unwrap(), json);
+        assert_eq!(
+            directory_tree_csv_for_view(
+                &view.tree,
+                view.reporting.as_ref(),
+                DIRECTORY_TREE_CSV_BYTES
+            )
+            .unwrap(),
+            csv
+        );
+    }
+}
+#[test]
+fn directory_reporting_view_identity_binds_mode_and_profile_even_when_rows_match() {
+    let pages = vec![page("https://x.test/plain", Some(200))];
+    let first =
+        build_directory_tree_view(&reporting_config(1), &pages, None, &Default::default()).unwrap();
+    let raw = build_directory_tree_view(
+        &reporting_config(1),
+        &pages,
+        Some(DirectoryTreeMode::Raw),
+        &Default::default(),
+    )
+    .unwrap();
+    let second =
+        build_directory_tree_view(&reporting_config(2), &pages, None, &Default::default()).unwrap();
+    assert_eq!(first.tree, raw.tree);
+    assert_eq!(first.tree, second.tree);
+    assert_ne!(
+        first.reporting.as_ref().unwrap().identity_sha256,
+        raw.reporting.unwrap().identity_sha256
+    );
+    assert_ne!(
+        first.reporting.unwrap().identity_sha256,
+        second.reporting.unwrap().identity_sha256
+    );
+    assert!(serde_json::from_str::<DirectoryTreeMode>("\"latest\"").is_err());
+}
+#[test]
+fn directory_reporting_csv_retains_complete_nodes_counts_formula_guard_and_byte_limits() {
+    let mut pages = reporting_pages();
+    pages.push(page("https://x.test/=SUM(1)", Some(200)));
+    let view =
+        build_directory_tree_view(&reporting_config(7), &pages, None, &Default::default()).unwrap();
+    let bytes = directory_tree_csv_for_view(
+        &view.tree,
+        view.reporting.as_ref(),
+        DIRECTORY_TREE_CSV_BYTES,
+    )
+    .unwrap();
+    let mut reader = csv::Reader::from_reader(bytes.as_slice());
+    let headers = reader.headers().unwrap().clone();
+    assert_eq!(headers.len(), 33);
+    let position = |label: &str| headers.iter().position(|v| v == label).unwrap();
+    let rows: Vec<_> = reader.records().map(|row| row.unwrap()).collect();
+    assert_eq!(rows.len(), view.tree.nodes.len());
+    for row in &rows {
+        assert_eq!(&row[position("view_mode")], "reported");
+        assert_eq!(&row[position("captured_page_observations")], "6");
+        assert_eq!(&row[position("selected_page_observations")], "3");
+        assert_eq!(&row[position("profile_excluded_page_observations")], "3");
+    }
+    assert!(rows.iter().any(|r| &r[position("label")] == "'=SUM(1)"));
+    assert_eq!(
+        directory_tree_csv_for_view(&view.tree, view.reporting.as_ref(), bytes.len()).unwrap(),
+        bytes
+    );
+    assert!(
+        directory_tree_csv_for_view(&view.tree, view.reporting.as_ref(), bytes.len() - 1).is_err()
+    );
+    assert!(
+        build_directory_tree_view(
+            &reporting_config(7),
+            &pages,
+            None,
+            &DirectoryTreeLimits {
+                max_pages: 2,
+                ..Default::default()
+            }
+        )
+        .is_err()
+    );
+}

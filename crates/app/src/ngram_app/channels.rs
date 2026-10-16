@@ -122,13 +122,15 @@ pub(super) fn aggregate(
     report: &CrawlReport,
     request: &Request,
     profile: NgramHtmlTextProfile,
+    ordinals: &[usize],
 ) -> Result<NgramCorpusReport> {
     ensure!(
-        report.pages.len() <= request.options.limits.max_documents,
+        ordinals.len() <= request.options.limits.max_documents,
         "Saved document count exceeds requested limit"
     );
-    let mut docs = Vec::with_capacity(report.pages.len());
-    for page in &report.pages {
+    let mut docs = Vec::with_capacity(ordinals.len());
+    for &ordinal in ordinals {
+        let page = &report.pages[ordinal];
         // Existing capture validation, selected-target generation, pending exclusion
         // and original source revision authority remain exactly the shared adapter.
         let (basis, capture) =
@@ -163,7 +165,7 @@ pub(super) fn aggregate(
 }
 
 pub(super) fn csv(
-    report: &NgramCorpusReport,
+    report: &Aggregate,
     request: &Request,
     snapshot: Snapshot,
 ) -> Result<(Vec<u8>, Snapshot)> {
@@ -171,7 +173,7 @@ pub(super) fn csv(
         data: vec![],
         cap: CSV_BYTES,
     };
-    csv_row(
+    csv_header(
         &mut out,
         &[
             "snapshot_token",
@@ -196,6 +198,7 @@ pub(super) fn csv(
             "channel_source_json",
         ]
         .map(str::to_owned),
+        &snapshot,
     )?;
     visit(report, request, |row| {
         let source = &row["source"];
@@ -204,7 +207,7 @@ pub(super) fn csv(
             Value::String(v) => v.clone(),
             v => v.to_string(),
         };
-        csv_row(
+        csv_record(
             &mut out,
             &[
                 snapshot.snapshot_token.clone(),
@@ -228,6 +231,8 @@ pub(super) fn csv(
                 serde_json::to_string(&request.html_text_channel)?,
                 source["channel"].to_string(),
             ],
+            &snapshot,
+            &source["raw_page_ordinal"],
         )
     })?;
     Ok((out.data, snapshot))
@@ -346,13 +351,15 @@ pub(super) fn aggregate_metadata(
     report: &CrawlReport,
     request: &Request,
     profile: open_seo_spider_core::NgramRetainedMetadataProfile,
+    ordinals: &[usize],
 ) -> Result<NgramCorpusReport> {
     ensure!(
-        report.pages.len() <= request.options.limits.max_documents,
+        ordinals.len() <= request.options.limits.max_documents,
         "Saved document count exceeds requested limit"
     );
-    let mut docs = Vec::with_capacity(report.pages.len());
-    for page in &report.pages {
+    let mut docs = Vec::with_capacity(ordinals.len());
+    for &ordinal in ordinals {
+        let page = &report.pages[ordinal];
         // A present original capture remains validated even though it is optional.
         // Broken/replaced/generation-foreign captures are errors, never ignored.
         open_seo_spider_core::validate_page_content_captures(page)?;
@@ -405,7 +412,7 @@ pub(super) fn aggregate_metadata(
     open_seo_spider_core::aggregate_saved_metadata_ngrams(&docs, &request.options, profile)
 }
 pub(super) fn csv_metadata(
-    report: &NgramCorpusReport,
+    report: &Aggregate,
     request: &Request,
     snapshot: Snapshot,
 ) -> Result<(Vec<u8>, Snapshot)> {
@@ -413,7 +420,7 @@ pub(super) fn csv_metadata(
         data: vec![],
         cap: CSV_BYTES,
     };
-    csv_row(
+    csv_header(
         &mut out,
         &[
             "snapshot_token",
@@ -438,6 +445,7 @@ pub(super) fn csv_metadata(
             "channel_source_json",
         ]
         .map(str::to_owned),
+        &snapshot,
     )?;
     visit(report, request, |row| {
         let source = &row["source"];
@@ -446,7 +454,7 @@ pub(super) fn csv_metadata(
             Value::String(v) => v.clone(),
             v => v.to_string(),
         };
-        csv_row(
+        csv_record(
             &mut out,
             &[
                 snapshot.snapshot_token.clone(),
@@ -470,6 +478,8 @@ pub(super) fn csv_metadata(
                 serde_json::to_string(&request.retained_metadata_channel)?,
                 source["channel"].to_string(),
             ],
+            &snapshot,
+            &source["raw_page_ordinal"],
         )
     })?;
     Ok((out.data, snapshot))

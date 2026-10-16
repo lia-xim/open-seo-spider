@@ -13,6 +13,8 @@ use std::{path::Path, sync::Mutex};
 mod crawl_quota_adapter;
 #[path = "store/sitemap_raw_read.rs"]
 mod sitemap_raw_read;
+#[path = "store/tls_state.rs"]
+mod tls_state;
 pub use sitemap_raw_read::{
     SITEMAP_RAW_READ_ENGINE, SitemapRawReadContext, SitemapRawReadRequest, SitemapRawReadWindow,
     SitemapRawRowKind,

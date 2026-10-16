@@ -147,6 +147,9 @@ async fn same_job_pair_cannot_observe_two_different_expected_generations() {
         config: None,
         expected_before_generation: Some(2),
         expected_after_generation: Some(1),
+        reporting_mode: None,
+        expected_reporting_identity: None,
+        expected_reporting_view: None,
         include_original_reports: false,
     };
     let (code, Json(error)) = stable_pair(&state, &request).await.err().unwrap();
@@ -176,6 +179,9 @@ fn bundle_request(before: Uuid, after: Uuid) -> SavedComparisonRequest {
         config: None,
         expected_before_generation: Some(2),
         expected_after_generation: Some(2),
+        reporting_mode: None,
+        expected_reporting_identity: None,
+        expected_reporting_view: None,
         include_original_reports: true,
     }
 }
@@ -238,8 +244,16 @@ async fn bundle_uses_same_stable_pair_after_both_sources_resume_and_change() {
         guard.generation = 3;
         guard.report.as_mut().unwrap().warnings = vec!["later generation mutation".into()];
     }
-    let response =
-        compare_stable_reports(cloned_before, cloned_after, Default::default(), true).unwrap();
+    let response = compare_stable_reports(
+        cloned_before,
+        cloned_after,
+        Default::default(),
+        true,
+        None,
+        None,
+        None,
+    )
+    .unwrap();
     response.validate_original_reports().unwrap();
     let bundle = response.original_reports.as_ref().unwrap();
     assert_eq!(bundle.before.report.warnings, ["before clone"]);

@@ -123,6 +123,124 @@ fn request(id: uuid::Uuid) -> Value {
     json!({"jsonrpc":"2.0","id":7,"method":"tools/call","params":{"name":"spider_generate_sitemaps","arguments":args(id)}})
 }
 
+fn reporting_wire(id: uuid::Uuid, mode: open_seo_spider_core::ReportingMode) -> Wire {
+    let mut first = PageRecord {
+        url: "https://example.org/first".into(),
+        final_url: "https://example.org/first".into(),
+        status: Some(200),
+        final_status: Some(200),
+        internal: true,
+        indexable: true,
+        content_type: "text/html".into(),
+        ..Default::default()
+    };
+    let mut second = first.clone();
+    second.url = "https://example.org/second".into();
+    second.final_url = second.url.clone();
+    first.pagination_prev = vec![second.url.clone()];
+    let report = CrawlReport {
+        config: CrawlConfig {
+            directive_reporting: Some(open_seo_spider_core::DirectiveReportingConfig {
+                respect_next_prev: true,
+                ..Default::default()
+            }),
+            ..Default::default()
+        },
+        pages: vec![first, second],
+        summary: Default::default(),
+        issues: vec![],
+        warnings: vec![],
+        operation: None,
+        policy_ledger: None,
+        resource_ledger: None,
+        sitemap_catalog: None,
+        sitemap_coverage_inventory: None,
+        sitemap_source_measurements: None,
+    };
+    let bundle = generate_sitemap_bundle(
+        &report,
+        &SitemapGenerationOptions {
+            public_base_url: "https://example.org/".into(),
+            reporting_mode: Some(mode),
+            max_total_output_bytes: MAX_ZIP_BYTES,
+            ..Default::default()
+        },
+    )
+    .unwrap();
+    let mut w = wire(id);
+    for (name, value) in &mut w.headers {
+        match name.as_str() {
+            "content-length" => *value = bundle.zip_bytes.len().to_string(),
+            "x-sitemap-bundle-sha256" => *value = bundle.zip_sha256.clone(),
+            "x-sitemap-report-sha256" => *value = bundle.manifest.report_sha256.clone(),
+            "x-sitemap-generated-urls" => *value = bundle.manifest.memberships.len().to_string(),
+            "x-sitemap-excluded-pages" => *value = bundle.manifest.excluded_pages.to_string(),
+            _ => {}
+        }
+    }
+    w.headers.push((
+        "x-sitemap-reporting".into(),
+        serde_json::to_string(bundle.manifest.reporting.as_ref().unwrap()).unwrap(),
+    ));
+    w.body = bundle.zip_bytes;
+    w
+}
+#[tokio::test]
+async fn generation_mcp_reporting_existing_tool_forwards_mode_and_returns_actual_bounded_metadata()
+{
+    for mode in [
+        open_seo_spider_core::ReportingMode::Raw,
+        open_seo_spider_core::ReportingMode::Reported,
+    ] {
+        let id = uuid::Uuid::new_v4();
+        let w = reporting_wire(id, mode);
+        let (bridge, stop, task) = provider(w.clone()).await;
+        let result=call(&bridge,json!({"id":id,"options":{"public_base_url":"https://example.org/","reporting_mode":mode}})).await.unwrap();
+        assert_eq!(
+            result["reporting"]["identity"]["mode"],
+            serde_json::to_value(mode).unwrap()
+        );
+        assert_eq!(result["reporting"]["captured_page_observations"], 2);
+        assert_eq!(
+            STANDARD
+                .decode(result["data_base64"].as_str().unwrap())
+                .unwrap(),
+            w.body
+        );
+        assert_eq!(
+            w.received.lock().unwrap().as_ref().unwrap().1["reporting_mode"],
+            serde_json::to_value(mode).unwrap()
+        );
+        stop.send(()).unwrap();
+        task.await.unwrap();
+    }
+    assert!(arguments(json!({"id":uuid::Uuid::nil(),"options":{"public_base_url":"https://example.org/","reporting_mode":"auto"}})).is_err());
+}
+#[tokio::test]
+async fn generation_mcp_reporting_rejects_missing_explicit_mode_or_inconsistent_identity_header() {
+    for corrupt in [false, true] {
+        let id = uuid::Uuid::new_v4();
+        let mut w = reporting_wire(id, open_seo_spider_core::ReportingMode::Raw);
+        if corrupt {
+            let item = w
+                .headers
+                .iter_mut()
+                .find(|(name, _)| name == "x-sitemap-reporting")
+                .unwrap();
+            let mut value: Value = serde_json::from_str(&item.1).unwrap();
+            value["identity_sha256"] = json!("0".repeat(64));
+            item.1 = serde_json::to_string(&value).unwrap();
+        } else {
+            w.headers.retain(|(name, _)| name != "x-sitemap-reporting");
+        }
+        let (bridge, stop, task) = provider(w).await;
+        let result=call(&bridge,json!({"id":id,"options":{"public_base_url":"https://example.org/","reporting_mode":"raw"}})).await.unwrap_err();
+        assert_eq!(result.code, "invalid_response");
+        stop.send(()).unwrap();
+        task.await.unwrap();
+    }
+}
+
 #[tokio::test]
 async fn generation_mcp_actual_binary_roundtrip_is_single_encoded_hash_bound_and_readonly() {
     let id = uuid::Uuid::new_v4();

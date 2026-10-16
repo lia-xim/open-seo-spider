@@ -1,5 +1,6 @@
 use super::*;
 use axum::body::to_bytes;
+use open_seo_spider_core::{build_directory_tree, directory_tree_csv};
 fn csv_cells(bytes: &[u8]) -> Vec<Vec<String>> {
     // Small independent RFC4180 decoder oracle, not a writer mirror.
     let text = String::from_utf8(bytes.to_vec()).unwrap();
@@ -358,5 +359,240 @@ async fn directory_api_real_oversized_saved_report_refuses_before_authority_clon
         REPORT_BYTES + 1
     );
     drop(j);
+    state.lifecycle.blocking.shutdown_and_drain().await.unwrap();
+}
+
+fn profile_job(id: Uuid) -> Job {
+    let mut j = job(id, "completed", "https://x.test/a/visible");
+    let profile = Some(open_seo_spider_core::DirectiveReportingConfig {
+        respect_noindex: true,
+        ..Default::default()
+    });
+    j.config.directive_reporting = profile.clone();
+    let report = j.report.as_mut().unwrap();
+    report.config.directive_reporting = profile;
+    let mut hidden = report.pages[0].clone();
+    hidden.url = "https://x.test/hidden/only".into();
+    hidden.final_url = hidden.url.clone();
+    hidden.meta_robots = vec!["noindex".into()];
+    report.pages.push(hidden);
+    j
+}
+#[test]
+fn directory_api_view_request_serde_keeps_legacy_absence_and_rejects_unknown_modes() {
+    let legacy = serde_json::to_value(TreeRequest::default()).unwrap();
+    assert!(legacy.get("mode").is_none());
+    assert!(
+        serde_json::from_value::<TreeRequest>(json!({}))
+            .unwrap()
+            .mode
+            .is_none()
+    );
+    assert!(
+        serde_json::from_value::<TreeRequest>(json!({"mode":null}))
+            .unwrap()
+            .mode
+            .is_none()
+    );
+    assert_eq!(
+        serde_json::from_value::<TreeRequest>(json!({"mode":"raw"}))
+            .unwrap()
+            .mode,
+        Some(DirectoryTreeMode::Raw)
+    );
+    assert_eq!(
+        serde_json::from_value::<TreeRequest>(json!({"mode":"reported"}))
+            .unwrap()
+            .mode,
+        Some(DirectoryTreeMode::Reported)
+    );
+    for value in [json!("latest"), json!(true), json!({"mode":"raw"})] {
+        assert!(serde_json::from_value::<TreeRequest>(json!({"mode":value})).is_err());
+    }
+}
+#[test]
+fn directory_api_reporting_view_keeps_raw_snapshot_hashes_and_saved_source_bytes() {
+    let j = profile_job(Uuid::new_v4());
+    let before_report = serde_json::to_vec(j.report.as_ref().unwrap()).unwrap();
+    let before_config = serde_json::to_vec(&j.config).unwrap();
+    let reported = evaluate(&j, &TreeRequest::default()).unwrap();
+    let raw = evaluate(
+        &j,
+        &TreeRequest {
+            mode: Some(DirectoryTreeMode::Raw),
+            ..Default::default()
+        },
+    )
+    .unwrap();
+    assert_eq!(
+        serde_json::to_value(&reported.snapshot).unwrap(),
+        serde_json::to_value(&raw.snapshot).unwrap()
+    );
+    assert_eq!(
+        reported.snapshot.typed_report_sha256,
+        format!("{:x}", Sha256::digest(&before_report))
+    );
+    assert_eq!(
+        reported.snapshot.typed_config_sha256,
+        format!("{:x}", Sha256::digest(&before_config))
+    );
+    assert_eq!(reported.tree.input_observations, 1);
+    assert_eq!(raw.tree.input_observations, 2);
+    assert_ne!(reported.token, raw.token);
+    assert_eq!(
+        serde_json::to_vec(j.report.as_ref().unwrap()).unwrap(),
+        before_report
+    );
+    assert_eq!(serde_json::to_vec(&j.config).unwrap(), before_config);
+}
+#[test]
+fn directory_api_inactive_profiles_preserve_legacy_snapshot_token_and_csv_bytes() {
+    let mut j = job(Uuid::new_v4(), "completed", "https://x.test/a");
+    let old_tree =
+        build_directory_tree(&j.report.as_ref().unwrap().pages, &Default::default()).unwrap();
+    let old_csv = directory_tree_csv(&old_tree, DIRECTORY_TREE_CSV_BYTES).unwrap();
+    let first = evaluate(&j, &TreeRequest::default()).unwrap();
+    assert_eq!(
+        first.token,
+        digest(&(
+            DIRECTORY_TREE_ENGINE,
+            &first.snapshot,
+            &DirectoryTreeLimits::default()
+        ))
+        .unwrap()
+    );
+    for explicit_false in [false, true] {
+        let profile = explicit_false.then(open_seo_spider_core::DirectiveReportingConfig::default);
+        j.config.directive_reporting = profile.clone();
+        j.report.as_mut().unwrap().config.directive_reporting = profile;
+        let evaluated = evaluate(&j, &TreeRequest::default()).unwrap();
+        assert!(evaluated.reporting.is_none());
+        assert_eq!(evaluated.token, first.token);
+        assert_eq!(
+            directory_tree_csv_for_view(
+                &evaluated.tree,
+                evaluated.reporting.as_ref(),
+                DIRECTORY_TREE_CSV_BYTES
+            )
+            .unwrap(),
+            old_csv
+        );
+    }
+}
+#[tokio::test]
+async fn directory_api_preview_and_csv_reject_cross_view_tokens_even_when_rows_match() {
+    let id = Uuid::new_v4();
+    let mut j = profile_job(id);
+    // No page is hidden, so only the explicit view identity distinguishes these views.
+    j.report.as_mut().unwrap().pages.truncate(1);
+    let state = state(j);
+    let first = value(
+        preview(State(state.clone()), Path(id), Ok(Json(Default::default())))
+            .await
+            .unwrap(),
+    )
+    .await;
+    assert_eq!(first["reporting_view"]["identity"]["mode"], "reported");
+    let raw = value(
+        preview(
+            State(state.clone()),
+            Path(id),
+            Ok(Json(TreeRequest {
+                mode: Some(DirectoryTreeMode::Raw),
+                ..Default::default()
+            })),
+        )
+        .await
+        .unwrap(),
+    )
+    .await;
+    assert_eq!(first["current"], raw["current"]);
+    assert_eq!(first["snapshot"], raw["snapshot"]);
+    assert_ne!(first["snapshot_token"], raw["snapshot_token"]);
+    for (from, mode) in [
+        (&first, DirectoryTreeMode::Raw),
+        (&raw, DirectoryTreeMode::Reported),
+    ] {
+        let request = TreeRequest {
+            mode: Some(mode),
+            expected_snapshot_token: Some(from["snapshot_token"].as_str().unwrap().into()),
+            ..Default::default()
+        };
+        let (status, error) =
+            failed(preview(State(state.clone()), Path(id), Ok(Json(request.clone()))).await);
+        assert_eq!(status, StatusCode::CONFLICT);
+        assert_eq!(error.code, "stale_directory_snapshot");
+        let (status, error) = failed(csv(State(state.clone()), Path(id), Ok(Json(request))).await);
+        assert_eq!(status, StatusCode::CONFLICT);
+        assert_eq!(error.code, "stale_directory_snapshot");
+    }
+    state.lifecycle.blocking.shutdown_and_drain().await.unwrap();
+}
+#[tokio::test]
+async fn directory_api_reported_csv_matches_preview_counts_and_profile_change_refuses_old_token() {
+    let id = Uuid::new_v4();
+    let state = state(profile_job(id));
+    let first = value(
+        preview(State(state.clone()), Path(id), Ok(Json(Default::default())))
+            .await
+            .unwrap(),
+    )
+    .await;
+    assert_eq!(first["input_observations"], 1);
+    assert_eq!(first["current"]["counts"]["observations"], 1);
+    assert_eq!(first["reporting_view"]["captured_page_observations"], 2);
+    assert_eq!(
+        first["reporting_view"]["profile_visible_page_observations"],
+        1
+    );
+    assert_eq!(
+        first["reporting_view"]["excluded_from_view_page_observations"],
+        1
+    );
+    let request = TreeRequest {
+        expected_snapshot_token: Some(first["snapshot_token"].as_str().unwrap().into()),
+        ..Default::default()
+    };
+    let out = csv(State(state.clone()), Path(id), Ok(Json(request.clone())))
+        .await
+        .unwrap();
+    let bytes = to_bytes(out.into_body(), DIRECTORY_TREE_CSV_BYTES)
+        .await
+        .unwrap();
+    let rows = csv_cells(&bytes);
+    assert_eq!(rows[0].len(), 33);
+    let field = |name: &str| rows[0].iter().position(|v| v == name).unwrap();
+    for row in &rows[1..] {
+        assert_eq!(row[field("view_mode")], "reported");
+        assert_eq!(row[field("captured_page_observations")], "2");
+        assert_eq!(row[field("selected_page_observations")], "1");
+        assert!(!row[field("address")].contains("hidden"));
+    }
+    let source = get_job(&state, id)
+        .await
+        .unwrap_or_else(|(_, Json(e))| panic!("{}", e.error));
+    {
+        let mut j = source.write().await;
+        let profile = open_seo_spider_core::DirectiveReportingConfig {
+            respect_canonical: true,
+            ..Default::default()
+        };
+        j.config.directive_reporting = Some(profile.clone());
+        j.report.as_mut().unwrap().config.directive_reporting = Some(profile);
+    }
+    let (_, error) = failed(csv(State(state.clone()), Path(id), Ok(Json(request))).await);
+    assert_eq!(error.code, "stale_directory_snapshot");
+    let after = value(
+        preview(State(state.clone()), Path(id), Ok(Json(Default::default())))
+            .await
+            .unwrap(),
+    )
+    .await;
+    assert_eq!(after["input_observations"], 2);
+    assert_ne!(
+        first["reporting_view"]["identity_sha256"],
+        after["reporting_view"]["identity_sha256"]
+    );
+    assert_eq!(source.read().await.report.as_ref().unwrap().pages.len(), 2);
     state.lifecycle.blocking.shutdown_and_drain().await.unwrap();
 }

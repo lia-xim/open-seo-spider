@@ -100,7 +100,90 @@ fn parse_saved_api_json<T: serde::de::DeserializeOwned>(
     Ok(value)
 }
 
-fn decode(status: reqwest::StatusCode, bytes: &[u8], include_original_reports: bool) -> Value {
+/// An internally coherent view is not necessarily the view this MCP request asked for.
+fn validate_reporting_request(
+    value: &SavedComparisonResponse,
+    request: &SavedComparisonRequest,
+) -> Result<(), SavedComparisonFailure> {
+    use open_seo_spider_core::ReportingMode;
+    let mismatch = |message| failure("comparison_reporting_response_mismatch", message);
+    match &value.reporting {
+        None => {
+            if request.reporting_mode.is_some()
+                || request.expected_reporting_identity.is_some()
+                || request.expected_reporting_view.is_some()
+            {
+                return Err(mismatch(
+                    "API success omitted the requested reporting mode or guard binding",
+                ));
+            }
+        }
+        Some(view) => {
+            let expected_mode = request.reporting_mode.unwrap_or(ReportingMode::Reported);
+            if view.identity.mode != expected_mode {
+                return Err(mismatch("API reporting mode differs from the MCP request"));
+            }
+            if request.reporting_mode.is_none()
+                && view.identity.before_profile.is_none()
+                && view.identity.after_profile.is_none()
+            {
+                return Err(mismatch(
+                    "Inactive Auto must preserve the legacy response without reporting",
+                ));
+            }
+            if request
+                .expected_reporting_identity
+                .as_deref()
+                .is_some_and(|expected| expected != view.identity_sha256)
+            {
+                return Err(mismatch(
+                    "API reporting mode/profile identity differs from the MCP request guard",
+                ));
+            }
+            if request
+                .expected_reporting_view
+                .as_deref()
+                .is_some_and(|expected| expected != view.view_sha256)
+            {
+                return Err(mismatch(
+                    "API snapshot/config/view differs from the MCP request guard",
+                ));
+            }
+        }
+    }
+    if let Some(bundle) = &value.original_reports {
+        // These full typed reports already passed their raw comparison hash/byte
+        // bindings. Recompute presentation from the same snapshots when present;
+        // never filter, rejoin or reclassify the underlying raw comparison.
+        let expected = crate::comparison_app::reporting::build(
+            &value.comparison,
+            &bundle.before.report,
+            &bundle.after.report,
+            request.reporting_mode,
+            request.expected_reporting_identity.as_deref(),
+            request.expected_reporting_view.as_deref(),
+        )
+        .map_err(|_| {
+            mismatch("API reporting does not satisfy the request and complete original snapshots")
+        })?;
+        let expected = serde_json::to_value(expected)
+            .map_err(|_| mismatch("Expected reporting could not be represented"))?;
+        let observed = serde_json::to_value(&value.reporting)
+            .map_err(|_| mismatch("Observed reporting could not be represented"))?;
+        if expected != observed {
+            return Err(mismatch(
+                "API reporting differs from the projection of its complete original snapshots",
+            ));
+        }
+    }
+    Ok(())
+}
+fn decode_with_request(
+    status: reqwest::StatusCode,
+    bytes: &[u8],
+    request: &SavedComparisonRequest,
+) -> Value {
+    let include_original_reports = request.include_original_reports;
     if status.is_success() {
         match parse_saved_api_json::<SavedComparisonResponse>(bytes, include_original_reports) {
             Ok(value) if value.website_requests == 0 && value.comparison.website_requests == 0 => {
@@ -111,6 +194,9 @@ fn decode(status: reqwest::StatusCode, bytes: &[u8], include_original_reports: b
                     ));
                 }
                 if let Err(error) = value.validate_original_reports() {
+                    return error_result(error);
+                }
+                if let Err(error) = validate_reporting_request(&value, request) {
                     return error_result(error);
                 }
                 tool_result(json!(value), false)
@@ -273,7 +359,7 @@ pub(super) async fn call(bridge: &Bridge, arguments: Value) -> Value {
                 // Windows stdio main stack and off asynchronous HTTP workers.
                 return match bridge
                     .workers
-                    .run_blocking(move || decode(status, &bytes, true))
+                    .run_blocking(move || decode_with_request(status, &bytes, &request))
                     .await
                 {
                     Ok(result) => result,
@@ -282,7 +368,7 @@ pub(super) async fn call(bridge: &Bridge, arguments: Value) -> Value {
                     }
                 };
             }
-            Ok(None) => return decode(status, &bytes, false),
+            Ok(None) => return decode_with_request(status, &bytes, &request),
             Err(error) => {
                 return error_result(failure("comparison_loopback_transport", error.to_string()));
             }
@@ -290,6 +376,16 @@ pub(super) async fn call(bridge: &Bridge, arguments: Value) -> Value {
     }
 }
 
+#[cfg(test)]
+fn decode(status: reqwest::StatusCode, bytes: &[u8], include_original_reports: bool) -> Value {
+    let request: SavedComparisonRequest = serde_json::from_value(json!({
+        "before":"00000000-0000-0000-0000-000000000001",
+        "after":"00000000-0000-0000-0000-000000000002",
+        "include_original_reports":include_original_reports
+    }))
+    .expect("Legacy test request is valid");
+    decode_with_request(status, bytes, &request)
+}
 #[cfg(test)]
 #[path = "saved_comparison_tests.rs"]
 mod tests;

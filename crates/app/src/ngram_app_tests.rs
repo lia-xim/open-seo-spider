@@ -31,7 +31,7 @@ fn saved_ngram_projection_token_binds_every_filter_limit_source_and_snapshot_wit
         basis: "declared_pure_projection_test",
         observed_generation: None,
     }];
-    let report = aggregate_saved_ngrams(&docs, &Default::default()).unwrap();
+    let report = Aggregate::legacy(aggregate_saved_ngrams(&docs, &Default::default()).unwrap());
     let report_source = legacy_report();
     let context = context(&report_source, Some("job".into()), Some(7), "declared").unwrap();
     let mut request = Request {
@@ -156,7 +156,7 @@ fn saved_ngram_extended_filter_csv_and_snapshot_range_are_bound_and_strict() {
         max_n: 6,
         ..Default::default()
     };
-    let report = aggregate_saved_ngrams(&docs, &options).unwrap();
+    let report = Aggregate::legacy(aggregate_saved_ngrams(&docs, &options).unwrap());
     let mut request = Request {
         options,
         n: Some(6),
@@ -199,4 +199,333 @@ fn saved_ngram_extended_filter_csv_and_snapshot_range_are_bound_and_strict() {
     assert!(old6.validate().is_err());
     let explicit: Request = serde_json::from_str(r#"{"options":{"max_n":6},"n":6}"#).unwrap();
     assert!(explicit.validate().is_ok());
+}
+
+pub(super) fn reporting_profile(mask: u8) -> open_seo_spider_core::DirectiveReportingConfig {
+    open_seo_spider_core::DirectiveReportingConfig {
+        version: 1,
+        respect_noindex: mask & 1 != 0,
+        respect_canonical: mask & 2 != 0,
+        respect_next_prev: mask & 4 != 0,
+    }
+}
+// Independent finite RFC4180 decoder for exported cells, including embedded quotes/newlines.
+pub(super) fn reporting_csv(bytes: &[u8]) -> Vec<Vec<String>> {
+    let text = std::str::from_utf8(bytes).unwrap();
+    let mut chars = text.chars().peekable();
+    let (mut rows, mut row, mut cell, mut quoted) = (Vec::new(), Vec::new(), String::new(), false);
+    while let Some(c) = chars.next() {
+        if quoted {
+            if c == '"' {
+                if chars.peek() == Some(&'"') {
+                    chars.next();
+                    cell.push('"');
+                } else {
+                    quoted = false;
+                }
+            } else {
+                cell.push(c);
+            }
+        } else {
+            match c {
+                '"' => {
+                    assert!(cell.is_empty());
+                    quoted = true;
+                }
+                ',' => row.push(std::mem::take(&mut cell)),
+                '\r' => {
+                    assert_eq!(chars.next(), Some('\n'));
+                    row.push(std::mem::take(&mut cell));
+                    rows.push(std::mem::take(&mut row));
+                }
+                _ => cell.push(c),
+            }
+        }
+    }
+    assert!(!quoted && row.is_empty() && cell.is_empty());
+    rows
+}
+#[test]
+fn saved_ngram_reporting_request_serde_strict_and_default_legacy_bytes_token_csv() {
+    let report = legacy_report();
+    let absent: Request = serde_json::from_str("{}").unwrap();
+    let null: Request = serde_json::from_str(r#"{"reporting_mode":null}"#).unwrap();
+    assert_eq!(
+        serde_json::to_vec(&absent).unwrap(),
+        serde_json::to_vec(&null).unwrap()
+    );
+    assert!(
+        serde_json::to_value(&absent)
+            .unwrap()
+            .get("reporting_mode")
+            .is_none()
+    );
+    for value in [json!("other"), json!(true), json!({})] {
+        assert!(serde_json::from_value::<Request>(json!({"reporting_mode":value})).is_err());
+    }
+    let request = Request {
+        view: View::Sources,
+        ..Default::default()
+    };
+    let ctx = context(&report, Some("legacy".into()), Some(7), "declared").unwrap();
+    let corpus = aggregate(&report, &request).unwrap();
+    assert_eq!(
+        bounded_hash(&corpus, CSV_BYTES).unwrap(),
+        bounded_hash(&corpus.corpus, CSV_BYTES).unwrap(),
+        "Legacy aggregate bytes are unchanged by omitted envelope"
+    );
+    let (original, snapshot) = preview(&corpus, ctx.clone(), &request).unwrap();
+    let old_options = bounded_hash(&json!({"source_kind":request.source_kind,"options":request.options,"view":request.view,"n":request.n,"query":request.query,"exact_tokens":request.exact_tokens,"limit":request.limit}), REQUEST_BYTES).unwrap();
+    assert_eq!(snapshot.options_sha256, old_options);
+    assert_eq!(
+        snapshot.snapshot_token,
+        bounded_hash(
+            &(&ctx, &old_options, &snapshot.aggregate_sha256),
+            REQUEST_BYTES
+        )
+        .unwrap()
+    );
+    let export = Request {
+        expected_snapshot_token: Some(snapshot.snapshot_token.clone()),
+        ..request.clone()
+    };
+    let (original_csv, _) = csv(&corpus, ctx.clone(), &export).unwrap();
+    let golden = format!(
+        "\"snapshot_token\",\"view\",\"n\",\"tokens_json\",\"occurrences\",\"document_frequency\",\"source_ordinal\",\"requested_url\",\"source_revision\",\"capture_config_sha256\",\"text_sha256\",\"basis\",\"observed_generation\",\"source_state\",\"source_counted\",\"first_positions_json\",\"positions_sampled\",\"website_requests\"\r\n\"{}\",\"sources\",\"\",\"null\",\"\",\"\",\"0\",\"https://example.test/legacy\",\"\",\"\",\"\",\"captured_in_crawl\",\"\",\"missing_or_unavailable\",\"false\",\"null\",\"\",\"0\"\r\n",
+        snapshot.snapshot_token
+    );
+    assert_eq!(original_csv, golden.as_bytes());
+    for profile in [None, Some(reporting_profile(0))] {
+        let mut r = report.clone();
+        r.config.directive_reporting = profile;
+        let c = context(&r, Some("legacy".into()), Some(7), "declared").unwrap();
+        let a = aggregate(&r, &request).unwrap();
+        assert_eq!(
+            preview(&a, c.clone(), &null).unwrap().1.snapshot_token,
+            preview(&a, c.clone(), &absent).unwrap().1.snapshot_token
+        );
+        assert_eq!(preview(&a, c.clone(), &request).unwrap().0, original);
+        assert_eq!(csv(&a, c, &export).unwrap().0, original_csv);
+    }
+}
+#[test]
+fn saved_ngram_reporting_equal_rows_still_bind_mode_profile_and_aggregate_basis() {
+    let mut report = legacy_report();
+    report.config.directive_reporting = Some(reporting_profile(1));
+    let original = serde_json::to_vec(&report).unwrap();
+    let q = Request {
+        view: View::Sources,
+        ..Default::default()
+    };
+    let ctx = context(&report, Some("job".into()), Some(7), "declared").unwrap();
+    let shown = aggregate(&report, &q).unwrap();
+    let raw_request = Request {
+        reporting_mode: Some(ReportingMode::Raw),
+        ..q.clone()
+    };
+    let raw = aggregate(&report, &raw_request).unwrap();
+    assert_eq!(
+        serde_json::to_value(&shown.corpus).unwrap(),
+        serde_json::to_value(&raw.corpus).unwrap()
+    );
+    let (_, a) = preview(&shown, ctx.clone(), &q).unwrap();
+    let (_, b) = preview(&raw, ctx.clone(), &raw_request).unwrap();
+    assert_ne!(a.snapshot_token, b.snapshot_token);
+    assert_eq!(a.caller.typed_report_sha256, b.caller.typed_report_sha256);
+    assert!(
+        preview(&shown, ctx.clone(), &raw_request).is_err(),
+        "Cannot reinterpret an already aggregated corpus, even without a supplied token"
+    );
+    let explicit = Request {
+        reporting_mode: Some(ReportingMode::Reported),
+        ..q.clone()
+    };
+    assert_eq!(
+        preview(&shown, ctx.clone(), &explicit)
+            .unwrap()
+            .1
+            .snapshot_token,
+        a.snapshot_token
+    );
+    let stale = Request {
+        expected_snapshot_token: Some(a.snapshot_token),
+        ..raw_request
+    };
+    assert!(preview(&raw, ctx.clone(), &stale).is_err());
+    report.config.directive_reporting = Some(reporting_profile(3));
+    let changed = aggregate(&report, &q).unwrap();
+    let changed_ctx = context(&report, Some("job".into()), Some(7), "declared").unwrap();
+    assert!(preview(&shown, changed_ctx.clone(), &q).is_err());
+    assert_ne!(
+        preview(&changed, changed_ctx, &q).unwrap().1.snapshot_token,
+        b.snapshot_token
+    );
+    report.config.directive_reporting = Some(reporting_profile(1));
+    assert_eq!(serde_json::to_vec(&report).unwrap(), original);
+}
+#[test]
+fn saved_ngram_reporting_source_paging_csv_keeps_dense_and_raw_ordinals_distinct() {
+    let mut report = legacy_report();
+    report.config.directive_reporting = Some(reporting_profile(1));
+    report.pages = (0..4)
+        .map(|i| {
+            let mut p = report.pages[0].clone();
+            p.url = format!("https://example.test/{i}");
+            p.final_url = p.url.clone();
+            if i % 2 == 0 {
+                p.meta_robots = vec!["noindex".into()];
+            }
+            p
+        })
+        .collect();
+    let raw_before = serde_json::to_vec(&report).unwrap();
+    let q = Request {
+        view: View::Sources,
+        limit: 1,
+        ..Default::default()
+    };
+    let a = aggregate(&report, &q).unwrap();
+    let ctx = context(&report, Some("job".into()), Some(7), "declared").unwrap();
+    let (first, snapshot) = preview(&a, ctx.clone(), &q).unwrap();
+    let first: Value = serde_json::from_slice(&first).unwrap();
+    assert_eq!(first["rows"][0]["source"]["ordinal"], 0);
+    assert_eq!(first["rows"][0]["source"]["raw_page_ordinal"], 1);
+    assert_eq!(first["reporting"]["captured_page_observations"], 4);
+    assert_eq!(first["reporting"]["eligible_page_observations"], 2);
+    let continuation = Request {
+        after: Some(1),
+        expected_snapshot_token: Some(snapshot.snapshot_token.clone()),
+        ..q.clone()
+    };
+    let next: Value =
+        serde_json::from_slice(&preview(&a, ctx.clone(), &continuation).unwrap().0).unwrap();
+    assert_eq!(next["rows"][0]["source"]["ordinal"], 1);
+    assert_eq!(next["rows"][0]["source"]["raw_page_ordinal"], 3);
+    assert_eq!(next["has_more"], false);
+    assert!(
+        preview(
+            &a,
+            ctx.clone(),
+            &Request {
+                reporting_mode: Some(ReportingMode::Raw),
+                ..continuation
+            }
+        )
+        .is_err()
+    );
+    let export = Request {
+        expected_snapshot_token: Some(snapshot.snapshot_token),
+        ..q
+    };
+    let rows = reporting_csv(&csv(&a, ctx, &export).unwrap().0);
+    assert_eq!(rows.len(), 4);
+    assert_eq!(rows[0].len(), 20);
+    assert_eq!(rows[1][1], "reporting");
+    assert_eq!(rows[2][6], "0");
+    assert_eq!(rows[2][19], "1");
+    assert_eq!(rows[3][6], "1");
+    assert_eq!(rows[3][19], "3");
+    assert_eq!(serde_json::to_vec(&report).unwrap(), raw_before);
+}
+#[test]
+fn saved_ngram_reporting_wholly_hidden_retains_counts_and_raw_global_ceiling() {
+    let mut report = legacy_report();
+    report.config.directive_reporting = Some(reporting_profile(1));
+    report.pages[0].meta_robots = vec!["noindex".into()];
+    let q = Request {
+        view: View::Sources,
+        ..Default::default()
+    };
+    let a = aggregate(&report, &q).unwrap();
+    let ctx = context(&report, None, None, "declared").unwrap();
+    let (bytes, s) = preview(&a, ctx.clone(), &q).unwrap();
+    let value: Value = serde_json::from_slice(&bytes).unwrap();
+    assert_eq!(value["total_rows"], 0);
+    assert_eq!(value["saved_documents"], 0);
+    assert_eq!(value["reporting"]["captured_page_observations"], 1);
+    assert_eq!(value["reporting"]["profile_excluded_page_observations"], 1);
+    let rows = reporting_csv(
+        &csv(
+            &a,
+            ctx,
+            &Request {
+                expected_snapshot_token: Some(s.snapshot_token),
+                ..q.clone()
+            },
+        )
+        .unwrap()
+        .0,
+    );
+    assert_eq!(rows.len(), 2);
+    let metadata: Value = serde_json::from_str(&rows[1][18]).unwrap();
+    assert_eq!(metadata["eligible_page_observations"], 0);
+    report.pages = vec![report.pages[0].clone(); 50_001];
+    assert!(
+        aggregate(&report, &q).is_err(),
+        "Hidden observations cannot evade the global raw page ceiling"
+    );
+}
+#[tokio::test]
+async fn saved_ngram_reporting_offline_cli_modes_and_stale_token_preserve_raw_inputs() {
+    let dir = tempfile::tempdir().unwrap();
+    let path = dir.path().join("report.json");
+    let options = dir.path().join("options.json");
+    let mut report = legacy_report();
+    report.config.directive_reporting = Some(reporting_profile(1));
+    report.pages[0].meta_robots = vec!["noindex".into()];
+    let before = serde_json::to_vec(&report).unwrap();
+    tokio::fs::write(&path, &before).await.unwrap();
+    for (name, mode, expected) in [("reported", None, 0), ("raw", Some(ReportingMode::Raw), 1)] {
+        let q = Request {
+            view: View::Sources,
+            reporting_mode: mode,
+            ..Default::default()
+        };
+        tokio::fs::write(&options, serde_json::to_vec(&q).unwrap())
+            .await
+            .unwrap();
+        let out = dir.path().join(format!("{name}.json"));
+        let csv = dir.path().join(format!("{name}.csv"));
+        run_cli(
+            path.clone(),
+            Some(options.clone()),
+            out.clone(),
+            Some(csv.clone()),
+        )
+        .await
+        .unwrap();
+        let value: Value = serde_json::from_slice(&tokio::fs::read(out).await.unwrap()).unwrap();
+        assert_eq!(value["saved_documents"], expected);
+        assert_eq!(
+            reporting_csv(&tokio::fs::read(csv).await.unwrap()).len(),
+            expected as usize + 2
+        );
+    }
+    let q = Request {
+        view: View::Sources,
+        reporting_mode: Some(ReportingMode::Raw),
+        ..Default::default()
+    };
+    let a = aggregate(&report, &q).unwrap();
+    let ctx = context(&report, None, None, "explicit_cli_report_file_app_declared").unwrap();
+    let (_, token) = preview(&a, ctx, &q).unwrap();
+    tokio::fs::write(
+        &options,
+        serde_json::to_vec(&Request {
+            reporting_mode: None,
+            expected_snapshot_token: Some(token.snapshot_token),
+            ..q
+        })
+        .unwrap(),
+    )
+    .await
+    .unwrap();
+    let out = dir.path().join("must-not-exist.json");
+    assert!(
+        run_cli(path.clone(), Some(options), out.clone(), None)
+            .await
+            .is_err()
+    );
+    assert!(!out.exists());
+    assert_eq!(tokio::fs::read(path).await.unwrap(), before);
 }

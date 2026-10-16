@@ -263,11 +263,13 @@ fn context(crawler: &Crawler, generation: u64) -> FetchContext {
         client: crawler.client.clone(),
         headers: crawler.headers.clone(),
         robots: crawler.robots.clone(),
+        hsts: crawler.hsts.clone(),
         rate: crawler.rate.clone(),
         pdf_slots: crawler.pdf_slots.clone(),
         pdf_tasks: crate::TaskOwner::new("sitemap_fixture_pdf"),
         policy: crawler.policy.clone(),
         pdf_parse_hook: None,
+        quota_start_hook: None,
         cdn_classification: None,
         cdn_directory_reporting: None,
     }

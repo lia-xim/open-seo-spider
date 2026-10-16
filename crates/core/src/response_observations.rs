@@ -83,7 +83,7 @@ pub fn export_response_observations_csv(report: &CrawlReport) -> anyhow::Result<
         "Body Complete",
         "Document Metadata Available",
     ])?;
-    for row in response_observations(report) {
+    for row in crate::reported_responses(report) {
         writer.write_record([
             crate::export::csv_text(&row.requested_url),
             crate::export::csv_text(&row.response_url),
@@ -101,7 +101,7 @@ pub fn export_response_observations_csv(report: &CrawlReport) -> anyhow::Result<
             row.document_metadata_available.to_string(),
         ])?;
     }
-    Ok(String::from_utf8(writer.into_inner()?)?)
+    crate::reporting_csv(report, String::from_utf8(writer.into_inner()?)?)
 }
 
 #[cfg(test)]

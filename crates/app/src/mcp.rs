@@ -7,14 +7,49 @@ use tokio::io::{AsyncRead, AsyncWrite};
 #[cfg(test)]
 use tokio::io::{AsyncReadExt, AsyncWriteExt, BufReader};
 pub const PROTOCOLS: &[&str] = &["2025-06-18", "2025-11-25"];
+mod broken_sources;
 mod crawl_quotas;
 mod enrichment;
 mod files;
 mod generation;
+mod ngrams;
 mod saved_comparison;
 mod segments;
 mod sitemap_findings;
 mod sitemaps;
+mod spelling;
+fn append_content_reporting_query(url: &mut Url, args: &Value) -> anyhow::Result<()> {
+    if let Some(value) = args.get("reporting_mode").filter(|v| !v.is_null()) {
+        let mode = value
+            .as_str()
+            .context("reporting_mode must be raw/reported or null (Auto)")?;
+        anyhow::ensure!(
+            matches!(mode, "raw" | "reported"),
+            "Unknown content reporting mode"
+        );
+        url.query_pairs_mut().append_pair("reporting_mode", mode);
+    }
+    if let Some(value) = args.get("expected_generation").filter(|v| !v.is_null()) {
+        let generation = value
+            .as_u64()
+            .context("expected_generation must be a nonnegative integer")?;
+        url.query_pairs_mut()
+            .append_pair("expected_generation", &generation.to_string());
+    }
+    for key in ["expected_snapshot_sha256", "expected_reporting_identity"] {
+        if let Some(value) = args.get(key).filter(|v| !v.is_null()) {
+            let digest = value
+                .as_str()
+                .context("Expected saved content identity must be a string")?;
+            anyhow::ensure!(
+                digest.len() == 64 && digest.bytes().all(|b| b.is_ascii_hexdigit()),
+                "Invalid expected saved content identity"
+            );
+            url.query_pairs_mut().append_pair(key, digest);
+        }
+    }
+    Ok(())
+}
 #[derive(Clone)]
 pub struct Bridge {
     client: Client,
@@ -130,6 +165,9 @@ impl Bridge {
         tools.push(enrichment::definition());
         tools.push(segments::definition());
         tools.push(crawl_quotas::definition());
+        tools.push(ngrams::definition());
+        tools.push(broken_sources::definition());
+        tools.push(spelling::definition());
         if self.files.is_some() {
             tools.extend(files::FileTools::definitions());
         }
@@ -224,6 +262,17 @@ impl Bridge {
                     let result = files.call(name, args).await;
                     return Some(file_result(id, result));
                 }
+                if name == spelling::NAME {
+                    if !spelling::valid_id(&id) {
+                        return Some(error(
+                            Value::Null,
+                            -32602,
+                            "Spelling RPC id exceeds bound or has invalid type",
+                        ));
+                    }
+                    let result = spelling::call(self, args).await;
+                    return Some(spelling::complete_response(id, result));
+                }
                 if name == sitemap_findings::NAME {
                     let result = sitemap_findings::call(self, args).await;
                     return Some(
@@ -268,6 +317,15 @@ impl Bridge {
     async fn call(&self, name: &str, args: Value) -> anyhow::Result<Value> {
         if name == crawl_quotas::NAME {
             return crawl_quotas::call(self, args).await;
+        }
+        if name == spelling::NAME {
+            return spelling::call(self, args).await;
+        }
+        if name == broken_sources::NAME {
+            return broken_sources::call(self, args).await;
+        }
+        if name == ngrams::NAME {
+            return ngrams::call(self, args).await;
         }
         if name == segments::NAME {
             return segments::call(self, args).await;
@@ -399,6 +457,7 @@ impl Bridge {
             }
         }
         if matches!(name, "spider_content" | "spider_content_document") {
+            append_content_reporting_query(&mut url, &args)?;
             let source = args
                 .get("source_kind")
                 .map(|value| value.as_str().context("source_kind must be a string"))
@@ -558,7 +617,7 @@ fn inventory() -> Vec<Value> {
     let mut tools: Vec<Value> = vec![
         ("spider_capabilities","Read implemented and optional capabilities",json!({}),vec![],true),
         ("spider_list_crawls","List saved and active crawls",json!({}),vec![],true),
-        ("spider_start_crawl","Start a crawl for user-requested targets",json!({"config":{"type":"object","description":"CrawlConfig: seed_urls or seed_url, sitemap_urls, concurrency, delay_ms, obey_robots, max_pages, optional renderer and sitemap_source_processing (max_post_http_entity_bytes, max_decoded_xml_bytes, max_xml_events), plus independent optional sitemap_membership_limits (max_catalog_json_bytes:1..134217728, max_row_json_bytes:1..1048576 and no greater than catalog cap, max_rows:1..1000000); absent membership limits preserve 32 MiB catalog/256 KiB row/1M rows, source work budgets do not widen page bodies or membership retention","properties":{"crawl_quotas":crawl_quotas::config_schema(),"crawl_admission_limits":{"type":["object","null"],"additionalProperties":false,"description":"Opt-in version1 native PageDocument and redirect guards, before robots/rate/HTTP; renderer combination is refused. None/null preserves legacy behavior. At least one non-null bound is required. Folder depth counts all completed literal slash segments including empty segments, not encoded %2F. Raw query splits only on &: absent=0, present empty=1, duplicate keys/empty tokens count. Fetch bytes measure the normalized effective fetch alias, without rewriting original observations. No dynamic quotas.","required":["version"],"properties":{"version":{"type":"integer","const":1},"max_folder_depth":{"type":["integer","null"],"minimum":0,"maximum":65535},"max_query_tokens":{"type":["integer","null"],"minimum":0,"maximum":65535},"max_fetch_url_utf8_bytes":{"type":["integer","null"],"minimum":1,"maximum":1048576}},"anyOf":[{"required":["max_folder_depth"],"properties":{"max_folder_depth":{"type":"integer"}}},{"required":["max_query_tokens"],"properties":{"max_query_tokens":{"type":"integer"}}},{"required":["max_fetch_url_utf8_bytes"],"properties":{"max_fetch_url_utf8_bytes":{"type":"integer"}}}]},"cdn_directory_reporting":{"type":["object","null"],"additionalProperties":false,"description":"Optional own reporting profile: literal trailing-slash directories on ASCII DNS hosts, cross HTTP/HTTPS and one www alias, exact supported non-default port. Does not grant fetch, traversal, redirect, resource, header or credential permission; no vendor parity claim. Explicit80/443, IDNA, IPv6, wildcard and dot-segment declarations unsupported.","required":["version","rules"],"properties":{"version":{"type":"integer","const":1},"rules":{"type":"array","minItems":1,"maxItems":32,"uniqueItems":true,"items":{"type":"string","minLength":1,"maxLength":2048}}}},"cdn_classification":{"type":["object","null"],"additionalProperties":false,"description":"Optional version1 declared reporting classification for exact HTTP(S) origins. This does not grant fetch, HTML traversal, resource-origin or credential permission; no wildcard/subdomain inheritance or path scopes. None/null preserves legacy behavior.","required":["version","origins"],"properties":{"version":{"type":"integer","const":1},"origins":{"type":"array","minItems":1,"maxItems":32,"uniqueItems":true,"items":{"type":"string","minLength":1,"maxLength":2048}}}},"sitemap_membership_limits":{"type":["object","null"],"additionalProperties":false,"description":"Independent explicit durable membership capacity; null/absence keeps legacy defaults. Row bytes cannot exceed catalog bytes; Rust validates this relation before crawl IO.","properties":{"max_catalog_json_bytes":{"type":"integer","minimum":1,"maximum":134217728,"default":33554432},"max_row_json_bytes":{"type":"integer","minimum":1,"maximum":1048576,"default":262144},"max_rows":{"type":"integer","minimum":1,"maximum":1000000,"default":1000000}}}}}}),vec!["config"],false),
+        ("spider_start_crawl","Start a crawl for user-requested targets",json!({"config":{"type":"object","description":"CrawlConfig: seed_urls or seed_url, sitemap_urls, concurrency, delay_ms, obey_robots, max_pages, optional renderer and sitemap_source_processing (max_post_http_entity_bytes, max_decoded_xml_bytes, max_xml_events), plus independent optional sitemap_membership_limits (max_catalog_json_bytes:1..134217728, max_row_json_bytes:1..1048576 and no greater than catalog cap, max_rows:1..1000000); absent membership limits preserve 32 MiB catalog/256 KiB row/1M rows, source work budgets do not widen page bodies or membership retention","properties":{"tls":crate::tls_config::schema(),"directive_reporting":{"type":["object","null"],"additionalProperties":false,"required":["version","respect_noindex","respect_canonical","respect_next_prev"],"properties":{"version":{"type":"integer","const":1},"respect_noindex":{"type":"boolean"},"respect_canonical":{"type":"boolean"},"respect_next_prev":{"type":"boolean"}},"description":"Optional report-row hiding only. Crawling and outlink discovery remain unchanged. Canonical uses captured document identity; next/prev hides pages with observed prev only. project.json remains raw evidence."},"crawl_quotas":crawl_quotas::config_schema(),"crawl_admission_limits":{"type":["object","null"],"additionalProperties":false,"description":"Opt-in version1 native PageDocument and redirect guards, before robots/rate/HTTP; renderer combination is refused. None/null preserves legacy behavior. At least one non-null bound is required. Folder depth counts all completed literal slash segments including empty segments, not encoded %2F. Raw query splits only on &: absent=0, present empty=1, duplicate keys/empty tokens count. Fetch bytes measure the normalized effective fetch alias, without rewriting original observations. No dynamic quotas.","required":["version"],"properties":{"version":{"type":"integer","const":1},"max_folder_depth":{"type":["integer","null"],"minimum":0,"maximum":65535},"max_query_tokens":{"type":["integer","null"],"minimum":0,"maximum":65535},"max_fetch_url_utf8_bytes":{"type":["integer","null"],"minimum":1,"maximum":1048576}},"anyOf":[{"required":["max_folder_depth"],"properties":{"max_folder_depth":{"type":"integer"}}},{"required":["max_query_tokens"],"properties":{"max_query_tokens":{"type":"integer"}}},{"required":["max_fetch_url_utf8_bytes"],"properties":{"max_fetch_url_utf8_bytes":{"type":"integer"}}}]},"cdn_directory_reporting":{"type":["object","null"],"additionalProperties":false,"description":"Optional own reporting profile: literal trailing-slash directories on ASCII DNS hosts, cross HTTP/HTTPS and one www alias, exact supported non-default port. Does not grant fetch, traversal, redirect, resource, header or credential permission; no vendor parity claim. Explicit80/443, IDNA, IPv6, wildcard and dot-segment declarations unsupported.","required":["version","rules"],"properties":{"version":{"type":"integer","const":1},"rules":{"type":"array","minItems":1,"maxItems":32,"uniqueItems":true,"items":{"type":"string","minLength":1,"maxLength":2048}}}},"cdn_classification":{"type":["object","null"],"additionalProperties":false,"description":"Optional version1 declared reporting classification for exact HTTP(S) origins. This does not grant fetch, HTML traversal, resource-origin or credential permission; no wildcard/subdomain inheritance or path scopes. None/null preserves legacy behavior.","required":["version","origins"],"properties":{"version":{"type":"integer","const":1},"origins":{"type":"array","minItems":1,"maxItems":32,"uniqueItems":true,"items":{"type":"string","minLength":1,"maxLength":2048}}}},"sitemap_membership_limits":{"type":["object","null"],"additionalProperties":false,"description":"Independent explicit durable membership capacity; null/absence keeps legacy defaults. Row bytes cannot exceed catalog bytes; Rust validates this relation before crawl IO.","properties":{"max_catalog_json_bytes":{"type":"integer","minimum":1,"maximum":134217728,"default":33554432},"max_row_json_bytes":{"type":"integer","minimum":1,"maximum":1048576,"default":262144},"max_rows":{"type":"integer","minimum":1,"maximum":1000000,"default":1000000}}}}}}),vec!["config"],false),
         ("spider_status","Read crawl progress and warnings",json!({"id":uuid}),vec!["id"],true),
         ("spider_pages","Read a bounded page slice; increment offset for more",json!({"id":uuid,"offset":{"type":"integer","minimum":0},"limit":{"type":"integer","minimum":1,"maximum":10000}}),vec!["id"],true),
         ("spider_issues","Read observed audit issues",json!({"id":uuid}),vec!["id"],true),
@@ -568,9 +627,9 @@ fn inventory() -> Vec<Value> {
         ("spider_resources","Read bounded native source occurrences and immutable resource grants without fetching websites",json!({"id":uuid,"after_sequence":{"type":"integer","minimum":0},"limit":{"type":"integer","minimum":1,"maximum":1000}}),vec!["id"],true),
         ("spider_resource_transports","Read bounded stored transport metadata, including checked responses excluded from report rows",json!({"id":uuid,"after_url":{"type":"string","minLength":1,"maxLength":65536},"limit":{"type":"integer","minimum":1,"maximum":1000}}),vec!["id"],true),
         ("spider_inspect_css","Inspect declared dependencies in supplied CSS with an explicit bounded parser profile; no website is fetched",json!({"input":{"type":"object"}}),vec!["input"],true),
-        ("spider_content","Read a bounded saved-content inventory without text or website requests",json!({"id":uuid,"source_kind":{"type":"string","enum":["raw_http_html","rendered_dom_html"]},"after_ordinal":{"type":"integer","minimum":0},"limit":{"type":"integer","minimum":1,"maximum":200}}),vec!["id"],true),
-        ("spider_content_document","Read one exact saved requested URL and source capture without fetching it",json!({"id":uuid,"url":{"type":"string"},"source_kind":{"type":"string","enum":["raw_http_html","rendered_dom_html"]}}),vec!["id","url"],true),
-        ("spider_analyze_crawl_content","Analyze an explicit bounded cohort of saved source captures; no website is fetched",json!({"id":uuid,"input":{"type":"object"}}),vec!["id","input"],true),
+        ("spider_content","Read a bounded saved-content inventory; optional raw/reported mode or absent/null Auto applies saved reporting profile before selection, retaining raw ordinals and snapshot identity; no website requests",json!({"id":uuid,"reporting_mode":{"type":["string","null"],"enum":["raw","reported",null],"description":"Absent/null is Auto: active saved directive_reporting profile, otherwise legacy raw."},"expected_generation":{"type":["integer","null"],"minimum":0},"expected_snapshot_sha256":{"type":["string","null"],"pattern":"^[a-fA-F0-9]{64}$"},"expected_reporting_identity":{"type":["string","null"],"pattern":"^[a-fA-F0-9]{64}$"},"source_kind":{"type":"string","enum":["raw_http_html","rendered_dom_html"]},"after_ordinal":{"type":"integer","minimum":0},"limit":{"type":"integer","minimum":1,"maximum":200}}),vec!["id"],true),
+        ("spider_content_document","Read one exact saved requested URL; a known profile-hidden URL returns excluded_reporting and capture:null, while unknown URLs still refuse. Optional raw/reported or absent/null Auto; no fetch",json!({"id":uuid,"reporting_mode":{"type":["string","null"],"enum":["raw","reported",null],"description":"Absent/null is Auto: active saved directive_reporting profile, otherwise legacy raw."},"expected_generation":{"type":["integer","null"],"minimum":0},"expected_snapshot_sha256":{"type":["string","null"],"pattern":"^[a-fA-F0-9]{64}$"},"expected_reporting_identity":{"type":["string","null"],"pattern":"^[a-fA-F0-9]{64}$"},"url":{"type":"string"},"source_kind":{"type":"string","enum":["raw_http_html","rendered_dom_html"]}}),vec!["id","url"],true),
+        ("spider_analyze_crawl_content","Analyze 1..128 explicit saved URLs through the same HTTP/CLI reporting service; input.reporting_mode raw/reported or absent/null Auto applies the active saved profile before analysis. Known hidden selections remain explicit exclusions; expected_generation/expected_snapshot_sha256/expected_reporting_identity bind the saved view. No website fetch",json!({"id":uuid,"input":{"type":"object"}}),vec!["id","input"],true),
         ("spider_analyze_content","Analyze supplied text locally with an explicit similarity/readability profile; no website is fetched",json!({"input":{"type":"object"}}),vec!["input"],true),
         ("spider_preview_policy","Preview supplied scope, query and rewrite decisions locally; no crawl is started",json!({"input":{"type":"object"}}),vec!["input"],true),
         ("spider_cancel","Cancel and retain the saved frontier",json!({"id":uuid}),vec!["id"],false),
@@ -636,6 +695,52 @@ mod tests {
                 .is_none()
         );
         assert_eq!(inventory().len(), 26);
+    }
+    #[test]
+    fn saved_content_reporting_query_forwards_exact_mode_and_stale_guards_without_a_new_tool() {
+        let mut url =
+            Url::parse("http://127.0.0.1/api/crawls/00000000-0000-0000-0000-000000000000/content")
+                .unwrap();
+        append_content_reporting_query(&mut url,&json!({"reporting_mode":"reported","expected_generation":7,
+            "expected_snapshot_sha256":"a".repeat(64),"expected_reporting_identity":"b".repeat(64)})).unwrap();
+        let fields = url
+            .query_pairs()
+            .collect::<std::collections::HashMap<_, _>>();
+        assert_eq!(fields["reporting_mode"], "reported");
+        assert_eq!(fields["expected_generation"], "7");
+        assert_eq!(fields["expected_snapshot_sha256"], "a".repeat(64));
+        assert_eq!(fields["expected_reporting_identity"], "b".repeat(64));
+        let before = inventory();
+        assert_eq!(
+            before
+                .iter()
+                .filter(|v| v["name"] == "spider_content")
+                .count(),
+            1
+        );
+        assert!(
+            before
+                .iter()
+                .find(|v| v["name"] == "spider_content")
+                .unwrap()["inputSchema"]["properties"]
+                .get("reporting_mode")
+                .is_some()
+        );
+        for bad in [
+            json!({"reporting_mode":"auto"}),
+            json!({"reporting_mode":true}),
+            json!({"expected_generation":-1}),
+            json!({"expected_snapshot_sha256":"bad"}),
+        ] {
+            assert!(append_content_reporting_query(&mut url, &bad).is_err());
+        }
+        let mut auto = Url::parse("http://127.0.0.1/").unwrap();
+        append_content_reporting_query(
+            &mut auto,
+            &json!({"reporting_mode":null,"expected_reporting_identity":null}),
+        )
+        .unwrap();
+        assert_eq!(auto.query(), None);
     }
     #[test]
     fn only_loopback_bridge() {

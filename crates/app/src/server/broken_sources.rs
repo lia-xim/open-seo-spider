@@ -51,10 +51,13 @@ async fn evaluate_saved(
         (saved, snapshot)
     };
     let filter = request.filter;
+    let mode = request.reporting_mode;
     let result = state
         .lifecycle
         .blocking
-        .run_blocking(move || projection::evaluate(saved.report, snapshot, filter))
+        .run_blocking(move || {
+            projection::evaluate_with_reporting(saved.report, snapshot, filter, mode)
+        })
         .await
         .map_err(|e| {
             error(

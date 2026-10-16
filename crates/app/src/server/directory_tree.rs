@@ -3,8 +3,8 @@ use super::*;
 use axum::extract::rejection::JsonRejection;
 use open_seo_spider_core::{
     ComparisonSide, DIRECTORY_TREE_CSV_BYTES, DIRECTORY_TREE_ENGINE, DIRECTORY_TREE_JSON_BYTES,
-    DirectoryTree, DirectoryTreeLimits, build_directory_tree, directory_tree_csv,
-    directory_tree_json,
+    DirectoryTree, DirectoryTreeLimits, DirectoryTreeMode, DirectoryTreeReporting,
+    build_directory_tree_view, directory_tree_csv_for_view, directory_tree_json,
 };
 use sha2::{Digest, Sha256};
 use std::io::{self, Write};
@@ -41,6 +41,8 @@ pub(super) struct TreeRequest {
     pub offset: usize,
     #[serde(default = "default_limit")]
     pub limit: usize,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub mode: Option<DirectoryTreeMode>,
 }
 impl Default for TreeRequest {
     fn default() -> Self {
@@ -50,6 +52,7 @@ impl Default for TreeRequest {
             parent_id: None,
             offset: 0,
             limit: 100,
+            mode: None,
         }
     }
 }
@@ -133,6 +136,7 @@ struct Evaluation {
     tree: DirectoryTree,
     snapshot: Snapshot,
     token: String,
+    reporting: Option<DirectoryTreeReporting>,
 }
 fn evaluate(job: &Job, r: &TreeRequest) -> DResult<Evaluation> {
     let report_hash = if let Some(report) = &job.report {
@@ -166,8 +170,21 @@ fn evaluate(job: &Job, r: &TreeRequest) -> DResult<Evaluation> {
         report_generation_attested: false,
     };
     let limits = DirectoryTreeLimits::default();
-    let token = digest(&(DIRECTORY_TREE_ENGINE, &snapshot, &limits))
-        .map_err(|e| failure(StatusCode::BAD_REQUEST, "directory_token_budget", e))?;
+    let view =
+        build_directory_tree_view(&saved.report.config, &saved.report.pages, r.mode, &limits)
+            .map_err(|e| failure(StatusCode::BAD_REQUEST, "directory_tree_budget", e))?;
+    let token = if let Some(reporting) = &view.reporting {
+        digest(&(
+            DIRECTORY_TREE_ENGINE,
+            &snapshot,
+            &limits,
+            &reporting.identity,
+        ))
+    } else {
+        // Preserve the existing raw token for absent/null/all-false default profiles.
+        digest(&(DIRECTORY_TREE_ENGINE, &snapshot, &limits))
+    }
+    .map_err(|e| failure(StatusCode::BAD_REQUEST, "directory_token_budget", e))?;
     if r.expected_snapshot_token
         .as_ref()
         .is_some_and(|expected| expected != &token)
@@ -175,13 +192,12 @@ fn evaluate(job: &Job, r: &TreeRequest) -> DResult<Evaluation> {
         return Err(failure(
             StatusCode::CONFLICT,
             "stale_directory_snapshot",
-            "The saved report, App status/generation or configuration changed; start a new preview",
+            "The saved report, App status/generation, configuration or reporting view changed; start a new preview",
         ));
     }
-    let tree = build_directory_tree(&saved.report.pages, &limits)
-        .map_err(|e| failure(StatusCode::BAD_REQUEST, "directory_tree_budget", e))?;
     Ok(Evaluation {
-        tree,
+        tree: view.tree,
+        reporting: view.reporting,
         snapshot,
         token,
     })
@@ -253,7 +269,8 @@ pub(super) async fn preview(
         let mut children:Vec<_>=e.tree.nodes.iter().filter(|n|n.parent_id.as_deref()==Some(parent)).collect();children.sort_by(|a,b|a.address.cmp(&b.address).then(a.kind.cmp(&b.kind)));
         if r.offset>children.len(){return Err(failure(StatusCode::BAD_REQUEST,"directory_offset_out_of_range","Offset exceeds the actual child count"));}
         let end=r.offset.saturating_add(r.limit).min(children.len());
-        let value=json!({"engine":e.tree.engine,"snapshot":e.snapshot,"snapshot_token":e.token,"root_id":e.tree.root_id,"current":current,"ancestors":ancestors,"children":&children[r.offset..end],"offset":r.offset,"total_children":children.len(),"next_offset":(end<children.len()).then_some(end),"input_observations":e.tree.input_observations,"invalid_url_observations":e.tree.invalid_url_observations,"unsupported_url_observations":e.tree.unsupported_url_observations,"credential_url_observations":e.tree.credential_url_observations,"total_nodes":e.tree.nodes.len(),"website_requests":0,"counts_mean":"Synthetic group counters aggregate descendants; group addresses do not prove a request. Status belongs to requested URL; final response is never substituted. Stored indexability is used only for a direct successful observed document; missing/redirect/error/robots cases remain unknown."});
+        let mut value=json!({"engine":e.tree.engine,"snapshot":e.snapshot,"snapshot_token":e.token,"root_id":e.tree.root_id,"current":current,"ancestors":ancestors,"children":&children[r.offset..end],"offset":r.offset,"total_children":children.len(),"next_offset":(end<children.len()).then_some(end),"input_observations":e.tree.input_observations,"invalid_url_observations":e.tree.invalid_url_observations,"unsupported_url_observations":e.tree.unsupported_url_observations,"credential_url_observations":e.tree.credential_url_observations,"total_nodes":e.tree.nodes.len(),"website_requests":0,"counts_mean":"Synthetic group counters aggregate descendants; group addresses do not prove a request. Status belongs to requested URL; final response is never substituted. Stored indexability is used only for a direct successful observed document; missing/redirect/error/robots cases remain unknown."});
+        if let Some(reporting)=&e.reporting {value["reporting_view"]=serde_json::to_value(reporting).map_err(|e|failure(StatusCode::BAD_REQUEST,"directory_json_budget",e))?;}
         directory_tree_json(&value,DIRECTORY_TREE_JSON_BYTES).map_err(|e|failure(StatusCode::BAD_REQUEST,"directory_json_budget",e))
     }).await.map_err(|e|failure(StatusCode::INTERNAL_SERVER_ERROR,"directory_page_worker_failed",e))??;
     Ok(response(bytes, "application/json", false))
@@ -281,7 +298,9 @@ pub(super) async fn csv(
     let bytes = state
         .lifecycle
         .blocking
-        .run_blocking(move || directory_tree_csv(&e.tree, DIRECTORY_TREE_CSV_BYTES))
+        .run_blocking(move || {
+            directory_tree_csv_for_view(&e.tree, e.reporting.as_ref(), DIRECTORY_TREE_CSV_BYTES)
+        })
         .await
         .map_err(|e| {
             failure(

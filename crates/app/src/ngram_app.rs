@@ -17,6 +17,199 @@ pub(crate) const REQUEST_BYTES: usize = 64 * 1024;
 pub(crate) const REPORT_BYTES: usize = 64 * 1024 * 1024;
 pub(crate) const JSON_BYTES: usize = 8 * 1024 * 1024;
 pub(crate) const CSV_BYTES: usize = 64 * 1024 * 1024;
+/// Reporting is an App presentation boundary; core corpus membership indices stay dense.
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub(crate) enum ReportingMode {
+    Raw,
+    Reported,
+}
+#[derive(Debug, Clone, Serialize, PartialEq, Eq)]
+pub(crate) struct ReportingIdentity {
+    pub engine: &'static str,
+    pub mode: ReportingMode,
+    pub directive_reporting: Option<open_seo_spider_core::DirectiveReportingConfig>,
+}
+#[derive(Debug, Clone, Serialize)]
+pub(crate) struct Reporting {
+    pub identity: ReportingIdentity,
+    pub identity_sha256: String,
+    pub raw_page_ordinals_sha256: String,
+    pub captured_page_observations: usize,
+    pub profile_visible_page_observations: usize,
+    pub profile_excluded_page_observations: usize,
+    pub eligible_page_observations: usize,
+    pub counted_source_observations: usize,
+    pub uncounted_source_observations: usize,
+    pub counts_mean: &'static str,
+}
+#[derive(Debug, Serialize)]
+pub(crate) struct Aggregate {
+    #[serde(flatten)]
+    pub corpus: NgramCorpusReport,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reporting: Option<Reporting>,
+    #[serde(skip)]
+    raw_page_ordinals: Option<Vec<usize>>,
+}
+impl std::ops::Deref for Aggregate {
+    type Target = NgramCorpusReport;
+    fn deref(&self) -> &Self::Target {
+        &self.corpus
+    }
+}
+impl Aggregate {
+    #[cfg(test)]
+    fn legacy(corpus: NgramCorpusReport) -> Self {
+        Self {
+            corpus,
+            reporting: None,
+            raw_page_ordinals: None,
+        }
+    }
+}
+fn reporting_identity(
+    profile: &Option<open_seo_spider_core::DirectiveReportingConfig>,
+    requested: Option<ReportingMode>,
+) -> Result<Option<ReportingIdentity>> {
+    if let Some(profile) = profile {
+        profile.validate()?;
+    }
+    let active = !open_seo_spider_core::DirectiveReportingConfig::is_inactive(profile);
+    if !active && requested.is_none() {
+        return Ok(None);
+    }
+    Ok(Some(ReportingIdentity {
+        engine: "open-seo-spider/saved-ngram-reporting-v1",
+        mode: requested.unwrap_or(if active {
+            ReportingMode::Reported
+        } else {
+            ReportingMode::Raw
+        }),
+        directive_reporting: profile
+            .clone()
+            .filter(open_seo_spider_core::DirectiveReportingConfig::active),
+    }))
+}
+fn selected_observations(
+    report: &CrawlReport,
+    request: &Request,
+) -> Result<(Option<ReportingIdentity>, Vec<usize>, usize)> {
+    // The raw serialization/page ceilings remain global, even when every row is hidden.
+    preclone(report)?;
+    let identity = reporting_identity(&report.config.directive_reporting, request.reporting_mode)?;
+    let reported = identity
+        .as_ref()
+        .is_some_and(|v| v.mode == ReportingMode::Reported);
+    let mut ordinals = Vec::new();
+    let mut visible = 0;
+    for (ordinal, page) in report.pages.iter().enumerate() {
+        // Validate against the original complete report, including selected-recrawl
+        // target/generation bindings. Never construct a filtered report or rewrite captures.
+        if identity.is_some() || request.retained_metadata_channel.is_some() {
+            open_seo_spider_core::validate_page_content_captures(page)?;
+        }
+        crate::content_cohort::captured_source(report, page, request.source_kind)?;
+        let shown = open_seo_spider_core::directive_page_visible(&report.config, page);
+        visible += usize::from(shown);
+        if !reported || shown {
+            ordinals.push(ordinal);
+        }
+    }
+    ensure!(
+        ordinals.len() <= request.options.limits.max_documents,
+        "Saved document count exceeds requested limit"
+    );
+    Ok((identity, ordinals, visible))
+}
+fn finish_aggregate(
+    corpus: NgramCorpusReport,
+    report: &CrawlReport,
+    identity: Option<ReportingIdentity>,
+    ordinals: Vec<usize>,
+    visible: usize,
+) -> Result<Aggregate> {
+    ensure!(
+        corpus.sources.len() == ordinals.len(),
+        "Ngram source observation mapping mismatch"
+    );
+    ensure!(
+        corpus
+            .sources
+            .iter()
+            .enumerate()
+            .all(|(i, s)| s.ordinal == i && s.requested_url == report.pages[ordinals[i]].url),
+        "Dense corpus source identity mismatch"
+    );
+    let reporting = identity.map(|identity| -> Result<Reporting> {
+        let counted = corpus.sources.iter().filter(|s| s.counted).count();
+        Ok(Reporting {
+            identity_sha256: bounded_hash(&identity, REQUEST_BYTES)?, identity,
+            raw_page_ordinals_sha256: bounded_hash(&ordinals, JSON_BYTES)?,
+            captured_page_observations: report.pages.len(),
+            profile_visible_page_observations: visible,
+            profile_excluded_page_observations: report.pages.len() - visible,
+            eligible_page_observations: ordinals.len(), counted_source_observations: counted,
+            uncounted_source_observations: ordinals.len() - counted,
+            counts_mean: "Captured/profile counts describe original page observations. Only eligible observations enter this corpus and its limits. Counted/uncounted are extraction states within that eligible population, not website coverage. source.ordinal and memberships remain dense corpus indices; source.raw_page_ordinal separately identifies the complete raw report observation. Multiple eligible duplicate URLs retain the existing explicit ambiguity refusal. Raw snapshot/crawl facts and capture bindings are unchanged.",
+        })
+    }).transpose()?;
+    Ok(Aggregate {
+        corpus,
+        raw_page_ordinals: reporting.as_ref().map(|_| ordinals),
+        reporting,
+    })
+}
+fn source_value(
+    report: &Aggregate,
+    source: &open_seo_spider_core::NgramCorpusSource,
+) -> Result<Value> {
+    let mut value = serde_json::to_value(source)?;
+    if let Some(ordinals) = &report.raw_page_ordinals {
+        value["raw_page_ordinal"] = json!(
+            ordinals
+                .get(source.ordinal)
+                .context("Missing raw source observation ordinal")?
+        );
+    }
+    Ok(value)
+}
+fn csv_header(out: &mut impl Write, columns: &[String], snapshot: &Snapshot) -> Result<()> {
+    let mut header = columns.to_vec();
+    if snapshot.reporting.is_some() {
+        header.extend(["reporting_json".into(), "raw_page_ordinal".into()]);
+    }
+    csv_row(out, &header)?;
+    if let Some(reporting) = &snapshot.reporting {
+        // A typed metadata row retains counts/profile even for a wholly hidden corpus.
+        let mut row = vec![String::new(); columns.len()];
+        row[0] = snapshot.snapshot_token.clone();
+        row[1] = "reporting".into();
+        row.extend([serde_json::to_string(reporting)?, String::new()]);
+        csv_row(out, &row)?;
+    }
+    Ok(())
+}
+fn csv_record(
+    out: &mut impl Write,
+    columns: &[String],
+    snapshot: &Snapshot,
+    raw_ordinal: &Value,
+) -> Result<()> {
+    let mut row = columns.to_vec();
+    if snapshot.reporting.is_some() {
+        row.extend([
+            String::new(),
+            if raw_ordinal.is_null() {
+                String::new()
+            } else {
+                raw_ordinal.to_string()
+            },
+        ]);
+    }
+    csv_row(out, &row)
+}
+
 #[derive(Debug, Default, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub(crate) enum View {
@@ -48,6 +241,8 @@ pub(crate) struct Request {
     pub after: Option<usize>,
     pub expected_snapshot_token: Option<String>,
     pub expected_generation: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reporting_mode: Option<ReportingMode>,
 }
 impl Default for Request {
     fn default() -> Self {
@@ -64,6 +259,7 @@ impl Default for Request {
             after: None,
             expected_snapshot_token: None,
             expected_generation: None,
+            reporting_mode: None,
         }
     }
 }
@@ -157,6 +353,8 @@ pub(crate) struct Context {
     pub report_sha_profile: &'static str,
     pub sql_attested: bool,
     pub report_generation_attested: bool,
+    #[serde(skip)]
+    directive_reporting: Option<open_seo_spider_core::DirectiveReportingConfig>,
 }
 pub(crate) fn context(
     report: &CrawlReport,
@@ -172,10 +370,13 @@ pub(crate) fn context(
         report_sha_profile: "typed-crawl-report-serde-json-v1",
         sql_attested: false,
         report_generation_attested: false,
+        directive_reporting: report.config.directive_reporting.clone(),
     })
 }
 #[derive(Clone, Serialize)]
 pub(crate) struct Snapshot {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reporting: Option<Reporting>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retained_metadata_channel: Option<open_seo_spider_core::NgramRetainedMetadataProfile>,
     pub caller: Context,
@@ -186,42 +387,47 @@ pub(crate) struct Snapshot {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub html_text_channel: Option<open_seo_spider_core::NgramHtmlTextProfile>,
 }
-pub(crate) fn aggregate(report: &CrawlReport, request: &Request) -> Result<NgramCorpusReport> {
+pub(crate) fn aggregate(report: &CrawlReport, request: &Request) -> Result<Aggregate> {
     request.validate()?;
-    if let Some(profile) = request.retained_metadata_channel {
-        return channels::aggregate_metadata(report, request, profile);
-    }
-    if let Some(profile) = request.html_text_channel {
-        return channels::aggregate(report, request, profile);
-    }
-    ensure!(
-        report.pages.len() <= request.options.limits.max_documents,
-        "Saved document count exceeds requested limit"
-    );
-    let mut docs = Vec::with_capacity(report.pages.len());
-    for page in &report.pages {
-        let (basis, capture) =
-            crate::content_cohort::captured_source(report, page, request.source_kind)?;
-        let result = capture.and_then(|c| c.result.as_ref());
-        docs.push(NgramCorpusDocument {
-            requested_url: &page.url,
-            source_revision: capture.map(|c| c.source_revision.as_str()),
-            capture_config_sha256: capture.map(|c| c.config_sha256.as_str()),
-            text_sha256: result.and_then(|r| r.text_sha256.as_deref()),
-            text: result.and_then(|r| r.text.as_deref()),
-            complete: result.is_some_and(|r| {
-                matches!(
-                    r.status,
-                    ContentCaptureStatus::Complete | ContentCaptureStatus::Empty
-                )
-            }),
-            basis,
-            observed_generation: capture.and_then(|c| c.observed_generation),
-        });
-    }
-    aggregate_saved_ngrams(&docs, &request.options)
+    let (identity, ordinals, visible) = selected_observations(report, request)?;
+    let corpus = if let Some(profile) = request.retained_metadata_channel {
+        channels::aggregate_metadata(report, request, profile, &ordinals)?
+    } else if let Some(profile) = request.html_text_channel {
+        channels::aggregate(report, request, profile, &ordinals)?
+    } else {
+        let mut docs = Vec::with_capacity(ordinals.len());
+        for &ordinal in &ordinals {
+            let page = &report.pages[ordinal];
+            let (basis, capture) =
+                crate::content_cohort::captured_source(report, page, request.source_kind)?;
+            let result = capture.and_then(|c| c.result.as_ref());
+            docs.push(NgramCorpusDocument {
+                requested_url: &page.url,
+                source_revision: capture.map(|c| c.source_revision.as_str()),
+                capture_config_sha256: capture.map(|c| c.config_sha256.as_str()),
+                text_sha256: result.and_then(|r| r.text_sha256.as_deref()),
+                text: result.and_then(|r| r.text.as_deref()),
+                complete: result.is_some_and(|r| {
+                    matches!(
+                        r.status,
+                        ContentCaptureStatus::Complete | ContentCaptureStatus::Empty
+                    )
+                }),
+                basis,
+                observed_generation: capture.and_then(|c| c.observed_generation),
+            });
+        }
+        aggregate_saved_ngrams(&docs, &request.options)?
+    };
+    finish_aggregate(corpus, report, identity, ordinals, visible)
 }
-fn snapshot(context: Context, request: &Request, report: &NgramCorpusReport) -> Result<Snapshot> {
+fn snapshot(context: Context, request: &Request, report: &Aggregate) -> Result<Snapshot> {
+    request.validate()?;
+    let identity = reporting_identity(&context.directive_reporting, request.reporting_mode)?;
+    ensure!(
+        report.reporting.as_ref().map(|v| &v.identity) == identity.as_ref(),
+        "Stale saved ngram reporting view/profile"
+    );
     ensure!(
         report.retained_metadata_profile == request.retained_metadata_channel,
         "Saved aggregate belongs to another retained metadata channel"
@@ -261,6 +467,11 @@ fn snapshot(context: Context, request: &Request, report: &NgramCorpusReport) -> 
             REQUEST_BYTES,
         )?
     };
+    let options_sha256 = if let Some(identity) = &identity {
+        bounded_hash(&(&options_sha256, identity), REQUEST_BYTES)?
+    } else {
+        options_sha256
+    };
     let aggregate_sha256 = bounded_hash(report, CSV_BYTES)?;
     let snapshot_token = bounded_hash(
         &(&context, &options_sha256, &aggregate_sha256),
@@ -274,6 +485,7 @@ fn snapshot(context: Context, request: &Request, report: &NgramCorpusReport) -> 
         "Stale saved ngram snapshot/options/filter/limit"
     );
     Ok(Snapshot {
+        reporting: report.reporting.clone(),
         caller: context,
         source_kind: request.source_kind,
         options_sha256,
@@ -296,7 +508,7 @@ fn includes(row: &open_seo_spider_core::NgramCorpusRow, request: &Request) -> bo
             .contains(&request.query.to_lowercase())
 }
 fn visit(
-    report: &NgramCorpusReport,
+    report: &Aggregate,
     request: &Request,
     mut f: impl FnMut(Value) -> Result<()>,
 ) -> Result<usize> {
@@ -304,7 +516,7 @@ fn visit(
     match request.view {
         View::Sources => {
             for source in &report.sources {
-                f(json!({"view":"sources","source":source}))?;
+                f(json!({"view":"sources","source":source_value(report, source)?}))?;
                 count += 1;
             }
         }
@@ -325,7 +537,7 @@ fn visit(
                             .get(membership.source_ordinal)
                             .context("Unknown aggregate source ordinal")?;
                         f(
-                            json!({"view":"occurrences","n":row.n,"tokens":row.tokens,"occurrences":membership.occurrences,"source":source,"first_positions":membership.first_positions,"positions_sampled":membership.positions_sampled}),
+                            json!({"view":"occurrences","n":row.n,"tokens":row.tokens,"occurrences":membership.occurrences,"source":source_value(report, source)?,"first_positions":membership.first_positions,"positions_sampled":membership.positions_sampled}),
                         )?;
                         count += 1;
                     }
@@ -359,7 +571,7 @@ fn bytes(value: &impl Serialize, cap: usize) -> Result<Vec<u8>> {
     Ok(sink.data)
 }
 pub(crate) fn preview(
-    report: &NgramCorpusReport,
+    report: &Aggregate,
     context: Context,
     request: &Request,
 ) -> Result<(Vec<u8>, Snapshot)> {
@@ -385,6 +597,16 @@ pub(crate) fn preview(
         value["scope"] = json!("all_saved_requested_page_rows_retained_metadata_elements_v1");
         value["retained_metadata_channel"] = json!(profile);
     }
+    if let Some(reporting) = &report.reporting {
+        value["reporting"] = serde_json::to_value(reporting)?;
+        if reporting.identity.mode == ReportingMode::Reported {
+            let scope = value["scope"]
+                .as_str()
+                .context("Missing corpus scope")?
+                .replacen("all_saved_", "reported_saved_", 1);
+            value["scope"] = json!(scope);
+        }
+    }
     Ok((bytes(&value, JSON_BYTES)?, snapshot))
 }
 fn csv_row(out: &mut impl Write, cells: &[String]) -> Result<()> {
@@ -408,7 +630,7 @@ fn csv_row(out: &mut impl Write, cells: &[String]) -> Result<()> {
     Ok(())
 }
 pub(crate) fn csv(
-    report: &NgramCorpusReport,
+    report: &Aggregate,
     context: Context,
     request: &Request,
 ) -> Result<(Vec<u8>, Snapshot)> {
@@ -427,7 +649,7 @@ pub(crate) fn csv(
         data: vec![],
         cap: CSV_BYTES,
     };
-    csv_row(
+    csv_header(
         &mut out,
         &[
             "snapshot_token",
@@ -450,6 +672,7 @@ pub(crate) fn csv(
             "website_requests",
         ]
         .map(str::to_owned),
+        &snapshot,
     )?;
     visit(report, request, |row| {
         let source = &row["source"];
@@ -458,7 +681,7 @@ pub(crate) fn csv(
             Value::String(v) => v.clone(),
             v => v.to_string(),
         };
-        csv_row(
+        csv_record(
             &mut out,
             &[
                 snapshot.snapshot_token.clone(),
@@ -480,6 +703,8 @@ pub(crate) fn csv(
                 cell(&row["positions_sampled"]),
                 "0".into(),
             ],
+            &snapshot,
+            &source["raw_page_ordinal"],
         )
     })?;
     Ok((out.data, snapshot))

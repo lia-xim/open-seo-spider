@@ -670,3 +670,380 @@ async fn saved_retained_metadata_body_budget_only_foreign_capture_and_snapshot_n
     );
     assert_eq!(serde_json::to_vec(&report).unwrap(), original);
 }
+
+fn reporting_requests() -> [Request; 3] {
+    [
+        Request::default(),
+        request(Channel::Title, ContentCaptureSourceKind::RawHttpHtml),
+        metadata_request(Channel::Title, ContentCaptureSourceKind::RawHttpHtml),
+    ]
+}
+// Five genuine owned raw-HTML fetch/capture observations; no database or renderer.
+async fn reporting_captured_report() -> CrawlReport {
+    use axum::{Router, extract::Path, routing::get};
+    let site = Router::new().route("/{name}", get(|Path(name): Path<String>| async move {
+        let directive = match name.as_str() { "noindex" => "<meta name=robots content=noindex>", "canonical" => "<link rel=canonical href=/target-only>", "prev" => "<link rel=prev href=/target-only>", "next" => "<link rel=next href=/target-only><link rel=canonical href=/next>", _ => "" };
+        ([("content-type", "text/html; charset=utf-8")], format!("<!doctype html><head><title>alpha shared</title>{directive}</head><body><p>alpha shared</p></body>"))
+    }));
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+    let origin = format!("http://{}", listener.local_addr().unwrap());
+    let (stop, stopped) = tokio::sync::oneshot::channel::<()>();
+    let site = tokio::spawn(async move {
+        axum::serve(listener, site)
+            .with_graceful_shutdown(async {
+                let _ = stopped.await;
+            })
+            .await
+            .unwrap();
+    });
+    let crawler = Crawler::new(CrawlConfig {
+        seed_urls: ["plain", "noindex", "canonical", "prev", "next"]
+            .map(|p| format!("{origin}/{p}"))
+            .to_vec(),
+        content_capture: Some(Default::default()),
+        concurrency: 1,
+        crawl_links: false,
+        obey_robots: false,
+        discover_sitemaps: false,
+        request_timeout_secs: 5,
+        ..Default::default()
+    })
+    .unwrap();
+    let report = tokio::time::timeout(
+        std::time::Duration::from_secs(15),
+        crawler.run_controlled(None, CrawlControl::new()),
+    )
+    .await
+    .unwrap()
+    .unwrap()
+    .report;
+    drop(crawler);
+    stop.send(()).unwrap();
+    tokio::time::timeout(std::time::Duration::from_secs(5), site)
+        .await
+        .unwrap()
+        .unwrap();
+    assert_eq!(report.pages.len(), 5);
+    report
+}
+#[tokio::test]
+async fn saved_ngram_reporting_eight_profiles_apply_before_all_three_channel_corpora() {
+    let mut report = reporting_captured_report().await;
+    for mask in 0u8..8 {
+        report.config.directive_reporting = Some(tests::reporting_profile(mask));
+        let before = serde_json::to_vec(&report).unwrap();
+        let expected = 5 - mask.count_ones() as usize;
+        for request in reporting_requests() {
+            let result = aggregate(&report, &request).unwrap();
+            assert_eq!(result.sources.len(), expected);
+            assert_eq!(
+                result
+                    .rows
+                    .iter()
+                    .find(|r| r.tokens == ["alpha"])
+                    .unwrap()
+                    .document_frequency,
+                expected
+            );
+            assert!(
+                result
+                    .sources
+                    .iter()
+                    .all(|s| !s.requested_url.ends_with("target-only"))
+            );
+            if mask == 0 {
+                assert!(result.reporting.is_none());
+            } else {
+                let visibility = result.reporting.as_ref().unwrap();
+                assert_eq!(
+                    (
+                        visibility.captured_page_observations,
+                        visibility.profile_visible_page_observations,
+                        visibility.profile_excluded_page_observations,
+                        visibility.eligible_page_observations,
+                        visibility.counted_source_observations
+                    ),
+                    (5, expected, mask.count_ones() as usize, expected, expected)
+                );
+            }
+        }
+        assert_eq!(serde_json::to_vec(&report).unwrap(), before);
+    }
+}
+#[tokio::test]
+async fn saved_ngram_reporting_raw_ordinals_capture_bindings_and_dense_memberships_survive_selection()
+ {
+    let mut report = reporting_captured_report().await;
+    report.config.directive_reporting = Some(tests::reporting_profile(7));
+    let expected: Vec<_> = report
+        .pages
+        .iter()
+        .enumerate()
+        .filter(|(_, p)| open_seo_spider_core::directive_page_visible(&report.config, p))
+        .map(|(i, _)| i)
+        .collect();
+    assert_eq!(expected.len(), 2);
+    for mut request in reporting_requests() {
+        request.view = View::Sources;
+        let result = aggregate(&report, &request).unwrap();
+        let ctx = context(
+            &report,
+            Some("job".into()),
+            Some(7),
+            "captured-owned-fixture",
+        )
+        .unwrap();
+        let (bytes, s) = preview(&result, ctx.clone(), &request).unwrap();
+        let value: Value = serde_json::from_slice(&bytes).unwrap();
+        for (dense, raw) in expected.iter().copied().enumerate() {
+            let row = &value["rows"][dense]["source"];
+            assert_eq!(row["ordinal"], dense);
+            assert_eq!(row["raw_page_ordinal"], raw);
+            assert_eq!(row["requested_url"], report.pages[raw].url);
+            assert_eq!(
+                row["source_revision"],
+                report.pages[raw].content_captures.as_ref().unwrap()[0].source_revision
+            );
+        }
+        for row in &result.rows {
+            for membership in &row.sources {
+                assert!(membership.source_ordinal < result.sources.len());
+                assert_eq!(
+                    result.sources[membership.source_ordinal].requested_url,
+                    report.pages[expected[membership.source_ordinal]].url
+                );
+            }
+        }
+        request.expected_snapshot_token = Some(s.snapshot_token);
+        let rows = tests::reporting_csv(&csv(&result, ctx, &request).unwrap().0);
+        let columns =
+            if request.html_text_channel.is_some() || request.retained_metadata_channel.is_some() {
+                22
+            } else {
+                20
+            };
+        assert!(rows.iter().all(|r| r.len() == columns));
+        assert_eq!(rows[1][1], "reporting");
+        assert_eq!(rows.len(), 4);
+        for (dense, raw) in expected.iter().enumerate() {
+            assert_eq!(rows[dense + 2][6], dense.to_string());
+            assert_eq!(rows[dense + 2][columns - 1], raw.to_string());
+        }
+    }
+}
+#[tokio::test]
+async fn saved_ngram_reporting_mixed_duplicate_observations_select_individually_not_by_url() {
+    let mut report = reporting_captured_report().await;
+    let original = report
+        .pages
+        .iter()
+        .find(|p| p.url.ends_with("/plain"))
+        .unwrap()
+        .clone();
+    let mut hidden = original.clone();
+    hidden.meta_robots = vec!["noindex".into()];
+    report.pages = vec![hidden, original];
+    report.config.directive_reporting = Some(tests::reporting_profile(1));
+    for request in reporting_requests() {
+        let result = aggregate(&report, &request).unwrap();
+        assert_eq!(result.sources.len(), 1);
+        assert_eq!(result.raw_page_ordinals.as_deref(), Some(&[1][..]));
+        assert!(
+            aggregate(
+                &report,
+                &Request {
+                    reporting_mode: Some(ReportingMode::Raw),
+                    ..request.clone()
+                }
+            )
+            .unwrap_err()
+            .to_string()
+            .contains("Duplicate")
+        );
+    }
+    report.pages[0].meta_robots.clear();
+    for request in reporting_requests() {
+        assert!(
+            aggregate(&report, &request).is_err(),
+            "Several eligible exact-URL observations keep original ambiguity refusal"
+        );
+    }
+}
+#[tokio::test]
+async fn saved_ngram_reporting_limits_apply_to_visible_corpus_but_hidden_capture_errors_are_retained()
+ {
+    let mut report = reporting_captured_report().await;
+    report.config.directive_reporting = Some(tests::reporting_profile(7));
+    for mut request in reporting_requests() {
+        request.options.limits.max_documents = 2;
+        assert_eq!(aggregate(&report, &request).unwrap().sources.len(), 2);
+        assert!(
+            aggregate(
+                &report,
+                &Request {
+                    reporting_mode: Some(ReportingMode::Raw),
+                    ..request
+                }
+            )
+            .is_err()
+        );
+    }
+    let hidden = report
+        .pages
+        .iter_mut()
+        .find(|p| p.url.ends_with("/noindex"))
+        .unwrap();
+    hidden.content_captures.as_mut().unwrap()[0].source_revision = "corrupt-hidden-capture".into();
+    for request in reporting_requests() {
+        assert!(
+            aggregate(&report, &request).is_err(),
+            "Profile filtering never hides invalid original capture identity"
+        );
+    }
+}
+#[tokio::test]
+async fn saved_ngram_reporting_dom_and_optional_metadata_channels_keep_separate_raw_source_authority()
+ {
+    let mut report = captured_report().await;
+    report.config.directive_reporting = Some(tests::reporting_profile(1));
+    let before = serde_json::to_vec(&report).unwrap();
+    for source_kind in [
+        ContentCaptureSourceKind::RawHttpHtml,
+        ContentCaptureSourceKind::RenderedDomHtml,
+    ] {
+        for request in [
+            Request {
+                source_kind,
+                ..Default::default()
+            },
+            request(Channel::Title, source_kind),
+            metadata_request(Channel::Title, source_kind),
+        ] {
+            let shown = aggregate(&report, &request).unwrap();
+            let raw = aggregate(
+                &report,
+                &Request {
+                    reporting_mode: Some(ReportingMode::Raw),
+                    ..request.clone()
+                },
+            )
+            .unwrap();
+            assert_eq!(
+                serde_json::to_value(&shown.corpus).unwrap(),
+                serde_json::to_value(&raw.corpus).unwrap()
+            );
+            let ctx = context(&report, None, None, "controlled-renderer-protocol-fixture").unwrap();
+            assert_ne!(
+                preview(&shown, ctx.clone(), &request)
+                    .unwrap()
+                    .1
+                    .snapshot_token,
+                preview(
+                    &raw,
+                    ctx,
+                    &Request {
+                        reporting_mode: Some(ReportingMode::Raw),
+                        ..request
+                    }
+                )
+                .unwrap()
+                .1
+                .snapshot_token
+            );
+        }
+    }
+    assert_eq!(serde_json::to_vec(&report).unwrap(), before);
+}
+
+#[tokio::test]
+async fn saved_ngram_reporting_all_three_channels_preserve_legacy_options_tokens_full_json_csv_bytes()
+ {
+    let original_report = reporting_captured_report().await;
+    assert!(original_report.config.directive_reporting.is_none());
+    for mut request in reporting_requests() {
+        request.view = View::Sources;
+        let original_context = context(
+            &original_report,
+            Some("legacy".into()),
+            Some(7),
+            "owned-saved-capture-fixture",
+        )
+        .unwrap();
+        let original_corpus = aggregate(&original_report, &request).unwrap();
+        assert!(original_corpus.reporting.is_none());
+        assert_eq!(
+            bounded_hash(&original_corpus, CSV_BYTES).unwrap(),
+            bounded_hash(&original_corpus.corpus, CSV_BYTES).unwrap()
+        );
+        let original_options = if let Some(profile) = request.retained_metadata_channel {
+            bounded_hash(&json!({"retained_metadata_channel":profile,"source_kind":request.source_kind,"options":request.options,"view":request.view,"n":request.n,"query":request.query,"exact_tokens":request.exact_tokens,"limit":request.limit}), REQUEST_BYTES).unwrap()
+        } else if let Some(profile) = request.html_text_channel {
+            bounded_hash(&json!({"html_text_channel":profile,"source_kind":request.source_kind,"options":request.options,"view":request.view,"n":request.n,"query":request.query,"exact_tokens":request.exact_tokens,"limit":request.limit}), REQUEST_BYTES).unwrap()
+        } else {
+            bounded_hash(&json!({"source_kind":request.source_kind,"options":request.options,"view":request.view,"n":request.n,"query":request.query,"exact_tokens":request.exact_tokens,"limit":request.limit}), REQUEST_BYTES).unwrap()
+        };
+        let (original_json, original_snapshot) =
+            preview(&original_corpus, original_context.clone(), &request).unwrap();
+        assert_eq!(original_snapshot.options_sha256, original_options);
+        assert_eq!(
+            original_snapshot.snapshot_token,
+            bounded_hash(
+                &(
+                    &original_context,
+                    &original_options,
+                    &original_snapshot.aggregate_sha256
+                ),
+                REQUEST_BYTES
+            )
+            .unwrap()
+        );
+        let export = Request {
+            expected_snapshot_token: Some(original_snapshot.snapshot_token),
+            ..request.clone()
+        };
+        let original_csv = csv(&original_corpus, original_context, &export).unwrap().0;
+        let rows = tests::reporting_csv(&original_csv);
+        let columns =
+            if request.html_text_channel.is_some() || request.retained_metadata_channel.is_some() {
+                20
+            } else {
+                18
+            };
+        assert_eq!(rows.len(), original_report.pages.len() + 1);
+        assert!(rows.iter().all(|row| row.len() == columns));
+        assert!(
+            !rows[0]
+                .iter()
+                .any(|column| column == "reporting_json" || column == "raw_page_ordinal")
+        );
+        let mut null_wire = serde_json::to_value(&request).unwrap();
+        null_wire["reporting_mode"] = Value::Null;
+        let null_request: Request = serde_json::from_value(null_wire).unwrap();
+        assert_eq!(
+            serde_json::to_vec(&null_request).unwrap(),
+            serde_json::to_vec(&request).unwrap()
+        );
+        for profile in [None, Some(tests::reporting_profile(0))] {
+            let mut report = original_report.clone();
+            report.config.directive_reporting = profile;
+            assert_eq!(
+                serde_json::to_vec(&report).unwrap(),
+                serde_json::to_vec(&original_report).unwrap()
+            );
+            let context = context(
+                &report,
+                Some("legacy".into()),
+                Some(7),
+                "owned-saved-capture-fixture",
+            )
+            .unwrap();
+            let corpus = aggregate(&report, &null_request).unwrap();
+            assert!(corpus.reporting.is_none());
+            assert_eq!(
+                preview(&corpus, context.clone(), &null_request).unwrap().0,
+                original_json
+            );
+            assert_eq!(csv(&corpus, context, &export).unwrap().0, original_csv);
+        }
+    }
+}

@@ -104,7 +104,7 @@ async fn owned_shutdown_stops_actual_http_listener_after_exact_legacy_inventory(
         .iter()
         .map(|v| v["name"].as_str().unwrap())
         .collect();
-    assert_eq!(names.len(), 29);
+    assert_eq!(names.len(), 32);
     assert_eq!(
         &names[..26],
         &[
@@ -139,6 +139,27 @@ async fn owned_shutdown_stops_actual_http_listener_after_exact_legacy_inventory(
     assert_eq!(names[26], "spider_api_enrichment");
     assert_eq!(names[27], "spider_segments");
     assert_eq!(names[28], "spider_crawl_quotas");
+    assert_eq!(names[29], "spider_ngrams");
+    assert_eq!(names[30], "spider_broken_sources");
+    assert_eq!(names[31], "spider_spelling");
+    assert_eq!(names.iter().filter(|v| **v == "spider_spelling").count(), 1);
+    assert_eq!(
+        names
+            .iter()
+            .filter(|name| **name == "spider_broken_sources")
+            .count(),
+        1
+    );
+    let broken = &inventory["result"]["tools"][30];
+    assert_eq!(
+        broken["annotations"],
+        json!({"readOnlyHint":true,"destructiveHint":false,"idempotentHint":true,"openWorldHint":false})
+    );
+    assert_eq!(broken["inputSchema"]["additionalProperties"], false);
+    assert_eq!(
+        broken["inputSchema"]["properties"]["scope"]["enum"],
+        json!(["page_links", "resources"])
+    );
     assert_eq!(
         names
             .iter()

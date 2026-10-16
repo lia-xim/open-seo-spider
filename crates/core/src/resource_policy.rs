@@ -731,7 +731,26 @@ impl ResourceDiscoveryConfig {
             .as_ref()
             .ok_or_else(|| anyhow::anyhow!("Strict response facts missing"))?;
         let mut evaluated = Vec::new();
-        for observed in &facts.redirect_decisions {
+        // Synthetic HSTS gates participate in immutable grant intersection, but
+        // are not added to the actual network redirect response facts.
+        let mut ordered = Vec::new();
+        for index in 0..=facts.redirect_decisions.len() {
+            if let Some(tls) = &page.tls {
+                for hop in tls
+                    .hsts_upgrades
+                    .iter()
+                    .filter(|hop| hop.network_redirect_index == index)
+                {
+                    if let Some(gate) = &hop.resource_gate {
+                        ordered.push(gate);
+                    }
+                }
+            }
+            if let Some(gate) = facts.redirect_decisions.get(index) {
+                ordered.push(gate);
+            }
+        }
+        for observed in ordered {
             if captured_responses_only
                 && !observed.target_url.as_deref().is_some_and(|target| {
                     page.redirect_chain.iter().any(|hop| hop.url == target)

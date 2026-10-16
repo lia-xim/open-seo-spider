@@ -22,7 +22,7 @@
       javascript_rendering: false, renderer_endpoint: 'http://127.0.0.1:8790/render',
       renderer_wait_ms: 500, renderer_accessibility: false, renderer_screenshot: false,
       renderer_collect_cookies: false, custom_javascript_json: '[]',
-      include_patterns_text: '', exclude_patterns_text: '', custom_extractions_json: '[]', audit_thresholds_json: '{}', pdf_analysis_json: '{}', validate_fragments: false, link_position_rules_json: '[]', crawl_policy_enabled: false, crawl_policy_json: '{"scope":{"roots":[{"origin":"https://example.test","folders":["/"],"subdomains":false,"exact_paths":[]}]}}', live_policy_limits_json: '{}', content_capture_enabled:false, content_capture_json:'{"sources":["raw_http_html"],"include_selectors":["body"],"exclude_selectors":["script","style","template","noscript","nav","footer"]}',resource_discovery_enabled:false,resource_discovery_json:'{}',resource_discovery_limits_json:'{}',cdn_classification_enabled:false,cdn_origins_text:'',cdn_directory_reporting_enabled:false,cdn_directory_rules_text:''
+      include_patterns_text: '', exclude_patterns_text: '', custom_extractions_json: '[]', audit_thresholds_json: '{}', pdf_analysis_json: '{}', validate_fragments: false, link_position_rules_json: '[]', crawl_policy_enabled: false, crawl_policy_json: '{"scope":{"roots":[{"origin":"https://example.test","folders":["/"],"subdomains":false,"exact_paths":[]}]}}', live_policy_limits_json: '{}', content_capture_enabled:false, content_capture_json:'{"sources":["raw_http_html"],"include_selectors":["body"],"exclude_selectors":["script","style","template","noscript","nav","footer"]}',resource_discovery_enabled:false,resource_discovery_json:'{}',resource_discovery_limits_json:'{}',tls_enabled:false,tls_respect_hsts:false,tls_certificates_json:'[]',cdn_classification_enabled:false,cdn_origins_text:'',cdn_directory_reporting_enabled:false,cdn_directory_rules_text:'',respect_noindex:false,respect_canonical:false,respect_next_prev:false
     }
   };
   const sections = {
@@ -385,7 +385,7 @@
       if ($('crawl-mode').value !== mode) throw new Error('Der Crawl-Modus wurde während der Prüfung geändert. Bitte erneut starten.');
       if (!current()) return;
       const payload = { ...state.settings, ...advanced, mode, seed_url: mode === 'sitemap' ? '' : urls[0] || '', urls: mode === 'sitemap' ? [] : urls, seed_urls: mode === 'sitemap' ? [] : urls, sitemap_urls: mode === 'sitemap' ? urls : sitemapUrls, input_imports: inputImports, crawl_links: mode !== 'list', include_subdomains: state.settings.follow_subdomains, request_timeout_secs: state.settings.timeout_seconds, max_body_bytes: state.settings.max_body_mb * 1024 * 1024 };
-      for (const key of ['cdn_directory_reporting_enabled','cdn_directory_rules_text','cdn_classification_enabled','cdn_origins_text','crawl_policy_enabled', 'crawl_policy_json', 'live_policy_limits_json', 'content_capture_enabled', 'content_capture_json','resource_discovery_enabled','resource_discovery_json','resource_discovery_limits_json']) delete payload[key];
+      for (const key of ['tls_enabled','tls_respect_hsts','tls_certificates_json','respect_noindex','respect_canonical','respect_next_prev','cdn_directory_reporting_enabled','cdn_directory_rules_text','cdn_classification_enabled','cdn_origins_text','crawl_policy_enabled', 'crawl_policy_json', 'live_policy_limits_json', 'content_capture_enabled', 'content_capture_json','resource_discovery_enabled','resource_discovery_json','resource_discovery_limits_json']) delete payload[key];
       for (const key of [...crawlQuotaSettingKeys, ...crawlAdmissionSettingKeys, ...sitemapArchiveSettingKeys, 'sitemap_source_processing_enabled', ...sitemapSourceFields.map(field => field.setting), 'sitemap_membership_limits_enabled', ...sitemapMembershipFields.map(field => field.setting)]) delete payload[key];
       payload.renderer = state.settings.javascript_rendering ? { endpoint: state.settings.renderer_endpoint, wait_ms: state.settings.renderer_wait_ms, accessibility: state.settings.renderer_accessibility, screenshot: state.settings.renderer_screenshot, collect_cookies: state.settings.renderer_collect_cookies, custom_javascript: parseCustomJavascript(state.settings.custom_javascript_json) } : null;
       const result = await request('/api/crawls', { method: 'POST', body: JSON.stringify(payload) });
@@ -522,6 +522,8 @@
     $('export-csv').disabled = policySection() ? !policyVisibleRows().length || Boolean(state.policyToken || state.policyError) : (!hasData && !state.issues.length) || state.section === 'responses' && state.responses == null || state.section === 'fragments' && (!state.fragments || !state.fragments.enabled);
     $('export-sitemap').disabled = !hasData || Boolean(busy || active());
     $('export-project').disabled = !state.crawl || Boolean(busy || active());
+    $('export-visible-report').disabled = $('export-project').disabled;
+    syncDirectiveReportingProfileSource();
     $('export-resources').disabled = !state.crawl || Boolean(busy || active());
     $('recrawl-selected-count').textContent = `${number(state.recrawlURLs.size)} URLs ausgewählt`;
     $('recrawl-selected').disabled = !canRecrawl();
@@ -582,8 +584,12 @@
 
   function renderOverview() {
     const element = $('overview-view');
+    if (!state.pages.length && !state.issues.length && state.crawl?.reporting_visibility?.captured_pages > 0 && state.crawl.reporting_visibility.visible_pages === 0) {
+      element.innerHTML = directiveReportingNote() + '<div class="empty-overview"><h3>Alle erfassten Seiten sind ausgeblendet</h3><p>Die gespeicherten Berichtsfilter blenden die Seiten aus. Der vollständige Roh-Snapshot bleibt verfügbar.</p></div>';
+      return;
+    }
     if (!state.pages.length && !state.issues.length) {
-      element.innerHTML = `<div class="empty-overview"><div class="empty-icon" aria-hidden="true">⌘</div><h3>${state.crawl ? 'Die ersten Antworten werden ausgewertet' : 'Dein erster Crawl beginnt hier'}</h3><p>${state.crawl ? 'Sobald URLs abgerufen wurden, erscheinen HTTP-Status, Seitenmetadaten und erkannte Probleme. Ein leerer Bereich ist noch keine Aussage über die Website.' : 'Gib eine Website ein oder importiere eine URL-Liste. Open SEO Spider entdeckt Seiten und zeigt dir die technischen Details, die Suchmaschinen sehen.'}</p><div class="feature-pills"><span>HTTP & Redirects</span><span>Titles & Descriptions</span><span>Canonical & Robots</span><span>Links & Hreflang</span><span>CSV & Sitemap</span></div></div>`;
+      element.innerHTML = directiveReportingNote() + `<div class="empty-overview"><div class="empty-icon" aria-hidden="true">⌘</div><h3>${state.crawl ? 'Die ersten Antworten werden ausgewertet' : 'Dein erster Crawl beginnt hier'}</h3><p>${state.crawl ? 'Sobald URLs abgerufen wurden, erscheinen HTTP-Status, Seitenmetadaten und erkannte Probleme. Ein leerer Bereich ist noch keine Aussage über die Website.' : 'Gib eine Website ein oder importiere eine URL-Liste. Open SEO Spider entdeckt Seiten und zeigt dir die technischen Details, die Suchmaschinen sehen.'}</p><div class="feature-pills"><span>HTTP & Redirects</span><span>Titles & Descriptions</span><span>Canonical & Robots</span><span>Links & Hreflang</span><span>CSV & Sitemap</span></div></div>`;
       return;
     }
     const pages = internals();
@@ -602,7 +608,7 @@
     }
     const severityOrder = { error: 0, warning: 1, notice: 2 };
     const groups = [...grouped.values()].sort((a, b) => (severityOrder[a.severity] ?? 3) - (severityOrder[b.severity] ?? 3) || b.count - a.count).slice(0, 6);
-    element.innerHTML = `<div class="overview-grid"><div class="overview-card"><h3>Antworten & Abrufstatus</h3>${buckets.map(([label, count, kind]) => `<div class="status-summary-row"><span>${escape(label)}</span><div class="bar ${kind}"><span style="width:${Math.min(100, pages.length ? count / pages.length * 100 : 0)}%"></span></div><strong>${number(count)}</strong></div>`).join('')}<p class="graph-note">Weiterleitungen können zusätzlich in der finalen 2xx-Antwort enthalten sein.</p></div><div class="overview-card"><h3>Erkannte Probleme</h3>${groups.length ? groups.map((group) => `<button class="issue-summary-row text-button" style="width:100%;text-align:left" data-issue-filter="${escape(group.code)}"><i class="severity-dot ${escape(group.severity)}"></i><span>${escape(issueTitle(group.code))}</span><strong>${number(group.count)}</strong></button>`).join('') : '<p class="detail-empty">Bislang wurden keine Probleme gemeldet. Das ist kein Nachweis für vollständige SEO-Fehlerfreiheit.</p>'}</div></div><div class="overview-footnote"><span aria-hidden="true">ⓘ</span><span>${state.crawl?.config?.renderer ? 'JavaScript-Rendering ist konfiguriert. Prüfe den tatsächlichen Renderstatus je Seite; Worker-Fehler erscheinen in den Seitendetails. Externe APIs sind nicht Teil dieses Crawls.' : 'Die Auswertung beruht auf gelieferten HTTP-Antworten und HTML. JavaScript-Inhalte und externe APIs sind nicht Teil dieses Crawls.'}</span></div>`;
+    element.innerHTML = directiveReportingNote() + `<div class="overview-grid"><div class="overview-card"><h3>Antworten & Abrufstatus</h3>${buckets.map(([label, count, kind]) => `<div class="status-summary-row"><span>${escape(label)}</span><div class="bar ${kind}"><span style="width:${Math.min(100, pages.length ? count / pages.length * 100 : 0)}%"></span></div><strong>${number(count)}</strong></div>`).join('')}<p class="graph-note">Weiterleitungen können zusätzlich in der finalen 2xx-Antwort enthalten sein.</p></div><div class="overview-card"><h3>Erkannte Probleme</h3>${groups.length ? groups.map((group) => `<button class="issue-summary-row text-button" style="width:100%;text-align:left" data-issue-filter="${escape(group.code)}"><i class="severity-dot ${escape(group.severity)}"></i><span>${escape(issueTitle(group.code))}</span><strong>${number(group.count)}</strong></button>`).join('') : '<p class="detail-empty">Bislang wurden keine Probleme gemeldet. Das ist kein Nachweis für vollständige SEO-Fehlerfreiheit.</p>'}</div></div><div class="overview-footnote"><span aria-hidden="true">ⓘ</span><span>${state.crawl?.config?.renderer ? 'JavaScript-Rendering ist konfiguriert. Prüfe den tatsächlichen Renderstatus je Seite; Worker-Fehler erscheinen in den Seitendetails. Externe APIs sind nicht Teil dieses Crawls.' : 'Die Auswertung beruht auf gelieferten HTTP-Antworten und HTML. JavaScript-Inhalte und externe APIs sind nicht Teil dieses Crawls.'}</span></div>`;
     element.querySelectorAll('[data-issue-filter]').forEach((button) => button.addEventListener('click', () => {
       selectSection('issues');
       state.search = button.dataset.issueFilter;
@@ -730,7 +736,7 @@
   const textColumn = (key, label, getter = (row) => row[key], klass = '') => ({ key, label, value: getter, render: (row) => `<span class="${klass || 'truncate'}" title="${escape(getter(row) ?? '')}">${escape(getter(row) ?? '—')}</span>` });
   const urlColumn = textColumn('url', 'URL', (row) => row.url, 'url-cell');
   const numberColumn = (key, label, getter = (row) => row[key]) => ({ key, label, value: getter, render: (row) => getter(row) == null ? '—' : escape(number(getter(row))) });
-  const statusColumn = { key: 'status', label: 'HTTP final', value: effectiveStatus, render: (row) => statusBadge(effectiveStatus(row)) };
+  const statusColumn = { key: 'status', label: 'HTTP final', value: effectiveStatus, render: (row) => statusBadge(effectiveStatus(row)) + (row.tls?.hsts_upgrades?.length ? ' <span class="badge" title="Lokale Transportregel, keine HTTP-Weiterleitung">HSTS 307</span>' : '') };
   const indexColumn = { key: 'indexable', label: 'Indexierbarkeit', value: (row) => row.indexable === true ? 'Indexierbar' : row.indexable === false ? 'Nicht indexierbar' : 'Unbekannt', render: (row) => `<span class="badge ${row.indexable === false ? 'warning' : row.indexable == null ? 'neutral' : ''}">${row.indexable === true ? 'Indexierbar' : row.indexable === false ? 'Nicht indexierbar' : 'Unbekannt'}</span>` };
   const issueColumn = numberColumn('issue_count', 'Probleme', (row) => pageIssues(row.url).length);
   const domColumns = () => [numberColumn('dom_index', 'DOM-Index', row => row.dom_location?.index), textColumn('dom_path', 'DOM-Pfad', domPath), textColumn('dom_source', 'DOM-Quelle', domSource), textColumn('dom_complete', 'Vollständiger Prüfbefund', row => !row._page?.dom_metadata ? 'Nicht erfasst' : completeDOM(row._page) ? 'Ja' : 'Nein / unklar')];
@@ -1054,6 +1060,7 @@
         ['Wörter / Tiefe', `${page.word_count ?? '—'} / ${page.depth ?? '—'}`],
         ['Antwortgröße', page.size_bytes == null ? '—' : `${number(page.size_bytes)} Bytes${page.truncated ? ' · Antwort abgeschnitten' : ''}`],
         ['Strukturierte Daten', `${array(page.structured_data).length} JSON-LD-Blöcke · ${page.invalid_structured_data ?? 0} ungültig`],
+        ['HSTS-Transportregeln', page.tls?.hsts_upgrades?.length ? JSON.stringify(page.tls.hsts_upgrades, null, 2) : 'Keine gespeicherte lokale HSTS-Weiterleitung. HTTP-Status und Server-Weiterleitungen bleiben separat.'],
         ['Weiterleitungen', page.redirect_chain.map((entry) => `${entry.status} ${entry.url} → ${entry.target}`).join('\n') || '—'],
         ['Robots.txt', page.blocked_by_robots ? 'Abruf ausgeschlossen' : page.robots_warning || 'Kein gemeldeter Ausschluss'],
         ['Abruffehler', page.error || '—'], ['Statische URL-Zulassung', page.crawl_admission ? (page.crawl_admission.last.denied ? 'Verweigert: '+page.crawl_admission.last.denied : 'Geprüft') : 'Nicht aktiviert / Altbestand'], ['URL-Grenzen (Tiefe / Query / Bytes)', page.crawl_admission ? [page.crawl_admission.last.folder_depth,page.crawl_admission.last.query_tokens,page.crawl_admission.last.fetch_url_utf8_bytes].join(' / ') : '—'], ['Entdeckt auf', page.discovered_from || '—'],
@@ -1246,6 +1253,8 @@
       return { coverage: operation?.coverage ?? 'crawl_snapshot', basis, selectedState, parentHash: operation?.parent?.snapshot_sha256 ?? '', fetchedAt: page?.fetched_at ?? '', requestedURL: page?.url ?? '' };
     };
     for (const [key, label] of [['coverage', 'Crawl Coverage'], ['basis', 'Observation Basis'], ['selectedState', 'Selected State'], ['parentHash', 'Parent Snapshot SHA256'], ['fetchedAt', 'Fetched At'], ['requestedURL', 'Observation Requested URL']]) cols.push(textColumn('observation_' + key, label, row => metadata(row)[key]));
+    const visibility=state.crawl?.reporting_visibility;
+    if(visibility)for(const [key,label] of [['captured_pages','Captured Pages'],['visible_pages','Visible Pages'],['hidden_pages','Hidden Pages']])cols.push(textColumn('reporting_'+key,label,()=>visibility[key]));
     const csvCell = (input) => { let value = String(input ?? ''); if (typeof input !== 'number' && typeof input !== 'boolean' && /^[\s\uFEFF]*[=+@-]/u.test(value)) value = `'${value}`; return `"${value.replace(/"/g, '""')}"`; };
     const data = [cols.map((column) => csvCell(column.label)).join(','), ...rows.map((row) => cols.map((column) => csvCell(column.value(row))).join(','))].join('\r\n');
     const section = state.section;
@@ -1279,6 +1288,9 @@
   }
 
   function openSettings() {
+    tlsFileRevision++;
+    $('tls-file-status').textContent='';
+    $('tls-certificate-files').value='';
     invalidatePolicyPreview();
     const form = $('settings-form');
     for (const [key, value] of Object.entries(state.settings)) {
@@ -1293,15 +1305,19 @@
     syncCrawlAdmissionSettings();
     renderQuotaRuleControls();syncQuotaSettings();
     $('settings-error').hidden = true;
+    syncDirectiveReportingProfileSource();
+    $('directive-reporting-load-status').textContent = '';
+    $('directive-reporting-load-status').setAttribute('role', 'status');
     $('settings-dialog').showModal();
   }
 
   function saveSettings(event) {
     event.preventDefault();
     const form = $('settings-form');
-    const advancedText = { ...readCdnDirectoryReportingSettings(form), ...readCdnClassificationSettings(form), ...readCrawlQuotaSettings(form), ...readCrawlAdmissionSettings(form), ...readSitemapSourceProcessingSettings(form), ...readSitemapSourceArchiveSettings(form), include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value, link_position_rules_json: form.elements.link_position_rules_json.value, validate_fragments: form.elements.validate_fragments.checked, crawl_policy_enabled: form.elements.crawl_policy_enabled.checked, crawl_policy_json: form.elements.crawl_policy_json.value, live_policy_limits_json: form.elements.live_policy_limits_json.value, follow_subdomains: form.elements.follow_subdomains.checked, check_external: form.elements.check_external.checked, javascript_rendering: form.elements.javascript_rendering.checked, content_capture_enabled:form.elements.content_capture_enabled.checked, content_capture_json:form.elements.content_capture_json.value,resource_discovery_enabled:form.elements.resource_discovery_enabled.checked,resource_discovery_json:form.elements.resource_discovery_json.value,resource_discovery_limits_json:form.elements.resource_discovery_limits_json.value };
+    const advancedText = { ...readTlsSettings(form), ...readDirectiveReportingSettings(form), ...readCdnDirectoryReportingSettings(form), ...readCdnClassificationSettings(form), ...readCrawlQuotaSettings(form), ...readCrawlAdmissionSettings(form), ...readSitemapSourceProcessingSettings(form), ...readSitemapSourceArchiveSettings(form), include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value, link_position_rules_json: form.elements.link_position_rules_json.value, validate_fragments: form.elements.validate_fragments.checked, crawl_policy_enabled: form.elements.crawl_policy_enabled.checked, crawl_policy_json: form.elements.crawl_policy_json.value, live_policy_limits_json: form.elements.live_policy_limits_json.value, follow_subdomains: form.elements.follow_subdomains.checked, check_external: form.elements.check_external.checked, javascript_rendering: form.elements.javascript_rendering.checked, content_capture_enabled:form.elements.content_capture_enabled.checked, content_capture_json:form.elements.content_capture_json.value,resource_discovery_enabled:form.elements.resource_discovery_enabled.checked,resource_discovery_json:form.elements.resource_discovery_json.value,resource_discovery_limits_json:form.elements.resource_discovery_limits_json.value };
     try { parseAdvanced(advancedText); validateRendererSettings({ javascript_rendering: form.elements.javascript_rendering.checked, renderer_endpoint: form.elements.renderer_endpoint.value.trim(), renderer_wait_ms: Number(form.elements.renderer_wait_ms.value), timeout_seconds: Number(form.elements.timeout_seconds.value) }); }
     catch (error) {
+      if (form.elements.tls_enabled.checked) $('tls-settings').open = true;
       if (form.elements.sitemap_source_processing_enabled.checked || form.elements.sitemap_membership_limits_enabled.checked) $('sitemap-source-processing-settings').open = true;
       if (form.elements.crawl_admission_limits_enabled.checked) $('crawl-admission-settings').open = true;
       if (form.elements.crawl_quotas_enabled.checked) $('crawl-quota-settings').open = true;
@@ -1333,8 +1349,10 @@
         Object.assign(state.settings, { crawl_policy_enabled: saved.crawl_policy_enabled === true, crawl_policy_json: String(saved.crawl_policy_json || '{"scope":{"roots":[{"origin":"https://example.test","folders":["/"]}]}}'), live_policy_limits_json: String(saved.live_policy_limits_json || '{}') });
         Object.assign(state.settings, { content_capture_enabled:saved.content_capture_enabled === true, content_capture_json:String(saved.content_capture_json || '{"sources":["raw_http_html"],"include_selectors":["body"],"exclude_selectors":["script","style","template","noscript","nav","footer"]}') });
         Object.assign(state.settings,{resource_discovery_enabled:saved.resource_discovery_enabled===true,resource_discovery_json:String(saved.resource_discovery_json || '{}'),resource_discovery_limits_json:String(saved.resource_discovery_limits_json || '{}')});
+        Object.assign(state.settings,restoreTlsSettings(saved));
         Object.assign(state.settings,restoreCdnClassificationSettings(saved));
         Object.assign(state.settings,restoreCdnDirectoryReportingSettings(saved));
+        Object.assign(state.settings,restoreDirectiveReportingSettings(saved));
         state.settings.crawl_quotas_enabled=saved.crawl_quotas_enabled===true;
         state.settings.crawl_quota_per_depth=String(saved.crawl_quota_per_depth??'');
         state.settings.crawl_quota_per_subdomain=String(saved.crawl_quota_per_subdomain??'');
@@ -1586,7 +1604,7 @@
       return { name, selector, attribute: definition.attribute == null ? null : definition.attribute.trim(), method, output, max_results, regex_group, regex_flags, namespaces };
     });
     const lines = (value) => [...new Set(String(value || '').split(/\r?\n/).map((line) => line.trim()).filter(Boolean))];
-    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), pdf_analysis: parsePdfAnalysis(settings.pdf_analysis_json), link_position_rules: parsePositionRules(settings.link_position_rules_json), validate_fragments: settings.validate_fragments === true, include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text), ...parseNativePolicy(settings), ...parseContentCapture(settings),...parseResourceDiscovery(settings), ...parseSitemapSourceProcessing(settings), ...parseSitemapMembershipLimits(settings), ...parseSitemapSourceArchive(settings), ...parseCrawlQuotas(settings), ...parseCrawlAdmissionLimits(settings), ...parseCdnClassification(settings), ...parseCdnDirectoryReporting(settings) };
+    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), pdf_analysis: parsePdfAnalysis(settings.pdf_analysis_json), link_position_rules: parsePositionRules(settings.link_position_rules_json), validate_fragments: settings.validate_fragments === true, include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text), ...parseNativePolicy(settings), ...parseContentCapture(settings),...parseResourceDiscovery(settings), ...parseSitemapSourceProcessing(settings), ...parseSitemapMembershipLimits(settings), ...parseSitemapSourceArchive(settings), ...parseCrawlQuotas(settings), ...parseCrawlAdmissionLimits(settings), ...parseTlsSettings(settings), ...parseCdnClassification(settings), ...parseCdnDirectoryReporting(settings), ...parseDirectiveReporting(settings) };
   }
 
   function policyObject(value, allowed, label) {
@@ -1688,6 +1706,43 @@
     return config;
   }
 
+  const directiveReportingKeys=["respect_noindex","respect_canonical","respect_next_prev"];
+  function readDirectiveReportingSettings(form){return Object.fromEntries(directiveReportingKeys.map(key=>[key,form.elements[key].checked]));}
+  function restoreDirectiveReportingSettings(saved){return Object.fromEntries(directiveReportingKeys.map(key=>[key,saved[key]===true]));}
+  function parseDirectiveReporting(settings){
+    const flags=Object.fromEntries(directiveReportingKeys.map(key=>{const value=settings[key]??false;if(typeof value!=="boolean")throw new Error("Berichtsfilter: true oder false erforderlich.");return[key,value];}));
+    return Object.values(flags).some(Boolean)?{directive_reporting:{version:1,...flags}}:{};
+  }
+  function directiveReportingSettingsFromCrawlConfig(config) {
+    if (!config || typeof config !== 'object' || Array.isArray(config)) throw new Error('Die Konfiguration des ausgewählten Crawls ist noch nicht geladen.');
+    const profile = config.directive_reporting;
+    if (profile == null) return Object.fromEntries(directiveReportingKeys.map(key => [key, false]));
+    const allowed = ['version', ...directiveReportingKeys];
+    if (typeof profile !== 'object' || Array.isArray(profile) || Object.keys(profile).length !== allowed.length || allowed.some(key => !Object.hasOwn(profile, key)) || profile.version !== 1 || directiveReportingKeys.some(key => typeof profile[key] !== 'boolean')) throw new Error('Die gespeicherten Berichtsfilter haben kein unterstütztes Version-1-Profil mit drei booleschen Schaltern.');
+    return Object.fromEntries(directiveReportingKeys.map(key => [key, profile[key]]));
+  }
+  function syncDirectiveReportingProfileSource() {
+    const crawl = state.crawl, config = crawl?.config;
+    const available = Boolean(crawl && config && typeof config === 'object' && !Array.isArray(config));
+    $('directive-reporting-load-selected').disabled = !available;
+    $('directive-reporting-profile-source').textContent = available ? 'Quelle: ausgewählter Crawl ' + crawl.id + '. Es werden nur die drei Berichtsfilter geladen.' : crawl ? 'Die Konfiguration des ausgewählten Crawls ist noch nicht geladen.' : 'Zuerst einen gespeicherten Crawl auswählen, um dessen Berichtsfilter zu laden.';
+  }
+  function loadSelectedDirectiveReportingProfile() {
+    const status = $('directive-reporting-load-status');
+    try {
+      if (!state.crawl) throw new Error('Zuerst einen gespeicherten Crawl auswählen.');
+      const flags = directiveReportingSettingsFromCrawlConfig(state.crawl.config);
+      const form = $('settings-form');
+      for (const key of directiveReportingKeys) form.elements[key].checked = flags[key];
+      status.setAttribute('role', 'status');
+      status.textContent = 'Berichtsfilter aus Crawl ' + state.crawl.id + ' in den Entwurf übernommen. Mit Speichern gelten sie für den nächsten Crawl.';
+    } catch (error) {
+      status.setAttribute('role', 'alert');
+      status.textContent = 'Berichtsfilter konnten nicht geladen werden: ' + error.message;
+    }
+  }
+  function directiveReportingNote(){const counts=state.crawl?.reporting_visibility;return counts?`<p class="graph-note">Berichtsfilter: ${number(counts.visible_pages)} sichtbar, ${number(counts.hidden_pages)} ausgeblendet, ${number(counts.captured_pages)} erfasst. Abrufe und ausgehende Linkentdeckung bleiben erhalten. Roh-Snapshots und getrennte Analysebereiche sind ungefiltert.</p>`:"";}
+
   function restoreCdnDirectoryReportingSettings(saved){return {cdn_directory_reporting_enabled:saved.cdn_directory_reporting_enabled===true,cdn_directory_rules_text:typeof saved.cdn_directory_rules_text==='string'?saved.cdn_directory_rules_text:''};}
   function readCdnDirectoryReportingSettings(form){return {cdn_directory_reporting_enabled:form.elements.cdn_directory_reporting_enabled.checked,cdn_directory_rules_text:form.elements.cdn_directory_rules_text.value};}
   function parseCdnDirectoryReporting(settings){
@@ -1723,6 +1778,60 @@
     return observation.matching_rules.slice(0,32).map(rule=>`Regel ${Number(rule.rule_index)+1}: ${String(rule.declared_directory)}`).join('\n')+'\nDeklarierte Berichtszuordnung · '+String(observation.engine)+' · '+String(observation.normalization)+'\nKonfigurations-SHA256 '+String(observation.config_sha256)+'\nUrsprünglicher Seed-Bereich: '+(observation.seed_scope_internal?'intern':'extern')+' · keine zusätzliche Abruf-/Traversierungs-/Headerfreigabe';
   }
 
+  let tlsFileRevision = 0;
+  function restoreTlsSettings(saved) {
+    return {tls_enabled:saved.tls_enabled===true,tls_respect_hsts:saved.tls_respect_hsts===true,tls_certificates_json:typeof saved.tls_certificates_json==='string'?saved.tls_certificates_json:'[]'};
+  }
+  function readTlsSettings(form) {
+    return {tls_enabled:form.elements.tls_enabled.checked,tls_respect_hsts:form.elements.tls_respect_hsts.checked,tls_certificates_json:form.elements.tls_certificates_json.value};
+  }
+  function parseTlsSettings(settings) {
+    if(!settings.tls_enabled)return {};
+    const text=settings.tls_certificates_json, encoder=new TextEncoder();
+    if(typeof text!=='string'||encoder.encode(text).length>600000)throw new Error('Die Zertifikatsliste ist zu groß.');
+    let files;try{files=JSON.parse(text);}catch(_){throw new Error('Zertifikate: gültiges JSON erforderlich.');}
+    if(!Array.isArray(files)||files.length>8)throw new Error('Höchstens 8 öffentliche Zertifikatsdateien sind erlaubt.');
+    let total=0;const names=new Set();
+    for(const file of files){
+      if(!file||typeof file!=='object'||Array.isArray(file)||Object.keys(file).sort().join(',')!=='data,format,name'||!['pem','der'].includes(file.format)||typeof file.name!=='string'||!file.name||encoder.encode(file.name).length>256||/[\x00-\x1f\x7f/\\]/.test(file.name)||names.has(file.name)||typeof file.data!=='string')throw new Error('Zertifikat: format, eindeutiger name und data sind erforderlich.');
+      names.add(file.name);
+      let size;
+      if(file.format==='der'){
+        if(!/^(?:[0-9a-f]{2})+$/.test(file.data))throw new Error('DER muss als klein geschriebene Hex-Zeichenfolge vorliegen.');
+        size=file.data.length/2;
+      }else{
+        const rest=file.data.trim().replace(/-----BEGIN CERTIFICATE-----[\t\r\n A-Za-z0-9+/=]+-----END CERTIFICATE-----/g,'').trim();
+        if(rest||!file.data.includes('-----BEGIN CERTIFICATE-----'))throw new Error('PEM darf nur öffentliche CERTIFICATE-Blöcke enthalten, keine privaten Schlüssel.');
+        size=encoder.encode(file.data).length;
+      }
+      total+=size;
+      if(!size||size>65536||total>262144)throw new Error('Zertifikate: höchstens 65536 Bytes je Datei und 262144 Bytes insgesamt.');
+    }
+    const respect_hsts=settings.tls_respect_hsts===true;
+    if(!respect_hsts&&!files.length)return {};
+    if(settings.javascript_rendering)throw new Error('Crawl-eigene Zertifikate und HSTS sind mit dem externen JavaScript-Renderer noch nicht unterstützt. Keine Option wird automatisch ausgeschaltet.');
+    return {tls:{version:1,respect_hsts,trusted_certificates:files}};
+  }
+  async function stageTlsCertificateFiles(event) {
+    const input=event.target, files=Array.from(input.files||[]), form=$('settings-form');
+    const revision=++tlsFileRevision, prior=form.elements.tls_certificates_json.value;
+    try{
+      if(!files.length)return;
+      if(files.length>8||files.some(file=>!/\.(crt|pem|cer|der)$/i.test(file.name)||file.size<1||file.size>65536)||files.reduce((n,file)=>n+file.size,0)>262144)throw new Error('Wähle bis zu 8 .crt/.pem/.cer/.der-Dateien im angegebenen Byte-Limit.');
+      const selected=[];
+      for(const file of files){
+        const bytes=new Uint8Array(await file.arrayBuffer());
+        let pem=null;try{const decoded=new TextDecoder('utf-8',{fatal:true,ignoreBOM:true}).decode(bytes);if(decoded.replace(/^[\t\n\v\f\r ]+/, '').startsWith('-----BEGIN'))pem=decoded;}catch(_){}
+        selected.push({format:pem===null?'der':'pem',name:file.name,data:pem===null?Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join(''):pem});
+      }
+      parseTlsSettings({tls_enabled:true,tls_respect_hsts:form.elements.tls_respect_hsts.checked,tls_certificates_json:JSON.stringify(selected),javascript_rendering:false});
+      if(revision!==tlsFileRevision||!$('settings-dialog').open||form.elements.tls_certificates_json.value!==prior)return;
+      form.elements.tls_certificates_json.value=JSON.stringify(selected,null,2);
+      $('tls-file-status').textContent='Öffentliche Zertifikatsdaten vorgemerkt. Erst Speichern übernimmt sie für den nächsten Crawl.';
+    }catch(error){
+      if(revision===tlsFileRevision&&$('settings-dialog').open)$('tls-file-status').textContent=error.message;
+    }finally{input.value='';}
+  }
   function restoreCdnClassificationSettings(saved){return {cdn_classification_enabled:saved.cdn_classification_enabled===true,cdn_origins_text:typeof saved.cdn_origins_text==='string'?saved.cdn_origins_text:''};}
   function readCdnClassificationSettings(form){return {cdn_classification_enabled:form.elements.cdn_classification_enabled.checked,cdn_origins_text:form.elements.cdn_origins_text.value};}
   function parseCdnClassification(settings){
@@ -2242,10 +2351,13 @@
     if(sitemapBundle.result){
       const result=sitemapBundle.result,mode={omit:'Ohne Änderungsdatum',captured_sitemap:'Gespeicherte Sitemap-Deklarationen',provided:'Eigene Datumswerte mit Quellenangabe'}[result.options.lastmod.source];
       const fields=[['Gespeicherte URLs im Archiv',number(result.generated)],['Ausgeschlossene Seiten',number(result.excluded)],['Archivgröße',number(result.bytes)+' Bytes'],['Geplantes öffentliches Verzeichnis',result.options.public_base_url],['Änderungsdatum',mode],['Bilddeklarationen',result.options.include_images?(result.options.allow_external_images?'Auch andere Hosts':'Gleicher Host'):'Nicht aufgenommen'],['Sprachalternativen',result.options.include_hreflang?'Aufgenommen, soweit gespeicherte Deklarationen verwendbar sind':'Nicht aufgenommen'],['SHA-256 des Archivs',result.bundleSha],['SHA-256 des gespeicherten Berichts',result.reportSha]];
+      if(result.reporting){const view=result.reporting;fields.push(['Berichtsansicht',view.identity.mode],['Erfasste Seiten',number(view.captured_page_observations)],['Nach Berichtsansicht berechtigte Seiten',number(view.eligible_page_observations)],['Durch Berichtsprofil ausgeblendet',number(view.excluded_reporting_page_observations)],['Berichtsidentität SHA-256',view.identity_sha256],['Berechtigte Rohordinal-Identität SHA-256',view.eligible_raw_page_ordinals_sha256]);}
       $('sitemap-bundle-result-fields').innerHTML=fields.map(([label,value])=>`<dt>${escape(label)}</dt><dd>${escape(value)}</dd>`).join('');
     }else{$('sitemap-bundle-result-fields').replaceChildren();}
   }
   function sitemapBundleOptions() {
+    const reportingMode=$('sitemap-bundle-reporting-mode').value;
+    if(!['','raw','reported'].includes(reportingMode))throw new Error('Eine unterstützte Berichtsansicht auswählen.');
     const integer=(id,label,max)=>{const input=$(id).value;if(!/^[1-9][0-9]*$/.test(input) || !Number.isSafeInteger(Number(input)) || Number(input)>max)throw new Error(`${label}: eine ganze Zahl zwischen 1 und ${number(max)} eingeben.`);return Number(input);};
     const publicBase=$('sitemap-bundle-public-base').value;
     let url;try{url=new URL(publicBase);}catch(_){throw new Error('Ein vollständiges öffentliches HTTP(S)-Verzeichnis eingeben.');}
@@ -2269,6 +2381,7 @@
     const includeImages=$('sitemap-bundle-images').checked;
     return {
       public_base_url:publicBase,
+      ...(reportingMode?{reporting_mode:reportingMode}:{}),
       max_urls_per_file:integer('sitemap-bundle-max-urls','URLs je Datei',50000),
       max_urlset_uncompressed_bytes:integer('sitemap-bundle-max-file-bytes','URL-Sitemap-Größe',52428800),
       max_index_uncompressed_bytes:integer('sitemap-bundle-max-index-bytes','Indexgröße',52428800),
@@ -2280,6 +2393,25 @@
       changefreq:$('sitemap-bundle-changefreq').value || null,
       priority:$('sitemap-bundle-priority').value || null,
     };
+  }
+  async function validateSitemapBundleReporting(rawReporting,requestedMode,generated,excluded) {
+    if(requestedMode!=null && !['raw','reported'].includes(requestedMode))throw new Error('Eine unterstützte Berichtsansicht auswählen.');
+    if(rawReporting===null){if(requestedMode!=null)throw new Error('Die ausdrücklich gewählten Berichtsmetadaten fehlen.');return null;}
+    if(typeof rawReporting!=='string'||new TextEncoder().encode(rawReporting).byteLength>8192)throw new Error('Die Berichtsmetadaten überschreiten ihre Grenze oder sind ungültig.');
+    let value;try{value=JSON.parse(rawReporting);}catch(_){throw new Error('Ungültige Berichtsmetadaten.');}
+    const object=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);
+    const exact=(value,keys)=>object(value)&&Object.keys(value).length===keys.length&&keys.every(key=>Object.hasOwn(value,key));
+    const identity=value?.identity;
+    if(!object(value)||!exact(identity,['engine','mode','directive_reporting'])||identity.engine!=='open-seo-spider/sitemap-generation-reporting-v1'||!['raw','reported'].includes(identity.mode)||requestedMode!=null&&identity.mode!==requestedMode)throw new Error('Ungültige Berichtsidentität oder Berichtsansicht.');
+    const profile=identity.directive_reporting;
+    if(profile!==null && (!exact(profile,['version','respect_noindex','respect_canonical','respect_next_prev'])||profile.version!==1||['respect_noindex','respect_canonical','respect_next_prev'].some(key=>typeof profile[key]!=='boolean')||![profile.respect_noindex,profile.respect_canonical,profile.respect_next_prev].some(flag=>flag===true)))throw new Error('Ungültiges aktives Berichtsprofil.');
+    const counts=[generated,excluded,value.captured_page_observations,value.profile_visible_page_observations,value.profile_excluded_page_observations,value.eligible_page_observations,value.excluded_reporting_page_observations,value.generated_pages];
+    if(counts.some(n=>!Number.isSafeInteger(n)||n<0||n>1000000)||generated<1||value.captured_page_observations!==generated+excluded||value.profile_visible_page_observations+value.profile_excluded_page_observations!==value.captured_page_observations||value.eligible_page_observations!==(identity.mode==='raw'?value.captured_page_observations:value.profile_visible_page_observations)||value.excluded_reporting_page_observations+value.eligible_page_observations!==value.captured_page_observations||value.generated_pages!==generated||generated>value.eligible_page_observations)throw new Error('Ungültige Berichts-Zählung.');
+    if([value.identity_sha256,value.eligible_raw_page_ordinals_sha256,value.generated_raw_page_ordinals_sha256].some(hash=>typeof hash!=='string'||!/^[a-f0-9]{64}$/.test(hash)))throw new Error('Ungültige Berichts-Prüfsumme.');
+    if(!globalThis.crypto?.subtle)throw new Error('Dieser Browser kann die Berichtsidentität nicht verifizieren.');
+    const digest=[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(identity))))].map(byte=>byte.toString(16).padStart(2,'0')).join('');
+    if(digest!==value.identity_sha256)throw new Error('Die Berichtsidentität stimmt nicht mit der Prüfsumme überein.');
+    return value;
   }
   async function readSitemapBundleStream(response,limit,expectedLength=null) {
     if(!response.body?.getReader)throw new Error('Dieser Browser unterstützt den begrenzten Datei-Download nicht.');
@@ -2295,8 +2427,8 @@
     if(!state.crawl || active() || actionBusy() || sitemapBundle.token)return;
     sitemapBundle.error='';sitemapBundle.result=null;
     let options;try{options=sitemapBundleOptions();}catch(error){sitemapBundle.error=error.message;renderSitemapBundleControls();return;}
-    const token={id:state.crawl.id,generation:state.generation,serverGeneration:state.crawl.generation??null,controller:new AbortController()};
-    const owns=()=>sitemapBundle.token===token && state.crawl?.id===token.id && state.generation===token.generation && (state.crawl?.generation??null)===token.serverGeneration && !token.controller.signal.aborted;
+    const token={id:state.crawl.id,generation:state.generation,serverGeneration:state.crawl.generation??null,reportingMode:$('sitemap-bundle-reporting-mode').value,controller:new AbortController()};
+    const owns=()=>sitemapBundle.token===token && state.crawl?.id===token.id && state.generation===token.generation && (state.crawl?.generation??null)===token.serverGeneration && $('sitemap-bundle-reporting-mode').value===token.reportingMode && !token.controller.signal.aborted;
     sitemapBundle.token=token;sitemapBundle.status='Sitemap-Dateien werden aus dem gespeicherten Crawl vorbereitet …';renderSitemapBundleControls();
     try{
       const response=await fetch(`/api/crawls/${encodeURIComponent(token.id)}/sitemap-bundle`,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/zip'},body:JSON.stringify(options),signal:token.controller.signal});
@@ -2305,7 +2437,7 @@
         const failure=await readSitemapBundleStream(response,65536),raw=await failure.blob.text();
         let details;try{details=JSON.parse(raw);}catch(_){}
         const message=typeof details?.message==='string'?details.message:typeof details?.error==='string'?details.error:`Sitemap-Dateien konnten nicht erzeugt werden (HTTP ${response.status}).`;
-        const reasonLabels={outside_public_base:'Außerhalb des öffentlichen Verzeichnisses',invalid_page_url:'Ungültige Seiten-URL',invalid_url:'Ungültige Seiten-URL',non_indexable:'Nicht indexierbare Seite',not_indexable:'Nicht indexierbare Seite',non_200:'Antwortstatus ungleich 200',non_200_status:'Antwortstatus ungleich 200',redirected:'Weitergeleitete Seite',duplicate_url:'Doppelte URL',incomplete_page:'Unvollständiger Seitenbefund'};
+        const reasonLabels={excluded_reporting:'Durch Berichtsprofil ausgeblendet',outside_public_base:'Außerhalb des öffentlichen Verzeichnisses',invalid_page_url:'Ungültige Seiten-URL',invalid_url:'Ungültige Seiten-URL',non_indexable:'Nicht indexierbare Seite',not_indexable:'Nicht indexierbare Seite',non_200:'Antwortstatus ungleich 200',non_200_status:'Antwortstatus ungleich 200',redirected:'Weitergeleitete Seite',duplicate_url:'Doppelte URL',incomplete_page:'Unvollständiger Seitenbefund'};
         const diagnostic=details?.diagnostic_counts && typeof details.diagnostic_counts==='object' && !Array.isArray(details.diagnostic_counts)?Object.entries(details.diagnostic_counts).filter(([name,count])=>/^[a-z0-9_]+$/.test(name) && Number.isSafeInteger(count) && count>0).map(([name,count])=>`${reasonLabels[name] || 'Weitere Auslassung'}: ${number(count)}`).join(' · '):'';
         throw new Error(message+(diagnostic?` Ausgelassene Befunde: ${diagnostic}.`:''));
       }
@@ -2313,6 +2445,7 @@
       const count=(name,positive=false)=>{const raw=response.headers.get(name);if(!/^(0|[1-9][0-9]*)$/.test(raw??'') || !Number.isSafeInteger(Number(raw)) || positive && Number(raw)<1)throw new Error('Die Archivantwort enthält keine unterstützte Dateigröße oder URL-Zählung.');return Number(raw);};
       if(response.headers.get('content-type')?.split(';',1)[0].trim().toLowerCase()!=='application/zip' || response.headers.get('x-sitemap-generation-engine')!==sitemapBundleEngine)throw new Error('Der Server hat kein unterstütztes Sitemap-Archiv geliefert.');
       const reportSha=hash('x-sitemap-report-sha256'),bundleSha=hash('x-sitemap-bundle-sha256'),generated=count('x-sitemap-generated-urls',true),excluded=count('x-sitemap-excluded-pages'),expected=count('content-length',true);
+      const reporting=await validateSitemapBundleReporting(response.headers.get('x-sitemap-reporting'),options.reporting_mode??null,generated,excluded);
       if(expected>options.max_total_output_bytes)throw new Error('Das Archiv überschreitet die angegebene Gesamtgröße; es wird kein Download bereitgestellt.');
       const file=await readSitemapBundleStream(response,options.max_total_output_bytes,expected);
       if(!owns())return;
@@ -2323,13 +2456,14 @@
       if(actual!==bundleSha)throw new Error('Die Archiv-Prüfsumme stimmt nicht überein; es wird kein Download bereitgestellt.');
       if(!owns())return;
       downloadBlob(new Blob([bytes],{type:'application/zip'}),`open-seo-spider-${token.id}-sitemap-bundle.zip`);
-      sitemapBundle.result={options,generated,excluded,bytes:file.bytes,reportSha,bundleSha};
+      sitemapBundle.result={options,generated,excluded,bytes:file.bytes,reportSha,bundleSha,...(reporting?{reporting}:{})};
       sitemapBundle.status=`ZIP zum lokalen Download bereitgestellt: ${number(generated)} gespeicherte URLs, ${number(excluded)} ausgeschlossene Seiten. Die Dateien wurden nicht veröffentlicht.`;
     }catch(error){if(owns()){sitemapBundle.error=error.message;sitemapBundle.status='Kein neues Archiv zum Download bereitgestellt.';}}
     finally{if(sitemapBundle.token===token){sitemapBundle.token=null;renderSitemapBundleControls();}}
   }
   function bindSitemapBundleEvents() {
     $('sitemap-bundle-form').addEventListener('submit',generateSitemapBundle);
+    $('sitemap-bundle-reporting-mode').addEventListener('change',()=>{sitemapBundle.token?.controller.abort();sitemapBundle.token=null;sitemapBundle.result=null;sitemapBundle.error='';sitemapBundle.status='Berichtsansicht geändert; das nächste Archiv wird neu aus dem gespeicherten Stand erzeugt.';renderSitemapBundleControls();});
     $('sitemap-bundle-lastmod-source').addEventListener('change',renderSitemapBundleControls);
     $('sitemap-bundle-images').addEventListener('change',()=>{if(!$('sitemap-bundle-images').checked)$('sitemap-bundle-external-images').checked=false;renderSitemapBundleControls();});
     $('sitemap-bundle-cancel').addEventListener('click',()=>{if(!sitemapBundle.token)return;sitemapBundle.token.controller.abort();sitemapBundle.token=null;sitemapBundle.result=null;sitemapBundle.error='';sitemapBundle.status='Download abgebrochen. Kein neues Archiv bereitgestellt.';renderSitemapBundleControls();});
@@ -2703,6 +2837,19 @@
   const contentProfiles = { engine:'open-seo-spider/content-analysis-v1',token:'unicode-alphanumeric-mark-runs-no-normalization-v1',similarity:'exact-token-shingle-set-jaccard-v1',readability:'declared-en-de-vowel-groups-terminal-e-v1',capture:'open-seo-spider/native-content-binding-v1',captureEngine:'open-seo-spider/html-content-capture-v1',selection:'css-ancestor-membership-document-order-v1',whitespace:'unicode-whitespace-and-nonempty-node-boundaries-ascii-space-v1',parser:'scraper-0.27.0-html5ever-document-recovery-v1',htmlHash:'supplied-html-string-utf8-v1' };
   const contentSection = () => state.section === 'content';
   const contentSource = () => $('content-source').value;
+  const contentReportingMode = () => $('content-reporting-mode').value;
+  function contentReportingQuery(token,inventory=null) {
+    const query=new URLSearchParams();
+    if(token.reportingMode)query.set('reporting_mode',token.reportingMode);
+    if(inventory){query.set('expected_snapshot_sha256',inventory.snapshot.sha256);if(inventory.snapshot.generation!=null)query.set('expected_generation',String(inventory.snapshot.generation));if(inventory.reporting)query.set('expected_reporting_identity',inventory.reporting.identity_sha256);}
+    return query.toString() ? '&'+query : '';
+  }
+  function validateContentReporting(result,token,inventory=null) {
+    const reporting=result.reporting;
+    if(reporting){const identity=reporting.identity;if(identity?.engine!=='open-seo-spider/saved-content-reporting-v1'||!['raw','reported'].includes(identity.mode)||token.reportingMode&&identity.mode!==token.reportingMode||!/^[a-f0-9]{64}$/.test(reporting.identity_sha256)||!/^[a-f0-9]{64}$/.test(reporting.eligible_raw_page_ordinals_sha256)||!Number.isSafeInteger(reporting.captured_page_observations)||!Number.isSafeInteger(reporting.profile_visible_page_observations)||!Number.isSafeInteger(reporting.profile_excluded_page_observations)||!Number.isSafeInteger(reporting.eligible_page_observations)||reporting.profile_visible_page_observations<0||reporting.profile_excluded_page_observations<0||reporting.profile_visible_page_observations+reporting.profile_excluded_page_observations!==reporting.captured_page_observations||reporting.eligible_page_observations!==(identity.mode==='raw'?reporting.captured_page_observations:reporting.profile_visible_page_observations))throw new Error('Ungültige Berichtsansicht oder Befundzählung.');}
+    else if(token.reportingMode)throw new Error('Die ausdrücklich gewählte Berichtsansicht fehlt.');
+    if(inventory && (inventory.reporting?.identity_sha256!==reporting?.identity_sha256 || inventory.reporting?.eligible_raw_page_ordinals_sha256!==reporting?.eligible_raw_page_ordinals_sha256))throw new Error('Gespeichertes Berichtsprofil oder sichtbare Befundidentität geändert. Quellseite neu laden.');
+  }
   const contentBasis = basis => ({captured_in_crawl:'Erfasst in diesem Crawl',refreshed_selected:'Neu geprüft im ausgewählten Lauf',inherited_parent:'Beibehalten aus Elternbericht',pending_selected:'Ausstehend · kein aktueller Text',unknown_operation:'Befundalter unbekannt'}[basis] || 'Befundbasis unbekannt');
   const contentParent = row => !row ? 'Elternquelle unbekannt' : row.parent_source_kind == null ? 'Elternquelle unbekannt' : `${row.parent_source_kind}${row.parent_source_kind==='imported_snapshot' ? ' · deklarierter Import; keine authentifizierte Netzwerkquelle' : ''}`;
   const contentStatus = status => ({complete:'Vollständig',empty:'Beobachtet leer',incomplete:'Unvollständig',unavailable:'Quelle nicht verfügbar',error:'Erfassungsfehler',missing:'Nicht erfasst / Legacy'}[status] || 'Nicht unterstützter Zustand');
@@ -2719,13 +2866,14 @@
     state.content.inventoryToken?.controller.abort(); state.content.inventoryToken = null;
     state.content.inventory = null; state.content.selected.clear(); state.content.cursor = 0; state.content.back = []; state.content.error = '';
     state.content.sort = 0; state.content.direction = 1;
+    if ($('content-reporting-mode')) $('content-reporting-mode').value = '';
     if ($('content-search')) { $('content-search').value = ''; $('content-filter').value = 'all'; $('content-result-search').value = ''; }
   }
   function contentToken(kind) {
-    const token = { kind,id:state.crawl.id,generation:state.generation,revision:state.content.revision,source:contentSource(),controller:new AbortController() };
+    const token = { kind,id:state.crawl.id,generation:state.generation,revision:state.content.revision,source:contentSource(),reportingMode:contentReportingMode(),controller:new AbortController() };
     state.content[kind] = token; return token;
   }
-  function contentCurrent(token) { return state.content[token.kind] === token && token.id === state.crawl?.id && token.generation === state.generation && token.revision === state.content.revision && token.source === contentSource(); }
+  function contentCurrent(token) { return state.content[token.kind] === token && token.id === state.crawl?.id && token.generation === state.generation && token.revision === state.content.revision && token.source === contentSource() && token.reportingMode === contentReportingMode(); }
   function validateContentEnvelope(result, source) {
     if (!result || result.engine !== savedContentEngine || result.source_kind !== source || result.website_requests !== 0 || result.site_wide_coverage !== false || result.snapshot?.sha_profile !== 'typed-crawl-report-serde-json-v1' || typeof result.snapshot.sha256 !== 'string' || !/^[a-fA-F0-9]{64}$/.test(result.snapshot.sha256) || !['native_saved_report','declared_imported_report'].includes(result.snapshot.origin) || !(result.snapshot.generation == null || Number.isSafeInteger(result.snapshot.generation) && result.snapshot.generation >= 0)) throw new Error('Nicht unterstützte gespeicherte Inhaltsbindung, Quelle oder Snapshot-Profil.');
   }
@@ -2737,9 +2885,9 @@
     if (!state.crawl || active() || content.inventoryToken || !contentSection()) return;
     const token = contentToken('inventoryToken'); content.error = ''; renderContent();
     try {
-      const result = await request(`/api/crawls/${encodeURIComponent(token.id)}/content?after_ordinal=${cursor}&limit=200&source_kind=${token.source}`,{signal:token.controller.signal});
+      const result = await request(`/api/crawls/${encodeURIComponent(token.id)}/content?after_ordinal=${cursor}&limit=200&source_kind=${token.source}${contentReportingQuery(token,navigation ? content.inventory : null)}`,{signal:token.controller.signal});
       if (!contentCurrent(token)) return;
-      validateContentEnvelope(result,token.source);
+      validateContentEnvelope(result,token.source); validateContentReporting(result,token,navigation ? content.inventory : null);
       if (!Array.isArray(result.rows) || result.rows.length > 200 || result.limit !== 200 || result.text_included !== false || result.after_ordinal !== cursor || typeof result.has_more !== 'boolean' || !Number.isSafeInteger(result.total_saved_pages) || result.total_saved_pages < 0 || result.has_more && (!Number.isSafeInteger(result.next_after_ordinal) || result.next_after_ordinal <= cursor)) throw new Error('Ungültige oder unbeschränkte gespeicherte Quellseite.');
       result.rows.forEach(row => validateContentRow(row,token.source));
       if (content.inventory && content.inventory.snapshot.sha256 !== result.snapshot.sha256) {
@@ -2772,7 +2920,7 @@
     if (!contentSection()) return;
     const content = state.content, inventory = content.inventory, snapshot = inventory?.snapshot;
     $('content-summary').textContent = !state.crawl ? 'Einen gespeicherten Crawl auswählen.' : active() ? 'Der Crawl ist aktiv. Textquellen werden erst aus einem ruhenden gespeicherten Stand gelesen.' : content.inventoryToken ? 'Gespeicherte Quellseite wird geladen …' : !inventory ? 'Noch keine gespeicherten Textquellen geladen.' : `${contentOrigin(snapshot.origin)} · Snapshot ${snapshot.sha256} · Generation ${snapshot.generation ?? 'unbekannt'} · ${number(inventory.total_saved_pages)} gespeicherte Dokumente; diese API-Seite enthält keinen Text.`;
-    $('content-scope').textContent = 'Quelle: ' + contentSource() + ' · Snapshot-Profil: ' + (snapshot?.sha_profile || 'noch nicht erfasst') + ' · Keine Website-Vollständigkeit abgeleitet. Befundalter, Textvollständigkeit und Herkunft bleiben getrennt.';
+    $('content-scope').textContent = (inventory?.reporting ? 'Ansicht '+inventory.reporting.identity.mode+' · '+number(inventory.reporting.eligible_page_observations)+' berechtigte / '+number(inventory.reporting.captured_page_observations)+' erfasste Befunde · '+number(inventory.reporting.profile_excluded_page_observations)+' durch gespeichertes Profil ausgeblendet. ' : '') + 'Quelle: ' + contentSource() + ' · Snapshot-Profil: ' + (snapshot?.sha_profile || 'noch nicht erfasst') + ' · Keine Website-Vollständigkeit abgeleitet. Befundalter, Textvollständigkeit und Herkunft bleiben getrennt.';
     $('content-error').hidden = !content.error; $('content-error').textContent = content.error;
     const rows = contentVisibleRows(), usable = Boolean(inventory && !content.error && !active()), busy = Boolean(content.inventoryToken);
     const table = $('content-table');
@@ -2797,9 +2945,9 @@
     if (active() || !content.inventory || !array(content.inventory.rows).some(row=>row.requested_url===url)) return;
     content.sourceToken?.controller.abort(); const token=contentToken('sourceToken'); content.source=null; content.sourceError=''; $('content-source-inspector').hidden=false; $('content-source-text').textContent='Gespeicherte Quelle wird geladen …'; $('content-source-json').disabled=true; $('content-source-inspector').scrollIntoView({block:'nearest'});
     try {
-      const result=await request(`/api/crawls/${encodeURIComponent(token.id)}/content/document?url=${encodeURIComponent(url)}&source_kind=${token.source}`,{signal:token.controller.signal});
+      const result=await request(`/api/crawls/${encodeURIComponent(token.id)}/content/document?url=${encodeURIComponent(url)}&source_kind=${token.source}${contentReportingQuery(token,content.inventory)}`,{signal:token.controller.signal});
       if (!contentCurrent(token)) return;
-      validateContentEnvelope(result,token.source); validateContentRow(result.row,token.source);
+      validateContentEnvelope(result,token.source); validateContentReporting(result,token,content.inventory); validateContentRow(result.row,token.source);
       if (result.row.requested_url!==url || result.snapshot.sha256!==content.inventory.snapshot.sha256 || result.snapshot.generation!==content.inventory.snapshot.generation) throw new Error('Textquelle gehört nicht zum ausgewählten gespeicherten Snapshot. Quellseite aktualisieren.');
       content.source=result;
     } catch(error) { if(contentCurrent(token)) content.sourceError='Textquelle nicht verfügbar: '+error.message; }
@@ -2814,7 +2962,7 @@
     $('content-source-heading').textContent=row.requested_url;
     $('content-source-basis').textContent=`${contentBasis(row.basis)} · ${contentOrigin(source.snapshot.origin)}${['inherited_parent','pending_selected'].includes(row.basis) ? ' · Elternquelle '+contentParent(row)+' · Eltern-Snapshot '+(row.parent_snapshot_sha256 ?? 'unbekannt') : ''} · Quelle ${source.source_kind} · ${contentStatus(row.status)} · Quellsprache ${row.html_language ?? 'unbekannt'}${row.html_language_reason ? ' ('+row.html_language_reason+')' : ''}. Textvollständigkeit belegt keinen neuen Abruf.`;
     const supported = !source.capture || source.capture.engine===contentProfiles.capture && (!result || result.engine===contentProfiles.captureEngine && result.selection_profile===contentProfiles.selection && result.whitespace_profile===contentProfiles.whitespace && result.parser_profile===contentProfiles.parser && result.html_hash_representation===contentProfiles.htmlHash);
-    $('content-source-text').textContent=!supported ? 'Nicht unterstütztes Erfassungsprofil. Exakte Daten bleiben im JSON sichtbar; kein Text wird als geprüfte Quelle umgedeutet.' : result?.text == null ? `Kein gespeicherter Text. ${contentReason(row) || 'Quelle nicht verfügbar.'}` : result.text==='' ? '[Beobachtet leere Textauswahl: exakter Text ist eine leere Zeichenfolge.]' : result.text;
+    $('content-source-text').textContent=source.status==='excluded_reporting' ? 'Bekannte gespeicherte URL, durch das Berichtsprofil ausgeblendet. In dieser Ansicht werden keine Textquelle oder Analysewerte ausgegeben; Raw zeigt die gespeicherte Quelle.' : !supported ? 'Nicht unterstütztes Erfassungsprofil. Exakte Daten bleiben im JSON sichtbar; kein Text wird als geprüfte Quelle umgedeutet.' : result?.text == null ? `Kein gespeicherter Text. ${contentReason(row) || 'Quelle nicht verfügbar.'}` : result.text==='' ? '[Beobachtet leere Textauswahl: exakter Text ist eine leere Zeichenfolge.]' : result.text;
     $('content-source-evidence').textContent=JSON.stringify(source,null,2); $('content-source-json').disabled=false;
   }
   async function analyzeSavedContent() {
@@ -2824,12 +2972,12 @@
     catch(error) { content.analysisError=error.message; renderContent(); return; }
     invalidateContentRequests('Gespeicherte Texte werden offline berechnet …');
     const token=contentToken('analysisToken'),snapshot=content.inventory.snapshot;
-    const body={urls:[...content.selected],source_kind:token.source,config,indexable_only:$('content-indexable-only').checked,complete_only:$('content-complete-only').checked,...(snapshot.generation==null ? {} : {expected_generation:snapshot.generation})};
+    const body={urls:[...content.selected],source_kind:token.source,config,...(token.reportingMode?{reporting_mode:token.reportingMode}:{}),expected_snapshot_sha256:snapshot.sha256,...(content.inventory.reporting?{expected_reporting_identity:content.inventory.reporting.identity_sha256}:{}),indexable_only:$('content-indexable-only').checked,complete_only:$('content-complete-only').checked,...(snapshot.generation==null ? {} : {expected_generation:snapshot.generation})};
     renderContent();
     try {
       const result=await request(`/api/crawls/${encodeURIComponent(token.id)}/content/analyze`,{method:'POST',body:JSON.stringify(body),signal:token.controller.signal});
       if(!contentCurrent(token)) return;
-      validateContentEnvelope(result,token.source);
+      validateContentEnvelope(result,token.source); validateContentReporting(result,token,content.inventory);
       if(result.snapshot.sha256!==snapshot.sha256 || result.snapshot.generation!==snapshot.generation || !Array.isArray(result.requested_urls) || JSON.stringify(result.requested_urls)!==JSON.stringify(body.urls) || result.selected_count!==body.urls.length || !Array.isArray(result.documents) || !Array.isArray(result.excluded) || result.included_count!==result.documents.length || result.included_count+result.excluded.length!==result.selected_count || !['ready','empty_filtered_cohort'].includes(result.status) || result.status==='ready' && !result.analysis || result.status==='empty_filtered_cohort' && (result.analysis!==null || result.included_count!==0)) throw new Error('Analyse ist nicht eindeutig an den ausgewählten Snapshot und die vollständige explizite Kohorte gebunden.');
       if(result.indexable_only!==body.indexable_only || result.complete_only!==body.complete_only) throw new Error('Analysefilter stimmen nicht mit der ausgewählten Kohorte überein.');
       const observed=new Set(),ids=new Set();
@@ -2855,7 +3003,7 @@
     const content=state.content,result=content.result,analysis=result?.analysis;
     $('content-analysis-results').hidden=!result; $('content-analysis-json').disabled=!result;
     if(!result) return;
-    $('content-analysis-summary').textContent=`${result.selected_count} ausgewählt · ${result.included_count} enthalten · ${result.excluded.length} ausdrücklich ausgeschlossen · ${contentOrigin(result.snapshot.origin)} · Snapshot ${result.snapshot.sha256}, Generation ${result.snapshot.generation ?? 'unbekannt'} · Quelle ${result.source_kind} · 0 Website-Anfragen. Keine Website-Vollständigkeit behauptet.`;
+    $('content-analysis-summary').textContent=(result.reporting ? 'Ansicht '+result.reporting.identity.mode+' · '+result.excluded_reporting_count+' durch Berichtsprofil ausgeschlossen · ' : '')+`${result.selected_count} ausgewählt · ${result.included_count} enthalten · ${result.excluded.length} ausdrücklich ausgeschlossen · ${contentOrigin(result.snapshot.origin)} · Snapshot ${result.snapshot.sha256}, Generation ${result.snapshot.generation ?? 'unbekannt'} · Quelle ${result.source_kind} · 0 Website-Anfragen. Keine Website-Vollständigkeit behauptet.`;
     $('content-analysis-profile').textContent=!analysis ? 'Leere Kohorte nach ausdrücklichen Filtern; Ausschlüsse sind vollständig in der Evidenz aufgeführt.' : !supportedContentAnalysis(analysis) ? 'Nicht unterstütztes Analyseprofil. Keine N-Grams, Ähnlichkeits- oder Lesbarkeitswerte werden daraus abgeleitet.' : `Engine ${analysis.engine} · Tokenprofil ${analysis.token_profile} · Paarprofil ${analysis.similarity_profile} · Input SHA256 ${analysis.input_sha256} · Config SHA256 ${analysis.config_sha256} · ${analysis.corpus?.pairs_emitted ?? 'unbekannt'} ausgegebene / ${analysis.corpus?.possible_pairs ?? 'unbekannt'} mögliche Paare; ${analysis.corpus?.pairs_scored ?? 'unbekannt'} bewertet.`;
     const selector=$('content-result-document'), previous=selector.value;
     selector.replaceChildren(...array(analysis?.documents).map(analysisDocument=>{const option=document.createElement('option');option.value=analysisDocument.id;option.textContent=array(result.documents).find(row=>row.analysis_document_id===analysisDocument.id)?.row.requested_url || analysisDocument.id;return option;}));
@@ -2875,10 +3023,11 @@
   function exportContentRows() {
     const inventory=state.content.inventory,rows=contentVisibleRows(); if(active() || !inventory || state.content.inventoryToken || state.content.error || !rows.length) return;
     const cell=value=>{let text=String(value??'');if(typeof value!=='number' && typeof value!=='boolean' && /^[\s\uFEFF]*[=+@-]/u.test(text))text="'"+text;return '"'+text.replace(/"/g,'""')+'"';};
-    const columns=[['Snapshot SHA256',()=>inventory.snapshot.sha256],['Snapshot Generation',()=>inventory.snapshot.generation],['Snapshot Origin',()=>inventory.snapshot.origin],...contentColumns];
+    const columns=[['Snapshot SHA256',()=>inventory.snapshot.sha256],['Snapshot Generation',()=>inventory.snapshot.generation],['Snapshot Origin',()=>inventory.snapshot.origin],...(inventory.reporting ? [['Berichtsmodus',()=>inventory.reporting.identity.mode],['Berichtsidentität SHA256',()=>inventory.reporting.identity_sha256],['Berechtigte Rohordinal-Identität SHA256',()=>inventory.reporting.eligible_raw_page_ordinals_sha256],['Erfasste Befunde',()=>inventory.reporting.captured_page_observations],['Berechtigte Befunde',()=>inventory.reporting.eligible_page_observations]] : []),...contentColumns];
     const csv=[columns.map(([label])=>cell(label)).join(','),...rows.map(row=>columns.map(([,value])=>cell(value(row))).join(','))].join('\r\n'); downloadBlob(new Blob(['\uFEFF',csv],{type:'text/csv;charset=utf-8'}),`open-seo-spider-${state.crawl.id}-content-page-${state.content.cursor}.csv`);
   }
   function bindContentEvents() {
+    $('content-reporting-mode').addEventListener('change',()=>{state.content.selected.clear();invalidateContentRequests('Berichtsansicht geändert; Kohorte und Ergebnis neu wählen.',true);renderContent();loadContentInventory();});
     $('content-source').addEventListener('change',()=>{invalidateContentRequests('Textquelle geändert; vorherige Berechnung ungültig.',true);renderContent();loadContentInventory();});
     $('content-refresh').addEventListener('click',()=>loadContentInventory());
     $('content-prev').addEventListener('click',()=>{if(state.content.back.length)loadContentInventory(state.content.back.at(-1),'back');});
@@ -3256,6 +3405,8 @@
     $('settings-inline').addEventListener('click', openSettings);
     $('settings-close').addEventListener('click', () => $('settings-dialog').close());
     $('settings-form').addEventListener('submit', saveSettings);
+    $('tls-certificate-files').addEventListener('change', stageTlsCertificateFiles);
+    $('directive-reporting-load-selected').addEventListener('click', loadSelectedDirectiveReportingProfile);
     $('settings-form').elements.javascript_rendering.addEventListener('change', (event) => toggleRendererSettings(event.target.checked));
     $('settings-form').elements.crawl_admission_limits_enabled.addEventListener('change', syncCrawlAdmissionSettings);
     $('settings-form').elements.crawl_quotas_enabled.addEventListener('change',syncQuotaSettings);
@@ -3274,6 +3425,7 @@
     $('import-file').addEventListener('change', (event) => importProject(event.target.files[0]));
     $('export-sitemap').addEventListener('click', () => serverDownload('sitemap.xml', `open-seo-spider-${state.crawl.id}-sitemap.xml`));
     $('export-project').addEventListener('click', () => serverDownload('project.json', `open-seo-spider-${state.crawl.id}.json`));
+    $('export-visible-report').addEventListener('click', () => serverDownload('report.json', `open-seo-spider-${state.crawl.id}-sichtbar.json`));
     document.addEventListener('visibilitychange', () => { if (!document.hidden && active() && !state.polling) refresh(); });
   }
 

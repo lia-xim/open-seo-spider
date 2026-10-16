@@ -78,6 +78,50 @@ fn generation_cli_requires_all_explicit_paths_and_rejects_unknown_flags() {
     );
 }
 #[tokio::test]
+async fn generation_cli_reporting_shared_options_receipt_raw_hash_and_inputs_unchanged() {
+    let dir = directory();
+    let snapshot = dir.join("crawl.json");
+    let opts = dir.join("options.json");
+    let mut r = report();
+    r.config.directive_reporting = Some(open_seo_spider_core::DirectiveReportingConfig {
+        respect_next_prev: true,
+        ..Default::default()
+    });
+    r.pages[0].pagination_prev = vec!["https://example.org/visible".into()];
+    let mut visible = r.pages[0].clone();
+    visible.url = "https://example.org/visible".into();
+    visible.final_url = visible.url.clone();
+    visible.pagination_prev.clear();
+    r.pages.push(visible);
+    let input = serde_json::to_vec(&r).unwrap();
+    tokio::fs::write(&snapshot, &input).await.unwrap();
+    for (mode, n) in [("raw", 2), ("reported", 1)] {
+        let options = serde_json::to_vec(
+            &serde_json::json!({"public_base_url":"https://example.org/","reporting_mode":mode}),
+        )
+        .unwrap();
+        tokio::fs::write(&opts, &options).await.unwrap();
+        let result = run(
+            snapshot.clone(),
+            opts.clone(),
+            dir.join(format!("{mode}.zip")),
+        )
+        .await
+        .unwrap();
+        assert_eq!(result.generated_urls, n);
+        assert_eq!(
+            result.report_sha256,
+            format!("{:x}", Sha256::digest(&input))
+        );
+        let v = result.reporting.unwrap();
+        assert_eq!(v.generated_pages, n);
+        assert_eq!(v.captured_page_observations, 2);
+        assert_eq!(tokio::fs::read(&snapshot).await.unwrap(), input);
+        assert_eq!(tokio::fs::read(&opts).await.unwrap(), options);
+    }
+    tokio::fs::remove_dir_all(dir).await.unwrap();
+}
+#[tokio::test]
 async fn generation_cli_saved_inputs_unchanged_complete_zip_and_no_overwrite() {
     let dir = directory();
     let snapshot = dir.join("crawl.json");

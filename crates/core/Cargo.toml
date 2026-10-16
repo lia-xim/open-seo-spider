@@ -37,4 +37,7 @@ url = { version = "2", features = ["serde"] }
 zip = { version = "=8.6.0", default-features = false, features = ["deflate"] }
 
 [dev-dependencies]
+# Source27 local TLS fixtures only; Root must resolve/update Cargo.lock and execute.
+rcgen = "=0.14.5"
+tokio-rustls = { version = "0.26.4", default-features = false, features = ["ring", "tls12"] }
 tempfile = "3"

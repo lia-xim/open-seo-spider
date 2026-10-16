@@ -359,3 +359,322 @@ fn segments_omitted_depth_is_not_a_supported_predicate_and_chart_default_is_decl
         assert_eq!(summary["depth_policy"], DEPTH_POLICY);
     }
 }
+
+fn profile(mask: u8) -> crate::DirectiveReportingConfig {
+    crate::DirectiveReportingConfig {
+        version: 1,
+        respect_noindex: mask & 1 != 0,
+        respect_canonical: mask & 2 != 0,
+        respect_next_prev: mask & 4 != 0,
+    }
+}
+fn reporting_report() -> CrawlReport {
+    let mut r = report(vec![
+        p("https://x/plain", Some("yes"), Some(200)),
+        p("https://x/noindex", Some("yes"), Some(404)),
+        p("https://x/canonical", Some("yes"), Some(200)),
+        p("https://x/prev", Some("yes"), Some(200)),
+        p("https://x/next", Some("yes"), Some(200)),
+    ]);
+    r.pages[1].meta_robots = vec!["noindex".into()];
+    r.pages[2].canonical = vec!["https://x/target-only".into()];
+    r.pages[3].pagination_prev = vec!["https://x/target-only".into()];
+    r.pages[4].pagination_next = vec!["https://x/target-only".into()];
+    r.pages[4].canonical = vec![r.pages[4].url.clone()];
+    r.pages[4].links.push(crate::LinkRecord {
+        url: "https://x/target-only".into(),
+        ..Default::default()
+    });
+    r
+}
+#[test]
+fn segments_reporting_eight_profiles_filter_before_rule_counts_charts_and_selection() {
+    let mut r = reporting_report();
+    let rules = rules(vec![
+        d("all", Field::RequestedUrl, Operator::Contains, "https://x/"),
+        d("yes", Field::StoredTitle, Operator::Equals, "yes"),
+    ]);
+    for mask in 0u8..8 {
+        r.config.directive_reporting = Some(profile(mask));
+        let before = serde_json::to_vec(&r).unwrap();
+        let projected = project_with_reporting(&r, &rules, &Selection::All, None).unwrap();
+        let expected = 5 - mask.count_ones() as usize;
+        assert_eq!(
+            (
+                projected.total_pages,
+                projected.selected_pages,
+                projected.counts[0].matched,
+                projected.counts[1].matched,
+                projected.multiple_matches
+            ),
+            (expected, expected, expected, expected, expected)
+        );
+        assert_eq!(projected.charts.status.values().sum::<usize>(), expected);
+        assert!(
+            !projected
+                .pages
+                .iter()
+                .any(|p| p.url == "https://x/target-only")
+        );
+        assert_eq!(serde_json::to_vec(&r).unwrap(), before);
+        if mask == 0 {
+            assert!(projected.reporting.is_none());
+        } else {
+            let metadata = projected.reporting.unwrap();
+            assert_eq!(metadata.captured_page_observations, 5);
+            assert_eq!(metadata.profile_visible_page_observations, expected);
+            assert_eq!(
+                metadata.profile_excluded_page_observations,
+                mask.count_ones() as usize
+            );
+            assert_eq!(metadata.eligible_page_observations, expected);
+        }
+    }
+}
+#[test]
+fn segments_reporting_mixed_duplicates_use_selected_visible_owner_and_keep_raw_ordinals() {
+    let mut r = report(vec![
+        p("https://x/mixed", Some("hidden"), Some(404)),
+        p("https://x/mixed", Some("visible"), Some(200)),
+        p("https://x/only-hidden", Some("hidden"), Some(200)),
+        p("https://x/visible", Some("visible"), Some(200)),
+    ]);
+    for index in [0, 2] {
+        r.pages[index].meta_robots = vec!["noindex".into()];
+    }
+    r.config.directive_reporting = Some(profile(1));
+    for url in [
+        "https://x/mixed",
+        "https://x/only-hidden",
+        "https://x/visible",
+        "https://x/orphan",
+    ] {
+        r.issues.push(AuditIssue {
+            code: "x".into(),
+            severity: Severity::Warning,
+            url: url.into(),
+            message: "original".into(),
+            related_urls: vec!["https://x/only-hidden".into()],
+        });
+    }
+    let before = serde_json::to_vec(&r).unwrap();
+    let all = project_with_reporting(&r, &Rules::default(), &Selection::All, None).unwrap();
+    assert_eq!(
+        all.pages.iter().map(|p| p.page_ordinal).collect::<Vec<_>>(),
+        vec![1, 3]
+    );
+    assert_eq!(
+        all.issues
+            .iter()
+            .map(|i| i.url.as_str())
+            .collect::<Vec<_>>(),
+        vec!["https://x/mixed", "https://x/visible"]
+    );
+    assert_eq!(all.issues[0].related_urls, vec!["https://x/only-hidden"]);
+    assert_eq!(
+        all.orphan_issues, 1,
+        "A known hidden URL never becomes an orphan"
+    );
+    let meta = all.reporting.unwrap();
+    assert_eq!(
+        (
+            meta.captured_issues,
+            meta.profile_visible_issues,
+            meta.profile_excluded_issues,
+            meta.selected_issues,
+            meta.captured_orphan_issues
+        ),
+        (4, 3, 1, 2, 1)
+    );
+    let selected = project_with_reporting(
+        &r,
+        &rules(vec![d(
+            "hidden",
+            Field::StoredTitle,
+            Operator::Equals,
+            "hidden",
+        )]),
+        &Selection::Segment {
+            id: "hidden".into(),
+        },
+        None,
+    )
+    .unwrap();
+    assert!(
+        selected.pages.is_empty() && selected.issues.is_empty(),
+        "Hidden matching duplicate cannot select the visible duplicate's issue"
+    );
+    assert_eq!(selected.counts[0].matched, 0);
+    assert_eq!(serde_json::to_vec(&r).unwrap(), before);
+}
+#[test]
+fn segments_reporting_unknown_unassigned_and_overlap_cohorts_only_use_visible_rows() {
+    let mut r = report(vec![
+        p("hidden", None, None),
+        p("unknown", None, None),
+        p("unassigned", Some("no"), Some(404)),
+        p("matched", Some("yes"), Some(200)),
+    ]);
+    r.pages[0].meta_robots = vec!["noindex".into()];
+    r.config.directive_reporting = Some(profile(1));
+    let rules = rules(vec![
+        d("one", Field::StoredTitle, Operator::Equals, "yes"),
+        d("two", Field::Status, Operator::Equals, "200"),
+    ]);
+    let unknown = project_with_reporting(&r, &rules, &Selection::Unknown, None).unwrap();
+    assert_eq!(
+        unknown
+            .pages
+            .iter()
+            .map(|p| p.page_ordinal)
+            .collect::<Vec<_>>(),
+        vec![1]
+    );
+    assert_eq!(
+        (
+            unknown.total_pages,
+            unknown.unknown_pages,
+            unknown.unassigned_pages,
+            unknown.multiple_matches
+        ),
+        (3, 1, 1, 1)
+    );
+    let unassigned = project_with_reporting(&r, &rules, &Selection::Unassigned, None).unwrap();
+    assert_eq!(unassigned.pages[0].page_ordinal, 2);
+    let matched =
+        project_with_reporting(&r, &rules, &Selection::Segment { id: "one".into() }, None).unwrap();
+    assert_eq!(matched.pages[0].page_ordinal, 3);
+    assert_eq!(
+        matched
+            .counts
+            .iter()
+            .map(|c| c.selected_matched)
+            .collect::<Vec<_>>(),
+        vec![1, 1]
+    );
+    assert_eq!(matched.charts.status, BTreeMap::from([("200".into(), 1)]));
+}
+#[test]
+fn segments_reporting_explicit_raw_keeps_full_projection_but_distinct_profile_identity() {
+    let mut r = reporting_report();
+    r.config.directive_reporting = Some(profile(7));
+    let raw = project_with_reporting(
+        &r,
+        &Rules::default(),
+        &Selection::All,
+        Some(ReportingMode::Raw),
+    )
+    .unwrap();
+    assert_eq!(raw.pages.len(), 5);
+    let metadata = raw.reporting.as_ref().unwrap();
+    assert_eq!(metadata.identity.mode, ReportingMode::Raw);
+    assert_eq!(
+        (
+            metadata.captured_page_observations,
+            metadata.profile_visible_page_observations,
+            metadata.profile_excluded_page_observations,
+            metadata.eligible_page_observations,
+            metadata.selected_page_observations
+        ),
+        (5, 2, 3, 5, 5)
+    );
+    let reported = project_with_reporting(&r, &Rules::default(), &Selection::All, None).unwrap();
+    assert_ne!(
+        metadata.identity_sha256,
+        reported.reporting.unwrap().identity_sha256
+    );
+    let mut actual = serde_json::to_value(raw).unwrap();
+    actual.as_object_mut().unwrap().remove("reporting");
+    assert_eq!(
+        actual,
+        serde_json::to_value(project(&r, &Rules::default(), &Selection::All).unwrap()).unwrap()
+    );
+}
+#[test]
+fn segments_reporting_legacy_none_null_false_keep_fixed_empty_csv_contract_and_wire() {
+    let original = serde_json::to_value(CrawlConfig::default()).unwrap();
+    let legacy_summary = r#"{"charts":{"depth":{},"status":{}},"counts":[],"depth_policy":"declared_saved_depth_including_possible_legacy_or_import_default_zero_not_a_segment_predicate","engine":"saved_segments_v1","multiple_matches":0,"orphan_issues":0,"rules":{"definitions":[],"version":1},"selected_pages":0,"selection":{"kind":"all"},"total_pages":0,"unassigned_pages":0,"unknown_pages":0}"#;
+    let golden = format!(
+        "row_type,page_ordinal,url,segment_indices_json,unknown_indices_json,data_json\r\ncontext,,,,,\"\"\"fixture\"\"\"\r\nsummary,,,,,\"{}\"\r\n",
+        legacy_summary.replace('"', "\"\"")
+    );
+    for wire in [
+        original.clone(),
+        {
+            let mut v = original.clone();
+            v["directive_reporting"] = serde_json::Value::Null;
+            v
+        },
+        {
+            let mut v = original.clone();
+            v["directive_reporting"] = serde_json::to_value(profile(0)).unwrap();
+            v
+        },
+    ] {
+        let mut r = report(vec![]);
+        r.config = serde_json::from_value(wire).unwrap();
+        assert_eq!(serde_json::to_value(&r.config).unwrap(), original);
+        let projected =
+            project_with_reporting(&r, &Rules::default(), &Selection::All, None).unwrap();
+        assert!(projected.reporting.is_none());
+        assert!(
+            serde_json::to_value(&projected)
+                .unwrap()
+                .get("reporting")
+                .is_none()
+        );
+        assert_eq!(
+            csv_bytes(&projected, &"fixture").unwrap(),
+            golden.as_bytes()
+        );
+    }
+}
+#[test]
+fn segments_reporting_csv_includes_exact_reporting_row_and_selected_original_issue_facts() {
+    let mut r = reporting_report();
+    r.config.directive_reporting = Some(profile(7));
+    r.issues.push(AuditIssue {
+        code: "x".into(),
+        severity: Severity::Warning,
+        url: r.pages[0].url.clone(),
+        message: "m,\"\r\n雪".into(),
+        related_urls: vec![r.pages[1].url.clone()],
+    });
+    let projected = project_with_reporting(&r, &Rules::default(), &Selection::All, None).unwrap();
+    let bytes = csv_bytes(&projected, &"fixture").unwrap();
+    let rows = csv::Reader::from_reader(bytes.as_slice())
+        .records()
+        .map(|r| r.unwrap())
+        .collect::<Vec<_>>();
+    assert_eq!(
+        rows.iter().map(|r| &r[0]).collect::<Vec<_>>(),
+        vec!["context", "summary", "reporting", "page", "page", "issue"]
+    );
+    let metadata: serde_json::Value = serde_json::from_str(&rows[2][5]).unwrap();
+    assert_eq!(
+        metadata,
+        serde_json::to_value(projected.reporting.as_ref().unwrap()).unwrap()
+    );
+    assert_eq!(metadata["captured_page_observations"], 5);
+    assert_eq!(metadata["eligible_page_observations"], 2);
+    let issue: AuditIssue = serde_json::from_str(&rows[5][5]).unwrap();
+    assert_eq!(
+        serde_json::to_value(issue).unwrap(),
+        serde_json::to_value(&r.issues[0]).unwrap()
+    );
+}
+#[test]
+fn segments_reporting_hidden_population_still_respects_raw_row_budget_and_profile_guards() {
+    let mut r = report(vec![PageRecord::default(); MAX_PAGES + 1]);
+    r.config.directive_reporting = Some(profile(1));
+    for p in &mut r.pages {
+        p.meta_robots = vec!["noindex".into()];
+    }
+    assert!(project_with_reporting(&r, &Rules::default(), &Selection::All, None).is_err());
+    let mut invalid = reporting_report();
+    invalid.config.directive_reporting = Some(crate::DirectiveReportingConfig {
+        version: 2,
+        ..profile(0)
+    });
+    assert!(project_with_reporting(&invalid, &Rules::default(), &Selection::All, None).is_err());
+}

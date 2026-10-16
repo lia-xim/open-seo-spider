@@ -171,14 +171,17 @@ async fn file_tools_inventory_is_disabled_by_default_and_declares_exact_five_whe
     let old_tools = old["result"]["tools"].as_array().unwrap();
     let new_tools = new["result"]["tools"].as_array().unwrap();
     assert_eq!(inventory().len(), 26);
-    assert_eq!(old_tools.len(), 29);
-    assert_eq!(new_tools.len(), 34);
+    assert_eq!(old_tools.len(), 32);
+    assert_eq!(new_tools.len(), 37);
     assert_eq!(&old_tools[..26], inventory().as_slice());
     assert_eq!(old_tools[26], enrichment::definition());
     assert_eq!(old_tools[27], segments::definition());
     assert_eq!(old_tools[28], crawl_quotas::definition());
-    assert_eq!(&new_tools[..29], old_tools.as_slice());
-    let mut actual: Vec<_> = new_tools[29..]
+    assert_eq!(old_tools[29], ngrams::definition());
+    assert_eq!(old_tools[30], broken_sources::definition());
+    assert_eq!(old_tools[31], spelling::definition());
+    assert_eq!(&new_tools[..32], old_tools.as_slice());
+    let mut actual: Vec<_> = new_tools[32..]
         .iter()
         .map(|tool| tool["name"].as_str().unwrap())
         .collect();
@@ -186,7 +189,7 @@ async fn file_tools_inventory_is_disabled_by_default_and_declares_exact_five_whe
     let mut expected = FILE_NAMES;
     expected.sort_unstable();
     assert_eq!(actual, expected);
-    for tool in &new_tools[29..] {
+    for tool in &new_tools[32..] {
         assert_eq!(tool["inputSchema"]["additionalProperties"], false);
         assert!(tool["inputSchema"]["properties"].is_object());
     }
@@ -518,7 +521,7 @@ async fn file_tools_actual_stdio_frames_share_opt_in_and_drain_on_eof() {
     .await;
     assert_eq!(values.len(), 4);
     let tools = values[0]["result"]["tools"].as_array().unwrap();
-    assert_eq!(tools.len(), 34);
+    assert_eq!(tools.len(), 37);
     let quotas: Vec<_> = tools
         .iter()
         .filter(|tool| tool["name"] == "spider_crawl_quotas")
@@ -678,7 +681,7 @@ async fn http_mode(enabled: bool, listen_ip: &str) -> anyhow::Result<()> {
         let tools = listed["result"]["tools"]
             .as_array()
             .context("actual tool list")?;
-        ensure!(tools.len() == if enabled { 34 } else { 29 });
+        ensure!(tools.len() == if enabled { 37 } else { 32 });
         let quotas: Vec<_> = tools
             .iter()
             .filter(|tool| tool["name"] == "spider_crawl_quotas")

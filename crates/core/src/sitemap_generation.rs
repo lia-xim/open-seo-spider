@@ -51,6 +51,9 @@ pub enum SitemapGenerationLastmod {
 #[serde(default, deny_unknown_fields)]
 pub struct SitemapGenerationOptions {
     pub public_base_url: String,
+    /// Omitted/null is Auto: active saved reporting profile, otherwise legacy raw.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reporting_mode: Option<crate::ReportingMode>,
     pub max_urls_per_file: usize,
     pub max_urlset_uncompressed_bytes: usize,
     pub max_index_uncompressed_bytes: usize,
@@ -66,6 +69,7 @@ impl Default for SitemapGenerationOptions {
     fn default() -> Self {
         Self {
             public_base_url: String::new(),
+            reporting_mode: None,
             max_urls_per_file: 50_000,
             max_urlset_uncompressed_bytes: 52_428_800,
             max_index_uncompressed_bytes: 52_428_800,
@@ -82,6 +86,7 @@ impl Default for SitemapGenerationOptions {
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
 #[serde(rename_all = "snake_case")]
 pub enum SitemapGenerationDiagnosticCode {
+    ExcludedReporting,
     InvalidRequestedUrl,
     DuplicateRequestedUrl,
     WrongOrigin,
@@ -162,6 +167,19 @@ pub struct SitemapGeneratedFileDescriptor {
     pub sha256: String,
 }
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct SitemapGenerationReporting {
+    pub identity: crate::ReportingIdentity,
+    pub identity_sha256: String,
+    pub eligible_raw_page_ordinals_sha256: String,
+    pub generated_raw_page_ordinals_sha256: String,
+    pub captured_page_observations: usize,
+    pub profile_visible_page_observations: usize,
+    pub profile_excluded_page_observations: usize,
+    pub eligible_page_observations: usize,
+    pub excluded_reporting_page_observations: usize,
+    pub generated_pages: usize,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct SitemapGenerationManifest {
     pub schema_version: u8,
     pub engine: String,
@@ -169,6 +187,8 @@ pub struct SitemapGenerationManifest {
     pub report_sha_profile: String,
     pub options: SitemapGenerationOptions,
     pub options_sha256: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub reporting: Option<SitemapGenerationReporting>,
     pub files: Vec<SitemapGeneratedFileDescriptor>,
     pub memberships: Vec<SitemapGeneratedMembership>,
     pub diagnostics: Vec<SitemapGenerationDiagnostic>,
@@ -210,6 +230,8 @@ pub struct SitemapGenerationFailure {
     pub message: String,
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
     pub diagnostic_counts: BTreeMap<SitemapGenerationDiagnosticCode, u64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub reporting: Option<Box<SitemapGenerationReporting>>,
 }
 impl std::fmt::Display for SitemapGenerationFailure {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -226,6 +248,7 @@ fn fail(
         code,
         message: message.into(),
         diagnostic_counts: BTreeMap::new(),
+        reporting: None,
     }
 }
 fn sha(bytes: impl AsRef<[u8]>) -> String {
@@ -884,6 +907,43 @@ pub fn generate_sitemap_bundle(
         ));
     }
     let report_sha256 = report_digest(report)?;
+    let mut identity =
+        crate::source_occurrence_reporting_identity(&report.config, options.reporting_mode)
+            .map_err(|e| fail(F::InvalidSource, e.to_string()))?;
+    if let Some(identity) = &mut identity {
+        identity.engine = "open-seo-spider/sitemap-generation-reporting-v1".into();
+    }
+    let reported = identity
+        .as_ref()
+        .is_some_and(|v| v.mode == crate::ReportingMode::Reported);
+    let visible = report
+        .pages
+        .iter()
+        .map(|page| crate::directive_page_visible(&report.config, page))
+        .collect::<Vec<_>>();
+    let mut reporting = if let Some(identity) = identity {
+        let ordinals = visible
+            .iter()
+            .enumerate()
+            .filter_map(|(n, show)| (!reported || *show).then_some(n))
+            .collect::<Vec<_>>();
+        let profile_visible_page_observations = visible.iter().filter(|show| **show).count();
+        Some(SitemapGenerationReporting {
+            identity_sha256: sha(json(&identity)?),
+            identity,
+            eligible_raw_page_ordinals_sha256: sha(json(&ordinals)?),
+            generated_raw_page_ordinals_sha256: sha(json(&Vec::<usize>::new())?),
+            captured_page_observations: report.pages.len(),
+            profile_visible_page_observations,
+            profile_excluded_page_observations: report.pages.len()
+                - profile_visible_page_observations,
+            eligible_page_observations: ordinals.len(),
+            excluded_reporting_page_observations: report.pages.len() - ordinals.len(),
+            generated_pages: 0,
+        })
+    } else {
+        None
+    };
     let mut diagnostics = Vec::new();
     let mut lastmod = lastmods(report, options, &mut diagnostics)?;
     let mut frequencies = BTreeMap::new();
@@ -894,6 +954,9 @@ pub fn generate_sitemap_bundle(
     let mut excluded = 0;
     for (ordinal, page) in report.pages.iter().enumerate() {
         let mut reasons = Vec::new();
+        if reported && !visible[ordinal] {
+            reasons.push(D::ExcludedReporting);
+        }
         let requested = url(&page.url);
         if requested.is_none() {
             reasons.push(D::InvalidRequestedUrl);
@@ -977,6 +1040,12 @@ pub fn generate_sitemap_bundle(
             Some(unused),
         );
     }
+    if let Some(view) = &mut reporting {
+        view.generated_pages = members.len();
+        view.generated_raw_page_ordinals_sha256 = sha(json(
+            &members.iter().map(|m| m.page_ordinal).collect::<Vec<_>>(),
+        )?);
+    }
     if members.is_empty() {
         let mut error = fail(
             F::NoEligibleUrls,
@@ -985,6 +1054,7 @@ pub fn generate_sitemap_bundle(
                 diagnostics.len()
             ),
         );
+        error.reporting = reporting.map(Box::new);
         for item in diagnostics {
             *error.diagnostic_counts.entry(item.code).or_default() += 1;
         }
@@ -1096,7 +1166,7 @@ pub fn generate_sitemap_bundle(
         ),
         bytes: index_bytes,
     });
-    let manifest=SitemapGenerationManifest{schema_version:1,engine:SITEMAP_GENERATION_ENGINE.into(),report_sha256,report_sha_profile:"typed-crawl-report-canonical-rust-serde-json-v1".into(),options:options.clone(),options_sha256:sha(json(options)?),files:files.iter().map(|file|file.descriptor.clone()).collect(),memberships:members,diagnostics,excluded_pages:excluded,input_pages:report.pages.len(),source_scope:if report.operation.is_some(){"mixed_age_selected_recrawl; stored unselected inherited observations may be included; no current freshness/full-site completeness inference"}else{"captured_static_report_documents; no current freshness/full-site completeness inference"}.into(),selected_recrawl:report.operation.is_some(),negative_membership_claim:false,hreflang_validation_profile:"HTTP(S) identity + language/script/region lexical grammar + captured self-link/conflict checks; ISO registry assignments and reciprocity are not attested".into()};
+    let manifest=SitemapGenerationManifest{schema_version:1,engine:SITEMAP_GENERATION_ENGINE.into(),report_sha256,report_sha_profile:"typed-crawl-report-canonical-rust-serde-json-v1".into(),options:options.clone(),options_sha256:sha(json(options)?),reporting,files:files.iter().map(|file|file.descriptor.clone()).collect(),memberships:members,diagnostics,excluded_pages:excluded,input_pages:report.pages.len(),source_scope:if report.operation.is_some(){"mixed_age_selected_recrawl; stored unselected inherited observations may be included; no current freshness/full-site completeness inference"}else{"captured_static_report_documents; no current freshness/full-site completeness inference"}.into(),selected_recrawl:report.operation.is_some(),negative_membership_claim:false,hreflang_validation_profile:"HTTP(S) identity + language/script/region lexical grammar + captured self-link/conflict checks; ISO registry assignments and reciprocity are not attested".into()};
     let manifest_bytes = json(&manifest)?;
     total = total
         .checked_add(manifest_bytes.len())

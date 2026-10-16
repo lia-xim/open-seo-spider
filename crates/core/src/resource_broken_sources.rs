@@ -67,6 +67,8 @@ pub enum ResourceBrokenSourcesFilter {
 #[serde(default, deny_unknown_fields)]
 pub struct ResourceBrokenSourcesRequest {
     pub filter: ResourceBrokenSourcesFilter,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reporting_mode: Option<crate::ReportingMode>,
     pub limit: usize,
     pub after_sequence: Option<u64>,
     pub expected_snapshot_token: Option<String>,
@@ -76,6 +78,7 @@ impl Default for ResourceBrokenSourcesRequest {
     fn default() -> Self {
         Self {
             filter: Default::default(),
+            reporting_mode: None,
             limit: 100,
             after_sequence: None,
             expected_snapshot_token: None,
@@ -177,6 +180,8 @@ pub struct ResourceBrokenSourcesRow {
     pub reason: &'static str,
     pub anchor_text: Option<String>,
     pub anchor_text_state: &'static str,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_reporting_owner: Option<&'static str>,
 }
 #[derive(Debug, Clone, Serialize)]
 pub struct ResourceBrokenSourcesSnapshot {
@@ -185,6 +190,8 @@ pub struct ResourceBrokenSourcesSnapshot {
     pub saved: ResourceReadSnapshot,
     pub ledger: ResourceLedgerSummary,
     pub transport_set_sha256: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reporting: Option<ResourceSourceReporting>,
     pub transport_rows: usize,
     pub transport_utf8_bytes: usize,
     pub evaluation_rows: usize,
@@ -206,6 +213,8 @@ pub struct ResourceBrokenSourcesPage {
     pub snapshot: Option<ResourceBrokenSourcesSnapshot>,
     pub rows: Vec<ResourceBrokenSourcesRow>,
     pub selected_evaluation_rows: usize,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reporting_counts: Option<ResourceSourceReportingCounts>,
     pub selected_distinct_occurrence_ids: usize,
     pub counts: BTreeMap<ResourceBrokenSourcesState, usize>,
     pub next_sequence: Option<u64>,
@@ -219,6 +228,132 @@ pub struct ResourceBrokenSourcesCsv {
     pub snapshot: ResourceBrokenSourcesSnapshot,
     pub exported_evaluation_rows: usize,
     pub distinct_exported_occurrence_ids: usize,
+}
+#[derive(Debug, Clone, Serialize)]
+pub struct ResourceSourceReporting {
+    pub identity: crate::ReportingIdentity,
+    pub identity_sha256: String,
+    pub raw_owner_report_sha256: Option<String>,
+    pub eligible_owner_raw_ordinals_sha256: String,
+    pub captured_owner_page_observations: usize,
+    pub profile_visible_owner_page_observations: usize,
+    pub profile_excluded_owner_page_observations: usize,
+    pub owner_report_binding: &'static str,
+    pub owner_join: &'static str,
+}
+#[derive(Debug, Default, Clone, Serialize)]
+pub struct ResourceSourceReportingCounts {
+    pub captured_evaluation_rows: usize,
+    pub eligible_evaluation_rows: usize,
+    pub excluded_owner_evaluation_rows: usize,
+    pub unknown_owner_evaluation_rows: usize,
+    pub raw_counts: BTreeMap<ResourceBrokenSourcesState, usize>,
+}
+struct ReportingOwners {
+    metadata: Option<ResourceSourceReporting>,
+    observed: BTreeSet<String>,
+    hidden: BTreeSet<String>,
+}
+fn reporting_owners(
+    c: &Connection,
+    cfg: &CrawlConfig,
+    r: &ResourceBrokenSourcesRequest,
+    ledger: &ResourceLedgerSummary,
+) -> Result<ReportingOwners> {
+    let Some(identity) = crate::source_occurrence_reporting_identity(cfg, r.reporting_mode)? else {
+        return Ok(ReportingOwners {
+            metadata: None,
+            observed: BTreeSet::new(),
+            hidden: BTreeSet::new(),
+        });
+    };
+    // Only this optional presentation read admits the full saved report. It uses
+    // the SAME verified read TX, never App-uploaded owner flags or a second Store.
+    let report_text = metadata_text(c, "report", 64 * 1024 * 1024)?;
+    let report = report_text
+        .as_deref()
+        .map(serde_json::from_str::<crate::CrawlReport>)
+        .transpose()?;
+    let mut observed = BTreeSet::new();
+    let mut hidden = BTreeSet::new();
+    let mut ordinals = Vec::new();
+    let mut captured = 0usize;
+    let mut visible = 0usize;
+    let mut raw_hash = None;
+    let mut owner_report_binding = "unknown_saved_report_absent";
+    if let Some(report) = report {
+        ensure!(
+            report.pages.len() <= r.limits.max_transports,
+            "Resource reporting owner page budget exceeded"
+        );
+        ensure!(
+            hash_json(&report.config, 8 * 1024 * 1024)?.0 == hash_json(cfg, 8 * 1024 * 1024)?.0,
+            "Saved resource owner report configuration differs"
+        );
+        raw_hash = Some(hash_json(&report, 64 * 1024 * 1024)?.0);
+        let run = metadata_text(c, "run_state", 64 * 1024)?
+            .map(|v| serde_json::from_str::<CrawlRunState>(&v))
+            .transpose()?;
+        let checkpoint = metadata_text(c, "checkpoint", 4 * 1024 * 1024)?
+            .map(|v| serde_json::from_str::<crate::CrawlCheckpoint>(&v))
+            .transpose()?;
+        let config_text = metadata_text(c, "config", 8 * 1024 * 1024)?
+            .context("Resource reporting config missing")?;
+        let bound = match (run, checkpoint) {
+            (Some(run), Some(cp)) => {
+                run.outcome == Some(cp.outcome)
+                    && run.generation == cp.generation
+                    && cp.report_sha256
+                        == crate::resource_policy::digest(
+                            report_text
+                                .as_deref()
+                                .context("Owner report text missing")?,
+                        )
+                    && cp.config_sha256 == crate::resource_policy::digest(&config_text)
+                    && cp.resource_ledger.as_ref() == Some(ledger)
+                    && report.resource_ledger.as_ref() == Some(ledger)
+            }
+            _ => false,
+        };
+        owner_report_binding = if bound {
+            "current_terminal_checkpoint_report_config_generation_outcome_resource_ledger_bound"
+        } else {
+            "unknown_cached_report_not_bound_to_current_terminal_checkpoint"
+        };
+        if bound {
+            captured = report.pages.len();
+            for (ordinal, page) in report.pages.iter().enumerate() {
+                observed.insert(page.url.clone());
+                let show = crate::directive_page_visible(cfg, page);
+                if show {
+                    visible += 1;
+                }
+                if identity.mode == crate::ReportingMode::Raw || show {
+                    ordinals.push(ordinal);
+                }
+            }
+            hidden = crate::directive_hidden_issue_urls(cfg, &report.pages)
+                .into_iter()
+                .map(str::to_owned)
+                .collect();
+        }
+    }
+    let metadata = ResourceSourceReporting {
+        identity_sha256: hash_json(&identity, 64 * 1024)?.0,
+        identity,
+        raw_owner_report_sha256: raw_hash,
+        eligible_owner_raw_ordinals_sha256: hash_json(&ordinals, 4 * 1024 * 1024)?.0,
+        captured_owner_page_observations: captured,
+        profile_visible_owner_page_observations: visible,
+        profile_excluded_owner_page_observations: captured - visible,
+        owner_report_binding,
+        owner_join: "exact requested_source_url to complete saved-report URL multimap; hide only all observations hidden; absent/unobserved owners retained unknown; no HTML/CSS ancestor inheritance",
+    };
+    Ok(ReportingOwners {
+        metadata: Some(metadata),
+        observed,
+        hidden,
+    })
 }
 pub(crate) enum Output {
     Page(ResourceBrokenSourcesPage),
@@ -662,6 +797,7 @@ fn unavailable(reason: &'static str) -> ResourceBrokenSourcesPage {
         snapshot: None,
         rows: vec![],
         selected_evaluation_rows: 0,
+        reporting_counts: None,
         selected_distinct_occurrence_ids: 0,
         counts: BTreeMap::new(),
         next_sequence: None,
@@ -751,11 +887,17 @@ pub(crate) fn project(
         [],
         |r| r.get(0),
     )?;
+    let owners = reporting_owners(c, cfg, r, &ledger)?;
+    let mut reporting_counts = owners
+        .metadata
+        .as_ref()
+        .map(|_| ResourceSourceReportingCounts::default());
     let mut snapshot = ResourceBrokenSourcesSnapshot {
         engine: ENGINE,
         scope: RESOURCE_BROKEN_SOURCES_SCOPE,
         saved,
         transport_set_sha256,
+        reporting: owners.metadata.clone(),
         transport_rows: transports,
         transport_utf8_bytes: transport_bytes,
         evaluation_rows: ledger.decision_rows,
@@ -807,49 +949,60 @@ pub(crate) fn project(
         cap: CSV_CAP,
     };
     if matches!(mode, Mode::Csv) {
-        csv_record(
-            &mut csv,
-            &[
-                "scope",
-                "sequence",
-                "occurrence_id",
-                "evaluation_revision",
-                "generation",
-                "basis",
-                "source_requested_url",
-                "source_document_url",
-                "source_unit_revision",
-                "source_ordinal",
-                "source_complete",
-                "raw_value",
-                "decoded_value",
-                "original_resolved_url",
-                "grant_fetch_url",
-                "reference_kind",
-                "classification_basis",
-                "dom_path",
-                "utf8_unit_byte_start",
-                "utf8_unit_byte_end",
-                "attributes_json",
-                "anchor_text",
-                "anchor_text_state",
-                "state",
-                "reason",
-                "target_initial_status",
-                "target_final_status",
-                "target_final_url",
-                "target_retained_response",
-                "source_transport_json",
-                "target_transport_json",
-                "complete_evaluation_json",
-                "snapshot_token",
-                "transport_set_sha256",
-                "distinct_stored_occurrence_ids",
-                "evaluation_rows",
-                "website_requests",
-            ]
-            .map(str::to_owned),
-        )?;
+        let mut headers = [
+            "scope",
+            "sequence",
+            "occurrence_id",
+            "evaluation_revision",
+            "generation",
+            "basis",
+            "source_requested_url",
+            "source_document_url",
+            "source_unit_revision",
+            "source_ordinal",
+            "source_complete",
+            "raw_value",
+            "decoded_value",
+            "original_resolved_url",
+            "grant_fetch_url",
+            "reference_kind",
+            "classification_basis",
+            "dom_path",
+            "utf8_unit_byte_start",
+            "utf8_unit_byte_end",
+            "attributes_json",
+            "anchor_text",
+            "anchor_text_state",
+            "state",
+            "reason",
+            "target_initial_status",
+            "target_final_status",
+            "target_final_url",
+            "target_retained_response",
+            "source_transport_json",
+            "target_transport_json",
+            "complete_evaluation_json",
+            "snapshot_token",
+            "transport_set_sha256",
+            "distinct_stored_occurrence_ids",
+            "evaluation_rows",
+            "website_requests",
+        ]
+        .map(str::to_owned)
+        .to_vec();
+        if snapshot.reporting.is_some() {
+            headers.extend(
+                [
+                    "reporting_mode",
+                    "reporting_identity_sha256",
+                    "raw_owner_report_sha256",
+                    "eligible_owner_raw_ordinals_sha256",
+                    "source_reporting_owner",
+                ]
+                .map(str::to_owned),
+            );
+        }
+        csv_record(&mut csv, &headers)?;
     }
     let mut stmt=c.prepare("SELECT o.data,t.data,t.payload_sha256,s.data,s.payload_sha256 FROM resource_occurrences o LEFT JOIN resource_transports t ON t.url COLLATE BINARY=json_extract(o.data,'$.decision.grant.fetch_url') COLLATE BINARY LEFT JOIN resource_transports s ON s.url COLLATE BINARY=json_extract(o.data,'$.occurrence.requested_source_url') COLLATE BINARY ORDER BY o.sequence")?;
     let mut rows = stmt.query([])?;
@@ -864,6 +1017,29 @@ pub(crate) fn project(
         let target = transport(row, 1, 2, r.limits.max_row_utf8_bytes)?;
         let source = transport(row, 3, 4, r.limits.max_row_utf8_bytes)?;
         let (state, reason) = state(&observation, target.as_ref());
+        let owner = &observation.occurrence.requested_source_url;
+        let known = owners.observed.contains(owner);
+        let profile_hidden = owners.hidden.contains(owner);
+        let excluded = owners
+            .metadata
+            .as_ref()
+            .is_some_and(|v| v.identity.mode == crate::ReportingMode::Reported)
+            && profile_hidden;
+        if let Some(counts) = &mut reporting_counts {
+            counts.captured_evaluation_rows += 1;
+            *counts.raw_counts.entry(state).or_insert(0) += 1;
+            if !known {
+                counts.unknown_owner_evaluation_rows += 1;
+            }
+            if excluded {
+                counts.excluded_owner_evaluation_rows += 1;
+            } else {
+                counts.eligible_evaluation_rows += 1;
+            }
+        }
+        if excluded {
+            continue;
+        }
         *counts.entry(state).or_insert(0) += 1;
         if !r.filter.includes(state) {
             continue;
@@ -883,6 +1059,15 @@ pub(crate) fn project(
             reason,
             anchor_text: None,
             anchor_text_state: "not_captured_in_resource_occurrence",
+            source_reporting_owner: owners.metadata.as_ref().map(|_| {
+                if !known {
+                    "unknown_unobserved_owner_preserved"
+                } else if profile_hidden {
+                    "known_profile_hidden_owner_in_raw"
+                } else {
+                    "known_visible_owner"
+                }
+            }),
         };
         if matches!(mode, Mode::Csv) {
             write_row(&mut csv, &entry, &snapshot)?;
@@ -927,6 +1112,7 @@ pub(crate) fn project(
         snapshot: Some(snapshot),
         rows: output,
         selected_evaluation_rows: selected,
+        reporting_counts,
         selected_distinct_occurrence_ids: selected_ids.len(),
         counts,
         next_sequence,
@@ -985,53 +1171,64 @@ fn write_row(
     let o = &r.observation;
     let x = &o.occurrence;
     let t = r.target_transport.as_ref();
-    csv_record(
-        out,
-        &[
-            RESOURCE_BROKEN_SOURCES_SCOPE.into(),
-            o.sequence.to_string(),
-            x.occurrence_id.clone(),
-            o.evaluation_revision.clone(),
-            o.generation.to_string(),
-            enum_text(&o.basis)?,
-            x.requested_source_url.clone(),
-            x.source_document_url.clone(),
-            x.source_unit_revision.clone(),
-            x.source_ordinal.to_string(),
-            x.source_complete.to_string(),
-            x.raw_value.clone(),
-            x.decoded_value.clone().unwrap_or_default(),
-            x.resolved_url.clone().unwrap_or_default(),
-            r.grant_fetch_url.clone().unwrap_or_default(),
-            enum_text(&x.reference_kind)?,
-            x.classification_basis.clone(),
-            x.dom_location.clone().unwrap_or_default(),
-            x.byte_start.map(|v| v.to_string()).unwrap_or_default(),
-            x.byte_end.map(|v| v.to_string()).unwrap_or_default(),
-            json(&x.attributes)?,
-            String::new(),
-            r.anchor_text_state.into(),
-            enum_text(&r.state)?,
-            r.reason.into(),
-            t.and_then(|t| t.initial_status)
-                .map(|v| v.to_string())
-                .unwrap_or_default(),
-            t.and_then(|t| t.final_status)
-                .map(|v| v.to_string())
-                .unwrap_or_default(),
-            t.map(|t| t.final_url.clone()).unwrap_or_default(),
-            t.map(|t| t.retained_response.to_string())
-                .unwrap_or_default(),
-            json(&r.source_transport)?,
-            json(&r.target_transport)?,
-            json(o)?,
-            s.snapshot_token.clone(),
-            s.transport_set_sha256.clone(),
-            s.distinct_stored_occurrence_ids.to_string(),
-            s.evaluation_rows.to_string(),
-            "0".into(),
-        ],
-    )
+    let mut fields = vec![
+        RESOURCE_BROKEN_SOURCES_SCOPE.into(),
+        o.sequence.to_string(),
+        x.occurrence_id.clone(),
+        o.evaluation_revision.clone(),
+        o.generation.to_string(),
+        enum_text(&o.basis)?,
+        x.requested_source_url.clone(),
+        x.source_document_url.clone(),
+        x.source_unit_revision.clone(),
+        x.source_ordinal.to_string(),
+        x.source_complete.to_string(),
+        x.raw_value.clone(),
+        x.decoded_value.clone().unwrap_or_default(),
+        x.resolved_url.clone().unwrap_or_default(),
+        r.grant_fetch_url.clone().unwrap_or_default(),
+        enum_text(&x.reference_kind)?,
+        x.classification_basis.clone(),
+        x.dom_location.clone().unwrap_or_default(),
+        x.byte_start.map(|v| v.to_string()).unwrap_or_default(),
+        x.byte_end.map(|v| v.to_string()).unwrap_or_default(),
+        json(&x.attributes)?,
+        String::new(),
+        r.anchor_text_state.into(),
+        enum_text(&r.state)?,
+        r.reason.into(),
+        t.and_then(|t| t.initial_status)
+            .map(|v| v.to_string())
+            .unwrap_or_default(),
+        t.and_then(|t| t.final_status)
+            .map(|v| v.to_string())
+            .unwrap_or_default(),
+        t.map(|t| t.final_url.clone()).unwrap_or_default(),
+        t.map(|t| t.retained_response.to_string())
+            .unwrap_or_default(),
+        json(&r.source_transport)?,
+        json(&r.target_transport)?,
+        json(o)?,
+        s.snapshot_token.clone(),
+        s.transport_set_sha256.clone(),
+        s.distinct_stored_occurrence_ids.to_string(),
+        s.evaluation_rows.to_string(),
+        "0".into(),
+    ];
+    if let Some(v) = &s.reporting {
+        fields.extend([
+            if v.identity.mode == crate::ReportingMode::Raw {
+                "raw".into()
+            } else {
+                "reported".into()
+            },
+            v.identity_sha256.clone(),
+            v.raw_owner_report_sha256.clone().unwrap_or_default(),
+            v.eligible_owner_raw_ordinals_sha256.clone(),
+            r.source_reporting_owner.unwrap_or_default().into(),
+        ]);
+    }
+    csv_record(out, &fields)
 }
 #[cfg(test)]
 #[path = "resource_broken_sources_tests.rs"]

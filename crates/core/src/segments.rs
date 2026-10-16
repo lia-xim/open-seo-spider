@@ -183,6 +183,111 @@ fn charge(total: &mut usize, n: usize, cap: usize) -> Result<()> {
     })?;
     Ok(())
 }
+/// Separate saved-report presentation mode; never a crawl or snapshot authority.
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub enum ReportingMode {
+    Raw,
+    Reported,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct ReportingIdentity {
+    pub engine: String,
+    pub mode: ReportingMode,
+    pub directive_reporting: Option<crate::DirectiveReportingConfig>,
+}
+#[derive(Debug, Clone, Serialize)]
+pub struct Reporting {
+    pub identity: ReportingIdentity,
+    pub identity_sha256: String,
+    pub captured_page_observations: usize,
+    pub profile_visible_page_observations: usize,
+    pub profile_excluded_page_observations: usize,
+    /// Population for total_pages, per-rule counts, overlaps, unknown and unassigned.
+    pub eligible_page_observations: usize,
+    /// Eligible observations that also match the segment selection.
+    pub selected_page_observations: usize,
+    pub captured_issues: usize,
+    /// Profile visibility includes real orphan URLs, which segments never assign to pages.
+    pub profile_visible_issues: usize,
+    pub profile_excluded_issues: usize,
+    /// Issues owned by at least one selected eligible page observation at the exact URL.
+    pub selected_issues: usize,
+    /// Always relative to all captured page URLs, including profile-hidden observations.
+    pub captured_orphan_issues: usize,
+    pub counts_mean: &'static str,
+}
+/// None preserves legacy response/CSV bytes and token formula when no switch is active.
+pub fn reporting_identity(
+    config: &crate::CrawlConfig,
+    requested: Option<ReportingMode>,
+) -> Result<Option<ReportingIdentity>> {
+    if let Some(profile) = &config.directive_reporting {
+        profile.validate()?;
+    }
+    let active = !crate::DirectiveReportingConfig::is_inactive(&config.directive_reporting);
+    if !active && requested.is_none() {
+        return Ok(None);
+    }
+    Ok(Some(ReportingIdentity {
+        engine: "open-seo-spider/saved-segments-reporting-v1".into(),
+        mode: requested.unwrap_or(if active {
+            ReportingMode::Reported
+        } else {
+            ReportingMode::Raw
+        }),
+        directive_reporting: config
+            .directive_reporting
+            .clone()
+            .filter(crate::DirectiveReportingConfig::active),
+    }))
+}
+/// Visible individual observations are selected before rule matching and aggregation.
+/// Raw ordinals and captured URL ownership remain intact; no raw report is cloned/mutated.
+pub fn project_with_reporting(
+    report: &CrawlReport,
+    rules: &Rules,
+    selection: &Selection,
+    requested: Option<ReportingMode>,
+) -> Result<Projection> {
+    let identity = reporting_identity(&report.config, requested)?;
+    let reported = identity
+        .as_ref()
+        .is_some_and(|view| view.mode == ReportingMode::Reported);
+    let mut projection = project_observations(report, rules, selection, reported)?;
+    if let Some(identity) = identity {
+        let visible = report
+            .pages
+            .iter()
+            .filter(|page| crate::directive_page_visible(&report.config, page))
+            .count();
+        let hidden_issue_urls = crate::directive_hidden_issue_urls(&report.config, &report.pages);
+        let visible_issues = report
+            .issues
+            .iter()
+            .filter(|issue| !hidden_issue_urls.contains(issue.url.as_str()))
+            .count();
+        use sha2::{Digest, Sha256};
+        let identity_sha256 = format!("{:x}", Sha256::digest(json_bytes(&identity)?));
+        projection.reporting = Some(Reporting {
+            identity,
+            identity_sha256,
+            captured_page_observations: report.pages.len(),
+            profile_visible_page_observations: visible,
+            profile_excluded_page_observations: report.pages.len() - visible,
+            eligible_page_observations: projection.total_pages,
+            selected_page_observations: projection.selected_pages,
+            captured_issues: report.issues.len(),
+            profile_visible_issues: visible_issues,
+            profile_excluded_issues: report.issues.len() - visible_issues,
+            selected_issues: projection.issues.len(),
+            captured_orphan_issues: projection.orphan_issues,
+            counts_mean: "Page counts count observations, not unique URLs or requests. Rules/overlaps/unknown/unassigned use the eligible raw or reported population; charts use its segment selection. Page ordinals refer to the complete captured report. Issues follow selected eligible exact-URL owners; orphan counts always use all captured URLs. Raw snapshot/crawl counters and relationship targets are unchanged.",
+        });
+    }
+    Ok(projection)
+}
+
 #[derive(Debug, Clone, Serialize)]
 pub struct Count {
     pub id: String,
@@ -224,8 +329,18 @@ pub struct Projection {
     pub charts: Charts,
     pub pages: Vec<Row>,
     pub issues: Vec<AuditIssue>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reporting: Option<Reporting>,
 }
 pub fn project(report: &CrawlReport, rules: &Rules, selection: &Selection) -> Result<Projection> {
+    project_observations(report, rules, selection, false)
+}
+fn project_observations(
+    report: &CrawlReport,
+    rules: &Rules,
+    selection: &Selection,
+    reported: bool,
+) -> Result<Projection> {
     let compiled = compile(rules)?;
     ensure!(
         report.pages.len() <= MAX_PAGES && report.issues.len() <= MAX_ISSUES,
@@ -257,6 +372,7 @@ pub fn project(report: &CrawlReport, rules: &Rules, selection: &Selection) -> Re
     let mut selected_urls = BTreeSet::new();
     let mut all_urls = BTreeSet::new();
     let (mut unassigned, mut unknown, mut overlaps, mut work, mut copied) = (0, 0, 0, 0, 0);
+    let mut eligible = 0;
     let mut charts = Charts {
         status: BTreeMap::new(),
         depth: BTreeMap::new(),
@@ -264,6 +380,11 @@ pub fn project(report: &CrawlReport, rules: &Rules, selection: &Selection) -> Re
     for (ordinal, p) in report.pages.iter().enumerate() {
         charge(&mut copied, p.url.len(), OUTPUT_BYTES)?;
         all_urls.insert(p.url.as_str());
+        // Preserve captured URL ownership/orphan accounting before hiding observations.
+        if reported && !crate::directive_page_visible(&report.config, p) {
+            continue;
+        }
+        eligible += 1;
         let (mut matched, mut missing) = (Vec::new(), Vec::new());
         for (i, d) in rules.definitions.iter().enumerate() {
             let (mut yes, mut no, mut absent) = (false, false, false);
@@ -386,7 +507,7 @@ pub fn project(report: &CrawlReport, rules: &Rules, selection: &Selection) -> Re
         depth_policy: DEPTH_POLICY,
         rules: rules.clone(),
         selection: selection.clone(),
-        total_pages: report.pages.len(),
+        total_pages: eligible,
         selected_pages: pages.len(),
         multiple_matches: overlaps,
         unassigned_pages: unassigned,
@@ -396,6 +517,7 @@ pub fn project(report: &CrawlReport, rules: &Rules, selection: &Selection) -> Re
         charts,
         pages,
         issues,
+        reporting: None,
     })
 }
 
@@ -490,6 +612,16 @@ pub fn csv_bytes(projection: &Projection, context: &impl Serialize) -> Result<Ve
             &serde_json::json!({"engine":projection.engine,"depth_policy":projection.depth_policy,"rules":projection.rules,"selection":projection.selection,"total_pages":projection.total_pages,"selected_pages":projection.selected_pages,"multiple_matches":projection.multiple_matches,"unassigned_pages":projection.unassigned_pages,"unknown_pages":projection.unknown_pages,"orphan_issues":projection.orphan_issues,"counts":projection.counts,"charts":projection.charts}),
         )?,
     )?;
+    if let Some(reporting) = &projection.reporting {
+        record(
+            "reporting",
+            String::new(),
+            "",
+            String::new(),
+            String::new(),
+            serde_json::to_string(reporting)?,
+        )?;
+    }
     for r in &projection.pages {
         record(
             "page",

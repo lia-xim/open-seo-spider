@@ -1,0 +1,126 @@
+{
+  "kind": "initial_public_alpha_selected_verification_records",
+  "recorded_at": "2026-10-16T21:59:13.283Z",
+  "result": "LOCAL_SOURCE_GATES_PASS_PUBLIC_CI_PENDING",
+  "source_composition_sha256": "26c1d6f0bdc99f8e1f3d27dee989d7b69a12a57fce3a78695c4b5db1017cc3e1",
+  "files": [
+    {
+      "name": "clippy-proof.json",
+      "sha256": "8a5f40b375bd6cebcc2ccabf8f05f3b5151563d592414c7670866c183528e349",
+      "bytes": 2711
+    },
+    {
+      "name": "clippy.log.txt",
+      "sha256": "924b4f513060be3d28e0cfece8d2831ebe53d0a3612702f2adfacb9be9858923",
+      "bytes": 202
+    },
+    {
+      "name": "core11-selected-controls-proof.json",
+      "sha256": "791b474f4c04a4dd97fb79da3c1b496b78edbef1a0068020973dd8c8b8b6b873",
+      "bytes": 189734
+    },
+    {
+      "name": "focused-proof.json",
+      "sha256": "caddeeba070492c5e7c5c6fb502de34243cd7f8b54eb3f2b372fbe41354c5b2f",
+      "bytes": 25381
+    },
+    {
+      "name": "history-publication-audit.json",
+      "sha256": "cbd04fe61171e2433b003b5771e68873ddfaa57a7587dec9e8729a1941168a3b",
+      "bytes": 2243
+    },
+    {
+      "name": "history-publication-audit.md",
+      "sha256": "153ef707e5301ce16e57d464eb0c4d5035d5e12aea082d6684999992e276158e",
+      "bytes": 2621
+    },
+    {
+      "name": "local-engine-independent-actual-audit.json",
+      "sha256": "93a3526eb4cb2cb293c58c9834b3db52926a1008acbec8f271e2aaae3ca08921",
+      "bytes": 3862
+    },
+    {
+      "name": "local-engine-proof.json",
+      "sha256": "adc7de87146e6d5a8b00d642f11af2a0c2d9ac10b54280355321afb2bd3d4a41",
+      "bytes": 8016
+    },
+    {
+      "name": "local-engine.log.txt",
+      "sha256": "0b94a9817d730df6efe8b10429b31c901034dec15d474d8c35779ab87bd4a350",
+      "bytes": 689
+    },
+    {
+      "name": "native24-independent-actual-audit.json",
+      "sha256": "6f6dcbb0a21f3f5047fcfb8d2b62ec0dd61d3f43d4dc09df11be6277f7db3d15",
+      "bytes": 5250
+    },
+    {
+      "name": "native26-independent-actual-audit.json",
+      "sha256": "c03e348cf47f58c3f2e1b1b571b9e0f8714217b4813902644a6922012b204814",
+      "bytes": 5698
+    },
+    {
+      "name": "portable-ui-proof.json",
+      "sha256": "80226454ffe9345bfaa3351719aa35a92659615c89eaf44e0cbcc43a9ed7f097",
+      "bytes": 2102
+    },
+    {
+      "name": "portable-ui.log.txt",
+      "sha256": "1b0037be56067e98a81c0bf9426c3b1f461a782228e2a49a8f0fa12f2505ddf4",
+      "bytes": 361
+    },
+    {
+      "name": "publication-source-joins.json",
+      "sha256": "c4f973e7bb0e9dcb8afb108958aad6141af2d9e2932085a18785c95b4eaced2c",
+      "bytes": 4104
+    },
+    {
+      "name": "publication-source-review.json",
+      "sha256": "298490ff3f9b4070172598d8579f76790dd072a7230921cbbda3c1b284384b18",
+      "bytes": 12013
+    },
+    {
+      "name": "README.md",
+      "sha256": "c82a5265be9c4f78ece8bf778ad779ac5f1fb5c4f77f9a1b60b73f23c7b91fce",
+      "bytes": 6094
+    },
+    {
+      "name": "required-tests.json",
+      "sha256": "77d02c46cc09ada51afcc409deac541073a4f78536395ce7a2ca12789073dded",
+      "bytes": 343483
+    },
+    {
+      "name": "source-independent-review.json",
+      "sha256": "ba19574c779bb1dd2fd0af53696134bd1afa75e20618ddcb9810fdc1c5ea7698",
+      "bytes": 5086
+    },
+    {
+      "name": "tested-source-hashes.json",
+      "sha256": "b2c7d23c23a0d9cd2ab33a009b9fb9d226fb05aa755676e3df903afbbbb48eee",
+      "bytes": 80746
+    },
+    {
+      "name": "workspace-independent-actual-audit.json",
+      "sha256": "93ce6ad9f7f4dc056e4bdc71d05303f7219ee2f555d2506a24829face78b75a6",
+      "bytes": 4006
+    },
+    {
+      "name": "workspace-proof.json",
+      "sha256": "a482f5af8db3f9ddd6da21af93b6918cd5443c85ec228c4eba55f6034941c2d2",
+      "bytes": 58716
+    },
+    {
+      "name": "workspace.log.txt",
+      "sha256": "e3ae233a3e83875523f828ad22404e46d650326203af247015fdf41df3296ee6",
+      "bytes": 196054
+    }
+  ],
+  "qualifications": [
+    "Selected records retain original local paths and hashes for provenance. Referenced external preparation/runtime artifacts are not all redistributed.",
+    "1722 current workspace tests include four fresh real-renderer tests; strict all-feature Clippy passed. This is Windows-local evidence, not Linux/Docker/current public CI proof.",
+    "Two LanguageTool app-consumer tests and prior focused/UI evidence are reused only through the explicit C2-to-C4 production-byte equality join. They are not fresh C4 native API/CLI/MCP/browser acceptance.",
+    "Core11 selected25 controls are a Root actual proof without a new independent actual audit or full Native17r9 acceptance.",
+    "Native24/26 audit receipts qualify older native consumers. New Source27/28 native frontdoors, optimized package, installed application upgrade, full parity and production readiness remain open.",
+    "The installed Source16 Windows pilot is unchanged. No vendor binaries, engine/JRE/browser packages, private crawl databases or private TLS fixture keys are included."
+  ]
+}

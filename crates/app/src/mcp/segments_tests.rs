@@ -19,7 +19,8 @@ async fn segments_mcp_rejects_invalid_authority_shapes_before_loopback_and_keeps
         .await
         .unwrap();
     let names = listed["result"]["tools"].as_array().unwrap();
-    assert_eq!(names.len(), 29);
+    assert_eq!(names.len(), 32);
+    assert_eq!(names[31], crate::mcp::spelling::definition());
     assert_eq!(names[27]["name"], NAME);
     assert_eq!(names[26]["name"], "spider_api_enrichment");
 }
@@ -63,4 +64,42 @@ async fn segments_mcp_actual_http_adapter_preserves_request_digest_and_normal_se
         .unwrap()
         .unwrap();
     assert_eq!(result.unwrap()["complete_fixture"], true);
+}
+
+#[test]
+fn segments_mcp_shared_request_reporting_mode_is_strict_and_survives_transport_serialization() {
+    for mode in ["raw", "reported"] {
+        let parsed: Args = serde_json::from_value(
+            json!({"id":uuid::Uuid::nil(),"request":{"reporting_mode":mode}}),
+        )
+        .unwrap();
+        parsed.request.validate().unwrap();
+        assert_eq!(
+            serde_json::to_value(parsed.request).unwrap()["reporting_mode"],
+            mode
+        );
+    }
+    for mode in [json!("latest"), json!(true), json!({})] {
+        assert!(
+            serde_json::from_value::<Args>(
+                json!({"id":uuid::Uuid::nil(),"request":{"reporting_mode":mode}})
+            )
+            .is_err()
+        );
+    }
+    let parsed: Args =
+        serde_json::from_value(json!({"id":uuid::Uuid::nil(),"request":{"reporting_mode":null}}))
+            .unwrap();
+    assert!(
+        serde_json::to_value(parsed.request)
+            .unwrap()
+            .get("reporting_mode")
+            .is_none()
+    );
+    assert!(
+        definition()["description"]
+            .as_str()
+            .unwrap()
+            .contains("reporting_mode")
+    );
 }

@@ -4,6 +4,9 @@ use std::collections::BTreeMap;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(default)]
 pub struct CrawlConfig {
+    /// Crawl-scoped trust and optional learned HSTS. Inactive values preserve legacy bytes.
+    #[serde(default, skip_serializing_if = "crate::TlsConfig::inactive_option")]
+    pub tls: Option<crate::TlsConfig>,
     pub seed_urls: Vec<String>,
     /// Declared original input occurrences; network deduplication is separate.
     pub input_imports: Vec<crate::ListImportResult>,
@@ -47,6 +50,12 @@ pub struct CrawlConfig {
     pub max_depth: Option<usize>,
     /// Minimum interval between request starts for the same origin.
     pub delay_ms: u64,
+    /// Reporting visibility only; never a request, frontier or outlink permission.
+    #[serde(
+        default,
+        skip_serializing_if = "crate::DirectiveReportingConfig::is_inactive"
+    )]
+    pub directive_reporting: Option<crate::DirectiveReportingConfig>,
     pub obey_robots: bool,
     pub check_external: bool,
     pub max_body_bytes: usize,
@@ -142,6 +151,8 @@ impl Default for CrawlConfig {
             max_pages: None,
             max_depth: None,
             delay_ms: 100,
+            tls: None,
+            directive_reporting: None,
             obey_robots: true,
             check_external: false,
             max_body_bytes: 5 * 1024 * 1024,
@@ -959,7 +970,7 @@ pub struct PageRecord {
     /// Native static dispatch evidence; absent on legacy/unconfigured pages.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub crawl_admission: Option<crate::CrawlAdmissionObservation>,
-    /// Status of the initially requested URL; final_status belongs to final_url.
+    /// First actual network HTTP response; HSTS synthetic 307 stays in tls, never here.
     pub status: Option<u16>,
     pub final_status: Option<u16>,
     pub content_type: String,
@@ -971,6 +982,8 @@ pub struct PageRecord {
     pub blocked_by_robots: bool,
     pub robots_warning: Option<String>,
     pub redirect_chain: Vec<RedirectHop>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub tls: Option<crate::PageTlsObservation>,
     pub headers: BTreeMap<String, String>,
     pub titles: Vec<String>,
     pub meta_descriptions: Vec<String>,

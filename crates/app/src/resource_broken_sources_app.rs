@@ -18,10 +18,12 @@ pub(crate) const JSON_BYTES: usize = 8 * 1024 * 1024;
 pub(crate) const CSV_BYTES: usize = 64 * 1024 * 1024;
 pub(crate) const SCOPE: &str = "verified_resource_ledger_occurrences";
 
-#[derive(Clone, Debug, Deserialize, Default)]
+#[derive(Clone, Debug, Deserialize, Serialize, Default)]
 #[serde(default, deny_unknown_fields)]
 pub(crate) struct Request {
     pub filter: ResourceBrokenSourcesFilter,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reporting_mode: Option<open_seo_spider_core::ReportingMode>,
     pub limit: Option<usize>,
     pub after_sequence: Option<u64>,
     pub expected_snapshot_token: Option<String>,
@@ -58,6 +60,7 @@ impl Request {
         );
         Ok(ResourceBrokenSourcesRequest {
             filter: self.filter,
+            reporting_mode: self.reporting_mode,
             limit,
             after_sequence: self.after_sequence,
             expected_snapshot_token,

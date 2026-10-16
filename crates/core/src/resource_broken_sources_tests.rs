@@ -222,6 +222,284 @@ fn update_transport(path: &Path, edit: impl FnOnce(&mut ResourceTransportObserva
     )
     .unwrap();
 }
+// Declared storage fixture only, not a claim that an App performed this checkpoint.
+fn bind_reporting_report(f: &Fixture, mask: u8, mixed: bool) -> crate::CrawlReport {
+    let mut cfg = f.cfg.clone();
+    cfg.directive_reporting = Some(crate::DirectiveReportingConfig {
+        version: 1,
+        respect_noindex: mask & 1 != 0,
+        respect_canonical: mask & 2 != 0,
+        respect_next_prev: mask & 4 != 0,
+    });
+    let mut sources = f.sources.clone();
+    sources[0].meta_robots = vec!["noindex".into()];
+    sources[0].pagination_prev = vec![sources[1].url.clone()];
+    sources[1].canonical = vec!["https://fixture.test/other-document".into()];
+    if mixed {
+        let mut visible = sources[0].clone();
+        visible.meta_robots.clear();
+        visible.pagination_prev.clear();
+        sources.push(visible);
+    }
+    let report = crate::CrawlReport {
+        config: cfg.clone(),
+        pages: sources,
+        issues: vec![],
+        summary: Default::default(),
+        warnings: vec![],
+        operation: None,
+        policy_ledger: None,
+        resource_ledger: f.store.resource_ledger_summary().unwrap(),
+        sitemap_catalog: None,
+        sitemap_coverage_inventory: None,
+        sitemap_source_measurements: None,
+    };
+    let config = serde_json::to_string(&cfg).unwrap();
+    let body = serde_json::to_string(&report).unwrap();
+    let c = Connection::open(f.path()).unwrap();
+    let run: String = c
+        .query_row(
+            "SELECT value FROM metadata WHERE key='run_state'",
+            [],
+            |row| row.get(0),
+        )
+        .unwrap();
+    let mut run: crate::CrawlRunState = serde_json::from_str(&run).unwrap();
+    run.outcome = Some(crate::CrawlOutcome::Completed);
+    run.finished_at = Some("2026-10-15T12:00:10Z".into());
+    let cp = crate::CrawlCheckpoint {
+        generation: f.generation,
+        revision: 1,
+        outcome: crate::CrawlOutcome::Completed,
+        created_at: "2026-10-15T12:00:10Z".into(),
+        report_sha256: crate::resource_policy::digest(&body),
+        config_sha256: crate::resource_policy::digest(&config),
+        completed: report.pages.len(),
+        pending: 0,
+        discovery_pending: 0,
+        discovery_complete: false,
+        policy_ledger: None,
+        resource_ledger: report.resource_ledger.clone(),
+        sitemap_ledger: None,
+        sitemap_source_measurements: None,
+    };
+    for (key, value) in [
+        ("config", config),
+        ("report", body),
+        ("run_state", serde_json::to_string(&run).unwrap()),
+        ("checkpoint", serde_json::to_string(&cp).unwrap()),
+    ] {
+        c.execute(
+            "INSERT OR REPLACE INTO metadata(key,value) VALUES(?1,?2)",
+            params![key, value],
+        )
+        .unwrap();
+    }
+    report
+}
+#[test]
+fn resource_source_reporting_eight_profiles_keep_all_target_transport404_and_raw_decisions() {
+    for mask in 0..8 {
+        let f = Fixture::new(2, false);
+        let report = bind_reporting_report(&f, mask, false);
+        let raw_report = serde_json::to_vec(&report).unwrap();
+        let page = failures(&f.store);
+        let expected = usize::from(mask & 5 == 0) * 2 + usize::from(mask & 2 == 0);
+        assert_eq!(page.rows.len(), expected);
+        for row in &page.rows {
+            assert_eq!(row.state, ResourceBrokenSourcesState::ObservedHttpFailure);
+            assert_eq!(
+                row.target_transport.as_ref().unwrap().final_status,
+                Some(404)
+            );
+        }
+        if mask > 0 {
+            let s = page.snapshot.as_ref().unwrap();
+            let meta = s.reporting.as_ref().unwrap();
+            assert!(
+                meta.owner_report_binding
+                    .starts_with("current_terminal_checkpoint")
+            );
+            assert_eq!(
+                meta.raw_owner_report_sha256.as_deref(),
+                Some(hash_json(&report, 64 * 1024 * 1024).unwrap().0.as_str())
+            );
+            assert_eq!(s.transport_rows, 3);
+            assert_eq!(
+                page.reporting_counts
+                    .as_ref()
+                    .unwrap()
+                    .captured_evaluation_rows,
+                5
+            );
+            assert_eq!(
+                page.reporting_counts.as_ref().unwrap().raw_counts
+                    [&ResourceBrokenSourcesState::ObservedHttpFailure],
+                3
+            );
+        }
+        assert_eq!(serde_json::to_vec(&report).unwrap(), raw_report);
+        let mut csv_request = request(ResourceBrokenSourcesFilter::Failures);
+        csv_request.expected_snapshot_token =
+            Some(page.snapshot.as_ref().unwrap().snapshot_token.clone());
+        let csv = f
+            .store
+            .export_resource_broken_sources_csv(&csv_request)
+            .unwrap();
+        assert_eq!(csv.exported_evaluation_rows, expected);
+        assert_eq!(
+            String::from_utf8(csv.bytes).unwrap().lines().count(),
+            expected + 1
+        );
+    }
+}
+#[test]
+fn resource_source_reporting_mixed_duplicate_orphan_and_missing_checkpoint_preserve_unknown_owners()
+{
+    let f = Fixture::new(2, false);
+    bind_reporting_report(&f, 7, true);
+    let page = failures(&f.store);
+    assert_eq!(page.rows.len(), 2);
+    assert!(page.rows.iter().all(|r| {
+        r.observation
+            .occurrence
+            .requested_source_url
+            .ends_with("a.css")
+    }));
+    let c = Connection::open(f.path()).unwrap();
+    c.execute("DELETE FROM metadata WHERE key='checkpoint'", [])
+        .unwrap();
+    drop(c);
+    let unbound = failures(&f.store);
+    assert_eq!(unbound.rows.len(), 3);
+    assert!(
+        unbound
+            .rows
+            .iter()
+            .all(|r| r.source_reporting_owner == Some("unknown_unobserved_owner_preserved"))
+    );
+    assert_eq!(
+        unbound
+            .reporting_counts
+            .as_ref()
+            .unwrap()
+            .excluded_owner_evaluation_rows,
+        0
+    );
+    assert_ne!(
+        page.snapshot.unwrap().snapshot_token,
+        unbound.snapshot.unwrap().snapshot_token
+    );
+}
+#[test]
+fn resource_source_reporting_equalcount_mode_token_raw_transport_identity_profile_edit_and_stale_cache()
+ {
+    let f = Fixture::new(2, false);
+    bind_reporting_report(&f, 1, true);
+    let mut raw_request = request(ResourceBrokenSourcesFilter::Failures);
+    raw_request.reporting_mode = Some(crate::ReportingMode::Raw);
+    let raw = f.store.resource_broken_sources(&raw_request).unwrap();
+    let reported = failures(&f.store);
+    assert_eq!(raw.rows.len(), reported.rows.len());
+    assert_eq!(
+        raw.snapshot.as_ref().unwrap().transport_set_sha256,
+        reported.snapshot.as_ref().unwrap().transport_set_sha256
+    );
+    assert_ne!(
+        raw.snapshot.as_ref().unwrap().snapshot_token,
+        reported.snapshot.as_ref().unwrap().snapshot_token
+    );
+    let mut stale = request(ResourceBrokenSourcesFilter::Failures);
+    stale.expected_snapshot_token = Some(raw.snapshot.as_ref().unwrap().snapshot_token.clone());
+    assert!(f.store.resource_broken_sources(&stale).is_err());
+    let c = Connection::open(f.path()).unwrap();
+    let config: String = c
+        .query_row("SELECT value FROM metadata WHERE key='config'", [], |r| {
+            r.get(0)
+        })
+        .unwrap();
+    let mut changed: CrawlConfig = serde_json::from_str(&config).unwrap();
+    changed
+        .directive_reporting
+        .as_mut()
+        .unwrap()
+        .respect_canonical = true;
+    c.execute(
+        "UPDATE metadata SET value=?1 WHERE key='config'",
+        [serde_json::to_string(&changed).unwrap()],
+    )
+    .unwrap();
+    drop(c);
+    assert!(
+        f.store
+            .resource_broken_sources(&request(ResourceBrokenSourcesFilter::Failures))
+            .unwrap_err()
+            .to_string()
+            .contains("owner report configuration differs")
+    );
+}
+#[test]
+fn resource_source_reporting_inactive_default_bytes_and_no_report_unknown_are_truthful() {
+    let f = Fixture::new(2, false);
+    let legacy = failures(&f.store);
+    let baseline = serde_json::to_vec(&legacy).unwrap();
+    let null: ResourceBrokenSourcesRequest =
+        serde_json::from_value(serde_json::json!({"filter":"failures","reporting_mode":null}))
+            .unwrap();
+    assert_eq!(
+        serde_json::to_vec(&f.store.resource_broken_sources(&null).unwrap()).unwrap(),
+        baseline
+    );
+    let mut explicit = request(ResourceBrokenSourcesFilter::Failures);
+    explicit.reporting_mode = Some(crate::ReportingMode::Reported);
+    let p = f.store.resource_broken_sources(&explicit).unwrap();
+    assert_eq!(p.rows.len(), 3);
+    assert!(
+        p.rows
+            .iter()
+            .all(|r| r.source_reporting_owner == Some("unknown_unobserved_owner_preserved"))
+    );
+    assert_eq!(
+        p.snapshot
+            .as_ref()
+            .unwrap()
+            .reporting
+            .as_ref()
+            .unwrap()
+            .owner_report_binding,
+        "unknown_saved_report_absent"
+    );
+    assert!(
+        serde_json::from_value::<ResourceBrokenSourcesRequest>(
+            serde_json::json!({"reporting_mode":"auto"})
+        )
+        .is_err()
+    );
+    let f = Fixture::new(2, false);
+    let baseline = failures(&f.store);
+    let mut export = request(ResourceBrokenSourcesFilter::Failures);
+    export.expected_snapshot_token =
+        Some(baseline.snapshot.as_ref().unwrap().snapshot_token.clone());
+    let baseline_csv = f
+        .store
+        .export_resource_broken_sources_csv(&export)
+        .unwrap()
+        .bytes;
+    bind_reporting_report(&f, 0, false);
+    let inactive = failures(&f.store);
+    assert_eq!(
+        serde_json::to_vec(&inactive).unwrap(),
+        serde_json::to_vec(&baseline).unwrap()
+    );
+    assert_eq!(
+        f.store
+            .export_resource_broken_sources_csv(&export)
+            .unwrap()
+            .bytes,
+        baseline_csv
+    );
+}
+
 #[test]
 fn resource_broken_sources_real_css_duplicates_private_404_and_cold_read_only_reopen_preserve_source_units()
  {

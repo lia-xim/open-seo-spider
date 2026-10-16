@@ -20,6 +20,40 @@
   const validReference = reference => reference === null || object(reference) && safeInteger(reference.ordinal) && ['original_requested_url', 'document_url', 'fetched_at', 'basis'].every(key => typeof reference[key] === 'string');
   const validSnapshot = snapshot => object(snapshot) && /^[a-f0-9]{64}$/.test(snapshot.typed_report_sha256) && typeof snapshot.typed_report_sha_profile === 'string' && object(snapshot.coverage) && safeInteger(snapshot.coverage.saved_page_count) && safeInteger(snapshot.coverage.pending) && ['limited','cancelled','mixed_age_selected_recrawl','website_completeness_proven'].every(key => typeof snapshot.coverage[key] === 'boolean') && (snapshot.caller_binding === null || object(snapshot.caller_binding));
 
+  const viewPages = envelope => envelope?.reporting ? envelope.reporting.rows.filter(row => row.included).map(row => envelope.comparison.pages[row.comparison_index]) : envelope?.comparison.pages || [];
+  const ordered = value => Array.isArray(value) ? value.map(ordered) : object(value) ? Object.fromEntries(Object.keys(value).sort().map(k => [k,ordered(value[k])])) : value;
+  const shaJSON = async value => Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(ordered(value))))),n=>n.toString(16).padStart(2,'0')).join('');
+  function validateReporting(envelope) {
+    const r=envelope.reporting,c=envelope.comparison;
+    if(r===undefined)return;
+    const bad=()=>{throw Error('Berichtsansicht, Zeilenbezug oder Zähler stimmen nicht mit dem vollständigen Rohvergleich überein.');};
+    const profile=p=>p===null||object(p)&&Object.keys(p).length===4&&p.version===1&&['respect_noindex','respect_canonical','respect_next_prev'].every(k=>typeof p[k]==='boolean')&&[p.respect_noindex,p.respect_canonical,p.respect_next_prev].some(Boolean);
+    if(!object(r)||!object(r.identity)||r.identity.engine!=='open-seo-spider/saved-comparison-reporting-v1'||!['raw','reported'].includes(r.identity.mode)||!profile(r.identity.before_profile)||!profile(r.identity.after_profile)||!Array.isArray(r.rows)||r.rows.length!==c.pages.length||r.raw_compared_rows!==c.pages.length||!['identity_sha256','view_sha256'].every(k=>/^[a-f0-9]{64}$/.test(r[k])))bad();
+    const counts={added:0,removed:0,changed:0,unchanged:0,pages_with_unknown_fields:0};let included=0;
+    const observed={before:0,after:0},visible={before:0,after:0};
+    r.rows.forEach((row,i)=>{
+      const page=c.pages[i];
+      if(!object(row)||row.comparison_index!==i||row.comparison_key!==page.comparison_key||typeof row.included!=='boolean')bad();
+      for(const side of ['before','after']){
+        const flag=row[side+'_visible'];
+        if(page[side]===null?flag!==null:typeof flag!=='boolean')bad();
+        if(flag!==null)observed[side]++;
+        if(flag===true)visible[side]++;
+        if(r.identity[side+'_profile']===null&&flag===false)bad();
+      }
+      if(row.included!==(r.identity.mode==='raw'||row.before_visible===true||row.after_visible===true))bad();
+      if(row.included){included++;counts[page.kind]++;if(page.unknown_fields.length)counts.pages_with_unknown_fields++;}
+    });
+    for(const side of ['before','after'])if(r[side+'_captured_page_observations']!==observed[side]||observed[side]!==c[side+'_snapshot'].coverage.saved_page_count||r[side+'_profile_visible_page_observations']!==visible[side])bad();
+    if(r.included_compared_rows!==included||r.excluded_compared_rows!==r.rows.length-included||Object.keys(counts).some(k=>r.view_counts?.[k]!==counts[k]||r.raw_counts?.[k]!==c.counts[k]))bad();
+  }
+  async function validateReportingIdentity(envelope,requestedMode,expectedActive=false) {
+    validateReporting(envelope);
+    const r=envelope.reporting,c=envelope.comparison;
+    if(!r){if(requestedMode||expectedActive)throw Error('Gewählte oder aktive Berichtsansicht fehlt.');return;}
+    if(requestedMode?r.identity.mode!==requestedMode:r.identity.mode!=='reported'||r.identity.before_profile===null&&r.identity.after_profile===null)throw Error('Berichtsmodus wurde geändert.');
+    if(await shaJSON(r.identity)!==r.identity_sha256||await shaJSON({identity_sha256:r.identity_sha256,before_snapshot_sha256:c.before_snapshot.typed_report_sha256,after_snapshot_sha256:c.after_snapshot.typed_report_sha256,config_sha256:c.config_sha256,rows:r.rows})!==r.view_sha256)throw Error('Berichtsidentität gehört nicht zu diesem gespeicherten Vergleich.');
+  }
   function validateEnvelope(envelope, includeOriginalReports = false) {
     const result = envelope?.comparison;
     if (!object(envelope) || envelope.website_requests !== 0 || !object(result) || result.schema_version !== 1 || result.engine !== ENGINE || result.website_requests !== 0 || !Array.isArray(result.pages) || !object(result.counts) || !object(result.config) || !validSnapshot(result.before_snapshot) || !validSnapshot(result.after_snapshot) || !strings(result.limitations)) throw Error('Unbekanntes oder unvollständiges Vergleichsformat. Es wird kein Ergebnis als vollständig angezeigt.');
@@ -37,6 +71,7 @@
     }
     if (Object.keys(counts).some(key => !safeInteger(result.counts[key]) || counts[key] !== result.counts[key])) throw Error('Die Zähler stimmen nicht mit den gespeicherten Vergleichszeilen überein.');
     validateOriginalReports(envelope, includeOriginalReports);
+    validateReporting(envelope);
     return envelope;
   }
 
@@ -63,11 +98,14 @@
   const csvCell = input => { let value = String(input ?? ''); if (/^[\s\uFEFF]*[=+@-]/u.test(value)) value = "'" + value; return '"' + value.replace(/"/g, '""') + '"'; };
   function csvExport(envelope, pages) {
     const comparison = envelope.comparison;
+    const visibility=new Map((envelope.reporting?.rows??[]).map(r=>[r.comparison_key,r]));
     const columns = ['Art','Vergleichsidentität','Vorher Original-URL','Nachher Original-URL','Feld','Befund','Vorher Zustand','Vorher Wert JSON','Vorher Quellenprofil','Vorher Gründe JSON','Vorher Herkunft JSON','Nachher Zustand','Nachher Wert JSON','Nachher Quellenprofil','Nachher Gründe JSON','Nachher Herkunft JSON','Verfügbarkeit geändert','Vollständige Werte vergleichbar','Vergleichsgrund','Vorher Bericht SHA256','Nachher Bericht SHA256'];
+    if(envelope.reporting)columns.push('reporting_json','row_visibility_json');
     const lines = ['\uFEFF' + columns.map(csvCell).join(',')]; let bytes = new TextEncoder().encode(lines[0]).length + 2;
+    if(envelope.reporting){const {rows:projectionRows,...summary}=envelope.reporting;const metadata=Array(21).fill('');metadata.push(JSON.stringify(summary),'');const line=metadata.map(csvCell).join(',');bytes+=new TextEncoder().encode(line).length+2;if(bytes>MAX_CSV)throw Error('CSV überschreitet256MiB.');lines.push(line);}
     for (const page of pages) for (const field of page.fields) {
       if (unsafeInteger(field.before.value) || unsafeInteger(field.after.value) || unsafeInteger(field.before.provenance) || unsafeInteger(field.after.provenance)) throw Error('Ein numerischer Wert überschreitet die präzise CSV-Darstellung im Browser. Exakte Originalwerte stehen im gesamten JSON-Export; es wurde keine CSV-Teildatei exportiert.');
-      const line = [page.kind,page.comparison_key,page.before?.original_requested_url ?? '',page.after?.original_requested_url ?? '',field.field,field.outcome,field.before.state,JSON.stringify(field.before.value),field.before.profile ?? '',JSON.stringify(field.before.reasons),JSON.stringify(field.before.provenance),field.after.state,JSON.stringify(field.after.value),field.after.profile ?? '',JSON.stringify(field.after.reasons),JSON.stringify(field.after.provenance),field.availability_changed,field.comparable_complete_values,field.reason ?? '',comparison.before_snapshot.typed_report_sha256,comparison.after_snapshot.typed_report_sha256].map(csvCell).join(',');
+      const line = [page.kind,page.comparison_key,page.before?.original_requested_url ?? '',page.after?.original_requested_url ?? '',field.field,field.outcome,field.before.state,JSON.stringify(field.before.value),field.before.profile ?? '',JSON.stringify(field.before.reasons),JSON.stringify(field.before.provenance),field.after.state,JSON.stringify(field.after.value),field.after.profile ?? '',JSON.stringify(field.after.reasons),JSON.stringify(field.after.provenance),field.availability_changed,field.comparable_complete_values,field.reason ?? '',comparison.before_snapshot.typed_report_sha256,comparison.after_snapshot.typed_report_sha256,...(envelope.reporting?['',JSON.stringify(visibility.get(page.comparison_key))]:[])].map(csvCell).join(',');
       bytes += new TextEncoder().encode(line).length + 2;
       if (bytes > MAX_CSV) throw Error('Der CSV-Export überschreitet 256 MiB. Es wurde keine Teildatei exportiert.');
       lines.push(line);
@@ -91,7 +129,7 @@
     if (!dialog || dialog.dataset.bound) return;
     dialog.dataset.bound = 'true';
     const state = { jobs:[], result:null, resultRaw:null, error:null, page:0, selected:null, fieldPage:0, revision:0, token:null, historyToken:null, exportBusy:false };
-    const filtered = () => { const kind = $('saved-comparison-filter').value, query = $('saved-comparison-search').value.trim().toLocaleLowerCase('de-DE'); return (state.result?.comparison.pages || []).filter(page => (kind === 'all' || kind === page.kind) && (!query || [page.comparison_key,page.before?.original_requested_url,page.after?.original_requested_url].some(value => String(value ?? '').toLocaleLowerCase('de-DE').includes(query)))); };
+    const filtered = () => { const kind = $('saved-comparison-filter').value, query = $('saved-comparison-search').value.trim().toLocaleLowerCase('de-DE'); return viewPages(state.result).filter(page => (kind === 'all' || kind === page.kind) && (!query || [page.comparison_key,page.before?.original_requested_url,page.after?.original_requested_url].some(value => String(value ?? '').toLocaleLowerCase('de-DE').includes(query)))); };
     const busy = () => Boolean(state.token || state.historyToken || state.exportBusy);
     const eligible = job => job && !['running','pausing','cancelling','queued','pending'].includes(job.status) && job.recrawl_available !== false;
     const announce = text => { $('saved-comparison-status').textContent = text; };
@@ -104,6 +142,7 @@
       $('saved-comparison-export-scope').textContent = $('saved-comparison-original-reports').checked ? 'JSON enthält den Vergleich und beide geladenen gespeicherten Berichte mit ihren vorhandenen Daten. Unbekannte und teilweise Befunde bleiben erhalten. Die Berichtsinhalte werden mit der unveränderten Antwort exportiert. CSV enthält die verglichenen Felder der gewählten URLs. Exporte verwenden die bereits geladenen Daten.' : 'Exporte verwenden das bereits geladene Vergleichsergebnis. Das Vergleichs-JSON enthält die verglichenen Befunde und Berichtsbezüge. Mit der Option oben kann JSON auch beide geladenen gespeicherten Berichte enthalten. CSV enthält die verglichenen Felder der gewählten URLs, unabhängig von der sichtbaren Tabellen- oder Feldseite. JSON bewahrt die erhaltene Antwort; CSV schützt Textzellen vor Formelausführung.';
       $('saved-comparison-export-csv').disabled = !usable;
       $('saved-comparison-export-filtered').disabled = !usable || !filtered().length;
+      if(state.result?.reporting)$('saved-comparison-export-scope').textContent='Tabelle und CSV verwenden die gebundene Berichtsansicht. JSON bewahrt den vollständigen Rohvergleich plus Sichtbarkeitsindex; ausgeblendete Seiten werden dort nicht gelöscht. Bei Sichtbarkeitswechseln bleiben Rohänderungsklassen und beide gespeicherten Seitenfakten erhalten. URL-Zielwerte und Originalberichte werden nicht gefiltert.';
       $('saved-comparison-form').setAttribute('aria-busy', String(Boolean(state.token)));
     }
     function abortComparison() { state.revision += 1; state.token?.controller.abort(); state.token = null; controls(); }
@@ -153,13 +192,14 @@
     };
     function render() {
       const result = state.result?.comparison; if (!result) return;
+      const reporting=state.result.reporting,counts=reporting?.view_counts??result.counts;
       $('saved-comparison-results').hidden = false;
-      $('saved-comparison-counts').innerHTML = Object.entries(KINDS).map(([kind,label]) => `<span>${escape(label)} <strong>${numeric(result.counts[kind])}</strong></span>`).join('') + `<span>Mit unbekannten Feldern <strong>${numeric(result.counts.pages_with_unknown_fields)}</strong></span>`;
-      $('saved-comparison-coverage').textContent = snapshotDescription(result.before_snapshot, 'Vorher') + '\n' + snapshotDescription(result.after_snapshot, 'Nachher');
+      $('saved-comparison-counts').innerHTML = Object.entries(KINDS).map(([kind,label]) => `<span>${escape(label)} <strong>${numeric(counts[kind])}</strong></span>`).join('') + `<span>Mit unbekannten Feldern <strong>${numeric(counts.pages_with_unknown_fields)}</strong></span>`;
+      $('saved-comparison-coverage').textContent = snapshotDescription(result.before_snapshot, 'Vorher') + '\n' + snapshotDescription(result.after_snapshot, 'Nachher')+(reporting?'\nAnsicht '+reporting.identity.mode+' · '+reporting.included_compared_rows+' von '+reporting.raw_compared_rows+' Rohvergleichszeilen · '+reporting.excluded_compared_rows+' beidseits ausgeblendet/abwesend. Die Änderungsklassen und Zielfakten stammen aus dem vollständigen Rohvergleich.':'');
       const bundle = state.result.original_reports;
       $('saved-comparison-bundle-status').hidden = !bundle;
       $('saved-comparison-bundle-status').textContent = bundle ? `JSON enthält beide geladenen gespeicherten Berichte · Vorher ${numeric(bundle.before.typed_report_json_bytes)} Bytes · Nachher ${numeric(bundle.after.typed_report_json_bytes)} Bytes. Unbekannte und teilweise Befunde bleiben gekennzeichnet.` : '';
-      $('saved-comparison-profile').textContent = safeJSON({engine:result.engine,identity_profile:result.identity_profile,mapping_profile:result.mapping_profile,config:result.config,config_sha256:result.config_sha256,before_snapshot:result.before_snapshot,after_snapshot:result.after_snapshot,ignored_runtime_fields:result.ignored_runtime_fields,limitations:result.limitations,website_requests:result.website_requests,vendor_parity:result.vendor_parity});
+      $('saved-comparison-profile').textContent = safeJSON({reporting:state.result.reporting,engine:result.engine,identity_profile:result.identity_profile,mapping_profile:result.mapping_profile,config:result.config,config_sha256:result.config_sha256,before_snapshot:result.before_snapshot,after_snapshot:result.after_snapshot,ignored_runtime_fields:result.ignored_runtime_fields,limitations:result.limitations,website_requests:result.website_requests,vendor_parity:result.vendor_parity});
       const rows = filtered(); state.page = Math.max(0,Math.min(state.page,Math.max(0,Math.ceil(rows.length / PAGE_SIZE)-1))); const offset = state.page * PAGE_SIZE;
       $('saved-comparison-table').querySelector('tbody').innerHTML = rows.slice(offset,offset+PAGE_SIZE).map(page => `<tr><td><span class="badge ${page.kind === 'changed' ? 'warning' : page.kind === 'removed' ? 'danger' : 'neutral'}">${escape(KINDS[page.kind])}</span></td><td><button class="saved-comparison-row" type="button" data-comparison-key="${escape(page.comparison_key)}">${escape(page.comparison_key)}</button><small>Vorher: ${escape(page.before?.original_requested_url ?? 'URL fehlt in diesem Bericht')}<br>Nachher: ${escape(page.after?.original_requested_url ?? 'URL fehlt in diesem Bericht')}</small></td><td>${numeric(page.fields.filter(field => field.outcome === 'changed').length)} geändert · ${numeric(page.unknown_fields.length)} unbekannt<small>${page.equality_proven_for_compared_fields ? 'Gleichheit für die verglichenen Felder belegt' : 'Gleichheit für die verglichenen Felder nicht belegt'}</small></td></tr>`).join('') || '<tr><td colspan="3" class="empty-cell">Keine Vergleichszeilen für diesen Filter.</td></tr>';
       $('saved-comparison-page-label').textContent = rows.length ? `${numeric(offset+1)}–${numeric(Math.min(rows.length,offset+PAGE_SIZE))} von ${numeric(rows.length)} gefilterten URLs; ${numeric(result.pages.length)} URLs im gesamten Ergebnis.` : `0 gefilterte URLs; ${numeric(result.pages.length)} URLs im gesamten Ergebnis.`;
@@ -169,9 +209,9 @@
       return `<section class="saved-comparison-fact"><h5>${escape(label)} · <span class="badge ${['unknown','partial','missing','error','unavailable'].includes(fact.state) ? 'warning' : 'neutral'}">${escape(STATES[fact.state])}</span></h5><pre tabindex="0">${escape(factValue(fact))}</pre><p>Quellenprofil: <code>${escape(fact.profile ?? 'Nicht erfasst')}</code></p>${fact.reasons.length ? `<p>Gründe: ${escape(fact.reasons.join(' · '))}</p>` : ''}<details><summary>Gespeicherte Herkunft</summary><pre tabindex="0">${escape(fact.provenance === null ? 'Herkunft nicht erfasst.' : safeJSON(fact.provenance))}</pre></details></section>`;
     }
     function detail() {
-      const page = state.result?.comparison.pages.find(page => page.comparison_key === state.selected); $('saved-comparison-detail').hidden = !page; if (!page) return;
+      const page = viewPages(state.result).find(page => page.comparison_key === state.selected); $('saved-comparison-detail').hidden = !page; if (!page) return;
       $('saved-comparison-detail-heading').textContent = `${KINDS[page.kind]} · ${page.comparison_key}`;
-      $('saved-comparison-page-data').textContent = safeJSON({before:page.before,after:page.after,unknown_fields:page.unknown_fields,equality_proven_for_compared_fields:page.equality_proven_for_compared_fields});
+      $('saved-comparison-page-data').textContent = safeJSON({reporting_visibility:state.result.reporting?.rows.find(row=>row.comparison_key===page.comparison_key),before:page.before,after:page.after,unknown_fields:page.unknown_fields,equality_proven_for_compared_fields:page.equality_proven_for_compared_fields});
       const kind = $('saved-comparison-field-filter').value, fields = page.fields.filter(field => kind === 'all' || kind === field.outcome); state.fieldPage = Math.max(0,Math.min(state.fieldPage,Math.max(0,Math.ceil(fields.length/PAGE_SIZE)-1))); const offset = state.fieldPage*PAGE_SIZE;
       $('saved-comparison-fields').innerHTML = fields.slice(offset,offset+PAGE_SIZE).map(field => `<article class="saved-comparison-field"><h4>${escape(field.field)} <span class="badge ${field.outcome === 'unknown' ? 'warning' : 'neutral'}">${escape(OUTCOMES[field.outcome])}</span></h4><p>${field.comparable_complete_values ? 'Vollständige Werte unter passenden Quellenprofilen vergleichbar.' : 'Vollständiger Wertevergleich nicht belegt.'}${field.availability_changed ? ' Verfügbarkeit geändert.' : ''}${field.reason ? ' ' + escape(field.reason) : ''}</p><div class="saved-comparison-facts">${factHTML(field.before,'Vorher')}${factHTML(field.after,'Nachher')}</div></article>`).join('') || '<p>Keine Felder für diesen Filter.</p>';
       $('saved-comparison-field-label').textContent = `${numeric(Math.min(fields.length,offset+1))}–${numeric(Math.min(fields.length,offset+PAGE_SIZE))} von ${numeric(fields.length)} gefilterten Feldern.`;
@@ -185,6 +225,8 @@
       try { config = JSON.parse($('saved-comparison-config').value); if (!object(config)) throw Error('Vergleichsoptionen müssen ein JSON-Objekt sein.'); }
       catch (error) { showError({message:error.message}); return; }
       const body = {before:before.id,after:after.id,config}; const omitted = [];
+      const requestedMode=$('saved-comparison-reporting-mode')?.value??'';
+      if(requestedMode)body.reporting_mode=requestedMode;
       const includeOriginalReports = $('saved-comparison-original-reports').checked;
       if (includeOriginalReports) body.include_original_reports = true;
       for (const [side,job] of [['before',before],['after',after]]) { if (safeInteger(job.generation)) body['expected_' + side + '_generation'] = job.generation; else omitted.push(side === 'before' ? 'Vorher' : 'Nachher'); }
@@ -195,14 +237,18 @@
         const response = await fetch('/api/compare/saved', {method:'POST',headers:{'Content-Type':'application/json'},body:payload,signal:token.controller.signal}); const {body:envelope,text:raw} = await boundedJSON(response);
         if (state.token !== token || state.revision !== token.revision || !dialog.open) return;
         if (!response.ok) { if (!object(envelope.error) || typeof envelope.error.code !== 'string' || typeof envelope.error.message !== 'string' || !Array.isArray(envelope.error.collisions)) throw Error(`Ungültiger strukturierter API-Fehler: HTTP ${response.status}`); showError(envelope); announce(response.status === 409 ? 'Gespeicherter Jobstand geändert oder nicht stabil. Historie aktualisieren und erneut vergleichen.' : `Vergleich abgewiesen: HTTP ${response.status}`); return; }
-        state.result = validateEnvelope(envelope, includeOriginalReports); state.resultRaw = raw; state.page = 0; render(); announce(`Vergleich gespeichert geladener Berichte abgeschlossen · ${numeric(envelope.comparison.pages.length)} URLs · keine Website-Anfragen.${omitted.length ? ` Keine präzise erwartete Jobgeneration für ${omitted.join(', ')} verfügbar; ohne diese Erwartung verglichen.` : ''}`);
+        validateEnvelope(envelope, includeOriginalReports);
+        const activeProfile=job=>['respect_noindex','respect_canonical','respect_next_prev'].some(k=>job.config?.directive_reporting?.[k]===true);
+        await validateReportingIdentity(envelope,requestedMode,activeProfile(before)||activeProfile(after));
+        if(state.token!==token||state.revision!==token.revision||!dialog.open)return;
+        state.result = envelope; state.resultRaw = raw; state.page = 0; render(); announce(`Vergleich gespeichert geladener Berichte abgeschlossen · ${numeric(envelope.comparison.pages.length)} URLs · keine Website-Anfragen.${omitted.length ? ` Keine präzise erwartete Jobgeneration für ${omitted.join(', ')} verfügbar; ohne diese Erwartung verglichen.` : ''}`);
       } catch (error) { if (state.token === token && error.name !== 'AbortError') { showError({message:error.message}); announce('Vergleich nicht verfügbar. Kein Teilergebnis wird exportiert.'); } }
       finally { if (state.token === token) { state.token = null; controls(); } }
     }
     async function download(kind, filteredOnly = false) {
       if (!state.result || busy()) return; state.exportBusy = true; controls();
       try {
-        const envelope = state.result, rows = filteredOnly ? filtered() : envelope.comparison.pages;
+        const envelope = state.result, rows = filteredOnly ? filtered() : viewPages(envelope);
         const text = kind === 'json' ? state.resultRaw : csvExport(envelope,rows);
         const bundled = kind === 'json' && Boolean(envelope.original_reports);
         await downloadBlob(new Blob([text], {type:kind === 'json' ? 'application/json;charset=utf-8' : 'text/csv;charset=utf-8'}), `open-seo-spider-gespeicherter-vergleich-${envelope.comparison.before_snapshot.typed_report_sha256.slice(0,12)}-${envelope.comparison.after_snapshot.typed_report_sha256.slice(0,12)}${bundled ? '-mit-gespeicherten-berichten' : ''}${filteredOnly ? '-gefiltert' : ''}.${kind}`);
@@ -219,6 +265,7 @@
     for (const id of ['saved-comparison-before','saved-comparison-after']) $(id).addEventListener('change', invalidate);
     $('saved-comparison-config').addEventListener('input', invalidate);
     $('saved-comparison-original-reports').addEventListener('change', invalidate);
+    $('saved-comparison-reporting-mode')?.addEventListener('change', invalidate);
     for (const id of ['saved-comparison-filter','saved-comparison-search']) $(id).addEventListener(id.endsWith('search') ? 'input' : 'change', () => {state.page=0;render();});
     $('saved-comparison-prev').addEventListener('click', () => {state.page-=1;render();}); $('saved-comparison-next').addEventListener('click', () => {state.page+=1;render();});
     $('saved-comparison-table').addEventListener('click', event => { const button = event.target.closest('[data-comparison-key]'); if (!button) return; state.selected = button.dataset.comparisonKey; state.fieldPage=0; detail(); $('saved-comparison-detail-heading').focus(); });

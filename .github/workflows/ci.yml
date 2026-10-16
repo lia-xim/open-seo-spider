@@ -2,6 +2,8 @@ name: Rust checks
 on:
   push:
   pull_request:
+permissions:
+  contents: read
 concurrency:
   group: checks-${{ github.ref }}
   cancel-in-progress: true
@@ -30,7 +32,8 @@ jobs:
           node-version: '24'
       - run: cargo fmt --all --check
       - run: cargo test --workspace --locked
-      - run: cargo clippy --workspace --all-targets --locked -- -D warnings
+      - run: cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+      - run: node scripts/check-ui-fixtures.mjs
       - run: cargo build --locked -p open-seo-spider
       - name: Sitemap transport ownership and final-witness controls
         run: node --test scripts/sitemap-transport-oracles.test.mjs
@@ -174,13 +177,16 @@ jobs:
           New-Item -ItemType Directory -Path $releaseArtifactFolder -Force | Out-Null
           $releaseManifest | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $releaseArtifactFolder 'open-seo-spider-windows-release.json') -Encoding utf8NoBOM
           Copy-Item -LiteralPath $releaseExe -Destination $releaseArtifactFolder
+          Copy-Item -LiteralPath LICENSE -Destination (Join-Path $releaseArtifactFolder 'LICENSE')
+          Copy-Item -LiteralPath assets/fonts/LICENSE.txt -Destination (Join-Path $releaseArtifactFolder 'ROBOTO-LICENSE.txt')
+          Copy-Item -LiteralPath THIRD_PARTY_NOTICES.md -Destination (Join-Path $releaseArtifactFolder 'THIRD_PARTY_NOTICES.md')
           Copy-Item -LiteralPath $releaseBundleProof -Destination $releaseArtifactFolder
           Copy-Item -LiteralPath $releaseBudgetProof -Destination $releaseArtifactFolder
           Copy-Item -LiteralPath $releaseSitemapProof -Destination $releaseArtifactFolder
           Copy-Item -LiteralPath $releaseSitemapRequests -Destination $releaseArtifactFolder
           Copy-Item -LiteralPath $releaseSitemapLog -Destination $releaseArtifactFolder
           Copy-Item -LiteralPath $releaseSitemapValidationPath -Destination $releaseArtifactFolder
-      - name: Save the private optimized Windows artifact
+      - name: Save the optimized Windows artifact
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4
         with:
@@ -188,7 +194,7 @@ jobs:
           retention-days: 14
           if-no-files-found: error
           path: target/release-artifact/*
-      - name: Save private sitemap transport debug and release witnesses
+      - name: Save sitemap transport debug and release witnesses
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -200,7 +206,7 @@ jobs:
             ${{ runner.temp }}/sitemap-transport-release-e2e.json*
             ${{ runner.temp }}/sitemap-transport-debug-validation.json
             ${{ runner.temp }}/sitemap-transport-release-validation.json
-      - name: Save private stored sitemap debug and release witnesses
+      - name: Save stored sitemap debug and release witnesses
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -275,7 +281,7 @@ jobs:
           SPIDER_SOURCE_COMMIT: ${{ github.sha }}
           SPIDER_EXPECTED_SOURCE_COMMIT: ${{ github.sha }}
           SPIDER_SITEMAP_NATIVE_OUTPUT: ${{ runner.temp }}/sitemap-assessment-native
-      - name: Save private stored sitemap API and browser witnesses
+      - name: Save stored sitemap API and browser witnesses
         if: always()
         uses: actions/upload-artifact@v4
         with:

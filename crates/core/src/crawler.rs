@@ -36,6 +36,7 @@ pub struct Crawler {
     headers: HeaderMap,
     filters: UrlFilters,
     robots: Arc<RobotsCache>,
+    hsts: Option<Arc<crate::tls::HstsCache>>,
     rate: Arc<RateLimiter>,
     store: Option<Arc<CrawlStore>>,
     // Ephemeral construction fact; never persisted as original source evidence.
@@ -74,8 +75,26 @@ impl Crawler {
         // with_store / with_selected_recrawl has identified the actual mode.
         let original_sitemap_inputs =
             automatically_captured_sitemap_inputs.then(|| config.sitemap_urls.clone());
+        if let Some(tls) = &config.tls {
+            tls.validate()?;
+            if !tls.is_inactive() && config.renderer.is_some() {
+                bail!(
+                    "Crawl-scoped trust/HSTS is not yet supported by the external renderer; disable rendering or TLS options"
+                );
+            }
+        }
+        if config
+            .tls
+            .as_ref()
+            .is_some_and(crate::TlsConfig::is_inactive)
+        {
+            config.tls = None;
+        }
         config.prepare_input_lists()?;
         config.validate_crawl_quotas()?;
+        if let Some(profile) = &config.directive_reporting {
+            profile.validate()?;
+        }
         if automatically_captured_sitemap_inputs {
             config.explicit_sitemap_inputs = original_sitemap_inputs;
         }
@@ -208,17 +227,34 @@ impl Crawler {
                     .with_context(|| format!("Invalid header value for {name}"))?,
             );
         }
-        let client = Client::builder()
-            .user_agent(&config.user_agent)
-            .timeout(Duration::from_secs(config.request_timeout_secs))
-            .redirect(reqwest::redirect::Policy::none())
-            .build()?;
-        let robots_client = Client::builder()
-            .user_agent(&config.user_agent)
-            .timeout(Duration::from_secs(config.request_timeout_secs))
-            .redirect(reqwest::redirect::Policy::limited(5))
-            .build()?;
-        let robots = Arc::new(RobotsCache::new(robots_client));
+        let hsts = config
+            .tls
+            .as_ref()
+            .filter(|c| c.respect_hsts)
+            .map(crate::tls::HstsCache::new)
+            .transpose()?
+            .map(Arc::new);
+        let client = crate::tls::configure_client(
+            &config,
+            Client::builder()
+                .user_agent(&config.user_agent)
+                .timeout(Duration::from_secs(config.request_timeout_secs))
+                .redirect(reqwest::redirect::Policy::none()),
+        )?
+        .build()?;
+        let robots_client = crate::tls::configure_client(
+            &config,
+            Client::builder()
+                .user_agent(&config.user_agent)
+                .timeout(Duration::from_secs(config.request_timeout_secs))
+                .redirect(if hsts.is_some() {
+                    reqwest::redirect::Policy::none()
+                } else {
+                    reqwest::redirect::Policy::limited(5)
+                }),
+        )?
+        .build()?;
+        let robots = Arc::new(RobotsCache::with_hsts(robots_client, hsts.clone()));
         let rate = Arc::new(RateLimiter::new(config.delay_ms));
         Ok(Self {
             config,
@@ -227,6 +263,7 @@ impl Crawler {
             headers,
             filters,
             robots,
+            hsts,
             rate,
             store: None,
             automatically_captured_sitemap_inputs,
@@ -436,6 +473,9 @@ impl Crawler {
             .as_ref()
             .map(|store| store.begin_run(&started_at))
             .transpose()?;
+        if let (Some(hsts), Some(store), Some(generation)) = (&self.hsts, &self.store, generation) {
+            hsts.attach(store.clone(), generation)?;
+        }
         if let (Some(policy), Some(store), Some(generation)) =
             (&self.policy, &self.store, generation)
             && selected.is_none()
@@ -624,12 +664,15 @@ impl Crawler {
             client: self.client.clone(),
             headers: self.headers.clone(),
             robots: self.robots.clone(),
+            hsts: self.hsts.clone(),
             rate: self.rate.clone(),
             pdf_slots: self.pdf_slots.clone(),
             pdf_tasks: pdf_tasks.clone(),
             policy: self.policy.clone(),
             #[cfg(test)]
             pdf_parse_hook: self.pdf_parse_hook.clone(),
+            #[cfg(test)]
+            quota_start_hook: None,
         });
         let mut tasks: FuturesUnordered<BoxFuture<'static, anyhow::Result<Option<PageRecord>>>> =
             FuturesUnordered::new();
@@ -888,6 +931,9 @@ impl Crawler {
         // Cancel can drop the Page future; the actual already-started parser
         // must still join before any terminal checkpoint can be published.
         pdf_tasks.shutdown_and_drain().await?;
+        if let Some(hsts) = &self.hsts {
+            hsts.healthy()?;
+        }
         if self.config.resource_discovery.is_some()
             && let Some(store) = &self.store
         {
@@ -1107,7 +1153,13 @@ impl Crawler {
             batch.source_revision,
             permission.revision()?
         ));
-        let redirects_traverse = page.policy.as_ref().is_none_or(|policy| {
+        let redirects_traverse = page.tls.as_ref().is_none_or(|tls| {
+            tls.hsts_upgrades.iter().all(|hop| {
+                hop.crawl_policy
+                    .as_ref()
+                    .is_none_or(|decision| decision.traverse)
+            })
+        }) && page.policy.as_ref().is_none_or(|policy| {
             policy
                 .redirect_decisions
                 .iter()
@@ -1682,12 +1734,15 @@ impl Crawler {
             client: self.client.clone(),
             headers: self.headers.clone(),
             robots: self.robots.clone(),
+            hsts: self.hsts.clone(),
             rate: self.rate.clone(),
             pdf_slots: self.pdf_slots.clone(),
             pdf_tasks: pdf_tasks.clone(),
             policy: self.policy.clone(),
             #[cfg(test)]
             pdf_parse_hook: self.pdf_parse_hook.clone(),
+            #[cfg(test)]
+            quota_start_hook: None,
         };
         while let Some(entry) = queue.front().cloned() {
             if control.request() != CrawlRequest::Running {
@@ -2190,13 +2245,20 @@ impl Crawler {
                     .unwrap_or_else(|| format!("status {:?}", page.final_status))
             ));
         }
-        let xml_allowed = self.policy.is_none()
+        let xml_allowed = (self.policy.is_none()
             || page.policy.as_ref().is_some_and(|observed| {
                 observed.admission.can_discover_xml
                     && observed
                         .redirect_decisions
                         .iter()
                         .all(|row| row.decision.folder_internal)
+            }))
+            && page.tls.as_ref().is_none_or(|tls| {
+                tls.hsts_upgrades.iter().all(|hop| {
+                    hop.crawl_policy
+                        .as_ref()
+                        .is_none_or(|decision| decision.folder_internal && decision.traverse)
+                })
             });
         let capture = protocol
             .source_capture
@@ -3099,15 +3161,92 @@ struct FetchContext {
     client: Client,
     headers: HeaderMap,
     robots: Arc<RobotsCache>,
+    hsts: Option<Arc<crate::tls::HstsCache>>,
     rate: Arc<RateLimiter>,
     pdf_slots: Arc<Semaphore>,
     pdf_tasks: crate::TaskOwner,
     policy: Option<Arc<crate::CompiledCrawlPolicy>>,
     #[cfg(test)]
     pdf_parse_hook: Option<PdfParseHook>,
+    // Per-context fault injection only; production cannot mutate this seam.
+    #[cfg(test)]
+    quota_start_hook: Option<Arc<dyn Fn() + Send + Sync>>,
 }
 
 impl FetchContext {
+    /// Local transport upgrade; never a server Location, status or redirect ledger row.
+    fn apply_hsts(
+        &self,
+        page: &mut PageRecord,
+        current: &mut Url,
+        gates: &mut Vec<crate::ResourceRedirectDecision>,
+    ) -> anyhow::Result<bool> {
+        let Some(cache) = &self.hsts else {
+            return Ok(false);
+        };
+        let Some(mut hop) = cache.upgrade(current, page.redirect_chain.len())? else {
+            return Ok(false);
+        };
+        let target = Url::parse(&hop.target_url)?;
+        let policy = self.policy.as_ref().map(|policy| {
+            policy.evaluate(&crate::CandidateInput {
+                occurrence_id: format!("hsts:{}:{}", page.url, page.redirect_chain.len()),
+                source_kind: crate::CandidateSourceKind::SavedFetch,
+                raw_value: target.to_string(),
+                base_url: None,
+                source_url: Some(current.to_string()),
+                source_location: None,
+            })
+        });
+        if let (Some(observation), Some(decision)) = (&mut page.policy, &policy) {
+            observation.effective_can_expand &= decision.traverse;
+        }
+        let mut allowed = policy
+            .as_ref()
+            .is_none_or(|p| p.decision != crate::CrawlPolicyDecisionKind::Deny);
+        if let (Some(resource), Some(permission)) =
+            (&self.config.resource_discovery, &page.resource_permission)
+            && resource.contract.is_some()
+        {
+            let gate = resource.redirect_decision(
+                permission,
+                current,
+                target.as_str(),
+                Some(&target),
+                &self.seeds,
+                self.config.include_subdomains,
+                self.config.check_external,
+                policy.as_ref().map(|p| {
+                    (
+                        p.decision != crate::CrawlPolicyDecisionKind::Deny,
+                        p.traverse,
+                    )
+                }),
+                gates,
+            )?;
+            allowed &= gate.allowed;
+            gates.push(gate.clone());
+            hop.resource_gate = Some(gate);
+        } else if self.policy.is_none() {
+            allowed &= same_scope(&target, &self.seeds, self.config.include_subdomains)
+                || self.config.check_external
+                || self.config.resource_discovery.as_ref().is_some_and(|c| {
+                    c.permits_resource_origin(&target, &self.seeds, self.config.include_subdomains)
+                });
+        }
+        hop.crawl_policy = policy;
+        page.final_url = target.to_string();
+        page.final_status = None;
+        page.tls
+            .get_or_insert_with(Default::default)
+            .hsts_upgrades
+            .push(hop);
+        if !allowed {
+            bail!("HSTS HTTPS target denied by current crawl/resource scope; no request sent");
+        }
+        *current = target;
+        Ok(true)
+    }
     /// Preserve the pre-quota private test helper only for explicit legacy fixtures.
     #[cfg(test)]
     async fn document(&self, entry: QueueEntry) -> (PageRecord, Option<String>) {
@@ -3145,6 +3284,9 @@ impl FetchContext {
             if session.deferred {
                 return Ok(None);
             }
+        }
+        if let Some(hsts) = &self.hsts {
+            hsts.healthy()?;
         }
         if let Some(classification) = &self.cdn_classification {
             classification.apply(&mut page);
@@ -3303,14 +3445,26 @@ impl FetchContext {
         let body_limit = purpose.body_limit(&self.config);
         let mut sitemap_received = sitemap_capture::ReceiveProgress::new(body_limit);
         let mut resource_redirects: Vec<crate::ResourceRedirectDecision> = Vec::new();
+        let mut transport_gates: Vec<crate::ResourceRedirectDecision> = Vec::new();
         loop {
+            match self.apply_hsts(&mut page, &mut current, &mut transport_gates) {
+                Ok(true) if !visited.insert(current.to_string()) => {
+                    page.error = Some("HSTS/HTTP redirect loop".into());
+                    break;
+                }
+                Ok(_) => {}
+                Err(error) => {
+                    page.error = Some(error.to_string());
+                    break;
+                }
+            }
             // This is the common dispatch seam for seeds, normal discoveries,
             // policy aliases, resource-frontier tasks and selected recrawls.
             // Protocol sitemap and auxiliary robots requests are separate scopes.
             if purpose == FetchPurpose::PageDocument
                 && let Some(limits) = &self.config.crawl_admission_limits
             {
-                let phase = if page.redirect_chain.is_empty() {
+                let phase = if page.redirect_chain.is_empty() && page.tls.is_none() {
                     crate::CrawlAdmissionPhase::Initial
                 } else {
                     crate::CrawlAdmissionPhase::Redirect
@@ -3362,6 +3516,23 @@ impl FetchContext {
                     break;
                 }
             }
+            // A verified HTTPS robots redirect can learn HSTS before the page send.
+            match self.apply_hsts(&mut page, &mut current, &mut transport_gates) {
+                Ok(true) => {
+                    if !visited.insert(current.to_string()) {
+                        page.error = Some("HSTS/HTTP redirect loop".into());
+                        break;
+                    }
+                    // Re-admit and re-check robots for HTTPS. The earlier quota reservation
+                    // remains unstarted and is closed by the same quota owner.
+                    continue;
+                }
+                Ok(false) => {}
+                Err(error) => {
+                    page.error = Some(error.to_string());
+                    break;
+                }
+            }
             self.rate.wait(&current).await;
             let started = Instant::now();
             let request = self.client.get(current.clone());
@@ -3382,11 +3553,23 @@ impl FetchContext {
                 hop.request_started = true;
             }
             request_started = true;
-            if let (Some(session), Some(id)) = (quota.as_deref_mut(), quota_token)
-                && let Err(error) = session.start(id)
+            if let (Some(session), Some(id)) = (quota.as_deref_mut(), quota_token) {
+                #[cfg(test)]
+                if let Some(hook) = &self.quota_start_hook {
+                    hook();
+                }
+                if let Err(error) = session.start(id) {
+                    session.failure = Some(error.to_string());
+                    break;
+                }
+            }
+            if let Some(tls) = &mut page.tls
+                && let Some(hop) = tls
+                    .hsts_upgrades
+                    .last_mut()
+                    .filter(|h| h.target_url == current.as_str())
             {
-                session.failure = Some(error.to_string());
-                break;
+                hop.https_request_started = true;
             }
             let response = request.send().await;
             let mut response = match response {
@@ -3442,6 +3625,17 @@ impl FetchContext {
                 .iter()
                 .filter_map(|v| v.to_str().ok().map(str::to_owned))
                 .collect();
+            if let Some(hsts) = &self.hsts {
+                let source = if purpose == FetchPurpose::SitemapProtocol {
+                    crate::HstsSourceKind::Sitemap
+                } else {
+                    crate::HstsSourceKind::Document
+                };
+                if let Err(error) = hsts.observe(response.url(), response.headers(), source) {
+                    page.error = Some(error.to_string());
+                    break;
+                }
+            }
             if matches!(status, 301 | 302 | 303 | 307 | 308) {
                 page.response_ms += started.elapsed().as_millis() as u64;
                 let location = response
@@ -3507,10 +3701,11 @@ impl FetchContext {
                         self.config.include_subdomains,
                         self.config.check_external,
                         policy,
-                        &resource_redirects,
+                        &transport_gates,
                     ) {
                         Ok(decision) => {
                             let index = resource_redirects.len();
+                            transport_gates.push(decision.clone());
                             resource_redirects.push(decision);
                             Some(index)
                         }
@@ -3974,6 +4169,165 @@ mod tests {
     use lopdf::dictionary;
     use std::sync::{Condvar, Mutex};
     use tokio::io::{AsyncReadExt, AsyncWriteExt};
+
+    #[tokio::test]
+    async fn hsts_denied_quota_start_keeps_https_unstarted_and_sends_nothing() {
+        // A listening owned socket catches even a ClientHello. No request server
+        // or certificate is needed: quota.start must refuse before any send.
+        let listener = tokio::net::TcpListener::bind(("127.0.0.1", 0))
+            .await
+            .unwrap();
+        let port = listener.local_addr().unwrap().port();
+        let original = format!("http://localhost:{port}/denied-start");
+        let secure = format!("https://localhost:{port}/denied-start");
+        let crawler = Crawler::new(CrawlConfig {
+            seed_urls: vec![original.clone()],
+            obey_robots: false,
+            discover_sitemaps: false,
+            crawl_links: false,
+            delay_ms: 0,
+            tls: Some(crate::TlsConfig {
+                respect_hsts: true,
+                ..Default::default()
+            }),
+            crawl_quotas: Some(crate::CrawlQuotaConfig {
+                version: 1,
+                max_urls_per_depth: Some(4),
+                max_urls_per_subdomain: None,
+                url_pattern_quotas: vec![],
+            }),
+            ..Default::default()
+        })
+        .unwrap();
+        let dir = tempfile::tempdir().unwrap();
+        let store = Arc::new(CrawlStore::open(dir.path().join("stale-start.sqlite")).unwrap());
+        store.prepare(crawler.effective_config()).unwrap();
+        store
+            .enqueue(&QueueEntry {
+                url: original.clone(),
+                depth: 0,
+                discovered_from: None,
+                admission: None,
+            })
+            .unwrap();
+        let generation = store.begin_run("before-reserve").unwrap();
+        let compiled = Arc::new(
+            crawler
+                .config
+                .crawl_quotas
+                .as_ref()
+                .unwrap()
+                .compile()
+                .unwrap(),
+        );
+        let hsts = crawler.hsts.as_ref().unwrap().clone();
+        let mut headers = HeaderMap::new();
+        headers.insert(
+            "strict-transport-security",
+            HeaderValue::from_static("max-age=3600"),
+        );
+        // Deliberately prepared policy. Existing TLS fixtures separately cover
+        // learning from actual verified HTTPS responses when Root executes them.
+        hsts.observe(
+            &Url::parse(&secure).unwrap(),
+            &headers,
+            crate::HstsSourceKind::Document,
+        )
+        .unwrap();
+        let hooks = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+        let hook_store = store.clone();
+        let hook_count = hooks.clone();
+        let pdf_tasks = crate::TaskOwner::new("hsts_denied_start_pdf");
+        let context = FetchContext {
+            quotas: Some(compiled.clone()),
+            store: Some(store.clone()),
+            capture: None,
+            cdn_classification: None,
+            cdn_directory_reporting: None,
+            generation: Some(generation),
+            config: crawler.config.clone(),
+            seeds: crawler.seeds.clone(),
+            client: crawler.client.clone(),
+            headers: crawler.headers.clone(),
+            robots: crawler.robots.clone(),
+            hsts: Some(hsts),
+            rate: crawler.rate.clone(),
+            pdf_slots: crawler.pdf_slots.clone(),
+            pdf_tasks: pdf_tasks.clone(),
+            policy: None,
+            pdf_parse_hook: None,
+            quota_start_hook: Some(Arc::new(move || {
+                assert_eq!(
+                    hook_count.fetch_add(1, std::sync::atomic::Ordering::SeqCst),
+                    0
+                );
+                let reserved = hook_store.crawl_quota_summary().unwrap().unwrap();
+                assert_eq!(
+                    reserved.active_attempts, 1,
+                    "the actual reservation succeeded"
+                );
+                assert_eq!(reserved.actual_started_attempts, 0);
+                assert_eq!(
+                    hook_store.begin_run("invalidate-before-start").unwrap(),
+                    generation + 1
+                );
+            })),
+        };
+        let mut quota = crate::crawl_quota_runtime::QuotaFetchSession::new(
+            store.clone(),
+            compiled,
+            generation,
+            original.clone(),
+            0,
+        );
+        let (page, payload) = tokio::time::timeout(
+            Duration::from_secs(3),
+            context.fetch(
+                QueueEntry {
+                    url: original.clone(),
+                    depth: 0,
+                    discovered_from: None,
+                    admission: None,
+                },
+                FetchPurpose::PageDocument,
+                Some(&mut quota),
+            ),
+        )
+        .await
+        .unwrap();
+        assert_eq!(hooks.load(std::sync::atomic::Ordering::SeqCst), 1);
+        assert_eq!(quota.failure.as_deref(), Some("Stale quota generation"));
+        assert!(!quota.deferred);
+        assert!(payload.is_none());
+        assert_eq!(page.url, original);
+        assert_eq!(page.final_url, secure);
+        assert_eq!(page.status, None);
+        assert_eq!(page.final_status, None);
+        assert!(page.redirect_chain.is_empty());
+        let upgrades = &page.tls.as_ref().unwrap().hsts_upgrades;
+        assert_eq!(upgrades.len(), 1);
+        assert_eq!(upgrades[0].synthetic_status, 307);
+        assert!(!upgrades[0].network_request_made);
+        assert!(!upgrades[0].https_request_started);
+        assert_eq!(
+            store
+                .crawl_quota_summary()
+                .unwrap()
+                .unwrap()
+                .actual_started_attempts,
+            0
+        );
+        assert!(
+            tokio::time::timeout(Duration::from_millis(50), listener.accept())
+                .await
+                .is_err(),
+            "neither a cleartext request nor a TLS ClientHello reached the owned listener"
+        );
+        pdf_tasks.shutdown_and_drain().await.unwrap();
+        drop(quota); // Stale-generation cleanup remains conservative, never a terminal PASS.
+        drop(context);
+        drop(listener);
+    }
 
     #[test]
     fn pdf_policy_candidates_keep_raw_uri_and_rejected_actions_without_false_completeness() {

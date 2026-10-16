@@ -1,3 +1,4 @@
+import {assertDefaultMcpInventory} from './mcp-inventory-contract.mjs';
 // Native membership acceptance: owned processes, data and browser; no shared runtime operations.
 import assert from 'node:assert/strict';
 import http from 'node:http';
@@ -69,7 +70,7 @@ async function collect(job,query={},limit=3){let cursor=null,rows=[],token=null,
 async function error(route,status,code){const value=await json(route,undefined,status);assert.equal(value.code,code);assert.equal(value.website_requests,0);return value;}
 async function recordSdk(label,action){try{const result=await bounded(action(),budgets.request,"SDK action "+label);const record={label,result,at_ms:stamp()};sdkRecords.push(record);await jsonNew(path.join(output,'sdk',String(++sdkSerial).padStart(3,'0')+'.json'),record);return result;}catch(caught){const record={label,error:{message:caught.message,code:caught.code,data:caught.data},at_ms:stamp()};sdkRecords.push(record);await jsonNew(path.join(output,'sdk',String(++sdkSerial).padStart(3,'0')+'.json'),record);throw caught;}}
 function noteWire(label,transport){const send=transport.send.bind(transport);transport.send=async(message,...options)=>{const record={label,message,at_ms:stamp(),scope:'actual SDK outgoing message before native transport delivery'};sdkWire.push(record);await jsonNew(path.join(output,'sdk','wire-'+String(sdkWire.length).padStart(3,'0')+'.json'),record);return send(message,...options);};}
-function assertInventory(value){assert.equal(value.tools.length,26);const tool=value.tools.find(item=>item.name==='spider_sitemaps');assert(tool);assert.equal(tool.annotations.readOnlyHint,true);assert.equal(tool.annotations.openWorldHint,false);assert.equal(tool.inputSchema.additionalProperties,false);assert.equal(tool.inputSchema.properties.limit.maximum,200);return value.tools.map(item=>item.name).sort();}
+function assertInventory(value){assertDefaultMcpInventory(value.tools);const tool=value.tools.find(item=>item.name==='spider_sitemaps');assert(tool);assert.equal(tool.annotations.readOnlyHint,true);assert.equal(tool.annotations.openWorldHint,false);assert.equal(tool.inputSchema.additionalProperties,false);assert.equal(tool.inputSchema.properties.limit.maximum,200);return value.tools.map(item=>item.name).sort();}
 async function registerSdk(label,client,transport){
   assert(!sdkRegistry.has(transport),'Owned SDK transport registered once before connect');
   const producer={label,client,transport,closed:false,close_attempts:[]};sdkProducers.push(producer);sdkRegistry.set(transport,producer);

@@ -1,5 +1,6 @@
 use crate::robots_sitemap_source::{ROBOTS_BODY_CAP, RobotsBodyBuffer, RobotsSitemapSource};
 use crate::urls::origin;
+use anyhow::Context;
 use reqwest::Client;
 use std::{
     collections::HashMap,
@@ -28,6 +29,7 @@ impl RobotsPolicy {
 
 pub(crate) struct RobotsCache {
     client: Client,
+    hsts: Option<Arc<crate::tls::HstsCache>>,
     policies: Mutex<HashMap<String, Arc<RobotsPolicy>>>,
 }
 
@@ -35,8 +37,59 @@ impl RobotsCache {
     pub fn new(client: Client) -> Self {
         Self {
             client,
+            hsts: None,
             policies: Mutex::new(HashMap::new()),
         }
+    }
+    pub(crate) fn with_hsts(client: Client, hsts: Option<Arc<crate::tls::HstsCache>>) -> Self {
+        Self {
+            client,
+            hsts,
+            policies: Mutex::new(HashMap::new()),
+        }
+    }
+    async fn response(&self, url: &str) -> anyhow::Result<reqwest::Response> {
+        let Some(hsts) = &self.hsts else {
+            return Ok(self.client.get(url).send().await?);
+        };
+        let mut current = Url::parse(url)?;
+        let mut visited = std::collections::HashSet::new();
+        for redirects in 0..=5 {
+            if let Some(upgrade) = hsts.upgrade(&current, redirects)? {
+                current = Url::parse(&upgrade.target_url)?;
+            }
+            if !visited.insert(current.to_string()) {
+                anyhow::bail!("robots HTTP/HSTS redirect loop");
+            }
+            let response = self.client.get(current.clone()).send().await?;
+            if hsts
+                .observe(
+                    response.url(),
+                    response.headers(),
+                    crate::HstsSourceKind::Robots,
+                )
+                .is_err()
+            {
+                // Retain the actual response/status/body. Sticky cache failure stops
+                // the page send and terminal checkpoint, and no redirect is followed.
+                return Ok(response);
+            }
+            if matches!(response.status().as_u16(), 301 | 302 | 303 | 307 | 308) {
+                if redirects == 5 {
+                    anyhow::bail!("robots redirect limit exceeded");
+                }
+                let location = response
+                    .headers()
+                    .get(reqwest::header::LOCATION)
+                    .context("robots redirect has no Location")?
+                    .to_str()?;
+                current = crate::normalize_url(location, Some(&current))
+                    .context("robots redirect has invalid HTTP(S) Location")?;
+            } else {
+                return Ok(response);
+            }
+        }
+        unreachable!("bounded robots redirect loop")
     }
     pub async fn get(&self, url: &Url) -> Arc<RobotsPolicy> {
         let origin = origin(url);
@@ -47,7 +100,7 @@ impl RobotsCache {
         }
         let robots_url = format!("{origin}/robots.txt");
         let mut policy = RobotsPolicy::default();
-        match self.client.get(&robots_url).send().await {
+        match self.response(&robots_url).await {
             Ok(mut response) if response.status().is_success() => {
                 let final_url = response.url().to_string();
                 let status = response.status().as_u16();

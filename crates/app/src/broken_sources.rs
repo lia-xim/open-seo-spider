@@ -53,6 +53,8 @@ impl Filter {
 #[serde(default, deny_unknown_fields)]
 pub(crate) struct Request {
     pub filter: Filter,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reporting_mode: Option<open_seo_spider_core::ReportingMode>,
     #[serde(default = "default_limit")]
     pub limit: usize,
     pub expected_generation: Option<u64>,
@@ -66,6 +68,7 @@ impl Default for Request {
     fn default() -> Self {
         Self {
             filter: Filter::default(),
+            reporting_mode: None,
             limit: default_limit(),
             expected_generation: None,
             expected_snapshot_token: None,
@@ -181,6 +184,19 @@ pub(crate) struct Evaluation {
     facts: Vec<Fact>,
     rows: Vec<RowIndex>,
     summary: BTreeMap<Verdict, usize>,
+    reporting: Option<SourceReporting>,
+}
+#[derive(Serialize)]
+pub(crate) struct SourceReporting {
+    identity: open_seo_spider_core::ReportingIdentity,
+    identity_sha256: String,
+    eligible_source_raw_ordinals_sha256: String,
+    captured_page_observations: usize,
+    eligible_source_page_observations: usize,
+    captured_link_occurrences: usize,
+    eligible_link_occurrences: usize,
+    excluded_link_occurrences: usize,
+    raw_summary: BTreeMap<Verdict, usize>,
 }
 fn http_identity(value: &str) -> Option<String> {
     open_seo_spider_core::normalize_url(value, None).map(|v| v.to_string())
@@ -258,12 +274,37 @@ fn age_reason(
     };
     None
 }
+#[cfg(test)]
 pub(crate) fn evaluate(
     report: CrawlReport,
     snapshot: Snapshot,
     filter: Filter,
 ) -> Result<Evaluation> {
+    evaluate_with_reporting(report, snapshot, filter, None)
+}
+pub(crate) fn evaluate_with_reporting(
+    report: CrawlReport,
+    snapshot: Snapshot,
+    filter: Filter,
+    mode: Option<open_seo_spider_core::ReportingMode>,
+) -> Result<Evaluation> {
     preflight(&report)?;
+    let identity = open_seo_spider_core::source_occurrence_reporting_identity(&report.config, mode)
+        .map_err(|e| fail("invalid_reporting_profile", e))?;
+    let reported = identity
+        .as_ref()
+        .is_some_and(|v| v.mode == open_seo_spider_core::ReportingMode::Reported);
+    let eligible = report
+        .pages
+        .iter()
+        .map(|page| !reported || open_seo_spider_core::directive_page_visible(&report.config, page))
+        .collect::<Vec<_>>();
+    let mut raw_summary = BTreeMap::new();
+    let captured_link_occurrences = report
+        .pages
+        .iter()
+        .map(|page| page.links.len())
+        .sum::<usize>();
     let mut targets: BTreeMap<String, Vec<usize>> = BTreeMap::new();
     for (i, p) in report.pages.iter().enumerate() {
         targets.entry(p.url.clone()).or_default().push(i);
@@ -362,6 +403,10 @@ pub(crate) fn evaluate(
                     (Verdict::Unknown, "nonterminal_final_http_status")
                 }
             };
+            *raw_summary.entry(verdict).or_insert(0) += 1;
+            if !eligible[source] {
+                continue;
+            }
             *summary.entry(verdict).or_insert(0) += 1;
             rows.push(RowIndex {
                 source,
@@ -371,7 +416,7 @@ pub(crate) fn evaluate(
             });
         }
     }
-    let token = digest(
+    let mut token = digest(
         &(
             "broken_sources_binding_v1",
             &snapshot,
@@ -384,6 +429,38 @@ pub(crate) fn evaluate(
         64 * 1024,
     )?
     .0;
+    let reporting = if let Some(identity) = identity {
+        let ordinals = eligible
+            .iter()
+            .enumerate()
+            .filter_map(|(n, v)| v.then_some(n))
+            .collect::<Vec<_>>();
+        let identity_sha256 = digest(&identity, 64 * 1024)?.0;
+        let eligible_source_raw_ordinals_sha256 = digest(&ordinals, REPORT_BYTES)?.0;
+        token = digest(
+            &(
+                "broken_sources_reporting_binding_v1",
+                &token,
+                &identity_sha256,
+                &eligible_source_raw_ordinals_sha256,
+            ),
+            64 * 1024,
+        )?
+        .0;
+        Some(SourceReporting {
+            identity,
+            identity_sha256,
+            eligible_source_raw_ordinals_sha256,
+            captured_page_observations: report.pages.len(),
+            eligible_source_page_observations: ordinals.len(),
+            captured_link_occurrences,
+            eligible_link_occurrences: rows.len(),
+            excluded_link_occurrences: captured_link_occurrences - rows.len(),
+            raw_summary,
+        })
+    } else {
+        None
+    };
     Ok(Evaluation {
         report,
         snapshot,
@@ -394,6 +471,7 @@ pub(crate) fn evaluate(
         facts,
         rows,
         summary,
+        reporting,
     })
 }
 #[derive(Serialize)]
@@ -444,6 +522,8 @@ pub(crate) struct Page<'a> {
     pub snapshot_token: &'a str,
     pub filter: Filter,
     pub total_retained_link_occurrences: usize,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reporting: Option<&'a SourceReporting>,
     pub filtered_rows: usize,
     pub summary: &'a BTreeMap<Verdict, usize>,
     pub offset: usize,
@@ -530,7 +610,13 @@ impl Evaluation {
                 "Download requires a preview snapshot token",
             ));
         }
-        if request.filter != self.filter
+        let identity = open_seo_spider_core::source_occurrence_reporting_identity(
+            &self.report.config,
+            request.reporting_mode,
+        )
+        .map_err(|e| fail("invalid_reporting_profile", e))?;
+        if identity.as_ref() != self.reporting.as_ref().map(|v| &v.identity)
+            || request.filter != self.filter
             || request
                 .expected_snapshot_token
                 .as_ref()
@@ -608,7 +694,13 @@ impl Evaluation {
             snapshot: &self.snapshot,
             snapshot_token: &self.token,
             filter: self.filter,
-            total_retained_link_occurrences: self.rows.len(),
+            total_retained_link_occurrences: self
+                .report
+                .pages
+                .iter()
+                .map(|page| page.links.len())
+                .sum(),
+            reporting: self.reporting.as_ref(),
             filtered_rows: count,
             summary: &self.summary,
             offset,
@@ -628,103 +720,127 @@ impl Evaluation {
             bytes: Vec::new(),
             max,
         };
-        csv_record(
-            &mut out,
-            &[
-                "scope",
-                "source_page_ordinal",
-                "source_requested_url",
-                "source_document_url",
-                "source_final_url",
-                "source_initial_status",
-                "source_final_status",
-                "source_fetched_at",
-                "source_age_unknown_reason",
-                "source_selected_observations_json",
-                "link_ordinal",
-                "retained_link_json",
-                "kind",
-                "anchor_text",
-                "rel",
-                "internal",
-                "nofollow",
-                "target_requested_url",
-                "raw_href",
-                "resolved_href",
-                "fragment",
-                "dom_index",
-                "dom_path",
-                "dom_path_truncated",
-                "semantic_ancestors_json",
-                "position_classification",
-                "observation_count",
-                "verdict",
-                "reason",
-                "target_observations_json",
-                "source_redirect_chain_json",
-                "source_truncated",
-                "source_rendered",
-                "source_renderer_error",
-                "snapshot_token",
-                "typed_report_sha256",
-                "app_generation",
-                "website_requests",
-            ]
-            .map(str::to_owned),
-        )?;
+        let mut columns = [
+            "scope",
+            "source_page_ordinal",
+            "source_requested_url",
+            "source_document_url",
+            "source_final_url",
+            "source_initial_status",
+            "source_final_status",
+            "source_fetched_at",
+            "source_age_unknown_reason",
+            "source_selected_observations_json",
+            "link_ordinal",
+            "retained_link_json",
+            "kind",
+            "anchor_text",
+            "rel",
+            "internal",
+            "nofollow",
+            "target_requested_url",
+            "raw_href",
+            "resolved_href",
+            "fragment",
+            "dom_index",
+            "dom_path",
+            "dom_path_truncated",
+            "semantic_ancestors_json",
+            "position_classification",
+            "observation_count",
+            "verdict",
+            "reason",
+            "target_observations_json",
+            "source_redirect_chain_json",
+            "source_truncated",
+            "source_rendered",
+            "source_renderer_error",
+            "snapshot_token",
+            "typed_report_sha256",
+            "app_generation",
+            "website_requests",
+        ]
+        .map(str::to_owned)
+        .to_vec();
+        if self.reporting.is_some() {
+            columns.extend(
+                [
+                    "reporting_mode",
+                    "reporting_identity_sha256",
+                    "eligible_source_raw_ordinals_sha256",
+                    "captured_link_occurrences",
+                    "eligible_link_occurrences",
+                    "excluded_link_occurrences",
+                ]
+                .map(str::to_owned),
+            );
+        }
+        csv_record(&mut out, &columns)?;
         for index in self.rows.iter().filter(|r| self.filter.includes(r.verdict)) {
             let row = self.row(index);
             let l = row.link;
             let d = l.dom_location.as_ref();
             let s = &row.source;
-            csv_record(
-                &mut out,
-                &[
-                    SCOPE.into(),
-                    s.page_ordinal.to_string(),
-                    s.requested_url.into(),
-                    s.document_url.into(),
-                    s.final_url.into(),
-                    s.initial_status.map(|v| v.to_string()).unwrap_or_default(),
-                    s.final_status.map(|v| v.to_string()).unwrap_or_default(),
-                    s.fetched_at.into(),
-                    s.age_unknown_reason.unwrap_or_default().into(),
-                    bounded_json(&s.selected_observations)?,
-                    row.link_ordinal.to_string(),
-                    bounded_json(l)?,
-                    l.kind.clone(),
-                    l.text.clone(),
-                    l.rel.clone(),
-                    l.internal.to_string(),
-                    l.nofollow.to_string(),
-                    l.url.clone(),
-                    l.raw_href.clone().unwrap_or_default(),
-                    l.resolved_href.clone().unwrap_or_default(),
-                    l.fragment.clone().unwrap_or_default(),
-                    d.map(|d| d.index.to_string()).unwrap_or_default(),
-                    d.and_then(|d| d.path.clone()).unwrap_or_default(),
-                    d.map(|d| d.path_truncated.to_string()).unwrap_or_default(),
-                    bounded_json(&d.map(|d| &d.semantic_ancestors))?,
-                    l.position.clone().unwrap_or_default(),
-                    row.observation_count.to_string(),
-                    match row.verdict {
-                        Verdict::ObservedHttpFailure => "observed_http_failure",
-                        Verdict::Unknown => "unknown",
-                        Verdict::ObservedNonFailure => "observed_non_failure",
-                    }
-                    .into(),
-                    row.reason.into(),
-                    bounded_json(&row.target_observations)?,
-                    bounded_json(s.redirect_chain)?,
-                    s.truncated.to_string(),
-                    s.rendered.to_string(),
-                    s.renderer_error.clone().unwrap_or_default(),
-                    self.token.clone(),
-                    self.snapshot.typed_report_sha256.clone(),
-                    self.snapshot.app_generation.to_string(),
-                    "0".into(),
-                ],
-            )?;
+            let mut fields = vec![
+                SCOPE.into(),
+                s.page_ordinal.to_string(),
+                s.requested_url.into(),
+                s.document_url.into(),
+                s.final_url.into(),
+                s.initial_status.map(|v| v.to_string()).unwrap_or_default(),
+                s.final_status.map(|v| v.to_string()).unwrap_or_default(),
+                s.fetched_at.into(),
+                s.age_unknown_reason.unwrap_or_default().into(),
+                bounded_json(&s.selected_observations)?,
+                row.link_ordinal.to_string(),
+                bounded_json(l)?,
+                l.kind.clone(),
+                l.text.clone(),
+                l.rel.clone(),
+                l.internal.to_string(),
+                l.nofollow.to_string(),
+                l.url.clone(),
+                l.raw_href.clone().unwrap_or_default(),
+                l.resolved_href.clone().unwrap_or_default(),
+                l.fragment.clone().unwrap_or_default(),
+                d.map(|d| d.index.to_string()).unwrap_or_default(),
+                d.and_then(|d| d.path.clone()).unwrap_or_default(),
+                d.map(|d| d.path_truncated.to_string()).unwrap_or_default(),
+                bounded_json(&d.map(|d| &d.semantic_ancestors))?,
+                l.position.clone().unwrap_or_default(),
+                row.observation_count.to_string(),
+                match row.verdict {
+                    Verdict::ObservedHttpFailure => "observed_http_failure",
+                    Verdict::Unknown => "unknown",
+                    Verdict::ObservedNonFailure => "observed_non_failure",
+                }
+                .into(),
+                row.reason.into(),
+                bounded_json(&row.target_observations)?,
+                bounded_json(s.redirect_chain)?,
+                s.truncated.to_string(),
+                s.rendered.to_string(),
+                s.renderer_error.clone().unwrap_or_default(),
+                self.token.clone(),
+                self.snapshot.typed_report_sha256.clone(),
+                self.snapshot.app_generation.to_string(),
+                "0".into(),
+            ];
+            if let Some(v) = &self.reporting {
+                fields.extend([
+                    if v.identity.mode == open_seo_spider_core::ReportingMode::Raw {
+                        "raw".into()
+                    } else {
+                        "reported".into()
+                    },
+                    v.identity_sha256.clone(),
+                    v.eligible_source_raw_ordinals_sha256.clone(),
+                    v.captured_link_occurrences.to_string(),
+                    v.eligible_link_occurrences.to_string(),
+                    v.excluded_link_occurrences.to_string(),
+                ]);
+            }
+            csv_record(&mut out, &fields)?;
         }
         Ok(out.bytes)
     }

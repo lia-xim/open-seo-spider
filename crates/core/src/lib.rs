@@ -17,10 +17,17 @@ mod crawl_admission;
 mod crawl_quota_ledger;
 mod crawl_quota_runtime;
 mod crawl_quotas;
+pub mod spelling;
 pub use crawl_quotas::*;
 mod crawl_policy;
 mod crawler;
 mod css_discovery;
+mod directive_reporting;
+pub use directive_reporting::{
+    DirectiveReportingConfig, ReportingVisibility, directive_hidden_issue_urls,
+    directive_page_visible, reported_fragments, reported_report, reported_responses, reporting_csv,
+    reporting_json, reporting_visibility, source_occurrence_reporting_identity,
+};
 mod directory_tree;
 mod dom_facts;
 mod export;
@@ -31,6 +38,7 @@ pub mod segments;
 pub use cdn_classification::{
     CDN_CLASSIFICATION_ENGINE, CdnClassificationConfig, CdnClassificationObservation,
 };
+pub use segments::{ReportingIdentity, ReportingMode};
 mod html_head;
 pub use html_head::{
     HTML_HEAD_ENGINE, HTML_HEAD_PROFILE, HtmlHeadObservation, HtmlHeadSpan, HtmlHeadStatus,
@@ -98,6 +106,11 @@ mod srcset;
 mod store;
 mod task_owner;
 pub use task_owner::{OwnedTask, OwnedTaskError, OwnedTaskStats, TaskAdmission, TaskOwner};
+mod tls;
+pub use tls::{
+    CRAWL_TLS_ENGINE, HstsPolicy, HstsSourceKind, HstsUpgrade, PageTlsObservation, TlsConfig,
+    TrustedCertificate,
+};
 mod text_metrics;
 mod urls;
 

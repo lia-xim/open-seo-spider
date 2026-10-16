@@ -7,6 +7,14 @@ use open_seo_spider_core::ContentCaptureSourceKind;
 pub(super) struct InventoryQuery {
     #[serde(default)]
     after_ordinal: usize,
+    #[serde(default)]
+    reporting_mode: Option<content_cohort::ReportingMode>,
+    #[serde(default)]
+    expected_generation: Option<u64>,
+    #[serde(default)]
+    expected_snapshot_sha256: Option<String>,
+    #[serde(default)]
+    expected_reporting_identity: Option<String>,
     #[serde(default = "default_limit")]
     limit: usize,
     #[serde(default = "content_cohort::default_source")]
@@ -19,10 +27,18 @@ fn default_limit() -> usize {
 #[serde(deny_unknown_fields)]
 pub(super) struct DocumentQuery {
     url: String,
+    #[serde(default)]
+    reporting_mode: Option<content_cohort::ReportingMode>,
+    #[serde(default)]
+    expected_generation: Option<u64>,
+    #[serde(default)]
+    expected_snapshot_sha256: Option<String>,
+    #[serde(default)]
+    expected_reporting_identity: Option<String>,
     #[serde(default = "content_cohort::default_source")]
     source_kind: ContentCaptureSourceKind,
 }
-fn stable_report(job: &Job) -> ApiResult<&CrawlReport> {
+pub(super) fn stable_report(job: &Job) -> ApiResult<&CrawlReport> {
     if matches!(job.status.as_str(), "running" | "pausing" | "cancelling") {
         return Err(api_error(
             StatusCode::CONFLICT,
@@ -33,7 +49,7 @@ fn stable_report(job: &Job) -> ApiResult<&CrawlReport> {
         .as_ref()
         .ok_or_else(|| api_error(StatusCode::CONFLICT, "Saved report is unavailable"))
 }
-fn context(
+pub(super) fn context(
     state: &AppState,
     job: &Job,
     report: &CrawlReport,
@@ -63,12 +79,18 @@ pub(super) async fn inventory(
     let guard = job.read().await;
     let report = stable_report(&guard)?;
     let context = context(&state, &guard, report)?;
-    content_cohort::inventory(
+    content_cohort::inventory_with_reporting(
         report,
         &context,
         query.source_kind,
         query.after_ordinal,
         query.limit,
+        &content_cohort::ReportingOptions {
+            mode: query.reporting_mode,
+            expected_generation: query.expected_generation,
+            expected_snapshot_sha256: query.expected_snapshot_sha256,
+            expected_reporting_identity: query.expected_reporting_identity,
+        },
     )
     .map(Json)
     .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))
@@ -82,9 +104,20 @@ pub(super) async fn document(
     let guard = job.read().await;
     let report = stable_report(&guard)?;
     let context = context(&state, &guard, report)?;
-    content_cohort::saved_document(report, &context, query.source_kind, &query.url)
-        .map(Json)
-        .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))
+    content_cohort::saved_document_with_reporting(
+        report,
+        &context,
+        query.source_kind,
+        &query.url,
+        &content_cohort::ReportingOptions {
+            mode: query.reporting_mode,
+            expected_generation: query.expected_generation,
+            expected_snapshot_sha256: query.expected_snapshot_sha256,
+            expected_reporting_identity: query.expected_reporting_identity,
+        },
+    )
+    .map(Json)
+    .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))
 }
 pub(super) async fn analyze(
     State(state): State<AppState>,

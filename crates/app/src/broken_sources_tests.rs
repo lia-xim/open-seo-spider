@@ -54,6 +54,172 @@ fn json(e: &Evaluation, r: &Request) -> serde_json::Value {
     serde_json::from_slice(&json_bytes(&e.page(r).unwrap()).unwrap()).unwrap()
 }
 
+fn reporting_profile(mask: u8) -> open_seo_spider_core::DirectiveReportingConfig {
+    open_seo_spider_core::DirectiveReportingConfig {
+        version: 1,
+        respect_noindex: mask & 1 != 0,
+        respect_canonical: mask & 2 != 0,
+        respect_next_prev: mask & 4 != 0,
+    }
+}
+fn reporting_report() -> CrawlReport {
+    let mut pages = Vec::new();
+    for name in ["plain", "noindex", "canonical", "prev", "next-only"] {
+        let mut p = page(&format!("https://a.test/{name}"), 200);
+        p.links = vec![link("https://a.test/target", "retained exact occurrence")];
+        match name {
+            "noindex" => p.meta_robots = vec!["noindex".into()],
+            "canonical" => p.canonical = vec!["https://a.test/plain".into()],
+            "prev" => p.pagination_prev = vec!["https://a.test/plain".into()],
+            "next-only" => p.pagination_next = vec!["https://a.test/plain".into()],
+            _ => {}
+        }
+        pages.push(p);
+    }
+    let mut target = page("https://a.test/target", 404);
+    target.meta_robots = vec!["noindex".into()];
+    pages.push(target);
+    report(pages)
+}
+fn reporting_evaluation(
+    report: CrawlReport,
+    mode: Option<open_seo_spider_core::ReportingMode>,
+) -> Evaluation {
+    let snapshot = evaluated(report.clone(), Filter::All).snapshot;
+    evaluate_with_reporting(report, snapshot, Filter::All, mode).unwrap()
+}
+#[test]
+fn broken_source_reporting_eight_profiles_keep_hidden_target404_full_facts_raw_ordinals_and_raw_report()
+ {
+    for mask in 0..8 {
+        let mut report = reporting_report();
+        report.config.directive_reporting = Some(reporting_profile(mask));
+        let raw = serde_json::to_vec(&report).unwrap();
+        let e = reporting_evaluation(report, None);
+        let q = Request {
+            filter: Filter::All,
+            ..Default::default()
+        };
+        let p = json(&e, &q);
+        let expected = (0..5)
+            .filter(|n| match n {
+                1 => mask & 1 == 0,
+                2 => mask & 2 == 0,
+                3 => mask & 4 == 0,
+                _ => true,
+            })
+            .collect::<Vec<_>>();
+        assert_eq!(
+            p["rows"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .map(|row| row["source"]["page_ordinal"].as_u64().unwrap() as usize)
+                .collect::<Vec<_>>(),
+            expected
+        );
+        assert_eq!(p["total_retained_link_occurrences"], 5);
+        for row in p["rows"].as_array().unwrap() {
+            assert_eq!(row["verdict"], "observed_http_failure");
+            assert_eq!(row["observation_count"], 1);
+            assert_eq!(row["target_observations"][0]["final_status"], 404);
+        }
+        assert_eq!(serde_json::to_vec(&e.report).unwrap(), raw);
+        if mask > 0 {
+            assert_eq!(p["reporting"]["raw_summary"]["observed_http_failure"], 5);
+            assert_eq!(p["reporting"]["eligible_link_occurrences"], expected.len());
+        }
+        let csv = String::from_utf8(e.export_csv().unwrap()).unwrap();
+        assert_eq!(csv.lines().count(), expected.len() + 1);
+    }
+}
+#[test]
+fn broken_source_reporting_legacy_null_all_false_json_csv_token_exact_and_equalcount_view_tokens_differ()
+ {
+    let report = reporting_report();
+    let baseline = reporting_evaluation(report.clone(), None);
+    let q = Request {
+        filter: Filter::All,
+        ..Default::default()
+    };
+    let bytes = json_bytes(&baseline.page(&q).unwrap()).unwrap();
+    let csv = baseline.export_csv().unwrap();
+    let mut inactive = report.clone();
+    inactive.config.directive_reporting = Some(reporting_profile(0));
+    let e = reporting_evaluation(inactive, None);
+    assert_eq!(json_bytes(&e.page(&q).unwrap()).unwrap(), bytes);
+    assert_eq!(e.export_csv().unwrap(), csv);
+    assert_eq!(e.token, baseline.token);
+    let mut report = report;
+    report
+        .pages
+        .retain(|p| p.url.ends_with("/plain") || p.url.ends_with("/target"));
+    report.config.directive_reporting = Some(reporting_profile(1));
+    let raw = reporting_evaluation(
+        report.clone(),
+        Some(open_seo_spider_core::ReportingMode::Raw),
+    );
+    let reported =
+        reporting_evaluation(report, Some(open_seo_spider_core::ReportingMode::Reported));
+    assert_eq!(raw.rows.len(), reported.rows.len());
+    assert_eq!(
+        raw.snapshot.typed_report_sha256,
+        reported.snapshot.typed_report_sha256
+    );
+    assert_ne!(raw.token, reported.token);
+    let wrong = Request {
+        filter: Filter::All,
+        reporting_mode: Some(open_seo_spider_core::ReportingMode::Reported),
+        expected_snapshot_token: Some(raw.token.clone()),
+        ..Default::default()
+    };
+    assert!(reported.page(&wrong).is_err());
+    assert!(raw.page(&wrong).is_err());
+    assert!(
+        serde_json::from_value::<Request>(serde_json::json!({"reporting_mode":"auto"})).is_err()
+    );
+}
+#[test]
+fn broken_source_reporting_all_hidden_and_cursor_profile_edit_refuse_stale_without_classification_rewrite()
+ {
+    let mut report = reporting_report();
+    for page in &mut report.pages {
+        page.meta_robots = vec!["noindex".into()];
+    }
+    report.config.directive_reporting = Some(reporting_profile(1));
+    let e = reporting_evaluation(report.clone(), None);
+    let p = json(
+        &e,
+        &Request {
+            filter: Filter::All,
+            ..Default::default()
+        },
+    );
+    assert_eq!(p["rows"], serde_json::json!([]));
+    assert_eq!(p["reporting"]["excluded_link_occurrences"], 5);
+    assert_eq!(p["reporting"]["raw_summary"]["observed_http_failure"], 5);
+    let raw = reporting_evaluation(
+        report.clone(),
+        Some(open_seo_spider_core::ReportingMode::Raw),
+    );
+    let first = Request {
+        filter: Filter::All,
+        reporting_mode: Some(open_seo_spider_core::ReportingMode::Raw),
+        limit: 1,
+        ..Default::default()
+    };
+    let first_page = raw.page(&first).unwrap();
+    let cursor = first_page.next_cursor.clone().unwrap();
+    report.config.directive_reporting = Some(reporting_profile(2));
+    let changed = reporting_evaluation(report, Some(open_seo_spider_core::ReportingMode::Raw));
+    let stale = Request {
+        cursor: Some(cursor),
+        expected_snapshot_token: Some(raw.token.clone()),
+        ..first
+    };
+    assert!(changed.page(&stale).is_err());
+}
+
 #[test]
 fn broken_sources_preserves_repeated_occurrences_dom_absence_and_exact_requested_redirect_identity()
 {

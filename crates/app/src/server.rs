@@ -18,8 +18,8 @@ use open_seo_spider_core::{
     export_input_occurrences_csv, export_issues_csv, export_links_csv, export_pages_csv,
     export_pdf_csv, export_response_observations_csv, export_robots_simulation_csv,
     export_serp_csv, export_sitemap_xml, import_serp_csv, import_url_list, inspect_xlsx_list,
-    prepare_selected_recrawl, preview_crawl_policy, preview_serp, response_observations,
-    simulate_robots, validate_fragments,
+    prepare_selected_recrawl, preview_crawl_policy, preview_serp, reported_fragments,
+    reported_responses, simulate_robots,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
@@ -47,6 +47,7 @@ mod sitemap_generation;
 mod sitemaps;
 mod source_bodies;
 mod source_body_stream;
+mod spelling;
 mod transport;
 
 #[cfg(test)]
@@ -119,7 +120,13 @@ impl Job {
             })
             .count();
         let active = matches!(self.status.as_str(), "running" | "pausing" | "cancelling");
-        json!({"id":self.id,"status":self.status,"seed_url":self.config.seed_urls.first(),"config":self.config,"started_at":self.started_at,"finished_at":self.finished_at,"generation":self.generation,"checkpoint":self.checkpoint,"operation":self.operation,"policy_ledger":self.policy_ledger,"resource_ledger":self.resource_ledger,"resume_available":self.frontier_available && !active,"recrawl_available":self.report.is_some() && !active && self.config.crawl_quotas.is_none(),"parent_snapshot_available":self.operation.is_some() && self.frontier_available,"stats":{"discovered":self.pages.len()+self.queued+self.in_flight,"queued":self.queued,"discovery_pending":self.discovery_pending,"fetched":self.pages.len(),"failed":failed,"issues":self.issues.len(),"in_flight":self.in_flight},"warnings":self.warnings,"error":self.error,"summary":self.report.as_ref().map(|report| &report.summary)})
+        let mut value = json!({"id":self.id,"status":self.status,"seed_url":self.config.seed_urls.first(),"config":self.config,"started_at":self.started_at,"finished_at":self.finished_at,"generation":self.generation,"checkpoint":self.checkpoint,"operation":self.operation,"policy_ledger":self.policy_ledger,"resource_ledger":self.resource_ledger,"resume_available":self.frontier_available && !active,"recrawl_available":self.report.is_some() && !active && self.config.crawl_quotas.is_none(),"parent_snapshot_available":self.operation.is_some() && self.frontier_available,"stats":{"discovered":self.pages.len()+self.queued+self.in_flight,"queued":self.queued,"discovery_pending":self.discovery_pending,"fetched":self.pages.len(),"failed":failed,"issues":self.issues.len(),"in_flight":self.in_flight},"warnings":self.warnings,"error":self.error,"summary":self.report.as_ref().map(|report| &report.summary)});
+        if let Some(counts) =
+            open_seo_spider_core::reporting_visibility(&self.config, &self.pages, &self.issues)
+        {
+            value["reporting_visibility"] = json!(counts);
+        }
+        value
     }
 }
 #[derive(Serialize)]
@@ -223,6 +230,7 @@ async fn serve_with_mcp_files_ready_source(
     let shutdown_state = state.clone();
     let drain_state = state.clone();
     let router = Router::new()
+        .route("/favicon.ico", get(|| async { StatusCode::NO_CONTENT }))
         .route(
             "/",
             get(|| async {
@@ -329,6 +337,50 @@ async fn serve_with_mcp_files_ready_source(
         .route("/api/lists/inspect", post(list_inspect))
         .route("/api/lists/import", post(list_import))
         .route("/api/policy/preview", post(policy_preview))
+        .route(
+            "/spelling",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/html; charset=utf-8")],
+                    include_str!("../../../web/spelling.html"),
+                )
+            }),
+        )
+        .route(
+            "/spelling.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+                    include_str!("../../../web/spelling.js"),
+                )
+            }),
+        )
+        .route(
+            "/api/spelling/dictionary",
+            get(spelling::get_dictionary)
+                .post(spelling::put_dictionary)
+                .layer(axum::extract::DefaultBodyLimit::max(1024 * 1024)),
+        )
+        .route(
+            "/api/crawls/{id}/spelling/profile",
+            get(spelling::get_profile)
+                .post(spelling::put_profile)
+                .layer(axum::extract::DefaultBodyLimit::max(128 * 1024)),
+        )
+        .route(
+            "/api/crawls/{id}/spelling/analyze",
+            post(spelling::analyze).layer(axum::extract::DefaultBodyLimit::max(
+                crate::spelling_app::REQUEST_BYTES,
+            )),
+        )
+        .route(
+            "/api/crawls/{id}/spelling/runs/{run}",
+            get(spelling::result),
+        )
+        .route(
+            "/api/crawls/{id}/spelling/runs/{run}/csv",
+            get(spelling::csv),
+        )
         .route("/api/content/analyze", post(content_analysis))
         .route("/api/css/inspect", post(resources::inspect_css))
         .route("/api/crawls/{id}/content", get(content::inventory))
@@ -450,6 +502,7 @@ async fn serve_with_mcp_files_ready_source(
             post(sitemap_generation::bundle),
         )
         .route("/api/crawls/{id}/project.json", get(export_project))
+        .route("/api/crawls/{id}/report.json", get(export_visible_report))
         .route(
             "/resource-broken-sources",
             get(|| async {
@@ -866,8 +919,10 @@ async fn capabilities() -> Json<Value> {
             "fragment_validation":{"opt_in":true,"requires_captured_target":true,"unknown_is_not_missing":true}
         },
         "offline_policy_preview":{"endpoint":"/api/policy/preview","website_requests":0,"applied_to_crawls":true},
+        "native_tls":{"opt_in":true,"config_field":"tls","engine":open_seo_spider_core::CRAWL_TLS_ENGINE,"trusted_certificate_formats":["pem","der"],"max_trust_files":8,"max_file_bytes":65536,"max_total_bytes":262144,"max_certificates":32,"app_crawl_scoped":true,"hostname_validation":true,"hsts_default":false,"hsts_robots_learning":true,"hsts_resume_state":true,"synthetic_status":307,"actual_http_status_unchanged":true,"renderer_supported":false,"full_reference_parity":false},
         "native_crawl_policy":{"opt_in":true,"engine":open_seo_spider_core::LIVE_CRAWL_POLICY_ENGINE,"durable_sqlite_ledger":true,"paged_observations":true,"streamed_snapshot_exports":true,"renderer_supported":false,"scope_does_not_grant_credentials":true,"occurrence_limit":null},
         "offline_content_analysis":{"endpoint":"/api/content/analyze","website_requests":0,"similarity":"exact_token_shingle_jaccard","readability":"explicit_en_de_heuristic","full_reference_parity":false},
+        "saved_spelling":{"endpoint":"/api/crawls/{id}/spelling/analyze","engine":open_seo_spider_core::spelling::ENGINE,"default_enabled":false,"local_engine_opt_in":true,"website_requests":0,"max_documents":32,"offset_unit":"utf16_code_units","persistent_dictionary_scope":"application","profile_scope":"crawl"},
         "saved_content_analysis":{"endpoint":"/api/crawls/{id}/content/analyze","engine":crate::content_cohort::SAVED_CONTENT_ENGINE,"website_requests":0,"explicit_cohort":true,"max_documents":128,"site_wide_coverage":false},
         "saved_comparison":{"endpoint":"/api/compare/saved","engine":open_seo_spider_core::SAVED_COMPARISON_ENGINE,"website_requests":0,"exact_requested_identity":true,"explicit_mapping":true,"unknown_facts_preserved":true,"full_original_report_bundle":false,"sql_attested":false,"full_reference_parity":false},
         "native_content_capture":{"opt_in":true,"sources":["raw_http_html","rendered_dom_html"],"body_retention":false,"source_binding":"persisted_consistency","full_reference_parity":false},
@@ -1260,9 +1315,10 @@ async fn pages(
         .pages
         .iter()
         .filter(|page| {
-            query
-                .internal
-                .is_none_or(|internal| page.internal == internal)
+            open_seo_spider_core::directive_page_visible(&guard.config, page)
+                && query
+                    .internal
+                    .is_none_or(|internal| page.internal == internal)
                 && (q.is_empty()
                     || page.url.to_lowercase().contains(&q)
                     || page.title().to_lowercase().contains(&q))
@@ -1285,16 +1341,30 @@ async fn pages(
             value
         })
         .collect();
-    Ok(Json(
-        json!({"pages":results,"total":total,"offset":offset,"limit":limit}),
-    ))
+    let mut value = json!({"pages":results,"total":total,"offset":offset,"limit":limit});
+    if let Some(counts) =
+        open_seo_spider_core::reporting_visibility(&guard.config, &guard.pages, &guard.issues)
+    {
+        value["reporting_visibility"] = json!(counts);
+    }
+    Ok(Json(value))
 }
 async fn issues(State(state): State<AppState>, Path(id): Path<Uuid>) -> ApiResult<Json<Value>> {
     let job = get_job(&state, id).await?;
     let guard = job.read().await;
-    Ok(Json(
-        json!({"issues":guard.issues,"total":guard.issues.len()}),
-    ))
+    let hidden = open_seo_spider_core::directive_hidden_issue_urls(&guard.config, &guard.pages);
+    let visible: Vec<_> = guard
+        .issues
+        .iter()
+        .filter(|issue| !hidden.contains(issue.url.as_str()))
+        .collect();
+    let mut value = json!({"issues":visible,"total":visible.len()});
+    if let Some(counts) =
+        open_seo_spider_core::reporting_visibility(&guard.config, &guard.pages, &guard.issues)
+    {
+        value["reporting_visibility"] = json!(counts);
+    }
+    Ok(Json(value))
 }
 async fn cancel_crawl(
     State(state): State<AppState>,
@@ -1680,7 +1750,7 @@ async fn advanced_analysis(
     Path(id): Path<Uuid>,
 ) -> ApiResult<Json<Value>> {
     let report = require_report(&state, id).await?;
-    Ok(Json(crate::analysis::analyze_report(&report)))
+    Ok(Json(crate::analysis::reporting_analysis(&report)))
 }
 fn download(body: String, kind: &str, filename: &str) -> Response {
     (
@@ -1842,7 +1912,7 @@ async fn fragment_inventory(
 ) -> ApiResult<Json<Value>> {
     let report = require_report(&state, id).await?;
     Ok(Json(
-        json!({"observations":validate_fragments(&report),"enabled":report.config.validate_fragments,"scope":"declared_anchor_fragments_in_captured_documents","unknown_is_not_missing":true}),
+        json!({"observations":reported_fragments(&report),"enabled":report.config.validate_fragments,"scope":"declared_anchor_fragments_in_captured_documents","unknown_is_not_missing":true}),
     ))
 }
 async fn export_fragments(
@@ -1886,7 +1956,7 @@ async fn response_inventory(
     State(state): State<AppState>,
     Path(id): Path<Uuid>,
 ) -> ApiResult<Json<Value>> {
-    let rows = response_observations(&require_report(&state, id).await?);
+    let rows = reported_responses(&require_report(&state, id).await?);
     Ok(Json(
         json!({"responses":rows,"scope":"captured_native_response_observations","unretained_redirect_headers_and_body":"unknown","document_records_are_separate":true}),
     ))
@@ -1970,6 +2040,21 @@ async fn export_cookie_csv(
         "cookies.csv",
     ))
 }
+async fn export_visible_report(
+    State(state): State<AppState>,
+    Path(id): Path<Uuid>,
+) -> ApiResult<Response> {
+    let report = require_report(&state, id).await?;
+    let value = open_seo_spider_core::reporting_json(&report)
+        .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?;
+    Ok(download(
+        serde_json::to_string_pretty(&value)
+            .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?,
+        "application/json",
+        "visible-report.json",
+    ))
+}
+
 async fn export_project(
     State(state): State<AppState>,
     Path(id): Path<Uuid>,

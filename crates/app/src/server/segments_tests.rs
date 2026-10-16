@@ -171,3 +171,141 @@ async fn segments_saved_api_full_export_requires_token_and_detects_report_tail_c
     );
     state.lifecycle.blocking.shutdown_and_drain().await.unwrap();
 }
+
+fn reporting_job(id: Uuid) -> Job {
+    let mut j = job(id, "completed", "https://x.test/visible");
+    let report = j.report.as_mut().unwrap();
+    report.config.directive_reporting = Some(open_seo_spider_core::DirectiveReportingConfig {
+        respect_noindex: true,
+        ..Default::default()
+    });
+    let mut hidden = report.pages[0].clone();
+    hidden.url = "https://x.test/hidden".into();
+    hidden.final_url = hidden.url.clone();
+    hidden.meta_robots = vec!["noindex".into()];
+    report.pages.push(hidden);
+    j
+}
+#[tokio::test]
+async fn segments_saved_api_profile_preview_json_csv_share_view_bound_token_and_raw_authority() {
+    let id = Uuid::new_v4();
+    let state = state(reporting_job(id));
+    let source = get_job(&state, id)
+        .await
+        .unwrap_or_else(|_| panic!("fixture"));
+    let before = serde_json::to_vec(source.read().await.report.as_ref().unwrap()).unwrap();
+    let first = value(
+        preview(State(state.clone()), Path(id), Ok(Json(Request::default())))
+            .await
+            .unwrap(),
+    )
+    .await;
+    assert_eq!(first["summary"]["selected_pages"], 1);
+    assert_eq!(first["reporting"]["captured_page_observations"], 2);
+    assert_eq!(first["context"]["reporting_view"]["mode"], "reported");
+    let q = Request {
+        expected_snapshot_token: Some(first["context"]["snapshot_token"].as_str().unwrap().into()),
+        ..Default::default()
+    };
+    let full = value(
+        json(State(state.clone()), Path(id), Ok(Json(q.clone())))
+            .await
+            .unwrap(),
+    )
+    .await;
+    assert_eq!(full["projection"]["reporting"], first["reporting"]);
+    assert_eq!(
+        full["context"]["typed_report_sha256"],
+        first["context"]["typed_report_sha256"]
+    );
+    let out = csv(State(state.clone()), Path(id), Ok(Json(q.clone())))
+        .await
+        .unwrap();
+    let expected = out.headers()["x-content-sha256"]
+        .to_str()
+        .unwrap()
+        .to_owned();
+    let bytes = axum::body::to_bytes(out.into_body(), core::OUTPUT_BYTES)
+        .await
+        .unwrap();
+    assert_eq!(service::sha(&bytes), expected);
+    let mut crossed = q;
+    crossed.reporting_mode = Some(core::ReportingMode::Raw);
+    assert_eq!(
+        refused(preview(State(state.clone()), Path(id), Ok(Json(crossed.clone()))).await).0,
+        StatusCode::CONFLICT
+    );
+    assert_eq!(
+        refused(json(State(state.clone()), Path(id), Ok(Json(crossed.clone()))).await).0,
+        StatusCode::CONFLICT
+    );
+    assert_eq!(
+        refused(csv(State(state.clone()), Path(id), Ok(Json(crossed))).await).0,
+        StatusCode::CONFLICT
+    );
+    let raw = value(
+        preview(
+            State(state.clone()),
+            Path(id),
+            Ok(Json(Request {
+                reporting_mode: Some(core::ReportingMode::Raw),
+                ..Default::default()
+            })),
+        )
+        .await
+        .unwrap(),
+    )
+    .await;
+    assert_eq!(raw["summary"]["selected_pages"], 2);
+    assert_eq!(
+        raw["context"]["typed_report_sha256"],
+        first["context"]["typed_report_sha256"]
+    );
+    assert_eq!(
+        serde_json::to_vec(source.read().await.report.as_ref().unwrap()).unwrap(),
+        before
+    );
+    state.lifecycle.blocking.shutdown_and_drain().await.unwrap();
+}
+#[tokio::test]
+async fn segments_saved_api_same_job_profile_change_refuses_prior_preview_and_exports() {
+    let id = Uuid::new_v4();
+    let state = state(reporting_job(id));
+    let first = value(
+        preview(State(state.clone()), Path(id), Ok(Json(Request::default())))
+            .await
+            .unwrap(),
+    )
+    .await;
+    let q = Request {
+        expected_snapshot_token: Some(first["context"]["snapshot_token"].as_str().unwrap().into()),
+        ..Default::default()
+    };
+    let source = get_job(&state, id)
+        .await
+        .unwrap_or_else(|_| panic!("fixture"));
+    source
+        .write()
+        .await
+        .report
+        .as_mut()
+        .unwrap()
+        .config
+        .directive_reporting
+        .as_mut()
+        .unwrap()
+        .respect_canonical = true;
+    assert_eq!(
+        refused(preview(State(state.clone()), Path(id), Ok(Json(q.clone()))).await).0,
+        StatusCode::CONFLICT
+    );
+    assert_eq!(
+        refused(json(State(state.clone()), Path(id), Ok(Json(q.clone()))).await).0,
+        StatusCode::CONFLICT
+    );
+    assert_eq!(
+        refused(csv(State(state.clone()), Path(id), Ok(Json(q))).await).0,
+        StatusCode::CONFLICT
+    );
+    state.lifecycle.blocking.shutdown_and_drain().await.unwrap();
+}

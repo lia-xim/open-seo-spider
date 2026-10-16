@@ -18,6 +18,8 @@ pub struct Receipt {
     pub sha256: String,
     pub report_sha256: String,
     pub generated_urls: usize,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reporting: Option<open_seo_spider_core::SitemapGenerationReporting>,
     pub excluded_pages: usize,
     pub engine: String,
     pub temporary_cleanup_warning: Option<String>,
@@ -65,6 +67,7 @@ pub async fn run(snapshot: PathBuf, options: PathBuf, output: PathBuf) -> anyhow
         sha256: bundle.zip_sha256,
         report_sha256: bundle.manifest.report_sha256,
         generated_urls: bundle.manifest.memberships.len(),
+        reporting: bundle.manifest.reporting,
         excluded_pages: bundle.manifest.excluded_pages,
         engine: bundle.manifest.engine,
         temporary_cleanup_warning: warning,

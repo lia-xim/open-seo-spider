@@ -67,6 +67,52 @@ fn bytes(path: &std::path::Path) -> BTreeMap<String, Vec<u8>> {
 use std::collections::BTreeMap;
 
 #[tokio::test]
+async fn sitemap_bundle_http_reporting_uses_same_raw_report_and_actual_profile_metadata_without_saved_writes()
+ {
+    let (state, _, directory) = fixture().await;
+    let mut r = report();
+    r.config.directive_reporting = Some(open_seo_spider_core::DirectiveReportingConfig {
+        respect_next_prev: true,
+        ..Default::default()
+    });
+    r.pages[0].pagination_prev = vec!["https://example.org/visible".into()];
+    let mut visible = r.pages[0].clone();
+    visible.url = "https://example.org/visible".into();
+    visible.final_url = visible.url.clone();
+    visible.pagination_prev.clear();
+    r.pages.push(visible);
+    let id = Uuid::new_v4();
+    persist_import(&state, id, r)
+        .await
+        .unwrap_or_else(|(_, Json(error))| panic!("{}", error.error));
+    let before = bytes(&directory);
+    // Import extends analysis; the endpoint hashes the persisted complete snapshot.
+    let raw_sha = {
+        use sha2::{Digest, Sha256};
+        format!("{:x}", Sha256::digest(&before[&format!("{id}.json")]))
+    };
+    for (mode, n) in [
+        (open_seo_spider_core::ReportingMode::Raw, 2),
+        (open_seo_spider_core::ReportingMode::Reported, 1),
+    ] {
+        let mut o = options();
+        o.reporting_mode = Some(mode);
+        let response = bundle(State(state.clone()), Path(id), Ok(Json(o)))
+            .await
+            .unwrap();
+        assert_eq!(response.status(), StatusCode::OK);
+        let v: open_seo_spider_core::SitemapGenerationReporting =
+            serde_json::from_str(response.headers()["x-sitemap-reporting"].to_str().unwrap())
+                .unwrap();
+        assert_eq!(v.identity.mode, mode);
+        assert_eq!(v.generated_pages, n);
+        assert_eq!(response.headers()["x-sitemap-report-sha256"], raw_sha);
+        let body = to_bytes(response.into_body(), 268435456).await.unwrap();
+        assert!(body.starts_with(b"PK\x03\x04"));
+    }
+    assert_eq!(before, bytes(&directory));
+}
+#[tokio::test]
 async fn actual_saved_import_export_is_stable_hash_bound_and_readonly() {
     use sha2::{Digest, Sha256};
     let (state, id, directory) = fixture().await;

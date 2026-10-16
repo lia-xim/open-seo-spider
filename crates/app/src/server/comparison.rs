@@ -179,6 +179,9 @@ fn compare_stable_reports(
     after: StableSavedReport,
     config: open_seo_spider_core::SavedComparisonConfig,
     include_original_reports: bool,
+    reporting_mode: Option<open_seo_spider_core::ReportingMode>,
+    expected_reporting_identity: Option<String>,
+    expected_reporting_view: Option<String>,
 ) -> Result<SavedComparisonResponse, SavedComparisonFailure> {
     let result = compare_saved_crawls(
         &before.report,
@@ -188,13 +191,22 @@ fn compare_stable_reports(
         Some(&after.binding),
     )
     .map_err(SavedComparisonFailure::from)?;
-    if include_original_reports {
+    let reporting = crate::comparison_app::reporting::build(
+        &result,
+        &before.report,
+        &after.report,
+        reporting_mode,
+        expected_reporting_identity.as_deref(),
+        expected_reporting_view.as_deref(),
+    )?;
+    let response = if include_original_reports {
         // Move the very reports passed by reference to Core; no second read
         // or clone supplies the original-report bundle after releasing locks.
         SavedComparisonResponse::with_original_reports(result, before.report, after.report)
     } else {
         SavedComparisonResponse::new(result)
-    }
+    }?;
+    response.with_reporting(reporting)
 }
 pub(super) async fn compare_saved(
     State(state): State<AppState>,
@@ -224,12 +236,23 @@ pub(super) async fn compare_saved(
                 }
             })?;
     let config = request.config.unwrap_or_default();
+    let reporting_mode = request.reporting_mode;
+    let expected_reporting_identity = request.expected_reporting_identity;
+    let expected_reporting_view = request.expected_reporting_view;
     // All locks are released. Core alone computes and validates report hashes.
     state
         .lifecycle
         .blocking
         .run_blocking(move || {
-            compare_stable_reports(before, after, config, include_original_reports)
+            compare_stable_reports(
+                before,
+                after,
+                config,
+                include_original_reports,
+                reporting_mode,
+                expected_reporting_identity,
+                expected_reporting_view,
+            )
         })
         .await
         .map_err(|error| {

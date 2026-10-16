@@ -188,6 +188,53 @@ pub fn analyze_report(report: &CrawlReport) -> Value {
     })
 }
 
+/// Filter source-owned presentation rows only after computing the complete graph.
+/// Persistence and relationship/score calculations continue to use analyze_report.
+pub fn reporting_analysis(report: &CrawlReport) -> Value {
+    let mut value = analyze_report(report);
+    let Some(visibility) =
+        open_seo_spider_core::reporting_visibility(&report.config, &report.pages, &report.issues)
+    else {
+        return value;
+    };
+    let hidden = open_seo_spider_core::directive_hidden_issue_urls(&report.config, &report.pages);
+    let retain_owner =
+        |row: &Value, key: &str| row[key].as_str().is_none_or(|url| !hidden.contains(url));
+    for key in ["issues", "structured_data"] {
+        if let Some(rows) = value[key].as_array_mut() {
+            rows.retain(|row| retain_owner(row, "url"));
+        }
+    }
+    for key in ["nodes", "orphan_candidates"] {
+        if let Some(rows) = value["graph"][key].as_array_mut() {
+            rows.retain(|row| retain_owner(row, "url"));
+        }
+    }
+    if let Some(rows) = value["graph"]["edges"].as_array_mut() {
+        rows.retain(|row| retain_owner(row, "source"));
+    }
+    if let Some(rows) = value["fragments"]["observations"].as_array_mut() {
+        rows.retain(|row| retain_owner(row, "source_url"));
+    }
+    if let Some(cycles) = value["canonical_cycles"].as_array_mut() {
+        cycles.retain(|cycle| {
+            cycle.as_array().is_none_or(|urls| {
+                urls.iter()
+                    .any(|url| url.as_str().is_none_or(|url| !hidden.contains(url)))
+            })
+        });
+    }
+    value["reporting_visibility"] =
+        serde_json::to_value(visibility).expect("typed reporting counts serialize");
+    value["reporting_basis"] = json!({
+        "row_policy":"source URL is hidden only when every captured observation of that URL is hidden",
+        "metrics_coverage_and_depth_distribution":"computed from complete captured observations before presentation filtering",
+        "relationship_references":"retained verbatim, including hidden or unobserved target URLs and complete mixed-visible canonical cycles",
+        "raw_snapshot_modified":false
+    });
+    value
+}
+
 fn usable_html(page: &PageRecord) -> bool {
     page.is_html() && usable_document(page)
 }
@@ -2115,6 +2162,119 @@ mod tests {
                 .as_array()
                 .unwrap()
                 .is_empty()
+        );
+    }
+
+    #[test]
+    fn directive_analysis_projects_eight_profiles_without_recalculating_captured_metrics() {
+        use open_seo_spider_core::DirectiveReportingConfig;
+        let mut a = page("a");
+        a.links = vec![anchor("noindex"), anchor("canonical"), anchor("prev")];
+        let mut n = page("noindex");
+        n.meta_robots = vec!["noindex".into()];
+        n.links = vec![anchor("a")];
+        let mut c = page("canonical");
+        c.canonical = vec![a.url.clone()];
+        c.links = vec![anchor("a")];
+        let mut p = page("prev");
+        p.pagination_prev = vec![a.url.clone()];
+        p.links = vec![anchor("a")];
+        for row in [&mut a, &mut n, &mut c, &mut p] {
+            row.structured_data.push(json!({"@type":"WebPage"}));
+        }
+        let mut snapshot = report(vec![a, n, c, p]);
+        let raw = analyze_report(&snapshot);
+        assert_eq!(reporting_analysis(&snapshot), raw);
+        for mask in 0..8 {
+            snapshot.config.directive_reporting = Some(DirectiveReportingConfig {
+                version: 1,
+                respect_noindex: mask & 1 != 0,
+                respect_canonical: mask & 2 != 0,
+                respect_next_prev: mask & 4 != 0,
+            });
+            let saved = serde_json::to_vec(&snapshot).unwrap();
+            let view = reporting_analysis(&snapshot);
+            let hidden = open_seo_spider_core::directive_hidden_issue_urls(
+                &snapshot.config,
+                &snapshot.pages,
+            );
+            for key in ["nodes", "orphan_candidates"] {
+                let expected: Vec<_> = raw["graph"][key]
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .filter(|row| !hidden.contains(row["url"].as_str().unwrap()))
+                    .cloned()
+                    .collect();
+                assert_eq!(view["graph"][key], json!(expected));
+            }
+            for key in ["issues", "structured_data"] {
+                let expected: Vec<_> = raw[key]
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .filter(|row| !hidden.contains(row["url"].as_str().unwrap()))
+                    .cloned()
+                    .collect();
+                assert_eq!(view[key], json!(expected));
+            }
+            let edges: Vec<_> = raw["graph"]["edges"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .filter(|row| !hidden.contains(row["source"].as_str().unwrap()))
+                .cloned()
+                .collect();
+            assert_eq!(view["graph"]["edges"], json!(edges));
+            assert_eq!(
+                view["graph"]["depth_distribution"],
+                raw["graph"]["depth_distribution"]
+            );
+            assert_eq!(view["graph"]["algorithm"], raw["graph"]["algorithm"]);
+            assert_eq!(view["coverage"], raw["coverage"]);
+            assert_eq!(serde_json::to_vec(&snapshot).unwrap(), saved);
+            if mask == 0 {
+                assert_eq!(view, raw);
+            }
+        }
+    }
+
+    #[test]
+    fn directive_analysis_keeps_visible_duplicates_and_complete_mixed_cycles() {
+        use open_seo_spider_core::DirectiveReportingConfig;
+        let mut a = page("a");
+        let mut b = page("b");
+        a.canonical = vec![b.url.clone()];
+        b.canonical = vec![a.url.clone()];
+        a.meta_robots = vec!["noindex".into()];
+        b.meta_robots = vec!["noindex".into()];
+        let mut snapshot = report(vec![a.clone(), b]);
+        snapshot.config.directive_reporting = Some(DirectiveReportingConfig {
+            respect_noindex: true,
+            ..Default::default()
+        });
+        let cycle = analyze_report(&snapshot)["canonical_cycles"].clone();
+        assert_eq!(cycle.as_array().unwrap().len(), 1);
+        assert!(
+            reporting_analysis(&snapshot)["canonical_cycles"]
+                .as_array()
+                .unwrap()
+                .is_empty()
+        );
+        a.meta_robots.clear();
+        snapshot.pages.push(a);
+        let view = reporting_analysis(&snapshot);
+        assert_eq!(view["canonical_cycles"], cycle);
+        assert_eq!(view["graph"]["nodes"].as_array().unwrap().len(), 1);
+        assert_eq!(view["graph"]["nodes"][0]["url"], "https://fixture.test/a");
+        assert!(
+            view["issues"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(
+                    |row| row["url"] == "https://fixture.test/a" && row["code"] == "canonical_loop"
+                )
         );
     }
 }

@@ -18,6 +18,8 @@ mod sitemap_findings;
 mod sitemap_findings_cli;
 mod sitemap_membership;
 mod sitemap_raw_cli;
+mod spelling_app;
+mod tls_config;
 
 use clap::{Parser, Subcommand};
 use open_seo_spider_core::{
@@ -48,6 +50,27 @@ struct Cli {
     reason = "The CLI parses one command; explicit optional fields avoid extra heap allocations."
 )]
 enum Command {
+    /// Check an explicit saved HTML-text cohort with an opt-in local LanguageTool service.
+    SpellingCheck {
+        snapshot: PathBuf,
+        #[arg(long)]
+        request: PathBuf,
+        /// Persistent application dictionary schema; omitted means a separate empty dictionary.
+        #[arg(long)]
+        dictionary: Option<PathBuf>,
+        #[arg(long)]
+        output: PathBuf,
+        #[arg(long)]
+        csv: Option<PathBuf>,
+    },
+    /// Export visible report rows from a raw saved snapshot; no website requests.
+    ReportVisible {
+        snapshot: PathBuf,
+        #[arg(long)]
+        output: PathBuf,
+        #[arg(long)]
+        csv: Option<PathBuf>,
+    },
     /// Resume an existing job through the local API; authority/store ownership stays in that service.
     Resume {
         /// Existing job UUID, not a SQLite/report path.
@@ -120,6 +143,9 @@ enum Command {
         /// Include complete loaded typed reports bound to the compared snapshots.
         #[arg(long)]
         include_original_reports: bool,
+        /// Presentation only: raw or reported; omitted uses the saved profiles.
+        #[arg(long, value_parser = ["raw", "reported"])]
+        reporting_mode: Option<String>,
     },
     /// Inspect declared dependencies in supplied CSS locally; no website is fetched.
     InspectCss {
@@ -288,6 +314,12 @@ enum Command {
         list: bool,
         #[arg(long)]
         config: Option<PathBuf>,
+        /// Add a bounded public PEM/DER trust file to this crawl only; repeat up to 8 times.
+        #[arg(long)]
+        trusted_certificate: Vec<PathBuf>,
+        /// Learn and enforce verified HTTPS HSTS policies (disabled by default).
+        #[arg(long)]
+        respect_hsts: bool,
         /// Durable SQLite frontier, required when the optional native policy is enabled.
         #[arg(long)]
         store: Option<PathBuf>,
@@ -334,6 +366,95 @@ async fn main() -> anyhow::Result<()> {
         mcp_files_dir: None,
         shutdown_on_stdin_eof: false,
     }) {
+        Command::SpellingCheck {
+            snapshot,
+            request,
+            dictionary,
+            output,
+            csv,
+        } => {
+            let report: open_seo_spider_core::CrawlReport =
+                serde_json::from_slice(&read_bounded(&snapshot, 256 * 1024 * 1024).await?)?;
+            let raw_request = read_bounded(&request, spelling_app::REQUEST_BYTES).await?;
+            let parsed: spelling_app::Request = serde_json::from_slice(&raw_request)?;
+            let words: open_seo_spider_core::spelling::Dictionary = if let Some(path) = &dictionary
+            {
+                serde_json::from_slice(&read_bounded(path, 1024 * 1024).await?)?
+            } else {
+                Default::default()
+            };
+            let inputs = std::iter::once(&snapshot)
+                .chain(std::iter::once(&request))
+                .chain(dictionary.iter());
+            let mut sources = std::collections::HashSet::new();
+            for path in inputs {
+                sources.insert(destination_identity(&tokio::fs::canonicalize(path).await?));
+            }
+            let mut destinations = std::collections::HashSet::new();
+            for path in std::iter::once(&output).chain(csv.iter()) {
+                let resolved = canonical_destination(path).await?;
+                anyhow::ensure!(
+                    !sources.contains(&destination_identity(&resolved)),
+                    "Spelling output aliases an input"
+                );
+                anyhow::ensure!(
+                    destinations.insert(destination_identity(&resolved)),
+                    "Spelling output paths must be distinct"
+                );
+                anyhow::ensure!(
+                    !tokio::fs::try_exists(path).await?,
+                    "Spelling output exists"
+                );
+            }
+            let context =
+                content_cohort::snapshot_context(&report, None, "declared_imported_report")?;
+            let prepared = spelling_app::prepare(&report, &context, parsed, words)?;
+            let checked = spelling_app::run(prepared).await?;
+            let json = serde_json::to_vec_pretty(&checked)?;
+            let csv_bytes = csv
+                .as_ref()
+                .map(|_| spelling_app::csv(&checked))
+                .transpose()?;
+            write_new_report(&output, &json).await?;
+            if let (Some(path), Some(bytes)) = (csv, csv_bytes) {
+                write_new_report(&path, bytes.as_bytes()).await?;
+            }
+        }
+        Command::ReportVisible {
+            snapshot,
+            output,
+            csv,
+        } => {
+            let input = read_bounded(&snapshot, 256 * 1024 * 1024).await?;
+            let report: open_seo_spider_core::CrawlReport = serde_json::from_slice(&input)?;
+            let source = tokio::fs::canonicalize(&snapshot).await?;
+            let mut destinations = std::collections::HashSet::new();
+            for destination in std::iter::once(&output).chain(csv.iter()) {
+                let resolved = canonical_destination(destination).await?;
+                anyhow::ensure!(
+                    resolved != source,
+                    "Visible report destination aliases raw snapshot"
+                );
+                anyhow::ensure!(
+                    destinations.insert(destination_identity(&resolved)),
+                    "Visible JSON and CSV destinations must be distinct"
+                );
+                anyhow::ensure!(
+                    !tokio::fs::try_exists(destination).await?,
+                    "Visible report destination already exists"
+                );
+            }
+            let value = open_seo_spider_core::reporting_json(&report)?;
+            let json = serde_json::to_vec_pretty(&value)?;
+            let csv_bytes = csv
+                .as_ref()
+                .map(|_| export_pages_csv(&report))
+                .transpose()?;
+            write_new_report(&output, &json).await?;
+            if let (Some(path), Some(bytes)) = (csv, csv_bytes) {
+                write_new_report(&path, bytes.as_bytes()).await?;
+            }
+        }
         Command::Serve {
             listen,
             data_dir,
@@ -416,17 +537,38 @@ async fn main() -> anyhow::Result<()> {
             output,
             csv,
             include_original_reports,
+            reporting_mode,
         } => {
-            if let Err(error) = comparison_app::run_cli(
-                before,
-                after,
-                config,
-                output,
-                csv,
-                include_original_reports,
-            )
-            .await
-            {
+            let mode = reporting_mode.map(|v| {
+                if v == "raw" {
+                    open_seo_spider_core::ReportingMode::Raw
+                } else {
+                    open_seo_spider_core::ReportingMode::Reported
+                }
+            });
+            let result = if mode.is_some() {
+                comparison_app::run_cli_reporting(
+                    before,
+                    after,
+                    config,
+                    output,
+                    csv,
+                    include_original_reports,
+                    mode,
+                )
+                .await
+            } else {
+                comparison_app::run_cli(
+                    before,
+                    after,
+                    config,
+                    output,
+                    csv,
+                    include_original_reports,
+                )
+                .await
+            };
+            if let Err(error) = result {
                 eprintln!("{}", serde_json::to_string(&error)?);
                 std::process::exit(2);
             }
@@ -806,6 +948,8 @@ async fn main() -> anyhow::Result<()> {
             sitemap,
             list,
             config,
+            trusted_certificate,
+            respect_hsts,
             store,
             list_file,
             list_options,
@@ -826,6 +970,34 @@ async fn main() -> anyhow::Result<()> {
             } else {
                 CrawlConfig::default()
             };
+            if respect_hsts || !trusted_certificate.is_empty() {
+                if trusted_certificate.len() > 8 {
+                    anyhow::bail!("At most 8 trusted certificate files are allowed");
+                }
+                let mut tls = config.tls.take().unwrap_or_default();
+                tls.respect_hsts |= respect_hsts;
+                for path in trusted_certificate {
+                    let extension = path
+                        .extension()
+                        .and_then(|s| s.to_str())
+                        .unwrap_or("")
+                        .to_ascii_lowercase();
+                    if !["crt", "pem", "cer", "der"].contains(&extension.as_str()) {
+                        anyhow::bail!("Trusted certificate must be .crt, .pem, .cer or .der");
+                    }
+                    let name = path
+                        .file_name()
+                        .and_then(|s| s.to_str())
+                        .ok_or_else(|| anyhow::anyhow!("Certificate requires a UTF-8 file name"))?
+                        .to_owned();
+                    let bytes = read_bounded(&path, 65536).await?;
+                    tls.trusted_certificates.push(
+                        open_seo_spider_core::TrustedCertificate::from_file_bytes(name, &bytes)?,
+                    );
+                }
+                tls.validate()?;
+                config.tls = Some(tls);
+            }
             if !config.seed_urls.is_empty() && config.input_imports.is_empty() {
                 // Retain the existing separate manual-seed import without merging
                 // sitemap imports before Crawler::new captures original declarations.

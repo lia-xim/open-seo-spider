@@ -666,3 +666,314 @@ fn mcp_bundle_worker_pipeline_accepts_api_depth256_and_refuses257_on_small_calle
         .join()
         .unwrap();
 }
+
+fn reporting_request(
+    include: bool,
+    mode: Option<open_seo_spider_core::ReportingMode>,
+    identity: Option<&str>,
+    view: Option<&str>,
+) -> SavedComparisonRequest {
+    serde_json::from_value(json!({
+        "before":"00000000-0000-0000-0000-000000000001",
+        "after":"00000000-0000-0000-0000-000000000002",
+        "include_original_reports":include, "reporting_mode":mode,
+        "expected_reporting_identity":identity, "expected_reporting_view":view
+    }))
+    .unwrap()
+}
+fn reporting_report(mask: u8, warning: &str) -> open_seo_spider_core::CrawlReport {
+    use open_seo_spider_core::{CrawlConfig, CrawlReport, DirectiveReportingConfig};
+    CrawlReport {
+        config: CrawlConfig {
+            directive_reporting: (mask != 0).then_some(DirectiveReportingConfig {
+                version: 1,
+                respect_noindex: mask & 1 != 0,
+                respect_canonical: mask & 2 != 0,
+                respect_next_prev: mask & 4 != 0,
+            }),
+            ..Default::default()
+        },
+        pages: vec![],
+        issues: vec![],
+        summary: Default::default(),
+        warnings: vec![warning.into()],
+        operation: None,
+        policy_ledger: None,
+        resource_ledger: None,
+        sitemap_catalog: None,
+        sitemap_coverage_inventory: None,
+        sitemap_source_measurements: None,
+    }
+}
+fn reporting_api_bytes(
+    include: bool,
+    mask: u8,
+    mode: Option<open_seo_spider_core::ReportingMode>,
+    warning: &str,
+) -> Vec<u8> {
+    let before = reporting_report(mask, warning);
+    let after = before.clone();
+    let comparison = open_seo_spider_core::compare_saved_crawls(
+        &before,
+        &after,
+        &Default::default(),
+        None,
+        None,
+    )
+    .unwrap();
+    let view =
+        crate::comparison_app::reporting::build(&comparison, &before, &after, mode, None, None)
+            .unwrap();
+    let response = if include {
+        SavedComparisonResponse::with_original_reports(comparison, before, after).unwrap()
+    } else {
+        SavedComparisonResponse::new(comparison).unwrap()
+    };
+    serde_json::to_vec(&response.with_reporting(view).unwrap()).unwrap()
+}
+fn reporting_guards(bytes: &[u8]) -> (String, String) {
+    let value: Value = serde_json::from_slice(bytes).unwrap();
+    (
+        value["reporting"]["identity_sha256"]
+            .as_str()
+            .unwrap()
+            .into(),
+        value["reporting"]["view_sha256"].as_str().unwrap().into(),
+    )
+}
+fn internally_valid_reporting_refusal(bytes: &[u8], request: &SavedComparisonRequest) {
+    let parsed: SavedComparisonResponse = serde_json::from_slice(bytes).unwrap();
+    parsed.validate_original_reports().unwrap();
+    let result = decode_with_request(reqwest::StatusCode::OK, bytes, request);
+    assert_eq!(result["isError"], true);
+    assert_eq!(
+        result["structuredContent"]["error"]["code"],
+        "comparison_reporting_response_mismatch"
+    );
+}
+#[test]
+fn reporting_mcp_missing_view_refuses_explicit_mode_and_each_guard_in_both_bundle_paths() {
+    use open_seo_spider_core::ReportingMode;
+    let guard = "a".repeat(64);
+    for include in [false, true] {
+        let bytes = bundle_api_bytes(include);
+        for request in [
+            reporting_request(include, Some(ReportingMode::Raw), None, None),
+            reporting_request(include, Some(ReportingMode::Reported), None, None),
+            reporting_request(include, None, Some(&guard), None),
+            reporting_request(include, None, None, Some(&guard)),
+            reporting_request(include, None, Some(&guard), Some(&guard)),
+        ] {
+            internally_valid_reporting_refusal(&bytes, &request);
+        }
+    }
+    // Complete active originals establish Auto's projection even without an explicit guard.
+    let active = reporting_api_bytes(true, 1, None, "active");
+    let mut value: Value = serde_json::from_slice(&active).unwrap();
+    value.as_object_mut().unwrap().remove("reporting");
+    internally_valid_reporting_refusal(
+        &serde_json::to_vec(&value).unwrap(),
+        &reporting_request(true, None, None, None),
+    );
+}
+#[test]
+fn reporting_mcp_internally_valid_wrong_mode_is_not_promoted_to_success() {
+    use open_seo_spider_core::ReportingMode;
+    for include in [false, true] {
+        for (asked, reply) in [
+            (ReportingMode::Raw, ReportingMode::Reported),
+            (ReportingMode::Reported, ReportingMode::Raw),
+        ] {
+            let bytes = reporting_api_bytes(include, 1, Some(reply), "same");
+            internally_valid_reporting_refusal(
+                &bytes,
+                &reporting_request(include, Some(asked), None, None),
+            );
+        }
+        let bytes = reporting_api_bytes(include, 1, Some(ReportingMode::Raw), "same");
+        internally_valid_reporting_refusal(&bytes, &reporting_request(include, None, None, None));
+        // Inactive Auto remains absence, not an unsolicited explicit Reported response.
+        let inactive = reporting_api_bytes(include, 0, Some(ReportingMode::Reported), "same");
+        internally_valid_reporting_refusal(
+            &inactive,
+            &reporting_request(include, None, None, None),
+        );
+    }
+}
+#[test]
+fn reporting_mcp_equal_count_wrong_profile_identity_is_refused_for_raw_and_reported() {
+    use open_seo_spider_core::ReportingMode;
+    for include in [false, true] {
+        for mode in [ReportingMode::Raw, ReportingMode::Reported] {
+            let expected = reporting_api_bytes(include, 1, Some(mode), "same");
+            let other = reporting_api_bytes(include, 2, Some(mode), "same");
+            let (identity, _) = reporting_guards(&expected);
+            let e: Value = serde_json::from_slice(&expected).unwrap();
+            let o: Value = serde_json::from_slice(&other).unwrap();
+            assert_eq!(
+                e["reporting"]["included_compared_rows"],
+                o["reporting"]["included_compared_rows"]
+            );
+            assert_ne!(
+                e["reporting"]["identity_sha256"],
+                o["reporting"]["identity_sha256"]
+            );
+            internally_valid_reporting_refusal(
+                &other,
+                &reporting_request(include, Some(mode), Some(&identity), None),
+            );
+        }
+    }
+}
+#[test]
+fn reporting_mcp_wrong_snapshot_view_guard_is_refused_even_when_profile_identity_matches() {
+    use open_seo_spider_core::ReportingMode;
+    for include in [false, true] {
+        for mode in [ReportingMode::Raw, ReportingMode::Reported] {
+            let expected = reporting_api_bytes(include, 1, Some(mode), "first full raw snapshot");
+            let other = reporting_api_bytes(include, 1, Some(mode), "different full raw snapshot");
+            let (identity, view) = reporting_guards(&expected);
+            let (other_identity, other_view) = reporting_guards(&other);
+            assert_eq!(identity, other_identity);
+            assert_ne!(view, other_view);
+            internally_valid_reporting_refusal(
+                &other,
+                &reporting_request(include, Some(mode), Some(&identity), Some(&view)),
+            );
+        }
+    }
+}
+#[test]
+fn reporting_mcp_matching_guards_accept_complete_reply_and_inactive_default_keeps_legacy_shape() {
+    use open_seo_spider_core::ReportingMode;
+    for include in [false, true] {
+        for mask in [0, 1] {
+            for mode in [
+                None,
+                Some(ReportingMode::Raw),
+                Some(ReportingMode::Reported),
+            ] {
+                let bytes = reporting_api_bytes(include, mask, mode, "same");
+                let value: Value = serde_json::from_slice(&bytes).unwrap();
+                let request = if mask == 0 && mode.is_none() {
+                    assert!(value.get("reporting").is_none());
+                    reporting_request(include, None, None, None)
+                } else {
+                    let (identity, view) = reporting_guards(&bytes);
+                    reporting_request(include, mode, Some(&identity), Some(&view))
+                };
+                let result = decode_with_request(reqwest::StatusCode::OK, &bytes, &request);
+                assert_eq!(result["isError"], false);
+                assert_eq!(result["structuredContent"], value);
+                assert_eq!(
+                    serde_json::from_str::<Value>(result["content"][0]["text"].as_str().unwrap())
+                        .unwrap(),
+                    value
+                );
+            }
+        }
+    }
+}
+#[test]
+fn reporting_mcp_acceptance_never_filters_raw_mapping_or_original_target_facts() {
+    use open_seo_spider_core::{
+        ComparisonSide, ComparisonUrlMapping, PageRecord, ReportingMode, SavedComparisonConfig,
+    };
+    let make_page = |url: &str, hidden: bool| {
+        let mut p = PageRecord {
+            url: url.into(),
+            final_url: url.into(),
+            status: Some(200),
+            final_status: Some(200),
+            content_type: "text/html".into(),
+            fetched_at: "2026-10-16T00:00:00Z".into(),
+            ..Default::default()
+        };
+        let html = format!(
+            "<html><head><title>Saved</title>{}</head><body><a href='/raw-target'>Target</a></body></html>",
+            if hidden {
+                "<meta name='robots' content='noindex'>"
+            } else {
+                ""
+            }
+        );
+        open_seo_spider_core::extract_html(
+            &mut p,
+            &html,
+            &[reqwest::Url::parse(url).unwrap()],
+            false,
+        );
+        p
+    };
+    for include in [false, true] {
+        for mode in [ReportingMode::Raw, ReportingMode::Reported] {
+            let mut before = reporting_report(1, "before");
+            let mut after = reporting_report(1, "after");
+            before.pages = vec![
+                make_page("https://fixture.test/old/a", false),
+                make_page("https://fixture.test/old/hidden", true),
+            ];
+            after.pages = vec![
+                make_page("https://fixture.test/a", false),
+                make_page("https://fixture.test/hidden", true),
+            ];
+            let mut config = SavedComparisonConfig::default();
+            config.mappings.push(ComparisonUrlMapping {
+                side: ComparisonSide::Before,
+                from_origin: "https://fixture.test".into(),
+                from_path_prefix: "/old".into(),
+                to_origin: "https://fixture.test".into(),
+                to_path_prefix: "/".into(),
+            });
+            let raw =
+                open_seo_spider_core::compare_saved_crawls(&before, &after, &config, None, None)
+                    .unwrap();
+            assert_eq!(raw.pages.len(), 2);
+            let exact_raw = serde_json::to_value(&raw).unwrap();
+            let view = crate::comparison_app::reporting::build(
+                &raw,
+                &before,
+                &after,
+                Some(mode),
+                None,
+                None,
+            )
+            .unwrap();
+            let response = if include {
+                SavedComparisonResponse::with_original_reports(raw, before.clone(), after.clone())
+                    .unwrap()
+            } else {
+                SavedComparisonResponse::new(raw).unwrap()
+            };
+            let bytes = serde_json::to_vec(&response.with_reporting(view).unwrap()).unwrap();
+            let (identity, view) = reporting_guards(&bytes);
+            let result = decode_with_request(
+                reqwest::StatusCode::OK,
+                &bytes,
+                &reporting_request(include, Some(mode), Some(&identity), Some(&view)),
+            );
+            assert_eq!(result["isError"], false);
+            assert_eq!(result["structuredContent"]["comparison"], exact_raw);
+            assert_eq!(
+                result["structuredContent"]["reporting"]["included_compared_rows"],
+                if mode == ReportingMode::Raw { 2 } else { 1 }
+            );
+            let kept = result["structuredContent"]["comparison"]["pages"]
+                .as_array()
+                .unwrap();
+            assert_eq!(kept.len(), 2);
+            assert!(kept.iter().all(|p| {
+                p["before"]["original_requested_url"]
+                    .as_str()
+                    .unwrap()
+                    .contains("/old/")
+            }));
+            if include {
+                assert_eq!(
+                    result["structuredContent"]["original_reports"]["before"]["report"],
+                    serde_json::to_value(&before).unwrap()
+                );
+            }
+        }
+    }
+}

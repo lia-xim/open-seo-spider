@@ -1907,17 +1907,27 @@
     {
       "id": "metadata.spelling",
       "name": "Spelling and grammar",
-      "status": "planned",
+      "status": "partial",
       "phase": "P1",
       "source_ids": [
         "spelling"
       ],
       "acceptance_test": "Test multilingual dictionaries, ignored words/rules and exact issue locations against saved text.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "source28-open-source-alpha-20261016"
+          ],
+          "proves": "Independent currentC4source review;34new defaultRust fixtures and40extractedUIVMgroups from pinnedC2focused proof, plus two realC2appconsumer localLanguageTool tests coveringEN/DEspelling/grammar,UTF16anddictionaryrecheck. Exactproduction/testbodyandfinite6pair bindingqualifiesC4reuse. RootcurrentC4workspace1722/0/0andallfeaturesstrictClippypass; independentactualsuiteauditNO_FINDINGS_BOUNDED_ACTUAL_AUDIT. FrozenC4suite459remainsbound; publication452of459exactplus7reviewedlegacyCIinventoryportsNOT_RUN,allcompiledRust/UIexact.",
+          "limits": "SavedHTMLtextonly; explicitlocalserviceacknowledgement, defaultoff, noengine/JREbundling/autolaunch/cloudfallback. Notfullmultilingualquality,PDF/title/meta, nativeAPI/CLI/MCP/browserfrontdoor, installationorScreamingFrogparity."
+        }
+      ],
       "parity_evidence": [],
       "group": "metadata",
       "remaining_acceptance": [
-        "Test multilingual dictionaries, ignored words/rules and exact issue locations against saved text."
+        "Expand multilingual and regional-language quality checks beyond the two English/German app-consumer fixtures, retaining exact UTF16 issue locations and unknown/incomplete results.",
+        "Verify current native API/CLI/MCP and real browser saved-run/dictionary workflows, persisted reload and failure cases; extracted UI VM groups and app-consumer tests do not replace these front doors.",
+        "Separately implement and verify PDF/title/meta or other text channels and packaging/operating workflows; full manufacturer feature and language-quality parity remains NOT_PROVEN."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -6601,6 +6611,14 @@
       "artifact": "docs/verification/quotas-tested-main-retry-20261016/index.json",
       "artifact_sha256": "bda25ec3bf4af60d5455ce9b8c287574a3ffda208f9febe452f8d1239f8f31d0",
       "scope": "Quota429 preview actual format/Clippy/29newRust/9inheritedNode pass; current Source14 new Main native first MCP-limit and second CSV-terminator oracle failures retained; next source successor pending and installation blocked. Additional CDN guard static review only. No manufacturer-parity or feature-status upgrade."
+    },
+    {
+      "id": "source28-open-source-alpha-20261016",
+      "recorded_at": "2026-10-16T21:49:50.686Z",
+      "artifact": "docs/verification/source28-open-source-alpha-20261016/README.md",
+      "artifact_sha256": "c82a5265be9c4f78ece8bf778ad779ac5f1fb5c4f77f9a1b60b73f23c7b91fce",
+      "result": "ROOT_ACTUAL_1722_0_0_STRICT_CLIPPY_PASS_BOUNDED_INDEPENDENT_SUITE_NOF",
+      "scope": "OnlysavedHTMLspellingplannedtopartial;34newdefaultRust/40UIVM/2realAppconsumerLTtests explicitlyC2toC4productionexact-reused. CurrentRoot1722suiteandstrictClippyactual; independentactualsuiteauditNO_FINDINGS_BOUNDED_ACTUAL_AUDIT. FrozenC4has459testedinputs;publication452exact+7reviewedlegacyCIinventoryportsNOT_RUN,compiledRust/UIexact. Core11selected25RootpassnotfullNative17; Native23/24/25/26boundedindependentconsumersnotNative27/28. Source16installedunchanged, publicCI/parityNOT_PROVEN."
     }
   ],
   "reference_workflows": [
@@ -6723,15 +6741,15 @@
   "status_summary": {
     "overall": {
       "implemented": 36,
-      "partial": 68,
-      "planned": 40,
+      "partial": 69,
+      "planned": 39,
       "total": 144
     },
     "phases": {
       "P1": {
         "implemented": 14,
-        "partial": 28,
-        "planned": 3,
+        "partial": 29,
+        "planned": 2,
         "total": 45
       },
       "P2": {
@@ -6780,8 +6798,8 @@
       },
       "metadata": {
         "implemented": 2,
-        "partial": 8,
-        "planned": 1,
+        "partial": 9,
+        "planned": 0,
         "total": 11
       },
       "links": {
@@ -6858,7 +6876,7 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-16T21:02:00.189Z",
+  "last_verified_at": "2026-10-16T21:49:50.686Z",
   "current_work": [
     {
       "id": "combined-source-v15-20261016",
@@ -9128,9 +9146,9 @@
     {
       "id": "native-resource-quotas-20261016",
       "priority": 1,
-      "status": "CORE10_PASS_NATIVE_R8_CAPSULE_FAILURE_PHYSICALLY_DRAINED",
+      "status": "CORE11_SELECTED25_ROOT_PASS_NATIVE17_R9_NOT_RUN",
       "title_de": "Native interne Ressourcen-Crawls mit dauerhaften Quoten verbinden",
-      "summary_de": "Core10 besteht weiterhin25 Speicher-Kontrollen. Ressourcenlauf8 erreicht RQ13, scheitert aber am bisherigen8MiB-Gesamtlimit des Nachweisformats: jede Epoche enthält die vollständige wachsende Anfragehistorie. Alle75 gespeicherten SQL-Besitzer und die Testfixture sind geschlossen, keine eigenen Prozesse verbleiben. Der Fehllauf und nachgelagerte logische Abschlussfehler bleiben erhalten. Das neue begrenzte Komponentenformat besteht die unabhängige Quellprüfung und52 tatsächliche Dateisystem-Prüfgruppen. Die Einbindung in alle Besitzerrollen und die native Gesamtabnahme sind offen.",
+      "summary_de": "Core11 ist an Provider6, Bridge13 und Native7 frisch gebunden. Alle25 ausgewählten echten Speicher-Kontrollen bestehen; der Root-Gesamtablauf schließt regulär. Die unabhängige tatsächliche Core11-Prüfung steht noch aus. Das Komponentenformat besteht52 begrenzte Dateisystemfälle; die vollständige Native17r9-Ressourcen-/Browser-/SQL-/EOF-Matrix ist NOT_RUN. Frühere R8-Fehler und der physisch geschlossene Stand bleiben erhalten. Lokal bleibt Source16 installiert.",
       "feature_ids": [
         "crawl.resources",
         "crawl.limits"
@@ -9151,14 +9169,16 @@
         "Source17 vollständig eingefroren und mit1559 Tests ohne Fehler/ignorierte Tests, vier frischen Renderer-Gates, Format, Clippy und optimiertem Build geprüft. Veralteter Testbelegtext vor Ausführung korrigiert und frisch unabhängig geprüft.",
         "Alle sechs bestehenden Source17-Nativregressionen tatsächlich ausgeführt und unabhängig anhand begrenzter gespeicherter Rohbelege ohne Befund geprüft. Die neue Ressourcenmatrix und Installation werden dadurch nicht ersetzt.",
         "Core10: tatsächlicher neunter25er-Lauf und unabhängiger Audit bestanden, natürliche Worker-Enden und vier geschlossene SQL-Besitzer bestätigt; Root-Fenster physisch geschlossen.",
-        "Ressourcenlauf3 und4 tatsächlich ausgeführt und als Fehler mit vollständigen Teilbelegen erhalten; nachgelagerte eigene physische Prozess-/SQL-/Fixture-Prüfung bestätigt keine zurückbehaltenen Besitzer. Lauf4 erhält ausdrücklich keinen natürlichen Gesamtabschluss."
+        "Ressourcenlauf3 und4 tatsächlich ausgeführt und als Fehler mit vollständigen Teilbelegen erhalten; nachgelagerte eigene physische Prozess-/SQL-/Fixture-Prüfung bestätigt keine zurückbehaltenen Besitzer. Lauf4 erhält ausdrücklich keinen natürlichen Gesamtabschluss.",
+        "Core11: aktuelle Quellenbindung und25 ausgewählte tatsächliche Kontrollfälle bestanden; Root-Wrapper regulär mit0 beendet. Das ist keine vollständige Native17-Abnahme; unabhängiger tatsächlicher Core11-Audit noch offen."
       ],
       "pending_acceptance_de": [
-        "Geprüftes Komponentenformat mit52 tatsächlich bestandenen Prüffällen in Brücke, Provider und Abschlussprüfer binden; neue exakte Besitzerinventare, Quellenprüfungen und Freigabe erstellen.",
-        "Vollständige Ressourcenmatrix einschließlich Browser/SQL/EOF-Grenzen neu bestehen.",
-        "Produktübernahme und Daten erhaltende Installation abschließen."
+        "Die25 tatsächlichen Core11-Kontrollen unabhängig anhand der exakten aktuellen Rohbelege prüfen.",
+        "Vollständige Native17r9-Ressourcenmatrix einschließlich Browser-/SQL-/EOF-Grenzen frisch ausführen und unabhängig abnehmen; bisher NOT_RUN.",
+        "Eine spätere lokale Aktualisierung nur getrennt und mit Daten erhaltender Abnahme durchführen; diese Open-Source-Veröffentlichung ändert die installierte Source16 nicht."
       ],
       "documentation": [
+        "docs/verification/source28-open-source-alpha-20261016/README.md",
         "docs/verification/source27-tls-and-native-progress-20261016/index.json",
         "docs/verification/source26-comparison-and-resource-drain-20261016/index.json",
         "docs/verification/source24-review-and-core10-20261016/index.json",
@@ -9194,16 +9214,21 @@
         "closed_provider_helper": "PASS_ATTEMPT9_25_CURRENT_INDEPENDENT_ACTUAL_AUDIT_EIGHT_FAILURES_PRESERVED",
         "UI_owner_repair": "SOURCE_PROPOSAL_NEW_NATIVE_ACCEPTANCE_PENDING",
         "physical_drain": "PASS_75_SQL_CLOSED_FIXTURE_ZERO_KNOWN_SCOPED_PROCESS_ZERO_ROOT_KILLS",
-        "component_repair": "PASS_SOURCE_NOF_AND_52_ACTUAL_FILESYSTEM_FIXTURES_NOT_NATIVE_SUCCESS"
+        "component_repair": "PASS_SOURCE_NOF_AND_52_ACTUAL_FILESYSTEM_FIXTURES_NOT_NATIVE_SUCCESS",
+        "Core11_source": "CURRENT_PROVIDER6_BRIDGE13_NATIVE7_SOURCE_BOUND",
+        "Core11_selected25": "PASS_ROOT_ACTUAL_25_CONTROLS_NATURAL_WRAPPER_CLOSE",
+        "Core11_independent_actual_audit": "PENDING_ROOT_FINAL_VERIFICATION",
+        "Native17_r9": "NOT_RUN",
+        "local_installation_current": "UNCHANGED_SOURCE16"
       },
       "reference_parity": "NOT_PROVEN"
     },
     {
       "id": "directive-reporting-20261016",
       "priority": 1,
-      "status": "SOURCE27_SUITE_BUILD_PASS_TWO_NATIVE_CONSUMERS_AUDITED_REMAINING_OPEN",
+      "status": "FOUR_NATIVE_CONSUMERS_AUDITED_SOURCE28_SUITE_BOUNDED_AUDIT_NOF",
       "title_de": "Berichtsfilter für Noindex, Canonicals und Pagination ergänzen",
-      "summary_de": "Der449-Dateien-Kandidat einschließlich TLS/HSTS besteht1688 Tests ohne Fehler oder ignorierte Tests,910 Pflichtnamen, vier frische Renderer-Gates,31 UI-VM-Gruppen, Format, strengen Clippy und optimierten Build samt unabhängigem tatsächlichem Suite-Audit. N-Gramm/Inhalt und Sitemap-Bundle bestehen aktuelle C5-Nativläufe mit unabhängigen Rohdaten-Audits. Defekte Quellen und Vergleichsansichten bleiben nach getrennt geprüften Testkorrekturen in Abnahme. Der89-Dateien-Patch ist geprüft und nicht angewendet; lokal läuft weiterSource16.",
+      "summary_de": "Die gespeicherten Berichtsconsumer Native23/24/25/26 sind in ihren begrenzten Quellständen unabhängig tatsächlich geprüft. Historische Source27C2-Suite1688/0/0 und Build bleiben erhalten. Der eingefrorene Source28C4-Stand mit459 Dateien besteht den Root-Gesamtlauf1722/0/0 und All-Features-Clippy; sein unabhängiger tatsächlicher Suite-Audit schließt ohne offenen Befund. Vor den CI-Ports waren alle459 Arbeitsbaumdateien exakt. Im aktuellen Veröffentlichungsstand sind452 davon exakt; sieben eng geprüfte ältere CI-Inventarports bleiben ungetestet, alle kompilierten Rust-/UI-Produktdateien identisch. Frische Native27-TLS/HSTS- und Native28-Sprachprüfungs-Frontdoors bleiben offen; aktive TLS/HSTS plus Renderer bleibt abgelehnt. Lokal läuft Source16.",
       "feature_ids": [
         "robots.traversal"
       ],
@@ -9231,15 +9256,17 @@
         "Source26: vollständiger Rohvergleich plus profil-/modus-/snapshotgebundener Sichtbarkeitsindex umgesetzt; unabhängiger MCP-Anforderungsbindungsbefund mit sechs neuen Rust-Regressionen geschlossen.",
         "Source26: alle443 Quellen vor/nach exakt, 1660/0/0 Tests,882 Pflichtnamen, vier echte Renderer-Gates,23 UI-VM-Gruppen, Format, strenger Clippy und optimierter Build bestanden;75-Dateien-Patch per apply --check geprüft und nicht angewendet.",
         "Source27C2:449 unveränderte Quellen,1688/0/0 Tests,910 Pflichtnamen, vier Renderer-Gates,31 VM-Gruppen, Format/Clippy und optimierter Build. Lokale CA-/HTTPS-/HSTS-Fälle einschließlich Hostname/Vertrauen/Quota-Start tatsächlich bestanden.",
-        "Native23r2 und Native25r3: echte API/CLI/MCP/Browser-Exporte und vollständige Rohdaten unabhängig ohne Befund geprüft; begrenzte Kriterien, keine Herstellerparität."
+        "Native23r2 und Native25r3: echte API/CLI/MCP/Browser-Exporte und vollständige Rohdaten unabhängig ohne Befund geprüft; begrenzte Kriterien, keine Herstellerparität.",
+        "Native24 und Native26: begrenzte tatsächliche Rohdaten-Audits abgeschlossen; zusammen mit Native23/25 vier gesondert qualifizierte Berichtsconsumer, keine aktuelle Source28-Gesamtabnahme.",
+        "Source28C4: historisch vor den CI-Ports alle459 Quellen exakt in den Arbeitsbaum übernommen; tatsächlicher Root-Gesamtlauf1722/0/0 mit944 exakten Pflichtnamen und vier frischen Rendererprüfungen, aktueller strenger Clippy bestanden. Unabhängiger tatsächlicher Gesamtaudit ohne offenen Befund abgeschlossen; auf eingefrorenes C4 begrenzt."
       ],
       "pending_acceptance_de": [
-        "Native24/26-Wiederholungsläufe samt unabhängiger tatsächlicher Rohdatenprüfung abschließen.",
-        "TLS/HSTS über aktuelle App-/CLI-/MCP-/Browser-Wege nativ abnehmen; aktive TLS/HSTS-Kombination mit Renderer bleibt ausdrücklich eingeschränkt.",
-        "Source17-Ressourcenmatrix, geprüfte Produktübernahme und Daten erhaltende Installation abschließen.",
-        "Alle144 Fähigkeiten,416 Filter und32 Abläufe weiter einzeln abarbeiten; Sprachprüfung bleibt bis zur Fehlerkorrektur offen."
+        "TLS/HSTS über aktuelle App-/CLI-/MCP-/Browser-Wege nativ abnehmen; aktive Kombination mit Renderer bleibt ausdrücklich abgelehnt.",
+        "Aktuelle native Source28-Sprachprüfungs-Frontdoors und die vollständige Native17r9-Ressourcenmatrix separat abnehmen.",
+        "Alle144 Fähigkeiten,416 Filter und32 Abläufe weiter einzeln abarbeiten; keine Herstellerparität oder neue Installation ableiten."
       ],
       "documentation": [
+        "docs/verification/source28-open-source-alpha-20261016/README.md",
         "docs/verification/source27-tls-and-native-progress-20261016/index.json",
         "docs/verification/source26-comparison-and-resource-drain-20261016/index.json",
         "docs/verification/source24-review-and-core10-20261016/index.json",
@@ -9290,34 +9317,92 @@
         "combined27_build": "PASS_OPTIMIZED_NOT_NATIVE_ACCEPTANCE",
         "native23": "PASS_ACTUAL_R2_INDEPENDENT_AUDIT",
         "native25": "PASS_ACTUAL_R3_INDEPENDENT_AUDIT",
-        "native24": "PASS_BOUNDED_CURRENT_SOURCE26_BROKEN_SOURCES_NATIVE24",
-        "native26": "PASS_BOUNDED_CURRENT_SOURCE26_SAVED_COMPARISON_NATIVE25"
+        "native24": "PASS_BOUNDED_ACTUAL_INDEPENDENT_AUDIT",
+        "native26": "PASS_BOUNDED_ACTUAL_INDEPENDENT_AUDIT",
+        "combined28_source_review": "PASS_C4_NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+        "combined28_source_integration": "HISTORICAL_PRE_CI_ALL459_R_EXACT_CURRENT452_EXACT_7_REVIEWED_CI_PORTS_NOT_RUN",
+        "combined28_full_suite": "PASS_ROOT_ACTUAL_1722_0_0_944_REQUIRED_FOUR_FRESH_RENDERER",
+        "combined28_suite_independent_actual_audit": "NO_FINDINGS_BOUNDED_ACTUAL_AUDIT_FROZEN_C4",
+        "combined28_strict_clippy": "PASS_CURRENT_ALL_TARGETS_ALL_FEATURES",
+        "native27_TLS_HSTS": "NOT_RUN",
+        "native28_spelling": "NOT_RUN",
+        "local_installation_current": "UNCHANGED_SOURCE16",
+        "publication_source_binding": "452_OF459_EXACT_7_REVIEWED_CI_SCRIPT_PORTS_NOT_RUN_COMPILED_RUST_UI_EXACT"
       },
       "reference_parity": "NOT_PROVEN"
     },
     {
       "id": "saved-spelling-grammar-20261016",
       "title_de": "Lokale Rechtschreib- und Grammatikprüfung gespeicherter Inhalte",
-      "priority": 32,
-      "status": "SOURCE_V2_ONE_P2_V3_REPAIR_PENDING",
-      "summary_de": "Die erste isolierte API-/CLI-/MCP-/UI-Implementierung liegt vor. Unabhängige Prüfung findet drei zu schließende P2-Punkte: gemeinsames Antwortbudget, exakte Abdeckung aller ausgewählten URLs und Schutz vor erfolgreichen Nullbefunden bei deaktivierter Prüfung oder leerem Text. V2 schließt diese drei Befunde mit sieben neuen Regressionen im Quellcode. Ein echter deutscher Enginebefund enthält31 Vorschläge und überschreitet die bisherige Parsergrenze20; V3 korrigiert diesen neuen Befund mit einer festen512er-Grenze und gezielten Regressionen. Kein Produktlauf oder Einbau ist abgenommen.",
+      "priority": 2,
+      "status": "C4_SOURCE_AND_ACTUAL_1722_SUITE_BOUNDED_AUDITS_NOF_NATIVE_OPEN",
+      "summary_de": "Vier Quellbefunde sind mit V3 geschlossen; die eingefrorene C4-Komposition mit459 Dateien ist ohne offenen Quellbefund geprüft.34 neue Rust-Tests und40 UI-VM-Gruppen sowie zwei echte lokale EN/DE-Appconsumer-Engineprüfungen bestehen am C2-Stand; exakte Produkt-/Sprachtestdateien und sechs enge Quellpaare qualifizieren die C4-Wiederverwendung. C4-Clippy und eingefrorener Root-Gesamtlauf1722/0/0 samt unabhängigem tatsächlichem Audit bestehen. Historisch vor den CI-Ports waren459 Arbeitsbaumdateien exakt; aktuell452 exakt und sieben eng geprüfte CI-Inventarports nicht ausgeführt, alle kompilierten Rust-/UI-Produktdateien identisch. Nur gespeichertes HTML und explizit lokaler separat gestarteter Dienst; breite Sprachqualität, native Frontdoors, neue Installation und Herstellerparität bleiben offen.",
       "completed_acceptance_de": [
-        "449 Basisdateien,23 vollständige Änderungspaare und fünf Syntaxprüfungen unabhängig verifiziert; V1 bleibt mit Befunden erhalten."
+        "449 Basisdateien,23 vollständige Änderungspaare und fünf Syntaxprüfungen unabhängig verifiziert; V1 bleibt mit Befunden erhalten.",
+        "V3 schließt Antwort-Gesamtbudget, exakte URL-Partition, erfolgreicheNullbefund-Gates und die reale31-Vorschläge-Antwort mit einer festen512er-Grenze; vollständige Quellprüfung ohne Befund.",
+        "34 neue Rust-Fälle tatsächlich bestanden (35 selektierte insgesamt einschließlich eines geerbten Falls);40 extrahierte UI-VM-Gruppen, davon9/27 Sprachprüfungsgruppen/-varianten. Keine echte Browserabnahme daraus abgeleitet.",
+        "Zwei tatsächliche Appconsumer-Tests gegen die gepinnte lokale Engine:EN/DE,UTF16,Wörterbuch-Neupruefung und getrennte Grammatik. Nur C2-Belege mit expliziter produktgleicher C4-Bindung wiederverwendet; kein neuer Engineprozess.",
+        "C4-Quell-NoF und All-Features-Clippy bestanden; aktuelle tatsächliche Root-Suite1722/0/0 enthält alle34 Pflicht-Sprachtests sowie zwei korrigierte bestehende Inventartests. Unabhängiger tatsächlicher Gesamtaudit ohne offenen Befund abgeschlossen; eingefrorener C4-Stand und qualifizierte Wiederverwendung."
       ],
       "pending_acceptance_de": [
-        "Alle drei Befunde mit gezielten Regressionen schließen und erneut unabhängig prüfen.",
-        "Tatsächliche lokale Engine sowie Rust-/UI-/API-/CLI-/MCP-/Browser-Integration einschließlich UTF16, Fehlern und Wörterbuch-Fortbestand abnehmen.",
-        "Weiter offene Textquellen wie PDF sowie Titel/Metadaten separat abdecken."
+        "Aktuelle native API-/CLI-/MCP-/Browser-Frontdoors einschließlich Fehlern, Reload und dauerhaftem Wörterbuch prüfen.",
+        "Weitere Sprachen, regionale Auswahl und Textquellen wie PDF sowie Titel/Metadaten jeweils separat abdecken; vollständige Herstellerparität bleibt offen."
       ],
       "gates": {
-        "source_review": "V1_THREE_SOURCE_CLOSED_V2_ONE_NEW_P2_NO_NOF",
+        "source_review": "C4_NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
         "engine_pilot": "PASS_ACTUAL_ENGINE_API_AND_UTF16_PILOT_NOT_PRODUCT_INTEGRATION",
-        "product_integration": "NOT_RUN",
-        "manufacturer_parity": "NOT_PROVEN"
+        "product_integration": "TWO_ACTUAL_C2_APP_CONSUMER_LT_TESTS_REUSED_EXACT_C4_NOT_NATIVE_FRONTDOORS",
+        "manufacturer_parity": "NOT_PROVEN",
+        "source_review_history": "V1_THREE_SOURCE_CLOSED_V2_ONE_NEW_P2_NO_NOF",
+        "focused_Rust": "PASS_34_NEW_DEFAULT_35_TOTAL_C2_WITH_EXACT_C4_REUSE",
+        "UI_VM": "PASS_40_GROUPS_SPELLING9_GROUPS27_VARIANTS_NOT_REAL_BROWSER",
+        "current_clippy": "PASS_ALL_TARGETS_ALL_FEATURES_CURRENT_C4",
+        "current_full_suite": "PASS_ROOT_ACTUAL_1722_0_0_944_REQUIRED_FOUR_FRESH_RENDERER",
+        "current_full_suite_independent_actual_audit": "NO_FINDINGS_BOUNDED_ACTUAL_AUDIT_FROZEN_C4",
+        "native_frontdoors": "NOT_RUN",
+        "installation": "UNCHANGED_SOURCE16",
+        "publication_source_binding": "452_OF459_EXACT_7_REVIEWED_CI_SCRIPT_PORTS_NOT_RUN_COMPILED_RUST_UI_EXACT"
       },
       "documentation": [
+        "docs/verification/source28-open-source-alpha-20261016/README.md",
         "docs/verification/source27-tls-and-native-progress-20261016/source28-v1-source-findings.json"
+      ],
+      "feature_ids": [
+        "metadata.spelling"
       ]
+    },
+    {
+      "id": "source28-open-source-alpha-20261016",
+      "title_de": "Open-Source-Alpha mit ehrlich begrenztem Prüfstand veröffentlichen",
+      "priority": 0,
+      "status": "ROOT_LOCAL_SOURCE28_BOUNDED_ACTUAL_AUDIT_NOF_PUBLICATION_PENDING",
+      "summary_de": "Der eingefrorene Source28C4-Stand bindet459 Quellen und besteht Root-Suite1722/0/0 sowie strengen Clippy; der unabhängige tatsächliche Suite-Audit ist ohne offenen Befund abgeschlossen. Vor den CI-Ports waren alle459 Arbeitsbaumdateien exakt. Der aktuelle Veröffentlichungsstand erhält452 exakt und sieben eng geprüfte ältere CI-Inventarports bleiben ungetestet; alle kompilierten Rust-/UI-Produktdateien sind identisch. Öffentliche Alpha-Dokumentation und strikte32-Werkzeug-CI-Kompatibilität sind vorbereitet. Veröffentlichung, frische öffentliche CI und plattformweite Abnahme bleiben getrennte Prüfungen. Lokal bleibt Source16 unverändert; keine vollständige Herstellerparität.",
+      "completed_acceptance_de": [
+        "Historisch vor den CI-Ports alle459 C4-Arbeitsbaumquellen bytegenau gebunden; aktuell452 exakt plus sieben eng geprüfte, nicht ausgeführte CI-Inventarports bei identischen kompilierten Rust-/UI-Produktdateien; noch keine Veröffentlichung durch diesen Dokumentationsstand.",
+        "Fünf englische Alpha-Projekttexte vorbereitet; lokale Grenzen, gesonderter LanguageTool-Dienst und Drittanbieter-Lizenzen offengelegt.",
+        "Sieben alte26er-Inventarerwartungen als enger Vorschlag durch ein explizites32-Namen-Prüforakel ersetzt; alle bisherigen übrigen Testbedingungen erhalten.",
+        "Root-Gesamtlauf1722/0/0 mit944 Pflichtnamen und vier frischen echten Rendererprüfungen abgeschlossen; unabhängiger tatsächlicher Audit ohne offenen Befund abgeschlossen."
+      ],
+      "pending_acceptance_de": [
+        "Geprüfte Dokumentation/CI-Pfade übernehmen, öffentliche Repository-Veröffentlichung getrennt abschließen und tatsächliche öffentliche CI-Ergebnisse kontrollieren.",
+        "Native27/28, vollständige Native17r9, Linux-/Docker-Laufzeit und eine spätere Installation separat prüfen; keine automatische lokale Aktualisierung."
+      ],
+      "documentation": [
+        "docs/verification/source28-open-source-alpha-20261016/README.md"
+      ],
+      "gates": {
+        "current_source": "FROZEN_C4_459_TESTED_PUBLICATION_452_EXACT_7_REVIEWED_CI_ONLY_PORTS_NOT_RUN",
+        "full_suite": "PASS_ROOT_ACTUAL_1722_0_0_944_REQUIRED_FOUR_FRESH_RENDERER",
+        "independent_suite_audit": "NO_FINDINGS_BOUNDED_ACTUAL_AUDIT_FROZEN_C4",
+        "strict_clippy": "PASS_CURRENT_ALL_TARGETS_ALL_FEATURES",
+        "publication": "NOT_RUN",
+        "public_CI": "NOT_PROVEN",
+        "platforms": "WINDOWS_PILOT_ONLY_FRESH_LINUX_DOCKER_PENDING",
+        "installation": "UNCHANGED_SOURCE16",
+        "manufacturer_parity": "NOT_PROVEN",
+        "publication_source_binding": "452_OF459_EXACT_7_REVIEWED_CI_SCRIPT_PORTS_NOT_RUN_COMPILED_RUST_UI_EXACT"
+      },
+      "reference_parity": "NOT_PROVEN"
     }
   ],
   "active_work_ids": [
@@ -9327,6 +9412,9 @@
     "links-segments-20261016",
     "durable-crawl-quotas-20261016",
     "cli-crawl-resume-20261016",
-    "native-resource-quotas-20261016"
+    "native-resource-quotas-20261016",
+    "directive-reporting-20261016",
+    "saved-spelling-grammar-20261016",
+    "source28-open-source-alpha-20261016"
   ]
 }

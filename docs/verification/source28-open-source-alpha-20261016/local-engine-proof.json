@@ -1,0 +1,196 @@
+{
+  "kind": "Root_actual_Source28_app_consumer_pinned_local_language_engine_integration",
+  "result": "PASS_ACTUAL_TWO_APP_CONSUMER_LOCAL_ENGINE_INTEGRATION_TESTS",
+  "Root_runner": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-integration-v1/Root-runner.mjs",
+    "sha256": "9c19c6c027b862f180e329565e3968e672b5c000c594959332619ba71daba3bf",
+    "bytes": 12586
+  },
+  "composition": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-spelling-root-composition-v2/composition.json",
+    "sha256": "3fd21b312e1fc15bac72e444fa8f64578fc5b1a4642577d6336ef4c6df5e7a0f",
+    "bytes": 554481
+  },
+  "source_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-composed-C2-independent-source-review-v1/receipt.json",
+    "sha256": "fc49aef1edf9d996eaec39861deb2b78925cc97bb44f7c6a2ce8cc28fc9067f1",
+    "bytes": 3790
+  },
+  "focused": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-spelling-focused-v2/proof.json",
+    "sha256": "caddeeba070492c5e7c5c6fb502de34243cd7f8b54eb3f2b372fbe41354c5b2f",
+    "bytes": 25381
+  },
+  "extraction": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/language-runtime/source28-jdk17-pinned-20261016-v1/extraction-proof.json",
+    "sha256": "1342b57f66f78b4ebdd1dc1da2691fe097bd0ccd2a01fa19364db70d4573eb47",
+    "bytes": 750595
+  },
+  "adapter": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-integration-v1/OpenSeoOwnedLanguageTool.java",
+    "sha256": "9a65182ff2bbc735e75dc02fe66183152215137a39d230870ac663b02e6cfbf9",
+    "bytes": 1794
+  },
+  "config": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-integration-v1/server.properties",
+    "sha256": "13275a9218383f1b78470dc5f8a5e5fd01e43b9c6d835b812d0103d39a2d35ab",
+    "bytes": 74
+  },
+  "port": 61678,
+  "cases": [
+    {
+      "label": "engine-identity",
+      "form": {
+        "text": "This is a test.",
+        "language": "en-US"
+      },
+      "request_body": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-integration-v1/engine-identity-request.form",
+        "sha256": "c803233ea72a9b9302febe9e3d2e9864fdcdcf9dfd16699d41b19fc0eaf396b3",
+        "bytes": 35
+      },
+      "status": 200,
+      "headers": {
+        "date": "Fri, 16 Oct 2026 21:19:45 GMT",
+        "content-type": "application/json",
+        "content-length": "597"
+      },
+      "response": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-integration-v1/engine-identity-response.raw",
+        "sha256": "c1930e5bfcd8e870ec0b2bc350d0f08e302600a2120c7151fdf8fcde96b3d8cd",
+        "bytes": 597
+      },
+      "complete": true,
+      "duration_ms": 2703,
+      "software": {
+        "name": "LanguageTool",
+        "version": "6.9-SNAPSHOT",
+        "buildDate": "2026-10-16 18:49:04 +0200",
+        "apiVersion": 1,
+        "premium": false,
+        "premiumHint": "You might be missing errors only the Premium version can find. Contact us at support<at>languagetoolplus.com.",
+        "status": ""
+      },
+      "language": {
+        "name": "English (US)",
+        "code": "en-US",
+        "detectedLanguage": {
+          "name": "English (US)",
+          "code": "en-US",
+          "confidence": 0.9999905,
+          "source": "+fallback"
+        }
+      },
+      "warnings": {
+        "incompleteResults": false
+      },
+      "matches": []
+    }
+  ],
+  "integration": {
+    "pid": 3368,
+    "status": {
+      "code": 0,
+      "signal": null
+    },
+    "error": null,
+    "actual_close_event": true,
+    "log": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-integration-v1/integration.log",
+      "sha256": "0b94a9817d730df6efe8b10429b31c901034dec15d474d8c35779ab87bd4a350",
+      "bytes": 689
+    },
+    "pre_spawn": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-integration-v1/integration-pre-spawn.json",
+      "sha256": "c7467c649ec06d1ba26abf8df801612ccc8cd376cb162570754c4be3a37b231a",
+      "bytes": 2792
+    },
+    "required_tests": [
+      {
+        "name": "spelling_app::tests::spelling_real_local_engine_english_german_utf16_and_dictionary_recheck_without_website",
+        "status": "ok"
+      },
+      {
+        "name": "spelling_app::tests::spelling_real_local_engine_reports_actual_grammar_separately_from_spelling",
+        "status": "ok"
+      }
+    ],
+    "passed": true
+  },
+  "source459_before_after_exact": true,
+  "processes": [
+    {
+      "label": "java-version",
+      "pid": 50984,
+      "status": {
+        "code": 0,
+        "signal": null
+      },
+      "actual_close_event": true,
+      "stdout": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-integration-v1/java-version.stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "stderr": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-integration-v1/java-version.stderr.log",
+        "sha256": "2c05c59b13a701146c37d79936303eb8080cd353e096756dfab1cd833a306423",
+        "bytes": 196
+      }
+    },
+    {
+      "label": "owned-language-engine",
+      "pid": 27848,
+      "args": [
+        "-Djava.awt.headless=true",
+        "-Duser.home=E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-integration-v1/java-home",
+        "-Djava.io.tmpdir=E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-integration-v1/tmp",
+        "-Xms64m",
+        "-Xmx768m",
+        "--class-path",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\language-runtime\\source28-pinned-20261016-v1\\languagetool\\LanguageTool-6.9-SNAPSHOT\\languagetool-server.jar;E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\language-runtime\\source28-pinned-20261016-v1\\languagetool\\LanguageTool-6.9-SNAPSHOT/libs/*",
+        "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-integration-v1/OpenSeoOwnedLanguageTool.java",
+        "61678",
+        "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-integration-v1/server.properties"
+      ],
+      "events": [
+        {
+          "event": "exit",
+          "code": 0,
+          "signal": null
+        },
+        {
+          "event": "close",
+          "code": 0,
+          "signal": null
+        }
+      ],
+      "stdin_EOF_sent": true,
+      "status": {
+        "code": 0,
+        "signal": null
+      },
+      "actual_close_event": true,
+      "actual_ready": true,
+      "stdout": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-integration-v1/engine.stdout.log",
+        "sha256": "2beb2d7d32c1561e6ab8cbddcee8259c113e487fa7b1171848e9e9f42e697916",
+        "bytes": 632
+      },
+      "stderr": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-integration-v1/engine.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "listener_port_rebound_and_closed": true
+    }
+  ],
+  "active_HTTP": 0,
+  "Root_forced_own_engine": false,
+  "failures": [],
+  "scope": "Two actual app-consumer feature tests against a pinned loopback LanguageTool process: EN/DE spelling, UTF16, dictionary recheck, accepted grammar and zero website requests. No native API/CLI/MCP/browser frontdoors, external engine network-absence, broad language quality or installation accepted.",
+  "product_integration": "TWO_FEATURE_TESTS_ONLY",
+  "installed_Open_Spider_changed": false,
+  "manufacturer_parity": "NOT_PROVEN",
+  "recorded_at": "2026-10-16T21:21:59.833Z"
+}

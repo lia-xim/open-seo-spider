@@ -795,3 +795,40 @@ docs/verification/source27-tls-and-native-progress-20261016/source28-engine-pilo
 docs/verification/source27-tls-and-native-progress-20261016/source28-engine-pilot-v2-failure.json -text whitespace=cr-at-eol
 docs/verification/source27-tls-and-native-progress-20261016/source28-engine-pilot-v3-failure.json -text whitespace=cr-at-eol
 docs/verification/source27-tls-and-native-progress-20261016/index.json -text whitespace=cr-at-eol
+
+"crates/app/src/comparison_app/reporting.rs" -text
+"crates/app/src/comparison_app/reporting_tests.rs" -text
+"crates/app/src/content_cohort_reporting_tests.rs" -text
+"crates/app/src/mcp/broken_sources.rs" -text
+"crates/app/src/mcp/broken_sources_tests.rs" -text
+"crates/app/src/mcp/ngrams.rs" -text
+"crates/app/src/mcp/ngrams_tests.rs" -text
+"crates/app/src/tls_config.rs" -text
+"crates/core/src/directive_reporting.rs" -text
+"crates/core/src/store/tls_state.rs" -text
+"crates/core/src/tls.rs" -text
+"crates/core/src/tls/local_tls_tests.rs" -text
+"crates/core/src/tls/tests.rs" -text
+"crates/core/tests/directive_reporting_crawl.rs" -text
+"web/verification/ui-content-reporting.cjs" -text
+"web/verification/ui-sitemap-bundle-reporting.cjs" -text
+"web/verification/ui-tls-certificate-staging.cjs" -text
+"crates/app/src/mcp/spelling.rs" -text
+"crates/app/src/mcp/spelling/tests.rs" -text
+"crates/app/src/server/spelling.rs" -text
+"crates/app/src/spelling_app.rs" -text
+"crates/app/src/spelling_app/tests.rs" -text
+"crates/core/src/spelling.rs" -text
+"crates/core/src/spelling/tests.rs" -text
+"web/spelling.html" -text
+"web/spelling.js" -text
+"web/verification/ui-saved-spelling.cjs" -text
+# Keep generated verification records out of language statistics.
+docs/verification/** linguist-generated=true
+
+# Frozen CRLF test source: retain normal whitespace checks while accepting CRLF.
+crates/app/src/mcp/wiring_tests.rs whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# Preserve hash-bound raw verification records and their natural log EOF bytes.
+/docs/verification/source28-open-source-alpha-20261016/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+/docs/verification/source28-open-source-alpha-20261016/*.log.txt whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
