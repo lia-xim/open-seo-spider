@@ -1,0 +1,69 @@
+{
+  "kind": "sanitized_actual_source14_installed_summary",
+  "recorded_at": "2026-10-16T05:39:13.427Z",
+  "result": "PASS_SOURCE_V14_COLD_LOCAL_INSTALL_WITH_COPY_COMPATIBILITY",
+  "installed_source": 14,
+  "source_commit": "d7b85081262850baf442ff3ad70d0a7bd63787c6",
+  "source_inputs": 418,
+  "binary": {
+    "sha256": "46a8b448b001329ba2c92c7881af0d7c12006281e8c02f291d84a14af8bac568",
+    "bytes": 46157312
+  },
+  "full_suite": {
+    "passed": 1506,
+    "failed": 0,
+    "ignored": 0,
+    "fresh_renderer_checks": 4
+  },
+  "native_roles": "ALL_FOUR_PASS_WITH_RECORDED_SCOPE_QUALIFICATIONS",
+  "read_only_ready_probe": {
+    "result": "PASS_ACTUAL_READONLY_FOUR_NATIVE_READY_GUARD",
+    "sha256": "678facc03c18a2887485fd1e48c3081cbc8dbd705eb7e1d062a53531625cff55",
+    "bytes": 8798
+  },
+  "private_install_proof": {
+    "sha256": "28e76203c72dd3462c909e26b0bb1d23a4fb56493f15d444361dfe0947c2ac6e",
+    "bytes": 69861,
+    "content": "PRIVATE_NOT_UPLOADED"
+  },
+  "saved_data": {
+    "data_files": 38,
+    "report_jobs": 8
+  },
+  "verified_assets": 30,
+  "normal_mcp_tools": 28,
+  "data_bytes_streams_acl_and_stable_metadata_exact": true,
+  "all_raw_metadata_equal": false,
+  "qualified_volatile_metadata": "Only last-write timestamps of five actual baseline SQLite SHM files changed in each old-copy, candidate-copy and installed-live read comparison; 15 recorded deltas. File bytes, streams, creation, attributes, ACL and other metadata remained exact.",
+  "data_restored": false,
+  "backup": "Three independently verified copies in the same original DATA parent; private locations and inventories not uploaded.",
+  "compatibility_processes": "Both owned compatibility processes have actual observed close events and final parent FDs closed. No natural exit-zero claim.",
+  "services": "Installed application and renderer intentionally left running; parent log FDs finalized and execution lock released.",
+  "original_graceful_shutdown": "NOT_PROVEN",
+  "rollback_exercised": false,
+  "global_network_packet_trace": "NOT_PROVEN",
+  "manufacturer_parity": "NOT_PROVEN",
+  "feature_status_changes": 0,
+  "reviews": [
+    {
+      "path": "docs/verification/source14-installed-20261016/installer-source-review.json",
+      "sha256": "5b27e569d1958cacdc327c5f647857c6d21651baeed615ac38ef6ec181e5b09f",
+      "bytes": 4504
+    },
+    {
+      "path": "docs/verification/source14-installed-20261016/cold-source-review.json",
+      "sha256": "57f07d3a2bde0ee4b4fa0fec217f77c4c64a5f2e6984def0eb583cdd6cf40236",
+      "bytes": 4542
+    },
+    {
+      "path": "docs/verification/source14-installed-20261016/main-native-actual-audit.json",
+      "sha256": "e329d957fc02c0b341209ed3ee47e878726549e68ebdd1bf74675bea4ef90192",
+      "bytes": 4344
+    },
+    {
+      "path": "docs/verification/source14-installed-20261016/installation-actual-audit.json",
+      "sha256": "f320f7d61fb8b42701de4a29df290abb7578a9a6870470b7001bb8db9c71a01e",
+      "bytes": 3782
+    }
+  ]
+}
