@@ -1,0 +1,534 @@
+{
+  "kind": "api_only_composed_preview_three_stage_derivation",
+  "status": "SOURCE_ONLY_VERIFIED_NOT_RUNTIME",
+  "basis_preformat": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v13-draft-v3\\preformat.json",
+    "sha256": "13547987d8f394701cdd898f667f0f556f4fdf1b41895354df6cd1254ac2bfcf",
+    "bytes": 245980
+  },
+  "basis_actual_format": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source13-preliminary-format-v3\\proof.json",
+    "sha256": "5fe1fd874de5ac4e561d6b800e1e98361c1601ef93a57ee01ce77934f1c27397",
+    "bytes": 119049
+  },
+  "basis_formatter_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source13-format-independent-review-v3\\receipt.json",
+    "sha256": "dd529c2e3469814914bd21e1c4d6dbff77f0e198c8d784a5d2579e3ef7f3f373",
+    "bytes": 73652
+  },
+  "api_v1_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-enrichment-proposal-v1\\manifest.json",
+    "sha256": "fbe3c3d75dc6131bdd2c4a82df0fdcc137b4de1f0ce0381c5d4980cb6309a5c4",
+    "bytes": 17366
+  },
+  "ancestral_derivation": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/api-only-enrichment-proposal-v1/DERIVATION.json",
+    "sha256": "55820a688b276515bd65a98c9cebe363652751cc4fae4c0727ce590efa113b00",
+    "bytes": 18704
+  },
+  "api_v2_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-enrichment-proposal-v2\\manifest.json",
+    "sha256": "03404635d92093079e63a0ed0162862fe201f7d54332cdcd2aa8e9f8c447d113",
+    "bytes": 20257
+  },
+  "api_v2_revision": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/api-only-enrichment-proposal-v2/REVISION.json",
+    "sha256": "d6595e8377b87a8ebe7ef272b495d251cdb253c6b094adb969c74da4f0008b7c",
+    "bytes": 61814
+  },
+  "api_v3_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-enrichment-proposal-v3\\manifest.json",
+    "sha256": "c37ed77f5ad9241917e66a34fc0de9c109f8777a7e9520bd16f8c93f8f9967da",
+    "bytes": 21801
+  },
+  "api_v3_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-enrichment-independent-review-v3\\receipt.json",
+    "sha256": "8a956aedf4a354e613e089728536f7f7351ec98593b1fc01cbe6eb8f181962c5",
+    "bytes": 2761
+  },
+  "api_v3_revision": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-enrichment-proposal-v3\\REVISION.json",
+    "sha256": "084feffa6abe2782219de24dd2a86825fe7df2586cd46f74fc5b8e83df38de55",
+    "bytes": 12936
+  },
+  "ancestral_operations": [
+    {
+      "path": "crates/core/src/lib.rs",
+      "before_sha256": "acac0de0e89a5d9855e7792e8bd05977c2daf54ddd0d697bef94b190a4900061",
+      "after_sha256": "04dab039a2699c24452650e28851016e2dfed1888e8aa713503f8c67b84cdcd7",
+      "bytes": 7472,
+      "operations": [
+        {
+          "label": "public additive API-only module",
+          "offset": 2768,
+          "offset_utf16": 2768,
+          "before": "mod task_owner;",
+          "after": "pub mod api_enrichment;\nmod task_owner;",
+          "before_sha256": "acac0de0e89a5d9855e7792e8bd05977c2daf54ddd0d697bef94b190a4900061",
+          "after_sha256": "04dab039a2699c24452650e28851016e2dfed1888e8aa713503f8c67b84cdcd7"
+        }
+      ]
+    },
+    {
+      "path": "crates/app/src/main.rs",
+      "before_sha256": "94d7cc731fc44f160881084e017b19ba01f48fe327d23fe6a6cbc77a6a73f806",
+      "after_sha256": "8fcdf940d72a0d5e17e8216a5df6a13d9238be3882eeb858c247db8677acb9ea",
+      "bytes": 35294,
+      "operations": [
+        {
+          "label": "application service module",
+          "offset": 125,
+          "offset_utf16": 125,
+          "before": "mod ngram_app;",
+          "after": "mod ngram_app;\nmod enrichment_app;",
+          "before_sha256": "94d7cc731fc44f160881084e017b19ba01f48fe327d23fe6a6cbc77a6a73f806",
+          "after_sha256": "41523dda876c6fdefac0f5a665b5ea4109ee972562a01d994fbd33822ff66b62"
+        },
+        {
+          "label": "explicit CLI command",
+          "offset": 4891,
+          "offset_utf16": 4891,
+          "before": "    /// Aggregate own1..6-grams across every row of an explicit saved report; no website requests.",
+          "after": "    /// Enrich a supplied URL list through Google PageSpeed only. Google may fetch the submitted sites.\n    EnrichUrls {\n        input: PathBuf,\n        #[arg(long)] options: PathBuf,\n        #[arg(long)] store: PathBuf,\n        #[arg(long)] output: PathBuf,\n        #[arg(long)] csv: Option<PathBuf>,\n    },\n    /// Aggregate own1..6-grams across every row of an explicit saved report; no website requests.",
+          "before_sha256": "41523dda876c6fdefac0f5a665b5ea4109ee972562a01d994fbd33822ff66b62",
+          "after_sha256": "7addad38fe1f2036ca0ce5719f5de4244c1fafff51b806095aa6e5d4407714d0"
+        },
+        {
+          "label": "CLI shared service dispatch",
+          "offset": 20492,
+          "offset_utf16": 20492,
+          "before": "        Command::SavedNgrams {",
+          "after": "        Command::EnrichUrls { input, options, store, output, csv } => {\n            let result = enrichment_app::run_cli(input, options, store, output, csv).await?;\n            println!(\"{}\", serde_json::to_string(&result)?);\n        }\n        Command::SavedNgrams {",
+          "before_sha256": "7addad38fe1f2036ca0ce5719f5de4244c1fafff51b806095aa6e5d4407714d0",
+          "after_sha256": "8fcdf940d72a0d5e17e8216a5df6a13d9238be3882eeb858c247db8677acb9ea"
+        }
+      ]
+    },
+    {
+      "path": "crates/app/src/server.rs",
+      "before_sha256": "15023515fe973bbb7e5ae628acf991eb83283b079fed56ad5389cb451f4ffef3",
+      "after_sha256": "8d6db6f3c33edda0e7318864fa9a9a86ca1747b596789be26efdb974f219fda3",
+      "bytes": 92097,
+      "operations": [
+        {
+          "label": "API module",
+          "offset": 1563,
+          "offset_utf16": 1563,
+          "before": "mod ngram_corpus;",
+          "after": "mod ngram_corpus;\nmod enrichment;",
+          "before_sha256": "15023515fe973bbb7e5ae628acf991eb83283b079fed56ad5389cb451f4ffef3",
+          "after_sha256": "3594ab38a4bbbaaa58ae2c2aed1b7890f2a1e129f86889809ad52f635c856aa5"
+        },
+        {
+          "label": "owned service initialization",
+          "offset": 7386,
+          "offset_utf16": 7386,
+          "before": "    mcp.set_task_owner(lifecycle.blocking.clone());",
+          "after": "    mcp.set_task_owner(lifecycle.blocking.clone());\n    lifecycle.install_enrichments(crate::enrichment_app::Service::open(data_dir.join(\"api-enrichments\"), lifecycle.admission.clone(), address.ip().is_loopback())?)?;",
+          "before_sha256": "3594ab38a4bbbaaa58ae2c2aed1b7890f2a1e129f86889809ad52f635c856aa5",
+          "after_sha256": "b00e957d318097d9a21a99f9d818709ce696a2e0b0603e17679ebd2a8b61188e"
+        },
+        {
+          "label": "static and API routes",
+          "offset": 9804,
+          "offset_utf16": 9804,
+          "before": "        .route(\"/api/lists/inspect\", post(list_inspect))",
+          "after": "        .route(\"/api-enrichment\", get(|| async { ([(header::CONTENT_TYPE,\"text/html; charset=utf-8\")], include_str!(\"../../../web/api-enrichment.html\")) }))\n        .route(\"/api-enrichment.js\", get(|| async { ([(header::CONTENT_TYPE,\"text/javascript; charset=utf-8\")], include_str!(\"../../../web/api-enrichment.js\")) }))\n        .route(\"/api-enrichment.css\", get(|| async { ([(header::CONTENT_TYPE,\"text/css; charset=utf-8\")], include_str!(\"../../../web/api-enrichment.css\")) }))\n        .route(\"/api/enrichments/preview\", post(enrichment::preview).layer(axum::extract::DefaultBodyLimit::max(64*1024*1024)))\n        .route(\"/api/enrichments\", post(enrichment::start).layer(axum::extract::DefaultBodyLimit::max(64*1024*1024)))\n        .route(\"/api/enrichments/{id}\", get(enrichment::status))\n        .route(\"/api/enrichments/{id}/configuration\", get(enrichment::configuration))\n        .route(\"/api/enrichments/{id}/cancel\", post(enrichment::cancel))\n        .route(\"/api/enrichments/{id}/results\", post(enrichment::page).layer(axum::extract::DefaultBodyLimit::max(8192)))\n        .route(\"/api/enrichments/{id}/csv\", post(enrichment::csv).layer(axum::extract::DefaultBodyLimit::max(8192)))\n        .route(\"/api/lists/inspect\", post(list_inspect))",
+          "before_sha256": "b00e957d318097d9a21a99f9d818709ce696a2e0b0603e17679ebd2a8b61188e",
+          "after_sha256": "58ed1e5dd73334838f0e1d332b4e7e06dedb9b17df617966af1c6f017c457ff3"
+        },
+        {
+          "label": "explicit narrow capability",
+          "offset": 33207,
+          "offset_utf16": 33207,
+          "before": "        \"offline_list_import\":",
+          "after": "        \"api_only_enrichment\":{\"path\":\"/api-enrichment\",\"engine\":open_seo_spider_core::api_enrichment::API_ENRICHMENT_ENGINE,\"providers\":[\"pagespeed_lighthouse_v1\"],\"application_website_requests\":0,\"provider_may_fetch_submitted_site\":true,\"explicit_start\":true,\"retained_cancel_and_eof_join\":true,\"immutable_completed_reports\":true,\"automatic_provider_resume\":false,\"full_reference_parity\":false},\n        \"offline_list_import\":",
+          "before_sha256": "58ed1e5dd73334838f0e1d332b4e7e06dedb9b17df617966af1c6f017c457ff3",
+          "after_sha256": "15bddf16393cb6beddcce5b0054cdbe6351d5d551df5abd36e0ee45a88338c19"
+        },
+        {
+          "label": "remaining provider gap is explicit",
+          "offset": 34440,
+          "offset_utf16": 34440,
+          "before": "\"unimplemented\":[\"api_integrations\",",
+          "after": "\"unimplemented\":[\"additional_api_integrations\",",
+          "before_sha256": "15bddf16393cb6beddcce5b0054cdbe6351d5d551df5abd36e0ee45a88338c19",
+          "after_sha256": "8d6db6f3c33edda0e7318864fa9a9a86ca1747b596789be26efdb974f219fda3"
+        }
+      ]
+    },
+    {
+      "path": "crates/app/src/server/lifecycle.rs",
+      "before_sha256": "503a742cec791cc5596bc5b66ccd732e051838e5070e6b012296c7f35285a6d6",
+      "after_sha256": "9c90110a277ff9ba941451468fad49a6c142758f8743c5a17ee65be0889fc528",
+      "bytes": 9977,
+      "operations": [
+        {
+          "label": "owned operation slot",
+          "offset": 545,
+          "offset_utf16": 545,
+          "before": "    pub(super) transports: super::transport::Registry,",
+          "after": "    pub(super) transports: super::transport::Registry,\n    enrichments: Arc<std::sync::OnceLock<crate::enrichment_app::Service>>,",
+          "before_sha256": "503a742cec791cc5596bc5b66ccd732e051838e5070e6b012296c7f35285a6d6",
+          "after_sha256": "7ef714e49759beb1b44abafc2b93a11a4cd6fd68ccbf1c40e194d28de5eff62b"
+        },
+        {
+          "label": "empty test lifecycle retains prior construction",
+          "offset": 1299,
+          "offset_utf16": 1299,
+          "before": "            admission,",
+          "after": "            enrichments: Default::default(),\n            admission,",
+          "before_sha256": "7ef714e49759beb1b44abafc2b93a11a4cd6fd68ccbf1c40e194d28de5eff62b",
+          "after_sha256": "92fe4502ed8d91ff3c3a60e12c2657f9bab6cac4e59a032322b7214388ce0c05"
+        },
+        {
+          "label": "service access",
+          "offset": 1385,
+          "offset_utf16": 1385,
+          "before": "pub(super) enum ShutdownSource {",
+          "after": "impl Lifecycle {\n    pub(super) fn install_enrichments(&self, service: crate::enrichment_app::Service) -> anyhow::Result<()> {\n        self.enrichments.set(service).map_err(|_|anyhow::anyhow!(\"API-only service already installed\"))\n    }\n    pub(super) fn enrichments(&self) -> anyhow::Result<&crate::enrichment_app::Service> {\n        self.enrichments.get().ok_or_else(||anyhow::anyhow!(\"API-only service is not initialized\"))\n    }\n    async fn drain_enrichments(&self) -> anyhow::Result<()> {\n        if let Some(service)=self.enrichments.get() { service.drain().await?; }\n        Ok(())\n    }\n}\npub(super) enum ShutdownSource {",
+          "before_sha256": "92fe4502ed8d91ff3c3a60e12c2657f9bab6cac4e59a032322b7214388ce0c05",
+          "after_sha256": "4b3b677bd223f2a8d256710f9c54d269f89710d04b99a048f26746f0fe48fd08"
+        },
+        {
+          "label": "EOF cancellation before signal resolution",
+          "offset": 6927,
+          "offset_utf16": 6927,
+          "before": "    state.mcp.close_file_tools_admission();",
+          "after": "    state.mcp.close_file_tools_admission();\n    if let Some(service)=state.lifecycle.enrichments.get() { service.close(); }",
+          "before_sha256": "4b3b677bd223f2a8d256710f9c54d269f89710d04b99a048f26746f0fe48fd08",
+          "after_sha256": "d50f0abf7174458b4225b2261e2a8a85f2105490ec6fe3a0569429c81c38f44d"
+        },
+        {
+          "label": "await all ten owned drains",
+          "offset": 7666,
+          "offset_utf16": 7666,
+          "before": "    let (requests, blocking, crawls, csv, reads, files, bodies, responses, transports) = tokio::join!(",
+          "after": "    let (requests, blocking, crawls, csv, reads, files, bodies, responses, transports, enrichments) = tokio::join!(",
+          "before_sha256": "d50f0abf7174458b4225b2261e2a8a85f2105490ec6fe3a0569429c81c38f44d",
+          "after_sha256": "de213fb4e717acd0618f6d0fcb313cde666dc0106efd0d64242516aebaaf6dc4"
+        },
+        {
+          "label": "new real retained drain",
+          "offset": 8203,
+          "offset_utf16": 8203,
+          "before": "        state.lifecycle.transports.shutdown_and_drain(),",
+          "after": "        state.lifecycle.transports.shutdown_and_drain(),\n        state.lifecycle.drain_enrichments(),",
+          "before_sha256": "de213fb4e717acd0618f6d0fcb313cde666dc0106efd0d64242516aebaaf6dc4",
+          "after_sha256": "d595bb4bdcf6a5022f1c9ecc286e210f5ed2d2d989a820f5eadf0c33057a063d"
+        },
+        {
+          "label": "join failure retained",
+          "offset": 8582,
+          "offset_utf16": 8582,
+          "before": "        transports,\n    ] {",
+          "after": "        transports,\n        enrichments,\n    ] {",
+          "before_sha256": "d595bb4bdcf6a5022f1c9ecc286e210f5ed2d2d989a820f5eadf0c33057a063d",
+          "after_sha256": "1b9b56e2c17ba12a74c3586167e519c5629e33ed6faf19a3372c6dce4356e28e"
+        },
+        {
+          "label": "separate new owner receipt; three original owners unchanged",
+          "offset": 9370,
+          "offset_utf16": 9370,
+          "before": "\"owners\":stats,\"source_body_transports\"",
+          "after": "\"owners\":stats,\"api_enrichment_operations\":state.lifecycle.enrichments.get().map(|service|service.stats()),\"source_body_transports\"",
+          "before_sha256": "1b9b56e2c17ba12a74c3586167e519c5629e33ed6faf19a3372c6dce4356e28e",
+          "after_sha256": "9c90110a277ff9ba941451468fad49a6c142758f8743c5a17ee65be0889fc528"
+        }
+      ]
+    },
+    {
+      "path": "crates/app/src/mcp.rs",
+      "before_sha256": "8a09c5c9f654edab59615d9ee49a719bafe21603bf669227be3400e5bb9de549",
+      "after_sha256": "c687c52bc793d23a38ec38b078b3db1f48de0905fa12da7741183d432acd902f",
+      "bytes": 33844,
+      "operations": [
+        {
+          "label": "MCP module",
+          "offset": 390,
+          "offset_utf16": 390,
+          "before": "mod files;",
+          "after": "mod files;\nmod enrichment;",
+          "before_sha256": "8a09c5c9f654edab59615d9ee49a719bafe21603bf669227be3400e5bb9de549",
+          "after_sha256": "5114c944076d2785cbee62852e4117be2df56550766a220e815949a92f73384b"
+        },
+        {
+          "label": "add tool only to actual Bridge inventory; keep free legacy26 tests",
+          "offset": 4596,
+          "offset_utf16": 4596,
+          "before": "        let mut tools = inventory();",
+          "after": "        let mut tools = inventory();\n        tools.push(enrichment::definition());",
+          "before_sha256": "5114c944076d2785cbee62852e4117be2df56550766a220e815949a92f73384b",
+          "after_sha256": "5795c363ecc5c822027bd4d890c064796df8e175f54cfcb450ccbb42c5b57c48"
+        },
+        {
+          "label": "one action-discriminated adapter",
+          "offset": 10726,
+          "offset_utf16": 10726,
+          "before": "    async fn call(&self, name: &str, args: Value) -> anyhow::Result<Value> {",
+          "after": "    async fn call(&self, name: &str, args: Value) -> anyhow::Result<Value> {\n        if name == enrichment::NAME { return enrichment::call(self,args).await; }",
+          "before_sha256": "5795c363ecc5c822027bd4d890c064796df8e175f54cfcb450ccbb42c5b57c48",
+          "after_sha256": "c687c52bc793d23a38ec38b078b3db1f48de0905fa12da7741183d432acd902f"
+        }
+      ]
+    },
+    {
+      "path": "web/index.html",
+      "before_sha256": "a1df57b493a0768f8b3b2ef23936d1ea0ed47dffe46fc2fea37a28364a985301",
+      "after_sha256": "b7071dda3eba03834e8a1e287ccb28bd54f84af4dd9ad9e67faea9046bed46e0",
+      "bytes": 90761,
+      "operations": [
+        {
+          "label": "discoverable standalone workflow",
+          "offset": 11968,
+          "offset_utf16": 11854,
+          "before": "<a class=\"button small\" href=\"/saved-ngrams\">Gespeicherte N-Gramme</a>",
+          "after": "<a class=\"button small\" href=\"/saved-ngrams\">Gespeicherte N-Gramme</a><a class=\"button small\" href=\"/api-enrichment\">URLs per API anreichern</a>",
+          "before_sha256": "a1df57b493a0768f8b3b2ef23936d1ea0ed47dffe46fc2fea37a28364a985301",
+          "after_sha256": "b7071dda3eba03834e8a1e287ccb28bd54f84af4dd9ad9e67faea9046bed46e0"
+        }
+      ]
+    }
+  ],
+  "revision_operations": [
+    {
+      "path": "crates/core/src/api_enrichment.rs",
+      "label": "normalized byte cap before plan/preview/admission",
+      "offset": 3658,
+      "offset_utf16": 3658,
+      "before": "if let Some(value)=&row.normalized_url { let u=url::Url::parse(value)?;",
+      "after": "if let Some(value)=&row.normalized_url { ensure!(value.len()<=8192,\"API URL byte budget exceeded\");let u=url::Url::parse(value)?;",
+      "before_sha256": "189d20c630182a677eed3171ede0f69aa1177e1a345c3cde437eb5b5bc308b8a",
+      "after_sha256": "c3e9f300590123c6e2d7c38ef41bc08944800a3b480343a462558b6b34b0e8e5"
+    },
+    {
+      "path": "crates/core/src/api_enrichment.rs",
+      "label": "typed Lighthouse runtime failure code",
+      "offset": 5507,
+      "offset_utf16": 5507,
+      "before": "ProviderHttp, InvalidJson",
+      "after": "ProviderHttp, LighthouseRuntime, InvalidJson",
+      "before_sha256": "c3e9f300590123c6e2d7c38ef41bc08944800a3b480343a462558b6b34b0e8e5",
+      "after_sha256": "bef6cb418a06e3afc3955199770d6c2f3e826eb6e4675396c6afcceb6f0a372f"
+    },
+    {
+      "path": "crates/core/src/api_enrichment.rs",
+      "label": "explicit runtime/no-metrics states",
+      "offset": 8092,
+      "offset_utf16": 8092,
+      "before": "fn metrics(bytes:&[u8])->Result<Option<PageSpeedMetrics>> {\n    let value:serde_json::Value=serde_json::from_slice(bytes)?;ensure!(value.is_object(),\"Provider result must be an object\");\n    let Some(l)=value.get(\"lighthouseResult\")else{return Ok(None)};ensure!(l.is_object(),\"Invalid Lighthouse object\");\n    let requested=optional_text(l,\"requestedUrl\",8192)?;let final_url=optional_text(l,\"finalUrl\",8192)?;for s in [&requested,&final_url].into_iter().flatten(){let u=url::Url::parse(s)?;ensure!(matches!(u.scheme(),\"http\"|\"https\")&&u.username().is_empty()&&u.password().is_none(),\"Invalid provider URL\");}\n    Ok(Some(PageSpeedMetrics{provider_requested_url:requested,provider_final_url:final_url,provider_fetch_time:optional_text(l,\"fetchTime\",128)?,lighthouse_version:optional_text(l,\"lighthouseVersion\",128)?,performance_score:metric(l,\"/categories/performance/score\",true)?,first_contentful_paint_ms:metric(l,\"/audits/first-contentful-paint/numericValue\",false)?,largest_contentful_paint_ms:metric(l,\"/audits/largest-contentful-paint/numericValue\",false)?,total_blocking_time_ms:metric(l,\"/audits/total-blocking-time/numericValue\",false)?,cumulative_layout_shift:metric(l,\"/audits/cumulative-layout-shift/numericValue\",false)?}))\n}\n",
+      "after": "enum ParsedMetrics { Observed(PageSpeedMetrics), Unavailable, RuntimeFailure }\nfn metrics(bytes:&[u8])->Result<ParsedMetrics> {\n    let value:serde_json::Value=serde_json::from_slice(bytes)?;ensure!(value.is_object(),\"Provider result must be an object\");\n    let Some(l)=value.get(\"lighthouseResult\").filter(|v|!v.is_null())else{return Ok(ParsedMetrics::Unavailable)};ensure!(l.is_object(),\"Invalid Lighthouse object\");\n    // Do not persist raw provider runtimeError messages or key material. HTTP200 is not Lighthouse success.\n    if let Some(error)=l.get(\"runtimeError\").filter(|v|!v.is_null()){ensure!(error.is_object(),\"Invalid Lighthouse runtime error\");return Ok(ParsedMetrics::RuntimeFailure);}\n    let requested=optional_text(l,\"requestedUrl\",8192)?;let final_url=optional_text(l,\"finalUrl\",8192)?;for s in [&requested,&final_url].into_iter().flatten(){let u=url::Url::parse(s)?;ensure!(matches!(u.scheme(),\"http\"|\"https\")&&u.username().is_empty()&&u.password().is_none(),\"Invalid provider URL\");}\n    let observed=PageSpeedMetrics{provider_requested_url:requested,provider_final_url:final_url,provider_fetch_time:optional_text(l,\"fetchTime\",128)?,lighthouse_version:optional_text(l,\"lighthouseVersion\",128)?,performance_score:metric(l,\"/categories/performance/score\",true)?,first_contentful_paint_ms:metric(l,\"/audits/first-contentful-paint/numericValue\",false)?,largest_contentful_paint_ms:metric(l,\"/audits/largest-contentful-paint/numericValue\",false)?,total_blocking_time_ms:metric(l,\"/audits/total-blocking-time/numericValue\",false)?,cumulative_layout_shift:metric(l,\"/audits/cumulative-layout-shift/numericValue\",false)?};\n    if [observed.performance_score,observed.first_contentful_paint_ms,observed.largest_contentful_paint_ms,observed.total_blocking_time_ms,observed.cumulative_layout_shift].iter().all(Option::is_none){Ok(ParsedMetrics::Unavailable)}else{Ok(ParsedMetrics::Observed(observed))}\n}\n",
+      "before_sha256": "bef6cb418a06e3afc3955199770d6c2f3e826eb6e4675396c6afcceb6f0a372f",
+      "after_sha256": "d83e5d6373c0165f8d0b4ae418dab25754669a8afb994935de275f4f2547157f"
+    },
+    {
+      "path": "crates/core/src/api_enrichment.rs",
+      "label": "HTTP200 consumes typed runtime outcome",
+      "offset": 14553,
+      "offset_utf16": 14553,
+      "before": "Ok(Some(m))=>{item.metrics=Some(m);item.outcome=ApiOutcome::Success;item.failure=None;},Ok(None)=>{item.outcome=ApiOutcome::Unavailable;item.failure=None;},Err(_)=>item.failure=Some(ApiFailureCode::InvalidSchema)",
+      "after": "Ok(ParsedMetrics::Observed(m))=>{item.metrics=Some(m);item.outcome=ApiOutcome::Success;item.failure=None;},Ok(ParsedMetrics::Unavailable)=>{item.outcome=ApiOutcome::Unavailable;item.failure=None;},Ok(ParsedMetrics::RuntimeFailure)=>{item.outcome=ApiOutcome::Failed;item.failure=Some(ApiFailureCode::LighthouseRuntime);},Err(_)=>item.failure=Some(ApiFailureCode::InvalidSchema)",
+      "before_sha256": "d83e5d6373c0165f8d0b4ae418dab25754669a8afb994935de275f4f2547157f",
+      "after_sha256": "d82954dc1b4bcff9a9b0735fb4861c11a0406ff5ace5a07019ad25fe34d411e6"
+    },
+    {
+      "path": "crates/app/src/server/enrichment.rs",
+      "label": "immutable reference binding for existing ChannelWriter borrow",
+      "offset": 3791,
+      "offset_utf16": 3791,
+      "before": ".start(move|mut channel,ready|",
+      "after": ".start(move|channel,ready|",
+      "before_sha256": "197c83c5a5a2ccd8b9316f6526fdee204232d6e42ddba728499e8d5b42cbb6f6",
+      "after_sha256": "936464f1efeb3c7d7c0cf11754831080f1448cb43192d3916b8acae5267e9e05"
+    },
+    {
+      "path": "web/api-enrichment.js",
+      "label": "CSV first column uses actual one-based importer contract",
+      "offset": 553,
+      "offset_utf16": 551,
+      "before": "column: {kind: 'index', value: 0}",
+      "after": "column: {kind: 'index', value: 1}",
+      "before_sha256": "475c570e1e7cd03eae73bb5715cfbf5b2fab9877880bc4bf4d2c97c950d6a38d",
+      "after_sha256": "fe8df01e763073a3d31e0f305b625fb92c8706625574b45c5b60c0ddcc49dc04"
+    },
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "label": "two additive Core behavior regressions",
+      "offset": 0,
+      "offset_utf16": 0,
+      "before": "use super::*;\nuse std::{collections::VecDeque,sync::{Mutex,atomic::{AtomicUsize,Ordering}}};\nuse tokio::io::{AsyncReadExt,AsyncWriteExt};\nfn options()->ListImportOptions{ListImportOptions{format:crate::ListImportFormat::Txt,limits:Default::default()}}\nfn plan(input:&str)->ApiEnrichmentPlan{prepare_api_enrichment(input.as_bytes(),&options(),&ApiEnrichmentOptions{retries:0,..Default::default()}).unwrap()}\nfn good()->Vec<u8>{br#\"{\"lighthouseResult\":{\"requestedUrl\":\"https://example.test/a\",\"finalUrl\":\"https://elsewhere.test/final\",\"fetchTime\":\"2026-10-16T00:00:00Z\",\"lighthouseVersion\":\"13.0\",\"categories\":{\"performance\":{\"score\":0.75}},\"audits\":{\"largest-contentful-paint\":{\"numericValue\":1234.5}}}}\"#.to_vec()}\nstruct Queue{values:Mutex<VecDeque<PageSpeedReply>>,seen:Mutex<Vec<String>>}\nimpl Queue{fn new(values:Vec<PageSpeedReply>)->Self{Self{values:Mutex::new(values.into()),seen:Default::default()}}}\nimpl PageSpeedTransport for Queue{fn execute<'a>(&'a self,r:PageSpeedRequest<'a>,_:ApiCancellation)->BoxFuture<'a,std::result::Result<PageSpeedReply,ApiFailureCode>>{Box::pin(async move{self.seen.lock().unwrap().push(r.requested_url.into());self.values.lock().unwrap().pop_front().ok_or(ApiFailureCode::Network)})}}\nfn reply(status:u16,bytes:Vec<u8>)->PageSpeedReply{PageSpeedReply{status,bytes,retry_after_secs:Some(0)}}\n\n#[test]\nfn api_only_import_provenance_deduplicates_execution_not_occurrences_and_refuses_url_credentials(){\n    let input=\"https://example.test/a#one\\nhttps://example.test/a#two\\nnot a URL\\nhttps://example.test/b\\n\";\n    let p=plan(input);assert_eq!(p.unique_urls,[\"https://example.test/a\",\"https://example.test/b\"]);assert_eq!(p.input.rows.len(),4);assert_eq!(p.input.rows[0].raw_value,\"https://example.test/a#one\");assert_eq!(p.input.rows[1].raw_value,\"https://example.test/a#two\");assert!(p.input.rows[2].normalized_url.is_none());assert_eq!(p.input.input_sha256,api_sha(input.as_bytes()));assert_eq!(p.input.website_requests,0);\n    assert!(prepare_api_enrichment(b\"https://user:password@example.test/\",&options(),&Default::default()).is_err());\n    let mut o=ApiEnrichmentOptions::default();o.version=2;assert!(o.validate().is_err());o.version=1;o.retries=3;assert!(o.validate().is_err());\n    assert!(serde_json::from_value::<ApiEnrichmentOptions>(serde_json::json!({\"endpoint\":\"http://127.0.0.1/\"})).is_err());\n}\n#[tokio::test]\nasync fn api_only_typed_provider_metrics_are_separate_from_site_facts_and_absence_is_not_zero(){\n    let q=Queue::new(vec![reply(200,good()),reply(200,b\"{}\".to_vec())]);let report=run_api_enrichment(plan(\"https://example.test/a\\nhttps://example.test/b\"),&q,None,Default::default()).await.unwrap();\n    assert_eq!(report.provider_request_attempts,2);assert_eq!(report.application_website_requests,0);assert_eq!(report.observations[0].api_http_status,Some(200));let m=report.observations[0].metrics.as_ref().unwrap();assert_eq!(m.performance_score,Some(0.75));assert_eq!(m.largest_contentful_paint_ms,Some(1234.5));assert_eq!(m.first_contentful_paint_ms,None);assert_eq!(m.provider_final_url.as_deref(),Some(\"https://elsewhere.test/final\"));assert_eq!(report.observations[1].outcome,ApiOutcome::Unavailable);assert!(report.observations[1].metrics.is_none());validate_api_report(&report).unwrap();\n    let mut out=Vec::new();export_api_enrichment_csv(&report,&mut out).unwrap();let mut csv=csv::Reader::from_reader(out.as_slice());assert_eq!(csv.headers().unwrap().get(7),Some(\"api_http_status\"));assert_eq!(csv.records().count(),2);\n}\n#[tokio::test]\nasync fn api_only_transient_retry_call_budget_and_authentication_are_bounded(){\n    let mut p=plan(\"https://example.test/a\\nhttps://example.test/b\");p.options.retries=2;p.options.max_provider_calls=3;p.fingerprint=api_sha(&bounded_api_json(&(API_ENRICHMENT_ENGINE,&p.input,&p.options,&p.unique_urls),API_REPORT_BYTES).unwrap());\n    let q=Queue::new(vec![reply(429,b\"{}\".to_vec()),reply(200,good()),reply(429,b\"{}\".to_vec())]);let r=run_api_enrichment(p,&q,None,Default::default()).await.unwrap();assert_eq!(r.provider_request_attempts,3);assert_eq!(q.seen.lock().unwrap().len(),3);assert_eq!(r.observations[0].outcome,ApiOutcome::Success);assert_eq!(r.observations[1].failure,Some(ApiFailureCode::CallBudget));assert_eq!(r.observations[1].outcome,ApiOutcome::BudgetExceeded);\n    let q=Queue::new(vec![reply(401,b\"do not persist provider error or credentials\".to_vec())]);let r=run_api_enrichment(plan(\"https://example.test/a\"),&q,None,Default::default()).await.unwrap();assert_eq!(r.provider_request_attempts,1);assert_eq!(r.observations[0].failure,Some(ApiFailureCode::Authentication));assert!(!String::from_utf8(bounded_api_json(&r,API_REPORT_BYTES).unwrap()).unwrap().contains(\"do not persist\"));\n}\n#[tokio::test]\nasync fn api_only_cancel_drops_inflight_transport_and_never_starts_remaining_urls(){\n    struct Held{entered:tokio::sync::Notify,dropped:Arc<AtomicUsize>}\n    impl PageSpeedTransport for Held{fn execute<'a>(&'a self,_:PageSpeedRequest<'a>,_:ApiCancellation)->BoxFuture<'a,std::result::Result<PageSpeedReply,ApiFailureCode>>{Box::pin(async move{struct DropFlag(Arc<AtomicUsize>);impl Drop for DropFlag{fn drop(&mut self){self.0.fetch_add(1,Ordering::SeqCst);}}let _flag=DropFlag(self.dropped.clone());self.entered.notify_one();std::future::pending().await})}}\n    let h=Arc::new(Held{entered:Default::default(),dropped:Default::default()});let cancel=ApiCancellation::default();let c=cancel.clone();let worker=h.clone();let task=tokio::spawn(async move{run_api_enrichment(plan(\"https://example.test/a\\nhttps://example.test/b\"),worker.as_ref(),None,c).await});tokio::time::timeout(Duration::from_secs(2),h.entered.notified()).await.unwrap();cancel.cancel();let r=tokio::time::timeout(Duration::from_secs(2),task).await.unwrap().unwrap().unwrap();assert_eq!(h.dropped.load(Ordering::SeqCst),1);assert_eq!(r.provider_request_attempts,1);assert_eq!(r.outcome,\"cancelled\");assert!(r.observations.iter().all(|o|o.outcome==ApiOutcome::Cancelled));\n    let h=Held{entered:Default::default(),dropped:Default::default()};let mut p=plan(\"https://example.test/a\\nhttps://example.test/b\");p.options.max_job_ms=100;p.fingerprint=api_sha(&bounded_api_json(&(API_ENRICHMENT_ENGINE,&p.input,&p.options,&p.unique_urls),API_REPORT_BYTES).unwrap());let r=tokio::time::timeout(Duration::from_secs(2),run_api_enrichment(p,&h,None,Default::default())).await.unwrap().unwrap();assert_eq!(h.dropped.load(Ordering::SeqCst),1);assert_eq!(r.provider_request_attempts,1);assert_eq!(r.outcome,\"partial\");assert!(r.observations.iter().all(|o|o.failure==Some(ApiFailureCode::JobDeadline)));\n}\n#[tokio::test]\nasync fn api_only_hash_plan_response_caps_and_invalid_metrics_refuse_without_silent_coercion(){\n    let mut p=plan(\"https://example.test/a\");p.fingerprint.push('0');let q=Queue::new(vec![]);assert!(run_api_enrichment(p,&q,None,Default::default()).await.is_err());assert!(q.seen.lock().unwrap().is_empty());\n    let q=Queue::new(vec![]);assert!(run_api_enrichment(plan(\"https://example.test/a\"),&q,Some(\"test-not-an-environment-key\"),Default::default()).await.is_err());assert!(q.seen.lock().unwrap().is_empty());\n    let mut p=plan(\"https://example.test/a\");p.options.max_response_bytes=2;p.fingerprint=api_sha(&bounded_api_json(&(API_ENRICHMENT_ENGINE,&p.input,&p.options,&p.unique_urls),API_REPORT_BYTES).unwrap());let q=Queue::new(vec![reply(200,good())]);let r=run_api_enrichment(p,&q,None,Default::default()).await.unwrap();assert_eq!(r.observations[0].failure,Some(ApiFailureCode::ResponseBudget));\n    let q=Queue::new(vec![reply(200,br#\"{\"lighthouseResult\":{\"categories\":{\"performance\":{\"score\":2}}}}\"#.to_vec())]);let r=run_api_enrichment(plan(\"https://example.test/a\"),&q,None,Default::default()).await.unwrap();assert_eq!(r.observations[0].failure,Some(ApiFailureCode::InvalidSchema));assert!(r.observations[0].metrics.is_none());assert!(bounded_api_json(&r,1).is_err());\n}\n#[test]\nfn api_only_production_request_has_fixed_https_origin_and_secret_is_not_serialized(){\n    let http=PageSpeedHttp::new().unwrap();let r=PageSpeedRequest{requested_url:\"http://127.0.0.1:12345/path?x=1&y=2\",strategy:PageSpeedStrategy::Desktop,timeout_ms:1000,max_response_bytes:1024,key:Some(\"test-only-secret\")};let req=http.request(&r).build().unwrap();assert_eq!(req.url().scheme(),\"https\");assert_eq!(req.url().host_str(),Some(\"www.googleapis.com\"));assert_eq!(req.url().path(),\"/pagespeedonline/v5/runPagespeed\");assert_eq!(req.url().query_pairs().find(|(k,_)|k==\"url\").unwrap().1,r.requested_url);assert_eq!(req.url().query_pairs().find(|(k,_)|k==\"key\").unwrap().1,\"test-only-secret\");let p=plan(\"https://example.test/a\");assert!(!String::from_utf8(bounded_api_json(&p,API_REPORT_BYTES).unwrap()).unwrap().contains(\"test-only-secret\"));assert_eq!(safe_csv(\"  =1+1\"),\"'  =1+1\");assert_eq!(safe_csv(\"https://example.test/\"),\"https://example.test/\");\n}\n#[tokio::test]\nasync fn api_only_real_local_mock_api_response_does_not_fetch_the_supplied_website_or_follow_redirect(){\n    // Both loopback endpoints are tests only. No product endpoint override is introduced.\n    struct HttpMock{endpoint:String,client:reqwest::Client}\n    impl PageSpeedTransport for HttpMock{fn execute<'a>(&'a self,r:PageSpeedRequest<'a>,_:ApiCancellation)->BoxFuture<'a,std::result::Result<PageSpeedReply,ApiFailureCode>>{Box::pin(async move{let response=self.client.get(&self.endpoint).query(&[(\"url\",r.requested_url)]).send().await.map_err(|_|ApiFailureCode::Network)?;let status=response.status().as_u16();let bytes=response.bytes().await.map_err(|_|ApiFailureCode::Network)?.to_vec();Ok(reply(status,bytes))})}}\n    let trap=tokio::net::TcpListener::bind(\"127.0.0.1:0\").await.unwrap();let website=format!(\"http://{}/actual-site\",trap.local_addr().unwrap());let (stop_tx,mut stop_rx)=tokio::sync::oneshot::channel();let hits=Arc::new(AtomicUsize::new(0));let seen=hits.clone();let trap_task=tokio::spawn(async move{loop{tokio::select!{_= &mut stop_rx=>break,r=trap.accept()=>{let (_stream,_)=r.unwrap();seen.fetch_add(1,Ordering::SeqCst);}}}});\n    for status in [200,302]{let listener=tokio::net::TcpListener::bind(\"127.0.0.1:0\").await.unwrap();let endpoint=format!(\"http://{}/mock-psi\",listener.local_addr().unwrap());let target=website.clone();let peer=tokio::spawn(async move{let (mut stream,_)=listener.accept().await.unwrap();let mut request=Vec::new();loop{let mut b=[0;1024];let n=stream.read(&mut b).await.unwrap();assert!(n>0);request.extend_from_slice(&b[..n]);assert!(request.len()<16384);if request.windows(4).any(|x|x==b\"\\r\\n\\r\\n\"){break;}}let text=String::from_utf8(request).unwrap();assert!(text.starts_with(\"GET /mock-psi?url=\"));let body=if status==200{good()}else{Vec::new()};let head=format!(\"HTTP/1.1 {status} Test\\r\\nContent-Length: {}\\r\\nLocation: {target}\\r\\nConnection: close\\r\\n\\r\\n\",body.len());stream.write_all(head.as_bytes()).await.unwrap();stream.write_all(&body).await.unwrap();stream.shutdown().await.unwrap();});\n        let mock=HttpMock{endpoint,client:reqwest::Client::builder().no_proxy().redirect(reqwest::redirect::Policy::none()).build().unwrap()};let r=tokio::time::timeout(Duration::from_secs(3),run_api_enrichment(plan(&website),&mock,None,Default::default())).await.unwrap().unwrap();peer.await.unwrap();assert_eq!(r.provider_request_attempts,1);assert_eq!(r.observations[0].api_http_status,Some(status));assert_eq!(r.application_website_requests,0);if status==302{assert_eq!(r.observations[0].failure,Some(ApiFailureCode::ProviderHttp));}}\n    stop_tx.send(()).unwrap();trap_task.await.unwrap();assert_eq!(hits.load(Ordering::SeqCst),0);\n}\n",
+      "after": "use super::*;\nuse std::{collections::VecDeque,sync::{Mutex,atomic::{AtomicUsize,Ordering}}};\nuse tokio::io::{AsyncReadExt,AsyncWriteExt};\nfn options()->ListImportOptions{ListImportOptions{format:crate::ListImportFormat::Txt,limits:Default::default()}}\nfn plan(input:&str)->ApiEnrichmentPlan{prepare_api_enrichment(input.as_bytes(),&options(),&ApiEnrichmentOptions{retries:0,..Default::default()}).unwrap()}\nfn good()->Vec<u8>{br#\"{\"lighthouseResult\":{\"requestedUrl\":\"https://example.test/a\",\"finalUrl\":\"https://elsewhere.test/final\",\"fetchTime\":\"2026-10-16T00:00:00Z\",\"lighthouseVersion\":\"13.0\",\"categories\":{\"performance\":{\"score\":0.75}},\"audits\":{\"largest-contentful-paint\":{\"numericValue\":1234.5}}}}\"#.to_vec()}\nstruct Queue{values:Mutex<VecDeque<PageSpeedReply>>,seen:Mutex<Vec<String>>}\nimpl Queue{fn new(values:Vec<PageSpeedReply>)->Self{Self{values:Mutex::new(values.into()),seen:Default::default()}}}\nimpl PageSpeedTransport for Queue{fn execute<'a>(&'a self,r:PageSpeedRequest<'a>,_:ApiCancellation)->BoxFuture<'a,std::result::Result<PageSpeedReply,ApiFailureCode>>{Box::pin(async move{self.seen.lock().unwrap().push(r.requested_url.into());self.values.lock().unwrap().pop_front().ok_or(ApiFailureCode::Network)})}}\nfn reply(status:u16,bytes:Vec<u8>)->PageSpeedReply{PageSpeedReply{status,bytes,retry_after_secs:Some(0)}}\n\n#[test]\nfn api_only_import_provenance_deduplicates_execution_not_occurrences_and_refuses_url_credentials(){\n    let input=\"https://example.test/a#one\\nhttps://example.test/a#two\\nnot a URL\\nhttps://example.test/b\\n\";\n    let p=plan(input);assert_eq!(p.unique_urls,[\"https://example.test/a\",\"https://example.test/b\"]);assert_eq!(p.input.rows.len(),4);assert_eq!(p.input.rows[0].raw_value,\"https://example.test/a#one\");assert_eq!(p.input.rows[1].raw_value,\"https://example.test/a#two\");assert!(p.input.rows[2].normalized_url.is_none());assert_eq!(p.input.input_sha256,api_sha(input.as_bytes()));assert_eq!(p.input.website_requests,0);\n    assert!(prepare_api_enrichment(b\"https://user:password@example.test/\",&options(),&Default::default()).is_err());\n    let mut o=ApiEnrichmentOptions::default();o.version=2;assert!(o.validate().is_err());o.version=1;o.retries=3;assert!(o.validate().is_err());\n    assert!(serde_json::from_value::<ApiEnrichmentOptions>(serde_json::json!({\"endpoint\":\"http://127.0.0.1/\"})).is_err());\n}\n#[tokio::test]\nasync fn api_only_typed_provider_metrics_are_separate_from_site_facts_and_absence_is_not_zero(){\n    let q=Queue::new(vec![reply(200,good()),reply(200,b\"{}\".to_vec())]);let report=run_api_enrichment(plan(\"https://example.test/a\\nhttps://example.test/b\"),&q,None,Default::default()).await.unwrap();\n    assert_eq!(report.provider_request_attempts,2);assert_eq!(report.application_website_requests,0);assert_eq!(report.observations[0].api_http_status,Some(200));let m=report.observations[0].metrics.as_ref().unwrap();assert_eq!(m.performance_score,Some(0.75));assert_eq!(m.largest_contentful_paint_ms,Some(1234.5));assert_eq!(m.first_contentful_paint_ms,None);assert_eq!(m.provider_final_url.as_deref(),Some(\"https://elsewhere.test/final\"));assert_eq!(report.observations[1].outcome,ApiOutcome::Unavailable);assert!(report.observations[1].metrics.is_none());validate_api_report(&report).unwrap();\n    let mut out=Vec::new();export_api_enrichment_csv(&report,&mut out).unwrap();let mut csv=csv::Reader::from_reader(out.as_slice());assert_eq!(csv.headers().unwrap().get(7),Some(\"api_http_status\"));assert_eq!(csv.records().count(),2);\n}\n#[tokio::test]\nasync fn api_only_transient_retry_call_budget_and_authentication_are_bounded(){\n    let mut p=plan(\"https://example.test/a\\nhttps://example.test/b\");p.options.retries=2;p.options.max_provider_calls=3;p.fingerprint=api_sha(&bounded_api_json(&(API_ENRICHMENT_ENGINE,&p.input,&p.options,&p.unique_urls),API_REPORT_BYTES).unwrap());\n    let q=Queue::new(vec![reply(429,b\"{}\".to_vec()),reply(200,good()),reply(429,b\"{}\".to_vec())]);let r=run_api_enrichment(p,&q,None,Default::default()).await.unwrap();assert_eq!(r.provider_request_attempts,3);assert_eq!(q.seen.lock().unwrap().len(),3);assert_eq!(r.observations[0].outcome,ApiOutcome::Success);assert_eq!(r.observations[1].failure,Some(ApiFailureCode::CallBudget));assert_eq!(r.observations[1].outcome,ApiOutcome::BudgetExceeded);\n    let q=Queue::new(vec![reply(401,b\"do not persist provider error or credentials\".to_vec())]);let r=run_api_enrichment(plan(\"https://example.test/a\"),&q,None,Default::default()).await.unwrap();assert_eq!(r.provider_request_attempts,1);assert_eq!(r.observations[0].failure,Some(ApiFailureCode::Authentication));assert!(!String::from_utf8(bounded_api_json(&r,API_REPORT_BYTES).unwrap()).unwrap().contains(\"do not persist\"));\n}\n#[tokio::test]\nasync fn api_only_cancel_drops_inflight_transport_and_never_starts_remaining_urls(){\n    struct Held{entered:tokio::sync::Notify,dropped:Arc<AtomicUsize>}\n    impl PageSpeedTransport for Held{fn execute<'a>(&'a self,_:PageSpeedRequest<'a>,_:ApiCancellation)->BoxFuture<'a,std::result::Result<PageSpeedReply,ApiFailureCode>>{Box::pin(async move{struct DropFlag(Arc<AtomicUsize>);impl Drop for DropFlag{fn drop(&mut self){self.0.fetch_add(1,Ordering::SeqCst);}}let _flag=DropFlag(self.dropped.clone());self.entered.notify_one();std::future::pending().await})}}\n    let h=Arc::new(Held{entered:Default::default(),dropped:Default::default()});let cancel=ApiCancellation::default();let c=cancel.clone();let worker=h.clone();let task=tokio::spawn(async move{run_api_enrichment(plan(\"https://example.test/a\\nhttps://example.test/b\"),worker.as_ref(),None,c).await});tokio::time::timeout(Duration::from_secs(2),h.entered.notified()).await.unwrap();cancel.cancel();let r=tokio::time::timeout(Duration::from_secs(2),task).await.unwrap().unwrap().unwrap();assert_eq!(h.dropped.load(Ordering::SeqCst),1);assert_eq!(r.provider_request_attempts,1);assert_eq!(r.outcome,\"cancelled\");assert!(r.observations.iter().all(|o|o.outcome==ApiOutcome::Cancelled));\n    let h=Held{entered:Default::default(),dropped:Default::default()};let mut p=plan(\"https://example.test/a\\nhttps://example.test/b\");p.options.max_job_ms=100;p.fingerprint=api_sha(&bounded_api_json(&(API_ENRICHMENT_ENGINE,&p.input,&p.options,&p.unique_urls),API_REPORT_BYTES).unwrap());let r=tokio::time::timeout(Duration::from_secs(2),run_api_enrichment(p,&h,None,Default::default())).await.unwrap().unwrap();assert_eq!(h.dropped.load(Ordering::SeqCst),1);assert_eq!(r.provider_request_attempts,1);assert_eq!(r.outcome,\"partial\");assert!(r.observations.iter().all(|o|o.failure==Some(ApiFailureCode::JobDeadline)));\n}\n#[tokio::test]\nasync fn api_only_hash_plan_response_caps_and_invalid_metrics_refuse_without_silent_coercion(){\n    let mut p=plan(\"https://example.test/a\");p.fingerprint.push('0');let q=Queue::new(vec![]);assert!(run_api_enrichment(p,&q,None,Default::default()).await.is_err());assert!(q.seen.lock().unwrap().is_empty());\n    let q=Queue::new(vec![]);assert!(run_api_enrichment(plan(\"https://example.test/a\"),&q,Some(\"test-not-an-environment-key\"),Default::default()).await.is_err());assert!(q.seen.lock().unwrap().is_empty());\n    let mut p=plan(\"https://example.test/a\");p.options.max_response_bytes=2;p.fingerprint=api_sha(&bounded_api_json(&(API_ENRICHMENT_ENGINE,&p.input,&p.options,&p.unique_urls),API_REPORT_BYTES).unwrap());let q=Queue::new(vec![reply(200,good())]);let r=run_api_enrichment(p,&q,None,Default::default()).await.unwrap();assert_eq!(r.observations[0].failure,Some(ApiFailureCode::ResponseBudget));\n    let q=Queue::new(vec![reply(200,br#\"{\"lighthouseResult\":{\"categories\":{\"performance\":{\"score\":2}}}}\"#.to_vec())]);let r=run_api_enrichment(plan(\"https://example.test/a\"),&q,None,Default::default()).await.unwrap();assert_eq!(r.observations[0].failure,Some(ApiFailureCode::InvalidSchema));assert!(r.observations[0].metrics.is_none());assert!(bounded_api_json(&r,1).is_err());\n}\n#[test]\nfn api_only_production_request_has_fixed_https_origin_and_secret_is_not_serialized(){\n    let http=PageSpeedHttp::new().unwrap();let r=PageSpeedRequest{requested_url:\"http://127.0.0.1:12345/path?x=1&y=2\",strategy:PageSpeedStrategy::Desktop,timeout_ms:1000,max_response_bytes:1024,key:Some(\"test-only-secret\")};let req=http.request(&r).build().unwrap();assert_eq!(req.url().scheme(),\"https\");assert_eq!(req.url().host_str(),Some(\"www.googleapis.com\"));assert_eq!(req.url().path(),\"/pagespeedonline/v5/runPagespeed\");assert_eq!(req.url().query_pairs().find(|(k,_)|k==\"url\").unwrap().1,r.requested_url);assert_eq!(req.url().query_pairs().find(|(k,_)|k==\"key\").unwrap().1,\"test-only-secret\");let p=plan(\"https://example.test/a\");assert!(!String::from_utf8(bounded_api_json(&p,API_REPORT_BYTES).unwrap()).unwrap().contains(\"test-only-secret\"));assert_eq!(safe_csv(\"  =1+1\"),\"'  =1+1\");assert_eq!(safe_csv(\"https://example.test/\"),\"https://example.test/\");\n}\n#[tokio::test]\nasync fn api_only_real_local_mock_api_response_does_not_fetch_the_supplied_website_or_follow_redirect(){\n    // Both loopback endpoints are tests only. No product endpoint override is introduced.\n    struct HttpMock{endpoint:String,client:reqwest::Client}\n    impl PageSpeedTransport for HttpMock{fn execute<'a>(&'a self,r:PageSpeedRequest<'a>,_:ApiCancellation)->BoxFuture<'a,std::result::Result<PageSpeedReply,ApiFailureCode>>{Box::pin(async move{let response=self.client.get(&self.endpoint).query(&[(\"url\",r.requested_url)]).send().await.map_err(|_|ApiFailureCode::Network)?;let status=response.status().as_u16();let bytes=response.bytes().await.map_err(|_|ApiFailureCode::Network)?.to_vec();Ok(reply(status,bytes))})}}\n    let trap=tokio::net::TcpListener::bind(\"127.0.0.1:0\").await.unwrap();let website=format!(\"http://{}/actual-site\",trap.local_addr().unwrap());let (stop_tx,mut stop_rx)=tokio::sync::oneshot::channel();let hits=Arc::new(AtomicUsize::new(0));let seen=hits.clone();let trap_task=tokio::spawn(async move{loop{tokio::select!{_= &mut stop_rx=>break,r=trap.accept()=>{let (_stream,_)=r.unwrap();seen.fetch_add(1,Ordering::SeqCst);}}}});\n    for status in [200,302]{let listener=tokio::net::TcpListener::bind(\"127.0.0.1:0\").await.unwrap();let endpoint=format!(\"http://{}/mock-psi\",listener.local_addr().unwrap());let target=website.clone();let peer=tokio::spawn(async move{let (mut stream,_)=listener.accept().await.unwrap();let mut request=Vec::new();loop{let mut b=[0;1024];let n=stream.read(&mut b).await.unwrap();assert!(n>0);request.extend_from_slice(&b[..n]);assert!(request.len()<16384);if request.windows(4).any(|x|x==b\"\\r\\n\\r\\n\"){break;}}let text=String::from_utf8(request).unwrap();assert!(text.starts_with(\"GET /mock-psi?url=\"));let body=if status==200{good()}else{Vec::new()};let head=format!(\"HTTP/1.1 {status} Test\\r\\nContent-Length: {}\\r\\nLocation: {target}\\r\\nConnection: close\\r\\n\\r\\n\",body.len());stream.write_all(head.as_bytes()).await.unwrap();stream.write_all(&body).await.unwrap();stream.shutdown().await.unwrap();});\n        let mock=HttpMock{endpoint,client:reqwest::Client::builder().no_proxy().redirect(reqwest::redirect::Policy::none()).build().unwrap()};let r=tokio::time::timeout(Duration::from_secs(3),run_api_enrichment(plan(&website),&mock,None,Default::default())).await.unwrap().unwrap();peer.await.unwrap();assert_eq!(r.provider_request_attempts,1);assert_eq!(r.observations[0].api_http_status,Some(status));assert_eq!(r.application_website_requests,0);if status==302{assert_eq!(r.observations[0].failure,Some(ApiFailureCode::ProviderHttp));}}\n    stop_tx.send(()).unwrap();trap_task.await.unwrap();assert_eq!(hits.load(Ordering::SeqCst),0);\n}\n\n#[tokio::test]\nasync fn api_only_http200_lighthouse_runtime_errors_and_missing_measurements_are_not_success(){\n    for (body,outcome,failure) in [\n        (br#\"{\"lighthouseResult\":{\"runtimeError\":{\"code\":\"NO_FCP\",\"message\":\"test-only-secret-must-not-survive\"},\"categories\":{\"performance\":{\"score\":0.9}}}}\"#.to_vec(),ApiOutcome::Failed,Some(ApiFailureCode::LighthouseRuntime)),\n        (br#\"{\"lighthouseResult\":{\"requestedUrl\":\"https://example.test/a\",\"fetchTime\":\"2026-10-16T00:00:00Z\"}}\"#.to_vec(),ApiOutcome::Unavailable,None),\n        (br#\"{\"lighthouseResult\":{}}\"#.to_vec(),ApiOutcome::Unavailable,None),\n    ]{let q=Queue::new(vec![reply(200,body)]);let r=run_api_enrichment(plan(\"https://example.test/a\"),&q,None,Default::default()).await.unwrap();assert_eq!(r.observations[0].api_http_status,Some(200));assert_eq!(r.observations[0].outcome,outcome);assert_eq!(r.observations[0].failure,failure);assert!(r.observations[0].metrics.is_none());if outcome==ApiOutcome::Failed{assert_eq!(r.outcome,\"partial\");}let raw=String::from_utf8(bounded_api_json(&r,API_REPORT_BYTES).unwrap()).unwrap();assert!(!raw.contains(\"test-only-secret-must-not-survive\"));assert!(!raw.contains(\"NO_FCP\"));}\n}\n#[tokio::test]\nasync fn api_only_unicode_normalized_url_exact8192_and_plus1_refuse_before_attempt_and_revalidate_legacy_plan(){\n    let prefix=\"https://example.test/\";let raw=format!(\"{prefix}{}{}\",\"é\".repeat(1000),\"a\".repeat(8192-prefix.len()-6000));assert!(raw.len()<8192);let exact=plan(&raw);assert_eq!(exact.unique_urls[0].len(),8192);let over=format!(\"{raw}a\");assert!(prepare_api_enrichment(over.as_bytes(),&options(),&Default::default()).is_err());\n    // A plan produced before the new prepare guard still faces the original run-time authority guard.\n    let mut legacy=exact;legacy.input=import_url_list(over.as_bytes(),&options()).unwrap();legacy.unique_urls=vec![legacy.input.rows[0].normalized_url.clone().unwrap()];assert_eq!(legacy.unique_urls[0].len(),8193);legacy.fingerprint=api_sha(&bounded_api_json(&(API_ENRICHMENT_ENGINE,&legacy.input,&legacy.options,&legacy.unique_urls),API_REPORT_BYTES).unwrap());let q=Queue::new(vec![]);assert!(run_api_enrichment(legacy,&q,None,Default::default()).await.is_err());assert!(q.seen.lock().unwrap().is_empty());\n}\n",
+      "before_sha256": "624a7cfb7fbbfd7ea5d9c6faab39711e06e9915588c52a52528320f4cbc0b027",
+      "after_sha256": "808341f4c113a1dd28290c9aaafa47683cd073fc1f2311b2ee38723fa4464388"
+    },
+    {
+      "path": "crates/app/src/enrichment_app_tests.rs",
+      "label": "two additive App importer/admission regressions",
+      "offset": 0,
+      "offset_utf16": 0,
+      "before": "use super::*;\nuse futures::future::BoxFuture;\nuse std::sync::atomic::{AtomicUsize,Ordering};\nuse std::time::Duration;\n#[derive(Clone)]\npub(crate) struct Mock{pub(crate) calls:Arc<AtomicUsize>}\nimpl Default for Mock{fn default()->Self{Self{calls:Default::default()}}}\nimpl PageSpeedTransport for Mock{fn execute<'a>(&'a self,r:api::PageSpeedRequest<'a>,_:ApiCancellation)->BoxFuture<'a,std::result::Result<api::PageSpeedReply,api::ApiFailureCode>>{Box::pin(async move{self.calls.fetch_add(1,Ordering::SeqCst);Ok(api::PageSpeedReply{status:200,bytes:serde_json::to_vec(&serde_json::json!({\"lighthouseResult\":{\"requestedUrl\":r.requested_url,\"finalUrl\":r.requested_url,\"categories\":{\"performance\":{\"score\":0.5}}}})).unwrap(),retry_after_secs:None})})}}\npub(crate) fn request(input:&str)->StartRequest{StartRequest{acknowledge_remote_fetch:true,input_utf8:input.into(),import:ListImportOptions{format:open_seo_spider_core::ListImportFormat::Txt,limits:Default::default()},options:ApiEnrichmentOptions{retries:0,..Default::default()}}}\npub(crate) async fn settled(service:&Service,id:Uuid){tokio::time::timeout(Duration::from_secs(3),async{while locked(&service.active).contains_key(&id){tokio::task::yield_now().await;}}).await.unwrap();service.owner.reap_completed().await;}\npub(crate) async fn fixture(root:PathBuf,input:&str)->(Service,Uuid,Mock){let s=Service::open(root,TaskAdmission::default(),false).unwrap();let r=request(input);let mock=Mock::default();let started=s.start_mock(prepare(&r).unwrap(),input.as_bytes().to_vec(),mock.clone(),None).await.unwrap();let id=serde_json::from_value(started[\"id\"].clone()).unwrap();settled(&s,id).await;(s,id,mock)}\n\n#[tokio::test]\nasync fn api_enrichment_snapshot_pages_preserve_all_occurrences_filters_and_cold_no_provider_resume(){\n    let dir=tempfile::tempdir().unwrap();let input=(0..205).map(|i|format!(\"https://example.test/{i}\\n\")).collect::<String>()+\"https://example.test/0\\ninvalid\";let root=dir.path().join(\"jobs\");let (service,id,mock)=fixture(root.clone(),&input).await;assert_eq!(mock.calls.load(Ordering::SeqCst),205);let first:serde_json::Value=serde_json::from_slice(&service.page(id,&Default::default()).unwrap()).unwrap();assert_eq!(first[\"total\"],207);assert_eq!(first[\"rows\"].as_array().unwrap().len(),100);let snapshot=first[\"snapshot\"].as_str().unwrap().to_owned();let after=first[\"after\"].as_str().unwrap().to_owned();let second=ReadRequest{expected_snapshot:Some(snapshot.clone()),after:Some(after.clone()),..Default::default()};let page:serde_json::Value=serde_json::from_slice(&service.page(id,&second).unwrap()).unwrap();assert_eq!(page[\"rows\"].as_array().unwrap().len(),100);assert_ne!(first[\"rows\"][0][\"input\"][\"raw_value\"],page[\"rows\"][0][\"input\"][\"raw_value\"]);\n    assert!(service.page(id,&ReadRequest{after:Some(after.clone()),..Default::default()}).is_err());assert!(service.page(id,&ReadRequest{expected_snapshot:Some(\"stale\".into()),after:Some(after.clone()),..Default::default()}).is_err());assert!(service.page(id,&ReadRequest{outcome:Some(ApiOutcome::Failed),..second.clone()}).is_err());assert!(service.page(Uuid::new_v4(),&second).is_err());\n    let csv=service.csv(id,&ReadRequest{expected_snapshot:Some(snapshot.clone()),..Default::default()}).unwrap();assert_eq!(String::from_utf8(csv.clone()).unwrap().lines().count(),208);service.drain().await.unwrap();drop(service);let reopened=Service::open(root,TaskAdmission::default(),false).unwrap();assert_eq!(reopened.status(id).unwrap()[\"status\"],\"complete\");assert_eq!(reopened.csv(id,&ReadRequest{expected_snapshot:Some(snapshot),..Default::default()}).unwrap(),csv);assert_eq!(mock.calls.load(Ordering::SeqCst),205);assert_eq!(reopened.stats()[\"admitted\"],0);reopened.drain().await.unwrap();\n}\n#[tokio::test]\nasync fn api_enrichment_close_cancels_and_actually_joins_owned_inflight_work_before_return(){\n    struct Held{entered:Arc<tokio::sync::Notify>,dropped:Arc<AtomicUsize>}\n    impl PageSpeedTransport for Held{fn execute<'a>(&'a self,_:api::PageSpeedRequest<'a>,_:ApiCancellation)->BoxFuture<'a,std::result::Result<api::PageSpeedReply,api::ApiFailureCode>>{Box::pin(async move{struct D(Arc<AtomicUsize>);impl Drop for D{fn drop(&mut self){self.0.fetch_add(1,Ordering::SeqCst);}}let _d=D(self.dropped.clone());self.entered.notify_one();std::future::pending().await})}}\n    let dir=tempfile::tempdir().unwrap();let s=Service::open(dir.path().join(\"jobs\"),TaskAdmission::default(),false).unwrap();assert!(!dir.path().join(\"jobs\").exists());let entered=Arc::new(tokio::sync::Notify::new());let dropped=Arc::new(AtomicUsize::new(0));let r=request(\"https://example.test/a\\nhttps://example.test/b\");let result=s.start_mock(prepare(&r).unwrap(),r.input_utf8.into_bytes(),Held{entered:entered.clone(),dropped:dropped.clone()},None).await.unwrap();let id=serde_json::from_value(result[\"id\"].clone()).unwrap();tokio::time::timeout(Duration::from_secs(2),entered.notified()).await.unwrap();s.close();tokio::time::timeout(Duration::from_secs(3),s.drain()).await.unwrap().unwrap();assert_eq!(dropped.load(Ordering::SeqCst),1);assert_eq!(s.stats()[\"admitted\"],1);assert_eq!(s.stats()[\"started\"],1);assert_eq!(s.stats()[\"joined\"],1);assert_eq!(s.stats()[\"retained\"],0);assert_eq!(s.stats()[\"active_jobs\"],0);assert_eq!(s.status(id).unwrap()[\"status\"],\"cancelled\");assert_eq!(s.report(id).unwrap().0.provider_request_attempts,1);let r=request(\"https://example.test/new\");assert!(s.start_mock(prepare(&r).unwrap(),r.input_utf8.into_bytes(),Mock::default(),None).await.is_err());\n}\n#[tokio::test]\nasync fn api_enrichment_original_input_config_and_completed_report_hashes_refuse_tamper(){\n    let dir=tempfile::tempdir().unwrap();let input=\"https://example.test/a#part\\nhttps://example.test/a#other\";let (s,id,mock)=fixture(dir.path().join(\"jobs\"),input).await;let saved:StartRequest=serde_json::from_slice(&s.configuration(id).unwrap()).unwrap();assert_eq!(saved.input_utf8,input);assert_eq!(saved.options,request(input).options);assert!(!saved.acknowledge_remote_fetch);let (report,snapshot)=s.report(id).unwrap();assert_eq!(report.plan.input.rows.len(),2);assert_eq!(mock.calls.load(Ordering::SeqCst),1);\n    fs::write(s.directory(id).join(\"input.bin\"),b\"https://changed.test/\").unwrap();assert!(s.configuration(id).is_err());fs::write(s.directory(id).join(\"report.json\"),b\"{}\").unwrap();assert!(s.report(id).is_err());assert!(s.csv(id,&ReadRequest{expected_snapshot:Some(snapshot),..Default::default()}).is_err());s.drain().await.unwrap();\n}\n#[tokio::test]\nasync fn api_enrichment_cli_protects_existing_inputs_outputs_and_returns_complete_json_csv_from_same_service(){\n    let dir=tempfile::tempdir().unwrap();let input=dir.path().join(\"input.txt\");let options=dir.path().join(\"options.json\");let output=dir.path().join(\"out.json\");let csv=dir.path().join(\"out.csv\");let text=\"https://example.test/a\\nhttps://example.test/a\\ninvalid\";fs::write(&input,text).unwrap();let mut r=request(\"\");r.input_utf8.clear();fs::write(&options,serde_json::to_vec(&r).unwrap()).unwrap();let mock=Mock::default();let calls=mock.calls.clone();let result=run_cli_inner(input.clone(),options.clone(),dir.path().join(\"jobs\"),output.clone(),Some(csv.clone()),mock,|_|Ok(None)).await.unwrap();assert_eq!(result[\"provider_request_attempts\"],1);assert_eq!(result[\"application_website_requests\"],0);assert_eq!(calls.load(Ordering::SeqCst),1);let report:ApiEnrichmentReport=serde_json::from_slice(&fs::read(&output).unwrap()).unwrap();assert_eq!(report.plan.input.rows.len(),3);assert_eq!(String::from_utf8(fs::read(&csv).unwrap()).unwrap().lines().count(),4);assert_eq!(fs::read(&input).unwrap(),text.as_bytes());\n    let old=fs::read(&output).unwrap();let mock=Mock::default();let calls=mock.calls.clone();assert!(run_cli_inner(input.clone(),options.clone(),dir.path().join(\"not-created\"),output.clone(),None,mock,|_|Ok(None)).await.is_err());assert_eq!(calls.load(Ordering::SeqCst),0);assert_eq!(fs::read(&output).unwrap(),old);assert!(!dir.path().join(\"not-created\").exists());let mock=Mock::default();assert!(run_cli_inner(input.clone(),options,dir.path().join(\"also-not-created\"),input.clone(),None,mock,|_|Ok(None)).await.is_err());assert_eq!(fs::read(input).unwrap(),text.as_bytes());\n}\n#[tokio::test]\nasync fn api_enrichment_owner_panic_is_reported_and_retained_join_is_not_lost(){\n    struct Panics;impl PageSpeedTransport for Panics{fn execute<'a>(&'a self,_:api::PageSpeedRequest<'a>,_:ApiCancellation)->BoxFuture<'a,std::result::Result<api::PageSpeedReply,api::ApiFailureCode>>{Box::pin(async move{panic!(\"test-only provider panic\")})}}\n    let dir=tempfile::tempdir().unwrap();let s=Service::open(dir.path().join(\"jobs\"),TaskAdmission::default(),false).unwrap();let r=request(\"https://example.test/a\");let result=s.start_mock(prepare(&r).unwrap(),r.input_utf8.into_bytes(),Panics,None).await.unwrap();let id=serde_json::from_value(result[\"id\"].clone()).unwrap();tokio::time::timeout(Duration::from_secs(3),async{while s.owner.snapshot().first_failure.is_none(){tokio::task::yield_now().await;}}).await.unwrap();assert!(s.status(id).is_err());assert!(s.drain().await.is_err());assert_eq!(s.stats()[\"retained\"],0);assert_eq!(s.stats()[\"joined\"],1);let cold=Service::open(dir.path().join(\"jobs\"),TaskAdmission::default(),false).unwrap();assert_eq!(cold.status(id).unwrap()[\"status\"],\"interrupted\");assert_eq!(cold.stats()[\"admitted\"],0);cold.drain().await.unwrap();\n}\n",
+      "after": "use super::*;\nuse futures::future::BoxFuture;\nuse std::sync::atomic::{AtomicUsize,Ordering};\nuse std::time::Duration;\n#[derive(Clone)]\npub(crate) struct Mock{pub(crate) calls:Arc<AtomicUsize>}\nimpl Default for Mock{fn default()->Self{Self{calls:Default::default()}}}\nimpl PageSpeedTransport for Mock{fn execute<'a>(&'a self,r:api::PageSpeedRequest<'a>,_:ApiCancellation)->BoxFuture<'a,std::result::Result<api::PageSpeedReply,api::ApiFailureCode>>{Box::pin(async move{self.calls.fetch_add(1,Ordering::SeqCst);Ok(api::PageSpeedReply{status:200,bytes:serde_json::to_vec(&serde_json::json!({\"lighthouseResult\":{\"requestedUrl\":r.requested_url,\"finalUrl\":r.requested_url,\"categories\":{\"performance\":{\"score\":0.5}}}})).unwrap(),retry_after_secs:None})})}}\npub(crate) fn request(input:&str)->StartRequest{StartRequest{acknowledge_remote_fetch:true,input_utf8:input.into(),import:ListImportOptions{format:open_seo_spider_core::ListImportFormat::Txt,limits:Default::default()},options:ApiEnrichmentOptions{retries:0,..Default::default()}}}\npub(crate) async fn settled(service:&Service,id:Uuid){tokio::time::timeout(Duration::from_secs(3),async{while locked(&service.active).contains_key(&id){tokio::task::yield_now().await;}}).await.unwrap();service.owner.reap_completed().await;}\npub(crate) async fn fixture(root:PathBuf,input:&str)->(Service,Uuid,Mock){let s=Service::open(root,TaskAdmission::default(),false).unwrap();let r=request(input);let mock=Mock::default();let started=s.start_mock(prepare(&r).unwrap(),input.as_bytes().to_vec(),mock.clone(),None).await.unwrap();let id=serde_json::from_value(started[\"id\"].clone()).unwrap();settled(&s,id).await;(s,id,mock)}\n\n#[tokio::test]\nasync fn api_enrichment_snapshot_pages_preserve_all_occurrences_filters_and_cold_no_provider_resume(){\n    let dir=tempfile::tempdir().unwrap();let input=(0..205).map(|i|format!(\"https://example.test/{i}\\n\")).collect::<String>()+\"https://example.test/0\\ninvalid\";let root=dir.path().join(\"jobs\");let (service,id,mock)=fixture(root.clone(),&input).await;assert_eq!(mock.calls.load(Ordering::SeqCst),205);let first:serde_json::Value=serde_json::from_slice(&service.page(id,&Default::default()).unwrap()).unwrap();assert_eq!(first[\"total\"],207);assert_eq!(first[\"rows\"].as_array().unwrap().len(),100);let snapshot=first[\"snapshot\"].as_str().unwrap().to_owned();let after=first[\"after\"].as_str().unwrap().to_owned();let second=ReadRequest{expected_snapshot:Some(snapshot.clone()),after:Some(after.clone()),..Default::default()};let page:serde_json::Value=serde_json::from_slice(&service.page(id,&second).unwrap()).unwrap();assert_eq!(page[\"rows\"].as_array().unwrap().len(),100);assert_ne!(first[\"rows\"][0][\"input\"][\"raw_value\"],page[\"rows\"][0][\"input\"][\"raw_value\"]);\n    assert!(service.page(id,&ReadRequest{after:Some(after.clone()),..Default::default()}).is_err());assert!(service.page(id,&ReadRequest{expected_snapshot:Some(\"stale\".into()),after:Some(after.clone()),..Default::default()}).is_err());assert!(service.page(id,&ReadRequest{outcome:Some(ApiOutcome::Failed),..second.clone()}).is_err());assert!(service.page(Uuid::new_v4(),&second).is_err());\n    let csv=service.csv(id,&ReadRequest{expected_snapshot:Some(snapshot.clone()),..Default::default()}).unwrap();assert_eq!(String::from_utf8(csv.clone()).unwrap().lines().count(),208);service.drain().await.unwrap();drop(service);let reopened=Service::open(root,TaskAdmission::default(),false).unwrap();assert_eq!(reopened.status(id).unwrap()[\"status\"],\"complete\");assert_eq!(reopened.csv(id,&ReadRequest{expected_snapshot:Some(snapshot),..Default::default()}).unwrap(),csv);assert_eq!(mock.calls.load(Ordering::SeqCst),205);assert_eq!(reopened.stats()[\"admitted\"],0);reopened.drain().await.unwrap();\n}\n#[tokio::test]\nasync fn api_enrichment_close_cancels_and_actually_joins_owned_inflight_work_before_return(){\n    struct Held{entered:Arc<tokio::sync::Notify>,dropped:Arc<AtomicUsize>}\n    impl PageSpeedTransport for Held{fn execute<'a>(&'a self,_:api::PageSpeedRequest<'a>,_:ApiCancellation)->BoxFuture<'a,std::result::Result<api::PageSpeedReply,api::ApiFailureCode>>{Box::pin(async move{struct D(Arc<AtomicUsize>);impl Drop for D{fn drop(&mut self){self.0.fetch_add(1,Ordering::SeqCst);}}let _d=D(self.dropped.clone());self.entered.notify_one();std::future::pending().await})}}\n    let dir=tempfile::tempdir().unwrap();let s=Service::open(dir.path().join(\"jobs\"),TaskAdmission::default(),false).unwrap();assert!(!dir.path().join(\"jobs\").exists());let entered=Arc::new(tokio::sync::Notify::new());let dropped=Arc::new(AtomicUsize::new(0));let r=request(\"https://example.test/a\\nhttps://example.test/b\");let result=s.start_mock(prepare(&r).unwrap(),r.input_utf8.into_bytes(),Held{entered:entered.clone(),dropped:dropped.clone()},None).await.unwrap();let id=serde_json::from_value(result[\"id\"].clone()).unwrap();tokio::time::timeout(Duration::from_secs(2),entered.notified()).await.unwrap();s.close();tokio::time::timeout(Duration::from_secs(3),s.drain()).await.unwrap().unwrap();assert_eq!(dropped.load(Ordering::SeqCst),1);assert_eq!(s.stats()[\"admitted\"],1);assert_eq!(s.stats()[\"started\"],1);assert_eq!(s.stats()[\"joined\"],1);assert_eq!(s.stats()[\"retained\"],0);assert_eq!(s.stats()[\"active_jobs\"],0);assert_eq!(s.status(id).unwrap()[\"status\"],\"cancelled\");assert_eq!(s.report(id).unwrap().0.provider_request_attempts,1);let r=request(\"https://example.test/new\");assert!(s.start_mock(prepare(&r).unwrap(),r.input_utf8.into_bytes(),Mock::default(),None).await.is_err());\n}\n#[tokio::test]\nasync fn api_enrichment_original_input_config_and_completed_report_hashes_refuse_tamper(){\n    let dir=tempfile::tempdir().unwrap();let input=\"https://example.test/a#part\\nhttps://example.test/a#other\";let (s,id,mock)=fixture(dir.path().join(\"jobs\"),input).await;let saved:StartRequest=serde_json::from_slice(&s.configuration(id).unwrap()).unwrap();assert_eq!(saved.input_utf8,input);assert_eq!(saved.options,request(input).options);assert!(!saved.acknowledge_remote_fetch);let (report,snapshot)=s.report(id).unwrap();assert_eq!(report.plan.input.rows.len(),2);assert_eq!(mock.calls.load(Ordering::SeqCst),1);\n    fs::write(s.directory(id).join(\"input.bin\"),b\"https://changed.test/\").unwrap();assert!(s.configuration(id).is_err());fs::write(s.directory(id).join(\"report.json\"),b\"{}\").unwrap();assert!(s.report(id).is_err());assert!(s.csv(id,&ReadRequest{expected_snapshot:Some(snapshot),..Default::default()}).is_err());s.drain().await.unwrap();\n}\n#[tokio::test]\nasync fn api_enrichment_cli_protects_existing_inputs_outputs_and_returns_complete_json_csv_from_same_service(){\n    let dir=tempfile::tempdir().unwrap();let input=dir.path().join(\"input.txt\");let options=dir.path().join(\"options.json\");let output=dir.path().join(\"out.json\");let csv=dir.path().join(\"out.csv\");let text=\"https://example.test/a\\nhttps://example.test/a\\ninvalid\";fs::write(&input,text).unwrap();let mut r=request(\"\");r.input_utf8.clear();fs::write(&options,serde_json::to_vec(&r).unwrap()).unwrap();let mock=Mock::default();let calls=mock.calls.clone();let result=run_cli_inner(input.clone(),options.clone(),dir.path().join(\"jobs\"),output.clone(),Some(csv.clone()),mock,|_|Ok(None)).await.unwrap();assert_eq!(result[\"provider_request_attempts\"],1);assert_eq!(result[\"application_website_requests\"],0);assert_eq!(calls.load(Ordering::SeqCst),1);let report:ApiEnrichmentReport=serde_json::from_slice(&fs::read(&output).unwrap()).unwrap();assert_eq!(report.plan.input.rows.len(),3);assert_eq!(String::from_utf8(fs::read(&csv).unwrap()).unwrap().lines().count(),4);assert_eq!(fs::read(&input).unwrap(),text.as_bytes());\n    let old=fs::read(&output).unwrap();let mock=Mock::default();let calls=mock.calls.clone();assert!(run_cli_inner(input.clone(),options.clone(),dir.path().join(\"not-created\"),output.clone(),None,mock,|_|Ok(None)).await.is_err());assert_eq!(calls.load(Ordering::SeqCst),0);assert_eq!(fs::read(&output).unwrap(),old);assert!(!dir.path().join(\"not-created\").exists());let mock=Mock::default();assert!(run_cli_inner(input.clone(),options,dir.path().join(\"also-not-created\"),input.clone(),None,mock,|_|Ok(None)).await.is_err());assert_eq!(fs::read(input).unwrap(),text.as_bytes());\n}\n#[tokio::test]\nasync fn api_enrichment_owner_panic_is_reported_and_retained_join_is_not_lost(){\n    struct Panics;impl PageSpeedTransport for Panics{fn execute<'a>(&'a self,_:api::PageSpeedRequest<'a>,_:ApiCancellation)->BoxFuture<'a,std::result::Result<api::PageSpeedReply,api::ApiFailureCode>>{Box::pin(async move{panic!(\"test-only provider panic\")})}}\n    let dir=tempfile::tempdir().unwrap();let s=Service::open(dir.path().join(\"jobs\"),TaskAdmission::default(),false).unwrap();let r=request(\"https://example.test/a\");let result=s.start_mock(prepare(&r).unwrap(),r.input_utf8.into_bytes(),Panics,None).await.unwrap();let id=serde_json::from_value(result[\"id\"].clone()).unwrap();tokio::time::timeout(Duration::from_secs(3),async{while s.owner.snapshot().first_failure.is_none(){tokio::task::yield_now().await;}}).await.unwrap();assert!(s.status(id).is_err());assert!(s.drain().await.is_err());assert_eq!(s.stats()[\"retained\"],0);assert_eq!(s.stats()[\"joined\"],1);let cold=Service::open(dir.path().join(\"jobs\"),TaskAdmission::default(),false).unwrap();assert_eq!(cold.status(id).unwrap()[\"status\"],\"interrupted\");assert_eq!(cold.stats()[\"admitted\"],0);cold.drain().await.unwrap();\n}\n\n#[test]\nfn api_enrichment_ui_first_csv_column_one_matches_real_import_consumer(){\n    let value=serde_json::json!({\"acknowledge_remote_fetch\":false,\"input_utf8\":\"https://example.test/a,ignored\\nhttps://example.test/b,ignored\",\"import\":{\"format\":{\"kind\":\"csv\",\"delimiter\":\"comma\",\"column\":{\"kind\":\"index\",\"value\":1},\"start_row\":1}},\"options\":{\"version\":1,\"strategy\":\"mobile\",\"credential_profile\":\"anonymous\"}});let r:StartRequest=serde_json::from_value(value.clone()).unwrap();let p=prepare(&r).unwrap();assert_eq!(p.unique_urls,[\"https://example.test/a\",\"https://example.test/b\"]);assert_eq!(p.input.rows.len(),2);assert_eq!(p.input.selected_column,Some(1));let mut bad=value;bad[\"import\"][\"format\"][\"column\"][\"value\"]=serde_json::json!(0);let bad:StartRequest=serde_json::from_value(bad).unwrap();assert!(prepare(&bad).is_err());\n}\n#[tokio::test]\nasync fn api_enrichment_normalized_overcap_plan_is_refused_before_store_owner_or_provider_admission(){\n    let dir=tempfile::tempdir().unwrap();let root=dir.path().join(\"must-not-be-created\");let s=Service::open(root.clone(),TaskAdmission::default(),false).unwrap();let prefix=\"https://example.test/\";let raw=format!(\"{prefix}{}{}a\",\"é\".repeat(1000),\"a\".repeat(8192-prefix.len()-6000));assert!(raw.len()<8192);let r=request(&raw);assert!(prepare(&r).is_err());assert!(!root.exists());assert_eq!(s.stats()[\"admitted\"],0);\n    let mut legacy=prepare(&request(\"https://example.test/valid\")).unwrap();legacy.input=open_seo_spider_core::import_url_list(raw.as_bytes(),&r.import).unwrap();legacy.unique_urls=vec![legacy.input.rows[0].normalized_url.clone().unwrap()];assert_eq!(legacy.unique_urls[0].len(),8193);legacy.fingerprint=api::api_sha(&api::bounded_api_json(&(api::API_ENRICHMENT_ENGINE,&legacy.input,&legacy.options,&legacy.unique_urls),api::API_REPORT_BYTES).unwrap());let mock=Mock::default();assert!(s.start_mock(legacy,raw.into_bytes(),mock.clone(),None).await.is_err());assert_eq!(mock.calls.load(Ordering::SeqCst),0);assert_eq!(s.stats()[\"admitted\"],0);assert_eq!(s.stats()[\"active_jobs\"],0);assert!(!root.exists());s.drain().await.unwrap();\n}\n",
+      "before_sha256": "85424e25d7566d7a6192f01853c1fd848bb5ef4fb8768e2068aed89020ad2f6b",
+      "after_sha256": "d253338f9cb52ee18f9d85d3b89b6d388b914d4c4d0ff4b3ad65ca1e5d951aca"
+    },
+    {
+      "path": "api-enrichment-ui.test.cjs",
+      "label": "additive ordinary CSV frontend regression",
+      "offset": 0,
+      "offset_utf16": 0,
+      "before": "// Separate frontend source tests. Not Cargo names, not browser/native evidence.\nconst test=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs');const path=require('node:path');const vm=require('node:vm');\nconst source=fs.readFileSync(path.join(__dirname,'source/web/api-enrichment.js'),'utf8');\nfunction load(){const context={TextEncoder,structuredClone};vm.createContext(context);vm.runInContext(source,context);return context.ApiOnlyUIHelpers;}\ntest('api-only input creates typed fixed provider options without an endpoint or key',()=>{const h=load();const r=h.buildRequest('https://Example.test:443/a\\nhttps://example.test/a','txt','mobile','anonymous');assert.equal(r.input_utf8,'https://Example.test:443/a\\nhttps://example.test/a');assert.equal(r.options.version,1);assert.equal(r.options.strategy,'mobile');assert.equal(r.acknowledge_remote_fetch,false);assert.equal('key' in r.options,false);assert.equal('endpoint' in r.options,false);assert.throws(()=>h.buildRequest('x','html','mobile','anonymous'));});\ntest('api-only byte limits count Unicode bytes and reject unsupported credential profiles',()=>{const h=load();assert.equal(h.byteLength('é😀'),6);assert.throws(()=>h.buildRequest('é'.repeat(4*1024*1024+1),'txt','mobile','anonymous'));assert.throws(()=>h.buildRequest('https://example.test/','txt','mobile','api_key_text'));});\ntest('api-only reopen preserves explicit import selection and budget configuration without reacknowledgement',()=>{const h=load();const saved={import:{format:{kind:'csv',delimiter:'semicolon',column:{kind:'header',name:'URL',row:1},start_row:2}},options:{version:1,retries:0,max_provider_calls:12,max_response_bytes:1024,max_job_ms:1000,timeout_ms:500,strategy:'desktop',credential_profile:'page_speed_environment'}};const r=h.savedRequest(saved,'URL\\nhttps://example.test/','csv','mobile','anonymous');assert.equal(r.import.format.delimiter,'semicolon');assert.equal(r.import.format.column.name,'URL');assert.equal(r.options.max_provider_calls,12);assert.equal(r.options.retries,0);assert.equal(r.options.strategy,'mobile');assert.equal(r.acknowledge_remote_fetch,false);assert.notEqual(r.import,saved.import);});\ntest('api-only continuation carries exact snapshot cursor and no implicit new provider execution',()=>{const r=load().readRequest('sha','cursor');assert.equal(r.expected_snapshot,'sha');assert.equal(r.after,'cursor');assert.equal(r.limit,100);assert.equal(r.outcome,null);assert.equal('input_utf8' in r,false);assert.deepEqual(Object.keys(r).sort(),[\"after\",\"expected_snapshot\",\"limit\",\"outcome\"]);const first=load().readRequest(null,null);assert.equal(first.expected_snapshot,null);assert.equal(first.after,null);});\n",
+      "after": "// Separate frontend source tests. Not Cargo names, not browser/native evidence.\nconst test=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs');const path=require('node:path');const vm=require('node:vm');\nconst source=fs.readFileSync(path.join(__dirname,'source/web/api-enrichment.js'),'utf8');\nfunction load(){const context={TextEncoder,structuredClone};vm.createContext(context);vm.runInContext(source,context);return context.ApiOnlyUIHelpers;}\ntest('api-only input creates typed fixed provider options without an endpoint or key',()=>{const h=load();const r=h.buildRequest('https://Example.test:443/a\\nhttps://example.test/a','txt','mobile','anonymous');assert.equal(r.input_utf8,'https://Example.test:443/a\\nhttps://example.test/a');assert.equal(r.options.version,1);assert.equal(r.options.strategy,'mobile');assert.equal(r.acknowledge_remote_fetch,false);assert.equal('key' in r.options,false);assert.equal('endpoint' in r.options,false);assert.throws(()=>h.buildRequest('x','html','mobile','anonymous'));});\ntest('api-only byte limits count Unicode bytes and reject unsupported credential profiles',()=>{const h=load();assert.equal(h.byteLength('é😀'),6);assert.throws(()=>h.buildRequest('é'.repeat(4*1024*1024+1),'txt','mobile','anonymous'));assert.throws(()=>h.buildRequest('https://example.test/','txt','mobile','api_key_text'));});\ntest('api-only reopen preserves explicit import selection and budget configuration without reacknowledgement',()=>{const h=load();const saved={import:{format:{kind:'csv',delimiter:'semicolon',column:{kind:'header',name:'URL',row:1},start_row:2}},options:{version:1,retries:0,max_provider_calls:12,max_response_bytes:1024,max_job_ms:1000,timeout_ms:500,strategy:'desktop',credential_profile:'page_speed_environment'}};const r=h.savedRequest(saved,'URL\\nhttps://example.test/','csv','mobile','anonymous');assert.equal(r.import.format.delimiter,'semicolon');assert.equal(r.import.format.column.name,'URL');assert.equal(r.options.max_provider_calls,12);assert.equal(r.options.retries,0);assert.equal(r.options.strategy,'mobile');assert.equal(r.acknowledge_remote_fetch,false);assert.notEqual(r.import,saved.import);});\ntest('api-only continuation carries exact snapshot cursor and no implicit new provider execution',()=>{const r=load().readRequest('sha','cursor');assert.equal(r.expected_snapshot,'sha');assert.equal(r.after,'cursor');assert.equal(r.limit,100);assert.equal(r.outcome,null);assert.equal('input_utf8' in r,false);assert.deepEqual(Object.keys(r).sort(),[\"after\",\"expected_snapshot\",\"limit\",\"outcome\"]);const first=load().readRequest(null,null);assert.equal(first.expected_snapshot,null);assert.equal(first.after,null);});\n\ntest('api-only ordinary CSV uses the real importer first-column-one contract',()=>{const r=load().buildRequest('https://example.test/a,x\\nhttps://example.test/b,y','csv','mobile','anonymous');assert.equal(r.import.format.kind,'csv');assert.equal(r.import.format.column.kind,'index');assert.equal(r.import.format.column.value,1);assert.equal(r.import.format.start_row,1);assert.equal(r.import.format.delimiter,'comma');});\n",
+      "before_sha256": "12d4461ae5626507d1e1da9b051628ca5cf666a15f34139e4ba64a0ec6b294b1",
+      "after_sha256": "dd893a552561de69e22dcef6fe409115115c12575541d359e6b5aef16bdac449"
+    }
+  ],
+  "repair_operations": [
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "label": "Explicit invalid-version initializer; later mutations still require mut",
+      "offset": 2086,
+      "before": "let mut o=ApiEnrichmentOptions::default();o.version=2;",
+      "after": "let mut o=ApiEnrichmentOptions{version:2,..Default::default()};",
+      "before_sha256": "808341f4c113a1dd28290c9aaafa47683cd073fc1f2311b2ee38723fa4464388",
+      "before_bytes": 13830,
+      "after_sha256": "ec544bdefc7627124be260f6827668abf0bc17587eeda2bfa9da17adc201efe8",
+      "after_bytes": 13839
+    },
+    {
+      "path": "crates/app/src/enrichment_app_tests.rs",
+      "label": "Equivalent derived Default for test-only Arc atomic call counter",
+      "offset": 118,
+      "before": "#[derive(Clone)]\npub(crate) struct Mock{pub(crate) calls:Arc<AtomicUsize>}\nimpl Default for Mock{fn default()->Self{Self{calls:Default::default()}}}\n",
+      "after": "#[derive(Clone,Default)]\npub(crate) struct Mock{pub(crate) calls:Arc<AtomicUsize>}\n",
+      "before_sha256": "d253338f9cb52ee18f9d85d3b89b6d388b914d4c4d0ff4b3ad65ca1e5d951aca",
+      "before_bytes": 11482,
+      "after_sha256": "ae51ecefed6ef5bac7c57a17cb70b54bd17081ff99c4d750bbd627e082fb18cc",
+      "after_bytes": 11416
+    }
+  ],
+  "new_paths": [
+    {
+      "path": "crates/app/src/enrichment_app.rs",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "93ac56c303cb18053edb6966b7e65c51561471df28c3bb7aa86ef03cdd8a468e",
+      "bytes": 17986
+    },
+    {
+      "path": "crates/app/src/enrichment_app_tests.rs",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "85424e25d7566d7a6192f01853c1fd848bb5ef4fb8768e2068aed89020ad2f6b",
+      "bytes": 9378
+    },
+    {
+      "path": "crates/app/src/mcp/enrichment.rs",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "f68591e71d68d86eaadb6732142cfc735a946eda6e6aa9ef1ea52b0278d18e4e",
+      "bytes": 3959
+    },
+    {
+      "path": "crates/app/src/mcp/enrichment_tests.rs",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "0df391d7a311d113cb645dc185ca508fda5771708ae905e89bed9e8edcd5fa0a",
+      "bytes": 2162
+    },
+    {
+      "path": "crates/app/src/server/enrichment.rs",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "197c83c5a5a2ccd8b9316f6526fdee204232d6e42ddba728499e8d5b42cbb6f6",
+      "bytes": 4583
+    },
+    {
+      "path": "crates/app/src/server/enrichment_tests.rs",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "1621b390a566d2eb091ce1ff15fe8b2fec1bde1c5cc0bf2acb5a1e03b4745702",
+      "bytes": 5165
+    },
+    {
+      "path": "crates/core/src/api_enrichment.rs",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "189d20c630182a677eed3171ede0f69aa1177e1a345c3cde437eb5b5bc308b8a",
+      "bytes": 18416
+    },
+    {
+      "path": "crates/core/src/api_enrichment/pagespeed.rs",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "5c10636a12a01643dbaf9e6691ae9f7d249226e85298290badc8995de1d0dec0",
+      "bytes": 2059
+    },
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "624a7cfb7fbbfd7ea5d9c6faab39711e06e9915588c52a52528320f4cbc0b027",
+      "bytes": 11566
+    },
+    {
+      "path": "web/api-enrichment.css",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "36c79dcd1a8b1df363591f2c94ead1eb10cf8b8dfc087b22a432b3dd8e63ea1a",
+      "bytes": 1291
+    },
+    {
+      "path": "web/api-enrichment.html",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "de9066081d48485cd46e2d064e7e1717358cd14c1c64ebbd86c06782ebab9a93",
+      "bytes": 2496
+    },
+    {
+      "path": "web/api-enrichment.js",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "475c570e1e7cd03eae73bb5715cfbf5b2fab9877880bc4bf4d2c97c950d6a38d",
+      "bytes": 8952
+    }
+  ],
+  "verified_ancestral_operations": 21,
+  "verified_revision_operations": 9,
+  "verified_repair_operations": 2,
+  "whole_modified_file_inverses": [
+    {
+      "path": "crates/core/src/lib.rs",
+      "ancestral_operations": 1,
+      "ancestral_forward_and_whole_inverse_exact": true
+    },
+    {
+      "path": "crates/app/src/main.rs",
+      "ancestral_operations": 3,
+      "ancestral_forward_and_whole_inverse_exact": true
+    },
+    {
+      "path": "crates/app/src/server.rs",
+      "ancestral_operations": 5,
+      "ancestral_forward_and_whole_inverse_exact": true
+    },
+    {
+      "path": "crates/app/src/server/lifecycle.rs",
+      "ancestral_operations": 8,
+      "ancestral_forward_and_whole_inverse_exact": true
+    },
+    {
+      "path": "crates/app/src/mcp.rs",
+      "ancestral_operations": 3,
+      "ancestral_forward_and_whole_inverse_exact": true
+    },
+    {
+      "path": "web/index.html",
+      "ancestral_operations": 1,
+      "ancestral_forward_and_whole_inverse_exact": true
+    }
+  ],
+  "complete_rollback_parent_inputs": 388,
+  "verification_rollback_exact": true,
+  "unowned_unchanged_inputs": 382,
+  "qualification": "Three distinct exact stages: D3 to V1 integration21, V2 correction9 including separate Node verification, V3 test-only lint repair2. Complete reverse recovery checks every388 original parent byte; old preview V1 formatted400 and preformat400 remain unchanged."
+}

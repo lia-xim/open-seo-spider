@@ -1,0 +1,44 @@
+(function () {
+  'use strict';
+  const byteLength = text => new TextEncoder().encode(text).length;
+  function buildRequest(input, format, strategy, profile) {
+    if (!['txt', 'csv', 'xml'].includes(format) || !['mobile', 'desktop'].includes(strategy) || !['anonymous', 'page_speed_environment'].includes(profile)) throw Error('Bitte gültige Optionen wählen.');
+    if (!input.trim() || byteLength(input) > 8 * 1024 * 1024) throw Error('Bitte eine URL-Liste bis 8 MiB eingeben.');
+    const kind = format === 'csv' ? {kind: 'csv', delimiter: 'comma', column: {kind: 'index', value: 1}, start_row: 1} : {kind: format};
+    return {acknowledge_remote_fetch: false, input_utf8: input, import: {format: kind}, options: {version: 1, strategy, credential_profile: profile}};
+  }
+  function readRequest(snapshot, after) { return {expected_snapshot: snapshot || null, after: after || null, limit: 100, outcome: null}; }
+  function savedRequest(saved, input, format, strategy, profile) { const request = buildRequest(input, format, strategy, profile); if (saved) { request.options = {...saved.options, ...request.options}; if (saved.import.format.kind === format) request.import = structuredClone(saved.import); } return request; }
+  const helpers = {buildRequest, readRequest, byteLength, savedRequest};
+  globalThis.ApiOnlyUIHelpers = helpers;
+  if (typeof document === 'undefined') return;
+  const $ = id => document.getElementById(id);
+  let busy = false, revision = 0, configRevision = 0, saved = null, preview = null, selected = null, snapshot = null, after = null, poll = null;
+  const configure = ['input', 'format', 'strategy', 'profile'];
+  function error(value) { $('error').textContent = value ? String(value.message || value) : ''; }
+  function sync() { for (const id of configure) $(id).disabled = busy; $('preview').disabled = busy; $('start').disabled = busy || !preview || !$('ack').checked; $('next').disabled = busy || !after; $('export').disabled = busy || !snapshot; $('reopen').disabled = busy; $('cancel').disabled = !selected; }
+  function invalidate() { configRevision++; preview = null; $('summary').textContent = 'Eingabe geändert. Bitte neue Vorschau erstellen.'; sync(); }
+  configure.forEach(id => $(id).addEventListener('input', invalidate)); $('ack').addEventListener('change', sync);
+  async function request(route, body, binary = false) {
+    const response = await fetch(route, {method: body === undefined ? 'GET' : 'POST', headers: body === undefined ? {} : {'Content-Type': 'application/json'}, body: body === undefined ? undefined : JSON.stringify(body), cache: 'no-store'});
+    if (!response.ok) { const result = await response.json().catch(() => null); throw Error(result?.error?.message || `Anfrage fehlgeschlagen (${response.status}).`); }
+    if (!binary) return response.json();
+    const reader = response.body.getReader(), chunks = []; let size = 0;
+    try { for (;;) { const {value, done} = await reader.read(); if (done) break; size += value.byteLength; if (size > 64 * 1024 * 1024) throw Error('CSV überschreitet 64 MiB.'); chunks.push(value); } } catch (e) { await reader.cancel(e).catch(() => {}); throw e; } finally { reader.releaseLock(); }
+    const data = new Uint8Array(size); let offset = 0; for (const chunk of chunks) { data.set(chunk, offset); offset += chunk.byteLength; }
+    const hash = [...new Uint8Array(await crypto.subtle.digest('SHA-256', data))].map(x => x.toString(16).padStart(2, '0')).join('');
+    if (response.headers.get('x-content-sha256') !== hash || Number(response.headers.get('content-length')) !== size) throw Error('CSV-Länge oder Prüfsumme stimmt nicht.');
+    return data;
+  }
+  function row(input, observation) { const tr = document.createElement('tr'); for (const value of [input.source_row, input.raw_value, observation?.outcome || 'input_rejected', observation?.api_http_status ?? '—', observation?.metrics?.performance_score ?? '—', observation?.metrics?.largest_contentful_paint_ms ?? '—']) { const td = document.createElement('td'); td.textContent = String(value); tr.append(td); } return tr; }
+  async function page(next) { if (busy || !selected) return; busy = true; const rev = revision, id = selected; sync(); error(); try { const result = await request(`/api/enrichments/${id}/results`, readRequest(next ? snapshot : null, next ? after : null)); if (rev !== revision || id !== selected) return; snapshot = result.snapshot; after = result.after; if (!next) $('rows').replaceChildren(); for (const r of result.rows) $('rows').append(row(r.input, r.provider_observation)); $('status').textContent = `${result.status}: ${result.total} Eingabezeilen, ${result.provider_request_attempts} Provider-Aufrufversuche, 0 Website-Abrufe durch unsere App.`; } catch (e) { error(e); } finally { busy = false; sync(); } }
+  async function status(id, rev) { if (selected !== id || rev !== revision) return; try { const result = await request(`/api/enrichments/${id}`); if (selected !== id || rev !== revision) return; $('status').textContent = result.status; if (['running', 'cancelling'].includes(result.status)) poll = setTimeout(() => status(id, rev), 500); else if (['complete', 'partial', 'cancelled'].includes(result.status)) { if (busy) poll = setTimeout(() => status(id, rev), 100); else await page(false); } else error(Error('Für diesen Auftrag liegt kein vollständig gespeicherter Bericht vor.')); } catch (e) { error(e); } }
+  $('configuration').addEventListener('submit', async event => { event.preventDefault(); if (busy) return; busy = true; sync(); error(); const rev = configRevision; try { const input = savedRequest(saved, $('input').value, $('format').value, $('strategy').value, $('profile').value), result = await request('/api/enrichments/preview', input); if (rev !== configRevision) return; preview = {input, fingerprint: result.fingerprint}; $('summary').textContent = `${result.supplied_rows} Eingabezeilen, ${result.unique_provider_urls} verschiedene Provider-URLs. Unsere App crawlt diese URLs nicht; Google kann sie abrufen. Der Profilzugang wird beim Start geprüft.`; } catch (e) { error(e); } finally { busy = false; sync(); } });
+  $('start').addEventListener('click', async () => { if (busy || !preview || !$('ack').checked) return; busy = true; sync(); error(); try { const result = await request('/api/enrichments', {...preview.input, acknowledge_remote_fetch: true}); revision++; clearTimeout(poll); selected = result.id; $('job').value = selected; snapshot = after = null; $('rows').replaceChildren(); try { localStorage.setItem('api-enrichment-job-v1', selected); } catch (_) {} busy = false; sync(); await status(selected, revision); } catch (e) { error(e); } finally { busy = false; sync(); } });
+  $('cancel').addEventListener('click', async () => { if (!selected) return; try { await request(`/api/enrichments/${selected}/cancel`, {}); $('status').textContent = 'Abbruch angefordert; auf Abschluss wird gewartet.'; } catch (e) { error(e); } });
+  $('reopen').addEventListener('click', async () => { if (busy) return; const id = $('job').value.trim(); if (!/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(id)) { error(Error('Bitte eine gültige Auftrags-ID eingeben.')); return; } revision++; configRevision++; const rev = revision; clearTimeout(poll); selected = id; saved = null; snapshot = after = preview = null; $('input').value = ''; $('summary').textContent = 'Gespeicherte Konfiguration wird geladen.'; $('rows').replaceChildren(); busy = true; sync(); error(); try { const config = await request(`/api/enrichments/${id}/configuration`); if (selected !== id || rev !== revision) return; saved = config; $('input').value = config.input_utf8; $('format').value = config.import.format.kind; $('strategy').value = config.options.strategy; $('profile').value = config.options.credential_profile; $('ack').checked = false; $('summary').textContent = 'Gespeicherte Eingabe, Importauswahl und Optionen geladen. Es wird kein Provider erneut aufgerufen.'; } catch (e) { error(e); } finally { busy = false; sync(); } await status(id, rev); });
+  $('next').addEventListener('click', () => page(true));
+  $('export').addEventListener('click', async () => { if (busy || !selected || !snapshot) return; busy = true; sync(); error(); const id = selected, rev = revision; let url; try { const data = await request(`/api/enrichments/${id}/csv`, readRequest(snapshot, null), true); if (selected !== id || rev !== revision) return; url = URL.createObjectURL(new Blob([data], {type: 'text/csv;charset=utf-8'})); const a = document.createElement('a'); a.href = url; a.download = `api-enrichment-${id}.csv`; a.click(); } catch (e) { error(e); } finally { if (url) setTimeout(() => URL.revokeObjectURL(url), 1000); busy = false; sync(); } });
+  try { $('job').value = localStorage.getItem('api-enrichment-job-v1') || ''; } catch (_) {}
+  window.addEventListener('pagehide', () => clearTimeout(poll)); sync();
+}());

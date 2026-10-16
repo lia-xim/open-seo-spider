@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "kind": "current_official_documentation_provider_gap_plan",
+  "recorded_at": "2026-10-15T23:47:54.752Z",
+  "status": "PLANNED_NOT_IMPLEMENTED",
+  "sources": [
+    {
+      "url": "https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/",
+      "source_kind": "vendor_official_configuration",
+      "anchors": [
+        "google-analytics-integration",
+        "google-search-console-integration",
+        "pagespeed-insights-integration",
+        "majestic",
+        "ahrefs",
+        "moz"
+      ],
+      "verification_recorded_at": "2026-10-15T23:47:54.752Z"
+    },
+    {
+      "url": "https://developers.google.com/speed/docs/insights/v5/get-started",
+      "source_kind": "google_official_psi",
+      "verification_recorded_at": "2026-10-15T23:47:54.752Z"
+    },
+    {
+      "url": "https://developer.chrome.com/docs/crux/api/",
+      "source_kind": "google_official_crux",
+      "verification_recorded_at": "2026-10-15T23:47:54.752Z"
+    }
+  ],
+  "facts_and_remaining_acceptance": [
+    {
+      "feature": "integrations.ga4",
+      "reference_summary": "Selected account/property/stream, configurable page/landing dimensions and metrics; slash/case alternatives use highest-session match rather than summation.",
+      "todo": "Own authorized client; preserve raw URL and match reason. Verify dimensional compatibility, pagination, missing rows, no-data vs zero, orphan discovery separately from optional crawl admission."
+    },
+    {
+      "feature": "integrations.gsc",
+      "reference_summary": "Search Analytics date/dimension data and optional discovered URLs.",
+      "todo": "Independent OAuth client, explicit property/date/filter scope; row-coverage metadata, null vs zero, canonical/URL matching and distinct orphan/import/crawl decisions."
+    },
+    {
+      "feature": "integrations.inspection",
+      "reference_summary": "Separate URL Inspection selection and index/canonical/enhancement outcomes.",
+      "todo": "Per-property quota accounting, inspected vs deferred status, inspection timestamp, raw verdicts, structured enhancement issues; no live inspection until authorized property access."
+    },
+    {
+      "feature": "integrations.psi",
+      "reference_summary": "Remote and local Lighthouse; lab and CrUX page/origin data, audit details and resource exports.",
+      "todo": "Current first-provider proposal is remote lab subset only. Add bounded local Lighthouse worker with explicit fetch/auth/profile lifecycle, full audit selection/details and source/resource exports. Add separate CrUX URL/origin/form-factor/period/distribution outcomes; do not infer field INP from lab TBT or treat absent data as zero."
+    },
+    {
+      "feature": "integrations.majestic",
+      "reference_summary": "Open Apps authorization, fresh/historic data and URL/subdomain/domain metrics.",
+      "todo": "Own authorized integration, bounded typed results, dataset/scope provenance, units/quotas, unavailable and retry/error states."
+    },
+    {
+      "feature": "integrations.ahrefs",
+      "reference_summary": "Current reference uses v3 with Ahrefs Connect and subscription integration units.",
+      "todo": "Own app/OAuth or independently entitled API access. No vendor token/app reuse. Explicit endpoint/metric scope, token expiry, quotas, pagination and joins."
+    },
+    {
+      "feature": "integrations.moz",
+      "reference_summary": "Current reference documents v3 token access, URL/subdomain/domain metrics and separate API entitlement.",
+      "todo": "Independent token profile, selected metrics/scopes, expiry/quota/error handling, typed unavailable outcomes and durable source provenance."
+    }
+  ],
+  "google_current_warning": "Google explicitly plans to discontinue CrUX field data in PSI and recommends the dedicated CrUX or CrUX History APIs. Build field-data support as a separate adapter; do not depend on PSI loadingExperience always existing.",
+  "own_cross_provider_contract": "Every provider needs immutable completed input/options/results, explicit refresh, cancellation/retained join, budget/secret redaction, complete CSV and bounded snapshot pagination, API/CLI/MCP/UI/cold fixtures. Mocks prove own contracts only; live provider compatibility remains separately unproven.",
+  "current_product_changed": false,
+  "provider_requests": 0,
+  "credentials_read": false,
+  "reference_parity": "NOT_PROVEN",
+  "timestamp_qualification": "Source verification was recorded after the web reads; no exact individual HTTP retrieval time is claimed."
+}

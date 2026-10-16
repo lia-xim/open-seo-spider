@@ -1,0 +1,276 @@
+{
+  "kind": "api_only_enrichment_v3_two_test_lint_repairs",
+  "status": "SOURCE_FIX_AUTHORED_NOT_RUN",
+  "parent": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-enrichment-proposal-v2\\manifest.json",
+    "sha256": "03404635d92093079e63a0ed0162862fe201f7d54332cdcd2aa8e9f8c447d113",
+    "bytes": 20257
+  },
+  "independent_parent_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-enrichment-independent-review-v2\\receipt.json",
+    "sha256": "ed2804250ad8a782116083bd9354ab5f11d8cc256313236c2d31aed76f255fb6",
+    "bytes": 3415
+  },
+  "actual_failed_preview": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-preview-clippy-v1\\proof.json",
+    "sha256": "815b0be7029daa01c4a762fc376559f2f25255d11fc8d29911d9b0149ce51253",
+    "bytes": 80962
+  },
+  "actual_preview_format": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-preview-format-v1\\proof.json",
+    "sha256": "d00e873a58769a616e0c138c98f986f85b958a76e1afe985e200743f8be91e3e",
+    "bytes": 131387
+  },
+  "actual_preview_formatter_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-preview-format-independent-review-v1\\receipt.json",
+    "sha256": "c850a2041cff8d834c1378c8fd910d3fa79c3a9f5f1d5c266d9ed1012c0677f7",
+    "bytes": 76628
+  },
+  "ancestral_v1_derivation": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/api-only-enrichment-proposal-v1/DERIVATION.json",
+    "sha256": "55820a688b276515bd65a98c9cebe363652751cc4fae4c0727ce590efa113b00",
+    "bytes": 18704
+  },
+  "ancestral_v2_revision": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/api-only-enrichment-proposal-v2/REVISION.json",
+    "sha256": "d6595e8377b87a8ebe7ef272b495d251cdb253c6b094adb969c74da4f0008b7c",
+    "bytes": 61814
+  },
+  "operations": [
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "label": "Explicit invalid-version initializer; later mutations still require mut",
+      "offset": 2086,
+      "before": "let mut o=ApiEnrichmentOptions::default();o.version=2;",
+      "after": "let mut o=ApiEnrichmentOptions{version:2,..Default::default()};",
+      "before_sha256": "808341f4c113a1dd28290c9aaafa47683cd073fc1f2311b2ee38723fa4464388",
+      "before_bytes": 13830,
+      "after_sha256": "ec544bdefc7627124be260f6827668abf0bc17587eeda2bfa9da17adc201efe8",
+      "after_bytes": 13839
+    },
+    {
+      "path": "crates/app/src/enrichment_app_tests.rs",
+      "label": "Equivalent derived Default for test-only Arc atomic call counter",
+      "offset": 118,
+      "before": "#[derive(Clone)]\npub(crate) struct Mock{pub(crate) calls:Arc<AtomicUsize>}\nimpl Default for Mock{fn default()->Self{Self{calls:Default::default()}}}\n",
+      "after": "#[derive(Clone,Default)]\npub(crate) struct Mock{pub(crate) calls:Arc<AtomicUsize>}\n",
+      "before_sha256": "d253338f9cb52ee18f9d85d3b89b6d388b914d4c4d0ff4b3ad65ca1e5d951aca",
+      "before_bytes": 11482,
+      "after_sha256": "ae51ecefed6ef5bac7c57a17cb70b54bd17081ff99c4d750bbd627e082fb18cc",
+      "after_bytes": 11416
+    }
+  ],
+  "whole_forward_inverse_operations": 2,
+  "whole_parent_file_inverses": 18,
+  "changed_product_paths": [
+    "crates/core/src/api_enrichment_tests.rs",
+    "crates/app/src/enrichment_app_tests.rs"
+  ],
+  "unchanged_product_paths": [
+    "crates/app/src/enrichment_app.rs",
+    "crates/app/src/main.rs",
+    "crates/app/src/mcp.rs",
+    "crates/app/src/mcp/enrichment.rs",
+    "crates/app/src/mcp/enrichment_tests.rs",
+    "crates/app/src/server.rs",
+    "crates/app/src/server/enrichment.rs",
+    "crates/app/src/server/enrichment_tests.rs",
+    "crates/app/src/server/lifecycle.rs",
+    "crates/core/src/api_enrichment.rs",
+    "crates/core/src/api_enrichment/pagespeed.rs",
+    "crates/core/src/lib.rs",
+    "web/api-enrichment.css",
+    "web/api-enrichment.html",
+    "web/api-enrichment.js",
+    "web/index.html"
+  ],
+  "current_function_spans": [
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "name": "api_only_cancel_drops_inflight_transport_and_never_starts_remaining_urls",
+      "before_sha256": "af4ac7cfc7d6810920119ddf37a78942f42a8d6723794926651f69a6da1fd352",
+      "after_sha256": "af4ac7cfc7d6810920119ddf37a78942f42a8d6723794926651f69a6da1fd352",
+      "before_bytes": 1874,
+      "after_bytes": 1874,
+      "body_exact": true
+    },
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "name": "api_only_hash_plan_response_caps_and_invalid_metrics_refuse_without_silent_coercion",
+      "before_sha256": "9170335845f061ec02fc6cdfe997ce73a361de942e3d235166fd300e34d1f780",
+      "after_sha256": "9170335845f061ec02fc6cdfe997ce73a361de942e3d235166fd300e34d1f780",
+      "before_bytes": 1299,
+      "after_bytes": 1299,
+      "body_exact": true
+    },
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "name": "api_only_http200_lighthouse_runtime_errors_and_missing_measurements_are_not_success",
+      "before_sha256": "3530b6374f44cd0eab88cc745b35bdcf830dded1773887272c86141dba71439d",
+      "after_sha256": "3530b6374f44cd0eab88cc745b35bdcf830dded1773887272c86141dba71439d",
+      "before_bytes": 1190,
+      "after_bytes": 1190,
+      "body_exact": true
+    },
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "name": "api_only_import_provenance_deduplicates_execution_not_occurrences_and_refuses_url_credentials",
+      "before_sha256": "8424ebc2dba2f07230623d7ecf12d90184c434459dfdf5b217259837b0e1e69a",
+      "after_sha256": "c1ecd9183dd00cfeeb7197e2cec00dba3c7b7e60a4f056331b17ace6a1c59c54",
+      "before_bytes": 1019,
+      "after_bytes": 1028,
+      "body_exact": false
+    },
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "name": "api_only_production_request_has_fixed_https_origin_and_secret_is_not_serialized",
+      "before_sha256": "e1540a92eeb25b472e11fea92937e554a44db1c3d874d64ae6be35aaeb643b8a",
+      "after_sha256": "e1540a92eeb25b472e11fea92937e554a44db1c3d874d64ae6be35aaeb643b8a",
+      "before_bytes": 960,
+      "after_bytes": 960,
+      "body_exact": true
+    },
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "name": "api_only_real_local_mock_api_response_does_not_fetch_the_supplied_website_or_follow_redirect",
+      "before_sha256": "27cabdaf7fbf0cad6963104e36f23d956164b10f1ffc01000d1550c77244f1d6",
+      "after_sha256": "27cabdaf7fbf0cad6963104e36f23d956164b10f1ffc01000d1550c77244f1d6",
+      "before_bytes": 2710,
+      "after_bytes": 2710,
+      "body_exact": true
+    },
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "name": "api_only_transient_retry_call_budget_and_authentication_are_bounded",
+      "before_sha256": "4be57d2b504cba39719a757494b7998a57cc04b2e5ba1b57b29266e69bfb7ab8",
+      "after_sha256": "4be57d2b504cba39719a757494b7998a57cc04b2e5ba1b57b29266e69bfb7ab8",
+      "before_bytes": 1218,
+      "after_bytes": 1218,
+      "body_exact": true
+    },
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "name": "api_only_typed_provider_metrics_are_separate_from_site_facts_and_absence_is_not_zero",
+      "before_sha256": "3bbb056f40b4dd7456960fca374b20d5d3dede8887473b7a6c79c276b8fd6bdb",
+      "after_sha256": "3bbb056f40b4dd7456960fca374b20d5d3dede8887473b7a6c79c276b8fd6bdb",
+      "before_bytes": 1147,
+      "after_bytes": 1147,
+      "body_exact": true
+    },
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "name": "api_only_unicode_normalized_url_exact8192_and_plus1_refuse_before_attempt_and_revalidate_legacy_plan",
+      "before_sha256": "472a7fe36e9ee56d94148379b754c2d229a0d988fed9c930cff049bd640531b0",
+      "after_sha256": "472a7fe36e9ee56d94148379b754c2d229a0d988fed9c930cff049bd640531b0",
+      "before_bytes": 1071,
+      "after_bytes": 1071,
+      "body_exact": true
+    },
+    {
+      "path": "crates/app/src/enrichment_app_tests.rs",
+      "name": "api_enrichment_cli_protects_existing_inputs_outputs_and_returns_complete_json_csv_from_same_service",
+      "before_sha256": "de730a54c9244f9b63e0408506c0a4342f0e1f42802fd9f3d1c0b2e8b0b9c4ee",
+      "after_sha256": "de730a54c9244f9b63e0408506c0a4342f0e1f42802fd9f3d1c0b2e8b0b9c4ee",
+      "before_bytes": 1724,
+      "after_bytes": 1724,
+      "body_exact": true
+    },
+    {
+      "path": "crates/app/src/enrichment_app_tests.rs",
+      "name": "api_enrichment_close_cancels_and_actually_joins_owned_inflight_work_before_return",
+      "before_sha256": "96e9a7fc7a9851dd2b58edc124e86fc24c1711fe2b818b2d3afaec33c5a97640",
+      "after_sha256": "96e9a7fc7a9851dd2b58edc124e86fc24c1711fe2b818b2d3afaec33c5a97640",
+      "before_bytes": 1773,
+      "after_bytes": 1773,
+      "body_exact": true
+    },
+    {
+      "path": "crates/app/src/enrichment_app_tests.rs",
+      "name": "api_enrichment_normalized_overcap_plan_is_refused_before_store_owner_or_provider_admission",
+      "before_sha256": "ea1b427e8ecc165c8179d0b5e10aef082a7e6723442d4da7897170212f139de5",
+      "after_sha256": "ea1b427e8ecc165c8179d0b5e10aef082a7e6723442d4da7897170212f139de5",
+      "before_bytes": 1269,
+      "after_bytes": 1269,
+      "body_exact": true
+    },
+    {
+      "path": "crates/app/src/enrichment_app_tests.rs",
+      "name": "api_enrichment_original_input_config_and_completed_report_hashes_refuse_tamper",
+      "before_sha256": "1f865023602af4f553fc8e48bee00f77b1b0341063fc703e74ce76c0412e096b",
+      "after_sha256": "1f865023602af4f553fc8e48bee00f77b1b0341063fc703e74ce76c0412e096b",
+      "before_bytes": 962,
+      "after_bytes": 962,
+      "body_exact": true
+    },
+    {
+      "path": "crates/app/src/enrichment_app_tests.rs",
+      "name": "api_enrichment_owner_panic_is_reported_and_retained_join_is_not_lost",
+      "before_sha256": "c2ae856f16d625a49df77d85871d4035ac03f8ce299998847430747f8de644a6",
+      "after_sha256": "c2ae856f16d625a49df77d85871d4035ac03f8ce299998847430747f8de644a6",
+      "before_bytes": 1183,
+      "after_bytes": 1183,
+      "body_exact": true
+    },
+    {
+      "path": "crates/app/src/enrichment_app_tests.rs",
+      "name": "api_enrichment_snapshot_pages_preserve_all_occurrences_filters_and_cold_no_provider_resume",
+      "before_sha256": "1766f59bdd4fd43691f6014ce87e40ea3d1bae206ed2b7f98aac1684baacc1a4",
+      "after_sha256": "1766f59bdd4fd43691f6014ce87e40ea3d1bae206ed2b7f98aac1684baacc1a4",
+      "before_bytes": 2071,
+      "after_bytes": 2071,
+      "body_exact": true
+    },
+    {
+      "path": "crates/app/src/enrichment_app_tests.rs",
+      "name": "api_enrichment_ui_first_csv_column_one_matches_real_import_consumer",
+      "before_sha256": "f3c3476797751e75363a83e68ff98f38ad4a90cedf6f3f23ccb25d903e56e308",
+      "after_sha256": "f3c3476797751e75363a83e68ff98f38ad4a90cedf6f3f23ccb25d903e56e308",
+      "before_bytes": 832,
+      "after_bytes": 832,
+      "body_exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/enrichment_tests.rs",
+      "name": "api_enrichment_mcp_action_shapes_reject_without_api_or_provider_requests",
+      "before_sha256": "870ab9c92ed8783c4bccb06619a88cbec49b6d153a716cdea1282a4c864b3eb0",
+      "after_sha256": "870ab9c92ed8783c4bccb06619a88cbec49b6d153a716cdea1282a4c864b3eb0",
+      "before_bytes": 701,
+      "after_bytes": 701,
+      "body_exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/enrichment_tests.rs",
+      "name": "api_enrichment_mcp_uses_the_same_real_loopback_api_and_verifies_csv_bytes",
+      "before_sha256": "ab4753bf997e0552a8bd0a2a62fb335afa88464ca43b43a5d832530124f61d5f",
+      "after_sha256": "ab4753bf997e0552a8bd0a2a62fb335afa88464ca43b43a5d832530124f61d5f",
+      "before_bytes": 1445,
+      "after_bytes": 1445,
+      "body_exact": true
+    },
+    {
+      "path": "crates/app/src/server/enrichment_tests.rs",
+      "name": "api_enrichment_http_preview_and_unacknowledged_start_never_fetch_supplied_website",
+      "before_sha256": "ffb8bcc7568090f146d9128422837d2ea12655e41e1dcb702f392ec370c1b0eb",
+      "after_sha256": "ffb8bcc7568090f146d9128422837d2ea12655e41e1dcb702f392ec370c1b0eb",
+      "before_bytes": 1464,
+      "after_bytes": 1464,
+      "body_exact": true
+    },
+    {
+      "path": "crates/app/src/server/enrichment_tests.rs",
+      "name": "api_enrichment_http_reads_full_csv_exact_length_sha_registry_completion_and_cold_config",
+      "before_sha256": "20deeca76cec81e0ed5f0bcdb8f4add7ff6e8b227e6b35de75bbafdd47da4352",
+      "after_sha256": "20deeca76cec81e0ed5f0bcdb8f4add7ff6e8b227e6b35de75bbafdd47da4352",
+      "before_bytes": 2074,
+      "after_bytes": 2074,
+      "body_exact": true
+    }
+  ],
+  "unchanged_function_bodies": 19,
+  "changed_initializer_function_bodies": 1,
+  "all_assertion_text_exact": true,
+  "all_names_exact": true,
+  "production_files_changed": 0,
+  "new_dependencies": [],
+  "qualification": "The actual preview V1 Clippy failure remains failure. These source repairs do not claim compilation/test success."
+}

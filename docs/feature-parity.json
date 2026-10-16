@@ -3356,9 +3356,14 @@
       "parity_evidence": [],
       "group": "integrations",
       "remaining_acceptance": [
-        "Using an authorized property, join page metrics with declared URL matching and preserve absent data as absent."
+        "Using an authorized property, join page metrics with declared URL matching and preserve absent data as absent.",
+        "Own authorized client; preserve raw URL and match reason. Verify dimensional compatibility, pagination, missing rows, no-data vs zero, orphan discovery separately from optional crawl admission."
       ],
-      "parity_status": "NOT_PROVEN"
+      "parity_status": "NOT_PROVEN",
+      "reference_scope": {
+        "latest_documentation_check": "2026-10-15T23:47:54.752Z",
+        "current_provider_gap_plan": "docs/verification/api-only-rust-failure-20261016/plans/provider-breadth.json"
+      }
     },
     {
       "id": "integrations.gsc",
@@ -3373,9 +3378,14 @@
       "parity_evidence": [],
       "group": "integrations",
       "remaining_acceptance": [
-        "Fetch selected dates/dimensions and join clicks/impressions/CTR/position; report API errors and row coverage."
+        "Fetch selected dates/dimensions and join clicks/impressions/CTR/position; report API errors and row coverage.",
+        "Independent OAuth client, explicit property/date/filter scope; row-coverage metadata, null vs zero, canonical/URL matching and distinct orphan/import/crawl decisions."
       ],
-      "parity_status": "NOT_PROVEN"
+      "parity_status": "NOT_PROVEN",
+      "reference_scope": {
+        "latest_documentation_check": "2026-10-15T23:47:54.752Z",
+        "current_provider_gap_plan": "docs/verification/api-only-rust-failure-20261016/plans/provider-breadth.json"
+      }
     },
     {
       "id": "integrations.inspection",
@@ -3390,9 +3400,14 @@
       "parity_evidence": [],
       "group": "integrations",
       "remaining_acceptance": [
-        "Honor daily/property quotas; retain inspection timestamp and distinguish inspected from queued URLs."
+        "Honor daily/property quotas; retain inspection timestamp and distinguish inspected from queued URLs.",
+        "Per-property quota accounting, inspected vs deferred status, inspection timestamp, raw verdicts, structured enhancement issues; no live inspection until authorized property access."
       ],
-      "parity_status": "NOT_PROVEN"
+      "parity_status": "NOT_PROVEN",
+      "reference_scope": {
+        "latest_documentation_check": "2026-10-15T23:47:54.752Z",
+        "current_provider_gap_plan": "docs/verification/api-only-rust-failure-20261016/plans/provider-breadth.json"
+      }
     },
     {
       "id": "integrations.psi",
@@ -3407,9 +3422,14 @@
       "parity_evidence": [],
       "group": "integrations",
       "remaining_acceptance": [
-        "Preserve mobile/desktop, field/lab distinction, metric units and provider error details."
+        "Preserve mobile/desktop, field/lab distinction, metric units and provider error details.",
+        "Current first-provider proposal is remote lab subset only. Add bounded local Lighthouse worker with explicit fetch/auth/profile lifecycle, full audit selection/details and source/resource exports. Add separate CrUX URL/origin/form-factor/period/distribution outcomes; do not infer field INP from lab TBT or treat absent data as zero."
       ],
-      "parity_status": "NOT_PROVEN"
+      "parity_status": "NOT_PROVEN",
+      "reference_scope": {
+        "latest_documentation_check": "2026-10-15T23:47:54.752Z",
+        "current_provider_gap_plan": "docs/verification/api-only-rust-failure-20261016/plans/provider-breadth.json"
+      }
     },
     {
       "id": "integrations.cwv",
@@ -3441,9 +3461,14 @@
       "parity_evidence": [],
       "group": "integrations",
       "remaining_acceptance": [
-        "Use separately authorized credentials; mock fresh/historic datasets, quota exhaustion and URL/domain scopes."
+        "Use separately authorized credentials; mock fresh/historic datasets, quota exhaustion and URL/domain scopes.",
+        "Own authorized integration, bounded typed results, dataset/scope provenance, units/quotas, unavailable and retry/error states."
       ],
-      "parity_status": "NOT_PROVEN"
+      "parity_status": "NOT_PROVEN",
+      "reference_scope": {
+        "latest_documentation_check": "2026-10-15T23:47:54.752Z",
+        "current_provider_gap_plan": "docs/verification/api-only-rust-failure-20261016/plans/provider-breadth.json"
+      }
     },
     {
       "id": "integrations.ahrefs",
@@ -3458,9 +3483,14 @@
       "parity_evidence": [],
       "group": "integrations",
       "remaining_acceptance": [
-        "Use independent authorized app/API access; mock expiry, quota and metric joins without reusing vendor tokens."
+        "Use independent authorized app/API access; mock expiry, quota and metric joins without reusing vendor tokens.",
+        "Own app/OAuth or independently entitled API access. No vendor token/app reuse. Explicit endpoint/metric scope, token expiry, quotas, pagination and joins."
       ],
-      "parity_status": "NOT_PROVEN"
+      "parity_status": "NOT_PROVEN",
+      "reference_scope": {
+        "latest_documentation_check": "2026-10-15T23:47:54.752Z",
+        "current_provider_gap_plan": "docs/verification/api-only-rust-failure-20261016/plans/provider-breadth.json"
+      }
     },
     {
       "id": "integrations.moz",
@@ -3475,9 +3505,14 @@
       "parity_evidence": [],
       "group": "integrations",
       "remaining_acceptance": [
-        "Mock authorized URL/domain metric queries with unavailable/quota states."
+        "Mock authorized URL/domain metric queries with unavailable/quota states.",
+        "Independent token profile, selected metrics/scopes, expiry/quota/error handling, typed unavailable outcomes and durable source provenance."
       ],
-      "parity_status": "NOT_PROVEN"
+      "parity_status": "NOT_PROVEN",
+      "reference_scope": {
+        "latest_documentation_check": "2026-10-15T23:47:54.752Z",
+        "current_provider_gap_plan": "docs/verification/api-only-rust-failure-20261016/plans/provider-breadth.json"
+      }
     },
     {
       "id": "integrations.oauth",
@@ -6426,6 +6461,15 @@
       "recorded_at": "2026-10-15T23:41:35.369Z",
       "scope": "Bounded checkpoint; large captured wire bodies/CSV, databases, vendor files and browser executables are intentionally not in this repository. This is not a relocatable whole-runtime archive.",
       "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "api-only-rust-failure-20261016",
+      "artifact": "docs/verification/api-only-rust-failure-20261016/index.json",
+      "artifact_sha256": "0dd73a4fd649b6e7530f6db6fbf64e412b7bf4ecbd574887dc49eb75723ed721",
+      "result": "FORMAT_AND_CLIPPY_V2_PASS_APP10_PASS_ONE_FIXTURE_FAIL_CORE9_NOT_RUN",
+      "recorded_at": "2026-10-16T00:00:21.312Z",
+      "scope": "Actual400 preview formatter/Clippy and incomplete requested20 Rust run; failure and9 unexecuted Core functions preserved. Source12 remains381 unchanged, installedSource11.",
+      "reference_parity": "NOT_PROVEN"
     }
   ],
   "reference_workflows": [
@@ -8461,7 +8505,7 @@
       "priority": 1,
       "title_de": "Crawl-Grenzen, weitere Ngramkanäle und große Sitemap-Daten ausbauen",
       "status": "ACTUAL1428_BUILD_LARGE13_AND_SMALL6_PASS_STATIC25_FINAL_RUNTIME_DRIFT_NEW_CHROME_ACCEPTANCE_PENDING",
-      "summary_de": "Source12:1428 Tests, Releasebuild, Small6 und vollständige50.000-Sitemap-Warm-/Cold-/CSV-Abnahme bestanden. Generator6 und Metadata8 sind historische Browser-PASSs. StaticR4 bestand alle25 Funktionsfälle, scheiterte aber korrekt am finalen Chrome-Hash nach automatischem Update. Vollständige Browserkopie gesichert; aktuelle Renderer-/acht Browser-Scope-Abnahmen und BODY/Migration/Resource/EOF/Installation bleiben offen. Installiert bleibt Source11.",
+      "summary_de": "Source12:1428 Tests, Releasebuild, Small6 und vollständige50.000-Sitemap-Warm-/Cold-/CSV-Abnahme bestanden. Generator6 und Metadata8 sind historische Browser-PASSs. StaticR4 bestand alle25 Funktionsfälle, scheiterte aber korrekt am finalen Chrome-Hash nach automatischem Update. Vollständige Browserkopie gesichert; aktuelle Renderer-/sieben Browser-Scope-Abnahmen und BODY/Migration/Resource/EOF/Installation bleiben offen. Installiert bleibt Source11.",
       "completed_acceptance_de": [
         "381 Eingaben aus drei unabhängig geprüften Rollen ohne Pfadüberschneidung komponiert und formatiert. Alle 606 bisherigen Vollnamen bleiben zusätzlich zu 44 neuen Funktionen erhalten.",
         "Strenger Compilerlauf erfolgreich. Beide echten 501-URL-Kontrollcrawls, alle sechs Indexfälle einschließlich 50.000 Mitgliedschaften und 59-MiB-Bericht sowie die neuen Metadatenkanäle ohne Pflicht-Textcapture bestehen in den jeweiligen Funktionen.",
@@ -8477,11 +8521,12 @@
       ],
       "pending_acceptance_de": [
         "Historische Suite/Build-Nachweise unverändert bewahren und separate aktuelle E-Runtime mit vier echten Renderer-Gates prüfen.",
-        "Alle acht browserabhängigen Scopes erneut mit der festen E-Runtime ausführen; fünf browserfreie PASSs explizit historisch weiterverwenden, EOF2 noch ausführen.",
+        "Alle sieben browserabhängigen Scopes erneut mit der festen E-Runtime ausführen; fünf browserfreie PASSs explizit historisch weiterverwenden, BODY13 und EOF2 noch ausführen.",
         "BODY13/Migration8/Resource8+Ngram6 und Static25 als vollständige aktuelle Scope-Läufe abschließen; danach sichere Installation und Cold-Abnahme.",
         "Herstellerparität und der restliche144-Feature-/416-Filter-/32-Workflow-Katalog bleiben offen."
       ],
       "documentation": [
+        "docs/verification/api-only-rust-failure-20261016/plans/runtime-scope-correction.json",
         "docs/verification/source12-runtime-drift-20261016/index.json",
         "docs/verification/source12-small6-20261016/index.json",
         "docs/verification/source12-metadata-native-20261016/index.json",
@@ -8540,28 +8585,31 @@
       "id": "api-only-enrichment-20261016",
       "priority": 3,
       "title_de": "Eigenständige API-Anreicherung ohne lokalen Websitecrawl",
-      "status": "SOURCE_REVIEWED_NODE5_PASS_RUST_AND_NATIVE_NOT_RUN",
-      "summary_de": "Erster PageSpeed-Entwurf mit eigenem Core-/App-/API-/CLI-/MCP-/UI-Ablauf liegt unabhängig geprüft vor.18 eigene Quellen/400 projizierte Inputs,20 Rustfunktionen authored und fünf UI-Hilfsfälle tatsächlich bestanden. Vier Quellbefunde eng korrigiert; weder Rustlauf noch Provider- oder Nativeabnahme behauptet. Aktiver Code bleibt Source12, installiert Source11.",
+      "status": "ACTUAL400_FORMAT_CLIPPY_PASS_APP10_PASS_ONE_FIXTURE_FAIL_CORE9_NOT_RUN",
+      "summary_de": "Gemeinsamer400-Input-Entwurf tatsächlich formatiert und Clippy ohne Warnung bestanden.20 Rustfunktionen angefordert; Cargo führte11 App-/API-/MCP-Funktionen aus:10 bestanden, eine negative Testvorbereitung scheiterte an der bereits vorhandenen Import-Provenienzgrenze. Neun Corefunktionen noch nicht gelaufen. ReineFixturekorrektur wird vorbereitet; Produktionsguards bleiben unverändert. Fünf Nodehilfsfälle sind separate unveränderteJS-Vorläuferbelege. Aktiver CodeSource12, installiertSource11.",
       "completed_acceptance_de": [
         "Unabhängiger Vollreview plus Closure von CSV-Spalte1, expliziten Lighthouse-Laufzeitfehlern/fehlenden Metriken, normalisierter8192B-URLgrenze vor Jobaufnahme und Warnungsgate.",
         "Fünf Node-VM-Hilfsfälle tatsächlich mit exakten Namen und natürlichem Prozessabschluss bestanden; alle18 Vorschlags- und388 Elternquellen unverändert."
       ],
       "pending_acceptance_de": [
-        "Separaten400-Input-Entwurf vollständig komponieren, formatieren und die20 Rustfunktionen samt realer lokaler API-/Website-Trap-Prüfung ausführen.",
-        "Alle400 Quellen, komplette Suite, Releasekandidat sowie API-/CLI-/MCP-/Browser-/Cold-/Cancel-/EOF-Pfade prüfen; erst danach sichere Installation.",
-        "Übrige dokumentierte Anbieter und ihre eigene API-only-Semantik ergänzen; ein PageSpeed-Adapter ist keine vollständige Anbieterparität."
+        "NegativeApp-/Core-Grenzfallvorbereitung ohne Lockerung derProduktionsgrenzen korrigieren und alle20Rustfunktionen tatsächlich ausführen.",
+        "Danach alle400Quellen freigeben, kompletteSuite, Releasekandidat und API-/CLI-/MCP-/Browser-/Cold-/Cancel-/EOF-Pfade prüfen; sichereInstallation bleibt separat offen.",
+        "DokumentierteweitereAnbieter,lokalesLighthouse und getrennteCrUX-Felddaten umsetzen; erfolgreiche Teiltests beweisen keinevollständigeParität."
       ],
       "documentation": [
+        "docs/verification/api-only-rust-failure-20261016/index.json",
         "docs/verification/next-feature-reviewed-20261016/index.json"
       ],
       "gates": {
         "source_review": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
         "node": "PASS_FIVE_API_ONLY_FRONTEND_HELPER_CASES_ONLY",
-        "rust": "NOT_RUN",
+        "rust": "FAIL_TWENTY_NEW_RUST_FUNCTIONS_10_PASS_1_FAIL_9_UNEXECUTED",
         "provider": "NOT_RUN",
         "native": "NOT_RUN",
         "installation": "NOT_RUN",
-        "manufacturer_parity": "NOT_PROVEN"
+        "manufacturer_parity": "NOT_PROVEN",
+        "format": "PASS_FORMAT_COMMAND_ONLY",
+        "clippy": "PASS_PRELIMINARY_CLIPPY_ONLY"
       }
     }
   ],

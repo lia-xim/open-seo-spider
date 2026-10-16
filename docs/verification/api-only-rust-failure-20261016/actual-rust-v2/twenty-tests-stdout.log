@@ -1,0 +1,28 @@
+
+running 11 tests
+test enrichment_app::tests::api_enrichment_cli_protects_existing_inputs_outputs_and_returns_complete_json_csv_from_same_service ... ok
+test enrichment_app::tests::api_enrichment_close_cancels_and_actually_joins_owned_inflight_work_before_return ... ok
+test enrichment_app::tests::api_enrichment_normalized_overcap_plan_is_refused_before_store_owner_or_provider_admission ... FAILED
+test enrichment_app::tests::api_enrichment_original_input_config_and_completed_report_hashes_refuse_tamper ... ok
+test enrichment_app::tests::api_enrichment_owner_panic_is_reported_and_retained_join_is_not_lost ... ok
+test enrichment_app::tests::api_enrichment_snapshot_pages_preserve_all_occurrences_filters_and_cold_no_provider_resume ... ok
+test enrichment_app::tests::api_enrichment_ui_first_csv_column_one_matches_real_import_consumer ... ok
+test mcp::enrichment::tests::api_enrichment_mcp_action_shapes_reject_without_api_or_provider_requests ... ok
+test mcp::enrichment::tests::api_enrichment_mcp_uses_the_same_real_loopback_api_and_verifies_csv_bytes ... ok
+test server::enrichment::tests::api_enrichment_http_preview_and_unacknowledged_start_never_fetch_supplied_website ... ok
+test server::enrichment::tests::api_enrichment_http_reads_full_csv_exact_length_sha_registry_completion_and_cold_config ... ok
+
+failures:
+
+---- enrichment_app::tests::api_enrichment_normalized_overcap_plan_is_refused_before_store_owner_or_provider_admission stdout ----
+
+thread 'enrichment_app::tests::api_enrichment_normalized_overcap_plan_is_refused_before_store_owner_or_provider_admission' (35796) panicked at crates\app\src\enrichment_app_tests.rs:407:85:
+called `Result::unwrap()` on an `Err` value: provenance metadata field exceeds hard ceiling
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    enrichment_app::tests::api_enrichment_normalized_overcap_plan_is_refused_before_store_owner_or_provider_admission
+
+test result: FAILED. 10 passed; 1 failed; 0 ignored; 0 measured; 357 filtered out; finished in 0.23s
+
