@@ -1,0 +1,822 @@
+{
+  "kind": "Root_actual_pinned_local_language_engine_API_pilot",
+  "result": "PASS_ACTUAL_ENGINE_API_AND_UTF16_PILOT_NOT_PRODUCT_INTEGRATION",
+  "Root_runner": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/Root-runner.mjs",
+    "sha256": "abeb207e3d1d2286d69cb1d0b52cc35484da389e03e3f14193a871b32e66c03f",
+    "bytes": 10688
+  },
+  "extraction": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/language-runtime/source28-jdk17-pinned-20261016-v1/extraction-proof.json",
+    "sha256": "1342b57f66f78b4ebdd1dc1da2691fe097bd0ccd2a01fa19364db70d4573eb47",
+    "bytes": 750595
+  },
+  "adapter": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/OpenSeoOwnedLanguageTool.java",
+    "sha256": "9a65182ff2bbc735e75dc02fe66183152215137a39d230870ac663b02e6cfbf9",
+    "bytes": 1794
+  },
+  "config": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/server.properties",
+    "sha256": "13275a9218383f1b78470dc5f8a5e5fd01e43b9c6d835b812d0103d39a2d35ab",
+    "bytes": 74
+  },
+  "port": 62447,
+  "cases": [
+    {
+      "label": "en-spelling",
+      "form": {
+        "text": "This is a speling mistake.",
+        "language": "en-US"
+      },
+      "request_body": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/en-spelling-request.form",
+        "sha256": "51d9e5d95ddb176b43a35a2673e7d47885dcefa783aa97fa63892f663a27c9a1",
+        "bytes": 46
+      },
+      "status": 200,
+      "headers": {
+        "date": "Fri, 16 Oct 2026 20:56:07 GMT",
+        "content-type": "application/json",
+        "content-length": "1139"
+      },
+      "response": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/en-spelling-response.raw",
+        "sha256": "88c3de9cd992824cb632266a4ed5e0e204b776c89ba618a206e2c3794aa015c6",
+        "bytes": 1139
+      },
+      "complete": true,
+      "duration_ms": 2627,
+      "software": {
+        "name": "LanguageTool",
+        "version": "6.9-SNAPSHOT",
+        "buildDate": "2026-10-16 18:49:04 +0200",
+        "apiVersion": 1,
+        "premium": false,
+        "premiumHint": "You might be missing errors only the Premium version can find. Contact us at support<at>languagetoolplus.com.",
+        "status": ""
+      },
+      "language": {
+        "name": "English (US)",
+        "code": "en-US",
+        "detectedLanguage": {
+          "name": "English (US)",
+          "code": "en-US",
+          "confidence": 0.9999996,
+          "source": "+fallback"
+        }
+      },
+      "warnings": {
+        "incompleteResults": false
+      },
+      "matches": [
+        {
+          "offset": 10,
+          "length": 7,
+          "text": "speling",
+          "rule": {
+            "id": "MORFOLOGIK_RULE_EN_US",
+            "description": "Possible spelling mistake",
+            "issueType": "misspelling",
+            "category": {
+              "id": "TYPOS",
+              "name": "Possible Typo"
+            }
+          },
+          "replacements": [
+            {
+              "value": "spelling"
+            },
+            {
+              "value": "spewing"
+            },
+            {
+              "value": "spieling"
+            }
+          ],
+          "context": {
+            "text": "This is a speling mistake.",
+            "offset": 10,
+            "length": 7
+          }
+        }
+      ]
+    },
+    {
+      "label": "de-spelling",
+      "form": {
+        "text": "Das ist ein Feler.",
+        "language": "de-DE"
+      },
+      "request_body": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/de-spelling-request.form",
+        "sha256": "82c26d304bd9d0cc1b0cae8220a2ec1d812fcfc8fcf923ba8976902de534297e",
+        "bytes": 38
+      },
+      "status": 200,
+      "headers": {
+        "date": "Fri, 16 Oct 2026 20:56:13 GMT",
+        "content-type": "application/json",
+        "content-length": "1663"
+      },
+      "response": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/de-spelling-response.raw",
+        "sha256": "397139b8389c9e7c541c12ba6cbbfca20434f9d481c7e0d69315c3b00a63510e",
+        "bytes": 1663
+      },
+      "complete": true,
+      "duration_ms": 5797,
+      "software": {
+        "name": "LanguageTool",
+        "version": "6.9-SNAPSHOT",
+        "buildDate": "2026-10-16 18:49:04 +0200",
+        "apiVersion": 1,
+        "premium": false,
+        "premiumHint": "You might be missing errors only the Premium version can find. Contact us at support<at>languagetoolplus.com.",
+        "status": ""
+      },
+      "language": {
+        "name": "German (Germany)",
+        "code": "de-DE",
+        "detectedLanguage": {
+          "name": "German (Germany)",
+          "code": "de-DE",
+          "confidence": 0.9999957,
+          "source": "+fallback"
+        }
+      },
+      "warnings": {
+        "incompleteResults": false
+      },
+      "matches": [
+        {
+          "offset": 12,
+          "length": 5,
+          "text": "Feler",
+          "rule": {
+            "id": "GERMAN_SPELLER_RULE",
+            "description": "Möglicher Rechtschreibfehler",
+            "issueType": "misspelling",
+            "category": {
+              "id": "TYPOS",
+              "name": "Mögliche Tippfehler"
+            }
+          },
+          "replacements": [
+            {
+              "value": "Fehler"
+            },
+            {
+              "value": "Vieler"
+            },
+            {
+              "value": "Feuer"
+            },
+            {
+              "value": "Täler"
+            },
+            {
+              "value": "Feiern"
+            },
+            {
+              "value": "Feder"
+            },
+            {
+              "value": "Feier"
+            },
+            {
+              "value": "Feiert"
+            },
+            {
+              "value": "Felder"
+            },
+            {
+              "value": "Pfeiler"
+            },
+            {
+              "value": "Velar"
+            },
+            {
+              "value": "Vier"
+            },
+            {
+              "value": "Tälern"
+            },
+            {
+              "value": "Väter"
+            },
+            {
+              "value": "Feldern"
+            },
+            {
+              "value": "Aller"
+            },
+            {
+              "value": "Feuern"
+            },
+            {
+              "value": "Feger"
+            },
+            {
+              "value": "Viele"
+            },
+            {
+              "value": "Feuert"
+            },
+            {
+              "value": "Pfälzer"
+            },
+            {
+              "value": "Pfeilern"
+            },
+            {
+              "value": "Vielen"
+            },
+            {
+              "value": "Federn"
+            },
+            {
+              "value": "Velen"
+            },
+            {
+              "value": "Federt"
+            },
+            {
+              "value": "Meter"
+            },
+            {
+              "value": "Verler"
+            },
+            {
+              "value": "Feder-"
+            },
+            {
+              "value": "Eher"
+            },
+            {
+              "value": "Fehlern"
+            }
+          ],
+          "context": {
+            "text": "Das ist ein Feler.",
+            "offset": 12,
+            "length": 5
+          }
+        }
+      ]
+    },
+    {
+      "label": "en-clean",
+      "form": {
+        "text": "This is a test.",
+        "language": "en-US"
+      },
+      "request_body": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/en-clean-request.form",
+        "sha256": "c803233ea72a9b9302febe9e3d2e9864fdcdcf9dfd16699d41b19fc0eaf396b3",
+        "bytes": 35
+      },
+      "status": 200,
+      "headers": {
+        "date": "Fri, 16 Oct 2026 20:56:13 GMT",
+        "content-type": "application/json",
+        "content-length": "597"
+      },
+      "response": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/en-clean-response.raw",
+        "sha256": "c1930e5bfcd8e870ec0b2bc350d0f08e302600a2120c7151fdf8fcde96b3d8cd",
+        "bytes": 597
+      },
+      "complete": true,
+      "duration_ms": 32,
+      "software": {
+        "name": "LanguageTool",
+        "version": "6.9-SNAPSHOT",
+        "buildDate": "2026-10-16 18:49:04 +0200",
+        "apiVersion": 1,
+        "premium": false,
+        "premiumHint": "You might be missing errors only the Premium version can find. Contact us at support<at>languagetoolplus.com.",
+        "status": ""
+      },
+      "language": {
+        "name": "English (US)",
+        "code": "en-US",
+        "detectedLanguage": {
+          "name": "English (US)",
+          "code": "en-US",
+          "confidence": 0.9999905,
+          "source": "+fallback"
+        }
+      },
+      "warnings": {
+        "incompleteResults": false
+      },
+      "matches": []
+    },
+    {
+      "label": "de-clean",
+      "form": {
+        "text": "Das ist ein Test.",
+        "language": "de-DE"
+      },
+      "request_body": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/de-clean-request.form",
+        "sha256": "3536743fa624941324f2f9a997e0726ec340de0ddc1e890b4972cf32df2b35c7",
+        "bytes": 37
+      },
+      "status": 200,
+      "headers": {
+        "date": "Fri, 16 Oct 2026 20:56:14 GMT",
+        "content-type": "application/json",
+        "content-length": "605"
+      },
+      "response": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/de-clean-response.raw",
+        "sha256": "0de0b6d316c796401c8df1cba0b48e6bb0b6e84aaffd0f950b3873fb2ee9a8c3",
+        "bytes": 605
+      },
+      "complete": true,
+      "duration_ms": 799,
+      "software": {
+        "name": "LanguageTool",
+        "version": "6.9-SNAPSHOT",
+        "buildDate": "2026-10-16 18:49:04 +0200",
+        "apiVersion": 1,
+        "premium": false,
+        "premiumHint": "You might be missing errors only the Premium version can find. Contact us at support<at>languagetoolplus.com.",
+        "status": ""
+      },
+      "language": {
+        "name": "German (Germany)",
+        "code": "de-DE",
+        "detectedLanguage": {
+          "name": "German (Germany)",
+          "code": "de-DE",
+          "confidence": 0.9999939,
+          "source": "+fallback"
+        }
+      },
+      "warnings": {
+        "incompleteResults": false
+      },
+      "matches": []
+    },
+    {
+      "label": "en-grammar",
+      "form": {
+        "text": "He go to school.",
+        "language": "en-US"
+      },
+      "request_body": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/en-grammar-request.form",
+        "sha256": "2b0b5022f760948bbd76650670a476ac81d9a606ed1cca027483fa3c42225006",
+        "bytes": 36
+      },
+      "status": 200,
+      "headers": {
+        "date": "Fri, 16 Oct 2026 20:56:14 GMT",
+        "content-type": "application/json",
+        "content-length": "1381"
+      },
+      "response": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/en-grammar-response.raw",
+        "sha256": "0e85c796469218bc1f849646364556a4d2c7de3627f22bcc31f2c42b8ba1d010",
+        "bytes": 1381
+      },
+      "complete": true,
+      "duration_ms": 32,
+      "software": {
+        "name": "LanguageTool",
+        "version": "6.9-SNAPSHOT",
+        "buildDate": "2026-10-16 18:49:04 +0200",
+        "apiVersion": 1,
+        "premium": false,
+        "premiumHint": "You might be missing errors only the Premium version can find. Contact us at support<at>languagetoolplus.com.",
+        "status": ""
+      },
+      "language": {
+        "name": "English (US)",
+        "code": "en-US",
+        "detectedLanguage": {
+          "name": "English (US)",
+          "code": "en-US",
+          "confidence": 0.9985886,
+          "source": "+fallback"
+        }
+      },
+      "warnings": {
+        "incompleteResults": false
+      },
+      "matches": [
+        {
+          "offset": 3,
+          "length": 2,
+          "text": "go",
+          "rule": {
+            "id": "HE_VERB_AGR",
+            "subId": "1",
+            "sourceFile": "grammar.xml",
+            "description": "Agreement error: Non-third person/past tense verb with 'he/she/it' or a pronoun",
+            "issueType": "grammar",
+            "urls": [
+              {
+                "value": "https://languagetool.org/insights/post/grammar-subject-verb-agreement/#1-singular-subjects-must-go-with-singular-verbs-and-plural-subjects-with-plural-verbs"
+              }
+            ],
+            "category": {
+              "id": "GRAMMAR",
+              "name": "Grammar"
+            }
+          },
+          "replacements": [
+            {
+              "value": "goes"
+            },
+            {
+              "value": "went"
+            }
+          ],
+          "context": {
+            "text": "He go to school.",
+            "offset": 3,
+            "length": 2
+          }
+        }
+      ]
+    },
+    {
+      "label": "de-grammar",
+      "form": {
+        "text": "Ich bin eine Mann.",
+        "language": "de-DE"
+      },
+      "request_body": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/de-grammar-request.form",
+        "sha256": "37bdf9c5f91c82bda8e4696b5719b24f0b1c2f816fd6862930c4123f651ff852",
+        "bytes": 38
+      },
+      "status": 200,
+      "headers": {
+        "date": "Fri, 16 Oct 2026 20:56:15 GMT",
+        "content-type": "application/json",
+        "content-length": "1359"
+      },
+      "response": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/de-grammar-response.raw",
+        "sha256": "6918fa5df132574639a208e8ee2192f6b01ffc3af4fcc0d0a51713c6e6ada0cf",
+        "bytes": 1359
+      },
+      "complete": true,
+      "duration_ms": 823,
+      "software": {
+        "name": "LanguageTool",
+        "version": "6.9-SNAPSHOT",
+        "buildDate": "2026-10-16 18:49:04 +0200",
+        "apiVersion": 1,
+        "premium": false,
+        "premiumHint": "You might be missing errors only the Premium version can find. Contact us at support<at>languagetoolplus.com.",
+        "status": ""
+      },
+      "language": {
+        "name": "German (Germany)",
+        "code": "de-DE",
+        "detectedLanguage": {
+          "name": "German (Germany)",
+          "code": "de-DE",
+          "confidence": 0.99999124,
+          "source": "+fallback"
+        }
+      },
+      "warnings": {
+        "incompleteResults": false
+      },
+      "matches": [
+        {
+          "offset": 8,
+          "length": 9,
+          "text": "eine Mann",
+          "rule": {
+            "id": "DE_AGREEMENT",
+            "description": "Kongruenz von Nominalphrasen (unvollständig!), z.B. 'mein kleiner (kleines) Haus'",
+            "issueType": "uncategorized",
+            "urls": [
+              {
+                "value": "https://languagetool.org/insights/de/beitrag/deklination/"
+              }
+            ],
+            "category": {
+              "id": "GRAMMAR",
+              "name": "Grammatik"
+            }
+          },
+          "replacements": [
+            {
+              "value": "ein Mann"
+            },
+            {
+              "value": "einen Mann"
+            },
+            {
+              "value": "einem Mann"
+            }
+          ],
+          "context": {
+            "text": "Ich bin eine Mann.",
+            "offset": 8,
+            "length": 9
+          }
+        }
+      ]
+    },
+    {
+      "label": "en-UTF16-supplementary",
+      "form": {
+        "text": "😀 This is a speling mistake.",
+        "language": "en-US"
+      },
+      "request_body": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/en-UTF16-supplementary-request.form",
+        "sha256": "9d08bd46669cb131d857f9cef8de8fed8b0eabd921df495fd045c7b3477f40f7",
+        "bytes": 59
+      },
+      "status": 200,
+      "headers": {
+        "date": "Fri, 16 Oct 2026 20:56:15 GMT",
+        "content-type": "application/json",
+        "content-length": "1149"
+      },
+      "response": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/en-UTF16-supplementary-response.raw",
+        "sha256": "819382cc4b845869bf7391c03895729878454e079a76d9905a0264bea20d5e64",
+        "bytes": 1149
+      },
+      "complete": true,
+      "duration_ms": 36,
+      "software": {
+        "name": "LanguageTool",
+        "version": "6.9-SNAPSHOT",
+        "buildDate": "2026-10-16 18:49:04 +0200",
+        "apiVersion": 1,
+        "premium": false,
+        "premiumHint": "You might be missing errors only the Premium version can find. Contact us at support<at>languagetoolplus.com.",
+        "status": ""
+      },
+      "language": {
+        "name": "English (US)",
+        "code": "en-US",
+        "detectedLanguage": {
+          "name": "English (US)",
+          "code": "en-US",
+          "confidence": 0.9999996,
+          "source": "+fallback"
+        }
+      },
+      "warnings": {
+        "incompleteResults": false
+      },
+      "matches": [
+        {
+          "offset": 13,
+          "length": 7,
+          "text": "speling",
+          "rule": {
+            "id": "MORFOLOGIK_RULE_EN_US",
+            "description": "Possible spelling mistake",
+            "issueType": "misspelling",
+            "category": {
+              "id": "TYPOS",
+              "name": "Possible Typo"
+            }
+          },
+          "replacements": [
+            {
+              "value": "spelling"
+            },
+            {
+              "value": "spewing"
+            },
+            {
+              "value": "spieling"
+            }
+          ],
+          "context": {
+            "text": "😀 This is a speling mistake.",
+            "offset": 13,
+            "length": 7
+          }
+        }
+      ]
+    },
+    {
+      "label": "en-UTF16-combining",
+      "form": {
+        "text": "😀 Café: This is a speling mistake.",
+        "language": "en-US"
+      },
+      "request_body": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/en-UTF16-combining-request.form",
+        "sha256": "0d1f34d0fe3039d27aae2f57a44c9b921e0501b0e46a41e654e4e30b620a7c06",
+        "bytes": 73
+      },
+      "status": 200,
+      "headers": {
+        "date": "Fri, 16 Oct 2026 20:56:15 GMT",
+        "content-type": "application/json",
+        "content-length": "1742"
+      },
+      "response": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/en-UTF16-combining-response.raw",
+        "sha256": "69bc27b00f46f0d9bd6a210b49a3fb71ef8fd32375b0fb4881480d9104e23390",
+        "bytes": 1742
+      },
+      "complete": true,
+      "duration_ms": 46,
+      "software": {
+        "name": "LanguageTool",
+        "version": "6.9-SNAPSHOT",
+        "buildDate": "2026-10-16 18:49:04 +0200",
+        "apiVersion": 1,
+        "premium": false,
+        "premiumHint": "You might be missing errors only the Premium version can find. Contact us at support<at>languagetoolplus.com.",
+        "status": ""
+      },
+      "language": {
+        "name": "English (US)",
+        "code": "en-US",
+        "detectedLanguage": {
+          "name": "English (US)",
+          "code": "en-US",
+          "confidence": 0.9999957,
+          "source": "+fallback"
+        }
+      },
+      "warnings": {
+        "incompleteResults": false
+      },
+      "matches": [
+        {
+          "offset": 3,
+          "length": 5,
+          "text": "Café",
+          "rule": {
+            "id": "MORFOLOGIK_RULE_EN_US",
+            "description": "Possible spelling mistake",
+            "issueType": "misspelling",
+            "category": {
+              "id": "TYPOS",
+              "name": "Possible Typo"
+            }
+          },
+          "replacements": [
+            {
+              "value": "Cafe"
+            },
+            {
+              "value": "Café"
+            },
+            {
+              "value": "Cafes"
+            },
+            {
+              "value": "Cafés"
+            }
+          ],
+          "context": {
+            "text": "😀 Café: This is a speling mistake.",
+            "offset": 3,
+            "length": 5
+          }
+        },
+        {
+          "offset": 20,
+          "length": 7,
+          "text": "speling",
+          "rule": {
+            "id": "MORFOLOGIK_RULE_EN_US",
+            "description": "Possible spelling mistake",
+            "issueType": "misspelling",
+            "category": {
+              "id": "TYPOS",
+              "name": "Possible Typo"
+            }
+          },
+          "replacements": [
+            {
+              "value": "spelling"
+            },
+            {
+              "value": "spewing"
+            },
+            {
+              "value": "spieling"
+            }
+          ],
+          "context": {
+            "text": "😀 Café: This is a speling mistake.",
+            "offset": 20,
+            "length": 7
+          }
+        }
+      ]
+    },
+    {
+      "label": "unsupported-language",
+      "form": {
+        "text": "This is a test.",
+        "language": "zz-ZZ"
+      },
+      "request_body": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/unsupported-language-request.form",
+        "sha256": "c0d29332709291c98b6b9240b13083a0d1b16e0e28bcd7c7c5864a53e6d8db4b",
+        "bytes": 35
+      },
+      "status": 400,
+      "headers": {
+        "date": "Fri, 16 Oct 2026 20:56:15 GMT",
+        "content-length": "707"
+      },
+      "response": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/unsupported-language-response.raw",
+        "sha256": "06276795fdd9b8ad19f66aabf1981e11ba5359f672ae85026fe1fe7136ecf545",
+        "bytes": 707
+      },
+      "complete": true,
+      "duration_ms": 12
+    }
+  ],
+  "processes": [
+    {
+      "label": "java-version",
+      "pid": 51540,
+      "status": {
+        "code": 0,
+        "signal": null
+      },
+      "actual_close_event": true,
+      "stdout": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/java-version.stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "stderr": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/java-version.stderr.log",
+        "sha256": "2c05c59b13a701146c37d79936303eb8080cd353e096756dfab1cd833a306423",
+        "bytes": 196
+      }
+    },
+    {
+      "label": "owned-language-engine",
+      "pid": 40032,
+      "args": [
+        "-Djava.awt.headless=true",
+        "-Duser.home=E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/java-home",
+        "-Djava.io.tmpdir=E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/tmp",
+        "-Xms64m",
+        "-Xmx768m",
+        "--class-path",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\language-runtime\\source28-pinned-20261016-v1\\languagetool\\LanguageTool-6.9-SNAPSHOT\\languagetool-server.jar;E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\language-runtime\\source28-pinned-20261016-v1\\languagetool\\LanguageTool-6.9-SNAPSHOT/libs/*",
+        "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/OpenSeoOwnedLanguageTool.java",
+        "62447",
+        "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/server.properties"
+      ],
+      "events": [
+        {
+          "event": "exit",
+          "code": 0,
+          "signal": null
+        },
+        {
+          "event": "close",
+          "code": 0,
+          "signal": null
+        }
+      ],
+      "stdin_EOF_sent": true,
+      "status": {
+        "code": 0,
+        "signal": null
+      },
+      "actual_close_event": true,
+      "actual_ready": true,
+      "stdout": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/engine.stdout.log",
+        "sha256": "dd679bad064800c016c98f57dc80cde0cf61eb6547205bdc73584005592ba228",
+        "bytes": 632
+      },
+      "stderr": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v4/engine.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "listener_port_rebound_and_closed": true
+    }
+  ],
+  "active_HTTP": 0,
+  "Root_forced_own_engine": false,
+  "failures": [],
+  "scope": "Own synthetic EN/DE sentences and exact dated local engine. Supplementary/combining prefixes test actual UTF16 offsets. No cloud/provider parity, external engine network-absence, persisted dictionaries, Open Spider consumer integration or installation accepted by this pilot.",
+  "product_integration": "NOT_RUN",
+  "installed_Open_Spider_changed": false,
+  "manufacturer_parity": "NOT_PROVEN",
+  "recorded_at": "2026-10-16T20:56:15.539Z"
+}

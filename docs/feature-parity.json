@@ -6858,7 +6858,7 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-16T19:44:52.664Z",
+  "last_verified_at": "2026-10-16T21:02:00.189Z",
   "current_work": [
     {
       "id": "combined-source-v15-20261016",
@@ -9128,9 +9128,9 @@
     {
       "id": "native-resource-quotas-20261016",
       "priority": 1,
-      "status": "CORE10_PASS_NATIVE_ATTEMPT5_FAIL_CURRENT_QUIESCENCE_SOURCE_REVIEWED",
+      "status": "CORE10_PASS_NATIVE_R8_CAPSULE_FAILURE_PHYSICALLY_DRAINED",
       "title_de": "Native interne Ressourcen-Crawls mit dauerhaften Quoten verbinden",
-      "summary_de": "Core10 besteht alle25 Speicher-Kontrollen samt unabhängigem tatsächlichen Audit. Der vollständige Ressourcenlauf3 scheiterte an einem geschlossenen UI-Panel; die Prüfaktion ist korrigiert. Lauf4 erreicht spätere Ressourcenfälle, scheitert beim zu frühen Schließen des Testbrowser-Kontexts und bleibt fehlgeschlagen. Beide eigenen Fenster sind physisch geschlossen; bei Lauf4 wurde nur der hängende Root-Prüfprozess erzwungen beendet. Lauf5 schließt alle eigenen Besitzer ohne Root-Zwangsbeendigung, scheitert aber an der falschen Annahme, nach einer Freeze-Bestätigung könnten keine verzögerten Netzwerkereignisse eintreffen. Die aktuelle Reparatur prüft zwei ruhige Runden mit identischem Anfragebestand; die tatsächliche Abnahme fehlt.",
+      "summary_de": "Core10 besteht weiterhin25 Speicher-Kontrollen. Ressourcenlauf8 erreicht RQ13, scheitert aber am bisherigen8MiB-Gesamtlimit des Nachweisformats: jede Epoche enthält die vollständige wachsende Anfragehistorie. Alle75 gespeicherten SQL-Besitzer und die Testfixture sind geschlossen, keine eigenen Prozesse verbleiben. Der Fehllauf und nachgelagerte logische Abschlussfehler bleiben erhalten. Das neue begrenzte Komponentenformat besteht die unabhängige Quellprüfung und52 tatsächliche Dateisystem-Prüfgruppen. Die Einbindung in alle Besitzerrollen und die native Gesamtabnahme sind offen.",
       "feature_ids": [
         "crawl.resources",
         "crawl.limits"
@@ -9154,10 +9154,12 @@
         "Ressourcenlauf3 und4 tatsächlich ausgeführt und als Fehler mit vollständigen Teilbelegen erhalten; nachgelagerte eigene physische Prozess-/SQL-/Fixture-Prüfung bestätigt keine zurückbehaltenen Besitzer. Lauf4 erhält ausdrücklich keinen natürlichen Gesamtabschluss."
       ],
       "pending_acceptance_de": [
-        "Quellengeprüfte aktuelle Browser-Abschlussreparatur mit vollständiger Ressourcenmatrix tatsächlich abnehmen.",
-        "Aktuelle eigene Datenprüfung, Produktübernahme und Daten erhaltende Installation abschließen."
+        "Geprüftes Komponentenformat mit52 tatsächlich bestandenen Prüffällen in Brücke, Provider und Abschlussprüfer binden; neue exakte Besitzerinventare, Quellenprüfungen und Freigabe erstellen.",
+        "Vollständige Ressourcenmatrix einschließlich Browser/SQL/EOF-Grenzen neu bestehen.",
+        "Produktübernahme und Daten erhaltende Installation abschließen."
       ],
       "documentation": [
+        "docs/verification/source27-tls-and-native-progress-20261016/index.json",
         "docs/verification/source26-comparison-and-resource-drain-20261016/index.json",
         "docs/verification/source24-review-and-core10-20261016/index.json",
         "docs/verification/source19-directory-and-source18-native-20261016/index.json",
@@ -9179,7 +9181,7 @@
         "Node_current": "V4_PASS_ACTUAL16_THREE_DRIVERS_FIVE_CURRENT_TARGETS",
         "full_suite": "PASS_ACTUAL_1559_ZERO_FAILED_ZERO_IGNORED_FOUR_FRESH_RENDERER_FMT_CLIPPY",
         "build": "PASS_ACTUAL_SOURCE17_OPTIMIZED_BUILD",
-        "native": "FAIL_ATTEMPT5_FALSE_FREEZE_BARRIER_PRESERVED_PHYSICAL_DRAIN_COMPLETE_NO_ROOT_KILLS",
+        "native": "FAIL_R8_CAPSULE_8MiB_AGGREGATE_NOT_ACCEPTED",
         "installation": "NOT_RUN",
         "manufacturer_parity": "NOT_PROVEN",
         "formatter_review": "V4_NO_FINDINGS_BOUNDED_MECHANICAL_REVIEW",
@@ -9190,16 +9192,18 @@
         "current_proposal": "V4_ACTUAL_PRIVATE_PUBLICATION_AUDITED",
         "native_regressions": "PASS_SIX_CURRENT_ACTUAL_BOUNDED_SCOPES_INDEPENDENTLY_AUDITED",
         "closed_provider_helper": "PASS_ATTEMPT9_25_CURRENT_INDEPENDENT_ACTUAL_AUDIT_EIGHT_FAILURES_PRESERVED",
-        "UI_owner_repair": "SOURCE_PROPOSAL_NEW_NATIVE_ACCEPTANCE_PENDING"
+        "UI_owner_repair": "SOURCE_PROPOSAL_NEW_NATIVE_ACCEPTANCE_PENDING",
+        "physical_drain": "PASS_75_SQL_CLOSED_FIXTURE_ZERO_KNOWN_SCOPED_PROCESS_ZERO_ROOT_KILLS",
+        "component_repair": "PASS_SOURCE_NOF_AND_52_ACTUAL_FILESYSTEM_FIXTURES_NOT_NATIVE_SUCCESS"
       },
       "reference_parity": "NOT_PROVEN"
     },
     {
       "id": "directive-reporting-20261016",
       "priority": 1,
-      "status": "SOURCE26_FULL_SUITE_BUILD_PASS_NATIVE_FRONTDOORS_PENDING",
+      "status": "SOURCE27_SUITE_BUILD_PASS_TWO_NATIVE_CONSUMERS_AUDITED_REMAINING_OPEN",
       "title_de": "Berichtsfilter für Noindex, Canonicals und Pagination ergänzen",
-      "summary_de": "Die gemeinsame443-Dateien-Version für N-Gramme, Inhalte, defekte Quellen, Sitemap-Bundles und Vergleichsansichten ist unabhängig ohne offenen Quellbefund geprüft. Der vollständige lokale Lauf besteht 1660 Tests ohne Fehler oder ignorierte Tests,882 Pflichtnamen, vier echte Renderer-Prüfungen,23 Inhalts-/Sitemap-UI-VM-Gruppen sowie Format und Clippy ohne Warnungen. Optimierter Build und75-Dateien-Patch sind geprüft. Neue native Browser-/API-/CLI-/MCP-Abnahmen und Installation fehlen; lokal läuft weiterSource16.",
+      "summary_de": "Der449-Dateien-Kandidat einschließlich TLS/HSTS besteht1688 Tests ohne Fehler oder ignorierte Tests,910 Pflichtnamen, vier frische Renderer-Gates,31 UI-VM-Gruppen, Format, strengen Clippy und optimierten Build samt unabhängigem tatsächlichem Suite-Audit. N-Gramm/Inhalt und Sitemap-Bundle bestehen aktuelle C5-Nativläufe mit unabhängigen Rohdaten-Audits. Defekte Quellen und Vergleichsansichten bleiben nach getrennt geprüften Testkorrekturen in Abnahme. Der89-Dateien-Patch ist geprüft und nicht angewendet; lokal läuft weiterSource16.",
       "feature_ids": [
         "robots.traversal"
       ],
@@ -9225,14 +9229,18 @@
         "C3 besteht alle1659 Rust-Tests und23 UI-VM-Gruppen, bleibt wegen Clippy fehlgeschlagen. C4 verkleinert nur den Sitemap-Fehlertyp; C5 korrigiert eine unveränderte Testkonfiguration. Beide Fehlläufe bleiben erhalten, aktueller Clippy für alle Ziele besteht ohne Warnungen.",
         "Source25: strengere UI-Profilvalidierung mit15 Sitemap- und8 Inhalts-VM-Gruppen tatsächlich bestanden; ursprünglicher unzureichender13er-Lauf und HTTP-Hash-Orakelfehler bleiben dokumentiert.",
         "Source26: vollständiger Rohvergleich plus profil-/modus-/snapshotgebundener Sichtbarkeitsindex umgesetzt; unabhängiger MCP-Anforderungsbindungsbefund mit sechs neuen Rust-Regressionen geschlossen.",
-        "Source26: alle443 Quellen vor/nach exakt, 1660/0/0 Tests,882 Pflichtnamen, vier echte Renderer-Gates,23 UI-VM-Gruppen, Format, strenger Clippy und optimierter Build bestanden;75-Dateien-Patch per apply --check geprüft und nicht angewendet."
+        "Source26: alle443 Quellen vor/nach exakt, 1660/0/0 Tests,882 Pflichtnamen, vier echte Renderer-Gates,23 UI-VM-Gruppen, Format, strenger Clippy und optimierter Build bestanden;75-Dateien-Patch per apply --check geprüft und nicht angewendet.",
+        "Source27C2:449 unveränderte Quellen,1688/0/0 Tests,910 Pflichtnamen, vier Renderer-Gates,31 VM-Gruppen, Format/Clippy und optimierter Build. Lokale CA-/HTTPS-/HSTS-Fälle einschließlich Hostname/Vertrauen/Quota-Start tatsächlich bestanden.",
+        "Native23r2 und Native25r3: echte API/CLI/MCP/Browser-Exporte und vollständige Rohdaten unabhängig ohne Befund geprüft; begrenzte Kriterien, keine Herstellerparität."
       ],
       "pending_acceptance_de": [
-        "N-Gramm-/Inhaltsansichten, defekte Quellen, Sitemap-Bundles und Vergleichsansichten über tatsächliche API-, Offline-CLI-, MCP- und Browser-Wege abnehmen.",
-        "Geprüften Gesamtpatch übernehmen und Daten erhaltend installieren.",
-        "Alle144 Feature-Einträge weiter bis zur belegten Abdeckung abarbeiten; TLS und HSTS als nächsten isolierten Funktionsbereich fertigstellen."
+        "Native24/26-Wiederholungsläufe samt unabhängiger tatsächlicher Rohdatenprüfung abschließen.",
+        "TLS/HSTS über aktuelle App-/CLI-/MCP-/Browser-Wege nativ abnehmen; aktive TLS/HSTS-Kombination mit Renderer bleibt ausdrücklich eingeschränkt.",
+        "Source17-Ressourcenmatrix, geprüfte Produktübernahme und Daten erhaltende Installation abschließen.",
+        "Alle144 Fähigkeiten,416 Filter und32 Abläufe weiter einzeln abarbeiten; Sprachprüfung bleibt bis zur Fehlerkorrektur offen."
       ],
       "documentation": [
+        "docs/verification/source27-tls-and-native-progress-20261016/index.json",
         "docs/verification/source26-comparison-and-resource-drain-20261016/index.json",
         "docs/verification/source24-review-and-core10-20261016/index.json",
         "docs/verification/source21-native-and-storage-diagnostic-20261016/index.json",
@@ -9255,7 +9263,7 @@
         "installation": "NOT_RUN",
         "manufacturer_parity": "NOT_PROVEN",
         "legacy_UI": "PASS_ACTUAL16_CURRENT_TARGET_TESTS",
-        "product_patch": "75_FILE_APPLY_CHECK_PASS_NOT_APPLIED",
+        "product_patch": "89_FILES_APPLY_CHECK_PASS_NOT_APPLIED",
         "directory_full_suite": "PASS_ACTUAL1582_0_0_FOUR_RENDERER_FMT_CLIPPY",
         "directory_build": "PASS_ACTUAL_OPTIMIZED_CANDIDATE",
         "directory_native": "FAIL_CONSOLE404_AFTER_FIRST_VIEW_AND_CSV_PRESERVED",
@@ -9275,9 +9283,41 @@
         "combined26_full_suite": "PASS_ACTUAL_1660_0_0_882_REQUIRED_FOUR_RENDERER_VM23_FMT_CLIPPY",
         "combined26_actual_suite_audit": "PASS_CURRENT_INDEPENDENT_ACTUAL_AUDIT",
         "combined26_build": "PASS_ACTUAL_OPTIMIZED_BUILD",
-        "combined26_native": "NOT_RUN"
+        "combined26_native": "NOT_RUN",
+        "combined27_source_review": "PASS_CURRENT_C2_NO_FINDINGS",
+        "combined27_full_suite": "PASS_ACTUAL_1688_0_0_910_REQUIRED_FOUR_RENDERER_VM31_FMT_CLIPPY",
+        "combined27_suite_audit": "PASS_CURRENT_ACTUAL_INDEPENDENT_AUDIT",
+        "combined27_build": "PASS_OPTIMIZED_NOT_NATIVE_ACCEPTANCE",
+        "native23": "PASS_ACTUAL_R2_INDEPENDENT_AUDIT",
+        "native25": "PASS_ACTUAL_R3_INDEPENDENT_AUDIT",
+        "native24": "PASS_BOUNDED_CURRENT_SOURCE26_BROKEN_SOURCES_NATIVE24",
+        "native26": "PASS_BOUNDED_CURRENT_SOURCE26_SAVED_COMPARISON_NATIVE25"
       },
       "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "saved-spelling-grammar-20261016",
+      "title_de": "Lokale Rechtschreib- und Grammatikprüfung gespeicherter Inhalte",
+      "priority": 32,
+      "status": "SOURCE_V2_ONE_P2_V3_REPAIR_PENDING",
+      "summary_de": "Die erste isolierte API-/CLI-/MCP-/UI-Implementierung liegt vor. Unabhängige Prüfung findet drei zu schließende P2-Punkte: gemeinsames Antwortbudget, exakte Abdeckung aller ausgewählten URLs und Schutz vor erfolgreichen Nullbefunden bei deaktivierter Prüfung oder leerem Text. V2 schließt diese drei Befunde mit sieben neuen Regressionen im Quellcode. Ein echter deutscher Enginebefund enthält31 Vorschläge und überschreitet die bisherige Parsergrenze20; V3 korrigiert diesen neuen Befund mit einer festen512er-Grenze und gezielten Regressionen. Kein Produktlauf oder Einbau ist abgenommen.",
+      "completed_acceptance_de": [
+        "449 Basisdateien,23 vollständige Änderungspaare und fünf Syntaxprüfungen unabhängig verifiziert; V1 bleibt mit Befunden erhalten."
+      ],
+      "pending_acceptance_de": [
+        "Alle drei Befunde mit gezielten Regressionen schließen und erneut unabhängig prüfen.",
+        "Tatsächliche lokale Engine sowie Rust-/UI-/API-/CLI-/MCP-/Browser-Integration einschließlich UTF16, Fehlern und Wörterbuch-Fortbestand abnehmen.",
+        "Weiter offene Textquellen wie PDF sowie Titel/Metadaten separat abdecken."
+      ],
+      "gates": {
+        "source_review": "V1_THREE_SOURCE_CLOSED_V2_ONE_NEW_P2_NO_NOF",
+        "engine_pilot": "PASS_ACTUAL_ENGINE_API_AND_UTF16_PILOT_NOT_PRODUCT_INTEGRATION",
+        "product_integration": "NOT_RUN",
+        "manufacturer_parity": "NOT_PROVEN"
+      },
+      "documentation": [
+        "docs/verification/source27-tls-and-native-progress-20261016/source28-v1-source-findings.json"
+      ]
     }
   ],
   "active_work_ids": [

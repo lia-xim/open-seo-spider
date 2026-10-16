@@ -1,0 +1,147 @@
+{
+  "kind": "source28_saved_spelling_grammar_independent_source_review",
+  "result": "FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "proposal": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-saved-spelling-proposal-v2/manifest.NOT-RUN.json",
+    "sha256": "9fb2ebfeb74953309578bbc3af086b8ca281ad977f4e02eebda4dd8a45e623c9",
+    "bytes": 31200
+  },
+  "baseline": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source27-tls-hsts-root-composition-v2/composition.json",
+    "sha256": "2cfa8d828de09905a68ab12c4193fc5875a245d76a540025008f37887b501ff9",
+    "bytes": 881141
+  },
+  "baseline_source_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source27-composed-C2-independent-source-review-v1/receipt.json",
+    "sha256": "7aeef28a7c1d320c9fb734b8376f3a782caa3605be0d30fc60a4b22696682420",
+    "bytes": 2957
+  },
+  "complete_pairs": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-saved-spelling-proposal-v2/FULLPAIRS.NOT-A-REVIEW.json",
+    "sha256": "a96d6a60922ddd2e6d5c7d6e5baf3ec7c0a52733ea8267ba2423fde320d0ae28",
+    "bytes": 1485274
+  },
+  "v1_to_v2_derivation": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-saved-spelling-proposal-v2/AUTHOR-V1-TO-V2-DERIVATION.NOT-A-REVIEW.json",
+    "sha256": "73c0af78b5d86ba8d2e171ab5a236d19de7f36a8333d2a46929b7d02725cc7c3",
+    "bytes": 1177133
+  },
+  "contract": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-saved-spelling-proposal-v2/CONTRACT.NOT-RUN.json",
+    "sha256": "6a52f686034a0a65ab11a0c29d6317bc9b7f352dcc5179846cd8222e04640a2b",
+    "bytes": 20591
+  },
+  "parent_findings": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-saved-spelling-independent-source-review-v1/receipt.json",
+    "sha256": "d56d475321ce8c15d225997195843fa1d79bfc8b6185a4d72a958527fdc03c47",
+    "bytes": 9435
+  },
+  "previous_finding_closures": [
+    {
+      "id": "S28-01",
+      "result": "CLOSED_IN_REVIEWED_SOURCE",
+      "evidence": "exchange receives the remaining aggregate budget, rejects oversized declared length before retention, appends at most the remaining streamed prefix, retains EOF=false/error and partial bytes on overflow/deadline; run and validate_report recompute remaining per-attempt caps and cumulative retained raw body bytes. Declared/chunked3MiB+3MiB negative fixtures retain<=4MiB. Tests NOT_RUN."
+    },
+    {
+      "id": "S28-02",
+      "result": "CLOSED_IN_REVIEWED_SOURCE",
+      "evidence": "Request rejects duplicate/empty/oversized identities. validate_partition requires exact selected/included/excluded counts, ordered one-to-one URL partition, original selection IDs, unique raw ordinals, source kind and valid active reported-view exclusions. run preflights its prepared input binding; validate_report zips exact returned provenance. Omitted/duplicate/unknown/reordered/raw-excluded/all-excluded/missing fixtures authored. Tests NOT_RUN."
+    },
+    {
+      "id": "S28-03",
+      "result": "CLOSED_IN_REVIEWED_SOURCE",
+      "evidence": "Every provider attempt now requires enabled+acknowledged config and complete nonempty byte/UTF16-bounded saved text. Checked documents must have a provider and validated raw response. Disabled/empty forged success regressions with recomputed digests and valid legitimate unknown states authored in service and MCP tests. Tests NOT_RUN."
+    }
+  ],
+  "findings": [
+    {
+      "id": "S28-04",
+      "priority": 2,
+      "title": "Support the pinned local engines real German replacement list without silently truncating it",
+      "file": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-saved-spelling-proposal-v2/source/crates/core/src/spelling.rs",
+        "sha256": "6ced566bed2e4c7c5ef3fe50f448cf1146e4ce93482aea2341afb02aa9624868",
+        "bytes": 14644
+      },
+      "line": 243,
+      "summary": "The real saved de-DE reply for Das ist ein Feler. from the pinned LanguageTool6.9-SNAPSHOT contains31 replacements for GERMAN_SPELLER_RULE. parse_reply rejects every issue with more than20 replacements. A normal German misspelling therefore becomes provider_error under the current proposal, and its expected positive actual-DE test cannot establish the intended behavior with that response.",
+      "saved_request": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v3/de-spelling-request.form",
+        "sha256": "82c26d304bd9d0cc1b0cae8220a2ec1d812fcfc8fcf923ba8976902de534297e",
+        "bytes": 38
+      },
+      "saved_response": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v3/de-spelling-response.raw",
+        "sha256": "397139b8389c9e7c541c12ba6cbbfca20434f9d481c7e0d69315c3b00a63510e",
+        "bytes": 1663
+      },
+      "saved_observation": {
+        "software": {
+          "name": "LanguageTool",
+          "version": "6.9-SNAPSHOT",
+          "buildDate": "2026-10-16 18:49:04 +0200",
+          "apiVersion": 1
+        },
+        "language": "de-DE",
+        "text": "Das ist ein Feler.",
+        "rule": "GERMAN_SPELLER_RULE",
+        "issueType": "misspelling",
+        "offset": 12,
+        "length": 5,
+        "matched": "Feler",
+        "replacement_count": 31,
+        "first_replacement": "Fehler"
+      },
+      "consequence": "German analysis incorrectly reports an unavailable/incomplete provider result for this ordinary valid engine response rather than retaining the complete issue and allowing dictionary/recheck behavior.",
+      "required_change": "Use an explicitly documented, evidenced finite replacement count contract that admits the pinned engines observed valid31-item list while retaining every returned suggestion. Preserve the4MiB provider/aggregate and8MiB result ceilings and per-string limits. Update the schema/contract/tests consistently; do not silently slice the suggestions or turn the rejection into a clean zero.",
+      "required_regression": "Save a rights-safe actual pinned German response fixture or equivalent complete31-item literal fixture, assert the entire list and exact issue span are retained, then assert a response above the new declared finite count remains an explicit error. Root must later run the real-engine DE spelling/dictionary-recheck test.",
+      "basis": "Independent data-only parse/hash/schema/span inspection of Root-provided saved synthetic engine responses plus source predicate review. The product parser itself was not executed and the failed Root V3 pilot is not promoted to product acceptance."
+    }
+  ],
+  "audit": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-saved-spelling-independent-source-review-v2/AUDIT.json",
+    "sha256": "6ecd6b7ae4df610cb2a8f3e0ec1deeb828ec1c520591f3591b209729733f0bc3",
+    "bytes": 9535
+  },
+  "source_verification": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-saved-spelling-independent-source-review-v2/SOURCE-VERIFICATION.json",
+    "sha256": "570d6d3b7cdacc48b3ad5fc4c3440efc4fd13929cd69da8adb1e096559cfeb95",
+    "bytes": 168223
+  },
+  "delta_tests_and_saved_provider": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-saved-spelling-independent-source-review-v2/DELTA-AND-SAVED-PROVIDER.json",
+    "sha256": "5eb2c76b989a01c04bd5e21d1aa39d8d8921a2025cb9754c3b6ed306b0e9746b",
+    "bytes": 33044
+  },
+  "syntax_only": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-saved-spelling-independent-source-review-v2/GRAMMAR.NOT-A-TEST.json",
+    "sha256": "6e339d0ab03de4d41aeba0c517f1f2d3f197fd1954656688562b222cfb30a693",
+    "bytes": 3110
+  },
+  "source_counts": {
+    "baseline": 449,
+    "payloads": 23,
+    "modify": 13,
+    "add": 10,
+    "proposed": 459,
+    "inherited_exact": 436
+  },
+  "source_execution": false,
+  "actual_engine": "NOT_RUN_BY_REVIEWER",
+  "actual_native": "NOT_RUN",
+  "actual_browser": "NOT_RUN",
+  "installation": "NOT_RUN",
+  "manufacturer_parity": "NOT_PROVEN",
+  "qualification": "Independent saved-source review. S28-01/02/03 source-closed; S28-04 remains open from actual saved Root provider data. Not a NoF or runtime acceptance. V1 and V2 proposals preserved. AdditionalV4saved-data addendum admits8success schemas/spans except existingS28-04; unsupported-language400 correctly remains failure. No further findings.",
+  "previous_frozen_receipt": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-saved-spelling-independent-source-review-v2/receipt.json",
+    "sha256": "68ffebdb4895e57ce7ad6ebeb71695c1061cc9f77cd0be4edbe594c16377ae32",
+    "bytes": 8237
+  },
+  "saved_LT_V4_addendum": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-saved-spelling-independent-source-review-v2/SAVED-LT-V4-ADDENDUM.json",
+    "sha256": "879827572b4fe26880c5f0ed927a56954f3d25f44a883a0e4e953793deddf75f",
+    "bytes": 13642
+  },
+  "Root_authorized_next_contract": "Explicit512replacements per issue; preserve all observed replacements, raw per-document/aggregate4MiB and result8MiB caps and per-string bounds. Prospective Root specification, not implemented or accepted by this receipt."
+}

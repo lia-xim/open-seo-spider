@@ -1,0 +1,82 @@
+{
+  "kind": "Root_actual_reviewed_native24_26_sequential_retry4",
+  "result": "FAIL_BATCH_NOT_ACCEPTED",
+  "Root_runner": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source24-26-reviewed-native-r4-root-batch-v1/Root-runner.mjs",
+    "sha256": "9223c53c78c25c21e9ad6533ada1d395fbdc6f4290a79c1d86a423bd2212d999",
+    "bytes": 4647
+  },
+  "roles": [
+    {
+      "version": 24,
+      "proposal": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source24-native-owner-caller-proposal-v4/manifest.NOT-RUN.json",
+        "sha256": "bf5f394f17064dcda64b5b32c257df3faf641449d9800b7a64386d3c45afa2f5",
+        "bytes": 9748
+      },
+      "review": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source24-caller-v4-Root-independent-source-review-v1/receipt.json",
+        "sha256": "ce0488f598661386dd133e921e94d0c86f34840f86cca1abd23e348e8a33a84d",
+        "bytes": 7436
+      }
+    },
+    {
+      "version": 26,
+      "proposal": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source26-native-owner-caller-proposal-v4/manifest.NOT-RUN.json",
+        "sha256": "b56181147777dff25d165783dc7594037a4005e0e32eec991aaf1e32fa089b4e",
+        "bytes": 5587
+      },
+      "review": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source26-caller-v4-Root-independent-source-review-v1/receipt.json",
+        "sha256": "5bfec698356579f741b1a3a1cfa344fb0854a22c462f0123ad7a52385b665435",
+        "bytes": 7079
+      }
+    }
+  ],
+  "common": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source26-C5-full-suite-independent-actual-audit-v1/receipt.json",
+      "sha256": "7d15e954db36ea1d5a6c6cc8356e83dcc0e9b2c488fc9acf43de7dbc03814de1",
+      "bytes": 7571
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source26-comparison-optimized-build-v3/proof.json",
+      "sha256": "bf98674d05dce716e62e1fb384eaedb4317e384e6c3649353bfd6d253a6e2698",
+      "bytes": 2317
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source26-comparison-C5-independent-source-review-v1/receipt.json",
+      "sha256": "9cfbd8bb89d7aac1b91eb6af51ede4e6358864004be0beb73699178b216e1067",
+      "bytes": 8547
+    }
+  ],
+  "runs": [
+    {
+      "label": "native24-same-process-issue-and-run",
+      "pid": 51464,
+      "status": {
+        "code": 3221226505,
+        "signal": null
+      },
+      "error": null,
+      "actual_close_event": true,
+      "duration_ms": 1177,
+      "log": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source24-26-reviewed-native-r4-root-batch-v1/native24-same-process-issue-and-run.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    }
+  ],
+  "failures": [
+    {
+      "message": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   code: 3221226505,\n-   code: 0,\n    signal: null\n  }\n",
+      "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   code: 3221226505,\n-   code: 0,\n    signal: null\n  }\n\n    at run (file:///C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/run-native24-26-reviewed-r4-root-v1.mjs:6:849)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async file:///C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/run-native24-26-reviewed-r4-root-v1.mjs:7:24"
+    }
+  ],
+  "installed_changed": false,
+  "manufacturer_parity": "NOT_PROVEN",
+  "qualification": "Each role owns a fresh finite reviewed grant. Native24 issue/run same process. Earlier failed runs retained. Per-role actual receipts and independent raw audit remain required.",
+  "recorded_at": "2026-10-16T20:52:07.682Z"
+}

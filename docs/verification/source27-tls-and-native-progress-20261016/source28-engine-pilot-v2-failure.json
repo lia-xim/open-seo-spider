@@ -1,0 +1,111 @@
+{
+  "kind": "Root_actual_pinned_local_language_engine_API_pilot",
+  "result": "FAIL_ACTUAL_ENGINE_PILOT_NOT_ACCEPTED",
+  "Root_runner": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v2/Root-runner.mjs",
+    "sha256": "2b2fa0e5740a5d3173a13aed8ea3a0a7fcc95e221f22c3d284de5c4374aeb5d1",
+    "bytes": 10380
+  },
+  "extraction": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/language-runtime/source28-jdk17-pinned-20261016-v1/extraction-proof.json",
+    "sha256": "1342b57f66f78b4ebdd1dc1da2691fe097bd0ccd2a01fa19364db70d4573eb47",
+    "bytes": 750595
+  },
+  "adapter": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v2/OpenSeoOwnedLanguageTool.java",
+    "sha256": "cdbdf11d2cabb7174323b40b95ad1c02b94b1b272c69c6555728a56fc92716b9",
+    "bytes": 1596
+  },
+  "config": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v2/server.properties",
+    "sha256": "13275a9218383f1b78470dc5f8a5e5fd01e43b9c6d835b812d0103d39a2d35ab",
+    "bytes": 74
+  },
+  "port": 56745,
+  "cases": [],
+  "processes": [
+    {
+      "label": "java-version",
+      "pid": 30976,
+      "status": {
+        "code": 0,
+        "signal": null
+      },
+      "actual_close_event": true,
+      "stdout": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v2/java-version.stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "stderr": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v2/java-version.stderr.log",
+        "sha256": "2c05c59b13a701146c37d79936303eb8080cd353e096756dfab1cd833a306423",
+        "bytes": 196
+      }
+    },
+    {
+      "label": "owned-language-engine",
+      "pid": 44128,
+      "args": [
+        "-Djava.awt.headless=true",
+        "-Duser.home=E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v2/java-home",
+        "-Djava.io.tmpdir=E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v2/tmp",
+        "-Xms64m",
+        "-Xmx768m",
+        "--class-path",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\language-runtime\\source28-pinned-20261016-v1\\languagetool\\LanguageTool-6.9-SNAPSHOT\\languagetool-server.jar;E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\language-runtime\\source28-pinned-20261016-v1\\languagetool\\LanguageTool-6.9-SNAPSHOT/libs/*",
+        "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v2/OpenSeoOwnedLanguageTool.java",
+        "56745",
+        "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v2/server.properties"
+      ],
+      "events": [
+        {
+          "event": "exit",
+          "code": 1,
+          "signal": null
+        },
+        {
+          "event": "close",
+          "code": 1,
+          "signal": null
+        }
+      ],
+      "stdin_EOF_sent": false,
+      "status": {
+        "code": 1,
+        "signal": null
+      },
+      "actual_close_event": true,
+      "stdout": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v2/engine.stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "stderr": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source28-local-language-engine-probe-v2/engine.stderr.log",
+        "sha256": "80cb3f7c7118d5fc9dc3ae7e8ccd1ac01440811c57311ce4d3886564158e3470",
+        "bytes": 974
+      }
+    }
+  ],
+  "active_HTTP": 0,
+  "Root_forced_own_engine": false,
+  "failures": [
+    {
+      "message": "Engine exited before readiness 1 null",
+      "stack": "Error: Engine exited before readiness 1 null\n    at ChildProcess.<anonymous> (file:///C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/probe-source28-local-language-engine-root-v2.mjs:8:1484)\n    at Object.onceWrapper (node:events:631:26)\n    at ChildProcess.emit (node:events:509:28)\n    at ChildProcess._handle.onexit (node:internal/child_process:295:12)"
+    },
+    {
+      "phase": "engine_close",
+      "status": {
+        "code": 1,
+        "signal": null
+      }
+    }
+  ],
+  "scope": "Own synthetic EN/DE sentences and exact dated local engine. Supplementary/combining prefixes test actual UTF16 offsets. No cloud/provider parity, external engine network-absence, persisted dictionaries, Open Spider consumer integration or installation accepted by this pilot.",
+  "product_integration": "NOT_RUN",
+  "installed_Open_Spider_changed": false,
+  "manufacturer_parity": "NOT_PROVEN",
+  "recorded_at": "2026-10-16T20:54:19.826Z"
+}

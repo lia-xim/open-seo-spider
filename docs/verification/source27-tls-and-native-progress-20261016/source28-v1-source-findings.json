@@ -1,0 +1,127 @@
+{
+  "kind": "source28_saved_spelling_grammar_independent_source_review",
+  "result": "FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "findings": [
+    {
+      "id": "S28-01",
+      "priority": 2,
+      "title": "Enforce the remaining aggregate response budget inside each exchange",
+      "file": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-saved-spelling-proposal-v1/source/crates/app/src/spelling_app.rs",
+        "sha256": "130951f14df4ee00136c276911fd0e3ca641616ba43dafdb14cd53d8b8517e05",
+        "bytes": 24584
+      },
+      "lines": [
+        103,
+        108,
+        143,
+        156
+      ],
+      "summary": "The advertised aggregate retained provider-response ceiling is4MiB, but exchange always permits its own independent4MiB body. run checks the aggregate only after receiving and retaining the complete next body. Two individually valid3MiB replies retain6MiB, mark the second provider_error and may still serialize below the8MiB report bound. The aggregate ceiling is therefore exceeded before rejection.",
+      "trigger": "Choose two complete nonempty captures. First reply is valid LanguageTool JSON padded through an additive field to3MiB. Second is another3MiB reply. response_bytes<4MiB permits dispatch of the second and exchange uses MAX_RESPONSE_BYTES rather than4MiB-response_bytes.",
+      "consequence": "The observed/retained provider byte budget can approach8MiB rather than4MiB; the finite contract is not enforced at the read boundary and large failure evidence can crowd out the immutable result.",
+      "required_change": "Pass the remaining aggregate response budget into exchange and enforce the lesser of the remaining budget and per-document maximum before declared-length acceptance and each streamed chunk. Keep bounded partial failure bytes truthful/body_complete=false. Never enlarge either ceiling.",
+      "required_regression": "Two responses whose individual sizes are below4MiB but combined sizes exceed4MiB; assert retained/observed sum never exceeds4MiB and the over-budget document has explicit unknown failure status. Cover declared length and chunked body.",
+      "basis": "Direct saved-source control-flow and arithmetic review only; no target or HTTP execution."
+    },
+    {
+      "id": "S28-02",
+      "priority": 2,
+      "title": "Validate an exact included/excluded partition of all requested URLs",
+      "file": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-saved-spelling-proposal-v1/source/crates/app/src/spelling_app.rs",
+        "sha256": "130951f14df4ee00136c276911fd0e3ca641616ba43dafdb14cd53d8b8517e05",
+        "bytes": 24584
+      },
+      "lines": [
+        203,
+        223,
+        251,
+        253
+      ],
+      "summary": "validate_report compares documents.len only with the returned saved_capture.documents.len. It does not require each requested URL to occur once across included and excluded rows, does not enforce included/selected/excluded accounting, and does not reject duplicate returned URL identities. Omitting the same selected URL from both arrays passes the current cardinality and membership checks.",
+      "trigger": "An otherwise valid complete one-document report has request.selection.urls and saved_capture.requested_urls both changed to [urlA,urlB], while documents and provenance still contain only urlA and excluded remains empty. With expected request matching those two URLs, the current validator still has a nonempty complete cohort and can accept complete=true/accepted_count=0 despite urlB having no state.",
+      "consequence": "Malformed persisted/transport data can silently lose selected work and still claim a complete zero-issue run. MCP decode delegates to this validator, so its exact-cohort guarantee is incomplete.",
+      "required_change": "Validate unique bounded requested identities, the exact one-to-one partition of requested URLs into included documents and explicitly allowed reporting exclusions, unique document URL/analysis IDs, exact row/provenance association and selected/included/excluded counters when present. Exclusions must respect the actual requested reporting semantics and may not be fabricated for raw or legacy views.",
+      "required_regression": "Drop a selected row from both arrays, duplicate one returned URL under a different analysis ID, add an unknown excluded identity and invent a raw-mode reporting exclusion; each must fail validation/MCP decode. Retain legitimate all-excluded reported-view unknown-count behavior.",
+      "basis": "Direct saved-source predicate walkthrough only; no product code imported, evaluated or executed."
+    },
+    {
+      "id": "S28-03",
+      "priority": 2,
+      "title": "Apply successful-check eligibility when validating saved or bridged results",
+      "file": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-saved-spelling-proposal-v1/source/crates/app/src/spelling_app.rs",
+        "sha256": "130951f14df4ee00136c276911fd0e3ca641616ba43dafdb14cd53d8b8517e05",
+        "bytes": 24584
+      },
+      "lines": [
+        138,
+        142,
+        230,
+        243
+      ],
+      "summary": "The runner correctly treats default-disabled and empty saved text as unknown without an engine request. validate_report does not enforce those same preconditions for a checked document. parse_reply only calls Config.validate, which permits disabled config, and accepts an empty text with a zero-match complete response. A crafted checked result can therefore claim complete/zero for a disabled request or an empty capture.",
+      "trigger": "A report has a complete saved empty capture with the correct digest, valid LanguageTool zero-match raw response, matching software/language/provider evidence and recomputed counts. The request can also have enabled=false with a valid endpoint. Existing checked/provenance/hash predicates succeed even though run would refuse to check the text.",
+      "consequence": "Persisted/MCP validation accepts a successful zero claim that the production run state machine deliberately forbids, weakening the explicit unknown-versus-clean invariant.",
+      "required_change": "Before accepting provider/checked success, require the request enabled/local acknowledgement and successful-check gates that are derivable from the saved record: complete capture, nonempty exact text and text bounds. Preserve valid disabled/empty reports as incomplete with no successful checked result and no aggregate count.",
+      "required_regression": "Take a valid checked report, change it into a disabled configuration with matching config/request digests, and separately provide an empty complete capture plus zero-match reply; validate_report and MCP decode must reject both. Existing legitimate disabled/empty unknown reports must continue to validate.",
+      "basis": "Direct saved-source predicate walkthrough only; no target execution."
+    }
+  ],
+  "proposal": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-saved-spelling-proposal-v1/manifest.NOT-RUN.json",
+    "sha256": "d9942f7d156ed3abb35762a642db23eec64a22bad30fdf881aae43c2bbeb3260",
+    "bytes": 29630
+  },
+  "baseline": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source27-tls-hsts-root-composition-v2/composition.json",
+    "sha256": "2cfa8d828de09905a68ab12c4193fc5875a245d76a540025008f37887b501ff9",
+    "bytes": 881141
+  },
+  "baseline_source_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source27-composed-C2-independent-source-review-v1/receipt.json",
+    "sha256": "7aeef28a7c1d320c9fb734b8376f3a782caa3605be0d30fc60a4b22696682420",
+    "bytes": 2957
+  },
+  "complete_pairs": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-saved-spelling-proposal-v1/FULLPAIRS.NOT-A-REVIEW.json",
+    "sha256": "f2183ddfe3a45cbe1ba443799ba19951ab330ae2a2709d34b9b5ef32e3bb1642",
+    "bytes": 1436046
+  },
+  "contract": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-saved-spelling-proposal-v1/CONTRACT.NOT-RUN.json",
+    "sha256": "96c740edbbc540ab6fe498a3cc72eb4657a9aaf8a7792cc0a65783c55d4c56d3",
+    "bytes": 17051
+  },
+  "audit": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-saved-spelling-independent-source-review-v1/AUDIT.json",
+    "sha256": "0e04139b6eed1bd715f5266c5aabe0ce94a9c773a25de80f35afa2f6759c518d",
+    "bytes": 11329
+  },
+  "source_verification": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-saved-spelling-independent-source-review-v1/SOURCE-VERIFICATION.json",
+    "sha256": "48ee72103561dbeaf251c6407ea33b11e7beb266ebbdc4680a4698338b152a14",
+    "bytes": 166581
+  },
+  "syntax_only": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-saved-spelling-independent-source-review-v1/GRAMMAR.NOT-A-TEST.json",
+    "sha256": "39be30b09da240ca836347d39049040974630900d33aef74bc4f80daeede1e47",
+    "bytes": 3110
+  },
+  "source_counts": {
+    "baseline": 449,
+    "payloads": 23,
+    "modify": 13,
+    "add": 10,
+    "proposed": 459,
+    "inherited_exact": 436
+  },
+  "source_execution": false,
+  "actual_engine": "NOT_RUN",
+  "actual_native": "NOT_RUN",
+  "actual_browser": "NOT_RUN",
+  "installation": "NOT_RUN",
+  "manufacturer_parity": "NOT_PROVEN",
+  "qualification": "Independent saved-source review with three actionable findings. Not NoF and not runtime acceptance. Proposal unchanged."
+}
