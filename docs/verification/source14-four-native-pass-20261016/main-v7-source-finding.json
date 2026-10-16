@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "kind": "source14_segments_cdn_directory_native_independent_review",
+  "result": "FINDINGS",
+  "findings": [
+    {
+      "id": "MAIN18-CROSS-CHANNEL-CLOSE-ORDER-01",
+      "priority": 2,
+      "title": "Do not require a total ACK callback order across independent browser channels",
+      "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source14-segments-cdn-directory-native-preparation-v7\\browser-owner.mjs",
+      "line": 17,
+      "trigger": "Chrome completes explicit Browser.close, but the separate Playwright TCP disconnect or OS child close callback reaches this Node event loop before the raw WebSocket ACK callback.",
+      "actual": "close() requires ackSequence<disconnectSequence and ackSequence<childCloseSequence. These eventSequence numbers record host callback delivery across different channels, for which the source/producer contract supplies no total order.",
+      "impact": "A fully acknowledged, naturally closed browser with all pipe EOF and no retained work can be rejected by a race in the harness. Running V7 would risk another false native failure; it is not source-admissible.",
+      "requested_change": "Keep the exact same-raw-WS matching ACK → only permitted TypeError → remote close ordering. Correlate independent Playwright disconnect and child close to previously established explicit closeIntent plus the actual closeCommandID/forced=false event snapshots; require every observed endstate, natural exit/close0, complete pipes/FDs and final pending0 before qualification. Remove only the unproved cross-channel ACK inequalities. Preserve all raw diagnostic rows and failure-only nonqualification.",
+      "evidence": {
+        "matching_raw_socket_ACK_is_synchronous": true,
+        "separate_channels": [
+          "Node raw WebSocket",
+          "Playwright CDP TCP connection",
+          "child_process OS exit/close callbacks"
+        ],
+        "historical_V6_order_unknown": true
+      },
+      "runtime_reproduction": "NOT_RUN_SOURCE_ONLY"
+    }
+  ],
+  "reviewer": "/root/native_v4_review",
+  "independent_of_author": true,
+  "proposal_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source14-segments-cdn-directory-native-preparation-v7\\manifest.json",
+    "sha256": "4e00fc63be6a5bf5e721c7618acc9b8d6e2c08716f6416ddde58a597324c2838",
+    "bytes": 17561
+  },
+  "harness": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source14-segments-cdn-directory-native-preparation-v7\\native-segments-cdn-directory.mjs",
+    "sha256": "b7a3d592a8feb6932dda1b0ea2d7d79b3d76842b3ac17fd75ecf1969ddc4cce8",
+    "bytes": 17216
+  },
+  "parent_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source14-segments-cdn-directory-native-independent-review-v6\\receipt.json",
+    "sha256": "5156b39a0026935c73d3be0fb20bcb43929b18d150c31e0dd18b81be3f55ce0e",
+    "bytes": 6127
+  },
+  "historical_actual_failure": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/segments-cdn-directory-native-v14-r5/proof.json",
+    "sha256": "5a3b103b62d15559cf5938a76f4fd95ca612b5bb0e81244b9a7c91e1df3ce7b6",
+    "bytes": 1699656
+  },
+  "audit": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source14-segments-cdn-directory-native-independent-review-v7\\AUDIT.json",
+    "sha256": "a1d3010727a1a82954acb1c64c5f07658ea119f83fd1a424071a639e01596d9e",
+    "bytes": 31406
+  },
+  "report": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source14-segments-cdn-directory-native-independent-review-v7\\REVIEW.md",
+    "sha256": "248c8185ccfbb3abcb09525265fda08e765be8cf48d5d4b29a04bc7be9062b95",
+    "bytes": 2621
+  },
+  "chrome_close_source": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source14-segments-cdn-directory-native-preparation-v7\\CHROME-CLOSE-SOURCE.json",
+    "sha256": "4942cd8ebcec4761b30f834962407470d756a65466ce1129fbf58b0985977e4c",
+    "bytes": 15046
+  },
+  "reviewed_runtime_modules": [
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source14-segments-cdn-directory-native-preparation-v7\\admission.mjs",
+      "sha256": "bc6bf8830d2148da765953201d3fd42df38b5b100846bcf6df6ebe20360626a5",
+      "bytes": 13965
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source14-segments-cdn-directory-native-preparation-v7\\browser-flow.mjs",
+      "sha256": "81e4a94f6bfe22a8685ba0558809a318bac41e935d7cd54e369a38b31efe5d51",
+      "bytes": 24286
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source14-segments-cdn-directory-native-preparation-v7\\browser-owner.mjs",
+      "sha256": "dccceb14669c92491915cd890757a83f19259437d961962d561db3da96e6bd50",
+      "bytes": 10888
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source14-segments-cdn-directory-native-preparation-v7\\directory-oracle.mjs",
+      "sha256": "32f389068c23179ed03d68ae15f4d3467a91a9c5b645218eb0677e37d7593c92",
+      "bytes": 7660
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source14-segments-cdn-directory-native-preparation-v7\\fixture.mjs",
+      "sha256": "ff649a58150a91c0c1f4e042631a7712116fc67f76ef20a362c425d268841968",
+      "bytes": 8757
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source14-segments-cdn-directory-native-preparation-v7\\log-budget.mjs",
+      "sha256": "85a5688a9241cf8569cdd8901ee0ec663e5c0f95e64ce0259418138efb4736e8",
+      "bytes": 552
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source14-segments-cdn-directory-native-preparation-v7\\mcp-flow.mjs",
+      "sha256": "eb81d301f2cf0be246bc950b991d65bd7703d98af908eb96a34c34df511e3dd8",
+      "bytes": 3913
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source14-segments-cdn-directory-native-preparation-v7\\native-segments-cdn-directory.mjs",
+      "sha256": "b7a3d592a8feb6932dda1b0ea2d7d79b3d76842b3ac17fd75ecf1969ddc4cce8",
+      "bytes": 17216
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source14-segments-cdn-directory-native-preparation-v7\\oracle.mjs",
+      "sha256": "d70b054679dfcfa706f3a8f6ec764a2673836fc6eba57b4ea8fc1855b7d9a1fb",
+      "bytes": 11363
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source14-segments-cdn-directory-native-preparation-v7\\owned-runtime.mjs",
+      "sha256": "c9ffc88f46258af41b1e2604035f5f0e7b2e84b22938867b716b4f80122214d1",
+      "bytes": 11988
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source14-segments-cdn-directory-native-preparation-v7\\process-runtime.mjs",
+      "sha256": "25cbce0028f75b733fe9cc827f0b1cec32b7c457c231c6b577d2a45baad19e0c",
+      "bytes": 3213
+    },
+    {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source14-segments-cdn-directory-native-preparation-v7\\workflow.mjs",
+      "sha256": "18d3e4bae2115e498cce44d502b8f998e163ea563e02f29b5bb444e7fa1fa694",
+      "bytes": 26256
+    }
+  ],
+  "mechanics": {
+    "whole_operations": 7,
+    "whole_pairs": 20,
+    "unchanged_runtime_modules": 10,
+    "whole_safety_regions": 12,
+    "parser_protection_regions": 4
+  },
+  "executed": {
+    "own_fs_data_checker_only": true,
+    "target_imports": 0,
+    "target_calls": 0,
+    "compiler": 0,
+    "syntax": 0,
+    "native": 0,
+    "HTTP": 0,
+    "browser": 0,
+    "PE_C_R_Original_Git": 0,
+    "installer_Cold_mutations": 0
+  },
+  "qualification": "Complete bounded independent V6→V7 source delta review. One source-derived race finding; no source admission or native success. Historical failures preserved."
+}

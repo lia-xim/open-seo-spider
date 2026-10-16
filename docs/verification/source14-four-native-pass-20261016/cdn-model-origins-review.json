@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "result": "NO_FINDINGS_BOUNDED_STATIC_REFERENCE_REVIEW",
+  "findings": [],
+  "audit": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/cdn-model-origins-independent-review-v1/AUDIT-FINAL.json",
+    "sha256": "7b9f8a644f80f61c25cd3d36da808aa5c489a8188b3a6ee78a9db4ed8aa57c6d",
+    "bytes": 14194
+  },
+  "review_source": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/review-cdn-model-origins-v1.cjs",
+    "sha256": "0f8f06c4baed9aa1ad2c95d75be7b7c3c717b8b4fb53bfc183907c4665a66d7b",
+    "bytes": 11565
+  },
+  "checked_E_ref_count": 36,
+  "method": "Independent built-in fs/Buffer JVM-class structure reader; captured classes treated as passive bytes. No authored reader/generator imported or executed.",
+  "recorded_at": "2026-10-16T04:55:53.117Z",
+  "operations": {
+    "C_R_Original_JAR_PE_reads": 0,
+    "target_imports_or_calls": 0,
+    "REA_JVM_vendor_product": 0,
+    "network": 0,
+    "Git": 0,
+    "compiler_tests_native": 0,
+    "lock_actions": 0
+  },
+  "qualification": "Bounded static reference review only. No runtime linkage/execution, global writer completeness, universal network/header semantics, current product authority or vendor parity established. Feature/catalog/product statuses remain unchanged.",
+  "kind": "cdn_two_model_write_origins_independent_reference_review",
+  "proposal_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/cdn-two-model-write-origins-reference-v1/manifest.json",
+    "sha256": "d1435386166e95adabf1f19819b7bd0adb1a6ae3fe2e3b2a712429de57f5abe1",
+    "bytes": 5010
+  },
+  "report": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\cdn-two-model-write-origins-reference-v1\\REPORT.md",
+    "sha256": "b2e33e62796aea48cd98c6fd0e54a4bc9a5abbd9474d6aa93f6972503a58cd84",
+    "bytes": 6126
+  },
+  "analysis": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\cdn-two-model-write-origins-reference-v1\\ANALYSIS.json",
+    "sha256": "4c1db8f502b0731ded1c1f9bbdd5b500747f4457f4fe22cd4d80dbaa7bbb8259",
+    "bytes": 334861
+  },
+  "arguments": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\cdn-two-model-write-origins-reference-v1\\ARGUMENT-ORIGINS.json",
+    "sha256": "0cc045456030405590b6b065b714b48a4e5bc2145f53cb7efc277d6fc3902475",
+    "bytes": 8437
+  },
+  "verification": {
+    "caller_classes": 12,
+    "complete_Code_bodies": 314,
+    "complete_Code_bytes": 22657,
+    "actual_invokes": 2947,
+    "exact_Integer_setter_calls": 4,
+    "exact_String_setter_calls": 0,
+    "target_setter_invokedynamic_bindings": 0,
+    "complete_selected_callers": 2,
+    "complete_model_setters": 2,
+    "raw_class_SHA_lengths_CRC_names_and_offsets": true
+  },
+  "confirmed": [
+    "Exact Integer setter stores argument unchanged; four decoded caller values are literal404/307/404/0, with the last inside XMLStreamException handler.",
+    "Exact String setter null branch leaves the field unchanged; non-null passes original input/literal4000/diagnostic to the named DB helper and stores its return.",
+    "Different String overload id1908791573(String)V is not the content setter id1521968436(String)V.",
+    "Twelve-class nonmatch is not a global no-callers result. Concrete model/direct-parent owner policy and no direct interfaces checked; four actual matches all name the concrete model."
+  ],
+  "limits": [
+    "The first report correctly treats its then-unread Worker/helper bodies as unresolved; later capture does not rewrite its historical boundary.",
+    "Four literal writers are not live response provenance. Archive before/after agreement remains a Root capture assertion; original archive was never read by this review."
+  ]
+}
