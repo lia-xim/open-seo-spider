@@ -1,0 +1,386 @@
+{
+  "kind": "api_only_mcp_static_registration_and_consumer_audit",
+  "status": "STATIC_AUTHOR_NOT_RUNTIME",
+  "registration": {
+    "free_tools": [
+      "spider_capabilities",
+      "spider_list_crawls",
+      "spider_start_crawl",
+      "spider_status",
+      "spider_pages",
+      "spider_issues",
+      "spider_analysis",
+      "spider_policy",
+      "spider_sitemaps",
+      "spider_resources",
+      "spider_resource_transports",
+      "spider_inspect_css",
+      "spider_content",
+      "spider_content_document",
+      "spider_analyze_crawl_content",
+      "spider_analyze_content",
+      "spider_preview_policy",
+      "spider_cancel",
+      "spider_pause",
+      "spider_resume",
+      "spider_recrawl",
+      "spider_project",
+      "spider_compare",
+      "spider_generate_sitemaps",
+      "spider_compare_saved",
+      "spider_sitemap_findings"
+    ],
+    "free_count": 26,
+    "bridge_addition": "spider_api_enrichment",
+    "bridge_index": 26,
+    "current_normal_count": 27,
+    "optional_file_count": 5,
+    "current_optional_count": 32,
+    "source": {
+      "path": "crates/app/src/mcp.rs",
+      "sha256": "457d694a8c820e5b927959b50e453c6ecd11c084d91ed6382bdbac85e718c6b6",
+      "bytes": 33865
+    },
+    "registration_order": "free inventory26 -> enrichment::definition() -> optional FileTools::definitions()5"
+  },
+  "correct_free26_inventory_files": [
+    {
+      "path": "crates/app/src/mcp.rs",
+      "before": {
+        "path": "crates/app/src/mcp.rs",
+        "sha256": "457d694a8c820e5b927959b50e453c6ecd11c084d91ed6382bdbac85e718c6b6",
+        "bytes": 33865
+      },
+      "unchanged": true,
+      "meaning": "Calls free inventory(), which intentionally returns26; no Bridge tools/list result and no replacement to27."
+    },
+    {
+      "path": "crates/app/src/mcp/saved_comparison_tests.rs",
+      "before": {
+        "path": "crates/app/src/mcp/saved_comparison_tests.rs",
+        "sha256": "06dc76962809e7578121553dae56262604d6632d334a9adffa4d76e1b04fec0e",
+        "bytes": 28351
+      },
+      "unchanged": true,
+      "meaning": "Calls free inventory(), which intentionally returns26; no Bridge tools/list result and no replacement to27."
+    },
+    {
+      "path": "crates/app/src/mcp/sitemaps_tests.rs",
+      "before": {
+        "path": "crates/app/src/mcp/sitemaps_tests.rs",
+        "sha256": "bdfe3f0afaaa3b99c123224675c5709f7d02961a27e06cefefc0c74dd62fb749",
+        "bytes": 7248
+      },
+      "unchanged": true,
+      "meaning": "Calls free inventory(), which intentionally returns26; no Bridge tools/list result and no replacement to27."
+    }
+  ],
+  "occurrences": [
+    {
+      "path": "crates/app/src/content_cohort.rs",
+      "line": 405,
+      "text": "fn legacy_absence_remains_missing_with_unknown_pairs_and_metadata_only_inventory() {",
+      "current_fixture_owned": false,
+      "qualification": "No additional stale26/31 inventory assertion found in this scoped occurrence; production/other source unchanged"
+    },
+    {
+      "path": "crates/app/src/mcp.rs",
+      "line": 127,
+      "text": "let mut tools = inventory();",
+      "current_fixture_owned": false,
+      "qualification": "Correct free26 inventory or non-count inspection"
+    },
+    {
+      "path": "crates/app/src/mcp.rs",
+      "line": 181,
+      "text": "\"tools/list\" => json!({\"tools\":self.inventory()}),",
+      "current_fixture_owned": false,
+      "qualification": "Correct free26 inventory or non-count inspection"
+    },
+    {
+      "path": "crates/app/src/mcp.rs",
+      "line": 190,
+      "text": "let definitions = self.inventory();",
+      "current_fixture_owned": false,
+      "qualification": "Correct free26 inventory or non-count inspection"
+    },
+    {
+      "path": "crates/app/src/mcp.rs",
+      "line": 543,
+      "text": "fn inventory() -> Vec<Value> {",
+      "current_fixture_owned": false,
+      "qualification": "Correct free26 inventory or non-count inspection"
+    },
+    {
+      "path": "crates/app/src/mcp.rs",
+      "line": 625,
+      "text": "assert_eq!(inventory().len(), 26);",
+      "current_fixture_owned": false,
+      "qualification": "Correct free26 inventory or non-count inspection"
+    },
+    {
+      "path": "crates/app/src/mcp/cdn_classification_tests.rs",
+      "line": 6,
+      "text": "let tools = inventory();",
+      "current_fixture_owned": false,
+      "qualification": "No additional stale26/31 inventory assertion found in this scoped occurrence; production/other source unchanged"
+    },
+    {
+      "path": "crates/app/src/mcp/crawl_admission_limits_tests.rs",
+      "line": 7,
+      "text": "let tools = inventory();",
+      "current_fixture_owned": false,
+      "qualification": "No additional stale26/31 inventory assertion found in this scoped occurrence; production/other source unchanged"
+    },
+    {
+      "path": "crates/app/src/mcp/enrichment_tests.rs",
+      "line": 16,
+      "text": "assert!(bridge.inventory().iter().any(|d| d[\"name\"] == NAME));",
+      "current_fixture_owned": false,
+      "qualification": "No additional stale26/31 inventory assertion found in this scoped occurrence; production/other source unchanged"
+    },
+    {
+      "path": "crates/app/src/mcp/saved_comparison_tests.rs",
+      "line": 10,
+      "text": "let tools = inventory();",
+      "current_fixture_owned": false,
+      "qualification": "Correct free26 inventory or non-count inspection"
+    },
+    {
+      "path": "crates/app/src/mcp/saved_comparison_tests.rs",
+      "line": 16,
+      "text": "let legacy_prefix: Vec<_> = [",
+      "current_fixture_owned": false,
+      "qualification": "Correct free26 inventory or non-count inspection"
+    },
+    {
+      "path": "crates/app/src/mcp/saved_comparison_tests.rs",
+      "line": 46,
+      "text": "assert_eq!(&names[..legacy_prefix.len()], legacy_prefix.as_slice());",
+      "current_fixture_owned": false,
+      "qualification": "Correct free26 inventory or non-count inspection"
+    },
+    {
+      "path": "crates/app/src/mcp/saved_comparison_tests.rs",
+      "line": 137,
+      "text": "assert_eq!(inventory().len(), 26);",
+      "current_fixture_owned": false,
+      "qualification": "Correct free26 inventory or non-count inspection"
+    },
+    {
+      "path": "crates/app/src/mcp/sitemaps_tests.rs",
+      "line": 5,
+      "text": "let tools = inventory();",
+      "current_fixture_owned": false,
+      "qualification": "Correct free26 inventory or non-count inspection"
+    },
+    {
+      "path": "crates/app/src/mcp/sitemaps_tests.rs",
+      "line": 155,
+      "text": "let tool = inventory()",
+      "current_fixture_owned": false,
+      "qualification": "Correct free26 inventory or non-count inspection"
+    },
+    {
+      "path": "crates/app/src/mcp/sitemaps_tests.rs",
+      "line": 167,
+      "text": "assert_eq!(inventory().len(), 26);",
+      "current_fixture_owned": false,
+      "qualification": "Correct free26 inventory or non-count inspection"
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "line": 171,
+      "text": "let old_tools = old[\"result\"][\"tools\"].as_array().unwrap();",
+      "current_fixture_owned": true,
+      "qualification": "Actual Bridge consumer repaired only where counts/slices depended on26/31"
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "line": 172,
+      "text": "let new_tools = new[\"result\"][\"tools\"].as_array().unwrap();",
+      "current_fixture_owned": true,
+      "qualification": "Actual Bridge consumer repaired only where counts/slices depended on26/31"
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "line": 173,
+      "text": "assert_eq!(inventory().len(), 26);",
+      "current_fixture_owned": true,
+      "qualification": "Actual Bridge consumer repaired only where counts/slices depended on26/31"
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "line": 174,
+      "text": "assert_eq!(old_tools.len(), 26);",
+      "current_fixture_owned": true,
+      "qualification": "Actual Bridge consumer repaired only where counts/slices depended on26/31"
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "line": 175,
+      "text": "assert_eq!(new_tools.len(), 31);",
+      "current_fixture_owned": true,
+      "qualification": "Actual Bridge consumer repaired only where counts/slices depended on26/31"
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "line": 176,
+      "text": "assert_eq!(&new_tools[..26], old_tools.as_slice());",
+      "current_fixture_owned": true,
+      "qualification": "Actual Bridge consumer repaired only where counts/slices depended on26/31"
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "line": 177,
+      "text": "let mut actual: Vec<_> = new_tools[26..]",
+      "current_fixture_owned": true,
+      "qualification": "Actual Bridge consumer repaired only where counts/slices depended on26/31"
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "line": 185,
+      "text": "for tool in &new_tools[26..] {",
+      "current_fixture_owned": true,
+      "qualification": "Actual Bridge consumer repaired only where counts/slices depended on26/31"
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "line": 516,
+      "text": "assert_eq!(values[0][\"result\"][\"tools\"].as_array().unwrap().len(), 31);",
+      "current_fixture_owned": true,
+      "qualification": "Actual Bridge consumer repaired only where counts/slices depended on26/31"
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "line": 660,
+      "text": "listed[\"result\"][\"tools\"]",
+      "current_fixture_owned": true,
+      "qualification": "Actual Bridge consumer repaired only where counts/slices depended on26/31"
+    },
+    {
+      "path": "crates/app/src/server/lifecycle_tests.rs",
+      "line": 85,
+      "text": "async fn owned_shutdown_stops_actual_http_listener_after_exact_legacy_inventory() {",
+      "current_fixture_owned": true,
+      "qualification": "Actual Bridge consumer repaired only where counts/slices depended on26/31"
+    },
+    {
+      "path": "crates/app/src/server/lifecycle_tests.rs",
+      "line": 101,
+      "text": "let names: Vec<_> = inventory[\"result\"][\"tools\"]",
+      "current_fixture_owned": true,
+      "qualification": "Actual Bridge consumer repaired only where counts/slices depended on26/31"
+    },
+    {
+      "path": "crates/app/src/server/sitemap_membership_config_tests.rs",
+      "line": 17,
+      "text": "let tools = listed[\"result\"][\"tools\"].as_array().unwrap();",
+      "current_fixture_owned": false,
+      "qualification": "No additional stale26/31 inventory assertion found in this scoped occurrence; production/other source unchanged"
+    }
+  ],
+  "all_app_source_files_scanned": [
+    "crates/app/src/analysis.rs",
+    "crates/app/src/broken_sources.rs",
+    "crates/app/src/broken_sources_tests.rs",
+    "crates/app/src/cdn_cli_tests.rs",
+    "crates/app/src/comparison_app.rs",
+    "crates/app/src/comparison_app/original_reports.rs",
+    "crates/app/src/comparison_app_tests.rs",
+    "crates/app/src/content_cohort.rs",
+    "crates/app/src/crawl_admission_cli_tests.rs",
+    "crates/app/src/enrichment_app.rs",
+    "crates/app/src/enrichment_app_tests.rs",
+    "crates/app/src/generation_export.rs",
+    "crates/app/src/generation_export_tests.rs",
+    "crates/app/src/main.rs",
+    "crates/app/src/mcp.rs",
+    "crates/app/src/mcp/cdn_classification_tests.rs",
+    "crates/app/src/mcp/crawl_admission_limits_tests.rs",
+    "crates/app/src/mcp/enrichment.rs",
+    "crates/app/src/mcp/enrichment_tests.rs",
+    "crates/app/src/mcp/files.rs",
+    "crates/app/src/mcp/files_tests.rs",
+    "crates/app/src/mcp/generation.rs",
+    "crates/app/src/mcp/generation_tests.rs",
+    "crates/app/src/mcp/saved_comparison.rs",
+    "crates/app/src/mcp/saved_comparison_tests.rs",
+    "crates/app/src/mcp/sitemap_findings.rs",
+    "crates/app/src/mcp/sitemap_findings/postfix_tests.rs",
+    "crates/app/src/mcp/sitemap_findings/stdio.rs",
+    "crates/app/src/mcp/sitemap_findings/tests.rs",
+    "crates/app/src/mcp/sitemaps.rs",
+    "crates/app/src/mcp/sitemaps_tests.rs",
+    "crates/app/src/mcp/stdio_tests.rs",
+    "crates/app/src/mcp/wiring_tests.rs",
+    "crates/app/src/migration_app.rs",
+    "crates/app/src/migration_app_tests.rs",
+    "crates/app/src/ngram_app.rs",
+    "crates/app/src/ngram_app/channel_tests.rs",
+    "crates/app/src/ngram_app/channels.rs",
+    "crates/app/src/ngram_app_tests.rs",
+    "crates/app/src/policy_export.rs",
+    "crates/app/src/resource_broken_sources_app.rs",
+    "crates/app/src/resource_broken_sources_app_tests.rs",
+    "crates/app/src/resource_export.rs",
+    "crates/app/src/server.rs",
+    "crates/app/src/server/broken_sources.rs",
+    "crates/app/src/server/broken_sources_tests.rs",
+    "crates/app/src/server/cdn_classification_tests.rs",
+    "crates/app/src/server/comparison.rs",
+    "crates/app/src/server/comparison_tests.rs",
+    "crates/app/src/server/content.rs",
+    "crates/app/src/server/crawl_admission_limits_tests.rs",
+    "crates/app/src/server/directory_tree.rs",
+    "crates/app/src/server/directory_tree_tests.rs",
+    "crates/app/src/server/enrichment.rs",
+    "crates/app/src/server/enrichment_tests.rs",
+    "crates/app/src/server/lifecycle.rs",
+    "crates/app/src/server/lifecycle_tests.rs",
+    "crates/app/src/server/migration.rs",
+    "crates/app/src/server/migration_tests.rs",
+    "crates/app/src/server/ngram_corpus.rs",
+    "crates/app/src/server/ngram_corpus_tests.rs",
+    "crates/app/src/server/policy.rs",
+    "crates/app/src/server/resource_broken_sources.rs",
+    "crates/app/src/server/resource_broken_sources_tests.rs",
+    "crates/app/src/server/resources.rs",
+    "crates/app/src/server/response_stream.rs",
+    "crates/app/src/server/response_stream_tests.rs",
+    "crates/app/src/server/sitemap_csv_stream.rs",
+    "crates/app/src/server/sitemap_csv_stream_lifecycle_tests.rs",
+    "crates/app/src/server/sitemap_csv_stream_sink_tests.rs",
+    "crates/app/src/server/sitemap_findings.rs",
+    "crates/app/src/server/sitemap_findings_reads.rs",
+    "crates/app/src/server/sitemap_findings_reads_tests.rs",
+    "crates/app/src/server/sitemap_findings_tests.rs",
+    "crates/app/src/server/sitemap_generation.rs",
+    "crates/app/src/server/sitemap_generation_tests.rs",
+    "crates/app/src/server/sitemap_membership_config_tests.rs",
+    "crates/app/src/server/sitemap_processing_config_tests.rs",
+    "crates/app/src/server/sitemaps.rs",
+    "crates/app/src/server/sitemaps_rich_read_tests.rs",
+    "crates/app/src/server/sitemaps_streaming_fixture.rs",
+    "crates/app/src/server/sitemaps_streaming_tests.rs",
+    "crates/app/src/server/sitemaps_tests.rs",
+    "crates/app/src/server/source_bodies.rs",
+    "crates/app/src/server/source_bodies_tests.rs",
+    "crates/app/src/server/source_body_stream.rs",
+    "crates/app/src/server/source_body_stream_tests.rs",
+    "crates/app/src/server/transport.rs",
+    "crates/app/src/server/transport_tests.rs",
+    "crates/app/src/sitemap_findings.rs",
+    "crates/app/src/sitemap_findings_cli.rs",
+    "crates/app/src/sitemap_findings_cli_tests.rs",
+    "crates/app/src/sitemap_findings_fixture.rs",
+    "crates/app/src/sitemap_findings_tests.rs",
+    "crates/app/src/sitemap_membership.rs",
+    "crates/app/src/sitemap_membership_rich_read_tests.rs",
+    "crates/app/src/sitemap_membership_tests.rs",
+    "crates/app/src/sitemap_raw_cli.rs",
+    "crates/app/src/sitemap_raw_cli_tests.rs",
+    "crates/app/src/sitemap_source_context_tests.rs"
+  ],
+  "source_imports": 0
+}

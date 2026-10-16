@@ -1,0 +1,275 @@
+{
+  "kind": "api_only_inventory_fixture_preview_producer_derivation",
+  "status": "SOURCE_ONLY_NOT_RUN",
+  "parent_preparation": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-preview-driver-preparation-v3\\manifest.json",
+    "sha256": "efe3abd0145059855ab55aa8d55ee060017b6f3f7aeaa95bcbd1625ec8ee15f6",
+    "bytes": 80071
+  },
+  "parent_independent_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-preview-driver-root-independent-review-v3\\receipt.json",
+    "sha256": "46a09523cc95a5da622bb5b621c2ee898fc2b141c46742c7ecc72fb315634522",
+    "bytes": 1745
+  },
+  "operations": [
+    {
+      "path": "common.mjs",
+      "label": "Specific reviewed fixture+400-preview admission only",
+      "offset": 2698,
+      "before": "export function admit(mode){const cli=argumentsFor(mode),reviewRef=ref(cli['--preparation-review']);assert.equal(reviewRef.sha256,cli['--preparation-review-sha256']);const review=noFindings(reviewRef),mref=review.proposal_manifest;assert.equal(path.resolve(mref.path),path.join(HERE,'manifest.json'));const m=data(mref);assert.equal(m.kind,'api_only_preview_root_producers_preparation');assert.equal(m.status,'AUTHORED_NOT_RUN');assert.deepEqual(m.files.map(f=>f.path).sort(sort),['check-preview-clippy.mjs','common.mjs','format-preview.mjs','run-preview-twenty-tests.mjs']);for(const f of m.files)read({path:path.join(HERE,f.path),sha256:f.sha256,bytes:f.bytes});const current=mode==='format'?'format-preview.mjs':mode==='clippy'?'check-preview-clippy.mjs':'run-preview-twenty-tests.mjs';assert.equal(path.resolve(process.argv[1]),path.join(HERE,current));const pre=data(m.preview);assert.equal(path.resolve(m.preview.path),path.resolve(PRE));assert.equal(pre.kind,'api_only_composed_400_input_preview');assert.equal(pre.source_inputs,400);assert.equal(pre.parent_source_inputs,388);assert.equal(pre.owned_paths,18);assert.equal(pre.modified_parent_inputs,6);assert.equal(pre.new_input_files,12);assert.equal(pre.unchanged_parent_inputs,382);assert.equal(pre.root_mutated,false);assert.equal(pre.frozen_manifest,null);assert.equal(pre.source_commit,null);assert.equal(path.resolve(pre.source_directory),path.resolve(SOURCE));assert.equal(pre.new_authored_test_functions.length,20);\n const cr=ref(cli['--composition-review']);assert.equal(cr.sha256,cli['--composition-review-sha256']);same(noFindings(cr).proposal_manifest,m.preview);same(pre.api_proposal,m.api_proposal);same(pre.api_review,m.api_review);same(noFindings(m.api_review).proposal_manifest,m.api_proposal);read(pre.composition_derivation);const inv=data(pre.test_inventory);assert.deepEqual(inv.new_authored_test_functions,pre.new_authored_test_functions);assert.equal(inv.parent_all_required_full_test_names.length,678);assert.equal(inv.all_required_full_test_names_forecast.length,698);assert.equal(new Set(inv.all_required_full_test_names_forecast).size,698);assert.equal(inv.required_test_names_forecast,694);assert.equal(inv.minimum_workspace_tests_forecast,1476);assert.equal(pre.files.length,400);assert.equal(new Set(pre.files.map(f=>f.path)).size,400);assert.deepEqual(pre.files.map(f=>f.path),pre.files.map(f=>f.path).sort(sort));for(const f of pre.files){assert(!path.isAbsolute(f.path)&&!f.path.includes('\\\\')&&!f.path.includes(':')&&f.path.split('/').every(p=>p&&p!=='.'&&p!=='..'));}verify(pre.preformat_directory,pre.files);const owned=new Set(pre.owned_changes.map(f=>f.path));assert.equal(owned.size,18);noNative();return{cli,pre,manifest:mref,preparation_review:reviewRef,composition_review:cr,preformat:m.preview,owned};}\n",
+      "after": "export function admit(mode){const cli=argumentsFor(mode),rr=ref(cli['--preparation-review']);assert.equal(rr.sha256,cli['--preparation-review-sha256']);const review=noFindings(rr),mr=review.proposal_manifest;assert.equal(path.resolve(mr.path),path.join(HERE,'manifest.json'));const m=data(mr);assert.equal(m.kind,'api_only_inventory_fixture_preview_producers_preparation');assert.equal(m.status,'AUTHORED_NOT_RUN');assert.deepEqual(m.files.map(f=>f.path).sort(sort),['check-preview-clippy.mjs','common.mjs','format-preview.mjs','run-preview-retained-tests.mjs']);for(const f of m.files)read({path:path.join(HERE,f.path),sha256:f.sha256,bytes:f.bytes});const current=mode==='format'?'format-preview.mjs':mode==='clippy'?'check-preview-clippy.mjs':'run-preview-retained-tests.mjs';assert.equal(path.resolve(process.argv[1]),path.join(HERE,current));same(m.fixture_proposal,{\"path\":\"E:\\\\CodexWork\\\\open-seo-spider-01a12ac3-20261013\\\\api-only-mcp-inventory-fixtures-proposal-v1\\\\manifest.json\",\"sha256\":\"f5ed1436b1842076fe1e22f1f9f6c2e0417441e87c79e0b7c6c1063ac90982d6\",\"bytes\":3467});same(m.fixture_review,{\"path\":\"E:\\\\CodexWork\\\\open-seo-spider-01a12ac3-20261013\\\\api-only-mcp-inventory-fixtures-independent-review-v1\\\\receipt.json\",\"sha256\":\"9610a920d73ba62d2fab1abcd377c3ad5b2a6b1a9f8f5ad12c6caf00334d6251\",\"bytes\":1785});same(noFindings(m.fixture_review).proposal_manifest,m.fixture_proposal);const pre=data(m.preview);assert.equal(path.resolve(m.preview.path),path.resolve(PRE));assert.equal(pre.kind,'api_only_inventory_fixture_400_input_preview');assert.equal(pre.source_inputs,400);assert.equal(pre.parent_source_inputs,400);assert.equal(pre.owned_paths,2);assert.equal(pre.modified_parent_inputs,2);assert.equal(pre.new_input_files,0);assert.equal(pre.unchanged_parent_inputs,398);assert.deepEqual(pre.parent12_union,{inputs:400,owned:36,modified:17,new:19,unchanged:364});same(pre.fixture_proposal,m.fixture_proposal);same(pre.fixture_review,m.fixture_review);assert.equal(pre.root_mutated,false);assert.equal(pre.frozen_manifest,null);assert.equal(pre.source_commit,null);assert.equal(path.resolve(pre.source_directory),path.resolve(SOURCE));assert.deepEqual(pre.new_authored_test_functions,[]);const cr=ref(cli['--composition-review']);assert.equal(cr.sha256,cli['--composition-review-sha256']);same(noFindings(cr).proposal_manifest,m.preview);const d=data(pre.composition_derivation);same(d.fixture_proposal,m.fixture_proposal);same(d.fixture_review,m.fixture_review);assert.equal(d.operations.length,5);const inv=data(pre.test_inventory);same(inv.fixture_proposal,m.fixture_proposal);same(inv.fixture_review,m.fixture_review);assert.deepEqual(inv.retained_test_functions,pre.retained_test_functions);assert.equal(inv.retained_test_functions.length,22);assert.equal(new Set(inv.retained_test_functions.map(t=>t.full_name)).size,22);assert.equal(inv.required_test_names_forecast,694);assert.equal(inv.full_test_names_forecast,698);assert.equal(inv.minimum_workspace_tests_forecast,1476);assert.equal(pre.files.length,400);assert.equal(new Set(pre.files.map(f=>f.path)).size,400);assert.deepEqual(pre.files.map(f=>f.path),pre.files.map(f=>f.path).sort(sort));for(const f of pre.files)assert(!path.isAbsolute(f.path)&&!f.path.includes('\\\\')&&!f.path.includes(':')&&f.path.split('/').every(p=>p&&p!=='.'&&p!=='..'));verify(pre.preformat_directory,pre.files);const owned=new Set(pre.owned_changes.map(f=>f.path));assert.equal(owned.size,2);noNative();return{cli,pre,manifest:mr,preparation_review:rr,composition_review:cr,preformat:m.preview,owned};}\n",
+      "before_sha256": "cf26b023123894338d049b9d76ca825e7b2d7dd24faa09658b209e18f25df040",
+      "before_bytes": 13753,
+      "after_sha256": "7e52374bd21450abe5e3b5b590324d32a42f4ce0cde36b9d46392f49a20b9e6f",
+      "after_bytes": 14504
+    },
+    {
+      "path": "common.mjs",
+      "label": "Fresh source/output namespace; dedicated target cache unchanged",
+      "offset": 368,
+      "before": "l)),B='E:/CodexWork/open-seo-spider-01a12ac3-20261013',D=path.join(B,'api-only-composed-preview-v3'),SOURCE=path.join(D,'source'),PRE=path.join(D,'preformat.json'),CARG",
+      "after": "l)),B='E:/CodexWork/open-seo-spider-01a12ac3-20261013',D=path.join(B,'api-only-inventory-fixture-preview-v1'),SOURCE=path.join(D,'source'),PRE=path.join(D,'preformat.json'),CARG",
+      "before_sha256": "7e52374bd21450abe5e3b5b590324d32a42f4ce0cde36b9d46392f49a20b9e6f",
+      "before_bytes": 14504,
+      "after_sha256": "34883c008363c2997c7a9967ff634ae88ac937dc8e1966c69f086804353f3c85",
+      "after_bytes": 14513
+    },
+    {
+      "path": "common.mjs",
+      "label": "Fresh source/output namespace; dedicated target cache unchanged",
+      "offset": 11792,
+      "before": ".versions,b.node.versions);}\nexport const FORMAT=path.join(B,'results/api-only-preview-format-v3/proof.json'),CLIPPY=path.join(B,'results/api-only-preview-clippy-v3/p",
+      "after": ".versions,b.node.versions);}\nexport const FORMAT=path.join(B,'results/api-only-inventory-fixture-format-v1/proof.json'),CLIPPY=path.join(B,'results/api-only-preview-clippy-v3/p",
+      "before_sha256": "34883c008363c2997c7a9967ff634ae88ac937dc8e1966c69f086804353f3c85",
+      "before_bytes": 14513,
+      "after_sha256": "6f5506f8b8b13270f17f87745a57a859cc1f7e44841403b3407d264d0a50091e",
+      "after_bytes": 14523
+    },
+    {
+      "path": "common.mjs",
+      "label": "Fresh source/output namespace; dedicated target cache unchanged",
+      "offset": 11870,
+      "before": "-inventory-fixture-format-v1/proof.json'),CLIPPY=path.join(B,'results/api-only-preview-clippy-v3/proof.json');\nexport function formatted(ctx){const r=ref(FORMAT);asse",
+      "after": "-inventory-fixture-format-v1/proof.json'),CLIPPY=path.join(B,'results/api-only-inventory-fixture-clippy-v1/proof.json');\nexport function formatted(ctx){const r=ref(FORMAT);asse",
+      "before_sha256": "6f5506f8b8b13270f17f87745a57a859cc1f7e44841403b3407d264d0a50091e",
+      "before_bytes": 14523,
+      "after_sha256": "6311aaabe5d0b53a2a46e2abee3afc130cebd810ac11a9ca80da7eaf1b052396",
+      "after_bytes": 14533
+    },
+    {
+      "path": "format-preview.mjs",
+      "label": "Fresh source/output namespace; dedicated target cache unchanged",
+      "offset": 157,
+      "before": "onst ctx=admit('format');verify(SOURCE,ctx.pre.files);const o=output('api-only-preview-format-v3');let actual=null;\ntry{const env=compilerEnvironment(o),fp=await fing",
+      "after": "onst ctx=admit('format');verify(SOURCE,ctx.pre.files);const o=output('api-only-inventory-fixture-format-v1');let actual=null;\ntry{const env=compilerEnvironment(o),fp=await fing",
+      "before_sha256": "8c6c5eb019305079d12662dc7da313183ac7431bb3ba189d96f6c863a94493a6",
+      "before_bytes": 1486,
+      "after_sha256": "4d0f72a84f411a1bc1abe05f0ad495b4dafa9e8736beb34ff1571b6237b52450",
+      "after_bytes": 1496
+    },
+    {
+      "path": "check-preview-clippy.mjs",
+      "label": "Fresh source/output namespace; dedicated target cache unchanged",
+      "offset": 159,
+      "before": "m'./common.mjs';\nconst ctx=admit('clippy'),f=formatted(ctx),o=output('api-only-preview-clippy-v3');let actual=null;\ntry{const env=compilerEnvironment(o),fp=await fing",
+      "after": "m'./common.mjs';\nconst ctx=admit('clippy'),f=formatted(ctx),o=output('api-only-inventory-fixture-clippy-v1');let actual=null;\ntry{const env=compilerEnvironment(o),fp=await fing",
+      "before_sha256": "7d8c223caeb4089c67a4ae05d47ced8acc9de6ed43f8bdb994bfcd65701090dc",
+      "before_bytes": 1254,
+      "after_sha256": "dade76e011cdd86d2068ff32b4319f5fddcf60b71016160595cb87549d54987a",
+      "after_bytes": 1264
+    },
+    {
+      "path": "run-preview-retained-tests.mjs",
+      "label": "Fresh source/output namespace; dedicated target cache unchanged",
+      "offset": 1601,
+      "before": "config'];assert(critical.every(n=>names.includes(n)));const o=output('api-only-preview-twenty-rust-tests-v3');let actual=null;\ntry{const env=compilerEnvironment(o),fp=await fing",
+      "after": "config'];assert(critical.every(n=>names.includes(n)));const o=output('api-only-inventory-fixture-retained-rust-tests-v1');let actual=null;\ntry{const env=compilerEnvironment(o),fp=await fing",
+      "before_sha256": "0317ecf597eff29c9cba7ead9ca3558b177abb4fea9cb808db3dbf33d1705eed",
+      "before_bytes": 4005,
+      "after_sha256": "7c8ad2145548578e395165581f34f1d3c21b28c78c6d55a743f5592c362a3f5a",
+      "after_bytes": 4017
+    },
+    {
+      "path": "run-preview-retained-tests.mjs",
+      "label": "22 actual retained App-bin functions instead of20 new API cases",
+      "offset": 939,
+      "before": "const names=ctx.pre.new_authored_test_functions.filter(f=>f.windows).map(f=>f.full_name).sort(sort);assert.equal(names.length,20);assert.equal(new Set(names).size,20);assert(names.every(n=>/^[A-Za-z0-9_:]+$/.test(n)));const critical=['api_enrichment::tests::api_only_real_local_mock_api_response_does_not_fetch_the_supplied_website_or_follow_redirect','enrichment_app::tests::api_enrichment_close_cancels_and_actually_joins_owned_inflight_work_before_return','enrichment_app::tests::api_enrichment_owner_panic_is_reported_and_retained_join_is_not_lost','server::enrichment::tests::api_enrichment_http_reads_full_csv_exact_length_sha_registry_completion_and_cold_config'];assert(critical.every(n=>names.includes(n)));",
+      "after": "const names=ctx.pre.retained_test_functions.map(f=>f.full_name).sort(sort);assert.equal(names.length,22);assert.equal(new Set(names).size,22);assert(names.every(n=>/^[A-Za-z0-9_:]+$/.test(n)&&(n.startsWith('mcp::file_wiring_tests::')||n.startsWith('server::lifecycle::tests::'))));const critical=[\"mcp::file_wiring_tests::file_tools_inventory_is_disabled_by_default_and_declares_exact_five_when_enabled\",\"mcp::file_wiring_tests::file_tools_actual_stdio_frames_share_opt_in_and_drain_on_eof\",\"mcp::file_wiring_tests::file_tools_http_opt_in_capabilities_inventory_and_dispatch_share_module\",\"server::lifecycle::tests::owned_shutdown_stops_actual_http_listener_after_exact_legacy_inventory\"];assert(critical.every(n=>names.includes(n)));",
+      "before_sha256": "7c8ad2145548578e395165581f34f1d3c21b28c78c6d55a743f5592c362a3f5a",
+      "before_bytes": 4017,
+      "after_sha256": "4942f31ce70c25915f75b607292968e9668a1d7bfceac0d36de3b08d055c4252",
+      "after_bytes": 4035
+    },
+    {
+      "path": "run-preview-retained-tests.mjs",
+      "label": "Exact actual package/bin target, no unnecessary Core integration compilation",
+      "offset": 1934,
+      "before": "const args=['test','--workspace','--locked','--','--include-ignored','--test-threads=1','--exact',...names]",
+      "after": "const args=['test','-p','open-seo-spider','--bin','open-seo-spider','--locked','--','--include-ignored','--test-threads=1','--exact',...names]",
+      "before_sha256": "4942f31ce70c25915f75b607292968e9668a1d7bfceac0d36de3b08d055c4252",
+      "before_bytes": 4035,
+      "after_sha256": "6f6e307c3c3811090b721cbd051a25072e3846450370f46ee4d4accbc821f5d6",
+      "after_bytes": 4070
+    },
+    {
+      "path": "run-preview-retained-tests.mjs",
+      "label": "Retained22 count/kind/qualification only",
+      "offset": 2898,
+      "before": "'&&s.failed===0&&s.ignored===0)&&summaries.reduce((n,s)=>n+s.passed,0)===20&&!/^error(?:\\[|:)/m.test(stderr),p={...proofBase(ctx,fp),kind:'actual",
+      "after": "'&&s.failed===0&&s.ignored===0)&&summaries.reduce((n,s)=>n+s.passed,0)===22&&!/^error(?:\\[|:)/m.test(stderr),p={...proofBase(ctx,fp),kind:'actual",
+      "before_sha256": "6f6e307c3c3811090b721cbd051a25072e3846450370f46ee4d4accbc821f5d6",
+      "before_bytes": 4070,
+      "after_sha256": "3260169ea90d0a70fd850e5eb5052f59ddd802b14b0b0c4dd55eb2ff3a1b2c90",
+      "after_bytes": 4070
+    },
+    {
+      "path": "run-preview-retained-tests.mjs",
+      "label": "Retained22 proof name",
+      "offset": 2053,
+      "before": "=1','--exact',...names];actual=await command(CARGO,args,SOURCE,env,o,'twenty-tests',30*60*1000);verify(SOURCE,f.rows);verify(ctx.pre.preformat_directory",
+      "after": "=1','--exact',...names];actual=await command(CARGO,args,SOURCE,env,o,'retained-tests',30*60*1000);verify(SOURCE,f.rows);verify(ctx.pre.preformat_directory",
+      "before_sha256": "3260169ea90d0a70fd850e5eb5052f59ddd802b14b0b0c4dd55eb2ff3a1b2c90",
+      "before_bytes": 4070,
+      "after_sha256": "723eaae72de7416fee866a5cb0530e237b4f5e91f2fba954b69bee8138b86b50",
+      "after_bytes": 4072
+    },
+    {
+      "path": "run-preview-retained-tests.mjs",
+      "label": "Retained22 proof kind",
+      "offset": 2969,
+      "before": ")===22&&!/^error(?:\\[|:)/m.test(stderr),p={...proofBase(ctx,fp),kind:'actual_api_only_preview_twenty_new_rust_regressions',result:passed?'PASS_TWENTY_NEW_RUST_FUNCTIONS_ONLY':'FAIL_TWENTY_NEW",
+      "after": ")===22&&!/^error(?:\\[|:)/m.test(stderr),p={...proofBase(ctx,fp),kind:'actual_api_only_inventory_fixture_regressions',result:passed?'PASS_TWENTY_NEW_RUST_FUNCTIONS_ONLY':'FAIL_TWENTY_NEW",
+      "before_sha256": "723eaae72de7416fee866a5cb0530e237b4f5e91f2fba954b69bee8138b86b50",
+      "before_bytes": 4072,
+      "after_sha256": "c658e8690694d01aee0e15b43a9c15ed05dc3b5737b9c3617e9ff425bd7b75c0",
+      "after_bytes": 4066
+    },
+    {
+      "path": "run-preview-retained-tests.mjs",
+      "label": "Retained22 success label",
+      "offset": 3031,
+      "before": "),kind:'actual_api_only_inventory_fixture_regressions',result:passed?'PASS_TWENTY_NEW_RUST_FUNCTIONS_ONLY':'FAIL_TWENTY_NEW_RUST_FUNCTIONS',actual_format:f.reference,formatter",
+      "after": "),kind:'actual_api_only_inventory_fixture_regressions',result:passed?'PASS_TWENTYTWO_RETAINED_MCP_LIFECYCLE_FUNCTIONS_ONLY':'FAIL_TWENTY_NEW_RUST_FUNCTIONS',actual_format:f.reference,formatter",
+      "before_sha256": "c658e8690694d01aee0e15b43a9c15ed05dc3b5737b9c3617e9ff425bd7b75c0",
+      "before_bytes": 4066,
+      "after_sha256": "e23b88f38faaf3fccdc5371f1a6f44922808d47351589044510c25e8036a9620",
+      "after_bytes": 4083
+    },
+    {
+      "path": "run-preview-retained-tests.mjs",
+      "label": "Retained22 failure label",
+      "offset": 3086,
+      "before": "result:passed?'PASS_TWENTYTWO_RETAINED_MCP_LIFECYCLE_FUNCTIONS_ONLY':'FAIL_TWENTY_NEW_RUST_FUNCTIONS',actual_format:f.reference,formatter_review:f.review,preliminary_clip",
+      "after": "result:passed?'PASS_TWENTYTWO_RETAINED_MCP_LIFECYCLE_FUNCTIONS_ONLY':'FAIL_RETAINED_MCP_LIFECYCLE_FUNCTIONS',actual_format:f.reference,formatter_review:f.review,preliminary_clip",
+      "before_sha256": "e23b88f38faaf3fccdc5371f1a6f44922808d47351589044510c25e8036a9620",
+      "before_bytes": 4083,
+      "after_sha256": "840c09f0202a03c6ba486f544523eccc9a0521e725bdcf9ad41b98f51c8016c4",
+      "after_bytes": 4090
+    },
+    {
+      "path": "run-preview-retained-tests.mjs",
+      "label": "Retained22 exact flag",
+      "offset": 3290,
+      "before": ",expected_function_names:names,actual_test_results:observed,summaries,all_twenty_names_exactly_once:namesExact,executed_test_functions:observed.length,source_files:f.row",
+      "after": ",expected_function_names:names,actual_test_results:observed,summaries,all_retained_names_exactly_once:namesExact,executed_test_functions:observed.length,source_files:f.row",
+      "before_sha256": "840c09f0202a03c6ba486f544523eccc9a0521e725bdcf9ad41b98f51c8016c4",
+      "before_bytes": 4090,
+      "after_sha256": "bbeba807e47d2add864203583e3abfa81c0606af82d4a5ef6959cb04f5338fe2",
+      "after_bytes": 4092
+    },
+    {
+      "path": "run-preview-retained-tests.mjs",
+      "label": "Truthful fixture lifecycle scope only",
+      "offset": 3523,
+      "before": "Real HTTP mock, separate supplied-website trap, cancellation, retained owner join/panic, CSV response registry and cold-read oracles are assertions in the exact named Rust functions. No external renderer or vendor process is started by this driver; failed forced-stop descendant cleanup is NOT_PROVEN.",
+      "after": "These22 existing App-bin functions assert actual MCP stdio/HTTP tools/list, exact legacy+new+optional tool positions, file capability bounds/EOF/durability and owned application shutdown. The earlier20 API-only mock/provider tests are separate predecessor evidence, not rerun here. No external renderer/vendor process is started; failed forced-stop descendant cleanup is NOT_PROVEN.",
+      "before_sha256": "bbeba807e47d2add864203583e3abfa81c0606af82d4a5ef6959cb04f5338fe2",
+      "before_bytes": 4092,
+      "after_sha256": "f914720128398ddc567417a2900aab0219d4e2e7a7d918a4e3e327942904e424",
+      "after_bytes": 4173
+    }
+  ],
+  "whole_file_pairs": [
+    {
+      "path": "common.mjs",
+      "parent": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-preview-driver-preparation-v3\\common.mjs",
+        "sha256": "cf26b023123894338d049b9d76ca825e7b2d7dd24faa09658b209e18f25df040",
+        "bytes": 13753
+      },
+      "current": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-inventory-fixture-driver-preparation-v1\\common.mjs",
+        "sha256": "6311aaabe5d0b53a2a46e2abee3afc130cebd810ac11a9ca80da7eaf1b052396",
+        "bytes": 14533
+      },
+      "whole_inverse_exact": true
+    },
+    {
+      "path": "format-preview.mjs",
+      "parent": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-preview-driver-preparation-v3\\format-preview.mjs",
+        "sha256": "8c6c5eb019305079d12662dc7da313183ac7431bb3ba189d96f6c863a94493a6",
+        "bytes": 1486
+      },
+      "current": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-inventory-fixture-driver-preparation-v1\\format-preview.mjs",
+        "sha256": "4d0f72a84f411a1bc1abe05f0ad495b4dafa9e8736beb34ff1571b6237b52450",
+        "bytes": 1496
+      },
+      "whole_inverse_exact": true
+    },
+    {
+      "path": "check-preview-clippy.mjs",
+      "parent": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-preview-driver-preparation-v3\\check-preview-clippy.mjs",
+        "sha256": "7d8c223caeb4089c67a4ae05d47ced8acc9de6ed43f8bdb994bfcd65701090dc",
+        "bytes": 1254
+      },
+      "current": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-inventory-fixture-driver-preparation-v1\\check-preview-clippy.mjs",
+        "sha256": "dade76e011cdd86d2068ff32b4319f5fddcf60b71016160595cb87549d54987a",
+        "bytes": 1264
+      },
+      "whole_inverse_exact": true
+    },
+    {
+      "path": "run-preview-retained-tests.mjs",
+      "parent": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-preview-driver-preparation-v3\\run-preview-twenty-tests.mjs",
+        "sha256": "0317ecf597eff29c9cba7ead9ca3558b177abb4fea9cb808db3dbf33d1705eed",
+        "bytes": 4005
+      },
+      "current": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-inventory-fixture-driver-preparation-v1\\run-preview-retained-tests.mjs",
+        "sha256": "f914720128398ddc567417a2900aab0219d4e2e7a7d918a4e3e327942904e424",
+        "bytes": 4173
+      },
+      "whole_inverse_exact": true
+    }
+  ],
+  "whole_unchanged_operational_regions": [
+    {
+      "path": "common.mjs",
+      "label": "Entire profile/environment/owned command pipe cap/close/fsync/fingerprint implementation",
+      "sha256": "63b48540f98097ec10f0b9c2317c9da6a8bb7518cd84b793f0968d0da32b9bac",
+      "bytes": 4930,
+      "exact": true
+    }
+  ],
+  "cargo_target": {
+    "manifest": {
+      "path": "crates/app/Cargo.toml",
+      "sha256": "3e020b4dbdc949435cf1dbbd8190db073eacff8d385996dacb5e9829eb7482b5",
+      "bytes": 1069
+    },
+    "main_source": {
+      "path": "crates/app/src/main.rs",
+      "sha256": "2a15829aa12f1919217cf7ad5609159c59a11ee3abbd42515de5f8bfd87eb433",
+      "bytes": 35395
+    },
+    "package_name": "open-seo-spider",
+    "binary_name": "open-seo-spider",
+    "default_bin_from_package_main": true
+  },
+  "qualification": "Only admission/source/output namespace and22 retained-test command/labels/count change. Common profile/process pipes+64MiB cap/actual close/fsync/fingerprints exact. No target import or execution."
+}

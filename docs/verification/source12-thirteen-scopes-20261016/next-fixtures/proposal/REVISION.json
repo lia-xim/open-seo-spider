@@ -1,0 +1,576 @@
+{
+  "kind": "api_only_bridge_inventory_test_fixture_compatibility",
+  "status": "AUTHORED_NOT_RUN",
+  "actual_passed_400_predecessor": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-preview-twenty-rust-tests-v3\\proof.json",
+    "sha256": "12d671faf3da1c6b990ae121aaab849be01c7b0192ebcedbcf63e6ed73f863ba",
+    "bytes": 91484
+  },
+  "operations": [
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "label": "Actual Bridge inventory retains26 legacy definitions, adds exact27th enrichment, then five capability tools",
+      "offset": 5504,
+      "before": "    assert_eq!(inventory().len(), 26);\n    assert_eq!(old_tools.len(), 26);\n    assert_eq!(new_tools.len(), 31);\n    assert_eq!(&new_tools[..26], old_tools.as_slice());\n    let mut actual: Vec<_> = new_tools[26..]",
+      "after": "    assert_eq!(inventory().len(), 26);\n    assert_eq!(old_tools.len(), 27);\n    assert_eq!(new_tools.len(), 32);\n    assert_eq!(&old_tools[..26], inventory().as_slice());\n    assert_eq!(old_tools[26], enrichment::definition());\n    assert_eq!(&new_tools[..27], old_tools.as_slice());\n    let mut actual: Vec<_> = new_tools[27..]",
+      "before_sha256": "e4716d605b2f0bf1dc9ddd7d5598e0411749cd95cc154d6f123162ca3967ad5a",
+      "before_bytes": 26693,
+      "after_sha256": "c5835f45ffc88b3c9b144502a98781e68a4af9970e441c8da72a1fc98a45e621",
+      "after_bytes": 26808
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "label": "Only five appended file tools are schema checked after current27 Bridge tools",
+      "offset": 6048,
+      "before": "    for tool in &new_tools[26..] {",
+      "after": "    for tool in &new_tools[27..] {",
+      "before_sha256": "c5835f45ffc88b3c9b144502a98781e68a4af9970e441c8da72a1fc98a45e621",
+      "before_bytes": 26808,
+      "after_sha256": "ab3f448007484c78f2a7eeb3139ce5764f52d9145e5c803ad37965a464710f36",
+      "after_bytes": 26808
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "label": "Actual stdio tools/list includes27 Bridge and5 file tools; all existing EOF/file durability assertions retained",
+      "offset": 17651,
+      "before": "    assert_eq!(values[0][\"result\"][\"tools\"].as_array().unwrap().len(), 31);",
+      "after": "    assert_eq!(values[0][\"result\"][\"tools\"].as_array().unwrap().len(), 32);",
+      "before_sha256": "ab3f448007484c78f2a7eeb3139ce5764f52d9145e5c803ad37965a464710f36",
+      "before_bytes": 26808,
+      "after_sha256": "f4758267fdcb5ea0a2ca8e8d6cba50c22bff43253f6346397fd5ba51defc26d8",
+      "after_bytes": 26808
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "label": "Actual HTTP tools/list count includes the same single additive Bridge tool",
+      "offset": 23040,
+      "before": "                == if enabled { 31 } else { 26 }",
+      "after": "                == if enabled { 32 } else { 27 }",
+      "before_sha256": "f4758267fdcb5ea0a2ca8e8d6cba50c22bff43253f6346397fd5ba51defc26d8",
+      "before_bytes": 26808,
+      "after_sha256": "dabb9298268791b08717f51b3846a005c3a7fc4e0228185c82429a7fd41f8ed6",
+      "after_bytes": 26808
+    },
+    {
+      "path": "crates/app/src/server/lifecycle_tests.rs",
+      "label": "Actual HTTP lifecycle inventory retains the exact26 legacy prefix plus explicit27th API-only tool",
+      "offset": 3308,
+      "before": "    assert_eq!(names.len(), 26);",
+      "after": "    assert_eq!(names.len(), 27);\n    assert_eq!(&names[..26], &[\n        \"spider_capabilities\",\n        \"spider_list_crawls\",\n        \"spider_start_crawl\",\n        \"spider_status\",\n        \"spider_pages\",\n        \"spider_issues\",\n        \"spider_analysis\",\n        \"spider_policy\",\n        \"spider_sitemaps\",\n        \"spider_resources\",\n        \"spider_resource_transports\",\n        \"spider_inspect_css\",\n        \"spider_content\",\n        \"spider_content_document\",\n        \"spider_analyze_crawl_content\",\n        \"spider_analyze_content\",\n        \"spider_preview_policy\",\n        \"spider_cancel\",\n        \"spider_pause\",\n        \"spider_resume\",\n        \"spider_recrawl\",\n        \"spider_project\",\n        \"spider_compare\",\n        \"spider_generate_sitemaps\",\n        \"spider_compare_saved\",\n        \"spider_sitemap_findings\",\n    ]);\n    assert_eq!(names[26], \"spider_api_enrichment\");",
+      "before_sha256": "6abf849830e228d4b9760d1cc7be06152337d4ab96df2cc79401e3fe1ff72ec3",
+      "before_bytes": 18158,
+      "after_sha256": "51f2c03602145999d98f0b37cfc75bffa94850c32df5bee3cb1d3780c79131c8",
+      "after_bytes": 19013
+    }
+  ],
+  "whole_file_inverses": [
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "before": {
+        "path": "crates/app/src/mcp/wiring_tests.rs",
+        "sha256": "e4716d605b2f0bf1dc9ddd7d5598e0411749cd95cc154d6f123162ca3967ad5a",
+        "bytes": 26693
+      },
+      "after": {
+        "path": "crates/app/src/mcp/wiring_tests.rs",
+        "sha256": "dabb9298268791b08717f51b3846a005c3a7fc4e0228185c82429a7fd41f8ed6",
+        "bytes": 26808
+      },
+      "exact_inverse": true
+    },
+    {
+      "path": "crates/app/src/server/lifecycle_tests.rs",
+      "before": {
+        "path": "crates/app/src/server/lifecycle_tests.rs",
+        "sha256": "6abf849830e228d4b9760d1cc7be06152337d4ab96df2cc79401e3fe1ff72ec3",
+        "bytes": 18158
+      },
+      "after": {
+        "path": "crates/app/src/server/lifecycle_tests.rs",
+        "sha256": "51f2c03602145999d98f0b37cfc75bffa94850c32df5bee3cb1d3780c79131c8",
+        "bytes": 19013
+      },
+      "exact_inverse": true
+    }
+  ],
+  "all_function_pairs": [
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "new",
+      "before_offset": 692,
+      "after_offset": 692,
+      "before_sha256": "bc619ad7c01fbb808c5ba2a1b19cf5419f3b7fe38f1421488da11d66c2764047",
+      "after_sha256": "bc619ad7c01fbb808c5ba2a1b19cf5419f3b7fe38f1421488da11d66c2764047",
+      "before_bytes": 203,
+      "after_bytes": 203,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "drop",
+      "before_offset": 928,
+      "after_offset": 928,
+      "before_sha256": "4a5720ef50d16713f52144b43f4bdd1b900c15f052a0753b92e62959165c4c72",
+      "after_sha256": "4a5720ef50d16713f52144b43f4bdd1b900c15f052a0753b92e62959165c4c72",
+      "before_bytes": 148,
+      "after_bytes": 148,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "call",
+      "before_offset": 1080,
+      "after_offset": 1080,
+      "before_sha256": "dc9b062ad3e934ef85479ddb5d99154028f056f32e60ea6447432e5f5baccb45",
+      "after_sha256": "dc9b062ad3e934ef85479ddb5d99154028f056f32e60ea6447432e5f5baccb45",
+      "before_bytes": 165,
+      "after_bytes": 165,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "local",
+      "before_offset": 1247,
+      "after_offset": 1247,
+      "before_sha256": "5c46fd8e8b197ed063e3d606bb959200755513957b92f9b84773055879da1886",
+      "after_sha256": "5c46fd8e8b197ed063e3d606bb959200755513957b92f9b84773055879da1886",
+      "before_bytes": 179,
+      "after_bytes": 179,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "trap",
+      "before_offset": 1428,
+      "after_offset": 1428,
+      "before_sha256": "dc762c1ccb8a30b4e67e7cb6f3ad79aff833fa983d7bec5f64e6eafa25a0acfa",
+      "after_sha256": "dc762c1ccb8a30b4e67e7cb6f3ad79aff833fa983d7bec5f64e6eafa25a0acfa",
+      "before_bytes": 952,
+      "after_bytes": 952,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "close_trap",
+      "before_offset": 2382,
+      "after_offset": 2382,
+      "before_sha256": "c6aec48db5f3ef2be0d92238c5e7f147c82e3b9aa4e3f687a0ee6e158f6c26d4",
+      "after_sha256": "c6aec48db5f3ef2be0d92238c5e7f147c82e3b9aa4e3f687a0ee6e158f6c26d4",
+      "before_bytes": 178,
+      "after_bytes": 178,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "join_owned",
+      "before_offset": 2562,
+      "after_offset": 2562,
+      "before_sha256": "40e55f22f5877a355c96cf16245a8569827d1a2f2569229971b28c6b8b19391c",
+      "after_sha256": "40e55f22f5877a355c96cf16245a8569827d1a2f2569229971b28c6b8b19391c",
+      "before_bytes": 478,
+      "after_bytes": 478,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "file_tools_cli_opt_in_is_shared_by_serve_and_mcp",
+      "before_offset": 3050,
+      "after_offset": 3050,
+      "before_sha256": "0b4335acfc6a9febac6d08418fafe054b8102c7b30073f3b6a0b96ce3b1901dc",
+      "after_sha256": "0b4335acfc6a9febac6d08418fafe054b8102c7b30073f3b6a0b96ce3b1901dc",
+      "before_bytes": 1279,
+      "after_bytes": 1279,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "file_tools_cli_requires_an_explicit_value_and_preserves_other_commands",
+      "before_offset": 4339,
+      "after_offset": 4339,
+      "before_sha256": "b9afce21f8fff2f874507738afc913a59bc16b8086cdc8fbf562866a7fee6a14",
+      "after_sha256": "b9afce21f8fff2f874507738afc913a59bc16b8086cdc8fbf562866a7fee6a14",
+      "before_bytes": 468,
+      "after_bytes": 468,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "file_tools_inventory_is_disabled_by_default_and_declares_exact_five_when_enabled",
+      "before_offset": 4824,
+      "after_offset": 4824,
+      "before_sha256": "ba4fe7cd34bd12720f76fe992314e119d3841fc24c188b3af77aaa42ae40e798",
+      "after_sha256": "8907c846a8726cd2e53fb9a6dd78e31f37a836e9954b70a68875574cbd0d8a74",
+      "before_bytes": 1344,
+      "after_bytes": 1459,
+      "exact": false
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "file_tools_disabled_requests_never_reach_the_api",
+      "before_offset": 6185,
+      "after_offset": 6300,
+      "before_sha256": "5a17b06059b212bd0d60f41c2e02303adc310aab32918c5412ccaedafe55c066",
+      "after_sha256": "5a17b06059b212bd0d60f41c2e02303adc310aab32918c5412ccaedafe55c066",
+      "before_bytes": 708,
+      "after_bytes": 708,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "file_tools_api_address_retains_exact_loopback_and_default_fallback",
+      "before_offset": 6903,
+      "after_offset": 7018,
+      "before_sha256": "9717e1d2e7a3eb11791ca1ea991f3f38d07e324202a3ae88823bb7bc37cc5f46",
+      "after_sha256": "9717e1d2e7a3eb11791ca1ea991f3f38d07e324202a3ae88823bb7bc37cc5f46",
+      "before_bytes": 599,
+      "after_bytes": 599,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "file_tools_all_five_execute_locally_with_no_api_calls",
+      "before_offset": 7519,
+      "after_offset": 7634,
+      "before_sha256": "0db7acbb5b5eb74924a436d38462d21d4072aff1335aeb5a7b093d0f4acf9681",
+      "after_sha256": "0db7acbb5b5eb74924a436d38462d21d4072aff1335aeb5a7b093d0f4acf9681",
+      "before_bytes": 1880,
+      "after_bytes": 1880,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "file_tools_rpc_id_is_bounded_before_version_errors_or_any_write",
+      "before_offset": 9416,
+      "after_offset": 9531,
+      "before_sha256": "649da38e07d3c88a5f112751e7021eceb961fb99c4f3bd2a1f17a49cb101300b",
+      "after_sha256": "649da38e07d3c88a5f112751e7021eceb961fb99c4f3bd2a1f17a49cb101300b",
+      "before_bytes": 1764,
+      "after_bytes": 1764,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "file_tools_invalid_shapes_and_oversized_text_never_mutate",
+      "before_offset": 11197,
+      "after_offset": 11312,
+      "before_sha256": "7dc4ad8638b91900c1328ab19d287578ed0d3432e0424a7abbd4bd83c3e731a5",
+      "after_sha256": "7dc4ad8638b91900c1328ab19d287578ed0d3432e0424a7abbd4bd83c3e731a5",
+      "before_bytes": 2025,
+      "after_bytes": 2025,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "file_tools_actual_text_response_is_single_copy_and_whole_wire_bounded",
+      "before_offset": 13239,
+      "after_offset": 13354,
+      "before_sha256": "17a59d3e37fc905f75d6f200400920812dcb0af429e3ab61960f5e044bd2b0d5",
+      "after_sha256": "17a59d3e37fc905f75d6f200400920812dcb0af429e3ab61960f5e044bd2b0d5",
+      "before_bytes": 1225,
+      "after_bytes": 1225,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "file_tools_wire_guard_accepts_exact_physical_frame_and_rejects_plus_one",
+      "before_offset": 14474,
+      "after_offset": 14589,
+      "before_sha256": "cdf33be2d800860f76804b95ac6d94bcb2a586d8b284026ea6410310a488883d",
+      "after_sha256": "cdf33be2d800860f76804b95ac6d94bcb2a586d8b284026ea6410310a488883d",
+      "before_bytes": 986,
+      "after_bytes": 986,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "file_tools_actual_stdio_frames_share_opt_in_and_drain_on_eof",
+      "before_offset": 15477,
+      "after_offset": 15592,
+      "before_sha256": "d3e41a12e7383a5c433815278e1079bf00ecf9e6eb3ac2ffdbfeed0d7db14f81",
+      "after_sha256": "5ab7cd8a587d7eb2839ac61f676e4ecaeb4d74501fa2cb5ebd9ef31e67d0843c",
+      "before_bytes": 2521,
+      "after_bytes": 2521,
+      "exact": false
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "poll_write",
+      "before_offset": 18060,
+      "after_offset": 18175,
+      "before_sha256": "adb428cabbe79597604ac981bab55abf2ac11e66bb55594b6d6c873be6730b39",
+      "after_sha256": "adb428cabbe79597604ac981bab55abf2ac11e66bb55594b6d6c873be6730b39",
+      "before_bytes": 281,
+      "after_bytes": 281,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "poll_flush",
+      "before_offset": 18346,
+      "after_offset": 18461,
+      "before_sha256": "cb30a85455c3446d2078e9b3bcfb6c4deceb4e0e0427d8809e5066b9bb0895a3",
+      "after_sha256": "cb30a85455c3446d2078e9b3bcfb6c4deceb4e0e0427d8809e5066b9bb0895a3",
+      "before_bytes": 125,
+      "after_bytes": 125,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "poll_shutdown",
+      "before_offset": 18476,
+      "after_offset": 18591,
+      "before_sha256": "e4871bfb1dedbca9c0a69e818ec5f04f334b4931357ef2a474987f330cff984f",
+      "after_sha256": "e4871bfb1dedbca9c0a69e818ec5f04f334b4931357ef2a474987f330cff984f",
+      "before_bytes": 128,
+      "after_bytes": 128,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "file_tools_stdio_output_error_still_awaits_registry_drain",
+      "before_offset": 18623,
+      "after_offset": 18738,
+      "before_sha256": "62c0b23a6b291b4a1db7932db192c2be2047ff0eec499b27ae9e748eb3cf631d",
+      "after_sha256": "62c0b23a6b291b4a1db7932db192c2be2047ff0eec499b27ae9e748eb3cf631d",
+      "before_bytes": 960,
+      "after_bytes": 960,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "file_tools_server_rejects_bad_root_and_nonloopback_before_data_directory",
+      "before_offset": 19600,
+      "after_offset": 19715,
+      "before_sha256": "b6206b944caac2a8c51fca06923babb9a6729ab0c88f93404f094980dcd191ec",
+      "after_sha256": "b6206b944caac2a8c51fca06923babb9a6729ab0c88f93404f094980dcd191ec",
+      "before_bytes": 1605,
+      "after_bytes": 1605,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "http_mode",
+      "before_offset": 21207,
+      "after_offset": 21322,
+      "before_sha256": "3087bb38346b799f8da4589c4f8011b719d5e7cacb9d5f9aa997f48192218ad9",
+      "after_sha256": "b040232f1484153f56081f129ff99e8bbc7fbdd0b826f5ba130d0067da933deb",
+      "before_bytes": 5234,
+      "after_bytes": 5234,
+      "exact": false
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "file_tools_http_opt_in_capabilities_inventory_and_dispatch_share_module",
+      "before_offset": 26458,
+      "after_offset": 26573,
+      "before_sha256": "a75e9444ce407df8ba16e9e20f6a0b31d00b685bc4d746c42d1d33998f6597c3",
+      "after_sha256": "a75e9444ce407df8ba16e9e20f6a0b31d00b685bc4d746c42d1d33998f6597c3",
+      "before_bytes": 234,
+      "after_bytes": 234,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/server/lifecycle_tests.rs",
+      "name": "owned_eof_reader_does_not_finish_on_nonempty_input_and_closes_only_at_actual_eof",
+      "before_offset": 100,
+      "after_offset": 100,
+      "before_sha256": "dd51d01af168a73bcf7b9fd61c64b135ab6599a6fd88469c60f1c192aee85082",
+      "after_sha256": "dd51d01af168a73bcf7b9fd61c64b135ab6599a6fd88469c60f1c192aee85082",
+      "before_bytes": 538,
+      "after_bytes": 538,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/server/lifecycle_tests.rs",
+      "name": "one_global_lifecycle_admission_closes_request_blocking_and_crawl_registries",
+      "before_offset": 655,
+      "after_offset": 655,
+      "before_sha256": "d1239b8823b99d1985e84afe6f513276bebe1ca6f524a3d972ebd24309b7ab3a",
+      "after_sha256": "d1239b8823b99d1985e84afe6f513276bebe1ca6f524a3d972ebd24309b7ab3a",
+      "before_bytes": 626,
+      "after_bytes": 626,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/server/lifecycle_tests.rs",
+      "name": "start_test_server",
+      "before_offset": 1283,
+      "after_offset": 1283,
+      "before_sha256": "61e4061d116aa7f727bb7da8c6fe0f6565b56435408fa68f18f3786f0b65118b",
+      "after_sha256": "61e4061d116aa7f727bb7da8c6fe0f6565b56435408fa68f18f3786f0b65118b",
+      "before_bytes": 204,
+      "after_bytes": 204,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/server/lifecycle_tests.rs",
+      "name": "start_test_server_mode",
+      "before_offset": 1488,
+      "after_offset": 1488,
+      "before_sha256": "50a1b3385982d3c690782c8045f09c0d0fda03ef7428d12cf2b49cf3286503b9",
+      "after_sha256": "50a1b3385982d3c690782c8045f09c0d0fda03ef7428d12cf2b49cf3286503b9",
+      "before_bytes": 940,
+      "after_bytes": 940,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/server/lifecycle_tests.rs",
+      "name": "owned_shutdown_stops_actual_http_listener_after_exact_legacy_inventory",
+      "before_offset": 2490,
+      "after_offset": 2490,
+      "before_sha256": "bd438e16a8b2e7cd95f47840dd377795688928d6b9acfd7d1ecb3b6e567d9ec3",
+      "after_sha256": "3eb35aad2c69a5a3791881ad81a36753eea97d0cfd213fca7061a313549f0830",
+      "before_bytes": 1268,
+      "after_bytes": 2123,
+      "exact": false
+    },
+    {
+      "path": "crates/app/src/server/lifecycle_tests.rs",
+      "name": "owned_shutdown_pauses_actual_crawl_and_waits_terminal_checkpoint_and_job_file",
+      "before_offset": 3820,
+      "after_offset": 4675,
+      "before_sha256": "17d486189eb8d08230ac01c41b2108f3ef3f72aeafec45055b4f9ce821b40514",
+      "after_sha256": "17d486189eb8d08230ac01c41b2108f3ef3f72aeafec45055b4f9ce821b40514",
+      "before_bytes": 153,
+      "after_bytes": 153,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/server/lifecycle_tests.rs",
+      "name": "failed_shutdown_signal_is_returned_only_after_actual_crawl_checkpoint_and_job_write",
+      "before_offset": 4035,
+      "after_offset": 4890,
+      "before_sha256": "d59a3069ab4de30f3138071137781467126926f336581f4bd792fb6ddf7158a7",
+      "after_sha256": "d59a3069ab4de30f3138071137781467126926f336581f4bd792fb6ddf7158a7",
+      "before_bytes": 158,
+      "after_bytes": 158,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/server/lifecycle_tests.rs",
+      "name": "actual_crawl_shutdown_waits_for_checkpoint",
+      "before_offset": 4195,
+      "after_offset": 5050,
+      "before_sha256": "0cc1421757b28e79f3f8ccbe1115e6d4275904d5f82a049c20c4c2ea9e360f70",
+      "after_sha256": "0cc1421757b28e79f3f8ccbe1115e6d4275904d5f82a049c20c4c2ea9e360f70",
+      "before_bytes": 3347,
+      "after_bytes": 3347,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/server/lifecycle_tests.rs",
+      "name": "shutdown_before_job_insert_keeps_admitted_initialization_owned_and_late_launch_paused",
+      "before_offset": 7604,
+      "after_offset": 8459,
+      "before_sha256": "c6a6e7564c332564a49ffac0b89fa97f5b03ea0694b70943385ac3c1f582183d",
+      "after_sha256": "c6a6e7564c332564a49ffac0b89fa97f5b03ea0694b70943385ac3c1f582183d",
+      "before_bytes": 3112,
+      "after_bytes": 3112,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/server/lifecycle_tests.rs",
+      "name": "typed_owned_core_failure_is_sticky_in_app_drain_but_domain_error_is_not",
+      "before_offset": 10778,
+      "after_offset": 11633,
+      "before_sha256": "3ef1171d85b8b2432c2b78f9e018aa8451345a045c3dc1f3eb0063846c240baf",
+      "after_sha256": "3ef1171d85b8b2432c2b78f9e018aa8451345a045c3dc1f3eb0063846c240baf",
+      "before_bytes": 1757,
+      "after_bytes": 1757,
+      "exact": true
+    },
+    {
+      "path": "crates/app/src/server/lifecycle_tests.rs",
+      "name": "policy_and_resource_http_exports_start_eagerly_and_stream_beyond_channel_capacity",
+      "before_offset": 12597,
+      "after_offset": 13452,
+      "before_sha256": "dd8e94e35f9fba136524653bc7cdbd761a3a66aa61d4107ad3329e3e0fd35ce0",
+      "after_sha256": "dd8e94e35f9fba136524653bc7cdbd761a3a66aa61d4107ad3329e3e0fd35ce0",
+      "before_bytes": 5560,
+      "after_bytes": 5560,
+      "exact": true
+    }
+  ],
+  "changed_function_pairs": [
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "file_tools_inventory_is_disabled_by_default_and_declares_exact_five_when_enabled",
+      "before_offset": 4824,
+      "after_offset": 4824,
+      "before_sha256": "ba4fe7cd34bd12720f76fe992314e119d3841fc24c188b3af77aaa42ae40e798",
+      "after_sha256": "8907c846a8726cd2e53fb9a6dd78e31f37a836e9954b70a68875574cbd0d8a74",
+      "before_bytes": 1344,
+      "after_bytes": 1459,
+      "exact": false
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "file_tools_actual_stdio_frames_share_opt_in_and_drain_on_eof",
+      "before_offset": 15477,
+      "after_offset": 15592,
+      "before_sha256": "d3e41a12e7383a5c433815278e1079bf00ecf9e6eb3ac2ffdbfeed0d7db14f81",
+      "after_sha256": "5ab7cd8a587d7eb2839ac61f676e4ecaeb4d74501fa2cb5ebd9ef31e67d0843c",
+      "before_bytes": 2521,
+      "after_bytes": 2521,
+      "exact": false
+    },
+    {
+      "path": "crates/app/src/mcp/wiring_tests.rs",
+      "name": "http_mode",
+      "before_offset": 21207,
+      "after_offset": 21322,
+      "before_sha256": "3087bb38346b799f8da4589c4f8011b719d5e7cacb9d5f9aa997f48192218ad9",
+      "after_sha256": "b040232f1484153f56081f129ff99e8bbc7fbdd0b826f5ba130d0067da933deb",
+      "before_bytes": 5234,
+      "after_bytes": 5234,
+      "exact": false
+    },
+    {
+      "path": "crates/app/src/server/lifecycle_tests.rs",
+      "name": "owned_shutdown_stops_actual_http_listener_after_exact_legacy_inventory",
+      "before_offset": 2490,
+      "after_offset": 2490,
+      "before_sha256": "bd438e16a8b2e7cd95f47840dd377795688928d6b9acfd7d1ecb3b6e567d9ec3",
+      "after_sha256": "3eb35aad2c69a5a3791881ad81a36753eea97d0cfd213fca7061a313549f0830",
+      "before_bytes": 1268,
+      "after_bytes": 2123,
+      "exact": false
+    }
+  ],
+  "all_function_names_unchanged": true,
+  "new_test_functions": 0,
+  "production_changes": 0,
+  "correct_free26_inventory_files": [
+    {
+      "path": "crates/app/src/mcp.rs",
+      "before": {
+        "path": "crates/app/src/mcp.rs",
+        "sha256": "457d694a8c820e5b927959b50e453c6ecd11c084d91ed6382bdbac85e718c6b6",
+        "bytes": 33865
+      },
+      "unchanged": true,
+      "meaning": "Calls free inventory(), which intentionally returns26; no Bridge tools/list result and no replacement to27."
+    },
+    {
+      "path": "crates/app/src/mcp/saved_comparison_tests.rs",
+      "before": {
+        "path": "crates/app/src/mcp/saved_comparison_tests.rs",
+        "sha256": "06dc76962809e7578121553dae56262604d6632d334a9adffa4d76e1b04fec0e",
+        "bytes": 28351
+      },
+      "unchanged": true,
+      "meaning": "Calls free inventory(), which intentionally returns26; no Bridge tools/list result and no replacement to27."
+    },
+    {
+      "path": "crates/app/src/mcp/sitemaps_tests.rs",
+      "before": {
+        "path": "crates/app/src/mcp/sitemaps_tests.rs",
+        "sha256": "bdfe3f0afaaa3b99c123224675c5709f7d02961a27e06cefefc0c74dd62fb749",
+        "bytes": 7248
+      },
+      "unchanged": true,
+      "meaning": "Calls free inventory(), which intentionally returns26; no Bridge tools/list result and no replacement to27."
+    }
+  ],
+  "qualification": "Only genuine Bridge tools/list consumers change. The passed20-new-function evidence belongs to the unmodified predecessor400; it is not transferred to these changed old test bodies. Every whole-file inverse recovers predecessor bytes."
+}
