@@ -3,6 +3,7 @@ mod broken_sources;
 mod comparison_app;
 mod content_cohort;
 mod crawl_quotas_app;
+mod crawl_resume;
 mod enrichment_app;
 mod generation_export;
 mod mcp;
@@ -47,6 +48,17 @@ struct Cli {
     reason = "The CLI parses one command; explicit optional fields avoid extra heap allocations."
 )]
 enum Command {
+    /// Resume an existing job through the local API; authority/store ownership stays in that service.
+    Resume {
+        /// Existing job UUID, not a SQLite/report path.
+        id: uuid::Uuid,
+        /// Canonical HTTP literal-loopback origin with an explicit nonzero port.
+        #[arg(long, default_value = "http://127.0.0.1:8787")]
+        server: String,
+        /// Strict ResumeOptions JSON (64KiB), including optional exact quota authority.
+        #[arg(long)]
+        options: Option<PathBuf>,
+    },
     /// Read durable native crawl quota accounting from an existing SQLite store.
     CrawlQuotas { store: PathBuf },
     /// Read a local findings page and/or complete stored CSV without website requests.
@@ -590,6 +602,14 @@ async fn main() -> anyhow::Result<()> {
         } => {
             let result = enrichment_app::run_cli(input, options, store, output, csv).await?;
             println!("{}", serde_json::to_string(&result)?);
+        }
+        Command::Resume {
+            id,
+            server,
+            options,
+        } => {
+            let accepted = crawl_resume::execute(&server, id, options.as_deref()).await?;
+            println!("{}", serde_json::to_string(&accepted)?);
         }
         Command::CrawlQuotas { store } => {
             let summary =

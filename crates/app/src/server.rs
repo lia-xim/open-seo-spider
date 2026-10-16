@@ -1341,17 +1341,7 @@ async fn pause_crawl(
     guard.status = "pausing".into();
     Ok(Json(guard.status()))
 }
-#[derive(Default, Deserialize)]
-#[serde(default, deny_unknown_fields)]
-struct ResumeOptions {
-    /// Omitted retains the saved limit; an explicit zero removes this operator limit.
-    max_pages: Option<usize>,
-    max_attempts: Option<usize>,
-    concurrency: Option<usize>,
-    delay_ms: Option<u64>,
-    request_timeout_secs: Option<u64>,
-    quota_increases: Option<open_seo_spider_core::CrawlQuotaIncreases>,
-}
+use crate::crawl_resume::ResumeOptions;
 async fn resume_crawl(
     State(state): State<AppState>,
     Path(id): Path<Uuid>,
