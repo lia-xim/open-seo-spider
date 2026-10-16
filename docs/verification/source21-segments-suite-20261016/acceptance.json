@@ -1,0 +1,209 @@
+{
+  "kind": "SOURCE21_SAVED_SEGMENTS_REPORTING_ACCEPTANCE_PLAN_NOT_EXECUTED",
+  "scope": "Saved-segments only, existing shared service, nine overrides/no new modules",
+  "baseline": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source19-directory-root-composition-v1/composition.json",
+    "sha256": "c06c5de391f7b072109cde58132c0d8cbf052f304f47251142e38a83bde45d19",
+    "bytes": 1037943
+  },
+  "impact_map": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source18-remaining-consumer-map-source-audit-v1/map.json",
+    "sha256": "0c9a72641d470c956e713c79356169770c83ab72bf291dae397a5013da00afb8",
+    "bytes": 31674
+  },
+  "behavior": {
+    "default": "Absent/null reporting_mode defaults Reported only for an active saved report directive profile; inactive absence/null/allfalse preserves legacy raw response/token/CSV behavior",
+    "raw": "All captured observations enter rule matching; reporting envelope explains profile-visible and eligible counts separately",
+    "reported": "Individual page visibility is evaluated before segment matching, rule counts, overlap/unknown/unassigned counts, selection and charts",
+    "ordinals": "Original report.pages ordinal retained; no reduced-report clone or ordinal reset",
+    "issue_ownership": "Issue rows follow exact URLs of selected eligible observations. Hidden duplicates cannot select a visible nonmatching owner. Known hidden captured URLs remain known for raw orphan accounting; related URLs remain unmodified",
+    "authority": "Raw typed report hash, rules hash, job/generation/origin/selection and stable saved authority unchanged; optional normalized profile/mode identity separately binds tokens/cursors/full exports",
+    "CSV": "Legacy six columns and typed context/summary/page/issue rows unchanged. Active/explicit views additionally emit one typed reporting row; no raw identity relabeling"
+  },
+  "mapping_audit": [
+    {
+      "frontdoor": "HTTP preview/JSON/CSV",
+      "path": "crates/app/src/server/segments.rs",
+      "change": "Existing stable readlock/hash-before-clone and shared evaluate preserved byte-exact; optional request flows into changed shared service"
+    },
+    {
+      "frontdoor": "offline saved-segments CLI",
+      "path": "crates/app/src/main.rs + segments_app::run_cli",
+      "change": "Explicit request JSON carries optional reporting_mode; same evaluator/full exporters; no CLI/crawl flags or file authority added. Existing create_new and bounded input path remain unchanged"
+    },
+    {
+      "frontdoor": "MCP spider_segments",
+      "path": "crates/app/src/mcp/segments.rs",
+      "change": "Typed shared Request validates and serializes reporting_mode through existing loopback POST/digest/export gates; only description changed; generic request schema remains server-validated"
+    },
+    {
+      "frontdoor": "dedicated saved-segments UI",
+      "path": "web/saved-segments.js/html",
+      "change": "Auto/reported/raw select, strict request propagation, reset/abort/token invalidation and truthful captured/profile/eligible count labels; no redesign or crawl change"
+    }
+  ],
+  "new_Rust_regressions": [
+    {
+      "source": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source21-saved-segments-reporting-proposal-v1/source/crates/core/src/segments_tests.rs",
+        "sha256": "70dae9bbff22304cb46b03fc7169b10411c505e3c9ccde1f0d67bcf169cc10ef",
+        "bytes": 21999
+      },
+      "name": "segments_reporting_eight_profiles_filter_before_rule_counts_charts_and_selection",
+      "status": "NOT_RUN_SOURCE_ONLY"
+    },
+    {
+      "source": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source21-saved-segments-reporting-proposal-v1/source/crates/core/src/segments_tests.rs",
+        "sha256": "70dae9bbff22304cb46b03fc7169b10411c505e3c9ccde1f0d67bcf169cc10ef",
+        "bytes": 21999
+      },
+      "name": "segments_reporting_mixed_duplicates_use_selected_visible_owner_and_keep_raw_ordinals",
+      "status": "NOT_RUN_SOURCE_ONLY"
+    },
+    {
+      "source": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source21-saved-segments-reporting-proposal-v1/source/crates/core/src/segments_tests.rs",
+        "sha256": "70dae9bbff22304cb46b03fc7169b10411c505e3c9ccde1f0d67bcf169cc10ef",
+        "bytes": 21999
+      },
+      "name": "segments_reporting_unknown_unassigned_and_overlap_cohorts_only_use_visible_rows",
+      "status": "NOT_RUN_SOURCE_ONLY"
+    },
+    {
+      "source": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source21-saved-segments-reporting-proposal-v1/source/crates/core/src/segments_tests.rs",
+        "sha256": "70dae9bbff22304cb46b03fc7169b10411c505e3c9ccde1f0d67bcf169cc10ef",
+        "bytes": 21999
+      },
+      "name": "segments_reporting_explicit_raw_keeps_full_projection_but_distinct_profile_identity",
+      "status": "NOT_RUN_SOURCE_ONLY"
+    },
+    {
+      "source": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source21-saved-segments-reporting-proposal-v1/source/crates/core/src/segments_tests.rs",
+        "sha256": "70dae9bbff22304cb46b03fc7169b10411c505e3c9ccde1f0d67bcf169cc10ef",
+        "bytes": 21999
+      },
+      "name": "segments_reporting_legacy_none_null_false_keep_fixed_empty_csv_contract_and_wire",
+      "status": "NOT_RUN_SOURCE_ONLY"
+    },
+    {
+      "source": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source21-saved-segments-reporting-proposal-v1/source/crates/core/src/segments_tests.rs",
+        "sha256": "70dae9bbff22304cb46b03fc7169b10411c505e3c9ccde1f0d67bcf169cc10ef",
+        "bytes": 21999
+      },
+      "name": "segments_reporting_csv_includes_exact_reporting_row_and_selected_original_issue_facts",
+      "status": "NOT_RUN_SOURCE_ONLY"
+    },
+    {
+      "source": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source21-saved-segments-reporting-proposal-v1/source/crates/core/src/segments_tests.rs",
+        "sha256": "70dae9bbff22304cb46b03fc7169b10411c505e3c9ccde1f0d67bcf169cc10ef",
+        "bytes": 21999
+      },
+      "name": "segments_reporting_hidden_population_still_respects_raw_row_budget_and_profile_guards",
+      "status": "NOT_RUN_SOURCE_ONLY"
+    },
+    {
+      "source": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source21-saved-segments-reporting-proposal-v1/source/crates/app/src/segments_app_tests.rs",
+        "sha256": "3b09f67bc4f0cc48c057643cc77f726db5bd1c9b09b79d1285f28a32124da863",
+        "bytes": 15575
+      },
+      "name": "segments_service_reporting_mode_serde_is_strict_and_legacy_request_omits_new_field",
+      "status": "NOT_RUN_SOURCE_ONLY"
+    },
+    {
+      "source": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source21-saved-segments-reporting-proposal-v1/source/crates/app/src/segments_app_tests.rs",
+        "sha256": "3b09f67bc4f0cc48c057643cc77f726db5bd1c9b09b79d1285f28a32124da863",
+        "bytes": 15575
+      },
+      "name": "segments_service_reporting_tokens_bind_mode_profile_and_raw_snapshot_without_relabelling",
+      "status": "NOT_RUN_SOURCE_ONLY"
+    },
+    {
+      "source": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source21-saved-segments-reporting-proposal-v1/source/crates/app/src/segments_app_tests.rs",
+        "sha256": "3b09f67bc4f0cc48c057643cc77f726db5bd1c9b09b79d1285f28a32124da863",
+        "bytes": 15575
+      },
+      "name": "segments_service_reported_paging_keeps_raw_ordinals_and_full_json_csv_population",
+      "status": "NOT_RUN_SOURCE_ONLY"
+    },
+    {
+      "source": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source21-saved-segments-reporting-proposal-v1/source/crates/app/src/segments_app_tests.rs",
+        "sha256": "3b09f67bc4f0cc48c057643cc77f726db5bd1c9b09b79d1285f28a32124da863",
+        "bytes": 15575
+      },
+      "name": "segments_service_inactive_profile_keeps_old_token_formula_full_json_and_csv",
+      "status": "NOT_RUN_SOURCE_ONLY"
+    },
+    {
+      "source": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source21-saved-segments-reporting-proposal-v1/source/crates/app/src/segments_app_tests.rs",
+        "sha256": "3b09f67bc4f0cc48c057643cc77f726db5bd1c9b09b79d1285f28a32124da863",
+        "bytes": 15575
+      },
+      "name": "segments_cli_shared_reporting_modes_export_and_refuse_cross_view_token_without_raw_writes",
+      "status": "NOT_RUN_SOURCE_ONLY"
+    },
+    {
+      "source": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source21-saved-segments-reporting-proposal-v1/source/crates/app/src/server/segments_tests.rs",
+        "sha256": "25f2911eeb37cf47925a5ff9ed598fff0f2338ac6adf1fd4f6e803ba76444aa1",
+        "bytes": 9546
+      },
+      "name": "segments_saved_api_profile_preview_json_csv_share_view_bound_token_and_raw_authority",
+      "status": "NOT_RUN_SOURCE_ONLY"
+    },
+    {
+      "source": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source21-saved-segments-reporting-proposal-v1/source/crates/app/src/server/segments_tests.rs",
+        "sha256": "25f2911eeb37cf47925a5ff9ed598fff0f2338ac6adf1fd4f6e803ba76444aa1",
+        "bytes": 9546
+      },
+      "name": "segments_saved_api_same_job_profile_change_refuses_prior_preview_and_exports",
+      "status": "NOT_RUN_SOURCE_ONLY"
+    },
+    {
+      "source": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source21-saved-segments-reporting-proposal-v1/source/crates/app/src/mcp/segments_tests.rs",
+        "sha256": "cc81266941153805fe0aa8edd61223a124fda4804cd711f8d62f057743558f9d",
+        "bytes": 3522
+      },
+      "name": "segments_mcp_shared_request_reporting_mode_is_strict_and_survives_transport_serialization",
+      "status": "NOT_RUN_SOURCE_ONLY"
+    }
+  ],
+  "legacy_byte_oracle": "Fixed predecessor empty-projection CSV golden, plus unchanged inactive default token tuple and None/null/allfalse serde compatibility",
+  "TODO": [
+    {
+      "gate": "Independent source review of all nine complete pairs, raw authority and visibility/issue/token/CSV semantics",
+      "status": "PENDING"
+    },
+    {
+      "gate": "Root compose nine overrides over exact434 Source19 baseline or explicit reconciled Source20 successor; resolve shared-file joins before execution",
+      "status": "PENDING"
+    },
+    {
+      "gate": "Root Rust formatting, all-target typecheck, targeted15 regressions, full suite/renderer/fmt/clippy",
+      "status": "NOT_RUN"
+    },
+    {
+      "gate": "Root actual HTTP/offline CLI/MCP and browser mode change/paging/export/stale tokens; source/raw preservation and evidence closure",
+      "status": "NOT_RUN"
+    }
+  ],
+  "qualifications": [
+    "No full feature/vendor parity or install acceptance",
+    "Core public project remains explicit raw API; only shared saved-segment service opts into project_with_reporting",
+    "No changes to crawler/discovery/raw report/crawl summary/ledgers/source facts or any unrelated specialized consumer",
+    "Orphan issues remain captured-wide, while rule aggregates use eligible observations and chart/rows use segment selection"
+  ],
+  "Root_grant": null,
+  "NoF_from_author": null
+}

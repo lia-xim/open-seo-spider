@@ -6858,7 +6858,7 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-16T17:06:45.090Z",
+  "last_verified_at": "2026-10-16T17:29:00.191Z",
   "current_work": [
     {
       "id": "combined-source-v15-20261016",
@@ -9193,9 +9193,9 @@
     {
       "id": "directive-reporting-20261016",
       "priority": 1,
-      "status": "ISOLATED_REPORTING_NATIVE_PASS_DIRECTORY_BUILD_PASS_REMAINING_CONSUMERS_PENDING",
+      "status": "REPORTING_NATIVE_PASS_DIRECTORY_AND_SEGMENTS_SUITE_PASS_NATIVE_RETRY_PENDING",
       "title_de": "Berichtsfilter für Noindex, Canonicals und Pagination ergänzen",
-      "summary_de": "Berichtsprofile bestehen jetzt echte8 API-/MCP-/CLI-Referenzprofile,8 Browser-Crawls und16 vollständig geprüfte Exportdateien mit unabhängigem tatsächlichem Audit. Der isolierte Verzeichnis-Kandidat besteht1582 Tests, vier Renderer-Gates, Format,Clippy und Build. Sein erster echter Browserlauf prüft eine Ansicht samtCSV und scheitert danach an einem Console404; Wiederholung mit ergänzt lokalem Icon-Endpunkt bleibt offen. Weitere Spezialberichte, Produktübernahme und Installation stehen aus.",
+      "summary_de": "Berichtsprofile bestehen acht echte API-/MCP-/CLI-Referenzprofile, acht Browser-Crawls und 16 vollständig geprüfte Exportdateien. Der isolierte Segment- und Verzeichniskandidat besteht jetzt alle 1.597 Tests, vier echte Renderer-Prüfungen, Format und Clippy. Modus- und Profilwechsel binden Export-Tokens; überlappende Segmente und ursprüngliche Beobachtungspositionen bleiben nachvollziehbar. Die nächste Browser-/CLI-/MCP-Abnahme und die Installation sind offen.",
       "feature_ids": [
         "robots.traversal"
       ],
@@ -9209,15 +9209,18 @@
         "Vollständige aktuelle Suite:1570/0/0, vier tatsächliche Chromium-Gates, Format und Clippy mit -D warnings; optimierter Kandidaten-Build bestanden.",
         "29 UI-VM-Gruppen mit81 Varianten und16 bestehende UI-Regressionen auf allen fünf aktuellen Zielen bestanden; isolierter Produktpatch per git apply --check geprüft.",
         "Echter Source18-Nativlauf:8 Referenzprofile überAPI/MCP/offlineCLI und8 dazugehörige Browser-Crawls;16 echte gespeicherte JSON-Exporte,128 Fixture-GETs und11 natürliche Kindprozess-Enden geprüft; aktuelles unabhängiges tatsächliches Audit bestanden.",
-        "Isolierter Source19-Verzeichniskandidat:1582/0/0,804 Pflichtnamen, vier echte Renderer-Gates, Format,Clippy mit-D warnings und optimierter Build bestanden;19-Dateien-Patch geprüft und noch nicht angewendet."
+        "Isolierter Source19-Verzeichniskandidat:1582/0/0,804 Pflichtnamen, vier echte Renderer-Gates, Format,Clippy mit-D warnings und optimierter Build bestanden;19-Dateien-Patch geprüft und noch nicht angewendet.",
+        "Source21: 15 neue Regressionen und vollständige Suite mit 1.597 bestandenen Tests, 819 Pflichtnamen, vier echten Renderer-Prüfungen sowie Format und Clippy ohne Warnungen; aktueller unabhängiger Rohdaten-Audit bestätigt den Lauf.",
+        "28-Dateien-Gesamtpatch gegen den aktuellen Produktstand geprüft und als reviewbarer, noch nicht angewendeter Kandidat gespeichert."
       ],
       "pending_acceptance_de": [
-        "Verzeichnislauf nach lokalem Icon-Endpunkt vollständig wiederholen:2 frische Crawls,6 Ansichten,6 echteCSV-Dateien,Navigation und veraltete Token.",
-        "Source21-Segmente mit Modus-/Profilbindung über gemeinsamen Dienst weiterprüfen:15 neue Quelltestfälle,formatierte Root-Komposition und All-Target-Typecheck bestehen; vollständige Suite läuft;Build und echteAPI/CLI/MCP/UI-Abnahme fehlen.",
-        "Verbleibende Spezialverbraucher:N-Gramme,Inhalte,Link-/Ressourcenquellen,Sitemap-Bundle und opt-inVergleich ergänzen; explizite Mapping-Audits bleiben rohe Bestandsprüfung.",
-        "Aktuelle Ressourcenmatrix abschließen,geprüften Gesamtpatch übernehmen und Daten erhaltend installieren."
+        "Segment- und Verzeichnisfunktionen mit zwei frischen Crawls in API, Browser, CLI und MCP gemeinsam abnehmen; 18 vollständige echte JSON-/CSV-Downloads prüfen.",
+        "N-Gramm-Erweiterung prüfen: Filter vor allen drei Textkanälen, separate Rohseitenpositionen, UI-Auswahl und neuer lesender MCP-Zugang; 15 neue Quellregressionen noch ausführen.",
+        "Weitere Spezialverbraucher ergänzen: Inhaltsauswahl, Link-/Ressourcenquellen, Sitemap-Bundle und opt-in-Vergleiche; explizite Mapping-Audits bleiben rohe Bestandsprüfungen.",
+        "Ressourcenmatrix abschließen, geprüften Gesamtpatch übernehmen und Daten erhaltend installieren."
       ],
       "documentation": [
+        "docs/verification/source21-segments-suite-20261016/index.json",
         "docs/verification/source19-directory-and-source18-native-20261016/index.json",
         "docs/verification/source18-reporting-candidate-20261016/index.json",
         "docs/verification/source18-directive-focused-20261016/index.json"
@@ -9239,7 +9242,11 @@
         "product_patch": "APPLY_CHECK_PASS_NOT_APPLIED",
         "directory_full_suite": "PASS_ACTUAL1582_0_0_FOUR_RENDERER_FMT_CLIPPY",
         "directory_build": "PASS_ACTUAL_OPTIMIZED_CANDIDATE",
-        "directory_native": "FAIL_CONSOLE404_AFTER_FIRST_VIEW_AND_CSV_PRESERVED"
+        "directory_native": "FAIL_CONSOLE404_AFTER_FIRST_VIEW_AND_CSV_PRESERVED",
+        "segments_full_suite": "PASS_ACTUAL1597_0_0_819_REQUIRED_FOUR_RENDERER_FMT_CLIPPY",
+        "segments_actual_suite_audit": "PASS_CURRENT_INDEPENDENT_ACTUAL_AUDIT",
+        "segments_build": "PASS_ACTUAL_OPTIMIZED_CANDIDATE",
+        "segments_native": "PREPARED_NOT_RUN"
       },
       "reference_parity": "NOT_PROVEN"
     }
