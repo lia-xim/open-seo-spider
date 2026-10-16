@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "kind": "combined_source17_scalar_binder_independent_review",
+  "result": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "findings": [],
+  "reviewer": "/root/comparison_review",
+  "recorded_at": "2026-10-16T12:25:53.0329630+00:00",
+  "proposal_manifest": {
+    "bytes": 9433,
+    "sha256": "d568822dc93c0ffdda0548b72c2b0f74f80849708d0cec38ba7987e7f9dd5d11",
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v17-driver-preparation-v2\\manifest.json"
+  },
+  "binder": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v17-driver-preparation-v2/combined-bindings-v17.mjs",
+    "sha256": "aeb93183632cc5bb34e4de841b8ec4650d1836073700d612e6ede48a8af6399f",
+    "bytes": 21057
+  },
+  "source_authority": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v17-driver-preparation-v1\\SOURCE-AUTHORITY.json",
+    "sha256": "3f1868385607094868637d3362a9160b319295f9a0dc80ac1ae4e9bf0a47d649",
+    "bytes": 11610
+  },
+  "reviewed_source_files": [
+    {
+      "bytes": 60995,
+      "sha256": "e76b94c3b8a53e9951aa4ec8f871e899f3492fba2613ff75b8cf3fac0eaee5c4",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v17-driver-preparation-v2\\validate-combined-source-v17.mjs"
+    },
+    {
+      "bytes": 18105,
+      "sha256": "c09df1da850c008785427e58659ddf30d94ff7d48ba2eb7df877d87b8ab22eea",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v17-driver-preparation-v2\\run-combined-suite-v17.mjs"
+    },
+    {
+      "bytes": 20234,
+      "sha256": "6f688cad9a01cbe33c3d65889aae62120d64f8f728d676e861f1b5d838ac415d",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v17-driver-preparation-v2\\build-combined-optimized-v17.mjs"
+    },
+    {
+      "bytes": 21057,
+      "sha256": "aeb93183632cc5bb34e4de841b8ec4650d1836073700d612e6ede48a8af6399f",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v17-driver-preparation-v2\\combined-bindings-v17.mjs"
+    }
+  ],
+  "audit": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v17-scalar-final-v2-independent-review-v1\\AUDIT.json",
+    "sha256": "ca5418065ed51958f9c50764071e30a65ca65c1acd81e1ef89d175182617fa67",
+    "bytes": 70850
+  },
+  "checks_count": 343,
+  "source_commit": "61f71341542fb61f06e63eec2c3e8a6ba1c0ec1e",
+  "counts": {
+    "parent": 431,
+    "current": 432,
+    "owned": 6,
+    "modified": 5,
+    "new": 1,
+    "unchanged": 426,
+    "new_Rust": 13,
+    "required": 777,
+    "full": 781,
+    "minimum": 1559,
+    "renderer_gates": 4,
+    "fresh_Node": 16,
+    "SDK_cases_separate": 29
+  },
+  "closed_report_finding": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v17-driver-final-v1-independent-review-v1/receipt.json",
+    "sha256": "846f6d473b2bebbbcbb47cc538669822c67d96ca5524138c23c58575a19d1d6c",
+    "bytes": 8591
+  },
+  "source_only": true,
+  "semantic_review": [
+    "Complete300-line current binder read; only its two transitive SHA values change between V1 and V2, independently reconstructed and inverted.",
+    "All432 current product input hashes and canonical6 parent/authored/formatted bindings are validated by the exact validator; current publication table and independently audited publication refs match current source commit.",
+    "Acyclic pinned authority -> validator -> suite -> builder -> binder; no target import/call occurred during review.",
+    "Parent16 manifest/build/candidate are immutable history; current bind requires new Source17 manifest, freshly re-parsed full suite at777 leaf/781 full names with4 renderer gates and>=1559 actual passes, failures0, ignored0.",
+    "Required full suite raw logs, child close receipts, source hashes, runtime identity, build source/suite/commit bindings and fresh captured PE digest remain strict; repeated verify() rechecks source+suite+build.",
+    "Current preliminary Node16 proof is one invocation of3drivers on5currenttargets; oldNode9 or separate7 cannot substitute.",
+    "V1 stale qualification finding is closed by exactly2fulltext replacements plus3transitive SHA replacements, with four whole pairs/inverses and7 protected source regions exact.",
+    "Dynamic Root approval requires fresh final Driver and Scalar reviews for the same exact preparation manifest+binder. Source-only metadata has no approval, freeze, suite, build, PE, native or installed acceptance."
+  ],
+  "boundaries": {
+    "review": "Fresh exact final SOURCE review only",
+    "Root_grant": "NOT_GRANTED",
+    "actual_frozen_Source17_manifest": "NOT_CREATED_BY_REVIEWER",
+    "full_Source17_suite": "NOT_RUN",
+    "Source17_optimized_build": "NOT_RUN",
+    "Source17_native": "NOT_RUN",
+    "Source17_installation": "NOT_RUN",
+    "publication_scope": "Exact independently audited code-publication metadata only; no current suite/build/native acceptance inferred",
+    "historical_parent16": "Pinned immutable provenance only; no old PE read/import/call or borrowed acceptance",
+    "private_mapping": "Source16 accepted safe mapping retained as opaque ref only; no private proof/witness/process traversal",
+    "runtime_metadata": "Only safe E JSON metadata read; no referenced C/runtime PE/package binaries accessed",
+    "target_import_eval_calls": 0,
+    "compiler_test_helper_or_native_calls": 0,
+    "PE_DB_WAL_SHM_private_C_R_Original_reads_or_hashes": 0,
+    "Git_HTTP_browser_locks": 0,
+    "source_files_edited": 0
+  },
+  "independence": "Fresh independent exact final V2 source review; no author or Root execution role. No target import/eval/calls, no binary or private data access. Historical/WIP reviews are provenance only."
+}

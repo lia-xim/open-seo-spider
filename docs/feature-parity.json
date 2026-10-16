@@ -6851,7 +6851,7 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-16T11:40:10.860Z",
+  "last_verified_at": "2026-10-16T13:03:22.375Z",
   "current_work": [
     {
       "id": "combined-source-v15-20261016",
@@ -9121,9 +9121,9 @@
     {
       "id": "native-resource-quotas-20261016",
       "priority": 1,
-      "status": "V4_UI_ADMISSION_REPAIR_SOURCE_PENDING_V3_PRELIMINARY_PASS",
+      "status": "SOURCE17_PRIVATE_FULL_SUITE_BUILD_PASS_NATIVE_PENDING",
       "title_de": "Native interne Ressourcen-Crawls mit dauerhaften Quoten verbinden",
-      "summary_de": "Die vorherige V3 besteht Formatierung, mechanischen Review, Clippy,13 Rust-Funktionen mit47 logischen Zellen171 Assertions sowie neun frische Frontend-Fälle. Das neue Native-Quellreview fand eine reale UI-Lücke: Ressourcen-Erkennung plus Crawl-Quoten werden im Einstellungsformular pauschal blockiert. V4 korrigiert die Zulassung anhand der unterstützten internen Ressourcenprofile und erhält Beschränkungen für externe Ziele/Subdomains. Aktuelle V4-Prüfungen, Veröffentlichung, Vollsuite mindestens1559, Build, vollständige Native-Matrix und Installation stehen aus.",
+      "summary_de": "Source17 ist mit sechs eigenen Produktpfaden und432 exakt gebundenen Quelldateien privat veröffentlicht. Die UI erlaubt interne Ressourcen-Crawls mit Quoten anhand des konkreten Profils und prüft die tatsächlichen Formularwerte; externe Ziele, Subdomains und Renderer bleiben gesondert offen. Aktuelle13 Rust-Funktionen mit47 logischen Zellen171 Assertions und16 Node-Fälle bestehen. Die vollständige aktuelle Suite besteht mit1559 Tests ohne Fehler/ignorierte Tests, vier frischen Renderer-Prüfungen, Format und Clippy; optimierter Build bestanden. Vollständige Native-Matrix und Installation stehen noch aus; lokal läuft Source16.",
       "feature_ids": [
         "crawl.resources",
         "crawl.limits"
@@ -9137,15 +9137,20 @@
         "V2-Vorschlag,432-Dateien-Komposition und fünf Producer frisch unabhängig ohne Befund geprüft; neue tatsächliche V2-Formatierung besteht.",
         "V2-Formatierung mechanisch unabhängig geprüft und strenger Clippy bestanden; tatsächlicher13-Funktionen-Lauf mit12/1/0 bleibt als fehlgeschlagen erhalten.",
         "V3 korrigiert ausschließlich die Berichtserwartung für ein beobachtetes blockiertes Redirect-Ziel;13 Funktionen47 Zellen171 Assertions, alle HTTP-/Header-/Quotenprüfungen erhalten.",
-        "V3: tatsächliche Formatierung samt unabhängiger mechanischer Prüfung, strenger Clippy, alle13 Rust-Funktionen mit0 Fehlern/0 ignoriert und alle neun frischen Node-Fälle bestanden."
+        "V3: tatsächliche Formatierung samt unabhängiger mechanischer Prüfung, strenger Clippy, alle13 Rust-Funktionen mit0 Fehlern/0 ignoriert und alle neun frischen Node-Fälle bestanden.",
+        "V4 korrigiert die pauschale Ressourcen-/Quoten-UI-Blockade anhand des tatsächlich unterstützten internen Profils. Sieben neue VM-Formularfälle prüfen tatsächliche Werte, Speichern, Wiederöffnen, API-Payload und verweigerte Profile.",
+        "Aktuelle V4:432-Dateien-Komposition mit sechs eigenen Produktpfaden, Formatierung mit unabhängigem mechanischem Review, strenger Clippy,13 Rust-Funktionen und16 Node-Fälle bestanden.",
+        "Produktcode61f7134 privat veröffentlicht; alle432 Quell-/Index-/Commit-Bytes und sechs kanonischen Bindungen unabhängig anhand gespeicherter Rohbelege geprüft.",
+        "Source17 vollständig eingefroren und mit1559 Tests ohne Fehler/ignorierte Tests, vier frischen Renderer-Gates, Format, Clippy und optimiertem Build geprüft. Veralteter Testbelegtext vor Ausführung korrigiert und frisch unabhängig geprüft."
       ],
       "pending_acceptance_de": [
-        "Pauschale UI-Blockade durch genaue Ressourcenprofil-Prüfung ersetzen; tatsächliche Formularwerte, Speichern/Wiederöffnen und gesendete API-Payloads einschließlich negativer Profile prüfen.",
-        "V4-Vorschlag,432-Dateien-Komposition mit sechs eigenen Produktpfaden und Prüfskripte unabhängig prüfen; aktuelle Formatierung, Clippy,13 Rust-Funktionen und frische Frontend-Fälle ausführen.",
-        "Finale Source17-Treiber und Zulassung auf aktuellen sechs Pfaden/432 Quelldateien binden, privat veröffentlichen und mindestens1559 Tests, Build sowie vollständige Ressourcen-/Quoten-Nativmatrix mit Pause/Cancel/Cold/Fehlerfällen ausführen.",
+        "Vollständige Ressourcen-/Quoten-Nativmatrix mit echten Browser/API/CLI/MCP-Zugriffen, Pause/Cancel/Cold-Neustart und gezielten Fehler-/Korruptionsfällen ausführen; Quellcode oder Hilfsproben ersetzen diese Abnahme nicht.",
+        "Aktuelle Nativregressionen und unabhängige begrenzte Rohbelegprüfungen auf dem Source17-Kandidaten durchführen.",
+        "Source17 erst nach bestandenen Nativtests und Daten erhaltender Kompatibilitätsprüfung lokal installieren; gespeicherte Berichte, Projekte, Einstellungen und vollständige Dateiintegrität prüfen.",
         "Renderer-, Selected- und externe CDN-/Ressourcenziele bleiben gesonderte offene Kombinationen."
       ],
       "documentation": [
+        "docs/verification/source17-suite-build-20261016/index.json",
         "docs/verification/source16-installed-20261016/index.json",
         "docs/verification/source16-six-native-audits-20261016/index.json",
         "docs/verification/source16-three-native-resource-repair-20261016/index.json",
@@ -9153,22 +9158,22 @@
         "docs/verification/source16-cli-suite-20261016/resource-quota-proposal-source-review.json"
       ],
       "gates": {
-        "source_review": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
-        "format": "V3_PASS_ACTUAL",
-        "clippy": "V3_PASS_ACTUAL_STRICT_CLIPPY",
-        "Rust13": "V3_PASS_ACTUAL13_ZERO_FAILED_ZERO_IGNORED",
-        "Node_current": "V3_PASS_FRESH9_PREVIOUS_PROPOSAL_CURRENT_V4_NOT_RUN",
-        "full_suite": "NOT_RUN",
-        "build": "NOT_RUN",
+        "source_review": "V4_NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+        "format": "V4_PASS_ACTUAL_AND_CURRENT_FULL_SUITE",
+        "clippy": "V4_PASS_ACTUAL_STRICT_AND_CURRENT_FULL_SUITE",
+        "Rust13": "V4_PASS_ACTUAL13_ZERO_FAILED_ZERO_IGNORED",
+        "Node_current": "V4_PASS_ACTUAL16_THREE_DRIVERS_FIVE_CURRENT_TARGETS",
+        "full_suite": "PASS_ACTUAL_1559_ZERO_FAILED_ZERO_IGNORED_FOUR_FRESH_RENDERER_FMT_CLIPPY",
+        "build": "PASS_ACTUAL_SOURCE17_OPTIMIZED_BUILD",
         "native": "NOT_RUN",
         "installation": "NOT_RUN",
         "manufacturer_parity": "NOT_PROVEN",
-        "formatter_review": "V3_NO_FINDINGS_BOUNDED_MECHANICAL_REVIEW",
+        "formatter_review": "V4_NO_FINDINGS_BOUNDED_MECHANICAL_REVIEW",
         "compile_repair": "V2_FRESH_SOURCE_COMPOSITION_PRODUCERS_NO_FINDINGS",
         "Node9": "V3_PASS_ACTUAL_FRESH9_FIVE_CURRENT_FORMATTED_TARGETS",
         "report_oracle_repair": "V3_FRESH_SOURCE_COMPOSITION_PRODUCERS_NO_FINDINGS",
-        "UI_admission": "P1_FINDING_CURRENT_V4_REPAIR_PENDING",
-        "current_proposal": "V4_SOURCE_PREPARATION_PENDING"
+        "UI_admission": "V4_IMPLEMENTED_SEVEN_VM_REGRESSIONS_PASS_REAL_NATIVE_PENDING",
+        "current_proposal": "V4_ACTUAL_PRIVATE_PUBLICATION_AUDITED"
       },
       "reference_parity": "NOT_PROVEN"
     }
