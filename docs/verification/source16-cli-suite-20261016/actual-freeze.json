@@ -1,0 +1,85 @@
+{
+  "kind": "actual_root_source16_approval_and_freeze",
+  "result": "PASS_ACTUAL_SOURCE16_FROZEN_FULL_SUITE_NOT_RUN",
+  "recorded_at": "2026-10-16T09:15:20.069Z",
+  "source_commit": "0620f176d945ec6ac79c2adcbc10c7519fe2d6a9",
+  "source_inputs": 431,
+  "root_approval": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source16-root-approval-v1\\approval.json",
+    "sha256": "2412204b7053b91ce18e7e0a07b1e577e30728414c5965499780b8407a3ba974",
+    "bytes": 83551
+  },
+  "manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v16\\manifest.json",
+    "sha256": "d1e668fe8f19e804aa76d3f28f36bc63fcc2d5122f3aa1d5c54792d5519e4a09",
+    "bytes": 846274
+  },
+  "preparation": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v16-driver-preparation-v1\\manifest.json",
+    "sha256": "9c6e477406eb6d09e74b2af38f0f3b38429cf9014c4a07ef0e8413fe365a8b9e",
+    "bytes": 8691
+  },
+  "independent_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v16-driver-independent-review-v1\\receipt.json",
+    "sha256": "12a8c16155011628bdef264f035b94b5ad14949cf8caea11f7de7d3baad9579a",
+    "bytes": 3108
+  },
+  "binder_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-v16-scalar-independent-review-v1\\receipt.json",
+    "sha256": "7febcc80b0c844a624982f88f6b7eb8abeb237a2e528ada1e913d653159b7f58",
+    "bytes": 2228
+  },
+  "private_publication": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source16-product-publication-r3-v1/private-publication.json",
+    "sha256": "f9c7b9376ff3c648fdbbf711295c0cd66287a17d518d5354c31cd11586a64775",
+    "bytes": 6007
+  },
+  "lineage": {
+    "parent_source_manifest_sha256": "435149da272de730c37c5ac51c415908b8487c556a17e26c7f06f165ed0cb9b1",
+    "parent_suite_proof_sha256": "187450cc3a07c893f917b608208cc9831e24adf26b997c032b09ad8dfffcad4a",
+    "parent_build_proof_sha256": "d0345d7c5651df9d78eb611f18698286d49261c95af453581386c325d5277e6e",
+    "source_proposals": [
+      {
+        "role": "crawl_resume_cli",
+        "manifest": {
+          "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-resume-cli-proposal-v2/manifest.json",
+          "sha256": "49bf626d430418f02a01e5f475fba5d9c83a221bd012b60b02a9a7a047e53a95",
+          "bytes": 5777
+        },
+        "independent_review": {
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\crawl-resume-cli-independent-review-v2\\receipt.json",
+          "sha256": "3472a55e434ef32bce1533a4f605d1766a7038c99f98443c37177e90d84f3a7f",
+          "bytes": 5910
+        }
+      }
+    ],
+    "root_approval_sha256": "2412204b7053b91ce18e7e0a07b1e577e30728414c5965499780b8407a3ba974",
+    "parent_inputs": 429,
+    "required_parent_names": 753,
+    "unchanged_parent_inputs": 427,
+    "changed_parent_inputs": 2,
+    "new_input_files": 2,
+    "delta_bindings": 4,
+    "new_named_windows_functions": [
+      "crawl_resume::tests::cli_resume_endpoint_accepts_only_canonical_literal_loopback_origins",
+      "crawl_resume::tests::cli_resume_invalid_options_refuse_before_any_local_connection",
+      "crawl_resume::tests::cli_resume_never_follows_redirect_to_another_owned_listener",
+      "crawl_resume::tests::cli_resume_options_preserve_zero_and_exact_generation_revision_hash_authority",
+      "crawl_resume::tests::cli_resume_options_read_is_capped_during_growth_and_oversize_refuses_before_connection",
+      "crawl_resume::tests::cli_resume_options_reject_unknown_and_duplicate_authority_fields",
+      "crawl_resume::tests::cli_resume_posts_exact_authority_and_reports_acceptance_without_completion",
+      "crawl_resume::tests::cli_resume_propagates_stale_or_nonmonotone_refusal_without_claiming_success",
+      "crawl_resume::tests::cli_resume_rejects_other_job_or_completed_response_as_accepted_running",
+      "crawl_resume::tests::cli_resume_reply_limit_and_deadline_are_real_refusals",
+      "crawl_resume::tests::cli_resume_requires_job_uuid_and_keeps_store_paths_out_of_its_syntax"
+    ],
+    "actual_required_names": 764,
+    "actual_source_inputs": 431,
+    "minimum_expected_workspace_tests": 1546
+  },
+  "full_suite": null,
+  "optimized_build": null,
+  "native": null,
+  "installation": null,
+  "installed_source": 15
+}
