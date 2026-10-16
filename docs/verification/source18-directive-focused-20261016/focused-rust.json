@@ -1,0 +1,119 @@
+{
+  "kind": "Root_actual_isolated_directive_reporting_focused_Rust_validation",
+  "result": "PASS_ACTUAL_ALL_TARGET_TYPECHECK_SIX_UNITS_EIGHT_PROFILE_LOOPBACK",
+  "formatted_source": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/directive-reporting-root-validation-v1/format-apply-v2/proof.json",
+    "sha256": "a2cdb0a044d3e48dbf30ae61de19071847db7fd2b3873dfeeee161ce7b86260f",
+    "bytes": 412271
+  },
+  "mechanical_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/directive-reporting-formatted-r4-independent-review-v1/receipt.json",
+    "sha256": "848944a2589be832791d4e263d2a71212eed9e101d88a1b980582bf19f1e0ed6",
+    "bytes": 159003
+  },
+  "proposal": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/directive-reporting-proposal-v1/manifest-r4.NOT-RUN.json",
+    "sha256": "1ba821ddc43e1d3c3df856f7171224631c8e42b528252e5f7eb8669b59e44751",
+    "bytes": 10244
+  },
+  "source_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/directive-reporting-r4-independent-source-review-v1/receipt.json",
+    "sha256": "f95bf4c8b7b8d9529b1ff814b4a9f3b39337e1c9c6589c82e889433768a27514",
+    "bytes": 8205
+  },
+  "runs": [
+    {
+      "label": "check-all-targets",
+      "args": [
+        "check",
+        "--workspace",
+        "--all-targets",
+        "--locked",
+        "--offline"
+      ],
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "duration_ms": 36339,
+      "stdout": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source18-directive-focused-rust-v1/check-all-targets.stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "stderr": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source18-directive-focused-rust-v1/check-all-targets.stderr.log",
+        "sha256": "0db0e2a8800d1bad8ee6ddfd61335f452aa47253507b6c9e1e9dc4e79a9b9746",
+        "bytes": 383
+      },
+      "accepted": true,
+      "required_tests": null
+    },
+    {
+      "label": "directive-unit",
+      "args": [
+        "test",
+        "-p",
+        "open-seo-spider-core",
+        "--lib",
+        "--locked",
+        "--offline",
+        "directive_reporting::tests::",
+        "--",
+        "--nocapture"
+      ],
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "duration_ms": 110280,
+      "stdout": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source18-directive-focused-rust-v1/directive-unit.stdout.log",
+        "sha256": "79b35bb3970ec87fd9068cf8b7c5411fa62f238215d921c0b297d5d45b1dae5a",
+        "bytes": 827
+      },
+      "stderr": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source18-directive-focused-rust-v1/directive-unit.stderr.log",
+        "sha256": "ae1e03f8e27a33437e78524b0fe8290265cd15ae9236a548c72547301941af7b",
+        "bytes": 373
+      },
+      "accepted": true,
+      "required_tests": 6
+    },
+    {
+      "label": "eight-profile-loopback",
+      "args": [
+        "test",
+        "-p",
+        "open-seo-spider-core",
+        "--test",
+        "directive_reporting_crawl",
+        "--locked",
+        "--offline",
+        "--",
+        "--nocapture"
+      ],
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "duration_ms": 79819,
+      "stdout": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source18-directive-focused-rust-v1/eight-profile-loopback.stdout.log",
+        "sha256": "08418d0f19635931d06e93f75011005e9b4cf87f1a8fe1c803ff7b49c4f6e56e",
+        "bytes": 195
+      },
+      "stderr": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source18-directive-focused-rust-v1/eight-profile-loopback.stderr.log",
+        "sha256": "4719739453164bd778fa958adc83025ab7bb649547879ddda362699c405031ea",
+        "bytes": 392
+      },
+      "accepted": true,
+      "required_tests": 1
+    }
+  ],
+  "all434_source_bytes_unchanged": true,
+  "full_workspace_suite": "NOT_RUN",
+  "actual_API_CLI_MCP_UI": "NOT_RUN",
+  "Source17_product_and_installed_runtime_unchanged": true,
+  "installation": "NOT_RUN",
+  "manufacturer_parity": "NOT_PROVEN",
+  "recorded_at": "2026-10-16T14:36:24.136Z"
+}

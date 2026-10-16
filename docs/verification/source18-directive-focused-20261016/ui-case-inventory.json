@@ -1,0 +1,226 @@
+{
+  "kind": "source18_directive_UI_authored_VM_case_inventory",
+  "status": "DESIGN_ONLY_NOT_RUN",
+  "groups": 20,
+  "variants": 43,
+  "cases": [
+    {
+      "id": "UI-01",
+      "name": "checkbox_combination_0_save_restore_actual_start_exact_profile",
+      "variants": 1,
+      "expected_flags": {
+        "respect_noindex": false,
+        "respect_canonical": false,
+        "respect_next_prev": false
+      },
+      "expected_wire_profile": "OMITTED",
+      "path": "Actual extracted open/save→localStorage→restore/open→startCrawl request recorder, exact settings roundtrip"
+    },
+    {
+      "id": "UI-02",
+      "name": "checkbox_combination_1_save_restore_actual_start_exact_profile",
+      "variants": 1,
+      "expected_flags": {
+        "respect_noindex": true,
+        "respect_canonical": false,
+        "respect_next_prev": false
+      },
+      "expected_wire_profile": {
+        "version": 1,
+        "respect_noindex": true,
+        "respect_canonical": false,
+        "respect_next_prev": false
+      },
+      "path": "Actual extracted open/save→localStorage→restore/open→startCrawl request recorder, exact settings roundtrip"
+    },
+    {
+      "id": "UI-03",
+      "name": "checkbox_combination_2_save_restore_actual_start_exact_profile",
+      "variants": 1,
+      "expected_flags": {
+        "respect_noindex": false,
+        "respect_canonical": true,
+        "respect_next_prev": false
+      },
+      "expected_wire_profile": {
+        "version": 1,
+        "respect_noindex": false,
+        "respect_canonical": true,
+        "respect_next_prev": false
+      },
+      "path": "Actual extracted open/save→localStorage→restore/open→startCrawl request recorder, exact settings roundtrip"
+    },
+    {
+      "id": "UI-04",
+      "name": "checkbox_combination_3_save_restore_actual_start_exact_profile",
+      "variants": 1,
+      "expected_flags": {
+        "respect_noindex": true,
+        "respect_canonical": true,
+        "respect_next_prev": false
+      },
+      "expected_wire_profile": {
+        "version": 1,
+        "respect_noindex": true,
+        "respect_canonical": true,
+        "respect_next_prev": false
+      },
+      "path": "Actual extracted open/save→localStorage→restore/open→startCrawl request recorder, exact settings roundtrip"
+    },
+    {
+      "id": "UI-05",
+      "name": "checkbox_combination_4_save_restore_actual_start_exact_profile",
+      "variants": 1,
+      "expected_flags": {
+        "respect_noindex": false,
+        "respect_canonical": false,
+        "respect_next_prev": true
+      },
+      "expected_wire_profile": {
+        "version": 1,
+        "respect_noindex": false,
+        "respect_canonical": false,
+        "respect_next_prev": true
+      },
+      "path": "Actual extracted open/save→localStorage→restore/open→startCrawl request recorder, exact settings roundtrip"
+    },
+    {
+      "id": "UI-06",
+      "name": "checkbox_combination_5_save_restore_actual_start_exact_profile",
+      "variants": 1,
+      "expected_flags": {
+        "respect_noindex": true,
+        "respect_canonical": false,
+        "respect_next_prev": true
+      },
+      "expected_wire_profile": {
+        "version": 1,
+        "respect_noindex": true,
+        "respect_canonical": false,
+        "respect_next_prev": true
+      },
+      "path": "Actual extracted open/save→localStorage→restore/open→startCrawl request recorder, exact settings roundtrip"
+    },
+    {
+      "id": "UI-07",
+      "name": "checkbox_combination_6_save_restore_actual_start_exact_profile",
+      "variants": 1,
+      "expected_flags": {
+        "respect_noindex": false,
+        "respect_canonical": true,
+        "respect_next_prev": true
+      },
+      "expected_wire_profile": {
+        "version": 1,
+        "respect_noindex": false,
+        "respect_canonical": true,
+        "respect_next_prev": true
+      },
+      "path": "Actual extracted open/save→localStorage→restore/open→startCrawl request recorder, exact settings roundtrip"
+    },
+    {
+      "id": "UI-08",
+      "name": "checkbox_combination_7_save_restore_actual_start_exact_profile",
+      "variants": 1,
+      "expected_flags": {
+        "respect_noindex": true,
+        "respect_canonical": true,
+        "respect_next_prev": true
+      },
+      "expected_wire_profile": {
+        "version": 1,
+        "respect_noindex": true,
+        "respect_canonical": true,
+        "respect_next_prev": true
+      },
+      "path": "Actual extracted open/save→localStorage→restore/open→startCrawl request recorder, exact settings roundtrip"
+    },
+    {
+      "id": "UI-09",
+      "name": "settings_object_missing_reporting_flags_clears_stale",
+      "variants": 1,
+      "expected": "Missing flat fields become allfalse despite initially checked stale controls"
+    },
+    {
+      "id": "UI-10",
+      "name": "settings_object_null_flat_flags_clears_stale",
+      "variants": 1,
+      "expected": "Null flat fields become allfalse; this is not a null entire settings record"
+    },
+    {
+      "id": "UI-11",
+      "name": "settings_object_allfalse_clears_stale",
+      "variants": 1,
+      "expected": "Literal false flat fields clear all three stale controls"
+    },
+    {
+      "id": "UI-12",
+      "name": "settings_object_current_mixed_profile_replaces_stale",
+      "variants": 1,
+      "expected": "Flat saved mask5 restores exactly true/false/true"
+    },
+    {
+      "id": "UI-13",
+      "name": "restore_accepts_only_literal_true_flat_flags",
+      "variants": 7,
+      "expected": "false/null/stringtrue/1/object/array/true; only literaltrue checks controls"
+    },
+    {
+      "id": "UI-14",
+      "name": "parse_rejects_nonboolean_reporting_flags_before_io",
+      "variants": 12,
+      "expected": "Each3keys × stringtrue/1/object/array throws named boolean error; no save/request"
+    },
+    {
+      "id": "UI-15",
+      "name": "failed_settings_parse_keeps_previous_settings_and_storage",
+      "variants": 1,
+      "expected": "Actual invalid custom-extractions JSON path rejects save atomically; dialog/error visible, original flags/settings/storage unchanged"
+    },
+    {
+      "id": "UI-16",
+      "name": "actual_visible_and_raw_download_handlers_keep_distinct_routes_and_blobs",
+      "variants": 2,
+      "expected": "Actual bound handlers route report.json/project.json separately, encode job ID, preserve raw filename, download distinct synthetic Blob, schedule/revoke URLs Selected-crawl controls are explicitly enabled by VM fixture setup, with actual_renderControls_evaluated=false retained."
+    },
+    {
+      "id": "UI-17",
+      "name": "download_errors_disabled_clicks_and_direct_no_selection_guard_are_distinct",
+      "variants": 3,
+      "expected": "Three scenarios:409 and thrown fetch errors with explicitly enabled selected-crawl stub fixtures; no selected crawl checks HTML-disabled synthetic physical click suppression and separately calls actual extracted serverDownload no-selection guard directly. Never invokes eager filename callbacks with state.crawl=null."
+    },
+    {
+      "id": "UI-18",
+      "name": "absent_or_null_entire_localStorage_preserves_existing_state_explicit_boundary",
+      "variants": 2,
+      "expected": "Missing key/null entire storage leaves existing settings unchanged; explicitly not stale clearing or backend profile support"
+    },
+    {
+      "id": "UI-19",
+      "name": "saving_allfalse_after_alltrue_clears_old_flags_and_omits_wire_profile",
+      "variants": 1,
+      "expected": "Two actual saves retain final allfalse storage and subsequent request omits directive_reporting"
+    },
+    {
+      "id": "UI-20",
+      "name": "legacy_empty_null_and_false_flat_reporting_values_omit_profile",
+      "variants": 3,
+      "expected": "Actual pure directive parser and parseAdvanced omit profile for empty/null/false flatvalues"
+    }
+  ],
+  "expected_actual_proof_kind": "source18_directive_reporting_actual_extracted_UI_VM_regressions",
+  "expected_success_result": "PASS_ACTUAL_EXTRACTED_UI_VM_ONLY",
+  "required_completed_groups": 20,
+  "required_completed_variants": 43,
+  "actual_proof": null,
+  "parent_inventory": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source18-directive-ui-regressions-preparation-v1/CASE-INVENTORY.NOT-RUN.json",
+    "sha256": "ee6fc303288b190e6a8a0dc8dc5cd19fa69cc10ac970d9c5afc38a914451562f",
+    "bytes": 7759
+  },
+  "parent_independent_finding": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source18-directive-ui-driver-v1-independent-source-review-v1/receipt.json",
+    "sha256": "54fac8df00208f34d794b5512589fa92a924d77959f89c395aed71baefa2f611",
+    "bytes": 4504
+  }
+}

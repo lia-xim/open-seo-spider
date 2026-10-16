@@ -1,0 +1,142 @@
+{
+  "kind": "source18_directive_UI_source_only_execution_contract",
+  "status": "AWAITING_INDEPENDENT_SOURCE_REVIEW_AND_ROOT_EXECUTION",
+  "targets": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/directive-reporting-root-validation-v1/format-apply-v2/source/web/app.js",
+      "sha256": "68c1ce60dba1f4f1457b3a69128b4e90236e0f7c14ff944b543b57342b59c682",
+      "bytes": 420762
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/directive-reporting-root-validation-v1/format-apply-v2/source/web/index.html",
+      "sha256": "806f6b1a0027d30000d419296ccfb6bb97aae25c7ca637720ad8f2b962dc73f4",
+      "bytes": 96432
+    }
+  ],
+  "exact_extraction_sections": [
+    {
+      "from": "  async function startCrawl(event) {",
+      "to": "  async function controlCrawl(",
+      "bytes": 4689,
+      "sha256": "133818491a6d61ba4cf39f847025d457f503eaf1907f93bd94a7255fdb94ae4d"
+    },
+    {
+      "from": "  function openSettings() {",
+      "to": "  const crawlQuotaSettingKeys=",
+      "bytes": 9703,
+      "sha256": "d40a0053e0ea9f41c48a3ffdebfada01f47d3aa5c7dda01c5701fe0346e3f775"
+    },
+    {
+      "from": "  const crawlQuotaSettingKeys=",
+      "to": "  function parseAdvanced(settings) {",
+      "bytes": 25926,
+      "sha256": "67fef17aa6ca312c7af7305f37b74bd0e3fb3d0f73a7b62457468fdf0bb5a384"
+    },
+    {
+      "from": "  function parseAdvanced(settings) {",
+      "to": "  // B12 draft:",
+      "bytes": 30519,
+      "sha256": "b305689ee0c6f5c95c4f4edb824a8c93f89801a96bada08364b5d678839147e5"
+    },
+    {
+      "from": "  function syncResourceContractSettings() {",
+      "to": "  function resourceSavedContractLabel() {",
+      "bytes": 4009,
+      "sha256": "c9eb4c1976f45ff417996447e087b7e22d65807df743edac04590fe2f51b99d8"
+    },
+    {
+      "from": "  function parsePositionRules(text) {",
+      "to": "  function listOptions() {",
+      "bytes": 6453,
+      "sha256": "f9595b2ca32ffaf83a24bc1404fe33a9b80cd506c6c746d719c7f4f252c5c792"
+    },
+    {
+      "from": "  function downloadBlob(blob, filename) {",
+      "to": "  function exportCSV() {",
+      "bytes": 321,
+      "sha256": "293de3bb64321438ae1323cb98a6a4934345f9b71091f5a6de457182b3150dbc"
+    },
+    {
+      "from": "  async function serverDownload(endpoint, filename) {",
+      "to": "  async function importProject(file) {",
+      "bytes": 412,
+      "sha256": "9f60d3e8a3bd0ed17b3d62048adeb451aaafccb67be74ef7d7426834907f6c2d"
+    }
+  ],
+  "actual_download_event_bindings": [
+    {
+      "id": "export-project",
+      "bytes": 130,
+      "sha256": "a2b120fadf7e00bd8c1db2e01878733a71412b9ef2743486fb1997d53eb99831"
+    },
+    {
+      "id": "export-visible-report",
+      "bytes": 145,
+      "sha256": "ee8d346880fef460797bf1a51126528cdb4c51206d1c1db9e6349df9a494a86a"
+    }
+  ],
+  "source_flow": "Current Source18 formatted JS/HTML exactly equal R4. Future Root evaluates only these exact functions in a synthetic VM; actual save/restore/start/download source is unchanged.",
+  "stub_boundary": {
+    "DOM": "Controls must already exist by name/id in exact HTML, including template declarations. No phantom form field/ID fallback. This is a finite descriptor stub, not an HTML/browser renderer. V2 initializes disabled properties from exact HTML boolean attributes outside quoted strings and suppresses synthetic physical click callbacks while disabled. The two actual download controls must be disabled in pinned HTML.",
+    "storage": "In-memory string map recording actual localStorage setItem calls",
+    "network": "In-memory request/fetch recording only; no actual HTTP/DNS/socket/browser",
+    "download": "Actual serverDownload/downloadBlob functions use explicitly synthetic Blob/anchor/ObjectURL/timer recorders; no file download or browser UI Selected-crawl branch fixtures explicitly set controls enabled; they do not execute or prove actual renderControls selection-state integration. No-selection function guards are called directly with safe literal filenames, separately from disabled event suppression.",
+    "unrelated_product_sections": "Extracted quota/sitemap/CDN/resource parsing helpers are present but fixtures disable those capabilities. Renderer/poll/history/section rendering outside tested flow use explicit no-op boundaries."
+  },
+  "pending_gaps": [
+    {
+      "id": "BACKEND_PROFILE_TO_UI_ADAPTER",
+      "status": "NOT_IMPLEMENTED_NOT_TESTED",
+      "evidence": "restoreDirectiveReportingSettings consumes flat saved respect_* fields. selectCrawl assigns saved crawl state; no config.directive_reporting-to-settings adapter exists in pinned JS.",
+      "required_followup": "Product implementation and independent review, then actual regression; this driver must not manufacture the adapter."
+    },
+    {
+      "id": "ENTIRE_STORAGE_ABSENCE",
+      "status": "EXPLICIT_BEHAVIOR_QUALIFICATION",
+      "evidence": "Missing/null entire localStorage record preserves existing state. An existing object with missing/null flags clears flags. These are distinct written cases."
+    },
+    {
+      "id": "REAL_BROWSER_AND_HTTP",
+      "status": "NOT_TESTED",
+      "evidence": "No rendered layout, event wiring on actual browser DOM, real service, native crawl or installed acceptance is proven by VM success."
+    },
+    {
+      "id": "ACTUAL_RENDERCONTROLS_DOWNLOAD_ENABLEMENT",
+      "status": "NOT_TESTED",
+      "evidence": "renderControls remains a no-op boundary. Fixture selectDownloadFixture records EXPLICIT_VM_FIXTURE_SETUP plus actual_renderControls_evaluated=false; no physical browser enablement claim."
+    }
+  ],
+  "required_next_steps": [
+    "Fresh independent V2 source review of exact repaired driver,8finite operations and unchanged2targets before Root execution",
+    "Root executes exact driver in a fresh owned E/results/source18-directive-ui-* JSON path",
+    "Independent bounded audit of actual saved proof/tool natural completion",
+    "Backend-profile loading gap remains open separately; no broader parity claim"
+  ],
+  "exact_future_Root_call": {
+    "program": "node",
+    "arguments": [
+      "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source18-directive-ui-regressions-preparation-v2/directive-reporting-ui-regressions.mjs",
+      "--output",
+      "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source18-directive-ui-v2/proof.json"
+    ],
+    "output_rule": "Only new own E/results/source18-directive-ui-... JSON, exclusive wx, no overwrite"
+  },
+  "author_actions": {
+    "target_imports_evaluation_calls": 0,
+    "driver_execution": 0,
+    "tests_compilers_browsers_HTTP_DB_PE_Git_locks_or_Original_actions": 0,
+    "syntax_only_parser": 1
+  },
+  "actual_proof": null,
+  "independent_source_review": null,
+  "parent_contract": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source18-directive-ui-regressions-preparation-v1/SOURCE-AND-EXECUTION-CONTRACT.NOT-RUN.json",
+    "sha256": "4d54a8b0a25a2b78c948ed7d402b43a405f2a4d3fe4e648ba648e03e7e0ffe28",
+    "bytes": 5854
+  },
+  "parent_independent_finding": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source18-directive-ui-driver-v1-independent-source-review-v1/receipt.json",
+    "sha256": "54fac8df00208f34d794b5512589fa92a924d77959f89c395aed71baefa2f611",
+    "bytes": 4504
+  }
+}

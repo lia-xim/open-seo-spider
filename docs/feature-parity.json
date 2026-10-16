@@ -6858,7 +6858,7 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-16T14:21:19.656Z",
+  "last_verified_at": "2026-10-16T14:55:37.349Z",
   "current_work": [
     {
       "id": "combined-source-v15-20261016",
@@ -9130,7 +9130,7 @@
       "priority": 1,
       "status": "SOURCE17_SIX_NATIVE_REGRESSIONS_PASS_EXTENDED_PENDING",
       "title_de": "Native interne Ressourcen-Crawls mit dauerhaften Quoten verbinden",
-      "summary_de": "Source17 ist privat veröffentlicht und mit1559 Tests, vier frischen Renderer-Gates, Format, Clippy und optimiertem Build geprüft. Alle sechs aktuellen Nativregressionen bestehen samt unabhängiger begrenzter Rohbelegprüfung: API/MCP, Sitemaps, HEAD/CDN, Segmente/CDN/Verzeichnisse, dauerhafte Quoten und CLI-Wiederaufnahme. Die neue Ressourcenmatrix und Installation stehen noch aus; lokal läuft Source16. Der erste zusätzliche Testhilfenlauf scheiterte an regulären Job-Metadatendateien und bleibt als Fehlerbeleg erhalten; Korrektur und Wiederholung stehen an.",
+      "summary_de": "Source17 besteht1559 Tests, vier frische Renderer-Gates, Format, Clippy, optimierten Build und sechs aktuelle Nativregressionen samt unabhängiger Belegprüfung. Die zusätzliche Testhilfe hat drei tatsächliche Fehlversuche zu Standard-Jobdateien, Zeitstempel-Strings und ACL-Vererbung offengelegt; alle Fehlerbelege bleiben erhalten und die eigenen Prozesse wurden geprüft beendet. Eine streng vergleichende Korrektur vermeidet überflüssige ACL-Schreibzugriffe; erneute Prüfung und Ausführung stehen an. Neue Ressourcenmatrix und Installation fehlen; lokal läuft Source16.",
       "feature_ids": [
         "crawl.resources",
         "crawl.limits"
@@ -9152,12 +9152,13 @@
         "Alle sechs bestehenden Source17-Nativregressionen tatsächlich ausgeführt und unabhängig anhand begrenzter gespeicherter Rohbelege ohne Befund geprüft. Die neue Ressourcenmatrix und Installation werden dadurch nicht ersetzt."
       ],
       "pending_acceptance_de": [
-        "Zusätzliche Testhilfe nach tatsächlichem Abbruch an regulären .job.json/.json-Metadaten korrigieren, frisch unabhängig prüfen und mit eigenen App-Prozessen erneut ausführen; fehlgeschlagenen Erstlauf erhalten.",
+        "Zusätzliche Testhilfe nach drei erhaltenen tatsächlichen Fehlversuchen mit strengem Dateiinventar-/Zeitstempel-/ACL-Vergleich fertig prüfen und ausführen; ACL-Gleichheit nicht durch stilles Ignorieren von Vererbungsmerkmalen ersetzen.",
         "Vollständige Ressourcen-/Quoten-Nativmatrix mit echten Browser/API/CLI/MCP-Zugriffen, Pause/Cancel/Cold-Neustart und gezielten Fehler-/Korruptionsfällen ausführen; Quellcode oder Hilfsproben ersetzen diese Abnahme nicht.",
         "Source17 erst nach bestandenen Nativtests und Daten erhaltender Kompatibilitätsprüfung lokal installieren; gespeicherte Berichte, Projekte, Einstellungen und vollständige Dateiintegrität prüfen.",
         "Renderer-, Selected- und externe CDN-/Ressourcenziele bleiben gesonderte offene Kombinationen."
       ],
       "documentation": [
+        "docs/verification/source18-directive-focused-20261016/index.json",
         "docs/verification/source17-six-native-audits-20261016/index.json",
         "docs/verification/source17-suite-build-20261016/index.json",
         "docs/verification/source16-installed-20261016/index.json",
@@ -9184,7 +9185,47 @@
         "UI_admission": "V4_IMPLEMENTED_SEVEN_VM_REGRESSIONS_PASS_REAL_NATIVE_PENDING",
         "current_proposal": "V4_ACTUAL_PRIVATE_PUBLICATION_AUDITED",
         "native_regressions": "PASS_SIX_CURRENT_ACTUAL_BOUNDED_SCOPES_INDEPENDENTLY_AUDITED",
-        "closed_provider_helper": "FIRST_ACTUAL_FAILED_METADATA_WHITELIST_REPAIR_AND_RETRY_REQUIRED"
+        "closed_provider_helper": "THREE_ACTUAL_FAILED_ATTEMPTS_STRICT_ACL_COPY_REPAIR_AND_RETRY_PENDING"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "directive-reporting-20261016",
+      "priority": 1,
+      "status": "SOURCE_PROPOSAL_FOCUSED_CHECKS_PASS_FULL_ACCEPTANCE_PENDING",
+      "title_de": "Berichtsfilter für Noindex, Canonicals und Pagination ergänzen",
+      "summary_de": "Isolierter Vorschlag mit434 Quelldateien: drei gespeicherte Berichtsfilter erhalten Rohdaten und Outlink-Verfolgung. Quellcode und Format sind unabhängig geprüft. Tatsächliche Typprüfung aller Targets, sechs Unit-Tests, ein Crawl-/Wiederöffnen-Test über acht Schalterprofile und20 UI-VM-Gruppen mit43 Varianten bestehen samt unabhängiger begrenzter Belegprüfung. Produktübernahme, Gesamtsuite, Build, echte App-/Browserprüfung und Installation fehlen; Backend-Profilübernahme in die UI bleibt offen.",
+      "feature_ids": [
+        "robots.traversal"
+      ],
+      "completed_acceptance_de": [
+        "Referenzvertrag präzisiert: Berichtsfilter ändern die sichtbaren Ergebnisse; Beziehungserkennung und Outlink-Crawl bleiben gesondert.",
+        "Neun bestehende und zwei neue Quellpfade unabhängig geprüft; gemischte URL-Duplikate behalten Probleme, sobald eine Beobachtung sichtbar bleibt.",
+        "434 isolierte Quellen nach reinem Formatumbau geprüft; tatsächliche Typprüfung aller Targets und sieben gezielte Rust-Testfunktionen bestanden, einschließlich acht gespeicherter Crawl-Profile.",
+        "20 tatsächliche VM-Testgruppen mit43 Varianten bestanden; Quellfunktionen, Speicherwerte, Payloads und getrennte sichtbare/Roh-JSON-Downloads unabhängig geprüft."
+      ],
+      "pending_acceptance_de": [
+        "Gespeicherte Backend-Profile in die UI übernehmen; fehlender Adapter ist aktuell ausdrücklich NOT_IMPLEMENTED.",
+        "Alle relevanten Spezialanalysen und Exporte auf die Berichtsfilter abstimmen; die vorbereitete primäre Ansicht ersetzt keine vollständige Verbrauchermatrix.",
+        "Vollständige aktuelle Testsuite mit vier frischen Renderer-Gates, Format und strengem Clippy ausführen.",
+        "Optimierten Build sowie tatsächliche API-/CLI-/MCP-/Browserprüfungen und Daten erhaltende Installation durchführen."
+      ],
+      "documentation": [
+        "docs/verification/source18-directive-focused-20261016/index.json"
+      ],
+      "gates": {
+        "source_review": "R4_NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+        "format": "PASS_ACTUAL_WITH_MECHANICAL_NO_FINDINGS",
+        "typecheck": "PASS_ACTUAL_WORKSPACE_ALL_TARGETS",
+        "focused_Rust": "PASS_SIX_UNITS_AND_ONE_EIGHT_PROFILE_LOOPBACK",
+        "UI_VM": "PASS_ACTUAL20_GROUPS43_VARIANTS",
+        "actual_focused_audit": "NO_FINDINGS_BOUNDED_ACTUAL_AUDIT",
+        "backend_profile_UI_adapter": "NOT_IMPLEMENTED_NOT_TESTED",
+        "full_suite": "NOT_RUN",
+        "build": "NOT_RUN",
+        "native_App_frontdoors": "NOT_RUN",
+        "installation": "NOT_RUN",
+        "manufacturer_parity": "NOT_PROVEN"
       },
       "reference_parity": "NOT_PROVEN"
     }

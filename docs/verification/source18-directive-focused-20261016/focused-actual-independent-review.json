@@ -1,0 +1,111 @@
+{
+  "kind": "source18_directive_focused_actual_independent_review",
+  "result": "NO_FINDINGS_BOUNDED_ACTUAL_AUDIT",
+  "independent_reviewer": "/root/directive_reporting_independent_review",
+  "actual_Rust_proof": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source18-directive-focused-rust-v1/proof.json",
+    "sha256": "782df4e4731a0b0d494fb5fd3e776a891f72c7d989e90f1c6de9a3e6a62577f9",
+    "bytes": 4259
+  },
+  "actual_UI_VM_proof": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source18-directive-ui-v2-actual-v1/proof.json",
+    "sha256": "84d16e98e531fea7ff775ee4e51b45822619912bbc566d0654ebf1b4ed98fe4f",
+    "bytes": 59352
+  },
+  "actual_UI_VM_Root_close": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source18-directive-ui-v2-actual-v1/Root-close.json",
+    "sha256": "0e7b299a32ae59a8bbed5d9d0aa9fc158db4f33210be72fe98594a804bddc018",
+    "bytes": 1751
+  },
+  "actual_final_format_check": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/directive-reporting-root-validation-v1/format-apply-v2/format-check-v1/proof.json",
+    "sha256": "a3c26ab2ed17ca4e10a3ca3c2545e593c11895c447417ca538bf67bab1f4c8be",
+    "bytes": 1456
+  },
+  "current_formatted_source": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/directive-reporting-root-validation-v1/format-apply-v2/proof.json",
+    "sha256": "a2cdb0a044d3e48dbf30ae61de19071847db7fd2b3873dfeeee161ce7b86260f",
+    "bytes": 412271
+  },
+  "current_source_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/directive-reporting-r4-independent-source-review-v1/receipt.json",
+    "sha256": "f95bf4c8b7b8d9529b1ff814b4a9f3b39337e1c9c6589c82e889433768a27514",
+    "bytes": 8205
+  },
+  "current_VM_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source18-directive-ui-regressions-preparation-v2/manifest.NOT-RUN.json",
+    "sha256": "b0579e5ff99c03d148bfdd7f73fb61ee2d84c2527a92a16915a4ee93944f2d64",
+    "bytes": 4627
+  },
+  "current_VM_source_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source18-directive-ui-driver-v2-independent-source-review-v1/receipt.json",
+    "sha256": "dbd172e5ff6cea0d7c948f2c34117d69bb40782f6c3a009840fc9bba741e86a3",
+    "bytes": 4800
+  },
+  "audit": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source18-directive-focused-actual-independent-audit-v1/AUDIT.json",
+    "sha256": "e3827b17c2c6805cb1ea9a802e35ec29f1a9b861b08e4471e6b8d690e844a202",
+    "bytes": 180507
+  },
+  "findings": [],
+  "counts": {
+    "current_source_files": 434,
+    "Rust_runs": 3,
+    "Rust_unit_tests": 6,
+    "Rust_loopback_fixture_tests": 1,
+    "loopback_profiles_in_passed_fixture": 8,
+    "VM_groups": 20,
+    "VM_variants": 43,
+    "VM_extracted_regions": 8,
+    "VM_event_bindings": 2,
+    "safe_artifact_hash_checks": 459,
+    "raw_Rust_stdout_stderr": 6,
+    "raw_VM_stdout_stderr": 2,
+    "raw_fmt_stdout_stderr": 2
+  },
+  "actual_tool_boundary": {
+    "Rust": {
+      "Root_start": "168f5d",
+      "session": 70907,
+      "Root_natural_completion": "f6e2b9",
+      "exit_code": 0
+    },
+    "VM": {
+      "Root_call": "cf554e",
+      "exit_code": 0,
+      "spawnSync_return_observed": true
+    },
+    "qualification": "Actual tool completions supplied by Root and joined to hash-verified saved process outcomes/raw logs; reviewer made no OS/process observation."
+  },
+  "accepted_bounded_evidence": [
+    "Actual final cargo fmt --check natural exit0 with empty raw stdout/stderr.",
+    "Actual offline locked all-workspace all-target typecheck exit0, both core and app source roots present in Cargo raw log.",
+    "Exactly six named directive unit tests passed, zero failures/ignored;1028 core tests were filtered out. Names independently derived from current source.",
+    "One actual owned-loopback test passed; its inspected source executes all eight profiles, checks unchanged request-target sets and hidden-source outlinks, reopens own saved SQLite/config and JSON, and checks visible counts/raw observations. No physical database or raw HTTP trace inspected by reviewer.",
+    "Actual reviewed VM driver completed20groups43variants, all same current8function-region and2event-binding hashes. All eight saved flat-settings/wire-profile combinations recalculated from saved proof.",
+    "Saved wrong-type rejections, invalid-save atomicity, raw/visible encoded routes and Blob metadata, explicit enabled fixtures, disabled event suppression, direct no-selection guards and storage-boundary cases matched current reviewed source assertions.",
+    "All434 current formatted source bytes independently rehashed to reviewed format table; both VM target bytes revalidated. Historical before/after equality remains Root captured proof plus immutable source identities."
+  ],
+  "qualifications": [
+    "Focused Rust validation is not a full workspace test suite, clippy run, optimized build or Source18 installation acceptance.",
+    "Rust loopback is actual core Crawler/owned fixture behavior; no running app API, CLI, MCP or browser frontdoor is established.",
+    "VM has synthetic DOM/storage/request/Blob/ObjectURL/timer recorders and no real browser/network/SQLite/native process. Download Blob contents/revocation are source assertions completed by exact driver; persisted proof retains synthetic Blob metadata and aggregate revocation outcome.",
+    "Selected-crawl download controls were enabled by explicit VM fixture setup; actual_renderControls_evaluated=false remains recorded. Real browser selection-state enablement is NOT_TESTED.",
+    "Backend config.directive_reporting to UI settings adapter remains NOT_IMPLEMENTED_NOT_TESTED. Missing/null whole localStorage preserves state; missing/null flat fields in a saved settings object clear flags.",
+    "Current Source17 product/live installation state is outside reviewer scope; no live/private data reads or unchanged-runtime claim independently made.",
+    "Native resource full matrix, actual app frontdoors, full Source18 suite/build, installation and manufacturer parity remain open."
+  ],
+  "reviewer_actions": {
+    "target_execution": 0,
+    "VM_execution": 0,
+    "tests_compilers_formatters": 0,
+    "HTTP_browser_SQL_database_PE_OS_process_lock_Git_actions": 0
+  },
+  "checker_note": "First reviewer data-checker attempt used raw path-string equality for stdout fullref and rejected equivalent Windows slash forms. Preserved helper was corrected only to canonical slash/case fullref identity with unchanged required SHA/bytes, then all checks passed; no product/driver mutation.",
+  "full_workspace_suite": null,
+  "optimized_build": null,
+  "actual_app_frontdoors": null,
+  "installed_acceptance": null,
+  "manufacturer_parity": "NOT_PROVEN",
+  "runtime_grant": null
+}
