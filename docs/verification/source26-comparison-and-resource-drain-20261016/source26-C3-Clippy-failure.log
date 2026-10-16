@@ -1,0 +1,105 @@
+    Checking open-seo-spider-core v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\source26-comparison-root-composition-v3\source\crates\core)
+error: the `Err`-variant returned from this function is very large
+   --> crates\core\src\sitemap_generation.rs:257:37
+    |
+257 | fn json<T: Serialize>(value: &T) -> Result<Vec<u8>> {
+    |                                     ^^^^^^^^^^^^^^^ the `Err`-variant is at least 208 bytes
+    |
+    = help: try reducing the size of `sitemap_generation::SitemapGenerationFailure`, for example by boxing large elements or replacing it with `Box<sitemap_generation::SitemapGenerationFailure>`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#result_large_err
+    = note: `-D clippy::result-large-err` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::result_large_err)]`
+
+error: the `Err`-variant returned from this function is very large
+   --> crates\core\src\sitemap_generation.rs:286:43
+    |
+286 | fn report_digest(report: &CrawlReport) -> Result<String> {
+    |                                           ^^^^^^^^^^^^^^ the `Err`-variant is at least 208 bytes
+    |
+    = help: try reducing the size of `sitemap_generation::SitemapGenerationFailure`, for example by boxing large elements or replacing it with `Box<sitemap_generation::SitemapGenerationFailure>`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#result_large_err
+
+error: the `Err`-variant returned from this function is very large
+   --> crates\core\src\sitemap_generation.rs:353:48
+    |
+353 | fn base(options: &SitemapGenerationOptions) -> Result<Url> {
+    |                                                ^^^^^^^^^^^ the `Err`-variant is at least 208 bytes
+    |
+    = help: try reducing the size of `sitemap_generation::SitemapGenerationFailure`, for example by boxing large elements or replacing it with `Box<sitemap_generation::SitemapGenerationFailure>`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#result_large_err
+
+error: the `Err`-variant returned from this function is very large
+   --> crates\core\src\sitemap_generation.rs:460:36
+    |
+460 | fn lexical_lastmod(value: &str) -> Result<String> {
+    |                                    ^^^^^^^^^^^^^^ the `Err`-variant is at least 208 bytes
+    |
+    = help: try reducing the size of `sitemap_generation::SitemapGenerationFailure`, for example by boxing large elements or replacing it with `Box<sitemap_generation::SitemapGenerationFailure>`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#result_large_err
+
+error: the `Err`-variant returned from this function is very large
+   --> crates\core\src\sitemap_generation.rs:483:83
+    |
+483 | pub fn validate_sitemap_generation_options(options: &SitemapGenerationOptions) -> Result<()> {
+    |                                                                                   ^^^^^^^^^^ the `Err`-variant is at least 208 bytes
+    |
+    = help: try reducing the size of `sitemap_generation::SitemapGenerationFailure`, for example by boxing large elements or replacing it with `Box<sitemap_generation::SitemapGenerationFailure>`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#result_large_err
+
+error: the `Err`-variant returned from this function is very large
+   --> crates\core\src\sitemap_generation.rs:492:6
+    |
+492 | ) -> Result<BTreeMap<String, SitemapGeneratedLastmod>> {
+    |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the `Err`-variant is at least 208 bytes
+    |
+    = help: try reducing the size of `sitemap_generation::SitemapGenerationFailure`, for example by boxing large elements or replacing it with `Box<sitemap_generation::SitemapGenerationFailure>`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#result_large_err
+
+error: the `Err`-variant returned from this function is very large
+   --> crates\core\src\sitemap_generation.rs:547:6
+    |
+547 | ) -> Result<BTreeMap<String, SitemapGeneratedLastmod>> {
+    |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the `Err`-variant is at least 208 bytes
+    |
+    = help: try reducing the size of `sitemap_generation::SitemapGenerationFailure`, for example by boxing large elements or replacing it with `Box<sitemap_generation::SitemapGenerationFailure>`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#result_large_err
+
+error: the `Err`-variant returned from this function is very large
+   --> crates\core\src\sitemap_generation.rs:682:6
+    |
+682 | ) -> Result<Vec<String>> {
+    |      ^^^^^^^^^^^^^^^^^^^ the `Err`-variant is at least 208 bytes
+    |
+    = help: try reducing the size of `sitemap_generation::SitemapGenerationFailure`, for example by boxing large elements or replacing it with `Box<sitemap_generation::SitemapGenerationFailure>`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#result_large_err
+
+error: the `Err`-variant returned from this function is very large
+   --> crates\core\src\sitemap_generation.rs:756:6
+    |
+756 | ) -> Result<Vec<SitemapGeneratedAlternate>> {
+    |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the `Err`-variant is at least 208 bytes
+    |
+    = help: try reducing the size of `sitemap_generation::SitemapGenerationFailure`, for example by boxing large elements or replacing it with `Box<sitemap_generation::SitemapGenerationFailure>`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#result_large_err
+
+error: the `Err`-variant returned from this function is very large
+   --> crates\core\src\sitemap_generation.rs:899:6
+    |
+899 | ) -> Result<SitemapGeneratedBundle> {
+    |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the `Err`-variant is at least 208 bytes
+    |
+    = help: try reducing the size of `sitemap_generation::SitemapGenerationFailure`, for example by boxing large elements or replacing it with `Box<sitemap_generation::SitemapGenerationFailure>`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#result_large_err
+
+error: the `Err`-variant returned from this closure is very large
+    --> crates\core\src\sitemap_generation.rs:1084:9
+     |
+1084 |      -> Result<()> {
+     |         ^^^^^^^^^^ the `Err`-variant is at least 208 bytes
+     |
+     = help: try reducing the size of `sitemap_generation::SitemapGenerationFailure`, for example by boxing large elements or replacing it with `Box<sitemap_generation::SitemapGenerationFailure>`
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#result_large_err
+
+error: could not compile `open-seo-spider-core` (lib) due to 11 previous errors
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `open-seo-spider-core` (lib test) due to 11 previous errors

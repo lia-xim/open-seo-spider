@@ -1,0 +1,18 @@
+    Checking open-seo-spider-core v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\source26-comparison-root-composition-v4\source\crates\core)
+    Checking open-seo-spider v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\source26-comparison-root-composition-v4\source\crates\app)
+error: field assignment outside of initializer for an instance created with Default::default()
+   --> crates\app\src\comparison_app\reporting_tests.rs:281:5
+    |
+281 |     config.include_selected_text = true;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: consider initializing the variable with `open_seo_spider_core::SavedComparisonConfig { include_selected_text: true, ..Default::default() }` and removing relevant reassignments
+   --> crates\app\src\comparison_app\reporting_tests.rs:280:5
+    |
+280 |     let mut config = SavedComparisonConfig::default();
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#field_reassign_with_default
+    = note: `-D clippy::field-reassign-with-default` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::field_reassign_with_default)]`
+
+error: could not compile `open-seo-spider` (bin "open-seo-spider" test) due to 1 previous error

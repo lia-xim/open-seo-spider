@@ -6858,7 +6858,7 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-16T18:23:36.425Z",
+  "last_verified_at": "2026-10-16T19:44:52.664Z",
   "current_work": [
     {
       "id": "combined-source-v15-20261016",
@@ -9128,9 +9128,9 @@
     {
       "id": "native-resource-quotas-20261016",
       "priority": 1,
-      "status": "CORE10_ACTUAL25_PASS_INDEPENDENT_AUDIT_FULL_RESOURCE_MATRIX_PENDING",
+      "status": "CORE10_PASS_NATIVE_ATTEMPT5_FAIL_CURRENT_QUIESCENCE_SOURCE_REVIEWED",
       "title_de": "Native interne Ressourcen-Crawls mit dauerhaften Quoten verbinden",
-      "summary_de": "Der neunte Capability-Lauf besteht alle25 Kontrollfälle und den unabhängigen tatsächlichen Audit:23 Hauptkontrollen plus zwei ausdrücklich abgeleitete WAL-Zustände. Die Initialisierung der Testkopie ist vor der Integritätsabnahme gesondert erfasst. Alle Prozesse und SQL-Besitzer geschlossen; acht frühere Fehlläufe bleiben erhalten. Vollständige Ressourcenmatrix und Installation fehlen; lokal läuftSource16.",
+      "summary_de": "Core10 besteht alle25 Speicher-Kontrollen samt unabhängigem tatsächlichen Audit. Der vollständige Ressourcenlauf3 scheiterte an einem geschlossenen UI-Panel; die Prüfaktion ist korrigiert. Lauf4 erreicht spätere Ressourcenfälle, scheitert beim zu frühen Schließen des Testbrowser-Kontexts und bleibt fehlgeschlagen. Beide eigenen Fenster sind physisch geschlossen; bei Lauf4 wurde nur der hängende Root-Prüfprozess erzwungen beendet. Lauf5 schließt alle eigenen Besitzer ohne Root-Zwangsbeendigung, scheitert aber an der falschen Annahme, nach einer Freeze-Bestätigung könnten keine verzögerten Netzwerkereignisse eintreffen. Die aktuelle Reparatur prüft zwei ruhige Runden mit identischem Anfragebestand; die tatsächliche Abnahme fehlt.",
       "feature_ids": [
         "crawl.resources",
         "crawl.limits"
@@ -9150,13 +9150,15 @@
         "Produktcode61f7134 privat veröffentlicht; alle432 Quell-/Index-/Commit-Bytes und sechs kanonischen Bindungen unabhängig anhand gespeicherter Rohbelege geprüft.",
         "Source17 vollständig eingefroren und mit1559 Tests ohne Fehler/ignorierte Tests, vier frischen Renderer-Gates, Format, Clippy und optimiertem Build geprüft. Veralteter Testbelegtext vor Ausführung korrigiert und frisch unabhängig geprüft.",
         "Alle sechs bestehenden Source17-Nativregressionen tatsächlich ausgeführt und unabhängig anhand begrenzter gespeicherter Rohbelege ohne Befund geprüft. Die neue Ressourcenmatrix und Installation werden dadurch nicht ersetzt.",
-        "Core10: tatsächlicher neunter25er-Lauf und unabhängiger Audit bestanden, natürliche Worker-Enden und vier geschlossene SQL-Besitzer bestätigt; Root-Fenster physisch geschlossen."
+        "Core10: tatsächlicher neunter25er-Lauf und unabhängiger Audit bestanden, natürliche Worker-Enden und vier geschlossene SQL-Besitzer bestätigt; Root-Fenster physisch geschlossen.",
+        "Ressourcenlauf3 und4 tatsächlich ausgeführt und als Fehler mit vollständigen Teilbelegen erhalten; nachgelagerte eigene physische Prozess-/SQL-/Fixture-Prüfung bestätigt keine zurückbehaltenen Besitzer. Lauf4 erhält ausdrücklich keinen natürlichen Gesamtabschluss."
       ],
       "pending_acceptance_de": [
-        "Vollständige aktuelle Ressourcenmatrix tatsächlich ausführen und anhand gespeicherter Rohbelege prüfen.",
-        "Aktuelle eigene Datenprüfung, Produktübernahme und Installation abschließen."
+        "Quellengeprüfte aktuelle Browser-Abschlussreparatur mit vollständiger Ressourcenmatrix tatsächlich abnehmen.",
+        "Aktuelle eigene Datenprüfung, Produktübernahme und Daten erhaltende Installation abschließen."
       ],
       "documentation": [
+        "docs/verification/source26-comparison-and-resource-drain-20261016/index.json",
         "docs/verification/source24-review-and-core10-20261016/index.json",
         "docs/verification/source19-directory-and-source18-native-20261016/index.json",
         "docs/verification/source18-reporting-candidate-20261016/index.json",
@@ -9177,7 +9179,7 @@
         "Node_current": "V4_PASS_ACTUAL16_THREE_DRIVERS_FIVE_CURRENT_TARGETS",
         "full_suite": "PASS_ACTUAL_1559_ZERO_FAILED_ZERO_IGNORED_FOUR_FRESH_RENDERER_FMT_CLIPPY",
         "build": "PASS_ACTUAL_SOURCE17_OPTIMIZED_BUILD",
-        "native": "EXTENDED_RESOURCE_MATRIX_NOT_RUN",
+        "native": "FAIL_ATTEMPT5_FALSE_FREEZE_BARRIER_PRESERVED_PHYSICAL_DRAIN_COMPLETE_NO_ROOT_KILLS",
         "installation": "NOT_RUN",
         "manufacturer_parity": "NOT_PROVEN",
         "formatter_review": "V4_NO_FINDINGS_BOUNDED_MECHANICAL_REVIEW",
@@ -9187,16 +9189,17 @@
         "UI_admission": "V4_IMPLEMENTED_SEVEN_VM_REGRESSIONS_PASS_REAL_NATIVE_PENDING",
         "current_proposal": "V4_ACTUAL_PRIVATE_PUBLICATION_AUDITED",
         "native_regressions": "PASS_SIX_CURRENT_ACTUAL_BOUNDED_SCOPES_INDEPENDENTLY_AUDITED",
-        "closed_provider_helper": "PASS_ATTEMPT9_25_CURRENT_INDEPENDENT_ACTUAL_AUDIT_EIGHT_FAILURES_PRESERVED"
+        "closed_provider_helper": "PASS_ATTEMPT9_25_CURRENT_INDEPENDENT_ACTUAL_AUDIT_EIGHT_FAILURES_PRESERVED",
+        "UI_owner_repair": "SOURCE_PROPOSAL_NEW_NATIVE_ACCEPTANCE_PENDING"
       },
       "reference_parity": "NOT_PROVEN"
     },
     {
       "id": "directive-reporting-20261016",
       "priority": 1,
-      "status": "BROKEN_SOURCES_FOCUSED13_PASS_BUNDLE_VALIDATION_REPAIR_COMPARISONS_IN_PROGRESS",
+      "status": "SOURCE26_FULL_SUITE_BUILD_PASS_NATIVE_FRONTDOORS_PENDING",
       "title_de": "Berichtsfilter für Noindex, Canonicals und Pagination ergänzen",
-      "summary_de": "N-Gramm- und Inhaltscode ist unabhängig quellengeprüft; der kombinierte Testlauf fand eine veraltete MCP-Inventarerwartung. Source24 korrigiert sie und besteht alle zwölf neuen Link-/Ressourcenquellentests sowie den betroffenen Abschlusstest. Der57-Dateien-Gesamtpatch ist geprüft und gespeichert. Die Sitemap-Bundle-Erweiterung besteht die Typprüfung; eine unabhängig gefundene UI-Profilvalidierungslücke wird mit Regressionstest geschlossen. Vollständiger aktueller Gesamtlauf, native Abnahme und Installation fehlen.",
+      "summary_de": "Die gemeinsame443-Dateien-Version für N-Gramme, Inhalte, defekte Quellen, Sitemap-Bundles und Vergleichsansichten ist unabhängig ohne offenen Quellbefund geprüft. Der vollständige lokale Lauf besteht 1660 Tests ohne Fehler oder ignorierte Tests,882 Pflichtnamen, vier echte Renderer-Prüfungen,23 Inhalts-/Sitemap-UI-VM-Gruppen sowie Format und Clippy ohne Warnungen. Optimierter Build und75-Dateien-Patch sind geprüft. Neue native Browser-/API-/CLI-/MCP-Abnahmen und Installation fehlen; lokal läuft weiterSource16.",
       "feature_ids": [
         "robots.traversal"
       ],
@@ -9218,15 +9221,19 @@
         "Source17: achter Capability-Lauf bleibt fehlgeschlagen; 23 Hauptkontrollen und der Fall ohne WAL-Dateien bestehen, der Fall mit vorhandener WAL-Datei ändert beim ersten Lesen SHM. Alle Prozesse/SQL-Besitzer geschlossen. Eigene Byte-Diagnose bestätigt stabile Haupt-/WAL-/JSON-Dateien und stabile Folgelesen/CLI-Ergebnisse; Testkopie-Initialisierung wird gesondert erfasst.",
         "Source23: alle24 neuen Regressionen im tatsächlichen Lauf bestanden; Gesamtlauf bleibt wegen einer alten MCP-Inventarerwartung fehlgeschlagen erhalten.",
         "Source24:440-Dateien-Komposition unabhängig ohne Befund geprüft; alle zwölf neuen Regressionen und der korrigierte MCP-Abschlusstest tatsächlich bestanden.57-Dateien-Patch per apply --check geprüft und nicht angewendet.",
-        "Core10:25 tatsächliche Speicher-Kontrollfälle einschließlich gesonderter Testkopie-Initialisierung mit unabhängiger Prüfung bestanden."
+        "Core10:25 tatsächliche Speicher-Kontrollfälle einschließlich gesonderter Testkopie-Initialisierung mit unabhängiger Prüfung bestanden.",
+        "C3 besteht alle1659 Rust-Tests und23 UI-VM-Gruppen, bleibt wegen Clippy fehlgeschlagen. C4 verkleinert nur den Sitemap-Fehlertyp; C5 korrigiert eine unveränderte Testkonfiguration. Beide Fehlläufe bleiben erhalten, aktueller Clippy für alle Ziele besteht ohne Warnungen.",
+        "Source25: strengere UI-Profilvalidierung mit15 Sitemap- und8 Inhalts-VM-Gruppen tatsächlich bestanden; ursprünglicher unzureichender13er-Lauf und HTTP-Hash-Orakelfehler bleiben dokumentiert.",
+        "Source26: vollständiger Rohvergleich plus profil-/modus-/snapshotgebundener Sichtbarkeitsindex umgesetzt; unabhängiger MCP-Anforderungsbindungsbefund mit sechs neuen Rust-Regressionen geschlossen.",
+        "Source26: alle443 Quellen vor/nach exakt, 1660/0/0 Tests,882 Pflichtnamen, vier echte Renderer-Gates,23 UI-VM-Gruppen, Format, strenger Clippy und optimierter Build bestanden;75-Dateien-Patch per apply --check geprüft und nicht angewendet."
       ],
       "pending_acceptance_de": [
-        "Sitemap-Bundle: UI-Profilvalidierung reparieren und tatsächlichen Regressionstest ausführen.",
-        "Explizite Vergleichsansichten implementieren; Mapping-Audits weiter roh halten.",
-        "Aktuelle Gesamtversion mit vollständiger Suite, Renderer, Format, Clippy, Build und nativer API-/CLI-/MCP-/Browser-Abnahme prüfen.",
-        "Geprüften Gesamtpatch übernehmen und Daten erhaltend installieren; alle144 Feature-Einträge weiter bis zur belegten Abdeckung abarbeiten."
+        "N-Gramm-/Inhaltsansichten, defekte Quellen, Sitemap-Bundles und Vergleichsansichten über tatsächliche API-, Offline-CLI-, MCP- und Browser-Wege abnehmen.",
+        "Geprüften Gesamtpatch übernehmen und Daten erhaltend installieren.",
+        "Alle144 Feature-Einträge weiter bis zur belegten Abdeckung abarbeiten; TLS und HSTS als nächsten isolierten Funktionsbereich fertigstellen."
       ],
       "documentation": [
+        "docs/verification/source26-comparison-and-resource-drain-20261016/index.json",
         "docs/verification/source24-review-and-core10-20261016/index.json",
         "docs/verification/source21-native-and-storage-diagnostic-20261016/index.json",
         "docs/verification/source21-segments-suite-20261016/index.json",
@@ -9248,7 +9255,7 @@
         "installation": "NOT_RUN",
         "manufacturer_parity": "NOT_PROVEN",
         "legacy_UI": "PASS_ACTUAL16_CURRENT_TARGET_TESTS",
-        "product_patch": "APPLY_CHECK_PASS_NOT_APPLIED",
+        "product_patch": "75_FILE_APPLY_CHECK_PASS_NOT_APPLIED",
         "directory_full_suite": "PASS_ACTUAL1582_0_0_FOUR_RENDERER_FMT_CLIPPY",
         "directory_build": "PASS_ACTUAL_OPTIMIZED_CANDIDATE",
         "directory_native": "FAIL_CONSOLE404_AFTER_FIRST_VIEW_AND_CSV_PRESERVED",
@@ -9262,8 +9269,13 @@
         "ngrams_content_source_review": "PASS_CURRENT_BOUNDED_SOURCE_REVIEW",
         "broken_sources_focused": "PASS_ACTUAL12_NEW_AND1_RETAINED",
         "broken_sources_source_review": "PASS_CURRENT_BOUNDED_SOURCE_REVIEW",
-        "sitemap_bundle": "TYPECHECK_VM13_PASS_SOURCE_P2_REPAIR_PENDING",
-        "comparison": "IMPLEMENTATION_IN_PROGRESS"
+        "sitemap_bundle": "PASS_CURRENT_SOURCE_VM15_AND_FULL_SUITE_NATIVE_PENDING",
+        "comparison": "PASS_CURRENT_SOURCE_AND_FULL_SUITE_NATIVE_PENDING",
+        "combined26_source_review": "PASS_CURRENT_C5_NO_FINDINGS",
+        "combined26_full_suite": "PASS_ACTUAL_1660_0_0_882_REQUIRED_FOUR_RENDERER_VM23_FMT_CLIPPY",
+        "combined26_actual_suite_audit": "PASS_CURRENT_INDEPENDENT_ACTUAL_AUDIT",
+        "combined26_build": "PASS_ACTUAL_OPTIMIZED_BUILD",
+        "combined26_native": "NOT_RUN"
       },
       "reference_parity": "NOT_PROVEN"
     }

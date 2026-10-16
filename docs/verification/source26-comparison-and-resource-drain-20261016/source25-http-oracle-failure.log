@@ -1,0 +1,23 @@
+    Finished `test` profile [optimized] target(s) in 0.53s
+     Running unittests src\main.rs (E:/CodexWork/open-seo-spider-01a12ac3-20261013/cargo-target\debug\deps\open_seo_spider-e7c98ad9fae86458.exe)
+
+running 1 test
+test server::sitemap_generation::tests::sitemap_bundle_http_reporting_uses_same_raw_report_and_actual_profile_metadata_without_saved_writes ... FAILED
+
+failures:
+
+---- server::sitemap_generation::tests::sitemap_bundle_http_reporting_uses_same_raw_report_and_actual_profile_metadata_without_saved_writes stdout ----
+
+thread 'server::sitemap_generation::tests::sitemap_bundle_http_reporting_uses_same_raw_report_and_actual_profile_metadata_without_saved_writes' (39320) panicked at crates\app\src\server\sitemap_generation_tests.rs:108:9:
+assertion `left == right` failed
+  left: "3281ad2e5b660de83c7dad98a77966bb0cdd71d8785ea29d97796054c6f33845"
+ right: "5d6255eb9f5c1df911f8d43e1dde948688b20c7212c1eacdf8cadf3c5d547c4b"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    server::sitemap_generation::tests::sitemap_bundle_http_reporting_uses_same_raw_report_and_actual_profile_metadata_without_saved_writes
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 450 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `-p open-seo-spider --bin open-seo-spider`
