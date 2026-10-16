@@ -1,0 +1,610 @@
+{
+  "kind": "ROOT_ACTUAL_OWNED_WAL_SHM_BYTE_DIAGNOSTIC",
+  "result": "PASS_BOUNDED_DIAGNOSTIC_ONLY",
+  "Root_runner_pre_execution": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-WAL-SHM-diagnostic-v1/Root-runner.mjs",
+    "sha256": "5fbb85a5b87478465919b1eb15bd73e8fbfc2782737d9cec521ed421a70e6a2a",
+    "bytes": 7381
+  },
+  "token": "04ce4abf-3dd3-4347-9a81-4cdc07699b44",
+  "binary": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-optimized-build-v17/candidate/open-seo-spider.exe",
+    "sha256": "738cfd55b0e2fc54b8d07a7bc1b12a49183908e394db424463eba37ed564f038",
+    "bytes": 46857728
+  },
+  "reader": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source17-closed-store-provider-preparation-v5/closed-store-reader.mjs",
+    "sha256": "1bc6cb62cd5d1f54a29386cb6dd7ae944347cc09f09bdfa22caa6efe3f6a95af",
+    "bytes": 5863
+  },
+  "source_capture": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source17-closed-store-capability-core-v17-wal-derived-v8\\closed-store-provider\\capture-0001\\data\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite",
+    "sha256": "9994e3899259f6afc2e4ef88d4e9652cfbc333f464a60a3ecb575edbd21a6919",
+    "bytes": 327680
+  },
+  "source_logical": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source17-closed-store-capability-core-v17-wal-derived-v8\\closed-store-provider\\0005-positive-capture-logical.json",
+    "sha256": "fca3128dd579d12296b0ecde55c641e9d1f74e4b68b0a225fa617aef31fdf167",
+    "bytes": 80203
+  },
+  "steps": [
+    {
+      "label": "baseline-quota",
+      "args": [
+        "crawl-quotas",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\writer-source\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite"
+      ],
+      "pid": 44416,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-WAL-SHM-diagnostic-v1/baseline-quota.stdout.log",
+        "sha256": "2f42c1f2e2b557b9b9364f724985f91d179c526cddf81daf2f134ca42f839100",
+        "bytes": 616
+      },
+      "stderr": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-WAL-SHM-diagnostic-v1/baseline-quota.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "spawnSync_returned": true
+    },
+    {
+      "label": "baseline-resource",
+      "args": [
+        "resource-ledger",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\writer-source\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite",
+        "--transports",
+        "--limit",
+        "1000"
+      ],
+      "pid": 26384,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-WAL-SHM-diagnostic-v1/baseline-resource.stdout.log",
+        "sha256": "1c5c95056311b90b50804a3e8b111c82684e74d1a172023dcf10f17abb08e8c4",
+        "bytes": 17014
+      },
+      "stderr": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-WAL-SHM-diagnostic-v1/baseline-resource.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "spawnSync_returned": true
+    },
+    {
+      "label": "unprimed",
+      "rows": [
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.job.json",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.job.json",
+          "sha256": "058a071e0e35e89da5b28a831673845492330f6f0b21cdc1b1baad9effc8ae41",
+          "bytes": 6188,
+          "modified_ms": 1792172032413.4265,
+          "ino": 1407374884122853
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.json",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.json",
+          "sha256": "cabbbca839c712eca92a1631837d92d5617dfa1f761915ccacc8531b42adc737",
+          "bytes": 19837,
+          "modified_ms": 1792172032411.4243,
+          "ino": 1407374884122854
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite",
+          "sha256": "9994e3899259f6afc2e4ef88d4e9652cfbc333f464a60a3ecb575edbd21a6919",
+          "bytes": 327680,
+          "modified_ms": 1792172032408.319,
+          "ino": 1407374884122855
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite-shm",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite-shm",
+          "sha256": "46e33ff59318d04f800bf3d6c122d192b6f3110bc06fa3b19a36cfc4e1fb9b31",
+          "bytes": 32768,
+          "modified_ms": 1792172552366.77,
+          "ino": 1407374884122856
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite-wal",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite-wal",
+          "sha256": "14a5c57eac1fffa310e36d7e6ef33dba393d60d87d4372f716ef9257da4832c1",
+          "bytes": 12392,
+          "modified_ms": 1792172552368.0564,
+          "ino": 1407374884122857
+        }
+      ],
+      "shm_bytes": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-WAL-SHM-diagnostic-v1/unprimed-SHM.bin",
+        "sha256": "46e33ff59318d04f800bf3d6c122d192b6f3110bc06fa3b19a36cfc4e1fb9b31",
+        "bytes": 32768
+      },
+      "recorded_at": "2026-10-16T17:42:32.399Z"
+    },
+    {
+      "label": "node-read-1",
+      "rows": [
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.job.json",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.job.json",
+          "sha256": "058a071e0e35e89da5b28a831673845492330f6f0b21cdc1b1baad9effc8ae41",
+          "bytes": 6188,
+          "modified_ms": 1792172032413.4265,
+          "ino": 1407374884122853
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.json",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.json",
+          "sha256": "cabbbca839c712eca92a1631837d92d5617dfa1f761915ccacc8531b42adc737",
+          "bytes": 19837,
+          "modified_ms": 1792172032411.4243,
+          "ino": 1407374884122854
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite",
+          "sha256": "9994e3899259f6afc2e4ef88d4e9652cfbc333f464a60a3ecb575edbd21a6919",
+          "bytes": 327680,
+          "modified_ms": 1792172032408.319,
+          "ino": 1407374884122855
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite-shm",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite-shm",
+          "sha256": "2bc95b04a82427789347603b09a8fb6670de1ed0fc108f255459b30237b1644a",
+          "bytes": 32768,
+          "modified_ms": 1792172552403.6025,
+          "ino": 1407374884122856
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite-wal",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite-wal",
+          "sha256": "14a5c57eac1fffa310e36d7e6ef33dba393d60d87d4372f716ef9257da4832c1",
+          "bytes": 12392,
+          "modified_ms": 1792172552368.0564,
+          "ino": 1407374884122857
+        }
+      ],
+      "shm_bytes": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-WAL-SHM-diagnostic-v1/node-read-1-SHM.bin",
+        "sha256": "2bc95b04a82427789347603b09a8fb6670de1ed0fc108f255459b30237b1644a",
+        "bytes": 32768
+      },
+      "recorded_at": "2026-10-16T17:42:32.419Z"
+    },
+    {
+      "label": "node-read-2",
+      "rows": [
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.job.json",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.job.json",
+          "sha256": "058a071e0e35e89da5b28a831673845492330f6f0b21cdc1b1baad9effc8ae41",
+          "bytes": 6188,
+          "modified_ms": 1792172032413.4265,
+          "ino": 1407374884122853
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.json",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.json",
+          "sha256": "cabbbca839c712eca92a1631837d92d5617dfa1f761915ccacc8531b42adc737",
+          "bytes": 19837,
+          "modified_ms": 1792172032411.4243,
+          "ino": 1407374884122854
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite",
+          "sha256": "9994e3899259f6afc2e4ef88d4e9652cfbc333f464a60a3ecb575edbd21a6919",
+          "bytes": 327680,
+          "modified_ms": 1792172032408.319,
+          "ino": 1407374884122855
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite-shm",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite-shm",
+          "sha256": "2bc95b04a82427789347603b09a8fb6670de1ed0fc108f255459b30237b1644a",
+          "bytes": 32768,
+          "modified_ms": 1792172552421.98,
+          "ino": 1407374884122856
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite-wal",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite-wal",
+          "sha256": "14a5c57eac1fffa310e36d7e6ef33dba393d60d87d4372f716ef9257da4832c1",
+          "bytes": 12392,
+          "modified_ms": 1792172552368.0564,
+          "ino": 1407374884122857
+        }
+      ],
+      "shm_bytes": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-WAL-SHM-diagnostic-v1/node-read-2-SHM.bin",
+        "sha256": "2bc95b04a82427789347603b09a8fb6670de1ed0fc108f255459b30237b1644a",
+        "bytes": 32768
+      },
+      "recorded_at": "2026-10-16T17:42:32.437Z"
+    },
+    {
+      "label": "node-read-3",
+      "rows": [
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.job.json",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.job.json",
+          "sha256": "058a071e0e35e89da5b28a831673845492330f6f0b21cdc1b1baad9effc8ae41",
+          "bytes": 6188,
+          "modified_ms": 1792172032413.4265,
+          "ino": 1407374884122853
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.json",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.json",
+          "sha256": "cabbbca839c712eca92a1631837d92d5617dfa1f761915ccacc8531b42adc737",
+          "bytes": 19837,
+          "modified_ms": 1792172032411.4243,
+          "ino": 1407374884122854
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite",
+          "sha256": "9994e3899259f6afc2e4ef88d4e9652cfbc333f464a60a3ecb575edbd21a6919",
+          "bytes": 327680,
+          "modified_ms": 1792172032408.319,
+          "ino": 1407374884122855
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite-shm",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite-shm",
+          "sha256": "2bc95b04a82427789347603b09a8fb6670de1ed0fc108f255459b30237b1644a",
+          "bytes": 32768,
+          "modified_ms": 1792172552439.5962,
+          "ino": 1407374884122856
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite-wal",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite-wal",
+          "sha256": "14a5c57eac1fffa310e36d7e6ef33dba393d60d87d4372f716ef9257da4832c1",
+          "bytes": 12392,
+          "modified_ms": 1792172552368.0564,
+          "ino": 1407374884122857
+        }
+      ],
+      "shm_bytes": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-WAL-SHM-diagnostic-v1/node-read-3-SHM.bin",
+        "sha256": "2bc95b04a82427789347603b09a8fb6670de1ed0fc108f255459b30237b1644a",
+        "bytes": 32768
+      },
+      "recorded_at": "2026-10-16T17:42:32.457Z"
+    },
+    {
+      "label": "actual-quota-6",
+      "args": [
+        "crawl-quotas",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite"
+      ],
+      "pid": 41572,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-WAL-SHM-diagnostic-v1/actual-quota-6.stdout.log",
+        "sha256": "2f42c1f2e2b557b9b9364f724985f91d179c526cddf81daf2f134ca42f839100",
+        "bytes": 616
+      },
+      "stderr": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-WAL-SHM-diagnostic-v1/actual-quota-6.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "spawnSync_returned": true
+    },
+    {
+      "label": "actual-quota-6-after",
+      "rows": [
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.job.json",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.job.json",
+          "sha256": "058a071e0e35e89da5b28a831673845492330f6f0b21cdc1b1baad9effc8ae41",
+          "bytes": 6188,
+          "modified_ms": 1792172032413.4265,
+          "ino": 1407374884122853
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.json",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.json",
+          "sha256": "cabbbca839c712eca92a1631837d92d5617dfa1f761915ccacc8531b42adc737",
+          "bytes": 19837,
+          "modified_ms": 1792172032411.4243,
+          "ino": 1407374884122854
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite",
+          "sha256": "9994e3899259f6afc2e4ef88d4e9652cfbc333f464a60a3ecb575edbd21a6919",
+          "bytes": 327680,
+          "modified_ms": 1792172032408.319,
+          "ino": 1407374884122855
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite-shm",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite-shm",
+          "sha256": "2bc95b04a82427789347603b09a8fb6670de1ed0fc108f255459b30237b1644a",
+          "bytes": 32768,
+          "modified_ms": 1792172552480.606,
+          "ino": 1407374884122856
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite-wal",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite-wal",
+          "sha256": "14a5c57eac1fffa310e36d7e6ef33dba393d60d87d4372f716ef9257da4832c1",
+          "bytes": 12392,
+          "modified_ms": 1792172552368.0564,
+          "ino": 1407374884122857
+        }
+      ],
+      "shm_bytes": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-WAL-SHM-diagnostic-v1/actual-quota-6-after-SHM.bin",
+        "sha256": "2bc95b04a82427789347603b09a8fb6670de1ed0fc108f255459b30237b1644a",
+        "bytes": 32768
+      },
+      "recorded_at": "2026-10-16T17:42:32.497Z"
+    },
+    {
+      "label": "actual-resource-8",
+      "args": [
+        "resource-ledger",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite",
+        "--transports",
+        "--limit",
+        "1000"
+      ],
+      "pid": 16236,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-WAL-SHM-diagnostic-v1/actual-resource-8.stdout.log",
+        "sha256": "1c5c95056311b90b50804a3e8b111c82684e74d1a172023dcf10f17abb08e8c4",
+        "bytes": 17014
+      },
+      "stderr": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-WAL-SHM-diagnostic-v1/actual-resource-8.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "spawnSync_returned": true
+    },
+    {
+      "label": "actual-resource-8-after",
+      "rows": [
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.job.json",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.job.json",
+          "sha256": "058a071e0e35e89da5b28a831673845492330f6f0b21cdc1b1baad9effc8ae41",
+          "bytes": 6188,
+          "modified_ms": 1792172032413.4265,
+          "ino": 1407374884122853
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.json",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.json",
+          "sha256": "cabbbca839c712eca92a1631837d92d5617dfa1f761915ccacc8531b42adc737",
+          "bytes": 19837,
+          "modified_ms": 1792172032411.4243,
+          "ino": 1407374884122854
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite",
+          "sha256": "9994e3899259f6afc2e4ef88d4e9652cfbc333f464a60a3ecb575edbd21a6919",
+          "bytes": 327680,
+          "modified_ms": 1792172032408.319,
+          "ino": 1407374884122855
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite-shm",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite-shm",
+          "sha256": "2bc95b04a82427789347603b09a8fb6670de1ed0fc108f255459b30237b1644a",
+          "bytes": 32768,
+          "modified_ms": 1792172552520.0486,
+          "ino": 1407374884122856
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite-wal",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite-wal",
+          "sha256": "14a5c57eac1fffa310e36d7e6ef33dba393d60d87d4372f716ef9257da4832c1",
+          "bytes": 12392,
+          "modified_ms": 1792172552368.0564,
+          "ino": 1407374884122857
+        }
+      ],
+      "shm_bytes": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-WAL-SHM-diagnostic-v1/actual-resource-8-after-SHM.bin",
+        "sha256": "2bc95b04a82427789347603b09a8fb6670de1ed0fc108f255459b30237b1644a",
+        "bytes": 32768
+      },
+      "recorded_at": "2026-10-16T17:42:32.529Z"
+    },
+    {
+      "label": "actual-quota-10",
+      "args": [
+        "crawl-quotas",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite"
+      ],
+      "pid": 46900,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-WAL-SHM-diagnostic-v1/actual-quota-10.stdout.log",
+        "sha256": "2f42c1f2e2b557b9b9364f724985f91d179c526cddf81daf2f134ca42f839100",
+        "bytes": 616
+      },
+      "stderr": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-WAL-SHM-diagnostic-v1/actual-quota-10.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "spawnSync_returned": true
+    },
+    {
+      "label": "actual-quota-10-after",
+      "rows": [
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.job.json",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.job.json",
+          "sha256": "058a071e0e35e89da5b28a831673845492330f6f0b21cdc1b1baad9effc8ae41",
+          "bytes": 6188,
+          "modified_ms": 1792172032413.4265,
+          "ino": 1407374884122853
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.json",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.json",
+          "sha256": "cabbbca839c712eca92a1631837d92d5617dfa1f761915ccacc8531b42adc737",
+          "bytes": 19837,
+          "modified_ms": 1792172032411.4243,
+          "ino": 1407374884122854
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite",
+          "sha256": "9994e3899259f6afc2e4ef88d4e9652cfbc333f464a60a3ecb575edbd21a6919",
+          "bytes": 327680,
+          "modified_ms": 1792172032408.319,
+          "ino": 1407374884122855
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite-shm",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite-shm",
+          "sha256": "2bc95b04a82427789347603b09a8fb6670de1ed0fc108f255459b30237b1644a",
+          "bytes": 32768,
+          "modified_ms": 1792172552553.004,
+          "ino": 1407374884122856
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite-wal",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite-wal",
+          "sha256": "14a5c57eac1fffa310e36d7e6ef33dba393d60d87d4372f716ef9257da4832c1",
+          "bytes": 12392,
+          "modified_ms": 1792172552368.0564,
+          "ino": 1407374884122857
+        }
+      ],
+      "shm_bytes": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-WAL-SHM-diagnostic-v1/actual-quota-10-after-SHM.bin",
+        "sha256": "2bc95b04a82427789347603b09a8fb6670de1ed0fc108f255459b30237b1644a",
+        "bytes": 32768
+      },
+      "recorded_at": "2026-10-16T17:42:32.563Z"
+    },
+    {
+      "label": "actual-resource-12",
+      "args": [
+        "resource-ledger",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite",
+        "--transports",
+        "--limit",
+        "1000"
+      ],
+      "pid": 12728,
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdout": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-WAL-SHM-diagnostic-v1/actual-resource-12.stdout.log",
+        "sha256": "1c5c95056311b90b50804a3e8b111c82684e74d1a172023dcf10f17abb08e8c4",
+        "bytes": 17014
+      },
+      "stderr": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-WAL-SHM-diagnostic-v1/actual-resource-12.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "spawnSync_returned": true
+    },
+    {
+      "label": "actual-resource-12-after",
+      "rows": [
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.job.json",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.job.json",
+          "sha256": "058a071e0e35e89da5b28a831673845492330f6f0b21cdc1b1baad9effc8ae41",
+          "bytes": 6188,
+          "modified_ms": 1792172032413.4265,
+          "ino": 1407374884122853
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.json",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.json",
+          "sha256": "cabbbca839c712eca92a1631837d92d5617dfa1f761915ccacc8531b42adc737",
+          "bytes": 19837,
+          "modified_ms": 1792172032411.4243,
+          "ino": 1407374884122854
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite",
+          "sha256": "9994e3899259f6afc2e4ef88d4e9652cfbc333f464a60a3ecb575edbd21a6919",
+          "bytes": 327680,
+          "modified_ms": 1792172032408.319,
+          "ino": 1407374884122855
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite-shm",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite-shm",
+          "sha256": "2bc95b04a82427789347603b09a8fb6670de1ed0fc108f255459b30237b1644a",
+          "bytes": 32768,
+          "modified_ms": 1792172552587.3496,
+          "ino": 1407374884122856
+        },
+        {
+          "leaf": "f108268f-a332-4b60-b44d-06503d885ec4.sqlite-wal",
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-WAL-SHM-diagnostic-v1\\retained-copy\\f108268f-a332-4b60-b44d-06503d885ec4.sqlite-wal",
+          "sha256": "14a5c57eac1fffa310e36d7e6ef33dba393d60d87d4372f716ef9257da4832c1",
+          "bytes": 12392,
+          "modified_ms": 1792172552368.0564,
+          "ino": 1407374884122857
+        }
+      ],
+      "shm_bytes": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-WAL-SHM-diagnostic-v1/actual-resource-12-after-SHM.bin",
+        "sha256": "2bc95b04a82427789347603b09a8fb6670de1ed0fc108f255459b30237b1644a",
+        "bytes": 32768
+      },
+      "recorded_at": "2026-10-16T17:42:32.597Z"
+    }
+  ],
+  "owners": [
+    {
+      "role": "own-fixture-writer",
+      "opened": true,
+      "closed": true
+    },
+    {
+      "role": "readOnly-node-1",
+      "opened": true,
+      "closed": true
+    },
+    {
+      "role": "readOnly-node-2",
+      "opened": true,
+      "closed": true
+    },
+    {
+      "role": "readOnly-node-3",
+      "opened": true,
+      "closed": true
+    }
+  ],
+  "failures": [],
+  "common_lock_released": true,
+  "read_phase_policy_changed": false,
+  "product_source_changed": false,
+  "native_acceptance_granted": false,
+  "installed_or_Original_touched": false,
+  "recorded_at": "2026-10-16T17:42:32.655Z"
+}
