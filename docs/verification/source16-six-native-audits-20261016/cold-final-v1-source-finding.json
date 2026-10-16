@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "kind": "source16_original_inventory_service_stop_and_cold_release_independent_review",
+  "result": "FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "findings": [
+    {
+      "id": "SOURCE16-FINAL-P2-COLD-LISTENER-ENUMERATION",
+      "priority": 2,
+      "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\install-source16-preparation-v1\\tree-ops.ps1",
+      "start": 41,
+      "end": 41,
+      "source": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\install-source16-preparation-v1\\tree-ops.ps1",
+        "sha256": "603f0dc7bca5b8c5f71efe410ac8ea953b3eb389621b357645a7907e07e61a49",
+        "bytes": 5924
+      },
+      "title": "Fail closed when the cold listener inventory cannot be enumerated",
+      "body": "The cold-mode query explicitly suppresses nonterminating Get-NetTCPConnection errors using -ErrorAction SilentlyContinue, then saves its empty output as listeners=[]. Both Installer cold() and Cold cold() interpret this as positive evidence that original ports8787/8790 are free, including before release issuance and executable replacement. A permission/provider/enumeration failure can therefore satisfy the cold precondition without a successful TCP inventory. Obtain a complete Get-NetTCPConnection -State Listen -ErrorAction Stop inventory and filter its successful output to the two ports, as the current service-identity.ps1 already does. Preserve the rest of the helper and immutable V1 package. Owner-mode nonempty-listener consumers are separately fail closed; this finding concerns the cold empty-set authority.",
+      "classification": "SOURCE_ONLY_INHERITED_FAIL_OPEN_OBSERVATION",
+      "runtime_fault_injection_performed": false,
+      "blocking_final_source_NoF": true
+    }
+  ],
+  "reviewer": "/root/installer_v2_fresh_independent_review",
+  "independent_from_source_author": true,
+  "proposal_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source16-cold-root-preparation-v1\\manifest.json",
+    "sha256": "8567cfc38d19e2b0c5ac976d7128a8d28d0307a246ea8adc23d674a9e9529a9a",
+    "bytes": 3962
+  },
+  "harness": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source16-cold-root-preparation-v1/prepare-original-cold.mjs",
+    "sha256": "fb866b80d5396a0ab21aaf6f7ba145118abd99d4a2ef49f339b97f87d64e3211",
+    "bytes": 26774
+  },
+  "installer_preparation": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\install-source16-preparation-v1\\manifest.json",
+    "sha256": "270501f3c7a40e12091ee0032b6c9bc08ca0ee848d765ac4ec72edfc50ae1bb8",
+    "bytes": 26173
+  },
+  "installer_independent_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source16-final-install-cold-independent-review-v1\\installer-receipt.json",
+    "sha256": "daa61a37b721e936e679241505ec11fdfb356356f59dd6da739938c5b37fc7ab",
+    "bytes": 5645
+  },
+  "audit": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source16-final-install-cold-independent-review-v1\\AUDIT.json",
+    "sha256": "cf82d4043236f7f6804bfa95e3341f70cfc9fc9413922a14a2045120470c820f",
+    "bytes": 198911
+  },
+  "scope": {
+    "complete_source_payloads": 6,
+    "exact_handle_identity_helper": true,
+    "inspection_max_minutes": 10,
+    "release_max_hours": 2,
+    "early_six_actual_audits_before_private_C": true,
+    "source_only": true
+  },
+  "Root_invocation_contract": {
+    "status": "BLOCKED_BY_SOURCE_FINDING_NOT_ROOT_READY",
+    "required_source_review_kinds": {
+      "installer": "source_v16_cold_installer_independent_review",
+      "cold": "source16_original_inventory_service_stop_and_cold_release_independent_review"
+    },
+    "Root_expected_ready_kind": "root_ready_for_source_v16_cold_install",
+    "Root_expected_ready_status": "SIX_SOURCE16_NATIVE_GATES_ACTUALLY_ACCEPTED_WITH_DIRECT_ACCEPTED_SOURCE15_ANCESTRY",
+    "actual_inputs": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source16-root-install-inputs-v1/actual-install-inputs.json",
+      "sha256": "46e0f37696ed8cd49d0f7610c7d48230512cc033f3239c3d2409aee7dec44fb2",
+      "bytes": 1727
+    },
+    "Root_input_capture": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source16-root-install-inputs-v1/root-capture-witness.json",
+      "sha256": "098d2c82e82eac66fa77949264b90a094f998e3d8e4641c00c0fd24a707823ae",
+      "bytes": 1446
+    },
+    "native_roles": [
+      "head_cdn",
+      "api_subset",
+      "segments_cdn_directory",
+      "sitemap_public_evidence",
+      "crawl_quotas",
+      "cli_resume"
+    ],
+    "required_before_private_Original_inspection": [
+      "Fresh exact final Installer and Cold source reviews with NO_FINDINGS_BOUNDED_SOURCE_REVIEW, matching kinds/manifests",
+      "Root-only physical source431/candidate/current Node/Chrome/runtime revalidation and six detailed native actual audit admission",
+      "Explicit actual Root Ready output; source review is not a grant"
+    ],
+    "inspection_max_minutes": 10,
+    "release_max_hours": 2,
+    "private_data": "Fresh current complete job-ID/DATA/ADS/ACL/stable-metadata inventory; no historical8jobs/38files/41rows/PIDs assumptions",
+    "stop": "Exact retained HANDLE bound to PID/createTime/image/argv/listeners and fresh idle fact<=15sec; classification remains forced, graceful/descendant drain NOT_PROVEN",
+    "copy_and_install": "Three exclusive same-parent full copies; neutral full DTO comparison; atomic EXE-only replace and EXE-only rollback; no DATA restore; only exact inventoried top-level sqlite-shm LastWriteTime exception in named runtime phases",
+    "point_time_only": "Any prior Root observation of live healthy15/eight completed jobs is a point-in-time witness, never fresh future admission"
+  },
+  "qualification": "Final Cold V1 source review inherits the same cold-helper enumeration finding. A source NoF, current Root Ready/inspection/stop/release and installation remain absent."
+}

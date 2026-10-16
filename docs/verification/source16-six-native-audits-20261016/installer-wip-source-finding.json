@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "kind": "source16_install_cold_port_wip_independent_source_review",
+  "result": "FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "findings": [
+    {
+      "id": "INSTALL16-WIP-P1-TERMINAL-PROVENANCE",
+      "priority": 1,
+      "file": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-source16-preparation-wip-v2-r1/install-cold-v16.mjs",
+      "lines": [
+        315,
+        318,
+        345,
+        347
+      ],
+      "title": "Current Source16 installer emits Source15 retry2 terminal results",
+      "body": "The current proof.kind and admitted source/candidate refer to Source16, but the success branch emits PASS_SOURCE_V15_RETRY2_COLD_LOCAL_INSTALL_WITH_COPY_COMPATIBILITY, both failure branches emit FAIL_SOURCE_V15_RETRY2_* and the final stable-metadata success predicate compares the same old15 PASS literal. A successful current install would therefore serialize a mixed-version receipt, and a correctly typed Source16 consumer would reject it or be forced to accept an old15 result for new16. Port all four current output/predicate sites in a new immutable successor. Preserve the exact accepted15 historical(proof) assertion and historical receipts unchanged.",
+      "actual_current_kind": "source_v16_cold_install",
+      "actual_current_terminal_literal": "PASS_SOURCE_V15_RETRY2_COLD_LOCAL_INSTALL_WITH_COPY_COMPATIBILITY",
+      "historical_15_result_must_remain": true
+    }
+  ],
+  "reviewer": "/root/installer_v2_fresh_independent_review",
+  "harness_author_role": false,
+  "recorded_at": "2026-10-16T10:36:00.406Z",
+  "proposal_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source16-install-cold-wip-index-v2-r1\\INDEX.json",
+    "sha256": "18dc6b4411c033411a0e8a1a4866414eda4dc82ec7e6a225554ae729ef0190a7",
+    "bytes": 2803
+  },
+  "installer_WIP_index": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-source16-preparation-wip-v2-r1/WIP-INDEX.json",
+    "sha256": "be4809707834f95cf1d60cc6f4ca7570b62fd366c7ab4f3387bacb52aa634575",
+    "bytes": 3471
+  },
+  "cold_WIP_index": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source16-cold-root-preparation-wip-v2-r1/WIP-INDEX.json",
+    "sha256": "2b13fd0d9215ad2c7ede29db2dfd434ca9f0a82794a071cb4dde846d76ff86bd",
+    "bytes": 2230
+  },
+  "audit": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source16-install-cold-wip-v2-r1-independent-review-v1\\AUDIT.json",
+    "sha256": "e3443ff965df8c216532b84ba79daa7000019ef888b545ac882914ee6476e13e",
+    "bytes": 59282
+  },
+  "scope": {
+    "whole_sources": 6,
+    "exact_pairs": 6,
+    "finite_ops": 48,
+    "retained_safety_regions": 12,
+    "helpers_preserved_except_first_throw": 3,
+    "stdin_parsers": 4,
+    "safe_refs": 81,
+    "source_only": true
+  },
+  "Root_invocation_contract": {
+    "status": "WIP_NOT_ADMITTED",
+    "entry_hard_throws": 6,
+    "runnable_manifest_present": false,
+    "required_fresh_final_review_kinds": {
+      "installer": "source_v16_cold_installer_independent_review",
+      "cold": "source16_original_inventory_service_stop_and_cold_release_independent_review"
+    },
+    "current_source_manifest": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v16/manifest.json",
+      "sha256": "d1e668fe8f19e804aa76d3f28f36bc63fcc2d5122f3aa1d5c54792d5519e4a09",
+      "bytes": 846274
+    },
+    "required_before_private_C": [
+      "Six role-specific actual audits and exact proof/source-review/raw-audit chains",
+      "Current actual install inputs fullref, final manifest/PINNED/release refs and fresh Installer/Cold source reviews",
+      "Root Ready guard for six detailed native gates plus direct accepted15 ancestry before any current private inspection"
+    ],
+    "fresh_inspection_max_minutes": 10,
+    "Root_install_release_max_hours": 2,
+    "termination": "Retained verified process HANDLE with PID/createTime/image/argv/listeners; graceful shutdown and descendant drain remain NOT_PROVEN",
+    "copies": "Exactly three exclusive fresh direct DATA siblings, full bytes/ADS/ACL/timestamps compared",
+    "data_integrity": "No DATA restore; only inventoried ordinary top-level sqlite-shm modified/LastWriteTime may differ in named live phases, all other bytes/streams/metadata/order exact",
+    "rollback": "EXE-only exact accepted15 bytes, never DATA restore"
+  },
+  "status": "WIP_NOT_ADMITTED",
+  "qualification": "Retained hard throws and missing final pins prevent admission. Concrete stale terminal-result finding requires immutable successor; all actual install/Ready/private operations remain NOT_PROVEN. No target import/call, DB/PE/private input read/hash or runtime action by reviewer."
+}
