@@ -1,0 +1,507 @@
+{
+  "schema_version": 1,
+  "kind": "api_only_enrichment_source_proposal",
+  "status": "AUTHORED_NOT_RUN",
+  "feature_id": "modes.apis",
+  "catalog_status": "planned; source-only first-provider partial proposal",
+  "basis": {
+    "kind": "actual_formatted_source13_draft_v3_not_a_release",
+    "source_directory": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/source",
+    "composition_preformat": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v13-draft-v3/preformat.json",
+      "sha256": "13547987d8f394701cdd898f667f0f556f4fdf1b41895354df6cd1254ac2bfcf",
+      "bytes": 245980
+    },
+    "actual_format": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source13-preliminary-format-v3/proof.json",
+      "sha256": "5fe1fd874de5ac4e561d6b800e1e98361c1601ef93a57ee01ce77934f1c27397",
+      "bytes": 119049
+    },
+    "independent_format_review": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source13-format-independent-review-v3/receipt.json",
+      "sha256": "dd529c2e3469814914bd21e1c4d6dbff77f0e198c8d784a5d2579e3ef7f3f373",
+      "bytes": 73652
+    },
+    "parent_inventory": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/api-only-enrichment-proposal-v1/PARENT-INVENTORY.json",
+      "sha256": "c32ed7b04c9b79eb407e2de415f32487835c7b89cf7de13ef2efda62a4dceacb",
+      "bytes": 68902
+    },
+    "source_inputs": 388,
+    "frozen_source_manifest": null,
+    "code_commit": null
+  },
+  "reference_plan": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/apis-mode-reference-plan-v1/manifest.json",
+    "sha256": "12694a0f10c82ca13bfe60441117ece54c99dc04ed21be6f5df352f88d13f243",
+    "bytes": 5569
+  },
+  "source_directory": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-enrichment-proposal-v4\\source",
+  "files": [
+    {
+      "path": "crates/app/src/enrichment_app.rs",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "93ac56c303cb18053edb6966b7e65c51561471df28c3bb7aa86ef03cdd8a468e",
+      "bytes": 17986
+    },
+    {
+      "path": "crates/app/src/enrichment_app_tests.rs",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "fb6ce191c471e19aff7c937013187a9986c57af9ffc9f4af4b41606d1e1311a2",
+      "bytes": 11940
+    },
+    {
+      "path": "crates/app/src/main.rs",
+      "before_sha256": "94d7cc731fc44f160881084e017b19ba01f48fe327d23fe6a6cbc77a6a73f806",
+      "before_bytes": 34729,
+      "sha256": "8fcdf940d72a0d5e17e8216a5df6a13d9238be3882eeb858c247db8677acb9ea",
+      "bytes": 35294
+    },
+    {
+      "path": "crates/app/src/mcp.rs",
+      "before_sha256": "8a09c5c9f654edab59615d9ee49a719bafe21603bf669227be3400e5bb9de549",
+      "before_bytes": 33700,
+      "sha256": "c687c52bc793d23a38ec38b078b3db1f48de0905fa12da7741183d432acd902f",
+      "bytes": 33844
+    },
+    {
+      "path": "crates/app/src/mcp/enrichment.rs",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "f68591e71d68d86eaadb6732142cfc735a946eda6e6aa9ef1ea52b0278d18e4e",
+      "bytes": 3959
+    },
+    {
+      "path": "crates/app/src/mcp/enrichment_tests.rs",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "0df391d7a311d113cb645dc185ca508fda5771708ae905e89bed9e8edcd5fa0a",
+      "bytes": 2162
+    },
+    {
+      "path": "crates/app/src/server.rs",
+      "before_sha256": "15023515fe973bbb7e5ae628acf991eb83283b079fed56ad5389cb451f4ffef3",
+      "before_bytes": 90317,
+      "sha256": "8d6db6f3c33edda0e7318864fa9a9a86ca1747b596789be26efdb974f219fda3",
+      "bytes": 92097
+    },
+    {
+      "path": "crates/app/src/server/enrichment.rs",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "936464f1efeb3c7d7c0cf11754831080f1448cb43192d3916b8acae5267e9e05",
+      "bytes": 4579
+    },
+    {
+      "path": "crates/app/src/server/enrichment_tests.rs",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "1621b390a566d2eb091ce1ff15fe8b2fec1bde1c5cc0bf2acb5a1e03b4745702",
+      "bytes": 5165
+    },
+    {
+      "path": "crates/app/src/server/lifecycle.rs",
+      "before_sha256": "503a742cec791cc5596bc5b66ccd732e051838e5070e6b012296c7f35285a6d6",
+      "before_bytes": 9008,
+      "sha256": "9c90110a277ff9ba941451468fad49a6c142758f8743c5a17ee65be0889fc528",
+      "bytes": 9977
+    },
+    {
+      "path": "crates/core/src/api_enrichment.rs",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "d82954dc1b4bcff9a9b0735fb4861c11a0406ff5ace5a07019ad25fe34d411e6",
+      "bytes": 19334
+    },
+    {
+      "path": "crates/core/src/api_enrichment/pagespeed.rs",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "5c10636a12a01643dbaf9e6691ae9f7d249226e85298290badc8995de1d0dec0",
+      "bytes": 2059
+    },
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "090645cd2587485061148845697cab5db5805ecaefa2109e6e58495534818e0f",
+      "bytes": 14143
+    },
+    {
+      "path": "crates/core/src/lib.rs",
+      "before_sha256": "acac0de0e89a5d9855e7792e8bd05977c2daf54ddd0d697bef94b190a4900061",
+      "before_bytes": 7448,
+      "sha256": "04dab039a2699c24452650e28851016e2dfed1888e8aa713503f8c67b84cdcd7",
+      "bytes": 7472
+    },
+    {
+      "path": "web/api-enrichment.css",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "36c79dcd1a8b1df363591f2c94ead1eb10cf8b8dfc087b22a432b3dd8e63ea1a",
+      "bytes": 1291
+    },
+    {
+      "path": "web/api-enrichment.html",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "de9066081d48485cd46e2d064e7e1717358cd14c1c64ebbd86c06782ebab9a93",
+      "bytes": 2496
+    },
+    {
+      "path": "web/api-enrichment.js",
+      "before_sha256": "ABSENT",
+      "before_bytes": 0,
+      "sha256": "fe8df01e763073a3d31e0f305b625fb92c8706625574b45c5b60c0ddcc49dc04",
+      "bytes": 8952
+    },
+    {
+      "path": "web/index.html",
+      "before_sha256": "a1df57b493a0768f8b3b2ef23936d1ea0ed47dffe46fc2fea37a28364a985301",
+      "before_bytes": 90687,
+      "sha256": "b7071dda3eba03834e8a1e287ccb28bd54f84af4dd9ad9e67faea9046bed46e0",
+      "bytes": 90761
+    }
+  ],
+  "derivation": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/api-only-enrichment-proposal-v1/DERIVATION.json",
+    "sha256": "55820a688b276515bd65a98c9cebe363652751cc4fae4c0727ce590efa113b00",
+    "bytes": 18704
+  },
+  "test_inventory": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-enrichment-proposal-v4\\TEST-INVENTORY.json",
+    "sha256": "d5f2ea85309227de8d306ebba0ab4d82880a0a155a553b8cd3ce6a4ac0992403",
+    "bytes": 33362
+  },
+  "projected_inventory": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-enrichment-proposal-v4\\PROJECTED-INVENTORY.json",
+    "sha256": "da9c8ea63b9b948b64908715b8cc9890b2a7f90dd6f7ac74644d2994f407be1c",
+    "bytes": 70682
+  },
+  "source_inputs": 400,
+  "owned_paths": 18,
+  "modified_parent_inputs": 6,
+  "new_input_files": 12,
+  "unchanged_parent_inputs": 382,
+  "new_authored_test_functions": [
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "name": "api_only_cancel_drops_inflight_transport_and_never_starts_remaining_urls",
+      "full_name": "api_enrichment::tests::api_only_cancel_drops_inflight_transport_and_never_starts_remaining_urls",
+      "body_sha256": "af4ac7cfc7d6810920119ddf37a78942f42a8d6723794926651f69a6da1fd352",
+      "body_bytes": 1874,
+      "windows": true,
+      "unix": true,
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "name": "api_only_hash_plan_response_caps_and_invalid_metrics_refuse_without_silent_coercion",
+      "full_name": "api_enrichment::tests::api_only_hash_plan_response_caps_and_invalid_metrics_refuse_without_silent_coercion",
+      "body_sha256": "9170335845f061ec02fc6cdfe997ce73a361de942e3d235166fd300e34d1f780",
+      "body_bytes": 1299,
+      "windows": true,
+      "unix": true,
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "name": "api_only_http200_lighthouse_runtime_errors_and_missing_measurements_are_not_success",
+      "full_name": "api_enrichment::tests::api_only_http200_lighthouse_runtime_errors_and_missing_measurements_are_not_success",
+      "body_sha256": "3530b6374f44cd0eab88cc745b35bdcf830dded1773887272c86141dba71439d",
+      "body_bytes": 1190,
+      "windows": true,
+      "unix": true,
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "name": "api_only_import_provenance_deduplicates_execution_not_occurrences_and_refuses_url_credentials",
+      "full_name": "api_enrichment::tests::api_only_import_provenance_deduplicates_execution_not_occurrences_and_refuses_url_credentials",
+      "body_sha256": "c1ecd9183dd00cfeeb7197e2cec00dba3c7b7e60a4f056331b17ace6a1c59c54",
+      "body_bytes": 1028,
+      "windows": true,
+      "unix": true,
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "name": "api_only_production_request_has_fixed_https_origin_and_secret_is_not_serialized",
+      "full_name": "api_enrichment::tests::api_only_production_request_has_fixed_https_origin_and_secret_is_not_serialized",
+      "body_sha256": "e1540a92eeb25b472e11fea92937e554a44db1c3d874d64ae6be35aaeb643b8a",
+      "body_bytes": 960,
+      "windows": true,
+      "unix": true,
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "name": "api_only_real_local_mock_api_response_does_not_fetch_the_supplied_website_or_follow_redirect",
+      "full_name": "api_enrichment::tests::api_only_real_local_mock_api_response_does_not_fetch_the_supplied_website_or_follow_redirect",
+      "body_sha256": "27cabdaf7fbf0cad6963104e36f23d956164b10f1ffc01000d1550c77244f1d6",
+      "body_bytes": 2710,
+      "windows": true,
+      "unix": true,
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "name": "api_only_transient_retry_call_budget_and_authentication_are_bounded",
+      "full_name": "api_enrichment::tests::api_only_transient_retry_call_budget_and_authentication_are_bounded",
+      "body_sha256": "4be57d2b504cba39719a757494b7998a57cc04b2e5ba1b57b29266e69bfb7ab8",
+      "body_bytes": 1218,
+      "windows": true,
+      "unix": true,
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "name": "api_only_typed_provider_metrics_are_separate_from_site_facts_and_absence_is_not_zero",
+      "full_name": "api_enrichment::tests::api_only_typed_provider_metrics_are_separate_from_site_facts_and_absence_is_not_zero",
+      "body_sha256": "3bbb056f40b4dd7456960fca374b20d5d3dede8887473b7a6c79c276b8fd6bdb",
+      "body_bytes": 1147,
+      "windows": true,
+      "unix": true,
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "path": "crates/core/src/api_enrichment_tests.rs",
+      "name": "api_only_unicode_normalized_url_exact8192_and_plus1_refuse_before_attempt_and_revalidate_legacy_plan",
+      "full_name": "api_enrichment::tests::api_only_unicode_normalized_url_exact8192_and_plus1_refuse_before_attempt_and_revalidate_legacy_plan",
+      "body_sha256": "59aa6194c64e0a7d16996341e9e4a4b8a460c302578839006780c20705d9b381",
+      "body_bytes": 1375,
+      "windows": true,
+      "unix": true,
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "path": "crates/app/src/enrichment_app_tests.rs",
+      "name": "api_enrichment_cli_protects_existing_inputs_outputs_and_returns_complete_json_csv_from_same_service",
+      "full_name": "enrichment_app::tests::api_enrichment_cli_protects_existing_inputs_outputs_and_returns_complete_json_csv_from_same_service",
+      "body_sha256": "de730a54c9244f9b63e0408506c0a4342f0e1f42802fd9f3d1c0b2e8b0b9c4ee",
+      "body_bytes": 1724,
+      "windows": true,
+      "unix": true,
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "path": "crates/app/src/enrichment_app_tests.rs",
+      "name": "api_enrichment_close_cancels_and_actually_joins_owned_inflight_work_before_return",
+      "full_name": "enrichment_app::tests::api_enrichment_close_cancels_and_actually_joins_owned_inflight_work_before_return",
+      "body_sha256": "96e9a7fc7a9851dd2b58edc124e86fc24c1711fe2b818b2d3afaec33c5a97640",
+      "body_bytes": 1773,
+      "windows": true,
+      "unix": true,
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "path": "crates/app/src/enrichment_app_tests.rs",
+      "name": "api_enrichment_normalized_overcap_plan_is_refused_before_store_owner_or_provider_admission",
+      "full_name": "enrichment_app::tests::api_enrichment_normalized_overcap_plan_is_refused_before_store_owner_or_provider_admission",
+      "body_sha256": "04a535d9c6e6c3c0cdfbdf77f6b3da854fb9b4dfc0f059713b810b80e7a363ca",
+      "body_bytes": 1793,
+      "windows": true,
+      "unix": true,
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "path": "crates/app/src/enrichment_app_tests.rs",
+      "name": "api_enrichment_original_input_config_and_completed_report_hashes_refuse_tamper",
+      "full_name": "enrichment_app::tests::api_enrichment_original_input_config_and_completed_report_hashes_refuse_tamper",
+      "body_sha256": "1f865023602af4f553fc8e48bee00f77b1b0341063fc703e74ce76c0412e096b",
+      "body_bytes": 962,
+      "windows": true,
+      "unix": true,
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "path": "crates/app/src/enrichment_app_tests.rs",
+      "name": "api_enrichment_owner_panic_is_reported_and_retained_join_is_not_lost",
+      "full_name": "enrichment_app::tests::api_enrichment_owner_panic_is_reported_and_retained_join_is_not_lost",
+      "body_sha256": "c2ae856f16d625a49df77d85871d4035ac03f8ce299998847430747f8de644a6",
+      "body_bytes": 1183,
+      "windows": true,
+      "unix": true,
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "path": "crates/app/src/enrichment_app_tests.rs",
+      "name": "api_enrichment_snapshot_pages_preserve_all_occurrences_filters_and_cold_no_provider_resume",
+      "full_name": "enrichment_app::tests::api_enrichment_snapshot_pages_preserve_all_occurrences_filters_and_cold_no_provider_resume",
+      "body_sha256": "1766f59bdd4fd43691f6014ce87e40ea3d1bae206ed2b7f98aac1684baacc1a4",
+      "body_bytes": 2071,
+      "windows": true,
+      "unix": true,
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "path": "crates/app/src/enrichment_app_tests.rs",
+      "name": "api_enrichment_ui_first_csv_column_one_matches_real_import_consumer",
+      "full_name": "enrichment_app::tests::api_enrichment_ui_first_csv_column_one_matches_real_import_consumer",
+      "body_sha256": "f3c3476797751e75363a83e68ff98f38ad4a90cedf6f3f23ccb25d903e56e308",
+      "body_bytes": 832,
+      "windows": true,
+      "unix": true,
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "path": "crates/app/src/mcp/enrichment_tests.rs",
+      "name": "api_enrichment_mcp_action_shapes_reject_without_api_or_provider_requests",
+      "full_name": "mcp::enrichment::tests::api_enrichment_mcp_action_shapes_reject_without_api_or_provider_requests",
+      "body_sha256": "870ab9c92ed8783c4bccb06619a88cbec49b6d153a716cdea1282a4c864b3eb0",
+      "body_bytes": 701,
+      "windows": true,
+      "unix": true,
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "path": "crates/app/src/mcp/enrichment_tests.rs",
+      "name": "api_enrichment_mcp_uses_the_same_real_loopback_api_and_verifies_csv_bytes",
+      "full_name": "mcp::enrichment::tests::api_enrichment_mcp_uses_the_same_real_loopback_api_and_verifies_csv_bytes",
+      "body_sha256": "ab4753bf997e0552a8bd0a2a62fb335afa88464ca43b43a5d832530124f61d5f",
+      "body_bytes": 1445,
+      "windows": true,
+      "unix": true,
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "path": "crates/app/src/server/enrichment_tests.rs",
+      "name": "api_enrichment_http_preview_and_unacknowledged_start_never_fetch_supplied_website",
+      "full_name": "server::enrichment::tests::api_enrichment_http_preview_and_unacknowledged_start_never_fetch_supplied_website",
+      "body_sha256": "ffb8bcc7568090f146d9128422837d2ea12655e41e1dcb702f392ec370c1b0eb",
+      "body_bytes": 1464,
+      "windows": true,
+      "unix": true,
+      "status": "AUTHORED_NOT_RUN"
+    },
+    {
+      "path": "crates/app/src/server/enrichment_tests.rs",
+      "name": "api_enrichment_http_reads_full_csv_exact_length_sha_registry_completion_and_cold_config",
+      "full_name": "server::enrichment::tests::api_enrichment_http_reads_full_csv_exact_length_sha_registry_completion_and_cold_config",
+      "body_sha256": "20deeca76cec81e0ed5f0bcdb8f4add7ff6e8b227e6b35de75bbafdd47da4352",
+      "body_bytes": 2074,
+      "windows": true,
+      "unix": true,
+      "status": "AUTHORED_NOT_RUN"
+    }
+  ],
+  "required_test_names_forecast": 694,
+  "full_test_names_forecast": 698,
+  "minimum_workspace_tests_forecast": 1476,
+  "additional_non_cargo_verification": {
+    "source": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-enrichment-proposal-v4\\api-enrichment-ui.test.cjs",
+      "sha256": "dd893a552561de69e22dcef6fe409115115c12575541d359e6b5aef16bdac449",
+      "bytes": 3142
+    },
+    "target": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-enrichment-proposal-v4\\source\\web\\api-enrichment.js",
+      "sha256": "fe8df01e763073a3d31e0f305b625fb92c8706625574b45c5b60c0ddcc49dc04",
+      "bytes": 8952
+    },
+    "names": [
+      "api-only input creates typed fixed provider options without an endpoint or key",
+      "api-only byte limits count Unicode bytes and reject unsupported credential profiles",
+      "api-only reopen preserves explicit import selection and budget configuration without reacknowledgement",
+      "api-only continuation carries exact snapshot cursor and no implicit new provider execution",
+      "api-only ordinary CSV uses the real importer first-column-one contract"
+    ],
+    "status": "UNCHANGED_V3_BYTES_SEPARATE_ANCESTOR_NODE5_PROOF",
+    "cargo_names": false
+  },
+  "syntax_checks": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/api-only-enrichment-proposal-v2/SYNTAX-CHECKS.json",
+    "sha256": "ab1634fc0c7f62f91b9462af99b2071a40f9bdfc207615eb398016912b0b2340",
+    "bytes": 1289
+  },
+  "handoff": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-enrichment-proposal-v4\\HANDOFF.md",
+    "sha256": "cae7bf68fe7fb3c8307b889182f3dc545961f4929d3e710066c6606cc45762cf",
+    "bytes": 1958
+  },
+  "new_dependencies": [],
+  "runtime_authorities": {
+    "provider": "fixed_https_pagespeed_lighthouse_v1",
+    "application_website_requests": 0,
+    "provider_may_fetch_submitted_site": true,
+    "credential_value_in_runtime_options": false,
+    "crawler_callback": false,
+    "test_mock_implementations": "cfg(test) only",
+    "job_identity": "uuid/generation1/immutable_report_sha",
+    "cursor_binding": [
+      "job",
+      "generation",
+      "snapshot",
+      "filter"
+    ],
+    "native_grants_created": false
+  },
+  "actual_formatter": null,
+  "actual_compiler": null,
+  "actual_rust_tests": null,
+  "actual_node_tests": null,
+  "actual_suite": null,
+  "actual_binary": null,
+  "actual_provider_requests": null,
+  "actual_native": null,
+  "root_changed": false,
+  "revision": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-enrichment-proposal-v4\\REVISION.json",
+    "sha256": "784e68af4b7a209895b1a14260366080aac114b881118d8845f5c85c8a80e68d",
+    "bytes": 17324
+  },
+  "previous_proposal": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-enrichment-proposal-v3\\manifest.json",
+    "sha256": "c37ed77f5ad9241917e66a34fc0de9c109f8777a7e9520bd16f8c93f8f9967da",
+    "bytes": 21801
+  },
+  "source_findings_closed": [
+    "API-ONLY-01",
+    "API-ONLY-02",
+    "API-ONLY-03",
+    "API-ONLY-04"
+  ],
+  "independent_parent_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-enrichment-independent-review-v3\\receipt.json",
+    "sha256": "8a956aedf4a354e613e089728536f7f7351ec98593b1fc01cbe6eb8f181962c5",
+    "bytes": 2761
+  },
+  "previous_findings_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/api-only-enrichment-independent-review-v1/receipt.json",
+    "sha256": "59728f60af00e428674abd51272ed189257f9e56fdb7f37bdcfc68be9afc0adc",
+    "bytes": 4217
+  },
+  "actual_prior_preview_clippy_failure": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-preview-clippy-v1\\proof.json",
+    "sha256": "815b0be7029daa01c4a762fc376559f2f25255d11fc8d29911d9b0149ce51253",
+    "bytes": 80962
+  },
+  "actual_prior_preview_format": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-preview-format-v2\\proof.json",
+    "sha256": "c0a18575b32b1a578555aba002ef3e4af2b3b4dc34092e45dbf9952a39ca40d5",
+    "bytes": 131387
+  },
+  "actual_prior_preview_formatter_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-preview-format-independent-review-v1\\receipt.json",
+    "sha256": "c850a2041cff8d834c1378c8fd910d3fa79c3a9f5f1d5c266d9ed1012c0677f7",
+    "bytes": 76628
+  },
+  "ancestor_node5_proof": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-frontend-tests-v1\\proof.json",
+    "sha256": "7a6c2d19b522d6669c0b029bb814292d8e0b71efd6e52e85979450869790ac4e",
+    "bytes": 3314
+  },
+  "syntax_qualification": "Historical V2 Node syntax checks; all JS and Node verification bytes remain exact V3. No new target import, compiler, Node or Rust test invocation.",
+  "actual_prior_preview_test_failure": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-preview-twenty-rust-tests-v2\\proof.json",
+    "sha256": "a93fc67a0c68cc87edc67b3d79f03d5c89d27a94ce2cc11c493f56bad5d780d5",
+    "bytes": 88776
+  },
+  "actual_prior_preview_clippy": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-preview-clippy-v2\\proof.json",
+    "sha256": "b17d8ed49cab7e707868a99af5ef510491f8406f5d6f427fc520c73003757767",
+    "bytes": 80956
+  }
+}

@@ -1,0 +1,780 @@
+{
+  "kind": "source12_current_renderer_four_compatibility",
+  "result": "PASS_CURRENT_SOURCE12_RENDERER_FOUR_NOT_FULL_SUITE",
+  "recorded_at": "2026-10-16T00:06:04.200Z",
+  "source_manifest_sha256": "3b62e68b32b2d23e375977cac8d5d0dad313c8f144eb43b4ab2896fae7687b18",
+  "suite_proof_sha256": "8bba7750a13d0e7ec1de843d7599b0aab48e9ac5cffdf24eff6f0e26618d27d6",
+  "build_proof_sha256": "7512cfdc9e4f09d5c847c6ac89fa92face47172d5a8c673df0a2bbd67f6b46f4",
+  "candidate_binary_sha256": "f7ce325cf73d16f1c4943ebf98dc8a2e888e93ee25c999bc7f2c10d1b1a1a65c",
+  "candidate_bytes": 43650560,
+  "build_driver_sha256": "95c7ac504e12d80c874804149e3a8d56a68435554a4fb2fac26ca2ee88ce95d0",
+  "source_commit": "5d50a10f3974c9afe79909b963427e67dd8fb001",
+  "preparation": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source12-historical-current-runtime-bridge-preparation-v3\\manifest.json",
+    "sha256": "b09da50b5dfb3d5b1a92dc9d803a161767f9b515c6d5c3b1f4e4e6f093a33e10",
+    "bytes": 10585
+  },
+  "preparation_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-historical-current-runtime-bridge-independent-review-v3/renderer-receipt.json",
+    "sha256": "aea5dc4a00b598e32f94cf296b4e44f6afa8116114b616b1efb315c1bfc8a7ff",
+    "bytes": 1666
+  },
+  "release": {
+    "path": "C:/Users/matth/Documents/Codex/2026-10-11/https-github-com-morluto-rea-https/work/v12-renderer-four-runtime2-release-r3.json",
+    "sha256": "f932284117699f0c7965e6ae99ae8d581a5b17d0e4f8035431c6b840572831b4",
+    "bytes": 2479
+  },
+  "current_runtime_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/browser-runtime/source12-runtime2/runtime-manifest.json",
+    "sha256": "2dd2e6f599eb0aa4586fab3edd7de406929f484dd4d0c0229e88a2f0a55ea06f",
+    "bytes": 83687
+  },
+  "current_runtime_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-current-runtime-manifest-independent-review-v1/receipt.json",
+    "sha256": "a42061eb1517b60683a57ea00e148573e3320f028298ac4eacfa72f63997fe5f",
+    "bytes": 2576
+  },
+  "test_profile": {
+    "opt_level": 1,
+    "debug_assertions": true,
+    "overflow_checks": true,
+    "debug_info": 0,
+    "environment": {
+      "CARGO_PROFILE_TEST_OPT_LEVEL": "1",
+      "CARGO_PROFILE_TEST_DEBUG_ASSERTIONS": "true",
+      "CARGO_PROFILE_TEST_OVERFLOW_CHECKS": "true",
+      "CARGO_PROFILE_TEST_DEBUG": "0",
+      "CARGO_PROFILE_DEV_DEBUG": "0"
+    }
+  },
+  "renderer_inputs": [
+    {
+      "path": "renderer/package-lock.json",
+      "sha256": "931a8719184b70ef76b49ddcc43421f4adf02491dbacafe75f0a121687172184",
+      "bytes": 1148
+    },
+    {
+      "path": "renderer/package.json",
+      "sha256": "141208207c717118e20c35305c77edf35fe8fc9c1c6cdcf4a4e2666b59a78bc7",
+      "bytes": 428
+    },
+    {
+      "path": "renderer/server.mjs",
+      "sha256": "779699ebcf533cd88e0877eaf80edc7db28f0c4935a2e3a50f16d1fed45b7175",
+      "bytes": 26030
+    },
+    {
+      "path": "renderer/tests/worker.test.mjs",
+      "sha256": "365a31344da4a3c50d49d4c70657efde646fb1fa15965c817843932b55363e51",
+      "bytes": 17462
+    }
+  ],
+  "renderer_gates": [
+    "live_browser_worker_executes_javascript_for_core_crawl",
+    "live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness",
+    "live_browser_worker_pause_drains_render_and_retains_rendered_discoveries",
+    "live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion"
+  ],
+  "actual_four_full_names_verified": true,
+  "actual_cargo_close_count": 4,
+  "passed": 4,
+  "failed": 0,
+  "ignored": 0,
+  "runs": [
+    {
+      "name": "crawl_fixtures",
+      "args": [
+        "test",
+        "-p",
+        "open-seo-spider-core",
+        "--test",
+        "crawl_fixtures",
+        "--locked",
+        "live_browser_worker_executes_javascript_for_core_crawl",
+        "--",
+        "--exact",
+        "--include-ignored",
+        "--test-threads=1"
+      ],
+      "pid": 16052,
+      "spawned": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "spawn_error": null,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "errors": [],
+      "pipes": {
+        "stdout": {
+          "bytes_read": 180,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null
+        },
+        "stderr": {
+          "bytes_read": 851,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null
+        }
+      },
+      "total_read_bytes": 1031,
+      "written_bytes": 1031,
+      "log_cap_bytes": 67108864,
+      "log_overflow": false,
+      "elapsed_ms": 89833.6742,
+      "log_sha256": "554a9bd83b45f9b1ab9d05b9f841c1063394b0181bdb4d9c15450ce5d66bcd01",
+      "log_bytes": 1031,
+      "summaries": [
+        {
+          "state": "ok",
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "log_fd_closed": true,
+      "log_fsynced": true,
+      "record": {
+        "name": "crawl_fixtures",
+        "args": [
+          "test",
+          "-p",
+          "open-seo-spider-core",
+          "--test",
+          "crawl_fixtures",
+          "--locked",
+          "live_browser_worker_executes_javascript_for_core_crawl",
+          "--",
+          "--exact",
+          "--include-ignored",
+          "--test-threads=1"
+        ],
+        "pid": 16052,
+        "spawned": true,
+        "exit_event": true,
+        "actual_close_event": true,
+        "spawn_error": null,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "close_exit": {
+          "code": 0,
+          "signal": null
+        },
+        "forced": false,
+        "errors": [],
+        "pipes": {
+          "stdout": {
+            "bytes_read": 180,
+            "end": true,
+            "closed": true,
+            "error": null,
+            "write_error": null
+          },
+          "stderr": {
+            "bytes_read": 851,
+            "end": true,
+            "closed": true,
+            "error": null,
+            "write_error": null
+          }
+        },
+        "total_read_bytes": 1031,
+        "written_bytes": 1031,
+        "log_cap_bytes": 67108864,
+        "log_overflow": false,
+        "elapsed_ms": 89833.6742,
+        "log_sha256": "554a9bd83b45f9b1ab9d05b9f841c1063394b0181bdb4d9c15450ce5d66bcd01",
+        "log_bytes": 1031,
+        "summaries": [
+          {
+            "state": "ok",
+            "passed": 1,
+            "failed": 0,
+            "ignored": 0
+          }
+        ],
+        "log_fd_closed": true,
+        "log_fsynced": true
+      },
+      "log": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\renderer-four-compatibility-v12-runtime2\\crawl_fixtures.log",
+        "sha256": "554a9bd83b45f9b1ab9d05b9f841c1063394b0181bdb4d9c15450ce5d66bcd01",
+        "bytes": 1031
+      },
+      "receipt": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\renderer-four-compatibility-v12-runtime2\\crawl_fixtures.json",
+        "sha256": "965c96a95cf67d68126cd0a0cb8c9c79db7f1511fb1c1a24506baf5ac376298d",
+        "bytes": 1227
+      }
+    },
+    {
+      "name": "content_capture_fixtures",
+      "args": [
+        "test",
+        "-p",
+        "open-seo-spider-core",
+        "--test",
+        "content_capture_fixtures",
+        "--locked",
+        "live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness",
+        "--",
+        "--exact",
+        "--include-ignored",
+        "--test-threads=1"
+      ],
+      "pid": 38192,
+      "spawned": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "spawn_error": null,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "errors": [],
+      "pipes": {
+        "stdout": {
+          "bytes_read": 209,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null
+        },
+        "stderr": {
+          "bytes_read": 348,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null
+        }
+      },
+      "total_read_bytes": 557,
+      "written_bytes": 557,
+      "log_cap_bytes": 67108864,
+      "log_overflow": false,
+      "elapsed_ms": 13197.6139,
+      "log_sha256": "66bf6827bf358c701fb6d1abbd69c2057cddec8fc9713fe353e98c82d41577f0",
+      "log_bytes": 557,
+      "summaries": [
+        {
+          "state": "ok",
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "log_fd_closed": true,
+      "log_fsynced": true,
+      "record": {
+        "name": "content_capture_fixtures",
+        "args": [
+          "test",
+          "-p",
+          "open-seo-spider-core",
+          "--test",
+          "content_capture_fixtures",
+          "--locked",
+          "live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness",
+          "--",
+          "--exact",
+          "--include-ignored",
+          "--test-threads=1"
+        ],
+        "pid": 38192,
+        "spawned": true,
+        "exit_event": true,
+        "actual_close_event": true,
+        "spawn_error": null,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "close_exit": {
+          "code": 0,
+          "signal": null
+        },
+        "forced": false,
+        "errors": [],
+        "pipes": {
+          "stdout": {
+            "bytes_read": 209,
+            "end": true,
+            "closed": true,
+            "error": null,
+            "write_error": null
+          },
+          "stderr": {
+            "bytes_read": 348,
+            "end": true,
+            "closed": true,
+            "error": null,
+            "write_error": null
+          }
+        },
+        "total_read_bytes": 557,
+        "written_bytes": 557,
+        "log_cap_bytes": 67108864,
+        "log_overflow": false,
+        "elapsed_ms": 13197.6139,
+        "log_sha256": "66bf6827bf358c701fb6d1abbd69c2057cddec8fc9713fe353e98c82d41577f0",
+        "log_bytes": 557,
+        "summaries": [
+          {
+            "state": "ok",
+            "passed": 1,
+            "failed": 0,
+            "ignored": 0
+          }
+        ],
+        "log_fd_closed": true,
+        "log_fsynced": true
+      },
+      "log": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\renderer-four-compatibility-v12-runtime2\\content_capture_fixtures.log",
+        "sha256": "66bf6827bf358c701fb6d1abbd69c2057cddec8fc9713fe353e98c82d41577f0",
+        "bytes": 557
+      },
+      "receipt": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\renderer-four-compatibility-v12-runtime2\\content_capture_fixtures.json",
+        "sha256": "6ac10a703a2236cdcfa8cc3f48fe74d2c85a6c4a9c673b521ffe0770a01e90d9",
+        "bytes": 1273
+      }
+    },
+    {
+      "name": "control_fixtures",
+      "args": [
+        "test",
+        "-p",
+        "open-seo-spider-core",
+        "--test",
+        "control_fixtures",
+        "--locked",
+        "live_browser_worker_pause_drains_render_and_retains_rendered_discoveries",
+        "--",
+        "--exact",
+        "--include-ignored",
+        "--test-threads=1"
+      ],
+      "pid": 41296,
+      "spawned": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "spawn_error": null,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "errors": [],
+      "pipes": {
+        "stdout": {
+          "bytes_read": 197,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null
+        },
+        "stderr": {
+          "bytes_read": 331,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null
+        }
+      },
+      "total_read_bytes": 528,
+      "written_bytes": 528,
+      "log_cap_bytes": 67108864,
+      "log_overflow": false,
+      "elapsed_ms": 8479.3225,
+      "log_sha256": "dba78b491ab329abd1ae811258065f066723e375750fcf20f25dc85f989628b7",
+      "log_bytes": 528,
+      "summaries": [
+        {
+          "state": "ok",
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "log_fd_closed": true,
+      "log_fsynced": true,
+      "record": {
+        "name": "control_fixtures",
+        "args": [
+          "test",
+          "-p",
+          "open-seo-spider-core",
+          "--test",
+          "control_fixtures",
+          "--locked",
+          "live_browser_worker_pause_drains_render_and_retains_rendered_discoveries",
+          "--",
+          "--exact",
+          "--include-ignored",
+          "--test-threads=1"
+        ],
+        "pid": 41296,
+        "spawned": true,
+        "exit_event": true,
+        "actual_close_event": true,
+        "spawn_error": null,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "close_exit": {
+          "code": 0,
+          "signal": null
+        },
+        "forced": false,
+        "errors": [],
+        "pipes": {
+          "stdout": {
+            "bytes_read": 197,
+            "end": true,
+            "closed": true,
+            "error": null,
+            "write_error": null
+          },
+          "stderr": {
+            "bytes_read": 331,
+            "end": true,
+            "closed": true,
+            "error": null,
+            "write_error": null
+          }
+        },
+        "total_read_bytes": 528,
+        "written_bytes": 528,
+        "log_cap_bytes": 67108864,
+        "log_overflow": false,
+        "elapsed_ms": 8479.3225,
+        "log_sha256": "dba78b491ab329abd1ae811258065f066723e375750fcf20f25dc85f989628b7",
+        "log_bytes": 528,
+        "summaries": [
+          {
+            "state": "ok",
+            "passed": 1,
+            "failed": 0,
+            "ignored": 0
+          }
+        ],
+        "log_fd_closed": true,
+        "log_fsynced": true
+      },
+      "log": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\renderer-four-compatibility-v12-runtime2\\control_fixtures.log",
+        "sha256": "dba78b491ab329abd1ae811258065f066723e375750fcf20f25dc85f989628b7",
+        "bytes": 528
+      },
+      "receipt": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\renderer-four-compatibility-v12-runtime2\\control_fixtures.json",
+        "sha256": "eac13d0dbbbb318d1427a9f6976b2fe7d84b3a8c06ca85d3c8ab9945f2419985",
+        "bytes": 1245
+      }
+    },
+    {
+      "name": "recrawl_fixtures",
+      "args": [
+        "test",
+        "-p",
+        "open-seo-spider-core",
+        "--test",
+        "recrawl_fixtures",
+        "--locked",
+        "live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion",
+        "--",
+        "--exact",
+        "--include-ignored",
+        "--test-threads=1"
+      ],
+      "pid": 31812,
+      "spawned": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "spawn_error": null,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close_exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "errors": [],
+      "pipes": {
+        "stdout": {
+          "bytes_read": 207,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null
+        },
+        "stderr": {
+          "bytes_read": 331,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null
+        }
+      },
+      "total_read_bytes": 538,
+      "written_bytes": 538,
+      "log_cap_bytes": 67108864,
+      "log_overflow": false,
+      "elapsed_ms": 8074.4838,
+      "log_sha256": "13a68b8964c9b0018ae187d525f55c0808cdfc6bb2cc721c8ca854ca3503db45",
+      "log_bytes": 538,
+      "summaries": [
+        {
+          "state": "ok",
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "log_fd_closed": true,
+      "log_fsynced": true,
+      "record": {
+        "name": "recrawl_fixtures",
+        "args": [
+          "test",
+          "-p",
+          "open-seo-spider-core",
+          "--test",
+          "recrawl_fixtures",
+          "--locked",
+          "live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion",
+          "--",
+          "--exact",
+          "--include-ignored",
+          "--test-threads=1"
+        ],
+        "pid": 31812,
+        "spawned": true,
+        "exit_event": true,
+        "actual_close_event": true,
+        "spawn_error": null,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "close_exit": {
+          "code": 0,
+          "signal": null
+        },
+        "forced": false,
+        "errors": [],
+        "pipes": {
+          "stdout": {
+            "bytes_read": 207,
+            "end": true,
+            "closed": true,
+            "error": null,
+            "write_error": null
+          },
+          "stderr": {
+            "bytes_read": 331,
+            "end": true,
+            "closed": true,
+            "error": null,
+            "write_error": null
+          }
+        },
+        "total_read_bytes": 538,
+        "written_bytes": 538,
+        "log_cap_bytes": 67108864,
+        "log_overflow": false,
+        "elapsed_ms": 8074.4838,
+        "log_sha256": "13a68b8964c9b0018ae187d525f55c0808cdfc6bb2cc721c8ca854ca3503db45",
+        "log_bytes": 538,
+        "summaries": [
+          {
+            "state": "ok",
+            "passed": 1,
+            "failed": 0,
+            "ignored": 0
+          }
+        ],
+        "log_fd_closed": true,
+        "log_fsynced": true
+      },
+      "log": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\renderer-four-compatibility-v12-runtime2\\recrawl_fixtures.log",
+        "sha256": "13a68b8964c9b0018ae187d525f55c0808cdfc6bb2cc721c8ca854ca3503db45",
+        "bytes": 538
+      },
+      "receipt": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\renderer-four-compatibility-v12-runtime2\\recrawl_fixtures.json",
+        "sha256": "61676c230479fc85e8b0948418e3750e920304d2dcd868a0847ffcb04f88ef51",
+        "bytes": 1255
+      }
+    }
+  ],
+  "cargo_drained": true,
+  "cargo_handles": [
+    {
+      "name": "crawl_fixtures",
+      "pid": 16052,
+      "spawned": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "forced": false,
+      "pipeline_settled": true,
+      "pipes": {
+        "stdout": {
+          "bytes_read": 180,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null
+        },
+        "stderr": {
+          "bytes_read": 851,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null
+        }
+      },
+      "errors": []
+    },
+    {
+      "name": "content_capture_fixtures",
+      "pid": 38192,
+      "spawned": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "forced": false,
+      "pipeline_settled": true,
+      "pipes": {
+        "stdout": {
+          "bytes_read": 209,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null
+        },
+        "stderr": {
+          "bytes_read": 348,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null
+        }
+      },
+      "errors": []
+    },
+    {
+      "name": "control_fixtures",
+      "pid": 41296,
+      "spawned": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "forced": false,
+      "pipeline_settled": true,
+      "pipes": {
+        "stdout": {
+          "bytes_read": 197,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null
+        },
+        "stderr": {
+          "bytes_read": 331,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null
+        }
+      },
+      "errors": []
+    },
+    {
+      "name": "recrawl_fixtures",
+      "pid": 31812,
+      "spawned": true,
+      "exit_event": true,
+      "actual_close_event": true,
+      "forced": false,
+      "pipeline_settled": true,
+      "pipes": {
+        "stdout": {
+          "bytes_read": 207,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null
+        },
+        "stderr": {
+          "bytes_read": 331,
+          "end": true,
+          "closed": true,
+          "error": null,
+          "write_error": null
+        }
+      },
+      "errors": []
+    }
+  ],
+  "worker": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\renderer-four-compatibility-v12-runtime2\\owned-worker.json",
+    "sha256": "68ba85889df899838ea01c93b5d0dcb52926960cc3f2da8e3ab01d2d6149f516",
+    "bytes": 2505
+  },
+  "worker_closed": true,
+  "fixture_closed": true,
+  "worker_close": {
+    "actual_close_resolved": true,
+    "server_listening": false,
+    "pool_active": 0,
+    "pool_queued": 0
+  },
+  "fixture_close": {
+    "actual_close_callback": true,
+    "listening": false
+  },
+  "runtime_before": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\renderer-four-compatibility-v12-runtime2\\runtime-before.json",
+    "sha256": "3dc73aa07ed8d0c6e3ae9f2251cebbabc1de560719fefbed7f204b19e9105ae5",
+    "bytes": 82944
+  },
+  "runtime_after": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\renderer-four-compatibility-v12-runtime2\\runtime-after.json",
+    "sha256": "3dc73aa07ed8d0c6e3ae9f2251cebbabc1de560719fefbed7f204b19e9105ae5",
+    "bytes": 82944
+  },
+  "source_final_verified": true,
+  "runtime_final_verified": true,
+  "lock_released": true,
+  "retained_operations": 0,
+  "signals": [],
+  "failures": [],
+  "user_renderer_contacted": false,
+  "library_browser_pid_exit_independently_observed": false,
+  "qualification": "Supplemental current E-browser runtime witness only. Four unchanged genuine Cargo integration gates under the original profile; does not replace or mutate historical Source12 suite/build/native evidence. Browser PID exit is library-owned and not independently claimed."
+}

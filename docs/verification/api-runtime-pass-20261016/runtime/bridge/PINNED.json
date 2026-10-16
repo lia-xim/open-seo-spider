@@ -1,0 +1,185 @@
+{
+  "kind": "source12_historical_current_runtime_bridge_pins",
+  "core": {
+    "source_manifest_sha256": "3b62e68b32b2d23e375977cac8d5d0dad313c8f144eb43b4ab2896fae7687b18",
+    "suite_proof_sha256": "8bba7750a13d0e7ec1de843d7599b0aab48e9ac5cffdf24eff6f0e26618d27d6",
+    "build_proof_sha256": "7512cfdc9e4f09d5c847c6ac89fa92face47172d5a8c673df0a2bbd67f6b46f4",
+    "candidate_binary_sha256": "f7ce325cf73d16f1c4943ebf98dc8a2e888e93ee25c999bc7f2c10d1b1a1a65c",
+    "candidate_bytes": 43650560,
+    "build_driver_sha256": "95c7ac504e12d80c874804149e3a8d56a68435554a4fb2fac26ca2ee88ce95d0",
+    "source_commit": "5d50a10f3974c9afe79909b963427e67dd8fb001"
+  },
+  "source": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v12/manifest.json",
+    "sha256": "3b62e68b32b2d23e375977cac8d5d0dad313c8f144eb43b4ab2896fae7687b18",
+    "bytes": 754464
+  },
+  "suite": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-suite-v12/proof.json",
+    "sha256": "8bba7750a13d0e7ec1de843d7599b0aab48e9ac5cffdf24eff6f0e26618d27d6",
+    "bytes": 658399
+  },
+  "build": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-optimized-build-v12/proof.json",
+    "sha256": "7512cfdc9e4f09d5c847c6ac89fa92face47172d5a8c673df0a2bbd67f6b46f4",
+    "bytes": 100643
+  },
+  "historical_worker": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-suite-v12/owned-worker.json",
+    "sha256": "bb27fbd1c504c76d57725161b9daf9289f50b0c50f1f0039e4da893498dc6e58",
+    "bytes": 2299
+  },
+  "historical_chrome": {
+    "path": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+    "sha256": "9ca2beaa7a9fd1109f01e562788c22e045a01cec0f6015ade689325af7f8a521",
+    "version": "155.0.8059.41",
+    "artifact_availability": "NOT_AVAILABLE",
+    "observation": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/chrome-runtime-drift-observation-v1/proof.json",
+      "sha256": "36ec36befae8e3f61766ccaa9d07173622a2addf388f5b54ecd4d1c7b59dbf4b",
+      "bytes": 1607
+    },
+    "availability_scope": "ROOT_BOUNDED_INSTALLED_LAUNCHER_AND_OLD_VERSION_DIRECTORY_ONLY_NO_GLOBAL_BACKUP_SEARCH"
+  },
+  "source_renderer_inputs": [
+    {
+      "path": "renderer/package-lock.json",
+      "sha256": "931a8719184b70ef76b49ddcc43421f4adf02491dbacafe75f0a121687172184",
+      "bytes": 1148
+    },
+    {
+      "path": "renderer/package.json",
+      "sha256": "141208207c717118e20c35305c77edf35fe8fc9c1c6cdcf4a4e2666b59a78bc7",
+      "bytes": 428
+    },
+    {
+      "path": "renderer/server.mjs",
+      "sha256": "779699ebcf533cd88e0877eaf80edc7db28f0c4935a2e3a50f16d1fed45b7175",
+      "bytes": 26030
+    },
+    {
+      "path": "renderer/tests/worker.test.mjs",
+      "sha256": "365a31344da4a3c50d49d4c70657efde646fb1fa15965c817843932b55363e51",
+      "bytes": 17462
+    }
+  ],
+  "renderer_gates": [
+    {
+      "target": "crawl_fixtures",
+      "path": "crates/core/tests/crawl_fixtures.rs",
+      "full_name": "live_browser_worker_executes_javascript_for_core_crawl",
+      "source": {
+        "path": "crates/core/tests/crawl_fixtures.rs",
+        "sha256": "4126c441cceef82154d84bab4ac0ea05108e83cc7f4b88bf6d470bb70816647c",
+        "bytes": 50731
+      }
+    },
+    {
+      "target": "content_capture_fixtures",
+      "path": "crates/core/tests/content_capture_fixtures.rs",
+      "full_name": "live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness",
+      "source": {
+        "path": "crates/core/tests/content_capture_fixtures.rs",
+        "sha256": "738c2187dcdabf4c74f1fb047db4cdc8edc4e74422d6307eb0914cd7cf315471",
+        "bytes": 44560
+      }
+    },
+    {
+      "target": "control_fixtures",
+      "path": "crates/core/tests/control_fixtures.rs",
+      "full_name": "live_browser_worker_pause_drains_render_and_retains_rendered_discoveries",
+      "source": {
+        "path": "crates/core/tests/control_fixtures.rs",
+        "sha256": "9a90d82446f55ef348e3c3dec42aa4d606a871ef812196851c4d1e1c7d45a0ac",
+        "bytes": 20130
+      }
+    },
+    {
+      "target": "recrawl_fixtures",
+      "path": "crates/core/tests/recrawl_fixtures.rs",
+      "full_name": "live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion",
+      "source": {
+        "path": "crates/core/tests/recrawl_fixtures.rs",
+        "sha256": "49c8ce6ab6df505ed28681844f4950296446240beec8deb61d59d78ba46a9046",
+        "bytes": 27260
+      }
+    }
+  ],
+  "snapshot": {
+    "preparation": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\chrome-shipped-runtime-snapshot-preparation-v1\\manifest.json",
+      "sha256": "aa2a3034bfd508677f7fbf6f6161f7c177ae48dc448a5cf64665f5723b212af6",
+      "bytes": 2215
+    },
+    "source_review": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/chrome-shipped-runtime-snapshot-independent-review-v1/receipt.json",
+      "sha256": "bddae0716ef82f8fa13131a299d599d3653ca06d30b94ac920a04ac9c82a1fab",
+      "bytes": 2288
+    },
+    "copy_proof": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/chrome-shipped-runtime-snapshot-v1/proof.json",
+      "sha256": "bc8f5983b116fd61605aad6b2b831f6e9f905ff357d9d52f75245e52101f23f5",
+      "bytes": 2159
+    },
+    "source_before": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\chrome-shipped-runtime-snapshot-v1\\source-before.json",
+      "sha256": "1aa603fd5abf83de79a94de42493d01c2cc3b42b68eb7d88138a066e4f42d6a5",
+      "bytes": 67273
+    },
+    "source_after": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\chrome-shipped-runtime-snapshot-v1\\source-after.json",
+      "sha256": "1aa603fd5abf83de79a94de42493d01c2cc3b42b68eb7d88138a066e4f42d6a5",
+      "bytes": 67273
+    },
+    "destination_after": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\chrome-shipped-runtime-snapshot-v1\\destination-after.json",
+      "sha256": "06b5ab2e3ac28c1ec8f5168bc9ca93e63fafeea356aa4405865040fd7ec0f758",
+      "bytes": 45543
+    },
+    "root": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\browser-runtime\\chrome-155.0.8059.80-36a30716-source12-v1",
+    "version": "155.0.8059.80",
+    "launcher_sha256": "36a30716f0994b377f1ce6b47cfe35399b9719e31d597fe0ea0d8f3b62aed532",
+    "launcher_bytes": 4600472,
+    "tree_sha256": "21f7c52582def5e63c6c1298943bcee09afbee50a5bed441274b2e16a91703a9",
+    "file_count": 265,
+    "total_bytes": 512064902
+  },
+  "profile": {
+    "opt_level": 1,
+    "debug_assertions": true,
+    "overflow_checks": true,
+    "debug_info": 0,
+    "environment": {
+      "CARGO_PROFILE_TEST_OPT_LEVEL": "1",
+      "CARGO_PROFILE_TEST_DEBUG_ASSERTIONS": "true",
+      "CARGO_PROFILE_TEST_OVERFLOW_CHECKS": "true",
+      "CARGO_PROFILE_TEST_DEBUG": "0",
+      "CARGO_PROFILE_DEV_DEBUG": "0"
+    }
+  },
+  "previous_preparation": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v12-driver-preparation-v6/manifest.json",
+    "sha256": "587234d4625fe2227cd3a13f571d075b776c972aedbe3ea97c0c7902e71cf646",
+    "bytes": 9101
+  },
+  "previous_binder": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v12-driver-preparation-v6/combined-bindings.mjs",
+    "sha256": "19fb95a81ca76ffb22dfeec87d2d6e50f76ab9cd82f331c009a273838748f55f",
+    "bytes": 20702
+  },
+  "validator": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v12-driver-preparation-v6/validate-combined-source-v12.mjs",
+    "sha256": "17b238b13a66a68a50b30601cf82cdd5a7000787a4e4cb05aaf77f88ee62ccd8",
+    "bytes": 39379
+  },
+  "plan": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-runtime-drift-contract-plan-v1/manifest.json",
+    "sha256": "d91d452d161aedba3a101b9ca14203fe43472ad88ab19e28f6ea2f057b20c08d",
+    "bytes": 763
+  },
+  "addendum": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-runtime-drift-contract-addendum-v1/HANDOFF.md",
+    "sha256": "f7cb5781be535b1ecdb6ff7e3fb78e9ce1d64f41dd807e9f91c2dbefde06135c",
+    "bytes": 6646
+  }
+}

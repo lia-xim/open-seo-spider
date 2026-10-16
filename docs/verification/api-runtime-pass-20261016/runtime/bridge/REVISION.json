@@ -1,0 +1,350 @@
+{
+  "kind": "source12_runtime_bridge_active_log_cap_and_owned_cargo_pipe_revision",
+  "previous_preparation": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-historical-current-runtime-bridge-preparation-v2/manifest.json",
+    "sha256": "f1924d9586f62ec8a2580235219a26edaa15f3174626f823006976b97e028189",
+    "bytes": 10316
+  },
+  "findings_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-historical-current-runtime-bridge-independent-review-v2/receipt.json",
+    "sha256": "0aa1557888837da5956055553b59462d8e05614d1abfca4d0efefa6147b1b71d",
+    "bytes": 3672
+  },
+  "closed_findings": [
+    "RUNTIME-BRIDGE-01"
+  ],
+  "files": [
+    {
+      "path": "run-renderer-four-runtime2.mjs",
+      "parent": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-historical-current-runtime-bridge-preparation-v2/run-renderer-four-runtime2.mjs",
+        "sha256": "9f24aa5b6e12d492eb8caf115e4f0e5bf8450cc728b9b4a7c6e99112f82479f6",
+        "bytes": 14135
+      },
+      "current": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-historical-current-runtime-bridge-preparation-v3/run-renderer-four-runtime2.mjs",
+        "sha256": "384d0e9a8428fc39f9bce8d75049fab88eeee5bf6573e43a23e740e73a7a7133",
+        "bytes": 17633
+      },
+      "operations": [
+        {
+          "path": "run-renderer-four-runtime2.mjs",
+          "label": "Active combined64MiB prewrite cap; two owned pipes and actual Cargo process closure",
+          "offset": 6303,
+          "before_state_sha256": "9f24aa5b6e12d492eb8caf115e4f0e5bf8450cc728b9b4a7c6e99112f82479f6",
+          "after_state_sha256": "f6560f42d332c386b0312398f6c5a628143e92c754d40444d75e73836e734da3",
+          "before_base64": "YXN5bmMgZnVuY3Rpb24gcnVuKG5hbWUsYXJncyl7Y29uc3QgbG9nUGF0aD1wYXRoLmpvaW4ob3V0LG5hbWUrJy5sb2cnKSxsb2c9ZnMub3BlblN5bmMobG9nUGF0aCwnd3gnKTtsZXQgY2hpbGQsc3Bhd25FcnJvcj1udWxsLGV4aXQsZmRDbG9zZWQ9ZmFsc2UsZnN5bmNlZD1mYWxzZTtjb25zdCBzdGFydGVkPXByb2Nlc3MuaHJ0aW1lLmJpZ2ludCgpO3RyeXtjaGlsZD1zcGF3bihjYXJnbyxhcmdzLHtjd2Q6c291cmNlLGVudix3aW5kb3dzSGlkZTp0cnVlLHN0ZGlvOlsnaWdub3JlJyxsb2csbG9nXX0pO2NoaWxkLm9uY2UoJ2Vycm9yJyxlPT57c3Bhd25FcnJvcj1TdHJpbmcoZS5tZXNzYWdlKX0pO2V4aXQ9YXdhaXQgbmV3IFByb21pc2UocmVzb2x2ZT0+Y2hpbGQub25jZSgnY2xvc2UnLChjb2RlLHNpZ25hbCk9PnJlc29sdmUoe2NvZGUsc2lnbmFsfSkpKTt9ZmluYWxseXt0cnl7ZnMuZnN5bmNTeW5jKGxvZyk7ZnN5bmNlZD10cnVlO31maW5hbGx5e2ZzLmNsb3NlU3luYyhsb2cpO2ZkQ2xvc2VkPXRydWU7fX1hc3NlcnQoZnMuc3RhdFN5bmMobG9nUGF0aCkuc2l6ZTw9NjQqMTAyNCoxMDI0LCdCb3VuZGVkIGFjdHVhbCBnYXRlIGxvZycpO2NvbnN0IGJ5dGVzPWZzLnJlYWRGaWxlU3luYyhsb2dQYXRoKSx0ZXh0PWJ5dGVzLnRvU3RyaW5nKCd1dGY4Jyksc3VtbWFyaWVzPVsuLi50ZXh0Lm1hdGNoQWxsKC90ZXN0IHJlc3VsdDogKG9rfEZBSUxFRClcLiAoXGQrKSBwYXNzZWQ7IChcZCspIGZhaWxlZDsgKFxkKykgaWdub3JlZDsvZyldLm1hcChtPT4oe3N0YXRlOm1bMV0scGFzc2VkOittWzJdLGZhaWxlZDorbVszXSxpZ25vcmVkOittWzRdfSkpO2NvbnN0IHJlY29yZD17bmFtZSxhcmdzLHBpZDpjaGlsZD8ucGlkLGFjdHVhbF9jbG9zZV9ldmVudDp0cnVlLGV4aXQsc3Bhd25fZXJyb3I6c3Bhd25FcnJvcixlbGFwc2VkX21zOk51bWJlcihwcm9jZXNzLmhydGltZS5iaWdpbnQoKS1zdGFydGVkKS8xZTYsbG9nX3NoYTI1NjpzaGEoYnl0ZXMpLGxvZ19ieXRlczpieXRlcy5sZW5ndGgsc3VtbWFyaWVzLGxvZ19mZF9jbG9zZWQ6ZmRDbG9zZWQsbG9nX2ZzeW5jZWQ6ZnN5bmNlZH0scmVjZWlwdD13cml0ZShuYW1lKycuanNvbicscmVjb3JkKSxyb3c9ey4uLnJlY29yZCxyZWNvcmQsbG9nOnJlZihsb2dQYXRoKSxyZWNlaXB0fTtydW5zLnB1c2gocm93KTthc3NlcnQuZXF1YWwoc3Bhd25FcnJvcixudWxsKTthc3NlcnQuZGVlcEVxdWFsKGV4aXQse2NvZGU6MCxzaWduYWw6bnVsbH0pO3JldHVybiB0ZXh0O30=",
+          "after_base64": "ZnVuY3Rpb24gc3RvcE93bmVkQ2FyZ28oaCxyZWFzb24pe2lmKCFoLmNoaWxkfHwhTnVtYmVyLmlzU2FmZUludGVnZXIoaC5jaGlsZC5waWQpfHxoLmNoaWxkLnBpZDw9MHx8aC5hY3R1YWxfY2xvc2VfZXZlbnR8fGguZm9yY2VkKXJldHVybjtoLmZvcmNlZD10cnVlO2NvbnN0IHJvdz17dGFyZ2V0Oidvd25lZF9jYXJnb19jaGlsZCcscGlkOmguY2hpbGQucGlkLHNpZ25hbDonU0lHS0lMTCcscmVhc29uLHJldHVybmVkOm51bGwsZXJyb3I6bnVsbH07c2lnbmFscy5wdXNoKHJvdyk7dHJ5e3Jvdy5yZXR1cm5lZD1oLmNoaWxkLmtpbGwoJ1NJR0tJTEwnKTt9Y2F0Y2goZSl7cm93LmVycm9yPVN0cmluZyhlKTtoLmVycm9ycy5wdXNoKCdPd25lZCBDYXJnbyBraWxsOiAnK2UpO319CmFzeW5jIGZ1bmN0aW9uIHJ1bihuYW1lLGFyZ3Mpe2NvbnN0IGxvZ1BhdGg9cGF0aC5qb2luKG91dCxuYW1lKycubG9nJyksbG9nPWZzLm9wZW5TeW5jKGxvZ1BhdGgsJ3d4Jyksc3RhcnRlZD1wcm9jZXNzLmhydGltZS5iaWdpbnQoKSxjYXA9NjQqMTAyNCoxMDI0O2NvbnN0IGg9e25hbWUsYXJncyxjaGlsZDpudWxsLHNwYXduZWQ6ZmFsc2UsZXhpdF9ldmVudDpmYWxzZSxhY3R1YWxfY2xvc2VfZXZlbnQ6ZmFsc2Usc3Bhd25fZXJyb3I6bnVsbCxleGl0Om51bGwsZm9yY2VkOmZhbHNlLGVycm9yczpbXSx0b3RhbF9yZWFkX2J5dGVzOjAsd3JpdHRlbl9ieXRlczowLG92ZXJmbG93OmZhbHNlLHBpcGVzOnt9LHBpcGVsaW5lOm51bGwscGlwZWxpbmVfc2V0dGxlZDpmYWxzZX07Y2FyZ29IYW5kbGVzLnB1c2goaCk7bGV0IGZkQ2xvc2VkPWZhbHNlLGZzeW5jZWQ9ZmFsc2U7CnRyeXtoLmNoaWxkPXNwYXduKGNhcmdvLGFyZ3Mse2N3ZDpzb3VyY2UsZW52LHdpbmRvd3NIaWRlOnRydWUsc3RkaW86WydpZ25vcmUnLCdwaXBlJywncGlwZSddfSk7Y29uc3QgY2xvc2VkPW5ldyBQcm9taXNlKHJlc29sdmU9PntoLmNoaWxkLm9uY2UoJ3NwYXduJywoKT0+e2guc3Bhd25lZD10cnVlO30pO2guY2hpbGQub25jZSgnZXJyb3InLGU9PntoLnNwYXduX2Vycm9yPVN0cmluZyhlLm1lc3NhZ2UpO2guZXJyb3JzLnB1c2goJ0NhcmdvIHNwYXduOiAnK2UpO30pO2guY2hpbGQub25jZSgnZXhpdCcsKGNvZGUsc2lnbmFsKT0+e2guZXhpdF9ldmVudD10cnVlO2guZXhpdD17Y29kZSxzaWduYWx9O30pO2guY2hpbGQub25jZSgnY2xvc2UnLChjb2RlLHNpZ25hbCk9PntoLmFjdHVhbF9jbG9zZV9ldmVudD10cnVlO2guY2xvc2VfZXhpdD17Y29kZSxzaWduYWx9O3Jlc29sdmUoKTt9KTt9KTtjb25zdCBkcmFpbnM9WydzdGRvdXQnLCdzdGRlcnInXS5tYXAoa2V5PT57Y29uc3Qgc3RyZWFtPWguY2hpbGRba2V5XSxwPWgucGlwZXNba2V5XT17Ynl0ZXNfcmVhZDowLGVuZDpmYWxzZSxjbG9zZWQ6ZmFsc2UsZXJyb3I6bnVsbCx3cml0ZV9lcnJvcjpudWxsfTtyZXR1cm4gbmV3IFByb21pc2UocmVzb2x2ZT0+e3N0cmVhbS5vbignZGF0YScsY2h1bms9PntwLmJ5dGVzX3JlYWQrPWNodW5rLmxlbmd0aDtoLnRvdGFsX3JlYWRfYnl0ZXMrPWNodW5rLmxlbmd0aDtpZihoLndyaXR0ZW5fYnl0ZXMrY2h1bmsubGVuZ3RoPmNhcCl7aWYoIWgub3ZlcmZsb3cpe2gub3ZlcmZsb3c9dHJ1ZTtoLmVycm9ycy5wdXNoKCdDb21iaW5lZCBDYXJnbyBsb2cgZXhjZWVkcyBhY3RpdmU2NE1pQiBjYXAnKTtzdG9wT3duZWRDYXJnbyhoLCdhY3RpdmVfY29tYmluZWRfbG9nX2NhcCcpO31yZXR1cm47fWlmKGgub3ZlcmZsb3d8fHAud3JpdGVfZXJyb3IpcmV0dXJuO3RyeXtsZXQgb2Zmc2V0PTA7d2hpbGUob2Zmc2V0PGNodW5rLmxlbmd0aCl7Y29uc3Qgbj1mcy53cml0ZVN5bmMobG9nLGNodW5rLG9mZnNldCxjaHVuay5sZW5ndGgtb2Zmc2V0KTthc3NlcnQobj4wKTtvZmZzZXQrPW47aC53cml0dGVuX2J5dGVzKz1uO2Fzc2VydChoLndyaXR0ZW5fYnl0ZXM8PWNhcCk7fX1jYXRjaChlKXtwLndyaXRlX2Vycm9yPVN0cmluZyhlKTtoLmVycm9ycy5wdXNoKCdDYXJnbyAnK2tleSsnIGxvZyB3cml0ZTogJytlKTtzdG9wT3duZWRDYXJnbyhoLCdvd25lZF9sb2dfd3JpdGVfZmFpbHVyZScpO319KTtzdHJlYW0ub25jZSgnZW5kJywoKT0+e3AuZW5kPXRydWU7fSk7c3RyZWFtLm9uY2UoJ2Vycm9yJyxlPT57cC5lcnJvcj1TdHJpbmcoZSk7aC5lcnJvcnMucHVzaCgnQ2FyZ28gJytrZXkrJyBwaXBlOiAnK2UpO3N0b3BPd25lZENhcmdvKGgsJ293bmVkX3BpcGVfZmFpbHVyZScpO30pO3N0cmVhbS5vbmNlKCdjbG9zZScsKCk9PntwLmNsb3NlZD10cnVlO3Jlc29sdmUoKTt9KTt9KTt9KTtoLnBpcGVsaW5lPVByb21pc2UuYWxsKFtjbG9zZWQsLi4uZHJhaW5zXSk7aC5waXBlbGluZS50aGVuKCgpPT57aC5waXBlbGluZV9zZXR0bGVkPXRydWU7fSwoKT0+e2gucGlwZWxpbmVfc2V0dGxlZD10cnVlO30pO2F3YWl0IGgucGlwZWxpbmU7Cn1maW5hbGx5e3RyeXtmcy5mc3luY1N5bmMobG9nKTtmc3luY2VkPXRydWU7fWZpbmFsbHl7ZnMuY2xvc2VTeW5jKGxvZyk7ZmRDbG9zZWQ9dHJ1ZTt9fQpjb25zdCBieXRlcz1mcy5yZWFkRmlsZVN5bmMobG9nUGF0aCk7YXNzZXJ0LmVxdWFsKGJ5dGVzLmxlbmd0aCxoLndyaXR0ZW5fYnl0ZXMpO2Fzc2VydChieXRlcy5sZW5ndGg8PWNhcCk7Y29uc3QgdGV4dD1ieXRlcy50b1N0cmluZygndXRmOCcpLHN1bW1hcmllcz1bLi4udGV4dC5tYXRjaEFsbCgvdGVzdCByZXN1bHQ6IChva3xGQUlMRUQpXC4gKFxkKykgcGFzc2VkOyAoXGQrKSBmYWlsZWQ7IChcZCspIGlnbm9yZWQ7L2cpXS5tYXAobT0+KHtzdGF0ZTptWzFdLHBhc3NlZDorbVsyXSxmYWlsZWQ6K21bM10saWdub3JlZDorbVs0XX0pKTtjb25zdCByZWNvcmQ9e25hbWUsYXJncyxwaWQ6aC5jaGlsZD8ucGlkLHNwYXduZWQ6aC5zcGF3bmVkLGV4aXRfZXZlbnQ6aC5leGl0X2V2ZW50LGFjdHVhbF9jbG9zZV9ldmVudDpoLmFjdHVhbF9jbG9zZV9ldmVudCxzcGF3bl9lcnJvcjpoLnNwYXduX2Vycm9yLGV4aXQ6aC5leGl0LGNsb3NlX2V4aXQ6aC5jbG9zZV9leGl0LGZvcmNlZDpoLmZvcmNlZCxlcnJvcnM6aC5lcnJvcnMscGlwZXM6aC5waXBlcyx0b3RhbF9yZWFkX2J5dGVzOmgudG90YWxfcmVhZF9ieXRlcyx3cml0dGVuX2J5dGVzOmgud3JpdHRlbl9ieXRlcyxsb2dfY2FwX2J5dGVzOmNhcCxsb2dfb3ZlcmZsb3c6aC5vdmVyZmxvdyxlbGFwc2VkX21zOk51bWJlcihwcm9jZXNzLmhydGltZS5iaWdpbnQoKS1zdGFydGVkKS8xZTYsbG9nX3NoYTI1NjpzaGEoYnl0ZXMpLGxvZ19ieXRlczpieXRlcy5sZW5ndGgsc3VtbWFyaWVzLGxvZ19mZF9jbG9zZWQ6ZmRDbG9zZWQsbG9nX2ZzeW5jZWQ6ZnN5bmNlZH0scmVjZWlwdD13cml0ZShuYW1lKycuanNvbicscmVjb3JkKSxyb3c9ey4uLnJlY29yZCxyZWNvcmQsbG9nOnJlZihsb2dQYXRoKSxyZWNlaXB0fTtydW5zLnB1c2gocm93KTthc3NlcnQuZXF1YWwoaC5zcGF3bmVkLHRydWUpO2Fzc2VydC5lcXVhbChoLmV4aXRfZXZlbnQsdHJ1ZSk7YXNzZXJ0LmVxdWFsKGguYWN0dWFsX2Nsb3NlX2V2ZW50LHRydWUpO2Fzc2VydC5lcXVhbChoLnNwYXduX2Vycm9yLG51bGwpO2Fzc2VydC5lcXVhbChoLmZvcmNlZCxmYWxzZSk7YXNzZXJ0LmVxdWFsKGgub3ZlcmZsb3csZmFsc2UpO2Fzc2VydC5kZWVwRXF1YWwoaC5lcnJvcnMsW10pO2Zvcihjb25zdCBwIG9mIE9iamVjdC52YWx1ZXMoaC5waXBlcykpe2Fzc2VydC5lcXVhbChwLmVuZCx0cnVlKTthc3NlcnQuZXF1YWwocC5jbG9zZWQsdHJ1ZSk7YXNzZXJ0LmVxdWFsKHAuZXJyb3IsbnVsbCk7YXNzZXJ0LmVxdWFsKHAud3JpdGVfZXJyb3IsbnVsbCk7fWFzc2VydC5lcXVhbChoLnRvdGFsX3JlYWRfYnl0ZXMsaC53cml0dGVuX2J5dGVzKTthc3NlcnQuZGVlcEVxdWFsKGguZXhpdCx7Y29kZTowLHNpZ25hbDpudWxsfSk7YXNzZXJ0LmRlZXBFcXVhbChoLmNsb3NlX2V4aXQsaC5leGl0KTtyZXR1cm4gdGV4dDt9"
+        },
+        {
+          "path": "run-renderer-four-runtime2.mjs",
+          "label": "Retain every exact Cargo child handle for failure cleanup",
+          "offset": 5140,
+          "before_state_sha256": "f6560f42d332c386b0312398f6c5a628143e92c754d40444d75e73836e734da3",
+          "after_state_sha256": "28d51ee9a8e9675994bede9f1f5af56f5093191df2ac1da7dc913c5a4e83cfb3",
+          "before_base64": "Y29uc3QgcnVucz1bXSxmYWlsdXJlcz1bXSxwZW5kaW5nPW5ldyBTZXQoKSxzaWduYWxzPVtdOw==",
+          "after_base64": "Y29uc3QgcnVucz1bXSxjYXJnb0hhbmRsZXM9W10sZmFpbHVyZXM9W10scGVuZGluZz1uZXcgU2V0KCksc2lnbmFscz1bXTs="
+        },
+        {
+          "path": "run-renderer-four-runtime2.mjs",
+          "label": "Timeout/failure cleanup of only captured own Cargo child, then retained close+pipe drain",
+          "offset": 13125,
+          "before_state_sha256": "28d51ee9a8e9675994bede9f1f5af56f5093191df2ac1da7dc913c5a4e83cfb3",
+          "after_state_sha256": "c2cc72dc3cd1757a631b5f734225cb83fccc6f452edb42fdfdf20c1aed177dcb",
+          "before_base64": "ZmluYWxseXt0cnl7aWYod29ya2VyKWF3YWl0IHdpdGhpbih3b3JrZXIuY2xvc2UoKQ==",
+          "after_base64": "ZmluYWxseXtmb3IoY29uc3QgaCBvZiBjYXJnb0hhbmRsZXMpe2lmKGguY2hpbGQmJighaC5hY3R1YWxfY2xvc2VfZXZlbnR8fCFoLnBpcGVsaW5lX3NldHRsZWQpKXtzdG9wT3duZWRDYXJnbyhoLCdyZW5kZXJlcl9nYXRlX2ZhaWx1cmVfb3JfZGVhZGxpbmVfY2xlYW51cCcpO3RyeXtpZihoLnBpcGVsaW5lKWF3YWl0IHdpdGhpbihoLnBpcGVsaW5lLDMwMDAwLCdvd25lZCBDYXJnbyBhY3R1YWwgY2xvc2UgYW5kIGJvdGggcGlwZSBkcmFpbicpO2Vsc2UgdGhyb3cgRXJyb3IoJ0NhcmdvIHBpcGVsaW5lIHdhcyBub3QgZXN0YWJsaXNoZWQnKTt9Y2F0Y2goZSl7ZmFpbHVyZXMucHVzaCh7cGhhc2U6J293bmVkIENhcmdvIGNsZWFudXAnLG5hbWU6aC5uYW1lLGVycm9yOlN0cmluZyhlKX0pO319fXRyeXtpZih3b3JrZXIpYXdhaXQgd2l0aGluKHdvcmtlci5jbG9zZSgp"
+        },
+        {
+          "path": "run-renderer-four-runtime2.mjs",
+          "label": "No shared lock release before exact captured Cargo/pipes are actually drained",
+          "offset": 14852,
+          "before_state_sha256": "c2cc72dc3cd1757a631b5f734225cb83fccc6f452edb42fdfdf20c1aed177dcb",
+          "after_state_sha256": "bfbd1aa2f9bd53010a58b1d21b41b0ab0d89608d44e4fdddca8feb7c4c0e2352",
+          "before_base64": "aWYocGVuZGluZy5zaXplPT09MCYmd29ya2VyQ2xvc2VkJiZmaXh0dXJlQ2xvc2VkKXs=",
+          "after_base64": "Y29uc3QgY2FyZ29EcmFpbmVkPWNhcmdvSGFuZGxlcy5ldmVyeShoPT4haC5jaGlsZHx8KGguYWN0dWFsX2Nsb3NlX2V2ZW50JiZoLnBpcGVsaW5lX3NldHRsZWQmJk9iamVjdC52YWx1ZXMoaC5waXBlcykuZXZlcnkocD0+cC5jbG9zZWQpKSk7aWYocGVuZGluZy5zaXplPT09MCYmY2FyZ29EcmFpbmVkJiZ3b3JrZXJDbG9zZWQmJmZpeHR1cmVDbG9zZWQpew=="
+        },
+        {
+          "path": "run-renderer-four-runtime2.mjs",
+          "label": "Acceptance and proof retain explicit Cargo pipeline states",
+          "offset": 15530,
+          "before_state_sha256": "bfbd1aa2f9bd53010a58b1d21b41b0ab0d89608d44e4fdddca8feb7c4c0e2352",
+          "after_state_sha256": "59d80bd4e6efd310b5a8436797f8a2f58b42d1bcccf650e194b00801b6b19d19",
+          "before_base64": "JiZsb2NrUmVsZWFzZWQmJnBlbmRpbmcuc2l6ZT09PTA7Y29uc3QgcHJvb2Y9",
+          "after_base64": "JiZsb2NrUmVsZWFzZWQmJnBlbmRpbmcuc2l6ZT09PTAmJmNhcmdvRHJhaW5lZDtjb25zdCBwcm9vZj0="
+        },
+        {
+          "path": "run-renderer-four-runtime2.mjs",
+          "label": "Actual retained Cargo pipe/handle evidence separate from successful gate records",
+          "offset": 16364,
+          "before_state_sha256": "59d80bd4e6efd310b5a8436797f8a2f58b42d1bcccf650e194b00801b6b19d19",
+          "after_state_sha256": "056d1ca149ee193b3cee769225a2cb2e7659827ad75de0f21483ab96bc300a86",
+          "before_base64": "aWdub3JlZDpydW5zLnJlZHVjZSgobixyKT0+bityLnN1bW1hcmllcy5yZWR1Y2UoKG4scyk9Pm4rcy5pZ25vcmVkLDApLDApLHJ1bnMsd29ya2VyOg==",
+          "after_base64": "aWdub3JlZDpydW5zLnJlZHVjZSgobixyKT0+bityLnN1bW1hcmllcy5yZWR1Y2UoKG4scyk9Pm4rcy5pZ25vcmVkLDApLDApLHJ1bnMsY2FyZ29fZHJhaW5lZDpjYXJnb0RyYWluZWQsY2FyZ29faGFuZGxlczpjYXJnb0hhbmRsZXMubWFwKGg9Pih7bmFtZTpoLm5hbWUscGlkOmguY2hpbGQ/LnBpZCxzcGF3bmVkOmguc3Bhd25lZCxleGl0X2V2ZW50OmguZXhpdF9ldmVudCxhY3R1YWxfY2xvc2VfZXZlbnQ6aC5hY3R1YWxfY2xvc2VfZXZlbnQsZm9yY2VkOmguZm9yY2VkLHBpcGVsaW5lX3NldHRsZWQ6aC5waXBlbGluZV9zZXR0bGVkLHBpcGVzOmgucGlwZXMsZXJyb3JzOmguZXJyb3JzfSkpLHdvcmtlcjo="
+        },
+        {
+          "path": "run-renderer-four-runtime2.mjs",
+          "label": "Updated strict pipe witness helperSHA",
+          "offset": 433,
+          "before_state_sha256": "056d1ca149ee193b3cee769225a2cb2e7659827ad75de0f21483ab96bc300a86",
+          "after_state_sha256": "384d0e9a8428fc39f9bce8d75049fab88eeee5bf6573e43a23e740e73a7a7133",
+          "before_base64": "ODNiZjFiMTA5OGZlMDM4NTlhZGNiZDcyMTc4ZTg4YWU3NDIyNzNiYmNhOWNhMjJkN2M5ZTFkZDIwZTc4MDZkMA==",
+          "after_base64": "ZTQzYzA4M2QxOTg4MTY3NDQwZTZmM2QwMmU5NTVkNzRiZjMxZjEyNjE4NTI2YzZkYTRiZWQwNmJmODg3MjQxZA=="
+        }
+      ]
+    },
+    {
+      "path": "runtime-contract.mjs",
+      "parent": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-historical-current-runtime-bridge-preparation-v2/runtime-contract.mjs",
+        "sha256": "83bf1b1098fe03859adcbd72178e88ae742273bbca9ca22d7c9e1dd20e7806d0",
+        "bytes": 15929
+      },
+      "current": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-historical-current-runtime-bridge-preparation-v3/runtime-contract.mjs",
+        "sha256": "e43c083d1988167440e6f3d02e955d74bf31f12618526c6da4bed06bf887241d",
+        "bytes": 17212
+      },
+      "operations": [
+        {
+          "path": "runtime-contract.mjs",
+          "label": "Mandatory actual successful observed pipe and active cap receipt",
+          "offset": 12383,
+          "before_state_sha256": "83bf1b1098fe03859adcbd72178e88ae742273bbca9ca22d7c9e1dd20e7806d0",
+          "after_state_sha256": "286b5dbb133b7f308f825d3a9df9078379c495594c3d90ad2a581e77f16b587f",
+          "before_base64": "YXNzZXJ0LmVxdWFsKHgubG9nX2ZzeW5jZWQsdHJ1ZSk7",
+          "after_base64": "YXNzZXJ0LmVxdWFsKHgubG9nX2ZzeW5jZWQsdHJ1ZSk7YXNzZXJ0LmVxdWFsKHguc3Bhd25lZCx0cnVlKTthc3NlcnQuZXF1YWwoeC5leGl0X2V2ZW50LHRydWUpO2Fzc2VydC5kZWVwRXF1YWwoeC5jbG9zZV9leGl0LHguZXhpdCk7YXNzZXJ0LmVxdWFsKHguZm9yY2VkLGZhbHNlKTthc3NlcnQuZGVlcEVxdWFsKHguZXJyb3JzLFtdKTthc3NlcnQuZXF1YWwoeC5sb2dfY2FwX2J5dGVzLDY0KjEwMjQqMTAyNCk7YXNzZXJ0LmVxdWFsKHgubG9nX292ZXJmbG93LGZhbHNlKTthc3NlcnQuZGVlcEVxdWFsKE9iamVjdC5rZXlzKHgucGlwZXMpLnNvcnQoKSxbJ3N0ZGVycicsJ3N0ZG91dCddKTtmb3IoY29uc3QgcCBvZiBPYmplY3QudmFsdWVzKHgucGlwZXMpKXthc3NlcnQuZXF1YWwocC5lbmQsdHJ1ZSk7YXNzZXJ0LmVxdWFsKHAuY2xvc2VkLHRydWUpO2Fzc2VydC5lcXVhbChwLmVycm9yLG51bGwpO2Fzc2VydC5lcXVhbChwLndyaXRlX2Vycm9yLG51bGwpO2Fzc2VydChOdW1iZXIuaXNTYWZlSW50ZWdlcihwLmJ5dGVzX3JlYWQpJiZwLmJ5dGVzX3JlYWQ+PTApO31hc3NlcnQuZXF1YWwoeC50b3RhbF9yZWFkX2J5dGVzLHgucGlwZXMuc3Rkb3V0LmJ5dGVzX3JlYWQreC5waXBlcy5zdGRlcnIuYnl0ZXNfcmVhZCk7YXNzZXJ0LmVxdWFsKHgudG90YWxfcmVhZF9ieXRlcyx4LndyaXR0ZW5fYnl0ZXMpO2Fzc2VydC5lcXVhbCh4LndyaXR0ZW5fYnl0ZXMseC5sb2cuYnl0ZXMpO2Fzc2VydCh4LndyaXR0ZW5fYnl0ZXM8PXgubG9nX2NhcF9ieXRlcyk7"
+        },
+        {
+          "path": "runtime-contract.mjs",
+          "label": "Pipe/cap fields must equal actual fsynced individual record",
+          "offset": 13658,
+          "before_state_sha256": "286b5dbb133b7f308f825d3a9df9078379c495594c3d90ad2a581e77f16b587f",
+          "after_state_sha256": "e2fc80fb16db1485ffc2f56024e3ed8b4ee11c8318cae6e8ef46f421d4de9c7f",
+          "before_base64": "WyduYW1lJywnYXJncycsJ3BpZCcsJ2FjdHVhbF9jbG9zZV9ldmVudCcsJ3NwYXduX2Vycm9yJywnZXhpdCcsJ2xvZ19mZF9jbG9zZWQnLCdsb2dfZnN5bmNlZCdd",
+          "after_base64": "WyduYW1lJywnYXJncycsJ3BpZCcsJ3NwYXduZWQnLCdleGl0X2V2ZW50JywnYWN0dWFsX2Nsb3NlX2V2ZW50Jywnc3Bhd25fZXJyb3InLCdleGl0JywnY2xvc2VfZXhpdCcsJ2ZvcmNlZCcsJ2Vycm9ycycsJ3BpcGVzJywndG90YWxfcmVhZF9ieXRlcycsJ3dyaXR0ZW5fYnl0ZXMnLCdsb2dfY2FwX2J5dGVzJywnbG9nX292ZXJmbG93JywnbG9nX2ZkX2Nsb3NlZCcsJ2xvZ19mc3luY2VkJ10="
+        },
+        {
+          "path": "runtime-contract.mjs",
+          "label": "Success requires all exact Cargo handles/pipelines drained, never cleanup labelled natural",
+          "offset": 11887,
+          "before_state_sha256": "e2fc80fb16db1485ffc2f56024e3ed8b4ee11c8318cae6e8ef46f421d4de9c7f",
+          "after_state_sha256": "e43c083d1988167440e6f3d02e955d74bf31f12618526c6da4bed06bf887241d",
+          "before_base64": "YXNzZXJ0LmVxdWFsKHYucnVucy5sZW5ndGgsNCk7Y29uc3QgcmVzdWx0cz1bXTs=",
+          "after_base64": "YXNzZXJ0LmVxdWFsKHYuY2FyZ29fZHJhaW5lZCx0cnVlKTthc3NlcnQuZXF1YWwodi5jYXJnb19oYW5kbGVzLmxlbmd0aCw0KTtmb3IoY29uc3RbaSxoXW9mIHYuY2FyZ29faGFuZGxlcy5lbnRyaWVzKCkpe2NvbnN0IHg9di5ydW5zW2ldO2Fzc2VydC5lcXVhbChoLm5hbWUseC5uYW1lKTthc3NlcnQuZXF1YWwoaC5waWQseC5waWQpO2Fzc2VydC5lcXVhbChoLnNwYXduZWQsdHJ1ZSk7YXNzZXJ0LmVxdWFsKGguZXhpdF9ldmVudCx0cnVlKTthc3NlcnQuZXF1YWwoaC5hY3R1YWxfY2xvc2VfZXZlbnQsdHJ1ZSk7YXNzZXJ0LmVxdWFsKGguZm9yY2VkLGZhbHNlKTthc3NlcnQuZXF1YWwoaC5waXBlbGluZV9zZXR0bGVkLHRydWUpO2Fzc2VydC5kZWVwRXF1YWwoaC5lcnJvcnMsW10pO2Fzc2VydC5kZWVwRXF1YWwoaC5waXBlcyx4LnBpcGVzKTt9YXNzZXJ0LmVxdWFsKHYucnVucy5sZW5ndGgsNCk7Y29uc3QgcmVzdWx0cz1bXTs="
+        }
+      ]
+    },
+    {
+      "path": "capture-current-runtime.mjs",
+      "parent": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-historical-current-runtime-bridge-preparation-v2/capture-current-runtime.mjs",
+        "sha256": "916a01cc5036c02a435cff43551bc9e8afe99bdb368fdf7af15ef3f660bb3564",
+        "bytes": 2168
+      },
+      "current": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-historical-current-runtime-bridge-preparation-v3/capture-current-runtime.mjs",
+        "sha256": "1b0a538daef11f1d3158c723dbbd117140785d79f8fdb251aefd308f95572340",
+        "bytes": 2168
+      },
+      "operations": [
+        {
+          "path": "capture-current-runtime.mjs",
+          "label": "Updated strict pipe witness helperSHA",
+          "offset": 363,
+          "before_state_sha256": "916a01cc5036c02a435cff43551bc9e8afe99bdb368fdf7af15ef3f660bb3564",
+          "after_state_sha256": "1b0a538daef11f1d3158c723dbbd117140785d79f8fdb251aefd308f95572340",
+          "before_base64": "ODNiZjFiMTA5OGZlMDM4NTlhZGNiZDcyMTc4ZTg4YWU3NDIyNzNiYmNhOWNhMjJkN2M5ZTFkZDIwZTc4MDZkMA==",
+          "after_base64": "ZTQzYzA4M2QxOTg4MTY3NDQwZTZmM2QwMmU5NTVkNzRiZjMxZjEyNjE4NTI2YzZkYTRiZWQwNmJmODg3MjQxZA=="
+        }
+      ]
+    },
+    {
+      "path": "combined-bindings-runtime2.mjs",
+      "parent": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-historical-current-runtime-bridge-preparation-v2/combined-bindings-runtime2.mjs",
+        "sha256": "081f90684d02f07ce68174c423ce934b7441d9c8bc954deafe716ba104d8546e",
+        "bytes": 22127
+      },
+      "current": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-historical-current-runtime-bridge-preparation-v3/combined-bindings-runtime2.mjs",
+        "sha256": "6046f762128918146d97e4f4e888a6e2f420bc865cbe46037e0577a9fadb0922",
+        "bytes": 22127
+      },
+      "operations": [
+        {
+          "path": "combined-bindings-runtime2.mjs",
+          "label": "Fresh V3 helper identity path",
+          "offset": 1124,
+          "before_state_sha256": "081f90684d02f07ce68174c423ce934b7441d9c8bc954deafe716ba104d8546e",
+          "after_state_sha256": "9f0df733dfb755bf88553cd365cffc7c329d4c0db1fa1f4e34662f3bba36b36a",
+          "before_base64": "RTovQ29kZXhXb3JrL29wZW4tc2VvLXNwaWRlci0wMWExMmFjMy0yMDI2MTAxMy9zb3VyY2UxMi1oaXN0b3JpY2FsLWN1cnJlbnQtcnVudGltZS1icmlkZ2UtcHJlcGFyYXRpb24tdjIvcnVudGltZS1jb250cmFjdC5tanM=",
+          "after_base64": "RTovQ29kZXhXb3JrL29wZW4tc2VvLXNwaWRlci0wMWExMmFjMy0yMDI2MTAxMy9zb3VyY2UxMi1oaXN0b3JpY2FsLWN1cnJlbnQtcnVudGltZS1icmlkZ2UtcHJlcGFyYXRpb24tdjMvcnVudGltZS1jb250cmFjdC5tanM="
+        },
+        {
+          "path": "combined-bindings-runtime2.mjs",
+          "label": "Updated strict pipe witness helperSHA",
+          "offset": 1276,
+          "before_state_sha256": "9f0df733dfb755bf88553cd365cffc7c329d4c0db1fa1f4e34662f3bba36b36a",
+          "after_state_sha256": "6046f762128918146d97e4f4e888a6e2f420bc865cbe46037e0577a9fadb0922",
+          "before_base64": "ODNiZjFiMTA5OGZlMDM4NTlhZGNiZDcyMTc4ZTg4YWU3NDIyNzNiYmNhOWNhMjJkN2M5ZTFkZDIwZTc4MDZkMA==",
+          "after_base64": "ZTQzYzA4M2QxOTg4MTY3NDQwZTZmM2QwMmU5NTVkNzRiZjMxZjEyNjE4NTI2YzZkYTRiZWQwNmJmODg3MjQxZA=="
+        }
+      ]
+    },
+    {
+      "path": "ROOT-CONTRACT.md",
+      "parent": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-historical-current-runtime-bridge-preparation-v2/ROOT-CONTRACT.md",
+        "sha256": "4a644792b25eab79c01efae94d52ad7609804a796b7dc7df523574bf86b4f231",
+        "bytes": 8973
+      },
+      "current": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-historical-current-runtime-bridge-preparation-v3/ROOT-CONTRACT.md",
+        "sha256": "776197cbf71eaba95c22218d4f29059a7aebee7d7ded8cf689aaecd950ab788c",
+        "bytes": 9416
+      },
+      "operations": [
+        {
+          "path": "ROOT-CONTRACT.md",
+          "label": "Active operative cap and honest exact child timeout cleanup contract",
+          "offset": 5998,
+          "before_state_sha256": "4a644792b25eab79c01efae94d52ad7609804a796b7dc7df523574bf86b4f231",
+          "after_state_sha256": "776197cbf71eaba95c22218d4f29059a7aebee7d7ded8cf689aaecd950ab788c",
+          "before_base64": "TG9ncyBhcmUgYm91bmRlZDY0TWlCLg==",
+          "after_base64": "Q29tYmluZWQgc3Rkb3V0L3N0ZGVyciBsb2dzIGhhdmUgYW4gYWN0aXZlNjRNaUIgY2FwIGNoZWNrZWQgYmVmb3JlIGV2ZXJ5IHdyaXRlOyBib3RoIG93bmVkIHBpcGVzIGFyZSBvYnNlcnZlZCB0aHJvdWdoIGVuZC9jbG9zZS9lcnJvci4gT3ZlcmZsb3csIHBpcGUvd3JpdGUgZmFpbHVyZSBvciB0aGUgZXhpc3RpbmcxODBzIGdhdGUgZGVhZGxpbmUgbWFya3MgRkFJTCBhbmQgbWF5IFNJR0tJTEwgb25seSB0aGUgZGlyZWN0bHkgY2FwdHVyZWQgb3duIENhcmdvIGNoaWxkLiBJdHMgYWN0dWFsIGNsb3NlIGFuZCBib3RoIHBpcGUgZHJhaW5zIGFyZSB0aGVuIGF3YWl0ZWQgd2l0aGluMzBzLiBDbGVhbnVwIGlzIG5ldmVyIGFjY2VwdGVkIGFzIG5hdHVyYWwuIFVuc2V0dGxlZCBDYXJnbyBvcGVyYXRpb25zL3BpcGVzIGtlZXAgdGhlIGdsb2JhbCBsb2NrIGFuZCBwcm9kdWNlIHJldGFpbmVkIGZhaWx1cmUgZXZpZGVuY2Uu"
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "path": "run-renderer-four-runtime2.mjs",
+      "label": "Active combined64MiB prewrite cap; two owned pipes and actual Cargo process closure",
+      "offset": 6303,
+      "before_state_sha256": "9f24aa5b6e12d492eb8caf115e4f0e5bf8450cc728b9b4a7c6e99112f82479f6",
+      "after_state_sha256": "f6560f42d332c386b0312398f6c5a628143e92c754d40444d75e73836e734da3",
+      "before_base64": "YXN5bmMgZnVuY3Rpb24gcnVuKG5hbWUsYXJncyl7Y29uc3QgbG9nUGF0aD1wYXRoLmpvaW4ob3V0LG5hbWUrJy5sb2cnKSxsb2c9ZnMub3BlblN5bmMobG9nUGF0aCwnd3gnKTtsZXQgY2hpbGQsc3Bhd25FcnJvcj1udWxsLGV4aXQsZmRDbG9zZWQ9ZmFsc2UsZnN5bmNlZD1mYWxzZTtjb25zdCBzdGFydGVkPXByb2Nlc3MuaHJ0aW1lLmJpZ2ludCgpO3RyeXtjaGlsZD1zcGF3bihjYXJnbyxhcmdzLHtjd2Q6c291cmNlLGVudix3aW5kb3dzSGlkZTp0cnVlLHN0ZGlvOlsnaWdub3JlJyxsb2csbG9nXX0pO2NoaWxkLm9uY2UoJ2Vycm9yJyxlPT57c3Bhd25FcnJvcj1TdHJpbmcoZS5tZXNzYWdlKX0pO2V4aXQ9YXdhaXQgbmV3IFByb21pc2UocmVzb2x2ZT0+Y2hpbGQub25jZSgnY2xvc2UnLChjb2RlLHNpZ25hbCk9PnJlc29sdmUoe2NvZGUsc2lnbmFsfSkpKTt9ZmluYWxseXt0cnl7ZnMuZnN5bmNTeW5jKGxvZyk7ZnN5bmNlZD10cnVlO31maW5hbGx5e2ZzLmNsb3NlU3luYyhsb2cpO2ZkQ2xvc2VkPXRydWU7fX1hc3NlcnQoZnMuc3RhdFN5bmMobG9nUGF0aCkuc2l6ZTw9NjQqMTAyNCoxMDI0LCdCb3VuZGVkIGFjdHVhbCBnYXRlIGxvZycpO2NvbnN0IGJ5dGVzPWZzLnJlYWRGaWxlU3luYyhsb2dQYXRoKSx0ZXh0PWJ5dGVzLnRvU3RyaW5nKCd1dGY4Jyksc3VtbWFyaWVzPVsuLi50ZXh0Lm1hdGNoQWxsKC90ZXN0IHJlc3VsdDogKG9rfEZBSUxFRClcLiAoXGQrKSBwYXNzZWQ7IChcZCspIGZhaWxlZDsgKFxkKykgaWdub3JlZDsvZyldLm1hcChtPT4oe3N0YXRlOm1bMV0scGFzc2VkOittWzJdLGZhaWxlZDorbVszXSxpZ25vcmVkOittWzRdfSkpO2NvbnN0IHJlY29yZD17bmFtZSxhcmdzLHBpZDpjaGlsZD8ucGlkLGFjdHVhbF9jbG9zZV9ldmVudDp0cnVlLGV4aXQsc3Bhd25fZXJyb3I6c3Bhd25FcnJvcixlbGFwc2VkX21zOk51bWJlcihwcm9jZXNzLmhydGltZS5iaWdpbnQoKS1zdGFydGVkKS8xZTYsbG9nX3NoYTI1NjpzaGEoYnl0ZXMpLGxvZ19ieXRlczpieXRlcy5sZW5ndGgsc3VtbWFyaWVzLGxvZ19mZF9jbG9zZWQ6ZmRDbG9zZWQsbG9nX2ZzeW5jZWQ6ZnN5bmNlZH0scmVjZWlwdD13cml0ZShuYW1lKycuanNvbicscmVjb3JkKSxyb3c9ey4uLnJlY29yZCxyZWNvcmQsbG9nOnJlZihsb2dQYXRoKSxyZWNlaXB0fTtydW5zLnB1c2gocm93KTthc3NlcnQuZXF1YWwoc3Bhd25FcnJvcixudWxsKTthc3NlcnQuZGVlcEVxdWFsKGV4aXQse2NvZGU6MCxzaWduYWw6bnVsbH0pO3JldHVybiB0ZXh0O30=",
+      "after_base64": "ZnVuY3Rpb24gc3RvcE93bmVkQ2FyZ28oaCxyZWFzb24pe2lmKCFoLmNoaWxkfHwhTnVtYmVyLmlzU2FmZUludGVnZXIoaC5jaGlsZC5waWQpfHxoLmNoaWxkLnBpZDw9MHx8aC5hY3R1YWxfY2xvc2VfZXZlbnR8fGguZm9yY2VkKXJldHVybjtoLmZvcmNlZD10cnVlO2NvbnN0IHJvdz17dGFyZ2V0Oidvd25lZF9jYXJnb19jaGlsZCcscGlkOmguY2hpbGQucGlkLHNpZ25hbDonU0lHS0lMTCcscmVhc29uLHJldHVybmVkOm51bGwsZXJyb3I6bnVsbH07c2lnbmFscy5wdXNoKHJvdyk7dHJ5e3Jvdy5yZXR1cm5lZD1oLmNoaWxkLmtpbGwoJ1NJR0tJTEwnKTt9Y2F0Y2goZSl7cm93LmVycm9yPVN0cmluZyhlKTtoLmVycm9ycy5wdXNoKCdPd25lZCBDYXJnbyBraWxsOiAnK2UpO319CmFzeW5jIGZ1bmN0aW9uIHJ1bihuYW1lLGFyZ3Mpe2NvbnN0IGxvZ1BhdGg9cGF0aC5qb2luKG91dCxuYW1lKycubG9nJyksbG9nPWZzLm9wZW5TeW5jKGxvZ1BhdGgsJ3d4Jyksc3RhcnRlZD1wcm9jZXNzLmhydGltZS5iaWdpbnQoKSxjYXA9NjQqMTAyNCoxMDI0O2NvbnN0IGg9e25hbWUsYXJncyxjaGlsZDpudWxsLHNwYXduZWQ6ZmFsc2UsZXhpdF9ldmVudDpmYWxzZSxhY3R1YWxfY2xvc2VfZXZlbnQ6ZmFsc2Usc3Bhd25fZXJyb3I6bnVsbCxleGl0Om51bGwsZm9yY2VkOmZhbHNlLGVycm9yczpbXSx0b3RhbF9yZWFkX2J5dGVzOjAsd3JpdHRlbl9ieXRlczowLG92ZXJmbG93OmZhbHNlLHBpcGVzOnt9LHBpcGVsaW5lOm51bGwscGlwZWxpbmVfc2V0dGxlZDpmYWxzZX07Y2FyZ29IYW5kbGVzLnB1c2goaCk7bGV0IGZkQ2xvc2VkPWZhbHNlLGZzeW5jZWQ9ZmFsc2U7CnRyeXtoLmNoaWxkPXNwYXduKGNhcmdvLGFyZ3Mse2N3ZDpzb3VyY2UsZW52LHdpbmRvd3NIaWRlOnRydWUsc3RkaW86WydpZ25vcmUnLCdwaXBlJywncGlwZSddfSk7Y29uc3QgY2xvc2VkPW5ldyBQcm9taXNlKHJlc29sdmU9PntoLmNoaWxkLm9uY2UoJ3NwYXduJywoKT0+e2guc3Bhd25lZD10cnVlO30pO2guY2hpbGQub25jZSgnZXJyb3InLGU9PntoLnNwYXduX2Vycm9yPVN0cmluZyhlLm1lc3NhZ2UpO2guZXJyb3JzLnB1c2goJ0NhcmdvIHNwYXduOiAnK2UpO30pO2guY2hpbGQub25jZSgnZXhpdCcsKGNvZGUsc2lnbmFsKT0+e2guZXhpdF9ldmVudD10cnVlO2guZXhpdD17Y29kZSxzaWduYWx9O30pO2guY2hpbGQub25jZSgnY2xvc2UnLChjb2RlLHNpZ25hbCk9PntoLmFjdHVhbF9jbG9zZV9ldmVudD10cnVlO2guY2xvc2VfZXhpdD17Y29kZSxzaWduYWx9O3Jlc29sdmUoKTt9KTt9KTtjb25zdCBkcmFpbnM9WydzdGRvdXQnLCdzdGRlcnInXS5tYXAoa2V5PT57Y29uc3Qgc3RyZWFtPWguY2hpbGRba2V5XSxwPWgucGlwZXNba2V5XT17Ynl0ZXNfcmVhZDowLGVuZDpmYWxzZSxjbG9zZWQ6ZmFsc2UsZXJyb3I6bnVsbCx3cml0ZV9lcnJvcjpudWxsfTtyZXR1cm4gbmV3IFByb21pc2UocmVzb2x2ZT0+e3N0cmVhbS5vbignZGF0YScsY2h1bms9PntwLmJ5dGVzX3JlYWQrPWNodW5rLmxlbmd0aDtoLnRvdGFsX3JlYWRfYnl0ZXMrPWNodW5rLmxlbmd0aDtpZihoLndyaXR0ZW5fYnl0ZXMrY2h1bmsubGVuZ3RoPmNhcCl7aWYoIWgub3ZlcmZsb3cpe2gub3ZlcmZsb3c9dHJ1ZTtoLmVycm9ycy5wdXNoKCdDb21iaW5lZCBDYXJnbyBsb2cgZXhjZWVkcyBhY3RpdmU2NE1pQiBjYXAnKTtzdG9wT3duZWRDYXJnbyhoLCdhY3RpdmVfY29tYmluZWRfbG9nX2NhcCcpO31yZXR1cm47fWlmKGgub3ZlcmZsb3d8fHAud3JpdGVfZXJyb3IpcmV0dXJuO3RyeXtsZXQgb2Zmc2V0PTA7d2hpbGUob2Zmc2V0PGNodW5rLmxlbmd0aCl7Y29uc3Qgbj1mcy53cml0ZVN5bmMobG9nLGNodW5rLG9mZnNldCxjaHVuay5sZW5ndGgtb2Zmc2V0KTthc3NlcnQobj4wKTtvZmZzZXQrPW47aC53cml0dGVuX2J5dGVzKz1uO2Fzc2VydChoLndyaXR0ZW5fYnl0ZXM8PWNhcCk7fX1jYXRjaChlKXtwLndyaXRlX2Vycm9yPVN0cmluZyhlKTtoLmVycm9ycy5wdXNoKCdDYXJnbyAnK2tleSsnIGxvZyB3cml0ZTogJytlKTtzdG9wT3duZWRDYXJnbyhoLCdvd25lZF9sb2dfd3JpdGVfZmFpbHVyZScpO319KTtzdHJlYW0ub25jZSgnZW5kJywoKT0+e3AuZW5kPXRydWU7fSk7c3RyZWFtLm9uY2UoJ2Vycm9yJyxlPT57cC5lcnJvcj1TdHJpbmcoZSk7aC5lcnJvcnMucHVzaCgnQ2FyZ28gJytrZXkrJyBwaXBlOiAnK2UpO3N0b3BPd25lZENhcmdvKGgsJ293bmVkX3BpcGVfZmFpbHVyZScpO30pO3N0cmVhbS5vbmNlKCdjbG9zZScsKCk9PntwLmNsb3NlZD10cnVlO3Jlc29sdmUoKTt9KTt9KTt9KTtoLnBpcGVsaW5lPVByb21pc2UuYWxsKFtjbG9zZWQsLi4uZHJhaW5zXSk7aC5waXBlbGluZS50aGVuKCgpPT57aC5waXBlbGluZV9zZXR0bGVkPXRydWU7fSwoKT0+e2gucGlwZWxpbmVfc2V0dGxlZD10cnVlO30pO2F3YWl0IGgucGlwZWxpbmU7Cn1maW5hbGx5e3RyeXtmcy5mc3luY1N5bmMobG9nKTtmc3luY2VkPXRydWU7fWZpbmFsbHl7ZnMuY2xvc2VTeW5jKGxvZyk7ZmRDbG9zZWQ9dHJ1ZTt9fQpjb25zdCBieXRlcz1mcy5yZWFkRmlsZVN5bmMobG9nUGF0aCk7YXNzZXJ0LmVxdWFsKGJ5dGVzLmxlbmd0aCxoLndyaXR0ZW5fYnl0ZXMpO2Fzc2VydChieXRlcy5sZW5ndGg8PWNhcCk7Y29uc3QgdGV4dD1ieXRlcy50b1N0cmluZygndXRmOCcpLHN1bW1hcmllcz1bLi4udGV4dC5tYXRjaEFsbCgvdGVzdCByZXN1bHQ6IChva3xGQUlMRUQpXC4gKFxkKykgcGFzc2VkOyAoXGQrKSBmYWlsZWQ7IChcZCspIGlnbm9yZWQ7L2cpXS5tYXAobT0+KHtzdGF0ZTptWzFdLHBhc3NlZDorbVsyXSxmYWlsZWQ6K21bM10saWdub3JlZDorbVs0XX0pKTtjb25zdCByZWNvcmQ9e25hbWUsYXJncyxwaWQ6aC5jaGlsZD8ucGlkLHNwYXduZWQ6aC5zcGF3bmVkLGV4aXRfZXZlbnQ6aC5leGl0X2V2ZW50LGFjdHVhbF9jbG9zZV9ldmVudDpoLmFjdHVhbF9jbG9zZV9ldmVudCxzcGF3bl9lcnJvcjpoLnNwYXduX2Vycm9yLGV4aXQ6aC5leGl0LGNsb3NlX2V4aXQ6aC5jbG9zZV9leGl0LGZvcmNlZDpoLmZvcmNlZCxlcnJvcnM6aC5lcnJvcnMscGlwZXM6aC5waXBlcyx0b3RhbF9yZWFkX2J5dGVzOmgudG90YWxfcmVhZF9ieXRlcyx3cml0dGVuX2J5dGVzOmgud3JpdHRlbl9ieXRlcyxsb2dfY2FwX2J5dGVzOmNhcCxsb2dfb3ZlcmZsb3c6aC5vdmVyZmxvdyxlbGFwc2VkX21zOk51bWJlcihwcm9jZXNzLmhydGltZS5iaWdpbnQoKS1zdGFydGVkKS8xZTYsbG9nX3NoYTI1NjpzaGEoYnl0ZXMpLGxvZ19ieXRlczpieXRlcy5sZW5ndGgsc3VtbWFyaWVzLGxvZ19mZF9jbG9zZWQ6ZmRDbG9zZWQsbG9nX2ZzeW5jZWQ6ZnN5bmNlZH0scmVjZWlwdD13cml0ZShuYW1lKycuanNvbicscmVjb3JkKSxyb3c9ey4uLnJlY29yZCxyZWNvcmQsbG9nOnJlZihsb2dQYXRoKSxyZWNlaXB0fTtydW5zLnB1c2gocm93KTthc3NlcnQuZXF1YWwoaC5zcGF3bmVkLHRydWUpO2Fzc2VydC5lcXVhbChoLmV4aXRfZXZlbnQsdHJ1ZSk7YXNzZXJ0LmVxdWFsKGguYWN0dWFsX2Nsb3NlX2V2ZW50LHRydWUpO2Fzc2VydC5lcXVhbChoLnNwYXduX2Vycm9yLG51bGwpO2Fzc2VydC5lcXVhbChoLmZvcmNlZCxmYWxzZSk7YXNzZXJ0LmVxdWFsKGgub3ZlcmZsb3csZmFsc2UpO2Fzc2VydC5kZWVwRXF1YWwoaC5lcnJvcnMsW10pO2Zvcihjb25zdCBwIG9mIE9iamVjdC52YWx1ZXMoaC5waXBlcykpe2Fzc2VydC5lcXVhbChwLmVuZCx0cnVlKTthc3NlcnQuZXF1YWwocC5jbG9zZWQsdHJ1ZSk7YXNzZXJ0LmVxdWFsKHAuZXJyb3IsbnVsbCk7YXNzZXJ0LmVxdWFsKHAud3JpdGVfZXJyb3IsbnVsbCk7fWFzc2VydC5lcXVhbChoLnRvdGFsX3JlYWRfYnl0ZXMsaC53cml0dGVuX2J5dGVzKTthc3NlcnQuZGVlcEVxdWFsKGguZXhpdCx7Y29kZTowLHNpZ25hbDpudWxsfSk7YXNzZXJ0LmRlZXBFcXVhbChoLmNsb3NlX2V4aXQsaC5leGl0KTtyZXR1cm4gdGV4dDt9"
+    },
+    {
+      "path": "run-renderer-four-runtime2.mjs",
+      "label": "Retain every exact Cargo child handle for failure cleanup",
+      "offset": 5140,
+      "before_state_sha256": "f6560f42d332c386b0312398f6c5a628143e92c754d40444d75e73836e734da3",
+      "after_state_sha256": "28d51ee9a8e9675994bede9f1f5af56f5093191df2ac1da7dc913c5a4e83cfb3",
+      "before_base64": "Y29uc3QgcnVucz1bXSxmYWlsdXJlcz1bXSxwZW5kaW5nPW5ldyBTZXQoKSxzaWduYWxzPVtdOw==",
+      "after_base64": "Y29uc3QgcnVucz1bXSxjYXJnb0hhbmRsZXM9W10sZmFpbHVyZXM9W10scGVuZGluZz1uZXcgU2V0KCksc2lnbmFscz1bXTs="
+    },
+    {
+      "path": "run-renderer-four-runtime2.mjs",
+      "label": "Timeout/failure cleanup of only captured own Cargo child, then retained close+pipe drain",
+      "offset": 13125,
+      "before_state_sha256": "28d51ee9a8e9675994bede9f1f5af56f5093191df2ac1da7dc913c5a4e83cfb3",
+      "after_state_sha256": "c2cc72dc3cd1757a631b5f734225cb83fccc6f452edb42fdfdf20c1aed177dcb",
+      "before_base64": "ZmluYWxseXt0cnl7aWYod29ya2VyKWF3YWl0IHdpdGhpbih3b3JrZXIuY2xvc2UoKQ==",
+      "after_base64": "ZmluYWxseXtmb3IoY29uc3QgaCBvZiBjYXJnb0hhbmRsZXMpe2lmKGguY2hpbGQmJighaC5hY3R1YWxfY2xvc2VfZXZlbnR8fCFoLnBpcGVsaW5lX3NldHRsZWQpKXtzdG9wT3duZWRDYXJnbyhoLCdyZW5kZXJlcl9nYXRlX2ZhaWx1cmVfb3JfZGVhZGxpbmVfY2xlYW51cCcpO3RyeXtpZihoLnBpcGVsaW5lKWF3YWl0IHdpdGhpbihoLnBpcGVsaW5lLDMwMDAwLCdvd25lZCBDYXJnbyBhY3R1YWwgY2xvc2UgYW5kIGJvdGggcGlwZSBkcmFpbicpO2Vsc2UgdGhyb3cgRXJyb3IoJ0NhcmdvIHBpcGVsaW5lIHdhcyBub3QgZXN0YWJsaXNoZWQnKTt9Y2F0Y2goZSl7ZmFpbHVyZXMucHVzaCh7cGhhc2U6J293bmVkIENhcmdvIGNsZWFudXAnLG5hbWU6aC5uYW1lLGVycm9yOlN0cmluZyhlKX0pO319fXRyeXtpZih3b3JrZXIpYXdhaXQgd2l0aGluKHdvcmtlci5jbG9zZSgp"
+    },
+    {
+      "path": "run-renderer-four-runtime2.mjs",
+      "label": "No shared lock release before exact captured Cargo/pipes are actually drained",
+      "offset": 14852,
+      "before_state_sha256": "c2cc72dc3cd1757a631b5f734225cb83fccc6f452edb42fdfdf20c1aed177dcb",
+      "after_state_sha256": "bfbd1aa2f9bd53010a58b1d21b41b0ab0d89608d44e4fdddca8feb7c4c0e2352",
+      "before_base64": "aWYocGVuZGluZy5zaXplPT09MCYmd29ya2VyQ2xvc2VkJiZmaXh0dXJlQ2xvc2VkKXs=",
+      "after_base64": "Y29uc3QgY2FyZ29EcmFpbmVkPWNhcmdvSGFuZGxlcy5ldmVyeShoPT4haC5jaGlsZHx8KGguYWN0dWFsX2Nsb3NlX2V2ZW50JiZoLnBpcGVsaW5lX3NldHRsZWQmJk9iamVjdC52YWx1ZXMoaC5waXBlcykuZXZlcnkocD0+cC5jbG9zZWQpKSk7aWYocGVuZGluZy5zaXplPT09MCYmY2FyZ29EcmFpbmVkJiZ3b3JrZXJDbG9zZWQmJmZpeHR1cmVDbG9zZWQpew=="
+    },
+    {
+      "path": "run-renderer-four-runtime2.mjs",
+      "label": "Acceptance and proof retain explicit Cargo pipeline states",
+      "offset": 15530,
+      "before_state_sha256": "bfbd1aa2f9bd53010a58b1d21b41b0ab0d89608d44e4fdddca8feb7c4c0e2352",
+      "after_state_sha256": "59d80bd4e6efd310b5a8436797f8a2f58b42d1bcccf650e194b00801b6b19d19",
+      "before_base64": "JiZsb2NrUmVsZWFzZWQmJnBlbmRpbmcuc2l6ZT09PTA7Y29uc3QgcHJvb2Y9",
+      "after_base64": "JiZsb2NrUmVsZWFzZWQmJnBlbmRpbmcuc2l6ZT09PTAmJmNhcmdvRHJhaW5lZDtjb25zdCBwcm9vZj0="
+    },
+    {
+      "path": "run-renderer-four-runtime2.mjs",
+      "label": "Actual retained Cargo pipe/handle evidence separate from successful gate records",
+      "offset": 16364,
+      "before_state_sha256": "59d80bd4e6efd310b5a8436797f8a2f58b42d1bcccf650e194b00801b6b19d19",
+      "after_state_sha256": "056d1ca149ee193b3cee769225a2cb2e7659827ad75de0f21483ab96bc300a86",
+      "before_base64": "aWdub3JlZDpydW5zLnJlZHVjZSgobixyKT0+bityLnN1bW1hcmllcy5yZWR1Y2UoKG4scyk9Pm4rcy5pZ25vcmVkLDApLDApLHJ1bnMsd29ya2VyOg==",
+      "after_base64": "aWdub3JlZDpydW5zLnJlZHVjZSgobixyKT0+bityLnN1bW1hcmllcy5yZWR1Y2UoKG4scyk9Pm4rcy5pZ25vcmVkLDApLDApLHJ1bnMsY2FyZ29fZHJhaW5lZDpjYXJnb0RyYWluZWQsY2FyZ29faGFuZGxlczpjYXJnb0hhbmRsZXMubWFwKGg9Pih7bmFtZTpoLm5hbWUscGlkOmguY2hpbGQ/LnBpZCxzcGF3bmVkOmguc3Bhd25lZCxleGl0X2V2ZW50OmguZXhpdF9ldmVudCxhY3R1YWxfY2xvc2VfZXZlbnQ6aC5hY3R1YWxfY2xvc2VfZXZlbnQsZm9yY2VkOmguZm9yY2VkLHBpcGVsaW5lX3NldHRsZWQ6aC5waXBlbGluZV9zZXR0bGVkLHBpcGVzOmgucGlwZXMsZXJyb3JzOmguZXJyb3JzfSkpLHdvcmtlcjo="
+    },
+    {
+      "path": "runtime-contract.mjs",
+      "label": "Mandatory actual successful observed pipe and active cap receipt",
+      "offset": 12383,
+      "before_state_sha256": "83bf1b1098fe03859adcbd72178e88ae742273bbca9ca22d7c9e1dd20e7806d0",
+      "after_state_sha256": "286b5dbb133b7f308f825d3a9df9078379c495594c3d90ad2a581e77f16b587f",
+      "before_base64": "YXNzZXJ0LmVxdWFsKHgubG9nX2ZzeW5jZWQsdHJ1ZSk7",
+      "after_base64": "YXNzZXJ0LmVxdWFsKHgubG9nX2ZzeW5jZWQsdHJ1ZSk7YXNzZXJ0LmVxdWFsKHguc3Bhd25lZCx0cnVlKTthc3NlcnQuZXF1YWwoeC5leGl0X2V2ZW50LHRydWUpO2Fzc2VydC5kZWVwRXF1YWwoeC5jbG9zZV9leGl0LHguZXhpdCk7YXNzZXJ0LmVxdWFsKHguZm9yY2VkLGZhbHNlKTthc3NlcnQuZGVlcEVxdWFsKHguZXJyb3JzLFtdKTthc3NlcnQuZXF1YWwoeC5sb2dfY2FwX2J5dGVzLDY0KjEwMjQqMTAyNCk7YXNzZXJ0LmVxdWFsKHgubG9nX292ZXJmbG93LGZhbHNlKTthc3NlcnQuZGVlcEVxdWFsKE9iamVjdC5rZXlzKHgucGlwZXMpLnNvcnQoKSxbJ3N0ZGVycicsJ3N0ZG91dCddKTtmb3IoY29uc3QgcCBvZiBPYmplY3QudmFsdWVzKHgucGlwZXMpKXthc3NlcnQuZXF1YWwocC5lbmQsdHJ1ZSk7YXNzZXJ0LmVxdWFsKHAuY2xvc2VkLHRydWUpO2Fzc2VydC5lcXVhbChwLmVycm9yLG51bGwpO2Fzc2VydC5lcXVhbChwLndyaXRlX2Vycm9yLG51bGwpO2Fzc2VydChOdW1iZXIuaXNTYWZlSW50ZWdlcihwLmJ5dGVzX3JlYWQpJiZwLmJ5dGVzX3JlYWQ+PTApO31hc3NlcnQuZXF1YWwoeC50b3RhbF9yZWFkX2J5dGVzLHgucGlwZXMuc3Rkb3V0LmJ5dGVzX3JlYWQreC5waXBlcy5zdGRlcnIuYnl0ZXNfcmVhZCk7YXNzZXJ0LmVxdWFsKHgudG90YWxfcmVhZF9ieXRlcyx4LndyaXR0ZW5fYnl0ZXMpO2Fzc2VydC5lcXVhbCh4LndyaXR0ZW5fYnl0ZXMseC5sb2cuYnl0ZXMpO2Fzc2VydCh4LndyaXR0ZW5fYnl0ZXM8PXgubG9nX2NhcF9ieXRlcyk7"
+    },
+    {
+      "path": "runtime-contract.mjs",
+      "label": "Pipe/cap fields must equal actual fsynced individual record",
+      "offset": 13658,
+      "before_state_sha256": "286b5dbb133b7f308f825d3a9df9078379c495594c3d90ad2a581e77f16b587f",
+      "after_state_sha256": "e2fc80fb16db1485ffc2f56024e3ed8b4ee11c8318cae6e8ef46f421d4de9c7f",
+      "before_base64": "WyduYW1lJywnYXJncycsJ3BpZCcsJ2FjdHVhbF9jbG9zZV9ldmVudCcsJ3NwYXduX2Vycm9yJywnZXhpdCcsJ2xvZ19mZF9jbG9zZWQnLCdsb2dfZnN5bmNlZCdd",
+      "after_base64": "WyduYW1lJywnYXJncycsJ3BpZCcsJ3NwYXduZWQnLCdleGl0X2V2ZW50JywnYWN0dWFsX2Nsb3NlX2V2ZW50Jywnc3Bhd25fZXJyb3InLCdleGl0JywnY2xvc2VfZXhpdCcsJ2ZvcmNlZCcsJ2Vycm9ycycsJ3BpcGVzJywndG90YWxfcmVhZF9ieXRlcycsJ3dyaXR0ZW5fYnl0ZXMnLCdsb2dfY2FwX2J5dGVzJywnbG9nX292ZXJmbG93JywnbG9nX2ZkX2Nsb3NlZCcsJ2xvZ19mc3luY2VkJ10="
+    },
+    {
+      "path": "runtime-contract.mjs",
+      "label": "Success requires all exact Cargo handles/pipelines drained, never cleanup labelled natural",
+      "offset": 11887,
+      "before_state_sha256": "e2fc80fb16db1485ffc2f56024e3ed8b4ee11c8318cae6e8ef46f421d4de9c7f",
+      "after_state_sha256": "e43c083d1988167440e6f3d02e955d74bf31f12618526c6da4bed06bf887241d",
+      "before_base64": "YXNzZXJ0LmVxdWFsKHYucnVucy5sZW5ndGgsNCk7Y29uc3QgcmVzdWx0cz1bXTs=",
+      "after_base64": "YXNzZXJ0LmVxdWFsKHYuY2FyZ29fZHJhaW5lZCx0cnVlKTthc3NlcnQuZXF1YWwodi5jYXJnb19oYW5kbGVzLmxlbmd0aCw0KTtmb3IoY29uc3RbaSxoXW9mIHYuY2FyZ29faGFuZGxlcy5lbnRyaWVzKCkpe2NvbnN0IHg9di5ydW5zW2ldO2Fzc2VydC5lcXVhbChoLm5hbWUseC5uYW1lKTthc3NlcnQuZXF1YWwoaC5waWQseC5waWQpO2Fzc2VydC5lcXVhbChoLnNwYXduZWQsdHJ1ZSk7YXNzZXJ0LmVxdWFsKGguZXhpdF9ldmVudCx0cnVlKTthc3NlcnQuZXF1YWwoaC5hY3R1YWxfY2xvc2VfZXZlbnQsdHJ1ZSk7YXNzZXJ0LmVxdWFsKGguZm9yY2VkLGZhbHNlKTthc3NlcnQuZXF1YWwoaC5waXBlbGluZV9zZXR0bGVkLHRydWUpO2Fzc2VydC5kZWVwRXF1YWwoaC5lcnJvcnMsW10pO2Fzc2VydC5kZWVwRXF1YWwoaC5waXBlcyx4LnBpcGVzKTt9YXNzZXJ0LmVxdWFsKHYucnVucy5sZW5ndGgsNCk7Y29uc3QgcmVzdWx0cz1bXTs="
+    },
+    {
+      "path": "run-renderer-four-runtime2.mjs",
+      "label": "Updated strict pipe witness helperSHA",
+      "offset": 433,
+      "before_state_sha256": "056d1ca149ee193b3cee769225a2cb2e7659827ad75de0f21483ab96bc300a86",
+      "after_state_sha256": "384d0e9a8428fc39f9bce8d75049fab88eeee5bf6573e43a23e740e73a7a7133",
+      "before_base64": "ODNiZjFiMTA5OGZlMDM4NTlhZGNiZDcyMTc4ZTg4YWU3NDIyNzNiYmNhOWNhMjJkN2M5ZTFkZDIwZTc4MDZkMA==",
+      "after_base64": "ZTQzYzA4M2QxOTg4MTY3NDQwZTZmM2QwMmU5NTVkNzRiZjMxZjEyNjE4NTI2YzZkYTRiZWQwNmJmODg3MjQxZA=="
+    },
+    {
+      "path": "capture-current-runtime.mjs",
+      "label": "Updated strict pipe witness helperSHA",
+      "offset": 363,
+      "before_state_sha256": "916a01cc5036c02a435cff43551bc9e8afe99bdb368fdf7af15ef3f660bb3564",
+      "after_state_sha256": "1b0a538daef11f1d3158c723dbbd117140785d79f8fdb251aefd308f95572340",
+      "before_base64": "ODNiZjFiMTA5OGZlMDM4NTlhZGNiZDcyMTc4ZTg4YWU3NDIyNzNiYmNhOWNhMjJkN2M5ZTFkZDIwZTc4MDZkMA==",
+      "after_base64": "ZTQzYzA4M2QxOTg4MTY3NDQwZTZmM2QwMmU5NTVkNzRiZjMxZjEyNjE4NTI2YzZkYTRiZWQwNmJmODg3MjQxZA=="
+    },
+    {
+      "path": "combined-bindings-runtime2.mjs",
+      "label": "Fresh V3 helper identity path",
+      "offset": 1124,
+      "before_state_sha256": "081f90684d02f07ce68174c423ce934b7441d9c8bc954deafe716ba104d8546e",
+      "after_state_sha256": "9f0df733dfb755bf88553cd365cffc7c329d4c0db1fa1f4e34662f3bba36b36a",
+      "before_base64": "RTovQ29kZXhXb3JrL29wZW4tc2VvLXNwaWRlci0wMWExMmFjMy0yMDI2MTAxMy9zb3VyY2UxMi1oaXN0b3JpY2FsLWN1cnJlbnQtcnVudGltZS1icmlkZ2UtcHJlcGFyYXRpb24tdjIvcnVudGltZS1jb250cmFjdC5tanM=",
+      "after_base64": "RTovQ29kZXhXb3JrL29wZW4tc2VvLXNwaWRlci0wMWExMmFjMy0yMDI2MTAxMy9zb3VyY2UxMi1oaXN0b3JpY2FsLWN1cnJlbnQtcnVudGltZS1icmlkZ2UtcHJlcGFyYXRpb24tdjMvcnVudGltZS1jb250cmFjdC5tanM="
+    },
+    {
+      "path": "combined-bindings-runtime2.mjs",
+      "label": "Updated strict pipe witness helperSHA",
+      "offset": 1276,
+      "before_state_sha256": "9f0df733dfb755bf88553cd365cffc7c329d4c0db1fa1f4e34662f3bba36b36a",
+      "after_state_sha256": "6046f762128918146d97e4f4e888a6e2f420bc865cbe46037e0577a9fadb0922",
+      "before_base64": "ODNiZjFiMTA5OGZlMDM4NTlhZGNiZDcyMTc4ZTg4YWU3NDIyNzNiYmNhOWNhMjJkN2M5ZTFkZDIwZTc4MDZkMA==",
+      "after_base64": "ZTQzYzA4M2QxOTg4MTY3NDQwZTZmM2QwMmU5NTVkNzRiZjMxZjEyNjE4NTI2YzZkYTRiZWQwNmJmODg3MjQxZA=="
+    },
+    {
+      "path": "ROOT-CONTRACT.md",
+      "label": "Active operative cap and honest exact child timeout cleanup contract",
+      "offset": 5998,
+      "before_state_sha256": "4a644792b25eab79c01efae94d52ad7609804a796b7dc7df523574bf86b4f231",
+      "after_state_sha256": "776197cbf71eaba95c22218d4f29059a7aebee7d7ded8cf689aaecd950ab788c",
+      "before_base64": "TG9ncyBhcmUgYm91bmRlZDY0TWlCLg==",
+      "after_base64": "Q29tYmluZWQgc3Rkb3V0L3N0ZGVyciBsb2dzIGhhdmUgYW4gYWN0aXZlNjRNaUIgY2FwIGNoZWNrZWQgYmVmb3JlIGV2ZXJ5IHdyaXRlOyBib3RoIG93bmVkIHBpcGVzIGFyZSBvYnNlcnZlZCB0aHJvdWdoIGVuZC9jbG9zZS9lcnJvci4gT3ZlcmZsb3csIHBpcGUvd3JpdGUgZmFpbHVyZSBvciB0aGUgZXhpc3RpbmcxODBzIGdhdGUgZGVhZGxpbmUgbWFya3MgRkFJTCBhbmQgbWF5IFNJR0tJTEwgb25seSB0aGUgZGlyZWN0bHkgY2FwdHVyZWQgb3duIENhcmdvIGNoaWxkLiBJdHMgYWN0dWFsIGNsb3NlIGFuZCBib3RoIHBpcGUgZHJhaW5zIGFyZSB0aGVuIGF3YWl0ZWQgd2l0aGluMzBzLiBDbGVhbnVwIGlzIG5ldmVyIGFjY2VwdGVkIGFzIG5hdHVyYWwuIFVuc2V0dGxlZCBDYXJnbyBvcGVyYXRpb25zL3BpcGVzIGtlZXAgdGhlIGdsb2JhbCBsb2NrIGFuZCBwcm9kdWNlIHJldGFpbmVkIGZhaWx1cmUgZXZpZGVuY2Uu"
+    }
+  ],
+  "original_profile_and_four_genuine_gates_exact": true,
+  "historical_suite_build_return_and_source_regions_exact": true,
+  "actual_execution": false
+}

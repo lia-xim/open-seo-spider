@@ -1,0 +1,129 @@
+{
+  "kind": "api_only_preview_v3_six_literal_namespace_operations",
+  "status": "SOURCE_ONLY_VERIFIED",
+  "parent": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-preview-driver-preparation-v2\\manifest.json",
+    "sha256": "ba9490ec0d19d06b34a8611280d54f79237a8b953bd87d621c6d795cbfeb5460",
+    "bytes": 79868
+  },
+  "parent_independent_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-preview-driver-root-independent-review-v2\\receipt.json",
+    "sha256": "0ee8ba927e0685d0e14b5358fa20d56a12d6319ec98281967f935afdbd6f95d4",
+    "bytes": 1700
+  },
+  "composition": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-composed-preview-v3\\preformat.json",
+    "sha256": "84d54108e57430bca1481fc499c566e7cdbb61770d1462feeea990047acc30ec",
+    "bytes": 163396
+  },
+  "api_proposal": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-enrichment-proposal-v4\\manifest.json",
+    "sha256": "fd02497bd24a034f2c6ef6374d9ab60d9d4af6d01a24e0a53b5e0dbbfdb1c994",
+    "bytes": 22331
+  },
+  "api_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\api-only-enrichment-independent-review-v4\\receipt.json",
+    "sha256": "1a8f757c76472737140387dff140dfe983c492fc508b1d9aa6e25abd5f200f0f",
+    "bytes": 2746
+  },
+  "operations": [
+    {
+      "path": "common.mjs",
+      "offset": 438,
+      "before": "api-only-composed-preview-v2",
+      "after": "api-only-composed-preview-v3",
+      "before_sha256": "3d04dbba71af2b14f0784bfb70b352eab8b6d13756c82ae46409e66b5d4b5603",
+      "before_bytes": 13753,
+      "after_sha256": "8cf6e5b68d6bbe773871a80747f486d0fb443358e279d2aad9ca9c60f27efb28",
+      "after_bytes": 13753
+    },
+    {
+      "path": "common.mjs",
+      "offset": 11094,
+      "before": "results/api-only-preview-format-v2",
+      "after": "results/api-only-preview-format-v3",
+      "before_sha256": "8cf6e5b68d6bbe773871a80747f486d0fb443358e279d2aad9ca9c60f27efb28",
+      "before_bytes": 13753,
+      "after_sha256": "05bee3388485a289adca56295a8ee08a28eb0e65216ea09f57d0ac56cf7b9e73",
+      "after_bytes": 13753
+    },
+    {
+      "path": "common.mjs",
+      "offset": 11162,
+      "before": "results/api-only-preview-clippy-v2",
+      "after": "results/api-only-preview-clippy-v3",
+      "before_sha256": "05bee3388485a289adca56295a8ee08a28eb0e65216ea09f57d0ac56cf7b9e73",
+      "before_bytes": 13753,
+      "after_sha256": "cf26b023123894338d049b9d76ca825e7b2d7dd24faa09658b209e18f25df040",
+      "after_bytes": 13753
+    },
+    {
+      "path": "format-preview.mjs",
+      "offset": 219,
+      "before": "output('api-only-preview-format-v2')",
+      "after": "output('api-only-preview-format-v3')",
+      "before_sha256": "fb6db96a94196a9a044919d63457c9ea299f1d6ea3082db0d19f323513eef59b",
+      "before_bytes": 1486,
+      "after_sha256": "8c6c5eb019305079d12662dc7da313183ac7431bb3ba189d96f6c863a94493a6",
+      "after_bytes": 1486
+    },
+    {
+      "path": "check-preview-clippy.mjs",
+      "offset": 221,
+      "before": "output('api-only-preview-clippy-v2')",
+      "after": "output('api-only-preview-clippy-v3')",
+      "before_sha256": "d25c49060f1f95106ad2cf6f77475c21f82ae1fe7f54c90b8761f600d1bc9476",
+      "before_bytes": 1254,
+      "after_sha256": "7d8c223caeb4089c67a4ae05d47ced8acc9de6ed43f8bdb994bfcd65701090dc",
+      "after_bytes": 1254
+    },
+    {
+      "path": "run-preview-twenty-tests.mjs",
+      "offset": 1663,
+      "before": "output('api-only-preview-twenty-rust-tests-v2')",
+      "after": "output('api-only-preview-twenty-rust-tests-v3')",
+      "before_sha256": "70ffe785f60b3764f3182c42d2ad336ea3f9f024357efd592fb11d5e339f5f48",
+      "before_bytes": 4005,
+      "after_sha256": "0317ecf597eff29c9cba7ead9ca3558b177abb4fea9cb808db3dbf33d1705eed",
+      "after_bytes": 4005
+    }
+  ],
+  "verified_operations": 6,
+  "whole_file_inverse_pairs": 4,
+  "whole_operational_regions": [
+    {
+      "source": "common.mjs",
+      "start": "export function compilerEnvironment",
+      "end": "// Promise resolves",
+      "bytes": 699,
+      "sha256": "720fbaeac26138495c6e3401e8ead888e308159e95b41ef501398650cadb4a0c",
+      "exact": true
+    },
+    {
+      "source": "common.mjs",
+      "start": "export async function command",
+      "end": "export function assertSuccessful",
+      "bytes": 2335,
+      "sha256": "0913a164745891afc47a41907bcbf8fb5ecc19838e482bf582c49847a9b5e128",
+      "exact": true
+    },
+    {
+      "source": "common.mjs",
+      "start": "export function assertSuccessful",
+      "end": "export const FORMAT",
+      "bytes": 1581,
+      "sha256": "1575efb0069e1d907f9827f2702ed46194c4692727f7d9c8dcaec026ec16bfa7",
+      "exact": true
+    },
+    {
+      "source": "common.mjs",
+      "start": "export function formatted",
+      "end": "export function proofBase",
+      "bytes": 1469,
+      "sha256": "90b762bd0169970780a4ec1ab60e82dbceb5ca80d71751f81576499d595feb94",
+      "exact": true
+    }
+  ],
+  "dedicated_cargo_target_unchanged": "cargo-target-api-only-preview-v1",
+  "qualification": "Only fresh source/output namespaces changed. Process/profile/parser/fingerprint/formatter/CLI/close guards are exactly independently reviewed V2. No target source import or call."
+}

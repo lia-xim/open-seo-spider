@@ -1,0 +1,9 @@
+# API-only V4: truthful overcap negative fixtures
+
+AUTHORED_NOT_RUN. The actual V2 preview App run had10PASS/1FAIL; Core9 did not execute. The App fixture attempted to unwrap a real import with an8193-byte normalized URL, but the existing importer correctly rejects any normalized provenance field above8192. The Core negative fixture had the same source-confirmed impossible import. This revision changes only these two test preparations.
+
+Both retain a genuine accepted exact8192-byte normalized URL and genuine rejected8193-byte prepare/import controls. The negative typed plan is then explicitly forged from the valid exact plan by mutating raw value, declared input byte length/SHA, normalized URL and deduplicated URL list, and recomputing its API fingerprint. It is not claimed to have passed any real or historical importer. The unchanged App service must reject during original-byte re-import before store/owner/provider admission; Core must reject its unchanged provenance/run authority before transport execution. Provider0, admission0, active0, absent store and drain assertions remain unchanged.
+
+Two whole-state operations/inverses recover all18 V3 parent payloads exactly. All production, six shared D3 paths and16 other payloads are byte-identical. Twenty canonical Rust names remain;18 attributed functions are exact and two retain every original assertion plus three new assertions. Current TEST-INVENTORY/PROJECTED-INVENTORY have actual new body/file hashes. V1 integration21 +V2 revision9 +V3 revision2 remain separate immutable ancestor stages; V4 adds two operations. JavaScript/Node5 are unchanged separate evidence.
+
+The actual V2 test failure, prior format and passing preliminary Clippy are provenance only. No Rust/compiler/provider/native PASS is authored. First obtain a direct V4 independent source review; then build a fresh R3 composed400 preview and V3 producer preparation, leaving V1/V2 preformat/source/results immutable.
