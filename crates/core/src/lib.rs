@@ -3,6 +3,11 @@
 //! No commercial URL cap is imposed. Resource limits are user configuration.
 mod audit;
 mod cdn_classification;
+mod cdn_directory_reporting;
+pub use cdn_directory_reporting::{
+    CDN_DIRECTORY_NORMALIZATION, CDN_DIRECTORY_REPORTING_ENGINE, CdnDirectoryReportingConfig,
+    CdnDirectoryReportingObservation, CdnDirectoryRuleMatch,
+};
 mod comparison;
 mod content_analysis;
 mod content_binding;
@@ -18,6 +23,7 @@ mod export;
 mod extract;
 mod extraction_engine;
 mod fragments;
+pub mod segments;
 pub use cdn_classification::{
     CDN_CLASSIFICATION_ENGINE, CdnClassificationConfig, CdnClassificationObservation,
 };

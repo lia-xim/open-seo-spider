@@ -104,7 +104,7 @@ async fn owned_shutdown_stops_actual_http_listener_after_exact_legacy_inventory(
         .iter()
         .map(|v| v["name"].as_str().unwrap())
         .collect();
-    assert_eq!(names.len(), 27);
+    assert_eq!(names.len(), 28);
     assert_eq!(
         &names[..26],
         &[
@@ -137,6 +137,7 @@ async fn owned_shutdown_stops_actual_http_listener_after_exact_legacy_inventory(
         ]
     );
     assert_eq!(names[26], "spider_api_enrichment");
+    assert_eq!(names[27], "spider_segments");
     assert!(names.contains(&"spider_sitemap_findings"));
     assert!(
         !names

@@ -10,6 +10,7 @@ mod ngram_app;
 mod policy_export;
 mod resource_broken_sources_app;
 mod resource_export;
+mod segments_app;
 mod server;
 mod sitemap_findings;
 mod sitemap_findings_cli;
@@ -155,6 +156,17 @@ enum Command {
         output: PathBuf,
         #[arg(long)]
         csv: Option<PathBuf>,
+    },
+    /// Apply ordered saved-page segments and export complete counts, charts, pages and issues locally.
+    SavedSegments {
+        report: PathBuf,
+        #[arg(long)]
+        request: PathBuf,
+        #[arg(long)]
+        output: PathBuf,
+        /// Complete CSV instead of the default complete JSON. Existing outputs are refused.
+        #[arg(long)]
+        csv: bool,
     },
     /// Aggregate own1..6-grams across every row of an explicit saved report; no website requests.
     SavedNgrams {
@@ -576,6 +588,14 @@ async fn main() -> anyhow::Result<()> {
             let result = enrichment_app::run_cli(input, options, store, output, csv).await?;
             println!("{}", serde_json::to_string(&result)?);
         }
+        Command::SavedSegments {
+            report,
+            request,
+            output,
+            csv,
+        } => {
+            segments_app::run_cli(report, request, output, csv).await?;
+        }
         Command::SavedNgrams {
             report,
             options,
@@ -948,3 +968,9 @@ mod crawl_admission_cli_tests;
 #[cfg(test)]
 #[path = "cdn_cli_tests.rs"]
 mod cdn_cli_tests;
+#[cfg(test)]
+#[path = "cdn_directory_cli_tests.rs"]
+mod cdn_directory_cli_tests;
+#[cfg(test)]
+#[path = "segments_cli_tests.rs"]
+mod segments_cli_tests;

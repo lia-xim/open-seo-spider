@@ -1,0 +1,56 @@
+(()=>{'use strict';
+const FIELDS={requested_url:'Anfrage-URL',final_url:'Finale URL',status:'Anfrage-Status',media_type:'Medientyp',stored_title:'Gespeicherter Dokumenttitel'};
+const OPS={equals:'Ist gleich',contains:'Enthält',regex:'Regulärer Ausdruck'};
+const bytes=s=>new TextEncoder().encode(s).length;
+function validateRules(r){
+ if(!r||r.version!==1||!Array.isArray(r.definitions)||r.definitions.length>32)throw Error('Bis zu32 Segmente sind erlaubt.');
+ const ids=new Set();let total=0;
+ for(const d of r.definitions){if(!d||typeof d.id!=='string'||!/^[A-Za-z0-9_-]{1,64}$/.test(d.id)||ids.has(d.id))throw Error('Segmentkennungen müssen eindeutig sein.');ids.add(d.id);
+ if(typeof d.name!=='string'||!d.name.trim()||bytes(d.name)>256)throw Error('Bitte kurze, nicht leere Segmentnamen eingeben.');
+ if(!['all','any'].includes(d.join)||!Array.isArray(d.conditions)||d.conditions.length<1||d.conditions.length>8)throw Error('Je Segment sind1 bis8 Bedingungen erlaubt.');
+ for(const c of d.conditions){if(!c||!Object.hasOwn(FIELDS,c.field)||!Object.hasOwn(OPS,c.operator)||typeof c.value!=='string'||typeof c.case_insensitive!=='boolean'||bytes(c.value)>2048)throw Error('Bitte Feld, Vergleich und einen Wert bis2048 UTF8-Bytes angeben.');total+=bytes(c.value);}
+ }if(total>32768||bytes(JSON.stringify(r))>60000)throw Error('Die Definitionen sind zu groß.');return r;
+}
+function selection(value){if(value==='all'||value==='unassigned'||value==='unknown')return{kind:value};if(value.startsWith('segment:'))return{kind:'segment',id:value.slice(8)};throw Error('Ungültige Segmentauswahl.');}
+function makeRequest(rules,chosen,view,context=null,cursor=null){validateRules(rules);if(!['pages','issues'].includes(view))throw Error('Ungültige Ergebnisansicht.');return{rules,selection:selection(chosen),view,limit:100,cursor,expected_snapshot_token:context?.snapshot_token??null,expected_generation:context?.app_generation??null};}
+function gate(){let n=0;return{invalidate:()=>++n,current:()=>n,accept:v=>v===n};}
+const helpers={validateRules,selection,makeRequest,gate};
+if(typeof module!=='undefined'&&module.exports)module.exports=helpers;
+if(typeof document==='undefined')return;
+const $=id=>document.getElementById(id);let rules={version:1,definitions:[]},context=null,next=null,active=null;const epoch=gate(),KEY='open-seo-saved-segments-v1';
+const el=(tag,text)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
+const message=s=>{$('message').textContent=s;};
+function reset(){epoch.invalidate();active?.abort();active=null;context=null;next=null;$('result').hidden=true;$('next').disabled=true;}
+function label(text,child){const l=el('label',text);l.append(child);return l;}
+function select(values,current,change){const s=el('select');for(const[k,v]of Object.entries(values)){const o=el('option',v);o.value=k;s.append(o);}s.value=current;s.onchange=()=>{change(s.value);reset();};return s;}
+function input(value,change){const i=el('input');i.value=value;i.oninput=()=>{change(i.value);reset();};return i;}
+function button(text,action){const b=el('button',text);b.type='button';b.onclick=action;return b;}
+function renderDefinitions(){
+ $('definitions').replaceChildren();
+ rules.definitions.forEach((d,i)=>{const f=el('fieldset');f.append(el('legend',`Segment${i+1}`),label('Name',input(d.name,v=>{d.name=v;renderSelection();})),label('Bedingungen',select({all:'Alle müssen zutreffen',any:'Mindestens eine muss zutreffen'},d.join,v=>d.join=v)));
+ d.conditions.forEach((c,j)=>{const row=el('div');row.className='condition';const v=input(c.value,x=>c.value=x);const check=el('input');check.type='checkbox';check.checked=c.case_insensitive;check.onchange=()=>{c.case_insensitive=check.checked;reset();};row.append(label('Feld',select(FIELDS,c.field,x=>c.field=x)),label('Vergleich',select(OPS,c.operator,x=>c.operator=x)),label('Wert',v),label('Groß-/Kleinschreibung ignorieren',check));if(d.conditions.length>1)row.append(button('Bedingung entfernen',()=>{d.conditions.splice(j,1);reset();renderDefinitions();}));f.append(row);});
+ if(d.conditions.length<8)f.append(button('Bedingung hinzufügen',()=>{d.conditions.push({field:'requested_url',operator:'contains',value:'',case_insensitive:false});reset();renderDefinitions();}));
+ for(const[txt,to]of [['Nach oben',i-1],['Nach unten',i+1]]){const b=button(txt,()=>{[rules.definitions[i],rules.definitions[to]]=[rules.definitions[to],rules.definitions[i]];reset();renderDefinitions();});b.disabled=to<0||to>=rules.definitions.length;f.append(b);}f.append(button('Segment entfernen',()=>{rules.definitions.splice(i,1);reset();renderDefinitions();}));$('definitions').append(f);});renderSelection();$('add').disabled=rules.definitions.length>=32;
+}
+function renderSelection(){const old=$('selection').value;const options={all:'Alle gespeicherten Seiten',unassigned:'Unzugeordnet',unknown:'Unbekannt'};for(const d of rules.definitions)options['segment:'+d.id]=d.name;$('selection').replaceChildren();for(const[k,v]of Object.entries(options)){const o=el('option',v);o.value=k;$('selection').append(o);}$('selection').value=Object.hasOwn(options,old)?old:'all';}
+async function post(suffix,request,signal){
+ const id=$('job').value;if(!/^[0-9a-f-]{36}$/i.test(id))throw Error('Bitte einen gespeicherten Crawl wählen.');
+ const r=await fetch(`/api/crawls/${encodeURIComponent(id)}/${suffix}`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(request),signal});
+ const b=await r.arrayBuffer();if(b.byteLength>33554432)throw Error('Die Antwort überschreitet die Exportgrenze.');
+ if(!r.ok){let e;try{e=JSON.parse(new TextDecoder().decode(b));}catch{}throw Error(e?.message||`Auswertung abgelehnt (${r.status}).`);}
+ const expected=r.headers.get('x-content-sha256');const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',b)),v=>v.toString(16).padStart(2,'0')).join('');if(hash!==expected)throw Error('Die Antwort konnte nicht vollständig geprüft werden.');return b;
+}
+function chart(id,data){$(id).replaceChildren();const max=Math.max(1,...Object.values(data));for(const[k,n]of Object.entries(data)){const li=el('li',`${k==='unknown'?'Unbekannt':k}: ${n}`);const bar=el('span');bar.className='bar';bar.style.width=`${100*n/max}%`;li.append(bar);$(id).append(li);}}
+function render(r){context=r.context;next=r.next;$('result').hidden=false;$('next').disabled=!next;const s=r.summary;$('summary').textContent=`${s.selected_pages}/${s.total_pages} Seiten · ${s.selected_issues} Issues · ${s.multiple_matches} Mehrfachtreffer insgesamt · ${s.unassigned_pages} unzugeordnet · ${s.unknown_pages} unbekannt · ${s.orphan_issues} Issues ohne Seiten-URL`;
+ $('authority').textContent=`Berichtsstand ${context.snapshot_token.slice(0,12)} · gespeicherte Daten, kein neuer Websiteabruf`;
+ $('counts').replaceChildren();for(const c of r.counts){const tr=el('tr');for(const v of[c.name,c.matched,c.unknown,c.selected_matched,c.selected_unknown])tr.append(el('td',String(v)));$('counts').append(tr);}chart('statuses',r.charts.status);chart('depths',r.charts.depth);
+ const columns=r.view==='pages'?['page_ordinal','url','document_url','status','depth','stored_title','matched_indices','unknown_indices']:['code','severity','url','message','related_urls'];const labels={page_ordinal:'Zeile (ab 0)',url:'Anfrage-URL',document_url:'Dokument-URL',status:'Status',depth:'Gespeicherte Tiefe (Standard0 möglich)',stored_title:'Gespeicherter Titel',matched_indices:'Segmente',unknown_indices:'Unbekannte Prüfungen',code:'Issue',severity:'Schwere',message:'Befund',related_urls:'Verwandte URLs'};$('rows-head').replaceChildren();const head=el('tr');for(const c of columns)head.append(el('th',labels[c]));$('rows-head').append(head);$('rows').replaceChildren();for(const row of r.rows){const tr=el('tr');for(const k of columns){let v=row[k];if(k==='matched_indices'||k==='unknown_indices')v=v.map(i=>r.counts[i].name).join(', ');tr.append(el('td',v===null?'Unbekannt':typeof v==='object'?JSON.stringify(v):String(v??'')));}$('rows').append(tr);}message(`${r.rows.length} von ${r.total} Zeilen in dieser Ansicht.`);
+}
+async function load(cursor=null){active?.abort();active=new AbortController();const signal=active.signal;const revision=epoch.invalidate();try{const req=makeRequest(rules,$('selection').value,$('view').value,cursor?context:null,cursor);const data=JSON.parse(new TextDecoder().decode(await post('segments',req,signal)));if(epoch.accept(revision))render(data);}catch(e){if(e.name!=='AbortError'&&epoch.accept(revision)){reset();message(e.message);}}}
+async function download(csv){if(!context)return;active?.abort();active=new AbortController();const signal=active.signal,revision=epoch.current();try{const req=makeRequest(rules,$('selection').value,$('view').value,context,null);const b=await post(csv?'segments.csv':'segments.json',req,signal);if(!epoch.accept(revision))return;const url=URL.createObjectURL(new Blob([b],{type:csv?'text/csv':'application/json'}));const a=el('a');a.href=url;a.download=csv?'segments.csv':'segments.json';a.click();URL.revokeObjectURL(url);message('Vollständiger ausgewählter Bericht heruntergeladen.');}catch(e){if(e.name!=='AbortError'&&epoch.accept(revision))message(e.message);}}
+ $('add').onclick=()=>{if(rules.definitions.length>=32)return;let i=1;while(rules.definitions.some(d=>d.id==='s'+i))i++;rules.definitions.push({id:'s'+i,name:'Segment '+i,join:'all',conditions:[{field:'requested_url',operator:'contains',value:'/',case_insensitive:false}]});reset();renderDefinitions();};
+ $('save').onclick=()=>{try{validateRules(rules);localStorage.setItem(KEY,JSON.stringify(rules));message('Definitionen in diesem Browser gespeichert.');}catch(e){message(e.message);}};
+ $('restore').onclick=()=>{try{const raw=localStorage.getItem(KEY);if(!raw)throw Error('Noch keine Definitionen gespeichert.');if(bytes(raw)>65536)throw Error('Gespeicherte Definitionen sind zu groß.');rules=validateRules(JSON.parse(raw));reset();renderDefinitions();message('Definitionen geladen; Crawl erneut auswerten.');}catch(e){message(e.message);}};
+ $('segments-form').onsubmit=e=>{e.preventDefault();load();};$('selection').onchange=reset;$('view').onchange=reset;$('job').onchange=reset;$('next').onclick=()=>load(next);$('export-json').onclick=()=>download(false);$('export-csv').onclick=()=>download(true);renderDefinitions();
+ fetch('/api/crawls').then(r=>{if(!r.ok)throw Error('Crawl-Liste nicht verfügbar.');return r.json();}).then(r=>{$('job').replaceChildren(el('option','Bitte Crawl wählen'));$('job').firstChild.value='';for(const j of r.crawls||[]){const o=el('option',`${j.seed_url||j.id} · ${j.status}`);o.value=j.id;o.disabled=['running','pausing','cancelling'].includes(j.status);$('job').append(o);}}).catch(e=>message(e.message));
+})();

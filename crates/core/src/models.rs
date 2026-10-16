@@ -34,6 +34,9 @@ pub struct CrawlConfig {
     /// Declared reporting classification only; never grants fetch, traversal or credentials.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub cdn_classification: Option<crate::CdnClassificationConfig>,
+    /// Own literal-directory reporting only; never network or credential authority.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cdn_directory_reporting: Option<crate::CdnDirectoryReportingConfig>,
     pub concurrency: usize,
     pub request_timeout_secs: u64,
     /// None means no product-imposed URL limit.
@@ -129,6 +132,7 @@ impl Default for CrawlConfig {
             crawl_links: true,
             include_subdomains: false,
             cdn_classification: None,
+            cdn_directory_reporting: None,
             concurrency: 8,
             request_timeout_secs: 30,
             max_pages: None,
@@ -649,6 +653,8 @@ pub struct LinkRecord {
     pub internal: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub cdn_classification: Option<crate::CdnClassificationObservation>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cdn_directory_reporting: Option<crate::CdnDirectoryReportingObservation>,
     pub nofollow: bool,
     pub kind: String,
     pub raw_href: Option<String>,
@@ -971,6 +977,8 @@ pub struct PageRecord {
     /// Requested URL classification, never inferred from a redirect or a CDN provider.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub cdn_classification: Option<crate::CdnClassificationObservation>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cdn_directory_reporting: Option<crate::CdnDirectoryReportingObservation>,
     /// Bounded native HTTP head-source facts, independent of repaired/rendered metadata.
     /// Legacy absence is unknown; no observation is reconstructed on report load.
     #[serde(default, skip_serializing_if = "Option::is_none")]

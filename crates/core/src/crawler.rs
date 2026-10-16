@@ -48,6 +48,8 @@ pub struct Crawler {
     policy_limits: crate::LiveCrawlPolicyLimits,
     capture: Option<Arc<crate::CompiledContentCaptureConfig>>,
     cdn_classification: Option<Arc<crate::cdn_classification::CompiledCdnClassification>>,
+    cdn_directory_reporting:
+        Option<Arc<crate::cdn_directory_reporting::CompiledCdnDirectoryReporting>>,
     #[cfg(test)]
     pdf_parse_hook: Option<PdfParseHook>,
 }
@@ -94,6 +96,12 @@ impl Crawler {
             .cdn_classification
             .as_ref()
             .map(crate::CdnClassificationConfig::compile)
+            .transpose()?
+            .map(Arc::new);
+        let cdn_directory_reporting = config
+            .cdn_directory_reporting
+            .as_ref()
+            .map(crate::CdnDirectoryReportingConfig::compile)
             .transpose()?
             .map(Arc::new);
         let capture = config
@@ -228,6 +236,7 @@ impl Crawler {
             policy_limits,
             capture,
             cdn_classification,
+            cdn_directory_reporting,
             #[cfg(test)]
             pdf_parse_hook: None,
         })
@@ -572,6 +581,7 @@ impl Crawler {
             store: self.store.clone(),
             capture: self.capture.clone(),
             cdn_classification: self.cdn_classification.clone(),
+            cdn_directory_reporting: self.cdn_directory_reporting.clone(),
             generation,
             config: self.config.clone(),
             seeds: self.seeds.clone(),
@@ -703,7 +713,7 @@ impl Crawler {
                     &page,
                     &self.seeds,
                     self.config.include_subdomains,
-                    self.cdn_classification.is_some(),
+                    self.cdn_classification.is_some() || self.cdn_directory_reporting.is_some(),
                 )
                 && !page.blocked_by_robots
                 && self.config.max_depth.is_none_or(|limit| page.depth < limit)
@@ -714,7 +724,7 @@ impl Crawler {
                         link,
                         &self.seeds,
                         self.config.include_subdomains,
-                        self.cdn_classification.is_some(),
+                        self.cdn_classification.is_some() || self.cdn_directory_reporting.is_some(),
                     ) || self.config.check_external)
                         && self.filters.allows(&link.url)
                         && seen.insert(link.url.clone())
@@ -1603,6 +1613,7 @@ impl Crawler {
             store: self.store.clone(),
             capture: self.capture.clone(),
             cdn_classification: self.cdn_classification.clone(),
+            cdn_directory_reporting: self.cdn_directory_reporting.clone(),
             generation,
             config: self.config.clone(),
             seeds: self.seeds.clone(),
@@ -3017,6 +3028,8 @@ struct FetchContext {
     store: Option<Arc<CrawlStore>>,
     capture: Option<Arc<crate::CompiledContentCaptureConfig>>,
     cdn_classification: Option<Arc<crate::cdn_classification::CompiledCdnClassification>>,
+    cdn_directory_reporting:
+        Option<Arc<crate::cdn_directory_reporting::CompiledCdnDirectoryReporting>>,
     generation: Option<u64>,
     config: CrawlConfig,
     seeds: Vec<Url>,
@@ -3036,6 +3049,9 @@ impl FetchContext {
         let (mut page, payload) = self.fetch(entry, FetchPurpose::PageDocument).await;
         if let Some(classification) = &self.cdn_classification {
             classification.apply(&mut page);
+        }
+        if let Some(reporting) = &self.cdn_directory_reporting {
+            reporting.apply(&mut page);
         }
         match payload {
             Some(FetchPayload::PageText(text)) => (page, Some(text)),

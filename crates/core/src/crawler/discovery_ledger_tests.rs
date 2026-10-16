@@ -285,6 +285,7 @@ fn context(crawler: &Crawler, generation: u64) -> FetchContext {
         policy: crawler.policy.clone(),
         pdf_parse_hook: None,
         cdn_classification: None,
+        cdn_directory_reporting: None,
     }
 }
 fn setup(

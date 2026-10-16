@@ -38,6 +38,7 @@ mod policy;
 mod resource_broken_sources;
 pub(crate) mod resources;
 mod response_stream;
+mod segments;
 mod sitemap_csv_stream;
 mod sitemap_findings;
 mod sitemap_findings_reads;
@@ -566,6 +567,54 @@ async fn serve_with_mcp_files_ready_source(
             )),
         )
         .route(
+            "/saved-segments",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/html; charset=utf-8")],
+                    include_str!("../../../web/saved-segments.html"),
+                )
+            }),
+        )
+        .route(
+            "/saved-segments.js",
+            get(|| async {
+                (
+                    [(
+                        header::CONTENT_TYPE,
+                        "application/javascript; charset=utf-8",
+                    )],
+                    include_str!("../../../web/saved-segments.js"),
+                )
+            }),
+        )
+        .route(
+            "/saved-segments.css",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/css; charset=utf-8")],
+                    include_str!("../../../web/saved-segments.css"),
+                )
+            }),
+        )
+        .route(
+            "/api/crawls/{id}/segments",
+            post(segments::preview).layer(axum::extract::DefaultBodyLimit::max(
+                segments::REQUEST_BYTES,
+            )),
+        )
+        .route(
+            "/api/crawls/{id}/segments.json",
+            post(segments::json).layer(axum::extract::DefaultBodyLimit::max(
+                segments::REQUEST_BYTES,
+            )),
+        )
+        .route(
+            "/api/crawls/{id}/segments.csv",
+            post(segments::csv).layer(axum::extract::DefaultBodyLimit::max(
+                segments::REQUEST_BYTES,
+            )),
+        )
+        .route(
             "/saved-ngrams",
             get(|| async {
                 (
@@ -818,6 +867,7 @@ async fn capabilities() -> Json<Value> {
         "saved_content_analysis":{"endpoint":"/api/crawls/{id}/content/analyze","engine":crate::content_cohort::SAVED_CONTENT_ENGINE,"website_requests":0,"explicit_cohort":true,"max_documents":128,"site_wide_coverage":false},
         "saved_comparison":{"endpoint":"/api/compare/saved","engine":open_seo_spider_core::SAVED_COMPARISON_ENGINE,"website_requests":0,"exact_requested_identity":true,"explicit_mapping":true,"unknown_facts_preserved":true,"full_original_report_bundle":false,"sql_attested":false,"full_reference_parity":false},
         "native_content_capture":{"opt_in":true,"sources":["raw_http_html","rendered_dom_html"],"body_retention":false,"source_binding":"persisted_consistency","full_reference_parity":false},
+        "cdn_directory_reporting":{"opt_in":true,"engine":open_seo_spider_core::CDN_DIRECTORY_REPORTING_ENGINE,"normalization":open_seo_spider_core::CDN_DIRECTORY_NORMALIZATION,"version":1,"max_rules":32,"max_rule_utf8_bytes":2048,"literal_directory_prefix":true,"cross_http_https":true,"one_www_alias":true,"ascii_dns_only":true,"explicit_default_ports_supported":false,"declared_reporting_only":true,"grants_network_or_credentials":false,"full_reference_parity":false},
         "cdn_classification":{"opt_in":true,"engine":open_seo_spider_core::CDN_CLASSIFICATION_ENGINE,"version":1,"exact_http_origins":true,"max_origins":32,"declared_reporting_only":true,"grants_network_or_credentials":false,"full_reference_parity":false},
         "native_resource_discovery":{"opt_in":true,"engine":open_seo_spider_core::RESOURCE_DISCOVERY_ENGINE,"semantic_contracts":[open_seo_spider_core::RESOURCE_DISCOVERY_ENGINE,open_seo_spider_core::RESOURCE_CONTRACT_ENGINE],"contract_selection":"explicit_optional_config","qualified_directives":["nofollow","ugc","sponsored"],"qualified_link_scope":"target_internal_external_including_document_nofollow","durable_original_reference_roles":true,"durable_sqlite_ledger":true,"paged_occurrences":true,"paged_transport_metadata":true,"streamed_snapshot_exports":true,"entity_body_retention":false,"renderer_supported":false,"full_reference_parity":false},
         "stored_sitemap_source_bodies":{"opt_in":true,"config_field":"sitemap_source_archive","storage":"utf8_sqlite_own_archive","metadata_byte_availability":"not_checked","download":"verified_private_spool_before_headers","max_binary_bytes":67108864,"json_page_limits_unchanged":true,"wire_bytes":false,"portable_bundle":false,"inherited_body_copy":false,"unresponsive_transport_drain":"not_proven"},
@@ -826,6 +876,7 @@ async fn capabilities() -> Json<Value> {
         "offline_serp":{"path":"/serp","website_requests":0,"csv_import":true,"row_limit":10000},
         "offline_robots":{"path":"/robots","website_requests":0,"engine":"crawler_policy","remote_rules_fetch":false},
         "api_only_enrichment":{"path":"/api-enrichment","engine":open_seo_spider_core::api_enrichment::API_ENRICHMENT_ENGINE,"providers":["pagespeed_lighthouse_v1"],"application_website_requests":0,"provider_may_fetch_submitted_site":true,"explicit_start":true,"retained_cancel_and_eof_join":true,"immutable_completed_reports":true,"automatic_provider_resume":false,"full_reference_parity":false},
+        "saved_segments":{"path":"/saved-segments","engine":open_seo_spider_core::segments::ENGINE,"version":1,"ordered_multi_label":true,"segment_fields":["requested_url","final_url","status","media_type","stored_title"],"missing_values":"unknown_for_supported_predicate_fields","depth_is_segment_predicate":false,"depth_reporting_policy":open_seo_spider_core::segments::DEPTH_POLICY,"max_segments":32,"max_conditions_per_segment":8,"snapshot_bound_pagination":true,"full_json_csv":true,"website_requests":0,"definition_storage":"explicit_request_or_browser_local_storage","intersegment_dependencies":false,"full_reference_parity":false},
         "offline_list_import":{"formats":["txt","csv","xml","xlsx"],"website_requests":0,"max_input_bytes":8388608,"max_rows_per_file":50000,"row_order":true,"duplicates":true,"xlsx_formulas":"reject_or_explicit_cached_string_only","provenance":"declared_client_input"},
         "optional_worker":{"javascript_rendering":true,"custom_javascript":true,
             "redacted_cookie_observations":true,"screenshots":true,"accessibility_axe":true,
@@ -893,6 +944,9 @@ mod crawl_admission_limits_tests;
 #[cfg(test)]
 #[path = "server/cdn_classification_tests.rs"]
 mod cdn_classification_tests;
+#[cfg(test)]
+#[path = "server/cdn_directory_reporting_tests.rs"]
+mod cdn_directory_reporting_tests;
 
 fn config_from_input(mut value: Value) -> anyhow::Result<CrawlConfig> {
     let object = value

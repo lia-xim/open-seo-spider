@@ -296,6 +296,7 @@ fn context_from_crawler(crawler: &Crawler) -> FetchContext {
         policy: crawler.policy.clone(),
         pdf_parse_hook: None,
         cdn_classification: None,
+        cdn_directory_reporting: None,
     }
 }
 fn admission(

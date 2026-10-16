@@ -21,7 +21,7 @@
       javascript_rendering: false, renderer_endpoint: 'http://127.0.0.1:8790/render',
       renderer_wait_ms: 500, renderer_accessibility: false, renderer_screenshot: false,
       renderer_collect_cookies: false, custom_javascript_json: '[]',
-      include_patterns_text: '', exclude_patterns_text: '', custom_extractions_json: '[]', audit_thresholds_json: '{}', pdf_analysis_json: '{}', validate_fragments: false, link_position_rules_json: '[]', crawl_policy_enabled: false, crawl_policy_json: '{"scope":{"roots":[{"origin":"https://example.test","folders":["/"],"subdomains":false,"exact_paths":[]}]}}', live_policy_limits_json: '{}', content_capture_enabled:false, content_capture_json:'{"sources":["raw_http_html"],"include_selectors":["body"],"exclude_selectors":["script","style","template","noscript","nav","footer"]}',resource_discovery_enabled:false,resource_discovery_json:'{}',resource_discovery_limits_json:'{}',cdn_classification_enabled:false,cdn_origins_text:''
+      include_patterns_text: '', exclude_patterns_text: '', custom_extractions_json: '[]', audit_thresholds_json: '{}', pdf_analysis_json: '{}', validate_fragments: false, link_position_rules_json: '[]', crawl_policy_enabled: false, crawl_policy_json: '{"scope":{"roots":[{"origin":"https://example.test","folders":["/"],"subdomains":false,"exact_paths":[]}]}}', live_policy_limits_json: '{}', content_capture_enabled:false, content_capture_json:'{"sources":["raw_http_html"],"include_selectors":["body"],"exclude_selectors":["script","style","template","noscript","nav","footer"]}',resource_discovery_enabled:false,resource_discovery_json:'{}',resource_discovery_limits_json:'{}',cdn_classification_enabled:false,cdn_origins_text:'',cdn_directory_reporting_enabled:false,cdn_directory_rules_text:''
     }
   };
   const sections = {
@@ -382,7 +382,7 @@
       if ($('crawl-mode').value !== mode) throw new Error('Der Crawl-Modus wurde während der Prüfung geändert. Bitte erneut starten.');
       if (!current()) return;
       const payload = { ...state.settings, ...advanced, mode, seed_url: mode === 'sitemap' ? '' : urls[0] || '', urls: mode === 'sitemap' ? [] : urls, seed_urls: mode === 'sitemap' ? [] : urls, sitemap_urls: mode === 'sitemap' ? urls : sitemapUrls, input_imports: inputImports, crawl_links: mode !== 'list', include_subdomains: state.settings.follow_subdomains, request_timeout_secs: state.settings.timeout_seconds, max_body_bytes: state.settings.max_body_mb * 1024 * 1024 };
-      for (const key of ['cdn_classification_enabled','cdn_origins_text','crawl_policy_enabled', 'crawl_policy_json', 'live_policy_limits_json', 'content_capture_enabled', 'content_capture_json','resource_discovery_enabled','resource_discovery_json','resource_discovery_limits_json']) delete payload[key];
+      for (const key of ['cdn_directory_reporting_enabled','cdn_directory_rules_text','cdn_classification_enabled','cdn_origins_text','crawl_policy_enabled', 'crawl_policy_json', 'live_policy_limits_json', 'content_capture_enabled', 'content_capture_json','resource_discovery_enabled','resource_discovery_json','resource_discovery_limits_json']) delete payload[key];
       for (const key of [...crawlAdmissionSettingKeys, ...sitemapArchiveSettingKeys, 'sitemap_source_processing_enabled', ...sitemapSourceFields.map(field => field.setting), 'sitemap_membership_limits_enabled', ...sitemapMembershipFields.map(field => field.setting)]) delete payload[key];
       payload.renderer = state.settings.javascript_rendering ? { endpoint: state.settings.renderer_endpoint, wait_ms: state.settings.renderer_wait_ms, accessibility: state.settings.renderer_accessibility, screenshot: state.settings.renderer_screenshot, collect_cookies: state.settings.renderer_collect_cookies, custom_javascript: parseCustomJavascript(state.settings.custom_javascript_json) } : null;
       const result = await request('/api/crawls', { method: 'POST', body: JSON.stringify(payload) });
@@ -1031,6 +1031,7 @@
         ['Meta Description', first(page.meta_descriptions) || '—'], ['H1', first(page.h1) || '—'],
         ['Pixelbreiten Titel / Description', `${JSON.stringify(page.title_pixel_widths || [])}\n${JSON.stringify(page.description_pixel_widths || [])}`],
         ['Text-Messprofil', page.text_metrics_engine || 'Keine Messung erfasst'],
+        ['CDN-Verzeichniszuordnung', cdnDirectoryReportText(page.cdn_directory_reporting)],
         ['CDN-Klassifikation', page.cdn_classification ? page.cdn_classification.configured_origin + '\nDeklarierte Konfiguration · ' + page.cdn_classification.engine + '\nKonfigurations-SHA256 ' + page.cdn_classification.config_sha256 + '\nUrsprünglicher Seed-Bereich: ' + (page.cdn_classification.seed_scope_internal ? 'intern' : 'extern') + ' · keine zusätzliche Abruf-/Traversierungs-/Headerfreigabe' : 'Kein gespeicherter CDN-Zuordnungsbefund; alte Beobachtungen werden nicht nachträglich klassifiziert.'],
         ...htmlHeadDetailFields(page),
         ['H2', first(page.h2) || '—'], ['Canonical', first(page.canonical) || '—'],
@@ -1144,7 +1145,7 @@
       };
       element.innerHTML = `<p class="detail-empty">Beobachtungen aus dem reparierten HTML5-DOM. DOM-Pfad und Reihenfolge sind keine Quellzeilen oder Bildschirmkoordinaten. Kandidaten-Syntax belegt keine Browserauswahl.</p><dl class="details-grid">${fields.map(([name, value]) => `<dt>${escape(name)}</dt><dd>${escape(value)}</dd>`).join('')}</dl>${preview('Überschriftenfolge', facts?.headings)}${preview('Meta Keywords', facts?.meta_keywords)}${preview('Fragmentziele im Dokument', facts?.fragment_targets)}${preview('Weitere Navigation', facts?.navigation_candidates)}${preview('Responsive Bildvorkommen', facts?.responsive_images)}${preview('Linkvorkommen und Position', page.links)}${preview('DOM vor Rendering', page.raw_metadata?.dom_metadata ? [page.raw_metadata.dom_metadata] : null)}${preview('Fragmentreferenzen dieser Quell-URL', state.fragments?.enabled ? array(state.fragments.observations).filter(record => record.source_url === page.url) : null)}`;
     } else if (state.inspectorTab === 'outlinks') {
-      element.innerHTML = page.links.length ? `<ul class="detail-links">${page.links.map((link) => `<li>${safeLink(linkURL(link))}${typeof link === 'object' ? `<small>${escape(link.text || '(ohne Linktext)')} · ${link.internal ? 'intern' : 'extern'}${link.nofollow ? ' · nofollow' : ''}${link.kind ? ` · ${escape(link.kind)}` : ''}</small>` : ''}</li>`).join('')}</ul>` : '<p class="detail-empty">Keine ausgehenden Links erfasst.</p>';
+      element.innerHTML = page.links.length ? `<ul class="detail-links">${page.links.map((link) => `<li>${safeLink(linkURL(link))}${typeof link === 'object' ? `<small>${escape(link.text || '(ohne Linktext)')} · ${link.internal ? 'intern' : 'extern'}${link.nofollow ? ' · nofollow' : ''}${link.kind ? ` · ${escape(link.kind)}` : ''}${link.cdn_directory_reporting ? ` · ${escape(cdnDirectoryReportText(link.cdn_directory_reporting))}` : ''}</small>` : ''}</li>`).join('')}</ul>` : '<p class="detail-empty">Keine ausgehenden Links erfasst.</p>';
     } else if (state.inspectorTab === 'inlinks') {
       const sources = internals().flatMap((source) => source.links.filter((link) => linkURL(link) === page.url || linkURL(link) === page.final_url).map((link) => ({ url: source.url, text: typeof link === 'object' ? link.text : '' })));
       element.innerHTML = sources.length ? `<ul class="detail-links">${sources.map((source) => `<li>${safeLink(source.url)}<small>${escape(source.text || '(ohne Linktext)')}</small></li>`).join('')}</ul>` : '<p class="detail-empty">Keine eingehenden Links aus den bislang erfassten Seiten. Die Start-URL kann ohne interne Eingangslinks erscheinen.</p>';
@@ -1292,7 +1293,7 @@
   function saveSettings(event) {
     event.preventDefault();
     const form = $('settings-form');
-    const advancedText = { ...readCdnClassificationSettings(form), ...readCrawlAdmissionSettings(form), ...readSitemapSourceProcessingSettings(form), ...readSitemapSourceArchiveSettings(form), include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value, link_position_rules_json: form.elements.link_position_rules_json.value, validate_fragments: form.elements.validate_fragments.checked, crawl_policy_enabled: form.elements.crawl_policy_enabled.checked, crawl_policy_json: form.elements.crawl_policy_json.value, live_policy_limits_json: form.elements.live_policy_limits_json.value, javascript_rendering: form.elements.javascript_rendering.checked, content_capture_enabled:form.elements.content_capture_enabled.checked, content_capture_json:form.elements.content_capture_json.value,resource_discovery_enabled:form.elements.resource_discovery_enabled.checked,resource_discovery_json:form.elements.resource_discovery_json.value,resource_discovery_limits_json:form.elements.resource_discovery_limits_json.value };
+    const advancedText = { ...readCdnDirectoryReportingSettings(form), ...readCdnClassificationSettings(form), ...readCrawlAdmissionSettings(form), ...readSitemapSourceProcessingSettings(form), ...readSitemapSourceArchiveSettings(form), include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value, link_position_rules_json: form.elements.link_position_rules_json.value, validate_fragments: form.elements.validate_fragments.checked, crawl_policy_enabled: form.elements.crawl_policy_enabled.checked, crawl_policy_json: form.elements.crawl_policy_json.value, live_policy_limits_json: form.elements.live_policy_limits_json.value, javascript_rendering: form.elements.javascript_rendering.checked, content_capture_enabled:form.elements.content_capture_enabled.checked, content_capture_json:form.elements.content_capture_json.value,resource_discovery_enabled:form.elements.resource_discovery_enabled.checked,resource_discovery_json:form.elements.resource_discovery_json.value,resource_discovery_limits_json:form.elements.resource_discovery_limits_json.value };
     try { parseAdvanced(advancedText); validateRendererSettings({ javascript_rendering: form.elements.javascript_rendering.checked, renderer_endpoint: form.elements.renderer_endpoint.value.trim(), renderer_wait_ms: Number(form.elements.renderer_wait_ms.value), timeout_seconds: Number(form.elements.timeout_seconds.value) }); }
     catch (error) {
       if (form.elements.sitemap_source_processing_enabled.checked || form.elements.sitemap_membership_limits_enabled.checked) $('sitemap-source-processing-settings').open = true;
@@ -1326,6 +1327,7 @@
         Object.assign(state.settings, { content_capture_enabled:saved.content_capture_enabled === true, content_capture_json:String(saved.content_capture_json || '{"sources":["raw_http_html"],"include_selectors":["body"],"exclude_selectors":["script","style","template","noscript","nav","footer"]}') });
         Object.assign(state.settings,{resource_discovery_enabled:saved.resource_discovery_enabled===true,resource_discovery_json:String(saved.resource_discovery_json || '{}'),resource_discovery_limits_json:String(saved.resource_discovery_limits_json || '{}')});
         Object.assign(state.settings,restoreCdnClassificationSettings(saved));
+        Object.assign(state.settings,restoreCdnDirectoryReportingSettings(saved));
         state.settings.crawl_admission_limits_enabled = saved.crawl_admission_limits_enabled === true;
         for(const field of crawlAdmissionFields)state.settings[field.setting]=String(saved[field.setting]??'');
         state.settings.sitemap_source_archive_enabled = saved.sitemap_source_archive_enabled === true;
@@ -1496,7 +1498,7 @@
       return { name, selector, attribute: definition.attribute == null ? null : definition.attribute.trim(), method, output, max_results, regex_group, regex_flags, namespaces };
     });
     const lines = (value) => [...new Set(String(value || '').split(/\r?\n/).map((line) => line.trim()).filter(Boolean))];
-    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), pdf_analysis: parsePdfAnalysis(settings.pdf_analysis_json), link_position_rules: parsePositionRules(settings.link_position_rules_json), validate_fragments: settings.validate_fragments === true, include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text), ...parseNativePolicy(settings), ...parseContentCapture(settings),...parseResourceDiscovery(settings), ...parseSitemapSourceProcessing(settings), ...parseSitemapMembershipLimits(settings), ...parseSitemapSourceArchive(settings), ...parseCrawlAdmissionLimits(settings), ...parseCdnClassification(settings) };
+    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), pdf_analysis: parsePdfAnalysis(settings.pdf_analysis_json), link_position_rules: parsePositionRules(settings.link_position_rules_json), validate_fragments: settings.validate_fragments === true, include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text), ...parseNativePolicy(settings), ...parseContentCapture(settings),...parseResourceDiscovery(settings), ...parseSitemapSourceProcessing(settings), ...parseSitemapMembershipLimits(settings), ...parseSitemapSourceArchive(settings), ...parseCrawlAdmissionLimits(settings), ...parseCdnClassification(settings), ...parseCdnDirectoryReporting(settings) };
   }
 
   function policyObject(value, allowed, label) {
@@ -1596,6 +1598,41 @@
     }
     if (config.readability != null) { policyObject(config.readability,['min_words'],'Lesbarkeit'); const minimum = config.readability.min_words ?? 30; if (!Number.isSafeInteger(minimum) || minimum < 1 || minimum > maxTokens) throw new Error('Lesbarkeit: min_words muss positiv und innerhalb des Tokenbudgets sein.'); }
     return config;
+  }
+
+  function restoreCdnDirectoryReportingSettings(saved){return {cdn_directory_reporting_enabled:saved.cdn_directory_reporting_enabled===true,cdn_directory_rules_text:typeof saved.cdn_directory_rules_text==='string'?saved.cdn_directory_rules_text:''};}
+  function readCdnDirectoryReportingSettings(form){return {cdn_directory_reporting_enabled:form.elements.cdn_directory_reporting_enabled.checked,cdn_directory_rules_text:form.elements.cdn_directory_rules_text.value};}
+  function parseCdnDirectoryReporting(settings){
+    if(!settings.cdn_directory_reporting_enabled)return {};
+    const text=settings.cdn_directory_rules_text,encoder=new TextEncoder();
+    const invalid=()=>new Error('Eine CDN-Verzeichnisadresse ist ungültig. Verwende einen ASCII-Domainnamen mit http:// oder https:// und einem abschließenden /. Zugangsdaten, Platzhalter, Zusätze, Punkte-Verzeichnisse und die Ports 80/443 sind hier nicht erlaubt.');
+    if(typeof text!=='string'||encoder.encode(text).length>131072)throw new Error('Die CDN-Verzeichnisliste ist zu lang. Gib höchstens 32 Adressen ein.');
+    const rules=text.split(/\r?\n/).filter(value=>value.trim()!=='');
+    if(rules.length<1||rules.length>32)throw new Error('Gib 1 bis 32 CDN-Verzeichnisadressen ein, jeweils eine pro Zeile.');
+    const seen=new Set();
+    for(const value of rules){
+      if(encoder.encode(value).length>2048||/[^\x21-\x7e]|[\\?#@*]/.test(value))throw invalid();
+      const parts=/^(https?):\/\/([^/]+)(\/.*)?$/i.exec(value);if(!parts)throw invalid();
+      const authority=parts[2].split(':'),host=authority[0].toLowerCase(),directory=parts[3]||'/';
+      if(authority.length>2||host.length>253||!host.split('.').every(label=>label.length>=1&&label.length<=63&&/^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/.test(label)&&!label.startsWith('xn--')))throw invalid();
+      const port=authority.length===2?Number(authority[1]):null;
+      if(authority.length===2&&(!/^\d+$/.test(authority[1])||!Number.isInteger(port)||port<1||port>65535||port===80||port===443))throw invalid();
+      if(!directory.endsWith('/')||/%(?![a-f0-9]{2})/i.test(directory)||directory.split('/').some(segment=>['.','..'].includes(segment.replace(/%2e/ig,'.'))))throw invalid();
+      let url;try{url=new URL(value);}catch(_){throw invalid();}
+      if(url.hostname!==host||url.pathname!==directory||(url.port?Number(url.port):null)!==port)throw invalid();
+      // Numeric/IP hosts are outside this own DNS profile, including URL's IPv4 aliases.
+      if(/^[\d.]+$/.test(url.hostname))throw invalid();
+      const alias=host.replace(/^www\./,'');let base;try{base=new URL(`http://${alias}/`);}catch(_){throw invalid();}
+      if(base.hostname!==alias||/^[\d.]+$/.test(base.hostname))throw invalid();
+      const key=JSON.stringify([alias,port,directory]);
+      if(seen.has(key))throw new Error('Eine CDN-Verzeichnisregel ist mehrfach eingetragen. Auch http/https und ein vorangestelltes www zählen hier zur selben Regel.');
+      seen.add(key);
+    }
+    return {cdn_directory_reporting:{version:1,rules}};
+  }
+  function cdnDirectoryReportText(observation){
+    if(!observation||!Array.isArray(observation.matching_rules)||!observation.matching_rules.length)return 'Kein gespeicherter CDN-Verzeichnisbefund; alte Beobachtungen werden nicht nachträglich zugeordnet.';
+    return observation.matching_rules.slice(0,32).map(rule=>`Regel ${Number(rule.rule_index)+1}: ${String(rule.declared_directory)}`).join('\n')+'\nDeklarierte Berichtszuordnung · '+String(observation.engine)+' · '+String(observation.normalization)+'\nKonfigurations-SHA256 '+String(observation.config_sha256)+'\nUrsprünglicher Seed-Bereich: '+(observation.seed_scope_internal?'intern':'extern')+' · keine zusätzliche Abruf-/Traversierungs-/Headerfreigabe';
   }
 
   function restoreCdnClassificationSettings(saved){return {cdn_classification_enabled:saved.cdn_classification_enabled===true,cdn_origins_text:typeof saved.cdn_origins_text==='string'?saved.cdn_origins_text:''};}
