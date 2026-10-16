@@ -6851,14 +6851,14 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-16T06:50:11.597Z",
+  "last_verified_at": "2026-10-16T07:20:08.960Z",
   "current_work": [
     {
       "id": "combined-source-v15-20261016",
       "priority": 0,
-      "status": "RETRY2_FULL_RUST_SUITE_PASS_BUILD_RUNNING_NATIVE_PENDING",
+      "status": "FULL_RUST_AND_RELEASE_BUILD_PASS_QUOTA_NATIVE_FAILED_UI_READINESS",
       "title_de": "Source15 mit dauerhaften Crawl-Limits vollständig abnehmen",
-      "summary_de": "Der frische vollständige Retry2-Lauf besteht mit 1535 Rust-Tests, null Fehlern und null übersprungenen Tests. Vier echte frische Renderer-Prüfungen, Formatprüfung und strenger Clippy bestehen; Worker und Fixture sind tatsächlich geschlossen. Neun Frontendfälle bleiben separate frühere Belege mit fünf bytegleichen Testzielen. Der optimierte Build läuft; native Abnahme und Installation stehen aus. Die letzte abgenommene Installation bleibt Source14.",
+      "summary_de": "Retry2 besteht den Gesamtlauf mit 1535 Rust-Tests und den optimierten Release-Build. Der erste Quota-Nativlauf besteht den breiten UI-Ablauf und scheitert im 320-Pixel-Fenster vor dem Öffnen der Quota-Erhöhung am noch nicht bedienbaren Button. Die Ursache ist noch nicht bewiesen; eine begrenzte Zustandsprüfung wird unabhängig geprüft. Die fünf Datenbank-Negativkopien wurden noch nicht erreicht. Alle Testprozesse sind geschlossen, die Testsperre ist frei. Die letzte abgenommene Installation bleibt Source14.",
       "feature_ids": [
         "crawl.limits"
       ],
@@ -6867,10 +6867,11 @@
         "Quoten-Produkt-/Kompositions-/Formatreviews und die tatsächlichen Vorprüfungen bestehen.",
         "Source14 bleibt tatsächlich installiert; gespeicherteCrawls wurden unverändert übernommen.",
         "Die zwei eng geprüften Testkorrekturen bestehen Formatter, unabhängigen Whitespace-Review, strengen Clippy und drei tatsächlich ausgeführte Inventartests. Privat veröffentlicht; alle 429 Dateien und Git-Blobs geprüft.",
-        "Der vollständig eingefrorene Retry2-Quellstand besteht den tatsächlichen Gesamtlauf mit 1535 Rust-Tests einschließlich vier frischer Renderer-Prüfungen, Formatprüfung und Clippy. Alle 429 Quelldateien bleiben unverändert."
+        "Der vollständig eingefrorene Retry2-Quellstand besteht den tatsächlichen Gesamtlauf mit 1535 Rust-Tests einschließlich vier frischer Renderer-Prüfungen, Formatprüfung und Clippy. Alle 429 Quelldateien bleiben unverändert.",
+        "Der tatsächliche optimierte Retry2-Build besteht; die neue Programmdatei ist mit SHA256 und Größe gebunden. Der fehlgeschlagene erste Nativlauf bleibt als fehlgeschlagener Beleg erhalten."
       ],
       "pending_acceptance_de": [
-        "Optimierten Build und Programmdatei abnehmen; anschließend die tatsächlichen API-/CLI-/MCP-/UI-/Cold-Regressionsrollen und Quota-Szenarien ausführen.",
+        "Den 320-Pixel-Zustandswechsel mit begrenzter DOM-Beobachtung prüfen und einen frischen vollständigen Quota-Nativlauf einschließlich fünf expliziter negativer Datenbankkopien bestehen; übrige Nativrollen und Installation bleiben offen.",
         "Den unveränderlichen Nachfolger vollständig mit allen bisherigen Tests und vier frischen Rendererfunktionen ausführen; 1535 ist bisher nur die erwartete Mindestzahl.",
         "Optimierten Build, echte Quotenabläufe über öffentliche Oberflächen/Cold-Neustart und Daten erhaltende Installation bestehen.",
         "Renderer-, Ressourcen- und Selected-Kombinationen mit aktivierten Quoten bleiben im ersten Entwurf ausgeschlossen; vollständige Herstellerparität bleibt offen.",
@@ -6878,6 +6879,7 @@
         "Sibling-DNS/Host-Nativprüfung bleibt ohne tatsächlich vorhandene Resolverbeobachtung offen; kein Portwechsel als Hostbeweis."
       ],
       "documentation": [
+        "docs/verification/source15-build-cli-native-failure-20261016/index.json",
         "docs/verification/source15-retry2-suite-20261016/index.json",
         "docs/verification/retry2-and-cli-progress-20261016/index.json",
         "docs/verification/source15-suite-failure-20261016/index.json",
@@ -6893,11 +6895,12 @@
         "new_rust": "PASS_29_FUNCTIONS_ONLY",
         "inherited_node": "PASS_9_CASES_ON_429_ONLY",
         "full_suite": "PASS_ACTUAL_1535_ZERO_FAILED_ZERO_IGNORED_FOUR_FRESH_RENDERER_FMT_CLIPPY",
-        "optimized_build": "RUNNING_NOT_ACCEPTED_AT_CHECKPOINT",
+        "optimized_build": "PASS_ACTUAL_OPTIMIZED_BUILD_CANDIDATE_214EB3CA_46790144_BYTES",
         "native": "NOT_RUN",
         "installation": "NOT_RUN",
         "manufacturer_parity": "NOT_PROVEN",
-        "retained_fixture_tests": "PASS_ACTUAL_ALL_THREE_EXACTLY_ONCE"
+        "retained_fixture_tests": "PASS_ACTUAL_ALL_THREE_EXACTLY_ONCE",
+        "quota_native": "FAIL_FIRST_ACTUAL_RUN_320PX_INCREASE_READINESS_FRESH_RETRY_PENDING"
       },
       "reference_parity": "NOT_PROVEN"
     },
@@ -8943,9 +8946,9 @@
     {
       "id": "durable-crawl-quotas-20261016",
       "priority": 6,
-      "status": "RETRY2_FULL_RUST_SUITE_PASS_BUILD_RUNNING_NATIVE_PENDING",
+      "status": "FULL_RUST_AND_RELEASE_BUILD_PASS_QUOTA_NATIVE_FAILED_UI_READINESS",
       "title_de": "Dauerhafte URL-Kontingente je Tiefe, Host und Muster ergänzen",
-      "summary_de": "Der frische vollständige Retry2-Lauf besteht mit 1535 Rust-Tests, null Fehlern und null übersprungenen Tests. Vier echte frische Renderer-Prüfungen, Formatprüfung und strenger Clippy bestehen; Worker und Fixture sind tatsächlich geschlossen. Neun Frontendfälle bleiben separate frühere Belege mit fünf bytegleichen Testzielen. Der optimierte Build läuft; native Abnahme und Installation stehen aus. Die letzte abgenommene Installation bleibt Source14.",
+      "summary_de": "Retry2 besteht den Gesamtlauf mit 1535 Rust-Tests und den optimierten Release-Build. Der erste Quota-Nativlauf besteht den breiten UI-Ablauf und scheitert im 320-Pixel-Fenster vor dem Öffnen der Quota-Erhöhung am noch nicht bedienbaren Button. Die Ursache ist noch nicht bewiesen; eine begrenzte Zustandsprüfung wird unabhängig geprüft. Die fünf Datenbank-Negativkopien wurden noch nicht erreicht. Alle Testprozesse sind geschlossen, die Testsperre ist frei. Die letzte abgenommene Installation bleibt Source14.",
       "feature_ids": [
         "crawl.limits"
       ],
@@ -8957,10 +8960,11 @@
         "Tatsächlich gegen 429 ausgeführt: Format und Formatreview, Clippy, alle 29 neuen Rustfunktionen und neun geerbte Frontendfälle bestanden.",
         "Nach erfolgreicherSource14-Installation alle35geprüftenProduktpfade gezielt integriert und privatcommitted/gepusht;429Arbeitsdateien undGitBlobs exakt geprüft.",
         "Die zwei eng geprüften Testkorrekturen bestehen Formatter, unabhängigen Whitespace-Review, strengen Clippy und drei tatsächlich ausgeführte Inventartests. Privat veröffentlicht; alle 429 Dateien und Git-Blobs geprüft.",
-        "Der vollständig eingefrorene Retry2-Quellstand besteht den tatsächlichen Gesamtlauf mit 1535 Rust-Tests einschließlich vier frischer Renderer-Prüfungen, Formatprüfung und Clippy. Alle 429 Quelldateien bleiben unverändert."
+        "Der vollständig eingefrorene Retry2-Quellstand besteht den tatsächlichen Gesamtlauf mit 1535 Rust-Tests einschließlich vier frischer Renderer-Prüfungen, Formatprüfung und Clippy. Alle 429 Quelldateien bleiben unverändert.",
+        "Der tatsächliche optimierte Retry2-Build besteht; die neue Programmdatei ist mit SHA256 und Größe gebunden. Der fehlgeschlagene erste Nativlauf bleibt als fehlgeschlagener Beleg erhalten."
       ],
       "pending_acceptance_de": [
-        "Optimierten Build und Programmdatei abnehmen; anschließend die tatsächlichen API-/CLI-/MCP-/UI-/Cold-Regressionsrollen und Quota-Szenarien ausführen.",
+        "Den 320-Pixel-Zustandswechsel mit begrenzter DOM-Beobachtung prüfen und einen frischen vollständigen Quota-Nativlauf einschließlich fünf expliziter negativer Datenbankkopien bestehen; übrige Nativrollen und Installation bleiben offen.",
         "Den unveränderlichen Nachfolger vollständig mit allen bisherigen Tests und vier frischen Rendererfunktionen ausführen; 1535 ist bisher nur die erwartete Mindestzahl.",
         "Optimierten Build, echte Quotenabläufe über öffentliche Oberflächen/Cold-Neustart und Daten erhaltende Installation bestehen.",
         "Renderer-, Ressourcen- und Selected-Kombinationen mit aktivierten Quoten bleiben im ersten Entwurf ausgeschlossen; vollständige Herstellerparität bleibt offen.",
@@ -8968,6 +8972,7 @@
         "Sibling-DNS/Host-Nativprüfung bleibt ohne tatsächlich vorhandene Resolverbeobachtung offen; kein Portwechsel als Hostbeweis."
       ],
       "documentation": [
+        "docs/verification/source15-build-cli-native-failure-20261016/index.json",
         "docs/verification/source15-retry2-suite-20261016/index.json",
         "docs/verification/retry2-and-cli-progress-20261016/index.json",
         "docs/verification/source15-suite-failure-20261016/index.json",
@@ -8994,7 +8999,8 @@
         "installation": "NOT_RUN",
         "private_code": "PASS_ACTUAL_0BB0724_ALL429_BYTES_AND_GIT_BLOBS",
         "retained_fixture_tests": "PASS_ACTUAL_ALL_THREE_EXACTLY_ONCE",
-        "optimized_build": "RUNNING_NOT_ACCEPTED_AT_CHECKPOINT"
+        "optimized_build": "PASS_ACTUAL_OPTIMIZED_BUILD_CANDIDATE_214EB3CA_46790144_BYTES",
+        "quota_native": "FAIL_FIRST_ACTUAL_RUN_320PX_INCREASE_READINESS_FRESH_RETRY_PENDING"
       },
       "reference_parity": "NOT_PROVEN"
     },
@@ -9043,9 +9049,9 @@
     {
       "id": "cli-crawl-resume-20261016",
       "priority": 1,
-      "status": "REVIEWED_SOURCE_DRAFT_REBOUND_TO_RETRY2_ELEVEN_TESTS_NOT_RUN",
+      "status": "ACTUAL_FORMAT_CLIPPY_ELEVEN_RUST_TESTS_PASS_NOT_INTEGRATED",
       "title_de": "Gespeicherte Crawls per CLI sicher fortsetzen",
-      "summary_de": "Der getrennte CLI-Entwurf nutzt den vorhandenen lokalen Resume-Endpunkt und dieselben sechs Optionsfelder und Autoritätsprüfungen. Ein Reviewbefund zur Begrenzung des Dateilesens ist im V2-Quellstand behoben. Alle zehn bisherigen Tests bleiben bytegleich; ein elfter Test prüft Grenzen und wachsende Reader und Dateien. Unabhängiger Quellenreview ohne Befund. Kompilierung, Tests, Integration und Nativabnahme stehen aus; Source15 besitzt diesen CLI-Befehl weiterhin nicht.",
+      "summary_de": "Der auf Retry2 übertragene CLI-Resume-Entwurf besteht tatsächliche Formatierung, unabhängige Prüfung der mechanischen Änderungen, strengen Clippy und alle elf gerichteten Rust-Tests. Der Entwurf ist noch nicht in den Produktquellstand integriert; Gesamtlauf, Release-Build, echte CLI-/API-Abnahme und Installation fehlen.",
       "feature_ids": [
         "automation.cli",
         "crawl.limits"
@@ -9054,7 +9060,8 @@
         "V1-Reviewbefund und V2-Prüfung mit vollständigen Dateipaaren belegt.",
         "Mechanisch geteiltes ResumeOptions-Datenformat; ein lokaler Resume-POST über die vorhandene App.",
         "Begrenztes Lesen am bereits offenen Handle, explizite Never-Retry-Policy und elf benannte Rust-Regressionstests vorhanden.",
-        "Der CLI-Entwurf ist auf die tatsächlichen Retry2-Preimages übertragen und als 431-Dateien-Komposition unabhängig geprüft. Elf neue Tests bleiben unausgeführt."
+        "Der CLI-Entwurf ist auf die tatsächlichen Retry2-Preimages übertragen und als 431-Dateien-Komposition unabhängig geprüft. Elf neue Tests bleiben unausgeführt.",
+        "Tatsächliche Formatierung mit unabhängiger mechanischer Prüfung, strenger Clippy und alle elf gerichteten Rust-Funktionen bestehen in der isolierten 431-Dateien-Komposition."
       ],
       "pending_acceptance_de": [
         "Formatter, Clippy, elf gerichtete Rusttests und den vollständigen Nachfolger prüfen.",
@@ -9062,6 +9069,7 @@
         "Danach lokal installieren und vorhandene Crawls verifizieren."
       ],
       "documentation": [
+        "docs/verification/source15-build-cli-native-failure-20261016/index.json",
         "docs/verification/source15-retry2-suite-20261016/cli-parent-composition-source-review.json",
         "docs/verification/retry2-and-cli-progress-20261016/index.json",
         "docs/verification/retry2-and-cli-progress-20261016/cli-v2-source-review.json",
@@ -9076,7 +9084,10 @@
         "native": "NOT_RUN",
         "installation": "NOT_RUN",
         "manufacturer_parity": "NOT_PROVEN",
-        "parent_source_composition": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW_CURRENT_RETRY2_PREIMAGES"
+        "parent_source_composition": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW_CURRENT_RETRY2_PREIMAGES",
+        "preview_format": "PASS_ACTUAL_WITH_INDEPENDENT_MECHANICAL_REVIEW",
+        "preview_clippy": "PASS_ACTUAL_STRICT_CLIPPY",
+        "preview_eleven_tests": "PASS_ACTUAL_ELEVEN_ZERO_FAILED_ZERO_IGNORED"
       },
       "reference_parity": "NOT_PROVEN"
     }
