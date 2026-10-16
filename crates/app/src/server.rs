@@ -29,6 +29,7 @@ use uuid::Uuid;
 mod broken_sources;
 mod comparison;
 mod content;
+mod crawl_quotas;
 mod directory_tree;
 mod enrichment;
 mod lifecycle;
@@ -81,6 +82,7 @@ struct Job {
     frontier_available: bool,
     operation: Option<SelectedRecrawlOperation>,
     recrawl_override: RecrawlResumeOverride,
+    quota_increases: Option<open_seo_spider_core::CrawlQuotaIncreases>,
     policy_ledger: Option<open_seo_spider_core::PolicyLedgerSummary>,
     resource_ledger: Option<open_seo_spider_core::ResourceLedgerSummary>,
 }
@@ -117,7 +119,7 @@ impl Job {
             })
             .count();
         let active = matches!(self.status.as_str(), "running" | "pausing" | "cancelling");
-        json!({"id":self.id,"status":self.status,"seed_url":self.config.seed_urls.first(),"config":self.config,"started_at":self.started_at,"finished_at":self.finished_at,"generation":self.generation,"checkpoint":self.checkpoint,"operation":self.operation,"policy_ledger":self.policy_ledger,"resource_ledger":self.resource_ledger,"resume_available":self.frontier_available && !active,"recrawl_available":self.report.is_some() && !active,"parent_snapshot_available":self.operation.is_some() && self.frontier_available,"stats":{"discovered":self.pages.len()+self.queued+self.in_flight,"queued":self.queued,"discovery_pending":self.discovery_pending,"fetched":self.pages.len(),"failed":failed,"issues":self.issues.len(),"in_flight":self.in_flight},"warnings":self.warnings,"error":self.error,"summary":self.report.as_ref().map(|report| &report.summary)})
+        json!({"id":self.id,"status":self.status,"seed_url":self.config.seed_urls.first(),"config":self.config,"started_at":self.started_at,"finished_at":self.finished_at,"generation":self.generation,"checkpoint":self.checkpoint,"operation":self.operation,"policy_ledger":self.policy_ledger,"resource_ledger":self.resource_ledger,"resume_available":self.frontier_available && !active,"recrawl_available":self.report.is_some() && !active && self.config.crawl_quotas.is_none(),"parent_snapshot_available":self.operation.is_some() && self.frontier_available,"stats":{"discovered":self.pages.len()+self.queued+self.in_flight,"queued":self.queued,"discovery_pending":self.discovery_pending,"fetched":self.pages.len(),"failed":failed,"issues":self.issues.len(),"in_flight":self.in_flight},"warnings":self.warnings,"error":self.error,"summary":self.report.as_ref().map(|report| &report.summary)})
     }
 }
 #[derive(Serialize)]
@@ -332,6 +334,7 @@ async fn serve_with_mcp_files_ready_source(
         .route("/api/crawls/{id}/content", get(content::inventory))
         .route("/api/crawls/{id}/content/document", get(content::document))
         .route("/api/crawls/{id}/content/analyze", post(content::analyze))
+        .route("/api/crawls/{id}/quotas", get(crawl_quotas::summary))
         .route("/api/crawls/{id}/recrawl", post(recrawl))
         .route("/api/crawls/{id}/parent.json", get(export_recrawl_parent))
         .route(
@@ -850,6 +853,7 @@ async fn capabilities() -> Json<Value> {
             "http":true,"list":true,"sitemap":true,"robots":true,
             "agent_scoped_indexing_directives":true,"http_link_relationships":true,
             "redirects":true,"intermediate_response_inventory":true,
+            "crawl_quotas":{"version":1,"summary_route":"GET /api/crawls/{id}/quotas","dimensions":["depth","host","pattern"],"resume":"strict_monotone_increases_bound_to_generation_profile_revision_sha256","unsupported":["renderer","resource_discovery","selected_recrawl"],"legacy_accounting":"unavailable"},
             "selected_recrawl":true,"selected_recrawl_profile":"new_child_exact_requested_urls_no_outward_discovery",
             "cancel":true,"pause":true,"pause_semantics":"stop_admission_then_drain_then_checkpoint","resume":true,"sqlite_only_recovery":true,"immutable_report_revisions":true,"url_limit":null,"url_regex_filters":true,
             "css_extraction":true,"xpath_1_0_extraction":true,"regex_extraction":true,
@@ -1026,6 +1030,7 @@ async fn create_crawl_prepared(
         frontier_available: false,
         operation: None,
         recrawl_override: RecrawlResumeOverride::default(),
+        quota_increases: None,
         policy_ledger: None,
         resource_ledger: None,
     }));
@@ -1060,6 +1065,12 @@ async fn recrawl_prepared(
         return Err(api_error(
             StatusCode::CONFLICT,
             "Wait for a stable source checkpoint before selected recrawl",
+        ));
+    }
+    if guard.config.crawl_quotas.is_some() {
+        return Err(api_error(
+            StatusCode::BAD_REQUEST,
+            "Selected recrawl with crawl quotas is unsupported",
         ));
     }
     let report = guard.report.as_ref().ok_or_else(|| {
@@ -1153,7 +1164,7 @@ async fn recrawl_prepared(
         pages, issues:Vec::new(), queued, discovery_pending:0, in_flight:0,
         warnings:vec!["Selected recrawl retains unrelated source observations; current coverage combines inherited and newly captured results.".into()],
         error:None, report:None, control:CrawlControl::new(), generation:1, checkpoint:None,
-        frontier_available:true, operation, recrawl_override:RecrawlResumeOverride::default(), policy_ledger:None, resource_ledger:None,
+        frontier_available:true, operation, recrawl_override:RecrawlResumeOverride::default(), quota_increases:None, policy_ledger:None, resource_ledger:None,
     }));
     if let Err(error) = save_manifest(&state, &job).await {
         remove_reserved_job_files(&state, id).await;
@@ -1339,6 +1350,7 @@ struct ResumeOptions {
     concurrency: Option<usize>,
     delay_ms: Option<u64>,
     request_timeout_secs: Option<u64>,
+    quota_increases: Option<open_seo_spider_core::CrawlQuotaIncreases>,
 }
 async fn resume_crawl(
     State(state): State<AppState>,
@@ -1401,6 +1413,25 @@ async fn resume_crawl_prepared(
                 "Saved frontier has no crawl configuration",
             )
         })?;
+        if let Some(increases) = &options.quota_increases {
+            if selected {
+                return Err(api_error(
+                    StatusCode::BAD_REQUEST,
+                    "Selected recrawl quota increases are unsupported",
+                ));
+            }
+            let database = database.clone();
+            let increases = increases.clone();
+            config = state
+                .lifecycle
+                .blocking
+                .run_blocking(move || {
+                    CrawlStore::open_read_only(database)?.preview_crawl_quota_increases(&increases)
+                })
+                .await
+                .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?
+                .map_err(|error| api_error(StatusCode::CONFLICT, error))?;
+        }
         if let Some(max_pages) = options.max_pages {
             config.max_pages = (max_pages > 0).then_some(max_pages);
         }
@@ -1439,6 +1470,7 @@ async fn resume_crawl_prepared(
         guard.error = None;
         guard.report = None;
         guard.operation = inspection.operation;
+        guard.quota_increases = options.quota_increases;
         guard.recrawl_override = RecrawlResumeOverride {
             max_attempts: options.max_attempts,
         };
@@ -1446,14 +1478,15 @@ async fn resume_crawl_prepared(
     Ok((Json(json!({"id":id,"status":"running"})), job))
 }
 async fn launch(state: AppState, job: Arc<RwLock<Job>>) {
-    let (config, id, control, generation, recrawl_override) = {
-        let guard = job.read().await;
+    let (config, id, control, generation, recrawl_override, quota_increases) = {
+        let mut guard = job.write().await;
         (
             guard.config.clone(),
             guard.id,
             guard.control.clone(),
             guard.generation,
             guard.recrawl_override.clone(),
+            guard.quota_increases.take(),
         )
     };
     let (sender, mut receiver) = tokio::sync::mpsc::unbounded_channel();
@@ -1537,6 +1570,11 @@ async fn launch(state: AppState, job: Arc<RwLock<Job>>) {
     let result = match Crawler::from_saved_config(config) {
         Ok(crawler) => match crawler.with_store(state.data_dir.join(format!("{id}.sqlite"))) {
             Ok(crawler) => {
+                let crawler = if let Some(increases) = quota_increases {
+                    crawler.with_quota_increases(increases)
+                } else {
+                    crawler
+                };
                 crawler
                     .with_recrawl_resume_override(recrawl_override)
                     .run_controlled(Some(sender.clone()), control)
@@ -2001,6 +2039,7 @@ async fn register_report(state: &AppState, id: Uuid, report: CrawlReport) {
         frontier_available: false,
         operation,
         recrawl_override: RecrawlResumeOverride::default(),
+        quota_increases: None,
         policy_ledger,
         resource_ledger,
     };
@@ -2261,6 +2300,7 @@ async fn load_reports(state: &AppState) -> anyhow::Result<()> {
             frontier_available: true,
             operation: inspection.operation,
             recrawl_override: RecrawlResumeOverride::default(),
+            quota_increases: None,
             policy_ledger: inspection.policy_ledger,
             resource_ledger: inspection.resource_ledger,
         };
@@ -2316,6 +2356,7 @@ async fn load_reports(state: &AppState) -> anyhow::Result<()> {
             frontier_available: false,
             operation: None,
             recrawl_override: RecrawlResumeOverride::default(),
+            quota_increases: None,
             policy_ledger: None,
             resource_ledger: None,
         };

@@ -9,6 +9,8 @@ use serde::de::DeserializeOwned;
 use sha2::{Digest, Sha256};
 use std::{path::Path, sync::Mutex};
 
+#[path = "store/crawl_quota_adapter.rs"]
+mod crawl_quota_adapter;
 #[path = "store/sitemap_raw_read.rs"]
 mod sitemap_raw_read;
 pub use sitemap_raw_read::{
@@ -157,6 +159,9 @@ impl CrawlStore {
         let transaction = connection.transaction()?;
         let config: Option<CrawlConfig> = metadata(&transaction, "config")?;
         if let Some(config) = &config {
+            crate::crawl_quota_ledger::verify(&transaction, config)?;
+        }
+        if let Some(config) = &config {
             crate::resource_ledger::verify(&transaction, config)?;
         }
         verify_saved_content_captures(&transaction)?;
@@ -271,6 +276,9 @@ impl CrawlStore {
                     "Terminal sitemap coverage context differs from checkpoint report"
                 );
             }
+        }
+        if checkpoint_valid && let (Some(config), Some(run)) = (&config, &run_state) {
+            crate::crawl_quota_ledger::verify_checkpoint(&transaction, config, run.generation)?;
         }
         transaction.commit()?;
         Ok(CrawlStoreInspection {
@@ -562,6 +570,9 @@ impl CrawlStore {
             .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
         let transaction = connection.transaction()?;
         verify_saved_content_captures(&transaction)?;
+        if let Some(config) = metadata::<CrawlConfig>(&transaction, "config")? {
+            crate::crawl_quota_ledger::begin(&transaction, &config)?;
+        }
         let previous: Option<CrawlRunState> = metadata(&transaction, "run_state")?;
         let generation = previous
             .map_or(0, |run| run.generation)
@@ -579,11 +590,20 @@ impl CrawlStore {
     }
 
     pub(crate) fn prepare(&self, config: &CrawlConfig) -> anyhow::Result<bool> {
+        self.prepare_with_quota_increases(config, None)
+    }
+
+    pub(crate) fn prepare_with_quota_increases(
+        &self,
+        config: &CrawlConfig,
+        increases: Option<&crate::CrawlQuotaIncreases>,
+    ) -> anyhow::Result<bool> {
         config.validate_input_provenance_budget()?;
-        let connection = self
+        let mut connection = self
             .connection
             .lock()
             .map_err(|_| anyhow::anyhow!("Storage lock poisoned"))?;
+        let connection = connection.transaction()?;
         verify_saved_content_captures(&connection)?;
         if let RunPlan::SelectedRecrawl(plan) = load_run_plan(&connection)? {
             let bytes = parent_snapshot(&connection)?
@@ -598,6 +618,8 @@ impl CrawlStore {
             .optional()?;
         if let Some(saved) = saved {
             let mut old: CrawlConfig = serde_json::from_str(&saved)?;
+            crate::crawl_quota_ledger::prepare(&connection, Some(&old), config, increases)?;
+            old.crawl_quotas = config.crawl_quotas.clone();
             if old.explicit_sitemap_inputs != config.explicit_sitemap_inputs {
                 bail!("Saved crawl cannot change original explicit sitemap provenance");
             }
@@ -625,12 +647,15 @@ impl CrawlStore {
                 "UPDATE metadata SET value=?1 WHERE key='config'",
                 [serde_json::to_string(config)?],
             )?;
+            connection.commit()?;
             Ok(true)
         } else {
+            crate::crawl_quota_ledger::prepare(&connection, None, config, increases)?;
             connection.execute(
                 "INSERT INTO metadata(key,value) VALUES('config',?1)",
                 [serde_json::to_string(config)?],
             )?;
+            connection.commit()?;
             Ok(false)
         }
     }
@@ -2266,6 +2291,7 @@ impl CrawlStore {
         if report.resource_ledger != checkpoint.resource_ledger {
             bail!("Report resource ledger differs from committed evidence");
         }
+        crate::crawl_quota_ledger::bind_checkpoint(&transaction, &report.config, generation)?;
         run.finished_at = Some(checkpoint.created_at.clone());
         run.outcome = Some(outcome);
         put_metadata(&transaction, "report", &report_text)?;

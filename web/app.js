@@ -10,6 +10,7 @@
     search: '', filter: 'all', sort: 'url', direction: 1, page: 0, pageSize: 50,
     selected: null, selectedResponse: null, selectedInput: null, responses: null, responsesError: '', fragments: null, fragmentsError: '', inspectorTab: 'details', polling: false, starting: false,
     generation: 0, pollToken: null, pollTimer: null, control: null, operationSequence: 0, startOperation: null, historySequence: 0, issueMap: new Map(), pageMap: new Map(), cache: {}, analysis: null, analysisError: '', settings: {
+      crawl_quotas_enabled:false,crawl_quota_per_depth:"",crawl_quota_per_subdomain:"",crawl_quota_patterns_json:"[]",
       crawl_admission_limits_enabled:false,crawl_max_folder_depth:"",crawl_max_query_tokens:"",crawl_max_fetch_url_utf8_bytes:"",
       concurrency: 8, timeout_seconds: 20, max_pages: 0, max_depth: 0,
       user_agent: 'Open SEO Spider/0.1', indexability_agent: 'googlebot', obey_robots: true, follow_subdomains: false,
@@ -119,6 +120,7 @@
   function invalidatePoll() {
     invalidateContentRequests('Der Crawl-Stand wurde geändert.', true);
     resetResourceLedger();
+    resetQuotaSummary();
     resetSitemapFindings();
     resetSitemapMembership();
     state.generation += 1;
@@ -287,6 +289,7 @@
       if (analysis) state.issues.push(...array(analysis.issues));
       state.issues = state.issues.filter(issue => !pendingSelected.has(issue.url));
       reindexIssues(); connection(true); render();
+      loadQuotaSummary();
       if (policySection() && !state.policyToken) loadPolicyPage(state.policyCursor);
       if (contentSection() && !active() && !state.content.inventory && !state.content.inventoryToken) loadContentInventory();
       if (resourceSection() && !state.resources.token) loadResourcePage();
@@ -383,7 +386,7 @@
       if (!current()) return;
       const payload = { ...state.settings, ...advanced, mode, seed_url: mode === 'sitemap' ? '' : urls[0] || '', urls: mode === 'sitemap' ? [] : urls, seed_urls: mode === 'sitemap' ? [] : urls, sitemap_urls: mode === 'sitemap' ? urls : sitemapUrls, input_imports: inputImports, crawl_links: mode !== 'list', include_subdomains: state.settings.follow_subdomains, request_timeout_secs: state.settings.timeout_seconds, max_body_bytes: state.settings.max_body_mb * 1024 * 1024 };
       for (const key of ['cdn_directory_reporting_enabled','cdn_directory_rules_text','cdn_classification_enabled','cdn_origins_text','crawl_policy_enabled', 'crawl_policy_json', 'live_policy_limits_json', 'content_capture_enabled', 'content_capture_json','resource_discovery_enabled','resource_discovery_json','resource_discovery_limits_json']) delete payload[key];
-      for (const key of [...crawlAdmissionSettingKeys, ...sitemapArchiveSettingKeys, 'sitemap_source_processing_enabled', ...sitemapSourceFields.map(field => field.setting), 'sitemap_membership_limits_enabled', ...sitemapMembershipFields.map(field => field.setting)]) delete payload[key];
+      for (const key of [...crawlQuotaSettingKeys, ...crawlAdmissionSettingKeys, ...sitemapArchiveSettingKeys, 'sitemap_source_processing_enabled', ...sitemapSourceFields.map(field => field.setting), 'sitemap_membership_limits_enabled', ...sitemapMembershipFields.map(field => field.setting)]) delete payload[key];
       payload.renderer = state.settings.javascript_rendering ? { endpoint: state.settings.renderer_endpoint, wait_ms: state.settings.renderer_wait_ms, accessibility: state.settings.renderer_accessibility, screenshot: state.settings.renderer_screenshot, collect_cookies: state.settings.renderer_collect_cookies, custom_javascript: parseCustomJavascript(state.settings.custom_javascript_json) } : null;
       const result = await request('/api/crawls', { method: 'POST', body: JSON.stringify(payload) });
       const crawl = result.crawl || result;
@@ -435,6 +438,7 @@
   const cancelCrawl = () => controlCrawl('cancel');
   function resumeCrawl() {
     if (!canResume() || actionBusy()) return;
+    if (quotaUI.result?.summary?.deferred_targets > 0 && state.crawl.config?.crawl_quotas) { openQuotaIncrease(); return; }
     if (state.crawl.status !== 'limited') { controlCrawl('resume'); return; }
     const selected = Boolean(recrawlOperation());
     limitResumeContext = { id: state.crawl.id, generation: state.generation, budgetKey: selected ? 'max_attempts' : 'max_pages' };
@@ -529,6 +533,7 @@
     $('inspector-recrawl-checkbox').checked = Boolean(state.selected && state.recrawlURLs.has(state.selected.url));
     $('inspector-recrawl-checkbox').disabled = Boolean(busy || active() || state.crawl?.recrawl_available === false);
     renderSitemapBundleControls();
+    renderQuotaSummary();
     $('settings-summary').textContent = `${state.settings.concurrency} parallele Requests · ${state.settings.obey_robots ? 'Robots.txt beachten' : 'Robots.txt ignorieren'}${state.settings.max_pages ? ` · Grenze ${number(state.settings.max_pages)}` : ''}${state.settings.javascript_rendering ? ' · JavaScript-Rendering' : ''}${state.settings.crawl_policy_enabled ? ' · Native URL-Policy' : ''}${state.settings.resource_discovery_enabled ? ' · Native Ressourcenregeln' : ''}${state.settings.sitemap_source_processing_enabled ? ' · Eigene Sitemap-Grenzen' : ''}`;
   }
 
@@ -1286,6 +1291,7 @@
     syncSitemapSourceProcessingSettings();
     syncSitemapSourceArchiveSettings();
     syncCrawlAdmissionSettings();
+    renderQuotaRuleControls();syncQuotaSettings();
     $('settings-error').hidden = true;
     $('settings-dialog').showModal();
   }
@@ -1293,11 +1299,12 @@
   function saveSettings(event) {
     event.preventDefault();
     const form = $('settings-form');
-    const advancedText = { ...readCdnDirectoryReportingSettings(form), ...readCdnClassificationSettings(form), ...readCrawlAdmissionSettings(form), ...readSitemapSourceProcessingSettings(form), ...readSitemapSourceArchiveSettings(form), include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value, link_position_rules_json: form.elements.link_position_rules_json.value, validate_fragments: form.elements.validate_fragments.checked, crawl_policy_enabled: form.elements.crawl_policy_enabled.checked, crawl_policy_json: form.elements.crawl_policy_json.value, live_policy_limits_json: form.elements.live_policy_limits_json.value, javascript_rendering: form.elements.javascript_rendering.checked, content_capture_enabled:form.elements.content_capture_enabled.checked, content_capture_json:form.elements.content_capture_json.value,resource_discovery_enabled:form.elements.resource_discovery_enabled.checked,resource_discovery_json:form.elements.resource_discovery_json.value,resource_discovery_limits_json:form.elements.resource_discovery_limits_json.value };
+    const advancedText = { ...readCdnDirectoryReportingSettings(form), ...readCdnClassificationSettings(form), ...readCrawlQuotaSettings(form), ...readCrawlAdmissionSettings(form), ...readSitemapSourceProcessingSettings(form), ...readSitemapSourceArchiveSettings(form), include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value, link_position_rules_json: form.elements.link_position_rules_json.value, validate_fragments: form.elements.validate_fragments.checked, crawl_policy_enabled: form.elements.crawl_policy_enabled.checked, crawl_policy_json: form.elements.crawl_policy_json.value, live_policy_limits_json: form.elements.live_policy_limits_json.value, javascript_rendering: form.elements.javascript_rendering.checked, content_capture_enabled:form.elements.content_capture_enabled.checked, content_capture_json:form.elements.content_capture_json.value,resource_discovery_enabled:form.elements.resource_discovery_enabled.checked,resource_discovery_json:form.elements.resource_discovery_json.value,resource_discovery_limits_json:form.elements.resource_discovery_limits_json.value };
     try { parseAdvanced(advancedText); validateRendererSettings({ javascript_rendering: form.elements.javascript_rendering.checked, renderer_endpoint: form.elements.renderer_endpoint.value.trim(), renderer_wait_ms: Number(form.elements.renderer_wait_ms.value), timeout_seconds: Number(form.elements.timeout_seconds.value) }); }
     catch (error) {
       if (form.elements.sitemap_source_processing_enabled.checked || form.elements.sitemap_membership_limits_enabled.checked) $('sitemap-source-processing-settings').open = true;
       if (form.elements.crawl_admission_limits_enabled.checked) $('crawl-admission-settings').open = true;
+      if (form.elements.crawl_quotas_enabled.checked) $('crawl-quota-settings').open = true;
       if (form.elements.sitemap_source_archive_enabled.checked) $('sitemap-source-archive-settings').open = true;
       $('settings-error').textContent = error.message;
       $('settings-error').hidden = false;
@@ -1328,6 +1335,10 @@
         Object.assign(state.settings,{resource_discovery_enabled:saved.resource_discovery_enabled===true,resource_discovery_json:String(saved.resource_discovery_json || '{}'),resource_discovery_limits_json:String(saved.resource_discovery_limits_json || '{}')});
         Object.assign(state.settings,restoreCdnClassificationSettings(saved));
         Object.assign(state.settings,restoreCdnDirectoryReportingSettings(saved));
+        state.settings.crawl_quotas_enabled=saved.crawl_quotas_enabled===true;
+        state.settings.crawl_quota_per_depth=String(saved.crawl_quota_per_depth??'');
+        state.settings.crawl_quota_per_subdomain=String(saved.crawl_quota_per_subdomain??'');
+        state.settings.crawl_quota_patterns_json=String(saved.crawl_quota_patterns_json??'[]');
         state.settings.crawl_admission_limits_enabled = saved.crawl_admission_limits_enabled === true;
         for(const field of crawlAdmissionFields)state.settings[field.setting]=String(saved[field.setting]??'');
         state.settings.sitemap_source_archive_enabled = saved.sitemap_source_archive_enabled === true;
@@ -1340,6 +1351,78 @@
         for (const field of sitemapSourceFields) state.settings[field.setting] = String(saved[field.setting] ?? field.initial);
       }
     } catch (_) { /* Invalid saved settings fall back to safe defaults. */ }
+  }
+
+  const crawlQuotaSettingKeys=['crawl_quotas_enabled','crawl_quota_per_depth','crawl_quota_per_subdomain','crawl_quota_patterns_json'];
+  const quotaUI={result:null,error:'',token:null};
+  let quotaIncreaseContext=null;
+  const quotaInteger=(raw,label)=>{if(!/^[0-9]+$/.test(String(raw))||(!Number.isSafeInteger(Number(raw))||Number(raw)>1000000000))throw new Error(label+': Eine ganze Zahl von 0 bis 1000000000 eingeben.');return Number(raw);};
+  const quotaCount=value=>Number.isSafeInteger(value)&&value>=0?number(value):'Unbekannt / nicht sicher darstellbar';
+  function readQuotaRuleControls(){return [...$('crawl-quota-patterns').querySelectorAll('[data-quota-rule]')].map(row=>({id:row.querySelector('[data-quota-id]').value,pattern:row.querySelector('[data-quota-pattern]').value,max_urls:row.querySelector('[data-quota-max]').value}));}
+  function renderQuotaRuleControls(rows){
+    if(!rows){try{rows=JSON.parse(state.settings.crawl_quota_patterns_json);}catch(_){rows=[];}}
+    if(!Array.isArray(rows)||rows.length>32)rows=[];
+    const host=$('crawl-quota-patterns');host.replaceChildren();
+    rows.forEach((rule,index)=>{
+      const row=document.createElement('fieldset');row.dataset.quotaRule='';const legend=document.createElement('legend');legend.textContent='Muster '+(index+1);row.append(legend);
+      for(const [key,label,type] of [['id','Eindeutige ID','text'],['pattern','Rust-Regex','text'],['max','Maximale URLs','number']]){const wrap=document.createElement('label');wrap.textContent=label;const input=document.createElement('input');input.type=type;input.setAttribute('data-quota-'+key,'');input.value=rule[key==='max'?'max_urls':key]??'';if(type==='number'){input.min='0';input.step='1';}wrap.append(input);row.append(wrap);}
+      for(const [label,delta] of [['Nach oben',-1],['Nach unten',1],['Entfernen',0]]){const button=document.createElement('button');button.type='button';button.className='button small';button.textContent=label;button.disabled=delta===-1&&index===0||delta===1&&index===rows.length-1;button.addEventListener('click',()=>{const current=readQuotaRuleControls();if(delta)[current[index],current[index+delta]]=[current[index+delta],current[index]];else current.splice(index,1);renderQuotaRuleControls(current);});row.append(button);}host.append(row);
+    });
+    $('crawl-quota-add').disabled=rows.length>=32;
+  }
+  function syncQuotaSettings(){const fields=$('crawl-quota-fields');fields.disabled=!$('settings-form').elements.crawl_quotas_enabled.checked;fields.hidden=fields.disabled;}
+  function readCrawlQuotaSettings(form){return {crawl_quotas_enabled:form.elements.crawl_quotas_enabled.checked,crawl_quota_per_depth:form.elements.crawl_quota_per_depth.value,crawl_quota_per_subdomain:form.elements.crawl_quota_per_subdomain.value,crawl_quota_patterns_json:JSON.stringify(readQuotaRuleControls())};}
+  function parseCrawlQuotas(settings){
+    if(settings.crawl_quotas_enabled!==true)return {};
+    if(settings.javascript_rendering===true||settings.resource_discovery_enabled===true)throw new Error('Crawl-Quoten unterstützen derzeit weder JavaScript-Rendering noch Ressourcenermittlung.');
+    const config={version:1,url_pattern_quotas:[]};
+    for(const [setting,key] of [['crawl_quota_per_depth','max_urls_per_depth'],['crawl_quota_per_subdomain','max_urls_per_subdomain']]){const raw=settings[setting];if(raw!==''&&raw!=null)config[key]=quotaInteger(raw,key);}
+    const rows=JSON.parse(settings.crawl_quota_patterns_json||'[]'),ids=new Set();
+    if(!Array.isArray(rows)||rows.length>32)throw new Error('Höchstens 32 Quoten-Muster sind möglich.');
+    let patternBytes=0;const encoder=new TextEncoder();
+    for(const row of rows){if(!row||typeof row.id!=='string'||!/^[A-Za-z0-9_-]{1,64}$/.test(row.id)||ids.has(row.id)||typeof row.pattern!=='string'||!row.pattern.length||encoder.encode(row.pattern).length>4096)throw new Error('Jedes Muster benötigt eine eindeutige ASCII-ID (1 bis 64 Buchstaben, Ziffern, _ oder -) und eine Rust-Regex von 1 bis 4096 UTF-8-Bytes.');patternBytes+=encoder.encode(row.pattern).length;if(patternBytes>32768)throw new Error('Alle Quoten-Muster zusammen dürfen höchstens 32768 UTF-8-Bytes belegen.');ids.add(row.id);config.url_pattern_quotas.push({id:row.id,pattern:row.pattern,max_urls:quotaInteger(row.max_urls,'Muster '+row.id)});}
+    if(config.max_urls_per_depth==null&&config.max_urls_per_subdomain==null&&!rows.length)throw new Error('Mindestens eine Quote eingeben oder die Funktion ausschalten.');
+    return {crawl_quotas:config};
+  }
+  function resetQuotaSummary(){quotaUI.token?.controller.abort();quotaUI.token=null;quotaUI.result=null;quotaUI.error='';quotaIncreaseContext=null;if($('quota-increase-dialog').open)$('quota-increase-dialog').close();}
+  async function loadQuotaSummary(force=false){
+    if(!state.crawl||quotaUI.token)return;
+    if(!state.crawl.config?.crawl_quotas){quotaUI.result={enabled:false,summary:null,availability:'legacy_unavailable'};quotaUI.error='';renderQuotaSummary();return;}
+    if(!force&&quotaUI.result&&quotaUI.result.id!==state.crawl.id)quotaUI.result=null;
+    const token={id:state.crawl.id,generation:state.generation,controller:new AbortController()};quotaUI.token=token;renderQuotaSummary();
+    try{const result=await request('/api/crawls/'+encodeURIComponent(token.id)+'/quotas',{signal:token.controller.signal});if(quotaUI.token!==token||state.crawl?.id!==token.id||state.generation!==token.generation)return;if(result.id!==token.id||result.availability!=='available'||!result.summary)throw new Error('Keine bestätigte Quoten-Zusammenfassung erhalten.');quotaUI.result=result;quotaUI.error='';}
+    catch(error){if(quotaUI.token===token){quotaUI.result=null;if(error.name!=='AbortError')quotaUI.error=error.message;}}
+    finally{if(quotaUI.token===token){quotaUI.token=null;renderQuotaSummary();}}
+  }
+  function renderQuotaSummary(){
+    const panel=$('crawl-quota-summary-panel');panel.hidden=!state.crawl;if(!state.crawl)return;
+    const summary=quotaUI.result?.summary;
+    $('crawl-quota-error').hidden=!quotaUI.error;$('crawl-quota-error').textContent=quotaUI.error;
+    $('crawl-quota-state').textContent=quotaUI.token?'Gespeicherte Quoten werden geladen …':quotaUI.error?'Quoten nicht verfügbar; Zähler bleiben unbekannt.':summary?'Crawl-Durchlauf '+quotaCount(summary.generation)+' · Quotenstand '+quotaCount(summary.profile_revision):state.crawl.config?.crawl_quotas?'Quoten sind konfiguriert; noch kein bestätigter gespeicherter Stand geladen.':'Keine gespeicherte Quotenmessung für diesen Crawl. Historische Werte bleiben unbekannt.';
+    $('crawl-quota-counts').textContent=summary?'Reservierte Ziele: '+quotaCount(summary.reserved_distinct_targets)+' · Gestartete Versuche: '+quotaCount(summary.actual_started_attempts)+' · Beendete Versuche: '+quotaCount(summary.settled_attempts)+' · Aktive Versuche: '+quotaCount(summary.active_attempts)+' · Unterbrochen / unbekannt: '+quotaCount(summary.interrupted_or_unknown_attempts)+' · Wegen Quoten zurückgestellt: '+quotaCount(summary.deferred_targets):'Reservierte Ziele, Versuche und Zurückstellungen: unbekannt.';
+    $('crawl-quota-causes').textContent=summary?'Gespeicherte Quotenursachen: '+(Array.isArray(summary.causes)&&summary.causes.length?summary.causes.join(' · '):'Keine in dieser Zusammenfassung erfasst'):'Quotenursachen: unbekannt.';
+    $('crawl-quota-buckets').innerHTML=(Array.isArray(summary?.bucket_rows)?summary.bucket_rows:[]).map(row=>'<tr><td>'+escape(row.dimension)+'</td><td>'+escape(row.key)+'</td><td>'+escape(quotaCount(row.used))+'</td><td>'+escape(quotaCount(row.limit))+'</td></tr>').join('');
+    $('crawl-quota-omitted').textContent=summary?'Zusätzliche hier nicht angezeigte Gruppen: '+quotaCount(summary.bucket_rows_omitted):'';
+    $('crawl-quota-refresh').disabled=Boolean(quotaUI.token||actionBusy());
+    $('crawl-quota-increase').disabled=!summary||!canResume()||actionBusy()||Boolean(quotaUI.token)||!Number.isSafeInteger(summary.generation)||!Number.isSafeInteger(summary.profile_revision)||!/^[0-9a-f]{64}$/.test(summary.profile_sha256);
+  }
+  function openQuotaIncrease(){
+    const summary=quotaUI.result?.summary;if(!summary||!canResume()||actionBusy()||quotaUI.token)return;
+    if(!Number.isSafeInteger(summary.generation)||!Number.isSafeInteger(summary.profile_revision)||!/^[0-9a-f]{64}$/.test(summary.profile_sha256)){message('Der gespeicherte Quotenstand kann nicht sicher gebunden werden.',true);return;}
+    const fields=$('quota-increase-fields');fields.replaceChildren();const entries=[];
+    if(summary.config.max_urls_per_depth!=null)entries.push(['max_urls_per_depth','Je Crawl-Tiefe',summary.config.max_urls_per_depth]);
+    if(summary.config.max_urls_per_subdomain!=null)entries.push(['max_urls_per_subdomain','Je Host / Subdomain',summary.config.max_urls_per_subdomain]);
+    for(const rule of summary.config.url_pattern_quotas||[])entries.push(['pattern:'+rule.id,'Muster '+rule.id+' · '+rule.pattern,rule.max_urls]);
+    if(entries.some(([, ,cap])=>!Number.isSafeInteger(cap)||cap<0)){message('Mindestens eine gespeicherte Grenze ist nicht sicher darstellbar.',true);return;}
+    for(const [key,label,cap] of entries){const wrap=document.createElement('label');wrap.textContent=label+' (aktuell '+quotaCount(cap)+')';const input=document.createElement('input');input.type='number';input.min=String(cap);input.step='1';input.value=String(cap);input.dataset.quotaIncrease=key;wrap.append(input);fields.append(wrap);}
+    quotaIncreaseContext={id:state.crawl.id,generation:state.generation,summary,entries};$('quota-increase-error').hidden=true;$('quota-increase-dialog').showModal();
+  }
+  function submitQuotaIncrease(event){
+    event.preventDefault();const context=quotaIncreaseContext;if(!context||context.id!==state.crawl?.id||context.generation!==state.generation||!canResume()){$('quota-increase-dialog').close();return;}
+    try{const summary=context.summary,increases={expected_generation:summary.generation,expected_profile_revision:summary.profile_revision,expected_profile_sha256:summary.profile_sha256,url_pattern_maxima:{}};let changed=false;
+      for(const [index,input] of [...$('quota-increase-fields').querySelectorAll('[data-quota-increase]')].entries()){const [key,,cap]=context.entries[index],value=quotaInteger(input.value,key);if(value<cap)throw new Error('Quoten dürfen nicht abgesenkt werden.');if(value===cap)continue;changed=true;if(key.startsWith('pattern:'))Object.defineProperty(increases.url_pattern_maxima,key.slice(8),{value,enumerable:true});else increases[key]=value;}
+      if(!changed)throw new Error('Mindestens eine bestehende Quote erhöhen.');quotaIncreaseContext=null;$('quota-increase-dialog').close();controlCrawl('resume',{quota_increases:increases},context);
+    }catch(error){$('quota-increase-error').textContent=error.message;$('quota-increase-error').hidden=false;}
   }
 
   const crawlAdmissionFields = [
@@ -1498,7 +1581,7 @@
       return { name, selector, attribute: definition.attribute == null ? null : definition.attribute.trim(), method, output, max_results, regex_group, regex_flags, namespaces };
     });
     const lines = (value) => [...new Set(String(value || '').split(/\r?\n/).map((line) => line.trim()).filter(Boolean))];
-    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), pdf_analysis: parsePdfAnalysis(settings.pdf_analysis_json), link_position_rules: parsePositionRules(settings.link_position_rules_json), validate_fragments: settings.validate_fragments === true, include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text), ...parseNativePolicy(settings), ...parseContentCapture(settings),...parseResourceDiscovery(settings), ...parseSitemapSourceProcessing(settings), ...parseSitemapMembershipLimits(settings), ...parseSitemapSourceArchive(settings), ...parseCrawlAdmissionLimits(settings), ...parseCdnClassification(settings), ...parseCdnDirectoryReporting(settings) };
+    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), pdf_analysis: parsePdfAnalysis(settings.pdf_analysis_json), link_position_rules: parsePositionRules(settings.link_position_rules_json), validate_fragments: settings.validate_fragments === true, include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text), ...parseNativePolicy(settings), ...parseContentCapture(settings),...parseResourceDiscovery(settings), ...parseSitemapSourceProcessing(settings), ...parseSitemapMembershipLimits(settings), ...parseSitemapSourceArchive(settings), ...parseCrawlQuotas(settings), ...parseCrawlAdmissionLimits(settings), ...parseCdnClassification(settings), ...parseCdnDirectoryReporting(settings) };
   }
 
   function policyObject(value, allowed, label) {
@@ -3170,6 +3253,13 @@
     $('settings-form').addEventListener('submit', saveSettings);
     $('settings-form').elements.javascript_rendering.addEventListener('change', (event) => toggleRendererSettings(event.target.checked));
     $('settings-form').elements.crawl_admission_limits_enabled.addEventListener('change', syncCrawlAdmissionSettings);
+    $('settings-form').elements.crawl_quotas_enabled.addEventListener('change',syncQuotaSettings);
+    $('crawl-quota-add').addEventListener('click',()=>{const rows=readQuotaRuleControls();if(rows.length>=32)return;rows.push({id:'',pattern:'',max_urls:''});renderQuotaRuleControls(rows);});
+    $('crawl-quota-refresh').addEventListener('click',()=>loadQuotaSummary(true));
+    $('crawl-quota-increase').addEventListener('click',openQuotaIncrease);
+    $('quota-increase-close').addEventListener('click',()=>{quotaIncreaseContext=null;$('quota-increase-dialog').close();});
+    $('quota-increase-dialog').addEventListener('cancel',()=>{quotaIncreaseContext=null;});
+    $('quota-increase-form').addEventListener('submit',submitQuotaIncrease);
     $('settings-form').elements.sitemap_source_archive_enabled.addEventListener('change', syncSitemapSourceArchiveSettings);
     $('settings-form').elements.sitemap_source_processing_enabled.addEventListener('change', syncSitemapSourceProcessingSettings);
     $('settings-form').elements.sitemap_membership_limits_enabled.addEventListener('change', syncSitemapSourceProcessingSettings);
@@ -3184,6 +3274,7 @@
 
   async function initialize() {
     $('advanced-config').append($('crawl-admission-settings-template').content.cloneNode(true));
+    $('advanced-config').append($('crawl-quota-settings-template').content.cloneNode(true));
     $('advanced-config').append($('sitemap-source-archive-settings-template').content.cloneNode(true));
     $('advanced-config').append($('sitemap-source-processing-settings-template').content.cloneNode(true));
     $('advanced-config').append($('policy-settings-template').content.cloneNode(true));

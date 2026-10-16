@@ -254,6 +254,7 @@ fn setup(
 }
 fn context(crawler: &Crawler, generation: u64) -> FetchContext {
     FetchContext {
+        quotas: None,
         store: crawler.store.clone(),
         capture: crawler.capture.clone(),
         generation: Some(generation),

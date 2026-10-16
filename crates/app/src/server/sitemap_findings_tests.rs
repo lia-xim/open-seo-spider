@@ -132,6 +132,7 @@ impl Fixture {
             frontier_available: true,
             operation: None,
             recrawl_override: Default::default(),
+            quota_increases: None,
             policy_ledger: None,
             resource_ledger: None,
         };

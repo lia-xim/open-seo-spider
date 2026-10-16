@@ -19,7 +19,7 @@ async fn segments_mcp_rejects_invalid_authority_shapes_before_loopback_and_keeps
         .await
         .unwrap();
     let names = listed["result"]["tools"].as_array().unwrap();
-    assert_eq!(names.len(), 28);
+    assert_eq!(names.len(), 29);
     assert_eq!(names[27]["name"], NAME);
     assert_eq!(names[26]["name"], "spider_api_enrichment");
 }

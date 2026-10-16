@@ -156,6 +156,7 @@ async fn setup(fixture: &Fixture, mode: Mode) -> (OwnedDirectory, AppState, Uuid
         frontier_available: !matches!(mode, Mode::Detached),
         operation: None,
         recrawl_override: Default::default(),
+        quota_increases: None,
         policy_ledger: None,
         resource_ledger: None,
     };

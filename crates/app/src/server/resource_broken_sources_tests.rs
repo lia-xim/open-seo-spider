@@ -26,6 +26,7 @@ fn state(dir: PathBuf, report: CrawlReport, generation: u64) -> (AppState, Uuid)
         frontier_available: true,
         operation: None,
         recrawl_override: Default::default(),
+        quota_increases: None,
         policy_ledger: None,
     };
     (

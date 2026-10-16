@@ -2,6 +2,7 @@ mod analysis;
 mod broken_sources;
 mod comparison_app;
 mod content_cohort;
+mod crawl_quotas_app;
 mod enrichment_app;
 mod generation_export;
 mod mcp;
@@ -46,6 +47,8 @@ struct Cli {
     reason = "The CLI parses one command; explicit optional fields avoid extra heap allocations."
 )]
 enum Command {
+    /// Read durable native crawl quota accounting from an existing SQLite store.
+    CrawlQuotas { store: PathBuf },
     /// Read a local findings page and/or complete stored CSV without website requests.
     SitemapFindings {
         store: PathBuf,
@@ -588,6 +591,12 @@ async fn main() -> anyhow::Result<()> {
             let result = enrichment_app::run_cli(input, options, store, output, csv).await?;
             println!("{}", serde_json::to_string(&result)?);
         }
+        Command::CrawlQuotas { store } => {
+            let summary =
+                tokio::task::spawn_blocking(move || crawl_quotas_app::read_summary(&store))
+                    .await??;
+            println!("{}", serde_json::to_string(&summary)?);
+        }
         Command::SavedSegments {
             report,
             request,
@@ -700,6 +709,10 @@ async fn main() -> anyhow::Result<()> {
                 &urls,
                 max_attempts,
             )?;
+            anyhow::ensure!(
+                prepared.config.crawl_quotas.is_none(),
+                "Selected recrawl with crawl quotas is unsupported"
+            );
             let mut crawler = Crawler::from_saved_config(prepared.config.clone())?
                 .with_selected_recrawl(prepared)?;
             if let Some(store) = store {

@@ -44,6 +44,7 @@ pub struct Crawler {
     asserted_plan: Option<RunPlan>,
     selected_base: Option<PreparedSelectedRecrawl>,
     recrawl_override: RecrawlResumeOverride,
+    quota_increases: Option<crate::CrawlQuotaIncreases>,
     policy: Option<Arc<crate::CompiledCrawlPolicy>>,
     policy_limits: crate::LiveCrawlPolicyLimits,
     capture: Option<Arc<crate::CompiledContentCaptureConfig>>,
@@ -74,6 +75,7 @@ impl Crawler {
         let original_sitemap_inputs =
             automatically_captured_sitemap_inputs.then(|| config.sitemap_urls.clone());
         config.prepare_input_lists()?;
+        config.validate_crawl_quotas()?;
         if automatically_captured_sitemap_inputs {
             config.explicit_sitemap_inputs = original_sitemap_inputs;
         }
@@ -232,6 +234,7 @@ impl Crawler {
             asserted_plan: None,
             selected_base: None,
             recrawl_override: RecrawlResumeOverride::default(),
+            quota_increases: None,
             policy,
             policy_limits,
             capture,
@@ -240,6 +243,11 @@ impl Crawler {
             #[cfg(test)]
             pdf_parse_hook: None,
         })
+    }
+
+    pub fn with_quota_increases(mut self, increases: crate::CrawlQuotaIncreases) -> Self {
+        self.quota_increases = Some(increases);
+        self
     }
 
     pub fn with_store(mut self, path: impl AsRef<Path>) -> anyhow::Result<Self> {
@@ -277,6 +285,10 @@ impl Crawler {
     /// An optional assertion. A saved selected store is always detected even
     /// when the caller does not supply its plan (SQLite-only resume).
     pub fn with_run_plan(mut self, plan: RunPlan) -> anyhow::Result<Self> {
+        anyhow::ensure!(
+            self.config.crawl_quotas.is_none() || !matches!(&plan, RunPlan::SelectedRecrawl(_)),
+            "Selected recrawl with crawl_quotas is unsupported"
+        );
         if let RunPlan::SelectedRecrawl(plan) = &plan
             && plan.engine != crate::SELECTED_RECRAWL_ENGINE
         {
@@ -291,6 +303,10 @@ impl Crawler {
         prepared: PreparedSelectedRecrawl,
     ) -> anyhow::Result<Self> {
         prepared.validate()?;
+        anyhow::ensure!(
+            self.config.crawl_quotas.is_none(),
+            "Selected recrawl with crawl_quotas is not supported in this slice"
+        );
         if self.automatically_captured_sitemap_inputs {
             self.config.explicit_sitemap_inputs = prepared.config.explicit_sitemap_inputs.clone();
             self.automatically_captured_sitemap_inputs = false;
@@ -347,6 +363,10 @@ impl Crawler {
         pdf_tasks: crate::TaskOwner,
     ) -> anyhow::Result<ControlledCrawlResult> {
         self.config.validate_input_provenance_budget()?;
+        anyhow::ensure!(
+            self.config.crawl_quotas.is_none() || self.store.is_some(),
+            "crawl_quotas requires an explicit durable Store"
+        );
         if control.is_finished() {
             bail!(
                 "A finished crawl controller cannot be reused; create one for the new invocation"
@@ -384,6 +404,10 @@ impl Crawler {
             RunPlan::FullCrawl => None,
             RunPlan::SelectedRecrawl(plan) => Some(plan),
         };
+        anyhow::ensure!(
+            selected.is_none() || self.config.crawl_quotas.is_none(),
+            "Selected recrawl with quotas is unsupported"
+        );
         let memory_base = if self.store.is_none() && selected.is_some() {
             Some(
                 self.selected_base
@@ -399,7 +423,12 @@ impl Crawler {
         let started_at = Utc::now().to_rfc3339();
         let started = Instant::now();
         let resumed = match &self.store {
-            Some(store) => store.prepare(&self.config)?,
+            Some(store) => match self.quota_increases.as_ref() {
+                Some(increase) => {
+                    store.prepare_with_quota_increases(&self.config, Some(increase))?
+                }
+                None => store.prepare(&self.config)?,
+            },
             None => false,
         };
         let generation = self
@@ -578,6 +607,13 @@ impl Crawler {
             warnings.push("Selected recrawl: unselected observations are inherited unchanged; pending selected historical rows are excluded. This is mixed-age coverage, not a fresh full-site crawl.".into());
         }
         let context = Arc::new(FetchContext {
+            quotas: self
+                .config
+                .crawl_quotas
+                .as_ref()
+                .map(crate::CrawlQuotaConfig::compile)
+                .transpose()?
+                .map(Arc::new),
             store: self.store.clone(),
             capture: self.capture.clone(),
             cdn_classification: self.cdn_classification.clone(),
@@ -595,7 +631,7 @@ impl Crawler {
             #[cfg(test)]
             pdf_parse_hook: self.pdf_parse_hook.clone(),
         });
-        let mut tasks: FuturesUnordered<BoxFuture<'static, anyhow::Result<PageRecord>>> =
+        let mut tasks: FuturesUnordered<BoxFuture<'static, anyhow::Result<Option<PageRecord>>>> =
             FuturesUnordered::new();
         let mut completed_transports = self
             .store
@@ -662,7 +698,9 @@ impl Crawler {
                 let fetch = context.clone();
                 tasks.push(
                     async move {
-                        let (mut page, text) = fetch.document(entry).await;
+                        let Some((mut page, text)) = fetch.document_admitted(entry).await? else {
+                            return Ok(None);
+                        };
                         if let Some(config) = &fetch.config.resource_discovery {
                             let decode = page
                                 .resource_response
@@ -684,7 +722,7 @@ impl Crawler {
                                     .unwrap_or_default(),
                             )?);
                         }
-                        Ok(page)
+                        Ok(Some(page))
                     }
                     .boxed(),
                 );
@@ -700,9 +738,13 @@ impl Crawler {
             if tasks.is_empty() {
                 break;
             }
-            let mut page = tokio::select! {
+            let page = tokio::select! {
                 page = tasks.next() => page.expect("nonempty tasks")?,
                 _ = control.changed() => continue,
+            };
+            let Some(mut page) = page else {
+                limited = true;
+                continue;
             };
             let mut discoveries = Vec::new();
             if self.config.resource_discovery.is_none()
@@ -828,8 +870,21 @@ impl Crawler {
                 pages.push(page);
             }
         }
-        let pending = queue.len() + tasks.len();
+        let pending = if self.config.crawl_quotas.is_some() {
+            self.store
+                .as_ref()
+                .expect("validated quota store")
+                .pending_count()?
+        } else {
+            queue.len() + tasks.len()
+        };
         drop(tasks); // In-flight requests remain pending in SQLite and can be resumed.
+        if self.config.crawl_quotas.is_some() {
+            self.store
+                .as_ref()
+                .expect("quota store")
+                .end_crawl_quota_generation(generation.expect("quota generation"))?;
+        }
         // Cancel can drop the Page future; the actual already-started parser
         // must still join before any terminal checkpoint can be published.
         pdf_tasks.shutdown_and_drain().await?;
@@ -1610,6 +1665,13 @@ impl Crawler {
             (queue, discovered, 0)
         };
         let context = FetchContext {
+            quotas: self
+                .config
+                .crawl_quotas
+                .as_ref()
+                .map(crate::CrawlQuotaConfig::compile)
+                .transpose()?
+                .map(Arc::new),
             store: self.store.clone(),
             capture: self.capture.clone(),
             cdn_classification: self.cdn_classification.clone(),
@@ -3025,6 +3087,7 @@ impl SitemapProtocolObservation {
 }
 
 struct FetchContext {
+    quotas: Option<Arc<crate::crawl_quotas::CompiledCrawlQuotas>>,
     store: Option<Arc<CrawlStore>>,
     capture: Option<Arc<crate::CompiledContentCaptureConfig>>,
     cdn_classification: Option<Arc<crate::cdn_classification::CompiledCdnClassification>>,
@@ -3045,8 +3108,44 @@ struct FetchContext {
 }
 
 impl FetchContext {
+    /// Preserve the pre-quota private test helper only for explicit legacy fixtures.
+    #[cfg(test)]
     async fn document(&self, entry: QueueEntry) -> (PageRecord, Option<String>) {
-        let (mut page, payload) = self.fetch(entry, FetchPurpose::PageDocument).await;
+        assert!(
+            self.config.crawl_quotas.is_none() && self.quotas.is_none(),
+            "Legacy document test wrapper requires explicit None quotas"
+        );
+        self.document_admitted(entry)
+            .await
+            .expect("legacy document cannot have quota persistence errors")
+            .expect("legacy document cannot be quota deferred")
+    }
+
+    async fn document_admitted(
+        &self,
+        entry: QueueEntry,
+    ) -> anyhow::Result<Option<(PageRecord, Option<String>)>> {
+        let mut quota = self.quotas.as_ref().map(|profile| {
+            crate::crawl_quota_runtime::QuotaFetchSession::new(
+                self.store.as_ref().expect("quota store").clone(),
+                profile.clone(),
+                self.generation.expect("quota generation"),
+                entry.url.clone(),
+                entry.depth,
+            )
+        });
+        let (mut page, payload) = self
+            .fetch(entry, FetchPurpose::PageDocument, quota.as_mut())
+            .await;
+        if let Some(session) = &mut quota {
+            if let Some(error) = &session.failure {
+                anyhow::bail!("Durable quota admission failed: {error}");
+            }
+            session.finish()?;
+            if session.deferred {
+                return Ok(None);
+            }
+        }
         if let Some(classification) = &self.cdn_classification {
             classification.apply(&mut page);
         }
@@ -3054,8 +3153,8 @@ impl FetchContext {
             reporting.apply(&mut page);
         }
         match payload {
-            Some(FetchPayload::PageText(text)) => (page, Some(text)),
-            None => (page, None),
+            Some(FetchPayload::PageText(text)) => Ok(Some((page, Some(text)))),
+            None => Ok(Some((page, None))),
             Some(FetchPayload::SitemapProtocol(_)) => unreachable!("private page fetch purpose"),
         }
     }
@@ -3064,7 +3163,7 @@ impl FetchContext {
         &self,
         entry: QueueEntry,
     ) -> (PageRecord, SitemapProtocolObservation) {
-        let (page, payload) = self.fetch(entry, FetchPurpose::SitemapProtocol).await;
+        let (page, payload) = self.fetch(entry, FetchPurpose::SitemapProtocol, None).await;
         let observed = match payload {
             Some(FetchPayload::SitemapProtocol(observed)) => *observed,
             // Existing early returns precede any send(). Keep an explicit
@@ -3087,6 +3186,7 @@ impl FetchContext {
         &self,
         entry: QueueEntry,
         purpose: FetchPurpose,
+        mut quota: Option<&mut crate::crawl_quota_runtime::QuotaFetchSession>,
     ) -> (PageRecord, Option<FetchPayload>) {
         let mut page = PageRecord {
             url: entry.url.clone(),
@@ -3226,6 +3326,24 @@ impl FetchContext {
                     break;
                 }
             }
+            let quota_token = if let Some(session) = quota.as_deref_mut() {
+                match session.reserve(&current) {
+                    Ok(Some(id)) => Some(id),
+                    Ok(None) => {
+                        page.error = Some(
+                            "Target deferred by durable crawl quota; no HTTP to this target".into(),
+                        );
+                        page.final_status = None;
+                        break;
+                    }
+                    Err(error) => {
+                        session.failure = Some(error.to_string());
+                        break;
+                    }
+                }
+            } else {
+                None
+            };
             if self.config.obey_robots {
                 let policy = self.robots.get(&current).await;
                 let allowed = policy.allowed(&self.config.user_agent, current.as_str());
@@ -3264,6 +3382,12 @@ impl FetchContext {
                 hop.request_started = true;
             }
             request_started = true;
+            if let (Some(session), Some(id)) = (quota.as_deref_mut(), quota_token)
+                && let Err(error) = session.start(id)
+            {
+                session.failure = Some(error.to_string());
+                break;
+            }
             let response = request.send().await;
             let mut response = match response {
                 Ok(response) => response,
@@ -3274,6 +3398,12 @@ impl FetchContext {
                 }
             };
             let status = response.status().as_u16();
+            if let (Some(session), Some(id)) = (quota.as_deref_mut(), quota_token)
+                && let Err(error) = session.response(id, status)
+            {
+                session.failure = Some(error.to_string());
+                break;
+            }
             page.status.get_or_insert(status);
             page.final_status = Some(status);
             page.final_url = current.to_string();
@@ -3834,6 +3964,9 @@ impl FetchContext {
 #[cfg(test)]
 #[path = "crawler/crawl_admission_tests.rs"]
 mod crawl_admission_tests;
+#[cfg(test)]
+#[path = "crawler/crawl_quotas_tests.rs"]
+mod crawl_quotas_tests;
 
 #[cfg(test)]
 mod tests {

@@ -40,6 +40,7 @@ fn job(id: Uuid, status: &str, url: &str) -> Job {
         frontier_available: false,
         operation: None,
         recrawl_override: Default::default(),
+        quota_increases: None,
         policy_ledger: None,
         resource_ledger: None,
     }

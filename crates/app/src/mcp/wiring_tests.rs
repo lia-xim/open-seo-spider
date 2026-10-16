@@ -171,13 +171,14 @@ async fn file_tools_inventory_is_disabled_by_default_and_declares_exact_five_whe
     let old_tools = old["result"]["tools"].as_array().unwrap();
     let new_tools = new["result"]["tools"].as_array().unwrap();
     assert_eq!(inventory().len(), 26);
-    assert_eq!(old_tools.len(), 28);
-    assert_eq!(new_tools.len(), 33);
+    assert_eq!(old_tools.len(), 29);
+    assert_eq!(new_tools.len(), 34);
     assert_eq!(&old_tools[..26], inventory().as_slice());
     assert_eq!(old_tools[26], enrichment::definition());
     assert_eq!(old_tools[27], segments::definition());
-    assert_eq!(&new_tools[..28], old_tools.as_slice());
-    let mut actual: Vec<_> = new_tools[28..]
+    assert_eq!(old_tools[28], crawl_quotas::definition());
+    assert_eq!(&new_tools[..29], old_tools.as_slice());
+    let mut actual: Vec<_> = new_tools[29..]
         .iter()
         .map(|tool| tool["name"].as_str().unwrap())
         .collect();
@@ -185,7 +186,7 @@ async fn file_tools_inventory_is_disabled_by_default_and_declares_exact_five_whe
     let mut expected = FILE_NAMES;
     expected.sort_unstable();
     assert_eq!(actual, expected);
-    for tool in &new_tools[28..] {
+    for tool in &new_tools[29..] {
         assert_eq!(tool["inputSchema"]["additionalProperties"], false);
         assert!(tool["inputSchema"]["properties"].is_object());
     }

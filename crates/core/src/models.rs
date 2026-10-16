@@ -29,6 +29,9 @@ pub struct CrawlConfig {
     /// Optional static native PageDocument URL limits; None preserves legacy bytes.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub crawl_admission_limits: Option<crate::CrawlAdmissionLimits>,
+    /// Durable distinct native target quotas. Absence preserves all legacy bytes.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub crawl_quotas: Option<crate::CrawlQuotaConfig>,
     pub crawl_links: bool,
     pub include_subdomains: bool,
     /// Declared reporting classification only; never grants fetch, traversal or credentials.
@@ -129,6 +132,7 @@ impl Default for CrawlConfig {
             sitemap_membership_limits: None,
             sitemap_source_archive: None,
             crawl_admission_limits: None,
+            crawl_quotas: None,
             crawl_links: true,
             include_subdomains: false,
             cdn_classification: None,
@@ -165,6 +169,21 @@ impl Default for CrawlConfig {
 impl CrawlConfig {
     /// Validate before creating a store or sending website requests. Browser
     /// navigation/subrequests have no interception contract in this native slice.
+    pub fn validate_crawl_quotas(&self) -> anyhow::Result<()> {
+        if let Some(quotas) = &self.crawl_quotas {
+            quotas.validate()?;
+            anyhow::ensure!(
+                self.renderer.is_none(),
+                "crawl_quotas cannot be combined with a renderer"
+            );
+            anyhow::ensure!(
+                self.resource_discovery.is_none(),
+                "crawl_quotas with resource discovery is not supported in this slice"
+            );
+        }
+        Ok(())
+    }
+
     pub fn validate_crawl_admission_limits(&self) -> anyhow::Result<()> {
         if let Some(limits) = &self.crawl_admission_limits {
             limits.validate()?;

@@ -22,6 +22,7 @@ fn state(id: Uuid, report: CrawlReport) -> AppState {
         frontier_available: false,
         operation: None,
         recrawl_override: Default::default(),
+        quota_increases: None,
         policy_ledger: None,
         resource_ledger: None,
     };
