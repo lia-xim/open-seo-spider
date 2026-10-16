@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "kind": "source_v15_retry2_cold_installer_independent_review",
+  "result": "SOURCE_FINDINGS_NOT_RUN",
+  "findings": [
+    {
+      "label": "Quota exact17 case results/26 ordered source/runtime boundaries/99 GETs/44+1+0 crawl-owner joins",
+      "result": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n-   'Q01',\n    'Q02',\n    'Q03',\n    'Q04',\n    'Q05',\n+   'Q07',\n    'Q06',\n-   'Q07',\n    'Q08',\n+   'Q16',\n-   'Q09',\n    'Q10',\n    'Q11',\n+   'Q01',\n+   'Q14',\n    'Q12',\n    'Q13',\n+   'Q09',\n-   'Q14',\n    'Q15',\n-   'Q16',\n    'Q17'\n  ]\n"
+    }
+  ],
+  "reviewer": "/root/installer_v2_fresh_independent_review",
+  "independent_from_source_authors": true,
+  "proposal_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\install-source15-retry2-preparation-v3\\manifest.json",
+    "sha256": "68fb925c386f40d3a02165a05cb46b110c3724e0858395a6aa7bb388a6764402",
+    "bytes": 18967
+  },
+  "harness": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-source15-retry2-preparation-v3/install-cold-v15-r2.mjs",
+    "sha256": "8df9ddf32611621c3dbb9c9833830b3fcb9252be32bf67f94f524a56c1780a3c",
+    "bytes": 41568
+  },
+  "acceptance_guard": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-source15-retry2-preparation-v3/verify-current-acceptance.mjs",
+    "sha256": "b72af58fc956f352ddb2fd1c7afd80a86521c51326e80eca2cf030cd86ba590b",
+    "bytes": 52272
+  },
+  "audit": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source15-final-install-cold-independent-review-v3\\AUDIT.json",
+    "sha256": "c6e4edd675fe780f9076aad36a9a7370e3808d1d77b28ae51c54a224034aa40e",
+    "bytes": 78897
+  },
+  "prior_P1_finding": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-installer-cold-WIP-independent-review-v1/FINDINGS.json",
+    "sha256": "39570eaf8b27a232bfa1d7575b47ce0137f3277423f1073be90454274c5169c8",
+    "bytes": 11326
+  },
+  "prior_P1_closed": false,
+  "scope": {
+    "complete_runtime_sources": 6,
+    "whole_pairs": 6,
+    "literal_operations": 16,
+    "retained_safety_regions": 12,
+    "unchanged_helpers": 3,
+    "typed_actual_audit_chains": 5,
+    "stdin_parse_only": 4,
+    "source_only": true
+  },
+  "qualification": "Fresh independent bounded source review of the exact final Installer V3 manifest, full six-source composition and exact five actual audit/producer schemas. No target module import/call, current Original/PE/DB/HTTP/Git/lock action, Ready execution or installation."
+}
