@@ -13,6 +13,7 @@ pub(super) struct Lifecycle {
     pub(super) source_bodies: source_body_stream::Registry,
     pub(super) response_streams: super::response_stream::Registry,
     pub(super) transports: super::transport::Registry,
+    enrichments: Arc<std::sync::OnceLock<crate::enrichment_app::Service>>,
 }
 impl Default for Lifecycle {
     fn default() -> Self {
@@ -24,8 +25,30 @@ impl Default for Lifecycle {
             response_streams: super::response_stream::Registry::new(admission.clone()),
             transports: super::transport::Registry::new(admission.clone()),
             source_bodies: source_body_stream::Registry::new(admission.clone()),
+            enrichments: Default::default(),
             admission,
         }
+    }
+}
+impl Lifecycle {
+    pub(super) fn install_enrichments(
+        &self,
+        service: crate::enrichment_app::Service,
+    ) -> anyhow::Result<()> {
+        self.enrichments
+            .set(service)
+            .map_err(|_| anyhow::anyhow!("API-only service already installed"))
+    }
+    pub(super) fn enrichments(&self) -> anyhow::Result<&crate::enrichment_app::Service> {
+        self.enrichments
+            .get()
+            .ok_or_else(|| anyhow::anyhow!("API-only service is not initialized"))
+    }
+    async fn drain_enrichments(&self) -> anyhow::Result<()> {
+        if let Some(service) = self.enrichments.get() {
+            service.drain().await?;
+        }
+        Ok(())
     }
 }
 pub(super) enum ShutdownSource {
@@ -164,6 +187,9 @@ pub(super) fn close_admission(state: &AppState) {
     state.exports.close_admission();
     state.finding_reads.close_admission();
     state.mcp.close_file_tools_admission();
+    if let Some(service) = state.lifecycle.enrichments.get() {
+        service.close();
+    }
 }
 pub(super) async fn pause_active(state: &AppState) {
     let jobs: Vec<_> = state.jobs.read().await.values().cloned().collect();
@@ -178,7 +204,7 @@ pub(super) async fn drain(state: &AppState) -> anyhow::Result<()> {
     pause_active(state).await;
     // All ownership/admission was closed BEFORE the Axum signal resolved.
     // Await all results even after an error; no early ? can drop another drain.
-    let (requests, blocking, crawls, csv, reads, files, bodies, responses, transports) = tokio::join!(
+    let (requests, blocking, crawls, csv, reads, files, bodies, responses, transports, enrichments) = tokio::join!(
         state.lifecycle.requests.shutdown_and_drain(),
         state.lifecycle.blocking.shutdown_and_drain(),
         state.lifecycle.crawls.shutdown_and_drain(),
@@ -188,6 +214,7 @@ pub(super) async fn drain(state: &AppState) -> anyhow::Result<()> {
         state.lifecycle.source_bodies.shutdown_and_drain(),
         state.lifecycle.response_streams.shutdown_and_drain(),
         state.lifecycle.transports.shutdown_and_drain(),
+        state.lifecycle.drain_enrichments(),
     );
     let mut errors = Vec::new();
     for result in [
@@ -200,6 +227,7 @@ pub(super) async fn drain(state: &AppState) -> anyhow::Result<()> {
         bodies,
         responses,
         transports,
+        enrichments,
     ] {
         if let Err(error) = result {
             errors.push(error.to_string());
@@ -219,7 +247,7 @@ pub(super) fn receipt(state: &AppState, cause: &str, clean: bool) {
     });
     eprintln!(
         "{}",
-        json!({"kind":"owned_application_shutdown_v1","cause":cause,"clean":clean,"owners":stats,"source_body_transports":state.lifecycle.source_bodies.stats(),"response_streams":state.lifecycle.response_streams.stats(),"incoming_transports":state.lifecycle.transports.stats(),"response_transport_owned":state.lifecycle.transports.stats()["registered"],"qualification":"Local application task joins only; actual process/pipe EOF is an independent outside witness; no stateful MCP session or external renderer-process drain claim"})
+        json!({"kind":"owned_application_shutdown_v1","cause":cause,"clean":clean,"owners":stats,"api_enrichment_operations":state.lifecycle.enrichments.get().map(|service|service.stats()),"source_body_transports":state.lifecycle.source_bodies.stats(),"response_streams":state.lifecycle.response_streams.stats(),"incoming_transports":state.lifecycle.transports.stats(),"response_transport_owned":state.lifecycle.transports.stats()["registered"],"qualification":"Local application task joins only; actual process/pipe EOF is an independent outside witness; no stateful MCP session or external renderer-process drain claim"})
     );
 }
 

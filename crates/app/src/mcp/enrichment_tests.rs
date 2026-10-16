@@ -1,0 +1,69 @@
+use super::*;
+#[tokio::test]
+async fn api_enrichment_mcp_action_shapes_reject_without_api_or_provider_requests() {
+    let bridge = Bridge::new("http://127.0.0.1:1").unwrap();
+    for args in [
+        json!({"action":"start","endpoint":"https://attacker.test/"}),
+        json!({"action":"status","id":"../../data"}),
+        json!({"action":"cancel","id":uuid::Uuid::nil(),"input":crate::enrichment_app::tests::request("https://example.test/")}),
+        json!({"action":"read","id":uuid::Uuid::nil(),"request":{"limit":201}}),
+    ] {
+        assert!(call(&bridge, args).await.is_err());
+    }
+    let definition = definition();
+    assert_eq!(definition["name"], NAME);
+    assert_eq!(definition["annotations"]["openWorldHint"], true);
+    assert!(bridge.inventory().iter().any(|d| d["name"] == NAME));
+}
+#[tokio::test]
+async fn api_enrichment_mcp_uses_the_same_real_loopback_api_and_verifies_csv_bytes() {
+    use axum::{Router, http::header, routing::post};
+    let body = b"source_index,outcome\n1,success\n".to_vec();
+    let hash = open_seo_spider_core::api_enrichment::api_sha(&body);
+    let expected = body.clone();
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+    let base = format!("http://{}/", listener.local_addr().unwrap());
+    let id = uuid::Uuid::new_v4();
+    let route = format!("/api/enrichments/{id}/csv");
+    let router = Router::new().route(
+        &route,
+        post(move |axum::Json(request): axum::Json<Value>| {
+            let b = body.clone();
+            let h = hash.clone();
+            async move {
+                assert_eq!(request["expected_snapshot"], "snapshot");
+                axum::response::Response::builder()
+                    .header(header::CONTENT_TYPE, "text/csv")
+                    .header(header::CONTENT_LENGTH, b.len().to_string())
+                    .header("x-content-sha256", h)
+                    .body(axum::body::Body::from(b))
+                    .unwrap()
+            }
+        }),
+    );
+    let (stop, closed) = tokio::sync::oneshot::channel();
+    let server = tokio::spawn(async move {
+        axum::serve(listener, router)
+            .with_graceful_shutdown(async {
+                let _ = closed.await;
+            })
+            .await
+            .unwrap();
+    });
+    let bridge = Bridge::new(&base).unwrap();
+    let result = call(
+        &bridge,
+        json!({"action":"csv","id":id,"request":{"expected_snapshot":"snapshot"}}),
+    )
+    .await
+    .unwrap();
+    assert_eq!(
+        base64::engine::general_purpose::STANDARD
+            .decode(result["base64"].as_str().unwrap())
+            .unwrap(),
+        expected
+    );
+    assert_eq!(result["application_website_requests"], 0);
+    stop.send(()).unwrap();
+    server.await.unwrap();
+}

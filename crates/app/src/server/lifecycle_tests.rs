@@ -104,7 +104,39 @@ async fn owned_shutdown_stops_actual_http_listener_after_exact_legacy_inventory(
         .iter()
         .map(|v| v["name"].as_str().unwrap())
         .collect();
-    assert_eq!(names.len(), 26);
+    assert_eq!(names.len(), 27);
+    assert_eq!(
+        &names[..26],
+        &[
+            "spider_capabilities",
+            "spider_list_crawls",
+            "spider_start_crawl",
+            "spider_status",
+            "spider_pages",
+            "spider_issues",
+            "spider_analysis",
+            "spider_policy",
+            "spider_sitemaps",
+            "spider_resources",
+            "spider_resource_transports",
+            "spider_inspect_css",
+            "spider_content",
+            "spider_content_document",
+            "spider_analyze_crawl_content",
+            "spider_analyze_content",
+            "spider_preview_policy",
+            "spider_cancel",
+            "spider_pause",
+            "spider_resume",
+            "spider_recrawl",
+            "spider_project",
+            "spider_compare",
+            "spider_generate_sitemaps",
+            "spider_compare_saved",
+            "spider_sitemap_findings",
+        ]
+    );
+    assert_eq!(names[26], "spider_api_enrichment");
     assert!(names.contains(&"spider_sitemap_findings"));
     assert!(
         !names

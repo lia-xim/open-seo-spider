@@ -171,10 +171,12 @@ async fn file_tools_inventory_is_disabled_by_default_and_declares_exact_five_whe
     let old_tools = old["result"]["tools"].as_array().unwrap();
     let new_tools = new["result"]["tools"].as_array().unwrap();
     assert_eq!(inventory().len(), 26);
-    assert_eq!(old_tools.len(), 26);
-    assert_eq!(new_tools.len(), 31);
-    assert_eq!(&new_tools[..26], old_tools.as_slice());
-    let mut actual: Vec<_> = new_tools[26..]
+    assert_eq!(old_tools.len(), 27);
+    assert_eq!(new_tools.len(), 32);
+    assert_eq!(&old_tools[..26], inventory().as_slice());
+    assert_eq!(old_tools[26], enrichment::definition());
+    assert_eq!(&new_tools[..27], old_tools.as_slice());
+    let mut actual: Vec<_> = new_tools[27..]
         .iter()
         .map(|tool| tool["name"].as_str().unwrap())
         .collect();
@@ -182,7 +184,7 @@ async fn file_tools_inventory_is_disabled_by_default_and_declares_exact_five_whe
     let mut expected = FILE_NAMES;
     expected.sort_unstable();
     assert_eq!(actual, expected);
-    for tool in &new_tools[26..] {
+    for tool in &new_tools[27..] {
         assert_eq!(tool["inputSchema"]["additionalProperties"], false);
         assert!(tool["inputSchema"]["properties"].is_object());
     }
@@ -513,7 +515,7 @@ async fn file_tools_actual_stdio_frames_share_opt_in_and_drain_on_eof() {
     )
     .await;
     assert_eq!(values.len(), 4);
-    assert_eq!(values[0]["result"]["tools"].as_array().unwrap().len(), 31);
+    assert_eq!(values[0]["result"]["tools"].as_array().unwrap().len(), 32);
     assert_eq!(values[1]["result"]["isError"], false);
     assert_eq!(values[2]["result"]["isError"], false);
     assert_eq!(values[3]["result"], json!({}));
@@ -661,7 +663,7 @@ async fn http_mode(enabled: bool, listen_ip: &str) -> anyhow::Result<()> {
                 .as_array()
                 .context("actual tool list")?
                 .len()
-                == if enabled { 31 } else { 26 }
+                == if enabled { 32 } else { 27 }
         );
         let legacy: Value = client
             .post(format!("{base}/mcp"))

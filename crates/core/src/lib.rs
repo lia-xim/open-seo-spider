@@ -2,6 +2,7 @@
 //! Independent HTTP crawling, SEO extraction, durable storage and exports.
 //! No commercial URL cap is imposed. Resource limits are user configuration.
 mod audit;
+mod cdn_classification;
 mod comparison;
 mod content_analysis;
 mod content_binding;
@@ -17,6 +18,13 @@ mod export;
 mod extract;
 mod extraction_engine;
 mod fragments;
+pub use cdn_classification::{
+    CDN_CLASSIFICATION_ENGINE, CdnClassificationConfig, CdnClassificationObservation,
+};
+mod html_head;
+pub use html_head::{
+    HTML_HEAD_ENGINE, HTML_HEAD_PROFILE, HtmlHeadObservation, HtmlHeadSpan, HtmlHeadStatus,
+};
 mod image_metadata;
 mod list_import;
 mod metadata;
@@ -75,6 +83,7 @@ pub use sitemap_source_store::{
     validate_catalog_binding as validate_sitemap_source_measurement_catalog_binding,
     validate_snapshot as validate_sitemap_source_measurement_snapshot,
 };
+pub mod api_enrichment;
 mod srcset;
 mod store;
 mod task_owner;

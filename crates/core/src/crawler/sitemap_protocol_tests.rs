@@ -295,6 +295,7 @@ fn context_from_crawler(crawler: &Crawler) -> FetchContext {
         pdf_tasks: crate::TaskOwner::new("sitemap_fixture_pdf"),
         policy: crawler.policy.clone(),
         pdf_parse_hook: None,
+        cdn_classification: None,
     }
 }
 fn admission(

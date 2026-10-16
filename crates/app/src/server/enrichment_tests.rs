@@ -1,0 +1,179 @@
+use super::*;
+use std::sync::atomic::{AtomicUsize, Ordering};
+use std::time::Duration;
+use tokio::sync::oneshot;
+async fn serve_fixture() -> (
+    tempfile::TempDir,
+    AppState,
+    Uuid,
+    reqwest::Client,
+    String,
+    oneshot::Sender<()>,
+    tokio::task::JoinHandle<()>,
+    crate::enrichment_app::tests::Mock,
+) {
+    let temp = tempfile::tempdir().unwrap();
+    let (service, id, mock) = crate::enrichment_app::tests::fixture(
+        temp.path().join("enrichments"),
+        "https://example.test/a\nhttps://example.test/a\ninvalid",
+    )
+    .await;
+    let lifecycle = lifecycle::Lifecycle::default();
+    lifecycle.install_enrichments(service).unwrap();
+    let state = AppState {
+        mcp: crate::mcp::Bridge::new("http://127.0.0.1:1").unwrap(),
+        jobs: Default::default(),
+        data_dir: Arc::new(temp.path().to_path_buf()),
+        exports: Default::default(),
+        finding_reads: Default::default(),
+        lifecycle,
+    };
+    let router = Router::new()
+        .route("/api/enrichments/preview", post(preview))
+        .route("/api/enrichments", post(start))
+        .route("/api/enrichments/{id}", get(status))
+        .route("/api/enrichments/{id}/configuration", get(configuration))
+        .route("/api/enrichments/{id}/results", post(page))
+        .route("/api/enrichments/{id}/csv", post(csv))
+        .with_state(state.clone());
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+    let url = format!("http://{}", listener.local_addr().unwrap());
+    let (stop, closed) = oneshot::channel();
+    let server = tokio::spawn(async move {
+        axum::serve(listener, router)
+            .with_graceful_shutdown(async {
+                let _ = closed.await;
+            })
+            .await
+            .unwrap();
+    });
+    let client = reqwest::Client::builder()
+        .no_proxy()
+        .timeout(Duration::from_secs(3))
+        .redirect(reqwest::redirect::Policy::none())
+        .build()
+        .unwrap();
+    (temp, state, id, client, url, stop, server, mock)
+}
+#[tokio::test]
+async fn api_enrichment_http_reads_full_csv_exact_length_sha_registry_completion_and_cold_config() {
+    let (_temp, state, id, client, url, stop, server, mock) = serve_fixture().await;
+    let before = mock.calls.load(Ordering::SeqCst);
+    let first: Value = client
+        .post(format!("{url}/api/enrichments/{id}/results"))
+        .json(&crate::enrichment_app::ReadRequest::default())
+        .send()
+        .await
+        .unwrap()
+        .error_for_status()
+        .unwrap()
+        .json()
+        .await
+        .unwrap();
+    assert_eq!(first["total"], 3);
+    let request = crate::enrichment_app::ReadRequest {
+        expected_snapshot: first["snapshot"].as_str().map(str::to_owned),
+        ..Default::default()
+    };
+    let response = client
+        .post(format!("{url}/api/enrichments/{id}/csv"))
+        .json(&request)
+        .send()
+        .await
+        .unwrap()
+        .error_for_status()
+        .unwrap();
+    let n = response.content_length().unwrap();
+    let hash = response.headers()["x-content-sha256"]
+        .to_str()
+        .unwrap()
+        .to_owned();
+    let bytes = response.bytes().await.unwrap();
+    assert_eq!(u64::try_from(bytes.len()).unwrap(), n);
+    assert_eq!(open_seo_spider_core::api_enrichment::api_sha(&bytes), hash);
+    assert_eq!(
+        String::from_utf8(bytes.to_vec()).unwrap().lines().count(),
+        4
+    );
+    let config: crate::enrichment_app::StartRequest = client
+        .get(format!("{url}/api/enrichments/{id}/configuration"))
+        .send()
+        .await
+        .unwrap()
+        .error_for_status()
+        .unwrap()
+        .json()
+        .await
+        .unwrap();
+    assert_eq!(
+        config.input_utf8,
+        "https://example.test/a\nhttps://example.test/a\ninvalid"
+    );
+    assert!(!config.acknowledge_remote_fetch);
+    assert_eq!(mock.calls.load(Ordering::SeqCst), before);
+    let response = client
+        .post(format!("{url}/api/enrichments/{id}/csv"))
+        .json(&crate::enrichment_app::ReadRequest {
+            expected_snapshot: Some("wrong".into()),
+            ..Default::default()
+        })
+        .send()
+        .await
+        .unwrap();
+    assert_eq!(response.status(), StatusCode::CONFLICT);
+    stop.send(()).unwrap();
+    server.await.unwrap();
+    lifecycle::close_admission(&state);
+    lifecycle::drain(&state).await.unwrap();
+    let stats = serde_json::to_value(state.lifecycle.response_streams.stats()).unwrap();
+    assert_eq!(stats["complete"], 1);
+    assert_eq!(stats["aborted"], 0);
+    assert_eq!(stats["retained"], 0);
+    assert_eq!(state.lifecycle.enrichments().unwrap().stats()["joined"], 1);
+}
+#[tokio::test]
+async fn api_enrichment_http_preview_and_unacknowledged_start_never_fetch_supplied_website() {
+    let (_temp, state, _id, client, url, stop, server, mock) = serve_fixture().await;
+    let trap = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+    let hits = Arc::new(AtomicUsize::new(0));
+    let seen = hits.clone();
+    let (finish, mut done) = oneshot::channel();
+    let input = format!("http://{}/must-not-be-crawled", trap.local_addr().unwrap());
+    let trap_task = tokio::spawn(async move {
+        loop {
+            tokio::select! {_= &mut done=>break,r=trap.accept()=>{r.unwrap();seen.fetch_add(1,Ordering::SeqCst);}}
+        }
+    });
+    let mut request = crate::enrichment_app::tests::request(&input);
+    request.acknowledge_remote_fetch = false;
+    let before = mock.calls.load(Ordering::SeqCst);
+    let preview: Value = client
+        .post(format!("{url}/api/enrichments/preview"))
+        .json(&request)
+        .send()
+        .await
+        .unwrap()
+        .error_for_status()
+        .unwrap()
+        .json()
+        .await
+        .unwrap();
+    assert_eq!(preview["unique_provider_urls"], 1);
+    assert_eq!(preview["application_website_requests"], 0);
+    assert_eq!(preview["provider_may_fetch_submitted_site"], true);
+    let refused = client
+        .post(format!("{url}/api/enrichments"))
+        .json(&request)
+        .send()
+        .await
+        .unwrap();
+    assert_eq!(refused.status(), StatusCode::BAD_REQUEST);
+    assert_eq!(mock.calls.load(Ordering::SeqCst), before);
+    finish.send(()).unwrap();
+    trap_task.await.unwrap();
+    assert_eq!(hits.load(Ordering::SeqCst), 0);
+    stop.send(()).unwrap();
+    server.await.unwrap();
+    lifecycle::close_admission(&state);
+    lifecycle::drain(&state).await.unwrap();
+}

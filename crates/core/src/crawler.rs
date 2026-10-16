@@ -47,6 +47,7 @@ pub struct Crawler {
     policy: Option<Arc<crate::CompiledCrawlPolicy>>,
     policy_limits: crate::LiveCrawlPolicyLimits,
     capture: Option<Arc<crate::CompiledContentCaptureConfig>>,
+    cdn_classification: Option<Arc<crate::cdn_classification::CompiledCdnClassification>>,
     #[cfg(test)]
     pdf_parse_hook: Option<PdfParseHook>,
 }
@@ -89,6 +90,12 @@ impl Crawler {
         } else if config.resource_discovery_limits.is_some() {
             bail!("Resource discovery limits require resource discovery configuration");
         }
+        let cdn_classification = config
+            .cdn_classification
+            .as_ref()
+            .map(crate::CdnClassificationConfig::compile)
+            .transpose()?
+            .map(Arc::new);
         let capture = config
             .content_capture
             .as_ref()
@@ -220,6 +227,7 @@ impl Crawler {
             policy,
             policy_limits,
             capture,
+            cdn_classification,
             #[cfg(test)]
             pdf_parse_hook: None,
         })
@@ -563,6 +571,7 @@ impl Crawler {
         let context = Arc::new(FetchContext {
             store: self.store.clone(),
             capture: self.capture.clone(),
+            cdn_classification: self.cdn_classification.clone(),
             generation,
             config: self.config.clone(),
             seeds: self.seeds.clone(),
@@ -690,13 +699,23 @@ impl Crawler {
                 && self.policy.is_none()
                 && selected.is_none()
                 && self.config.crawl_links
-                && page.internal
+                && crate::cdn_classification::navigation_source_internal(
+                    &page,
+                    &self.seeds,
+                    self.config.include_subdomains,
+                    self.cdn_classification.is_some(),
+                )
                 && !page.blocked_by_robots
                 && self.config.max_depth.is_none_or(|limit| page.depth < limit)
             {
                 for link in &page.links {
                     // Nofollow describes search-engine semantics; an audit may still inspect it.
-                    if (link.internal || self.config.check_external)
+                    if (crate::cdn_classification::navigation_target_internal(
+                        link,
+                        &self.seeds,
+                        self.config.include_subdomains,
+                        self.cdn_classification.is_some(),
+                    ) || self.config.check_external)
                         && self.filters.allows(&link.url)
                         && seen.insert(link.url.clone())
                     {
@@ -1583,6 +1602,7 @@ impl Crawler {
         let context = FetchContext {
             store: self.store.clone(),
             capture: self.capture.clone(),
+            cdn_classification: self.cdn_classification.clone(),
             generation,
             config: self.config.clone(),
             seeds: self.seeds.clone(),
@@ -2996,6 +3016,7 @@ impl SitemapProtocolObservation {
 struct FetchContext {
     store: Option<Arc<CrawlStore>>,
     capture: Option<Arc<crate::CompiledContentCaptureConfig>>,
+    cdn_classification: Option<Arc<crate::cdn_classification::CompiledCdnClassification>>,
     generation: Option<u64>,
     config: CrawlConfig,
     seeds: Vec<Url>,
@@ -3012,7 +3033,10 @@ struct FetchContext {
 
 impl FetchContext {
     async fn document(&self, entry: QueueEntry) -> (PageRecord, Option<String>) {
-        let (page, payload) = self.fetch(entry, FetchPurpose::PageDocument).await;
+        let (mut page, payload) = self.fetch(entry, FetchPurpose::PageDocument).await;
+        if let Some(classification) = &self.cdn_classification {
+            classification.apply(&mut page);
+        }
         match payload {
             Some(FetchPayload::PageText(text)) => (page, Some(text)),
             None => (page, None),
@@ -3721,6 +3745,8 @@ impl FetchContext {
                 &self.config.custom_extractions,
                 "raw_html",
             );
+            page.html_head_observation =
+                Some(crate::html_head::observe(&page, text, decode_status));
         }
         if page.is_html()
             && page.final_status == Some(200)

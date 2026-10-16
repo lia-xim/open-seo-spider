@@ -30,6 +30,7 @@ mod broken_sources;
 mod comparison;
 mod content;
 mod directory_tree;
+mod enrichment;
 mod lifecycle;
 mod migration;
 mod ngram_corpus;
@@ -200,6 +201,11 @@ async fn serve_with_mcp_files_ready_source(
     tokio::fs::create_dir_all(&data_dir).await?;
     let lifecycle = lifecycle::Lifecycle::default();
     mcp.set_task_owner(lifecycle.blocking.clone());
+    lifecycle.install_enrichments(crate::enrichment_app::Service::open(
+        data_dir.join("api-enrichments"),
+        lifecycle.admission.clone(),
+        address.ip().is_loopback(),
+    )?)?;
     let state = AppState {
         mcp,
         jobs: Arc::new(RwLock::new(HashMap::new())),
@@ -267,6 +273,55 @@ async fn serve_with_mcp_files_ready_source(
                     include_str!("../../../web/list-import.js"),
                 )
             }),
+        )
+        .route(
+            "/api-enrichment",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/html; charset=utf-8")],
+                    include_str!("../../../web/api-enrichment.html"),
+                )
+            }),
+        )
+        .route(
+            "/api-enrichment.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+                    include_str!("../../../web/api-enrichment.js"),
+                )
+            }),
+        )
+        .route(
+            "/api-enrichment.css",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/css; charset=utf-8")],
+                    include_str!("../../../web/api-enrichment.css"),
+                )
+            }),
+        )
+        .route(
+            "/api/enrichments/preview",
+            post(enrichment::preview).layer(axum::extract::DefaultBodyLimit::max(64 * 1024 * 1024)),
+        )
+        .route(
+            "/api/enrichments",
+            post(enrichment::start).layer(axum::extract::DefaultBodyLimit::max(64 * 1024 * 1024)),
+        )
+        .route("/api/enrichments/{id}", get(enrichment::status))
+        .route(
+            "/api/enrichments/{id}/configuration",
+            get(enrichment::configuration),
+        )
+        .route("/api/enrichments/{id}/cancel", post(enrichment::cancel))
+        .route(
+            "/api/enrichments/{id}/results",
+            post(enrichment::page).layer(axum::extract::DefaultBodyLimit::max(8192)),
+        )
+        .route(
+            "/api/enrichments/{id}/csv",
+            post(enrichment::csv).layer(axum::extract::DefaultBodyLimit::max(8192)),
         )
         .route("/api/lists/inspect", post(list_inspect))
         .route("/api/lists/import", post(list_import))
@@ -763,19 +818,21 @@ async fn capabilities() -> Json<Value> {
         "saved_content_analysis":{"endpoint":"/api/crawls/{id}/content/analyze","engine":crate::content_cohort::SAVED_CONTENT_ENGINE,"website_requests":0,"explicit_cohort":true,"max_documents":128,"site_wide_coverage":false},
         "saved_comparison":{"endpoint":"/api/compare/saved","engine":open_seo_spider_core::SAVED_COMPARISON_ENGINE,"website_requests":0,"exact_requested_identity":true,"explicit_mapping":true,"unknown_facts_preserved":true,"full_original_report_bundle":false,"sql_attested":false,"full_reference_parity":false},
         "native_content_capture":{"opt_in":true,"sources":["raw_http_html","rendered_dom_html"],"body_retention":false,"source_binding":"persisted_consistency","full_reference_parity":false},
+        "cdn_classification":{"opt_in":true,"engine":open_seo_spider_core::CDN_CLASSIFICATION_ENGINE,"version":1,"exact_http_origins":true,"max_origins":32,"declared_reporting_only":true,"grants_network_or_credentials":false,"full_reference_parity":false},
         "native_resource_discovery":{"opt_in":true,"engine":open_seo_spider_core::RESOURCE_DISCOVERY_ENGINE,"semantic_contracts":[open_seo_spider_core::RESOURCE_DISCOVERY_ENGINE,open_seo_spider_core::RESOURCE_CONTRACT_ENGINE],"contract_selection":"explicit_optional_config","qualified_directives":["nofollow","ugc","sponsored"],"qualified_link_scope":"target_internal_external_including_document_nofollow","durable_original_reference_roles":true,"durable_sqlite_ledger":true,"paged_occurrences":true,"paged_transport_metadata":true,"streamed_snapshot_exports":true,"entity_body_retention":false,"renderer_supported":false,"full_reference_parity":false},
         "stored_sitemap_source_bodies":{"opt_in":true,"config_field":"sitemap_source_archive","storage":"utf8_sqlite_own_archive","metadata_byte_availability":"not_checked","download":"verified_private_spool_before_headers","max_binary_bytes":67108864,"json_page_limits_unchanged":true,"wire_bytes":false,"portable_bundle":false,"inherited_body_copy":false,"unresponsive_transport_drain":"not_proven"},
         "crawl_admission_limits":{"opt_in":true,"config_field":"crawl_admission_limits","version":1,"static_only":true,"folder_depth_zero_allowed":true,"query_tokens_zero_allowed":true,"fetch_url_bytes_min":1,"fetch_url_bytes_max":1048576,"page_document_and_redirects":true,"renderer_supported":false,"dynamic_quotas":false},
         "sitemap_membership_limits":{"opt_in":true,"config_field":"sitemap_membership_limits","default_catalog_json_bytes":open_seo_spider_core::DEFAULT_SITEMAP_CATALOG_BYTES,"max_catalog_json_bytes":open_seo_spider_core::MAX_SITEMAP_CATALOG_BYTES,"source_work_independent":true,"raw_xml_body_retention":false,"wire_limits_unchanged":true},
         "offline_serp":{"path":"/serp","website_requests":0,"csv_import":true,"row_limit":10000},
         "offline_robots":{"path":"/robots","website_requests":0,"engine":"crawler_policy","remote_rules_fetch":false},
+        "api_only_enrichment":{"path":"/api-enrichment","engine":open_seo_spider_core::api_enrichment::API_ENRICHMENT_ENGINE,"providers":["pagespeed_lighthouse_v1"],"application_website_requests":0,"provider_may_fetch_submitted_site":true,"explicit_start":true,"retained_cancel_and_eof_join":true,"immutable_completed_reports":true,"automatic_provider_resume":false,"full_reference_parity":false},
         "offline_list_import":{"formats":["txt","csv","xml","xlsx"],"website_requests":0,"max_input_bytes":8388608,"max_rows_per_file":50000,"row_order":true,"duplicates":true,"xlsx_formulas":"reject_or_explicit_cached_string_only","provenance":"declared_client_input"},
         "optional_worker":{"javascript_rendering":true,"custom_javascript":true,
             "redacted_cookie_observations":true,"screenshots":true,"accessibility_axe":true,
             "endpoint":"http://127.0.0.1:8790/render","enabled_by_default":false},
         "mcp":{"stdio":true,"streamable_http":"/mcp"},
         "exports":["pages_csv","issues_csv","links_csv","extractions_csv","javascript_csv","cookies_csv","pdf_csv","image_resources_csv","responses_csv","fragments_csv","dom_csv","inputs_csv","sitemap_xml","sitemap_bundle_zip","project_json"],
-        "unimplemented":["api_integrations","spelling_grammar","pdf_ocr_and_rendering","shared_authenticated_browser_sessions","embedding_semantic_search","scheduling","full_structured_data_validation"],
+        "unimplemented":["additional_api_integrations","spelling_grammar","pdf_ocr_and_rendering","shared_authenticated_browser_sessions","embedding_semantic_search","scheduling","full_structured_data_validation"],
         "parity":"in progress; see docs/parity/granular-acceptance.json"
     }))
 }
@@ -832,6 +889,10 @@ async fn list_crawls(State(state): State<AppState>) -> Json<Value> {
 #[cfg(test)]
 #[path = "server/crawl_admission_limits_tests.rs"]
 mod crawl_admission_limits_tests;
+
+#[cfg(test)]
+#[path = "server/cdn_classification_tests.rs"]
+mod cdn_classification_tests;
 
 fn config_from_input(mut value: Value) -> anyhow::Result<CrawlConfig> {
     let object = value

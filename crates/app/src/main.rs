@@ -2,6 +2,7 @@ mod analysis;
 mod broken_sources;
 mod comparison_app;
 mod content_cohort;
+mod enrichment_app;
 mod generation_export;
 mod mcp;
 mod migration_app;
@@ -140,6 +141,18 @@ enum Command {
         #[arg(long)]
         json: Option<PathBuf>,
         /// New CSV destination for every occurrence; pagination does not apply.
+        #[arg(long)]
+        csv: Option<PathBuf>,
+    },
+    /// Enrich a supplied URL list through Google PageSpeed only. Google may fetch the submitted sites.
+    EnrichUrls {
+        input: PathBuf,
+        #[arg(long)]
+        options: PathBuf,
+        #[arg(long)]
+        store: PathBuf,
+        #[arg(long)]
+        output: PathBuf,
         #[arg(long)]
         csv: Option<PathBuf>,
     },
@@ -553,6 +566,16 @@ async fn main() -> anyhow::Result<()> {
             })
             .await??;
         }
+        Command::EnrichUrls {
+            input,
+            options,
+            store,
+            output,
+            csv,
+        } => {
+            let result = enrichment_app::run_cli(input, options, store, output, csv).await?;
+            println!("{}", serde_json::to_string(&result)?);
+        }
         Command::SavedNgrams {
             report,
             options,
@@ -921,3 +944,7 @@ async fn list_options_for(
 #[cfg(test)]
 #[path = "crawl_admission_cli_tests.rs"]
 mod crawl_admission_cli_tests;
+
+#[cfg(test)]
+#[path = "cdn_cli_tests.rs"]
+mod cdn_cli_tests;

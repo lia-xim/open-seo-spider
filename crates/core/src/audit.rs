@@ -74,6 +74,7 @@ pub fn audit_pages_with_thresholds(
     let by_url: HashMap<&str, &PageRecord> =
         pages.iter().map(|page| (page.url.as_str(), page)).collect();
     for page in pages {
+        crate::html_head::audit(page, &mut issues);
         crate::onpage::audit_page(page, thresholds, &mut issues);
         if page.blocked_by_robots {
             issue(
