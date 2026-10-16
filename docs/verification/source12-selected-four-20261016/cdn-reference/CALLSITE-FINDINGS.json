@@ -1,0 +1,1687 @@
+{
+  "schema_version": 1,
+  "status": "STATIC_CLASSIFICATION_CONSUMPTION_RESOLVED_ADDITIONAL_FIELDS_UNKNOWN",
+  "findings": [
+    {
+      "id": "CDN-CALLSITE-01",
+      "status": "OBSERVED_STATIC_UI_CLASSIFICATION_OUTPUT",
+      "fact": "The actual CDN test UI constructs the concrete classifier, calls id(String)Z and selects the exact localization key configuration.cdns.test.internal or configuration.cdns.test.external, then passes the translated text to Label.setText. This is a UI classification result, not extracted HTML or an audit finding.",
+      "locations": [
+        {
+          "member": "uk/co/screamingfrog/seospider/ui/crawl_config/e/id281146822.class",
+          "class_sha256": "46d2ea67e2655a7260b76f2e3326830925cb8f77145dab45566dfdc6670684e4",
+          "method": "id281146822",
+          "descriptor": "(Luk/co/screamingfrog/utils/ad/b/id2080300152;Luk/co/screamingfrog/utils/ad/b/id2080300152;Ljavafx/scene/control/Label;)V",
+          "code_offset": 7131,
+          "code_bytes": 100,
+          "instructions": [
+            {
+              "pc": 55,
+              "class_file_offset": 7186,
+              "opcode": "0xbb",
+              "name": "new",
+              "operands_hex": "0020",
+              "constant_pool_index": 32,
+              "resolved": {
+                "tag": 7,
+                "value": "seo/spider/spider/id1768309875"
+              }
+            },
+            {
+              "pc": 64,
+              "class_file_offset": 7195,
+              "opcode": "0xb7",
+              "name": "invokespecial",
+              "operands_hex": "0057",
+              "constant_pool_index": 87,
+              "resolved": {
+                "tag": 10,
+                "owner": "seo/spider/spider/id1768309875",
+                "name": "<init>",
+                "descriptor": "(Lseo/spider/config/SpiderInternalURLConfig;Ljava/lang/String;)V"
+              }
+            },
+            {
+              "pc": 70,
+              "class_file_offset": 7201,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "00780200",
+              "constant_pool_index": 120,
+              "resolved": {
+                "tag": 11,
+                "owner": "seo/spider/spider/id487602255",
+                "name": "id",
+                "descriptor": "(Ljava/lang/String;)Z"
+              }
+            },
+            {
+              "pc": 75,
+              "class_file_offset": 7206,
+              "opcode": "0x99",
+              "name": "ifeq",
+              "operands_hex": "000b",
+              "branch_target": 86
+            },
+            {
+              "pc": 78,
+              "class_file_offset": 7209,
+              "opcode": "0x12",
+              "name": "ldc",
+              "operands_hex": "07",
+              "constant_pool_index": 7,
+              "resolved": {
+                "tag": 8,
+                "value": "configuration.cdns.test.internal"
+              }
+            },
+            {
+              "pc": 80,
+              "class_file_offset": 7211,
+              "opcode": "0xb8",
+              "name": "invokestatic",
+              "operands_hex": "0063",
+              "constant_pool_index": 99,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/w/id281146822",
+                "name": "id281146822",
+                "descriptor": "(Ljava/lang/String;)Ljava/lang/String;"
+              }
+            },
+            {
+              "pc": 83,
+              "class_file_offset": 7214,
+              "opcode": "0xa7",
+              "name": "goto",
+              "operands_hex": "0008",
+              "branch_target": 91
+            },
+            {
+              "pc": 86,
+              "class_file_offset": 7217,
+              "opcode": "0x12",
+              "name": "ldc",
+              "operands_hex": "06",
+              "constant_pool_index": 6,
+              "resolved": {
+                "tag": 8,
+                "value": "configuration.cdns.test.external"
+              }
+            },
+            {
+              "pc": 88,
+              "class_file_offset": 7219,
+              "opcode": "0xb8",
+              "name": "invokestatic",
+              "operands_hex": "0063",
+              "constant_pool_index": 99,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/w/id281146822",
+                "name": "id281146822",
+                "descriptor": "(Ljava/lang/String;)Ljava/lang/String;"
+              }
+            },
+            {
+              "pc": 96,
+              "class_file_offset": 7227,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "004c",
+              "constant_pool_index": 76,
+              "resolved": {
+                "tag": 10,
+                "owner": "javafx/scene/control/Label",
+                "name": "setText",
+                "descriptor": "(Ljava/lang/String;)V"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CDN-CALLSITE-02",
+      "status": "OBSERVED_STATIC_DIRECT_CLASSIFIER_RETURN",
+      "fact": "The 33-byte UI predicate constructs the concrete classifier and directly returns its id281146822(String)Z result. No parser, extracted field or persisted sink is demonstrated in this method.",
+      "locations": [
+        {
+          "member": "seo/spider/ui/id1854136919.class",
+          "class_sha256": "7c9279f81445232aabbf7b045513498330b33de402630d5664fac0df012886de",
+          "method": "id281146822",
+          "descriptor": "(Luk/co/screamingfrog/seospider/data/id1883924803;)Z",
+          "code_offset": 806,
+          "code_bytes": 33,
+          "instructions": [
+            {
+              "pc": 0,
+              "class_file_offset": 806,
+              "opcode": "0xbb",
+              "name": "new",
+              "operands_hex": "0004",
+              "constant_pool_index": 4,
+              "resolved": {
+                "tag": 7,
+                "value": "seo/spider/spider/id1768309875"
+              }
+            },
+            {
+              "pc": 18,
+              "class_file_offset": 824,
+              "opcode": "0xb7",
+              "name": "invokespecial",
+              "operands_hex": "000a",
+              "constant_pool_index": 10,
+              "resolved": {
+                "tag": 10,
+                "owner": "seo/spider/spider/id1768309875",
+                "name": "<init>",
+                "descriptor": "(Lseo/spider/config/SpiderInternalURLConfig;Ljava/lang/String;)V"
+              }
+            },
+            {
+              "pc": 27,
+              "class_file_offset": 833,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "000e0200",
+              "constant_pool_index": 14,
+              "resolved": {
+                "tag": 11,
+                "owner": "seo/spider/spider/id487602255",
+                "name": "id281146822",
+                "descriptor": "(Ljava/lang/String;)Z"
+              }
+            },
+            {
+              "pc": 32,
+              "class_file_offset": 838,
+              "opcode": "0xac",
+              "name": "ireturn",
+              "operands_hex": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CDN-CALLSITE-03",
+      "status": "OBSERVED_STATIC_LINKSCOPE_ARGUMENT_FLOW",
+      "fact": "Both a/id281146822 selected methods pass the LinkScope return directly into data/id.id281146822(LinkScope), then combine LinkPathType and pass the built object onward. Both id100783116 methods do the same. The sink implementations and human extraction-field names are unavailable; a typed builder argument is not proof of a title/headings/metadata field.",
+      "locations": [
+        {
+          "member": "seo/spider/spider/a/id281146822.class",
+          "class_sha256": "100bfb82d511a00fe2c561a7f0b559620308db5c228f20a3d8da4e1d03e0a303",
+          "method": "id1909831410",
+          "descriptor": "(Lseo/spider/spider/a/id814175767;Luk/co/screamingfrog/seospider/data/id439112727;)V",
+          "code_offset": 17176,
+          "code_bytes": 63,
+          "instructions": [
+            {
+              "pc": 29,
+              "class_file_offset": 17205,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "00ec0200",
+              "constant_pool_index": 236,
+              "resolved": {
+                "tag": 11,
+                "owner": "seo/spider/spider/id487602255",
+                "name": "id1909831410",
+                "descriptor": "(Ljava/lang/String;)Luk/co/screamingfrog/seospider/data/LinkScope;"
+              }
+            },
+            {
+              "pc": 34,
+              "class_file_offset": 17210,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "00aa",
+              "constant_pool_index": 170,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/data/id",
+                "name": "id281146822",
+                "descriptor": "(Luk/co/screamingfrog/seospider/data/LinkScope;)Luk/co/screamingfrog/seospider/data/id;"
+              }
+            },
+            {
+              "pc": 44,
+              "class_file_offset": 17220,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "00a9",
+              "constant_pool_index": 169,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/data/id",
+                "name": "id281146822",
+                "descriptor": "(Luk/co/screamingfrog/seospider/data/LinkPathType;)Luk/co/screamingfrog/seospider/data/id;"
+              }
+            },
+            {
+              "pc": 59,
+              "class_file_offset": 17235,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "00b0",
+              "constant_pool_index": 176,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/data/id1020581975",
+                "name": "id281146822",
+                "descriptor": "(Luk/co/screamingfrog/seospider/data/id281146822;)V"
+              }
+            }
+          ]
+        },
+        {
+          "member": "seo/spider/spider/a/id281146822.class",
+          "class_sha256": "100bfb82d511a00fe2c561a7f0b559620308db5c228f20a3d8da4e1d03e0a303",
+          "method": "id814175767",
+          "descriptor": "(Lseo/spider/spider/a/id814175767;Luk/co/screamingfrog/seospider/data/id439112727;)V",
+          "code_offset": 17301,
+          "code_bytes": 63,
+          "instructions": [
+            {
+              "pc": 29,
+              "class_file_offset": 17330,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "00ec0200",
+              "constant_pool_index": 236,
+              "resolved": {
+                "tag": 11,
+                "owner": "seo/spider/spider/id487602255",
+                "name": "id1909831410",
+                "descriptor": "(Ljava/lang/String;)Luk/co/screamingfrog/seospider/data/LinkScope;"
+              }
+            },
+            {
+              "pc": 34,
+              "class_file_offset": 17335,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "00aa",
+              "constant_pool_index": 170,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/data/id",
+                "name": "id281146822",
+                "descriptor": "(Luk/co/screamingfrog/seospider/data/LinkScope;)Luk/co/screamingfrog/seospider/data/id;"
+              }
+            },
+            {
+              "pc": 44,
+              "class_file_offset": 17345,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "00a9",
+              "constant_pool_index": 169,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/data/id",
+                "name": "id281146822",
+                "descriptor": "(Luk/co/screamingfrog/seospider/data/LinkPathType;)Luk/co/screamingfrog/seospider/data/id;"
+              }
+            },
+            {
+              "pc": 59,
+              "class_file_offset": 17360,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "00b0",
+              "constant_pool_index": 176,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/data/id1020581975",
+                "name": "id281146822",
+                "descriptor": "(Luk/co/screamingfrog/seospider/data/id281146822;)V"
+              }
+            }
+          ]
+        },
+        {
+          "member": "seo/spider/spider/id100783116.class",
+          "class_sha256": "5224f74401b1a96087b95e1df32f813e9d86f04b971a2066dcc28bf4e1a5e5ea",
+          "method": "id",
+          "descriptor": "(Ljava/lang/String;)V",
+          "code_offset": 9033,
+          "code_bytes": 56,
+          "instructions": [
+            {
+              "pc": 23,
+              "class_file_offset": 9056,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "00940200",
+              "constant_pool_index": 148,
+              "resolved": {
+                "tag": 11,
+                "owner": "seo/spider/spider/id487602255",
+                "name": "id1909831410",
+                "descriptor": "(Ljava/lang/String;)Luk/co/screamingfrog/seospider/data/LinkScope;"
+              }
+            },
+            {
+              "pc": 28,
+              "class_file_offset": 9061,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "0069",
+              "constant_pool_index": 105,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/data/id",
+                "name": "id281146822",
+                "descriptor": "(Luk/co/screamingfrog/seospider/data/LinkScope;)Luk/co/screamingfrog/seospider/data/id;"
+              }
+            },
+            {
+              "pc": 37,
+              "class_file_offset": 9070,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "0068",
+              "constant_pool_index": 104,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/data/id",
+                "name": "id281146822",
+                "descriptor": "(Luk/co/screamingfrog/seospider/data/LinkPathType;)Luk/co/screamingfrog/seospider/data/id;"
+              }
+            },
+            {
+              "pc": 52,
+              "class_file_offset": 9085,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "0070",
+              "constant_pool_index": 112,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/data/id1020581975",
+                "name": "id281146822",
+                "descriptor": "(Luk/co/screamingfrog/seospider/data/id281146822;)V"
+              }
+            }
+          ]
+        },
+        {
+          "member": "seo/spider/spider/id100783116.class",
+          "class_sha256": "5224f74401b1a96087b95e1df32f813e9d86f04b971a2066dcc28bf4e1a5e5ea",
+          "method": "id1909831410",
+          "descriptor": "(Ljava/lang/String;)V",
+          "code_offset": 9530,
+          "code_bytes": 56,
+          "instructions": [
+            {
+              "pc": 23,
+              "class_file_offset": 9553,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "00940200",
+              "constant_pool_index": 148,
+              "resolved": {
+                "tag": 11,
+                "owner": "seo/spider/spider/id487602255",
+                "name": "id1909831410",
+                "descriptor": "(Ljava/lang/String;)Luk/co/screamingfrog/seospider/data/LinkScope;"
+              }
+            },
+            {
+              "pc": 28,
+              "class_file_offset": 9558,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "0069",
+              "constant_pool_index": 105,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/data/id",
+                "name": "id281146822",
+                "descriptor": "(Luk/co/screamingfrog/seospider/data/LinkScope;)Luk/co/screamingfrog/seospider/data/id;"
+              }
+            },
+            {
+              "pc": 37,
+              "class_file_offset": 9567,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "0068",
+              "constant_pool_index": 104,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/data/id",
+                "name": "id281146822",
+                "descriptor": "(Luk/co/screamingfrog/seospider/data/LinkPathType;)Luk/co/screamingfrog/seospider/data/id;"
+              }
+            },
+            {
+              "pc": 52,
+              "class_file_offset": 9582,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "0070",
+              "constant_pool_index": 112,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/data/id1020581975",
+                "name": "id281146822",
+                "descriptor": "(Luk/co/screamingfrog/seospider/data/id281146822;)V"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CDN-CALLSITE-04",
+      "status": "OBSERVED_STATIC_MODEL_METHOD_ARGUMENT_UNKNOWN_FIELD",
+      "fact": "Two callers pass the classifier boolean to data/id1020581975.id1908791573(Z)V. The destination method body is outside the captured twelve classes. Neither its actual field write nor a human-readable field name is established.",
+      "locations": [
+        {
+          "member": "seo/spider/spider/id814175767.class",
+          "class_sha256": "52f87e12802087ce5da71125a7e102ea88b02273ca16e8f0212e824f02bfb310",
+          "method": "id1908791573",
+          "descriptor": "()V",
+          "code_offset": 21636,
+          "code_bytes": 140,
+          "instructions": [
+            {
+              "pc": 63,
+              "class_file_offset": 21699,
+              "opcode": "0xb8",
+              "name": "invokestatic",
+              "operands_hex": "0102",
+              "constant_pool_index": 258,
+              "resolved": {
+                "tag": 10,
+                "owner": "seo/spider/spider/id814175767",
+                "name": "id281146822",
+                "descriptor": "(Lseo/spider/spider/id878518017;Ljava/lang/String;)Lseo/spider/spider/id1768309875;"
+              }
+            },
+            {
+              "pc": 72,
+              "class_file_offset": 21708,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "016d0200",
+              "constant_pool_index": 365,
+              "resolved": {
+                "tag": 11,
+                "owner": "seo/spider/spider/id487602255",
+                "name": "id",
+                "descriptor": "(Ljava/lang/String;)Z"
+              }
+            },
+            {
+              "pc": 77,
+              "class_file_offset": 21713,
+              "opcode": "0x3e",
+              "name": "istore_3",
+              "operands_hex": ""
+            },
+            {
+              "pc": 80,
+              "class_file_offset": 21716,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "012d",
+              "constant_pool_index": 301,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/data/id1020581975",
+                "name": "id1908791573",
+                "descriptor": "(Z)V"
+              }
+            }
+          ]
+        },
+        {
+          "member": "seo/spider/spider/b/id281146822.class",
+          "class_sha256": "456ff75e62771f6e9c48983bd1fe694539f5ec1bdba4c5fbf097a49fac54577c",
+          "method": "id281146822",
+          "descriptor": "(Ljava/lang/String;)Luk/co/screamingfrog/seospider/data/id1020581975;",
+          "code_offset": 26703,
+          "code_bytes": 65,
+          "instructions": [
+            {
+              "pc": 39,
+              "class_file_offset": 26742,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "01ab0200",
+              "constant_pool_index": 427,
+              "resolved": {
+                "tag": 11,
+                "owner": "seo/spider/spider/id487602255",
+                "name": "id",
+                "descriptor": "(Ljava/lang/String;)Z"
+              }
+            },
+            {
+              "pc": 44,
+              "class_file_offset": 26747,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "0158",
+              "constant_pool_index": 344,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/data/id1020581975",
+                "name": "id1908791573",
+                "descriptor": "(Z)V"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CDN-CALLSITE-05",
+      "status": "OBSERVED_STATIC_LIST_FILTERING",
+      "fact": "id1943073927 uses four actual interface calls in conditional filtering passes over a supplied List. At PC62/233 a true result reaches List.add at PC74/245 before clear/addAll. The PC331/345 pair forms a combined condition before another List.add at368. This demonstrates list-item filtering; the list's ultimate purpose and any HTML extraction are not established by this method.",
+      "locations": [
+        {
+          "member": "seo/spider/spider/id1943073927.class",
+          "class_sha256": "2803c6682113e641e6f6f0fdeb0b42b86e3db5f8be9305a8a8adf5549f3f0925",
+          "method": "id281146822",
+          "descriptor": "(Ljava/util/List;)V",
+          "code_offset": 1783,
+          "code_bytes": 827,
+          "instructions": [
+            {
+              "pc": 62,
+              "class_file_offset": 1845,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "002a0200",
+              "constant_pool_index": 42,
+              "resolved": {
+                "tag": 11,
+                "owner": "seo/spider/spider/id487602255",
+                "name": "id",
+                "descriptor": "(Ljava/lang/String;)Z"
+              }
+            },
+            {
+              "pc": 67,
+              "class_file_offset": 1850,
+              "opcode": "0x99",
+              "name": "ifeq",
+              "operands_hex": "000d",
+              "branch_target": 80
+            },
+            {
+              "pc": 74,
+              "class_file_offset": 1857,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "00260200",
+              "constant_pool_index": 38,
+              "resolved": {
+                "tag": 11,
+                "owner": "java/util/List",
+                "name": "add",
+                "descriptor": "(Ljava/lang/Object;)Z"
+              }
+            },
+            {
+              "pc": 84,
+              "class_file_offset": 1867,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "00280100",
+              "constant_pool_index": 40,
+              "resolved": {
+                "tag": 11,
+                "owner": "java/util/List",
+                "name": "clear",
+                "descriptor": "()V"
+              }
+            },
+            {
+              "pc": 92,
+              "class_file_offset": 1875,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "00270200",
+              "constant_pool_index": 39,
+              "resolved": {
+                "tag": 11,
+                "owner": "java/util/List",
+                "name": "addAll",
+                "descriptor": "(Ljava/util/Collection;)Z"
+              }
+            },
+            {
+              "pc": 233,
+              "class_file_offset": 2016,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "002c0200",
+              "constant_pool_index": 44,
+              "resolved": {
+                "tag": 11,
+                "owner": "seo/spider/spider/id487602255",
+                "name": "id814175767",
+                "descriptor": "(Ljava/lang/String;)Z"
+              }
+            },
+            {
+              "pc": 238,
+              "class_file_offset": 2021,
+              "opcode": "0x99",
+              "name": "ifeq",
+              "operands_hex": "000d",
+              "branch_target": 251
+            },
+            {
+              "pc": 245,
+              "class_file_offset": 2028,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "00260200",
+              "constant_pool_index": 38,
+              "resolved": {
+                "tag": 11,
+                "owner": "java/util/List",
+                "name": "add",
+                "descriptor": "(Ljava/lang/Object;)Z"
+              }
+            },
+            {
+              "pc": 255,
+              "class_file_offset": 2038,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "00280100",
+              "constant_pool_index": 40,
+              "resolved": {
+                "tag": 11,
+                "owner": "java/util/List",
+                "name": "clear",
+                "descriptor": "()V"
+              }
+            },
+            {
+              "pc": 263,
+              "class_file_offset": 2046,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "00270200",
+              "constant_pool_index": 39,
+              "resolved": {
+                "tag": 11,
+                "owner": "java/util/List",
+                "name": "addAll",
+                "descriptor": "(Ljava/util/Collection;)Z"
+              }
+            },
+            {
+              "pc": 331,
+              "class_file_offset": 2114,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "002a0200",
+              "constant_pool_index": 42,
+              "resolved": {
+                "tag": 11,
+                "owner": "seo/spider/spider/id487602255",
+                "name": "id",
+                "descriptor": "(Ljava/lang/String;)Z"
+              }
+            },
+            {
+              "pc": 336,
+              "class_file_offset": 2119,
+              "opcode": "0x99",
+              "name": "ifeq",
+              "operands_hex": "0015",
+              "branch_target": 357
+            },
+            {
+              "pc": 345,
+              "class_file_offset": 2128,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "002b0200",
+              "constant_pool_index": 43,
+              "resolved": {
+                "tag": 11,
+                "owner": "seo/spider/spider/id487602255",
+                "name": "id281146822",
+                "descriptor": "(Ljava/lang/String;)Z"
+              }
+            },
+            {
+              "pc": 350,
+              "class_file_offset": 2133,
+              "opcode": "0x9a",
+              "name": "ifne",
+              "operands_hex": "0007",
+              "branch_target": 357
+            },
+            {
+              "pc": 361,
+              "class_file_offset": 2144,
+              "opcode": "0x9a",
+              "name": "ifne",
+              "operands_hex": "000d",
+              "branch_target": 374
+            },
+            {
+              "pc": 368,
+              "class_file_offset": 2151,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "00260200",
+              "constant_pool_index": 38,
+              "resolved": {
+                "tag": 11,
+                "owner": "java/util/List",
+                "name": "add",
+                "descriptor": "(Ljava/lang/Object;)Z"
+              }
+            },
+            {
+              "pc": 378,
+              "class_file_offset": 2161,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "00280100",
+              "constant_pool_index": 40,
+              "resolved": {
+                "tag": 11,
+                "owner": "java/util/List",
+                "name": "clear",
+                "descriptor": "()V"
+              }
+            },
+            {
+              "pc": 386,
+              "class_file_offset": 2169,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "00270200",
+              "constant_pool_index": 39,
+              "resolved": {
+                "tag": 11,
+                "owner": "java/util/List",
+                "name": "addAll",
+                "descriptor": "(Ljava/util/Collection;)Z"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CDN-CALLSITE-06",
+      "status": "OBSERVED_STATIC_GUARDED_LIST_OUTPUT",
+      "fact": "id360930495 stores classifier id281146822(String)Z in local5 at66. Both local4 and local5 must be true at151/156 to enter the main list-production block. This block obtains typed data collections and appends item strings, with additional configuration and helper guards. The false arm may call two other local methods under separate flags at1287 onward; both output lists are subsequently filtered by id1943073927. This is not proof of additional HTML field extraction.",
+      "locations": [
+        {
+          "member": "seo/spider/spider/id360930495.class",
+          "class_sha256": "c74c337816e6c8b88d17bec69e93ff7254d45188a4c6f931fa2a58445c274e00",
+          "method": "id281146822",
+          "descriptor": "(Luk/co/screamingfrog/seospider/data/id782393105;Ljava/util/List;Ljava/util/List;)V",
+          "code_offset": 6056,
+          "code_bytes": 1338,
+          "instructions": [
+            {
+              "pc": 61,
+              "class_file_offset": 6117,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "005b0200",
+              "constant_pool_index": 91,
+              "resolved": {
+                "tag": 11,
+                "owner": "seo/spider/spider/id487602255",
+                "name": "id281146822",
+                "descriptor": "(Ljava/lang/String;)Z"
+              }
+            },
+            {
+              "pc": 66,
+              "class_file_offset": 6122,
+              "opcode": "0x36",
+              "name": "istore",
+              "operands_hex": "05"
+            },
+            {
+              "pc": 151,
+              "class_file_offset": 6207,
+              "opcode": "0x15",
+              "name": "iload",
+              "operands_hex": "04"
+            },
+            {
+              "pc": 153,
+              "class_file_offset": 6209,
+              "opcode": "0x99",
+              "name": "ifeq",
+              "operands_hex": "046e",
+              "branch_target": 1287
+            },
+            {
+              "pc": 156,
+              "class_file_offset": 6212,
+              "opcode": "0x15",
+              "name": "iload",
+              "operands_hex": "05"
+            },
+            {
+              "pc": 158,
+              "class_file_offset": 6214,
+              "opcode": "0x99",
+              "name": "ifeq",
+              "operands_hex": "0469",
+              "branch_target": 1287
+            },
+            {
+              "pc": 195,
+              "class_file_offset": 6251,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "002e",
+              "constant_pool_index": 46,
+              "resolved": {
+                "tag": 10,
+                "owner": "seo/spider/config/SpiderCrawlConfig",
+                "name": "id1657863171",
+                "descriptor": "()Z"
+              }
+            },
+            {
+              "pc": 203,
+              "class_file_offset": 6259,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "00710100",
+              "constant_pool_index": 113,
+              "resolved": {
+                "tag": 11,
+                "owner": "uk/co/screamingfrog/seospider/data/id782393105",
+                "name": "id552658142",
+                "descriptor": "()Ljava/util/List;"
+              }
+            },
+            {
+              "pc": 240,
+              "class_file_offset": 6296,
+              "opcode": "0xb8",
+              "name": "invokestatic",
+              "operands_hex": "004b",
+              "constant_pool_index": 75,
+              "resolved": {
+                "tag": 10,
+                "owner": "seo/spider/spider/id360930495",
+                "name": "id281146822",
+                "descriptor": "(Luk/co/screamingfrog/seospider/data/id1624077564;Z)Z"
+              }
+            },
+            {
+              "pc": 254,
+              "class_file_offset": 6310,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "002c",
+              "constant_pool_index": 44,
+              "resolved": {
+                "tag": 10,
+                "owner": "seo/spider/config/SpiderCrawlConfig",
+                "name": "id105195538",
+                "descriptor": "()Z"
+              }
+            },
+            {
+              "pc": 264,
+              "class_file_offset": 6320,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "004f",
+              "constant_pool_index": 79,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/data/id281146822",
+                "name": "id70533838",
+                "descriptor": "()Ljava/lang/String;"
+              }
+            },
+            {
+              "pc": 267,
+              "class_file_offset": 6323,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "00530200",
+              "constant_pool_index": 83,
+              "resolved": {
+                "tag": 11,
+                "owner": "java/util/List",
+                "name": "add",
+                "descriptor": "(Ljava/lang/Object;)Z"
+              }
+            },
+            {
+              "pc": 1287,
+              "class_file_offset": 7343,
+              "opcode": "0x15",
+              "name": "iload",
+              "operands_hex": "06"
+            },
+            {
+              "pc": 1289,
+              "class_file_offset": 7345,
+              "opcode": "0x99",
+              "name": "ifeq",
+              "operands_hex": "0009",
+              "branch_target": 1298
+            },
+            {
+              "pc": 1295,
+              "class_file_offset": 7351,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "0045",
+              "constant_pool_index": 69,
+              "resolved": {
+                "tag": 10,
+                "owner": "seo/spider/spider/id360930495",
+                "name": "id",
+                "descriptor": "(Luk/co/screamingfrog/seospider/data/id782393105;Ljava/util/List;)V"
+              }
+            },
+            {
+              "pc": 1298,
+              "class_file_offset": 7354,
+              "opcode": "0x15",
+              "name": "iload",
+              "operands_hex": "07"
+            },
+            {
+              "pc": 1300,
+              "class_file_offset": 7356,
+              "opcode": "0x99",
+              "name": "ifeq",
+              "operands_hex": "0009",
+              "branch_target": 1309
+            },
+            {
+              "pc": 1306,
+              "class_file_offset": 7362,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "004d",
+              "constant_pool_index": 77,
+              "resolved": {
+                "tag": 10,
+                "owner": "seo/spider/spider/id360930495",
+                "name": "id281146822",
+                "descriptor": "(Luk/co/screamingfrog/seospider/data/id782393105;Ljava/util/List;)V"
+              }
+            },
+            {
+              "pc": 1321,
+              "class_file_offset": 7377,
+              "opcode": "0xb7",
+              "name": "invokespecial",
+              "operands_hex": "0042",
+              "constant_pool_index": 66,
+              "resolved": {
+                "tag": 10,
+                "owner": "seo/spider/spider/id1943073927",
+                "name": "<init>",
+                "descriptor": "(Lseo/spider/spider/id487602255;Lseo/spider/config/SpiderConfigPersistableState;)V"
+              }
+            },
+            {
+              "pc": 1328,
+              "class_file_offset": 7384,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "0043",
+              "constant_pool_index": 67,
+              "resolved": {
+                "tag": 10,
+                "owner": "seo/spider/spider/id1943073927",
+                "name": "id281146822",
+                "descriptor": "(Ljava/util/List;)V"
+              }
+            },
+            {
+              "pc": 1334,
+              "class_file_offset": 7390,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "0043",
+              "constant_pool_index": 67,
+              "resolved": {
+                "tag": 10,
+                "owner": "seo/spider/spider/id1943073927",
+                "name": "id281146822",
+                "descriptor": "(Ljava/util/List;)V"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CDN-CALLSITE-07",
+      "status": "OBSERVED_STATIC_CONFIGURED_EXTRACTION_DISPATCH_CDN_CAUSALITY_UNKNOWN",
+      "fact": "The large id1247909229 method has an actual configured custom-extraction path: a seoelements predicate guards SpiderCustomExtractionConfig count/config access; the loop obtains CustomExtractionInfo, invokes an extractor returning List, stores results in a Map and passes that Map to data/id1020581975.id281146822(Map)V. The extractor body, config semantics, resulting HTML field names, sink storage and CDN-specific enabling path remain unknown. Nearby classifier LinkScope calls do not prove that causal connection.",
+      "locations": [
+        {
+          "member": "seo/spider/spider/id1247909229.class",
+          "class_sha256": "ef44e17362f9d477b7367fc2133e9a4a2d0729feec7c9473f2efb3bfad557050",
+          "method": "id281146822",
+          "descriptor": "(Lseo/spider/h/id722251721;)V",
+          "code_offset": 13904,
+          "code_bytes": 2174,
+          "instructions": [
+            {
+              "pc": 156,
+              "class_file_offset": 14060,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "010f0200",
+              "constant_pool_index": 271,
+              "resolved": {
+                "tag": 11,
+                "owner": "seo/spider/spider/id487602255",
+                "name": "id1909831410",
+                "descriptor": "(Ljava/lang/String;)Luk/co/screamingfrog/seospider/data/LinkScope;"
+              }
+            },
+            {
+              "pc": 177,
+              "class_file_offset": 14081,
+              "opcode": "0xb7",
+              "name": "invokespecial",
+              "operands_hex": "00eb",
+              "constant_pool_index": 235,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/data/id439112727",
+                "name": "<init>",
+                "descriptor": "(Ljava/lang/String;Luk/co/screamingfrog/seospider/data/LinkPathType;Luk/co/screamingfrog/seospider/data/LinkScope;)V"
+              }
+            },
+            {
+              "pc": 180,
+              "class_file_offset": 14084,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "00b9",
+              "constant_pool_index": 185,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/data/id1020581975",
+                "name": "id",
+                "descriptor": "(Luk/co/screamingfrog/seospider/data/id439112727;)V"
+              }
+            },
+            {
+              "pc": 652,
+              "class_file_offset": 14556,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "010f0200",
+              "constant_pool_index": 271,
+              "resolved": {
+                "tag": 11,
+                "owner": "seo/spider/spider/id487602255",
+                "name": "id1909831410",
+                "descriptor": "(Ljava/lang/String;)Luk/co/screamingfrog/seospider/data/LinkScope;"
+              }
+            },
+            {
+              "pc": 717,
+              "class_file_offset": 14621,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "00b7",
+              "constant_pool_index": 183,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/data/id",
+                "name": "id281146822",
+                "descriptor": "(Luk/co/screamingfrog/seospider/data/LinkScope;)Luk/co/screamingfrog/seospider/data/id;"
+              }
+            },
+            {
+              "pc": 1129,
+              "class_file_offset": 15033,
+              "opcode": "0xb8",
+              "name": "invokestatic",
+              "operands_hex": "0093",
+              "constant_pool_index": 147,
+              "resolved": {
+                "tag": 10,
+                "owner": "seo/spider/seoelements/id1221206073",
+                "name": "id1909831410",
+                "descriptor": "(Luk/co/screamingfrog/seospider/data/id1883924803;)Z"
+              }
+            },
+            {
+              "pc": 1140,
+              "class_file_offset": 15044,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "01070100",
+              "constant_pool_index": 263,
+              "resolved": {
+                "tag": 11,
+                "owner": "seo/spider/config/id1896960423",
+                "name": "id105195538",
+                "descriptor": "()Lseo/spider/config/SpiderCustomExtractionConfig;"
+              }
+            },
+            {
+              "pc": 1145,
+              "class_file_offset": 15049,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "0088",
+              "constant_pool_index": 136,
+              "resolved": {
+                "tag": 10,
+                "owner": "seo/spider/config/SpiderCustomExtractionConfig",
+                "name": "id1840409942",
+                "descriptor": "()I"
+              }
+            },
+            {
+              "pc": 1171,
+              "class_file_offset": 15075,
+              "opcode": "0xb7",
+              "name": "invokespecial",
+              "operands_hex": "008e",
+              "constant_pool_index": 142,
+              "resolved": {
+                "tag": 10,
+                "owner": "seo/spider/extraction/id1657863171",
+                "name": "<init>",
+                "descriptor": "(Ljava/lang/String;Ljava/lang/String;)V"
+              }
+            },
+            {
+              "pc": 1238,
+              "class_file_offset": 15142,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "0089",
+              "constant_pool_index": 137,
+              "resolved": {
+                "tag": 10,
+                "owner": "seo/spider/config/SpiderCustomExtractionConfig",
+                "name": "id281146822",
+                "descriptor": "(I)Lseo/spider/extraction/CustomExtractionInfo;"
+              }
+            },
+            {
+              "pc": 1249,
+              "class_file_offset": 15153,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "008f",
+              "constant_pool_index": 143,
+              "resolved": {
+                "tag": 10,
+                "owner": "seo/spider/extraction/id1657863171",
+                "name": "id281146822",
+                "descriptor": "(Lseo/spider/extraction/CustomExtractionInfo;I)Ljava/util/List;"
+              }
+            },
+            {
+              "pc": 1277,
+              "class_file_offset": 15181,
+              "opcode": "0xb8",
+              "name": "invokestatic",
+              "operands_hex": "005e",
+              "constant_pool_index": 94,
+              "resolved": {
+                "tag": 10,
+                "owner": "java/lang/Integer",
+                "name": "valueOf",
+                "descriptor": "(I)Ljava/lang/Integer;"
+              }
+            },
+            {
+              "pc": 1282,
+              "class_file_offset": 15186,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "00fc0300",
+              "constant_pool_index": 252,
+              "resolved": {
+                "tag": 11,
+                "owner": "java/util/Map",
+                "name": "put",
+                "descriptor": "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"
+              }
+            },
+            {
+              "pc": 1296,
+              "class_file_offset": 15200,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "00fb0100",
+              "constant_pool_index": 251,
+              "resolved": {
+                "tag": 11,
+                "owner": "java/util/Map",
+                "name": "isEmpty",
+                "descriptor": "()Z"
+              }
+            },
+            {
+              "pc": 1311,
+              "class_file_offset": 15215,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "00d8",
+              "constant_pool_index": 216,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/data/id1020581975",
+                "name": "id281146822",
+                "descriptor": "(Ljava/util/Map;)V"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CDN-CALLSITE-08",
+      "status": "OBSERVED_STATIC_WRAPPERS_AND_RECORD_CONSTRUCTION",
+      "fact": "t/id's selected method directly returns LinkScope. y/id281146822 supplies LinkScope to a data/id439112727 constructor with String and LinkPathType. z/id1966139935 returns a boolean based on existing LinkScope enum comparisons and a classifier call. These establish typed classification consumption, not an additional SEO extraction field or audit code.",
+      "locations": [
+        {
+          "member": "uk/co/screamingfrog/seospider/t/id.class",
+          "class_sha256": "c1cbf63d2f473822e20ac2097cba175fef023250e11de437be756941514add69",
+          "method": "id",
+          "descriptor": "(Ljava/lang/String;)Luk/co/screamingfrog/seospider/data/LinkScope;",
+          "code_offset": 31185,
+          "code_bytes": 11,
+          "instructions": [
+            {
+              "pc": 5,
+              "class_file_offset": 31190,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "01fb0200",
+              "constant_pool_index": 507,
+              "resolved": {
+                "tag": 11,
+                "owner": "seo/spider/spider/id487602255",
+                "name": "id1909831410",
+                "descriptor": "(Ljava/lang/String;)Luk/co/screamingfrog/seospider/data/LinkScope;"
+              }
+            },
+            {
+              "pc": 10,
+              "class_file_offset": 31195,
+              "opcode": "0xb0",
+              "name": "areturn",
+              "operands_hex": ""
+            }
+          ]
+        },
+        {
+          "member": "uk/co/screamingfrog/seospider/y/id281146822.class",
+          "class_sha256": "594e1a74993578af0a8d531ff708d8baa920a6fa7d466d8d30a1f6b64589c277",
+          "method": "id281146822",
+          "descriptor": "(Ljava/lang/String;)Ljava/util/Optional;",
+          "code_offset": 5600,
+          "code_bytes": 339,
+          "instructions": [
+            {
+              "pc": 139,
+              "class_file_offset": 5739,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "00590200",
+              "constant_pool_index": 89,
+              "resolved": {
+                "tag": 11,
+                "owner": "seo/spider/spider/id487602255",
+                "name": "id1909831410",
+                "descriptor": "(Ljava/lang/String;)Luk/co/screamingfrog/seospider/data/LinkScope;"
+              }
+            },
+            {
+              "pc": 144,
+              "class_file_offset": 5744,
+              "opcode": "0x4c",
+              "name": "astore_1",
+              "operands_hex": ""
+            },
+            {
+              "pc": 156,
+              "class_file_offset": 5756,
+              "opcode": "0xb7",
+              "name": "invokespecial",
+              "operands_hex": "0040",
+              "constant_pool_index": 64,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/data/id439112727",
+                "name": "<init>",
+                "descriptor": "(Ljava/lang/String;Luk/co/screamingfrog/seospider/data/LinkPathType;Luk/co/screamingfrog/seospider/data/LinkScope;)V"
+              }
+            }
+          ]
+        },
+        {
+          "member": "uk/co/screamingfrog/seospider/z/id1966139935.class",
+          "class_sha256": "ef2d3b3094c4be7a04680e9fb2065111b47f70b2ee94472fe560c12c52562a4c",
+          "method": "id281146822",
+          "descriptor": "(Lseo/spider/spider/id487602255;Luk/co/screamingfrog/seospider/data/id1768309875;)Z",
+          "code_offset": 5453,
+          "code_bytes": 45,
+          "instructions": [
+            {
+              "pc": 5,
+              "class_file_offset": 5458,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "004b0100",
+              "constant_pool_index": 75,
+              "resolved": {
+                "tag": 11,
+                "owner": "uk/co/screamingfrog/seospider/data/id1768309875",
+                "name": "id",
+                "descriptor": "()Luk/co/screamingfrog/seospider/data/LinkScope;"
+              }
+            },
+            {
+              "pc": 10,
+              "class_file_offset": 5463,
+              "opcode": "0xb2",
+              "name": "getstatic",
+              "operands_hex": "001f",
+              "constant_pool_index": 31,
+              "resolved": {
+                "tag": 9,
+                "owner": "uk/co/screamingfrog/seospider/data/LinkScope",
+                "name": "id281146822",
+                "descriptor": "Luk/co/screamingfrog/seospider/data/LinkScope;"
+              }
+            },
+            {
+              "pc": 13,
+              "class_file_offset": 5466,
+              "opcode": "0xa6",
+              "name": "if_acmpne",
+              "operands_hex": "0010",
+              "branch_target": 29
+            },
+            {
+              "pc": 23,
+              "class_file_offset": 5476,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "004a0200",
+              "constant_pool_index": 74,
+              "resolved": {
+                "tag": 11,
+                "owner": "seo/spider/spider/id487602255",
+                "name": "id",
+                "descriptor": "(Ljava/lang/String;)Z"
+              }
+            },
+            {
+              "pc": 28,
+              "class_file_offset": 5481,
+              "opcode": "0xac",
+              "name": "ireturn",
+              "operands_hex": ""
+            },
+            {
+              "pc": 35,
+              "class_file_offset": 5488,
+              "opcode": "0xb2",
+              "name": "getstatic",
+              "operands_hex": "001e",
+              "constant_pool_index": 30,
+              "resolved": {
+                "tag": 9,
+                "owner": "uk/co/screamingfrog/seospider/data/LinkScope",
+                "name": "id",
+                "descriptor": "Luk/co/screamingfrog/seospider/data/LinkScope;"
+              }
+            },
+            {
+              "pc": 38,
+              "class_file_offset": 5491,
+              "opcode": "0xa6",
+              "name": "if_acmpne",
+              "operands_hex": "0005",
+              "branch_target": 43
+            },
+            {
+              "pc": 42,
+              "class_file_offset": 5495,
+              "opcode": "0xac",
+              "name": "ireturn",
+              "operands_hex": ""
+            },
+            {
+              "pc": 44,
+              "class_file_offset": 5497,
+              "opcode": "0xac",
+              "name": "ireturn",
+              "operands_hex": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CDN-CALLSITE-09",
+      "status": "OBSERVED_STATIC_COMBINED_PREDICATE_UNKNOWN_HELPER_SEMANTICS",
+      "fact": "id1247909229's selected (data/id1020581975)Z predicate combines classifier local3 with local2, a separately computed local4 and several data/helper predicates before returning. Its body is an actual boolean combination, but external helper semantics and the caller's downstream field meaning are not resolved.",
+      "locations": [
+        {
+          "member": "seo/spider/spider/id1247909229.class",
+          "class_sha256": "ef44e17362f9d477b7367fc2133e9a4a2d0729feec7c9473f2efb3bfad557050",
+          "method": "id281146822",
+          "descriptor": "(Luk/co/screamingfrog/seospider/data/id1020581975;)Z",
+          "code_offset": 17482,
+          "code_bytes": 155,
+          "instructions": [
+            {
+              "pc": 58,
+              "class_file_offset": 17540,
+              "opcode": "0xb9",
+              "name": "invokeinterface",
+              "operands_hex": "01100200",
+              "constant_pool_index": 272,
+              "resolved": {
+                "tag": 11,
+                "owner": "seo/spider/spider/id487602255",
+                "name": "id281146822",
+                "descriptor": "(Ljava/lang/String;)Z"
+              }
+            },
+            {
+              "pc": 63,
+              "class_file_offset": 17545,
+              "opcode": "0x3e",
+              "name": "istore_3",
+              "operands_hex": ""
+            },
+            {
+              "pc": 80,
+              "class_file_offset": 17562,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "007b",
+              "constant_pool_index": 123,
+              "resolved": {
+                "tag": 10,
+                "owner": "seo/spider/config/SpiderCrawlConfig",
+                "name": "id1768309875",
+                "descriptor": "()Z"
+              }
+            },
+            {
+              "pc": 91,
+              "class_file_offset": 17573,
+              "opcode": "0x36",
+              "name": "istore",
+              "operands_hex": "04"
+            },
+            {
+              "pc": 96,
+              "class_file_offset": 17578,
+              "opcode": "0xb8",
+              "name": "invokestatic",
+              "operands_hex": "00e9",
+              "constant_pool_index": 233,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/data/id315938658",
+                "name": "id",
+                "descriptor": "(Luk/co/screamingfrog/seospider/data/id782393105;)Z"
+              }
+            },
+            {
+              "pc": 103,
+              "class_file_offset": 17585,
+              "opcode": "0xb8",
+              "name": "invokestatic",
+              "operands_hex": "00a7",
+              "constant_pool_index": 167,
+              "resolved": {
+                "tag": 10,
+                "owner": "seo/spider/spider/id601314627",
+                "name": "id281146822",
+                "descriptor": "(Luk/co/screamingfrog/seospider/data/id782393105;)Z"
+              }
+            },
+            {
+              "pc": 110,
+              "class_file_offset": 17592,
+              "opcode": "0xb8",
+              "name": "invokestatic",
+              "operands_hex": "00a6",
+              "constant_pool_index": 166,
+              "resolved": {
+                "tag": 10,
+                "owner": "seo/spider/spider/id601314627",
+                "name": "id",
+                "descriptor": "(Luk/co/screamingfrog/seospider/data/id782393105;)Z"
+              }
+            },
+            {
+              "pc": 117,
+              "class_file_offset": 17599,
+              "opcode": "0xb8",
+              "name": "invokestatic",
+              "operands_hex": "0094",
+              "constant_pool_index": 148,
+              "resolved": {
+                "tag": 10,
+                "owner": "seo/spider/spider/b/a/a/id",
+                "name": "id281146822",
+                "descriptor": "(Luk/co/screamingfrog/seospider/data/id1020581975;)Z"
+              }
+            },
+            {
+              "pc": 124,
+              "class_file_offset": 17606,
+              "opcode": "0xb6",
+              "name": "invokevirtual",
+              "operands_hex": "00d3",
+              "constant_pool_index": 211,
+              "resolved": {
+                "tag": 10,
+                "owner": "uk/co/screamingfrog/seospider/data/id1020581975",
+                "name": "id1981399840",
+                "descriptor": "()Z"
+              }
+            },
+            {
+              "pc": 135,
+              "class_file_offset": 17617,
+              "opcode": "0x99",
+              "name": "ifeq",
+              "operands_hex": "0012",
+              "branch_target": 153
+            },
+            {
+              "pc": 138,
+              "class_file_offset": 17620,
+              "opcode": "0x1c",
+              "name": "iload_2",
+              "operands_hex": ""
+            },
+            {
+              "pc": 139,
+              "class_file_offset": 17621,
+              "opcode": "0x99",
+              "name": "ifeq",
+              "operands_hex": "0007",
+              "branch_target": 146
+            },
+            {
+              "pc": 142,
+              "class_file_offset": 17624,
+              "opcode": "0x1d",
+              "name": "iload_3",
+              "operands_hex": ""
+            },
+            {
+              "pc": 143,
+              "class_file_offset": 17625,
+              "opcode": "0x9a",
+              "name": "ifne",
+              "operands_hex": "0008",
+              "branch_target": 151
+            },
+            {
+              "pc": 146,
+              "class_file_offset": 17628,
+              "opcode": "0x15",
+              "name": "iload",
+              "operands_hex": "04"
+            },
+            {
+              "pc": 148,
+              "class_file_offset": 17630,
+              "opcode": "0x99",
+              "name": "ifeq",
+              "operands_hex": "0005",
+              "branch_target": 153
+            },
+            {
+              "pc": 152,
+              "class_file_offset": 17634,
+              "opcode": "0xac",
+              "name": "ireturn",
+              "operands_hex": ""
+            },
+            {
+              "pc": 154,
+              "class_file_offset": 17636,
+              "opcode": "0xac",
+              "name": "ireturn",
+              "operands_hex": ""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "known_additional_html_extraction_fields": [],
+  "known_cdn_specific_audit_decisions": [],
+  "negative_qualification": "No independently mapped additional field is proved in this bounded pass. This is not proof that the vendor has no such fields. Straight-line argument/branch observations do not prove runtime invocation or hidden sink implementation."
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "kind": "selected_root_issuer_fsync_actual_readback_closure",
+  "parent": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-runtime2-selected-root-operations-preparation-v3/manifest.json",
+    "sha256": "fcb6a17d5e4ad8ec7a6038d783963eeabe15acf430a103705417a567f3cb681a",
+    "bytes": 8274
+  },
+  "findings_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-runtime2-selected-root-operations-independent-review-v3/receipt.json",
+    "sha256": "d3e088010754aee9e110c464554a17c82c8b88bb0ea668eed7b717ce9856d197",
+    "bytes": 3163
+  },
+  "operations": [
+    {
+      "before": "D=B+'/source12-runtime2-selected-root-operations-preparation-v3'",
+      "after": "D=B+'/source12-runtime2-selected-root-operations-preparation-v4'"
+    },
+    {
+      "before": "const json=r=>JSON.parse(read(r));function ref(p)",
+      "after": "function writeExact(p,b){assert(Buffer.isBuffer(b));const fd=fs.openSync(p,'wx');try{let offset=0;while(offset<b.length){const n=fs.writeSync(fd,b,offset,b.length-offset);assert(n>0);offset+=n;}fs.fsyncSync(fd);}finally{fs.closeSync(fd);}const actual=ref(p);assert.equal(actual.bytes,b.length);assert.equal(actual.sha256,H(b));read(actual);return actual;}\nconst json=r=>JSON.parse(read(r));function ref(p)"
+    },
+    {
+      "before": "fs.writeFileSync(p.target,read(p.source),{flag:'wx'});assert.equal(H(fs.readFileSync(p.target)),p.source.sha256);",
+      "after": "const promoted=writeExact(p.target,read(p.source));assert.equal(promoted.sha256,p.source.sha256);"
+    },
+    {
+      "before": "fs.writeFileSync(g.path,b,{flag:'wx'});const{value,...rest}=g;issuedRows.push({...rest,grant:{path:g.path,sha256:H(b),bytes:b.length},",
+      "after": "const actualGrant=writeExact(g.path,b);const{value,...rest}=g;issuedRows.push({...rest,grant:actualGrant,"
+    },
+    {
+      "before": "fs.writeFileSync(receiptPath,JSON.stringify(receipt,null,2)+'\\n',{flag:'wx'});console.log",
+      "after": "writeExact(receiptPath,Buffer.from(JSON.stringify(receipt,null,2)+'\\n'));console.log"
+    }
+  ],
+  "whole_source_inverse_verified": true,
+  "grant_receipt_and_promotions": "wx/full-write/fsync/close/actual-readback/hash/length verified",
+  "actual_root_grants_issued": false
+}
