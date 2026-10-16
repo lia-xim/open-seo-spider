@@ -1179,9 +1179,9 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 #### Noch offen
 
-- [ ] **Expansion nach Indexierungsregeln steuern** — Offen; `robots.traversal`, P1.
+- [ ] **Direktiven für Anzeige und Entdeckung getrennt steuern** — Offen; `robots.traversal`, P1.
 
-  Orientierung: Noindex-, Canonical- und Pagination-Regeln anwenden, ohne Beobachtungen zu unterdrücken.
+  Orientierung: Gespeicherte Noindex-, Canonical- und Pagination-Anzeigefilter prüfen; Abrufe, Outlinks und Rohbeobachtungen erhalten.
 
   Beweisregister: [resource-contract-core](verification/resource-contract-core.json) (FOCUSED_CORE_PASS_FULL_MATRIX_PENDING), [resource-contract-api-cli-mcp](verification/resource-contract-e2e.json) (PASS).
 
@@ -1191,11 +1191,11 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
   ```json
   {
     "id": "robots.traversal",
-    "reference_name": "Directive-dependent discovery",
+    "reference_name": "Directive-dependent reporting and discovery",
     "status": "planned",
-    "acceptance_test": "Verify saved noindex/canonical/pagination policies influence expansion without suppressing observed evidence.",
+    "acceptance_test": "Verify saved noindex/canonical/pagination reporting switches filter visible results while preserving raw observations, crawl counts and outlink traversal; keep relationship discovery controls independent.",
     "remaining_acceptance": [
-      "Verify saved noindex/canonical/pagination policies influence expansion without suppressing observed evidence."
+      "Verify saved noindex/canonical/pagination reporting switches filter visible results while preserving raw observations, crawl counts and outlink traversal; keep relationship discovery controls independent."
     ],
     "implementation_evidence": [
       {
@@ -6040,4 +6040,4 @@ Diese unveränderten Einträge dokumentieren den damaligen Stand. Aktuelle Resta
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `bf50b74ac4371fff3004fd3fa2861c089a568a3995a71b4d9d6f608714db0617`. Letzter im Katalog erfasster Beweisstand: `2026-10-16T13:03:22.375Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `4778b5b65b3ccfef7fd243e8cdf13693e529275ac50b458bb2bc0bd2643db6da`. Letzter im Katalog erfasster Beweisstand: `2026-10-16T13:03:22.375Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

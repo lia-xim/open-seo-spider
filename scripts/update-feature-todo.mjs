@@ -32,7 +32,7 @@ robots.test|Robots-Regeln offline simulieren|Der gemeinsame Entscheidungsmechani
 robots.override|Explizite Robots-Ausnahme|Gespeicherten Override und seine sichtbare Wirkung auf tatsächliche Anfragen prüfen.
 robots.meta|Meta-Robots und X-Robots-Tag|Der eigene Direktiven- und Whitespace-Vertrag ist geprüft.
 robots.indexability|Indexierbarkeit mit Gründen erklären|Jede Erklärung und Agenten-spezifische Direktive in einer vollständigen Fixture prüfen.
-robots.traversal|Expansion nach Indexierungsregeln steuern|Noindex-, Canonical- und Pagination-Regeln anwenden, ohne Beobachtungen zu unterdrücken.
+robots.traversal|Direktiven für Anzeige und Entdeckung getrennt steuern|Gespeicherte Noindex-, Canonical- und Pagination-Anzeigefilter prüfen; Abrufe, Outlinks und Rohbeobachtungen erhalten.
 http.response|Initiale und finale HTTP-Antworten erfassen|Transferbytes, Timing-Phasen und mehrfach vorhandene Header vollständig erhalten.
 http.failures|HTTP- und Netzwerkfehler unterscheiden|Maschinenlesbare 5xx-, DNS-, Timeout- und ungültige URL-Zustände vollständig prüfen.
 http.redirects|Redirect-Ketten und Stop-Gründe|Weitere Endzustände und Kombinationen prüfen; fehlende Zwischenantworten ausdrücklich unbekannt lassen.

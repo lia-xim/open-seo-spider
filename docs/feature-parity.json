@@ -1306,13 +1306,13 @@
     },
     {
       "id": "robots.traversal",
-      "name": "Directive-dependent discovery",
+      "name": "Directive-dependent reporting and discovery",
       "status": "planned",
       "phase": "P1",
       "source_ids": [
         "config"
       ],
-      "acceptance_test": "Verify saved noindex/canonical/pagination policies influence expansion without suppressing observed evidence.",
+      "acceptance_test": "Verify saved noindex/canonical/pagination reporting switches filter visible results while preserving raw observations, crawl counts and outlink traversal; keep relationship discovery controls independent.",
       "implementation_evidence": [
         {
           "batch": "B10-resource-contract-v2",
@@ -1327,9 +1327,16 @@
       "parity_evidence": [],
       "group": "robots",
       "remaining_acceptance": [
-        "Verify saved noindex/canonical/pagination policies influence expansion without suppressing observed evidence."
+        "Verify saved noindex/canonical/pagination reporting switches filter visible results while preserving raw observations, crawl counts and outlink traversal; keep relationship discovery controls independent."
       ],
-      "parity_status": "NOT_PROVEN"
+      "parity_status": "NOT_PROVEN",
+      "reference_clarification": {
+        "checked_at": "2026-10-16",
+        "source": "https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/",
+        "note": "Respect Noindex/Canonical/Next-Prev are reporting switches. They do not suppress crawling or following outlinks. The earlier acceptance incorrectly conflated these with traversal.",
+        "detail": "docs/reference-directive-reporting-20261016.md",
+        "implementation_status": "PLANNED_NOT_IMPLEMENTED"
+      }
     },
     {
       "id": "http.response",
