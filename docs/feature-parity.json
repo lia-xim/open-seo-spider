@@ -144,8 +144,8 @@
       "title": "Version 24 release (19 May 2026)",
       "url": "https://www.screamingfrog.co.uk/blog/seo-spider-24/",
       "type": "official_primary_documentation",
-      "checked_on": "2026-10-15",
-      "review_note": "Version24 page still advertises24.3; finer existing-group gaps tracked in docs/reference24-detail-gaps-20261015.md. Failed separate download-page lookup is not evidence."
+      "checked_on": "2026-10-16",
+      "review_note": "Version24 page still advertises24.3; finer existing-group gaps tracked in docs/reference24-detail-gaps-20261015.md. Failed separate download-page lookup is not evidence. Refreshed against official release history on16 October:24.3 remains latest listed; two additional existing-group criteria recorded in docs/reference24-detail-gaps-20261016.md."
     },
     {
       "id": "list",
@@ -3513,7 +3513,8 @@
       "status": "planned",
       "phase": "P4",
       "source_ids": [
-        "config"
+        "config",
+        "release24"
       ],
       "acceptance_test": "Use independent authorized app/API access; mock expiry, quota and metric joins without reusing vendor tokens.",
       "implementation_evidence": [],
@@ -3521,12 +3522,14 @@
       "group": "integrations",
       "remaining_acceptance": [
         "Use independent authorized app/API access; mock expiry, quota and metric joins without reusing vendor tokens.",
-        "Own app/OAuth or independently entitled API access. No vendor token/app reuse. Explicit endpoint/metric scope, token expiry, quotas, pagination and joins."
+        "Own app/OAuth or independently entitled API access. No vendor token/app reuse. Explicit endpoint/metric scope, token expiry, quotas, pagination and joins.",
+        "Ahrefs country and volume basis: preserve and validate country separately from monthly/average volume, bind both to metric/query provenance, and test invalid values and roundtrips with owned mocks before an independently authorized live provider check."
       ],
       "parity_status": "NOT_PROVEN",
       "reference_scope": {
-        "latest_documentation_check": "2026-10-15T23:47:54.752Z",
-        "current_provider_gap_plan": "docs/verification/api-only-rust-failure-20261016/plans/provider-breadth.json"
+        "latest_documentation_check": "2026-10-16T04:54:35.391Z",
+        "current_provider_gap_plan": "docs/verification/api-only-rust-failure-20261016/plans/provider-breadth.json",
+        "current_detail_gap_note": "docs/reference24-detail-gaps-20261016.md"
       }
     },
     {
@@ -3696,16 +3699,22 @@
       "status": "planned",
       "phase": "P4",
       "source_ids": [
-        "semantic"
+        "semantic",
+        "release24"
       ],
       "acceptance_test": "Query saved vectors and visualize clusters while retaining model/dimensionality provenance.",
       "implementation_evidence": [],
       "parity_evidence": [],
       "group": "ai",
       "remaining_acceptance": [
-        "Query saved vectors and visualize clusters while retaining model/dimensionality provenance."
+        "Query saved vectors and visualize clusters while retaining model/dimensionality provenance.",
+        "Content cluster legend: enable and disable displayed clusters through visible legend controls, preserve stored cluster assignments and model provenance, and verify return to the complete graph and exports."
       ],
-      "parity_status": "NOT_PROVEN"
+      "parity_status": "NOT_PROVEN",
+      "reference_scope": {
+        "latest_documentation_check": "2026-10-16T04:54:35.392Z",
+        "current_detail_gap_note": "docs/reference24-detail-gaps-20261016.md"
+      }
     },
     {
       "id": "ai.redirect_mapping",
@@ -8764,15 +8773,16 @@
       "id": "cdn-directory-reporting-20261016",
       "title_de": "CDN-Verzeichnisse nachvollziehbar klassifizieren",
       "priority": 4,
-      "status": "THREE_NATIVE_PASS_MAIN_SECOND_CSV_ORACLE_FAILURE_NEXT_SOURCE_PENDING",
-      "summary_de": "Source14 besteht die vollständige lokale Suite mit 1506 Tests, den optimierten Build und drei praktische Abnahmen. Im neuen Segmentablauf bestehen zehn Gruppen einschließlich vollständiger API-/CLI-Exporte. Sein erster Lauf scheiterte an einer falschen MCP-Exporterwartung über der bestehenden 1-MB-Antwortgrenze. Im zweiten Lauf bestehen zwölf Gruppen einschließlich MCP; ein weiterer Testfehler beim unterschiedlichen LF-/CRLF-Vertrag der CSV-Exporte wird eng korrigiert. Sichtbare UI, Cold und Installation bleiben offen.",
+      "status": "THREE_NATIVE_PASS_MAIN_NEGATIVE_IMPORT_CAP_FAILURE_NARROW_RETRY_PENDING",
+      "summary_de": "Source14 besteht die lokale Gesamtsuite mit1506 Tests, den optimierten Build und drei praktische Abnahmen. Im dritten Segmentlauf bestehen zwölf Gruppen einschließlich vollständiger API-/CLI-Exporte und beider MCP-Zugänge. Die vorherige CSV-Testannahme ist korrigiert. Der Ablauf stoppt vor der UI, weil sein abgetrenntes negatives Altformat-Beispiel72899 Bytes gegen die eigene unveränderte64-KiB-Requestgrenze enthält. Nur acht optionale Ressourcenquellen dieses negativen Beispiels werden entfernt; alle8 Seiten,18 Links und28 Issues bleiben erhalten. UI, Cold und Installation sind weiter offen.",
       "completed_acceptance_de": [
         "Die echte Ressourcen-fixture zweimal mit deaktivierter/aktivierter Klassifikation und identischen Fetchfreigaben geprüft; Klassifikation erteilt keine zusätzlichen Anfragen.",
         "Gemeinsame Source14 mit31 Produktpfaden privat veröffentlicht; aktuelle30 Rust-/9 Frontendfälle bestehen.",
         "Vollständige Source14-Suite: 1506 bestanden, 0 fehlgeschlagen, 0 ignoriert; alle aktuellen Pflichtnamen, vier frische Rendererfunktionen, Format/Clippy und eigene Prozess-/Fixtureabschlüsse geprüft.",
         "Optimierter Source14-Build und drei frische Nativrollen bestanden: elf Head/CDN-Fälle, qualifizierte API-only-Teilabnahme und acht Sitemap-Szenarien.",
         "Im ersten Segment-/CDN-Verzeichnislauf bestehen zehn Gruppen; der fehlgeschlagene MCP-Großexport und die vollständig geschlossenen eigenen Prozesse bleiben als Fehlernachweis erhalten.",
-        "Korrigierter Test prüft alle MCP-Seiten und Issues, eigene kleine vollständige Auswahl sowie echte Größenrefusals; keine Produkt- oder Budgetänderung."
+        "Korrigierter Test prüft alle MCP-Seiten und Issues, eigene kleine vollständige Auswahl sowie echte Größenrefusals; keine Produkt- oder Budgetänderung.",
+        "Dritter tatsächlicher Lauf: Segment- und Links-CSV mit getrennten CRLF-/LF-Verträgen bestanden; zwölf Gruppen PASS. Negativimport scheitert vor IO an der eigenen64-KiB-Grenze. Alle eigenen Ressourcen geschlossen, keine Stoppsignale, Lock freigegeben."
       ],
       "pending_acceptance_de": [
         "Alle 18 Gruppen des korrigierten Segment-/CDN-Verzeichnisablaufs tatsächlich erfüllen, einschließlich sichtbarer UI bei 1440/320 und Cold-Neustart.",
@@ -8780,6 +8790,7 @@
         "Erst danach die drei Datenkopien und Integritätsprüfung durchführen und die lokale EXE gezielt ersetzen."
       ],
       "documentation": [
+        "docs/verification/main-negative-cap-and-reference-20261016/index.json",
         "docs/verification/quotas-tested-main-retry-20261016/index.json",
         "docs/verification/quotas-tested-main-retry-20261016/main-first-native-failed.json",
         "docs/verification/source14-three-native-progress-20261016/index.json",
@@ -8791,7 +8802,7 @@
       ],
       "gates": {
         "full_suite": "PASS_ACTUAL_1506_0_0_FOUR_FRESH_RENDERER_FMT_CLIPPY",
-        "native": "THREE_PASS_MAIN_SECOND_CSV_ORACLE_FAILURE_NEXT_SOURCE_PENDING",
+        "native": "THREE_PASS_MAIN_NEGATIVE_IMPORT_REQUEST_CAP_FAILURE_UI_COLD_NOT_RUN",
         "manufacturer_parity": "NOT_PROVEN",
         "optimized_build": "PASS_ACTUAL_SOURCE14",
         "installation": "NOT_RUN"
@@ -8801,8 +8812,8 @@
       "id": "links-segments-20261016",
       "title_de": "Gespeicherte Segmente über Reports und Exporte anwenden",
       "priority": 5,
-      "status": "THREE_NATIVE_PASS_MAIN_SECOND_CSV_ORACLE_FAILURE_NEXT_SOURCE_PENDING",
-      "summary_de": "Source14 besteht die vollständige lokale Suite mit 1506 Tests, den optimierten Build und drei praktische Abnahmen. Im neuen Segmentablauf bestehen zehn Gruppen einschließlich vollständiger API-/CLI-Exporte. Sein erster Lauf scheiterte an einer falschen MCP-Exporterwartung über der bestehenden 1-MB-Antwortgrenze. Im zweiten Lauf bestehen zwölf Gruppen einschließlich MCP; ein weiterer Testfehler beim unterschiedlichen LF-/CRLF-Vertrag der CSV-Exporte wird eng korrigiert. Sichtbare UI, Cold und Installation bleiben offen.",
+      "status": "THREE_NATIVE_PASS_MAIN_NEGATIVE_IMPORT_CAP_FAILURE_NARROW_RETRY_PENDING",
+      "summary_de": "Source14 besteht die lokale Gesamtsuite mit1506 Tests, den optimierten Build und drei praktische Abnahmen. Im dritten Segmentlauf bestehen zwölf Gruppen einschließlich vollständiger API-/CLI-Exporte und beider MCP-Zugänge. Die vorherige CSV-Testannahme ist korrigiert. Der Ablauf stoppt vor der UI, weil sein abgetrenntes negatives Altformat-Beispiel72899 Bytes gegen die eigene unveränderte64-KiB-Requestgrenze enthält. Nur acht optionale Ressourcenquellen dieses negativen Beispiels werden entfernt; alle8 Seiten,18 Links und28 Issues bleiben erhalten. UI, Cold und Installation sind weiter offen.",
       "completed_acceptance_de": [
         "SegmentV2 und gesamte418-Input-Komposition unabhängig geprüft.",
         "Tatsächlicher Formatter und unabhängiger Review aller418 Vorher-/Nachherdateien bestanden.",
@@ -8813,7 +8824,8 @@
         "Vollständige Source14-Suite: 1506 bestanden, 0 fehlgeschlagen, 0 ignoriert; alle aktuellen Pflichtnamen, vier frische Rendererfunktionen, Format/Clippy und eigene Prozess-/Fixtureabschlüsse geprüft.",
         "Optimierter Source14-Build und drei frische Nativrollen bestanden: elf Head/CDN-Fälle, qualifizierte API-only-Teilabnahme und acht Sitemap-Szenarien.",
         "Im ersten Segment-/CDN-Verzeichnislauf bestehen zehn Gruppen; der fehlgeschlagene MCP-Großexport und die vollständig geschlossenen eigenen Prozesse bleiben als Fehlernachweis erhalten.",
-        "Korrigierter Test prüft alle MCP-Seiten und Issues, eigene kleine vollständige Auswahl sowie echte Größenrefusals; keine Produkt- oder Budgetänderung."
+        "Korrigierter Test prüft alle MCP-Seiten und Issues, eigene kleine vollständige Auswahl sowie echte Größenrefusals; keine Produkt- oder Budgetänderung.",
+        "Dritter tatsächlicher Lauf: Segment- und Links-CSV mit getrennten CRLF-/LF-Verträgen bestanden; zwölf Gruppen PASS. Negativimport scheitert vor IO an der eigenen64-KiB-Grenze. Alle eigenen Ressourcen geschlossen, keine Stoppsignale, Lock freigegeben."
       ],
       "pending_acceptance_de": [
         "Alle 18 Gruppen des korrigierten Segment-/CDN-Verzeichnisablaufs tatsächlich erfüllen, einschließlich sichtbarer UI bei 1440/320 und Cold-Neustart.",
@@ -8821,6 +8833,7 @@
         "Erst danach die drei Datenkopien und Integritätsprüfung durchführen und die lokale EXE gezielt ersetzen."
       ],
       "documentation": [
+        "docs/verification/main-negative-cap-and-reference-20261016/index.json",
         "docs/verification/quotas-tested-main-retry-20261016/index.json",
         "docs/verification/quotas-tested-main-retry-20261016/main-first-native-failed.json",
         "docs/verification/source14-three-native-progress-20261016/index.json",
@@ -8835,7 +8848,7 @@
       ],
       "gates": {
         "full_suite": "PASS_ACTUAL_1506_0_0_FOUR_FRESH_RENDERER_FMT_CLIPPY",
-        "native": "THREE_PASS_MAIN_SECOND_CSV_ORACLE_FAILURE_NEXT_SOURCE_PENDING",
+        "native": "THREE_PASS_MAIN_NEGATIVE_IMPORT_REQUEST_CAP_FAILURE_UI_COLD_NOT_RUN",
         "manufacturer_parity": "NOT_PROVEN",
         "source_review": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
         "format": "PASS_FORMAT_COMMAND_ONLY",
@@ -8921,9 +8934,9 @@
     {
       "id": "combined-source-v14-20261016",
       "priority": 0,
-      "status": "THREE_NATIVE_PASS_MAIN_SECOND_CSV_ORACLE_FAILURE_NEXT_SOURCE_PENDING",
+      "status": "THREE_NATIVE_PASS_MAIN_NEGATIVE_IMPORT_CAP_FAILURE_NARROW_RETRY_PENDING",
       "title_de": "Source14 vollständig abnehmen und installieren",
-      "summary_de": "Source14 besteht die vollständige lokale Suite mit 1506 Tests, den optimierten Build und drei praktische Abnahmen. Im neuen Segmentablauf bestehen zehn Gruppen einschließlich vollständiger API-/CLI-Exporte. Sein erster Lauf scheiterte an einer falschen MCP-Exporterwartung über der bestehenden 1-MB-Antwortgrenze. Im zweiten Lauf bestehen zwölf Gruppen einschließlich MCP; ein weiterer Testfehler beim unterschiedlichen LF-/CRLF-Vertrag der CSV-Exporte wird eng korrigiert. Sichtbare UI, Cold und Installation bleiben offen.",
+      "summary_de": "Source14 besteht die lokale Gesamtsuite mit1506 Tests, den optimierten Build und drei praktische Abnahmen. Im dritten Segmentlauf bestehen zwölf Gruppen einschließlich vollständiger API-/CLI-Exporte und beider MCP-Zugänge. Die vorherige CSV-Testannahme ist korrigiert. Der Ablauf stoppt vor der UI, weil sein abgetrenntes negatives Altformat-Beispiel72899 Bytes gegen die eigene unveränderte64-KiB-Requestgrenze enthält. Nur acht optionale Ressourcenquellen dieses negativen Beispiels werden entfernt; alle8 Seiten,18 Links und28 Issues bleiben erhalten. UI, Cold und Installation sind weiter offen.",
       "feature_ids": [
         "links.segments",
         "crawl.cdns"
@@ -8934,7 +8947,8 @@
         "Vollständige1506/0/0-Suite mit allen aktuellen Pflichtnamen und vier frischenRendererfunktionen bestanden.",
         "Optimierter Source14-Build und drei frische Nativrollen bestanden: elf Head/CDN-Fälle, qualifizierte API-only-Teilabnahme und acht Sitemap-Szenarien.",
         "Im ersten Segment-/CDN-Verzeichnislauf bestehen zehn Gruppen; der fehlgeschlagene MCP-Großexport und die vollständig geschlossenen eigenen Prozesse bleiben als Fehlernachweis erhalten.",
-        "Korrigierter Test prüft alle MCP-Seiten und Issues, eigene kleine vollständige Auswahl sowie echte Größenrefusals; keine Produkt- oder Budgetänderung."
+        "Korrigierter Test prüft alle MCP-Seiten und Issues, eigene kleine vollständige Auswahl sowie echte Größenrefusals; keine Produkt- oder Budgetänderung.",
+        "Dritter tatsächlicher Lauf: Segment- und Links-CSV mit getrennten CRLF-/LF-Verträgen bestanden; zwölf Gruppen PASS. Negativimport scheitert vor IO an der eigenen64-KiB-Grenze. Alle eigenen Ressourcen geschlossen, keine Stoppsignale, Lock freigegeben."
       ],
       "pending_acceptance_de": [
         "Alle 18 Gruppen des korrigierten Segment-/CDN-Verzeichnisablaufs tatsächlich erfüllen, einschließlich sichtbarer UI bei 1440/320 und Cold-Neustart.",
@@ -8942,6 +8956,7 @@
         "Erst danach die drei Datenkopien und Integritätsprüfung durchführen und die lokale EXE gezielt ersetzen."
       ],
       "documentation": [
+        "docs/verification/main-negative-cap-and-reference-20261016/index.json",
         "docs/verification/quotas-tested-main-retry-20261016/index.json",
         "docs/verification/quotas-tested-main-retry-20261016/main-first-native-failed.json",
         "docs/verification/source14-three-native-progress-20261016/index.json",
@@ -8950,7 +8965,7 @@
       "gates": {
         "full_suite": "PASS_ACTUAL_1506_0_0_FOUR_FRESH_RENDERER_FMT_CLIPPY",
         "optimized_build": "PASS_ACTUAL_SOURCE14",
-        "native": "THREE_PASS_MAIN_SECOND_CSV_ORACLE_FAILURE_NEXT_SOURCE_PENDING",
+        "native": "THREE_PASS_MAIN_NEGATIVE_IMPORT_REQUEST_CAP_FAILURE_UI_COLD_NOT_RUN",
         "installation": "NOT_RUN",
         "manufacturer_parity": "NOT_PROVEN"
       },

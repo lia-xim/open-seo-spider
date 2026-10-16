@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "kind": "source14_explicit_synthetic_negative_import_size_investigation",
+  "status": "STATIC_SOURCE_DATA_ONLY_NOT_NATIVE",
+  "failure": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/segments-cdn-directory-native-v14-r3/proof.json",
+    "sha256": "f28496bee18b9aff6ddc530f318f65f1371979823560264e83110b97d72d193d",
+    "bytes": 944415
+  },
+  "genuine_source": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/segments-cdn-directory-native-v14-r3/genuine-directory-on.json",
+    "sha256": "0634d10f34d299512b5d09564c8f4983c9e31ac52f3d6ffc5582321a086a9d94",
+    "bytes": 115112
+  },
+  "genuine_compact_bytes": 81020,
+  "original_negative_compact_bytes": 72899,
+  "request_cap_unchanged": 65536,
+  "proposed_negative_compact_bytes": 54396,
+  "bytes_below_cap": 11140,
+  "construction": "Clone the same genuine resource-on report; preserve every8Page/18Link/28Issue plus every top-level field. Preserve the existing deletion of depth and Page/Link CDN observations; additionally omit only all8 optional Page.resource_source batches. This is explicitly detached synthetic-negative imported data, not genuine positive native evidence.",
+  "counts": {
+    "retained_pages": 8,
+    "retained_links": 18,
+    "retained_issues": 28,
+    "removedDepth": 8,
+    "originalNonzeroDepths": 7,
+    "removedPageCDN": 6,
+    "removedLinkCDN": 12,
+    "detachedResourceInventories": 8,
+    "removedSourceValueBytes": 18351
+  },
+  "per_top_field": [
+    {
+      "key": "config",
+      "bytes": 3856
+    },
+    {
+      "key": "pages",
+      "bytes": 68397,
+      "items": 8
+    },
+    {
+      "key": "issues",
+      "bytes": 6057,
+      "items": 28
+    },
+    {
+      "key": "summary",
+      "bytes": 290
+    },
+    {
+      "key": "warnings",
+      "bytes": 2,
+      "items": 0
+    },
+    {
+      "key": "resource_ledger",
+      "bytes": 432
+    },
+    {
+      "key": "sitemap_catalog",
+      "bytes": 673
+    },
+    {
+      "key": "sitemap_coverage_inventory",
+      "bytes": 328
+    },
+    {
+      "key": "sitemap_source_measurements",
+      "bytes": 833
+    }
+  ],
+  "source_refs": [
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v14/crates/core/src/models.rs",
+      "sha256": "e85dbc763f17f3c2ffc854f8b17f5f892b6537be8779002718ed9e0c2a56fd65",
+      "bytes": 41814
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v14/crates/app/src/server.rs",
+      "sha256": "f795b993077a3d4af8ce6f2e8923bb1ff9c6e3725d692b3aeaa26c2a0df238b4",
+      "bytes": 95447
+    },
+    {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v14/crates/app/src/analysis.rs",
+      "sha256": "c6eb34a694b2f75ff040afe58a4895a4d223f187bccb4a4d2baef67bcad903b2",
+      "bytes": 84089
+    }
+  ],
+  "source_anchors": [
+    {
+      "path": "crates/core/src/models.rs",
+      "line": 1008,
+      "claim": "serde default/skip Option resource_source"
+    },
+    {
+      "path": "crates/app/src/server.rs",
+      "line": 1957,
+      "claim": "import Json<CrawlReport> -> persist_import -> extend_report/write_json/register_report"
+    },
+    {
+      "path": "crates/app/src/analysis.rs",
+      "line": 15,
+      "claim": "extend_report computes already-saved relationship/security issues; no resource_source restoration"
+    }
+  ],
+  "proof_obligations_after_approval": [
+    "Assert exact8 retained pages/18 retained links on this fixed fixture; no row-selection or trimming.",
+    "Before request record compact JSON bytes+SHA and enforce original64KiB cap.",
+    "After public import assert all retained pages depth0 and Page/Link CDN fields absent/unknown, optional source inventory absent; preserve unsupported-depth400 refusal.",
+    "Record synthetic-negative only, detached8 source inventories; no positive transport/original observation authority claim.",
+    "All positive reports/225GETs/5realcrawls untouched."
+  ],
+  "executed": {
+    "target_imports": 0,
+    "target_calls": 0,
+    "HTTP": 0,
+    "native": 0,
+    "compiler": 0,
+    "C_R_Original": 0,
+    "Git": 0
+  }
+}

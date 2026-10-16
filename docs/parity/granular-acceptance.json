@@ -48480,8 +48480,8 @@
         "integrations.ahrefs",
         "integrations.moz"
       ],
-      "fixture_contract": "Owned/mock URL lookup with redirect/canonical mismatch and quota errors.",
-      "independent_expected": "Service-specific metrics/units/account/query timestamp retained; account fees/quotas not bypassed.",
+      "fixture_contract": "Owned/mock URL lookup with redirect/canonical mismatch and quota errors. Ahrefs: country-specific queries with distinct monthly/average volume options, invalid options, expiry/quota and complete configuration roundtrips.",
+      "independent_expected": "Service-specific metrics/units/account/query timestamp retained; account fees/quotas not bypassed. Country and volume time basis remain explicit in provider metric provenance.",
       "acceptance_status": "DRAFT_NOT_EXECUTED_AS_A_COMPLETE_WORKFLOW",
       "reference_parity": "NOT_PROVEN",
       "related_capability_statuses": [
@@ -48500,7 +48500,8 @@
       ],
       "source_urls": [
         "https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/",
-        "https://www.screamingfrog.co.uk/seo-spider/user-guide/general/"
+        "https://www.screamingfrog.co.uk/seo-spider/user-guide/general/",
+        "https://www.screamingfrog.co.uk/blog/seo-spider-24/"
       ]
     },
     {
@@ -48582,10 +48583,11 @@
         "links.crawl_graph",
         "links.directory_graph",
         "links.graphs_3d",
-        "links.segments"
+        "links.segments",
+        "ai.semantic_search"
       ],
-      "fixture_contract": "Crawl/directory/content cluster layouts with selected segment and large partial graph.",
-      "independent_expected": "Topology versus layout separated; SVG/image/HTML export and segment membership explicit; drawing alone is not graph-algorithm proof.",
+      "fixture_contract": "Crawl/directory/content cluster layouts with selected segment and large partial graph. Visible content-cluster legend toggles and restoration of the full graph.",
+      "independent_expected": "Topology versus layout separated; SVG/image/HTML export and segment membership explicit; drawing alone is not graph-algorithm proof. Display filtering preserves stored cluster assignments and model provenance; verify complete-view restoration.",
       "acceptance_status": "DRAFT_NOT_EXECUTED_AS_A_COMPLETE_WORKFLOW",
       "reference_parity": "NOT_PROVEN",
       "related_capability_statuses": [
@@ -48604,11 +48606,16 @@
         {
           "id": "links.segments",
           "status": "planned"
+        },
+        {
+          "id": "ai.semantic_search",
+          "status": "planned"
         }
       ],
       "source_urls": [
         "https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/",
-        "https://www.screamingfrog.co.uk/seo-spider/user-guide/general/"
+        "https://www.screamingfrog.co.uk/seo-spider/user-guide/general/",
+        "https://www.screamingfrog.co.uk/blog/seo-spider-24/"
       ]
     },
     {
