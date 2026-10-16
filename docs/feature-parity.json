@@ -6851,7 +6851,7 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-16T09:44:20.980Z",
+  "last_verified_at": "2026-10-16T10:06:19.822Z",
   "current_work": [
     {
       "id": "combined-source-v15-20261016",
@@ -9057,9 +9057,9 @@
     {
       "id": "cli-crawl-resume-20261016",
       "priority": 0,
-      "status": "FULL_SUITE_AND_BUILD_PASS_NATIVE_INSTALL_OPEN",
+      "status": "THREE_NATIVE_PASS_CLI_HARNESS_REPAIRED_REPEAT_RUNNING",
       "title_de": "Gespeicherte Crawls per CLI sicher fortsetzen",
-      "summary_de": "Source16 ist mit431 Produktdateien privat veröffentlicht und eingefroren. Vollständiger Gesamtlauf1546/0/0 einschließlich vier frischer Renderer-Prüfungen, Format und Clippy sowie optimierter Build bestehen. Neuer Kandidat e6a296bb/46850560Bytes. Tatsächliche CLI-Abnahme, fünf aktuelle native Regressionen und lokale Installation bleiben offen; installiert läuft Source15. Herstellerparität bleibtNOT_PROVEN.",
+      "summary_de": "Source16 besteht1546/0/0 und Releasebuild sowie aktuelle API-, Sitemap- und Head/CDN-Nativprüfungen. Erster CLI-Nativlauf scheitert beim JSON-Abschlussbericht an einem Aliaszyklus; Rohbelege und Root-Fehlerzeugnis bleiben erhalten. Enger Harness-Fix hat frische Native-/Helper-Quellreviews; Wiederholung läuft. Segment-/Verzeichnis- und Quotenregression, tatsächliche CLI-Abnahme und Installation bleiben offen. Installiert ist Source15; Herstellerparität bleibtNOT_PROVEN.",
       "feature_ids": [
         "automation.cli",
         "crawl.limits"
@@ -9072,14 +9072,17 @@
         "Tatsächliche Formatierung mit unabhängiger mechanischer Prüfung, strenger Clippy und alle elf gerichteten Rust-Funktionen bestehen in der isolierten 431-Dateien-Komposition.",
         "Vier CLI-Produktpfade plus eigene Rohbyte-Attribute privat veröffentlicht; alle431 Arbeitsdateien, Index- und Commit-Blobs geprüft. Unabhängiger tatsächlicher Publikationsaudit ohne Befund.",
         "Vollständiger Source16-Gesamtlauf besteht mit1546/0/0, vier frischen Renderer-Gates, Format und Clippy; alle431 Eingaben unverändert und eigene Testprozesse/Fixture geschlossen.",
-        "Tatsächlicher optimierter Source16-Build mit drei regulären Kindprozessabschlüssen, unverändertem Suite-Beleg und allen431 unveränderten Quelldateien; Programmdatei und exakt fünf Native-Core-SHA-Felder durch Root gebunden."
+        "Tatsächlicher optimierter Source16-Build mit drei regulären Kindprozessabschlüssen, unverändertem Suite-Beleg und allen431 unveränderten Quelldateien; Programmdatei und exakt fünf Native-Core-SHA-Felder durch Root gebunden.",
+        "Aktuelle tatsächliche API-, Sitemap- und Head/CDN-Nativläufe auf dem Source16-Kandidaten bestehen; frühere Source15-Nativläufe werden nicht übernommen.",
+        "CLI-Harness-Aliaszyklus im fehlgeschlagenen Abschlussbericht eng behoben; beide R18-Varianten und alle24 Gruppen bleiben erhalten, frische unabhängige Native-/Helper-Quellreviews ohne Befund."
       ],
       "pending_acceptance_de": [
         "Aktuellen gebauten Source16-Kandidaten mit tatsächlichen CLI-Aufrufen, echtem Store, Resume, Quota-Erhöhung, Ablehnungen und Prozessschluss prüfen.",
-        "Fünf aktuelle native Regressionen auf der neuen Programmdatei ausführen; ältere Source15-Nachweise bleiben historisch.",
+        "Noch Segment-/Verzeichnis- und Quotenregression auf Source16 ausführen; drei andere Rollen bestehen bereits.",
         "Danach Source16 lokal installieren und bestehende Crawls an exklusiven Datenkopien und vollständigen Berichten prüfen."
       ],
       "documentation": [
+        "docs/verification/source16-three-native-resource-repair-20261016/index.json",
         "docs/verification/source16-build-resource-format-20261016/index.json",
         "docs/verification/source16-cli-suite-20261016/index.json",
         "docs/verification/source16-cli-suite-20261016/full-suite.json",
@@ -9095,7 +9098,7 @@
         "clippy": "PASS_ACTUAL_CURRENT_FULL_SUITE",
         "new_rust": "PASS_ALL_ELEVEN_IN_CURRENT_FULL_SUITE",
         "integration": "PASS_ACTUAL_PRIVATE_0620_ALL431_INDEX_AND_COMMIT_BYTES",
-        "native": "NOT_RUN_ON_SOURCE16",
+        "native": "PASS_ACTUAL_API_SITEMAP_HEAD_THREE_OF_FIVE",
         "installation": "NOT_RUN_ON_SOURCE16",
         "manufacturer_parity": "NOT_PROVEN",
         "parent_source_composition": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW_CURRENT_RETRY2_PREIMAGES",
@@ -9103,16 +9106,17 @@
         "preview_clippy": "PASS_ACTUAL_STRICT_CLIPPY",
         "preview_eleven_tests": "PASS_ACTUAL_ELEVEN_ZERO_FAILED_ZERO_IGNORED",
         "full_suite": "PASS_ACTUAL_1546_ZERO_FAILED_ZERO_IGNORED_FOUR_FRESH_RENDERER_FMT_CLIPPY",
-        "optimized_build": "PASS_ACTUAL_SOURCE16_E6A296BB_46850560_BYTES"
+        "optimized_build": "PASS_ACTUAL_SOURCE16_E6A296BB_46850560_BYTES",
+        "CLI_native": "FIRST_RUN_FAIL_SERIALIZATION_FIXED_SOURCE_REVIEWS_PASS_REPEAT_OPEN"
       },
       "reference_parity": "NOT_PROVEN"
     },
     {
       "id": "native-resource-quotas-20261016",
       "priority": 1,
-      "status": "ACTUAL_FORMAT_PASS_MECHANICAL_REVIEW_CLIPPY_RUST_NODE_OPEN",
+      "status": "FIRST_CLIPPY_FAILED_TEST_REPAIR_V2_REVIEWED_FORMAT_PASS",
       "title_de": "Native interne Ressourcen-Crawls mit dauerhaften Quoten verbinden",
-      "summary_de": "Source17 ist an den tatsächlichen vollständigen Source16-Gesamtlauf gebunden und als separate432-Dateien-Komposition unabhängig geprüft. Tatsächlicher Formatter besteht; nur die neue Core-Testdatei ist formatiert,431 andere Dateien bleiben bytegleich. Mechanischer Formatreview, Clippy,13 Core-Integrationstests, neun frische Node-Fälle und spätere vollständige Abnahme bleiben offen.",
+      "summary_de": "Source17-Erstprüfung scheitert an sechs Compilerfehlern ausschließlich in der neuen Testdatei. V2 behebt fünf SQL-COUNT-Dekodierungen und eine Verwendung nach finish(self), mit unveränderten13 Funktionen47 logischen Zellen156 Assertions. Frische Quell-, Kompositions- und Producer-Reviews ohne Befund; neue Formatierung besteht. Mechanischer V2-Formatreview, Clippy,13 Rust-Funktionen, neun frische Node-Fälle und vollständige Folgeabnahme bleiben offen.",
       "feature_ids": [
         "crawl.resources",
         "crawl.limits"
@@ -9121,22 +9125,25 @@
         "Vorhandenen gemeinsamen Dispatcher, dauerhafte Reservierung vor Abruf, Ressourcenabschluss und Wiederaufnahme in der Quelle geprüft.",
         "Unabhängiger begrenzter Quellreview ohne Befund; ursprünglicher Source16-Preview und Source15-Vorgänger bleiben unverändert.",
         "Alle431 tatsächlichen Source16-Vorgängerdateien vor/nach und alle432 Kompositions-/Vorformat-/Vorschlagsdateien exakt geprüft; unabhängiger Kompositions- und Producer-Review ohne Befund.",
-        "Tatsächliche Formatierung besteht; ausschließlich crates/core/tests/resource_quota_fixtures.rs geändert."
+        "Tatsächliche Formatierung besteht; ausschließlich crates/core/tests/resource_quota_fixtures.rs geändert.",
+        "Fehlgeschlagener V1-Clippy-Beleg unverändert erhalten; nur neue Testdatei mit sechs endlichen Korrekturen samt Rückableitung geändert, alle13 Namen47 Zellen156 Assertions erhalten.",
+        "V2-Vorschlag,432-Dateien-Komposition und fünf Producer frisch unabhängig ohne Befund geprüft; neue tatsächliche V2-Formatierung besteht."
       ],
       "pending_acceptance_de": [
-        "Mechanische Formatänderungen unabhängig prüfen, dann strengen Clippy und alle13 neuen Core-Integrationstests tatsächlich ausführen.",
+        "Mechanische V2-Formatänderungen unabhängig prüfen, dann strengen V2-Clippy und alle13 neuen Core-Integrationstests tatsächlich ausführen.",
         "Alle vier betroffenen CDN-Frontendfälle frisch prüfen; neun historische Node-Fälle sind keine frischen Source17-Tests.",
         "Eigener vollständiger Gesamtlauf, Build, Ressourcen-/Quoten-Nativmatrix mit Pause/Cold/Fehlerfällen und Installation.",
         "Renderer-, Selected- und externe CDN-/Ressourcenziele bleiben gesonderte noch offene Kombinationen."
       ],
       "documentation": [
+        "docs/verification/source16-three-native-resource-repair-20261016/index.json",
         "docs/verification/source16-build-resource-format-20261016/index.json",
         "docs/verification/source16-cli-suite-20261016/resource-quota-proposal-source-review.json"
       ],
       "gates": {
         "source_review": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
-        "format": "PASS_ACTUAL_FORMAT_COMMAND_ONLY",
-        "clippy": "NOT_RUN",
+        "format": "V2_PASS_ACTUAL_FORMAT_COMMAND_ONLY",
+        "clippy": "V1_FAIL_SIX_TEST_COMPILE_ERRORS_V2_NOT_RUN",
         "Rust13": "NOT_RUN",
         "Node_current": "NOT_RUN",
         "full_suite": "NOT_RUN",
@@ -9144,7 +9151,8 @@
         "native": "NOT_RUN",
         "installation": "NOT_RUN",
         "manufacturer_parity": "NOT_PROVEN",
-        "formatter_review": "PENDING_AT_THIS_CHECKPOINT"
+        "formatter_review": "V2_PENDING_AT_CHECKPOINT",
+        "compile_repair": "V2_FRESH_SOURCE_COMPOSITION_PRODUCERS_NO_FINDINGS"
       },
       "reference_parity": "NOT_PROVEN"
     }
