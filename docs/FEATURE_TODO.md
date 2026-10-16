@@ -4,7 +4,7 @@
 
 Die Liste hält alle 144 gruppierten Fähigkeiten fest. Ein Haken bedeutet, dass das **eigene gespeicherte Abnahmekriterium** mit Beweisen erfüllt ist. Er bedeutet keine vollständige Gleichheit mit Screaming Frog. Diese Referenzparität bleibt für alle Einträge **NOT_PROVEN**.
 
-Aktueller Katalogstand: **33 eigene Abnahmen erfüllt**, **70 teilweise geprüft**, **41 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
+Aktueller Katalogstand: **34 eigene Abnahmen erfüllt**, **70 teilweise geprüft**, **40 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
 
 Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.json) bilden ein zusätzliches Register. Ihre positiven Fälle, Kontrollfälle, Parameter und Grenzfälle müssen jeweils geprüft werden. Ein implementierter Kern, ein leerer Export oder übereinstimmende CSV-Zellen ersetzen diese Einzelabnahme nicht.
 
@@ -29,7 +29,7 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - Verträge: [index.json](verification/installed12-source13-progress-20261016/index.json), [installed-summary.json](verification/installed12-source13-progress-20261016/installed-summary.json), [index.json](verification/source12-thirteen-scopes-20261016/index.json), [index.json](verification/source12-selected-four-20261016/index.json), [renderer-four-proof.json](verification/api-runtime-pass-20261016/runtime/renderer-four-proof.json), [current-runtime-review.json](verification/api-runtime-pass-20261016/runtime/current-runtime-review.json), [runtime-scope-correction.json](verification/api-only-rust-failure-20261016/plans/runtime-scope-correction.json), [index.json](verification/source12-runtime-drift-20261016/index.json), [index.json](verification/source12-small6-20261016/index.json), [index.json](verification/source12-metadata-native-20261016/index.json), [index.json](verification/source12-build-native-20261016/index.json), [index.json](verification/source12-suite-20261016/index.json), [index.json](verification/source12-preliminary-tests-20261015/index.json).
   - Gate-Stand: preliminary_clippy: PASS_ACTUAL_FINAL_DRAFT4_PRELIMINARY_CLIPPY; node: PASS_EIGHT_LOGICAL_SOURCE_CASES; new_rust_tests: PASS_ALL44_WITHIN_ACTUAL1428_FULL_SUITE; full_suite: PASS_COMBINED_WORKSPACE_V12_REAL_RENDERER_FMT_CLIPPY; optimized_build: PASS_COMBINED_OPTIMIZED_BUILD_V12; native: FOURTEEN_ACTUAL_PRODUCT_SCOPES_PASS; installation: PASS_ACTUAL_SOURCE12_COLD_LOCAL_INSTALL_WITH_COPY_COMPATIBILITY; manufacturer_parity: NOT_PROVEN; generator: PASS_ACTUAL_SOURCE12_SITEMAP_GENERATION_SIX_PAGE_API_CLI_UI_COLD; ngram_metadata: PASS_ACTUAL_SOURCE12_NGRAM_METADATA_CHANNELS_WORDCLOUD_API_CLI_UI_COLD; static_limits: PASS_ACTUAL25_WITH501_GENUINE_GETS; large_source_50000: PASS_GENUINE_LARGE_SOURCE_NATIVE_WITH_DECLARED_BODY_RETENTION_GAP; static_limits_r4: FAIL_FINAL_RUNTIME_HASH_AFTER_25_PASS_CASES; current_chrome: PASS_FOUR_CURRENT_SOURCE12_RENDERER_FUNCTIONS_ONLY; owned_http_eof: PASS_SOURCE12_IDLE_AND_ACTUAL_INFLIGHT_CRAWL_EOF_ONLY; original_response_body: PASS_SOURCE12_ACTUAL_CRAWL_ORIGINAL64M_PUBLIC_EOF_COLD_REOPEN_AND_BOUNDARIES; migration: PASS_ACTUAL_SOURCE12_MIGRATION_WORKFLOW; resource_directory: PASS_ACTUAL_SOURCE12_RESOURCE_DIRECTORY_WORKFLOW_WITH_NGRAM6; independent_selected_four: NO_FINDINGS_BOUNDED_ACTUAL_EVIDENCE_AUDIT.
 
-- [ ] **Roh-HTML-Head-Diagnostik und explizite CDN-Klassifikation** — ACTUAL1476_SUITE_BUILD_API_SUBSET_PASS_HEAD_NATIVE_RETRY. Alle400 privaten finalen Quellen bestehen die vollständige1476/0/0-Suite einschließlich vier echter Rendererfunktionen und den optimierten Windows-Build. Der API-only-Teilumfang besteht echte API-/CLI-/MCP-/Browser-/Cold-Abläufe mit207 gelieferten Zeilen und null Website-Anfragen/Verbindungen. Seine gespeicherten Messwerte sind ausdrücklich synthetische Unavailable-Fixtures, keine erfolgreiche Liveprovider-Anreicherung. Zwei fehlgeschlagene Head/CDN-Testläufe bleiben erhalten; eng korrigierte Prüforakel werden erneut ausgeführt. Installiert bleibt Source12.
+- [x] **Roh-HTML-Head-Diagnostik und explizite CDN-Klassifikation** — COMPLETED. Source13 ist nach vollständiger1476/0/0-Suite, optimiertem Windows-Build, elf Head/CDN-Nativgruppen und der qualifizierten API-only-Teilabnahme lokal installiert. Acht gespeicherte Crawls und38 Dateien bleiben erhalten; Datenbytes und vereinbarte stabile Metadaten sind gleich.27 Webassets und27 normale MCP-Tools sind verifiziert. Der einzelne anonyme Liveprovider-Aufruf erhielt429; erfolgreiche Messwerte sind offen.
   - [x] Fehlerhafte explizite Head-Inhalte mit Rohquellpositionen und getrennten unbekannten Alt-/Budgetzuständen in16 Rustfunktionen geprüft.
   - [x] Exakte konfigurierte CDN-Origins mit Schema, IDNA-Host und effektivem Port in12 Rustfunktionen geprüft; Berichtsklassifikation erweitert weder Navigation noch Ressourcen-/Credentialfreigaben.
   - [x] Alle28 neuen Rustfunktionen tatsächlich bestanden; sechs neue Node-Quellfälle, Format und Clippy bestanden. Drei alte Fixtureinitialisierungen eng korrigiert; alle35 ursprünglichen Testkörper bleiben bytegleich.
@@ -39,22 +39,23 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - [x] Vollständige1476/0/0-Suite, Format, strenger Clippy und vier frische Rendererfunktionen tatsächlich bestanden; alle400 Quellen am Ende unverändert.
   - [x] Optimierten Windows-Kandidaten45168128Bytes tatsächlich gebaut.
   - [x] API-native Teilabnahme mit drei regulären App-EOFs, Browser.close-Ack/echtem Remote-Abschluss und vollständigen207-Zeilen-JSON-/CSV-Lesewegen bestanden.
-  - [ ] Head/CDN über alle elf realen API-/CLI-/MCP-/UI-/Cold-Gruppen vollständig bestehen; zwei vorangegangene Testfehler unverändert erhalten.
-  - [ ] Erst nach den verpflichtenden nativen Gates die geprüfte Source13-Version unter vollständigem Datenerhalt installieren.
-  - Verträge: [index.json](verification/source13-api-native-progress-20261016/index.json), [source13-private-publication.json](verification/installed12-source13-progress-20261016/source13-private-publication.json), [index.json](verification/source13-tested-preview-20261016/index.json).
-  - Gate-Stand: new_rust: PASS_ALL28_ONLY; node: PASS_SIX_SOURCE_CASES_ONLY; clippy: PASS_ACTUAL_PRELIMINARY_CLIPPY; full_suite: PASS_COMBINED_WORKSPACE_V13_REAL_RENDERER_FMT_CLIPPY; optimized_build: PASS_COMBINED_OPTIMIZED_BUILD_V13; native: HEAD_RETRY_PENDING_NO_COMBINED_ACCEPTANCE; installation: NOT_RUN_SOURCE12_INSTALLED; manufacturer_parity: NOT_PROVEN; private_publication: PASS_ACTUAL400_PRIVATE_EXACT_REMOTE; manifest: PASS_ACTUAL_FROZEN400; api_native_subset: PASS_SOURCE13_NATIVE_FRONTDOORS_AND_DECLARED_FIXTURE_READS_ONLY.
+  - [x] Alle elf Head/CDN-Gruppen über echte API-/CLI-/MCP-/UI-/Cold-Schnittstellen bestanden; beide früheren Fehler bleiben erhalten.
+  - [x] Source13 mit drei geprüften Datenkopien, strenger Datenintegrität und enger EXE-Ersetzung installiert; beide Dienste laufen.
+  - Verträge: [index.json](verification/source13-installed-segments-progress-20261016/index.json), [installed-summary.json](verification/source13-installed-segments-progress-20261016/installed-summary.json), [index.json](verification/source13-api-native-progress-20261016/index.json), [source13-private-publication.json](verification/installed12-source13-progress-20261016/source13-private-publication.json), [index.json](verification/source13-tested-preview-20261016/index.json).
+  - Gate-Stand: new_rust: PASS_ALL28_ONLY; node: PASS_SIX_SOURCE_CASES_ONLY; clippy: PASS_ACTUAL_PRELIMINARY_CLIPPY; full_suite: PASS_COMBINED_WORKSPACE_V13_REAL_RENDERER_FMT_CLIPPY; optimized_build: PASS_COMBINED_OPTIMIZED_BUILD_V13; native: PASS_HEAD11_AND_HONEST_API_SUBSET; installation: PASS_ACTUAL_SOURCE13_COLD_LOCAL_INSTALL_WITH_COPY_COMPATIBILITY; manufacturer_parity: NOT_PROVEN; private_publication: PASS_ACTUAL400_PRIVATE_EXACT_REMOTE; manifest: PASS_ACTUAL_FROZEN400; api_native_subset: PASS_SOURCE13_NATIVE_FRONTDOORS_AND_DECLARED_FIXTURE_READS_ONLY.
 
-- [ ] **Eigenständige API-Anreicherung ohne lokalen Websitecrawl** — ACTUAL1476_SUITE_BUILD_NATIVE_SUBSET_PASS_LIVE_PROVIDER_OPEN. Alle400 privaten finalen Quellen bestehen die vollständige1476/0/0-Suite einschließlich vier echter Rendererfunktionen und den optimierten Windows-Build. Der API-only-Teilumfang besteht echte API-/CLI-/MCP-/Browser-/Cold-Abläufe mit207 gelieferten Zeilen und null Website-Anfragen/Verbindungen. Seine gespeicherten Messwerte sind ausdrücklich synthetische Unavailable-Fixtures, keine erfolgreiche Liveprovider-Anreicherung.. Erfolgreicher Liveanbieter, expliziter Refresh, aktive Provider-Cancellation, erfolgreicher Enrichment-CLI und weitere Anbieter bleiben offen.
+- [ ] **Eigenständige API-Anreicherung ohne lokalen Websitecrawl** — INSTALLED_SOURCE13_BOUNDED_NATIVE_PASS_PROVIDER429_BREADTH_OPEN. Source13 API-only-Modus ist installiert. Die vollständige1476/0/0-Suite sowie echte Frontdoors und ausdrücklich synthetische Saved-Consumer über API/CLI/MCP/Browser/Cold bestehen. Der eine produktive anonyme PageSpeed-Aufruf antwortete429; sein echtes Teilergebnis bleibt nach Neustart identisch. Erfolgreiche Metrics, Refresh, aktiver Provider-Cancel, erfolgreicher Enrichment-CLI und weitere Anbieter bleiben offen.
   - [x] Unabhängiger Vollreview plus Closure von CSV-Spalte1, expliziten Lighthouse-Laufzeitfehlern/fehlenden Metriken, normalisierter8192B-URLgrenze vor Jobaufnahme und Warnungsgate.
   - [x] Fünf Node-VM-Hilfsfälle tatsächlich mit exakten Namen und natürlichem Prozessabschluss bestanden; alle18 Vorschlags- und388 Elternquellen unverändert.
   - [x] Finaler Zwei-Dateien-Fixturestand: tatsächlicher Formatter, unabhängiger Byte-/Tokenreview, Clippy ohne Warnungen und alle 22 vorhandenen MCP-/Lifecycle-Tests mit regulärem Prozessabschluss bestanden. Keine neuen Testnamen oder gelockerten Produktgrenzen.
   - [x] Source13 privat veröffentlicht/eingefroren; tatsächliche1476/0/0-Suite und Releasebuild bestanden.
   - [x] Echte native Frontdoors und ausdrücklich synthetische gespeicherte Consumer über Browser/API/CLI/MCP sowie drei normale EOF-/Cold-Läufe bestanden; vollständige208 CSV-Zeilen einschließlich Header.
-  - [ ] Source13 nach vollständiger Head/CDN-Abnahme sicher installieren.
-  - [ ] Einen echten produktiven Providerlauf separat beobachten; Refresh, aktiven Cancel und erfolgreichen Enrichment-CLI gesondert prüfen.
-  - [ ] Weitere Anbieter, lokales Lighthouse und getrennte CrUX-Felddaten umsetzen.
+  - [x] Source13 lokal installiert; ein produktiver anonymer Provider-Aufruf mit genau einem Versuch erhielt429 und wurde über API/CSV/MCP warm/kalt konsistent gelesen.
+  - [ ] Prove successful production-provider metrics and independent response observations; the one anonymous attempt returned HTTP429.
+  - [ ] Prove explicit provider refresh, active in-flight cancellation and successful enrich-urls CLI JSON/CSV using the real accepted job path.
+  - [ ] Implement and verify the remaining documented providers and separate CrUX/local Lighthouse behavior; one PageSpeed adapter does not complete provider breadth.
   - Verträge: [api-native.json](verification/source13-api-native-progress-20261016/api-native.json), [actual-format.json](verification/source12-thirteen-scopes-20261016/next-fixtures/actual-format.json), [index.json](verification/api-runtime-pass-20261016/index.json), [index.json](verification/api-only-rust-failure-20261016/index.json), [index.json](verification/next-feature-reviewed-20261016/index.json).
-  - Gate-Stand: source_review: NO_FINDINGS_BOUNDED_SOURCE_REVIEW; node: PASS_FIVE_API_ONLY_FRONTEND_HELPER_CASES_ONLY; rust: PASS_TWENTY_NEW_RUST_FUNCTIONS_ONLY; provider: NOT_PROVEN; native: PASS_NATIVE_FRONTDOORS_AND_DECLARED_FIXTURE_READS_ONLY; installation: NOT_RUN; manufacturer_parity: NOT_PROVEN; format: PASS_FORMAT_COMMAND_ONLY; clippy: PASS_PRELIMINARY_CLIPPY_ONLY; inventory_fixture_format: PASS_FORMAT_COMMAND_ONLY; inventory_fixture_retained_tests: PASS_TWENTYTWO_RETAINED_MCP_LIFECYCLE_FUNCTIONS_ONLY; inventory_fixture_clippy: PASS_PRELIMINARY_CLIPPY_ONLY; full_suite: PASS_ACTUAL1476_WORKSPACE; optimized_build: PASS_ACTUAL_WINDOWS_RELEASE.
+  - Gate-Stand: source_review: NO_FINDINGS_BOUNDED_SOURCE_REVIEW; node: PASS_FIVE_API_ONLY_FRONTEND_HELPER_CASES_ONLY; rust: PASS_TWENTY_NEW_RUST_FUNCTIONS_ONLY; provider: ONE_ACTUAL_HTTP429_ATTEMPT_NO_METRIC_SUCCESS; native: PASS_NATIVE_FRONTDOORS_AND_DECLARED_FIXTURE_READS_ONLY; installation: PASS_ACTUAL_SOURCE13; manufacturer_parity: NOT_PROVEN; format: PASS_FORMAT_COMMAND_ONLY; clippy: PASS_PRELIMINARY_CLIPPY_ONLY; inventory_fixture_format: PASS_FORMAT_COMMAND_ONLY; inventory_fixture_retained_tests: PASS_TWENTYTWO_RETAINED_MCP_LIFECYCLE_FUNCTIONS_ONLY; inventory_fixture_clippy: PASS_PRELIMINARY_CLIPPY_ONLY; full_suite: PASS_ACTUAL1476_WORKSPACE; optimized_build: PASS_ACTUAL_WINDOWS_RELEASE.
 
 - [ ] **CDN-Verzeichnisse nachvollziehbar klassifizieren** — ACTUAL405_FORMAT_CLIPPY_RUST12_NODE4_PASS_PREVIEW_ONLY. Optionale begrenzte CDN-Verzeichnisprofile mit Herkunft und expliziter Trennung von Fetch-/Credentialfreigaben sind im405-Input-Entwurf umgesetzt. Formatter, unabhängiger Formatreview, strenger Clippy,12 Rust- und4 Frontendfälle bestehen. Vollsuite, reale UI-/Cold-Abnahme, Veröffentlichung und Installation stehen aus.
   - [x] Die echte Ressourcen-fixture zweimal mit deaktivierter/aktivierter Klassifikation und identischen Fetchfreigaben geprüft; Klassifikation erteilt keine zusätzlichen Anfragen.
@@ -63,13 +64,15 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - Verträge: [cdn-directory-rust12.json](verification/installed12-source13-progress-20261016/cdn-directory-rust12.json), [cdn-directory-node4.json](verification/installed12-source13-progress-20261016/cdn-directory-node4.json).
   - Gate-Stand: full_suite: NOT_RUN; native: NOT_RUN; manufacturer_parity: NOT_PROVEN.
 
-- [ ] **Gespeicherte Segmente über Reports und Exporte anwenden** — INDEPENDENT_SOURCE_REVIEW_FORMAT_PASS_FIRST_TEST_COMPILE_FAILED. Gemeinsame Segmentauswertung für gespeicherte URL-Zahlen, Probleme, Diagramme und vollständige Exporte ist mit CDN-Verzeichnisprofilen als418-Input-Entwurf komponiert. Vollständige unabhängige Quellen- und Formatprüfung bestehen. Der erste Compilerlauf stoppt an zwei neuen Testaufrufen ohne Debug-fähigen Fehlerwert; eng begrenzte Testkorrektur in Arbeit. Noch keine neuen30 Rust-/9 Node-Tests oder Vollsuite bestanden.
+- [ ] **Gespeicherte Segmente über Reports und Exporte anwenden** — ACTUAL418_FORMAT_CLIPPY_NODE9_PASS_RUST30_RUNNING. Die zwei neuen Testaufrufe sind ohne Produkt- oder Assertionänderung korrigiert. Der frisch komponierte418-Input-Stand besteht unabhängigen Quellen-/Formatreview, strengen Clippy und alle neun aktuellen Frontendfälle. Alle30 neuen Rustfunktionen laufen; Vollsuite, Build und reale UI-/Cold-Abnahme stehen aus.
   - [x] SegmentV2 und gesamte418-Input-Komposition unabhängig geprüft.
   - [x] Tatsächlicher Formatter und unabhängiger Review aller418 Vorher-/Nachherdateien bestanden.
+  - [x] Zwei reine Error-Unwrap-Testaufrufe eng korrigiert und unabhängig geprüft; alle417 übrigen Vorformatquellen exakt.
+  - [x] Formatter, unabhängiger Formatreview, Clippy und alle neun Frontendfälle tatsächlich bestanden.
   - [ ] Zwei Testaufrufe eng korrigieren, unabhängig prüfen und Compiler sowie alle30 neuen Rust-/9 Frontendfälle tatsächlich bestehen.
   - [ ] Vollsuite/Releasebuild sowie echte Counts-/Issues-/Charts-/Exportmitgliedschaft mit Cold-Reopen und null zusätzlichen WebsiteGETs prüfen.
-  - Verträge: [segments-first-clippy-failed.json](verification/source13-api-native-progress-20261016/segments-first-clippy-failed.json), [next-backlog-report.md](verification/installed12-source13-progress-20261016/next-backlog-report.md).
-  - Gate-Stand: full_suite: NOT_RUN; native: NOT_RUN; manufacturer_parity: NOT_PROVEN; source_review: NO_FINDINGS_BOUNDED_SOURCE_REVIEW; format: PASS_FORMAT_COMMAND_ONLY; clippy: FAILED_TWO_NEW_TEST_DEBUG_BOUNDS; new_rust: NOT_RUN; node: NOT_RUN.
+  - Verträge: [segments-clippy.json](verification/source13-installed-segments-progress-20261016/segments-clippy.json), [segments-node9.json](verification/source13-installed-segments-progress-20261016/segments-node9.json), [segments-first-clippy-failed.json](verification/source13-api-native-progress-20261016/segments-first-clippy-failed.json), [next-backlog-report.md](verification/installed12-source13-progress-20261016/next-backlog-report.md).
+  - Gate-Stand: full_suite: NOT_RUN; native: NOT_RUN; manufacturer_parity: NOT_PROVEN; source_review: NO_FINDINGS_BOUNDED_SOURCE_REVIEW; format: PASS_FORMAT_COMMAND_ONLY; clippy: PASS_PRELIMINARY_CLIPPY_ONLY; new_rust: RUNNING_NOT_ACCEPTED; node: PASS_ALL_NINE_CURRENT_FRONTEND_HELPERS.
 
 Frühere Zwischenstände bleiben am Ende als eingeklappte Historie erhalten. Ihre damaligen offenen Schritte sind keine zusätzlichen aktuellen Aufgaben; maßgeblich sind die aktuelle Arbeit und die offenen Feature-Kriterien.
 
@@ -81,15 +84,15 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 ### Crawl-Modi und Steuerung
 
-7 Einträge: 6 eigene Abnahmen erfüllt, 0 teilweise geprüft, 1 offen.
+7 Einträge: 6 eigene Abnahmen erfüllt, 1 teilweise geprüft, 0 offen.
 
-#### Noch offen
+#### Teilweise vorhanden – Restarbeiten
 
-- [ ] **URLs ausschließlich über APIs anreichern** — Offen; `modes.apis`, P1.
+- [ ] **URLs ausschließlich über APIs anreichern** — Teilweise geprüft; `modes.apis`, P1.
 
   Orientierung: API-Anreicherung, fehlende Daten und null Website-Anfragen prüfen.
 
-  Beweisregister: keine zugeordnete ausgeführte Prüfung.
+  Beweisregister: [source13-installed-segments-progress-20261016](verification/source13-installed-segments-progress-20261016/index.json), [source13-api-native-progress-20261016](verification/source13-api-native-progress-20261016/index.json).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -98,14 +101,23 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
   {
     "id": "modes.apis",
     "reference_name": "API-only enrichment",
-    "status": "planned",
+    "status": "partial",
     "acceptance_test": "Enrich supplied URLs using a mock API; record zero website requests.",
     "remaining_acceptance": [
-      "Enrich supplied URLs using a mock API; record zero website requests.",
-      "Prove saved API-only jobs, complete CSV/JSON, pagination, explicit refresh/cancel and cold reopen across API/CLI/MCP/served UI with zero local website requests; qualify provider-initiated remote fetch separately.",
-      "Implement and verify API-only behavior across the remaining documented providers; one PageSpeed proposal and five UI helper tests do not complete provider breadth."
+      "Prove successful production-provider metrics and independent response observations; the one anonymous attempt returned HTTP429.",
+      "Prove explicit provider refresh, active in-flight cancellation and successful enrich-urls CLI JSON/CSV using the real accepted job path.",
+      "Implement and verify the remaining documented providers and separate CrUX/local Lighthouse behavior; one PageSpeed adapter does not complete provider breadth."
     ],
-    "implementation_evidence": [],
+    "implementation_evidence": [
+      {
+        "verification_run_ids": [
+          "source13-installed-segments-progress-20261016",
+          "source13-api-native-progress-20261016"
+        ],
+        "proves": "Installed Source13 includes API-only PageSpeed adapter, injectable transport success/error/budget/cancel Rust tests in the actual1476 suite, actual import/preview/refusal/API/CLI/MCP/browser consumers, complete207-row saved fixtures and cold reopen with zero dedicated website-trap requests/connections. One actual anonymous production attempt returned429 and its partial report was stored/reopened identically.",
+        "limits": "Synthetic native saved fixtures contain unavailable values, not live provider metrics. Real metric success, explicit refresh, active provider cancellation, successful enrich-urls CLI and additional providers remain open."
+      }
+    ],
     "parity_status": "NOT_PROVEN"
   }
   ```
@@ -600,7 +612,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Konfigurierte CDN-Grenzen ohne unbegrenzte externe Traversierung ergänzen.
 
-  Beweisregister: [resource-discovery-api-cli](verification/resource-discovery-e2e.json) (PASS), [ui-resource-discovery-live](../web/verification/ui-resource-discovery-live-results.json) (PASS), [resource-discovery-batch](verification/resource-discovery-batch.json) (PASS), [resource-contract-core](verification/resource-contract-core.json) (FOCUSED_CORE_PASS_FULL_MATRIX_PENDING), [resource-contract-api-cli-mcp](verification/resource-contract-e2e.json) (PASS), [resource-contract-ui](verification/resource-contract-ui.json) (PASS), [source13-tested-preview-20261016](verification/source13-tested-preview-20261016/index.json) (PASS_28_NEW_RUST_AND_SIX_NODE_PREVIEW_ONLY).
+  Beweisregister: [resource-discovery-api-cli](verification/resource-discovery-e2e.json) (PASS), [ui-resource-discovery-live](../web/verification/ui-resource-discovery-live-results.json) (PASS), [resource-discovery-batch](verification/resource-discovery-batch.json) (PASS), [resource-contract-core](verification/resource-contract-core.json) (FOCUSED_CORE_PASS_FULL_MATRIX_PENDING), [resource-contract-api-cli-mcp](verification/resource-contract-e2e.json) (PASS), [resource-contract-ui](verification/resource-contract-ui.json) (PASS), [source13-tested-preview-20261016](verification/source13-tested-preview-20261016/index.json) (PASS_28_NEW_RUST_AND_SIX_NODE_PREVIEW_ONLY), [source13-installed-segments-progress-20261016](verification/source13-installed-segments-progress-20261016/index.json).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -649,6 +661,13 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
         ],
         "proves": "Actual12 Rust functions prove strict optional exact-origin CDN reporting classification and retained original navigation/resource/credential boundaries. Three Node cases prove plain-text user configuration, exact declaration persistence and invalid origin refusal.",
         "limits": "Immutable preview only: active main sources remain Source12 and installed services Source11. Final full suite, native API/CLI/MCP/browser/cold acceptance, safe installation and broader vendor semantics remain open."
+      },
+      {
+        "verification_run_ids": [
+          "source13-installed-segments-progress-20261016"
+        ],
+        "proves": "Installed exact-origin reporting classification passed genuine declaration-only/external-anchor/resource-NoGrant/redirect controls, strict negatives, API/CLI/MCP/UI1440/320 and cold consumers in all11 native cases.",
+        "limits": "Navigation/resource/credential grants remain separate. Domain-plus-subfolder reporting is only the next uninstalled418 preview; additional vendor CDN extraction and crawl equivalence remain unproven."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -3372,7 +3391,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 ### Validierung und Qualitätsprüfungen
 
-10 Einträge: 1 eigene Abnahmen erfüllt, 5 teilweise geprüft, 4 offen.
+10 Einträge: 2 eigene Abnahmen erfüllt, 4 teilweise geprüft, 4 offen.
 
 #### Teilweise vorhanden – Restarbeiten
 
@@ -3468,39 +3487,6 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "ui-fixture"
         ],
         "proves": "Viewport meta evidence/missing-viewport findings exist; dashboard itself passes narrow viewport layout checks."
-      }
-    ],
-    "parity_status": "NOT_PROVEN"
-  }
-  ```
-
-  </details>
-
-- [ ] **Ungültige Head-Struktur erkennen** — Teilweise geprüft; `quality.html_head`, P3.
-
-  Orientierung: Ungültige Head-Kinder und Auswirkungen auf Metadaten mit Rohmarkup-Herkunft prüfen.
-
-  Beweisregister: [source13-tested-preview-20261016](verification/source13-tested-preview-20261016/index.json) (PASS_28_NEW_RUST_AND_SIX_NODE_PREVIEW_ONLY).
-
-  <details>
-  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
-
-  ```json
-  {
-    "id": "quality.html_head",
-    "reference_name": "Invalid head elements",
-    "status": "partial",
-    "acceptance_test": "Seed invalid head children that affect subsequent metadata; point to observed raw markup.",
-    "remaining_acceptance": [
-      "Seed invalid head children that affect subsequent metadata; point to observed raw markup."
-    ],
-    "implementation_evidence": [
-      {
-        "verification_run_ids": [
-          "source13-tested-preview-20261016"
-        ],
-        "proves": "Actual16 Rust functions prove bounded explicit raw-HTTP head diagnostics, source positions/excerpts, invalid children and following metadata observations; UI helpers preserve unknown legacy/incomplete state and render stored markup as text.",
-        "limits": "Immutable preview only: active main sources remain Source12 and installed services Source11. Final full suite, native API/CLI/MCP/browser/cold acceptance, safe installation and broader vendor semantics remain open."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -3670,6 +3656,44 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "ui-renderer"
         ],
         "proves": "Pinned axe-core4.14.0 runs on owned failing rendered HTML. Tests assert button-name/image-alt plus engine version, impact, node HTML/target and WCAG tags; the live Rust/browser test retains the accessibility JSON."
+      }
+    ],
+    "parity_status": "NOT_PROVEN"
+  }
+  ```
+
+  </details>
+
+- [x] **Ungültige Head-Struktur erkennen** — Eigene Abnahme erfüllt; `quality.html_head`, P3.
+
+  Orientierung: Ungültige Head-Kinder und Auswirkungen auf Metadaten mit Rohmarkup-Herkunft prüfen.
+
+  Beweisregister: [source13-tested-preview-20261016](verification/source13-tested-preview-20261016/index.json) (PASS_28_NEW_RUST_AND_SIX_NODE_PREVIEW_ONLY), [source13-installed-segments-progress-20261016](verification/source13-installed-segments-progress-20261016/index.json).
+
+  <details>
+  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
+
+  ```json
+  {
+    "id": "quality.html_head",
+    "reference_name": "Invalid head elements",
+    "status": "implemented",
+    "acceptance_test": "Seed invalid head children that affect subsequent metadata; point to observed raw markup.",
+    "remaining_acceptance": [],
+    "implementation_evidence": [
+      {
+        "verification_run_ids": [
+          "source13-tested-preview-20261016"
+        ],
+        "proves": "Actual16 Rust functions prove bounded explicit raw-HTTP head diagnostics, source positions/excerpts, invalid children and following metadata observations; UI helpers preserve unknown legacy/incomplete state and render stored markup as text.",
+        "limits": "Immutable preview only: active main sources remain Source12 and installed services Source11. Final full suite, native API/CLI/MCP/browser/cold acceptance, safe installation and broader vendor semantics remain open."
+      },
+      {
+        "verification_run_ids": [
+          "source13-installed-segments-progress-20261016"
+        ],
+        "proves": "Own invalid-head criterion completed: eight genuine HTTP literal cases with independently fixed byte positions, raw excerpts and following metadata, separately changed rendered DOM, complete API/CLI/MCP/UI/cold consumers and installed Source13. Full1476 suite and actual11-case native proof retained.",
+        "limits": "Bounded captured explicit-head source diagnostics only. Incomplete/non200/lossy/legacy states remain Unknown. No Google processing or full manufacturer runtime equality is asserted."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -5899,4 +5923,4 @@ Diese unveränderten Einträge dokumentieren den damaligen Stand. Aktuelle Resta
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `8b841ad93f36b4a4daeb31e096b17871346a4c74f7b36660be1b611395524113`. Letzter im Katalog erfasster Beweisstand: `2026-10-16T02:56:27.395Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `52e70c671fc8be17f43489abcd5b759a3816dbc54479bd57f7e1c76bbbceb835`. Letzter im Katalog erfasster Beweisstand: `2026-10-16T03:10:00.868Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

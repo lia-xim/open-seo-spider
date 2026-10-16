@@ -1,0 +1,86 @@
+{
+  "kind": "actual_installed_source13_and_next_segments_progress",
+  "recorded_at": "2026-10-16T03:10:00.868Z",
+  "installed_source": 13,
+  "source_commit": "757809db04877ea86b3f1e82733024cc5635ba26",
+  "source_inputs": 400,
+  "full_suite": {
+    "passed": 1476,
+    "failed": 0,
+    "ignored": 0,
+    "fresh_renderer_functions": 4
+  },
+  "native": {
+    "head_cdn": "PASS_ALL11",
+    "api_subset": "PASS_NATIVE_FRONTDOORS_AND_DECLARED_FIXTURE_READS_ONLY",
+    "live_anonymous_provider": {
+      "logical_attempts": 1,
+      "http_status": 429,
+      "outcome": "partial",
+      "successful_metrics": "NOT_PROVEN"
+    }
+  },
+  "installed_summary": "installed-summary.json",
+  "next418": {
+    "source_review": "NO_FINDINGS",
+    "format": "PASS",
+    "clippy": "PASS",
+    "current_node_cases": 9,
+    "new_rust30": "RUNNING_NOT_ACCEPTED",
+    "full_suite": "NOT_RUN",
+    "native": "NOT_RUN",
+    "installed": false
+  },
+  "own_criteria_status_changes": [
+    {
+      "id": "quality.html_head",
+      "from": "partial",
+      "to": "implemented",
+      "scope": "Own stored raw-markup criterion only; manufacturer parity NOT_PROVEN."
+    },
+    {
+      "id": "modes.apis",
+      "from": "planned",
+      "to": "partial",
+      "scope": "Installed PageSpeed-backed mode with tested injected transports and native consumers; successful real metrics, active cancel, refresh, successful CLI and provider breadth remain open."
+    }
+  ],
+  "manufacturer_parity": "NOT_PROVEN",
+  "files": [
+    {
+      "path": "head-native.json",
+      "sha256": "d6207a3cb239f48c4f15c6098c13042e6eba326e21be58267c50e7a5bdf347ed",
+      "bytes": 1424517
+    },
+    {
+      "path": "provider-one-attempt.json",
+      "sha256": "f314dbe7d9e4e502a92f47cac368bcafb14c15061720be62db33f2ca647b0cde",
+      "bytes": 25692
+    },
+    {
+      "path": "guard-probe.json",
+      "sha256": "a400d59e00d8bd235afadaf1f89a5df8dc9ec0c6bba4b2b7f3310aadeabe84fc",
+      "bytes": 3909
+    },
+    {
+      "path": "segments-format.json",
+      "sha256": "936a01faa7ba06623348d3b9d96ae075d99fa962db1b18e6c90c85e6e29bf41c",
+      "bytes": 137001
+    },
+    {
+      "path": "segments-formatter-review.json",
+      "sha256": "6d066e12b8976ae74084ada43c28ee98a24a9532feb680279872c5e3680f3fa6",
+      "bytes": 79613
+    },
+    {
+      "path": "segments-clippy.json",
+      "sha256": "e8d1123929656c7f021eb4be47c3904c77a2bb2b3ee4680c0e2a73fff6d3bb4e",
+      "bytes": 84388
+    },
+    {
+      "path": "segments-node9.json",
+      "sha256": "f086cf26b82b3d19c95a5ed573cdc69d6569c507f16a74d49fadf3fb3251df53",
+      "bytes": 84987
+    }
+  ]
+}
