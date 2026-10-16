@@ -6512,6 +6512,13 @@
       "recorded_at": "2026-10-16T02:17:52.402Z",
       "scope": "Fourteen actual Source12 native scopes and accepted local installation. Source13 code400 privately published and frozen with independently reviewed constructor correction; actual full suite running, build/native/install pending. CDN directory405 preliminary checks pass.",
       "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "source13-api-native-progress-20261016",
+      "recorded_at": "2026-10-16T02:56:27.395Z",
+      "artifact": "docs/verification/source13-api-native-progress-20261016/index.json",
+      "artifact_sha256": "50246793647695ccedfa8b6298dd7e980d47eb53f625175b2fb11e6459e1c114",
+      "scope": "Actual Source13 fullsuite/build and explicitly bounded API native subset. Failed Head/Matrix/Segments checks retained; no vendor parity or installation upgrade."
     }
   ],
   "reference_workflows": [
@@ -6769,7 +6776,7 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-16T02:17:52.402Z",
+  "last_verified_at": "2026-10-16T02:56:27.395Z",
   "current_work": [
     {
       "id": "combined-source-v11-20261015",
@@ -8607,21 +8614,25 @@
       "id": "combined-source-v13-20261016",
       "priority": 2,
       "title_de": "Roh-HTML-Head-Diagnostik und explizite CDN-Klassifikation",
-      "status": "ACTUAL_PRIVATE400_FROZEN_FULL_SUITE_RUNNING",
-      "summary_de": "Der finale400-Input-Stand mit HTML-Head-Diagnostik, CDN-Klassifikation und API-Anreicherung ist als757809d im privaten Repository veröffentlicht und nach unabhängig geprüfter Korrektur der separaten Node-Testquellenbindung eingefroren. Der tatsächliche Gesamttest mit mindestens1476 Funktionen und vier frischen Rendererfunktionen läuft. Releasebuild, native Abnahme und Installation bleiben offen. Installiert bleibt Source12.",
+      "status": "ACTUAL1476_SUITE_BUILD_API_SUBSET_PASS_HEAD_NATIVE_RETRY",
+      "summary_de": "Alle400 privaten finalen Quellen bestehen die vollständige1476/0/0-Suite einschließlich vier echter Rendererfunktionen und den optimierten Windows-Build. Der API-only-Teilumfang besteht echte API-/CLI-/MCP-/Browser-/Cold-Abläufe mit207 gelieferten Zeilen und null Website-Anfragen/Verbindungen. Seine gespeicherten Messwerte sind ausdrücklich synthetische Unavailable-Fixtures, keine erfolgreiche Liveprovider-Anreicherung. Zwei fehlgeschlagene Head/CDN-Testläufe bleiben erhalten; eng korrigierte Prüforakel werden erneut ausgeführt. Installiert bleibt Source12.",
       "completed_acceptance_de": [
         "Fehlerhafte explizite Head-Inhalte mit Rohquellpositionen und getrennten unbekannten Alt-/Budgetzuständen in16 Rustfunktionen geprüft.",
         "Exakte konfigurierte CDN-Origins mit Schema, IDNA-Host und effektivem Port in12 Rustfunktionen geprüft; Berichtsklassifikation erweitert weder Navigation noch Ressourcen-/Credentialfreigaben.",
         "Alle28 neuen Rustfunktionen tatsächlich bestanden; sechs neue Node-Quellfälle, Format und Clippy bestanden. Drei alte Fixtureinitialisierungen eng korrigiert; alle35 ursprünglichen Testkörper bleiben bytegleich.",
         "Source12 vollständig lokal abgenommen und installiert.",
         "Finalen400-Input-Produktstand privat veröffentlicht; genau36 Produktpfade, alle Rohbytes und derselbe entfernte Commit geprüft.",
-        "Separaten Node-Verifikationscode vollständig rekonstruiert und an alle fünf tatsächlichen Testnamen gebunden; vier neue Prüftreiber unabhängig geprüft. Alle400 finalen Quellen mit tatsächlicher Rootfreigabe eingefroren."
+        "Separaten Node-Verifikationscode vollständig rekonstruiert und an alle fünf tatsächlichen Testnamen gebunden; vier neue Prüftreiber unabhängig geprüft. Alle400 finalen Quellen mit tatsächlicher Rootfreigabe eingefroren.",
+        "Vollständige1476/0/0-Suite, Format, strenger Clippy und vier frische Rendererfunktionen tatsächlich bestanden; alle400 Quellen am Ende unverändert.",
+        "Optimierten Windows-Kandidaten45168128Bytes tatsächlich gebaut.",
+        "API-native Teilabnahme mit drei regulären App-EOFs, Browser.close-Ack/echtem Remote-Abschluss und vollständigen207-Zeilen-JSON-/CSV-Lesewegen bestanden."
       ],
       "pending_acceptance_de": [
-        "Vollständige mindestens1476-Test-Suite einschließlich aller bisherigen650 Vollnamen und vier frischer Rendererfunktionen ausführen.",
-        "Releasekandidaten bauen, Head/CDN und den API-only-Teilumfang nativ über die tatsächlichen Schnittstellen abnehmen; danach sicher installieren."
+        "Head/CDN über alle elf realen API-/CLI-/MCP-/UI-/Cold-Gruppen vollständig bestehen; zwei vorangegangene Testfehler unverändert erhalten.",
+        "Erst nach den verpflichtenden nativen Gates die geprüfte Source13-Version unter vollständigem Datenerhalt installieren."
       ],
       "documentation": [
+        "docs/verification/source13-api-native-progress-20261016/index.json",
         "docs/verification/installed12-source13-progress-20261016/source13-private-publication.json",
         "docs/verification/source13-tested-preview-20261016/index.json"
       ],
@@ -8629,32 +8640,36 @@
         "new_rust": "PASS_ALL28_ONLY",
         "node": "PASS_SIX_SOURCE_CASES_ONLY",
         "clippy": "PASS_ACTUAL_PRELIMINARY_CLIPPY",
-        "full_suite": "RUNNING_ACTUAL_FROZEN400",
-        "optimized_build": "NOT_RUN",
-        "native": "NOT_RUN",
-        "installation": "NOT_RUN",
+        "full_suite": "PASS_COMBINED_WORKSPACE_V13_REAL_RENDERER_FMT_CLIPPY",
+        "optimized_build": "PASS_COMBINED_OPTIMIZED_BUILD_V13",
+        "native": "HEAD_RETRY_PENDING_NO_COMBINED_ACCEPTANCE",
+        "installation": "NOT_RUN_SOURCE12_INSTALLED",
         "manufacturer_parity": "NOT_PROVEN",
         "private_publication": "PASS_ACTUAL400_PRIVATE_EXACT_REMOTE",
-        "manifest": "PASS_ACTUAL_FROZEN400"
+        "manifest": "PASS_ACTUAL_FROZEN400",
+        "api_native_subset": "PASS_SOURCE13_NATIVE_FRONTDOORS_AND_DECLARED_FIXTURE_READS_ONLY"
       }
     },
     {
       "id": "api-only-enrichment-20261016",
       "priority": 3,
       "title_de": "Eigenständige API-Anreicherung ohne lokalen Websitecrawl",
-      "status": "ACTUAL400_FINAL_FIXTURE_FORMAT_CLIPPY_RETAINED22_PASS_FULL_ACCEPTANCE_PENDING",
-      "summary_de": "Der erste 400-Input-Entwurf besteht Formatter, Clippy und alle 20 neuen API-Rustfunktionen mit lokalen Mock-Anfragen. Der Folgestand passt genau zwei vorhandene Testdateien an das neue MCP-Inventar an: 27 normale Tools beziehungsweise 32 mit Dateitools; das freie Legacy-Inventar bleibt bei 26. Dieser finale Folgestand besteht Formatter, unabhängige Formatprüfung, Clippy und alle 22 bestehenden MCP-/Lifecycle-Funktionen. Die vollständige Gesamtsuite, Releasebinary, native API-Abnahme, Liveanbieter und Installation bleiben offen. Der finale Produktcode ist inzwischen privat als757809d veröffentlicht. Ein nativer Test ohne Liveanbieter ist vorbereitet; erfolgreiche Liveprovider-Anreicherung und weitere Anbieter bleiben ausdrücklich offen.",
+      "status": "ACTUAL1476_SUITE_BUILD_NATIVE_SUBSET_PASS_LIVE_PROVIDER_OPEN",
+      "summary_de": "Alle400 privaten finalen Quellen bestehen die vollständige1476/0/0-Suite einschließlich vier echter Rendererfunktionen und den optimierten Windows-Build. Der API-only-Teilumfang besteht echte API-/CLI-/MCP-/Browser-/Cold-Abläufe mit207 gelieferten Zeilen und null Website-Anfragen/Verbindungen. Seine gespeicherten Messwerte sind ausdrücklich synthetische Unavailable-Fixtures, keine erfolgreiche Liveprovider-Anreicherung.. Erfolgreicher Liveanbieter, expliziter Refresh, aktive Provider-Cancellation, erfolgreicher Enrichment-CLI und weitere Anbieter bleiben offen.",
       "completed_acceptance_de": [
         "Unabhängiger Vollreview plus Closure von CSV-Spalte1, expliziten Lighthouse-Laufzeitfehlern/fehlenden Metriken, normalisierter8192B-URLgrenze vor Jobaufnahme und Warnungsgate.",
         "Fünf Node-VM-Hilfsfälle tatsächlich mit exakten Namen und natürlichem Prozessabschluss bestanden; alle18 Vorschlags- und388 Elternquellen unverändert.",
-        "Finaler Zwei-Dateien-Fixturestand: tatsächlicher Formatter, unabhängiger Byte-/Tokenreview, Clippy ohne Warnungen und alle 22 vorhandenen MCP-/Lifecycle-Tests mit regulärem Prozessabschluss bestanden. Keine neuen Testnamen oder gelockerten Produktgrenzen."
+        "Finaler Zwei-Dateien-Fixturestand: tatsächlicher Formatter, unabhängiger Byte-/Tokenreview, Clippy ohne Warnungen und alle 22 vorhandenen MCP-/Lifecycle-Tests mit regulärem Prozessabschluss bestanden. Keine neuen Testnamen oder gelockerten Produktgrenzen.",
+        "Source13 privat veröffentlicht/eingefroren; tatsächliche1476/0/0-Suite und Releasebuild bestanden.",
+        "Echte native Frontdoors und ausdrücklich synthetische gespeicherte Consumer über Browser/API/CLI/MCP sowie drei normale EOF-/Cold-Läufe bestanden; vollständige208 CSV-Zeilen einschließlich Header."
       ],
       "pending_acceptance_de": [
-        "Alle 400 Quellen als nächsten Source13 veröffentlichen, einfrieren, die vollständige Gesamtsuite und den Releasekandidaten prüfen.",
-        "Den API-only-Workflow mit dem tatsächlichen Releasebinary über Browser/API/CLI/MCP sowie Cold/Cancel/EOF prüfen; danach sicher installieren.",
-        "Weitere Anbieter, lokales Lighthouse und getrennte CrUX-Felddaten umsetzen; erfolgreiche Teiltests beweisen keine vollständige Parität."
+        "Source13 nach vollständiger Head/CDN-Abnahme sicher installieren.",
+        "Einen echten produktiven Providerlauf separat beobachten; Refresh, aktiven Cancel und erfolgreichen Enrichment-CLI gesondert prüfen.",
+        "Weitere Anbieter, lokales Lighthouse und getrennte CrUX-Felddaten umsetzen."
       ],
       "documentation": [
+        "docs/verification/source13-api-native-progress-20261016/api-native.json",
         "docs/verification/source12-thirteen-scopes-20261016/next-fixtures/actual-format.json",
         "docs/verification/api-runtime-pass-20261016/index.json",
         "docs/verification/api-only-rust-failure-20261016/index.json",
@@ -8664,15 +8679,17 @@
         "source_review": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
         "node": "PASS_FIVE_API_ONLY_FRONTEND_HELPER_CASES_ONLY",
         "rust": "PASS_TWENTY_NEW_RUST_FUNCTIONS_ONLY",
-        "provider": "NOT_RUN",
-        "native": "NOT_RUN",
+        "provider": "NOT_PROVEN",
+        "native": "PASS_NATIVE_FRONTDOORS_AND_DECLARED_FIXTURE_READS_ONLY",
         "installation": "NOT_RUN",
         "manufacturer_parity": "NOT_PROVEN",
         "format": "PASS_FORMAT_COMMAND_ONLY",
         "clippy": "PASS_PRELIMINARY_CLIPPY_ONLY",
         "inventory_fixture_format": "PASS_FORMAT_COMMAND_ONLY",
         "inventory_fixture_retained_tests": "PASS_TWENTYTWO_RETAINED_MCP_LIFECYCLE_FUNCTIONS_ONLY",
-        "inventory_fixture_clippy": "PASS_PRELIMINARY_CLIPPY_ONLY"
+        "inventory_fixture_clippy": "PASS_PRELIMINARY_CLIPPY_ONLY",
+        "full_suite": "PASS_ACTUAL1476_WORKSPACE",
+        "optimized_build": "PASS_ACTUAL_WINDOWS_RELEASE"
       }
     },
     {
@@ -8702,20 +8719,29 @@
       "id": "links-segments-20261016",
       "title_de": "Gespeicherte Segmente über Reports und Exporte anwenden",
       "priority": 5,
-      "status": "SOURCE_IMPLEMENTATION_IN_PROGRESS",
-      "summary_de": "Als nächster offener Produktbaustein entsteht eine gemeinsame Segmentauswertung über gespeicherte Crawlfakten für URL-Zahlen, Probleme, Diagramme und vollständige Exporte. Überlappungen, fehlende Daten, Regeln und Seitengrenzen erhalten dieselbe Semantik.",
-      "completed_acceptance_de": [],
+      "status": "INDEPENDENT_SOURCE_REVIEW_FORMAT_PASS_FIRST_TEST_COMPILE_FAILED",
+      "summary_de": "Gemeinsame Segmentauswertung für gespeicherte URL-Zahlen, Probleme, Diagramme und vollständige Exporte ist mit CDN-Verzeichnisprofilen als418-Input-Entwurf komponiert. Vollständige unabhängige Quellen- und Formatprüfung bestehen. Der erste Compilerlauf stoppt an zwei neuen Testaufrufen ohne Debug-fähigen Fehlerwert; eng begrenzte Testkorrektur in Arbeit. Noch keine neuen30 Rust-/9 Node-Tests oder Vollsuite bestanden.",
+      "completed_acceptance_de": [
+        "SegmentV2 und gesamte418-Input-Komposition unabhängig geprüft.",
+        "Tatsächlicher Formatter und unabhängiger Review aller418 Vorher-/Nachherdateien bestanden."
+      ],
       "pending_acceptance_de": [
-        "Quellvorschlag und unabhängigen Review abschließen.",
-        "Gemeinsame Counts-/Issues-/Charts-/Exportmitgliedschaft an einer echten endlichen Website und nach Cold-Reopen mit null zusätzlichen WebsiteGETs abnehmen."
+        "Zwei Testaufrufe eng korrigieren, unabhängig prüfen und Compiler sowie alle30 neuen Rust-/9 Frontendfälle tatsächlich bestehen.",
+        "Vollsuite/Releasebuild sowie echte Counts-/Issues-/Charts-/Exportmitgliedschaft mit Cold-Reopen und null zusätzlichen WebsiteGETs prüfen."
       ],
       "documentation": [
+        "docs/verification/source13-api-native-progress-20261016/segments-first-clippy-failed.json",
         "docs/verification/installed12-source13-progress-20261016/next-backlog-report.md"
       ],
       "gates": {
         "full_suite": "NOT_RUN",
         "native": "NOT_RUN",
-        "manufacturer_parity": "NOT_PROVEN"
+        "manufacturer_parity": "NOT_PROVEN",
+        "source_review": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+        "format": "PASS_FORMAT_COMMAND_ONLY",
+        "clippy": "FAILED_TWO_NEW_TEST_DEBUG_BOUNDS",
+        "new_rust": "NOT_RUN",
+        "node": "NOT_RUN"
       }
     }
   ],
