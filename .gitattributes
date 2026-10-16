@@ -386,3 +386,7 @@ docs/verification/source15-code-integration-20261016/index.json -text
 docs/verification/source15-code-integration-20261016/frontdoor-source-audit.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 docs/verification/source15-suite-failure-20261016/full-suite-failed.json -text
 docs/verification/source15-suite-failure-20261016/index.json -text
+
+# Preserve exact Source15 retry2 fixture bytes
+/crates/app/src/mcp/wiring_tests.rs -text
+/crates/app/src/server/lifecycle_tests.rs -text

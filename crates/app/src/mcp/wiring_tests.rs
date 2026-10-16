@@ -517,7 +517,22 @@ async fn file_tools_actual_stdio_frames_share_opt_in_and_drain_on_eof() {
     )
     .await;
     assert_eq!(values.len(), 4);
-    assert_eq!(values[0]["result"]["tools"].as_array().unwrap().len(), 33);
+    let tools = values[0]["result"]["tools"].as_array().unwrap();
+    assert_eq!(tools.len(), 34);
+    let quotas: Vec<_> = tools
+        .iter()
+        .filter(|tool| tool["name"] == "spider_crawl_quotas")
+        .collect();
+    assert_eq!(quotas.len(), 1);
+    assert_eq!(tools[28]["name"], "spider_crawl_quotas");
+    assert_eq!(
+        quotas[0]["inputSchema"],
+        json!({"type":"object","additionalProperties":false,"required":["id","action"],"properties":{"id":{"type":"string","format":"uuid"},"action":{"const":"summary"}}})
+    );
+    assert_eq!(
+        quotas[0]["annotations"],
+        json!({"readOnlyHint":true,"destructiveHint":false,"idempotentHint":true,"openWorldHint":false})
+    );
     assert_eq!(values[1]["result"]["isError"], false);
     assert_eq!(values[2]["result"]["isError"], false);
     assert_eq!(values[3]["result"], json!({}));
@@ -660,13 +675,18 @@ async fn http_mode(enabled: bool, listen_ip: &str) -> anyhow::Result<()> {
             .error_for_status()?
             .json()
             .await?;
-        ensure!(
-            listed["result"]["tools"]
-                .as_array()
-                .context("actual tool list")?
-                .len()
-                == if enabled { 33 } else { 28 }
-        );
+        let tools = listed["result"]["tools"]
+            .as_array()
+            .context("actual tool list")?;
+        ensure!(tools.len() == if enabled { 34 } else { 29 });
+        let quotas: Vec<_> = tools
+            .iter()
+            .filter(|tool| tool["name"] == "spider_crawl_quotas")
+            .collect();
+        ensure!(quotas.len() == 1);
+        ensure!(tools[28]["name"] == "spider_crawl_quotas");
+        ensure!(quotas[0]["inputSchema"] == json!({"type":"object","additionalProperties":false,"required":["id","action"],"properties":{"id":{"type":"string","format":"uuid"},"action":{"const":"summary"}}}));
+        ensure!(quotas[0]["annotations"] == json!({"readOnlyHint":true,"destructiveHint":false,"idempotentHint":true,"openWorldHint":false}));
         let legacy: Value = client
             .post(format!("{base}/mcp"))
             .json(&call(json!(99), "spider_list_crawls", json!({})))

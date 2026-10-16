@@ -104,7 +104,7 @@ async fn owned_shutdown_stops_actual_http_listener_after_exact_legacy_inventory(
         .iter()
         .map(|v| v["name"].as_str().unwrap())
         .collect();
-    assert_eq!(names.len(), 28);
+    assert_eq!(names.len(), 29);
     assert_eq!(
         &names[..26],
         &[
@@ -138,6 +138,23 @@ async fn owned_shutdown_stops_actual_http_listener_after_exact_legacy_inventory(
     );
     assert_eq!(names[26], "spider_api_enrichment");
     assert_eq!(names[27], "spider_segments");
+    assert_eq!(names[28], "spider_crawl_quotas");
+    assert_eq!(
+        names
+            .iter()
+            .filter(|name| **name == "spider_crawl_quotas")
+            .count(),
+        1
+    );
+    let quota = &inventory["result"]["tools"][28];
+    assert_eq!(
+        quota["inputSchema"],
+        json!({"type":"object","additionalProperties":false,"required":["id","action"],"properties":{"id":{"type":"string","format":"uuid"},"action":{"const":"summary"}}})
+    );
+    assert_eq!(
+        quota["annotations"],
+        json!({"readOnlyHint":true,"destructiveHint":false,"idempotentHint":true,"openWorldHint":false})
+    );
     assert!(names.contains(&"spider_sitemap_findings"));
     assert!(
         !names
