@@ -6851,14 +6851,14 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-16T05:42:44.690Z",
+  "last_verified_at": "2026-10-16T06:01:44.636Z",
   "current_work": [
     {
       "id": "combined-source-v15-20261016",
       "priority": 0,
-      "status": "PRIVATE_CODE_PUBLISHED_FULL_SUITE_NOT_RUN",
+      "status": "ACTUAL_FULL_SUITE_FAILED_THREE_RETAINED_INVENTORY_ASSERTIONS",
       "title_de": "Source15 mit dauerhaften Crawl-Limits vollständig abnehmen",
-      "summary_de": "Der unabhängig geprüfteQuotenentwurf ist als Source15 privat veröffentlicht:429Dateien,35übernommeneProduktpfade(24geändert/11neu),394unverändert. AlleDateibytes undGitBlobs stimmen. Formatter, strengerClippy,29neueRustfunktionen und9bestehendeFrontendfälle auf429 bestehen. Gesamtsuite mit vier frischenRendererprüfungen, Releasebuild, echteQuota-Nativabläufe undInstallation stehen aus;1535Tests sind eineMindestprognose. Installiert bleibtSource14.",
+      "summary_de": "Der erste vollständigeSource15-Lauf ist mit386bestandenen und3fehlgeschlagenenApp-Tests gestoppt(Cargo101). Drei alteInventarprüfungen erwarten28/33MCP-Werkzeuge, während der neueQuotenzugang29/34liefert. Formatter besteht; Worker undFixture sind geschlossen. VerbleibendeGesamtsuite, Releasebuild undNativabnahme sind nicht akzeptiert. ZweiTestdateien werden separat geprüft korrigiert; Produktlogik undTestnamen bleiben erhalten. Installiert bleibt die abgenommeneSource14.",
       "feature_ids": [
         "crawl.limits"
       ],
@@ -6868,6 +6868,7 @@
         "Source14 bleibt tatsächlich installiert; gespeicherteCrawls wurden unverändert übernommen."
       ],
       "pending_acceptance_de": [
+        "Drei veralteteMCP-Inventarprüfungen in zweiTestdateien eng korrigieren und unabhängig prüfen; frischen429Retry2 mit vollständigerSuite undvierfrischenRendererprüfungen ausführen. HistorischenFehllauf unverändert erhalten.",
         "Den unveränderlichen Nachfolger vollständig mit allen bisherigen Tests und vier frischen Rendererfunktionen ausführen; 1535 ist bisher nur die erwartete Mindestzahl.",
         "Optimierten Build, echte Quotenabläufe über öffentliche Oberflächen/Cold-Neustart und Daten erhaltende Installation bestehen.",
         "Renderer-, Ressourcen- und Selected-Kombinationen mit aktivierten Quoten bleiben im ersten Entwurf ausgeschlossen; vollständige Herstellerparität bleibt offen.",
@@ -6875,6 +6876,8 @@
         "Sibling-DNS/Host-Nativprüfung bleibt ohne tatsächlich vorhandene Resolverbeobachtung offen; kein Portwechsel als Hostbeweis."
       ],
       "documentation": [
+        "docs/verification/source15-suite-failure-20261016/index.json",
+        "docs/verification/source15-suite-failure-20261016/full-suite-failed.json",
         "docs/verification/source15-code-integration-20261016/index.json",
         "docs/verification/source15-code-integration-20261016/frontdoor-source-audit.json",
         "docs/verification/source14-installed-20261016/installed-summary.json"
@@ -6885,7 +6888,7 @@
         "preliminary_clippy": "PASS_ACTUAL_PREVIEW2",
         "new_rust": "PASS_29_FUNCTIONS_ONLY",
         "inherited_node": "PASS_9_CASES_ON_429_ONLY",
-        "full_suite": "NOT_RUN",
+        "full_suite": "FAIL_ACTUAL_386_PASS_3_RETAINED_INVENTORY_FAILURES",
         "optimized_build": "NOT_RUN",
         "native": "NOT_RUN",
         "installation": "NOT_RUN",
@@ -8935,9 +8938,9 @@
     {
       "id": "durable-crawl-quotas-20261016",
       "priority": 6,
-      "status": "PRIVATE_SOURCE15_CODE_PUBLISHED_429_FULL_SUITE_PENDING",
+      "status": "ACTUAL_FULL_SUITE_FAILED_THREE_RETAINED_INVENTORY_ASSERTIONS",
       "title_de": "Dauerhafte URL-Kontingente je Tiefe, Host und Muster ergänzen",
-      "summary_de": "Der unabhängig geprüfteQuotenentwurf ist als Source15 privat veröffentlicht:429Dateien,35übernommeneProduktpfade(24geändert/11neu),394unverändert. AlleDateibytes undGitBlobs stimmen. Formatter, strengerClippy,29neueRustfunktionen und9bestehendeFrontendfälle auf429 bestehen. Gesamtsuite mit vier frischenRendererprüfungen, Releasebuild, echteQuota-Nativabläufe undInstallation stehen aus;1535Tests sind eineMindestprognose. Installiert bleibtSource14.",
+      "summary_de": "Der erste vollständigeSource15-Lauf ist mit386bestandenen und3fehlgeschlagenenApp-Tests gestoppt(Cargo101). Drei alteInventarprüfungen erwarten28/33MCP-Werkzeuge, während der neueQuotenzugang29/34liefert. Formatter besteht; Worker undFixture sind geschlossen. VerbleibendeGesamtsuite, Releasebuild undNativabnahme sind nicht akzeptiert. ZweiTestdateien werden separat geprüft korrigiert; Produktlogik undTestnamen bleiben erhalten. Installiert bleibt die abgenommeneSource14.",
       "feature_ids": [
         "crawl.limits"
       ],
@@ -8950,6 +8953,7 @@
         "Nach erfolgreicherSource14-Installation alle35geprüftenProduktpfade gezielt integriert und privatcommitted/gepusht;429Arbeitsdateien undGitBlobs exakt geprüft."
       ],
       "pending_acceptance_de": [
+        "Drei veralteteMCP-Inventarprüfungen in zweiTestdateien eng korrigieren und unabhängig prüfen; frischen429Retry2 mit vollständigerSuite undvierfrischenRendererprüfungen ausführen. HistorischenFehllauf unverändert erhalten.",
         "Den unveränderlichen Nachfolger vollständig mit allen bisherigen Tests und vier frischen Rendererfunktionen ausführen; 1535 ist bisher nur die erwartete Mindestzahl.",
         "Optimierten Build, echte Quotenabläufe über öffentliche Oberflächen/Cold-Neustart und Daten erhaltende Installation bestehen.",
         "Renderer-, Ressourcen- und Selected-Kombinationen mit aktivierten Quoten bleiben im ersten Entwurf ausgeschlossen; vollständige Herstellerparität bleibt offen.",
@@ -8957,6 +8961,8 @@
         "Sibling-DNS/Host-Nativprüfung bleibt ohne tatsächlich vorhandene Resolverbeobachtung offen; kein Portwechsel als Hostbeweis."
       ],
       "documentation": [
+        "docs/verification/source15-suite-failure-20261016/index.json",
+        "docs/verification/source15-suite-failure-20261016/full-suite-failed.json",
         "docs/verification/source15-code-integration-20261016/index.json",
         "docs/verification/source15-code-integration-20261016/frontdoor-source-audit.json",
         "docs/verification/quotas-tested-main-retry-20261016/index.json",
@@ -8975,7 +8981,7 @@
         "formatter_review": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
         "new_rust": "PASS_ALL_29_NEW_FUNCTIONS",
         "node": "PASS_NINE_INHERITED_CASES_ON_429_ONLY",
-        "full_suite": "NOT_RUN",
+        "full_suite": "FAIL_ACTUAL_386_PASS_3_RETAINED_INVENTORY_FAILURES",
         "installation": "NOT_RUN",
         "private_code": "PASS_ACTUAL_526BD13_ALL429_BYTES_AND_GIT_BLOBS"
       },
