@@ -6851,14 +6851,14 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-16T07:38:22.506Z",
+  "last_verified_at": "2026-10-16T08:11:13.089Z",
   "current_work": [
     {
       "id": "combined-source-v15-20261016",
       "priority": 0,
-      "status": "FOUR_ACTUAL_NATIVE_REGRESSIONS_PASS_QUOTA_V4_RETRY_RUNNING",
+      "status": "ALL_FIVE_ACTUAL_NATIVE_ROLES_AND_INDEPENDENT_AUDITS_PASS_INSTALLATION_PENDING",
       "title_de": "Source15 mit dauerhaften Crawl-Limits vollständig abnehmen",
-      "summary_de": "Source15 Retry2 besteht 1535 Rust-Tests, den Release-Build und vier tatsächliche Regressionsrollen: API, Head/CDN, Segmente/Verzeichnisberichte und Sitemap. Der API-Rohdaten-Audit ist unabhängig abgeschlossen; drei weitere Audits laufen noch. Der zweite Quota-Nativlauf besteht beide UI-Breiten und scheitert später am falschen CSV-Testpfad. V4 korrigiert diesen Pfad sowie die Trennung von tatsächlichem und erwartetem HTTP-Status und läuft frisch. Beide Fehlläufe bleiben erhalten. Quota-Gesamtabnahme, fünf Datenbank-Negativkopien und Installation bleiben offen; installiert bleibt Source14.",
+      "summary_de": "Source15 Retry2 besteht 1535 Rust-Tests, den Release-Build und alle fünf tatsächlichen Nativrollen mit unabhängigen Rohdatenprüfungen. Der Quota-Lauf bestätigt 17 Gruppen, 22 regulär geschlossene Kindprozesse, 99 GETs, 26 Prüfgrenzen, acht geschlossene SQLite-Verbindungen sowie fünf Negativkopien und sechs begrenzte Leseprüfungen. Drei frühere Fehlläufe bleiben erhalten. Neue Installer-Skripte schließen den gefundenen Schemafehler im Entwurf; frische unabhängige Skriptprüfung und tatsächliche Installation stehen aus. Installiert bleibt Source14; vollständige Herstellerparität bleibt offen.",
       "feature_ids": [
         "crawl.limits"
       ],
@@ -6869,18 +6869,17 @@
         "Die zwei eng geprüften Testkorrekturen bestehen Formatter, unabhängigen Whitespace-Review, strengen Clippy und drei tatsächlich ausgeführte Inventartests. Privat veröffentlicht; alle 429 Dateien und Git-Blobs geprüft.",
         "Der vollständig eingefrorene Retry2-Quellstand besteht den tatsächlichen Gesamtlauf mit 1535 Rust-Tests einschließlich vier frischer Renderer-Prüfungen, Formatprüfung und Clippy. Alle 429 Quelldateien bleiben unverändert.",
         "Der tatsächliche optimierte Retry2-Build besteht; die neue Programmdatei ist mit SHA256 und Größe gebunden. Der fehlgeschlagene erste Nativlauf bleibt als fehlgeschlagener Beleg erhalten.",
-        "Vier aktuelle tatsächliche Regressionsrollen bestehen; die unabhängige API-Prüfung bestätigt alle gespeicherten JSON-/CSV-Zellen, acht reguläre Prozessabschlüsse und die begrenzte synthetische Provider-Grenze."
+        "Vier aktuelle tatsächliche Regressionsrollen bestehen; die unabhängige API-Prüfung bestätigt alle gespeicherten JSON-/CSV-Zellen, acht reguläre Prozessabschlüsse und die begrenzte synthetische Provider-Grenze.",
+        "Alle fünf tatsächlichen Nativrollen sind unabhängig geprüft. Der vollständige Quota-Lauf besteht beide UI-Breiten, CSV/JSON/MCP/CLI, Cold-Neustart, fünf explizite Negativkopien und sechs begrenzte SQLite-Leseprüfungen; der Rohdaten-Audit prüft 10.628 CSV-Zellen."
       ],
       "pending_acceptance_de": [
-        "Den korrigierten Quota-V4-Nativlauf vollständig einschließlich fünf negativer Datenbankkopien bestehen; verbleibende unabhängige Ist-Audits und frische Installationsabnahme abschließen.",
-        "Den 320-Pixel-Zustandswechsel mit begrenzter DOM-Beobachtung prüfen und einen frischen vollständigen Quota-Nativlauf einschließlich fünf expliziter negativer Datenbankkopien bestehen; übrige Nativrollen und Installation bleiben offen.",
-        "Den unveränderlichen Nachfolger vollständig mit allen bisherigen Tests und vier frischen Rendererfunktionen ausführen; 1535 ist bisher nur die erwartete Mindestzahl.",
-        "Optimierten Build, echte Quotenabläufe über öffentliche Oberflächen/Cold-Neustart und Daten erhaltende Installation bestehen.",
+        "Finale Installer-/Cold-Skripte unabhängig prüfen; frische private Zustandsprüfung, genaue Beendigung der beiden Leerlaufdienste, drei exklusive Datenkopien und tatsächliche Daten erhaltende Source15-Installation abnehmen.",
         "Renderer-, Ressourcen- und Selected-Kombinationen mit aktivierten Quoten bleiben im ersten Entwurf ausgeschlossen; vollständige Herstellerparität bleibt offen.",
         "CLI-Profiländerung/Wiederaufnahme ist derzeit kein vorhandener Befehl. Profiländerungsfälle über vorhandene API/MCP prüfen; CLI-Summary und Anfangscrawl getrennt abnehmen und diese eigene CLI-Lücke ausdrücklich offenhalten.",
         "Sibling-DNS/Host-Nativprüfung bleibt ohne tatsächlich vorhandene Resolverbeobachtung offen; kein Portwechsel als Hostbeweis."
       ],
       "documentation": [
+        "docs/verification/source15-five-native-audited-20261016/index.json",
         "docs/verification/source15-four-native-20261016/index.json",
         "docs/verification/source15-build-cli-native-failure-20261016/index.json",
         "docs/verification/source15-retry2-suite-20261016/index.json",
@@ -6899,12 +6898,13 @@
         "inherited_node": "PASS_9_CASES_ON_429_ONLY",
         "full_suite": "PASS_ACTUAL_1535_ZERO_FAILED_ZERO_IGNORED_FOUR_FRESH_RENDERER_FMT_CLIPPY",
         "optimized_build": "PASS_ACTUAL_OPTIMIZED_BUILD_CANDIDATE_214EB3CA_46790144_BYTES",
-        "native": "NOT_RUN",
+        "native": "PASS_ACTUAL_FIVE_ROLES",
         "installation": "NOT_RUN",
         "manufacturer_parity": "NOT_PROVEN",
         "retained_fixture_tests": "PASS_ACTUAL_ALL_THREE_EXACTLY_ONCE",
-        "quota_native": "V4_FRESH_RETRY_RUNNING_NOT_ACCEPTED_AT_CHECKPOINT",
-        "native_regressions": "PASS_ACTUAL_API_HEAD_MAIN_SITEMAP_FOUR_ROLES"
+        "quota_native": "PASS_ACTUAL_V5_17_GROUPS22_NATURAL_CHILDREN99_GET26_BOUNDARIES",
+        "native_regressions": "PASS_ACTUAL_API_HEAD_MAIN_SITEMAP_FOUR_ROLES",
+        "actual_native_independent_audits": "ALL_FIVE_NO_FINDINGS_BOUNDED_ACTUAL_NATIVE_AUDIT"
       },
       "reference_parity": "NOT_PROVEN"
     },
@@ -8950,9 +8950,9 @@
     {
       "id": "durable-crawl-quotas-20261016",
       "priority": 6,
-      "status": "FOUR_ACTUAL_NATIVE_REGRESSIONS_PASS_QUOTA_V4_RETRY_RUNNING",
+      "status": "ALL_FIVE_ACTUAL_NATIVE_ROLES_AND_INDEPENDENT_AUDITS_PASS_INSTALLATION_PENDING",
       "title_de": "Dauerhafte URL-Kontingente je Tiefe, Host und Muster ergänzen",
-      "summary_de": "Source15 Retry2 besteht 1535 Rust-Tests, den Release-Build und vier tatsächliche Regressionsrollen: API, Head/CDN, Segmente/Verzeichnisberichte und Sitemap. Der API-Rohdaten-Audit ist unabhängig abgeschlossen; drei weitere Audits laufen noch. Der zweite Quota-Nativlauf besteht beide UI-Breiten und scheitert später am falschen CSV-Testpfad. V4 korrigiert diesen Pfad sowie die Trennung von tatsächlichem und erwartetem HTTP-Status und läuft frisch. Beide Fehlläufe bleiben erhalten. Quota-Gesamtabnahme, fünf Datenbank-Negativkopien und Installation bleiben offen; installiert bleibt Source14.",
+      "summary_de": "Source15 Retry2 besteht 1535 Rust-Tests, den Release-Build und alle fünf tatsächlichen Nativrollen mit unabhängigen Rohdatenprüfungen. Der Quota-Lauf bestätigt 17 Gruppen, 22 regulär geschlossene Kindprozesse, 99 GETs, 26 Prüfgrenzen, acht geschlossene SQLite-Verbindungen sowie fünf Negativkopien und sechs begrenzte Leseprüfungen. Drei frühere Fehlläufe bleiben erhalten. Neue Installer-Skripte schließen den gefundenen Schemafehler im Entwurf; frische unabhängige Skriptprüfung und tatsächliche Installation stehen aus. Installiert bleibt Source14; vollständige Herstellerparität bleibt offen.",
       "feature_ids": [
         "crawl.limits"
       ],
@@ -8966,18 +8966,17 @@
         "Die zwei eng geprüften Testkorrekturen bestehen Formatter, unabhängigen Whitespace-Review, strengen Clippy und drei tatsächlich ausgeführte Inventartests. Privat veröffentlicht; alle 429 Dateien und Git-Blobs geprüft.",
         "Der vollständig eingefrorene Retry2-Quellstand besteht den tatsächlichen Gesamtlauf mit 1535 Rust-Tests einschließlich vier frischer Renderer-Prüfungen, Formatprüfung und Clippy. Alle 429 Quelldateien bleiben unverändert.",
         "Der tatsächliche optimierte Retry2-Build besteht; die neue Programmdatei ist mit SHA256 und Größe gebunden. Der fehlgeschlagene erste Nativlauf bleibt als fehlgeschlagener Beleg erhalten.",
-        "Vier aktuelle tatsächliche Regressionsrollen bestehen; die unabhängige API-Prüfung bestätigt alle gespeicherten JSON-/CSV-Zellen, acht reguläre Prozessabschlüsse und die begrenzte synthetische Provider-Grenze."
+        "Vier aktuelle tatsächliche Regressionsrollen bestehen; die unabhängige API-Prüfung bestätigt alle gespeicherten JSON-/CSV-Zellen, acht reguläre Prozessabschlüsse und die begrenzte synthetische Provider-Grenze.",
+        "Alle fünf tatsächlichen Nativrollen sind unabhängig geprüft. Der vollständige Quota-Lauf besteht beide UI-Breiten, CSV/JSON/MCP/CLI, Cold-Neustart, fünf explizite Negativkopien und sechs begrenzte SQLite-Leseprüfungen; der Rohdaten-Audit prüft 10.628 CSV-Zellen."
       ],
       "pending_acceptance_de": [
-        "Den korrigierten Quota-V4-Nativlauf vollständig einschließlich fünf negativer Datenbankkopien bestehen; verbleibende unabhängige Ist-Audits und frische Installationsabnahme abschließen.",
-        "Den 320-Pixel-Zustandswechsel mit begrenzter DOM-Beobachtung prüfen und einen frischen vollständigen Quota-Nativlauf einschließlich fünf expliziter negativer Datenbankkopien bestehen; übrige Nativrollen und Installation bleiben offen.",
-        "Den unveränderlichen Nachfolger vollständig mit allen bisherigen Tests und vier frischen Rendererfunktionen ausführen; 1535 ist bisher nur die erwartete Mindestzahl.",
-        "Optimierten Build, echte Quotenabläufe über öffentliche Oberflächen/Cold-Neustart und Daten erhaltende Installation bestehen.",
+        "Finale Installer-/Cold-Skripte unabhängig prüfen; frische private Zustandsprüfung, genaue Beendigung der beiden Leerlaufdienste, drei exklusive Datenkopien und tatsächliche Daten erhaltende Source15-Installation abnehmen.",
         "Renderer-, Ressourcen- und Selected-Kombinationen mit aktivierten Quoten bleiben im ersten Entwurf ausgeschlossen; vollständige Herstellerparität bleibt offen.",
         "CLI-Profiländerung/Wiederaufnahme ist derzeit kein vorhandener Befehl. Profiländerungsfälle über vorhandene API/MCP prüfen; CLI-Summary und Anfangscrawl getrennt abnehmen und diese eigene CLI-Lücke ausdrücklich offenhalten.",
         "Sibling-DNS/Host-Nativprüfung bleibt ohne tatsächlich vorhandene Resolverbeobachtung offen; kein Portwechsel als Hostbeweis."
       ],
       "documentation": [
+        "docs/verification/source15-five-native-audited-20261016/index.json",
         "docs/verification/source15-four-native-20261016/index.json",
         "docs/verification/source15-build-cli-native-failure-20261016/index.json",
         "docs/verification/source15-retry2-suite-20261016/index.json",
@@ -8995,7 +8994,7 @@
       "gates": {
         "source": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
         "compile": "PASS_PRELIMINARY_CLIPPY_ONLY",
-        "native": "NOT_RUN",
+        "native": "PASS_ACTUAL_FIVE_ROLES",
         "manufacturer_parity": "NOT_PROVEN",
         "composition": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
         "format": "PASS_FORMAT_COMMAND_ONLY",
@@ -9007,8 +9006,9 @@
         "private_code": "PASS_ACTUAL_0BB0724_ALL429_BYTES_AND_GIT_BLOBS",
         "retained_fixture_tests": "PASS_ACTUAL_ALL_THREE_EXACTLY_ONCE",
         "optimized_build": "PASS_ACTUAL_OPTIMIZED_BUILD_CANDIDATE_214EB3CA_46790144_BYTES",
-        "quota_native": "V4_FRESH_RETRY_RUNNING_NOT_ACCEPTED_AT_CHECKPOINT",
-        "native_regressions": "PASS_ACTUAL_API_HEAD_MAIN_SITEMAP_FOUR_ROLES"
+        "quota_native": "PASS_ACTUAL_V5_17_GROUPS22_NATURAL_CHILDREN99_GET26_BOUNDARIES",
+        "native_regressions": "PASS_ACTUAL_API_HEAD_MAIN_SITEMAP_FOUR_ROLES",
+        "actual_native_independent_audits": "ALL_FIVE_NO_FINDINGS_BOUNDED_ACTUAL_NATIVE_AUDIT"
       },
       "reference_parity": "NOT_PROVEN"
     },
