@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "result": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "findings": [],
+  "mechanical_audit": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-v11-installer-cold-independent-review/AUDIT.json",
+    "sha256": "9f8706cd5dcfc3e5358b13e0a951edce86c97060fb0bfe9bd83034eb961d9493",
+    "bytes": 35402
+  },
+  "review_script": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\review-source12-v11-installer-cold.cjs",
+    "sha256": "d8bb35126ca4ad248d922ae52ed58f2b73219de54e68165732f274f5899a825c",
+    "bytes": 14793
+  },
+  "target_imports_guard_helper_C_Original_Root_Git_runtime_actions": 0,
+  "kind": "source12_original_cold_root_independent_review",
+  "proposal_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-cold-root-preparation-v11/manifest.json",
+    "sha256": "7312bd8f04e1166b180e2cbcf18ebc33f13f4402171c90b021b52dec5020744c",
+    "bytes": 4356
+  },
+  "harness": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source12-cold-root-preparation-v11/prepare-original-cold.mjs",
+    "sha256": "08d6ccbf6746c998367c46f0305fbd74b5de8c046d8a4e462ed5475f5adbadbc",
+    "bytes": 28402
+  },
+  "installer_preparation": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-source12-preparation-v11/manifest.json",
+    "sha256": "8e7dbb1dd166c10f05b9113fc6cd8b76e219753dfd8d762a451e72104747353b",
+    "bytes": 14054
+  },
+  "installer_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-source12-independent-review-v11/receipt.json",
+    "sha256": "817e58a7516bb5f07c752cc2aa149864c2ac42be68fe152e5f3e63722a786541",
+    "bytes": 3767
+  },
+  "parent_independent_review": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source12-v10-installer-cold-independent-review\\cold-receipt.json",
+    "sha256": "07dc102166f97845388874bae80b0a4ff683ef75bbb970a8a41aac994289b70f",
+    "bytes": 3453
+  },
+  "verification": {
+    "whole_state_operations": 4,
+    "sole_executable_delta": "COLD InstallerV10 to InstallerV11 directory",
+    "current_manifest_template_helper_PINNED_exact": true,
+    "service_helper_and_native_paths_exact": true,
+    "scalar_template_spread_checks_preserved": true
+  },
+  "qualification": "Current source dependency closure only. Sole Cold executable delta selects V11; its emitted release now inherits actual603f from the exactly pinned current template. Service/idle/retained handles, three copies, DATA/SHM/no-restore, and all stop conditions are unchanged. Root must still perform current actual readonly admission and fresh Original inspection; no Original action performed here."
+}

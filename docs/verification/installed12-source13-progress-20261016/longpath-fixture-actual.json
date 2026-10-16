@@ -1,0 +1,336 @@
+{
+  "kind": "root_source12_v10_actual_owned_longpath_ads_copy_fixture",
+  "result": "PASS_ACTUAL_E_ONLY_LONG262_SHORT_HIDDEN_EMPTY_CUSTOM_ADS_STRICT_COPY",
+  "original_data_accessed": false,
+  "service_actions": 0,
+  "data_restored": false,
+  "helper": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-source12-preparation-v10/tree-ops.ps1",
+    "sha256": "603f0dc7bca5b8c5f71efe410ac8ea953b3eb389621b357645a7907e07e61a49"
+  },
+  "runs": [
+    {
+      "label": "setup",
+      "executable": "C:/Program Files/PowerShell/7/pwsh.exe",
+      "args": [
+        "-Command",
+        "$ErrorActionPreference='Stop'; $root=$env:OPEN_SEO_OWNED_FIXTURE_SOURCE; $rows=@(Get-Item -LiteralPath $root -Force)+@(Get-ChildItem -LiteralPath $root -Recurse -Force); foreach($i in $rows|Sort-Object {$_.FullName.Length} -Descending){Set-Acl -LiteralPath $i.FullName -AclObject (Get-Acl -LiteralPath $i.FullName); $i=Get-Item -LiteralPath $i.FullName -Force; if(-not $i.PSIsContainer -and $i.Name.StartsWith('hidden_')){$i.Attributes=$i.Attributes -bor [IO.FileAttributes]::Hidden}; $i.CreationTimeUtc=[DateTime]::Parse('2024-01-02T03:04:05Z').ToUniversalTime(); $i.LastWriteTimeUtc=[DateTime]::Parse('2024-02-03T04:05:06Z').ToUniversalTime()}; Write-Output 'OWNED_SYNTHETIC_METADATA_READY'"
+      ],
+      "spawn": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "signals": [],
+      "stdout": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-tree-longpath-fixture-v10-r2\\setup.stdout.log",
+        "sha256": "a5497feede0fd886fe9d9f1cfd8652b3eaf4b7ae5c6ec5e5c44c61bbc0fa09fb",
+        "bytes": 32,
+        "end": true,
+        "closed": true,
+        "fd_closed": true
+      },
+      "stderr": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-tree-longpath-fixture-v10-r2\\setup.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "end": true,
+        "closed": true,
+        "fd_closed": true
+      },
+      "pid": 9008
+    },
+    {
+      "label": "source-before",
+      "executable": "C:/Program Files/PowerShell/7/pwsh.exe",
+      "args": [
+        "-File",
+        "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-source12-preparation-v10/tree-ops.ps1",
+        "-Mode",
+        "snapshot",
+        "-Root",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-tree-longpath-fixture-v10-r2\\source",
+        "-Out",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-tree-longpath-fixture-v10-r2\\source-before.json"
+      ],
+      "spawn": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "signals": [],
+      "stdout": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-tree-longpath-fixture-v10-r2\\source-before.stdout.log",
+        "sha256": "40071b1db794b68d055e0cff32912162fcccff04c19ec12641b4077232f00a09",
+        "bytes": 18,
+        "end": true,
+        "closed": true,
+        "fd_closed": true
+      },
+      "stderr": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-tree-longpath-fixture-v10-r2\\source-before.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "end": true,
+        "closed": true,
+        "fd_closed": true
+      },
+      "pid": 43116
+    },
+    {
+      "label": "copy",
+      "executable": "C:/Program Files/PowerShell/7/pwsh.exe",
+      "args": [
+        "-File",
+        "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-source12-preparation-v10/tree-ops.ps1",
+        "-Mode",
+        "copy",
+        "-Root",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-tree-longpath-fixture-v10-r2\\source",
+        "-Destination",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-tree-longpath-fixture-v10-r2\\dest",
+        "-Out",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-tree-longpath-fixture-v10-r2\\copy-verified.json"
+      ],
+      "spawn": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "signals": [],
+      "stdout": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-tree-longpath-fixture-v10-r2\\copy.stdout.log",
+        "sha256": "40071b1db794b68d055e0cff32912162fcccff04c19ec12641b4077232f00a09",
+        "bytes": 18,
+        "end": true,
+        "closed": true,
+        "fd_closed": true
+      },
+      "stderr": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-tree-longpath-fixture-v10-r2\\copy.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "end": true,
+        "closed": true,
+        "fd_closed": true
+      },
+      "pid": 45876
+    },
+    {
+      "label": "source-after",
+      "executable": "C:/Program Files/PowerShell/7/pwsh.exe",
+      "args": [
+        "-File",
+        "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-source12-preparation-v10/tree-ops.ps1",
+        "-Mode",
+        "snapshot",
+        "-Root",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-tree-longpath-fixture-v10-r2\\source",
+        "-Out",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-tree-longpath-fixture-v10-r2\\source-after.json"
+      ],
+      "spawn": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "signals": [],
+      "stdout": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-tree-longpath-fixture-v10-r2\\source-after.stdout.log",
+        "sha256": "40071b1db794b68d055e0cff32912162fcccff04c19ec12641b4077232f00a09",
+        "bytes": 18,
+        "end": true,
+        "closed": true,
+        "fd_closed": true
+      },
+      "stderr": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-tree-longpath-fixture-v10-r2\\source-after.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "end": true,
+        "closed": true,
+        "fd_closed": true
+      },
+      "pid": 43280
+    },
+    {
+      "label": "dest-after",
+      "executable": "C:/Program Files/PowerShell/7/pwsh.exe",
+      "args": [
+        "-File",
+        "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-source12-preparation-v10/tree-ops.ps1",
+        "-Mode",
+        "snapshot",
+        "-Root",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-tree-longpath-fixture-v10-r2\\dest",
+        "-Out",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-tree-longpath-fixture-v10-r2\\dest-after.json"
+      ],
+      "spawn": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "signals": [],
+      "stdout": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-tree-longpath-fixture-v10-r2\\dest-after.stdout.log",
+        "sha256": "40071b1db794b68d055e0cff32912162fcccff04c19ec12641b4077232f00a09",
+        "bytes": 18,
+        "end": true,
+        "closed": true,
+        "fd_closed": true
+      },
+      "stderr": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source12-tree-longpath-fixture-v10-r2\\dest-after.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "end": true,
+        "closed": true,
+        "fd_closed": true
+      },
+      "pid": 6300
+    }
+  ],
+  "authored": [
+    {
+      "relative_path": "regular_short.bin",
+      "long": false,
+      "kind": "regular",
+      "absolute_characters": 117,
+      "bytes": 9,
+      "sha256": "f466d71a7811215ff3249a0723ff8cbd49dae4e6bb13552ca1ad99f1339754a8",
+      "streams": []
+    },
+    {
+      "relative_path": "empty_short.bin",
+      "long": false,
+      "kind": "empty",
+      "absolute_characters": 115,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "streams": []
+    },
+    {
+      "relative_path": "hidden_short.bin",
+      "long": false,
+      "kind": "hidden",
+      "absolute_characters": 116,
+      "bytes": 9,
+      "sha256": "f466d71a7811215ff3249a0723ff8cbd49dae4e6bb13552ca1ad99f1339754a8",
+      "streams": [
+        {
+          "name": "oss_hidden",
+          "bytes": 18,
+          "sha256": "23ea06b98ac55f5c091fd230589a7307b609e5d394d7753334fb35a29c515536"
+        }
+      ]
+    },
+    {
+      "relative_path": "streams_short.bin",
+      "long": false,
+      "kind": "streams",
+      "absolute_characters": 117,
+      "bytes": 9,
+      "sha256": "f466d71a7811215ff3249a0723ff8cbd49dae4e6bb13552ca1ad99f1339754a8",
+      "streams": [
+        {
+          "name": "oss_empty",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "oss_nonempty",
+          "bytes": 18,
+          "sha256": "23ea06b98ac55f5c091fd230589a7307b609e5d394d7753334fb35a29c515536"
+        }
+      ]
+    },
+    {
+      "relative_path": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn\\regular_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.bin",
+      "long": true,
+      "kind": "regular",
+      "absolute_characters": 262,
+      "bytes": 9,
+      "sha256": "f466d71a7811215ff3249a0723ff8cbd49dae4e6bb13552ca1ad99f1339754a8",
+      "streams": []
+    },
+    {
+      "relative_path": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn\\empty_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.bin",
+      "long": true,
+      "kind": "empty",
+      "absolute_characters": 262,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "streams": []
+    },
+    {
+      "relative_path": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn\\hidden_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.bin",
+      "long": true,
+      "kind": "hidden",
+      "absolute_characters": 262,
+      "bytes": 9,
+      "sha256": "f466d71a7811215ff3249a0723ff8cbd49dae4e6bb13552ca1ad99f1339754a8",
+      "streams": [
+        {
+          "name": "oss_hidden",
+          "bytes": 18,
+          "sha256": "23ea06b98ac55f5c091fd230589a7307b609e5d394d7753334fb35a29c515536"
+        }
+      ]
+    },
+    {
+      "relative_path": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn\\streams_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.bin",
+      "long": true,
+      "kind": "streams",
+      "absolute_characters": 262,
+      "bytes": 9,
+      "sha256": "f466d71a7811215ff3249a0723ff8cbd49dae4e6bb13552ca1ad99f1339754a8",
+      "streams": [
+        {
+          "name": "oss_empty",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "oss_nonempty",
+          "bytes": 18,
+          "sha256": "23ea06b98ac55f5c091fd230589a7307b609e5d394d7753334fb35a29c515536"
+        }
+      ]
+    }
+  ],
+  "cases": {
+    "default_files": 8,
+    "long262_files": 4,
+    "short_controls": 4,
+    "hidden_files": 2,
+    "custom_streams": 6,
+    "empty_named_streams": 2
+  },
+  "complete_source_and_copy_metadata_equal": true,
+  "source_unchanged": true,
+  "acl_scope": "Synthetic source ACLs explicitly materialized before first baseline; AI-on matches all41 recorded Original rows. AI-off control-bit preservation remains NOT_PROVEN; R1 failure retained. No copy equality exception.",
+  "application_or_browser_or_provider_started": false,
+  "lock_released": true,
+  "recorded_at": "2026-10-16T01:53:05.458Z"
+}
