@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "kind": "source25_sitemap_bundle_reporting_composed_independent_source_review",
+  "result": "FINDINGS_CURRENT_BOUNDED_SOURCE_REVIEW",
+  "composition": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source25-sitemap-bundle-root-composition-v1/composition.json",
+    "sha256": "84f758dd15858a6e73772102dc28a043f7e1cc000e62b6590c249418e60e6c30",
+    "bytes": 1475645
+  },
+  "proposal_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source25-sitemap-bundle-reporting-proposal-v1/manifest.NOT-RUN.json",
+    "sha256": "464d838b474fe91961db36615d700966ba60c475830e0b411b5abba2a069f651",
+    "bytes": 8663
+  },
+  "contract": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source25-sitemap-bundle-reporting-proposal-v1/CONTRACT.NOT-RUN.json",
+    "sha256": "12d498c22502a2539e8706699c9470f95b2f0c8d2a9d9fedd881924f6b7634b5",
+    "bytes": 8894
+  },
+  "derivation": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source25-sitemap-bundle-reporting-proposal-v1/FULLPAIRS.NOT-A-REVIEW.json",
+    "sha256": "8e366d047b33d14975985cdc5b567a21818e73e54a3ce28a167d04cb2bb5158e",
+    "bytes": 1426364
+  },
+  "findings": [
+    {
+      "id": "S25-P2-UI-PROFILE-HEADER",
+      "priority": 2,
+      "title": "Validate the reporting profile before accepting the sitemap Blob",
+      "file": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source25-sitemap-bundle-root-composition-v1/source/web/app.js",
+        "sha256": "4c56df7797d0602ce0282efc016487091fe7b759783e403a5ca1234db0504db3",
+        "bytes": 430863
+      },
+      "start_line": 2374,
+      "end_line": 2374,
+      "body": "generateSitemapBundle validates mode/engine/count/hash syntax and later recomputes SHA(identity), but does not validate identity.directive_reporting. A JSON profile with version999 and non-boolean flags, or allfalse inactive flags, can pass with a recomputed matching digest and coherent counts. MCP reporting_header parses strict DirectiveReportingConfig and requires validate()+active(), so this shared frontdoor is weaker than the promised typed profile contract. No malformed-response runtime call was performed.",
+      "counterexample": {
+        "identity": {
+          "engine": "open-seo-spider/sitemap-generation-reporting-v1",
+          "mode": "raw",
+          "directive_reporting": {
+            "version": 999,
+            "respect_noindex": "yes",
+            "respect_canonical": false,
+            "respect_next_prev": false
+          }
+        },
+        "counts": {
+          "captured_page_observations": 1,
+          "profile_visible_page_observations": 1,
+          "profile_excluded_page_observations": 0,
+          "eligible_page_observations": 1,
+          "excluded_reporting_page_observations": 0,
+          "generated_pages": 1
+        },
+        "guards": "All displayed predicates can pass; provide SHA256 of exact JSON.stringify(identity) and syntactically valid ordinal digests."
+      },
+      "suggested_fix": "Match the strict typed profile boundary in UI: required version1/exact boolean fields, null for absence or an active strict profile; reject malformed extra/missing/inactive object profiles before download. Add source-bound malformed-profile and valid-profile async download-path regressions. Preserve count/hash/mode/EOF/owner guards."
+    }
+  ],
+  "audit": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source25-sitemap-bundle-composed-independent-source-review-v1/AUDIT.json",
+    "sha256": "e501e36f6494aa4aa746a1f810c2f44e3ca34b4edded979453d3c9c6f6bf391f",
+    "bytes": 446352
+  },
+  "scope": "Independent source/JSON/hash/fullpair/inverse + nonempty Node stdin grammar only; current441 composition. No target import/eval/VM/compiler/test/native/browser/HTTP/SQL/DB/PE/C/R/private/Git/process inspection/commonlock.",
+  "source_only": true,
+  "actual_execution": "NOT_RUN",
+  "Root_runtime_grant": null
+}

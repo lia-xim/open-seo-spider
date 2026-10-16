@@ -1,0 +1,66 @@
+{
+  "kind": "ROOT_SOURCE17_NATIVE_OUTER_CALLER_FAILURE_NOT_ACCEPTANCE",
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source17-resource-quotas-native-v17-r2'\n- 'E:\\\\CodexWork\\\\open-seo-spider-01a12ac3-20261013\\\\results\\\\source17-resource-quotas-native-v17-r2'\n\n    at Module.runSource17OwnedNative (file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/source17-native-root-owner-preparation-v4/root-native-main.mjs:23:474)\n    at async runRootSource17Native (file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/source17-native-whole-acceptance-preparation-v9/root-native-outer-caller-WIP.mjs:72:580)\n    at async launchFromRootTemplate (file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/source17-native-whole-acceptance-preparation-v9/root-native-outer-caller-WIP.mjs:78:1043)\n    at async file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/source17-native-whole-acceptance-preparation-v9/root-native-same-process-launcher-WIP.mjs:11:107",
+  "assembly_returned": false,
+  "owner": {
+    "owner_pid": 50396,
+    "lock_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-native-outer-v4/active.lock",
+    "lock_identity": {
+      "dev": "75787924",
+      "ino": "2533274790990059",
+      "birthtimeNs": "1792174966241895100"
+    },
+    "lock_sha256": "4779e68165a16cf8dac14e1b5e34225bd43a032b39b4edceb3107fb172e034c2",
+    "lock_bytes": 6569,
+    "actual_input": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source17-native-outer-caller-v17-r2/actual-input.json",
+      "sha256": "0d55ed06904a9ee6c3a5321ef3349f2d0c2ad25a637fd72108a0fc065317dce9",
+      "bytes": 19657
+    },
+    "retained_failure": true,
+    "released": false,
+    "failures": [
+      {
+        "sequence": 1,
+        "at": "2026-10-16T18:22:52.067Z",
+        "reason": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source17-resource-quotas-native-v17-r2'\n- 'E:\\\\CodexWork\\\\open-seo-spider-01a12ac3-20261013\\\\results\\\\source17-resource-quotas-native-v17-r2'\n\n    at Module.runSource17OwnedNative (file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/source17-native-root-owner-preparation-v4/root-native-main.mjs:23:474)\n    at async runRootSource17Native (file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/source17-native-whole-acceptance-preparation-v9/root-native-outer-caller-WIP.mjs:72:580)\n    at async launchFromRootTemplate (file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/source17-native-whole-acceptance-preparation-v9/root-native-outer-caller-WIP.mjs:78:1043)\n    at async file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/source17-native-whole-acceptance-preparation-v9/root-native-same-process-launcher-WIP.mjs:11:107",
+        "checkpoint_history": {
+          "count": 3,
+          "sha256": "141eb3bcc77d6eceba4cfce6c0966f47a08a95b9f8bbd2d29ef4c3b1b6aca3bd",
+          "bytes": 1407,
+          "reference": null,
+          "state": "COLLECTING_NOT_YET_SEALED"
+        },
+        "checkpoint_capture": {
+          "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source17-native-outer-caller-v17-r2\\checkpoint-history-failure-1\\capsule.json",
+          "sha256": "aa0066dfcfc448dac39bfb5ec4db425b34a27f68fde086f2e0019e392536b3df",
+          "bytes": 538
+        },
+        "checkpoint_capture_error": null,
+        "owner_pid": 50396,
+        "fd_retained": true,
+        "lock_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/combined-native-outer-v4/active.lock",
+        "lock_identity": {
+          "dev": "75787924",
+          "ino": "2533274790990059",
+          "birthtimeNs": "1792174966241895100"
+        },
+        "input_reference": {
+          "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source17-native-outer-caller-v17-r2/actual-input.json",
+          "sha256": "0d55ed06904a9ee6c3a5321ef3349f2d0c2ad25a637fd72108a0fc065317dce9",
+          "bytes": 19657
+        },
+        "release_forbidden": true
+      }
+    ],
+    "checkpoint_history": {
+      "count": 3,
+      "sha256": "141eb3bcc77d6eceba4cfce6c0966f47a08a95b9f8bbd2d29ef4c3b1b6aca3bd",
+      "bytes": 1407,
+      "reference": null,
+      "state": "COLLECTING_NOT_YET_SEALED"
+    }
+  },
+  "window_releasable": false,
+  "qualification": "No successful Native result. Actual lock file/FD is retained if acquired; process termination may close its FD, but this source never removes the failure lock."
+}
