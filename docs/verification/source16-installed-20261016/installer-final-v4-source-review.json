@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "kind": "source_v16_cold_installer_independent_review",
+  "result": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "findings": [],
+  "reviewer": "/root/installer_v2_fresh_independent_review",
+  "independent_from_source_authors": true,
+  "proposal_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\install-source16-preparation-v4\\manifest.json",
+    "sha256": "499990fae811002bd5cd69c759c22a88d8a38c88872e0e712238b93df0efa08a",
+    "bytes": 28854
+  },
+  "harness": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-source16-preparation-v4/install-cold-v16.mjs",
+    "sha256": "fb0fde704591d1b3ff8cf699b464c104068ed677352717a91d491b9e7b73b191",
+    "bytes": 41544
+  },
+  "acceptance_guard": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-source16-preparation-v4/verify-current-acceptance.mjs",
+    "sha256": "ba954c0764e5d8d4274b26c91baeee225d1ddfe89922d1fb10ccc5a498077fe2",
+    "bytes": 63921
+  },
+  "audit": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source16-final-install-cold-independent-review-v4\\AUDIT.json",
+    "sha256": "5bd5b7107e647ed3ca85ebc424b5360d0b3642d37ba3b81fd1cf22542b9ab591",
+    "bytes": 300437
+  },
+  "scope": {
+    "complete_source_payloads": 6,
+    "ancestry_and_current_derivation_pairs": 71,
+    "finite_ops": 34,
+    "retained_safety_regions_byte_exact": 11,
+    "tree_helper_single_reviewed_error_propagation_fix": true,
+    "whole_helpers_byte_exact": 2,
+    "typed_current_actual_native_audits": 6,
+    "MJS_stdin_parse_only": 4,
+    "PowerShell_text_only_parse": 2,
+    "source_only": true
+  },
+  "prior_findings_closed": true,
+  "prior_findings": {
+    "Quota_typed_array_ABI_failure": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source16-quota-review-abi-readiness-failure-root-witness-v1/proof.json",
+      "sha256": "20c27a38927fa4a83baf57aa13093d832df6ffff2b40aed1ae90519a68e61ffc",
+      "bytes": 3852
+    },
+    "Quota_typed_array_ABI_source_closed": true,
+    "prior_installer_review": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source16-final-install-cold-independent-review-v3/installer-receipt-r2.json",
+      "sha256": "57bc7a8a6e88aded465375f34b0cc21bdfcf47012bd440bcc47095eaac456465",
+      "bytes": 6641
+    },
+    "prior_cold_review": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source16-final-install-cold-independent-review-v3/cold-receipt-r2.json",
+      "sha256": "7c4e6dbfd39067c32d995c05c8f1ac6ac83c074cc86aa458e1f9405edc20134c",
+      "bytes": 4826
+    },
+    "Head_binding_failure_closed": true,
+    "prior_P1_finding": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source16-install-cold-wip-v2-r1-independent-review-v1/receipt.json",
+      "sha256": "877fd99d82a6a88b3e969a3355def6d369012954c463cdf9b24462d54d5aa9cb",
+      "bytes": 4693
+    },
+    "P1_current16_terminal_outputs_fixed": true,
+    "historical_accepted15_result_preserved": true,
+    "P2_closed": true,
+    "P2_change": {
+      "file": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\install-source16-preparation-v4\\tree-ops.ps1",
+        "sha256": "e1e386db358ce9efb21794edb7ce8513a62f068e7593267bcdfab97a95eeedc7",
+        "bytes": 5902
+      },
+      "removed_query": "  $rows=@(foreach($portNumber in @(8787,8790)){Get-NetTCPConnection -LocalPort $portNumber -State Listen -ErrorAction SilentlyContinue|Select-Object LocalAddress,LocalPort,OwningProcess})",
+      "inserted_query": "  $rows=@(Get-NetTCPConnection -State Listen -ErrorAction Stop | Where-Object { $_.LocalPort -in @(8787,8790) } | Select-Object LocalAddress,LocalPort,OwningProcess)",
+      "all_other_helper_bytes_exact": true
+    },
+    "runtime_fault_injection": false
+  },
+  "Root_invocation_contract": {
+    "status": "SOURCE_REVIEW_ONLY_NOT_ROOT_READY_NOT_INSTALLED",
+    "required_source_review_kinds": {
+      "installer": "source_v16_cold_installer_independent_review",
+      "cold": "source16_original_inventory_service_stop_and_cold_release_independent_review"
+    },
+    "Root_expected_ready_kind": "root_ready_for_source_v16_cold_install",
+    "Root_expected_ready_status": "SIX_SOURCE16_NATIVE_GATES_ACTUALLY_ACCEPTED_WITH_DIRECT_ACCEPTED_SOURCE15_ANCESTRY",
+    "actual_inputs": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source16-root-install-inputs-v1/actual-install-inputs.json",
+      "sha256": "46e0f37696ed8cd49d0f7610c7d48230512cc033f3239c3d2409aee7dec44fb2",
+      "bytes": 1727
+    },
+    "Root_input_capture": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source16-root-install-inputs-v1/root-capture-witness.json",
+      "sha256": "098d2c82e82eac66fa77949264b90a094f998e3d8e4641c00c0fd24a707823ae",
+      "bytes": 1446
+    },
+    "native_roles": [
+      "head_cdn",
+      "api_subset",
+      "segments_cdn_directory",
+      "sitemap_public_evidence",
+      "crawl_quotas",
+      "cli_resume"
+    ],
+    "required_before_private_Original_inspection": [
+      "Root must bind these fresh exact finalV4 Installer and Cold NoFs and their fullrefs before invoking the guard or private inspection",
+      "Root-only physical source431/current candidate/current Node/Chrome/runtime verification and six detailed current native/audit guard acceptance",
+      "Successful actual Root Ready output from the exact reviewed source; this NoF is not that output or a stop/install grant"
+    ],
+    "inspection_max_minutes": 10,
+    "release_max_hours": 2,
+    "private_data": "Fresh complete current jobs/DATA/ADS/ACL/stable-metadata inventory and unchanged repeated snapshots; no historical count/PID assumptions",
+    "stop": "Exact verified retained HANDLE identity with PID/createTime/image/argv/listeners and current idle<=15sec; forced termination remains classified as such, graceful/descendant drain NOT_PROVEN",
+    "install": "After successful fresh inspection and stop/cold guard, finite two-hour Root release; three exclusive direct DATA siblings/full DTO comparisons/atomic EXE-only replacement and rollback; no DATA restore; only exact inventoried SHM LastWriteTime exception in named runtime phases",
+    "original_current_state": "NOT_OBSERVED_BY_PEER: prior Root live healthy15/eight completed jobs are point-in-time observations, not future admission"
+  },
+  "qualification": "Fresh finalV4 bounded independent source NoF, exact current manifest/harness/guard and six actual role-audit schemas. P1 current16 provenance and P2 fail-open cold listener query both closed in immutable successors. No target execution, physical private/PE/DB observation, Root Ready/stop/install grant or runtime acceptance."
+}

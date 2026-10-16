@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "kind": "source17_resource_quotas_native_WIP2_independent_review",
+  "result": "FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "findings": [
+    {
+      "id": "S17-NATIVE-WIP2-UI-001",
+      "priority": 1,
+      "title": "Current UI rejects the combined resource and quota profile before either wired UI case can start",
+      "file": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source17-resource-quotas-native-preparation-wip-v2/resource-ui-WIP.mjs",
+      "start": 7,
+      "end": 7,
+      "source": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source17-resource-quotas-native-preparation-wip-v2/resource-ui-WIP.mjs",
+        "sha256": "554137d2b608783b642ff5714fc170408ff44a50aae1c83632f93a4ad983a4d7",
+        "bytes": 10077
+      },
+      "product_source": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/native-resource-quotas-composed-preview-v3/source/web/app.js",
+        "sha256": "f12bbebccfda31397dacd06f6dfe363a25211f9e62e208f3bc9d2a77a9d2494d",
+        "bytes": 417741
+      },
+      "product_lines": {
+        "quota_parse_refusal": 1377,
+        "parseAdvanced_calls_quota_parser": 1584,
+        "saveSettings_validation": 1303,
+        "catch_returns_before_close": 1313,
+        "dialog_close_only_after_validation": 1319
+      },
+      "body": "start() checks both resource_discovery_enabled and crawl_quotas_enabled, submits #settings-form and immediately waits for #settings-dialog hidden. The exact current formatted Source17 app.js parseCrawlQuotas still unconditionally throws whenever resource_discovery_enabled===true and crawl quotas are enabled (line1377). parseAdvanced invokes it (line1584); saveSettings catches the exception and returns before its dialog.close call (lines1303-1319). Consequently RQ02 UI1440 and UI320 cannot reach creation or actual resume, regardless of the future Root owner environment. Current index HTML support text alone does not change this executable JS guard.",
+      "affected_contracts": [
+        {
+          "source": {
+            "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source17-resource-quotas-native-preparation-wip-v2/CASE-INVENTORY.NOT-RUN.json",
+            "sha256": "627febfa54d90e896534ef1f51ec48fb019cbd85e4a02d39803ede638ca00131",
+            "bytes": 9062
+          },
+          "fields": [
+            "wired_source_flows[group=RQ02].frontdoors",
+            "source_flow_wired_unexecuted_groups"
+          ]
+        },
+        {
+          "source": {
+            "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source17-resource-quotas-native-preparation-wip-v2/SOURCE-CONTRACTS.NOT-RUN.json",
+            "sha256": "bcb8117767df0dbae55866d6c81eb9cff12883ba83180142cf075b9e8429086b",
+            "bytes": 8276
+          },
+          "field": "invariants[id=VISIBLE_UI_NO_INJECTION]"
+        }
+      ],
+      "required_fix": "Create a fresh immutable product proposal/driver successor whose UI validation accepts exactly the supported native internal current-contract resource+quota profile while preserving renderer/Selected/external/subdomain refusals. Rebind all changed product source counts/pins and review a real visible UI start+resume flow. Do not bypass the guard via injected state, API substitution, disabled assertions or a false WIP NoF.",
+      "runtime_reproduction": "NOT_RUN; deterministic source/ABI contradiction only",
+      "scope": "Current WIP hard guards still prevent operational admission; no Original or runtime action performed."
+    }
+  ],
+  "proposal_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source17-resource-quotas-native-preparation-wip-v2/WIP-INDEX.json",
+    "sha256": "3b57e0faf027f774c401bf5037c489496e5226fa050eadccc75ecadc09e696ee",
+    "bytes": 15618
+  },
+  "harness": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source17-resource-quotas-native-preparation-wip-v2/native-resource-quotas-WIP.mjs",
+    "sha256": "8e636bb1462f32979dc3102e3b544c8c1ac948bb61d58f53c2e5e2ac3d51ac1a",
+    "bytes": 433
+  },
+  "admission": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source17-resource-quotas-native-preparation-wip-v2/admission-WIP.mjs",
+    "sha256": "065cacda00359d6fb5fa57ccd54adbe76f0ca5cc2e7cc8e237f0faae123c9c22",
+    "bytes": 645
+  },
+  "derivation": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source17-resource-quotas-native-preparation-wip-v2/AUTHOR-DERIVATION.NOT-A-REVIEW.json",
+    "sha256": "19ee895172d5b81b79b2a038f5c49f166f024bc721654c76bde3bb848b0fe606",
+    "bytes": 654212
+  },
+  "case_inventory": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source17-resource-quotas-native-preparation-wip-v2/CASE-INVENTORY.NOT-RUN.json",
+    "sha256": "627febfa54d90e896534ef1f51ec48fb019cbd85e4a02d39803ede638ca00131",
+    "bytes": 9062
+  },
+  "source_contracts": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source17-resource-quotas-native-preparation-wip-v2/SOURCE-CONTRACTS.NOT-RUN.json",
+    "sha256": "bcb8117767df0dbae55866d6c81eb9cff12883ba83180142cf075b9e8429086b",
+    "bytes": 8276
+  },
+  "helper_independent_source_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source17-live-WAL-helper-independent-source-review-v1/receipt-v2.json",
+    "sha256": "0885822e7b0bfe2c65f67c76e25868258be0e5849513db5ee7451f10e99370aa",
+    "bytes": 3745
+  },
+  "audit": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source17-resource-quotas-native-WIP2-independent-review-v1/AUDIT.json",
+    "sha256": "1a45152ec6713deb75af07231e0662eab703af3064b7d19bb02df22a1975fa38",
+    "bytes": 9624
+  },
+  "checked": {
+    "successor_whole_pairs": 22,
+    "exact_successors": 21,
+    "entry_successor_changes": 1,
+    "new_ABSENT_pairs": 12,
+    "port_basis_pairs": 3,
+    "finite_operations_including_port_basis": 4,
+    "original_control_bodies_exact": 19,
+    "protected_regions_exact": 2,
+    "UI_readiness_bytes_exact": 3547,
+    "fresh_stdin_parsers0": 34,
+    "formatted_public_anchor_pins": 14
+  },
+  "status": "HARD_WIP_NOT_ADMITTED_INCOMPLETE_ROOT_ENVIRONMENT_AND_CASES",
+  "overall_NoF": false,
+  "Root_grant": null,
+  "actual_synthetic_WAL_test": null,
+  "actual_Native17": null,
+  "no_actions": {
+    "prepared_or_target_imports_evaluation_calls": 0,
+    "DB_WAL_SHM_reads_hashes_or_calls": 0,
+    "PE_C_R_Original_private_proofs_DTO_or_native_outputs_reads_hashes": 0,
+    "Git_HTTP_browser_locks_compiler_native_calls": 0
+  },
+  "qualification": "UI source contradiction blocks overall source NoF. Separate helper source NoF is narrow and supplies no execution grant/capability/native PASS. Fresh immutable repair and independent review required."
+}

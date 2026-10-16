@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "kind": "source16_postinstall_private_root_verifier_independent_source_review",
+  "result": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "findings": [],
+  "reviewer": "/root/installer_v2_fresh_independent_review",
+  "independent_from_verifier_author": true,
+  "proposal_manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source16-installed-root-verifier-preparation-final-v2\\manifest.json",
+    "sha256": "7e646b5be3bcd1c7846ef7a5ff953079d4eb8832a54aabead653683a8750d378",
+    "bytes": 7324
+  },
+  "harness": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source16-installed-root-verifier-preparation-final-v2/verify-source16-installed-root.mjs",
+    "sha256": "ce0aad2e120b31ed8e90a7c9aec2f2bce4f5d327ff66c616f0ecde4bfce8059e",
+    "bytes": 19557
+  },
+  "derivation": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source16-installed-root-verifier-preparation-final-v2/DERIVATION.json",
+    "sha256": "08ee99e0f9d64fa67b978900421b1a27d13d6f5ca1a8857bd02a577bd695b38e",
+    "bytes": 65348
+  },
+  "audit": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source16-installed-root-verifier-final-v2-independent-review-v1\\AUDIT.json",
+    "sha256": "3efc5e09639310ff459f113a4fbb14ddbf8c8109fbd102b9173520b45fb111fd",
+    "bytes": 21562
+  },
+  "parent_final_preparation": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source16-installed-root-verifier-preparation-final-v1/manifest.json",
+    "sha256": "1ba58549bcef86bebcc66939b752f7a47961e13013cf271cc9ff5a1b099c8a99",
+    "bytes": 5995
+  },
+  "parent_final_source_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source16-installed-root-verifier-final-independent-review-v1/receipt.json",
+    "sha256": "fc7e0085e3531bca8c8d20fc792719b0c932b6b10d7fa02ab04ee4dbd8de57df",
+    "bytes": 6955
+  },
+  "known_final_package_metadata": {
+    "installer": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/install-source16-preparation-v4/manifest.json",
+      "sha256": "499990fae811002bd5cd69c759c22a88d8a38c88872e0e712238b93df0efa08a",
+      "bytes": 28854
+    },
+    "Cold": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source16-cold-root-preparation-v4/manifest.json",
+      "sha256": "e12cb1aa800a6e64ffec7d3dfa249ffc039a2b86aa001e28aeede63a0d4ca8c3",
+      "bytes": 5353
+    }
+  },
+  "known_matching_package_source_reviews": {
+    "installer": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source16-final-install-cold-independent-review-v4/installer-receipt.json",
+      "sha256": "737bf9aa4fca973d77a73a6c0535ced748d5078cec55d6d2d4d4996e42dee6bb",
+      "bytes": 6705
+    },
+    "Cold": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source16-final-install-cold-independent-review-v4/cold-receipt.json",
+      "sha256": "20b2ac9711f77bf676daea658baca44778b1b53b883c3f223097b1b933d6798c",
+      "bytes": 4820
+    }
+  },
+  "scope": {
+    "complete_source_pairs": 1,
+    "finite_call_edits": 2,
+    "exact_inverses": 2,
+    "all_other_source_bytes_identical": true,
+    "retained_comparison_guard_witnesses": 39,
+    "optional_length_only_at_two_recorded_reference_joins": true,
+    "current_full_NoF_validation_unchanged": true,
+    "late_Root_refs": 12,
+    "template_all_NULL": true,
+    "stdin_parser_only": 1,
+    "private_actual_evidence_validation": false
+  },
+  "required_late_Root_refs": [
+    "verifier_preparation",
+    "verifier_source_review",
+    "final_installer_preparation",
+    "final_installer_source_review",
+    "final_Cold_preparation",
+    "final_Cold_source_review",
+    "actual_inspection",
+    "actual_Ready",
+    "actual_stop",
+    "actual_release",
+    "actual_install",
+    "actual_install_process_close"
+  ],
+  "Root_grant": null,
+  "actual_verifier_execution": "NOT_RUN_BY_REVIEWER",
+  "actual_private_installation_validation": "NOT_PERFORMED_BY_THIS_SOURCE_REVIEW",
+  "no_actions": {
+    "target_imports_calls": 0,
+    "private_Root_inputs_proofs_DTOs_observations_or_Original_reads_hashes": 0,
+    "physical_PE_DB_WAL_SHM_C_R_Git_HTTP_lock_actions": 0,
+    "own_MJS_stdin_parser_processes": 2,
+    "distinct_current_MJS_sources_parsed": 1
+  },
+  "qualifications": [
+    "Fresh narrow source NoF over finalV2 exact source/preparation only; no target/helper execution, private evidence read/hash or runtime validation.",
+    "Only the two immutable recorded review-reference joins permit an omitted recorded byte count. Path and SHA must still match; any present recorded byte count must match. Current supplied NoF fullref remains mandatory and is independently read/hash/size-checked plus exact kind/result/findings/current-MF validation before either join.",
+    "All remaining source bytes, fullref joins,39 protected DATA/DTO/metadata/SHM/process guards and twelve mandatory late Root-input requirements are preserved.",
+    "Root alone supplies fresh actual inputs and validates private contents. Verifier actual completion and postinstall OS identity/liveness remain separate Root observations; no own future close or broad parity claim."
+  ]
+}
