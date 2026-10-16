@@ -1,0 +1,532 @@
+{
+  "kind": "Root_actual_owned_fixed_blob_download_transport_diagnostic",
+  "result": "DIAGNOSTIC_COMPLETED_NOT_PRODUCT_ACCEPTANCE",
+  "manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source18-directive-native-smoke-preparation-v6/manifest.json",
+    "sha256": "ccd2d18ae05f5df77de0b506041d89c092a7086b97414748c332178aa7b8604c",
+    "bytes": 8169
+  },
+  "review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/Source18V6-independent-source-review-v1/receipt.json",
+    "sha256": "099e9a8301cb777686f11f6b4cec3024c2b88e4aebd4ad360cef9cada3af3417",
+    "bytes": 4151
+  },
+  "release": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-blob-download-diagnostic-v2/release.json",
+    "sha256": "05bf26de1b7310895139093e016473a038fca262c9443a7f3c7aa77f1be5b4b5",
+    "bytes": 2288
+  },
+  "runtime": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source18-directive-native-smoke-preparation-v6/runtime.mjs",
+    "sha256": "19c9da9a91d370eab3b44445272a6727b252f98f189db85000f2a15f7d453952",
+    "bytes": 20580
+  },
+  "node": {
+    "path": "C:\\Program Files\\nodejs\\node.exe",
+    "sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5",
+    "bytes": 91694408
+  },
+  "chrome": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\browser-runtime\\chrome-155.0.8059.80-36a30716-source12-v1\\chrome.exe",
+    "sha256": "36a30716f0994b377f1ce6b47cfe35399b9719e31d597fe0ea0d8f3b62aed532",
+    "bytes": 4600472
+  },
+  "pp": {
+    "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\outputs\\open-seo-spider\\renderer\\node_modules\\playwright-core\\package.json",
+    "sha256": "1d6b6f80ffb0c52865af0f9fe01abf2140df019e49ae6ac134605e462d583f3a",
+    "bytes": 876
+  },
+  "entry": {
+    "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\outputs\\open-seo-spider\\renderer\\node_modules\\playwright-core/index.js",
+    "sha256": "a58fb2cec4293e7dcf73c58a179898a4f3986666451a19da4e731fa3af63265b",
+    "bytes": 697
+  },
+  "runner": {
+    "path": "C:\\Users\\matth\\Documents\\Codex\\2026-10-11\\https-github-com-morluto-rea-https\\work\\diagnose-owned-blob-download-root-v2.mjs",
+    "sha256": "7e84a2a64616119f28d65359ab4caa893c927be3c0565b6654526c00948bba86",
+    "bytes": 10576
+  },
+  "cases": [
+    {
+      "mode": "baseline",
+      "index": 0,
+      "expected_sha256": "25b894b07248deb86d8feffb9b9d6922187fbaa2380c3b09721f121ae8675302",
+      "expected_bytes": 50,
+      "command": null,
+      "download": {
+        "url": "blob:http://127.0.0.1:56458/a18c993c-0883-4a1a-bc6c-deb63d2bdffc",
+        "suggested_filename": "diagnostic.json",
+        "failure": null,
+        "failure_settled": true,
+        "save_settled": true,
+        "save_error": null,
+        "saved": {
+          "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-blob-download-diagnostic-v2/saved-baseline.json",
+          "sha256": "25b894b07248deb86d8feffb9b9d6922187fbaa2380c3b09721f121ae8675302",
+          "bytes": 50
+        }
+      },
+      "error": null,
+      "physical_artifacts": [
+        {
+          "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-blob-download-diagnostic-v2/playwright-artifacts/bc89262b-ff89-4f24-b102-57d7c2a2e8a4",
+          "sha256": "25b894b07248deb86d8feffb9b9d6922187fbaa2380c3b09721f121ae8675302",
+          "bytes": 50
+        }
+      ],
+      "exact_known_payload_artifact": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-blob-download-diagnostic-v2/playwright-artifacts/bc89262b-ff89-4f24-b102-57d7c2a2e8a4",
+        "sha256": "25b894b07248deb86d8feffb9b9d6922187fbaa2380c3b09721f121ae8675302",
+        "bytes": 50
+      }
+    },
+    {
+      "mode": "native-allowAndName",
+      "index": 1,
+      "expected_sha256": "25b894b07248deb86d8feffb9b9d6922187fbaa2380c3b09721f121ae8675302",
+      "expected_bytes": 50,
+      "command": {
+        "method": "Browser.setDownloadBehavior",
+        "params": {
+          "behavior": "allowAndName",
+          "browserContextId": "3D777B8F6734AD5F8E62919725FAC3BB",
+          "downloadPath": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-blob-download-diagnostic-v2\\playwright-artifacts",
+          "eventsEnabled": true
+        },
+        "result": {}
+      },
+      "download": {
+        "url": "blob:http://127.0.0.1:56458/093f3555-c7f6-42dd-980c-9491c8e784d9",
+        "suggested_filename": "diagnostic.json",
+        "failure": null,
+        "failure_settled": true,
+        "save_settled": true,
+        "save_error": null,
+        "saved": {
+          "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-blob-download-diagnostic-v2/saved-native-allowAndName.json",
+          "sha256": "25b894b07248deb86d8feffb9b9d6922187fbaa2380c3b09721f121ae8675302",
+          "bytes": 50
+        }
+      },
+      "error": null,
+      "physical_artifacts": [
+        {
+          "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-blob-download-diagnostic-v2/playwright-artifacts/02c6296b-fa2b-4446-974e-113e73c023a0",
+          "sha256": "25b894b07248deb86d8feffb9b9d6922187fbaa2380c3b09721f121ae8675302",
+          "bytes": 50
+        },
+        {
+          "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-blob-download-diagnostic-v2/playwright-artifacts/bc89262b-ff89-4f24-b102-57d7c2a2e8a4",
+          "sha256": "25b894b07248deb86d8feffb9b9d6922187fbaa2380c3b09721f121ae8675302",
+          "bytes": 50
+        }
+      ],
+      "exact_known_payload_artifact": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-blob-download-diagnostic-v2/playwright-artifacts/bc89262b-ff89-4f24-b102-57d7c2a2e8a4",
+        "sha256": "25b894b07248deb86d8feffb9b9d6922187fbaa2380c3b09721f121ae8675302",
+        "bytes": 50
+      }
+    },
+    {
+      "mode": "native-allow",
+      "index": 2,
+      "expected_sha256": "25b894b07248deb86d8feffb9b9d6922187fbaa2380c3b09721f121ae8675302",
+      "expected_bytes": 50,
+      "command": {
+        "method": "Browser.setDownloadBehavior",
+        "params": {
+          "behavior": "allow",
+          "browserContextId": "3D777B8F6734AD5F8E62919725FAC3BB",
+          "downloadPath": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-blob-download-diagnostic-v2\\playwright-artifacts",
+          "eventsEnabled": true
+        },
+        "result": {}
+      },
+      "download": {
+        "url": "blob:http://127.0.0.1:56458/febcd2f7-bdd1-485b-b340-0e7c8c47b548",
+        "suggested_filename": "diagnostic.json",
+        "failure": null,
+        "failure_settled": true,
+        "save_settled": true,
+        "save_error": "Error: download.saveAs: ENOENT: no such file or directory, copyfile 'E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-blob-download-diagnostic-v2\\playwright-artifacts\\6afce461-f783-4626-93a5-0edd718871a8' -> 'E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-blob-download-diagnostic-v2\\saved-native-allow.json'",
+        "saved": null
+      },
+      "error": null,
+      "physical_artifacts": [
+        {
+          "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-blob-download-diagnostic-v2/playwright-artifacts/02c6296b-fa2b-4446-974e-113e73c023a0",
+          "sha256": "25b894b07248deb86d8feffb9b9d6922187fbaa2380c3b09721f121ae8675302",
+          "bytes": 50
+        },
+        {
+          "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-blob-download-diagnostic-v2/playwright-artifacts/bc89262b-ff89-4f24-b102-57d7c2a2e8a4",
+          "sha256": "25b894b07248deb86d8feffb9b9d6922187fbaa2380c3b09721f121ae8675302",
+          "bytes": 50
+        },
+        {
+          "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-blob-download-diagnostic-v2/playwright-artifacts/diagnostic.json",
+          "sha256": "25b894b07248deb86d8feffb9b9d6922187fbaa2380c3b09721f121ae8675302",
+          "bytes": 50
+        }
+      ],
+      "exact_known_payload_artifact": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-blob-download-diagnostic-v2/playwright-artifacts/diagnostic.json",
+        "sha256": "25b894b07248deb86d8feffb9b9d6922187fbaa2380c3b09721f121ae8675302",
+        "bytes": 50
+      }
+    }
+  ],
+  "events": [
+    {
+      "name": "Browser.downloadWillBegin",
+      "value": {
+        "frameId": "535D9DA08A2A369F03B988C9ABB935E0",
+        "guid": "02c6296b-fa2b-4446-974e-113e73c023a0",
+        "url": "blob:http://127.0.0.1:56458/093f3555-c7f6-42dd-980c-9491c8e784d9",
+        "suggestedFilename": "diagnostic.json"
+      },
+      "at": "2026-10-16T16:46:21.236Z"
+    },
+    {
+      "name": "Browser.downloadProgress",
+      "value": {
+        "guid": "02c6296b-fa2b-4446-974e-113e73c023a0",
+        "totalBytes": 50,
+        "receivedBytes": 0,
+        "state": "inProgress"
+      },
+      "at": "2026-10-16T16:46:21.236Z"
+    },
+    {
+      "name": "Browser.downloadProgress",
+      "value": {
+        "guid": "02c6296b-fa2b-4446-974e-113e73c023a0",
+        "totalBytes": 50,
+        "receivedBytes": 50,
+        "state": "inProgress"
+      },
+      "at": "2026-10-16T16:46:21.236Z"
+    },
+    {
+      "name": "Browser.downloadProgress",
+      "value": {
+        "guid": "02c6296b-fa2b-4446-974e-113e73c023a0",
+        "totalBytes": 50,
+        "receivedBytes": 50,
+        "state": "inProgress"
+      },
+      "at": "2026-10-16T16:46:21.236Z"
+    },
+    {
+      "name": "Browser.downloadProgress",
+      "value": {
+        "guid": "02c6296b-fa2b-4446-974e-113e73c023a0",
+        "totalBytes": 50,
+        "receivedBytes": 50,
+        "state": "inProgress"
+      },
+      "at": "2026-10-16T16:46:21.240Z"
+    },
+    {
+      "name": "Browser.downloadProgress",
+      "value": {
+        "guid": "02c6296b-fa2b-4446-974e-113e73c023a0",
+        "totalBytes": 50,
+        "receivedBytes": 50,
+        "state": "inProgress"
+      },
+      "at": "2026-10-16T16:46:21.273Z"
+    },
+    {
+      "name": "Browser.downloadProgress",
+      "value": {
+        "guid": "02c6296b-fa2b-4446-974e-113e73c023a0",
+        "totalBytes": 50,
+        "receivedBytes": 50,
+        "state": "completed",
+        "filePath": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-blob-download-diagnostic-v2\\playwright-artifacts\\02c6296b-fa2b-4446-974e-113e73c023a0"
+      },
+      "at": "2026-10-16T16:46:21.298Z"
+    },
+    {
+      "name": "Browser.downloadWillBegin",
+      "value": {
+        "frameId": "535D9DA08A2A369F03B988C9ABB935E0",
+        "guid": "6afce461-f783-4626-93a5-0edd718871a8",
+        "url": "blob:http://127.0.0.1:56458/febcd2f7-bdd1-485b-b340-0e7c8c47b548",
+        "suggestedFilename": "diagnostic.json"
+      },
+      "at": "2026-10-16T16:46:21.367Z"
+    },
+    {
+      "name": "Browser.downloadProgress",
+      "value": {
+        "guid": "6afce461-f783-4626-93a5-0edd718871a8",
+        "totalBytes": 50,
+        "receivedBytes": 0,
+        "state": "inProgress"
+      },
+      "at": "2026-10-16T16:46:21.367Z"
+    },
+    {
+      "name": "Browser.downloadProgress",
+      "value": {
+        "guid": "6afce461-f783-4626-93a5-0edd718871a8",
+        "totalBytes": 50,
+        "receivedBytes": 50,
+        "state": "inProgress"
+      },
+      "at": "2026-10-16T16:46:21.367Z"
+    },
+    {
+      "name": "Browser.downloadProgress",
+      "value": {
+        "guid": "6afce461-f783-4626-93a5-0edd718871a8",
+        "totalBytes": 50,
+        "receivedBytes": 50,
+        "state": "inProgress"
+      },
+      "at": "2026-10-16T16:46:21.368Z"
+    },
+    {
+      "name": "Browser.downloadProgress",
+      "value": {
+        "guid": "6afce461-f783-4626-93a5-0edd718871a8",
+        "totalBytes": 50,
+        "receivedBytes": 50,
+        "state": "inProgress"
+      },
+      "at": "2026-10-16T16:46:21.372Z"
+    },
+    {
+      "name": "Browser.downloadProgress",
+      "value": {
+        "guid": "6afce461-f783-4626-93a5-0edd718871a8",
+        "totalBytes": 50,
+        "receivedBytes": 50,
+        "state": "inProgress"
+      },
+      "at": "2026-10-16T16:46:21.407Z"
+    },
+    {
+      "name": "Browser.downloadProgress",
+      "value": {
+        "guid": "6afce461-f783-4626-93a5-0edd718871a8",
+        "totalBytes": 50,
+        "receivedBytes": 50,
+        "state": "completed",
+        "filePath": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\owned-blob-download-diagnostic-v2\\playwright-artifacts\\diagnostic.json"
+      },
+      "at": "2026-10-16T16:46:21.438Z"
+    }
+  ],
+  "website": [
+    {
+      "method": "GET",
+      "path": "/diag",
+      "query": "?case=0",
+      "status": 200,
+      "bytes": 513,
+      "request_complete": true,
+      "response_finished": true,
+      "response_closed": true
+    },
+    {
+      "method": "GET",
+      "path": "/favicon.ico",
+      "query": "",
+      "status": 200,
+      "bytes": 0,
+      "request_complete": true,
+      "response_finished": true,
+      "response_closed": true
+    },
+    {
+      "method": "GET",
+      "path": "/diag",
+      "query": "?case=1",
+      "status": 200,
+      "bytes": 513,
+      "request_complete": true,
+      "response_finished": true,
+      "response_closed": true
+    },
+    {
+      "method": "GET",
+      "path": "/favicon.ico",
+      "query": "",
+      "status": 200,
+      "bytes": 0,
+      "request_complete": true,
+      "response_finished": true,
+      "response_closed": true
+    },
+    {
+      "method": "GET",
+      "path": "/diag",
+      "query": "?case=2",
+      "status": 200,
+      "bytes": 513,
+      "request_complete": true,
+      "response_finished": true,
+      "response_closed": true
+    },
+    {
+      "method": "GET",
+      "path": "/favicon.ico",
+      "query": "",
+      "status": 200,
+      "bytes": 0,
+      "request_complete": true,
+      "response_finished": true,
+      "response_closed": true
+    }
+  ],
+  "actual_drain": {
+    "children": [
+      {
+        "label": "chrome",
+        "pid": 38672,
+        "spawned": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "close": {
+          "code": 0,
+          "signal": null
+        },
+        "forced": false,
+        "errors": [],
+        "stdin": {
+          "eof_sent": false,
+          "finished": false,
+          "closed": true,
+          "error": null
+        },
+        "events": [
+          {
+            "event": "spawn",
+            "at": 1792169180249
+          },
+          {
+            "event": "exit",
+            "code": 0,
+            "signal": null,
+            "at": 1792169181580
+          },
+          {
+            "event": "close",
+            "code": 0,
+            "signal": null,
+            "at": 1792169181583
+          }
+        ],
+        "logs": [
+          {
+            "name": "stdout",
+            "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-blob-download-diagnostic-v2/chrome.stdout.log",
+            "bytes": 0,
+            "end": true,
+            "closed": true,
+            "error": null,
+            "write_error": null,
+            "fd_closed": true,
+            "actual_fd_null": true,
+            "raw": {
+              "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-blob-download-diagnostic-v2/chrome.stdout.log",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "bytes": 0
+            }
+          },
+          {
+            "name": "stderr",
+            "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-blob-download-diagnostic-v2/chrome.stderr.log",
+            "bytes": 100,
+            "end": true,
+            "closed": true,
+            "error": null,
+            "write_error": null,
+            "fd_closed": true,
+            "actual_fd_null": true,
+            "raw": {
+              "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/owned-blob-download-diagnostic-v2/chrome.stderr.log",
+              "sha256": "3a7b4221828bd5d12110f10ea06f3d410f37315717c1a1798f99a62b8b24e764",
+              "bytes": 100
+            }
+          }
+        ]
+      }
+    ],
+    "browser": {
+      "closed": true,
+      "disconnected": true,
+      "events": [
+        {
+          "event": "open"
+        },
+        {
+          "event": "context_close_resolved"
+        },
+        {
+          "event": "Browser.close_ack",
+          "id": 1
+        },
+        {
+          "event": "close",
+          "code": 1006,
+          "wasClean": false,
+          "closeAck": true,
+          "pending": 0
+        },
+        {
+          "event": "playwright_disconnected"
+        }
+      ],
+      "socket_errors": [
+        {
+          "event": "error",
+          "message": "",
+          "native_name": "TypeError",
+          "ready_state": 3,
+          "closeIntent": true,
+          "closeAck": true,
+          "pending": 0
+        }
+      ]
+    },
+    "fixture_closed": true,
+    "listener_closed": true,
+    "socket_retained": 0,
+    "HTTP_retained": 0,
+    "failures": []
+  },
+  "checkpoints": [
+    {
+      "phase": "BEFORE_GENERIC_RUNTIME_IMPORT",
+      "at": "2026-10-16T16:46:20.220Z"
+    },
+    {
+      "phase": "BEFORE_OWNED_CHILD_chrome",
+      "at": "2026-10-16T16:46:20.236Z"
+    },
+    {
+      "phase": "BEFORE_DIAGNOSTIC_baseline",
+      "at": "2026-10-16T16:46:20.943Z"
+    },
+    {
+      "phase": "BEFORE_DIAGNOSTIC_native-allowAndName",
+      "at": "2026-10-16T16:46:21.174Z"
+    },
+    {
+      "phase": "BEFORE_DIAGNOSTIC_native-allow",
+      "at": "2026-10-16T16:46:21.303Z"
+    },
+    {
+      "phase": "AFTER_ALL_ACTUAL_DIAGNOSTIC_DRAIN",
+      "at": "2026-10-16T16:46:21.587Z"
+    }
+  ],
+  "product_acceptance": false,
+  "manufacturer_parity": "NOT_PROVEN"
+}

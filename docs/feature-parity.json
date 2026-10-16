@@ -6858,7 +6858,7 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-16T15:48:21.664Z",
+  "last_verified_at": "2026-10-16T17:06:45.090Z",
   "current_work": [
     {
       "id": "combined-source-v15-20261016",
@@ -9130,7 +9130,7 @@
       "priority": 1,
       "status": "SOURCE17_SIX_NATIVE_REGRESSIONS_PASS_EXTENDED_PENDING",
       "title_de": "Native interne Ressourcen-Crawls mit dauerhaften Quoten verbinden",
-      "summary_de": "Source17 besteht1559 Tests, vier Renderer-Gates, Format, Clippy, Build und sechs aktuelle Nativregressionen. Vier zusätzliche Testhilfe-Fehlversuche bleiben erhalten. Die Initialkopie besteht jetzt; beim CLI-Lesen änderte sich nur eine SHM-Schreibzeit. Eine eng begrenzte und unabhängig geprüfte Korrektur protokolliert diese Differenz mit ausdrücklich falschem Vollmetadaten-Gleichheitsflag; aktuelle Verknüpfungen und neue Ausführung folgen. Neue Ressourcenmatrix und Installation fehlen; lokal läuft Source16.",
+      "summary_de": "Sieben Helper-Gesamtversuche bleiben fehlgeschlagen erhalten. Im sechsten und siebten Lauf bestehen alle23 unveränderten Hauptkontrollen. Im siebten besteht zusätzlich der ausdrücklich abgeleitete Test ohne WAL-Begleitdateien; der Test mit vorhandener WAL-Datei scheitert beim Hashen an einer Windows-Dateisperre. Der Aufbau dieses dritten Tests wird korrigiert. Vollständige25er-Abnahme,Ressourcenmatrix und Installation fehlen; lokal läuftSource16.",
       "feature_ids": [
         "crawl.resources",
         "crawl.limits"
@@ -9152,12 +9152,12 @@
         "Alle sechs bestehenden Source17-Nativregressionen tatsächlich ausgeführt und unabhängig anhand begrenzter gespeicherter Rohbelege ohne Befund geprüft. Die neue Ressourcenmatrix und Installation werden dadurch nicht ersetzt."
       ],
       "pending_acceptance_de": [
-        "Zusätzliche Testhilfe mit aktuellen Referenzen erneut ausführen: nur die beobachtete Schreibzeit der vorhandenen SHM-Datei darf beim Lesen abweichen; Inhalt, Inventar und alle anderen Metadaten bleiben strikt.",
-        "Vollständige Ressourcen-/Quoten-Nativmatrix mit echten Browser/API/CLI/MCP-Zugriffen, Pause/Cancel/Cold-Neustart und gezielten Fehler-/Korruptionsfällen ausführen; Quellcode oder Hilfsproben ersetzen diese Abnahme nicht.",
-        "Source17 erst nach bestandenen Nativtests und Daten erhaltender Kompatibilitätsprüfung lokal installieren; gespeicherte Berichte, Projekte, Einstellungen und vollständige Dateiintegrität prüfen.",
-        "Renderer-, Selected- und externe CDN-/Ressourcenziele bleiben gesonderte offene Kombinationen."
+        "Dateisperre im ausdrücklich abgeleiteten WAL-Testaufbau korrigieren;23 Hauptkontrollen und2 qualifizierte WAL-Zustandskontrollen gemeinsam abnehmen.",
+        "Aktuelle Whole-/Caller-/Inventarverknüpfungen und zusätzliche Ressourcenmatrix abschließen.",
+        "Aktuelle eigene Datenprüfung, Produktübernahme und Installation abschließen."
       ],
       "documentation": [
+        "docs/verification/source19-directory-and-source18-native-20261016/index.json",
         "docs/verification/source18-reporting-candidate-20261016/index.json",
         "docs/verification/source18-directive-focused-20261016/index.json",
         "docs/verification/source17-six-native-audits-20261016/index.json",
@@ -9186,16 +9186,16 @@
         "UI_admission": "V4_IMPLEMENTED_SEVEN_VM_REGRESSIONS_PASS_REAL_NATIVE_PENDING",
         "current_proposal": "V4_ACTUAL_PRIVATE_PUBLICATION_AUDITED",
         "native_regressions": "PASS_SIX_CURRENT_ACTUAL_BOUNDED_SCOPES_INDEPENDENTLY_AUDITED",
-        "closed_provider_helper": "FOUR_FAILED_ATTEMPTS_PRESERVED_READ_PHASE_REPAIR_REVIEWED_CURRENT_JOINS_AND_ACTUAL_PENDING"
+        "closed_provider_helper": "SEVEN_FAILED_WRAPPERS_PRESERVED_ATTEMPT7_GENUINE23_AND_DERIVED_ABSENT_PASS_PRESENT_FAIL"
       },
       "reference_parity": "NOT_PROVEN"
     },
     {
       "id": "directive-reporting-20261016",
       "priority": 1,
-      "status": "ISOLATED_REVIEWED_PATCH_FULL_SUITE_BUILD_PASS_NATIVE_PENDING",
+      "status": "ISOLATED_REPORTING_NATIVE_PASS_DIRECTORY_BUILD_PASS_REMAINING_CONSUMERS_PENDING",
       "title_de": "Berichtsfilter für Noindex, Canonicals und Pagination ergänzen",
-      "summary_de": "434 isolierte Quellen und ein noch nicht angewendeter Patch mit elf Änderungen und zwei neuen Dateien sind geprüft. Gespeicherte Berichtsprofile lassen sich in den Einstellungsentwurf laden; Linkmetriken, strukturierte Daten, Fragment- und Antwortberichte verwenden die Sichtbarkeitsregeln mit vollständiger Rohdatenbasis. 1570 Tests, vier Chromium-Gates, Format, strenges Clippy, optimierter Kandidaten-Build,29 UI-VM-Gruppen mit81 Varianten und16 bestehende UI-Regressionen bestehen. Echte App-/Browserprüfung, weitere Spezialberichte, Produktübernahme und Installation bleiben offen.",
+      "summary_de": "Berichtsprofile bestehen jetzt echte8 API-/MCP-/CLI-Referenzprofile,8 Browser-Crawls und16 vollständig geprüfte Exportdateien mit unabhängigem tatsächlichem Audit. Der isolierte Verzeichnis-Kandidat besteht1582 Tests, vier Renderer-Gates, Format,Clippy und Build. Sein erster echter Browserlauf prüft eine Ansicht samtCSV und scheitert danach an einem Console404; Wiederholung mit ergänzt lokalem Icon-Endpunkt bleibt offen. Weitere Spezialberichte, Produktübernahme und Installation stehen aus.",
       "feature_ids": [
         "robots.traversal"
       ],
@@ -9207,15 +9207,18 @@
         "Gespeicherte Backend-Profile über explizite UI-Aktion laden; strikte Prüfung vor Änderungen am Entwurf, bestehendes Speichern und getrennte Discovery-Einstellungen erhalten.",
         "Analysen nach vollständiger Berechnung filtern; ursprüngliche Linkwerte, Zielbeziehungen und versteckte Fragmentziele erhalten.",
         "Vollständige aktuelle Suite:1570/0/0, vier tatsächliche Chromium-Gates, Format und Clippy mit -D warnings; optimierter Kandidaten-Build bestanden.",
-        "29 UI-VM-Gruppen mit81 Varianten und16 bestehende UI-Regressionen auf allen fünf aktuellen Zielen bestanden; isolierter Produktpatch per git apply --check geprüft."
+        "29 UI-VM-Gruppen mit81 Varianten und16 bestehende UI-Regressionen auf allen fünf aktuellen Zielen bestanden; isolierter Produktpatch per git apply --check geprüft.",
+        "Echter Source18-Nativlauf:8 Referenzprofile überAPI/MCP/offlineCLI und8 dazugehörige Browser-Crawls;16 echte gespeicherte JSON-Exporte,128 Fixture-GETs und11 natürliche Kindprozess-Enden geprüft; aktuelles unabhängiges tatsächliches Audit bestanden.",
+        "Isolierter Source19-Verzeichniskandidat:1582/0/0,804 Pflichtnamen, vier echte Renderer-Gates, Format,Clippy mit-D warnings und optimierter Build bestanden;19-Dateien-Patch geprüft und noch nicht angewendet."
       ],
       "pending_acceptance_de": [
-        "Aktuelle Native17-Ressourcenmatrix abschließen; die sechs bestehenden Nativregressionen ersetzen die zusätzliche Matrix nicht.",
-        "Neue Source18-Anwendung über echte API-/CLI-/MCP-Zugriffe und Browser-Profilübernahme prüfen.",
-        "Spezialberichte für Verzeichnisbaum, Segmente, N-Gramme, Inhalte, Link-/Ressourcenquellen und Sitemap-Bundle ergänzen; Vergleich und explizite Mapping-Audits benötigen gesonderte Regeln.",
-        "Den geprüften Patch erst nach den verbleibenden Abnahmen übernehmen und Daten erhaltend installieren."
+        "Verzeichnislauf nach lokalem Icon-Endpunkt vollständig wiederholen:2 frische Crawls,6 Ansichten,6 echteCSV-Dateien,Navigation und veraltete Token.",
+        "Source21-Segmente mit Modus-/Profilbindung über gemeinsamen Dienst weiterprüfen:15 neue Quelltestfälle,formatierte Root-Komposition und All-Target-Typecheck bestehen; vollständige Suite läuft;Build und echteAPI/CLI/MCP/UI-Abnahme fehlen.",
+        "Verbleibende Spezialverbraucher:N-Gramme,Inhalte,Link-/Ressourcenquellen,Sitemap-Bundle und opt-inVergleich ergänzen; explizite Mapping-Audits bleiben rohe Bestandsprüfung.",
+        "Aktuelle Ressourcenmatrix abschließen,geprüften Gesamtpatch übernehmen und Daten erhaltend installieren."
       ],
       "documentation": [
+        "docs/verification/source19-directory-and-source18-native-20261016/index.json",
         "docs/verification/source18-reporting-candidate-20261016/index.json",
         "docs/verification/source18-directive-focused-20261016/index.json"
       ],
@@ -9229,11 +9232,14 @@
         "backend_profile_UI_adapter": "SOURCE_AND_VM_PASS_REAL_BROWSER_PENDING",
         "full_suite": "PASS_ACTUAL1570_0_0_FOUR_RENDERER_FMT_CLIPPY",
         "build": "PASS_ACTUAL_OPTIMIZED_CANDIDATE",
-        "native_App_frontdoors": "NOT_RUN",
+        "native_App_frontdoors": "PASS_ACTUAL8_REFERENCE8_REAL_UI16_EXPORTS_INDEPENDENT_AUDIT",
         "installation": "NOT_RUN",
         "manufacturer_parity": "NOT_PROVEN",
         "legacy_UI": "PASS_ACTUAL16_CURRENT_TARGET_TESTS",
-        "product_patch": "APPLY_CHECK_PASS_NOT_APPLIED"
+        "product_patch": "APPLY_CHECK_PASS_NOT_APPLIED",
+        "directory_full_suite": "PASS_ACTUAL1582_0_0_FOUR_RENDERER_FMT_CLIPPY",
+        "directory_build": "PASS_ACTUAL_OPTIMIZED_CANDIDATE",
+        "directory_native": "FAIL_CONSOLE404_AFTER_FIRST_VIEW_AND_CSV_PRESERVED"
       },
       "reference_parity": "NOT_PROVEN"
     }
