@@ -4,7 +4,7 @@
 
 Die Liste hält alle 144 gruppierten Fähigkeiten fest. Ein Haken bedeutet, dass das **eigene gespeicherte Abnahmekriterium** mit Beweisen erfüllt ist. Er bedeutet keine vollständige Gleichheit mit Screaming Frog. Diese Referenzparität bleibt für alle Einträge **NOT_PROVEN**.
 
-Aktueller Katalogstand: **34 eigene Abnahmen erfüllt**, **70 teilweise geprüft**, **40 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
+Aktueller Katalogstand: **36 eigene Abnahmen erfüllt**, **68 teilweise geprüft**, **40 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
 
 Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.json) bilden ein zusätzliches Register. Ihre positiven Fälle, Kontrollfälle, Parameter und Grenzfälle müssen jeweils geprüft werden. Ein implementierter Kern, ein leerer Export oder übereinstimmende CSV-Zellen ersetzen diese Einzelabnahme nicht.
 
@@ -57,22 +57,27 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - Verträge: [api-native.json](verification/source13-api-native-progress-20261016/api-native.json), [actual-format.json](verification/source12-thirteen-scopes-20261016/next-fixtures/actual-format.json), [index.json](verification/api-runtime-pass-20261016/index.json), [index.json](verification/api-only-rust-failure-20261016/index.json), [index.json](verification/next-feature-reviewed-20261016/index.json).
   - Gate-Stand: source_review: NO_FINDINGS_BOUNDED_SOURCE_REVIEW; node: PASS_FIVE_API_ONLY_FRONTEND_HELPER_CASES_ONLY; rust: PASS_TWENTY_NEW_RUST_FUNCTIONS_ONLY; provider: ONE_ACTUAL_HTTP429_ATTEMPT_NO_METRIC_SUCCESS; native: PASS_NATIVE_FRONTDOORS_AND_DECLARED_FIXTURE_READS_ONLY; installation: PASS_ACTUAL_SOURCE13; manufacturer_parity: NOT_PROVEN; format: PASS_FORMAT_COMMAND_ONLY; clippy: PASS_PRELIMINARY_CLIPPY_ONLY; inventory_fixture_format: PASS_FORMAT_COMMAND_ONLY; inventory_fixture_retained_tests: PASS_TWENTYTWO_RETAINED_MCP_LIFECYCLE_FUNCTIONS_ONLY; inventory_fixture_clippy: PASS_PRELIMINARY_CLIPPY_ONLY; full_suite: PASS_ACTUAL1476_WORKSPACE; optimized_build: PASS_ACTUAL_WINDOWS_RELEASE.
 
-- [ ] **CDN-Verzeichnisse nachvollziehbar klassifizieren** — ACTUAL405_FORMAT_CLIPPY_RUST12_NODE4_PASS_PREVIEW_ONLY. Optionale begrenzte CDN-Verzeichnisprofile mit Herkunft und expliziter Trennung von Fetch-/Credentialfreigaben sind im405-Input-Entwurf umgesetzt. Formatter, unabhängiger Formatreview, strenger Clippy,12 Rust- und4 Frontendfälle bestehen. Vollsuite, reale UI-/Cold-Abnahme, Veröffentlichung und Installation stehen aus.
+- [ ] **CDN-Verzeichnisse nachvollziehbar klassifizieren** — SOURCE14_PRIVATE_CODE_ACTUAL30_RUST9_NODE_PASS_FULL_SUITE_PENDING. CDN-Verzeichnisprofile sind gemeinsam mit Segmenten in Source14 privat veröffentlicht. Alle30 neuen Rust- und neun aktuellen Frontendfälle sowie Format und Clippy bestehen. Der reale API-/CLI-/MCP-/Browser-/Cold-Ablauf, Vollsuite, Releasebuild und Installation sind offen.
   - [x] Die echte Ressourcen-fixture zweimal mit deaktivierter/aktivierter Klassifikation und identischen Fetchfreigaben geprüft; Klassifikation erteilt keine zusätzlichen Anfragen.
-  - [ ] Nach Source13 alle405 Quellen komponieren und vollständig prüfen.
+  - [x] Gemeinsame Source14 mit31 Produktpfaden privat veröffentlicht; aktuelle30 Rust-/9 Frontendfälle bestehen.
+  - [ ] Vollständigen418-Input-Stand einschließlich aller Renderer-Gates prüfen und optimierten Kandidaten bauen.
   - [ ] Den realen API-/CLI-/MCP-/Browser-/Cold-Ablauf mit vollständigen Exporten abnehmen.
-  - Verträge: [cdn-directory-rust12.json](verification/installed12-source13-progress-20261016/cdn-directory-rust12.json), [cdn-directory-node4.json](verification/installed12-source13-progress-20261016/cdn-directory-node4.json).
+  - [ ] Mit geprüfter Datenintegrität installieren.
+  - Verträge: [index.json](verification/source14-code-sitemap-matrix-progress-20261016/index.json), [cdn-directory-rust12.json](verification/installed12-source13-progress-20261016/cdn-directory-rust12.json), [cdn-directory-node4.json](verification/installed12-source13-progress-20261016/cdn-directory-node4.json).
   - Gate-Stand: full_suite: NOT_RUN; native: NOT_RUN; manufacturer_parity: NOT_PROVEN.
 
-- [ ] **Gespeicherte Segmente über Reports und Exporte anwenden** — ACTUAL418_FORMAT_CLIPPY_NODE9_PASS_RUST30_RUNNING. Die zwei neuen Testaufrufe sind ohne Produkt- oder Assertionänderung korrigiert. Der frisch komponierte418-Input-Stand besteht unabhängigen Quellen-/Formatreview, strengen Clippy und alle neun aktuellen Frontendfälle. Alle30 neuen Rustfunktionen laufen; Vollsuite, Build und reale UI-/Cold-Abnahme stehen aus.
+- [ ] **Gespeicherte Segmente über Reports und Exporte anwenden** — SOURCE14_PRIVATE_CODE_ACTUAL30_RUST9_NODE_PASS_FULL_SUITE_PENDING. Alle30 neuen Rustfunktionen und neun aktuellen Frontendfälle bestehen auf dem geprüften418-Input-Stand. Genau31 Produktpfade sind privat als d7b8508 veröffentlicht; alle418 Quelldateien und Git-Blobs stimmen. Vollsuite, optimierter Build, echte Counts-/Issues-/Charts-/Export-/UI-/Cold-Abnahme und Installation folgen.
   - [x] SegmentV2 und gesamte418-Input-Komposition unabhängig geprüft.
   - [x] Tatsächlicher Formatter und unabhängiger Review aller418 Vorher-/Nachherdateien bestanden.
   - [x] Zwei reine Error-Unwrap-Testaufrufe eng korrigiert und unabhängig geprüft; alle417 übrigen Vorformatquellen exakt.
   - [x] Formatter, unabhängiger Formatreview, Clippy und alle neun Frontendfälle tatsächlich bestanden.
-  - [ ] Zwei Testaufrufe eng korrigieren, unabhängig prüfen und Compiler sowie alle30 neuen Rust-/9 Frontendfälle tatsächlich bestehen.
-  - [ ] Vollsuite/Releasebuild sowie echte Counts-/Issues-/Charts-/Exportmitgliedschaft mit Cold-Reopen und null zusätzlichen WebsiteGETs prüfen.
-  - Verträge: [segments-clippy.json](verification/source13-installed-segments-progress-20261016/segments-clippy.json), [segments-node9.json](verification/source13-installed-segments-progress-20261016/segments-node9.json), [segments-first-clippy-failed.json](verification/source13-api-native-progress-20261016/segments-first-clippy-failed.json), [next-backlog-report.md](verification/installed12-source13-progress-20261016/next-backlog-report.md).
-  - Gate-Stand: full_suite: NOT_RUN; native: NOT_RUN; manufacturer_parity: NOT_PROVEN; source_review: NO_FINDINGS_BOUNDED_SOURCE_REVIEW; format: PASS_FORMAT_COMMAND_ONLY; clippy: PASS_PRELIMINARY_CLIPPY_ONLY; new_rust: RUNNING_NOT_ACCEPTED; node: PASS_ALL_NINE_CURRENT_FRONTEND_HELPERS.
+  - [x] Alle30 neuen Rustfunktionen tatsächlich ohne Fehler oder ignorierte Tests bestanden.
+  - [x] Source14 mit31 Produktpfaden privat veröffentlicht; alle418 Rohdateien und Git-Blobs verifiziert.
+  - [ ] Vollständige Source14-Suite einschließlich aller bisherigen Pflichtnamen und vier frisch ausgeführter Renderer-Gates bestehen.
+  - [ ] Optimierten Kandidaten bauen und echte Counts-/Issues-/Charts-/Exportmitgliedschaft mit Cold-Reopen und null zusätzlichen WebsiteGETs prüfen.
+  - [ ] Den vollständig abgenommenen Source14-Kandidaten mit geprüftem Datenkopien- und Integritätsvertrag lokal installieren.
+  - Verträge: [index.json](verification/source14-code-sitemap-matrix-progress-20261016/index.json), [segments-rust30.json](verification/source14-code-sitemap-matrix-progress-20261016/segments-rust30.json), [segments-clippy.json](verification/source13-installed-segments-progress-20261016/segments-clippy.json), [segments-node9.json](verification/source13-installed-segments-progress-20261016/segments-node9.json), [segments-first-clippy-failed.json](verification/source13-api-native-progress-20261016/segments-first-clippy-failed.json), [next-backlog-report.md](verification/installed12-source13-progress-20261016/next-backlog-report.md).
+  - Gate-Stand: full_suite: NOT_RUN; native: NOT_RUN; manufacturer_parity: NOT_PROVEN; source_review: NO_FINDINGS_BOUNDED_SOURCE_REVIEW; format: PASS_FORMAT_COMMAND_ONLY; clippy: PASS_PRELIMINARY_CLIPPY_ONLY; new_rust: PASS_ALL_THIRTY_NEW_FUNCTIONS; node: PASS_ALL_NINE_CURRENT_FRONTEND_HELPERS; private_code: PASS_ACTUAL_D7B8508_ALL418_BYTES_AND_GIT_BLOBS; optimized_build: NOT_RUN; installation: NOT_RUN.
 
 Frühere Zwischenstände bleiben am Ende als eingeklappte Historie erhalten. Ihre damaligen offenen Schritte sind keine zusätzlichen aktuellen Aufgaben; maßgeblich sind die aktuelle Arbeit und die offenen Feature-Kriterien.
 
@@ -3704,102 +3709,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 ### Sitemaps
 
-5 Einträge: 3 eigene Abnahmen erfüllt, 2 teilweise geprüft, 0 offen.
-
-#### Teilweise vorhanden – Restarbeiten
-
-- [ ] **Sitemap-Mitgliedschaft abgleichen** — Teilweise geprüft; `sitemap.coverage`, P2.
-
-  Orientierung: Vollständige Mitgliedschaft speichern und Sitemap-only sowie nicht gelistete Crawl-URLs getrennt prüfen.
-
-  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [analysis](analysis-acceptance.md) (PASS), [sitemap-derived-assessment-local](verification/sitemap-assessment-local.json) (PASS_LOCAL_WINDOWS), [combined-optimized-native-v3-20261015](verification/combined-optimized-native-v3-20261015/index.json) (FIVE_NATIVE_SCOPES_PASS_PHYSICAL_FAILED_EXTERNAL_ROOT_ABORT_NOT_INSTALL_ELIGIBLE).
-
-  <details>
-  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
-
-  ```json
-  {
-    "id": "sitemap.coverage",
-    "reference_name": "Sitemap coverage and orphan checks",
-    "status": "partial",
-    "acceptance_test": "Compare fetched pages and sitemap locations; distinguish not listed, sitemap-only and incomplete crawl.",
-    "remaining_acceptance": [
-      "Join persisted original memberships to fetched page and inlink observations, distinguishing not-listed, sitemap-only, pending, unavailable and historical evidence without inventing whole-website completeness."
-    ],
-    "implementation_evidence": [
-      {
-        "verification_run_ids": [
-          "core-fixtures",
-          "analysis"
-        ],
-        "proves": "Sitemap-only locations are fetched with discovery source; observed graph orphan candidates explicitly retain incomplete/limited coverage boundaries."
-      },
-      {
-        "verification_run_ids": [
-          "sitemap-derived-assessment-local"
-        ],
-        "proves": "Actual same-transaction inventory permits qualified Complete/KnownEmpty/Unknown for current or historical declared sources; missing/denied/incomplete sources remain unknown, invalid Page Locs separate. Target/inlink joins and full website coverage remain open."
-      },
-      {
-        "scope": "Actual same-source small native and405-page browser findings/complete CSV scope; physical export limits and50000URL/50MiB positives remain open.",
-        "verification_run_ids": [
-          "combined-optimized-native-v3-20261015"
-        ],
-        "artifact": "docs/verification/combined-optimized-native-v3-20261015/index.json",
-        "reference_parity": "NOT_PROVEN"
-      }
-    ],
-    "parity_status": "NOT_PROVEN"
-  }
-  ```
-
-  </details>
-
-- [ ] **Sitemap-Felder und Zielzustände validieren** — Teilweise geprüft; `sitemap.validity`, P2.
-
-  Orientierung: Lastmod erhalten/prüfen und Redirect-, Non-200- sowie nicht indexierbare Ziele getrennt melden.
-
-  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [sitemap-derived-assessment-local](verification/sitemap-assessment-local.json) (PASS_LOCAL_WINDOWS), [combined-optimized-native-v3-20261015](verification/combined-optimized-native-v3-20261015/index.json) (FIVE_NATIVE_SCOPES_PASS_PHYSICAL_FAILED_EXTERNAL_ROOT_ABORT_NOT_INSTALL_ELIGIBLE).
-
-  <details>
-  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
-
-  ```json
-  {
-    "id": "sitemap.validity",
-    "reference_name": "Sitemap URL validation",
-    "status": "partial",
-    "acceptance_test": "Find redirect/non-200/non-indexable URLs and invalid lastmod values in fixture XML.",
-    "remaining_acceptance": [
-      "Produce explicit sitemap target redirect/non200/nonindexable findings from actual page observations; preserve original membership beside rewritten fetch identities."
-    ],
-    "implementation_evidence": [
-      {
-        "verification_run_ids": [
-          "core-fixtures"
-        ],
-        "proves": "Discovered sitemap locations receive ordinary status/indexability observations and errors."
-      },
-      {
-        "verification_run_ids": [
-          "sitemap-derived-assessment-local"
-        ],
-        "proves": "Raw lastmod fields retained and assessed against named XSD1.0 date|dateTime and W3C precision profiles; actual API/SDK/browser handle calendar errors, duplicate elements, incomplete prefixes and undetermined leap seconds. Target redirect/non200/nonindexable findings remain open."
-      },
-      {
-        "scope": "Actual same-source small native and405-page browser findings/complete CSV scope; physical export limits and50000URL/50MiB positives remain open.",
-        "verification_run_ids": [
-          "combined-optimized-native-v3-20261015"
-        ],
-        "artifact": "docs/verification/combined-optimized-native-v3-20261015/index.json",
-        "reference_parity": "NOT_PROVEN"
-      }
-    ],
-    "parity_status": "NOT_PROVEN"
-  }
-  ```
-
-  </details>
+5 Einträge: 5 eigene Abnahmen erfüllt, 0 teilweise geprüft, 0 offen.
 
 #### Geprüfter eigener Kern
 
@@ -3832,6 +3742,109 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "sitemap-derived-assessment-local"
         ],
         "proves": "Actual native explicit duplicate roots, recursive index/self-cycle, duplicate compressed child and malformed XML retain original occurrences, complete-source facts and bounded deduplication. Current workspace includes parser/transport/ledger cases. Independent discovery acceptance is met; vendor parity is unproven."
+      }
+    ],
+    "parity_status": "NOT_PROVEN"
+  }
+  ```
+
+  </details>
+
+- [x] **Sitemap-Mitgliedschaft abgleichen** — Eigene Abnahme erfüllt; `sitemap.coverage`, P2.
+
+  Orientierung: Vollständige Mitgliedschaft speichern und Sitemap-only sowie nicht gelistete Crawl-URLs getrennt prüfen.
+
+  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [analysis](analysis-acceptance.md) (PASS), [sitemap-derived-assessment-local](verification/sitemap-assessment-local.json) (PASS_LOCAL_WINDOWS), [combined-optimized-native-v3-20261015](verification/combined-optimized-native-v3-20261015/index.json) (FIVE_NATIVE_SCOPES_PASS_PHYSICAL_FAILED_EXTERNAL_ROOT_ABORT_NOT_INSTALL_ELIGIBLE), [source14-code-sitemap-matrix-progress-20261016](verification/source14-code-sitemap-matrix-progress-20261016/index.json).
+
+  <details>
+  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
+
+  ```json
+  {
+    "id": "sitemap.coverage",
+    "reference_name": "Sitemap coverage and orphan checks",
+    "status": "implemented",
+    "acceptance_test": "Compare fetched pages and sitemap locations; distinguish not listed, sitemap-only and incomplete crawl.",
+    "remaining_acceptance": [],
+    "implementation_evidence": [
+      {
+        "verification_run_ids": [
+          "core-fixtures",
+          "analysis"
+        ],
+        "proves": "Sitemap-only locations are fetched with discovery source; observed graph orphan candidates explicitly retain incomplete/limited coverage boundaries."
+      },
+      {
+        "verification_run_ids": [
+          "sitemap-derived-assessment-local"
+        ],
+        "proves": "Actual same-transaction inventory permits qualified Complete/KnownEmpty/Unknown for current or historical declared sources; missing/denied/incomplete sources remain unknown, invalid Page Locs separate. Target/inlink joins and full website coverage remain open."
+      },
+      {
+        "scope": "Actual same-source small native and405-page browser findings/complete CSV scope; physical export limits and50000URL/50MiB positives remain open.",
+        "verification_run_ids": [
+          "combined-optimized-native-v3-20261015"
+        ],
+        "artifact": "docs/verification/combined-optimized-native-v3-20261015/index.json",
+        "reference_parity": "NOT_PROVEN"
+      },
+      {
+        "verification_run_ids": [
+          "source14-code-sitemap-matrix-progress-20261016"
+        ],
+        "proves": "Actual Source13 eight-scenario matrix joins original persisted memberships with fetched pages and observed inlinks; distinguishes not listed, sitemap-only, pending, unavailable, incomplete, genuine empty, historical and active-resume generation states. Complete API/CLI/HTTP+serial stdio MCP/UI1440+320/CSV and cold reopen preserve the results with zero read-triggered website GETs.",
+        "limits": "Finite own acceptance only. No whole-website completeness, website-wide orphan proof, arbitrary Internet/protocol exhaustiveness or manufacturer parity. No new Source14 runtime claim."
+      }
+    ],
+    "parity_status": "NOT_PROVEN"
+  }
+  ```
+
+  </details>
+
+- [x] **Sitemap-Felder und Zielzustände validieren** — Eigene Abnahme erfüllt; `sitemap.validity`, P2.
+
+  Orientierung: Lastmod erhalten/prüfen und Redirect-, Non-200- sowie nicht indexierbare Ziele getrennt melden.
+
+  Beweisregister: [core-fixtures](../crates/core/tests/crawl_fixtures.rs) (PASS), [sitemap-derived-assessment-local](verification/sitemap-assessment-local.json) (PASS_LOCAL_WINDOWS), [combined-optimized-native-v3-20261015](verification/combined-optimized-native-v3-20261015/index.json) (FIVE_NATIVE_SCOPES_PASS_PHYSICAL_FAILED_EXTERNAL_ROOT_ABORT_NOT_INSTALL_ELIGIBLE), [source14-code-sitemap-matrix-progress-20261016](verification/source14-code-sitemap-matrix-progress-20261016/index.json).
+
+  <details>
+  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
+
+  ```json
+  {
+    "id": "sitemap.validity",
+    "reference_name": "Sitemap URL validation",
+    "status": "implemented",
+    "acceptance_test": "Find redirect/non-200/non-indexable URLs and invalid lastmod values in fixture XML.",
+    "remaining_acceptance": [],
+    "implementation_evidence": [
+      {
+        "verification_run_ids": [
+          "core-fixtures"
+        ],
+        "proves": "Discovered sitemap locations receive ordinary status/indexability observations and errors."
+      },
+      {
+        "verification_run_ids": [
+          "sitemap-derived-assessment-local"
+        ],
+        "proves": "Raw lastmod fields retained and assessed against named XSD1.0 date|dateTime and W3C precision profiles; actual API/SDK/browser handle calendar errors, duplicate elements, incomplete prefixes and undetermined leap seconds. Target redirect/non200/nonindexable findings remain open."
+      },
+      {
+        "scope": "Actual same-source small native and405-page browser findings/complete CSV scope; physical export limits and50000URL/50MiB positives remain open.",
+        "verification_run_ids": [
+          "combined-optimized-native-v3-20261015"
+        ],
+        "artifact": "docs/verification/combined-optimized-native-v3-20261015/index.json",
+        "reference_parity": "NOT_PROVEN"
+      },
+      {
+        "verification_run_ids": [
+          "source14-code-sitemap-matrix-progress-20261016"
+        ],
+        "proves": "Actual Source13 matrix retains original redirect301 despite final200, actual404/nonindexable/robots observations, original old sitemap membership beside rewritten new fetch identity, malformed XML and retained valid/invalid calendar lastmods. Full consumers and cold reopen passed; independent audit separates raw XML evidence and admitted assessment assertions from response bodies not separately retained.",
+        "limits": "Finite own acceptance only. No whole-website completeness, website-wide orphan proof, arbitrary Internet/protocol exhaustiveness or manufacturer parity. No new Source14 runtime claim."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -5479,7 +5492,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 ## Frühere Arbeitsstände
 
 <details>
-<summary>32 historische Zwischenstände mit ihren damaligen Ergebnissen und offenen Schritten</summary>
+<summary>34 historische Zwischenstände mit ihren damaligen Ergebnissen und offenen Schritten</summary>
 
 Diese unveränderten Einträge dokumentieren den damaligen Stand. Aktuelle Restarbeiten stehen oben und in den jeweiligen Feature-Kriterien.
 
@@ -5748,6 +5761,13 @@ Diese unveränderten Einträge dokumentieren den damaligen Stand. Aktuelle Resta
   - Verträge: [index.json](verification/source10-response-registry-20261015/index.json), [index.json](verification/combined-workspace-v10-20261015/index.json), [index.json](verification/source10-directed-checkpoint-20261015/index.json), [index.json](verification/next-batch-source-proposals-20261015/index.json), [ADDENDUM.md](verification/next-batch-source-proposals-20261015/ngram/gap/ADDENDUM.md).
   - Gate-Stand: source_review: NO_FINDINGS_BOUNDED_SOURCE_REVIEW; rust_tests: 9_AUTHORED_NOT_RUN; native: NOT_RUN; manufacturer_parity: NOT_PROVEN.
 
+- [ ] **Sitemap-Ziele und Mitgliedschaft öffentlich nachvollziehbar auswerten** — COMPLETED_OWN_CRITERIA_REFERENCE_PARITY_NOT_PROVEN. Acht echte Source13-Nativszenarien bestehen über vollständige API-/CLI-/MCP-/Browser-/CSV-/Cold-Schnittstellen. Unabhängiger Audit bestätigt die beiden präzisen eigenen Kriterien für Abdeckung und Gültigkeit. Gesamte Websiteabdeckung und Hersteller-Parität bleiben unbewiesen.
+  - [x] Originalmitgliedschaft mit tatsächlichen Seiten und Inlinks verknüpft; fehlend, nur Sitemap, wartend, unvollständig, unbekannt, historisch und echte leere Quelle getrennt.
+  - [x] Redirect301,404,Noindex,Robots und Rewrite-Identitäten mit tatsächlichen Requests geprüft; Originalmitgliedschaft erhalten.
+  - [x] 17 natürliche eigene Prozessabschlüsse, vollständige CSVs, reale UI bei1440/320, Warm-/Coldgleichheit und null zusätzliche WebsiteGETs beim Lesen unabhängig geprüft.
+  - Verträge: [index.json](verification/source14-code-sitemap-matrix-progress-20261016/index.json), [sitemap-independent-audit.json](verification/source14-code-sitemap-matrix-progress-20261016/sitemap-independent-audit.json).
+  - Gate-Stand: native: PASS_ACTUAL_SOURCE13_FINITE_SITEMAP_PUBLIC_UNKNOWN_REWRITE_HISTORY_COLD_MATRIX; independent_audit: NO_FINDINGS_BOUNDED_ACTUAL_EVIDENCE_AUDIT; manufacturer_parity: NOT_PROVEN.
+
 - [ ] **Teilweise geschriebene Downloadblöcke korrekt melden** — ACTUAL_SOURCE8_WORKSPACE_AND_BODY_TRANSPORT_NATIVE_PASS. Source8 korrigiert den Write-Vertrag: Eine erfolgreiche Schreiboperation meldet die tatsächlich angenommene Präfixlänge; spätere Fehler werden nicht als Nullfortschritt ausgegeben. Drei neue Regressionen und alle bisherigen HTTP-/Abbruchtests bestehen im tatsächlichen Gesamtlauf. Frische native Abnahmen folgen.
   - [x] Produktionscode und tatsächliche vier privaten Exportaufrufer gegen Rusts Write-Vertrag unabhängig gelesen; Bewertung bleibt vom belegten Interrupted-Endlosfehler getrennt.
   - [ ] Künftige Produktänderungen mit vollständiger Exportregression am jeweiligen Kandidaten prüfen.
@@ -5898,6 +5918,13 @@ Diese unveränderten Einträge dokumentieren den damaligen Stand. Aktuelle Resta
   - Verträge: [mcp-file-tools.md](mcp-file-tools.md), [preparation.json](verification/mcp-file-tools-source-20261015/preparation.json), [index.json](verification/mcp-file-tools-source-20261015/focused-module-first/index.json), [windows-root-test-repair.json](verification/mcp-file-tools-source-20261015/windows-root-test-repair.json), [index.json](verification/mcp-file-tools-source-20261015/focused-module-repaired/index.json), [index.json](verification/mcp-file-tools-source-20261015/focused-wiring-repaired/index.json), [index.json](verification/combined-workspace-v3-20261015/index.json), [index.json](verification/combined-optimized-native-v3-20261015/index.json).
   - Gate-Stand: source_review: BOUNDED_SOURCE_ONLY_NO_CONFIRMED_FINDINGS; authored_tests: 31_WRITTEN_29_WINDOWS_EXECUTED_AND_PASSED_2_UNIX_NOT_RUN; compile: PASS_ACTUAL_TEST_PROFILE_51_82_SECONDS; official_sdk: PASS_175_ACTUAL_OPERATION_ASSERTIONS; native_http_stdio: PASS_BOTH_OFFICIAL_SDK_TRANSPORTS; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN; windows_root_test_repair: PASS_ACTUAL_MODULE_GROUP; transport_tests: PASS_14_ACTUAL_GROUPS_OWNED_HTTP_THREE_MODES; unix_tests: 2_AUTHORED_NOT_RUN; combined_v3_workspace: PASS_1203_INCLUDING_4_RENDERER_FMT_CLIPPY; windows_junction: PASS_INNER_AND_ROOT_CONTROLS; http_inflight_graceful_drain: NOT_PROVEN.
 
+- [ ] **Dauerhafte URL-Kontingente je Tiefe, Host und Muster ergänzen** — SOURCE_AUTHORING_NOT_COMPILED_OR_ACCEPTED. Eine getrennte nächste Quellfassung wird für atomare Kontingente vor tatsächlichem Netzwerkzugriff, dauerhafte Wiederaufnahme und nachvollziehbare Usage vorbereitet. Dieser Entwurf gehört nicht zu Source14 und ist noch nicht kompiliert oder abgenommen.
+  - [x] Vorhandene Grenzwerte und verbleibende Quotenfamilien anhand tatsächlicher418 Quellen abgegrenzt.
+  - [ ] Quellvorschlag unabhängig prüfen, integrieren und echte Concurrency-/Redirect-/0-vor-Robots-/Resume-/Cold-Fälle bestehen.
+  - [ ] Vollsuite, öffentliche Oberflächen und eigene Laufzeitabnahme abschließen; Renderer-/Ressourcen-/Selected-Kombinationen bleiben im ersten Entwurf ausdrücklich ausgeschlossen.
+  - Verträge: [index.json](verification/source14-code-sitemap-matrix-progress-20261016/index.json).
+  - Gate-Stand: source: AUTHORING; compile: NOT_RUN; native: NOT_RUN; manufacturer_parity: NOT_PROVEN.
+
 - [x] **B8: optionale Textaufnahme und gespeicherte Inhaltsanalyse** — COMPLETED. Der begrenzte B8-Baustein für optionale Roh-/DOM-Textaufnahme und gespeicherte ausgewählte Inhaltsanalyse ist mit eigenen nativen/API/UI-Gates, exakter Commit-CI und unveränderlichem installiertem Release geprüft. Vollständige Website-Analyse und CSS-Neuauswahl ohne erhaltenes HTML/DOM bleiben zusätzliche offene Feature-Abnahmen.
   - [x] Pure CSS-/Unicode-Auswahl20 und Binding4 sowie16 echte native Fixtures geprüft; ungültige Konfiguration scheitert vor HTTP.
   - [x] Rohe und tatsächliche Chromium-DOM-Quellen behalten getrennte Texte, Sprachen, Hashes und Herkunft; fehlender Renderer ersetzt keine Quelle.
@@ -5923,4 +5950,4 @@ Diese unveränderten Einträge dokumentieren den damaligen Stand. Aktuelle Resta
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `52e70c671fc8be17f43489abcd5b759a3816dbc54479bd57f7e1c76bbbceb835`. Letzter im Katalog erfasster Beweisstand: `2026-10-16T03:10:00.868Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `ea68d9c64624b736371aad963892c6fa95ea791c548b82e0e3ec2d4d44d1eb25`. Letzter im Katalog erfasster Beweisstand: `2026-10-16T03:33:06.773Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
