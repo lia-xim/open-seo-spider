@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased — initial public alpha
+## v0.1.0-alpha.1 — 2026-10-17
 
 Independent Rust implementation with an original local web interface, CLI and MCP workflows.
 

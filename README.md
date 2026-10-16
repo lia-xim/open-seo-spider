@@ -2,6 +2,8 @@
 
 An independent local SEO crawler written in Rust. **Alpha software:** useful workflows exist, but complete Screaming Frog feature parity and production readiness are not claimed. This project is not affiliated with Screaming Frog.
 
+Public source preview: [v0.1.0-alpha.1](https://github.com/lia-xim/open-seo-spider/releases/tag/v0.1.0-alpha.1). The [GitHub Actions results](https://github.com/lia-xim/open-seo-spider/actions) are tracked separately from the local checks below.
+
 There is no fixed commercial URL allowance. Your configured crawl budgets, storage, memory, network and hardware still limit a crawl.
 
 ## What is available
