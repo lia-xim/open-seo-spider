@@ -6858,7 +6858,7 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-16T13:03:22.375Z",
+  "last_verified_at": "2026-10-16T14:21:19.656Z",
   "current_work": [
     {
       "id": "combined-source-v15-20261016",
@@ -9128,9 +9128,9 @@
     {
       "id": "native-resource-quotas-20261016",
       "priority": 1,
-      "status": "SOURCE17_PRIVATE_FULL_SUITE_BUILD_PASS_NATIVE_PENDING",
+      "status": "SOURCE17_SIX_NATIVE_REGRESSIONS_PASS_EXTENDED_PENDING",
       "title_de": "Native interne Ressourcen-Crawls mit dauerhaften Quoten verbinden",
-      "summary_de": "Source17 ist mit sechs eigenen Produktpfaden und432 exakt gebundenen Quelldateien privat veröffentlicht. Die UI erlaubt interne Ressourcen-Crawls mit Quoten anhand des konkreten Profils und prüft die tatsächlichen Formularwerte; externe Ziele, Subdomains und Renderer bleiben gesondert offen. Aktuelle13 Rust-Funktionen mit47 logischen Zellen171 Assertions und16 Node-Fälle bestehen. Die vollständige aktuelle Suite besteht mit1559 Tests ohne Fehler/ignorierte Tests, vier frischen Renderer-Prüfungen, Format und Clippy; optimierter Build bestanden. Vollständige Native-Matrix und Installation stehen noch aus; lokal läuft Source16.",
+      "summary_de": "Source17 ist privat veröffentlicht und mit1559 Tests, vier frischen Renderer-Gates, Format, Clippy und optimiertem Build geprüft. Alle sechs aktuellen Nativregressionen bestehen samt unabhängiger begrenzter Rohbelegprüfung: API/MCP, Sitemaps, HEAD/CDN, Segmente/CDN/Verzeichnisse, dauerhafte Quoten und CLI-Wiederaufnahme. Die neue Ressourcenmatrix und Installation stehen noch aus; lokal läuft Source16. Der erste zusätzliche Testhilfenlauf scheiterte an regulären Job-Metadatendateien und bleibt als Fehlerbeleg erhalten; Korrektur und Wiederholung stehen an.",
       "feature_ids": [
         "crawl.resources",
         "crawl.limits"
@@ -9148,15 +9148,17 @@
         "V4 korrigiert die pauschale Ressourcen-/Quoten-UI-Blockade anhand des tatsächlich unterstützten internen Profils. Sieben neue VM-Formularfälle prüfen tatsächliche Werte, Speichern, Wiederöffnen, API-Payload und verweigerte Profile.",
         "Aktuelle V4:432-Dateien-Komposition mit sechs eigenen Produktpfaden, Formatierung mit unabhängigem mechanischem Review, strenger Clippy,13 Rust-Funktionen und16 Node-Fälle bestanden.",
         "Produktcode61f7134 privat veröffentlicht; alle432 Quell-/Index-/Commit-Bytes und sechs kanonischen Bindungen unabhängig anhand gespeicherter Rohbelege geprüft.",
-        "Source17 vollständig eingefroren und mit1559 Tests ohne Fehler/ignorierte Tests, vier frischen Renderer-Gates, Format, Clippy und optimiertem Build geprüft. Veralteter Testbelegtext vor Ausführung korrigiert und frisch unabhängig geprüft."
+        "Source17 vollständig eingefroren und mit1559 Tests ohne Fehler/ignorierte Tests, vier frischen Renderer-Gates, Format, Clippy und optimiertem Build geprüft. Veralteter Testbelegtext vor Ausführung korrigiert und frisch unabhängig geprüft.",
+        "Alle sechs bestehenden Source17-Nativregressionen tatsächlich ausgeführt und unabhängig anhand begrenzter gespeicherter Rohbelege ohne Befund geprüft. Die neue Ressourcenmatrix und Installation werden dadurch nicht ersetzt."
       ],
       "pending_acceptance_de": [
+        "Zusätzliche Testhilfe nach tatsächlichem Abbruch an regulären .job.json/.json-Metadaten korrigieren, frisch unabhängig prüfen und mit eigenen App-Prozessen erneut ausführen; fehlgeschlagenen Erstlauf erhalten.",
         "Vollständige Ressourcen-/Quoten-Nativmatrix mit echten Browser/API/CLI/MCP-Zugriffen, Pause/Cancel/Cold-Neustart und gezielten Fehler-/Korruptionsfällen ausführen; Quellcode oder Hilfsproben ersetzen diese Abnahme nicht.",
-        "Aktuelle Nativregressionen und unabhängige begrenzte Rohbelegprüfungen auf dem Source17-Kandidaten durchführen.",
         "Source17 erst nach bestandenen Nativtests und Daten erhaltender Kompatibilitätsprüfung lokal installieren; gespeicherte Berichte, Projekte, Einstellungen und vollständige Dateiintegrität prüfen.",
         "Renderer-, Selected- und externe CDN-/Ressourcenziele bleiben gesonderte offene Kombinationen."
       ],
       "documentation": [
+        "docs/verification/source17-six-native-audits-20261016/index.json",
         "docs/verification/source17-suite-build-20261016/index.json",
         "docs/verification/source16-installed-20261016/index.json",
         "docs/verification/source16-six-native-audits-20261016/index.json",
@@ -9172,7 +9174,7 @@
         "Node_current": "V4_PASS_ACTUAL16_THREE_DRIVERS_FIVE_CURRENT_TARGETS",
         "full_suite": "PASS_ACTUAL_1559_ZERO_FAILED_ZERO_IGNORED_FOUR_FRESH_RENDERER_FMT_CLIPPY",
         "build": "PASS_ACTUAL_SOURCE17_OPTIMIZED_BUILD",
-        "native": "NOT_RUN",
+        "native": "EXTENDED_RESOURCE_MATRIX_NOT_RUN",
         "installation": "NOT_RUN",
         "manufacturer_parity": "NOT_PROVEN",
         "formatter_review": "V4_NO_FINDINGS_BOUNDED_MECHANICAL_REVIEW",
@@ -9180,7 +9182,9 @@
         "Node9": "V3_PASS_ACTUAL_FRESH9_FIVE_CURRENT_FORMATTED_TARGETS",
         "report_oracle_repair": "V3_FRESH_SOURCE_COMPOSITION_PRODUCERS_NO_FINDINGS",
         "UI_admission": "V4_IMPLEMENTED_SEVEN_VM_REGRESSIONS_PASS_REAL_NATIVE_PENDING",
-        "current_proposal": "V4_ACTUAL_PRIVATE_PUBLICATION_AUDITED"
+        "current_proposal": "V4_ACTUAL_PRIVATE_PUBLICATION_AUDITED",
+        "native_regressions": "PASS_SIX_CURRENT_ACTUAL_BOUNDED_SCOPES_INDEPENDENTLY_AUDITED",
+        "closed_provider_helper": "FIRST_ACTUAL_FAILED_METADATA_WHITELIST_REPAIR_AND_RETRY_REQUIRED"
       },
       "reference_parity": "NOT_PROVEN"
     }
