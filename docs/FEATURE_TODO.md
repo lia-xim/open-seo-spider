@@ -57,27 +57,29 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - Verträge: [api-native.json](verification/source13-api-native-progress-20261016/api-native.json), [actual-format.json](verification/source12-thirteen-scopes-20261016/next-fixtures/actual-format.json), [index.json](verification/api-runtime-pass-20261016/index.json), [index.json](verification/api-only-rust-failure-20261016/index.json), [index.json](verification/next-feature-reviewed-20261016/index.json).
   - Gate-Stand: source_review: NO_FINDINGS_BOUNDED_SOURCE_REVIEW; node: PASS_FIVE_API_ONLY_FRONTEND_HELPER_CASES_ONLY; rust: PASS_TWENTY_NEW_RUST_FUNCTIONS_ONLY; provider: ONE_ACTUAL_HTTP429_ATTEMPT_NO_METRIC_SUCCESS; native: PASS_NATIVE_FRONTDOORS_AND_DECLARED_FIXTURE_READS_ONLY; installation: PASS_ACTUAL_SOURCE13; manufacturer_parity: NOT_PROVEN; format: PASS_FORMAT_COMMAND_ONLY; clippy: PASS_PRELIMINARY_CLIPPY_ONLY; inventory_fixture_format: PASS_FORMAT_COMMAND_ONLY; inventory_fixture_retained_tests: PASS_TWENTYTWO_RETAINED_MCP_LIFECYCLE_FUNCTIONS_ONLY; inventory_fixture_clippy: PASS_PRELIMINARY_CLIPPY_ONLY; full_suite: PASS_ACTUAL1476_WORKSPACE; optimized_build: PASS_ACTUAL_WINDOWS_RELEASE.
 
-- [ ] **CDN-Verzeichnisse nachvollziehbar klassifizieren** — SOURCE14_PRIVATE_CODE_ACTUAL30_RUST9_NODE_PASS_FULL_SUITE_PENDING. CDN-Verzeichnisprofile sind gemeinsam mit Segmenten in Source14 privat veröffentlicht. Alle30 neuen Rust- und neun aktuellen Frontendfälle sowie Format und Clippy bestehen. Der reale API-/CLI-/MCP-/Browser-/Cold-Ablauf, Vollsuite, Releasebuild und Installation sind offen.
+- [ ] **CDN-Verzeichnisse nachvollziehbar klassifizieren** — ACTUAL_SOURCE14_FULL1506_PASS_BUILD_RUNNING_NATIVE_INSTALL_PENDING. Source14 ist privat als d7b8508 veröffentlicht und unveränderlich eingefroren. Die vollständige1506/0/0-Suite mit allen bisherigen Pflichtnamen, vier frisch ausgeführten Rendererfunktionen, Format und Clippy besteht. Der optimierte Build läuft; die realen gemeinsamen Schnittstellen-/UI-/Cold-Abnahmen und Installation stehen aus.
   - [x] Die echte Ressourcen-fixture zweimal mit deaktivierter/aktivierter Klassifikation und identischen Fetchfreigaben geprüft; Klassifikation erteilt keine zusätzlichen Anfragen.
   - [x] Gemeinsame Source14 mit31 Produktpfaden privat veröffentlicht; aktuelle30 Rust-/9 Frontendfälle bestehen.
-  - [ ] Vollständigen418-Input-Stand einschließlich aller Renderer-Gates prüfen und optimierten Kandidaten bauen.
-  - [ ] Den realen API-/CLI-/MCP-/Browser-/Cold-Ablauf mit vollständigen Exporten abnehmen.
-  - [ ] Mit geprüfter Datenintegrität installieren.
-  - Verträge: [index.json](verification/source14-code-sitemap-matrix-progress-20261016/index.json), [cdn-directory-rust12.json](verification/installed12-source13-progress-20261016/cdn-directory-rust12.json), [cdn-directory-node4.json](verification/installed12-source13-progress-20261016/cdn-directory-node4.json).
-  - Gate-Stand: full_suite: NOT_RUN; native: NOT_RUN; manufacturer_parity: NOT_PROVEN.
+  - [x] VollständigeSource14-Suite:1506bestanden/0fehlgeschlagen/0ignoriert,alle728vollenPflichtnamen,vierfrischeRendererfunktionen,Format/Clippy,eigeneWorker-/Fixtureabschlüsseund418finaleQuellbytesgeprüft.
+  - [ ] OptimiertenSource14-Kandidaten fertig bauen und an den tatsächlichen1506-Suitenachweis binden.
+  - [ ] Allevier aktuellen Nativrollen bestehen: Segmente/CDN-Verzeichnisse, Head/CDN, API-only-Teilabnahme und Sitemap-Matrix.
+  - [ ] Den vollständig abgenommenenSource14-Kandidaten mit geprüftem Datenkopien-/Integritätsvertrag lokal installieren.
+  - Verträge: [index.json](verification/source14-full-suite-20261016/index.json), [full-suite.json](verification/source14-full-suite-20261016/full-suite.json), [index.json](verification/source14-code-sitemap-matrix-progress-20261016/index.json), [cdn-directory-rust12.json](verification/installed12-source13-progress-20261016/cdn-directory-rust12.json), [cdn-directory-node4.json](verification/installed12-source13-progress-20261016/cdn-directory-node4.json).
+  - Gate-Stand: full_suite: PASS_ACTUAL_1506_0_0_FOUR_FRESH_RENDERER_FMT_CLIPPY; native: NOT_RUN; manufacturer_parity: NOT_PROVEN; optimized_build: RUNNING_NOT_ACCEPTED; installation: NOT_RUN.
 
-- [ ] **Gespeicherte Segmente über Reports und Exporte anwenden** — SOURCE14_PRIVATE_CODE_ACTUAL30_RUST9_NODE_PASS_FULL_SUITE_PENDING. Alle30 neuen Rustfunktionen und neun aktuellen Frontendfälle bestehen auf dem geprüften418-Input-Stand. Genau31 Produktpfade sind privat als d7b8508 veröffentlicht; alle418 Quelldateien und Git-Blobs stimmen. Vollsuite, optimierter Build, echte Counts-/Issues-/Charts-/Export-/UI-/Cold-Abnahme und Installation folgen.
+- [ ] **Gespeicherte Segmente über Reports und Exporte anwenden** — ACTUAL_SOURCE14_FULL1506_PASS_BUILD_RUNNING_NATIVE_INSTALL_PENDING. Source14 ist privat als d7b8508 veröffentlicht und unveränderlich eingefroren. Die vollständige1506/0/0-Suite mit allen bisherigen Pflichtnamen, vier frisch ausgeführten Rendererfunktionen, Format und Clippy besteht. Der optimierte Build läuft; die realen gemeinsamen Schnittstellen-/UI-/Cold-Abnahmen und Installation stehen aus.
   - [x] SegmentV2 und gesamte418-Input-Komposition unabhängig geprüft.
   - [x] Tatsächlicher Formatter und unabhängiger Review aller418 Vorher-/Nachherdateien bestanden.
   - [x] Zwei reine Error-Unwrap-Testaufrufe eng korrigiert und unabhängig geprüft; alle417 übrigen Vorformatquellen exakt.
   - [x] Formatter, unabhängiger Formatreview, Clippy und alle neun Frontendfälle tatsächlich bestanden.
   - [x] Alle30 neuen Rustfunktionen tatsächlich ohne Fehler oder ignorierte Tests bestanden.
   - [x] Source14 mit31 Produktpfaden privat veröffentlicht; alle418 Rohdateien und Git-Blobs verifiziert.
-  - [ ] Vollständige Source14-Suite einschließlich aller bisherigen Pflichtnamen und vier frisch ausgeführter Renderer-Gates bestehen.
-  - [ ] Optimierten Kandidaten bauen und echte Counts-/Issues-/Charts-/Exportmitgliedschaft mit Cold-Reopen und null zusätzlichen WebsiteGETs prüfen.
-  - [ ] Den vollständig abgenommenen Source14-Kandidaten mit geprüftem Datenkopien- und Integritätsvertrag lokal installieren.
-  - Verträge: [index.json](verification/source14-code-sitemap-matrix-progress-20261016/index.json), [segments-rust30.json](verification/source14-code-sitemap-matrix-progress-20261016/segments-rust30.json), [segments-clippy.json](verification/source13-installed-segments-progress-20261016/segments-clippy.json), [segments-node9.json](verification/source13-installed-segments-progress-20261016/segments-node9.json), [segments-first-clippy-failed.json](verification/source13-api-native-progress-20261016/segments-first-clippy-failed.json), [next-backlog-report.md](verification/installed12-source13-progress-20261016/next-backlog-report.md).
-  - Gate-Stand: full_suite: NOT_RUN; native: NOT_RUN; manufacturer_parity: NOT_PROVEN; source_review: NO_FINDINGS_BOUNDED_SOURCE_REVIEW; format: PASS_FORMAT_COMMAND_ONLY; clippy: PASS_PRELIMINARY_CLIPPY_ONLY; new_rust: PASS_ALL_THIRTY_NEW_FUNCTIONS; node: PASS_ALL_NINE_CURRENT_FRONTEND_HELPERS; private_code: PASS_ACTUAL_D7B8508_ALL418_BYTES_AND_GIT_BLOBS; optimized_build: NOT_RUN; installation: NOT_RUN.
+  - [x] VollständigeSource14-Suite:1506bestanden/0fehlgeschlagen/0ignoriert,alle728vollenPflichtnamen,vierfrischeRendererfunktionen,Format/Clippy,eigeneWorker-/Fixtureabschlüsseund418finaleQuellbytesgeprüft.
+  - [ ] OptimiertenSource14-Kandidaten fertig bauen und an den tatsächlichen1506-Suitenachweis binden.
+  - [ ] Allevier aktuellen Nativrollen bestehen: Segmente/CDN-Verzeichnisse, Head/CDN, API-only-Teilabnahme und Sitemap-Matrix.
+  - [ ] Den vollständig abgenommenenSource14-Kandidaten mit geprüftem Datenkopien-/Integritätsvertrag lokal installieren.
+  - Verträge: [index.json](verification/source14-full-suite-20261016/index.json), [full-suite.json](verification/source14-full-suite-20261016/full-suite.json), [index.json](verification/source14-code-sitemap-matrix-progress-20261016/index.json), [segments-rust30.json](verification/source14-code-sitemap-matrix-progress-20261016/segments-rust30.json), [segments-clippy.json](verification/source13-installed-segments-progress-20261016/segments-clippy.json), [segments-node9.json](verification/source13-installed-segments-progress-20261016/segments-node9.json), [segments-first-clippy-failed.json](verification/source13-api-native-progress-20261016/segments-first-clippy-failed.json), [next-backlog-report.md](verification/installed12-source13-progress-20261016/next-backlog-report.md).
+  - Gate-Stand: full_suite: PASS_ACTUAL_1506_0_0_FOUR_FRESH_RENDERER_FMT_CLIPPY; native: NOT_RUN; manufacturer_parity: NOT_PROVEN; source_review: NO_FINDINGS_BOUNDED_SOURCE_REVIEW; format: PASS_FORMAT_COMMAND_ONLY; clippy: PASS_PRELIMINARY_CLIPPY_ONLY; new_rust: PASS_ALL_THIRTY_NEW_FUNCTIONS; node: PASS_ALL_NINE_CURRENT_FRONTEND_HELPERS; private_code: PASS_ACTUAL_D7B8508_ALL418_BYTES_AND_GIT_BLOBS; optimized_build: RUNNING_NOT_ACCEPTED; installation: NOT_RUN.
 
 Frühere Zwischenstände bleiben am Ende als eingeklappte Historie erhalten. Ihre damaligen offenen Schritte sind keine zusätzlichen aktuellen Aufgaben; maßgeblich sind die aktuelle Arbeit und die offenen Feature-Kriterien.
 
@@ -5492,7 +5494,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 ## Frühere Arbeitsstände
 
 <details>
-<summary>34 historische Zwischenstände mit ihren damaligen Ergebnissen und offenen Schritten</summary>
+<summary>35 historische Zwischenstände mit ihren damaligen Ergebnissen und offenen Schritten</summary>
 
 Diese unveränderten Einträge dokumentieren den damaligen Stand. Aktuelle Restarbeiten stehen oben und in den jeweiligen Feature-Kriterien.
 
@@ -5640,6 +5642,16 @@ Diese unveränderten Einträge dokumentieren den damaligen Stand. Aktuelle Resta
   - [ ] Plattform- und installierte Laufzeitabnahmen getrennt abschließen; keine vollständige Hersteller-Parität behaupten.
   - Verträge: [index.json](verification/sitemap-source-ui-suite-failed-20261015/index.json), [check.json](verification/sitemap-compile-repair-20261015/check.json), [index.json](verification/sitemap-compile-repair-20261015/focused-app-regressions/index.json), [index.json](verification/combined-workspace-v3-20261015/index.json).
   - Gate-Stand: historical_e9_full_suite: ACTUAL_COMPILE_FAIL_101_ZERO_TESTS_WORKER_CLOSED; intermediate_five_file_check: PASS_WITH_THREE_APP_WARNINGS; final_eight_file_full_suite: FAIL_APP_217_PASS_3_FAIL_0_IGNORE_CORE_RENDERER_CLIPPY_NOT_RUN; final_source_manifest_sha256: 0ab151e4fd06f4603d8429bed4c784f7045e5c838bec378706d6c01bfaefb7bf; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN; final_eight_file_check: PASS_NO_WARNINGS_23_26_SECONDS; directed_three_regressions: PASS_3_ACTUAL_TESTS_4_TEST_SOURCE_REPAIRS; new_full_workspace: NOT_RUN_AFTER_TEST_REPAIRS; combined_v3_workspace: PASS_1203_INCLUDING_4_RENDERER_FMT_CLIPPY.
+
+- [ ] **Source14 vollständig abnehmen und installieren** — FULL_SUITE_PASS_OPTIMIZED_BUILD_RUNNING. Privaterd7b8508 mit418Inputs/31Produktpfaden. Vollständige1506/0/0-Suite einschließlich vier frischerRendererfunktionen,Format/Clippy und tatsächlicherProzess-/Fixtureabschlüsse besteht. OptimierterWindows-Build läuft; vier frischeNativrollen und Coldinstallation folgen. Installiert bleibtSource13.
+  - [x] Alle418 Quelldateien und Git-Blobs des privatenCodes stimmen.
+  - [x] UnabhängigeProdukt-/Format-/Produzenten-/Binderreviews;Source14 unveränderlich eingefroren.
+  - [x] Vollständige1506/0/0-Suite mit allen aktuellen Pflichtnamen und vier frischenRendererfunktionen bestanden.
+  - [ ] OptimiertenBuild abschließen.
+  - [ ] Vier aktuelleNativrollen mit echtenSchnittstellen/UI/Cold erfüllen.
+  - [ ] Datenintegrität und dreiSiblingCopies prüfen, EXE eng ersetzen und lokaleDienste abnehmen.
+  - Verträge: [index.json](verification/source14-full-suite-20261016/index.json).
+  - Gate-Stand: full_suite: PASS_ACTUAL_1506_0_0_FOUR_FRESH_RENDERER_FMT_CLIPPY; optimized_build: RUNNING_NOT_ACCEPTED; native: NOT_RUN; installation: NOT_RUN; manufacturer_parity: NOT_PROVEN.
 
 - [ ] **N-Gramm-Corpus, Quellenberichte und Verzeichnisansicht prüfen** — ACTUAL_WARM_RESOURCE6_NGRAM5_PASS_EXACT_LENGTH_LIFECYCLE_BUG. Source10 besteht1380Tests und optimierten Build sowie native API-/CLI-Gruppe/13UI-Mockgruppen. Sechs warme Resource-/Directory- und fünf neue Ngramgruppen bestehen mit206echten gespeicherten Seiten,205Quellen/410Sechswortvorkommen, unabhängigen1–6-Summen,API/CLI/vollständigerCSV/UI1440/320. Reguläre Appbeendigung klassifiziert jedoch sechs nachweislich vollständig gelesene Content-Length-Downloads alsabgebrochen. Ein einzelner echter205Zeilen-HTTP-Download reproduziert das. Gesamtlauf bleibtFAIL; kalte Wiederöffnung und Installation sind offen. Neben dem CSS-Umbruch ist ein begrenzter Rust-Lebenszyklusfix erforderlich.
   - [x] 369 Inputs zusammengesetzt,18eigene Pfade (7geänderte/11neue),351 unverändert; unabhängige Kompositions- und Formatprüfung.
@@ -5918,12 +5930,12 @@ Diese unveränderten Einträge dokumentieren den damaligen Stand. Aktuelle Resta
   - Verträge: [mcp-file-tools.md](mcp-file-tools.md), [preparation.json](verification/mcp-file-tools-source-20261015/preparation.json), [index.json](verification/mcp-file-tools-source-20261015/focused-module-first/index.json), [windows-root-test-repair.json](verification/mcp-file-tools-source-20261015/windows-root-test-repair.json), [index.json](verification/mcp-file-tools-source-20261015/focused-module-repaired/index.json), [index.json](verification/mcp-file-tools-source-20261015/focused-wiring-repaired/index.json), [index.json](verification/combined-workspace-v3-20261015/index.json), [index.json](verification/combined-optimized-native-v3-20261015/index.json).
   - Gate-Stand: source_review: BOUNDED_SOURCE_ONLY_NO_CONFIRMED_FINDINGS; authored_tests: 31_WRITTEN_29_WINDOWS_EXECUTED_AND_PASSED_2_UNIX_NOT_RUN; compile: PASS_ACTUAL_TEST_PROFILE_51_82_SECONDS; official_sdk: PASS_175_ACTUAL_OPERATION_ASSERTIONS; native_http_stdio: PASS_BOTH_OFFICIAL_SDK_TRANSPORTS; installed_runtime: UNCHANGED_AB1; manufacturer_parity: NOT_PROVEN; windows_root_test_repair: PASS_ACTUAL_MODULE_GROUP; transport_tests: PASS_14_ACTUAL_GROUPS_OWNED_HTTP_THREE_MODES; unix_tests: 2_AUTHORED_NOT_RUN; combined_v3_workspace: PASS_1203_INCLUDING_4_RENDERER_FMT_CLIPPY; windows_junction: PASS_INNER_AND_ROOT_CONTROLS; http_inflight_graceful_drain: NOT_PROVEN.
 
-- [ ] **Dauerhafte URL-Kontingente je Tiefe, Host und Muster ergänzen** — SOURCE_AUTHORING_NOT_COMPILED_OR_ACCEPTED. Eine getrennte nächste Quellfassung wird für atomare Kontingente vor tatsächlichem Netzwerkzugriff, dauerhafte Wiederaufnahme und nachvollziehbare Usage vorbereitet. Dieser Entwurf gehört nicht zu Source14 und ist noch nicht kompiliert oder abgenommen.
+- [ ] **Dauerhafte URL-Kontingente je Tiefe, Host und Muster ergänzen** — SOURCE_ONLY_INDEPENDENT_REVIEW_P1_RECOVERY_FIX_AUTHORING. Ein429-Input-Entwurf mit dauerhaftenKontingenten und26verfasstenRusttests liegt vor; nichts davon ist kompiliert oder ausgeführt. Unabhängiger Quellenreview fand eine konkrete Wiederaufnahmelücke bei veränderterSQLite-Kollation. Ein enger Nachfolger ergänzt vollständigeTabellenstrukturprüfung, Gegenregression, echtenAbbruchtest und zwei verständlicheUItexte.
   - [x] Vorhandene Grenzwerte und verbleibende Quotenfamilien anhand tatsächlicher418 Quellen abgegrenzt.
   - [ ] Quellvorschlag unabhängig prüfen, integrieren und echte Concurrency-/Redirect-/0-vor-Robots-/Resume-/Cold-Fälle bestehen.
   - [ ] Vollsuite, öffentliche Oberflächen und eigene Laufzeitabnahme abschließen; Renderer-/Ressourcen-/Selected-Kombinationen bleiben im ersten Entwurf ausdrücklich ausgeschlossen.
-  - Verträge: [index.json](verification/source14-code-sitemap-matrix-progress-20261016/index.json).
-  - Gate-Stand: source: AUTHORING; compile: NOT_RUN; native: NOT_RUN; manufacturer_parity: NOT_PROVEN.
+  - Verträge: [index.json](verification/source14-full-suite-20261016/index.json), [index.json](verification/source14-code-sitemap-matrix-progress-20261016/index.json).
+  - Gate-Stand: source: P1_REVIEW_FINDING_AND_NARROW_CORRECTION_AUTHORING; compile: NOT_RUN; native: NOT_RUN; manufacturer_parity: NOT_PROVEN.
 
 - [x] **B8: optionale Textaufnahme und gespeicherte Inhaltsanalyse** — COMPLETED. Der begrenzte B8-Baustein für optionale Roh-/DOM-Textaufnahme und gespeicherte ausgewählte Inhaltsanalyse ist mit eigenen nativen/API/UI-Gates, exakter Commit-CI und unveränderlichem installiertem Release geprüft. Vollständige Website-Analyse und CSS-Neuauswahl ohne erhaltenes HTML/DOM bleiben zusätzliche offene Feature-Abnahmen.
   - [x] Pure CSS-/Unicode-Auswahl20 und Binding4 sowie16 echte native Fixtures geprüft; ungültige Konfiguration scheitert vor HTTP.
@@ -5950,4 +5962,4 @@ Diese unveränderten Einträge dokumentieren den damaligen Stand. Aktuelle Resta
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `ea68d9c64624b736371aad963892c6fa95ea791c548b82e0e3ec2d4d44d1eb25`. Letzter im Katalog erfasster Beweisstand: `2026-10-16T03:33:06.773Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `e8deae9e4e1236d8c89db0c170aa761ec30500d445dff5252fc0bc0a013e9876`. Letzter im Katalog erfasster Beweisstand: `2026-10-16T03:51:46.895Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
