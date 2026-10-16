@@ -176,10 +176,27 @@ impl CrawlConfig {
                 self.renderer.is_none(),
                 "crawl_quotas cannot be combined with a renderer"
             );
-            anyhow::ensure!(
-                self.resource_discovery.is_none(),
-                "crawl_quotas with resource discovery is not supported in this slice"
-            );
+            if let Some(resource) = &self.resource_discovery {
+                anyhow::ensure!(
+                    resource
+                        .contract
+                        .as_ref()
+                        .is_some_and(|contract| contract.engine == crate::RESOURCE_CONTRACT_ENGINE),
+                    "crawl_quotas with resource discovery requires resource-contract-v2"
+                );
+                anyhow::ensure!(
+                    !self.include_subdomains,
+                    "crawl_quotas with resource discovery does not support include_subdomains"
+                );
+                anyhow::ensure!(
+                    !self.check_external,
+                    "crawl_quotas with resource discovery does not support check_external"
+                );
+                anyhow::ensure!(
+                    resource.resource_scope.external_origins.is_empty(),
+                    "crawl_quotas with resource discovery does not support external resource origins"
+                );
+            }
         }
         Ok(())
     }

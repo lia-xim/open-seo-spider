@@ -853,7 +853,7 @@ async fn capabilities() -> Json<Value> {
             "http":true,"list":true,"sitemap":true,"robots":true,
             "agent_scoped_indexing_directives":true,"http_link_relationships":true,
             "redirects":true,"intermediate_response_inventory":true,
-            "crawl_quotas":{"version":1,"summary_route":"GET /api/crawls/{id}/quotas","dimensions":["depth","host","pattern"],"resume":"strict_monotone_increases_bound_to_generation_profile_revision_sha256","unsupported":["renderer","resource_discovery","selected_recrawl"],"legacy_accounting":"unavailable"},
+            "crawl_quotas":{"version":1,"summary_route":"GET /api/crawls/{id}/quotas","dimensions":["depth","host","pattern"],"resume":"strict_monotone_increases_bound_to_generation_profile_revision_sha256","unsupported":["renderer","selected_recrawl"],"resource_discovery":{"contract_engine":"open-seo-spider/resource-contract-v2","scope":"existing_internal_host_and_explicit_port","include_subdomains":false,"check_external":false,"external_origins":[]},"legacy_accounting":"unavailable"},
             "selected_recrawl":true,"selected_recrawl_profile":"new_child_exact_requested_urls_no_outward_discovery",
             "cancel":true,"pause":true,"pause_semantics":"stop_admission_then_drain_then_checkpoint","resume":true,"sqlite_only_recovery":true,"immutable_report_revisions":true,"url_limit":null,"url_regex_filters":true,
             "css_extraction":true,"xpath_1_0_extraction":true,"regex_extraction":true,
