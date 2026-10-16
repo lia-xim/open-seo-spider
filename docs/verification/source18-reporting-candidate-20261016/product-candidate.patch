@@ -1,0 +1,1700 @@
+diff --git a/crates/app/src/analysis.rs b/crates/app/src/analysis.rs
+index ad21254..704b474 100644
+--- a/crates/app/src/analysis.rs
++++ b/crates/app/src/analysis.rs
+@@ -188,6 +188,53 @@ pub fn analyze_report(report: &CrawlReport) -> Value {
+     })
+ }
+ 
++/// Filter source-owned presentation rows only after computing the complete graph.
++/// Persistence and relationship/score calculations continue to use analyze_report.
++pub fn reporting_analysis(report: &CrawlReport) -> Value {
++    let mut value = analyze_report(report);
++    let Some(visibility) =
++        open_seo_spider_core::reporting_visibility(&report.config, &report.pages, &report.issues)
++    else {
++        return value;
++    };
++    let hidden = open_seo_spider_core::directive_hidden_issue_urls(&report.config, &report.pages);
++    let retain_owner =
++        |row: &Value, key: &str| row[key].as_str().is_none_or(|url| !hidden.contains(url));
++    for key in ["issues", "structured_data"] {
++        if let Some(rows) = value[key].as_array_mut() {
++            rows.retain(|row| retain_owner(row, "url"));
++        }
++    }
++    for key in ["nodes", "orphan_candidates"] {
++        if let Some(rows) = value["graph"][key].as_array_mut() {
++            rows.retain(|row| retain_owner(row, "url"));
++        }
++    }
++    if let Some(rows) = value["graph"]["edges"].as_array_mut() {
++        rows.retain(|row| retain_owner(row, "source"));
++    }
++    if let Some(rows) = value["fragments"]["observations"].as_array_mut() {
++        rows.retain(|row| retain_owner(row, "source_url"));
++    }
++    if let Some(cycles) = value["canonical_cycles"].as_array_mut() {
++        cycles.retain(|cycle| {
++            cycle.as_array().is_none_or(|urls| {
++                urls.iter()
++                    .any(|url| url.as_str().is_none_or(|url| !hidden.contains(url)))
++            })
++        });
++    }
++    value["reporting_visibility"] =
++        serde_json::to_value(visibility).expect("typed reporting counts serialize");
++    value["reporting_basis"] = json!({
++        "row_policy":"source URL is hidden only when every captured observation of that URL is hidden",
++        "metrics_coverage_and_depth_distribution":"computed from complete captured observations before presentation filtering",
++        "relationship_references":"retained verbatim, including hidden or unobserved target URLs and complete mixed-visible canonical cycles",
++        "raw_snapshot_modified":false
++    });
++    value
++}
++
+ fn usable_html(page: &PageRecord) -> bool {
+     page.is_html() && usable_document(page)
+ }
+@@ -2117,4 +2164,117 @@ mod tests {
+                 .is_empty()
+         );
+     }
++
++    #[test]
++    fn directive_analysis_projects_eight_profiles_without_recalculating_captured_metrics() {
++        use open_seo_spider_core::DirectiveReportingConfig;
++        let mut a = page("a");
++        a.links = vec![anchor("noindex"), anchor("canonical"), anchor("prev")];
++        let mut n = page("noindex");
++        n.meta_robots = vec!["noindex".into()];
++        n.links = vec![anchor("a")];
++        let mut c = page("canonical");
++        c.canonical = vec![a.url.clone()];
++        c.links = vec![anchor("a")];
++        let mut p = page("prev");
++        p.pagination_prev = vec![a.url.clone()];
++        p.links = vec![anchor("a")];
++        for row in [&mut a, &mut n, &mut c, &mut p] {
++            row.structured_data.push(json!({"@type":"WebPage"}));
++        }
++        let mut snapshot = report(vec![a, n, c, p]);
++        let raw = analyze_report(&snapshot);
++        assert_eq!(reporting_analysis(&snapshot), raw);
++        for mask in 0..8 {
++            snapshot.config.directive_reporting = Some(DirectiveReportingConfig {
++                version: 1,
++                respect_noindex: mask & 1 != 0,
++                respect_canonical: mask & 2 != 0,
++                respect_next_prev: mask & 4 != 0,
++            });
++            let saved = serde_json::to_vec(&snapshot).unwrap();
++            let view = reporting_analysis(&snapshot);
++            let hidden = open_seo_spider_core::directive_hidden_issue_urls(
++                &snapshot.config,
++                &snapshot.pages,
++            );
++            for key in ["nodes", "orphan_candidates"] {
++                let expected: Vec<_> = raw["graph"][key]
++                    .as_array()
++                    .unwrap()
++                    .iter()
++                    .filter(|row| !hidden.contains(row["url"].as_str().unwrap()))
++                    .cloned()
++                    .collect();
++                assert_eq!(view["graph"][key], json!(expected));
++            }
++            for key in ["issues", "structured_data"] {
++                let expected: Vec<_> = raw[key]
++                    .as_array()
++                    .unwrap()
++                    .iter()
++                    .filter(|row| !hidden.contains(row["url"].as_str().unwrap()))
++                    .cloned()
++                    .collect();
++                assert_eq!(view[key], json!(expected));
++            }
++            let edges: Vec<_> = raw["graph"]["edges"]
++                .as_array()
++                .unwrap()
++                .iter()
++                .filter(|row| !hidden.contains(row["source"].as_str().unwrap()))
++                .cloned()
++                .collect();
++            assert_eq!(view["graph"]["edges"], json!(edges));
++            assert_eq!(
++                view["graph"]["depth_distribution"],
++                raw["graph"]["depth_distribution"]
++            );
++            assert_eq!(view["graph"]["algorithm"], raw["graph"]["algorithm"]);
++            assert_eq!(view["coverage"], raw["coverage"]);
++            assert_eq!(serde_json::to_vec(&snapshot).unwrap(), saved);
++            if mask == 0 {
++                assert_eq!(view, raw);
++            }
++        }
++    }
++
++    #[test]
++    fn directive_analysis_keeps_visible_duplicates_and_complete_mixed_cycles() {
++        use open_seo_spider_core::DirectiveReportingConfig;
++        let mut a = page("a");
++        let mut b = page("b");
++        a.canonical = vec![b.url.clone()];
++        b.canonical = vec![a.url.clone()];
++        a.meta_robots = vec!["noindex".into()];
++        b.meta_robots = vec!["noindex".into()];
++        let mut snapshot = report(vec![a.clone(), b]);
++        snapshot.config.directive_reporting = Some(DirectiveReportingConfig {
++            respect_noindex: true,
++            ..Default::default()
++        });
++        let cycle = analyze_report(&snapshot)["canonical_cycles"].clone();
++        assert_eq!(cycle.as_array().unwrap().len(), 1);
++        assert!(
++            reporting_analysis(&snapshot)["canonical_cycles"]
++                .as_array()
++                .unwrap()
++                .is_empty()
++        );
++        a.meta_robots.clear();
++        snapshot.pages.push(a);
++        let view = reporting_analysis(&snapshot);
++        assert_eq!(view["canonical_cycles"], cycle);
++        assert_eq!(view["graph"]["nodes"].as_array().unwrap().len(), 1);
++        assert_eq!(view["graph"]["nodes"][0]["url"], "https://fixture.test/a");
++        assert!(
++            view["issues"]
++                .as_array()
++                .unwrap()
++                .iter()
++                .any(
++                    |row| row["url"] == "https://fixture.test/a" && row["code"] == "canonical_loop"
++                )
++        );
++    }
+ }
+diff --git a/crates/app/src/main.rs b/crates/app/src/main.rs
+index 66b3160..2d99c00 100644
+--- a/crates/app/src/main.rs
++++ b/crates/app/src/main.rs
+@@ -48,6 +48,14 @@ struct Cli {
+     reason = "The CLI parses one command; explicit optional fields avoid extra heap allocations."
+ )]
+ enum Command {
++    /// Export visible report rows from a raw saved snapshot; no website requests.
++    ReportVisible {
++        snapshot: PathBuf,
++        #[arg(long)]
++        output: PathBuf,
++        #[arg(long)]
++        csv: Option<PathBuf>,
++    },
+     /// Resume an existing job through the local API; authority/store ownership stays in that service.
+     Resume {
+         /// Existing job UUID, not a SQLite/report path.
+@@ -334,6 +342,41 @@ async fn main() -> anyhow::Result<()> {
+         mcp_files_dir: None,
+         shutdown_on_stdin_eof: false,
+     }) {
++        Command::ReportVisible {
++            snapshot,
++            output,
++            csv,
++        } => {
++            let input = read_bounded(&snapshot, 256 * 1024 * 1024).await?;
++            let report: open_seo_spider_core::CrawlReport = serde_json::from_slice(&input)?;
++            let source = tokio::fs::canonicalize(&snapshot).await?;
++            let mut destinations = std::collections::HashSet::new();
++            for destination in std::iter::once(&output).chain(csv.iter()) {
++                let resolved = canonical_destination(destination).await?;
++                anyhow::ensure!(
++                    resolved != source,
++                    "Visible report destination aliases raw snapshot"
++                );
++                anyhow::ensure!(
++                    destinations.insert(destination_identity(&resolved)),
++                    "Visible JSON and CSV destinations must be distinct"
++                );
++                anyhow::ensure!(
++                    !tokio::fs::try_exists(destination).await?,
++                    "Visible report destination already exists"
++                );
++            }
++            let value = open_seo_spider_core::reporting_json(&report)?;
++            let json = serde_json::to_vec_pretty(&value)?;
++            let csv_bytes = csv
++                .as_ref()
++                .map(|_| export_pages_csv(&report))
++                .transpose()?;
++            write_new_report(&output, &json).await?;
++            if let (Some(path), Some(bytes)) = (csv, csv_bytes) {
++                write_new_report(&path, bytes.as_bytes()).await?;
++            }
++        }
+         Command::Serve {
+             listen,
+             data_dir,
+diff --git a/crates/app/src/mcp.rs b/crates/app/src/mcp.rs
+index ddcfcaa..4e9ee7f 100644
+--- a/crates/app/src/mcp.rs
++++ b/crates/app/src/mcp.rs
+@@ -558,7 +558,7 @@ fn inventory() -> Vec<Value> {
+     let mut tools: Vec<Value> = vec![
+         ("spider_capabilities","Read implemented and optional capabilities",json!({}),vec![],true),
+         ("spider_list_crawls","List saved and active crawls",json!({}),vec![],true),
+-        ("spider_start_crawl","Start a crawl for user-requested targets",json!({"config":{"type":"object","description":"CrawlConfig: seed_urls or seed_url, sitemap_urls, concurrency, delay_ms, obey_robots, max_pages, optional renderer and sitemap_source_processing (max_post_http_entity_bytes, max_decoded_xml_bytes, max_xml_events), plus independent optional sitemap_membership_limits (max_catalog_json_bytes:1..134217728, max_row_json_bytes:1..1048576 and no greater than catalog cap, max_rows:1..1000000); absent membership limits preserve 32 MiB catalog/256 KiB row/1M rows, source work budgets do not widen page bodies or membership retention","properties":{"crawl_quotas":crawl_quotas::config_schema(),"crawl_admission_limits":{"type":["object","null"],"additionalProperties":false,"description":"Opt-in version1 native PageDocument and redirect guards, before robots/rate/HTTP; renderer combination is refused. None/null preserves legacy behavior. At least one non-null bound is required. Folder depth counts all completed literal slash segments including empty segments, not encoded %2F. Raw query splits only on &: absent=0, present empty=1, duplicate keys/empty tokens count. Fetch bytes measure the normalized effective fetch alias, without rewriting original observations. No dynamic quotas.","required":["version"],"properties":{"version":{"type":"integer","const":1},"max_folder_depth":{"type":["integer","null"],"minimum":0,"maximum":65535},"max_query_tokens":{"type":["integer","null"],"minimum":0,"maximum":65535},"max_fetch_url_utf8_bytes":{"type":["integer","null"],"minimum":1,"maximum":1048576}},"anyOf":[{"required":["max_folder_depth"],"properties":{"max_folder_depth":{"type":"integer"}}},{"required":["max_query_tokens"],"properties":{"max_query_tokens":{"type":"integer"}}},{"required":["max_fetch_url_utf8_bytes"],"properties":{"max_fetch_url_utf8_bytes":{"type":"integer"}}}]},"cdn_directory_reporting":{"type":["object","null"],"additionalProperties":false,"description":"Optional own reporting profile: literal trailing-slash directories on ASCII DNS hosts, cross HTTP/HTTPS and one www alias, exact supported non-default port. Does not grant fetch, traversal, redirect, resource, header or credential permission; no vendor parity claim. Explicit80/443, IDNA, IPv6, wildcard and dot-segment declarations unsupported.","required":["version","rules"],"properties":{"version":{"type":"integer","const":1},"rules":{"type":"array","minItems":1,"maxItems":32,"uniqueItems":true,"items":{"type":"string","minLength":1,"maxLength":2048}}}},"cdn_classification":{"type":["object","null"],"additionalProperties":false,"description":"Optional version1 declared reporting classification for exact HTTP(S) origins. This does not grant fetch, HTML traversal, resource-origin or credential permission; no wildcard/subdomain inheritance or path scopes. None/null preserves legacy behavior.","required":["version","origins"],"properties":{"version":{"type":"integer","const":1},"origins":{"type":"array","minItems":1,"maxItems":32,"uniqueItems":true,"items":{"type":"string","minLength":1,"maxLength":2048}}}},"sitemap_membership_limits":{"type":["object","null"],"additionalProperties":false,"description":"Independent explicit durable membership capacity; null/absence keeps legacy defaults. Row bytes cannot exceed catalog bytes; Rust validates this relation before crawl IO.","properties":{"max_catalog_json_bytes":{"type":"integer","minimum":1,"maximum":134217728,"default":33554432},"max_row_json_bytes":{"type":"integer","minimum":1,"maximum":1048576,"default":262144},"max_rows":{"type":"integer","minimum":1,"maximum":1000000,"default":1000000}}}}}}),vec!["config"],false),
++        ("spider_start_crawl","Start a crawl for user-requested targets",json!({"config":{"type":"object","description":"CrawlConfig: seed_urls or seed_url, sitemap_urls, concurrency, delay_ms, obey_robots, max_pages, optional renderer and sitemap_source_processing (max_post_http_entity_bytes, max_decoded_xml_bytes, max_xml_events), plus independent optional sitemap_membership_limits (max_catalog_json_bytes:1..134217728, max_row_json_bytes:1..1048576 and no greater than catalog cap, max_rows:1..1000000); absent membership limits preserve 32 MiB catalog/256 KiB row/1M rows, source work budgets do not widen page bodies or membership retention","properties":{"directive_reporting":{"type":["object","null"],"additionalProperties":false,"required":["version","respect_noindex","respect_canonical","respect_next_prev"],"properties":{"version":{"type":"integer","const":1},"respect_noindex":{"type":"boolean"},"respect_canonical":{"type":"boolean"},"respect_next_prev":{"type":"boolean"}},"description":"Optional report-row hiding only. Crawling and outlink discovery remain unchanged. Canonical uses captured document identity; next/prev hides pages with observed prev only. project.json remains raw evidence."},"crawl_quotas":crawl_quotas::config_schema(),"crawl_admission_limits":{"type":["object","null"],"additionalProperties":false,"description":"Opt-in version1 native PageDocument and redirect guards, before robots/rate/HTTP; renderer combination is refused. None/null preserves legacy behavior. At least one non-null bound is required. Folder depth counts all completed literal slash segments including empty segments, not encoded %2F. Raw query splits only on &: absent=0, present empty=1, duplicate keys/empty tokens count. Fetch bytes measure the normalized effective fetch alias, without rewriting original observations. No dynamic quotas.","required":["version"],"properties":{"version":{"type":"integer","const":1},"max_folder_depth":{"type":["integer","null"],"minimum":0,"maximum":65535},"max_query_tokens":{"type":["integer","null"],"minimum":0,"maximum":65535},"max_fetch_url_utf8_bytes":{"type":["integer","null"],"minimum":1,"maximum":1048576}},"anyOf":[{"required":["max_folder_depth"],"properties":{"max_folder_depth":{"type":"integer"}}},{"required":["max_query_tokens"],"properties":{"max_query_tokens":{"type":"integer"}}},{"required":["max_fetch_url_utf8_bytes"],"properties":{"max_fetch_url_utf8_bytes":{"type":"integer"}}}]},"cdn_directory_reporting":{"type":["object","null"],"additionalProperties":false,"description":"Optional own reporting profile: literal trailing-slash directories on ASCII DNS hosts, cross HTTP/HTTPS and one www alias, exact supported non-default port. Does not grant fetch, traversal, redirect, resource, header or credential permission; no vendor parity claim. Explicit80/443, IDNA, IPv6, wildcard and dot-segment declarations unsupported.","required":["version","rules"],"properties":{"version":{"type":"integer","const":1},"rules":{"type":"array","minItems":1,"maxItems":32,"uniqueItems":true,"items":{"type":"string","minLength":1,"maxLength":2048}}}},"cdn_classification":{"type":["object","null"],"additionalProperties":false,"description":"Optional version1 declared reporting classification for exact HTTP(S) origins. This does not grant fetch, HTML traversal, resource-origin or credential permission; no wildcard/subdomain inheritance or path scopes. None/null preserves legacy behavior.","required":["version","origins"],"properties":{"version":{"type":"integer","const":1},"origins":{"type":"array","minItems":1,"maxItems":32,"uniqueItems":true,"items":{"type":"string","minLength":1,"maxLength":2048}}}},"sitemap_membership_limits":{"type":["object","null"],"additionalProperties":false,"description":"Independent explicit durable membership capacity; null/absence keeps legacy defaults. Row bytes cannot exceed catalog bytes; Rust validates this relation before crawl IO.","properties":{"max_catalog_json_bytes":{"type":"integer","minimum":1,"maximum":134217728,"default":33554432},"max_row_json_bytes":{"type":"integer","minimum":1,"maximum":1048576,"default":262144},"max_rows":{"type":"integer","minimum":1,"maximum":1000000,"default":1000000}}}}}}),vec!["config"],false),
+         ("spider_status","Read crawl progress and warnings",json!({"id":uuid}),vec!["id"],true),
+         ("spider_pages","Read a bounded page slice; increment offset for more",json!({"id":uuid,"offset":{"type":"integer","minimum":0},"limit":{"type":"integer","minimum":1,"maximum":10000}}),vec!["id"],true),
+         ("spider_issues","Read observed audit issues",json!({"id":uuid}),vec!["id"],true),
+diff --git a/crates/app/src/server.rs b/crates/app/src/server.rs
+index eb9debc..bcb2030 100644
+--- a/crates/app/src/server.rs
++++ b/crates/app/src/server.rs
+@@ -18,8 +18,8 @@ use open_seo_spider_core::{
+     export_input_occurrences_csv, export_issues_csv, export_links_csv, export_pages_csv,
+     export_pdf_csv, export_response_observations_csv, export_robots_simulation_csv,
+     export_serp_csv, export_sitemap_xml, import_serp_csv, import_url_list, inspect_xlsx_list,
+-    prepare_selected_recrawl, preview_crawl_policy, preview_serp, response_observations,
+-    simulate_robots, validate_fragments,
++    prepare_selected_recrawl, preview_crawl_policy, preview_serp, reported_fragments,
++    reported_responses, simulate_robots,
+ };
+ use serde::{Deserialize, Serialize};
+ use serde_json::{Value, json};
+@@ -119,7 +119,13 @@ impl Job {
+             })
+             .count();
+         let active = matches!(self.status.as_str(), "running" | "pausing" | "cancelling");
+-        json!({"id":self.id,"status":self.status,"seed_url":self.config.seed_urls.first(),"config":self.config,"started_at":self.started_at,"finished_at":self.finished_at,"generation":self.generation,"checkpoint":self.checkpoint,"operation":self.operation,"policy_ledger":self.policy_ledger,"resource_ledger":self.resource_ledger,"resume_available":self.frontier_available && !active,"recrawl_available":self.report.is_some() && !active && self.config.crawl_quotas.is_none(),"parent_snapshot_available":self.operation.is_some() && self.frontier_available,"stats":{"discovered":self.pages.len()+self.queued+self.in_flight,"queued":self.queued,"discovery_pending":self.discovery_pending,"fetched":self.pages.len(),"failed":failed,"issues":self.issues.len(),"in_flight":self.in_flight},"warnings":self.warnings,"error":self.error,"summary":self.report.as_ref().map(|report| &report.summary)})
++        let mut value = json!({"id":self.id,"status":self.status,"seed_url":self.config.seed_urls.first(),"config":self.config,"started_at":self.started_at,"finished_at":self.finished_at,"generation":self.generation,"checkpoint":self.checkpoint,"operation":self.operation,"policy_ledger":self.policy_ledger,"resource_ledger":self.resource_ledger,"resume_available":self.frontier_available && !active,"recrawl_available":self.report.is_some() && !active && self.config.crawl_quotas.is_none(),"parent_snapshot_available":self.operation.is_some() && self.frontier_available,"stats":{"discovered":self.pages.len()+self.queued+self.in_flight,"queued":self.queued,"discovery_pending":self.discovery_pending,"fetched":self.pages.len(),"failed":failed,"issues":self.issues.len(),"in_flight":self.in_flight},"warnings":self.warnings,"error":self.error,"summary":self.report.as_ref().map(|report| &report.summary)});
++        if let Some(counts) =
++            open_seo_spider_core::reporting_visibility(&self.config, &self.pages, &self.issues)
++        {
++            value["reporting_visibility"] = json!(counts);
++        }
++        value
+     }
+ }
+ #[derive(Serialize)]
+@@ -450,6 +456,7 @@ async fn serve_with_mcp_files_ready_source(
+             post(sitemap_generation::bundle),
+         )
+         .route("/api/crawls/{id}/project.json", get(export_project))
++        .route("/api/crawls/{id}/report.json", get(export_visible_report))
+         .route(
+             "/resource-broken-sources",
+             get(|| async {
+@@ -1260,9 +1267,10 @@ async fn pages(
+         .pages
+         .iter()
+         .filter(|page| {
+-            query
+-                .internal
+-                .is_none_or(|internal| page.internal == internal)
++            open_seo_spider_core::directive_page_visible(&guard.config, page)
++                && query
++                    .internal
++                    .is_none_or(|internal| page.internal == internal)
+                 && (q.is_empty()
+                     || page.url.to_lowercase().contains(&q)
+                     || page.title().to_lowercase().contains(&q))
+@@ -1285,16 +1293,30 @@ async fn pages(
+             value
+         })
+         .collect();
+-    Ok(Json(
+-        json!({"pages":results,"total":total,"offset":offset,"limit":limit}),
+-    ))
++    let mut value = json!({"pages":results,"total":total,"offset":offset,"limit":limit});
++    if let Some(counts) =
++        open_seo_spider_core::reporting_visibility(&guard.config, &guard.pages, &guard.issues)
++    {
++        value["reporting_visibility"] = json!(counts);
++    }
++    Ok(Json(value))
+ }
+ async fn issues(State(state): State<AppState>, Path(id): Path<Uuid>) -> ApiResult<Json<Value>> {
+     let job = get_job(&state, id).await?;
+     let guard = job.read().await;
+-    Ok(Json(
+-        json!({"issues":guard.issues,"total":guard.issues.len()}),
+-    ))
++    let hidden = open_seo_spider_core::directive_hidden_issue_urls(&guard.config, &guard.pages);
++    let visible: Vec<_> = guard
++        .issues
++        .iter()
++        .filter(|issue| !hidden.contains(issue.url.as_str()))
++        .collect();
++    let mut value = json!({"issues":visible,"total":visible.len()});
++    if let Some(counts) =
++        open_seo_spider_core::reporting_visibility(&guard.config, &guard.pages, &guard.issues)
++    {
++        value["reporting_visibility"] = json!(counts);
++    }
++    Ok(Json(value))
+ }
+ async fn cancel_crawl(
+     State(state): State<AppState>,
+@@ -1680,7 +1702,7 @@ async fn advanced_analysis(
+     Path(id): Path<Uuid>,
+ ) -> ApiResult<Json<Value>> {
+     let report = require_report(&state, id).await?;
+-    Ok(Json(crate::analysis::analyze_report(&report)))
++    Ok(Json(crate::analysis::reporting_analysis(&report)))
+ }
+ fn download(body: String, kind: &str, filename: &str) -> Response {
+     (
+@@ -1842,7 +1864,7 @@ async fn fragment_inventory(
+ ) -> ApiResult<Json<Value>> {
+     let report = require_report(&state, id).await?;
+     Ok(Json(
+-        json!({"observations":validate_fragments(&report),"enabled":report.config.validate_fragments,"scope":"declared_anchor_fragments_in_captured_documents","unknown_is_not_missing":true}),
++        json!({"observations":reported_fragments(&report),"enabled":report.config.validate_fragments,"scope":"declared_anchor_fragments_in_captured_documents","unknown_is_not_missing":true}),
+     ))
+ }
+ async fn export_fragments(
+@@ -1886,7 +1908,7 @@ async fn response_inventory(
+     State(state): State<AppState>,
+     Path(id): Path<Uuid>,
+ ) -> ApiResult<Json<Value>> {
+-    let rows = response_observations(&require_report(&state, id).await?);
++    let rows = reported_responses(&require_report(&state, id).await?);
+     Ok(Json(
+         json!({"responses":rows,"scope":"captured_native_response_observations","unretained_redirect_headers_and_body":"unknown","document_records_are_separate":true}),
+     ))
+@@ -1970,6 +1992,21 @@ async fn export_cookie_csv(
+         "cookies.csv",
+     ))
+ }
++async fn export_visible_report(
++    State(state): State<AppState>,
++    Path(id): Path<Uuid>,
++) -> ApiResult<Response> {
++    let report = require_report(&state, id).await?;
++    let value = open_seo_spider_core::reporting_json(&report)
++        .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?;
++    Ok(download(
++        serde_json::to_string_pretty(&value)
++            .map_err(|error| api_error(StatusCode::INTERNAL_SERVER_ERROR, error))?,
++        "application/json",
++        "visible-report.json",
++    ))
++}
++
+ async fn export_project(
+     State(state): State<AppState>,
+     Path(id): Path<Uuid>,
+diff --git a/crates/core/src/crawler.rs b/crates/core/src/crawler.rs
+index c3dddad..f4e3b59 100644
+--- a/crates/core/src/crawler.rs
++++ b/crates/core/src/crawler.rs
+@@ -76,6 +76,9 @@ impl Crawler {
+             automatically_captured_sitemap_inputs.then(|| config.sitemap_urls.clone());
+         config.prepare_input_lists()?;
+         config.validate_crawl_quotas()?;
++        if let Some(profile) = &config.directive_reporting {
++            profile.validate()?;
++        }
+         if automatically_captured_sitemap_inputs {
+             config.explicit_sitemap_inputs = original_sitemap_inputs;
+         }
+diff --git a/crates/core/src/directive_reporting.rs b/crates/core/src/directive_reporting.rs
+new file mode 100644
+index 0000000..06a925e
+--- /dev/null
++++ b/crates/core/src/directive_reporting.rs
+@@ -0,0 +1,699 @@
++//! Opt-in presentation of saved observations. This module has no crawl/store I/O.
++use crate::{AuditIssue, CrawlConfig, CrawlReport, PageRecord};
++use serde::{Deserialize, Deserializer, Serialize};
++use std::{borrow::Cow, collections::HashSet};
++
++#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
++pub struct DirectiveReportingConfig {
++    pub version: u8,
++    pub respect_noindex: bool,
++    pub respect_canonical: bool,
++    pub respect_next_prev: bool,
++}
++
++impl Default for DirectiveReportingConfig {
++    fn default() -> Self {
++        Self {
++            version: 1,
++            respect_noindex: false,
++            respect_canonical: false,
++            respect_next_prev: false,
++        }
++    }
++}
++
++impl<'de> Deserialize<'de> for DirectiveReportingConfig {
++    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
++        #[derive(Deserialize)]
++        #[serde(deny_unknown_fields)]
++        struct Wire {
++            version: u8,
++            respect_noindex: bool,
++            respect_canonical: bool,
++            respect_next_prev: bool,
++        }
++        struct ObjectProfile;
++        impl<'de> serde::de::Visitor<'de> for ObjectProfile {
++            type Value = Wire;
++            fn expecting(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
++                f.write_str("a strict directive reporting object")
++            }
++            fn visit_map<A: serde::de::MapAccess<'de>>(self, map: A) -> Result<Wire, A::Error> {
++                Wire::deserialize(serde::de::value::MapAccessDeserializer::new(map))
++            }
++        }
++        let value = deserializer.deserialize_map(ObjectProfile)?;
++        let config = Self {
++            version: value.version,
++            respect_noindex: value.respect_noindex,
++            respect_canonical: value.respect_canonical,
++            respect_next_prev: value.respect_next_prev,
++        };
++        config.validate().map_err(serde::de::Error::custom)?;
++        Ok(config)
++    }
++}
++
++impl DirectiveReportingConfig {
++    pub fn validate(&self) -> anyhow::Result<()> {
++        anyhow::ensure!(self.version == 1, "Unsupported directive reporting version");
++        Ok(())
++    }
++    pub fn active(&self) -> bool {
++        self.respect_noindex || self.respect_canonical || self.respect_next_prev
++    }
++    /// Explicit all-false is semantically absence and serializes as legacy absence.
++    pub fn is_inactive(value: &Option<Self>) -> bool {
++        value.as_ref().is_none_or(|profile| !profile.active())
++    }
++}
++
++/// Use the same scoped robots evaluator and document identity as the audit.
++/// Incomplete/failed/non-200 and other non-indexable rows are not blanket hidden.
++pub fn directive_page_visible(config: &CrawlConfig, page: &PageRecord) -> bool {
++    let Some(profile) = &config.directive_reporting else {
++        return true;
++    };
++    !(profile.respect_noindex
++        && crate::applicable_robot_directives(page)
++            .iter()
++            .any(|value| matches!(value.as_str(), "noindex" | "none"))
++        || profile.respect_canonical && page.canonical.iter().any(|url| url != page.document_url())
++        || profile.respect_next_prev && !page.pagination_prev.is_empty())
++}
++
++/// URL-owned issues are hidden only when every captured observation of that URL
++/// is hidden. A visible duplicate keeps its issues; an orphan URL is never hidden.
++/// Shared by API issue rows, detached report projections and visibility counters.
++pub fn directive_hidden_issue_urls<'a>(
++    config: &CrawlConfig,
++    pages: &'a [PageRecord],
++) -> HashSet<&'a str> {
++    let mut hidden = HashSet::new();
++    if DirectiveReportingConfig::is_inactive(&config.directive_reporting) {
++        return hidden;
++    }
++    let mut visible = HashSet::new();
++    for page in pages {
++        if directive_page_visible(config, page) {
++            visible.insert(page.url.as_str());
++        } else {
++            hidden.insert(page.url.as_str());
++        }
++    }
++    hidden.retain(|url| !visible.contains(url));
++    hidden
++}
++
++#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
++pub struct ReportingVisibility {
++    pub engine: &'static str,
++    pub captured_pages: usize,
++    pub visible_pages: usize,
++    pub hidden_pages: usize,
++    pub captured_issues: usize,
++    pub visible_issues: usize,
++    pub hidden_issues: usize,
++    pub captured_source_links: usize,
++    pub visible_source_links: usize,
++    pub hidden_source_links: usize,
++}
++
++pub fn reporting_visibility(
++    config: &CrawlConfig,
++    pages: &[PageRecord],
++    issues: &[AuditIssue],
++) -> Option<ReportingVisibility> {
++    if DirectiveReportingConfig::is_inactive(&config.directive_reporting) {
++        return None;
++    }
++    let hidden_rows = pages
++        .iter()
++        .filter(|page| !directive_page_visible(config, page))
++        .count();
++    let hidden = directive_hidden_issue_urls(config, pages);
++    let visible_issues = issues
++        .iter()
++        .filter(|issue| !hidden.contains(issue.url.as_str()))
++        .count();
++    let captured_links = pages.iter().map(|page| page.links.len()).sum();
++    let visible_links = pages
++        .iter()
++        .filter(|page| directive_page_visible(config, page))
++        .map(|page| page.links.len())
++        .sum();
++    Some(ReportingVisibility {
++        engine: "open-seo-spider/directive-reporting-v1",
++        captured_pages: pages.len(),
++        visible_pages: pages.len() - hidden_rows,
++        hidden_pages: hidden_rows,
++        captured_issues: issues.len(),
++        visible_issues,
++        hidden_issues: issues.len() - visible_issues,
++        captured_source_links: captured_links,
++        visible_source_links: visible_links,
++        hidden_source_links: captured_links - visible_links,
++    })
++}
++
++/// Detached row projection only. Never save this back into the raw job/store.
++/// Summary remains captured crawl statistics, not a recomputed crawl result.
++pub fn reported_report(report: &CrawlReport) -> Cow<'_, CrawlReport> {
++    if DirectiveReportingConfig::is_inactive(&report.config.directive_reporting) {
++        return Cow::Borrowed(report);
++    }
++    let hidden = directive_hidden_issue_urls(&report.config, &report.pages);
++    let mut projected = report.clone();
++    projected
++        .pages
++        .retain(|page| directive_page_visible(&report.config, page));
++    projected
++        .issues
++        .retain(|issue| !hidden.contains(issue.url.as_str()));
++    Cow::Owned(projected)
++}
++
++/// Analyze complete captured target facts before suppressing source-owned rows.
++pub fn reported_fragments(report: &CrawlReport) -> Vec<crate::FragmentObservation> {
++    let hidden = directive_hidden_issue_urls(&report.config, &report.pages);
++    crate::validate_fragments(report)
++        .into_iter()
++        .filter(|row| !hidden.contains(row.source_url.as_str()))
++        .collect()
++}
++
++/// Redirect hops retain their original request owner and response identities.
++pub fn reported_responses(report: &CrawlReport) -> Vec<crate::ResponseObservation> {
++    let visible = reported_report(report);
++    crate::response_observations(visible.as_ref())
++}
++
++/// Public visible rows have a distinct envelope, never a raw snapshot identity.
++pub fn reporting_json(report: &CrawlReport) -> anyhow::Result<serde_json::Value> {
++    let visible = reported_report(report);
++    let counts = reporting_visibility(&report.config, &report.pages, &report.issues)
++        .unwrap_or_else(|| ReportingVisibility {
++            engine: "open-seo-spider/directive-reporting-v1",
++            captured_pages: report.pages.len(),
++            visible_pages: report.pages.len(),
++            hidden_pages: 0,
++            captured_issues: report.issues.len(),
++            visible_issues: report.issues.len(),
++            hidden_issues: 0,
++            captured_source_links: report.pages.iter().map(|page| page.links.len()).sum(),
++            visible_source_links: report.pages.iter().map(|page| page.links.len()).sum(),
++            hidden_source_links: 0,
++        });
++    Ok(serde_json::json!({
++        "engine":"open-seo-spider/directive-reporting-v1",
++        "kind":"visible_report_rows_not_raw_snapshot",
++        "directive_reporting":report.config.directive_reporting,
++        "reporting_visibility":counts,
++        "captured_crawl_summary":report.summary,
++        "pages":visible.pages,
++        "issues":visible.issues,
++        "qualification":"Source-owned rows are filtered; retained page/link relationship facts are not rewritten. Raw project, crawl counters, frontier and explicit source/ledger APIs remain complete. Analysis rows use the same visibility policy while their metrics retain the complete capture basis."
++    }))
++}
++
++/// Counts are appended only for active profiles, preserving old CSV bytes.
++pub fn reporting_csv(report: &CrawlReport, csv: String) -> anyhow::Result<String> {
++    let Some(counts) = reporting_visibility(&report.config, &report.pages, &report.issues) else {
++        return Ok(csv);
++    };
++    let mut reader = csv::ReaderBuilder::new()
++        .has_headers(false)
++        .from_reader(csv.as_bytes());
++    let mut writer = csv::Writer::from_writer(Vec::new());
++    let labels = [
++        "Captured Pages",
++        "Visible Pages",
++        "Hidden Pages",
++        "Captured Issues",
++        "Visible Issues",
++        "Hidden Issues",
++    ];
++    let values = [
++        counts.captured_pages,
++        counts.visible_pages,
++        counts.hidden_pages,
++        counts.captured_issues,
++        counts.visible_issues,
++        counts.hidden_issues,
++    ]
++    .map(|value| value.to_string());
++    for (index, record) in reader.records().enumerate() {
++        let mut record = record?;
++        if index == 0 {
++            for label in labels {
++                record.push_field(label);
++            }
++        } else {
++            for value in &values {
++                record.push_field(value);
++            }
++        }
++        writer.write_record(&record)?;
++    }
++    Ok(String::from_utf8(writer.into_inner()?)?)
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++    use crate::{LinkRecord, RobotsDirective};
++
++    fn pages() -> Vec<PageRecord> {
++        let plain = PageRecord {
++            url: "https://fixture.test/plain".into(),
++            final_url: "https://fixture.test/plain".into(),
++            ..Default::default()
++        };
++        let mut noindex = plain.clone();
++        noindex.url = "https://fixture.test/noindex".into();
++        noindex.final_url = noindex.url.clone();
++        noindex.meta_robots = vec!["noindex".into()];
++        let mut canonical = plain.clone();
++        canonical.url = "https://fixture.test/canonical".into();
++        canonical.final_url = canonical.url.clone();
++        canonical.canonical = vec![plain.url.clone()];
++        let mut prev = plain.clone();
++        prev.url = "https://fixture.test/prev".into();
++        prev.final_url = prev.url.clone();
++        prev.pagination_prev = vec![plain.url.clone()];
++        vec![plain, noindex, canonical, prev]
++    }
++    #[test]
++    fn eight_independent_switch_combinations_keep_raw_links_and_crawl_configuration() {
++        let mut rows = pages();
++        for page in &mut rows {
++            page.links.push(LinkRecord {
++                url: "https://fixture.test/outlink".into(),
++                ..Default::default()
++            });
++        }
++        let raw = serde_json::to_vec(&rows).unwrap();
++        for mask in 0..8 {
++            let config = CrawlConfig {
++                directive_reporting: Some(DirectiveReportingConfig {
++                    version: 1,
++                    respect_noindex: mask & 1 != 0,
++                    respect_canonical: mask & 2 != 0,
++                    respect_next_prev: mask & 4 != 0,
++                }),
++                ..Default::default()
++            };
++            assert!(directive_page_visible(&config, &rows[0]));
++            for (index, bit) in [(1, 1), (2, 2), (3, 4)] {
++                assert_eq!(
++                    directive_page_visible(&config, &rows[index]),
++                    mask & bit == 0
++                );
++            }
++            assert_eq!(serde_json::to_vec(&rows).unwrap(), raw);
++            assert!(config.crawl_links);
++            assert!(config.resource_discovery.is_none());
++        }
++    }
++    #[test]
++    fn noindex_uses_scoped_audit_evaluator_not_nonindexable_or_stale_effective_cache() {
++        let config = CrawlConfig {
++            directive_reporting: Some(DirectiveReportingConfig {
++                respect_noindex: true,
++                ..Default::default()
++            }),
++            ..Default::default()
++        };
++        let mut row = pages().remove(0);
++        row.indexable = false;
++        row.status = Some(404);
++        row.effective_robots = vec!["noindex".into()];
++        assert!(directive_page_visible(&config, &row));
++        row.indexability_agent = "googlebot".into();
++        row.robots_directives = vec![RobotsDirective {
++            agent: Some("bingbot".into()),
++            directives: vec!["noindex".into()],
++            ..Default::default()
++        }];
++        assert!(directive_page_visible(&config, &row));
++        row.robots_directives[0].agent = Some("googlebot".into());
++        assert!(!directive_page_visible(&config, &row));
++    }
++    #[test]
++    fn canonical_uses_final_or_successful_render_document_identity_and_prev_is_independent() {
++        let config = CrawlConfig {
++            directive_reporting: Some(DirectiveReportingConfig {
++                respect_canonical: true,
++                respect_next_prev: true,
++                ..Default::default()
++            }),
++            ..Default::default()
++        };
++        let mut row = pages().remove(0);
++        row.canonical = vec![row.final_url.clone()];
++        row.pagination_next = vec!["https://fixture.test/page2".into()];
++        assert!(directive_page_visible(&config, &row));
++        row.rendered = true;
++        row.rendered_url = Some("https://fixture.test/rendered".into());
++        row.canonical = vec![row.rendered_url.clone().unwrap()];
++        assert!(directive_page_visible(&config, &row));
++        row.pagination_prev = vec!["https://fixture.test/page1".into()];
++        assert!(!directive_page_visible(&config, &row));
++    }
++    #[test]
++    fn strict_saved_profile_default_none_null_and_all_false_keep_legacy_config_bytes() {
++        let raw = serde_json::to_value(CrawlConfig::default()).unwrap();
++        assert!(raw.get("directive_reporting").is_none());
++        for profile in [
++            serde_json::Value::Null,
++            serde_json::json!({"version":1,"respect_noindex":false,"respect_canonical":false,"respect_next_prev":false}),
++        ] {
++            let mut value = raw.clone();
++            value["directive_reporting"] = profile;
++            let config: CrawlConfig = serde_json::from_value(value).unwrap();
++            assert_eq!(serde_json::to_value(config).unwrap(), raw);
++        }
++        for profile in [
++            serde_json::json!({}),
++            serde_json::json!([1, true, false, false]),
++            serde_json::json!({"version":2,"respect_noindex":true,"respect_canonical":false,"respect_next_prev":false}),
++            serde_json::json!({"version":1,"respect_noindex":"true","respect_canonical":false,"respect_next_prev":false}),
++            serde_json::json!({"version":1,"respect_noindex":true,"respect_canonical":false,"respect_next_prev":false,"follow":true}),
++        ] {
++            let mut value = raw.clone();
++            value["directive_reporting"] = profile;
++            assert!(serde_json::from_value::<CrawlConfig>(value).is_err());
++        }
++    }
++    #[test]
++    fn default_standard_csv_and_summary_raw_bytes_are_preserved_and_duplicate_rows_count() {
++        let mut report = CrawlReport {
++            config: CrawlConfig::default(),
++            pages: pages(),
++            issues: Vec::new(),
++            summary: crate::CrawlSummary::default(),
++            warnings: Vec::new(),
++            operation: None,
++            policy_ledger: None,
++            resource_ledger: None,
++            sitemap_catalog: None,
++            sitemap_coverage_inventory: None,
++            sitemap_source_measurements: None,
++        };
++        let legacy = crate::export_pages_csv(&report).unwrap();
++        for profile in [None, Some(DirectiveReportingConfig::default())] {
++            report.config.directive_reporting = profile;
++            assert_eq!(crate::export_pages_csv(&report).unwrap(), legacy);
++            assert!(matches!(reported_report(&report), Cow::Borrowed(_)));
++        }
++        report.config.directive_reporting = Some(DirectiveReportingConfig {
++            respect_noindex: true,
++            ..Default::default()
++        });
++        report.pages.push(report.pages[1].clone());
++        let raw = serde_json::to_vec(&report).unwrap();
++        let counts = reporting_visibility(&report.config, &report.pages, &report.issues).unwrap();
++        assert_eq!(counts.captured_pages, 5);
++        assert_eq!(counts.hidden_pages, 2);
++        assert_eq!(counts.visible_pages, 3);
++        let visible = reporting_json(&report).unwrap();
++        assert_eq!(visible["pages"].as_array().unwrap().len(), 3);
++        let csv = crate::export_pages_csv(&report).unwrap();
++        assert!(csv.lines().next().unwrap().contains("Captured Pages"));
++        assert_eq!(serde_json::to_vec(&report).unwrap(), raw);
++        let mut same_url_visible = report.pages[1].clone();
++        same_url_visible.meta_robots.clear();
++        report.pages.push(same_url_visible);
++        let projected = reported_report(&report);
++        assert_eq!(projected.pages.len(), 4);
++        assert_eq!(
++            reporting_visibility(&report.config, &report.pages, &report.issues)
++                .unwrap()
++                .visible_pages,
++            projected.pages.len()
++        );
++    }
++
++    #[test]
++    fn mixed_duplicate_issues_stay_visible_all_hidden_hide_and_orphans_survive() {
++        let mut mixed_hidden = pages()[1].clone();
++        mixed_hidden.url = "https://fixture.test/mixed".into();
++        mixed_hidden.final_url = mixed_hidden.url.clone();
++        let mut mixed_visible = mixed_hidden.clone();
++        mixed_visible.meta_robots.clear();
++        let mut all_hidden = mixed_hidden.clone();
++        all_hidden.url = "https://fixture.test/fully-hidden".into();
++        all_hidden.final_url = all_hidden.url.clone();
++        let plain = pages()[0].clone();
++        let issue = |code: &str, url: &str| AuditIssue {
++            code: code.into(),
++            severity: crate::Severity::Notice,
++            url: url.into(),
++            message: "Authored URL-owned issue fixture".into(),
++            related_urls: Vec::new(),
++        };
++        let mut report = CrawlReport {
++            config: CrawlConfig::default(),
++            pages: vec![
++                plain.clone(),
++                mixed_hidden,
++                mixed_visible,
++                all_hidden.clone(),
++                all_hidden,
++            ],
++            issues: vec![
++                issue("mixed-retained", "https://fixture.test/mixed"),
++                issue("fully-hidden", "https://fixture.test/fully-hidden"),
++                issue("orphan-retained", "https://fixture.test/orphan"),
++                issue("plain-retained", &plain.url),
++            ],
++            summary: crate::CrawlSummary::default(),
++            warnings: Vec::new(),
++            operation: None,
++            policy_ledger: None,
++            resource_ledger: None,
++            sitemap_catalog: None,
++            sitemap_coverage_inventory: None,
++            sitemap_source_measurements: None,
++        };
++        let legacy_csv = crate::export_issues_csv(&report).unwrap();
++        let legacy_config = serde_json::to_value(CrawlConfig::default()).unwrap();
++        for profile in [
++            None,
++            Some(serde_json::Value::Null),
++            Some(serde_json::json!({
++                "version":1, "respect_noindex":false, "respect_canonical":false, "respect_next_prev":false
++            })),
++        ] {
++            let mut config = legacy_config.clone();
++            if let Some(profile) = profile {
++                config["directive_reporting"] = profile;
++            }
++            report.config = serde_json::from_value(config).unwrap();
++            assert!(directive_hidden_issue_urls(&report.config, &report.pages).is_empty());
++            assert_eq!(crate::export_issues_csv(&report).unwrap(), legacy_csv);
++            assert_eq!(reported_report(&report).issues.len(), 4);
++            assert!(reporting_visibility(&report.config, &report.pages, &report.issues).is_none());
++        }
++        report.config.directive_reporting = Some(DirectiveReportingConfig {
++            respect_noindex: true,
++            ..Default::default()
++        });
++        let raw = serde_json::to_vec(&report).unwrap();
++        let hidden = directive_hidden_issue_urls(&report.config, &report.pages);
++        assert_eq!(hidden, HashSet::from(["https://fixture.test/fully-hidden"]));
++        // This is the exact public API row predicate, using the shared helper.
++        let api_rows: Vec<_> = report
++            .issues
++            .iter()
++            .filter(|row| !hidden.contains(row.url.as_str()))
++            .collect();
++        let projected = reported_report(&report);
++        let expected = ["mixed-retained", "orphan-retained", "plain-retained"];
++        assert_eq!(
++            api_rows
++                .iter()
++                .map(|row| row.code.as_str())
++                .collect::<Vec<_>>(),
++            expected
++        );
++        assert_eq!(
++            projected
++                .issues
++                .iter()
++                .map(|row| row.code.as_str())
++                .collect::<Vec<_>>(),
++            expected
++        );
++        let counts = reporting_visibility(&report.config, &report.pages, &report.issues).unwrap();
++        assert_eq!(
++            (
++                counts.captured_pages,
++                counts.visible_pages,
++                counts.hidden_pages
++            ),
++            (5, 2, 3)
++        );
++        assert_eq!(
++            (
++                counts.captured_issues,
++                counts.visible_issues,
++                counts.hidden_issues
++            ),
++            (4, 3, 1)
++        );
++        let exported = reporting_json(&report).unwrap();
++        assert_eq!(exported["issues"].as_array().unwrap().len(), 3);
++        let csv = crate::export_issues_csv(&report).unwrap();
++        let rows: Vec<_> = csv::Reader::from_reader(csv.as_bytes())
++            .records()
++            .map(Result::unwrap)
++            .collect();
++        assert_eq!(
++            rows.iter()
++                .map(|row| row.get(1).unwrap())
++                .collect::<Vec<_>>(),
++            expected
++        );
++        assert!(
++            rows.iter()
++                .all(|row| row.get(9) == Some("3") && row.get(10) == Some("1"))
++        );
++        assert_eq!(serde_json::to_vec(&report).unwrap(), raw);
++    }
++
++    #[test]
++    fn fragment_reporting_keeps_hidden_target_facts_and_default_csv_bytes() {
++        let mut rows = pages();
++        for row in &mut rows {
++            row.content_type = "text/html".into();
++            row.status = Some(200);
++            row.final_status = Some(200);
++        }
++        let seeds = [crate::normalize_url(&rows[0].url, None).unwrap()];
++        crate::extract_html(
++            &mut rows[0],
++            "<a href='/noindex#present'>Known</a>",
++            &seeds,
++            false,
++        );
++        crate::extract_html(
++            &mut rows[1],
++            "<meta name='robots' content='noindex'><h1 id='present'>Target</h1><a href='/plain#absent'>Hidden source</a>",
++            &seeds,
++            false,
++        );
++        let mut report = CrawlReport {
++            config: CrawlConfig {
++                validate_fragments: true,
++                ..Default::default()
++            },
++            pages: rows,
++            issues: vec![],
++            summary: Default::default(),
++            warnings: vec![],
++            operation: None,
++            policy_ledger: None,
++            resource_ledger: None,
++            sitemap_catalog: None,
++            sitemap_coverage_inventory: None,
++            sitemap_source_measurements: None,
++        };
++        let raw = crate::validate_fragments(&report);
++        assert_eq!(raw.len(), 2);
++        let csv = crate::export_fragments_csv(&report).unwrap();
++        report.config.directive_reporting = Some(DirectiveReportingConfig::default());
++        assert_eq!(crate::export_fragments_csv(&report).unwrap(), csv);
++        report.config.directive_reporting = Some(DirectiveReportingConfig {
++            respect_noindex: true,
++            ..Default::default()
++        });
++        let saved = serde_json::to_vec(&report).unwrap();
++        let visible = reported_fragments(&report);
++        assert_eq!(visible.len(), 1);
++        let expected = raw
++            .iter()
++            .find(|row| row.source_url == report.pages[0].url)
++            .unwrap();
++        assert_eq!(
++            serde_json::to_value(&visible[0]).unwrap(),
++            serde_json::to_value(expected).unwrap()
++        );
++        assert!(
++            visible
++                .iter()
++                .all(|row| row.source_url != report.pages[1].url)
++        );
++        assert_eq!(visible[0].status, crate::FragmentStatus::MatchedId);
++        let csv = crate::export_fragments_csv(&report).unwrap();
++        assert_eq!(
++            csv::Reader::from_reader(csv.as_bytes()).records().count(),
++            1
++        );
++        assert!(csv.lines().next().unwrap().contains("Captured Pages"));
++        assert_eq!(serde_json::to_vec(&report).unwrap(), saved);
++    }
++
++    #[test]
++    fn response_reporting_filters_owner_observations_preserving_redirect_hop_facts() {
++        let mut rows = pages();
++        for row in &mut rows {
++            row.status = Some(200);
++            row.final_status = Some(200);
++        }
++        let hop = crate::RedirectHop {
++            url: rows[0].url.clone(),
++            status: 302,
++            target: rows[1].url.clone(),
++        };
++        rows[0].redirect_chain.push(hop);
++        rows[0].final_url = rows[1].url.clone();
++        let mut report = CrawlReport {
++            config: CrawlConfig::default(),
++            pages: rows,
++            issues: vec![],
++            summary: Default::default(),
++            warnings: vec![],
++            operation: None,
++            policy_ledger: None,
++            resource_ledger: None,
++            sitemap_catalog: None,
++            sitemap_coverage_inventory: None,
++            sitemap_source_measurements: None,
++        };
++        let raw = crate::response_observations(&report);
++        let csv = crate::export_response_observations_csv(&report).unwrap();
++        assert_eq!(raw.len(), 5);
++        report.config.directive_reporting = Some(DirectiveReportingConfig::default());
++        assert_eq!(
++            crate::export_response_observations_csv(&report).unwrap(),
++            csv
++        );
++        report.config.directive_reporting = Some(DirectiveReportingConfig {
++            respect_noindex: true,
++            ..Default::default()
++        });
++        let saved = serde_json::to_vec(&report).unwrap();
++        let view = reported_responses(&report);
++        assert_eq!(view.len(), 4);
++        assert_eq!(
++            serde_json::to_value(&view[0]).unwrap(),
++            serde_json::to_value(&raw[0]).unwrap()
++        );
++        assert_eq!(
++            view[0].location.as_deref(),
++            Some(report.pages[1].url.as_str())
++        );
++        assert!(
++            view.iter()
++                .all(|row| row.requested_url != report.pages[1].url)
++        );
++        let csv = crate::export_response_observations_csv(&report).unwrap();
++        assert_eq!(
++            csv::Reader::from_reader(csv.as_bytes()).records().count(),
++            4
++        );
++        assert!(csv.lines().next().unwrap().contains("Captured Pages"));
++        assert_eq!(serde_json::to_vec(&report).unwrap(), saved);
++    }
++}
+diff --git a/crates/core/src/export.rs b/crates/core/src/export.rs
+index 1d8b776..54a09cf 100644
+--- a/crates/core/src/export.rs
++++ b/crates/core/src/export.rs
+@@ -97,6 +97,9 @@ pub fn export_input_occurrences_csv(report: &CrawlReport) -> anyhow::Result<Stri
+ }
+ 
+ pub fn export_pages_csv(report: &CrawlReport) -> anyhow::Result<String> {
++    let raw_report = report;
++    let visible_report = crate::reported_report(report);
++    let report = visible_report.as_ref();
+     let mut writer = csv::Writer::from_writer(Vec::new());
+     writer.write_record([
+         "URL",
+@@ -255,10 +258,13 @@ pub fn export_pages_csv(report: &CrawlReport) -> anyhow::Result<String> {
+             csv_text(&page.fetched_at),
+         ])?;
+     }
+-    Ok(String::from_utf8(writer.into_inner()?)?)
++    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
+ }
+ 
+ pub fn export_issues_csv(report: &CrawlReport) -> anyhow::Result<String> {
++    let raw_report = report;
++    let visible_report = crate::reported_report(report);
++    let report = visible_report.as_ref();
+     let mut writer = csv::Writer::from_writer(Vec::new());
+     writer.write_record(["Severity", "Code", "URL", "Message", "Related URLs"])?;
+     for issue in &report.issues {
+@@ -270,10 +276,13 @@ pub fn export_issues_csv(report: &CrawlReport) -> anyhow::Result<String> {
+             csv_text(&issue.related_urls.join(" | ")),
+         ])?;
+     }
+-    Ok(String::from_utf8(writer.into_inner()?)?)
++    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
+ }
+ 
+ pub fn export_links_csv(report: &CrawlReport) -> anyhow::Result<String> {
++    let raw_report = report;
++    let visible_report = crate::reported_report(report);
++    let report = visible_report.as_ref();
+     let mut writer = csv::Writer::from_writer(Vec::new());
+     writer.write_record([
+         "Source",
+@@ -338,7 +347,7 @@ pub fn export_links_csv(report: &CrawlReport) -> anyhow::Result<String> {
+             ])?;
+         }
+     }
+-    Ok(String::from_utf8(writer.into_inner()?)?)
++    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
+ }
+ 
+ pub fn export_fragments_csv(report: &CrawlReport) -> anyhow::Result<String> {
+@@ -357,7 +366,7 @@ pub fn export_fragments_csv(report: &CrawlReport) -> anyhow::Result<String> {
+         "Source DOM JSON",
+         "Matched Target JSON",
+     ])?;
+-    for row in crate::validate_fragments(report) {
++    for row in crate::reported_fragments(report) {
+         let status = serde_json::to_value(row.status)?;
+         writer.write_record([
+             csv_text(&row.source_url),
+@@ -382,11 +391,14 @@ pub fn export_fragments_csv(report: &CrawlReport) -> anyhow::Result<String> {
+                 .unwrap_or_default(),
+         ])?;
+     }
+-    Ok(String::from_utf8(writer.into_inner()?)?)
++    crate::reporting_csv(report, String::from_utf8(writer.into_inner()?)?)
+ }
+ 
+ /// Original typed facts, with explicit legacy/availability records per snapshot.
+ pub fn export_dom_observations_csv(report: &CrawlReport) -> anyhow::Result<String> {
++    let raw_report = report;
++    let visible_report = crate::reported_report(report);
++    let report = visible_report.as_ref();
+     let mut writer = csv::Writer::from_writer(Vec::new());
+     writer.write_record([
+         "URL",
+@@ -477,11 +489,14 @@ pub fn export_dom_observations_csv(report: &CrawlReport) -> anyhow::Result<Strin
+             }
+         }
+     }
+-    Ok(String::from_utf8(writer.into_inner()?)?)
++    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
+ }
+ 
+ /// One result per row preserves values containing commas, quotes or delimiters.
+ pub fn export_custom_extractions_csv(report: &CrawlReport) -> anyhow::Result<String> {
++    let raw_report = report;
++    let visible_report = crate::reported_report(report);
++    let report = visible_report.as_ref();
+     let mut writer = csv::Writer::from_writer(Vec::new());
+     writer.write_record([
+         "URL",
+@@ -552,12 +567,15 @@ pub fn export_custom_extractions_csv(report: &CrawlReport) -> anyhow::Result<Str
+             }
+         }
+     }
+-    Ok(String::from_utf8(writer.into_inner()?)?)
++    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
+ }
+ 
+ /// One row per executed script. JSON preserves the difference between a missing
+ /// result, null, a string and structured data, including embedded CSV delimiters.
+ pub fn export_custom_javascript_csv(report: &CrawlReport) -> anyhow::Result<String> {
++    let raw_report = report;
++    let visible_report = crate::reported_report(report);
++    let report = visible_report.as_ref();
+     let mut writer = csv::Writer::from_writer(Vec::new());
+     writer.write_record([
+         "URL",
+@@ -583,12 +601,15 @@ pub fn export_custom_javascript_csv(report: &CrawlReport) -> anyhow::Result<Stri
+             ])?;
+         }
+     }
+-    Ok(String::from_utf8(writer.into_inner()?)?)
++    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
+ }
+ 
+ /// Captured cookie attributes only. An allowlist deliberately omits cookie
+ /// values and all unknown fields, including in imported legacy reports.
+ pub fn export_browser_cookies_csv(report: &CrawlReport) -> anyhow::Result<String> {
++    let raw_report = report;
++    let visible_report = crate::reported_report(report);
++    let report = visible_report.as_ref();
+     let mut writer = csv::Writer::from_writer(Vec::new());
+     writer.write_record([
+         "URL",
+@@ -620,12 +641,15 @@ pub fn export_browser_cookies_csv(report: &CrawlReport) -> anyhow::Result<String
+             ])?;
+         }
+     }
+-    Ok(String::from_utf8(writer.into_inner()?)?)
++    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
+ }
+ 
+ /// Native PDF observations. Unknown numbers remain empty cells, while parse
+ /// errors, unsupported extraction and exhausted limits stay explicit.
+ pub fn export_pdf_csv(report: &CrawlReport) -> anyhow::Result<String> {
++    let raw_report = report;
++    let visible_report = crate::reported_report(report);
++    let report = visible_report.as_ref();
+     let mut writer = csv::Writer::from_writer(Vec::new());
+     writer.write_record([
+         "URL",
+@@ -682,11 +706,14 @@ pub fn export_pdf_csv(report: &CrawlReport) -> anyhow::Result<String> {
+             serde_json::to_string(&pdf.limits_reached)?,
+         ])?;
+     }
+-    Ok(String::from_utf8(writer.into_inner()?)?)
++    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
+ }
+ 
+ /// Fetched image resource metadata, separate from declared img width/height/alt.
+ pub fn export_image_resources_csv(report: &CrawlReport) -> anyhow::Result<String> {
++    let raw_report = report;
++    let visible_report = crate::reported_report(report);
++    let report = visible_report.as_ref();
+     let mut writer = csv::Writer::from_writer(Vec::new());
+     writer.write_record([
+         "URL",
+@@ -725,7 +752,7 @@ pub fn export_image_resources_csv(report: &CrawlReport) -> anyhow::Result<String
+             csv_text(image.parse_error.as_deref().unwrap_or_default()),
+         ])?;
+     }
+-    Ok(String::from_utf8(writer.into_inner()?)?)
++    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
+ }
+ 
+ fn resource_status(status: crate::ResourceAnalysisStatus) -> String {
+@@ -764,9 +791,18 @@ pub fn csv_text(value: &str) -> String {
+ }
+ 
+ pub fn export_sitemap_xml(report: &CrawlReport) -> String {
++    let counts = crate::reporting_visibility(&report.config, &report.pages, &report.issues);
++    let visible_report = crate::reported_report(report);
++    let report = visible_report.as_ref();
+     let mut xml = String::from(
+         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n",
+     );
++    if let Some(counts) = counts {
++        xml.push_str(&format!(
++            "<!-- Captured Pages: {}; Visible Pages: {}; Hidden Pages: {} -->\n",
++            counts.captured_pages, counts.visible_pages, counts.hidden_pages
++        ));
++    }
+     for page in report
+         .pages
+         .iter()
+diff --git a/crates/core/src/lib.rs b/crates/core/src/lib.rs
+index 2a677a7..10c9692 100644
+--- a/crates/core/src/lib.rs
++++ b/crates/core/src/lib.rs
+@@ -21,6 +21,12 @@ pub use crawl_quotas::*;
+ mod crawl_policy;
+ mod crawler;
+ mod css_discovery;
++mod directive_reporting;
++pub use directive_reporting::{
++    DirectiveReportingConfig, ReportingVisibility, directive_hidden_issue_urls,
++    directive_page_visible, reported_fragments, reported_report, reported_responses, reporting_csv,
++    reporting_json, reporting_visibility,
++};
+ mod directory_tree;
+ mod dom_facts;
+ mod export;
+diff --git a/crates/core/src/models.rs b/crates/core/src/models.rs
+index 0eef546..f469296 100644
+--- a/crates/core/src/models.rs
++++ b/crates/core/src/models.rs
+@@ -47,6 +47,12 @@ pub struct CrawlConfig {
+     pub max_depth: Option<usize>,
+     /// Minimum interval between request starts for the same origin.
+     pub delay_ms: u64,
++    /// Reporting visibility only; never a request, frontier or outlink permission.
++    #[serde(
++        default,
++        skip_serializing_if = "crate::DirectiveReportingConfig::is_inactive"
++    )]
++    pub directive_reporting: Option<crate::DirectiveReportingConfig>,
+     pub obey_robots: bool,
+     pub check_external: bool,
+     pub max_body_bytes: usize,
+@@ -142,6 +148,7 @@ impl Default for CrawlConfig {
+             max_pages: None,
+             max_depth: None,
+             delay_ms: 100,
++            directive_reporting: None,
+             obey_robots: true,
+             check_external: false,
+             max_body_bytes: 5 * 1024 * 1024,
+diff --git a/crates/core/src/response_observations.rs b/crates/core/src/response_observations.rs
+index aa5b3d0..5eb04bd 100644
+--- a/crates/core/src/response_observations.rs
++++ b/crates/core/src/response_observations.rs
+@@ -83,7 +83,7 @@ pub fn export_response_observations_csv(report: &CrawlReport) -> anyhow::Result<
+         "Body Complete",
+         "Document Metadata Available",
+     ])?;
+-    for row in response_observations(report) {
++    for row in crate::reported_responses(report) {
+         writer.write_record([
+             crate::export::csv_text(&row.requested_url),
+             crate::export::csv_text(&row.response_url),
+@@ -101,7 +101,7 @@ pub fn export_response_observations_csv(report: &CrawlReport) -> anyhow::Result<
+             row.document_metadata_available.to_string(),
+         ])?;
+     }
+-    Ok(String::from_utf8(writer.into_inner()?)?)
++    crate::reporting_csv(report, String::from_utf8(writer.into_inner()?)?)
+ }
+ 
+ #[cfg(test)]
+diff --git a/crates/core/tests/directive_reporting_crawl.rs b/crates/core/tests/directive_reporting_crawl.rs
+new file mode 100644
+index 0000000..f31ef15
+--- /dev/null
++++ b/crates/core/tests/directive_reporting_crawl.rs
+@@ -0,0 +1,154 @@
++//! Genuine future owned-loopback regression; authored source only, NOT RUN here.
++use open_seo_spider_core::{
++    CrawlConfig, CrawlReport, CrawlStore, Crawler, DirectiveReportingConfig,
++    directive_page_visible, export_pages_csv, reporting_json, reporting_visibility,
++};
++use std::{
++    collections::BTreeSet,
++    sync::{Arc, Mutex, atomic::AtomicBool},
++};
++use tokio::{
++    io::{AsyncReadExt, AsyncWriteExt},
++    net::TcpListener,
++    sync::oneshot,
++    task::JoinSet,
++};
++
++#[tokio::test]
++async fn eight_profiles_reopen_saved_flags_and_preserve_actual_outlink_frontier() {
++    let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
++    let origin = format!("http://{}", listener.local_addr().unwrap());
++    let hits = Arc::new(Mutex::new(Vec::<String>::new()));
++    let recorded = hits.clone();
++    let (stop, mut stopped) = oneshot::channel::<()>();
++    let server = tokio::spawn(async move {
++        let mut connections = JoinSet::new();
++        loop {
++            tokio::select! {
++                _=&mut stopped=>break,
++                accepted=listener.accept()=>{
++                    let (mut socket,_)=accepted.unwrap();let rows=recorded.clone();
++                    connections.spawn(async move {
++                        let mut request=Vec::new();let mut buffer=[0;1024];
++                        while !request.windows(4).any(|v|v==b"\r\n\r\n") {
++                            let n=socket.read(&mut buffer).await.unwrap();assert!(n>0);request.extend_from_slice(&buffer[..n]);assert!(request.len()<=8192);
++                        }
++                        let request=String::from_utf8(request).unwrap();let target=request.split_whitespace().nth(1).unwrap().to_owned();rows.lock().unwrap().push(target.clone());
++                        let (head,body)=match target.as_str() {
++                            "/"=>("", "<a href='/noindex'>N</a><a href='/canonical'>C</a><a href='/page2'>P</a><a href='/first'>First</a>"),
++                            "/noindex"=>("<meta name='robots' content='noindex'>", "<a href='/from-noindex'>Out</a>"),
++                            "/canonical"=>("<link rel='canonical' href='/canonical-target'>", "<a href='/from-canonical'>Out</a>"),
++                            "/page2"=>("<link rel='prev' href='/first'>", "<a href='/from-prev'>Out</a>"),
++                            "/first"=>("<link rel='next' href='/page2'>", ""),
++                            _=>("", "Leaf"),
++                        };
++                        let body=format!("<html><head><title>Owned</title>{head}</head><body>{body}</body></html>");
++                        socket.write_all(format!("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{}",body.len(),body).as_bytes()).await.unwrap();socket.shutdown().await.unwrap();
++                    });
++                }
++            }
++        }
++        drop(listener);
++        while let Some(joined) = connections.join_next().await {
++            joined.unwrap();
++        }
++    });
++    let temp = tempfile::tempdir().unwrap();
++    let mut expected_requests = None;
++    let mut expected_captured = None;
++    for mask in 0_u8..8 {
++        let from = hits.lock().unwrap().len();
++        let profile = DirectiveReportingConfig {
++            version: 1,
++            respect_noindex: mask & 1 != 0,
++            respect_canonical: mask & 2 != 0,
++            respect_next_prev: mask & 4 != 0,
++        };
++        let config = CrawlConfig {
++            seed_urls: vec![origin.clone() + "/"],
++            discover_sitemaps: false,
++            obey_robots: false,
++            concurrency: 1,
++            delay_ms: 0,
++            max_pages: None,
++            request_timeout_secs: 10,
++            directive_reporting: Some(profile.clone()),
++            ..Default::default()
++        };
++        let store_path = temp.path().join(format!("profile-{mask}.sqlite"));
++        let report = Crawler::new(config)
++            .unwrap()
++            .with_store(&store_path)
++            .unwrap()
++            .run(None, Arc::new(AtomicBool::new(false)))
++            .await
++            .unwrap();
++        for path in ["/from-noindex", "/from-canonical", "/from-prev"] {
++            assert!(
++                report
++                    .pages
++                    .iter()
++                    .any(|page| page.url == origin.clone() + path)
++            );
++        }
++        assert!(directive_page_visible(
++            &report.config,
++            report
++                .pages
++                .iter()
++                .find(|page| page.url == origin.clone() + "/first")
++                .unwrap()
++        ));
++        let requests: BTreeSet<_> = hits.lock().unwrap()[from..].iter().cloned().collect();
++        if let Some(expected) = &expected_requests {
++            assert_eq!(&requests, expected);
++        } else {
++            expected_requests = Some(requests);
++        }
++        let captured: BTreeSet<_> = report.pages.iter().map(|page| page.url.clone()).collect();
++        if let Some(expected) = &expected_captured {
++            assert_eq!(&captured, expected);
++        } else {
++            expected_captured = Some(captured);
++        }
++        let before = serde_json::to_vec(&report).unwrap();
++        let snapshot = temp.path().join(format!("profile-{mask}.json"));
++        std::fs::write(&snapshot, &before).unwrap();
++        let reopened: CrawlReport =
++            serde_json::from_slice(&std::fs::read(&snapshot).unwrap()).unwrap();
++        let raw_store = CrawlStore::open_read_only(&store_path).unwrap();
++        assert_eq!(raw_store.pages().unwrap().len(), report.pages.len());
++        let saved = raw_store.config().unwrap().unwrap();
++        assert_eq!(
++            saved
++                .directive_reporting
++                .as_ref()
++                .is_some_and(|flags| flags.active()),
++            mask != 0
++        );
++        let visible = reporting_json(&reopened).unwrap();
++        let csv = export_pages_csv(&reopened).unwrap();
++        assert_eq!(
++            visible["pages"].as_array().unwrap().len(),
++            report.pages.len() - mask.count_ones() as usize
++        );
++        if mask != 0 {
++            let counts =
++                reporting_visibility(&reopened.config, &reopened.pages, &reopened.issues).unwrap();
++            assert_eq!(counts.hidden_pages, mask.count_ones() as usize);
++            assert!(csv.lines().next().unwrap().contains("Captured Pages"));
++            assert_eq!(
++                visible["reporting_visibility"]["captured_pages"],
++                report.pages.len()
++            );
++        }
++        assert_eq!(
++            serde_json::to_vec(&report).unwrap(),
++            before,
++            "Reporting must not rewrite raw observations, summary, relationship facts or frontier config"
++        );
++        drop(raw_store);
++    }
++    stop.send(()).unwrap();
++    server.await.unwrap();
++}
+diff --git a/web/app.js b/web/app.js
+index 94becd0..f13f5bc 100644
+--- a/web/app.js
++++ b/web/app.js
+@@ -22,7 +22,7 @@
+       javascript_rendering: false, renderer_endpoint: 'http://127.0.0.1:8790/render',
+       renderer_wait_ms: 500, renderer_accessibility: false, renderer_screenshot: false,
+       renderer_collect_cookies: false, custom_javascript_json: '[]',
+-      include_patterns_text: '', exclude_patterns_text: '', custom_extractions_json: '[]', audit_thresholds_json: '{}', pdf_analysis_json: '{}', validate_fragments: false, link_position_rules_json: '[]', crawl_policy_enabled: false, crawl_policy_json: '{"scope":{"roots":[{"origin":"https://example.test","folders":["/"],"subdomains":false,"exact_paths":[]}]}}', live_policy_limits_json: '{}', content_capture_enabled:false, content_capture_json:'{"sources":["raw_http_html"],"include_selectors":["body"],"exclude_selectors":["script","style","template","noscript","nav","footer"]}',resource_discovery_enabled:false,resource_discovery_json:'{}',resource_discovery_limits_json:'{}',cdn_classification_enabled:false,cdn_origins_text:'',cdn_directory_reporting_enabled:false,cdn_directory_rules_text:''
++      include_patterns_text: '', exclude_patterns_text: '', custom_extractions_json: '[]', audit_thresholds_json: '{}', pdf_analysis_json: '{}', validate_fragments: false, link_position_rules_json: '[]', crawl_policy_enabled: false, crawl_policy_json: '{"scope":{"roots":[{"origin":"https://example.test","folders":["/"],"subdomains":false,"exact_paths":[]}]}}', live_policy_limits_json: '{}', content_capture_enabled:false, content_capture_json:'{"sources":["raw_http_html"],"include_selectors":["body"],"exclude_selectors":["script","style","template","noscript","nav","footer"]}',resource_discovery_enabled:false,resource_discovery_json:'{}',resource_discovery_limits_json:'{}',cdn_classification_enabled:false,cdn_origins_text:'',cdn_directory_reporting_enabled:false,cdn_directory_rules_text:'',respect_noindex:false,respect_canonical:false,respect_next_prev:false
+     }
+   };
+   const sections = {
+@@ -385,7 +385,7 @@
+       if ($('crawl-mode').value !== mode) throw new Error('Der Crawl-Modus wurde während der Prüfung geändert. Bitte erneut starten.');
+       if (!current()) return;
+       const payload = { ...state.settings, ...advanced, mode, seed_url: mode === 'sitemap' ? '' : urls[0] || '', urls: mode === 'sitemap' ? [] : urls, seed_urls: mode === 'sitemap' ? [] : urls, sitemap_urls: mode === 'sitemap' ? urls : sitemapUrls, input_imports: inputImports, crawl_links: mode !== 'list', include_subdomains: state.settings.follow_subdomains, request_timeout_secs: state.settings.timeout_seconds, max_body_bytes: state.settings.max_body_mb * 1024 * 1024 };
+-      for (const key of ['cdn_directory_reporting_enabled','cdn_directory_rules_text','cdn_classification_enabled','cdn_origins_text','crawl_policy_enabled', 'crawl_policy_json', 'live_policy_limits_json', 'content_capture_enabled', 'content_capture_json','resource_discovery_enabled','resource_discovery_json','resource_discovery_limits_json']) delete payload[key];
++      for (const key of ['respect_noindex','respect_canonical','respect_next_prev','cdn_directory_reporting_enabled','cdn_directory_rules_text','cdn_classification_enabled','cdn_origins_text','crawl_policy_enabled', 'crawl_policy_json', 'live_policy_limits_json', 'content_capture_enabled', 'content_capture_json','resource_discovery_enabled','resource_discovery_json','resource_discovery_limits_json']) delete payload[key];
+       for (const key of [...crawlQuotaSettingKeys, ...crawlAdmissionSettingKeys, ...sitemapArchiveSettingKeys, 'sitemap_source_processing_enabled', ...sitemapSourceFields.map(field => field.setting), 'sitemap_membership_limits_enabled', ...sitemapMembershipFields.map(field => field.setting)]) delete payload[key];
+       payload.renderer = state.settings.javascript_rendering ? { endpoint: state.settings.renderer_endpoint, wait_ms: state.settings.renderer_wait_ms, accessibility: state.settings.renderer_accessibility, screenshot: state.settings.renderer_screenshot, collect_cookies: state.settings.renderer_collect_cookies, custom_javascript: parseCustomJavascript(state.settings.custom_javascript_json) } : null;
+       const result = await request('/api/crawls', { method: 'POST', body: JSON.stringify(payload) });
+@@ -522,6 +522,8 @@
+     $('export-csv').disabled = policySection() ? !policyVisibleRows().length || Boolean(state.policyToken || state.policyError) : (!hasData && !state.issues.length) || state.section === 'responses' && state.responses == null || state.section === 'fragments' && (!state.fragments || !state.fragments.enabled);
+     $('export-sitemap').disabled = !hasData || Boolean(busy || active());
+     $('export-project').disabled = !state.crawl || Boolean(busy || active());
++    $('export-visible-report').disabled = $('export-project').disabled;
++    syncDirectiveReportingProfileSource();
+     $('export-resources').disabled = !state.crawl || Boolean(busy || active());
+     $('recrawl-selected-count').textContent = `${number(state.recrawlURLs.size)} URLs ausgewählt`;
+     $('recrawl-selected').disabled = !canRecrawl();
+@@ -582,8 +584,12 @@
+ 
+   function renderOverview() {
+     const element = $('overview-view');
++    if (!state.pages.length && !state.issues.length && state.crawl?.reporting_visibility?.captured_pages > 0 && state.crawl.reporting_visibility.visible_pages === 0) {
++      element.innerHTML = directiveReportingNote() + '<div class="empty-overview"><h3>Alle erfassten Seiten sind ausgeblendet</h3><p>Die gespeicherten Berichtsfilter blenden die Seiten aus. Der vollständige Roh-Snapshot bleibt verfügbar.</p></div>';
++      return;
++    }
+     if (!state.pages.length && !state.issues.length) {
+-      element.innerHTML = `<div class="empty-overview"><div class="empty-icon" aria-hidden="true">⌘</div><h3>${state.crawl ? 'Die ersten Antworten werden ausgewertet' : 'Dein erster Crawl beginnt hier'}</h3><p>${state.crawl ? 'Sobald URLs abgerufen wurden, erscheinen HTTP-Status, Seitenmetadaten und erkannte Probleme. Ein leerer Bereich ist noch keine Aussage über die Website.' : 'Gib eine Website ein oder importiere eine URL-Liste. Open SEO Spider entdeckt Seiten und zeigt dir die technischen Details, die Suchmaschinen sehen.'}</p><div class="feature-pills"><span>HTTP & Redirects</span><span>Titles & Descriptions</span><span>Canonical & Robots</span><span>Links & Hreflang</span><span>CSV & Sitemap</span></div></div>`;
++      element.innerHTML = directiveReportingNote() + `<div class="empty-overview"><div class="empty-icon" aria-hidden="true">⌘</div><h3>${state.crawl ? 'Die ersten Antworten werden ausgewertet' : 'Dein erster Crawl beginnt hier'}</h3><p>${state.crawl ? 'Sobald URLs abgerufen wurden, erscheinen HTTP-Status, Seitenmetadaten und erkannte Probleme. Ein leerer Bereich ist noch keine Aussage über die Website.' : 'Gib eine Website ein oder importiere eine URL-Liste. Open SEO Spider entdeckt Seiten und zeigt dir die technischen Details, die Suchmaschinen sehen.'}</p><div class="feature-pills"><span>HTTP & Redirects</span><span>Titles & Descriptions</span><span>Canonical & Robots</span><span>Links & Hreflang</span><span>CSV & Sitemap</span></div></div>`;
+       return;
+     }
+     const pages = internals();
+@@ -602,7 +608,7 @@
+     }
+     const severityOrder = { error: 0, warning: 1, notice: 2 };
+     const groups = [...grouped.values()].sort((a, b) => (severityOrder[a.severity] ?? 3) - (severityOrder[b.severity] ?? 3) || b.count - a.count).slice(0, 6);
+-    element.innerHTML = `<div class="overview-grid"><div class="overview-card"><h3>Antworten & Abrufstatus</h3>${buckets.map(([label, count, kind]) => `<div class="status-summary-row"><span>${escape(label)}</span><div class="bar ${kind}"><span style="width:${Math.min(100, pages.length ? count / pages.length * 100 : 0)}%"></span></div><strong>${number(count)}</strong></div>`).join('')}<p class="graph-note">Weiterleitungen können zusätzlich in der finalen 2xx-Antwort enthalten sein.</p></div><div class="overview-card"><h3>Erkannte Probleme</h3>${groups.length ? groups.map((group) => `<button class="issue-summary-row text-button" style="width:100%;text-align:left" data-issue-filter="${escape(group.code)}"><i class="severity-dot ${escape(group.severity)}"></i><span>${escape(issueTitle(group.code))}</span><strong>${number(group.count)}</strong></button>`).join('') : '<p class="detail-empty">Bislang wurden keine Probleme gemeldet. Das ist kein Nachweis für vollständige SEO-Fehlerfreiheit.</p>'}</div></div><div class="overview-footnote"><span aria-hidden="true">ⓘ</span><span>${state.crawl?.config?.renderer ? 'JavaScript-Rendering ist konfiguriert. Prüfe den tatsächlichen Renderstatus je Seite; Worker-Fehler erscheinen in den Seitendetails. Externe APIs sind nicht Teil dieses Crawls.' : 'Die Auswertung beruht auf gelieferten HTTP-Antworten und HTML. JavaScript-Inhalte und externe APIs sind nicht Teil dieses Crawls.'}</span></div>`;
++    element.innerHTML = directiveReportingNote() + `<div class="overview-grid"><div class="overview-card"><h3>Antworten & Abrufstatus</h3>${buckets.map(([label, count, kind]) => `<div class="status-summary-row"><span>${escape(label)}</span><div class="bar ${kind}"><span style="width:${Math.min(100, pages.length ? count / pages.length * 100 : 0)}%"></span></div><strong>${number(count)}</strong></div>`).join('')}<p class="graph-note">Weiterleitungen können zusätzlich in der finalen 2xx-Antwort enthalten sein.</p></div><div class="overview-card"><h3>Erkannte Probleme</h3>${groups.length ? groups.map((group) => `<button class="issue-summary-row text-button" style="width:100%;text-align:left" data-issue-filter="${escape(group.code)}"><i class="severity-dot ${escape(group.severity)}"></i><span>${escape(issueTitle(group.code))}</span><strong>${number(group.count)}</strong></button>`).join('') : '<p class="detail-empty">Bislang wurden keine Probleme gemeldet. Das ist kein Nachweis für vollständige SEO-Fehlerfreiheit.</p>'}</div></div><div class="overview-footnote"><span aria-hidden="true">ⓘ</span><span>${state.crawl?.config?.renderer ? 'JavaScript-Rendering ist konfiguriert. Prüfe den tatsächlichen Renderstatus je Seite; Worker-Fehler erscheinen in den Seitendetails. Externe APIs sind nicht Teil dieses Crawls.' : 'Die Auswertung beruht auf gelieferten HTTP-Antworten und HTML. JavaScript-Inhalte und externe APIs sind nicht Teil dieses Crawls.'}</span></div>`;
+     element.querySelectorAll('[data-issue-filter]').forEach((button) => button.addEventListener('click', () => {
+       selectSection('issues');
+       state.search = button.dataset.issueFilter;
+@@ -1246,6 +1252,8 @@
+       return { coverage: operation?.coverage ?? 'crawl_snapshot', basis, selectedState, parentHash: operation?.parent?.snapshot_sha256 ?? '', fetchedAt: page?.fetched_at ?? '', requestedURL: page?.url ?? '' };
+     };
+     for (const [key, label] of [['coverage', 'Crawl Coverage'], ['basis', 'Observation Basis'], ['selectedState', 'Selected State'], ['parentHash', 'Parent Snapshot SHA256'], ['fetchedAt', 'Fetched At'], ['requestedURL', 'Observation Requested URL']]) cols.push(textColumn('observation_' + key, label, row => metadata(row)[key]));
++    const visibility=state.crawl?.reporting_visibility;
++    if(visibility)for(const [key,label] of [['captured_pages','Captured Pages'],['visible_pages','Visible Pages'],['hidden_pages','Hidden Pages']])cols.push(textColumn('reporting_'+key,label,()=>visibility[key]));
+     const csvCell = (input) => { let value = String(input ?? ''); if (typeof input !== 'number' && typeof input !== 'boolean' && /^[\s\uFEFF]*[=+@-]/u.test(value)) value = `'${value}`; return `"${value.replace(/"/g, '""')}"`; };
+     const data = [cols.map((column) => csvCell(column.label)).join(','), ...rows.map((row) => cols.map((column) => csvCell(column.value(row))).join(','))].join('\r\n');
+     const section = state.section;
+@@ -1293,13 +1301,16 @@
+     syncCrawlAdmissionSettings();
+     renderQuotaRuleControls();syncQuotaSettings();
+     $('settings-error').hidden = true;
++    syncDirectiveReportingProfileSource();
++    $('directive-reporting-load-status').textContent = '';
++    $('directive-reporting-load-status').setAttribute('role', 'status');
+     $('settings-dialog').showModal();
+   }
+ 
+   function saveSettings(event) {
+     event.preventDefault();
+     const form = $('settings-form');
+-    const advancedText = { ...readCdnDirectoryReportingSettings(form), ...readCdnClassificationSettings(form), ...readCrawlQuotaSettings(form), ...readCrawlAdmissionSettings(form), ...readSitemapSourceProcessingSettings(form), ...readSitemapSourceArchiveSettings(form), include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value, link_position_rules_json: form.elements.link_position_rules_json.value, validate_fragments: form.elements.validate_fragments.checked, crawl_policy_enabled: form.elements.crawl_policy_enabled.checked, crawl_policy_json: form.elements.crawl_policy_json.value, live_policy_limits_json: form.elements.live_policy_limits_json.value, follow_subdomains: form.elements.follow_subdomains.checked, check_external: form.elements.check_external.checked, javascript_rendering: form.elements.javascript_rendering.checked, content_capture_enabled:form.elements.content_capture_enabled.checked, content_capture_json:form.elements.content_capture_json.value,resource_discovery_enabled:form.elements.resource_discovery_enabled.checked,resource_discovery_json:form.elements.resource_discovery_json.value,resource_discovery_limits_json:form.elements.resource_discovery_limits_json.value };
++    const advancedText = { ...readDirectiveReportingSettings(form), ...readCdnDirectoryReportingSettings(form), ...readCdnClassificationSettings(form), ...readCrawlQuotaSettings(form), ...readCrawlAdmissionSettings(form), ...readSitemapSourceProcessingSettings(form), ...readSitemapSourceArchiveSettings(form), include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value, link_position_rules_json: form.elements.link_position_rules_json.value, validate_fragments: form.elements.validate_fragments.checked, crawl_policy_enabled: form.elements.crawl_policy_enabled.checked, crawl_policy_json: form.elements.crawl_policy_json.value, live_policy_limits_json: form.elements.live_policy_limits_json.value, follow_subdomains: form.elements.follow_subdomains.checked, check_external: form.elements.check_external.checked, javascript_rendering: form.elements.javascript_rendering.checked, content_capture_enabled:form.elements.content_capture_enabled.checked, content_capture_json:form.elements.content_capture_json.value,resource_discovery_enabled:form.elements.resource_discovery_enabled.checked,resource_discovery_json:form.elements.resource_discovery_json.value,resource_discovery_limits_json:form.elements.resource_discovery_limits_json.value };
+     try { parseAdvanced(advancedText); validateRendererSettings({ javascript_rendering: form.elements.javascript_rendering.checked, renderer_endpoint: form.elements.renderer_endpoint.value.trim(), renderer_wait_ms: Number(form.elements.renderer_wait_ms.value), timeout_seconds: Number(form.elements.timeout_seconds.value) }); }
+     catch (error) {
+       if (form.elements.sitemap_source_processing_enabled.checked || form.elements.sitemap_membership_limits_enabled.checked) $('sitemap-source-processing-settings').open = true;
+@@ -1335,6 +1346,7 @@
+         Object.assign(state.settings,{resource_discovery_enabled:saved.resource_discovery_enabled===true,resource_discovery_json:String(saved.resource_discovery_json || '{}'),resource_discovery_limits_json:String(saved.resource_discovery_limits_json || '{}')});
+         Object.assign(state.settings,restoreCdnClassificationSettings(saved));
+         Object.assign(state.settings,restoreCdnDirectoryReportingSettings(saved));
++        Object.assign(state.settings,restoreDirectiveReportingSettings(saved));
+         state.settings.crawl_quotas_enabled=saved.crawl_quotas_enabled===true;
+         state.settings.crawl_quota_per_depth=String(saved.crawl_quota_per_depth??'');
+         state.settings.crawl_quota_per_subdomain=String(saved.crawl_quota_per_subdomain??'');
+@@ -1586,7 +1598,7 @@
+       return { name, selector, attribute: definition.attribute == null ? null : definition.attribute.trim(), method, output, max_results, regex_group, regex_flags, namespaces };
+     });
+     const lines = (value) => [...new Set(String(value || '').split(/\r?\n/).map((line) => line.trim()).filter(Boolean))];
+-    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), pdf_analysis: parsePdfAnalysis(settings.pdf_analysis_json), link_position_rules: parsePositionRules(settings.link_position_rules_json), validate_fragments: settings.validate_fragments === true, include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text), ...parseNativePolicy(settings), ...parseContentCapture(settings),...parseResourceDiscovery(settings), ...parseSitemapSourceProcessing(settings), ...parseSitemapMembershipLimits(settings), ...parseSitemapSourceArchive(settings), ...parseCrawlQuotas(settings), ...parseCrawlAdmissionLimits(settings), ...parseCdnClassification(settings), ...parseCdnDirectoryReporting(settings) };
++    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), pdf_analysis: parsePdfAnalysis(settings.pdf_analysis_json), link_position_rules: parsePositionRules(settings.link_position_rules_json), validate_fragments: settings.validate_fragments === true, include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text), ...parseNativePolicy(settings), ...parseContentCapture(settings),...parseResourceDiscovery(settings), ...parseSitemapSourceProcessing(settings), ...parseSitemapMembershipLimits(settings), ...parseSitemapSourceArchive(settings), ...parseCrawlQuotas(settings), ...parseCrawlAdmissionLimits(settings), ...parseCdnClassification(settings), ...parseCdnDirectoryReporting(settings), ...parseDirectiveReporting(settings) };
+   }
+ 
+   function policyObject(value, allowed, label) {
+@@ -1688,6 +1700,43 @@
+     return config;
+   }
+ 
++  const directiveReportingKeys=["respect_noindex","respect_canonical","respect_next_prev"];
++  function readDirectiveReportingSettings(form){return Object.fromEntries(directiveReportingKeys.map(key=>[key,form.elements[key].checked]));}
++  function restoreDirectiveReportingSettings(saved){return Object.fromEntries(directiveReportingKeys.map(key=>[key,saved[key]===true]));}
++  function parseDirectiveReporting(settings){
++    const flags=Object.fromEntries(directiveReportingKeys.map(key=>{const value=settings[key]??false;if(typeof value!=="boolean")throw new Error("Berichtsfilter: true oder false erforderlich.");return[key,value];}));
++    return Object.values(flags).some(Boolean)?{directive_reporting:{version:1,...flags}}:{};
++  }
++  function directiveReportingSettingsFromCrawlConfig(config) {
++    if (!config || typeof config !== 'object' || Array.isArray(config)) throw new Error('Die Konfiguration des ausgewählten Crawls ist noch nicht geladen.');
++    const profile = config.directive_reporting;
++    if (profile == null) return Object.fromEntries(directiveReportingKeys.map(key => [key, false]));
++    const allowed = ['version', ...directiveReportingKeys];
++    if (typeof profile !== 'object' || Array.isArray(profile) || Object.keys(profile).length !== allowed.length || allowed.some(key => !Object.hasOwn(profile, key)) || profile.version !== 1 || directiveReportingKeys.some(key => typeof profile[key] !== 'boolean')) throw new Error('Die gespeicherten Berichtsfilter haben kein unterstütztes Version-1-Profil mit drei booleschen Schaltern.');
++    return Object.fromEntries(directiveReportingKeys.map(key => [key, profile[key]]));
++  }
++  function syncDirectiveReportingProfileSource() {
++    const crawl = state.crawl, config = crawl?.config;
++    const available = Boolean(crawl && config && typeof config === 'object' && !Array.isArray(config));
++    $('directive-reporting-load-selected').disabled = !available;
++    $('directive-reporting-profile-source').textContent = available ? 'Quelle: ausgewählter Crawl ' + crawl.id + '. Es werden nur die drei Berichtsfilter geladen.' : crawl ? 'Die Konfiguration des ausgewählten Crawls ist noch nicht geladen.' : 'Zuerst einen gespeicherten Crawl auswählen, um dessen Berichtsfilter zu laden.';
++  }
++  function loadSelectedDirectiveReportingProfile() {
++    const status = $('directive-reporting-load-status');
++    try {
++      if (!state.crawl) throw new Error('Zuerst einen gespeicherten Crawl auswählen.');
++      const flags = directiveReportingSettingsFromCrawlConfig(state.crawl.config);
++      const form = $('settings-form');
++      for (const key of directiveReportingKeys) form.elements[key].checked = flags[key];
++      status.setAttribute('role', 'status');
++      status.textContent = 'Berichtsfilter aus Crawl ' + state.crawl.id + ' in den Entwurf übernommen. Mit Speichern gelten sie für den nächsten Crawl.';
++    } catch (error) {
++      status.setAttribute('role', 'alert');
++      status.textContent = 'Berichtsfilter konnten nicht geladen werden: ' + error.message;
++    }
++  }
++  function directiveReportingNote(){const counts=state.crawl?.reporting_visibility;return counts?`<p class="graph-note">Berichtsfilter: ${number(counts.visible_pages)} sichtbar, ${number(counts.hidden_pages)} ausgeblendet, ${number(counts.captured_pages)} erfasst. Abrufe und ausgehende Linkentdeckung bleiben erhalten. Roh-Snapshots und getrennte Analysebereiche sind ungefiltert.</p>`:"";}
++
+   function restoreCdnDirectoryReportingSettings(saved){return {cdn_directory_reporting_enabled:saved.cdn_directory_reporting_enabled===true,cdn_directory_rules_text:typeof saved.cdn_directory_rules_text==='string'?saved.cdn_directory_rules_text:''};}
+   function readCdnDirectoryReportingSettings(form){return {cdn_directory_reporting_enabled:form.elements.cdn_directory_reporting_enabled.checked,cdn_directory_rules_text:form.elements.cdn_directory_rules_text.value};}
+   function parseCdnDirectoryReporting(settings){
+@@ -3256,6 +3305,7 @@
+     $('settings-inline').addEventListener('click', openSettings);
+     $('settings-close').addEventListener('click', () => $('settings-dialog').close());
+     $('settings-form').addEventListener('submit', saveSettings);
++    $('directive-reporting-load-selected').addEventListener('click', loadSelectedDirectiveReportingProfile);
+     $('settings-form').elements.javascript_rendering.addEventListener('change', (event) => toggleRendererSettings(event.target.checked));
+     $('settings-form').elements.crawl_admission_limits_enabled.addEventListener('change', syncCrawlAdmissionSettings);
+     $('settings-form').elements.crawl_quotas_enabled.addEventListener('change',syncQuotaSettings);
+@@ -3274,6 +3324,7 @@
+     $('import-file').addEventListener('change', (event) => importProject(event.target.files[0]));
+     $('export-sitemap').addEventListener('click', () => serverDownload('sitemap.xml', `open-seo-spider-${state.crawl.id}-sitemap.xml`));
+     $('export-project').addEventListener('click', () => serverDownload('project.json', `open-seo-spider-${state.crawl.id}.json`));
++    $('export-visible-report').addEventListener('click', () => serverDownload('report.json', `open-seo-spider-${state.crawl.id}-sichtbar.json`));
+     document.addEventListener('visibilitychange', () => { if (!document.hidden && active() && !state.polling) refresh(); });
+   }
+ 
+diff --git a/web/index.html b/web/index.html
+index ed74b97..4ed7c8b 100644
+--- a/web/index.html
++++ b/web/index.html
+@@ -91,7 +91,7 @@
+       </section>
+       <section class="results-panel" aria-labelledby="section-heading">
+         <section id="recrawl-operation" class="recrawl-operation" aria-labelledby="recrawl-operation-heading" hidden><h2 id="recrawl-operation-heading">Gezielte Wiederprüfung · Befunde unterschiedlichen Alters</h2><p id="recrawl-operation-summary"></p><p>Nur „Neu geprüft“ gehört zur Wiederprüfung dieses Laufs. Beibehaltene Befunde stammen aus dem vorherigen Bericht. Für ausstehende ausgewählte URLs wird kein früherer Befund als aktuelles Ergebnis gezeigt.</p><p id="recrawl-operation-budget"></p><p id="recrawl-parent-evidence"></p><button id="recrawl-parent-snapshot" class="button small" type="button" hidden>Originalbericht herunterladen</button> <button id="recrawl-parent" class="button small" type="button">Elternlauf in Historie öffnen</button><details><summary>Ausgewählte Anfrage-URLs und Prüfstand</summary><ul id="recrawl-operation-targets" class="recrawl-target-list"></ul></details></section>
+-        <div class="results-heading"><div><p id="section-eyebrow" class="eyebrow">CRAWL INTELLIGENCE</p><h2 id="section-heading">Übersicht</h2><p id="section-description" class="section-description">Ein Blick auf den technischen Zustand deiner Website.</p></div><div class="export-controls"><a class="button small" href="/saved-segments">Gespeicherte Segmente</a><a class="button small" href="/saved-ngrams">Gespeicherte N-Gramme</a><a class="button small" href="/api-enrichment">URLs per API anreichern</a><a class="button small" href="/resource-broken-sources">Ressourcen: Fehler und Quellen</a><a class="button small" href="/broken-sources" title="Quellen aus gespeicherten Seitenlinks; CSS- und Resource-Ledger-Vollabdeckung separat">Linkfehler · Quellen</a><button id="import-project" class="button small" type="button" title="Einen exportierten Open SEO Spider-Bericht laden">↑ JSON laden</button><input id="import-file" type="file" accept=".json,application/json" hidden><button id="export-csv" class="button small" type="button" disabled title="Alle aktuell gefilterten Ergebnisse dieses Bereichs exportieren">↓ CSV</button><button id="export-resources" class="button small" type="button" disabled hidden title="Alle gespeicherten Ressourcenbefunde dieses Bereichs exportieren">↓ Ressourcen CSV</button><button id="export-sitemap" class="button small" type="button" disabled>↓ Sitemap</button><button id="export-project" class="button small" type="button" disabled title="Nach Abschluss oder Stopp als vollständigen Crawl-Bericht exportieren">↓ JSON</button></div></div>
++        <div class="results-heading"><div><p id="section-eyebrow" class="eyebrow">CRAWL INTELLIGENCE</p><h2 id="section-heading">Übersicht</h2><p id="section-description" class="section-description">Ein Blick auf den technischen Zustand deiner Website.</p></div><div class="export-controls"><a class="button small" href="/saved-segments">Gespeicherte Segmente</a><a class="button small" href="/saved-ngrams">Gespeicherte N-Gramme</a><a class="button small" href="/api-enrichment">URLs per API anreichern</a><a class="button small" href="/resource-broken-sources">Ressourcen: Fehler und Quellen</a><a class="button small" href="/broken-sources" title="Quellen aus gespeicherten Seitenlinks; CSS- und Resource-Ledger-Vollabdeckung separat">Linkfehler · Quellen</a><button id="import-project" class="button small" type="button" title="Einen exportierten Open SEO Spider-Bericht laden">↑ JSON laden</button><input id="import-file" type="file" accept=".json,application/json" hidden><button id="export-csv" class="button small" type="button" disabled title="Alle aktuell gefilterten Ergebnisse dieses Bereichs exportieren">↓ CSV</button><button id="export-resources" class="button small" type="button" disabled hidden title="Alle gespeicherten Ressourcenbefunde dieses Bereichs exportieren">↓ Ressourcen CSV</button><button id="export-sitemap" class="button small" type="button" disabled>↓ Sitemap</button><button id="export-project" class="button small" type="button" disabled title="Vollständiger Roh-Snapshot mit allen gespeicherten Beobachtungen">↓ Roh-JSON</button><button id="export-visible-report" class="button small" type="button" disabled title="Sichtbare Seiten und Probleme mit getrennten Erfassungszahlen exportieren">↓ Sichtbares JSON</button></div></div>
+         <div class="recrawl-selection-bar"><span id="recrawl-selected-count" aria-live="polite">0 URLs ausgewählt</span><button id="recrawl-clear" class="button small" type="button" disabled>Auswahl aufheben</button><button id="recrawl-selected" class="button small" type="button" disabled>Ausgewählte URLs erneut prüfen</button><p id="recrawl-selection-hint"></p></div>
+         <div id="overview-view"></div>
+         <div id="table-view" hidden>
+@@ -253,7 +253,7 @@
+     <div id="list-preview-panel" hidden><p id="list-preview-summary"></p><details><summary>Importprofil &amp; Hinweise</summary><pre id="list-preview-details" class="list-import-details"></pre></details><div class="table-scroll" tabindex="0" aria-label="Importzeilen, horizontal scrollbar"><table id="list-preview-table"><thead><tr><th>Reihenfolge</th><th>Quellzeile</th><th>Physische Zeile</th><th>Sheet / Zelle</th><th>Originalwert</th><th>Kandidat</th><th>Normalisierte URL</th><th>Fragment</th><th>Zelltyp / Formel</th><th>Duplikat</th><th>Fehler</th></tr></thead><tbody></tbody></table></div><div class="table-pagination"><button id="list-page-prev" type="button" class="button">←</button><span id="list-page-label"></span><button id="list-page-next" type="button" class="button">→</button></div></div>
+     <div class="dialog-footer"><button id="list-accept" type="button" class="button primary" disabled>Geprüfte Kandidaten übernehmen</button></div>
+   </dialog>
+-  <dialog id="settings-dialog" aria-labelledby="settings-heading"><form id="settings-form"><div class="dialog-heading"><div><p class="eyebrow">CRAWL CONFIGURATION</p><h2 id="settings-heading">Crawl-Einstellungen</h2></div><button id="settings-close" class="icon-button" type="button" aria-label="Einstellungen schließen">×</button></div><p>Die Einstellungen gelten für den nächsten Crawl. Ein Wert von 0 deaktiviert die freiwillige Grenze.</p><div class="settings-grid"><label>Parallele Requests<input name="concurrency" type="number" min="1" max="64" value="8" required></label><label>Timeout in Sekunden<input name="timeout_seconds" type="number" min="1" max="300" value="20" required></label><label>URL-Grenze<input name="max_pages" type="number" min="0" value="0" required><small>0 = unbegrenzt</small></label><label>Maximale Tiefe<input name="max_depth" type="number" min="0" value="0" required><small>0 = unbegrenzt</small></label><label>Request-Abstand in ms<input name="delay_ms" type="number" min="0" max="60000" value="100" required><small>Pro Host; 0 = kein Mindestabstand</small></label><label>Max. Antwortgröße in MiB<input name="max_body_mb" type="number" min="1" max="100" value="5" required><small>Größere Antworten werden markiert</small></label><label class="setting-wide">User-Agent<input name="user_agent" value="Open SEO Spider/0.1" maxlength="256" required></label><label class="setting-wide">Bot für Indexierungs-Anweisungen<input name="indexability_agent" value="googlebot" maxlength="128" required><small>Meta- und X-Robots-Anweisungen für diesen Bot auswerten, zusätzlich zu allgemeinen Anweisungen. Der HTTP-User-Agent bleibt separat konfiguriert.</small></label></div><label class="checkbox-field"><input name="obey_robots" type="checkbox" checked><span>Robots.txt beachten<small>Ausgeschlossene URLs werden nicht abgerufen.</small></span></label><label class="checkbox-field"><input name="follow_subdomains" type="checkbox"><span>Subdomains einschließen<small>Nur aktivieren, wenn diese zum gewünschten Crawl gehören.</small></span></label><label class="checkbox-field"><input name="validate_fragments" type="checkbox"><span>Fragmentziele prüfen<small>Explizit aktivieren; prüft IDs und benannte Anker nur gegen erfasste vollständige Dokumente. Unbekannte und fehlgeschlagene Ziele bleiben getrennt.</small></span></label><label class="checkbox-field"><input name="check_external" type="checkbox"><span>Externe Linkziele prüfen<small>Auch Ziele außerhalb der Website werden abgerufen. Interne Auswertungen bleiben getrennt.</small></span></label><label class="checkbox-field"><input name="javascript_rendering" type="checkbox"><span>JavaScript-Rendering aktivieren<small>Benötigt den separat laufenden lokalen Browser-Worker. Verbindungsfehler werden als Warnung ausgewiesen.</small></span></label><div id="renderer-settings" class="settings-grid renderer-settings" hidden><label class="setting-wide">Lokaler Worker-Endpunkt<input name="renderer_endpoint" type="url" value="http://127.0.0.1:8790/render" placeholder="http://127.0.0.1:8790/render"></label><label>Wartezeit nach Laden (ms)<input name="renderer_wait_ms" type="number" min="0" max="30000" value="500"></label><div></div><label class="checkbox-field setting-wide"><input name="renderer_accessibility" type="checkbox"><span>Barrierefreiheit mit axe prüfen<small>Benötigt axe im Browser-Worker.</small></span></label><label class="checkbox-field setting-wide"><input name="renderer_screenshot" type="checkbox"><span>Screenshot erfassen<small>Kann größere gespeicherte Crawl-Berichte erzeugen.</small></span></label><label class="checkbox-field setting-wide"><input name="renderer_collect_cookies" type="checkbox"><span>Cookie-Eigenschaften erfassen<small>Name, Domain, Pfad und Flags pro isoliertem Seitenaufruf; Cookie-Werte werden ausgelassen.</small></span></label><label class="setting-wide">Eigene JavaScript-Auswertungen als JSON<textarea name="custom_javascript_json" rows="6" spellcheck="false">[]</textarea><small>Beispiel: [{"name":"documentTitle","script":"return document.title;"}] · await ist erlaubt. Ausführung nach der Render-Wartezeit im Seitenkontext; 2 Sekunden pro Script. Rückgabe als JSON, Fehler je Auswertung sichtbar.</small></label></div><details id="advanced-config" class="advanced-config"><summary>URL-Filter, Extraktionen &amp; Prüfgrenzen</summary><div class="settings-grid"><label class="checkbox-field setting-wide"><input name="cdn_classification_enabled" type="checkbox"><span>CDN-Adressen im Bericht als intern kennzeichnen<small>Erlaubt keine zusätzlichen Seitenaufrufe. Externe Ziele werden weiterhin nur nach den übrigen Crawl-Einstellungen geprüft.</small></span></label><label class="setting-wide">CDN-Adressen, eine pro Zeile<textarea name="cdn_origins_text" rows="4" maxlength="131072" spellcheck="false" placeholder="https://cdn.example.test&#10;https://images.example.test:8443"></textarea><small>1 bis 32 vollständige Adressen mit http:// oder https:// und optionalem Port. Keine Platzhalter, Unterverzeichnisse oder Zugangsdaten. Jede Subdomain muss einzeln eingetragen werden.</small></label><label class="checkbox-field setting-wide"><input name="cdn_directory_reporting_enabled" type="checkbox"><span>CDN-Verzeichnisse im Bericht als intern kennzeichnen<small>Eigene optionale Zuordnung; erlaubt keine zusätzlichen Abrufe, Weiterleitungen, Ressourcen oder Zugangsdaten.</small></span></label><label class="setting-wide">CDN-Verzeichnisadressen, eine pro Zeile<textarea name="cdn_directory_rules_text" rows="4" maxlength="131072" spellcheck="false" placeholder="https://cdn.example.test/assets/&#10;https://files.example.test:8443/"></textarea><small>1 bis 32 ASCII-Domainadressen, jeweils bis 2048 UTF-8-Bytes. Root oder Unterverzeichnis mit abschließendem /. Gilt für HTTP und HTTPS sowie genau einen www-Zusatz. Pfad und Prozentkodierung bleiben wörtlich. Keine Platzhalter, IDNA-/IPv6-Adressen, Punkte-Verzeichnisse oder expliziten Ports 80/443. Die separate CDN-Adressenliste darüber behält ihre bisherigen Regeln.</small></label>
++  <dialog id="settings-dialog" aria-labelledby="settings-heading"><form id="settings-form"><div class="dialog-heading"><div><p class="eyebrow">CRAWL CONFIGURATION</p><h2 id="settings-heading">Crawl-Einstellungen</h2></div><button id="settings-close" class="icon-button" type="button" aria-label="Einstellungen schließen">×</button></div><p>Die Einstellungen gelten für den nächsten Crawl. Ein Wert von 0 deaktiviert die freiwillige Grenze.</p><div class="settings-grid"><label>Parallele Requests<input name="concurrency" type="number" min="1" max="64" value="8" required></label><label>Timeout in Sekunden<input name="timeout_seconds" type="number" min="1" max="300" value="20" required></label><label>URL-Grenze<input name="max_pages" type="number" min="0" value="0" required><small>0 = unbegrenzt</small></label><label>Maximale Tiefe<input name="max_depth" type="number" min="0" value="0" required><small>0 = unbegrenzt</small></label><label>Request-Abstand in ms<input name="delay_ms" type="number" min="0" max="60000" value="100" required><small>Pro Host; 0 = kein Mindestabstand</small></label><label>Max. Antwortgröße in MiB<input name="max_body_mb" type="number" min="1" max="100" value="5" required><small>Größere Antworten werden markiert</small></label><label class="setting-wide">User-Agent<input name="user_agent" value="Open SEO Spider/0.1" maxlength="256" required></label><label class="setting-wide">Bot für Indexierungs-Anweisungen<input name="indexability_agent" value="googlebot" maxlength="128" required><small>Meta- und X-Robots-Anweisungen für diesen Bot auswerten, zusätzlich zu allgemeinen Anweisungen. Der HTTP-User-Agent bleibt separat konfiguriert.</small></label></div><label class="checkbox-field"><input name="obey_robots" type="checkbox" checked><span>Robots.txt beachten<small>Ausgeschlossene URLs werden nicht abgerufen.</small></span></label><details class="advanced-config"><summary>Seiten in Berichten ausblenden</summary><p id="directive-reporting-profile-source" class="detail-empty">Zuerst einen gespeicherten Crawl auswählen, um dessen Berichtsfilter zu laden.</p><button id="directive-reporting-load-selected" class="button small" type="button" disabled>Berichtsfilter aus ausgewähltem Crawl laden</button><p id="directive-reporting-load-status" role="status"></p><p class="detail-empty">Die Aktion übernimmt nur die drei Berichtsfilter in dieses Formular. Erst Speichern ändert die Einstellungen für den nächsten Crawl. Der ausgewählte Bericht, der Bot für Indexierungs-Anweisungen und die Ressourcen- oder Linkentdeckung bleiben unverändert.</p><p>Alle Seiten werden weiterhin abgerufen und ausgehende Links verfolgt. Die drei Filter betreffen Seiten- und Problemzeilen sowie normale Berichts-Exporte. Roh-Snapshots und getrennte Analyse-/Ledger-Bereiche bleiben vollständig.</p><label class="checkbox-field"><input name="respect_noindex" type="checkbox"><span>Noindex-Seiten ausblenden<small>Verwendet die erfassten allgemeinen und für den konfigurierten Bot geltenden Anweisungen.</small></span></label><label class="checkbox-field"><input name="respect_canonical" type="checkbox"><span>Auf andere URLs kanonisierte Seiten ausblenden<small>Selbstreferenzierende Canonicals bleiben sichtbar.</small></span></label><label class="checkbox-field"><input name="respect_next_prev" type="checkbox"><span>Folgeseiten mit prev-Verweis ausblenden<small>Eine erste Seite mit ausschließlich next bleibt sichtbar.</small></span></label></details><label class="checkbox-field"><input name="follow_subdomains" type="checkbox"><span>Subdomains einschließen<small>Nur aktivieren, wenn diese zum gewünschten Crawl gehören.</small></span></label><label class="checkbox-field"><input name="validate_fragments" type="checkbox"><span>Fragmentziele prüfen<small>Explizit aktivieren; prüft IDs und benannte Anker nur gegen erfasste vollständige Dokumente. Unbekannte und fehlgeschlagene Ziele bleiben getrennt.</small></span></label><label class="checkbox-field"><input name="check_external" type="checkbox"><span>Externe Linkziele prüfen<small>Auch Ziele außerhalb der Website werden abgerufen. Interne Auswertungen bleiben getrennt.</small></span></label><label class="checkbox-field"><input name="javascript_rendering" type="checkbox"><span>JavaScript-Rendering aktivieren<small>Benötigt den separat laufenden lokalen Browser-Worker. Verbindungsfehler werden als Warnung ausgewiesen.</small></span></label><div id="renderer-settings" class="settings-grid renderer-settings" hidden><label class="setting-wide">Lokaler Worker-Endpunkt<input name="renderer_endpoint" type="url" value="http://127.0.0.1:8790/render" placeholder="http://127.0.0.1:8790/render"></label><label>Wartezeit nach Laden (ms)<input name="renderer_wait_ms" type="number" min="0" max="30000" value="500"></label><div></div><label class="checkbox-field setting-wide"><input name="renderer_accessibility" type="checkbox"><span>Barrierefreiheit mit axe prüfen<small>Benötigt axe im Browser-Worker.</small></span></label><label class="checkbox-field setting-wide"><input name="renderer_screenshot" type="checkbox"><span>Screenshot erfassen<small>Kann größere gespeicherte Crawl-Berichte erzeugen.</small></span></label><label class="checkbox-field setting-wide"><input name="renderer_collect_cookies" type="checkbox"><span>Cookie-Eigenschaften erfassen<small>Name, Domain, Pfad und Flags pro isoliertem Seitenaufruf; Cookie-Werte werden ausgelassen.</small></span></label><label class="setting-wide">Eigene JavaScript-Auswertungen als JSON<textarea name="custom_javascript_json" rows="6" spellcheck="false">[]</textarea><small>Beispiel: [{"name":"documentTitle","script":"return document.title;"}] · await ist erlaubt. Ausführung nach der Render-Wartezeit im Seitenkontext; 2 Sekunden pro Script. Rückgabe als JSON, Fehler je Auswertung sichtbar.</small></label></div><details id="advanced-config" class="advanced-config"><summary>URL-Filter, Extraktionen &amp; Prüfgrenzen</summary><div class="settings-grid"><label class="checkbox-field setting-wide"><input name="cdn_classification_enabled" type="checkbox"><span>CDN-Adressen im Bericht als intern kennzeichnen<small>Erlaubt keine zusätzlichen Seitenaufrufe. Externe Ziele werden weiterhin nur nach den übrigen Crawl-Einstellungen geprüft.</small></span></label><label class="setting-wide">CDN-Adressen, eine pro Zeile<textarea name="cdn_origins_text" rows="4" maxlength="131072" spellcheck="false" placeholder="https://cdn.example.test&#10;https://images.example.test:8443"></textarea><small>1 bis 32 vollständige Adressen mit http:// oder https:// und optionalem Port. Keine Platzhalter, Unterverzeichnisse oder Zugangsdaten. Jede Subdomain muss einzeln eingetragen werden.</small></label><label class="checkbox-field setting-wide"><input name="cdn_directory_reporting_enabled" type="checkbox"><span>CDN-Verzeichnisse im Bericht als intern kennzeichnen<small>Eigene optionale Zuordnung; erlaubt keine zusätzlichen Abrufe, Weiterleitungen, Ressourcen oder Zugangsdaten.</small></span></label><label class="setting-wide">CDN-Verzeichnisadressen, eine pro Zeile<textarea name="cdn_directory_rules_text" rows="4" maxlength="131072" spellcheck="false" placeholder="https://cdn.example.test/assets/&#10;https://files.example.test:8443/"></textarea><small>1 bis 32 ASCII-Domainadressen, jeweils bis 2048 UTF-8-Bytes. Root oder Unterverzeichnis mit abschließendem /. Gilt für HTTP und HTTPS sowie genau einen www-Zusatz. Pfad und Prozentkodierung bleiben wörtlich. Keine Platzhalter, IDNA-/IPv6-Adressen, Punkte-Verzeichnisse oder expliziten Ports 80/443. Die separate CDN-Adressenliste darüber behält ihre bisherigen Regeln.</small></label>
+ <label class="setting-wide">URL-Include-Muster<textarea name="include_patterns_text" rows="3" placeholder="Ein regulärer Ausdruck pro Zeile"></textarea><small>Leer = alle URLs im konfigurierten Crawl-Bereich. Rust prüft die Regex-Syntax.</small></label><label class="setting-wide">URL-Exclude-Muster<textarea name="exclude_patterns_text" rows="3" placeholder="/logout&#10;/checkout"></textarea><small>Ein regulärer Ausdruck pro Zeile; passende URLs werden ausgeschlossen.</small></label><label class="setting-wide">Geordnete Linkpositionen als JSON<textarea name="link_position_rules_json" rows="4" spellcheck="false">[]</textarea><small>Maximal 32 Regeln mit name und selector. Beispiel: [{"name":"Artikel","selector":"article"},{"name":"Navigation","selector":"nav"}] · Der erste passende Selektor am Link oder einem Vorfahren gewinnt. Ohne eigene Treffer gelten DOM-Bereiche wie nav, header, footer, aside oder content; keine Bildschirmpositionen.</small></label><label class="setting-wide">Eigene CSS-, XPath- und Regex-Extraktionen als JSON<textarea name="custom_extractions_json" rows="6" spellcheck="false">[]</textarea><small>Beispiel: [{"name":"price","selector":".price","attribute":null}] · null erfasst Text; "href" oder "src" erfasst ein Attribut. Optional method: "xpath" mit selector: "//a/@href" oder method: "regex" mit regex_group und regex_flags. XPath 1.0 auf dem reparierten HTML-DOM; id(), lang(), Variablen und Erweiterungen werden nicht unterstützt. Regex verwendet Rust-Syntax. max_results begrenzt gespeicherte Werte und markiert abgeschnittene Erfassungen. output: "auto" bewahrt Text/Attribute; "text", "inner_html" oder "outer_html" wählen die Ausgabe. "function_value" fordert einen XPath-Skalar. HTML-Modi für XPath unterstützen Element- und Dokumentknoten. Ausgabe bleibt Text in der Oberfläche.</small></label><label class="setting-wide">PDF-Analyse und Grenzen als JSON<textarea name="pdf_analysis_json" rows="4" spellcheck="false">{}</textarea><small>{} verwendet die begrenzte native Analyse. Beispiel: {"enabled":true,"max_pages":1000,"max_annotations":10000} · enabled:false deaktiviert die Auswertung. Textoperatoren und URI-Annotationen, keine OCR; Fehler und erreichte Grenzen bleiben sichtbar.</small></label><label class="setting-wide">Prüfgrenzen als JSON<textarea name="audit_thresholds_json" rows="5" spellcheck="false">{}</textarea><small>{} verwendet die Standardgrenzen. Beispiel: {"max_title_chars":60,"max_description_chars":155,"max_url_chars":115,"min_word_count":200,"max_title_pixels":561} · null deaktiviert eine einzelne Prüfung. Pixelprofil: öffentliches Roboto, Titel 20px und Description 14px; komplexe Schriftformen bleiben unbekannt. Keine Vorhersage der Google-Darstellung.</small></label></div></details><div class="capability-note"><strong>Aktueller Funktionsumfang</strong><p>Standardmäßig analysiert der Crawler HTTP-Antworten und HTML. Erfasste Bilddateien erhalten unabhängige Dateimaße; die begrenzte PDF-Analyse erfasst Metadaten, Textoperatoren und URI-Annotationen. Optionales JavaScript-Rendering verwendet den lokalen Browser-Worker. URL-Filter und eigene CSS-, XPath-1.0- und Regex-Extraktionen sind verfügbar. Eigene JavaScript-Auswertungen und Cookie-Eigenschaften sind mit dem Browser-Worker verfügbar. Externe Analytics-APIs sind hier noch nicht eingerichtet.</p></div><p id="settings-error" class="message error" role="alert" hidden></p><div class="dialog-footer"><button class="button primary" type="submit">Einstellungen übernehmen</button></div></form></dialog>
+   <template id="sitemap-source-processing-settings-template"><details id="sitemap-source-processing-settings" class="advanced-config"><summary>Verarbeitung von XML-Sitemap-Quellen</summary>
+     <label class="checkbox-field"><input name="sitemap_source_processing_enabled" type="checkbox"><span>Eigene Verarbeitungsgrenzen für Sitemap-Quellen verwenden<small>Gilt für den nächsten Crawl. Ohne Aktivierung gelten die bisherigen Sitemap-Grenzen.</small></span></label>

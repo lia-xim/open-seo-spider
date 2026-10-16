@@ -6858,7 +6858,7 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-16T14:55:37.349Z",
+  "last_verified_at": "2026-10-16T15:48:21.664Z",
   "current_work": [
     {
       "id": "combined-source-v15-20261016",
@@ -9130,7 +9130,7 @@
       "priority": 1,
       "status": "SOURCE17_SIX_NATIVE_REGRESSIONS_PASS_EXTENDED_PENDING",
       "title_de": "Native interne Ressourcen-Crawls mit dauerhaften Quoten verbinden",
-      "summary_de": "Source17 besteht1559 Tests, vier frische Renderer-Gates, Format, Clippy, optimierten Build und sechs aktuelle Nativregressionen samt unabhängiger Belegprüfung. Die zusätzliche Testhilfe hat drei tatsächliche Fehlversuche zu Standard-Jobdateien, Zeitstempel-Strings und ACL-Vererbung offengelegt; alle Fehlerbelege bleiben erhalten und die eigenen Prozesse wurden geprüft beendet. Eine streng vergleichende Korrektur vermeidet überflüssige ACL-Schreibzugriffe; erneute Prüfung und Ausführung stehen an. Neue Ressourcenmatrix und Installation fehlen; lokal läuft Source16.",
+      "summary_de": "Source17 besteht1559 Tests, vier Renderer-Gates, Format, Clippy, Build und sechs aktuelle Nativregressionen. Vier zusätzliche Testhilfe-Fehlversuche bleiben erhalten. Die Initialkopie besteht jetzt; beim CLI-Lesen änderte sich nur eine SHM-Schreibzeit. Eine eng begrenzte und unabhängig geprüfte Korrektur protokolliert diese Differenz mit ausdrücklich falschem Vollmetadaten-Gleichheitsflag; aktuelle Verknüpfungen und neue Ausführung folgen. Neue Ressourcenmatrix und Installation fehlen; lokal läuft Source16.",
       "feature_ids": [
         "crawl.resources",
         "crawl.limits"
@@ -9152,12 +9152,13 @@
         "Alle sechs bestehenden Source17-Nativregressionen tatsächlich ausgeführt und unabhängig anhand begrenzter gespeicherter Rohbelege ohne Befund geprüft. Die neue Ressourcenmatrix und Installation werden dadurch nicht ersetzt."
       ],
       "pending_acceptance_de": [
-        "Zusätzliche Testhilfe nach drei erhaltenen tatsächlichen Fehlversuchen mit strengem Dateiinventar-/Zeitstempel-/ACL-Vergleich fertig prüfen und ausführen; ACL-Gleichheit nicht durch stilles Ignorieren von Vererbungsmerkmalen ersetzen.",
+        "Zusätzliche Testhilfe mit aktuellen Referenzen erneut ausführen: nur die beobachtete Schreibzeit der vorhandenen SHM-Datei darf beim Lesen abweichen; Inhalt, Inventar und alle anderen Metadaten bleiben strikt.",
         "Vollständige Ressourcen-/Quoten-Nativmatrix mit echten Browser/API/CLI/MCP-Zugriffen, Pause/Cancel/Cold-Neustart und gezielten Fehler-/Korruptionsfällen ausführen; Quellcode oder Hilfsproben ersetzen diese Abnahme nicht.",
         "Source17 erst nach bestandenen Nativtests und Daten erhaltender Kompatibilitätsprüfung lokal installieren; gespeicherte Berichte, Projekte, Einstellungen und vollständige Dateiintegrität prüfen.",
         "Renderer-, Selected- und externe CDN-/Ressourcenziele bleiben gesonderte offene Kombinationen."
       ],
       "documentation": [
+        "docs/verification/source18-reporting-candidate-20261016/index.json",
         "docs/verification/source18-directive-focused-20261016/index.json",
         "docs/verification/source17-six-native-audits-20261016/index.json",
         "docs/verification/source17-suite-build-20261016/index.json",
@@ -9185,16 +9186,16 @@
         "UI_admission": "V4_IMPLEMENTED_SEVEN_VM_REGRESSIONS_PASS_REAL_NATIVE_PENDING",
         "current_proposal": "V4_ACTUAL_PRIVATE_PUBLICATION_AUDITED",
         "native_regressions": "PASS_SIX_CURRENT_ACTUAL_BOUNDED_SCOPES_INDEPENDENTLY_AUDITED",
-        "closed_provider_helper": "THREE_ACTUAL_FAILED_ATTEMPTS_STRICT_ACL_COPY_REPAIR_AND_RETRY_PENDING"
+        "closed_provider_helper": "FOUR_FAILED_ATTEMPTS_PRESERVED_READ_PHASE_REPAIR_REVIEWED_CURRENT_JOINS_AND_ACTUAL_PENDING"
       },
       "reference_parity": "NOT_PROVEN"
     },
     {
       "id": "directive-reporting-20261016",
       "priority": 1,
-      "status": "SOURCE_PROPOSAL_FOCUSED_CHECKS_PASS_FULL_ACCEPTANCE_PENDING",
+      "status": "ISOLATED_REVIEWED_PATCH_FULL_SUITE_BUILD_PASS_NATIVE_PENDING",
       "title_de": "Berichtsfilter für Noindex, Canonicals und Pagination ergänzen",
-      "summary_de": "Isolierter Vorschlag mit434 Quelldateien: drei gespeicherte Berichtsfilter erhalten Rohdaten und Outlink-Verfolgung. Quellcode und Format sind unabhängig geprüft. Tatsächliche Typprüfung aller Targets, sechs Unit-Tests, ein Crawl-/Wiederöffnen-Test über acht Schalterprofile und20 UI-VM-Gruppen mit43 Varianten bestehen samt unabhängiger begrenzter Belegprüfung. Produktübernahme, Gesamtsuite, Build, echte App-/Browserprüfung und Installation fehlen; Backend-Profilübernahme in die UI bleibt offen.",
+      "summary_de": "434 isolierte Quellen und ein noch nicht angewendeter Patch mit elf Änderungen und zwei neuen Dateien sind geprüft. Gespeicherte Berichtsprofile lassen sich in den Einstellungsentwurf laden; Linkmetriken, strukturierte Daten, Fragment- und Antwortberichte verwenden die Sichtbarkeitsregeln mit vollständiger Rohdatenbasis. 1570 Tests, vier Chromium-Gates, Format, strenges Clippy, optimierter Kandidaten-Build,29 UI-VM-Gruppen mit81 Varianten und16 bestehende UI-Regressionen bestehen. Echte App-/Browserprüfung, weitere Spezialberichte, Produktübernahme und Installation bleiben offen.",
       "feature_ids": [
         "robots.traversal"
       ],
@@ -9202,30 +9203,37 @@
         "Referenzvertrag präzisiert: Berichtsfilter ändern die sichtbaren Ergebnisse; Beziehungserkennung und Outlink-Crawl bleiben gesondert.",
         "Neun bestehende und zwei neue Quellpfade unabhängig geprüft; gemischte URL-Duplikate behalten Probleme, sobald eine Beobachtung sichtbar bleibt.",
         "434 isolierte Quellen nach reinem Formatumbau geprüft; tatsächliche Typprüfung aller Targets und sieben gezielte Rust-Testfunktionen bestanden, einschließlich acht gespeicherter Crawl-Profile.",
-        "20 tatsächliche VM-Testgruppen mit43 Varianten bestanden; Quellfunktionen, Speicherwerte, Payloads und getrennte sichtbare/Roh-JSON-Downloads unabhängig geprüft."
+        "20 tatsächliche VM-Testgruppen mit43 Varianten bestanden; Quellfunktionen, Speicherwerte, Payloads und getrennte sichtbare/Roh-JSON-Downloads unabhängig geprüft.",
+        "Gespeicherte Backend-Profile über explizite UI-Aktion laden; strikte Prüfung vor Änderungen am Entwurf, bestehendes Speichern und getrennte Discovery-Einstellungen erhalten.",
+        "Analysen nach vollständiger Berechnung filtern; ursprüngliche Linkwerte, Zielbeziehungen und versteckte Fragmentziele erhalten.",
+        "Vollständige aktuelle Suite:1570/0/0, vier tatsächliche Chromium-Gates, Format und Clippy mit -D warnings; optimierter Kandidaten-Build bestanden.",
+        "29 UI-VM-Gruppen mit81 Varianten und16 bestehende UI-Regressionen auf allen fünf aktuellen Zielen bestanden; isolierter Produktpatch per git apply --check geprüft."
       ],
       "pending_acceptance_de": [
-        "Gespeicherte Backend-Profile in die UI übernehmen; fehlender Adapter ist aktuell ausdrücklich NOT_IMPLEMENTED.",
-        "Alle relevanten Spezialanalysen und Exporte auf die Berichtsfilter abstimmen; die vorbereitete primäre Ansicht ersetzt keine vollständige Verbrauchermatrix.",
-        "Vollständige aktuelle Testsuite mit vier frischen Renderer-Gates, Format und strengem Clippy ausführen.",
-        "Optimierten Build sowie tatsächliche API-/CLI-/MCP-/Browserprüfungen und Daten erhaltende Installation durchführen."
+        "Aktuelle Native17-Ressourcenmatrix abschließen; die sechs bestehenden Nativregressionen ersetzen die zusätzliche Matrix nicht.",
+        "Neue Source18-Anwendung über echte API-/CLI-/MCP-Zugriffe und Browser-Profilübernahme prüfen.",
+        "Spezialberichte für Verzeichnisbaum, Segmente, N-Gramme, Inhalte, Link-/Ressourcenquellen und Sitemap-Bundle ergänzen; Vergleich und explizite Mapping-Audits benötigen gesonderte Regeln.",
+        "Den geprüften Patch erst nach den verbleibenden Abnahmen übernehmen und Daten erhaltend installieren."
       ],
       "documentation": [
+        "docs/verification/source18-reporting-candidate-20261016/index.json",
         "docs/verification/source18-directive-focused-20261016/index.json"
       ],
       "gates": {
-        "source_review": "R4_NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
-        "format": "PASS_ACTUAL_WITH_MECHANICAL_NO_FINDINGS",
-        "typecheck": "PASS_ACTUAL_WORKSPACE_ALL_TARGETS",
+        "source_review": "R5_UI_CONSUMER_V3_NO_FINDINGS",
+        "format": "PASS_ACTUAL",
+        "typecheck": "PASS_ACTUAL_ALL_TARGETS",
         "focused_Rust": "PASS_SIX_UNITS_AND_ONE_EIGHT_PROFILE_LOOPBACK",
-        "UI_VM": "PASS_ACTUAL20_GROUPS43_VARIANTS",
-        "actual_focused_audit": "NO_FINDINGS_BOUNDED_ACTUAL_AUDIT",
-        "backend_profile_UI_adapter": "NOT_IMPLEMENTED_NOT_TESTED",
-        "full_suite": "NOT_RUN",
-        "build": "NOT_RUN",
+        "UI_VM": "PASS_ACTUAL29_GROUPS81_VARIANTS",
+        "actual_focused_audit": "CURRENT_COMPOSED_BOUNDED_ACTUAL_AUDIT",
+        "backend_profile_UI_adapter": "SOURCE_AND_VM_PASS_REAL_BROWSER_PENDING",
+        "full_suite": "PASS_ACTUAL1570_0_0_FOUR_RENDERER_FMT_CLIPPY",
+        "build": "PASS_ACTUAL_OPTIMIZED_CANDIDATE",
         "native_App_frontdoors": "NOT_RUN",
         "installation": "NOT_RUN",
-        "manufacturer_parity": "NOT_PROVEN"
+        "manufacturer_parity": "NOT_PROVEN",
+        "legacy_UI": "PASS_ACTUAL16_CURRENT_TARGET_TESTS",
+        "product_patch": "APPLY_CHECK_PASS_NOT_APPLIED"
       },
       "reference_parity": "NOT_PROVEN"
     }

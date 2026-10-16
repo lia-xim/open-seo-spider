@@ -1,0 +1,1629 @@
+{
+  "kind": "source18_directive_reporting_actual_extracted_UI_VM_regressions",
+  "result": "PASS_ACTUAL_EXTRACTED_UI_VM_ONLY",
+  "qualification": "Only exact pinned source functions in a synthetic DOM/storage/request/blob recorder. No real browser, HTTP, website crawl, SQLite, native process or installed-product acceptance.",
+  "targets": {
+    "app": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/directive-reporting-profile-adapter-proposal-r5/source/web/app.js",
+      "sha256": "7ae066ec0e6709854081c8a8ca581dd6365201003b79ab66f2152950b0172b2f",
+      "bytes": 423434
+    },
+    "html": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/directive-reporting-profile-adapter-proposal-r5/source/web/index.html",
+      "sha256": "f96728e36900be36d361b53fbb59aa471fd4f671a5fab345871f50c9846b9822",
+      "bytes": 97071
+    }
+  },
+  "extracted_sections": [
+    {
+      "from": "  async function startCrawl(event) {",
+      "to": "  async function controlCrawl(",
+      "bytes": 4689,
+      "sha256": "133818491a6d61ba4cf39f847025d457f503eaf1907f93bd94a7255fdb94ae4d"
+    },
+    {
+      "from": "  function openSettings() {",
+      "to": "  const crawlQuotaSettingKeys=",
+      "bytes": 9881,
+      "sha256": "a55244575b5ede79c77ac5706cb474aef35553aec981d078b522ab0beb84ea0c"
+    },
+    {
+      "from": "  const crawlQuotaSettingKeys=",
+      "to": "  function parseAdvanced(settings) {",
+      "bytes": 25926,
+      "sha256": "67fef17aa6ca312c7af7305f37b74bd0e3fb3d0f73a7b62457468fdf0bb5a384"
+    },
+    {
+      "from": "  function parseAdvanced(settings) {",
+      "to": "  // B12 draft:",
+      "bytes": 32859,
+      "sha256": "d04ccbbbbcf8293cb300422ae99550427bd5f3c5ab40c609abc4f3f291f3b8a8"
+    },
+    {
+      "from": "  function syncResourceContractSettings() {",
+      "to": "  function resourceSavedContractLabel() {",
+      "bytes": 4009,
+      "sha256": "c9eb4c1976f45ff417996447e087b7e22d65807df743edac04590fe2f51b99d8"
+    },
+    {
+      "from": "  function parsePositionRules(text) {",
+      "to": "  function listOptions() {",
+      "bytes": 6453,
+      "sha256": "f9595b2ca32ffaf83a24bc1404fe33a9b80cd506c6c746d719c7f4f252c5c792"
+    },
+    {
+      "from": "  function downloadBlob(blob, filename) {",
+      "to": "  function exportCSV() {",
+      "bytes": 321,
+      "sha256": "293de3bb64321438ae1323cb98a6a4934345f9b71091f5a6de457182b3150dbc"
+    },
+    {
+      "from": "  async function serverDownload(endpoint, filename) {",
+      "to": "  async function importProject(file) {",
+      "bytes": 412,
+      "sha256": "9f60d3e8a3bd0ed17b3d62048adeb451aaafccb67be74ef7d7426834907f6c2d"
+    },
+    {
+      "event_id": "export-project",
+      "bytes": 130,
+      "sha256": "a2b120fadf7e00bd8c1db2e01878733a71412b9ef2743486fb1997d53eb99831"
+    },
+    {
+      "event_id": "export-visible-report",
+      "bytes": 145,
+      "sha256": "ee8d346880fef460797bf1a51126528cdb4c51206d1c1db9e6349df9a494a86a"
+    },
+    {
+      "event_id": "directive-reporting-load-selected",
+      "bytes": 108,
+      "sha256": "8000d043b7daf040842584482582451a0868c3ce134cc5ae9515d627169414b8"
+    }
+  ],
+  "expected_groups": 29,
+  "expected_variants": 81,
+  "completed_groups": 29,
+  "completed_variants": 81,
+  "cases": [
+    {
+      "id": "UI-01",
+      "name": "checkbox_combination_0_save_restore_actual_start_exact_profile",
+      "variants": 1,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": {
+        "mask": 0,
+        "saved_ui_json": "{\"concurrency\":2,\"timeout_seconds\":20,\"max_pages\":0,\"max_depth\":0,\"user_agent\":\"Owned Source18 VM fixture\",\"indexability_agent\":\"googlebot\",\"obey_robots\":true,\"follow_subdomains\":false,\"delay_ms\":0,\"max_body_mb\":5,\"check_external\":false,\"javascript_rendering\":false,\"renderer_endpoint\":\"http://127.0.0.1:8790/render\",\"renderer_wait_ms\":50,\"renderer_accessibility\":false,\"renderer_screenshot\":false,\"renderer_collect_cookies\":false,\"respect_noindex\":false,\"respect_canonical\":false,\"respect_next_prev\":false,\"cdn_directory_reporting_enabled\":false,\"cdn_directory_rules_text\":\"\",\"cdn_classification_enabled\":false,\"cdn_origins_text\":\"\",\"crawl_quotas_enabled\":false,\"crawl_quota_per_depth\":\"\",\"crawl_quota_per_subdomain\":\"\",\"crawl_quota_patterns_json\":\"[]\",\"crawl_admission_limits_enabled\":false,\"crawl_max_folder_depth\":\"\",\"crawl_max_query_tokens\":\"\",\"crawl_max_fetch_url_utf8_bytes\":\"\",\"sitemap_source_processing_enabled\":false,\"sitemap_membership_limits_enabled\":false,\"sitemap_membership_max_catalog_json_bytes\":\"33554432\",\"sitemap_membership_max_row_json_bytes\":\"262144\",\"sitemap_membership_max_rows\":\"1000000\",\"sitemap_source_max_post_http_entity_bytes\":\"8388608\",\"sitemap_source_max_decoded_xml_bytes\":\"8388608\",\"sitemap_source_max_xml_events\":\"500000\",\"sitemap_source_archive_enabled\":false,\"sitemap_source_archive_post_http\":false,\"sitemap_source_archive_decoded_xml\":false,\"sitemap_source_archive_max_body_bytes\":\"67108864\",\"sitemap_source_archive_max_total_bytes\":\"536870912\",\"sitemap_source_archive_max_records\":\"4096\",\"include_patterns_text\":\"/public/\",\"exclude_patterns_text\":\"/private/\",\"custom_extractions_json\":\"[]\",\"custom_javascript_json\":\"[]\",\"audit_thresholds_json\":\"{}\",\"pdf_analysis_json\":\"{}\",\"link_position_rules_json\":\"[]\",\"validate_fragments\":false,\"crawl_policy_enabled\":false,\"crawl_policy_json\":\"{}\",\"live_policy_limits_json\":\"{}\",\"content_capture_enabled\":false,\"content_capture_json\":\"{}\",\"resource_discovery_enabled\":false,\"resource_discovery_json\":\"{}\",\"resource_discovery_limits_json\":\"{}\"}",
+        "serialized_request": {
+          "concurrency": 2,
+          "timeout_seconds": 20,
+          "max_pages": 0,
+          "max_depth": 0,
+          "user_agent": "Owned Source18 VM fixture",
+          "obey_robots": true,
+          "follow_subdomains": false,
+          "delay_ms": 0,
+          "max_body_mb": 5,
+          "check_external": false,
+          "javascript_rendering": false,
+          "renderer_endpoint": "http://127.0.0.1:8790/render",
+          "renderer_wait_ms": 50,
+          "renderer_accessibility": false,
+          "renderer_screenshot": false,
+          "indexability_agent": "googlebot",
+          "renderer_collect_cookies": false,
+          "custom_javascript_json": "[]",
+          "audit_thresholds_json": "{}",
+          "pdf_analysis_json": "{}",
+          "include_patterns_text": "/public/",
+          "exclude_patterns_text": "/private/",
+          "custom_extractions_json": "[]",
+          "validate_fragments": false,
+          "link_position_rules_json": "[]",
+          "custom_extractions": [],
+          "audit_thresholds": {},
+          "pdf_analysis": {},
+          "link_position_rules": [],
+          "include_patterns": [
+            "/public/"
+          ],
+          "exclude_patterns": [
+            "/private/"
+          ],
+          "mode": "spider",
+          "seed_url": "https://synthetic.test/public/",
+          "urls": [
+            "https://synthetic.test/public/"
+          ],
+          "seed_urls": [
+            "https://synthetic.test/public/"
+          ],
+          "sitemap_urls": [],
+          "input_imports": [],
+          "crawl_links": true,
+          "include_subdomains": false,
+          "request_timeout_secs": 20,
+          "max_body_bytes": 5242880,
+          "renderer": null
+        },
+        "storage_writes": 1,
+        "request_count": 1,
+        "flags": {
+          "respect_noindex": false,
+          "respect_canonical": false,
+          "respect_next_prev": false
+        }
+      }
+    },
+    {
+      "id": "UI-02",
+      "name": "checkbox_combination_1_save_restore_actual_start_exact_profile",
+      "variants": 1,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": {
+        "mask": 1,
+        "saved_ui_json": "{\"concurrency\":2,\"timeout_seconds\":20,\"max_pages\":0,\"max_depth\":0,\"user_agent\":\"Owned Source18 VM fixture\",\"indexability_agent\":\"googlebot\",\"obey_robots\":true,\"follow_subdomains\":false,\"delay_ms\":0,\"max_body_mb\":5,\"check_external\":false,\"javascript_rendering\":false,\"renderer_endpoint\":\"http://127.0.0.1:8790/render\",\"renderer_wait_ms\":50,\"renderer_accessibility\":false,\"renderer_screenshot\":false,\"renderer_collect_cookies\":false,\"respect_noindex\":true,\"respect_canonical\":false,\"respect_next_prev\":false,\"cdn_directory_reporting_enabled\":false,\"cdn_directory_rules_text\":\"\",\"cdn_classification_enabled\":false,\"cdn_origins_text\":\"\",\"crawl_quotas_enabled\":false,\"crawl_quota_per_depth\":\"\",\"crawl_quota_per_subdomain\":\"\",\"crawl_quota_patterns_json\":\"[]\",\"crawl_admission_limits_enabled\":false,\"crawl_max_folder_depth\":\"\",\"crawl_max_query_tokens\":\"\",\"crawl_max_fetch_url_utf8_bytes\":\"\",\"sitemap_source_processing_enabled\":false,\"sitemap_membership_limits_enabled\":false,\"sitemap_membership_max_catalog_json_bytes\":\"33554432\",\"sitemap_membership_max_row_json_bytes\":\"262144\",\"sitemap_membership_max_rows\":\"1000000\",\"sitemap_source_max_post_http_entity_bytes\":\"8388608\",\"sitemap_source_max_decoded_xml_bytes\":\"8388608\",\"sitemap_source_max_xml_events\":\"500000\",\"sitemap_source_archive_enabled\":false,\"sitemap_source_archive_post_http\":false,\"sitemap_source_archive_decoded_xml\":false,\"sitemap_source_archive_max_body_bytes\":\"67108864\",\"sitemap_source_archive_max_total_bytes\":\"536870912\",\"sitemap_source_archive_max_records\":\"4096\",\"include_patterns_text\":\"/public/\",\"exclude_patterns_text\":\"/private/\",\"custom_extractions_json\":\"[]\",\"custom_javascript_json\":\"[]\",\"audit_thresholds_json\":\"{}\",\"pdf_analysis_json\":\"{}\",\"link_position_rules_json\":\"[]\",\"validate_fragments\":false,\"crawl_policy_enabled\":false,\"crawl_policy_json\":\"{}\",\"live_policy_limits_json\":\"{}\",\"content_capture_enabled\":false,\"content_capture_json\":\"{}\",\"resource_discovery_enabled\":false,\"resource_discovery_json\":\"{}\",\"resource_discovery_limits_json\":\"{}\"}",
+        "serialized_request": {
+          "concurrency": 2,
+          "timeout_seconds": 20,
+          "max_pages": 0,
+          "max_depth": 0,
+          "user_agent": "Owned Source18 VM fixture",
+          "obey_robots": true,
+          "follow_subdomains": false,
+          "delay_ms": 0,
+          "max_body_mb": 5,
+          "check_external": false,
+          "javascript_rendering": false,
+          "renderer_endpoint": "http://127.0.0.1:8790/render",
+          "renderer_wait_ms": 50,
+          "renderer_accessibility": false,
+          "renderer_screenshot": false,
+          "indexability_agent": "googlebot",
+          "renderer_collect_cookies": false,
+          "custom_javascript_json": "[]",
+          "audit_thresholds_json": "{}",
+          "pdf_analysis_json": "{}",
+          "include_patterns_text": "/public/",
+          "exclude_patterns_text": "/private/",
+          "custom_extractions_json": "[]",
+          "validate_fragments": false,
+          "link_position_rules_json": "[]",
+          "custom_extractions": [],
+          "audit_thresholds": {},
+          "pdf_analysis": {},
+          "link_position_rules": [],
+          "include_patterns": [
+            "/public/"
+          ],
+          "exclude_patterns": [
+            "/private/"
+          ],
+          "directive_reporting": {
+            "version": 1,
+            "respect_noindex": true,
+            "respect_canonical": false,
+            "respect_next_prev": false
+          },
+          "mode": "spider",
+          "seed_url": "https://synthetic.test/public/",
+          "urls": [
+            "https://synthetic.test/public/"
+          ],
+          "seed_urls": [
+            "https://synthetic.test/public/"
+          ],
+          "sitemap_urls": [],
+          "input_imports": [],
+          "crawl_links": true,
+          "include_subdomains": false,
+          "request_timeout_secs": 20,
+          "max_body_bytes": 5242880,
+          "renderer": null
+        },
+        "storage_writes": 1,
+        "request_count": 1,
+        "flags": {
+          "respect_noindex": true,
+          "respect_canonical": false,
+          "respect_next_prev": false
+        }
+      }
+    },
+    {
+      "id": "UI-03",
+      "name": "checkbox_combination_2_save_restore_actual_start_exact_profile",
+      "variants": 1,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": {
+        "mask": 2,
+        "saved_ui_json": "{\"concurrency\":2,\"timeout_seconds\":20,\"max_pages\":0,\"max_depth\":0,\"user_agent\":\"Owned Source18 VM fixture\",\"indexability_agent\":\"googlebot\",\"obey_robots\":true,\"follow_subdomains\":false,\"delay_ms\":0,\"max_body_mb\":5,\"check_external\":false,\"javascript_rendering\":false,\"renderer_endpoint\":\"http://127.0.0.1:8790/render\",\"renderer_wait_ms\":50,\"renderer_accessibility\":false,\"renderer_screenshot\":false,\"renderer_collect_cookies\":false,\"respect_noindex\":false,\"respect_canonical\":true,\"respect_next_prev\":false,\"cdn_directory_reporting_enabled\":false,\"cdn_directory_rules_text\":\"\",\"cdn_classification_enabled\":false,\"cdn_origins_text\":\"\",\"crawl_quotas_enabled\":false,\"crawl_quota_per_depth\":\"\",\"crawl_quota_per_subdomain\":\"\",\"crawl_quota_patterns_json\":\"[]\",\"crawl_admission_limits_enabled\":false,\"crawl_max_folder_depth\":\"\",\"crawl_max_query_tokens\":\"\",\"crawl_max_fetch_url_utf8_bytes\":\"\",\"sitemap_source_processing_enabled\":false,\"sitemap_membership_limits_enabled\":false,\"sitemap_membership_max_catalog_json_bytes\":\"33554432\",\"sitemap_membership_max_row_json_bytes\":\"262144\",\"sitemap_membership_max_rows\":\"1000000\",\"sitemap_source_max_post_http_entity_bytes\":\"8388608\",\"sitemap_source_max_decoded_xml_bytes\":\"8388608\",\"sitemap_source_max_xml_events\":\"500000\",\"sitemap_source_archive_enabled\":false,\"sitemap_source_archive_post_http\":false,\"sitemap_source_archive_decoded_xml\":false,\"sitemap_source_archive_max_body_bytes\":\"67108864\",\"sitemap_source_archive_max_total_bytes\":\"536870912\",\"sitemap_source_archive_max_records\":\"4096\",\"include_patterns_text\":\"/public/\",\"exclude_patterns_text\":\"/private/\",\"custom_extractions_json\":\"[]\",\"custom_javascript_json\":\"[]\",\"audit_thresholds_json\":\"{}\",\"pdf_analysis_json\":\"{}\",\"link_position_rules_json\":\"[]\",\"validate_fragments\":false,\"crawl_policy_enabled\":false,\"crawl_policy_json\":\"{}\",\"live_policy_limits_json\":\"{}\",\"content_capture_enabled\":false,\"content_capture_json\":\"{}\",\"resource_discovery_enabled\":false,\"resource_discovery_json\":\"{}\",\"resource_discovery_limits_json\":\"{}\"}",
+        "serialized_request": {
+          "concurrency": 2,
+          "timeout_seconds": 20,
+          "max_pages": 0,
+          "max_depth": 0,
+          "user_agent": "Owned Source18 VM fixture",
+          "obey_robots": true,
+          "follow_subdomains": false,
+          "delay_ms": 0,
+          "max_body_mb": 5,
+          "check_external": false,
+          "javascript_rendering": false,
+          "renderer_endpoint": "http://127.0.0.1:8790/render",
+          "renderer_wait_ms": 50,
+          "renderer_accessibility": false,
+          "renderer_screenshot": false,
+          "indexability_agent": "googlebot",
+          "renderer_collect_cookies": false,
+          "custom_javascript_json": "[]",
+          "audit_thresholds_json": "{}",
+          "pdf_analysis_json": "{}",
+          "include_patterns_text": "/public/",
+          "exclude_patterns_text": "/private/",
+          "custom_extractions_json": "[]",
+          "validate_fragments": false,
+          "link_position_rules_json": "[]",
+          "custom_extractions": [],
+          "audit_thresholds": {},
+          "pdf_analysis": {},
+          "link_position_rules": [],
+          "include_patterns": [
+            "/public/"
+          ],
+          "exclude_patterns": [
+            "/private/"
+          ],
+          "directive_reporting": {
+            "version": 1,
+            "respect_noindex": false,
+            "respect_canonical": true,
+            "respect_next_prev": false
+          },
+          "mode": "spider",
+          "seed_url": "https://synthetic.test/public/",
+          "urls": [
+            "https://synthetic.test/public/"
+          ],
+          "seed_urls": [
+            "https://synthetic.test/public/"
+          ],
+          "sitemap_urls": [],
+          "input_imports": [],
+          "crawl_links": true,
+          "include_subdomains": false,
+          "request_timeout_secs": 20,
+          "max_body_bytes": 5242880,
+          "renderer": null
+        },
+        "storage_writes": 1,
+        "request_count": 1,
+        "flags": {
+          "respect_noindex": false,
+          "respect_canonical": true,
+          "respect_next_prev": false
+        }
+      }
+    },
+    {
+      "id": "UI-04",
+      "name": "checkbox_combination_3_save_restore_actual_start_exact_profile",
+      "variants": 1,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": {
+        "mask": 3,
+        "saved_ui_json": "{\"concurrency\":2,\"timeout_seconds\":20,\"max_pages\":0,\"max_depth\":0,\"user_agent\":\"Owned Source18 VM fixture\",\"indexability_agent\":\"googlebot\",\"obey_robots\":true,\"follow_subdomains\":false,\"delay_ms\":0,\"max_body_mb\":5,\"check_external\":false,\"javascript_rendering\":false,\"renderer_endpoint\":\"http://127.0.0.1:8790/render\",\"renderer_wait_ms\":50,\"renderer_accessibility\":false,\"renderer_screenshot\":false,\"renderer_collect_cookies\":false,\"respect_noindex\":true,\"respect_canonical\":true,\"respect_next_prev\":false,\"cdn_directory_reporting_enabled\":false,\"cdn_directory_rules_text\":\"\",\"cdn_classification_enabled\":false,\"cdn_origins_text\":\"\",\"crawl_quotas_enabled\":false,\"crawl_quota_per_depth\":\"\",\"crawl_quota_per_subdomain\":\"\",\"crawl_quota_patterns_json\":\"[]\",\"crawl_admission_limits_enabled\":false,\"crawl_max_folder_depth\":\"\",\"crawl_max_query_tokens\":\"\",\"crawl_max_fetch_url_utf8_bytes\":\"\",\"sitemap_source_processing_enabled\":false,\"sitemap_membership_limits_enabled\":false,\"sitemap_membership_max_catalog_json_bytes\":\"33554432\",\"sitemap_membership_max_row_json_bytes\":\"262144\",\"sitemap_membership_max_rows\":\"1000000\",\"sitemap_source_max_post_http_entity_bytes\":\"8388608\",\"sitemap_source_max_decoded_xml_bytes\":\"8388608\",\"sitemap_source_max_xml_events\":\"500000\",\"sitemap_source_archive_enabled\":false,\"sitemap_source_archive_post_http\":false,\"sitemap_source_archive_decoded_xml\":false,\"sitemap_source_archive_max_body_bytes\":\"67108864\",\"sitemap_source_archive_max_total_bytes\":\"536870912\",\"sitemap_source_archive_max_records\":\"4096\",\"include_patterns_text\":\"/public/\",\"exclude_patterns_text\":\"/private/\",\"custom_extractions_json\":\"[]\",\"custom_javascript_json\":\"[]\",\"audit_thresholds_json\":\"{}\",\"pdf_analysis_json\":\"{}\",\"link_position_rules_json\":\"[]\",\"validate_fragments\":false,\"crawl_policy_enabled\":false,\"crawl_policy_json\":\"{}\",\"live_policy_limits_json\":\"{}\",\"content_capture_enabled\":false,\"content_capture_json\":\"{}\",\"resource_discovery_enabled\":false,\"resource_discovery_json\":\"{}\",\"resource_discovery_limits_json\":\"{}\"}",
+        "serialized_request": {
+          "concurrency": 2,
+          "timeout_seconds": 20,
+          "max_pages": 0,
+          "max_depth": 0,
+          "user_agent": "Owned Source18 VM fixture",
+          "obey_robots": true,
+          "follow_subdomains": false,
+          "delay_ms": 0,
+          "max_body_mb": 5,
+          "check_external": false,
+          "javascript_rendering": false,
+          "renderer_endpoint": "http://127.0.0.1:8790/render",
+          "renderer_wait_ms": 50,
+          "renderer_accessibility": false,
+          "renderer_screenshot": false,
+          "indexability_agent": "googlebot",
+          "renderer_collect_cookies": false,
+          "custom_javascript_json": "[]",
+          "audit_thresholds_json": "{}",
+          "pdf_analysis_json": "{}",
+          "include_patterns_text": "/public/",
+          "exclude_patterns_text": "/private/",
+          "custom_extractions_json": "[]",
+          "validate_fragments": false,
+          "link_position_rules_json": "[]",
+          "custom_extractions": [],
+          "audit_thresholds": {},
+          "pdf_analysis": {},
+          "link_position_rules": [],
+          "include_patterns": [
+            "/public/"
+          ],
+          "exclude_patterns": [
+            "/private/"
+          ],
+          "directive_reporting": {
+            "version": 1,
+            "respect_noindex": true,
+            "respect_canonical": true,
+            "respect_next_prev": false
+          },
+          "mode": "spider",
+          "seed_url": "https://synthetic.test/public/",
+          "urls": [
+            "https://synthetic.test/public/"
+          ],
+          "seed_urls": [
+            "https://synthetic.test/public/"
+          ],
+          "sitemap_urls": [],
+          "input_imports": [],
+          "crawl_links": true,
+          "include_subdomains": false,
+          "request_timeout_secs": 20,
+          "max_body_bytes": 5242880,
+          "renderer": null
+        },
+        "storage_writes": 1,
+        "request_count": 1,
+        "flags": {
+          "respect_noindex": true,
+          "respect_canonical": true,
+          "respect_next_prev": false
+        }
+      }
+    },
+    {
+      "id": "UI-05",
+      "name": "checkbox_combination_4_save_restore_actual_start_exact_profile",
+      "variants": 1,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": {
+        "mask": 4,
+        "saved_ui_json": "{\"concurrency\":2,\"timeout_seconds\":20,\"max_pages\":0,\"max_depth\":0,\"user_agent\":\"Owned Source18 VM fixture\",\"indexability_agent\":\"googlebot\",\"obey_robots\":true,\"follow_subdomains\":false,\"delay_ms\":0,\"max_body_mb\":5,\"check_external\":false,\"javascript_rendering\":false,\"renderer_endpoint\":\"http://127.0.0.1:8790/render\",\"renderer_wait_ms\":50,\"renderer_accessibility\":false,\"renderer_screenshot\":false,\"renderer_collect_cookies\":false,\"respect_noindex\":false,\"respect_canonical\":false,\"respect_next_prev\":true,\"cdn_directory_reporting_enabled\":false,\"cdn_directory_rules_text\":\"\",\"cdn_classification_enabled\":false,\"cdn_origins_text\":\"\",\"crawl_quotas_enabled\":false,\"crawl_quota_per_depth\":\"\",\"crawl_quota_per_subdomain\":\"\",\"crawl_quota_patterns_json\":\"[]\",\"crawl_admission_limits_enabled\":false,\"crawl_max_folder_depth\":\"\",\"crawl_max_query_tokens\":\"\",\"crawl_max_fetch_url_utf8_bytes\":\"\",\"sitemap_source_processing_enabled\":false,\"sitemap_membership_limits_enabled\":false,\"sitemap_membership_max_catalog_json_bytes\":\"33554432\",\"sitemap_membership_max_row_json_bytes\":\"262144\",\"sitemap_membership_max_rows\":\"1000000\",\"sitemap_source_max_post_http_entity_bytes\":\"8388608\",\"sitemap_source_max_decoded_xml_bytes\":\"8388608\",\"sitemap_source_max_xml_events\":\"500000\",\"sitemap_source_archive_enabled\":false,\"sitemap_source_archive_post_http\":false,\"sitemap_source_archive_decoded_xml\":false,\"sitemap_source_archive_max_body_bytes\":\"67108864\",\"sitemap_source_archive_max_total_bytes\":\"536870912\",\"sitemap_source_archive_max_records\":\"4096\",\"include_patterns_text\":\"/public/\",\"exclude_patterns_text\":\"/private/\",\"custom_extractions_json\":\"[]\",\"custom_javascript_json\":\"[]\",\"audit_thresholds_json\":\"{}\",\"pdf_analysis_json\":\"{}\",\"link_position_rules_json\":\"[]\",\"validate_fragments\":false,\"crawl_policy_enabled\":false,\"crawl_policy_json\":\"{}\",\"live_policy_limits_json\":\"{}\",\"content_capture_enabled\":false,\"content_capture_json\":\"{}\",\"resource_discovery_enabled\":false,\"resource_discovery_json\":\"{}\",\"resource_discovery_limits_json\":\"{}\"}",
+        "serialized_request": {
+          "concurrency": 2,
+          "timeout_seconds": 20,
+          "max_pages": 0,
+          "max_depth": 0,
+          "user_agent": "Owned Source18 VM fixture",
+          "obey_robots": true,
+          "follow_subdomains": false,
+          "delay_ms": 0,
+          "max_body_mb": 5,
+          "check_external": false,
+          "javascript_rendering": false,
+          "renderer_endpoint": "http://127.0.0.1:8790/render",
+          "renderer_wait_ms": 50,
+          "renderer_accessibility": false,
+          "renderer_screenshot": false,
+          "indexability_agent": "googlebot",
+          "renderer_collect_cookies": false,
+          "custom_javascript_json": "[]",
+          "audit_thresholds_json": "{}",
+          "pdf_analysis_json": "{}",
+          "include_patterns_text": "/public/",
+          "exclude_patterns_text": "/private/",
+          "custom_extractions_json": "[]",
+          "validate_fragments": false,
+          "link_position_rules_json": "[]",
+          "custom_extractions": [],
+          "audit_thresholds": {},
+          "pdf_analysis": {},
+          "link_position_rules": [],
+          "include_patterns": [
+            "/public/"
+          ],
+          "exclude_patterns": [
+            "/private/"
+          ],
+          "directive_reporting": {
+            "version": 1,
+            "respect_noindex": false,
+            "respect_canonical": false,
+            "respect_next_prev": true
+          },
+          "mode": "spider",
+          "seed_url": "https://synthetic.test/public/",
+          "urls": [
+            "https://synthetic.test/public/"
+          ],
+          "seed_urls": [
+            "https://synthetic.test/public/"
+          ],
+          "sitemap_urls": [],
+          "input_imports": [],
+          "crawl_links": true,
+          "include_subdomains": false,
+          "request_timeout_secs": 20,
+          "max_body_bytes": 5242880,
+          "renderer": null
+        },
+        "storage_writes": 1,
+        "request_count": 1,
+        "flags": {
+          "respect_noindex": false,
+          "respect_canonical": false,
+          "respect_next_prev": true
+        }
+      }
+    },
+    {
+      "id": "UI-06",
+      "name": "checkbox_combination_5_save_restore_actual_start_exact_profile",
+      "variants": 1,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": {
+        "mask": 5,
+        "saved_ui_json": "{\"concurrency\":2,\"timeout_seconds\":20,\"max_pages\":0,\"max_depth\":0,\"user_agent\":\"Owned Source18 VM fixture\",\"indexability_agent\":\"googlebot\",\"obey_robots\":true,\"follow_subdomains\":false,\"delay_ms\":0,\"max_body_mb\":5,\"check_external\":false,\"javascript_rendering\":false,\"renderer_endpoint\":\"http://127.0.0.1:8790/render\",\"renderer_wait_ms\":50,\"renderer_accessibility\":false,\"renderer_screenshot\":false,\"renderer_collect_cookies\":false,\"respect_noindex\":true,\"respect_canonical\":false,\"respect_next_prev\":true,\"cdn_directory_reporting_enabled\":false,\"cdn_directory_rules_text\":\"\",\"cdn_classification_enabled\":false,\"cdn_origins_text\":\"\",\"crawl_quotas_enabled\":false,\"crawl_quota_per_depth\":\"\",\"crawl_quota_per_subdomain\":\"\",\"crawl_quota_patterns_json\":\"[]\",\"crawl_admission_limits_enabled\":false,\"crawl_max_folder_depth\":\"\",\"crawl_max_query_tokens\":\"\",\"crawl_max_fetch_url_utf8_bytes\":\"\",\"sitemap_source_processing_enabled\":false,\"sitemap_membership_limits_enabled\":false,\"sitemap_membership_max_catalog_json_bytes\":\"33554432\",\"sitemap_membership_max_row_json_bytes\":\"262144\",\"sitemap_membership_max_rows\":\"1000000\",\"sitemap_source_max_post_http_entity_bytes\":\"8388608\",\"sitemap_source_max_decoded_xml_bytes\":\"8388608\",\"sitemap_source_max_xml_events\":\"500000\",\"sitemap_source_archive_enabled\":false,\"sitemap_source_archive_post_http\":false,\"sitemap_source_archive_decoded_xml\":false,\"sitemap_source_archive_max_body_bytes\":\"67108864\",\"sitemap_source_archive_max_total_bytes\":\"536870912\",\"sitemap_source_archive_max_records\":\"4096\",\"include_patterns_text\":\"/public/\",\"exclude_patterns_text\":\"/private/\",\"custom_extractions_json\":\"[]\",\"custom_javascript_json\":\"[]\",\"audit_thresholds_json\":\"{}\",\"pdf_analysis_json\":\"{}\",\"link_position_rules_json\":\"[]\",\"validate_fragments\":false,\"crawl_policy_enabled\":false,\"crawl_policy_json\":\"{}\",\"live_policy_limits_json\":\"{}\",\"content_capture_enabled\":false,\"content_capture_json\":\"{}\",\"resource_discovery_enabled\":false,\"resource_discovery_json\":\"{}\",\"resource_discovery_limits_json\":\"{}\"}",
+        "serialized_request": {
+          "concurrency": 2,
+          "timeout_seconds": 20,
+          "max_pages": 0,
+          "max_depth": 0,
+          "user_agent": "Owned Source18 VM fixture",
+          "obey_robots": true,
+          "follow_subdomains": false,
+          "delay_ms": 0,
+          "max_body_mb": 5,
+          "check_external": false,
+          "javascript_rendering": false,
+          "renderer_endpoint": "http://127.0.0.1:8790/render",
+          "renderer_wait_ms": 50,
+          "renderer_accessibility": false,
+          "renderer_screenshot": false,
+          "indexability_agent": "googlebot",
+          "renderer_collect_cookies": false,
+          "custom_javascript_json": "[]",
+          "audit_thresholds_json": "{}",
+          "pdf_analysis_json": "{}",
+          "include_patterns_text": "/public/",
+          "exclude_patterns_text": "/private/",
+          "custom_extractions_json": "[]",
+          "validate_fragments": false,
+          "link_position_rules_json": "[]",
+          "custom_extractions": [],
+          "audit_thresholds": {},
+          "pdf_analysis": {},
+          "link_position_rules": [],
+          "include_patterns": [
+            "/public/"
+          ],
+          "exclude_patterns": [
+            "/private/"
+          ],
+          "directive_reporting": {
+            "version": 1,
+            "respect_noindex": true,
+            "respect_canonical": false,
+            "respect_next_prev": true
+          },
+          "mode": "spider",
+          "seed_url": "https://synthetic.test/public/",
+          "urls": [
+            "https://synthetic.test/public/"
+          ],
+          "seed_urls": [
+            "https://synthetic.test/public/"
+          ],
+          "sitemap_urls": [],
+          "input_imports": [],
+          "crawl_links": true,
+          "include_subdomains": false,
+          "request_timeout_secs": 20,
+          "max_body_bytes": 5242880,
+          "renderer": null
+        },
+        "storage_writes": 1,
+        "request_count": 1,
+        "flags": {
+          "respect_noindex": true,
+          "respect_canonical": false,
+          "respect_next_prev": true
+        }
+      }
+    },
+    {
+      "id": "UI-07",
+      "name": "checkbox_combination_6_save_restore_actual_start_exact_profile",
+      "variants": 1,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": {
+        "mask": 6,
+        "saved_ui_json": "{\"concurrency\":2,\"timeout_seconds\":20,\"max_pages\":0,\"max_depth\":0,\"user_agent\":\"Owned Source18 VM fixture\",\"indexability_agent\":\"googlebot\",\"obey_robots\":true,\"follow_subdomains\":false,\"delay_ms\":0,\"max_body_mb\":5,\"check_external\":false,\"javascript_rendering\":false,\"renderer_endpoint\":\"http://127.0.0.1:8790/render\",\"renderer_wait_ms\":50,\"renderer_accessibility\":false,\"renderer_screenshot\":false,\"renderer_collect_cookies\":false,\"respect_noindex\":false,\"respect_canonical\":true,\"respect_next_prev\":true,\"cdn_directory_reporting_enabled\":false,\"cdn_directory_rules_text\":\"\",\"cdn_classification_enabled\":false,\"cdn_origins_text\":\"\",\"crawl_quotas_enabled\":false,\"crawl_quota_per_depth\":\"\",\"crawl_quota_per_subdomain\":\"\",\"crawl_quota_patterns_json\":\"[]\",\"crawl_admission_limits_enabled\":false,\"crawl_max_folder_depth\":\"\",\"crawl_max_query_tokens\":\"\",\"crawl_max_fetch_url_utf8_bytes\":\"\",\"sitemap_source_processing_enabled\":false,\"sitemap_membership_limits_enabled\":false,\"sitemap_membership_max_catalog_json_bytes\":\"33554432\",\"sitemap_membership_max_row_json_bytes\":\"262144\",\"sitemap_membership_max_rows\":\"1000000\",\"sitemap_source_max_post_http_entity_bytes\":\"8388608\",\"sitemap_source_max_decoded_xml_bytes\":\"8388608\",\"sitemap_source_max_xml_events\":\"500000\",\"sitemap_source_archive_enabled\":false,\"sitemap_source_archive_post_http\":false,\"sitemap_source_archive_decoded_xml\":false,\"sitemap_source_archive_max_body_bytes\":\"67108864\",\"sitemap_source_archive_max_total_bytes\":\"536870912\",\"sitemap_source_archive_max_records\":\"4096\",\"include_patterns_text\":\"/public/\",\"exclude_patterns_text\":\"/private/\",\"custom_extractions_json\":\"[]\",\"custom_javascript_json\":\"[]\",\"audit_thresholds_json\":\"{}\",\"pdf_analysis_json\":\"{}\",\"link_position_rules_json\":\"[]\",\"validate_fragments\":false,\"crawl_policy_enabled\":false,\"crawl_policy_json\":\"{}\",\"live_policy_limits_json\":\"{}\",\"content_capture_enabled\":false,\"content_capture_json\":\"{}\",\"resource_discovery_enabled\":false,\"resource_discovery_json\":\"{}\",\"resource_discovery_limits_json\":\"{}\"}",
+        "serialized_request": {
+          "concurrency": 2,
+          "timeout_seconds": 20,
+          "max_pages": 0,
+          "max_depth": 0,
+          "user_agent": "Owned Source18 VM fixture",
+          "obey_robots": true,
+          "follow_subdomains": false,
+          "delay_ms": 0,
+          "max_body_mb": 5,
+          "check_external": false,
+          "javascript_rendering": false,
+          "renderer_endpoint": "http://127.0.0.1:8790/render",
+          "renderer_wait_ms": 50,
+          "renderer_accessibility": false,
+          "renderer_screenshot": false,
+          "indexability_agent": "googlebot",
+          "renderer_collect_cookies": false,
+          "custom_javascript_json": "[]",
+          "audit_thresholds_json": "{}",
+          "pdf_analysis_json": "{}",
+          "include_patterns_text": "/public/",
+          "exclude_patterns_text": "/private/",
+          "custom_extractions_json": "[]",
+          "validate_fragments": false,
+          "link_position_rules_json": "[]",
+          "custom_extractions": [],
+          "audit_thresholds": {},
+          "pdf_analysis": {},
+          "link_position_rules": [],
+          "include_patterns": [
+            "/public/"
+          ],
+          "exclude_patterns": [
+            "/private/"
+          ],
+          "directive_reporting": {
+            "version": 1,
+            "respect_noindex": false,
+            "respect_canonical": true,
+            "respect_next_prev": true
+          },
+          "mode": "spider",
+          "seed_url": "https://synthetic.test/public/",
+          "urls": [
+            "https://synthetic.test/public/"
+          ],
+          "seed_urls": [
+            "https://synthetic.test/public/"
+          ],
+          "sitemap_urls": [],
+          "input_imports": [],
+          "crawl_links": true,
+          "include_subdomains": false,
+          "request_timeout_secs": 20,
+          "max_body_bytes": 5242880,
+          "renderer": null
+        },
+        "storage_writes": 1,
+        "request_count": 1,
+        "flags": {
+          "respect_noindex": false,
+          "respect_canonical": true,
+          "respect_next_prev": true
+        }
+      }
+    },
+    {
+      "id": "UI-08",
+      "name": "checkbox_combination_7_save_restore_actual_start_exact_profile",
+      "variants": 1,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": {
+        "mask": 7,
+        "saved_ui_json": "{\"concurrency\":2,\"timeout_seconds\":20,\"max_pages\":0,\"max_depth\":0,\"user_agent\":\"Owned Source18 VM fixture\",\"indexability_agent\":\"googlebot\",\"obey_robots\":true,\"follow_subdomains\":false,\"delay_ms\":0,\"max_body_mb\":5,\"check_external\":false,\"javascript_rendering\":false,\"renderer_endpoint\":\"http://127.0.0.1:8790/render\",\"renderer_wait_ms\":50,\"renderer_accessibility\":false,\"renderer_screenshot\":false,\"renderer_collect_cookies\":false,\"respect_noindex\":true,\"respect_canonical\":true,\"respect_next_prev\":true,\"cdn_directory_reporting_enabled\":false,\"cdn_directory_rules_text\":\"\",\"cdn_classification_enabled\":false,\"cdn_origins_text\":\"\",\"crawl_quotas_enabled\":false,\"crawl_quota_per_depth\":\"\",\"crawl_quota_per_subdomain\":\"\",\"crawl_quota_patterns_json\":\"[]\",\"crawl_admission_limits_enabled\":false,\"crawl_max_folder_depth\":\"\",\"crawl_max_query_tokens\":\"\",\"crawl_max_fetch_url_utf8_bytes\":\"\",\"sitemap_source_processing_enabled\":false,\"sitemap_membership_limits_enabled\":false,\"sitemap_membership_max_catalog_json_bytes\":\"33554432\",\"sitemap_membership_max_row_json_bytes\":\"262144\",\"sitemap_membership_max_rows\":\"1000000\",\"sitemap_source_max_post_http_entity_bytes\":\"8388608\",\"sitemap_source_max_decoded_xml_bytes\":\"8388608\",\"sitemap_source_max_xml_events\":\"500000\",\"sitemap_source_archive_enabled\":false,\"sitemap_source_archive_post_http\":false,\"sitemap_source_archive_decoded_xml\":false,\"sitemap_source_archive_max_body_bytes\":\"67108864\",\"sitemap_source_archive_max_total_bytes\":\"536870912\",\"sitemap_source_archive_max_records\":\"4096\",\"include_patterns_text\":\"/public/\",\"exclude_patterns_text\":\"/private/\",\"custom_extractions_json\":\"[]\",\"custom_javascript_json\":\"[]\",\"audit_thresholds_json\":\"{}\",\"pdf_analysis_json\":\"{}\",\"link_position_rules_json\":\"[]\",\"validate_fragments\":false,\"crawl_policy_enabled\":false,\"crawl_policy_json\":\"{}\",\"live_policy_limits_json\":\"{}\",\"content_capture_enabled\":false,\"content_capture_json\":\"{}\",\"resource_discovery_enabled\":false,\"resource_discovery_json\":\"{}\",\"resource_discovery_limits_json\":\"{}\"}",
+        "serialized_request": {
+          "concurrency": 2,
+          "timeout_seconds": 20,
+          "max_pages": 0,
+          "max_depth": 0,
+          "user_agent": "Owned Source18 VM fixture",
+          "obey_robots": true,
+          "follow_subdomains": false,
+          "delay_ms": 0,
+          "max_body_mb": 5,
+          "check_external": false,
+          "javascript_rendering": false,
+          "renderer_endpoint": "http://127.0.0.1:8790/render",
+          "renderer_wait_ms": 50,
+          "renderer_accessibility": false,
+          "renderer_screenshot": false,
+          "indexability_agent": "googlebot",
+          "renderer_collect_cookies": false,
+          "custom_javascript_json": "[]",
+          "audit_thresholds_json": "{}",
+          "pdf_analysis_json": "{}",
+          "include_patterns_text": "/public/",
+          "exclude_patterns_text": "/private/",
+          "custom_extractions_json": "[]",
+          "validate_fragments": false,
+          "link_position_rules_json": "[]",
+          "custom_extractions": [],
+          "audit_thresholds": {},
+          "pdf_analysis": {},
+          "link_position_rules": [],
+          "include_patterns": [
+            "/public/"
+          ],
+          "exclude_patterns": [
+            "/private/"
+          ],
+          "directive_reporting": {
+            "version": 1,
+            "respect_noindex": true,
+            "respect_canonical": true,
+            "respect_next_prev": true
+          },
+          "mode": "spider",
+          "seed_url": "https://synthetic.test/public/",
+          "urls": [
+            "https://synthetic.test/public/"
+          ],
+          "seed_urls": [
+            "https://synthetic.test/public/"
+          ],
+          "sitemap_urls": [],
+          "input_imports": [],
+          "crawl_links": true,
+          "include_subdomains": false,
+          "request_timeout_secs": 20,
+          "max_body_bytes": 5242880,
+          "renderer": null
+        },
+        "storage_writes": 1,
+        "request_count": 1,
+        "flags": {
+          "respect_noindex": true,
+          "respect_canonical": true,
+          "respect_next_prev": true
+        }
+      }
+    },
+    {
+      "id": "UI-09",
+      "name": "settings_object_missing_reporting_flags_clears_stale",
+      "variants": 1,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": {
+        "saved_ui_object": {},
+        "expected_flags": {
+          "respect_noindex": false,
+          "respect_canonical": false,
+          "respect_next_prev": false
+        },
+        "actual_flags": {
+          "respect_noindex": false,
+          "respect_canonical": false,
+          "respect_next_prev": false
+        }
+      }
+    },
+    {
+      "id": "UI-10",
+      "name": "settings_object_null_flat_flags_clears_stale",
+      "variants": 1,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": {
+        "saved_ui_object": {
+          "respect_noindex": null,
+          "respect_canonical": null,
+          "respect_next_prev": null
+        },
+        "expected_flags": {
+          "respect_noindex": false,
+          "respect_canonical": false,
+          "respect_next_prev": false
+        },
+        "actual_flags": {
+          "respect_noindex": false,
+          "respect_canonical": false,
+          "respect_next_prev": false
+        }
+      }
+    },
+    {
+      "id": "UI-11",
+      "name": "settings_object_allfalse_clears_stale",
+      "variants": 1,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": {
+        "saved_ui_object": {
+          "respect_noindex": false,
+          "respect_canonical": false,
+          "respect_next_prev": false
+        },
+        "expected_flags": {
+          "respect_noindex": false,
+          "respect_canonical": false,
+          "respect_next_prev": false
+        },
+        "actual_flags": {
+          "respect_noindex": false,
+          "respect_canonical": false,
+          "respect_next_prev": false
+        }
+      }
+    },
+    {
+      "id": "UI-12",
+      "name": "settings_object_current_mixed_profile_replaces_stale",
+      "variants": 1,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": {
+        "saved_ui_object": {
+          "respect_noindex": true,
+          "respect_canonical": false,
+          "respect_next_prev": true
+        },
+        "expected_flags": {
+          "respect_noindex": true,
+          "respect_canonical": false,
+          "respect_next_prev": true
+        },
+        "actual_flags": {
+          "respect_noindex": true,
+          "respect_canonical": false,
+          "respect_next_prev": true
+        }
+      }
+    },
+    {
+      "id": "UI-13",
+      "name": "restore_accepts_only_literal_true_flat_flags",
+      "variants": 7,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": [
+        {
+          "input": false,
+          "expected": {
+            "respect_noindex": false,
+            "respect_canonical": false,
+            "respect_next_prev": false
+          }
+        },
+        {
+          "input": null,
+          "expected": {
+            "respect_noindex": false,
+            "respect_canonical": false,
+            "respect_next_prev": false
+          }
+        },
+        {
+          "input": "true",
+          "expected": {
+            "respect_noindex": false,
+            "respect_canonical": false,
+            "respect_next_prev": false
+          }
+        },
+        {
+          "input": 1,
+          "expected": {
+            "respect_noindex": false,
+            "respect_canonical": false,
+            "respect_next_prev": false
+          }
+        },
+        {
+          "input": {},
+          "expected": {
+            "respect_noindex": false,
+            "respect_canonical": false,
+            "respect_next_prev": false
+          }
+        },
+        {
+          "input": [],
+          "expected": {
+            "respect_noindex": false,
+            "respect_canonical": false,
+            "respect_next_prev": false
+          }
+        },
+        {
+          "input": true,
+          "expected": {
+            "respect_noindex": true,
+            "respect_canonical": true,
+            "respect_next_prev": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "UI-14",
+      "name": "parse_rejects_nonboolean_reporting_flags_before_io",
+      "variants": 12,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": [
+        {
+          "key": "respect_noindex",
+          "input": "true",
+          "refused": true
+        },
+        {
+          "key": "respect_noindex",
+          "input": 1,
+          "refused": true
+        },
+        {
+          "key": "respect_noindex",
+          "input": {},
+          "refused": true
+        },
+        {
+          "key": "respect_noindex",
+          "input": [],
+          "refused": true
+        },
+        {
+          "key": "respect_canonical",
+          "input": "true",
+          "refused": true
+        },
+        {
+          "key": "respect_canonical",
+          "input": 1,
+          "refused": true
+        },
+        {
+          "key": "respect_canonical",
+          "input": {},
+          "refused": true
+        },
+        {
+          "key": "respect_canonical",
+          "input": [],
+          "refused": true
+        },
+        {
+          "key": "respect_next_prev",
+          "input": "true",
+          "refused": true
+        },
+        {
+          "key": "respect_next_prev",
+          "input": 1,
+          "refused": true
+        },
+        {
+          "key": "respect_next_prev",
+          "input": {},
+          "refused": true
+        },
+        {
+          "key": "respect_next_prev",
+          "input": [],
+          "refused": true
+        }
+      ]
+    },
+    {
+      "id": "UI-15",
+      "name": "failed_settings_parse_keeps_previous_settings_and_storage",
+      "variants": 1,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": {
+        "settings_unchanged": true,
+        "storage_writes": 0,
+        "requests": 0,
+        "error": "Eigene Extraktionen müssen ein gültiges JSON-Array sein."
+      }
+    },
+    {
+      "id": "UI-16",
+      "name": "actual_visible_and_raw_download_handlers_keep_distinct_routes_and_blobs",
+      "variants": 2,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": {
+        "setup": {
+          "selected_id": "job /?雪",
+          "enabled_by": "EXPLICIT_VM_FIXTURE_SETUP",
+          "actual_renderControls_evaluated": false
+        },
+        "physical_clicks": [
+          {
+            "id": "export-visible-report",
+            "disabled": false,
+            "handler_invoked": true
+          },
+          {
+            "id": "export-project",
+            "disabled": false,
+            "handler_invoked": true
+          }
+        ],
+        "fetch_record": [
+          {
+            "url": "/api/crawls/job%20%2F%3F%E9%9B%AA/report.json",
+            "options": null
+          },
+          {
+            "url": "/api/crawls/job%20%2F%3F%E9%9B%AA/project.json",
+            "options": null
+          }
+        ],
+        "downloads": [
+          {
+            "filename": "open-seo-spider-job /?雪-sichtbar.json",
+            "bytes": 16,
+            "url": "vm-blob:0"
+          },
+          {
+            "filename": "open-seo-spider-job /?雪.json",
+            "bytes": 12,
+            "url": "vm-blob:1"
+          }
+        ],
+        "all_URLs_revoked": true
+      }
+    },
+    {
+      "id": "UI-17",
+      "name": "download_errors_disabled_clicks_and_direct_no_selection_guard_are_distinct",
+      "variants": 3,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": [
+        {
+          "mode": "status",
+          "setup": {
+            "selected_id": "owned-job",
+            "enabled_by": "EXPLICIT_VM_FIXTURE_SETUP",
+            "actual_renderControls_evaluated": false
+          },
+          "physical_clicks": [
+            {
+              "id": "export-visible-report",
+              "disabled": false,
+              "handler_invoked": true
+            }
+          ],
+          "fetches": 1,
+          "downloads": 0,
+          "error": {
+            "text": "Export fehlgeschlagen: HTTP 409",
+            "error": true
+          }
+        },
+        {
+          "mode": "throw",
+          "setup": {
+            "selected_id": "owned-job",
+            "enabled_by": "EXPLICIT_VM_FIXTURE_SETUP",
+            "actual_renderControls_evaluated": false
+          },
+          "physical_clicks": [
+            {
+              "id": "export-visible-report",
+              "disabled": false,
+              "handler_invoked": true
+            }
+          ],
+          "fetches": 1,
+          "downloads": 0,
+          "error": {
+            "text": "Export fehlgeschlagen: Owned synthetic download failure",
+            "error": true
+          }
+        },
+        {
+          "mode": "no-selected-crawl",
+          "physical_clicks": [
+            {
+              "id": "export-visible-report",
+              "disabled": true,
+              "handler_invoked": false,
+              "basis": "SYNTHETIC_PHYSICAL_CLICK_DISABLED_SUPPRESSION"
+            },
+            {
+              "id": "export-project",
+              "disabled": true,
+              "handler_invoked": false,
+              "basis": "SYNTHETIC_PHYSICAL_CLICK_DISABLED_SUPPRESSION"
+            }
+          ],
+          "direct_serverDownload_calls": 2,
+          "fetches": 0,
+          "downloads": 0,
+          "qualification": "Disabled controls suppress bound callbacks. Actual serverDownload no-selection guard is checked by direct function calls, not by invoking eager state.crawl.id filename callbacks. Selected control enabling and actual renderControls integration are outside this VM slice."
+        }
+      ]
+    },
+    {
+      "id": "UI-18",
+      "name": "absent_or_null_entire_localStorage_preserves_existing_state_explicit_boundary",
+      "variants": 2,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": [
+        {
+          "stored": "ABSENT_KEY",
+          "existing_flags_unchanged": true,
+          "qualification": "No settings object exists to apply. This is not backend-profile loading or stale-state clearing."
+        },
+        {
+          "stored": "null",
+          "existing_flags_unchanged": true,
+          "qualification": "No settings object exists to apply. This is not backend-profile loading or stale-state clearing."
+        }
+      ]
+    },
+    {
+      "id": "UI-19",
+      "name": "saving_allfalse_after_alltrue_clears_old_flags_and_omits_wire_profile",
+      "variants": 1,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": {
+        "saved_states": [
+          {
+            "concurrency": 2,
+            "timeout_seconds": 20,
+            "max_pages": 0,
+            "max_depth": 0,
+            "user_agent": "Owned Source18 VM fixture",
+            "indexability_agent": "googlebot",
+            "obey_robots": true,
+            "follow_subdomains": false,
+            "delay_ms": 0,
+            "max_body_mb": 5,
+            "check_external": false,
+            "javascript_rendering": false,
+            "renderer_endpoint": "http://127.0.0.1:8790/render",
+            "renderer_wait_ms": 50,
+            "renderer_accessibility": false,
+            "renderer_screenshot": false,
+            "renderer_collect_cookies": false,
+            "respect_noindex": true,
+            "respect_canonical": true,
+            "respect_next_prev": true,
+            "cdn_directory_reporting_enabled": false,
+            "cdn_directory_rules_text": "",
+            "cdn_classification_enabled": false,
+            "cdn_origins_text": "",
+            "crawl_quotas_enabled": false,
+            "crawl_quota_per_depth": "",
+            "crawl_quota_per_subdomain": "",
+            "crawl_quota_patterns_json": "[]",
+            "crawl_admission_limits_enabled": false,
+            "crawl_max_folder_depth": "",
+            "crawl_max_query_tokens": "",
+            "crawl_max_fetch_url_utf8_bytes": "",
+            "sitemap_source_processing_enabled": false,
+            "sitemap_membership_limits_enabled": false,
+            "sitemap_membership_max_catalog_json_bytes": "33554432",
+            "sitemap_membership_max_row_json_bytes": "262144",
+            "sitemap_membership_max_rows": "1000000",
+            "sitemap_source_max_post_http_entity_bytes": "8388608",
+            "sitemap_source_max_decoded_xml_bytes": "8388608",
+            "sitemap_source_max_xml_events": "500000",
+            "sitemap_source_archive_enabled": false,
+            "sitemap_source_archive_post_http": false,
+            "sitemap_source_archive_decoded_xml": false,
+            "sitemap_source_archive_max_body_bytes": "67108864",
+            "sitemap_source_archive_max_total_bytes": "536870912",
+            "sitemap_source_archive_max_records": "4096",
+            "include_patterns_text": "/public/",
+            "exclude_patterns_text": "/private/",
+            "custom_extractions_json": "[]",
+            "custom_javascript_json": "[]",
+            "audit_thresholds_json": "{}",
+            "pdf_analysis_json": "{}",
+            "link_position_rules_json": "[]",
+            "validate_fragments": false,
+            "crawl_policy_enabled": false,
+            "crawl_policy_json": "{}",
+            "live_policy_limits_json": "{}",
+            "content_capture_enabled": false,
+            "content_capture_json": "{}",
+            "resource_discovery_enabled": false,
+            "resource_discovery_json": "{}",
+            "resource_discovery_limits_json": "{}"
+          },
+          {
+            "concurrency": 2,
+            "timeout_seconds": 20,
+            "max_pages": 0,
+            "max_depth": 0,
+            "user_agent": "Owned Source18 VM fixture",
+            "indexability_agent": "googlebot",
+            "obey_robots": true,
+            "follow_subdomains": false,
+            "delay_ms": 0,
+            "max_body_mb": 5,
+            "check_external": false,
+            "javascript_rendering": false,
+            "renderer_endpoint": "http://127.0.0.1:8790/render",
+            "renderer_wait_ms": 50,
+            "renderer_accessibility": false,
+            "renderer_screenshot": false,
+            "renderer_collect_cookies": false,
+            "respect_noindex": false,
+            "respect_canonical": false,
+            "respect_next_prev": false,
+            "cdn_directory_reporting_enabled": false,
+            "cdn_directory_rules_text": "",
+            "cdn_classification_enabled": false,
+            "cdn_origins_text": "",
+            "crawl_quotas_enabled": false,
+            "crawl_quota_per_depth": "",
+            "crawl_quota_per_subdomain": "",
+            "crawl_quota_patterns_json": "[]",
+            "crawl_admission_limits_enabled": false,
+            "crawl_max_folder_depth": "",
+            "crawl_max_query_tokens": "",
+            "crawl_max_fetch_url_utf8_bytes": "",
+            "sitemap_source_processing_enabled": false,
+            "sitemap_membership_limits_enabled": false,
+            "sitemap_membership_max_catalog_json_bytes": "33554432",
+            "sitemap_membership_max_row_json_bytes": "262144",
+            "sitemap_membership_max_rows": "1000000",
+            "sitemap_source_max_post_http_entity_bytes": "8388608",
+            "sitemap_source_max_decoded_xml_bytes": "8388608",
+            "sitemap_source_max_xml_events": "500000",
+            "sitemap_source_archive_enabled": false,
+            "sitemap_source_archive_post_http": false,
+            "sitemap_source_archive_decoded_xml": false,
+            "sitemap_source_archive_max_body_bytes": "67108864",
+            "sitemap_source_archive_max_total_bytes": "536870912",
+            "sitemap_source_archive_max_records": "4096",
+            "include_patterns_text": "/public/",
+            "exclude_patterns_text": "/private/",
+            "custom_extractions_json": "[]",
+            "custom_javascript_json": "[]",
+            "audit_thresholds_json": "{}",
+            "pdf_analysis_json": "{}",
+            "link_position_rules_json": "[]",
+            "validate_fragments": false,
+            "crawl_policy_enabled": false,
+            "crawl_policy_json": "{}",
+            "live_policy_limits_json": "{}",
+            "content_capture_enabled": false,
+            "content_capture_json": "{}",
+            "resource_discovery_enabled": false,
+            "resource_discovery_json": "{}",
+            "resource_discovery_limits_json": "{}"
+          }
+        ],
+        "final_request": {
+          "url": "/api/crawls",
+          "method": "POST",
+          "body": {
+            "concurrency": 2,
+            "timeout_seconds": 20,
+            "max_pages": 0,
+            "max_depth": 0,
+            "user_agent": "Owned Source18 VM fixture",
+            "indexability_agent": "googlebot",
+            "obey_robots": true,
+            "follow_subdomains": false,
+            "delay_ms": 0,
+            "max_body_mb": 5,
+            "check_external": false,
+            "javascript_rendering": false,
+            "renderer_endpoint": "http://127.0.0.1:8790/render",
+            "renderer_wait_ms": 50,
+            "renderer_accessibility": false,
+            "renderer_screenshot": false,
+            "renderer_collect_cookies": false,
+            "include_patterns_text": "/public/",
+            "exclude_patterns_text": "/private/",
+            "custom_extractions_json": "[]",
+            "custom_javascript_json": "[]",
+            "audit_thresholds_json": "{}",
+            "pdf_analysis_json": "{}",
+            "link_position_rules_json": "[]",
+            "validate_fragments": false,
+            "custom_extractions": [],
+            "audit_thresholds": {},
+            "pdf_analysis": {},
+            "link_position_rules": [],
+            "include_patterns": [
+              "/public/"
+            ],
+            "exclude_patterns": [
+              "/private/"
+            ],
+            "mode": "spider",
+            "seed_url": "https://synthetic.test/public/",
+            "urls": [
+              "https://synthetic.test/public/"
+            ],
+            "seed_urls": [
+              "https://synthetic.test/public/"
+            ],
+            "sitemap_urls": [],
+            "input_imports": [],
+            "crawl_links": true,
+            "include_subdomains": false,
+            "request_timeout_secs": 20,
+            "max_body_bytes": 5242880,
+            "renderer": null
+          }
+        }
+      }
+    },
+    {
+      "id": "UI-20",
+      "name": "legacy_empty_null_and_false_flat_reporting_values_omit_profile",
+      "variants": 3,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": {
+        "inputs": [
+          {},
+          {
+            "respect_noindex": null,
+            "respect_canonical": null,
+            "respect_next_prev": null
+          },
+          {
+            "respect_noindex": false,
+            "respect_canonical": false,
+            "respect_next_prev": false
+          }
+        ],
+        "all_omit_profile": true
+      }
+    },
+    {
+      "id": "UI-21",
+      "name": "nested_backend_profiles_all_eight_explicit_load_save_reopen_wire",
+      "variants": 8,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": [
+        {
+          "mask": 0,
+          "loaded_flags": {
+            "respect_noindex": false,
+            "respect_canonical": false,
+            "respect_next_prev": false
+          },
+          "wire_profile": null,
+          "saved_config_unchanged": true,
+          "load_storage_writes": 0
+        },
+        {
+          "mask": 1,
+          "loaded_flags": {
+            "respect_noindex": true,
+            "respect_canonical": false,
+            "respect_next_prev": false
+          },
+          "wire_profile": {
+            "version": 1,
+            "respect_noindex": true,
+            "respect_canonical": false,
+            "respect_next_prev": false
+          },
+          "saved_config_unchanged": true,
+          "load_storage_writes": 0
+        },
+        {
+          "mask": 2,
+          "loaded_flags": {
+            "respect_noindex": false,
+            "respect_canonical": true,
+            "respect_next_prev": false
+          },
+          "wire_profile": {
+            "version": 1,
+            "respect_noindex": false,
+            "respect_canonical": true,
+            "respect_next_prev": false
+          },
+          "saved_config_unchanged": true,
+          "load_storage_writes": 0
+        },
+        {
+          "mask": 3,
+          "loaded_flags": {
+            "respect_noindex": true,
+            "respect_canonical": true,
+            "respect_next_prev": false
+          },
+          "wire_profile": {
+            "version": 1,
+            "respect_noindex": true,
+            "respect_canonical": true,
+            "respect_next_prev": false
+          },
+          "saved_config_unchanged": true,
+          "load_storage_writes": 0
+        },
+        {
+          "mask": 4,
+          "loaded_flags": {
+            "respect_noindex": false,
+            "respect_canonical": false,
+            "respect_next_prev": true
+          },
+          "wire_profile": {
+            "version": 1,
+            "respect_noindex": false,
+            "respect_canonical": false,
+            "respect_next_prev": true
+          },
+          "saved_config_unchanged": true,
+          "load_storage_writes": 0
+        },
+        {
+          "mask": 5,
+          "loaded_flags": {
+            "respect_noindex": true,
+            "respect_canonical": false,
+            "respect_next_prev": true
+          },
+          "wire_profile": {
+            "version": 1,
+            "respect_noindex": true,
+            "respect_canonical": false,
+            "respect_next_prev": true
+          },
+          "saved_config_unchanged": true,
+          "load_storage_writes": 0
+        },
+        {
+          "mask": 6,
+          "loaded_flags": {
+            "respect_noindex": false,
+            "respect_canonical": true,
+            "respect_next_prev": true
+          },
+          "wire_profile": {
+            "version": 1,
+            "respect_noindex": false,
+            "respect_canonical": true,
+            "respect_next_prev": true
+          },
+          "saved_config_unchanged": true,
+          "load_storage_writes": 0
+        },
+        {
+          "mask": 7,
+          "loaded_flags": {
+            "respect_noindex": true,
+            "respect_canonical": true,
+            "respect_next_prev": true
+          },
+          "wire_profile": {
+            "version": 1,
+            "respect_noindex": true,
+            "respect_canonical": true,
+            "respect_next_prev": true
+          },
+          "saved_config_unchanged": true,
+          "load_storage_writes": 0
+        }
+      ]
+    },
+    {
+      "id": "UI-22",
+      "name": "missing_null_and_explicit_allfalse_backend_profiles_clear_stale_draft",
+      "variants": 3,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": [
+        {
+          "name": "absent",
+          "cleared": true,
+          "wire_profile_omitted": true
+        },
+        {
+          "name": "null",
+          "cleared": true,
+          "wire_profile_omitted": true
+        },
+        {
+          "name": "allfalse",
+          "cleared": true,
+          "wire_profile_omitted": true
+        }
+      ]
+    },
+    {
+      "id": "UI-23",
+      "name": "strict_Rust_wire_shape_refusals_preserve_draft_settings_and_saved_config",
+      "variants": 14,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": [
+        {
+          "name": "boolean_false",
+          "refused": true,
+          "controls_unchanged": true
+        },
+        {
+          "name": "boolean_true",
+          "refused": true,
+          "controls_unchanged": true
+        },
+        {
+          "name": "array",
+          "refused": true,
+          "controls_unchanged": true
+        },
+        {
+          "name": "string",
+          "refused": true,
+          "controls_unchanged": true
+        },
+        {
+          "name": "number",
+          "refused": true,
+          "controls_unchanged": true
+        },
+        {
+          "name": "empty_object",
+          "refused": true,
+          "controls_unchanged": true
+        },
+        {
+          "name": "unsupported_version",
+          "refused": true,
+          "controls_unchanged": true
+        },
+        {
+          "name": "string_version",
+          "refused": true,
+          "controls_unchanged": true
+        },
+        {
+          "name": "missing_flag",
+          "refused": true,
+          "controls_unchanged": true
+        },
+        {
+          "name": "missing_version",
+          "refused": true,
+          "controls_unchanged": true
+        },
+        {
+          "name": "unknown_field",
+          "refused": true,
+          "controls_unchanged": true
+        },
+        {
+          "name": "string_flag",
+          "refused": true,
+          "controls_unchanged": true
+        },
+        {
+          "name": "null_flag",
+          "refused": true,
+          "controls_unchanged": true
+        },
+        {
+          "name": "integer_flag",
+          "refused": true,
+          "controls_unchanged": true
+        }
+      ]
+    },
+    {
+      "id": "UI-24",
+      "name": "unavailable_whole_config_is_not_a_legacy_profile",
+      "variants": 4,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": [
+        {
+          "name": "undefined",
+          "refused": true
+        },
+        {
+          "name": "null",
+          "refused": true
+        },
+        {
+          "name": "array",
+          "refused": true
+        },
+        {
+          "name": "boolean",
+          "refused": true
+        }
+      ]
+    },
+    {
+      "id": "UI-25",
+      "name": "selected_source_switches_only_explicit_load_changes_checkbox_draft",
+      "variants": 4,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": {
+        "source_transitions": [
+          "A",
+          "B",
+          "config_unavailable",
+          "none"
+        ],
+        "draft_applied_only_on_click": true,
+        "actual_selectCrawl_or_renderControls_evaluated": false
+      }
+    },
+    {
+      "id": "UI-26",
+      "name": "closing_unsaved_loaded_profile_reopens_original_settings",
+      "variants": 1,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": {
+        "unsaved_flags_discarded": true
+      }
+    },
+    {
+      "id": "UI-27",
+      "name": "ordinary_save_validation_failure_after_load_keeps_previous_persisted_settings",
+      "variants": 1,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": {
+        "ordinary_validation_prevents_persistence": true,
+        "loaded_draft_retained_for_correction": true
+      }
+    },
+    {
+      "id": "UI-28",
+      "name": "disabled_physical_profile_clicks_and_direct_defensive_no_source_guard",
+      "variants": 2,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": [
+        {
+          "source": "NONE",
+          "physical_handler_invoked": false,
+          "direct_guard_refused": true
+        },
+        {
+          "source": "no-config",
+          "physical_handler_invoked": false,
+          "direct_guard_refused": true
+        }
+      ]
+    },
+    {
+      "id": "UI-29",
+      "name": "reporting_flags_do_not_change_canonical_or_pagination_discovery_or_bot",
+      "variants": 1,
+      "result": "PASS_VM_REGRESSION",
+      "evidence": {
+        "reporting": {
+          "version": 1,
+          "respect_noindex": true,
+          "respect_canonical": true,
+          "respect_next_prev": true
+        },
+        "discovery": {
+          "canonical": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "pagination": {
+            "store": true,
+            "fetch": true,
+            "expand": true
+          }
+        },
+        "indexability_agent": "googlebot"
+      }
+    }
+  ],
+  "error": null,
+  "pending_gaps": [
+    {
+      "id": "BACKEND_PROFILE_TO_UI_ADAPTER",
+      "status": "SOURCE_IMPLEMENTED_VM_EXECUTION_SEPARATE",
+      "detail": "Actual R5 nested adapter and bound load action are extracted. Future VM execution uses authored backend-shaped config fixtures; it is not actual server retrieval, selectCrawl/renderControls integration or browser proof."
+    },
+    {
+      "id": "ACTUAL_BROWSER_PROFILE_LOAD_SAVE_REOPEN",
+      "status": "NOT_RUN",
+      "detail": "Root must exercise real selected-crawl retrieval, load feedback, ordinary save, localStorage reopen, and independent discovery controls in the browser."
+    },
+    {
+      "id": "ABSENT_ENTIRE_LOCALSTORAGE",
+      "status": "QUALIFIED_ACTUAL_VM_BOUNDARY",
+      "detail": "Missing/null entire localStorage preserves existing state. Missing/null flat fields inside a settings object clear flags; these are distinct cases."
+    }
+  ],
+  "no_external_actions": {
+    "actual_browser": 0,
+    "HTTP_or_network": 0,
+    "SQLite_DB_WAL_SHM": 0,
+    "PE_or_native_process": 0,
+    "Git_lock_or_Original_access": 0
+  },
+  "recorded_at": "2026-10-16T15:19:00.636Z"
+}
