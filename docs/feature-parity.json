@@ -6854,6 +6854,46 @@
   "last_verified_at": "2026-10-16T04:42:18.249Z",
   "current_work": [
     {
+      "id": "combined-source-v15-20261016",
+      "priority": 0,
+      "status": "PRIVATE_CODE_PUBLISHED_FULL_SUITE_NOT_RUN",
+      "title_de": "Source15 mit dauerhaften Crawl-Limits vollständig abnehmen",
+      "summary_de": "Der unabhängig geprüfteQuotenentwurf ist als Source15 privat veröffentlicht:429Dateien,35übernommeneProduktpfade(24geändert/11neu),394unverändert. AlleDateibytes undGitBlobs stimmen. Formatter, strengerClippy,29neueRustfunktionen und9bestehendeFrontendfälle auf429 bestehen. Gesamtsuite mit vier frischenRendererprüfungen, Releasebuild, echteQuota-Nativabläufe undInstallation stehen aus;1535Tests sind eineMindestprognose. Installiert bleibtSource14.",
+      "feature_ids": [
+        "crawl.limits"
+      ],
+      "completed_acceptance_de": [
+        "AktuellerprivaterCode526bd13:429Quelldateien vollständig gegenFormatstand undGitBlobs geprüft.",
+        "Quoten-Produkt-/Kompositions-/Formatreviews und die tatsächlichen Vorprüfungen bestehen.",
+        "Source14 bleibt tatsächlich installiert; gespeicherteCrawls wurden unverändert übernommen."
+      ],
+      "pending_acceptance_de": [
+        "Den unveränderlichen Nachfolger vollständig mit allen bisherigen Tests und vier frischen Rendererfunktionen ausführen; 1535 ist bisher nur die erwartete Mindestzahl.",
+        "Optimierten Build, echte Quotenabläufe über öffentliche Oberflächen/Cold-Neustart und Daten erhaltende Installation bestehen.",
+        "Renderer-, Ressourcen- und Selected-Kombinationen mit aktivierten Quoten bleiben im ersten Entwurf ausgeschlossen; vollständige Herstellerparität bleibt offen.",
+        "CLI-Profiländerung/Wiederaufnahme ist derzeit kein vorhandener Befehl. Profiländerungsfälle über vorhandene API/MCP prüfen; CLI-Summary und Anfangscrawl getrennt abnehmen und diese eigene CLI-Lücke ausdrücklich offenhalten.",
+        "Sibling-DNS/Host-Nativprüfung bleibt ohne tatsächlich vorhandene Resolverbeobachtung offen; kein Portwechsel als Hostbeweis."
+      ],
+      "documentation": [
+        "docs/verification/source15-code-integration-20261016/index.json",
+        "docs/verification/source15-code-integration-20261016/frontdoor-source-audit.json",
+        "docs/verification/source14-installed-20261016/installed-summary.json"
+      ],
+      "gates": {
+        "private_code": "PASS_ACTUAL_526BD13_ALL429_BYTES_AND_GIT_BLOBS",
+        "source_review": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+        "preliminary_clippy": "PASS_ACTUAL_PREVIEW2",
+        "new_rust": "PASS_29_FUNCTIONS_ONLY",
+        "inherited_node": "PASS_9_CASES_ON_429_ONLY",
+        "full_suite": "NOT_RUN",
+        "optimized_build": "NOT_RUN",
+        "native": "NOT_RUN",
+        "installation": "NOT_RUN",
+        "manufacturer_parity": "NOT_PROVEN"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
       "id": "combined-source-v11-20261015",
       "priority": 0,
       "title_de": "Export-Abschlüsse und schmale Einstellungsdialoge korrigieren",
@@ -8895,9 +8935,9 @@
     {
       "id": "durable-crawl-quotas-20261016",
       "priority": 6,
-      "status": "ACTUAL429_PREVIEW_FMT_CLIPPY_RUST29_INHERITED_NODE9_PASS_INTEGRATION_PENDING",
+      "status": "PRIVATE_SOURCE15_CODE_PUBLISHED_429_FULL_SUITE_PENDING",
       "title_de": "Dauerhafte URL-Kontingente je Tiefe, Host und Muster ergänzen",
-      "summary_de": "Der separate Quotenentwurf mit 429 Quelldateien besteht Format, unabhängigen Formatreview, Clippy, alle 29 neuen Rustfunktionen und neun geerbte Frontendfälle. Der erste Clippy-Lauf mit drei Lintfehlern bleibt erhalten; ausschließlich diese drei Stellen wurden eng korrigiert und erneut geprüft. Integration, vollständige Gesamtsuite, optimierter Build, Nativabnahme und Installation stehen aus.",
+      "summary_de": "Der unabhängig geprüfteQuotenentwurf ist als Source15 privat veröffentlicht:429Dateien,35übernommeneProduktpfade(24geändert/11neu),394unverändert. AlleDateibytes undGitBlobs stimmen. Formatter, strengerClippy,29neueRustfunktionen und9bestehendeFrontendfälle auf429 bestehen. Gesamtsuite mit vier frischenRendererprüfungen, Releasebuild, echteQuota-Nativabläufe undInstallation stehen aus;1535Tests sind eineMindestprognose. Installiert bleibtSource14.",
       "feature_ids": [
         "crawl.limits"
       ],
@@ -8906,16 +8946,19 @@
         "Alle 35 geänderten/neuen Pfade des V5-Entwurfs unabhängig geprüft; zwei Befunde im Code geschlossen.",
         "Separate 429-Dateien-Komposition unabhängig geprüft; tatsächlicher Formatter mit 18 Änderungen ausschließlich an eigenen Rustpfaden bestanden.",
         "V6 mit genau drei Clippy-Korrekturen unabhängig geprüft; 33 andere Payloads und 427 Quelldateien gegenüber V5 bytegenau.",
-        "Tatsächlich gegen 429 ausgeführt: Format und Formatreview, Clippy, alle 29 neuen Rustfunktionen und neun geerbte Frontendfälle bestanden."
+        "Tatsächlich gegen 429 ausgeführt: Format und Formatreview, Clippy, alle 29 neuen Rustfunktionen und neun geerbte Frontendfälle bestanden.",
+        "Nach erfolgreicherSource14-Installation alle35geprüftenProduktpfade gezielt integriert und privatcommitted/gepusht;429Arbeitsdateien undGitBlobs exakt geprüft."
       ],
       "pending_acceptance_de": [
-        "Nach der jetzt erfolgreichen Source14-Installation den geprüften Quotenentwurf integrieren und privat als eigenen Quellstand veröffentlichen.",
         "Den unveränderlichen Nachfolger vollständig mit allen bisherigen Tests und vier frischen Rendererfunktionen ausführen; 1535 ist bisher nur die erwartete Mindestzahl.",
         "Optimierten Build, echte Quotenabläufe über öffentliche Oberflächen/Cold-Neustart und Daten erhaltende Installation bestehen.",
         "Renderer-, Ressourcen- und Selected-Kombinationen mit aktivierten Quoten bleiben im ersten Entwurf ausgeschlossen; vollständige Herstellerparität bleibt offen.",
-        "CLI-Profiländerung/Wiederaufnahme ist derzeit kein vorhandener Befehl. Profiländerungsfälle über vorhandene API/MCP prüfen; CLI-Summary und Anfangscrawl getrennt abnehmen und diese eigene CLI-Lücke ausdrücklich offenhalten."
+        "CLI-Profiländerung/Wiederaufnahme ist derzeit kein vorhandener Befehl. Profiländerungsfälle über vorhandene API/MCP prüfen; CLI-Summary und Anfangscrawl getrennt abnehmen und diese eigene CLI-Lücke ausdrücklich offenhalten.",
+        "Sibling-DNS/Host-Nativprüfung bleibt ohne tatsächlich vorhandene Resolverbeobachtung offen; kein Portwechsel als Hostbeweis."
       ],
       "documentation": [
+        "docs/verification/source15-code-integration-20261016/index.json",
+        "docs/verification/source15-code-integration-20261016/frontdoor-source-audit.json",
         "docs/verification/quotas-tested-main-retry-20261016/index.json",
         "docs/verification/quotas-tested-main-retry-20261016/quotas-v2-rust29.json",
         "docs/verification/source14-three-native-progress-20261016/index.json",
@@ -8933,7 +8976,8 @@
         "new_rust": "PASS_ALL_29_NEW_FUNCTIONS",
         "node": "PASS_NINE_INHERITED_CASES_ON_429_ONLY",
         "full_suite": "NOT_RUN",
-        "installation": "NOT_RUN"
+        "installation": "NOT_RUN",
+        "private_code": "PASS_ACTUAL_526BD13_ALL429_BYTES_AND_GIT_BLOBS"
       },
       "reference_parity": "NOT_PROVEN"
     },
