@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "kind": "source15_retry2_four_native_legacy_v4_bounded_source_review",
+  "result": "FINDINGS_BOUNDED_SOURCE_REVIEW_NOT_RUN",
+  "aggregate": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-native-regressions-author-receipt-v4.json",
+    "sha256": "e0f4b6713dff13931bb0738b576fff4f158e2c24bd58d8f0aad9ba88534601da",
+    "bytes": 3132
+  },
+  "previous_findings": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-native-regressions-independent-review-v3/receipt.json",
+    "sha256": "3317afad752e0a71de7abd767a5f57dd8010732c3d88625bdceb50fc916d846a",
+    "bytes": 10603
+  },
+  "findings": [
+    {
+      "id": "REG15R2-MAIN-TABLES-04",
+      "priority": 1,
+      "role": "main",
+      "title": "Current manifest omits tables required by its unchanged native consumer",
+      "proposal_manifest": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-regression-main-preparation-v4/manifest.json",
+        "sha256": "0a0b42988c18a65b9dabed637f22f02bc73628b1d11a506d49a9eed4b736ae2a",
+        "bytes": 11838
+      },
+      "source": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-regression-main-preparation-v4/admission.mjs",
+        "sha256": "d5656242d8b75acb7f430812e5c741d64324ca06cde83d669b9457d1f36f5f56",
+        "bytes": 14487
+      },
+      "line": 70,
+      "missing_manifest_fields": [
+        "case_names",
+        "runtime_verification_boundaries"
+      ],
+      "required_lengths": [
+        18,
+        22
+      ],
+      "derived_failure_not_executed": "assert.deepEqual(undefined,P.case_names) rejects before binder admission",
+      "minimum_fix": "Fresh immutable manifest with the exact retained declaration tables; preserve source, oracles, boundaries and counts. Current .harness reference must identify that fresh package entrypoint."
+    },
+    {
+      "id": "REG15R2-HEAD-BOUNDARIES-05",
+      "priority": 1,
+      "role": "head",
+      "title": "Current manifest omits tables required by its unchanged native consumer",
+      "proposal_manifest": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-regression-head-preparation-v4/manifest.json",
+        "sha256": "bb5c5e6d9024c70af670f034dd7d576acffba39c6bf2c74a9bc2c6979052b894",
+        "bytes": 10479
+      },
+      "source": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-regression-head-preparation-v4/native-head-cdn-workflow.mjs",
+        "sha256": "71247e776eeb2b7fa1c42450204f51bcef9fbf02ea412c013b6e6f475928b93c",
+        "bytes": 21934
+      },
+      "line": 11,
+      "missing_manifest_fields": [
+        "runtime_verification_boundaries"
+      ],
+      "required_lengths": [
+        13
+      ],
+      "derived_failure_not_executed": "first fullBoundary compares undefined with exact13-phase table after initial owned startup",
+      "minimum_fix": "Fresh immutable manifest with the exact retained declaration tables; preserve source, oracles, boundaries and counts. Current .harness reference must identify that fresh package entrypoint."
+    },
+    {
+      "id": "REG15R2-SITEMAP-BOUNDARIES-06",
+      "priority": 1,
+      "role": "sitemap",
+      "title": "Current manifest omits tables required by its unchanged native consumer",
+      "proposal_manifest": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-regression-sitemap-preparation-v4/manifest.json",
+        "sha256": "a96301548fd416fb5aec9fb2c30ef60668cb632a94b8c13f60ca3b3aa74e771b",
+        "bytes": 10725
+      },
+      "source": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-regression-sitemap-preparation-v4/native-matrix.mjs",
+        "sha256": "8570726b32a4abc3e975a66e778ae6ca5866a07ab61fdb6513e8a21a4488c572",
+        "bytes": 18696
+      },
+      "line": 10,
+      "missing_manifest_fields": [
+        "runtime_verification_boundaries"
+      ],
+      "required_lengths": [
+        14
+      ],
+      "derived_failure_not_executed": "first boundary indexes undefined before fixture start",
+      "minimum_fix": "Fresh immutable manifest with the exact retained declaration tables; preserve source, oracles, boundaries and counts. Current .harness reference must identify that fresh package entrypoint."
+    }
+  ],
+  "roles": [
+    {
+      "role": "head",
+      "proposal_manifest": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-regression-head-preparation-v4/manifest.json",
+        "sha256": "bb5c5e6d9024c70af670f034dd7d576acffba39c6bf2c74a9bc2c6979052b894",
+        "bytes": 10479
+      },
+      "harness": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-regression-head-preparation-v4/native-head-cdn-workflow.mjs",
+        "sha256": "71247e776eeb2b7fa1c42450204f51bcef9fbf02ea412c013b6e6f475928b93c",
+        "bytes": 21934
+      },
+      "current_review": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-native-regressions-independent-review-v4/head/receipt.json",
+        "sha256": "a52c3845ef2ad5314d008e39162e03aef9f9f374293facdaaf0d45f207365b1d",
+        "bytes": 2843
+      }
+    },
+    {
+      "role": "api",
+      "proposal_manifest": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-regression-api-preparation-v4/manifest.json",
+        "sha256": "1084edf352b588a86acb6e89cca05ec266d3457562b254af7390aad48a560284",
+        "bytes": 9447
+      },
+      "harness": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-regression-api-preparation-v4/run-source13-api-only-native-subset.mjs",
+        "sha256": "58d453dd07455cba44ffc3b0579453e9428b8a31750a218f2d3bb00ca6e46571",
+        "bytes": 56678
+      },
+      "current_review": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-native-regressions-independent-review-v4/api/receipt.json",
+        "sha256": "c5958f2f1498f9a6a381d0ba18adab1688c966f80694d9581fb89bd4bf76fd4e",
+        "bytes": 3278
+      }
+    },
+    {
+      "role": "sitemap",
+      "proposal_manifest": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-regression-sitemap-preparation-v4/manifest.json",
+        "sha256": "a96301548fd416fb5aec9fb2c30ef60668cb632a94b8c13f60ca3b3aa74e771b",
+        "bytes": 10725
+      },
+      "harness": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-regression-sitemap-preparation-v4/native-matrix.mjs",
+        "sha256": "8570726b32a4abc3e975a66e778ae6ca5866a07ab61fdb6513e8a21a4488c572",
+        "bytes": 18696
+      },
+      "current_review": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-native-regressions-independent-review-v4/sitemap/receipt.json",
+        "sha256": "d517c5a44676a58f22fd31111e4439970a8aba07be7c803f35faea9d6b319c99",
+        "bytes": 2824
+      }
+    },
+    {
+      "role": "main",
+      "proposal_manifest": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-regression-main-preparation-v4/manifest.json",
+        "sha256": "0a0b42988c18a65b9dabed637f22f02bc73628b1d11a506d49a9eed4b736ae2a",
+        "bytes": 11838
+      },
+      "harness": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-regression-main-preparation-v4/native-segments-cdn-directory.mjs",
+        "sha256": "dde8412541bc8a89507c8cf5948831fea7444d484b641f0ee470e57debb97e27",
+        "bytes": 17216
+      },
+      "current_review": {
+        "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-native-regressions-independent-review-v4/main/receipt.json",
+        "sha256": "e9477ac4357bb848e29c2588bdc435550a478f6246580d1a1de13212feac420a",
+        "bytes": 2859
+      }
+    }
+  ],
+  "source_audit": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-native-regressions-independent-review-v4/FS-AUDIT.json",
+    "sha256": "f5440586dd6d97c7f5a84c0f73c38fabadea1aaa6c92b64a06ec67ba8b37913c",
+    "bytes": 180926
+  },
+  "parser_audit": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-native-regressions-independent-review-v4/PARSER-AUDIT.json",
+    "sha256": "2b2bde59a2b76c6255d04137cde4a0dba948279a792185430fc353603df58afe",
+    "bytes": 15071
+  },
+  "checks": {
+    "all32_sources_physically_read_and_hashed": true,
+    "current52_whole_pairs_and9_operations_forward_reverse_exact": true,
+    "ancestral52_pairs_and67_operations_forward_reverse_exact": true,
+    "verified_E_refs": 351,
+    "parser_only_modules": 32,
+    "prior_P1_kind_path_review_corrections_preserved": true
+  },
+  "qualification": "API has a separate current direct source NoF; Head/Sitemap/Main require immutable metadata successors. Prior V3 full source audit retained as exact-byte body baseline; current admissions, source/fixture/consumer/ownership paths checked. No new Native PASS; historical r1 suite failure remains failure. No target imports/calls or C/R/Original/PE/DB/HTTP/Git/lock actions."
+}

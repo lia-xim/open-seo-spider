@@ -1,0 +1,18 @@
+{
+  "kind": "root_observed_source15_sitemap_v6_admission_failure",
+  "result": "FAIL_BEFORE_OUTPUT_LOCK_AND_TARGET_IMPORT",
+  "recorded_at": "2026-10-16T07:31:00Z",
+  "actual_exec_tool_chunk": "d76182",
+  "actual_exit_code": 1,
+  "entry": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-regression-sitemap-preparation-v6/native-matrix.mjs",
+  "preparation_sha256": "19d8355f902248caebca49bbb46d40e76ead9de4efd7281d86afb190fee0de3c",
+  "review_sha256": "6f6bc90f8f70c25870dced6f3cbb79cc4ae89749faf4afcde7ec8ab0c55ff636",
+  "failure": "admission.mjs:18 deepStrictEqual review.harness against path.join(HERE,'native-matrix.mjs') rejects forward-slash spelling against native Windows backslash spelling",
+  "actual_review_harness_path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-retry2-regression-sitemap-preparation-v6/native-matrix.mjs",
+  "expected_harness_path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\source15-retry2-regression-sitemap-preparation-v6\\native-matrix.mjs",
+  "both_harness_sha256": "8570726b32a4abc3e975a66e778ae6ca5866a07ab61fdb6513e8a21a4488c572",
+  "both_harness_bytes": 18696,
+  "Root_after_failure_output_exists": false,
+  "Root_after_failure_lock_exists": false,
+  "qualification": "Root observation of the returned exec result and explicit subsequent filesystem checks, not a fabricated native proof or independently captured process log. Admission source orders this assertion before output creation, lock acquisition and binder import. Failed attempt remains failed; no source or review bytes were overwritten."
+}
