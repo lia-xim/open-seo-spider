@@ -1,0 +1,1734 @@
+{
+  "schema_version": 1,
+  "kind": "source14_api_only_native_subset",
+  "result": "PASS_SOURCE14_NATIVE_FRONTDOORS_AND_DECLARED_FIXTURE_READS_ONLY",
+  "manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v14\\manifest.json",
+    "sha256": "62f100b6bbfa0d259fc618783637b0be0aba3a4a30bc0c80b7764a0130475076",
+    "bytes": 840553
+  },
+  "suite": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-suite-v14\\proof.json",
+    "sha256": "1d1c8753d662f27ff0fd3653888c9757e90c20e4049fcdb294fb481d4043cce0",
+    "bytes": 732102
+  },
+  "release": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source14-root-native-inputs-v1\\api-core.json",
+    "sha256": "fd620be34424b49a4e80e648ded088fd88cd8dfa058b5f2a125fefe1a0139bb2",
+    "bytes": 473
+  },
+  "binary": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-optimized-build-v14\\candidate\\open-seo-spider.exe",
+    "sha256": "46a8b448b001329ba2c92c7881af0d7c12006281e8c02f291d84a14af8bac568",
+    "bytes": 46157312
+  },
+  "binder": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v14-driver-preparation-v1-r3/combined-bindings-v14.mjs",
+    "sha256": "482641666c18c68121a0e4251e546a677a11b1dcb993e6b60d4799f7e8fe5868",
+    "bytes": 21204
+  },
+  "checks": {
+    "stdio": {
+      "exact_ids": [
+        11,
+        12,
+        13,
+        14
+      ],
+      "jsonrpc": "2.0",
+      "initialization_protocol": "2025-11-25",
+      "server": {
+        "name": "open-seo-spider",
+        "version": "0.1.0"
+      },
+      "api_tool_definition": {
+        "annotations": {
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": true,
+          "readOnlyHint": false
+        },
+        "description": "Preview/start a bounded PageSpeed-only enrichment of supplied URLs, or status/read/cancel/export an existing API-only job. Our application does not crawl supplied websites; Google PageSpeed may fetch them remotely. Explicit start can send provider requests. Keys are resolved only from a selected server credential profile, never tool arguments.",
+        "inputSchema": {
+          "additionalProperties": false,
+          "properties": {
+            "action": {
+              "enum": [
+                "preview",
+                "start",
+                "status",
+                "configuration",
+                "read",
+                "csv",
+                "cancel"
+              ]
+            },
+            "id": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "input": {
+              "type": "object"
+            },
+            "request": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "action"
+          ],
+          "type": "object"
+        },
+        "name": "spider_api_enrichment"
+      },
+      "preview_and_refusal": true
+    },
+    "real_native_frontdoors": {
+      "preview_fingerprint": "2b684b04b467e569e3a8fcd1c90e790fe00a9d8c5c056568abbfd9670383412d",
+      "supplied_rows": 207,
+      "accepted_occurrences": 206,
+      "unique_urls": 205,
+      "unacknowledged_start_refused": true,
+      "missing_profile_start_refused": true,
+      "endpoint_override_refused": true,
+      "cli_import": true,
+      "cli_missing_profile_refused": true,
+      "cli_existing_output_preserved": true,
+      "mcp_http_and_stdio": true,
+      "provider_workers_admitted": 0
+    },
+    "first_eof": {
+      "api_enrichment_operations": {
+        "active_jobs": 0,
+        "admitted": 0,
+        "closing": true,
+        "first_failure": null,
+        "joined": 0,
+        "owner": "api_enrichment_operations",
+        "retained": 0,
+        "started": 0
+      },
+      "cause": "owned_stdin_eof",
+      "clean": true,
+      "incoming_transports": {
+        "accept_admitted": 1,
+        "accept_joined": 1,
+        "accept_retained": 0,
+        "accepted": 14,
+        "actual_io_dropped": 14,
+        "complete": 14,
+        "connection_admitted": 14,
+        "connection_joined": 14,
+        "connection_retained": 0,
+        "first_failure": null,
+        "grace_seconds": 5,
+        "incoming_protocol": "http1_plain_tcp_no_application_upgrades",
+        "listener_dropped": true,
+        "peer_errors": 0,
+        "registered": true,
+        "rejected": 0,
+        "retained": 0,
+        "shutdown_aborted": 0,
+        "tcp_write_pending": 0,
+        "whole_application_five_second_bound": false
+      },
+      "kind": "owned_application_shutdown_v1",
+      "owners": [
+        {
+          "admitted": 16,
+          "closing": true,
+          "first_failure": null,
+          "joined": 16,
+          "owner": "http_requests",
+          "retained": 0,
+          "started": 16
+        },
+        {
+          "admitted": 6,
+          "closing": true,
+          "first_failure": null,
+          "joined": 6,
+          "owner": "http_blocking",
+          "retained": 0,
+          "started": 6
+        },
+        {
+          "admitted": 0,
+          "closing": true,
+          "first_failure": null,
+          "joined": 0,
+          "owner": "crawl_operations",
+          "retained": 0,
+          "started": 0
+        }
+      ],
+      "qualification": "Local application task joins only; actual process/pipe EOF is an independent outside witness; no stateful MCP session or external renderer-process drain claim",
+      "response_streams": {
+        "aborted": 0,
+        "admitted": 0,
+        "complete": 0,
+        "enqueues": 0,
+        "failed": 0,
+        "first_failure": null,
+        "full_reservations": 0,
+        "joined": 0,
+        "max_chunk": 0,
+        "peak_queued": 0,
+        "response_supervisors_joined": 0,
+        "retained": 0,
+        "started": 0
+      },
+      "response_transport_owned": true,
+      "source_body_transports": {
+        "admitted": 0,
+        "first_failure": null,
+        "joined": 0,
+        "logical_spool_byte_limit": 134217728,
+        "owner": "source_body_transports",
+        "retained": 0,
+        "spool_leases": 0,
+        "started": 0,
+        "unresponsive_transport_shutdown": "not_proven"
+      }
+    },
+    "fixture_backed_reads": {
+      "fixture_backed": true,
+      "actual_provider_execution": false,
+      "completed_job": "4b795c38-4a55-48d9-ad40-de2a8ed6a869",
+      "interrupted_job": "f360ba01-a51d-498d-8b0b-e6c6d2359660",
+      "complete_json_rows": 207,
+      "pages": [
+        100,
+        100,
+        7
+      ],
+      "filtered_occurrences": 206,
+      "csv_rows": 207,
+      "csv_bytes": 22298,
+      "csv_sha256": "5f1d729fe79e1f5354520a174956cf7d803c54143b3e9d2ec43b2f7b0444e1aa",
+      "mcp_csv_equal": true,
+      "stale_snapshot_refused": true,
+      "cross_job_cursor_refused": true,
+      "completed_cancel_only": true
+    },
+    "served_ui": {
+      "public_selectors_exact": [
+        "#configuration",
+        "#input",
+        "#format",
+        "#strategy",
+        "#profile",
+        "#preview",
+        "#summary",
+        "#ack",
+        "#start",
+        "#cancel",
+        "#job",
+        "#reopen",
+        "#status",
+        "#rows",
+        "#next",
+        "#export",
+        "#error"
+      ],
+      "reopened_raw_input": true,
+      "ack_reset": true,
+      "pages": [
+        100,
+        200,
+        207
+      ],
+      "unknown_metrics_display": "em_dash_not_zero",
+      "download": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\browser-downloads\\api-enrichment-4b795c38-4a55-48d9-ad40-de2a8ed6a869.csv",
+        "sha256": "5f1d729fe79e1f5354520a174956cf7d803c54143b3e9d2ec43b2f7b0444e1aa",
+        "bytes": 22298
+      },
+      "fixture_backed": true,
+      "explicit_repreview_only": true,
+      "missing_credential_start_refused": true,
+      "completed_saved_cancel_only": true
+    },
+    "browser_request_ledger": [
+      {
+        "url": "http://127.0.0.1:56893/api-enrichment",
+        "method": "GET"
+      },
+      {
+        "url": "http://127.0.0.1:56893/api-enrichment.css",
+        "method": "GET"
+      },
+      {
+        "url": "http://127.0.0.1:56893/api-enrichment.js",
+        "method": "GET"
+      },
+      {
+        "url": "http://127.0.0.1:56893/favicon.ico",
+        "method": "GET"
+      },
+      {
+        "url": "http://127.0.0.1:56893/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/configuration",
+        "method": "GET"
+      },
+      {
+        "url": "http://127.0.0.1:56893/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869",
+        "method": "GET"
+      },
+      {
+        "url": "http://127.0.0.1:56893/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/results",
+        "method": "POST"
+      },
+      {
+        "url": "http://127.0.0.1:56893/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/results",
+        "method": "POST"
+      },
+      {
+        "url": "http://127.0.0.1:56893/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/results",
+        "method": "POST"
+      },
+      {
+        "url": "http://127.0.0.1:56893/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/csv",
+        "method": "POST"
+      },
+      {
+        "url": "http://127.0.0.1:56893/api/enrichments/preview",
+        "method": "POST"
+      },
+      {
+        "url": "http://127.0.0.1:56893/api/enrichments/preview",
+        "method": "POST"
+      },
+      {
+        "url": "http://127.0.0.1:56893/api/enrichments",
+        "method": "POST"
+      },
+      {
+        "url": "http://127.0.0.1:56893/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/cancel",
+        "method": "POST"
+      }
+    ],
+    "browser_real_inputs": [
+      {
+        "kind": "wheel",
+        "selector": "#job",
+        "deltaY": 894
+      },
+      {
+        "kind": "pointer_click",
+        "selector": "#job",
+        "x": 374.5,
+        "y": 242.5
+      },
+      {
+        "kind": "keyboard_text",
+        "selector": "#job",
+        "characters": 36
+      },
+      {
+        "kind": "pointer_click",
+        "selector": "#reopen",
+        "x": 81.28125,
+        "y": 301.5
+      },
+      {
+        "kind": "wheel",
+        "selector": "#next",
+        "deltaY": 1200
+      },
+      {
+        "kind": "wheel",
+        "selector": "#next",
+        "deltaY": 1200
+      },
+      {
+        "kind": "wheel",
+        "selector": "#next",
+        "deltaY": 1200
+      },
+      {
+        "kind": "wheel",
+        "selector": "#next",
+        "deltaY": 411
+      },
+      {
+        "kind": "pointer_click",
+        "selector": "#next",
+        "x": 105.0234375,
+        "y": 395.5
+      },
+      {
+        "kind": "wheel",
+        "selector": "#next",
+        "deltaY": 1200
+      },
+      {
+        "kind": "wheel",
+        "selector": "#next",
+        "deltaY": 1200
+      },
+      {
+        "kind": "wheel",
+        "selector": "#next",
+        "deltaY": 1200
+      },
+      {
+        "kind": "wheel",
+        "selector": "#next",
+        "deltaY": 353
+      },
+      {
+        "kind": "pointer_click",
+        "selector": "#next",
+        "x": 105.0234375,
+        "y": 395.5
+      },
+      {
+        "kind": "wheel",
+        "selector": "#export",
+        "deltaY": 419
+      },
+      {
+        "kind": "pointer_click",
+        "selector": "#export",
+        "x": 302.5234375,
+        "y": 395.5
+      },
+      {
+        "kind": "wheel",
+        "selector": "#preview",
+        "deltaY": -1200
+      },
+      {
+        "kind": "wheel",
+        "selector": "#preview",
+        "deltaY": -1200
+      },
+      {
+        "kind": "wheel",
+        "selector": "#preview",
+        "deltaY": -1200
+      },
+      {
+        "kind": "wheel",
+        "selector": "#preview",
+        "deltaY": -1200
+      },
+      {
+        "kind": "wheel",
+        "selector": "#preview",
+        "deltaY": -1200
+      },
+      {
+        "kind": "wheel",
+        "selector": "#preview",
+        "deltaY": -1200
+      },
+      {
+        "kind": "wheel",
+        "selector": "#preview",
+        "deltaY": -1200
+      },
+      {
+        "kind": "pointer_click",
+        "selector": "#preview",
+        "x": 72.1484375,
+        "y": 221.875
+      },
+      {
+        "kind": "pointer_click",
+        "selector": "#profile",
+        "x": 613.5,
+        "y": 83.375
+      },
+      {
+        "kind": "keyboard_select",
+        "selector": "#profile",
+        "value": "page_speed_environment"
+      },
+      {
+        "kind": "pointer_click",
+        "selector": "#preview",
+        "x": 72.1484375,
+        "y": 221.875
+      },
+      {
+        "kind": "pointer_click",
+        "selector": "#ack",
+        "x": 55,
+        "y": 440.6875
+      },
+      {
+        "kind": "wheel",
+        "selector": "#start",
+        "deltaY": 273.1875
+      },
+      {
+        "kind": "pointer_click",
+        "selector": "#start",
+        "x": 131.1796875,
+        "y": 242.6875
+      },
+      {
+        "kind": "pointer_click",
+        "selector": "#cancel",
+        "x": 281.828125,
+        "y": 242.6875
+      }
+    ],
+    "browser_close": {
+      "browser_close_ack": true,
+      "socket_close_observed": true,
+      "socket_close_code": 1006,
+      "socket_close_was_clean": false,
+      "pending_commands": 0,
+      "pending_event_tasks": 0,
+      "child_exit_close_and_pipes": true,
+      "normal_close": true,
+      "forced_cleanup": false,
+      "close_transport_diagnostic": "CONFIRMED_EXPLICIT_BROWSER_CLOSE_TRANSPORT",
+      "close_socket_error_count": 1
+    },
+    "browser_diagnostics": {
+      "schema_version": 1,
+      "qualification": "Only fixed error codes, CDP numeric codes/local methods/ids, sanitized request identities and timing; no raw postData, error messages, credentials or WebSocket frames.",
+      "overflow": false,
+      "errors": [],
+      "error_metadata": [],
+      "socket_errors": [
+        {
+          "code": "CDP_SOCKET_ERROR",
+          "at": "2026-10-16T04:04:39.360Z",
+          "monotonic_ms": 7178.1764,
+          "after_explicit_close_began": true,
+          "during_forced_cleanup": false,
+          "ack_observed_at_event": true,
+          "ready_state": 3,
+          "native_error_name": "TypeError",
+          "native_error_code": null,
+          "classification": "CONFIRMED_EXPLICIT_BROWSER_CLOSE_TRANSPORT"
+        }
+      ],
+      "timeline": [
+        {
+          "code": "EXPLICIT_BROWSER_CLOSE_BEGAN",
+          "at": "2026-10-16T04:04:39.331Z",
+          "monotonic_ms": 7149.9846
+        },
+        {
+          "code": "BROWSER_CLOSE_ACK",
+          "at": "2026-10-16T04:04:39.332Z",
+          "monotonic_ms": 7150.3389
+        },
+        {
+          "code": "ACTUAL_REMOTE_SOCKET_CLOSE",
+          "at": "2026-10-16T04:04:39.361Z",
+          "monotonic_ms": 7178.6163
+        },
+        {
+          "code": "NATURAL_CHILD_CLOSE_AND_PIPE_EOF",
+          "at": "2026-10-16T04:04:39.454Z",
+          "monotonic_ms": 7272.5527
+        },
+        {
+          "code": "CLOSE_QUALIFICATION_COMPLETED",
+          "at": "2026-10-16T04:04:39.455Z",
+          "monotonic_ms": 7272.6264
+        }
+      ],
+      "blocked": [],
+      "seen": [
+        {
+          "method": "GET",
+          "origin_class": "OWNED_APPLICATION",
+          "scheme": "http:",
+          "pathname": "/api-enrichment",
+          "url_sha256": "6b5d720287756deda01155d2e541386c7dba5b1702c6614a30867fe688416e0e",
+          "query_omitted": false,
+          "fragment_omitted": false,
+          "credentials_omitted": false
+        },
+        {
+          "method": "GET",
+          "origin_class": "OWNED_APPLICATION",
+          "scheme": "http:",
+          "pathname": "/api-enrichment.css",
+          "url_sha256": "8087b25892cd88e487c637c5e03304f88d01b29b98dbc99281be1cad8ca6c255",
+          "query_omitted": false,
+          "fragment_omitted": false,
+          "credentials_omitted": false
+        },
+        {
+          "method": "GET",
+          "origin_class": "OWNED_APPLICATION",
+          "scheme": "http:",
+          "pathname": "/api-enrichment.js",
+          "url_sha256": "44b1666e9c81837a37076286395026713632fd65fd425ee70e6132d62738719e",
+          "query_omitted": false,
+          "fragment_omitted": false,
+          "credentials_omitted": false
+        },
+        {
+          "method": "GET",
+          "origin_class": "OWNED_APPLICATION",
+          "scheme": "http:",
+          "pathname": "/favicon.ico",
+          "url_sha256": "14173f5a18e0fad994f328db9b61f7cb048de1f7fb6af53e262fee8daa817c76",
+          "query_omitted": false,
+          "fragment_omitted": false,
+          "credentials_omitted": false
+        },
+        {
+          "method": "GET",
+          "origin_class": "OWNED_APPLICATION",
+          "scheme": "http:",
+          "pathname": "/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/configuration",
+          "url_sha256": "b6ffc28986efb4ca812d364f076559e8c505e2f0cd9b1193bf0eefd785a28621",
+          "query_omitted": false,
+          "fragment_omitted": false,
+          "credentials_omitted": false
+        },
+        {
+          "method": "GET",
+          "origin_class": "OWNED_APPLICATION",
+          "scheme": "http:",
+          "pathname": "/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869",
+          "url_sha256": "f27e934d09e80231793776240deef6e7b3dc2d3b4dcc7741daf6deacb0f8adae",
+          "query_omitted": false,
+          "fragment_omitted": false,
+          "credentials_omitted": false
+        },
+        {
+          "method": "POST",
+          "origin_class": "OWNED_APPLICATION",
+          "scheme": "http:",
+          "pathname": "/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/results",
+          "url_sha256": "e503939198c6ba14baee517190e98c64615db11a5770d5c7ebf84edab4ba6766",
+          "query_omitted": false,
+          "fragment_omitted": false,
+          "credentials_omitted": false
+        },
+        {
+          "method": "POST",
+          "origin_class": "OWNED_APPLICATION",
+          "scheme": "http:",
+          "pathname": "/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/results",
+          "url_sha256": "e503939198c6ba14baee517190e98c64615db11a5770d5c7ebf84edab4ba6766",
+          "query_omitted": false,
+          "fragment_omitted": false,
+          "credentials_omitted": false
+        },
+        {
+          "method": "POST",
+          "origin_class": "OWNED_APPLICATION",
+          "scheme": "http:",
+          "pathname": "/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/results",
+          "url_sha256": "e503939198c6ba14baee517190e98c64615db11a5770d5c7ebf84edab4ba6766",
+          "query_omitted": false,
+          "fragment_omitted": false,
+          "credentials_omitted": false
+        },
+        {
+          "method": "POST",
+          "origin_class": "OWNED_APPLICATION",
+          "scheme": "http:",
+          "pathname": "/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/csv",
+          "url_sha256": "de2ac6226c91cfb5f98b1efbe77f8bf216b07b2daefb7d8e6c99c5385fb9151f",
+          "query_omitted": false,
+          "fragment_omitted": false,
+          "credentials_omitted": false
+        },
+        {
+          "method": "POST",
+          "origin_class": "OWNED_APPLICATION",
+          "scheme": "http:",
+          "pathname": "/api/enrichments/preview",
+          "url_sha256": "921f35a35726c6f2a477e25205fe93c2a853012b5043d0531875371a06377c98",
+          "query_omitted": false,
+          "fragment_omitted": false,
+          "credentials_omitted": false
+        },
+        {
+          "method": "POST",
+          "origin_class": "OWNED_APPLICATION",
+          "scheme": "http:",
+          "pathname": "/api/enrichments/preview",
+          "url_sha256": "921f35a35726c6f2a477e25205fe93c2a853012b5043d0531875371a06377c98",
+          "query_omitted": false,
+          "fragment_omitted": false,
+          "credentials_omitted": false
+        },
+        {
+          "method": "POST",
+          "origin_class": "OWNED_APPLICATION",
+          "scheme": "http:",
+          "pathname": "/api/enrichments",
+          "url_sha256": "c935abedeee68c1f03f4cdcdc8a28dc895b493d29ce7bbf80a74f33cd59541e8",
+          "query_omitted": false,
+          "fragment_omitted": false,
+          "credentials_omitted": false
+        },
+        {
+          "method": "POST",
+          "origin_class": "OWNED_APPLICATION",
+          "scheme": "http:",
+          "pathname": "/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/cancel",
+          "url_sha256": "672634200abe5bd38b1c9e7d8f33619be51a74d5c33d931b844065ca56f2a711",
+          "query_omitted": false,
+          "fragment_omitted": false,
+          "credentials_omitted": false
+        }
+      ],
+      "closure": {
+        "browser_close_ack": true,
+        "socket_close_observed": true,
+        "socket_close_code": 1006,
+        "socket_close_was_clean": false,
+        "pending_commands": 0,
+        "pending_event_tasks": 0,
+        "child_exit_close_and_pipes": true,
+        "normal_close": true,
+        "forced_cleanup": false,
+        "close_transport_diagnostic": "CONFIRMED_EXPLICIT_BROWSER_CLOSE_TRANSPORT",
+        "close_socket_error_count": 1
+      },
+      "pending_commands": [],
+      "pending_event_tasks": 0
+    },
+    "browser_diagnostic_snapshots": [
+      {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\browser-diagnostic-001-pre-close.json",
+        "sha256": "d895a1016c0bbe86b592315641c572f781975dc3a9003e47e09d769e9145ac48",
+        "bytes": 5637
+      },
+      {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\browser-diagnostic-002-close-final.json",
+        "sha256": "85054e93186475e5ecff2e327d04f7e15cc49f0ce55c9b1226102ab31cd24ee0",
+        "bytes": 6803
+      }
+    ],
+    "second_eof": {
+      "api_enrichment_operations": {
+        "active_jobs": 0,
+        "admitted": 0,
+        "closing": true,
+        "first_failure": null,
+        "joined": 0,
+        "owner": "api_enrichment_operations",
+        "retained": 0,
+        "started": 0
+      },
+      "cause": "owned_stdin_eof",
+      "clean": true,
+      "incoming_transports": {
+        "accept_admitted": 1,
+        "accept_joined": 1,
+        "accept_retained": 0,
+        "accepted": 20,
+        "actual_io_dropped": 20,
+        "complete": 20,
+        "connection_admitted": 20,
+        "connection_joined": 20,
+        "connection_retained": 0,
+        "first_failure": null,
+        "grace_seconds": 5,
+        "incoming_protocol": "http1_plain_tcp_no_application_upgrades",
+        "listener_dropped": true,
+        "peer_errors": 0,
+        "registered": true,
+        "rejected": 0,
+        "retained": 0,
+        "shutdown_aborted": 0,
+        "tcp_write_pending": 0,
+        "whole_application_five_second_bound": false
+      },
+      "kind": "owned_application_shutdown_v1",
+      "owners": [
+        {
+          "admitted": 32,
+          "closing": true,
+          "first_failure": null,
+          "joined": 32,
+          "owner": "http_requests",
+          "retained": 0,
+          "started": 32
+        },
+        {
+          "admitted": 20,
+          "closing": true,
+          "first_failure": null,
+          "joined": 20,
+          "owner": "http_blocking",
+          "retained": 0,
+          "started": 20
+        },
+        {
+          "admitted": 0,
+          "closing": true,
+          "first_failure": null,
+          "joined": 0,
+          "owner": "crawl_operations",
+          "retained": 0,
+          "started": 0
+        }
+      ],
+      "qualification": "Local application task joins only; actual process/pipe EOF is an independent outside witness; no stateful MCP session or external renderer-process drain claim",
+      "response_streams": {
+        "aborted": 0,
+        "admitted": 3,
+        "complete": 3,
+        "enqueues": 3,
+        "failed": 0,
+        "first_failure": null,
+        "full_reservations": 0,
+        "joined": 3,
+        "max_chunk": 22298,
+        "peak_queued": 1,
+        "response_supervisors_joined": 3,
+        "retained": 0,
+        "started": 3
+      },
+      "response_transport_owned": true,
+      "source_body_transports": {
+        "admitted": 0,
+        "first_failure": null,
+        "joined": 0,
+        "logical_spool_byte_limit": 134217728,
+        "owner": "source_body_transports",
+        "retained": 0,
+        "spool_leases": 0,
+        "started": 0,
+        "unresponsive_transport_shutdown": "not_proven"
+      }
+    },
+    "third_eof": {
+      "api_enrichment_operations": {
+        "active_jobs": 0,
+        "admitted": 0,
+        "closing": true,
+        "first_failure": null,
+        "joined": 0,
+        "owner": "api_enrichment_operations",
+        "retained": 0,
+        "started": 0
+      },
+      "cause": "owned_stdin_eof",
+      "clean": true,
+      "incoming_transports": {
+        "accept_admitted": 1,
+        "accept_joined": 1,
+        "accept_retained": 0,
+        "accepted": 7,
+        "actual_io_dropped": 7,
+        "complete": 7,
+        "connection_admitted": 7,
+        "connection_joined": 7,
+        "connection_retained": 0,
+        "first_failure": null,
+        "grace_seconds": 5,
+        "incoming_protocol": "http1_plain_tcp_no_application_upgrades",
+        "listener_dropped": true,
+        "peer_errors": 0,
+        "registered": true,
+        "rejected": 0,
+        "retained": 0,
+        "shutdown_aborted": 0,
+        "tcp_write_pending": 0,
+        "whole_application_five_second_bound": false
+      },
+      "kind": "owned_application_shutdown_v1",
+      "owners": [
+        {
+          "admitted": 7,
+          "closing": true,
+          "first_failure": null,
+          "joined": 7,
+          "owner": "http_requests",
+          "retained": 0,
+          "started": 7
+        },
+        {
+          "admitted": 5,
+          "closing": true,
+          "first_failure": null,
+          "joined": 5,
+          "owner": "http_blocking",
+          "retained": 0,
+          "started": 5
+        },
+        {
+          "admitted": 0,
+          "closing": true,
+          "first_failure": null,
+          "joined": 0,
+          "owner": "crawl_operations",
+          "retained": 0,
+          "started": 0
+        }
+      ],
+      "qualification": "Local application task joins only; actual process/pipe EOF is an independent outside witness; no stateful MCP session or external renderer-process drain claim",
+      "response_streams": {
+        "aborted": 0,
+        "admitted": 1,
+        "complete": 1,
+        "enqueues": 1,
+        "failed": 0,
+        "first_failure": null,
+        "full_reservations": 0,
+        "joined": 1,
+        "max_chunk": 22298,
+        "peak_queued": 1,
+        "response_supervisors_joined": 1,
+        "retained": 0,
+        "started": 1
+      },
+      "response_transport_owned": true,
+      "source_body_transports": {
+        "admitted": 0,
+        "first_failure": null,
+        "joined": 0,
+        "logical_spool_byte_limit": 134217728,
+        "owner": "source_body_transports",
+        "retained": 0,
+        "spool_leases": 0,
+        "started": 0,
+        "unresponsive_transport_shutdown": "not_proven"
+      }
+    },
+    "cold_reopen": {
+      "fixture_backed": true,
+      "all_saved_bytes_unchanged": true,
+      "config_and_complete_csv_and_json_equal": true,
+      "automatic_provider_resume": false
+    }
+  },
+  "website_trap": {
+    "requests": [],
+    "request_count": 0,
+    "connections": 0,
+    "socket_closes": 0,
+    "request_closes": 0,
+    "response_closes": 0,
+    "retained_sockets": 0,
+    "retained_requests": 0,
+    "server_close_observed": true,
+    "close_callback_observed": true,
+    "close_requested": true,
+    "closed": true,
+    "normal_close": true,
+    "forced_cleanup": false,
+    "deadline_exceeded": false,
+    "errors": []
+  },
+  "local_website_requests": 0,
+  "provider_calls_by_harness": 0,
+  "all_own_children_normally_closed": true,
+  "normal_application_eof_closes": 3,
+  "normal_browser_close": true,
+  "browser_close": {
+    "browser_close_ack": true,
+    "socket_close_observed": true,
+    "socket_close_code": 1006,
+    "socket_close_was_clean": false,
+    "pending_commands": 0,
+    "pending_event_tasks": 0,
+    "child_exit_close_and_pipes": true,
+    "normal_close": true,
+    "forced_cleanup": false,
+    "close_transport_diagnostic": "CONFIRMED_EXPLICIT_BROWSER_CLOSE_TRANSPORT",
+    "close_socket_error_count": 1
+  },
+  "lock_released": true,
+  "actual_live_provider_acceptance": "NOT_PROVEN",
+  "not_proven": [
+    "successful_production_provider_transport",
+    "successful_live_provider_job_and_refresh",
+    "active_provider_cancellation",
+    "successful_enrich_urls_cli_json_csv"
+  ],
+  "synthetic_saved_fixtures": true,
+  "requests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:56877/healthz",
+      "status": 200,
+      "bytes": 54,
+      "sha256": "58599c0752ab5171a3d754c07e2bcd66e5879a826c609c66df01bcf107e6efaa",
+      "complete": true,
+      "content_type": "application/json",
+      "content_length": "54",
+      "declared_sha256": null
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56877/api/enrichments/preview",
+      "status": 200,
+      "bytes": 838,
+      "sha256": "a4a140f9ab31d606b15da58e2fecce8a4db6e89560fb50d39d8765c34b90d577",
+      "complete": true,
+      "content_type": "application/json",
+      "content_length": "838",
+      "declared_sha256": null
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56877/api/enrichments",
+      "status": 400,
+      "bytes": 95,
+      "sha256": "d22b7bd604b7eec8f11d2a5cb34cdd3e446993f5cf7ff258e646c51e04785b35",
+      "complete": true,
+      "content_type": "application/json",
+      "content_length": "95",
+      "declared_sha256": null
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56877/api/enrichments",
+      "status": 422,
+      "bytes": 67,
+      "sha256": "b808d01a206eb0ff752247955d891c407c0f9c6efa530f5f648a5c5f2f76003e",
+      "complete": true,
+      "content_type": "application/json",
+      "content_length": "67",
+      "declared_sha256": null
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56877/api/enrichments/preview",
+      "status": 400,
+      "bytes": 205,
+      "sha256": "087dc1f293ee628d10020a8c32ad7ddfaa2adc04c2fcc26525ec35d5cfd5efdd",
+      "complete": true,
+      "content_type": "application/json",
+      "content_length": "205",
+      "declared_sha256": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:56877/api/capabilities",
+      "status": 200,
+      "bytes": 6885,
+      "sha256": "03c0133f37760abb486cb898e4516bca7dad5fbe8c7d9201a9a6aa4a0c5bb741",
+      "complete": true,
+      "content_type": "application/json",
+      "content_length": "6885",
+      "declared_sha256": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:56877/api-enrichment",
+      "status": 200,
+      "bytes": 2496,
+      "sha256": "de9066081d48485cd46e2d064e7e1717358cd14c1c64ebbd86c06782ebab9a93",
+      "complete": true,
+      "content_type": "text/html; charset=utf-8",
+      "content_length": "2496",
+      "declared_sha256": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:56877/api-enrichment.js",
+      "status": 200,
+      "bytes": 8952,
+      "sha256": "fe8df01e763073a3d31e0f305b625fb92c8706625574b45c5b60c0ddcc49dc04",
+      "complete": true,
+      "content_type": "text/javascript; charset=utf-8",
+      "content_length": "8952",
+      "declared_sha256": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:56877/api-enrichment.css",
+      "status": 200,
+      "bytes": 1291,
+      "sha256": "36c79dcd1a8b1df363591f2c94ead1eb10cf8b8dfc087b22a432b3dd8e63ea1a",
+      "complete": true,
+      "content_type": "text/css; charset=utf-8",
+      "content_length": "1291",
+      "declared_sha256": null
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56877/mcp",
+      "status": 200,
+      "bytes": 19521,
+      "sha256": "b14ca21ad9beffebb06122cd791c361946cee685c11e758ef3a227faf05771d9",
+      "complete": true,
+      "content_type": "application/json",
+      "content_length": "19521",
+      "declared_sha256": null
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56877/mcp",
+      "status": 200,
+      "bytes": 1844,
+      "sha256": "3e893906010a58df8f7aa294e8feb8a9686ef1e61ece0460e27d4cde4a511d60",
+      "complete": true,
+      "content_type": "application/json",
+      "content_length": "1844",
+      "declared_sha256": null
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56877/mcp",
+      "status": 200,
+      "bytes": 127,
+      "sha256": "e7e242bf940193b722a22482dc28ec46df85429e5a16007f2ad0457cb200f71a",
+      "complete": true,
+      "content_type": "application/json",
+      "content_length": "127",
+      "declared_sha256": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:56893/healthz",
+      "status": 200,
+      "bytes": 54,
+      "sha256": "58599c0752ab5171a3d754c07e2bcd66e5879a826c609c66df01bcf107e6efaa",
+      "complete": true,
+      "content_type": "application/json",
+      "content_length": "54",
+      "declared_sha256": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:56893/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869",
+      "status": 200,
+      "bytes": 262,
+      "sha256": "1f4402181504462ea8281764e22c9e6ee4f7391b500f34fa8aaab2117e9c114f",
+      "complete": true,
+      "content_type": "application/json",
+      "content_length": "262",
+      "declared_sha256": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:56893/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/configuration",
+      "status": 200,
+      "bytes": 6682,
+      "sha256": "65a6a3f3803ca1457a41f8106e570786590c7ae4145241b6a023d55333f4bd0a",
+      "complete": true,
+      "content_type": "application/json; charset=utf-8",
+      "content_length": "6682",
+      "declared_sha256": "65a6a3f3803ca1457a41f8106e570786590c7ae4145241b6a023d55333f4bd0a"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56893/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/results",
+      "status": 200,
+      "bytes": 50201,
+      "sha256": "67ab03e9a142b1cd4e90d7997226194ce9b2b2113d1b18ec2bc9c36184004317",
+      "complete": true,
+      "content_type": "application/json; charset=utf-8",
+      "content_length": "50201",
+      "declared_sha256": "67ab03e9a142b1cd4e90d7997226194ce9b2b2113d1b18ec2bc9c36184004317"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56893/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/results",
+      "status": 200,
+      "bytes": 50832,
+      "sha256": "f3bb30a16e1bae99e8ee2a831ce6b6e8463b022fbc294094ccaf24286a22b21a",
+      "complete": true,
+      "content_type": "application/json; charset=utf-8",
+      "content_length": "50832",
+      "declared_sha256": "f3bb30a16e1bae99e8ee2a831ce6b6e8463b022fbc294094ccaf24286a22b21a"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56893/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/results",
+      "status": 200,
+      "bytes": 3609,
+      "sha256": "fe2f1e002b7285eaabf1d1dd3991a127dac0f70c75afaa3f9f9ceef521750eb8",
+      "complete": true,
+      "content_type": "application/json; charset=utf-8",
+      "content_length": "3609",
+      "declared_sha256": "fe2f1e002b7285eaabf1d1dd3991a127dac0f70c75afaa3f9f9ceef521750eb8"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56893/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/results",
+      "status": 200,
+      "bytes": 50201,
+      "sha256": "67ab03e9a142b1cd4e90d7997226194ce9b2b2113d1b18ec2bc9c36184004317",
+      "complete": true,
+      "content_type": "application/json; charset=utf-8",
+      "content_length": "50201",
+      "declared_sha256": "67ab03e9a142b1cd4e90d7997226194ce9b2b2113d1b18ec2bc9c36184004317"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56893/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/results",
+      "status": 409,
+      "bytes": 35,
+      "sha256": "c66f9ba76c5cbd9fd4cd7a78826aa572b4d933fead1c797b694a3f58b8611b63",
+      "complete": true,
+      "content_type": "application/json",
+      "content_length": "35",
+      "declared_sha256": null
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56893/api/enrichments/da437893-e67d-421f-b054-740a3f0f54a3/results",
+      "status": 409,
+      "bytes": 47,
+      "sha256": "c7f85e231d78dd3c49c17ea24d70c0202033da7d1ca570be6151afb5f8c373bd",
+      "complete": true,
+      "content_type": "application/json",
+      "content_length": "47",
+      "declared_sha256": null
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56893/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/results",
+      "status": 200,
+      "bytes": 50213,
+      "sha256": "dba9fa9b4e4914094a8528ebf937df23909bf07d913729a7bc321e8e56f7672a",
+      "complete": true,
+      "content_type": "application/json; charset=utf-8",
+      "content_length": "50213",
+      "declared_sha256": "dba9fa9b4e4914094a8528ebf937df23909bf07d913729a7bc321e8e56f7672a"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56893/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/results",
+      "status": 200,
+      "bytes": 50844,
+      "sha256": "88fd66a4a7cb41a2dd437260522a51042c383b8550972c437b83b37bb35596a6",
+      "complete": true,
+      "content_type": "application/json; charset=utf-8",
+      "content_length": "50844",
+      "declared_sha256": "88fd66a4a7cb41a2dd437260522a51042c383b8550972c437b83b37bb35596a6"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56893/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/results",
+      "status": 200,
+      "bytes": 3331,
+      "sha256": "59cb20cb6892889d689d1d3a624f96dbd8028245da3d66cba82492fa52e6ec16",
+      "complete": true,
+      "content_type": "application/json; charset=utf-8",
+      "content_length": "3331",
+      "declared_sha256": "59cb20cb6892889d689d1d3a624f96dbd8028245da3d66cba82492fa52e6ec16"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56893/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/csv",
+      "status": 200,
+      "bytes": 22298,
+      "sha256": "5f1d729fe79e1f5354520a174956cf7d803c54143b3e9d2ec43b2f7b0444e1aa",
+      "complete": true,
+      "content_type": "text/csv; charset=utf-8",
+      "content_length": "22298",
+      "declared_sha256": "5f1d729fe79e1f5354520a174956cf7d803c54143b3e9d2ec43b2f7b0444e1aa"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56893/mcp",
+      "status": 200,
+      "bytes": 59914,
+      "sha256": "193d2f2a21d92885251b0d87d4aa65781868bec81561173ebcbbb255d0782e2f",
+      "complete": true,
+      "content_type": "application/json",
+      "content_length": "59914",
+      "declared_sha256": null
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56893/mcp",
+      "status": 200,
+      "bytes": 111,
+      "sha256": "cce56ee35539349ad8d46e435e57f086acc5b5cc915cdcc301e7aa58036a11ee",
+      "complete": true,
+      "content_type": "application/json",
+      "content_length": "111",
+      "declared_sha256": null
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56893/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/cancel",
+      "status": 200,
+      "bytes": 262,
+      "sha256": "1f4402181504462ea8281764e22c9e6ee4f7391b500f34fa8aaab2117e9c114f",
+      "complete": true,
+      "content_type": "application/json",
+      "content_length": "262",
+      "declared_sha256": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:56893/api/enrichments/f360ba01-a51d-498d-8b0b-e6c6d2359660",
+      "status": 200,
+      "bytes": 150,
+      "sha256": "2c58b0276dbf6abe7291dca38b77702b3262864bc09b0b453507f577a415d902",
+      "complete": true,
+      "content_type": "application/json",
+      "content_length": "150",
+      "declared_sha256": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63731/healthz",
+      "status": 200,
+      "bytes": 54,
+      "sha256": "58599c0752ab5171a3d754c07e2bcd66e5879a826c609c66df01bcf107e6efaa",
+      "complete": true,
+      "content_type": "application/json",
+      "content_length": "54",
+      "declared_sha256": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63731/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869",
+      "status": 200,
+      "bytes": 262,
+      "sha256": "1f4402181504462ea8281764e22c9e6ee4f7391b500f34fa8aaab2117e9c114f",
+      "complete": true,
+      "content_type": "application/json",
+      "content_length": "262",
+      "declared_sha256": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63731/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/configuration",
+      "status": 200,
+      "bytes": 6682,
+      "sha256": "65a6a3f3803ca1457a41f8106e570786590c7ae4145241b6a023d55333f4bd0a",
+      "complete": true,
+      "content_type": "application/json; charset=utf-8",
+      "content_length": "6682",
+      "declared_sha256": "65a6a3f3803ca1457a41f8106e570786590c7ae4145241b6a023d55333f4bd0a"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:63731/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/csv",
+      "status": 200,
+      "bytes": 22298,
+      "sha256": "5f1d729fe79e1f5354520a174956cf7d803c54143b3e9d2ec43b2f7b0444e1aa",
+      "complete": true,
+      "content_type": "text/csv; charset=utf-8",
+      "content_length": "22298",
+      "declared_sha256": "5f1d729fe79e1f5354520a174956cf7d803c54143b3e9d2ec43b2f7b0444e1aa"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:63731/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/results",
+      "status": 200,
+      "bytes": 50201,
+      "sha256": "67ab03e9a142b1cd4e90d7997226194ce9b2b2113d1b18ec2bc9c36184004317",
+      "complete": true,
+      "content_type": "application/json; charset=utf-8",
+      "content_length": "50201",
+      "declared_sha256": "67ab03e9a142b1cd4e90d7997226194ce9b2b2113d1b18ec2bc9c36184004317"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:63731/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/results",
+      "status": 200,
+      "bytes": 50832,
+      "sha256": "f3bb30a16e1bae99e8ee2a831ce6b6e8463b022fbc294094ccaf24286a22b21a",
+      "complete": true,
+      "content_type": "application/json; charset=utf-8",
+      "content_length": "50832",
+      "declared_sha256": "f3bb30a16e1bae99e8ee2a831ce6b6e8463b022fbc294094ccaf24286a22b21a"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:63731/api/enrichments/4b795c38-4a55-48d9-ad40-de2a8ed6a869/results",
+      "status": 200,
+      "bytes": 3609,
+      "sha256": "fe2f1e002b7285eaabf1d1dd3991a127dac0f70c75afaa3f9f9ceef521750eb8",
+      "complete": true,
+      "content_type": "application/json; charset=utf-8",
+      "content_length": "3609",
+      "declared_sha256": "fe2f1e002b7285eaabf1d1dd3991a127dac0f70c75afaa3f9f9ceef521750eb8"
+    }
+  ],
+  "children": [
+    {
+      "label": "cli-import-list",
+      "pid": 26600,
+      "executable": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-optimized-build-v14\\candidate\\open-seo-spider.exe",
+      "args": [
+        "import-list",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\input.txt",
+        "--options",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\import-options.json",
+        "--output",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\native-import.json"
+      ],
+      "spawn_error": null,
+      "stdin_error": null,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "close_received": true,
+      "eof_requested": true,
+      "forced_stop": false,
+      "output_overflow": false,
+      "pipes": {
+        "stdout": {
+          "end": true,
+          "close": true
+        },
+        "stderr": {
+          "end": true,
+          "close": true
+        }
+      },
+      "stdout": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\processes\\cli-import-list-stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "stderr": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\processes\\cli-import-list-stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    },
+    {
+      "label": "app-preview",
+      "pid": 40064,
+      "executable": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-optimized-build-v14\\candidate\\open-seo-spider.exe",
+      "args": [
+        "serve",
+        "--listen",
+        "127.0.0.1:0",
+        "--data-dir",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\data",
+        "--shutdown-on-stdin-eof"
+      ],
+      "spawn_error": null,
+      "stdin_error": null,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "close_received": true,
+      "eof_requested": true,
+      "forced_stop": false,
+      "output_overflow": false,
+      "pipes": {
+        "stdout": {
+          "end": true,
+          "close": true
+        },
+        "stderr": {
+          "end": true,
+          "close": true
+        }
+      },
+      "stdout": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\processes\\app-preview-stdout.log",
+        "sha256": "5fae36c29bc35ec086560fdfd9c845eb28d02010bb8f4553e07a09e1ac8a91e3",
+        "bytes": 40
+      },
+      "stderr": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\processes\\app-preview-stderr.log",
+        "sha256": "7a2ce33e56e0d90baa6bb15a78cfbc899ea543d54d86665acecdcc3c70c8c918",
+        "bytes": 1738
+      }
+    },
+    {
+      "label": "native-mcp-stdio",
+      "pid": 27080,
+      "executable": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-optimized-build-v14\\candidate\\open-seo-spider.exe",
+      "args": [
+        "mcp",
+        "--server",
+        "http://127.0.0.1:56877"
+      ],
+      "spawn_error": null,
+      "stdin_error": null,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "close_received": true,
+      "eof_requested": true,
+      "forced_stop": false,
+      "output_overflow": false,
+      "pipes": {
+        "stdout": {
+          "end": true,
+          "close": true
+        },
+        "stderr": {
+          "end": true,
+          "close": true
+        }
+      },
+      "stdout": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\processes\\native-mcp-stdio-stdout.log",
+        "sha256": "4913cc1085e1e0d53bd53b12d1cce397e19ce2e627541d78e5174de76914f544",
+        "bytes": 21797
+      },
+      "stderr": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\processes\\native-mcp-stdio-stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    },
+    {
+      "label": "cli-enrichment-missing-profile",
+      "pid": 27320,
+      "executable": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-optimized-build-v14\\candidate\\open-seo-spider.exe",
+      "args": [
+        "enrich-urls",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\input.txt",
+        "--options",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\cli-missing-profile.json",
+        "--store",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\cli-store",
+        "--output",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\cli-refused.json",
+        "--csv",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\cli-refused.csv"
+      ],
+      "spawn_error": null,
+      "stdin_error": null,
+      "exit": {
+        "code": 1,
+        "signal": null
+      },
+      "close": {
+        "code": 1,
+        "signal": null
+      },
+      "close_received": true,
+      "eof_requested": true,
+      "forced_stop": false,
+      "output_overflow": false,
+      "pipes": {
+        "stdout": {
+          "end": true,
+          "close": true
+        },
+        "stderr": {
+          "end": true,
+          "close": true
+        }
+      },
+      "stdout": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\processes\\cli-enrichment-missing-profile-stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "stderr": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\processes\\cli-enrichment-missing-profile-stderr.log",
+        "sha256": "36b9c581cc689b0367710c537525277c6ee18e2d7706b864d3d34152238d1ac4",
+        "bytes": 63
+      }
+    },
+    {
+      "label": "cli-existing-output-refused",
+      "pid": 34944,
+      "executable": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-optimized-build-v14\\candidate\\open-seo-spider.exe",
+      "args": [
+        "enrich-urls",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\input.txt",
+        "--options",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\cli-missing-profile.json",
+        "--store",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\cli-never-store",
+        "--output",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\existing-output.txt"
+      ],
+      "spawn_error": null,
+      "stdin_error": null,
+      "exit": {
+        "code": 1,
+        "signal": null
+      },
+      "close": {
+        "code": 1,
+        "signal": null
+      },
+      "close_received": true,
+      "eof_requested": true,
+      "forced_stop": false,
+      "output_overflow": false,
+      "pipes": {
+        "stdout": {
+          "end": true,
+          "close": true
+        },
+        "stderr": {
+          "end": true,
+          "close": true
+        }
+      },
+      "stdout": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\processes\\cli-existing-output-refused-stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "stderr": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\processes\\cli-existing-output-refused-stderr.log",
+        "sha256": "834706a70f9dfb6cafbb7f31c129fb468f1e38afdda5562aee38f580f94108b6",
+        "bytes": 46
+      }
+    },
+    {
+      "label": "app-saved-reads",
+      "pid": 31876,
+      "executable": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-optimized-build-v14\\candidate\\open-seo-spider.exe",
+      "args": [
+        "serve",
+        "--listen",
+        "127.0.0.1:0",
+        "--data-dir",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\data",
+        "--shutdown-on-stdin-eof"
+      ],
+      "spawn_error": null,
+      "stdin_error": null,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "close_received": true,
+      "eof_requested": true,
+      "forced_stop": false,
+      "output_overflow": false,
+      "pipes": {
+        "stdout": {
+          "end": true,
+          "close": true
+        },
+        "stderr": {
+          "end": true,
+          "close": true
+        }
+      },
+      "stdout": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\processes\\app-saved-reads-stdout.log",
+        "sha256": "8a267c9a8537d6f5422d2bd8718ea57b5394b285bc2b6acd4f189042993e1d72",
+        "bytes": 40
+      },
+      "stderr": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\processes\\app-saved-reads-stderr.log",
+        "sha256": "872f0b84946bd8eb7db53af153db9f89c4dea56064cb076bfb62920424d73648",
+        "bytes": 1745
+      }
+    },
+    {
+      "label": "browser-api-ui",
+      "pid": 29096,
+      "executable": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\browser-runtime\\chrome-155.0.8059.80-36a30716-source12-v1\\chrome.exe",
+      "args": [
+        "--headless=new",
+        "--remote-debugging-address=127.0.0.1",
+        "--remote-debugging-port=0",
+        "--user-data-dir=E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\browser-profile",
+        "--no-first-run",
+        "--no-default-browser-check",
+        "--disable-background-networking",
+        "--disable-component-update",
+        "--disable-sync",
+        "--metrics-recording-only",
+        "about:blank"
+      ],
+      "spawn_error": null,
+      "stdin_error": null,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "close_received": true,
+      "eof_requested": true,
+      "forced_stop": false,
+      "output_overflow": false,
+      "pipes": {
+        "stdout": {
+          "end": true,
+          "close": true
+        },
+        "stderr": {
+          "end": true,
+          "close": true
+        }
+      },
+      "stdout": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\processes\\browser-api-ui-stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "stderr": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\processes\\browser-api-ui-stderr.log",
+        "sha256": "6218cf16c3512f25a2a001ffb21c916051203bc7936ff0ea528119f1741b8223",
+        "bytes": 488
+      }
+    },
+    {
+      "label": "app-cold-reopen",
+      "pid": 2272,
+      "executable": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\combined-optimized-build-v14\\candidate\\open-seo-spider.exe",
+      "args": [
+        "serve",
+        "--listen",
+        "127.0.0.1:0",
+        "--data-dir",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\data",
+        "--shutdown-on-stdin-eof"
+      ],
+      "spawn_error": null,
+      "stdin_error": null,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "close_received": true,
+      "eof_requested": true,
+      "forced_stop": false,
+      "output_overflow": false,
+      "pipes": {
+        "stdout": {
+          "end": true,
+          "close": true
+        },
+        "stderr": {
+          "end": true,
+          "close": true
+        }
+      },
+      "stdout": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\processes\\app-cold-reopen-stdout.log",
+        "sha256": "c7a798d7d2bef21755bc2a9802cfb291752314fac242d4ab5bd36ff163824fe4",
+        "bytes": 40
+      },
+      "stderr": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\api-only-native-subset-v14\\processes\\app-cold-reopen-stderr.log",
+        "sha256": "dd8ea79d483b4a01e10734b2a4594a1092a17bb3db89eee602fc9a5bd5d0680d",
+        "bytes": 1734
+      }
+    }
+  ],
+  "qualification": "Real fresh Source14 PE frontdoor refusals/preview/import plus synthetic saved-report consumers, real served UI and cold reopen. No acknowledged production provider job succeeded or was refreshed/cancelled. No global network packet trace, vendor parity, renderer worker, installation, original user-data or credential use is certified."
+}
