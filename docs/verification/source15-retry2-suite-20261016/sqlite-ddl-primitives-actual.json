@@ -1,0 +1,96 @@
+{
+  "kind": "actual_root_node_sqlite_owned_ddl_capability",
+  "started_at": "2026-10-16T06:41:56.596Z",
+  "ended_at": "2026-10-16T06:41:56.706Z",
+  "executable": {
+    "path": "C:/Program Files/nodejs/node.exe",
+    "sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5",
+    "bytes": 91694408
+  },
+  "source": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/node-sqlite-owned-ddl-capability-root-v1/ddl-probe.mjs",
+    "sha256": "59870319f6d4dc014d7d36e760ccf061c19be1ec4c1114d2932aa449577bcbc8",
+    "bytes": 4017
+  },
+  "own_product_schema_source": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-source-v15-r2/crates/core/src/crawl_quota_ledger.rs",
+    "sha256": "0096e23df351f171f419ebf060a269a2869f65a0e77a3be620eaa7945a35777f",
+    "bytes": 22747
+  },
+  "synthetic_schema": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/node-sqlite-owned-ddl-capability-root-v1/OWN-SCHEMA.json",
+    "sha256": "350c3f1a9a778cd31f52331c32e8fdfe5e5374cf0e2308ab099c258e40b71a98",
+    "bytes": 947
+  },
+  "actual_process": {
+    "pid": 39968,
+    "status": 0,
+    "signal": null,
+    "error": null
+  },
+  "logs": {
+    "stdout": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/node-sqlite-owned-ddl-capability-root-v1/stdout.log",
+      "sha256": "eed387b1ad04eb1a0aa31a48b0ea032976eaac4853556105c255a682ca4ae2b4",
+      "bytes": 2452
+    },
+    "stderr": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/node-sqlite-owned-ddl-capability-root-v1/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  },
+  "scope": "Four explicitly synthetic E-owned SQLite files; API/DDL primitive observation only, no product runtime or original data.",
+  "result": "PASS_THREE_SYNTHETIC_DDL_PRIMITIVES_ONLY",
+  "observations": {
+    "kind": "actual_node_sqlite_synthetic_ddl_primitive_capability",
+    "result": "PASS_THREE_SYNTHETIC_DDL_PRIMITIVES_ONLY",
+    "pid": 39968,
+    "node_version": "v24.15.0",
+    "sqlite_version": "3.51.3",
+    "primary": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\node-sqlite-owned-ddl-capability-root-v1\\SYNTHETIC-ONLY-PRIMARY.sqlite",
+      "sha256": "c743eb76bcf456a89b2012b1e5c77c918e39293a3822afd1c2cdea8d321097a0",
+      "bytes": 45056
+    },
+    "primary_bytes_unchanged": true,
+    "results": [
+      {
+        "role": "canonical-table-DDL",
+        "target": "crawl_quota_buckets",
+        "before_sql": "CREATE TABLE crawl_quota_buckets(kind TEXT NOT NULL,bucket TEXT NOT NULL,used INTEGER NOT NULL CHECK(used>0),PRIMARY KEY(kind,bucket))",
+        "after_sql": "CREATE TABLE crawl_quota_buckets(kind TEXT NOT NULL,bucket TEXT NOT NULL,consumed INTEGER NOT NULL CHECK(consumed>0),PRIMARY KEY(kind,bucket))",
+        "all_row_values_and_cardinalities_preserved": true,
+        "closed": true,
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\node-sqlite-owned-ddl-capability-root-v1\\SYNTHETIC-ONLY-canonical-table-DDL.sqlite",
+        "sha256": "ddf451baa5973bbdbe22936f5005dd2353273fe70777e7febbf436871e2c67cb",
+        "bytes": 45056
+      },
+      {
+        "role": "generation-index",
+        "target": "crawl_quota_attempt_generation",
+        "before_sql": "CREATE INDEX crawl_quota_attempt_generation ON crawl_quota_attempts(generation,state)",
+        "after_sql": "CREATE INDEX crawl_quota_attempt_generation ON crawl_quota_attempts(state,generation)",
+        "all_row_values_and_cardinalities_preserved": true,
+        "closed": true,
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\node-sqlite-owned-ddl-capability-root-v1\\SYNTHETIC-ONLY-generation-index.sqlite",
+        "sha256": "ba320e998ff17d2775531596e0cb2fd6d4a615973b445aeb4b67e8fbdd2cebf9",
+        "bytes": 45056
+      },
+      {
+        "role": "member-NOCASE",
+        "target": "crawl_quota_members",
+        "before_sql": "CREATE TABLE crawl_quota_members(kind TEXT NOT NULL,bucket TEXT NOT NULL,target TEXT NOT NULL,PRIMARY KEY(kind,bucket,target))",
+        "after_sql": "CREATE TABLE crawl_quota_members(kind TEXT NOT NULL,bucket TEXT NOT NULL,target TEXT COLLATE NOCASE NOT NULL,PRIMARY KEY(kind,bucket,target))",
+        "all_row_values_and_cardinalities_preserved": true,
+        "closed": true,
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\node-sqlite-owned-ddl-capability-root-v1\\SYNTHETIC-ONLY-member-NOCASE.sqlite",
+        "sha256": "17fe158c88e7b1aa446391de0f344f0dd497b3b1baa0d6ed19afd364b2740791",
+        "bytes": 53248
+      }
+    ],
+    "application_database_opened": false,
+    "application_canonical_ddl_guard_executed": false,
+    "product_Q15_native": "NOT_PROVEN"
+  }
+}

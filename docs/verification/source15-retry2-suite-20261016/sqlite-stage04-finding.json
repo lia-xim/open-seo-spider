@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "kind": "crawl_quotas_closed_store_io_independent_source_review",
+  "result": "SOURCE_FINDINGS_NOT_RUN",
+  "findings": [
+    {
+      "id": "QUOTA-CLOSED-STORE-IO-01",
+      "priority": "P1",
+      "title": "Retain failed SQLite closes through cleanup and native-lock release",
+      "status": "DERIVED_SOURCE_COUNTERPATH_NOT_RUN",
+      "locations": [
+        {
+          "source": {
+            "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-native-preparation-wip-stage04-v1/closed-store-io.mjs",
+            "sha256": "6ab37ba1019ceee496465991a6707804508e0ff6921a3c915d6f6f55b3607265",
+            "bytes": 7559
+          },
+          "line": 11,
+          "scope": "readOnly finally catches db.close error then loses the db object"
+        },
+        {
+          "source": {
+            "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-native-preparation-wip-stage04-v1/closed-store-io.mjs",
+            "sha256": "6ab37ba1019ceee496465991a6707804508e0ff6921a3c915d6f6f55b3607265",
+            "bytes": 7559
+          },
+          "line": 15,
+          "scope": "negative finally catches db.close error then loses the db object"
+        },
+        {
+          "source": {
+            "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-native-preparation-wip-stage04-v1/quota-harness.mjs",
+            "sha256": "ac14a1777d8f60b88821d072fb182e38c9d776d7106ac0d082c924ae38a1304c",
+            "bytes": 20984
+          },
+          "line": 23,
+          "scope": "io is block-local in try; no retained DB owner shared with finally"
+        },
+        {
+          "source": {
+            "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-native-preparation-wip-stage04-v1/quota-harness.mjs",
+            "sha256": "ac14a1777d8f60b88821d072fb182e38c9d776d7106ac0d082c924ae38a1304c",
+            "bytes": 20984
+          },
+          "line": 29,
+          "scope": "undrained excludes SQLite owners; lock can be unlinked after a close error"
+        }
+      ],
+      "counterpath": [
+        "A copied DB opens successfully in readOnly() or negative().",
+        "The explicitly handled db.close() failure is captured in closeError; diagnostic and AggregateError/throw preserve the error text, but the actual db handle has no retained registry or caller-accessible retry/drain interface.",
+        "quota-harness catch drains its known browser/HTTP/child/fixture/promise owners; IO is block-local and absent from cleanup.",
+        "If every other owner is drained, final undrained becomes false and the own native lock is released although the failed-close DB owner was not explicitly closed. This is a source-level failure branch, not an observed product/runtime failure."
+      ],
+      "impact": "A future admitted harness would break its all-owned-resources-closed/lock-retention contract on its existing close-error path. Current Stage04 entry/admit are hard-disabled, so no target/native effect occurred.",
+      "minimum_fix": "Retain each actual opened DatabaseSync handle until close succeeds; expose closeAll()/hasOpenOwners()/receipt(), hold io in outer harness scope, invoke closeAll in final cleanup for success/failure, include actual retained DB owners in undrained before unlinking lock. Preserve original/sidecar checks and aggregate query/mutation/close/integrity errors; record rollback failures separately rather than fabricating closure.",
+      "not_requested": "No changes to positive authority, SQL mutations, case/request counts, deadlines, source schemas or the open Q15 DDL/index/NOCASE native scope."
+    }
+  ],
+  "harness": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-native-preparation-wip-stage04-v1/closed-store-io.mjs",
+    "sha256": "6ab37ba1019ceee496465991a6707804508e0ff6921a3c915d6f6f55b3607265",
+    "bytes": 7559
+  },
+  "caller": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-native-preparation-wip-stage04-v1/quota-harness.mjs",
+    "sha256": "ac14a1777d8f60b88821d072fb182e38c9d776d7106ac0d082c924ae38a1304c",
+    "bytes": 20984
+  },
+  "admission": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-native-preparation-wip-stage04-v1/admission.mjs",
+    "sha256": "a6cbbb174f918828d2c1f09007d27cfde588439c98c5fd7cae94074515f7f97d",
+    "bytes": 1764
+  },
+  "capability_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/node-sqlite-owned-capability-independent-review-v1/receipt.json",
+    "sha256": "bcd0f85bb3b66b6bff343177b0f0654af4caa9b404fcce86dd1560cff92e4dae",
+    "bytes": 1393
+  },
+  "role_reviews": {
+    "reader": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-closed-store-io-independent-review-stage04-v1/reader-receipt.json",
+      "sha256": "424e40980383688cc31c71de319a57801828385984ba0c9818508bd83f752820",
+      "bytes": 5402
+    },
+    "mutator": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-closed-store-io-independent-review-stage04-v1/mutator-receipt.json",
+      "sha256": "bf6e011393bb4c4ade7e064d67a7a5cc55027388c1c3efd3c9b6463526133031",
+      "bytes": 5411
+    },
+    "adapter": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-closed-store-io-independent-review-stage04-v1/adapter-receipt.json",
+      "sha256": "90ae839affdd7cb94f70b6dddd690a620bd1b1a84a18554d600b0b44cff7e266",
+      "bytes": 5420
+    }
+  },
+  "audit": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-closed-store-io-independent-review-stage04-v1/AUDIT.json",
+    "sha256": "6af1699bbb5c975def3bdf5a7da3ae9b6a3c4e5c2bef5767cdc6c2d742115037",
+    "bytes": 7451
+  },
+  "report": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-closed-store-io-independent-review-stage04-v1/REPORT.md",
+    "sha256": "cff8aaea1c3d63136e088f6054be0de2bff0ae940d8b6fcf90d0980ee455c013",
+    "bytes": 1463
+  },
+  "qualification": "No mutable Stage04 source changed; no DB opened/imported/executed. Primitive capability NoF is separate and does not hide adapter close/lock finding. Canonical DDL/index/NOCASE native scope stays open."
+}

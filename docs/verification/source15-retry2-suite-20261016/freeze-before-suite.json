@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "kind": "actual_root_source15_retry2_approval_and_freeze",
+  "result": "PASS_ACTUAL_SOURCE15_RETRY2_FROZEN_FULL_SUITE_NOT_RUN",
+  "recorded_at": "2026-10-16T06:34:56.403Z",
+  "retry_generation": 2,
+  "source_commit": "0bb0724306561ca535fd0995e8d69d7d82dfd7b9",
+  "root_documentation_head_at_admission": "18420fadebd13d614fee5611ac916c70b609c9ab",
+  "source_inputs": 429,
+  "root_approval": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\results\\source15-retry2-root-approval-v1\\approval.json",
+    "sha256": "a046acc92605bc358e0bc9ead2dc960e81025c5e7695595bd30f79e73022a58e",
+    "bytes": 97126
+  },
+  "manifest": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\combined-source-v15-r2\\manifest.json",
+    "sha256": "435149da272de730c37c5ac51c415908b8487c556a17e26c7f06f165ed0cb9b1",
+    "bytes": 1229381
+  },
+  "preparation": {
+    "sha256": "b7a048293092ee30a1999b708d13bf2e1fcd26f2b7f2ba6faa78c072924638cb",
+    "bytes": 6616,
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v15-retry2-driver-preparation-v2/manifest.json"
+  },
+  "independent_review": {
+    "sha256": "4f35f55e0e5c67809d354bc4cb3811bb4f37ffd07812c0ceaa3e0c6979294727",
+    "bytes": 1980,
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v15-retry2-driver-independent-review-v2/receipt.json"
+  },
+  "binder_review": {
+    "sha256": "91c312fcc47d38d6849596a924d7605c910db82bbc69add4237b23537a831a59",
+    "bytes": 5976,
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/combined-v15-retry2-scalar-binder-independent-review-v2/receipt.json"
+  },
+  "private_publication": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/results/source15-retry2-product-publication-v1/private-publication.json",
+    "sha256": "046f51271df71d79e6a80b8144b9ab1bc8793d648f1597bce896a2d68e599231",
+    "bytes": 7211
+  },
+  "lineage": {
+    "parent_source_manifest_sha256": "62f100b6bbfa0d259fc618783637b0be0aba3a4a30bc0c80b7764a0130475076",
+    "parent_suite_proof_sha256": "1d1c8753d662f27ff0fd3653888c9757e90c20e4049fcdb294fb481d4043cce0",
+    "parent_build_proof_sha256": "9d5bb4ede703489263e76ec3e57a86f94717c7fe4f4310777a2c8c250a6d11c6",
+    "source_proposals": [
+      {
+        "role": "crawl_quotas",
+        "manifest": {
+          "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-proposal-v6/manifest.json",
+          "sha256": "42e31c435332a7475974cfaa75b7112ad9958a8d0fe8b26f4bcfb93cb6845870",
+          "bytes": 30739
+        },
+        "independent_review": {
+          "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-independent-review-v6/receipt.json",
+          "sha256": "aab7d3632eead74b235440469122606a3dec7f818f8af6134f0fc336b13498da",
+          "bytes": 1693
+        }
+      },
+      {
+        "role": "sdk29_retained_fixture_correction",
+        "manifest": {
+          "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-sdk29-fixture-correction-proposal-v1/manifest.json",
+          "sha256": "c0ce6a6b0ef06076b9013072e3683ff828546ea9884978d899acb96f0f9a7fdd",
+          "bytes": 3676
+        },
+        "independent_review": {
+          "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/source15-sdk29-fixture-correction-independent-review-v1/receipt.json",
+          "sha256": "e69db2e885b80897d9ab920c9f48ce5ede337f8d8a486988d537ac2df9dce438",
+          "bytes": 3249
+        }
+      }
+    ],
+    "root_approval_sha256": "a046acc92605bc358e0bc9ead2dc960e81025c5e7695595bd30f79e73022a58e",
+    "parent_inputs": 418,
+    "required_parent_names": 724,
+    "unchanged_parent_inputs": 393,
+    "changed_parent_inputs": 25,
+    "new_input_files": 11,
+    "delta_bindings": 36,
+    "new_named_windows_functions": [
+      "crawl_quotas_app::tests::malformed_quota_store_is_not_converted_or_replaced_by_readonly_service",
+      "crawl_quotas_app::tests::missing_quota_store_is_never_created_by_readonly_service",
+      "crawl_quotas_app::tests::quota_cli_accepts_only_explicit_store_and_has_no_mutating_or_fake_export_options",
+      "mcp::crawl_quotas::tests::quotas_mcp_actual_get_adapter_preserves_legacy_unknown_and_closes_server",
+      "mcp::crawl_quotas::tests::quotas_mcp_has_only_strict_readonly_summary_and_refuses_other_actions_before_io",
+      "server::crawl_quotas::tests::quotas_api_preserves_absence_and_rejects_invalid_or_unsupported_config",
+      "server::crawl_quotas::tests::quotas_api_resume_requires_full_core_authority_and_summary_has_no_actions",
+      "crawl_quotas::tests::quota_all_matching_rules_claim_together_and_later_overlap_cannot_spend_host_slot",
+      "crawl_quotas::tests::quota_cold_enabled_missing_ledger_is_not_silently_reinitialized",
+      "crawl_quotas::tests::quota_interrupted_nocase_membership_schema_refuses_recovery_and_reserve_without_spending",
+      "crawl_quotas::tests::quota_memberships_all_match_effective_full_url_and_separate_port_from_host_key",
+      "crawl_quotas::tests::quota_owned_future_drop_keeps_capacity_unknown_and_stale_generation_cannot_send",
+      "crawl_quotas::tests::quota_real_store_atomic_denial_does_not_spend_unrelated_dimensions_or_create_page",
+      "crawl_quotas::tests::quota_reservation_sql_failure_rolls_back_every_membership_and_prevents_start",
+      "crawl_quotas::tests::quota_sql_unsigned_counters_reject_negative_null_float_and_text_without_wrapping",
+      "crawl_quotas::tests::quota_types_reject_unknown_duplicate_bad_version_ranges_and_regex",
+      "crawler::crawl_quotas_tests::quotas_actual_cancel_drops_held_request_keeps_paid_memberships_and_cold_unknown_checkpoint",
+      "crawler::crawl_quotas_tests::quotas_actual_pause_drains_held_request_then_cold_resume_reuses_same_ledger",
+      "crawler::crawl_quotas_tests::quotas_actual_policy_alias_is_charged_without_overwriting_two_original_inputs",
+      "crawler::crawl_quotas_tests::quotas_cold_missing_exactly_once_index_refuses_without_repair_or_website_io",
+      "crawler::crawl_quotas_tests::quotas_cold_same_count_response_mutation_is_detected_by_full_ledger_binding",
+      "crawler::crawl_quotas_tests::quotas_real_all_dimension_denial_keeps_unrelated_positive_branches",
+      "crawler::crawl_quotas_tests::quotas_real_concurrent_starts_cannot_overspend_depth_capacity",
+      "crawler::crawl_quotas_tests::quotas_real_depth_limits_preserve_duplicate_links_and_resume_only_new_targets",
+      "crawler::crawl_quotas_tests::quotas_real_host_capacity_is_shared_across_explicit_seed_ports",
+      "crawler::crawl_quotas_tests::quotas_real_redirect_deferred_preserves_actual302_separately_and_never_fetches_target",
+      "crawler::crawl_quotas_tests::quotas_two_actual_frontier_redirects_share_target_membership_but_own_attempts",
+      "crawler::crawl_quotas_tests::quotas_unsupported_renderer_resource_and_memory_paths_refuse_without_website_requests",
+      "crawler::crawl_quotas_tests::quotas_zero_admission_precedes_robots_and_rate_and_cold_read_has_no_website_io"
+    ],
+    "actual_required_names": 753,
+    "actual_source_inputs": 429,
+    "minimum_expected_workspace_tests": 1535
+  },
+  "full_suite": null,
+  "optimized_build": null,
+  "native": null,
+  "installation": null,
+  "installed_source": 14
+}

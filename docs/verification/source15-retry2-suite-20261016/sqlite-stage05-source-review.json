@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "result": "NO_FINDINGS_BOUNDED_SOURCE_REVIEW",
+  "findings": [],
+  "proposal_manifest": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-native-preparation-wip-stage05-v2/WIP-INDEX.json",
+    "sha256": "37fce591c2d465660ae743fccaafd62f5282e241cb7f0d976de5a0cbb021fb14",
+    "bytes": 8019
+  },
+  "harness": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-native-preparation-wip-stage05-v2/closed-store-io.mjs",
+    "sha256": "a9d0f61bbce8892e0729f1062a01d4bd89718887c53035c8ae3d518f0e918bfa",
+    "bytes": 10754
+  },
+  "caller": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-native-preparation-wip-stage05-v2/quota-harness.mjs",
+    "sha256": "cb53444c2100e2ff1a27212faaac268e43f3c025377ae470bdd4f2feb163d04b",
+    "bytes": 22325
+  },
+  "admission": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-native-preparation-wip-stage05-v2/admission.mjs",
+    "sha256": "a6cbbb174f918828d2c1f09007d27cfde588439c98c5fd7cae94074515f7f97d",
+    "bytes": 1764
+  },
+  "predecessor_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-closed-store-io-independent-review-stage04-v1/receipt.json",
+    "sha256": "a5120977e5105c242f1dd7bc71fdd8658558489d7a7e5bd11fbec75f463d57bd",
+    "bytes": 6205
+  },
+  "primitive_capability_review": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/node-sqlite-owned-capability-independent-review-v1/receipt.json",
+    "sha256": "bcd0f85bb3b66b6bff343177b0f0654af4caa9b404fcce86dd1560cff92e4dae",
+    "bytes": 1393
+  },
+  "finding_closed": "QUOTA-CLOSED-STORE-IO-01",
+  "audit": {
+    "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-closed-store-io-independent-review-stage05-v2/AUDIT.json",
+    "sha256": "457882f9d167b393dafdc9d8755044256aab76b73b5afdb8178fe921259f6a25",
+    "bytes": 44026
+  },
+  "scope": "Source ownership correction on WIP reader / two negative-copy mutator / harness adapter; not native admission",
+  "reasoning": {
+    "finding_closed": "QUOTA-CLOSED-STORE-IO-01",
+    "actual_owner_registry": "Every successfully returned copied DatabaseSync object is retained in owners; only its own close() successful return removes it. Constructor failures do not fabricate a returned owner. Failed attempts survive in serializable history.",
+    "caller": "io now belongs to outer harness scope. Finally independently attempts before snapshot, retained-owner close drain, after snapshot and current-open-owner query, even if a previous snapshot fails.",
+    "failure_preservation": "Any failed close history, prior retained owner, drain/integrity/snapshot error makes result FAIL. A successful retry permits release only after all owner/resource predicates drain; it never restores PASS.",
+    "lock": "sqliteUndrained starts true when IO exists; a failed owner query leaves it true. Any retained DB owner joins existing undrained predicate before exact-own lock unlink.",
+    "retained_invariants": "Only copies are opened, primary App/CLI owners must already be closed, read-only/query_only remains, EXCL copies and primary main/-wal/-shm before/after checks remain; only approved header-SHA and terminal-status negative mutations remain.",
+    "rollback": "Negative-copy catch now retains a dedicated rollbackError; diagnostic serializes it separately, and AggregateError preserves primary, rollback, close and integrity causes in that order. The 19 SQL call literals and ownership registry region stay exact."
+  },
+  "qualification": "Bounded Stage04-to-Stage05-v2 ownership/rollback SOURCE correction only. No DB open, generated-source import/evaluation, target, browser, HTTP, native, lock, C/R/Original, compiler or Git operation. WIP remains hard-disabled and future authorities NULL. Source-declared failure paths are NOT runtime-injected tests; no product/native Q15 acceptance. Canonical DDL/index/collation and sibling DNS remain NOT_PROVEN. Unchanged copy/SQL behavior is retained historical scope, not a claim of generic filesystem or database failure semantics. Stage05-v1 received no independent NoF.",
+  "kind": "crawl_quotas_closed_store_io_independent_source_review",
+  "role_reviews": {
+    "reader": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-closed-store-io-independent-review-stage05-v2/reader-receipt.json",
+      "sha256": "49541298f788c2933b943ef163b54213d248db650fb4bf5f0f1c74935f6759b1",
+      "bytes": 4245
+    },
+    "mutator": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-closed-store-io-independent-review-stage05-v2/mutator-receipt.json",
+      "sha256": "4a1cd4b3622d5ecc816620042fceee1d757d1e1f3fb186baaa3bc33d83ccdcd4",
+      "bytes": 4247
+    },
+    "adapter": {
+      "path": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/crawl-quotas-closed-store-io-independent-review-stage05-v2/adapter-receipt.json",
+      "sha256": "0726e21967562c80000a8067f714da2c30f535a4c11187de8c9156eb6614fe50",
+      "bytes": 4247
+    }
+  }
+}
