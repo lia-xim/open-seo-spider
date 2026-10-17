@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#ffffff">
   <title>Open SEO Spider · Lokaler SEO-Crawler</title>
   <link rel="stylesheet" href="/styles.css">
   <script src="/list-import.js" defer></script>
@@ -14,17 +15,21 @@
   <a class="skip-link" href="#main">Zum Inhalt</a>
   <header class="topbar">
     <a class="brand" href="/" aria-label="Open SEO Spider Startseite">
-      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 5 7 11v10l9 6 9-6V11Z"/><path d="m7 11 9 5 9-5M16 16v11"/><circle cx="16" cy="5" r="2.5"/><circle cx="7" cy="11" r="2.5"/><circle cx="25" cy="11" r="2.5"/><circle cx="16" cy="27" r="2.5"/></svg>
-      <span>Open SEO Spider<small>YOUR WEB, UNDERSTOOD.</small></span>
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 5 7 11v10l9 6 9-6V11Z"/><path d="m7 11 9 5 9-5M16 16v11"/></svg>
+      <span>Open SEO Spider</span>
     </a>
-    <div class="topbar-right"><a class="text-button" href="/directory-tree">Verzeichnisstruktur</a><a class="text-button" href="/migration">Migration</a><a class="text-button" href="/serp">SERP-<wbr>Editor</a><span id="connection-state" class="connection"><i></i>Verbinde lokal …</span><span class="version">RUST · LOCAL</span><button id="settings-open" class="icon-button" aria-label="Crawl-Einstellungen öffnen" title="Einstellungen">⚙</button></div>
+    <span class="topbar-divider" aria-hidden="true"></span>
+    <div class="saved-comparison-history"><div class="history-control"><label for="crawl-history" class="sr-only">Gespeicherte Crawls</label><select id="crawl-history"><option value="">Neuer Crawl</option></select></div><button id="saved-comparison-open" type="button" class="button ghost small" aria-haspopup="dialog">Vergleichen</button></div>
+    <div class="topbar-right"><details class="menu tools-menu"><summary class="button ghost small">Werkzeuge</summary><div class="menu-panel" role="list">
+        <a role="listitem" href="/directory-tree">Verzeichnisstruktur</a><a role="listitem" href="/migration">Migration</a><a role="listitem" href="/serp">SERP-Editor</a>
+        <hr><a role="listitem" href="/saved-segments">Segmente</a><a role="listitem" href="/saved-ngrams">N-Gramme</a><a role="listitem" href="/spelling">Rechtschreibung</a>
+        <hr><a role="listitem" href="/api-enrichment">API-Anreicherung</a><a role="listitem" href="/resource-broken-sources">Ressourcenfehler</a><a role="listitem" href="/broken-sources">Linkfehler</a></div></details><span id="connection-state" class="connection"><i></i>Verbinde lokal …</span><button id="settings-open" class="icon-button" aria-label="Crawl-Einstellungen öffnen" title="Einstellungen"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 12.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2Z"/><path d="M16.2 12.4a1.3 1.3 0 0 0 .3 1.4l.1.1a1.6 1.6 0 1 1-2.2 2.2l-.1-.1a1.3 1.3 0 0 0-1.4-.3 1.3 1.3 0 0 0-.8 1.2v.2a1.6 1.6 0 1 1-3.2 0V17a1.3 1.3 0 0 0-.9-1.2 1.3 1.3 0 0 0-1.4.3l-.1.1a1.6 1.6 0 1 1-2.2-2.2l.1-.1a1.3 1.3 0 0 0 .3-1.4 1.3 1.3 0 0 0-1.2-.8H3a1.6 1.6 0 1 1 0-3.2h.1a1.3 1.3 0 0 0 1.2-.9 1.3 1.3 0 0 0-.3-1.4l-.1-.1a1.6 1.6 0 1 1 2.2-2.2l.1.1a1.3 1.3 0 0 0 1.4.3h.1a1.3 1.3 0 0 0 .8-1.2V3a1.6 1.6 0 1 1 3.2 0v.1a1.3 1.3 0 0 0 .8 1.2 1.3 1.3 0 0 0 1.4-.3l.1-.1a1.6 1.6 0 1 1 2.2 2.2l-.1.1a1.3 1.3 0 0 0-.3 1.4v.1a1.3 1.3 0 0 0 1.2.8h.2a1.6 1.6 0 1 1 0 3.2H17a1.3 1.3 0 0 0-1.2.8Z"/></svg></button></div>
   </header>
   <div class="app-layout">
     <aside class="sidebar" aria-label="Analysen">
-      <div class="workspace-label">CRAWL WORKSPACE</div>
       <nav id="section-nav">
         <button data-section="overview" class="nav-item active" aria-current="page"><span class="nav-symbol">◫</span>Übersicht<span class="nav-count" data-count="overview">—</span></button>
-        <div class="nav-group-label">URL INVENTAR</div>
+        <div class="nav-group-label">Inventar</div>
         <button data-section="sitemap-findings" class="nav-item"><span class="nav-symbol" aria-hidden="true">✓</span>Sitemap-Befunde</button>
         <button data-section="sitemap-membership" class="nav-item"><span class="nav-symbol">⌘</span>Sitemaps &amp; Mitgliedschaft</button>
         <button data-section="inputs" class="nav-item"><span class="nav-symbol">↳</span>Eingabezeilen</button>
@@ -36,7 +41,7 @@
         <button data-section="policyaliases" class="nav-item"><span class="nav-symbol">⇢</span>URL-Transformationen</button>
         <button data-section="content" class="nav-item"><span class="nav-symbol">¶</span>Inhaltstexte &amp; Analyse</button>
         <button data-section="resource-discovery" class="nav-item"><span class="nav-symbol">⌁</span>Ressourcenermittlung</button>
-        <div class="nav-group-label">ONPAGE ANALYSE</div>
+        <div class="nav-group-label">Onpage</div>
         <button data-section="titles" class="nav-item"><span class="nav-symbol">T</span>Seitentitel</button>
         <button data-section="meta" class="nav-item"><span class="nav-symbol">¶</span>Meta Descriptions</button>
         <button data-section="headings" class="nav-item"><span class="nav-symbol">H</span>Überschriften</button>
@@ -57,42 +62,41 @@
         <button data-section="javascript" class="nav-item"><span class="nav-symbol">ƒ</span>JavaScript-Auswertungen</button>
         <button data-section="cookies" class="nav-item"><span class="nav-symbol">◌</span>Cookies</button>
         <button data-section="pagination" class="nav-item"><span class="nav-symbol">↔</span>Pagination &amp; AMP</button>
-        <div class="nav-group-label">PRIORISIERUNG</div>
+        <div class="nav-group-label">Priorisierung</div>
         <button data-section="issues" class="nav-item"><span class="nav-symbol">!</span>Probleme<span class="nav-count" data-count="issues">0</span></button>
         <button data-section="graph" class="nav-item"><span class="nav-symbol">⌘</span>Linkgraph</button>
         <button data-section="linkmetrics" class="nav-item"><span class="nav-symbol">≡</span>Linkmetriken</button>
       </nav>
-      <div class="sidebar-footer"><span class="local-dot"></span><div>Deine Daten bleiben lokal<small>Unabhängige Implementierung</small></div></div>
     </aside>
     <main id="main" tabindex="-1">
       <section class="crawl-panel" aria-labelledby="crawl-heading">
-        <div class="page-heading"><div><p class="eyebrow">LOKALER TECHNISCHER SEO-AUDIT</p><h1 id="crawl-heading">Seiten entdecken. Probleme verstehen.</h1></div><div class="saved-comparison-history"><div class="history-control"><label for="crawl-history">Gespeicherte Crawls</label><select id="crawl-history"><option value="">Neuer Crawl</option></select></div><button id="saved-comparison-open" type="button" class="button small" aria-haspopup="dialog">Crawls vergleichen</button></div></div>
+        <h1 id="crawl-heading" class="sr-only">Crawl</h1>
         <form id="crawl-form" class="crawl-form">
-          <div class="mode-control"><label for="crawl-mode">Modus</label><select id="crawl-mode"><option value="spider">Website crawlen</option><option value="list">URL-Liste</option><option value="sitemap">Sitemap crawlen</option></select></div>
-          <div class="seed-control"><label for="seed-url">Start-URL</label><div class="url-input"><span aria-hidden="true">↗</span><input id="seed-url" name="seed_url" type="url" placeholder="https://example.com" autocomplete="url" spellcheck="false" required></div></div>
-          <button id="start-button" class="button primary" type="submit"><span aria-hidden="true">▶</span>Crawl starten</button>
-          <button id="pause-button" class="button" type="button" hidden title="Neue Anfragen anhalten; laufende Anfragen abschließen und danach den Stand speichern">Ⅱ Pausieren</button>
-          <button id="cancel-button" class="button" type="button" hidden>■ Stoppen</button>
-          <button id="resume-button" class="button" type="button" hidden>↻ Fortsetzen</button>
+          <div class="mode-control"><label for="crawl-mode" class="sr-only">Modus</label><select id="crawl-mode"><option value="spider">Website crawlen</option><option value="list">URL-Liste</option><option value="sitemap">Sitemap crawlen</option></select></div>
+          <div class="seed-control"><label for="seed-url" class="sr-only">Start-URL</label><div class="url-input"><input id="seed-url" name="seed_url" type="url" placeholder="https://example.com" autocomplete="url" spellcheck="false" required></div></div>
+          <button id="start-button" class="button primary" type="submit">Crawl starten</button>
+          <button id="pause-button" class="button" type="button" hidden title="Neue Anfragen anhalten; laufende Anfragen abschließen und danach den Stand speichern">Pausieren</button>
+          <button id="cancel-button" class="button" type="button" hidden>Stoppen</button>
+          <button id="resume-button" class="button" type="button" hidden>Fortsetzen</button>
         </form>
-        <div id="list-control" class="list-control" hidden><label for="url-list">Eine vollständige HTTP(S)-URL pro Zeile</label><textarea id="url-list" rows="4" placeholder="https://example.com/&#10;https://example.com/about" spellcheck="false"></textarea><div class="list-import-actions"><button id="list-import-open" type="button" class="button">↑ Datei importieren</button><span id="list-origin-state">Manueller Text · wird vor dem Crawl lokal geprüft</span></div><p>Import und Vorschau starten keine Website-Requests. Der Crawl beginnt erst mit „Crawl starten“.</p></div>
-        <div class="crawl-bottom"><div id="crawl-state" class="crawl-state"><span class="status-dot idle"></span>Bereit für deinen ersten Crawl</div><div class="crawl-options"><span id="settings-summary">8 parallele Requests · Robots.txt beachten</span><button id="settings-inline" type="button" class="text-button">Anpassen ↗</button></div></div>
+        <div id="list-control" class="list-control" hidden><label for="url-list">Eine vollständige HTTP(S)-URL pro Zeile</label><textarea id="url-list" rows="4" placeholder="https://example.com/&#10;https://example.com/about" spellcheck="false"></textarea><div class="list-import-actions"><button id="list-import-open" type="button" class="button small">Datei importieren</button><span id="list-origin-state">Manueller Text · wird vor dem Crawl lokal geprüft</span></div></div>
+        <div class="crawl-bottom"><div id="crawl-state" class="crawl-state"><span class="status-dot idle"></span>Bereit für deinen ersten Crawl</div><div class="crawl-options"><span id="settings-summary">8 parallele Requests · Robots.txt beachten</span><button id="settings-inline" type="button" class="text-button">Anpassen</button></div></div>
+        <div class="crawl-extras"><div id="crawl-checkpoint" class="crawl-checkpoint" hidden aria-label="Gespeicherter Crawlstand"></div>
         <details id="crawl-quota-summary-panel" class="advanced-config" hidden><summary>Gespeicherte Crawl-Quoten</summary><p id="crawl-quota-state" role="status"></p><p id="crawl-quota-error" class="message error" role="alert" hidden></p><p id="crawl-quota-counts"></p><p id="crawl-quota-causes"></p><div class="table-scroll" tabindex="0" aria-label="Gespeicherte Quoten, horizontal scrollbar"><table><thead><tr><th>Dimension</th><th>Gruppe</th><th>Reserviert</th><th>Grenze</th></tr></thead><tbody id="crawl-quota-buckets"></tbody></table></div><p id="crawl-quota-omitted" class="detail-empty"></p><button id="crawl-quota-refresh" class="button small" type="button">Gespeicherten Stand laden</button> <button id="crawl-quota-increase" class="button small" type="button" disabled>Quoten erhöhen &amp; fortsetzen</button><p class="detail-empty">Reservierte eindeutige Abrufziele sind keine erfolgreichen Seiten. Versuche und offene beziehungsweise unbekannte Versuche bleiben getrennt. Fehlende historische Messwerte bleiben unbekannt.</p></details>
-        <div id="crawl-checkpoint" class="crawl-checkpoint" hidden aria-label="Gespeicherter Crawlstand"></div>
-        <div class="progress-track" aria-hidden="true"><div id="progress-bar"></div></div>
+        <details id="crawl-notices" class="crawl-notices" hidden><summary>Hinweise zu diesem Crawl</summary><ul></ul></details></div>
         <p id="message" class="message" role="status" hidden></p>
-        <details id="crawl-notices" class="crawl-notices" hidden><summary>Hinweise zu diesem Crawl</summary><ul></ul></details>
+        <div class="progress-track" aria-hidden="true"><div id="progress-bar"></div></div>
       </section>
       <section class="metrics" aria-label="Crawl-Kennzahlen">
-        <div class="metric"><div><span>GESPEICHERTE ERGEBNISZEILEN</span><span class="metric-icon">↗</span></div><strong id="metric-fetched">0</strong><small id="metric-progress">Noch keine URLs</small></div>
-        <div class="metric"><div><span>URL-WARTESCHLANGE</span><span class="metric-icon">≋</span></div><strong id="metric-queued">0</strong><small id="metric-discovered">0 URLs entdeckt</small><small id="metric-inflight">Laufende Anfragen: nicht erfasst</small><small id="metric-discovery">Sitemap-Discovery: nicht erfasst</small></div>
-        <div class="metric"><div><span>HTML-SEITEN</span><span class="metric-icon">⌘</span></div><strong id="metric-html">0</strong><small id="metric-indexable">0 indexierbar</small></div>
-        <div class="metric"><div><span>PROBLEME</span><span class="metric-icon warn">!</span></div><strong id="metric-issues">0</strong><small id="metric-failed">0 fehlgeschlagene Abrufe</small></div>
+        <div class="metric"><div><span>URLs</span></div><strong id="metric-fetched">0</strong><small id="metric-progress">Noch keine URLs</small></div>
+        <div class="metric"><div><span>Warteschlange</span></div><strong id="metric-queued">0</strong><small id="metric-discovered">0 URLs entdeckt</small><small id="metric-inflight">Laufende Anfragen: nicht erfasst</small><small id="metric-discovery">Sitemap-Discovery: nicht erfasst</small></div>
+        <div class="metric"><div><span>HTML-Seiten</span></div><strong id="metric-html">0</strong><small id="metric-indexable">0 indexierbar</small></div>
+        <div class="metric"><div><span>Probleme</span></div><strong id="metric-issues">0</strong><small id="metric-failed">0 fehlgeschlagene Abrufe</small></div>
       </section>
       <section class="results-panel" aria-labelledby="section-heading">
         <section id="recrawl-operation" class="recrawl-operation" aria-labelledby="recrawl-operation-heading" hidden><h2 id="recrawl-operation-heading">Gezielte Wiederprüfung · Befunde unterschiedlichen Alters</h2><p id="recrawl-operation-summary"></p><p>Nur „Neu geprüft“ gehört zur Wiederprüfung dieses Laufs. Beibehaltene Befunde stammen aus dem vorherigen Bericht. Für ausstehende ausgewählte URLs wird kein früherer Befund als aktuelles Ergebnis gezeigt.</p><p id="recrawl-operation-budget"></p><p id="recrawl-parent-evidence"></p><button id="recrawl-parent-snapshot" class="button small" type="button" hidden>Originalbericht herunterladen</button> <button id="recrawl-parent" class="button small" type="button">Elternlauf in Historie öffnen</button><details><summary>Ausgewählte Anfrage-URLs und Prüfstand</summary><ul id="recrawl-operation-targets" class="recrawl-target-list"></ul></details></section>
-        <div class="results-heading"><div><p id="section-eyebrow" class="eyebrow">CRAWL INTELLIGENCE</p><h2 id="section-heading">Übersicht</h2><p id="section-description" class="section-description">Ein Blick auf den technischen Zustand deiner Website.</p></div><div class="export-controls"><a class="button small" href="/saved-segments">Gespeicherte Segmente</a><a class="button small" href="/saved-ngrams">Gespeicherte N-Gramme</a><a class="button small" href="/spelling">Texte prüfen</a><a class="button small" href="/api-enrichment">URLs per API anreichern</a><a class="button small" href="/resource-broken-sources">Ressourcen: Fehler und Quellen</a><a class="button small" href="/broken-sources" title="Quellen aus gespeicherten Seitenlinks; CSS- und Resource-Ledger-Vollabdeckung separat">Linkfehler · Quellen</a><button id="import-project" class="button small" type="button" title="Einen exportierten Open SEO Spider-Bericht laden">↑ JSON laden</button><input id="import-file" type="file" accept=".json,application/json" hidden><button id="export-csv" class="button small" type="button" disabled title="Alle aktuell gefilterten Ergebnisse dieses Bereichs exportieren">↓ CSV</button><button id="export-resources" class="button small" type="button" disabled hidden title="Alle gespeicherten Ressourcenbefunde dieses Bereichs exportieren">↓ Ressourcen CSV</button><button id="export-sitemap" class="button small" type="button" disabled>↓ Sitemap</button><button id="export-project" class="button small" type="button" disabled title="Vollständiger Roh-Snapshot mit allen gespeicherten Beobachtungen">↓ Roh-JSON</button><button id="export-visible-report" class="button small" type="button" disabled title="Sichtbare Seiten und Probleme mit getrennten Erfassungszahlen exportieren">↓ Sichtbares JSON</button></div></div>
-        <div class="recrawl-selection-bar"><span id="recrawl-selected-count" aria-live="polite">0 URLs ausgewählt</span><button id="recrawl-clear" class="button small" type="button" disabled>Auswahl aufheben</button><button id="recrawl-selected" class="button small" type="button" disabled>Ausgewählte URLs erneut prüfen</button><p id="recrawl-selection-hint"></p></div>
+        <div class="results-heading"><div><p id="section-eyebrow" class="eyebrow">CRAWL INTELLIGENCE</p><h2 id="section-heading">Übersicht</h2><p id="section-description" class="section-description">Ein Blick auf den technischen Zustand deiner Website.</p></div><div class="export-controls"><button id="import-project" class="button small" type="button" title="Einen exportierten Open SEO Spider-Bericht laden">Importieren</button><input id="import-file" type="file" accept=".json,application/json" hidden><button id="export-csv" class="button small" type="button" disabled title="Alle aktuell gefilterten Ergebnisse dieses Bereichs exportieren">CSV</button><button id="export-resources" class="button small" type="button" disabled hidden title="Alle gespeicherten Ressourcenbefunde dieses Bereichs exportieren">Ressourcen-CSV</button><button id="export-sitemap" class="button small" type="button" disabled>Sitemap</button><button id="export-project" class="button small" type="button" disabled title="Vollständiger Roh-Snapshot mit allen gespeicherten Beobachtungen">Roh-JSON</button><button id="export-visible-report" class="button small" type="button" disabled title="Sichtbare Seiten und Probleme mit getrennten Erfassungszahlen exportieren">JSON</button></div></div>
+        <div class="recrawl-selection-bar"><span id="recrawl-selected-count" aria-live="polite">0 URLs ausgewählt</span><button id="recrawl-clear" class="button small" type="button" disabled>Auswahl aufheben</button><button id="recrawl-selected" class="button small" type="button" disabled title="Gilt nur für vorhandene Anfrage-URLs in diesem Bericht. Filter und Pagination ändern die Auswahl nicht.">Ausgewählte URLs erneut prüfen</button><p id="recrawl-selection-hint"></p></div>
         <div id="overview-view"></div>
         <div id="table-view" hidden>
           <div class="table-tools"><div class="search-field"><span aria-hidden="true">⌕</span><input id="table-search" type="search" aria-label="Ergebnisse durchsuchen" placeholder="URL oder Inhalt durchsuchen …"></div><select id="table-filter" aria-label="Ergebnisse filtern"><option value="all">Alle Ergebnisse</option></select><div id="result-count" class="result-count">0 Ergebnisse</div></div>
@@ -225,7 +229,7 @@
         <div id="graph-view" hidden></div>
       </section>
       <section id="inspector" class="inspector" aria-label="Details der ausgewählten URL" hidden><div class="inspector-header"><div><p class="eyebrow">URL INSPECTOR</p><h2 id="inspector-url"></h2><label id="inspector-recrawl-selection" class="inspector-recrawl-selection" hidden><input id="inspector-recrawl-checkbox" type="checkbox">Anfrage-URL für Wiederprüfung auswählen</label></div><button id="inspector-close" class="icon-button" aria-label="URL-Details schließen">×</button></div><div id="inspector-tabs" class="inspector-tabs" role="tablist" aria-label="URL-Details"><button role="tab" data-tab="details" aria-selected="true">Seitendetails</button><button role="tab" data-tab="inlinks" aria-selected="false">Eingehende Links</button><button role="tab" data-tab="outlinks" aria-selected="false">Ausgehende Links</button><button role="tab" data-tab="dom" aria-selected="false">DOM-Beobachtungen</button><button role="tab" data-tab="issues" aria-selected="false">Probleme</button></div><div id="inspector-content" role="tabpanel"></div></section>
-      <footer class="main-footer"><span>Open SEO Spider · lokal, transparent, unabhängig</span><span>HTTP-Crawling &amp; HTML-Analyse · keine künstliche URL-Lizenzgrenze</span></footer>
+      <footer class="main-footer"><span>Open SEO Spider · Daten bleiben lokal</span></footer>
     </main>
   </div>
   <dialog id="quota-increase-dialog" aria-labelledby="quota-increase-heading"><form id="quota-increase-form"><div class="dialog-heading"><h2 id="quota-increase-heading">Bestehende Quoten erhöhen</h2><button id="quota-increase-close" type="button" class="icon-button" aria-label="Abbrechen">×</button></div><p>Die bestehenden Gruppen und Regeln bleiben erhalten. Nur höhere Grenzen sind zulässig; 0 hebt eine Grenze nicht auf. Beim Fortsetzen wird geprüft, dass dieser gespeicherte Quotenstand noch aktuell ist.</p><div id="quota-increase-fields" class="settings-grid"></div><p id="quota-increase-error" class="message error" role="alert" hidden></p><div class="dialog-footer"><button type="submit" class="button primary">Erhöhungen bestätigen &amp; fortsetzen</button></div></form></dialog>
