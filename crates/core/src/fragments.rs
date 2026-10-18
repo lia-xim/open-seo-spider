@@ -47,8 +47,34 @@ impl<'a> FragmentTargetIndex<'a> {
 /// Returns no rows while config.validate_fragments is disabled. Every captured
 /// anchor occurrence with a fragment otherwise receives a deterministic result.
 pub fn validate_fragments(report: &CrawlReport) -> Vec<FragmentObservation> {
+    let mut rows = Vec::new();
+    visit_fragment_observations(report, None, |row| {
+        rows.push(row);
+        Ok(())
+    })
+    .expect("infallible fragment collector");
+    rows
+}
+fn resolved_bytes(link: &crate::LinkRecord) -> impl Iterator<Item = u8> + '_ {
+    let (prefix, fragment) = match link.resolved_href.as_deref() {
+        Some(value) => (value, None),
+        None => (link.url.as_str(), link.fragment.as_deref()),
+    };
+    prefix.bytes().chain(
+        fragment
+            .into_iter()
+            .flat_map(|value| std::iter::once(b'#').chain(value.bytes())),
+    )
+}
+/// Visits sorted captured occurrences one at a time; targets always use the complete original report.
+/// Optional raw source ordinals are applied before any occurrence payload is cloned.
+pub fn visit_fragment_observations(
+    report: &CrawlReport,
+    selected_ordinals: Option<&std::collections::BTreeSet<usize>>,
+    mut visit: impl FnMut(FragmentObservation) -> anyhow::Result<()>,
+) -> anyhow::Result<()> {
     if !report.config.validate_fragments {
-        return Vec::new();
+        return Ok(());
     }
     let mut requested: BTreeMap<String, Vec<usize>> = BTreeMap::new();
     let mut documents: BTreeMap<String, Vec<usize>> = BTreeMap::new();
@@ -65,62 +91,66 @@ pub fn validate_fragments(report: &CrawlReport) -> Vec<FragmentObservation> {
     let mut target_indexes: Vec<Option<FragmentTargetIndex<'_>>> = std::iter::repeat_with(|| None)
         .take(report.pages.len())
         .collect();
-    let mut observations = Vec::new();
-    for source in &report.pages {
-        for link in source.links.iter().filter(|link| link.kind == "anchor") {
-            let Some(fragment) = &link.fragment else {
-                continue;
-            };
-            let mut observation = FragmentObservation {
-                source_url: source.url.clone(),
-                source_document_url: source.document_url().into(),
-                target_url: link.url.clone(),
-                resolved_href: link
-                    .resolved_href
-                    .clone()
-                    .unwrap_or_else(|| format!("{}#{fragment}", link.url)),
-                fragment: fragment.clone(),
-                decoded_fragment: Some(decode_fragment(fragment)),
-                source_dom_location: link.dom_location.clone(),
-                ..Default::default()
-            };
-            let target_key = normalize_url(&link.url, None).map(|url| url.to_string());
-            let candidates = target_key
-                .as_ref()
-                .and_then(|url| requested.get(url).or_else(|| documents.get(url)));
-            match candidates {
-                None => observation.reason = "target_not_observed".into(),
-                Some(targets) if targets.len() != 1 => {
-                    observation.reason = "target_capture_ambiguous".into()
-                }
-                Some(targets) => evaluate(
-                    &mut observation,
-                    &report.pages[targets[0]],
-                    &mut target_indexes[targets[0]],
-                ),
-            }
-            observations.push(observation);
+    let mut sources = Vec::new();
+    for (ordinal, source) in report.pages.iter().enumerate() {
+        if selected_ordinals.is_some_and(|selected| !selected.contains(&ordinal)) {
+            continue;
+        }
+        for link in source
+            .links
+            .iter()
+            .filter(|link| link.kind == "anchor" && link.fragment.is_some())
+        {
+            sources.push((source, link));
         }
     }
-    observations.sort_by(|a, b| {
-        (
-            &a.source_url,
-            a.source_dom_location
-                .as_ref()
-                .map(|location| location.index),
-            &a.resolved_href,
-            &a.target_url,
-        )
-            .cmp(&(
-                &b.source_url,
-                b.source_dom_location
+    sources.sort_by(|(a, al), (b, bl)| {
+        a.url
+            .cmp(&b.url)
+            .then_with(|| {
+                al.dom_location
                     .as_ref()
-                    .map(|location| location.index),
-                &b.resolved_href,
-                &b.target_url,
-            ))
+                    .map(|v| v.index)
+                    .cmp(&bl.dom_location.as_ref().map(|v| v.index))
+            })
+            .then_with(|| resolved_bytes(al).cmp(resolved_bytes(bl)))
+            .then_with(|| al.url.cmp(&bl.url))
     });
-    observations
+    for (source, link) in sources {
+        let Some(fragment) = &link.fragment else {
+            continue;
+        };
+        let mut observation = FragmentObservation {
+            source_url: source.url.clone(),
+            source_document_url: source.document_url().into(),
+            target_url: link.url.clone(),
+            resolved_href: link
+                .resolved_href
+                .clone()
+                .unwrap_or_else(|| format!("{}#{fragment}", link.url)),
+            fragment: fragment.clone(),
+            decoded_fragment: Some(decode_fragment(fragment)),
+            source_dom_location: link.dom_location.clone(),
+            ..Default::default()
+        };
+        let target_key = normalize_url(&link.url, None).map(|url| url.to_string());
+        let candidates = target_key
+            .as_ref()
+            .and_then(|url| requested.get(url).or_else(|| documents.get(url)));
+        match candidates {
+            None => observation.reason = "target_not_observed".into(),
+            Some(targets) if targets.len() != 1 => {
+                observation.reason = "target_capture_ambiguous".into()
+            }
+            Some(targets) => evaluate(
+                &mut observation,
+                &report.pages[targets[0]],
+                &mut target_indexes[targets[0]],
+            ),
+        }
+        visit(observation)?;
+    }
+    Ok(())
 }
 
 fn evaluate<'a>(
@@ -285,6 +315,46 @@ mod tests {
             summary: CrawlSummary::default(),
             warnings: vec![],
         }
+    }
+    #[test]
+    fn selected_source_ordinals_keep_duplicate_url_owners_and_full_original_targets() {
+        let first = page("duplicate", "<a href='/outside#first'>first owner</a>");
+        let selected = page(
+            "duplicate",
+            "<a href='/outside#second'>second owner</a><a href='/outside#first'>second occurrence</a>",
+        );
+        let outside = page("outside", "<div id='first'></div><div id='second'></div>");
+        let report = report(vec![first, selected, outside]);
+        let before = serde_json::to_vec(&report).unwrap();
+        let mut rows = Vec::new();
+        visit_fragment_observations(&report, Some(&[1].into()), |row| {
+            rows.push(row);
+            Ok(())
+        })
+        .unwrap();
+        assert_eq!(rows.len(), 2);
+        assert_eq!(rows[0].fragment, "second");
+        assert_eq!(rows[1].fragment, "first");
+        assert!(
+            rows.iter()
+                .all(|row| row.status == FragmentStatus::MatchedId)
+        );
+        assert!(rows.iter().all(|row| {
+            row.target_document_url.as_deref() == Some("https://example.org/outside")
+                && row.matched_target.is_some()
+        }));
+        let mut all = Vec::new();
+        visit_fragment_observations(&report, None, |row| {
+            all.push(row);
+            Ok(())
+        })
+        .unwrap();
+        assert_eq!(
+            serde_json::to_vec(&all).unwrap(),
+            serde_json::to_vec(&validate_fragments(&report)).unwrap()
+        );
+        assert_eq!(all.len(), 3);
+        assert_eq!(serde_json::to_vec(&report).unwrap(), before);
     }
     #[test]
     fn exact_then_decoded_ids_names_top_case_and_invalid_utf8() {

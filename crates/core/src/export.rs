@@ -1,9 +1,25 @@
 use crate::{CrawlReport, PageChange};
+mod csv_writer;
+pub(crate) use csv_writer::CsvRows;
+#[cfg(test)]
+#[path = "export/stream_tests.rs"]
+mod stream_tests;
 use std::collections::{BTreeMap, BTreeSet};
 
 /// Original list occurrences joined to captured request identities, without fetching.
 pub fn export_input_occurrences_csv(report: &CrawlReport) -> anyhow::Result<String> {
-    let mut writer = csv::Writer::from_writer(Vec::new());
+    let mut bytes = Vec::new();
+    write_input_occurrences_csv(report, &mut bytes, &[])?;
+    Ok(String::from_utf8(bytes)?)
+}
+
+/// Encode original CSV rows directly into a caller-owned (optionally bounded) sink.
+pub fn write_input_occurrences_csv<W: std::io::Write>(
+    report: &CrawlReport,
+    sink: W,
+    extra: &[(String, String)],
+) -> anyhow::Result<W> {
+    let mut writer = crate::export::CsvRows::new(sink, None, extra)?;
     writer.write_record([
         "Source List",
         "Input SHA256",
@@ -93,14 +109,25 @@ pub fn export_input_occurrences_csv(report: &CrawlReport) -> anyhow::Result<Stri
             ])?;
         }
     }
-    Ok(String::from_utf8(writer.into_inner()?)?)
+    writer.finish()
 }
 
 pub fn export_pages_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let mut bytes = Vec::new();
+    write_pages_csv(report, &mut bytes, &[])?;
+    Ok(String::from_utf8(bytes)?)
+}
+
+/// Encode original CSV rows directly into a caller-owned (optionally bounded) sink.
+pub fn write_pages_csv<W: std::io::Write>(
+    report: &CrawlReport,
+    sink: W,
+    extra: &[(String, String)],
+) -> anyhow::Result<W> {
     let raw_report = report;
     let visible_report = crate::reported_report(report);
     let report = visible_report.as_ref();
-    let mut writer = csv::Writer::from_writer(Vec::new());
+    let mut writer = crate::export::CsvRows::new(sink, Some(raw_report), extra)?;
     let tls_columns = raw_report
         .config
         .tls
@@ -289,14 +316,25 @@ pub fn export_pages_csv(report: &CrawlReport) -> anyhow::Result<String> {
         }
         writer.write_record(row)?;
     }
-    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
+    writer.finish()
 }
 
 pub fn export_issues_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let mut bytes = Vec::new();
+    write_issues_csv(report, &mut bytes, &[])?;
+    Ok(String::from_utf8(bytes)?)
+}
+
+/// Encode original CSV rows directly into a caller-owned (optionally bounded) sink.
+pub fn write_issues_csv<W: std::io::Write>(
+    report: &CrawlReport,
+    sink: W,
+    extra: &[(String, String)],
+) -> anyhow::Result<W> {
     let raw_report = report;
     let visible_report = crate::reported_report(report);
     let report = visible_report.as_ref();
-    let mut writer = csv::Writer::from_writer(Vec::new());
+    let mut writer = crate::export::CsvRows::new(sink, Some(raw_report), extra)?;
     writer.write_record(["Severity", "Code", "URL", "Message", "Related URLs"])?;
     for issue in &report.issues {
         writer.write_record([
@@ -307,14 +345,25 @@ pub fn export_issues_csv(report: &CrawlReport) -> anyhow::Result<String> {
             csv_text(&issue.related_urls.join(" | ")),
         ])?;
     }
-    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
+    writer.finish()
 }
 
 pub fn export_links_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let mut bytes = Vec::new();
+    write_links_csv(report, &mut bytes, &[])?;
+    Ok(String::from_utf8(bytes)?)
+}
+
+/// Encode original CSV rows directly into a caller-owned (optionally bounded) sink.
+pub fn write_links_csv<W: std::io::Write>(
+    report: &CrawlReport,
+    sink: W,
+    extra: &[(String, String)],
+) -> anyhow::Result<W> {
     let raw_report = report;
     let visible_report = crate::reported_report(report);
     let report = visible_report.as_ref();
-    let mut writer = csv::Writer::from_writer(Vec::new());
+    let mut writer = crate::export::CsvRows::new(sink, Some(raw_report), extra)?;
     writer.write_record([
         "Source",
         "Target",
@@ -378,11 +427,64 @@ pub fn export_links_csv(report: &CrawlReport) -> anyhow::Result<String> {
             ])?;
         }
     }
-    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
+    writer.finish()
 }
 
 pub fn export_fragments_csv(report: &CrawlReport) -> anyhow::Result<String> {
-    let mut writer = csv::Writer::from_writer(Vec::new());
+    let mut bytes = Vec::new();
+    write_fragments_csv(report, &mut bytes, &[])?;
+    Ok(String::from_utf8(bytes)?)
+}
+pub fn write_fragments_csv<W: std::io::Write>(
+    report: &CrawlReport,
+    sink: W,
+    extra: &[(String, String)],
+) -> anyhow::Result<W> {
+    let hidden = crate::directive_hidden_issue_urls(&report.config, &report.pages);
+    let selected = report
+        .pages
+        .iter()
+        .enumerate()
+        .filter(|(_, page)| !hidden.contains(page.url.as_str()))
+        .map(|(i, _)| i)
+        .collect();
+    let mut writer = fragment_writer(sink, Some(report), extra)?;
+    crate::visit_fragment_observations(report, Some(&selected), |row| {
+        write_fragment_row(&mut writer, &row)
+    })?;
+    writer.finish()
+}
+/// Selects source observations by raw ordinal, preserving complete original target facts.
+pub fn write_selected_fragments_csv<W: std::io::Write>(
+    report: &CrawlReport,
+    selected_ordinals: &std::collections::BTreeSet<usize>,
+    sink: W,
+    extra: &[(String, String)],
+) -> anyhow::Result<W> {
+    let mut writer = fragment_writer(sink, None, extra)?;
+    crate::visit_fragment_observations(report, Some(selected_ordinals), |row| {
+        write_fragment_row(&mut writer, &row)
+    })?;
+    writer.finish()
+}
+/// Resolved rows must come from the original complete capture before source-owner filtering.
+pub fn write_fragment_observations_csv<W: std::io::Write>(
+    rows: &[crate::FragmentObservation],
+    sink: W,
+    extra: &[(String, String)],
+) -> anyhow::Result<W> {
+    let mut writer = fragment_writer(sink, None, extra)?;
+    for row in rows {
+        write_fragment_row(&mut writer, row)?;
+    }
+    writer.finish()
+}
+fn fragment_writer<W: std::io::Write>(
+    sink: W,
+    reporting: Option<&CrawlReport>,
+    extra: &[(String, String)],
+) -> anyhow::Result<CsvRows<W>> {
+    let mut writer = CsvRows::new(sink, reporting, extra)?;
     writer.write_record([
         "Source URL",
         "Source Document URL",
@@ -397,40 +499,54 @@ pub fn export_fragments_csv(report: &CrawlReport) -> anyhow::Result<String> {
         "Source DOM JSON",
         "Matched Target JSON",
     ])?;
-    for row in crate::reported_fragments(report) {
-        let status = serde_json::to_value(row.status)?;
-        writer.write_record([
-            csv_text(&row.source_url),
-            csv_text(&row.source_document_url),
-            csv_text(&row.target_url),
-            csv_text(&row.resolved_href),
-            csv_text(&row.fragment),
-            csv_text(row.decoded_fragment.as_deref().unwrap_or_default()),
-            csv_text(status.as_str().unwrap_or_default()),
-            csv_text(&row.reason),
-            csv_text(row.target_document_url.as_deref().unwrap_or_default()),
-            row.target_complete.to_string(),
-            row.source_dom_location
-                .as_ref()
-                .map(serde_json::to_string)
-                .transpose()?
-                .unwrap_or_default(),
-            row.matched_target
-                .as_ref()
-                .map(serde_json::to_string)
-                .transpose()?
-                .unwrap_or_default(),
-        ])?;
-    }
-    crate::reporting_csv(report, String::from_utf8(writer.into_inner()?)?)
+    Ok(writer)
+}
+fn write_fragment_row<W: std::io::Write>(
+    writer: &mut CsvRows<W>,
+    row: &crate::FragmentObservation,
+) -> anyhow::Result<()> {
+    let status = serde_json::to_value(row.status)?;
+    writer.write_record([
+        csv_text(&row.source_url),
+        csv_text(&row.source_document_url),
+        csv_text(&row.target_url),
+        csv_text(&row.resolved_href),
+        csv_text(&row.fragment),
+        csv_text(row.decoded_fragment.as_deref().unwrap_or_default()),
+        csv_text(status.as_str().unwrap_or_default()),
+        csv_text(&row.reason),
+        csv_text(row.target_document_url.as_deref().unwrap_or_default()),
+        row.target_complete.to_string(),
+        row.source_dom_location
+            .as_ref()
+            .map(serde_json::to_string)
+            .transpose()?
+            .unwrap_or_default(),
+        row.matched_target
+            .as_ref()
+            .map(serde_json::to_string)
+            .transpose()?
+            .unwrap_or_default(),
+    ])?;
+    Ok(())
 }
 
-/// Original typed facts, with explicit legacy/availability records per snapshot.
 pub fn export_dom_observations_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let mut bytes = Vec::new();
+    write_dom_observations_csv(report, &mut bytes, &[])?;
+    Ok(String::from_utf8(bytes)?)
+}
+
+/// Encode original CSV rows directly into a caller-owned (optionally bounded) sink.
+pub fn write_dom_observations_csv<W: std::io::Write>(
+    report: &CrawlReport,
+    sink: W,
+    extra: &[(String, String)],
+) -> anyhow::Result<W> {
     let raw_report = report;
     let visible_report = crate::reported_report(report);
     let report = visible_report.as_ref();
-    let mut writer = csv::Writer::from_writer(Vec::new());
+    let mut writer = crate::export::CsvRows::new(sink, Some(raw_report), extra)?;
     writer.write_record([
         "URL",
         "Snapshot Role",
@@ -520,15 +636,26 @@ pub fn export_dom_observations_csv(report: &CrawlReport) -> anyhow::Result<Strin
             }
         }
     }
-    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
+    writer.finish()
 }
 
 /// One result per row preserves values containing commas, quotes or delimiters.
 pub fn export_custom_extractions_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let mut bytes = Vec::new();
+    write_custom_extractions_csv(report, &mut bytes, &[])?;
+    Ok(String::from_utf8(bytes)?)
+}
+
+/// Encode original CSV rows directly into a caller-owned (optionally bounded) sink.
+pub fn write_custom_extractions_csv<W: std::io::Write>(
+    report: &CrawlReport,
+    sink: W,
+    extra: &[(String, String)],
+) -> anyhow::Result<W> {
     let raw_report = report;
     let visible_report = crate::reported_report(report);
     let report = visible_report.as_ref();
-    let mut writer = csv::Writer::from_writer(Vec::new());
+    let mut writer = crate::export::CsvRows::new(sink, Some(raw_report), extra)?;
     writer.write_record([
         "URL",
         "Name",
@@ -598,7 +725,7 @@ pub fn export_custom_extractions_csv(report: &CrawlReport) -> anyhow::Result<Str
             }
         }
     }
-    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
+    writer.finish()
 }
 
 /// One row per saved custom-search rule/source observation. Exact zero remains
@@ -678,8 +805,8 @@ fn search_csv_json(value: &impl serde::Serialize, limit: usize) -> anyhow::Resul
     serde_json::to_writer(&mut buffer, value)?;
     Ok(String::from_utf8(buffer.bytes)?)
 }
-fn search_csv_record(
-    writer: &mut csv::Writer<SearchCsvBuffer>,
+fn search_csv_record<W: std::io::Write>(
+    writer: &mut CsvRows<W>,
     mut row: Vec<String>,
     visibility: Option<&[String; 6]>,
 ) -> anyhow::Result<()> {
@@ -694,6 +821,36 @@ fn export_custom_search_csv_bounded(
     csv_limit: usize,
     page_json_limit: usize,
 ) -> anyhow::Result<String> {
+    let output = write_custom_search_csv_with_limits(
+        report,
+        SearchCsvBuffer::new(csv_limit),
+        csv_limit,
+        page_json_limit,
+        &[],
+    )?;
+    Ok(String::from_utf8(output.bytes)?)
+}
+/// The caller owns the output budget; saved-page evidence retains the search engine limit.
+pub fn write_custom_search_csv<W: std::io::Write>(
+    report: &CrawlReport,
+    sink: W,
+    extra: &[(String, String)],
+) -> anyhow::Result<W> {
+    write_custom_search_csv_with_limits(
+        report,
+        sink,
+        64 * 1024 * 1024,
+        crate::CUSTOM_SEARCH_MAX_OUTPUT_BYTES,
+        extra,
+    )
+}
+fn write_custom_search_csv_with_limits<W: std::io::Write>(
+    report: &CrawlReport,
+    sink: W,
+    csv_limit: usize,
+    page_json_limit: usize,
+    extra: &[(String, String)],
+) -> anyhow::Result<W> {
     let visibility = crate::reporting_visibility(&report.config, &report.pages, &report.issues);
     let values = visibility.as_ref().map(|counts| {
         [
@@ -706,7 +863,7 @@ fn export_custom_search_csv_bounded(
         ]
         .map(|number| number.to_string())
     });
-    let mut writer = csv::Writer::from_writer(SearchCsvBuffer::new(csv_limit));
+    let mut writer = CsvRows::new(sink, None, extra)?;
     let mut headers = vec![
         "URL",
         "Document URL",
@@ -818,16 +975,27 @@ fn export_custom_search_csv_bounded(
             )?;
         }
     }
-    Ok(String::from_utf8(writer.into_inner()?.bytes)?)
+    writer.finish()
 }
 
 /// One row per executed script. JSON preserves the difference between a missing
 /// result, null, a string and structured data, including embedded CSV delimiters.
 pub fn export_custom_javascript_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let mut bytes = Vec::new();
+    write_custom_javascript_csv(report, &mut bytes, &[])?;
+    Ok(String::from_utf8(bytes)?)
+}
+
+/// Encode original CSV rows directly into a caller-owned (optionally bounded) sink.
+pub fn write_custom_javascript_csv<W: std::io::Write>(
+    report: &CrawlReport,
+    sink: W,
+    extra: &[(String, String)],
+) -> anyhow::Result<W> {
     let raw_report = report;
     let visible_report = crate::reported_report(report);
     let report = visible_report.as_ref();
-    let mut writer = csv::Writer::from_writer(Vec::new());
+    let mut writer = crate::export::CsvRows::new(sink, Some(raw_report), extra)?;
     writer.write_record([
         "URL",
         "Script Name",
@@ -852,16 +1020,27 @@ pub fn export_custom_javascript_csv(report: &CrawlReport) -> anyhow::Result<Stri
             ])?;
         }
     }
-    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
+    writer.finish()
 }
 
 /// Captured cookie attributes only. An allowlist deliberately omits cookie
 /// values and all unknown fields, including in imported legacy reports.
 pub fn export_browser_cookies_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let mut bytes = Vec::new();
+    write_browser_cookies_csv(report, &mut bytes, &[])?;
+    Ok(String::from_utf8(bytes)?)
+}
+
+/// Encode original CSV rows directly into a caller-owned (optionally bounded) sink.
+pub fn write_browser_cookies_csv<W: std::io::Write>(
+    report: &CrawlReport,
+    sink: W,
+    extra: &[(String, String)],
+) -> anyhow::Result<W> {
     let raw_report = report;
     let visible_report = crate::reported_report(report);
     let report = visible_report.as_ref();
-    let mut writer = csv::Writer::from_writer(Vec::new());
+    let mut writer = crate::export::CsvRows::new(sink, Some(raw_report), extra)?;
     writer.write_record([
         "URL",
         "Name",
@@ -892,16 +1071,27 @@ pub fn export_browser_cookies_csv(report: &CrawlReport) -> anyhow::Result<String
             ])?;
         }
     }
-    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
+    writer.finish()
 }
 
 /// Native PDF observations. Unknown numbers remain empty cells, while parse
 /// errors, unsupported extraction and exhausted limits stay explicit.
 pub fn export_pdf_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let mut bytes = Vec::new();
+    write_pdf_csv(report, &mut bytes, &[])?;
+    Ok(String::from_utf8(bytes)?)
+}
+
+/// Encode original CSV rows directly into a caller-owned (optionally bounded) sink.
+pub fn write_pdf_csv<W: std::io::Write>(
+    report: &CrawlReport,
+    sink: W,
+    extra: &[(String, String)],
+) -> anyhow::Result<W> {
     let raw_report = report;
     let visible_report = crate::reported_report(report);
     let report = visible_report.as_ref();
-    let mut writer = csv::Writer::from_writer(Vec::new());
+    let mut writer = crate::export::CsvRows::new(sink, Some(raw_report), extra)?;
     writer.write_record([
         "URL",
         "Final URL",
@@ -957,15 +1147,26 @@ pub fn export_pdf_csv(report: &CrawlReport) -> anyhow::Result<String> {
             serde_json::to_string(&pdf.limits_reached)?,
         ])?;
     }
-    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
+    writer.finish()
 }
 
 /// Fetched image resource metadata, separate from declared img width/height/alt.
 pub fn export_image_resources_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    let mut bytes = Vec::new();
+    write_image_resources_csv(report, &mut bytes, &[])?;
+    Ok(String::from_utf8(bytes)?)
+}
+
+/// Encode original CSV rows directly into a caller-owned (optionally bounded) sink.
+pub fn write_image_resources_csv<W: std::io::Write>(
+    report: &CrawlReport,
+    sink: W,
+    extra: &[(String, String)],
+) -> anyhow::Result<W> {
     let raw_report = report;
     let visible_report = crate::reported_report(report);
     let report = visible_report.as_ref();
-    let mut writer = csv::Writer::from_writer(Vec::new());
+    let mut writer = crate::export::CsvRows::new(sink, Some(raw_report), extra)?;
     writer.write_record([
         "URL",
         "Final URL",
@@ -1003,7 +1204,7 @@ pub fn export_image_resources_csv(report: &CrawlReport) -> anyhow::Result<String
             csv_text(image.parse_error.as_deref().unwrap_or_default()),
         ])?;
     }
-    crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
+    writer.finish()
 }
 
 fn resource_status(status: crate::ResourceAnalysisStatus) -> String {

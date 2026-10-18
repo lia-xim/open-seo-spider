@@ -44,7 +44,7 @@ credential handling are unchanged. No job or saved result is seeded. The child
 processes cannot inherit a PageSpeed key; only isolated loopback ports are used.
 `SPIDER_ENRICHMENT_ARTIFACT_DIR` may select a **new** artifact directory; reuse is
 refused. Default output is `artifacts/enrichment-success-*`. This command runs
-separately from the 35-suite UI runner and is not an additional registered suite.
+separately from the 37-suite UI runner and is not an additional registered suite.
 
 For a focused investigation:
 
@@ -82,7 +82,9 @@ explicit executions separately.
 | Saved comparison, original-report bundles and cold restart | saved-comparison, comparison-bundles | Owned native processes, browser, saved data and offline HTTP witnesses |
 | Migration CSV mapping, redirect outcomes and retained broken-link sources | link-workflows | Browser → native saved report; 109 mappings, 107 link occurrences, pagination and complete verified exports |
 | Directory hierarchy, raw/reported views and unknown/imported data | directory-tree | Browser → native saved report; exact rendered cards, 100+5 paging, full CSV and stale tokens |
-| Segment builder, persisted rules, assignments and issue views | saved-segments | Browser → native saved text; exact membership/cells, 100+5 paging, JSON/CSV and stale rules/views |
+| Segment builder, browser-local rules, assignments and issue views | saved-segments | Browser → native saved text; exact membership/cells, 100+5 paging, JSON/CSV and stale rules/views |
+| Applied segments across the main dashboard, charts, full native/section exports and cold reopen | dashboard-segments | Two normal native processes and 1,010 genuinely captured pages; all 1,005 selected ordered titles, original ordinal controls, snapshot-bound original records, global/selected scopes and complete exports |
+| Compact mobile segment cells with full expandable values | segments-density | Normal native process and 105 genuinely captured pages; 320px closed-row bounds, keyboard/touch/selection, full cells and identical expanded/collapsed exports |
 | N-gram totals, occurrences, word cloud and text/metadata channels | saved-ngrams | Browser → native corpus; exact rendered rows, complete CSV, missing sources and real stale-generation refusal |
 | N-gram and segment analysis after native restart | ngrams-cold-restart, segments-cold-restart | Two owned native processes per suite; exact saved sources and complete exports, active HTTP410 witness through both closes; browser state boundaries described below |
 | Resource/CSS failure occurrences and unavailable history | resource-sources | Browser → native SQLite ledger; 106 occurrences, 100+6 paging, snapshot-bound CSV and page JSON |
@@ -96,7 +98,16 @@ also separate; they must not be described as browser E2E tests.
 
 ## Remaining important-path work
 
-The 35 registered suites provide bounded functional cases for the specialist
+The [dashboard-segment receipt](verification/dashboard-segments-20261018/README.md)
+records all 37 registered suites passing in three separate phases (2+1+34) on
+the same final normal executable and 485 unchanged source/driver inputs. This
+is not a single shared-store 37-suite invocation. The large dashboard suite
+has a measured-workflow budget of 900 seconds; all other suites retain 240
+seconds. Its positive fixture contains 1,010 real pages with unique descriptions.
+The separate repeated-description case actually exceeds the existing 32 MiB
+projection budget and remains an open large-corpus limitation.
+
+The 37 registered suites provide bounded functional cases for the specialist
 tools above; a passing case is not complete feature acceptance. Cold native
 restart across other tools, all rule/operator combinations, broader
 malformed imported archives and concurrent mutations need further coverage.

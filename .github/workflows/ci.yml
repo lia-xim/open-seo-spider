@@ -265,6 +265,7 @@ jobs:
       - run: node --test web/verification/list-import-state.test.mjs
       - run: node --test web/verification/api-enrichment-state.test.cjs
       - run: node --test web/verification/accessibility-state.test.cjs
+      - run: node --test web/verification/dashboard-segments-state.test.cjs
       - run: cargo build --locked -p open-seo-spider
       - name: Opt-in Rust browser fixtures on an owned renderer
         run: node scripts/renderer-rust-e2e.mjs

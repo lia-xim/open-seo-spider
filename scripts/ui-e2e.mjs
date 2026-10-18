@@ -37,6 +37,10 @@ const suites = [
   ['directory-tree', 'ui-directory-tree-live.cjs', 'live'],
   ['saved-ngrams', 'ui-ngrams-live.cjs', 'live'],
   ['saved-segments', 'ui-segments-live.cjs', 'live'],
+  // Full 1,010-page capture, all issue chunks, independent native read oracles,
+  // repeated cohorts and cold reopen exceed the ordinary four-minute budget.
+  ['dashboard-segments', 'ui-dashboard-segments-live.cjs', 'owned-native', 900000],
+  ['segments-density', 'ui-segments-density-live.cjs', 'owned-native'],
   ['ngrams-cold-restart', 'ui-ngrams-cold-live.cjs', 'owned-native'],
   ['segments-cold-restart', 'ui-segments-cold-live.cjs', 'owned-native'],
   ['resource-sources', 'ui-resource-sources-live.cjs', 'live'],
@@ -89,7 +93,7 @@ try {
   }
   assert(appOrigin, 'No owned post-bind endpoint');
   assert.equal((await fetch(appOrigin+'/healthz')).status,200);
-  for (const [name,script,kind] of selected) {
+  for (const [name,script,kind,timeoutMs=240000] of selected) {
     const directory = path.join(output,name); fs.mkdirSync(directory);
     const stdout = fs.createWriteStream(path.join(directory,'stdout.log')), stderr = fs.createWriteStream(path.join(directory,'stderr.log'));
     const started = Date.now();
@@ -101,11 +105,11 @@ try {
         SPIDER_UI_PROOF:path.join(directory,'native-proof.json')}});
     let error, timedOut=false; child.once('error', value=>error=String(value));
     child.stdout.pipe(stdout); child.stderr.pipe(stderr);
-    const timer = setTimeout(()=>{timedOut=true;child.kill();},240000);
+    const timer = setTimeout(()=>{timedOut=true;child.kill();},timeoutMs);
     const status = await new Promise(resolve=>child.once('close',(code,signal)=>resolve({code,signal})));
     clearTimeout(timer);
     await Promise.all([new Promise(resolve=>stdout.closed?resolve():stdout.once('close',resolve)),new Promise(resolve=>stderr.closed?resolve():stderr.once('close',resolve))]);
-    results.push({name,script,kind,...status,error,timed_out:timedOut,duration_ms:Date.now()-started});
+    results.push({name,script,kind,...status,error,timed_out:timedOut,timeout_ms:timeoutMs,duration_ms:Date.now()-started});
     console.log(`${status.code===0?'PASS':'FAIL'} ${name} (${kind})`);
     if (status.code!==0 || error || timedOut) throw Error(name+': '+fs.readFileSync(path.join(directory,'stderr.log'),'utf8').slice(-3000));
   }

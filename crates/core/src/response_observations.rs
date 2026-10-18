@@ -20,56 +20,93 @@ pub struct ResponseObservation {
 }
 
 pub fn response_observations(report: &CrawlReport) -> Vec<ResponseObservation> {
-    let mut rows = Vec::new();
-    for page in &report.pages {
-        for (index, hop) in page.redirect_chain.iter().enumerate() {
-            // A valid redirect advances final_url to the next target before it
-            // is requested. With no terminal response, the retained header map
-            // belongs to the last captured hop, even when the target revisits an
-            // earlier URL in a loop. A terminal response replaces that map.
-            let last_headers =
-                page.final_status.is_none() && index + 1 == page.redirect_chain.len();
-            rows.push(ResponseObservation {
-                requested_url: page.url.clone(),
-                response_url: hop.url.clone(),
-                response_index: index + 1,
-                status: hop.status,
-                location: Some(hop.target.clone()),
-                capture_kind: "redirect_hop",
-                headers: last_headers.then(|| page.headers.clone()),
-                content_type: last_headers.then(|| page.content_type.clone()),
-                body_bytes: None,
-                body_complete: None,
-                document_metadata_available: false,
+    response_rows(report, false).collect()
+}
+
+/// Produce at most one observation at a time. A long request owner must not be
+/// cloned across the entire redirect inventory before a bounded sink can stop.
+fn response_rows(
+    report: &CrawlReport,
+    reported: bool,
+) -> impl Iterator<Item = ResponseObservation> + '_ {
+    report
+        .pages
+        .iter()
+        .filter(move |page| !reported || crate::directive_page_visible(&report.config, page))
+        .flat_map(|page| {
+            let hops = page
+                .redirect_chain
+                .iter()
+                .enumerate()
+                .map(move |(index, hop)| {
+                    // A valid redirect advances final_url to the next target before it
+                    // is requested. With no terminal response, the retained header map
+                    // belongs to the last captured hop, even when the target revisits an
+                    // earlier URL in a loop. A terminal response replaces that map.
+                    let last_headers =
+                        page.final_status.is_none() && index + 1 == page.redirect_chain.len();
+                    ResponseObservation {
+                        requested_url: page.url.clone(),
+                        response_url: hop.url.clone(),
+                        response_index: index + 1,
+                        status: hop.status,
+                        location: Some(hop.target.clone()),
+                        capture_kind: "redirect_hop",
+                        headers: last_headers.then(|| page.headers.clone()),
+                        content_type: last_headers.then(|| page.content_type.clone()),
+                        body_bytes: None,
+                        body_complete: None,
+                        document_metadata_available: false,
+                    }
+                });
+            let terminal = page.final_status.into_iter().map(move |status| {
+                let redirect = matches!(status, 301 | 302 | 303 | 307 | 308);
+                ResponseObservation {
+                    requested_url: page.url.clone(),
+                    response_url: if page.final_url.is_empty() {
+                        page.url.clone()
+                    } else {
+                        page.final_url.clone()
+                    },
+                    response_index: page.redirect_chain.len() + 1,
+                    status,
+                    location: page.headers.get("location").cloned(),
+                    capture_kind: "terminal_response",
+                    headers: Some(page.headers.clone()),
+                    content_type: Some(page.content_type.clone()),
+                    body_bytes: (!redirect).then_some(page.size_bytes),
+                    body_complete: (!redirect).then_some(!page.truncated && page.error.is_none()),
+                    document_metadata_available: !redirect
+                        && page.is_html()
+                        && page.error.is_none(),
+                }
             });
-        }
-        let Some(status) = page.final_status else {
-            continue;
-        };
-        let redirect = matches!(status, 301 | 302 | 303 | 307 | 308);
-        rows.push(ResponseObservation {
-            requested_url: page.url.clone(),
-            response_url: if page.final_url.is_empty() {
-                page.url.clone()
-            } else {
-                page.final_url.clone()
-            },
-            response_index: page.redirect_chain.len() + 1,
-            status,
-            location: page.headers.get("location").cloned(),
-            capture_kind: "terminal_response",
-            headers: Some(page.headers.clone()),
-            content_type: Some(page.content_type.clone()),
-            body_bytes: (!redirect).then_some(page.size_bytes),
-            body_complete: (!redirect).then_some(!page.truncated && page.error.is_none()),
-            document_metadata_available: !redirect && page.is_html() && page.error.is_none(),
-        });
-    }
-    rows
+            hops.chain(terminal)
+        })
 }
 
 pub fn export_response_observations_csv(report: &CrawlReport) -> anyhow::Result<String> {
-    let mut writer = csv::Writer::from_writer(Vec::new());
+    let mut bytes = Vec::new();
+    write_response_observations_csv(report, &mut bytes, &[])?;
+    Ok(String::from_utf8(bytes)?)
+}
+
+/// Encode original CSV rows directly into a caller-owned (optionally bounded) sink.
+pub fn write_response_observations_csv<W: std::io::Write>(
+    report: &CrawlReport,
+    sink: W,
+    extra: &[(String, String)],
+) -> anyhow::Result<W> {
+    write_response_rows(report, sink, extra, response_rows(report, true))
+}
+
+fn write_response_rows<W: std::io::Write>(
+    report: &CrawlReport,
+    sink: W,
+    extra: &[(String, String)],
+    rows: impl IntoIterator<Item = ResponseObservation>,
+) -> anyhow::Result<W> {
+    let mut writer = crate::export::CsvRows::new(sink, Some(report), extra)?;
     writer.write_record([
         "Requested URL",
         "Response URL",
@@ -83,7 +120,7 @@ pub fn export_response_observations_csv(report: &CrawlReport) -> anyhow::Result<
         "Body Complete",
         "Document Metadata Available",
     ])?;
-    for row in crate::reported_responses(report) {
+    for row in rows {
         writer.write_record([
             crate::export::csv_text(&row.requested_url),
             crate::export::csv_text(&row.response_url),
@@ -101,13 +138,134 @@ pub fn export_response_observations_csv(report: &CrawlReport) -> anyhow::Result<
             row.document_metadata_available.to_string(),
         ])?;
     }
-    crate::reporting_csv(report, String::from_utf8(writer.into_inner()?)?)
+    writer.finish()
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::{PageRecord, RedirectHop};
+    #[derive(Debug)]
+    struct BudgetCounter {
+        bytes: usize,
+        cap: usize,
+        refused: usize,
+    }
+    impl std::io::Write for BudgetCounter {
+        fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+            let Some(next) = self
+                .bytes
+                .checked_add(bytes.len())
+                .filter(|n| *n <= self.cap)
+            else {
+                self.refused += 1;
+                return Err(std::io::Error::other(
+                    "response CSV owned test budget exceeded",
+                ));
+            };
+            self.bytes = next;
+            Ok(bytes.len())
+        }
+        fn flush(&mut self) -> std::io::Result<()> {
+            Ok(())
+        }
+    }
+
+    #[test]
+    fn response_csv_stops_redirect_owner_fanout_before_collecting_all_observations() {
+        // Declared amplification control: eager response rows would clone more
+        // than 29GiB from this small report before the CSV sink could refuse.
+        let source = format!("https://owned.invalid/{}", "x".repeat(3 * 1024 * 1024));
+        let report = report(PageRecord {
+            url: source.clone(),
+            final_url: source,
+            redirect_chain: (0..10_000)
+                .map(|i| RedirectHop {
+                    url: format!("https://owned.invalid/hop/{i}"),
+                    target: format!("https://owned.invalid/hop/{}", i + 1),
+                    status: 302,
+                })
+                .collect(),
+            ..Default::default()
+        });
+        assert!(serde_json::to_vec(&report).unwrap().len() < 64 * 1024 * 1024);
+        let mut sink = BudgetCounter {
+            bytes: 0,
+            cap: 64 * 1024 * 1024,
+            refused: 0,
+        };
+        assert!(
+            write_response_observations_csv(&report, &mut sink, &[])
+                .unwrap_err()
+                .to_string()
+                .contains("test budget")
+        );
+        assert!(sink.refused > 0);
+        assert!(sink.bytes <= sink.cap);
+        let seen = std::cell::Cell::new(0usize);
+        let rows = response_rows(&report, true).inspect(|_| seen.set(seen.get() + 1));
+        let mut sink = BudgetCounter {
+            bytes: 0,
+            cap: 8 * 1024 * 1024,
+            refused: 0,
+        };
+        assert!(write_response_rows(&report, &mut sink, &[], rows).is_err());
+        assert!(
+            seen.get() > 0 && seen.get() < 5,
+            "Sink refusal must stop the shared producer immediately"
+        );
+    }
+
+    #[test]
+    fn response_csv_lazy_profile_matches_legacy_six_column_projection_bytes() {
+        let visible = PageRecord {
+            url: "https://owned.invalid/visible/雪".into(),
+            final_url: "https://owned.invalid/visible/雪".into(),
+            final_status: Some(200),
+            content_type: "text/html".into(),
+            ..Default::default()
+        };
+        let hidden = PageRecord {
+            url: "https://owned.invalid/hidden".into(),
+            final_url: "https://owned.invalid/hidden".into(),
+            final_status: Some(200),
+            meta_robots: vec!["noindex".into()],
+            ..Default::default()
+        };
+        let report = CrawlReport {
+            config: crate::CrawlConfig {
+                directive_reporting: Some(crate::DirectiveReportingConfig {
+                    respect_noindex: true,
+                    ..Default::default()
+                }),
+                ..Default::default()
+            },
+            pages: vec![visible.clone(), hidden],
+            ..Default::default()
+        };
+        // The compatibility Vec API remains raw; the writer filters source
+        // observations before creating any response payload.
+        assert_eq!(response_observations(&report).len(), 2);
+        let projected = CrawlReport {
+            pages: vec![visible],
+            ..Default::default()
+        };
+        let expected = crate::reporting_csv(
+            &report,
+            export_response_observations_csv(&projected).unwrap(),
+        )
+        .unwrap();
+        let actual = write_response_observations_csv(&report, Vec::new(), &[]).unwrap();
+        assert_eq!(actual, expected.as_bytes());
+        let mut reader = csv::Reader::from_reader(actual.as_slice());
+        let headers = reader.headers().unwrap().clone();
+        let rows = reader.records().collect::<csv::Result<Vec<_>>>().unwrap();
+        assert_eq!(rows.len(), 1);
+        assert_eq!(&headers[headers.len() - 6], "Captured Pages");
+        assert_eq!(&rows[0][headers.len() - 6], "2");
+        assert_eq!(&rows[0][headers.len() - 5], "1");
+        assert_eq!(&rows[0][headers.len() - 4], "1");
+    }
     fn report(page: PageRecord) -> CrawlReport {
         CrawlReport {
             operation: None,

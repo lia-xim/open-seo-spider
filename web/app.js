@@ -6,6 +6,7 @@
     resources: { result:null, token:null, revision:0, cursor:0, back:[], error:'', selected:null, sort:0, direction:1 },
     content: { inventory:null, inventoryToken:null, cursor:0, back:[], error:'', selected:new Set(), source:null, sourceToken:null, sourceError:'', result:null, analysisToken:null, analysisError:'', revision:0, resultPage:0, sort:0, direction:1, resultSort:1, resultDirection:-1 },
     recrawlURLs: new Set(), policy: null, policyError: '', policyToken: null, policyCursor: 0, policyBack: [], policySelected: null, policySort: 0, policyDirection: 1,
+    segmentView:null,segmentBase:null,
     crawl: null, crawls: [], pages: [], issues: [], section: 'overview',
     search: '', filter: 'all', sort: 'url', direction: 1, page: 0, pageSize: 50,
     selected: null, selectedResponse: null, selectedInput: null, responses: null, responsesError: '', fragments: null, fragmentsError: '', inspectorTab: 'details', polling: false, starting: false,
@@ -26,6 +27,72 @@
       include_patterns_text: '', exclude_patterns_text: '', custom_extractions_json: '[]', audit_thresholds_json: '{}', pdf_analysis_json: '{}', validate_fragments: false, link_position_rules_json: '[]', crawl_policy_enabled: false, crawl_policy_json: '{"scope":{"roots":[{"origin":"https://example.test","folders":["/"],"subdomains":false,"exact_paths":[]}]}}', live_policy_limits_json: '{}', content_capture_enabled:false, content_capture_json:'{"sources":["raw_http_html"],"include_selectors":["body"],"exclude_selectors":["script","style","template","noscript","nav","footer"]}',resource_discovery_enabled:false,resource_discovery_json:'{}',resource_discovery_limits_json:'{}',tls_enabled:false,tls_respect_hsts:false,tls_certificates_json:'[]',cdn_classification_enabled:false,cdn_origins_text:'',cdn_directory_reporting_enabled:false,cdn_directory_rules_text:'',respect_noindex:false,respect_canonical:false,respect_next_prev:false
     }
   };
+
+  let dashboardSegments = null;
+  const separateSegmentSections = new Set(['inputs','policy','policyaliases','content','resource-discovery','sitemap-membership','sitemap-findings']);
+  const relationshipPages = () => state.segmentView ? state.segmentView.target_lookup : state.pages;
+  function clearDashboardSegmentView() {
+    if (!state.segmentBase) return;
+    Object.assign(state,state.segmentBase);state.segmentBase=null;state.segmentView=null;state.cache={};
+    state.selected=null;state.selectedResponse=null;state.selectedInput=null;state.recrawlURLs.clear();state.page=0;
+    reindexIssues();$('inspector').hidden=true;render();
+  }
+  function installDashboardSegmentView(result) {
+    state.segmentBase={pages:state.pages,issues:state.issues,analysis:state.analysis,analysisError:state.analysisError,pageMap:state.pageMap,responses:state.responses,responsesError:state.responsesError,fragments:state.fragments,fragmentsError:state.fragmentsError};
+    state.segmentView=result;
+    state.pages=result.pages.map(row=>({...normalPage(row.page),_segmentOrdinal:row.page_ordinal,_segmentMembership:row.membership}));
+    state.pageMap=new Map(state.pages.map(page=>[page.url,page]));state.cache={};
+    state.issues=result.issues;state.analysis=result.analysis;state.analysisError='';
+    state.responses=result.responses;state.responsesError='';state.fragments=result.fragments;state.fragmentsError='';
+    state.selected=null;state.selectedResponse=null;state.selectedInput=null;state.recrawlURLs.clear();state.page=0;
+    reindexIssues();$('inspector').hidden=true;render();
+  }
+  function renderDashboardSegments() {
+    const panel=$('dashboard-segments');if(!panel)return;
+    const controller=dashboardSegments,view=state.segmentView,s=controller?.state;
+    panel.setAttribute('aria-busy',String(Boolean(s?.busy)));
+    $('dashboard-segment-apply').disabled=!controller || Boolean(s?.busy || s?.draftValid===false || state.polling || active() || actionBusy() || !state.crawl);
+    $('dashboard-segment-clear').disabled=!controller || !Boolean(s?.busy || s?.applied || s?.error);
+    for(const id of ['dashboard-segment-json','dashboard-segment-csv'])$(id).disabled=!view || Boolean(s?.busy || active() || actionBusy());
+    $('dashboard-segment-state').textContent=!controller?'Segmentfunktionen werden mit dem nativen Dashboard geladen.':s.busy?'Vollständigen gespeicherten Segmentstand prüfen …':s.error?s.error:view?`${number(view.cohort.summary.selected_pages)} von ${number(view.cohort.summary.total_pages)} Seitenbeobachtungen · ${number(view.cohort.summary.selected_issues)} gespeicherte Issues · Stand ${view.context.snapshot_token.slice(0,12)} · keine Websiteabrufe`:'Keine Segmentauswahl angewandt. Definitionen in diesem Browser laden, auswählen und ausdrücklich anwenden.';
+    $('dashboard-segment-state').classList.toggle('error',Boolean(s?.error));
+    const separate=separateSegmentSections.has(state.section);
+    $('dashboard-segment-scope').hidden=!view;
+    $('dashboard-segment-scope').textContent=!view?'':separate?'Eigenständiges Originalinventar: Das Dashboardsegment wird auf diesen Bereich und dessen separate Exporte nicht angewandt. Die Segmentkennzahlen oben bleiben auf die ausgewählten Seiten begrenzt.':['graph','linkmetrics'].includes(state.section)?'Ausgewählte Seiten, Linkmetriken des vollständigen Original-Captures. Zielbeziehungen außerhalb des Segments bleiben erhalten; keine neue Berechnung eines isolierten Teilgraphen.':'Seiten und Quellvorkommen aus der bestätigten Segmentauswahl. Beziehungspartner außerhalb der Auswahl bleiben als gespeicherter Kontext erhalten.';
+    $('export-visible-report').textContent=view?'Segment-JSON':'JSON';
+    $('export-sitemap').title=view?'Sitemap verwendet den Originalbericht und ist bei aktiver Segmentansicht gesperrt.':'';
+  }
+  function loadDashboardSegmentDefinitions() {
+    if(!dashboardSegments)return;
+    dashboardSegments.invalidate();
+    try{
+      const raw=localStorage.getItem(window.DashboardSegments.KEY);if(raw && new TextEncoder().encode(raw).length>65536)throw Error('Gespeicherte Segmentdefinitionen sind zu groß.');
+      const rules=window.DashboardSegments.validateRules(raw?JSON.parse(raw):{version:1,definitions:[]});
+      const select=$('dashboard-segment-selection'),chosen=select.value;
+      select.replaceChildren();
+      for(const[value,label]of [['all','Alle Seiten dieser Berichtsansicht'],...rules.definitions.map(definition=>['segment:'+definition.id,definition.name]),['unassigned','Unzugeordnet'],['unknown','Unbekannt']]){const option=document.createElement('option');option.value=value;option.textContent=label;select.append(option);}
+      select.value=[...select.options].some(option=>option.value===chosen)?chosen:'all';
+      dashboardSegments.configure(rules,select.value,$('dashboard-segment-mode').value);
+    }catch(error){dashboardSegments.invalidate(error.message);}
+  }
+  function bindDashboardSegments() {
+    if(!window.DashboardSegments)return;
+    dashboardSegments=window.DashboardSegments.createController({
+      owner:()=>({id:state.crawl?.id??null,nativeGeneration:state.crawl?.generation??null,uiGeneration:state.generation,stable:Boolean(state.crawl&&!active()&&!actionBusy()&&!state.pollToken)}),
+      fetch:(...args)=>fetch(...args),crypto:window.crypto,onClear:clearDashboardSegmentView,onInstall:installDashboardSegmentView,
+      onChange:()=>{renderDashboardSegments();renderControls();},
+      onDownload:(bytes,kind)=>{downloadBlob(new Blob([bytes],{type:kind==='json'?'application/json':'text/csv;charset=utf-8'}),`open-seo-spider-${state.crawl.id}-segment-${kind}.${kind==='json'?'json':'csv'}`);message('Vollständiger Segmentexport · Länge, SHA-256 und Snapshot bestätigt.');}
+    });
+    const configure=()=>{try{dashboardSegments.configure(dashboardSegments.state.rules,$('dashboard-segment-selection').value,$('dashboard-segment-mode').value);}catch(_){}};
+    $('dashboard-segment-load').addEventListener('click',loadDashboardSegmentDefinitions);
+    $('dashboard-segment-selection').addEventListener('change',configure);$('dashboard-segment-mode').addEventListener('change',configure);
+    $('dashboard-segment-apply').addEventListener('click',()=>dashboardSegments.apply());
+    $('dashboard-segment-clear').addEventListener('click',()=>dashboardSegments.invalidate());
+    $('dashboard-segment-json').addEventListener('click',()=>dashboardSegments.download('json'));
+    $('dashboard-segment-csv').addEventListener('click',()=>dashboardSegments.download('pages'));
+    window.addEventListener('storage',event=>{if(event.key===window.DashboardSegments.KEY || event.key===null)dashboardSegments.invalidate('Segmentdefinitionen wurden in einem anderen Fenster geändert. Definitionen erneut laden und anwenden.');});
+  }
+
   const sections = {
     overview: ['CRAWL INTELLIGENCE', 'Übersicht', 'Ein Blick auf den technischen Zustand deiner Website.'],
     internal: ['URL INVENTAR', 'Interne URLs', 'Alle erfassten URLs im Crawl-Bereich mit ihrem tatsächlichen Abrufstatus.'],
@@ -110,7 +177,7 @@
   const canRecrawl = () => Boolean(state.crawl && state.crawl.recrawl_available !== false && !active() && !actionBusy() && state.recrawlURLs.size);
   // Resource/link occurrences can contain source facts beside a different target URL.
   // Only a row whose displayed URL is itself the stored document is selectable here.
-  const recrawlPage = row => !row._page || row._page.url === row.url ? state.pageMap.get(row.url) : null;
+  const recrawlPage = row => !row._page || row._page.url === row.url ? (state.segmentView && Number.isSafeInteger((row._page || row)._segmentOrdinal) ? row._page || row : state.pageMap.get(row.url)) : null;
   function observationAge(url) {
     const operation = recrawlOperation();
     if (!operation) return '';
@@ -126,6 +193,7 @@
     if (restoreFocus) [...document.querySelectorAll('[data-recrawl-url]')].find(input => input.dataset.recrawlUrl === url)?.focus({ preventScroll: true });
   }
   function invalidatePoll() {
+    dashboardSegments?.invalidate();
     invalidateContentRequests('Der Crawl-Stand wurde geändert.', true);
     resetResourceLedger();
     resetQuotaSummary();
@@ -257,6 +325,7 @@
       ]);
       if (!current()) return;
       const previousStatus = state.crawl.status, nextCrawl = crawlResult.crawl || crawlResult;
+      if((nextCrawl.generation??null)!==(state.crawl.generation??null))dashboardSegments?.invalidate();
       const terminal = !activeStatus(nextCrawl.status);
       const from = terminal || !['running', 'queued', 'pending', 'pausing'].includes(previousStatus) ? 0 : state.pages.length;
       const pages = await loadPages(id, generation, from);
@@ -315,6 +384,7 @@
     } finally {
       if (state.pollToken === token) {
         state.pollToken = null; state.polling = false;
+        renderControls();
         if (generation === state.generation && state.crawl?.id === id && active()) state.pollTimer = setTimeout(() => refresh(generation), 2000);
       }
     }
@@ -543,6 +613,9 @@
     $('inspector-recrawl-selection').hidden = !state.selected || !state.pageMap.has(state.selected.url) || Boolean(state.selectedResponse || state.selectedInput);
     $('inspector-recrawl-checkbox').checked = Boolean(state.selected && state.recrawlURLs.has(state.selected.url));
     $('inspector-recrawl-checkbox').disabled = Boolean(busy || active() || state.crawl?.recrawl_available === false);
+    if(state.segmentView)$('export-sitemap').disabled=true;
+    if(dashboardSegments?.state.busy){$('export-csv').disabled=true;$('export-resources').disabled=true;$('export-visible-report').disabled=true;}
+    renderDashboardSegments();
     renderSitemapBundleControls();
     renderQuotaSummary();
     $('settings-summary').textContent = `${state.settings.concurrency} parallele Requests · ${state.settings.obey_robots ? 'Robots.txt beachten' : 'Robots.txt ignorieren'}${state.settings.max_pages ? ` · Grenze ${number(state.settings.max_pages)}` : ''}${state.settings.javascript_rendering ? ' · JavaScript-Rendering' : ''}${state.settings.crawl_policy_enabled ? ' · Native URL-Policy' : ''}${state.settings.resource_discovery_enabled ? ' · Native Ressourcenregeln' : ''}${state.settings.sitemap_source_processing_enabled ? ' · Eigene Sitemap-Grenzen' : ''}`;
@@ -550,16 +623,20 @@
 
   function renderMetrics() {
     renderRecrawlOperation();
-    const current = stats();
-    const fetched = current.fetched ?? state.pages.filter((page) => page.status != null || page.error || page.blocked_by_robots).length;
-    const discovered = current.discovered ?? state.pages.length;
-    const queued = current.queued ?? Math.max(0, discovered - fetched);
-    const failed = current.failed ?? state.pages.filter((page) => page.error).length;
+    const current = stats(),cohort=state.segmentView?.cohort.summary;
+    const fetched = cohort?.selected_pages ?? current.fetched ?? state.pages.filter((page) => page.status != null || page.error || page.blocked_by_robots).length;
+    const globalPages=state.segmentBase?.pages??state.pages;
+    const globalFetched=current.fetched??globalPages.filter(page=>page.status!=null||page.error||page.blocked_by_robots).length;
+    const discovered = current.discovered ?? globalPages.length;
+    const queued = current.queued ?? Math.max(0, discovered - globalFetched);
+    const failed = cohort?.failed_pages ?? current.failed ?? state.pages.filter((page) => page.error).length;
     const html = htmlPages();
     $('metric-fetched').textContent = number(fetched);
     $('metric-queued').textContent = number(queued);
-    $('metric-html').textContent = number(html.length);
-    $('metric-issues').textContent = number(Math.max(current.issues || 0, state.issues.length));
+    $('metric-html').textContent = number(cohort?.html_pages ?? html.length);
+    $('metric-issues').textContent = number(cohort?.selected_issues ?? Math.max(current.issues || 0, state.issues.length));
+    $('metric-url-label').textContent=cohort?'Seiten im Segment':'URLs';
+    $('metric-queue-label').textContent=cohort?'Warteschlange · gesamter Crawl':'Warteschlange';
     $('metric-discovered').textContent = `${number(discovered)} URLs entdeckt`;
     $('metric-inflight').textContent = current.in_flight == null ? 'Laufende Anfragen: nicht erfasst' : `${number(current.in_flight)} laufende Anfragen`;
     $('metric-discovery').textContent = current.discovery_pending == null ? 'Sitemap-Discovery: nicht erfasst' : `${number(current.discovery_pending)} ausstehende Sitemap-Discovery-Einheiten`;
@@ -570,7 +647,7 @@
     $('crawl-checkpoint').hidden = !state.crawl;
     $('crawl-checkpoint').textContent = checkpointParts.join(' · ');
     $('metric-failed').textContent = `${number(failed)} fehlgeschlagene Abrufe`;
-    $('metric-indexable').textContent = `${number(html.filter((page) => page.indexable === true).length)} indexierbar`;
+    $('metric-indexable').textContent = `${number(cohort?.indexable_pages ?? html.filter((page) => page.indexable === true).length)} indexierbar`;
     const started = state.crawl?.started_at || state.crawl?.created_at;
     const finished = state.crawl?.finished_at;
     const elapsed = started ? Math.max(0, Math.floor(((finished ? new Date(finished).getTime() : Date.now()) - new Date(started).getTime()) / 1000)) : 0;
@@ -581,7 +658,7 @@
     $('crawl-notices').querySelector('ul').innerHTML = notices.map((notice) => `<li>${escape(notice)}</li>`).join('');
     const statusClass = ['completed', 'complete', 'finished'].includes(status) ? 'completed' : status;
     $('crawl-state').innerHTML = `<span class="status-dot ${escape(statusClass)}"></span>${escape(labels[status] || (state.crawl ? status : 'Bereit für deinen ersten Crawl'))}`;
-    const fraction = discovered ? Math.min(1, fetched / discovered) : 0;
+    const fraction = discovered ? Math.min(1, globalFetched / discovered) : 0;
     $('progress-bar').style.width = `${state.crawl && ['completed', 'complete', 'finished'].includes(status) ? 100 : fraction * 100}%`;
     $('progress-bar').style.backgroundColor = status === 'failed' ? 'var(--danger)' : ['cancelled', 'canceled', 'cancelling', 'pausing', 'paused', 'limited', 'interrupted'].includes(status) ? 'var(--warning)' : '';
     if (status === 'pausing') $('crawl-state').insertAdjacentHTML('beforeend', '<span>· Noch kein fertiger Pause-Checkpoint</span>');
@@ -593,6 +670,7 @@
 
   function renderOverview() {
     const element = $('overview-view');
+    if (state.segmentView && !state.pages.length) { element.innerHTML='<div class="empty-overview"><h3>Keine Seiten in dieser Segmentauswahl</h3><p>Bestätigte leere Auswahl des gespeicherten Berichts. Unbekannte Prüfungen und ausgeblendete Beobachtungen bleiben getrennt.</p></div>';return; }
     if (!state.pages.length && !state.issues.length && state.crawl?.reporting_visibility?.captured_pages > 0 && state.crawl.reporting_visibility.visible_pages === 0) {
       element.innerHTML = directiveReportingNote() + '<div class="empty-overview"><h3>Alle erfassten Seiten sind ausgeblendet</h3><p>Die gespeicherten Berichtsfilter blenden die Seiten aus. Der vollständige Roh-Snapshot bleibt verfügbar.</p></div>';
       return;
@@ -602,7 +680,8 @@
       return;
     }
     const pages = internals();
-    const buckets = [
+    const nativeOverview=state.segmentView?.cohort.charts.overview;
+    const buckets = nativeOverview ? [['2xx · Erfolgreich',nativeOverview.success,''],['3xx · Weiterleitung',nativeOverview.redirect,'warning'],['4xx · Client-Fehler',nativeOverview.client_error,'danger'],['5xx · Server-Fehler',nativeOverview.server_error,'danger'],['Nicht abgerufen',nativeOverview.unfetched,'warning']] : [
       ['2xx · Erfolgreich', pages.filter((p) => effectiveStatus(p) >= 200 && effectiveStatus(p) < 300).length, ''],
       ['3xx · Weiterleitung', pages.filter((p) => (p.status >= 300 && p.status < 400) || p.redirect_chain.length).length, 'warning'],
       ['4xx · Client-Fehler', pages.filter((p) => effectiveStatus(p) >= 400 && effectiveStatus(p) < 500).length, 'danger'],
@@ -657,7 +736,7 @@
   function externalRows() {
     if (state.cache.external) return state.cache.external;
     const result = new Map();
-    const records = state.pageMap;
+    const records = state.segmentView ? new Map(relationshipPages().map(page=>[page.url,page])) : state.pageMap;
     for (const page of internals()) for (const link of page.links) {
       const url = linkURL(link);
       if (!url || typeof link === 'object' && link.internal !== false) continue;
@@ -687,8 +766,8 @@
 
   function resourceAliases() {
     if (state.cache.resourceAliases) return state.cache.resourceAliases;
-    const aliases = new Map(state.pages.map(page => [page.url, page]));
-    for (const page of state.pages) if (page.final_url && !aliases.has(page.final_url)) aliases.set(page.final_url, page);
+    const aliases = new Map(relationshipPages().map(page => [page.url, page]));
+    for (const page of relationshipPages()) if (page.final_url && !aliases.has(page.final_url)) aliases.set(page.final_url, page);
     state.cache.resourceAliases = aliases;
     return aliases;
   }
@@ -910,7 +989,7 @@
       return `<input class="recrawl-row-checkbox" type="checkbox" data-recrawl-url="${escape(page.url)}" aria-label="Für Wiederprüfung auswählen: ${escape(page.url)}" ${state.recrawlURLs.has(page.url) ? 'checked' : ''} ${active() || actionBusy() || state.crawl?.recrawl_available === false ? 'disabled' : ''}>`;
     };
     const cell = (column, row, index) => `${index === 0 ? selectionCell(row) : ''}${column.render(row)}${index === 0 && !['inputs', 'responses'].includes(state.section) && recrawlPage(row) && observationAge(recrawlPage(row).url) ? `<small class="observation-age">${escape(observationAge(recrawlPage(row).url))}</small>` : ''}`;
-    const isSelected = row => state.section === 'inputs' ? state.selectedInput && row.list_index === state.selectedInput.list_index && row.occurrence_index === state.selectedInput.occurrence_index : state.section === 'responses' ? state.selectedResponse && state.selectedResponse.requested_url === row.requested_url && state.selectedResponse.response_index === row.response_index : state.selected && (row._page?.url || row.url) === state.selected.url;
+    const isSelected = row => state.segmentView && Number.isSafeInteger((row._page||row)._segmentOrdinal) && state.selected ? (row._page||row)._segmentOrdinal===state.selected._segmentOrdinal : state.section === 'inputs' ? state.selectedInput && row.list_index === state.selectedInput.list_index && row.occurrence_index === state.selectedInput.occurrence_index : state.section === 'responses' ? state.selectedResponse && state.selectedResponse.requested_url === row.requested_url && state.selectedResponse.response_index === row.response_index : state.selected && (row._page?.url || row.url) === state.selected.url;
     const emptyNote = state.section === 'responses' ? state.responsesError || (state.responses == null ? 'Diese Beobachtungen werden nach Abschluss oder Stopp des Crawls geladen. Nicht erfasste Antworten bleiben unbekannt.' : 'Es wurden keine nativen HTTP-Antworten erfasst, beispielsweise bei DNS-Fehlern oder Robots-Sperren.') : state.section === 'fragments' ? state.fragmentsError || (!state.fragments ? 'Fragmentbeobachtungen werden nach Abschluss oder Stopp geladen.' : !state.fragments.enabled ? 'Fragmentprüfung ist für diesen Crawl deaktiviert. Aktiviere sie in den Einstellungen für einen neuen Crawl.' : 'Keine Fragmentreferenzen im erfassten Inventar. Crawl- und Capture-Grenzen gelten weiterhin.') : null;
     const table = $('results-table');
     const inputEmptyNote = state.section === 'custom-search' ? state.crawl?.config?.custom_search ? 'Keine gespeicherten Suchbeobachtungen für diese Seiten. Die fehlende Aufzeichnung bleibt unbekannt, ohne bestätigte Null-Treffer.' : 'Eigene Suche war nicht aktiviert oder ist historisch nicht erfasst. Regeln in den Einstellungen für einen neuen Crawl aktivieren; keine nachträglichen Null-Treffer abgeleitet.' : state.section === 'inputs' ? array(state.crawl?.config?.input_imports).length ? 'Die gespeicherten Importergebnisse enthalten keine Eingabezeilen.' : 'Eingabeherkunft nicht erfasst. Bei älteren Projekten bleibt sie unbekannt; dies ist kein Nachweis einer leeren Eingabe.' : null;
@@ -933,7 +1012,7 @@
         if (state.section === 'inputs') { state.selected = null; state.selectedResponse = null; state.selectedInput = row; renderInspector(); renderTable(); $('inspector').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); return; }
         if (state.section === 'responses') { selectResponse(row); return; }
         if (state.section === 'fragments' && !row._page) { message('Kein gespeicherter Dokumentdatensatz zur Quell-URL verfügbar.', true); return; }
-        const page = row._page || state.pageMap.get(row.url) || row;
+        const page = row._page || (Number.isSafeInteger(row._segmentOrdinal)?row:state.pageMap.get(row.url)) || row;
         selectPage(page);
         if (state.section === 'custom-search') { state.inspectorTab = 'custom-search'; renderInspector(); }
         if (state.section === 'accessibility') { state.inspectorTab = 'accessibility'; renderInspector(); }
@@ -976,6 +1055,7 @@
 
   function renderSection() {
     const [eyebrow, title, description] = sections[state.section];
+    renderDashboardSegments();
     $('section-eyebrow').textContent = eyebrow;
     $('section-heading').textContent = title;
     $('section-description').textContent = description;
@@ -1001,6 +1081,7 @@
     else if (sitemapSection()) renderSitemapMembership();
     else if (findingsSection()) renderSitemapFindings();
     else renderTable();
+    if(dashboardSegments?.state.busy){$('export-csv').disabled=true;$('export-resources').disabled=true;$('export-visible-report').disabled=true;}
   }
 
   function selectResponse(response) {
@@ -1069,6 +1150,7 @@
     if (state.inspectorTab === 'accessibility') { renderAccessibilityInspector(page, element); return; }
     if (state.inspectorTab === 'details') {
       const fields = [
+        ...(Number.isSafeInteger(page._segmentOrdinal)?[['Originale Seitenbeobachtung (ab 0)',page._segmentOrdinal]]:[]),
         ...(observationAge(page.url) ? [['Alter des Befunds', observationAge(page.url)]] : []),
         ['HTTP initial / final', `${page.status ?? '—'} / ${effectiveStatus(page) ?? '—'}`],
         ['Finale URL', page.final_url || '—'], ['Content-Type', page.content_type || '—'],
@@ -1193,8 +1275,8 @@
     } else if (state.inspectorTab === 'outlinks') {
       element.innerHTML = page.links.length ? `<ul class="detail-links">${page.links.map((link) => `<li>${safeLink(linkURL(link))}${typeof link === 'object' ? `<small>${escape(link.text || '(ohne Linktext)')} · ${link.internal ? 'intern' : 'extern'}${link.nofollow ? ' · nofollow' : ''}${link.kind ? ` · ${escape(link.kind)}` : ''}${link.cdn_directory_reporting ? ` · ${escape(cdnDirectoryReportText(link.cdn_directory_reporting))}` : ''}</small>` : ''}</li>`).join('')}</ul>` : '<p class="detail-empty">Keine ausgehenden Links erfasst.</p>';
     } else if (state.inspectorTab === 'inlinks') {
-      const sources = internals().flatMap((source) => source.links.filter((link) => linkURL(link) === page.url || linkURL(link) === page.final_url).map((link) => ({ url: source.url, text: typeof link === 'object' ? link.text : '' })));
-      element.innerHTML = sources.length ? `<ul class="detail-links">${sources.map((source) => `<li>${safeLink(source.url)}<small>${escape(source.text || '(ohne Linktext)')}</small></li>`).join('')}</ul>` : '<p class="detail-empty">Keine eingehenden Links aus den bislang erfassten Seiten. Die Start-URL kann ohne interne Eingangslinks erscheinen.</p>';
+      const sources = (state.segmentView && state.segmentBase ? state.segmentBase.pages.filter(page=>page.internal) : internals()).flatMap((source) => source.links.filter((link) => linkURL(link) === page.url || linkURL(link) === page.final_url).map((link) => ({ url: source.url, text: typeof link === 'object' ? link.text : '' })));
+      element.innerHTML = (state.segmentView?'<p class="detail-empty">Eingehende Linkvorkommen aus dem profilsichtbaren Originalbestand, einschließlich Quellen außerhalb des Segments. Durch das Berichtsprofil ausgeblendete Quellen sind hier nicht enthalten; native Graphmetriken verwenden den vollständigen Capture.</p>':'') + (sources.length ? `<ul class="detail-links">${sources.map((source) => `<li>${safeLink(source.url)}<small>${escape(source.text || '(ohne Linktext)')}</small></li>`).join('')}</ul>` : '<p class="detail-empty">Keine eingehenden Links aus den bislang erfassten Seiten. Die Start-URL kann ohne interne Eingangslinks erscheinen.</p>');
     } else {
       const issues = pageIssues(page.url);
       element.innerHTML = issues.length ? `<ul class="detail-links">${issues.map((issue) => `<li><span class="badge ${issue.severity === 'error' ? 'danger' : issue.severity === 'warning' ? 'warning' : 'neutral'}">${escape(issue.severity)}</span> ${escape(issueTitle(issue.code))}<small>${escape(issue.message || '')}</small>${array(issue.related_urls).length ? `<small>${array(issue.related_urls).map(safeLink).join('<br>')}</small>` : ''}</li>`).join('')}</ul>` : '<p class="detail-empty">Für diese URL wurden bislang keine Probleme gemeldet.</p>';
@@ -1323,6 +1405,7 @@
   }
 
   function exportCSV() {
+    if(dashboardSegments?.state.busy)return;
     if (policySection()) { exportPolicyPage(); return; }
     if (contentSection()) { exportContentRows(); return; }
     if (state.section==='resource-discovery' || sitemapSection() || findingsSection()) return;
@@ -1341,6 +1424,8 @@
       return { coverage: operation?.coverage ?? 'crawl_snapshot', basis, selectedState, parentHash: operation?.parent?.snapshot_sha256 ?? '', fetchedAt: page?.fetched_at ?? '', requestedURL: page?.url ?? '' };
     };
     for (const [key, label] of [['coverage', 'Crawl Coverage'], ['basis', 'Observation Basis'], ['selectedState', 'Selected State'], ['parentHash', 'Parent Snapshot SHA256'], ['fetchedAt', 'Fetched At'], ['requestedURL', 'Observation Requested URL']]) cols.push(textColumn('observation_' + key, label, row => metadata(row)[key]));
+    const segment=separateSegmentSections.has(state.section)?null:state.segmentView;
+    if(segment)for(const[key,label,value]of [['token','Segment Snapshot Token',()=>segment.context.snapshot_token],['rules','Segment Rules SHA256',()=>segment.context.rules_sha256],['report','Segment Typed Report SHA256',()=>segment.context.typed_report_sha256],['generation','Segment Generation',()=>segment.context.app_generation],['selection','Segment Selection',()=>JSON.stringify(segment.selection)],['reporting','Segment Reporting Identity',()=>JSON.stringify(segment.context.reporting_view??null)],['ordinal','Original Page Ordinal',row=>['issues','linkmetrics','structured'].includes(state.section)?'':(row._page||row)._segmentOrdinal??'']])cols.push(textColumn('segment_'+key,label,value));
     const visibility=state.crawl?.reporting_visibility;
     if(visibility)for(const [key,label] of [['captured_pages','Captured Pages'],['visible_pages','Visible Pages'],['hidden_pages','Hidden Pages']])cols.push(textColumn('reporting_'+key,label,()=>visibility[key]));
     const csvCell = (input) => { let value = String(input ?? ''); if (typeof input !== 'number' && typeof input !== 'boolean' && /^[\s\uFEFF]*[=+@-]/u.test(value)) value = `'${value}`; return `"${value.replace(/"/g, '""')}"`; };
@@ -1353,7 +1438,13 @@
 
   async function serverDownload(endpoint, filename) {
     if (!state.crawl) return;
-    const owner={id:state.crawl.id,generation:state.generation,nativeGeneration:state.crawl.generation};
+    if(state.segmentView){
+      if(endpoint==='report.json'){await dashboardSegments.download('json');return;}
+      if(endpoint==='sitemap.xml'){message('Sitemap-Export benötigt die Originalansicht.',true);return;}
+      const kind=({'dom.csv':'dom','custom-search.csv':'custom-search','pdf.csv':'pdf','responses.csv':'responses','fragments.csv':'fragments','links.csv':'links','images.csv':'images'})[endpoint] || (endpoint.startsWith('accessibility.csv')?'accessibility':null);
+      if(kind){await dashboardSegments.download(kind);return;}
+    }
+    const owner={id:state.crawl.id,generation:state.generation,nativeGeneration:state.crawl.generation,segmentRevision:dashboardSegments?.state.revision};
     try {
       const response = await fetch(`/api/crawls/${encodeURIComponent(owner.id)}/${endpoint}`);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -1364,11 +1455,13 @@
         const actual=[...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(byte=>byte.toString(16).padStart(2,'0')).join('');
         if(actual!==digest)throw new Error('CSV: SHA-256 stimmt nicht überein.');
         if(endpoint.startsWith('accessibility.csv')&&response.headers.get('x-accessibility-generation')!==String(owner.nativeGeneration))throw new Error('Accessibility-CSV: Generation stimmt nicht überein.');
-        if(owner.id!==state.crawl?.id||owner.generation!==state.generation)return;
+        if(owner.id!==state.crawl?.id||owner.generation!==state.generation||owner.segmentRevision!==dashboardSegments?.state.revision)return;
         downloadBlob(new Blob([bytes],{type:'text/csv;charset=utf-8'}),filename);message('Gespeicherte Befunde CSV · Länge und SHA-256 bestätigt.');return;
       }
-      downloadBlob(await response.blob(), filename);
-    } catch (error) { if(owner.id!==state.crawl?.id||owner.generation!==state.generation)return;message(`Export fehlgeschlagen: ${error.message}`, true); }
+      const blob=await response.blob();
+      if(owner.id!==state.crawl?.id||owner.generation!==state.generation||owner.segmentRevision!==dashboardSegments?.state.revision)return;
+      downloadBlob(blob, filename);
+    } catch (error) { if(owner.id!==state.crawl?.id||owner.generation!==state.generation||owner.segmentRevision!==dashboardSegments?.state.revision)return;message(`Export fehlgeschlagen: ${error.message}`, true); }
   }
 
   async function importProject(file) {
@@ -1850,7 +1943,7 @@
       status.textContent = 'Berichtsfilter konnten nicht geladen werden: ' + error.message;
     }
   }
-  function directiveReportingNote(){const counts=state.crawl?.reporting_visibility;return counts?`<p class="graph-note">Berichtsfilter: ${number(counts.visible_pages)} sichtbar, ${number(counts.hidden_pages)} ausgeblendet, ${number(counts.captured_pages)} erfasst. Abrufe und ausgehende Linkentdeckung bleiben erhalten. Roh-Snapshots und getrennte Analysebereiche sind ungefiltert.</p>`:"";}
+  function directiveReportingNote(){if(state.segmentView){const r=state.segmentView.cohort.reporting;return `<p class="graph-note">Bestätigte Segmentauswahl: ${number(state.segmentView.cohort.summary.selected_pages)} von ${number(state.segmentView.cohort.summary.total_pages)} Seitenbeobachtungen${r?` · ${number(r.captured_page_observations)} erfasst · ${number(r.profile_excluded_page_observations)} durch Berichtsprofil ausgeblendet`:''}. Globale Crawl-Zähler und Beziehungspartner bleiben getrennt.</p>`;}const counts=state.crawl?.reporting_visibility;return counts?`<p class="graph-note">Berichtsfilter: ${number(counts.visible_pages)} sichtbar, ${number(counts.hidden_pages)} ausgeblendet, ${number(counts.captured_pages)} erfasst. Abrufe und ausgehende Linkentdeckung bleiben erhalten. Roh-Snapshots und getrennte Analysebereiche sind ungefiltert.</p>`:"";}
 
   function restoreCdnDirectoryReportingSettings(saved){return {cdn_directory_reporting_enabled:saved.cdn_directory_reporting_enabled===true,cdn_directory_rules_text:typeof saved.cdn_directory_rules_text==='string'?saved.cdn_directory_rules_text:''};}
   function readCdnDirectoryReportingSettings(form){return {cdn_directory_reporting_enabled:form.elements.cdn_directory_reporting_enabled.checked,cdn_directory_rules_text:form.elements.cdn_directory_rules_text.value};}
@@ -3431,6 +3524,7 @@
   }
 
   function bindEvents() {
+    bindDashboardSegments();
     window.SavedComparisonUI?.bind({ downloadBlob, selectedJob: () => state.crawl?.id });
     bindResourceEvents();
     bindSitemapEvents();

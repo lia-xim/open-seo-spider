@@ -226,7 +226,7 @@ impl Write for Counter {
         Ok(())
     }
 }
-fn row(output: &mut Budget, cells: &[String]) -> Result<()> {
+fn row(output: &mut impl Write, cells: &[String]) -> Result<()> {
     for (index, cell) in cells.iter().enumerate() {
         if index > 0 {
             output.write_all(b",")?;
@@ -255,17 +255,55 @@ fn number(value: Option<u64>) -> String {
     value.map(|n| n.to_string()).unwrap_or_default()
 }
 fn export(report: &CrawlReport, cap: usize, page_cap: usize) -> Result<Vec<u8>> {
-    let mut output = Budget {
+    let output = Budget {
         bytes: Vec::new(),
         cap,
     };
-    row(&mut output, &HEADERS.map(str::to_owned))?;
-    let captured = report.pages.len();
-    let visible = report
-        .pages
-        .iter()
-        .filter(|p| open_seo_spider_core::directive_page_visible(&report.config, p))
-        .count();
+    Ok(write_csv(report, output, page_cap, &[], None)?.bytes)
+}
+
+/// Cohort selection is already applied by the shared segment engine. Keep the
+/// original captured/profile counts distinct from the selected-page columns.
+pub(super) fn write_cohort_csv<W: Write>(
+    report: &CrawlReport,
+    output: W,
+    extra: &[(String, String)],
+    captured: usize,
+    visible: usize,
+) -> Result<W> {
+    write_csv(report, output, PAGE_BYTES, extra, Some((captured, visible)))
+}
+
+fn write_csv<W: Write>(
+    report: &CrawlReport,
+    mut output: W,
+    page_cap: usize,
+    extra: &[(String, String)],
+    counts: Option<(usize, usize)>,
+) -> Result<W> {
+    let mut headers = HEADERS.map(str::to_owned).to_vec();
+    for (name, _) in extra {
+        ensure!(
+            !headers.contains(name),
+            "Duplicate accessibility CSV context column"
+        );
+        headers.push(name.clone());
+    }
+    row(&mut output, &headers)?;
+    let (captured, visible) = counts.unwrap_or_else(|| {
+        (
+            report.pages.len(),
+            report
+                .pages
+                .iter()
+                .filter(|p| open_seo_spider_core::directive_page_visible(&report.config, p))
+                .count(),
+        )
+    });
+    ensure!(
+        visible <= captured,
+        "Invalid accessibility captured/profile counts"
+    );
     for page in report
         .pages
         .iter()
@@ -330,6 +368,7 @@ fn export(report: &CrawlReport, cap: usize, page_cap: usize) -> Result<Vec<u8>> 
         base[30] = visible.to_string();
         base[31] = (captured - visible).to_string();
         base[32] = "automated_only; saved_observations_not_a_WCAG_compliance_claim".into();
+        base.extend(extra.iter().map(|(_, value)| value.clone()));
         row(&mut output, &base)?;
         base[28].clear();
         for (kind, rules) in [
@@ -362,7 +401,7 @@ fn export(report: &CrawlReport, cap: usize, page_cap: usize) -> Result<Vec<u8>> 
             }
         }
     }
-    Ok(output.bytes)
+    Ok(output)
 }
 
 #[derive(Default, Deserialize)]

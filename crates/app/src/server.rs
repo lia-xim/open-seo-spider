@@ -42,6 +42,7 @@ mod policy;
 mod resource_broken_sources;
 pub(crate) mod resources;
 mod response_stream;
+mod segment_dashboard;
 mod segments;
 mod sitemap_csv_stream;
 mod sitemap_findings;
@@ -293,6 +294,15 @@ async fn serve_with_mcp_files_ready_source_inner(
                 (
                     [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
                     include_str!("../../../web/app.js"),
+                )
+            }),
+        )
+        .route(
+            "/dashboard-segments.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+                    include_str!("../../../web/dashboard-segments.js"),
                 )
             }),
         )
@@ -719,6 +729,30 @@ async fn serve_with_mcp_files_ready_source_inner(
         .route(
             "/api/crawls/{id}/segments.csv",
             post(segments::csv).layer(axum::extract::DefaultBodyLimit::max(
+                segments::REQUEST_BYTES,
+            )),
+        )
+        .route(
+            "/api/crawls/{id}/segments/dashboard",
+            post(segment_dashboard::preview).layer(axum::extract::DefaultBodyLimit::max(
+                segments::REQUEST_BYTES,
+            )),
+        )
+        .route(
+            "/api/crawls/{id}/segments/dashboard-analysis",
+            post(segment_dashboard::analyze).layer(axum::extract::DefaultBodyLimit::max(
+                segments::REQUEST_BYTES,
+            )),
+        )
+        .route(
+            "/api/crawls/{id}/segments/dashboard.json",
+            post(segment_dashboard::json).layer(axum::extract::DefaultBodyLimit::max(
+                segments::REQUEST_BYTES,
+            )),
+        )
+        .route(
+            "/api/crawls/{id}/segments/dashboard/{kind}",
+            post(segment_dashboard::csv).layer(axum::extract::DefaultBodyLimit::max(
                 segments::REQUEST_BYTES,
             )),
         )
