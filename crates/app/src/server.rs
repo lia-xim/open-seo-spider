@@ -44,6 +44,7 @@ mod policy;
 mod resource_broken_sources;
 pub(crate) mod resources;
 mod response_stream;
+mod screenshots;
 mod segment_dashboard;
 mod segments;
 mod sitemap_csv_stream;
@@ -300,6 +301,15 @@ async fn serve_with_mcp_files_ready_source_inner(
             }),
         )
         .route(
+            "/screenshots.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+                    include_str!("../../../web/screenshots.js"),
+                )
+            }),
+        )
+        .route(
             "/config-profiles.js",
             get(|| async {
                 (
@@ -506,6 +516,8 @@ async fn serve_with_mcp_files_ready_source_inner(
         )
         .route("/api/content/analyze", post(content_analysis))
         .route("/api/css/inspect", post(resources::inspect_css))
+        .route("/api/crawls/{id}/screenshot", get(screenshots::metadata))
+        .route("/api/crawls/{id}/screenshot.png", get(screenshots::png))
         .route("/api/crawls/{id}/content", get(content::inventory))
         .route("/api/crawls/{id}/content/document", get(content::document))
         .route("/api/crawls/{id}/content/analyze", post(content::analyze))

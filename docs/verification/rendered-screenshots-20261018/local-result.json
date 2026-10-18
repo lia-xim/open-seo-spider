@@ -1,0 +1,1547 @@
+{
+  "kind": "rendered_screenshots_selected_viewport_local_acceptance",
+  "result": "PASS_LOCAL_SELECTED_VIEWPORT_SAVED_PNG_AND_FORTY_ONE_SUITE_REGRESSION",
+  "recorded_at": "2026-10-18T19:59:05.164Z",
+  "parent_commit": "513bbebad065ef42fe825d173684e0c8aee316dc",
+  "normal_binary": {
+    "path": "target/debug/open-seo-spider.exe",
+    "bytes": 89986560,
+    "sha256": "c780fa04c09a7f8a20e1ba5f61368fb0df2d729b85785fbcb34dbe95cae0ed59"
+  },
+  "frozen_acceptance_inputs": 579,
+  "frozen_acceptance_manifest_sha256": "07be90a360aab288d992d77e7e284b74a883be4794e7c48a58d5d18f74c6f8f7",
+  "rust": {
+    "passed": 1831,
+    "failed": 0,
+    "ignored": 5,
+    "blocks": 17,
+    "explicit_opt_in_chromium_cases": 4
+  },
+  "state_tests": {
+    "passed": 160,
+    "failed": 0
+  },
+  "semantic_ui_groups": 40,
+  "ui": {
+    "one_complete_invocation": true,
+    "registered_suites": 41,
+    "kinds": {
+      "fixture": 9,
+      "live": 21,
+      "owned-native": 11
+    },
+    "proof": {
+      "path": "artifacts/screenshot-ui41-r3/proof.json",
+      "bytes": 10299,
+      "sha256": "4f09b26170d3084485d61cf69f20aa3d855b8339850b99c7e60f1eed99750e59"
+    },
+    "kind": "redesign_UI_E2E",
+    "results": [
+      {
+        "name": "dashboard",
+        "script": "ui-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 8186
+      },
+      {
+        "name": "pause-controls",
+        "script": "ui-crawl-control-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 6910
+      },
+      {
+        "name": "recrawl-controls",
+        "script": "ui-selected-recrawl-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5890
+      },
+      {
+        "name": "policy-controls",
+        "script": "ui-policy-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 8924
+      },
+      {
+        "name": "content-controls",
+        "script": "ui-content-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 30646
+      },
+      {
+        "name": "resource-controls",
+        "script": "ui-resource-discovery-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 15410
+      },
+      {
+        "name": "resource-ledger",
+        "script": "ui-resource-ledger-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 10042
+      },
+      {
+        "name": "resource-contract",
+        "script": "ui-resource-contract-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 11874
+      },
+      {
+        "name": "comparison-controls",
+        "script": "ui-saved-comparison-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4423
+      },
+      {
+        "name": "tool-navigation",
+        "script": "ui-tools-navigation-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4333
+      },
+      {
+        "name": "rendered-crawl",
+        "script": "ui-renderer-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4607
+      },
+      {
+        "name": "dom-capture",
+        "script": "ui-dom-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 14097
+      },
+      {
+        "name": "accessibility-review",
+        "script": "ui-accessibility-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 19973
+      },
+      {
+        "name": "resources",
+        "script": "ui-resource-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 8787
+      },
+      {
+        "name": "robots",
+        "script": "ui-robots-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 1939
+      },
+      {
+        "name": "serp",
+        "script": "ui-serp-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 1559
+      },
+      {
+        "name": "list-import",
+        "script": "ui-list-import-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4952
+      },
+      {
+        "name": "pause-resume",
+        "script": "ui-crawl-control-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 16454
+      },
+      {
+        "name": "selected-recrawl",
+        "script": "ui-selected-recrawl-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 8667
+      },
+      {
+        "name": "policy",
+        "script": "ui-policy-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5081
+      },
+      {
+        "name": "content",
+        "script": "ui-content-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 9264
+      },
+      {
+        "name": "resource-discovery",
+        "script": "ui-resource-discovery-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 9091
+      },
+      {
+        "name": "resource-persistence",
+        "script": "ui-resource-contract-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 7049
+      },
+      {
+        "name": "saved-spelling",
+        "script": "ui-spelling-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 2874
+      },
+      {
+        "name": "link-workflows",
+        "script": "ui-link-workflows-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4122
+      },
+      {
+        "name": "api-enrichment",
+        "script": "ui-enrichment-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 1472
+      },
+      {
+        "name": "directory-tree",
+        "script": "ui-directory-tree-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5864
+      },
+      {
+        "name": "saved-ngrams",
+        "script": "ui-ngrams-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5393
+      },
+      {
+        "name": "saved-segments",
+        "script": "ui-segments-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5081
+      },
+      {
+        "name": "dashboard-segments",
+        "script": "ui-dashboard-segments-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 900000,
+        "duration_ms": 364272
+      },
+      {
+        "name": "segments-repeated-metadata",
+        "script": "ui-segments-repeated-metadata-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 1800000,
+        "duration_ms": 1190118
+      },
+      {
+        "name": "segments-density",
+        "script": "ui-segments-density-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4978
+      },
+      {
+        "name": "ngrams-cold-restart",
+        "script": "ui-ngrams-cold-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 10114
+      },
+      {
+        "name": "segments-cold-restart",
+        "script": "ui-segments-cold-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 12122
+      },
+      {
+        "name": "resource-sources",
+        "script": "ui-resource-sources-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 15183
+      },
+      {
+        "name": "custom-search",
+        "script": "ui-custom-search-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 21046
+      },
+      {
+        "name": "saved-comparison",
+        "script": "ui-saved-comparison-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 3467
+      },
+      {
+        "name": "comparison-bundles",
+        "script": "ui-saved-comparison-bundle-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4626
+      },
+      {
+        "name": "configuration-profiles",
+        "script": "ui-config-profiles-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 9139
+      },
+      {
+        "name": "configuration-profile-catalog",
+        "script": "ui-config-profile-catalog-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 9556
+      },
+      {
+        "name": "screenshot-viewport",
+        "script": "ui-screenshot-viewport-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 13092
+      }
+    ],
+    "app_origin": "http://127.0.0.1:49177",
+    "shutdown": {
+      "code": 0,
+      "signal": null
+    },
+    "binary": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\target\\debug\\open-seo-spider.exe",
+    "binary_sha256": "c780fa04c09a7f8a20e1ba5f61368fb0df2d729b85785fbcb34dbe95cae0ed59",
+    "binary_unchanged": true,
+    "tracked_sources_unchanged": true,
+    "changed": [],
+    "complete": true,
+    "scope": "Isolated owned local app/data/renderer and synthetic fixtures. Mocked-API fixture suites are labelled separately from live native flows. No installed app or user crawl store used."
+  },
+  "focused_screenshot_acceptance": {
+    "result": "PASS",
+    "duration_ms": 14751,
+    "binary": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\target\\debug\\open-seo-spider.exe",
+    "binary_sha256": "c780fa04c09a7f8a20e1ba5f61368fb0df2d729b85785fbcb34dbe95cae0ed59",
+    "chrome": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/browser-runtime/chrome-155.0.8059.80-36a30716-source12-v1/chrome.exe",
+    "chrome_sha256": "36a30716f0994b377f1ce6b47cfe35399b9719e31d597fe0ea0d8f3b62aed532",
+    "output": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\screenshot-live-r3",
+    "pins": [
+      {
+        "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-screenshot-viewport-live.cjs",
+        "sha256": "02442d345fbb869947c2d01cf40bbc1f1be7bd57b6ba4c56dcd937db831d6d76"
+      },
+      {
+        "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\artifact-path.cjs",
+        "sha256": "1b620a679c3e714a1d1f76f390d2a5bc0d563f3e18b2ee1e033665ad76c194fd"
+      },
+      {
+        "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\target\\debug\\open-seo-spider.exe",
+        "sha256": "c780fa04c09a7f8a20e1ba5f61368fb0df2d729b85785fbcb34dbe95cae0ed59"
+      },
+      {
+        "file": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/browser-runtime/chrome-155.0.8059.80-36a30716-source12-v1/chrome.exe",
+        "sha256": "36a30716f0994b377f1ce6b47cfe35399b9719e31d597fe0ea0d8f3b62aed532"
+      },
+      {
+        "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\renderer\\server.mjs",
+        "sha256": "779699ebcf533cd88e0877eaf80edc7db28f0c4935a2e3a50f16d1fed45b7175"
+      },
+      {
+        "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\renderer\\package-lock.json",
+        "sha256": "931a8719184b70ef76b49ddcc43421f4adf02491dbacafe75f0a121687172184"
+      },
+      {
+        "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\index.html",
+        "sha256": "24415cf3d4cdbe4e2f0dcefe190b4d01b503793cf72f1a9d88f7b41bb027429f"
+      },
+      {
+        "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\app.js",
+        "sha256": "ce1071bd30a0d236d4d3b96aca8285b4abfbc54d62c3e2dd28ea8d448bdf48e4"
+      },
+      {
+        "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\styles.css",
+        "sha256": "04bf13af36e94c69cefbbf2a8effc5a925443d48a9050903632b430bb2007e5a"
+      },
+      {
+        "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\config-profiles.js",
+        "sha256": "add70b14f6f0f6bc2e7e2b565f675fad06bc613d2aca56975e3ab1ff01212796"
+      },
+      {
+        "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\screenshots.js",
+        "sha256": "0ca1c112ba0fc7d1857fc05db41807ef7d16558db34dbd8a88795355ad5fbd25"
+      }
+    ],
+    "store": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\screenshot-live-r3\\store",
+    "renderer_url": "http://127.0.0.1:54972/render",
+    "origin_scope": "two different owned native origins; empty fresh cold browser context",
+    "raw_snapshot_sha_scope": "compact original native project JSON text removes whitespace only outside strings; number lexemes unchanged",
+    "geometry": [
+      {
+        "selector": "#screenshot-details > summary",
+        "x": 23,
+        "y": 628.3125,
+        "width": 274,
+        "height": 18
+      },
+      {
+        "selector": "#screenshot-export",
+        "x": 23,
+        "y": 621.5,
+        "width": 274,
+        "height": 32
+      },
+      {
+        "selector": "[name=renderer_viewport_enabled]",
+        "x": 50,
+        "y": 442.46875,
+        "width": 15,
+        "height": 15
+      },
+      {
+        "selector": "[name=renderer_viewport_width]",
+        "x": 46,
+        "y": 568.46875,
+        "width": 228,
+        "height": 33.5
+      },
+      {
+        "selector": "[name=renderer_viewport_height]",
+        "x": 46,
+        "y": 637.96875,
+        "width": 228,
+        "height": 33.5
+      }
+    ],
+    "checks": [
+      "Actual imported legacy renderer profile preserves native-only bytes, two explicit viewports reach real Chromium and saved PNGs match dimensions, quadrant pixels, media breakpoint and executed titles",
+      "Guarded native PNG rejects stale identity and unavailable declared controls; actual held metadata/PNG cannot replace a new selection or download after inspector close",
+      "Two actual normal native processes reopen byte-identical captures and PNG downloads with empty cold browser storage, zero product refetches, two positive410 witnesses and natural stdin EOF0; populated320px controls remain reachable"
+    ],
+    "captures": [
+      {
+        "id": "b3a56b09-6859-42be-bbd8-7ab7d29660c2",
+        "meta": {
+          "engine": "open-seo-spider/screenshot-v1",
+          "version": 1,
+          "id": "b3a56b09-6859-42be-bbd8-7ab7d29660c2",
+          "ordinal": 0,
+          "url": "http://127.0.0.1:54973/a",
+          "final_url": "http://127.0.0.1:54973/a",
+          "generation": 1,
+          "snapshot_sha256": "cdd951dbe9ee2140515fb270f09311764ca7001af502cb7f13a7be0229f57dd1",
+          "available": true,
+          "status": "available",
+          "reason": null,
+          "viewport": {
+            "height": 240,
+            "width": 320
+          },
+          "png_sha256": "0f92034ea203a9836492dbf7e05232da6ff01ced3675bfa93dec2f5e4f5f4c08",
+          "bytes": 815,
+          "width": 320,
+          "height": 240
+        },
+        "project_sha256": "133e7cb64ba6ebaef892a45b2c59cb12cf7183a4fc47feeb58270866898945a2",
+        "saved_sha256": "c2aa79199e4546882198bc34e39ab6a09f7098627de77cec6a8963599b193507",
+        "requested_viewport": {
+          "width": 320,
+          "height": 240
+        }
+      },
+      {
+        "id": "c1bd6e6d-a6e1-451a-a28a-3fd0c488b851",
+        "meta": {
+          "engine": "open-seo-spider/screenshot-v1",
+          "version": 1,
+          "id": "c1bd6e6d-a6e1-451a-a28a-3fd0c488b851",
+          "ordinal": 0,
+          "url": "http://127.0.0.1:54973/b",
+          "final_url": "http://127.0.0.1:54973/b",
+          "generation": 1,
+          "snapshot_sha256": "0a32425cef5691f6b4ca602b1e27c2f6f5a526c0abbc75d63028e50c37e4cfd6",
+          "available": true,
+          "status": "available",
+          "reason": null,
+          "viewport": {
+            "height": 900,
+            "width": 1440
+          },
+          "png_sha256": "d0304cf16d72dc8ff3080b3d83277dc72900e57c7067946289df1bee72354d4c",
+          "bytes": 5992,
+          "width": 1440,
+          "height": 900
+        },
+        "project_sha256": "b3f7b006e6a0e947bfd0e7234d1146918bc3f43aaa821ae95790374e449797b7",
+        "saved_sha256": "388287a98d49354bc0bca48c9ad9369f07660d97ad9f53eea721cfc41b9bfdc6",
+        "requested_viewport": {
+          "width": 1440,
+          "height": 900
+        }
+      }
+    ],
+    "negatives": [
+      {
+        "label": "invalid-settings-and-native-pure-validation",
+        "scope": "no job/store/website/worker requests",
+        "cases": 3
+      },
+      {
+        "label": "stale-generation",
+        "status": 409,
+        "scope": "native-bound-PNG-refusal",
+        "bytes": 102
+      },
+      {
+        "label": "wrong-snapshot",
+        "status": 409,
+        "scope": "native-bound-PNG-refusal",
+        "bytes": 102
+      },
+      {
+        "label": "wrong-image",
+        "status": 409,
+        "scope": "native-bound-PNG-refusal",
+        "bytes": 72
+      },
+      {
+        "label": "wrong-url",
+        "status": 409,
+        "scope": "native-bound-PNG-refusal",
+        "bytes": 110
+      },
+      {
+        "label": "missing-ordinal",
+        "status": 404,
+        "scope": "native-bound-PNG-refusal",
+        "bytes": 82
+      },
+      {
+        "label": "missing",
+        "id": "bcf727e4-aeea-4358-b96c-1db417e76f0a",
+        "status": "missing",
+        "scope": "explicit-declared-import-negative-only; not genuine capture"
+      },
+      {
+        "label": "disabled",
+        "id": "571f975e-d6af-4320-8b6c-491609bd4cb8",
+        "status": "disabled",
+        "scope": "explicit-declared-import-negative-only; not genuine capture"
+      },
+      {
+        "label": "render_failed",
+        "id": "58de2104-7507-4f69-94df-882ffc8e6102",
+        "status": "render_failed",
+        "scope": "explicit-declared-import-negative-only; not genuine capture"
+      },
+      {
+        "label": "corrupt",
+        "id": "d71dbc1e-b3e7-496e-b56e-0bdf4b074885",
+        "status": "corrupt",
+        "scope": "explicit-declared-import-negative-only; not genuine capture"
+      }
+    ],
+    "downloads": [
+      {
+        "source": "browser-event",
+        "phase": "warm",
+        "suggested": "open-seo-spider-screenshot-0.png"
+      },
+      {
+        "source": "actual-file",
+        "label": "warm-a",
+        "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\screenshot-live-r3\\warm-a.png",
+        "sha256": "0f92034ea203a9836492dbf7e05232da6ff01ced3675bfa93dec2f5e4f5f4c08",
+        "bytes": 815,
+        "identity": {
+          "id": "b3a56b09-6859-42be-bbd8-7ab7d29660c2",
+          "ordinal": 0,
+          "url": "http://127.0.0.1:54973/a",
+          "generation": 1,
+          "snapshot_sha256": "cdd951dbe9ee2140515fb270f09311764ca7001af502cb7f13a7be0229f57dd1",
+          "image_sha256": "0f92034ea203a9836492dbf7e05232da6ff01ced3675bfa93dec2f5e4f5f4c08"
+        },
+        "decoded": {
+          "width": 320,
+          "height": 240,
+          "pixels": [
+            [
+              240,
+              32,
+              32,
+              255
+            ],
+            [
+              20,
+              180,
+              60,
+              255
+            ],
+            [
+              40,
+              60,
+              220,
+              255
+            ],
+            [
+              230,
+              180,
+              20,
+              255
+            ]
+          ]
+        }
+      },
+      {
+        "source": "browser-event",
+        "phase": "warm",
+        "suggested": "open-seo-spider-screenshot-0.png"
+      },
+      {
+        "source": "actual-file",
+        "label": "warm-b",
+        "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\screenshot-live-r3\\warm-b.png",
+        "sha256": "d0304cf16d72dc8ff3080b3d83277dc72900e57c7067946289df1bee72354d4c",
+        "bytes": 5992,
+        "identity": {
+          "id": "c1bd6e6d-a6e1-451a-a28a-3fd0c488b851",
+          "ordinal": 0,
+          "url": "http://127.0.0.1:54973/b",
+          "generation": 1,
+          "snapshot_sha256": "0a32425cef5691f6b4ca602b1e27c2f6f5a526c0abbc75d63028e50c37e4cfd6",
+          "image_sha256": "d0304cf16d72dc8ff3080b3d83277dc72900e57c7067946289df1bee72354d4c"
+        },
+        "decoded": {
+          "width": 1440,
+          "height": 900,
+          "pixels": [
+            [
+              16,
+              200,
+              200,
+              255
+            ],
+            [
+              20,
+              180,
+              60,
+              255
+            ],
+            [
+              40,
+              60,
+              220,
+              255
+            ],
+            [
+              230,
+              180,
+              20,
+              255
+            ]
+          ]
+        }
+      },
+      {
+        "source": "browser-event",
+        "phase": "cold",
+        "suggested": "open-seo-spider-screenshot-0.png"
+      },
+      {
+        "source": "actual-file",
+        "label": "cold-a",
+        "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\screenshot-live-r3\\cold-a.png",
+        "sha256": "0f92034ea203a9836492dbf7e05232da6ff01ced3675bfa93dec2f5e4f5f4c08",
+        "bytes": 815,
+        "identity": {
+          "id": "b3a56b09-6859-42be-bbd8-7ab7d29660c2",
+          "ordinal": 0,
+          "url": "http://127.0.0.1:54973/a",
+          "generation": 1,
+          "snapshot_sha256": "cdd951dbe9ee2140515fb270f09311764ca7001af502cb7f13a7be0229f57dd1",
+          "image_sha256": "0f92034ea203a9836492dbf7e05232da6ff01ced3675bfa93dec2f5e4f5f4c08"
+        },
+        "decoded": {
+          "width": 320,
+          "height": 240,
+          "pixels": [
+            [
+              240,
+              32,
+              32,
+              255
+            ],
+            [
+              20,
+              180,
+              60,
+              255
+            ],
+            [
+              40,
+              60,
+              220,
+              255
+            ],
+            [
+              230,
+              180,
+              20,
+              255
+            ]
+          ]
+        }
+      },
+      {
+        "source": "browser-event",
+        "phase": "cold",
+        "suggested": "open-seo-spider-screenshot-0.png"
+      },
+      {
+        "source": "actual-file",
+        "label": "cold-b",
+        "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\screenshot-live-r3\\cold-b.png",
+        "sha256": "d0304cf16d72dc8ff3080b3d83277dc72900e57c7067946289df1bee72354d4c",
+        "bytes": 5992,
+        "identity": {
+          "id": "c1bd6e6d-a6e1-451a-a28a-3fd0c488b851",
+          "ordinal": 0,
+          "url": "http://127.0.0.1:54973/b",
+          "generation": 1,
+          "snapshot_sha256": "0a32425cef5691f6b4ca602b1e27c2f6f5a526c0abbc75d63028e50c37e4cfd6",
+          "image_sha256": "d0304cf16d72dc8ff3080b3d83277dc72900e57c7067946289df1bee72354d4c"
+        },
+        "decoded": {
+          "width": 1440,
+          "height": 900,
+          "pixels": [
+            [
+              16,
+              200,
+              200,
+              255
+            ],
+            [
+              20,
+              180,
+              60,
+              255
+            ],
+            [
+              40,
+              60,
+              220,
+              255
+            ],
+            [
+              230,
+              180,
+              20,
+              255
+            ]
+          ]
+        }
+      },
+      {
+        "source": "browser-event",
+        "phase": "cold",
+        "suggested": "open-seo-spider-screenshot-0.png"
+      },
+      {
+        "source": "actual-file",
+        "label": "cold-b-320",
+        "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\screenshot-live-r3\\cold-b-320.png",
+        "sha256": "d0304cf16d72dc8ff3080b3d83277dc72900e57c7067946289df1bee72354d4c",
+        "bytes": 5992,
+        "identity": {
+          "id": "c1bd6e6d-a6e1-451a-a28a-3fd0c488b851",
+          "ordinal": 0,
+          "url": "http://127.0.0.1:54973/b",
+          "generation": 1,
+          "snapshot_sha256": "0a32425cef5691f6b4ca602b1e27c2f6f5a526c0abbc75d63028e50c37e4cfd6",
+          "image_sha256": "d0304cf16d72dc8ff3080b3d83277dc72900e57c7067946289df1bee72354d4c"
+        },
+        "decoded": {
+          "width": 1440,
+          "height": 900,
+          "pixels": [
+            [
+              16,
+              200,
+              200,
+              255
+            ],
+            [
+              20,
+              180,
+              60,
+              255
+            ],
+            [
+              40,
+              60,
+              220,
+              255
+            ],
+            [
+              230,
+              180,
+              20,
+              255
+            ]
+          ]
+        }
+      }
+    ],
+    "held_actual_responses": [
+      {
+        "kind": "metadata",
+        "id": "b3a56b09-6859-42be-bbd8-7ab7d29660c2",
+        "source": "actual-native-response-body-only-delayed",
+        "route": "http://127.0.0.1:63183/api/crawls/b3a56b09-6859-42be-bbd8-7ab7d29660c2/screenshot?url=http%3A%2F%2F127.0.0.1%3A54973%2Fa",
+        "bytes": 489,
+        "sha256": "3753d628cdf011358b69ad347d50933854468f640578f49ea24f8a1f320910fc",
+        "delivery": "fulfilled"
+      },
+      {
+        "kind": "png",
+        "id": "b3a56b09-6859-42be-bbd8-7ab7d29660c2",
+        "source": "actual-native-response-body-only-delayed",
+        "route": "http://127.0.0.1:63183/api/crawls/b3a56b09-6859-42be-bbd8-7ab7d29660c2/screenshot.png?url=http%3A%2F%2F127.0.0.1%3A54973%2Fa&ordinal=0&expected_snapshot_sha256=cdd951dbe9ee2140515fb270f09311764ca7001af502cb7f13a7be0229f57dd1&expected_image_sha256=0f92034ea203a9836492dbf7e05232da6ff01ced3675bfa93dec2f5e4f5f4c08&expected_generation=1",
+        "bytes": 815,
+        "sha256": "0f92034ea203a9836492dbf7e05232da6ff01ced3675bfa93dec2f5e4f5f4c08",
+        "delivery": "fulfilled"
+      }
+    ],
+    "native": [
+      {
+        "phase": "warm",
+        "pid": 460,
+        "origin": "http://127.0.0.1:63183",
+        "close": {
+          "code": 0,
+          "signal": null
+        },
+        "natural_stdin_eof": true,
+        "forced": false
+      },
+      {
+        "phase": "cold",
+        "pid": 30436,
+        "origin": "http://127.0.0.1:64582",
+        "close": {
+          "code": 0,
+          "signal": null
+        },
+        "natural_stdin_eof": true,
+        "forced": false
+      }
+    ],
+    "website_capture_hits": [
+      {
+        "method": "GET",
+        "url": "/a"
+      },
+      {
+        "method": "GET",
+        "url": "/a"
+      },
+      {
+        "method": "GET",
+        "url": "/favicon.ico"
+      },
+      {
+        "method": "GET",
+        "url": "/b"
+      },
+      {
+        "method": "GET",
+        "url": "/b"
+      },
+      {
+        "method": "GET",
+        "url": "/favicon.ico"
+      }
+    ],
+    "offline_product_hits": [],
+    "offline_positive_controls": [
+      {
+        "status": 410,
+        "phase": "warm"
+      },
+      {
+        "status": 410,
+        "phase": "between-processes"
+      }
+    ],
+    "worker_requests": [
+      {
+        "method": "POST",
+        "path": "/render",
+        "offline": false
+      },
+      {
+        "method": "POST",
+        "path": "/render",
+        "offline": false
+      }
+    ],
+    "browser_errors": [],
+    "external_requests": [],
+    "scope": "Two genuine selected-viewport Chromium screenshots and saved lazy native downloads. Imported reports are negative controls only. Not full-page, device-scale-factor, all screenshot formats, all-browser, crash-durability or vendor parity proof."
+  },
+  "independent_retained_file_review": {
+    "kind": "screenshot_runtime_independent_read_only_acceptance",
+    "reviewed_at": "2026-10-18T19:28:18.371Z",
+    "result": "PASS_R3_FOCUSED_SCOPE",
+    "mode": "Newr3 retained-file/receipt/source review and independent offline PNG CRC/inflate/unfilter; no additional native/browser/Cargo execution",
+    "proof": {
+      "path": "artifacts/screenshot-live-r3/ui-screenshot-viewport-live.json",
+      "sha256": "94c6a3d564a7e2d2db38ba082523c7baf4884106f4a873a1e904878f9c378394",
+      "result": "PASS",
+      "groups": 3,
+      "driver_duration_ms": 14751,
+      "gate_duration_ms": 15261
+    },
+    "driver": {
+      "path": "web/verification/ui-screenshot-viewport-live.cjs",
+      "sha256": "02442d345fbb869947c2d01cf40bbc1f1be7bd57b6ba4c56dcd937db831d6d76"
+    },
+    "binary": {
+      "path": "target/debug/open-seo-spider.exe",
+      "sha256": "c780fa04c09a7f8a20e1ba5f61368fb0df2d729b85785fbcb34dbe95cae0ed59",
+      "bytes": 89986560,
+      "build_receipt": "artifacts/screenshot-r3-20261018-binary.json",
+      "build_receipt_sha256": "4ab591bdacd39a023892e57a20d5c44fe5add45fea04906f5b5e4397d316c384"
+    },
+    "source_manifest": {
+      "path": "artifacts/screenshot-r3-20261018-inputs.json",
+      "sha256": "07be90a360aab288d992d77e7e284b74a883be4794e7c48a58d5d18f74c6f8f7",
+      "input_count": 579,
+      "current_bytes_all_match": true,
+      "scope": "Explicit579-input frozen manifest, not exhaustive dependency closure"
+    },
+    "focused_gate": {
+      "path": "artifacts/screenshot-live-r3-20261018-gates.json",
+      "sha256": "cb4faafaea604b7262bebafb53ca3a8e953537d97196d276a5aab35ddd640e34",
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/screenshot-live-r3-20261018-screenshot-live.log",
+      "log_sha256": "2c284c74a90417fb70865c43b74f6baa91f56f4996e75315af7e6da6244319cc"
+    },
+    "preparation_gates": [
+      {
+        "label": "format",
+        "code": 0,
+        "log": "artifacts/screenshot-r3-20261018-format.log",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "clippy",
+        "code": 0,
+        "log": "artifacts/screenshot-r3-20261018-clippy.log",
+        "log_sha256": "21a1d68ce9773e8f1aa738a56c544f4d63da8c9fe015c503936ceb0256a426ae"
+      },
+      {
+        "label": "normal-build",
+        "code": 0,
+        "log": "artifacts/screenshot-r3-20261018-normal-build.log",
+        "log_sha256": "7e95f8dc936ca7c1cc9af489d9e35f958fcce1da04e2406acd0e152dee104e47"
+      }
+    ],
+    "captures": [
+      {
+        "id": "b3a56b09-6859-42be-bbd8-7ab7d29660c2",
+        "project_path": "artifacts/screenshot-live-r3/warm-a-project.json",
+        "project_sha256": "133e7cb64ba6ebaef892a45b2c59cb12cf7183a4fc47feeb58270866898945a2",
+        "saved_report_sha256": "c2aa79199e4546882198bc34e39ab6a09f7098627de77cec6a8963599b193507",
+        "png_sha256": "0f92034ea203a9836492dbf7e05232da6ff01ced3675bfa93dec2f5e4f5f4c08",
+        "png_bytes": 815,
+        "viewport": {
+          "width": 320,
+          "height": 240
+        },
+        "independent_offline_crc_inflate_unfilter": {
+          "width": 320,
+          "height": 240,
+          "pixels": [
+            [
+              240,
+              32,
+              32,
+              255
+            ],
+            [
+              20,
+              180,
+              60,
+              255
+            ],
+            [
+              40,
+              60,
+              220,
+              255
+            ],
+            [
+              230,
+              180,
+              20,
+              255
+            ]
+          ]
+        },
+        "snapshot_sha256": "cdd951dbe9ee2140515fb270f09311764ca7001af502cb7f13a7be0229f57dd1"
+      },
+      {
+        "id": "c1bd6e6d-a6e1-451a-a28a-3fd0c488b851",
+        "project_path": "artifacts/screenshot-live-r3/warm-b-project.json",
+        "project_sha256": "b3f7b006e6a0e947bfd0e7234d1146918bc3f43aaa821ae95790374e449797b7",
+        "saved_report_sha256": "388287a98d49354bc0bca48c9ad9369f07660d97ad9f53eea721cfc41b9bfdc6",
+        "png_sha256": "d0304cf16d72dc8ff3080b3d83277dc72900e57c7067946289df1bee72354d4c",
+        "png_bytes": 5992,
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "independent_offline_crc_inflate_unfilter": {
+          "width": 1440,
+          "height": 900,
+          "pixels": [
+            [
+              16,
+              200,
+              200,
+              255
+            ],
+            [
+              20,
+              180,
+              60,
+              255
+            ],
+            [
+              40,
+              60,
+              220,
+              255
+            ],
+            [
+              230,
+              180,
+              20,
+              255
+            ]
+          ]
+        },
+        "snapshot_sha256": "0a32425cef5691f6b4ca602b1e27c2f6f5a526c0abbc75d63028e50c37e4cfd6"
+      }
+    ],
+    "downloads": [
+      {
+        "label": "warm-a",
+        "path": "artifacts/screenshot-live-r3/warm-a.png",
+        "bytes": 815,
+        "sha256": "0f92034ea203a9836492dbf7e05232da6ff01ced3675bfa93dec2f5e4f5f4c08"
+      },
+      {
+        "label": "warm-b",
+        "path": "artifacts/screenshot-live-r3/warm-b.png",
+        "bytes": 5992,
+        "sha256": "d0304cf16d72dc8ff3080b3d83277dc72900e57c7067946289df1bee72354d4c"
+      },
+      {
+        "label": "cold-a",
+        "path": "artifacts/screenshot-live-r3/cold-a.png",
+        "bytes": 815,
+        "sha256": "0f92034ea203a9836492dbf7e05232da6ff01ced3675bfa93dec2f5e4f5f4c08"
+      },
+      {
+        "label": "cold-b",
+        "path": "artifacts/screenshot-live-r3/cold-b.png",
+        "bytes": 5992,
+        "sha256": "d0304cf16d72dc8ff3080b3d83277dc72900e57c7067946289df1bee72354d4c"
+      },
+      {
+        "label": "cold-b-320",
+        "path": "artifacts/screenshot-live-r3/cold-b-320.png",
+        "bytes": 5992,
+        "sha256": "d0304cf16d72dc8ff3080b3d83277dc72900e57c7067946289df1bee72354d4c"
+      }
+    ],
+    "browser_download_events": 5,
+    "native": [
+      {
+        "phase": "warm",
+        "pid": 460,
+        "origin": "http://127.0.0.1:63183",
+        "close": {
+          "code": 0,
+          "signal": null
+        },
+        "natural_stdin_eof": true,
+        "native_shutdown_clean": true,
+        "log": "artifacts/screenshot-live-r3/native-warm.log",
+        "log_sha256": "ce0edb0ba8f67eb5aaad32d9e45835b1a24ecf4af6a6fb75bfae4c5170a1fa78"
+      },
+      {
+        "phase": "cold",
+        "pid": 30436,
+        "origin": "http://127.0.0.1:64582",
+        "close": {
+          "code": 0,
+          "signal": null
+        },
+        "natural_stdin_eof": true,
+        "native_shutdown_clean": true,
+        "log": "artifacts/screenshot-live-r3/native-cold.log",
+        "log_sha256": "ceb07c561800029fcf017e83fc87abdeee7ce9f2ded9586b4460e77dd3f2b2fd"
+      }
+    ],
+    "controls": {
+      "native_png_binding_refusals": [
+        {
+          "label": "stale-generation",
+          "status": 409
+        },
+        {
+          "label": "wrong-snapshot",
+          "status": 409
+        },
+        {
+          "label": "wrong-image",
+          "status": 409
+        },
+        {
+          "label": "wrong-url",
+          "status": 409
+        },
+        {
+          "label": "missing-ordinal",
+          "status": 404
+        }
+      ],
+      "declared_import_unavailable_only": [
+        "missing",
+        "disabled",
+        "render_failed",
+        "corrupt"
+      ],
+      "effect_free_validation_cases": 3,
+      "held_real_responses": [
+        {
+          "kind": "metadata",
+          "sha256": "3753d628cdf011358b69ad347d50933854468f640578f49ea24f8a1f320910fc",
+          "bytes": 489,
+          "delivery": "fulfilled"
+        },
+        {
+          "kind": "png",
+          "sha256": "0f92034ea203a9836492dbf7e05232da6ff01ced3675bfa93dec2f5e4f5f4c08",
+          "bytes": 815,
+          "delivery": "fulfilled"
+        }
+      ],
+      "offline_product_refetches": 0,
+      "positive_410_witnesses": 2,
+      "real_worker_requests": 2,
+      "browser_errors": 0,
+      "external_requests": 0
+    },
+    "source_review_confirmed": [
+      "Unconditional exact native GET oracle and browser header metadata versus each actual downloaded original PNG; no mutation replay",
+      "Job-bound snapshot recipe recomputed preserving original JSON numeric lexemes",
+      "Actual cold project/raw-report and metadata equality asserted by executed driver, same store and different origin/fresh browser storage",
+      "Offline410 enabled before first native EOF and retained through second EOF, two nonce positive controls",
+      "Preview Blob bytes equal saved originals and no PNG GET occurs before explicit download",
+      "Delayed actual native metadata/PNG bodies cannot install stale selection or download after Inspector close; final exactly5events/5verifiedfiles",
+      "320px control reachability and overflow assertions retained"
+    ],
+    "limits": [
+      "Only320x240 and1440x900 viewport screenshots fullPage:false; not all formats/browsers/device scale/full-page capture",
+      "Imported reports are negative-only; no positive seeded capture",
+      "Independent offline decoder scoped to retained8-bit noninterlaced RGB PNGs, no arbitrary PNG codec/resource proof",
+      "Not vendor parity/global CPU/RSS/crash durability/SQL generation attestation",
+      "Historical r2 receipt retained separately; this receipt binds r3 c780fa04/07be90a3 after Clippy-only predicate correction",
+      "Root full41UI and workspace were still running; no broad-suite current PASS inferred"
+    ]
+  },
+  "independent_review_file": {
+    "path": "artifacts/screenshot-runtime-independent-review-r3-20261018.json",
+    "bytes": 9072,
+    "sha256": "d108e76dee9a4263fa5b28aa50aacb717646673b2f4e502667f1b99b12163c57"
+  },
+  "retained_history": {
+    "r1_focused_native": {
+      "path": "artifacts/screenshot-r1-20261018-gates.json",
+      "bytes": 663,
+      "sha256": "6d1b769f54ed8ba3ac7e5251b91e8a0e8b02650a16ba40e82b3c500af4c464b2"
+    },
+    "r2_focused_native_browser": {
+      "path": "artifacts/screenshot-live-r2/ui-screenshot-viewport-live.json",
+      "bytes": 17237,
+      "sha256": "d9b0da564638cb998fff98648503b35f6b439c9c79b7dc7f5685c91285ca63d3"
+    },
+    "r2_clippy_failed": {
+      "path": "artifacts/screenshot-rust-r2-20261018-gates.json",
+      "bytes": 655,
+      "sha256": "b86588a9b51ab678ea1bb01236b9f77388c4544db7a9b633ffdf8b14945744bd"
+    },
+    "r2_ui_interrupted": {
+      "path": "artifacts/screenshot-ui41-r2-interruption.json",
+      "bytes": 573,
+      "sha256": "26e752d1960ce1070204458518e98733d2dac697e0f6a58a209872fd372ac046"
+    },
+    "r2_ui_not_pass": {
+      "path": "artifacts/screenshot-ui41-r2/proof.json",
+      "bytes": 2526,
+      "sha256": "b4c8b38be9a18e7217451fc54bd38c35a66b2b245d94afc4d71d514c8e542864"
+    },
+    "explanation": "r1 native8 passed with two inherited-import warnings. r2 screenshot browser3 groups passed. Strict Clippy then failed only manual_is_multiple_of. Root stopped one identified owned r2 aggregate child after6 successful fixture suites so the coordinator could clean up; aggregate is retained failed/interrupted, not successful. r3 uses the lint-compliant equivalent palette predicate and completes its own exact-source gates."
+  },
+  "claims": {
+    "rendering_screenshot_independent_acceptance": "PASS",
+    "full_vendor_parity": "NOT_PROVEN",
+    "stable_release_ready": false,
+    "local_regression_ready": true,
+    "installed_source16_updated": false,
+    "fresh_exact_commit_public_ci": "PENDING_AFTER_PUBLICATION"
+  },
+  "limits": [
+    "Selected viewport PNG is viewport-only; full-page captures, device-scale-factor/device emulation, other image formats, all browsers and arbitrary imported pixel-decoder correctness are not claimed.",
+    "Native PNG checks structure/CRC/dimensions and streams typed report identity under the cached job read lock; not fresh SQLite attestation. Independent fixture PNG pixels were actually decoded and checked.",
+    "Two shared preparation slots and64MiB logical PNG output cap do not establish global CPU/RSS/transport-memory bounds.",
+    "All144 capabilities,416 filters and32 workflow contracts remain tracked; complete manufacturer parity and general production credentials/installation are separate gates."
+  ],
+  "parent_public_ci": {
+    "source_commit": "513bbebad065ef42fe825d173684e0c8aee316dc",
+    "run_id": 39156291901,
+    "renderer_job_id": 117760088992,
+    "renderer_result": "FAIL_CONFIGURATION_PROFILES_EXACT_U64_BROWSER_BODY_READ",
+    "diagnosis_file": {
+      "path": "artifacts/profile-browser-response-CI-513-diagnosis-20261018.json",
+      "bytes": 7859,
+      "sha256": "efd281a10c5c78386d406df2a51ab7ebc11efcea61b03e09ac9ed9ac12f756a4"
+    },
+    "diagnosis": {
+      "kind": "configuration_profile_browser_response_ci_diagnosis",
+      "recorded_on": "2026-10-18",
+      "result": "OPEN_CDP_RESPONSE_BODY_FAILURE_CAUSE_NOT_PROVEN",
+      "backlog_order": "Separate follow-up after the current screenshot acceptance; no change to its frozen source or running gates",
+      "ci": {
+        "run_id": "39156291901",
+        "renderer_job_id": "117760088992",
+        "source_commit": "513bbebad065ef42fe825d173684e0c8aee316dc",
+        "source_label": "513",
+        "renderer_result": "FAIL",
+        "configuration_profiles_result": "FAIL",
+        "density_in_this_job": "PASS",
+        "other_jobs": "Not assessed by this diagnosis"
+      },
+      "evidence": {
+        "renderer_log": {
+          "path": "artifacts/catalog-published-513-renderer-job.log",
+          "bytes": 114856,
+          "sha256": "45b30d30b90a63946dd3cd775a21710ae79683c907c76a2c89b429d5f5acd9c6"
+        },
+        "downloaded_failure_receipt": {
+          "path": "artifacts/catalog-ci-513-renderer/configuration-profiles/config-profiles-1792351573334-94a8bc56/ui-config-profiles-live.json",
+          "bytes": 34114,
+          "sha256": "31572637268cbd1fdd2c8736e08fa243bcabd5110a5cab3015d8fbb2fb914a2e"
+        },
+        "current_driver": {
+          "path": "web/verification/ui-config-profiles-live.cjs",
+          "bytes": 58333,
+          "sha256": "a8575fe11defbdb62e6e619bbed20439cb5c89141bf3822014767368f9335000",
+          "matches_driver_sha256_in_failed_receipt": true
+        },
+        "failed_ci_binary_sha256": "60c5f8f2b792b76624ba26f03ea13afd86ff2a751913a6114abea00b0f5c6f96"
+      },
+      "observed": {
+        "duration_ms": 6698,
+        "completed_groups": 4,
+        "completed_checks": [
+          "Actual picker import, native sanitizer, full profile export and dialog save preserve65/301/native-only fields, exact non-MiB bytes and disabled profiles without effects",
+          "Three corrupt or unsupported stored wrappers persist visibly and block button/programmatic Start without effects; import alone cannot clear the guard, explicit valid Save recovers",
+          "Opening Settings aborts a real pending startup restore without permitting legacy Start; explicit current-profile Save recovers and old native reply cannot poison active profile or storage",
+          "Malformed, duplicate, unknown, positional, credential/path/private-key, regex/selector and UTF8 files leave draft/storage/jobs/files/network unchanged"
+        ],
+        "actual_profile_downloads": 1,
+        "browser_page_errors": [],
+        "website_capture_requests": 0,
+        "last_observed_jobs": "Empty native crawl list",
+        "last_browser_request": {
+          "method": "POST",
+          "path": "/api/config-profiles/inspect",
+          "request_sha256": "f994d5f7c75899f9e67c628dfb8f96ca529ad4da379b2bb91da5ee043b223761"
+        },
+        "last_active_test_stage": "upload('exact-u64.json', large) immediately after the fourth completed check",
+        "next_unrelated_user_agent_edit_save_reload": "NOT_OBSERVED; sequential test awaits this upload response before those actions",
+        "failed_browser_response_http_status": "NOT_RECORDED",
+        "failed_browser_response_request_hash": "NOT_RECORDED; the last request is reconstructed exactly, while response-level correlation was not recorded",
+        "failure_message": "response.body: Protocol error (Network.getResponseBody): No data found for resource with given identifier",
+        "playwright_additional_message": "Response body is not available for a response that was navigated away from. Read response.body() before triggering any navigation.",
+        "capture_source_location": "web/verification/ui-config-profiles-live.cjs:147",
+        "capture_handling": "The response event immediately calls response.body().then(bytes => ({bytes}), error => ({error})); browserJSON subsequently throws the captured error. This is not evidence of an unhandled rejection in the response callback.",
+        "screenshots": "None present in the downloaded failed case; this driver only writes its final cold320px screenshot on success",
+        "cleanup": {
+          "native_owners": 1,
+          "phase": "warm",
+          "close": {
+            "code": null,
+            "signal": "SIGTERM"
+          },
+          "forced": true,
+          "natural_stdin_eof": false,
+          "interpretation": "Failure-finally cleanup, not a successful natural process-close gate"
+        }
+      },
+      "request_reconstruction": {
+        "source": "artifacts/catalog-ci-513-renderer/configuration-profiles/config-profiles-1792351573334-94a8bc56/full-native-before-crawl.json",
+        "source_bytes": 3020,
+        "operation": "Apply the driver's exact lexical replacement of delay_ms:0 with delay_ms:9007199254740993, then encode the outer object containing only profile_text with JSON string escaping",
+        "full_profile_or_request_content_retained_here": false,
+        "reconstructed_request_sha256": "f994d5f7c75899f9e67c628dfb8f96ca529ad4da379b2bb91da5ee043b223761",
+        "equals_last_recorded_browser_request": true,
+        "numeric_parse_or_reserialization_of_the_profile": false,
+        "method": "Read-only local text/hash reconstruction; no HTTP or application execution"
+      },
+      "proof_boundaries": {
+        "exact_chromium_or_cdp_root_cause": "NOT_PROVEN",
+        "actual_navigation_caused_the_failure": "NOT_PROVEN; generic Playwright wording is not a navigation witness, and source awaits the upload before its next planned navigation",
+        "product_defect": "NOT_PROVEN",
+        "native_http_5xx_cause": "NOT_PROVEN; the failed browser response status was not recorded",
+        "density_failure_in_this_run": false,
+        "local_screenshot_acceptance_or_current_full41_outcome": "Not assessed; current frozen runs continue independently"
+      },
+      "proposed_next_slice": {
+        "status": "PROPOSED_NOT_IMPLEMENTED_OR_EXECUTED",
+        "scope": "Test-only actual browser body capture for an explicit allowlist of pure profile preview endpoints, beginning with POST /api/config-profiles/inspect",
+        "capture": "Create a Response.clone() and attach a bounded actual-byte read in the browser before handing the original Response to the application consumer; retain the original Response unchanged",
+        "identity": "Bind each capture to its exact original method, URL, raw request text hash and monotonically assigned request sequence; reject ambiguous or superseded associations",
+        "assertions": [
+          "Retrieve the actual cloned browser bytes, status and original headers; retain mandatory complete-body assertions and native profile/effective config comparisons",
+          "Preserve installed DOM, draft, storage, secret-scope, unknown/zero and no-effects assertions",
+          "Retain held real native A/B response bytes and prove that stale work cannot replace the current draft or release current busy ownership",
+          "Bound captured data and record capture/read failure explicitly rather than silently substituting another source"
+        ],
+        "not_allowed": [
+          "No JSON POST retry or replay to obtain replacement bytes",
+          "No /api/crawls/from-profile or other mutation replay",
+          "No catch-fallback from a failed CDP read to an oracle labeled as the original browser body",
+          "No synthetic successful response or modified original Response",
+          "No timeout increase, disabled assertion or change to the running frozen screenshot acceptance"
+        ],
+        "independent_pure_oracle_limit": "An unconditional independent pure /inspect oracle is behavior-safe but is a different body source. Current config_profiles.rs json_reply provides MIME and no-store without X-Content-SHA256, so matching status/length plus oracle SHA and installed DOM does not by itself establish byte identity of the original browser response. Any such alternative requires an explicit proof qualification."
+      },
+      "work_performed": {
+        "tracked_files_changed": false,
+        "product_or_driver_changed": false,
+        "tests_or_builds_run": false,
+        "browser_or_native_app_launched": false,
+        "http_requests_issued": false,
+        "only_new_write": "artifacts/profile-browser-response-CI-513-diagnosis-20261018.json"
+      }
+    },
+    "root_cause": "NOT_PROVEN",
+    "current_screenshot_source_public_ci": "NOT_YET_RUN",
+    "terminal_run": {
+      "checked_at": "2026-10-18T19:54:36.933Z",
+      "run_id": 39156291901,
+      "head_sha": "513bbebad065ef42fe825d173684e0c8aee316dc",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/lia-xim/open-seo-spider/actions/runs/39156291901",
+      "created_at": "2026-10-18T18:54:13Z",
+      "updated_at": "2026-10-18T19:49:36Z",
+      "jobs": [
+        {
+          "id": 117760088992,
+          "name": "renderer",
+          "status": "completed",
+          "conclusion": "failure",
+          "started_at": "2026-10-18T18:54:16Z",
+          "completed_at": "2026-10-18T19:26:29Z"
+        },
+        {
+          "id": 117760089164,
+          "name": "container",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-18T18:54:16Z",
+          "completed_at": "2026-10-18T19:06:39Z"
+        },
+        {
+          "id": 117760089195,
+          "name": "test (ubuntu-latest)",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-18T18:54:16Z",
+          "completed_at": "2026-10-18T19:06:22Z"
+        },
+        {
+          "id": 117760089204,
+          "name": "test (windows-latest)",
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-10-18T18:54:16Z",
+          "completed_at": "2026-10-18T19:49:36Z"
+        }
+      ],
+      "scope": "Terminal public CI of exact prior513 commit; current screenshot WIP has separate local acceptance and no published exact-commit CI yet."
+    },
+    "terminal_run_file": {
+      "path": "artifacts/catalog-published-ci-513bbeb-final.json",
+      "bytes": 1390,
+      "sha256": "a5d9c44aed7384715fb1362ce80a30932d1ab889b38dda0198ce1519c4fe4918"
+    }
+  },
+  "source_gates": {
+    "path": "docs/verification/rendered-screenshots-20261018/source-gates.json",
+    "bytes": 117096,
+    "sha256": "4d5f2b063c67177701c60822f3a63bcab2a8d5213d1ffab070ba67536ba57673"
+  }
+}

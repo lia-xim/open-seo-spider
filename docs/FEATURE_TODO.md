@@ -4,11 +4,31 @@
 
 Die Liste hält alle 144 gruppierten Fähigkeiten fest. Ein Haken bedeutet, dass das **eigene gespeicherte Abnahmekriterium** mit Beweisen erfüllt ist. Er bedeutet keine vollständige Gleichheit mit Screaming Frog. Diese Referenzparität bleibt für alle Einträge **NOT_PROVEN**.
 
-Aktueller Katalogstand: **38 eigene Abnahmen erfüllt**, **69 teilweise geprüft**, **37 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
+Aktueller Katalogstand: **39 eigene Abnahmen erfüllt**, **68 teilweise geprüft**, **37 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
 
 Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.json) bilden ein zusätzliches Register. Ihre positiven Fälle, Kontrollfälle, Parameter und Grenzfälle müssen jeweils geprüft werden. Ein implementierter Kern, ein leerer Export oder übereinstimmende CSV-Zellen ersetzen diese Einzelabnahme nicht.
 
 ## Aktuelle Arbeit und nächste Schritte
+
+- [ ] **Tatsächliche Profil-Antwortbytes im Browser ohne CDP-Rennen nachweisen** — CI_FAILURE_DIAGNOSED_CAPTURE_CHANGE_PENDING. Öffentliche513-Renderer-CI besteht Density, scheitert später beim Import exact-u64.json. Rekonstruierter Request-SHA stimmt mit dem letzten Browserrequest überein; Fehler liegt vor Speichern/Reload. Chromium-Ursache und Produktdefekt sind noch nicht belegt. Der lokale Screenshot-Stand und seine vollständige Windows-Abnahme sind separat.
+  - [x] Abgeschlossenen Rendererjob117760088992 aus Run39156291901 und rohe Artefakte erhalten. Vier Profil-Prüfgruppen bestehen; danach schlägt das Lesen tatsächlicher Browserantwortbytes fehl.
+  - [x] Exakten u64-Import über Request-SHAf994d5f7… zugeordnet. Die generische Meldung über eine Navigation ist kein Beweis für tatsächliche Navigation.
+  - [ ] Preview-Antwortbytes im echten Browser über Response.clone erfassen, exakt dem Request zuordnen und ursprüngliche Response/Funktionslogik erhalten.
+  - [ ] Alle bisherigen Pflichtprüfungen echter Bytes, UI und Speicherung beibehalten; keine Mutation wiederholen, keine Fallback-Oracles oder erhöhten Timeouts.
+  - [ ] Gezielte lokale Profil-Abnahme und neue exakte öffentliche Gesamtabnahme durchführen; erst danach CI-Lücke schließen.
+  - Verträge: [e2e-testing.md](e2e-testing.md), [FEATURE_TODO.md](FEATURE_TODO.md), [README.md](verification/rendered-screenshots-20261018/README.md).
+  - Gate-Stand: parent_public_renderer: FAIL_EXACT_U64_BROWSER_RESPONSE_BODY; root_cause: NOT_PROVEN; current_screenshot_local: PASS_COMPLETE_SCOPED_ACCEPTANCE; capture_fix: NOT_IMPLEMENTED; new_public_CI: NOT_RUN.
+
+- [ ] **Browsergröße wählen und gespeicherte Screenshot-Dateien eindeutig zuordnen** — LOCAL_SCREENSHOT_ACCEPTANCE_AND41_SUITE_PASS_PUBLIC_CI_PENDING. Optionale Browsergröße und gespeicherter PNG-Download sind durch Rust, Einstellungen, portable/nativ benannte Profile und den lazy Inspector geführt. Echte320×240-/1440×900-Captures, geprüfte Vorschau/Datei/Pixels und Kaltstart sind belegt.1831 Rust/160 Zustandstests/40 semantische Gruppen und alle41 UI-Suiten bestehen auf demselben eingefrorenen Stand. Herstellerparität bleibt NOT_PROVEN.
+  - [x] Optionale strikt geprüfte Viewports bewahren Altprofil-Byteidentität und native-only/u64-Profiloptionen; ungültige Einstellungen werden vor Job-/Datei-/Website-/Worker-Effekten abgewiesen.
+  - [x] Native Metadaten und originale PNG-Anhänge sind an Job, originale Zeile/URL, Generation, typed Report und Bild-SHA gebunden. Gleiche Reports anderer Jobs sowie stale/falsche Kontexte werden abgewiesen; fehlende/deaktivierte/fehlgeschlagene/beschädigte Bilder bleiben getrennt.
+  - [x] Echter Chromium-Nachweis320×240 und1440×900 mit Pixeln/Media-Query, fünf tatsächlichen Downloads und geprüfter lazy Blob-Vorschau. Verspätete Antworten, geschlossene Inspector-Kontexte und320px-Bedienung geprüft.
+  - [x] Zwei natürliche EOF0-Prozesse mit frischem Browser-Kontext und anderem Origin öffnen bytegleiche gespeicherte Projekte/Bilder unter zwei positiven410-Kontrollen; null Offline-Produktabrufe.
+  - [x] 1831 Rust/0 Fehler/5 Ignores; strenges Clippy;4 explizite Chromium-Fälle;160 Zustandstests;40 semantische Gruppen; alle41 registrierten UI-Suiten in einem abgeschlossenen Aufruf.
+  - [ ] Frische öffentliche CI des neuen exakten Commits nach Veröffentlichung terminal prüfen; lokale Gates sind keine Installations- oder Release-Freigabe.
+  - [ ] Full-page-/weitere Bildformate, Geräteskalierung/Emulation, alle Browser, beliebige importierte Pixel-Dekodierung, globale Ressourcen- und Crash-Grenzen sowie vollständige Herstellerparität sind nicht mit diesem Schnitt nachgewiesen.
+  - Verträge: [rendered-screenshots.md](rendered-screenshots.md), [e2e-testing.md](e2e-testing.md), [FEATURE_TODO.md](FEATURE_TODO.md), [README.md](verification/rendered-screenshots-20261018/README.md), [local-result.json](verification/rendered-screenshots-20261018/local-result.json), [source-gates.json](verification/rendered-screenshots-20261018/source-gates.json).
+  - Gate-Stand: core_targeted: PASS_FULL_WORKSPACE_INCLUDING6_VIEWPORT_REGRESSIONS; native_artifacts: PASS_NATIVE8_TESTS_PLUS_ACTUAL_PNG_BYTES_AND_CONTEXT; web_settings_and_inspector: PASS160_STATE_TESTS_CHECKED_PREVIEW_AND_PROFILE_PRESERVATION; browser_native_cold: PASS3_GROUPS5_DOWNLOADS2_NATURAL_EOF0_ZERO_OFFLINE_PRODUCT_REQUESTS; regression: PASS41_REGISTERED_UI_SUITES_ONE_COMPLETE_INVOCATION; fresh_public_CI: PENDING_NEW_EXACT_COMMIT; manufacturer_parity: NOT_PROVEN.
 
 - [ ] **Intermittierenden Space-Schritt im vollständigen Browserlauf aufklären** — LOCAL_CANONICAL_TOGGLE_AND40_SUITE_PASS_PUBLIC_CI_PENDING. Die kanonische Vorbedingung wartet vor Space auf das tatsächliche vertrauenswürdige native Öffnungs-Toggle nach Touch. Drei vorab festgelegte Läufe mit passendem eingefrorenem Normalbuild sowie die aktuelle vollständige 40-Suiten-Abnahme bestehen bei erhaltenen Produktassertions und Deadlines. Frühere lokale Aggregate-/Setup-Fehler und der Parent-Rendererfehler bleiben erhalten. Genaue Chromium-Ursache und allgemeine Stabilität sind weiterhin NOT_PROVEN.
   - [x] Originaler Fehllauf mit Screenshot, Daten, unverändertem Quell-/Binärhash und natürlichem App-Ende erhalten.
@@ -25,18 +45,18 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - Verträge: [README.md](verification/configuration-profiles-20261018/README.md), [e2e-testing.md](e2e-testing.md), [README.md](verification/configuration-profile-catalog-20261018/README.md), [local-result.json](verification/configuration-profile-catalog-20261018/local-result.json), [source-gates.json](verification/configuration-profile-catalog-20261018/source-gates.json).
   - Gate-Stand: aggregate: FAIL_RETAINED; isolated_canonical: PASS_UNCHANGED; instrumented_diagnostic: PASS_OBSERVATION_TIMING_QUALIFIED; root_cause: NOT_PROVEN; full_vendor_parity: NOT_PROVEN; passive_reproduction: PASS_FAIL_PASS_ORIGINAL_SPACE_ASSERTION_FOCUS_CORRECT_NATIVE_CLICK_ABSENT_ON_FAILURE; native_toggle_prototype: PASS3_PRESPECIFIED_NO_FIXED_SLEEP_NO_ASSERTION_OR_DEADLINE_CHANGE; canonical_precondition: PASS3_PRESPECIFIED_CANONICAL_MATCHING_NORMAL_BINARY_ORIGINAL_ASSERTIONS_AND_DEADLINES; current_full_UI40: PASS_ONE_COMPLETE_INVOCATION_SOURCE_AND_BINARY_UNCHANGED_NATURAL_EOF0; parent_renderer_CI: FAIL_RETAINED_RUN39151352510_JOB117745485458_OLD_DENSITY_SPACE; fresh_public_CI: PENDING_NEW_EXACT_COMMIT.
 
-- [ ] **Benannte native Konfigurationsprofile speichern und verwalten** — LOCAL_NATIVE_CATALOG_AND40_SUITE_PASS_PUBLIC_CI_PENDING. Benannte Profile sind im nativen SQLite-Katalog des ausgewählten Datenverzeichnisses und im bestehenden Einstellungsdialog umgesetzt. Metadatenliste und Laden sind explizit; Laden stellt nur die Arbeitskopie bereit, Settings-Save übernimmt sie. Create/Replace/Rename/Delete verwenden Revision/SHA-CAS und verändern die aktive Kopie nicht. 1817 Rust/0 Fehler/5 Ignores; 130 Zustandstests; 40 semantische Gruppen; alle 40 registrierten UI-Suiten in einem abgeschlossenen Aufruf; 14 erfolgreiche quellengebundene Gates. Herstellerparität und frische öffentliche CI bleiben separat offen.
+- [ ] **Benannte native Konfigurationsprofile speichern und verwalten** — LOCAL_NATIVE_CATALOG_PASS_PUBLIC_CI_PROFILE_BODY_FAILURE. Benannter nativer SQLite-Profilkatalog und explizite Arbeitskopie-/Katalogaktionen sind lokal nachgewiesen:1817 Rust,130 Zustandstests,40 semantische Gruppen und alle40 UI-Suiten in einem Aufruf. Exakte öffentliche513-CI ist terminal fehlgeschlagen: Container/Ubuntu/Windows bestehen; Renderer besteht Density, scheitert später beim exact-u64-Profilimport am Lesen tatsächlicher Browserantwortbytes. Ursache und Produktdefekt sind NOT_PROVEN; eigene Folgearbeit ist priorisiert.
   - [x] Aktuellen Quellenstand e4f58c2 und offene Kriterien überprüft; bestehenden strikten Profilparser, Windows-SQLite-Adapter und Settings-Controller als gemeinsame Grenzen festgelegt.
   - [x] Konkreten API-/Speichervertrag und Browser/Native/Kaltstart-Abnahme einschließlich paralleler Tabs, expliziter Header und320px-Ansicht dokumentiert.
   - [x] Quellengebundene native/store/API-, Zustands- und Browserabnahme abgeschlossen: 4 echte Katalog-Prüfgruppen, 11 unabhängige SQL-Snapshots und 5 echte Downloads; zwei positive und zwei negative native Prozesse schließen natürlich mit EOF0. Kalter frischer Browserkontext und explizites Laden erhalten Profile ohne automatische Übernahme; zwei positive 410-Kontrollen stehen null Offline-Produktanfragen gegenüber.
   - [x] Tatsächliche Konflikte aus zwei Tabs, beschädigte native Stores ohne stillen Rückfall, spät beantwortetes Laden, fehlende Header, exakte portable Zahlen, Bedienung bei 320 px und am Desktop und Arbeitskopie/aktive Kopie/Browser-Speicherung getrennt nachgewiesen.
   - [x] 1817 Rust/0 Fehler/5 Ignores; 130 Zustandstests; 40 semantische Gruppen; alle 40 registrierten UI-Suiten in einem abgeschlossenen Aufruf; 14 erfolgreiche quellengebundene Gates.
-  - [ ] Frische öffentliche CI des neuen exakten Commits terminal prüfen; lokale Abnahme ist keine öffentliche CI- oder Installationsfreigabe. Parent-Run39151352510/Rendererjob117745485458 hat einen erhaltenen Density-Space-Fehler des vorherigen Treibers.
+  - [ ] Exakte öffentliche513-CI geprüft: Renderer scheitert beim Import exact-u64.json am CDP-Body-Lesen; Density besteht. Rootcause und Produktfehler sind NOT_PROVEN. Als eigenständigen Browser-Antwort-Abnahmepunkt beheben und neue exakte CI prüfen.
   - [ ] Portable Profil-Ausführung durch CLI, allgemeine Formatmigration, Katalog-History/Synchronisierung und breitere Cross-Origin-/Credential-/Pfad-Registrierung gesondert spezifizieren und tatsächlich prüfen.
   - [ ] Physische64MiB-Profil-/256MiB-Kataloggrenzen im Browser sowie globale RAM/CPU/Datenträger-, Crash- und gleichzeitige Mehrprozess-Mutationsgrenzen bleiben unbelegt; kleinere injizierte Budgetkontrollen nicht als maximale Laufzeitbeweise ausgeben.
   - [ ] Optionale Transport-/Renderer-/Providerkombinationen und vollständige Herstellerformat-/Funktions-/Verhaltensparität bleiben NOT_PROVEN.
   - Verträge: [configuration-profile-catalog.md](configuration-profile-catalog.md), [configuration-profiles.md](configuration-profiles.md), [FEATURE_TODO.md](FEATURE_TODO.md), [README.md](verification/configuration-profile-catalog-20261018/README.md), [local-result.json](verification/configuration-profile-catalog-20261018/local-result.json), [source-gates.json](verification/configuration-profile-catalog-20261018/source-gates.json).
-  - Gate-Stand: implementation: PASS_NATIVE_SQLITE_CATALOG_AND_EXPLICIT_SETTINGS_ACTIONS; native_tests: PASS_WORKSPACE1817_FAILED0_IGNORED5; browser_native_cold: PASS4_GROUPS5_DOWNLOADS4_NATURAL_EOF0; regression: PASS40_REGISTERED_UI_SUITES_ONE_COMPLETE_INVOCATION_SOURCE_AND_BINARY_UNCHANGED; fresh_public_CI: PENDING_NEW_EXACT_COMMIT; manufacturer_parity: NOT_PROVEN; state_tests: PASS130; controlled_provider: PASS_CFG_TEST_ONLY_NOT_REAL_CREDENTIALS.
+  - Gate-Stand: implementation: PASS_NATIVE_SQLITE_CATALOG_AND_EXPLICIT_SETTINGS_ACTIONS; native_tests: PASS_WORKSPACE1817_FAILED0_IGNORED5; browser_native_cold: PASS4_GROUPS5_DOWNLOADS4_NATURAL_EOF0; regression: PASS40_REGISTERED_UI_SUITES_ONE_COMPLETE_INVOCATION_SOURCE_AND_BINARY_UNCHANGED; fresh_public_CI: FAIL_EXACT_513_RENDERER_CONFIGURATION_PROFILE_RESPONSE_BODY; manufacturer_parity: NOT_PROVEN; state_tests: PASS130; controlled_provider: PASS_CFG_TEST_ONLY_NOT_REAL_CREDENTIALS.
 
 - [ ] **Vollständige Konfigurationsprofile im Redesign importieren und exportieren** — LOCAL_PROFILE_ACCEPTANCE_AND39_DISTINCT_UI_CASES_AGGREGATE_FAILURE_RETAINED_PUBLIC_CI_PENDING. Versionierte Konfigurationsprofile sind in Core, nativer API und bestehendem Einstellungsdialog umgesetzt. Echtes Importieren/Exportieren, vollständiges Laden, exakte 64-Bit-Zahlen und native Optionen, flüchtige Headerbindungen sowie Kaltstart sind geprüft. 1.802 Rust-Tests und alle39 registrierten Browserfälle haben erfolgreiche Ausführungen; der gemeinsame Lauf scheiterte nach31 Erfolgen am Density-Space-Schritt, dessen Ursache trotz isoliertem Erfolg offen bleibt.
   - [x] Striktes natives Profilformat v1 mit Duplikat-/Unknown-/Versions-/Größen-/Tiefenprüfungen und gemeinsamer reiner Vorbereitung; keine Clients, Dateien, Jobs oder Provider beim Prüfen. Native TLS-Trust-Anchor-Prüfung akzeptiert echte Zertifikate und verweigert ungültiges DER vor Clientbau.
@@ -3264,7 +3284,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 ### Browser-Rendering und eigene Extraktion
 
-14 Einträge: 5 eigene Abnahmen erfüllt, 4 teilweise geprüft, 5 offen.
+14 Einträge: 6 eigene Abnahmen erfüllt, 3 teilweise geprüft, 5 offen.
 
 #### Teilweise vorhanden – Restarbeiten
 
@@ -3330,41 +3350,6 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "ui-renderer"
         ],
         "proves": "RawMetadata preserves original titles/headings/links/extraction values while current fields reflect rendered DOM. Native status/headers remain separate."
-      }
-    ],
-    "parity_status": "NOT_PROVEN"
-  }
-  ```
-
-  </details>
-
-- [ ] **Screenshots nachvollziehbar speichern** — Teilweise geprüft; `rendering.screenshot`, P3.
-
-  Orientierung: Viewport im Crawl/UI auswählbar machen und Bild-/Artefakt-Prüfungen ergänzen.
-
-  Beweisregister: [renderer](../renderer/tests/worker.test.mjs) (PASS), [core-browser](../crates/core/tests/crawl_fixtures.rs) (PASS), [ui-renderer](../web/verification/ui-renderer-live-results.json) (PASS).
-
-  <details>
-  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
-
-  ```json
-  {
-    "id": "rendering.screenshot",
-    "reference_name": "Rendered screenshots",
-    "status": "partial",
-    "acceptance_test": "Capture a deterministic owned page at selected viewport and link the image to URL/snapshot.",
-    "remaining_acceptance": [
-      "Expose selected capture viewport through crawler/UI, add deterministic image/viewport assertions and artifact-file links.",
-      "Next scoped screenshot workflow: choose actual capture viewport in settings, crawl an owned deterministic rendered page, verify PNG dimensions and URL/generation binding, then reopen the saved project and verify the same image/export artifact. Screenshot presence alone does not prove viewport correctness."
-    ],
-    "implementation_evidence": [
-      {
-        "verification_run_ids": [
-          "renderer",
-          "core-browser",
-          "ui-renderer"
-        ],
-        "proves": "Worker returns a valid viewport PNG; real core crawl stores screenshot_base64 on the URL record and JSON snapshot can serialize it. Actual UI lazily previews the PNG and project export retains render evidence."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -3592,6 +3577,44 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "ui-renderer"
         ],
         "proves": "Real Rust→worker→installed Chrome execution changes title/H1 and extracts a JavaScript-only link. Optional renderer settings and worker startup are independently tested. PageRecord browser_version/rendered_viewport/render_wait_ms/network_events_dropped preserve worker provenance; Rust fixture and explicit live worker test verify it. Saved CrawlConfig retains optional renderer settings. The fresh real core-to-Chrome gate also asserts browser_version, rendered_viewport, render_wait_ms=100 and network_events_dropped=0."
+      }
+    ],
+    "parity_status": "NOT_PROVEN"
+  }
+  ```
+
+  </details>
+
+- [x] **Screenshots nachvollziehbar speichern** — Eigene Abnahme erfüllt; `rendering.screenshot`, P3.
+
+  Orientierung: Viewport im Crawl/UI auswählbar machen und Bild-/Artefakt-Prüfungen ergänzen.
+
+  Beweisregister: [renderer](../renderer/tests/worker.test.mjs) (PASS), [core-browser](../crates/core/tests/crawl_fixtures.rs) (PASS), [ui-renderer](../web/verification/ui-renderer-live-results.json) (PASS), [rendered-screenshots-20261018](verification/rendered-screenshots-20261018/README.md) (PASS_LOCAL_SELECTED_VIEWPORT_SAVED_PNG_AND_FORTY_ONE_SUITE_REGRESSION).
+
+  <details>
+  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
+
+  ```json
+  {
+    "id": "rendering.screenshot",
+    "reference_name": "Rendered screenshots",
+    "status": "implemented",
+    "acceptance_test": "Capture a deterministic owned page at selected viewport and link the image to URL/snapshot.",
+    "remaining_acceptance": [],
+    "implementation_evidence": [
+      {
+        "verification_run_ids": [
+          "renderer",
+          "core-browser",
+          "ui-renderer"
+        ],
+        "proves": "Worker returns a valid viewport PNG; real core crawl stores screenshot_base64 on the URL record and JSON snapshot can serialize it. Actual UI lazily previews the PNG and project export retains render evidence."
+      },
+      {
+        "verification_run_ids": [
+          "rendered-screenshots-20261018"
+        ],
+        "proves": "Actual settings-selected320x240 and1440x900 reach real Chromium; decoded PNG pixel/media witnesses, original saved PNG attachment and job/URL/ordinal/generation/snapshot identity, lazy checked preview, stale/unavailable refusal, two natural EOF0 processes and byte-identical offline cold reopen are proven."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -6345,4 +6368,4 @@ Diese unveränderten Einträge dokumentieren den damaligen Stand. Aktuelle Resta
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `385a76f220cffa4ae03d0bc09b53682d2d5dce50a3d5f83b053dff850c8fd70a`. Letzter im Katalog erfasster Beweisstand: `2026-10-18T18:51:21.410Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `f1d926066297d3bd8484f6f1ccdca36eaf281ac73ecbc400fb1ff0865d960015`. Letzter im Katalog erfasster Beweisstand: `2026-10-18T19:59:05.164Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

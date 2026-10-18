@@ -35,6 +35,11 @@ struct RenderedDocument {
 }
 
 pub(crate) fn validate_renderer(config: &RendererConfig, timeout_secs: u64) -> anyhow::Result<()> {
+    if let Some(viewport) = config.viewport
+        && (!(100..=4096).contains(&viewport.width) || !(100..=4096).contains(&viewport.height))
+    {
+        bail!("Renderer viewport width and height must each be from 100 to 4096 pixels");
+    }
     let endpoint = normalize_url(&config.endpoint, None).context("Invalid renderer endpoint")?;
     if endpoint.scheme() != "http"
         || !matches!(
@@ -279,9 +284,13 @@ async fn request_render(
     } else {
         BTreeMap::new()
     };
-    let body = serde_json::to_vec(
-        &serde_json::json!({"url":page.final_url,"user_agent":config.user_agent,"timeout_ms":config.request_timeout_secs.saturating_mul(1000),"wait_ms":renderer.wait_ms,"custom_headers":headers,"accessibility":renderer.accessibility,"screenshot":renderer.screenshot,"custom_javascript":renderer.custom_javascript,"collect_cookies":renderer.collect_cookies}),
-    )?;
+    let mut body = serde_json::json!({"url":page.final_url,"user_agent":config.user_agent,"timeout_ms":config.request_timeout_secs.saturating_mul(1000),"wait_ms":renderer.wait_ms,"custom_headers":headers,"accessibility":renderer.accessibility,"screenshot":renderer.screenshot,"custom_javascript":renderer.custom_javascript,"collect_cookies":renderer.collect_cookies});
+    if let Some(viewport) = renderer.viewport {
+        body.as_object_mut()
+            .unwrap()
+            .insert("viewport".into(), serde_json::to_value(viewport)?);
+    }
+    let body = serde_json::to_vec(&body)?;
     let client = Client::builder()
         .redirect(reqwest::redirect::Policy::none())
         .no_proxy()
@@ -328,5 +337,25 @@ async fn request_render(
             document.status
         );
     }
+    if let Some(requested) = renderer.viewport
+        && !document
+            .viewport
+            .as_ref()
+            .and_then(serde_json::Value::as_object)
+            .is_some_and(|reported| {
+                reported.get("width").and_then(serde_json::Value::as_u64)
+                    == Some(u64::from(requested.width))
+                    && reported.get("height").and_then(serde_json::Value::as_u64)
+                        == Some(u64::from(requested.height))
+            })
+    {
+        bail!(
+            "Renderer response viewport does not match the explicitly requested width and height"
+        );
+    }
     Ok(document)
 }
+
+#[cfg(test)]
+#[path = "renderer_viewport_tests.rs"]
+mod viewport_tests;

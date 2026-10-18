@@ -2827,7 +2827,7 @@
     {
       "id": "rendering.screenshot",
       "name": "Rendered screenshots",
-      "status": "partial",
+      "status": "implemented",
       "phase": "P3",
       "source_ids": [
         "render"
@@ -2841,14 +2841,17 @@
             "ui-renderer"
           ],
           "proves": "Worker returns a valid viewport PNG; real core crawl stores screenshot_base64 on the URL record and JSON snapshot can serialize it. Actual UI lazily previews the PNG and project export retains render evidence."
+        },
+        {
+          "verification_run_ids": [
+            "rendered-screenshots-20261018"
+          ],
+          "proves": "Actual settings-selected320x240 and1440x900 reach real Chromium; decoded PNG pixel/media witnesses, original saved PNG attachment and job/URL/ordinal/generation/snapshot identity, lazy checked preview, stale/unavailable refusal, two natural EOF0 processes and byte-identical offline cold reopen are proven."
         }
       ],
       "parity_evidence": [],
       "group": "rendering",
-      "remaining_acceptance": [
-        "Expose selected capture viewport through crawler/UI, add deterministic image/viewport assertions and artifact-file links.",
-        "Next scoped screenshot workflow: choose actual capture viewport in settings, crawl an owned deterministic rendered page, verify PNG dimensions and URL/generation binding, then reopen the saved project and verify the same image/export artifact. Screenshot presence alone does not prove viewport correctness."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -6770,6 +6773,28 @@
       "command": "1817 Rust/0 Fehler/5 Ignores; 130 Zustandstests; 40 semantische Gruppen; alle 40 registrierten UI-Suiten in einem abgeschlossenen Aufruf; 14 erfolgreiche quellengebundene Gates.",
       "scope": "Benannter nativer SQLite-Profilkatalog im ausgewählten Datenverzeichnis: explizite Metadatenliste, Arbeitskopie laden, reine Katalogaktionen Create/Replace/Rename/Delete mit Revisionstring und SHA-CAS. 4 echte Katalog-Prüfgruppen, 11 unabhängige SQL-Snapshots und 5 echte Downloads; zwei positive und zwei negative native Prozesse schließen natürlich mit EOF0. Kalter frischer Browserkontext und explizites Laden erhalten Profile ohne automatische Übernahme; zwei positive 410-Kontrollen stehen null Offline-Produktanfragen gegenüber. Kanonische native Toggle-Vorbedingung vor Space besteht drei vorab festgelegte Läufe und die aktuelle vollständige 40-Suiten-Abnahme; Produktassertions und Deadlines bleiben erhalten.",
       "limits": "storage.config bleibt partial; Herstellerparität und stabile Release-Freigabe sind NOT_PROVEN. CLI-Profil-Ausführung, allgemeine Migration/Synchronisierung/History, physische 64 MiB-/256MiB-Browsergrenzen und globale Ressourcen-/Crash-/Parallelitätsgrenzen bleiben offen. Kontrollierter cfg(test)-Provider ist kein Nachweis realer Zugangsdaten. Historische Density-/Setup-FAILs bleiben erhalten. Parent-Rendererjob117745485458 aus Run39151352510 scheiterte am alten Density-Space-Schritt; neue exakte öffentliche Commit-CI steht aus. Genaue Chromium-Ursache und allgemeine Stabilität sind NOT_PROVEN."
+    },
+    {
+      "id": "rendered-screenshots-20261018",
+      "date": "2026-10-18",
+      "result": "PASS_LOCAL_SELECTED_VIEWPORT_SAVED_PNG_AND_FORTY_ONE_SUITE_REGRESSION",
+      "artifact": "docs/verification/rendered-screenshots-20261018/README.md",
+      "evidence": "docs/verification/rendered-screenshots-20261018/local-result.json",
+      "source_gates": "docs/verification/rendered-screenshots-20261018/source-gates.json",
+      "evidence_bytes": 54034,
+      "evidence_sha256": "1128a8b1bd3f150d39e2ce3e5f0420039fb7b4d898dca636eedef9f09c370a5c",
+      "source_gates_sha256": "4d5f2b063c67177701c60822f3a63bcab2a8d5213d1ffab070ba67536ba57673",
+      "source_debug_sha256": "c780fa04c09a7f8a20e1ba5f61368fb0df2d729b85785fbcb34dbe95cae0ed59",
+      "frozen_acceptance_input_count": 579,
+      "frozen_acceptance_manifest_sha256": "07be90a360aab288d992d77e7e284b74a883be4794e7c48a58d5d18f74c6f8f7",
+      "rust_passed": 1831,
+      "rust_failed": 0,
+      "rust_ignored": 5,
+      "ui_suite_count": 41,
+      "ui_one_complete_invocation": true,
+      "command": "1831 Rust/0 failed/5 opt-in ignores; strictClippy;4 explicit Chromium;160 state tests;40 semantic groups; all41 UI suites in one terminal invocation; focused actual screenshot3 groups5 downloads2 natural EOF0",
+      "scope": "Selected viewport and original saved PNG download through actual settings/renderer/native/browser/cold boundaries; independent exact bytes, pixel and context verification.",
+      "limits": "Selected viewport PNG is viewport-only; full-page captures, device-scale-factor/device emulation, other image formats, all browsers and arbitrary imported pixel-decoder correctness are not claimed. Native PNG checks structure/CRC/dimensions and streams typed report identity under the cached job read lock; not fresh SQLite attestation. Independent fixture PNG pixels were actually decoded and checked. Two shared preparation slots and64MiB logical PNG output cap do not establish global CPU/RSS/transport-memory bounds. All144 capabilities,416 filters and32 workflow contracts remain tracked; complete manufacturer parity and general production credentials/installation are separate gates."
     }
   ],
   "reference_workflows": [
@@ -6891,8 +6916,8 @@
   ],
   "status_summary": {
     "overall": {
-      "implemented": 38,
-      "partial": 69,
+      "implemented": 39,
+      "partial": 68,
       "planned": 37,
       "total": 144
     },
@@ -6910,8 +6935,8 @@
         "total": 45
       },
       "P3": {
-        "implemented": 8,
-        "partial": 7,
+        "implemented": 9,
+        "partial": 6,
         "planned": 9,
         "total": 24
       },
@@ -6972,8 +6997,8 @@
         "total": 6
       },
       "rendering": {
-        "implemented": 5,
-        "partial": 4,
+        "implemented": 6,
+        "partial": 3,
         "planned": 5,
         "total": 14
       },
@@ -7027,14 +7052,80 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-18T18:51:21.410Z",
+  "last_verified_at": "2026-10-18T19:59:05.164Z",
   "current_work": [
+    {
+      "id": "profile-browser-response-capture-ci-20261018",
+      "priority": -13,
+      "title_de": "Tatsächliche Profil-Antwortbytes im Browser ohne CDP-Rennen nachweisen",
+      "status": "CI_FAILURE_DIAGNOSED_CAPTURE_CHANGE_PENDING",
+      "summary_de": "Öffentliche513-Renderer-CI besteht Density, scheitert später beim Import exact-u64.json. Rekonstruierter Request-SHA stimmt mit dem letzten Browserrequest überein; Fehler liegt vor Speichern/Reload. Chromium-Ursache und Produktdefekt sind noch nicht belegt. Der lokale Screenshot-Stand und seine vollständige Windows-Abnahme sind separat.",
+      "completed_acceptance_de": [
+        "Abgeschlossenen Rendererjob117760088992 aus Run39156291901 und rohe Artefakte erhalten. Vier Profil-Prüfgruppen bestehen; danach schlägt das Lesen tatsächlicher Browserantwortbytes fehl.",
+        "Exakten u64-Import über Request-SHAf994d5f7… zugeordnet. Die generische Meldung über eine Navigation ist kein Beweis für tatsächliche Navigation."
+      ],
+      "pending_acceptance_de": [
+        "Preview-Antwortbytes im echten Browser über Response.clone erfassen, exakt dem Request zuordnen und ursprüngliche Response/Funktionslogik erhalten.",
+        "Alle bisherigen Pflichtprüfungen echter Bytes, UI und Speicherung beibehalten; keine Mutation wiederholen, keine Fallback-Oracles oder erhöhten Timeouts.",
+        "Gezielte lokale Profil-Abnahme und neue exakte öffentliche Gesamtabnahme durchführen; erst danach CI-Lücke schließen."
+      ],
+      "documentation": [
+        "docs/e2e-testing.md",
+        "docs/FEATURE_TODO.md",
+        "docs/verification/rendered-screenshots-20261018/README.md"
+      ],
+      "gates": {
+        "parent_public_renderer": "FAIL_EXACT_U64_BROWSER_RESPONSE_BODY",
+        "root_cause": "NOT_PROVEN",
+        "current_screenshot_local": "PASS_COMPLETE_SCOPED_ACCEPTANCE",
+        "capture_fix": "NOT_IMPLEMENTED",
+        "new_public_CI": "NOT_RUN"
+      },
+      "reference_parity": "NOT_PROVEN",
+      "public_ci_url": "https://github.com/lia-xim/open-seo-spider/actions/runs/39156291901/job/117760088992"
+    },
+    {
+      "id": "screenshot-viewport-artifacts-20261018",
+      "priority": -12,
+      "title_de": "Browsergröße wählen und gespeicherte Screenshot-Dateien eindeutig zuordnen",
+      "status": "LOCAL_SCREENSHOT_ACCEPTANCE_AND41_SUITE_PASS_PUBLIC_CI_PENDING",
+      "summary_de": "Optionale Browsergröße und gespeicherter PNG-Download sind durch Rust, Einstellungen, portable/nativ benannte Profile und den lazy Inspector geführt. Echte320×240-/1440×900-Captures, geprüfte Vorschau/Datei/Pixels und Kaltstart sind belegt.1831 Rust/160 Zustandstests/40 semantische Gruppen und alle41 UI-Suiten bestehen auf demselben eingefrorenen Stand. Herstellerparität bleibt NOT_PROVEN.",
+      "completed_acceptance_de": [
+        "Optionale strikt geprüfte Viewports bewahren Altprofil-Byteidentität und native-only/u64-Profiloptionen; ungültige Einstellungen werden vor Job-/Datei-/Website-/Worker-Effekten abgewiesen.",
+        "Native Metadaten und originale PNG-Anhänge sind an Job, originale Zeile/URL, Generation, typed Report und Bild-SHA gebunden. Gleiche Reports anderer Jobs sowie stale/falsche Kontexte werden abgewiesen; fehlende/deaktivierte/fehlgeschlagene/beschädigte Bilder bleiben getrennt.",
+        "Echter Chromium-Nachweis320×240 und1440×900 mit Pixeln/Media-Query, fünf tatsächlichen Downloads und geprüfter lazy Blob-Vorschau. Verspätete Antworten, geschlossene Inspector-Kontexte und320px-Bedienung geprüft.",
+        "Zwei natürliche EOF0-Prozesse mit frischem Browser-Kontext und anderem Origin öffnen bytegleiche gespeicherte Projekte/Bilder unter zwei positiven410-Kontrollen; null Offline-Produktabrufe.",
+        "1831 Rust/0 Fehler/5 Ignores; strenges Clippy;4 explizite Chromium-Fälle;160 Zustandstests;40 semantische Gruppen; alle41 registrierten UI-Suiten in einem abgeschlossenen Aufruf."
+      ],
+      "pending_acceptance_de": [
+        "Frische öffentliche CI des neuen exakten Commits nach Veröffentlichung terminal prüfen; lokale Gates sind keine Installations- oder Release-Freigabe.",
+        "Full-page-/weitere Bildformate, Geräteskalierung/Emulation, alle Browser, beliebige importierte Pixel-Dekodierung, globale Ressourcen- und Crash-Grenzen sowie vollständige Herstellerparität sind nicht mit diesem Schnitt nachgewiesen."
+      ],
+      "documentation": [
+        "docs/rendered-screenshots.md",
+        "docs/e2e-testing.md",
+        "docs/FEATURE_TODO.md",
+        "docs/verification/rendered-screenshots-20261018/README.md",
+        "docs/verification/rendered-screenshots-20261018/local-result.json",
+        "docs/verification/rendered-screenshots-20261018/source-gates.json"
+      ],
+      "gates": {
+        "core_targeted": "PASS_FULL_WORKSPACE_INCLUDING6_VIEWPORT_REGRESSIONS",
+        "native_artifacts": "PASS_NATIVE8_TESTS_PLUS_ACTUAL_PNG_BYTES_AND_CONTEXT",
+        "web_settings_and_inspector": "PASS160_STATE_TESTS_CHECKED_PREVIEW_AND_PROFILE_PRESERVATION",
+        "browser_native_cold": "PASS3_GROUPS5_DOWNLOADS2_NATURAL_EOF0_ZERO_OFFLINE_PRODUCT_REQUESTS",
+        "regression": "PASS41_REGISTERED_UI_SUITES_ONE_COMPLETE_INVOCATION",
+        "fresh_public_CI": "PENDING_NEW_EXACT_COMMIT",
+        "manufacturer_parity": "NOT_PROVEN"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
     {
       "id": "named-native-profile-catalog-20261018",
       "priority": -10,
       "title_de": "Benannte native Konfigurationsprofile speichern und verwalten",
-      "status": "LOCAL_NATIVE_CATALOG_AND40_SUITE_PASS_PUBLIC_CI_PENDING",
-      "summary_de": "Benannte Profile sind im nativen SQLite-Katalog des ausgewählten Datenverzeichnisses und im bestehenden Einstellungsdialog umgesetzt. Metadatenliste und Laden sind explizit; Laden stellt nur die Arbeitskopie bereit, Settings-Save übernimmt sie. Create/Replace/Rename/Delete verwenden Revision/SHA-CAS und verändern die aktive Kopie nicht. 1817 Rust/0 Fehler/5 Ignores; 130 Zustandstests; 40 semantische Gruppen; alle 40 registrierten UI-Suiten in einem abgeschlossenen Aufruf; 14 erfolgreiche quellengebundene Gates. Herstellerparität und frische öffentliche CI bleiben separat offen.",
+      "status": "LOCAL_NATIVE_CATALOG_PASS_PUBLIC_CI_PROFILE_BODY_FAILURE",
+      "summary_de": "Benannter nativer SQLite-Profilkatalog und explizite Arbeitskopie-/Katalogaktionen sind lokal nachgewiesen:1817 Rust,130 Zustandstests,40 semantische Gruppen und alle40 UI-Suiten in einem Aufruf. Exakte öffentliche513-CI ist terminal fehlgeschlagen: Container/Ubuntu/Windows bestehen; Renderer besteht Density, scheitert später beim exact-u64-Profilimport am Lesen tatsächlicher Browserantwortbytes. Ursache und Produktdefekt sind NOT_PROVEN; eigene Folgearbeit ist priorisiert.",
       "completed_acceptance_de": [
         "Aktuellen Quellenstand e4f58c2 und offene Kriterien überprüft; bestehenden strikten Profilparser, Windows-SQLite-Adapter und Settings-Controller als gemeinsame Grenzen festgelegt.",
         "Konkreten API-/Speichervertrag und Browser/Native/Kaltstart-Abnahme einschließlich paralleler Tabs, expliziter Header und320px-Ansicht dokumentiert.",
@@ -7043,7 +7134,7 @@
         "1817 Rust/0 Fehler/5 Ignores; 130 Zustandstests; 40 semantische Gruppen; alle 40 registrierten UI-Suiten in einem abgeschlossenen Aufruf; 14 erfolgreiche quellengebundene Gates."
       ],
       "pending_acceptance_de": [
-        "Frische öffentliche CI des neuen exakten Commits terminal prüfen; lokale Abnahme ist keine öffentliche CI- oder Installationsfreigabe. Parent-Run39151352510/Rendererjob117745485458 hat einen erhaltenen Density-Space-Fehler des vorherigen Treibers.",
+        "Exakte öffentliche513-CI geprüft: Renderer scheitert beim Import exact-u64.json am CDP-Body-Lesen; Density besteht. Rootcause und Produktfehler sind NOT_PROVEN. Als eigenständigen Browser-Antwort-Abnahmepunkt beheben und neue exakte CI prüfen.",
         "Portable Profil-Ausführung durch CLI, allgemeine Formatmigration, Katalog-History/Synchronisierung und breitere Cross-Origin-/Credential-/Pfad-Registrierung gesondert spezifizieren und tatsächlich prüfen.",
         "Physische64MiB-Profil-/256MiB-Kataloggrenzen im Browser sowie globale RAM/CPU/Datenträger-, Crash- und gleichzeitige Mehrprozess-Mutationsgrenzen bleiben unbelegt; kleinere injizierte Budgetkontrollen nicht als maximale Laufzeitbeweise ausgeben.",
         "Optionale Transport-/Renderer-/Providerkombinationen und vollständige Herstellerformat-/Funktions-/Verhaltensparität bleiben NOT_PROVEN."
@@ -7061,7 +7152,7 @@
         "native_tests": "PASS_WORKSPACE1817_FAILED0_IGNORED5",
         "browser_native_cold": "PASS4_GROUPS5_DOWNLOADS4_NATURAL_EOF0",
         "regression": "PASS40_REGISTERED_UI_SUITES_ONE_COMPLETE_INVOCATION_SOURCE_AND_BINARY_UNCHANGED",
-        "fresh_public_CI": "PENDING_NEW_EXACT_COMMIT",
+        "fresh_public_CI": "FAIL_EXACT_513_RENDERER_CONFIGURATION_PROFILE_RESPONSE_BODY",
         "manufacturer_parity": "NOT_PROVEN",
         "state_tests": "PASS130",
         "controlled_provider": "PASS_CFG_TEST_ONLY_NOT_REAL_CREDENTIALS"
@@ -10036,6 +10127,8 @@
     }
   ],
   "active_work_ids": [
+    "profile-browser-response-capture-ci-20261018",
+    "screenshot-viewport-artifacts-20261018",
     "named-native-profile-catalog-20261018",
     "ui-density-space-aggregate-20261018",
     "configuration-profile-browser-e2e-20261018",

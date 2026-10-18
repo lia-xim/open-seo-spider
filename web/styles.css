@@ -354,6 +354,15 @@ td { height: 36px; padding: 6px 12px; border-bottom: 1px solid var(--line-soft);
 .rendered-screenshot { margin-top: 16px; font-size: 12px; color: var(--brand); }
 .rendered-screenshot summary { cursor: pointer; }
 .rendered-screenshot img { display: block; max-width: 100%; height: auto; margin-top: 10px; border: 1px solid var(--line); border-radius: var(--radius); }
+.rendered-screenshot, #screenshot-metadata, #screenshot-metadata dd { min-width: 0; overflow-wrap: anywhere; }
+#screenshot-state { color: var(--muted); line-height: 1.6; }
+#screenshot-state.error { color: var(--danger); }
+#screenshot-export { max-width: 100%; height: auto; min-height: 32px; white-space: normal; }
+@media (max-width: 640px) {
+  #screenshot-metadata { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  #screenshot-metadata dd { margin-bottom: 10px; }
+  #screenshot-export { width: 100%; }
+}
 
 /* Link graph */
 .graph-container { padding: 16px; overflow: auto; }

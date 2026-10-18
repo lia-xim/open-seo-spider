@@ -4,9 +4,13 @@ The supported story is: open the redesigned interface, configure a crawl, fetch
 owned pages through the Rust backend, inspect the saved result, and export or
 reopen that result. Tests must follow the real boundary they claim to cover.
 
-## Current named-profile and regression acceptance
+## Current screenshot and complete regression acceptance
 
-The [current receipt](verification/configuration-profile-catalog-20261018/README.md) records **1,817 ordinary Rust tests**, five deliberate opt-in ignores, strict Clippy, four explicitly executed Chromium fixtures, controlled-provider cold replay, 130 state tests and 40 semantic UI groups.
+The [current screenshot receipt](verification/rendered-screenshots-20261018/README.md) records **1,831 ordinary Rust tests**, five deliberate opt-in ignores, strict Clippy, four explicit Chromium cases, **160 state tests**,40 semantic UI groups and **all41 registered UI suites in one complete invocation**. The selected-viewport workflow includes actual320 ×240/1440 ×900 pixel checks, five byte-identical PNG downloads, guarded lazy preview and a two-process offline cold reopen. The full144-capability/416-filter/32-workflow ledger remains intact; manufacturer parity is `NOT_PROVEN`.
+
+## Prior named-profile acceptance
+
+The [named-profile receipt](verification/configuration-profile-catalog-20261018/README.md) records **1,817 ordinary Rust tests**, five deliberate opt-in ignores, strict Clippy, four explicitly executed Chromium fixtures, controlled-provider cold replay, 130 state tests and 40 semantic UI groups.
 
 All **40 registered UI suites passed in one complete invocation** on the same frozen product and driver bytes: nine API-fixture suites and 31 native suites. The named native catalog has four actual browser groups, two positive native processes and two separately prepared negative-only processes, five real downloads and a fresh-origin cold reload. Existing portable-profile acceptance also passed its ten browser groups.
 

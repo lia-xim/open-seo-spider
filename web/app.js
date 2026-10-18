@@ -22,6 +22,7 @@
       sitemap_membership_limits_enabled:false, sitemap_membership_max_catalog_json_bytes:'33554432', sitemap_membership_max_row_json_bytes:'262144', sitemap_membership_max_rows:'1000000',
       javascript_rendering: false, renderer_endpoint: 'http://127.0.0.1:8790/render',
       renderer_wait_ms: 500, renderer_accessibility: false, renderer_screenshot: false,
+      renderer_viewport_enabled: false, renderer_viewport_width: 1280, renderer_viewport_height: 800,
       renderer_collect_cookies: false, custom_javascript_json: '[]',
       custom_search_enabled:false, custom_search_json:'{"version":1,"rules":[{"name":"Beispiel","method":"literal","pattern":"Suchbegriff","sources":["raw_html"]}]}',
       include_patterns_text: '', exclude_patterns_text: '', custom_extractions_json: '[]', audit_thresholds_json: '{}', pdf_analysis_json: '{}', validate_fragments: false, link_position_rules_json: '[]', crawl_policy_enabled: false, crawl_policy_json: '{"scope":{"roots":[{"origin":"https://example.test","folders":["/"],"subdomains":false,"exact_paths":[]}]}}', live_policy_limits_json: '{}', content_capture_enabled:false, content_capture_json:'{"sources":["raw_http_html"],"include_selectors":["body"],"exclude_selectors":["script","style","template","noscript","nav","footer"]}',resource_discovery_enabled:false,resource_discovery_json:'{}',resource_discovery_limits_json:'{}',tls_enabled:false,tls_respect_hsts:false,tls_certificates_json:'[]',cdn_classification_enabled:false,cdn_origins_text:'',cdn_directory_reporting_enabled:false,cdn_directory_rules_text:'',respect_noindex:false,respect_canonical:false,respect_next_prev:false
@@ -30,6 +31,7 @@
 
   let configProfiles = null, profileFormBaseline = null, profileToolbarBaseline = null, profileHeaderSignature = '', profileQuotaBaseline = null;
   let configProfileCatalog = null, profileCatalogNameOwner = '', profileCatalogDelete = null;
+  let screenshotController = null, screenshotView = null;
   const legacySettingsDefaults = {...state.settings};
   let dashboardSegments = null;
   const separateSegmentSections = new Set(['inputs','policy','policyaliases','content','resource-discovery','sitemap-membership','sitemap-findings']);
@@ -199,6 +201,7 @@
     if (restoreFocus) [...document.querySelectorAll('[data-recrawl-url]')].find(input => input.dataset.recrawlUrl === url)?.focus({ preventScroll: true });
   }
   function invalidatePoll() {
+    screenshotController?.invalidate();
     dashboardSegments?.invalidate();
     invalidateContentRequests('Der Crawl-Stand wurde geändert.', true);
     resetResourceLedger();
@@ -480,7 +483,8 @@
       for (const key of ['tls_enabled','tls_respect_hsts','tls_certificates_json','respect_noindex','respect_canonical','respect_next_prev','cdn_directory_reporting_enabled','cdn_directory_rules_text','cdn_classification_enabled','cdn_origins_text','crawl_policy_enabled', 'crawl_policy_json', 'live_policy_limits_json', 'content_capture_enabled', 'content_capture_json','resource_discovery_enabled','resource_discovery_json','resource_discovery_limits_json']) delete payload[key];
       for (const key of [...crawlQuotaSettingKeys, ...crawlAdmissionSettingKeys, ...sitemapArchiveSettingKeys, 'sitemap_source_processing_enabled', ...sitemapSourceFields.map(field => field.setting), 'sitemap_membership_limits_enabled', ...sitemapMembershipFields.map(field => field.setting)]) delete payload[key];
       delete payload.custom_search_enabled; delete payload.custom_search_json;
-      payload.renderer = state.settings.javascript_rendering ? { endpoint: state.settings.renderer_endpoint, wait_ms: state.settings.renderer_wait_ms, accessibility: state.settings.renderer_accessibility, screenshot: state.settings.renderer_screenshot, collect_cookies: state.settings.renderer_collect_cookies, custom_javascript: parseCustomJavascript(state.settings.custom_javascript_json) } : null;
+      for(const key of ['renderer_viewport_enabled','renderer_viewport_width','renderer_viewport_height'])delete payload[key];
+      payload.renderer = state.settings.javascript_rendering ? { endpoint: state.settings.renderer_endpoint, wait_ms: state.settings.renderer_wait_ms, accessibility: state.settings.renderer_accessibility, screenshot: state.settings.renderer_screenshot, ...(rendererViewport(state.settings) ? {viewport:rendererViewport(state.settings)} : {}), collect_cookies: state.settings.renderer_collect_cookies, custom_javascript: parseCustomJavascript(state.settings.custom_javascript_json) } : null;
       const result = await request('/api/crawls', { method: 'POST', body: JSON.stringify(payload) });
       const crawl = result.crawl || result;
       if (!crawl.id) throw new Error('Der Server hat keine Crawl-ID zurückgegeben.');
@@ -599,6 +603,7 @@
   }
 
   function renderControls() {
+    if(screenshotView?.previewOwner&&!window.SpiderScreenshots?.sameOwner(screenshotView.previewOwner,screenshotOwner()))clearScreenshotPreview();
     const busy = actionBusy();
     $('start-button').disabled = Boolean(busy || active());
     $('pause-button').hidden = !state.crawl || !['running', 'queued', 'pending', 'pausing'].includes(state.crawl.status);
@@ -1149,7 +1154,66 @@
     $('inspector-content').innerHTML = `<p class="detail-empty">Deklarierte Herkunft aus dem gespeicherten Importergebnis, keine signierte Bestätigung. Index 0 ist erhalten und bedeutet eine nicht erfasste Quellposition. Abrufbefunde sind ausschließlich im vollständigen Eingabezeilen-CSV ergänzt.</p><dl class="details-grid">${fields.map(([label, value]) => `<dt>${escape(label)}</dt><dd>${escape(value ?? 'Nicht erfasst')}</dd>`).join('')}</dl><details><summary>Importoptionen &amp; Grenzen</summary><pre class="list-import-details">${escape(JSON.stringify({ options: row._import.options, website_requests: row._import.website_requests, warnings: row._import.warnings, limitations: row._import.limitations }, null, 2))}</pre></details>`;
   }
 
+  function screenshotOwner() {
+    const view=screenshotView;
+    if(!view||!view.details.open||view.details.isConnected===false||$('inspector').hidden||state.selected!==view.page||state.selectedInput||state.selectedResponse||state.inspectorTab!=='details'||!state.crawl)return null;
+    return {id:state.crawl.id,url:view.page.url,ordinal:Number.isSafeInteger(view.page._segmentOrdinal)?view.page._segmentOrdinal:null,nativeGeneration:state.crawl.generation??null,uiGeneration:state.generation,selection:view.page,view,segmentRevision:dashboardSegments?.state.revision??null,tab:state.inspectorTab,section:state.section};
+  }
+  function clearScreenshotPreview(view=screenshotView) {
+    if(!view)return;
+    view.previewToken=null;view.previewKey=null;view.previewOwner=null;view.previewError='';
+    view.image?.remove();view.image=null;
+    if(view.previewURL){URL.revokeObjectURL(view.previewURL);view.previewURL=null;}
+    view.details.dataset.previewStatus='idle';
+  }
+  function renderScreenshotPreview(view,metadata) {
+    const tools=window.SpiderScreenshots,owner=screenshotOwner();
+    if(!tools||!owner||!metadata?.available){clearScreenshotPreview(view);view.details.dataset.previewStatus=metadata?'unavailable':'idle';return;}
+    const key=JSON.stringify(metadata);
+    if(view.previewKey===key&&tools.sameOwner(view.previewOwner,owner))return;
+    clearScreenshotPreview(view);
+    const token={owner};view.previewKey=key;view.previewOwner=owner;view.previewToken=token;view.details.dataset.previewStatus='checking';
+    const current=()=>screenshotView===view&&view.previewToken===token&&tools.sameOwner(owner,screenshotOwner())&&screenshotController?.state.metadata?.available&&JSON.stringify(screenshotController.state.metadata)===key;
+    tools.checkedPreview(view.page.screenshot_base64,metadata).then(bytes=>{
+      if(!current())return;
+      const url=URL.createObjectURL(new Blob([bytes],{type:'image/png'})),image=document.createElement('img');
+      view.previewURL=url;view.image=image;image.src=url;image.alt=`Lokal erfasster, geprüfter Browser-Screenshot von ${view.page.url}`;image.dataset.screenshotPreview='';view.details.append(image);view.details.dataset.previewStatus='available';
+    }).catch(error=>{
+      if(!current())return;
+      clearScreenshotPreview(view);view.previewKey=key;view.previewOwner=owner;view.previewError=typeof error?.message==='string'?error.message:'Die gespeicherte Vorschau konnte nicht geprüft werden.';view.details.dataset.previewStatus='error';renderScreenshotState();
+    });
+  }
+  function renderScreenshotState() {
+    const view=screenshotView;if(!view)return;
+    const value=screenshotController?.state,metadata=value?.metadata;
+    view.status.textContent=(value?.busy?(value.phase==='download'?'Gespeicherten PNG-Screenshot vollständig prüfen …':'Gespeicherte Screenshot-Metadaten prüfen …'):value?.error?value.error:metadata?metadata.available?(value.phase==='downloaded'?'PNG geprüft und heruntergeladen.':'PNG gespeichert; der Download prüft die Originaldatei vollständig.'):({disabled:'Screenshot war deaktiviert.',render_failed:'Browser-Rendering ist fehlgeschlagen.',missing:'Kein Screenshot aufgezeichnet; Verfügbarkeit unbekannt.',corrupt:'Gespeicherter Screenshot ist beschädigt oder widersprüchlich.'}[metadata.status]+' Befund: '+metadata.reason):'Noch keine nativen Screenshot-Metadaten geladen.')+(view.previewError?' Vorschau nicht verfügbar: '+view.previewError:'');
+    view.status.dataset.status=metadata?.status||(value?.error?'error':'idle');
+    view.status.classList.toggle('error',Boolean(value?.error||metadata?.status==='corrupt'));
+    view.button.disabled=!screenshotController||Boolean(value?.busy)||Boolean(metadata&&!metadata.available);
+    view.metadata.replaceChildren();
+    if(metadata){
+      const fields=[['Crawl-ID',metadata.id],['Originale Seitenbeobachtung (ab 0)',metadata.ordinal],['Anfrage-URL',metadata.url],['Finale URL',metadata.final_url],['Native Generation',metadata.generation??'Unbekannt'],['Snapshot SHA-256',metadata.snapshot_sha256],['Dateistatus',metadata.status],['Befund',metadata.reason??'Keine Abweichung'],['Gespeicherte Browser-Ansicht',metadata.viewport?`${metadata.viewport.width} × ${metadata.viewport.height}`:'Nicht gespeichert; historischer Worker-Standard nicht abgeleitet'],['PNG-Abmessungen',metadata.available?`${metadata.width} × ${metadata.height}`:'Nicht bestätigt'],['PNG-Bytes',metadata.bytes??'Nicht bestätigt'],['PNG SHA-256',metadata.png_sha256??'Nicht bestätigt']];
+      for(const[label,value]of fields){const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;dd.textContent=String(value);view.metadata.append(dt,dd);}
+    }
+    renderScreenshotPreview(view,metadata);
+  }
+  function renderScreenshotInspector(page,element) {
+    if(!screenshotController&&window.SpiderScreenshots)screenshotController=window.SpiderScreenshots.createController({owner:screenshotOwner,changed:renderScreenshotState,download:downloadBlob});
+    const details=document.createElement('details'),summary=document.createElement('summary'),status=document.createElement('p'),metadata=document.createElement('dl'),button=document.createElement('button');
+    details.id='screenshot-details';details.className='rendered-screenshot';summary.textContent='Screenshot prüfen, anzeigen und herunterladen';status.id='screenshot-state';status.setAttribute('role','status');status.setAttribute('aria-live','polite');metadata.id='screenshot-metadata';metadata.className='details-grid';button.id='screenshot-export';button.type='button';button.className='button small';button.textContent='PNG prüfen und herunterladen';
+    details.append(summary,status,metadata,button);
+    screenshotView={page,details,status,metadata,button};
+    details.addEventListener('toggle',()=>{
+      if(screenshotView?.details!==details)return;
+      if(!details.open){screenshotController?.invalidate();return;}
+      screenshotController?.inspect();
+    });
+    button.addEventListener('click',()=>screenshotController?.download());element.append(details);renderScreenshotState();
+  }
+
   function renderInspector() {
+    screenshotController?.invalidate();
+    screenshotView = null;
     renderControls();
     if (state.selectedInput) { renderInputInspector(state.selectedInput); return; }
     if (state.selectedResponse) { renderResponseInspector(state.selectedResponse); return; }
@@ -1257,21 +1321,7 @@
         );
       }
       element.innerHTML = `<dl class="details-grid">${fields.map(([label, value]) => `<dt>${escape(label)}</dt><dd>${escape(value)}</dd>`).join('')}</dl>`;
-      if (typeof page.screenshot_base64 === 'string' && /^[A-Za-z0-9+/=\r\n]+$/.test(page.screenshot_base64)) {
-        const details = document.createElement('details');
-        details.className = 'rendered-screenshot';
-        const summary = document.createElement('summary'); summary.textContent = 'Erfassten Browser-Screenshot anzeigen';
-        details.append(summary);
-        details.addEventListener('toggle', () => {
-          if (details.open && !details.querySelector('img')) {
-            const image = document.createElement('img');
-            image.src = `data:image/png;base64,${page.screenshot_base64}`;
-            image.alt = `Lokal erfasster Browser-Screenshot von ${page.url}`;
-            details.append(image);
-          }
-        });
-        element.append(details);
-      }
+      renderScreenshotInspector(page, element);
     } else if (state.inspectorTab === 'dom') {
       const facts = page.dom_metadata;
       const fields = [
@@ -1530,7 +1580,8 @@
     const form = $('settings-form');
     const advancedText = { ...readTlsSettings(form), ...readDirectiveReportingSettings(form), ...readCdnDirectoryReportingSettings(form), ...readCdnClassificationSettings(form), ...readCrawlQuotaSettings(form), ...readCrawlAdmissionSettings(form), ...readSitemapSourceProcessingSettings(form), ...readSitemapSourceArchiveSettings(form), include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value, link_position_rules_json: form.elements.link_position_rules_json.value, validate_fragments: form.elements.validate_fragments.checked, crawl_policy_enabled: form.elements.crawl_policy_enabled.checked, crawl_policy_json: form.elements.crawl_policy_json.value, live_policy_limits_json: form.elements.live_policy_limits_json.value, follow_subdomains: form.elements.follow_subdomains.checked, check_external: form.elements.check_external.checked, javascript_rendering: form.elements.javascript_rendering.checked, content_capture_enabled:form.elements.content_capture_enabled.checked, content_capture_json:form.elements.content_capture_json.value,resource_discovery_enabled:form.elements.resource_discovery_enabled.checked,resource_discovery_json:form.elements.resource_discovery_json.value,resource_discovery_limits_json:form.elements.resource_discovery_limits_json.value };
     Object.assign(advancedText,{custom_search_enabled:form.elements.custom_search_enabled.checked,custom_search_json:form.elements.custom_search_json.value});
-    try { parseAdvanced(advancedText); validateRendererSettings({ javascript_rendering: form.elements.javascript_rendering.checked, renderer_endpoint: form.elements.renderer_endpoint.value.trim(), renderer_wait_ms: Number(form.elements.renderer_wait_ms.value), timeout_seconds: Number(form.elements.timeout_seconds.value) }); }
+    Object.assign(advancedText, {renderer_viewport_enabled:form.elements.renderer_viewport_enabled.checked,renderer_viewport_width:Number(form.elements.renderer_viewport_width.value),renderer_viewport_height:Number(form.elements.renderer_viewport_height.value)});
+    try { parseAdvanced(advancedText); validateRendererSettings({ javascript_rendering: form.elements.javascript_rendering.checked, renderer_endpoint: form.elements.renderer_endpoint.value.trim(), renderer_wait_ms: Number(form.elements.renderer_wait_ms.value), timeout_seconds: Number(form.elements.timeout_seconds.value), ...advancedText }); }
     catch (error) {
       if (form.elements.tls_enabled.checked) $('tls-settings').open = true;
       if (form.elements.sitemap_source_processing_enabled.checked || form.elements.sitemap_membership_limits_enabled.checked) $('sitemap-source-processing-settings').open = true;
@@ -1561,6 +1612,7 @@
         const nonnegative = (value) => Number.isInteger(Number(value)) && Number(value) >= 0 ? Number(value) : 0;
         state.settings = { concurrency: positive(saved.concurrency, 8, 64), timeout_seconds: positive(saved.timeout_seconds, 20, 300), max_pages: nonnegative(saved.max_pages), max_depth: nonnegative(saved.max_depth), user_agent: String(saved.user_agent || 'Open SEO Spider/0.1').slice(0, 256), obey_robots: saved.obey_robots !== false, follow_subdomains: saved.follow_subdomains === true, delay_ms: nonnegative(saved.delay_ms ?? 100), max_body_mb: positive(saved.max_body_mb, 5, 100), check_external: saved.check_external === true, javascript_rendering: saved.javascript_rendering === true, renderer_endpoint: String(saved.renderer_endpoint || 'http://127.0.0.1:8790/render'), renderer_wait_ms: nonnegative(saved.renderer_wait_ms ?? 500), renderer_accessibility: saved.renderer_accessibility === true, renderer_screenshot: saved.renderer_screenshot === true };
         Object.assign(state.settings, { indexability_agent: String(saved.indexability_agent || 'googlebot'), renderer_collect_cookies: saved.renderer_collect_cookies === true, custom_javascript_json: String(saved.custom_javascript_json || '[]'), audit_thresholds_json: String(saved.audit_thresholds_json || '{}'), pdf_analysis_json: String(saved.pdf_analysis_json || '{}'), include_patterns_text: String(saved.include_patterns_text || ''), exclude_patterns_text: String(saved.exclude_patterns_text || ''), custom_extractions_json: String(saved.custom_extractions_json || '[]'), validate_fragments: saved.validate_fragments === true, link_position_rules_json: String(saved.link_position_rules_json || '[]') });
+        Object.assign(state.settings,{renderer_viewport_enabled:saved.renderer_viewport_enabled===true,renderer_viewport_width:positive(saved.renderer_viewport_width,1280,4096),renderer_viewport_height:positive(saved.renderer_viewport_height,800,4096)});
         Object.assign(state.settings, { crawl_policy_enabled: saved.crawl_policy_enabled === true, crawl_policy_json: String(saved.crawl_policy_json || '{"scope":{"roots":[{"origin":"https://example.test","folders":["/"]}]}}'), live_policy_limits_json: String(saved.live_policy_limits_json || '{}') });
         Object.assign(state.settings, { content_capture_enabled:saved.content_capture_enabled === true, content_capture_json:String(saved.content_capture_json || '{"sources":["raw_http_html"],"include_selectors":["body"],"exclude_selectors":["script","style","template","noscript","nav","footer"]}') });
         Object.assign(state.settings,{resource_discovery_enabled:saved.resource_discovery_enabled===true,resource_discovery_json:String(saved.resource_discovery_json || '{}'),resource_discovery_limits_json:String(saved.resource_discovery_limits_json || '{}')});
@@ -1616,7 +1668,7 @@
     for(const [ui,key]of [['include_patterns_text','include_patterns'],['exclude_patterns_text','exclude_patterns']])settings[ui]=JSON.parse(raw(key,'[]')).join('\n');
     for(const [ui,key]of [['custom_extractions_json','custom_extractions'],['audit_thresholds_json','audit_thresholds'],['pdf_analysis_json','pdf_analysis'],['link_position_rules_json','link_position_rules']])settings[ui]=raw(key,legacySettingsDefaults[ui]);
     const renderer=raw('renderer','null');settings.javascript_rendering=renderer!=='null';
-    if(settings.javascript_rendering){const r=tools.fields(renderer);settings.renderer_endpoint=JSON.parse(r.get('endpoint'));settings.renderer_wait_ms=r.get('wait_ms');settings.renderer_accessibility=r.get('accessibility')==='true';settings.renderer_screenshot=r.get('screenshot')==='true';settings.renderer_collect_cookies=r.get('collect_cookies')==='true';settings.custom_javascript_json=r.get('custom_javascript')||'[]';}
+    if(settings.javascript_rendering){const r=tools.fields(renderer);settings.renderer_endpoint=JSON.parse(r.get('endpoint'));settings.renderer_wait_ms=r.get('wait_ms');settings.renderer_accessibility=r.get('accessibility')==='true';settings.renderer_screenshot=r.get('screenshot')==='true';settings.renderer_collect_cookies=r.get('collect_cookies')==='true';settings.custom_javascript_json=r.get('custom_javascript')||'[]';const viewport=r.get('viewport');settings.renderer_viewport_enabled=viewport!==undefined&&viewport!=='null';if(settings.renderer_viewport_enabled){const v=tools.fields(viewport);settings.renderer_viewport_width=v.get('width');settings.renderer_viewport_height=v.get('height');}}
     for(const [enabled,json,key,limits,limitsKey]of [['crawl_policy_enabled','crawl_policy_json','crawl_policy','live_policy_limits_json','live_policy_limits'],['content_capture_enabled','content_capture_json','content_capture'],['custom_search_enabled','custom_search_json','custom_search'],['resource_discovery_enabled','resource_discovery_json','resource_discovery','resource_discovery_limits_json','resource_discovery_limits']]){settings[enabled]=effective.has(key)&&raw(key)!=='null';if(settings[enabled])settings[json]=raw(key);if(limits)settings[limits]=raw(limitsKey,'{}');}
     for(const [enabled,key,definitions]of [['sitemap_source_processing_enabled','sitemap_source_processing',sitemapSourceFields],['sitemap_membership_limits_enabled','sitemap_membership_limits',sitemapMembershipFields],['crawl_admission_limits_enabled','crawl_admission_limits',crawlAdmissionFields],['sitemap_source_archive_enabled','sitemap_source_archive',sitemapArchiveFields]]){
       settings[enabled]=effective.has(key)&&raw(key)!=='null';
@@ -1657,8 +1709,12 @@
     }
     if(changed('javascript_rendering')){
       if(!current.javascript_rendering)set(['renderer'],'null');
-      else set(['renderer'],'{"endpoint":'+JSON.stringify(current.renderer_endpoint.trim())+',"wait_ms":'+integer(current.renderer_wait_ms)+',"accessibility":'+JSON.stringify(current.renderer_accessibility)+',"screenshot":'+JSON.stringify(current.renderer_screenshot)+',"collect_cookies":'+JSON.stringify(current.renderer_collect_cookies)+',"custom_javascript":'+current.custom_javascript_json+'}');
-    }else if(current.javascript_rendering){for(const[ui,key]of [['renderer_endpoint','endpoint'],['renderer_wait_ms','wait_ms'],['renderer_accessibility','accessibility'],['renderer_screenshot','screenshot'],['renderer_collect_cookies','collect_cookies'],['custom_javascript_json','custom_javascript']])if(changed(ui))set(['renderer',key],ui==='custom_javascript_json'?current[ui]:ui==='renderer_wait_ms'?integer(current[ui]):JSON.stringify(current[ui]));}
+      else set(['renderer'],'{"endpoint":'+JSON.stringify(current.renderer_endpoint.trim())+',"wait_ms":'+integer(current.renderer_wait_ms)+',"accessibility":'+JSON.stringify(current.renderer_accessibility)+',"screenshot":'+JSON.stringify(current.renderer_screenshot)+',"collect_cookies":'+JSON.stringify(current.renderer_collect_cookies)+',"custom_javascript":'+current.custom_javascript_json+(current.renderer_viewport_enabled?',"viewport":'+JSON.stringify(rendererViewport(current)):'')+'}');
+    }else if(current.javascript_rendering){
+      for(const[ui,key]of [['renderer_endpoint','endpoint'],['renderer_wait_ms','wait_ms'],['renderer_accessibility','accessibility'],['renderer_screenshot','screenshot'],['renderer_collect_cookies','collect_cookies'],['custom_javascript_json','custom_javascript']])if(changed(ui))set(['renderer',key],ui==='custom_javascript_json'?current[ui]:ui==='renderer_wait_ms'?integer(current[ui]):JSON.stringify(current[ui]));
+      if(changed('renderer_viewport_enabled')){if(current.renderer_viewport_enabled)set(['renderer','viewport'],JSON.stringify(rendererViewport(current)));else remove(['renderer','viewport']);}
+      else if(current.renderer_viewport_enabled){const viewport=rendererViewport(current);for(const axis of ['width','height'])if(changed('renderer_viewport_'+axis))set(['renderer','viewport',axis],String(viewport[axis]));}
+    }
     const objectGroup=(enabled,key,keys,parser)=>{
       if(!keys.some(changed)&&!changed(enabled))return;
       if(!current[enabled]){remove([key]);return;}
@@ -1736,7 +1792,7 @@
   function configProfileFromFormText() {
     const settings=profileFormSnapshot(), advanced=parseAdvanced(settings);
     const config={...advanced,concurrency:Number(settings.concurrency),request_timeout_secs:Number(settings.timeout_seconds),max_pages:Number(settings.max_pages)||null,max_depth:Number(settings.max_depth)||null,delay_ms:Number(settings.delay_ms),max_body_bytes:Number(settings.max_body_mb)*1048576,user_agent:settings.user_agent,indexability_agent:settings.indexability_agent,obey_robots:settings.obey_robots,include_subdomains:settings.follow_subdomains,check_external:settings.check_external};
-    config.renderer=settings.javascript_rendering?{endpoint:settings.renderer_endpoint,wait_ms:Number(settings.renderer_wait_ms),accessibility:settings.renderer_accessibility,screenshot:settings.renderer_screenshot,collect_cookies:settings.renderer_collect_cookies,custom_javascript:parseCustomJavascript(settings.custom_javascript_json)}:null;
+    config.renderer=settings.javascript_rendering?{endpoint:settings.renderer_endpoint,wait_ms:Number(settings.renderer_wait_ms),accessibility:settings.renderer_accessibility,screenshot:settings.renderer_screenshot,...(rendererViewport(settings)?{viewport:rendererViewport(settings)}:{}),collect_cookies:settings.renderer_collect_cookies,custom_javascript:parseCustomJavascript(settings.custom_javascript_json)}:null;
     return JSON.stringify(config);
   }
   async function ensureConfigProfile() {
@@ -3684,6 +3740,7 @@
 
   function validateRendererSettings(settings) {
     if (!settings.javascript_rendering) return;
+    rendererViewport(settings);
     let endpoint;
     try { endpoint = new URL(settings.renderer_endpoint); } catch (_) { throw new Error('Der Browser-Worker benötigt einen gültigen lokalen HTTP-Endpunkt.'); }
     if (endpoint.protocol !== 'http:' || !['127.0.0.1', 'localhost', '[::1]', '::1'].includes(endpoint.hostname)) throw new Error('Der Browser-Worker muss per HTTP auf 127.0.0.1, localhost oder ::1 erreichbar sein.');
@@ -3694,6 +3751,15 @@
   function toggleRendererSettings(enabled) {
     $('renderer-settings').hidden = !enabled;
     $('renderer-settings').querySelectorAll('input, textarea').forEach((input) => { input.disabled = !enabled; });
+    const form=$('settings-form');
+    for(const axis of ['width','height'])if(form.elements['renderer_viewport_'+axis])form.elements['renderer_viewport_'+axis].disabled=!enabled||!form.elements.renderer_viewport_enabled.checked;
+  }
+
+  function rendererViewport(settings) {
+    if(!settings.renderer_viewport_enabled)return null;
+    const viewport={width:Number(settings.renderer_viewport_width),height:Number(settings.renderer_viewport_height)};
+    if(Object.values(viewport).some(value=>!Number.isInteger(value)||value<100||value>4096))throw Error('Die Browser-Ansicht benötigt Breite und Höhe als ganze Zahlen von100 bis4096 Pixeln.');
+    return viewport;
   }
 
   function listOptions() {
@@ -3841,7 +3907,7 @@
     $('page-size').addEventListener('change', (event) => { state.pageSize = Number(event.target.value); state.page = 0; renderTable(); });
     $('page-prev').addEventListener('click', () => { state.page -= 1; renderTable(); });
     $('page-next').addEventListener('click', () => { state.page += 1; renderTable(); });
-    $('inspector-close').addEventListener('click', () => { state.selected = null; state.selectedResponse = null; state.selectedInput = null; $('inspector').hidden = true; if (!['overview', 'graph'].includes(state.section)) renderTable(); });
+    $('inspector-close').addEventListener('click', () => { screenshotController?.invalidate();screenshotView=null;state.selected = null; state.selectedResponse = null; state.selectedInput = null; $('inspector').hidden = true; if (!['overview', 'graph'].includes(state.section)) renderTable(); });
     const tabs = [...document.querySelectorAll('[data-tab]')];
     tabs.forEach((button, index) => {
       button.addEventListener('click', () => { state.inspectorTab = button.dataset.tab; renderInspector(); });
@@ -3861,6 +3927,7 @@
     $('tls-certificate-files').addEventListener('change', stageTlsCertificateFiles);
     $('directive-reporting-load-selected').addEventListener('click', loadSelectedDirectiveReportingProfile);
     $('settings-form').elements.javascript_rendering.addEventListener('change', (event) => toggleRendererSettings(event.target.checked));
+    $('settings-form').elements.renderer_viewport_enabled.addEventListener('change',()=>toggleRendererSettings($('settings-form').elements.javascript_rendering.checked));
     $('settings-form').elements.crawl_admission_limits_enabled.addEventListener('change', syncCrawlAdmissionSettings);
     $('settings-form').elements.crawl_quotas_enabled.addEventListener('change',syncQuotaSettings);
     $('crawl-quota-add').addEventListener('click',()=>{const rows=readQuotaRuleControls();if(rows.length>=32)return;rows.push({id:'',pattern:'',max_urls:''});renderQuotaRuleControls(rows);});

@@ -581,6 +581,9 @@ pub struct RendererConfig {
     pub custom_javascript: Vec<CustomJavaScriptConfig>,
     pub collect_cookies: bool,
     pub max_response_bytes: usize,
+    /// None retains the worker's legacy 1280×800 viewport and old profile bytes.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub viewport: Option<RendererViewport>,
 }
 
 impl Default for RendererConfig {
@@ -593,7 +596,44 @@ impl Default for RendererConfig {
             custom_javascript: Vec::new(),
             collect_cookies: false,
             max_response_bytes: 32 * 1024 * 1024,
+            viewport: None,
         }
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+pub struct RendererViewport {
+    pub width: u32,
+    pub height: u32,
+}
+
+impl<'de> Deserialize<'de> for RendererViewport {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        struct ObjectViewport;
+        impl<'de> serde::de::Visitor<'de> for ObjectViewport {
+            type Value = RendererViewport;
+            fn expecting(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                formatter.write_str("an object containing integer viewport width and height")
+            }
+            fn visit_map<A: serde::de::MapAccess<'de>>(
+                self,
+                map: A,
+            ) -> Result<Self::Value, A::Error> {
+                #[derive(Deserialize)]
+                #[serde(deny_unknown_fields)]
+                struct Fields {
+                    width: u32,
+                    height: u32,
+                }
+                let fields =
+                    Fields::deserialize(serde::de::value::MapAccessDeserializer::new(map))?;
+                Ok(RendererViewport {
+                    width: fields.width,
+                    height: fields.height,
+                })
+            }
+        }
+        deserializer.deserialize_map(ObjectViewport)
     }
 }
 

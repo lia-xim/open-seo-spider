@@ -26,7 +26,7 @@ const server=http.createServer(async(req,res)=>{
     }
     if(suffix==='pages')return send(res,{pages:[],total:0});if(suffix==='issues')return send(res,{issues:[],total:0});if(suffix==='analysis')return send(res,{issues:[],graph:{nodes:[],edges:[]}});if(suffix==='responses')return send(res,{responses:[]});if(suffix==='fragments')return send(res,{enabled:false,observations:[]});
   }
-  const file=url.pathname==='/'?'index.html':url.pathname.slice(1);if(!['index.html','app.js','dashboard-segments.js','config-profiles.js','list-import.js','styles.css','saved-comparison.js'].includes(file)){res.statusCode=404;return res.end()}
+  const file=url.pathname==='/'?'index.html':url.pathname.slice(1);if(!['index.html','app.js','dashboard-segments.js','config-profiles.js','screenshots.js','list-import.js','styles.css','saved-comparison.js'].includes(file)){res.statusCode=404;return res.end()}
   res.setHeader('content-type',file.endsWith('.css')?'text/css':file.endsWith('.js')?'text/javascript':'text/html');res.end(fs.readFileSync(path.join(web,file)));
 });
 const delay=ms=>new Promise(done=>setTimeout(done,ms));async function until(fn,label){for(let i=0;i<200;i++){if(fn())return;await delay(30)}throw Error(`Timeout ${label}`)}
