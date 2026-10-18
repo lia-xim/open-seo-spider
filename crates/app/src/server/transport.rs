@@ -83,11 +83,20 @@ impl Connection {
         }
     }
     fn bind(&self, cancel: Abort) -> anyhow::Result<Lease> {
-        let id = self
-            .0
-            .next
-            .fetch_update(Ordering::SeqCst, Ordering::SeqCst, |n| n.checked_add(1))
-            .map_err(|_| anyhow::anyhow!("Connection binding identifier exhausted"))?;
+        let mut id = self.0.next.load(Ordering::SeqCst);
+        loop {
+            let next = id
+                .checked_add(1)
+                .ok_or_else(|| anyhow::anyhow!("Connection binding identifier exhausted"))?;
+            match self
+                .0
+                .next
+                .compare_exchange_weak(id, next, Ordering::SeqCst, Ordering::SeqCst)
+            {
+                Ok(_) => break,
+                Err(observed) => id = observed,
+            }
+        }
         let callback = Arc::new(Callback(cancel));
         let mut bindings = lock(&self.0.bindings);
         if self.0.closed.load(Ordering::SeqCst) {

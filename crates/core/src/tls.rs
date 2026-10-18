@@ -208,7 +208,9 @@ impl TrustedCertificate {
                     bail!("DER data must be bounded lowercase hexadecimal");
                 }
                 data.as_bytes()
-                    .chunks_exact(2)
+                    .as_chunks::<2>()
+                    .0
+                    .iter()
                     .map(|p| {
                         let nibble = |b: u8| if b <= b'9' { b - b'0' } else { b - b'a' + 10 };
                         Ok((nibble(p[0]) << 4) | nibble(p[1]))

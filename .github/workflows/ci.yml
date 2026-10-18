@@ -106,7 +106,7 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          $releaseSourcePaths=@('Cargo.toml','Cargo.lock','crates/core/src','crates/app/src','crates/core/Cargo.toml','crates/app/Cargo.toml','assets','web/index.html','web/app.js','web/saved-comparison.js','web/styles.css','web/list-import.js','web/serp.html','web/serp.js','web/robots.html','web/robots.js')
+          $releaseSourcePaths=@('Cargo.toml','Cargo.lock','crates/core/src','crates/app/src','crates/core/Cargo.toml','crates/app/Cargo.toml','crates/app/build.rs','assets','web/index.html','web/app.js','web/saved-comparison.js','web/styles.css','web/list-import.js','web/serp.html','web/serp.js','web/robots.html','web/robots.js')
           git diff --quiet HEAD -- $releaseSourcePaths
           if($LASTEXITCODE -ne 0){throw 'Compiled source differs from the exact CI commit'}
           cargo build --release --locked -p open-seo-spider
@@ -248,18 +248,9 @@ jobs:
           fi
       - run: npm test
         working-directory: renderer
-      - run: node web/verification/ui-smoke.cjs
-      - run: node web/verification/ui-crawl-control-smoke.cjs
-      - run: node web/verification/ui-selected-recrawl-smoke.cjs
-      - run: node web/verification/ui-policy-smoke.cjs
-      - run: node web/verification/ui-content-smoke.cjs
-      - run: node web/verification/ui-resource-discovery-smoke.cjs
-      - run: node web/verification/ui-resource-ledger-smoke.cjs
-      - run: node web/verification/ui-resource-contract-smoke.cjs
       - run: node web/verification/saved-comparison-contract.test.cjs
       - run: node web/verification/saved-comparison-native-fence.test.cjs
       - run: node web/verification/saved-comparison-bundle-native-fence.test.cjs
-      - run: node web/verification/ui-saved-comparison-smoke.cjs
       - run: node scripts/update-feature-todo.mjs --check
       - run: node --test web/verification/serp-state-race.test.cjs
       - run: node --test web/verification/robots-input-state.test.cjs
@@ -267,6 +258,19 @@ jobs:
       - run: cargo build --locked -p open-seo-spider
       - run: npm ci --ignore-scripts
         working-directory: scripts
+      - name: Redesigned UI fixture and native end-to-end workflows
+        run: node scripts/ui-e2e.mjs
+        env:
+          SPIDER_BINARY: target/debug/open-seo-spider
+          SPIDER_E2E_OUTPUT: ${{ runner.temp }}/redesign-ui-e2e
+      - name: Save redesigned UI evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: redesign-ui-e2e-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: ${{ runner.temp }}/redesign-ui-e2e/**
       - name: Native stored sitemap API CSV SDK and browser
         run: node scripts/run-sitemap-native-checks.mjs membership
         env:
@@ -291,16 +295,6 @@ jobs:
           path: |
             ${{ runner.temp }}/sitemap-membership-native/**
             ${{ runner.temp }}/sitemap-assessment-native/**
-      - name: Native saved-comparison browser and offline restart
-        run: node web/verification/ui-saved-comparison-live.cjs
-        env:
-          SPIDER_BINARY: target/debug/open-seo-spider
-          SPIDER_COMPARISON_UI_PROOF: ${{ runner.temp }}/saved-comparison-ui-native.json
-      - name: Native optional-original-report browser export and offline restart
-        run: node web/verification/ui-saved-comparison-bundle-live.cjs
-        env:
-          SPIDER_BINARY: target/debug/open-seo-spider
-          SPIDER_UI_PROOF: ${{ runner.temp }}/saved-comparison-original-bundle-ui-native.json
       - name: Rust and browser integration
         shell: bash
         run: |
@@ -316,15 +310,3 @@ jobs:
           cargo test --locked -p open-seo-spider-core --test control_fixtures live_browser_worker_pause_drains_render_and_retains_rendered_discoveries -- --ignored
           cargo test --locked -p open-seo-spider-core --test recrawl_fixtures live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion -- --ignored
           cargo test --locked -p open-seo-spider-core --test content_capture_fixtures live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness -- --ignored --exact
-          node web/verification/ui-renderer-live.cjs
-          node web/verification/ui-serp-live.cjs
-          node web/verification/ui-resource-live.cjs
-          node web/verification/ui-dom-live.cjs
-          node web/verification/ui-robots-live.cjs
-          node web/verification/ui-list-import-live.cjs
-          node web/verification/ui-crawl-control-live.cjs
-          node web/verification/ui-selected-recrawl-live.cjs
-          node web/verification/ui-policy-live.cjs
-          node web/verification/ui-content-live.cjs
-          SPIDER_APP_URL=http://127.0.0.1:8787 node web/verification/ui-resource-discovery-live.cjs
-          SPIDER_APP_URL=http://127.0.0.1:18789 node web/verification/ui-resource-contract-live.cjs

@@ -1,3 +1,4 @@
+const artifactPath = require('./artifact-path.cjs');
 // Isolated browser/API contract fixture. This does not execute the native policy engine.
 const http = require('node:http'), fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict');
 const { pathToFileURL } = require('node:url'), web = path.resolve(__dirname, '..');
@@ -202,7 +203,7 @@ async function download(page, id) {
   return fs.readFileSync(await item.path(), 'utf8');
 }
 function report(result, failure) {
-  fs.writeFileSync(path.join(__dirname, 'ui-policy-fixture-results.json'), JSON.stringify({ tested_at: new Date().toISOString(), result, scope: 'isolated browser/API fixture; not native policy execution, persistence, HTTP or export proof', checks, preview_requests: previewPosts.length, crawl_requests: crawlPosts.length, control_requests: controlPosts, ledger_requests: ledgerGets, native_export_requests: exportGets, native_export_download_paths: exportDownloadPaths, native_export_client_transports: exportClientTransports, javascript_runtime_errors: errors, unexpected_network_requests: unexpectedNetwork, ...(failure ? { failure: failure.message } : {}) }, null, 2) + '\n');
+  fs.writeFileSync(artifactPath('ui-policy-fixture-results.json'), JSON.stringify({ tested_at: new Date().toISOString(), result, scope: 'isolated browser/API fixture; not native policy execution, persistence, HTTP or export proof', checks, preview_requests: previewPosts.length, crawl_requests: crawlPosts.length, control_requests: controlPosts, ledger_requests: ledgerGets, native_export_requests: exportGets, native_export_download_paths: exportDownloadPaths, native_export_client_transports: exportClientTransports, javascript_runtime_errors: errors, unexpected_network_requests: unexpectedNetwork, ...(failure ? { failure: failure.message } : {}) }, null, 2) + '\n');
 }
 
 (async () => {

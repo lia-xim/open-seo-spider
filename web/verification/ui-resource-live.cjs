@@ -1,3 +1,4 @@
+const artifactPath = require('./artifact-path.cjs');
 // Actual browser -> Rust -> owned local HTTP resource fixture -> persisted exports.
 // Requires a rebuilt running app. This never crawls a public website.
 const http=require('node:http'),fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
@@ -101,6 +102,6 @@ function csvRows(input){
     for(const [width,height]of [[1440,900],[390,844],[320,740]]){await page.setViewportSize({width,height});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.locator('.main-footer').scrollIntoViewIfNeeded();const box=await page.locator('.main-footer').boundingBox();assert.ok(box.y<height&&box.y+box.height>0)}
     await page.click('#settings-open');await page.locator('#settings-dialog .dialog-footer button').scrollIntoViewIfNeeded();const button=await page.locator('#settings-dialog .dialog-footer button').boundingBox();assert.ok(button.y>=0&&button.y+button.height<=740);await page.click('#settings-close');checked('resource views and expanded settings fit narrow and wide browser widths with bottom reachable');
     assert.deepEqual(errors,[]);
-    const proof={tested_at:new Date().toISOString(),scope:'Actual browser -> Rust native resource parsing -> original local PDF/PNG/SVG -> UI/filter/export/legacy/disabled configuration',app_url:app,crawl_id:id,fixture_origin:origin,observed_urls:data.total,checks,javascript_runtime_errors:errors};fs.writeFileSync(path.join(__dirname,'ui-resource-live-results.json'),JSON.stringify(proof,null,2));console.log(`${checks.length} actual resource checks passed.`);
+    const proof={tested_at:new Date().toISOString(),scope:'Actual browser -> Rust native resource parsing -> original local PDF/PNG/SVG -> UI/filter/export/legacy/disabled configuration',app_url:app,crawl_id:id,fixture_origin:origin,observed_urls:data.total,checks,javascript_runtime_errors:errors};fs.writeFileSync(artifactPath('ui-resource-live-results.json'),JSON.stringify(proof,null,2));console.log(`${checks.length} actual resource checks passed.`);
   }finally{await browser.close();await new Promise(resolve=>{fixture.close(resolve);fixture.closeAllConnections()})}
 })().catch(error=>{console.error(error);fixture.close();fixture.closeAllConnections();process.exitCode=1});

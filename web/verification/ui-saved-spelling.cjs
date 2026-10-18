@@ -1,7 +1,7 @@
 'use strict';
 // Source-only VM fixture definition. No browser, engine or product execution by author.
 const fs=require('node:fs'),assert=require('node:assert/strict'),crypto=require('node:crypto'),vm=require('node:vm');
-const targets=[{"path":"E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-spelling-root-composition-v3/source/web/spelling.js","bytes":14485,"sha256":"e7c125c42d42a4f8727a45182eaae7425a7a25a70ca7ecd95000d8d0bbb258ff"},{"path":"E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-spelling-root-composition-v3/source/web/spelling.html","bytes":5657,"sha256":"f0af645d582e5e20d8e40c6794ca3cb6add0bd80ad6a6879ee8163c5f0cc0255"}];assert.equal(process.argv.length,4,'Explicit current spelling.js and spelling.html required');
+const targets=[{"path":"web/spelling.js","bytes":14485,"sha256":"e7c125c42d42a4f8727a45182eaae7425a7a25a70ca7ecd95000d8d0bbb258ff"},{"path":"web/spelling.html","bytes":5690,"sha256":"82bbd39d0887391801e67890a9803c6027f26ee7135fc6f7793e841be3677d71"}];assert.equal(process.argv.length,4,'Explicit current spelling.js and spelling.html required');
 for(let i=0;i<2;i++){assert.equal(process.argv[i+2].replace(/\\/g,'/'),targets[i].path);const b=fs.readFileSync(process.argv[i+2]);assert.equal(b.length,targets[i].bytes);assert.equal(crypto.createHash('sha256').update(b).digest('hex'),targets[i].sha256);}
 const source=fs.readFileSync(process.argv[2],'utf8'),html=fs.readFileSync(process.argv[3],'utf8');
 const a=source.indexOf('// SOURCE28_PURE_BEGIN'),b=source.indexOf('// SOURCE28_PURE_END');assert(a>=0&&b>a);

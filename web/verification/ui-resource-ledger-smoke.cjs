@@ -1,5 +1,6 @@
 // Isolated immutable resource ledger browser/API fixture. No native discovery, CSS parsing, persistence or website requests.
 'use strict';
+const artifactPath = require('./artifact-path.cjs');
 const http = require('node:http'), fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict'), crypto = require('node:crypto');
 const { pathToFileURL } = require('node:url'), web = path.resolve(__dirname, '..');
 let playwright;
@@ -62,7 +63,7 @@ async function until(fn, label) { for (let i = 0; i < 320; i++) { if (await fn()
 const check = name => { checks.push(name); console.log('PASS ' + name); };
 async function project(page, id) { await page.locator('#crawl-history').evaluate((element, id) => { element.value = id; element.dispatchEvent(new Event('change', { bubbles: true })); }, id); }
 async function download(page, selector) { const promise = page.waitForEvent('download'); await page.click(selector); return fs.readFileSync(await (await promise).path(), 'utf8'); }
-function report(direct) { fs.writeFileSync(path.join(__dirname, 'ui-resource-ledger-fixture-results.json'), JSON.stringify({ tested_at: new Date().toISOString(), result: 'PASS', scope: 'isolated browser/API immutable source/transport display fixture; no native discovery/parser/persistence/website-HTTP/export proof', checks, api_requests: apiCalls, native_export_requests: exportCalls, control_requests: controlCalls, direct_export_transport: direct, javascript_runtime_errors: errors, unexpected_network_requests: external }, null, 2) + '\n'); }
+function report(direct) { fs.writeFileSync(artifactPath('ui-resource-ledger-fixture-results.json'), JSON.stringify({ tested_at: new Date().toISOString(), result: 'PASS', scope: 'isolated browser/API immutable source/transport display fixture; no native discovery/parser/persistence/website-HTTP/export proof', checks, api_requests: apiCalls, native_export_requests: exportCalls, control_requests: controlCalls, direct_export_transport: direct, javascript_runtime_errors: errors, unexpected_network_requests: external }, null, 2) + '\n'); }
 
 const prefix = '#resource-discovery-', rowsSelector = prefix + 'table [data-resource-row]';
 async function settled(page) { await page.waitForFunction(() => !document.getElementById('resource-discovery-refresh').disabled); }

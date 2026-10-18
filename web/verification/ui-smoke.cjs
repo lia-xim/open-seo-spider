@@ -1,3 +1,4 @@
+const artifactPath = require('./artifact-path.cjs');
 // Isolated UI fixture test. This does not claim Rust crawler or live-site proof.
 // Set SPIDER_PLAYWRIGHT_MODULE and SPIDER_CHROME when using other installations.
 const http = require('node:http');
@@ -142,10 +143,10 @@ const server = http.createServer(async (req, res) => {
     }
     await page.setViewportSize({width:390,height:844}); await page.click('#settings-open'); await page.locator('#settings-dialog .dialog-footer button').scrollIntoViewIfNeeded(); const saveBox=await page.locator('#settings-dialog .dialog-footer button').boundingBox(); assert.ok(saveBox.y>=0&&saveBox.y+saveBox.height<=844); assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)); await page.click('#settings-close'); checked('expanded renderer and extraction settings bottom reachable on mobile');
     assert.deepEqual(errors, []);
-    await page.setViewportSize({ width: 1440, height: 1000 }); await page.evaluate(() => scrollTo(0, 0)); await page.screenshot({ path: path.join(__dirname, 'browser-wide.png'), fullPage: true });
-    await page.setViewportSize({ width: 390, height: 844 }); await page.screenshot({ path: path.join(__dirname, 'browser-mobile.png'), fullPage: true });
+    await page.setViewportSize({ width: 1440, height: 1000 }); await page.evaluate(() => scrollTo(0, 0)); await page.screenshot({ path: artifactPath('browser-wide.png'), fullPage: true });
+    await page.setViewportSize({ width: 390, height: 844 }); await page.screenshot({ path: artifactPath('browser-mobile.png'), fullPage: true });
     const proof = { tested_at: new Date().toISOString(), scope: 'Isolated browser fixture only; not live Rust backend proof', browser_version: await browser.version(), browser_executable: executable || chromium.executablePath(), checks, javascript_runtime_errors: errors };
-    fs.writeFileSync(path.join(__dirname, 'ui-fixture-results.json'), JSON.stringify(proof, null, 2));
+    fs.writeFileSync(artifactPath('ui-fixture-results.json'), JSON.stringify(proof, null, 2));
     console.log(`${checks.length} UI checks passed.`);
   } finally { await browser.close(); await new Promise((resolve) => server.close(resolve)); }
 })().catch((error) => { console.error(error); server.close(); process.exitCode = 1; });

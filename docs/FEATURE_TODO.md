@@ -10,6 +10,19 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
 
 ## Aktuelle Arbeit und nächste Schritte
 
+- [ ] **Claudes Redesign technisch absichern und wichtige UI-Pfade Ende zu Ende prüfen** — LOCAL_25_SUITES_PASS_SPECIALIST_PATHS_OPEN. Auf Claudes Redesign53bb730 bestehen lokal alle25 registrierten Browser-Suiten in einem Lauf: neun mit API-Fixtures und16 mit nativen Abläufen. Neue Nachweise decken18 Werkzeug-Navigationsrunden und gespeicherte Sprachprüfung ab. Windows-Debugstart und320px-Überlauf der gefüllten Sprachprüfung sind korrigiert. Die vollständige Feature-Abdeckung und weitere Spezialwerkzeug-E2Es bleiben offen.
+  - [x] Gemeinsamer isolierter Lauf aller25 Suiten mit eigenem App-Speicher und dynamischem Renderer-Port bestanden; regulärer App-Abschluss0, unveränderte Binärdatei und getrackte Quellen.
+  - [x] Neue Sprachprüfungs-E2E: explizite Freigabe, tatsächliche lokale Protokollanfragen, Dictionary-/Profil-Neuladen, historischer CSV-Export und Dienstfehler; keine Website-Neuabrufe, keine Aussage über echte LanguageTool-Sprachqualität.
+  - [x] Windows-Debugstart mit8MiB-Stackreserve und gefüllte Sprachprüfung bei320px geprüft; Claudes Gestaltung beibehalten.
+  - [x] Runtime-Ausgaben aus20 älteren Tests von getrackten Fixtures getrennt; gemeinsame CI führt weiterhin sämtliche bisherigen UI-Suiten plus zwei neue aus.
+  - [x] Formatprüfung, strenges All-Targets/All-Features-Clippy,40 UI-VM-Gruppen,32 Zustandsregressionen und zwei gezielte Rust-Regressionen bestanden.
+  - [ ] Funktionale Browser/API/Speicher/Export-E2Es für Migration, Verzeichnisbaum, gespeicherte Segmente, N-Gramme, Broken Sources und Provider-Anreicherung ergänzen; Navigation allein reicht nicht.
+  - [ ] Öffentliche CI auf dem neuen Commit und Linux-Ausführung prüfen; bisheriger öffentlicher Lauf38973477912 scheiterte an Clippy und veränderten getrackten Testausgaben.
+  - [ ] Kalte Neustarts und Seitennavigation der übrigen Spezialwerkzeuge, echte LanguageTool-Sprachqualität, autorisierte externe Provider und weitere Browser separat prüfen.
+  - [ ] Vollständigen144-Fähigkeiten-Katalog weiter abarbeiten;36/69/39 bleiben unverändert, Herstellerparität bleibt NOT_PROVEN.
+  - Verträge: [e2e-testing.md](e2e-testing.md), [README.md](verification/redesign-e2e-20261018/README.md).
+  - Gate-Stand: local_UI_E2E: PASS_25_SUITES_9_FIXTURE_16_NATIVE; strict_clippy: PASS_RUST_1_95_ALL_TARGETS_ALL_FEATURES; public_CI: NOT_PROVEN_NEW_COMMIT_PENDING; specialist_functional_E2E: OPEN; manufacturer_parity: NOT_PROVEN; installation: UNCHANGED_SOURCE16.
+
 - [x] **Source15 mit dauerhaften Crawl-Limits vollständig abnehmen** — COMPLETED. Source15 Retry2 ist nach1535/0/0-Tests, vier frischen Rendererprüfungen, Release-Build und fünf tatsächlichen Nativrollen samt unabhängigen Rohdaten-Audits lokal installiert. Frische Ready-/Leerlaufprüfung, genaue Dienstbeendigung, drei exklusive Datenkopien und vollständige Berichtsvergleiche über alle acht gespeicherten Crawls bestehen. Dateibytes, Streams, ACLs, Attribute, Erstellzeiten und stabile Metadaten sind exakt; nur15 qualifizierte SHM-Schreibzeitdeltas bleiben. App8787 und Renderer8790 laufen mit bestätigten neuen Identitäten. Private Datenbelege bleiben lokal. Herstellerparität bleibt NOT_PROVEN.
   - [x] Historischer Erststand526bd13 geprüft; aktueller Retry2-Produktstand0bb0724 umfasst weiterhin429 exakt gebundene Quelldateien.
   - [x] Quoten-Produkt-/Kompositions-/Formatreviews und die tatsächlichen Vorprüfungen bestehen.
@@ -6106,4 +6119,4 @@ Diese unveränderten Einträge dokumentieren den damaligen Stand. Aktuelle Resta
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `9b14c9fa82ff53e7098b593ce030e4d069dd21a166e85f2b21495306daddd6a4`. Letzter im Katalog erfasster Beweisstand: `2026-10-16T21:49:50.686Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `9b688c715b619fdb33b164a9a2e13dd304edd6230ede4493b0acc4a56ff2fcac`. Letzter im Katalog erfasster Beweisstand: `2026-10-16T21:49:50.686Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

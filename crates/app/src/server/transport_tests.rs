@@ -11,6 +11,20 @@ use futures::StreamExt;
 use std::io::Write;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 type Producer = dyn Fn(&mut ChannelWriter, &mut Ready<()>) -> anyhow::Result<()> + Send + Sync;
+
+#[test]
+fn incoming_binding_exhaustion_never_wraps_or_discards_an_existing_lease() {
+    let connection = Connection::new(Arc::new(Notify::new()));
+    connection.0.next.store(u64::MAX - 1, Ordering::SeqCst);
+    let lease = connection.bind(Arc::new(|| {})).unwrap();
+    assert_eq!(lease.id, u64::MAX - 1);
+    assert!(connection.bind(Arc::new(|| {})).is_err());
+    assert_eq!(connection.0.next.load(Ordering::SeqCst), u64::MAX);
+    assert_eq!(lock(&connection.0.bindings).len(), 1);
+    drop(lease);
+    assert!(lock(&connection.0.bindings).is_empty());
+}
+
 struct Fixture {
     transport: Registry,
     responses: response_stream::Registry,

@@ -1,7 +1,7 @@
 'use strict';
 // Later Root-only isolated VM checks of exact extracted UI functions; no browser/runtime proof.
 const fs=require('node:fs'),crypto=require('node:crypto'),assert=require('node:assert/strict'),vm=require('node:vm');
-const targets=[{"path":"E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-spelling-root-composition-v3/source/web/app.js","sha256":"d5561fa03214a370101ca9e9b52a87fd18837977190061b9ef95fdb87bdb586f","bytes":437494},{"path":"E:/CodexWork/open-seo-spider-01a12ac3-20261013/source28-spelling-root-composition-v3/source/web/index.html","sha256":"2eb9ca716cebc95497ca8d3eacea499e18f1c40683187d235968c082940e44a6","bytes":100017}];assert.equal(process.argv.length,4,'Explicit current app.js and index.html paths required');
+const targets=[{"path":"web/app.js","bytes":436828,"sha256":"cdea5f64366ee0877f77ce71d67cb6195f0b7affcd889560d3b55af4706160f5"},{"path":"web/index.html","bytes":99978,"sha256":"3961c177f221d62ede690f7f62417fb0fc0d891fb7f5286265299d7758598844"}];assert.equal(process.argv.length,4,'Explicit current app.js and index.html paths required');
 const hash=b=>crypto.createHash('sha256').update(b).digest('hex');const source=process.argv.slice(2).map((p,i)=>{const b=fs.readFileSync(p);assert.equal(b.length,targets[i].bytes);assert.equal(hash(b),targets[i].sha256);return b.toString('utf8').replaceAll('\r\n','\n');});
 const [js,html]=source,regions=[];
 function extract(name,oneLine=false){const a=js.indexOf('  function '+name+'(');assert(a>=0,name);const b=oneLine?js.indexOf('\n',a):js.indexOf('\n  }',a)+4;assert(b>a);const s=js.slice(a,b);regions.push({name,sha256:hash(s),bytes:Buffer.byteLength(s)});return s;}

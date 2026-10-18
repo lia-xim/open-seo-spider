@@ -22,7 +22,7 @@ assert(lstatSync(binary).isFile() && !lstatSync(binary).isSymbolicLink());
 const binarySha = sha(readFileSync(binary));
 if (process.env.SPIDER_BINARY_SHA256) assert.equal(binarySha, process.env.SPIDER_BINARY_SHA256);
 const exact = new Set(['Cargo.toml', 'Cargo.lock', 'crates/core/Cargo.toml',
-  'crates/app/Cargo.toml', 'docs/parity/reference-headings/fixture-cases.json',
+  'crates/app/Cargo.toml', 'crates/app/build.rs', 'docs/parity/reference-headings/fixture-cases.json',
   'docs/parity/resource-matrix-plan.json']);
 const prefixes = ['crates/core/src/', 'crates/core/tests/', 'crates/app/src/', 'assets/fonts/', 'web/'];
 const sourcePaths = git(['ls-files', '-z']).split('\0').filter(Boolean)

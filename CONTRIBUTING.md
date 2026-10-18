@@ -16,6 +16,12 @@ cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
 
 For renderer changes, run `npm test` in `renderer/`. Real browser and LanguageTool checks need their separately configured local runtimes; a skipped or unconfigured check is not a pass. Report what you actually ran.
 
+For UI changes, build the app and run `node scripts/ui-e2e.mjs`. See the
+[E2E setup and coverage matrix](docs/e2e-testing.md) for browser installation,
+isolated data, focused runs and the distinction between API fixtures and native
+workflows. Runtime evidence belongs in ignored artifact folders, never over
+tracked source fixtures.
+
 ## Issues and pull requests
 
 - For bugs, include the source revision, OS/toolchain, expected and actual behavior, and a small sanitized reproduction.

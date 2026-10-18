@@ -637,6 +637,11 @@ body.tool-page { margin: 0; padding: 0; max-width: none; background: var(--bg); 
 .tool-page [role=alert], .tool-page .error, .tool-page #error { color: var(--danger); }
 .tool-page .muted, .tool-page .scope { color: var(--muted); }
 .tool-page #status { border-color: var(--line); border-radius: var(--radius); }
+.spelling-page main { grid-template-columns: minmax(0, 1fr); }
+.spelling-page main > * { min-width: 0; overflow-wrap: anywhere; }
+.spelling-page label { grid-template-columns: minmax(0, 1fr); min-width: min(14rem, 100%); max-width: 100%; }
+.spelling-page :is(input, select, textarea) { min-width: 0; }
+.spelling-page button { max-width: 100%; white-space: normal; }
 .tool-page footer { margin-top: 24px; color: var(--faint); font-size: 12px; }
 @media (max-width: 600px) {
   .tool-page > header, .tool-page main { padding-left: 12px; padding-right: 12px; }

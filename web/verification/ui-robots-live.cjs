@@ -1,3 +1,4 @@
+const artifactPath = require('./artifact-path.cjs');
 // Real browser -> local Rust simulation/export -> zero supplied-website requests.
 const assert=require('node:assert/strict');
 const http=require('node:http');
@@ -31,10 +32,10 @@ const submit=async page=>{await page.click('#simulate');await page.waitForFuncti
     await page.selectOption('#decision-filter','unknown');assert.equal(await page.locator('#results-table tbody tr').count(),4);assert.match(await page.locator('#results-table tbody').innerText(),/Invalid absolute URL|Only absolute HTTP/);await page.selectOption('#decision-filter','all');
     assert.equal(await page.locator('#results-table img').count(),0);assert.equal(await page.evaluate(()=>Boolean(window.__robots_xss)),false);
     checked('Duplicate source rows fragments malformed/non-HTTP/blank unknowns and untrusted URL text remain distinct and safely displayed');
-    const jsonPromise=page.waitForEvent('download');await page.click('#export-json');const jsonPath=path.join(__dirname,'ui-robots-live-export.json');await(await jsonPromise).saveAs(jsonPath);const saved=JSON.parse(fs.readFileSync(jsonPath,'utf8'));
+    const jsonPromise=page.waitForEvent('download');await page.click('#export-json');const jsonPath=artifactPath('ui-robots-live-export.json');await(await jsonPromise).saveAs(jsonPath);const saved=JSON.parse(fs.readFileSync(jsonPath,'utf8'));
     assert.deepEqual(saved.input.urls,urls);assert.equal(saved.input.robots_text,rules);assert.equal(saved.result.website_requests,0);assert.equal(saved.result.rules_sha256,require('node:crypto').createHash('sha256').update(rules).digest('hex'));
     assert.equal(saved.result.rows[0].input_url,saved.result.rows[7].input_url);assert.equal(saved.result.rows[2].fragment,'part');assert.equal(saved.result.rows[2].normalized_url,`${origin}/report.pdf`);assert.equal(saved.result.rows[4].path_query,'/find?blocked=1');assert.equal(saved.result.rows[10].allowed,null);assert.equal(saved.result.matched_rule,undefined);
-    const csvPromise=page.waitForEvent('download');await page.click('#export-csv');const csvPath=path.join(__dirname,'ui-robots-live-export.csv');await(await csvPromise).saveAs(csvPath);const csv=fs.readFileSync(csvPath,'utf8');assert.match(csv,/'=FORMULA\(\)/);assert.match(csv,/Rules SHA256/);assert.match(csv,/false/);assert.match(csv,/true/);
+    const csvPromise=page.waitForEvent('download');await page.click('#export-csv');const csvPath=artifactPath('ui-robots-live-export.csv');await(await csvPromise).saveAs(csvPath);const csv=fs.readFileSync(csvPath,'utf8');assert.match(csv,/'=FORMULA\(\)/);assert.match(csv,/Rules SHA256/);assert.match(csv,/false/);assert.match(csv,/true/);
     checked('Real native CSV neutralizes formulas while exact JSON preserves original rules ordered duplicate inputs hash and tri-state observations');
     await page.selectOption('#agent-preset','Googlebot');await submit(page);
     const agentDecision=await page.locator('#results-table tbody tr .decision').allTextContents();assert.equal(agentDecision[0],'Erlaubt');assert.equal(agentDecision[6],'Gesperrt');assert.equal(agentDecision[4],'Erlaubt');assert.match(await page.locator('#facts').innerText(),/Agent: Googlebot/);
@@ -60,6 +61,6 @@ const submit=async page=>{await page.click('#simulate');await page.waitForFuncti
     assert.equal(websiteRequests,0);assert.deepEqual(errors,[]);
     checked('Actual tester and result table fit desktop and narrow mobile with reachable footer and zero website requests');
     const proof={tested_at:new Date().toISOString(),result:'PASS',scope:'Actual browser -> offline Rust robots matcher and CSV -> supplied owned HTTP URLs/sitemap receive zero requests',app_url:app,website_requests:websiteRequests,checks,javascript_runtime_errors:errors};
-    fs.writeFileSync(path.join(__dirname,'ui-robots-live-results.json'),JSON.stringify(proof,null,2)+'\n');console.log(JSON.stringify(proof));
+    fs.writeFileSync(artifactPath('ui-robots-live-results.json'),JSON.stringify(proof,null,2)+'\n');console.log(JSON.stringify(proof));
   }finally{await context.close();await browser.close();await new Promise(resolve=>fixture.close(resolve));}
 })().catch(error=>{console.error(error);process.exitCode=1;fixture.close();});

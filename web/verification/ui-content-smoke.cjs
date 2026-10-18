@@ -1,3 +1,4 @@
+const artifactPath = require('./artifact-path.cjs');
 // Isolated saved-content browser/API fixture. Does not execute native capture/analysis or visit websites.
 const http = require('node:http'), fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict'), crypto = require('node:crypto');
 const { pathToFileURL } = require('node:url'), web = path.resolve(__dirname, '..');
@@ -102,7 +103,7 @@ async function settings(page, enabled, config) { await page.click('#settings-ope
 async function submitSettings(page) { await page.locator('#settings-form').evaluate(form => form.dispatchEvent(new Event('submit', { cancelable: true }))); }
 async function start(page) { const before = crawlPosts.length; await page.fill('#seed-url', 'https://start.fixture/'); await page.click('#start-button'); await until(() => crawlPosts.length > before, 'crawl POST'); await page.waitForFunction(() => !document.getElementById('start-button').disabled); }
 async function text(page, selector) { return page.locator(selector).textContent(); }
-function report(result, failure) { if (result !== 'PASS') return; fs.writeFileSync(path.join(__dirname, 'ui-content-fixture-results.json'), JSON.stringify({ tested_at: new Date().toISOString(), result, scope: 'isolated saved-content browser/API fixture with authored display vectors; no native capture/analysis, persistence, website HTTP or native export proof', checks, crawl_requests: crawlPosts.length, content_requests: contentCalls, control_requests: controls, javascript_runtime_errors: errors, unexpected_network_requests: external }, null, 2) + '\n'); }
+function report(result, failure) { if (result !== 'PASS') return; fs.writeFileSync(artifactPath('ui-content-fixture-results.json'), JSON.stringify({ tested_at: new Date().toISOString(), result, scope: 'isolated saved-content browser/API fixture with authored display vectors; no native capture/analysis, persistence, website HTTP or native export proof', checks, crawl_requests: crawlPosts.length, content_requests: contentCalls, control_requests: controls, javascript_runtime_errors: errors, unexpected_network_requests: external }, null, 2) + '\n'); }
 
 (async () => {
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve)); let executable;
