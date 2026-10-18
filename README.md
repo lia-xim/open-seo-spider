@@ -10,6 +10,7 @@ There is no fixed commercial URL allowance. Your configured crawl budgets, stora
 
 - Native HTTP crawling, robots rules, redirects, internal links, canonical/hreflang observations and configurable SEO checks.
 - URL-list imports, CSS/XPath/regex extraction, PDF/image observations and JSON/CSV exports.
+- Main result tables with [combined numeric/text filters, stable sorting and saved browser column layouts](docs/table-explorer.md), plus complete filtered CSV exports.
 - SQLite-backed crawl state, pause/resume, selected recrawl and saved snapshot comparison.
 - Sitemap discovery, parsing, findings, saved-source reporting and sitemap generation.
 - Opt-in saved raw/rendered HTML text, content cohorts, segments and n-gram reports, without refetching websites for saved analysis.
@@ -62,13 +63,13 @@ The local HTTP app must already be running. File tools require the explicit `--m
 
 ## Current limits and verification
 
-The [feature ledger](docs/feature-parity.json) tracks 144 grouped requirements: **38 independently accepted, 69 partial and 37 open**. These are project acceptance states, not a percentage of another product's functionality. The [ongoing to-do list](docs/FEATURE_TODO.md) records the remaining work.
+The [feature ledger](docs/feature-parity.json) tracks 144 grouped requirements: **39 independently accepted, 68 partial and 37 open**. These are project acceptance states, not a percentage of another product's functionality. The [ongoing to-do list](docs/FEATURE_TODO.md) records the remaining work.
 
 See [named local profiles](docs/configuration-profile-catalog.md) for explicit native save/load/rename/delete and revision conflicts. See [configuration profiles](docs/configuration-profiles.md) for the versioned browser/API format, exact native settings, explicit header requirements and its distinction from CLI configuration files. The [redesign E2E guide](docs/e2e-testing.md) separates browser/native workflows from fixture-only checks.
 
 The saved-spelling slice has focused evidence for 34 default Rust tests, 40 extracted UI VM groups across related workflows, and two real app-consumer LanguageTool tests using English/German fixtures. Those bounded checks do not prove every UI path, language or external integration. A VM fixture is not a real browser workflow.
 
-The latest local Windows run passed **1,817 ordinary workspace tests plus all four explicitly enabled Chromium fixtures**, with zero failures and five deliberate opt-in ignores in the ordinary run. All **40 UI suites** passed together (nine API-fixture suites and 31 native suites); strict Clippy, 130 state tests and 40 semantic UI groups passed. See the [named-profile and full-regression receipt](docs/verification/configuration-profile-catalog-20261018/README.md) for exact source/binary hashes, native persistence, cold restart and scope. Fresh public CI for this commit is separate and pending. Earlier verification receipts remain historical. The installed Windows pilot remains Source16 and was not updated by this work.
+The latest local R4 Windows acceptance passed **201 state/helper tests**, **40 semantic UI groups**, **17 reported Chromium transport tests (two parent cases and 15 subcontrols)** and **all 42 UI suites in one invocation** (nine API-fixture suites and 33 native-service suites). Four explicitly enabled Rust/Chromium fixtures also passed separately on R4. **1,831 ordinary workspace tests / zero failures / five opt-in ignores**, format and strict Clippy were completed on R3 and are explicitly reused against byte-identical product/native sources and the same binary; they are not a new R4 workspace run. See the [current table-view and full-regression receipt](docs/verification/table-explorer-20261018-r4/README.md) for exact source/binary hashes, cold reopen and proof boundaries. R1/R2 failures and the R3 UI aggregate failure after 35 passing suites remain recorded. The public parent CI for 25b failed only in renderer; Windows, Ubuntu and container passed. Fresh public CI for the new exact source remains separate and pending. The [earlier named-profile receipt](docs/verification/configuration-profile-catalog-20261018/README.md) remains historical. The installed Windows pilot remains Source16 and was not updated by this work.
 
 Complete authenticated browser sessions, OCR, scheduling and comprehensive external-provider workflows remain incomplete or open. Provider features require your own authorized credentials and remain subject to provider quotas. Proprietary crawl-file compatibility and performance equivalence are not claimed.
 

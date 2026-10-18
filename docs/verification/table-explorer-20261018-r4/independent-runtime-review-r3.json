@@ -1,0 +1,219 @@
+{
+  "original_artifact": {
+    "path": "artifacts/table-explorer-independent-runtime-review-20261018-r3.json",
+    "bytes": 8301,
+    "sha256": "d8ca8cc5abcbfa856430be7ea920a20d7c6145b46d4a053e211edfe88cadbab6"
+  },
+  "derivation": "Machine-local absolute paths sanitized; this is a derived document, not the original raw JSON byte stream.",
+  "qualification": "Historical focused review only; no retrospective claim that the reviewer executed R4 or validated its whole aggregate.",
+  "evidence": {
+    "review_kind": "INDEPENDENT_EXISTING_RUNTIME_ARTIFACT_REVIEW",
+    "result": "FOCUSED_R3_EVIDENCE_VERIFIED_BROAD_GATES_NOT_EVALUATED",
+    "reviewed_at_utc": "2026-10-18T21:09:36.395Z",
+    "reviewer_reexecuted_product_or_browser_or_tests": false,
+    "reviewer_modified_tracked_sources": false,
+    "proof": {
+      "path": "artifacts/table-explorer-native-r3-20261018/proof.json",
+      "bytes": 891,
+      "sha256": "dd6178b4ab1d20820476982186e6e1b4c94ff5e9a577c172aea49d77822075be"
+    },
+    "native_receipt": {
+      "path": "artifacts/table-explorer-native-r3-20261018/table-explorer/table-explorer-1792357602212-9a8702ff/ui-table-explorer-live.json",
+      "bytes": 51109,
+      "sha256": "649650a60ceda8150f748d0d9eebda083e7e1976f6ee1daef4c9998ac6fda548"
+    },
+    "source": {
+      "manifest": {
+        "path": "artifacts/table-explorer-r3-20261018-inputs.json",
+        "bytes": 103619,
+        "sha256": "0cc5bf061469049ed93ea06289d1bb310469928c50cf9f9a2cfad0cf0738ba31"
+      },
+      "current_inputs_verified": 586,
+      "previous_manifest": {
+        "path": "artifacts/table-explorer-r1-20261018-inputs.json",
+        "bytes": 103619,
+        "sha256": "fb65909a94661bdc72888ee2375ac9bd8533ff7b740003762e39d8e7fbe8b233"
+      },
+      "changed_paths_since_r1": [
+        "web/verification/ui-table-explorer-live.cjs"
+      ],
+      "product_source_identical_to_r1": true,
+      "binary_sha256": "4c4fcb839f39d2d6f98f3b77ddd9bdcc0d8a5f3613bdd2afb4edef2652f7cbbd",
+      "binary_bytes": 90040832,
+      "driver_sha256": "66bcda7cf28d0773fa133a63763145d6f7a026be4113b460c905ad6e62578ddf",
+      "all_driver_pins_current": true,
+      "embedded_warm_and_cold_assets_verified": 10
+    },
+    "timing": {
+      "outer_native_gate_ms": 21054,
+      "inner_suite_ms": 15755,
+      "scope": "one focused suite; not broad regression timing"
+    },
+    "observed": {
+      "major_groups": 6,
+      "native_captures": [
+        {
+          "id": "c72eba59-080d-418f-bc48-578f49f7d6b7",
+          "pages": 107,
+          "project_sha256": "8ff3aba5d39494184434dea00be6f443682eff1b31e63e5236231879710a0b95",
+          "saved_sha256": "72b570db3549c6a562dfcf6600e02a30164caa10b95b5a98468dc230da95cdb7",
+          "project_read_observations": 3
+        },
+        {
+          "id": "b231bc66-4fbc-4eb5-8479-4b2844812840",
+          "pages": 1,
+          "project_sha256": "de07335a010cfce61128d24166d49c8b3d4213f7d02ba942658b55b46920517c",
+          "saved_sha256": "4d59d88d7463fec8d16fb295bfc89eaaaad2f4821b42c23e7478c70d0f28814e",
+          "project_read_observations": 3
+        }
+      ],
+      "native_children": [
+        {
+          "phase": "warm",
+          "origin": "http://127.0.0.1:56059",
+          "pid": 36520,
+          "natural_eof": true,
+          "forced": false,
+          "close": {
+            "code": 0,
+            "signal": null
+          }
+        },
+        {
+          "phase": "cold",
+          "origin": "http://127.0.0.1:56059",
+          "pid": 42432,
+          "natural_eof": true,
+          "forced": false,
+          "close": {
+            "code": 0,
+            "signal": null
+          }
+        }
+      ],
+      "same_origin_rebind": true,
+      "natural_eof_zero": 2,
+      "forced_shutdowns": 0,
+      "main_harness_shutdown": {
+        "code": 0,
+        "signal": null
+      },
+      "website_capture_requests": 109,
+      "offline_product_requests": 0,
+      "positive_410_controls": 2,
+      "page_errors": 0,
+      "external_browser_requests": 0,
+      "actual_browser_downloads": 5,
+      "actual_csv_files": [
+        {
+          "label": "warm-filtered-103",
+          "bytes": 16728,
+          "sha256": "ae9c43cb649da9a6316afaf2f879d4189814ef089b3ed740a080fa5464e35154",
+          "rows": 103,
+          "columns": 10,
+          "all_cells_and_order": "VERIFIED_FROM_ORIGINAL_NATIVE_PROJECT"
+        },
+        {
+          "label": "warm-all-106",
+          "bytes": 17186,
+          "sha256": "7872c4b108e10a051a6c7238c2ae61b5b580436f72457134123f9ea2bb3bf86a",
+          "rows": 106,
+          "columns": 10,
+          "all_cells_and_order": "VERIFIED_FROM_ORIGINAL_NATIVE_PROJECT"
+        },
+        {
+          "label": "cold-all-106",
+          "bytes": 17186,
+          "sha256": "7872c4b108e10a051a6c7238c2ae61b5b580436f72457134123f9ea2bb3bf86a",
+          "rows": 106,
+          "columns": 10,
+          "all_cells_and_order": "VERIFIED_FROM_ORIGINAL_NATIVE_PROJECT"
+        },
+        {
+          "label": "cold-filtered-103",
+          "bytes": 16728,
+          "sha256": "ae9c43cb649da9a6316afaf2f879d4189814ef089b3ed740a080fa5464e35154",
+          "rows": 103,
+          "columns": 10,
+          "all_cells_and_order": "VERIFIED_FROM_ORIGINAL_NATIVE_PROJECT"
+        },
+        {
+          "label": "cold-filtered-320",
+          "bytes": 16728,
+          "sha256": "ae9c43cb649da9a6316afaf2f879d4189814ef089b3ed740a080fa5464e35154",
+          "rows": 103,
+          "columns": 10,
+          "all_cells_and_order": "VERIFIED_FROM_ORIGINAL_NATIVE_PROJECT"
+        }
+      ],
+      "complete_ordered_csv_header_and_all_cells_verified": true,
+      "negative_control_kinds": [
+        "CSV_validator_only",
+        "genuine_native_transport_unknown",
+        "genuine_native_title_widths",
+        "invalid_numeric_range",
+        "detached_real_DOM_controls",
+        "actual_browser_quota_persistence_refusal",
+        "browser_preferences_corruption_only"
+      ],
+      "actual_browser_quota": {
+        "stored_code_units": 5240885,
+        "error_name": "QuotaExceededError",
+        "error_code": 22,
+        "saved_preference_unchanged": true,
+        "recovery_after_owned_cleanup": true
+      },
+      "preferences_json_hashes_verified": 5,
+      "geometry_observations": 22,
+      "png": [
+        {
+          "path": "artifacts/table-explorer-native-r3-20261018/table-explorer/table-explorer-1792357602212-9a8702ff/table-explorer-1440.png",
+          "bytes": 202604,
+          "sha256": "380a2d7b7d67e9285be49fffd301f2afb56516998174174fe1e0057d9183fd66",
+          "width": 1440,
+          "height": 1961
+        },
+        {
+          "path": "artifacts/table-explorer-native-r3-20261018/table-explorer/table-explorer-1792357602212-9a8702ff/table-explorer-320.png",
+          "bytes": 153493,
+          "sha256": "7c17cdf0d99f5bc3b07c600937277bdb0946309a5143bda8cb9866138c110ae0",
+          "width": 320,
+          "height": 3425
+        },
+        {
+          "path": "artifacts/table-explorer-native-r3-20261018/table-explorer/table-explorer-1792357602212-9a8702ff/table-explorer-cold-320.png",
+          "bytes": 114987,
+          "sha256": "9695a70297ff1eb866f99085cc0f93ee5a32495648c6043797eba5efcbcda7d4",
+          "width": 320,
+          "height": 2535
+        }
+      ]
+    },
+    "geometry_schema_qualification": "The raw receipt geometry.width is the element box width because {...box} overwrote viewport width. Viewport provenance was independently checked using first and second 11-control groups from frozen source plus actual PNG IHDR widths 1440/320. Runtime source assertions used the correct local viewport width. Do not present geometry.width as viewport width.",
+    "retained_failed_attempts": [
+      {
+        "path": "artifacts/table-explorer-native-r1-20261018/table-explorer/table-explorer-1792357396689-e3e30d39/ui-table-explorer-live.json",
+        "bytes": 28850,
+        "sha256": "bdfde348b2a716f9aebbe8d04fa89370ee7f4db4697652f44829cdeb4b2f78dc",
+        "result": "FAIL",
+        "major_groups": 1,
+        "stage": "closed nested columns details checkbox visibility"
+      },
+      {
+        "path": "artifacts/table-explorer-native-r2-20261018/table-explorer/table-explorer-1792357516721-3938159a/ui-table-explorer-live.json",
+        "bytes": 39794,
+        "sha256": "96a18494f55a882ed17761453935b3ebefcba2911654f2876f86fe62cdad6f60",
+        "result": "FAIL",
+        "major_groups": 5,
+        "stage": "search debounce left three prior rows at strict single-row wait"
+      }
+    ],
+    "scope_limits": [
+      "This review reads existing artifacts and hashes, and does not execute another test, native process or browser.",
+      "The 586 explicit frozen inputs are verified as declared acceptance inputs; this is not an exhaustive compiler-dependency attestation.",
+      "Same-origin fresh-context browser storageState restores column preferences only; no native or portable-project preference storage is proved.",
+      "Broad workspace/Chromium/provider/full42-suite gates were active or pending and are not promoted by this focused PASS.",
+      "No native Start, all operators/table kinds, unsafe-integer/u64 exactness, unbounded corpus or RSS, or vendor feature parity claim."
+    ]
+  }
+}

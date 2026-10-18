@@ -32,6 +32,8 @@
   let configProfiles = null, profileFormBaseline = null, profileToolbarBaseline = null, profileHeaderSignature = '', profileQuotaBaseline = null;
   let configProfileCatalog = null, profileCatalogNameOwner = '', profileCatalogDelete = null;
   let screenshotController = null, screenshotView = null;
+  let tableExplorer = null;
+  let tableRenderSequence = 0;
   const legacySettingsDefaults = {...state.settings};
   let dashboardSegments = null;
   const separateSegmentSections = new Set(['inputs','policy','policyaliases','content','resource-discovery','sitemap-membership','sitemap-findings']);
@@ -422,6 +424,9 @@
     state.fragments = null;
     state.fragmentsError = '';
     state.page = 0;
+    tableExplorer?.resetOwner();
+    state.search='';state.filter='all';state.sort=state.section==='inputs'?'list_index':'url';state.direction=1;
+    $('table-search').value='';$('table-filter').value='all';
     state.crawl = id ? state.crawls.find((crawl) => crawl.id === id) || { id, status: 'running' } : null;
     renderSourceBodies();
     state.issueMap = new Map();
@@ -634,6 +639,7 @@
     $('inspector-recrawl-checkbox').disabled = Boolean(busy || active() || state.crawl?.recrawl_available === false);
     if(state.segmentView)$('export-sitemap').disabled=true;
     if(dashboardSegments?.state.busy){$('export-csv').disabled=true;$('export-resources').disabled=true;$('export-visible-report').disabled=true;}
+    if(tableExplorer && !$('table-view').hidden && !tableExplorer.canExport())$('export-csv').disabled=true;
     renderDashboardSegments();
     renderSitemapBundleControls();
     renderQuotaSummary();
@@ -856,9 +862,9 @@
     }
   }
 
-  const textColumn = (key, label, getter = (row) => row[key], klass = '') => ({ key, label, value: getter, render: (row) => `<span class="${klass || 'truncate'}" title="${escape(getter(row) ?? '')}">${escape(getter(row) ?? '—')}</span>` });
+  const textColumn = (key, label, getter = (row) => row[key], klass = '') => ({ key, label, type:'text', value: getter, render: (row) => `<span class="${klass || 'truncate'}" title="${escape(getter(row) ?? '')}">${escape(getter(row) ?? '—')}</span>` });
   const urlColumn = textColumn('url', 'URL', (row) => row.url, 'url-cell');
-  const numberColumn = (key, label, getter = (row) => row[key]) => ({ key, label, value: getter, render: (row) => getter(row) == null ? '—' : escape(number(getter(row))) });
+  const numberColumn = (key, label, getter = (row) => row[key]) => ({ key, label, type:'number', value: getter, render: (row) => getter(row) == null ? '—' : escape(number(getter(row))) });
   const statusColumn = { key: 'status', label: 'HTTP final', value: effectiveStatus, render: (row) => statusBadge(effectiveStatus(row)) + (row.tls?.hsts_upgrades?.length ? ' <span class="badge" title="Lokale Transportregel, keine HTTP-Weiterleitung">HSTS 307</span>' : '') };
   const indexColumn = { key: 'indexable', label: 'Indexierbarkeit', value: (row) => row.indexable === true ? 'Indexierbar' : row.indexable === false ? 'Nicht indexierbar' : 'Unbekannt', render: (row) => `<span class="badge ${row.indexable === false ? 'warning' : row.indexable == null ? 'neutral' : ''}">${row.indexable === true ? 'Indexierbar' : row.indexable === false ? 'Nicht indexierbar' : 'Unbekannt'}</span>` };
   const issueColumn = numberColumn('issue_count', 'Probleme', (row) => pageIssues(row.url).length);
@@ -982,7 +988,51 @@
     return filter === '2xx' ? status >= 200 && status < 300 : filter === '4xx' ? status >= 400 && status < 500 : filter === '5xx' ? status >= 500 : true;
   }
 
-  function filteredRows() {
+  function tableSchema() {
+    const numeric=new Set(['status','initial_status','response_ms','elapsed_ms','link_score']);
+    const required=state.section==='inputs'?['list_index','input_sha256','source_index']:state.section==='responses'?['url','requested_url','response_index']:state.section==='custom-search'?['url','rule_name','method','source']:['url'];
+    return columns().map((column,index)=>{
+      const type=column.type||(numeric.has(column.key)?'number':'text');
+      const rawValue=row=>{
+        if(row._unavailable && !required.includes(column.key))return null;
+        if(type==='number')return column.value(row);
+        if(['titles','title_text'].includes(column.key))return row.titles?.length?row.titles[0]:null;
+        if(column.key==='description_text')return row.meta_descriptions?.length?row.meta_descriptions[0]:null;
+        if(column.key==='indexable'&&row.indexable==null)return null;
+        if(column.key==='raw_value')return row.raw_value;
+        if(state.section==='images'&&column.key==='alt')return row.alt;
+        if(state.section==='keywords'&&column.key==='content')return row.content;
+        if(state.section==='headingorder'&&column.key==='text_with_image_alt')return row.text_with_image_alt;
+        if(column.key==='dom_source')return row._page?.dom_metadata?.source??null;
+        if(column.key==='dom_path')return row.dom_location?.path??null;
+        if(state.section==='issues'&&column.key==='code')return row.code;
+        if(column.key==='headers_known'&&row.headers==null)return null;
+        if(column.key==='selection'||column.key==='validation')return null;
+        if(column.key==='blocked'&&!row.blocked_by_robots&&!row.robots_warning&&effectiveStatus(row)==null)return null;
+        if(column.key==='self_reference'&&!row.canonical?.length)return null;
+        if(column.key==='dom_complete'&&!row._page?.dom_metadata)return null;
+        if(column.key==='heading_text_engine'&&!row._page?.dom_metadata?.heading_text_engine)return null;
+        if(Object.hasOwn(row,column.key)&&row[column.key]==null)return null;
+        return column.value(row);
+      };
+      return {...column,type,rawValue,mandatory:index===0||required.includes(column.key)};
+    });
+  }
+  function tableOwner() {
+    return {projectId:state.crawl?.id??null,section:state.section,generation:state.generation,segment:state.segmentView?.context?.snapshot_token??null};
+  }
+  function tableIdentity(row) {
+    return JSON.stringify([row.requested_url??row._page?.url??row.url??row.normalized_url??'',row.url??'',row.list_index??null,row.occurrence_index??null,row.source_index??null,row.response_index??null,row.dom_location?.index??null,row.rule_name??null,row.source??null,row._segmentOrdinal??row._page?._segmentOrdinal??null]);
+  }
+  function bindTableExplorer() {
+    if(!window.TableExplorer||!window.TableExplorerUI){$('table-options').open=true;$('table-explorer-error').hidden=false;$('table-explorer-error').textContent='Erweiterte Tabellenfunktionen sind nicht geladen.';return;}
+    tableExplorer=window.TableExplorerUI.create({owner:tableOwner,identity:{identity:tableIdentity},sort:()=>({key:state.sort,direction:state.direction}),setSort:sort=>{state.sort=sort.key;state.direction=sort.direction;},changed:()=>{state.page=0;renderTable();}});
+  }
+  function filteredRows(useExplorer=true) {
+    if(tableExplorer&&useExplorer){
+      const schema=tableSchema();if(!schema.some(column=>column.key===state.sort))state.sort=schema[0].key;
+      return tableExplorer.rows(getRows().filter(matchesFilter),schema,state.search,{key:state.sort,direction:state.direction});
+    }
     const search = state.search.toLocaleLowerCase('de-DE');
     const currentColumns = columns();
     const rows = getRows().filter((row) => matchesFilter(row) && (!search || currentColumns.map((column) => column.value(row) ?? '').join(' ').toLocaleLowerCase('de-DE').includes(search) || String(row.code || '').toLowerCase().includes(search)));
@@ -996,7 +1046,9 @@
   }
 
   function renderTable() {
-    const currentColumns = columns();
+    const tableSequence=++tableRenderSequence,owner=JSON.stringify(tableOwner());
+    const currentTable=()=>tableSequence===tableRenderSequence&&owner===JSON.stringify(tableOwner());
+    const currentColumns = tableExplorer?tableExplorer.columns(tableSchema()):columns();
     const rows = filteredRows();
     const pages = Math.ceil(rows.length / state.pageSize);
     state.page = Math.max(0, Math.min(state.page, pages - 1));
@@ -1014,13 +1066,14 @@
     const table = $('results-table');
     const inputEmptyNote = state.section === 'custom-search' ? state.crawl?.config?.custom_search ? 'Keine gespeicherten Suchbeobachtungen für diese Seiten. Die fehlende Aufzeichnung bleibt unbekannt, ohne bestätigte Null-Treffer.' : 'Eigene Suche war nicht aktiviert oder ist historisch nicht erfasst. Regeln in den Einstellungen für einen neuen Crawl aktivieren; keine nachträglichen Null-Treffer abgeleitet.' : state.section === 'inputs' ? array(state.crawl?.config?.input_imports).length ? 'Die gespeicherten Importergebnisse enthalten keine Eingabezeilen.' : 'Eingabeherkunft nicht erfasst. Bei älteren Projekten bleibt sie unbekannt; dies ist kein Nachweis einer leeren Eingabe.' : null;
     table.querySelector('thead').innerHTML = `<tr>${currentColumns.map((column) => `<th scope="col" aria-sort="${state.sort === column.key ? state.direction > 0 ? 'ascending' : 'descending' : 'none'}"><button type="button" data-sort="${escape(column.key)}">${escape(column.label)}<span aria-hidden="true">${state.sort === column.key ? state.direction > 0 ? '↑' : '↓' : '↕'}</span></button></th>`).join('')}</tr>`;
-    table.querySelector('tbody').innerHTML = visible.length ? visible.map((row, index) => `<tr class="click-row${isSelected(row) ? ' selected' : ''}" data-row="${index}" tabindex="0" aria-label="Details zu ${escape(row.url)} öffnen">${currentColumns.map((column, columnIndex) => `<td>${cell(column, row, columnIndex)}</td>`).join('')}</tr>`).join('') : `<tr><td class="empty-cell" colspan="${currentColumns.length}"><strong>${state.search || state.filter !== 'all' ? 'Keine passenden Ergebnisse' : state.crawl ? 'Noch keine Daten in diesem Bereich' : 'Starte einen Crawl, um Ergebnisse zu sehen'}</strong>${escape(state.search || state.filter !== 'all' ? 'Ändere den Filter oder den Suchbegriff.' : inputEmptyNote || emptyNote || (['linkmetrics', 'structured'].includes(state.section) ? state.analysisError || 'Diese Auswertung wird nach Abschluss oder Stopp des Crawls berechnet.' : state.section === 'images' ? 'Bildreferenzen erscheinen nach der Auswertung von HTML-Seiten.' : state.section === 'external' ? 'Externe Links erscheinen, sobald sie im HTML entdeckt werden.' : 'Nur tatsächlich erfasste Daten werden angezeigt.'))}</td></tr>`;
+    table.querySelector('tbody').innerHTML = visible.length ? visible.map((row, index) => `<tr class="click-row${isSelected(row) ? ' selected' : ''}" data-row="${index}" tabindex="0" aria-label="Details zu ${escape(row.url)} öffnen">${currentColumns.map((column, columnIndex) => `<td>${cell(column, row, columnIndex)}</td>`).join('')}</tr>`).join('') : `<tr><td class="empty-cell" colspan="${currentColumns.length}"><strong>${state.search || state.filter !== 'all' || tableExplorer?.hasRules() ? 'Keine passenden Ergebnisse' : state.crawl ? 'Noch keine Daten in diesem Bereich' : 'Starte einen Crawl, um Ergebnisse zu sehen'}</strong>${escape(state.search || state.filter !== 'all' || tableExplorer?.hasRules() ? 'Ändere den Filter oder den Suchbegriff.' : inputEmptyNote || emptyNote || (['linkmetrics', 'structured'].includes(state.section) ? state.analysisError || 'Diese Auswertung wird nach Abschluss oder Stopp des Crawls berechnet.' : state.section === 'images' ? 'Bildreferenzen erscheinen nach der Auswertung von HTML-Seiten.' : state.section === 'external' ? 'Externe Links erscheinen, sobald sie im HTML entdeckt werden.' : 'Nur tatsächlich erfasste Daten werden angezeigt.'))}</td></tr>`;
     table.querySelectorAll('[data-recrawl-url]').forEach(input => {
       input.addEventListener('click', event => event.stopPropagation());
       input.addEventListener('keydown', event => event.stopPropagation());
-      input.addEventListener('change', () => setRecrawlSelected(input.dataset.recrawlUrl, input.checked));
+      input.addEventListener('change', () => {if(currentTable())setRecrawlSelected(input.dataset.recrawlUrl, input.checked);});
     });
     table.querySelectorAll('[data-sort]').forEach((button) => button.addEventListener('click', () => {
+      if(!currentTable())return;
       state.direction = state.sort === button.dataset.sort ? -state.direction : 1;
       state.sort = button.dataset.sort;
       state.page = 0;
@@ -1028,6 +1081,7 @@
     }));
     table.querySelectorAll('[data-row]').forEach((rowElement) => {
       const open = () => {
+        if(!currentTable())return;
         const row = visible[Number(rowElement.dataset.row)];
         if (state.section === 'inputs') { state.selected = null; state.selectedResponse = null; state.selectedInput = row; renderInspector(); renderTable(); $('inspector').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); return; }
         if (state.section === 'responses') { selectResponse(row); return; }
@@ -1045,6 +1099,7 @@
     $('page-label').textContent = rows.length ? `${number(offset + 1)}–${number(Math.min(offset + state.pageSize, rows.length))} von ${number(rows.length)}` : 'Keine Ergebnisse';
     $('page-prev').disabled = state.page === 0;
     $('page-next').disabled = state.page + 1 >= pages;
+    tableExplorer?.render();
     renderControls();
   }
 
@@ -1059,6 +1114,7 @@
     state.search = '';
     state.sort = section === 'inputs' ? 'list_index' : 'url';
     state.direction = 1;
+    tableExplorer?.resetOwner();
     $('table-search').value = '';
     $('table-filter').innerHTML = filterOptions().map(([value, label]) => `<option value="${escape(value)}">${escape(label)}</option>`).join('');
     document.querySelectorAll('[data-section]').forEach((button) => {
@@ -1475,9 +1531,12 @@
     if (contentSection()) { exportContentRows(); return; }
     if (state.section==='resource-discovery' || sitemapSection() || findingsSection()) return;
     const original = state.section;
+    const useExplorer=!['overview','graph'].includes(original);
+    if(useExplorer&&tableExplorer&&!tableExplorer.canExport()){message('Die Tabellenansicht enthält einen Fehler. Vor dem Export die angezeigte Meldung beheben.',true);return;}
     if (['overview', 'graph'].includes(original)) state.section = 'internal';
-    const cols = columns();
-    const rows = filteredRows();
+    const cols = useExplorer&&tableExplorer?tableExplorer.columns(tableSchema()):columns();
+    const rows = filteredRows(useExplorer);
+    if(useExplorer&&tableExplorer&&!tableExplorer.canExport()){state.section=original;message('Die Tabellenansicht konnte nicht ausgewertet werden; kein CSV erzeugt.',true);return;}
     const operation = state.crawl?.operation;
     const selected = operation?.coverage === 'mixed_age_selected_recrawl';
     const targets = new Map(array(operation?.targets).map(target => [target.requested_url, target]));
@@ -3961,6 +4020,7 @@
     const searchTab=document.createElement('button');searchTab.type='button';searchTab.dataset.tab='custom-search';searchTab.setAttribute('role','tab');searchTab.setAttribute('aria-selected','false');searchTab.textContent='Eigene Suche';$('inspector-tabs').append(searchTab);
     restoreSettings();
     bindEvents();
+    bindTableExplorer();
     selectSection('overview');
     render();
     await initializeConfigProfiles();

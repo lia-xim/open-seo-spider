@@ -30,7 +30,7 @@ const initialHits = [], offlineHits = [], witnessHits = [], nonce = randomUUID()
 const secretValues = ['owned-volatile-one-' + randomUUID(), 'owned-volatile-two-' + randomUUID()];
 const headerNames = ['X-Owned-Config', 'x-owned-config'];
 let app, siteOrigin, browser, context, page, site, offline = false, failure, jobId;
-const responseBodies = new WeakMap();
+const capturePolicies = new WeakMap();
 const inspectedResponses = [];
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 function check(label) { checks.push(label); console.log('PASS ' + label); }
@@ -140,36 +140,24 @@ function captureBrowserResponses() {
       if (p.startsWith('/api/')) requests.push({source: 'browser', method: request.method(), path: p, request_sha256: hash(Buffer.from(request.postData() || ''))});
     } else if (!url.startsWith('blob:') && !url.startsWith('data:') && url !== 'about:blank') external.push(url);
   });
-  page.on('response', response => {
-    const url = new URL(response.url());
-    if (url.origin !== app.origin) return;
-    if (url.pathname === '/api/config-profiles/export') return; // Chrome download bodies are not a reliable CDP oracle.
-    if (url.pathname === '/api/config-profiles/inspect') return; // Exact bytes come from the original fetch Response.clone in this browser document.
-    if (url.pathname.startsWith('/api/config-profiles/') || url.pathname === '/api/crawls/from-profile' || /^\/api\/crawls\/[^/]+\/config-profile$/.test(url.pathname)) {
-      // Capture once immediately on the event, including mutations. Never reread/replay a start.
-      responseBodies.set(response, response.body().then(bytes => ({bytes}), error => ({error})));
-    }
-  });
 }
 async function browserJSON(pending, marker) {
-  const response = await pending;
-  if (new URL(response.url()).pathname === '/api/config-profiles/inspect') {
-    const observed = {method: response.request().method(), url: response.url(), status: response.status(), request_sha256: hash(Buffer.from(response.request().postData() || ''))};
-    try {
-      assert(marker, 'An awaited pre-action browser marker is required for native profile inspection');
-      const result = await profileCapture.capture(page, response, marker);
-      inspectedResponses.push({...observed, ...result.evidence, bytes: result.bytes.length, sha256: hash(result.bytes), result: 'PASS'});
-      return {response, bytes: result.bytes, value: JSON.parse(result.bytes)};
-    } catch (error) {
-      inspectedResponses.push({...observed, marker, result: 'FAIL', error: error.message});
-      throw error;
-    }
+  const target = page, response = await pending, request = response.request(), raw = request.postDataBuffer();
+  const observed = {method: request.method(), path: new URL(response.url()).pathname, url: response.url(), status: response.status(), observed_headers: response.headers(), request_sha256: hash(raw || Buffer.alloc(0)), request_bytes: raw?.length || 0, marker, result: 'BODY_PENDING'};
+  inspectedResponses.push(observed); // Preserve original wire metadata even if body capture refuses.
+  try {
+    const policy = capturePolicies.get(target);
+    assert(policy && profileCapture.canCapture(request.method(), response.url(), policy), 'Consumed JSON must belong to this exact owned profile API policy');
+    assert(marker, 'An awaited pre-action browser marker is required for every consumed original JSON response');
+    const result = await profileCapture.capture(target, response, marker);
+    Object.assign(observed, result.evidence, {bytes: result.bytes.length, sha256: hash(result.bytes), result: 'PASS'});
+    return {response, bytes: result.bytes, value: JSON.parse(result.bytes)};
+  } catch (error) {
+    Object.assign(observed, {result: 'FAIL', error: error.message});
+    throw error;
   }
-  const captured = responseBodies.get(response); assert(captured, 'Immediate once-buffer capture missing');
-  const result = await captured; if (result.error) throw result.error;
-  return {response, bytes: result.bytes, value: JSON.parse(result.bytes)};
 }
-function waitJSON(route, method = 'POST', marker) { return browserJSON(page.waitForResponse(response => response.url() === app.origin + route && response.request().method() === method), marker); }
+function waitJSON(route, method = 'POST', marker) { const origin = capturePolicies.get(page)?.origin; assert(origin, 'Owned capture policy must be installed before actions'); return browserJSON(page.waitForResponse(response => response.url() === origin + route && response.request().method() === method), marker); }
 async function inspectEditor(text) {
   await page.fill('#config-profile-json', text);
   const marker = await profileCapture.mark(page);
@@ -421,7 +409,7 @@ async function run() {
   const executablePath = process.env.SPIDER_CHROME || process.env.OPEN_SEO_BROWSER_PATH || await (await import('../../renderer/server.mjs')).findBrowserExecutable();
   const chromeHash = hash(fs.readFileSync(executablePath)); browser = await chromium.launch({headless: true, executablePath});
   context = await browser.newContext({acceptDownloads: true, viewport: {width: 1440, height: 1000}}); page = await context.newPage(); captureBrowserResponses();
-  await profileCapture.install(page);
+  const capturePolicy = {name: profileCapture.OWNED_POLICY, origin: app.origin}; await profileCapture.install(page, {}, capturePolicy); capturePolicies.set(page, capturePolicy);
   for (const [file, route] of [['index.html', '/'], ['app.js', '/app.js'], ['styles.css', '/styles.css'], ['config-profiles.js', '/config-profiles.js']]) {
     const source = path.join(root, 'web', file), sourceHash = hash(fs.readFileSync(source));
     const served = await raw(route); assert.equal(hash(served.bytes), sourceHash, 'Actual native embedded asset must match the frozen frontend source');
@@ -496,7 +484,7 @@ async function run() {
   negatives.push({name: 'missing-partial-and-undeclared-runtime-bindings', source: 'actual_native_start_requests_before_effects', statuses: [400, 400, 400]});
   await openSettings(); await resolveHeaders(); await save();
   noSecrets(JSON.stringify(await storage()), 'bound values remain volatile');
-  const starting = waitJSON('/api/crawls/from-profile'); await page.click('#start-button'); const started = await starting; assert.equal(started.response.status(), 200); jobId = started.value.id || started.value.crawl?.id; assert(jobId);
+  const startMarker = await profileCapture.mark(page); const starting = waitJSON('/api/crawls/from-profile', 'POST', startMarker); await page.click('#start-button'); const started = await starting; assert.equal(started.response.status(), 200); jobId = started.value.id || started.value.crawl?.id; assert(jobId);
   const payload = started.response.request().postDataJSON(); assert.equal(payload.profile_text != null, true); assert.deepEqual(Object.keys(payload.header_values).sort(), headerNames.slice().sort());
   await until(async () => { const status = (await json('/api/crawls/' + jobId)).value; assert.notEqual(status.status, 'failed', status.error); return status.status === 'completed'; }, 'actual profile crawl');
   const project = await json('/api/crawls/' + jobId + '/project.json');
@@ -528,7 +516,7 @@ async function run() {
   await openSettings(); await resolveHeaders(); await save();
   assert.equal(await page.inputValue('#seed-url'), replacementURL, 'Header reentry plus Settings Save must preserve the user-edited run target without a second fill');
   noSecrets(JSON.stringify(await storage()), 'Reentered replacement-run bindings stay volatile');
-  const replacementPending = waitJSON('/api/crawls/from-profile'); await page.click('#start-button');
+  const replacementMarker = await profileCapture.mark(page); const replacementPending = waitJSON('/api/crawls/from-profile', 'POST', replacementMarker); await page.click('#start-button');
   const replacementStart = await replacementPending; assert.equal(replacementStart.response.status(), 200);
   const replacementId = replacementStart.value.id || replacementStart.value.crawl?.id; assert(replacementId); assert.notEqual(replacementId, jobId);
   const replacementPayload = replacementStart.response.request().postDataJSON();
@@ -548,7 +536,7 @@ async function run() {
   offline = true; await witness();
   await selectJob(jobId, 2);
   const sanitized = (await json('/api/crawls/' + jobId + '/config-profile')).value; noSecrets(JSON.stringify(sanitized), 'selected saved profile');
-  await openSettings(); const loading = waitJSON('/api/crawls/' + jobId + '/config-profile', 'GET'); await page.click('#config-profile-load-selected'); const loaded = await loading; assert.equal(loaded.response.status(), 200); await installed(loaded.value);
+  await openSettings(); const loadingMarker = await profileCapture.mark(page); const loading = waitJSON('/api/crawls/' + jobId + '/config-profile', 'GET', loadingMarker); await page.click('#config-profile-load-selected'); const loaded = await loading; assert.equal(loaded.response.status(), 200); await installed(loaded.value);
   const selectedDownload = await profileDownload('selected-saved-sanitized-profile'); sameConfig(selectedDownload.toString('utf8'), sanitized.profile_json, 'Selected profile export has original declared options and only header requirements');
   await save(); const storedBeforeCold = await storage();
   if (await page.locator('#settings-dialog').evaluate(el => el.open)) await page.click('#settings-close');
@@ -561,7 +549,7 @@ async function run() {
   const restoredHeaders = await requirements();
   assert.deepEqual(restoredHeaders.map(input => input.name).sort(), headerNames.slice().sort());
   assert(restoredHeaders.every(input => input.value === ''), 'Cold browser restore must not recover header values before selected-load can clear them');
-  const coldLoad = waitJSON('/api/crawls/' + jobId + '/config-profile', 'GET'); await page.click('#config-profile-load-selected'); const reloaded = await coldLoad; await installed(reloaded.value);
+  const coldLoadMarker = await profileCapture.mark(page); const coldLoad = waitJSON('/api/crawls/' + jobId + '/config-profile', 'GET', coldLoadMarker); await page.click('#config-profile-load-selected'); const reloaded = await coldLoad; await installed(reloaded.value);
   assert((await requirements()).every(input => input.value === ''), 'Secret bindings are not restored from storage/server');
   const coldExport = await profileDownload('cold-selected-sanitized-profile'); assert.deepEqual(coldExport, selectedDownload); noSecrets(JSON.stringify(await storage()), 'cold profile storage');
   await page.setViewportSize({width: 320, height: 900});

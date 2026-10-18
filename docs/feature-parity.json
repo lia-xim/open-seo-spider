@@ -4556,13 +4556,24 @@
             "ui-live"
           ],
           "proves": "Text search, numeric sorting, title/image/issue filters, bounded pagination and persisted settings are fixture-tested; live404 filter/inspector is proved."
+        },
+        {
+          "verification_run_ids": [
+            "table-explorer-20261018-r4"
+          ],
+          "granular_workflow_ids": [
+            "ui.filter-details-export"
+          ],
+          "proves": "Genuine native captures contain 107 pages and one page. All 106 title rows and 103 filtered rows were compared across 50-row pages, including NFC/case matching, inclusive numeric bounds, zero/empty/unknown states, both sort directions and duplicate response source identities. Five complete CSV files preserve all 521 data rows and their provenance cells. Explicit per-crawl/section browser column preferences survive a fresh-context same-origin cold reopen; genuine quota, corrupt storage and stale controls were tested. The fresh R4 full 42-suite run and reused R3 workspace result (1,831 passed, zero failed, five ignored) are bound separately. No new R4 Rust-workspace execution is claimed."
         }
       ],
       "parity_evidence": [],
       "group": "ui",
       "remaining_acceptance": [
-        "Save/reopen column preferences and test combined numeric/text filtering rather than separate controls alone.",
-        "Next scoped dashboard workflow: combine numeric bounds and Unicode text search with stable multi-page sorting, persist named column visibility/order, reopen the same saved project and verify every selected row plus complete current-section CSV. Empty and unknown values need separate controls."
+        "Multiple named column views and portable cross-project view import/export are not part of the one-projection browser preference slice.",
+        "OR and nested predicates, XLSX output and the remaining commas/newlines/formulas combinations in granular workflow ui.filter-details-export need separate complete workflow acceptance.",
+        "Specialist policy/content/resource/sitemap inventories keep separate controls and native cursor/export contracts; test their complete traversal and all relevant tables without treating the main-table acceptance as universal.",
+        "Measure larger filtering corpora and interactive latency/memory; native API-prepared fixtures do not establish every Start path, cross-browser behavior or full manufacturer parity."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -6814,6 +6825,28 @@
       "command": "180 state/helper tests;12 actual Chromium tests;3 native UI suites in one terminal invocation; normal unchanged build",
       "scope": "Verification-only actual browser Response.clone capture for pure inspect and catalog GET paths. Original fetch Promise/Response and actual once-only mutation response checks retained.",
       "limits": "New full41 local suite and full Rust suite not rerun in this test-only slice; b7 historical complete41/1831 proof stays separate. New exact public CI pending, installed pilot unchanged; maximum browser sizes, general stability, all browsers and manufacturer parity NOT_PROVEN."
+    },
+    {
+      "id": "table-explorer-20261018-r4",
+      "date": "2026-10-18",
+      "result": "PASS_LOCAL_TABLE_EXPLORER_AND_FORTY_TWO_SUITE_REGRESSION",
+      "artifact": "docs/verification/table-explorer-20261018-r4/README.md",
+      "evidence": "docs/verification/table-explorer-20261018-r4/local-result.json",
+      "source_gates": "docs/verification/table-explorer-20261018-r4/source-gates.json",
+      "evidence_bytes": 21493,
+      "evidence_sha256": "372678fc2964c0cc987d55f0b169570d80d4528edec18a782e68ae9dc7a17ea0",
+      "source_gates_sha256": "b31dba2eb582568ee50e88eaea4c58797c39fd036cdf67f0a9946fa019d82372",
+      "source_debug_sha256": "4c4fcb839f39d2d6f98f3b77ddd9bdcc0d8a5f3613bdd2afb4edef2652f7cbbd",
+      "frozen_acceptance_input_count": 586,
+      "frozen_acceptance_manifest_sha256": "49a73002ee548531ee78231265002dcc95edcd45becc3e03bb8c3a1336a133e6",
+      "ui_suite_count": 42,
+      "ui_one_complete_invocation": true,
+      "command": "R4: 201 state tests, 40 semantic groups, 17 reported Chromium tests (2 parents and 15 subcontrols), four targeted native suites, all 42 UI suites in one invocation and four separately enabled Rust/Chromium fixtures. The unchanged product and native sources permit explicit reuse of the R3 workspace result (1,831 passed, zero failed, five ignored), format and strict Clippy. Detailed native table evidence is bound separately.",
+      "granular_workflow_ids": [
+        "ui.filter-details-export"
+      ],
+      "scope": "Actual native API-prepared saved crawls; typed numeric/text AND rules, NFC search, stable multi-page sort, exact full projected CSV and inspectors, browser-origin column preferences with corruption/quota/stale controls, and same-origin cold reopen.",
+      "limits": "This accepts a bounded part of ui.filter-details-export. OR/nested expressions, XLSX, multiple named or portable views, specialist cursor workflows, larger corpora and manufacturer parity remain open. API preparation does not prove the main Start path. Browser preferences are not native portable project data. Public parent CI 25b failed during catalog Create A response capture; fresh public CI remains pending. R4 changes only six test files: owned original-response capture and the independent custom-search identity-tie oracle. Product/native sources and the binary are unchanged."
     }
   ],
   "reference_workflows": [
@@ -7071,14 +7104,53 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-18T20:34:00.484Z",
+  "last_verified_at": "2026-10-18T22:32:15.521Z",
   "current_work": [
+    {
+      "id": "table-explorer-20261018",
+      "priority": -14,
+      "title_de": "Kombinierte Tabellenfilter und gespeicherte Spaltenansichten",
+      "status": "LOCAL_R4_TABLE_AND42_UI_PASS_R3_RUST_REUSED_PUBLIC_CI_PENDING",
+      "summary_de": "Kombinierte Zahlen- und Textregeln, NFC-Suche und stabile Sortierung sind tatsächlich geprüft. Bestätigte Nullwerte, leere Texte und unbekannte Werte bleiben getrennt. Sechs native Gruppen, 36 Ansichten, fünf CSV-Dateien mit 521 Datenzeilen und ein Kaltstart sind belegt. Der frische R4-Lauf besteht alle 42 UI-Suiten. Die 1.831 bestandenen R3-Rust-Tests mit null Fehlern und fünf ignorierten Tests werden wegen identischer Produkt- und Native-Quellen ausdrücklich wiederverwendet. Herstellerparität und weitere Ansichts-, Export- und Spezialpfade bleiben offen.",
+      "completed_acceptance_de": [
+        "Echte native API-Crawls mit 107 Seiten und einer Seite wurden gespeichert. Alle 106 Title-Beobachtungen und 103 gefilterten Zeilen wurden vor der Aufteilung in 50er-Seiten exakt verglichen. NFC/Unicode, beide Sortierrichtungen und Gleichstände sind geprüft. Null, leer und unbekannt bleiben getrennt.",
+        "Fünf vollständige CSV-Dateien mit insgesamt 521 Datenzeilen wurden tatsächlich heruntergeladen. Headerreihenfolge sowie jede Daten- und Provenienzzelle wurden geprüft. Die warmen, kalten und 320-Pixel-Exporte haben identische Bytes. Der tatsächliche Validator verweigert doppelte Header.",
+        "Explizites Speichern/Reset je Crawl und Bereich, verdeckte Such-/Filter-/Sortierspalten, echte Chromium-Quota, beschädigte erhaltene Präferenzbytes und fünf veraltete DOM-Steuerelemente geprüft. Präferenzen bleiben Browserdaten; kein portables natives Projektformat behauptet.",
+        "36 Ansichten, der Redirect-Inspector und doppelte Antwort-Quellidentitäten sind geprüft. Die Bedienung bei 1.440 und 320 Pixeln wurde tatsächlich ausgeführt. Zwei eigene native Prozesse und der Koordinator enden natürlich nach stdin-EOF mit Exit 0. Der Kaltstart behält denselben Ursprung und unveränderte Reportbytes. Zwei positive HTTP-410-Kontrollen und null Offline-Neuabrufe sind belegt.",
+        "Frische R4-Kontrollen bestehen: 201 Zustands- und Helper-Tests, 40 semantische Gruppen und 17 berichtete echte Chromium-Tests mit zwei Elternfällen und 15 Unterkontrollen. Vier fokussierte native Suiten, vier separat aktivierte Rust-/Chromium-Fixtures und alle 42 UI-Suiten in einem vollständigen Aufruf bestehen ebenfalls. Die 1.831 bestandenen Rust-Tests mit null Fehlern und fünf ignorierten Tests sowie Format und striktes Clippy stammen ausdrücklich aus R3. Nur sechs Testdateien änderten sich; Produkt- und Native-Quellen sowie normale Binary sind identisch.",
+        "R1 (geschlossene verschachtelte Spaltenliste), R2 (Suchrender noch nicht abgeschlossen) und der R3-Gesamtlauf (35 Suiten bestanden, danach veraltete Custom-Search-Tie-Reihenfolge im Orakel) bleiben FAIL mit Rohbelegen und Hashs. Nur das unabhängige Orakel wurde an die bereits vorhandene vollständige Quellidentität angepasst; keine Produkt-, Filter-, Body- oder Zeitgrenze gelockert. geometry.width im Rohbeleg ist Elementbreite; Viewportzuordnung wird separat gebunden."
+      ],
+      "pending_acceptance_de": [
+        "Mehrere benannte und portable Tabellen-/Spaltenansichten sowie ODER-/verschachtelte Regeln implementieren und mit vollständigem Export prüfen.",
+        "XLSX und die weiteren CSV-Kombinationen des granularen Workflows ui.filter-details-export vollständig prüfen; der Teilbeleg schließt den Gesamtvertrag nicht.",
+        "Spezialtabellen mit ihren vollständigen nativen Cursor-/Export-Verträgen und größere Filter-Corpora einschließlich Speicher/Latenz gesondert abnehmen.",
+        "Die neue öffentliche CI des exakten Quellstands ist separat terminal zu prüfen. Der öffentliche Elternlauf 25b ist insgesamt fehlgeschlagen. Nur Renderer scheiterte beim ersten Katalog-Create A an nicht verfügbaren CDP-Antwortbytes; Windows, Ubuntu und Container bestanden. Exakter damaliger HTTP-Status und Chromium-Ursache bleiben NOT_PROVEN.",
+        "Die neue exakte öffentliche CI bleibt gesondert abzunehmen. Die test-only Owned-Capture-Änderung wurde in R4 mit echten Transportkontrollen und nativen Profil-/Katalog-/Screenshot-Workflows geprüft; daraus folgt keine Erklärung der historischen Chromium-Ursache, keine Produktions-Capture-API und keine Herstellerparität."
+      ],
+      "documentation": [
+        "docs/table-explorer.md",
+        "docs/e2e-testing.md",
+        "docs/FEATURE_TODO.md",
+        "docs/verification/table-explorer-20261018-r4/README.md",
+        "docs/verification/table-explorer-20261018-r4/local-result.json",
+        "docs/verification/table-explorer-20261018-r4/source-gates.json"
+      ],
+      "gates": {
+        "implementation": "PASS_BOUNDED_MAIN_TABLE_SLICE",
+        "helper": "PASS201_R4_STATE_TESTS_INCLUDING14_TABLE_HELPER_AND27_CAPTURE_CONTROLS",
+        "native_browser": "PASS6_GROUPS36_VIEWS5_CSV521_ROWS2_NATIVE_EOF0_PLUS_COORDINATOR",
+        "broad_regression": "PASS_R4_FULL42_ONE_INVOCATION_EXPLICIT_RUST_BROWSER4_R3_ORDINARY_RUST1831_0FAILED_5IGNORED_REUSED_SAME_PRODUCT",
+        "public_CI": "NEW_SOURCE_NOT_RUN_PARENT25B_RENDERER_FAIL_RETAINED",
+        "manufacturer_parity": "NOT_PROVEN"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
     {
       "id": "profile-browser-response-capture-ci-20261018",
       "priority": -13,
       "title_de": "Profil-Antwortbytes direkt im Browser erfassen",
-      "status": "LOCAL_ACTUAL_BROWSER_CAPTURE_AND_THREE_NATIVE_SUITES_PASS_PUBLIC_CI_PENDING",
-      "summary_de": "Reine Profilprüfung und Katalog-GETs erfassen echte Response.clone-Bytes mit exakter Request-/Dokument-Zuordnung. Originales Fetch-Promise und Response bleiben erhalten; kein Request-Replay. Zustandstests, echte Chromium-Kontrollen und alle drei betroffenen nativen UI-Suiten bestehen auf unveränderten eingefrorenen Quellen. Drei frühere lokale Fehler bleiben erhalten; frische öffentliche Gesamtabnahme ist separat offen.",
+      "status": "LOCAL_R4_OWNED_CAPTURE_BROWSER_AND_NATIVE_PASS_PUBLIC_CI_PENDING",
+      "summary_de": "Reine Profilprüfung und Katalog-GETs erfassen echte Response.clone-Bytes mit exakter Request-/Dokument-Zuordnung. Originales Fetch-Promise und Response bleiben erhalten; kein Request-Replay. Zustandstests, echte Chromium-Kontrollen und alle drei betroffenen nativen UI-Suiten bestehen auf unveränderten eingefrorenen Quellen. Drei frühere lokale Fehler bleiben erhalten; frische öffentliche Gesamtabnahme ist separat offen. Der öffentliche Lauf 25b mit Run-ID 39164257731 ist terminal fehlgeschlagen. Windows, Ubuntu und Container bestanden. Nur Renderer scheiterte beim ersten Katalog-Create an nicht verfügbaren CDP-Antwortbytes. Die SQL-Zuordnung beweist keinen damaligen HTTP-Status. R4 prüft die angewendete Capture-Policy für exakt eigene Ursprünge und benannte Operationen. Standard-Lesezugriffe bleiben unverändert; jeder Original-fetch läuft genau einmal. Original-Promise und Original-Response bleiben erhalten. Rohbytes und Fehlerstatus 409 werden ohne Wiederholung einer Mutation oder CDP-Fallback gebunden. Die 17 berichteten Chromium-Tests bestehen aus zwei Elternfällen und 15 Unterkontrollen. Vier fokussierte native Suiten und der frische vollständige Lauf aller 42 UI-Suiten bestehen. Produktquellen und Binary bleiben unverändert. Neue öffentliche CI bleibt offen.",
       "completed_acceptance_de": [
         "Abgeschlossenen Rendererjob117760088992 aus Run39156291901 und rohe Artefakte erhalten. Vier Profil-Prüfgruppen bestehen; danach schlägt das Lesen tatsächlicher Browserantwortbytes fehl.",
         "Exakten u64-Import über Request-SHAf994d5f7… zugeordnet. Die generische Meldung über eine Navigation ist kein Beweis für tatsächliche Navigation.",
@@ -7086,10 +7158,12 @@
         "180 Zustand-/Helper-Tests und 12 gemeldete echte Chromium-Tests bestehen;15 tatsächliche Transportanfragen ohne CDP-Body-/Text-/JSON-Aufruf oder zusätzliche HTTP-Anfrage. Clone-Limit/Timeout lassen die Originalantwort weiter unverändert konsumieren.",
         "Alle drei betroffenen UI-Suiten bestehen in einem gemeinsamen Aufruf mit langen Windows-Ausgabepfaden:10 Profil-,4 Katalog- und3 Screenshot-Gruppen;45 geprüfte Inspect-Antworten,11 unabhängige SQL-Snapshots,8 natürliche Native-EOF0 und zusätzlicher natürlicher Koordinator-Abschluss.",
         "Alle bisherigen u64-/UI-/Speicher-/Header-/Kaltstart-/Negativ-/320px-Assertions und Deadlines bleiben erhalten. Nur Node-SQLite-Testpfade erhalten auf Windows das Namensraumpräfix; die nativen Datenpfade bleiben gleich.",
-        "R1-about:blank-Fehler, R2-Node-SQLite-Pfadfehler und R3-Katalog-CDP-Body-Fehler bleiben als FAIL dokumentiert; diese Erfolge ersetzen keine frühere Niederlage."
+        "R1-about:blank-Fehler, R2-Node-SQLite-Pfadfehler und R3-Katalog-CDP-Body-Fehler bleiben als FAIL dokumentiert; diese Erfolge ersetzen keine frühere Niederlage.",
+        "Der exakte öffentliche CI-Status für 25b wurde am 18.10.2026 um 21:41:25 UTC geprüft. Der Lauf ist insgesamt fehlgeschlagen. Nur Renderer-Job 117784125203 scheiterte beim ersten Create A an nicht verfügbaren CDP-Antwortbytes. Windows, Ubuntu und Container bestanden. Ursprüngliche Rohbelege und die nur lesende SQLite-Zuordnung bleiben erhalten. Sie beweisen weder den damaligen HTTP-Status 200 noch eine Produktursache.",
+        "R4 besteht 201 aktuelle Zustandskontrollen, 40 semantische Gruppen und 17 berichtete Chromium-Tests mit zwei Elternfällen und 15 Unterkontrollen. Die exakte Bindung an Ursprung, Policy, Methode, Pfad, Requestbytes, Header und Status ist geprüft. Der Standard bleibt auf reine Lesezugriffe begrenzt. Fehlerstatus 409 und ein einzelner Original-request ohne Replay sind belegt. Vier echte native Suiten für Profile, Katalog, Screenshots und Custom Search sowie alle 42 UI-Suiten bestehen. Die historische CI für 25b wird dadurch nicht nachträglich erfolgreich."
       ],
       "pending_acceptance_de": [
-        "Neue öffentliche CI des exakten veröffentlichten Commits einschließlich aller41 UI-Suiten terminal prüfen; vorher die öffentliche CI-Lücke nicht als geschlossen markieren.",
+        "Neue öffentliche CI des exakten veröffentlichten R4-Quellstands terminal prüfen. Die lokalen Transport-/Native-Erfolge erklären weder den historischen CDP-Fehler sicher noch belegen sie andere Browser, beliebige Antwortgrößen oder globale Stabilität; keine Mutation wiederholen und keine Body-/Zeitbudgetausnahme hinzufügen.",
         "Cross-Browser-/beliebige Last-/maximale Profil- und Kataloggrößen sowie vollständige Herstellerparität sind mit diesem begrenzten Testhelfer-Schnitt nicht nachgewiesen."
       ],
       "documentation": [
@@ -7107,7 +7181,9 @@
         "actual_chromium": "PASS12_REPORTED_TESTS15_HTTP_ZERO_CDP_BODY_CALLS",
         "native_regression": "PASS3_SUITES_ONE_INVOCATION_LONG_WINDOWS_OUTPUT17_GROUPS8_NATURAL_EOF0",
         "previous_local_failures": "R1_R2_R3_RETAINED_FAIL",
-        "new_public_CI": "PENDING_AFTER_PUBLISH"
+        "new_public_CI": "PENDING_AFTER_LOCAL_R4_ACCEPTANCE_PARENT25B_FAIL_RETAINED",
+        "published25b_public_CI": "FAIL_TERMINAL_RENDERER_CREATEA_CDP_BODY_OTHER3_JOBS_SUCCESS",
+        "owned_capture_candidate": "APPLIED_TEST_ONLY_R4_CHROMIUM17_2PARENTS15SUBCONTROLS_NATIVE4_FULL42_PASS"
       },
       "reference_parity": "NOT_PROVEN",
       "public_ci_url": "https://github.com/lia-xim/open-seo-spider/actions/runs/39156291901/job/117760088992"
@@ -10155,6 +10231,7 @@
     }
   ],
   "active_work_ids": [
+    "table-explorer-20261018",
     "profile-browser-response-capture-ci-20261018",
     "screenshot-viewport-artifacts-20261018",
     "named-native-profile-catalog-20261018",

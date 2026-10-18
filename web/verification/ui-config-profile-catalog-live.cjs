@@ -27,7 +27,7 @@ const CATALOG = '/api/config-profile-catalog', ENGINE = 'open-seo-spider/config-
 const key = 'open-seo-spider-config-profile-draft-v1', positiveStore = path.join(output, 'positive-store');
 const header = 'X-Owned-Catalog', secret = 'owned-volatile-catalog-' + randomUUID(), nonce = randomUUID();
 const checks = [], owners = [], requests = [], negatives = [], downloads = [], sqlProofs = [], held = [], errors = [], external = [], captureHits = [], offlineHits = [], witnesses = [];
-const bodies = new WeakMap();
+const capturePolicies = new WeakMap();
 const inspectedResponses = [];
 const pins = [__filename, path.join(__dirname, 'artifact-path.cjs'), binary, chrome, path.join(__dirname, 'profile-response-capture.cjs')].map(file => ({file, sha256: hash(fs.readFileSync(file))}));
 let app, browser, site, siteOrigin, offline = false, failure, proof;
@@ -88,22 +88,11 @@ async function native(route, body, status = 200, method = body === undefined ? '
 }
 async function api(route, body, status, method) { const result = await native(route, body, status, method); return {...result, value: JSON.parse(result.bytes)}; }
 async function effects() { return {files: files(app.directory), jobs: (await api('/api/crawls')).value, capture: captureHits.length, offline: offlineHits.length}; }
-function usesBrowserClone(route, method) {
-  return (method === 'POST' && route === '/api/config-profiles/inspect') ||
-    (method === 'GET' && (route === CATALOG || /^\/api\/config-profile-catalog\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(route)));
-}
 function observe(page) {
   const owner = app;
   page.on('pageerror', error => errors.push(error.message));
   page.on('request', request => {
     const url = request.url(); if (url.startsWith(owner.origin + '/api/')) requests.push({source: 'browser', phase: owner.phase, method: request.method(), path: new URL(url).pathname, request_sha256: hash(Buffer.from(request.postData() || ''))});
-  });
-  page.on('response', response => {
-    if (!response.url().startsWith(owner.origin + '/api/')) return;
-    const p = new URL(response.url()).pathname;
-    if (p === '/api/config-profiles/export') return; // Attachment bodies use actual file + unconditional pure native oracle.
-    if (usesBrowserClone(p, response.request().method())) return;
-    if (p.startsWith(CATALOG) || p.startsWith('/api/config-profiles/') || p === '/api/crawls/from-profile') bodies.set(response, response.body().then(bytes => ({bytes}), error => ({error})));
   });
 }
 async function makeContext() {
@@ -113,31 +102,29 @@ async function makeContext() {
   return context;
 }
 async function makePage(context) {
-  const page = await context.newPage(); observe(page); await profileCapture.install(page); await page.goto(app.origin); await page.locator('#connection-state.connected').waitFor();
+  const page = await context.newPage(); observe(page); const policy = {name: profileCapture.OWNED_POLICY, origin: app.origin}; await profileCapture.install(page, {}, policy); capturePolicies.set(page, policy); await page.goto(app.origin); await page.locator('#connection-state.connected').waitFor();
   if (await page.evaluate(name => localStorage.getItem(name) !== null, key)) await page.locator('#config-profile-active').waitFor({state: 'visible'});
   return page;
 }
 async function browserJSON(page, pending, marker) {
-  const response = await pending;
-  if (usesBrowserClone(new URL(response.url()).pathname, response.request().method())) {
-    const observed = {method: response.request().method(), url: response.url(), status: response.status(), request_sha256: hash(Buffer.from(response.request().postData() || ''))};
-    try {
-      assert(marker, 'An awaited pre-action browser marker is required for pure profile/catalog reads');
-      const result = await profileCapture.capture(page, response, marker);
-      inspectedResponses.push({...observed, ...result.evidence, bytes: result.bytes.length, sha256: hash(result.bytes), result: 'PASS'});
-      return {response, bytes: result.bytes, value: JSON.parse(result.bytes)};
-    } catch (error) {
-      inspectedResponses.push({...observed, marker, result: 'FAIL', error: error.message});
-      throw error;
-    }
+  const response = await pending, request = response.request(), raw = request.postDataBuffer();
+  const observed = {method: request.method(), path: new URL(response.url()).pathname, url: response.url(), status: response.status(), observed_headers: response.headers(), request_sha256: hash(raw || Buffer.alloc(0)), request_bytes: raw?.length || 0, marker, result: 'BODY_PENDING'};
+  inspectedResponses.push(observed); // Preserve original wire metadata even if body capture refuses.
+  try {
+    const policy = capturePolicies.get(page);
+    assert(policy && profileCapture.canCapture(request.method(), response.url(), policy), 'Consumed JSON must belong to this exact owned profile API policy');
+    assert(marker, 'An awaited pre-action browser marker is required for every consumed original JSON response');
+    const result = await profileCapture.capture(page, response, marker);
+    Object.assign(observed, result.evidence, {bytes: result.bytes.length, sha256: hash(result.bytes), result: 'PASS'});
+    return {response, bytes: result.bytes, value: JSON.parse(result.bytes)};
+  } catch (error) {
+    Object.assign(observed, {result: 'FAIL', error: error.message});
+    throw error;
   }
-  const captured = bodies.get(response); assert(captured, 'Immediate once-only mutation/JSON response capture required');
-  const result = await captured; if (result.error) throw result.error;
-  return {response, bytes: result.bytes, value: JSON.parse(result.bytes)};
 }
-function waitJSON(page, route, method = 'POST', marker) { return browserJSON(page, page.waitForResponse(response => response.url() === app.origin + route && response.request().method() === method), marker); }
+function waitJSON(page, route, method = 'POST', marker) { const origin = capturePolicies.get(page)?.origin; assert(origin, 'Owned capture policy must be installed before actions'); return browserJSON(page, page.waitForResponse(response => response.url() === origin + route && response.request().method() === method), marker); }
 async function clickJSON(page, selector, route, method = 'POST', expected = 200) {
-  const marker = usesBrowserClone(route, method) ? await profileCapture.mark(page) : undefined;
+  const marker = await profileCapture.mark(page);
   const pending = waitJSON(page, route, method, marker); await page.click(selector); const result = await pending;
   assert.equal(result.response.status(), expected, 'Browser ' + method + ' ' + route + ': ' + result.bytes.toString().slice(0, 500));
   noSecret(result.bytes.toString(), 'native browser response'); return result;
@@ -389,7 +376,7 @@ async function run() {
   await load(page, entryB); const warmB = await download(page, 'warm-operational-catalog', rowB.profile_text);
   check('Real browser create, rename, overwrite, delete, recreate and delayed actual native Load preserve exact stored profile bytes/u64, source provenance and volatile-secret boundaries');
   await missingHeaderStart(page, 'Warm catalog reapply'); await openSettings(page); await bindHeader(page); await save(page);
-  const starting = waitJSON(page, '/api/crawls/from-profile'); await page.click('#start-button'); const started = await starting; assert.equal(started.response.status(), 200); const jobId = started.value.id;
+  const startMarker = await profileCapture.mark(page); const starting = waitJSON(page, '/api/crawls/from-profile', 'POST', startMarker); await page.click('#start-button'); const started = await starting; assert.equal(started.response.status(), 200); const jobId = started.value.id;
   assert(jobId); await until(async () => { const job = (await api('/api/crawls/' + jobId)).value; assert.notEqual(job.status, 'failed', job.error); return job.status === 'completed'; }, 'owned catalog profile capture');
   const project = await native('/api/crawls/' + jobId + '/project.json'), report = JSON.parse(project.bytes); assert.equal(report.pages.length, 2);
   assert.deepEqual(new Set(report.pages.map(row => row.url)), new Set(config.seed_urls)); assert.equal(captureHits.length, 2); assert(captureHits.every(hit => hit.header_received));

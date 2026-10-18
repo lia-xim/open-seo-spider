@@ -1,0 +1,133 @@
+{
+  "original_artifact": {
+    "path": "artifacts/profile-owned-capture-candidate-independent-source-review-20261018.json",
+    "bytes": 7264,
+    "sha256": "97f174fa69c03ce3f49c5d8d74e0ba48fceceaca0a1a55fd4dd70d6d5cbcaf28"
+  },
+  "derivation": "Machine-local absolute paths sanitized; this is a derived document, not the original raw JSON byte stream.",
+  "qualification": "Historical source-only review before application. The later R4 Chromium/native results are separately bound.",
+  "evidence": {
+    "kind": "INDEPENDENT_CANDIDATE_SOURCE_REVIEW_ONLY",
+    "result": "SOURCE_APPROVED_ACTUAL_BROWSER_AND_NATIVE_NOT_RUN",
+    "reviewed_at_utc": "2026-10-18T21:20:30.1476899Z",
+    "candidates": [
+      {
+        "path": "artifacts/profile-owned-capture-candidate-20261018/web/verification/profile-response-capture.cjs",
+        "sha256": "cecf33851a5e9628f015a6a420b3f8a618800a256c3eea5c15bff8cd56f706fb",
+        "bytes": 19586
+      },
+      {
+        "path": "artifacts/profile-owned-capture-candidate-20261018/web/verification/profile-response-capture.test.cjs",
+        "sha256": "743e19cec036a9dfe9814292c40238cca56e49d029e606bc0d30ac481928e257",
+        "bytes": 32187
+      },
+      {
+        "path": "artifacts/profile-owned-capture-candidate-20261018/web/verification/profile-response-capture-browser.test.cjs",
+        "sha256": "d4c56c44d8234fc9a6e8e400a904a2392830046fec1093413a050497561d2685",
+        "bytes": 21864
+      },
+      {
+        "path": "artifacts/profile-owned-capture-candidate-20261018/web/verification/ui-config-profiles-live.cjs",
+        "sha256": "e7d0a8fc6cb1d30e14423cd5b553e807b4aa0ea28fba34e1c2bb726a0863f0cf",
+        "bytes": 59764
+      },
+      {
+        "path": "artifacts/profile-owned-capture-candidate-20261018/web/verification/ui-config-profile-catalog-live.cjs",
+        "sha256": "f5a93b63b2344bf714f02a8d4907b6b4acd9e514ac1448fbb5c9c8ef700c643b",
+        "bytes": 48305
+      }
+    ],
+    "current_originals": [
+      {
+        "path": "web/verification/profile-response-capture.cjs",
+        "sha256": "87221bd30f633d2e0cbc8cb270b1c5f285790980e11941adfd266a6a292b4104",
+        "matches_frozen_586_manifest": true
+      },
+      {
+        "path": "web/verification/profile-response-capture.test.cjs",
+        "sha256": "eaf9f4fd56055c72225be29774c61fc502cdd3835ac95ab65c68bfa0b8e4817a",
+        "matches_frozen_586_manifest": true
+      },
+      {
+        "path": "web/verification/profile-response-capture-browser.test.cjs",
+        "sha256": "0243b2ee58d8ac1516c117bad93678738b56d47ff07c45b6e732166a2a119847",
+        "matches_frozen_586_manifest": true
+      },
+      {
+        "path": "web/verification/ui-config-profiles-live.cjs",
+        "sha256": "3e3db8e992f81631befbfd0d81fbcb59f1b811924e753c96bae43cdfa5385efd",
+        "matches_frozen_586_manifest": true
+      },
+      {
+        "path": "web/verification/ui-config-profile-catalog-live.cjs",
+        "sha256": "82c9e44ebec62e401e7ef1debdfc1c2c31085e09ac68c3a8e0fc0ba81bd0f29f",
+        "matches_frozen_586_manifest": true
+      }
+    ],
+    "originals_not_modified_by_reviewer": true,
+    "original_586_frozen_master_remains_separate": true,
+    "source_review": [
+      "Default policy keeps only POST inspect and GET catalog list/item. All six extra owned operations remain excluded unless the explicit named third-argument policy is installed.",
+      "Owned policy is hardcoded to catalog create, replace, delete, rename, from-profile Start, and saved config-profile GET, plus original pure routes. It binds a canonical exact loopback HTTP(S) origin with explicit non-reserved port. Browser and Node share the same route specifications.",
+      "The original fetch is invoked once, synchronously, and its exact original Promise is returned. Observation clones the original Response before App fulfillment handlers without replacing or consuming that original Response. No HTTP replay, retry, fallback, or synthetic successful API response is introduced.",
+      "Request method, exact URL and raw UTF8 body SHA, actual status and headers, document epoch, awaited pre-action sequence mark, uniqueness, bounded stream bytes, clone-only timeout/cancellation, chunk transfer, and released retained buffers remain enforced. A real 409 body is captured as 409 without becoming success.",
+      "Both native driver integrations retain the previous SQL/CAS, exact bytes, DOM, effects, jobs, secrets, persistence, cold reopen, source bindings and negative assertions. All consumed JSON operations have explicit pre-action markers, including catalog CRUD, from-profile Start, selected saved profile GET and stale B inspection.",
+      "Driver metadata records status, headers, method, path, URL, request SHA/length and marker before awaiting body capture. Existing held actual native APIResponse body controls and actual attachment download plus unconditional pure-native oracles remain unchanged.",
+      "All twenty original Node controls remain; seven policy controls add default exclusions, original Promise/Response identity, exact owned operations, CAS409, wrong-route/origin/policy refusal, unsupported bodies and lowered byte bounds. Existing browser transport controls remain with four additional owned HTTP fixture subcontrols."
+    ],
+    "resolved_source_finding": {
+      "id": "second_fixture_server_initialization_cleanup",
+      "status": "CLOSED_IN_FINAL_BROWSER_CANDIDATE",
+      "evidence": "The final candidate creates the first server, registers t.after with optional second-server cleanup, and only then awaits creation of the second server. A second bind/reserved-port failure is covered by the first server cleanup."
+    },
+    "author_unit_history": [
+      {
+        "path": "artifacts/profile-owned-capture-candidate-20261018/node-candidate-r1.log",
+        "sha256": "e1fba750fd4a219558ae803721508b8eeba58ef375fa5f8cde117da45c94dc49",
+        "reported_result": "FAIL",
+        "passed": 26,
+        "failed": 1,
+        "observed_assertion": "expected aggregate bytes 0, actual 2",
+        "qualification": "Retained initial Node fixture failure; not an actual native/browser result."
+      },
+      {
+        "path": "artifacts/profile-owned-capture-candidate-20261018/node-candidate-r2.log",
+        "sha256": "0352ae24a396f635fd448811f916ffc00e0a4a26e269bd653ec0e3978f0e7f17",
+        "reported_result": "PASS",
+        "passed": 27,
+        "failed": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "duration_ms": 203.5328,
+        "executed_by": "candidate author",
+        "reviewer_action": "Read retained raw log; did not rerun."
+      }
+    ],
+    "ci_context": {
+      "commit": "25b3654d7b7efa285429f78e6fe9c985b0f29bcd",
+      "run": 39164257731,
+      "failed_operation": "first catalog Create A POST",
+      "request_sha256": "d3da32435c7aeb036c8dede35d607af38bb326a3455d1b6808d649fd9d2c6be7",
+      "observed_failure": "CDP Network.getResponseBody No data found",
+      "persisted_sql_association": "READ_ONLY_EVIDENCE_EXISTS",
+      "exact_wire_status_and_body": "NOT_PROVEN",
+      "root_cause": "NOT_PROVEN"
+    },
+    "actual_candidate_browser": "NOT_RUN",
+    "actual_candidate_native": "NOT_RUN",
+    "reviewer_reran_tests": false,
+    "reviewer_started_browser_or_native_or_cargo": false,
+    "reviewer_changed_original_sources": false,
+    "reviewer_staged_or_committed": false,
+    "limits": {
+      "response_bytes": 2097152,
+      "aggregate_bytes": 16777216,
+      "records": 64,
+      "request_bytes": 2097152,
+      "transfer_chunk_bytes": 32768,
+      "clone_read_ms": 10000,
+      "scope": "Unchanged test-fixture bounds, not product 64MiB, physical RSS, or arbitrary workflow guarantees."
+    },
+    "scope": "Only ignored complete replacement candidates reviewed. Source approval does not establish successful actual Chromium/native acceptance, stable broad-master regression, or public CI success."
+  }
+}

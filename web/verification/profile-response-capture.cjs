@@ -4,6 +4,27 @@
 const assert=require('node:assert/strict'),crypto=require('node:crypto');
 const ENGINE='open-seo-spider/test-profile-response-capture-v1';
 const KEY='__openSeoProfileResponseCaptureV1';
+const OWNED_POLICY='open-seo-spider/owned-profile-json-v1';
+const UUID='[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
+const PURE_ROUTES=Object.freeze([['POST','^/api/config-profiles/inspect$'],['GET','^/api/config-profile-catalog(?:/'+UUID+')?$']]);
+const OWNED_ROUTES=Object.freeze([['POST','^/api/config-profile-catalog$'],['PUT','^/api/config-profile-catalog/'+UUID+'$'],['DELETE','^/api/config-profile-catalog/'+UUID+'$'],['POST','^/api/config-profile-catalog/'+UUID+'/rename$'],['POST','^/api/crawls/from-profile$'],['GET','^/api/crawls/'+UUID+'/config-profile$']]);
+function policyFor(value){
+  if(value===undefined||value===null)return null;
+  assert(value&&typeof value==='object'&&!Array.isArray(value),'Explicit owned capture policy object required');
+  assert.deepEqual(Object.keys(value).sort(),['name','origin'],'Owned policy permits only name and exact origin');
+  assert.equal(value.name,OWNED_POLICY,'Unknown owned capture policy');assert.equal(typeof value.origin,'string','Owned origin must be a string');
+  const url=new URL(value.origin),port=Number(url.port);
+  assert(['http:','https:'].includes(url.protocol)&&['127.0.0.1','[::1]','localhost'].includes(url.hostname),'Owned policy requires an explicit loopback HTTP origin');
+  assert(url.origin===value.origin&&url.href===value.origin+'/'&&url.port&&port>1024&&![8787,8790].includes(port),'Expected canonical non-reserved owned origin without path, credentials, query or fragment');
+  return Object.freeze({name:OWNED_POLICY,origin:value.origin});
+}
+function routesFor(policy){return policy?[...PURE_ROUTES,...OWNED_ROUTES]:[...PURE_ROUTES];}
+function canCapture(method,url,policy){
+  const selected=policyFor(policy);if(typeof method!=='string'||typeof url!=='string')return false;
+  let location;try{location=new URL(url);}catch(_){return false;}
+  if(location.href!==url||location.href!==location.origin+location.pathname||selected&&location.origin!==selected.origin)return false;
+  return routesFor(selected).some(([verb,pattern])=>verb===method&&new RegExp(pattern).test(location.pathname));
+}
 const DEFAULT_LIMITS=Object.freeze({maxResponseBytes:2097152,maxAggregateBytes:16777216,maxRecords:64,maxRequestBytes:2097152,transferChunkBytes:32768,maxReadMs:10000});
 const installed=new WeakMap();
 const hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
@@ -12,15 +33,16 @@ function normalizedHeaders(value){const rows=Object.entries(value).map(([name,te
 
 // This exact function is installed in each real document and exercised by the
 // Node controls. It closes over no Node state and never issues a network call.
-function installInDocument({key,engine,limits}) {
+function installInDocument({key,engine,limits,policy,routes}) {
   // The page's lifecycle intentionally navigates through about:blank. Its
   // insecure/opaque crypto surface is not a profile API capture document.
   let documentUrl;try{documentUrl=new URL(location.href);}catch(_){return;}
   if(documentUrl.protocol!=='http:'&&documentUrl.protocol!=='https:')return;
+  if(policy&&documentUrl.origin!==policy.origin)return;
   if(Object.prototype.hasOwnProperty.call(globalThis,key))return;
   const originalFetch=globalThis.fetch,then=Promise.prototype.then,encoder=new TextEncoder();
   const epoch=crypto.randomUUID(),origin=location.origin;
-  const catalogPath=/^\/api\/config-profile-catalog(?:\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})?$/;
+  const routeMatchers=routes.map(([method,pattern])=>({method,pattern:new RegExp(pattern)}));
   const records=[];let sequence=0,used=0,peak=0,overflow=null;
   const digest=async bytes=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),value=>value.toString(16).padStart(2,'0')).join('');
   const reserve=bytes=>{if(bytes>limits.maxAggregateBytes-used)return false;used+=bytes;peak=Math.max(peak,used);return true;};
@@ -35,21 +57,21 @@ function installInDocument({key,engine,limits}) {
     if(typeof input!=='string')return null;
     let parsed;try{parsed=new URL(input,location.href);}catch(_){return null;}
     if(parsed.origin!==origin||parsed.href!==origin+parsed.pathname)return null;
-    const inspect=parsed.pathname==='/api/config-profiles/inspect',catalog=catalogPath.test(parsed.pathname),url=parsed.href;
-    if(!inspect&&!catalog)return null;
+    const url=parsed.href,matches=routeMatchers.filter(route=>route.pattern.test(parsed.pathname));
+    if(!matches.length)return null;
     const method=init&&Object.getOwnPropertyDescriptor(init,'method');
     if(method&&(!Object.prototype.hasOwnProperty.call(method,'value')||typeof method.value!=='string')||!method&&init&&'method' in init){
       return {url,method:null,error:'unsupported_request_shape'};
     }
     const verb=method?method.value.toUpperCase():'GET';
-    if(inspect&&verb!=='POST'||catalog&&verb!=='GET')return null;
+    if(!matches.some(route=>route.method===verb))return null;
     const body=init&&Object.getOwnPropertyDescriptor(init,'body');
     if(verb==='GET'){
       if(body&&(!Object.prototype.hasOwnProperty.call(body,'value')||body.value!==undefined&&body.value!==null)||!body&&init&&'body' in init)return {url,method:verb,error:'unsupported_request_body'};
       return {url,method:verb,body:''};
     }
-    if(!body||!Object.prototype.hasOwnProperty.call(body,'value')||typeof body.value!=='string')return {url,method:'POST',error:'unsupported_request_body'};
-    return {url,method:'POST',body:body.value};
+    if(!body||!Object.prototype.hasOwnProperty.call(body,'value')||typeof body.value!=='string')return {url,method:verb,error:'unsupported_request_body'};
+    return {url,method:verb,body:body.value};
   }
   function begin(shape){
     sequence++;
@@ -102,7 +124,7 @@ function installInDocument({key,engine,limits}) {
     catch(_){/* Observational argument handling must never alter original fetch. */}
     return promise;
   };
-  function summary(){return{engine,epoch,origin,sequence,limits:{...limits},aggregateBytes:used,peakAggregateBytes:peak,overflow:overflow?{...overflow}:null,records:records.map(record=>({sequence:record.sequence,method:record.method,url:record.url,requestSha256:record.requestSha256,requestBytes:record.requestBytes,status:record.status,responseSha256:record.responseSha256,responseBytes:record.responseBytes,phase:record.phase,error:record.error,headerNames:record.headers?Object.keys(record.headers):[]}))};}
+  function summary(){return{engine,epoch,origin,sequence,policy:policy?{...policy}:null,limits:{...limits},aggregateBytes:used,peakAggregateBytes:peak,overflow:overflow?{...overflow}:null,records:records.map(record=>({sequence:record.sequence,method:record.method,url:record.url,requestSha256:record.requestSha256,requestBytes:record.requestBytes,status:record.status,responseSha256:record.responseSha256,responseBytes:record.responseBytes,phase:record.phase,error:record.error,headerNames:record.headers?Object.keys(record.headers):[]}))};}
   function select(query){
     if(query.epoch!==epoch)return{state:'error',error:'document_epoch_changed'};
     if(!Number.isSafeInteger(query.afterSequence)||query.afterSequence<0||query.afterSequence>sequence)return{state:'error',error:'invalid_capture_mark'};
@@ -129,14 +151,15 @@ function installInDocument({key,engine,limits}) {
   Object.defineProperty(globalThis,key,{value:Object.freeze({mark:()=>({epoch,afterSequence:sequence}),summary,select,chunk,releaseCapture}),configurable:false,enumerable:false,writable:false});
 }
 
-async function install(page,options={}){const limits=limitsFor(options);if(installed.has(page)){assert.deepEqual(installed.get(page),limits,'Capture already installed with other fixture limits');return;}await page.addInitScript(installInDocument,{key:KEY,engine:ENGINE,limits});installed.set(page,limits);}
+async function install(page,options={},policy){const configuration={limits:limitsFor(options),policy:policyFor(policy)};if(installed.has(page)){assert.deepEqual(installed.get(page),configuration,'Capture already installed with other fixture limits or policy');return;}await page.addInitScript(installInDocument,{key:KEY,engine:ENGINE,...configuration,routes:routesFor(configuration.policy)});installed.set(page,configuration);}
 async function mark(page){return page.evaluate(key=>{const api=globalThis[key];if(!api)throw Error('Profile response capture is not installed in this document');return api.mark();},KEY);}
 async function history(page){return page.evaluate(key=>{const api=globalThis[key];if(!api)throw Error('Profile response capture is not installed in this document');return api.summary();},KEY);}
 async function capture(page,response,marker){
   assert(marker&&typeof marker.epoch==='string'&&Number.isSafeInteger(marker.afterSequence)&&marker.afterSequence>=0,'An awaited pre-action capture mark is required');
   const request=response.request(),method=request.method(),url=response.url();
-  const location=new URL(url),catalog=/^\/api\/config-profile-catalog(?:\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})?$/.test(location.pathname);
-  assert(method==='POST'&&location.pathname==='/api/config-profiles/inspect'||method==='GET'&&catalog,'Only allowlisted pure profile reads are captured');assert.equal(location.href,location.origin+location.pathname,'Expected no query, fragment or URL credentials');
+  const configuration=installed.get(page);assert(configuration,'Capture must first be installed on this page');
+  const location=new URL(url),policy=configuration.policy;
+  assert(canCapture(method,url,policy),'Only allowlisted profile reads or explicitly owned JSON operations are captured');
   const current=await history(page);assert.equal(location.origin,current.origin,'Expected same-origin capture');assert.equal(current.epoch,marker.epoch,'document_epoch_changed');
   const posted=typeof request.postDataBuffer==='function'?request.postDataBuffer():request.postData()===null?null:Buffer.from(request.postData(),'utf8');
   if(method==='GET')assert.equal(posted,null,'GET capture requires absent request data');else assert(posted!==null,'A raw string request body is required');
@@ -146,11 +169,11 @@ async function capture(page,response,marker){
   const handle=await page.waitForFunction(({key,query})=>{const api=globalThis[key];return!api||api.select(query).state!=='pending';},{key:KEY,query});if(handle?.dispose)await handle.dispose();
   const selected=await page.evaluate(({key,query})=>{const api=globalThis[key];if(!api)throw Error('document_epoch_changed');return api.select(query);},{key:KEY,query});
   assert.equal(selected.state,'ready','Browser profile capture refused: '+(selected.error||selected.state));
-  const limits=installed.get(page)||DEFAULT_LIMITS;assert(selected.responseBytes<=limits.maxResponseBytes,'Captured response exceeds fixture limit');const chunks=[];
+  const limits=configuration.limits;assert(selected.responseBytes<=limits.maxResponseBytes,'Captured response exceeds fixture limit');const chunks=[];
   for(let offset=0;offset<selected.responseBytes;){const item=await page.evaluate(({key,query})=>globalThis[key].chunk(query),{key:KEY,query:{epoch:marker.epoch,sequence:selected.sequence,offset,maxBytes:limits.transferChunkBytes}});assert.equal(item.epoch,marker.epoch);assert.equal(item.sequence,selected.sequence);assert.equal(item.offset,offset);const bytes=Buffer.from(item.base64,'base64');assert.equal(bytes.toString('base64'),item.base64);assert.equal(bytes.length,item.bytes);assert(bytes.length>0&&bytes.length<=limits.transferChunkBytes);chunks.push(bytes);offset+=bytes.length;assert(offset<=selected.responseBytes);}
   const bytes=Buffer.concat(chunks);assert.equal(bytes.length,selected.responseBytes);assert.equal(hash(bytes),selected.responseSha256,'Actual browser clone byte digest');
   const final=await page.evaluate(({key,query})=>globalThis[key].select(query),{key:KEY,query});assert.deepEqual(final,selected,'Capture changed during byte transfer');
   const released=await page.evaluate(({key,query})=>globalThis[key].releaseCapture(query),{key:KEY,query});assert.deepEqual(released,{epoch:marker.epoch,sequence:selected.sequence,responseSha256:selected.responseSha256,released:true});
-  return{bytes,status:selected.status,headers:selected.headers,evidence:{engine:ENGINE,source:'actual_browser_fetch_response_clone',epoch:marker.epoch,after_sequence:marker.afterSequence,sequence:selected.sequence,method,url,request_sha256:requestSha256,request_bytes:selected.requestBytes,response_sha256:selected.responseSha256,response_bytes:selected.responseBytes,headers_sha256:hash(Buffer.from(JSON.stringify(headers))),fixture_limits:{...limits},http_replay:false,buffer_released:true}};
+  return{bytes,status:selected.status,headers:selected.headers,evidence:{engine:ENGINE,source:'actual_browser_fetch_response_clone',epoch:marker.epoch,after_sequence:marker.afterSequence,sequence:selected.sequence,method,url,request_sha256:requestSha256,request_bytes:selected.requestBytes,response_sha256:selected.responseSha256,response_bytes:selected.responseBytes,headers_sha256:hash(Buffer.from(JSON.stringify(headers))),fixture_limits:{...limits},...(policy?{capture_policy:{...policy}}:{}),http_replay:false,buffer_released:true}};
 }
-module.exports={ENGINE,DEFAULT_LIMITS,install,mark,capture,history,installInDocument};
+module.exports={ENGINE,OWNED_POLICY,DEFAULT_LIMITS,install,mark,capture,history,canCapture,installInDocument};

@@ -301,6 +301,24 @@ async fn serve_with_mcp_files_ready_source_inner(
             }),
         )
         .route(
+            "/table-explorer.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+                    include_str!("../../../web/table-explorer.js"),
+                )
+            }),
+        )
+        .route(
+            "/table-explorer-ui.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+                    include_str!("../../../web/table-explorer-ui.js"),
+                )
+            }),
+        )
+        .route(
             "/screenshots.js",
             get(|| async {
                 (

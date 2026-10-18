@@ -12,6 +12,8 @@
   <script src="/dashboard-segments.js" defer></script>
   <script src="/config-profiles.js" defer></script>
   <script src="/screenshots.js" defer></script>
+  <script src="/table-explorer.js" defer></script>
+  <script src="/table-explorer-ui.js" defer></script>
   <script src="/app.js" defer></script>
 </head>
 <body>
@@ -112,6 +114,25 @@
         <div id="overview-view"></div>
         <div id="table-view" hidden>
           <div class="table-tools"><div class="search-field"><span aria-hidden="true">⌕</span><input id="table-search" type="search" aria-label="Ergebnisse durchsuchen" placeholder="URL oder Inhalt durchsuchen …"></div><select id="table-filter" aria-label="Ergebnisse filtern"><option value="all">Alle Ergebnisse</option></select><div id="result-count" class="result-count">0 Ergebnisse</div></div>
+          <details id="table-options" class="table-options">
+            <summary>Ansicht und Filter</summary>
+            <p>Alle Filter gelten gemeinsam (UND), auch für ausgeblendete Spalten. Textsuche berücksichtigt äquivalente Unicode-Schreibweisen. Leerer Text und fehlende Messwerte bleiben getrennt; 0 ist ein Wert.</p>
+            <form id="table-rule-form" class="table-rule-form" novalidate>
+              <label>Spalte<select id="table-rule-column"></select></label>
+              <label>Bedingung<select id="table-rule-op"></select></label>
+              <label id="table-rule-text-label">Text<input id="table-rule-text" type="text" maxlength="4096"></label>
+              <label id="table-rule-min-label" hidden>Untergrenze<input id="table-rule-min" type="text" inputmode="decimal" aria-describedby="table-explorer-error"></label>
+              <label id="table-rule-max-label" hidden>Obergrenze<input id="table-rule-max" type="text" inputmode="decimal" aria-describedby="table-explorer-error"></label>
+              <button id="table-rule-add" class="button small" type="submit">Filter hinzufügen</button>
+              <button id="table-rules-clear" class="button small" type="button" disabled>Filter aufheben</button>
+            </form>
+            <ul id="table-rules" class="table-rules" aria-label="Aktive zusätzliche Filter"></ul>
+            <div class="table-sort-options"><label>Sortieren nach<select id="table-sort-column"></select></label><label>Reihenfolge<select id="table-sort-direction"><option value="1">Aufsteigend</option><option value="-1">Absteigend</option></select></label><small>Werte zuerst, danach leere Texte, zuletzt fehlende Messwerte. Gleiche Werte behalten eine eindeutige Reihenfolge.</small></div>
+            <details class="table-columns"><summary>Spalten auswählen und anordnen</summary><p>Die Identitätsspalten bleiben vorne sichtbar. Der CSV-Export enthält alle gefilterten Zeilen mit diesen Spalten und den Befundinformationen.</p><ul id="table-column-list" aria-label="Spaltenreihenfolge und Sichtbarkeit"></ul></details>
+            <div class="table-column-actions"><button id="table-columns-save" class="button small" type="button" disabled>Spalten speichern</button><button id="table-columns-reset" class="button small" type="button" disabled>Spalten zurücksetzen</button><span id="table-column-storage-status" role="status" aria-live="polite"></span></div>
+            <p>Die Spaltenansicht wird nur in diesem Browser für den ausgewählten Crawl und Bereich gespeichert. Suchbegriffe, Filter und Sortierung werden nicht gespeichert.</p>
+            <p id="table-explorer-error" class="message error" role="alert" hidden></p>
+          </details>
           <div class="table-scroll" tabindex="0" aria-label="Ergebnistabelle, horizontal scrollbar"><table id="results-table"><thead></thead><tbody></tbody></table></div>
           <div class="table-pagination"><span id="page-label">Keine Ergebnisse</span><div><label for="page-size">Zeilen</label><select id="page-size"><option>25</option><option selected>50</option><option>100</option><option>250</option></select><button id="page-prev" class="button small" aria-label="Vorherige Seite" disabled>←</button><button id="page-next" class="button small" aria-label="Nächste Seite" disabled>→</button></div></div>
         </div>

@@ -1,0 +1,124 @@
+{
+  "proof": {
+    "original_artifact": {
+      "path": "artifacts/table-explorer-targeted-r4-20261018/proof.json",
+      "bytes": 1644,
+      "sha256": "7dbfb7ce3b4491b858d3fbe90ce873ba5c22c2a181754a0cab4125cc1659e30d"
+    },
+    "derivation": "Machine-local absolute paths sanitized; this is a derived document, not the original raw JSON byte stream.",
+    "qualification": "Fresh targeted four-suite invocation, separate from complete R4 full42.",
+    "evidence": {
+      "kind": "redesign_UI_E2E",
+      "results": [
+        {
+          "name": "custom-search",
+          "script": "ui-custom-search-live.cjs",
+          "kind": "live",
+          "code": 0,
+          "signal": null,
+          "timed_out": false,
+          "timeout_ms": 240000,
+          "duration_ms": 21096
+        },
+        {
+          "name": "configuration-profiles",
+          "script": "ui-config-profiles-live.cjs",
+          "kind": "owned-native",
+          "code": 0,
+          "signal": null,
+          "timed_out": false,
+          "timeout_ms": 240000,
+          "duration_ms": 9295
+        },
+        {
+          "name": "configuration-profile-catalog",
+          "script": "ui-config-profile-catalog-live.cjs",
+          "kind": "owned-native",
+          "code": 0,
+          "signal": null,
+          "timed_out": false,
+          "timeout_ms": 240000,
+          "duration_ms": 9941
+        },
+        {
+          "name": "screenshot-viewport",
+          "script": "ui-screenshot-viewport-live.cjs",
+          "kind": "owned-native",
+          "code": 0,
+          "signal": null,
+          "timed_out": false,
+          "timeout_ms": 240000,
+          "duration_ms": 18003
+        }
+      ],
+      "app_origin": "http://127.0.0.1:63222",
+      "shutdown": {
+        "code": 0,
+        "signal": null
+      },
+      "binary": "<workspace>\\target\\debug\\open-seo-spider.exe",
+      "binary_sha256": "4c4fcb839f39d2d6f98f3b77ddd9bdcc0d8a5f3613bdd2afb4edef2652f7cbbd",
+      "binary_unchanged": true,
+      "tracked_sources_unchanged": true,
+      "changed": [],
+      "complete": true,
+      "scope": "Isolated owned local app/data/renderer and synthetic fixtures. Mocked-API fixture suites are labelled separately from live native flows. No installed app or user crawl store used."
+    }
+  },
+  "receipts": [
+    {
+      "suite": "custom-search",
+      "receipt": {
+        "path": "artifacts/table-explorer-targeted-r4-20261018/custom-search/custom-search-live.json",
+        "bytes": 6023,
+        "sha256": "853d27103490e36a5bb0ce203c6cc3c818da084386390e44aea70c705c65b1d0"
+      },
+      "groups": 10
+    },
+    {
+      "suite": "configuration-profiles",
+      "receipt": {
+        "path": "artifacts/table-explorer-targeted-r4-20261018/configuration-profiles/config-profiles-1792360790386-8af5599d/ui-config-profiles-live.json",
+        "bytes": 138505,
+        "sha256": "76b3214d2df742953dcbe1b4b6426e6adfc9c615498677d6c1d60184d5af3fa1"
+      },
+      "groups": 10,
+      "negative_controls": 26,
+      "downloads": 6
+    },
+    {
+      "suite": "configuration-profile-catalog",
+      "receipt": {
+        "path": "artifacts/table-explorer-targeted-r4-20261018/configuration-profile-catalog/config-profile-catalog-1792360799696-5dd66526/ui-config-profile-catalog-live.json",
+        "bytes": 109652,
+        "sha256": "0058c3047fa8c6e503d1fc460211cdd342bc37d9d8145b9018f4533765246373"
+      },
+      "groups": 4,
+      "negative_controls": 7,
+      "downloads": 5
+    },
+    {
+      "suite": "screenshot-viewport",
+      "receipt": {
+        "path": "artifacts/table-explorer-targeted-r4-20261018/screenshot-viewport/screenshot-viewport-1792360809649-8516ebee/ui-screenshot-viewport-live.json",
+        "bytes": 17811,
+        "sha256": "77b847582f8335dcb7240923449ef03b2642c0e7997f49e7ae112a20aeb00a73"
+      },
+      "groups": 3,
+      "negative_controls": 10,
+      "downloads": 10
+    }
+  ],
+  "response_capture": {
+    "profiles": 49,
+    "catalog": 33,
+    "source": "actual_browser_fetch_response_clone",
+    "http_replay": false,
+    "current_Create_A": {
+      "status": 200,
+      "bytes": 337,
+      "sha256": "1af2383a9ef9303882ac57169973b5138dcf8a18777bf73182545831dd12dec4"
+    },
+    "historical_CI_Create_A_status": "NOT_PROVEN"
+  }
+}

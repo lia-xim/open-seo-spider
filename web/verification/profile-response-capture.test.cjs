@@ -16,7 +16,7 @@ class Page {
 }
 function response(bytes=Buffer.from('{"native":9007199254740993,"text":"雪 Ä"}'),status=200,headers={}){return new Response(bytes,{status,headers:{'content-type':'application/json','content-length':String(bytes.length),'cache-control':'no-store',...headers}});}
 function facade(real,body='{"profile_text":"{\\"x\\":9007199254740993}"}',extra={}){return{request:()=>({method:()=>extra.method||'POST',postData:()=>body,postDataBuffer:()=>body===null?null:Buffer.from(body)}),url:()=>extra.url||ROUTE,status:()=>extra.status||real.status,headers:()=>Object.fromEntries(real.headers),body(){throw Error('CDP body must never be called');},text(){throw Error('CDP text must never be called');},json(){throw Error('CDP JSON must never be called');}};}
-async function setup(fetch,limits){const page=new Page(fetch);await capture.install(page,limits);await page.goto();return page;}
+async function setup(fetch,limits,policy){const page=new Page(fetch);await capture.install(page,limits,policy);await page.goto();return page;}
 async function settle(page){await page.waitForFunction(()=>{const state=globalThis.__openSeoProfileResponseCaptureV1.summary();return state.records.every(record=>record.phase!=='pending');});return capture.history(page);}
 
 test('synchronous wrapper preserves exact Promise, Response and original rejection identities without another fetch',async()=>{
@@ -95,4 +95,61 @@ test('GET unsupported body or method shapes refuse without getter invocation, or
 test('GET selection binds URL and mark, rejects duplicate same-URL captures, status/header drift and old document epochs',async()=>{
  const pending=deferred();const page=await setup(url=>url===CATALOG?pending.promise:Promise.resolve(response(Buffer.from('item'))));page.env.fetch(CATALOG);const before=await capture.mark(page),item=await page.env.fetch(ITEM,{method:'GET'});await assert.rejects(capture.capture(page,facade(item,null,{url:ITEM,method:'GET',status:400}),before),/response_status_mismatch/);const changed=facade(item,null,{url:ITEM,method:'GET'});changed.headers=()=>({'x-wrong':'header'});await assert.rejects(capture.capture(page,changed,before),/response_headers_mismatch/);assert.equal((await capture.capture(page,facade(item,null,{url:ITEM,method:'GET'}),before)).bytes.toString(),'item');pending.resolve(response(Buffer.from('list')));await settle(page);
  let calls=0;const duplicate=await setup(()=>Promise.resolve(response(Buffer.from('same'),++calls===1?200:400))),mark=await capture.mark(duplicate),first=await duplicate.env.fetch(CATALOG);await duplicate.env.fetch(CATALOG,{method:'GET'});await assert.rejects(capture.capture(duplicate,facade(first,null,{url:CATALOG,method:'GET'}),mark),/ambiguous_capture_records/);await duplicate.goto();const fresh=await duplicate.env.fetch(CATALOG);await assert.rejects(capture.capture(duplicate,facade(fresh,null,{url:CATALOG,method:'GET'}),mark),/document_epoch_changed/);await settle(duplicate);assert.equal(calls,3);
+});
+
+const OWNED={name:capture.OWNED_POLICY,origin:URL_BASE};
+const SAVED=URL_BASE+'/api/crawls/10101010-1111-4222-8333-444444444444/config-profile';
+const EXTRA_ROUTES=[['POST',CATALOG],['PUT',ITEM],['DELETE',ITEM],['POST',ITEM+'/rename'],['POST',URL_BASE+'/api/crawls/from-profile'],['GET',SAVED]];
+
+test('owned routes require an explicit named third-argument policy and preserve the default pure allowlist',async()=>{
+ const page=await setup(()=>Promise.resolve(response()));let calls=0;
+ for(const [method,url]of EXTRA_ROUTES){assert.equal(capture.canCapture(method,url),false);const mark=await capture.mark(page),real=await page.env.fetch(url,{method,...(method==='GET'?{}:{body:'{}'})});calls++;await assert.rejects(capture.capture(page,facade(real,method==='GET'?null:'{}',{method,url}),mark),/Only allowlisted/);assert.equal(real.bodyUsed,false);}
+ assert.equal(calls,6);assert.equal((await capture.history(page)).sequence,0);assert.equal((await capture.history(page)).policy,null);
+ for(const [method,url]of [['POST',ROUTE],['GET',CATALOG],['GET',ITEM]])assert.equal(capture.canCapture(method,url),true);
+});
+
+test('each explicitly owned operation captures exactly one unchanged Promise and Response including a 409 body',async()=>{
+ const calls=[],bytes=Buffer.from('{"owned":"雪","revision":"9007199254740993"}');
+ const page=await setup((...args)=>{const real=response(bytes,args[1].method==='DELETE'?409:200,{'x-owned-cas':'original'}),promise=Promise.resolve(real);calls.push({args,real,promise});return promise;},{transferChunkBytes:11},OWNED);
+ for(const [index,[method,url]]of EXTRA_ROUTES.entries()){
+  assert(capture.canCapture(method,url,OWNED));const body=method==='GET'?null:JSON.stringify({operation:index,header_values:{'X-Owned':'never-save-owned-secret'},profile_text:'{"delay_ms":9007199254740993}'}),init=Object.freeze({method,...(body===null?{}:{body})}),before=await capture.mark(page),promise=page.env.fetch(url,init),call=calls.at(-1);
+  assert.equal(promise,call.promise);assert.equal(call.args[0],url);assert.equal(call.args[1],init);const app=promise.then(async value=>{assert.equal(value,call.real);assert.equal(value.bodyUsed,false);return Buffer.from(await value.arrayBuffer());});
+  const actual=await capture.capture(page,facade(call.real,body,{method,url}),before);assert.deepEqual(actual.bytes,bytes);assert.deepEqual(await app,bytes);assert.equal(actual.status,method==='DELETE'?409:200);assert.equal(actual.headers['x-owned-cas'],'original');assert.deepEqual(actual.evidence.capture_policy,OWNED);assert.equal(actual.evidence.method,method);assert.equal(actual.evidence.url,url);assert.equal(actual.evidence.sequence,before.afterSequence+1);assert.equal(actual.evidence.request_sha256,sha(Buffer.from(body??'')));assert.equal(actual.evidence.request_bytes,Buffer.byteLength(body??''));assert.equal(actual.evidence.http_replay,false);assert.equal(actual.evidence.buffer_released,true);
+ }
+ const state=await capture.history(page);assert.equal(calls.length,EXTRA_ROUTES.length);assert.equal(state.sequence,EXTRA_ROUTES.length);assert.equal(state.aggregateBytes,0);assert.deepEqual(state.policy,OWNED);assert(state.records.every(row=>row.phase==='released'));assert(!JSON.stringify(state).includes('never-save-owned-secret'));
+});
+
+test('owned policy is exact, canonical, loopback-scoped and included in idempotent installation comparison',async()=>{
+ const page=new Page(()=>Promise.resolve(response()));await capture.install(page,{},OWNED);await capture.install(page,{}, {...OWNED});assert.equal(page.scripts.length,1);
+ await assert.rejects(capture.install(page));await assert.rejects(capture.install(page,{}, {...OWNED,origin:'http://127.0.0.1:5555'}));await assert.rejects(capture.install(page,{maxRecords:1},OWNED));
+ const invalid=[{}, {name:'other',origin:URL_BASE},{...OWNED,extra:true},{...OWNED,origin:URL_BASE+'/'},{...OWNED,origin:URL_BASE+'?'},{...OWNED,origin:'http://user:pass@127.0.0.1:4444'},{...OWNED,origin:'http://127.0.0.1:8787'},{...OWNED,origin:'http://127.0.0.1:8790'},{...OWNED,origin:'http://elsewhere.invalid:4444'},{...OWNED,origin:'http://127.0.0.1'},{...OWNED,origin:URL_BASE+'/path'}];
+ for(const policy of invalid){const next=new Page(()=>Promise.resolve(response()));await assert.rejects(capture.install(next,{},policy));assert.equal(next.scripts.length,0);}
+ await assert.rejects(capture.install(new Page(()=>Promise.resolve(response())),OWNED));
+});
+
+test('owned matcher excludes wrong origins, methods, noncanonical UUIDs, path suffixes and empty query/fragment delimiters',async()=>{
+ let calls=0,reads=0;const page=await setup(()=>{calls++;return Promise.resolve(response());},{},OWNED);
+ const cases=[['PATCH',ITEM],['POST',ITEM],['DELETE',CATALOG],['PUT',ITEM+'/rename'],['POST',CATALOG+'/invalid'],['POST',CATALOG+'/'],['POST',ITEM.replace('10101010','AAAAAAAA')+'/rename'],['POST',CATALOG+'?'],['POST',CATALOG+'#'],['POST',CATALOG+'?x=1'],['GET',SAVED+'/'],['GET',SAVED+'#'],['POST',URL_BASE+'/api/unrelated'],['POST',CATALOG.replace(':4444',':5555')],['POST','http://user:pass@127.0.0.1:4444/api/config-profile-catalog']];
+ for(const [method,url]of cases){assert.equal(capture.canCapture(method,url,OWNED),false);const init={method};Object.defineProperty(init,'body',{get(){reads++;throw Error('Excluded request body getter');}});await page.env.fetch(url,init);}
+ assert.equal(calls,cases.length);assert.equal(reads,0);assert.equal((await capture.history(page)).sequence,0);
+});
+
+test('owned nonmatching documents never install a wrapper and every accepted origin return gets a fresh epoch',async()=>{
+ const real=response(),promise=Promise.resolve(real),original=()=>promise,page=await setup(original,{},OWNED),first=await capture.mark(page);
+ await page.goto('http://127.0.0.1:5555/');assert.equal(page.env.fetch,original);await assert.rejects(capture.mark(page),/not installed/);assert.equal(page.env.fetch('/api/config-profile-catalog',{method:'POST',body:'{}'}),promise);assert.equal(await promise,real);assert.equal(real.bodyUsed,false);
+ await page.goto();const current=await capture.mark(page);assert.notEqual(current.epoch,first.epoch);assert.equal(current.afterSequence,0);const found=await page.env.fetch(CATALOG,{method:'POST',body:'{}'});await assert.rejects(capture.capture(page,facade(found,'{}',{url:CATALOG,method:'POST'}),first),/document_epoch_changed/);assert((await capture.capture(page,facade(found,'{}',{url:CATALOG,method:'POST'}),current)).bytes.length);
+});
+
+test('owned CAS errors bind exact status, headers, raw body and unique sequence rather than treating errors as capture success',async()=>{
+ const real=response(Buffer.from('{"error":"actual_owned_conflict"}'),409),page=await setup(()=>Promise.resolve(real),{},OWNED),before=await capture.mark(page),body='{"expected_revision":"9007199254740993"}';page.env.fetch(ITEM,{method:'PUT',body});
+ await assert.rejects(capture.capture(page,facade(real,body,{url:ITEM,method:'PUT',status:200}),before),/response_status_mismatch/);
+ const wrong=facade(real,body,{url:ITEM,method:'PUT'});wrong.headers=()=>({'x-wrong':'header'});await assert.rejects(capture.capture(page,wrong,before),/response_headers_mismatch/);
+ await assert.rejects(capture.capture(page,facade(real,body+' ',{url:ITEM,method:'PUT'}),before),/matching_capture_not_found/);
+ const actual=await capture.capture(page,facade(real,body,{url:ITEM,method:'PUT'}),before);assert.equal(actual.status,409);assert.equal(actual.bytes.toString(),'{"error":"actual_owned_conflict"}');assert.equal((await capture.history(page)).aggregateBytes,0);assert.equal(real.bodyUsed,false);
+ let calls=0;const duplicate=await setup(()=>Promise.resolve(response(Buffer.from('same'),++calls===1?200:409)),{},OWNED),mark=await capture.mark(duplicate),first=await duplicate.env.fetch(ITEM,{method:'DELETE',body:'{}'});await duplicate.env.fetch(ITEM,{method:'DELETE',body:'{}'});await assert.rejects(capture.capture(duplicate,facade(first,'{}',{url:ITEM,method:'DELETE'}),mark),/ambiguous_capture_records/);assert.equal(calls,2);
+});
+
+test('owned unsupported request shapes and lowered byte limits refuse observation without mutating the original request or response',async()=>{
+ let getters=0;for(const init of [{method:'PUT',body:new Uint8Array([1])},{method:'PUT',get body(){getters++;throw Error('Do not reread body getter');}}]){const real=response(),promise=Promise.resolve(real),page=await setup(()=>promise,{},OWNED),mark=await capture.mark(page);assert.equal(page.env.fetch(ITEM,init),promise);await assert.rejects(capture.capture(page,facade(real,'{}',{url:ITEM,method:'PUT'}),mark),/unsupported_request_body/);assert.equal(real.bodyUsed,false);}
+ assert.equal(getters,0);const real=response(),page=await setup(()=>Promise.resolve(real),{maxResponseBytes:4},OWNED),mark=await capture.mark(page);assert.equal(await page.env.fetch(CATALOG,{method:'POST',body:'{}'}),real);await assert.rejects(capture.capture(page,facade(real,'{}',{url:CATALOG,method:'POST'}),mark),/response_byte_limit/);assert.equal(real.bodyUsed,false);await page.waitForFunction(()=>globalThis.__openSeoProfileResponseCaptureV1.summary().aggregateBytes===0);assert.equal((await capture.history(page)).aggregateBytes,0);assert(Buffer.from(await real.arrayBuffer()).length);
 });

@@ -54,6 +54,7 @@ const suites = [
   ['configuration-profiles', 'ui-config-profiles-live.cjs', 'owned-native'],
   ['configuration-profile-catalog', 'ui-config-profile-catalog-live.cjs', 'owned-native'],
   ['screenshot-viewport', 'ui-screenshot-viewport-live.cjs', 'owned-native'],
+  ['table-explorer', 'ui-table-explorer-live.cjs', 'owned-native'],
 ];
 const args = process.argv.slice(2);
 assert(args.length === 0 || (args.length === 2 && args[0] === '--only'), 'Usage: node scripts/ui-e2e.mjs [--only name,name]');

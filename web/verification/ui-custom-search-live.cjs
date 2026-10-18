@@ -76,7 +76,10 @@ async function download(page,button,path){
 }
 async function table(page,observations){
   await page.click('[data-section="custom-search"]');
-  const expected=observations.map(row=>[row.url||row.document_url||observations[0]?.document_url,row.rule_name,row.method,sourceLabels[row.source],statusLabels[row.status],row.status==='complete'&&row.count!=null?String(row.count):'—',String(row.matches_observed),String(row.matches.length),row.evidence_complete?'Ja':'Nein']).sort((a,b)=>a[0].localeCompare(b[0],'de',{numeric:true,sensitivity:'base'}));
+  // Default URL sorting resolves ties by rule/source identity, then original occurrence.
+  const expected=observations.map((row,index)=>({row,index,url:row.url||row.document_url||observations[0]?.document_url}))
+    .sort((a,b)=>a.url.localeCompare(b.url,'de',{numeric:true,sensitivity:'base'})||a.row.rule_name.localeCompare(b.row.rule_name,'de',{numeric:true,sensitivity:'variant'})||a.row.source.localeCompare(b.row.source,'de',{numeric:true,sensitivity:'variant'})||a.index-b.index)
+    .map(({row,url})=>[url,row.rule_name,row.method,sourceLabels[row.source],statusLabels[row.status],row.status==='complete'&&row.count!=null?String(row.count):'—',String(row.matches_observed),String(row.matches.length),row.evidence_complete?'Ja':'Nein']);
   await page.waitForFunction(expected=>{const rows=[...document.querySelectorAll('#results-table tr[data-row]')];return rows.length===expected.length&&JSON.stringify(rows.map(row=>[...row.querySelectorAll('td')].slice(0,9).map(cell=>cell.textContent.trim())))===JSON.stringify(expected);},expected);
   assert.equal(await page.locator('#results-table tr[data-row]').count(),expected.length);
 }

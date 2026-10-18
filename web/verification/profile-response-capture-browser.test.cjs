@@ -9,6 +9,7 @@ const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const route='/api/config-profiles/inspect';
 const originalBytes=Buffer.from(' \n{"transport_fixture":"雪 – exact UTF-8","u64":9007199254740993,"escaped":"quote \\\" and slash \\\\"}\r\n');
 const alternateBytes=Buffer.concat([originalBytes,Buffer.from('\t')]);
+const conflictBytes=Buffer.from('{"error":"owned_transport_CAS_conflict"}');
 function deferred(){let resolve;const promise=new Promise(done=>resolve=done);return {promise,resolve};}
 function protectedResponse(response,counter){return new Proxy(response,{get(target,key){if(['body','text','json'].includes(key))return ()=>{counter.calls++;throw Error('CDP response body must never be used');};const value=Reflect.get(target,key,target);return typeof value==='function'?value.bind(target):value;}});}
 async function ownedSite(){
@@ -19,12 +20,12 @@ async function ownedSite(){
     const chunks=[];for await(const chunk of request)chunks.push(chunk);const body=Buffer.concat(chunks).toString();
     requests.push({method:request.method,url:request.url,body,sha256:sha(Buffer.from(body))});
     const mode=body?JSON.parse(body).case:'get';
-    response.writeHead(mode==='association-b'?201:200,{'content-type':'application/json; charset=utf-8','x-owned-transport':'actual-http-fixture'});
+    response.writeHead(mode==='association-b'?201:mode==='owned-conflict'?409:200,{'content-type':'application/json; charset=utf-8','x-owned-transport':'actual-http-fixture'});
     if(['abort','error','stall'].includes(mode)){
       const closed=deferred();response.once('close',()=>closed.resolve());streams.set(mode,{response,closed:closed.promise});
       response.write(mode==='stall'?originalBytes.subarray(0,5):'{"incomplete":');response.flushHeaders();arrivals.get(mode)?.resolve();return;
     }
-    response.end(mode==='association-b'?alternateBytes:originalBytes);
+    response.end(mode==='association-b'?alternateBytes:mode==='owned-conflict'?conflictBytes:originalBytes);
   });
   await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});
   if([8787,8790].includes(server.address().port)){await new Promise(resolve=>server.close(resolve));throw Error('Owned fixture unexpectedly bound a reserved application port');}
@@ -33,7 +34,8 @@ async function ownedSite(){
     async close(){for(const stream of streams.values())stream.response.destroy();server.closeAllConnections();await new Promise(resolve=>server.close(resolve));}};
 }
 async function beginFetch(page,body,{method='POST',url=route,abort=false,implicit=false}={}){
-  const responsePending=page.waitForResponse(response=>new URL(response.url()).pathname===url&&response.request().method()===method);
+  const target=new URL(url,page.url());target.hash='';
+  const responsePending=page.waitForResponse(response=>response.url()===target.href&&response.request().method()===method);
   await page.evaluate(({body,method,url,abort,implicit})=>{
     const controller=new AbortController();window.ownedController=controller;
     const pending=implicit?fetch(url):fetch(url,{method,headers:method==='GET'?{}:{'content-type':'application/json'},body:method==='GET'?undefined:body,...(abort?{signal:controller.signal}:{})});
@@ -51,7 +53,7 @@ async function boundEvidence(page,record,mark,body,site,expected=originalBytes,s
   assert.deepEqual(record.bytes,expected);assert.equal(record.status,status);assert.equal(record.headers['x-owned-transport'],'actual-http-fixture');
   assert.deepEqual(evidence,{engine:capture.ENGINE,source:'actual_browser_fetch_response_clone',epoch:mark.epoch,after_sequence:mark.afterSequence,
     sequence:evidence.sequence,method,url:site.origin+path,request_sha256:sha(Buffer.from(body)),request_bytes:Buffer.byteLength(body),
-    response_sha256:sha(expected),response_bytes:expected.length,headers_sha256:sha(Buffer.from(JSON.stringify(record.headers))),fixture_limits:history.limits,http_replay:false,buffer_released:true});
+    response_sha256:sha(expected),response_bytes:expected.length,headers_sha256:sha(Buffer.from(JSON.stringify(record.headers))),fixture_limits:history.limits,...(history.policy?{capture_policy:history.policy}:{}),http_replay:false,buffer_released:true});
   assert(Number.isSafeInteger(evidence.sequence)&&evidence.sequence>mark.afterSequence);assert.equal(history.engine,capture.ENGINE);assert.equal(history.epoch,mark.epoch);assert.equal(history.origin,site.origin);
   const actual=history.records.filter(item=>item.sequence===evidence.sequence);assert.equal(actual.length,1);
   assert.deepEqual(actual[0],{sequence:evidence.sequence,method,url:site.origin+path,requestSha256:sha(Buffer.from(body)),requestBytes:Buffer.byteLength(body),status,
@@ -158,4 +160,43 @@ test('actual Chromium Response.clone profile transport controls (not native prod
     await page.goto('about:blank');assert.deepEqual(pageErrors,[]);await page.close();assert.deepEqual(pageErrors,[]);
   });
   assert.equal(site.requests.length,15,'Exact owned API request count; no recorder HTTP replay');assert.equal(site.documents.length,6,'Only initial/reload/two bounded controls/two returns from about:blank');assert.equal(cdp.calls,0);assert.deepEqual(pageErrors,[]);
+});
+
+
+// All original pure-policy controls above remain. This additional owned HTTP
+// fixture verifies only opt-in transport; no native catalog/job success is implied.
+// Exact Promise/Response reference identity is additionally asserted by VM tests.
+test('actual Chromium explicitly owned JSON mutation capture remains observational and origin bound',{timeout:60000},async t=>{
+ const executable=process.env.OPEN_SEO_BROWSER_PATH||process.env.SPIDER_CHROME;assert(executable&&fs.statSync(executable).isFile(),'Explicit pinned Chromium required');
+ const site=await ownedSite();let other,browser,context;const pageErrors=[],cdp={calls:0};
+ t.after(async()=>{try{if(context)await context.close();}finally{try{if(browser)await browser.close();}finally{await Promise.all([site.close(),...(other?[other.close()]:[])]);}}});
+ other=await ownedSite();
+ browser=await chromium.launch({headless:true,executablePath:executable});context=await browser.newContext();context.on('page',page=>page.on('pageerror',error=>pageErrors.push({url:page.url(),message:error.message})));
+ const catalog='/api/config-profile-catalog',item=catalog+'/10101010-1111-4222-8333-444444444444',saved='/api/crawls/10101010-1111-4222-8333-444444444444/config-profile';
+ const routes=[['POST',catalog],['PUT',item],['DELETE',item],['POST',item+'/rename'],['POST','/api/crawls/from-profile'],['GET',saved]],policy={name:capture.OWNED_POLICY,origin:site.origin};
+ const pure=await context.newPage();await capture.install(pure);await pure.goto(site.origin);
+ await t.test('default pure capture still excludes every extra operation while actual HTTP and original responses succeed once',async()=>{
+  const before=site.requests.length;
+  for(const [method,path]of routes){const mark=await capture.mark(pure),body=method==='GET'?'':JSON.stringify({case:'owned-default-excluded',path}),response=await beginFetch(pure,body,{method,url:path});await original(pure);assert.equal(capture.canCapture(method,site.origin+path),false);await assert.rejects(capture.capture(pure,protectedResponse(response,cdp),mark),/Only allowlisted/);}
+  assert.equal(site.requests.length,before+routes.length);assert.equal((await capture.history(pure)).sequence,0);assert.equal((await capture.history(pure)).policy,null);assert.equal(cdp.calls,0);
+ });
+ const owned=await context.newPage();await capture.install(owned,{},policy);await owned.goto(site.origin);
+ await t.test('explicit owned policy captures each exact operation plus409 with full byte/header/status/request binding and no replay',async()=>{
+  const before=site.requests.length,cases=[...routes.map(([method,path])=>({method,path,mode:'owned-success',status:200,bytes:originalBytes})),{method:'PUT',path:item,mode:'owned-conflict',status:409,bytes:conflictBytes}];
+  for(const [index,{method,path,mode,status,bytes}]of cases.entries()){
+   const body=method==='GET'?'':JSON.stringify({case:mode,operation:index,header_values:{'X-Owned':'private-input-sentinel'}}),mark=await capture.mark(owned),count=site.requests.length,response=await beginFetch(owned,body,{method,url:path});assert(capture.canCapture(method,site.origin+path,policy));
+   const record=await capture.capture(owned,protectedResponse(response,cdp),mark);await original(owned,bytes,status);await boundEvidence(owned,record,mark,body,site,bytes,status,{method,path});assert.equal(site.requests.length,count+1);assert.deepEqual(record.evidence.capture_policy,policy);assert.equal(cdp.calls,0);
+  }
+  const history=await capture.history(owned);assert.equal(site.requests.length,before+cases.length);assert.deepEqual(history.policy,policy);assert.equal(history.aggregateBytes,0);assert(history.records.every(row=>row.phase==='released'));assert(!JSON.stringify(history).includes('private-input-sentinel'));
+ });
+ await t.test('wrong methods, path shapes and query or fragment requests cannot become successful owned captures',async()=>{
+  const before=site.requests.length,history=await capture.history(owned),cases=[['PATCH',item],['POST',item],['POST',catalog+'?wrong=1'],['POST',catalog+'#']];
+  for(const [method,path]of cases){const mark=await capture.mark(owned),response=await beginFetch(owned,JSON.stringify({case:'owned-wrong-route'}),{method,url:path});await original(owned);assert.equal(capture.canCapture(method,site.origin+path,policy),false);await assert.rejects(capture.capture(owned,protectedResponse(response,cdp),mark));}
+  assert.equal(site.requests.length,before+cases.length);assert.equal((await capture.history(owned)).sequence,history.sequence);assert.equal(cdp.calls,0);
+ });
+ await t.test('a different owned HTTP document is not wrapped by a policy for the first origin',async()=>{
+  const foreign=await context.newPage();await capture.install(foreign,{},policy);await foreign.goto(other.origin);await assert.rejects(capture.mark(foreign),/not installed/);
+  const before=other.requests.length,response=await beginFetch(foreign,JSON.stringify({case:'owned-other-origin'}),{method:'POST',url:catalog});await original(foreign);assert.equal(other.requests.length,before+1);assert.equal(capture.canCapture('POST',other.origin+catalog,policy),false);assert.equal(response.status(),200);await foreign.goto('about:blank');await foreign.close();
+ });
+ assert.equal(site.requests.length,17,'Six excluded, six owned+one409 and four wrong-route requests, each exactly once');assert.equal(other.requests.length,1);assert.equal(site.documents.length,2);assert.equal(other.documents.length,1);assert.equal(cdp.calls,0);assert.deepEqual(pageErrors,[]);await pure.goto('about:blank');await owned.goto('about:blank');assert.deepEqual(pageErrors,[]);
 });

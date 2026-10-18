@@ -39,7 +39,7 @@ const server = http.createServer(async (req, res) => {
     if (suffix === 'fragments') return send(res, { enabled: false, observations: [] });
     if (suffix === 'parent.json') { parentDownloads.push(id); return send(res, { exact_parent: job.operation.parent.job_id }); }
   }
-  const file = url.pathname === '/' ? 'index.html' : url.pathname.slice(1); if (!['index.html', 'app.js','dashboard-segments.js','config-profiles.js','screenshots.js', 'list-import.js', 'styles.css', 'saved-comparison.js'].includes(file)) { res.statusCode = 404; return res.end(); }
+  const file = url.pathname === '/' ? 'index.html' : url.pathname.slice(1); if (!['index.html', 'app.js','dashboard-segments.js','config-profiles.js','screenshots.js','table-explorer.js','table-explorer-ui.js', 'list-import.js', 'styles.css', 'saved-comparison.js'].includes(file)) { res.statusCode = 404; return res.end(); }
   res.setHeader('content-type', file.endsWith('.js') ? 'text/javascript' : file.endsWith('.css') ? 'text/css' : 'text/html'); res.end(fs.readFileSync(path.join(web, file)));
 });
 const delay = ms => new Promise(done => setTimeout(done, ms));

@@ -1,0 +1,719 @@
+{
+  "result": "PASS_LOCAL_TABLE_EXPLORER_AND_FORTY_TWO_SUITE_REGRESSION",
+  "revision": "R4",
+  "recorded_at": "2026-10-18T22:32:15.521Z",
+  "local_feature_acceptance": "PASS",
+  "one_complete_UI_invocation": true,
+  "stable_release_ready": false,
+  "public_CI_for_new_source": "NOT_RUN",
+  "normal_binary_sha256": "4c4fcb839f39d2d6f98f3b77ddd9bdcc0d8a5f3613bdd2afb4edef2652f7cbbd",
+  "normal_binary_bytes": 90040832,
+  "source": {
+    "manifest": {
+      "path": "artifacts/table-explorer-r4-20261018-inputs.json",
+      "bytes": 103614,
+      "sha256": "49a73002ee548531ee78231265002dcc95edcd45becc3e03bb8c3a1336a133e6"
+    },
+    "inputs": 586,
+    "current_raw_match": true,
+    "R3_delta": {
+      "path": "artifacts/table-explorer-r4-20261018-source-delta.json",
+      "bytes": 3544,
+      "sha256": "c557e925eec88ba839866a89bbd7de536ce506913f36db1ab369ca3342401413"
+    },
+    "changed_paths": [
+      "web/verification/profile-response-capture-browser.test.cjs",
+      "web/verification/profile-response-capture.cjs",
+      "web/verification/profile-response-capture.test.cjs",
+      "web/verification/ui-config-profile-catalog-live.cjs",
+      "web/verification/ui-config-profiles-live.cjs",
+      "web/verification/ui-custom-search-live.cjs"
+    ]
+  },
+  "rust": {
+    "passed": 1831,
+    "failed": 0,
+    "ignored": 5,
+    "blocks": 17
+  },
+  "rust_provenance": {
+    "execution": "R3 ordinary workspace",
+    "manifest": {
+      "path": "artifacts/table-explorer-r3-20261018-inputs.json",
+      "bytes": 103619,
+      "sha256": "0cc5bf061469049ed93ea06289d1bb310469928c50cf9f9a2cfad0cf0738ba31"
+    },
+    "gate": {
+      "label": "rust-workspace",
+      "command": "cargo",
+      "args": [
+        "test",
+        "--workspace",
+        "--locked",
+        "--offline",
+        "--",
+        "--test-threads=2"
+      ],
+      "started_at": "2026-10-18T21:07:46.319Z",
+      "duration_ms": 969081,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/table-explorer-r3-20261018-rust-workspace.log",
+      "log_bytes": 209613,
+      "log_sha256": "8da8e6058d62a7098302ae22b7e47f54c1dc8ccf045d336eabd324bae8103a84",
+      "frozen_inputs_sha256": "0cc5bf061469049ed93ea06289d1bb310469928c50cf9f9a2cfad0cf0738ba31",
+      "source_inputs_unchanged": true
+    },
+    "product_and_native_sources_unchanged": true
+  },
+  "state": {
+    "passed": 201,
+    "failed": 0,
+    "source": "R4 current controls"
+  },
+  "semantic": {
+    "groups": 40,
+    "actual_browser": false,
+    "actual_engine": false
+  },
+  "capture_browser": {
+    "reported": 17,
+    "parents": 2,
+    "subcontrols": 15,
+    "source": "R4 actual Chromium HTTP fixture, not native product acceptance"
+  },
+  "renderer_rust": {
+    "passed": 4,
+    "executed": [
+      "live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness",
+      "live_browser_worker_executes_javascript_for_core_crawl",
+      "live_browser_worker_pause_drains_render_and_retains_rendered_discoveries",
+      "live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion"
+    ],
+    "separate_from_ordinary_ignored": true
+  },
+  "ui": {
+    "suite_count": 42,
+    "complete": true,
+    "results": [
+      {
+        "name": "dashboard",
+        "script": "ui-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 8886
+      },
+      {
+        "name": "pause-controls",
+        "script": "ui-crawl-control-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 6955
+      },
+      {
+        "name": "recrawl-controls",
+        "script": "ui-selected-recrawl-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5903
+      },
+      {
+        "name": "policy-controls",
+        "script": "ui-policy-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 7412
+      },
+      {
+        "name": "content-controls",
+        "script": "ui-content-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 23035
+      },
+      {
+        "name": "resource-controls",
+        "script": "ui-resource-discovery-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 15550
+      },
+      {
+        "name": "resource-ledger",
+        "script": "ui-resource-ledger-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 9475
+      },
+      {
+        "name": "resource-contract",
+        "script": "ui-resource-contract-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 11165
+      },
+      {
+        "name": "comparison-controls",
+        "script": "ui-saved-comparison-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4440
+      },
+      {
+        "name": "tool-navigation",
+        "script": "ui-tools-navigation-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4278
+      },
+      {
+        "name": "rendered-crawl",
+        "script": "ui-renderer-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 6615
+      },
+      {
+        "name": "dom-capture",
+        "script": "ui-dom-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 14479
+      },
+      {
+        "name": "accessibility-review",
+        "script": "ui-accessibility-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 20134
+      },
+      {
+        "name": "resources",
+        "script": "ui-resource-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 8740
+      },
+      {
+        "name": "robots",
+        "script": "ui-robots-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 1882
+      },
+      {
+        "name": "serp",
+        "script": "ui-serp-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 1558
+      },
+      {
+        "name": "list-import",
+        "script": "ui-list-import-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5422
+      },
+      {
+        "name": "pause-resume",
+        "script": "ui-crawl-control-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 16357
+      },
+      {
+        "name": "selected-recrawl",
+        "script": "ui-selected-recrawl-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 8587
+      },
+      {
+        "name": "policy",
+        "script": "ui-policy-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4401
+      },
+      {
+        "name": "content",
+        "script": "ui-content-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 9157
+      },
+      {
+        "name": "resource-discovery",
+        "script": "ui-resource-discovery-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 9064
+      },
+      {
+        "name": "resource-persistence",
+        "script": "ui-resource-contract-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 6972
+      },
+      {
+        "name": "saved-spelling",
+        "script": "ui-spelling-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 2675
+      },
+      {
+        "name": "link-workflows",
+        "script": "ui-link-workflows-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 3631
+      },
+      {
+        "name": "api-enrichment",
+        "script": "ui-enrichment-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 1477
+      },
+      {
+        "name": "directory-tree",
+        "script": "ui-directory-tree-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5483
+      },
+      {
+        "name": "saved-ngrams",
+        "script": "ui-ngrams-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4998
+      },
+      {
+        "name": "saved-segments",
+        "script": "ui-segments-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4781
+      },
+      {
+        "name": "dashboard-segments",
+        "script": "ui-dashboard-segments-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 900000,
+        "duration_ms": 348512
+      },
+      {
+        "name": "segments-repeated-metadata",
+        "script": "ui-segments-repeated-metadata-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 1800000,
+        "duration_ms": 1139985
+      },
+      {
+        "name": "segments-density",
+        "script": "ui-segments-density-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4960
+      },
+      {
+        "name": "ngrams-cold-restart",
+        "script": "ui-ngrams-cold-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 10075
+      },
+      {
+        "name": "segments-cold-restart",
+        "script": "ui-segments-cold-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 12103
+      },
+      {
+        "name": "resource-sources",
+        "script": "ui-resource-sources-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 14666
+      },
+      {
+        "name": "custom-search",
+        "script": "ui-custom-search-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 21420
+      },
+      {
+        "name": "saved-comparison",
+        "script": "ui-saved-comparison-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 3525
+      },
+      {
+        "name": "comparison-bundles",
+        "script": "ui-saved-comparison-bundle-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4888
+      },
+      {
+        "name": "configuration-profiles",
+        "script": "ui-config-profiles-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 9309
+      },
+      {
+        "name": "configuration-profile-catalog",
+        "script": "ui-config-profile-catalog-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 9944
+      },
+      {
+        "name": "screenshot-viewport",
+        "script": "ui-screenshot-viewport-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 18091
+      },
+      {
+        "name": "table-explorer",
+        "script": "ui-table-explorer-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 15483
+      }
+    ],
+    "proof": {
+      "path": "artifacts/table-explorer-ui42-r4-20261018/proof.json",
+      "bytes": 10539,
+      "sha256": "9d4c61c87950592b4b043666adb6dbf113e2482757f34ffa947893a58dca9c55"
+    },
+    "coordinator_shutdown": {
+      "code": 0,
+      "signal": null
+    }
+  },
+  "native": {
+    "major_groups": 6,
+    "views": 36,
+    "actual_CSV_files": 5,
+    "exported_data_rows": 521,
+    "native_children": 2,
+    "same_origin_rebind": true,
+    "natural_EOF_zero": 2,
+    "coordinator_EOF_zero": 1,
+    "positive_410_controls": 2,
+    "offline_product_requests": 0,
+    "page_errors": 0,
+    "external_browser_requests": 0,
+    "geometry_observations": 22,
+    "geometry_qualification": "geometry.width is element box width. PNG IHDR and ordered group provenance establish the 1440 px and 320 px viewports. Runtime assertions used the correct local viewport width.",
+    "raw_receipt": {
+      "path": "artifacts/table-explorer-ui42-r4-20261018/table-explorer/table-explorer-1792362676124-f19ee882/ui-table-explorer-live.json",
+      "bytes": 51343,
+      "sha256": "a48df7957bd7a2892529763ece21cc60384e0fef3c9ab4c1af77e0139d7ccb0f"
+    },
+    "focused_R3_receipt": {
+      "path": "artifacts/table-explorer-native-r3-20261018/table-explorer/table-explorer-1792357602212-9a8702ff/ui-table-explorer-live.json",
+      "bytes": 51109,
+      "sha256": "649650a60ceda8150f748d0d9eebda083e7e1976f6ee1daef4c9998ac6fda548"
+    }
+  },
+  "targeted_native": {
+    "suite_count": 4,
+    "complete": true,
+    "proof": {
+      "path": "artifacts/table-explorer-targeted-r4-20261018/proof.json",
+      "bytes": 1644,
+      "sha256": "7dbfb7ce3b4491b858d3fbe90ce873ba5c22c2a181754a0cab4125cc1659e30d"
+    },
+    "receipts": [
+      {
+        "suite": "custom-search",
+        "receipt": {
+          "path": "artifacts/table-explorer-targeted-r4-20261018/custom-search/custom-search-live.json",
+          "bytes": 6023,
+          "sha256": "853d27103490e36a5bb0ce203c6cc3c818da084386390e44aea70c705c65b1d0"
+        },
+        "groups": 10
+      },
+      {
+        "suite": "configuration-profiles",
+        "receipt": {
+          "path": "artifacts/table-explorer-targeted-r4-20261018/configuration-profiles/config-profiles-1792360790386-8af5599d/ui-config-profiles-live.json",
+          "bytes": 138505,
+          "sha256": "76b3214d2df742953dcbe1b4b6426e6adfc9c615498677d6c1d60184d5af3fa1"
+        },
+        "groups": 10,
+        "negative_controls": 26,
+        "downloads": 6
+      },
+      {
+        "suite": "configuration-profile-catalog",
+        "receipt": {
+          "path": "artifacts/table-explorer-targeted-r4-20261018/configuration-profile-catalog/config-profile-catalog-1792360799696-5dd66526/ui-config-profile-catalog-live.json",
+          "bytes": 109652,
+          "sha256": "0058c3047fa8c6e503d1fc460211cdd342bc37d9d8145b9018f4533765246373"
+        },
+        "groups": 4,
+        "negative_controls": 7,
+        "downloads": 5
+      },
+      {
+        "suite": "screenshot-viewport",
+        "receipt": {
+          "path": "artifacts/table-explorer-targeted-r4-20261018/screenshot-viewport/screenshot-viewport-1792360809649-8516ebee/ui-screenshot-viewport-live.json",
+          "bytes": 17811,
+          "sha256": "77b847582f8335dcb7240923449ef03b2642c0e7997f49e7ae112a20aeb00a73"
+        },
+        "groups": 3,
+        "negative_controls": 10,
+        "downloads": 10
+      }
+    ],
+    "original_response_capture": {
+      "profiles": 49,
+      "catalog": 33,
+      "http_replay": false,
+      "current_Create_A_status": 200,
+      "current_Create_A_response_bytes": 337,
+      "current_Create_A_response_sha256": "1af2383a9ef9303882ac57169973b5138dcf8a18777bf73182545831dd12dec4"
+    }
+  },
+  "retained_failures": [
+    {
+      "attempt": "R1",
+      "result": "FAIL",
+      "stage": "Nested columns details closed before checkbox interaction"
+    },
+    {
+      "attempt": "R2",
+      "result": "FAIL",
+      "stage": "Exact unique row wait preceded completion of search debounce"
+    },
+    {
+      "attempt": "R3 full42",
+      "result": "FAIL",
+      "stage": "Custom-search expected URL-only tie order disagreed with the intentional source-identity tie policy"
+    }
+  ],
+  "parent_CI": {
+    "run": 39164257731,
+    "commit": "25b3654d7b7efa285429f78e6fe9c985b0f29bcd",
+    "status": "completed",
+    "conclusion": "failure",
+    "renderer": "FAIL_TERMINAL",
+    "exact_Create_A_wire_status": "NOT_PROVEN",
+    "SQL_association": "READ_ONLY_ASSOCIATION_ONLY"
+  },
+  "test_only_capture_hardening": {
+    "applied": true,
+    "source_review_historical": {
+      "path": "artifacts/profile-owned-capture-candidate-independent-source-review-20261018.json",
+      "bytes": 7264,
+      "sha256": "97f174fa69c03ce3f49c5d8d74e0ba48fceceaca0a1a55fd4dd70d6d5cbcaf28"
+    },
+    "actual_Chromium_reported": 17,
+    "targeted_native_suites": 4,
+    "no_HTTP_replay": true
+  },
+  "evidence_files": [
+    {
+      "path": "docs/verification/table-explorer-20261018-r4/native-live.json",
+      "bytes": 55032,
+      "sha256": "6d7373886ff1a40727fd09743047f3b8901832a1d0962c6e16935183156d23bd"
+    },
+    {
+      "path": "docs/verification/table-explorer-20261018-r4/focused-r3-native-live.json",
+      "bytes": 54809,
+      "sha256": "2231f6cbdc258917765ec9e6b75e042666c483763a62dfb552d2c5b4e8e2a577"
+    },
+    {
+      "path": "docs/verification/table-explorer-20261018-r4/independent-runtime-review-r3.json",
+      "bytes": 9218,
+      "sha256": "a161739095635b54c2dbc9f49a5e4b28b89ff837113f0557985a1453accc9c51"
+    },
+    {
+      "path": "docs/verification/table-explorer-20261018-r4/owned-capture-source-review.json",
+      "bytes": 7889,
+      "sha256": "ea33d6c38aea0324a6730c19a26fccca13a6838c88b871ec74b570b0490e4c0d"
+    },
+    {
+      "path": "docs/verification/table-explorer-20261018-r4/targeted-native.json",
+      "bytes": 4249,
+      "sha256": "fd28f4d99cc2a4ee338e2830afaf3a0d0d31c32035bf99622bac2a267f5f64d2"
+    },
+    {
+      "path": "docs/verification/table-explorer-20261018-r4/parent-ci-status.json",
+      "bytes": 1210,
+      "sha256": "01bbb7733001c1ba8c21723d9811431f42e04fbeefee6a9dffeb5ab244c4ca83"
+    },
+    {
+      "path": "docs/verification/table-explorer-20261018-r4/prior-failures.json",
+      "bytes": 131694,
+      "sha256": "0bb0fb6344563190ea9c76aef1e1ef82a3f3b2457ed2c7ec7ccb97d0962bcf6b"
+    },
+    {
+      "path": "docs/verification/table-explorer-20261018-r4/source-gates.json",
+      "bytes": 127752,
+      "sha256": "b31dba2eb582568ee50e88eaea4c58797c39fd036cdf67f0a9946fa019d82372"
+    }
+  ],
+  "remaining": [
+    "Multiple named and cross-project portable table views",
+    "OR/nested filter expressions",
+    "XLSX export",
+    "Specialist complete-cursor/export contracts and larger corpus acceptance",
+    "Fresh public cross-platform CI",
+    "Full manufacturer feature parity remains NOT_PROVEN"
+  ],
+  "feature_catalog_counts": {
+    "features": 144,
+    "filters": 416,
+    "workflows": 32,
+    "implemented": 39,
+    "partial": 68,
+    "planned": 37,
+    "manufacturer_parity": "NOT_PROVEN"
+  },
+  "scope": [
+    "Main crawl preparation in the table E2E uses the real native API, not the dashboard Start button.",
+    "Column preferences are browser-origin/project/section local storage, not native portable project persistence.",
+    "Installed Source16 is outside this repository/fixture work; no new installed-software or reverse-engineering proof.",
+    "No all-table/operator, exact unsafe-u64 arithmetic, unbounded memory/performance, manual accessibility or manufacturer-parity claim."
+  ]
+}
