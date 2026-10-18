@@ -29,6 +29,38 @@ pub fn extend_report(report: &mut CrawlReport) {
         .count();
 }
 
+// Index only borrowed owners and original relationship slices. Building the
+// index must not clone every related URL in a report before any new finding is
+// compared; duplicate metadata can already contain millions of such entries.
+type ExistingIssueIndex<'a> = BTreeMap<(&'a str, &'a str), Vec<&'a [String]>>;
+
+fn existing_issue_index(report: &CrawlReport) -> ExistingIssueIndex<'_> {
+    let mut index: ExistingIssueIndex<'_> = BTreeMap::new();
+    for issue in &report.issues {
+        index
+            .entry((issue.url.as_str(), issue.code.as_str()))
+            .or_default()
+            .push(issue.related_urls.as_slice());
+    }
+    index
+}
+
+fn already_observed(existing: &ExistingIssueIndex<'_>, issue: &AuditIssue) -> bool {
+    let Some(previous) = existing.get(&(issue.url.as_str(), issue.code.as_str())) else {
+        return false;
+    };
+    // Preserve the original wildcard behavior for an owner/code observation
+    // without relationships. Nonempty relationships use exact set equality,
+    // independently of ordering or duplicates in imported observations.
+    if previous.iter().any(|urls| urls.is_empty()) {
+        return true;
+    }
+    let related: BTreeSet<_> = issue.related_urls.iter().map(String::as_str).collect();
+    previous
+        .iter()
+        .any(|urls| urls.iter().map(String::as_str).collect::<BTreeSet<_>>() == related)
+}
+
 /// Analyze only the supplied snapshot. Absence from a snapshot is never proof
 /// that a URL is missing from the website or has no links on the entire site.
 pub fn analyze_report(report: &CrawlReport) -> Value {
@@ -51,17 +83,7 @@ pub fn analyze_report(report: &CrawlReport) -> Value {
         }
     }
     let mut issues = Vec::new();
-    let existing: BTreeSet<_> = report
-        .issues
-        .iter()
-        .map(|issue| {
-            (
-                issue.url.clone(),
-                issue.code.clone(),
-                issue.related_urls.iter().cloned().collect::<BTreeSet<_>>(),
-            )
-        })
-        .collect();
+    let existing = existing_issue_index(report);
     for page in pages.values().copied().filter(|page| usable_document(page)) {
         analyze_relationships(page, &lookup, &mut issues);
         if page.is_html() {
@@ -133,13 +155,7 @@ pub fn analyze_report(report: &CrawlReport) -> Value {
             && a.related_urls == b.related_urls
             && a.message == b.message
     });
-    issues.retain(|issue| {
-        !existing.contains(&(
-            issue.url.clone(),
-            issue.code.clone(),
-            issue.related_urls.iter().cloned().collect(),
-        )) && !existing.contains(&(issue.url.clone(), issue.code.clone(), BTreeSet::new()))
-    });
+    issues.retain(|issue| !already_observed(&existing, issue));
     let structured_data: Vec<_> = pages
         .values()
         .copied()
@@ -2163,6 +2179,46 @@ mod tests {
                 .unwrap()
                 .is_empty()
         );
+    }
+
+    #[test]
+    fn existing_relationship_sets_preserve_order_duplicates_subset_and_empty_wildcard_rules() {
+        let mut a = page("a");
+        let mut b = page("b");
+        let mut c = page("c");
+        a.canonical = vec![b.url.clone()];
+        b.canonical = vec![c.url.clone()];
+        c.canonical = vec![a.url.clone()];
+        let mut snapshot = report(vec![a, b, c]);
+        let existing = |owner: &str, related: &[&str]| AuditIssue {
+            severity: Severity::Warning,
+            code: "canonical_loop".into(),
+            url: page(owner).url,
+            message: "Original imported evidence".into(),
+            related_urls: related.iter().map(|path| page(path).url).collect(),
+        };
+        snapshot.issues = vec![
+            existing("a", &["c", "a", "b", "b"]),
+            existing("b", &["b", "a"]),
+            existing("c", &[]),
+        ];
+        let original = serde_json::to_vec(&snapshot).unwrap();
+        let value = analyze_report(&snapshot);
+        assert!(!has_issue(&value, "canonical_loop", "a"));
+        assert!(has_issue(&value, "canonical_loop", "b"));
+        assert!(!has_issue(&value, "canonical_loop", "c"));
+        let retained: Vec<_> = value["issues"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter(|issue| issue["code"] == "canonical_loop")
+            .collect();
+        assert_eq!(retained.len(), 1);
+        assert_eq!(
+            retained[0]["related_urls"],
+            json!([page("a").url, page("b").url, page("c").url])
+        );
+        assert_eq!(serde_json::to_vec(&snapshot).unwrap(), original);
     }
 
     #[test]

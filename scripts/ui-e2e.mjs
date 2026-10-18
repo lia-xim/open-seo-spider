@@ -40,6 +40,10 @@ const suites = [
   // Full 1,010-page capture, all issue chunks, independent native read oracles,
   // repeated cohorts and cold reopen exceed the ordinary four-minute budget.
   ['dashboard-segments', 'ui-dashboard-segments-live.cjs', 'owned-native', 900000],
+  // This repeated-description corpus validates over one million original URL
+  // relationships through browser/oracle pairs, standalone API, CLI, MCP and a
+  // full cold replay. Measured warm verification alone takes about eight minutes.
+  ['segments-repeated-metadata', 'ui-segments-repeated-metadata-live.cjs', 'owned-native', 1800000],
   ['segments-density', 'ui-segments-density-live.cjs', 'owned-native'],
   ['ngrams-cold-restart', 'ui-ngrams-cold-live.cjs', 'owned-native'],
   ['segments-cold-restart', 'ui-segments-cold-live.cjs', 'owned-native'],

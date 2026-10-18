@@ -777,6 +777,181 @@ fn segment_dashboard_preflight_refuses_fragment_and_quadratic_groups_before_deri
 }
 
 #[tokio::test]
+async fn segment_dashboard_large_original_issues_page_and_export_without_projection_clones() {
+    // Declared regression for the real repeated-description corpus. Native
+    // browser capture/provenance is covered separately by the live fixture.
+    let urls: Vec<_> = (0..1010)
+        .map(|i| format!("https://owned.test/products/repeated/{i:04}"))
+        .collect();
+    let report = CrawlReport {
+        pages: urls
+            .iter()
+            .map(|url| page(url, Some("pick captured")))
+            .collect(),
+        issues: urls
+            .iter()
+            .map(|url| AuditIssue {
+                code: "description_duplicate".into(),
+                severity: core::Severity::Warning,
+                url: url.clone(),
+                message: "Same captured description".into(),
+                related_urls: urls.iter().filter(|other| *other != url).cloned().collect(),
+            })
+            .collect(),
+        ..Default::default()
+    };
+    let before = service::report_hash(&report).unwrap();
+    assert!(engine::project(&report, &engine::Rules::default(), &engine::Selection::All).is_err());
+    let id = Uuid::new_v4();
+    let state = state(id, report);
+    let q = Request {
+        limit: 200,
+        expected_generation: Some(7),
+        ..Default::default()
+    };
+    let first = value(
+        preview(State(state.clone()), Path(id), Ok(Json(q.clone())))
+            .await
+            .unwrap(),
+    )
+    .await;
+    assert_eq!(first["cohort"]["summary"]["selected_issues"], 1010);
+    let q = bound(&first, q);
+    let source = get_job(&state, id)
+        .await
+        .unwrap_or_else(|_| panic!("fixture"));
+    let mut issue_request = q.clone();
+    issue_request.view = View::Issues;
+    let mut seen = 0usize;
+    let mut related = 0usize;
+    loop {
+        let result = value(
+            preview(
+                State(state.clone()),
+                Path(id),
+                Ok(Json(issue_request.clone())),
+            )
+            .await
+            .unwrap(),
+        )
+        .await;
+        assert_eq!(result["context"], first["context"]);
+        assert_eq!(result["total"], 1010);
+        let guard = source.read().await;
+        let report = guard.report.as_ref().unwrap();
+        for row in result["rows"].as_array().unwrap() {
+            assert_eq!(row, &serde_json::to_value(&report.issues[seen]).unwrap());
+            related += row["related_urls"].as_array().unwrap().len();
+            seen += 1;
+        }
+        drop(guard);
+        if result["next"].is_null() {
+            break;
+        }
+        issue_request.cursor = Some(serde_json::from_value(result["next"].clone()).unwrap());
+    }
+    assert_eq!(seen, 1010);
+    assert_eq!(related, 1_019_090);
+    let standalone =
+        super::super::segments::preview(State(state.clone()), Path(id), Ok(Json(q.clone())))
+            .await
+            .unwrap();
+    let standalone: Value = serde_json::from_slice(
+        &axum::body::to_bytes(standalone.into_body(), PAGE_BYTES)
+            .await
+            .unwrap(),
+    )
+    .unwrap();
+    assert_eq!(standalone["summary"]["selected_issues"], 1010);
+    let mut standalone_q = q.clone();
+    standalone_q.view = View::Issues;
+    let response =
+        super::super::segments::preview(State(state.clone()), Path(id), Ok(Json(standalone_q)))
+            .await
+            .unwrap();
+    let standalone: Value = serde_json::from_slice(
+        &axum::body::to_bytes(response.into_body(), PAGE_BYTES)
+            .await
+            .unwrap(),
+    )
+    .unwrap();
+    assert_eq!(standalone["rows"].as_array().unwrap().len(), 200);
+    {
+        let guard = source.read().await;
+        let report = guard.report.as_ref().unwrap();
+        let e = segments::evaluate(&guard, &q).unwrap();
+        assert!(service::full_json(report, &e).is_err());
+        assert!(service::full_csv(report, &e).is_err());
+        assert!(
+            selected_report(report, &e).issues.is_empty(),
+            "Non-issue exporters/responses must not copy original issue payloads"
+        );
+    }
+    let full_bytes = bytes(
+        json(State(state.clone()), Path(id), Ok(Json(q.clone())))
+            .await
+            .unwrap(),
+    )
+    .await;
+    assert!(full_bytes.len() > PAGE_BYTES && full_bytes.len() < EXPORT_BYTES);
+    let full: Value = serde_json::from_slice(&full_bytes).unwrap();
+    assert_eq!(full["issues"].as_array().unwrap().len(), 1010);
+    for (ordinal, issue) in full["issues"].as_array().unwrap().iter().enumerate() {
+        let guard = source.read().await;
+        assert_eq!(
+            issue,
+            &serde_json::to_value(&guard.report.as_ref().unwrap().issues[ordinal]).unwrap()
+        );
+    }
+    drop(full);
+    drop(full_bytes);
+    let data = bytes(
+        csv(
+            State(state.clone()),
+            Path((id, "issues.csv".into())),
+            Ok(Json(q.clone())),
+        )
+        .await
+        .unwrap(),
+    )
+    .await;
+    let mut reader = ::csv::Reader::from_reader(data.as_slice());
+    assert_eq!(reader.headers().unwrap().len(), 18);
+    let mut count = 0;
+    for record in reader.records() {
+        let record = record.unwrap();
+        let guard = source.read().await;
+        let original = &guard.report.as_ref().unwrap().issues[count];
+        assert_eq!(&record[2], original.url);
+        assert_eq!(&record[4], original.related_urls.join(" | "));
+        count += 1;
+    }
+    assert_eq!(count, 1010);
+    drop(reader);
+    drop(data);
+    let graph = value(
+        analyze(State(state.clone()), Path(id), Ok(Json(q)))
+            .await
+            .unwrap(),
+    )
+    .await;
+    assert_eq!(
+        graph["analysis"]["graph"]["nodes"]
+            .as_array()
+            .unwrap()
+            .len(),
+        1010
+    );
+    let guard = source.read().await;
+    assert_eq!(
+        service::report_hash(guard.report.as_ref().unwrap()).unwrap(),
+        before
+    );
+    drop(guard);
+    state.lifecycle.blocking.shutdown_and_drain().await.unwrap();
+}
+
+#[tokio::test]
 async fn segment_dashboard_physical_64mib_complete_csv_and_plus_one_refusal() {
     // Explicitly declared synthetic amplification/budget control, not crawl-origin proof.
     let mut source = page("https://budget.test/source", Some("pick"));

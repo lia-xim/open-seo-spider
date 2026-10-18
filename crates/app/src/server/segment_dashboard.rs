@@ -162,7 +162,7 @@ fn cohort<'a>(report: &CrawlReport, e: &'a service::Evaluation) -> Cohort<'a> {
     let mut summary = Summary {
         total_pages: p.total_pages,
         selected_pages: p.selected_pages,
-        selected_issues: p.issues.len(),
+        selected_issues: p.issue_ordinals.len(),
         multiple_matches: p.multiple_matches,
         unassigned_pages: p.unassigned_pages,
         unknown_pages: p.unknown_pages,
@@ -204,7 +204,8 @@ fn cohort<'a>(report: &CrawlReport, e: &'a service::Evaluation) -> Cohort<'a> {
                 usize::from(page.blocked_by_robots || page.error.is_some() || status.is_none());
         }
     }
-    for issue in &p.issues {
+    for ordinal in &p.issue_ordinals {
+        let issue = &report.issues[*ordinal];
         match issue.severity {
             core::Severity::Error => summary.issue_counts.error += 1,
             core::Severity::Warning => summary.issue_counts.warning += 1,
@@ -232,7 +233,7 @@ fn cohort<'a>(report: &CrawlReport, e: &'a service::Evaluation) -> Cohort<'a> {
 #[serde(untagged)]
 enum Rows<'a> {
     Pages(Vec<Page<'a>>),
-    Issues(&'a [AuditIssue]),
+    Issues(Vec<&'a AuditIssue>),
 }
 #[derive(Serialize)]
 struct PageReply<'a> {
@@ -252,14 +253,20 @@ fn paged(
 ) -> Result<Vec<u8>> {
     let total = match request.view {
         View::Pages => e.projection.pages.len(),
-        View::Issues => e.projection.issues.len(),
+        View::Issues => e.projection.issue_ordinals.len(),
     };
     let offset = request.cursor.as_ref().map_or(0, |c| c.offset);
     ensure!(offset <= total, "Cursor offset exceeds selected cohort");
     let end = offset.saturating_add(request.limit).min(total);
     let rows = match request.view {
         View::Pages => Rows::Pages(page_rows(report, &e.projection.pages[offset..end])),
-        View::Issues => Rows::Issues(&e.projection.issues[offset..end]),
+        View::Issues => Rows::Issues(
+            e.projection
+                .selected_issues(report)?
+                .skip(offset)
+                .take(end - offset)
+                .collect(),
+        ),
     };
     encode(
         &PageReply {
@@ -286,7 +293,7 @@ struct FullReply<'a> {
     captured_config: &'a CrawlConfig,
     captured_crawl_summary: &'a core::CrawlSummary,
     pages: Vec<Page<'a>>,
-    issues: &'a [AuditIssue],
+    issues: Vec<&'a AuditIssue>,
 }
 fn full(report: &CrawlReport, e: &service::Evaluation, cap: usize) -> Result<Vec<u8>> {
     encode(
@@ -297,7 +304,7 @@ fn full(report: &CrawlReport, e: &service::Evaluation, cap: usize) -> Result<Vec
             captured_config: &report.config,
             captured_crawl_summary: &report.summary,
             pages: page_rows(report, &e.projection.pages),
-            issues: &e.projection.issues,
+            issues: e.projection.selected_issues(report)?.collect(),
         },
         cap,
     )
@@ -669,7 +676,6 @@ fn selected_report(report: &CrawlReport, e: &service::Evaluation) -> CrawlReport
             .iter()
             .map(|r| report.pages[r.page_ordinal].clone())
             .collect(),
-        issues: e.projection.issues.clone(),
         summary: report.summary.clone(),
         operation: report.operation.clone(),
         ..Default::default()
@@ -770,7 +776,7 @@ fn extra(report: &CrawlReport, e: &service::Evaluation) -> Result<Vec<(String, S
         ("Segment Eligible Pages", e.projection.total_pages.to_string()),
         ("Segment Selected Pages", e.projection.selected_pages.to_string()),
         ("Segment Captured Issues", report.issues.len().to_string()),
-        ("Segment Selected Issues", e.projection.issues.len().to_string()),
+        ("Segment Selected Issues", e.projection.issue_ordinals.len().to_string()),
         ("Segment Orphan Issues", e.projection.orphan_issues.to_string()),
         ("Segment Scope", "selected saved observations; crawl activity and relationship targets unchanged; no SQL or origin attestation".into()),
     ];
@@ -782,15 +788,23 @@ fn csv_bytes(
     kind: CsvKind,
     cap: usize,
 ) -> Result<Vec<u8>> {
-    let selected = selected_report(report, e);
     let extra = extra(report, e)?;
     let mut out = Bounded::new(cap);
+    if matches!(kind, CsvKind::Issues) {
+        core::write_issue_observations_csv(
+            e.projection.selected_issues(report)?,
+            &mut out,
+            &extra,
+        )?;
+        return Ok(out.bytes);
+    }
+    let selected = selected_report(report, e);
     match kind {
         CsvKind::Pages => {
             core::write_pages_csv(&selected, &mut out, &extra)?;
         }
         CsvKind::Issues => {
-            core::write_issues_csv(&selected, &mut out, &extra)?;
+            unreachable!("borrowed issues handled before cloning any selected pages")
         }
         CsvKind::Links => {
             core::write_links_csv(&selected, &mut out, &extra)?;
@@ -911,7 +925,7 @@ async fn read(
             if matches!(operation, Operation::Page) {
                 let total = match request.view {
                     View::Pages => e.projection.pages.len(),
-                    View::Issues => e.projection.issues.len(),
+                    View::Issues => e.projection.issue_ordinals.len(),
                 };
                 if request
                     .cursor

@@ -143,8 +143,9 @@ pub use export::{
     export_issues_csv, export_links_csv, export_pages_csv, export_pdf_csv, export_sitemap_xml,
     write_browser_cookies_csv, write_custom_extractions_csv, write_custom_javascript_csv,
     write_custom_search_csv, write_dom_observations_csv, write_fragment_observations_csv,
-    write_fragments_csv, write_image_resources_csv, write_input_occurrences_csv, write_issues_csv,
-    write_links_csv, write_pages_csv, write_pdf_csv, write_selected_fragments_csv,
+    write_fragments_csv, write_image_resources_csv, write_input_occurrences_csv,
+    write_issue_observations_csv, write_issues_csv, write_links_csv, write_pages_csv,
+    write_pdf_csv, write_selected_fragments_csv,
 };
 pub use extract::{extract_custom, extract_html};
 pub use extraction_engine::extract_configured;

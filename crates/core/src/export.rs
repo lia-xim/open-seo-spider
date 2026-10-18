@@ -331,12 +331,29 @@ pub fn write_issues_csv<W: std::io::Write>(
     sink: W,
     extra: &[(String, String)],
 ) -> anyhow::Result<W> {
-    let raw_report = report;
-    let visible_report = crate::reported_report(report);
-    let report = visible_report.as_ref();
-    let mut writer = crate::export::CsvRows::new(sink, Some(raw_report), extra)?;
+    let hidden = crate::directive_hidden_issue_urls(&report.config, &report.pages);
+    let rows = report
+        .issues
+        .iter()
+        .filter(|issue| !hidden.contains(issue.url.as_str()));
+    write_issue_rows(rows, CsvRows::new(sink, Some(report), extra)?)
+}
+
+/// Original selected issues, borrowed from the immutable complete report.
+/// Context columns are supplied by the caller; no filtered report is invented.
+pub fn write_issue_observations_csv<'a, W: std::io::Write>(
+    issues: impl IntoIterator<Item = &'a crate::AuditIssue>,
+    sink: W,
+    extra: &[(String, String)],
+) -> anyhow::Result<W> {
+    write_issue_rows(issues, CsvRows::new(sink, None, extra)?)
+}
+fn write_issue_rows<'a, W: std::io::Write>(
+    issues: impl IntoIterator<Item = &'a crate::AuditIssue>,
+    mut writer: CsvRows<W>,
+) -> anyhow::Result<W> {
     writer.write_record(["Severity", "Code", "URL", "Message", "Related URLs"])?;
-    for issue in &report.issues {
+    for issue in issues {
         writer.write_record([
             format!("{:?}", issue.severity),
             csv_text(&issue.code),

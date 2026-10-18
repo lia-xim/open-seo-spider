@@ -53,12 +53,12 @@
     panel.setAttribute('aria-busy',String(Boolean(s?.busy)));
     $('dashboard-segment-apply').disabled=!controller || Boolean(s?.busy || s?.draftValid===false || state.polling || active() || actionBusy() || !state.crawl);
     $('dashboard-segment-clear').disabled=!controller || !Boolean(s?.busy || s?.applied || s?.error);
-    for(const id of ['dashboard-segment-json','dashboard-segment-csv'])$(id).disabled=!view || Boolean(s?.busy || active() || actionBusy());
+    for(const id of ['dashboard-segment-json','dashboard-segment-csv','dashboard-segment-export-kind'])$(id).disabled=!view || Boolean(s?.busy || active() || actionBusy());
     $('dashboard-segment-state').textContent=!controller?'Segmentfunktionen werden mit dem nativen Dashboard geladen.':s.busy?'Vollständigen gespeicherten Segmentstand prüfen …':s.error?s.error:view?`${number(view.cohort.summary.selected_pages)} von ${number(view.cohort.summary.total_pages)} Seitenbeobachtungen · ${number(view.cohort.summary.selected_issues)} gespeicherte Issues · Stand ${view.context.snapshot_token.slice(0,12)} · keine Websiteabrufe`:'Keine Segmentauswahl angewandt. Definitionen in diesem Browser laden, auswählen und ausdrücklich anwenden.';
     $('dashboard-segment-state').classList.toggle('error',Boolean(s?.error));
     const separate=separateSegmentSections.has(state.section);
     $('dashboard-segment-scope').hidden=!view;
-    $('dashboard-segment-scope').textContent=!view?'':separate?'Eigenständiges Originalinventar: Das Dashboardsegment wird auf diesen Bereich und dessen separate Exporte nicht angewandt. Die Segmentkennzahlen oben bleiben auf die ausgewählten Seiten begrenzt.':['graph','linkmetrics'].includes(state.section)?'Ausgewählte Seiten, Linkmetriken des vollständigen Original-Captures. Zielbeziehungen außerhalb des Segments bleiben erhalten; keine neue Berechnung eines isolierten Teilgraphen.':'Seiten und Quellvorkommen aus der bestätigten Segmentauswahl. Beziehungspartner außerhalb der Auswahl bleiben als gespeicherter Kontext erhalten.';
+    $('dashboard-segment-scope').textContent=!view?'':state.section==='issues'?'Probleme der bestätigten Segmentauswahl. Der Tabellen-CSV enthält die angezeigten Spalten einschließlich der Anzahl weiterer URLs. Für sämtliche zugehörigen URLs im Originalumfang oben die native CSV-Art „Probleme – alle zugehörigen URLs“ oder Segment-JSON wählen.':separate?'Eigenständiges Originalinventar: Das Dashboardsegment wird auf diesen Bereich und dessen separate Exporte nicht angewandt. Die Segmentkennzahlen oben bleiben auf die ausgewählten Seiten begrenzt.':['graph','linkmetrics'].includes(state.section)?'Ausgewählte Seiten, Linkmetriken des vollständigen Original-Captures. Zielbeziehungen außerhalb des Segments bleiben erhalten; keine neue Berechnung eines isolierten Teilgraphen.':'Seiten und Quellvorkommen aus der bestätigten Segmentauswahl. Beziehungspartner außerhalb der Auswahl bleiben als gespeicherter Kontext erhalten.';
     $('export-visible-report').textContent=view?'Segment-JSON':'JSON';
     $('export-sitemap').title=view?'Sitemap verwendet den Originalbericht und ist bei aktiver Segmentansicht gesperrt.':'';
   }
@@ -75,6 +75,9 @@
       dashboardSegments.configure(rules,select.value,$('dashboard-segment-mode').value);
     }catch(error){dashboardSegments.invalidate(error.message);}
   }
+  function downloadDashboardSegmentCSV() {
+    return dashboardSegments?.download($('dashboard-segment-export-kind').value);
+  }
   function bindDashboardSegments() {
     if(!window.DashboardSegments)return;
     dashboardSegments=window.DashboardSegments.createController({
@@ -89,7 +92,7 @@
     $('dashboard-segment-apply').addEventListener('click',()=>dashboardSegments.apply());
     $('dashboard-segment-clear').addEventListener('click',()=>dashboardSegments.invalidate());
     $('dashboard-segment-json').addEventListener('click',()=>dashboardSegments.download('json'));
-    $('dashboard-segment-csv').addEventListener('click',()=>dashboardSegments.download('pages'));
+    $('dashboard-segment-csv').addEventListener('click',downloadDashboardSegmentCSV);
     window.addEventListener('storage',event=>{if(event.key===window.DashboardSegments.KEY || event.key===null)dashboardSegments.invalidate('Segmentdefinitionen wurden in einem anderen Fenster geändert. Definitionen erneut laden und anwenden.');});
   }
 
@@ -1068,7 +1071,7 @@
     $('sitemap-membership-view').hidden = !sitemapSection();
     $('sitemap-findings-view').hidden = !findingsSection();
     $('export-csv').disabled = policySection() ? !policyVisibleRows().length || Boolean(state.policyToken || state.policyError) : (state.section === 'inputs' ? !getRows().length : !state.pages.length && !state.issues.length) || state.section === 'responses' && state.responses == null || state.section === 'fragments' && (!state.fragments || !state.fragments.enabled);
-    $('export-csv').title = policySection() ? 'Nur gefilterte Vorkommen der aktuell geladenen Ledger-Seite exportieren' : 'Alle aktuell gefilterten Ergebnisse dieses Bereichs exportieren';
+    $('export-csv').title = policySection() ? 'Nur gefilterte Vorkommen der aktuell geladenen Ledger-Seite exportieren' : state.segmentView && state.section==='issues' ? 'Alle gefilterten Probleme mit den angezeigten Spalten; weitere URLs als Anzahl. Vollständige zugehörige URLs: native CSV-Art Probleme oder Segment-JSON.' : 'Alle aktuell gefilterten Ergebnisse dieses Bereichs exportieren';
     if (state.section==='resource-discovery' || sitemapSection() || findingsSection()) $('export-csv').disabled=true;
     $('export-resources').hidden = !['accessibility', 'custom-search', 'inputs', 'pdf', 'imagefiles', 'responses', 'fragments', 'linkdom', ...domSections].includes(state.section);
     $('export-resources').disabled = !state.crawl || Boolean(actionBusy() || active());

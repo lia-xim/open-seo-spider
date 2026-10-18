@@ -2,7 +2,7 @@
 use anyhow::{Result, ensure};
 use open_seo_spider_core::{
     CrawlReport,
-    segments::{self, Projection, Rules, Selection},
+    segments::{self, IndexedProjection, Rules, Selection},
 };
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -137,7 +137,7 @@ pub(crate) fn sha(bytes: &[u8]) -> String {
 }
 pub(crate) struct Evaluation {
     pub context: Context,
-    pub projection: Projection,
+    pub projection: IndexedProjection,
 }
 pub(crate) fn evaluate(
     report: &CrawlReport,
@@ -186,7 +186,7 @@ pub(crate) fn evaluate(
             .is_none_or(|t| *t == token),
         "Snapshot/rules/selection/reporting view changed; preview again"
     );
-    let projection = segments::project_with_reporting(
+    let projection = segments::project_indexed_with_reporting(
         report,
         &request.rules,
         &request.selection,
@@ -212,34 +212,75 @@ pub(crate) fn evaluate(
         projection,
     })
 }
-pub(crate) fn page(e: &Evaluation, request: &Request) -> Result<Vec<u8>> {
+#[derive(Serialize)]
+#[serde(untagged)]
+enum PageRows<'a> {
+    Pages(&'a [segments::Row]),
+    Issues(Vec<&'a open_seo_spider_core::AuditIssue>),
+}
+#[derive(Serialize)]
+struct PageReply<'a> {
+    context: &'a Context,
+    depth_policy: &'static str,
+    counts: &'a [segments::Count],
+    charts: &'a segments::Charts,
+    summary: serde_json::Value,
+    view: View,
+    total: usize,
+    rows: PageRows<'a>,
+    next: Option<Cursor>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    reporting: Option<&'a segments::Reporting>,
+}
+pub(crate) fn page(report: &CrawlReport, e: &Evaluation, request: &Request) -> Result<Vec<u8>> {
     let total = match request.view {
         View::Pages => e.projection.pages.len(),
-        View::Issues => e.projection.issues.len(),
+        View::Issues => e.projection.issue_ordinals.len(),
     };
     let offset = request.cursor.as_ref().map_or(0, |c| c.offset);
     ensure!(offset <= total, "Cursor offset exceeds selected result");
     let end = offset.saturating_add(request.limit).min(total);
     let rows = match request.view {
-        View::Pages => serde_json::to_value(&e.projection.pages[offset..end])?,
-        View::Issues => serde_json::to_value(&e.projection.issues[offset..end])?,
+        View::Pages => PageRows::Pages(&e.projection.pages[offset..end]),
+        View::Issues => PageRows::Issues(
+            e.projection
+                .selected_issues(report)?
+                .skip(offset)
+                .take(end - offset)
+                .collect(),
+        ),
     };
     let next = (end < total).then(|| Cursor {
         offset: end,
         view: request.view,
         snapshot_token: e.context.snapshot_token.clone(),
     });
-    let mut output = serde_json::json!({"context":e.context,"depth_policy":e.projection.depth_policy,"counts":e.projection.counts,"charts":e.projection.charts,"summary":{"total_pages":e.projection.total_pages,"selected_pages":e.projection.selected_pages,"selected_issues":e.projection.issues.len(),"multiple_matches":e.projection.multiple_matches,"unassigned_pages":e.projection.unassigned_pages,"unknown_pages":e.projection.unknown_pages,"orphan_issues":e.projection.orphan_issues},"view":request.view,"total":total,"rows":rows,"next":next});
-    if let Some(reporting) = &e.projection.reporting {
-        output["reporting"] = serde_json::to_value(reporting)?;
+    segments::json_bytes(&PageReply {
+        context: &e.context,
+        depth_policy: e.projection.depth_policy,
+        counts: &e.projection.counts,
+        charts: &e.projection.charts,
+        summary: serde_json::json!({"total_pages":e.projection.total_pages,"selected_pages":e.projection.selected_pages,"selected_issues":e.projection.issue_ordinals.len(),"multiple_matches":e.projection.multiple_matches,"unassigned_pages":e.projection.unassigned_pages,"unknown_pages":e.projection.unknown_pages,"orphan_issues":e.projection.orphan_issues}),
+        view: request.view,
+        total,
+        rows,
+        next,
+        reporting: e.projection.reporting.as_ref(),
+    })
+}
+pub(crate) fn full_json(report: &CrawlReport, e: &Evaluation) -> Result<Vec<u8>> {
+    #[derive(Serialize)]
+    struct Reply<'a> {
+        context: &'a Context,
+        projection: segments::ProjectionView<'a>,
     }
-    segments::json_bytes(&output)
+    segments::json_bytes(&Reply {
+        context: &e.context,
+        projection: e.projection.view(report)?,
+    })
 }
-pub(crate) fn full_json(e: &Evaluation) -> Result<Vec<u8>> {
-    segments::json_bytes(&serde_json::json!({"context":e.context,"projection":e.projection}))
-}
-pub(crate) fn full_csv(e: &Evaluation) -> Result<Vec<u8>> {
-    segments::csv_bytes(&e.projection, &e.context)
+pub(crate) fn full_csv(report: &CrawlReport, e: &Evaluation) -> Result<Vec<u8>> {
+    segments::indexed_csv_bytes(report, &e.projection, &e.context)
 }
 async fn bounded(path: &Path, cap: usize) -> Result<Vec<u8>> {
     let f = tokio::fs::File::open(path).await?;
@@ -279,7 +320,11 @@ pub(crate) async fn run_cli(
             None,
             "declared_offline_report_file",
         )?;
-        if csv { full_csv(&e) } else { full_json(&e) }
+        if csv {
+            full_csv(&report, &e)
+        } else {
+            full_json(&report, &e)
+        }
     })
     .await??;
     let mut file = tokio::fs::OpenOptions::new()

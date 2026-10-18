@@ -40,14 +40,14 @@ fn segments_service_cursor_binds_generation_rules_selection_view_and_report_byte
         ..Default::default()
     };
     let first = evaluate(&r, &q, Some("job".into()), Some(7), "declared").unwrap();
-    let page1: serde_json::Value = serde_json::from_slice(&page(&first, &q).unwrap()).unwrap();
+    let page1: serde_json::Value = serde_json::from_slice(&page(&r, &first, &q).unwrap()).unwrap();
     assert_eq!(page1["rows"].as_array().unwrap().len(), 200);
     assert_eq!(page1["rows"][199]["page_ordinal"], 199);
     q.cursor = Some(serde_json::from_value(page1["next"].clone()).unwrap());
     q.expected_snapshot_token = Some(first.context.snapshot_token.clone());
     q.expected_generation = Some(7);
     let e = evaluate(&r, &q, Some("job".into()), Some(7), "declared").unwrap();
-    let last: serde_json::Value = serde_json::from_slice(&page(&e, &q).unwrap()).unwrap();
+    let last: serde_json::Value = serde_json::from_slice(&page(&r, &e, &q).unwrap()).unwrap();
     assert_eq!(last["rows"].as_array().unwrap().len(), 101);
     assert_eq!(last["rows"][100]["page_ordinal"], 300);
     assert!(last["next"].is_null());
@@ -77,12 +77,13 @@ fn segments_service_cursor_binds_generation_rules_selection_view_and_report_byte
 }
 #[test]
 fn segments_service_full_exports_include_tail_issues_and_counts_without_page_truncation() {
-    let e = evaluate(&report(), &Request::default(), None, None, "offline").unwrap();
-    let full: serde_json::Value = serde_json::from_slice(&full_json(&e).unwrap()).unwrap();
+    let r = report();
+    let e = evaluate(&r, &Request::default(), None, None, "offline").unwrap();
+    let full: serde_json::Value = serde_json::from_slice(&full_json(&r, &e).unwrap()).unwrap();
     assert_eq!(full["projection"]["pages"].as_array().unwrap().len(), 301);
     assert_eq!(full["projection"]["pages"][300]["page_ordinal"], 300);
     assert_eq!(full["projection"]["issues"][0]["message"], "last issue");
-    let csv = String::from_utf8(full_csv(&e).unwrap()).unwrap();
+    let csv = String::from_utf8(full_csv(&r, &e).unwrap()).unwrap();
     assert_eq!(csv.lines().filter(|s| s.starts_with("page,")).count(), 301);
     assert_eq!(csv.lines().filter(|s| s.starts_with("issue,")).count(), 1);
     assert!(csv.contains(&e.context.snapshot_token));
@@ -311,7 +312,7 @@ fn segments_service_reported_paging_keeps_raw_ordinals_and_full_json_csv_populat
         ..Default::default()
     };
     let first = evaluate(&r, &q, Some("job".into()), Some(7), "declared").unwrap();
-    let value: serde_json::Value = serde_json::from_slice(&page(&first, &q).unwrap()).unwrap();
+    let value: serde_json::Value = serde_json::from_slice(&page(&r, &first, &q).unwrap()).unwrap();
     assert_eq!(value["summary"]["total_pages"], 299);
     assert_eq!(value["reporting"]["captured_page_observations"], 301);
     assert_eq!(value["reporting"]["profile_excluded_page_observations"], 2);
@@ -321,16 +322,16 @@ fn segments_service_reported_paging_keeps_raw_ordinals_and_full_json_csv_populat
     q.expected_snapshot_token = Some(first.context.snapshot_token.clone());
     let continuation = evaluate(&r, &q, Some("job".into()), Some(7), "declared").unwrap();
     let tail: serde_json::Value =
-        serde_json::from_slice(&page(&continuation, &q).unwrap()).unwrap();
+        serde_json::from_slice(&page(&r, &continuation, &q).unwrap()).unwrap();
     assert_eq!(tail["rows"].as_array().unwrap().len(), 99);
     assert_eq!(tail["rows"][98]["page_ordinal"], 300);
     let mut mismatched = q.clone();
     mismatched.reporting_mode = Some(segments::ReportingMode::Raw);
     assert!(evaluate(&r, &mismatched, Some("job".into()), Some(7), "declared").is_err());
-    let full: serde_json::Value = serde_json::from_slice(&full_json(&first).unwrap()).unwrap();
+    let full: serde_json::Value = serde_json::from_slice(&full_json(&r, &first).unwrap()).unwrap();
     assert_eq!(full["projection"]["pages"].as_array().unwrap().len(), 299);
     assert_eq!(full["projection"]["reporting"], value["reporting"]);
-    let csv = String::from_utf8(full_csv(&first).unwrap()).unwrap();
+    let csv = String::from_utf8(full_csv(&r, &first).unwrap()).unwrap();
     assert_eq!(csv.lines().filter(|r| r.starts_with("page,")).count(), 299);
     assert_eq!(
         csv.lines().filter(|r| r.starts_with("reporting,")).count(),
@@ -354,13 +355,13 @@ fn segments_service_inactive_profile_keeps_old_token_formula_full_json_and_csv()
     ))
     .unwrap());
     assert_eq!(first.context.snapshot_token, expected);
-    let original_json = full_json(&first).unwrap();
-    let original_csv = full_csv(&first).unwrap();
+    let original_json = full_json(&r, &first).unwrap();
+    let original_csv = full_csv(&r, &first).unwrap();
     r.config.directive_reporting = Some(open_seo_spider_core::DirectiveReportingConfig::default());
     let inactive = evaluate(&r, &q, None, None, "offline").unwrap();
     assert!(inactive.context.reporting_view.is_none() && inactive.projection.reporting.is_none());
-    assert_eq!(full_json(&inactive).unwrap(), original_json);
-    assert_eq!(full_csv(&inactive).unwrap(), original_csv);
+    assert_eq!(full_json(&r, &inactive).unwrap(), original_json);
+    assert_eq!(full_csv(&r, &inactive).unwrap(), original_csv);
     let explicit = evaluate(
         &r,
         &Request {

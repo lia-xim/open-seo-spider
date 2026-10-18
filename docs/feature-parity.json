@@ -520,7 +520,7 @@
             "api-enrichment-browser-local-20261018"
           ],
           "proves": "Actual browser -> full native cfg(test) router/service -> owned HTTP provider -> parser/storage -> complete CSV -> process-cold reopen. Five workflow groups and eight separate frontend state regressions pass. 105 unique URLs yield108 ordered input rows, exact100+8 DOM pages, five complete verified CSV downloads, zero/missing metrics, duplicate/rejected rows,429 retry and provider failures. In the tested refresh flow, reopening the saved original job clears acknowledgement; a new preview and renewed acknowledgement precede starting a new job. The original four saved files, generation, rows and CSV stay unchanged. Active cancellation aborts the held HTTP request; cold reopening makes zero repeat provider and website requests. Both native processes close naturally0;213 actual local-provider attempts and zero website requests.",
-          "limits": "Immutable test-only local transport, not production Google success. The normal production endpoint is unchanged and no jobs/reports are seeded. Final local gates pass: 1,749 ordinary Rust tests, four explicit Chromium fixtures, 32 UI suites, strict Clippy, normal build and independent normal-binary marker isolation. Successful enrichment CLI, authorized production observations, provider breadth and full reference parity stay open. Historical public CI fails; fresh public CI is pending. Windows concurrency mitigation passes locally, while the historical timeout cause remains NOT_PROVEN. The refresh evidence covers that reopened-job flow, not universal fresh-preview/consent enforcement: current UI retains preview/acknowledgement after start and clears preview on input invalidation; the API requires a true acknowledgement boolean per POST."
+          "limits": "Immutable test-only local transport, not production Google success. The normal production endpoint is unchanged and no jobs/reports are seeded. Final local gates pass: 1,749 ordinary Rust tests, four explicit Chromium fixtures, 32 UI suites, strict Clippy, normal build and independent normal-binary marker isolation. Successful enrichment CLI, authorized production observations, provider breadth and full reference parity stay open. Historical public CI failures remain. On83c the positive test-provider and37-suite UI steps passed; the renderer job failed later at a separate stale sitemap asset allowlist. Both narrow sitemap harness repairs pass locally; a fresh complete public CI result remains pending. Windows concurrency mitigation passes locally, while the historical timeout cause remains NOT_PROVEN. The refresh evidence covers that reopened-job flow, not universal fresh-preview/consent enforcement: current UI retains preview/acknowledgement after start and clears preview on input invalidation; the API requires a true acknowledgement boolean per POST."
         }
       ],
       "parity_evidence": [],
@@ -2307,14 +2307,21 @@
             "dashboard-segments-20261018"
           ],
           "proves": "Main dashboard applies complete original PageRecords, counts, charts, source-owned tables and full native/local exports with exact original ordinals and full-capture graph/target facts. Genuine1010-page native capture, complete1005-title DOM,13 projected views, cold EOF0/no-refetch and105-row compact mobile disclosure/text selection are locally checked.",
-          "limits": "Bounded own acceptance; status remains partial. Browser-local definitions, actual32MiB projection refusal for repeated-metadata amplification, all operators/large-corpus performance and manufacturer parity remain open."
+          "limits": "Bounded own acceptance; status remains partial. The earlier repeated-metadata32MiB projection-copy refusal andR1/R2/R3 failures remain historical. The separate indexed follow-up now passes the exact warm/cold fixture in R4. Browser-local definitions, all operators, other large-corpus performance and manufacturer parity remain open."
+        },
+        {
+          "verification_run_ids": [
+            "large-segment-issues-20261018"
+          ],
+          "proves": "Actual ordinary-binary repeated-description crawl with1010pages/7068issues; selected1005pages/7035issues/1012035original ordered related URLs survives all native200-row pages and every100-row browser page warm and cold.96browser/native oracles and42standalone API pages agree. Full18column native issueCSV44429381bytes and cohortJSON45193762bytes are independently validated actual downloads and byte-identical after two native processes at the same fresh store/origin. All13 native export kinds are selectable without invalidating context. Actual normal CLI tail JSON/six-column CSV preserve1007relationships; large32MiB exports refuse with no successful prefix. Pinned official SDK2.3.1 MCP returns five exact previews and refuses oversized1MiB results; allfive actual consumer children close. Four real-validator negatives andthree409source guards pass;0website refetches/two positive nonce probes.",
+          "limits": "Status remains partial: exact owned fixture and current declared source closure only. Browser-local rules are explicitly reapplied, not persisted by server. R1/R2/R3 and unrelated first-batch Node fast termination remain failed. No Windows-long-path repair,universalRSS/CPU/stability,all-operator/other-corpus/provider/installation or manufacturer-parity claim; fresh public CI pending."
         }
       ],
       "parity_evidence": [],
       "group": "links",
       "remaining_acceptance": [
         "Verify all supported rule/operator combinations, broader imported and concurrent-mutation cases, and large-corpus budgets. Browser-local same-origin restoration does not establish server persistence or a fresh browser profile.",
-        "Address the actual repeated-metadata large-corpus case: roughly1000 pages can create quadratic related-URL findings and exceed the32MiB projection budget. Bounded refusal is proven; broad usability, universalRSS and CPU guarantees are not.",
+        "Extend beyond the now-passing exact repeated-metadata fixture to other corpora, concurrency/archival/operator cases and independently measured resource behavior. Preserve the historical early32MiB refusal andR1/R2/R3 failures; R4 now fully proves the indexed own workflow including all original relationships, normal CLI/MCP limits and cold replay. No universalRSS, CPU or runtime guarantee follows.",
         "Extend explicitly scoped integration to additional specialist inventories where a captured-page cohort is meaningful, and verify manufacturer-specific semantics independently."
       ],
       "parity_status": "NOT_PROVEN"
@@ -2839,7 +2846,8 @@
       "parity_evidence": [],
       "group": "rendering",
       "remaining_acceptance": [
-        "Expose selected capture viewport through crawler/UI, add deterministic image/viewport assertions and artifact-file links."
+        "Expose selected capture viewport through crawler/UI, add deterministic image/viewport assertions and artifact-file links.",
+        "Next scoped screenshot workflow: choose actual capture viewport in settings, crawl an owned deterministic rendered page, verify PNG dimensions and URL/generation binding, then reopen the saved project and verify the same image/export artifact. Screenshot presence alone does not prove viewport correctness."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -4011,7 +4019,8 @@
       "parity_evidence": [],
       "group": "storage",
       "remaining_acceptance": [
-        "Add dedicated config import/export with credential/path validation and unchanged setting assertions."
+        "Add dedicated config import/export with credential/path validation and unchanged setting assertions.",
+        "Next scoped configuration workflow: export a typed crawl profile, import into a fresh draft, validate absent credentials/files and unsafe or invalid paths before job creation, then prove every unchanged option through actual UI/API/saved config and reopen. Never include secrets in exported profiles."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -4035,7 +4044,8 @@
       "parity_evidence": [],
       "group": "storage",
       "remaining_acceptance": [
-        "Copy/open an archive in a second directory and validate all declared portable artifacts plus manifest/schema version."
+        "Copy/open an archive in a second directory and validate all declared portable artifacts plus manifest/schema version.",
+        "Prove supported Windows long data/artifact paths with a fresh deep owned directory, explicit process/store lifecycle and complete archive reopen. Repeated-metadata attemptR1 encountered a long-path failure; no product fix, arbitrary path-length support or successful long-path acceptance is claimed. Keep this separate from ordinary short-path JSON portability."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -4533,7 +4543,8 @@
       "parity_evidence": [],
       "group": "ui",
       "remaining_acceptance": [
-        "Save/reopen column preferences and test combined numeric/text filtering rather than separate controls alone."
+        "Save/reopen column preferences and test combined numeric/text filtering rather than separate controls alone.",
+        "Next scoped dashboard workflow: combine numeric bounds and Unicode text search with stable multi-page sorting, persist named column visibility/order, reopen the same saved project and verify every selected row plus complete current-section CSV. Empty and unknown values need separate controls."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -6698,6 +6709,18 @@
       "tested_at": "2026-10-18T13:36:45.575Z",
       "source_debug_sha256": "794ffe668b1724240ab0ba43cc6df1f0de8893011fb7c92d18f2e057cc844ad3",
       "limitations": "Bounded independent local acceptance; ordinary Rust predates JS-only selection guard. Public CI, large-corpus limits and manufacturer parity separate."
+    },
+    {
+      "id": "large-segment-issues-20261018",
+      "date": "2026-10-18",
+      "result": "PASS_LOCAL_R4_AND38_SEPARATE_SUCCESSFUL_UI_CASES_PUBLIC_CI_PENDING",
+      "artifact": "docs/verification/large-segment-issues-20261018/README.md",
+      "evidence": "docs/verification/large-segment-issues-20261018/local-result.json",
+      "source_gates": "docs/verification/large-segment-issues-20261018/source-gates.json",
+      "source_debug_sha256": "b37fedf446d887ddd803a2fd5a21bc636b7d3e1274c6afa93ef4f9ce8e6bd3a8",
+      "command": "1772 ordinary Rust; four explicit Chromium fixtures; focused26App22Core32Analysis;71 state/40 VM; strict Clippy; positive test-provider; UI14+22+1+1 across distinct phases",
+      "scope": "Complete independent1010-page repeated-description workflow:1005selected/7035issues/1012035ordered relationships;96 browser-native oracles,42standalone pages; every warm/cold DOM row and byte-identical45193762-byte JSON/44429381-byte issueCSV; two actual native EOF0 at same store/origin; normal CLI/MCP success and unchanged32MiB/1MiB refusal boundaries. Four validator negatives,three409guards,0refetches/two nonce controls. All38 registered cases have successful executions across separate phases; initial later-failing batch remains FAIL.",
+      "limits": "Own bounded local acceptance only. R1 long-path,R2 event timeout,R3 global timeout and first-batch Node0xC0000409 failure remain. Node root cause, Windows long paths, universal resource/stability claims, production providers,installation,fresh public CI and manufacturer parity NOT_PROVEN. No single38-suite invocation claimed."
     }
   ],
   "reference_workflows": [
@@ -6958,21 +6981,92 @@
   "last_verified_at": "2026-10-18T12:19:19.632Z",
   "current_work": [
     {
+      "id": "large-segment-issue-views-20261018",
+      "title_de": "Große Segmentbefunde ohne vorzeitige Gesamtkopie verarbeiten",
+      "status": "LOCAL_R4_COMPLETE_PASS_38_SEPARATE_UI_CASES_FRESH_PUBLIC_CI_PENDING",
+      "summary_de": "Der indexierte Core-Evaluator und geliehene Befundverweise verarbeiten den echten Wiederholungsmetadaten-Korpus ohne vorzeitige Gesamtkopie. R4 besteht vollständig in1176159ms:1010 erfasste Seiten/7068 Befunde,1005 ausgewählte Seiten/7035 Befunde/1012035 geordnete URL-Beziehungen, volle warme/kalte Tabellen und bytegleiche JSON-/CSV-Exporte.1772 gewöhnliche Rust-Tests, vier separate Chromium-Prüfungen,71 Zustandsfälle,40 aktuelle semantische VM-Gruppen, strenges Clippy und der positive test-only HTTP-Provider-Ablauf bestehen. Alle38 registrierten UI-Fälle haben erfolgreiche Ausführungen in getrennten Phasen; der zuerst am Node-Prozess gescheiterte Lauf bleibt fehlgeschlagen. Keine Behauptung eines einzigen38-Suiten-Laufs, allgemeiner Leistungsgrenzen oder Herstellerparität; frische öffentliche Gesamt-CI bleibt offen.",
+      "completed_acceptance_de": [
+        "Originalartefakt unabhängig vermessen: 1010 echte Seiten, 7068 Befunde und 1015056 related_urls bei 45247815 Berichtbytes. Der 1005-Seiten-Ausschnitt enthält 7035 Befunde; seine größte 200er-Issue-Antwort ist etwa 7.9 MB.",
+        "Ursache im gemeinsamen Core-Matcher und zusätzliche Analyse-Kopien identifiziert; bytegleiche Antwortformate, Originalreihenfolge und vollständige Beziehungen sind als unveränderte Anforderungen festgelegt.",
+        "Gemeinsame Core-Auswahl mit originalen Befundindizes implementiert; die öffentliche kopierende API bleibt als begrenzter Legacy-Adapter erhalten. Analyse-Deduplizierung leiht Original-URL-Verweise und erhält exakte Owner-/Code-, ungeordnete Set- und Empty-Wildcard-Semantik.",
+        "Alle13 nativen CSV-Arten sind ausdrücklich auswählbar; Standard bleibt Seiten. Auswahl der Ausgabeart verändert oder lädt den bestätigten Segmentkontext nicht. Vollständige Befund-URL-Verweise sind vom generischen Spalten-CSV mit Anzahl klar unterschieden.",
+        "Aktueller lokaler Quellenstand:1772 gewöhnliche Rust-Tests,0 Fehler/5 gezielte Ignores; vier echte Chromium-Fixtures separat,71 Zustandsprüfungen,40 aktuelle semantische VM-Gruppen und strenges Clippy bestanden. Die positive Browser-/Native-/lokale-HTTP-Provider-Abnahme mit zwei nativen Prozessen besteht ebenfalls; Testtransport und Produktionsanbieter bleiben getrennt.",
+        "Teilbelege des insgesamt fehlgeschlagenen R3: alle1005 warmen Titel und7035 Problemzeilen vollständig im DOM; vollständiges Dashboard-JSON45193736Bytes und Issues-CSV44429381Bytes;42 Standalone-API-Seiten sowie zwei volle32-MiB-Exportablehnungen. Tatsächliches MCP über SDK2.3.1: fünf positive Vorschauen, explizite1-MiB-Ablehnung und natürlicher EOF0-Abschluss. Daraus folgt kein vollständiger E2E-PASS.",
+        "Fehlläufe bleiben erhalten: R1 Windows-Langpfad, R2 Ereigniswartezeit180s, R3 Gesamtlauf900044ms/SIGTERM. R3 beweist den finalen CLI-Abschluss, die deklarierte Importkontrolle und die kalte Großkorpus-Wiederholung nicht.",
+        "R4 vollständig bestanden:1176159ms (19min36.159s),1010 tatsächliche Website-Aufnahmen,7068 gespeicherte Befunde. Die1005 ausgewählten Seiten enthalten7035 Befunde und1012035 originale geordnete related_urls. Warme und kalte Haupttabellen prüfen jeden Titel und jede Problemzelle über alle Seiten;96 unabhängige Browser-/Native-Leseorakel und42 vollständige Standalone-API-Seiten erhalten alle Beziehungen.",
+        "Vollständige tatsächliche Browser-Downloads sind warm/kalt bytegleich: Dashboard-JSON45193762Bytes, SHA256d99ee3c281548032eb8c190fb57f1a0d80ba0dea2709bdebffba9edf4194b8b2; Issues-CSV44429381Bytes, SHA256327beab1ac15158ebecb8887da6c385434c3bc0a7d2f65aa789970d788653f97. Alle18 CSV-Spalten und ursprünglichen Beziehungen stimmen mit dem unabhängigen nativen Orakel überein; keine Abschneidung oder Erhöhung der bisherigen Grenzen.",
+        "Zwei tatsächliche native App-Prozesse öffnen denselben frischen Store auf derselben eigenen Origin und schließen beide natürlich per stdin-EOF0. Die Regeln stammen aus demselben browserlokalen Speicher und werden ausdrücklich neu angewendet; keine serverseitige Regelpersistenz behauptet. HTTP410-Zeuge bleibt bis nach beiden Abschlüssen:0 Produkt-Neuabrufe bei zwei erfolgreichen Nonce-Kontrollproben,0 JavaScript-Fehler/externen Versuchen.",
+        "Tatsächliche normale CLI: vollständiges Tail-JSON und sechs CSV-Spalten mit allen1007 Beziehungen, beide Kinder Code0. Große JSON-/CSV-Ausgaben werden an der unveränderten32-MiB-Grenze ohne Datei oder erfolgreichen Präfix verweigert, beide Kinder erwartungsgemäß Code1. Tatsächlicher SDK2.3.1-MCP-Prozess liefert fünf exakte Vorschauen und verweigert200 Duplikatbefunde oberhalb1MiB; natürlicher EOF0. Alle fünf Consumer-Kinder sind tatsächlich geschlossen.",
+        "Deklarierte späte Duplikat-Importkontrolle hält die gewählte Originalordinal1001 getrennt von der letzten404-Beobachtung. Native Metadaten binden Generation1 für den echten Crawl und0 für den Import. Drei tatsächliche409-Ablehnungen für Token/Generation/fremden Auftrag sowie vier Negativkontrollen am tatsächlichen Beziehungs-/CSV-Validator bestehen.",
+        "Sechs create_new-IN_PROGRESS-Checkpoints dokumentieren warme Exporte, Standalone, MCP, vollständig geschlossene CLI-Kinder, deklarierte Kontrolle und kalte bytegleiche Exporte. Erst der abschließende reguläre Gesamtbeleg und das unveränderte Programm b37fedf4 begründen R4-PASS; kein einzelner Zwischencheckpoint gilt als vollständige Abnahme.",
+        "Aktuelle fokussierte Prüfungen:26 App-,22 Core- und32 Analyse-Fälle bestanden; dazu71 UI-Zustandsfälle/40 aktuelle semantische VM-Gruppen,1772 gewöhnliche Rust-Tests ohne Fehler/5 gezielte Ignores, vier echte Chromium-Fixtures, strenges Clippy und normaler Build. Die positive cfg(test)-HTTP-Provider-Abnahme besteht mit zwei nativen Prozessen,213 lokalen Provider-Versuchen und0 Website-Anfragen; Produktions-Google bleibt unbewiesen.",
+        "Alle38 registrierten UI-Fälle (9 Fixtures/29 native oder Live-Suiten) haben erfolgreiche Ausführungen in getrennten Phasen:14 bestandene Fälle vor dem späteren Node-Abbruch des fehlgeschlagenen ersten Batches,22 vollständige Folgefälle, ein normaler isolierter Robots-Fall ohne Preload/Reportflags und der neue vollständige R4. Kein einziger gemeinsamer38-Suiten-Lauf behauptet.486 Eingaben mit gesondert ausgewiesenen autorisierten Testtreiberänderungen; Kompiliereingaben unverändert und aktuelle Runtime-Hashes erneut geprüft.",
+        "Der erste Robots-Node-Prozess endete nach fünf Teilprüfungen mit0xC0000409 ohne JavaScript-Fehler oder Timeout. Ein autorisierter isolierter Diagnoselauf und danach ein normaler unveränderter Robots-Lauf bestehen jeweils alle acht Prüfblöcke mit0 Website-Anfragen und regulärem App-Ende. Ursache bleibt NOT_PROVEN; kein Produktfix und keine allgemeine Stabilität daraus abgeleitet.",
+        "Das1800s-Gesamtbudget gilt ausschließlich für den neuen Großkorpus-Fall; Ereigniswartezeit420s und Wartezeit nach Installation180s bleiben getrennt. Die übrigen37 Suite-Budgets sind unverändert. R1-Langpfad, R2-Ereigniswartezeit180s, R3-Gesamtlauf900044ms/SIGTERM und der erste fehlgeschlagene Robots-Batch bleiben als Fehler erhalten.",
+        "Run39132410328 auf83c ist jetzt terminal FAIL: Windows-,Ubuntu- und Container-Jobs SUCCESS; Renderer-Job FAIL erst nach erfolgreichem37er-UI-Schritt im separaten Sitemap-Harness. Beide eng korrigierten Sitemap-Treiber bestehen lokal11/13 Gruppen; frische öffentliche Gesamt-CI des neuen Commits bleibt offen. Kein allgemeiner Plattform-/Docker-Laufzeit- oder Installationsnachweis."
+      ],
+      "pending_acceptance_de": [
+        "Frische öffentliche Gesamt-CI für den neuen exakten Commit vollständig abnehmen. Der historische83c-Run ist terminal fehlgeschlagen: Windows-,Ubuntu- und Container-Jobs erfolgreich; Renderer37er-UI-Schritt erfolgreich, späterer Sitemap-Harness fehlgeschlagen. Die eng reparierten Sitemap-Treiber bestehen lokal11/13 Gruppen, öffentliche Wiederholung bleibt offen.",
+        "Windows-Langpfad für tiefe Daten-/Artefaktverzeichnisse gesondert in storage.portable abnehmen; R1 ist kein behobener Produktfehler. Ursache des isolierten Node-Fast-Abbruchs0xC0000409 bleibt unbekannt.",
+        "Weitere Segmentoperatoren/Kombinationen, andere Corpora und Spezialinventare sowie Konkurrenz-,Archiv- und Browserfälle prüfen. Dieser synthetische vollständige Korpus belegt keine universellen RSS-/CPU-/Laufzeitgarantien, Server-Regelpersistenz oder Crash-Recovery.",
+        "Als nächste eigene Bausteine Konfigurations-Import/Export mit Credential-/Pfadprüfung, kombinierte Zahlen-/Textfilter mit gespeicherten Spalten und reproduzierbare Screenshot-/Viewport-Artefakte bearbeiten; die jeweiligen Feature-Kriterien bleiben offen.",
+        "Autorisierte echte Produktionsanbieter-Metriken, erfolgreiche Enrichment-CLI und weitere Anbieter separat prüfen. Alle144 Fähigkeiten/416 Filter/32 Referenzabläufe sowie vollständige Herstellerparität bleiben NOT_PROVEN; installierte Source16 unverändert."
+      ],
+      "documentation": [
+        "docs/verification/large-segment-issues-20261018/README.md",
+        "docs/verification/large-segment-issues-20261018/local-result.json",
+        "docs/verification/large-segment-issues-20261018/source-gates.json",
+        "docs/e2e-testing.md",
+        "docs/verification/dashboard-segments-20261018/README.md"
+      ],
+      "gates": {
+        "implementation": "IMPLEMENTED_INDEXED_CORE_BORROWED_ANALYSIS_13_EXPORT_KINDS",
+        "core_native_tests": "PASS26_APP22_CORE32_ANALYSIS_PLUS1772_ORDINARY_FAIL0_IGNORE5",
+        "frontend_state": "PASS71_STATE_AND40_CURRENT_SEMANTIC_VM_GROUPS",
+        "repeated_metadata_browser": "PASS_R4_COMPLETE1176159MS_ALL_WARM_COLD_ROWS_EXPORTS_AND_CHILD_CLOSES",
+        "broad_gates": "PASS1772_CHROME4_STATE71_VM40_CLIPPY_PROVIDER_AND38_SUCCESSFUL_CASES_ACROSS_DISTINCT_PHASES",
+        "installation": "UNCHANGED_SOURCE16",
+        "manufacturer_parity": "NOT_PROVEN",
+        "explicit_Chromium": "PASS4_ACTUAL_OWNED_RENDERER",
+        "strict_clippy": "PASS_ALL_TARGETS_ALL_FEATURES_DENY_WARNINGS",
+        "positive_enrichment": "PASS_ACTUAL_CFGTEST_LOCAL_HTTP_PROVIDER_TWO_NATIVE_PROCESSES",
+        "prior_attempts": "R1_LONG_PATH_R2_EVENT180_TIMEOUT_R3_GLOBAL900_TIMEOUT_ALL_RETAINED",
+        "warm_R3": "PARTIAL1005_TITLES7035_ISSUE_DOM_JSON45193736_CSV44429381_STANDALONE42_MCP5_AND_LIMIT_REFUSALS",
+        "final_CLI_import_cold": "PASS_TWO_APP_EOF0_FIVE_CONSUMER_CLOSES_DECLARED_IMPORT_AND_BYTE_IDENTICAL_COLD_EXPORTS",
+        "next_runtime": "R4_COMPLETE_PASS_GLOBAL1800_EVENT420_POSTINSTALL180_OTHER37_BUDGETS_UNCHANGED",
+        "public_CI": "PENDING_NEW_EXACT_COMMIT",
+        "normal_build": "PASS_SHA_b37fedf446d887ddd803a2fd5a21bc636b7d3e1274c6afa93ef4f9ce8e6bd3a8",
+        "browser_native_oracles": "PASS96_BROWSER_NATIVE_PLUS42_STANDALONE",
+        "actual_consumers": "PASS_MCP5_PREVIEWS_AND1MIB_REFUSAL_EOF0_CLI_TAIL_JSON_CSV_CODE0_AND_TWO32MIB_REFUSALS_CODE1",
+        "negative_controls": "PASS4_ACTUAL_VALIDATOR_CONTROLS_AND3_NATIVE409_GUARDS",
+        "source_binding": "PASS486_DECLARED_INPUTS_COMPILED_UNCHANGED_AUTHORIZED_DRIVER_EDITS_EXPLICIT_RUNTIME_RECHECKED",
+        "first_robots_batch": "FAIL_NATIVE_NODE0XC0000409_CAUSE_UNKNOWN_DIAGNOSTIC_AND_ONE_PLAIN_CASE_PASS",
+        "public_CI_83c": "TERMINALFAIL_WINDOWS_UBUNTU_CONTAINER_PASS_RENDERER_UI37_PASS_LATER_SITEMAP_HARNESS_FAIL",
+        "public_CI_83c_final": "TERMINALFAIL_WINDOWS_UBUNTU_CONTAINER_SUCCESS_RENDERER_LATE_SITEMAP_HARNESS_FAIL_UI37_SUCCESS"
+      },
+      "reference_parity": "NOT_PROVEN",
+      "priority": -6
+    },
+    {
       "id": "dashboard-segments-bounded-20261018",
       "title_de": "Segmente in der Hauptansicht und vollständigen Exporten anwenden",
-      "status": "LOCAL_PASS_37_UI_THREE_PHASES_PUBLIC_CI_PENDING",
-      "summary_de": "Gespeicherte Segmente sind in Haupttabellen, Kennzahlen, Diagrammen und vollständigen nativen/Tabellen-Exporten integriert. Alle 37 registrierten UI-Suiten bestehen lokal in drei ausdrücklich getrennten Phasen (2+1+34) auf derselben finalen Binärdatei. Die mobile Textauswahl wurde durch eine echte E2E-Prüfung repariert. 1766 Rust-Tests, vier separate Chromium-Prüfungen, sieben native Dashboard- und 68 Zustandsprüfungen bestehen; weitere Herstellerfunktionen und öffentliche CI bleiben offen.",
+      "status": "LOCAL37_PHASES_AND_PUBLIC37_UI_PASS_LATER_SITEMAP_HARNESS_FAILED",
+      "summary_de": "Gespeicherte Segmente sind in Haupttabellen, Kennzahlen, Diagrammen und vollständigen nativen/Tabellen-Exporten integriert. Alle 37 registrierten UI-Suiten bestehen lokal in drei ausdrücklich getrennten Phasen (2+1+34) auf derselben finalen Binärdatei. Die mobile Textauswahl wurde durch eine echte E2E-Prüfung repariert. 1766 Rust-Tests, vier separate Chromium-Prüfungen, sieben native Dashboard- und 68 Zustandsprüfungen bestehen; weitere Herstellerfunktionen und öffentliche CI bleiben offen. Der spätere öffentliche83c-Renderer-Schritt besteht alle37 UI-Suiten gemeinsam; der Job scheitert danach separat am veralteten Sitemap-Harness. Die Wiederholungsmetadaten-Folgeabnahme ist im neuen Block large-segment-issue-views-20261018 nach erhaltenen R1/R2/R3-Fehlern vollständig als R4 bestanden.",
       "completed_acceptance_de": [
         "1010 echte Aufnahmen; vollständige 200er-Paginierung und alle 1005 ausgewählten Titel sowie native/generische Exporte geprüft. Originalordinale, doppelte URLs, unbekannte/unzugeordnete/überlappende/leere Gruppen, Roh-/Berichtsmodus und Ziele außerhalb des Segments bleiben korrekt.",
         "Kontext-, Generations-, Regel-/Tab-/Crawlwechsel, Inspector jenseits von 1000 und kalter zweiter Prozess geprüft; zwei natürliche EOF0-Abschlüsse, identischer Export und null Offline-Neuabrufe bei zwei echten Kontrollproben.",
         "105 echte mobile Tabellenzeilen: geschlossene Zeilen 83.125px; vollständige Werte per Pointer-Auswahl, Tastatur, nativem Pfeil und Touch sowie identische vollständige Exporte geprüft. Den tatsächlichen Auswahl-/Einklappfehler behoben.",
         "13 native CSV-Arten schreiben in begrenzte Senken. Sieben native Tests einschließlich physischer 64MiB exakt/+1-Byte-Ablehnung; zusätzliche URL-/Redirect-/Fragment-Fanout-Ablehnungen stoppen vor vollständiger Materialisierung.",
         "1766 gewöhnliche Rust-Tests ohne Fehler/fünf gezielte Ignores; vier Chromium-Fixtures separat bestanden. Das war vor der späteren reinen JS-Auswahlkorrektur; Rust-Code unverändert. Finales strenges Clippy, 68 Zustandsprüfungen und 40 aktuelle semantische VM-Gruppen bestanden.",
-        "Alle 37 registrierten UI-Suiten verteilt auf drei natürliche, quellstabile Phasen: zwei fokussierte, eine Dashboard- und 34 übrige Suiten; neun API-Fixtures und 28 native Suiten. Kein behaupteter gemeinsamer 37-Suiten-Speicherlauf. Finale Binärdatei und 485 Quellen/Treiber identisch."
+        "Alle 37 registrierten UI-Suiten verteilt auf drei natürliche, quellstabile Phasen: zwei fokussierte, eine Dashboard- und 34 übrige Suiten; neun API-Fixtures und 28 native Suiten. Kein behaupteter gemeinsamer 37-Suiten-Speicherlauf. Finale Binärdatei und 485 Quellen/Treiber identisch.",
+        "Öffentlicher Commit83c46948a615d91885a303a46f246fdecd965611, Run39132410328: Alle37 registrierten UI-Suiten (9 Fixtures/28 native oder Live-Suiten) bestanden im gemeinsamen Renderer-Schritt. Der Renderer-Job117690092264 scheiterte erst danach im gesonderten Sitemap-Mitgliedschaftstreiber, dessen veraltete Asset-Liste GET /dashboard-segments.js selbst blockierte. Kein bestandenes Gesamt-CI-Ergebnis; frühere Fehlläufe bleiben erhalten.",
+        "Die zwei eng korrigierten Sitemap-Harnesses bestehen lokal auf dem normalen b37fedf446d887ddd803a2fd5a21bc636b7d3e1274c6afa93ef4f9ce8e6bd3a8:11 Mitgliedschafts- und13 Assessment-Gruppen, je sechs tatsächlich ausgelieferte Asset-Hashes, vollständige native API-/CSV-/SDK-/Browser-Prüfungen und unveränderte483 aktuelle Quelldateien. Zwei echte Blockierkontrollen je Lauf bleiben erhalten; Website-Zeugen sind nach App-Ende und sauberem Fixture-Drain geprüft. Diese Treiber verwenden SIGTERM, nicht EOF0. Der öffentliche83c-Fehler bleibt fehlgeschlagen; frische öffentliche Wiederholung steht aus.",
+        "Folgeabnahme large-segment-issue-views-20261018: tatsächlicher großer Wiederholungsmetadaten-Korpus mit allen warmen/kalten7035 Problemzeilen, vollständigen bytegleichen Issues-CSV/JSON-Dateien und normalen CLI-/MCP-Consumern besteht in R4. Eigene historische37er-Phasen bleiben getrennt von den neuen38er-Ausführungen und deren erstem fehlgeschlagenem Node-Batch.",
+        "Run39132410328 auf83c ist jetzt terminal FAIL: Windows-,Ubuntu- und Container-Jobs SUCCESS; Renderer-Job FAIL erst nach erfolgreichem37er-UI-Schritt im separaten Sitemap-Harness. Beide eng korrigierten Sitemap-Treiber bestehen lokal11/13 Gruppen; frische öffentliche Gesamt-CI des neuen Commits bleibt offen. Kein allgemeiner Plattform-/Docker-Laufzeit- oder Installationsnachweis."
       ],
       "pending_acceptance_de": [
-        "Öffentliche CI des nächsten exakten Commits separat prüfen. Der historische Run39127069406 bleibt fehlgeschlagen; Hash-Checker und Ressourcen-CDP-Treiber sind lokal korrigiert und abgenommen.",
-        "Großkorpus-Grenze bleibt offen: 1010 echte Seiten mit identischen Descriptions erzeugten 45247815 Berichtbytes und über eine Million related_urls. Die bestehende 32-MiB-Segmentprojektion lehnte korrekt ab; diese Engine-Grenze ist nicht aufgehoben.",
+        "Öffentliche Gesamt-CI für den jeweiligen neuen Commit separat abnehmen. Auf83c bestand der37er-UI-Schritt, der spätere gesonderte Sitemap-Harness scheiterte. Beide betroffenen Sitemap-Treiber bestehen lokal nach enger Asset-Korrektur; frische öffentliche Wiederholung und neuer Folgecode bleiben offen. Historische Run39127069406- und andere Fehlschläge bleiben erhalten.",
+        "Weitere Corpora,Operator-/Kombinations-,Konkurrenz- und Browserfälle sowie allgemeine RSS-/CPU-/Laufzeitgarantien bleiben offen. Der konkrete historische45-MB-Wiederholungsfall ist im indexierten Folgeblock vollständig warm/kalt abgenommen;32-MiB-Vorschau/Standalone-Exporte,64-MiB-Dashboard-Exporte und1-MiB-MCP bleiben eigene unveränderte Grenzen.",
         "Weitere Segmentoperatoren und Kombinationen, große Corpora, weitere Spezialinventare sowie alle 144 Fähigkeiten/416 Filter/32 Referenzabläufe weiter abarbeiten. Server-Persistenz der Regeln, neue Browserprofile, Crash-Recovery und vollständige Herstellerparität bleiben NOT_PROVEN."
       ],
       "documentation": [
@@ -6990,13 +7084,19 @@
         "aggregate_UI": "PASS37_THREE_PHASES_2_1_34_SAME_FINAL_BINARY_485_BOUND_INPUTS",
         "ordinary_rust": "PASS1766_FAIL0_IGNORE5_BEFORE_JS_ONLY_POINTER_FIX",
         "strict_clippy": "PASS_FINAL_ALL_TARGETS_ALL_FEATURES_DENY_WARNINGS",
-        "public_CI": "PENDING_NEXT_COMMIT",
+        "public_CI": "PUBLIC83C_UI37_STEP_PASS_LATER_SITEMAP_HARNESS_FAIL_NEW_CI_PENDING",
         "manufacturer_parity": "NOT_PROVEN",
         "installation": "UNCHANGED_SOURCE16",
         "explicit_Chromium": "PASS4_ACTUAL_OWNED_RENDERER",
-        "public_CI_previous": "FAIL39127069406_HASH_CHECKER_AND_RESOURCE_CDP_REPAIRED_LOCALLY"
+        "public_CI_previous": "FAIL39127069406_HASH_CHECKER_AND_RESOURCE_CDP_REPAIRED_LOCALLY",
+        "public_CI_83c_UI": "PASS37_SINGLE_PUBLIC_STEP_9_FIXTURE28_NATIVE_OR_LIVE",
+        "public_CI_83c_renderer": "FAIL_JOB117690092264_AFTER_UI_IN_SITEMAP_ASSET_ALLOWLIST",
+        "sitemap_harness_local_repair": "PASS11_MEMBERSHIP13_ASSESSMENT_NORMAL_B37_483_SOURCES_UNCHANGED",
+        "large_followup": "PASS_R4_COMPLETE_WARM_COLD_FULL_RELATIONSHIPS_EXPORTS_CLI_MCP_BOUNDED_OWN_ACCEPTANCE",
+        "public_CI_83c_final": "TERMINALFAIL_WINDOWS_UBUNTU_CONTAINER_SUCCESS_RENDERER_LATE_SITEMAP_HARNESS_FAIL_UI37_SUCCESS"
       },
-      "reference_parity": "NOT_PROVEN"
+      "reference_parity": "NOT_PROVEN",
+      "priority": -5
     },
     {
       "id": "accessibility-and-cold-specialists-20261018",
@@ -7015,11 +7115,13 @@
         "N-Gramme: echte Quelldaten über zwei Prozesse,19 vollständige CSVs/acht JSONs, vollständige Quellenfolge, neun Header- und vier Quellenkontrollen; keine behauptete Persistenz der Browseroptionen.",
         "Segmente:109 echte Seiten, sieben identische warme/kalte Vorschauen,28 vollständige Downloads, alle sechs CSV-Spalten und sieben Fehlerkontrollen; browserlokale Regeln auf derselben eigenen Origin gesondert geprüft.",
         "Beide Cold-Suiten halten den echten HTTP410-Zeugen vor dem ersten EOF bis nach beiden natürlichen Prozessabschlüssen und Browserende; jeweils null Produkt-Neuabrufe bei zwei erfolgreichen Kontrollproben.",
-        "1753 gewöhnliche Rust-Tests ohne Fehler/fünf gezielte Ignores, Format, strenges Clippy, normaler Build und gemeinsamer35-Suiten-Lauf bestanden. Danach ausschließlich zwei Testassertionen verschärft und beide Suiten gezielt erneut bestanden."
+        "1753 gewöhnliche Rust-Tests ohne Fehler/fünf gezielte Ignores, Format, strenges Clippy, normaler Build und gemeinsamer35-Suiten-Lauf bestanden. Danach ausschließlich zwei Testassertionen verschärft und beide Suiten gezielt erneut bestanden.",
+        "Der zuvor offene Hauptansichtsbaustein ist im Folgeblock dashboard-segments-bounded-20261018 lokal abgenommen: vollständige Original-Seitendatensätze, Kennzahlen, Diagramme, profilgebundene Filter, Inspector und volle Exporte. Im öffentlichen83c-Lauf bestanden Accessibility, beide Cold-Suiten und die neue Hauptansicht innerhalb aller37 UI-Suiten. Weitere Operatoren, beliebige Großkorpora und Herstellerparität sind damit nicht belegt.",
+        "Run39132410328 auf83c ist jetzt terminal FAIL: Windows-,Ubuntu- und Container-Jobs SUCCESS; Renderer-Job FAIL erst nach erfolgreichem37er-UI-Schritt im separaten Sitemap-Harness. Beide eng korrigierten Sitemap-Treiber bestehen lokal11/13 Gruppen; frische öffentliche Gesamt-CI des neuen Commits bleibt offen. Kein allgemeiner Plattform-/Docker-Laufzeit- oder Installationsnachweis."
       ],
       "pending_acceptance_de": [
-        "Run39127069406 des exakten Vorgängercommits ist terminal fehlgeschlagen. Accessibility und beide Cold-Suiten bestanden dort tatsächlich; andere Hash-Checker-/Ressourcen-CDP-Fehler bleiben als fehlgeschlagen sichtbar und werden im neuen Arbeitsblock behoben.",
-        "Segmente in Hauptansicht/Diagramme/Filter integrieren; weitere Operatoren, Import-/Konkurrenzfälle sowie große Corpora und fehlende N-Gramm-Kanäle separat abnehmen.",
+        "Run39127069406 bleibt terminal fehlgeschlagen; die damaligen Hash-Checker-/Ressourcen-CDP-Reparaturen sind lokal abgenommen und der spätere öffentliche83c-Lauf bestand alle37 UI-Suiten. Dieser spätere Renderer-Job scheiterte danach separat am Sitemap-Harness; beide eng reparierten Sitemap-Treiber bestehen lokal, frische öffentliche Wiederholung bleibt offen.",
+        "Weitere Operator-/Kombinations-, Import-/Konkurrenz- und Großkorpusfälle sowie fehlende N-Gramm-Kanäle separat abnehmen. Browserlokale Regeln bleiben von nativen gespeicherten Quellen getrennt; manuelle Barrierefreiheit und vollständige Herstellerparität bleiben NOT_PROVEN.",
         "Die vollständigen144 Fähigkeiten,416 Filter und32 Referenzabläufe weiter bearbeiten; manuelle Barrierefreiheit und vollständige Herstellerparität bleiben NOT_PROVEN."
       ],
       "documentation": [
@@ -7037,7 +7139,11 @@
         "public_CI_081bf33": "RENDERER_FAIL_WINDOWS_SEPARATELY_TRACKED_39123847418",
         "public_CI_current": "FAIL39127069406_UBUNTU_WINDOWS_HISTORICAL_HASH_CHECKER_RENDERER_RESOURCE_CDP",
         "manufacturer_parity": "NOT_PROVEN",
-        "installation": "UNCHANGED_SOURCE16"
+        "installation": "UNCHANGED_SOURCE16",
+        "dashboard_followup": "PASS_BOUNDED_LOCAL_AND_PUBLIC83C_UI_STEP_LARGE_R3_STILL_INCOMPLETE",
+        "public_CI_83c_UI": "PASS37_INCLUDING_ACCESSIBILITY_AND_BOTH_COLD_SUITES",
+        "public_CI_83c_renderer": "FAIL_LATER_SEPARATE_SITEMAP_HARNESS_NEW_CI_PENDING",
+        "public_CI_83c_final": "TERMINALFAIL_WINDOWS_UBUNTU_CONTAINER_SUCCESS_RENDERER_LATE_SITEMAP_HARNESS_FAIL_UI37_SUCCESS"
       },
       "reference_parity": "NOT_PROVEN"
     },
@@ -7049,7 +7155,7 @@
       "feature_ids": [
         "modes.apis"
       ],
-      "summary_de": "Fünf Browser-/Native-/HTTP-Provider-Abläufe und acht getrennte UI-Zustandsregressionen bestehen. 108 Eingabezeilen mit 100+8 exakten DOM-Zeilen, fünf vollständige CSVs, 213 Provider-Versuche, kein Website-Abruf, ein unveränderter alter Auftrag nach Refresh, tatsächlicher Abbruch und kalte Wiederöffnung sind belegt. Der finale lokale Stand besteht 1.749 reguläre Rust-Tests, vier separat ausgeführte Chromium-Tests, alle 32 UI-Suiten, strenges Clippy und den normalen Build. Der Provider-Transport existiert nur im Testprogramm. Echte Google-Erfolge, Enrichment-CLI, weitere Anbieter und neue öffentliche CI bleiben offen; die genaue Ursache des historischen Windows-Timeouts ist nicht nachgewiesen.",
+      "summary_de": "Fünf Browser-/Native-/HTTP-Provider-Abläufe und acht getrennte UI-Zustandsregressionen bestehen. 108 Eingabezeilen mit 100+8 exakten DOM-Zeilen, fünf vollständige CSVs, 213 Provider-Versuche, kein Website-Abruf, ein unveränderter alter Auftrag nach Refresh, tatsächlicher Abbruch und kalte Wiederöffnung sind belegt. Der finale lokale Stand besteht 1.749 reguläre Rust-Tests, vier separat ausgeführte Chromium-Tests, alle 32 UI-Suiten, strenges Clippy und den normalen Build. Der Provider-Transport existiert nur im Testprogramm. Der öffentliche83c-Provider-/UI-Schritt bestand vor dem späteren Sitemap-Harness-Fehler. Echte Google-Erfolge, Enrichment-CLI, weitere Anbieter und eine erfolgreiche neue Gesamt-CI bleiben offen; die genaue Ursache des historischen Windows-Timeouts ist nicht nachgewiesen.",
       "completed_acceptance_de": [
         "Acht reproduzierte UI-Regressionsfälle bestehen: Terminal-Abbruch, verspätete Status-/Cancel-Antworten, Eigentum des Busy-Zustands und Sperren nach veraltetem Ergebnis-/CSV-Snapshot.",
         "Realer Browser startet nach Vorschau und neuer Freigabe den vollständigen nativen Dienst; 105 eindeutige URLs, zwei zusätzliche Duplikatzeilen und eine abgelehnte Eingabe ergeben 108 exakt geprüfte Zeilen mit 100+8 Seitengrenze.",
@@ -7061,10 +7167,12 @@
         "Finale LF-Quellen und Testprogramm-SHA 5c907bf2 sind gebunden; 356 Kompiliereingaben und drei Treiber bleiben während des fokussierten Laufs unverändert. Katalog bleibt 37/69/38; modes.apis bleibt partial.",
         "Finale breite Gates: 1.749 reguläre Rust-Tests mit 0 Fehlern/5 bewusst ignorierten Tests; vier Chromium-Fixtures separat bestanden. Alle 32 UI-Suiten gemeinsam: 9 Fixtures und 23 native Suiten mit regulärem App-Abschluss 0 und unveränderten getrackten Quellen/Binärdatei; Format, strenges Clippy und normaler Build bestanden.",
         "28 reine Bundle-Kontrollen bestehen separat; elf native Gruppen und zwölf offizielle SDK-Prüfungen bestehen auf der normalen Binärdatei. Der Test-Provider-Selektor fehlt im Normalprogramm und ist als Positivkontrolle im separaten Testprogramm vorhanden.",
-        "Die zuvor offene kalte native Segment-/N-Gramm-Wiederöffnung sowie Accessibility-UI mit needs-review sind im Folgebaustein accessibility-and-cold-specialists-20261018 lokal abgenommen; browserlokale Regeln und neu gewählte N-Gramm-Optionen bleiben ausdrücklich getrennte Grenzen."
+        "Die zuvor offene kalte native Segment-/N-Gramm-Wiederöffnung sowie Accessibility-UI mit needs-review sind im Folgebaustein accessibility-and-cold-specialists-20261018 lokal abgenommen; browserlokale Regeln und neu gewählte N-Gramm-Optionen bleiben ausdrücklich getrennte Grenzen.",
+        "Im öffentlichen83c-Renderer-Job bestanden die getrennte positive cfg(test)-Provider-/Cold-Abnahme und danach alle37 UI-Suiten. Der Job scheiterte erst anschließend am gesonderten Sitemap-Harness; dies ist keine Produktions-Google- oder Gesamt-CI-Abnahme.",
+        "Run39132410328 auf83c ist jetzt terminal FAIL: Windows-,Ubuntu- und Container-Jobs SUCCESS; Renderer-Job FAIL erst nach erfolgreichem37er-UI-Schritt im separaten Sitemap-Harness. Beide eng korrigierten Sitemap-Treiber bestehen lokal11/13 Gruppen; frische öffentliche Gesamt-CI des neuen Commits bleibt offen. Kein allgemeiner Plattform-/Docker-Laufzeit- oder Installationsnachweis."
       ],
       "pending_acceptance_de": [
-        "Frische öffentliche Linux-/Windows-/Renderer-/Container-CI nach Push prüfen. Beide zuvor fehlgeschlagenen Windows-Tests bestehen lokal; die neue Concurrency-Grenze ist eine Maßnahme, die genaue historische 5s-Drain-Ursache bleibt NOT_PROVEN.",
+        "Öffentliche Gesamt-CI für den jeweiligen neuen Commit separat abnehmen. Auf83c bestand der37er-UI-Schritt, der spätere gesonderte Sitemap-Harness scheiterte. Beide betroffenen Sitemap-Treiber bestehen lokal nach enger Asset-Korrektur; frische öffentliche Wiederholung und neuer Folgecode bleiben offen. Historische Run39127069406- und andere Fehlschläge bleiben erhalten. Die genaue historische Windows-5s-Drain-Ursache bleibt trotz lokaler Concurrency-Maßnahme NOT_PROVEN.",
         "Autorisierte echte Google-Metriken und unabhängige Produktionsantworten sowie erfolgreichen enrich-urls-CLI mit JSON/CSV separat prüfen.",
         "Weitere dokumentierte Anbieter, getrennte CrUX-/lokale-Lighthouse-Verträge, zusätzliche Operator-/Archiv-/Konkurrenz-/Browserfälle weiter abarbeiten. Herstellerparität bleibt NOT_PROVEN."
       ],
@@ -7082,7 +7190,7 @@
         "final_explicit_Chromium": "PASS_FOUR_ACTUAL_OWNED_RENDERER",
         "final_strict_clippy": "PASS_ALL_TARGETS_ALL_FEATURES_WARNINGS_DENIED",
         "public_CI_01ba979": "FAIL_TWO_WINDOWS_TIMEOUTS_LINUX_OBSOLETE26_DIRECTORY_CDP_BODY",
-        "new_public_CI": "PENDING_AFTER_PUSH",
+        "new_public_CI": "PUBLIC83C_PROVIDER_AND_UI_STEP_PASS_LATER_SITEMAP_HARNESS_FAIL_FRESH_CI_PENDING",
         "production_Google": "NOT_PROVEN",
         "successful_enrichment_CLI": "NOT_PROVEN",
         "provider_breadth": "OPEN",
@@ -7092,7 +7200,8 @@
         "test_transport_isolation": "PASS_MARKER_ABSENT_NORMAL_PRESENT_TEST",
         "bundle": "PASS_28_CONTROLS_11_NATIVE_12_OFFICIAL_SDK",
         "Windows_old_timeout_root_cause": "NOT_PROVEN_CONCURRENCY_MITIGATION_LOCAL_PASS",
-        "followup_accessibility_and_cold": "PASS_LOCAL_SEPARATE_20261018_RECEIPT"
+        "followup_accessibility_and_cold": "PASS_LOCAL_SEPARATE_20261018_RECEIPT",
+        "public_CI_83c_final": "TERMINALFAIL_WINDOWS_UBUNTU_CONTAINER_SUCCESS_RENDERER_LATE_SITEMAP_HARNESS_FAIL_UI37_SUCCESS"
       },
       "reference_parity": "NOT_PROVEN"
     },
@@ -7101,7 +7210,7 @@
       "title_de": "Eigene Suche und Spezialwerkzeuge mit nativen Browser-Abläufen absichern",
       "priority": -2,
       "status": "LOCAL_1750_RUST_32_UI_PASS_PUBLIC_CI_PENDING",
-      "summary_de": "Die eigene Literal-/Regex-Suche ist für vier getrennte Roh-/DOM-/Textquellen implementiert und mit echten Browser-, API-, Speicher-, Export- und Neustartabläufen abgenommen. Alle 32 UI-Suiten bestehen gemeinsam lokal: neun API-Fixtures und 23 native Abläufe. Zusätzlich bestehen 1.746 reguläre Rust-Tests und vier separat ausgeführte Chromium-Tests sowie strenges Clippy. Die drei Fehler des öffentlichen Laufs ee4eb6a (Windows-Stack, inkonsistente Recrawl-Fixture, verspätetes Lesen einer Browserantwort) sind korrigiert und lokal geprüft. Die neue öffentliche CI bleibt offen.",
+      "summary_de": "Die eigene Literal-/Regex-Suche ist für vier getrennte Roh-/DOM-/Textquellen implementiert und mit echten Browser-, API-, Speicher-, Export- und Neustartabläufen abgenommen. Alle 32 UI-Suiten bestehen gemeinsam lokal: neun API-Fixtures und 23 native Abläufe. Zusätzlich bestehen 1.746 reguläre Rust-Tests und vier separat ausgeführte Chromium-Tests sowie strenges Clippy. Die drei Fehler des öffentlichen Laufs ee4eb6a (Windows-Stack, inkonsistente Recrawl-Fixture, verspätetes Lesen einer Browserantwort) sind korrigiert und lokal geprüft. Der spätere öffentliche83c-Lauf besteht alle37 UI-Suiten; der Renderer-Job scheitert danach am separaten Sitemap-Harness. Frische vollständige öffentliche CI bleibt offen.",
       "completed_acceptance_de": [
         "Gemeinsamer Lauf aller 32 UI-Suiten mit regulärem App-Abschluss 0, unveränderten getrackten Quellen und identischer getesteter Binärdatei bestanden.",
         "Eigene Suche: vier getrennte Quellen, genaue Unicode-Bytepositionen, Literal-/Regex-Zählungen, explizite Unknown-Zustände, begrenzte Arbeit und Belege; ungültige Regeln vor Website-Anfragen abgelehnt.",
@@ -7112,10 +7221,12 @@
         "Verzeichnis-Test liest Vorschauantworten sofort einmal; Such-Downloads werden anhand der tatsächlichen Datei und einer unabhängigen nativen HTTP-Antwort geprüft.",
         "Moderne Recrawl-Fixture erhält ihre tatsächliche Discovery-Konfiguration; zwölf native Szenarien und ein widersprüchlicher Inventar-Kontrollfall bestehen ohne Aufweichen der Produktionsprüfung.",
         "Die zuvor abgenommenen Spezialwerkzeug-Szenarien mit über 100 Zeilen, vollständigen Exporten und zwei Sitemap-Orphan-Kontrollen bestehen weiterhin im gemeinsamen Lauf. Historische strikte Sitemap-Prüfungen auf 3f3e8ea bleiben gesonderte ältere Belege.",
-        "Nachtrag api-enrichment-browser-local-20261018: Positive test-only HTTP-Provider-Anreicherung durch Browser, Router, Polling, Speicherung, vollständige Exporte, Refresh, echten Abbruch und kalte Wiederöffnung bestanden. Echte Google-Metriken, Enrichment-CLI und weitere Anbieter bleiben separat offen."
+        "Nachtrag api-enrichment-browser-local-20261018: Positive test-only HTTP-Provider-Anreicherung durch Browser, Router, Polling, Speicherung, vollständige Exporte, Refresh, echten Abbruch und kalte Wiederöffnung bestanden. Echte Google-Metriken, Enrichment-CLI und weitere Anbieter bleiben separat offen.",
+        "Öffentlicher Commit83c46948a615d91885a303a46f246fdecd965611, Run39132410328: Alle37 registrierten UI-Suiten (9 Fixtures/28 native oder Live-Suiten) bestanden im gemeinsamen Renderer-Schritt. Der Renderer-Job117690092264 scheiterte erst danach im gesonderten Sitemap-Mitgliedschaftstreiber, dessen veraltete Asset-Liste GET /dashboard-segments.js selbst blockierte. Kein bestandenes Gesamt-CI-Ergebnis; frühere Fehlläufe bleiben erhalten.",
+        "Run39132410328 auf83c ist jetzt terminal FAIL: Windows-,Ubuntu- und Container-Jobs SUCCESS; Renderer-Job FAIL erst nach erfolgreichem37er-UI-Schritt im separaten Sitemap-Harness. Beide eng korrigierten Sitemap-Treiber bestehen lokal11/13 Gruppen; frische öffentliche Gesamt-CI des neuen Commits bleibt offen. Kein allgemeiner Plattform-/Docker-Laufzeit- oder Installationsnachweis."
       ],
       "pending_acceptance_de": [
-        "Frische öffentliche Linux-/Windows-/Renderer-/Container-CI des neuen Commits beobachten und konkrete Folgefehler beheben; lokales Grün ersetzt keine öffentliche Abnahme.",
+        "Öffentliche Gesamt-CI für den jeweiligen neuen Commit separat abnehmen. Auf83c bestand der37er-UI-Schritt, der spätere gesonderte Sitemap-Harness scheiterte. Beide betroffenen Sitemap-Treiber bestehen lokal nach enger Asset-Korrektur; frische öffentliche Wiederholung und neuer Folgecode bleiben offen. Historische Run39127069406- und andere Fehlschläge bleiben erhalten.",
         "Kalte Wiederöffnung weiterer Spezialwerkzeuge, zusätzliche Regel-/Operator-Kombinationen, fehlerhafte Archive, konkurrierende Änderungen und weitere Browser ergänzen.",
         "Vollständigen 144-Fähigkeiten-Katalog weiter abarbeiten: 38 eigene Abnahmen, 69 teilweise geprüft, 37 offen. Das zusätzliche Register mit 416 Filtern und 32 Ablaufverträgen bleibt eigenständig; Herstellerparität NOT_PROVEN."
       ],
@@ -7133,9 +7244,10 @@
         "custom_search": "PASS_TEN_NATIVE_BROWSER_WORKFLOWS",
         "selected_recrawl_fixture": "PASS_TWELVE_NATIVE_SCENARIOS_WITH_MODERN_COVERAGE_REFUSAL",
         "public_CI_ee4eb6a": "CONTAINER_PASS_WINDOWS_STACK_FAIL_LINUX_FIXTURE_FAIL_RENDERER_BODY_READ_FAIL",
-        "public_CI_new_commit": "PENDING_AFTER_PUSH",
+        "public_CI_new_commit": "PUBLIC83C_UI37_STEP_PASS_LATER_SITEMAP_HARNESS_FAIL_FRESH_CI_PENDING",
         "manufacturer_parity": "NOT_PROVEN",
-        "installation": "UNCHANGED_SOURCE16"
+        "installation": "UNCHANGED_SOURCE16",
+        "public_CI_83c_final": "TERMINALFAIL_WINDOWS_UBUNTU_CONTAINER_SUCCESS_RENDERER_LATE_SITEMAP_HARNESS_FAIL_UI37_SUCCESS"
       },
       "reference_parity": "NOT_PROVEN"
     },
@@ -9103,7 +9215,7 @@
       "priority": 3,
       "title_de": "Eigenständige API-Anreicherung ohne lokalen Websitecrawl",
       "status": "INSTALLED_SOURCE14_BOUNDED_NATIVE_PASS_PROVIDER_BREADTH_OPEN",
-      "summary_de": "Source13 API-only-Modus ist installiert. Die vollständige1476/0/0-Suite sowie echte Frontdoors und ausdrücklich synthetische Saved-Consumer über API/CLI/MCP/Browser/Cold bestehen. Der eine produktive anonyme PageSpeed-Aufruf antwortete429; sein echtes Teilergebnis bleibt nach Neustart identisch. Erfolgreiche Metrics, Refresh, aktiver Provider-Cancel, erfolgreicher Enrichment-CLI und weitere Anbieter bleiben offen.",
+      "summary_de": "Source13 API-only-Modus ist installiert. Die vollständige1476/0/0-Suite sowie echte Frontdoors und ausdrücklich synthetische Saved-Consumer über API/CLI/MCP/Browser/Cold bestehen. Der eine produktive anonyme PageSpeed-Aufruf antwortete429; sein echtes Teilergebnis bleibt nach Neustart identisch. Kontrollierter lokaler HTTP-Provider-Erfolg einschließlich Refresh und aktivem Abbruch ist im Folgeblock api-enrichment-browser-20261018 belegt. Autorisierte Produktionsmetriken, erfolgreiche Enrichment-CLI, Produktions-Refresh/-Abbruch und weitere Anbieter bleiben separat offen.",
       "completed_acceptance_de": [
         "Unabhängiger Vollreview plus Closure von CSV-Spalte1, expliziten Lighthouse-Laufzeitfehlern/fehlenden Metriken, normalisierter8192B-URLgrenze vor Jobaufnahme und Warnungsgate.",
         "Fünf Node-VM-Hilfsfälle tatsächlich mit exakten Namen und natürlichem Prozessabschluss bestanden; alle18 Vorschlags- und388 Elternquellen unverändert.",
@@ -9705,6 +9817,7 @@
     }
   ],
   "active_work_ids": [
+    "large-segment-issue-views-20261018",
     "dashboard-segments-bounded-20261018",
     "accessibility-and-cold-specialists-20261018",
     "api-enrichment-browser-20261018",

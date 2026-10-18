@@ -37,6 +37,18 @@ pub(super) fn stable_saved_report(
     side: ComparisonSide,
     expected: Option<u64>,
 ) -> ComparisonApiResult<StableSavedReport> {
+    let binding = stable_saved_report_binding(job, side, expected)?;
+    Ok(StableSavedReport {
+        report: job.report.as_ref().expect("validated saved report").clone(),
+        binding,
+    })
+}
+/// The same cached authority checks without cloning the immutable report.
+pub(super) fn stable_saved_report_binding(
+    job: &Job,
+    side: ComparisonSide,
+    expected: Option<u64>,
+) -> ComparisonApiResult<ComparisonCallerBinding> {
     if matches!(job.status.as_str(), "running" | "pausing" | "cancelling") {
         return Err(conflict(
             job,
@@ -90,18 +102,15 @@ pub(super) fn stable_saved_report(
         "sql_attested":false,"report_generation_attested":false
     })
     .to_string();
-    Ok(StableSavedReport {
-        report: report.clone(),
-        binding: ComparisonCallerBinding {
-            job_id: Some(job.id.to_string()),
-            // Zero is the App's import/detached sentinel, not an observed saved generation.
-            generation: (job.generation > 0).then_some(job.generation),
-            origin: Some(origin.into()),
-            basis: Some(basis),
-            active_checkpoint: Some(false),
-            snapshot_sha256: None,
-            sha_profile: None,
-        },
+    Ok(ComparisonCallerBinding {
+        job_id: Some(job.id.to_string()),
+        // Zero is the App's import/detached sentinel, not an observed saved generation.
+        generation: (job.generation > 0).then_some(job.generation),
+        origin: Some(origin.into()),
+        basis: Some(basis),
+        active_checkpoint: Some(false),
+        snapshot_sha256: None,
+        sha_profile: None,
     })
 }
 async fn stable_pair(

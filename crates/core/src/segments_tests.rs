@@ -1,4 +1,141 @@
 use super::*;
+
+#[test]
+fn indexed_selection_keeps_legacy_bytes_profiles_and_original_issue_identity() {
+    for mask in 0..8 {
+        let mut r = reporting_report();
+        r.config.directive_reporting = Some(profile(mask));
+        r.issues = r
+            .pages
+            .iter()
+            .map(|page| AuditIssue {
+                code: "owned".into(),
+                severity: Severity::Warning,
+                url: page.url.clone(),
+                message: "captured".into(),
+                related_urls: vec!["outside".into()],
+            })
+            .collect();
+        r.issues.push(r.issues[0].clone()); // Identical records remain distinct ordinals.
+        let rules = rules(vec![d("a", Field::RequestedUrl, Operator::Contains, "/")]);
+        for mode in [
+            None,
+            Some(ReportingMode::Raw),
+            Some(ReportingMode::Reported),
+        ] {
+            for selection in [
+                Selection::All,
+                Selection::Segment { id: "a".into() },
+                Selection::Unknown,
+                Selection::Unassigned,
+            ] {
+                let owned = project_with_reporting(&r, &rules, &selection, mode).unwrap();
+                let indexed = project_indexed_with_reporting(&r, &rules, &selection, mode).unwrap();
+                let view = indexed.view(&r).unwrap();
+                assert_eq!(json_bytes(&view).unwrap(), json_bytes(&owned).unwrap());
+                assert_eq!(
+                    indexed_csv_bytes(&r, &indexed, &"binding").unwrap(),
+                    csv_bytes(&owned, &"binding").unwrap()
+                );
+                for (&ordinal, issue) in indexed
+                    .issue_ordinals
+                    .iter()
+                    .zip(indexed.selected_issues(&r).unwrap())
+                {
+                    assert!(std::ptr::eq(issue, &r.issues[ordinal]));
+                }
+            }
+        }
+    }
+}
+
+#[test]
+fn indexed_large_related_population_borrows_all_facts_without_raising_owned_or_output_caps() {
+    let urls: Vec<_> = (0..1010)
+        .map(|i| format!("https://owned.test/products/repeated/{i:04}"))
+        .collect();
+    let mut r = report(
+        urls.iter()
+            .map(|url| p(url, Some("captured"), Some(200)))
+            .collect(),
+    );
+    r.issues = urls
+        .iter()
+        .map(|url| AuditIssue {
+            code: "description_duplicate".into(),
+            severity: Severity::Warning,
+            url: url.clone(),
+            message: "Same captured description".into(),
+            related_urls: urls.iter().filter(|other| *other != url).cloned().collect(),
+        })
+        .collect();
+    assert!(
+        project(&r, &Rules::default(), &Selection::All).is_err(),
+        "Legacy owned32MiB clone ceiling is unchanged"
+    );
+    let indexed = project_indexed(&r, &Rules::default(), &Selection::All).unwrap();
+    assert_eq!(indexed.issue_ordinals, (0..1010).collect::<Vec<_>>());
+    let mut related = 0;
+    for (ordinal, issue) in indexed.selected_issues(&r).unwrap().enumerate() {
+        assert!(std::ptr::eq(issue, &r.issues[ordinal]));
+        assert_eq!(issue.related_urls.len(), 1009);
+        related += issue.related_urls.len();
+    }
+    assert_eq!(related, 1_019_090);
+    assert!(
+        json_bytes(&indexed.view(&r).unwrap()).is_err(),
+        "Actual32MiB full output cap remains unchanged"
+    );
+    assert!(indexed_csv_bytes(&r, &indexed, &"large").is_err());
+    let mut invalid = indexed.clone();
+    invalid.issue_ordinals[0] = r.issues.len();
+    assert!(invalid.view(&r).is_err());
+}
+
+#[test]
+fn borrowed_issue_csv_preserves_original_order_duplicates_nested_urls_and_formula_safety() {
+    let issues = vec![
+        AuditIssue {
+            code: "=code".into(),
+            severity: Severity::Warning,
+            url: "https://x.test/雪".into(),
+            message: "@message,\"\n".into(),
+            related_urls: vec![
+                "https://x.test/b".into(),
+                "https://x.test/b".into(),
+                "https://x.test/a".into(),
+            ],
+        },
+        AuditIssue {
+            code: "second".into(),
+            severity: Severity::Notice,
+            url: "https://x.test/雪".into(),
+            message: "second record".into(),
+            related_urls: vec![],
+        },
+    ];
+    let r = CrawlReport {
+        issues,
+        ..Default::default()
+    };
+    let extra = vec![("Segment Snapshot Token".into(), "owned".into())];
+    let borrowed =
+        crate::write_issue_observations_csv(r.issues.iter(), Vec::new(), &extra).unwrap();
+    assert_eq!(
+        borrowed,
+        crate::write_issues_csv(&r, Vec::new(), &extra).unwrap()
+    );
+    let mut reader = csv::Reader::from_reader(borrowed.as_slice());
+    let rows = reader.records().collect::<csv::Result<Vec<_>>>().unwrap();
+    assert_eq!(rows.len(), 2);
+    assert_eq!(&rows[0][1], "'=code");
+    assert_eq!(&rows[0][3], "'@message,\"\n");
+    assert_eq!(
+        &rows[0][4],
+        "https://x.test/b | https://x.test/b | https://x.test/a"
+    );
+    assert_eq!(&rows[1][3], "second record");
+}
 use crate::{CrawlConfig, CrawlSummary, Severity};
 fn report(pages: Vec<PageRecord>) -> CrawlReport {
     CrawlReport {

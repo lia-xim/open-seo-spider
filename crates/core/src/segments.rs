@@ -250,6 +250,19 @@ pub fn project_with_reporting(
     selection: &Selection,
     requested: Option<ReportingMode>,
 ) -> Result<Projection> {
+    materialize(
+        report,
+        project_indexed_with_reporting(report, rules, selection, requested)?,
+    )
+}
+
+/// Select complete original observations without copying saved issue payloads.
+pub fn project_indexed_with_reporting(
+    report: &CrawlReport,
+    rules: &Rules,
+    selection: &Selection,
+    requested: Option<ReportingMode>,
+) -> Result<IndexedProjection> {
     let identity = reporting_identity(&report.config, requested)?;
     let reported = identity
         .as_ref()
@@ -280,7 +293,7 @@ pub fn project_with_reporting(
             captured_issues: report.issues.len(),
             profile_visible_issues: visible_issues,
             profile_excluded_issues: report.issues.len() - visible_issues,
-            selected_issues: projection.issues.len(),
+            selected_issues: projection.issue_ordinals.len(),
             captured_orphan_issues: projection.orphan_issues,
             counts_mean: "Page counts count observations, not unique URLs or requests. Rules/overlaps/unknown/unassigned use the eligible raw or reported population; charts use its segment selection. Page ordinals refer to the complete captured report. Issues follow selected eligible exact-URL owners; orphan counts always use all captured URLs. Raw snapshot/crawl counters and relationship targets are unchanged.",
         });
@@ -332,7 +345,121 @@ pub struct Projection {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reporting: Option<Reporting>,
 }
+
+/// An immutable-report selection plan. Issue ordinals preserve original order,
+/// duplicate records and complete related URL arrays without owning them again.
+#[derive(Debug, Clone)]
+pub struct IndexedProjection {
+    pub engine: &'static str,
+    pub rules: Rules,
+    pub selection: Selection,
+    pub depth_policy: &'static str,
+    pub total_pages: usize,
+    pub selected_pages: usize,
+    pub multiple_matches: usize,
+    pub unassigned_pages: usize,
+    pub unknown_pages: usize,
+    pub orphan_issues: usize,
+    pub counts: Vec<Count>,
+    pub charts: Charts,
+    pub pages: Vec<Row>,
+    pub issue_ordinals: Vec<usize>,
+    pub reporting: Option<Reporting>,
+    copied_bytes: usize,
+}
+
+/// Same public projection shape, borrowing original issue facts. Construct only
+/// while the report remains immutable; App separately binds its full typed hash.
+#[derive(Serialize)]
+pub struct ProjectionView<'a> {
+    pub engine: &'static str,
+    pub rules: &'a Rules,
+    pub selection: &'a Selection,
+    pub depth_policy: &'static str,
+    pub total_pages: usize,
+    pub selected_pages: usize,
+    pub multiple_matches: usize,
+    pub unassigned_pages: usize,
+    pub unknown_pages: usize,
+    pub orphan_issues: usize,
+    pub counts: &'a [Count],
+    pub charts: &'a Charts,
+    pub pages: &'a [Row],
+    pub issues: Vec<&'a AuditIssue>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reporting: Option<&'a Reporting>,
+}
+impl IndexedProjection {
+    pub fn selected_issues<'a>(
+        &'a self,
+        report: &'a CrawlReport,
+    ) -> Result<impl ExactSizeIterator<Item = &'a AuditIssue>> {
+        ensure!(
+            self.issue_ordinals.iter().all(|i| *i < report.issues.len())
+                && self.issue_ordinals.windows(2).all(|w| w[0] < w[1]),
+            "Invalid original issue ordinals"
+        );
+        Ok(self.issue_ordinals.iter().map(|i| &report.issues[*i]))
+    }
+    pub fn view<'a>(&'a self, report: &'a CrawlReport) -> Result<ProjectionView<'a>> {
+        Ok(ProjectionView {
+            engine: self.engine,
+            rules: &self.rules,
+            selection: &self.selection,
+            depth_policy: self.depth_policy,
+            total_pages: self.total_pages,
+            selected_pages: self.selected_pages,
+            multiple_matches: self.multiple_matches,
+            unassigned_pages: self.unassigned_pages,
+            unknown_pages: self.unknown_pages,
+            orphan_issues: self.orphan_issues,
+            counts: &self.counts,
+            charts: &self.charts,
+            pages: &self.pages,
+            issues: self.selected_issues(report)?.collect(),
+            reporting: self.reporting.as_ref(),
+        })
+    }
+}
+
+fn materialize(report: &CrawlReport, indexed: IndexedProjection) -> Result<Projection> {
+    let mut copied = indexed.copied_bytes;
+    let mut issues = Vec::with_capacity(indexed.issue_ordinals.len());
+    for issue in indexed.selected_issues(report)? {
+        for value in [&issue.code, &issue.url, &issue.message]
+            .into_iter()
+            .chain(issue.related_urls.iter())
+        {
+            charge(&mut copied, value.len(), OUTPUT_BYTES)?;
+        }
+        issues.push(issue.clone());
+    }
+    Ok(Projection {
+        engine: indexed.engine,
+        rules: indexed.rules,
+        selection: indexed.selection,
+        depth_policy: indexed.depth_policy,
+        total_pages: indexed.total_pages,
+        selected_pages: indexed.selected_pages,
+        multiple_matches: indexed.multiple_matches,
+        unassigned_pages: indexed.unassigned_pages,
+        unknown_pages: indexed.unknown_pages,
+        orphan_issues: indexed.orphan_issues,
+        counts: indexed.counts,
+        charts: indexed.charts,
+        pages: indexed.pages,
+        issues,
+        reporting: indexed.reporting,
+    })
+}
 pub fn project(report: &CrawlReport, rules: &Rules, selection: &Selection) -> Result<Projection> {
+    materialize(report, project_indexed(report, rules, selection)?)
+}
+pub fn project_indexed(
+    report: &CrawlReport,
+    rules: &Rules,
+    selection: &Selection,
+) -> Result<IndexedProjection> {
     project_observations(report, rules, selection, false)
 }
 fn project_observations(
@@ -340,7 +467,7 @@ fn project_observations(
     rules: &Rules,
     selection: &Selection,
     reported: bool,
-) -> Result<Projection> {
+) -> Result<IndexedProjection> {
     let compiled = compile(rules)?;
     ensure!(
         report.pages.len() <= MAX_PAGES && report.issues.len() <= MAX_ISSUES,
@@ -486,23 +613,17 @@ fn project_observations(
             });
         }
     }
-    let mut issues = Vec::new();
+    let mut issue_ordinals = Vec::new();
     let mut orphan_issues = 0;
-    for i in &report.issues {
+    for (ordinal, i) in report.issues.iter().enumerate() {
         if !all_urls.contains(i.url.as_str()) {
             orphan_issues += 1;
         }
         if selected_urls.contains(i.url.as_str()) {
-            for s in [&i.code, &i.url, &i.message]
-                .into_iter()
-                .chain(i.related_urls.iter())
-            {
-                charge(&mut copied, s.len(), OUTPUT_BYTES)?;
-            }
-            issues.push(i.clone());
+            issue_ordinals.push(ordinal);
         }
     }
-    Ok(Projection {
+    Ok(IndexedProjection {
         engine: ENGINE,
         depth_policy: DEPTH_POLICY,
         rules: rules.clone(),
@@ -516,8 +637,9 @@ fn project_observations(
         counts,
         charts,
         pages,
-        issues,
+        issue_ordinals,
         reporting: None,
+        copied_bytes: copied,
     })
 }
 
@@ -562,6 +684,33 @@ fn safe_cell(s: &str) -> String {
 /// Complete selected pages AND issues, plus counts/charts/rules/binding supplied by App.
 /// Every row has an explicit type. JSON cells preserve nested values and exact Unicode.
 pub fn csv_bytes(projection: &Projection, context: &impl Serialize) -> Result<Vec<u8>> {
+    let view = ProjectionView {
+        engine: projection.engine,
+        rules: &projection.rules,
+        selection: &projection.selection,
+        depth_policy: projection.depth_policy,
+        total_pages: projection.total_pages,
+        selected_pages: projection.selected_pages,
+        multiple_matches: projection.multiple_matches,
+        unassigned_pages: projection.unassigned_pages,
+        unknown_pages: projection.unknown_pages,
+        orphan_issues: projection.orphan_issues,
+        counts: &projection.counts,
+        charts: &projection.charts,
+        pages: &projection.pages,
+        issues: projection.issues.iter().collect(),
+        reporting: projection.reporting.as_ref(),
+    };
+    csv_view_bytes(&view, context)
+}
+pub fn indexed_csv_bytes(
+    report: &CrawlReport,
+    projection: &IndexedProjection,
+    context: &impl Serialize,
+) -> Result<Vec<u8>> {
+    csv_view_bytes(&projection.view(report)?, context)
+}
+fn csv_view_bytes(projection: &ProjectionView<'_>, context: &impl Serialize) -> Result<Vec<u8>> {
     let sink = Bounded {
         bytes: Vec::new(),
         cap: OUTPUT_BYTES,
@@ -622,7 +771,7 @@ pub fn csv_bytes(projection: &Projection, context: &impl Serialize) -> Result<Ve
             serde_json::to_string(reporting)?,
         )?;
     }
-    for r in &projection.pages {
+    for r in projection.pages {
         record(
             "page",
             r.page_ordinal.to_string(),

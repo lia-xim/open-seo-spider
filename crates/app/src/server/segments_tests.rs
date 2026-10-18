@@ -186,6 +186,74 @@ fn reporting_job(id: Uuid) -> Job {
     report.pages.push(hidden);
     j
 }
+
+#[test]
+fn segments_borrowed_authority_binding_preserves_owned_comparison_facts_and_refusals() {
+    let id = Uuid::new_v4();
+    let mut j = job(id, "completed", "https://x.test/authority");
+    for frontier in [false, true] {
+        j.frontier_available = frontier;
+        for generation in [0, 7] {
+            j.generation = generation;
+            let borrowed = comparison::stable_saved_report_binding(
+                &j,
+                ComparisonSide::Before,
+                Some(generation),
+            )
+            .unwrap();
+            let owned =
+                comparison::stable_saved_report(&j, ComparisonSide::Before, Some(generation))
+                    .unwrap();
+            assert_eq!(
+                serde_json::to_value(borrowed).unwrap(),
+                serde_json::to_value(owned.binding).unwrap()
+            );
+            assert_eq!(
+                serde_json::to_vec(&owned.report).unwrap(),
+                serde_json::to_vec(j.report.as_ref().unwrap()).unwrap()
+            );
+        }
+    }
+    j.checkpoint = Some(CrawlCheckpoint {
+        generation: 7,
+        revision: 3,
+        outcome: CrawlOutcome::Completed,
+        created_at: "captured".into(),
+        report_sha256: "declared-report".into(),
+        config_sha256: "declared-config".into(),
+        completed: 1,
+        pending: 0,
+        discovery_pending: 0,
+        discovery_complete: true,
+        policy_ledger: None,
+        resource_ledger: None,
+        sitemap_ledger: None,
+        sitemap_source_measurements: None,
+    });
+    let binding =
+        comparison::stable_saved_report_binding(&j, ComparisonSide::Before, Some(7)).unwrap();
+    assert_eq!(
+        binding.origin.as_deref(),
+        Some("app_declared_job_report_with_cached_checkpoint")
+    );
+    let basis: Value = serde_json::from_str(binding.basis.as_ref().unwrap()).unwrap();
+    assert_eq!(basis["checkpoint_revision"], 3);
+    assert_eq!(basis["sql_attested"], false);
+    for (status, expected) in [("running", Some(7)), ("completed", Some(8))] {
+        j.status = status.into();
+        let first = comparison::stable_saved_report_binding(&j, ComparisonSide::Before, expected)
+            .err()
+            .unwrap();
+        let second = comparison::stable_saved_report(&j, ComparisonSide::Before, expected)
+            .err()
+            .unwrap();
+        assert_eq!(first.0, second.0);
+        assert_eq!(
+            serde_json::to_value(first.1.0).unwrap(),
+            serde_json::to_value(second.1.0).unwrap()
+        );
+    }
+}
 #[tokio::test]
 async fn segments_saved_api_profile_preview_json_csv_share_view_bound_token_and_raw_authority() {
     let id = Uuid::new_v4();

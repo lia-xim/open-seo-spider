@@ -22,6 +22,9 @@ dynamic loopback ports, uses a new test store, and closes its app through stdin
 EOF. It refuses the installed application's ports 8787/8790. Runtime evidence
 goes to an ignored `artifacts/ui-e2e-*` directory; `SPIDER_E2E_OUTPUT` may select
 another **new** output directory. Each suite gets a separate artifact directory.
+Use a short output path in deeply nested Windows checkouts. The observed long
+SQLite-store path failure remains an open product case; shorter test paths are
+a workaround, not acceptance of long-path support.
 Tracked files are hashed before/after execution; a changed file fails the run.
 The application child does not inherit `OPEN_SEO_PAGESPEED_API_KEY`. The API
 enrichment suite exercises preview and refusal paths without sending targets
@@ -44,7 +47,7 @@ credential handling are unchanged. No job or saved result is seeded. The child
 processes cannot inherit a PageSpeed key; only isolated loopback ports are used.
 `SPIDER_ENRICHMENT_ARTIFACT_DIR` may select a **new** artifact directory; reuse is
 refused. Default output is `artifacts/enrichment-success-*`. This command runs
-separately from the 37-suite UI runner and is not an additional registered suite.
+separately from the 38-suite UI runner and is not an additional registered suite.
 
 For a focused investigation:
 
@@ -85,6 +88,7 @@ explicit executions separately.
 | Segment builder, browser-local rules, assignments and issue views | saved-segments | Browser → native saved text; exact membership/cells, 100+5 paging, JSON/CSV and stale rules/views |
 | Applied segments across the main dashboard, charts, full native/section exports and cold reopen | dashboard-segments | Two normal native processes and 1,010 genuinely captured pages; all 1,005 selected ordered titles, original ordinal controls, snapshot-bound original records, global/selected scopes and complete exports |
 | Compact mobile segment cells with full expandable values | segments-density | Normal native process and 105 genuinely captured pages; 320px closed-row bounds, keyboard/touch/selection, full cells and identical expanded/collapsed exports |
+| Repeated metadata with over a million complete issue relationships | segments-repeated-metadata | 1,010 genuinely captured pages; all 7,035 selected issue rows and ordered relationships, full Issues CSV/JSON, actual standalone API/CLI/MCP and two-process cold reopen |
 | N-gram totals, occurrences, word cloud and text/metadata channels | saved-ngrams | Browser → native corpus; exact rendered rows, complete CSV, missing sources and real stale-generation refusal |
 | N-gram and segment analysis after native restart | ngrams-cold-restart, segments-cold-restart | Two owned native processes per suite; exact saved sources and complete exports, active HTTP410 witness through both closes; browser state boundaries described below |
 | Resource/CSS failure occurrences and unavailable history | resource-sources | Browser → native SQLite ledger; 106 occurrences, 100+6 paging, snapshot-bound CSV and page JSON |
@@ -96,18 +100,36 @@ The existing native sitemap membership/assessment, API, CLI, MCP and renderer
 integration suites remain separate CI gates. Extracted-function VM tests are
 also separate; they must not be described as browser E2E tests.
 
-## Remaining important-path work
+## Verified slices and remaining important paths
 
-The [dashboard-segment receipt](verification/dashboard-segments-20261018/README.md)
+The earlier [dashboard-segment receipt](verification/dashboard-segments-20261018/README.md)
 records all 37 registered suites passing in three separate phases (2+1+34) on
 the same final normal executable and 485 unchanged source/driver inputs. This
 is not a single shared-store 37-suite invocation. The large dashboard suite
-has a measured-workflow budget of 900 seconds; all other suites retain 240
+had a measured-workflow budget of 900 seconds; its other 36 suites retained 240
 seconds. Its positive fixture contains 1,010 real pages with unique descriptions.
-The separate repeated-description case actually exceeds the existing 32 MiB
-projection budget and remains an open large-corpus limitation.
+The separate repeated-description case was refused before paging by the old
+32 MiB projection-copy budget. That historical failure is preserved.
 
-The 37 registered suites provide bounded functional cases for the specialist
+The current [large-issue receipt](verification/large-segment-issues-20261018/README.md)
+records successful executions of all 38 registered suites on the same normal
+executable and 486 unchanged source/driver inputs. These are separate phases:
+14 successful cases before a Node-process crash in Robots, 22 complete cases,
+one plain Robots acceptance after bounded diagnosis, and the new large case.
+The original failed batch is not relabelled successful. The new case completes
+in 19m36s with a case-specific 1,800-second budget; the existing dashboard case
+retains 900 seconds and the other 36 retain 240 seconds.
+
+Indexed original-issue selection now allows the repeated-description cohort to
+page fully and export complete 45,193,762-byte JSON and 44,429,381-byte issue CSV.
+Warm/cold files are byte-identical. Actual standalone API and CLI full exports
+still refuse at 32 MiB, and the MCP bridge retains its 1 MiB response bound.
+Smaller MCP previews retain every original related URL. Six intermediate
+checkpoints are explicitly `IN_PROGRESS`; only the final receipt establishes
+whole-case acceptance. General performance/RSS, long Windows stores and the
+isolated Node crash's root cause remain unproven. Fresh public CI is separate.
+
+The 38 registered suites provide bounded functional cases for the specialist
 tools above; a passing case is not complete feature acceptance. Cold native
 restart across other tools, all rule/operator combinations, broader
 malformed imported archives and concurrent mutations need further coverage.

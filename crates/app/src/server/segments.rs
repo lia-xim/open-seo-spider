@@ -29,18 +29,21 @@ pub(super) fn evaluate(job: &Job, request: &Request) -> SResult<service::Evaluat
             "Saved report unavailable",
         )
     })?;
-    // Check the entire serialization ceiling before the existing authority helper clones.
+    // Preserve the existing input-budget400 contract before authority checks.
+    // The borrowed binding helper now avoids copying the measured report.
     service::report_hash(report).map_err(bad)?;
-    let stable =
-        comparison::stable_saved_report(job, ComparisonSide::Before, request.expected_generation)
-            .map_err(|(s, Json(e))| fail(s, &e.error.code, e.error.message))?;
-    let origin = stable
-        .binding
+    let binding = comparison::stable_saved_report_binding(
+        job,
+        ComparisonSide::Before,
+        request.expected_generation,
+    )
+    .map_err(|(s, Json(e))| fail(s, &e.error.code, e.error.message))?;
+    let origin = binding
         .origin
         .as_deref()
         .unwrap_or("app_declared_saved_report");
     service::evaluate(
-        &stable.report,
+        report,
         request,
         Some(job.id.to_string()),
         Some(job.generation),
@@ -109,10 +112,11 @@ async fn read(
         .blocking
         .run_blocking(move || {
             let e = evaluate(&guard, &request)?;
+            let report = guard.report.as_ref().expect("evaluated saved report");
             let bytes = match export {
-                Some(true) => service::full_csv(&e),
-                Some(false) => service::full_json(&e),
-                None => service::page(&e, &request),
+                Some(true) => service::full_csv(report, &e),
+                Some(false) => service::full_json(report, &e),
+                None => service::page(report, &e, &request),
             }
             .map_err(bad)?;
             Ok(response(bytes, export == Some(true), export.is_some()))

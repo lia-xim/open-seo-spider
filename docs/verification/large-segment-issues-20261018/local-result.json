@@ -1,0 +1,1512 @@
+{
+  "kind": "complete_large_segment_issue_views_local_acceptance",
+  "result": "PASS_LOCAL_CURRENT_NORMAL_BINARY",
+  "binary": {
+    "path": "target/debug/open-seo-spider.exe",
+    "bytes": 86403072,
+    "sha256": "b37fedf446d887ddd803a2fd5a21bc636b7d3e1274c6afa93ef4f9ce8e6bd3a8"
+  },
+  "scope": "Independent synthetic owned crawls and data only. All38 registered suites have successful executions across distinct phases; first batch failed later in a Node robots process and is preserved. No single38-suite invocation, installation, production provider, general stability/performance or manufacturer parity claim.",
+  "rust": {
+    "passed": 1772,
+    "failed": 0,
+    "ignored": 5,
+    "ordinary_blocks": 17,
+    "log": {
+      "path": "artifacts/repeated-segment-workspace-20261018.log",
+      "bytes": 204855,
+      "sha256": "0f4574271ea5837ec9fa5089f60118bc46b578889eaed08e274fcd054cd65f56"
+    },
+    "deliberate_chromium_executions": [
+      "live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness",
+      "live_browser_worker_executes_javascript_for_core_crawl",
+      "live_browser_worker_pause_drains_render_and_retains_rendered_discoveries",
+      "live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion"
+    ],
+    "chromium_log": {
+      "path": "artifacts/repeated-segment-renderer-rust-20261018.log",
+      "bytes": 4498,
+      "sha256": "510aeeb4322ab47b005902f88b8e68e4965671ceb997b889aa1090d3f3370cb5"
+    },
+    "positive_enrichment": {
+      "proof": {
+        "path": "artifacts/rm-enrich/enrichment-success-coordinator.json",
+        "bytes": 98877,
+        "sha256": "5ad57c95a6816c4d4b1bdce6e1cde87c7823bd368d022a34ee7b11e70d37a207"
+      },
+      "test_binary_sha256": "0b0c8c6e80e22dd92e48b94428d73aba7a2af76566bc36d5eb1f147f722a6ac2",
+      "native_processes": 2,
+      "provider_attempts": 213,
+      "website_requests": 0
+    }
+  },
+  "other_gate_logs": [
+    {
+      "path": "artifacts/repeated-segment-core-focused-20261018.log",
+      "bytes": 2726,
+      "sha256": "7c03f9bae8abab9294571cf6278fa1048dac4d31cfabe01c69b9cfc8a1585e12"
+    },
+    {
+      "path": "artifacts/repeated-segment-app-focused-20261018.log",
+      "bytes": 3761,
+      "sha256": "2cc54f3328d697a8d45aecc392df3bfb7bfc8a27625e812cf89dda1b7a47771d"
+    },
+    {
+      "path": "artifacts/repeated-segment-analysis-focused-20261018.log",
+      "bytes": 3427,
+      "sha256": "ca0410ad667c19169d042e440c7a64c477f799a8e5ea3c695d23f3cd761d635a"
+    },
+    {
+      "path": "artifacts/repeated-segment-clippy-20261018.log",
+      "bytes": 298,
+      "sha256": "0f79417c5d9058e5c00f3c95db9a81e7d078e45f234e01ac6af2c476f441adf0"
+    },
+    {
+      "path": "artifacts/repeated-segment-normal-build-20261018.log",
+      "bytes": 177,
+      "sha256": "eed740929e5f8c20d3817be8eb3041d883d19435c7d44fe0d2d31c6d9d6e7e21"
+    },
+    {
+      "path": "artifacts/repeated-segment-all-state-20261018.log",
+      "bytes": 6950,
+      "sha256": "0f0448f58e020527f739aa8fd803bede0084a8d9d100083d4a66ce3008122fd1"
+    },
+    {
+      "path": "artifacts/repeated-segment-current-VM-20261018.json",
+      "bytes": 1069,
+      "sha256": "223732229180b7c3da7e9433225e1fdeae05e5840537a7429be2436ed88702c3"
+    }
+  ],
+  "ui": {
+    "registered": 38,
+    "fixture_suites": 9,
+    "native_suites": 29,
+    "successful": [
+      {
+        "name": "dashboard",
+        "script": "ui-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 8334,
+        "phase": "artifacts/rm-37/proof.json"
+      },
+      {
+        "name": "pause-controls",
+        "script": "ui-crawl-control-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 6872,
+        "phase": "artifacts/rm-37/proof.json"
+      },
+      {
+        "name": "recrawl-controls",
+        "script": "ui-selected-recrawl-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5748,
+        "phase": "artifacts/rm-37/proof.json"
+      },
+      {
+        "name": "policy-controls",
+        "script": "ui-policy-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 6849,
+        "phase": "artifacts/rm-37/proof.json"
+      },
+      {
+        "name": "content-controls",
+        "script": "ui-content-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 23190,
+        "phase": "artifacts/rm-37/proof.json"
+      },
+      {
+        "name": "resource-controls",
+        "script": "ui-resource-discovery-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 12740,
+        "phase": "artifacts/rm-37/proof.json"
+      },
+      {
+        "name": "resource-ledger",
+        "script": "ui-resource-ledger-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 9567,
+        "phase": "artifacts/rm-37/proof.json"
+      },
+      {
+        "name": "resource-contract",
+        "script": "ui-resource-contract-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 10793,
+        "phase": "artifacts/rm-37/proof.json"
+      },
+      {
+        "name": "comparison-controls",
+        "script": "ui-saved-comparison-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4257,
+        "phase": "artifacts/rm-37/proof.json"
+      },
+      {
+        "name": "tool-navigation",
+        "script": "ui-tools-navigation-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4239,
+        "phase": "artifacts/rm-37/proof.json"
+      },
+      {
+        "name": "rendered-crawl",
+        "script": "ui-renderer-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4538,
+        "phase": "artifacts/rm-37/proof.json"
+      },
+      {
+        "name": "dom-capture",
+        "script": "ui-dom-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 14490,
+        "phase": "artifacts/rm-37/proof.json"
+      },
+      {
+        "name": "accessibility-review",
+        "script": "ui-accessibility-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 19439,
+        "phase": "artifacts/rm-37/proof.json"
+      },
+      {
+        "name": "resources",
+        "script": "ui-resource-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 8737,
+        "phase": "artifacts/rm-37/proof.json"
+      },
+      {
+        "name": "serp",
+        "script": "ui-serp-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 1595,
+        "phase": "artifacts/rm-22/proof.json"
+      },
+      {
+        "name": "list-import",
+        "script": "ui-list-import-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5301,
+        "phase": "artifacts/rm-22/proof.json"
+      },
+      {
+        "name": "pause-resume",
+        "script": "ui-crawl-control-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 16285,
+        "phase": "artifacts/rm-22/proof.json"
+      },
+      {
+        "name": "selected-recrawl",
+        "script": "ui-selected-recrawl-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 8509,
+        "phase": "artifacts/rm-22/proof.json"
+      },
+      {
+        "name": "policy",
+        "script": "ui-policy-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4859,
+        "phase": "artifacts/rm-22/proof.json"
+      },
+      {
+        "name": "content",
+        "script": "ui-content-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 8778,
+        "phase": "artifacts/rm-22/proof.json"
+      },
+      {
+        "name": "resource-discovery",
+        "script": "ui-resource-discovery-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 8447,
+        "phase": "artifacts/rm-22/proof.json"
+      },
+      {
+        "name": "resource-persistence",
+        "script": "ui-resource-contract-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 6706,
+        "phase": "artifacts/rm-22/proof.json"
+      },
+      {
+        "name": "saved-spelling",
+        "script": "ui-spelling-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 2612,
+        "phase": "artifacts/rm-22/proof.json"
+      },
+      {
+        "name": "link-workflows",
+        "script": "ui-link-workflows-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 3299,
+        "phase": "artifacts/rm-22/proof.json"
+      },
+      {
+        "name": "api-enrichment",
+        "script": "ui-enrichment-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 1405,
+        "phase": "artifacts/rm-22/proof.json"
+      },
+      {
+        "name": "directory-tree",
+        "script": "ui-directory-tree-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5278,
+        "phase": "artifacts/rm-22/proof.json"
+      },
+      {
+        "name": "saved-ngrams",
+        "script": "ui-ngrams-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4763,
+        "phase": "artifacts/rm-22/proof.json"
+      },
+      {
+        "name": "saved-segments",
+        "script": "ui-segments-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4600,
+        "phase": "artifacts/rm-22/proof.json"
+      },
+      {
+        "name": "dashboard-segments",
+        "script": "ui-dashboard-segments-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 900000,
+        "duration_ms": 348089,
+        "phase": "artifacts/rm-22/proof.json"
+      },
+      {
+        "name": "segments-density",
+        "script": "ui-segments-density-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5234,
+        "phase": "artifacts/rm-22/proof.json"
+      },
+      {
+        "name": "ngrams-cold-restart",
+        "script": "ui-ngrams-cold-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 10503,
+        "phase": "artifacts/rm-22/proof.json"
+      },
+      {
+        "name": "segments-cold-restart",
+        "script": "ui-segments-cold-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 12822,
+        "phase": "artifacts/rm-22/proof.json"
+      },
+      {
+        "name": "resource-sources",
+        "script": "ui-resource-sources-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 16966,
+        "phase": "artifacts/rm-22/proof.json"
+      },
+      {
+        "name": "custom-search",
+        "script": "ui-custom-search-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 22115,
+        "phase": "artifacts/rm-22/proof.json"
+      },
+      {
+        "name": "saved-comparison",
+        "script": "ui-saved-comparison-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 3509,
+        "phase": "artifacts/rm-22/proof.json"
+      },
+      {
+        "name": "comparison-bundles",
+        "script": "ui-saved-comparison-bundle-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4860,
+        "phase": "artifacts/rm-22/proof.json"
+      },
+      {
+        "name": "robots",
+        "script": "ui-robots-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 2025,
+        "phase": "artifacts/robots-plain-acceptance-1792334545517/proof.json"
+      },
+      {
+        "name": "segments-repeated-metadata",
+        "script": "ui-segments-repeated-metadata-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 1800000,
+        "duration_ms": 1176159,
+        "phase": "artifacts/rm-r4/proof.json"
+      }
+    ],
+    "phases": [
+      {
+        "path": "artifacts/rm-37/proof.json",
+        "bytes": 4366,
+        "sha256": "c377fae730cf4998464600d7a0981bbed93dc79685dda229b9f900042d219387",
+        "complete": false,
+        "successful_suites": 14,
+        "failure": "Error: robots: \n    at file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/mcp-file-tools-v1/scripts/ui-e2e.mjs:118:53\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)"
+      },
+      {
+        "path": "artifacts/rm-22/proof.json",
+        "bytes": 5784,
+        "sha256": "82f49bb3dde3c35b86f904a1f4c54b2faa1e9016385a0e49600346c427a8cb6f",
+        "complete": true,
+        "successful_suites": 22,
+        "failure": null
+      },
+      {
+        "path": "artifacts/robots-plain-acceptance-1792334545517/proof.json",
+        "bytes": 866,
+        "sha256": "1e45d0723a64c8fb472e38f27d1f524985cf0921bd61f29bdbd4b2048cbc2d75",
+        "complete": true,
+        "successful_suites": 1,
+        "failure": null
+      },
+      {
+        "path": "artifacts/rm-r4/proof.json",
+        "bytes": 918,
+        "sha256": "12e049c48f7eb6f3ac4dcf3ee8deda21fc0af192fadacc932989d616ca82b240",
+        "complete": true,
+        "successful_suites": 1,
+        "failure": null
+      }
+    ]
+  },
+  "repeated_metadata": {
+    "proof": {
+      "path": "artifacts/rm-r4/segments-repeated-metadata/segments-repeated-metadata-1792334057275-2a81d747/segments-repeated-metadata-live.json",
+      "bytes": 730239,
+      "sha256": "85962e9e7bda841c9e037016f391c054c5240652db23edb73d096a70840e6398"
+    },
+    "checkpoints": [
+      {
+        "path": "artifacts/rm-r4/segments-repeated-metadata/segments-repeated-metadata-1792334057275-2a81d747/phase-01-warm-dom-full-exports-and-validator-controls.json",
+        "bytes": 331298,
+        "sha256": "078cf2c5ff1549850ad12f8c14c3554d9890a1097ee34ee3caf2170d5cab7445"
+      },
+      {
+        "path": "artifacts/rm-r4/segments-repeated-metadata/segments-repeated-metadata-1792334057275-2a81d747/phase-02-standalone-all-cursors-and-full-export-refusals.json",
+        "bytes": 347898,
+        "sha256": "529f7520b8966d27e252dd1c89f70bd843e9f58bd39ebf03f3d8b49b976abb21"
+      },
+      {
+        "path": "artifacts/rm-r4/segments-repeated-metadata/segments-repeated-metadata-1792334057275-2a81d747/phase-03-actual-mcp-previews-refusal-and-eof.json",
+        "bytes": 351910,
+        "sha256": "409fed3631486ad1daadb96615f698c233b5e4fe37e2dd02097eb50aea9f0418"
+      },
+      {
+        "path": "artifacts/rm-r4/segments-repeated-metadata/segments-repeated-metadata-1792334057275-2a81d747/phase-04-actual-cli-full-tail-and-all-export-refusals.json",
+        "bytes": 378667,
+        "sha256": "0dca113beda8332ba8bc21ad50b48a054c22a370589c1660adf2376fcf965661"
+      },
+      {
+        "path": "artifacts/rm-r4/segments-repeated-metadata/segments-repeated-metadata-1792334057275-2a81d747/phase-05-declared-late-duplicate-and-source-context-guards.json",
+        "bytes": 398144,
+        "sha256": "e316aa548f575fcac1210893f2f20e845bf7b2c0984a142a0bd6628e0e94dffc"
+      },
+      {
+        "path": "artifacts/rm-r4/segments-repeated-metadata/segments-repeated-metadata-1792334057275-2a81d747/phase-06-cold-all-dom-and-byte-identical-full-exports.json",
+        "bytes": 727298,
+        "sha256": "170e5c7e7caf0924bc65aed53364e2aff7758ef772b6d226b76ba665b3bd5814"
+      }
+    ],
+    "pages": 1010,
+    "issues": 7068,
+    "projections": [
+      {
+        "label": "warm-large",
+        "source": "3f33a231-e218-4f2b-850f-e268a97105d3",
+        "pages": 1005,
+        "issues": 7035,
+        "related_urls": 1012035,
+        "page_sizes": [
+          200,
+          200,
+          200,
+          200,
+          200,
+          5
+        ],
+        "issue_sizes": [
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          35
+        ],
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "label": "warm-tail",
+        "source": "3f33a231-e218-4f2b-850f-e268a97105d3",
+        "pages": 1,
+        "issues": 7,
+        "related_urls": 1007,
+        "page_sizes": [
+          1
+        ],
+        "issue_sizes": [
+          7
+        ],
+        "snapshot": "97b4a653d8b1cf91e572094f229e9828c680c301d57a5b9b8e8883e0f18e41ff"
+      },
+      {
+        "label": "declared-duplicate-tail",
+        "source": "0fb084b6-8de0-4f7f-bcd7-8911dd92d8a4",
+        "pages": 1,
+        "issues": 7,
+        "related_urls": 1007,
+        "page_sizes": [
+          1
+        ],
+        "issue_sizes": [
+          7
+        ],
+        "snapshot": "e13349de7a88e5e745451fe269444c72d039237fff6b8a7479722d7a9af69167"
+      },
+      {
+        "label": "cold-large",
+        "source": "3f33a231-e218-4f2b-850f-e268a97105d3",
+        "pages": 1005,
+        "issues": 7035,
+        "related_urls": 1012035,
+        "page_sizes": [
+          200,
+          200,
+          200,
+          200,
+          200,
+          5
+        ],
+        "issue_sizes": [
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          35
+        ],
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      }
+    ],
+    "exports": [
+      {
+        "label": "warm-complete-cohort",
+        "kind": "json",
+        "bytes": 45193762,
+        "sha256": "d99ee3c281548032eb8c190fb57f1a0d80ba0dea2709bdebffba9edf4194b8b2",
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\rm-r4\\segments-repeated-metadata\\segments-repeated-metadata-1792334057275-2a81d747\\warm-complete-cohort.json",
+        "native_oracle": 43
+      },
+      {
+        "label": "warm-all-issues",
+        "kind": "issues",
+        "bytes": 44429381,
+        "sha256": "327beab1ac15158ebecb8887da6c385434c3bc0a7d2f65aa789970d788653f97",
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\rm-r4\\segments-repeated-metadata\\segments-repeated-metadata-1792334057275-2a81d747\\warm-all-issues.csv",
+        "native_oracle": 44
+      },
+      {
+        "label": "cold-complete-cohort",
+        "kind": "json",
+        "bytes": 45193762,
+        "sha256": "d99ee3c281548032eb8c190fb57f1a0d80ba0dea2709bdebffba9edf4194b8b2",
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\rm-r4\\segments-repeated-metadata\\segments-repeated-metadata-1792334057275-2a81d747\\cold-complete-cohort.json",
+        "native_oracle": 94
+      },
+      {
+        "label": "cold-all-issues",
+        "kind": "issues",
+        "bytes": 44429381,
+        "sha256": "327beab1ac15158ebecb8887da6c385434c3bc0a7d2f65aa789970d788653f97",
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\rm-r4\\segments-repeated-metadata\\segments-repeated-metadata-1792334057275-2a81d747\\cold-all-issues.csv",
+        "native_oracle": 95
+      }
+    ],
+    "native": [
+      {
+        "phase": "first",
+        "pid": 11188,
+        "origin": "http://127.0.0.1:60007",
+        "shutdown": {
+          "code": 0,
+          "signal": null
+        }
+      },
+      {
+        "phase": "cold",
+        "pid": 1556,
+        "origin": "http://127.0.0.1:60007",
+        "shutdown": {
+          "code": 0,
+          "signal": null
+        }
+      }
+    ],
+    "consumer_children": [
+      {
+        "phase": "mcp-stdio",
+        "pid": 32212,
+        "shutdown": {
+          "code": 0,
+          "signal": null
+        }
+      },
+      {
+        "phase": "cli-tail-json",
+        "pid": 4952,
+        "shutdown": {
+          "code": 0,
+          "signal": null
+        }
+      },
+      {
+        "phase": "cli-tail-csv",
+        "pid": 33188,
+        "shutdown": {
+          "code": 0,
+          "signal": null
+        }
+      },
+      {
+        "phase": "cli-large-json-refused",
+        "pid": 34348,
+        "shutdown": {
+          "code": 1,
+          "signal": null
+        }
+      },
+      {
+        "phase": "cli-large-csv-refused",
+        "pid": 18624,
+        "shutdown": {
+          "code": 1,
+          "signal": null
+        }
+      }
+    ],
+    "actual_consumers": [
+      {
+        "consumer": "native_standalone_api",
+        "suffix": "segments.json",
+        "status": 400,
+        "error": {
+          "code": "segments_refused",
+          "message": "Segment output exceeds byte ceiling; no partial result"
+        },
+        "successful_prefix": false
+      },
+      {
+        "consumer": "native_standalone_api",
+        "suffix": "segments.csv",
+        "status": 400,
+        "error": {
+          "code": "segments_refused",
+          "message": "Segment output exceeds byte ceiling; no partial result"
+        },
+        "successful_prefix": false
+      },
+      {
+        "consumer": "actual_normal_mcp_stdio",
+        "label": "first200_pages",
+        "tool": "spider_segments",
+        "kind": "pages",
+        "offset": 0,
+        "rows": 200,
+        "total": 1005,
+        "bytes": 53535,
+        "sha256": "4c462165c461e27075df9d0c76d55403b9517a485d007a222b394b48c4025c99",
+        "request_sha256": "4acec16b35e9a3d9672016fb17456bfd7de1d854bf3f5dbae854dfbcbd259eab",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "consumer": "actual_normal_mcp_stdio",
+        "label": "last200_pages",
+        "tool": "spider_segments",
+        "kind": "pages",
+        "offset": 805,
+        "rows": 200,
+        "total": 1005,
+        "bytes": 53543,
+        "sha256": "7055e1c1c5024f7f03e345117219ba70bfda37c2cddb64a0afe84cb162ec7cc4",
+        "request_sha256": "bfd2fc47831ca88c47d422ea9875a7f93cd64bd10f723b21fed5c85595832261",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "consumer": "actual_normal_mcp_stdio",
+        "label": "first8_issues",
+        "tool": "spider_segments",
+        "kind": "issues",
+        "offset": 0,
+        "rows": 8,
+        "total": 7035,
+        "bytes": 3996,
+        "sha256": "08f07bfd8d5644c9944201df5e48bd9bc95f6a7baf5387429ed82e22446f47a6",
+        "request_sha256": "5454e2146b105e9960c9bdcf3b2d9e76b4c2f1068a9a764b9fb55a1ae38405d8",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "consumer": "actual_normal_mcp_stdio",
+        "label": "last8_issues",
+        "tool": "spider_segments",
+        "kind": "issues",
+        "offset": 7027,
+        "rows": 8,
+        "total": 7035,
+        "bytes": 4209,
+        "sha256": "763614775e5dcb63613c45d60a1cdd676154c371a6b699cb7978f084692eebb2",
+        "request_sha256": "5201dd3a5fadfd2b02dcd3879bf97757aa999e98f0aec34b1d822e3395a6a8f6",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "consumer": "actual_normal_mcp_stdio",
+        "label": "eight_duplicate_issues",
+        "tool": "spider_segments",
+        "kind": "issues",
+        "offset": 5025,
+        "rows": 8,
+        "total": 7035,
+        "bytes": 317904,
+        "sha256": "b4bb4769059c49581e67ddd0e11e156e5b7d6b739d3035043813f3f0b6079500",
+        "request_sha256": "5b300375b14b6930bcb214cd8abacbf1a43335e6116a512b9d431ad9b94850f8",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "consumer": "actual_normal_mcp_stdio",
+        "label": "200_duplicate_issues_refused_at_unchanged1MiB",
+        "isError": true,
+        "native_oracle": {
+          "kind": "issues",
+          "offset": 5025,
+          "rows": 200,
+          "total": 7035,
+          "bytes": 7888848,
+          "sha256": "9c2bfeded3ae3b419a5fa9978e0f382128d31abef376d031eb645ebf5169a906",
+          "request_sha256": "000f883d08bb4bc65f1b69a911bf713ea1722d9b0a5bcf60d26db366977803a8",
+          "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+        },
+        "error": "MCP segment result exceeds1MiB; use smaller pages or CLI full export"
+      },
+      {
+        "consumer": "actual_normal_cli",
+        "label": "tail-json",
+        "args": [
+          "saved-segments",
+          "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\rm-r4\\segments-repeated-metadata\\segments-repeated-metadata-1792334057275-2a81d747\\native-store\\3f33a231-e218-4f2b-850f-e268a97105d3.json",
+          "--request",
+          "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\rm-r4\\segments-repeated-metadata\\segments-repeated-metadata-1792334057275-2a81d747\\cli-tail-json\\request.json",
+          "--output",
+          "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\rm-r4\\segments-repeated-metadata\\segments-repeated-metadata-1792334057275-2a81d747\\cli-tail-json\\output.json"
+        ],
+        "shutdown": {
+          "code": 0,
+          "signal": null
+        },
+        "output_exists": true,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "consumer": "actual_normal_cli",
+        "label": "tail-csv",
+        "args": [
+          "saved-segments",
+          "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\rm-r4\\segments-repeated-metadata\\segments-repeated-metadata-1792334057275-2a81d747\\native-store\\3f33a231-e218-4f2b-850f-e268a97105d3.json",
+          "--request",
+          "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\rm-r4\\segments-repeated-metadata\\segments-repeated-metadata-1792334057275-2a81d747\\cli-tail-csv\\request.json",
+          "--output",
+          "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\rm-r4\\segments-repeated-metadata\\segments-repeated-metadata-1792334057275-2a81d747\\cli-tail-csv\\output.csv",
+          "--csv"
+        ],
+        "shutdown": {
+          "code": 0,
+          "signal": null
+        },
+        "output_exists": true,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "consumer": "actual_normal_cli",
+        "scope": "tail_full_json_and_6column_csv_complete_fields_and1007relatedURLs",
+        "json": {
+          "bytes": 43575,
+          "sha256": "33bd76816a9b67f60541c3a1f7d76341dd6893e6bd7fea31f0578fbe086e50ea"
+        },
+        "csv": {
+          "bytes": 46442,
+          "sha256": "9fe2fd0cdacc292557fd1f49cde785f861b5dbd49a270d140e02f3b0d0bbc77c"
+        }
+      },
+      {
+        "consumer": "actual_normal_cli",
+        "label": "large-json-refused",
+        "args": [
+          "saved-segments",
+          "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\rm-r4\\segments-repeated-metadata\\segments-repeated-metadata-1792334057275-2a81d747\\native-store\\3f33a231-e218-4f2b-850f-e268a97105d3.json",
+          "--request",
+          "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\rm-r4\\segments-repeated-metadata\\segments-repeated-metadata-1792334057275-2a81d747\\cli-large-json-refused\\request.json",
+          "--output",
+          "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\rm-r4\\segments-repeated-metadata\\segments-repeated-metadata-1792334057275-2a81d747\\cli-large-json-refused\\output.json"
+        ],
+        "shutdown": {
+          "code": 1,
+          "signal": null
+        },
+        "output_exists": false,
+        "stdout": "",
+        "stderr": "Error: Segment output exceeds byte ceiling; no partial result\n"
+      },
+      {
+        "consumer": "actual_normal_cli",
+        "label": "large-csv-refused",
+        "args": [
+          "saved-segments",
+          "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\rm-r4\\segments-repeated-metadata\\segments-repeated-metadata-1792334057275-2a81d747\\native-store\\3f33a231-e218-4f2b-850f-e268a97105d3.json",
+          "--request",
+          "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\rm-r4\\segments-repeated-metadata\\segments-repeated-metadata-1792334057275-2a81d747\\cli-large-csv-refused\\request.json",
+          "--output",
+          "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\rm-r4\\segments-repeated-metadata\\segments-repeated-metadata-1792334057275-2a81d747\\cli-large-csv-refused\\output.csv",
+          "--csv"
+        ],
+        "shutdown": {
+          "code": 1,
+          "signal": null
+        },
+        "output_exists": false,
+        "stdout": "",
+        "stderr": "Error: Segment output exceeds byte ceiling; no partial result\n"
+      }
+    ],
+    "standalone_api_cursors": [
+      {
+        "kind": "pages",
+        "offset": 0,
+        "rows": 200,
+        "total": 1005,
+        "bytes": 53535,
+        "sha256": "4c462165c461e27075df9d0c76d55403b9517a485d007a222b394b48c4025c99",
+        "request_sha256": "4acec16b35e9a3d9672016fb17456bfd7de1d854bf3f5dbae854dfbcbd259eab",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "pages",
+        "offset": 200,
+        "rows": 200,
+        "total": 1005,
+        "bytes": 53645,
+        "sha256": "d85b595aa92472df33c260b278ef0d36168c082f3428851cd139c81a77ef56c9",
+        "request_sha256": "9e21ea6d2843b4b7ea23b6fdcf6480b3c9aaeb42f80ce27f278593470082456a",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "pages",
+        "offset": 400,
+        "rows": 200,
+        "total": 1005,
+        "bytes": 53645,
+        "sha256": "79bd2b268525e4fe930b531cdc926555a858f613d5b4a8ed27edf0a8b48e7b4e",
+        "request_sha256": "536d55ca7fe3d0042fbe78accfc66ae38d8c153db3c5d549151378b692a03de1",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "pages",
+        "offset": 600,
+        "rows": 200,
+        "total": 1005,
+        "bytes": 53645,
+        "sha256": "3e05418301564af7347db38ccf698b123f6c55991ad3e7caba5c7a861e73fff1",
+        "request_sha256": "4f2c3538902468c45423cacf7e4c8c6100910a10401a7c44ae7268d0e304ed89",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "pages",
+        "offset": 800,
+        "rows": 200,
+        "total": 1005,
+        "bytes": 53646,
+        "sha256": "c8212e4bf52e84d8d75694496cab3be49aece8c7fdc97eb9a695dc2ad11e1f7a",
+        "request_sha256": "3aaa06c15aa29fcc1fdc722de8a87b8e13426138307d66b8eb5af8bc7dad8420",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "pages",
+        "offset": 1000,
+        "rows": 5,
+        "total": 1005,
+        "bytes": 3623,
+        "sha256": "64d0c730f5a94455f91f4d97232033e9f48844b843e22ea63cefbeb4cbb1e97b",
+        "request_sha256": "b29ef7c18c90b71ebff3719716fe531dcc79be927c7416a52c5262216adf6663",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 0,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39287,
+        "sha256": "4597708bd4701e830a4ba79d86c00df54c05947b4d7c966bbd42a47cf29a4c7e",
+        "request_sha256": "29891d92048cd072616895c0175249dfa0d7d5aee1c7370b0c3cd9848dcbaa35",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 200,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39287,
+        "sha256": "cd125b6f0a7c4c64982aac79f84c5ff6b9235401b9cc91acc706009b676f2107",
+        "request_sha256": "a34e410f44da3acaf746eb4244f3b50ce030ef3e1fade6d2753ae0ec3f887479",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 400,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39287,
+        "sha256": "d695a28f2d536b5bc169ade8eb76d87a48c669de45cb7dbde2546ae931b817c4",
+        "request_sha256": "4cbd27b1b4eb596d37d28d1dc89084da53b19d9d5d562d02ac8ebc831cb11a48",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 600,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39287,
+        "sha256": "6b2e8d70fa53484b97ffcbc50fdb38558391090d6ead992a6a95fa1b164679ac",
+        "request_sha256": "f217a009516803ca02e64c3901ce279aad9d05ebca3835b88f7451ed92bed684",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 800,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39288,
+        "sha256": "d36730a6dbc0f0dc398608d30d3527b41b975990ac02820ea1c6c5751233bd08",
+        "request_sha256": "5a1730f094a82f1daebce383c616a79002421f9262b6f9288caf5364a1c35f55",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 1000,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39288,
+        "sha256": "077a98723c24d04a5b63834c86acb3fa326e668235b585c60bd1d115f0c99b00",
+        "request_sha256": "8c935b9c854841fdac4618bb4adc9fbf0e5f69986d36c6ed0230bdbc6fa2b870",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 1200,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39288,
+        "sha256": "0c8daa756d747c010691759d25ec00c3fa5f499a268dcc32b9b05f0c48383668",
+        "request_sha256": "0b181f73747d973ee0a60d4bce836590f3355f9d9360e4701829a908dc6f10a8",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 1400,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39288,
+        "sha256": "8d165b8e86dfe778dbbee11cacc94955ade8ad71aac9ffad2e4830ced29a11d4",
+        "request_sha256": "69e1d0f9e533680b9253bb90868586ced7c9d622ef7eaae1cc59c80b21114da5",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 1600,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39288,
+        "sha256": "f2dbf706aba8f8929b7c683d295a36c047c7102df7fc5090947ebfd48bc18d32",
+        "request_sha256": "4909351be4dbf5d1ad7c678763e96ce3f3c2d1387ef173fea684c7dba96148fd",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 1800,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39288,
+        "sha256": "b27d4b3bede04c378a741f1832864b4cdf26c6ee942afa60918ce368883ee3bb",
+        "request_sha256": "9ca8c60706fae5423f3a067e34b9d2e5dc54daa32fe3eb3d18070df8db294425",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 2000,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39288,
+        "sha256": "85fde5b2dec0204725114286dae44f9a1fc9dee793f0749cdae8bfecf402b560",
+        "request_sha256": "39b31eaecf7e89611e1c66694036c3a91ec086d5591742d67c8e9673a36be1e1",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 2200,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39288,
+        "sha256": "83a39f76f89ae2e48bddeb5c13ff01aea577902eff6a537f07d4614a1fd197ba",
+        "request_sha256": "c129ec341c315de21228400a24126d40f0a6dfa9ce536d9c1da2c75c990321d1",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 2400,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39288,
+        "sha256": "01cd28753f485513a5ec02979da2d4c71054c49b06b135787e276e1d40de2c9d",
+        "request_sha256": "5bc39aee9579ca9f1fd61f1d1fdfae24f99856b23dd50da9bb4465b976eca528",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 2600,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39288,
+        "sha256": "05959bc29d76f9ca82d8df2c4e66c6b3e59b407bdcab3053c668993961c17b07",
+        "request_sha256": "5d44522c460ed190045b613a02e49a13712417b593abf460cc05f1665a6ef8f1",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 2800,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39288,
+        "sha256": "2cc33fcb0839b4816f4cfab46e0edaa75ba8f4630da7d9d48234d1c86714fec1",
+        "request_sha256": "2f5af0f125570b767d6e704652319e4707e675c4f25e846d5e95e1f0f479cb45",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 3000,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39288,
+        "sha256": "ad64b95f4574c3136a3535f986c7ea89a038ff2966cb01d9b0b8344f927eb69b",
+        "request_sha256": "b51eb53fd7c8d8176a73e5f7a63b98b189c92e71cf01843c88815b6350a0188b",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 3200,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39288,
+        "sha256": "d072682bd82c40cc844cc2371d454243adf6296c7d5741066e31afd01b3434da",
+        "request_sha256": "40c05ded5f4fed53907d1a1f5449539ae590168615376a20390b9f2ec611664e",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 3400,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39288,
+        "sha256": "ef7b5709cbbc0604c53077fa944107857758ad98017613adcb44cdda2e310e86",
+        "request_sha256": "1e5602d5f8c2bdee2d581e7c306728deb9fe8910d4f7f66146efcdb7ca1b6321",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 3600,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39288,
+        "sha256": "8f0deb0feab75163df6c164ade5d11c40552cd5255d3f1090248f25c29ea11fe",
+        "request_sha256": "ebf472588e1234580e00d71fc00350a1d82359a9ca07883a504d98c5e0421d3b",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 3800,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39288,
+        "sha256": "4692884a4e2b408a4f9d4477b4680452c7a60f4956bec24e2a06e0bb985731d1",
+        "request_sha256": "da7a1dc94affb7996b15441faa39862c0a2a081a25d88610ba1fd44612691b2a",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 4000,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39288,
+        "sha256": "a37f52cc6b0c988a54cbaad03cdc2e0060f3add3cf200132565a0fffd36076a8",
+        "request_sha256": "16a20aa366b3e9b57252cd805df523f3377a7c0c3017d455bda396a6b67cbc72",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 4200,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39288,
+        "sha256": "df0b5bfe39272dc24b0bd87ef59f73f9ba77cbaf71011aff8d9e3cc87a866d65",
+        "request_sha256": "21e34b46354d307ba40787910904d534c2f486207a0f1bc13838337de7d09e6d",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 4400,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39288,
+        "sha256": "fd116ee69b7ceb1536f3056a4a440f5d32e960b952c3d568cb945bd5fb62423a",
+        "request_sha256": "4777f4a96639298fe642bbc8dd518a581fcdfd12a9d74a30c128925c4f92a9a2",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 4600,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39288,
+        "sha256": "6a7dbfef273c9e12c7e30cc69cc3d2d21f14694a2aa1fce21c28068f52417da1",
+        "request_sha256": "4b6f893d4d22ad7fb4950d137656fcd3a07b6468e4f32a0bcd1a248dc1ba135b",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 4800,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 39288,
+        "sha256": "4cad5b12161f261ae572458800e9adae84b47c0f1160d11f13de51f5c72d68d4",
+        "request_sha256": "0d03dfda4a6d88b7395ec5f3360157d1193f42a5306811b0788c841359521833",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 5000,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 6907653,
+        "sha256": "091679843dec7ee4db521cae993a9427f21c1dcf13da17b94def0ac92207c1a2",
+        "request_sha256": "944ed05ad3e44d70e2f52ccdad96a51c39a647a846ecdfb16333fce9b7e6bc43",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 5200,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 7888848,
+        "sha256": "e084f7033efe27060d68e7171f6bcdcd8ef0013016725917f4f27244c1477a7f",
+        "request_sha256": "4ccde961297994c0bf634f67278809768c55c99c9aa995897c3655d7c9b68cc8",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 5400,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 7888848,
+        "sha256": "7224f345faeac976d3cf69db72c6a905fad438a8828234f8dd716e3770ba340f",
+        "request_sha256": "dbc5304294d15e58ac0b7f9ee0745e7548c767f49195db29ad39a4ce1f4a657b",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 5600,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 7888848,
+        "sha256": "b69b2a4c95fe6d9e9568f2ff1702d9592cb3f61bf20c813f4532f4b1a2b0806b",
+        "request_sha256": "32984880a8c98ebc5ce92e9c713b7cb42b370361bf9e80bf6059dfbf727d36b5",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 5800,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 7888848,
+        "sha256": "f243d992e3a1c03c020edd05b6c4bc6e1f01b386f58395460a0ff49e6cf644ee",
+        "request_sha256": "08cc45625d6edbd834a1ff389df9ec721e21974376cc06f07fc63901dee84547",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 6000,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 1225188,
+        "sha256": "a1bfda059df158850eeb39a5ee15d19ee3d926ce3ca692921738d7dd022955ec",
+        "request_sha256": "8cec1face2b2cd878de023f2ae3f75bd5c2d39d32bfed1932046e31c26454c9d",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 6200,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 49248,
+        "sha256": "89306e31aee76f6c6d17b7ef8f681930417a020a24784f51859529d0210d274c",
+        "request_sha256": "b0bc245298cceb1e10c78596dace169d93fed4c9a49c3bf64772437a1787962b",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 6400,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 49248,
+        "sha256": "c96d01a8c0242135d925e2def30d80ba7909c3181a2b55688eceea8d2dd6d5e3",
+        "request_sha256": "4e44364fee5778df82dbddfd6fe240111f84c20dd2be9ac7268a190def4d0e49",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 6600,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 49248,
+        "sha256": "12d38a228b3c24c4c3a5b86d5addda1e915ab89a51f0c2be14856f1af02703b2",
+        "request_sha256": "ff2e2a216f73689616b781b670c3fb28958fc3e53acbe76d344f9751ca69e2ca",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 6800,
+        "rows": 200,
+        "total": 7035,
+        "bytes": 49248,
+        "sha256": "01773d74496eae952cd793edbabfb67c72885123d82b0f3356a2d9b97c632c90",
+        "request_sha256": "be64ef44debc30ea0115d1896e160794cbec8ffc6b598ec6f95cd6f703709f30",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      },
+      {
+        "kind": "issues",
+        "offset": 7000,
+        "rows": 35,
+        "total": 7035,
+        "bytes": 10527,
+        "sha256": "133506dc8aee81f23ffe66cc9a00020b06be63334bf385a045989e140ff349a2",
+        "request_sha256": "e1bd7f19bcb07aa895da26c857e467b65397c7694a32454753cc1453c29cfd87",
+        "snapshot": "50ab81580ea66147deb4374c5da1fab185840f70fffe3490f6eb319ec6fd1e42"
+      }
+    ],
+    "negative_controls": [
+      "actual_related_validator_rejects_missing_last_url",
+      "actual_related_validator_rejects_duplicate_replacing_last_url_at_equal_count",
+      "actual_related_validator_rejects_reordered_urls",
+      "actual_csv_row_validator_rejects_changed_final_context_cell"
+    ],
+    "source_guards": [
+      {
+        "field": "expected_snapshot_token",
+        "status": 409,
+        "code": "segments_snapshot_or_rules_refused"
+      },
+      {
+        "field": "expected_generation",
+        "status": 409,
+        "code": "generation_conflict"
+      },
+      {
+        "field": "cross_job_snapshot",
+        "status": 409,
+        "code": "segments_snapshot_or_rules_refused"
+      }
+    ],
+    "raw_project": {
+      "bytes": 56601390,
+      "sha256": "674e7633302b34066ace50adb3507faaf8e789554db5c43f5ebe5f13651fc756"
+    },
+    "stored_report": {
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\rm-r4\\segments-repeated-metadata\\segments-repeated-metadata-1792334057275-2a81d747\\native-store\\3f33a231-e218-4f2b-850f-e268a97105d3.json",
+      "bytes": 45247615,
+      "sha256": "4146dbec20382d71aa4e927610ff80b8cbb2db979230da17c297f4c9f2871141"
+    },
+    "read_only_native_oracle_count": 96,
+    "website_capture_requests": 1010,
+    "offline_product_requests": 0,
+    "witness_controls": 2
+  },
+  "sitemap_harness_repair": {
+    "path": "artifacts/sitemap-83c-harness-fix-1792332252851/result.json",
+    "bytes": 1743,
+    "sha256": "0180a037682669c34a840a1b704dd66aeb884992657210ac9095c0617da957b1"
+  },
+  "historical_public_CI": {
+    "run": 39132410328,
+    "commit": "83c46948a615d91885a303a46f246fdecd965611",
+    "status": "completed",
+    "conclusion": "failure",
+    "proof": {
+      "path": "artifacts/ci-83c-final-status-20261018.json",
+      "bytes": 25301,
+      "sha256": "f3931e7968b098969388072abeb91ff3a7fe97f37ef09af60e9f5215c0a94e45"
+    }
+  },
+  "retained_failures": [
+    {
+      "path": "artifacts/segments-repeated-metadata-focused-20261018-r1/proof.json",
+      "bytes": 1748,
+      "sha256": "270cfd9bef9af3164c8dfcbaa4b77d1d58d76ff93531021d1ab94ae0bc570ae7"
+    },
+    {
+      "path": "artifacts/rm-r2/proof.json",
+      "bytes": 1545,
+      "sha256": "a87dfcf35336349308ea5ff6137fc859a4b4a9c7308b79440578d73ff6ead9a4"
+    },
+    {
+      "path": "artifacts/rm-r3/proof.json",
+      "bytes": 1167,
+      "sha256": "fd97dc095fbacdb3a69e55dda664d0a369a3e349963654424a35a94e46cc4091"
+    },
+    {
+      "path": "artifacts/rm-37/proof.json",
+      "bytes": 4366,
+      "sha256": "c377fae730cf4998464600d7a0981bbed93dc79685dda229b9f900042d219387"
+    }
+  ],
+  "remaining": {
+    "fresh_public_CI": "NOT_RUN_FOR_THIS_UNCOMMITTED_SOURCE",
+    "installed_application": "UNCHANGED_SOURCE16",
+    "windows_long_data_paths": "NOT_FIXED",
+    "isolated_Node_fast_termination_root_cause": "NOT_PROVEN",
+    "universal_RSS_CPU": "NOT_PROVEN",
+    "manufacturer_parity": "NOT_PROVEN",
+    "catalog": "38 implemented /69partial /37planned;144groups+416filters+32workflows"
+  }
+}
