@@ -18,6 +18,7 @@ jobs:
       - run: node scripts/container-e2e.mjs
   test:
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
@@ -106,7 +107,7 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          $releaseSourcePaths=@('Cargo.toml','Cargo.lock','crates/core/src','crates/app/src','crates/core/Cargo.toml','crates/app/Cargo.toml','crates/app/build.rs','assets','web/index.html','web/app.js','web/saved-comparison.js','web/styles.css','web/list-import.js','web/serp.html','web/serp.js','web/robots.html','web/robots.js')
+          $releaseSourcePaths=@('Cargo.toml','Cargo.lock','crates/core/src','crates/app/src','crates/core/Cargo.toml','crates/app/Cargo.toml','crates/app/build.rs','assets','web')
           git diff --quiet HEAD -- $releaseSourcePaths
           if($LASTEXITCODE -ne 0){throw 'Compiled source differs from the exact CI commit'}
           cargo build --release --locked -p open-seo-spider

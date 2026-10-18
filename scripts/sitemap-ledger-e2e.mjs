@@ -427,26 +427,41 @@ export async function main(){
  }
  async function legacy(){
   const group='legacy-none-import-selected-restart';phase=group;diagnosticScenario=group;diagnosticStage='scenario-start';const parent=reports.get('known-empty'),legacy=structuredClone(parent.entry.report);
+  for(const field of ['sitemap_catalog','sitemap_coverage_inventory','sitemap_source_measurements'])assert.ok(legacy[field],'Modern positive parent must actually contain '+field);
+  // A modern dependent sidecar without its catalog is corruption, not legacy
+  // absence. Keep both production guards exercised before constructing an old report.
+  for(const [kind,message] of [['measurements','Parent measurements lack source catalog'],['inventory','Coverage inventory requires a sitemap catalog']]){
+   const orphan=structuredClone(parent.entry.report);delete orphan.sitemap_catalog;if(kind==='inventory')delete orphan.sitemap_source_measurements;
+   const importedOrphan=await call('/api/crawls/import',orphan),file=path.join(ownedData,importedOrphan.value.id+'.json'),original=await readFile(file);
+   const before=(await readdir(ownedData)).sort(),interval={id:'orphan-'+kind+'-before-child-creation',started_ms:stamp(),finished_ms:null,after_request_ordinal:totalRequests,through_request_ordinal:null};intervals.push(interval);
+   const rejected=await call('/api/crawls/'+importedOrphan.value.id+'/recrawl',{urls:[fixtureOrigin+parent.seed]},400);assert.equal(rejected.value.error,message);
+   sameJson((await readdir(ownedData)).sort(),before);assert.ok(original.equals(await readFile(file)));interval.finished_ms=stamp();interval.through_request_ordinal=totalRequests;
+  }
   delete legacy.config.explicit_sitemap_inputs;delete legacy.sitemap_catalog;
+  delete legacy.sitemap_coverage_inventory;delete legacy.sitemap_source_measurements;
+  const absentHistory=report=>{for(const field of ['sitemap_catalog','sitemap_coverage_inventory','sitemap_source_measurements'])assert.equal(report[field]??null,null,field+' must remain absent for a historical report');};absentHistory(legacy);
   const forbidden='/'+group+'/forbidden.xml';route(group,forbidden,index(''),{'content-type':'application/xml'});
   legacy.config.sitemap_urls=[fixtureOrigin+forbidden];legacy.config.discover_sitemaps=true;
   const imported=await call('/api/crawls/import',legacy),importedReport=await call('/api/crawls/'+imported.value.id+'/project.json');
   assert.equal(importedReport.value.sitemap_catalog ?? null,null);assert.equal(importedReport.value.config.explicit_sitemap_inputs ?? null,null);
+  absentHistory(importedReport.value);
   const exact=await readFile(path.join(ownedData,imported.value.id+'.json'));
   const created=await call('/api/crawls/'+imported.value.id+'/recrawl',{urls:[fixtureOrigin+parent.seed]});
   const child=await capture(created.value.id);assert.equal(child.report.sitemap_catalog ?? null,null);
   assert.equal(child.report.config.explicit_sitemap_inputs ?? null,null);assert.equal(child.status.checkpoint.sitemap_ledger ?? null,null);
+  absentHistory(child.report);
   assert.ok(exact.equals((await call('/api/crawls/'+created.value.id+'/parent.json')).bytes));
   const childBytes=await readFile(path.join(ownedData,created.value.id+'.json'));
   await stop();phase='restart-legacy-read-only';const interval={id:'legacy-startup',started_ms:stamp(),finished_ms:null,
    after_request_ordinal:totalRequests,through_request_ordinal:null};intervals.push(interval);
   await launch('legacy-restart');assert.equal((await call('/api/crawls/'+created.value.id)).value.status,'completed');
   const recovered=await call('/api/crawls/'+created.value.id+'/project.json');assert.equal(recovered.value.sitemap_catalog ?? null,null);
+  absentHistory(recovered.value);
   assert.equal(recovered.value.config.explicit_sitemap_inputs ?? null,null);
   assert.ok(exact.equals(await readFile(path.join(ownedData,imported.value.id+'.json'))));
   assert.ok(childBytes.equals(await readFile(path.join(ownedData,created.value.id+'.json'))));interval.finished_ms=stamp();interval.through_request_ordinal=totalRequests;phase=group;diagnosticScenario=group;diagnosticStage='scenario-start';
   expectHit(group,forbidden,0);
-  checked(group,['publicly imported historical field absence preserved','selected native store and immutable parent remain catalogue-unavailable','restart neither upgrades history nor discovers declared forbidden source']);
+  checked(group,['orphan measurements and orphan inventory each rejected400 before child creation or HTTP','publicly imported historical field absence preserved','selected native store and immutable parent remain catalogue-unavailable','restart neither upgrades history nor discovers declared forbidden source']);
  }
  async function corruptParent(){
   const group='invalid-parent-catalog-rejected';phase=group;diagnosticScenario=group;diagnosticStage='scenario-start';const parent=reports.get('ordinary-original-nested');

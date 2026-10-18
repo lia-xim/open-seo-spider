@@ -31,6 +31,12 @@ const suites = [
   ['resource-discovery', 'ui-resource-discovery-live.cjs', 'live'],
   ['resource-persistence', 'ui-resource-contract-live.cjs', 'live'],
   ['saved-spelling', 'ui-spelling-live.cjs', 'live'],
+  ['link-workflows', 'ui-link-workflows-live.cjs', 'live'],
+  ['api-enrichment', 'ui-enrichment-live.cjs', 'live'],
+  ['directory-tree', 'ui-directory-tree-live.cjs', 'live'],
+  ['saved-ngrams', 'ui-ngrams-live.cjs', 'live'],
+  ['saved-segments', 'ui-segments-live.cjs', 'live'],
+  ['resource-sources', 'ui-resource-sources-live.cjs', 'live'],
   ['saved-comparison', 'ui-saved-comparison-live.cjs', 'owned-native'],
   ['comparison-bundles', 'ui-saved-comparison-bundle-live.cjs', 'owned-native'],
 ];
@@ -55,8 +61,11 @@ const appLog = fs.createWriteStream(path.join(output, 'app.log'));
 try {
   worker = createRendererServer();
   const address = await worker.listen(0), renderer = `http://127.0.0.1:${address.port}/render`;
+  const appEnvironment = {...process.env, OPEN_SEO_COORDINATED_EXECUTION_WINDOW:'confirmed'};
+  // Owned fixture runs must not inherit the user's paid provider credential.
+  delete appEnvironment.OPEN_SEO_PAGESPEED_API_KEY;
   app = spawn(binary, ['serve', '--listen', '127.0.0.1:0', '--data-dir', path.join(output, 'data'), '--shutdown-on-stdin-eof'],
-    {cwd:root, windowsHide:true, stdio:['pipe','pipe','pipe'], env:{...process.env, OPEN_SEO_COORDINATED_EXECUTION_WINDOW:'confirmed'}});
+    {cwd:root, windowsHide:true, stdio:['pipe','pipe','pipe'], env:appEnvironment});
   appClose = new Promise(resolve => app.once('close', (code,signal) => resolve({code,signal})));
   let startupError, pending = '';
   app.once('error', error => startupError = error);
@@ -118,5 +127,7 @@ try {
   if(!failure){
     assert.equal(shutdown?.code,0,'Owned app did not close naturally');
     assert.deepEqual(changed,[],'E2E mutated tracked source');
+    assert.equal(proof.binary_unchanged,true,'E2E binary changed during acceptance');
+    assert.equal(proof.complete,true,'E2E acceptance is incomplete');
   }
 }

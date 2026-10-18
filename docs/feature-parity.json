@@ -6879,6 +6879,42 @@
   "last_verified_at": "2026-10-16T21:49:50.686Z",
   "current_work": [
     {
+      "id": "specialist-workflows-e2e-20261018",
+      "title_de": "Spezialwerkzeuge mit echten Browser-Abläufen und vollständigen Exporten absichern",
+      "priority": -2,
+      "status": "LOCAL_31_SUITES_PASS_PUBLIC_CI_FIX_PENDING",
+      "summary_de": "Alle31 registrierten UI-Suiten bestehen gemeinsam lokal: neun API-Fixtures und22 native Abläufe. Sechs neue Suiten decken Migration/Linkfehler, Verzeichnisbaum, Segmente, N-Gramme, Ressourcenquellen und die API-Freigabe-/Fehlerpfade ab. Die sichtbaren Zeilen und vollständigen Exporte werden gegen native Ergebnisse geprüft. Eine konkrete API-Fehleranzeige ist korrigiert. Öffentliche CI von db5948a besteht Renderer und Docker sowie Linux-Rust/Clippy, scheitert danach an einer widersprüchlichen Legacy-Sitemap-Fixture; Windows wurde abgebrochen. Die Fixture-Korrektur besteht lokal11 Szenarien samt zwei neuen Ablehnungsfällen; eine frische öffentliche Abnahme bleibt offen.",
+      "completed_acceptance_de": [
+        "Ein gemeinsamer31-Suiten-Lauf mit regulärem App-Abschluss0, unveränderten getrackten Quellen und identischer getesteter Binärdatei bestanden.",
+        "105 Verzeichniskinder,105 Segmentzeilen, über100 N-Grammzeilen,107 Linkfundstellen,109 Migrationszeilen und106 Ressourcen-Fundstellen über die tatsächlichen UI-Seiten und vollständigen Exporte geprüft.",
+        "Unabhängige Reviews schärfen sichtbare DOM-Zeilen, genaue Segmentzuordnung, CSV-Vollständigkeit, echte Filteranfragen und Unknown-Zustände; fünf Kontrollen bestätigen die abschließenden Runner-Gates.",
+        "API-Anreicherung zeigt echte Backend-Fehlermeldungen aus String- und Objektantworten; Vorschau, Freigabe, Invalidierung und fehlende Zugangsdaten ohne Google-Übermittlung geprüft.",
+        "Sitemap-Legacy-Fixture entfernt beide modernen abhängigen Felder; verwaiste Messungen und verwaistes Inventar müssen separat400 ohne Kinddateien und Website-Anfragen ergeben. Tatsächlicher lokaler11-Szenarien-/11-SQLite-Aufgabenlauf mit vollständigem HTTP-Drain besteht."
+      ],
+      "pending_acceptance_de": [
+        "Strikten sauberen Commit-Nachweis für die korrigierte Sitemap-Matrix ausführen und frische öffentliche Linux-/Windows-CI prüfen; keine Behauptung eines vollständig grünen GitHub-Laufs.",
+        "Positive API-Anreicherung über den bestehenden test-only Transport-Injektionspunkt durch echten Browser/Router/Store prüfen; tatsächliche Google-Metriken separat autorisiert abnehmen.",
+        "Kalte native Wiederöffnung der neuen Spezialwerkzeuge, weitere Regel-/Operator-Kombinationen, archivübergreifende Fehler und weitere Browser ergänzen.",
+        "Als nächsten echten Funktionsausbau rendering.custom_search für Roh-HTML, DOM-HTML und ausdrücklich ausgewählte Texte implementieren; sichere Muster-/Ergebnisgrenzen, getrennte Herkunft und Unknown-Zustände erhalten.",
+        "Vollständigen144-Fähigkeiten-Katalog weiter abarbeiten;36/69/39 bleiben unverändert und Herstellerparität NOT_PROVEN."
+      ],
+      "documentation": [
+        "docs/e2e-testing.md",
+        "docs/verification/specialist-e2e-20261018/README.md",
+        "docs/custom-search-plan.md"
+      ],
+      "gates": {
+        "local_UI_E2E": "PASS_31_9_FIXTURE_22_NATIVE",
+        "public_CI_db5948a": "RENDERER_DOCKER_PASS_LINUX_RUST_CLIPPY_PASS_LEDGER_FIXTURE_FAIL_WINDOWS_CANCELLED",
+        "ledger_fix": "PASS_DIRECT_LOCAL_11_SCENARIOS_11_SQLITE_TWO_ORPHAN_CONTROLS",
+        "strict_clean_commit_ledger": "PENDING",
+        "public_CI_new_commit": "NOT_PROVEN",
+        "manufacturer_parity": "NOT_PROVEN",
+        "installation": "UNCHANGED_SOURCE16"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
       "id": "claude-redesign-e2e-20261018",
       "title_de": "Claudes Redesign technisch absichern und wichtige UI-Pfade Ende zu Ende prüfen",
       "priority": -1,
@@ -9442,6 +9478,7 @@
     }
   ],
   "active_work_ids": [
+    "specialist-workflows-e2e-20261018",
     "claude-redesign-e2e-20261018",
     "combined-source-v15-20261016",
     "api-only-enrichment-20261016",

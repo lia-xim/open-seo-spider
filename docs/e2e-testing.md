@@ -22,6 +22,9 @@ EOF. It refuses the installed application's ports 8787/8790. Runtime evidence
 goes to an ignored `artifacts/ui-e2e-*` directory; `SPIDER_E2E_OUTPUT` may select
 another **new** output directory. Each suite gets a separate artifact directory.
 Tracked files are hashed before/after execution; a changed file fails the run.
+The application child does not inherit `OPEN_SEO_PAGESPEED_API_KEY`. The API
+enrichment suite exercises preview and refusal paths without sending targets
+to Google; it does not establish successful provider measurements.
 
 For a focused investigation:
 
@@ -50,6 +53,12 @@ complete E2E pass. The runner stops at the first failure and retains its logs.
 | Discovery, occurrence/transport data and persisted resources | resource-discovery, resource-persistence | Browser → Rust → owned fixture |
 | Saved spelling, explicit transfer acknowledgement, dictionary/profile reload, CSV and provider failure | saved-spelling | Browser → Rust → deterministic local LanguageTool-compatible fixture; not real-engine quality |
 | Saved comparison, original-report bundles and cold restart | saved-comparison, comparison-bundles | Owned native processes, browser, saved data and offline HTTP witnesses |
+| Migration CSV mapping, redirect outcomes and retained broken-link sources | link-workflows | Browser → native saved report; 109 mappings, 107 link occurrences, pagination and complete verified exports |
+| Directory hierarchy, raw/reported views and unknown/imported data | directory-tree | Browser → native saved report; exact rendered cards, 100+5 paging, full CSV and stale tokens |
+| Segment builder, persisted rules, assignments and issue views | saved-segments | Browser → native saved text; exact membership/cells, 100+5 paging, JSON/CSV and stale rules/views |
+| N-gram totals, occurrences, word cloud and text/metadata channels | saved-ngrams | Browser → native corpus; exact rendered rows, complete CSV, missing sources and real stale-generation refusal |
+| Resource/CSS failure occurrences and unavailable history | resource-sources | Browser → native SQLite ledger; 106 occurrences, 100+6 paging, snapshot-bound CSV and page JSON |
+| API enrichment preview, acknowledgement, invalidation and error messages | api-enrichment | Browser → ordinary native API; no successful provider calls or persisted remote metrics claimed |
 
 The existing native sitemap membership/assessment, API, CLI, MCP and renderer
 integration suites remain separate CI gates. Extracted-function VM tests are
@@ -57,14 +66,15 @@ also separate; they must not be described as browser E2E tests.
 
 ## Remaining important-path work
 
-Tool-menu navigation is not functional acceptance of migration, directory-tree,
-saved segments, n-gram, broken-source or provider-enrichment workflows. Those
-specialist flows need their own actual UI/API/store/export cases in this runner,
-including stale revisions, pagination and cold reopen. Existing Rust tests and
-older bounded native reports are useful evidence but do not replace current
-redesign E2E execution. Real LanguageTool language quality, external authorized
-providers, all future features and broad cross-browser parity remain separate
-requirements in `FEATURE_TODO.md`.
+The 31 registered suites provide bounded functional cases for the specialist
+tools above; a passing case is not complete feature acceptance. Cold native
+restart across the remaining tools, all rule/operator combinations, broader
+malformed imported archives and concurrent mutations need further coverage.
+API enrichment still needs start/poll/persist/reopen success with a synthetic
+provider boundary, followed by a separately authorized real-provider check.
+Real LanguageTool language quality, other external providers, future features
+and broad cross-browser parity remain separate requirements in
+`FEATURE_TODO.md`.
 
 Generated logs/screenshots/results are deliberately not committed over the
 historical fixtures. GitHub Actions uploads the new run's evidence separately.

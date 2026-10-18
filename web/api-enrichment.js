@@ -21,7 +21,7 @@
   configure.forEach(id => $(id).addEventListener('input', invalidate)); $('ack').addEventListener('change', sync);
   async function request(route, body, binary = false) {
     const response = await fetch(route, {method: body === undefined ? 'GET' : 'POST', headers: body === undefined ? {} : {'Content-Type': 'application/json'}, body: body === undefined ? undefined : JSON.stringify(body), cache: 'no-store'});
-    if (!response.ok) { const result = await response.json().catch(() => null); throw Error(result?.error?.message || `Anfrage fehlgeschlagen (${response.status}).`); }
+    if (!response.ok) { const result = await response.json().catch(() => null); const message = typeof result?.error === 'string' ? result.error : result?.error?.message; throw Error(message || `Anfrage fehlgeschlagen (${response.status}).`); }
     if (!binary) return response.json();
     const reader = response.body.getReader(), chunks = []; let size = 0;
     try { for (;;) { const {value, done} = await reader.read(); if (done) break; size += value.byteLength; if (size > 64 * 1024 * 1024) throw Error('CSV überschreitet 64 MiB.'); chunks.push(value); } } catch (e) { await reader.cancel(e).catch(() => {}); throw e; } finally { reader.releaseLock(); }
