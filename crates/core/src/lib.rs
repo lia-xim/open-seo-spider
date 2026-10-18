@@ -199,12 +199,16 @@ pub use sitemap::{
     observe_sitemap_xml, parse_sitemap,
 };
 pub use store::{
-    CrawlStore, SITEMAP_RAW_READ_ENGINE, SITEMAP_READ_WINDOW_ENGINE, SitemapBodyCatalogState,
-    SitemapBodyReadContext, SitemapBodyReadError, SitemapBodyWindow, SitemapRawReadContext,
-    SitemapRawReadRequest, SitemapRawReadWindow, SitemapRawRowKind, SitemapReadSnapshot,
-    SitemapReadState, SitemapReadWindow, SitemapReadWindowError, SitemapReadWindowExpectedContext,
-    SitemapStoredRowsFilter, SitemapVerifiedBodyCopy, SitemapVerifiedFindings,
-    SitemapVerifiedReadHeader, SitemapVerifiedStoredRows, sitemap_read_state_sha256,
+    CONFIG_PROFILE_CATALOG_ENGINE, CONFIG_PROFILE_CATALOG_ENTRIES,
+    CONFIG_PROFILE_CATALOG_NAME_BYTES, CONFIG_PROFILE_CATALOG_TOTAL_BYTES, ConfigProfileCatalog,
+    ConfigProfileCatalogDocument, ConfigProfileCatalogEntry, ConfigProfileCatalogError,
+    ConfigProfileCatalogErrorKind, CrawlStore, SITEMAP_RAW_READ_ENGINE, SITEMAP_READ_WINDOW_ENGINE,
+    SitemapBodyCatalogState, SitemapBodyReadContext, SitemapBodyReadError, SitemapBodyWindow,
+    SitemapRawReadContext, SitemapRawReadRequest, SitemapRawReadWindow, SitemapRawRowKind,
+    SitemapReadSnapshot, SitemapReadState, SitemapReadWindow, SitemapReadWindowError,
+    SitemapReadWindowExpectedContext, SitemapStoredRowsFilter, SitemapVerifiedBodyCopy,
+    SitemapVerifiedFindings, SitemapVerifiedReadHeader, SitemapVerifiedStoredRows,
+    sitemap_read_state_sha256,
 };
 pub use urls::normalize_url;
 

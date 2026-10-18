@@ -10,7 +10,7 @@ use tokio::sync::OwnedSemaphorePermit;
 // A JSON-text envelope may escape every quote/backslash of a 64 MiB profile.
 // Two per-process slots bound body preparation and the actual blocking work.
 pub(super) const MAX_REQUEST_BYTES: usize = 2 * profile::CONFIG_PROFILE_BYTES + 256 * 1024;
-const MAX_REPLY_BYTES: usize = 6 * profile::CONFIG_PROFILE_BYTES + 1024 * 1024;
+pub(super) const MAX_REPLY_BYTES: usize = 6 * profile::CONFIG_PROFILE_BYTES + 1024 * 1024;
 
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -46,7 +46,7 @@ struct ConfigPatch {
     remove: bool,
 }
 
-fn slot(state: &AppState) -> ApiResult<OwnedSemaphorePermit> {
+pub(super) fn slot(state: &AppState) -> ApiResult<OwnedSemaphorePermit> {
     state
         .lifecycle
         .config_profile_gate
@@ -60,7 +60,10 @@ fn slot(state: &AppState) -> ApiResult<OwnedSemaphorePermit> {
         })
 }
 
-async fn body(state: &AppState, request: Request) -> ApiResult<(OwnedSemaphorePermit, Bytes)> {
+pub(super) async fn body(
+    state: &AppState,
+    request: Request,
+) -> ApiResult<(OwnedSemaphorePermit, Bytes)> {
     let json_type = request
         .headers()
         .get(header::CONTENT_TYPE)
@@ -200,6 +203,11 @@ fn json_reply(value: Value) -> anyhow::Result<Response> {
 }
 
 fn preview(value: profile::CrawlConfigProfile) -> anyhow::Result<Response> {
+    json_reply(preview_value(value)?)
+}
+
+/// Same pure preview used by the catalog before any persistent write.
+pub(super) fn preview_value(value: profile::CrawlConfigProfile) -> anyhow::Result<Value> {
     let inspected = profile::preview_config_profile(&value)?;
     let profile_json = String::from_utf8(profile::export_config_profile(&value)?)?;
     let config_json = serde_json::to_string(&value.config)?;
@@ -212,7 +220,7 @@ fn preview(value: profile::CrawlConfigProfile) -> anyhow::Result<Response> {
             .all(|text| text.len() <= profile::CONFIG_PROFILE_BYTES),
         "A configuration profile document exceeds64MiB after normalization"
     );
-    json_reply(json!({
+    Ok(json!({
         "engine":profile::CONFIG_PROFILE_ENGINE,
         "version":1,
         "profile_json":profile_json,

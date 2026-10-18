@@ -9,6 +9,15 @@ use serde::de::DeserializeOwned;
 use sha2::{Digest, Sha256};
 use std::{path::Path, sync::Mutex};
 
+#[path = "store/config_profile_catalog.rs"]
+mod config_profile_catalog;
+pub use config_profile_catalog::{
+    CONFIG_PROFILE_CATALOG_ENGINE, CONFIG_PROFILE_CATALOG_ENTRIES,
+    CONFIG_PROFILE_CATALOG_NAME_BYTES, CONFIG_PROFILE_CATALOG_TOTAL_BYTES, ConfigProfileCatalog,
+    ConfigProfileCatalogDocument, ConfigProfileCatalogEntry, ConfigProfileCatalogError,
+    ConfigProfileCatalogErrorKind,
+};
+
 #[path = "store/crawl_quota_adapter.rs"]
 mod crawl_quota_adapter;
 #[cfg(test)]

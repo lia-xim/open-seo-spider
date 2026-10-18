@@ -122,7 +122,7 @@ async function draft() {
 }
 async function openSettings() {
   if (!await page.locator('#settings-dialog').evaluate(el => el.open)) await page.click('#settings-open');
-  const editor = page.locator('#config-profiles > details');
+  const editor = page.locator('#config-profiles > details:has(#config-profile-json)');
   if (!await editor.evaluate(el => el.open)) await editor.locator(':scope > summary').click();
 }
 async function selectJob(id, capturedPages) {

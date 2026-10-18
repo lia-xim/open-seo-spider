@@ -29,6 +29,7 @@ use uuid::Uuid;
 mod accessibility;
 mod broken_sources;
 mod comparison;
+mod config_profile_catalog;
 mod config_profiles;
 mod content;
 mod crawl_quotas;
@@ -310,6 +311,29 @@ async fn serve_with_mcp_files_ready_source_inner(
         .route(
             "/api/config-profiles/default",
             get(config_profiles::defaults),
+        )
+        .route(
+            "/api/config-profile-catalog",
+            get(config_profile_catalog::list)
+                .post(config_profile_catalog::create)
+                .layer(axum::extract::DefaultBodyLimit::max(
+                    config_profiles::MAX_REQUEST_BYTES,
+                )),
+        )
+        .route(
+            "/api/config-profile-catalog/{id}",
+            get(config_profile_catalog::get)
+                .put(config_profile_catalog::replace)
+                .delete(config_profile_catalog::delete)
+                .layer(axum::extract::DefaultBodyLimit::max(
+                    config_profiles::MAX_REQUEST_BYTES,
+                )),
+        )
+        .route(
+            "/api/config-profile-catalog/{id}/rename",
+            post(config_profile_catalog::rename).layer(axum::extract::DefaultBodyLimit::max(
+                config_profiles::MAX_REQUEST_BYTES,
+            )),
         )
         .route(
             "/api/config-profiles/from-config",

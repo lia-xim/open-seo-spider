@@ -4,19 +4,22 @@ The supported story is: open the redesigned interface, configure a crawl, fetch
 owned pages through the Rust backend, inspect the saved result, and export or
 reopen that result. Tests must follow the real boundary they claim to cover.
 
-## Current profile acceptance and retained aggregate failure
+## Current named-profile and regression acceptance
 
-The [configuration-profile receipt](verification/configuration-profiles-20261018/README.md) records 1,802 ordinary Rust tests (five deliberate ignores), strict Clippy, four explicit Chromium cases, controlled-provider cold replay, 104 state tests and 40 semantic groups. Native profile acceptance has ten actual browser groups, 26 distinct rejection controls and six real downloads.
+The [current receipt](verification/configuration-profile-catalog-20261018/README.md) records **1,817 ordinary Rust tests**, five deliberate opt-in ignores, strict Clippy, four explicitly executed Chromium fixtures, controlled-provider cold replay, 130 state tests and 40 semantic UI groups.
 
-All **39 registered UI suites** have successful executions on the same frozen product and driver bytes across **three invocations**: 31 successful cases in a later-failing full run, seven remaining cases, and one unchanged isolated density case. This is **not one successful 39-suite invocation**. The full run timed out waiting for Space to close a disclosure after touch/text selection; the isolated canonical case and an instrumented diagnostic passed. Its intermittent cause and aggregate stability remain unproven. No deadline was raised, assertion disabled or product fix inferred from the isolated success.
+All **40 registered UI suites passed in one complete invocation** on the same frozen product and driver bytes: nine API-fixture suites and 31 native suites. The named native catalog has four actual browser groups, two positive native processes and two separately prepared negative-only processes, five real downloads and a fresh-origin cold reload. Existing portable-profile acceptance also passed its ten browser groups.
 
-The separate actual CLI check is `node scripts/crawl-config-cli-e2e.mjs`, with `SPIDER_BINARY` explicitly set to the built executable. It proves raw native `--config` options and explicit portable-envelope refusal before HTTP/output/store effects. It does not execute portable profiles through the CLI. See [the format contract](configuration-profiles.md) and [the full backlog](FEATURE_TODO.md).
+The prior [39-suite aggregate failure](verification/configuration-profiles-20261018/README.md) remains historical. Its Space step was reproduced with correctly focused, unblocked key events but no native activation click. The canonical test now waits for the preceding trusted native toggle to finish before sending Space. Three prespecified matching-build runs and the whole 40-suite run passed without raising deadlines or removing assertions. The exact Chromium root cause and universal stability are not proven.
+
+The actual CLI check is `node scripts/crawl-config-cli-e2e.mjs`, with `SPIDER_BINARY` explicitly set to the built executable. It proves raw native `--config` options and portable-envelope refusal before HTTP/output/store effects. Portable profile CLI execution remains unsupported. See [the format contract](configuration-profiles.md) and [the complete backlog](FEATURE_TODO.md).
 
 ## Run locally
 
 Use the project's Rust toolchain and Node.js 24. Install renderer dependencies
 with `npm ci --ignore-scripts` in `renderer/`. Install Chrome/Chromium separately
-and optionally set `OPEN_SEO_BROWSER_PATH` to its executable.
+and set `OPEN_SEO_BROWSER_PATH` to its executable for the complete suite. The
+named-catalog driver requires this explicit browser selection.
 
 ```sh
 cargo build --locked -p open-seo-spider
@@ -24,7 +27,9 @@ node scripts/ui-e2e.mjs
 node scripts/renderer-rust-e2e.mjs
 ```
 
-`SPIDER_BINARY` selects an explicitly built app. The runner never installs or
+`SPIDER_BINARY` selects an explicitly built app. The coordinator computes and
+passes its SHA-256 to each child; a direct catalog-driver invocation must also
+supply `SPIDER_BINARY_SHA256`. The runner never installs or
 updates the user's application. It launches a fresh app and renderer on owned
 dynamic loopback ports, uses a new test store, and closes its app through stdin
 EOF. It refuses the installed application's ports 8787/8790. Runtime evidence
@@ -87,6 +92,7 @@ explicit executions separately.
 | Offline robots and SERP editing/exports | robots, serp | Browser → Rust; website-request witnesses |
 | URL-list import and crawl | list-import | Browser → Rust → owned fixture |
 | Full native configuration profiles, exact integer/byte preservation, volatile headers and cold reopen | configuration-profiles | Registered owned-native browser/file-picker/download driver; current source acceptance is recorded separately |
+| Named native profile catalog, CRUD, two-tab CAS, corruption refusal and fresh-origin cold reload | configuration-profile-catalog | Actual browser → native API → SQLite → download, two positive and two negative-only EOF0 processes; bounded local receipt above |
 | Drain/pause/resume and selected recrawl | pause-resume, selected-recrawl | Browser → Rust → owned HTTP barriers/persistent crawl |
 | Policy preview and crawl decisions | policy | Browser → Rust → owned fixture |
 | Saved raw/rendered text and content analysis | content | Browser → native saved content |
@@ -139,7 +145,7 @@ checkpoints are explicitly `IN_PROGRESS`; only the final receipt establishes
 whole-case acceptance. General performance/RSS, long Windows stores and the
 isolated Node crash's root cause remain unproven. Fresh public CI is separate.
 
-The 39 registered suites provide bounded functional cases for the specialist
+The 40 registered suites provide bounded functional cases for the specialist
 tools above; a passing case is not complete feature acceptance. Cold native
 restart across other tools, all rule/operator combinations, broader
 malformed imported archives and concurrent mutations need further coverage.

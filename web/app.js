@@ -29,6 +29,7 @@
   };
 
   let configProfiles = null, profileFormBaseline = null, profileToolbarBaseline = null, profileHeaderSignature = '', profileQuotaBaseline = null;
+  let configProfileCatalog = null, profileCatalogNameOwner = '', profileCatalogDelete = null;
   const legacySettingsDefaults = {...state.settings};
   let dashboardSegments = null;
   const separateSegmentSections = new Set(['inputs','policy','policyaliases','content','resource-discovery','sitemap-membership','sitemap-findings']);
@@ -437,7 +438,7 @@
   function configProfileStartRefusal() {
     if(configProfiles?.state.restoreError)return 'Gespeicherter Profilentwurf konnte nicht wiederhergestellt werden: '+configProfiles.state.restoreError+' Der Crawlstart bleibt gesperrt. In den Einstellungen ein gültiges Profil prüfen und ausdrücklich speichern.';
     if(configProfiles?.state.restorePending)return 'Der gespeicherte Profilentwurf wurde noch nicht erfolgreich wiederhergestellt. Der Crawlstart bleibt gesperrt. In den Einstellungen ein gültiges Profil prüfen und ausdrücklich speichern.';
-    return configProfiles?.state.busy?'Die Profilprüfung läuft noch. Bitte vor dem Crawlstart abschließen.':'';
+    return configProfiles?.state.busy||configProfileCatalog?.state.busy?'Die Profilprüfung oder Bibliotheksaktion läuft noch. Bitte vor dem Crawlstart abschließen.':'';
   }
   async function startCrawl(event) {
     event.preventDefault();
@@ -1695,7 +1696,7 @@
     $('config-profile-error').hidden=!error;$('config-profile-error').textContent=error;
     $('config-profile-status').textContent=profile.busy?'Profil wird ohne Crawl oder Website-Anfragen geprüft.':envelope?'Vollständiger nativer Entwurf. Formularänderungen werden gezielt auf den JSON-Entwurf angewendet. Erst Speichern übernimmt ihn.':'Noch kein vollständiges Profil geladen; bisherige Einstellungen bleiben aktiv.';
     for(const id of ['config-profile-export','config-profile-load-selected','config-profile-default','config-profile-inspect'])$(id).disabled=profile.busy||(id==='config-profile-load-selected'&&!state.crawl);
-    $('settings-form').querySelector('button[type="submit"]').disabled=profile.busy;
+    $('settings-form').querySelector('button[type="submit"]').disabled=profile.busy||Boolean(configProfileCatalog?.state.busy);
     const names=envelope?.required_headers||[],signature=JSON.stringify(names);
     if(signature!==profileHeaderSignature){
       profileHeaderSignature=signature;const container=$('config-profile-required-headers');container.replaceChildren();
@@ -1704,6 +1705,22 @@
     for(const input of $('config-profile-required-headers').querySelectorAll('[data-profile-header]')){const name=input.dataset.profileHeader;if(input.value!==configProfiles.headerValue(name))input.value=configProfiles.headerValue(name);const resolve=[...$('config-profile-required-headers').querySelectorAll('[data-profile-header-resolve]')].find(element=>element.dataset.profileHeaderResolve===name);resolve.checked=configProfiles.hasHeader(name);}
     $('config-profile-header-state').textContent=names.length?configProfiles.unresolved().length+' von '+names.length+' Headerwerten fehlen. Profilentwurf und Profilexport enthalten keine Headerwerte. Beim Start werden sie Teil der lokal gespeicherten Laufkonfiguration.':'Keine Headerwerte erforderlich.';
     if(profile.active){const values=window.ConfigProfiles.fields(profile.active.effective_config_json),seeds=JSON.parse(values.get('seed_urls')||'[]'),maps=JSON.parse(values.get('sitemap_urls')||'[]');$('config-profile-active').hidden=false;$('config-profile-active').textContent='Vollprofil aktiv: '+seeds.length+' Start-URLs, '+maps.length+' Sitemap-URLs. Unveränderte Startfelder behalten alle gespeicherten Quellen und Eingabeherkünfte. Änderungen der Startfelder ersetzen diese Quellen ausdrücklich; Linkverfolgung bleibt im Profil festgelegt.';}
+    renderConfigProfileCatalog();
+  }
+  function renderConfigProfileCatalog() {
+    if(!configProfileCatalog)return;
+    const catalog=configProfileCatalog.state,entry=configProfileCatalog.selected(),busy=catalog.busy||configProfiles.state.busy,select=$('config-catalog-select');
+    const options=[document.createElement('option')];options[0].value='';options[0].textContent=catalog.loaded?'Eintrag auswählen':'Zuerst gespeicherte Profile laden';
+    for(const item of catalog.entries){const option=document.createElement('option');option.value=item.id;option.textContent=item.name+' · Revision '+item.revision;options.push(option);}select.replaceChildren(...options);select.value=catalog.selectedId;select.disabled=!catalog.entries.length;
+    const owner=entry?entry.id+':'+entry.revision:'';if(owner!==profileCatalogNameOwner){profileCatalogNameOwner=owner;if(entry)$('config-catalog-name').value=entry.name;}
+    $('config-catalog-status').textContent=catalog.busy?'Native Bibliotheksaktion läuft; der aktive Crawlentwurf bleibt unverändert.':catalog.status;
+    $('config-catalog-error').hidden=!catalog.error;$('config-catalog-error').textContent=catalog.error;
+    $('config-catalog-meta').textContent=entry?'Revision '+entry.revision+' · '+entry.profile_bytes+' UTF-8-Bytes · gespeichert '+entry.updated_at+' · SHA-256 '+entry.profile_sha256:'Keine gespeicherte Profilkopie ausgewählt.';
+    $('config-catalog-list').disabled=busy;$('config-catalog-create').disabled=busy;
+    for(const id of ['load','replace','rename','delete'])$('config-catalog-'+id).disabled=busy||!entry;
+    const token=entry?entry.id+':'+entry.revision+':'+entry.profile_sha256:null,confirm=Boolean(token&&token===profileCatalogDelete);
+    $('config-catalog-delete-question').hidden=!confirm;$('config-catalog-delete-question-text').textContent=confirm?'„'+entry.name+'“ aus der nativen Bibliothek löschen? Bereits geladene Entwürfe und Crawl-Konfigurationen bleiben erhalten.':'';
+    $('config-catalog-delete-confirm').disabled=busy||!confirm;
   }
   function projectProfileToolbar(envelope) {
     const values=window.ConfigProfiles.fields(envelope.effective_config_json),seeds=JSON.parse(values.get('seed_urls')||'[]'),maps=JSON.parse(values.get('sitemap_urls')||'[]');
@@ -1716,12 +1733,21 @@
     tlsFileRevision++;
     const result=await work;if(result){projectConfigProfile(result);renderConfigProfile();}return result;
   }
-  async function ensureConfigProfile() {
-    if(configProfiles.state.working||configProfiles.state.text.trim())return true;
+  function configProfileFromFormText() {
     const settings=profileFormSnapshot(), advanced=parseAdvanced(settings);
     const config={...advanced,concurrency:Number(settings.concurrency),request_timeout_secs:Number(settings.timeout_seconds),max_pages:Number(settings.max_pages)||null,max_depth:Number(settings.max_depth)||null,delay_ms:Number(settings.delay_ms),max_body_bytes:Number(settings.max_body_mb)*1048576,user_agent:settings.user_agent,indexability_agent:settings.indexability_agent,obey_robots:settings.obey_robots,include_subdomains:settings.follow_subdomains,check_external:settings.check_external};
     config.renderer=settings.javascript_rendering?{endpoint:settings.renderer_endpoint,wait_ms:Number(settings.renderer_wait_ms),accessibility:settings.renderer_accessibility,screenshot:settings.renderer_screenshot,collect_cookies:settings.renderer_collect_cookies,custom_javascript:parseCustomJavascript(settings.custom_javascript_json)}:null;
-    return Boolean(await stageConfigProfile(configProfiles.fromConfig(JSON.stringify(config))));
+    return JSON.stringify(config);
+  }
+  async function ensureConfigProfile() {
+    if(configProfiles.state.working||configProfiles.state.text.trim())return true;
+    return Boolean(await stageConfigProfile(configProfiles.fromConfig(configProfileFromFormText())));
+  }
+  function configProfileCatalogPreparation() { return configProfiles.state.working||configProfiles.state.text.trim()?{profile_text:configProfiles.state.text,patches:configProfilePatches()}:{config_text:configProfileFromFormText()}; }
+  async function writeConfigProfileCatalog(replace) {
+    profileCatalogDelete=null;
+    try{const name=$('config-catalog-name').value,preparation=configProfileCatalogPreparation();await configProfileCatalog[replace?'overwrite':'create'](name,preparation);}
+    catch(error){configProfileCatalog.state.error=error.message;renderConfigProfileCatalog();}
   }
   async function saveConfigProfile() {
     tlsFileRevision++;
@@ -1756,9 +1782,22 @@
     }catch(error){if(current())message('Der Profil-Crawl konnte nicht gestartet werden: '+error.message,true);}
     finally{if(state.startOperation===operation){state.startOperation=null;state.starting=false;renderControls();}}
   }
+  function bindConfigProfileCatalog() {
+    $('config-catalog-list').addEventListener('click',()=>{profileCatalogDelete=null;configProfileCatalog.list();});
+    $('config-catalog-select').addEventListener('change',()=>{profileCatalogDelete=null;configProfileCatalog.select($('config-catalog-select').value);});
+    $('config-catalog-name').addEventListener('input',()=>{profileCatalogDelete=null;configProfileCatalog.edited();});
+    $('config-catalog-load').addEventListener('click',()=>{tlsFileRevision++;profileCatalogDelete=null;stageConfigProfile(configProfileCatalog.load());});
+    $('config-catalog-create').addEventListener('click',()=>writeConfigProfileCatalog(false));$('config-catalog-replace').addEventListener('click',()=>writeConfigProfileCatalog(true));
+    $('config-catalog-rename').addEventListener('click',()=>{profileCatalogDelete=null;configProfileCatalog.rename($('config-catalog-name').value);});
+    $('config-catalog-delete').addEventListener('click',()=>{const entry=configProfileCatalog.selected();if(entry){configProfileCatalog.edited();profileCatalogDelete=entry.id+':'+entry.revision+':'+entry.profile_sha256;renderConfigProfileCatalog();}});
+    $('config-catalog-delete-cancel').addEventListener('click',()=>{profileCatalogDelete=null;renderConfigProfileCatalog();});
+    $('config-catalog-delete-confirm').addEventListener('click',()=>{const entry=configProfileCatalog.selected();if(entry&&profileCatalogDelete===entry.id+':'+entry.revision+':'+entry.profile_sha256){profileCatalogDelete=null;return configProfileCatalog.remove();}});
+  }
   async function initializeConfigProfiles() {
     if(!window.ConfigProfiles)return;
-    configProfiles=window.ConfigProfiles.createController({changed:()=>{renderConfigProfile();renderControls();}});
+    configProfiles=window.ConfigProfiles.createController({invalidated:()=>{profileCatalogDelete=null;configProfileCatalog?.invalidate();},changed:()=>{renderConfigProfile();renderControls();}});
+    configProfileCatalog=window.ConfigProfiles.createCatalogController({profiles:configProfiles,changed:()=>{renderConfigProfile();renderControls();}});
+    bindConfigProfileCatalog();
     $('config-profile-json').addEventListener('input',()=>{tlsFileRevision++;configProfiles.edited($('config-profile-json').value);});
     $('config-profile-import').addEventListener('click',()=>{configProfiles.edited();$('config-profile-file').value='';$('config-profile-file').click();});
     $('config-profile-file').addEventListener('change',()=>stageConfigProfile(configProfiles.importFile($('config-profile-file').files[0])));

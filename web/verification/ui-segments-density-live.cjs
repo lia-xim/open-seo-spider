@@ -233,8 +233,26 @@ async function compactMetrics(label) {
     assert(marker.candidates > 0 && marker.owner_is_summary && marker.outside_text, 'Native first-line marker must remain a reachable summary target outside the text span');
     metrics.push({stage: 'native_marker_hit_test', ...marker});
     const {x: markerX, y: markerY} = marker.point;
+    // `open` changes synchronously, but the browser queues the native toggle
+    // event. Finish this touch operation before switching input modality: a
+    // reproduced overlapping Space keyup produced no native activation click.
+    await details.evaluate(element => {
+      const witness = {serial: 0, open: null, trusted: false};
+      element.__densityNativeToggle = witness;
+      element.addEventListener('toggle', event => {
+        if (!event.isTrusted) return;
+        witness.serial++;
+        witness.open = element.open;
+        witness.trusted = true;
+      });
+    });
     await page.touchscreen.tap(markerX, markerY); await page.waitForFunction(index => !document.querySelectorAll('#rows tr')[index].cells[5].querySelector('details').open, longIndex);
     await page.touchscreen.tap(markerX, markerY); await page.waitForFunction(index => document.querySelectorAll('#rows tr')[index].cells[5].querySelector('details').open, longIndex);
+    await page.waitForFunction(index => {
+      const element = document.querySelectorAll('#rows tr')[index].cells[5].querySelector('details');
+      const witness = element.__densityNativeToggle;
+      return element.open && witness?.serial > 0 && witness.open === true && witness.trusted;
+    }, longIndex);
     await page.evaluate(() => window.getSelection().removeAllRanges());
     await summary.focus(); await page.keyboard.press('Space'); await page.waitForFunction(index => !document.querySelectorAll('#rows tr')[index].cells[5].querySelector('details').open, longIndex);
     await exactDOM(first); await compactMetrics('keyboard_recollapsed');

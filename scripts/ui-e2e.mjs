@@ -52,6 +52,7 @@ const suites = [
   ['saved-comparison', 'ui-saved-comparison-live.cjs', 'owned-native'],
   ['comparison-bundles', 'ui-saved-comparison-bundle-live.cjs', 'owned-native'],
   ['configuration-profiles', 'ui-config-profiles-live.cjs', 'owned-native'],
+  ['configuration-profile-catalog', 'ui-config-profile-catalog-live.cjs', 'owned-native'],
 ];
 const args = process.argv.slice(2);
 assert(args.length === 0 || (args.length === 2 && args[0] === '--only'), 'Usage: node scripts/ui-e2e.mjs [--only name,name]');
@@ -103,7 +104,7 @@ try {
     const stdout = fs.createWriteStream(path.join(directory,'stdout.log')), stderr = fs.createWriteStream(path.join(directory,'stderr.log'));
     const started = Date.now();
     const child = spawn(process.execPath,[path.join(root,'web/verification',script)],{cwd:root,windowsHide:true,stdio:['ignore','pipe','pipe'],
-      env:{...process.env, SPIDER_BINARY:binary, SPIDER_ROOT:root, SPIDER_APP_URL:appOrigin, SPIDER_URL:appOrigin,
+      env:{...process.env, SPIDER_BINARY:binary, SPIDER_BINARY_SHA256:binarySha, SPIDER_ROOT:root, SPIDER_APP_URL:appOrigin, SPIDER_URL:appOrigin,
         SPIDER_RENDERER_URL:renderer, OPEN_SEO_SPIDER_RENDERER:renderer,
         OPEN_SEO_COORDINATED_EXECUTION_WINDOW:'confirmed', SPIDER_TEST_ARTIFACT_DIR:directory,
         SPIDER_COMPARISON_LIVE_DIR:directory, SPIDER_COMPARISON_SMOKE_DIR:directory,

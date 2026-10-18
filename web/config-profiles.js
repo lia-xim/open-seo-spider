@@ -92,7 +92,7 @@
     return {...value, required_headers: required};
   }
   async function transport(route, body, options = {}) {
-    const response = await fetch(route, {method: body === undefined ? 'GET' : 'POST', cache: 'no-store', redirect: 'error',
+    const response = await fetch(route, {method: options.method || (body === undefined ? 'GET' : 'POST'), cache: 'no-store', redirect: 'error',
       signal: options.signal, headers: body === undefined ? {} : {'Content-Type': 'application/json'}, body: body === undefined ? undefined : JSON.stringify(body)});
     const cap = options.attachment ? MAX_BYTES : MAX_BYTES * 6 + 1048576;
     const declared = response.headers.get('content-length');
@@ -112,7 +112,7 @@
     const text = new TextDecoder('utf-8', {fatal: true, ignoreBOM: true}).decode(bytes);
     if (!response.ok) {
       let failure; try { failure = JSON.parse(text); } catch (_) {}
-      throw Error(typeof failure?.error === 'string' ? failure.error : 'Profilprüfung fehlgeschlagen (HTTP ' + response.status + ').');
+      const error = Error(typeof failure?.error === 'string' ? failure.error : 'Profilprüfung fehlgeschlagen (HTTP ' + response.status + ').');error.status=response.status;throw error;
     }
     if (options.attachment) {
       if (!response.headers.get('content-disposition')?.includes('attachment')) throw Error('Der Server hat keinen Profil-Download geliefert.');
@@ -127,6 +127,7 @@
     const secrets = new Map(); let operation = null;
     function invalidate() {
       state.revision++; operation?.controller.abort(); operation = null; state.busy = false;
+      options.invalidated?.();
     }
     function notify() { changed(state); }
     function begin() { invalidate(); state.open = true; state.working = state.active; state.text = state.active?.profile_json || ''; state.error = ''; notify(); }
@@ -214,9 +215,78 @@
       return Object.fromEntries(names.map(name => [name, secrets.get(name)]));
     }
     function clearHeaders() { secrets.clear(); notify(); }
-    return {state, begin, close, edited, invalidate, inspect, importFile, selected, defaults, fromConfig, save, restore, exportProfile, header, headerValues, clearHeaders,
+    function stageExternal(result) { const envelope=checkedEnvelope(result);if(!state.open)throw Error('Der Einstellungsdialog wurde geschlossen.');invalidate();return stage(envelope,true); }
+    return {state, begin, close, edited, invalidate, inspect, importFile, selected, defaults, fromConfig, save, restore, exportProfile, header, headerValues, clearHeaders, stageExternal,
       unresolved: () => (state.working?.required_headers || state.active?.required_headers || []).filter(name => !secrets.has(name)),
       hasHeader: name => secrets.has(name), headerValue: name => secrets.get(name) ?? ''};
   }
-  host.ConfigProfiles = {KEY, ENGINE, MAX_BYTES, fields, at, toMiB, fromMiB, createController, checkedEnvelope};
+  const CATALOG_ENGINE='open-seo-spider/config-profile-catalog-v1',CATALOG_ROUTE='/api/config-profile-catalog';
+  const CATALOG_LIMITS={max_entries:128,max_name_bytes:256,max_profile_bytes:MAX_BYTES,max_total_profile_bytes:268435456};
+  const uuid=value=>typeof value==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(value);
+  const digest=value=>typeof value==='string'&&/^[0-9a-f]{64}$/.test(value);
+  function objectKeys(value,keys) { return value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).sort().join(',')===keys.slice().sort().join(','); }
+  function catalogName(value) {
+    if(typeof value!=='string'||!value.length||size(value)>256||/^\p{White_Space}*$/u.test(value)||/\p{Cc}/u.test(value))throw Error('Profilname: 1 bis 256 UTF-8-Bytes, nicht leer und ohne Steuerzeichen. Leerzeichen im Namen bleiben unverändert.');
+    return value;
+  }
+  function checkedCatalogEntry(value) {
+    if(!objectKeys(value,['id','name','revision','profile_sha256','profile_bytes','created_at','updated_at'])||!uuid(value.id)||typeof value.revision!=='string'||!/^\d{1,19}$/.test(value.revision)||value.revision[0]==='0'||BigInt(value.revision)>9223372036854775807n||!digest(value.profile_sha256)||!Number.isSafeInteger(value.profile_bytes)||value.profile_bytes<1||value.profile_bytes>MAX_BYTES)throw Error('Ungültige Metadaten der Profilbibliothek.');
+    catalogName(value.name);
+    for(const key of ['created_at','updated_at'])if(typeof value[key]!=='string'||size(value[key])>64||!/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d+)?Z$/.test(value[key])||!Number.isFinite(Date.parse(value[key])))throw Error('Ungültiger Zeitstempel der Profilbibliothek.');
+    return {...value};
+  }
+  function checkedCatalogList(value) {
+    if(!objectKeys(value,['engine','version','scope','entries','limits'])||value.engine!==CATALOG_ENGINE||value.version!==1||value.scope!=='selected_application_data_directory'||!objectKeys(value.limits,Object.keys(CATALOG_LIMITS))||Object.entries(CATALOG_LIMITS).some(([key,limit])=>value.limits[key]!==limit)||!Array.isArray(value.entries)||value.entries.length>128)throw Error('Unbekannte oder unvollständige Profilbibliothek.');
+    const entries=value.entries.map(checkedCatalogEntry),ids=new Set(),names=new Set();let bytes=0;
+    for(const entry of entries){if(ids.has(entry.id)||names.has(entry.name))throw Error('Doppelte Einträge in der Profilbibliothek.');ids.add(entry.id);names.add(entry.name);bytes+=entry.profile_bytes;}
+    if(bytes>CATALOG_LIMITS.max_total_profile_bytes)throw Error('Die Profilbibliothek überschreitet ihr Gesamtbudget.');return entries;
+  }
+  async function textSha256(text) { return [...new Uint8Array(await host.crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)))].map(byte=>byte.toString(16).padStart(2,'0')).join(''); }
+  function createCatalogController(options) {
+    const profiles=options.profiles,send=options.transport||transport,changed=options.changed||(()=>{});
+    const state={entries:[],selectedId:'',loaded:false,busy:false,error:'',status:'Noch nicht geladen. Profile werden im gewählten lokalen App-Datenverzeichnis gespeichert.',revision:0};let operation=null,installing=false;
+    const selected=()=>state.entries.find(entry=>entry.id===state.selectedId)||null;
+    const notify=()=>changed(state);
+    function invalidate() { if(installing)return;state.revision++;operation?.controller.abort();operation=null;state.busy=false; }
+    function edited() { invalidate();state.error='';notify(); }
+    function select(id) { invalidate();state.error='';if(id!==''&&!state.entries.some(entry=>entry.id===id)){state.error='Den Bibliothekseintrag erneut laden.';notify();return;}state.selectedId=id;notify(); }
+    async function run(work,accept) {
+      invalidate();const owner={revision:state.revision,profileRevision:profiles.state.revision,controller:new AbortController()};operation=owner;
+      const current=()=>operation===owner&&state.revision===owner.revision&&profiles.state.revision===owner.profileRevision&&profiles.state.open;
+      const assertCurrent=()=>{if(!current()||owner.controller.signal.aborted)throw new DOMException('Überholte Bibliotheksaktion','AbortError');};
+      const timer=setTimeout(()=>owner.controller.abort(),30000);state.busy=true;state.error='';notify();
+      try{assertCurrent();const result=await work(owner.controller.signal,assertCurrent);assertCurrent();const accepted=accept(result);notify();return accepted;}
+      catch(error){if(current()){state.error=error?.status===409?'Konflikt: Der Eintrag wurde geändert oder der Name ist bereits vergeben. Gespeicherte Profile erneut laden. '+error.message:error?.name==='AbortError'?'Bibliotheksaktion abgebrochen oder Zeitlimit erreicht. Vor erneutem Ändern die Liste laden.':error?.message||'Profilbibliothek nicht verfügbar.';notify();}return null;}
+      finally{clearTimeout(timer);if(operation===owner){operation=null;state.busy=false;notify();}}
+    }
+    function candidateEntries(entry) { const index=state.entries.findIndex(item=>item.id===entry.id),entries=index<0?[...state.entries,entry]:state.entries.map((item,i)=>i===index?entry:item);return checkedCatalogList({engine:CATALOG_ENGINE,version:1,scope:'selected_application_data_directory',entries,limits:CATALOG_LIMITS}); }
+    function upsert(entry) { state.entries=candidateEntries(entry);state.selectedId=entry.id; }
+    const requireSelected=()=>{const entry=selected();if(!entry)throw Error('Zuerst einen gespeicherten Eintrag auswählen.');return {...entry};};
+    const cas=entry=>({expected_revision:entry.revision,expected_sha256:entry.profile_sha256});
+    async function inspected(preparation,signal,assertCurrent) {
+      let envelope;
+      if(typeof preparation.profile_text==='string')envelope=checkedEnvelope(await send('/api/config-profiles/inspect',{profile_text:preparation.profile_text,patches:preparation.patches||[]},{signal}));
+      else if(typeof preparation.config_text==='string')envelope=checkedEnvelope(await send('/api/config-profiles/from-config',{config_text:preparation.config_text},{signal}));
+      else throw Error('Zuerst einen vollständigen Profilentwurf prüfen.');
+      assertCurrent();const sha256=await textSha256(envelope.profile_json);assertCurrent();return {text:envelope.profile_json,sha256,bytes:size(envelope.profile_json)};
+    }
+    const list=()=>run(async signal=>checkedCatalogList(await send(CATALOG_ROUTE,undefined,{signal})),entries=>{state.entries=entries;state.loaded=true;if(!entries.some(entry=>entry.id===state.selectedId))state.selectedId='';state.status=entries.length+' gespeicherte Profile im gewählten App-Datenverzeichnis.';return entries;});
+    const load=()=>{profiles.invalidate();return run(async signal=>{
+      const target=requireSelected(),reply=await send(CATALOG_ROUTE+'/'+target.id,undefined,{signal});if(!objectKeys(reply,['entry','profile']))throw Error('Ungültige geladene Profilantwort.');
+      const entry=checkedCatalogEntry(reply.entry),profile=checkedEnvelope(reply.profile);if(entry.id!==target.id||BigInt(entry.revision)<BigInt(target.revision)||entry.profile_bytes!==size(profile.profile_json)||entry.profile_sha256!==await textSha256(profile.profile_json))throw Error('Profiltext und Bibliotheksmetadaten stimmen nicht überein.');return {entry,profile};
+    },({entry,profile})=>{const entries=candidateEntries(entry);installing=true;let staged;try{staged=profiles.stageExternal(profile);}finally{installing=false;}state.entries=entries;state.selectedId=entry.id;state.status='„'+entry.name+'“ ist nur in den Dialogentwurf geladen. Erst Einstellungen übernehmen aktiviert es; erforderliche Headerwerte neu eingeben.';return staged;});};
+    const write=(name,preparation,replace)=>run(async(signal,assertCurrent)=>{
+      catalogName(name);const target=replace?requireSelected():null,prepared=await inspected(preparation,signal,assertCurrent);assertCurrent();
+      const body={...(target?cas(target):{}),name,profile_text:prepared.text},reply=await send(CATALOG_ROUTE+(target?'/'+target.id:''),body,{signal,method:target?'PUT':'POST'});
+      if(!objectKeys(reply,['entry']))throw Error('Ungültige Antwort beim Speichern in der Bibliothek.');const entry=checkedCatalogEntry(reply.entry);
+      if(entry.name!==name||entry.profile_sha256!==prepared.sha256||entry.profile_bytes!==prepared.bytes||target&&(entry.id!==target.id||BigInt(entry.revision)<=BigInt(target.revision)||entry.created_at!==target.created_at)||!target&&state.entries.some(item=>item.id===entry.id))throw Error('Gespeicherte Profilmetadaten passen nicht zur bestätigten Aktion.');return entry;
+    },entry=>{upsert(entry);state.status='„'+entry.name+'“ wurde in der nativen Bibliothek gespeichert. Aktiver Entwurf und nächster Crawl bleiben unverändert.';return entry;});
+    const rename=name=>run(async signal=>{
+      catalogName(name);const target=requireSelected(),reply=await send(CATALOG_ROUTE+'/'+target.id+'/rename',{...cas(target),name},{signal});if(!objectKeys(reply,['entry']))throw Error('Ungültige Umbenennungsantwort.');const entry=checkedCatalogEntry(reply.entry);
+      if(entry.id!==target.id||entry.name!==name||entry.profile_sha256!==target.profile_sha256||entry.profile_bytes!==target.profile_bytes||entry.created_at!==target.created_at||BigInt(entry.revision)<=BigInt(target.revision))throw Error('Umbenennungsmetadaten passen nicht zum gewählten Eintrag.');return entry;
+    },entry=>{upsert(entry);state.status='Bibliothekseintrag umbenannt. Aktiver Entwurf und Crawl-Konfiguration bleiben unverändert.';return entry;});
+    const remove=()=>run(async signal=>{const target=requireSelected(),reply=await send(CATALOG_ROUTE+'/'+target.id,cas(target),{signal,method:'DELETE'});if(!objectKeys(reply,['deleted_id'])||reply.deleted_id!==target.id)throw Error('Ungültige Löschbestätigung.');return target;},target=>{state.entries=state.entries.filter(item=>item.id!==target.id);state.selectedId='';state.status='Bibliothekseintrag gelöscht. Bereits geladener Entwurf und gespeicherte Crawl-Konfiguration bleiben unverändert.';return target;});
+    return {state,list,load,create:(name,preparation)=>write(name,preparation,false),overwrite:(name,preparation)=>write(name,preparation,true),rename,remove,select,selected,invalidate,edited};
+  }
+  host.ConfigProfiles = {KEY, ENGINE, MAX_BYTES, fields, at, toMiB, fromMiB, createController, checkedEnvelope, CATALOG_ENGINE, CATALOG_LIMITS,checkedCatalogEntry,checkedCatalogList,catalogName,createCatalogController};
 })(typeof window === 'object' ? window : globalThis);

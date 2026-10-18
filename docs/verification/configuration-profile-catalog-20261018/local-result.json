@@ -1,0 +1,880 @@
+{
+  "result": "PASS_LOCAL_NAMED_PROFILE_CATALOG_AND_FORTY_SUITE_REGRESSION",
+  "recorded_at": "2026-10-18T18:51:21.410Z",
+  "normal_binary_sha256": "b6945c9d0786586a60b9646ed803e75f3ea117263a51135b6d3fd6dc139d7bd5",
+  "full_vendor_parity": "NOT_PROVEN",
+  "storage_config_feature_status": "partial",
+  "stable_release_ready": false,
+  "local_regression_ready": true,
+  "source": {
+    "parent_commit": "e4f58c26ea55e3dfd486bace4e8b0027bcc25f21",
+    "frozen_acceptance_input_count": 573,
+    "manifest": {
+      "path": "artifacts/catalog-r2-20261018-inputs.json",
+      "bytes": 101313,
+      "sha256": "2c2a9bfc6c72133d42e08b8207558fb779bdb1e5ab19e4ebb2cb4c72c10a5448"
+    },
+    "scope": "All current Rust source/manifests, assets, Web source and verification drivers, scripts, renderer and CI workflow files discovered with rg; includes untracked new modules. Includes two literal test-only documentation fixtures and .gitattributes; other docs/artifacts outside explicit acceptance input set. This is not an exhaustive transitive dependency closure.",
+    "binary": {
+      "path": "target/debug/open-seo-spider.exe",
+      "bytes": 89629184,
+      "sha256": "b6945c9d0786586a60b9646ed803e75f3ea117263a51135b6d3fd6dc139d7bd5"
+    }
+  },
+  "rust": {
+    "passed": 1817,
+    "failed": 0,
+    "ignored": 5,
+    "blocks": [
+      {
+        "passed": 525,
+        "failed": 0,
+        "ignored": 1
+      },
+      {
+        "passed": 1160,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "passed": 21,
+        "failed": 0,
+        "ignored": 1
+      },
+      {
+        "passed": 6,
+        "failed": 0,
+        "ignored": 1
+      },
+      {
+        "passed": 23,
+        "failed": 0,
+        "ignored": 1
+      },
+      {
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "passed": 13,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "passed": 6,
+        "failed": 0,
+        "ignored": 1
+      },
+      {
+        "passed": 22,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "passed": 15,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "passed": 13,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "passed": 0,
+        "failed": 0,
+        "ignored": 0
+      }
+    ]
+  },
+  "ui": {
+    "suite_count": 40,
+    "kinds": {
+      "fixture": 9,
+      "live": 21,
+      "owned-native": 10
+    },
+    "one_complete_invocation": true,
+    "source_unchanged": true,
+    "binary_unchanged": true,
+    "shutdown": {
+      "code": 0,
+      "signal": null
+    },
+    "receipt": {
+      "path": "artifacts/catalog-ui40-r2/proof.json",
+      "bytes": 10047,
+      "sha256": "bb2974e739fa63641982e2dec433eb1c1700efc1795bb24433dd8c911fa6a425"
+    },
+    "results": [
+      {
+        "name": "dashboard",
+        "script": "ui-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 8650
+      },
+      {
+        "name": "pause-controls",
+        "script": "ui-crawl-control-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 6876
+      },
+      {
+        "name": "recrawl-controls",
+        "script": "ui-selected-recrawl-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5797
+      },
+      {
+        "name": "policy-controls",
+        "script": "ui-policy-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 7583
+      },
+      {
+        "name": "content-controls",
+        "script": "ui-content-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 25982
+      },
+      {
+        "name": "resource-controls",
+        "script": "ui-resource-discovery-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 14944
+      },
+      {
+        "name": "resource-ledger",
+        "script": "ui-resource-ledger-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 9821
+      },
+      {
+        "name": "resource-contract",
+        "script": "ui-resource-contract-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 11726
+      },
+      {
+        "name": "comparison-controls",
+        "script": "ui-saved-comparison-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4526
+      },
+      {
+        "name": "tool-navigation",
+        "script": "ui-tools-navigation-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4258
+      },
+      {
+        "name": "rendered-crawl",
+        "script": "ui-renderer-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 6687
+      },
+      {
+        "name": "dom-capture",
+        "script": "ui-dom-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 14205
+      },
+      {
+        "name": "accessibility-review",
+        "script": "ui-accessibility-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 20010
+      },
+      {
+        "name": "resources",
+        "script": "ui-resource-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 8800
+      },
+      {
+        "name": "robots",
+        "script": "ui-robots-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 1934
+      },
+      {
+        "name": "serp",
+        "script": "ui-serp-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 1543
+      },
+      {
+        "name": "list-import",
+        "script": "ui-list-import-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4967
+      },
+      {
+        "name": "pause-resume",
+        "script": "ui-crawl-control-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 16361
+      },
+      {
+        "name": "selected-recrawl",
+        "script": "ui-selected-recrawl-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 8615
+      },
+      {
+        "name": "policy",
+        "script": "ui-policy-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5038
+      },
+      {
+        "name": "content",
+        "script": "ui-content-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 9107
+      },
+      {
+        "name": "resource-discovery",
+        "script": "ui-resource-discovery-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 9059
+      },
+      {
+        "name": "resource-persistence",
+        "script": "ui-resource-contract-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 6907
+      },
+      {
+        "name": "saved-spelling",
+        "script": "ui-spelling-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 2782
+      },
+      {
+        "name": "link-workflows",
+        "script": "ui-link-workflows-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 3599
+      },
+      {
+        "name": "api-enrichment",
+        "script": "ui-enrichment-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 1482
+      },
+      {
+        "name": "directory-tree",
+        "script": "ui-directory-tree-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5947
+      },
+      {
+        "name": "saved-ngrams",
+        "script": "ui-ngrams-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5285
+      },
+      {
+        "name": "saved-segments",
+        "script": "ui-segments-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4976
+      },
+      {
+        "name": "dashboard-segments",
+        "script": "ui-dashboard-segments-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 900000,
+        "duration_ms": 365792
+      },
+      {
+        "name": "segments-repeated-metadata",
+        "script": "ui-segments-repeated-metadata-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 1800000,
+        "duration_ms": 1202544
+      },
+      {
+        "name": "segments-density",
+        "script": "ui-segments-density-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5065
+      },
+      {
+        "name": "ngrams-cold-restart",
+        "script": "ui-ngrams-cold-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 10035
+      },
+      {
+        "name": "segments-cold-restart",
+        "script": "ui-segments-cold-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 12124
+      },
+      {
+        "name": "resource-sources",
+        "script": "ui-resource-sources-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 15580
+      },
+      {
+        "name": "custom-search",
+        "script": "ui-custom-search-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 20687
+      },
+      {
+        "name": "saved-comparison",
+        "script": "ui-saved-comparison-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 3443
+      },
+      {
+        "name": "comparison-bundles",
+        "script": "ui-saved-comparison-bundle-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4702
+      },
+      {
+        "name": "configuration-profiles",
+        "script": "ui-config-profiles-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 8967
+      },
+      {
+        "name": "configuration-profile-catalog",
+        "script": "ui-config-profile-catalog-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 9679
+      }
+    ]
+  },
+  "state_tests": 130,
+  "semantic_ui_groups": 40,
+  "catalog": {
+    "groups": 4,
+    "positive_native_processes": 2,
+    "negative_native_processes": 2,
+    "all_four_natural_eof0": true,
+    "sql_snapshots": 11,
+    "real_downloads": 5,
+    "website_capture_requests": 2,
+    "offline_product_requests": 0,
+    "positive_410_controls": 2,
+    "checks": [
+      "Explicit catalog list and missing/invalid/unsafe requests preserve an absent catalog directory, active profile, jobs and all network counters",
+      "Two real tabs enforce revision/hash CAS: stale PUT and confirmed DELETE return409 without modifying catalog bytes, active/working profile or browser storage",
+      "Real browser create, rename, overwrite, delete, recreate and delayed actual native Load preserve exact stored profile bytes/u64, source provenance and volatile-secret boundaries",
+      "Two positive normal native processes share the actual catalog across different origins and fresh browser contexts; cold explicit reapply preserves full bytes and missing-header refusal,320px works,410 remains through both EOF0 closes"
+    ],
+    "receipt": {
+      "path": "artifacts/catalog-live-r2/ui-config-profile-catalog-live.json",
+      "bytes": 53682,
+      "sha256": "18e8379fb4d2bf9b4e0c6a426710b64bc2a51c193068a924dc6bc954d3b517a1"
+    },
+    "independent_review": {
+      "path": "artifacts/catalog-r2-independent-review.json",
+      "bytes": 10879,
+      "sha256": "cf56147744f01f9062c7dd1dd18dd0293ccdc61880b186e5bac9e5748003cb50"
+    }
+  },
+  "density": {
+    "three_prespecified_matching_binary_runs": [
+      {
+        "number": 1,
+        "output": "artifacts/catalog-density-r2-20261018/run-1",
+        "code": 0,
+        "duration_ms": 4975,
+        "result": "PASS",
+        "receipt_sha256": "f0340507ae9f8e41a50f8c89f2ef1a6545747cee0cced356b89edb386f7f45cf"
+      },
+      {
+        "number": 2,
+        "output": "artifacts/catalog-density-r2-20261018/run-2",
+        "code": 0,
+        "duration_ms": 5081,
+        "result": "PASS",
+        "receipt_sha256": "5af3afddfda67fa3819cfd1c1c59b8f56d64761192fe9b301842cffc4c52429a"
+      },
+      {
+        "number": 3,
+        "output": "artifacts/catalog-density-r2-20261018/run-3",
+        "code": 0,
+        "duration_ms": 5057,
+        "result": "PASS",
+        "receipt_sha256": "318761a9c7b8d59dfff5fd5bc665f5073934c3eac8aed755f7b4510facacf2dd"
+      }
+    ],
+    "receipt": {
+      "path": "artifacts/catalog-density-r2-20261018/results.json",
+      "bytes": 830,
+      "sha256": "2225d00d2d58bdaa1ebe73fea010c076eeba8d11eac686f9cf0370f9be77c263"
+    },
+    "scope": "Native trusted-toggle completion precondition before Space; original assertions and deadlines retained. Exact Chromium root cause and general stability remain NOT_PROVEN. Pre-repair failure receipts remain historical."
+  },
+  "controlled_provider": {
+    "result": "PASS",
+    "receipt": {
+      "path": "artifacts/catalog-enrichment-r2/enrichment-success-coordinator.json",
+      "bytes": 100983,
+      "sha256": "e5a6d098515e129e25527f55a960337c4ae0b7de28ebdaa3faca292f05b102da"
+    },
+    "scope": "Actual browser -> full native cfg(test) router/service -> owned HTTP provider -> durable report -> CSV -> process-cold reopen. Real Google, CLI and other providers remain unproven."
+  },
+  "gates": [
+    {
+      "label": "focused-app",
+      "command": "cargo",
+      "args": [
+        "test",
+        "-p",
+        "open-seo-spider",
+        "--locked",
+        "--offline",
+        "config_profile_catalog",
+        "--",
+        "--nocapture",
+        "--test-threads=2"
+      ],
+      "started_at": "2026-10-18T18:14:33.419Z",
+      "duration_ms": 87628,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/catalog-r2-20261018-focused-app.log",
+      "log_bytes": 1063,
+      "log_sha256": "645dab50f4e438389052b75cf2422e576ce26ab496cdc756f4230e38e1b29604",
+      "frozen_inputs_sha256": "2c2a9bfc6c72133d42e08b8207558fb779bdb1e5ab19e4ebb2cb4c72c10a5448",
+      "source_inputs_unchanged": true
+    },
+    {
+      "label": "format",
+      "command": "cargo",
+      "args": [
+        "fmt",
+        "--all",
+        "--",
+        "--check"
+      ],
+      "started_at": "2026-10-18T18:16:01.205Z",
+      "duration_ms": 2666,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/catalog-r2-20261018-format.log",
+      "log_bytes": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "frozen_inputs_sha256": "2c2a9bfc6c72133d42e08b8207558fb779bdb1e5ab19e4ebb2cb4c72c10a5448",
+      "source_inputs_unchanged": true
+    },
+    {
+      "label": "normal-build",
+      "command": "cargo",
+      "args": [
+        "build",
+        "-p",
+        "open-seo-spider",
+        "--locked",
+        "--offline"
+      ],
+      "started_at": "2026-10-18T18:16:04.027Z",
+      "duration_ms": 31766,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/catalog-r2-20261018-normal-build.log",
+      "log_bytes": 175,
+      "log_sha256": "372dde363790d3c7dfa1f65c7236c6275d337529dd0abf3b1682d34ff6c7ad94",
+      "frozen_inputs_sha256": "2c2a9bfc6c72133d42e08b8207558fb779bdb1e5ab19e4ebb2cb4c72c10a5448",
+      "source_inputs_unchanged": true
+    },
+    {
+      "label": "state-all",
+      "command": "node",
+      "args": [
+        "--test",
+        "web/verification/serp-state-race.test.cjs",
+        "web/verification/robots-input-state.test.cjs",
+        "web/verification/list-import-state.test.mjs",
+        "web/verification/api-enrichment-state.test.cjs",
+        "web/verification/accessibility-state.test.cjs",
+        "web/verification/dashboard-segments-state.test.cjs",
+        "web/verification/config-profiles-state.test.cjs",
+        "web/verification/config-profile-catalog-state.test.cjs"
+      ],
+      "started_at": "2026-10-18T18:15:29.134Z",
+      "duration_ms": 409,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/catalog-r2-node-20261018-state-all.log",
+      "log_bytes": 13116,
+      "log_sha256": "5801478786ee5d56f703ee6cd32d60ebfd1604a7c95fdb90b9c0309459e1ea00",
+      "frozen_inputs_sha256": "2c2a9bfc6c72133d42e08b8207558fb779bdb1e5ab19e4ebb2cb4c72c10a5448",
+      "source_inputs_unchanged": true
+    },
+    {
+      "label": "semantic-ui",
+      "command": "node",
+      "args": [
+        "scripts/check-ui-fixtures.mjs"
+      ],
+      "started_at": "2026-10-18T18:15:29.719Z",
+      "duration_ms": 459,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/catalog-r2-node-20261018-semantic-ui.log",
+      "log_bytes": 1068,
+      "log_sha256": "75fb9f6e936fe2526118b00927963c71b2f31e4fb080496c72bf3ac3b2837c91",
+      "frozen_inputs_sha256": "2c2a9bfc6c72133d42e08b8207558fb779bdb1e5ab19e4ebb2cb4c72c10a5448",
+      "source_inputs_unchanged": true
+    },
+    {
+      "label": "catalog-live",
+      "command": "node",
+      "args": [
+        "web/verification/ui-config-profile-catalog-live.cjs"
+      ],
+      "started_at": "2026-10-18T18:16:54.305Z",
+      "duration_ms": 10098,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/catalog-r2-runtime-20261018-catalog-live.log",
+      "log_bytes": 778,
+      "log_sha256": "ca991bd148f8b6e293f2cfcd52620efc91f0c878e2696ab7a4c6d66870048c37",
+      "frozen_inputs_sha256": "2c2a9bfc6c72133d42e08b8207558fb779bdb1e5ab19e4ebb2cb4c72c10a5448",
+      "source_inputs_unchanged": true
+    },
+    {
+      "label": "density-three",
+      "command": "node",
+      "args": [
+        "artifacts/run-catalog-density-r2-20261018.cjs"
+      ],
+      "started_at": "2026-10-18T18:17:28.101Z",
+      "duration_ms": 15528,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/catalog-r2-runtime-20261018-density-three.log",
+      "log_bytes": 588,
+      "log_sha256": "d1cd5f2e9563e7f449f4038de2b91558ca024108bb1abd11d6c989b7727e66bd",
+      "frozen_inputs_sha256": "2c2a9bfc6c72133d42e08b8207558fb779bdb1e5ab19e4ebb2cb4c72c10a5448",
+      "source_inputs_unchanged": true
+    },
+    {
+      "label": "profile-regression",
+      "command": "node",
+      "args": [
+        "web/verification/ui-config-profiles-live.cjs"
+      ],
+      "started_at": "2026-10-18T18:17:43.790Z",
+      "duration_ms": 9069,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/catalog-r2-runtime-20261018-profile-regression.log",
+      "log_bytes": 1751,
+      "log_sha256": "53b0c43e5e4398885ad6addd05e9802ac4109ee50753356cec66bc1cf101bf7c",
+      "frozen_inputs_sha256": "2c2a9bfc6c72133d42e08b8207558fb779bdb1e5ab19e4ebb2cb4c72c10a5448",
+      "source_inputs_unchanged": true
+    },
+    {
+      "label": "cli-regression",
+      "command": "node",
+      "args": [
+        "scripts/crawl-config-cli-e2e.mjs"
+      ],
+      "started_at": "2026-10-18T18:17:53.019Z",
+      "duration_ms": 560,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/catalog-r2-runtime-20261018-cli-regression.log",
+      "log_bytes": 190,
+      "log_sha256": "ea8ad361673645689c4d15f71a4f97821042adbc8110c76b4697b5be6259dc0d",
+      "frozen_inputs_sha256": "2c2a9bfc6c72133d42e08b8207558fb779bdb1e5ab19e4ebb2cb4c72c10a5448",
+      "source_inputs_unchanged": true
+    },
+    {
+      "label": "clippy",
+      "command": "cargo",
+      "args": [
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--all-features",
+        "--locked",
+        "--offline",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "started_at": "2026-10-18T18:18:03.198Z",
+      "duration_ms": 51792,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/catalog-r2-rust-20261018-clippy.log",
+      "log_bytes": 295,
+      "log_sha256": "fa056100d9bff5044c204f3db200793f04fb8710a1845535c5f89f26b0c6aaa6",
+      "frozen_inputs_sha256": "2c2a9bfc6c72133d42e08b8207558fb779bdb1e5ab19e4ebb2cb4c72c10a5448",
+      "source_inputs_unchanged": true
+    },
+    {
+      "label": "workspace",
+      "command": "cargo",
+      "args": [
+        "test",
+        "--workspace",
+        "--locked",
+        "--offline",
+        "--",
+        "--test-threads=2"
+      ],
+      "started_at": "2026-10-18T18:18:55.150Z",
+      "duration_ms": 1014211,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/catalog-r2-rust-20261018-workspace.log",
+      "log_bytes": 208022,
+      "log_sha256": "8554a07ad7ebfca7e6c9fbe64bca21a90721722aeb64df3beb9c7e43c37499e0",
+      "frozen_inputs_sha256": "2c2a9bfc6c72133d42e08b8207558fb779bdb1e5ab19e4ebb2cb4c72c10a5448",
+      "source_inputs_unchanged": true
+    },
+    {
+      "label": "explicit-chromium",
+      "command": "node",
+      "args": [
+        "scripts/renderer-rust-e2e.mjs"
+      ],
+      "started_at": "2026-10-18T18:35:49.526Z",
+      "duration_ms": 6552,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/catalog-r2-rust-20261018-explicit-chromium.log",
+      "log_bytes": 4279,
+      "log_sha256": "7fdbfbee3d75977586cde3e01d101374a0574baea377d10c15c8d7503f2e8772",
+      "frozen_inputs_sha256": "2c2a9bfc6c72133d42e08b8207558fb779bdb1e5ab19e4ebb2cb4c72c10a5448",
+      "source_inputs_unchanged": true
+    },
+    {
+      "label": "ui-all-forty",
+      "command": "node",
+      "args": [
+        "scripts/ui-e2e.mjs"
+      ],
+      "started_at": "2026-10-18T18:19:14.908Z",
+      "duration_ms": 1901843,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/catalog-r2-ui40-20261018-ui-all-forty.log",
+      "log_bytes": 1331,
+      "log_sha256": "0b4c688e2b88e13984ddff1571214d779a53c3fd371d308e38c288de7876a035",
+      "frozen_inputs_sha256": "2c2a9bfc6c72133d42e08b8207558fb779bdb1e5ab19e4ebb2cb4c72c10a5448",
+      "source_inputs_unchanged": true
+    },
+    {
+      "label": "controlled-provider",
+      "command": "node",
+      "args": [
+        "scripts/run-enrichment-browser-checks.mjs"
+      ],
+      "started_at": "2026-10-18T18:36:52.245Z",
+      "duration_ms": 7534,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/catalog-r2-provider-20261018-controlled-provider.log",
+      "log_bytes": 1009,
+      "log_sha256": "dfd04d786fff37785bbb4fbc10598a4413194ad03d377e704f78ac55832515cc",
+      "frozen_inputs_sha256": "2c2a9bfc6c72133d42e08b8207558fb779bdb1e5ab19e4ebb2cb4c72c10a5448",
+      "source_inputs_unchanged": true
+    }
+  ],
+  "not_proven": [
+    "Full manufacturer-format, feature and behavioral parity",
+    "Portable profile execution through CLI; synchronization, general migration and history",
+    "Physical64MiB per-profile/256MiB aggregate browser boundaries; logical byte-boundary negatives use small injected native limits",
+    "Global RAM/CPU/SQLite physical-disk bounds, crash durability and simultaneous multi-process mutation stress",
+    "Real paid provider credentials, all operating systems and browsers",
+    "Optimized build/install and fresh exact-commit public CI for this source"
+  ]
+}

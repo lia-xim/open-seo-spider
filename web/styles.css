@@ -402,6 +402,14 @@ dialog p { margin: 8px 0 16px; font-size: 13px; color: var(--muted); }
 #config-profiles .settings-grid > * { min-width: 0; }
 #config-profiles .button { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
 #config-profiles textarea { display: block; width: 100%; min-width: 0; }
+#config-profile-catalog { margin: 12px 0 16px; padding: 12px; border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
+#config-profile-catalog > label { display: block; margin-top: 12px; min-width: 0; }
+#config-profile-catalog :is(select, input[type=text]) { display: block; margin-top: 4px; width: 100%; min-width: 0; }
+#config-profile-catalog .config-catalog-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; min-width: 0; }
+#config-profile-catalog .config-catalog-actions > button { flex: 1 1 200px; min-width: 0; }
+#config-catalog-meta { font-family: var(--mono); }
+#config-catalog-error, #config-catalog-status { white-space: pre-wrap; }
+.config-catalog-confirm { margin-top: 12px; padding: 10px; border: 1px solid var(--line-strong); border-radius: var(--radius); background: var(--subtle); }
 .list-import-dialog { width: min(1100px, calc(100vw - 24px)); max-width: none; }
 .list-import-dialog .table-scroll { max-height: 24rem; border: 1px solid var(--line); border-radius: var(--radius); }
 .list-import-dialog table { min-width: 1500px; }
