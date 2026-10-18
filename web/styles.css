@@ -776,3 +776,9 @@ body.tool-page { margin: 0; padding: 0; max-width: none; background: var(--bg); 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+.accessibility-scope { padding: 12px; background: var(--surface-soft, #f4f6f3); border-left: 3px solid #597c39; overflow-wrap: anywhere; }
+.accessibility-rule { margin: 12px 0; padding: 12px; border: 1px solid var(--border, #dce1d8); border-radius: 8px; min-width: 0; }
+.accessibility-rule p, .accessibility-node summary, .accessibility-node li { overflow-wrap: anywhere; }
+.accessibility-node { margin: 10px 0; min-width: 0; }
+.accessibility-evidence { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 360px; overflow: auto; font-size: 12px; background: #f5f6f4; padding: 10px; }

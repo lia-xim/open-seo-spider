@@ -62,6 +62,7 @@
     'custom-search': ['CUSTOM DATA', 'Eigene Suche', 'Gespeicherte Literal- und Regex-Suche je Regel und Quelle. Exakte Anzahl, beobachtete Untergrenze und begrenzte Beispiele bleiben getrennt; fehlende Aufzeichnungen sind unbekannt.'],
     javascript: ['CUSTOM DATA', 'JavaScript-Auswertungen', 'Eigene Scripts im isolierten Seitenkontext nach der Render-Wartezeit. Werte und Fehler bleiben getrennt.'],
     cookies: ['BROWSER ANALYSE', 'Cookies', 'Cookie-Eigenschaften aus einzelnen isolierten Seitenaufrufen. Aufnahme muss aktiviert werden; Werte werden ausgelassen.'],
+    accessibility: ['AUTOMATISIERTE PRÜFUNG', 'Barrierefreiheit', 'Gespeicherte axe-Beobachtungen der geladenen Seiten: Verstöße und manuell zu prüfende Befunde bleiben getrennt. Kein Nachweis vollständiger WCAG-Konformität. Der vollständige CSV liest alle durch das gespeicherte Berichtsprofil sichtbaren Seiten.'],
     pagination: ['TECHNISCHE ANALYSE', 'Pagination & AMP', 'Deklarierte next-, prev- und amphtml-Ziele aus HTML und HTTP-Link-Headern.']
   };
   const labels = {
@@ -714,6 +715,19 @@
     return internals().flatMap(page => page.links.map(link => ({ ...(typeof link === 'object' ? link : { url: link }), source_url: page.url, _page: page, _unavailable: typeof link !== 'object' || !link.dom_location })));
   }
 
+  function accessibilityObservation(page) {
+    const raw=page.accessibility, unknown=(status,reason)=>({status,reason,violations:null,incomplete:null,passes:null,inapplicable:null});
+    if(raw==null)return unknown(page.renderer_error?'renderer_error':'missing','Keine gespeicherte axe-Beobachtung');
+    if(typeof raw!=='object'||Array.isArray(raw))return unknown('malformed','Ungültige gespeicherte Beobachtung');
+    if(raw.error!=null)return unknown('error','Gespeicherter Fehler der axe-Prüfung');
+    const impact=value=>value===null||['minor','moderate','serious','critical'].includes(value);
+    const target=(value,depth=0)=>depth<=8&&(typeof value==='string'||Array.isArray(value)&&value.length>0&&value.every(v=>target(v,depth+1)));
+    const rule=value=>value&&typeof value==='object'&&['id','description','help','helpUrl'].every(key=>typeof value[key]==='string')&&value.id.length>0&&impact(value.impact)&&Array.isArray(value.tags)&&value.tags.every(v=>typeof v==='string')&&Array.isArray(value.nodes)&&value.nodes.length>0&&value.nodes.every(node=>node&&typeof node==='object'&&typeof node.html==='string'&&Array.isArray(node.target)&&target(node.target)&&(node.failureSummary==null||typeof node.failureSummary==='string')&&['any','all','none'].every(key=>Array.isArray(node[key])&&node[key].every(check=>check&&typeof check==='object'&&typeof check.id==='string'&&impact(check.impact)&&(check.message==null||typeof check.message==='string'))));
+    if(raw.engine!=='axe-core'||typeof raw.version!=='string'||!raw.version||raw.automated_only!==true||![raw.passes_count,raw.inapplicable_count].every(n=>Number.isSafeInteger(n)&&n>=0)||![raw.violations,raw.incomplete].every(rows=>Array.isArray(rows)&&rows.every(rule)))return unknown('malformed','Unvollständige oder ungültige axe-Daten; keine bestätigten Nullwerte');
+    return {status:raw.incomplete.length?'needs_review':raw.violations.length?'violations':'observed_zero',reason:'',violations:raw.violations.length,incomplete:raw.incomplete.length,passes:raw.passes_count,inapplicable:raw.inapplicable_count};
+  }
+  const accessibilityLabel=value=>({needs_review:'Manuell prüfen',violations:'Automatisierte Verstöße',observed_zero:'Keine automatisierten Befunde',missing:'Nicht erfasst',renderer_error:'Rendererfehler',error:'Prüfung fehlgeschlagen',malformed:'Unbekannt: ungültige Daten'}[value]||'Unbekannt');
+
   function getRows() {
     switch (state.section) {
       case 'inputs': return array(state.crawl?.config?.input_imports).flatMap((result, index) => array(result.rows).map((row, rowIndex) => ({ ...row, list_index: index + 1, occurrence_index: rowIndex, input_sha256: result.input_sha256, _import: result, url: row.normalized_url || '' })));
@@ -735,6 +749,7 @@
       case 'custom-search': return customSearchRows();
       case 'javascript': return internals().flatMap(page => page.custom_javascript_results.map(entry => ({ ...entry, url: page.url, value_json: entry.error ? '' : JSON.stringify(entry.value), _page: page })));
       case 'cookies': return internals().flatMap(page => page.browser_cookies.map(entry => ({ ...entry, url: page.url, _page: page })));
+      case 'accessibility': return state.pages.map(page=>({...accessibilityObservation(page),url:page.url,_page:page,axe_version:typeof page.accessibility?.version==='string'?page.accessibility.version:null}));
       case 'titles': { if (state.cache.titles) return state.cache.titles; const duplicates = duplicateValues('titles'); state.cache.titles = htmlPages().map((page) => ({ ...page, title_text: primary(page.titles), title_length: Array.from(primary(page.titles)).length, duplicates: duplicates.get(primary(page.titles).trim()) || 0 })); return state.cache.titles; }
       case 'meta': { if (state.cache.meta) return state.cache.meta; const duplicates = duplicateValues('meta_descriptions'); state.cache.meta = htmlPages().map((page) => ({ ...page, description_text: primary(page.meta_descriptions), description_length: Array.from(primary(page.meta_descriptions)).length, duplicates: duplicates.get(primary(page.meta_descriptions).trim()) || 0 })); return state.cache.meta; }
       case 'headings': return htmlPages();
@@ -753,6 +768,7 @@
   function columns() {
     switch (state.section) {
       case 'custom-search': return [urlColumn,textColumn('rule_name','Suchregel'),textColumn('method','Methode'),textColumn('source','Quelle',row=>searchSource(row.source)),textColumn('status','Suchzustand',row=>searchStatus(row.status)),numberColumn('count','Exakte Gesamtanzahl',row=>row.status==='complete'?row.count:null),numberColumn('matches_observed','Beobachtete Untergrenze'),numberColumn('saved_matches','Gespeicherte Beispiele',row=>array(row.matches).length),textColumn('evidence_complete','Beispiele vollständig',row=>row.evidence_complete===true?'Ja':row.evidence_complete===false?'Nein':'Unbekannt'),textColumn('reasons','Gründe',row=>array(row.reasons).join(' | '))];
+      case 'accessibility': return [urlColumn,textColumn('status','Beobachtung',row=>accessibilityLabel(row.status)),numberColumn('violations','Verstoßregeln'),numberColumn('incomplete','Manuell zu prüfende Regeln'),numberColumn('passes','Bestandene Regeln'),numberColumn('inapplicable','Nicht anwendbare Regeln'),textColumn('axe_version','axe-Version'),textColumn('reason','Hinweis')];
       case 'inputs': return [numberColumn('list_index', 'Liste'), textColumn('input_sha256', 'Quellhash'), numberColumn('source_index', 'Quellindex'), numberColumn('source_row', 'Quellzeile'), numberColumn('source_line', 'Physische Zeile'), textColumn('sheet', 'Worksheet'), textColumn('cell', 'Zelle'), textColumn('raw_value', 'Originalwert', row => row.raw_value == null ? 'Nicht erfasst' : row.raw_value === '' ? '[leer]' : row.raw_value), textColumn('normalized_url', 'Normalisierte URL'), textColumn('fragment', 'Fragment'), textColumn('candidate_kind', 'Kandidat', row => row.candidate_kind === 'page_url' ? 'Seiten-URL' : row.candidate_kind === 'sitemap_document' ? 'Sitemap-Dokument' : 'Nicht erfasst'), textColumn('error', 'Importfehler')];
       case 'external': return [urlColumn, { key: 'status', label: 'HTTP geprüft', value: (row) => row.status, render: (row) => statusBadge(row.status) }, textColumn('text', 'Linktext'), numberColumn('source_count', 'Verlinkende Seiten'), textColumn('nofollow', 'Nofollow', (row) => row.nofollow ? 'Ja' : 'Nein')];
       case 'status': return [urlColumn, { key: 'initial_status', label: 'HTTP initial', value: (row) => row.status, render: (row) => statusBadge(row.status) }, statusColumn, textColumn('final_url', 'Finale URL'), numberColumn('redirects', 'Redirects', (row) => row.redirect_chain.length), { key: 'response_ms', label: 'Antwortzeit', value: (row) => row.response_ms, render: (row) => duration(row.response_ms) }, indexColumn, textColumn('error', 'Abruffehler')];
@@ -787,6 +803,7 @@
     const base = [['all', 'Alle Ergebnisse']];
     switch (state.section) {
       case 'custom-search': return [...base,['complete','Vollständige Suche'],['incomplete','Unvollständige Suche'],['unavailable','Quelle nicht verfügbar'],['matched','Beobachtete Treffer'],['zero','Bestätigt keine Treffer'],['evidence-limited','Begrenzte Beispiele']];
+      case 'accessibility': return [...base,['violations','Mit automatisierten Verstößen'],['needs_review','Manuell prüfen'],['observed_zero','Bestätigt keine automatisierten Befunde'],['unknown','Nicht erfasst / Fehler / ungültig']];
       case 'inputs': return [...base, ['invalid', 'Ungültige Zeilen'], ['page_url', 'Seiten-URLs'], ['sitemap_document', 'Sitemap-Dokumente']];
       case 'fragments': return [...base, ['matched', 'ID / Name / Dokumentanfang gefunden'], ['missing', 'Ziel fehlt'], ['unknown', 'Unbekannt / nicht prüfbar'], ['unsupported', 'Nicht unterstützt']];
       case 'headingorder': return [...base, ['unavailable', 'Nicht erfasst'], ['partial', 'Unvollständiger Prüfbefund'], ['raw', 'HTML-Antwort'], ['rendered', 'Gerenderter DOM'], ...[1, 2, 3, 4, 5, 6].map(level => [`h${level}`, `H${level}`])];
@@ -819,6 +836,7 @@
     const filter = state.filter;
     if (filter === 'all') return true;
     if (state.section === 'custom-search') return filter === 'matched' ? row.matches_observed > 0 : filter === 'zero' ? row.status === 'complete' && row.count === 0 : filter === 'evidence-limited' ? row.evidence_complete === false : row.status === filter;
+    if (state.section === 'accessibility') return filter==='violations'?row.violations>0:filter==='needs_review'?row.incomplete>0:filter==='unknown'?row.violations===null:row.status===filter;
     if (state.section === 'inputs') return filter === 'invalid' ? row.error != null : row.candidate_kind === filter;
     if (state.section === 'fragments') return filter === 'matched' ? ['matched_id', 'matched_name', 'top'].includes(row.status) : row.status === filter;
     if (state.section === 'linkdom') return filter === 'unavailable' ? row._unavailable : filter === 'fragment' ? row.fragment != null : filter.startsWith('position:') ? row.position === filter.slice(9) : row.kind === filter;
@@ -918,6 +936,7 @@
         const page = row._page || state.pageMap.get(row.url) || row;
         selectPage(page);
         if (state.section === 'custom-search') { state.inspectorTab = 'custom-search'; renderInspector(); }
+        if (state.section === 'accessibility') { state.inspectorTab = 'accessibility'; renderInspector(); }
         if (domSections.includes(state.section) || ['linkdom', 'fragments'].includes(state.section)) { state.inspectorTab = 'dom'; renderInspector(); }
       };
       rowElement.addEventListener('click', open);
@@ -971,9 +990,9 @@
     $('export-csv').disabled = policySection() ? !policyVisibleRows().length || Boolean(state.policyToken || state.policyError) : (state.section === 'inputs' ? !getRows().length : !state.pages.length && !state.issues.length) || state.section === 'responses' && state.responses == null || state.section === 'fragments' && (!state.fragments || !state.fragments.enabled);
     $('export-csv').title = policySection() ? 'Nur gefilterte Vorkommen der aktuell geladenen Ledger-Seite exportieren' : 'Alle aktuell gefilterten Ergebnisse dieses Bereichs exportieren';
     if (state.section==='resource-discovery' || sitemapSection() || findingsSection()) $('export-csv').disabled=true;
-    $('export-resources').hidden = !['custom-search', 'inputs', 'pdf', 'imagefiles', 'responses', 'fragments', 'linkdom', ...domSections].includes(state.section);
+    $('export-resources').hidden = !['accessibility', 'custom-search', 'inputs', 'pdf', 'imagefiles', 'responses', 'fragments', 'linkdom', ...domSections].includes(state.section);
     $('export-resources').disabled = !state.crawl || Boolean(actionBusy() || active());
-    $('export-resources').textContent = state.section === 'custom-search' ? '↓ Alle gespeicherten Suchbefunde CSV' : state.section === 'inputs' ? '↓ Alle Eingabezeilen CSV' : domSections.includes(state.section) ? '↓ Alle DOM-Beobachtungen CSV' : state.section === 'pdf' ? '↓ PDF-Details CSV' : state.section === 'responses' ? '↓ Alle Antworten CSV' : state.section === 'fragments' ? '↓ Alle Fragmentziele CSV' : state.section === 'linkdom' ? '↓ Alle Linkvorkommen CSV' : '↓ Bilddateien CSV';
+    $('export-resources').textContent = state.section === 'accessibility' ? '↓ Alle gespeicherten Accessibility-Befunde CSV' : state.section === 'custom-search' ? '↓ Alle gespeicherten Suchbefunde CSV' : state.section === 'inputs' ? '↓ Alle Eingabezeilen CSV' : domSections.includes(state.section) ? '↓ Alle DOM-Beobachtungen CSV' : state.section === 'pdf' ? '↓ PDF-Details CSV' : state.section === 'responses' ? '↓ Alle Antworten CSV' : state.section === 'fragments' ? '↓ Alle Fragmentziele CSV' : state.section === 'linkdom' ? '↓ Alle Linkvorkommen CSV' : '↓ Bilddateien CSV';
     if (state.section === 'overview') renderOverview();
     else if (state.section === 'graph') renderGraph();
     else if (policySection()) renderPolicyLedger();
@@ -1047,6 +1066,7 @@
     document.querySelectorAll('[data-tab]').forEach((button) => button.setAttribute('aria-selected', String(button.dataset.tab === state.inspectorTab)));
     const element = $('inspector-content');
     if (state.inspectorTab === 'custom-search') { renderCustomSearchInspector(page, element); return; }
+    if (state.inspectorTab === 'accessibility') { renderAccessibilityInspector(page, element); return; }
     if (state.inspectorTab === 'details') {
       const fields = [
         ...(observationAge(page.url) ? [['Alter des Befunds', observationAge(page.url)]] : []),
@@ -1237,6 +1257,36 @@
 
   function render() { renderMetrics(); renderSection(); }
 
+  function renderAccessibilityInspector(page, element) {
+    const observed=accessibilityObservation(page),raw=page.accessibility;
+    element.replaceChildren(); element.dataset.accessibilityStatus=observed.status;
+    const display=value=>value==null?'Unbekannt':typeof value==='string'?value:typeof value==='number'||typeof value==='boolean'?String(value):JSON.stringify(value).slice(0,8192);
+    const make=(tag,text,klass)=>{const node=document.createElement(tag);if(text!=null)node.textContent=display(text);if(klass)node.className=klass;return node;};
+    element.append(make('p','Nur automatisierte axe-Beobachtungen. Manuelle Prüfungen und vollständige WCAG-Konformität sind nicht nachgewiesen. Gespeicherte Daten sind keine unabhängig attestierte Prüfung.','accessibility-scope'));
+    const fields=[['Beobachtung',accessibilityLabel(observed.status)],['Automated only',raw?.automated_only===true?'true':raw?.automated_only===false?'false · keine bestätigte automatisierte Beobachtung':'Unbekannt'],['Engine / Version',`${display(raw?.engine)} / ${display(raw?.version)}`],['Verstoßregeln',observed.violations],['Manuell zu prüfende Regeln',observed.incomplete],['Bestandene Regeln',observed.passes],['Nicht anwendbare Regeln',observed.inapplicable],['Browser / Zeitpunkt',`${page.browser_version??'Unbekannt'} / ${page.rendered_at??'Unbekannt'}`],['Gerenderte URL / Status',`${page.rendered_url??'Unbekannt'} / ${page.rendered_status??'Unbekannt'}`],['Fehler / Hinweis',raw?.error??page.renderer_error??observed.reason]];
+    const dl=make('dl',null,'details-grid');for(const[label,value]of fields){dl.append(make('dt',label),make('dd',value??'Unbekannt'));}element.append(dl);
+    if(observed.violations!==null){
+      element.append(make('p','Verstöße und Prüfpunkte zählen Regeln, nicht Elemente. Die Ansicht zeigt bis zu 100 Regeln und 50 Elemente je Regel; vollständige gespeicherte Details stehen im nativen CSV und Projekt-JSON.','detail-empty'));
+      for(const[kind,title]of [['violations','Automatisierte Verstöße'],['incomplete','Manuell prüfen / needs-review']]){
+        const group=make('section',null,'accessibility-group');group.dataset.accessibilityKind=kind;group.append(make('h3',`${title} (${raw[kind].length})`));
+        if(!raw[kind].length)group.append(make('p','0 beobachtete Regeln. Dies ist kein Nachweis vollständiger Barrierefreiheit.'));
+        for(const rule of raw[kind].slice(0,100)){
+          const card=make('article',null,'accessibility-rule');card.dataset.accessibilityRule=rule.id;
+          card.append(make('h4',`${rule.id} · ${rule.impact??'Impact unbekannt'}`),make('p',rule.help),make('p',rule.description),make('p',`Tags: ${rule.tags.join(' · ')}`),make('p',`Regelhilfe: ${rule.helpUrl}`));
+          for(const node of rule.nodes.slice(0,50)){
+            const details=make('details',null,'accessibility-node');details.append(make('summary',`Element: ${JSON.stringify(node.target).slice(0,2048)}`));
+            details.addEventListener('toggle',()=>{if(!details.open||details.dataset.loaded)return;details.dataset.loaded='true';details.append(make('h5','Gespeichertes HTML'),make('pre',node.html.slice(0,8192),'accessibility-evidence'));if(node.failureSummary)details.append(make('p',node.failureSummary.slice(0,8192)));
+              for(const key of ['any','all','none']){details.append(make('h5',`Prüfungen: ${key}`));const list=make('ul');for(const check of node[key].slice(0,100))list.append(make('li',`${check.id} · ${check.impact??'Impact unbekannt'} · ${check.message??'Keine Nachricht gespeichert'}`));details.append(list);}
+              const source=make('details'),summary=make('summary','Gespeicherte Element- und Checkdaten als JSON');source.append(summary,make('pre',JSON.stringify(node,null,2).slice(0,32768),'accessibility-evidence'));details.append(source);
+            });card.append(details);
+          }group.append(card);
+        }element.append(group);
+      }
+    }else element.append(make('p','Alle abgeleiteten Zähler bleiben unbekannt. Fehlende oder fehlerhafte Daten sind kein bestätigter Nullbefund.','detail-empty'));
+    const source=make('details');source.id='accessibility-json';source.append(make('summary','Gespeicherte axe-Beobachtung als JSON'));
+    source.addEventListener('toggle',()=>{if(!source.open||source.dataset.loaded)return;source.dataset.loaded='true';source.append(make('pre',JSON.stringify(raw??null,null,2).slice(0,131072),'accessibility-evidence'));source.append(make('p','Gekürzte JSON-Ansicht; vollständige gespeicherte Daten im nativen Export.','detail-empty'));});element.append(source);
+  }
+
   function renderCustomSearchInspector(page, element) {
     const results = array(page.custom_search);
     element.replaceChildren();
@@ -1303,21 +1353,22 @@
 
   async function serverDownload(endpoint, filename) {
     if (!state.crawl) return;
-    const owner={id:state.crawl.id,generation:state.generation};
+    const owner={id:state.crawl.id,generation:state.generation,nativeGeneration:state.crawl.generation};
     try {
       const response = await fetch(`/api/crawls/${encodeURIComponent(owner.id)}/${endpoint}`);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      if(endpoint==='custom-search.csv'){
+      if(endpoint==='custom-search.csv'||endpoint.startsWith('accessibility.csv')){
         const length=response.headers.get('content-length'),digest=response.headers.get('x-content-sha256');
         if(!/^(0|[1-9][0-9]*)$/.test(length??'')||!Number.isSafeInteger(Number(length))||Number(length)>67108864||!/^[a-f0-9]{64}$/.test(digest??'')||response.headers.get('cache-control')!=='no-store'||response.headers.get('content-type')?.split(';',1)[0].trim()!=='text/csv')throw new Error('Suchbefund-CSV ohne bestätigte Länge, Prüfsumme oder Ausgabeformat.');
         const file=await readSitemapBundleStream(response,67108864,Number(length)),bytes=new Uint8Array(await file.blob.arrayBuffer());
         const actual=[...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(byte=>byte.toString(16).padStart(2,'0')).join('');
-        if(actual!==digest)throw new Error('Suchbefund-CSV: SHA-256 stimmt nicht überein.');
+        if(actual!==digest)throw new Error('CSV: SHA-256 stimmt nicht überein.');
+        if(endpoint.startsWith('accessibility.csv')&&response.headers.get('x-accessibility-generation')!==String(owner.nativeGeneration))throw new Error('Accessibility-CSV: Generation stimmt nicht überein.');
         if(owner.id!==state.crawl?.id||owner.generation!==state.generation)return;
-        downloadBlob(new Blob([bytes],{type:'text/csv;charset=utf-8'}),filename);message('Gespeicherte Suchbefunde CSV · Länge und SHA-256 bestätigt.');return;
+        downloadBlob(new Blob([bytes],{type:'text/csv;charset=utf-8'}),filename);message('Gespeicherte Befunde CSV · Länge und SHA-256 bestätigt.');return;
       }
       downloadBlob(await response.blob(), filename);
-    } catch (error) { message(`Export fehlgeschlagen: ${error.message}`, true); }
+    } catch (error) { if(owner.id!==state.crawl?.id||owner.generation!==state.generation)return;message(`Export fehlgeschlagen: ${error.message}`, true); }
   }
 
   async function importProject(file) {
@@ -3478,7 +3529,7 @@
     $('settings-form').elements.sitemap_source_processing_enabled.addEventListener('change', syncSitemapSourceProcessingSettings);
     $('settings-form').elements.sitemap_membership_limits_enabled.addEventListener('change', syncSitemapSourceProcessingSettings);
     $('export-csv').addEventListener('click', exportCSV);
-    $('export-resources').addEventListener('click', () => serverDownload(domSections.includes(state.section) ? 'dom.csv' : ({ 'custom-search':'custom-search.csv',inputs: 'inputs.csv', pdf: 'pdf.csv', responses: 'responses.csv', fragments: 'fragments.csv', linkdom: 'links.csv', imagefiles: 'images.csv' })[state.section], `open-seo-spider-${state.crawl.id}-${state.section}.csv`));
+    $('export-resources').addEventListener('click', () => serverDownload(domSections.includes(state.section) ? 'dom.csv' : ({ accessibility:'accessibility.csv?generation='+encodeURIComponent(state.crawl.generation), 'custom-search':'custom-search.csv',inputs: 'inputs.csv', pdf: 'pdf.csv', responses: 'responses.csv', fragments: 'fragments.csv', linkdom: 'links.csv', imagefiles: 'images.csv' })[state.section], `open-seo-spider-${state.crawl.id}-${state.section}.csv`));
     $('import-project').addEventListener('click', () => $('import-file').click());
     $('import-file').addEventListener('change', (event) => importProject(event.target.files[0]));
     $('export-sitemap').addEventListener('click', () => serverDownload('sitemap.xml', `open-seo-spider-${state.crawl.id}-sitemap.xml`));

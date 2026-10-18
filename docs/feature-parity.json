@@ -2026,13 +2026,20 @@
           ],
           "proves": "Actual eight genuine native metadata-channel/wordcloud groups pass with Source12 candidate: raw/DOM identity, None vs complete capture,48channel/N combinations, duplicate/element/Unicode/unknown semantics, full210rowCSV, CLI equivalence, safe UI at1440/320, busy-state barrier and cold reopen; seven direct children naturally closed and reads cause zero website requests.",
           "limits": "This does not complete missing inlink/alt/unlinked-text channels, large-corpus/RSS guarantees, vendor parity or Source12 installation."
+        },
+        {
+          "verification_run_ids": [
+            "accessibility-cold-browser-20261018"
+          ],
+          "proves": "Current normal binary passes genuine saved-source and retained-title analysis over two actual native processes, exact105-unigram100+5 DOM,19 full CSV/eight page JSON downloads, complete ordered source inventory, nine CSV-header/four source negative controls and zero offline website requests. Document options are explicitly reapplied after reload.",
+          "limits": "Bounded independent acceptance only; manufacturer parity NOT_PROVEN. See receipt for separate native/browser persistence boundaries."
         }
       ],
       "parity_evidence": [],
       "group": "metadata",
       "remaining_acceptance": [
-        "Add separately documented title, heading and inlink text channels; capture needed alt/anchor and unlinked text provenance rather than infer it from flattened saved text.",
-        "Add bounded word-cloud and specialized report interactions; verify large-corpus CPU/cancellation/performance and documented capture limits."
+        "Extend existing selected-body, title/description/H1-H6 channels with separately captured inlink, alt/anchor and unlinked text provenance; do not infer unavailable channels from flattened text.",
+        "Extend the existing bounded word cloud and specialist interactions; verify large-corpus CPU/cancellation/performance and documented capture limits."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -2281,17 +2288,27 @@
     {
       "id": "links.segments",
       "name": "Configurable segmentation",
-      "status": "planned",
+      "status": "partial",
       "phase": "P2",
       "source_ids": [
         "config"
       ],
       "acceptance_test": "Apply ordered field/regex segments and filter counts, issues, charts and exports by segment.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "accessibility-cold-browser-20261018"
+          ],
+          "proves": "Standalone ordered field/regex segmentation has counts, issues, paged memberships and complete JSON/CSV. Genuine109-page capture and seven warm/cold projections pass, with every CSV cell,28 downloads, same-origin browser-local rule restoration and zero offline refetches through both native process closes.",
+          "limits": "Bounded independent acceptance only; manufacturer parity NOT_PROVEN. See receipt for separate native/browser persistence boundaries."
+        }
+      ],
       "parity_evidence": [],
       "group": "links",
       "remaining_acceptance": [
-        "Apply ordered field/regex segments and filter counts, issues, charts and exports by segment."
+        "Integrate reusable segments with the main dashboard charts, filters and report/export selections; standalone saved-segment analysis is already implemented.",
+        "Verify all supported rule/operator combinations, broader imported and concurrent-mutation cases, and large-corpus budgets. Browser-local same-origin rule restoration does not establish server persistence or a fresh browser profile.",
+        "Improve320px segment table density and bound very tall wrapped rows while preserving access to full details; current no-overflow and export-reachability checks do not establish compact mobile readability."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -3102,7 +3119,7 @@
     {
       "id": "quality.accessibility_limit",
       "name": "Manual accessibility boundaries",
-      "status": "partial",
+      "status": "implemented",
       "phase": "P3",
       "source_ids": [
         "accessibility"
@@ -3116,13 +3133,18 @@
             "ui-renderer"
           ],
           "proves": "Worker accessibility JSON marks automated_only:true and keeps incomplete results; errors use null findings plus error instead of an empty pass report."
+        },
+        {
+          "verification_run_ids": [
+            "accessibility-cold-browser-20261018"
+          ],
+          "proves": "Actual pinned axe captures preserve genuine incomplete/needs-review, observed zero and engine failures through the dashboard/inspector, complete generation-bound native CSV and process-cold reopening. Exact50+8 DOM and full node/check/rawJSON exports are checked; imported controls remain unknown, automated-only scope is explicit.",
+          "limits": "Bounded independent acceptance only; manufacturer parity NOT_PROVEN. See receipt for separate native/browser persistence boundaries."
         }
       ],
       "parity_evidence": [],
       "group": "quality",
-      "remaining_acceptance": [
-        "Display/export incomplete needs-review details and automated coverage throughout UI/specialist reports, with end-to-end assertions."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -6647,6 +6669,16 @@
       "artifact_sha256": "eac9097241cfde8a98dd8f25a1c466e00a762a9960f885060d5d224692ef7a72",
       "result": "LOCAL_1749_RUST_4_EXPLICIT_CHROMIUM_32_UI_ENRICHMENT_CLIPPY_PASS_PUBLIC_CI_PENDING",
       "scope": "Final source-bound cfg(test) provider/browser/storage/cold proof passes five workflow groups, eight separate VM regressions, 108 input rows over exact 100+8 DOM pages, five complete CSVs, 213 provider attempts and zero website requests. Refresh preserves four old files and CSV; one held request aborts and both processes close naturally through EOF0. Final local gates pass 1,749 ordinary Rust tests with five deliberate ignores, four explicit Chromium fixtures, 32 UI suites (9 fixture/23 native, natural app exit0), strict Clippy, normal build, 28 pure bundle controls, 11 native groups and 12 SDK checks. Test SHA5c907bf2 and normal SHA10596b1c bind distinct executables; 356 compile inputs and three drivers stay unchanged. No Google-success, enrichment-CLI, installation or parity claim. Fresh public CI is pending; exact historical Windows timeout cause NOT_PROVEN."
+    },
+    {
+      "id": "accessibility-cold-browser-20261018",
+      "artifact": "docs/verification/accessibility-cold-browser-20261018/README.md",
+      "command": "cargo test --workspace --locked --offline -- --test-threads=2; strict Clippy; node scripts/ui-e2e.mjs; focused updated cold suites",
+      "result": "PASS_LOCAL",
+      "tested_at": "2026-10-18T12:19:19.632Z",
+      "source_debug_sha256": "f493874eff33d2dde33ba5d9634599fdf63914dbbfd57e64bd9162b6d9dc41de",
+      "scope": "1753 ordinary Rust tests/0 failures/5 explicit ignores, four new native tests, four UI VM controls, all35 UI suites and two separately repeated hardened cold suites. Actual59 axe captures/58 visible and two-process specialist persistence with complete verified exports.",
+      "limits": "Separate assertion versions/phases are bound in source-gates.json. Public CI, manual/WCAG conformance, other pending acceptance and manufacturer parity remain separate."
     }
   ],
   "reference_workflows": [
@@ -6768,9 +6800,9 @@
   ],
   "status_summary": {
     "overall": {
-      "implemented": 37,
+      "implemented": 38,
       "partial": 69,
-      "planned": 38,
+      "planned": 37,
       "total": 144
     },
     "phases": {
@@ -6782,13 +6814,13 @@
       },
       "P2": {
         "implemented": 14,
-        "partial": 27,
-        "planned": 4,
+        "partial": 28,
+        "planned": 3,
         "total": 45
       },
       "P3": {
-        "implemented": 7,
-        "partial": 8,
+        "implemented": 8,
+        "partial": 7,
         "planned": 9,
         "total": 24
       },
@@ -6832,8 +6864,8 @@
       },
       "links": {
         "implemented": 3,
-        "partial": 6,
-        "planned": 2,
+        "partial": 7,
+        "planned": 1,
         "total": 11
       },
       "relationships": {
@@ -6855,8 +6887,8 @@
         "total": 14
       },
       "quality": {
-        "implemented": 2,
-        "partial": 4,
+        "implemented": 3,
+        "partial": 3,
         "planned": 4,
         "total": 10
       },
@@ -6904,8 +6936,51 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-18T11:31:49.576437+00:00",
+  "last_verified_at": "2026-10-18T12:19:19.632Z",
   "current_work": [
+    {
+      "id": "accessibility-and-cold-specialists-20261018",
+      "title_de": "Accessibility-Befunde lesbar machen und gespeicherte Spezialanalysen nach Neustart prüfen",
+      "priority": -4,
+      "status": "LOCAL_PASS_PUBLIC_CI_PENDING",
+      "feature_ids": [
+        "quality.accessibility_limit",
+        "metadata.ngrams",
+        "links.segments"
+      ],
+      "summary_de": "Accessibility-Tabelle, Inspector und vollständiger nativer CSV sind lokal geprüft. Der gemeinsame Lauf besteht alle35 UI-Suiten; zwei nachträglich verschärfte Cold-Testtreiber bestehen zusätzlich gezielt mit derselben Binärdatei.1753 Rust-Tests, vier neue Native- und vier VM-Prüfungen sowie strenges Clippy bestehen. Die installierte Source16 bleibt unverändert. Das erfüllt einen weiteren eigenen Baustein, keine vollständige Herstellerparität.",
+      "completed_acceptance_de": [
+        "59 echte axe-Aufnahmen: Nullbefunde, Verstöße, manuelle Prüfpunkte und Enginefehler;58 sichtbare Seiten, exakte50+8 DOM-Zeilen und vollständiger Node-/Check-/Rohdaten-CSV.",
+        "Vier native Tests mit205-seitigem Export, Profil-/Externfällen, Generation und Ausgabegrenzen; echte64MiB exakt/+1-Byte-Antworten. Vier VM-Regressionsfälle und fünf negative DOM-Kontrollen.",
+        "N-Gramme: echte Quelldaten über zwei Prozesse,19 vollständige CSVs/acht JSONs, vollständige Quellenfolge, neun Header- und vier Quellenkontrollen; keine behauptete Persistenz der Browseroptionen.",
+        "Segmente:109 echte Seiten, sieben identische warme/kalte Vorschauen,28 vollständige Downloads, alle sechs CSV-Spalten und sieben Fehlerkontrollen; browserlokale Regeln auf derselben eigenen Origin gesondert geprüft.",
+        "Beide Cold-Suiten halten den echten HTTP410-Zeugen vor dem ersten EOF bis nach beiden natürlichen Prozessabschlüssen und Browserende; jeweils null Produkt-Neuabrufe bei zwei erfolgreichen Kontrollproben.",
+        "1753 gewöhnliche Rust-Tests ohne Fehler/fünf gezielte Ignores, Format, strenges Clippy, normaler Build und gemeinsamer35-Suiten-Lauf bestanden. Danach ausschließlich zwei Testassertionen verschärft und beide Suiten gezielt erneut bestanden."
+      ],
+      "pending_acceptance_de": [
+        "Öffentliche CI des nächsten exakten Commits prüfen; der frühere081bf33-Rendererfehler bleibt als fehlgeschlagener historischer Lauf sichtbar.",
+        "Segmente in Hauptansicht/Diagramme/Filter integrieren; weitere Operatoren, Import-/Konkurrenzfälle sowie große Corpora und fehlende N-Gramm-Kanäle separat abnehmen.",
+        "Die vollständigen144 Fähigkeiten,416 Filter und32 Referenzabläufe weiter bearbeiten; manuelle Barrierefreiheit und vollständige Herstellerparität bleiben NOT_PROVEN."
+      ],
+      "documentation": [
+        "docs/verification/accessibility-cold-browser-20261018/README.md",
+        "docs/e2e-testing.md"
+      ],
+      "gates": {
+        "real_axe_fixture_calibration": "PASS_FIVE_ACTUAL_OWNED_WORKER_PROBES",
+        "product_implementation": "PASS_LOCAL_NORMAL_BINARY",
+        "cold_segments": "PASS_TWO_ACTUAL_NATIVE_PROCESSES_AND_BROWSER_LOCAL_RULES",
+        "cold_ngrams": "PASS_TWO_ACTUAL_NATIVE_PROCESSES_OPTIONS_REAPPLIED",
+        "aggregate_UI": "PASS35_THEN_TWO_HARDENED_FOCUSED_SUITES",
+        "ordinary_rust": "PASS1753_FAIL0_IGNORE5",
+        "clippy": "PASS_ALL_TARGETS_ALL_FEATURES_DENY_WARNINGS",
+        "public_CI_081bf33": "RENDERER_FAIL_WINDOWS_SEPARATELY_TRACKED_39123847418",
+        "public_CI_current": "PENDING_NEXT_COMMIT",
+        "manufacturer_parity": "NOT_PROVEN",
+        "installation": "UNCHANGED_SOURCE16"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
     {
       "id": "api-enrichment-browser-20261018",
       "title_de": "Positive API-Anreicherung und Zustandswechsel mit echtem lokalem HTTP-Provider absichern",
@@ -6925,12 +7000,12 @@
         "Zwei eigene native Prozesse schließen per stdin-EOF regulär 0. Neues Browserfenster und kalter zweiter Prozess öffnen exakt dieselbe Konfiguration und 100+8 Zeilen/CSV; kein automatischer Provider-Neustart, keine alte Freigabe, kein Website-Abruf.",
         "Finale LF-Quellen und Testprogramm-SHA 5c907bf2 sind gebunden; 356 Kompiliereingaben und drei Treiber bleiben während des fokussierten Laufs unverändert. Katalog bleibt 37/69/38; modes.apis bleibt partial.",
         "Finale breite Gates: 1.749 reguläre Rust-Tests mit 0 Fehlern/5 bewusst ignorierten Tests; vier Chromium-Fixtures separat bestanden. Alle 32 UI-Suiten gemeinsam: 9 Fixtures und 23 native Suiten mit regulärem App-Abschluss 0 und unveränderten getrackten Quellen/Binärdatei; Format, strenges Clippy und normaler Build bestanden.",
-        "28 reine Bundle-Kontrollen bestehen separat; elf native Gruppen und zwölf offizielle SDK-Prüfungen bestehen auf der normalen Binärdatei. Der Test-Provider-Selektor fehlt im Normalprogramm und ist als Positivkontrolle im separaten Testprogramm vorhanden."
+        "28 reine Bundle-Kontrollen bestehen separat; elf native Gruppen und zwölf offizielle SDK-Prüfungen bestehen auf der normalen Binärdatei. Der Test-Provider-Selektor fehlt im Normalprogramm und ist als Positivkontrolle im separaten Testprogramm vorhanden.",
+        "Die zuvor offene kalte native Segment-/N-Gramm-Wiederöffnung sowie Accessibility-UI mit needs-review sind im Folgebaustein accessibility-and-cold-specialists-20261018 lokal abgenommen; browserlokale Regeln und neu gewählte N-Gramm-Optionen bleiben ausdrücklich getrennte Grenzen."
       ],
       "pending_acceptance_de": [
         "Frische öffentliche Linux-/Windows-/Renderer-/Container-CI nach Push prüfen. Beide zuvor fehlgeschlagenen Windows-Tests bestehen lokal; die neue Concurrency-Grenze ist eine Maßnahme, die genaue historische 5s-Drain-Ursache bleibt NOT_PROVEN.",
         "Autorisierte echte Google-Metriken und unabhängige Produktionsantworten sowie erfolgreichen enrich-urls-CLI mit JSON/CSV separat prüfen.",
-        "Kalte native Wiederöffnung gespeicherter Crawl-/Quelldaten für Segmente und N-Gramme ergänzen. Browserlokale Segmentregeln separat am selben eigenen Origin aus localStorage wiederherstellen; serverseitige Regelspeicherung ist nicht belegt. Accessibility-UI-Abläufe mit unvollständigen Beobachtungen und needs-review-Zuständen prüfen.",
         "Weitere dokumentierte Anbieter, getrennte CrUX-/lokale-Lighthouse-Verträge, zusätzliche Operator-/Archiv-/Konkurrenz-/Browserfälle weiter abarbeiten. Herstellerparität bleibt NOT_PROVEN."
       ],
       "documentation": [
@@ -6956,7 +7031,8 @@
         "normal_build": "PASS_SHA_10596b1c74e35410eeaa0b1b3539fbb869b41341ff92408c9899b0a77a63628f",
         "test_transport_isolation": "PASS_MARKER_ABSENT_NORMAL_PRESENT_TEST",
         "bundle": "PASS_28_CONTROLS_11_NATIVE_12_OFFICIAL_SDK",
-        "Windows_old_timeout_root_cause": "NOT_PROVEN_CONCURRENCY_MITIGATION_LOCAL_PASS"
+        "Windows_old_timeout_root_cause": "NOT_PROVEN_CONCURRENCY_MITIGATION_LOCAL_PASS",
+        "followup_accessibility_and_cold": "PASS_LOCAL_SEPARATE_20261018_RECEIPT"
       },
       "reference_parity": "NOT_PROVEN"
     },
@@ -6981,7 +7057,7 @@
       "pending_acceptance_de": [
         "Frische öffentliche Linux-/Windows-/Renderer-/Container-CI des neuen Commits beobachten und konkrete Folgefehler beheben; lokales Grün ersetzt keine öffentliche Abnahme.",
         "Kalte Wiederöffnung weiterer Spezialwerkzeuge, zusätzliche Regel-/Operator-Kombinationen, fehlerhafte Archive, konkurrierende Änderungen und weitere Browser ergänzen.",
-        "Vollständigen 144-Fähigkeiten-Katalog weiter abarbeiten: 37 eigene Abnahmen, 69 teilweise geprüft, 38 offen. Das zusätzliche Register mit 416 Filtern und 32 Ablaufverträgen bleibt eigenständig; Herstellerparität NOT_PROVEN."
+        "Vollständigen 144-Fähigkeiten-Katalog weiter abarbeiten: 38 eigene Abnahmen, 69 teilweise geprüft, 37 offen. Das zusätzliche Register mit 416 Filtern und 32 Ablaufverträgen bleibt eigenständig; Herstellerparität NOT_PROVEN."
       ],
       "documentation": [
         "docs/e2e-testing.md",
@@ -9569,6 +9645,7 @@
     }
   ],
   "active_work_ids": [
+    "accessibility-and-cold-specialists-20261018",
     "api-enrichment-browser-20261018",
     "specialist-workflows-e2e-20261018",
     "combined-source-v15-20261016",

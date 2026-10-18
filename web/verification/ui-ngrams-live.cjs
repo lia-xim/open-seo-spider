@@ -8,7 +8,7 @@ const {chromium} = require('../../renderer/node_modules/playwright-core');
 const artifactPath = require('./artifact-path.cjs');
 const app = process.env.SPIDER_APP_URL;
 assert(app && new URL(app).hostname === '127.0.0.1' && !['8787', '8790'].includes(new URL(app).port), 'Use an isolated test app');
-const checks = [], errors = [], hits = new Map();
+const checks = [], errors = [], hits = new Map(), readEvidence = [], downloadEvidence = [], previewBytes = new WeakMap();
 const unique = Array.from({length: 105}, (_, i) => `word${i}`).join(' ');
 const bodies = {
   '/a': `Alpha beta Alpha beta and gamma Alpha ${unique} ${'repeat '.repeat(20)}`,
@@ -33,7 +33,8 @@ async function until(work, label) {
 async function api(path, body) {
   const response = await fetch(app + path, {method: body === undefined ? 'GET' : 'POST',
     headers: body === undefined ? {} : {'content-type': 'application/json'}, body: body === undefined ? undefined : JSON.stringify(body)});
-  assert.equal(response.status, 200, await response.clone().text()); return response.json();
+  const bytes = Buffer.from(await response.arrayBuffer());
+  assert.equal(response.status, 200, bytes.toString('utf8')); return JSON.parse(bytes);
 }
 async function crawl(urls, extra = {}) {
   const started = await api('/api/crawls', {seed_urls: urls, crawl_links: false, discover_sitemaps: false,
@@ -52,13 +53,29 @@ function csvRows(text) {
   }
   assert.equal(quoted, false); if (cell || row.length) { row.push(cell); rows.push(row); } return rows;
 }
+async function nativeRead(response, expectedURL) {
+  const request = response.request(), url = new URL(response.url()), body = request.postDataBuffer();
+  assert.equal(response.url(), expectedURL); assert.equal(url.origin, new URL(app).origin);
+  assert.match(url.pathname, /^\/api\/crawls\/[a-f0-9-]+\/ngrams\/(preview|csv)$/i);
+  assert.equal(url.search, ''); assert.equal(request.method(), 'POST'); assert(body, 'Exact browser POST bytes required');
+  // These two routes only read saved data. Always use the exact native POST as
+  // oracle; CDP body availability is not a retry/fallback or a product assertion.
+  const oracle = await fetch(response.url(), {method: 'POST', headers: {'content-type': request.headers()['content-type']}, body, cache: 'no-store', redirect: 'error'});
+  const bytes = Buffer.from(await oracle.arrayBuffer()), headers = await response.allHeaders(), oracleHeaders = Object.fromEntries(oracle.headers);
+  assert.equal(response.status(), oracle.status, bytes.toString('utf8'));
+  for (const name of ['content-type', 'content-length', 'x-content-sha256', 'cache-control', 'x-ngram-snapshot']) assert.equal(headers[name] ?? null, oracleHeaders[name] ?? null, name);
+  if (oracle.status === 200) { assert.equal(headers['content-type'], url.pathname.endsWith('/csv') ? 'text/csv; charset=utf-8' : 'application/json; charset=utf-8'); assert.equal(Number(headers['content-length']), bytes.length); assert.equal(headers['x-content-sha256'], sha(bytes)); assert.equal(headers['cache-control'], 'no-store'); }
+  readEvidence.push({url: response.url(), method: 'POST', request_sha256: sha(body), status: oracle.status, bytes: bytes.length, sha256: sha(bytes), body_source: 'unconditional_exact_read_only_native_post'});
+  return {bytes, headers};
+}
 async function preview(page, trigger = '#preview') {
-  const pending = page.waitForResponse(r => r.url().endsWith('/ngrams/preview') && r.request().method() === 'POST');
+  const expectedURL = `${app}/api/crawls/${await page.inputValue('#crawl')}/ngrams/preview`;
+  const pending = page.waitForResponse(r => r.url() === expectedURL && r.request().method() === 'POST');
   await page.click(trigger); const response = await pending;
-  assert.equal(response.status(), 200, await response.text());
-  const bytes = await response.body(), headers = response.headers();
+  const {bytes, headers} = await nativeRead(response, expectedURL); assert.equal(response.status(), 200, bytes.toString('utf8'));
   assert.equal(Number(headers['content-length']), bytes.length); assert.equal(headers['x-content-sha256'], sha(bytes));
   const value = JSON.parse(bytes); assert.equal(value.website_requests, 0); assert.equal(value.whole_website_coverage_attested, false);
+  previewBytes.set(value, bytes);
   const visible = {
     summary: `${value.after + 1 > value.total_rows ? 0 : value.after + 1}–${value.after + value.rows.length} von ${value.total_rows} Zeilen in der Auswahl · ${value.total_tokens} Tokens · ${value.total_text_bytes} analysierte Textbytes.`,
     headings: value.rows.map(row => row.tokens ? row.tokens.join(' ') : row.source.requested_url),
@@ -77,11 +94,16 @@ async function preview(page, trigger = '#preview') {
   return value;
 }
 async function download(page, button) {
-  const pending = page.waitForEvent('download'); await page.click(button); return fs.readFileSync(await (await pending).path());
+  const pending = page.waitForEvent('download'); await page.click(button); const item = await pending;
+  assert.equal(await item.failure(), null); const bytes = fs.readFileSync(await item.path());
+  const filename = `ngrams-download-${downloadEvidence.length + 1}.${button === '#json' ? 'json' : 'csv'}`;
+  fs.writeFileSync(artifactPath(filename), bytes); downloadEvidence.push({filename, bytes: bytes.length, sha256: sha(bytes)}); return bytes;
 }
 async function csv(page, expected) {
-  const pending = page.waitForResponse(r => r.url().endsWith('/ngrams/csv') && r.request().method() === 'POST');
-  const bytes = await download(page, '#csv'), response = await pending, headers = response.headers();
+  const expectedURL = `${app}/api/crawls/${await page.inputValue('#crawl')}/ngrams/csv`;
+  const pending = page.waitForResponse(r => r.url() === expectedURL && r.request().method() === 'POST');
+  const bytes = await download(page, '#csv'), response = await pending, oracle = await nativeRead(response, expectedURL), headers = oracle.headers;
+  assert.deepEqual(bytes, oracle.bytes, 'Actual browser CSV file must match the exact native read');
   assert.equal(response.status(), 200); assert.equal(headers['x-ngram-snapshot'], expected.snapshot.snapshot_token);
   assert.equal(Number(headers['content-length']), bytes.length); assert.equal(headers['x-content-sha256'], sha(bytes));
   assert.match(await page.locator('#status').innerText(), /SHA-256 bestätigt/); return csvRows(bytes.toString('utf8'));
@@ -112,7 +134,7 @@ async function selectCrawl(page, id) {
     assert.equal(first.all_supplied_sources_complete, false); assert.match(await page.locator('#coverage').innerText(), /unvollständige Quellen ausgeschlossen/);
     assert(first.total_rows > 100); assert.equal(first.rows.find(r => r.tokens[0] === 'alpha').occurrences, 4);
     assert(!first.rows.some(r => r.tokens[0] === 'excludednavigation' || r.tokens[0] === 'errorphrase'));
-    assert.deepEqual(JSON.parse((await download(page, '#json')).toString('utf8')), first);
+    const firstJSON = await download(page, '#json'); assert.deepEqual(firstJSON, previewBytes.get(first)); assert.deepEqual(JSON.parse(firstJSON), first);
     const fullCSV = await csv(page, first); assert.equal(fullCSV.length, first.total_rows + 1);
     const tokensColumn = fullCSV[0].indexOf('tokens_json'); assert(tokensColumn >= 0);
     assert(fullCSV.slice(1).some(row => JSON.parse(row[tokensColumn]).includes('word104')));
@@ -184,8 +206,8 @@ async function selectCrawl(page, id) {
     const beforeResume = count(); await api('/api/crawls/' + limitedId + '/resume', {max_pages: 0});
     await until(async () => (await api('/api/crawls/' + limitedId)).status === 'completed', 'explicit fixture resume');
     const resumedCount = count(); assert.notDeepEqual(resumedCount, beforeResume);
-    const denied = page.waitForResponse(r => r.url().endsWith('/ngrams/csv')); await page.click('#csv');
-    assert.equal((await denied).status(), 409); await until(() => page.isEnabled('#preview'), 'stale failure UI');
+    const staleURL = `${app}/api/crawls/${limitedId}/ngrams/csv`, denied = page.waitForResponse(r => r.url() === staleURL && r.request().method() === 'POST'); await page.click('#csv');
+    const staleResponse = await denied; assert.equal(staleResponse.status(), 409); await nativeRead(staleResponse, staleURL); await until(() => page.isEnabled('#preview'), 'stale failure UI');
     assert.equal(await page.isDisabled('#csv'), true); assert.equal(await page.isVisible('#results'), false); assert.match(await page.locator('#status').innerText(), /generation|Stale/i);
     const refreshed = await preview(page); assert.notEqual(refreshed.snapshot.caller.generation, oldGeneration); assert.equal(refreshed.saved_documents, 2);
     assert.equal((await csv(page, refreshed)).length, refreshed.total_rows + 1); assert.deepEqual(count(), resumedCount);
@@ -202,14 +224,14 @@ async function selectCrawl(page, id) {
     assert.deepEqual(count(), resumedCount); assert.deepEqual(await api('/api/crawls/' + id + '/project.json'), saved); assert.deepEqual(errors, []);
     check('bounded word cloud opens actual native source occurrences, populated 1440/320px layouts keep export reachable and the original saved report remains byte-equivalent as JSON');
     fs.writeFileSync(artifactPath('ngrams-live.json'), JSON.stringify({result: 'PASS', crawl_id: id, metadata_crawl_id: metadataId, resumed_crawl_id: limitedId,
-      checks, website_requests: count(), analysis_website_requests: 0, errors,
+      checks, website_requests: count(), analysis_website_requests: 0, errors, read_only_native_oracles: readEvidence, browser_downloads: downloadEvidence,
       scope: 'Actual redesigned browser/native Rust saved-crawl corpus, snapshot paging, generation conflict, JSON and hash/length verified CSV. Only owned synthetic HTML/native requests. No current whole-site coverage, reference tokenization parity, imported/tampered archive, cold restart or provider claim.'}, null, 2) + '\n');
     console.log(`${checks.length} native saved n-gram workflows passed`);
   } catch (error) {
     await page.screenshot({path: artifactPath('ngrams-failure.png'), fullPage: true});
     const layout = await page.evaluate(() => ({viewport: innerWidth, document: document.documentElement.scrollWidth, status: document.getElementById('status').textContent,
       overflow: [...document.querySelectorAll('body *')].filter(e => e.getBoundingClientRect().right > innerWidth + 1).slice(0, 25).map(e => ({tag: e.tagName, id: e.id, width: e.getBoundingClientRect().width, text: e.textContent.slice(0, 90)}))}));
-    fs.writeFileSync(artifactPath('ngrams-failure.json'), JSON.stringify({error: error.stack, checks, hits: count(), layout}, null, 2) + '\n'); throw error;
+    fs.writeFileSync(artifactPath('ngrams-failure.json'), JSON.stringify({error: error.stack, checks, hits: count(), layout, read_only_native_oracles: readEvidence, browser_downloads: downloadEvidence}, null, 2) + '\n'); throw error;
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; }).finally(async () => {
   website.closeAllConnections(); await new Promise(r => website.close(r));

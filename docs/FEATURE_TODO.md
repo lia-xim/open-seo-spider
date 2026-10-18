@@ -4,11 +4,24 @@
 
 Die Liste hält alle 144 gruppierten Fähigkeiten fest. Ein Haken bedeutet, dass das **eigene gespeicherte Abnahmekriterium** mit Beweisen erfüllt ist. Er bedeutet keine vollständige Gleichheit mit Screaming Frog. Diese Referenzparität bleibt für alle Einträge **NOT_PROVEN**.
 
-Aktueller Katalogstand: **37 eigene Abnahmen erfüllt**, **69 teilweise geprüft**, **38 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
+Aktueller Katalogstand: **38 eigene Abnahmen erfüllt**, **69 teilweise geprüft**, **37 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
 
 Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.json) bilden ein zusätzliches Register. Ihre positiven Fälle, Kontrollfälle, Parameter und Grenzfälle müssen jeweils geprüft werden. Ein implementierter Kern, ein leerer Export oder übereinstimmende CSV-Zellen ersetzen diese Einzelabnahme nicht.
 
 ## Aktuelle Arbeit und nächste Schritte
+
+- [ ] **Accessibility-Befunde lesbar machen und gespeicherte Spezialanalysen nach Neustart prüfen** — LOCAL_PASS_PUBLIC_CI_PENDING. Accessibility-Tabelle, Inspector und vollständiger nativer CSV sind lokal geprüft. Der gemeinsame Lauf besteht alle35 UI-Suiten; zwei nachträglich verschärfte Cold-Testtreiber bestehen zusätzlich gezielt mit derselben Binärdatei.1753 Rust-Tests, vier neue Native- und vier VM-Prüfungen sowie strenges Clippy bestehen. Die installierte Source16 bleibt unverändert. Das erfüllt einen weiteren eigenen Baustein, keine vollständige Herstellerparität.
+  - [x] 59 echte axe-Aufnahmen: Nullbefunde, Verstöße, manuelle Prüfpunkte und Enginefehler;58 sichtbare Seiten, exakte50+8 DOM-Zeilen und vollständiger Node-/Check-/Rohdaten-CSV.
+  - [x] Vier native Tests mit205-seitigem Export, Profil-/Externfällen, Generation und Ausgabegrenzen; echte64MiB exakt/+1-Byte-Antworten. Vier VM-Regressionsfälle und fünf negative DOM-Kontrollen.
+  - [x] N-Gramme: echte Quelldaten über zwei Prozesse,19 vollständige CSVs/acht JSONs, vollständige Quellenfolge, neun Header- und vier Quellenkontrollen; keine behauptete Persistenz der Browseroptionen.
+  - [x] Segmente:109 echte Seiten, sieben identische warme/kalte Vorschauen,28 vollständige Downloads, alle sechs CSV-Spalten und sieben Fehlerkontrollen; browserlokale Regeln auf derselben eigenen Origin gesondert geprüft.
+  - [x] Beide Cold-Suiten halten den echten HTTP410-Zeugen vor dem ersten EOF bis nach beiden natürlichen Prozessabschlüssen und Browserende; jeweils null Produkt-Neuabrufe bei zwei erfolgreichen Kontrollproben.
+  - [x] 1753 gewöhnliche Rust-Tests ohne Fehler/fünf gezielte Ignores, Format, strenges Clippy, normaler Build und gemeinsamer35-Suiten-Lauf bestanden. Danach ausschließlich zwei Testassertionen verschärft und beide Suiten gezielt erneut bestanden.
+  - [ ] Öffentliche CI des nächsten exakten Commits prüfen; der frühere081bf33-Rendererfehler bleibt als fehlgeschlagener historischer Lauf sichtbar.
+  - [ ] Segmente in Hauptansicht/Diagramme/Filter integrieren; weitere Operatoren, Import-/Konkurrenzfälle sowie große Corpora und fehlende N-Gramm-Kanäle separat abnehmen.
+  - [ ] Die vollständigen144 Fähigkeiten,416 Filter und32 Referenzabläufe weiter bearbeiten; manuelle Barrierefreiheit und vollständige Herstellerparität bleiben NOT_PROVEN.
+  - Verträge: [README.md](verification/accessibility-cold-browser-20261018/README.md), [e2e-testing.md](e2e-testing.md).
+  - Gate-Stand: real_axe_fixture_calibration: PASS_FIVE_ACTUAL_OWNED_WORKER_PROBES; product_implementation: PASS_LOCAL_NORMAL_BINARY; cold_segments: PASS_TWO_ACTUAL_NATIVE_PROCESSES_AND_BROWSER_LOCAL_RULES; cold_ngrams: PASS_TWO_ACTUAL_NATIVE_PROCESSES_OPTIONS_REAPPLIED; aggregate_UI: PASS35_THEN_TWO_HARDENED_FOCUSED_SUITES; ordinary_rust: PASS1753_FAIL0_IGNORE5; clippy: PASS_ALL_TARGETS_ALL_FEATURES_DENY_WARNINGS; public_CI_081bf33: RENDERER_FAIL_WINDOWS_SEPARATELY_TRACKED_39123847418; public_CI_current: PENDING_NEXT_COMMIT; manufacturer_parity: NOT_PROVEN; installation: UNCHANGED_SOURCE16.
 
 - [ ] **Positive API-Anreicherung und Zustandswechsel mit echtem lokalem HTTP-Provider absichern** — LOCAL_AGGREGATE_PASS_FRESH_PUBLIC_CI_PENDING. Fünf Browser-/Native-/HTTP-Provider-Abläufe und acht getrennte UI-Zustandsregressionen bestehen. 108 Eingabezeilen mit 100+8 exakten DOM-Zeilen, fünf vollständige CSVs, 213 Provider-Versuche, kein Website-Abruf, ein unveränderter alter Auftrag nach Refresh, tatsächlicher Abbruch und kalte Wiederöffnung sind belegt. Der finale lokale Stand besteht 1.749 reguläre Rust-Tests, vier separat ausgeführte Chromium-Tests, alle 32 UI-Suiten, strenges Clippy und den normalen Build. Der Provider-Transport existiert nur im Testprogramm. Echte Google-Erfolge, Enrichment-CLI, weitere Anbieter und neue öffentliche CI bleiben offen; die genaue Ursache des historischen Windows-Timeouts ist nicht nachgewiesen.
   - [x] Acht reproduzierte UI-Regressionsfälle bestehen: Terminal-Abbruch, verspätete Status-/Cancel-Antworten, Eigentum des Busy-Zustands und Sperren nach veraltetem Ergebnis-/CSV-Snapshot.
@@ -21,12 +34,12 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - [x] Finale LF-Quellen und Testprogramm-SHA 5c907bf2 sind gebunden; 356 Kompiliereingaben und drei Treiber bleiben während des fokussierten Laufs unverändert. Katalog bleibt 37/69/38; modes.apis bleibt partial.
   - [x] Finale breite Gates: 1.749 reguläre Rust-Tests mit 0 Fehlern/5 bewusst ignorierten Tests; vier Chromium-Fixtures separat bestanden. Alle 32 UI-Suiten gemeinsam: 9 Fixtures und 23 native Suiten mit regulärem App-Abschluss 0 und unveränderten getrackten Quellen/Binärdatei; Format, strenges Clippy und normaler Build bestanden.
   - [x] 28 reine Bundle-Kontrollen bestehen separat; elf native Gruppen und zwölf offizielle SDK-Prüfungen bestehen auf der normalen Binärdatei. Der Test-Provider-Selektor fehlt im Normalprogramm und ist als Positivkontrolle im separaten Testprogramm vorhanden.
+  - [x] Die zuvor offene kalte native Segment-/N-Gramm-Wiederöffnung sowie Accessibility-UI mit needs-review sind im Folgebaustein accessibility-and-cold-specialists-20261018 lokal abgenommen; browserlokale Regeln und neu gewählte N-Gramm-Optionen bleiben ausdrücklich getrennte Grenzen.
   - [ ] Frische öffentliche Linux-/Windows-/Renderer-/Container-CI nach Push prüfen. Beide zuvor fehlgeschlagenen Windows-Tests bestehen lokal; die neue Concurrency-Grenze ist eine Maßnahme, die genaue historische 5s-Drain-Ursache bleibt NOT_PROVEN.
   - [ ] Autorisierte echte Google-Metriken und unabhängige Produktionsantworten sowie erfolgreichen enrich-urls-CLI mit JSON/CSV separat prüfen.
-  - [ ] Kalte native Wiederöffnung gespeicherter Crawl-/Quelldaten für Segmente und N-Gramme ergänzen. Browserlokale Segmentregeln separat am selben eigenen Origin aus localStorage wiederherstellen; serverseitige Regelspeicherung ist nicht belegt. Accessibility-UI-Abläufe mit unvollständigen Beobachtungen und needs-review-Zuständen prüfen.
   - [ ] Weitere dokumentierte Anbieter, getrennte CrUX-/lokale-Lighthouse-Verträge, zusätzliche Operator-/Archiv-/Konkurrenz-/Browserfälle weiter abarbeiten. Herstellerparität bleibt NOT_PROVEN.
   - Verträge: [e2e-testing.md](e2e-testing.md), [README.md](verification/api-enrichment-browser-20261018/README.md).
-  - Gate-Stand: focused_native_browser: PASS_FIVE_GROUPS_FIVE_COMPLETE_CSV_213_PROVIDER_ZERO_WEBSITE; frontend_state_regressions: PASS_EIGHT; native_cold_reopen: PASS_TWO_EOF0_ZERO_REPEAT_PROVIDER; test_executable_sha256: 5c907bf2eb21c1b582f3aa9180692ec40f265421bf970a1bc8629690ffdb31e4; final_local_UI_32: PASS_32_9_FIXTURE_23_NATIVE_NATURAL0_UNCHANGED_SOURCES_BINARY; final_workspace_Rust: PASS_1749_ZERO_FAILURE_FIVE_DELIBERATE_IGNORES; final_explicit_Chromium: PASS_FOUR_ACTUAL_OWNED_RENDERER; final_strict_clippy: PASS_ALL_TARGETS_ALL_FEATURES_WARNINGS_DENIED; public_CI_01ba979: FAIL_TWO_WINDOWS_TIMEOUTS_LINUX_OBSOLETE26_DIRECTORY_CDP_BODY; new_public_CI: PENDING_AFTER_PUSH; production_Google: NOT_PROVEN; successful_enrichment_CLI: NOT_PROVEN; provider_breadth: OPEN; installation: UNCHANGED_SOURCE16; manufacturer_parity: NOT_PROVEN; normal_build: PASS_SHA_10596b1c74e35410eeaa0b1b3539fbb869b41341ff92408c9899b0a77a63628f; test_transport_isolation: PASS_MARKER_ABSENT_NORMAL_PRESENT_TEST; bundle: PASS_28_CONTROLS_11_NATIVE_12_OFFICIAL_SDK; Windows_old_timeout_root_cause: NOT_PROVEN_CONCURRENCY_MITIGATION_LOCAL_PASS.
+  - Gate-Stand: focused_native_browser: PASS_FIVE_GROUPS_FIVE_COMPLETE_CSV_213_PROVIDER_ZERO_WEBSITE; frontend_state_regressions: PASS_EIGHT; native_cold_reopen: PASS_TWO_EOF0_ZERO_REPEAT_PROVIDER; test_executable_sha256: 5c907bf2eb21c1b582f3aa9180692ec40f265421bf970a1bc8629690ffdb31e4; final_local_UI_32: PASS_32_9_FIXTURE_23_NATIVE_NATURAL0_UNCHANGED_SOURCES_BINARY; final_workspace_Rust: PASS_1749_ZERO_FAILURE_FIVE_DELIBERATE_IGNORES; final_explicit_Chromium: PASS_FOUR_ACTUAL_OWNED_RENDERER; final_strict_clippy: PASS_ALL_TARGETS_ALL_FEATURES_WARNINGS_DENIED; public_CI_01ba979: FAIL_TWO_WINDOWS_TIMEOUTS_LINUX_OBSOLETE26_DIRECTORY_CDP_BODY; new_public_CI: PENDING_AFTER_PUSH; production_Google: NOT_PROVEN; successful_enrichment_CLI: NOT_PROVEN; provider_breadth: OPEN; installation: UNCHANGED_SOURCE16; manufacturer_parity: NOT_PROVEN; normal_build: PASS_SHA_10596b1c74e35410eeaa0b1b3539fbb869b41341ff92408c9899b0a77a63628f; test_transport_isolation: PASS_MARKER_ABSENT_NORMAL_PRESENT_TEST; bundle: PASS_28_CONTROLS_11_NATIVE_12_OFFICIAL_SDK; Windows_old_timeout_root_cause: NOT_PROVEN_CONCURRENCY_MITIGATION_LOCAL_PASS; followup_accessibility_and_cold: PASS_LOCAL_SEPARATE_20261018_RECEIPT.
 
 - [ ] **Eigene Suche und Spezialwerkzeuge mit nativen Browser-Abläufen absichern** — LOCAL_1750_RUST_32_UI_PASS_PUBLIC_CI_PENDING. Die eigene Literal-/Regex-Suche ist für vier getrennte Roh-/DOM-/Textquellen implementiert und mit echten Browser-, API-, Speicher-, Export- und Neustartabläufen abgenommen. Alle 32 UI-Suiten bestehen gemeinsam lokal: neun API-Fixtures und 23 native Abläufe. Zusätzlich bestehen 1.746 reguläre Rust-Tests und vier separat ausgeführte Chromium-Tests sowie strenges Clippy. Die drei Fehler des öffentlichen Laufs ee4eb6a (Windows-Stack, inkonsistente Recrawl-Fixture, verspätetes Lesen einer Browserantwort) sind korrigiert und lokal geprüft. Die neue öffentliche CI bleibt offen.
   - [x] Gemeinsamer Lauf aller 32 UI-Suiten mit regulärem App-Abschluss 0, unveränderten getrackten Quellen und identischer getesteter Binärdatei bestanden.
@@ -41,7 +54,7 @@ Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.jso
   - [x] Nachtrag api-enrichment-browser-local-20261018: Positive test-only HTTP-Provider-Anreicherung durch Browser, Router, Polling, Speicherung, vollständige Exporte, Refresh, echten Abbruch und kalte Wiederöffnung bestanden. Echte Google-Metriken, Enrichment-CLI und weitere Anbieter bleiben separat offen.
   - [ ] Frische öffentliche Linux-/Windows-/Renderer-/Container-CI des neuen Commits beobachten und konkrete Folgefehler beheben; lokales Grün ersetzt keine öffentliche Abnahme.
   - [ ] Kalte Wiederöffnung weiterer Spezialwerkzeuge, zusätzliche Regel-/Operator-Kombinationen, fehlerhafte Archive, konkurrierende Änderungen und weitere Browser ergänzen.
-  - [ ] Vollständigen 144-Fähigkeiten-Katalog weiter abarbeiten: 37 eigene Abnahmen, 69 teilweise geprüft, 38 offen. Das zusätzliche Register mit 416 Filtern und 32 Ablaufverträgen bleibt eigenständig; Herstellerparität NOT_PROVEN.
+  - [ ] Vollständigen 144-Fähigkeiten-Katalog weiter abarbeiten: 38 eigene Abnahmen, 69 teilweise geprüft, 37 offen. Das zusätzliche Register mit 416 Filtern und 32 Ablaufverträgen bleibt eigenständig; Herstellerparität NOT_PROVEN.
   - Verträge: [e2e-testing.md](e2e-testing.md), [custom-search-plan.md](custom-search-plan.md), [README.md](verification/custom-search-20261018/README.md), [README.md](verification/api-enrichment-browser-20261018/README.md).
   - Gate-Stand: local_UI_E2E: PASS_32_9_FIXTURE_23_NATIVE; workspace_Rust: PASS_1746_ZERO_FAILURE_FOUR_EXPLICIT_RENDERER_IGNORES; explicit_Rust_Chromium: PASS_FOUR_ACTUAL_OWNED_RENDERER; strict_clippy: PASS_ALL_TARGETS_ALL_FEATURES; custom_search: PASS_TEN_NATIVE_BROWSER_WORKFLOWS; selected_recrawl_fixture: PASS_TWELVE_NATIVE_SCENARIOS_WITH_MODERN_COVERAGE_REFUSAL; public_CI_ee4eb6a: CONTAINER_PASS_WINDOWS_STACK_FAIL_LINUX_FIXTURE_FAIL_RENDERER_BODY_READ_FAIL; public_CI_new_commit: PENDING_AFTER_PUSH; manufacturer_parity: NOT_PROVEN; installation: UNCHANGED_SOURCE16.
 
@@ -2055,7 +2068,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   Orientierung: Gespeicherte Crawl-Texte und Quellrevisionen sind angebunden; große Corpus-Aggregation und vollständige spezielle N-Gramm-Exporte weiter prüfen.
 
-  Beweisregister: [content-analysis-core](../crates/core/src/content_analysis.rs) (PASS), [content-analysis-api-cli](verification/content-analysis-e2e.json) (PASS), [native-policy-ci](verification/native-policy-ci.json) (PASS), [native-policy-installed](verification/native-policy-installed.json) (PASS), [content-capture-core](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-native-chrome](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-api-cli](verification/content-capture-e2e.json) (PASS), [ui-content-fixture](../web/verification/ui-content-fixture-results.json) (PASS), [ui-content-live](../web/verification/ui-content-live-results.json) (PASS), [content-capture-batch](verification/content-capture-batch.json) (PASS), [content-capture-ci](verification/content-capture-ci.json) (PASS), [content-capture-installed](verification/content-capture-installed.json) (PASS), [source10-directed-checkpoint-20261015](verification/source10-directed-checkpoint-20261015/index.json) (PASS_21_NEW_FEATURE_NAMES_ONLY), [combined-workspace-v10-20261015](verification/combined-workspace-v10-20261015/index.json) (PASS_COMBINED_WORKSPACE_V10_REAL_RENDERER_FMT_CLIPPY), [source10-response-registry-20261015](verification/source10-response-registry-20261015/index.json) (FAIL_ACTUAL_SOURCE10_RESOURCE_DIRECTORY_WORKFLOW), [source11-native-four-20261015](verification/source11-native-four-20261015/index.json) (PASS_FOUR_CURRENT_NATIVE_SCOPES_SEVEN_PENDING), [source11-installed-generator-20261015](verification/source11-installed-generator-20261015/index.json) (PASS_LOCAL_INSTALL_AND_SIX_GENERATOR_GROUPS), [source12-suite-20261016](verification/source12-suite-20261016/index.json) (PASS_COMBINED_WORKSPACE_V12_REAL_RENDERER_FMT_CLIPPY), [source12-metadata-native-20261016](verification/source12-metadata-native-20261016/index.json) (PASS_ACTUAL_SOURCE12_NGRAM_METADATA_CHANNELS_WORDCLOUD_API_CLI_UI_COLD).
+  Beweisregister: [content-analysis-core](../crates/core/src/content_analysis.rs) (PASS), [content-analysis-api-cli](verification/content-analysis-e2e.json) (PASS), [native-policy-ci](verification/native-policy-ci.json) (PASS), [native-policy-installed](verification/native-policy-installed.json) (PASS), [content-capture-core](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-native-chrome](../crates/core/tests/content_capture_fixtures.rs) (PASS), [content-capture-api-cli](verification/content-capture-e2e.json) (PASS), [ui-content-fixture](../web/verification/ui-content-fixture-results.json) (PASS), [ui-content-live](../web/verification/ui-content-live-results.json) (PASS), [content-capture-batch](verification/content-capture-batch.json) (PASS), [content-capture-ci](verification/content-capture-ci.json) (PASS), [content-capture-installed](verification/content-capture-installed.json) (PASS), [source10-directed-checkpoint-20261015](verification/source10-directed-checkpoint-20261015/index.json) (PASS_21_NEW_FEATURE_NAMES_ONLY), [combined-workspace-v10-20261015](verification/combined-workspace-v10-20261015/index.json) (PASS_COMBINED_WORKSPACE_V10_REAL_RENDERER_FMT_CLIPPY), [source10-response-registry-20261015](verification/source10-response-registry-20261015/index.json) (FAIL_ACTUAL_SOURCE10_RESOURCE_DIRECTORY_WORKFLOW), [source11-native-four-20261015](verification/source11-native-four-20261015/index.json) (PASS_FOUR_CURRENT_NATIVE_SCOPES_SEVEN_PENDING), [source11-installed-generator-20261015](verification/source11-installed-generator-20261015/index.json) (PASS_LOCAL_INSTALL_AND_SIX_GENERATOR_GROUPS), [source12-suite-20261016](verification/source12-suite-20261016/index.json) (PASS_COMBINED_WORKSPACE_V12_REAL_RENDERER_FMT_CLIPPY), [source12-metadata-native-20261016](verification/source12-metadata-native-20261016/index.json) (PASS_ACTUAL_SOURCE12_NGRAM_METADATA_CHANNELS_WORDCLOUD_API_CLI_UI_COLD), [accessibility-cold-browser-20261018](verification/accessibility-cold-browser-20261018/README.md) (PASS_LOCAL).
 
   <details>
   <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
@@ -2067,8 +2080,8 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
     "status": "partial",
     "acceptance_test": "Count overlapping one-, two- and three-word sequences with documented stopword and case policies.",
     "remaining_acceptance": [
-      "Add separately documented title, heading and inlink text channels; capture needed alt/anchor and unlinked text provenance rather than infer it from flattened saved text.",
-      "Add bounded word-cloud and specialized report interactions; verify large-corpus CPU/cancellation/performance and documented capture limits."
+      "Extend existing selected-body, title/description/H1-H6 channels with separately captured inlink, alt/anchor and unlinked text provenance; do not infer unavailable channels from flattened text.",
+      "Extend the existing bounded word cloud and specialist interactions; verify large-corpus CPU/cancellation/performance and documented capture limits."
     ],
     "implementation_evidence": [
       {
@@ -2149,6 +2162,13 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
         ],
         "proves": "Actual eight genuine native metadata-channel/wordcloud groups pass with Source12 candidate: raw/DOM identity, None vs complete capture,48channel/N combinations, duplicate/element/Unicode/unknown semantics, full210rowCSV, CLI equivalence, safe UI at1440/320, busy-state barrier and cold reopen; seven direct children naturally closed and reads cause zero website requests.",
         "limits": "This does not complete missing inlink/alt/unlinked-text channels, large-corpus/RSS guarantees, vendor parity or Source12 installation."
+      },
+      {
+        "verification_run_ids": [
+          "accessibility-cold-browser-20261018"
+        ],
+        "proves": "Current normal binary passes genuine saved-source and retained-title analysis over two actual native processes, exact105-unigram100+5 DOM,19 full CSV/eight page JSON downloads, complete ordered source inventory, nine CSV-header/four source negative controls and zero offline website requests. Document options are explicitly reapplied after reload.",
+        "limits": "Bounded independent acceptance only; manufacturer parity NOT_PROVEN. See receipt for separate native/browser persistence boundaries."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -2237,7 +2257,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 ### Links und Website-Architektur
 
-11 Einträge: 3 eigene Abnahmen erfüllt, 6 teilweise geprüft, 2 offen.
+11 Einträge: 3 eigene Abnahmen erfüllt, 7 teilweise geprüft, 1 offen.
 
 #### Teilweise vorhanden – Restarbeiten
 
@@ -2439,6 +2459,41 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   </details>
 
+- [ ] **Logische Segmente bilden** — Teilweise geprüft; `links.segments`, P2.
+
+  Orientierung: Geordnete Feld-/Regex-Segmente auf Zählungen, Issues, Diagramme und Exporte anwenden.
+
+  Beweisregister: [accessibility-cold-browser-20261018](verification/accessibility-cold-browser-20261018/README.md) (PASS_LOCAL).
+
+  <details>
+  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
+
+  ```json
+  {
+    "id": "links.segments",
+    "reference_name": "Configurable segmentation",
+    "status": "partial",
+    "acceptance_test": "Apply ordered field/regex segments and filter counts, issues, charts and exports by segment.",
+    "remaining_acceptance": [
+      "Integrate reusable segments with the main dashboard charts, filters and report/export selections; standalone saved-segment analysis is already implemented.",
+      "Verify all supported rule/operator combinations, broader imported and concurrent-mutation cases, and large-corpus budgets. Browser-local same-origin rule restoration does not establish server persistence or a fresh browser profile.",
+      "Improve320px segment table density and bound very tall wrapped rows while preserving access to full details; current no-overflow and export-reachability checks do not establish compact mobile readability."
+    ],
+    "implementation_evidence": [
+      {
+        "verification_run_ids": [
+          "accessibility-cold-browser-20261018"
+        ],
+        "proves": "Standalone ordered field/regex segmentation has counts, issues, paged memberships and complete JSON/CSV. Genuine109-page capture and seven warm/cold projections pass, with every CSV cell,28 downloads, same-origin browser-local rule restoration and zero offline refetches through both native process closes.",
+        "limits": "Bounded independent acceptance only; manufacturer parity NOT_PROVEN. See receipt for separate native/browser persistence boundaries."
+      }
+    ],
+    "parity_status": "NOT_PROVEN"
+  }
+  ```
+
+  </details>
+
 #### Noch offen
 
 - [ ] **Große Graphen räumlich anzeigen** — Offen; `links.graphs_3d`, P2.
@@ -2458,31 +2513,6 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
     "acceptance_test": "Display a bounded large graph and expose truncation/focus rather than silently omitting nodes.",
     "remaining_acceptance": [
       "Display a bounded large graph and expose truncation/focus rather than silently omitting nodes."
-    ],
-    "implementation_evidence": [],
-    "parity_status": "NOT_PROVEN"
-  }
-  ```
-
-  </details>
-
-- [ ] **Logische Segmente bilden** — Offen; `links.segments`, P2.
-
-  Orientierung: Geordnete Feld-/Regex-Segmente auf Zählungen, Issues, Diagramme und Exporte anwenden.
-
-  Beweisregister: keine zugeordnete ausgeführte Prüfung.
-
-  <details>
-  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
-
-  ```json
-  {
-    "id": "links.segments",
-    "reference_name": "Configurable segmentation",
-    "status": "planned",
-    "acceptance_test": "Apply ordered field/regex segments and filter counts, issues, charts and exports by segment.",
-    "remaining_acceptance": [
-      "Apply ordered field/regex segments and filter counts, issues, charts and exports by segment."
     ],
     "implementation_evidence": [],
     "parity_status": "NOT_PROVEN"
@@ -3557,7 +3587,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 ### Validierung und Qualitätsprüfungen
 
-10 Einträge: 2 eigene Abnahmen erfüllt, 4 teilweise geprüft, 4 offen.
+10 Einträge: 3 eigene Abnahmen erfüllt, 3 teilweise geprüft, 4 offen.
 
 #### Teilweise vorhanden – Restarbeiten
 
@@ -3586,40 +3616,6 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "analysis"
         ],
         "proves": "JSON-LD parsed blocks/error count and recursively observed @type facts are tested; context type-coercion definitions are excluded from content type facts."
-      }
-    ],
-    "parity_status": "NOT_PROVEN"
-  }
-  ```
-
-  </details>
-
-- [ ] **Grenzen automatisierter Accessibility zeigen** — Teilweise geprüft; `quality.accessibility_limit`, P3.
-
-  Orientierung: Needs-review und unvollständige Abdeckung durch UI und Spezialberichte erhalten.
-
-  Beweisregister: [renderer](../renderer/tests/worker.test.mjs) (PASS), [core-browser](../crates/core/tests/crawl_fixtures.rs) (PASS), [ui-renderer](../web/verification/ui-renderer-live-results.json) (PASS).
-
-  <details>
-  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
-
-  ```json
-  {
-    "id": "quality.accessibility_limit",
-    "reference_name": "Manual accessibility boundaries",
-    "status": "partial",
-    "acceptance_test": "Display automated-only coverage and incomplete/needs-review findings in report exports.",
-    "remaining_acceptance": [
-      "Display/export incomplete needs-review details and automated coverage throughout UI/specialist reports, with end-to-end assertions."
-    ],
-    "implementation_evidence": [
-      {
-        "verification_run_ids": [
-          "renderer",
-          "core-browser",
-          "ui-renderer"
-        ],
-        "proves": "Worker accessibility JSON marks automated_only:true and keeps incomplete results; errors use null findings plus error instead of an empty pass report."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -3822,6 +3818,45 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "ui-renderer"
         ],
         "proves": "Pinned axe-core4.14.0 runs on owned failing rendered HTML. Tests assert button-name/image-alt plus engine version, impact, node HTML/target and WCAG tags; the live Rust/browser test retains the accessibility JSON."
+      }
+    ],
+    "parity_status": "NOT_PROVEN"
+  }
+  ```
+
+  </details>
+
+- [x] **Grenzen automatisierter Accessibility zeigen** — Eigene Abnahme erfüllt; `quality.accessibility_limit`, P3.
+
+  Orientierung: Needs-review und unvollständige Abdeckung durch UI und Spezialberichte erhalten.
+
+  Beweisregister: [renderer](../renderer/tests/worker.test.mjs) (PASS), [core-browser](../crates/core/tests/crawl_fixtures.rs) (PASS), [ui-renderer](../web/verification/ui-renderer-live-results.json) (PASS), [accessibility-cold-browser-20261018](verification/accessibility-cold-browser-20261018/README.md) (PASS_LOCAL).
+
+  <details>
+  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
+
+  ```json
+  {
+    "id": "quality.accessibility_limit",
+    "reference_name": "Manual accessibility boundaries",
+    "status": "implemented",
+    "acceptance_test": "Display automated-only coverage and incomplete/needs-review findings in report exports.",
+    "remaining_acceptance": [],
+    "implementation_evidence": [
+      {
+        "verification_run_ids": [
+          "renderer",
+          "core-browser",
+          "ui-renderer"
+        ],
+        "proves": "Worker accessibility JSON marks automated_only:true and keeps incomplete results; errors use null findings plus error instead of an empty pass report."
+      },
+      {
+        "verification_run_ids": [
+          "accessibility-cold-browser-20261018"
+        ],
+        "proves": "Actual pinned axe captures preserve genuine incomplete/needs-review, observed zero and engine failures through the dashboard/inspector, complete generation-bound native CSV and process-cold reopening. Exact50+8 DOM and full node/check/rawJSON exports are checked; imported controls remain unknown, automated-only scope is explicit.",
+        "limits": "Bounded independent acceptance only; manufacturer parity NOT_PROVEN. See receipt for separate native/browser persistence boundaries."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -6167,4 +6202,4 @@ Diese unveränderten Einträge dokumentieren den damaligen Stand. Aktuelle Resta
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `2fef7f7e2f2a2b443e11b3391a03f09aae3a251d8606cdae70079a98938c0f5a`. Letzter im Katalog erfasster Beweisstand: `2026-10-18T11:31:49.576437+00:00`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `d25ebf598059e93689f74bfb0b2ec9364484884fcbe3e82d9ebc89ff65479c40`. Letzter im Katalog erfasster Beweisstand: `2026-10-18T12:19:19.632Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

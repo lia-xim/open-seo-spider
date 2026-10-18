@@ -1,0 +1,181 @@
+{
+  "kind": "bounded_accessibility_and_cold_specialist_acceptance",
+  "recorded_at": "2026-10-18T12:19:19.632Z",
+  "result": "PASS_LOCAL",
+  "base_commit": "081bf33c040184979f897a93a25fc217c268afc1",
+  "normal_binary_sha256": "f493874eff33d2dde33ba5d9634599fdf63914dbbfd57e64bd9162b6d9dc41de",
+  "gates": {
+    "ordinary_workspace_rust": {
+      "passed": 1753,
+      "failed": 0,
+      "ignored": 5
+    },
+    "format": "PASS",
+    "clippy_all_targets_all_features_warnings_denied": "PASS",
+    "accessibility_native_tests": 4,
+    "post_clippy_test_fixture_only_rerun": {
+      "passed": 4,
+      "failed": 0,
+      "scope": "Three equivalent test-only initializers; no production edit"
+    },
+    "accessibility_frontend_closure_VM_tests": 4,
+    "accessibility_ordered_DOM_controls": {
+      "positive_slices": 2,
+      "rejected": 5
+    },
+    "aggregate_UI": {
+      "registered": 35,
+      "fixture": 9,
+      "native": 26,
+      "complete": true,
+      "shutdown": {
+        "code": 0,
+        "signal": null
+      },
+      "tracked_sources_unchanged": true,
+      "binary_unchanged": true
+    },
+    "updated_cold_assertion_suites": {
+      "count": 2,
+      "complete": true,
+      "shutdown": {
+        "code": 0,
+        "signal": null
+      },
+      "tracked_sources_unchanged": true,
+      "binary_unchanged": true
+    }
+  },
+  "accessibility": {
+    "workflow_groups": 5,
+    "native_pages": 59,
+    "profile_visible_pages": 58,
+    "ordered_DOM_rows": [
+      50,
+      8
+    ],
+    "native_shutdowns": [
+      {
+        "phase": "first",
+        "code": 0,
+        "signal": null
+      },
+      {
+        "phase": "cold",
+        "code": 0,
+        "signal": null
+      }
+    ],
+    "read_requests_after_capture": 0,
+    "csv_sha256": "f1bca727682e7f6c274338f30496d78e4082952b7ca32d31172ff2cfaea39449",
+    "physical_CSV_budget": "64MiB exact success; +1 byte atomic413",
+    "selected_page_budget": "4MiB pre-copy; actual overflow and injected exact/+1 checked; physical exact4MiB success not separately proven"
+  },
+  "ngrams": {
+    "workflow_groups": 5,
+    "actual_crawls": 3,
+    "website_requests": 7,
+    "exports": 27,
+    "read_only_oracles": 54,
+    "csv_header_negative_controls": 9,
+    "source_inventory_negative_controls": 4,
+    "offline_product_requests": 0,
+    "witness_controls": 2,
+    "native_shutdowns": [
+      {
+        "code": 0,
+        "signal": null
+      },
+      {
+        "code": 0,
+        "signal": null
+      }
+    ],
+    "options_scope": "No n-gram localStorage/server-option persistence claimed. Same browser document retains form values across same-origin native restart; reload restores defaults and test explicitly reapplies options."
+  },
+  "segments": {
+    "workflow_groups": 3,
+    "website_capture_requests": 109,
+    "exports": 28,
+    "read_only_oracles": 47,
+    "csv_cell_negative_controls": 7,
+    "offline_product_requests": 0,
+    "witness_controls": 2,
+    "native_shutdowns": [
+      {
+        "code": 0,
+        "signal": null
+      },
+      {
+        "code": 0,
+        "signal": null
+      }
+    ],
+    "rules_scope": "Browser-local rules, same browser context and owned origin; separate native saved crawl data"
+  },
+  "limits": [
+    "No manufacturer feature parity or manual/WCAG conformance proof",
+    "No installed application, user store, billing, release or production provider change",
+    "Public commit CI remains separate from local acceptance",
+    "All35 UI run passed before two test-only assertion upgrades; the final two upgraded suites passed separately on the same binary; three native test-only initializer changes then pass native4 and strictClippy separately",
+    "No fresh-browser/server rule persistence, crash recovery, every operator or large-corpus guarantee",
+    "The four Chromium fixtures and cfg(test) provider host remain ordinary-test ignores; they are separate gates, not counted as executed by cargo test"
+  ],
+  "evidence": [
+    {
+      "path": "artifacts/accessibility-all35-20261018/accessibility-review/accessibility-live.json",
+      "bytes": 3276,
+      "sha256": "13325bf4f562eef742a5410ef5aa907f6501367fc7379329cfdbc6899154eb8f"
+    },
+    {
+      "path": "artifacts/cold-final-focused-20261018/ngrams-cold-restart/ngrams-cold-1792325448588/ngrams-cold-live.json",
+      "bytes": 53932,
+      "sha256": "9ca61f3cc3e5e20573af73e40a380f0df4765cd8bbb0289f0d48fc3415e6e44f"
+    },
+    {
+      "path": "artifacts/cold-final-focused-20261018/segments-cold-restart/segments-cold-1792325460253-878e0f0f/segments-cold-live.json",
+      "bytes": 32108,
+      "sha256": "57ef58eb74d7314f750014651aa4a6a20c86f427436e20986b4e3ad5fbedbd73"
+    },
+    {
+      "path": "artifacts/accessibility-all35-20261018/proof.json",
+      "bytes": 7793,
+      "sha256": "2c5b1a4826ee72f18bd28aa3ccd42fa60fae6039cda3901ad3df8a894aba97bb"
+    },
+    {
+      "path": "artifacts/cold-final-focused-20261018/proof.json",
+      "bytes": 1084,
+      "sha256": "5817b48dd55fd88b8907cf2c59173b13c701b15ba6fe843a894d139b9ef76836"
+    },
+    {
+      "path": "artifacts/accessibility-workspace-20261018.log",
+      "bytes": 202346,
+      "sha256": "f2f4092ac1fde2b72be5a6fb338eb2686f7e1f0b36717c0601cf6cae8b5fa917"
+    },
+    {
+      "path": "artifacts/accessibility-clippy-20261018.log",
+      "bytes": 177,
+      "sha256": "17a5afcdf2be5a811999e217214567900907659894f64beaee8418f09fe6735a"
+    },
+    {
+      "path": "artifacts/accessibility-native-tests-20261018.log",
+      "bytes": 923,
+      "sha256": "48479b7a53fd68e0f6fe546b339e998a74a303aee7743f10796ef8ed9c9fb547"
+    },
+    {
+      "path": "artifacts/accessibility-native-final-tests-20261018.log",
+      "bytes": 923,
+      "sha256": "4b8ba5d079f9d0ca0e5809f3a1d17bacbff70781b4c189aa7efc36a57546e168"
+    },
+    {
+      "path": "artifacts/accessibility-normal-build-20261018.log",
+      "bytes": 177,
+      "sha256": "32a3908a60b22b5f9be1c0e5b654b97121820cd6a08ba5fb8104295b4ca579cf"
+    }
+  ],
+  "environment": {
+    "platform": "win32",
+    "node": "v24.15.0",
+    "scope": "Local Windows native acceptance; Linux/public CI remains separate."
+  }
+}

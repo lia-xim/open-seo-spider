@@ -44,7 +44,7 @@ credential handling are unchanged. No job or saved result is seeded. The child
 processes cannot inherit a PageSpeed key; only isolated loopback ports are used.
 `SPIDER_ENRICHMENT_ARTIFACT_DIR` may select a **new** artifact directory; reuse is
 refused. Default output is `artifacts/enrichment-success-*`. This command runs
-separately from the 32-suite UI runner and is not an additional registered suite.
+separately from the 35-suite UI runner and is not an additional registered suite.
 
 For a focused investigation:
 
@@ -70,6 +70,7 @@ explicit executions separately.
 | Saved comparison errors and optional bundle controls | comparison-controls | Real browser with explicit API fixtures |
 | All nine redesigned tool-menu links and return navigation, desktop/320px | tool-navigation | Real browser and Rust HTML routes; navigation only |
 | JavaScript crawl, screenshots, accessibility and DOM capture | rendered-crawl, dom-capture | Browser → Rust → owned renderer → owned HTTP site |
+| Saved accessibility review, unknown/zero/needs-review states, inspector and full CSV | accessibility-review | Two normal native processes → pinned axe/Chromium on owned HTML; 59 captures, 58 visible pages, declared import controls separate |
 | Resource and cookie observations | resources | Browser → Rust → owned fixture |
 | Offline robots and SERP editing/exports | robots, serp | Browser → Rust; website-request witnesses |
 | URL-list import and crawl | list-import | Browser → Rust → owned fixture |
@@ -83,6 +84,7 @@ explicit executions separately.
 | Directory hierarchy, raw/reported views and unknown/imported data | directory-tree | Browser → native saved report; exact rendered cards, 100+5 paging, full CSV and stale tokens |
 | Segment builder, persisted rules, assignments and issue views | saved-segments | Browser → native saved text; exact membership/cells, 100+5 paging, JSON/CSV and stale rules/views |
 | N-gram totals, occurrences, word cloud and text/metadata channels | saved-ngrams | Browser → native corpus; exact rendered rows, complete CSV, missing sources and real stale-generation refusal |
+| N-gram and segment analysis after native restart | ngrams-cold-restart, segments-cold-restart | Two owned native processes per suite; exact saved sources and complete exports, active HTTP410 witness through both closes; browser state boundaries described below |
 | Resource/CSS failure occurrences and unavailable history | resource-sources | Browser → native SQLite ledger; 106 occurrences, 100+6 paging, snapshot-bound CSV and page JSON |
 | API enrichment preview, acknowledgement, invalidation and error messages | api-enrichment | Browser → ordinary native API; no successful provider calls or persisted remote metrics claimed |
 | API enrichment start/poll, exact metrics and unknowns, 100+8 rows, refresh, cancellation, full export and cold reopen | separate enrichment coordinator | Browser → full native test router/service → owned HTTP provider → saved data; production Google transport and successful enrichment CLI remain unproven |
@@ -94,9 +96,9 @@ also separate; they must not be described as browser E2E tests.
 
 ## Remaining important-path work
 
-The 32 registered suites provide bounded functional cases for the specialist
+The 35 registered suites provide bounded functional cases for the specialist
 tools above; a passing case is not complete feature acceptance. Cold native
-restart across the remaining tools, all rule/operator combinations, broader
+restart across other tools, all rule/operator combinations, broader
 malformed imported archives and concurrent mutations need further coverage.
 The controlled positive API-enrichment path is now proved by the
 [2026-10-18 receipt](verification/api-enrichment-browser-20261018/README.md):
@@ -122,13 +124,32 @@ tests with zero failures/five deliberate ignores, four separately executed
 Chromium fixtures, all 32 UI suites (nine fixture/23 native; natural app exit 0),
 strict Clippy and the normal build. The 28 pure bundle controls, 11 native bundle
 groups and 12 official SDK checks pass on the normal executable. See the
-enrichment receipt for exact source and executable bindings. Process-cold native
-crawl/source reopen for segments/n-grams, separate same-origin restoration of
-browser-local segment rules, and accessibility journeys preserving incomplete
-and needs-review states still need their own acceptance. Server rule persistence
-is not claimed.
+enrichment receipt for exact source and executable bindings. Those 32-suite
+results are historical; the three new suites have separate acceptance.
 
-The latest public run on `01ba979` is
+The segment restart test retains one browser context and the same owned app
+origin across two actual native processes. Browser-local ordered rules are
+restored separately from native saved crawl/source data. It does not establish
+server persistence of rules, a fresh browser profile, crash recovery or every
+operator. The n-gram tool has no persisted analysis options: the test reapplies
+them after document reload and checks original saved captures and metadata.
+Both suites keep the original website active as an HTTP410 witness from before
+the first shutdown through the second shutdown and browser close. Nonce-tagged
+positive probes are separate from the zero product requests.
+
+The accessibility journey runs the pinned local axe engine on owned HTML,
+including a genuine incomplete color-contrast result and an actual engine
+failure. Missing, failed and malformed observations retain unknown counters;
+empty valid findings mean observed zero. Complete CSV has per-page summaries,
+every rule/node/check and exact saved observation JSON; a filtered or paged
+table never reduces that export. A 4 MiB selected-page JSON budget and 64 MiB full
+CSV budget refuse oversized output atomically. Native tests separately exercise
+physical64MiB exact/+1-byte responses; exact4MiB success is not separately
+proved. Imported malformed/false-scope controls are labelled separately from
+native observations. Automated-only results do not establish manual review or
+WCAG conformity.
+
+The historical public run on `01ba979` is
 [39120704481](https://github.com/lia-xim/open-seo-spider/actions/runs/39120704481).
 It remains a historical FAIL: two Windows timeouts, an obsolete Linux inventory
 expectation and an unavailable directory debugger response body despite
@@ -137,4 +158,19 @@ native POST artifact oracle together with browser metadata and exact DOM checks.
 Both previously failing Windows tests pass locally and CI concurrency was
 aligned, but the exact historical five-second drain-timeout cause remains
 NOT_PROVEN. The next public CI run is pending; local green does not prove that
-public Windows is fixed.
+public Windows is fixed. Run
+[39123847418 on081bf33](https://github.com/lia-xim/open-seo-spider/actions/runs/39123847418)
+subsequently passed Linux, container, the controlled positive provider gate and
+directory E2E, then failed at an unavailable n-gram CDP response body. Its
+Windows result remains separately tracked. Warm n-gram and segment tests now
+use unconditional read-only native response oracles with exact browser metadata,
+DOM and download comparisons; mutation requests are never replayed. Fresh CI
+is required for the current accessibility and cold-analysis changes.
+
+The current accessibility/cold-analysis local receipt records 1,753 ordinary
+Rust passes, zero failures/five deliberate ignores, strict Clippy and the normal
+build. All 35 UI suites passed together; the two cold assertion drivers were
+then strengthened and passed again separately on the same executable. See
+[the phase-bound receipt](verification/accessibility-cold-browser-20261018/README.md).
+These local gates do not establish public CI, release/installation or full
+manufacturer parity.

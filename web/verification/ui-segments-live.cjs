@@ -8,7 +8,7 @@ const artifactPath = require('./artifact-path.cjs');
 
 const app = process.env.SPIDER_APP_URL;
 assert(app && new URL(app).hostname === '127.0.0.1' && !['8787', '8790'].includes(new URL(app).port), 'Use an isolated owned native app');
-const checks = [], errors = [];
+const checks = [], errors = [], readEvidence = [], downloadEvidence = [];
 let websiteHits = 0;
 const documents = {
   '/index': {title: 'Owned home'},
@@ -28,8 +28,9 @@ const website = http.createServer((request, response) => {
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 async function json(path, body) {
   const response = await fetch(app + path, {method: body === undefined ? 'GET' : 'POST', headers: body === undefined ? {} : {'content-type': 'application/json'}, body: body === undefined ? undefined : JSON.stringify(body)});
-  assert.equal(response.status, 200, await response.clone().text());
-  return response.json();
+  const bytes = Buffer.from(await response.arrayBuffer());
+  assert.equal(response.status, 200, bytes.toString('utf8'));
+  return JSON.parse(bytes);
 }
 async function until(work, label) {
   for (let i = 0; i < 240; i++) {
@@ -55,12 +56,30 @@ async function renderedRows(page, value) {
   assert.deepEqual(await page.locator('#rows tr').evaluateAll(rows => rows.map(row => [...row.cells].map(cell => cell.textContent))), expected,
     'Visible native result cells must match every field, row and ordering of the current page');
 }
+async function nativeRead(response, expectedURL) {
+  const request = response.request(), url = new URL(response.url()), body = request.postDataBuffer();
+  assert.equal(response.url(), expectedURL); assert.equal(url.origin, new URL(app).origin);
+  assert.match(url.pathname, /^\/api\/crawls\/[a-f0-9-]+\/segments(?:\.(?:json|csv))?$/i);
+  assert.equal(url.search, ''); assert.equal(request.method(), 'POST'); assert(body, 'Exact browser POST bytes required');
+  // Segment preview/full exports are pure saved-data reads. Always compare the
+  // exact raw POST with the native oracle; never retry/replay a crawl mutation.
+  const oracle = await fetch(response.url(), {method: 'POST', headers: {'content-type': request.headers()['content-type']}, body, cache: 'no-store', redirect: 'error'});
+  const bytes = Buffer.from(await oracle.arrayBuffer()), headers = await response.allHeaders(), oracleHeaders = Object.fromEntries(oracle.headers);
+  assert.equal(response.status(), oracle.status, bytes.toString('utf8'));
+  for (const name of ['content-type', 'content-length', 'x-content-sha256', 'cache-control']) assert.equal(headers[name] ?? null, oracleHeaders[name] ?? null, name);
+  if (oracle.status === 200) {
+    assert.equal(headers['content-type'], url.pathname.endsWith('.csv') ? 'text/csv; charset=utf-8' : 'application/json; charset=utf-8');
+    assert.equal(Number(headers['content-length']), bytes.length); assert.equal(headers['x-content-sha256'], sha(bytes)); assert.equal(headers['cache-control'], 'no-store');
+  }
+  readEvidence.push({url: response.url(), method: 'POST', request_sha256: sha(body), status: oracle.status, bytes: bytes.length, sha256: sha(bytes), body_source: 'unconditional_exact_read_only_native_post'});
+  return {bytes, headers};
+}
 async function preview(page) {
-  const responsePromise = page.waitForResponse(response => response.url().endsWith('/segments') && response.request().method() === 'POST');
+  const expectedURL = `${app}/api/crawls/${await page.inputValue('#job')}/segments`;
+  const responsePromise = page.waitForResponse(response => response.url() === expectedURL && response.request().method() === 'POST');
   await page.getByRole('button', {name: 'Auswerten', exact: true}).click();
   const response = await responsePromise;
-  assert.equal(response.status(), 200, await response.text());
-  const bytes = await response.body();
+  const {bytes} = await nativeRead(response, expectedURL); assert.equal(response.status(), 200, bytes.toString('utf8'));
   assert.equal(sha(bytes), response.headers()['x-content-sha256']);
   const value = JSON.parse(bytes);
   await page.waitForFunction(() => !document.getElementById('result').hidden);
@@ -75,14 +94,17 @@ async function condition(fieldset, index, field, operator, value) {
   await row.getByLabel('Wert', {exact: true}).fill(value);
 }
 async function download(page, button, suffix) {
-  const responsePromise = page.waitForResponse(response => response.url().endsWith(suffix) && response.request().method() === 'POST');
+  assert(['/segments.json', '/segments.csv'].includes(suffix));
+  const expectedURL = `${app}/api/crawls/${await page.inputValue('#job')}${suffix}`;
+  const responsePromise = page.waitForResponse(response => response.url() === expectedURL && response.request().method() === 'POST');
   const downloadPromise = page.waitForEvent('download');
   await page.click(button);
   const response = await responsePromise;
-  assert.equal(response.status(), 200, await response.text());
-  const bytes = fs.readFileSync(await (await downloadPromise).path());
+  const oracle = await nativeRead(response, expectedURL); assert.equal(response.status(), 200, oracle.bytes.toString('utf8'));
+  const item = await downloadPromise; assert.equal(await item.failure(), null); const bytes = fs.readFileSync(await item.path());
   assert.equal(sha(bytes), response.headers()['x-content-sha256']);
-  assert.deepEqual(bytes, await response.body());
+  assert.deepEqual(bytes, oracle.bytes, 'Actual browser attachment must match the exact native read');
+  downloadEvidence.push({url: expectedURL, bytes: bytes.length, sha256: sha(bytes)});
   return bytes;
 }
 // CSV parsing checks the exported records and JSON cells, including quoted commas/newlines.
@@ -102,8 +124,9 @@ function parseCsv(text) {
 }
 async function refused(id, suffix, request, status) {
   const response = await fetch(`${app}/api/crawls/${id}/${suffix}`, {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(request)});
-  assert.equal(response.status, status, await response.clone().text());
-  return response.json();
+  const bytes = Buffer.from(await response.arrayBuffer());
+  assert.equal(response.status, status, bytes.toString('utf8'));
+  return JSON.parse(bytes);
 }
 
 (async () => {
@@ -220,9 +243,9 @@ async function refused(id, suffix, request, status) {
 
     segment = page.locator('#definitions fieldset').nth(0);
     await condition(segment, 0, 'requested_url', 'regex', '(?=unsupported-lookaround)');
-    const invalidResponse = page.waitForResponse(response => response.url().endsWith('/segments') && response.request().method() === 'POST');
+    const invalidURL = `${app}/api/crawls/${start.id}/segments`, invalidResponse = page.waitForResponse(response => response.url() === invalidURL && response.request().method() === 'POST');
     await page.getByRole('button', {name: 'Auswerten', exact: true}).click();
-    assert.equal((await invalidResponse).status(), 400);
+    const rejected = await invalidResponse; assert.equal(rejected.status(), 400); await nativeRead(rejected, invalidURL);
     await until(() => page.locator('#result').isHidden(), 'invalid Rust regex hides previous result');
     await condition(segment, 0, 'requested_url', 'regex', '/products/(red|blue)$');
     await preview(page);
@@ -251,11 +274,11 @@ async function refused(id, suffix, request, status) {
     assert.equal(batchFirst.value.summary.selected_pages, 105);
     assert.equal(batchFirst.value.rows.length, 100);
     assert.equal(batchFirst.value.next.offset, 100);
-    const continuationResponse = page.waitForResponse(response => response.url().endsWith('/segments') && response.request().method() === 'POST');
+    const continuationURL = `${app}/api/crawls/${batch.id}/segments`, continuationResponse = page.waitForResponse(response => response.url() === continuationURL && response.request().method() === 'POST');
     await page.click('#next');
     const continuation = await continuationResponse;
-    assert.equal(continuation.status(), 200, await continuation.text());
-    const batchLast = await continuation.json();
+    const continued = await nativeRead(continuation, continuationURL); assert.equal(continuation.status(), 200, continued.bytes.toString('utf8'));
+    const batchLast = JSON.parse(continued.bytes);
     await renderedRows(page, batchLast);
     assert.equal(batchLast.rows.length, 5);
     assert.equal(batchLast.context.snapshot_token, batchFirst.value.context.snapshot_token);
@@ -270,12 +293,12 @@ async function refused(id, suffix, request, status) {
     assert.equal(websiteHits, batchCapturedHits, 'Segment continuation and full export must never refetch the batch documents');
     checks.push('105 real saved pages span 100+5 snapshot-bound browser pages without gaps/duplicates; verified full CSV exports all 105 from the last preview');
     assert.deepEqual(errors, []);
-    fs.writeFileSync(artifactPath('segments-live.json'), JSON.stringify({result: 'PASS', crawl_id: start.id, pagination_crawl_id: batch.id, checks, captured_pages: batchCapturedHits, website_refetches: websiteHits - batchCapturedHits, typed_report_sha256: initialHash, errors, scope: 'Actual redesigned browser -> native Rust saved crawls -> deterministic predicates -> preview, snapshot-bound 100+5 pagination and integrity-verified full exports. Browser reload persistence covers definitions only; no cold native process restart, imported missing status or database attestation is claimed.'}, null, 2) + '\n');
+    fs.writeFileSync(artifactPath('segments-live.json'), JSON.stringify({result: 'PASS', crawl_id: start.id, pagination_crawl_id: batch.id, checks, captured_pages: batchCapturedHits, website_refetches: websiteHits - batchCapturedHits, typed_report_sha256: initialHash, errors, read_only_native_oracles: readEvidence, browser_downloads: downloadEvidence, scope: 'Actual redesigned browser -> native Rust saved crawls -> deterministic predicates -> preview, snapshot-bound 100+5 pagination and integrity-verified full exports. Browser reload persistence covers definitions only; no cold native process restart, imported missing status or database attestation is claimed.'}, null, 2) + '\n');
     console.log(`${checks.length} native saved-segments workflows passed`);
   } catch (error) {
     await page.screenshot({path: artifactPath('segments-failure.png'), fullPage: true});
     const layout = await page.evaluate(() => ({viewport: innerWidth, document: document.documentElement.scrollWidth, overflow: [...document.querySelectorAll('body *')].filter(element => element.getBoundingClientRect().right > innerWidth + 1).slice(0, 25).map(element => ({tag: element.tagName, id: element.id, width: element.getBoundingClientRect().width, text: element.textContent.slice(0, 90)}))}));
-    fs.writeFileSync(artifactPath('segments-failure.json'), JSON.stringify({error: error.stack, checks, layout}, null, 2) + '\n');
+    fs.writeFileSync(artifactPath('segments-failure.json'), JSON.stringify({error: error.stack, checks, layout, read_only_native_oracles: readEvidence, browser_downloads: downloadEvidence}, null, 2) + '\n');
     throw error;
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; }).finally(async () => {
