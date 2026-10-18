@@ -1,0 +1,1771 @@
+{
+  "result": "PASS_LOCAL_PROFILE_AND39_DISTINCT_SUITES_AGGREGATE_FAILURE_RETAINED",
+  "recorded_at": "2026-10-18T17:46:52.020Z",
+  "normal_binary_sha256": "f4b8ede57fc8dbdcb7a9c20a8c71ccf17a474c089c91bdbc52ba97e4e41eab44",
+  "full_vendor_parity": "NOT_PROVEN",
+  "storage_config_feature_status": "partial",
+  "evidence_scope": "Current R5 ordinary Windows feature acceptance and39 distinct successful UI suites across three invocations; the attempted whole39 invocation failed and remains failed. All named coordinator handles are terminal; aggregate regression stability and full manufacturer parity are not proven.",
+  "source": {
+    "r4_prebuild": {
+      "path": "artifacts/config-profile-r4-20261018-inputs.json",
+      "bytes": 99205,
+      "sha256": "f8f04b0377648af63f01966f1c8837bf6faad6d986b2d66c5a6b62dc560cf7b0",
+      "input_count": 562,
+      "parent_commit": "6398077e266083ea4ceb5ed8a4bc29c0dbdcb6ba"
+    },
+    "r4_build": {
+      "path": "artifacts/config-profile-r4-20261018-binary.json",
+      "bytes": 1078,
+      "sha256": "62ebd8cfe751ccac25d98857a7ac04d14b5959bf3f676f07dc8b757457bea5f1"
+    },
+    "r4_gates": {
+      "path": "artifacts/config-profile-r4-20261018-gates.json",
+      "bytes": 2260,
+      "sha256": "fcfe089162158a8bd8698620ebd73df7841f6f4d8ee15465c3b0301c201ef396"
+    },
+    "r3_prebuild": {
+      "path": "artifacts/config-profile-r3-20261018-inputs.json",
+      "bytes": 99205,
+      "sha256": "04d6de32e3f11fa7f8baf68902b3c2419914f76ac5b86d151c48fe1113236c78"
+    },
+    "r3_gates": {
+      "path": "artifacts/config-profile-r3-20261018-gates.json",
+      "bytes": 3116,
+      "sha256": "a945d7fe34987a1b074500f7f2e8ba449d52acbabdc2c53d62ebbd5096849b9a"
+    },
+    "r5_prebuild": {
+      "path": "artifacts/config-profile-r5-20261018-inputs.json",
+      "bytes": 99542,
+      "sha256": "f9e71ba364a2d8f9b436ed8a014f1767f8ec8d1966bf5b1e05c74d5dd7b0090d",
+      "parent_commit": "6398077e266083ea4ceb5ed8a4bc29c0dbdcb6ba",
+      "frozen_acceptance_input_count": 564
+    },
+    "r5_build": {
+      "path": "artifacts/config-profile-r5-20261018-binary.json",
+      "bytes": 2368,
+      "sha256": "78d0102f1dc566b4512666f44955f1e2cc13115c668deeb6d97495ab5ca690fa"
+    },
+    "proof_scope": "564 explicitly frozen prebuild acceptance source/harness inputs, not an exhaustive compiler dependency closure. The post-run include and Git byte-preservation supplements below are separately qualified.",
+    "frozen_acceptance_input_count": 564,
+    "r5_main_gates": {
+      "path": "artifacts/config-profile-r5-20261018-gates.json",
+      "bytes": 6676,
+      "sha256": "26c8435241f3904ace384ba81f8e7a575423f11655e6f9c08a5a8078053dfabd",
+      "terminal_gates": 11,
+      "all_exit_zero": true
+    },
+    "final_qualified_binding": {
+      "path": "docs/verification/configuration-profiles-20261018/source-gates.json",
+      "bytes": 123291,
+      "sha256": "6e15dcac65099401117b9c25213992c63c59a52beadc474b6849e0adda7f3c7b",
+      "frozen_acceptance_input_count": 564,
+      "frozen_acceptance_input_raw_index_blobs_match": true,
+      "passed_gate_count": 15,
+      "retained_failed_aggregate_gate_count": 1,
+      "scope": "564 explicitly frozen source/harness inputs were unchanged through acceptance and match staged raw Git blobs. Not an exhaustive compiler dependency closure. Two literal test-only documents outside that manifest have qualified supplemental post-run embedding evidence. Each browser invocation independently fenced all tracked files; Git byte-preservation metadata was added after aggregate and seven-suite runs, before the isolated canonical density pass. Windows local acceptance; fresh exact-commit public CI is separate."
+    }
+  },
+  "normal_build": {
+    "status": "PASS",
+    "code": 0,
+    "binary_bytes": 88864768,
+    "inputs_unchanged": true,
+    "prebuild_manifest_sha256": "f9e71ba364a2d8f9b436ed8a014f1767f8ec8d1966bf5b1e05c74d5dd7b0090d",
+    "log": {
+      "path": "artifacts/config-profile-r5-20261018-normal-build.log",
+      "bytes": 175,
+      "sha256": "b40e145633b37f59af1bbf79f7d633da873dcaf7a6950f7a22e8569d0f16bfc8"
+    },
+    "frozen_acceptance_input_count": 564
+  },
+  "focused_browser": {
+    "path": "artifacts/cp-live-r4/ui-config-profiles-live.json",
+    "bytes": 59749,
+    "sha256": "accb81f8bf5c3c838243f9dac182c56e3e4eeda9da52800b1ae903be57dad1ba",
+    "status": "PASS",
+    "duration_ms": 8314,
+    "driver": {
+      "path": "web/verification/ui-config-profiles-live.cjs",
+      "sha256": "89218bae5d9a1cf948532199b8df3fe9c584cb57bbce53d26d214bb5b75bf6a0"
+    },
+    "chrome_sha256": "36a30716f0994b377f1ce6b47cfe35399b9719e31d597fe0ea0d8f3b62aed532",
+    "check_group_count": 10,
+    "checks": [
+      "Actual picker import, native sanitizer, full profile export and dialog save preserve65/301/native-only fields, exact non-MiB bytes and disabled profiles without effects",
+      "Three corrupt or unsupported stored wrappers persist visibly and block button/programmatic Start without effects; import alone cannot clear the guard, explicit valid Save recovers",
+      "Opening Settings aborts a real pending startup restore without permitting legacy Start; explicit current-profile Save recovers and old native reply cannot poison active profile or storage",
+      "Malformed, duplicate, unknown, positional, credential/path/private-key, regex/selector and UTF8 files leave draft/storage/jobs/files/network unchanged",
+      "Untouched native u64 9007199254740993 survives unrelated control edit, Save, page reload and exact real profile attachment without JS rounding",
+      "Renderer-only native response byte limit survives disabled flags and roundtrip; no worker/provider is contacted",
+      "Actual picker arrayBuffer and actual native-response delay controls reject superseded work without replacing current draft or unlocking stale state",
+      "Explicit complete case-sensitive volatile header bindings start one genuine multi-seed crawl; every native option/provenance persists and traversal/discovery remain false",
+      "Natural replacement target → missing-header refusal → reentry and Save retains the target, creates a new one-page job with only run-input patches, preserves native options and original job bytes",
+      "Same owned origin/store cold native process returns byte-identical report and sanitized profile; browser-local options persist, secret values do not,320px works and both EOF0 closes retain410 witness"
+    ],
+    "negative_control_count": 26,
+    "negative_controls": [
+      {
+        "name": "malformed-stored-json",
+        "source": "actual_owned_browser_storage_reload"
+      },
+      {
+        "name": "stored-profile-text-wrong-type",
+        "source": "actual_owned_browser_storage_reload"
+      },
+      {
+        "name": "unsupported-stored-wrapper-version",
+        "source": "actual_owned_browser_storage_reload"
+      },
+      {
+        "name": "valid-stored-profile-restore-pending-then-settings-open",
+        "source": "actual_browser_reload_held_native_response"
+      },
+      {
+        "name": "malformed",
+        "source": "actual_file_picker_native_parser",
+        "status": 400
+      },
+      {
+        "name": "duplicate-version",
+        "source": "actual_file_picker_native_parser",
+        "status": 400
+      },
+      {
+        "name": "nested-duplicate",
+        "source": "actual_file_picker_native_parser",
+        "status": 400
+      },
+      {
+        "name": "unknown-envelope",
+        "source": "actual_file_picker_native_parser",
+        "status": 400
+      },
+      {
+        "name": "unknown-native",
+        "source": "actual_file_picker_native_parser",
+        "status": 400
+      },
+      {
+        "name": "version",
+        "source": "actual_file_picker_native_parser",
+        "status": 400
+      },
+      {
+        "name": "top-array",
+        "source": "actual_file_picker_native_parser",
+        "status": 400
+      },
+      {
+        "name": "struct-array",
+        "source": "actual_file_picker_native_parser",
+        "status": 400
+      },
+      {
+        "name": "config-array",
+        "source": "actual_file_picker_native_parser",
+        "status": 400
+      },
+      {
+        "name": "unsafe-key",
+        "source": "actual_file_picker_native_parser",
+        "status": 400
+      },
+      {
+        "name": "credential-url",
+        "source": "actual_file_picker_native_parser",
+        "status": 400
+      },
+      {
+        "name": "filesystem-path",
+        "source": "actual_file_picker_native_parser",
+        "status": 400
+      },
+      {
+        "name": "certificate-path",
+        "source": "actual_file_picker_native_parser",
+        "status": 400
+      },
+      {
+        "name": "private-key",
+        "source": "actual_file_picker_native_parser",
+        "status": 400
+      },
+      {
+        "name": "invalid-regex",
+        "source": "actual_file_picker_native_parser",
+        "status": 400
+      },
+      {
+        "name": "invalid-selector",
+        "source": "actual_file_picker_native_parser",
+        "status": 400
+      },
+      {
+        "name": "duplicate-required",
+        "source": "actual_file_picker_native_parser",
+        "status": 400
+      },
+      {
+        "name": "tagged-txt-unknown-extra",
+        "source": "actual_file_picker_native_parser",
+        "status": 400
+      },
+      {
+        "name": "tagged-xml-unknown-extra",
+        "source": "actual_file_picker_native_parser",
+        "status": 400
+      },
+      {
+        "name": "invalid-utf8-file-and-native-wire",
+        "source": "actual_file_picker_and_invalid_native_bytes"
+      },
+      {
+        "name": "non-json-content-type",
+        "source": "actual_native_request"
+      },
+      {
+        "name": "missing-partial-and-undeclared-runtime-bindings",
+        "source": "actual_native_start_requests_before_effects"
+      }
+    ],
+    "browser_download_count": 6,
+    "downloads": [
+      {
+        "label": "full-native-before-crawl",
+        "path": "artifacts/cp-live-r4/full-native-before-crawl.json",
+        "bytes": 3020,
+        "sha256": "95e1b4a10c2eda4eeade5f4e7738f5baabe6099d5834f1971775473270e256ab"
+      },
+      {
+        "label": "exact-u64-after-edit-save-reload",
+        "path": "artifacts/cp-live-r4/exact-u64-after-edit-save-reload.json",
+        "bytes": 3052,
+        "sha256": "25767443054a72dfa7f0e8b115c9b924fb04d48428660883ff06cd21a4564d82"
+      },
+      {
+        "label": "renderer-native-only-roundtrip",
+        "path": "artifacts/cp-live-r4/renderer-native-only-roundtrip.json",
+        "bytes": 3106,
+        "sha256": "84b1b1821f5703c9778ded6a8747d2dab30e3999c5e6fe539ffa850ef1ee794f"
+      },
+      {
+        "label": "selected-saved-sanitized-profile",
+        "path": "artifacts/cp-live-r4/selected-saved-sanitized-profile.json",
+        "bytes": 2953,
+        "sha256": "a066a02b4f842a4f63e278e739deda7f3f53b537baf53ad299a13ecb7b220be4"
+      },
+      {
+        "label": "cold-selected-sanitized-profile",
+        "path": "artifacts/cp-live-r4/cold-selected-sanitized-profile.json",
+        "bytes": 2953,
+        "sha256": "a066a02b4f842a4f63e278e739deda7f3f53b537baf53ad299a13ecb7b220be4"
+      },
+      {
+        "label": "cold-selected-320",
+        "path": "artifacts/cp-live-r4/cold-selected-320.json",
+        "bytes": 2953,
+        "sha256": "a066a02b4f842a4f63e278e739deda7f3f53b537baf53ad299a13ecb7b220be4"
+      }
+    ],
+    "served_assets": [
+      {
+        "path": "web/index.html",
+        "route": "/",
+        "sha256": "00d4318988a608d3559afa1f15c09e5b3a10a7ea5dc28f8c3051020bfb61d4c4"
+      },
+      {
+        "path": "web/app.js",
+        "route": "/app.js",
+        "sha256": "e9e5ec5ac9dbd26672876fe3e53879a3b7573ee062cd86146bb0d906f6a7fcf6"
+      },
+      {
+        "path": "web/styles.css",
+        "route": "/styles.css",
+        "sha256": "2cd74c91b66b2f0657a0c2bf18b2115f7ffd4c5996c13cd07b0471ce32132594"
+      },
+      {
+        "path": "web/config-profiles.js",
+        "route": "/config-profiles.js",
+        "sha256": "07fac2eb597b100889c4a5908600dc2a6aea2fe4d0a3515ec792fcc0449222a5"
+      }
+    ],
+    "capture": {
+      "jobs": 2,
+      "page_observations": 3,
+      "owned_get_paths": [
+        "/a",
+        "/b",
+        "/replacement"
+      ],
+      "all_explicit_headers_bound": true,
+      "original_project": {
+        "bytes": 24864,
+        "sha256": "be40014d4d5453a52a928761356566b4824b381fcac197a19cd47adc1c922892"
+      },
+      "replacement_project": {
+        "bytes": 14114,
+        "sha256": "957cf0adef5f0366a2bdc93c4a88bab311e6652f8ab9dd630edcfe643f11a496"
+      },
+      "both_projects_byte_equal_after_cold": true,
+      "original_unchanged_by_replacement": true,
+      "toolbar_target_edits": 1,
+      "natural_header_reentry_save_preserves_target": true,
+      "source_patch_paths": [
+        {
+          "path": [
+            "seed_urls"
+          ],
+          "operation": "replace"
+        },
+        {
+          "path": [
+            "sitemap_urls"
+          ],
+          "operation": "replace"
+        },
+        {
+          "path": [
+            "input_imports"
+          ],
+          "operation": "replace"
+        },
+        {
+          "path": [
+            "explicit_sitemap_inputs"
+          ],
+          "operation": "remove"
+        }
+      ]
+    },
+    "cold": {
+      "native_processes": 2,
+      "same_owned_origin": true,
+      "same_owned_store": true,
+      "natural_eof_zero_closes": 2,
+      "processes": [
+        {
+          "phase": "warm",
+          "close": {
+            "code": 0,
+            "signal": null
+          },
+          "natural_stdin_eof": true,
+          "forced": false
+        },
+        {
+          "phase": "cold",
+          "close": {
+            "code": 0,
+            "signal": null
+          },
+          "natural_stdin_eof": true,
+          "forced": false
+        }
+      ],
+      "offline_positive_http410_controls": 2,
+      "offline_product_requests": 0,
+      "website_offline_through_both_process_closes": true,
+      "profile_storage_scope": "same-origin retained browser context; sanitized profile only",
+      "cold_sanitized_profile_sha256": "a066a02b4f842a4f63e278e739deda7f3f53b537baf53ad299a13ecb7b220be4"
+    },
+    "browser_errors": 0,
+    "external_requests": 0,
+    "mobile": {
+      "viewport": 320,
+      "document": 320,
+      "dialog": 288,
+      "controls": [
+        {
+          "selector": "#config-profile-import",
+          "x": 33,
+          "y": 246.6875,
+          "width": 254,
+          "height": 28
+        },
+        {
+          "selector": "#config-profile-inspect",
+          "x": 33,
+          "y": 436.0625,
+          "width": 90.21875,
+          "height": 28
+        },
+        {
+          "selector": "#config-profile-export",
+          "x": 33,
+          "y": 386.6875,
+          "width": 254,
+          "height": 28
+        }
+      ]
+    },
+    "runtime_secret_boundary": "Profile files and browser draft storage contain header names only. Explicitly resolved header values become part of the saved native run configuration/raw project; this milestone does not encrypt or redact that runtime evidence."
+  },
+  "responsive_probe": {
+    "path": "artifacts/cp-layout-after/result.json",
+    "bytes": 3614,
+    "sha256": "f8d9f2d1c82d088e7888b78bfcbb262c885c68aaa7a83c5fc19329dd3238017f",
+    "status": "OBSERVED_ALL_REQUESTED_CONTROLS_REACHABLE",
+    "binary_sha256": "b1428bb4735c8191118e3000f4529b142cf7fb7d56b16664db6b6c18f8e6e15f",
+    "geometries": [
+      {
+        "viewport": 1440,
+        "document": 1440,
+        "dialog_width": 600,
+        "dialog_scroll_width": 598,
+        "grid_columns": "269px 269px",
+        "controls": [
+          {
+            "selector": "#config-profile-import",
+            "x": 443,
+            "y": 174.6875,
+            "width": 269,
+            "height": 48,
+            "reachable": true
+          },
+          {
+            "selector": "#config-profile-load-selected",
+            "x": 728,
+            "y": 174.6875,
+            "width": 269,
+            "height": 48,
+            "reachable": true
+          },
+          {
+            "selector": "#config-profile-export",
+            "x": 728,
+            "y": 236.6875,
+            "width": 269,
+            "height": 28,
+            "reachable": true
+          },
+          {
+            "selector": "#settings-form button[type=submit]",
+            "x": 813.09375,
+            "y": 825.21875,
+            "width": 183.90625,
+            "height": 32,
+            "reachable": true
+          },
+          {
+            "selector": "#settings-close",
+            "x": 965,
+            "y": 433.59375,
+            "width": 32,
+            "height": 32,
+            "reachable": true
+          }
+        ]
+      },
+      {
+        "viewport": 320,
+        "document": 320,
+        "dialog_width": 288,
+        "dialog_scroll_width": 286,
+        "grid_columns": "254px",
+        "controls": [
+          {
+            "selector": "#config-profile-import",
+            "x": 33,
+            "y": 166.6875,
+            "width": 254,
+            "height": 28,
+            "reachable": true
+          },
+          {
+            "selector": "#config-profile-load-selected",
+            "x": 33,
+            "y": 206.6875,
+            "width": 254,
+            "height": 48,
+            "reachable": true
+          },
+          {
+            "selector": "#config-profile-export",
+            "x": 33,
+            "y": 306.6875,
+            "width": 254,
+            "height": 28,
+            "reachable": true
+          },
+          {
+            "selector": "#settings-form button[type=submit]",
+            "x": 103.09375,
+            "y": 830.71875,
+            "width": 183.90625,
+            "height": 32,
+            "reachable": true
+          },
+          {
+            "selector": "#settings-close",
+            "x": 255,
+            "y": 434.09375,
+            "width": 32,
+            "height": 32,
+            "reachable": true
+          }
+        ]
+      }
+    ],
+    "native_close": {
+      "code": 0,
+      "signal": null
+    },
+    "screenshots": [
+      {
+        "path": "artifacts/cp-layout-after/settings-320.png",
+        "bytes": 63645,
+        "sha256": "875e303c8beadb531e44ef99abe038ffaf3b0624d45451b5d209883242542d71"
+      },
+      {
+        "path": "artifacts/cp-layout-after/settings-1440.png",
+        "bytes": 135999,
+        "sha256": "fcbb12c2d4196c02a7c585e52ef074399bd03c7ed1507da9ea6eaaabce905da6"
+      }
+    ],
+    "scope": "Earlier R4 normal binary b142; the four served UI assets are byte-identical in the current R5 profile pass. Current R5 fixture separately verifies320px import/inspect/export and an actual download."
+  },
+  "broad_current_source_gates": {
+    "ordinary_rust_workspace": {
+      "status": "PASS",
+      "code": 0,
+      "duration_ms": 943644,
+      "args": [
+        "test",
+        "--workspace",
+        "--locked",
+        "--offline",
+        "--",
+        "--test-threads=2"
+      ],
+      "log": {
+        "path": "artifacts/config-profile-r5-20261018-workspace.log",
+        "bytes": 206207,
+        "sha256": "ab9e4f6ae1bae4bd86d5d08f20c1c97be633d7322e07cca9fa6a774c32016a94"
+      },
+      "passed": 1802,
+      "failed": 0,
+      "ignored": 5,
+      "result_blocks": 17
+    },
+    "strict_all_target_all_feature_clippy": {
+      "status": "PASS",
+      "code": 0,
+      "duration_ms": 50069,
+      "args": [
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--all-features",
+        "--locked",
+        "--offline",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "log": {
+        "path": "artifacts/config-profile-r5-20261018-clippy.log",
+        "bytes": 295,
+        "sha256": "1e1b4d74be6996d83545eea912251d83541b2de9cb632bac9f8697cfd6f17700"
+      }
+    },
+    "four_explicit_rust_chromium_fixtures": {
+      "status": "PASS",
+      "code": 0,
+      "duration_ms": 53433,
+      "args": [
+        "scripts/renderer-rust-e2e.mjs"
+      ],
+      "log": {
+        "path": "artifacts/config-profile-r5-20261018-explicit-chromium.log",
+        "bytes": 4400,
+        "sha256": "72ee21f9fb3ace505430685fd726ec95bc3e5bd9e5bd7460df5485ade0073a3f"
+      },
+      "executed": [
+        "live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness",
+        "live_browser_worker_executes_javascript_for_core_crawl",
+        "live_browser_worker_pause_drains_render_and_retains_rendered_discoveries",
+        "live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion"
+      ],
+      "actual_fixture_count": 4
+    },
+    "positive_enrichment_cfg_test_host": {
+      "status": "PASS",
+      "code": 0,
+      "duration_ms": 7758,
+      "args": [
+        "scripts/run-enrichment-browser-checks.mjs"
+      ],
+      "log": {
+        "path": "artifacts/config-profile-r5-20261018-positive-enrichment.log",
+        "bytes": 1004,
+        "sha256": "6df2bfeb6f2e6553bde94bd18646574e828a5f3a2e5af6880753f3978ae3804f"
+      },
+      "receipt": {
+        "path": "artifacts/cp-enrichment-r1/enrichment-success-coordinator.json",
+        "bytes": 100383,
+        "sha256": "bbf91059ca013ca0883bb4addce2c1e61dc48bb6549a2e2bd04fb5a3b43e40db"
+      },
+      "test_host_sha256": "f734be77374a40902e24ced71b2afd36188d41ec399ff75953706e5877a66c3e",
+      "native_processes": [
+        {
+          "phase": "initial",
+          "shutdown": {
+            "code": 0,
+            "signal": null
+          }
+        },
+        {
+          "phase": "cold",
+          "shutdown": {
+            "code": 0,
+            "signal": null
+          }
+        }
+      ],
+      "provider_attempts": 213,
+      "website_requests": 0,
+      "cancel_aborts": 1,
+      "violations": 0,
+      "scope": "Actual browser -> full native cfg(test) router/service -> owned HTTP provider -> durable report -> CSV -> process-cold reopen. Real Google, CLI and other providers remain unproven."
+    },
+    "selected_39_ui_regression_suites": {
+      "status": "ALL39_DISTINCT_SUITES_HAVE_SUCCESS_AGGREGATE_INVOCATION_FAILED",
+      "registered_suites": 39,
+      "distinct_successful_suites": 39,
+      "single_39_invocation_pass": false,
+      "aggregate_regression_ready": false,
+      "phases": [
+        {
+          "path": "artifacts/cp-ui-39-r2/proof.json",
+          "bytes": 8496,
+          "sha256": "e14b7f5c378cf591e4247509adbba3d8cacce2c0b8f557778f01e7142b2472e4",
+          "complete": false,
+          "successful_suites": 31,
+          "failed_suites": 1,
+          "binary_sha256": "f4b8ede57fc8dbdcb7a9c20a8c71ccf17a474c089c91bdbc52ba97e4e41eab44",
+          "binary_unchanged": true,
+          "frozen_acceptance_inputs_unchanged": true,
+          "changed": [],
+          "shared_app_shutdown": {
+            "code": 0,
+            "signal": null
+          },
+          "results": [
+            {
+              "name": "dashboard",
+              "kind": "fixture",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 8374
+            },
+            {
+              "name": "pause-controls",
+              "kind": "fixture",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 6902
+            },
+            {
+              "name": "recrawl-controls",
+              "kind": "fixture",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 5788
+            },
+            {
+              "name": "policy-controls",
+              "kind": "fixture",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 6978
+            },
+            {
+              "name": "content-controls",
+              "kind": "fixture",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 24668
+            },
+            {
+              "name": "resource-controls",
+              "kind": "fixture",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 14963
+            },
+            {
+              "name": "resource-ledger",
+              "kind": "fixture",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 9898
+            },
+            {
+              "name": "resource-contract",
+              "kind": "fixture",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 11551
+            },
+            {
+              "name": "comparison-controls",
+              "kind": "fixture",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 4379
+            },
+            {
+              "name": "tool-navigation",
+              "kind": "live",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 4280
+            },
+            {
+              "name": "rendered-crawl",
+              "kind": "live",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 4634
+            },
+            {
+              "name": "dom-capture",
+              "kind": "live",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 14639
+            },
+            {
+              "name": "accessibility-review",
+              "kind": "owned-native",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 20135
+            },
+            {
+              "name": "resources",
+              "kind": "live",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 8778
+            },
+            {
+              "name": "robots",
+              "kind": "live",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 2016
+            },
+            {
+              "name": "serp",
+              "kind": "live",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 1562
+            },
+            {
+              "name": "list-import",
+              "kind": "live",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 4909
+            },
+            {
+              "name": "pause-resume",
+              "kind": "live",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 16530
+            },
+            {
+              "name": "selected-recrawl",
+              "kind": "live",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 8624
+            },
+            {
+              "name": "policy",
+              "kind": "live",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 5128
+            },
+            {
+              "name": "content",
+              "kind": "live",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 9491
+            },
+            {
+              "name": "resource-discovery",
+              "kind": "live",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 8922
+            },
+            {
+              "name": "resource-persistence",
+              "kind": "live",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 6878
+            },
+            {
+              "name": "saved-spelling",
+              "kind": "live",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 2784
+            },
+            {
+              "name": "link-workflows",
+              "kind": "live",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 3853
+            },
+            {
+              "name": "api-enrichment",
+              "kind": "live",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 1526
+            },
+            {
+              "name": "directory-tree",
+              "kind": "live",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 5723
+            },
+            {
+              "name": "saved-ngrams",
+              "kind": "live",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 5498
+            },
+            {
+              "name": "saved-segments",
+              "kind": "live",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 5182
+            },
+            {
+              "name": "dashboard-segments",
+              "kind": "owned-native",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 900000,
+              "duration_ms": 359046
+            },
+            {
+              "name": "segments-repeated-metadata",
+              "kind": "owned-native",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 1800000,
+              "duration_ms": 1145866
+            },
+            {
+              "name": "segments-density",
+              "kind": "owned-native",
+              "code": 1,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 32445
+            }
+          ],
+          "coordinator": {
+            "path": "artifacts/config-profile-r5-ui39-20261018-gates.json",
+            "bytes": 521,
+            "sha256": "d9ede26399ad3da2d9a11e5cc58140a496341c371db4ca6b92ff4a5673fe199e",
+            "gates": [
+              {
+                "label": "ui-39",
+                "code": 1,
+                "duration_ms": 1777479,
+                "log": {
+                  "path": "artifacts/config-profile-r5-ui39-20261018-ui-39.log",
+                  "bytes": 1510,
+                  "sha256": "64f8b7bb071fc319b5e604a538ea541039a629bf685620b20c7682b1512cdada"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "path": "artifacts/cp-ui-last7-r1/proof.json",
+          "bytes": 2353,
+          "sha256": "4f4c2215e2ccd912a42a02eb8bb05444a5cdc816b1ca9eb172d885ce8587f2e0",
+          "complete": true,
+          "successful_suites": 7,
+          "failed_suites": 0,
+          "binary_sha256": "f4b8ede57fc8dbdcb7a9c20a8c71ccf17a474c089c91bdbc52ba97e4e41eab44",
+          "binary_unchanged": true,
+          "frozen_acceptance_inputs_unchanged": true,
+          "changed": [],
+          "shared_app_shutdown": {
+            "code": 0,
+            "signal": null
+          },
+          "results": [
+            {
+              "name": "ngrams-cold-restart",
+              "kind": "owned-native",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 9853
+            },
+            {
+              "name": "segments-cold-restart",
+              "kind": "owned-native",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 11959
+            },
+            {
+              "name": "resource-sources",
+              "kind": "live",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 14796
+            },
+            {
+              "name": "custom-search",
+              "kind": "live",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 21869
+            },
+            {
+              "name": "saved-comparison",
+              "kind": "owned-native",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 3416
+            },
+            {
+              "name": "comparison-bundles",
+              "kind": "owned-native",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 4541
+            },
+            {
+              "name": "configuration-profiles",
+              "kind": "owned-native",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 8558
+            }
+          ],
+          "coordinator": {
+            "path": "artifacts/config-profile-r5-ui7-20261018-gates.json",
+            "bytes": 700,
+            "sha256": "0335afa9e52a159108a0402bc4be7dc513bcb6876f63052fa4767efa39981d95",
+            "gates": [
+              {
+                "label": "ui-remaining-seven",
+                "code": 0,
+                "duration_ms": 80287,
+                "log": {
+                  "path": "artifacts/config-profile-r5-ui7-20261018-ui-remaining-seven.log",
+                  "bytes": 356,
+                  "sha256": "acb43372fe1d20441403e2458af9c444b354e1b4564ac27065bdba5ea24a8b07"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "path": "artifacts/cp-density-canonical-r1/proof.json",
+          "bytes": 894,
+          "sha256": "30bcc5c38370da3489d8e595850fb7be263dd9e8f9e2c244a4551bbd7efd807d",
+          "complete": true,
+          "successful_suites": 1,
+          "failed_suites": 0,
+          "binary_sha256": "f4b8ede57fc8dbdcb7a9c20a8c71ccf17a474c089c91bdbc52ba97e4e41eab44",
+          "binary_unchanged": true,
+          "frozen_acceptance_inputs_unchanged": true,
+          "changed": [],
+          "shared_app_shutdown": {
+            "code": 0,
+            "signal": null
+          },
+          "results": [
+            {
+              "name": "segments-density",
+              "kind": "owned-native",
+              "code": 0,
+              "signal": null,
+              "timed_out": false,
+              "timeout_ms": 240000,
+              "duration_ms": 4998
+            }
+          ],
+          "coordinator": {
+            "path": "artifacts/config-profile-r5-density-20261018-gates.json",
+            "bytes": 587,
+            "sha256": "d8cdfc81417f4abfc3956921b29ffcc3c7eb3dac8c1fcb88ff5955d62884d253",
+            "gates": [
+              {
+                "label": "density-canonical",
+                "code": 0,
+                "duration_ms": 10265,
+                "log": {
+                  "path": "artifacts/config-profile-r5-density-20261018-density-canonical.log",
+                  "bytes": 146,
+                  "sha256": "89deb8a394cd6377da2235079f194734a48cb515ddb2ad79de310f5a3766b67a"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "successful_suite_names": [
+        "dashboard",
+        "pause-controls",
+        "recrawl-controls",
+        "policy-controls",
+        "content-controls",
+        "resource-controls",
+        "resource-ledger",
+        "resource-contract",
+        "comparison-controls",
+        "tool-navigation",
+        "rendered-crawl",
+        "dom-capture",
+        "accessibility-review",
+        "resources",
+        "robots",
+        "serp",
+        "list-import",
+        "pause-resume",
+        "selected-recrawl",
+        "policy",
+        "content",
+        "resource-discovery",
+        "resource-persistence",
+        "saved-spelling",
+        "link-workflows",
+        "api-enrichment",
+        "directory-tree",
+        "saved-ngrams",
+        "saved-segments",
+        "dashboard-segments",
+        "segments-repeated-metadata",
+        "ngrams-cold-restart",
+        "segments-cold-restart",
+        "resource-sources",
+        "custom-search",
+        "saved-comparison",
+        "comparison-bundles",
+        "configuration-profiles",
+        "segments-density"
+      ],
+      "large_repeated_metadata_ms": 1145866,
+      "density_isolated_coordinator_ms": 10265,
+      "registered_kind_counts": {
+        "fixture": 9,
+        "live": 21,
+        "owned-native": 9
+      },
+      "known_intermittent_failure": "The unchanged canonical density driver timed out at the Space-collapse wait in the whole-batch run and later passed in isolation. Cause remains NOT_PROVEN; no test/deadline or product change was used to obtain that isolated pass.",
+      "proof_boundary": "Nine fixture suites use mocked API/state setup; the other30 are live or owned-native cases. Registry success is not complete feature or universal path acceptance."
+    },
+    "final_source_gate_revalidation": {
+      "status": "PASS_EXPLICIT_FROZEN_INPUT_AND_INDEX_BINDING_WITH_QUALIFIED_POSTRUN_SUPPLEMENTS",
+      "path": "docs/verification/configuration-profiles-20261018/source-gates.json",
+      "sha256": "6e15dcac65099401117b9c25213992c63c59a52beadc474b6849e0adda7f3c7b",
+      "compiler_dependency_closure": "NOT_EXHAUSTIVE"
+    },
+    "fresh_exact_commit_public_ci": {
+      "status": "PENDING_NEW_EXACT_COMMIT"
+    }
+  },
+  "retained_failures": [
+    {
+      "stage": "Core focused r1",
+      "status": "FAIL_COMPILE",
+      "code": 101,
+      "summary": "Missing HeaderValue import in a test; no focused tests executed.",
+      "receipt": {
+        "path": "artifacts/config-profile-core-r1-20261018-result.json",
+        "bytes": 461,
+        "sha256": "596f0c91c2f7982feb012906339968ea6ce8ed0485a4266d0858f175965492db"
+      },
+      "log": {
+        "path": "artifacts/config-profile-core-r1-20261018.log",
+        "bytes": 510,
+        "sha256": "83605abf29da51987979cd34ff511f1107df807d6ab93441b2b46a189f6f8855"
+      }
+    },
+    {
+      "stage": "Core focused r2",
+      "status": "FAIL_TESTS",
+      "code": 101,
+      "passed": 8,
+      "failed": 2,
+      "summary": "Sitemap fixture omitted its required namespace; the tagged-unit strictness regression exposed ignored extra fields. Both failures remain historical.",
+      "receipt": {
+        "path": "artifacts/config-profile-core-r2-20261018-result.json",
+        "bytes": 461,
+        "sha256": "703911ad5afb40346add0ad1f1764b50ffb2b9b877f82305afa7c69b9a04adea"
+      },
+      "log": {
+        "path": "artifacts/config-profile-core-r2-20261018.log",
+        "bytes": 2451,
+        "sha256": "3ff95220b9a1b1d2a678e5664eab8437dec0498a8e53ac39403d446c65a4a532"
+      }
+    },
+    {
+      "stage": "Browser cp-live-r1",
+      "status": "FAIL_FIXTURE",
+      "binary_sha256": "69e680928c84386bc0c3b196ae85aec9c41dbbff4d5acd72e7f96c34af63e750",
+      "summary": "Authored renderer roundtrip fixture was refused with HTTP400; corrected fixture did not weaken native validation.",
+      "receipt": {
+        "path": "artifacts/cp-live-r1/ui-config-profiles-live.json",
+        "bytes": 28044,
+        "sha256": "217f2aebaba63bf7338480f573821811c7238d1285e3ad37f916d76b6f2d82f2"
+      }
+    },
+    {
+      "stage": "Browser cp-live-r2 / r3 source",
+      "status": "FAIL_PRODUCT_MOBILE_LAYOUT",
+      "binary_sha256": "8731207499c21b6ab35dcff40832e5532ae0f5c45599c41682cdfa0b054e52ef",
+      "completed_check_groups": 9,
+      "summary": "At320px the unwrapped selected-load button forced an oversized grid track and the import control was unreachable; a scoped six-line profile CSS change preceded the final pass.",
+      "receipt": {
+        "path": "artifacts/cp-live-r2/ui-config-profiles-live.json",
+        "bytes": 56111,
+        "sha256": "41a757ae4426bc83e0d3c004b338abc6ab74c431b09c17c27f924a0421370642"
+      }
+    },
+    {
+      "stage": "Before-layout probe",
+      "status": "FAIL_PROBE_AFTER_GEOMETRY_OBSERVATIONS",
+      "summary": "Recorded actual320/1440 geometry and EOF0, then failed a probe-only jobs response-shape assertion; its whole result is not a PASS.",
+      "receipt": {
+        "path": "artifacts/cp-layout-before/result.json",
+        "bytes": 3251,
+        "sha256": "1ab94e4f1fafb0b5c2d6b405ea8cdaebedf00096eaabd4838ad04d17c65bf959"
+      }
+    },
+    {
+      "stage": "First39-suite UI invocation",
+      "status": "FAIL_STRICT_FIXTURE_STATIC_ASSET_ALLOWLIST",
+      "binary_sha256": "b1428bb4735c8191118e3000f4529b142cf7fb7d56b16664db6b6c18f8e6e15f",
+      "completed": false,
+      "passed_cases": 8,
+      "failed_cases": 1,
+      "summary": "After eight fixture passes, comparison-controls refused the newly served /config-profiles.js static asset. The strict allowlist was updated explicitly; the historical invocation remains incomplete and failed.",
+      "receipt": {
+        "path": "artifacts/cp-ui-39-r1/proof.json",
+        "bytes": 3299,
+        "sha256": "8c3688da44f6223738bc4db111e60f5ff02ef351137e4c4a20ac729238579fab"
+      },
+      "log": {
+        "path": "artifacts/config-profile-r4-20261018-ui-39.log",
+        "bytes": 981,
+        "sha256": "ac7725e44e8fb63b29be4ce9329e55e8983906fa2868887f63c02ddbb028d159"
+      }
+    },
+    {
+      "stage": "Current R5 attempted whole39 invocation",
+      "status": "FAIL_DENSITY_SPACE_WAIT_CAUSE_NOT_PROVEN",
+      "binary_sha256": "f4b8ede57fc8dbdcb7a9c20a8c71ccf17a474c089c91bdbc52ba97e4e41eab44",
+      "complete": false,
+      "passed_cases": 31,
+      "failed_cases": 1,
+      "suite": "segments-density",
+      "driver_line": 239,
+      "wait_timeout_ms": 30000,
+      "outer_suite_timed_out": false,
+      "summary": "The Space-collapse wait timed out after31 successful cases, including the complete repeated-metadata case. Main app closed0, frozen inputs and binary remained unchanged. Remaining7 and canonical density separately passed, without deleting this failure or changing deadlines/assertions/product.",
+      "receipt": {
+        "path": "artifacts/cp-ui-39-r2/proof.json",
+        "bytes": 8496,
+        "sha256": "e14b7f5c378cf591e4247509adbba3d8cacce2c0b8f557778f01e7142b2472e4"
+      },
+      "log": {
+        "path": "artifacts/config-profile-r5-ui39-20261018-ui-39.log",
+        "bytes": 1510,
+        "sha256": "64f8b7bb071fc319b5e604a538ea541039a629bf685620b20c7682b1512cdada"
+      }
+    }
+  ],
+  "limitations": [
+    "All39 registered suites have individual successes across31+7+1 phases, but the actual whole39 invocation failed at the unchanged density Space wait. Aggregate regression and stable-release readiness remain false; its cause is unproven.",
+    "Single origin-scoped active draft; no named profile collection, profile migration or claim of full manufacturer parity.",
+    "The portable v1 envelope remains an App/browser format. Current crawl --config explicitly rejects recognizable portable envelopes with Settings/API guidance; it does not execute or resolve their bindings. Legacy raw configuration behavior remains separate.",
+    "Browser corpus validates the declared owned configuration and listed settings; not every native optional feature is executed or interactively edited.",
+    "The renderer configuration roundtrip does not contact or attest a renderer worker; provider integrations are not part of this profile fixture.",
+    "Core physical64MiB/depth/node boundaries and browser-small-file acceptance are separate proof scopes; no actual64MiB browser picker success is claimed.",
+    "Cold behavior uses the retained browser context on the exact same owned origin. It is not cross-browser, cross-device or cross-origin migration proof.",
+    "Rejected files leave prior accepted draft/storage/jobs/files/website effects unchanged; the guard intentionally retains damaged stored bytes until an explicitly validated successful Save.",
+    "No raw project bodies, header secret values or absolute machine paths are copied into this public summary. Raw local evidence stays ignored.",
+    "The564 prebuild acceptance inputs are not an exhaustive compiler dependency closure. The81-literal-include audit and full fixture embedding in four current test executables are supplemental post-run evidence; those four executables have no separately captured pre-execution hashes."
+  ],
+  "historical_focused_r4": {
+    "normal_binary_sha256": "b1428bb4735c8191118e3000f4529b142cf7fb7d56b16664db6b6c18f8e6e15f",
+    "source_input_count": 562,
+    "browser": {
+      "path": "artifacts/cp-live-r3/ui-config-profiles-live.json",
+      "bytes": 59749,
+      "sha256": "9f478aab8fc23930dab8652b15051a1f0520088c3b534e04ccfa9a4a9b94bfb4",
+      "status": "PASS",
+      "check_group_count": 10,
+      "negative_control_count": 26,
+      "browser_download_count": 6
+    },
+    "normal_build": {
+      "status": "PASS",
+      "code": 0,
+      "binary_bytes": 88858624,
+      "source_input_count": 562,
+      "inputs_unchanged": true,
+      "prebuild_manifest_sha256": "f8f04b0377648af63f01966f1c8837bf6faad6d986b2d66c5a6b62dc560cf7b0",
+      "log": {
+        "path": "artifacts/config-profile-r4-20261018-normal-build.log",
+        "bytes": 175,
+        "sha256": "01d9134547ba743a4a3f8ed0af08965d4a7a9277bf986e112e4a3ee5b7142754"
+      }
+    }
+  },
+  "actual_normal_cli": {
+    "path": "artifacts/cp-cli-r1/receipt.json",
+    "bytes": 2927,
+    "sha256": "49b4f3fa44ca4b7f9bc9568654ae2fcbad25f31e1d3f90e0f30bd7baabccf9e7",
+    "status": "PASS",
+    "binary_sha256": "f4b8ede57fc8dbdcb7a9c20a8c71ccf17a474c089c91bdbc52ba97e4e41eab44",
+    "script": {
+      "path": "scripts/crawl-config-cli-e2e.mjs",
+      "sha256": "379ba7fca5e084cd2301363a441a4308e862d5b83f7aef0e669a9905ea9d0359"
+    },
+    "processes": [
+      {
+        "kind": "raw_native_config",
+        "close": {
+          "code": 0,
+          "signal": null
+        },
+        "forced": false,
+        "captured_pages": 1,
+        "owned_http_requests": 1,
+        "report_sha256": "337cddc7b49327497d79a61dbcf3f0768bd8275b865fec5369c3c4412a898e9d"
+      },
+      {
+        "kind": "portable_profile_explicitly_refused",
+        "close": {
+          "code": 1,
+          "signal": null
+        },
+        "forced": false,
+        "input_sha256": "69542d592279b3f35c14d58438a72ae0990779355375863f863f7a54d74311a5",
+        "additional_http_requests": 0,
+        "product_files_unchanged": true,
+        "output_absent": true,
+        "store_directory_absent": true
+      }
+    ],
+    "website_requests": [
+      {
+        "method": "GET",
+        "path": "/raw-control"
+      }
+    ],
+    "guidance": "Portable envelopes are explicitly refused by crawl --config. Use browser Settings or /api/crawls/from-profile; raw CrawlConfig remains supported.",
+    "scope": "Two actual normal CLI children: raw configuration exits0 and captures one owned page; recognizable portable profile exits1 before any new HTTP/output/store effects. This is explicit refusal, not portable-profile CLI execution."
+  },
+  "earlier_component_gates": {
+    "scope": "Historical focused Core/TLS/App profile component gates on unchanged component code. R5 adds the separate main/CLI parser; these earlier passes are not a complete current-source workspace gate. State/semantic tests have now actually rerun under R5 above.",
+    "rustfmt": {
+      "status": "PASS",
+      "log": {
+        "path": "artifacts/config-profile-r3-20261018-rustfmt.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "state_corpus": {
+      "status": "PASS",
+      "tests": 104,
+      "failed": 0,
+      "ignored": 0,
+      "actual_native": false,
+      "actual_browser": false,
+      "profile_tests_included": 33,
+      "log": {
+        "path": "artifacts/config-profile-r3-20261018-state-corpus.log",
+        "bytes": 10135,
+        "sha256": "52193a5b2a447130bd6c7defa1910e5517e503e77452f193cde8e622c7d159dd"
+      }
+    },
+    "semantic_fixtures": {
+      "status": "PASS",
+      "groups": 40,
+      "actual_native": false,
+      "actual_browser": false,
+      "log": {
+        "path": "artifacts/config-profile-r3-20261018-semantic-fixtures.log",
+        "bytes": 1068,
+        "sha256": "080480689e80a2242b64425576c5d0759be83ab3272372556ecc61e204e24e3f"
+      }
+    },
+    "core_profile": {
+      "status": "PASS",
+      "tests": 11,
+      "receipt": {
+        "path": "artifacts/config-profile-core-r3-20261018-result.json",
+        "bytes": 459,
+        "sha256": "82722ba88a56e0c4202029abcc1a2c2b9b3df99c267bfde6805d669a7ad28965"
+      },
+      "log": {
+        "path": "artifacts/config-profile-core-r3-20261018.log",
+        "bytes": 1640,
+        "sha256": "cb58dd658f5bf4bdade403404ec4ef7391cf879adb0d404f70aa839403a3af49"
+      }
+    },
+    "core_tls": {
+      "status": "PASS",
+      "tests": 21,
+      "receipt": {
+        "path": "artifacts/config-profile-tls-r1-20261018-result.json",
+        "bytes": 452,
+        "sha256": "e86d377a1831fd5bad9ed07af728c4aa4753db3ccdd49fddab40729e8db3a368"
+      },
+      "log": {
+        "path": "artifacts/config-profile-tls-r1-20261018.log",
+        "bytes": 2162,
+        "sha256": "62029a90b2fc5158464b422bd5ea9e1b1234c817b89c93a488b31dac7b2c131f"
+      }
+    },
+    "app_profile": {
+      "status": "PASS",
+      "tests": 5,
+      "log": {
+        "path": "artifacts/config-profile-r2-20261018-app-focused.log",
+        "bytes": 1121,
+        "sha256": "62cd987ebd45c6b3fb7ad0af6fbbac828aab09e78144903d27d1943bfe6242e5"
+      }
+    },
+    "pre_cli_workspace": {
+      "status": "PASS_BASELINE_BEFORE_CLI_GUARD",
+      "passed": 1798,
+      "failed": 0,
+      "ignored": 5,
+      "source_input_count": 562,
+      "normal_binary_sha256": "b1428bb4735c8191118e3000f4529b142cf7fb7d56b16664db6b6c18f8e6e15f",
+      "log": {
+        "path": "artifacts/config-profile-r4-20261018-workspace.log",
+        "bytes": 206006,
+        "sha256": "e55e46ba27066a7696cc17bf891b6fcce491ec71c59728cb6e930f9e099ebfb1"
+      }
+    },
+    "r3_to_r4_source_delta": [
+      {
+        "path": "web/styles.css",
+        "before_sha256": "ddaf114029b77e03fa6af3e9ba400b2c02b7f27ac5c2d1e9b4e850910d2de1af",
+        "after_sha256": "2cd74c91b66b2f0657a0c2bf18b2115f7ffd4c5996c13cd07b0471ce32132594"
+      }
+    ]
+  },
+  "local_feature_acceptance": "PASS",
+  "stable_release_ready": false,
+  "aggregate_regression_ready": false,
+  "source_publication_scope": "Qualified OSS alpha source can be published with these limitations; this is not stable-release acceptance or a publication event. Fresh exact-commit CI remains pending.",
+  "current_r5_main_gates": {
+    "gates": [
+      {
+        "label": "rustfmt",
+        "status": "PASS",
+        "code": 0,
+        "duration_ms": 2603,
+        "log": {
+          "path": "artifacts/config-profile-r5-20261018-rustfmt.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "frozen_acceptance_inputs_unchanged": true
+      },
+      {
+        "label": "cli-unit",
+        "status": "PASS",
+        "code": 0,
+        "duration_ms": 55101,
+        "log": {
+          "path": "artifacts/config-profile-r5-20261018-cli-unit.log",
+          "bytes": 819,
+          "sha256": "6bd7d5c33d57757ce8395d0b522e02e4a8322f7319b3fcc2bb505cccb31be90e"
+        },
+        "frozen_acceptance_inputs_unchanged": true
+      },
+      {
+        "label": "normal-build",
+        "status": "PASS",
+        "code": 0,
+        "duration_ms": 31314,
+        "log": {
+          "path": "artifacts/config-profile-r5-20261018-normal-build.log",
+          "bytes": 175,
+          "sha256": "b40e145633b37f59af1bbf79f7d633da873dcaf7a6950f7a22e8569d0f16bfc8"
+        },
+        "frozen_acceptance_inputs_unchanged": true
+      },
+      {
+        "label": "cli-live",
+        "status": "PASS",
+        "code": 0,
+        "duration_ms": 1020,
+        "log": {
+          "path": "artifacts/config-profile-r5-20261018-cli-live.log",
+          "bytes": 174,
+          "sha256": "7a783d435818ed12ff781429f2eeb8159c7d47d5451777e945d859936ddc10e6"
+        },
+        "frozen_acceptance_inputs_unchanged": true
+      },
+      {
+        "label": "profiles-live",
+        "status": "PASS",
+        "code": 0,
+        "duration_ms": 8748,
+        "log": {
+          "path": "artifacts/config-profile-r5-20261018-profiles-live.log",
+          "bytes": 1751,
+          "sha256": "53b0c43e5e4398885ad6addd05e9802ac4109ee50753356cec66bc1cf101bf7c"
+        },
+        "frozen_acceptance_inputs_unchanged": true
+      },
+      {
+        "label": "semantic-fixtures",
+        "status": "PASS",
+        "code": 0,
+        "duration_ms": 425,
+        "log": {
+          "path": "artifacts/config-profile-r5-20261018-semantic-fixtures.log",
+          "bytes": 1068,
+          "sha256": "080480689e80a2242b64425576c5d0759be83ab3272372556ecc61e204e24e3f"
+        },
+        "frozen_acceptance_inputs_unchanged": true
+      },
+      {
+        "label": "state-corpus",
+        "status": "PASS",
+        "code": 0,
+        "duration_ms": 373,
+        "log": {
+          "path": "artifacts/config-profile-r5-20261018-state-corpus.log",
+          "bytes": 10141,
+          "sha256": "26ad7aa2fba1ab6ec0edb0f1af82f8fa9fa1ccfe721c16b85b7a8b5b34c1bbf9"
+        },
+        "frozen_acceptance_inputs_unchanged": true
+      },
+      {
+        "label": "workspace",
+        "status": "PASS",
+        "code": 0,
+        "duration_ms": 943644,
+        "log": {
+          "path": "artifacts/config-profile-r5-20261018-workspace.log",
+          "bytes": 206207,
+          "sha256": "ab9e4f6ae1bae4bd86d5d08f20c1c97be633d7322e07cca9fa6a774c32016a94"
+        },
+        "frozen_acceptance_inputs_unchanged": true
+      },
+      {
+        "label": "clippy",
+        "status": "PASS",
+        "code": 0,
+        "duration_ms": 50069,
+        "log": {
+          "path": "artifacts/config-profile-r5-20261018-clippy.log",
+          "bytes": 295,
+          "sha256": "1e1b4d74be6996d83545eea912251d83541b2de9cb632bac9f8697cfd6f17700"
+        },
+        "frozen_acceptance_inputs_unchanged": true
+      },
+      {
+        "label": "explicit-chromium",
+        "status": "PASS",
+        "code": 0,
+        "duration_ms": 53433,
+        "log": {
+          "path": "artifacts/config-profile-r5-20261018-explicit-chromium.log",
+          "bytes": 4400,
+          "sha256": "72ee21f9fb3ace505430685fd726ec95bc3e5bd9e5bd7460df5485ade0073a3f"
+        },
+        "frozen_acceptance_inputs_unchanged": true
+      },
+      {
+        "label": "positive-enrichment",
+        "status": "PASS",
+        "code": 0,
+        "duration_ms": 7758,
+        "log": {
+          "path": "artifacts/config-profile-r5-20261018-positive-enrichment.log",
+          "bytes": 1004,
+          "sha256": "6df2bfeb6f2e6553bde94bd18646574e828a5f3a2e5af6880753f3978ae3804f"
+        },
+        "frozen_acceptance_inputs_unchanged": true
+      }
+    ],
+    "rustfmt": {
+      "status": "PASS"
+    },
+    "cli_units": {
+      "status": "PASS",
+      "tests": 4
+    },
+    "state_corpus": {
+      "status": "PASS",
+      "tests": 104,
+      "failed": 0,
+      "ignored": 0,
+      "profile_tests_included": 33,
+      "actual_native": false,
+      "actual_browser": false
+    },
+    "semantic_fixtures": {
+      "status": "PASS",
+      "groups": 40,
+      "actual_native": false,
+      "actual_browser": false
+    },
+    "scope": "Eleven terminal actual main-coordinator gates; complete Rust/Clippy/Chromium/provider details are below."
+  },
+  "separate_sitemap_native_gates": {
+    "path": "artifacts/config-profile-r5-sitemaps-20261018-gates.json",
+    "bytes": 3057,
+    "sha256": "7ea2095b5c8a2a5394f9b79b7dda424d289548876f848626158a4d625de47de6",
+    "status": "PASS",
+    "groups": {
+      "membership": 11,
+      "assessment": 13
+    },
+    "gates": [
+      {
+        "label": "sitemap-membership",
+        "code": 0,
+        "duration_ms": 9153,
+        "log": {
+          "path": "artifacts/config-profile-r5-sitemaps-20261018-sitemap-membership.log",
+          "bytes": 1480,
+          "sha256": "796877d282b5c77c7b70c2b5dc2adeb85a0c0d4ab965f415b5fa873bf11a6676"
+        }
+      },
+      {
+        "label": "sitemap-assessment",
+        "code": 0,
+        "duration_ms": 9850,
+        "log": {
+          "path": "artifacts/config-profile-r5-sitemaps-20261018-sitemap-assessment.log",
+          "bytes": 1734,
+          "sha256": "cab59e2c71d7e12f12e0d0ba736c5295b3e325b42e248372644d5e366d5a50b3"
+        }
+      }
+    ],
+    "receipts": [
+      {
+        "path": "artifacts/cp-sitemap-membership-r1/proof.json",
+        "bytes": 473937,
+        "sha256": "9e25fae383adc1bf0ad6d30e71eb7141d31354c9b9225ef12a3c4c243c5ba7a3"
+      },
+      {
+        "path": "artifacts/cp-sitemap-assessment-r1/proof.json",
+        "bytes": 498551,
+        "sha256": "d6cffc0ffd8f9506450206b4d8ba6f0bf59fe46fd3f7309dc667a74420f408c5"
+      }
+    ]
+  },
+  "supplemental_post_run_include_audit": {
+    "path": "artifacts/config-profile-r5-supplemental-includes.json",
+    "bytes": 2627,
+    "sha256": "16a8c8518b0863bbaf170bf5e00b3efd058214c64d45526731e403b49c70dc6b",
+    "literal_include_references": 81,
+    "additional_fixture_documents": [
+      {
+        "path": "docs/parity/reference-headings/fixture-cases.json",
+        "bytes": 19440,
+        "sha256": "9af4e566f3b62f07239b7e59a001d3d25e7c432e9459096d3e14ca49d0194e34",
+        "parent_raw_bytes_equal": true
+      },
+      {
+        "path": "docs/parity/resource-matrix-plan.json",
+        "bytes": 181336,
+        "sha256": "06ac2ef019370b234d4fda56cba687923305e9a148aebf1c967d145068cbd18d",
+        "parent_raw_bytes_equal": true
+      }
+    ],
+    "current_executables_at_recorded_run_paths": [
+      {
+        "path": "target/debug/deps/dom_fixtures-08f541bcc18b9a9b.exe",
+        "bytes": 40320000,
+        "sha256": "d53da96406045c2f61ac3f582628cd8f8f614c93acd40de10cde4c2d4c9f99ca",
+        "embedded_fixture": "docs/parity/reference-headings/fixture-cases.json",
+        "embedded_full_raw_offset": 29761160
+      },
+      {
+        "path": "target/debug/deps/resource_matrix_fixtures-6684979975529288.exe",
+        "bytes": 41779712,
+        "sha256": "246dd55a6987ac74e3de38080f72a37a3627155b41b39b511d01e6556c48ede4",
+        "embedded_fixture": "docs/parity/resource-matrix-plan.json",
+        "embedded_full_raw_offset": 30414352
+      },
+      {
+        "path": "target/debug/deps/resource_redirect_fixtures-0ad629e5d4ddd224.exe",
+        "bytes": 41280512,
+        "sha256": "b279a30b245b25c1ac18d1c6f16e51ed76a19a536fb7889300349878e20426c1",
+        "embedded_fixture": "docs/parity/resource-matrix-plan.json",
+        "embedded_full_raw_offset": 29974304
+      },
+      {
+        "path": "target/debug/deps/resource_response_fixtures-d474db5eea00182a.exe",
+        "bytes": 41358848,
+        "sha256": "fc62e68b5697ef7f19b4791f8438abcf02d0fb97bb209c719a6e5dca20042c2b",
+        "embedded_fixture": "docs/parity/resource-matrix-plan.json",
+        "embedded_full_raw_offset": 30461952
+      }
+    ],
+    "pre_execution_hashes_for_these_four_test_executables_captured": false,
+    "scope": "564 explicit prebuild frozen source and harness inputs are not an exhaustive compiler dependency closure. These two additional literal test-only documents were checked after execution against unchanged parent bytes and full embedding in the currently present four executables at exact paths recorded by the run. No pre-execution hash of these executables was separately captured. Supplemental post-run evidence, not retroactive prefreeze."
+  },
+  "post_acceptance_git_byte_preservation": {
+    "path": "artifacts/config-profile-git-byte-preservation.json",
+    "bytes": 851,
+    "sha256": "9c8339123673c0ca20f6ae0b50e9357a1f0bab284bbca5dd0475eb263761b10b",
+    "file": "scripts/fixtures/validator-only-binary.bin",
+    "fixture_working_bytes_unchanged": true,
+    "tested_bytes": 71,
+    "tested_sha256": "2722f63cbac1db7029a98f28dc00b4058300b086e407a09bdf7a9f53d63e2882",
+    "old_parent_blob_bytes": 70,
+    "old_parent_blob_sha256": "eb82ddf5043b254c02d86f72a2380e71ba168fa3ef0349b00d4f92f5fd6887d0",
+    "old_attributes_sha256": "1c9a465bba6592b16737902485cf7c1fc6e0b9d97da49ce93a598599a9e4f1ee",
+    "new_attributes_sha256": "af7ca3370c20c370e93de7afa361805cf0531687942e0796c2534b3a774333ab",
+    "scope": "After terminal acceptance runs, add one file-specific Git -text rule and preserve the already tested71-byte CRLF fixture when staging. No working fixture bytes or product source changed. No broad renormalization."
+  },
+  "parent_public_ci": {
+    "path": "artifacts/config-profile-parent-ci-6398077.json",
+    "bytes": 40682,
+    "sha256": "44615f3b4743de50525e3c4e06488d973d308684e07f23594b8261a85a7da699",
+    "run_id": 39141990077,
+    "url": "https://github.com/lia-xim/open-seo-spider/actions/runs/39141990077",
+    "head_sha": "6398077e266083ea4ceb5ed8a4bc29c0dbdcb6ba",
+    "conclusion": "FAIL",
+    "jobs": [
+      {
+        "name": "test (ubuntu-latest)",
+        "conclusion": "success"
+      },
+      {
+        "name": "renderer",
+        "conclusion": "success"
+      },
+      {
+        "name": "test (windows-latest)",
+        "conclusion": "failure"
+      },
+      {
+        "name": "container",
+        "conclusion": "success"
+      }
+    ],
+    "windows_log": {
+      "path": "artifacts/ci-6398077-windows-117718190513.log",
+      "bytes": 476484,
+      "sha256": "d14f1be06f9a724c59540f2646ae23845a6c0a5d2630213fe4932aa4423b3d4c"
+    },
+    "diagnosis": "Windows optimized sitemap verification compared the release executable against an inherited debug SHA. Ubuntu, renderer and container jobs passed; the overall parent run failed.",
+    "candidate_change": "Current CI source repins the release SHA after its release build. That correction is not publicly verified until a new exact-commit CI run."
+  },
+  "density_observational_diagnostic": {
+    "path": "artifacts/density-diagnostic-20261018/diagnostic-result.json",
+    "bytes": 1267330,
+    "sha256": "0622da5c5cb470a71b335bd59bf452a121e02a0cf5dd263b3e33c1f1d1eba11b",
+    "acceptance": false,
+    "code": 0,
+    "signal": null,
+    "canonical_driver_sha256": "8d539d809403d7d23bc7a52f4852e30458b04cc4795eced149f740b28888db5d",
+    "instrumented_copy_sha256": "2b6f6621a68764e04176f10f91562cf523b34457d9d9998187bdb738011b7e3e",
+    "canonical_unchanged": true,
+    "scope": "Ignored instrumented observational copy passed. Diagnostic only; it is not the canonical isolated acceptance and does not establish the cause of the failed aggregate Space wait."
+  }
+}

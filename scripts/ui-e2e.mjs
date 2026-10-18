@@ -51,6 +51,7 @@ const suites = [
   ['custom-search', 'ui-custom-search-live.cjs', 'live'],
   ['saved-comparison', 'ui-saved-comparison-live.cjs', 'owned-native'],
   ['comparison-bundles', 'ui-saved-comparison-bundle-live.cjs', 'owned-native'],
+  ['configuration-profiles', 'ui-config-profiles-live.cjs', 'owned-native'],
 ];
 const args = process.argv.slice(2);
 assert(args.length === 0 || (args.length === 2 && args[0] === '--only'), 'Usage: node scripts/ui-e2e.mjs [--only name,name]');

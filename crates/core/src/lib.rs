@@ -9,6 +9,8 @@ pub use cdn_directory_reporting::{
     CdnDirectoryReportingObservation, CdnDirectoryRuleMatch,
 };
 mod comparison;
+pub mod config_profile;
+pub use config_profile::*;
 mod content_analysis;
 mod content_binding;
 mod content_capture;

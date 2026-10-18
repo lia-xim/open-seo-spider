@@ -4,6 +4,14 @@ The supported story is: open the redesigned interface, configure a crawl, fetch
 owned pages through the Rust backend, inspect the saved result, and export or
 reopen that result. Tests must follow the real boundary they claim to cover.
 
+## Current profile acceptance and retained aggregate failure
+
+The [configuration-profile receipt](verification/configuration-profiles-20261018/README.md) records 1,802 ordinary Rust tests (five deliberate ignores), strict Clippy, four explicit Chromium cases, controlled-provider cold replay, 104 state tests and 40 semantic groups. Native profile acceptance has ten actual browser groups, 26 distinct rejection controls and six real downloads.
+
+All **39 registered UI suites** have successful executions on the same frozen product and driver bytes across **three invocations**: 31 successful cases in a later-failing full run, seven remaining cases, and one unchanged isolated density case. This is **not one successful 39-suite invocation**. The full run timed out waiting for Space to close a disclosure after touch/text selection; the isolated canonical case and an instrumented diagnostic passed. Its intermittent cause and aggregate stability remain unproven. No deadline was raised, assertion disabled or product fix inferred from the isolated success.
+
+The separate actual CLI check is `node scripts/crawl-config-cli-e2e.mjs`, with `SPIDER_BINARY` explicitly set to the built executable. It proves raw native `--config` options and explicit portable-envelope refusal before HTTP/output/store effects. It does not execute portable profiles through the CLI. See [the format contract](configuration-profiles.md) and [the full backlog](FEATURE_TODO.md).
+
 ## Run locally
 
 Use the project's Rust toolchain and Node.js 24. Install renderer dependencies
@@ -22,9 +30,10 @@ dynamic loopback ports, uses a new test store, and closes its app through stdin
 EOF. It refuses the installed application's ports 8787/8790. Runtime evidence
 goes to an ignored `artifacts/ui-e2e-*` directory; `SPIDER_E2E_OUTPUT` may select
 another **new** output directory. Each suite gets a separate artifact directory.
-Use a short output path in deeply nested Windows checkouts. The observed long
-SQLite-store path failure remains an open product case; shorter test paths are
-a workaround, not acceptance of long-path support.
+Use a fresh output path in deeply nested Windows checkouts. The separate
+[Windows store-path receipt](verification/windows-store-paths-20261018/README.md)
+records the fixed ordinary SQLite path cases through 1,150 UTF-16 units and
+Unicode paths; network UNC and broader namespace portability remain unproven.
 Tracked files are hashed before/after execution; a changed file fails the run.
 The application child does not inherit `OPEN_SEO_PAGESPEED_API_KEY`. The API
 enrichment suite exercises preview and refusal paths without sending targets
@@ -47,7 +56,7 @@ credential handling are unchanged. No job or saved result is seeded. The child
 processes cannot inherit a PageSpeed key; only isolated loopback ports are used.
 `SPIDER_ENRICHMENT_ARTIFACT_DIR` may select a **new** artifact directory; reuse is
 refused. Default output is `artifacts/enrichment-success-*`. This command runs
-separately from the 38-suite UI runner and is not an additional registered suite.
+separately from the UI runner and is not an additional registered suite.
 
 For a focused investigation:
 
@@ -77,6 +86,7 @@ explicit executions separately.
 | Resource and cookie observations | resources | Browser → Rust → owned fixture |
 | Offline robots and SERP editing/exports | robots, serp | Browser → Rust; website-request witnesses |
 | URL-list import and crawl | list-import | Browser → Rust → owned fixture |
+| Full native configuration profiles, exact integer/byte preservation, volatile headers and cold reopen | configuration-profiles | Registered owned-native browser/file-picker/download driver; current source acceptance is recorded separately |
 | Drain/pause/resume and selected recrawl | pause-resume, selected-recrawl | Browser → Rust → owned HTTP barriers/persistent crawl |
 | Policy preview and crawl decisions | policy | Browser → Rust → owned fixture |
 | Saved raw/rendered text and content analysis | content | Browser → native saved content |
@@ -111,7 +121,7 @@ seconds. Its positive fixture contains 1,010 real pages with unique descriptions
 The separate repeated-description case was refused before paging by the old
 32 MiB projection-copy budget. That historical failure is preserved.
 
-The current [large-issue receipt](verification/large-segment-issues-20261018/README.md)
+The earlier [large-issue receipt](verification/large-segment-issues-20261018/README.md)
 records successful executions of all 38 registered suites on the same normal
 executable and 486 unchanged source/driver inputs. These are separate phases:
 14 successful cases before a Node-process crash in Robots, 22 complete cases,
@@ -129,7 +139,7 @@ checkpoints are explicitly `IN_PROGRESS`; only the final receipt establishes
 whole-case acceptance. General performance/RSS, long Windows stores and the
 isolated Node crash's root cause remain unproven. Fresh public CI is separate.
 
-The 38 registered suites provide bounded functional cases for the specialist
+The 39 registered suites provide bounded functional cases for the specialist
 tools above; a passing case is not complete feature acceptance. Cold native
 restart across other tools, all rule/operator combinations, broader
 malformed imported archives and concurrent mutations need further coverage.

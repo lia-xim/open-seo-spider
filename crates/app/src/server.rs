@@ -29,6 +29,7 @@ use uuid::Uuid;
 mod accessibility;
 mod broken_sources;
 mod comparison;
+mod config_profiles;
 mod content;
 mod crawl_quotas;
 mod directory_tree;
@@ -296,6 +297,47 @@ async fn serve_with_mcp_files_ready_source_inner(
                     include_str!("../../../web/app.js"),
                 )
             }),
+        )
+        .route(
+            "/config-profiles.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+                    include_str!("../../../web/config-profiles.js"),
+                )
+            }),
+        )
+        .route(
+            "/api/config-profiles/default",
+            get(config_profiles::defaults),
+        )
+        .route(
+            "/api/config-profiles/from-config",
+            post(config_profiles::from_config).layer(axum::extract::DefaultBodyLimit::max(
+                config_profiles::MAX_REQUEST_BYTES,
+            )),
+        )
+        .route(
+            "/api/config-profiles/inspect",
+            post(config_profiles::inspect).layer(axum::extract::DefaultBodyLimit::max(
+                config_profiles::MAX_REQUEST_BYTES,
+            )),
+        )
+        .route(
+            "/api/config-profiles/export",
+            post(config_profiles::export).layer(axum::extract::DefaultBodyLimit::max(
+                config_profiles::MAX_REQUEST_BYTES,
+            )),
+        )
+        .route(
+            "/api/crawls/{id}/config-profile",
+            get(config_profiles::selected),
+        )
+        .route(
+            "/api/crawls/from-profile",
+            post(config_profiles::create).layer(axum::extract::DefaultBodyLimit::max(
+                config_profiles::MAX_REQUEST_BYTES,
+            )),
         )
         .route(
             "/dashboard-segments.js",
@@ -1185,6 +1227,12 @@ async fn create_crawl_prepared(
 ) -> ApiResult<lifecycle::PreparedLaunch> {
     let config =
         config_from_input(value).map_err(|error| api_error(StatusCode::BAD_REQUEST, error))?;
+    create_crawl_with_config_prepared(state, config).await
+}
+async fn create_crawl_with_config_prepared(
+    state: AppState,
+    config: CrawlConfig,
+) -> ApiResult<lifecycle::PreparedLaunch> {
     let id = Uuid::new_v4();
     let job = Arc::new(RwLock::new(Job {
         id,

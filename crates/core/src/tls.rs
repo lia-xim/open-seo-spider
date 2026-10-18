@@ -1,5 +1,9 @@
 use anyhow::{Context, Result, bail};
 use reqwest::{Certificate, ClientBuilder, header::HeaderMap};
+use rustls::{
+    RootCertStore,
+    pki_types::{CertificateDer, pem::PemObject},
+};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::{
@@ -88,6 +92,10 @@ impl TlsConfig {
         }
         let mut total = 0usize;
         let mut result = Vec::new();
+        // Match Reqwest's rustls ClientBuilder trust-anchor validation without
+        // constructing a client. Parsing a reqwest::Certificate alone only
+        // stores its DER bytes and does not validate the certificate.
+        let mut roots = RootCertStore::empty();
         let mut names = HashSet::new();
         for file in &self.trusted_certificates {
             let name = file.name();
@@ -146,13 +154,26 @@ impl TlsConfig {
                     let pem_input = text.trim_start_matches(|c| {
                         matches!(c, ' ' | '\t' | '\r' | '\n' | '\u{000b}' | '\u{000c}')
                     });
-                    let certs = Certificate::from_pem_bundle(pem_input.as_bytes())?;
-                    if certs.len() != count || count == 0 {
+                    let mut decoded_count = 0usize;
+                    for certificate in CertificateDer::pem_slice_iter(pem_input.as_bytes()) {
+                        let certificate =
+                            certificate.context("Invalid PEM certificate encoding")?;
+                        roots
+                            .add(certificate.clone())
+                            .context("Invalid PEM certificate trust anchor")?;
+                        result.push(Certificate::from_der(certificate.as_ref())?);
+                        decoded_count += 1;
+                    }
+                    if decoded_count != count || count == 0 {
                         bail!("Incomplete PEM certificate bundle");
                     }
-                    result.extend(certs);
                 }
-                TrustedCertificate::Der { .. } => result.push(Certificate::from_der(&bytes)?),
+                TrustedCertificate::Der { .. } => {
+                    roots
+                        .add(CertificateDer::from(bytes.as_slice()))
+                        .context("Invalid DER certificate trust anchor")?;
+                    result.push(Certificate::from_der(&bytes)?);
+                }
             }
         }
         if result.len() > 32 {

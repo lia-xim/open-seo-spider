@@ -2,6 +2,7 @@ mod analysis;
 mod broken_sources;
 mod comparison_app;
 mod content_cohort;
+mod crawl_config_file;
 mod crawl_quotas_app;
 mod crawl_resume;
 mod enrichment_app;
@@ -964,9 +965,7 @@ async fn main() -> anyhow::Result<()> {
             xml_sitemap,
         } => {
             let mut config = if let Some(path) = config {
-                serde_json::from_slice::<CrawlConfig>(
-                    &read_bounded(&path, 32 * 1024 * 1024).await?,
-                )?
+                crawl_config_file::parse_raw_config(&read_bounded(&path, 32 * 1024 * 1024).await?)?
             } else {
                 CrawlConfig::default()
             };

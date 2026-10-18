@@ -28,6 +28,8 @@
     }
   };
 
+  let configProfiles = null, profileFormBaseline = null, profileToolbarBaseline = null, profileHeaderSignature = '', profileQuotaBaseline = null;
+  const legacySettingsDefaults = {...state.settings};
   let dashboardSegments = null;
   const separateSegmentSections = new Set(['inputs','policy','policyaliases','content','resource-discovery','sitemap-membership','sitemap-findings']);
   const relationshipPages = () => state.segmentView ? state.segmentView.target_lookup : state.pages;
@@ -394,6 +396,7 @@
   }
 
   async function selectCrawl(id) {
+    if (typeof configProfiles !== 'undefined' && configProfiles) configProfiles.edited();
     invalidatePoll();
     resetSitemapBundle();
     resetContent();
@@ -431,9 +434,16 @@
     }
   }
 
+  function configProfileStartRefusal() {
+    if(configProfiles?.state.restoreError)return 'Gespeicherter Profilentwurf konnte nicht wiederhergestellt werden: '+configProfiles.state.restoreError+' Der Crawlstart bleibt gesperrt. In den Einstellungen ein gültiges Profil prüfen und ausdrücklich speichern.';
+    if(configProfiles?.state.restorePending)return 'Der gespeicherte Profilentwurf wurde noch nicht erfolgreich wiederhergestellt. Der Crawlstart bleibt gesperrt. In den Einstellungen ein gültiges Profil prüfen und ausdrücklich speichern.';
+    return configProfiles?.state.busy?'Die Profilprüfung läuft noch. Bitte vor dem Crawlstart abschließen.':'';
+  }
   async function startCrawl(event) {
     event.preventDefault();
+    const refusal=configProfileStartRefusal();if(refusal){message(refusal,true);return;}
     if (actionBusy() || active()) return;
+    if (typeof configProfiles !== 'undefined' && configProfiles?.state.active) { await startProfileCrawl(); return; }
     const mode = $('crawl-mode').value;
     let urls = mode === 'list' ? [] : [$('seed-url').value.trim()], sitemapUrls = [], inputImports = [];
     if (mode !== 'list' && !urls[0]) { message('Bitte gib mindestens eine URL ein.', true); return; }
@@ -622,6 +632,7 @@
     renderSitemapBundleControls();
     renderQuotaSummary();
     $('settings-summary').textContent = `${state.settings.concurrency} parallele Requests · ${state.settings.obey_robots ? 'Robots.txt beachten' : 'Robots.txt ignorieren'}${state.settings.max_pages ? ` · Grenze ${number(state.settings.max_pages)}` : ''}${state.settings.javascript_rendering ? ' · JavaScript-Rendering' : ''}${state.settings.crawl_policy_enabled ? ' · Native URL-Policy' : ''}${state.settings.resource_discovery_enabled ? ' · Native Ressourcenregeln' : ''}${state.settings.sitemap_source_processing_enabled ? ' · Eigene Sitemap-Grenzen' : ''}`;
+    if(typeof configProfiles!=='undefined'&&configProfiles){if(configProfiles.state.active)$('settings-summary').textContent='Vollständiges natives Profil · '+configProfiles.unresolved().length+' erforderliche Headerwerte offen';if(configProfiles.state.restoreError||configProfiles.state.restorePending)$('settings-summary').textContent='Gespeichertes Profil nicht wiederhergestellt · Crawlstart gesperrt · Einstellungen prüfen';if(configProfileStartRefusal())$('start-button').disabled=true;}
   }
 
   function renderMetrics() {
@@ -1504,10 +1515,17 @@
     $('directive-reporting-load-status').textContent = '';
     $('directive-reporting-load-status').setAttribute('role', 'status');
     $('settings-dialog').showModal();
+    if (typeof configProfiles !== 'undefined' && configProfiles) {
+      configProfiles.begin();
+      if (configProfiles.state.working) projectConfigProfile(configProfiles.state.working);
+      else { profileFormBaseline = profileFormSnapshot(); profileConstraints(false); }
+      renderConfigProfile();
+    }
   }
 
-  function saveSettings(event) {
+  async function saveSettings(event) {
     event.preventDefault();
+    if (typeof configProfiles !== 'undefined' && configProfiles && (configProfiles.state.restoreError || configProfiles.state.restorePending || configProfiles.state.working || configProfiles.state.text.trim())) { await saveConfigProfile(); return; }
     const form = $('settings-form');
     const advancedText = { ...readTlsSettings(form), ...readDirectiveReportingSettings(form), ...readCdnDirectoryReportingSettings(form), ...readCdnClassificationSettings(form), ...readCrawlQuotaSettings(form), ...readCrawlAdmissionSettings(form), ...readSitemapSourceProcessingSettings(form), ...readSitemapSourceArchiveSettings(form), include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value, link_position_rules_json: form.elements.link_position_rules_json.value, validate_fragments: form.elements.validate_fragments.checked, crawl_policy_enabled: form.elements.crawl_policy_enabled.checked, crawl_policy_json: form.elements.crawl_policy_json.value, live_policy_limits_json: form.elements.live_policy_limits_json.value, follow_subdomains: form.elements.follow_subdomains.checked, check_external: form.elements.check_external.checked, javascript_rendering: form.elements.javascript_rendering.checked, content_capture_enabled:form.elements.content_capture_enabled.checked, content_capture_json:form.elements.content_capture_json.value,resource_discovery_enabled:form.elements.resource_discovery_enabled.checked,resource_discovery_json:form.elements.resource_discovery_json.value,resource_discovery_limits_json:form.elements.resource_discovery_limits_json.value };
     Object.assign(advancedText,{custom_search_enabled:form.elements.custom_search_enabled.checked,custom_search_json:form.elements.custom_search_json.value});
@@ -1566,6 +1584,195 @@
         for (const field of sitemapSourceFields) state.settings[field.setting] = String(saved[field.setting] ?? field.initial);
       }
     } catch (_) { /* Invalid saved settings fall back to safe defaults. */ }
+  }
+
+  function profileFormSnapshot() {
+    const result = Object.create(null);
+    for (const element of $('settings-form').elements) if (element.name && element.type !== 'file' && !['submit','button'].includes(element.type)) result[element.name] = element.type === 'checkbox' ? element.checked : element.value;
+    return result;
+  }
+  function profileToolbarSnapshot() { return JSON.stringify({mode:$('crawl-mode').value,seed:$('seed-url').value,list:$('url-list').value}); }
+  function profileSourceSnapshot(envelope) {
+    const fields=window.ConfigProfiles.fields(envelope.config_json);
+    return JSON.stringify(['seed_urls','sitemap_urls','input_imports','explicit_sitemap_inputs'].map(key=>[key,fields.has(key),fields.get(key)]));
+  }
+  function profileConstraints(enabled) {
+    const form = $('settings-form');
+    const bounds = {concurrency:['1',enabled?'1024':'64'],timeout_seconds:['1',enabled?null:'300'],delay_ms:['0',enabled?null:'60000'],max_body_mb:[enabled?'0.00000095367431640625':'1',enabled?null:'100']};
+    for (const [key,[min,max]] of Object.entries(bounds)) { const input=form.elements[key];input.min=min;if(max===null)input.removeAttribute('max');else input.max=max; }
+    form.elements.max_body_mb.step = enabled ? 'any' : '1';
+  }
+  function projectConfigProfile(envelope, commit = false) {
+    const tools=window.ConfigProfiles, effective=tools.fields(envelope.effective_config_json), settings={...legacySettingsDefaults};
+    const raw=(key,fallback)=>effective.get(key)??fallback;
+    const string=(key,fallback='')=>JSON.parse(raw(key,JSON.stringify(fallback)));
+    for(const [ui,key] of [['concurrency','concurrency'],['timeout_seconds','request_timeout_secs'],['delay_ms','delay_ms']])settings[ui]=raw(key,'0');
+    settings.max_pages=raw('max_pages','null')==='null'?'0':raw('max_pages','0');settings.max_depth=raw('max_depth','null')==='null'?'0':raw('max_depth','0');
+    settings.max_body_mb=tools.toMiB(raw('max_body_bytes','5242880'));
+    for(const key of ['user_agent','indexability_agent'])settings[key]=string(key,legacySettingsDefaults[key]);
+    for(const key of ['obey_robots','check_external','validate_fragments'])settings[key]=raw(key,'false')==='true';
+    settings.follow_subdomains=raw('include_subdomains','false')==='true';
+    for(const [ui,key]of [['include_patterns_text','include_patterns'],['exclude_patterns_text','exclude_patterns']])settings[ui]=JSON.parse(raw(key,'[]')).join('\n');
+    for(const [ui,key]of [['custom_extractions_json','custom_extractions'],['audit_thresholds_json','audit_thresholds'],['pdf_analysis_json','pdf_analysis'],['link_position_rules_json','link_position_rules']])settings[ui]=raw(key,legacySettingsDefaults[ui]);
+    const renderer=raw('renderer','null');settings.javascript_rendering=renderer!=='null';
+    if(settings.javascript_rendering){const r=tools.fields(renderer);settings.renderer_endpoint=JSON.parse(r.get('endpoint'));settings.renderer_wait_ms=r.get('wait_ms');settings.renderer_accessibility=r.get('accessibility')==='true';settings.renderer_screenshot=r.get('screenshot')==='true';settings.renderer_collect_cookies=r.get('collect_cookies')==='true';settings.custom_javascript_json=r.get('custom_javascript')||'[]';}
+    for(const [enabled,json,key,limits,limitsKey]of [['crawl_policy_enabled','crawl_policy_json','crawl_policy','live_policy_limits_json','live_policy_limits'],['content_capture_enabled','content_capture_json','content_capture'],['custom_search_enabled','custom_search_json','custom_search'],['resource_discovery_enabled','resource_discovery_json','resource_discovery','resource_discovery_limits_json','resource_discovery_limits']]){settings[enabled]=effective.has(key)&&raw(key)!=='null';if(settings[enabled])settings[json]=raw(key);if(limits)settings[limits]=raw(limitsKey,'{}');}
+    for(const [enabled,key,definitions]of [['sitemap_source_processing_enabled','sitemap_source_processing',sitemapSourceFields],['sitemap_membership_limits_enabled','sitemap_membership_limits',sitemapMembershipFields],['crawl_admission_limits_enabled','crawl_admission_limits',crawlAdmissionFields],['sitemap_source_archive_enabled','sitemap_source_archive',sitemapArchiveFields]]){
+      settings[enabled]=effective.has(key)&&raw(key)!=='null';
+      if(settings[enabled]){const values=tools.fields(raw(key));for(const field of definitions)settings[field.setting]=values.get(field.native)??String(field.initial??'');if(key==='sitemap_source_archive'){settings.sitemap_source_archive_post_http=values.get('retain_post_http_entity')==='true';settings.sitemap_source_archive_decoded_xml=values.get('retain_decoded_xml')==='true';}}
+    }
+    settings.crawl_quotas_enabled=effective.has('crawl_quotas')&&raw('crawl_quotas')!=='null';
+    if(settings.crawl_quotas_enabled){const q=tools.fields(raw('crawl_quotas'));settings.crawl_quota_per_depth=q.get('max_urls_per_depth')==='null'?'':q.get('max_urls_per_depth')??'';settings.crawl_quota_per_subdomain=q.get('max_urls_per_subdomain')==='null'?'':q.get('max_urls_per_subdomain')??'';settings.crawl_quota_patterns_json=q.get('url_pattern_quotas')||'[]';}
+    settings.tls_enabled=effective.has('tls')&&raw('tls')!=='null';if(settings.tls_enabled){const t=tools.fields(raw('tls'));settings.tls_respect_hsts=t.get('respect_hsts')==='true';settings.tls_certificates_json=t.get('trusted_certificates')||'[]';}
+    settings.cdn_classification_enabled=effective.has('cdn_classification')&&raw('cdn_classification')!=='null';if(settings.cdn_classification_enabled)settings.cdn_origins_text=JSON.parse(tools.fields(raw('cdn_classification')).get('origins')||'[]').join('\n');
+    settings.cdn_directory_reporting_enabled=effective.has('cdn_directory_reporting')&&raw('cdn_directory_reporting')!=='null';if(settings.cdn_directory_reporting_enabled)settings.cdn_directory_rules_text=JSON.parse(tools.fields(raw('cdn_directory_reporting')).get('rules')||'[]').map(rule=>typeof rule==='string'?rule:rule.rule??rule.directory??'').join('\n');
+    const directive=effective.has('directive_reporting')&&raw('directive_reporting')!=='null'?tools.fields(raw('directive_reporting')):new Map();for(const key of directiveReportingKeys)settings[key]=directive.get(key)==='true';
+    const form=$('settings-form');for(const[key,value]of Object.entries(settings)){const element=form.elements.namedItem(key);if(!element)continue;if(element.type==='checkbox')element.checked=Boolean(value);else element.value=value;}
+    profileConstraints(true);toggleRendererSettings(settings.javascript_rendering);syncResourceContractSettings();syncSitemapSourceProcessingSettings();syncSitemapSourceArchiveSettings();syncCrawlAdmissionSettings();renderQuotaRuleControls(JSON.parse(settings.crawl_quota_patterns_json));syncQuotaSettings();
+    profileFormBaseline=profileFormSnapshot();
+    profileQuotaBaseline=JSON.stringify(readQuotaRuleControls());
+    if(commit)state.settings=settings;
+    return settings;
+  }
+  function configProfilePatches() {
+    if(!profileFormBaseline)return [];
+    const form=$('settings-form'), current=profileFormSnapshot(), baseline=profileFormBaseline, patches=[];
+    if(profileQuotaBaseline!==null){const rows=JSON.stringify(readQuotaRuleControls());if(rows!==profileQuotaBaseline)current.crawl_quota_patterns_json=rows;}
+    const changed=key=>current[key]!==baseline[key], set=(path,value_json)=>patches.push({path,value_json});
+    const declared=configProfiles.state.working?.config_json||'{}';
+    const remove=path=>{if(window.ConfigProfiles.at(declared,path)!==undefined)patches.push({path,remove:true});};
+    const integer=value=>{if(!/^\d+$/.test(String(value)))throw Error('Eine ganze nichtnegative Zahl ist erforderlich.');return String(value).replace(/^0+(?=\d)/,'');};
+    for(const[ui,key]of [['concurrency','concurrency'],['timeout_seconds','request_timeout_secs'],['delay_ms','delay_ms'],['max_pages','max_pages'],['max_depth','max_depth']])if(changed(ui))set([key],['max_pages','max_depth'].includes(ui)&&integer(current[ui])==='0'?'null':integer(current[ui]));
+    if(changed('max_body_mb'))set(['max_body_bytes'],window.ConfigProfiles.fromMiB(current.max_body_mb));
+    for(const key of ['user_agent','indexability_agent'])if(changed(key))set([key],JSON.stringify(current[key].trim()));
+    for(const[ui,key]of [['follow_subdomains','include_subdomains'],['obey_robots','obey_robots'],['check_external','check_external'],['validate_fragments','validate_fragments']])if(changed(ui))set([key],JSON.stringify(current[ui]));
+    for(const[ui,key]of [['include_patterns_text','include_patterns'],['exclude_patterns_text','exclude_patterns']])if(changed(ui))set([key],JSON.stringify([...new Set(current[ui].split(/\r?\n/).map(value=>value.trim()).filter(Boolean))]));
+    for(const[ui,key]of [['custom_extractions_json','custom_extractions'],['audit_thresholds_json','audit_thresholds'],['pdf_analysis_json','pdf_analysis'],['link_position_rules_json','link_position_rules']])if(changed(ui))set([key],current[ui]);
+    const base=window.ConfigProfiles.fields(configProfiles.state.working?.effective_config_json||'{}');
+    const exists=key=>base.has(key)&&base.get(key)!=='null';
+    for(const[enabled,json,key,limits,limitsKey]of [['crawl_policy_enabled','crawl_policy_json','crawl_policy','live_policy_limits_json','live_policy_limits'],['content_capture_enabled','content_capture_json','content_capture'],['custom_search_enabled','custom_search_json','custom_search'],['resource_discovery_enabled','resource_discovery_json','resource_discovery','resource_discovery_limits_json','resource_discovery_limits']]){
+      if(changed(enabled)){if(!current[enabled]){remove([key]);if(limitsKey)remove([limitsKey]);}else{set([key],current[json]);if(limitsKey)set([limitsKey],current[limits]);}}
+      else if(current[enabled]){if(changed(json))set([key],current[json]);if(limits&&changed(limits))set([limitsKey],current[limits]);}
+    }
+    if(changed('javascript_rendering')){
+      if(!current.javascript_rendering)set(['renderer'],'null');
+      else set(['renderer'],'{"endpoint":'+JSON.stringify(current.renderer_endpoint.trim())+',"wait_ms":'+integer(current.renderer_wait_ms)+',"accessibility":'+JSON.stringify(current.renderer_accessibility)+',"screenshot":'+JSON.stringify(current.renderer_screenshot)+',"collect_cookies":'+JSON.stringify(current.renderer_collect_cookies)+',"custom_javascript":'+current.custom_javascript_json+'}');
+    }else if(current.javascript_rendering){for(const[ui,key]of [['renderer_endpoint','endpoint'],['renderer_wait_ms','wait_ms'],['renderer_accessibility','accessibility'],['renderer_screenshot','screenshot'],['renderer_collect_cookies','collect_cookies'],['custom_javascript_json','custom_javascript']])if(changed(ui))set(['renderer',key],ui==='custom_javascript_json'?current[ui]:ui==='renderer_wait_ms'?integer(current[ui]):JSON.stringify(current[ui]));}
+    const objectGroup=(enabled,key,keys,parser)=>{
+      if(!keys.some(changed)&&!changed(enabled))return;
+      if(!current[enabled]){remove([key]);return;}
+      const parsed=parser(current)[key];
+      if(!parsed){remove([key]);return;}
+      if(changed(enabled)||!exists(key))set([key],JSON.stringify(parsed));
+      return parsed;
+    };
+    for(const[enabled,key,definitions,parser]of [['sitemap_source_processing_enabled','sitemap_source_processing',sitemapSourceFields,parseSitemapSourceProcessing],['sitemap_membership_limits_enabled','sitemap_membership_limits',sitemapMembershipFields,parseSitemapMembershipLimits],['crawl_admission_limits_enabled','crawl_admission_limits',crawlAdmissionFields,parseCrawlAdmissionLimits],['sitemap_source_archive_enabled','sitemap_source_archive',sitemapArchiveFields,parseSitemapSourceArchive]]){
+      const keys=definitions.map(field=>field.setting);if(key==='sitemap_source_archive')keys.push('sitemap_source_archive_post_http','sitemap_source_archive_decoded_xml');
+      const parsed=objectGroup(enabled,key,keys,parser);if(!parsed||changed(enabled)||!exists(key))continue;
+      for(const field of definitions)if(changed(field.setting)){if(Object.hasOwn(parsed,field.native))set([key,field.native],JSON.stringify(parsed[field.native]));else remove([key,field.native]);}
+      if(key==='sitemap_source_archive')for(const[ui,native]of [['sitemap_source_archive_post_http','retain_post_http_entity'],['sitemap_source_archive_decoded_xml','retain_decoded_xml']])if(changed(ui))set([key,native],JSON.stringify(current[ui]));
+    }
+    if(['crawl_quotas_enabled',...crawlQuotaSettingKeys].some(changed)){const keys=crawlQuotaSettingKeys.filter(key=>key!=='crawl_quotas_enabled');const parsed=objectGroup('crawl_quotas_enabled','crawl_quotas',keys,parseCrawlQuotas);if(parsed&&!changed('crawl_quotas_enabled')&&exists('crawl_quotas'))for(const[ui,key]of [['crawl_quota_per_depth','max_urls_per_depth'],['crawl_quota_per_subdomain','max_urls_per_subdomain'],['crawl_quota_patterns_json','url_pattern_quotas']])if(changed(ui))set(['crawl_quotas',key],JSON.stringify(parsed[key]??null));}
+    if(['tls_enabled','tls_respect_hsts','tls_certificates_json'].some(changed)){
+      if(!current.tls_enabled)remove(['tls']);else if(changed('tls_enabled')||!exists('tls'))set(['tls'],'{"version":1,"respect_hsts":'+JSON.stringify(current.tls_respect_hsts)+',"trusted_certificates":'+current.tls_certificates_json+'}');else{if(changed('tls_respect_hsts'))set(['tls','respect_hsts'],JSON.stringify(current.tls_respect_hsts));if(changed('tls_certificates_json'))set(['tls','trusted_certificates'],current.tls_certificates_json);}
+    }
+    for(const[enabled,text,key,leaf,parser]of [['cdn_classification_enabled','cdn_origins_text','cdn_classification','origins',parseCdnClassification],['cdn_directory_reporting_enabled','cdn_directory_rules_text','cdn_directory_reporting','rules',parseCdnDirectoryReporting]])if(changed(enabled)||changed(text)){
+      if(!current[enabled])remove([key]);else{const parsed=parser(current)[key];if(changed(enabled)||!exists(key))set([key],JSON.stringify(parsed));else set([key,leaf],JSON.stringify(parsed[leaf]));}
+    }
+    if(directiveReportingKeys.some(changed)){
+      if(!exists('directive_reporting'))set(['directive_reporting'],JSON.stringify({version:1,...Object.fromEntries(directiveReportingKeys.map(key=>[key,current[key]]))}));
+      else for(const key of directiveReportingKeys)if(changed(key))set(['directive_reporting',key],JSON.stringify(current[key]));
+    }
+    return patches;
+  }
+  function renderConfigProfile() {
+    if(!configProfiles)return;
+    const profile=configProfiles.state, envelope=profile.working||profile.active;
+    const text=$('config-profile-json');if(text.value!==profile.text&&profile.open)text.value=profile.text;
+    $('config-profile-effective').textContent=profile.working?.effective_config_json||'';
+    const restoreError=profile.restoreError||profile.restorePending?configProfileStartRefusal():'',error=[restoreError,profile.error!==profile.restoreError?profile.error:''].filter(Boolean).join('\n');
+    $('config-profile-restore-error').hidden=!restoreError;$('config-profile-restore-error').textContent=restoreError;
+    $('config-profile-error').hidden=!error;$('config-profile-error').textContent=error;
+    $('config-profile-status').textContent=profile.busy?'Profil wird ohne Crawl oder Website-Anfragen geprüft.':envelope?'Vollständiger nativer Entwurf. Formularänderungen werden gezielt auf den JSON-Entwurf angewendet. Erst Speichern übernimmt ihn.':'Noch kein vollständiges Profil geladen; bisherige Einstellungen bleiben aktiv.';
+    for(const id of ['config-profile-export','config-profile-load-selected','config-profile-default','config-profile-inspect'])$(id).disabled=profile.busy||(id==='config-profile-load-selected'&&!state.crawl);
+    $('settings-form').querySelector('button[type="submit"]').disabled=profile.busy;
+    const names=envelope?.required_headers||[],signature=JSON.stringify(names);
+    if(signature!==profileHeaderSignature){
+      profileHeaderSignature=signature;const container=$('config-profile-required-headers');container.replaceChildren();
+      for(const name of names){const row=document.createElement('div'),label=document.createElement('label'),caption=document.createElement('span'),input=document.createElement('input'),resolve=document.createElement('input'),resolved=document.createElement('label');caption.textContent=name+' – explizite Eingabe für den nächsten Start';input.type='password';input.autocomplete='off';input.dataset.profileHeader=name;input.setAttribute('aria-label','Headerwert '+name);resolve.type='checkbox';resolve.dataset.profileHeaderResolve=name;resolved.append(resolve,document.createTextNode('Diesen Wert verwenden (auch leer)'));label.append(caption,input);row.append(label,resolved);container.append(row);input.addEventListener('input',()=>{const value=input.value;configProfiles.invalidate();resolve.checked=true;configProfiles.header(name,value,true);});resolve.addEventListener('change',()=>{const value=input.value,present=resolve.checked;configProfiles.invalidate();configProfiles.header(name,value,present);});}
+    }
+    for(const input of $('config-profile-required-headers').querySelectorAll('[data-profile-header]')){const name=input.dataset.profileHeader;if(input.value!==configProfiles.headerValue(name))input.value=configProfiles.headerValue(name);const resolve=[...$('config-profile-required-headers').querySelectorAll('[data-profile-header-resolve]')].find(element=>element.dataset.profileHeaderResolve===name);resolve.checked=configProfiles.hasHeader(name);}
+    $('config-profile-header-state').textContent=names.length?configProfiles.unresolved().length+' von '+names.length+' Headerwerten fehlen. Profilentwurf und Profilexport enthalten keine Headerwerte. Beim Start werden sie Teil der lokal gespeicherten Laufkonfiguration.':'Keine Headerwerte erforderlich.';
+    if(profile.active){const values=window.ConfigProfiles.fields(profile.active.effective_config_json),seeds=JSON.parse(values.get('seed_urls')||'[]'),maps=JSON.parse(values.get('sitemap_urls')||'[]');$('config-profile-active').hidden=false;$('config-profile-active').textContent='Vollprofil aktiv: '+seeds.length+' Start-URLs, '+maps.length+' Sitemap-URLs. Unveränderte Startfelder behalten alle gespeicherten Quellen und Eingabeherkünfte. Änderungen der Startfelder ersetzen diese Quellen ausdrücklich; Linkverfolgung bleibt im Profil festgelegt.';}
+  }
+  function projectProfileToolbar(envelope) {
+    const values=window.ConfigProfiles.fields(envelope.effective_config_json),seeds=JSON.parse(values.get('seed_urls')||'[]'),maps=JSON.parse(values.get('sitemap_urls')||'[]');
+    $('crawl-mode').value=!seeds.length&&maps.length?'sitemap':'spider';$('seed-url').value=seeds[0]||maps[0]||'';
+    $('list-control').hidden=true;$('seed-url').closest('.seed-control').hidden=false;$('seed-url').required=true;
+    $('seed-url').labels[0].textContent=$('crawl-mode').value==='sitemap'?'Sitemap-URL':'Start-URL';
+    profileToolbarBaseline=profileToolbarSnapshot();renderConfigProfile();
+  }
+  async function stageConfigProfile(work) {
+    tlsFileRevision++;
+    const result=await work;if(result){projectConfigProfile(result);renderConfigProfile();}return result;
+  }
+  async function ensureConfigProfile() {
+    if(configProfiles.state.working||configProfiles.state.text.trim())return true;
+    const settings=profileFormSnapshot(), advanced=parseAdvanced(settings);
+    const config={...advanced,concurrency:Number(settings.concurrency),request_timeout_secs:Number(settings.timeout_seconds),max_pages:Number(settings.max_pages)||null,max_depth:Number(settings.max_depth)||null,delay_ms:Number(settings.delay_ms),max_body_bytes:Number(settings.max_body_mb)*1048576,user_agent:settings.user_agent,indexability_agent:settings.indexability_agent,obey_robots:settings.obey_robots,include_subdomains:settings.follow_subdomains,check_external:settings.check_external};
+    config.renderer=settings.javascript_rendering?{endpoint:settings.renderer_endpoint,wait_ms:Number(settings.renderer_wait_ms),accessibility:settings.renderer_accessibility,screenshot:settings.renderer_screenshot,collect_cookies:settings.renderer_collect_cookies,custom_javascript:parseCustomJavascript(settings.custom_javascript_json)}:null;
+    return Boolean(await stageConfigProfile(configProfiles.fromConfig(JSON.stringify(config))));
+  }
+  async function saveConfigProfile() {
+    tlsFileRevision++;
+    try{
+      if(!await ensureConfigProfile())return;
+      const previous=configProfiles.state.active,pendingToolbar=previous&&profileToolbarSnapshot()!==profileToolbarBaseline;
+      const patches=configProfilePatches(),saved=await configProfiles.save(patches);if(!saved)return;
+      projectConfigProfile(saved,true);
+      if(!pendingToolbar||profileSourceSnapshot(previous)!==profileSourceSnapshot(saved))projectProfileToolbar(saved);
+      $('settings-dialog').close();invalidateContentRequests('Vollständiges Konfigurationsprofil gespeichert.');renderControls();
+    }catch(error){configProfiles.state.error=error.message;renderConfigProfile();}
+  }
+  async function startProfileCrawl() {
+    const refusal=configProfileStartRefusal();if(refusal){message(refusal,true);return;}
+    const operation={sequence:++state.operationSequence,generation:state.generation,id:state.crawl?.id||null};
+    const current=()=>state.startOperation===operation&&state.generation===operation.generation&&(state.crawl?.id||null)===operation.id;
+    state.startOperation=operation;state.starting=true;renderControls();
+    try{
+      const header_values=configProfiles.headerValues(),patches=[];
+      if(profileToolbarSnapshot()!==profileToolbarBaseline){
+        const mode=$('crawl-mode').value;let seeds=[],maps=[],imports=[];
+        if(mode==='list'){
+          let imported=listUI.controller.state.accepted;if(!imported||listUI.acceptedText!==$('url-list').value){listUI.controller.setEditedText($('url-list').value);imported=await listUI.controller.preview();if(!current())return;}
+          if(!imported)throw Error('Die neue URL-Liste muss vollständig geprüft werden.');const summary=window.ListImportTools.summarizeRows(imported.rows);if(!summary.accepted)throw Error('Keine gültigen neuen Ziele.');seeds=summary.page_urls;maps=summary.sitemap_urls;imports=[imported];
+        }else{const url=$('seed-url').value.trim();const parsed=new URL(url);if(!['http:','https:'].includes(parsed.protocol))throw Error('Eine HTTP(S)-Zieladresse ist erforderlich.');if(mode==='sitemap')maps=[url];else seeds=[url];}
+        patches.push({path:['seed_urls'],value_json:JSON.stringify(seeds)},{path:['sitemap_urls'],value_json:JSON.stringify(maps)},{path:['input_imports'],value_json:JSON.stringify(imports)});
+        if(window.ConfigProfiles.at(configProfiles.state.active.config_json,['explicit_sitemap_inputs'])!==undefined)patches.push({path:['explicit_sitemap_inputs'],remove:true});
+      }
+      if(!current())return;
+      const result=await request('/api/crawls/from-profile',{method:'POST',body:JSON.stringify({profile_text:configProfiles.state.active.profile_json,patches,header_values})});const crawl=result.crawl||result;if(!crawl.id)throw Error('Keine Crawl-ID empfangen.');
+      if(!current()){await loadHistory();return;}state.crawls.unshift(crawl);renderHistory();$('crawl-history').value=crawl.id;await selectCrawl(crawl.id);
+    }catch(error){if(current())message('Der Profil-Crawl konnte nicht gestartet werden: '+error.message,true);}
+    finally{if(state.startOperation===operation){state.startOperation=null;state.starting=false;renderControls();}}
+  }
+  async function initializeConfigProfiles() {
+    if(!window.ConfigProfiles)return;
+    configProfiles=window.ConfigProfiles.createController({changed:()=>{renderConfigProfile();renderControls();}});
+    $('config-profile-json').addEventListener('input',()=>{tlsFileRevision++;configProfiles.edited($('config-profile-json').value);});
+    $('config-profile-import').addEventListener('click',()=>{configProfiles.edited();$('config-profile-file').value='';$('config-profile-file').click();});
+    $('config-profile-file').addEventListener('change',()=>stageConfigProfile(configProfiles.importFile($('config-profile-file').files[0])));
+    $('config-profile-inspect').addEventListener('click',async()=>{try{if(!await ensureConfigProfile())return;await stageConfigProfile(configProfiles.inspect(configProfilePatches()));}catch(error){configProfiles.state.error=error.message;renderConfigProfile();}});
+    $('config-profile-default').addEventListener('click',()=>stageConfigProfile(configProfiles.defaults()));
+    $('config-profile-load-selected').addEventListener('click',()=>{const id=state.crawl?.id,generation=state.generation,nativeGeneration=state.crawl?.generation;if(id)stageConfigProfile(configProfiles.selected(id,()=>$('settings-dialog').open&&state.crawl?.id===id&&state.generation===generation&&state.crawl?.generation===nativeGeneration));});
+    $('config-profile-export').addEventListener('click',async()=>{try{if(!await ensureConfigProfile())return;const result=await configProfiles.exportProfile(configProfilePatches());if(result)downloadBlob(new Blob([result.bytes],{type:'application/json'}),'open-seo-spider-config-profile-v1.json');}catch(error){configProfiles.state.error=error.message;renderConfigProfile();}});
+    $('settings-form').addEventListener('input',event=>{if(event.target.name)configProfiles.edited();});
+    $('settings-form').addEventListener('change',event=>{if(event.target.name)configProfiles.edited();});
+    $('crawl-quota-patterns').addEventListener('input',()=>configProfiles.edited());$('crawl-quota-patterns').addEventListener('click',event=>{if(event.target.closest('button'))configProfiles.edited();});$('crawl-quota-add').addEventListener('click',()=>configProfiles.edited());
+    $('tls-certificate-files').addEventListener('change',()=>configProfiles.edited());
+    for(const id of ['seed-url','url-list','crawl-mode'])for(const event of ['input','change'])$(id).addEventListener(event,()=>{configProfiles.edited();configProfiles.clearHeaders();});
+    $('settings-dialog').addEventListener('close',()=>configProfiles.close());$('settings-dialog').addEventListener('cancel',()=>configProfiles.close());
+    const restored=await configProfiles.restore();if(restored){projectConfigProfile(restored,true);projectProfileToolbar(restored);}renderConfigProfile();
   }
 
   const crawlQuotaSettingKeys=['crawl_quotas_enabled','crawl_quota_per_depth','crawl_quota_per_subdomain','crawl_quota_patterns_json'];
@@ -2032,6 +2239,7 @@
       parseTlsSettings({tls_enabled:true,tls_respect_hsts:form.elements.tls_respect_hsts.checked,tls_certificates_json:JSON.stringify(selected),javascript_rendering:false});
       if(revision!==tlsFileRevision||!$('settings-dialog').open||form.elements.tls_certificates_json.value!==prior)return;
       form.elements.tls_certificates_json.value=JSON.stringify(selected,null,2);
+      if(typeof configProfiles!=='undefined'&&configProfiles)configProfiles.edited();
       $('tls-file-status').textContent='Öffentliche Zertifikatsdaten vorgemerkt. Erst Speichern übernimmt sie für den nächsten Crawl.';
     }catch(error){
       if(revision===tlsFileRevision&&$('settings-dialog').open)$('tls-file-status').textContent=error.message;
@@ -3649,6 +3857,7 @@
     bindEvents();
     selectSection('overview');
     render();
+    await initializeConfigProfiles();
     try {
       await loadHistory();
       const running = state.crawls.find((crawl) => ['running', 'queued', 'pending'].includes(crawl.status));

@@ -170,24 +170,11 @@ fn tls_file_import_ascii_whitespace_preserves_real_public_pem_and_der_boundaries
         );
     }
     // BOM, Unicode whitespace and arbitrary preambles do not acquire PEM status.
-    // DER's existing X509 check is completed by ClientBuilder, not a UI validator.
+    // Both file import and profile validation complete the same pure X509
+    // trust-anchor check used by Reqwest's rustls ClientBuilder.
     for prefix in ["\u{feff}", "\u{00a0}", "arbitrary preamble\n"] {
         let raw = format!("{prefix}{public_pem}");
-        if let Ok(imported) =
-            TrustedCertificate::from_file_bytes("not-pem.cer".into(), raw.as_bytes())
-        {
-            assert!(matches!(&imported, TrustedCertificate::Der { .. }));
-            let profile = TlsConfig {
-                trusted_certificates: vec![imported],
-                ..Default::default()
-            };
-            assert!(
-                profile
-                    .configure(reqwest::Client::builder())
-                    .and_then(|builder| builder.build().map_err(anyhow::Error::from))
-                    .is_err()
-            );
-        }
+        assert!(TrustedCertificate::from_file_bytes("not-pem.cer".into(), raw.as_bytes()).is_err());
         assert!(
             TlsConfig {
                 trusted_certificates: vec![TrustedCertificate::Pem {
@@ -199,6 +186,122 @@ fn tls_file_import_ascii_whitespace_preserves_real_public_pem_and_der_boundaries
             .validate()
             .is_err()
         );
+    }
+}
+
+#[test]
+fn pure_trust_validation_accepts_native_root_intermediate_and_leaf_anchors() {
+    use rcgen::{BasicConstraints, CertificateParams, IsCa, Issuer, KeyPair};
+
+    let mut root_params = CertificateParams::new(Vec::<String>::new()).unwrap();
+    root_params.is_ca = IsCa::Ca(BasicConstraints::Unconstrained);
+    let root_key = KeyPair::generate().unwrap();
+    let root = root_params.self_signed(&root_key).unwrap();
+    let root_issuer = Issuer::new(root_params, root_key);
+    let mut intermediate_params = CertificateParams::new(Vec::<String>::new()).unwrap();
+    intermediate_params.is_ca = IsCa::Ca(BasicConstraints::Constrained(0));
+    let intermediate_key = KeyPair::generate().unwrap();
+    let intermediate = intermediate_params
+        .signed_by(&intermediate_key, &root_issuer)
+        .unwrap();
+    let intermediate_issuer = Issuer::new(intermediate_params, intermediate_key);
+    let leaf_params = CertificateParams::new(vec!["localhost".into()]).unwrap();
+    let leaf_key = KeyPair::generate().unwrap();
+    let leaf = leaf_params
+        .signed_by(&leaf_key, &intermediate_issuer)
+        .unwrap();
+
+    // Native RootCertStore::add accepts certificates as trust anchors, including
+    // intermediates and non-CA leaves; preview must not invent a stricter policy.
+    let certificates = [&root, &intermediate, &leaf];
+    let mut native = RootCertStore::empty();
+    for certificate in certificates {
+        native.add(certificate.der().clone()).unwrap();
+        for (name, bytes) in [
+            ("anchor.der", certificate.der().as_ref().to_vec()),
+            ("anchor.pem", certificate.pem().into_bytes()),
+        ] {
+            let imported = TrustedCertificate::from_file_bytes(name.into(), &bytes).unwrap();
+            let tls = TlsConfig {
+                trusted_certificates: vec![imported],
+                ..Default::default()
+            };
+            assert_eq!(tls.certificates().unwrap().len(), 1);
+            tls.validate().unwrap();
+        }
+    }
+    assert_eq!(native.len(), 3);
+
+    let bundle = format!("{}{}{}", root.pem(), intermediate.pem(), leaf.pem());
+    let imported =
+        TrustedCertificate::from_file_bytes("bundle.pem".into(), bundle.as_bytes()).unwrap();
+    let tls = TlsConfig {
+        trusted_certificates: vec![imported],
+        ..Default::default()
+    };
+    assert_eq!(tls.certificates().unwrap().len(), 3);
+    let declared = serde_json::json!({"tls": tls});
+    let raw = serde_json::to_vec(&declared).unwrap();
+    let document = crate::config_profile::config_profile_from_json(&raw).unwrap();
+    assert_eq!(document.config, declared);
+    let preview = crate::config_profile::preview_config_profile(&document).unwrap();
+    assert!(preview.requires_targets);
+    assert_eq!(
+        preview
+            .effective_config
+            .tls
+            .as_ref()
+            .unwrap()
+            .trusted_certificates
+            .len(),
+        1
+    );
+    assert_eq!(
+        document.config["tls"]["trusted_certificates"][0]["data"],
+        bundle
+    );
+}
+
+#[test]
+fn invalid_x509_is_refused_by_pure_validation_and_all_profile_entrypoints() {
+    use crate::config_profile::{
+        CrawlConfigProfile, config_profile_from_config, config_profile_from_json,
+        parse_config_profile, preview_config_profile,
+    };
+
+    for certificate in [
+        TrustedCertificate::Der {
+            name: "invalid.der".into(),
+            data: "00".into(),
+        },
+        TrustedCertificate::Der {
+            name: "invalid.der".into(),
+            data: "3000".into(),
+        },
+        TrustedCertificate::Pem {
+            name: "invalid.pem".into(),
+            data: "-----BEGIN CERTIFICATE-----\nAA==\n-----END CERTIFICATE-----".into(),
+        },
+    ] {
+        let tls = TlsConfig {
+            trusted_certificates: vec![certificate],
+            ..Default::default()
+        };
+        assert!(tls.validate().is_err());
+        let config = CrawlConfig {
+            tls: Some(tls.clone()),
+            ..Default::default()
+        };
+        assert!(config_profile_from_config(&config).is_err());
+        let declared = serde_json::json!({"tls": tls});
+        assert!(config_profile_from_json(&serde_json::to_vec(&declared).unwrap()).is_err());
+        let document = CrawlConfigProfile {
+            version: 1,
+            config: declared,
+            required_headers: Vec::new(),
+        };
+        assert!(parse_config_profile(&serde_json::to_vec(&document).unwrap()).is_err());
+        assert!(preview_config_profile(&document).is_err());
     }
 }
 

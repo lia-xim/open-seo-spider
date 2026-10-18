@@ -397,6 +397,11 @@ dialog p { margin: 8px 0 16px; font-size: 13px; color: var(--muted); }
 .limit-setting { display: block; margin: 16px 0; font-size: 13px; color: var(--ink); }
 .limit-setting input { display: block; width: 100%; margin-top: 6px; }
 #settings-dialog .settings-grid small { overflow-wrap: anywhere; }
+#config-profiles { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+#config-profiles .settings-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+#config-profiles .settings-grid > * { min-width: 0; }
+#config-profiles .button { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+#config-profiles textarea { display: block; width: 100%; min-width: 0; }
 .list-import-dialog { width: min(1100px, calc(100vw - 24px)); max-width: none; }
 .list-import-dialog .table-scroll { max-height: 24rem; border: 1px solid var(--line); border-radius: var(--radius); }
 .list-import-dialog table { min-width: 1500px; }
@@ -721,6 +726,7 @@ body.tool-page { margin: 0; padding: 0; max-width: none; background: var(--bg); 
   .main-footer { display: block; padding: 14px 2px 20px; }
   dialog { padding: 16px; }
   .settings-grid { grid-template-columns: 1fr; gap: 12px; }
+  #config-profiles .settings-grid { grid-template-columns: minmax(0, 1fr); }
   .graph-container { padding: 12px; }
   .content-toolbar { align-items: stretch; }
   .content-toolbar > label, .content-toolbar > button { flex: 1 1 100%; }

@@ -73,6 +73,19 @@ jobs:
           retention-days: 14
           if-no-files-found: warn
           path: ${{ runner.temp }}/windows-store-paths/**
+      - name: Raw CLI configuration and explicit profile-envelope refusal
+        run: node scripts/crawl-config-cli-e2e.mjs
+        env:
+          SPIDER_BINARY: ${{ runner.os == 'Windows' && 'target/debug/open-seo-spider.exe' || 'target/debug/open-seo-spider' }}
+          SPIDER_CLI_CONFIG_OUTPUT: ${{ runner.temp }}/crawl-config-cli
+      - name: Save CLI configuration evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: crawl-config-cli-${{ runner.os }}-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: ${{ runner.temp }}/crawl-config-cli/**
       - name: Sitemap transport ownership and final-witness controls
         run: node --test scripts/sitemap-transport-oracles.test.mjs
       - name: Stored sitemap proof validator negative controls
@@ -151,6 +164,8 @@ jobs:
           if($LASTEXITCODE -ne 0){exit $LASTEXITCODE}
           git diff --quiet HEAD -- $releaseSourcePaths
           if($LASTEXITCODE -ne 0){throw 'Compiled source changed during release build'}
+          $releaseTestBinary=Join-Path (Get-Location) 'target/release/open-seo-spider.exe'
+          "SPIDER_BINARY_SHA256=$((Get-FileHash -LiteralPath $releaseTestBinary -Algorithm SHA256).Hash.ToLowerInvariant())" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
       - name: Verify optimized Windows original-report bundle
         if: runner.os == 'Windows'
         run: node scripts/saved-comparison-bundle-e2e.mjs
@@ -296,6 +311,7 @@ jobs:
       - run: node --test web/verification/api-enrichment-state.test.cjs
       - run: node --test web/verification/accessibility-state.test.cjs
       - run: node --test web/verification/dashboard-segments-state.test.cjs
+      - run: node --test web/verification/config-profiles-state.test.cjs
       - run: cargo build --locked -p open-seo-spider
       - name: Opt-in Rust browser fixtures on an owned renderer
         run: node scripts/renderer-rust-e2e.mjs

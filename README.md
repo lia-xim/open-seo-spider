@@ -62,7 +62,9 @@ The local HTTP app must already be running. File tools require the explicit `--m
 
 ## Current limits and verification
 
-The [feature ledger](docs/feature-parity.json) tracks 144 grouped requirements: **37 independently accepted, 69 partial and 38 open**. These are project acceptance states, not a percentage of another product's functionality. The [ongoing to-do list](docs/FEATURE_TODO.md) records the remaining work.
+The [feature ledger](docs/feature-parity.json) tracks 144 grouped requirements: **38 independently accepted, 69 partial and 37 open**. These are project acceptance states, not a percentage of another product's functionality. The [ongoing to-do list](docs/FEATURE_TODO.md) records the remaining work.
+
+See [configuration profiles](docs/configuration-profiles.md) for the versioned browser/API format, exact native settings, explicit header requirements and its distinction from CLI configuration files. The [redesign E2E guide](docs/e2e-testing.md) separates browser/native workflows from fixture-only checks.
 
 The saved-spelling slice has focused evidence for 34 default Rust tests, 40 extracted UI VM groups across related workflows, and two real app-consumer LanguageTool tests using English/German fixtures. Those bounded checks do not prove every UI path, language or external integration. A VM fixture is not a real browser workflow.
 
